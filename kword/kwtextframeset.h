@@ -114,7 +114,7 @@ public:
     void insert( QTextCursor * cursor, KWTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName,
                  CustomItemsMap customItemsMap = CustomItemsMap() );
-    void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
+    void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard, const QString & cmdName = QString::null );
     void undo();
     void redo();
     void clearUndoRedoInfo();
@@ -138,13 +138,15 @@ public:
         HighlightSelection = 1 // used to highlight during search/replace
     };
 
-    enum KeyboardActionPrivate { // keep in sync with QTextEdit
+    enum KeyboardAction { // keep in sync with QTextEdit
 	ActionBackspace,
 	ActionDelete,
 	ActionReturn,
 	ActionKill
     };
-    void doKeyboardAction( QTextCursor * cursor, KeyboardActionPrivate action );
+    // Executes keyboard action @p action. This is normally called by
+    // a key event handler.
+    void doKeyboardAction( QTextCursor * cursor, KWTextFormat * & currentFormat, KeyboardAction action );
 
     // -- Paragraph settings --
     void setCounter( QTextCursor * cursor, const Counter & counter );
@@ -153,8 +155,9 @@ public:
     void setPageBreaking( QTextCursor * cursor, bool linesTogether );
     void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder );
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
-    void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard,
-                     int paragLayoutFlags = KWParagLayout::All , int formatFlags = QTextFormat::Format );
+    void applyStyle( QTextCursor * cursor, const KWStyle * style, KWTextFormat * & currentFormat,
+                     int selectionId = QTextDocument::Standard,
+                     int paragLayoutFlags = KWParagLayout::All, int formatFlags = QTextFormat::Format );
     void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 
     void setTabList( QTextCursor * cursor,const KoTabulatorList & tabList );
@@ -338,7 +341,7 @@ public:
     void setMargin( QStyleSheetItem::Margin m, double margin )
           { textFrameSet()->setMargin( cursor, m, margin ); }
     void setTabList( const KoTabulatorList & tabList ){ textFrameSet()->setTabList( cursor, tabList ); }
-    void applyStyle( const KWStyle * style ) { textFrameSet()->applyStyle( cursor, style ); }
+    void applyStyle( const KWStyle * style );
 
     const KWParagLayout & currentParagLayout() const { return m_paragLayout; }
 
@@ -362,19 +365,25 @@ private slots:
 
 private:
 
-    enum MoveDirectionPrivate { // keep in sync with QTextEdit
-	MoveLeft,
-	MoveRight,
-	MoveUp,
-	MoveDown,
-	MoveHome,
-	MoveEnd,
-	MovePgUp,
-	MovePgDown
+    enum CursorAction { // keep in sync with QTextEdit
+        MoveBackward,
+        MoveForward,
+        MoveWordBackward,
+        MoveWordForward,
+        MoveUp,
+        MoveDown,
+        MoveLineStart,
+        MoveLineEnd,
+        MoveHome,
+        MoveEnd,
+        MovePgUp,
+        MovePgDown,
+        MoveParagUp, // KWord-specific
+        MoveParagDown // KWord-specific
     };
 
-    void moveCursor( MoveDirectionPrivate direction, bool shift, bool control );
-    void moveCursor( MoveDirectionPrivate direction, bool control );
+    void moveCursor( CursorAction action, bool select );
+    void moveCursor( CursorAction action );
 
 private:
     QPoint dragStartPos;

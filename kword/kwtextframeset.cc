@@ -78,7 +78,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     KWStyle * style = _doc->findStyle( "Standard" );
     if ( m_lastFormatted && style )
     {
-	static_cast<KWTextParag*>(m_lastFormatted)->setParagLayout( style->paragLayout() );
+        static_cast<KWTextParag*>(m_lastFormatted)->setParagLayout( style->paragLayout() );
         m_lastFormatted->setFormat( 0, m_lastFormatted->string()->length(), & style->format() );
     }
 
@@ -89,11 +89,11 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     interval = 0;
     changeIntervalTimer = new QTimer( this );
     connect( changeIntervalTimer, SIGNAL( timeout() ),
-	     this, SLOT( doChangeInterval() ) );
+             this, SLOT( doChangeInterval() ) );
 
     formatTimer = new QTimer( this );
     connect( formatTimer, SIGNAL( timeout() ),
-	     this, SLOT( formatMore() ) );
+             this, SLOT( formatMore() ) );
 }
 
 KWFrameSetEdit * KWTextFrameSet::createFrameSetEdit( KWCanvas * canvas )
@@ -1032,7 +1032,8 @@ void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutCh
                     styleApplied.paragLayout().margins[QStyleSheetItem::MarginTop]=p->margin(QStyleSheetItem::MarginTop);
                 }
 #endif
-                applyStyle( 0L, changedStyle, QTextDocument::Temp+1, paragLayoutChanged, formatChanged );
+                KWTextFormat * dummy = 0L;
+                applyStyle( 0L, changedStyle, dummy, QTextDocument::Temp+1, paragLayoutChanged, formatChanged );
                 textdoc->removeSelection( QTextDocument::Temp+1 );
             }
         }
@@ -1044,7 +1045,6 @@ void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutCh
     formatMore();
 }
 
-/*================================================================*/
 KWTextFrameSet *KWTextFrameSet::getCopy() {
     /* returns a deep copy of self */
     KWTextFrameSet *newFS = new KWTextFrameSet(m_doc, getName());
@@ -1062,7 +1062,7 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
     return newFS;
 }
 
-void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPrivate action )
+void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*currentFormat*/, KeyboardAction action )
 {
     KWTextParag * parag = static_cast<KWTextParag *>(cursor->parag());
     setLastFormattedParag( parag );
@@ -1071,16 +1071,16 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 
     switch ( action ) {
     case ActionDelete: {
-	checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
-	if ( !undoRedoInfo.valid() ) {
-	    undoRedoInfo.id = parag->paragId();
-	    undoRedoInfo.index = cursor->index();
-	    undoRedoInfo.text = QString::null;
+        checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
+        if ( !undoRedoInfo.valid() ) {
+            undoRedoInfo.id = parag->paragId();
+            undoRedoInfo.index = cursor->index();
+            undoRedoInfo.text = QString::null;
             undoRedoInfo.name = i18n("Delete text");
             undoRedoInfo.oldParagLayouts << parag->paragLayout();
-	}
+        }
         QTextStringChar * ch = parag->at( cursor->index() );
-	undoRedoInfo.text += ch->c;
+        undoRedoInfo.text += ch->c;
         KWParagLayout paragLayout;
         if ( parag->next() )
             paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
@@ -1091,18 +1091,18 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
         if ( cursor->remove() ) {
             if ( old != cursor->parag() && m_lastFormatted == old ) // 'old' has been deleted
                 m_lastFormatted = cursor->parag() ? cursor->parag()->prev() : 0;
-	    undoRedoInfo.text += "\n";
+            undoRedoInfo.text += "\n";
             undoRedoInfo.oldParagLayouts << paragLayout;
         }
     } break;
     case ActionBackspace: {
         // Remove counter
-	if ( parag->counter() && parag->counter()->style() != Counter::STYLE_NONE && cursor->index() == 0 ) {
-	    // parag->decDepth(); // We don't have support for nested lists at the moment
+        if ( parag->counter() && parag->counter()->style() != Counter::STYLE_NONE && cursor->index() == 0 ) {
+            // parag->decDepth(); // We don't have support for nested lists at the moment
                                   // (only in titles, but you don't want Backspace to move it up)
             Counter c;
             setCounter( cursor, c );
-	}
+        }
         else
         {
             checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
@@ -1130,17 +1130,17 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
         }
     } break;
     case ActionReturn: {
-	checkUndoRedoInfo( cursor, UndoRedoInfo::Return );
-	if ( !undoRedoInfo.valid() ) {
-	    undoRedoInfo.id = cursor->parag()->paragId();
-	    undoRedoInfo.index = cursor->index();
-	    undoRedoInfo.text = QString::null;
+        checkUndoRedoInfo( cursor, UndoRedoInfo::Return );
+        if ( !undoRedoInfo.valid() ) {
+            undoRedoInfo.id = cursor->parag()->paragId();
+            undoRedoInfo.index = cursor->index();
+            undoRedoInfo.text = QString::null;
             undoRedoInfo.name = i18n("Insert text");
-	}
-	undoRedoInfo.text += "\n";
-	cursor->splitAndInsertEmptyParag();
-	ASSERT( cursor->parag()->prev() );
-	if ( cursor->parag()->prev() )
+        }
+        undoRedoInfo.text += "\n";
+        cursor->splitAndInsertEmptyParag();
+        ASSERT( cursor->parag()->prev() );
+        if ( cursor->parag()->prev() )
             setLastFormattedParag( cursor->parag()->prev() );
 
         doUpdateCurrentFormat = false;
@@ -1149,39 +1149,43 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
         {
             KWStyle * newStyle = style->followingStyle();
             if ( newStyle && style != newStyle ) // different "following style" applied
+            {
                 doUpdateCurrentFormat = true;
+                //currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( cursor->parag()->paragFormat() ) );
+                //kdDebug() << "KWTextFrameSet::doKeyboardAction currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
+            }
         }
 
     } break;
     case ActionKill:
-	checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
-	if ( !undoRedoInfo.valid() ) {
-	    undoRedoInfo.id = cursor->parag()->paragId();
-	    undoRedoInfo.index = cursor->index();
-	    undoRedoInfo.text = QString::null;
+        checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
+        if ( !undoRedoInfo.valid() ) {
+            undoRedoInfo.id = cursor->parag()->paragId();
+            undoRedoInfo.index = cursor->index();
+            undoRedoInfo.text = QString::null;
             undoRedoInfo.name = i18n("Delete text");
             undoRedoInfo.oldParagLayouts << parag->paragLayout();
-	}
-	if ( cursor->atParagEnd() ) {
+        }
+        if ( cursor->atParagEnd() ) {
             QTextStringChar * ch = cursor->parag()->at( cursor->index() );
-	    undoRedoInfo.text += ch->c;
+            undoRedoInfo.text += ch->c;
             KWParagLayout paragLayout;
             if ( parag->next() )
                 paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
             copyCharFormatting( ch, undoRedoInfo.text.length()-1, true );
             if ( cursor->remove() )
             {
-		undoRedoInfo.text += "\n";
+                undoRedoInfo.text += "\n";
                 undoRedoInfo.oldParagLayouts << paragLayout;
             }
-	} else {
+        } else {
             int oldLen = undoRedoInfo.text.length();
-	    undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
+            undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
             for ( int i = cursor->index(); i < cursor->parag()->length(); ++i )
                 copyCharFormatting( cursor->parag()->at( i ), oldLen + i - cursor->index(), true );
-	    cursor->killLine();
-	}
-	break;
+            cursor->killLine();
+        }
+        break;
     }
 
     formatMore();
@@ -1204,7 +1208,7 @@ void KWTextFrameSet::ensureFormatted( QTextParag * parag )
 void KWTextFrameSet::formatMore()
 {
     if ( !m_lastFormatted || !isVisible() || m_availableHeight == -1 )
-	return;
+        return;
 
     int bottom = -1;
     int to = !sender() ? 2 : 20; // 20 when it comes from the formatTimer
@@ -1229,9 +1233,9 @@ void KWTextFrameSet::formatMore()
           ( i < to || bottom <= viewsBottom ) ; ++i )
     {
         //kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
-	lastFormatted->format();
-	bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
-	lastFormatted = lastFormatted->next();
+        lastFormatted->format();
+        bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
+        lastFormatted = lastFormatted->next();
     }
     //kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. Setting m_lastFormatted to " << lastFormatted << endl;
     m_lastFormatted = lastFormatted;
@@ -1356,10 +1360,10 @@ kdDebug() << "Deleting page: " << lastPage<< "\n";
         }
 
     if ( lastFormatted )
-	formatTimer->start( interval, TRUE );
+        formatTimer->start( interval, TRUE );
     else
     {
-	interval = QMAX( 0, interval );
+        interval = QMAX( 0, interval );
         //kdDebug(32002) << "KWTextFrameSet::formatMore all formatted" << endl;
     }
 }
@@ -1456,15 +1460,15 @@ void KWTextFrameSet::UndoRedoInfo::clear()
             case Margin:
                 cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWParagLayout::Margins, margin );
                 break;
-	    case LineSpacing:
-	        cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWParagLayout::LineSpacing );
-	        break;
-	    case Borders:
+            case LineSpacing:
+                cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWParagLayout::LineSpacing );
+                break;
+            case Borders:
                 cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWParagLayout::Borders );
-	        break;
+                break;
             case Tabulator:
                 cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWParagLayout::Tabulator );
-	        break;
+                break;
             case PageBreaking:
                 cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWParagLayout::PageBreaking );
                 break;
@@ -1556,7 +1560,8 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, 
     }
 }
 
-void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle, int selectionId,
+void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
+                                 KWTextFormat * & /*currentFormat*/, int selectionId,
                                  int paragLayoutFlags, int formatFlags )
 {
     QTextDocument * textdoc = textDocument();
@@ -1655,8 +1660,10 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
         {
             //kdDebug(32001) << "KWTextFrameSet::applyStyle " << parag->string()->length() << endl;
             parag->setFormat( 0, parag->string()->length(), newFormat, true, formatFlags );
-            parag->setFormat( newFormat ); // set default format (used to be for the counter, not really needed anymore)
+            parag->setFormat( newFormat );
         }
+        //currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( newFormat ) );
+        //kdDebug() << "KWTextFrameSet::applyStyle currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
     }
 
     if ( cursor )
@@ -1689,8 +1696,8 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor, int selection
         undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->paragLayout();
     }
     else{
-	QTextParag *start = textdoc->selectionStart( selectionId );
-	QTextParag *end = textdoc->selectionEnd( selectionId );
+        QTextParag *start = textdoc->selectionStart( selectionId );
+        QTextParag *end = textdoc->selectionEnd( selectionId );
         undoRedoInfo.id = start->paragId();
         undoRedoInfo.eid = end->paragId();
         for ( ; start && start != end->next() ; start = start->next() )
@@ -1706,17 +1713,17 @@ void KWTextFrameSet::setCounter( QTextCursor * cursor, const Counter & counter )
     QTextDocument * textdoc = textDocument();
     const Counter * curCounter = static_cast<KWTextParag*>(cursor->parag())->counter();
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
-	 curCounter && counter == *curCounter )
+         curCounter && counter == *curCounter )
         return;
     emit hideCursor();
     storeParagUndoRedoInfo( cursor );
     undoRedoInfo.type = UndoRedoInfo::Counter;
     undoRedoInfo.name = i18n("Change list type");
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
-	static_cast<KWTextParag*>(cursor->parag())->setCounter( counter );
+        static_cast<KWTextParag*>(cursor->parag())->setCounter( counter );
     } else {
-	QTextParag *start = textdoc->selectionStart( QTextDocument::Standard );
-	QTextParag *end = textdoc->selectionEnd( QTextDocument::Standard );
+        QTextParag *start = textdoc->selectionStart( QTextDocument::Standard );
+        QTextParag *end = textdoc->selectionEnd( QTextDocument::Standard );
         // Special hack for BR25742, don't apply bullet to last empty parag of the selection
         if ( start != end && end->length() <= 1 )
         {
@@ -1753,8 +1760,8 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
     }
     else
     {
-	QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
-	QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
+        QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
+        QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setAlign(align);
@@ -1790,8 +1797,8 @@ void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m,
     }
     else
     {
-	QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
-	QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
+        QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
+        QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setMargin(m, margin);
@@ -1824,8 +1831,8 @@ void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, double spacing )
     }
     else
     {
-	QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
-	QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
+        QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
+        QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setLineSpacing(spacing);
@@ -1860,21 +1867,21 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
     }
     else
     {
-	QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
-	QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
+        QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
+        QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
         setLastFormattedParag( start );
-	Border tmpBorder;
-	tmpBorder.ptWidth=0;
+        Border tmpBorder;
+        tmpBorder.ptWidth=0;
         for ( ; start && start != end->next() ; start = start->next() )
-	  {
-	    static_cast<KWTextParag *>(start)->setLeftBorder(leftBorder);
-	    static_cast<KWTextParag *>(start)->setRightBorder(rightBorder);
-	    //remove border
-	    static_cast<KWTextParag *>(start)->setTopBorder(tmpBorder);
-	    static_cast<KWTextParag *>(start)->setBottomBorder(tmpBorder);
-	  }
-	static_cast<KWTextParag *>(end)->setBottomBorder(bottomBorder);
-	static_cast<KWTextParag *>(textDocument()->selectionStart( QTextDocument::Standard ))->setTopBorder(topBorder);
+          {
+            static_cast<KWTextParag *>(start)->setLeftBorder(leftBorder);
+            static_cast<KWTextParag *>(start)->setRightBorder(rightBorder);
+            //remove border
+            static_cast<KWTextParag *>(start)->setTopBorder(tmpBorder);
+            static_cast<KWTextParag *>(start)->setBottomBorder(tmpBorder);
+          }
+        static_cast<KWTextParag *>(end)->setBottomBorder(bottomBorder);
+        static_cast<KWTextParag *>(textDocument()->selectionStart( QTextDocument::Standard ))->setTopBorder(topBorder);
     }
     emit repaintChanged( this );
     formatMore();
@@ -1905,8 +1912,8 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor, const KoTabulatorList &ta
     }
     else
     {
-	QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
-	QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
+        QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
+        QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setTabList( tabList );
@@ -1938,8 +1945,8 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
     }
     else
     {
-	QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
-	QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
+        QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
+        QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setLinesTogether( linesTogether );
@@ -1954,7 +1961,7 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
 }
 
 
-void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId )
+void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId, const QString & cmdName )
 {
     QTextDocument * textdoc = textDocument();
     //for ( int i = 1; i < (int)QTextDocument::Temp; ++i )
@@ -1962,9 +1969,9 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId )
     emit hideCursor();
     checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
     if ( !undoRedoInfo.valid() ) {
-	textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
-	undoRedoInfo.text = QString::null;
-        undoRedoInfo.name = i18n("Remove Selected Text");
+        textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
+        undoRedoInfo.text = QString::null;
+        undoRedoInfo.name = cmdName.isNull() ? i18n("Remove Selected Text") : cmdName;
     }
     int oldLen = undoRedoInfo.text.length();
     undoRedoInfo.text = textdoc->selectedText( selectionId );
@@ -1999,9 +2006,9 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     if ( !customItemsMap.isEmpty() )
         clearUndoRedoInfo();
     if ( !undoRedoInfo.valid() ) {
-	undoRedoInfo.id = cursor->parag()->paragId();
-	undoRedoInfo.index = cursor->index();
-	undoRedoInfo.text = QString::null;
+        undoRedoInfo.id = cursor->parag()->paragId();
+        undoRedoInfo.index = cursor->index();
+        undoRedoInfo.text = QString::null;
         undoRedoInfo.name = commandName;
     }
     int oldLen = undoRedoInfo.text.length();
@@ -2051,8 +2058,8 @@ void KWTextFrameSet::undo()
     QTextCursor *cursor = new QTextCursor( textDocument() ); // Kindof a dummy cursor
     QTextCursor *c = textDocument()->undo( cursor );
     if ( !c ) {
-	emit showCursor();
-	return;
+        emit showCursor();
+        return;
     }
     // We have to set this new cursor position in all views :(
     // It sucks a bit for useability, but otherwise one view might still have
@@ -2073,8 +2080,8 @@ void KWTextFrameSet::redo()
     QTextCursor *cursor = new QTextCursor( textDocument() ); // Kindof a dummy cursor
     QTextCursor *c = textDocument()->redo( cursor );
     if ( !c ) {
-	emit showCursor();
-	return;
+        emit showCursor();
+        return;
     }
     emit setCursor( c ); // see undo
     setLastFormattedParag( textdoc->firstParag() );
@@ -2138,7 +2145,7 @@ void KWTextFrameSet::setLastFormattedParag( QTextParag *parag )
 void KWTextFrameSet::checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type t )
 {
     if ( undoRedoInfo.valid() && ( t != undoRedoInfo.type || cursor != undoRedoInfo.cursor ) ) {
-	undoRedoInfo.clear();
+        undoRedoInfo.clear();
     }
     undoRedoInfo.type = t;
     undoRedoInfo.cursor = cursor;
@@ -2235,9 +2242,9 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, KWTextFormat * & currentFo
 void KWTextFrameSet::selectAll( bool select )
 {
     if ( !select )
-	textDocument()->removeSelection( QTextDocument::Standard );
+        textDocument()->removeSelection( QTextDocument::Standard );
     else
-	textDocument()->selectAll( QTextDocument::Standard );
+        textDocument()->selectAll( QTextDocument::Standard );
     selectionChangedNotify();
 }
 
@@ -2337,12 +2344,12 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     cursorVisible = TRUE;
     blinkTimer = new QTimer( this );
     connect( blinkTimer, SIGNAL( timeout() ),
-	     this, SLOT( blinkCursor() ) );
+             this, SLOT( blinkCursor() ) );
     blinkTimer->start( QApplication::cursorFlashTime() / 2 );
 
     dragStartTimer = new QTimer( this );
     connect( dragStartTimer, SIGNAL( timeout() ),
-	     this, SLOT( startDrag() ) );
+             this, SLOT( startDrag() ) );
 
     textFrameSet()->formatMore();
 
@@ -2379,10 +2386,10 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 
     /* bool selChanged = FALSE;
     for ( int i = 1; i < textDocument()->numSelections(); ++i )
-	selChanged = textDocument()->removeSelection( i ) || selChanged;
+        selChanged = textDocument()->removeSelection( i ) || selChanged;
 
     if ( selChanged ) {
-	// cursor->parag()->document()->nextDoubleBuffered = TRUE; ######## we need that only if we have nested items/documents
+        // cursor->parag()->document()->nextDoubleBuffered = TRUE; ######## we need that only if we have nested items/documents
         textFrameSet()->selectionChangedNotify();
     }*/
 
@@ -2390,138 +2397,144 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 
     switch ( e->key() ) {
     case Key_Left:
-	moveCursor( MoveLeft, e->state() & ShiftButton, e->state() & ControlButton );
-	break;
+        moveCursor( e->state() & ControlButton ? MoveWordBackward : MoveBackward, e->state() & ShiftButton );
+        break;
     case Key_Right:
-	moveCursor( MoveRight, e->state() & ShiftButton, e->state() & ControlButton );
-	break;
+        moveCursor( e->state() & ControlButton ? MoveWordForward : MoveForward, e->state() & ShiftButton );
+        break;
     case Key_Up:
-	moveCursor( MoveUp, e->state() & ShiftButton, e->state() & ControlButton );
-	break;
+        moveCursor( e->state() & ControlButton ? MoveParagUp : MoveUp, e->state() & ShiftButton );
+        break;
     case Key_Down:
-	moveCursor( MoveDown, e->state() & ShiftButton, e->state() & ControlButton );
-	break;
+        moveCursor( e->state() & ControlButton ? MoveParagDown : MoveDown, e->state() & ShiftButton );
+        break;
     case Key_Home:
-	moveCursor( MoveHome, e->state() & ShiftButton, e->state() & ControlButton );
-	break;
+        moveCursor( e->state() & ControlButton ? MoveHome : MoveLineStart, e->state() & ShiftButton );
+        break;
     case Key_End:
-	moveCursor( MoveEnd, e->state() & ShiftButton, e->state() & ControlButton );
-	break;
+        moveCursor( e->state() & ControlButton ? MoveEnd : MoveLineEnd, e->state() & ShiftButton );
+        break;
     case Key_Prior:
-	moveCursor( MovePgUp, e->state() & ShiftButton, e->state() & ControlButton );
-	break;
+        moveCursor( MovePgUp, e->state() & ShiftButton );
+        break;
     case Key_Next:
-	moveCursor( MovePgDown, e->state() & ShiftButton, e->state() & ControlButton );
-	break;
+        moveCursor( MovePgDown, e->state() & ShiftButton );
+        break;
     case Key_Return: case Key_Enter:
-	if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+        if ( textDocument()->hasSelection( QTextDocument::Standard ) )
             textFrameSet()->removeSelectedText( cursor );
-	clearUndoRedoInfo = FALSE;
-	textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionReturn );
-	break;
+        clearUndoRedoInfo = FALSE;
+        textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionReturn );
+        break;
     case Key_Delete:
-	if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+        if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
             textFrameSet()->removeSelectedText( cursor );
-	    break;
-	}
+            break;
+        }
 
         if ( e->state() & ControlButton )
         {
             // Delete a word
+            textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
+
             do {
-                textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionDelete );
+                cursor->gotoRight();
             } while ( !cursor->atParagEnd()
                       && !cursor->parag()->at( cursor->index() )->c.isSpace() );
+            textDocument()->setSelectionEnd( QTextDocument::Standard, cursor );
+            textFrameSet()->removeSelectedText( cursor, QTextDocument::Standard, i18n("Remove word") );
         }
         else
-            textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionDelete );
+            textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionDelete );
 
        clearUndoRedoInfo = FALSE;
-	break;
+        break;
     case Key_Backspace:
-	if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
-	    textFrameSet()->removeSelectedText( cursor );
-	    break;
-	}
+        if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+            textFrameSet()->removeSelectedText( cursor );
+            break;
+        }
 
-	if ( !cursor->parag()->prev() &&
-	     cursor->atParagStart() )
-	    break;
+        if ( !cursor->parag()->prev() &&
+             cursor->atParagStart() )
+            break;
 
         if ( e->state() & ControlButton )
         {
             // Delete a word
+            textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
+
             do {
-                textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionBackspace );
-                //kdDebug() << "KWTextFrameSetEdit::keyPressEvent one char removed, current char="
-                //          << cursor->parag()->at( cursor->index() )->c.latin1() << endl;
+                cursor->gotoLeft();
             } while ( !cursor->atParagStart()
                       && !cursor->parag()->at( cursor->index()-1 )->c.isSpace() );
+            textDocument()->setSelectionEnd( QTextDocument::Standard, cursor );
+            textFrameSet()->removeSelectedText( cursor, QTextDocument::Standard, i18n("Remove word") );
         }
         else
-            textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionBackspace );
+            textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionBackspace );
 
        clearUndoRedoInfo = FALSE;
-	break;
+        break;
     case Key_F16: // Copy key on Sun keyboards
-	copy();
-	break;
+        copy();
+        break;
     case Key_F18:  // Paste key on Sun keyboards
-	paste();
-	break;
+        paste();
+        break;
     case Key_F20:  // Cut key on Sun keyboards
-	cut();
-	break;
+        cut();
+        break;
     default: {
             //kdDebug() << "KWTextFrameSetEdit::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << endl;
-	    if ( e->text().length() &&
+            if ( e->text().length() &&
 //               !( e->state() & AltButton ) &&
-		 ( !e->ascii() || e->ascii() >= 32 ) ||
-		 ( e->text() == "\t" && !( e->state() & ControlButton ) ) ) {
-		clearUndoRedoInfo = FALSE;
-		if ( e->key() == Key_Tab ) {
+                 ( !e->ascii() || e->ascii() >= 32 ) ||
+                 ( e->text() == "\t" && !( e->state() & ControlButton ) ) ) {
+                clearUndoRedoInfo = FALSE;
+                if ( e->key() == Key_Tab ) {
                     // We don't have support for nested counters at the moment.
-		    /*if ( cursor->index() == 0 && cursor->parag()->style() &&
-			 cursor->parag()->style()->displayMode() == QStyleSheetItem::DisplayListItem ) {
-			static_cast<KWTextParag * >(cursor->parag())->incDepth();
-			emit hideCursor();
-			emit repaintChanged();
-			emit showCursor();
-			break;
-		    }*/
-		}
+                    /*if ( cursor->index() == 0 && cursor->parag()->style() &&
+                         cursor->parag()->style()->displayMode() == QStyleSheetItem::DisplayListItem ) {
+                        static_cast<KWTextParag * >(cursor->parag())->incDepth();
+                        emit hideCursor();
+                        emit repaintChanged();
+                        emit showCursor();
+                        break;
+                    }*/
+                }
                 // Port to setCounter if we really want that
-		/*if ( cursor->parag()->style() &&
-		     cursor->parag()->style()->displayMode() == QStyleSheetItem::DisplayBlock &&
-		     cursor->index() == 0 && ( e->text() == "-" || e->text() == "*" ) ) {
-		    setParagType( QStyleSheetItem::DisplayListItem, QStyleSheetItem::ListDisc );
-		} else {*/
-		    textFrameSet()->insert( cursor, m_currentFormat, e->text(), false, true, i18n("Insert Text") );
-		//}
-		break;
-	    }
+                /*if ( cursor->parag()->style() &&
+                     cursor->parag()->style()->displayMode() == QStyleSheetItem::DisplayBlock &&
+                     cursor->index() == 0 && ( e->text() == "-" || e->text() == "*" ) ) {
+                    setParagType( QStyleSheetItem::DisplayListItem, QStyleSheetItem::ListDisc );
+                } else {*/
+                    textFrameSet()->insert( cursor, m_currentFormat, e->text(), false, true, i18n("Insert Text") );
+                //}
+                break;
+            }
             // We should use KAccel instead, to make this configurable !
-	    if ( e->state() & ControlButton ) {
-		switch ( e->key() ) {
+            if ( e->state() & ControlButton ) {
+                switch ( e->key() ) {
                 case Key_F16: // Copy key on Sun keyboards
-		    copy();
-		    break;
-		case Key_A:
-		    moveCursor( MoveHome, e->state() & ShiftButton, FALSE );
-		    break;
-		case Key_E:
-		    moveCursor( MoveEnd, e->state() & ShiftButton, FALSE );
-		    break;
-		case Key_K:
-                    textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionKill );
-		    break;
+                    copy();
+                    break;
+                case Key_A:
+                    moveCursor( MoveLineStart, e->state() & ShiftButton );
+                    break;
+                case Key_E:
+                    moveCursor( MoveLineEnd, e->state() & ShiftButton );
+                    break;
+                case Key_K:
+                    textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionKill );
+                    break;
                 case Key_Insert:
-		    copy();
-		    break;
-		}
-		break;
-	    }
-	}
+                    copy();
+                    break;
+                }
+                break;
+            }
+        }
     }
 
     if ( clearUndoRedoInfo ) {
@@ -2530,25 +2543,25 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
     // TODO changeIntervalTimer->start( 100, TRUE );
 }
 
-void KWTextFrameSetEdit::moveCursor( MoveDirectionPrivate direction, bool shift, bool control )
+void KWTextFrameSetEdit::moveCursor( CursorAction action, bool select )
 {
     hideCursor();
-    if ( shift ) {
-	if ( !textDocument()->hasSelection( QTextDocument::Standard ) )
-	    textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
-	moveCursor( direction, control );
-	if ( textDocument()->setSelectionEnd( QTextDocument::Standard, cursor ) ) {
-	    //	    cursor->parag()->document()->nextDoubleBuffered = TRUE; ##### we need that only if we have nested items/documents
+    if ( select ) {
+        if ( !textDocument()->hasSelection( QTextDocument::Standard ) )
+            textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
+        moveCursor( action );
+        if ( textDocument()->setSelectionEnd( QTextDocument::Standard, cursor ) ) {
+            //      cursor->parag()->document()->nextDoubleBuffered = TRUE; ##### we need that only if we have nested items/documents
             textFrameSet()->selectionChangedNotify();
-	} else {
-	    showCursor();
-	}
-	ensureCursorVisible();
+        } else {
+            showCursor();
+        }
+        ensureCursorVisible();
     } else {
-	bool redraw = textDocument()->removeSelection( QTextDocument::Standard );
-	moveCursor( direction, control );
-	if ( redraw ) {
-	    //cursor->parag()->document()->nextDoubleBuffered = TRUE; // we need that only if we have nested items/documents
+        bool redraw = textDocument()->removeSelection( QTextDocument::Standard );
+        moveCursor( action );
+        if ( redraw ) {
+            //cursor->parag()->document()->nextDoubleBuffered = TRUE; // we need that only if we have nested items/documents
             textFrameSet()->selectionChangedNotify();
         }
         ensureCursorVisible();
@@ -2559,69 +2572,61 @@ void KWTextFrameSetEdit::moveCursor( MoveDirectionPrivate direction, bool shift,
     updateUI();
 }
 
-void KWTextFrameSetEdit::moveCursor( MoveDirectionPrivate direction, bool control )
+void KWTextFrameSetEdit::moveCursor( CursorAction action )
 {
-    switch ( direction ) {
-    case MoveLeft: {
-	if ( !control )
-	    cursor->gotoLeft();
-	else
-	    cursor->gotoWordLeft();
-    } break;
-    case MoveRight: {
-	if ( !control )
-	    cursor->gotoRight();
-	else
-	    cursor->gotoWordRight();
-    } break;
-    case MoveUp: {
-	if ( !control )
-	    cursor->gotoUp();
-	else
-        {
-	    //cursor->gotoPageUp( m_canvas->visibleHeight() );
-            // M. Brade suggested up one paragraph instead.
+    switch ( action ) {
+        case MoveBackward:
+            cursor->gotoLeft();
+            break;
+        case MoveWordBackward:
+            cursor->gotoWordLeft();
+            break;
+        case MoveForward:
+            cursor->gotoRight();
+            break;
+        case MoveWordForward:
+            cursor->gotoWordRight();
+            break;
+        case MoveUp:
+            cursor->gotoUp();
+            break;
+        case MoveDown:
+            cursor->gotoDown();
+            break;
+        case MovePgUp:
+            cursor->gotoPageUp( m_canvas->visibleHeight() );
+            break;
+        case MovePgDown:
+            cursor->gotoPageDown( m_canvas->visibleHeight() );
+            break;
+        case MoveLineStart:
+            cursor->gotoLineStart();
+            break;
+        case MoveHome:
+            cursor->gotoHome();
+            break;
+        case MoveLineEnd:
+            cursor->gotoLineEnd();
+            break;
+        case MoveEnd:
+            cursor->gotoEnd();
+            break;
+        case MoveParagUp: {
             QTextParag * parag = cursor->parag()->prev();
             if ( parag )
             {
                 cursor->setParag( parag );
                 cursor->setIndex( 0 );
             }
-        }
-    } break;
-    case MoveDown: {
-	if ( !control )
-	    cursor->gotoDown();
-	else
-        {
-	    //cursor->gotoPageDown( m_canvas->visibleHeight() );
-            // M. Brade suggested down one paragraph instead.
+        } break;
+        case MoveParagDown: {
             QTextParag * parag = cursor->parag()->next();
             if ( parag )
             {
                 cursor->setParag( parag );
                 cursor->setIndex( 0 );
             }
-        }
-    } break;
-    case MoveHome: {
-	if ( !control )
-	    cursor->gotoLineStart();
-	else
-	    cursor->gotoHome();
-    } break;
-    case MoveEnd: {
-	if ( !control )
-	    cursor->gotoLineEnd();
-	else
-	    cursor->gotoEnd();
-    } break;
-    case MovePgUp:
-	cursor->gotoPageUp( m_canvas->visibleHeight() );
-	break;
-    case MovePgDown:
-	cursor->gotoPageDown( m_canvas->visibleHeight() );
-	break;
+        } break;
     }
 
     updateUI();
@@ -2649,8 +2654,8 @@ void KWTextFrameSetEdit::paste()
 void KWTextFrameSetEdit::cut()
 {
     if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
-	copy();
-	textFrameSet()->removeSelectedText( cursor );
+        copy();
+        textFrameSet()->removeSelectedText( cursor );
     }
 }
 
@@ -2812,9 +2817,9 @@ void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint,
 void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent *, const QPoint &, const KoPoint & )
 {
     if ( dragStartTimer->isActive() )
-	dragStartTimer->stop();
+        dragStartTimer->stop();
     if ( mightStartDrag ) {
-	selectAll( FALSE );
+        selectAll( FALSE );
         mightStartDrag = false;
     }
     else
@@ -2987,32 +2992,32 @@ void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
     QTextCursor oldCursor = *cursor;
     placeCursor( iPoint );
     if ( inDoubleClick ) {
-	QTextCursor cl = *cursor;
-	cl.gotoWordLeft();
-	QTextCursor cr = *cursor;
-	cr.gotoWordRight();
+        QTextCursor cl = *cursor;
+        cl.gotoWordLeft();
+        QTextCursor cr = *cursor;
+        cr.gotoWordRight();
 
-	int diff = QABS( oldCursor.parag()->at( oldCursor.index() )->x - mousePos.x() );
-	int ldiff = QABS( cl.parag()->at( cl.index() )->x - mousePos.x() );
-	int rdiff = QABS( cr.parag()->at( cr.index() )->x - mousePos.x() );
+        int diff = QABS( oldCursor.parag()->at( oldCursor.index() )->x - mousePos.x() );
+        int ldiff = QABS( cl.parag()->at( cl.index() )->x - mousePos.x() );
+        int rdiff = QABS( cr.parag()->at( cr.index() )->x - mousePos.x() );
 
-	if ( cursor->parag()->lineStartOfChar( cursor->index() ) !=
-	     oldCursor.parag()->lineStartOfChar( oldCursor.index() ) )
-	    diff = 0xFFFFFF;
+        if ( cursor->parag()->lineStartOfChar( cursor->index() ) !=
+             oldCursor.parag()->lineStartOfChar( oldCursor.index() ) )
+            diff = 0xFFFFFF;
 
-	if ( rdiff < diff && rdiff < ldiff )
-	    *cursor = cr;
-	else if ( ldiff < diff && ldiff < rdiff )
-	    *cursor = cl;
-	else
-	    *cursor = oldCursor;
+        if ( rdiff < diff && rdiff < ldiff )
+            *cursor = cr;
+        else if ( ldiff < diff && ldiff < rdiff )
+            *cursor = cl;
+        else
+            *cursor = oldCursor;
 
     }
     ensureCursorVisible();
 
     bool redraw = FALSE;
     if ( textDocument()->hasSelection( QTextDocument::Standard ) )
-	redraw = textDocument()->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
+        redraw = textDocument()->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
     else // it may be that the initial click was out of the frame
         textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
 
@@ -3033,7 +3038,7 @@ void KWTextFrameSetEdit::placeCursor( const QPoint &pos )
 void KWTextFrameSetEdit::blinkCursor()
 {
     if ( !cursorVisible )
-	return;
+        return;
     bool cv = cursorVisible;
     blinkCursorVisible = !blinkCursorVisible;
     drawCursor( blinkCursorVisible );
@@ -3043,8 +3048,8 @@ void KWTextFrameSetEdit::blinkCursor()
 void KWTextFrameSetEdit::drawCursor( bool visible )
 {
     if ( !cursor->parag() ||
-	 !cursor->parag()->isValid() )
-	return;
+         !cursor->parag()->isValid() )
+        return;
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         return;
 
@@ -3270,7 +3275,6 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
                 m_currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( m_currentFormat->font(), m_currentFormat->color() ) );
             }
             showCurrentFormat();
-            //textDocument()->formatCollection()->debug();
         }
     }
 
@@ -3278,7 +3282,7 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
     KWTextParag * parag = static_cast<KWTextParag *>(cursor->parag());
 
     if ( m_paragLayout.alignment != parag->alignment() ) {
-	m_paragLayout.alignment = parag->alignment();
+        m_paragLayout.alignment = parag->alignment();
         m_canvas->gui()->getView()->showAlign( m_paragLayout.alignment );
     }
 
@@ -3302,10 +3306,10 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
        m_paragLayout.bottomBorder!=parag->bottomBorder())
     {
         m_paragLayout.leftBorder = parag->leftBorder();
-	m_paragLayout.rightBorder = parag->rightBorder();
-	m_paragLayout.topBorder = parag->topBorder();
-	m_paragLayout.bottomBorder = parag->bottomBorder();
-	m_canvas->gui()->getView()->showParagBorders( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.topBorder, m_paragLayout.bottomBorder );
+        m_paragLayout.rightBorder = parag->rightBorder();
+        m_paragLayout.topBorder = parag->topBorder();
+        m_paragLayout.bottomBorder = parag->bottomBorder();
+        m_canvas->gui()->getView()->showParagBorders( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.topBorder, m_paragLayout.bottomBorder );
     }
 
     if ( !parag->style() )
@@ -3317,11 +3321,11 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
     }
 
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)
-	|| m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine) )
+        || m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine) )
     {
-	m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
-	m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
-	m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] );
+        m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
+        m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
+        m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] );
     }
 
     m_paragLayout.setTabList( parag->tabList() );
@@ -3330,6 +3334,13 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
     // There are more paragraph settings, but those that are not directly
     // visible in the UI don't need to be handled here.
     // For instance parag and line spacing stuff, borders etc.
+}
+
+void KWTextFrameSetEdit::applyStyle( const KWStyle * style )
+{
+    textFrameSet()->applyStyle( cursor, style, m_currentFormat );
+    kdDebug() << "KWTextFrameSetEdit::applyStyle m_currentFormat=" << m_currentFormat << " " << m_currentFormat->key() << endl;
+    showCurrentFormat();
 }
 
 void KWTextFrameSetEdit::showCurrentFormat()
