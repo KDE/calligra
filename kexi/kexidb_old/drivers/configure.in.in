@@ -32,30 +32,20 @@ if test "x$mysql_plugin" != "xyes"; then
   compile_mysql_plugin="no"
 fi
 
-dnl check header files
-mysql_incdirs="$ac_mysql_incdir /usr/include /usr/include/mysql /usr/local/include/mysql /usr/local/include"
-AC_FIND_FILE(mysql.h, $mysql_incdirs, mysql_incdir)
-if test ! -r $mysql_incdir/mysql.h; then
-  compile_mysql_plugin="no"
-else
-  MYSQL_INCDIR=$mysql_incdir
-  AC_SUBST(MYSQL_INCDIR)
-fi
+KDE_FIND_PATH(mysql_config, MYSQL_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/b\
+in /usr/bin /opt/mysql/bin /usr/local/mysql/bin ], [
+  AC_MSG_WARN([Could not find MySQL anywhere, check http://www.mysql.com/])
+])
 
-dnl check libraries
-mysql_libdirs="$ac_mysql_libdir /usr/lib /usr/lib/mysql /usr/local/lib/mysql /usr/local/lib"
-AC_FIND_FILE(libmysqlclient.la, $mysql_libdirs, mysql_libdir)
-if test ! -r $mysql_libdir/libmysqlclient.la; then
-    AC_FIND_FILE(libmysqlclient.so, $mysql_libdirs, mysql_libdir)
-    if test ! -r $mysql_libdir/libmysqlclient.so; then
-        compile_mysql_plugin="no"
-    else
-        MYSQL_LIBDIR=$mysql_libdir
-        AC_SUBST(MYSQL_LIBDIR)
-    fi
+if test -n "$MYSQL_CONFIG"; then
+	mysql_incdir=`$MYSQL_CONFIG --cflags|sed -e "s,mysql'$,,g"|sed -e "s,-I',,g"`
+	mysql_libdir=`$MYSQL_CONFIG --libs|sed -e "s,',,g"`
+	MYSQL_INC=$mysql_incdir
+	MYSQL_LIBS=$mysql_libdir
+	AC_SUBST(MYSQL_INC)
+	AC_SUBST(MYSQL_LIBS)
 else
-  MYSQL_LIBDIR=$mysql_libdir
-  AC_SUBST(MYSQL_LIBDIR)
+	compile_mysql_plugin="no"
 fi
 
 if test "$compile_mysql_plugin" = "yes"; then
