@@ -17,11 +17,36 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
+#include <iostream.h>
+
+#include <klocale.h>
+
+#include <kexidberror.h>
+
+#include "cqldb.h"
 #include "cqlrecord.h"
 
-CqlRecord::CqlRecord(SqlHandle *handle)
+CqlRecord::CqlRecord(SqlHandle *handle, const QString statement)
  : KexiDBRecord()
 {
+	try
+	{
+		m_cursor = handle->declareCursor(statement.latin1());
+
+		try
+		{
+			m_cursor->open();
+		}
+		catch(CqlException &err)
+		{
+			cerr << err << endl;
+		}
+	}
+	catch(CqlException &err)
+	{
+		cerr << err << endl;
+		throw KexiDBError(0, CqlDB::errorText(err));
+	}
 }
 
 bool

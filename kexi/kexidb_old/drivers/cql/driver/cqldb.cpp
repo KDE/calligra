@@ -83,7 +83,7 @@ CqlDB::tables()
 	TableIdList *tlist = m_db->getTableIds("PUBLIC");
 	for(TableId *table = tlist->first(); table; table = tlist->next())
 	{
-		tables.append(QString(table->tableName().text()));
+		tables.append(cqlString(table->tableName()));
 	}
 
 	return tables;
@@ -102,7 +102,7 @@ CqlDB::query(QString statement)
 	kdDebug() << "CqlDB::query() query: " << rs << endl;
 	try
 	{
-		m_db->declareCursor(rs.latin1());
+		m_db->executeImmediate(rs.latin1());
 	}
 	catch(CqlException& ex)
 	{
@@ -123,24 +123,25 @@ KexiDBRecord*
 CqlDB::queryRecord(QString statement, bool buffer)
 {
 	kdDebug() << "CqlDB::queryRecord()" << endl;
-	query(statement);
-	CqlRecord *record = new CqlRecord(m_db);
+//	query(statement);
 
-	Cursor *cursor = new Cursor(*m_db);
+	if(!m_db)
+		return false;
+
+	QString rs(statement + ";");
+
 	try
 	{
-		cursor->open();
+		CqlRecord *record = new CqlRecord(m_db, rs);
 	}
-	catch(CqlException &ex)
+	catch(KexiDBError *err)
 	{
-		cerr << ex << endl;
-		throw new KexiDBError(0, "read error");
+		throw err;
 		return 0;
 	}
 
-	
 	kdDebug() << "CqlDB::queryRecord(): record created" << endl;
-	return record;
+
 }
 
 bool
@@ -148,6 +149,26 @@ CqlDB::alterField(const QString& table, const QString& field, const QString& new
 	KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
 	bool binary, bool unsignedType, const QString& defaultVal)
 {
+}
+
+// cql->kexi
+
+static QString
+CqlDB::cqlString(const CqlString &str)
+{
+	return QString(str.text());
+}
+
+static QString
+CqlDB::cqlFixedString(const CqlFixedLengthString &str)
+{
+	return QString(str.text());
+}
+
+static QString
+CqlDB::errorText(CqlException &ex)
+{
+	return cqlString(ex.errorText());
 }
 
 CqlDB::~CqlDB()

@@ -26,7 +26,7 @@ Boston, MA 02111-1307, USA.
 class CqlRecord : public KexiDBRecord
 {
 	public:
-		CqlRecord(SqlHandle *handle);
+		CqlRecord(SqlHandle *handle, const QString statement);
 		~CqlRecord();
 
 		bool		readOnly();
@@ -62,6 +62,10 @@ class CqlRecord : public KexiDBRecord
 		bool		next();
 
 		unsigned long	last_id();
+
+
+	protected:
+		Cursor		*m_cursor;
 };
 
 #endif

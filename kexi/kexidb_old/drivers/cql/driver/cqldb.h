@@ -49,6 +49,12 @@ class CqlDB : public KexiDB
 			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
 			bool binary, bool unsignedType, const QString& defaultVal);
 
+
+		// internal cql->kexi convertations
+		static QString	cqlString(const CqlString &str);
+		static QString	cqlFixedString(const CqlFixedLengthString &str);
+		static QString	errorText(CqlException &ex);
+
 	private:
 		SqlHandle	*m_db;
 };
