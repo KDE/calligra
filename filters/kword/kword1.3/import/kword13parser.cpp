@@ -437,9 +437,14 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
     }
     else if ( name == "STYLE" )
     {
-        // ### TODO: check if style name is empty (should not happen but it would have consequences)
         if ( m_kwordDocument && m_currentLayout )
         {
+            if ( m_currentLayout->m_name.isEmpty() )
+            {
+                // ### TODO: what should be really done with anonymous styles (should not happen but it would have consequences)
+                kdError(30520) << "Anonymous style found! Aborting" << endl;
+                return false; // Assume a parsing error!
+            }
             m_kwordDocument->m_styles.append( *m_currentLayout );
             success = true;
         }
