@@ -669,7 +669,7 @@ bool KoZip::doneWriting( uint size )
 void KoZip::virtual_hook( int id, void* data )
 { KArchive::virtual_hook( id, data ); }
 
-bool KoZip::writeData(const char * c, unsigned int i)
+bool KoZip::writeData(const char * c, uint i)
 {
     Q_ASSERT( d->m_currentFile );
     Q_ASSERT( d->m_currentDev );
