@@ -3347,7 +3347,7 @@ void QTextParag::setFormat( int index, int len, QTextFormat *f, bool useCollecti
 	index = 0;
     if ( index > str->length() - 1 )
 	index = str->length() - 1;
-    if ( index + len > str->length() )
+    if ( index + len >= str->length() )
 	len = str->length() - 1 - index;
 
     QTextFormatCollection *fc = 0;
