@@ -156,7 +156,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
                 _w = kMin( _w, width / 2 );
 
                 bitBlt( canv, width / 2 - _w, 0, &_pix2, 0, 0, _w, height );
-                bitBlt( canv, width / 2, 0, &_pix2, width / 2 - _w, 0, _w, height );
+                bitBlt( canv, width / 2, 0, &_pix2, width - _w, 0, _w, height );
 
                 _time.restart();
             }
