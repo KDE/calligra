@@ -30,6 +30,7 @@ class QPainter;
 class KoZoomHandler;
 class KoSize;
 class KoPoint;
+class QDomElement;
 
 void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor & color,
                  int _w, float angle, KoZoomHandler*_zoomHandler );
@@ -50,5 +51,12 @@ public:
     static QCursor penCursor(); // pen tool cursors
     static QCursor rotateCursor(); // rotate tool cursor
 };
+
+int readOasisSettingsInt( const QDomElement & element );
+double readOasisSettingsDouble( const QDomElement & element );
+bool readOasisSettingsBool( const QDomElement & element );
+QString readOasisSettingsString( const QDomElement & element );
+
+
 
 #endif

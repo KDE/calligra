@@ -30,6 +30,7 @@
 #include <kozoomhandler.h>
 #include <koPoint.h>
 #include <qdatetime.h>
+#include <qdom.h>
 
 void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,
                  int _w, float angle, KoZoomHandler* _zoomHandler)
@@ -391,3 +392,54 @@ int loadOasisTimer( const QString & timer )
 
     return ( second + minute*60 + hour*60*60 );
 }
+
+
+int readOasisSettingsInt( const QDomElement & element )
+{
+    if ( element.hasAttribute( "config:type" ) )
+    {
+        QString type = element.attribute( "config:type" );
+        QString str = element.text();
+        bool b;
+        int value = str.toInt( &b );
+        return ( b ? value : 0 );
+    }
+    return 0;
+}
+
+double readOasisSettingsDouble( const QDomElement & element )
+{
+    if ( element.hasAttribute( "config:type" ) )
+    {
+        QString type = element.attribute( "config:type" );
+        QString str = element.text();
+        bool b;
+        double value = str.toDouble( &b );
+        return ( b ? value : 0 );
+    }
+    return 0.0;
+}
+
+bool readOasisSettingsBool( const QDomElement & element )
+{
+    if ( element.hasAttribute( "config:type" ) )
+    {
+        QString type = element.attribute( "config:type" );
+        QString str = element.text();
+        return ( str == "true" ? true : false );
+    }
+    return false;
+}
+
+QString readOasisSettingsString( const QDomElement & element )
+{
+    if ( element.hasAttribute( "config:type" ) )
+    {
+        QString type = element.attribute( "config:type" );
+        QString str = element.text();
+        return str;
+    }
+    return QString::null;
+}
+
+
