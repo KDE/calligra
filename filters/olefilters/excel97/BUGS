@@ -1,0 +1,5 @@
+Import filter bug list
+-------------------------
+
+#1	Formula			$A$15.. locked areas give _WRONG_ values
+
