@@ -593,7 +593,7 @@ void KoAutoFormatDia::setupTab3()
     m_pListView->addColumn( i18n( "Find" ) );
     m_pListView->addColumn( i18n( "Replace" ) );
     m_pListView->setAllColumnsShowFocus( true );
-    grid->addMultiCellWidget( m_pListView, 6, 6, 0, 5 );
+    grid->addMultiCellWidget( m_pListView, 4, 10, 0, 5 );
 
     connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
              SLOT(slotChangeTextFormatEntry()) );
