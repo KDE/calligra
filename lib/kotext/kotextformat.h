@@ -43,17 +43,18 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending QTextFormat's enum */
-    enum { StrikeOut = 512 , CharSet = 1024, TextBackgroundColor = 2048 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024 };
 
+    /** Set a decimal point size. NOTE: this value isn't stored in the formay key.
+        You should NOT call this - it's a special treat for KoTextFormatter */
     void setPointSizeFloat( float );
-    float pointSizeFloat() const { return fn.pointSizeFloat(); }
-    void setStrikeOut(bool);
-    // ####### Not needed with 3.0? (Werner)
-    //void setCharset( QFont::CharSet charset );
+    //float pointSizeFloat() const { return fn.pointSizeFloat(); }
 
     /** Call this when a text color is set to 'invalid', meaning 'whatever the
      * default for the color scheme is' */
     static QColor defaultTextColor( QPainter * painter );
+
+    void setStrikeOut(bool);
 
     void setTextBackgroundColor(const QColor &);
     QColor textBackgroundColor()const {return m_textBackColor;}

@@ -24,7 +24,7 @@
 
 /**
  * A KoTextZoomHandler converts between an internal text layout resolution of
- * 1440 DPI (by default) and the point-size for the fonts (those known by the user).
+ * ~1440 DPI (by default) and the point-size for the fonts (those known by the user).
  * This conversion doesn't depend on the zoom level. Anything depending on the zoom
  * is handled by KoZoomHandler.
  * Not a real class, it only has static methods, since it has no data.
@@ -44,6 +44,9 @@ public:
     static int ptToLayoutUnit( double pt )
                    // is qRound needed ?
     { return static_cast<int>( pt * static_cast<double>( m_layoutUnitFactor ) ); }
+    /** Same thing for integer values, e.g. a font size in pt */
+    static int ptToLayoutUnit( int ptSize )
+    { return ptSize * m_layoutUnitFactor; }
 
     static QPoint ptToLayoutUnit( const KoPoint &p )
     { return QPoint( ptToLayoutUnit( p.x() ),
@@ -95,7 +98,7 @@ public:
 
     double resolutionX() const { return m_resolutionX; }
     double resolutionY() const { return m_resolutionY; }
-    
+
     int zoom() const { return m_zoom; }
 
     // Input: pt. Output: pixels. Resolution and zoom are applied.

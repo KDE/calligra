@@ -119,6 +119,11 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
                 {
                     // The fast way: use the cached font metrics from KoTextFormat
                     pixelww = origFormat->screenFontMetrics( zh ).width( c->c );
+#ifdef DEBUG_FORMATTER
+                    qDebug( "\nKoTextFormatter::format: char=%s, LU-size=%d, LU-width=%d [equiv. to pix=%d] pixel-width=%d", // format=%s",
+                            QString(c->c).latin1(), origFormat->font().pointSize(),
+                            ww, zh->layoutUnitToPixelX(ww), pixelww/*, origFormat->key().latin1()*/ );
+#endif
                 }
                 else {
                     // Here we have no choice, we need to create the format
@@ -136,13 +141,18 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
                         pos++;
                     }
                     pixelww = tmpFormat.width( str, off );
+#ifdef DEBUG_FORMATTER
+                    qDebug( "KoTextFormatter::format: char=%s, LU-size=%d, font-size=%d LU-width=%d pixel-width=%d format=%s",
+                            QString(c->c).latin1(), origFormat->font().pointSize(),
+                            tmpFormat.font().pointSize(), ww, pixelww, origFormat->key().latin1() );
+#endif
                 }
             }
-#ifdef DEBUG_FORMATTER
-            qDebug( "KoTextFormatter::format: char=%s, LU-size=%d, font-size=%d LU-width=%d pixel-width=%d format=%s",
-                    QString(c->c).latin1(), origFormat->font().pointSize(),
-                    tmpFormat.font().pointSize(), ww, pixelww, origFormat->key().latin1() );
-#endif
+            // ### Max offset (between pixel-width and proportional width) should be 1 pixel
+            // ### (i.e. rounding problems, not due to strangely-wide chars)
+            // still too much - never bigger otherwise spaces can't compensate
+            pixelww = QMIN( pixelww, zh->layoutUnitToPixelX(ww) );
+
 	} else if ( c->c == '\t' ) {
 	    int nx = parag->nextTab( i, x );
 	    if ( nx < x )
@@ -377,7 +387,7 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
             // More complex than that. It's the _space_ that has to grow/shrink
             pixelww -= pixelx - zh->layoutUnitToPixelX( x );
 #ifdef DEBUG_FORMATTER
-            qDebug("pixelww adjusted. x=%d pixelx=%d", zh->layoutUnitToPixelX( x ), pixelx);
+            qDebug("pixelww adjusted by pixelx - x. x=%d pixelx=%d", zh->layoutUnitToPixelX( x ), pixelx);
 #endif
 	} else {
 	    // Non-breakable character

@@ -307,8 +307,10 @@ void QTextFormat::generateKey()
        << fn.weight() << "/"
        << (int)fn.underline() << "/"
        << (int)fn.strikeOut() << "/"
-       << (int)fn.italic() << "/"
-       << (uint)col.rgb() << "/"
+       << (int)fn.italic() << "/";
+    if ( col.isValid() ) // just to shorten the key in the common case
+        ts << (uint)col.rgb();
+    ts << "/"
        << fn.family() << "/"
        << (int)isMisspelled() << "/"
        << anchor_href << "/"
@@ -325,8 +327,10 @@ QString QTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled
        << fn.weight() << "/"
        << (int)fn.underline() << "/"
        << (int)fn.strikeOut() << "/"
-       << (int)fn.italic() << "/"
-       << (uint)col.rgb() << "/"
+       << (int)fn.italic() << "/";
+    if ( col.isValid() ) // just to shorten the key in the common case
+        ts << (uint)col.rgb();
+    ts << "/"
        << fn.family() << "/"
        << (int)misspelled << "/"
        << lhref << "/"

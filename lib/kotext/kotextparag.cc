@@ -498,8 +498,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     //bool forPrint = ( painter.device()->devType() == QInternal::Printer );
     QFont font( lastFormat->screenFont( zh ) );
     //QFontInfo fi( font );
-    //kdDebug() << "KoTextParag::drawParagString requested font " << localFormat.font().pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
-    //kdDebug() << "KoTextParag::drawParagString in pixelsizes : " << localFormat.font().pixelSize() << " (" << lastFormat->font().pixelSize() << " for lu)" << endl;
+    //kdDebug() << "KoTextParag::drawParagString requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
 
     // 3) Go (almost verbatim from QTextFormat::drawParagString)
     QString str( s );
@@ -902,7 +901,7 @@ void KoTextParag::printRTDebug( int info )
     } else if ( info == 1 ) // formatting info
     {
         kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
-                  << " fontsize:" << dynamic_cast<KoTextFormat *>(paragFormat())->pointSizeFloat() << endl;
+                  << " fontsize:" << dynamic_cast<KoTextFormat *>(paragFormat())->font().pointSize() << endl;
 
         QTextString * s = string();
         for ( int i = 0 ; i < s->length() ; ++i )
@@ -918,7 +917,7 @@ void KoTextParag::printRTDebug( int info )
                       << " height=" << ch.height()
                 //      << " format=" << ch.format()
                       << " \"" << ch.format()->key() << "\" "
-                //<< " fontsize:" << dynamic_cast<KoTextFormat *>(ch.format())->pointSizeFloat()
+                //<< " fontsize:" << dynamic_cast<KoTextFormat *>(ch.format())->pointSize()
                       << endl;
             if ( ch.isCustom() )
             {

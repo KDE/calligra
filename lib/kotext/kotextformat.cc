@@ -60,11 +60,11 @@ QTextFormat * KoTextFormatCollection::format( const QFont &fn, const QColor &c )
     Q_ASSERT( !key.contains( '+' ) );
     key += '+';
     key += QString::number( (int)fn.strikeOut() );
-    key += '/';
-    key += QString::number( (int)(fn.pointSizeFloat() * 10) );
-    // ######## Not needed in 3.0?
     //key += '/';
-    //key += QString::number( (int)fn.charSet() );
+    //key += QString::number( (int)(fn.pointSizeFloat() * 10) );
+    key += '/';
+    //if (m_textBackColor.isValid())
+    //    key += m_textBackColor.rgb();
 
     d->m_cachedFormat = static_cast<KoTextFormat *>( dict().find( key ) );
     d->m_cfont = fn;
@@ -153,8 +153,8 @@ KoTextFormat::~KoTextFormat()
 void KoTextFormat::copyFormat( const QTextFormat & nf, int flags )
 {
     QTextFormat::copyFormat( nf, flags );
-    if ( flags & QTextFormat::Size )
-        fn.setPointSizeFloat( nf.font().pointSizeFloat() );
+    //if ( flags & QTextFormat::Size )
+    //    fn.setPointSizeFloat( nf.font().pointSizeFloat() );
     if ( flags & KoTextFormat::StrikeOut )
         fn.setStrikeOut( nf.font().strikeOut() );
     // ######## Not needed in 3.0?
@@ -199,10 +199,11 @@ void KoTextFormat::generateKey()
     // SYNC any changes to the key format with ::format above
     k += '+';
     k += QString::number( (int)fn.strikeOut() );
+    //k += '/';
+    //k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     k += '/';
-    k += QString::number( (int)(fn.pointSizeFloat() * 10) );
-    k += '/';
-    k += m_textBackColor.name();
+    if (m_textBackColor.isValid())
+        k += m_textBackColor.rgb();
     setKey( k );
     //kdDebug() << "generateKey textformat=" << this << " k=" << k << " pointsizefloat=" << fn.pointSizeFloat() << endl;
 

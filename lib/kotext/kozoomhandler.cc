@@ -23,8 +23,8 @@
 #include <koGlobal.h>
 
 // Layout text at 1440 DPI
-// Maybe this should depend on the value of x11AppDpiY, so that it's really
-// always the same ?
+// Well, not really always 1440 DPI, but always 20 times the point size
+// This is constant, no need to litterally apply 1440 DPI at all resolutions.
 int KoTextZoomHandler::m_layoutUnitFactor = 20;
 
 KoZoomHandler::KoZoomHandler()
@@ -64,7 +64,7 @@ double KoZoomHandler::layoutUnitToFontSize( int luSize, bool /*forPrint*/ ) cons
         * ( forPrint ? 1.0 : (72.0 / QPaintDevice::x11AppDpiY()) );
 #endif
     // Pt to pt conversion, we shouldn't need to care about pixel sizes and x11AppDpiY ...
-    return layoutUnitToPt( luSize ) * m_zoomedResolutionY;
+    return layoutUnitToPt( luSize ) * static_cast<double>(m_zoom) / 100.0;
 }
 
 int KoZoomHandler::layoutUnitToPixelY( int y, int h ) const
