@@ -2520,13 +2520,13 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
 KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
 {
     if ( object->isSticky() ) {
-        kdDebug(33001) << "Object is on sticky page" << endl;
-        return stickyPage();
+        //kdDebug(33001) << "Object is on sticky page" << endl;
+        return m_stickyPage;
     }
     for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
         QPtrList<KPObject> list( page->objectList() );
         if ( list.findRef( object ) != -1 ) {
-            kdDebug(33001) << "Object is on page " << m_pageList.findRef(page) + 1 << endl;
+            //kdDebug(33001) << "Object is on page " << m_pageList.findRef(page) + 1 << endl;
             return page;
         }
     }
@@ -2539,15 +2539,15 @@ KPrPage * KPresenterDoc::findSideBarPage(QPtrList<KPObject> &objects)
     KPObject *object;
     for ( object = objects.first(); object; object=objects.next() ) {
         if ( object->isSticky() ) {
-            kdDebug(33001) << "A Object is on the sticky page" << endl;
-            return stickyPage();
+            //kdDebug(33001) << "A Object is on the sticky page" << endl;
+            return m_stickyPage;
         }
     }
     object = objects.first();
     for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
         QPtrList<KPObject> list( page->objectList() );
         if ( list.findRef( object ) != -1 ) {
-            kdDebug(33001) << "The Objects are on page " << m_pageList.findRef(page) + 1 << endl;
+            //kdDebug(33001) << "The Objects are on page " << m_pageList.findRef(page) + 1 << endl;
             return page;
         }
     }
@@ -2942,10 +2942,10 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
         bool findObject = m_kpresenterView->getCanvas()->activePage()->findTextObject( bgObjSpellChecked );
         if ( !findObject )
         {
-            findObject = stickyPage()->findTextObject( bgObjSpellChecked );
+            findObject = m_stickyPage->findTextObject( bgObjSpellChecked );
             if ( findObject )
             {
-                bgObjSpellChecked = stickyPage()->nextTextObject( obj );
+                bgObjSpellChecked = m_stickyPage->nextTextObject( obj );
                 if ( bgObjSpellChecked )
                     return bgObjSpellChecked->nextTextObject();
                 else
@@ -2957,7 +2957,7 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
             return bgObjSpellChecked->nextTextObject();
         else
         {
-            bgObjSpellChecked = stickyPage()->nextTextObject( obj );
+            bgObjSpellChecked = m_stickyPage->nextTextObject( obj );
             if ( bgObjSpellChecked )
                 return bgObjSpellChecked->nextTextObject();
             else
