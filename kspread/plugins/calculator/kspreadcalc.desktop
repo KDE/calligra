@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=KSpreadCalculator
+X-KDE-Library=libkspreadcalc
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+Comment=Calculator plugin for KSpread
+Type=KPlugin
+ServiceTypes=KPlugin
