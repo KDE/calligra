@@ -376,6 +376,16 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
             return KoFilter::WrongFormat;
         }
     }
+    else if ( !qstrcmp( token.text, "urtf" ) )
+    {
+        // URTF seems to have either no version or having version 1
+        if ( token.value > 1 )
+        {
+            kdError(30515) << "Wrong URTF version (" << token.value << "); version 0 or 1 expected" << endl;
+            in.close();
+            return KoFilter::WrongFormat;
+        }
+    }
     else
     {
             kdError(30515) << "Wrong RTF document type (\\" << token.text << "); \\rtf or \\pwd expected" << endl;
