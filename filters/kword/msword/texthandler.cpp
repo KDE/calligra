@@ -138,6 +138,7 @@ void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor )
         static int s_tableNumber = 0;
         m_currentTable = new KWord::Table();
         m_currentTable->name = i18n("Table %1").arg( ++s_tableNumber );
+        //TODO insertVariable(...)
     }
     KWord::Row row( new wvWare::TableRowFunctor( functor ) );
     m_currentTable->rows.append( row );
