@@ -32,11 +32,7 @@ class KWInsertPicDia : public KDialogBase
 public:
     KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, KWDocument *_doc, const char *name = 0 );
 
-    // IPD = InsertPicDia :)
-    enum { IPD_IMAGE = 0, IPD_CLIPART };
-
     QString filename() const { return m_filename; }
-    int type() const { return m_type; }
     bool makeInline() const;
 
     // For pixmaps only
@@ -44,25 +40,19 @@ public:
 
     bool keepRatio() const;
 
-    //static bool selectClipartDia( QString &filename, const QString & _path=QString::null);
-    enum { SelectImage = 1, SelectClipart = 2 };
     /**
-     * @param filename output parameter containing the selected path to chosen file.
-     * Remote files are automatically downloaded first.
-     * @param flags SelectImage, SelectClipart, or both (bitfield).
-     * Return 0 if cancelled, SelectImage if picture was chosen, SelectClipart if clipart.
+     * @param _path the name of the old file
+     * @return the selected file name (QString::null if cancelled)
      */
-    static int selectPictureDia( QString &filename, int flags, const QString & _path=QString::null);
+    static QString selectPictureDia( const QString & _path = QString::null );
 
 protected slots:
     void slotChooseImage();
-    //void slotChooseClipart();
 
 protected:
     static QString selectPicture( KFileDialog & fd );
 
 private:
-    int m_type;
     QString m_filename;
     bool m_bFirst;
     QCheckBox *m_cbInline, *m_cbKeepRatio;

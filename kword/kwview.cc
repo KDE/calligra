@@ -3064,7 +3064,10 @@ void KWView::insertPicture( const QString &filename,
     }
     else
     {
+        KoPictureKey key;
+        key.setKeyFromFile( filename );
         KoPicture picture;
+        picture.setKey( key );
         picture.loadFromFile( filename );
         m_gui->canvasWidget()->insertPicture( picture , pixmapSize, _keepRatio );
     }
@@ -5724,7 +5727,6 @@ void KWView::canvasAddChild( KoViewChild *child )
 
 void KWView::changePicture()
 {
-    QString file;
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
     KoPictureKey oldKey ( frameset->picture().getKey() );
@@ -5733,10 +5735,14 @@ void KWView::changePicture()
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
 
-    if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectImage + KWInsertPicDia::SelectClipart, oldFile ) )
+    QString file ( KWInsertPicDia::selectPictureDia ( oldFile ) );
+    if ( !file.isEmpty() )
     {
+        KoPictureKey key;
+        key.setKeyFromFile ( file );
         KoPicture picture;
-        picture.loadFromFile( file );
+        picture.setKey ( key );
+        picture.loadFromFile ( file );
         KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change Picture"), FrameIndex(frame), oldKey, picture.getKey() ) ;
 
         frameset->insertPicture( picture );
@@ -7009,7 +7015,10 @@ void KWView::changeHorizontalLine()
     if ( dia->exec() )
     {
         QString file( dia->horizontalLineName() );
+        KoPictureKey key;
+        key.setKeyFromFile( file );
         KoPicture picture;
+        picture.setKey( key );
         picture.loadFromFile( file );
         KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change HorizontalLine"), FrameIndex(frame), oldFile, file) ;
 

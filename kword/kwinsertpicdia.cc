@@ -49,7 +49,6 @@ public:
     {
         viewport()->setBackgroundMode( PaletteBase );
         setMinimumSize( 300, 200 );
-        m_type = IPD_IMAGE;
     }
 
     virtual ~KWInsertPicPreview() {}
@@ -80,7 +79,6 @@ public:
     }
 
 private:
-    enum { IPD_IMAGE, IPD_CLIPART } m_type;
     KoPicture m_picture;
     QSize m_size;
 };
@@ -88,11 +86,10 @@ private:
 //////////////
 
 KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, KWDocument *_doc, const char *name )
-    : KDialogBase( Plain, i18n("Insert Picture"), Ok|Cancel, Ok, parent, name, true )
+    : KDialogBase( Plain, i18n("Insert Picture"), Ok|Cancel, Ok, parent, name, true ),
+    m_bFirst ( true ), m_doc ( _doc )
 {
-    m_doc = _doc;
     setInitialSize( QSize(400, 300) );
-    m_bFirst =true;
     QWidget *page = plainPage();
     QGridLayout *grid = new QGridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -135,53 +132,25 @@ bool KWInsertPicDia::keepRatio() const
 
 void KWInsertPicDia::slotChooseImage()
 {
-    int result = KWInsertPicDia::selectPictureDia( m_filename, SelectImage | SelectClipart, m_doc->picturePath() );
+    m_filename = KWInsertPicDia::selectPictureDia( m_doc->picturePath() );
     if ( m_filename.isEmpty() && m_bFirst)
     {
         KDialogBase::close();
     }
-    if ( result == SelectImage )
-    {
-        if ( m_preview->setPicture( m_filename ) )
-        {
-            m_type = IPD_IMAGE;
-            enableButtonOK( true );
-            m_cbKeepRatio->setEnabled( true );
-        }
-    } else if ( result == SelectClipart )
-    {
-        if ( m_preview->setPicture( m_filename ) )
-        {
-            m_type = IPD_CLIPART;
-            enableButtonOK( true );
-            m_cbKeepRatio->setEnabled( true );
-            m_cbKeepRatio->setChecked( false );
-        }
-    }
-    m_bFirst= false;
+    enableButtonOK ( !m_filename.isEmpty() );
+    m_bFirst = false;
 }
 
-int KWInsertPicDia::selectPictureDia( QString &filename, int flags, const QString & _path)
+QString KWInsertPicDia::selectPictureDia( const QString & _path )
 {
-    QStringList mimetypes;
-    if ( flags & SelectClipart )
-        mimetypes += KoPictureFilePreview::clipartMimeTypes();
-    if ( flags & SelectImage )
-        mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
+    QStringList mimetypes ( KImageIO::mimeTypes( KImageIO::Reading ) );
+    mimetypes += KoPictureFilePreview::clipartMimeTypes();
+
     KFileDialog fd( _path, QString::null, 0, 0, TRUE );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Choose Picture"));
     QString file = selectPicture( fd );
-    if ( !file.isEmpty() )
-    {
-        filename = file;
-        KMimeType::Ptr mime = KMimeType::findByPath( file );
-        if ( flags & SelectClipart &&
-             KoPictureFilePreview::clipartMimeTypes().contains( mime->name() ) )
-            return SelectClipart;
-        return SelectImage;
-    }
-    return 0;
+    return file;
 }
 
 QString KWInsertPicDia::selectPicture( KFileDialog & fd )
