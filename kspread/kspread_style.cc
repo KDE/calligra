@@ -259,6 +259,18 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         m_bottomBorderPen = convertOasisStringToPen( str );
         m_featuresSet |= SBottomBorder;
     }
+    if (styleStack.hasAttribute( "style:diagonal-tl-br" ) )
+    {
+        str=styleStack.attribute( "style:diagonal-tl-br" );
+        m_fallDiagonalPen = convertOasisStringToPen( str );
+        m_featuresSet |= SFallDiagonal;
+    }
+    if (styleStack.hasAttribute( "style:diagonal-bl-tr" ) )
+    {
+        str=styleStack.attribute( "style:diagonal-bl-tr" );
+        m_goUpDiagonalPen = convertOasisStringToPen( str );
+        m_featuresSet |= SGoUpDiagonal;
+    }
 #if 0
     bool ok;
     if ( format.hasAttribute( "type" ) )
@@ -403,29 +415,6 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     {
         m_textPen = util_toPen( pen );
         m_featuresSet |= STextPen;
-    }
-
-
-    QDomElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
-    if ( !fallDiagonal.isNull() )
-    {
-        QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
-        {
-            m_fallDiagonalPen = util_toPen( pen );
-            m_featuresSet |= SFallDiagonal;
-        }
-    }
-
-    QDomElement goUpDiagonal = format.namedItem( "up-diagonal" ).toElement();
-    if ( !goUpDiagonal.isNull() )
-    {
-        QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
-        {
-            m_goUpDiagonalPen = util_toPen( pen );
-            m_featuresSet |= SGoUpDiagonal;
-        }
     }
 
     if ( format.hasAttribute( "prefix" ) )
@@ -752,6 +741,15 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
 
         //todo add diagonal
     }
+    if ( ( m_fallDiagonalPen.width() != 0 ) && ( m_fallDiagonalPen.style() != Qt::NoPen ) )
+    {
+        style.addProperty("style:diagonal-tl-br", convertOasisPenToString( m_fallDiagonalPen ) );
+    }
+    if ( ( m_goUpDiagonalPen.width() != 0 ) && ( m_goUpDiagonalPen.style() != Qt::NoPen ) )
+    {
+        style.addProperty("style:diagonal-bl-tr", convertOasisPenToString(m_goUpDiagonalPen ) );
+    }
+
 
 #if 0
     if ( featureSet( SFontFamily ) )
@@ -771,21 +769,6 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     {
         format.setAttribute( "brushcolor", m_backGroundBrush.color().name() );
         format.setAttribute( "brushstyle", (int) m_backGroundBrush.style() );
-    }
-
-
-    if ( featureSet( SFallDiagonal ) )
-    {
-        QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
-        fallDiagonal.appendChild( util_createElement( "pen", m_fallDiagonalPen, doc ) );
-        format.appendChild( fallDiagonal );
-    }
-
-    if ( featureSet( SGoUpDiagonal ) )
-    {
-        QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
-        goUpDiagonal.appendChild( util_createElement( "pen", m_goUpDiagonalPen, doc ) );
-        format.appendChild( goUpDiagonal );
     }
 #endif
     return saveOasisStyleNumeric( mainStyles );
