@@ -4,6 +4,13 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 Name=Forms
+Name[da]=Formularer
+Name[es]=Formularios
+Name[et]=Vormid
+Name[pl]=Formularze
+Name[pt_BR]=Formulários
+Name[sv]=Formulär
+Name[xx]=xxFormsxx
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=1
 X-Kexi-TypeName=form
