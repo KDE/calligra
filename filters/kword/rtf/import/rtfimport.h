@@ -133,7 +133,7 @@ struct RTFFormat
     VertAlign vertAlign;
     Underline underline;
     int font, fontSize, baseline;
-    int color, bgcolor;
+    int color, bgcolor, underlinecolor;
     int uc;
     bool bold, italic, strike, striked, hidden, caps, smallCaps;
 };

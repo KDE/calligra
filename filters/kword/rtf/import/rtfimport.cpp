@@ -213,6 +213,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"u",		insertUnicodeSymbol,	state.format.uc, 0 ),
 	MEMBER(	0L,		"uc",		setNumericProperty,	state.format.uc, 0 ),
 	MEMBER(	0L,		"ul",		setUnderlineProperty,	state.format.underline, 0 ),
+	MEMBER(	0L,		"ulc",		setNumericProperty,	state.format.underlinecolor, 0 ),
 	MEMBER(	0L,		"uld",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineDouble ),
 	MEMBER(	0L,		"uldash",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDash ),
 	MEMBER(	0L,		"uldashd",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDashDot ),
@@ -786,6 +787,7 @@ void RTFImport::setPlainFormatting( RTFProperty * )
     format.baseline	= 0;
     format.color	= -1;
     format.bgcolor	= -1;
+    format.underlinecolor	= -1;
     format.vertAlign	= RTFFormat::Normal;
     format.bold		= false;
     format.italic	= false;
@@ -1885,6 +1887,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 	    node.addNode( "UNDERLINE" );
             QCString st,styleline,wordbyword("0");
             st.setNum(format.fmt.underline);
+            int underlinecolor = format.fmt.underlinecolor;
 
             switch (format.fmt.underline)
             {
@@ -1892,6 +1895,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
             default:
                 {
                     st="0";
+                    underlinecolor=-1; // Reset underline color
                     break;
                 }
             case RTFFormat::UnderlineSimple:
@@ -1953,6 +1957,11 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
             node.setAttribute( "wordbyword", wordbyword );
             if ( !styleline.isEmpty() )
                 node.setAttribute( "styleline", styleline );
+            if ( underlinecolor >= 0 && uint(underlinecolor) < colorTable.count() )
+            {
+                QCString colorstr( colorTable[underlinecolor].name().utf8() );
+                node.setAttribute( "underlinecolor", colorstr );
+            }
 
 	    node.closeNode( "UNDERLINE" );
 	}
