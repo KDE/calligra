@@ -26,7 +26,7 @@ class KSpreadCanvas;
 
 class KFormula;
 
-class QSimpleTextDocument;
+class QSimpleRichText;
 
 #include <iostream.h>
 #include <komlParser.h>
@@ -588,7 +588,7 @@ protected:
     /**
      * Perhaps this cell contains QML ?
      */
-    QSimpleTextDocument *m_pQML;
+    QSimpleRichText *m_pQML;
     /**
      * Perhaps this cell contains a visual formula ?
      */

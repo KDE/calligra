@@ -26,7 +26,7 @@
 #include <qdrawutl.h>
 #include <qpoint.h>
 #include <qpointarray.h>
-#include <qsimpletextdocument.h>
+#include <qsimplerichtext.h>
 #include <qpopupmenu.h>
 
 #include "kspread_table.h"
@@ -1922,7 +1922,7 @@ void KSpreadCell::setText( const QString& _text )
     if ( isFormular() )
       clearFormular();
 
-    m_pQML = new QSimpleTextDocument( m_strText.mid(1) );//, m_pTable->widget() );
+    m_pQML = new QSimpleRichText( m_strText.mid(1) );//, m_pTable->widget() );
 
     m_bValue = false;
     m_bBool = false;
