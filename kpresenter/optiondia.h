@@ -20,49 +20,51 @@
 #ifndef OPTIONDIA_H
 #define OPTIONDIA_H
 
-#include <qtabdialog.h>
+#include <qdialog.h>
 #include <qcolor.h>
 #include <qstring.h>
 
-#include <kcolorbtn.h>
-#include <qlineedit.h>
+#include <kcolorbutton.h>
+#include <knuminput.h>
 
-class QWidget;
+class QVBox;
 class QLabel;
 class QGroupBox;
+class QPushButton;
 
 /******************************************************************/
 /* class OptionDia                                                */
 /******************************************************************/
 
-class OptionDia : public QTabDialog
+class OptionDia : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    // constructor - destrcutor
+    // constructor - destructor
     OptionDia( QWidget *parent=0, const char *name=0 );
     ~OptionDia();
 
     // set values
-    void setRastX( int rx ) { eRastX->setText( QString().setNum( rx ) ); }
-    void setRastY( int ry ) { eRastY->setText( QString().setNum( ry ) ); }
+    void setRastX( int rx ) { eRastX->setValue( rx ); }
+    void setRastY( int ry ) { eRastY->setValue( ry ); }
     void setBackCol( const QColor &c ) { bBackCol->setColor( c ); }
 
     // get values
-    int getRastX() { return QString( eRastX->text() ).toInt(); }
-    int getRastY() { return QString( eRastY->text() ).toInt(); }
+    int getRastX() { return eRastX->value(); }
+    int getRastY() { return eRastY->value(); }
     QColor getBackCol() { return bBackCol->color(); }
 
 private:
 
-    // dialog objecsts
-    QWidget *general, *objects;
+    // dialog objects
+    QVBox *general, *objects;
     QLabel *lRastX, *lRastY, *lBackCol;
-    QLineEdit *eRastX, *eRastY;
+    KIntNumInput *eRastX, *eRastY;
     QGroupBox *txtObj;
     KColorButton *bBackCol;
-
+    QPushButton *okBut, *cancelBut;
+    QGroupBox *gbObjects;
 };
 #endif

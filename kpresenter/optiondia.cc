@@ -20,15 +20,17 @@
 #include "optiondia.h"
 #include "optiondia.moc"
 
-#include <qwidget.h>
 #include <qlabel.h>
-#include <qcheckbox.h>
 #include <qstring.h>
 #include <qgroupbox.h>
-#include <qvalidator.h>
+#include <qvbox.h>
+#include <qlayout.h>
+#include <qtabwidget.h>
 
 #include <kapp.h>
 #include <klocale.h>
+#include <knuminput.h>
+#include <kbuttonbox.h>
 
 #include <stdlib.h>
 
@@ -38,78 +40,62 @@
 
 /*==================== constructor ===============================*/
 OptionDia::OptionDia( QWidget *parent, const char *name )
-    :QTabDialog( parent, name, true )
+    :QDialog( parent, name, true )
 {
-    int col1 = 20, dummy, w, h;
-
     /* Tab: General */
-    general = new QWidget( this, "general" );
 
-    lRastX = new QLabel( general, "lRastX" );
-    lRastX->setText( i18n( "Horizontal Raster: " ) );
-    lRastX->move( col1, 20 );
-    lRastX->resize( lRastX->sizeHint() );
-
-    lRastY = new QLabel( general, "lRastY" );
-    lRastY->setText( i18n( "Vertical Raster: " ) );
-    lRastY->move( col1, lRastX->y()+lRastX->height()+15 );
-    lRastY->resize( lRastY->sizeHint() );
-
-    dummy = QMAX(lRastX->sizeHint().width(),lRastY->sizeHint().width());
-    lRastX->resize( dummy, lRastX->height() );
-    lRastY->resize( dummy, lRastY->height() );
-
-    eRastX = new QLineEdit( general );
-    eRastX->setValidator( new QIntValidator( eRastX ) );
-    eRastX->setText( "20" );
-    eRastX->move( lRastX->x()+lRastX->width()+10, lRastX->y() );
-    eRastX->resize( eRastX->sizeHint().width()/2, eRastX->sizeHint().height() );
-    eRastX->setMaxLength( 2 );
-
-    eRastY = new QLineEdit( general );
-    eRastY->setValidator( new QIntValidator( eRastY ) );
-    eRastY->setText( "20" );
-    eRastY->move( lRastY->x()+lRastY->width()+10, lRastY->y() );
-    eRastY->resize( eRastY->sizeHint().width()/2, eRastY->sizeHint().height() );
-    eRastY->setMaxLength( 2 );
-
-    lRastX->resize( lRastX->width(), eRastX->height() );
-    lRastY->resize( lRastY->width(), eRastY->height() );
-
-    general->resize( 20 + eRastX->x() + eRastX->width(), 20 + eRastY->y() + eRastY->height() );
-
-    /* Tab: Objects */
-    objects = new QWidget( this, "objects" );
-
-    txtObj = new QGroupBox( i18n( "Objects in Editing-Mode" ), objects, "txtObjs" );
-    txtObj->move( col1, col1 );
-
-    lBackCol = new QLabel( txtObj, "lBackCol" );
-    lBackCol->setText( i18n( "Backgroud color:" ) );
-    lBackCol->move( 10, 20 );
-    lBackCol->resize( lBackCol->sizeHint() );
-
-    bBackCol = new KColorButton( white, txtObj, "bBackCol" );
-    bBackCol->setGeometry( lBackCol->x() + lBackCol->width() + 10, lBackCol->y(), 100, 25 );
-
-    txtObj->resize( bBackCol->x() + bBackCol->width() + 20, bBackCol->y() + bBackCol->height() + 10 );
-
-    objects->resize( txtObj->width() + 40, txtObj->height() + 40 );
-
-    w = QMAX(objects->width(),general->width());
-    h = QMAX(objects->height(),general->height());
-
-
-    resize( 300, 200 );
-
-    /* build dialog */
-    addTab( general, i18n( "General" ) );
-//     addTab( objects, i18n( "Objects" ) );
-    objects->hide();
+    QVBoxLayout *layout = new QVBoxLayout( this );
+    layout->setMargin( 5 );
+    layout->setSpacing( 5 );
     
-    setCancelButton( i18n( "Cancel" ) );
-    setApplyButton( i18n( "Apply" ) );
-    setOkButton( i18n( "OK" ) );
+    QVBoxLayout *vbox = new QVBoxLayout( layout );
+    vbox->setSpacing( 5 );
+
+    QTabWidget *tabWidget = new QTabWidget( this );
+    vbox->addWidget( tabWidget );
+    
+    QVBox *general = new QVBox( tabWidget );
+    general->setMargin( 5 );
+    general->setSpacing( 5 );
+
+    (void) new QLabel( i18n( "Horizontal Raster: " ), general );
+
+    eRastX = new KIntNumInput(20, general);
+      
+    (void) new QLabel( i18n( "Vertical Raster: " ), general );
+  
+    eRastY = new KIntNumInput(20, general); 
+
+    tabWidget->addTab(general, i18n( "General" ));
+    
+    /* Tab: Objects */
+    
+    QVBox *objects = new QVBox( tabWidget );
+    objects->setMargin( 5 );
+    objects->setSpacing( 5 );
+    
+    gbObjects = new QGroupBox( 2, Qt::Horizontal, i18n( "Objects in editing mode" ), objects );
+        
+    (void) new QLabel( i18n( "Background color:" ), gbObjects );
+    
+    bBackCol = new KColorButton( white, gbObjects );
+
+    tabWidget->addTab(objects, i18n( "Objects" )); 
+    
+    /* Buttons */
+    KButtonBox *bb = new KButtonBox( this );
+    bb->addStretch();
+
+    okBut = bb->addButton( i18n( "&OK" ) );
+    cancelBut = bb->addButton( i18n( "&Cancel" ) );
+    okBut->setDefault( true );
+
+    connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
+
+    bb->layout();
+
+    layout->addWidget( bb );
 }
 
 /*===================== destructor ===============================*/
