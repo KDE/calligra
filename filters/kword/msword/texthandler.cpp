@@ -251,7 +251,7 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
     if ( !refChp || refChp->fCaps != chp->fCaps )
     {
         QDomElement fontAttrib( mainDocument().createElement( "FONTATTRIBUTE" ) );
-        fontAttrib.setAttribute( "value", chp->fCaps ? "upper" : "none" );
+        fontAttrib.setAttribute( "value", chp->fCaps ? "uppercase" : "none" );
         // TODO in KWord: small caps
         format.appendChild( fontAttrib );
     }
