@@ -288,7 +288,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	if (yytext[0]>='0' && yytext[0]<='9') {
 //		kdDebug() << "  Invalid identifier! " << yytext << endl;
-		setError(i18n("Invalid identifier."));
+		setError(i18n("Invalid identifier"));
 		return ERROR_DIGIT_BEFORE_IDENTIFIER;
 	}
 	return IDENTIFIER;

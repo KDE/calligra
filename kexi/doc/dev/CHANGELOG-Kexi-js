@@ -330,6 +330,8 @@ KexiDB
 	database engine requires. Do not append or prepend any quotation 
 	marks characters - it is automatically done by escapeIdentifier() using
 	DriverBehaviour::QUOTATION_MARKS_FOR_IDENTIFIER.
+Parser
+- tokens like '123abc' are now reported as invalid by lexer to parser
 
 
 2004-08-25
