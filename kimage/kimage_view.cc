@@ -43,13 +43,12 @@
 #include "kimage_shell.h"
 #include "kimage_global.h"
 
-KImageView::KImageView( KImageDocument* doc, QWidget* parent, const char* name )
-  : ContainerView( doc, parent, name )
-  , m_pDoc( doc )
+KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _name )
+  : ContainerView( _doc, _parent, _name )
 {
   //setWidget( this );
 
-  QObject::connect( m_pDoc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
+  QObject::connect( _doc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
   // edit actions
 
@@ -96,7 +95,7 @@ KImageView::KImageView( KImageDocument* doc, QWidget* parent, const char* name )
   m_copy->setEnabled( false );
   m_paste->setEnabled( false );
 
-  setBackgroundColor( darkBlue );
+  //setBackgroundColor( darkBlue );
 
   m_drawMode = OriginalSize;
   m_centerMode = 0;
@@ -104,20 +103,26 @@ KImageView::KImageView( KImageDocument* doc, QWidget* parent, const char* name )
   slotUpdateView();
 }
 
-void KImageView::paintEvent( QPaintEvent* event )
+void KImageView::paintEvent( QPaintEvent* /* _event */ )
 {
-  if( m_pixmap.isNull() )
-    return;
+  cout << "KImageView::paintEvent()" << endl;
+
+  //if( doc().isEmpty() )
+  //  return;
 
   QPainter painter;
 
   painter.begin( this );
 
+  QPixmap m_pixmap;
+  m_pixmap.convertFromImage( doc()->image() );
+
+  //painter.drawPixmap( 0, 0, m_pixmap );
+  
   // TODO : Scaling
 
-  m_pDoc->paintContent( painter, event->rect(), false );
+  //doc()->paintContent( painter, _event->rect(), false );
   
-  /*
   if( m_centerMode )
   {
     painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
@@ -126,35 +131,34 @@ void KImageView::paintEvent( QPaintEvent* event )
   {
     painter.drawPixmap( 0, 0, m_pixmap );
   }
-  */
   
   painter.end();
 }
 
-/*
 KImageDocument* KImageView::doc()
 {
-  return m_pDoc;
+  return (KImageDocument*) part();
 }
 
+/*
 bool KImageView::printDlg()
 {
   QPrinter prt;
 
   if( QPrintDialog::getPrinterSetup( &prt ) )
   {
-    m_pDoc->print( &prt );
+    doc()->print( &prt );
   }
   return true;
 }
 
 void KImageView::newView()
 {
-  ASSERT( m_pDoc != 0L );
+  ASSERT( doc() != 0L );
 
   KImageShell* shell = new KImageShell;
   shell->show();
-  shell->setDocument( m_pDoc );
+  shell->setDocument( doc() );
 }
 */
 
@@ -190,7 +194,7 @@ void KImageView::editImportImage()
   {
     return;
   }
-  if( !m_pDoc->openDocument( file, 0L ) )
+  if( !doc()->openDocument( file, 0L ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
@@ -201,7 +205,7 @@ void KImageView::editImportImage()
 
 void KImageView::editExportImage()
 {
-  if( m_pDoc->isEmpty() )
+  if( doc()->isEmpty() )
   {
     QString tmp;
     QMessageBox::critical( this, i18n( "IO Error" ), i18n("The document is empty\nNothing to export."), i18n( "OK" ) );
@@ -214,7 +218,7 @@ void KImageView::editExportImage()
   {
     return;
   }
-  if( !m_pDoc->saveDocument( file, 0L ) )
+  if( !doc()->saveDocument( file, 0L ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
@@ -234,12 +238,12 @@ void KImageView::editPreferences()
 
 void KImageView::editPageLayout()
 {
-  //m_pDoc->paperLayoutDlg();
+  //doc()->paperLayoutDlg();
 }
 
 void KImageView::viewFitToView()
 {
-  if( m_pDoc->image().isNull() )
+  if( doc()->image().isNull() )
     return;
 
   m_drawMode = FitToView;
@@ -248,7 +252,7 @@ void KImageView::viewFitToView()
 
 void KImageView::viewFitWithProportions()
 {
-  if( m_pDoc->image().isNull() )
+  if( doc()->image().isNull() )
     return;
 
   m_drawMode = FitWithProps;
@@ -257,7 +261,7 @@ void KImageView::viewFitWithProportions()
 
 void KImageView::viewOriginalSize()
 {
-  if( m_pDoc->image().isNull() )
+  if( doc()->image().isNull() )
     return;
 
   m_drawMode = OriginalSize;
@@ -266,7 +270,7 @@ void KImageView::viewOriginalSize()
 
 void KImageView::viewInformations()
 {
-  if( m_pDoc->isEmpty() )
+  if( doc()->isEmpty() )
   {
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n( "The document is empty\nNo information available." ), i18n( "OK" ) );
     return;
@@ -275,7 +279,7 @@ void KImageView::viewInformations()
   QString tmp;
 
   QMessageBox::information( this, i18n( "Image information" ),
-    tmp.sprintf( "X-Size : %i\nY-Size : %i\nColor depth : %i\n" + m_pDoc->m_strImageFormat,
+    tmp.sprintf( "X-Size : %i\nY-Size : %i\nColor depth : %i\n" + doc()->m_strImageFormat,
     m_pixmap.size().width(),
     m_pixmap.size().height(),
     m_pixmap.depth() ), i18n( "OK" ) );
@@ -283,7 +287,7 @@ void KImageView::viewInformations()
 
 void KImageView::viewZoomFactor()
 {
-  if( m_pDoc->isEmpty() )
+  if( doc()->isEmpty() )
   {
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
     return;
@@ -302,11 +306,14 @@ void KImageView::viewZoomFactor()
 
 void KImageView::viewCentered()
 {
-  if( m_pDoc->isEmpty() )
+/*
+  // FIXME: test fails all the time
+  if( doc()->isEmpty() )
   {
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
     return;
   }
+*/
   m_centerMode = 1 - m_centerMode;
   slotUpdateView();
 }
@@ -331,7 +338,7 @@ void KImageView::transformRotateRight()
 
   QWMatrix matrix;
   matrix.rotate( 90 );
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -341,7 +348,7 @@ void KImageView::transformRotateLeft()
 
   QWMatrix matrix;
   matrix.rotate( -90 );
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -359,7 +366,7 @@ void KImageView::transformRotateAngle()
 
   QWMatrix matrix;
   matrix.rotate( angle );
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -370,7 +377,7 @@ void KImageView::transformFlipVertical()
   QWMatrix matrix;
   QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   matrix *= matrix2;
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -382,7 +389,7 @@ void KImageView::transformFlipHorizontal()
   QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   matrix2.rotate( 180 );
   matrix *= matrix2;
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -399,7 +406,7 @@ void KImageView::transformZoomFactor()
     return;
   double val = (double)factor/100;
   matrix.scale( val, val );
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -409,7 +416,7 @@ void KImageView::transformZoomIn10()
 
   QWMatrix matrix;
   matrix.scale( 1.1, 1.1 );
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -419,7 +426,7 @@ void KImageView::transformZoomOut10()
 
   QWMatrix matrix;
   matrix.scale( 0.9, 0.9 );
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -429,7 +436,7 @@ void KImageView::transformZoomDouble()
 
   QWMatrix matrix;
   matrix.scale( 2.0, 2.0 );
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -439,7 +446,7 @@ void KImageView::transformZoomHalf()
 
   QWMatrix matrix;
   matrix.scale( 0.5, 0.5 );
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -447,8 +454,25 @@ void KImageView::transformZoomMax()
 {
   kdebug( KDEBUG_INFO, 0, "Zoom Max" );
 
+  // TODO : dont flip, zoom
+  QWMatrix matrix;
+  double dw = (double) width() / (double) doc()->image().width();
+  double dh = (double) height() / (double) doc()->image().height();
+  matrix.scale( dw, dh );
+
+/*
+	  m_pixmap.convertFromImage( doc()->image().smoothScale( width(), height() ) );
+  	  break;
+  	case FitWithProps:
+      dh = (double) height() / (double) doc()->image().height();
+      dw = (double) width() / (double) doc()->image().width();
+      d = ( dh < dw ? dh : dw );
+	  m_pixmap.convertFromImage( doc()->image().smoothScale( int( d * doc()->image().width() ), int ( d * doc()->image().height() ) ) );
+  	  break;
+*/
+
   //QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -456,8 +480,14 @@ void KImageView::transformZoomMaxAspect()
 {
   kdebug( KDEBUG_INFO, 0, "Zoom Max Aspect" );
 
+  // TODO : dont flip, zoom
+  QWMatrix matrix;
+  double dw = (double) width() / (double) doc()->image().width();
+  double dh = (double) height() / (double) doc()->image().height();
+  double d = ( dh < dw ? dh : dw );
+  matrix.scale( d, d );
   //QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-  //m_pDoc->transformImage( matrix );
+  doc()->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -480,7 +510,7 @@ void KImageView::resizeEvent( QResizeEvent* )
 void KImageView::slotUpdateView()
 {
 /*
-  if( m_pDoc->image().isNull() )
+  if( doc()->image().isNull() )
   {
     return;
   }
@@ -490,25 +520,25 @@ void KImageView::slotUpdateView()
   switch ( m_drawMode )
   {
   	case OriginalSize:
-	  m_pixmap.convertFromImage( m_pDoc->image() );
+	  m_pixmap.convertFromImage( doc()->image() );
   	  break;
   	case FitToView:
-	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( width(), height() ) );
+	  m_pixmap.convertFromImage( doc()->image().smoothScale( width(), height() ) );
   	  break;
   	case FitWithProps:
-      dh = (double) height() / (double) m_pDoc->image().height();
-      dw = (double) width() / (double) m_pDoc->image().width();
+      dh = (double) height() / (double) doc()->image().height();
+      dw = (double) width() / (double) doc()->image().width();
       d = ( dh < dw ? dh : dw );
-	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( int( d * m_pDoc->image().width() ), int ( d * m_pDoc->image().height() ) ) );
+	  m_pixmap.convertFromImage( doc()->image().smoothScale( int( d * doc()->image().width() ), int ( d * doc()->image().height() ) ) );
   	  break;
     case ZoomFactor:
-      dw = m_pDoc->image().width() * m_zoomFactor.x() / 100;
-      dh = m_pDoc->image().height() * m_zoomFactor.y() / 100;
-	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( int( dw * m_pDoc->image().width() ), int ( dh * m_pDoc->image().height() ) ) );
+      dw = doc()->image().width() * m_zoomFactor.x() / 100;
+      dh = doc()->image().height() * m_zoomFactor.y() / 100;
+	  m_pixmap.convertFromImage( doc()->image().smoothScale( int( dw * doc()->image().width() ), int ( dh * doc()->image().height() ) ) );
   	  break;
   }
-  QWidget::update();
 */
+  QWidget::update();
 }
 
 #include "kimage_view.moc"

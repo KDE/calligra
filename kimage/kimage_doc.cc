@@ -58,7 +58,8 @@ KImageDocument::~KImageDocument()
 
 bool KImageDocument::initDoc()
 {
-  m_bEmpty = true;
+  // FIXME hase to be true on startup
+  m_bEmpty = false;
 
   m_leftBorder = 20.0;
   m_rightBorder = 20.0;
@@ -69,6 +70,10 @@ bool KImageDocument::initDoc()
   m_paperHeight = PG_A4_HEIGHT;
   calcPaperSize();
   m_orientation = PG_PORTRAIT;
+
+  m_image.load( "/home/devel/daten/pshae46.jpg" );
+
+  cout << "MICHAEL : initDoc()" << endl;
 
   return true;
 }
@@ -90,12 +95,19 @@ Shell* KImageDocument::createShell()
   return shell;
 }
 
-void KImageDocument::paintContent( QPainter& /* _painter */, const QRect& /* _rect */, bool /* _transparent */ )
+void KImageDocument::paintContent( QPainter& _painter, const QRect& /* _rect */, bool /* _transparent */ )
 {
   // TODO : paint image here
   // draw only the rect given in _rect
   
   //paintPixmap( &_painter, _rect);
+
+  cout << "MICHAEL : KImageDocument::paintContent()" << endl;
+
+  QPixmap pix;
+  pix.convertFromImage( m_image );
+
+  _painter.drawPixmap( 0, 0, pix );
 }
 
 QCString KImageDocument::mimeType() const
@@ -731,6 +743,7 @@ bool KImageDocument::saveDocument( const QString & _filename, const char* / * _f
 
   return m_image.save( _filename, m_strImageFormat );
 }
+*/
 
 void KImageDocument::transformImage( const QWMatrix& matrix )
 {
@@ -746,20 +759,7 @@ void KImageDocument::transformImage( const QWMatrix& matrix )
   kdebug( KDEBUG_INFO, 0, "Image manipulated with matrix" );
 }
 
-void KImageDocument::setModified( bool _c )
-{
-  setModified( _c );
-  if ( _c )
-  {
-    m_bEmpty = false;
-  }
-}
-
-bool KImageDocument::isEmpty()
-{
-  return m_bEmpty;
-}
-
+/*
 float KImageDocument::printableWidth()
 {
   return m_paperWidth - m_leftBorder - m_rightBorder;

@@ -38,8 +38,7 @@ class KImageView : public ContainerView
 public:
   KImageView( KImageDocument* doc, QWidget* _parent = 0, const char* _name = 0 );
 
-protected:
-  virtual void paintEvent( QPaintEvent* );
+  KImageDocument* doc();
 
 public slots:
 //void slotDocUpdated();
@@ -105,8 +104,9 @@ public slots:
 protected:
   enum DrawMode { OriginalSize, FitToView, FitWithProps, ZoomFactor };
 
+  virtual void paintEvent( QPaintEvent* );
 /*
-  virtual void resizeEvent( QResizeEvent* _ev );
+  virtual void resizeEvent( QResizeEvent* );
   virtual void mousePressEvent ( QMouseEvent * );
   virtual void mouseReleaseEvent ( QMouseEvent * );
   virtual void mouseMoveEvent ( QMouseEvent * );
@@ -128,7 +128,6 @@ protected:
   KAction *m_helpAbout, *m_helpUsing;
 
   QPoint          m_zoomFactorValue;
-  KImageDocument *m_pDoc;
   QPixmap         m_pixmap;
   DrawMode        m_drawMode;
   int             m_centerMode;
