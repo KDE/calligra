@@ -521,7 +521,6 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
 
 	repaint( false );
 	double _tmp = i_first;
-	// FIXME
 	emit newLeftIndent( i_left );
 	i_first = _tmp;
 	emit newFirstIndent( i_first );

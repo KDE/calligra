@@ -351,12 +351,12 @@ void KoPageLayoutDia::setupTab1()
     } else {
 	QString str;
 	switch ( layout.unit ) {
-	case PG_MM: str = "mm"; break;
-	case PG_PT: str = "pt"; break;
-	case PG_INCH: str = "inch"; break;
+	case PG_MM: str = i18n("mm"); break;
+	case PG_PT: str = i18n("pt"); break;
+	case PG_INCH: str = i18n("inch"); break;
 	}
 
-	lpgUnit = new QLabel( i18n( QString( "All values are given in " + str ) ), tab1 );
+	lpgUnit = new QLabel( i18n("All values are given in %1").arg(str), tab1 );
 	grid1->addWidget( lpgUnit, 0, 0 );
     }
 
@@ -402,7 +402,7 @@ void KoPageLayoutDia::setupTab1()
     // linedit width
     epgWidth = new QLineEdit( formatFrame, "Width" );
     epgWidth->setValidator( new QDoubleValidator( epgWidth ) );
-    epgWidth->setText( "000.00" );
+    epgWidth->setText( i18n("000.00") );
     epgWidth->setMaxLength( 6 );
     epgWidth->setEchoMode( QLineEdit::Normal );
     epgWidth->setFrame( true );
@@ -420,7 +420,7 @@ void KoPageLayoutDia::setupTab1()
     // linedit height
     epgHeight = new QLineEdit( formatFrame, "Height" );
     epgHeight->setValidator( new QDoubleValidator( epgHeight ) );
-    epgHeight->setText( "000.00" );
+    epgHeight->setText( i18n("000.00") );
     epgHeight->setMaxLength( 6 );
     epgHeight->setEchoMode( QLineEdit::Normal );
     epgHeight->setFrame( true );
@@ -464,7 +464,7 @@ void KoPageLayoutDia::setupTab1()
     // linedit left
     ebrLeft = new QLineEdit( borderFrame, "Left" );
     ebrLeft->setValidator( new QDoubleValidator( ebrLeft ) );
-    ebrLeft->setText( "000.00" );
+    ebrLeft->setText( i18n("000.00") );
     ebrLeft->setMaxLength( 6 );
     ebrLeft->setEchoMode( QLineEdit::Normal );
     ebrLeft->setFrame( true );
@@ -481,7 +481,7 @@ void KoPageLayoutDia::setupTab1()
     // linedit right
     ebrRight = new QLineEdit( borderFrame, "Right" );
     ebrRight->setValidator( new QDoubleValidator( ebrRight ) );
-    ebrRight->setText( "000.00" );
+    ebrRight->setText( i18n("000.00") );
     ebrRight->setMaxLength( 6 );
     ebrRight->setEchoMode( QLineEdit::Normal );
     ebrRight->setFrame( true );
@@ -498,7 +498,7 @@ void KoPageLayoutDia::setupTab1()
     // linedit top
     ebrTop = new QLineEdit( borderFrame, "Top" );
     ebrTop->setValidator( new QDoubleValidator( ebrTop ) );
-    ebrTop->setText( "000.00" );
+    ebrTop->setText( i18n("000.00") );
     ebrTop->setMaxLength( 6 );
     ebrTop->setEchoMode( QLineEdit::Normal );
     ebrTop->setFrame( true );
@@ -515,7 +515,7 @@ void KoPageLayoutDia::setupTab1()
     // linedit bottom
     ebrBottom = new QLineEdit( borderFrame, "Bottom" );
     ebrBottom->setValidator( new QDoubleValidator( ebrBottom ) );
-    ebrBottom->setText( "000.00" );
+    ebrBottom->setText( i18n("000.00") );
     ebrBottom->setMaxLength( 6 );
     ebrBottom->setEchoMode( QLineEdit::Normal );
     ebrBottom->setFrame( true );
@@ -632,7 +632,6 @@ void KoPageLayoutDia::setValuesTab1Helper() {
 void KoPageLayoutDia::setupTab2()
 {
     QWidget *tab2 = addPage(i18n( "Header and Footer" ));
-
     QGridLayout *grid2 = new QGridLayout( tab2, 7, 3, 6, 6 );
 
     // ------------- header ---------------
@@ -685,6 +684,7 @@ void KoPageLayoutDia::setupTab2()
     grid2->addWidget( eFootRight, 5, 2 );
     eFootRight->setText( hf.footRight );
 
+    // FIXME (Werner) - How ti make *that* i18n-able?
     QLabel *lMacros2 = new QLabel( "<qt>You can insert several tags in the text:"
 			   "<ul><li>&lt;page&gt;: The current page</li>"
 			   "<li>&lt;name&gt;: The filename or URL</li>"
@@ -714,17 +714,17 @@ void KoPageLayoutDia::setupTab3()
 
     QString str;
     switch ( layout.unit ) {
-    case PG_MM: str = "mm"; break;
-    case PG_PT: str = "pt"; break;
-    case PG_INCH: str = "inch"; break;
+    case PG_MM: str = i18n("mm"); break;
+    case PG_PT: str = i18n("pt"); break;
+    case PG_INCH: str = i18n("inch"); break;
     }
 
-    QLabel *lCSpacing = new QLabel( i18n( QString( "Columns Spacing ( " + str + " ):" ) ), tab3 );
+    QLabel *lCSpacing = new QLabel( i18n("Columns Spacing ( %1 ):").arg(str), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
 
     nCSpacing = new QLineEdit( tab3, "" );
     nCSpacing->setValidator( new QDoubleValidator( nCSpacing ) );
-    nCSpacing->setText( "0.00" );
+    nCSpacing->setText( i18n("0.00") );
     nCSpacing->setMaxLength( 5 );
     nCSpacing->setEchoMode( QLineEdit::Normal );
     nCSpacing->setFrame( true );
@@ -767,9 +767,9 @@ void KoPageLayoutDia::setupTab4()
 {
     QString str;
     switch ( layout.unit ) {
-    case PG_MM: str = "mm"; break;
-    case PG_PT: str = "pt"; break;
-    case PG_INCH: str = "inch"; break;
+    case PG_MM: str = i18n("mm"); break;
+    case PG_PT: str = i18n("pt"); break;
+    case PG_INCH: str = i18n("inch"); break;
     }
 
     QWidget *tab4 = addPage(i18n( "Header and Footer" ));
@@ -794,13 +794,13 @@ void KoPageLayoutDia::setupTab4()
     headerGrid->addMultiCellWidget( rhEvenOdd, 3, 3, 0, 1 );
     if ( kwhf.header == HF_EO_DIFF ) rhEvenOdd->setChecked( true );
 
-    QLabel *lHSpacing = new QLabel( i18n( QString( "Spacing between header and body ( " + str + " ):" ) ), gHeader );
+    QLabel *lHSpacing = new QLabel( i18n("Spacing between header and body ( %1 ):").arg(str), gHeader );
     lHSpacing->setAlignment( AlignRight | AlignVCenter );
     headerGrid->addWidget( lHSpacing, 4, 0 );
 
     nHSpacing = new QLineEdit( gHeader, "" );
     nHSpacing->setValidator( new QDoubleValidator( nHSpacing ) );
-    nHSpacing->setText( "0.00" );
+    nHSpacing->setText( i18n("0.00") );
     nHSpacing->setMaxLength( 5 );
     nHSpacing->setEchoMode( QLineEdit::Normal );
     nHSpacing->setFrame( true );
@@ -858,13 +858,13 @@ void KoPageLayoutDia::setupTab4()
     footerGrid->addMultiCellWidget( rfEvenOdd, 3, 3, 0, 1 );
     if ( kwhf.footer == HF_EO_DIFF ) rfEvenOdd->setChecked( true );
 
-    QLabel *lFSpacing = new QLabel( i18n( QString( "Spacing between footer and body ( " + str + " ):" ) ), gFooter );
+    QLabel *lFSpacing = new QLabel( i18n("Spacing between footer and body ( %1 ):").arg(str), gFooter );
     lFSpacing->setAlignment( AlignRight | AlignVCenter );
     footerGrid->addWidget( lFSpacing, 4, 0 );
 
     nFSpacing = new QLineEdit( gFooter, "" );
     nFSpacing->setValidator( new QDoubleValidator( nFSpacing ) );
-    nFSpacing->setText( "0.00" );
+    nFSpacing->setText( i18n("0.00") );
     nFSpacing->setMaxLength( 5 );
     nFSpacing->setEchoMode( QLineEdit::Normal );
     nFSpacing->setFrame( true );
@@ -1076,172 +1076,71 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
     }
 }
 
-/*===================== width changed =============================*/
-void KoPageLayoutDia::widthChanged()
-{
-    if ( epgWidth->text().length() == 0 && retPressed )
-	epgWidth->setText( "0.00" );
+void KoPageLayoutDia::changed(QLineEdit *line, double &mm, double &pt, double &inch) {
+
+    if ( line->text().length() == 0 && retPressed )
+	line->setText( i18n("0.00") );
 
     switch ( layout.unit ) {
 	case PG_MM: {
-	    layout.mmWidth = epgWidth->text().toDouble();
-	    layout.ptWidth = MM_TO_POINT( layout.mmWidth );
-	    layout.inchWidth = MM_TO_INCH( layout.mmWidth );
+	    mm = line->text().toDouble();
+	    pt = MM_TO_POINT( mm );
+	    inch = MM_TO_INCH( mm );
 	} break;
 	case PG_PT: {
-	    layout.ptWidth = epgWidth->text().toDouble();
-	    layout.mmWidth = POINT_TO_MM( layout.ptWidth );
-	    layout.inchWidth = POINT_TO_INCH( layout.ptWidth );
+	    pt = line->text().toDouble();
+	    mm = POINT_TO_MM( pt );
+	    inch = POINT_TO_INCH( pt );
 	} break;
 	case PG_INCH: {
-	    layout.inchWidth = epgWidth->text().toDouble();
-	    layout.mmWidth = INCH_TO_MM( layout.inchWidth );
-	    layout.ptWidth = INCH_TO_POINT( layout.inchWidth );	
+	    inch = line->text().toDouble();
+	    mm = INCH_TO_MM( inch );
+	    pt = INCH_TO_POINT( inch );	
 	} break;
     }
-
-    updatePreview( layout );
     retPressed = false;
+}
+
+/*===================== width changed =============================*/
+void KoPageLayoutDia::widthChanged()
+{
+    changed(epgWidth, layout.mmWidth, layout.ptWidth, layout.inchWidth);
+    updatePreview( layout );
 }
 
 /*===================== height changed ============================*/
 void KoPageLayoutDia::heightChanged()
 {
-    if ( epgHeight->text().length() == 0 && retPressed )
-	epgHeight->setText( "0.00" );
-
-    switch ( layout.unit ) {
-	case PG_MM: {
-	    layout.mmHeight = epgHeight->text().toDouble();
-	    layout.ptHeight = MM_TO_POINT( layout.mmHeight );
-	    layout.inchHeight = MM_TO_INCH( layout.mmHeight );
-	} break;
-	case PG_PT: {
-	    layout.ptHeight = epgHeight->text().toDouble();
-	    layout.mmHeight = POINT_TO_MM( layout.ptHeight );
-	    layout.inchHeight = POINT_TO_INCH( layout.ptHeight );
-	} break;
-	case PG_INCH: {
-	    layout.inchHeight = epgHeight->text().toDouble();
-	    layout.mmHeight = INCH_TO_MM( layout.inchHeight );
-	    layout.ptHeight = INCH_TO_POINT( layout.inchHeight );
-	} break;
-    }
-
+    changed(epgHeight, layout.mmHeight, layout.ptHeight, layout.inchHeight);
     updatePreview( layout );
-    retPressed = false;
 }
 
 /*===================== left border changed =======================*/
 void KoPageLayoutDia::leftChanged()
 {
-    if ( ebrLeft->text().length() == 0 && retPressed )
-	ebrLeft->setText( "0.00" );
-
-    switch ( layout.unit ) {
-	case PG_MM: {
-	    layout.mmLeft = ebrLeft->text().toDouble();
-	    layout.ptLeft = MM_TO_POINT( layout.mmLeft );
-	    layout.inchLeft = MM_TO_INCH( layout.mmLeft );
-	} break;
-	case PG_PT: {
-	    layout.ptLeft = ebrLeft->text().toDouble();
-	    layout.mmLeft = POINT_TO_MM( layout.ptLeft );
-	    layout.inchLeft = POINT_TO_INCH( layout.ptLeft );
-	} break;
-	case PG_INCH: {
-	    layout.inchLeft = ebrLeft->text().toDouble();
-	    layout.mmLeft = INCH_TO_MM( layout.inchLeft );
-	    layout.ptLeft = INCH_TO_POINT( layout.inchLeft );
-	} break;
-    }
-
+    changed(ebrLeft, layout.mmLeft, layout.ptLeft, layout.inchLeft);
     updatePreview( layout );
-    retPressed = false;
 }
 
 /*===================== right border changed =======================*/
 void KoPageLayoutDia::rightChanged()
 {
-    if ( ebrRight->text().length() == 0 && retPressed )
-	ebrRight->setText( "0.00" );
-
-    switch ( layout.unit ) {
-	case PG_MM: {
-	    layout.mmRight = ebrRight->text().toDouble();
-	    layout.ptRight = MM_TO_POINT( layout.mmRight );
-	    layout.inchRight = MM_TO_INCH( layout.mmRight );
-	} break;
-	case PG_PT: {
-	    layout.ptRight = ebrRight->text().toDouble();
-	    layout.mmRight = POINT_TO_MM( layout.ptRight );
-	    layout.inchRight = POINT_TO_INCH( layout.ptRight );
-	} break;
-	case PG_INCH: {
-	    layout.inchRight = ebrRight->text().toDouble();
-	    layout.mmRight = INCH_TO_MM( layout.inchRight );
-	    layout.ptRight = INCH_TO_POINT( layout.inchRight );
-	} break;
-    }
-
+    changed(ebrRight, layout.mmRight, layout.ptRight, layout.inchRight);
     updatePreview( layout );
-    retPressed = false;
 }
 
 /*===================== top border changed =========================*/
 void KoPageLayoutDia::topChanged()
 {
-    if ( ebrTop->text().length() == 0 && retPressed )
-	ebrTop->setText( "0.00" );
-
-    switch ( layout.unit ) {
-	case PG_MM: {
-	    layout.mmTop = ebrTop->text().toDouble();
-	    layout.ptTop = MM_TO_POINT( layout.mmTop );
-	    layout.inchTop = MM_TO_INCH( layout.mmTop );
-	} break;
-	case PG_PT: {
-	    layout.ptTop = ebrTop->text().toDouble();
-	    layout.mmTop = POINT_TO_MM( layout.ptTop );
-	    layout.inchTop = POINT_TO_INCH( layout.ptTop );
-	} break;
-	case PG_INCH: {
-	    layout.inchTop = ebrTop->text().toDouble();
-	    layout.mmTop = INCH_TO_MM( layout.inchTop );
-	    layout.ptTop = INCH_TO_POINT( layout.inchTop );
-	} break;
-    }
-
+    changed(ebrTop, layout.mmTop, layout.ptTop, layout.inchTop);
     updatePreview( layout );
-    retPressed = false;
 }
 
 /*===================== bottom border changed ======================*/
 void KoPageLayoutDia::bottomChanged()
 {
-    if ( ebrBottom->text().length() == 0 && retPressed )
-	ebrBottom->setText( "0.00" );
-
-    switch ( layout.unit ) {
-	case PG_MM: {
-	    layout.mmBottom = ebrBottom->text().toDouble();
-	    layout.ptBottom = MM_TO_POINT( layout.mmBottom );
-	    layout.inchBottom = MM_TO_INCH( layout.mmBottom );
-	} break;
-	case PG_PT: {
-	    layout.ptBottom = ebrBottom->text().toDouble();
-	    layout.mmBottom = POINT_TO_MM( layout.ptBottom );
-	    layout.inchBottom = POINT_TO_INCH( layout.ptBottom );
-	} break;
-	case PG_INCH: {
-	    layout.inchBottom = ebrBottom->text().toDouble();
-	    layout.mmBottom = INCH_TO_MM( layout.inchBottom );
-	    layout.ptBottom = INCH_TO_POINT( layout.inchBottom );
-	} break;
-    }
-
+    changed(ebrBottom, layout.mmBottom, layout.ptBottom, layout.inchBottom);
     updatePreview( layout );
-    retPressed = false;
 }
 
 /*==================================================================*/

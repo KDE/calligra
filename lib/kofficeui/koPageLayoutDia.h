@@ -140,27 +140,12 @@ public:
      */
     static KoPageLayout standardLayout();
 
-    /**
-     *  Do not use, for internal only.
-     */
+protected:
     KoPageLayout getLayout() {return layout;};
-
-    /**
-     *  Do not use, for internal only.
-     */
     KoHeadFoot getHeadFoot();
-
-    /**
-     *  Do not use, for internal only.
-     */
     KoColumns getColumns();
-
-    /**
-     *  Do not use, for internal only.
-     */
     KoKWHeaderFooter getKWHeaderFooter();
 
-protected:
     // setup tabs
     void setupTab1();
     void setValuesTab1();
@@ -234,6 +219,8 @@ private slots:
     void nSpaceChanged( const QString & );
 
 private:
+    void changed(QLineEdit *line, double &mm, double &pt, double &inch);
+
     KoPageLayoutDiaPrivate *d;
 };
 
