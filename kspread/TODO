@@ -368,8 +368,7 @@ Todo:
 -> save/load conditional cell attribute
 -> save/load font format
 -> save/load formula
--> save/load header/footer
--> save/load print range
+-> save/load repeate header print
 -> save/load options
 
 Done:
@@ -380,3 +379,5 @@ Done:
 -> save/load protect doc/sheet
 -> save/load validation
 -> save/load page master layout
+-> save/load header/footer
+-> save/load print range
