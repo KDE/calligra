@@ -1225,17 +1225,35 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
             QString style = styleStack.attribute( "draw:fill-hatch-name" );
             kdDebug()<<" style hatch :"<<style<<endl;
             if ( style == "Black 0 Degrees" )
+                {
                 tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 9 ) );
+                }
             else if ( style == "Black 90 Degrees" )
                 tmpBrush.setStyle(static_cast<Qt::BrushStyle>(10 ) );
-            else if ( style == "Red Crossed 0 Degrees" || style == "Blue Crossed 0 Degrees" )
-                tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 11 ) );
+            else if ( style == "Red Crossed 0 Degrees" )
+                {
+                    tmpBrush.setColor( Qt::red );
+                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 11 ) );
+                }
+            else if ( style == "Blue Crossed 0 Degrees" )
+                {
+                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 11 ) );
+                    tmpBrush.setColor( Qt::blue );
+                }
             else if ( style == "Black 45 Degrees" || style == "Black 45 Degrees Wide" )
                 tmpBrush.setStyle(static_cast<Qt::BrushStyle>(12 ) );
             else if ( style == "Black -45 Degrees" )
                 tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 13 ) );
-            else if ( style == "Red Crossed 45 Degrees" || style == "Blue Crossed 45 Degrees" )
-                tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 14 ) );
+            else if ( style == "Red Crossed 45 Degrees" )
+                {
+                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 14 ) );
+                    tmpBrush.setColor( Qt::red );
+                }
+            else if ( style == "Blue Crossed 45 Degrees" )
+                {
+                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 14 ) );
+                    tmpBrush.setColor( Qt::blue );
+                }
             else
                 kdDebug()<<" hatch style not supported !!!!!!!!!!!!: "<<style<<endl;
 
