@@ -28,8 +28,7 @@ rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc kexiquerypartui.r
 	kexitablepartui.rc kexirelationhandlerui.rc kexiformpartui.rc kexitableview.rc \
 	kexirelationsview.rc kexikugarhandlerui.rc $(scriptrc)
 
-datadir = $(kde_confdir)
-data_DATA = kexirc
+kde_conf_DATA = kexirc
 
 servicetypesdir = $(kde_servicetypesdir)
 servicetypes_DATA=kexihandler.desktop kexitablefilter.desktop  kexiimportfilter.desktop  \
