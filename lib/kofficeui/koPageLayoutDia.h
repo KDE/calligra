@@ -33,7 +33,7 @@
 
 #include <kapp.h>
 #include <krestrictedline.h>
-#include <kspinbox.h>
+#include <qspinbox.h>
 
 // paper formats (mm)
 #define PG_A3_WIDTH             297.0
@@ -206,7 +206,7 @@ protected:
   QLineEdit *eHeadLeft,*eHeadMid,*eHeadRight;
   QLabel *lFootLeft,*lFootMid,*lFootRight,*lFoot,*lMacros1,*lMacros2;
   QLineEdit *eFootLeft,*eFootMid,*eFootRight;
-  KNumericSpinBox *nColumns,*nCSpacing,*nHSpacing,*nFSpacing;
+  QSpinBox *nColumns,*nCSpacing,*nHSpacing,*nFSpacing;
   QLabel *lColumns,*lCSpacing,*lHSpacing,*lFSpacing;
   QRadioButton *rhSame,*rhFirst,*rhEvenOdd;
   QRadioButton *rfSame,*rfFirst,*rfEvenOdd;
@@ -240,8 +240,8 @@ private slots:
   void rPressed() {retPressed = true;}
 
   // spinboxes
-  void nColChanged();
-  void nSpaceChanged();
+  void nColChanged(int);
+  void nSpaceChanged(int);
 
 };
 #endif //KOPGLAYOUTDIA_H

@@ -237,8 +237,8 @@ KoHeadFoot KoPageLayoutDia::getHeadFoot()
 /*================================================================*/
 KoColumns KoPageLayoutDia::getColumns()
 {
-  cl.columns = nColumns->getValue();
-  cl.columnSpacing = nCSpacing->getValue();
+  cl.columns = nColumns->value();
+  cl.columnSpacing = nCSpacing->value();
 
   return cl;
 }
@@ -252,7 +252,7 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
     kwhf.header = HF_FIRST_DIFF;
   else if (rhEvenOdd->isChecked())
     kwhf.header = HF_EO_DIFF;
-  kwhf.ptHeaderBodySpacing = nHSpacing->getValue();
+  kwhf.ptHeaderBodySpacing = nHSpacing->value();
 
   if (rfSame->isChecked())
     kwhf.footer = HF_SAME;
@@ -260,7 +260,7 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
     kwhf.footer = HF_FIRST_DIFF;
   else if (rfEvenOdd->isChecked())
     kwhf.footer = HF_EO_DIFF;
-  kwhf.ptFooterBodySpacing = nFSpacing->getValue();
+  kwhf.ptFooterBodySpacing = nFSpacing->value();
 
   return kwhf;
 }
@@ -691,27 +691,21 @@ void KoPageLayoutDia::setupTab3()
   lColumns->resize(lColumns->sizeHint());
   grid3->addWidget(lColumns,0,0);
 
-  nColumns = new KNumericSpinBox(tab3);
+  nColumns = new QSpinBox(1,16,1,tab3);
   nColumns->resize(nColumns->sizeHint());
   grid3->addWidget(nColumns,1,0);
-  nColumns->setEditable(false);
-  nColumns->setRange(1,9);
   nColumns->setValue(cl.columns);
-  connect(nColumns,SIGNAL(valueIncreased()),this,SLOT(nColChanged()));
-  connect(nColumns,SIGNAL(valueDecreased()),this,SLOT(nColChanged()));
+  connect(nColumns,SIGNAL(valueChanged(int)),this,SLOT(nColChanged(int)));
 
   lCSpacing = new QLabel(i18n("Columns Spacing (mm):"),tab3);
   lCSpacing->resize(lCSpacing->sizeHint());
   grid3->addWidget(lCSpacing,2,0);
 
-  nCSpacing = new KNumericSpinBox(tab3);
+  nCSpacing = new QSpinBox(0,100,1,tab3);
   nCSpacing->resize(nCSpacing->sizeHint());
   grid3->addWidget(nCSpacing,3,0);
-  nCSpacing->setEditable(false);
-  nCSpacing->setRange(0,100);
   nCSpacing->setValue(cl.columnSpacing);
-  connect(nCSpacing,SIGNAL(valueIncreased()),this,SLOT(nSpaceChanged()));
-  connect(nCSpacing,SIGNAL(valueDecreased()),this,SLOT(nSpaceChanged()));
+  connect(nCSpacing,SIGNAL(valueChanged(int)),this,SLOT(nSpaceChanged(int)));
 
   // ------------- preview -----------
   pgPreview2 = new KoPagePreview(tab3,"Preview",layout);
@@ -771,11 +765,9 @@ void KoPageLayoutDia::setupTab4()
   lHSpacing->setAlignment(AlignRight | AlignVCenter);
   headerGrid->addWidget(lHSpacing,4,0);
 
-  nHSpacing = new KNumericSpinBox(gHeader);
+  nHSpacing = new QSpinBox(0,100,1,gHeader);
   nHSpacing->resize(nHSpacing->sizeHint());
   headerGrid->addWidget(nHSpacing,4,1);
-  nHSpacing->setEditable(false);
-  nHSpacing->setRange(0,100);
   nHSpacing->setValue(kwhf.ptHeaderBodySpacing);
   
   headerGrid->addColSpacing(0,rhSame->width() / 2);
@@ -830,11 +822,9 @@ void KoPageLayoutDia::setupTab4()
   lFSpacing->setAlignment(AlignRight | AlignVCenter);
   footerGrid->addWidget(lFSpacing,4,0);
 
-  nFSpacing = new KNumericSpinBox(gFooter);
+  nFSpacing = new QSpinBox(0,100,1,gFooter);
   nFSpacing->resize(nFSpacing->sizeHint());
   footerGrid->addWidget(nFSpacing,4,1);
-  nFSpacing->setEditable(false);
-  nFSpacing->setRange(0,100);
   nFSpacing->setValue(kwhf.ptFooterBodySpacing);
   
   footerGrid->addColSpacing(0,rfSame->width() / 2);
@@ -1170,15 +1160,15 @@ void KoPageLayoutDia::bottomChanged()
 }
 
 /*==================================================================*/
-void KoPageLayoutDia::nColChanged()
+void KoPageLayoutDia::nColChanged(int _val)
 {
-  cl.columns = nColumns->getValue();
+  cl.columns = _val;
   updatePreview(layout);
 }
 
 /*==================================================================*/
-void KoPageLayoutDia::nSpaceChanged()
+void KoPageLayoutDia::nSpaceChanged(int _val)
 {
-  cl.columnSpacing = nCSpacing->getValue();
+  cl.columnSpacing = _val;
   updatePreview(layout);
 }
