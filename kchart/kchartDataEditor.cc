@@ -65,7 +65,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
    topLayout->addLayout(rowColLayout);
    topLayout->setStretchFactor(m_table, 1);
- 
+
 #if 0
     _widget = new SheetDlg(this,"SheetWidget");
     _widget->setGeometry(0,0,520,400);
@@ -133,6 +133,7 @@ void kchartDataEditor::setData( KoChart::Data* dat )
 
     for (unsigned int col = 1; col < colsCount + 1; col++) 
       m_table->setColumnWidth(col, COLUMNWIDTH);
+    resize(600,300);
 
     kdDebug(35001) << "Column width: " << m_table->columnWidth(1) << endl;
 }

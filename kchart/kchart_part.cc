@@ -138,7 +138,10 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     Q_ASSERT( m_params != 0 );
 
     // Handle data in rows or columns.
+    // FIXME: It seems as if the short labels are not generated properly.
     if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
+	// Data is handled in rows.  This is the default.
+
 	// These are efficient so it doesn't matter if we always copy.
 	m_displayData = m_currentData;
 
@@ -162,7 +165,10 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	    m_params->setLegendText( row, m_rowLabels[row] );
     }
     else {
-	// FIXME: Only copy when necessary.
+	// Data is handled in columns.  We will have to transpose
+	// everything since KDChart wants its data in rows.
+
+	// FIXME: Rewrite so that we only copy data when necessary.
 	
 	// Resize displayData so that the transposed data has room.
 	m_displayData.expand(m_currentData.usedCols(),

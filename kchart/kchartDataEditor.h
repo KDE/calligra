@@ -31,8 +31,10 @@ public:
     void getXLabel(KChartParams* params);
     void setXLabel(const QStringList &xlbl);
 
+#if 0
     void setAxisLabelTextLong( QStringList *_longLabels ) { longLabels = _longLabels; }
     void setAxisLabelTextShort( QStringList *_shortLabels ){ shortLabels = _shortLabels; }
+#endif
 
 public slots:
     void apply();

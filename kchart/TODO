@@ -18,6 +18,10 @@ Before release of KOffice 1.4
       - Manipulate with GUI						DONE
       - Paint chart using it						DONE
 
+* Issues with KSpread
+  - Printing: The chart is the size of a thumbnail, and wrongly placed.
+  - Labels are no longer generated correctly.				DONE
+
 * Other fixes
   - Include me in Authors						DONE
   - Can HiLo charts be made thicker than one line?  
