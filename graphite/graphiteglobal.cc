@@ -22,6 +22,28 @@
 #include <graphiteglobal.h>
 
 
+const bool operator==(const Gradient &lhs, const Gradient &rhs) {
+
+    return lhs.ca==rhs.ca && lhs.cb==rhs.cb && lhs.type==rhs.type &&
+	   lhs.xfactor==rhs.xfactor && lhs.yfactor==rhs.yfactor &&
+	   lhs.ncols==rhs.ncols;
+}
+
+const bool operator!=(const Gradient &lhs, const Gradient &rhs) {
+    return !operator==(lhs, rhs);
+}
+
+Gradient &Gradient::operator=(const Gradient &rhs) {
+
+    ca=rhs.ca;
+    cb=rhs.cb;
+    type=rhs.type;
+    xfactor=rhs.xfactor;
+    yfactor=rhs.yfactor;
+    ncols=rhs.ncols;
+    return *this;
+}
+
 GraphiteGlobal *GraphiteGlobal::m_self=0;
 
 GraphiteGlobal *GraphiteGlobal::self() {

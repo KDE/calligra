@@ -208,7 +208,6 @@ public:
 
     // Note: radians!
     virtual void rotate(const QPoint &center, const double &angle) = 0;
-    virtual void setAngle(const double &angle) { m_angle=angle; }
     const double &angle() const { return m_angle; }
 
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor) = 0;

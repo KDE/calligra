@@ -31,8 +31,12 @@ struct Gradient {
     short xfactor;
     short yfactor;
     short ncols;
+    
+    Gradient &operator=(const Gradient &rhs);
 };
 
+const bool operator==(const Gradient &lhs, const Gradient &rhs);
+const bool operator!=(const Gradient &lhs, const Gradient &rhs);
 
 // This class is used to access some configurable values.
 // We also use this class to save the rc file.
@@ -45,11 +49,11 @@ public:
     // size of the "fuzzy" zone for selections
     const int &fuzzyBorder() const { return m_fuzzyBorder; }
     void setFuzzyBorder(const int &fuzzyBorder) { m_fuzzyBorder=fuzzyBorder; }
-    
+
     // size of the "handles"
     const int &handleSize() const { return m_handleSize; }
     void setHandleSize(const int &handleSize) { m_handleSize=handleSize; }
-    
+
     // size (diameter) of the "rot-handles"
     const int &rotHandleSize() const { return m_rotHandleSize; }
     void setRotHandleSize(const int &rotHandleSize) { m_rotHandleSize=rotHandleSize; }

@@ -54,7 +54,6 @@ public:
     virtual void move(const int &dx, const int &dy);
 
     virtual void rotate(const QPoint &center, const double &angle);
-    virtual void setAngle(const double &angle);
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor);
     virtual void resize(const QRect &boundingRect);
 

@@ -35,8 +35,12 @@ GGroup::GGroup(const GGroup &rhs) : GObject(rhs), m_iterator(0L) {
     for(const GObject *object=rhs.firstChild(); object!=0L; object=rhs.nextChild()) {
 	const GObject *cloned=object->clone();
 	if(cloned!=0L) {
-	    cloned->setParent(this);
-	    m_members.append(cloned);
+	    if(cloned->state()!=GObject::Deleted) {
+		cloned->setParent(this);
+		m_members.append(cloned);
+	    }
+	    else
+		delete cloned;
 	}
     }
 }
@@ -54,12 +58,17 @@ GGroup::GGroup(const QDomElement &element) : GObject(element.namedItem("gobject"
 	m_ok=false;
 	return;
     }
+
     QDomElement e=children.firstChild().toElement();
     for( ; !e.isNull(); e=children.nextSibling().toElement()) {
 	const GObject *object=GObjectFactory::self()->create(e);
-	if(object!=0L && object->isOk()) {
-	    object->setParent(this);
-	    m_members.append(object);
+	if(object!=0L) {
+	    if(object->isOk()) {
+		object->setParent(this);
+		m_members.append(object);
+	    }
+	    else
+		delete object;
 	}
     }
 }
@@ -155,9 +164,10 @@ QDomElement GGroup::save(QDomDocument &doc) const {
     QDomElement children=doc.createElement("children");
 
     QListIterator<GObject> it(m_members);
-    for( ; it!=0L; ++it)
-	children.appendChild(it.current()->save(doc));
-
+    for( ; it!=0L; ++it) {
+	if(it.current()->state()!=GObject::Deleted)
+	    children.appendChild(it.current()->save(doc));
+    }
     element.appendChild(children);
     element.appendChild(GObject::save(doc));
     return element;
@@ -167,7 +177,7 @@ void GGroup::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->draw(p, reg, toPrinter);	
+	it.current()->draw(p, reg, toPrinter);
 }
 
 void GGroup::drawHandles(QPainter &/*p*/) {
@@ -279,18 +289,6 @@ void GGroup::rotate(const QPoint &center, const double &angle) {
     m_boundingRectDirty=true;
 }
 
-void GGroup::setAngle(const double &angle) {
-
-    if(m_angle==angle)
-	return;
-
-    m_angle=angle;
-    QListIterator<GObject> it(m_members);
-    for( ; it!=0L; ++it)
-	it.current()->setAngle(angle);
-    m_boundingRectDirty=true;
-}
-
 void GGroup::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {
 
     QListIterator<GObject> it(m_members);
@@ -344,28 +342,16 @@ void GGroup::setBrush(const QBrush &brush) {
 
 void GGroup::setGradient(const Gradient &gradient) {
 
-    if(m_gradient.ca==gradient.ca &&
-       m_gradient.cb==gradient.cb &&
-       m_gradient.type==gradient.type &&
-       m_gradient.xfactor==gradient.xfactor &&
-       m_gradient.yfactor==gradient.yfactor &&
-       m_gradient.ncols==gradient.ncols)
+    if(m_gradient==gradient)
 	return;
-
-    m_gradient.ca=gradient.ca;
-    m_gradient.cb=gradient.cb;
-    m_gradient.type=gradient.type;
-    m_gradient.xfactor=gradient.xfactor;
-    m_gradient.yfactor=gradient.yfactor;
-    m_gradient.ncols=gradient.ncols;
-
+    m_gradient=gradient;
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
 	it.current()->setGradient(gradient);
 }
 
 void GGroup::setPen(const QPen &pen) {
-    
+
     if(m_pen==pen)
 	return;
     m_pen=pen;

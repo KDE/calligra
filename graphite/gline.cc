@@ -254,10 +254,6 @@ void GLine::rotate(const QPoint &center, const double &angle) {
     m_boundingRectDirty=true;
 }
 
-void GLine::setAngle(const double &/*angle*/) {
-    // TODO
-}
-
 void GLine::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {
 
     scalePoint(m_a, xfactor, yfactor, origin);

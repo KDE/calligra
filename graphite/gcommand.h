@@ -33,6 +33,7 @@ class GCommand {
 public:
     virtual ~GCommand() {}
 
+    // Note: Check for object!=0L !!!
     virtual void execute() = 0;
     virtual void unexecute() = 0;
 
