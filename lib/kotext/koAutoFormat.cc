@@ -1044,8 +1044,9 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                                         textEditCursor->setIndex(newPos+1); 
                         return;
                 }
+                else if (go_right)
+                        index++;
         }
-                
                 
         if (m_bCapitalizeNameOfDays)
         {
@@ -1059,13 +1060,9 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
             }
         }
         
-        
         detectStartOfLink(lastWord);
         if( m_autoDetectUrl)
-        {
-                lastWord = getWordAfterSpace(parag, index);
                 doAutoDetectUrl( textEditCursor, parag, index, lastWord, txtObj );
-        }
         
         if ( ch.isSpace() && !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
         {
@@ -1083,6 +1080,8 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
 
         if( m_bAutoSuperScript && m_superScriptEntries.count()>0)
         {
+            if( lastWord.at(0).isPunct() )
+                lastWord = lastWord.mid(1);
             KCommand * cmd = doAutoSuperScript( textEditCursor, parag, index, lastWord, txtObj  );
             if ( cmd )
                 txtObj->emitNewCommand( cmd );
@@ -1774,12 +1773,11 @@ KCommand *KoAutoFormat::doCapitalizeNameOfDays( KoTextCursor* textEditCursor, Ko
     int pos = m_cacheNameOfDays.findIndex( word.lower() );
     if ( pos == -1 )
         return 0L;
-
     KoTextDocument * textdoc = parag->textDocument();
     QString replaceStr= m_cacheNameOfDays[pos];
     int start = index - replaceStr.length();
     int length = replaceStr.length();
-    if( word.at(0)==word.at(0).lower() )
+    if( word.at(0).isLetter() && word.at(0)==word.at(0).lower() )
     {
         KoTextCursor cursor( parag->document() );
         cursor.setParag( parag );
