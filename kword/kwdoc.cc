@@ -87,7 +87,7 @@ KWChild::~KWChild()
 KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
 {
     Q_ASSERT( m_partFrameSet );
-    if ( !m_partFrameSet || m_partFrameSet->isDeleted() )
+    if ( isDeleted() )
         return 0L;
     // Only activate when it's already selected.
     if ( !m_partFrameSet->frame(0)->isSelected() )
@@ -104,6 +104,11 @@ KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
         return 0L;
 
     return KoDocumentChild::hitTest( p, _matrix );
+}
+
+bool KWChild::isDeleted()
+{
+    return ( !m_partFrameSet || m_partFrameSet->isDeleted() );
 }
 
 /******************************************************************/
@@ -2435,7 +2440,7 @@ QDomDocument KWDocument::saveXML()
     QPtrListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
         KWChild* curr = static_cast<KWChild*>(chl.current());
-        if ( !curr->partFrameSet()->isDeleted() )
+        if ( !curr->isDeleted() )
         {
             QDomElement embeddedElem = doc.createElement( "EMBEDDED" );
             kwdoc.appendChild( embeddedElem );
@@ -2548,7 +2553,7 @@ bool KWDocument::saveChildren( KoStore *_store )
     for( ; it.current(); ++it ) {
         KWChild* curr = static_cast<KWChild*>(it.current());
         KoDocument* childDoc = it.current()->document();
-        if (childDoc && !curr->partFrameSet()->isDeleted())
+        if (childDoc && !curr->isDeleted())
         {
             kdDebug(32001) << "KWDocument::saveChildren url:" << childDoc->url().url()
                       << " extern:" << childDoc->isStoredExtern() << endl;
