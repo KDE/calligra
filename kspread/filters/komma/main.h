@@ -40,7 +40,6 @@ public:
   MyApplication( int &argc, char **argv );
   
   void start();
-  KoMainWindow* createNewShell() { return 0; }
 };
 
 class Factory : virtual public KOffice::FilterFactory_skel
