@@ -101,7 +101,7 @@ class VariableFormat: public TextZone
 			setSize(11);
 			setWeight(0);
 			setItalic(false);
-			setUnderlined(false);
+			setUnderlined(UNDERLINE_NONE);
 			setStrikeout(0);
 			setPos(0);
 			setLength(0);
