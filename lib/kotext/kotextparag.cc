@@ -1141,7 +1141,6 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         //kdDebug(32500) << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
 
-        int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
         p->save();
         switch( format->underlineLineStyle())
         {
@@ -1164,10 +1163,11 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         default:
             p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
         }
+        int y = lastY + baseLine - format->offsetFromBaseLine() + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
 
         p->drawLine( startX, y, startX + bw, y );
         //kdDebug(32500) << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
-        y = lastY + baseLine + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
+        y = lastY + baseLine - format->offsetFromBaseLine() + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
         //kdDebug(32500) << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
         p->drawLine( startX, y, startX + bw, y );
         p->restore();
