@@ -24,8 +24,8 @@
 KivioConnectorPoint::KivioConnectorPoint()
 {
     m_x = m_y = 0.0f;
-    m_pTarget = NULL;
-    m_pStencil = NULL;
+    m_pTarget = 0L;
+    m_pStencil = 0L;
     m_targetId = -1;
     m_connectable = true;
 }
@@ -33,7 +33,7 @@ KivioConnectorPoint::KivioConnectorPoint()
 KivioConnectorPoint::KivioConnectorPoint( KivioStencil *pParent, bool conn )
 {
     m_x = m_y = 0.0f;
-    m_pTarget = NULL;
+    m_pTarget = 0L;
     m_pStencil = pParent;
     m_targetId = -1;
     m_connectable = conn;
@@ -44,10 +44,10 @@ KivioConnectorPoint::~KivioConnectorPoint()
     if( m_pTarget )
     {
         m_pTarget->removeConnectorPointFromList( this );
-        m_pTarget = NULL;
+        m_pTarget = 0L;
     }
 
-    m_pStencil = NULL;
+    m_pStencil = 0L;
 }
 
 /**
@@ -158,7 +158,7 @@ void KivioConnectorPoint::disconnect( bool removeFromTargetList )
         if( removeFromTargetList == true )
             m_pTarget->removeConnectorPointFromList(this);
 
-        m_pTarget = NULL;
+        m_pTarget = 0L;
         m_targetId = -1;
     }
 
@@ -213,4 +213,9 @@ void KivioConnectorPoint::moveBy( float _x, float _y, bool updateStencil )
 
     if( updateStencil && m_pStencil )
         m_pStencil->updateConnectorPoints(this, _x, _y);
+}
+
+bool KivioConnectorPoint::isConnected()
+{
+  return (m_pTarget != 0L);
 }

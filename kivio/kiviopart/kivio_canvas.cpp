@@ -1436,15 +1436,13 @@ void KivioCanvas::setVisibleAreaByHeight(KivioRect r, int margin)
 
 void KivioCanvas::startPasteMoving()
 {
-  m_pasteMoving = true;
+  setEnabled(false);
+  KivioPoint p = activePage()->getRectForAllStencils().center();
+  m_origPoint.setCoords(p.x(), p.y());
+
   // Create a new painter object
   beginUnclippedSpawnerPainter();
   drawSelectedStencilsXOR();
-
-  // Tell the view to update the toolbars to reflect the
-  // first selected stencil's settings
-  m_pView->updateToolBars();
-
 
   // Build the list of old geometry
   KivioRect *pData;
@@ -1457,11 +1455,12 @@ void KivioCanvas::startPasteMoving()
     *pData = pStencil->rect();
     m_lstOldGeometry.append(pData);
 
-
     pStencil = activePage()->selectedStencils()->next();
   }
 
-  m_origPoint = mapFromScreen( lastPoint );
+  continuePasteMoving(lastPoint);
+  m_pasteMoving = true;
+  setEnabled(true);
 }
 
 void KivioCanvas::continuePasteMoving(const QPoint &pos)
@@ -1479,6 +1478,45 @@ void KivioCanvas::continuePasteMoving(const QPoint &pos)
   // Undraw the old stencils
   drawSelectedStencilsXOR();
 
+  // Translate to the new position
+  KoPoint p;
+  KivioRect selectedRect = activePage()->getRectForAllSelectedStencils();
+
+  newX = selectedRect.x() + dx;
+  newY = selectedRect.y() + dy;
+
+  // First attempt a snap-to-grid
+  p.setCoords(newX, newY);
+  p = snapToGrid(p);
+
+  newX = p.x();
+  newY = p.y();
+
+  // Now the guides override the grid so we attempt to snap to them
+  p.setCoords(selectedRect.x() + dx + selectedRect.w(), selectedRect.y() + dy + selectedRect.h());
+  p = snapToGuides(p, snappedX, snappedY);
+
+  if(snappedX) {
+    newX = p.x() - selectedRect.w();
+  }
+
+  if(snappedY) {
+    newY = p.y() - selectedRect.h();
+  }
+
+  p.setCoords(selectedRect.x() + dx, selectedRect.y() + dy);
+  p = snapToGuides(p, snappedX, snappedY);
+
+  if(snappedX) {
+    newX = p.x();
+  }
+
+  if(snappedY) {
+    newY = p.y();
+  }
+
+  dx = newX - selectedRect.x();
+  dy = newY - selectedRect.y();
 
   // Translate to the new position
   KivioStencil *pStencil = activePage()->selectedStencils()->first();
@@ -1487,47 +1525,14 @@ void KivioCanvas::continuePasteMoving(const QPoint &pos)
 
   while( pStencil && pData )
   {
-    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
-      pStencil->type() != kstConnector)
-    {
-      KoPoint p;
+    newX = pData->x() + dx;
+    newY = pData->y() + dy;
 
-      // First attempt a snap-to-grid
-      p.setCoords(pData->x() + dx, pData->y() + dy);
-      p = snapToGrid(p);
-
-      newX = p.x();
-      newY = p.y();
-
-      // Now the guides override the grid so we attempt to snap to them
-      p.setCoords(pData->x() + dx + pStencil->w(), pData->y() + dy + pStencil->h());
-      p = snapToGuides(p, snappedX, snappedY);
-
-      if(snappedX) {
-        newX = p.x() - pStencil->w();
-      }
-
-      if(snappedY) {
-        newY = p.y() - pStencil->h();
-      }
-
-      p.setCoords(pData->x() + dx, pData->y() + dy);
-      p = snapToGuides(p, snappedX, snappedY);
-
-      if(snappedX) {
-        newX = p.x();
-      }
-
-      if(snappedY) {
-        newY = p.y();
-      }
-
-      if( pStencil->protection()->at( kpX ) == false ) {
-        pStencil->setX(newX);
-      }
-      if( pStencil->protection()->at( kpY ) == false ) {
-        pStencil->setY(newY);
-      }
+    if( pStencil->protection()->at( kpX ) == false ) {
+      pStencil->setX(newX);
+    }
+    if( pStencil->protection()->at( kpY ) == false ) {
+      pStencil->setY(newY);
     }
 
     pData = m_lstOldGeometry.next();
@@ -1547,7 +1552,7 @@ void KivioCanvas::endPasteMoving()
   while( pStencil && pData )
   {
     if(pStencil->type() == kstConnector) {
-      pStencil->searchForConnections(m_pView->activePage(), m_pView->zoomHandler()->zoomItY(4));
+      pStencil->searchForConnections(m_pView->activePage(), m_pView->zoomHandler()->unzoomItY(4));
     }
 
     pData = m_lstOldGeometry.next();

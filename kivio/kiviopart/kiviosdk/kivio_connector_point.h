@@ -38,7 +38,7 @@ protected:
     KivioStencil *m_pStencil;
 
     int m_targetId;
-    
+
     bool m_connectable;
 
 
@@ -65,13 +65,13 @@ public:
     void setX( float, bool updateStencil=true );
     void setY( float, bool updateStencil=true );
     void setPosition( float, float, bool updateStencil=true );
-    void setConnectable( bool b ) { m_connectable = b; if( b==false ) { disconnect(); } }
-
     void moveBy( float _x, float _y, bool updateStencil=true );
 
     bool connectable() { return m_connectable; }
+    void setConnectable( bool b ) { m_connectable = b; if( b==false ) { disconnect(); } }
 
     void disconnect(bool removeFromTargetList=true);
+    bool isConnected();
 };
 
 #endif

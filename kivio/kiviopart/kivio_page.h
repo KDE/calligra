@@ -127,7 +127,6 @@ class KivioPage : public QObject
 
     int generateStencilIds( int );
 
-
     KivioStencil *checkForStencil( KivioPoint *, int *, float, bool);
 
 

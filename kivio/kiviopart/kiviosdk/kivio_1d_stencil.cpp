@@ -53,6 +53,7 @@
 #include "kivio_stencil_spawner_info.h"
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_text_style.h"
+#include "kivio_connector_target.h"
 
 #include <kdebug.h>
 #include <math.h>
@@ -148,39 +149,32 @@ QColor Kivio1DStencil::bgColor()
 /////////////////////////////////
 void Kivio1DStencil::setX( double x )
 {
-    double dx = x - m_x;
+  double dx = x - m_x;
+  KivioConnectorPoint *p = m_pConnectorPoints->first();
 
-    m_x += dx;
+  while( p )
+  {
+    p->disconnect();
+    p->setX( p->x() + dx, false );
+    p = m_pConnectorPoints->next();
+  }
 
-    KivioConnectorPoint *p = m_pConnectorPoints->first();
-    while( p )
-    {
-        p->setX( p->x() + dx, false );
-        p->disconnect();
-
-        p = m_pConnectorPoints->next();
-    }
-
-
-    m_x = x;
+  m_x = x;
 }
 
 void Kivio1DStencil::setY( double y )
 {
-    double dy = y - m_y;
+  double dy = y - m_y;
+  KivioConnectorPoint *p = m_pConnectorPoints->first();
 
-    m_y += dy;
+  while( p )
+  {
+    p->disconnect();
+    p->setY( p->y() + dy, false );
+    p = m_pConnectorPoints->next();
+  }
 
-    KivioConnectorPoint *p = m_pConnectorPoints->first();
-    while( p )
-    {
-        p->setY( p->y() + dy, false );
-        p->disconnect();
-
-        p = m_pConnectorPoints->next();
-    }
-
-    m_y = y;
+  m_y = y;
 }
 
 void Kivio1DStencil::setPosition( double x, double y )
@@ -583,14 +577,14 @@ bool Kivio1DStencil::boolContainsFalse( bool *boolArray, int count )
 void Kivio1DStencil::searchForConnections( KivioPage *pPage )
 {
   bool *done = new bool[ m_pConnectorPoints->count()];
-  int i;
+  unsigned int i;
 
-  for( i=0; i<(int)m_pConnectorPoints->count(); i++ ) {
+  for(i = 0; i < m_pConnectorPoints->count(); i++) {
     done[i] = false;
   }
 
   KivioConnectorPoint *p;
-  i=0;
+  i = 0;
   p = m_pConnectorPoints->first();
 
   while( p )
@@ -619,7 +613,7 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage )
     while( pStencil && ( boolContainsFalse(done, m_pConnectorPoints->count()) ) )
     {
       // No connecting to ourself!
-      if( pStencil != this )
+      if((pStencil != this))
       {
 
         // Iterate through all connectors attempting to connect it to the stencil.
@@ -630,9 +624,9 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage )
         {
           if( !done[i] && p->targetId() != -1 )
           {
-            if( pStencil->connectToTarget( p, p->targetId() ) )
+            if(pStencil->connectToTarget( p, p->targetId()))
             {
-                done[i] = true;
+              done[i] = true;
             }
           }
 
@@ -937,7 +931,7 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
 
   QFont f = m_pTextStyle->font();
 
-  f.setPointSize(zoomHandler->zoomItY(f.pointSize()));
+  f.setPixelSize(zoomHandler->zoomItY(f.pixelSize()));
   painter->setFont(f);
   painter->setTextColor(m_pTextStyle->color());
 

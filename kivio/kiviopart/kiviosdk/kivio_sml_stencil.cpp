@@ -709,7 +709,7 @@ void KivioSMLStencil::drawOutlineTextBox( KivioShape *pShape, KivioIntraStencilD
 {
   double defWidth = m_pSpawner->defWidth();
   double defHeight = m_pSpawner->defHeight();
-  double _x, _y, _w, _h;
+  int _x, _y, _w, _h;
   KivioShapeData *pShapeData = pShape->shapeData();
   KivioPoint *pPosition = pShapeData->position();
   KivioPoint *pDimensions = pShapeData->dimensions();
@@ -727,7 +727,7 @@ void KivioSMLStencil::drawOutlineTextBox( KivioShape *pShape, KivioIntraStencilD
 
 
   QFont f = pShapeData->textFont();
-  f.setPointSize(m_zoomHandler->zoomItY(f.pointSize()));
+  f.setPixelSize(m_zoomHandler->zoomItY(f.pixelSize()));
   painter->setFont( f );
   painter->setTextColor( QColor(0, 0, 0) );
 
@@ -1330,7 +1330,7 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
 {
   double defWidth = m_pSpawner->defWidth();
   double defHeight = m_pSpawner->defHeight();
-  double _x, _y, _w, _h;
+  int _x, _y, _w, _h;
   KivioShapeData *pShapeData = pShape->shapeData();
   KivioPoint *pPosition = pShapeData->position();
   KivioPoint *pDimensions = pShapeData->dimensions();
@@ -1348,7 +1348,7 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
 
 
   QFont f = pShapeData->textFont();
-  f.setPointSize( m_zoomHandler->zoomItY(f.pointSize()) );
+  f.setPixelSize( m_zoomHandler->zoomItY(f.pixelSize()) );
   painter->setFont( f );
   painter->setTextColor( pShapeData->textColor() );
 

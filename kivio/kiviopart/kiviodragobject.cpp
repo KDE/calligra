@@ -88,7 +88,7 @@ bool KivioDragObject::decode(QMimeSource* e, QPtrList<KivioStencil>& sl, KivioPa
 
   if(e->provides(m_decodeMimeList[0])) {
     QDomDocument doc("KivioSelection");
-    QByteArray data = e->encodedData( m_decodeMimeList[ 0 ] );
+    QByteArray data = e->encodedData(m_decodeMimeList[0]);
     doc.setContent( QCString( data, data.size()+1 ) );
     KivioLayer l(page);
     ok = l.loadXML(doc.documentElement());

@@ -466,7 +466,7 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
       int tf = vTextAlign() | hTextAlign();
 
       QFont f = textFont();
-      f.setPointSize( zoomHandler->zoomItY(f.pointSize()) );
+      f.setPixelSize( zoomHandler->zoomItY(f.pixelSize()) );
 
       d->painter->setFont( f );
       QString text = getStringFromDict(shape,"text");
@@ -796,25 +796,23 @@ void KivioPyStencil::setStyle( KivioIntraStencilData *d, PyObject *s, int &fillS
   }
 
   QString  sfont = getStringFromDict(s,"font");
-  double fontSize = zoomHandler->zoomItY((int)getDoubleFromDict(s,"fontsize"));
+  QFont f;
+  int fontSize = (int)getDoubleFromDict(s,"fontsize");
+
+  if(!fontSize) {
+    fontSize = 12; // FIXME: Should use some kind of global setting!!!
+  }
+
+  f.setPointSize(fontSize);
+  f.setPixelSize(zoomHandler->zoomItY(f.pixelSize()));
 
   if ( !sfont.isEmpty() ) {
-    if (!fontSize) {
-      fontSize = zoomHandler->zoomItY(12);
-    }
-
-    QFont f;
-    f.setPointSize(fontSize);
     f.setFamily(sfont);
-    p->setFont(f);
   } else {
-    if (fontSize) {
-      QFont f;
-      f.setPointSize(fontSize);
-      f.setFamily("times");
-      p->setFont(f);
-    }
+    f.setFamily("times");
   }
+
+  p->setFont(f);
 }
 
 QColor KivioPyStencil::readColor( PyObject *color )

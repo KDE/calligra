@@ -26,7 +26,6 @@
 #include "kivio_stencil.h"
 #include "kivio_rect.h"
 
-class QStringList;
 class KivioPage;
 
 class KivioDragObject : public QDragObject

@@ -935,8 +935,9 @@ void KivioPage::sendToBack()
 
 void KivioPage::copy()
 {
-  if(m_lstSelection.count() <= 0)
+  if(m_lstSelection.count() <= 0) {
     return;
+  }
 
   // push to clipbaord
   KivioDragObject* kdo = new KivioDragObject();
@@ -987,25 +988,13 @@ void KivioPage::paste(KivioView* view)
   QPtrList<KivioStencil> list;
   list.setAutoDelete(false);
   KivioDragObject kdo;
-  KoZoomHandler* zoom = view->zoomHandler();
 
   if(kdo.decode(QApplication::clipboard()->data(), list, this)) {
     unselectAllStencils();
     KivioStencil* stencil = list.first();
 
     while(stencil) {
-      stencil->setPosition( stencil->x() + 10.0f, stencil->y() + 10.0f );
       addStencil(stencil);
-      stencil = list.next();
-    }
-
-    stencil = list.first();
-
-    while(stencil) {
-      if(stencil->type() == kstConnector) {
-	stencil->searchForConnections(this, zoom->unzoomItY(4));
-      }
-
       selectStencil(stencil);
       stencil = list.next();
     }

@@ -130,7 +130,7 @@ void SMLConnector::connector(QRect)
         return;
     }
 
-    m_pStencil->searchForConnections(page, m_pView->zoomHandler()->zoomItY(4));
+    m_pStencil->searchForConnections(page, m_pView->zoomHandler()->unzoomItY(4));
     doc->updateView(page);
 }
 
