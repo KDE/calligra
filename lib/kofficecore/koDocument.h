@@ -498,7 +498,7 @@ public:
 
     /**
      * Checks whether error message boxes should be shown.
-     * @since 1.4
+     * @since 1.3.1
      */
     bool isAutoErrorHandlingEnabled();
 
