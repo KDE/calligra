@@ -137,7 +137,7 @@ QString FilterManager::exportFilters (const char* defaultExt) {
 QString FilterManager::extension (const char *fname) {
   QString file (fname);
   QString ext;
-  int pos = file.find ('.', 0, false);
+  int pos = file.findRev ('.', -1, false);
   if (pos != -1)
     ext = file.mid (pos + 1, file.length () - pos);
   return ext;
