@@ -177,8 +177,13 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        Q_UINT8 attr = 0; //invalid
        if( formatData.text.weight >= 75 ) attr = 12; // bold
        if( formatData.text.italic ) attr = 8; 
-       if( formatData.text.underline ) attr = 14; 
-       if( formatData.text.underlineIsDouble ) attr = 11; 
+       if( formatData.text.underline )
+       {
+         if( formatData.text.underlineValue == "double" )
+           attr = 11; // double underline
+         else
+           attr = 14; // single underline
+       }
        if( formatData.text.verticalAlignment == 1 ) attr = 6; //subscript
        if( formatData.text.verticalAlignment == 2 ) attr = 5; //superscript
        if( formatData.text.strikeout ) attr = 13; 
