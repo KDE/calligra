@@ -45,8 +45,6 @@ public:
     virtual ~KivioPainter();
 
     virtual bool start( QPaintDevice * ) { return false;}
-    virtual bool start( const QString & ) { return false;}
-
     virtual bool stop() { return false;}
 
 
