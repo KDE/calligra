@@ -246,6 +246,9 @@ public:
     KoFormatDia( QWidget* parent, KoSearchContext *_ctx, const char* name=0L);
     //apply to parameter to context !
     void ctxOptions( );
+
+protected slots:
+    void slotReset();
 private:
     QCheckBox *m_checkFamily;
     QCheckBox *m_checkSize;

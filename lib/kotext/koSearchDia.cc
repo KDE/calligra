@@ -595,11 +595,14 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
 }
 
 KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* name)
-    : KDialogBase( parent, name, true, i18n("Formatting Options"), Ok|Cancel ),
+    : KDialogBase( parent, name, true, i18n("Formatting Options"), Ok|Cancel|User1 ),
       m_ctx(_ctx)
 {
     QWidget *page = new QWidget( this );
     setMainWidget(page);
+    setButtonText( KDialogBase::User1, i18n("Reset") );
+
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
 
     QGridLayout *m_grid = new QGridLayout( page, 10, 2, 0, 6 );
     m_checkFamily = new QCheckBox( i18n( "Family" ),page  );
@@ -675,7 +678,11 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     QObject::connect( m_checkDoubleLine, SIGNAL( toggled( bool ) ), m_doubleLineItem, SLOT( setEnabled( bool ) ) );
 
     QObject::connect( m_checkVertAlign, SIGNAL( toggled( bool ) ), m_vertAlignItem, SLOT( setEnabled( bool ) ) );
+    slotReset();
+}
 
+void KoFormatDia::slotReset()
+{
     m_checkFamily->setChecked( m_ctx->m_optionsMask & KoSearchContext::Family );
     m_familyItem->setEnabled(m_checkFamily->isChecked());
 
