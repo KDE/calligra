@@ -131,7 +131,7 @@ bool RTFWorker::convertUnknownImage(QByteArray& unknownImage, QByteArray& image)
 
     if (!imageIO.write())
     {
-        kdWarning(30503) << "Could not write converted image! " << endl;
+        kdWarning(30515) << "Could not write converted image! " << endl;
         return false;
     }
     outbuf.close();
@@ -146,7 +146,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     QString strExt;
     QByteArray image;
 
-    kdDebug(30503) << "RTFWorker::makeImage" << endl << anchor.picture.koStoreName << endl;
+    kdDebug(30515) << "RTFWorker::makeImage" << endl << anchor.picture.koStoreName << endl;
 
     const int pos=strImageName.findRev('.');
     if(pos!=-1) strExt = strImageName.mid(pos).lower();
@@ -164,14 +164,14 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     {
         // either without extension or format is unknown
         // let's try to convert it to PNG format
-        kdDebug(30503) << "Converting image " << anchor.picture.koStoreName << endl;
+        kdDebug(30515) << "Converting image " << anchor.picture.koStoreName << endl;
 
         strTag="\\pngblip";
         QByteArray unknownImage;
         loadKoStoreFile(anchor.picture.koStoreName,unknownImage);
         if( !convertUnknownImage(unknownImage,image) )
         {
-            kdWarning(30503) << "Unable to convert " << anchor.picture.koStoreName << endl;
+            kdWarning(30515) << "Unable to convert " << anchor.picture.koStoreName << endl;
             return true;
         }
     }
@@ -183,7 +183,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     if( !image.size() )
         if (!loadKoStoreFile(anchor.picture.koStoreName,image))
         {
-            kdWarning(30503) << "Unable to load picture " << anchor.picture.koStoreName << endl;
+            kdWarning(30515) << "Unable to load picture " << anchor.picture.koStoreName << endl;
             return true;
         }
 
@@ -412,7 +412,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
             }
             else if (6==(*paraFormatDataIt).id)
             {
-                kdDebug(30503) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
+                kdDebug(30515) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
                 // We have an image, a clipart or a table
 
                 // But first, we must be sure that the paragraph is not opened.
@@ -432,7 +432,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 }
                 else
                 {
-                    kdWarning(30503) << "Unknown anchor type: "
+                    kdWarning(30515) << "Unknown anchor type: "
                         << (*paraFormatDataIt).frameAnchor.type << endl;
                 }
 
@@ -453,11 +453,11 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 bool RTFWorker::doFullParagraph(const QString& paraText,
     const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
-    kdDebug(30503) << "Entering RTFWorker::doFullParagraph" << endl << paraText << endl;
+    kdDebug(30515) << "Entering RTFWorker::doFullParagraph" << endl << paraText << endl;
 
     m_textBody += ProcessParagraphData( paraText, layout, paraFormatDataList);
 
-    kdDebug(30503) << "Quiting RTFWorker::doFullParagraph" << endl;
+    kdDebug(30515) << "Quiting RTFWorker::doFullParagraph" << endl;
     return true;
 }
 
@@ -517,13 +517,13 @@ bool RTFWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     if (!m_ioDevice)
     {
-        kdError(30503) << "No output file! Aborting!" << endl;
+        kdError(30515) << "No output file! Aborting!" << endl;
         return false;
     }
 
     if ( !m_ioDevice->open (IO_WriteOnly) )
     {
-        kdError(30503) << "Unable to open output file!" << endl;
+        kdError(30515) << "Unable to open output file!" << endl;
         return false;
     }
 
@@ -538,7 +538,7 @@ bool RTFWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
 bool RTFWorker::doCloseFile(void)
 {
-    kdDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
+    kdDebug(30515) << __FILE__ << ":" << __LINE__ << endl;
     delete m_streamOut;
     m_streamOut=NULL;
     if (m_ioDevice)
@@ -566,7 +566,7 @@ bool RTFWorker::doOpenDocument(void)
 
 void RTFWorker::writeFontData(void)
 {
-    kdDebug() << "Fonts:" << m_fontList << endl;
+    kdDebug(30515) << "Fonts:" << m_fontList << endl;
     *m_streamOut << "{\\fonttbl";
     uint count;
     QStringList::ConstIterator it;
@@ -1051,7 +1051,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         }
         else
         {
-            kdWarning(30503) << "Unknown alignment: " << layout.alignment << endl;
+            kdWarning(30515) << "Unknown alignment: " << layout.alignment << endl;
         }
     }
 
@@ -1130,7 +1130,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
            strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
 
         else 
-        kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+        kdWarning(30515) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 
     if (!layout.tabulatorList.isEmpty()
@@ -1187,7 +1187,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
 
 QString RTFWorker::lookupFont(const QString& fontName)
 {
-    kdDebug() << "RTFWorker::lookupFont " << fontName << endl;
+    kdDebug(30515) << "RTFWorker::lookupFont " << fontName << endl;
     if (fontName.isEmpty())
         return QString::null;
 
@@ -1201,12 +1201,12 @@ QString RTFWorker::lookupFont(const QString& fontName)
         if((*it) == fontName)  // check for match
         {
             strFont += QString::number(counter);
-            kdDebug() << strFont << endl;
+            kdDebug(30515) << strFont << endl;
             return strFont;
         }
     }  // end for()
 
-    kdDebug() << "New font: " << fontName << " count: " << counter << endl;
+    kdDebug(30515) << "New font: " << fontName << " count: " << counter << endl;
     m_fontList << fontName;
 
     strFont += QString::number(counter);
@@ -1233,7 +1233,7 @@ QString RTFWorker::lookupColor(const QString& markup, const QColor& color)
         }
     }
 
-    kdDebug() << "New color: " << color.name() << " count: " << counter << endl;
+    kdDebug(30515) << "New color: " << color.name() << " count: " << counter << endl;
     m_colorList << color;
 
     strColor += QString::number(counter);
@@ -1261,7 +1261,7 @@ QString RTFWorker::lookupStyle(const QString& styleName, LayoutData& returnLayou
         }
     }
 
-    kdDebug() << "New style: " << styleName << " count: " << counter << endl;
+    kdDebug(30515) << "New style: " << styleName << " count: " << counter << endl;
     LayoutData layout;
     m_styleList << layout;
     returnLayout=layout;

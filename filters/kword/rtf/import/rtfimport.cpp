@@ -279,7 +279,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     if (!in.open( IO_ReadOnly ))
     {
-	kdError() << "Unable to open input file!" << endl;
+	kdError(30515) << "Unable to open input file!" << endl;
 	in.close();
 	return KoFilter::FileNotFound;
     }
@@ -290,7 +290,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     if (token.type != RTFTokenizer::OpenGroup)
     {
-	kdError() << "Not an RTF file" << endl;
+	kdError(30515) << "Not an RTF file" << endl;
 	in.close();
 	return KoFilter::WrongFormat;
     }
@@ -305,7 +305,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     if (token.type != RTFTokenizer::ControlWord ||
 	strcmp( token.text, "rtf" ) || token.value > 1)
     {
-	kdError() << "Wrong document type or version (RTF version 0 or 1.x expected)" << endl;
+	kdError(30515) << "Wrong document type or version (RTF version 0 or 1.x expected)" << endl;
 	in.close();
 	return KoFilter::WrongFormat;
     }
@@ -992,7 +992,7 @@ void RTFImport::insertUTF8( int ch )
             *text++ = ch ;
         else
         {
-            kdWarning() << "RTFImport::insertUTF8: tried to insert control character " << ch << endl;
+            kdWarning(30515) << "RTFImport::insertUTF8: tried to insert control character " << ch << endl;
             *text++ = '?' ;
         }
     }
@@ -1247,8 +1247,8 @@ void RTFImport::parsePicture( RTFProperty * )
 
         // Add picture or clipart frameset
         frameSets.addFrameSet( frameName, 2, 0 );
-        //kdDebug() << "Width: " << picture.desiredWidth << " scalex: " << picture.scalex << "%" << endl;
-        //kdDebug() << "Height: " << picture.desiredHeight<< " scaley: " << picture.scaley << "%" << endl;
+        //kdDebug(30515) << "Width: " << picture.desiredWidth << " scalex: " << picture.scalex << "%" << endl;
+        //kdDebug(30515) << "Height: " << picture.desiredHeight<< " scaley: " << picture.scaley << "%" << endl;
         frameSets.addFrame( 0, 0,
                 (picture.desiredWidth  * picture.scalex) /100 ,
                 (picture.desiredHeight * picture.scaley) /100 , 0, 1, 0 );

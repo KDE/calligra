@@ -72,7 +72,7 @@ KoFilter::ConversionStatus RTFExport::convert( const QCString& from, const QCStr
 
     if (!leader)
     {
-        kdError(30503) << "Cannot create Worker! Aborting!" << endl;
+        kdError(30515) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
         return KoFilter::StupidError;
     }
