@@ -1103,3 +1103,11 @@ QString convertRangeToRef( const QString & tableName, const QRect & _area )
 {
     return tableName + "." + KSpreadCell::name( _area.left(), _area.top() ) + ":" + tableName + "."+ KSpreadCell::name( _area.right(), _area.bottom() );
 }
+
+QString convertOasisPenToString( const QPen & pen )
+{
+    QString s = QString( "%1pt solid " ).arg( pen.width() );
+    s+=pen.color().name();
+    return "";
+}
+

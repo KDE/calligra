@@ -515,10 +515,10 @@ void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
 
     if ( featureSet( SIndent ) )
     {
-         style.addPropertyPt("fo:margin-left", m_indent );
-         //FIXME
-         //if ( a == KSpreadFormat::Undefined )
-         //currentCellStyle.addProperty("fo:text-align", "start" );
+        style.addPropertyPt("fo:margin-left", m_indent );
+        //FIXME
+        //if ( a == KSpreadFormat::Undefined )
+        //currentCellStyle.addProperty("fo:text-align", "start" );
     }
     if ( featureSet( SDontPrintText ) && hasProperty( PDontPrintText ) )
         style.addProperty( "style:print-content", "false");
@@ -553,6 +553,26 @@ void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
         }
     }
 
+    if ( ( m_leftBorderPen == m_topBorderPen )&&
+         ( m_leftBorderPen == m_rightBorderPen )&&
+         ( m_leftBorderPen == m_bottomBorderPen ) )
+    {
+        style.addProperty("fo:border", convertOasisPenToString( m_leftBorderPen ) );
+    }
+    else
+    {
+        if ( ( m_leftBorderPen.width() != 0 ) && ( m_leftBorderPen.style() != Qt::NoPen ) )
+            style.addProperty( "fo:border-left", convertOasisPenToString( m_leftBorderPen ) );
+        if ( ( m_rightBorderPen.width() != 0 ) && ( m_rightBorderPen.style() != Qt::NoPen ) )
+            style.addProperty( "fo:border-right", convertOasisPenToString( m_rightBorderPen ) );
+        if ( ( m_topBorderPen.width() != 0 ) && ( m_topBorderPen.style() != Qt::NoPen ) )
+            style.addProperty( "fo:border-top", convertOasisPenToString( m_topBorderPen ) );
+        if ( ( m_bottomBorderPen.width() != 0 ) && ( m_bottomBorderPen.style() != Qt::NoPen ) )
+            style.addProperty( "fo:border-bottom", convertOasisPenToString( m_bottomBorderPen ) );
+
+        //todo add diagonal
+    }
+
 #if 0
     if ( featureSet( SFontFamily ) )
         format.setAttribute( "font-family", m_fontFamily );
@@ -573,33 +593,6 @@ void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
         format.setAttribute( "brushstyle", (int) m_backGroundBrush.style() );
     }
 
-    if ( featureSet( SLeftBorder ) )
-    {
-        QDomElement left = doc.createElement( "left-border" );
-        left.appendChild( util_createElement( "pen", m_leftBorderPen, doc ) );
-        format.appendChild( left );
-    }
-
-    if ( featureSet( STopBorder ) )
-    {
-        QDomElement top = doc.createElement( "top-border" );
-        top.appendChild( util_createElement( "pen", m_topBorderPen, doc ) );
-        format.appendChild( top );
-    }
-
-    if ( featureSet( SRightBorder ) )
-    {
-        QDomElement right = doc.createElement( "right-border" );
-        right.appendChild( util_createElement( "pen", m_rightBorderPen, doc ) );
-        format.appendChild( right );
-    }
-
-    if ( featureSet( SBottomBorder ) )
-    {
-        QDomElement bottom = doc.createElement( "bottom-border" );
-        bottom.appendChild( util_createElement( "pen", m_bottomBorderPen, doc ) );
-        format.appendChild( bottom );
-    }
 
     if ( featureSet( SFallDiagonal ) )
     {
