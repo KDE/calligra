@@ -141,10 +141,12 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 
 	for(int i=first; i <= last; i++)
 	{
-		int y = ((m_rowHeight * i)-m_offset) - 1;
-		QRect r(0, y, width(), m_rowHeight + 1);
+		int y = ((m_rowHeight * i)-m_offset);
+		QRect r(0, y, width(), m_rowHeight);
 		p.drawRect(r);
-		style().drawPrimitive(QStyle::PE_HeaderSection, &p, r, colorGroup());
+		style().drawPrimitive( QStyle::PE_HeaderSection, &p, r,
+			colorGroup(), QStyle::Style_Raised |
+			(isEnabled() ? QStyle::Style_Enabled : 0));
 	}
 
 	if (m_editRow!=-1 && m_editRow >= first && m_editRow <= (last/*+1 for insert row*/)) {
