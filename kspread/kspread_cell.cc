@@ -1804,7 +1804,9 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
   int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
-  bool selected = m_pTable->isCellSelected(cellRef.x(), cellRef.y());
+  QRect selection = m_pTable->selection();
+
+  bool selected = selection.contains(cellRef);
   // Dont draw any selection when printing.
   if ( painter.device()->isExtDev() || !drawCursor)
     selected = false;
@@ -1859,7 +1861,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
               (!painter.device()->isExtDev() ||
                !getDontprintText(cellRef.x(),cellRef.y())))
     {
-      paintText(painter, corner, cellRef, selected);
+      paintText(painter, corner, cellRef);
     }
   } /* if (!isObscured()) */
 
@@ -2133,14 +2135,12 @@ void KSpreadCell::paintMoreTextIndicator(QPainter& painter, QPoint corner,
   }
 }
 
-void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
-                            bool selected)
+void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef)
 {
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
 
   int width =  (m_iExtraYCells ? m_iExtraHeight : colLayout->width());
-  QPoint marker = m_pTable->marker();
   QColorGroup defaultColorGroup = QApplication::palette().active();
 
   QColor textColorPrint = textColor( cellRef.x(), cellRef.y() );
@@ -2173,6 +2173,20 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
         tmpPen.setColor( Qt::red );
     }
   }
+/****
+
+ For now I am commenting this out -- with the default color display you
+ can read normal text through a highlighted background.  Maybe this isn't
+ always the case, though, and we can put the highlighted text color back in.
+ In that case, we need to somewhere in here figure out if the text overlaps
+ another cell outside of the selection, otherwise that portion of the text
+ will be printed white on white.  So just that portion would need to be
+ painted again in the normal color.
+
+ This should probably be done eventually, anyway, because I like using the
+ reverse text color for highlighted cells.  I just don't like extending the
+ cell 'highlight' background outside of the selection rectangle because it
+ looks REALLY ugly.
 
   if ( selected && ( cellRef.x() != marker.x() || cellRef.y() != marker.y() )  )
   {
@@ -2184,6 +2198,8 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
   {
     painter.setPen(tmpPen);
   }
+*/
+ painter.setPen(tmpPen);
 
   QString tmpText = m_strOutText;
   int tmpHeight = m_iOutTextHeight;

@@ -454,6 +454,11 @@ public:
    */
   bool singleCellSelection() const;
 
+  /**
+   * @return the area that the 'handle' of the selection is located in painting coordinates.
+   */
+  QRect getSelectionHandleArea(KSpreadCanvas* canvas);
+
     void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
     void setSelection( const QRect &_rect, const QPoint& marker,
                        KSpreadCanvas *_canvas = 0L );
@@ -624,7 +629,6 @@ public:
     int adjustColumn( const QPoint &_marker, int _col = -1 );
     int adjustRow( const QPoint &_marker, int _row = -1 );
 
-    bool isCellSelected( int column, int row );
     /**
     * Check wether an entire row is selected in the current selection
     */
@@ -1188,9 +1192,6 @@ protected:
 
     /**
      * The rectangular area that is currently selected.
-     * If all 4 coordinates are 0 then no selection is made at all.
-     * But testing only selection.left() == 0 will tell you whether a selection
-     * is currently active or not.
      * If complete columns are selected, then selection.bottom() == KS_rowMax and selection.top()=1.
      * If complete rows are selected, then selection.right() == KS_colMax and selection.left()=1.
      */
@@ -1555,6 +1556,7 @@ private:
 
     void convertObscuringBorders();
     void checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret);
+
 };
 
 #endif

@@ -2314,36 +2314,48 @@ void KSpreadTable::refreshMergedCell()
 
 QRect KSpreadTable::selectionCellMerged(const QRect &_sel)
 {
-QRect selection(_sel);
-if( isColumnSelected() || isRowSelected() )
-        return selection;
-else
-  {
-  int top=selection.top();
-  int left=selection.left();
-  int bottom=selection.bottom();
-  int right=selection.right();
   KSpreadCell *cell;
-  for ( int x = selection.left(); x <= selection.right(); x++ )
-        for ( int y = selection.top(); y <= selection.bottom(); y++ )
+  QRect selection(_sel);
+  if( isColumnSelected() || isRowSelected() )
+    return selection;
+  else if (selection.width() == selection.height() &&
+           selection.width() == 1)
+  {
+    /* if just a single cell is selected, we need to merge even when
+       the obscuring isn't forced.  But only if this is the cell that
+       is doing the obscuring -- we still want to be able to click on a cell
+       that is being obscured.
+    */
+    cell = cellAt(selection.left(), selection.top());
+    selection.setWidth(cell->extraXCells() + 1);
+    selection.setHeight(cell->extraYCells() + 1);
+  }
+  else
+  {
+    int top=selection.top();
+    int left=selection.left();
+    int bottom=selection.bottom();
+    int right=selection.right();
+    for ( int x = selection.left(); x <= selection.right(); x++ )
+      for ( int y = selection.top(); y <= selection.bottom(); y++ )
+      {
+        cell = cellAt( x, y );
+        if( cell->isForceExtraCells())
         {
-                cell = cellAt( x, y );
-                if( cell->isForceExtraCells())
-                {
-                        right=QMAX(right,cell->extraXCells()+x);
-                        bottom=QMAX(bottom,cell->extraYCells()+y);
-                }
-                else if ( cell->isObscured() && cell->isObscuringForced() )
-                {
-                  cell = cell->obscuringCells().getFirst();
-                  left=QMIN(left,cell->column());
-                  top=QMIN(top,cell->row());
-                  bottom=QMAX(bottom,cell->row() + cell->extraYCells());
-                  right=QMAX(right,cell->column() + cell->extraXCells());
-                }
+          right=QMAX(right,cell->extraXCells()+x);
+          bottom=QMAX(bottom,cell->extraYCells()+y);
         }
+        else if ( cell->isObscured() && cell->isObscuringForced() )
+        {
+          cell = cell->obscuringCells().getFirst();
+          left=QMIN(left,cell->column());
+          top=QMIN(top,cell->row());
+          bottom=QMAX(bottom,cell->row() + cell->extraYCells());
+          right=QMAX(right,cell->column() + cell->extraXCells());
+        }
+      }
 
-  selection.setCoords(left,top,right,bottom);
+    selection.setCoords(left,top,right,bottom);
   }
   return selection;
 }
@@ -7020,21 +7032,6 @@ KSpreadCell* KSpreadTable::getNextCellLeft(int col, int row)
 KSpreadCell* KSpreadTable::getNextCellRight(int col, int row)
 { return m_cells.getNextCellRight(col, row); }
 
-bool KSpreadTable::isCellSelected(int column, int row)
-{
-  bool selected = false;
-  KSpreadCell* cell = cellAt( column, row );
-  selected = selection().contains( QPoint( column, row ) );
-  QPtrList<KSpreadCell> obscuredList = cell->obscuringCells();
-
-  for (cell = obscuredList.first(); cell != NULL && !selected;
-       cell = obscuredList.next())
-  {
-    selected = selection().contains(QPoint( cell->column(), cell->row() ) );
-  }
-  return selected;
-}
-
 void KSpreadTable::convertObscuringBorders()
 {
   /* a word of explanation here:
@@ -7128,7 +7125,7 @@ void KSpreadTable::paperLayoutDlg()
                      localizeHeadFootLine( hf.footMid   ),
                      localizeHeadFootLine( hf.footRight ) );
 //    setPrintGrid ( ksop.printGrid );
-    
+
     m_pDoc->setUnit( unit );
 }
 
@@ -7385,6 +7382,33 @@ QString KSpreadTable::completeHeading( const QString &_data, int _page, const QS
     return tmp;
 }
 
+QRect KSpreadTable::getSelectionHandleArea(KSpreadCanvas* canvas)
+{
+  /* maybe this should be moved to the table? */
+  KSpreadCell* cell = NULL;
+  int column, row, xpos, ypos, width, height;
+
+  // complete rows/columns are selected, use the marker.
+  if ( isRowSelected() || isColumnSelected() )
+  {
+    column = marker().x();
+    row = marker().y();
+  }
+  else
+  {
+    column = selection().right();
+    row = selection().bottom();
+  }
+  cell = cellAt(column, row);
+
+  xpos = columnPos( column, canvas );
+  ypos = rowPos( row, canvas );
+  width = cell->width( column );
+  height = cell->height( row );
+
+  QRect handle( (xpos + width - 2), (ypos + height - 1), 5, 5);
+  return handle;
+}
 
 #ifndef NDEBUG
 void KSpreadTable::printDebug()

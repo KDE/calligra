@@ -371,15 +371,6 @@ private:
     int m_iMouseStartRow;
 
     /**
-     * Tells whether the user selected more than one cell.
-     * If the user presses the left mouse button and if he marks more
-     * than one cell until he releases the button again, then this flag
-     * is set. If this flag is set, then one should repaint all visible
-     * cells once the button is released.
-     */
-    bool m_bMouseMadeSelection;
-
-    /**
      * True when the mouse button is pressed
      */
     bool m_bMousePressed;
@@ -479,6 +470,18 @@ private:
   void convertToMoney( KSpreadCell * cell );
   void convertToTime( KSpreadCell * cell );
   void convertToDate( KSpreadCell * cell );
+
+  void processClickSelectionHandle(QMouseEvent *event);
+  void processLeftClickAnchor();
+
+
+  /**
+   * Helper function used from many places to extend the current selection such as with
+   * a shift-click, mouse drag, shift-arrow key, etc.
+   *
+   * @param cell coordinates of the cell we want to extend towards.
+   */
+  void extendCurrentSelection(QPoint cell);
 };
 
 /**

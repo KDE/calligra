@@ -856,147 +856,93 @@ void KSpreadCanvas::slotMaxRow( int _max_row )
 
 void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 {
-    // Dont allow modifications if document is readonly.
-    if ( !m_pView->koDocument()->isReadWrite() )
-        return;
+  // Dont allow modifications if document is readonly.
+  if ( !m_pView->koDocument()->isReadWrite() )
+    return;
 
-    // Special handling for choose mode.
-    if( m_bChoose )
-    {
-        chooseMouseMoveEvent( _ev );
-        return;
-    }
+  // Special handling for choose mode.
+  if( m_bChoose )
+  {
+    chooseMouseMoveEvent( _ev );
+    return;
+  }
 
-    // Working on this table ?
-    KSpreadTable *table = activeTable();
-    if ( !table )
-        return;
+  // Working on this table ?
+  KSpreadTable *table = activeTable();
+  if ( !table )
+    return;
 
-    // Get the current selected rectangle
-    QRect selection( table->selection() );
+  int xpos;
+  int ypos;
+  int row = table->topRow( _ev->pos().y(), ypos, this );
+  int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
-    int xpos;
-    int ypos;
-    int row = table->topRow( _ev->pos().y(), ypos, this );
-    int col = table->leftColumn( _ev->pos().x(), xpos, this );
+  if( col > KS_colMax || row > KS_rowMax ) {
+    kdDebug(36001) << "KSpreadCanvas::mouseMoveEvent: col or row is out of range: col: " << col << " row: " << row << endl;
+    return;
+  }
 
-    if( col > KS_colMax || row > KS_rowMax ) {
-	kdDebug(36001) << "KSpreadCanvas::mouseMoveEvent: col or row is out of range: col: " << col << " row: " << row << endl;
-	return;
-    }
+  QRect selectionHandle = table->getSelectionHandleArea(this);
 
-    // Find out where the little "corner" (in lower right direction) is.
-    QRect corner;
-    // No selection or just complete rows/columns ?
-    if ( table->isRowSelected() || table->isColumnSelected() )
-    {
-        int x = table->columnPos( markerColumn(), this );
-        int y = table->rowPos( markerRow(), this );
-        KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
-        int w = cell->width( markerColumn(), this );
-        int h = cell->height( markerRow(), this );
-        if(cell->extraXCells())
-                w= cell->extraWidth();
-        corner = QRect( x + w - 2, y + h -1, 5, 5 );
-    }
-    else // if we have a rectangular selection ( not complete rows or columns )
-    {
-        int x = table->columnPos( selection.left(), this );
-        int y = table->rowPos( selection.top(),  this );
-        int x2 = table->columnPos( selection.right(), this );
-        KSpreadCell *cell = table->cellAt( selection.right(), selection.top() );
-        int tw = cell->width( selection.right(), this );
-        int w = ( x2 - x ) + tw;
-        cell = table->cellAt( selection.left(), selection.bottom() );
-        int y2 = table->rowPos( selection.bottom(), this );
-        int th = cell->height( selection.bottom(), this );
-        int h = ( y2 - y ) + th;
-
-        corner = QRect( x + w - 2, y + h -1, 5, 5 );
-    }
-
-    // Test whether the mouse is over some anchor
-    {
-        KSpreadCell *cell = table->visibleCellAt( col, row );
-        QString anchor = cell->testAnchor( _ev->pos().x() - xpos,
-                                           _ev->pos().y() - ypos );
-        if ( !anchor.isEmpty() && anchor != m_strAnchor )
-            setCursor( KCursor::handCursor() );
-        m_strAnchor = anchor;
-    }
-
-    //
-    // Now set the cursor correctly.
-    //
-    if ( corner.contains( _ev->pos() ) )
-      setCursor( sizeFDiagCursor );
-    else if ( !m_strAnchor.isEmpty() )
+  // Test whether the mouse is over some anchor
+  {
+    KSpreadCell *cell = table->visibleCellAt( col, row );
+    QString anchor = cell->testAnchor( _ev->pos().x() - xpos,
+                                       _ev->pos().y() - ypos );
+    if ( !anchor.isEmpty() && anchor != m_strAnchor )
       setCursor( KCursor::handCursor() );
-    else
-      setCursor( arrowCursor );
+    m_strAnchor = anchor;
+  }
 
-    // No marking, selecting etc. in progess? Then quit here.
-    if ( m_eMouseAction == NoAction )
-        return;
+  //
+  // Now set the cursor correctly.
+  //
+  if ( selectionHandle.contains( _ev->pos() ) )
+    setCursor( sizeFDiagCursor );
+  else if ( !m_strAnchor.isEmpty() )
+    setCursor( KCursor::handCursor() );
+  else
+    setCursor( arrowCursor );
 
-    // Set the new lower right corner of the selection
-    if ( col <= m_iMouseStartColumn )
+  // No marking, selecting etc. in progess? Then quit here.
+  if ( m_eMouseAction == NoAction )
+    return;
+
+  // Set the new extent of the selection
+  extendCurrentSelection(QPoint(col, row));
+
+  // Scroll the table if necessary
+  if ( _ev->pos().x() < 0 )
+    horzScrollBar()->setValue( xOffset() + xpos );
+  else if ( _ev->pos().x() > width() )
+  {
+    if ( col < KS_colMax )
     {
-        selection.setLeft( col );
-        selection.setRight( m_iMouseStartColumn );
+      ColumnLayout *cl = table->columnLayout( col + 1 );
+      xpos = table->columnPos( col + 1, this );
+      horzScrollBar()->setValue( xOffset() + ( xpos + cl->width( this ) - width() ) );
     }
-    else
-        selection.setRight( col );
-    if ( row <= m_iMouseStartRow )
+  }
+  if ( _ev->pos().y() < 0 )
+    vertScrollBar()->setValue( yOffset() + ypos );
+  else if ( _ev->pos().y() > height() )
+  {
+    if ( row < KS_rowMax )
     {
-        selection.setTop( row );
-        selection.setBottom( m_iMouseStartRow );
+      RowLayout *rl = table->rowLayout( row + 1 );
+      ypos = table->rowPos( row + 1, this );
+      vertScrollBar()->setValue( yOffset() + ( ypos + rl->height( this ) - height() ) );
     }
-    else
-        selection.setBottom( row );
+  }
 
-    selection=table->selectionCellMerged(selection);
-
-    // If nothing changed, then quit
-    if ( selection == table->selection() )
-        return;
-
-    // Set the new selection
-    table->setSelection( selection, QPoint( col, row ), this );
-    // Scroll the table if necessary
-    if ( _ev->pos().x() < 0 )
-        horzScrollBar()->setValue( xOffset() + xpos );
-    else if ( _ev->pos().x() > width() )
-    {
-        if ( col < KS_colMax )
-        {
-            ColumnLayout *cl = table->columnLayout( col + 1 );
-            xpos = table->columnPos( col + 1, this );
-            horzScrollBar()->setValue( xOffset() + ( xpos + cl->width( this ) - width() ) );
-        }
-    }
-    if ( _ev->pos().y() < 0 )
-        vertScrollBar()->setValue( yOffset() + ypos );
-    else if ( _ev->pos().y() > height() )
-    {
-        if ( row < KS_rowMax )
-        {
-            RowLayout *rl = table->rowLayout( row + 1 );
-            ypos = table->rowPos( row + 1, this );
-            vertScrollBar()->setValue( yOffset() + ( ypos + rl->height( this ) - height() ) );
-        }
-    }
-
-    // Show where we are now.
-    updatePosWidget();
-
-    m_bMouseMadeSelection = true;
+  // Show where we are now.
+  updatePosWidget();
 }
 
 void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 {
   if ( m_scrollTimer->isActive() )
-      m_scrollTimer->stop();
+    m_scrollTimer->stop();
 
   m_bMousePressed = false;
 
@@ -1045,254 +991,209 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   else if ( m_eMouseAction == Mark )
   {
     // Get the object in the lower right corner
-    KSpreadCell *cell = table->cellAt( m_iMouseStartColumn, m_iMouseStartRow );
+//    KSpreadCell *cell = table->cellAt( m_iMouseStartColumn, m_iMouseStartRow );
     // Did we mark only a single cell ?
     // Take care: One cell may obscure other cells ( extra size! ).
-    if ( selection.left() + cell->extraXCells() == selection.right() &&
-         selection.top() + cell->extraYCells() == selection.bottom() )
-    {
-      gotoLocation(KSpreadPoint(util_cellName(m_iMouseStartColumn, m_iMouseStartRow)));
-    }
-    else
-        m_pView->updateEditWidget();
+//    if ( selection.left() + cell->extraXCells() == selection.right() &&
+//         selection.top() + cell->extraYCells() == selection.bottom() )
+//    {
+//      gotoLocation(KSpreadPoint(util_cellName(m_iMouseStartColumn, m_iMouseStartRow)));
+//    }
+//    else
+//
+    m_pView->updateEditWidget();
   }
 
   m_eMouseAction = NoAction;
 
-  m_bMouseMadeSelection = FALSE;
+}
+
+void KSpreadCanvas::processClickSelectionHandle(QMouseEvent *event)
+{
+  KSpreadTable *table = activeTable();
+  QRect selection = table->selection();
+
+  // Auto fill ? That is done using the left mouse button.
+  if ( event->button() == LeftButton )
+  {
+    m_eMouseAction = AutoFill;
+    m_rctAutoFillSrc = selection;
+    m_iMouseStartColumn = QMIN(markerColumn(),selection.left());
+    m_iMouseStartRow = QMIN(markerRow(),selection.top());
+  }
+  // Resize a cell (dont with the right mouse button) ?
+  // But for that to work there must not be a selection.
+  else if ( event->button() == MidButton && table->singleCellSelection())
+  {
+    m_eMouseAction = ResizeCell;
+    m_iMouseStartColumn = markerColumn();
+    m_iMouseStartRow = markerRow();
+  }
+
+  return;
+}
+
+void KSpreadCanvas::extendCurrentSelection(QPoint cell)
+{
+  KSpreadTable* table = activeTable();
+
+  QPoint anchor(m_iMouseStartColumn, m_iMouseStartRow);
+  /* the selection simply becomes a box with the anchor and given cell as opposite corners*/
+  int left, top, right, bottom;
+  left = QMIN(anchor.x(), cell.x());
+  top = QMIN(anchor.y(), cell.y());
+  right = QMAX(anchor.x(), cell.x());
+  bottom = QMAX(anchor.y(), cell.y());
+  QRect newSelection(QPoint(left, top), QPoint(right, bottom));
+  newSelection.normalize();
+
+  /* account for merged cell problems */
+  newSelection = table->selectionCellMerged(newSelection);
+
+  /* keep the marker at the anchor */
+  table->setSelection(newSelection, anchor, this);
+
+}
+
+void KSpreadCanvas::processLeftClickAnchor()
+{
+  bool isLink = (m_strAnchor.find("http://") == 0 || m_strAnchor.find("mailto:") == 0
+                 || m_strAnchor.find("ftp://") == 0 || m_strAnchor.find("file:") == 0 );
+  bool isLocalLink = (m_strAnchor.find("file:") == 0);
+  if( isLink )
+  {
+    QString question = i18n("Do you want to open this link to '%1'?\n").arg(m_strAnchor);
+    if( isLocalLink )
+    {
+      question += i18n("Note that opening a link to a local file may "
+                       "compromise your system's security!");
+    }
+
+    // this will also start local programs, so adding a "don't warn again"
+    // checkbox will probably be too dangerous
+    int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
+    if( choice == KMessageBox::Yes )
+    {
+      (void) new KRun( m_strAnchor );
+    }
+  }
+  else
+  {
+    gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
+  }
 }
 
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
-    if ( _ev->button() == LeftButton )
-        m_bMousePressed = true;
+  if ( _ev->button() == LeftButton )
+    m_bMousePressed = true;
 
-    // If in choose mode, we handle the mouse differently.
-    if( m_bChoose )
-    {
-        chooseMousePressEvent( _ev );
-        return;
-    }
+  // If in choose mode, we handle the mouse differently.
+  if( m_bChoose )
+  {
+    chooseMousePressEvent( _ev );
+    return;
+  }
 
-    KSpreadTable *table = activeTable();
+  KSpreadTable *table = activeTable();
 
-    if ( !table )
-        return;
+  if ( !table )
+    return;
 
-    // We were editing a cell -> save value and get out of editing mode
-    if ( m_pEditor )
-    {
-        deleteEditor( true ); // save changes
-    }
+  // We were editing a cell -> save value and get out of editing mode
+  if ( m_pEditor )
+  {
+    deleteEditor( true ); // save changes
+  }
 
-    m_scrollTimer->start( 50 );
+  m_scrollTimer->start( 50 );
 
-    // Remember current values.
-    QRect selection( table->selection() );
-    int old_column = markerColumn();
-    int old_row = markerRow();
+  // Remember current values.
+  QRect selection( table->selection() );
 
-    // Check whether we clicked in the little marker in the lower right
-    // corner of a cell or a marked area.
-    {
-        // Get the position and size of the marker/marked-area
-        int xpos;
-        int ypos;
-        int w, h;
+  // Did we click in the lower right corner of the marker/marked-area ?
+  if (table->getSelectionHandleArea(this).contains(_ev->pos()))
+  {
+    processClickSelectionHandle(_ev);
+    return;
+  }
 
-        // complete rows/columns are selected
-        if ( table->isRowSelected() || table->isColumnSelected() )
-        {
-            xpos = table->columnPos( markerColumn(), this );
-            ypos = table->rowPos( markerRow(), this );
-            KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
-            w = cell->width( markerColumn() );
-            h = cell->height( markerRow() );
-            if(cell->extraXCells())
-                w= cell->extraWidth();
-        }
-        else // if we have a rectangular selection ( not complete rows or columns )
-        {
-            xpos = table->columnPos( selection.left(), this );
-            ypos = table->rowPos( selection.top(), this );
-            int x = table->columnPos( selection.right(), this );
-            KSpreadCell *cell = table->cellAt( selection.right(), selection.top() );
-            int tw = cell->width( selection.right(), this );
-            w = ( x - xpos ) + tw;
-            cell = table->cellAt( selection.left(), selection.bottom() );
-            int y = table->rowPos( selection.bottom(), this );
-            int th = cell->height( selection.bottom(), this );
-            h = ( y - ypos ) + th;
-        }
+  // In which cell did the user click ?
+  int xpos, ypos;
+  int row = table->topRow( _ev->pos().y(), ypos, this );
+  int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
-        // Did we click in the lower right corner of the marker/marked-area ?
-        if ( _ev->pos().x() >= xpos + w - 2 && _ev->pos().x() <= xpos + w + 3 &&
-             _ev->pos().y() >= ypos + h - 1 && _ev->pos().y() <= ypos + h + 4 )
-        {
-            // Auto fill ? That is done using the left mouse button.
-            if ( _ev->button() == LeftButton )
-            {
-                m_eMouseAction = AutoFill;
-                // Do we have a selection already ?
-                if ( !table->singleCellSelection() &&
-                     !table->isRowSelected()  && !table->isColumnSelected() )
-                { /* Selection is ok */
-                    m_rctAutoFillSrc = selection;
-                }
-                else // Select the current cell
-                {
-                    KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
-                    selection.setCoords( markerColumn(), markerRow(),
-                                         QMIN(KS_colMax, markerColumn() + cell->extraXCells()),
-                                         QMIN(KS_rowMax, markerRow()    + cell->extraYCells()) );
-                    m_rctAutoFillSrc.setCoords( markerColumn(), markerRow(),
-                                                markerColumn(), markerRow() );
-                }
-                m_iMouseStartColumn = QMIN(markerColumn(),selection.left());
-                m_iMouseStartRow = QMIN(markerRow(),selection.top());
+  //you cannot move marker when col > KS_colMax or row > KS_rowMax
+  if( col > KS_colMax || row > KS_rowMax){
+    kdDebug(36001) << "KSpreadCanvas::mousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
+    return;
+  }
 
-            }
-            // Resize a cell (dont with the right mouse button) ?
-            // But for that to work there must not be a selection.
-            else if ( _ev->button() == MidButton && table->singleCellSelection())
-            {
-                m_eMouseAction = ResizeCell;
-                KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
-                selection.setCoords( markerColumn(), markerRow(),
-                                     QMIN(KS_colMax, markerColumn() + cell->extraXCells()),
-                                     QMIN(KS_rowMax, markerRow()    + cell->extraYCells()) );
-                m_iMouseStartColumn = markerColumn();
-                m_iMouseStartRow = markerRow();
-            }
+  // Unselect a selection ?
+  if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
+    table->unselect();
 
-            table->setSelection( selection, this );
-            return;
-        }
-    }
+  // Extending an existing selection with the shift button ?
+  if ( m_pView->koDocument()->isReadWrite() && selection.right() != KS_colMax &&
+       selection.bottom() != KS_rowMax && _ev->state() & ShiftButton )
+  {
+    extendCurrentSelection(QPoint(col, row));
 
-    // In which cell did the user click ?
-    int xpos, ypos;
-    int row = table->topRow( _ev->pos().y(), ypos, this );
-    int col = table->leftColumn( _ev->pos().x(), xpos, this );
+    return;
+  }
 
-    //you cannot move marker when col > KS_colMax or row > KS_rowMax
-    if( col > KS_colMax || row > KS_rowMax){
-	kdDebug(36001) << "KSpreadCanvas::mousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
-	return;
-    }
+  KSpreadCell *cell = table->cellAt( col, row );
 
-    // Unselect a selection ?
-    if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
-        table->unselect();
+  // Go to the upper left corner of the obscuring object if cells are merged
+  if (cell->isObscuringForced())
+  {
+    cell = cell->obscuringCells().getFirst();
+    col = cell->column();
+    row = cell->row();
+  }
 
-    // Extending an existing selection with the shift button ?
-    if ( m_pView->koDocument()->isReadWrite() && selection.right() != KS_colMax && selection.bottom() != KS_rowMax && _ev->state() & ShiftButton )
-    {
-        if( col != old_column || row != old_row )
-        {
-            if(old_column>col)
-            {
-                int tmp=col;
-                col=old_column;
-                old_column=tmp;
-            }
-            if(old_row>row)
-            {
-                int tmp=row;
-                row=old_row;
-                old_row=tmp;
-            }
-            if( !table->singleCellSelection() )
-            {
-                //if you have a selection and you go up in the table
-                //so bottom is the bottom of the selection
-                //not the markercolumn
-                if(selection.bottom()>row)
-                    row = selection.bottom();
-                if(selection.right()>col)
-                    col = selection.right();
-            }
-            selection.setLeft(old_column);
-            selection.setRight( col );
-            selection.setTop(old_row);
-            selection.setBottom( row );
-            table->setSelection( selection, QPoint( old_column, old_row ), this );
+  // Start a marking action ?
+  if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
+  {
+    processLeftClickAnchor();
+  }
+  else if ( _ev->button() == LeftButton )
+  {
+    m_eMouseAction = Mark;
+    selection.setCoords( col, row,
+                         col + cell->extraXCells(),
+                         row + cell->extraYCells() );
+    table->setSelection( selection, this );
+    m_iMouseStartColumn = col;
+    m_iMouseStartRow = row;
+  }
+  else if ( _ev->button() == RightButton )
+  {
+    // No selection or the mouse press was outside of an existing selection ?
+    if ( !selection.contains( QPoint(col, row )) )
+      table->setMarker( QPoint( col, row ) );
+  }
 
-            return;
-        }
-    }
+  // Paste operation with the middle button ?
+  if( _ev->button() == MidButton )
+  {
+    table->setMarker( QPoint( col, row ) );
+    table->paste( QPoint( markerColumn(), markerRow() ) );
+    table->cellAt( markerColumn(), markerRow() )->update();
+  }
 
-    KSpreadCell *cell = table->cellAt( col, row );
+  // Update the edit box
+  m_pView->updateEditWidgetOnPress();
 
-    // Go to the upper left corner of the obscuring object if cells are merged
-    if (cell->isObscuringForced())
-    {
-      cell = cell->obscuringCells().getFirst();
-      col = cell->column();
-      row = cell->row();
-    }
+  updatePosWidget();
 
-    // Start a marking action ?
-    if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
-    {
-        bool isLink = (m_strAnchor.find("http://") == 0 || m_strAnchor.find("mailto:") == 0
-                       || m_strAnchor.find("ftp://") == 0 || m_strAnchor.find("file:") == 0 );
-        bool isLocalLink = (m_strAnchor.find("file:") == 0);
-        if( isLink )
-        {
-            QString question = i18n("Do you want to open this link to '%1'?\n").arg(m_strAnchor);
-            if( isLocalLink ) {
-                question += i18n("Note that opening a link to a local file may "
-                                 "compromise your system's security!");
-            }
-
-            // this will also start local programs, so adding a "don't warn again"
-            // checkbox will probably be too dangerous
-            int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
-            if( choice == KMessageBox::Yes ) {
-                (void) new KRun( m_strAnchor );
-            }
-        } else {
-            gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
-        }
-    }
-    else if ( _ev->button() == LeftButton )
-    {
-        m_eMouseAction = Mark;
-        selection.setCoords( col, row,
-                             col + cell->extraXCells(),
-                             row + cell->extraYCells() );
-        table->setSelection( selection, this );
-        m_iMouseStartColumn = col;
-        m_iMouseStartRow = row;
-    }
-    else if ( _ev->button() == RightButton )
-    {
-        // No selection or the mouse press was outside of an existing selection ?
-        if ( !selection.contains( QPoint(col, row )) )
-            table->setMarker( QPoint( col, row ) );
-    }
-
-    // Paste operation with the middle button ?
-    if( _ev->button() == MidButton )
-    {
-        table->setMarker( QPoint( col, row ) );
-        table->paste( QPoint( markerColumn(), markerRow() ) );
-        table->cellAt( markerColumn(), markerRow() )->update();
-    }
-
-    // Update the edit box
-    m_pView->updateEditWidgetOnPress();
-
-    updatePosWidget();
-
-    // Context menu ?
-    if ( _ev->button() == RightButton )
-    {
-        // TODO: Handle anchor
-        QPoint p = mapToGlobal( _ev->pos() );
-        m_pView->openPopupMenu( p );
-    }
+  // Context menu ?
+  if ( _ev->button() == RightButton )
+  {
+    // TODO: Handle anchor
+    QPoint p = mapToGlobal( _ev->pos() );
+    m_pView->openPopupMenu( p );
+  }
 }
 
 void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
