@@ -128,7 +128,7 @@ QValidator::State IdentifierValidator::validate( QString& input, int& pos ) cons
 
 KexiValidator::Result IdentifierValidator::internalCheck(
 	const QString &valueName, const QVariant& v, 
-	QString &message, QString &details)
+	QString &message, QString & /*details*/)
 {
 	if (Kexi::isIdentifier(v.toString()))
 		return KexiValidator::Ok;
@@ -151,7 +151,7 @@ KexiDBObjectNameValidator::~KexiDBObjectNameValidator()
 }
 
 KexiValidator::Result KexiDBObjectNameValidator::internalCheck(
-	const QString &valueName, const QVariant& v, 
+	const QString & /*valueName*/, const QVariant& v, 
 	QString &message, QString &details)
 {
 
