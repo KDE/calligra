@@ -779,7 +779,7 @@ void KPWebPresentationWizard::setupPage2()
 
     zoom = new KIntNumInput( webPres.getZoom(), row5 );
     zoom->setSuffix( " %" );
-    zoom->setRange( 1, 1000, 1 );
+    zoom->setRange( 25, 1000, 5 );
 
     encoding = new KComboBox( false, row6 );
     QStringList _strList = KGlobal::charsets()->availableEncodingNames();
