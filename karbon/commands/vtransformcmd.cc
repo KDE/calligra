@@ -28,7 +28,10 @@ VTransformCmd::execute()
 {
 	VObjectListIterator itr( m_objects );
 	for ( ; itr.current() ; ++itr )
+	{
 		itr.current()->transform( m_mat );
+		itr.current()->invalidateBoundingBox();
+	}
 }
 
 void
@@ -37,7 +40,10 @@ VTransformCmd::unexecute()
 	// inverting the matrix should undo the affine transformation
 	VObjectListIterator itr( m_objects );
 	for ( ; itr.current() ; ++itr )
+	{
 		itr.current()->transform( m_mat.invert() );
+		itr.current()->invalidateBoundingBox();
+	}
 }
 
 

@@ -146,6 +146,7 @@ VDocument::selectAllObjects()
 			}
 		}
 	}
+	m_selection.invalidateBoundingBox();
 }
 
 void
@@ -168,6 +169,7 @@ VDocument::selectObjectsWithinRect( const KoRect& rect,
 			m_selection.append( itr2.current() );
 		}
 	}
+	m_selection.invalidateBoundingBox();
 }
 
 void
