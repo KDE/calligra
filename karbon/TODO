@@ -16,9 +16,6 @@ TODO:
 	this way you'll get node undo/redo automatically.
 -	port all sophisticated VPath::functions like counterClockwise() to VPathIterator.
 -	add undo/redo to shape commands like VFlattenCmd etc
-
--	move the stuff from PAPER to DOC. PAGE would be better than PAPER, and since we have a
-	single page format...
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
 -	select first/last segment's knot if one of each other's knot is selected

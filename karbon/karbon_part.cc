@@ -123,15 +123,14 @@ bool
 KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
 	QDomElement root = document.documentElement();
-	QDomElement paper = root.namedItem( "PAPER" ).toElement();
 	QString unitName="mm";
-	if( !paper.isNull() )
+	if( !root.isNull() )
 	{
-		m_pageLayout.ptWidth = paper.attribute( "width", "0.0" ).toDouble();
-		m_pageLayout.ptHeight = paper.attribute( "height", "0.0" ).toDouble();
-		if( paper.hasAttribute( "unit" ) )
+		m_pageLayout.ptWidth	= root.attribute( "width", "0.0" ).toDouble();
+		m_pageLayout.ptHeight	= root.attribute( "height", "0.0" ).toDouble();
+		if( root.hasAttribute( "unit" ) )
 		{
-			unitName = paper.attribute("unit");
+			unitName = root.attribute("unit");
 		}
 	}
 	setUnit(KoUnit::unit( unitName ));
@@ -144,12 +143,9 @@ KarbonPart::saveXML()
 	QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
 	QDomElement me = doc.documentElement();
 
-	QDomElement paper = doc.createElement( "PAPER" );
-	paper.setAttribute( "width", m_pageLayout.ptWidth );
-	paper.setAttribute( "height", m_pageLayout.ptHeight );
-	paper.setAttribute( "unit", KoUnit::unitName( getUnit() ) );
-
-	me.appendChild( paper );
+	me.setAttribute( "width", m_pageLayout.ptWidth );
+	me.setAttribute( "height", m_pageLayout.ptHeight );
+	me.setAttribute( "unit", KoUnit::unitName( getUnit() ) );
 
 	m_doc.save( me );
 	return doc;
