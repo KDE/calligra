@@ -30,8 +30,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <list>
 #include <cassert>
+#include <stdio.h>
 
 #include <kdebug.h>
 

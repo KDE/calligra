@@ -2102,6 +2102,10 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       context.setValue( new KSValue( cell->valueDouble() ) );
     else if ( cell->isBool() )
       context.setValue( new KSValue( cell->valueBool() ) );
+    else if ( cell->isTime() )
+      context.setValue( new KSValue( cell->valueTime() ) );
+    else if ( cell->isDate() )
+      context.setValue( new KSValue( cell->valueDate() ) );
     else if ( cell->valueString().isEmpty() )
       context.setValue( new KSValue( 0.0 ) );
     else
@@ -2149,6 +2153,10 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
 	  c = new KSValue( cell->valueDouble() );
 	else if ( cell->isBool() )
 	  c = new KSValue( cell->valueBool() );
+	else if ( cell->isDate() )
+	  c = new KSValue( cell->valueDate() );
+	else if ( cell->isTime() )
+	  c = new KSValue( cell->valueTime() );
 	else if ( cell->valueString().isEmpty() )
 	  c = new KSValue( 0.0 );
 	else
