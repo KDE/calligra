@@ -1,0 +1,8 @@
+# KDE Config File
+[Desktop Entry]
+MimeType=application/x-killustrator
+Comment=KIllustrator
+DefaultApp=KIllustrator
+Icon=killustrator.png
+Type=MimeType
+Patterns=*.kil;
