@@ -645,6 +645,17 @@ void KPresenterView::toolsMouse()
     //m_canvas->deSelectAllObj();
 }
 
+
+/*==============================================================*/
+void KPresenterView::toolsRotate()
+{
+    if ( actionToolsRotate ->isChecked() )
+        m_canvas->setToolEditMode( TEM_ROTATE, false );
+    else
+        actionToolsRotate->setChecked(true);
+}
+
+
 /*=========================== insert line =======================*/
 void KPresenterView::toolsLine()
 {
@@ -2469,6 +2480,11 @@ void KPresenterView::setupActions()
     actionToolsMouse->setExclusiveGroup( "tools" );
     actionToolsMouse->setChecked( true );
 
+    actionToolsRotate = new KToggleAction( i18n( "&Rotate" ), "rotate", 0,
+					   this, SLOT( toolsRotate() ),
+					   actionCollection(), "tools_rotate" );
+    actionToolsRotate->setExclusiveGroup( "tools" );
+
     actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", Key_F6,
 					 this, SLOT( toolsLine() ),
 					 actionCollection(), "tools_line" );
@@ -3971,6 +3987,9 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
     switch ( toolEditMode ) {
     case TEM_MOUSE:
 	actionToolsMouse->setChecked( true );
+	break;
+    case TEM_ROTATE:
+	actionToolsRotate->setChecked( true );
 	break;
     case INS_LINE:
 	actionToolsLine->setChecked( true );

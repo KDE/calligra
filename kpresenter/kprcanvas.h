@@ -331,6 +331,7 @@ protected:
     void drawCubicBezierCurve( int _dx, int _dy );
     void endDrawCubicBezierCurve();
     double getAngle( const QPoint &p1, const QPoint &p2 );
+    double getAngle( const KoPoint& p1, const KoPoint& p2 );
 
 #ifndef NDEBUG
     void printRTDebug( int info );
@@ -362,6 +363,7 @@ private:
     void calcBoundingRect();
     bool objectIsAHeaderFooterHidden(KPObject *obj);
 
+
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
@@ -376,10 +378,11 @@ private:
     // variables
     QPopupMenu *presMenu;
     bool mousePressed;
+    double startAngle;
     ModifyType modType;
     unsigned int oldMx, oldMy;
 
-    KPObject *resizeObjNum, *editNum;
+    KPObject *resizeObjNum, *editNum, *rotateNum;
 
     bool fillBlack;
     KPresenterView *m_view;
@@ -394,6 +397,7 @@ private:
     QValueList<int>::Iterator slideListIterator;
     int PM_DM, PM_SM;
     int firstX, firstY;
+    double axisX, axisY;
     int delPageId;
     bool drawRubber;
     QRect rubber, oldBoundingRect, oldRect;

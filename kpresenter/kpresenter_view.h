@@ -160,6 +160,7 @@ public slots:
 
     // tools menu
     void toolsMouse();
+    void toolsRotate();
     void toolsLine();
     void toolsRectangle();
     void toolsCircleOrEllipse();
@@ -669,6 +670,7 @@ private:
     KAction *actionInsertClipart;
 
     KToggleAction *actionToolsMouse;
+    KToggleAction *actionToolsRotate;
     KToggleAction *actionToolsLine;
     KToggleAction *actionToolsRectangle;
     KToggleAction *actionToolsCircleOrEllipse;

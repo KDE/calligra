@@ -124,6 +124,7 @@
  </Menu>
  <Menu name="Tools"><text>&amp;Tools</text>
   <Action name="tools_mouse"/>
+  <Action name="tools_rotate"/>
   <Separator/>
   <Action name="tools_line"/>
   <Action name="tools_freehand"/>
@@ -173,6 +174,7 @@
 </ToolBar>
 <ToolBar name="toolsToolBar" position="left" fullWidth="false"><Text>Tools</Text>
   <Action name="tools_mouse"/>
+  <Action name="tools_rotate"/>
   <Action name="tools_line"/>
   <Action name="tools_freehand"/>
   <Action name="tools_polyline"/>

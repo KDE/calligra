@@ -88,6 +88,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         modType = MT_NONE;
         resizeObjNum = 0L;
         editNum = 0L;
+	rotateNum = 0L;
         setBackgroundColor( white );
         m_view = _view;
         setupMenus();
@@ -523,19 +524,19 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     bool _resizeObj = false;
                     KPObject *kpobject = 0;
 
-                    firstX = contentsPoint.x();
+		    firstX = contentsPoint.x();
                     firstY = contentsPoint.y();
 		    kpobject = m_activePage->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
 		    if ( kpobject ) {
                         if(_resizeObj)
                         {
-                            oldBoundingRect = getOldBoundingRect( kpobject );
+			    oldBoundingRect = getOldBoundingRect( kpobject );
                             resizeObjNum = kpobject;
                         }
                     }
                     else
                     {
-                        _resizeObj = false;
+			_resizeObj = false;
                         kpobject = m_view->kPresenterDoc()->stickyPage()->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
                         if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
                         {
@@ -564,10 +565,53 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         drawRubber = true;
                         rubber = QRect( e->x(), e->y(), 0, 0 );
                     }
-		    calcBoundingRect();
 
+		    // update hotspot
+		    calcBoundingRect();
                     m_hotSpot = docPoint - m_boundingRect.topLeft();
                 } break;
+		case TEM_ROTATE: {
+                    bool deSelAll = true;
+                    bool _resizeObj = false;
+                    KPObject *kpobject = 0;
+
+                    firstX = contentsPoint.x();
+                    firstY = contentsPoint.y();
+
+		    // find object on active page
+		    kpobject = m_activePage->getEditObj( docPoint );
+
+		    // find object on sticky page (ignore header/footer)
+		    if ( !kpobject ) {
+			kpobject = m_view->kPresenterDoc()->stickyPage()->getEditObj( docPoint );
+                        if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
+                            if(objectIsAHeaderFooterHidden(kpobject))
+                                kpobject=0L;
+		    }
+
+		    // clear old selections even if shift or control are pressed
+		    // we don't support rotating multiple objects yet
+		    deSelectAllObj();
+
+		    // deselect all if no object is found
+		    if ( !kpobject )
+			deSelectAllObj();
+
+		    // select and raise object
+		    else {
+			rotateNum = kpobject;
+			startAngle = -kpobject->getAngle();
+			selectObj( kpobject );
+			raiseObject( kpobject );
+		    }
+
+		    // set axis to center of selected objects bounding rect
+		    if ( kpobject ) {
+			calcBoundingRect();
+			axisX =	m_boundingRect.center().x();
+			axisY = m_boundingRect.center().y();
+		    }
+		} break;
                 case INS_FREEHAND: {
                     deSelectAllObj();
                     mousePressed = true;
@@ -1022,6 +1066,23 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             //setCursor( arrowCursor );
         }
     } break;
+    case TEM_ROTATE: {
+	if ( !rotateNum )
+	    break;
+
+	if ( startAngle != rotateNum->getAngle() ) {
+	    QPtrList<RotateCmd::RotateValues> list;
+	    RotateCmd::RotateValues *v = new RotateCmd::RotateValues;
+	    v->angle = startAngle;
+	    list.append( v );
+	    QPtrList<KPObject> objects;
+	    objects.append( rotateNum );
+	    RotateCmd *rotateCmd = new RotateCmd( i18n( "Change Rotation" ), list,
+						  rotateNum->getAngle(),
+						  objects, m_view->kPresenterDoc() );
+	    m_view->kPresenterDoc()->addCommand( rotateCmd );
+	}
+    }break;
     case INS_LINE: {
         if ( insRect.width() != 0 && insRect.height() != 0 ) {
             if ( insRect.top() == insRect.bottom() ) {
@@ -1151,6 +1212,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	    my = ( my / rastY() ) * rastY();
 	    switch ( toolEditMode ) {
 	    case TEM_MOUSE: {
+
+		kdDebug() << "TEM_MOUSE mouse move" << endl;
 		oldMx = ( oldMx / rastX() ) * rastX();
 		oldMy = ( oldMy / rastY() ) * rastY();
 
@@ -1176,6 +1239,18 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		oldMx = e->x()+diffx();
 		oldMy = e->y()+diffy();
 	    } break;
+	    case TEM_ROTATE: {
+		double angle = getAngle( KoPoint( e->x() + diffx(), e->y() + diffy() ),
+				      KoPoint( axisX, axisY ) );
+		double angle1 = getAngle( KoPoint( firstX, firstY ),
+				      KoPoint( axisX, axisY ) );
+
+		angle -= angle1;
+		angle -= startAngle;
+
+		activePage()->rotateObj( angle );
+		m_view->kPresenterDoc()->stickyPage()->rotateObj( angle );
+	    }break;
 	    case INS_TEXT: case INS_OBJECT: case INS_TABLE:
 	    case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM:
             case INS_PICTURE: case INS_CLIPART: {
@@ -5148,4 +5223,10 @@ KPObject *KPrCanvas::getSelectedObj()
         return obj;
     obj=m_view->kPresenterDoc()->stickyPage()->getSelectedObj();
     return obj;
+}
+
+double KPrCanvas::getAngle( const KoPoint& p1, const KoPoint& p2 )
+{
+    double a = atan2( p2.x() - p1.x(), p2.y() - p1.y() ) + M_PI;
+    return ( - ( a * 360 ) / ( 2 * M_PI ) - 90 );
 }
