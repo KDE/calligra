@@ -32,22 +32,22 @@
   </TABLESTYLE>
   <TABLESTYLE>
       <NAME value="Header 1"/>
-      <PFRAMESTYLE name="Light grey"/>
+      <PFRAMESTYLE name="Light Gray"/>
       <PSTYLE name="Standard"/>
   </TABLESTYLE>
   <TABLESTYLE>
       <NAME value="Header 2"/>
-      <PFRAMESTYLE name="Light blue"/>
+      <PFRAMESTYLE name="Light Blue"/>
       <PSTYLE name="Standard"/>
   </TABLESTYLE>
   <TABLESTYLE>
       <NAME value="Header 3"/>
-      <PFRAMESTYLE name="Dark grey"/>
+      <PFRAMESTYLE name="Dark Gray"/>
       <PSTYLE name="Standard"/>
   </TABLESTYLE>
   <TABLESTYLE>
       <NAME value="Header 4"/>
-      <PFRAMESTYLE name="Dark blue"/>
+      <PFRAMESTYLE name="Dark Blue"/>
       <PSTYLE name="Standard"/>
   </TABLESTYLE>
 </TABLESTYLES>
