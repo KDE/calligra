@@ -1765,16 +1765,12 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs )
 	    }
 	    else if ( (*it).m_strName == "prefix" )
 	    {
-	      // I have changed this from .empty() to .size() == 0
-	      // Torben, I hope this is ok?
-	      if ( !((*it).m_strValue.size() == 0 ) )
+	      if ( !((*it).m_strValue.empty() ) )
 		m_strPrefix = (*it).m_strValue.c_str();
 	    }
 	    else if ( (*it).m_strName == "postfix" )
 	    {
-	      // I have changed this from .empty() to .size() == 0
-	      // Torben, I hope this is ok?
-	      if ( !((*it).m_strValue.size() == 0 ) )
+	      if ( !((*it).m_strValue.empty() ) )
 		m_strPostfix = (*it).m_strValue.c_str();
 	    }
 	    else if ( (*it).m_strName == "float" )

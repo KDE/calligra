@@ -80,7 +80,7 @@ bool KOMLParser::open( const char *_search, string& tag )
       // Do NOT put it on the stack, but make a remark.
       m_bCloseSingleTag = true;
       // Delete trailing '/'
-      tag.remove( tl - 1, 1 );
+      tag.erase( tl - 1, 1 );
       return true;
     }
     // Is it a closing tag ?
@@ -240,7 +240,7 @@ bool KOMLParser::readTag( string &_str )
     }
   }
 
-  _str.remove( _str.length() - 1, 1 );
+  _str.erase( _str.length() - 1, 1 );
   
   return true;
 }
