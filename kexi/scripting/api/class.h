@@ -25,6 +25,10 @@
 #include <qobject.h>
 #include <klocale.h>
 
+#include <kdebug.h>
+#include <qvariant.h>
+#include "variant.h"
+
 #include "object.h"
 #include "list.h"
 #include "exception.h"
@@ -127,11 +131,35 @@ namespace Kross { namespace Api {
                 if(! f) return 0;
                 T *self = static_cast<T*>(this);
 
-                QValueList<Object*> arglist = arguments->getValue();
-                if(arglist.size() < f->arglist.getMinParams())
-                    throw AttributeException(i18n("To less parameters for '%1'.").arg(name));
-                if(arglist.size() > f->arglist.getMaxParams())
-                    throw AttributeException(i18n("To much parameters for '%1'.").arg(name));
+                QValueList<Object*>& arglist = arguments->getValue();
+                uint fmax = f->arglist.getMaxParams();
+                uint fmin = f->arglist.getMinParams();
+
+                // check the number of parameters passed.
+                if(arglist.size() < fmin)
+                    throw AttributeException(i18n("To less parameters for method '%1'.").arg(name));
+                if(arglist.size() > fmax)
+                    throw AttributeException(i18n("To much parameters for method '%1'.").arg(name));
+
+                // check type of passed parameters.
+                QValueList<Argument> farglist = f->arglist.getArguments();
+                for(uint i = 0; i < fmax; i++) {
+                    if(i >= arglist.count()) { // handle default arguments
+                        arglist.append( farglist[i].getObject() );
+                        continue;
+                    }
+
+                    Object* o = arguments->item(i);
+                    QString fcn = farglist[i].getClassName();
+                    QString ocn = o->getClassName();
+
+                    /*TODO
+                    e.g. on 'Kross::Api::Variant::String' vs. 'Kross::Api::Variant'
+                    We should add those ::String part even to the arguments in Kross::KexiDB::*
+                    */
+                    if(fcn.find(ocn) != 0)
+                        throw AttributeException(i18n("Method '%1' expected parameter of type '%1', but got '%2'.").arg(name).arg(fcn).arg(ocn));
+                }
 
                 FunctionPtr function = f->function;
                 return (self->*function)(arguments);

@@ -61,6 +61,7 @@ class KexiDBClass:
         # Fill the new connectiondata object with what we need to connect.
         connectiondata.setConnName("myFileConnection")
         connectiondata.setFileName(filename)
+        print "connectiondata.serverInfoString = %s" % connectiondata.serverInfoString()
         # Create the connection now.
         connection = driver.createConnection(connectiondata)
         # Establish the connection.

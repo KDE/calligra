@@ -77,14 +77,14 @@ namespace Kross { namespace Api {
              *
              * \return The value this Value-class holds.
              */
-            inline V getValue() { return m_value; }
+            inline V& getValue() { return m_value; }
 
             /**
              * Set the value.
              *
              * \param value The value to set.
              */
-            inline void setValue(V value) { m_value = value; }
+            inline void setValue(V& value) { m_value = value; }
 
         private:
             V m_value;

@@ -75,3 +75,8 @@ uint ArgumentList::getMaxParams()
     return m_maxparams;
 }
 
+QValueList<Argument>& ArgumentList::getArguments()
+{
+    return m_arguments;
+}
+

@@ -58,7 +58,7 @@ namespace Kross { namespace Api {
              *
              * \return Name of the class this argument expects.
              */
-            inline const QString& getClassName();
+            const QString& getClassName();
 
             /**
              * Return the optional default \a Object this class
@@ -68,7 +68,7 @@ namespace Kross { namespace Api {
              *         isn't optional and therefore doesn't have
              *         an default object.
              */
-            inline Object* getObject();
+            Object* getObject();
 
             /**
              * Implementation of the << operator.
@@ -90,7 +90,7 @@ namespace Kross { namespace Api {
 
     /**
      * An ArgumentList is a collection of \a Argument
-     * objects used in \a Class::Function.
+     * objects used in a \a Class::Function.
      */
     class ArgumentList
     {
@@ -128,12 +128,19 @@ namespace Kross { namespace Api {
              */
             uint getMaxParams();
 
+            /**
+             * Return the list of arguments.
+             *
+             * \return List of \a Argument.
+             */
+            QValueList<Argument>& getArguments();
+
         private:
             /// Minimal needed parameters.
             uint m_minparams;
             /// Maximal needed parameters.
             uint m_maxparams;
-            /// List of \a Argument objects.
+            /// List of \a Argument.
             QValueList<Argument> m_arguments;
     };
 

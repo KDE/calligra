@@ -47,7 +47,7 @@ KexiDBDriver::KexiDBDriver(KexiDBDriverManager* drivermanager, ::KexiDB::Driver*
         i18n("Return a driver-specific escaped SQL string.")
     );
     addFunction("createConnection", &KexiDBDriver::createConnection,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBConnectionData"),
         i18n("Create a new KexiDBConnection object and return it.")
     );
     addFunction("connectionList", &KexiDBDriver::connectionList,
