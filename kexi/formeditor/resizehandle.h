@@ -19,14 +19,13 @@
 #ifndef KFE_RESIZEHANDLER_H
 #define KFE_RESIZEHANDLER_H
 
-#include <qwidget.h>
+#include <qdict.h>
 #include <qguardedptr.h>
+#include <qwidget.h>
 
 /**
   *@author Joseph Wenninger
   */
-
-
 
 namespace KFormDesigner
 {
@@ -67,6 +66,8 @@ namespace KFormDesigner
 	{
 	Q_OBJECT
 	public:
+		typedef QDict<ResizeHandleSet> Dict;
+
 		ResizeHandleSet(QWidget *modify, bool editing = false);
 		~ResizeHandleSet();
 		void setWidget(QWidget *modify);

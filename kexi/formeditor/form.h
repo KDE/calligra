@@ -23,8 +23,9 @@
 
 
 #include <qobject.h>
-#include <qdict.h>
 #include <qptrlist.h>
+
+#include "resizehandle.h"
 
 class QWidget;
 class QDomElement;
@@ -37,7 +38,7 @@ namespace KFormDesigner {
 class Container;
 class ObjectPropertyBuffer;
 class FormManager;
-class ResizeHandleSet;
+//class ResizeHandleSet;
 class ObjectTree;
 class ObjectTreeItem;
 
@@ -188,7 +189,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		ObjectTree		*m_topTree;
 
 		QPtrList<QWidget>	m_selected;
-		QDict<ResizeHandleSet> m_resizeHandles;
+		ResizeHandleSet::Dict m_resizeHandles;
 
 		bool			m_inter;
 		bool			m_design;

@@ -32,7 +32,6 @@
 #include "formIO.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
-#include "resizehandle.h"
 
 #include "form.h"
 
