@@ -1692,6 +1692,7 @@ void KWTableFrameSet::setTopBorder(KoBorder newBorder) {
             }
         }
     }
+    recalcRows();
 }
 
 void KWTableFrameSet::setBottomBorder(KoBorder newBorder) {
@@ -1706,6 +1707,7 @@ void KWTableFrameSet::setBottomBorder(KoBorder newBorder) {
             }
         }
     }
+    recalcRows();
 }
 
 void KWTableFrameSet::setRightBorder(KoBorder newBorder) {
@@ -1812,7 +1814,6 @@ double KWTableFrameSet::Cell::bottomBorder() {
 }
 
 void KWTableFrameSet::Cell::setLeftBorder(KoBorder newBorder) {
-kdDebug() << "KWTableFrameSet::Cell::leftBorder (" << m_row << "," << m_col << endl;
     KWFrame *f = frame(0);
     double diff = f->leftBorder().ptWidth - newBorder.ptWidth;
     f->setLeftBorder(newBorder);
