@@ -5887,35 +5887,39 @@ void KPrCanvas::scrollTopLeftPoint( const QPoint & pos )
 
 void KPrCanvas::scrollCanvas(const KoRect & oldPos)
 {
-    QRect rect=m_view->zoomHandler()->zoomRect(oldPos);
-    KoRect visiblePage=m_view->zoomHandler()->unzoomRect(visibleRect());
-    double tmpdiffx=m_view->zoomHandler()->unzoomItX(diffx());
-    double tmpdiffy=m_view->zoomHandler()->unzoomItY(diffy());
-    if( m_boundingRect.bottom()>(visiblePage.bottom()+tmpdiffy))
+    QRect rect = m_view->zoomHandler()->zoomRect( oldPos );
+    KoRect visiblePage = m_view->zoomHandler()->unzoomRect( visibleRect() );
+    double tmpdiffx = m_view->zoomHandler()->unzoomItX( diffx() );
+    double tmpdiffy = m_view->zoomHandler()->unzoomItY( diffy() );
+    if( m_boundingRect.bottom() > ( visiblePage.bottom() + tmpdiffy ) )
     {
-        m_view->kPresenterDoc()->repaint(rect);
-        int y=m_view->zoomHandler()->zoomItY(m_boundingRect.bottom())-(m_view->zoomHandler()->zoomItY(visiblePage.bottom()+tmpdiffy));
-        m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()+y);
+        m_view->kPresenterDoc()->repaint( rect );
+        int y = m_view->zoomHandler()->zoomItY( m_boundingRect.bottom() )
+              - m_view->zoomHandler()->zoomItY( visiblePage.bottom() + tmpdiffy );
+        m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->value() + y );
     }
-    else if( m_boundingRect.top()<visiblePage.top()+tmpdiffy)
+    else if( m_boundingRect.top() < visiblePage.top() + tmpdiffy )
     {
-        m_view->kPresenterDoc()->repaint(rect);
-        int y=(m_view->zoomHandler()->zoomItY(visiblePage.top()+tmpdiffy))-m_view->zoomHandler()->zoomItY(m_boundingRect.top());
-        m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()-y);
+        m_view->kPresenterDoc()->repaint( rect );
+        int y = m_view->zoomHandler()->zoomItY( visiblePage.top() + tmpdiffy ) 
+              - m_view->zoomHandler()->zoomItY( m_boundingRect.top() );
+        m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->value() - y );
     }
 
-    if( m_boundingRect.left()<(visiblePage.left()+tmpdiffx))
+    if( m_boundingRect.left() < ( visiblePage.left() + tmpdiffx ) )
     {
-        m_view->kPresenterDoc()->repaint(rect);
-        int x=m_view->zoomHandler()->zoomItX(visiblePage.left()+tmpdiffx) - m_view->zoomHandler()->zoomItX(m_boundingRect.left());
-        m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()-x);
+        m_view->kPresenterDoc()->repaint( rect );
+        int x = m_view->zoomHandler()->zoomItX( visiblePage.left() + tmpdiffx ) 
+              - m_view->zoomHandler()->zoomItX( m_boundingRect.left() );
+        m_view->getHScrollBar()->setValue( m_view->getHScrollBar()->value() - x );
     }
-    else if ( m_boundingRect.right()>(visiblePage.right()+tmpdiffx))
+    else if ( m_boundingRect.right() > ( visiblePage.right() + tmpdiffx ) )
     {
-        m_view->kPresenterDoc()->repaint(rect);
+        m_view->kPresenterDoc()->repaint( rect );
 
-        int x=m_view->zoomHandler()->zoomItX(m_boundingRect.right())-(m_view->zoomHandler()->zoomItX(visiblePage.right()+tmpdiffy));
-        m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+x);
+        int x = m_view->zoomHandler()->zoomItX( m_boundingRect.right() ) 
+              - m_view->zoomHandler()->zoomItX( visiblePage.right() + tmpdiffx );
+        m_view->getHScrollBar()->setValue( m_view->getHScrollBar()->value() + x );
     }
 }
 
