@@ -1,0 +1,73 @@
+/*
+
+	Copyright (C) 1998 Simon Hausmann
+                       <tronical@gmx.net>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+#ifndef __kohtml_idl__
+#define __kohtml_idl__
+
+#include <openparts.idl>
+#include <koffice.idl>
+#include <openparts_ui.idl>
+
+module KoHTML
+{
+	interface KoHTMLView : KOffice::View
+	{
+		slot void editCopy();
+		slot void editPreferences();
+		
+		slot void viewToolBar();
+		slot void viewStatusBar();
+	
+		slot void newView();
+		slot void insertObject();
+		
+		slot void slotStatusMsg(in string text);
+		slot void statusCallback(in long ID);
+		
+		slot void slotURLEntered();
+		
+		slot void addBookmark();
+		slot void editBookmarks();
+		slot void slotBookmarkSelected(in long ID);
+		
+		slot void slotBack();
+		slot void slotForward();
+		slot void slotHome();
+		slot void slotReload();
+		slot void slotStop();
+	};
+
+	interface KoHTMLDocument : KOffice::Document, KOffice::Print
+	{
+	        string getHTMLData();
+		string getURL();
+		
+                void openURL(in string url);
+		
+		boolean documentDone();
+        };
+	
+	interface DocumentFactory : KOffice::DocumentFactory
+	{
+	};
+};
+
+#endif
+
