@@ -30,71 +30,157 @@
 #include <kdebug.h>
 #include <msword.h>
 #include <paragraph.h>
-//#include <string.h>
 
-short MsWord::char2unicode(unsigned char c)
+// We currently only take note of the document's main non-Far Eastern
+// language, and ignore character properties. TBD: remove these restrictions!
+unsigned short MsWord::char2unicode(unsigned lid, unsigned char c)
 {
-    static const short CP2UNI[] =
+    static iconv_t lastIconv = (iconv_t)-1;
+    static unsigned lastLid = (unsigned)-1;
+
+    // Is the language changing?
+    if (lastLid != lid)
     {
-        0x20ac, 0x0000, 0x201a, 0x0192,
-        0x201e, 0x2026, 0x2020, 0x2021,
-        0x02c6, 0x2030, 0x0160, 0x2039,
-        0x0152, 0x0000, 0x017d, 0x0000,
-        0x0000, 0x2018, 0x2019, 0x201c,
-        0x201d, 0x2022, 0x2013, 0x2014,
-        0x02dc, 0x2122, 0x0161, 0x203a,
-        0x0153, 0x0000, 0x017e, 0x0178
-    };
+        const char *codepage;
 
-    if (c <= 0x7f || c >= 0xa0)
-        return static_cast<short>(c);
-    else
-        return CP2UNI[c-0x80];
-/*
-    char f_code[33];            // From CCSID
-    char t_code[33];            // To CCSID
-    iconv_t iconv_handle;       // Conversion Descriptor returned
-                                // from iconv_open() function
-    char *obuf;                 // Buffer for converted characters
-    char *p;
-    size_t ibuflen;             // Length of input buffer
-    size_t obuflen;             // Length of output buffer
-    const char *ibuf;
-    char *codepage;
-    char buffer[1];
-    char buffer2[2];
-    U16 eachchar = c;
-    buffer[0]=eachchar;
-    ibuf = buffer;
-    obuf = buffer2;
+        // Unconditionally set the new language - this will prevent
+        // an error message for each character if things go wrong!
+        lastLid = lid;
 
-    // All reserved positions of from code (last 12 characters) and to code
-    // (last 19 characters) must be set to hexadecimal zeros.
+        // Find the name of the new code page.
+        codepage = lid2codepage(lastLid);
 
-    memset(f_code,'\0',33);
-    memset(t_code,'\0',33);
-
-    strcpy(f_code,"CP1252");
-    strcpy(t_code,"UCS-2");
-
-    iconv_handle = iconv_open(t_code,f_code);
-    if (iconv_handle == (iconv_t)-1)
-    {
-        kdError(s_area) << "iconv_open fail: " << errno << " cannot convertto unicode" << endl;
-        return('?');
+        // Close any existing context before opening the new one.
+        if (lastIconv != (iconv_t)-1)
+        {
+            iconv_close(lastIconv);
+        }
+        lastIconv = iconv_open("UCS-2", codepage);
+        if (lastIconv != (iconv_t)-1)
+        {
+            kdDebug(s_area) <<
+                "converting " << codepage <<
+                " to UCS-2" << endl;
+        }
+        else
+        {
+            kdError(s_area) <<
+                "cannot convert " << codepage <<
+                " to UCS-2: " << strerror(errno) << endl;
+        }
     }
 
-    ibuflen = 1;
-    obuflen = 2;
-    p = obuf;
-    iconv(iconv_handle, &ibuf, &ibuflen, &obuf, &obuflen);
-    eachchar = (U8)*p++;
-    eachchar = (eachchar << 8)&0xFF00;
-    eachchar += (U8)*p;
+    // Do the conversion!
 
-    iconv_close(iconv_handle);
-    return(eachchar);
-*/
+    unsigned short result = '?';
+
+    if (lastIconv != (iconv_t)-1)
+    {
+        unsigned char input[1];
+        unsigned char output[2];
+        size_t ibuflen = 1;
+        size_t obuflen = 2;
+        const char *ibuf;
+        char *obuf;
+
+        input[0] = c;
+        ibuf = (char *)&input[0];
+        obuf = (char *)&output[0];
+        if ((size_t)-1 != iconv(lastIconv, &ibuf, &ibuflen, &obuf, &obuflen))
+        {
+            result = (output[0] << 8) + output[1];
+        }
+        else
+        {
+            kdError(s_area) << "cannot convert " << c << ": " <<
+                strerror(errno) << endl;
+        }
+    }
+    return result;
+}
+
+// Map a language identifier to a code page. I have not been able to find
+// an authoritative mapping between the LID and code page, so this
+// one is drawn from wv/text.c. Corrections are welcome!
+
+const char *MsWord::lid2codepage(U16 lid)
+{
+    static const char *cp874 = "CP874";
+    static const char *cp932 = "CP932";
+    static const char *cp936 = "CP936";
+    static const char *cp949 = "CP949";
+    static const char *cp950 = "CP950";
+    static const char *cp1250 = "CP1250";
+    static const char *cp1251 = "CP1251";
+    static const char *cp1252 = "CP1252";
+    static const char *cp1253 = "CP1253";
+    static const char *cp1254 = "CP1254";
+    static const char *cp1255 = "CP1255";
+    static const char *cp1256 = "CP1256";
+    static const char *cp1257 = "CP1257";
+    static const char *unknown = "not known";
+
+    switch (lid)
+    {
+    case 0x0401:    /*Arabic*/                      return cp1256;
+    case 0x0402:    /*Bulgarian*/                   return cp1251;
+    case 0x0403:    /*Catalan*/                     return cp1252;
+    case 0x0404:    /*Traditional Chinese*/         return cp950;
+    case 0x0804:    /*Simplified Chinese*/          return cp936;
+    case 0x0405:    /*Czech*/                       return cp1250;
+    case 0x0406:    /*Danish*/                      return cp1252;
+    case 0x0407:    /*German*/                      return cp1252;
+    case 0x0807:    /*Swiss German*/                return cp1252;
+    case 0x0408:    /*Greek*/                       return cp1253;
+    case 0x0409:    /*U.S. English*/                return cp1252;
+    case 0x0809:    /*U.K. English*/                return cp1252;
+    case 0x0c09:    /*Australian English*/          return cp1252;
+    case 0x040a:    /*Castilian Spanish*/           return cp1252;
+    case 0x080a:    /*Mexican Spanish*/             return cp1252;
+    case 0x040b:    /*Finnish*/                     return cp1252;
+    case 0x040c:    /*French*/                      return cp1252;
+    case 0x080c:    /*Belgian French*/              return cp1252;
+    case 0x0c0c:    /*Canadian French*/             return cp1252;
+    case 0x100c:    /*Swiss French*/                return cp1252;
+    case 0x040d:    /*Hebrew*/                      return cp1255;
+    case 0x040e:    /*Hungarian*/                   return cp1250;
+    case 0x040f:    /*Icelandic*/                   return cp1252;
+    case 0x0410:    /*Italian*/                     return cp1252;
+    case 0x0810:    /*Swiss Italian*/               return cp1252;
+    case 0x0411:    /*Japanese*/                    return cp932;
+    case 0x0412:    /*Korean*/                      return cp949;
+    case 0x0413:    /*Dutch*/                       return cp1252;
+    case 0x0813:    /*Belgian Dutch*/               return cp1252;
+    case 0x0414:    /*Norwegian - Bokmal*/          return cp1252;
+    case 0x0814:    /*Norwegian - Nynorsk*/         return cp1252;
+    case 0x0415:    /*Polish*/                      return cp1250;
+    case 0x0416:    /*Brazilian Portuguese*/        return cp1252;
+    case 0x0816:    /*Portuguese*/                  return cp1252;
+    case 0x0417:    /*Rhaeto-Romanic*/              return cp1252;
+    case 0x0418:    /*Romanian*/                    return cp1250;
+    case 0x0419:    /*Russian*/                     return cp1251;
+    case 0x041a:    /*Croato-Serbian (Latin)*/      return cp1250;
+    case 0x081a:    /*Serbo-Croatian (Cyrillic) */  return cp1252;
+    case 0x041b:    /*Slovak*/                      return cp1250;
+    case 0x041c:    /*Albanian*/                    return cp1251;
+    case 0x041d:    /*Swedish*/                     return cp1250;
+    case 0x041e:    /*Thai*/                        return cp874;
+    case 0x041f:    /*Turkish*/                     return cp1254;
+    case 0x0420:    /*Urdu*/                        return cp1256;
+    case 0x0421:    /*Bahasa*/                      return cp1256;
+    case 0x0422:    /*Ukrainian*/                   return cp1251;
+    case 0x0423:    /*Byelorussian*/                return cp1251;
+    case 0x0424:    /*Slovenian*/                   return cp1250;
+    case 0x0425:    /*Estonian*/                    return cp1257;
+    case 0x0426:    /*Latvian*/                     return cp1257;
+    case 0x0427:    /*Lithuanian*/                  return cp1257;
+    case 0x0429:    /*Farsi*/                       return cp1256;
+    case 0x042D:    /*Basque*/                      return cp1252;
+    case 0x042F:    /*Macedonian*/                  return cp1251;
+    case 0x0436:    /*Afrikaans*/                   return cp1252;
+    case 0x043E:    /*Malaysian*/                   return cp1251;
+    default: return unknown;
+    }
 }
 
 void MsWord::constructionError(unsigned line, const char *reason)
@@ -195,7 +281,7 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
                     ptr2 += level.cbGrpprlPapx;
                     ptr2 += level.cbGrpprlChpx;
                     ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-                    ptr2 += read(ptr2, &numberText, numberTextLength, true);
+                    ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true);
                 }
             }
         }
@@ -221,7 +307,7 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
                 ptr2 += level.cbGrpprlPapx;
                 ptr2 += level.cbGrpprlChpx;
                 ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-                ptr2 += read(ptr2, &numberText, numberTextLength, true);
+                ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true);
             }
 
             // If this LFOLVL is ours, we are done!
@@ -413,7 +499,7 @@ void MsWord::getPAPX(
         QString text;
 
         //kdDebug(s_area) << "pap from: " << startFc << ".." << endFc << ": rgb: " << rgb << endl;
-        read(m_mainStream + startFc, &text, endFc - startFc, unicode);
+        read(m_fib.lid, m_mainStream + startFc, &text, endFc - startFc, unicode);
         decodeParagraph(text, layout, style);
     }
 }
@@ -428,6 +514,8 @@ void MsWord::getListStyles()
     const U8 *ptr = m_tableStream + m_fib.fcPlcfLst; //lcbPlcfLst.
     const U8 *ptr2;
     U16 lstfCount;
+
+    kdDebug(s_area) << "MsWord::getListStyles" << endl;
 
     // Failsafe for simple documents.
 
@@ -474,7 +562,7 @@ void MsWord::getListStyles()
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
             ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-            ptr2 += read(ptr2, &numberText, numberTextLength, true);
+            ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true);
         }
     }
 }
@@ -492,12 +580,14 @@ void MsWord::getStyles()
     U16 cbStshi;
     STSHI stshi;
 
+    kdDebug(s_area) << "MsWord::getStyles" << endl;
+
     // Failsafe for simple documents.
 
     m_styles = NULL;
     if (!m_fib.lcbStshf)
     {
-        kdError(s_area) << "MsWord::getListStyles: no data " << endl;
+        kdError(s_area) << "MsWord::getStyles: no data " << endl;
         return;
     }
 
@@ -528,7 +618,7 @@ void MsWord::getStyles()
         ptr += MsWordGenerated::read(ptr, &cbStd);
         if (cbStd)
         {
-            read(ptr, stshi.cbSTDBaseInFile, &std);
+            read(m_fib.lid, ptr, stshi.cbSTDBaseInFile, &std);
             kdDebug(s_area) << "MsWord::getStyles: style: " << std.xstzName <<
                 ", types: " << std.cupx <<
                 endl;
@@ -603,6 +693,7 @@ MsWord::MsWord(
     }
     kdDebug(s_area) << "MsWord::MsWord: nFib: " << m_fib.nFib << endl;
     kdDebug(s_area) << "MsWord::MsWord: lid: " << m_fib.lid << " lidFE: " << m_fib.lidFE << endl;
+    kdDebug(s_area) << "MsWord::MsWord: fExtChar: " << m_fib.fExtChar << endl;
 
     // Store away the streams for future use. Note that we do not
     // copy the contents of the streams, and that we rely on the storage
@@ -627,7 +718,7 @@ MsWord::MsWord(
     }
     getStyles();
     getListStyles();
-    getCHPXFKP();
+    // TBD: implement char properties: getCHPXFKP();
 }
 
 MsWord::~MsWord()
@@ -742,7 +833,9 @@ void MsWord::parse()
         pieceTable->startIteration(textPlex.ptr, textPlex.byteCount);
         while (pieceTable->getNext(&startFc, &endFc, &data))
         {
+            kdDebug(s_area) << "piece table from: " << startFc << ".." << endFc << endl;
             unicode = ((data.fc & codepage1252mask) != codepage1252mask);
+            //unicode = unicode || m_fib.fExtChar;
             if (!unicode)
             {
                 data.fc &= ~ codepage1252mask;
@@ -803,7 +896,7 @@ void MsWord::Plex<T, word6Size>::startIteration(const U8 *plex, const U32 byteCo
 }
 
 // Read a string, converting to unicode if needed.
-unsigned MsWord::read(const U8 *in, QString *out, unsigned count, bool unicode)
+unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool unicode)
 {
     U16 char16;
     U8 char8;
@@ -823,9 +916,14 @@ unsigned MsWord::read(const U8 *in, QString *out, unsigned count, bool unicode)
         for (unsigned i = 0; i < count; i++)
         {
             bytes += MsWordGenerated::read(in + bytes, &char8);
-            *out += QChar(char2unicode(char8));
+            *out += QChar(char2unicode(lid, char8));
         }
     }
+
+    // If the string ends in a CR, strip it off.
+
+    if (!unicode && (char8 == '\r'))
+        out->truncate(count - 1);
     return bytes;
 }
 
@@ -879,7 +977,7 @@ unsigned MsWord::read(unsigned nFib, const U8 *in, PAPXFKP *out)
     return bytes;
 }
 
-unsigned MsWord::read(const U8 *in, unsigned baseInFile, STD *out, unsigned count)
+unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsigned count)
 {
     U8 *ptr = (U8 *)out;
     unsigned bytes = 0;
@@ -901,7 +999,7 @@ unsigned MsWord::read(const U8 *in, unsigned baseInFile, STD *out, unsigned coun
             U8 terminator;
 
             offset += MsWordGenerated::read(in + offset, &nameLength);
-            offset += read(in + offset, &out->xstzName, nameLength, false);
+            offset += read(lid, in + offset, &out->xstzName, nameLength, false);
             offset += MsWordGenerated::read(in + offset, &terminator);
         }
         else
@@ -910,7 +1008,7 @@ unsigned MsWord::read(const U8 *in, unsigned baseInFile, STD *out, unsigned coun
             U16 terminator;
 
             offset += MsWordGenerated::read(in + offset, &nameLength);
-            offset += read(in + offset, &out->xstzName, nameLength, true);
+            offset += read(lid, in + offset, &out->xstzName, nameLength, true);
             offset += MsWordGenerated::read(in + offset, &terminator);
         }
         out->grupx = in + offset;

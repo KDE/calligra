@@ -857,21 +857,38 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
             MsWordGenerated::read(in + bytes, &tmp);
             m_pap.fInTable = tmp;
             break;
-        case sprmPFTtp:
+        case sprmPFTtp: // 0x2417
             MsWordGenerated::read(in + bytes, &tmp);
             m_pap.fTtp = tmp;
+            break;
+        case sprmPFLocked: // 0x2430
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_pap.fLocked = tmp;
+            break;
+        case sprmPFWidowControl: // 0x2431
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_pap.fWidowControl = tmp;
             break;
         case sprmPIlvl: // 0x260a
             MsWordGenerated::read(in + bytes, &m_pap.ilvl);
             break;
+        case sprmPPc: // 0x261B
+            // TBD: NYI
+            break;
         case sprmPOutLvl: // 0x2640
             MsWordGenerated::read(in + bytes, &m_pap.lvl);
+            break;
+        case sprmPWHeightAbs: // 0x442B
+            // TBD: NYI
             break;
         case sprmPIstd: // 0x4600
             MsWordGenerated::read(in + bytes, &m_pap.istd);
             break;
         case sprmPIlfo: // 0x460B
             MsWordGenerated::read(in + bytes, &m_pap.ilfo);
+            break;
+        case sprmPDyaLine: // 0x6412
+            // TBD: NYI
             break;
         case sprmPBrcTop: // 0x6424
             MsWordGenerated::read(in + bytes, &m_pap.brcTop);
@@ -909,16 +926,22 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
         case sprmPDyaAfter: // 0xA414
             MsWordGenerated::read(in + bytes, &m_pap.dyaAfter);
             break;
+        case sprmPChgTabsPapx: // 0xC60D
+            // TBD: NYI
+            break;
+        case sprmPAnld: // 0xC63E
+            MsWordGenerated::read(in + bytes, &m_pap.anld);
+            break;
 
         // TAP-specific stuff...
 
-        case sprmTTableBorders:
+        case sprmTTableBorders: // 0xD605
             if (tap)
             {
                 MsWordGenerated::read(in + bytes, &tap->rgbrcTable[0], 6);
             }
             break;
-        case sprmTDefTable:
+        case sprmTDefTable: // 0xD608
             if (tap)
             {
                 // Get cell count.
@@ -1025,7 +1048,7 @@ void Paragraph::apply(MsWord::LFO &style, bool useFormatting, bool useStartAt)
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
             ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-            ptr2 += MsWord::read(ptr2, &numberText, numberTextLength, true);
+            ptr2 += MsWord::read(m_document.m_fib.lid, ptr2, &numberText, numberTextLength, true);
             break;
         }
     }

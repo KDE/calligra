@@ -2830,7 +2830,7 @@ public:
         // otherwise they are ignored.
         U8 fWord6:1;
 
-        //  unused.
+        // unused.
         U8 unused5_7:1;
 
         // contains the character offsets into the LVL's XST of the inherited 

@@ -30,6 +30,7 @@ DESCRIPTION
 #ifndef MSWORD_H
 #define MSWORD_H
 
+#include <iconv.h>
 #include <kdebug.h>
 #include <mswordgenerated.h>
 
@@ -69,6 +70,7 @@ public:
     // which are OK, but where the inherited reader must be overridden.
 
     static unsigned read(
+        U16 lid,
         const U8 *in,
         QString *out,
         unsigned count = 1,
@@ -139,7 +141,7 @@ public:
         //
         const U8 *grupx;
     } __attribute__ ((packed)) STD;
-    static unsigned read(const U8 *in, unsigned baseInFile, STD *out, unsigned count=1);
+    static unsigned read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsigned count=1);
 
     static unsigned read(const U8 *in, FIB *out, unsigned count=1);
     static unsigned read(unsigned nFib, const U8 *in, BTE *out);
@@ -260,7 +262,8 @@ private:
 
     // Convert a char into a unicode character.
 
-    static short char2unicode(unsigned char c);
+    static unsigned short char2unicode(unsigned lid, unsigned char c);
+    static const char *lid2codepage(U16 lid);
 
     // Decode a paragraph into the various types for which we have callbacks.
 
