@@ -142,6 +142,13 @@ VDrawSelection::visitVComposite( VComposite &composite )
 		}
 	}
 
+	if( composite.drawCenterNode() && composite.state() == VObject::selected && !m_nodeediting )
+	{
+		// Draw a center node:
+		m_painter->setPen( Qt::NoPen );
+		m_painter->setBrush( Qt::blue.light() );
+		m_painter->drawNode( composite.boundingBox().center(), 2 );
+	}
 	m_painter->restore();
 
 	setSuccess();

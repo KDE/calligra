@@ -32,8 +32,6 @@ VPolygon::VPolygon( VObject* parent,
 		const KoPoint& center, double radius, uint edges, double angle )
 	: VComposite( parent )
 {
-	setDrawCenterNode();
-
 	// A polygon should have at least 3 edges:
 	if( edges < 3 )
 		edges = 3;

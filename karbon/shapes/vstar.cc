@@ -33,8 +33,6 @@ VStar::VStar( VObject* parent,
 		uint edges, double angle )
 	: VComposite( parent )
 {
-	setDrawCenterNode();
-
 	// A star should have at least 3 edges:
 	if( edges < 3 )
 		edges = 3;

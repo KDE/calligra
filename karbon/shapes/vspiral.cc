@@ -34,8 +34,6 @@ VSpiral::VSpiral( VObject* parent,
 		bool clockwise, double angle )
 	: VComposite( parent )
 {
-	setDrawCenterNode();
-
 	// It makes sense to have at least one segment:
 	if( segments < 1 )
 		segments = 1;
