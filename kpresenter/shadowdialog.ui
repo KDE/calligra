@@ -92,7 +92,7 @@
                                                 <cstring>colorLabel</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Color</string>
+                                                <string>Color:</string>
                                             </property>
                                         </widget>
                                         <widget class="KColorButton">
@@ -121,7 +121,7 @@
                                                 <cstring>distanceLabel</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Distance</string>
+                                                <string>Distance:</string>
                                             </property>
                                         </widget>
                                         <widget class="QSpinBox">
