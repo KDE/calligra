@@ -48,8 +48,8 @@
 #include "page.h"
 #include <koAutoFormat.h>
 #include <koparagcounter.h>
+#include <kaction.h>
 #include <kotextparag.h>
-#include <koDataTool.h>
 #include <qpopupmenu.h>
 #include <koVariable.h>
 #include <koVariableDlgs.h>
