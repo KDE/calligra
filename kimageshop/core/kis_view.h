@@ -126,7 +126,12 @@ class KisView : public KoView
   void tool_gradient();
   void tool_colorpicker();
 
-  // misc action slots
+  // settings action slots
+  void showMenubar();
+  void showToolbar();
+  void showStatusbar();
+  void showSidebar();
+  void saveOptions();
   void preferences();
 
   // scrollbar slots

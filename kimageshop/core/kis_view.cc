@@ -469,7 +469,7 @@ void KisView::resizeEvent(QResizeEvent*)
     m_pHRuler->setOffset(-xPaintOffset());
 }
 
-void KisView::updateReadWrite( bool readwrite )
+void KisView::updateReadWrite( bool /*readwrite*/ )
 {
 #ifdef __GNUC__
 #warning TODO 
@@ -850,6 +850,26 @@ void KisView::merge_linked_layers()
  * misc action slots
  */
 
+void KisView::showMenubar()
+{
+}
+
+void KisView::showToolbar()
+{
+}
+
+void KisView::showStatusbar()
+{
+}
+
+void KisView::showSidebar()
+{
+}
+
+void KisView::saveOptions()
+{
+}
+
 void KisView::preferences()
 {
   qDebug( "PREFERENCES called" );
@@ -926,7 +946,7 @@ void KisView::slotUndoRedoChanged( QString undo, QString redo )
   //####### FIXME
 
   m_undo->setEnabled( !undo.isEmpty() );
-  m_redo->setEnabled( !undo.isEmpty() );
+  m_redo->setEnabled( !redo.isEmpty() );
 }
 
 void KisView::slotUndoRedoChanged( QStringList undo, QStringList redo )
