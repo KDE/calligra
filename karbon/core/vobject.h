@@ -101,15 +101,15 @@ public:
 	VObject* parent() const { return m_parent; }
 
 	/**
-	 * Get the state the shape is in.
+	 * Get the state the object is in.
 	 *
-	 * @return the shape state at time of calling.
+	 * @return the object state at time of calling.
 	 */
 	VState state() const { return m_state; }
 
 	/**
 	 * Sets the state to a specified new state.
-	 * Note that this will not have any effect until draw() is
+	 * Note that this will not have any visual effect until draw() is
 	 * called on this object.
 	 *
 	 * @param state the new state.
@@ -134,7 +134,7 @@ public:
 	virtual void load( const QDomElement& element );
 
 	/**
-	 * Create an exact copy of this shape.
+	 * Create an exact copy of this object.
 	 */
 	virtual VObject* clone() const = 0;
 
