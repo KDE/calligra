@@ -396,7 +396,7 @@ static char*kpresenter_tmp[]={
  </BACKGROUND>
  <OBJECTS>
   <OBJECT type="4">
-   <ORIG x="10" y="10"/>
+   <ORIG x="0" y="0"/>
    <SIZE width="680" height="60"/>
    <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
    <EFFECTS effect="0" effect2="0"/>
@@ -419,7 +419,7 @@ static char*kpresenter_tmp[]={
    </TEXTOBJ>
   </OBJECT>
   <OBJECT type="1">
-   <ORIG x="10" y="60"/>
+   <ORIG x="0" y="50"/>
    <SIZE width="680" height="30"/>
    <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
    <EFFECTS effect="0" effect2="0"/>

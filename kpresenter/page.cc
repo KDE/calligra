@@ -118,8 +118,16 @@ void Page::drawBackground(QPainter *painter,QRect rect)
     {
       kpbackground = backgroundList()->at(i);
       if ((rect.intersects(QRect(getPageSize(i,_presFakt))) && editMode) ||
- 	  (!editMode && static_cast<int>(currPresPage) == i + 1))
- 	kpbackground->draw(painter,QPoint(getPageSize(i,_presFakt).x(),getPageSize(i,_presFakt).y()),editMode);
+  	  (!editMode && static_cast<int>(currPresPage) == i + 1))
+	{
+	  if (editMode)
+	    kpbackground->draw(painter,QPoint(getPageSize(i,_presFakt).x(),
+					      getPageSize(i,_presFakt).y()),editMode);
+	  else
+	    kpbackground->draw(painter,QPoint(getPageSize(i,_presFakt,false).x() + view->KPresenterDoc()->getLeftBorder() * _presFakt,
+					      getPageSize(i,_presFakt,false).y() + view->KPresenterDoc()->getTopBorder() * _presFakt),
+			       editMode);
+	}
     }
 }
 
@@ -127,12 +135,12 @@ void Page::drawBackground(QPainter *painter,QRect rect)
 void Page::drawObjects(QPainter *painter,QRect rect)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
       
-      if ((rect.intersects(kpobject->getBoundingRect(diffx(),diffy())) && editMode) ||
+      if ((rect.intersects(kpobject->getBoundingRect(diffx(i),diffy(i))) && editMode) ||
 	   (!editMode && getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) &&
 	    kpobject->getPresNum() <= static_cast<int>(currPresStep)))
 	{
@@ -142,7 +150,7 @@ void Page::drawObjects(QPainter *painter,QRect rect)
 	      kpobject->doSpecificEffects(true,false);
 	    }
 
-	  kpobject->draw(painter,diffx(),diffy());
+	  kpobject->draw(painter,diffx(i),diffy(i));
 	  kpobject->setSubPresStep(0);
 	  kpobject->doSpecificEffects(false);
 	}
@@ -730,6 +738,30 @@ int Page::getObjectAt(int x,int y)
   return -1;
 }
 
+/*================================================================*/
+int Page::diffx(int i = -1) 
+{
+  //if (i == -1)
+    return view->getDiffX();
+
+//   if (editMode)
+//     return view->getDiffX();
+
+//   return static_cast<int>(view->getDiffX() + view->KPresenterDoc()->getLeftBorder() * _presFakt);
+}
+
+/*================================================================*/
+int Page::diffy(int i = -1) 
+{
+  //if (i == -1)
+    return view->getDiffY();
+
+//   if (editMode)
+//     return view->getDiffY();
+
+//   return static_cast<int>(view->getDiffY() + ((i + 1) * view->KPresenterDoc()->getTopBorder() + 
+// 					      i * view->KPresenterDoc()->getBottomBorder()) * _presFakt);
+}
 /*======================= select object ==========================*/
 void Page::selectObj(int num)
 {
@@ -1129,10 +1161,10 @@ void Page::startScreenPresentation(bool zoom)
 
   if (zoom)
     {
-      float _presFaktW = static_cast<float>(width()) / static_cast<float>(getPageSize(0).width()) > 0.0 ? 
-	static_cast<float>(width()) / static_cast<float>(getPageSize(0).width()) : 1.0;
-      float _presFaktH = static_cast<float>(height()) / static_cast<float>(getPageSize(0).height()) > 0.0 ? 
-	static_cast<float>(height()) / static_cast<float>(getPageSize(0).height()) : 1.0;
+      float _presFaktW = static_cast<float>(width()) / static_cast<float>(getPageSize(0,1.0,false).width()) > 0.0 ? 
+	static_cast<float>(width()) / static_cast<float>(getPageSize(0,1.0,false).width()) : 1.0;
+      float _presFaktH = static_cast<float>(height()) / static_cast<float>(getPageSize(0,1.0,false).height()) > 0.0 ? 
+	static_cast<float>(height()) / static_cast<float>(getPageSize(0,1.0,false).height()) : 1.0;
       _presFakt = min(_presFaktW,_presFaktH);
     }
   else _presFakt = 1.0;
@@ -1308,7 +1340,7 @@ bool Page::pNext(bool)
       currPresStep = (int)(presStepList.first());
       
       QPixmap _pix2(QApplication::desktop()->width(),QApplication::desktop()->height());
-      drawPageInPix(_pix2,view->getDiffY() + view->KPresenterDoc()->getPageSize(0,0,0,_presFakt).height()+10);
+      drawPageInPix(_pix2,view->getDiffY() + view->KPresenterDoc()->getPageSize(0,0,0,_presFakt,false).height());
       
       changePages(_pix1,_pix2,backgroundList()->at(currPresPage - 2)->getPageEffect());
       
@@ -1986,9 +2018,11 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   currPresStep = 1000;
   subPresStep = 1000;
 
-  view->setDiffX(-(view->KPresenterDoc()->pageLayout().left - 5 + left_margin) * static_cast<int>((MM_TO_POINT * 100) / 100));
-  view->setDiffY(10);
-  view->setDiffY(diffy() - ((view->KPresenterDoc()->pageLayout().top - 5 + top_margin) * static_cast<int>((MM_TO_POINT * 100) / 100)));
+//   view->setDiffX(-(view->KPresenterDoc()->pageLayout().left - 5 + left_margin) * static_cast<int>((MM_TO_POINT * 100) / 100));
+//   view->setDiffY(10);
+//   view->setDiffY(diffy() - ((view->KPresenterDoc()->pageLayout().top - 5 + top_margin) * static_cast<int>((MM_TO_POINT * 100) / 100)));
+  view->setDiffX(-static_cast<int>((left_margin * MM_TO_POINT * 100) / 100));
+  view->setDiffY(-static_cast<int>((top_margin * MM_TO_POINT * 100) / 100));
 
   QColor c = kapp->winStyleHighlightColor();
   kapp->setWinStyleHighlightColor(kapp->selectColor);
@@ -2000,7 +2034,7 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   progress.setProgress(0);
 
   if (printer->fromPage() > 1)
-    view->setDiffY(diffy() + (printer->fromPage() - 1) * (getPageSize(1).height() + 10));
+    view->setDiffY((printer->fromPage() - 1) * (getPageSize(1,1.0,false).height()) - (top_margin * MM_TO_POINT * 100) / 100);
 
   for (int i = printer->fromPage();i <= printer->toPage();i++)
     {
@@ -2014,7 +2048,7 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
       if (i > printer->fromPage()) printer->newPage();
 
       painter->resetXForm();
-      painter->fillRect(getPageSize(i - 1),white);
+      painter->fillRect(getPageSize(0),white);
 
       drawPageInPainter(painter,view->getDiffY(),getPageSize(i - 1));
       kapp->processEvents();
@@ -2023,7 +2057,7 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
       view->presentParts(1.0,painter,getPageSize(i - 1),diffx(),diffy());
       kapp->processEvents();
 
-      view->setDiffY(diffy() + getPageSize(i - 1).height() + 10);
+      view->setDiffY(i * (getPageSize(1,1.0,false).height()) - (top_margin * MM_TO_POINT * 100) / 100);
     }
 
   setCursor(arrowCursor);
@@ -2041,4 +2075,9 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   editMode = true;
   repaint(false);
 }
+
+
+
+
+
 

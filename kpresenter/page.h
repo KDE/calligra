@@ -145,8 +145,8 @@ protected:
   QList<KPBackGround> *backgroundList() {return view->KPresenterDoc()->backgroundList();}
   QList<KPObject> *objectList() {return view->KPresenterDoc()->objectList();}
   unsigned int objNums() {return view->KPresenterDoc()->objNums();}
-  int diffx() {return view->getDiffX();}
-  int diffy() {return view->getDiffY();}
+  int diffx(int i = -1);
+  int diffy(int i = -1);
   unsigned int currPgNum() {return view->getCurrPgNum();}
   unsigned int rastX() {return view->KPresenterDoc()->rastX();}
   unsigned int rastY() {return view->KPresenterDoc()->rastY();}
@@ -154,7 +154,8 @@ protected:
   QColor txtSelCol() {return view->KPresenterDoc()->txtSelCol();}
   bool spInfinitLoop() {return view->KPresenterDoc()->spInfinitLoop();}
   bool spManualSwitch() {return view->KPresenterDoc()->spManualSwitch();}
-  QRect getPageSize(unsigned int p,float fakt=1.0) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt);}
+  QRect getPageSize(unsigned int p,float fakt=1.0,bool decBorders = true) 
+    {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt,decBorders);}
   unsigned int pageNums() {return view->KPresenterDoc()->getPageNums();}
   int getPageOfObj(int i,float fakt = 1.0) {return view->KPresenterDoc()->getPageOfObj(i,diffx(),diffy(),fakt);}
   float objSpeedFakt() {return ObjSpeed[static_cast<int>(view->KPresenterDoc()->getPresSpeed())];}

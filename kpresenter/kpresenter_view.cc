@@ -646,10 +646,12 @@ void KPresenterView_impl::screenStart()
 	{
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 
-	  float _presFaktW = static_cast<float>(page->width()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0).width()) > 1.0 ? 
-	    static_cast<float>(page->width()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0).width()) : 1.0;
-	  float _presFaktH = static_cast<float>(page->height()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0).height()) > 
-	    1.0 ? static_cast<float>(page->height()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0).height()) : 1.0;
+	  float _presFaktW = static_cast<float>(page->width()) / 
+	    static_cast<float>(KPresenterDoc()->getPageSize(0,0,0,1.0,false).width()) > 1.0 ? 
+	    static_cast<float>(page->width()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0,1.0,false).width()) : 1.0;
+	  float _presFaktH = static_cast<float>(page->height()) / 
+	    static_cast<float>(KPresenterDoc()->getPageSize(0,0,0,1.0,false).height()) > 
+	    1.0 ? static_cast<float>(page->height()) / static_cast<float>(KPresenterDoc()->getPageSize(0,0,0,1.0,false).height()) : 1.0;
 	  float _presFakt = min(_presFaktW,_presFaktH);
 	  page->setPresFakt(_presFakt);
 	}
@@ -661,13 +663,13 @@ void KPresenterView_impl::screenStart()
 	  
       _xOffset = xOffset;
       _yOffset = yOffset;
-      xOffset = 10;
-      yOffset = 10;
+      xOffset = 0;
+      yOffset = 0;
 
-      if (page->width() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).width())
- 	xOffset -= (page->width() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).width()) / 2;
-      if (page->height() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height())
- 	yOffset -= (page->height() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()) / 2;
+      if (page->width() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).width())
+ 	xOffset -= (page->width() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).width()) / 2;
+      if (page->height() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).height())
+ 	yOffset -= (page->height() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).height()) / 2;
 
       vert->setEnabled(false);
       horz->setEnabled(false);
@@ -763,7 +765,7 @@ void KPresenterView_impl::screenPrev()
     {
       if (page->pPrev(true))
 	{
-	  yOffset -= KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()+10; 
+	  yOffset -= KPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).height(); 
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->repaint(false);
 	  page->setFocus();
@@ -778,7 +780,7 @@ void KPresenterView_impl::screenPrev()
       p.end();
     }
   else
-    vert->setValue(yOffset - KPresenterDoc()->getPageSize(0,0,0).height() - 10); 
+    vert->setValue(yOffset - KPresenterDoc()->getPageSize(0,0,0,1.0,false).height()); 
 }
 
 /*========================== screen next ========================*/
@@ -788,7 +790,7 @@ void KPresenterView_impl::screenNext()
     {
       if (page->pNext(true))
 	{
-	  yOffset += KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()+10; 
+	  yOffset += KPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).height(); 
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  //page->repaint(false);
 	  page->setFocus();
@@ -803,7 +805,7 @@ void KPresenterView_impl::screenNext()
       p.end();
     }
   else
-    vert->setValue(yOffset + KPresenterDoc()->getPageSize(0,0,0).height() + 10); 
+    vert->setValue(yOffset + KPresenterDoc()->getPageSize(0,0,0,1.0,false).height()); 
 }
 
 /*========================== screen last ========================*/
@@ -3220,14 +3222,16 @@ void KPresenterView_impl::setRanges()
     {
       int range;
       
-      vert->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height() + 20);
-      range = (m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height() + 10) * m_pKPresenterDoc->getPageNums() - page->height() + 26 
+      vert->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).height() + 20);
+      range = (m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).height()) * 
+	m_pKPresenterDoc->getPageNums() - page->height() + 16 
 	< 0 ? 0 :
-	(m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).height() + 10) * m_pKPresenterDoc->getPageNums() - page->height() + 26;
+	(m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).height()) * 
+	m_pKPresenterDoc->getPageNums() - page->height() + 16;
       vert->setRange(0,range);
-      horz->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width() + 36 - page->width());
-      range = m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width() + 36 - page->width() < 0 ? 0 :
-	m_pKPresenterDoc->getPageSize(0,xOffset,yOffset).width() + 36 - page->width();
+      horz->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).width() + 16 - page->width());
+      range = m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).width() + 16 - page->width() < 0 ? 0 :
+	m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).width() + 16 - page->width();
       horz->setRange(0,range);
     }
 }

@@ -263,7 +263,7 @@ public:
   void setManualSwitch(bool ms) {_spManualSwitch = ms;}
 
   // size of page
-  QRect getPageSize(unsigned int,int,int,float fakt=1.0);
+  QRect getPageSize(unsigned int,int,int,float fakt=1.0,bool decBorders = true);
 
   // delete/reorder obejcts
   void deleteObjs();
@@ -311,6 +311,10 @@ public:
     { return presSpeed; }
   void setPresSpeed(PresSpeed _presSpeed)
     { presSpeed = _presSpeed; }
+
+  int getLeftBorder();
+  int getTopBorder();
+  int getBottomBorder();
 
 signals:
 

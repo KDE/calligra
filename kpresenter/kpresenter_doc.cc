@@ -1528,7 +1528,7 @@ int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float f
 	{
 	  for (int j = 0;j < static_cast<int>(_backgroundList.count());j++)
 	    {
-	      rect = getPageSize(j,diffx,diffy,fakt);
+	      rect = getPageSize(j,diffx,diffy,fakt,false);
 	      rect.setWidth(QApplication::desktop()->width());
 	      if (rect.intersects(kpobject->getBoundingRect(diffx,diffy)))
 		return j+1;
@@ -1539,7 +1539,7 @@ int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float f
 }
 
 /*================== get size of page ===========================*/
-QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,float fakt=1.0)
+QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,float fakt=1.0,bool decBorders = true)
 {
   double fact = 1;
   if (_pageLayout.unit == PG_CM) fact = 10;
@@ -1552,6 +1552,14 @@ QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,
   int wid = static_cast<int>(_pageLayout.width * fact * 100) / 100;
   int hei = static_cast<int>(_pageLayout.height * fact * 100) / 100;
   
+  if (!decBorders)
+    {
+      br = 0;
+      bt = 0;
+      bl = 0;
+      bb = 0;
+    }
+
   pw = wid * static_cast<int>(MM_TO_POINT * 100) / 100 - 
     (bl + br) * static_cast<int>(MM_TO_POINT * 100) / 100;
   ph = hei * static_cast<int>(MM_TO_POINT * 100) / 100 -
@@ -1560,9 +1568,37 @@ QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,
   pw = static_cast<int>(static_cast<float>(pw) * fakt);
   ph = static_cast<int>(static_cast<float>(ph) * fakt);
 
-  QRect rect(10 - diffx,(10 + ph * num +
-			 num * 10) - diffy,pw,ph);
-  return rect;
+  return QRect(-diffx + bl * static_cast<int>(MM_TO_POINT * 100) / 100,
+	       -diffy + bt * static_cast<int>(MM_TO_POINT * 100) / 100 + 
+	       num * bt * static_cast<int>(MM_TO_POINT * 100) / 100 + 
+	       num * bb * static_cast<int>(MM_TO_POINT * 100) / 100 + num * ph,pw,ph);
+}
+
+/*================================================================*/
+int KPresenterDocument_impl::getLeftBorder()
+{
+  double fact = 1;
+  if (_pageLayout.unit == PG_CM) fact = 10;
+  if (_pageLayout.unit == PG_INCH) fact = 25.4;
+  return static_cast<int>(_pageLayout.left * fact * 100 * MM_TO_POINT) / 100;
+}
+
+/*================================================================*/
+int KPresenterDocument_impl::getTopBorder()
+{
+  double fact = 1;
+  if (_pageLayout.unit == PG_CM) fact = 10;
+  if (_pageLayout.unit == PG_INCH) fact = 25.4;
+  return static_cast<int>(_pageLayout.top * fact * 100 * MM_TO_POINT) / 100;
+}
+
+/*================================================================*/
+int KPresenterDocument_impl::getBottomBorder()
+{
+  double fact = 1;
+  if (_pageLayout.unit == PG_CM) fact = 10;
+  if (_pageLayout.unit == PG_INCH) fact = 25.4;
+  return static_cast<int>(_pageLayout.bottom * fact * 100 * MM_TO_POINT) / 100;
 }
 
 /*================ return number of selected objs ================*/
