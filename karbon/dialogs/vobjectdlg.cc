@@ -26,6 +26,8 @@
 #include <koMainWindow.h>
 #include <koView.h>
 
+#include <tkfloatspinbox.h>
+
 #include "karbon_part.h"
 
 #include "vobjectdlg.h"
@@ -39,16 +41,24 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	//Widgets layout:
 	QGrid* mainLayout = new QGrid( 2, Vertical, this );
 	mainLayout->setSpacing( 5 );
+	
 	new QLabel( i18n( "X:" ), mainLayout );
 	new QLabel( i18n( "Y:" ), mainLayout );
 	m_X = new KDoubleNumInput( 0.00, mainLayout );
 	m_Y = new KDoubleNumInput( 0.00, mainLayout );
+	
 	new QLabel( i18n( "Width:" ), mainLayout );
 	new QLabel( i18n( "Height:" ), mainLayout );
 	m_Width = new KDoubleNumInput( 0.00, mainLayout );
 	m_Height = new KDoubleNumInput( 0.00, mainLayout );
+	
 	new QLabel( i18n( "Rotation:" ), mainLayout );
+	new QLabel( i18n( "Stroke:" ), mainLayout );
 	m_Rotation = new KDoubleNumInput( 0, mainLayout );
+	m_setLineWidth = new TKUFloatSpinBox( mainLayout );
+	m_setLineWidth->setDecimals(1);
+	m_setLineWidth->setMinValue(0.0);
+	m_setLineWidth->setLineStep(0.5);
 	
 	setWidget( mainLayout );
 }
