@@ -27,6 +27,10 @@
 class KoFrameButton;
 class QGridLayout;
 class RGBWidget;
+class HSBWidget;
+class CMYKWidget;
+class LABWidget;
+class GreyWidget;
 class KoColor;
 class KoColorSlider;
 class QLabel;
@@ -41,8 +45,15 @@ public:
 
   const KoColor &color() const {return mColor; }
 
+public slots:
+  void slotShowRGB();
+  void slotShowHSB();
+  void slotShowCMYK();
+  void slotShowLAB();
+  void slotShowGrey();
+
 signals:
-  void colorChanged(const KoColor &);
+  void colorChanged(const KoColor &c);
 
 protected slots:
   void slotChangeColor(const KoColor &c);
@@ -52,12 +63,16 @@ private:
   KoColor     mColor;
 
   QGridLayout *mGrid;
-  KoFrameButton *btn_RGB;
-  KoFrameButton *btn_CMYK;
-  KoFrameButton *btn_Grey;
-  KoFrameButton *btn_HSB;
-  KoFrameButton *btn_LAB;
+  KoFrameButton *btnRGB;
+  KoFrameButton *btnHSB;
+  KoFrameButton *btnCMYK;
+  KoFrameButton *btnLAB;
+  KoFrameButton *btnGrey;
   RGBWidget *mRGBWidget;
+  HSBWidget *mHSBWidget;
+  CMYKWidget *mCMYKWidget;
+  LABWidget *mLABWidget;
+  GreyWidget *mGreyWidget;
   KColorPatch *clr_patch;
 };
 
@@ -80,13 +95,42 @@ protected slots:
   void slotBInChanged(int b);
 
 signals:
-  void colorChanged(const KoColor &);
+  void colorChanged(const KoColor &c);
 
 private:
   KoColorChooser *mCC;
-  KoColorSlider *mRSlider, *mGSlider, *mBSlider;
-  QLabel      *mRLabel, *mGLabel, *mBLabel;
-  QSpinBox    *mRIn, *mGIn, *mBIn;
+  KoColorSlider *mRSlider;
+  KoColorSlider *mGSlider;
+  KoColorSlider *mBSlider;
+  QLabel *mRLabel;
+  QLabel *mGLabel;
+  QLabel *mBLabel;
+  QSpinBox *mRIn;
+  QSpinBox *mGIn;
+  QSpinBox *mBIn;
+};
+
+class GreyWidget : public QWidget
+{
+  Q_OBJECT
+public:
+  GreyWidget(KoColorChooser *aCC, QWidget *parent = 0L);
+
+public slots:
+  void slotChangeColor();
+
+protected slots:
+  void slotVSliderChanged(int v);
+  void slotVInChanged(int v);
+
+signals:
+  void colorChanged(const KoColor &c);
+
+protected:
+  KoColorChooser *mCC;
+  KoColorSlider *mVSlider;
+  QLabel      *mVLabel;
+  QSpinBox    *mVIn;
 };
 
 #endif

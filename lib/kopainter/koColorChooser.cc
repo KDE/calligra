@@ -33,34 +33,78 @@ KoColorChooser::KoColorChooser(QWidget *parent, const char *name):
 QWidget(parent, name)
 {
   mGrid = new QGridLayout(this, 2, 5);
-  btn_RGB = new KoFrameButton("RGB", this);
-  btn_CMYK = new KoFrameButton("CMYK", this);
-  btn_CMYK->setEnabled(false);
-  btn_Grey = new KoFrameButton("Grey", this);
-  btn_Grey->setEnabled(false);
-  btn_HSB = new KoFrameButton("HSB", this);
-  btn_HSB->setEnabled(false);
-  btn_LAB = new KoFrameButton("LAB", this);
-  btn_LAB->setEnabled(false);
+  btnRGB = new KoFrameButton("RGB", this);
+  btnHSB = new KoFrameButton("HSB", this);
+  btnHSB->setEnabled(false);
+  btnCMYK = new KoFrameButton("CMYK", this);
+  btnCMYK->setEnabled(false);
+  btnLAB = new KoFrameButton("LAB", this);
+  btnLAB->setEnabled(false);
+  btnGrey = new KoFrameButton("Grey", this);
+  btnRGB->setMaximumHeight(20);
+  btnCMYK->setMaximumHeight(20);
+  btnGrey->setMaximumHeight(20);
+  btnHSB->setMaximumHeight(20);
+  btnLAB->setMaximumHeight(20);
+
   clr_patch = new KColorPatch(this);
+
   mRGBWidget = new RGBWidget(this, this);
-  btn_RGB->setMaximumHeight(20);
-  btn_CMYK->setMaximumHeight(20);
-  btn_Grey->setMaximumHeight(20);
-  btn_HSB->setMaximumHeight(20);
-  btn_LAB->setMaximumHeight(20);
-  mGrid->addWidget(btn_RGB, 0, 0);
-  mGrid->addWidget(btn_CMYK, 0, 1);
-  mGrid->addWidget(btn_Grey, 0, 2);
-  mGrid->addWidget(btn_HSB, 0, 3);
-  mGrid->addWidget(btn_LAB, 0, 4);
+  mGreyWidget = new GreyWidget(this, this);
+
+  mGrid->addWidget(btnRGB, 0, 0);
+  mGrid->addWidget(btnHSB, 0, 1);
+  mGrid->addWidget(btnCMYK, 0, 2);
+  mGrid->addWidget(btnLAB, 0, 3);
+  mGrid->addWidget(btnGrey, 0, 4);
   mGrid->addMultiCellWidget(mRGBWidget, 1, 1, 1, 4);
+  mGrid->addMultiCellWidget(mGreyWidget, 1, 1, 1, 4);
   mGrid->addWidget(clr_patch, 1, 0);
-  
+
+  connect(btnRGB, SIGNAL(clicked()), this, SLOT(slotShowRGB()));
+  connect(btnHSB, SIGNAL(clicked()), this, SLOT(slotShowHSB()));
+  connect(btnCMYK, SIGNAL(clicked()), this, SLOT(slotShowCMYK()));
+  connect(btnLAB, SIGNAL(clicked()), this, SLOT(slotShowLAB()));
+  connect(btnGrey, SIGNAL(clicked()), this, SLOT(slotShowGrey()));
+
   connect(mRGBWidget, SIGNAL(colorChanged(const KoColor &)), this, SLOT(slotChangeColor(const KoColor &)));
-  connect(clr_patch, SIGNAL(colorChanged(const QColor &)), this, SLOT(slotChangeColor(const QColor &)));
   connect(this, SIGNAL(colorChanged(const KoColor &)), mRGBWidget, SLOT(slotChangeColor()));
+  connect(mGreyWidget, SIGNAL(colorChanged(const KoColor &)), this, SLOT(slotChangeColor(const KoColor &)));
+  connect(this, SIGNAL(colorChanged(const KoColor &)), mGreyWidget, SLOT(slotChangeColor()));
+  connect(clr_patch, SIGNAL(colorChanged(const QColor &)), this, SLOT(slotChangeColor(const QColor &)));
+
   slotChangeColor(KoColor::black());
+  slotShowRGB();
+}
+
+void KoColorChooser::slotShowRGB()
+{
+  mRGBWidget->show();
+  mGreyWidget->hide();
+}
+
+void KoColorChooser::slotShowHSB()
+{
+  mRGBWidget->hide();
+  mGreyWidget->hide();
+}
+
+void KoColorChooser::slotShowCMYK()
+{
+  mRGBWidget->hide();
+  mGreyWidget->hide();
+}
+
+void KoColorChooser::slotShowLAB()
+{
+  mRGBWidget->hide();
+  mGreyWidget->hide();
+}
+
+void KoColorChooser::slotShowGrey()
+{
+  mRGBWidget->hide();
+  mGreyWidget->show();
 }
 
 void KoColorChooser::slotChangeColor(const QColor &c)
@@ -74,6 +118,8 @@ void KoColorChooser::slotChangeColor(const KoColor &c)
   clr_patch->setColor(mColor.color());
   emit colorChanged(mColor);
 }
+
+/*           RGBWidget         */
 
 RGBWidget::RGBWidget(KoColorChooser *aCC, QWidget *parent):
 QWidget(parent)
@@ -199,6 +245,63 @@ void RGBWidget::slotBInChanged(int b)
   int r = mCC->color().R();
   int g = mCC->color().G();
   emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
+}
+
+/*          GreyWidget         */
+
+GreyWidget::GreyWidget(KoColorChooser *aCC, QWidget *parent = 0L):
+QWidget(parent)
+{
+  mCC = aCC;
+
+  QGridLayout *mGrid = new QGridLayout(this, 1, 3);
+  /* setup slider */
+  mVSlider = new KoColorSlider(this);
+  mVSlider->setMaximumHeight(20);
+  mVSlider->slotSetRange(0, 255);
+  mVSlider->slotSetColor1(QColor(255, 255, 255));
+  mVSlider->slotSetColor2(QColor(0, 0, 0));
+
+  /* setup slider label */
+  mVLabel = new QLabel("K", this);
+  mVLabel->setFixedWidth(18);
+  mVLabel->setFixedHeight(20);
+
+  /* setup spin box */
+  mVIn = new QSpinBox(0, 255, 1, this);
+  mVIn->setFixedWidth(42);
+  mVIn->setFixedHeight(20);
+
+  mGrid->addWidget(mVLabel, 0, 0);
+  mGrid->addWidget(mVSlider, 0, 1);
+  mGrid->addWidget(mVIn, 0, 2);
+
+  /* connect color slider */
+  connect(mVSlider, SIGNAL(valueChanged(int)), this, SLOT(slotVSliderChanged(int)));
+
+  /* connect spin box */
+  connect(mVIn, SIGNAL(valueChanged(int)), mVSlider, SLOT(slotSetValue(int)));
+}
+
+void GreyWidget::slotChangeColor()
+{
+  double v = mCC->color().R() + mCC->color().G() + mCC->color().B();
+  v /= 3.0;
+  v = 255.0 - v;
+  mVIn->setValue(static_cast<int>(v));
+  mVSlider->slotSetValue(static_cast<int>(v));
+}
+  
+void GreyWidget::slotVSliderChanged(int v)
+{
+  v = 255 - v;
+  emit colorChanged(KoColor(v, v, v, KoColor::cs_RGB));
+}
+
+void GreyWidget::slotVInChanged(int v)
+{
+  v = 255 - v;
+  emit colorChanged(KoColor(v, v, v, KoColor::cs_RGB));
 }
 
 #include "koColorChooser.moc"
