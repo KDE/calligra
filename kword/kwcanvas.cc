@@ -1734,18 +1734,14 @@ KWTableFrameSet *KWCanvas::getTable()
     return 0L;
 }
 
-void KWCanvas::editFrame( KWFrame * frame )
+void KWCanvas::editFrameSet( KWFrameSet * frameSet )
 {
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
 
-    KWFrameSet * fs = frame ? frame->frameSet() : 0L;
     bool emitChanged = false;
-    if ( fs )
-    {
-        KWTableFrameSet *table = fs->getGroupManager();
-        emitChanged = checkCurrentEdit( table ? table : fs );
-    }
+    KWTableFrameSet *table = frameSet->getGroupManager();
+    emitChanged = checkCurrentEdit( table ? table : frameSet );
 
     if ( emitChanged ) // emitted after mousePressEvent [for tables]
         emit currentFrameSetEditChanged();
@@ -1770,6 +1766,8 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     emit updateRuler();
 }
 
+// The only difference with checkCurrentEdit is that we don't want to start editing a non-text-frameset, right?
+// In that case a bool would prevent much code duplication......
 bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
 {
     bool emitChanged = false;
@@ -1794,6 +1792,9 @@ bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
         if(fs->type()==FT_TABLE || fs->type()==FT_TEXT)
         {
             m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+            KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+            if ( textedit )
+                textedit->ensureCursorVisible();
             emitChanged = true;
         }
     }
@@ -1816,6 +1817,9 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs )
     if ( fs && !m_currentFrameSetEdit )
     {
         m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+        KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+        if ( textedit )
+            textedit->ensureCursorVisible();
         emitChanged = true;
     }
     return emitChanged;

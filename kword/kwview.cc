@@ -882,7 +882,7 @@ void KWView::setupActions()
                     "document. The rulers show the position and width of pages and of frames and can "
                     "be used to position tabulators among others.<p>Uncheck this to disable "
                     "the rulers from being displayed." ) );
-	
+
     actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), 0,
                         this, SLOT( configureCompletion() ),
                         actionCollection(), "configure_completion" );
@@ -3086,7 +3086,7 @@ void KWView::insertFormula( QMimeSource* source )
         frameset->finalize(); // done last since it triggers a redraw
         m_doc->refreshDocStructure(FT_FORMULA);
 
-        m_gui->canvasWidget()->editFrame( frame );
+        m_gui->canvasWidget()->editFrameSet( frameset );
         frameset->setChanged();
         m_gui->canvasWidget()->repaintChanged( frameset, true );
     }

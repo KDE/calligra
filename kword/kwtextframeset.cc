@@ -2226,7 +2226,6 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     textobj->setNeedSpellCheck(true);
     fs->kWordDocument()->changeBackGroundSpellCheckTextFrameSet(fs);
     //fs->kWordDocument()->startBackgroundSpellCheck();
-
 }
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
@@ -2439,19 +2438,18 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                     if ( anchor ) {
                         KWFrameSet* frameSet = anchor->frameSet();
                         if ( frameSet->type() == FT_FORMULA ) {
-                            KWCanvas* canvas = m_canvas;
 
                             // this will "delete this"!
-                            canvas->editFrame( frameSet->frame( 0 ) );
+                            m_canvas->editFrameSet( frameSet );
 
                             // Is it okay to assume success here?
-                            KWFrameSetEdit* edit = canvas->currentFrameSetEdit();
+                            KWFrameSetEdit* edit = m_canvas->currentFrameSetEdit();
                             static_cast<KWFormulaFrameSetEdit*>( edit )->moveEnd();
 
                             // A FormulaFrameSetEdit looks a little different from
                             // a FormulaFrameSet. (Colors)
                             static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
-                            canvas->repaintChanged( frameSet, true );
+                            m_canvas->repaintChanged( frameSet, true );
                             return;
                         }
                     }
@@ -2471,15 +2469,14 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                     if ( anchor ) {
                         KWFrameSet* frameSet = anchor->frameSet();
                         if ( frameSet->type() == FT_FORMULA ) {
-                            KWCanvas* canvas = m_canvas;
 
                             // this will "delete this"!
-                            canvas->editFrame( frameSet->frame( 0 ) );
+                            m_canvas->editFrameSet( frameSet );
 
                             // A FormulaFrameSetEdit looks a little different from
                             // a FormulaFrameSet. (Colors)
                             static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
-                            canvas->repaintChanged( frameSet, true );
+                            m_canvas->repaintChanged( frameSet, true );
                             return;
                         }
                     }
@@ -2877,6 +2874,9 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType )
 
      // Layout the footnote frame
      doc->recalcFrames( pageNum, -1 ); // we know that for sure nothing changed before this page.
+
+     // And now edit the footnote frameset - all WPs do that it seems.
+     m_canvas->editFrameSet( fs );
 }
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )
