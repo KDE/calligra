@@ -167,6 +167,10 @@ void KFormulaContainer::addFraction(FormulaCursor* cursor)
 
 void KFormulaContainer::addRoot(FormulaCursor* cursor)
 {
+    if (cursor->isSelection()) {
+	KFCRemoveSelection *command=new KFCRemoveSelection(this,cursor,BasicElement::beforeCursor);
+	execute(command);
+    }
 
     KFCAddRoot *command=new KFCAddRoot(this,cursor);
     execute(command);
@@ -190,6 +194,11 @@ void KFormulaContainer::addSymbol(FormulaCursor* cursor,
 
 void KFormulaContainer::addMatrix(FormulaCursor* cursor, int rows, int columns)
 {
+
+    if (cursor->isSelection()) {
+	KFCRemoveSelection *command=new KFCRemoveSelection(this,cursor,BasicElement::beforeCursor);
+	execute(command);
+    }
 
     KFCAddMatrix *command=new KFCAddMatrix(this,cursor,rows,columns);
     execute(command);

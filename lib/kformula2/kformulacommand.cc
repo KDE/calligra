@@ -49,6 +49,7 @@ KFCAdd::KFCAdd(KFormulaContainer *document,FormulaCursor *cursor) : KFormulaComm
 {
     removedList.setAutoDelete(true); 
     removedList.clear();
+    insideElement=0;
 }
 
 bool KFCAdd::undo(FormulaCursor *cursor)
@@ -66,6 +67,13 @@ bool KFCAdd::redo(FormulaCursor *cursor)
 
     cursor->setCursorData(cursordata);
     cursor->insert(removedList);
+
+//Adjust it..some elements needs goinside()
+    if(!insideElement)
+        cursor->setSelection(false);
+    else
+        cursor->goInsideElement(insideElement);
+	
     return true;
 }
 
@@ -135,7 +143,7 @@ KFCAddRoot::KFCAddRoot(KFormulaContainer *document,FormulaCursor *cursor)
     RootElement* root = new RootElement();
     cursor->insert(root);
         //cursor->setSelection(false);
-
+    insideElement=root;
     cursor->goInsideElement(root);
     
 
@@ -151,7 +159,7 @@ KFCAddMatrix::KFCAddMatrix(KFormulaContainer *document,FormulaCursor *cursor,int
     MatrixElement* matrix = new MatrixElement(r,c);
     cursor->insert(matrix);
         //cursor->setSelection(false);
-    
+    insideElement=matrix;
     cursor->goInsideElement(matrix);
     
 

@@ -75,7 +75,7 @@ public:
 protected:
 
      QList<BasicElement> removedList;
-   
+     BasicElement *insideElement;   
 };
 
 class KFCRemoveSelection : public KFormulaCommand
