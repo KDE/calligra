@@ -30,6 +30,7 @@
 #include "vsinus.h"
 #include "vsinustool.h"
 #include "karbon_part.h"
+#include "vunitspinbox.h"
 
 
 VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* parent, const char* name )
@@ -37,11 +38,12 @@ VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* 
 {
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new KDoubleNumInput( 0, this );
-	m_width->setSuffix( m_part->getUnitName() );
+	m_width = new VUnitDoubleSpinBox( 0.0, 1000.0, 0.5, 0, 2, this );
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new KDoubleNumInput( 0, this );
-	m_height->setSuffix( m_part->getUnitName() );
+	m_height = new VUnitDoubleSpinBox( 0.0, 1000.0, 0.5, 0, 2, this );
+
+	refreshUnit();
+
 	new QLabel( i18n( "Periods:" ), this );
 	m_periods = new KIntSpinBox( this );
 	m_periods->setMinValue( 1 );
@@ -88,8 +90,8 @@ VSinusTool::VSinusOptionsWidget::setPeriods( uint value )
 void
 VSinusTool::VSinusOptionsWidget::refreshUnit ()
 {
-	m_width->setSuffix( m_part->getUnitName() );
-	m_height->setSuffix( m_part->getUnitName() );
+	m_width->setUnit( m_part->getUnit() );
+	m_height->setUnit( m_part->getUnit() );
 }
 
 VSinusTool::VSinusTool( KarbonView* view )

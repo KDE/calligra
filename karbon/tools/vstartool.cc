@@ -27,6 +27,7 @@
 #include "karbon_part.h"
 #include "vstar.h"
 #include "vstartool.h"
+#include "vunitspinbox.h"
 
 
 VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
@@ -34,14 +35,12 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 {
 	// add width/height-input:
 	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), this );
-	m_outerR = new KDoubleNumInput( 0, this );
-	m_outerR->setSuffix(m_part->getUnitName());
-	m_outerR->setRange( 0, 1000, 0.1 );
+	m_outerR = new VUnitDoubleSpinBox( 0.0, 1000.0, 0.5, 0.0, 2, this );
 
 	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), this );
-	m_innerR = new KDoubleNumInput( 0, this );
-	m_innerR->setSuffix(m_part->getUnitName());
-	m_innerR->setRange( 0, 1000, 0.1 );
+	m_innerR = new VUnitDoubleSpinBox( 0.0, 1000.0, 0.5, 0.0, 2, this );
+
+	refreshUnit();
 
 	new QLabel( i18n( "Edges:" ), this );
 	m_edges = new KIntSpinBox( this );
@@ -51,10 +50,10 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 	setInsideSpacing( 2 );
 }
 
-void VStarTool::VStarOptionsWidget::refreshUnit ()
+void VStarTool::VStarOptionsWidget::refreshUnit()
 {
-	m_outerR->setSuffix( m_part->getUnitName() );
-	m_innerR->setSuffix( m_part->getUnitName() );
+	m_outerR->setUnit( m_part->getUnit() );
+	m_innerR->setUnit( m_part->getUnit() );
 }
 
 VStarTool::VStarTool( KarbonView* view )

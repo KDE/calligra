@@ -28,7 +28,7 @@
 #include "vshapetool.h"
 
 
-class KDoubleNumInput;
+class VUnitDoubleSpinBox;
 class KIntSpinBox;
 class KarbonPart;
 
@@ -54,12 +54,12 @@ private:
 
 		void refreshUnit();
 
-		KDoubleNumInput* m_innerR;
-		KDoubleNumInput* m_outerR;
-		KIntSpinBox* m_edges;
-		KarbonPart*m_part;
-		QLabel *m_innerRLabel;
-		QLabel *m_outerRLabel;
+		VUnitDoubleSpinBox	*m_innerR;
+		VUnitDoubleSpinBox	*m_outerR;
+		KIntSpinBox			*m_edges;
+		KarbonPart			*m_part;
+		QLabel				*m_innerRLabel;
+		QLabel				*m_outerRLabel;
 	};
 
 	VStarOptionsWidget* m_optionsWidget;
