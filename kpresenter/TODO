@@ -59,6 +59,7 @@ Done:
 -> save/load picture object
 -> save/load page background image
 -> save/load animation group
+-> save/load sticky object
 
 Todo:
 -> save/load part element (necessary to modify koDocumentChild)
@@ -68,11 +69,9 @@ Bugs:
 -> load text layout format (bug into kpresenter)
 -> fix default value
 -> fix some arrow style  
--> fix dispeare animation.
+->specific object : header/footer is not sticky object into oo
 
 In Progress:
--> save/load sticky object
-	->specific object : header/footer is not sticky object into oo
 
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>
