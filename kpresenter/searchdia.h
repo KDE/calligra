@@ -21,7 +21,6 @@
 #ifndef searchdia_h
 #define searchdia_h
 
-#include <korichtext.h>
 #include "kptextobject.h"
 #include <koSearchDia.h>
 

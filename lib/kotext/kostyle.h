@@ -20,7 +20,8 @@
 #ifndef kostyle_h
 #define kostyle_h
 
-#include "korichtext.h" // for KoTextFormat, KoParagLayout
+#include "kotextformat.h"
+#include "koparaglayout.h"
 #include <qdom.h>
 #include <qptrlist.h>
 

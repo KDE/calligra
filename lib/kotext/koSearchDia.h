@@ -27,11 +27,11 @@
 #include <kreplace.h>
 #include <kreplacedialog.h>
 #include "kotextiterator.h"
+#include "kotextformat.h"
 
 #include <qcolor.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <korichtext.h>
 
 class QPushButton;
 class QRadioButton;
@@ -47,6 +47,7 @@ class KCommand;
 class KoTextDocument;
 class KoFindReplace;
 class KFontCombo;
+class KoTextCursor;
 //
 // This class represents the KWord-specific search extension items, and also the
 // corresponding replace items.

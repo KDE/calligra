@@ -18,6 +18,7 @@
 */
 
 #include "koparaglayout.h"
+#include "korichtext.h"
 #include "koparagcounter.h"
 #include "kostyle.h"
 #include <qdom.h>

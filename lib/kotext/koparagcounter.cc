@@ -19,7 +19,7 @@
 
 #include "koparagcounter.h"
 #include "kozoomhandler.h"
-#include "korichtext.h" // for KoTextFormat
+#include "kotextformat.h"
 #include "kotextdocument.h"
 #include <kdebug.h>
 #include <qdom.h>

@@ -119,7 +119,7 @@ public:
     void addSelection( int id );
 
     QString selectedText( int id, bool withCustom = TRUE ) const;
-    void copySelectedText( int id );
+    //void copySelectedText( int id );
     void removeSelectedText( int id, KoTextCursor *cursor );
     void indentSelection( int id );
 

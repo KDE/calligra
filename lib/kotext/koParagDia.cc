@@ -20,7 +20,7 @@
 #include "koParagDia.h"
 #include "koParagDia_p.h"
 #include "koDocument.h"
-#include "korichtext.h"
+#include "kotextformat.h"
 #include "kotextdocument.h"
 
 #include <qcheckbox.h>

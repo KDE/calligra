@@ -36,6 +36,7 @@
 #include "kozoomhandler.h"
 #include <koGlobal.h>
 #include <qcheckbox.h>
+#include <qlayout.h>
 
 /******************************************************************/
 /* Class: KoStyleManager                                          */

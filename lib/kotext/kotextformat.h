@@ -1,5 +1,3 @@
-// -*- c++ -*-
-
 #ifndef _KOTEXTFORMAT_H
 #define _KOTEXTFORMAT_H
 
@@ -26,11 +24,29 @@
 
 #undef S_NONE // Solaris defines it in sys/signal.h
 
+#include <qcolor.h>
+#include <qfont.h>
+#include <qstring.h>
+#include <qdict.h>
+
+class QFontMetrics;
 class KoCharStyle;
-class Q_EXPORT KoTextFormat
+class KoTextFormatCollection;
+class KoZoomHandler;
+class KoTextStringChar;
+class KoTextParag;
+
+/**
+ * Each character (KoTextStringChar) points to a KoTextFormat that defines the
+ * formatting of that character (font, bold, italic, underline, misspelled etc.).
+ *
+ * Formats are stored in KoTextFormatCollection and are shared for all
+ * characters with the same format.
+ */
+class KoTextFormat
 {
-    friend class KoTextFormatCollection;
-    friend class KoTextDocument;
+    friend class KoTextFormatCollection; // it sets 'collection'
+    //friend class KoTextDocument;
 
     // Having it here allows inline methods returning d->blah, for speed
 private:
@@ -134,18 +150,6 @@ public:
     void addRef();
     void removeRef();
 
-protected:
-    void generateKey();
-
-private:
-    void update();
-
-/**
- * Our extension of KoTextFormat, to add support for storing StrikeOut and
- * TextBackgroundColor as part of the format, and for caching of the appropriate
- * fontmetrics for WYSIWYG (text layout and painting).
- */
-public:
     /** Return a set of flags showing the differences between this and 'format' */
     int compare( const KoTextFormat & format ) const;
 
@@ -296,6 +300,10 @@ public:
 
 protected:
     QChar displayedChar( QChar c )const;
+    void generateKey();
+
+private:
+    void update();
 
     QColor m_textBackColor;
     QColor m_textUnderlineColor;
@@ -308,7 +316,6 @@ protected:
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;
 
-private:
     QFont fn;
     QColor col;
     uint missp : 1;
@@ -317,6 +324,52 @@ private:
     KoTextFormatCollection *collection;
     int ref;
     QString k;
+};
+
+#if defined(Q_TEMPLATEDLL)
+// MOC_SKIP_BEGIN
+template class Q_EXPORT QDict<KoTextFormat>;
+// MOC_SKIP_END
+#endif
+
+class Q_EXPORT KoTextFormatCollection
+{
+    friend class KoTextDocument;
+    friend class KoTextFormat;
+
+public:
+    KoTextFormatCollection();
+    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen, double ulw ); //// kotext addition
+    virtual ~KoTextFormatCollection();
+
+    void setDefaultFormat( KoTextFormat *f );
+    KoTextFormat *defaultFormat() const;
+    virtual KoTextFormat *format( const KoTextFormat *f );
+    virtual KoTextFormat *format( KoTextFormat *of, KoTextFormat *nf, int flags );
+    virtual KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language, bool hyphen, double ulw );
+    virtual void remove( KoTextFormat *f );
+    virtual KoTextFormat *createFormat( const KoTextFormat &f ) { return new KoTextFormat( f ); }
+    virtual KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language, bool hyphen, double ulw) { return new KoTextFormat( f, c, _language, hyphen, ulw, this ); }
+    void debug();
+
+    //void setPainter( QPainter *p );
+    //QStyleSheet *styleSheet() const { return sheet; }
+    //void setStyleSheet( QStyleSheet *s ) { sheet = s; }
+    //void updateStyles();
+    //void updateFontSizes( int base );
+    //void updateFontAttributes( const QFont &f, const QFont &old );
+
+    QDict<KoTextFormat> & dict() { return cKey; }
+
+private:
+    KoTextFormat *defFormat, *lastFormat, *cachedFormat;
+    QDict<KoTextFormat> cKey;
+    KoTextFormat *cres;
+    QFont cfont;
+    QColor ccol;
+    QString kof, knf;
+    int cflags;
+    //QStyleSheet *sheet;
 };
 
 inline QColor KoTextFormat::color() const
@@ -357,6 +410,16 @@ inline QString KoTextFormat::key() const
 inline bool KoTextFormat::useLinkColor() const
 {
     return linkColor;
+}
+
+inline void KoTextFormatCollection::setDefaultFormat( KoTextFormat *f )
+{
+    defFormat = f;
+}
+
+inline KoTextFormat *KoTextFormatCollection::defaultFormat() const
+{
+    return defFormat;
 }
 
 #endif

@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-//#include "kotextformat.h"
-#include "korichtext.h" // for KoTextFormat
+#include "kotextformat.h"
+#include "korichtext.h" // for KoTextParag etc.
 #include "kozoomhandler.h"
 #include <kglobal.h>
 #include <kdebug.h>
@@ -1054,3 +1054,209 @@ void KoTextFormat::printDebug()
 }
 #endif
 
+KoTextFormatCollection::KoTextFormatCollection()
+    : cKey( 307 )//, sheet( 0 )
+{
+#ifdef DEBUG_COLLECTION
+    qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
+#endif
+    defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language(), false, 1.0 ); //// kotext: need to use default QColor here
+    lastFormat = cres = 0;
+    cflags = -1;
+    cKey.setAutoDelete( TRUE );
+    cachedFormat = 0;
+}
+
+KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen, double ulw )
+    : cKey( 307 )//, sheet( 0 )
+{
+#ifdef DEBUG_COLLECTION
+    qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
+#endif
+    defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage, hyphen, ulw );
+    lastFormat = cres = 0;
+    cflags = -1;
+    cKey.setAutoDelete( TRUE );
+    cachedFormat = 0;
+}
+
+KoTextFormatCollection::~KoTextFormatCollection()
+{
+#ifdef DEBUG_COLLECTION
+    qDebug("KoTextFormatCollection::~KoTextFormatCollection %p", this);
+#endif
+    delete defFormat;
+    defFormat = 0;
+}
+
+KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *f )
+{
+    if ( f->parent() == this || f == defFormat ) {
+#ifdef DEBUG_COLLECTION
+	qDebug( " format(f) need '%s', best case!", f->key().latin1() );
+#endif
+	lastFormat = const_cast<KoTextFormat*>(f);
+	lastFormat->addRef();
+	return lastFormat;
+    }
+
+    if ( f == lastFormat || ( lastFormat && f->key() == lastFormat->key() ) ) {
+#ifdef DEBUG_COLLECTION
+	qDebug( " format(f) need '%s', good case!", f->key().latin1() );
+#endif
+	lastFormat->addRef();
+	return lastFormat;
+    }
+
+#if 0 // #### disabled, because if this format is not in the
+ // formatcollection, it doesn't get the painter through
+ // KoTextFormatCollection::setPainter() which breaks printing on
+ // windows
+    if ( f->isAnchor() ) {
+	lastFormat = createFormat( *f );
+	lastFormat->collection = 0;
+	return lastFormat;
+    }
+#endif
+
+    KoTextFormat *fm = cKey.find( f->key() );
+    if ( fm ) {
+#ifdef DEBUG_COLLECTION
+	qDebug( " format(f) need '%s', normal case!", f->key().latin1() );
+#endif
+	lastFormat = fm;
+	lastFormat->addRef();
+	return lastFormat;
+    }
+
+    if ( f->key() == defFormat->key() )
+	return defFormat;
+
+#ifdef DEBUG_COLLECTION
+    qDebug( " format(f) need '%s', worst case!", f->key().latin1() );
+#endif
+    lastFormat = createFormat( *f );
+    lastFormat->collection = this;
+    cKey.insert( lastFormat->key(), lastFormat );
+    Q_ASSERT( f->key() == lastFormat->key() );
+    return lastFormat;
+}
+
+KoTextFormat *KoTextFormatCollection::format( KoTextFormat *of, KoTextFormat *nf, int flags )
+{
+    if ( cres && kof == of->key() && knf == nf->key() && cflags == flags ) {
+#ifdef DEBUG_COLLECTION
+	qDebug( " format(of,nf,flags) mix of '%s' and '%s, best case!", of->key().latin1(), nf->key().latin1() );
+#endif
+	cres->addRef();
+	return cres;
+    }
+
+#ifdef DEBUG_COLLECTION
+    qDebug(" format(of,nf,%d) calling createFormat(of=%p %s)",flags,of,of->key().latin1());
+#endif
+    cres = createFormat( *of );
+    kof = of->key();
+    knf = nf->key();
+    cflags = flags;
+
+#ifdef DEBUG_COLLECTION
+    qDebug(" format(of,nf,%d) calling copyFormat(nf=%p %s)",flags,nf,nf->key().latin1());
+#endif
+    cres->copyFormat( *nf, flags );
+
+    KoTextFormat *fm = cKey.find( cres->key() );
+    if ( !fm ) {
+#ifdef DEBUG_COLLECTION
+	qDebug( " format(of,nf,flags) mix of '%s' and '%s, worst case!", of->key().latin1(), nf->key().latin1() );
+#endif
+	cres->collection = this;
+	cKey.insert( cres->key(), cres );
+    } else {
+#ifdef DEBUG_COLLECTION
+	qDebug( " format(of,nf,flags) mix of '%s' and '%s, good case!", of->key().latin1(), nf->key().latin1() );
+#endif
+	delete cres;
+	cres = fm;
+	cres->addRef();
+    }
+
+    return cres;
+}
+
+KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, const QString & language, bool hyphen, double ulw )
+{
+    if ( cachedFormat && cfont == f && ccol == c ) {
+#ifdef DEBUG_COLLECTION
+	qDebug( " format of font and col '%s' - best case", cachedFormat->key().latin1() );
+#endif
+	cachedFormat->addRef();
+	return cachedFormat;
+    }
+
+    QString key = KoTextFormat::getKey( f, c, FALSE, KoTextFormat::AlignNormal );
+    cachedFormat = cKey.find( key );
+    cfont = f;
+    ccol = c;
+
+    if ( cachedFormat ) {
+#ifdef DEBUG_COLLECTION
+	qDebug( " format of font and col '%s' - good case", cachedFormat->key().latin1() );
+#endif
+	cachedFormat->addRef();
+	return cachedFormat;
+    }
+
+    if ( key == defFormat->key() )
+	return defFormat;
+
+    cachedFormat = createFormat( f, c,language, hyphen, ulw );
+    cachedFormat->collection = this;
+    cKey.insert( cachedFormat->key(), cachedFormat );
+    if ( cachedFormat->key() != key )
+	qWarning("ASSERT: keys for format not identical: '%s '%s'", cachedFormat->key().latin1(), key.latin1() );
+#ifdef DEBUG_COLLECTION
+    qDebug( " format of font and col '%s' - worst case", cachedFormat->key().latin1() );
+#endif
+    return cachedFormat;
+}
+
+void KoTextFormatCollection::remove( KoTextFormat *f )
+{
+    if ( lastFormat == f )
+	lastFormat = 0;
+    if ( cres == f )
+	cres = 0;
+    if ( cachedFormat == f )
+	cachedFormat = 0;
+    cKey.remove( f->key() );
+}
+
+#if 0
+void KoTextFormatCollection::setPainter( QPainter *p )
+{
+    QDictIterator<KoTextFormat> it( cKey );
+    KoTextFormat *f;
+    while ( ( f = it.current() ) ) {
+	++it;
+	f->setPainter( p );
+    }
+}
+#endif
+
+#ifndef NDEBUG
+void KoTextFormatCollection::debug()
+{
+    qDebug( "------------ KoTextFormatCollection: debug --------------- BEGIN" );
+    qDebug( "Default Format: '%s' (%p): realfont: %s",
+            defFormat->key().latin1(), (void*)defFormat, QFontInfo( defFormat->font() ).family().latin1() );
+    QDictIterator<KoTextFormat> it( cKey );
+    for ( ; it.current(); ++it ) {
+         Q_ASSERT(it.currentKey() == it.current()->key());
+         if(it.currentKey() != it.current()->key())
+             qDebug("**** MISMATCH key=%s (see line below for format)", it.currentKey().latin1());
+	 it.current()->printDebug();
+    }
+    qDebug( "------------ KoTextFormatCollection: debug --------------- END" );
+}
+#endif

@@ -21,7 +21,7 @@
 #include <qdom.h>
 #include <kdebug.h>
 #include "kozoomhandler.h"
-//#include "kotextformat.h"
+#include "kotextformat.h"
 #include "korichtext.h" // for KoTextFormat
 
 KoBorder::KoBorder()

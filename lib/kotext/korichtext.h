@@ -110,7 +110,7 @@ class KoTextDocCommand;
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class Q_EXPORT KoTextStringChar
+class KoTextStringChar
 {
     friend class KoTextString;
 
@@ -167,11 +167,11 @@ private:
 
 #if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN
-template class Q_EXPORT QMemArray<KoTextStringChar>;
+template class QMemArray<KoTextStringChar>;
 // MOC_SKIP_END
 #endif
 
-class Q_EXPORT KoTextString
+class KoTextString
 {
 public:
 
@@ -248,13 +248,13 @@ inline QChar::Direction KoTextString::direction() const
 
 #if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN
-template class Q_EXPORT QValueStack<int>;
-template class Q_EXPORT QValueStack<KoTextParag*>;
-template class Q_EXPORT QValueStack<bool>;
+template class QValueStack<int>;
+template class QValueStack<KoTextParag*>;
+template class QValueStack<bool>;
 // MOC_SKIP_END
 #endif
 
-class Q_EXPORT KoTextCursor
+class KoTextCursor
 {
 public:
     KoTextCursor( KoTextDocument *d );
@@ -342,7 +342,7 @@ private:
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class Q_EXPORT KoTextDocCommand
+class KoTextDocCommand
 {
 public:
     enum Commands { Invalid, Insert, Delete, Format, Alignment, ParagType };
@@ -362,11 +362,11 @@ protected:
 
 #if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN
-template class Q_EXPORT QPtrList<KoTextDocCommand>;
+template class QPtrList<KoTextDocCommand>;
 // MOC_SKIP_END
 #endif
 
-class Q_EXPORT KoTextDocCommandHistory
+class KoTextDocCommandHistory
 {
 public:
     KoTextDocCommandHistory( int s ) : current( -1 ), steps( s ) { history.setAutoDelete( TRUE ); }
@@ -395,7 +395,7 @@ private:
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class Q_EXPORT KoTextCustomItem
+class KoTextCustomItem
 {
 public:
     KoTextCustomItem( KoTextDocument *p );
@@ -460,13 +460,12 @@ private:
 
 #if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN
-template class Q_EXPORT QMap<QString, QString>;
+template class QMap<QString, QString>;
 // MOC_SKIP_END
 #endif
 
-#undef KoTextFormat
-
-class Q_EXPORT KoTextImage : public KoTextCustomItem
+#if 0
+class KoTextImage : public KoTextCustomItem
 {
 public:
     KoTextImage( KoTextDocument *p, const QMap<QString, QString> &attr, const QString& context,
@@ -491,8 +490,9 @@ private:
     QString imgId;
 
 };
+#endif
 
-class Q_EXPORT KoTextHorizontalLine : public KoTextCustomItem
+class KoTextHorizontalLine : public KoTextCustomItem
 {
 public:
     KoTextHorizontalLine( KoTextDocument *p, const QMap<QString, QString> &attr, const QString& context,
@@ -513,11 +513,11 @@ private:
 
 #if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN
-template class Q_EXPORT QPtrList<KoTextCustomItem>;
+template class QPtrList<KoTextCustomItem>;
 // MOC_SKIP_END
 #endif
 
-class Q_EXPORT KoTextFlow
+class KoTextFlow
 {
     friend class KoTextDocument;
     friend class KoTextTableCell;
@@ -562,7 +562,7 @@ inline int KoTextFlow::width() const { return w; }
 #ifdef QTEXTTABLE_AVAILABLE
 class KoTextTable;
 
-class Q_EXPORT KoTextTableCell : public QLayoutItem
+class KoTextTableCell : public QLayoutItem
 {
     friend class KoTextTable;
 
@@ -628,12 +628,12 @@ private:
 
 #if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN
-template class Q_EXPORT QPtrList<KoTextTableCell>;
-template class Q_EXPORT QMap<KoTextCursor*, int>;
+template class QPtrList<KoTextTableCell>;
+template class QMap<KoTextCursor*, int>;
 // MOC_SKIP_END
 #endif
 
-class Q_EXPORT KoTextTable: public KoTextCustomItem
+class KoTextTable: public KoTextCustomItem
 {
     friend class KoTextTableCell;
 
@@ -700,7 +700,7 @@ private:
 
 class KoTextTableCell;
 
-struct Q_EXPORT KoTextDocumentSelection
+struct KoTextDocumentSelection
 {
     KoTextCursor startCursor, endCursor;
     bool swapped;
@@ -709,7 +709,7 @@ struct Q_EXPORT KoTextDocumentSelection
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-class Q_EXPORT KoTextDocDeleteCommand : public KoTextDocCommand
+class KoTextDocDeleteCommand : public KoTextDocCommand
 {
 public:
     KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str );
@@ -728,7 +728,7 @@ protected:
 };
 
 #if 0
-class Q_EXPORT KoTextDocInsertCommand : public KoTextDocDeleteCommand
+class KoTextDocInsertCommand : public KoTextDocDeleteCommand
 {
 public:
     KoTextDocInsertCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str )
@@ -744,7 +744,7 @@ public:
 };
 #endif
 
-class Q_EXPORT KoTextDocFormatCommand : public KoTextDocCommand
+class KoTextDocFormatCommand : public KoTextDocCommand
 {
 public:
     KoTextDocFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, KoTextFormat *f, int fl );
@@ -762,7 +762,7 @@ protected:
 
 };
 
-class Q_EXPORT KoTextAlignmentCommand : public KoTextDocCommand
+class KoTextAlignmentCommand : public KoTextDocCommand
 {
 public:
     KoTextAlignmentCommand( KoTextDocument *d, int fParag, int lParag, int na, const QMemArray<int> &oa );
@@ -781,12 +781,12 @@ private:
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-struct Q_EXPORT KoTextParagSelection
+struct KoTextParagSelection
 {
     int start, end;
 };
 
-struct Q_EXPORT KoTextParagLineStart
+struct KoTextParagLineStart
 {
     KoTextParagLineStart() : y( 0 ), baseLine( 0 ), h( 0 ), lineSpacing( 0 ), hyphenated( false )
 #ifndef QT_NO_COMPLEXTEXT
@@ -844,12 +844,12 @@ private:
 
 #if defined(Q_TEMPLATEDLL)
 // MOC_SKIP_BEGIN
-template class Q_EXPORT QMap<int, KoTextParagSelection>;
-template class Q_EXPORT QMap<int, KoTextParagLineStart*>;
+template class QMap<int, KoTextParagSelection>;
+template class QMap<int, KoTextParagLineStart*>;
 // MOC_SKIP_END
 #endif
 
-/*class Q_EXPORT KoTextParagData
+/*class KoTextParagData
 {
 public:
     KoTextParagData() {}
@@ -857,9 +857,7 @@ public:
     virtual void join( KoTextParagData * ) {}
 };*/
 
-class KoTextFormat;
-
-class Q_EXPORT KoTextParag
+class KoTextParag
 {
     friend class KoTextDocument;
     friend class KoTextCursor;
@@ -1082,7 +1080,7 @@ private:
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class Q_EXPORT KoTextFormatterBase
+class KoTextFormatterBase
 {
 public:
     KoTextFormatterBase();
@@ -1130,7 +1128,7 @@ private:
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #if 0
-class Q_EXPORT KoTextFormatterBaseBreakInWords : public KoTextFormatterBase
+class KoTextFormatterBaseBreakInWords : public KoTextFormatterBase
 {
 public:
     KoTextFormatterBaseBreakInWords();
@@ -1142,7 +1140,7 @@ public:
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class Q_EXPORT KoTextFormatterBaseBreakWords : public KoTextFormatterBase
+class KoTextFormatterBaseBreakWords : public KoTextFormatterBase
 {
 public:
     KoTextFormatterBaseBreakWords();
@@ -1155,7 +1153,7 @@ public:
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class Q_EXPORT KoTextIndent
+class KoTextIndent
 {
 public:
     KoTextIndent();
@@ -1168,7 +1166,7 @@ public:
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #if 0
-class Q_EXPORT KoTextPreProcessor
+class KoTextPreProcessor
 {
 public:
     enum Ids {
@@ -1185,57 +1183,6 @@ public:
 #endif
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#include "kotextformat.h"
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class Q_EXPORT QDict<KoTextFormat>;
-// MOC_SKIP_END
-#endif
-
-class Q_EXPORT KoTextFormatCollection
-{
-    friend class KoTextDocument;
-    friend class KoTextFormat;
-
-public:
-    KoTextFormatCollection();
-    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen, double ulw ); //// kotext addition
-    virtual ~KoTextFormatCollection();
-
-    void setDefaultFormat( KoTextFormat *f );
-    KoTextFormat *defaultFormat() const;
-    virtual KoTextFormat *format( const KoTextFormat *f );
-    virtual KoTextFormat *format( KoTextFormat *of, KoTextFormat *nf, int flags );
-    virtual KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language, bool hyphen, double ulw );
-    virtual void remove( KoTextFormat *f );
-    virtual KoTextFormat *createFormat( const KoTextFormat &f ) { return new KoTextFormat( f ); }
-    virtual KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language, bool hyphen, double ulw) { return new KoTextFormat( f, c, _language, hyphen, ulw, this ); }
-    void debug();
-
-    //void setPainter( QPainter *p );
-    //QStyleSheet *styleSheet() const { return sheet; }
-    //void setStyleSheet( QStyleSheet *s ) { sheet = s; }
-    //void updateStyles();
-    //void updateFontSizes( int base );
-    //void updateFontAttributes( const QFont &f, const QFont &old );
-
-    QDict<KoTextFormat> & dict() { return cKey; }
-
-private:
-    KoTextFormat *defFormat, *lastFormat, *cachedFormat;
-    QDict<KoTextFormat> cKey;
-    KoTextFormat *cres;
-    QFont cfont;
-    QColor ccol;
-    QString kof, knf;
-    int cflags;
-    QStyleSheet *sheet;
-
-};
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1510,42 +1457,14 @@ inline bool KoTextParag::isNewLinesAllowed() const
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-inline void KoTextFormatCollection::setDefaultFormat( KoTextFormat *f )
-{
-    defFormat = f;
-}
-
-inline KoTextFormat *KoTextFormatCollection::defaultFormat() const
-{
-    return defFormat;
-}
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 inline KoTextFormat *KoTextStringChar::format() const
 {
     return (type == Regular) ? d.format : d.custom->format;
 }
 
-
 inline KoTextCustomItem *KoTextStringChar::customItem() const
 {
     return isCustom() ? d.custom->custom : 0;
-}
-
-inline int KoTextStringChar::height() const
-{
-    return !isCustom() ? format()->height() : ( customItem()->placement() == KoTextCustomItem::PlaceInline ? customItem()->height : 0 );
-}
-
-inline int KoTextStringChar::ascent() const
-{
-    return !isCustom() ? format()->ascent() : ( customItem()->placement() == KoTextCustomItem::PlaceInline ? customItem()->ascent() : 0 );
-}
-
-inline int KoTextStringChar::descent() const
-{
-    return !isCustom() ? format()->descent() : 0;
 }
 
 #endif
