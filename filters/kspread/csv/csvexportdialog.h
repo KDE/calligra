@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 David Faure <faure@kde.org>
-
+   Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -40,6 +41,8 @@ class CSVExportDialog : public KDialogBase
   bool    exportSelectionOnly() const;
 
   void  fillTable( KSpreadMap * map );
+  QString getEndOfLine(void) const;
+  QTextCodec* getCodec(void) const;
 
  private:
   ExportDialogUI * m_dialog;

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2000 David Faure <faure@kde.org>
+   Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #include <csvexport.h>
 
 #include <qfile.h>
+#include <qtextcodec.h>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -54,7 +56,7 @@ class Cell
 
 
 CSVExport::CSVExport( KoFilter *, const char *, const QStringList & ) 
-  : KoFilter() 
+  : KoFilter(), m_eol("\n")
 {
 }
 
@@ -133,6 +135,10 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   if ( !expDialog.exec() )
     return KoFilter::UserCancelled;
 
+  QTextCodec* codec = expDialog.getCodec();
+  if ( !codec )
+    return KoFilter::StupidError;
+
   QChar csvDelimiter;
 
   csvDelimiter = expDialog.getDelimiter();
@@ -177,9 +183,9 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
         str += line;
         emptyLines = QString::null;
       }
-      // Append a CR, but in a temp string -> if no other real line,
+      // Append an end of line, but in a temp string -> if no other real line,
       // then those will be dropped
-      emptyLines += "\n";
+      emptyLines += m_eol;
     }
   }
   else
@@ -198,7 +204,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       if ( !first || expDialog.printAlwaysTableDelimiter() )
       {
         if ( !first)
-          str += "\n";
+          str += m_eol;
 
         QString name( expDialog.getTableDelimiter() );
         const QString tname( i18n("<SHEETNAME>") );
@@ -208,7 +214,8 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
           name.replace( pos, tname.length(), sheet->tableName() );
         }
         str += name;
-        str += "\n\n";
+        str += m_eol;
+        str += m_eol;
       }
 
       first = false;
@@ -247,17 +254,14 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
           str += line;
           emptyLines = QString::null;
         }
-        // Append a CR, but in a temp string -> if no other real line,
+        // Append an end of line, but in a temp string -> if no other real line,
         // then those will be dropped
-        emptyLines += "\n";
+        emptyLines += m_eol;
       }
     }
   }
-  str += "\n"; // Last CR
+  str += m_eol; // Last end of line
   emit sigProgress(100);
-
-  // Ok, now write to export file
-  QCString cstr(str.local8Bit()); // I assume people will prefer local8Bit over utf8... Another param ?
 
   QFile out(m_chain->outputFile());
   if ( !out.open( IO_WriteOnly ) ) 
@@ -266,7 +270,11 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
     out.close();
     return KoFilter::StupidError;
   }
-  out.writeBlock(cstr.data(), cstr.length());
+
+  QTextStream outStream( &out );
+  outStream.setCodec( codec );
+  
+  outStream << str;
 
   out.close();
   return KoFilter::OK;

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2000 David Faure <faure@kde.org>
+   Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #ifndef CSVEXPORT_H
 #define CSVEXPORT_H
 
+#include <qstring.h>
 #include <koFilter.h>
 
 class KSpreadSheet;
@@ -37,6 +39,8 @@ class CSVExport : public KoFilter
  private:
   void exportCell( KSpreadSheet const * const sheet, int col, int row, 
                    QString & separators, QString & line, QChar const & csvDelimiter, QChar const & textQuote );
+ private:
+  QString m_eol; ///< End of line (LF, CR or CRLF)  
 };
 
 #endif // CSVEXPORT_H
