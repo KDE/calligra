@@ -725,22 +725,34 @@ KisDoc::~KisDoc()
     Save current document (image) in a standard image format
     Note that only the current visible layer(s) will be saved
     usually one needs to merge all layers first, as with Gimp
+    
     The format the image is saved in is determined solely by 
     the file extension used. (Although the name of the original
-    file, if any, should be the default along with its extension
-    and related image type).
+    file, if any, should be the default file name and its extension
+    the default extension.  An imagi information dialog and 
+    extended file save dialog giving the user more choice about
+    the exact save format to use is needed, eventually).
     
-    This will only save at the display depth of the hardware -
-    often 16 bit.  To insure 32 bit images being exported, we
-    must use another routine to get the data directly from the
-    layer channels, and put it into a QImage, without using
-    the QPimap paint device.
+    To insure 32 bit images being exported, before the converstion to
+    a specific file format, we get the data directly from the layer 
+    channels, and put it into a QImage, without using the QPimap paint 
+    device.  Therefore the user's hardware has no effect on the depth
+    of the save file.
+    
+    There also need to be another method just to save the current view
+    as an image, mostly for debugging and documentation purposes, but it
+    will only save at the display depth of the hardware -  often 16 bit,
+    because it gets a QPixmap from the canvas instead of a QImage from
+    the layer(s).  
+    
 */
 
 bool KisDoc::saveAsQtImage( QString file, bool wholeImage)
 {
     int x, y, w, h;
+    bool ok = false;
     
+    // current layer only    
     if(!wholeImage)
     {
         x = current()->getCurrentLayer()->layerExtents().left();
@@ -748,15 +760,31 @@ bool KisDoc::saveAsQtImage( QString file, bool wholeImage)
         w = current()->getCurrentLayer()->layerExtents().width();
         h = current()->getCurrentLayer()->layerExtents().height();
     }
-    // current layer only
+    // all layers
     else 
     {
-        x = 0;
-        y = 0;
-        w = current()->width();
-        h = current()->height();
+        x = current()->getCurrentLayer()->imageExtents().left();
+        y = current()->getCurrentLayer()->imageExtents().top();
+        w = current()->getCurrentLayer()->imageExtents().width();
+        h = current()->getCurrentLayer()->imageExtents().height();
     }
-    
+
+    QImage *qimg = new QImage(w, h, 32);
+    if(qimg)
+    {  
+        qimg->setAlphaBuffer(current()->colorMode() == cm_RGBA ? true : false);
+        QRect saveRect = QRect(x, y, w, h);
+        LayerToQtImage(qimg, 0, saveRect);
+        ok = qimg->save(file, KImageIO::type(file).ascii());
+        delete qimg;
+    }
+        
+    return ok;
+
+// old - this should be used for saving or capturing the view instead.
+
+#if 0    
+
     // prepare a pixmap for drawing
     QPixmap *pix = new QPixmap (w, h);
     if (pix == 0L)
@@ -783,8 +811,9 @@ bool KisDoc::saveAsQtImage( QString file, bool wholeImage)
     // save the image in requested format. file extension 
     // determines image format - best way    
     return qimg.save(file, KImageIO::type(file).ascii());
-}
 
+#endif    
+}
 
 
 /*
@@ -837,7 +866,7 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView *pView)
     int ey = clipRect.bottom() - starty;
 
     uchar *sl;
-    uchar r, g, b, a;
+    uchar r, a;
 
     bool alpha = (img->colorMode() == cm_RGBA);
   
@@ -897,10 +926,10 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView *pView)
 
 /*
     Copy a rectangular area of a layer into a QImage, pixel by pixel 
-    using scanlines,  fully 32 bit even if the alpha channel isn't used. 
-    This provides a  basis for a clipboard buffer and a Krayon blit 
+    using scanlines, fully 32 bit even if the alpha channel isn't used. 
+    This provides a basis for a clipboard buffer and a Krayon blit 
     routine, with custom modifiers to blend, apply various filters and 
-    raster operations,  and many other neat effects.  -jwc-
+    raster operations, and many other neat effects.  
 */
 
 bool KisDoc::LayerToQtImage(QImage *qimg, KisView *pView, QRect & clipRect)
@@ -911,25 +940,24 @@ bool KisDoc::LayerToQtImage(QImage *qimg, KisView *pView, QRect & clipRect)
     KisLayer *lay = img->getCurrentLayer();
     if (!lay)  return false;
 
-    if(qimg->depth() < 16)
-    {
-        QImage Converted 
-            = qimg->smoothScale(qimg->width(), qimg->height());
-        qimg = &Converted;
-    }
-    
+    // this may not always be zero, but for current
+    // uses it will be, as the entire layer is copied
+    // from its offset into the image
     int startx = 0;
     int starty = 0;
 
+    // this insures getting the layer from its offset
+    // into the image, which may not be zero if the
+    // layer has been moved
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
   
     clipRect = clipRect.intersect(lay->imageExtents());
 
-    int sx = clipRect.left() - startx;
-    int sy = clipRect.top() - starty;
-    int ex = clipRect.right() - startx;
-    int ey = clipRect.bottom() - starty;
+    int sx = clipRect.left(); 
+    int sy = clipRect.top(); 
+    int ex = clipRect.right(); 
+    int ey = clipRect.bottom(); 
 
     uchar *sl;
     uchar r, g, b;
@@ -949,7 +977,7 @@ bool KisDoc::LayerToQtImage(QImage *qimg, KisView *pView, QRect & clipRect)
 	        b = lay->pixel(2, startx + x, starty + y);
             if(alpha) a = lay->pixel(3, startx + x, starty + y);        
         
-            uint *p = (uint *)qimg->scanLine(y) + x;
+            uint *p = (uint *)qimg->scanLine(y - sy) + (x - sx);
             *p = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);            
 	    } 
     }
@@ -995,7 +1023,8 @@ void KisDoc::removeClipImage()
 }
 
 /*
-    setClipImage - set current clip image for the document from the selection
+    setClipImage - set current clip image for the document 
+    from the selection
 */
 bool KisDoc::setClipImage()
 {
@@ -1029,69 +1058,6 @@ bool KisDoc::setClipImage()
     return true;
 }
 
-// old version
-#if 0
-bool KisDoc::setClipImage()
-{
-    KisImage *img = current();
-    KisLayer *lay = img->getCurrentLayer();
-
-    if(m_pClipImage != 0L)
-    { 
-        delete m_pClipImage;
-        m_pClipImage = 0L;
-    }   
-    
-    QRect selectRect = getSelection()->getRectangle();
-     
-    m_pClipImage = new QImage(selectRect.width(), selectRect.height(), 32);
-    if(!m_pClipImage) return false;
-    
-    // destination rect - the clip image
-    int dx = selectRect.width();
-    kdDebug(0) << "selection width: " << dx << endl;
-    int dy = selectRect.height();
-    kdDebug(0) << "selection height: " << dy << endl;    
-
-    // source rect - the layer data
-    int sx = selectRect.left();
-    int sy = selectRect.top();
-    
-    // channel values of pixel in layer
-    int r, g, b; 
-    
-    // need to determine if image is rgb or rgba
-    bool alpha = (img->colorMode() == cm_RGBA);
-    
-    // alpha channel value in layer 
-    // 255 is opaque, 0 is transparent
-    int a = 255; 
-    
-    // ptr to data at scanline in QImage
-    uint *p;
-    
-    // fill in the clip image with data from selection rectange
-    // in image layer, using channel data at x+dx, y+dy offset into layer 
-    for (int y = 0; y < dy; y++)
-    {
-        for (int x = 0; x < dx; x++)
-	    {
-            // source binary values by channel
-	        r = lay->pixel(0, sx + x, sy + y);
-	        g = lay->pixel(1, sx + x, sy + y);
-	        b = lay->pixel(2, sx + x, sy + y);
-            if(alpha) a = lay->pixel(3, sx + x, sy + y);
-            
-            // dest binary data in scanline at x offset
-            // is set at this point - uint (32 bit)
-            p = (uint *)m_pClipImage->scanLine(y) + x;
-            *p = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);
-        }
-    }
-    
-    return true;    
-}
-#endif
 
 KisImage* KisDoc::newImage(const QString& n, int width, int height, 
     cMode cm , uchar bitDepth )

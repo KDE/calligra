@@ -165,7 +165,8 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
     
     QString layerName; 
     layerName.sprintf("layer %d", img->layerList().count());
-    img->addLayer(nr, white, false, layerName);
+    // paramaters: rectangle,  color, clear to transparent, name
+    img->addLayer(nr, white, true, layerName);
     
     // adding a layer makes it the new current layer
     KisLayer *nlay = img->getCurrentLayer();
@@ -175,6 +176,8 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
         return false;
     }    
 
+    bool alpha = (img->colorMode() == cm_RGBA);
+    
     int srcXoffset = srcR.left();
     int srcYoffset = srcR.top();
     int srcWidth   = srcR.width();
@@ -184,7 +187,7 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
     int xpos = x, ypos = y;
     
     float r, g, b;
-    int r1, g1, b1;
+    int r1, g1, b1, a1;
     int r2, g2, b2;
     int r3, g3, b3;
     int r4, g4, b4;
@@ -213,6 +216,8 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
             r1 = lay->pixel(0, x1, y1); 
             g1 = lay->pixel(1, x1, y1);
             b1 = lay->pixel(2, x1, y1);
+
+            if(alpha) a1 = lay->pixel(3, x1, y1);
             
             // do not exceed layer width with check 
             // on right edge in source        
@@ -296,6 +301,8 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
             nlay->setPixel(0, xpos - x, ypos - y, (int)r);
             nlay->setPixel(1, xpos - x, ypos - y, (int)g);
             nlay->setPixel(2, xpos - x, ypos - y, (int)b);
+            
+            if(alpha) nlay->setPixel(3, xpos - x, ypos - y, (int)a1);
         }
     }
 
@@ -318,7 +325,7 @@ bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
 
     QString layerName; 
     layerName.sprintf("layer %d", img->layerList().count());
-    img->addLayer(nr, white, false, layerName);
+    img->addLayer(nr, white, true, layerName);
 
     // adding a layer makes it the new current layer
     KisLayer *nlay = img->getCurrentLayer();
@@ -327,6 +334,8 @@ bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
         kdDebug() << "scaleRough(): new layer not allocated!" << endl;
         return false;
     }    
+
+    bool alpha = (img->colorMode() == cm_RGBA);
 
     int srcXoffset = srcR.left();
     int srcYoffset = srcR.top();
@@ -337,7 +346,7 @@ bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
     kdDebug() << "srcR.left() " << srcR.left() 
               << "srcR.top() " << srcR.top()  << endl;
     
-    float r, g, b;
+    float r, g, b, a;
     float x1, y1;
     float xfloat, yfloat;
     
@@ -358,9 +367,13 @@ bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
             g = lay->pixel(1, x1, y1);
             b = lay->pixel(2, x1, y1);
             
+            if(alpha) a = lay->pixel(3, x1, y1);
+            
             nlay->setPixel(0, xpos - x , ypos - y, (int)r);
             nlay->setPixel(1, xpos - x,  ypos - y, (int)g);
             nlay->setPixel(2, xpos - x,  ypos - y, (int)b);
+            
+            if(alpha) nlay->setPixel(3, xpos - x,  ypos - y, (int)a);
         }
     }
 

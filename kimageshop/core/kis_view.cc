@@ -1994,7 +1994,7 @@ void KisView::crop()
     QRect layerRect(0, 0, cImage.width(), cImage.height());    
     QString name; name.sprintf("layer %d", img->layerList().count());
 
-    img->addLayer(layerRect, white, false, name);
+    img->addLayer(layerRect, white, true, name);
     uint indx = img->layerList().count() - 1;    
     img->setCurrentLayer(indx);    
     img->setFrontLayer(indx);    
@@ -2710,7 +2710,11 @@ void KisView::layerScale(bool smooth)
     if(!pNewLayerDialog->result() == QDialog::Accepted)
         return;
 
-    QRect srcR(lay->imageExtents());        
+    QRect srcR(lay->imageExtents());
+    
+    // only get the part of the layer which is inside the
+    // image boundaries - layer can be bigger or can overlap
+    srcR = srcR.intersect(img->imageExtents());        
     
     bool ok;
     
