@@ -135,7 +135,7 @@ public slots:
  */
 class KSpreadCell : public KSpreadLayout
 {
-  friend SelectPrivate;
+  friend class SelectPrivate;
 
 public:
     enum Content { Text, RichText, Formula, VisualFormula };

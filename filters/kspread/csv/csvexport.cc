@@ -24,7 +24,7 @@
 #include <qdom.h>
 #include <qstring.h>
 #include <qfile.h>
-#include <qapp.h>
+#include <qapplication.h>
 #include <qlist.h>
 #include <qsortedlist.h>
 

@@ -73,7 +73,7 @@ class DCOPObject;
  */
 class KSpreadView : public KoView
 {
-    friend KSpreadCanvas;
+    friend class KSpreadCanvas;
 
     Q_OBJECT
 public:
@@ -321,7 +321,7 @@ protected slots:
      */
     void popupChildMenu( KoChild*, const QPoint& global_pos );
     void slotPopupDeleteChild();
-    
+
     /**
      * Border popup menu
      */
@@ -350,7 +350,7 @@ protected slots:
      */
     void slotItemSelected( int );
     void slotListChoosePopupMenu( );
-   
+
 protected slots:
     void repaintPolygon( const QPointArray& );
 

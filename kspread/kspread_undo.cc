@@ -549,7 +549,7 @@ for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
     if(cl->isHide())
       list.append(cl->column());
   }
- 
+
 }
 
 void KSpreadUndoShowColumn::undo()
@@ -558,7 +558,7 @@ void KSpreadUndoShowColumn::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();          
+    doc()->undoBuffer()->lock();
     table->hideColumn( 0,-1,listCol );
     doc()->undoBuffer()->unlock();
 }
@@ -954,7 +954,7 @@ void KSpreadUndoDelete::undo()
         for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setWidth(int((*it2).columnWidth));
         }
     }
     else if(m_selection.right()==0x7FFF)
@@ -963,7 +963,7 @@ void KSpreadUndoDelete::undo()
         for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
-           rw->setHeight((*it2).rowHeight);
+           rw->setHeight(int((*it2).rowHeight));
         }
     }
 
@@ -988,7 +988,7 @@ void KSpreadUndoDelete::redo()
         for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setWidth(int((*it2).columnWidth));
         }
     }
     else if(m_selection.right()==0x7FFF)
@@ -997,7 +997,7 @@ void KSpreadUndoDelete::redo()
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
-           rw->setHeight((*it2).rowHeight);
+           rw->setHeight(int((*it2).rowHeight));
         }
     }
 
@@ -1927,7 +1927,7 @@ void KSpreadUndoCellPaste::undo()
                 for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
                         {
                         ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
-                        cl->setWidth((*it2).columnWidth);
+                        cl->setWidth(int((*it2).columnWidth));
                         }
                 }
         else
@@ -1947,7 +1947,7 @@ void KSpreadUndoCellPaste::undo()
                 for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
                         {
                         RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
-                        rw->setHeight((*it2).rowHeight);
+                        rw->setHeight(int((*it2).rowHeight));
                         }
                 }
         else
@@ -1997,7 +1997,7 @@ void KSpreadUndoCellPaste::redo()
          for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
                 {
                 ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
-                cl->setWidth((*it2).columnWidth);
+                cl->setWidth(int((*it2).columnWidth));
                 }
 
     }
@@ -2016,7 +2016,7 @@ void KSpreadUndoCellPaste::redo()
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
                 {
                 RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
-                 rw->setHeight((*it2).rowHeight);
+                 rw->setHeight(int((*it2).rowHeight));
                  }
     }
     else
@@ -2070,7 +2070,7 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
         int col = c->column();
         if ( m_selection.left() <= col && m_selection.right() >= col
         &&!c->isObscuringForced())
-        {	  
+        {
 	  styleCell tmpStyleCell;
 	  tmpStyleCell.row=c->row();
 	  tmpStyleCell.col=c->column();
@@ -2145,7 +2145,7 @@ void KSpreadUndoStyleCell::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-      
+
     QValueList<styleCell>::Iterator it2;
     for ( it2 = m_lstRedoStyleCell.begin(); it2 != m_lstRedoStyleCell.end(); ++it2 )
       {

@@ -445,16 +445,15 @@ void KSpreadDlgValidity::OkPressed()
 {
 if( chooseType->currentItem()==1)
         {
-        QString tmp;
         bool ok;
-        tmp=val_min->text().toDouble(&ok);
+        val_min->text().toDouble(&ok);
         if(! ok)
                 {
                 KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
                 val_min->setText("");
                 return;
                 }
-        tmp=val_max->text().toDouble(&ok);
+        val_max->text().toDouble(&ok);
         if(! ok && choose->currentItem() >=5 )
                 {
                 KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
@@ -464,16 +463,15 @@ if( chooseType->currentItem()==1)
         }
 else if( chooseType->currentItem()==2 || chooseType->currentItem()==6)
         {
-        QString tmp;
         bool ok;
-        tmp=val_min->text().toInt(&ok);
+        val_min->text().toInt(&ok);
         if(! ok)
                 {
                 KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
                 val_min->setText("");
                 return;
                 }
-        tmp=val_max->text().toInt(&ok);
+        val_max->text().toInt(&ok);
         if(! ok && choose->currentItem() >=5 )
                 {
                 KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));

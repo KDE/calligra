@@ -64,7 +64,7 @@ public:
 
     // Go into edit mode (enable the buttons)
     void setEditMode( bool mode );
-    
+
     void showEditWidget(bool _show);
 public slots:
     void slotAbortEdit();
@@ -90,9 +90,9 @@ private:
  */
 class KSpreadCanvas : public QWidget
 {
-    friend KSpreadHBorder;
-    friend KSpreadVBorder;
-    friend KSpreadView;
+    friend class KSpreadHBorder;
+    friend class KSpreadVBorder;
+    friend class KSpreadView;
 
     Q_OBJECT
 public:

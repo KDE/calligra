@@ -181,7 +181,7 @@ private:
  */
 class KSpreadTable : public QObject
 {
-    friend KSpreadCell;
+    friend class KSpreadCell;
 
     Q_OBJECT
 public:

@@ -57,7 +57,7 @@ class QTimer;
 
 class KivioCanvas : public QWidget
 { Q_OBJECT
-friend KivioView;
+  friend class KivioView;
 public:
   KivioCanvas( QWidget*, KivioView*, KivioDoc*, ToolController*, QScrollBar*, QScrollBar*, KivioRuler*, KivioRuler* );
   ~KivioCanvas();

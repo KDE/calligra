@@ -35,7 +35,7 @@
         r = (QWidget*)r->child("widget");                                \
       if ( r && r->inherits(#WIDGET_TYPE) ) {                            \
         WIDGET_TYPE* b = static_cast<WIDGET_TYPE*>(r);                   \
-        b->##METHOD_NAME(VALUE);                                         \
+        b->METHOD_NAME(VALUE);                                         \
       }                                                                  \
     }                                                                    \
   }

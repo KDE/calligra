@@ -496,9 +496,9 @@ if( config->hasGroup("Parameters" ))
 	m_pDoc->setShowTabBar(config->readBoolEntry("Tabbar",true));
 
 	m_pDoc->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
-	
+
 	m_pDoc->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
-	
+
 	m_pDoc->setShowFormularBar(config->readBoolEntry("Formula bar",true));
 	}
 
@@ -516,7 +516,7 @@ if( config->hasGroup("KSpread Page Layout" ) )
     if( m_pDoc->isEmpty())
       {
 	m_pDoc->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1));
-	
+
 	m_pDoc->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0));
 	m_pDoc->setPaperUnit((KoUnit)config->readNumEntry("Default unit page",0));
       }
@@ -545,7 +545,7 @@ void KSpreadView::RecalcWorkBook(){
 	  tbl != 0L; tbl = m_pDoc->map()->nextTable() ){
       tbl->recalc(true);
     }
-    
+
     //    slotUpdateView( activeTable() );
 
 }
@@ -592,8 +592,8 @@ void KSpreadView::updateEditWidget()
     bool active=activeTable()->getShowFormular();
     m_alignLeft->setEnabled(!active);
     m_alignCenter->setEnabled(!active);
-    m_alignRight->setEnabled(!active); 
-    
+    m_alignRight->setEnabled(!active);
+
     m_toolbarLock = TRUE;
 
     KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
@@ -904,7 +904,7 @@ void KSpreadView::undo()
     m_pDoc->undo();
 
     updateEditWidget();
-    
+
     resultOfCalc();
 }
 
@@ -1354,7 +1354,7 @@ void KSpreadView::slotTableRemoved( KSpreadTable *_t )
 	    //now area name is used in formula
 	    //so you must recalc tables when remove areaname
 	    KSpreadTable *tbl;
-	    
+
 	    for ( tbl = doc()->map()->firstTable(); tbl != 0L; tbl = doc()->map()->nextTable() )
 	      {
 		tbl->refreshRemoveAreaName((*it).ref_name);
@@ -1620,7 +1620,7 @@ void KSpreadView::sortList()
 
 void KSpreadView::gotoCell()
 {
-  
+
   KSpreadGotoDlg dlg( this, "GotoCell" );
   dlg.exec();
 }
@@ -1749,7 +1749,7 @@ void KSpreadView::print( QPrinter &prt )
 	break;
       case PG_DIN_A5:
 	prt.setPageSize(QPrinter::A5);
-	break;	
+	break;
       case PG_US_LETTER:
 	prt.setPageSize(QPrinter::Letter);
 	break;
@@ -1991,7 +1991,7 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
                 return 0;
     }
 
-    QPoint pos2( pos.x() / zoom(), pos.y() / zoom() );
+    QPoint pos2( int(pos.x() / zoom()), int(pos.y() / zoom()) );
 
     QListIterator<KoDocumentChild> it( m_pDoc->children() );
     for (; it.current(); ++it )
@@ -2033,7 +2033,7 @@ void KSpreadView::refreshView()
     bool active=activeTable()->getShowFormular();
     m_alignLeft->setEnabled(!active);
     m_alignCenter->setEnabled(!active);
-    m_alignRight->setEnabled(!active); 
+    m_alignRight->setEnabled(!active);
     active=m_pDoc->getShowFormularBar();
     editWidget()->showEditWidget(active);
     int posFrame=30;
@@ -2044,14 +2044,14 @@ void KSpreadView::refreshView()
       posWidget()->hide();
       posFrame=0;
       }
-    
+
     m_pToolWidget->show();
     // If this value (30) is changed then topBorder() needs to
     // be changed, too.
     m_pToolWidget->setGeometry( 0, 0, width(), /*30*/posFrame );
     int top = /*30*/posFrame;
 
-    
+
 
     if(m_pDoc->getShowTabBar())
       {
@@ -2297,10 +2297,10 @@ void KSpreadView::slotListChoosePopupMenu( )
 	     if(itemList.findIndex(c->text())==-1)
 	       itemList.append(c->text());
 	   }
-	   
+
        }
    }
- for ( QStringList::Iterator it = itemList.begin(); it != itemList.end();++it ) 
+ for ( QStringList::Iterator it = itemList.begin(); it != itemList.end();++it )
    m_popupListChoose->insertItem( (*it), id++ );
 
  if(id==0)
@@ -2321,10 +2321,10 @@ void KSpreadView::slotListChoosePopupMenu( )
 }
 
 
-void KSpreadView::slotItemSelected( int id) 
+void KSpreadView::slotItemSelected( int id)
 {
   QString tmp=m_popupListChoose->text(id);
-  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );  
+  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
 
   if(tmp==cell->text())
     return;
@@ -2335,13 +2335,13 @@ void KSpreadView::slotItemSelected( int id)
       m_pTable->insertCell(cell);
     }
 
- 
+
   if ( !m_pDoc->undoBuffer()->isLocked() )
     {
       KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, cell->text(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
-  
+
   cell->setCellText( tmp, true );
   editWidget()->setText( tmp );
 }
@@ -2379,7 +2379,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
       m_insertCell->plug( m_pPopupMenu );
       m_removeCell->plug( m_pPopupMenu );
     }
-    
+
 
 
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
@@ -2390,7 +2390,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
         m_removeComment->plug( m_pPopupMenu );
     }
 
-    
+
     if(activeTable()->testListChoose(QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow())))
       {
 	m_pPopupMenu->insertSeparator();
@@ -2977,8 +2977,8 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
         m_resizeColumn->setEnabled(true);
         m_equalizeColumn->setEnabled(true);
         }
-   
-    
+
+
     resultOfCalc();
     // Send some event around. This is read for example
     // by the calculator plugin.
@@ -3002,7 +3002,7 @@ QRect n = activeTable()->selectionRect();
  QRect tmpRect(n);
  if(n.left()==0)
    tmpRect.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),
-		      m_pCanvas->markerColumn(), m_pCanvas->markerRow()); 
+		      m_pCanvas->markerColumn(), m_pCanvas->markerRow());
  MethodOfCalc tmpMethod=m_pDoc->getTypeOfCalc() ;
 if(tmpRect.bottom()==0x7FFF)
    {
@@ -3018,10 +3018,10 @@ if(tmpRect.bottom()==0x7FFF)
 		 switch(tmpMethod)
 		   {
 		   case Sum:
-		     result+=c->valueDouble();		 
+		     result+=c->valueDouble();
 		     break;
 		   case Average:
-		     result+=c->valueDouble();	
+		     result+=c->valueDouble();
 		     break;
 		   case Min:
 		     if(result!=0)
@@ -3059,10 +3059,10 @@ if(tmpRect.bottom()==0x7FFF)
 		 switch(tmpMethod )
 		   {
 		   case Sum:
-		     result+=c->valueDouble();		 
+		     result+=c->valueDouble();
 		     break;
 		   case Average:
-		     result+=c->valueDouble();	
+		     result+=c->valueDouble();
 		     break;
 		   case Min:
 		     if(result!=0)
@@ -3082,7 +3082,7 @@ if(tmpRect.bottom()==0x7FFF)
 		     break;
 		   }
 		 nbCell++;
-	       }	
+	       }
 	   }
        }
    }
@@ -3097,10 +3097,10 @@ if(tmpRect.bottom()==0x7FFF)
 		 switch(tmpMethod )
 		   {
 		   case Sum:
-		     result+=cell->valueDouble();		 
+		     result+=cell->valueDouble();
 		     break;
 		   case Average:
-		     result+=cell->valueDouble();	
+		     result+=cell->valueDouble();
 		     break;
 		   case Min:
 		     if(result!=0)
@@ -3120,18 +3120,18 @@ if(tmpRect.bottom()==0x7FFF)
 		     break;
 		   }
 		 nbCell++;
-	       }	      
+	       }
 	 }
    }
  QString tmp;
  switch(tmpMethod )
    {
    case Sum:
-     tmp=i18n(" Sum: %1").arg(result);		 
+     tmp=i18n(" Sum: %1").arg(result);
      break;
    case Average:
      result=result/nbCell;
-     tmp=i18n("Average: %1").arg(result);	
+     tmp=i18n("Average: %1").arg(result);
      break;
    case Min:
      tmp=i18n("Min: %1").arg(result);
@@ -3143,8 +3143,8 @@ if(tmpRect.bottom()==0x7FFF)
      tmp=i18n("Count: %1").arg(nbCell);
      break;
    }
-	 
-	 
+
+
  KoMainWindow * tmpKo = m_pDoc->firstShell();
  for ( ; tmpKo ; tmpKo = m_pDoc->nextShell() )
    tmpKo->statusBarLabel()->setText(tmp);

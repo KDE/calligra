@@ -77,7 +77,7 @@ class TKUnitsAction;
 
 class KivioView : public KoView
 { Q_OBJECT
-friend KivioCanvas;
+  friend class KivioCanvas;
 public:
   KivioView( QWidget *_parent, const char *_name, KivioDoc *_doc );
   ~KivioView();
