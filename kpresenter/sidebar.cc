@@ -238,7 +238,7 @@ void ThumbBar::rebuildItems()
 
     clear();
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
-        ThumbItem *item = new ThumbItem(dynamic_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
+        ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
         item->setDragEnabled(false);  //no dragging for now
     }
 
@@ -264,7 +264,7 @@ kdDebug(33001) << "visible page = " << it->text().toInt() << endl;
         if ( ! dynamic_cast<ThumbItem *>(it)->isUptodate( ) ){
             //todo refresh picture
             it->setPixmap( getSlideThumb( it->text().toInt() - 1 ) );
-            dynamic_cast<ThumbItem *>(it)->setUptodate( true );
+            static_cast<ThumbItem *>(it)->setUptodate( true );
         }
 
         if ( it == findLastVisibleItem( vRect ) )
@@ -331,14 +331,14 @@ void ThumbBar::addItem( int pos )
         // find page which should move
         // do stuff because a item can not be insert at the beginning
         if ( pos == 0 && page == pos ){
-            ThumbItem *item = new ThumbItem(dynamic_cast<QIconView *>(this), it, QString::number(2), getSlideThumb(1));
+            ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), it, QString::number(2), getSlideThumb(1));
             item->setDragEnabled(false);  //no dragging for now
             it->setPixmap(getSlideThumb( 0 ));
             // move on to next item as we have inserted one
             it = it->nextItem();
         }
         else if ( (page + 1) == pos ) {
-            ThumbItem *item = new ThumbItem(dynamic_cast<QIconView *>(this), it, QString::number(pos+1), getSlideThumb(pos));
+            ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), it, QString::number(pos+1), getSlideThumb(pos));
             item->setDragEnabled(false);  //no dragging for now
             it = it->nextItem();
         }
@@ -539,7 +539,7 @@ void Outline::updateItem( int pagenr /* 0-based */)
     kdWarning() << "Item for page " << pagenr << " not found" << endl;
 }
 
-void Outline::addItem( int pos )
+void Outline::addItem( int /*pos*/ )
 {
     kdDebug(33001)<< "Outline::addItem" << endl;
     // still use rebuildItems as I had no good idea to do it :-) tz
