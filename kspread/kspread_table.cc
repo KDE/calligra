@@ -1768,7 +1768,7 @@ bool KSpreadTable::shiftColumn( const QPoint& marker )
 void KSpreadTable::unshiftColumn( const QPoint& marker )
 {
     m_pDoc->setModified( true );
-
+    m_cells.remove(marker.x(),marker.y());
     m_cells.unshiftColumn( marker );
 
     QListIterator<KSpreadTable> it( map()->tableList() );
@@ -1782,7 +1782,7 @@ void KSpreadTable::unshiftColumn( const QPoint& marker )
 void KSpreadTable::unshiftRow( const QPoint& marker )
 {
     m_pDoc->setModified( true );
-
+    m_cells.remove(marker.x(),marker.y());
     m_cells.unshiftRow( marker );
 
     QListIterator<KSpreadTable> it( map()->tableList() );
