@@ -635,7 +635,7 @@ bool OOWriterWorker::doOpenBody(void)
     for ( it = m_nonInlinedPictureAnchors.begin(); it != m_nonInlinedPictureAnchors.end(); ++it )
     {
         *m_streamOut << "  ";
-        makePicture( *it, true ); // ### PROVISORY as as-char anchor
+        makePicture( *it, AnchorNonInlined );
         *m_streamOut << "\n";
     }
     kdDebug(30520) << "=== Non-inlined pictures processed ===" << endl;
@@ -645,7 +645,7 @@ bool OOWriterWorker::doOpenBody(void)
     for ( it = m_nonInlinedTableAnchors.begin(); it != m_nonInlinedTableAnchors.end(); ++it )
     {
         *m_streamOut << "  ";
-        makeTable( *it ); // ### PROVISORY as as-char anchor
+        makeTable( *it, AnchorNonInlined );
         *m_streamOut << "\n";
     }
     kdDebug(30520) << "=== Non-inlined tables processed ===" << endl;
@@ -1232,7 +1232,7 @@ static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widt
 }
 #endif
 
-bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
+bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anchorType )
 {
 #ifdef ALLOW_TABLE
 
@@ -1287,7 +1287,16 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     // An inlined table, is an "as-char" text-box
     *m_streamOut << "<draw:text-box";
     *m_streamOut << " style:name=\"" << escapeOOText( automaticFrameStyle ) << "\"";
-    *m_streamOut << " draw:name=\"" << escapeOOText( translatedFrameName ) << "\" text:anchor-type=\"as-char\"";
+    *m_streamOut << " draw:name=\"" << escapeOOText( translatedFrameName ) << "\"";
+    if ( anchorType == AnchorNonInlined )
+    {
+        // ### TODO: correctly set a OOWriter frame positioned on the page
+        *m_streamOut << " text:anchor-type=\"paragraph\"";
+    }
+    else
+    {
+        *m_streamOut << " text:anchor-type=\"as-char\"";
+    }
     *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
     //*m_streamOut << " fo:min-height=\"1pt\"";// ### TODO: a better height (can be calulated from the KWord table frames)
     *m_streamOut << ">\n";
@@ -1363,7 +1372,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     return true;
 }
 
-bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameSize)
+bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType anchorType )
 {
     kdDebug(30518) << "New picture: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key.toString() << endl;
@@ -1420,14 +1429,9 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameS
     double height = 0.0;
     double width = 0.0;
 
-    if ( useFrameSize )
+    if ( anchorType == AnchorTextImage )
     {
-        height=anchor.frame.bottom - anchor.frame.top;
-        width =anchor.frame.right  - anchor.frame.left;
-    }
-    else
-    {
-        // We need to load the picture to get its size
+        // Text image have no frameset, so the only size information is in the picture itself.
         QBuffer buffer( image.copy() ); // Be more safe than sorry and do not allow shallow copy
         KoPicture pic;
         buffer.open( IO_ReadOnly );
@@ -1442,6 +1446,12 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameS
             kdWarning(30518) << "Could not load KoPicture: " << koStoreName << endl;
         }
         buffer.close();
+    }
+    else
+    {
+        // Use frame size
+        height=anchor.frame.bottom - anchor.frame.top;
+        width =anchor.frame.right  - anchor.frame.left;
     }
 
     if ( height < 1.0 )
@@ -1472,11 +1482,15 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameS
     // TODO:  (bad if there are two images of the same name, but of a different key)
     *m_streamOut << "<draw:image draw:name=\"" << anchor.picture.key.filename() << "\"";
     *m_streamOut << " draw:style-name=\"Graphics\""; // ### TODO: should be an automatic "graphic" style name instead
-#if 1
-    *m_streamOut << " text:anchor-type=\"as-char\"";
-#else
-    *m_streamOut << " text:anchor-type=\"paragraph\"";
-#endif
+    if ( anchorType == AnchorNonInlined ) 
+    {
+        // ### TODO: correctly set a OOWriter frame positioned on the page
+        *m_streamOut << " text:anchor-type=\"paragraph\"";
+    }
+    else
+    {
+        *m_streamOut << " text:anchor-type=\"as-char\"";
+    }
     *m_streamOut << " svg:height=\"" << height << "pt\" svg:width=\"" << width << "pt\"";
     *m_streamOut << " draw:z-index=\"0\" xlink:href=\"#" << ooName << "\"";
     *m_streamOut << " xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"";
@@ -1679,11 +1693,11 @@ void OOWriterWorker::processAnchor ( const QString&,
     if ( (2==formatData.frameAnchor.type) // <IMAGE> or <PICTURE>
         || (5==formatData.frameAnchor.type) ) // <CLIPART>
     {
-        makePicture(formatData.frameAnchor, true);
+        makePicture( formatData.frameAnchor, AnchorInlined );
     }
     else if (6==formatData.frameAnchor.type)
     {
-        makeTable(formatData.frameAnchor);
+        makeTable( formatData.frameAnchor, AnchorInlined );
     }
     else
     {
@@ -1697,7 +1711,7 @@ void OOWriterWorker::processTextImage ( const QString&,
     const FormatData& formatData)
 {
     kdDebug(30518) << "Text Image: " << formatData.frameAnchor.key.toString() << endl;
-    makePicture(formatData.frameAnchor, false);
+    makePicture( formatData.frameAnchor, AnchorTextImage );
 }
 
 void OOWriterWorker::processParagraphData ( const QString &paraText,

@@ -1,7 +1,7 @@
 //
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -55,6 +55,15 @@ public:
     OOWriterWorker(void);
     virtual ~OOWriterWorker(void) { delete m_streamOut; }
 public:
+    /// What is the type of the frameset anchor
+    enum AnchorType
+    {
+        AnchorUnknown = 0, // ### TODO: is this really needed?
+        AnchorInlined, ///< The frameset is inlined
+        AnchorNonInlined, ///< the frameset is not inlined
+        AnchorTextImage ///< This is a text image (KWord 0.8; inlined; only for pictures)
+    };
+public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); ///< Close file in normal conditions
     virtual bool doOpenDocument(void);
@@ -97,8 +106,8 @@ private:
     QString escapeOOSpan(const QString& strText) const;
     QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const;
     bool makeTableRows( const QString& tableName, const Table& table, int firstRowNumber );
-    bool makeTable(const FrameAnchor& anchor);
-    bool makePicture(const FrameAnchor& anchor, const bool useFrameSize);
+    bool makeTable( const FrameAnchor& anchor, const AnchorType anchorType );
+    bool makePicture( const FrameAnchor& anchor, const AnchorType anchorType );
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void declareFont(const QString& fontName);
     void writeFontDeclaration(void);
