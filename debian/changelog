@@ -1,3 +1,32 @@
+koffice (1:1.2.1-2) unstable; urgency=low
+
+  * First KDE3 upload to debian (closes: #162433).
+  * KSpread printing improved (closes: #106472).
+  * Tables no longer crash kword (closes: #111356).
+  * Better import filters for kword (closes: #113347, #143480, #148986).
+  * Search/replace in kword no longer causes infinite loop (closes: #113872).
+  * KWord frame breaks work in multi-column mode (closes: #114538).
+  * View footer no longer segfaults kword (closes: #115741).
+  * SUM() and sum() now the same in kspread (closes: #122578).
+  * Better import filters for kpresenter (closes: #129080, #129188).
+  * Kontour no longer supports embedded formulae (closes: #130715).
+  * Pasting text into kspread no longer appends garbage (closes: #132055).
+  * Better import filters for kspread (closes: #132562, #145281).
+  * KChart no longer segfaults when editing data (closes: #135983).
+  * KSpread no longer crashes on numeric overflow (closes: #136277).
+  * White text being edited is visible in kpresenter (closes: #136858).
+  * PDF output from kword improved (closes: #137085, #144450).
+  * KPresenter no longer crashes from right mouse clicks (closes: #137389).
+  * Images now included when copying and pasting pages between kpresenter
+    instances (closes: #138048).
+  * Change angle in kspread undoes properly (closes: #138224).
+  * Custom delimiters in kspread text imports now work (closes: #139478).
+  * KWord treats tabs correctly for justified paragraphs (closes: #139525).
+  * Save and search use different key bindings in kpresenter (closes: #141664).
+  * Fixed kpresenter manpage directory (closes: #156343).
+
+ -- Ben Burton <bab@debian.org>  Sun,  2 Feb 2003 19:40:16 +1100
+
 koffice (1:1.2.1-1) unstable; urgency=low
 
   * New upstream release.
