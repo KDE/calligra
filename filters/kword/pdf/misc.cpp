@@ -32,26 +32,6 @@
 namespace PDFImport
 {
 
-double toPoint(double mm)
-{
-    return mm * 72 / 25.4;
-}
-
-bool equal(double d1, double d2, double delta)
-{
-    return ( fabs(d1 - d2)<delta );
-}
-
-bool more(double d1, double d2, double delta)
-{
-    return ( d1>(d2+delta) );
-}
-
-bool less(double d1, double d2, double delta)
-{
-    return ( d1<(d2+delta) );
-}
-
 QColor toColor(GfxRGB &rgb)
 {
     return QColor(qRound(rgb.r*255), qRound(rgb.g*255), qRound(rgb.b*255));
@@ -145,7 +125,7 @@ FilterData::FilterData(KoFilterChain *chain, const DRect &pageRect,
     _mainElement.appendChild(_framesets);
 
     // main text frameset
-    _mainTextFrameset = createFrameset(Text, _pageRect);
+    _mainTextFrameset = createFrameset(Text);
     _pageIndex = 0;
 
     // standard style
@@ -156,7 +136,8 @@ FilterData::FilterData(KoFilterChain *chain, const DRect &pageRect,
     styles.appendChild(style);
 
     element = _document.createElement("FORMAT");
-    FilterFont::defaultFont->format(_document, element, 0, 0, true);
+    FilterFont font;
+    font.format(_document, element, 0, 0, true);
     style.appendChild(element);
 
     element = _document.createElement("NAME");
@@ -185,10 +166,13 @@ void FilterData::checkTextFrameset()
 
 QDomElement FilterData::pictureFrameset(const DRect &r)
 {
-    return createFrameset(Picture, r);
+    QDomElement frameset = createFrameset(Picture);
+    QDomElement frame = createFrame(Picture, r, false);
+    frameset.appendChild(frame);
+    return frameset;
 }
 
-QDomElement FilterData::createFrameset(FramesetType type, const DRect &r)
+QDomElement FilterData::createFrameset(FramesetType type)
 {
     bool text = (type==Text);
     uint &index = (text ? _textIndex : _imageIndex);
@@ -201,24 +185,32 @@ QDomElement FilterData::createFrameset(FramesetType type, const DRect &r)
     frameset.setAttribute("frameInfo", 0);
     _framesetList.append(frameset);
 
-    QDomElement frame = _document.createElement("FRAME");
-    if (text) frame.setAttribute("autoCreateNewFrame", (index==1 ? 1 : 0));
-    frame.setAttribute("newFrameBehavior", (text && index==1 ? 0 : 1));
-    frame.setAttribute("runaround", 0);
-    frame.setAttribute("left", r.left);
-    frame.setAttribute("right", r.right);
-    double offset = (_pageIndex-1) * _pageRect.height();
-    frame.setAttribute("top", r.top + offset);
-    frame.setAttribute("bottom", r.bottom + offset);
-    if ( text && index>1 ) frame.setAttribute("bkStyle", 0);
-    frameset.appendChild(frame);
-
     if (text) _textFrameset = frameset;
     _needNewTextFrameset = !text;
     kdDebug(30516) << "new frameset " << index << (text ? " text" : " image")
                    << endl;
     index++;
     return frameset;
+}
+
+QDomElement FilterData::createFrame(FramesetType type, const DRect &r,
+                                    bool forceMainFrameset)
+{
+    bool text = (type==Text);
+    bool mainFrameset =
+        (text ? (forceMainFrameset ? true : _textIndex==1) : false);
+
+    QDomElement frame = _document.createElement("FRAME");
+    if (text) frame.setAttribute("autoCreateNewFrame", (mainFrameset ? 1 : 0));
+    frame.setAttribute("newFrameBehavior", (mainFrameset ? 0 : 1));
+    frame.setAttribute("runaround", 0);
+    frame.setAttribute("left", r.left);
+    frame.setAttribute("right", r.right);
+    double offset = (_pageIndex-1) * _pageRect.height();
+    frame.setAttribute("top", r.top + offset);
+    frame.setAttribute("bottom", r.bottom + offset);
+    if ( text && !mainFrameset ) frame.setAttribute("bkStyle", 0);
+    return frame;
 }
 
 void FilterData::startPage()
@@ -232,6 +224,8 @@ void FilterData::startPage()
         _lastMainLayout.appendChild(element);
     }
     _lastMainLayout = QDomElement();
+    QDomElement frame = createFrame(Text, _pageRect, true);
+    _mainTextFrameset.appendChild(frame);
 }
 
 void FilterData::endPage()
@@ -272,88 +266,126 @@ QDomElement FilterData::createParagraph(const QString &text,
 }
 
 //-----------------------------------------------------------------------------
-FilterFont *FilterFont::defaultFont = 0;
-const char *FilterFont::FAMILY_DATA[FilterFont::Nb_Family] = {
+QDict<FilterFont::Data> *FilterFont::_dict = 0;
+const char *FilterFont::FAMILY_DATA[Nb_Family] = {
     "Times", "Helvetica", "Courier", "Symbol"
 };
 
-FilterFont::FilterFont(const QString &name, uint size, const QColor &color)
-    : _name(name), _color(color), _latex(false)
+void FilterFont::init()
 {
-    struct Data {
-        const char *regexp;
-        Family family;
-        bool italic, bold, latex;
-    };
-    static const Data DATA[] = {
-        // standard XPDF fonts
-        { "^Times-Roman$",           Times,       false, false, false },
-        { "^Times-Bold$",            Times,       false, true,  false },
-        { "^Times-Oblique$",         Times,       true,  false, false },
-        { "^Times-BoldOblique$",     Times,       true,  true,  false },
-        { "^Helvetica$",             Helvetica,   false, false, false },
-        { "^Helvetica-Bold$",        Helvetica,   false, true,  false },
-        { "^Helvetica-Oblique$",     Helvetica,   true,  false, false },
-        { "^Helvetica-BoldOblique$", Helvetica,   true,  true,  false },
-        { "^Courier$",               Courier,     false, false, false },
-        { "^Courier-Bold$",          Courier,     false, true,  false },
-        { "^Courier-Oblique$",       Courier,     true,  false, false },
-        { "^Courier-BoldOblique$",   Courier,     true,  true,  false },
-        { "^Symbol$",                Symbol,      false, false, false },
+    Q_ASSERT( _dict==0 );
+    _dict = new QDict<Data>(100, false); // case insensitive
+    _dict->setAutoDelete(true);
+}
 
-        // some latex fonts
-        { "\\w*\\+CMR\\d+$",         Times,       false, false, true  },
-        { "\\w*\\+CMBX\\d+$",        Times,       false, true,  true  }, // X ?
-        { "\\w*\\+CMCSC\\d+$",       Times,       false, false, true  }, // sc
-        { "\\w*\\+CMTT\\d+$",        Courier,     false, false, true  },
-        { "\\w*\\+CMSY\\d+$",        Symbol,      false, false, true  },
+void FilterFont::cleanup()
+{
+    delete _dict;
+    _dict = 0;
+}
 
-        { 0,                         Nb_Family,   false, false, false }
-    };
+FilterFont::FilterFont(const QString &name, uint size, const QColor &color)
+    : _pointSize(size), _color(color)
+{
+    init(name);
+}
 
-    QString family;
-    bool italic, bold;
-    QRegExp re;
-    uint i = 0;
-    while ( DATA[i].regexp!=0 ) {
-        re.setPattern(DATA[i].regexp);
-        if ( re.exactMatch(name) ) {
-            family = FAMILY_DATA[DATA[i].family];
-            _latex = DATA[i].latex;
-            italic = DATA[i].italic;
-            bold = DATA[i].bold;
-            break;
+struct KnownData {
+    const char *name;
+    FontFamily family;
+    FontStyle  style;
+    bool   latex;
+};
+static const KnownData KNOWN_DATA[] = {
+    // standard XPDF fonts
+    { "times-roman",           Times,       Regular,    false },
+    { "times-bold",            Times,       Bold,       false },
+    { "times-italic",          Times,       Italic,     false },
+    { "times-bolditalic",      Times,       BoldItalic, false },
+    { "helvetica",             Helvetica,   Regular,    false },
+    { "helvetica-bold",        Helvetica,   Bold,       false },
+    { "helvetica-italic",      Times,       Italic,     false },
+    { "helvetica-bolditalic",  Helvetica,   BoldItalic, false },
+    { "courier",               Courier,     Regular,    false },
+    { "courier-bold",          Courier,     Bold,       false },
+    { "courier-italic",        Courier,     Italic,     false },
+    { "courier-bolditalic",    Courier,     BoldItalic, false },
+    { "symbol",                Symbol,      Regular,    false },
+
+    // some latex fonts
+    { "+cmr",                  Times,       Regular,    true  },
+    { "+cmbx",                 Times,       Bold,       true  },
+    { "+cmcsc",                Times,       Regular,    true  }, // small caps
+    { "+cmmi",                 Times,       Italic,     true  },
+    { "+cmtt",                 Courier,     Regular,    true  },
+    { "+cmsy",                 Symbol,      Regular,    true  },
+    { "+msbm",                 Times,       Regular,    true  }, // math caps
+
+    { 0,                       Nb_Family,   Regular,    false }
+};
+
+void FilterFont::init(const QString &n)
+{
+    // check if font already parsed
+    _data = _dict->find(n);
+    if ( _data==0 ) {
+        // replace "Oblique" by "Italic"
+        QString name = n.lower();
+        name.replace("oblique", "italic");
+
+        // check if known font
+        _data = new Data;
+        uint i = 0;
+        while ( KNOWN_DATA[i].name!=0 ) {
+            if ( name.find(KNOWN_DATA[i].name)!=-1 ) {
+                _data->family = FAMILY_DATA[KNOWN_DATA[i].family];
+                _data->style = KNOWN_DATA[i].style;
+                _data->latex = KNOWN_DATA[i].latex;
+                break;
+            }
+            i++;
         }
-        i++;
+
+        if ( _data->family.isEmpty() ) { // let's try harder
+            kdDebug(30516) << "unknown font : " << n << endl;
+            if ( name.find("times")!=-1 )
+            _data->family = FAMILY_DATA[Times];
+            else if ( name.find("helvetica")!=-1 )
+                _data->family = FAMILY_DATA[Helvetica];
+            else if ( name.find("courier")!=-1 )
+                _data->family = FAMILY_DATA[Courier];
+            else if ( name.find("symbol")!=-1 )
+                _data->family = FAMILY_DATA[Symbol];
+            else {
+                kdDebug(30516) << "really unknown font !" << endl;
+                _data->family = name;
+            }
+
+            bool italic = ( name.find("italic")!=-1 );
+            bool bold = ( name.find("bold")!=-1 );
+            _data->style = toStyle(bold, italic);
+            _data->latex = false;
+        }
+
+        _dict->insert(name, _data);
     }
-    if ( family.isEmpty() ) { // let's try harder
-        kdDebug(30516) << "unknown font name=" << name << endl;
-        if ( name.contains("times", false) ) family = "Times";
-        else if ( name.contains("helvetica", false) ) family = "Helvetica";
-        else if ( name.contains("courier", false) ) family = "Courier";
-        else if ( name.contains("symbol", false) ) family = "Symbol";
-        else family = name;
 
-        italic = ( name.contains("oblique", false) ||
-                   name.contains("italic", false) );
-        bold = name.contains("bold", false);
+    // check if QFont already created
+    if ( _data->fonts[_pointSize]==0 ) {
+        QFont *font = new QFont(_data->family, _pointSize,
+                          (isBold(_data->style) ? QFont::Bold : QFont::Normal),
+                          isItalic(_data->style));
+        _data->fonts.insert(_pointSize, font);
     }
-
-//    if (_latex)
-//        kdDebug(30516) << "latex font name=" << name << endl;
-
-    _font = QFont(family, size, (bold ? QFont::Bold : QFont::Normal), italic);
 }
 
 bool FilterFont::operator ==(const FilterFont &font) const
 {
-    if ( _name!=font._name ) return false;
-    if ( _font.family()!=font._font.family() ) return false;
-    if ( _font.pointSize()!=font._font.pointSize() ) return false;
-    if ( _font.italic()!=font._font.italic() ) return false;
-    if ( _font.weight()!=font._font.weight() ) return false;
-    if ( _font.underline()!=font._font.underline() ) return false;
-    if ( _font.strikeOut()!=font._font.strikeOut() ) return false;
+    if ( _pointSize!=font._pointSize ) return false;
+    if ( _data->family!=font._data->family ) return false;
+    if ( _data->style!=font._data->style ) return false;
+//    if ( _underline!=font._underline ) return false;
+//    if ( _strikeOut!=font._strikeOut ) return false;
     if ( _color!=font._color ) return false;
     return true;
 }
@@ -366,45 +398,47 @@ bool FilterFont::format(QDomDocument &doc, QDomElement &f,
     if (!all) f.setAttribute("len", len);
 
     QDomElement element;
+    FilterFont def;
 
-    if ( all || _font.family()!=defaultFont->_font.family() ) {
+    if ( all || _data->family!=def._data->family ) {
         element = doc.createElement("FONT");
-        element.setAttribute("name", _font.family());
+        element.setAttribute("name", _data->family);
         f.appendChild(element);
     }
-    if ( all || _font.pointSize()!=defaultFont->_font.pointSize() ) {
+    if ( all || _pointSize!=def._pointSize ) {
         element = doc.createElement("SIZE");
-        element.setAttribute("value", _font.pointSize());
+        element.setAttribute("value", _pointSize);
         f.appendChild(element);
     }
-    if ( all || _font.italic()!=defaultFont->_font.italic() ) {
+    if ( all || isItalic(_data->style)!=isItalic(def._data->style) ) {
         element = doc.createElement("ITALIC");
-        element.setAttribute("value", (_font.italic() ? 1 : 0));
+        element.setAttribute("value", (isItalic(_data->style) ? 1 : 0));
         f.appendChild(element);
     }
-    if ( all || _font.weight()!=defaultFont->_font.weight() ) {
+    if ( all || isBold(_data->style)!=isBold(def._data->style) ) {
         element = doc.createElement("WEIGHT");
-        element.setAttribute("value", _font.weight());
+        element.setAttribute("value",
+                         (isBold(_data->style) ? QFont::Bold : QFont::Normal));
         f.appendChild(element);
     }
-    if ( all || _font.underline()!=defaultFont->_font.underline() ) {
-        element = doc.createElement("UNDERLINE");
-        element.setAttribute("value", (_font.underline() ? 1 : 0));
-        f.appendChild(element);
-    }
-    if ( all || _font.strikeOut()!=defaultFont->_font.strikeOut() ) {
-        element = doc.createElement("STRIKEOUT");
-        element.setAttribute("value", (_font.strikeOut() ? 1 : 0));
-        f.appendChild(element);
-    }
+//    if ( all || _underline!=def._underline ) {
+//        element = doc.createElement("UNDERLINE");
+//        element.setAttribute("value", (_underline ? 1 : 0));
+//        f.appendChild(element);
+//    }
+//    if ( all || _strikeOut!=def._strikeOut ) {
+//        element = doc.createElement("STRIKEOUT");
+//        element.setAttribute("value", (_strikeOut ? 1 : 0));
+//        f.appendChild(element);
+//    }
+
     if (all) {
         element = doc.createElement("VERTALIGN");
         element.setAttribute("value", 0);
         f.appendChild(element);
     }
 
-
-    if ( all || _color!=defaultFont->_color ) {
+    if ( all || _color!=def._color ) {
         element = doc.createElement("COLOR");
         element.setAttribute("red", _color.red());
         element.setAttribute("green", _color.green());
@@ -423,10 +457,30 @@ bool FilterFont::format(QDomDocument &doc, QDomElement &f,
     return f.hasChildNodes();
 }
 
+void FilterFont::setFamily(FontFamily f)
+{
+    int k = -1;
+    uint i=0;
+    while ( KNOWN_DATA[i].name!=0 ) {
+        if ( KNOWN_DATA[i].family==f ) {
+            if ( KNOWN_DATA[i].style==_data->style ) {
+                k = i;
+                break;
+            }
+            if ( k==-1 ) k = i;
+        }
+        i++;
+    }
+    if ( k==-1 ) k = 0;
+
+    init(KNOWN_DATA[k].name);
+}
+
 
 //-----------------------------------------------------------------------------
 FilterLink::FilterLink(double x1, double x2, double y1, double y2,
                        LinkAction &action, Catalog &catalog)
+    : _href("") // null string means not a link
 {
     _xMin = kMin(x1, x2);
     _xMax = kMax(x1, x2);
@@ -491,8 +545,16 @@ FilterLink::FilterLink(double x1, double x2, double y1, double y2,
     case actionMovie:
     case actionNamed:
     case actionUnknown:
+        kdDebug(30516) << "unsupported link=" << action.getKind() << endl;
         break;
     }
+}
+
+bool FilterLink::operator ==(const FilterLink &link) const
+{
+    if ( _href.isNull() && link._href.isNull() ) return true;
+    return ( _href==link._href && _xMin==link._xMin && _xMax==link._xMax
+             && _yMin==link._yMin && _yMax==link._yMax );
 }
 
 bool FilterLink::inside(double xMin, double xMax,

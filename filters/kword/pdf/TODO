@@ -1,0 +1,32 @@
+
+Small things:
+- find code for ligature 'ff' and find the other 3 ligatures.
+- check for underscores '_' drawn as a stroke by latex.
+- correctly detect and layout list bullets.
+- correctly detect soft hyphens.
+- correctly layout superscript characters.
+- complete "latexsymbol" conversion table.
+- complete accent+letter conversion table.
+- check below/above accent+letter combination.
+- check "..." and replace with appropriate symbol.
+
+Speed issues:
+- array for unicode characters conversion : done for first table (ie the
+  first 256 chars) ; need for other tables ?
+
+Bigger things:
+- fix height offset (by setting linespacing ?)
+- compute columns of text : compute main frame size with reasonnable
+  margins. Suppress uneeded line breaks. Use some kind of heuristic
+  on several pages and take care of right/left page...
+- detect if text is more or less centered.
+- correctly detect and layout superscript.
+- correctly detect and layout underline and strokeline.
+
+Hard things:
+- detect footnotes.
+- detect chapter title/numbering.
+- detect header/footer.
+
+GUI:
+- add option to (not) load images.

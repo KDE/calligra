@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
+ * Copyright (c) 2002-2003 Nicolas HADACEK (hadacek@kde.org)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +19,15 @@
 #ifndef MISC_H
 #define MISC_H
 
+#include <math.h>
+
 #include <qcolor.h>
 #include <qfont.h>
 #include <qdom.h>
 #include <qsize.h>
 #include <qvaluevector.h>
+#include <qdict.h>
+#include <qintdict.h>
 
 #include <koGlobal.h>
 
@@ -31,10 +35,29 @@ class GfxRGB;
 
 namespace PDFImport
 {
-    double toPoint(double mm);
-    bool equal(double d1, double d2, double delta = 0.1);
-    bool more(double d1, double d2, double delta = 0.1);
-    bool less(double d1, double d2, double delta = 0.1);
+    enum FontFamily { Times = 0, Helvetica, Courier, Symbol, Nb_Family };
+    enum FontStyle { Regular, Bold, Italic, BoldItalic };
+    inline FontStyle toStyle(bool bold, bool italic) {
+        return (bold ? (italic ? BoldItalic : Bold)
+                : (italic ? Italic : Regular) );
+    }
+    inline bool isItalic(FontStyle style) {
+        return (style==Italic || style==BoldItalic);
+    }
+    inline bool isBold(FontStyle style) {
+        return (style==Bold || style==BoldItalic);
+    }
+    //-------------------------------------------------------------------------
+    inline double toPoint(double mm) { return mm * 72 / 25.4; }
+    inline bool equal(double d1, double d2, double delta = 0.1) {
+        return ( fabs(d1 - d2)<delta );
+    }
+    inline bool more(double d1, double d2, double delta = 0.1) {
+        return ( d1>(d2+delta) );
+    }
+    inline bool less(double d1, double d2, double delta = 0.1) {
+        return ( d1<(d2+delta) );
+    }
     QColor toColor(GfxRGB &);
 
     //-------------------------------------------------------------------------
@@ -105,36 +128,50 @@ class FilterData
     FramesetList     _framesetList;
 
     enum FramesetType { Text, Picture };
-    QDomElement createFrameset(FramesetType, const PDFImport::DRect &);
+    QDomElement createFrameset(FramesetType);
+    QDomElement createFrame(FramesetType, const PDFImport::DRect &,
+                            bool forceMainFrameset);
 };
 
 //-----------------------------------------------------------------------------
 class FilterFont
 {
  public:
-    FilterFont(const QString &name = "Times-Roman", uint size = 12,
-               const QColor &color = Qt::black);
+    FilterFont(const QString &name = "Times-Roman",
+               uint size = 12, const QColor &color = Qt::black);
 
     bool operator ==(const FilterFont &) const;
     bool format(QDomDocument &, QDomElement &format, uint pos, uint len,
                 bool all = false) const;
-    const QFont &font() const { return _font; }
+    const QFont &font() const { return *_data->fonts[_pointSize]; }
     const QColor &color() const { return _color; }
-    bool isLatex() const { return _latex; }
-    bool isSymbol() const { return _font.family()==FAMILY_DATA[Symbol]; }
+    bool isLatex() const { return _data->latex; }
 
-    enum Family { Times = 0, Helvetica, Courier, Symbol, Nb_Family };
-    void setFamily(Family f) { _font.setFamily(FAMILY_DATA[f]); }
+    void setFamily(PDFImport::FontFamily);
 
-    static FilterFont *defaultFont;
+    static void init();
+    static void cleanup();
 
  private:
-    QString _name;
-    QFont   _font;
-    QColor  _color;
-    bool    _latex;
+    uint   _pointSize;
+    QColor _color;
 
-    static const char *FAMILY_DATA[Nb_Family];
+    class Data {
+    public:
+        Data() { fonts.setAutoDelete(true); }
+
+        QString family;
+        PDFImport::FontStyle   style;
+        bool    latex;
+        QIntDict<QFont> fonts;
+    };
+    Data *_data;
+
+    static QDict<Data> *_dict;
+    static const char *FAMILY_DATA[PDFImport::Nb_Family];
+
+ private:
+    void init(const QString &name);
 };
 
 //-----------------------------------------------------------------------------
@@ -144,12 +181,19 @@ class Catalog;
 class FilterLink
 {
  public:
+    FilterLink() {}
     FilterLink(double x1, double x2, double y1, double y2,
                LinkAction &, Catalog &);
 
+    bool operator ==(const FilterLink &) const;
+
+    bool isNull() const { return _href.isNull(); }
     bool inside(double xMin, double xMax, double yMin, double yMax) const;
     void format(QDomDocument &, QDomElement &format,
                 uint pos, const QString &text) const;
+
+ public:
+    QString text;
 
  private:
     double  _xMin, _yMin, _xMax, _yMax;

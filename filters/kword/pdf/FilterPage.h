@@ -24,20 +24,19 @@
 #include <qvaluevector.h>
 #include <qdom.h>
 
+#include "misc.h"
 
-class FilterFont;
-class FilterLink;
 
 //-----------------------------------------------------------------------------
 class FilterBlock
 {
  public:
-    FilterBlock() : link(0) {}
+    FilterBlock() : pos(0) {}
 
-    FilterFont *font;
-    FilterLink *link;
-    uint pos;
-    QString text, linkText;
+    FilterFont font;
+    FilterLink link;
+    uint       pos;
+    QString    text;
 };
 
 //-----------------------------------------------------------------------------
@@ -61,12 +60,11 @@ class FilterString : public TextString
  public:
     FilterString(GfxState *state, double x0, double y0,
                  double fontSize, uint frameIndex);
-    ~FilterString();
 
  private:
-    FilterFont *_font;
-    FilterLink *_link;
-    uint        _frameIndex;
+    FilterFont _font;
+    FilterLink _link;
+    uint       _frameIndex;
 
     void addChar(GfxState *state, double x, double y,
                  double dx, double dy, Unicode u);
@@ -87,16 +85,18 @@ class FilterPage : public TextPage
     void addString(TextString *);
     void endString();
     void dump();
-    void addLink(FilterLink *link) { _links.push_back(link); }
+    void addLink(const FilterLink &link) { _links.push_back(link); }
     void clear();
 
  private:
     FilterData &_data;
     bool        _empty;
     QValueVector<FilterParagraph> _pars;
-    QValueVector<FilterLink *>    _links;
+    QValueVector<FilterLink>      _links;
     FilterString *_lastStr;
 
+    static QChar checkSpecial(QChar, const FilterFont &,
+                              PDFImport::FontFamily &);
     void prepare();
 };
 

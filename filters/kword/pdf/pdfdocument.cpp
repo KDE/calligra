@@ -70,12 +70,12 @@ PdfDocument::PdfDocument(const QString &name, const QString &ownerPassword,
     }
 
     result = KoFilter::OK;
-    FilterFont::defaultFont = new FilterFont;
+    FilterFont::init();
 }
 
 PdfDocument::~PdfDocument()
 {
-    delete FilterFont::defaultFont;
+    FilterFont::cleanup();
     delete _device;
     delete _document;
     // _fileStream is deleted by PDFDoc

@@ -25,12 +25,26 @@
 namespace PDFImport
 {
     // check for special char
-    enum SpecialType { Normal, Ligature, Bullet, SuperScript, LatexSymbol };
-    SpecialType checkSpecial(Unicode, Unicode &res1, Unicode &res2);
+    enum CharType {
+        Unknown = 0,
+        Misc = 1, AlphaNumeric = 4, MiscSymbol = 5,
+
+        Accent = 6,         // can serve as accent (latex)
+        Hyphen = 7,         // can be an hyphen (can also be a bullet)
+        SuperScript = 8,
+        LatexSpecial = 9,   // special case of needed Symbol->Times mapping
+                            // only '\' (0x005C)
+        CanHaveAccent = 2,  // letter that can have an accent (latex)
+
+        SpecialSymbol = 10, // char exits but do Times->Symbol mapping
+        Bullet = 11         // can be a list bullet
+    };
+    bool checkLigature(Unicode, Unicode &res1, Unicode &res2);
+    CharType checkSpecial(Unicode, Unicode &res);
 
     // detect some letter/accent combinations
-    // (for e.g. latex layouts them separately)
-    bool checkAccent(Unicode letter, Unicode accent, Unicode &res);
+    // (latex layouts them separately)
+    Unicode checkCombi(Unicode letter, Unicode accent);
 };
 
 #endif

@@ -64,59 +64,28 @@ uint FilterParagraph::findNbTabs(uint i, double prevXMax) const {
 //-----------------------------------------------------------------------------
 FilterString::FilterString(GfxState *state, double x0, double y0,
                            double fontSize, uint frameIndex)
-    : TextString(state, x0, y0, fontSize), _link(0), _frameIndex(frameIndex)
+    : TextString(state, x0, y0, fontSize), _frameIndex(frameIndex)
 {
     GfxRGB rgb;
     state->getFillRGB(&rgb);
     GfxFont *font = state->getFont();
     GString *gname = (font ? font->getName() : 0);
     QString name = (gname ? gname->getCString() : 0);
-    _font = new FilterFont(name, qRound(fontSize), toColor(rgb));
-}
-
-FilterString::~FilterString()
-{
-    delete _font;
+    _font = FilterFont(name, qRound(fontSize), toColor(rgb));
 }
 
 void FilterString::addChar(GfxState *state, double x, double y,
                            double dx, double dy, Unicode u)
 {
     Unicode res1, res2;
-    switch ( checkSpecial(u, res1, res2) ) {
-    case Ligature:
+    if ( checkLigature(u, res1, res2) ) {
         kdDebug(30516) << "found ligature " << QString(QChar(res1))
                        << "+" << QString(QChar(res2)) << endl;
         TextString::addChar(state, x, y, dx/2, dy, res1);
         TextString::addChar(state, x+dx/2, y, dx/2, dy, res2);
-        break;
-    case Bullet: {
-        kdDebug(30516) << "found bullet" << endl;
-        // #### FIXME : if list, use a COUNTER
-        // temporarly replace by symbol
-        _font->setFamily(FilterFont::Symbol);
-        TextString::addChar(state, x, y, dx, dy, res1);
-        break;
-    }
-    case SuperScript:
-        kdDebug(30516) << "found superscript" << endl;
-        // #### FIXME
-        TextString::addChar(state, x, y, dx, dy, u);
-        break;
-    case LatexSymbol: {
-        if ( _font->isLatex() && _font->isSymbol() ) {
-            kdDebug(30516) << "found latex symbol" << endl;
-            // #### FIXME : we should separate the character from the rest
-            // of the string ....
-            _font->setFamily(FilterFont::Times);
-        }
-        TextString::addChar(state, x, y, dx, dy, u);
-        break;
-    }
-    case Normal:
+    } else {
         TextString::addChar(state, x, y, dx, dy, u);
         checkCombination(this);
-        break;
     }
 }
 
@@ -135,8 +104,8 @@ bool FilterString::checkCombination(TextString *str)
     letter.u = str->text[letter.i];
     accent.i = (str==this ? len-2 : len-1);
     accent.u = text[accent.i];
-    Unicode res;
-    if ( !checkAccent(letter.u, accent.u, res) ) return false;
+    Unicode res = checkCombi(letter.u, accent.u);
+    if ( res==0 ) return false;
 
     letter.min = (letter.i==0 ? str->xMin : str->xRight[letter.i-1]);
     letter.max = str->xRight[letter.i];
@@ -149,7 +118,7 @@ bool FilterString::checkCombination(TextString *str)
     // #### FIXME we should check for above or below accent !!!
     if ( more(letter.min, accent.min) || more(accent.max, letter.max) )
         return false;
-//    kdDebug(30516) << "  ...combi ok ! " << endl;
+    kdDebug(30516) << "  ...combi ok ! " << QString(QChar(res)) << endl;
 
     // replace accent by accented letter
     text[accent.i] = res;
@@ -187,8 +156,6 @@ void FilterPage::clear()
     TextPage::clear();
     _empty = true;
     _lastStr = 0;
-    for (uint i=0; i<_links.size(); i++)
-        delete _links[i];
     _links.resize(0);
     _pars.resize(0);
 }
@@ -221,13 +188,51 @@ void FilterPage::addString(TextString *str)
 {
 //    kdDebug(30516) << "addString..." << endl;
     if (_lastStr) _lastStr->checkCombination(str);
-//    kdDebug(30516) << "addmid" << endl;
     _lastStr = (str->len==0 ? 0 : static_cast<FilterString *>(str));
 //    QString s;
 //    for (int i=0; i<str->len; i++) s += QChar(str->text[i]);
 //    kdDebug(30516) << "string: " << s <<endl;
     TextPage::addString(str);
 //    kdDebug(30516) << " ...addString done" << endl;
+}
+
+QChar FilterPage::checkSpecial(QChar c, const FilterFont &font,
+                               FontFamily &family)
+{
+    family = Nb_Family;
+
+    Unicode res;
+    switch ( ::checkSpecial(c.unicode(), res) ) {
+    case Hyphen:
+        kdDebug(30516) << "found hyphen ?" << endl;
+        // #### FIXME : we should testlater if we are at line end, and
+        // if there is a letter just before, and if there is a letter on
+        // next line.
+        return 0x00AD;
+    case Bullet:
+        kdDebug(30516) << "found bullet" << endl;
+        // #### FIXME : if list, use a COUNTER
+        // temporarly replace by symbol
+        family = Symbol;
+        return res;
+    case SuperScript:
+        kdDebug(30516) << "found superscript" << endl;
+        // #### FIXME
+        break;
+    case LatexSpecial:
+        if ( !font.isLatex() ) break;
+        kdDebug(30516) << "found latex special" << endl;
+        family = Times;
+        return c;
+    case SpecialSymbol:
+        kdDebug(30516) << "found symbol=" << res << endl;
+        family = Symbol;
+        return res;
+    default:
+        break;
+    }
+
+    return c;
 }
 
 void FilterPage::prepare()
@@ -237,8 +242,8 @@ void FilterPage::prepare()
         for (TextLine *line = lines; line; line = line->next)
             for (TextBlock *blk = line->blocks; blk; blk = blk->next)
                 for (TextString *str = blk->strings; str; str = str->next)
-                    if ( _links[i]->inside(str->xMin, str->xMax, str->yMin,
-                                           str->yMax) )
+                    if ( _links[i].inside(str->xMin, str->xMax, str->yMin,
+                                          str->yMax) )
                         static_cast<FilterString *>(str)->_link = _links[i];
 
     // create paragraphs
@@ -326,18 +331,18 @@ void FilterPage::prepare()
                     b.pos = pos;
                     FilterString *fstr = static_cast<FilterString *>(str);
                     b.font = fstr->_font;
-                    if (fstr->_link) {
-                        b.text = '#';
-                        b.link = fstr->_link;
-                        b.linkText = tmp;
-                        pos++;
-                    } else {
+                    if ( fstr->_link.isNull() ) {
                         b.text = tmp;
                         pos += tmp.length();
+                    } else {
+                        b.text = '#';
+                        b.link = fstr->_link;
+                        b.link.text = tmp;
+                        pos++;
                     }
                     _pars[i].blocks.push_back(b);
 
-                    QFontMetrics fm( b.font->font() );
+                    QFontMetrics fm( b.font.font() );
                     lineHeight = kMax(lineHeight, fm.lineSpacing());
                 }
 
@@ -349,6 +354,48 @@ void FilterPage::prepare()
         }
     }
 
+    // check for special characters
+    for (uint i=0; i<_pars.size(); i++) {
+        uint inc = 0;
+        QValueVector<FilterBlock> blocks;
+        for (uint k=0; k<_pars[i].blocks.size(); k++) {
+            FilterBlock &b = _pars[i].blocks[k];
+            b.pos += inc;
+            const QString &s = (b.link.isNull() ? b.text : b.link.text);
+            QString res;
+            FontFamily family;
+            for (uint l=0; l<s.length(); l++) {
+                QChar c = checkSpecial(s[l], b.font, family);
+                if ( family==Nb_Family ) res += c;
+                else {
+                    if ( !res.isEmpty() ) {
+                        blocks.push_back(b);
+                        if ( b.link.isNull() ) {
+                            blocks.back().text = res;
+                            b.pos += res.length();
+                        } else {
+                            blocks.back().link.text = res;
+                            inc++;
+                            b.pos++;
+                        }
+                        res = "";
+                    }
+                    blocks.push_back(b);
+                    blocks.back().font.setFamily(family);
+                    if ( b.link.isNull() ) blocks.back().text = c;
+                    else blocks.back().link.text = c;
+                    b.pos++;
+                }
+            }
+            if ( !res.isEmpty() ) {
+                if ( b.link.isNull() ) b.text = res;
+                else b.link.text = res;
+                blocks.push_back(b);
+            }
+        }
+        _pars[i].blocks = blocks;
+    }
+
     // coalesce formats
     for (uint i=0; i<_pars.size(); i++) {
         uint dec = 0;
@@ -357,12 +404,12 @@ void FilterPage::prepare()
         for (uint k=1; k<_pars[i].blocks.size(); k++) {
             FilterBlock &b = _pars[i].blocks[k];
             b.pos -= dec;
-            if ( (b.link==blocks.back().link) &&
-                 (*b.font)==(*blocks.back().font) ) {
-                if (b.link) {
-                    blocks.back().linkText += b.linkText;
+            if ( b.link==blocks.back().link && b.font==blocks.back().font ) {
+                if ( b.link.isNull() ) blocks.back().text += b.text;
+                else {
+                    blocks.back().link.text += b.link.text;
                     dec++;
-                } else blocks.back().text += b.text;
+                }
             } else {
                 blocks.push_back(b);
             }
@@ -375,9 +422,6 @@ void FilterPage::prepare()
         par.firstIndent = 0;
         par.leftIndent = 0;
         FilterBlock b;
-        b.font = FilterFont::defaultFont;
-        b.pos = 0;
-        b.text = "";
         par.blocks.push_back(b);
         _pars.push_back(par);
     }
@@ -424,9 +468,10 @@ void FilterPage::dump()
             text += b.text;
             QDomElement element = _data.createElement("FORMAT");
             QDomDocument document = _data.document();
-            bool r = b.font->format(document, element, b.pos, b.text.length());
-            if (b.link) b.link->format(document, element, b.pos, b.linkText);
-            if ( r || b.link ) formats.push_back(element);
+            bool r = b.font.format(document, element, b.pos, b.text.length());
+            if ( !b.link.isNull() )
+                b.link.format(document, element, b.pos, b.link.text);
+            if ( r || !b.link.isNull() ) formats.push_back(element);
         }
 
         _data.createParagraph(text, layouts, formats);

@@ -93,7 +93,7 @@ void FilterDevice::drawLink(Link* link, Catalog *cat)
     cvtUserToDev(x2, y2, &ux2, &uy2);
 
     LinkAction *action = link->getAction();
-    FilterLink *flink = new FilterLink(ux1 ,ux2, uy1, uy2, *action, *cat);
+    FilterLink flink(ux1 ,ux2, uy1, uy2, *action, *cat);
     _page->addLink(flink);
 }
 
