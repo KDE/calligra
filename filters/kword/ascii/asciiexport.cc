@@ -57,7 +57,7 @@ class ASCIIWorker : public KWEFBaseWorker
 public:
     ASCIIWorker(void) : m_ioDevice(NULL), m_streamOut(NULL), m_eol("\n"),
         m_inList(false) { }
-    virtual ~ASCIIWorker(void) { }
+    virtual ~ASCIIWorker(void) { delete m_streamOut;}
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); // Close file in normal conditions
