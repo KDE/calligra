@@ -673,10 +673,10 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		double _x2 = gradient.vector().x();
 		double _y2 = gradient.origin().y();
 		double _y1 = gradient.vector().y();
-		kdDebug() << "_x1 : " << _x1 << endl;
-		kdDebug() << "_y1 : " << _y1 << endl;
-		kdDebug() << "_x2 : " << _x2 << endl;
-		kdDebug() << "_y2 : " << _y2 << endl;
+		//kdDebug() << "_x1 : " << _x1 << endl;
+		//kdDebug() << "_y1 : " << _y1 << endl;
+		//kdDebug() << "_x2 : " << _x2 << endl;
+		//kdDebug() << "_y2 : " << _y2 << endl;
 		// Adjust to gradientTransform
 		//QWMatrix m;// = gradient.gradientTransform();
 		//m.map(_x1, _y1, &_x1, &_y1);
@@ -699,9 +699,9 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		linear->c = -( ( _x1 * m_zoomFactor + m_matrix.dx() ) * linear->a +
 					   ( _y2 * m_zoomFactor ) * linear->b );
 
-		kdDebug() << "linear->a" << linear->a << endl;
-		kdDebug() << "linear->b" << linear->b << endl;
-		kdDebug() << "linear->c" << linear->c << endl;
+		//kdDebug() << "linear->a" << linear->a << endl;
+		//kdDebug() << "linear->b" << linear->b << endl;
+		//kdDebug() << "linear->c" << linear->c << endl;
 
 		// get stop array
 		int offsets = -1;
