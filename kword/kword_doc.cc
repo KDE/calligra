@@ -3086,6 +3086,7 @@ KWFrameSet *KWordDocument::getFirstSelectedFrameSet()
 void KWordDocument::print( QPainter *painter, QPrinter *printer,
 			   float /*left_margin*/, float /*top_margin*/ )
 {
+    printer->setFullPage( TRUE );
     QList<KWFormatContext> fcList;
     fcList.setAutoDelete( TRUE );
 
