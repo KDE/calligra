@@ -673,7 +673,8 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
 
       kdDebug() << "i: " << i << ", Type: " << type << ", Date: " << date.toString() << endl;
 
-      kspread_cell->setDate( date, type );
+      kspread_cell->setValue( date );
+      kspread_cell->setFormatType( type );
 
       return true;
     }
@@ -715,7 +716,8 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
       }
                       
       kdDebug() << "i: " << i << ", Type: " << type << endl;
-      kspread_cell->setTime( time, type );
+      kspread_cell->setValue( time );
+      kspread_cell->setFormatType( type );
 
       return true;
     }
@@ -891,7 +893,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
     else
     {
       // do pattern matching with gnumeric formats
-      QString content(kspread_cell->valueString());
+      QString content(kspread_cell->value().asString());
 
       if ( setType(kspread_cell, formatString, content) )
         return;
