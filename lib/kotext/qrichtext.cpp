@@ -3006,8 +3006,8 @@ int QTextFormat::width( const QChar &c ) const
 		w = fm.width( c );
                 //qDebug("QTextFormat::width font=%s fontsize=%d width=%d height=%d", fn.toString().ascii(), fn.pointSize(), w, fm.height());
 		( (QTextFormat*)this )->widths[ c.unicode() ] = w;
-                assert( w < 65535 );
-                assert( widths[ c.unicode() ] == w );
+                Q_ASSERT( w < 65535 );
+                Q_ASSERT( widths[ c.unicode() ] == w );
 	    }
 	    return w;
 	} else {
