@@ -57,7 +57,6 @@ VDrawSelection::visitVComposite( VComposite &composite )
 		m_painter->setBrush( Qt::NoBrush );
 		m_painter->strokePath();
 	}
-	kdDebug() << "state :  " << composite.state() << endl;
 
 	// Draw nodes and control lines:
 	if( composite.state() == VObject::selected || editnodes )
@@ -131,10 +130,10 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				// Draw knot:
 				m_painter->setPen( editnodes ? Qt::yellow : Qt::blue );
 
-				if( jtr.current()->knotIsSelected() && editnodes )
-					m_painter->setBrush( Qt::yellow );
-				else if( composite.state() == VObject::selected )
+				if( !m_nodeediting )
 					m_painter->setBrush( Qt::blue );
+				else if( jtr.current()->knotIsSelected() )
+					m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
 				else
 					m_painter->setBrush( Qt::white );
 
