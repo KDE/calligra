@@ -4827,17 +4827,21 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
     if ( !textP.isNull() )
     {
+        kdDebug()<<" !textP.isNull()333333333333333333333333333333333333333333\n";
         QDomElement subText = textP.firstChild().toElement();
         if ( !subText.isNull() )
         {
             // something in <text:p>, e.g. links
             text = subText.text();
-
+            kdDebug()<<" text subText !!!!!!!!!!!!!!!!! 11111111111111 :"<<text<<endl;
             if ( subText.hasAttributeNS( KoXmlNS::xlink, "href" ) )
             {
+                kdDebug()<<"  subText.hasAttributeNS link !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n";
                 QString link = subText.attributeNS( KoXmlNS::xlink, "href", QString::null );
+                kdDebug()<<" link :"<<link<<endl;
                 d->extra()->link = link;
                 d->strText = text;
+                kdDebug()<<"  d->strText :"<< d->strText<<endl;
             }
         }
         else

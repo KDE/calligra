@@ -778,16 +778,22 @@ QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles )
     switch( m_formatType )
     {
     case fraction_half:
+        format = "# ?/2";
         break;
     case fraction_quarter:
+        format = "# ?/4";
         break;
     case fraction_eighth:
+        format = "# ?/8";
         break;
     case fraction_sixteenth:
+        format = "# ?/16";
         break;
     case fraction_tenth:
+        format = "# ?/10";
         break;
     case fraction_hundredth:
+        format = "# ?/100";
         break;
     case fraction_one_digit:
         format = "# ?/?";
