@@ -95,6 +95,7 @@ private:
     QString escapeOOText(const QString& strText) const;
     QString escapeOOSpan(const QString& strText) const;
     QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const;
+    bool makeTableRows( const QString& tableName, const Table& table );
     bool makeTable(const FrameAnchor& anchor);
     bool makePicture(const FrameAnchor& anchor, const bool useFrameSize);
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);

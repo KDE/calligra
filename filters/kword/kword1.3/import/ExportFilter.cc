@@ -923,7 +923,6 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
 #define ALLOW_TABLE
 
-// ### TODO: make it a member of OOWriterWorker (when table support will work)
 QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const
 {
 #ifdef ALLOW_TABLE
@@ -1008,6 +1007,53 @@ QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) c
 #endif
 }
 
+bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table )
+{
+    *m_streamOut << "<table:table-row>\n";
+    int rowCurrent = 0;
+
+    ulong cellNumber = 0L;
+
+    for ( QValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
+        itCell != table.cellList.end(); ++itCell)
+    {
+        // ### TODO: rowspan, colspan
+        if ( rowCurrent != (*itCell).row )
+        {
+            rowCurrent = (*itCell).row;
+            *m_streamOut << "</table:table-row>\n";
+            *m_streamOut << "<table:table-row>\n";
+        }
+
+        const QString automaticCellStyle ( makeAutomaticStyleName( tableName + ".Cell", cellNumber ) );
+        QString key;
+        const QString props ( cellToProperties( (*itCell), key ) );
+        kdDebug(30520) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+
+        m_contentAutomaticStyles += "  <style:style";
+        m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
+        m_contentAutomaticStyles += " style:family=\"table-cell\"";
+        m_contentAutomaticStyles += ">\n";
+        m_contentAutomaticStyles += "   <style:properties ";
+        m_contentAutomaticStyles += props;
+        m_contentAutomaticStyles += "/>\n";
+        m_contentAutomaticStyles += "  </style:style>\n";
+
+        *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
+            << escapeOOText( automaticCellStyle) << "\">\n";
+
+        if (!doFullAllParagraphs(*(*itCell).paraList))
+        {
+            return false;
+        }
+
+        *m_streamOut << "</table:table-cell>\n";
+    }
+
+    *m_streamOut << "</table:table-row>\n";
+    return true;
+}
+
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
@@ -1075,49 +1121,8 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     m_contentAutomaticStyles += delayedAutomaticStyles;
     delayedAutomaticStyles = QString::null; // Release memory
 
-    *m_streamOut << "<table:table-row>\n";
-    int rowCurrent = 0;
+    makeTableRows( tableName, anchor.table );
 
-
-    ulong cellNumber = 0L;
-
-    for (itCell=anchor.table.cellList.begin();
-        itCell!=anchor.table.cellList.end(); itCell++)
-    {
-        // ### TODO: rowspan, colspan
-        if ( rowCurrent != (*itCell).row )
-        {
-            rowCurrent = (*itCell).row;
-            *m_streamOut << "</table:table-row>\n";
-            *m_streamOut << "<table:table-row>\n";
-        }
-
-        const QString automaticCellStyle ( makeAutomaticStyleName( tableName + ".Cell", cellNumber ) );
-        QString key;
-        const QString props ( cellToProperties( (*itCell), key ) );
-        kdDebug(30520) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
-
-        m_contentAutomaticStyles += "  <style:style";
-        m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
-        m_contentAutomaticStyles += " style:family=\"table-cell\"";
-        m_contentAutomaticStyles += ">\n";
-        m_contentAutomaticStyles += "   <style:properties ";
-        m_contentAutomaticStyles += props;
-        m_contentAutomaticStyles += "/>\n";
-        m_contentAutomaticStyles += "  </style:style>\n";
-
-        *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
-            << escapeOOText( automaticCellStyle) << "\">\n";
-
-        if (!doFullAllParagraphs(*(*itCell).paraList))
-        {
-            return false;
-        }
-
-        *m_streamOut << "</table:table-cell>\n";
-    }
-
-    *m_streamOut << "</table:table-row>\n";
     *m_streamOut << "</table:table>\n";
     *m_streamOut << "<text:p text:style-name=\"Standard\">\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
 #endif
