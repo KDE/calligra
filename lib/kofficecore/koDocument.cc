@@ -851,6 +851,7 @@ QCString KoDocument::nativeFormatMimeType()
   return m_nativeFormatMimeType;
 }
 
+//static
 QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
 {
   QString instname = instance ? instance->instanceName() : kapp->instanceName();
