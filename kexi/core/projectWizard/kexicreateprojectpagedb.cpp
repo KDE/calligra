@@ -36,6 +36,7 @@ Boston, MA 02111-1307, USA.
 #include "kexicreateprojectpagedb.h"
 #include "kexicreateproject.h"
 #include "kexiview.h"
+#include "kexidbconnection.h"
 
 KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPixmap *wpic, const char *name)
  : KexiCreateProjectPage(parent, wpic, name)
@@ -99,23 +100,35 @@ void
 KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host, const QString &user, const QString &password,
 	const QString &socket, const QString &port, bool savePass)
 {
-	m_cred.driver = driver;
-	m_cred.host = host;
-	m_cred.user = user;
-	m_cred.password = password;
-	m_cred.socket = socket;
-	m_cred.port = port;
-	m_cred.savePassword = savePass;
-	if(project()->initHostConnection(m_cred))
-	{
-		m_databases->clear();
+//	m_cred.driver = driver;
+//	m_cred.host = host;
+//	m_cred.user = user;
+//	m_cred.password = password;
+//	m_cred.socket = socket;
+//	m_cred.port = port;
+//	m_cred.savePassword = savePass;
+//	if(project()->initHostConnection(m_cred))
+//	{
 
-		KexiDB *db = project()->db();
-		QStringList databases = db->databases();
-		for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
-		{
-			new KListViewItem(m_databases, (*it));
-		}
+	m_driver = driver;
+	m_host = host;
+	m_user = user;
+	m_pass = password;
+	m_socket = socket;
+	m_port = port;
+
+	m_databases->clear();
+
+	KexiDB *db = new KexiDB;
+	db = db->add(driver);
+
+	if(!db->connect(host, user, password, socket, port))
+		return;
+
+	QStringList databases = db->databases();
+	for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
+	{
+		new KListViewItem(m_databases, (*it));
 	}
 
 }
@@ -123,17 +136,22 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 bool
 KexiCreateProjectPageDB::connectDB()
 {
-	m_cred.database = data("database").toString();
-	if(project()->initDbConnection(m_cred, data("create").toBool()))
-	{
+	QString database = data("database").toString();
+//	if(project()->initDbConnection(m_cred, data("create").toBool()))
+//	{
 //		emit project()->updateBrowsers();
 #if 0
                 kexi->mainWindow()->browser()->generateView();
 #endif
-                return true;
+//                return true;
 
-	}
-        return true;
+//	}
+
+	KexiDBConnection *c = new KexiDBConnection(m_host, m_user, m_pass, m_socket, m_port, m_dbname);
+	if(project()->initDBConnection(c))
+	        return true;
+
+	return false;
 }
 
 void

@@ -47,11 +47,20 @@ class KexiCreateProjectPageDB : public KexiCreateProjectPage
 		QRadioButton *m_existingRBtn;
 		QRadioButton *m_newRBtn;
 		KLineEdit *m_newEdit;
-		Credentials	m_cred;
+//		Credentials	m_cred;
 	
 	protected slots:
 		void		slotDatabaseChanged();
 		void		slotModeChanged(bool state);
+
+	private:
+		QString		m_driver;
+		QString		m_host;
+		QString		m_dbname;
+		QString		m_user;
+		QString		m_pass;
+		QString		m_socket;
+		QString		m_port;
 };
 
 #endif

@@ -34,6 +34,7 @@
 
 //#include "kexitabbrowser.h"
 #include "kexicreateproject.h"
+#include "kexidbconnection.h"
 //#include "kexiview.h"
 //#include "kexiproject.h"
 
@@ -139,7 +140,10 @@ KexiCreateProject::accept()
 	if(m_pageEngine->data("location").toString() != "RemoteDB")
 	{
 		kdDebug() << "KexiCreateProject::accept(): local engine..." << endl;
-		project()->initFileConnection(m_pageEngine->data("engine").toString(), QString::null);
+		//FIXME: care if user selects an existing location :)
+		KexiDBConnection *c = new KexiDBConnection(m_pageEngine->data("engine").toString(),
+		 QString::null);
+		project()->initDBConnection(c);
 	}
 	else
 	{

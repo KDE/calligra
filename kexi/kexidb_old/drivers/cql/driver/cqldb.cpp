@@ -69,7 +69,7 @@ CqlDB::load(QString file)
 
 	try
 	{
-		m_db->optionCurrentDirectory(dir);
+//		m_db->optionCurrentDirectory(dir);
 		m_db->connect("PUBLIC");
 	}
 	catch(CqlException& ex)

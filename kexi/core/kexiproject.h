@@ -1,19 +1,24 @@
-/***************************************************************************
-                          kexiproject.h  -  description
-                             -------------------
-    begin                : Sun Nov  17 23:30:00 CET 2002
-    copyright            : (C) 2002 Joseph Wenninger
-    email                : jowenn@kde.org
- ***************************************************************************/
+/* This file is part of the KDE project
+   Copyright (C) 2002   Joseph Wenninger <jowenn@kde.org>
+                        Lucijan Busch <lucijan@gmx.at>
+                        Daniel Molkentin <molkentin@kde.org>
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+ */
 
 #ifndef KEXI_PART_H
 #define KEXI_PART_H
@@ -24,12 +29,12 @@
 #include <koDocument.h>
 #include <kexiDB/kexidb.h>
 #include <kexiDB/kexidberror.h>
-//#include <kexiformmanager.h>
 
 class KexiDoc;
 class DCOPObject;
 class KexiRelation;
 class KexiProjectHandler;
+class KexiDBConnection;
 
 typedef QPtrList<KexiProjectHandler> ProviderList;
 
@@ -46,6 +51,7 @@ public:
 	QString location;
 };
 
+/*
 struct Credentials
 {
 	KexiDB::DBType type;
@@ -58,6 +64,7 @@ struct Credentials
 		socket;
 	bool savePassword;
 };
+*/
 
 typedef QMap<QString, QDomElement> Groups;
 typedef QValueList<FileReference> References;
@@ -83,9 +90,7 @@ public:
 	void addFileReference(FileReference);
 	References fileReferences(const QString &group);
 
-	bool initDbConnection(const Credentials& cred, const bool create = false);
-	bool initHostConnection(const Credentials &cred);
-	bool initFileConnection(const QString driver, const QString ref=QString::null);
+	bool initDBConnection(KexiDBConnection *c, KoStore *store = 0);
 
 	void clear();
 
@@ -113,15 +118,15 @@ protected:
 	bool saveProject();
 	bool saveProjectAs(const QString&);
 	bool loadProject(const QString&);
+
 private:
 	void saveConnectionSettings(QDomDocument&);
 	void saveReferences(QDomDocument&);
-	void loadConnectionSettings(QDomElement&);
 	void loadReferences(QDomElement&);
 	void loadHandlers();
 	KexiDoc*        m_settings;
 	KexiDB*         m_db;
-	Credentials     m_cred;
+//	Credentials     m_cred;
 	bool            m_dbAvaible;
 	References      m_fileReferences;
 	Groups          m_refGroups;
@@ -129,6 +134,7 @@ private:
 	PartList	*m_parts;
 	DCOPObject	*dcop;
 	bool		m_handlersLoaded;
+	KexiDBConnection *m_dbconnection;
 };
 
 #endif

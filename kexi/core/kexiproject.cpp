@@ -1,25 +1,24 @@
-/***************************************************************************
-                          kexipart.cpp  -  description
-                             -------------------
-    begin                : Sun Nov  17 23:30:00 CET 2002
-    copyright            : (C) 2002 Joseph Wenninger
-   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-                                          Daniel Molkentin <molkentin@kde.org>
+/* This file is part of the KDE project
+   Copyright (C) 2002   Joseph Wenninger <jowenn@kde.org>
+                        Lucijan Busch <lucijan@gmx.at>
+                        Daniel Molkentin <molkentin@kde.org>
 
-    email                : jowenn@kde.org
- ***************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-#include <sys/types.h>
-#include <unistd.h>
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+ */
 
 #include <qpainter.h>
 #include <qdir.h>
@@ -43,7 +42,7 @@
 #include "kexicreateprojectiface.h"
 #include "kexirelation.h"
 #include "kexiprojecthandler.h"
-
+#include "kexidbconnection.h"
 
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
@@ -51,11 +50,10 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 {
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
-	kdDebug()<<"creating KexDB instance"<<endl;
 	m_db = new KexiDB(this);
-//	m_formManager=new KexiFormManager(this);
+	m_dbconnection = new KexiDBConnection();
 	m_relationManager=new KexiRelation(this);
-	
+
 	m_parts = new PartList();
 
 	if ( name )
@@ -64,6 +62,7 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 
 KexiProject::~KexiProject()
 {
+	m_dbconnection->clean();
 	delete dcop;
 }
 
@@ -79,6 +78,7 @@ DCOPObject* KexiProject::dcopObject()
 
 bool KexiProject::completeSaving( KoStore* store )
 {
+	m_dbconnection->flush(store);
 	m_relationManager->storeRelations(store);
 	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
 		hand->store(store);
@@ -87,9 +87,11 @@ bool KexiProject::completeSaving( KoStore* store )
 
 bool KexiProject::completeLoading( KoStore* store )
 {
+	initDBConnection(m_dbconnection, store);
+
 	m_relationManager->loadRelations(store);
 	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
-		hand->load(store);	
+		hand->load(store);
 	return true;
 }
 
@@ -124,37 +126,38 @@ KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
 
 void KexiProject::saveConnectionSettings(QDomDocument &domDoc)
 {
+/*
 	QDomElement connectionElement = domDoc.createElement("connectionSettings");
 	domDoc.documentElement().appendChild(connectionElement);
-	
+
 //DB ENGINE
 	QDomElement engineElement = domDoc.createElement("engine");
 	connectionElement.appendChild(engineElement);
-	
+
 	QDomText tEngine = domDoc.createTextNode(m_cred.driver);
 	engineElement.appendChild(tEngine);
-	
+
 //HOST
 	QDomElement hostElement = domDoc.createElement("host");
 	connectionElement.appendChild(hostElement);
-	
+
 	QDomText tHost = domDoc.createTextNode(m_cred.host);
 	hostElement.appendChild(tHost);
 
-//DATABASE NAME	
+//DATABASE NAME
 	QDomElement nameElement = domDoc.createElement("name");
 	connectionElement.appendChild(nameElement);
-	
+
 	QDomText tName = domDoc.createTextNode(m_cred.database);
 	nameElement.appendChild(tName);
 
 //USER
 	QDomElement userElement = domDoc.createElement("user");
 	connectionElement.appendChild(userElement);
-	
+
 	QDomText tUser = domDoc.createTextNode(m_cred.user);
 	userElement.appendChild(tUser);
-	
+
 //PASSWORD STUFF
 	QDomElement passElement = domDoc.createElement("password");
 	connectionElement.appendChild(passElement);
@@ -167,7 +170,7 @@ void KexiProject::saveConnectionSettings(QDomDocument &domDoc)
 
 	QDomText tSavePass = domDoc.createTextNode(boolToString(m_cred.savePassword));
 	savePassElement.appendChild(tSavePass);
-
+*/
 }
 
 
@@ -193,14 +196,14 @@ void KexiProject::saveReferences(QDomDocument &domDoc)
 		else
 		{
 			kdDebug() << "KexiProject::saveProject(): creating group: " << ref.group << endl;
-			
+
 			QDomElement group = domDoc.createElement(ref.group);
 			group.appendChild(item);
-			
+
 			m_refGroups.insert(ref.group, group);
 		}
 	}
-	
+
 	for(Groups::Iterator itG = m_refGroups.begin(); itG != m_refGroups.end(); itG++)
 	{
 		refs.appendChild(itG.data());
@@ -212,80 +215,13 @@ QDomDocument KexiProject::saveXML()
 {
 	kdDebug()<<"KexiProject::saveXML()"<<endl;
 	QDomDocument domDoc=createDomDocument( "KexiProject", "1.0" );
-	saveConnectionSettings(domDoc);
+	m_dbconnection->writeInfo(domDoc);
 	saveReferences(domDoc);
 	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
 		hand->saveXML(domDoc);
 	setModified(false);
 	return domDoc;
 }
-
-
-void KexiProject::loadConnectionSettings(QDomElement &rootElement)
-{
-	QDomElement locationElement = rootElement.namedItem("type").toElement();
-	QDomElement engineElement = rootElement.namedItem("engine").toElement();
-	QDomElement hostElement = rootElement.namedItem("host").toElement();
-	QDomElement nameElement = rootElement.namedItem("name").toElement();
-	QDomElement userElement = rootElement.namedItem("user").toElement();
-	QDomElement passElement = rootElement.namedItem("password").toElement();
-	QDomElement savePassElement = rootElement.namedItem("savePassword").toElement();
-
-	KexiDB::DBType type;
-	if(locationElement.text() == "")
-	{
-		kdDebug() << "KexiProject::loadConnectionSettings(): no location" << endl;
-		type = KexiDB::RemoteDB;
-	}
-	if(locationElement.text() == "RemoteDB")
-	{
-		kdDebug() << "KexiProject::loadConnectionSettings(): remote" << endl;
-		type = KexiDB::RemoteDB;
-	}
-	if(locationElement.text() == "LocalDir")
-	{
-		kdDebug() << "KexiProject::loadConnectionSettings(): dir" << endl;
-		type = KexiDB::LocalDirectoryDB;
-	}
-	if(locationElement.text() == "LocalFile")
-	{
-		kdDebug() << "KexiProject::loadConnectionSettings(): file" << endl;
-		type = KexiDB::LocalFileDB;
-	}
-
-	Credentials parsedCred;
-	parsedCred.driver   = engineElement.text();
-	parsedCred.host     = hostElement.text();
-	parsedCred.database = nameElement.text();
-	parsedCred.user     = userElement.text();
-	parsedCred.password = passElement.text();
-	parsedCred.savePassword = stringToBool(savePassElement.text());
-	bool mod = false;
-
-	if(!parsedCred.savePassword)
-	{
-		QCString password;
-		int keep = 1;
-		int result = KPasswordDialog::getPassword(password, i18n("Password for %1 on %2").arg(parsedCred.user)
-			.arg(parsedCred.host), &keep);
-
-		if(result == KPasswordDialog::Accepted)
-		{
-			parsedCred.password = password;
-
-			if(keep)
-			{
-				parsedCred.savePassword = true;
-				mod = true;
-			}
-		}
-	}
-
-
-	initDbConnection(parsedCred);
-        setModified( isModified() | mod );
-}
-
 
 void KexiProject::loadReferences(QDomElement &fileRefs)
 {
@@ -326,16 +262,15 @@ bool KexiProject::loadXML( QIODevice *, const QDomDocument &domDoc )
 	{
 		QString tagname=el.tagName();
 		//perhaps the if's should be moved lateron into the methods alone
-		if (tagname=="connectionSettings") loadConnectionSettings(el);
-		else if (tagname=="references") loadReferences(el);
+		if (tagname=="connectionSettings")
+			m_dbconnection = KexiDBConnection::loadInfo(el);
+		else if (tagname=="references")
+			loadReferences(el);
 	}
 	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
 		hand->loadXML(domDoc);
 	return true;
 }
-
-
-
 
 void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/,
                                 double /*zoomX*/, double /*zoomY*/)
@@ -343,112 +278,25 @@ void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bo
 
 }
 
-bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
-{
-	kdDebug() << "KexiProject::initDbConnection()" << endl;
-
-	kdDebug() << "KexiProject::initDbConnection(): engine:" << cred.driver << endl;
-	kdDebug() << "KexiProject::initDbConnection(): host:" << cred.host << endl;
-	kdDebug() << "KexiProject::initDbConnection(): user:" << cred.user << endl;
-	kdDebug() << "KexiProject::initDbConnection(): database:" << cred.database << endl;
-
-
-	if(m_db->driverName() != cred.driver)
-	{
-		kdDebug() << "KexiProject::initDBConnection(): abroating" << endl;
-		initHostConnection(cred);
-	}
-
-	kdDebug() << "KexiProject::initDBConnection(): using simple method\n  because current driver is: " << m_db->driverName() << endl;
-
-	try
-	{
-		m_db->connect(cred.host, cred.user, cred.password, cred.socket, cred.port, cred.database, create);
-	}
-	catch(KexiDBError *err)
-	{
-		kdDebug() << "KexiProject::initDbConnection(): connection failed: #need to implement" /*m_db->lastError().databaseText() */ << endl;
-		err->toUser(0);
-		m_cred = cred;
-		return false;
-	}
-
-	m_cred = cred;
-	kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
-	setModified( false );
-	emit dbAvaible();
-//		emit updateBrowsers();
-	m_dbAvaible = true;
-	loadHandlers();
-//		new KexiTablePart(this);
-//		new KexiQueryPart(this);
-	kdDebug() << "KexiProject::initDbConnection(): db is avaible now..." << endl;
-	return true;
-}
-
 bool
-KexiProject::initHostConnection(const Credentials &cred)
+KexiProject::initDBConnection(KexiDBConnection *connection, KoStore *store)
 {
-	kdDebug() << "KexiProject::initHostConnection" << endl;
-	KexiDB *addDB = m_db->add(cred.driver);
-	if(addDB)
-	{
-		m_db = addDB;
-	}
-	else
-	{
-		return false;
-	}
+	if(!connection)
+		return;
 
-	if(!m_db->connect(cred.host, cred.user, cred.password, cred.socket, cred.port))
+	m_dbconnection = connection;
+	m_db = connection->connectDB(m_db, store);
+	if(m_db)
 	{
-		m_cred = cred;
-		setModified( true );
-		return false;
-	}
-	else
-	{
-		m_cred = cred;
+		setModified( false );
+		emit dbAvaible();
+		m_dbAvaible = true;
+		loadHandlers();
+
 		return true;
 	}
-}
-
-bool
-KexiProject::initFileConnection(const QString driver, const QString ref)
-{
-	kdDebug() << "KexiProject::initFileConnection()" << endl;
-
-	KexiDB *addDB = m_db->add(driver);
-	if(addDB)
-		m_db = addDB;
 	else
 		return false;
-
-//	if(m_db->load(file))
-//	{
-
-	QString tmpfile(KGlobal::dirs()->resourceDirs("tmp").first() + "kexi-" + QString::number(getpid()));
-//	QString tmpfile(locate("tmp", "kexi-2345325"));
-	kdDebug() << "KexiProject::initFileConnection() tmp: " << tmpfile << endl;
-	QDir tempdir(tmpfile);
-	tempdir.mkdir(tmpfile);
-
-	try
-	{
-		m_db->load(tmpfile);
-	}
-	catch(KexiDBError *err)
-	{
-		err->toUser(0);
-		return false;
-	}
-
-	setModified( false );
-	emit dbAvaible();
-//	emit updateBrowsers();
-	m_dbAvaible = true;
-	loadHandlers();
-	return true;
 }
 
 void
@@ -547,7 +395,7 @@ void KexiProject::loadHandlers()
 	for (KTrader::OfferList::ConstIterator it=ol.begin(); it!=ol.end(); ++it)
 	{
 		(void) KParts::ComponentFactory::createInstanceFromService<KexiProjectHandler>(
-			*it,this);	
+			*it,this);
 	}
 }
 
