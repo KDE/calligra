@@ -26,6 +26,7 @@
 #include <qsplitter.h>
 #include <qcursor.h>
 #include <qvaluelist.h>
+#include <kdebug.h>
 
 StencilBarDockManager::StencilBarDockManager( QWidget* parent, const char* name )
 : QWidget(parent,name)
@@ -289,7 +290,7 @@ void StencilBarDockManager::setDoc( KivioDoc *p )
 {
     if( m_pDoc )
     {
-        qDebug("StencilBarDockManager::setDoc() - This should never be called twice - error!!");
+        kdDebug() << "StencilBarDockManager::setDoc() - This should never be called twice - error!!" << endl;
         return;
     }
     m_pDoc = p;

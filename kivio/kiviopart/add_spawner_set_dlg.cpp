@@ -32,7 +32,7 @@
 #include <qdir.h>
 #include <qfile.h>
 
-static char * default_plug_xpm[] = {
+static const char * default_plug_xpm[] = {
 "16 16 5 1",
 "       c None",
 ".      c #000000",

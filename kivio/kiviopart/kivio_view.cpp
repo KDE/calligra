@@ -805,7 +805,7 @@ void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 {
     if( !pSpawner )
     {
-        qDebug("KivioView::addSpawnerToStackBar() - NULL pSpawner");
+        kdDebug() << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
         return;
     }
 
@@ -878,7 +878,8 @@ void KivioView::groupStencils()
     m_pActivePage->groupSelectedStencils();
     KivioRect r = m_pActivePage->getRectForAllStencils();
 
-    qDebug("RECT: %3.2f %3.2f %3.2f %3.2f", r.x(), r.y(), r.w(), r.h() );
+    kdDebug() << "RECT: " << r.x() << " " << r.y() << " "
+              << r.w() << " " << r.h() << endl;
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1077,7 +1078,7 @@ void KivioView::slotSetStartArrow( int i )
     }
     m_pDoc->updateView(m_pActivePage);
 
-    qDebug("Selected start arrow %d", i );
+    kdDebug() << "Selected start arrow " << i << endl;
 }
 
 void KivioView::slotSetEndArrow( int i )
@@ -1093,7 +1094,7 @@ void KivioView::slotSetEndArrow( int i )
     }
     m_pDoc->updateView(m_pActivePage);
 
-    qDebug("Selected end arrow %d", i );
+    kdDebug() << "Selected end arrow " << i << endl;
 }
 
 void KivioView::slotSetStartArrowSize()

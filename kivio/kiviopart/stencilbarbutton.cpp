@@ -19,6 +19,7 @@
 #include "stencilbarbutton.h"
 
 #include <kiconloader.h>
+#include <kdebug.h>
 #include <qapplication.h>
 #include <qpixmap.h>
 #include "qdrawutil.h"
@@ -34,23 +35,23 @@ DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* 
 
   const char* stencil_xpm[] = {
   "12 12 17 1",
-  ".	c #08009A",
-  "+	c #9A9C10",
-  "@	c None",
-  "#	c #0800A1",
-  "$	c #FAFD00",
-  "%	c #080092",
-  "&	c #F9FC07",
-  "*	c #F9FC00",
-  "=	c #070094",
-  "-	c #F4F70C",
-  ";	c #F6F900",
-  ">	c #08008D",
-  ",	c #F7FA00",
-  "'	c #C00101",
-  ")	c #C20904",
-  "!	c #C90000",
-  "~	c #BC0000",
+  ".    c #08009A",
+  "+    c #9A9C10",
+  "@    c None",
+  "#    c #0800A1",
+  "$    c #FAFD00",
+  "%    c #080092",
+  "&    c #F9FC07",
+  "*    c #F9FC00",
+  "=    c #070094",
+  "-    c #F4F70C",
+  ";    c #F6F900",
+  ">    c #08008D",
+  ",    c #F7FA00",
+  "'    c #C00101",
+  ")    c #C20904",
+  "!    c #C90000",
+  "~    c #BC0000",
   ".......+++@@",
   "..#...$$$$+@",
   "..%..&$***$+",
@@ -95,7 +96,7 @@ DragBarButton::~DragBarButton()
   if (m_pIcon)
     delete m_pIcon;
 
-  qDebug("DragBarButton - AHHHHHH I'M DYING!");
+  kdDebug() << "DragBarButton - AHHHHHH I'M DYING!" << endl;
 }
 
 void DragBarButton::drawButton( QPainter* paint )
@@ -202,7 +203,7 @@ void DragBarButton::mouseReleaseEvent( QMouseEvent* ev )
     QRect closeRect(width()-20,0,m_pClosePix->width(),height());
     if ( closeRect.contains(ev->pos()))
     {
-        qDebug("Emitting closeRequest");
+        kdDebug() << "Emitting closeRequest" << endl;
         emit closeRequired(this);
     }
     return;

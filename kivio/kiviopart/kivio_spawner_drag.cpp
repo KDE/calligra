@@ -23,6 +23,8 @@
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_icon_view.h"
 
+#include <kdebug.h>
+
 KivioSpawnerDrag::KivioSpawnerDrag( KivioIconView *view, QWidget *parent, const char *name )
     : QIconDrag( parent, name )
 {
@@ -32,7 +34,7 @@ KivioSpawnerDrag::KivioSpawnerDrag( KivioIconView *view, QWidget *parent, const 
 KivioSpawnerDrag::~KivioSpawnerDrag()
 {
     m_pView->clearCurrentDrag();
-    qDebug("KivioSpawnerDrag - this destroyed");
+    kdDebug() << "KivioSpawnerDrag - this destroyed" << endl;
 }
 
 const char *KivioSpawnerDrag::format( int i ) const
@@ -75,7 +77,7 @@ void KivioSpawnerDrag::append( const QIconDragItem &item, const QRect &pr,
     QIconDrag::append( item, pr, tr );
 
     QString full = spawner.set()->dir() + "/" + spawner.info()->title();
-    qDebug("KivioSpawnerDrag::append() - Adding %s", full.ascii() );
+    kdDebug() << "KivioSpawnerDrag::append() - Adding " << full << endl;
 
     m_spawners << full;
 }
