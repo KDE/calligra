@@ -1,2 +1,8 @@
-There is no filter-library yet...would you like to write one?
-Please contact Werner Trobin, wtrobin@carinthia.com
+Hi Percy!
+
+Please make sure, that you derive the lib-"interface" (like WordFilter in the
+winword97-dir) from FilterBase... I need this because I use a pointer to this
+base class to handle the different libs :)
+
+Thank you,
+Werner

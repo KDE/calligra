@@ -2,8 +2,12 @@
 #define OLEFILTER_H
 
 #include <qobject.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qstring.h>
 #include "klaola.h"
 #include "ktar.h"
+#include <filterbase.h>
 #include <wordfilter.h>
 #include <myfile.h>
 
@@ -26,15 +30,16 @@ protected slots:
     void slotPart(const char *nameIN, const char *nameOUT);
 
 private:
-    void convert(const QString &name);
+    void convert(const QString &name);   // do the real work, recursively
 
-    myFile fileIn;
+    myFile fileIn;         // will hopefully be changed, soon
     QString fileOutName;
+    QList<QMap<QString, QString> > partList;
     IN in;
     OUT out;
     KLaola *docfile;
     KTar *fileOut;
     bool success;
-    //WordFilter *wordFilter;
+    FilterBase *myFilter;
 };
 #endif // OLEFILTER_H
