@@ -42,13 +42,6 @@ class KexiQueryDesigner : public KexiDialogBase
 	
 	public:
 	
-	enum ActivePart
-	{
-		EditorPart,
-		SqlPart,
-		ViewPart
-	};
-	
 	
 		KexiQueryDesigner(QWidget *parent, QString indentifier, const char *name=0);
 		~KexiQueryDesigner();
@@ -60,7 +53,7 @@ class KexiQueryDesigner : public KexiDialogBase
 		void			setCurrentQuery(QString query);
 
 	protected:
-		void			addTab(QPixmap pixmap, QString caption, QWidget *assosiated);
+		void			addTab(QPixmap pixmap, QString caption, QWidget *assosiated,int ID);
 
 	private:
 		class			EditGUIClient;
@@ -77,10 +70,7 @@ class KexiQueryDesigner : public KexiDialogBase
 
 		QString			m_identifier;
 		
-		ActivePart		m_currentPart;
-
 		KMultiTabBar		*m_tb;
-		WidgetIndex		m_parts;
 		int			m_partCount;
 		int			m_activeTab;
 

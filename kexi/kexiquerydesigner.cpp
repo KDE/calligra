@@ -113,9 +113,9 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const 
 
         m_tb = new KMultiTabBar(this,KMultiTabBar::Horizontal);
 	m_tb->showActiveTabTexts(false);
-        addTab(SmallIcon("state_edit"), "Graphical Designer", m_editor);
-        addTab(SmallIcon("state_sql"), "Sql Editor", m_sqlView);
-        addTab(SmallIcon("table"), "Result", m_view);
+        addTab(SmallIcon("state_edit"), "Graphical Designer", m_editor,m_widgetStack->id(m_editor));
+        addTab(SmallIcon("state_sql"), "Sql Editor", m_sqlView,m_widgetStack->id(m_sqlView));
+        addTab(SmallIcon("table"), "Result", m_view,m_widgetStack->id(m_view));
 	l->addWidget(m_tb);
 	l->activate();
 //	activateActions();
@@ -160,8 +160,6 @@ KexiQueryDesigner::slotEditState()
 	m_editGUIClient->m_actionSQL->setChecked(false);
 
 	m_widgetStack->raiseWidget(m_editor);
-
-	m_currentPart = EditorPart;
 }
 
 void
@@ -172,7 +170,6 @@ KexiQueryDesigner::slotSQLState()
 
 	m_widgetStack->raiseWidget(m_sqlView);
 	
-	m_currentPart = SqlPart;
 }
 
 void
@@ -182,18 +179,16 @@ KexiQueryDesigner::slotViewState()
 	m_editGUIClient->m_actionSQL->setChecked(false);
 
 	kdDebug()<<"Raising view"<<endl;
+	
+	QObject *viswid=m_widgetStack->visibleWidget();
 	m_widgetStack->raiseWidget(m_view);
 
-	switch(m_currentPart)
-	{
-		case EditorPart:
+	if (viswid==m_editor) {
 			if(m_editor->getQuery() == "")
-				break;
 			
 			m_view->executeQuery(m_editor->getQuery());
-			break;
-			
-		case SqlPart:
+	} else
+	if (viswid==m_sqlView) {			
 			KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_sqlDoc);
 			kdDebug() << "KexiQueryDesigner::slotViewState() sql-edit: " << eIface->text() << endl;
 
@@ -203,8 +198,6 @@ KexiQueryDesigner::slotViewState()
 			 */
 			if(eIface->text() != "")
 				m_view->executeQuery(eIface->text());
-
-			break;
 	}
 }
 
@@ -284,19 +277,18 @@ KexiQueryDesigner::slotSave(KoStore *store)
 }
 
 void
-KexiQueryDesigner::addTab(QPixmap pixmap, QString caption, QWidget *assosiated)
+KexiQueryDesigner::addTab(QPixmap pixmap, QString caption, QWidget *assosiated,int ID)
 {
 	m_partCount++;
 	kdDebug() << "KexiQueryDesigner::addTab(): adding tab: " << m_partCount << endl;
-	m_tb->insertTab(pixmap, m_partCount, caption);
-	m_parts.insert(m_partCount, assosiated);
+	m_tb->appendTab(pixmap, ID, caption);
 
-	connect(m_tb->getTab(m_partCount), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
+	connect(m_tb->getTab(ID), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
 
 	if(m_activeTab == -1)
 	{
-		m_tb->setTab(m_partCount, true);
-		m_activeTab = m_partCount;
+		m_tb->setTab(ID, true);
+		m_activeTab = ID;
 	}
 }
 
@@ -308,13 +300,13 @@ KexiQueryDesigner::slotTabActivated(int tab)
 		m_tb->setTab(m_activeTab, false);
 		
 		//please close your eyes and go some lines down (blind) 
-		if(m_parts[tab] == m_view && m_parts[m_activeTab] == m_editor)
+		if(m_widgetStack->widget(tab) == m_view && m_widgetStack->widget(m_activeTab) == m_editor)
 		{
 			m_view->executeQuery(m_editor->getQuery());
 		}
 		
 		m_activeTab = tab;
-		m_widgetStack->raiseWidget(m_parts[m_activeTab]);
+		m_widgetStack->raiseWidget(m_activeTab);
 	}
 	else
 	{

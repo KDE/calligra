@@ -128,7 +128,7 @@ KMultiTabBarTab* KMultiTabBarInternal::getTab(int id)
 }
 
 
-int KMultiTabBarInternal::insertTab(QPixmap pic ,int id,const QString& text)
+int KMultiTabBarInternal::appendTab(QPixmap pic ,int id,const QString& text)
 {
 	KMultiTabBarTab  *tab;
 	m_tabs.append(tab= new KMultiTabBarTab(pic,text,id,box,position));
@@ -261,13 +261,6 @@ void KMultiTabBarTab::drawButton(QPainter *paint)
 			paint->setPen(colorGroup().background().dark(120));
 			paint->drawLine(1,0,1,23);
 
-			if (m_showAnyTabText)
-			{
-				paint->rotate(90);
-				paint->setPen(colorGroup().text());
-				paint->drawText(25,-width()/2+QFontMetrics(QFont()).height()/2,m_text);
-			}
-	
 		}
 		else
 		if ((position==KMultiTabBar::Bottom) || (position==KMultiTabBar::Top))
@@ -413,7 +406,7 @@ KMultiTabBar::KMultiTabBar(QWidget *parent,KMultiTabBarBasicMode bm):QWidget(par
   return 0;
 }*/
 
-int KMultiTabBar::insertButton(QPixmap pic ,int id,QPopupMenu *popup,const QString&)
+int KMultiTabBar::appendButton(QPixmap pic ,int id,QPopupMenu *popup,const QString&)
 {
 	KMultiTabBarButton  *btn;
 	buttons.append(btn= new KMultiTabBarButton(pic,QString::null,
@@ -424,9 +417,9 @@ int KMultiTabBar::insertButton(QPixmap pic ,int id,QPopupMenu *popup,const QStri
 	return 0;
 }
 
-int KMultiTabBar::insertTab(QPixmap pic ,int id ,const QString& text)
+int KMultiTabBar::appendTab(QPixmap pic ,int id ,const QString& text)
 {
- internal->insertTab(pic,id,text);
+ internal->appendTab(pic,id,text);
  return 0;
 }
 

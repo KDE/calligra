@@ -48,9 +48,9 @@ public:
 
 	enum KMultiTabBarPosition{Left, Right, Top, Bottom};
  	//int insertButton(QPixmap,int=-1,const QString& =QString::null);
- 	int insertButton(QPixmap,int=-1,QPopupMenu* =0,const QString& =QString::null);
+ 	int appendButton(QPixmap,int=-1,QPopupMenu* =0,const QString& =QString::null);
 	void removeButton(int);
-	int insertTab(QPixmap,int=-1,const QString& =QString::null);
+	int appendTab(QPixmap,int=-1,const QString& =QString::null);
 	void removeTab(int);
 	void setTab(int,bool);
 	bool isTabRaised(int);
@@ -102,7 +102,6 @@ public:
 	void showActiveTabText(bool show);
 private:
 	bool m_showActiveTabText;
-	bool m_showAnyTabText;
 protected:
 	void updateState();
 	virtual void drawButton(QPainter *);
@@ -115,7 +114,7 @@ class KMultiTabBarInternal: public QScrollView
 	Q_OBJECT
 public:
 	KMultiTabBarInternal(QWidget *parent,KMultiTabBar::KMultiTabBarBasicMode bm);
-	int insertTab(QPixmap,int=-1,const QString& =QString::null);
+	int appendTab(QPixmap,int=-1,const QString& =QString::null);
 	KMultiTabBarTab *getTab(int);
 	void removeTab(int);
 	void setPosition(enum KMultiTabBar::KMultiTabBarPosition pos);

@@ -70,7 +70,7 @@ void
 KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon, QString text)
 {
 	m_tabs++;
-	m_tabBar->insertTab(kexi->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs,text);
+	m_tabBar->appendTab(kexi->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs,text);
 
 	connect(m_tabBar->getTab(m_tabs), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
 	m_stack->addWidget(browser);
