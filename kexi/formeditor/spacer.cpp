@@ -65,8 +65,8 @@ Spacer::saveSpacer(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 {
 	QDomElement tclass = domDoc.createElement("spacer");
 	parent.appendChild(tclass);
-	tclass.appendChild(FormIO::prop(domDoc, "name", item->widget()->property("name"), item->widget()));
-	tclass.appendChild(FormIO::prop(domDoc, "geometry", item->widget()->property("geometry"), item->widget()));
+	FormIO::prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
+	FormIO::prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
 
 	// Saving spacer orientation
 	QDomElement propertyE = domDoc.createElement("property");

@@ -28,6 +28,9 @@ class KActionCollection;
 class KAction;
 class QWidget;
 class QPopupMenu;
+class QVariant;
+class QDomDocument;
+class QDomElement;
 
 namespace KFormDesigner {
 /**
@@ -97,7 +100,11 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 		void    startEditing(const QString &classname, QWidget *w, Container *container);
 
+		void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
+		        QDomElement &parentNode, QDomDocument &parent);
+		void		readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w);
 		bool    showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
+		QStringList  autoSaveProperties(const QString &classname);
 
 	signals:
 		void	prepareInsert(const QString &c);

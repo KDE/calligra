@@ -15,6 +15,8 @@
 #include <qcheckbox.h>
 #include <qobjectlist.h>
 #include <qstring.h>
+#include <qvariant.h>
+#include <qdom.h>
 
 #include <klineedit.h>
 #include <kpushbutton.h>
@@ -28,6 +30,7 @@
 #include <kdebug.h>
 
 #include "spacer.h"
+#include "formIO.h"
 #include "stdwidgetfactory.h"
 
 // Some widgets subclass to allow event filtering and some other things
@@ -38,11 +41,15 @@ class KFORMEDITOR_EXPORT MyTextEdit : public KTextEdit
 		 : KTextEdit(text, QString::null, parent, name)
 		{
 			m_container = container;
-			setReadOnly(true);
+			//setReadOnly(true);
 			setCursor(QCursor(Qt::ArrowCursor));
 		}
 		~MyTextEdit() {;}
 
+		void setContainer(QObject *container)
+		{
+			m_container = container;
+		}
 		virtual bool eventFilter(QObject *o, QEvent *ev)
 		{
 			bool ok = m_container->eventFilter(this, ev);
@@ -72,6 +79,10 @@ class KFORMEDITOR_EXPORT MySpinBox : public KIntSpinBox
 		}
 		~MySpinBox() {;}
 
+		void setContainer(QObject *container)
+		{
+			m_container = container;
+		}
 		virtual bool eventFilter(QObject *o, QEvent *ev)
 		{
 			bool ok = m_container->eventFilter(this, ev);
@@ -311,23 +322,62 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 	}
 	else if(classname == "KIntSpinBox")
 	{
-		KIntSpinBox *spin = static_cast<KIntSpinBox*>(w);
+		/*KIntSpinBox *spin = static_cast<KIntSpinBox*>(w);
 		QRect r(spin->geometry());
 		r.setWidth(r.width() - spin->upRect().width());
 		createEditor(spin->text(), spin, r, Qt::AlignRight, true, Qt::PaletteBase);
-		m_editor->setValidator(spin->validator());
+		m_editor->setValidator(spin->validator());*/
+		((MySpinBox*)w)->setContainer(this);
+		disableFilter(w, container);
 	}
-	else if(classname == "KComboBox")
+	else if((classname == "KComboBox") || (classname == "KListBox"))
 	{
-	}
-	else if(classname == "KListBox")
-	{
+		QStringList list;
+		if(classname == "KListBox")
+		{
+			KListBox *listbox = (KListBox*)w;
+			for(uint i=0; i < listbox->count(); i++)
+				list.append(listbox->text(i));
+		}
+		else if(classname == "KComboBox")
+		{
+			KComboBox *combo = (KComboBox*)w;
+			for(int i=0; i < combo->count(); i++)
+				list.append(combo->text(i));
+		}
+
+		if(editList(w, list))
+		{
+			if(classname == "KListBox")
+			{
+				((KListBox*)w)->clear();
+				((KListBox*)w)->insertStringList(list);
+			}
+			else if(classname == "KComboBox")
+			{
+				((KComboBox*)w)->clear();
+				((KComboBox*)w)->insertStringList(list);
+			}
+		}
 	}
 	else if(classname == "KTextEdit")
 	{
+		((MyTextEdit*)w)->setContainer(this);
+		disableFilter(w, container);
 	}
 
 	return;
+}
+
+void
+StdWidgetFactory::resetEditor()
+{
+	if(m_widget && !m_editor && m_widget->isA("KTextEdit"))
+		((MyTextEdit*)m_widget)->setContainer(m_container);
+	else if(m_widget && !m_editor && m_widget->isA("KIntSpinBox"))
+		((MySpinBox*)m_widget)->setContainer(m_container);
+
+	WidgetFactory::resetEditor();
 }
 
 void
@@ -340,6 +390,61 @@ StdWidgetFactory::changeText(const QString &text)
 		changeProperty("text", text, m_container);
 }
 
+void
+StdWidgetFactory::saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &domDoc)
+{
+	if(name == "list_items" && classname == "KComboBox")
+	{
+		KComboBox *combo = (KComboBox*)w;
+		for(int i=0; i < combo->count(); i++)
+		{
+			QDomElement item = domDoc.createElement("item");
+			KFormDesigner::FormIO::saveProperty(item, domDoc, "property", "text", combo->text(i));
+			parentNode.appendChild(item);
+		}
+	}
+
+	if(name == "list_items" && classname == "KListBox")
+	{
+		KListBox *listbox = (KListBox*)w;
+		for(uint i=0; i < listbox->count(); i++)
+		{
+			QDomElement item = domDoc.createElement("item");
+			KFormDesigner::FormIO::saveProperty(item, domDoc, "property", "text", listbox->text(i));
+			parentNode.appendChild(item);
+		}
+	}
+
+	return;
+}
+
+void
+StdWidgetFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w)
+{
+	QString tag = node.tagName();
+	QString name = node.attribute("name");
+
+	if(tag == "item" && classname == "KComboBox")
+	{
+		KComboBox *combo = (KComboBox*)w;
+		QVariant val = KFormDesigner::FormIO::readProp(node.firstChild().firstChild(), w, name);
+		if(val.canCast(QVariant::Pixmap))
+			combo->insertItem(val.toPixmap());
+		else
+			combo->insertItem(val.toString());
+	}
+
+	if(tag == "item" && classname == "KListBox")
+	{
+		KListBox *listbox = (KListBox*)w;
+		QVariant val = KFormDesigner::FormIO::readProp(node.firstChild().firstChild(), w, name);
+		if(val.canCast(QVariant::Pixmap))
+			listbox->insertItem(val.toPixmap());
+		else
+			listbox->insertItem(val.toString());
+	}
+}
+
 bool
 StdWidgetFactory::showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple)
 {
@@ -348,6 +453,19 @@ StdWidgetFactory::showProperty(const QString &classname, QWidget *w, const QStri
 		return KFormDesigner::Spacer::showProperty(property);
 	}
 	return !multiple;
+}
+
+QStringList
+StdWidgetFactory::autoSaveProperties(const QString &classname)
+{
+	if(classname == "QLabel")
+		return QStringList("text");
+	if(classname == "KComboBox")
+		return QStringList("list_items");
+	if(classname == "KListBox")
+		return QStringList("list_items");
+
+	return QStringList();
 }
 
 StdWidgetFactory::~StdWidgetFactory()

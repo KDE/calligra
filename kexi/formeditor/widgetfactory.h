@@ -30,6 +30,9 @@
 
 class QWidget;
 class KLineEdit;
+class QDomElement;
+class QDomDocument;
+class QVariant;
 
 namespace KFormDesigner {
 
@@ -129,7 +132,11 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		virtual void		startEditing(const QString &classname, QWidget *w, Container *container)=0;
 
+		virtual void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
+		         QDomElement &parentNode,  QDomDocument &parent)=0;
+		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w)=0;
 		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple) { return !multiple; }
+		virtual QStringList     autoSaveProperties(const QString &classname)=0;
 
 	protected:
 		/*! This function creates a KLineEdit to input some text and edit a widget's contents. This can be used in startEditing().
@@ -138,6 +145,8 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		virtual KLineEdit*	createEditor(const QString &text, QWidget *w, QRect geometry, int align,  bool useFrame=false,
 		     BackgroundMode background = Qt::NoBackground);
+		virtual void     disableFilter(QWidget *w, Container *container);
+		virtual bool     editList(QWidget *w, QStringList &list);
 		/*! This function destroys the editor. */
 		virtual bool  eventFilter(QObject *obj, QEvent *ev);
 		virtual void  changeProperty(const char *name, const QVariant &value, Container *container);
@@ -156,6 +165,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		QWidget *m_widget;
 		KLineEdit  *m_editor;
 		ResizeHandleSet  *m_handles;
+		Container      *m_container;
 };
 
 }

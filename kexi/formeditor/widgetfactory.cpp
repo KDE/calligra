@@ -16,8 +16,14 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include <qlayout.h>
+#include <qdialog.h>
 
+#include <keditlistbox.h>
+#include <kstdguiitem.h>
 #include <klineedit.h>
+#include <kpushbutton.h>
+#include <kdebug.h>
 
 #include "resizehandle.h"
 #include "objpropbuffer.h"
@@ -34,6 +40,7 @@ WidgetFactory::WidgetFactory(QObject *parent, const char *name)
 	m_editor = 0;
 	m_widget = 0;
 	m_handles = 0;
+	m_container = 0;
 }
 
 KLineEdit*
@@ -53,19 +60,67 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 	editor->setFocus();
 	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeText(const QString&)));
 	connect(w, SIGNAL(destroyed()), this, SLOT(resetEditor()));
-	connect(m_editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+	connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
 
-	m_handles = new ResizeHandleSet(editor, true);
+	m_handles = new ResizeHandleSet(w, true);
 
 	m_editor = editor;
 	m_widget = w;
 	return editor;
 }
 
+void
+WidgetFactory::disableFilter(QWidget *w, Container *container)
+{
+	w->removeEventFilter(container);
+	w->installEventFilter(this);
+	w->setFocus();
+	m_handles = new ResizeHandleSet(w, true);
+	m_widget = w;
+	m_container = container;
+	m_editor = 0;
+
+	connect(w, SIGNAL(destroyed()), this, SLOT(resetEditor()));
+}
+
+bool
+WidgetFactory::editList(QWidget *w, QStringList &list)
+{
+	QDialog* dialog = new QDialog(w->topLevelWidget(), "stringlist_dialog", true);
+	QVBoxLayout *vbox = new QVBoxLayout(dialog, 2);
+
+	KEditListBox *edit = new KEditListBox(dialog, "editlist");
+	vbox->addWidget(edit);
+
+	QHBoxLayout *hbox = new QHBoxLayout(vbox, 6);
+	KPushButton *pbOk = new KPushButton(KStdGuiItem::ok(), dialog);
+	KPushButton *pbCancel = new KPushButton(KStdGuiItem::cancel(), dialog);
+	QSpacerItem *spacer = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+	connect(pbOk, SIGNAL(clicked()), dialog, SLOT(accept()));
+	connect(pbCancel, SIGNAL(clicked()), dialog, SLOT(reject()));
+
+	hbox->addItem(spacer);
+	hbox->addWidget(pbOk);
+	hbox->addWidget(pbCancel);
+
+	edit->insertStringList(list);
+
+	if(dialog->exec() == QDialog::Accepted)
+	{
+		list = edit->items();
+		return true;
+	}
+	else
+		return false;
+}
+
 bool
 WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 {
-	if(obj != (QObject *)m_editor)
+	QWidget *w = m_editor ? m_editor : m_widget;
+
+	if(obj != (QObject *)w)
 		return false;
 
 	if(ev->type() == QEvent::FocusOut)
@@ -73,7 +128,7 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 	else if(ev->type() == QEvent::KeyPress)
 	{
 		QKeyEvent *e = static_cast<QKeyEvent*>(ev);
-		if((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter))
+		if(((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->state() != ControlButton))
 			resetEditor();
 	}
 	else if(ev->type() == QEvent::ContextMenu)
@@ -85,10 +140,16 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 void
 WidgetFactory::resetEditor()
 {
-	if(!m_editor)
-		return;
-	changeText(m_editor->text());
-	m_editor->deleteLater();
+	if(!m_editor && m_widget)
+	{
+		m_widget->removeEventFilter(this);
+		m_widget->installEventFilter(m_container);
+	}
+	else
+	{
+		changeText(m_editor->text());
+		m_editor->deleteLater();
+	}
 	delete m_handles;
 	m_editor = 0;
 	m_widget = 0;

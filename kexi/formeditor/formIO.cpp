@@ -211,31 +211,17 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 	return 1;
 }
 
-QDomElement
-FormIO::prop(QDomDocument &parent, const char *name, const QVariant &value, QWidget *w)
+void
+FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, const QVariant &value, QWidget *w, WidgetLibrary *lib)
 {
 	// Widget specific properties and attributes ///////////////
-
-	// The widget is a page of a QTabWidget
-	if(name == QString("title") && (w->parentWidget()->inherits("QWidgetStack")))
+	kdDebug() << "FormIO::prop()  saving the property " << name << endl;
+	if(w->metaObject()->findProperty(name, true) == -1)
 	{
-		QTabWidget *tab = (QTabWidget*)w->parentWidget()->parentWidget();
-
-		QDomElement propertyE = parent.createElement("attribute");
-		propertyE.setAttribute("name", name);
-		QDomElement type = parent.createElement("string");
-		QDomText valueE = parent.createTextNode(tab->tabLabel(w));
-
-		type.appendChild(valueE);
-		propertyE.appendChild(type);
-		return propertyE;
+		if(lib)
+			lib->saveSpecialProperty(w->className(), name, value, w, parentNode, parent);
+		return;
 	}
-
-	// TODO : The widget is a page of a QWidgetStack
-
-	// End of widget specific stuff //////////////////////
-
-
 
 	QDomElement propertyE = parent.createElement("property");
 	propertyE.setAttribute("name", name);
@@ -263,11 +249,21 @@ FormIO::prop(QDomDocument &parent, const char *name, const QVariant &value, QWid
 			type.appendChild(valueE);
 		}
 		propertyE.appendChild(type);
-		return propertyE;
+		parentNode.appendChild(propertyE);
+		return;
 	}
 
 
 	// Saving a "normal" property
+	writeVariant(parent, type, valueE, value);
+
+	propertyE.appendChild(type);
+	parentNode.appendChild(propertyE);
+}
+
+void
+FormIO::writeVariant(QDomDocument &parent, QDomElement &type, QDomText &valueE, QVariant value)
+{
 	switch(value.type())
 	{
 		case QVariant::String:
@@ -446,9 +442,19 @@ FormIO::prop(QDomDocument &parent, const char *name, const QVariant &value, QWid
 		default:
 			break;
 	}
+}
 
+void
+FormIO::saveProperty(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, const QString &property, const QVariant &value)
+{
+	QDomElement propertyE = domDoc.createElement(tagName);
+	propertyE.setAttribute("name", property);
+	QDomElement type;
+	QDomText valueE;
+
+	writeVariant(domDoc, type, valueE, value);
 	propertyE.appendChild(type);
-	return propertyE;
+	parentNode.appendChild(propertyE);
 }
 
 QVariant
@@ -569,7 +575,7 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	}
 		return QVariant();
 }
-
+/*
 void
 FormIO::readAttribute(QDomNode node, QObject *obj, const QString &name)
 {
@@ -580,7 +586,7 @@ FormIO::readAttribute(QDomNode node, QObject *obj, const QString &name)
 		QTabWidget *tab = (QTabWidget*)w->parentWidget();
 		tab->addTab(w, tag.text());
 	}
-}
+}*/
 
 void
 FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout)
@@ -604,8 +610,14 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		}
 	}
 	tclass.setAttribute("class", item->widget()->className());
-	tclass.appendChild(prop(domDoc, "name", item->widget()->property("name"), item->widget()));
-	tclass.appendChild(prop(domDoc, "geometry", item->widget()->property("geometry"), item->widget()));
+	prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
+	prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
+
+	WidgetLibrary *lib=0;
+	if(item->container())
+		lib = item->container()->form()->manager()->lib();
+	else
+		lib = item->parent()->container()->form()->manager()->lib();
 
 	for(QMap<QString,QVariant>::Iterator it = item->modifProp()->begin(); it != item->modifProp()->end(); ++it)
 	{
@@ -613,13 +625,13 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		{
 			if(!savedAlignment)
 			{
-				tclass.appendChild(prop(domDoc, "alignment", item->widget()->property("alignment"), item->widget()));
+				prop(tclass, domDoc, "alignment", item->widget()->property("alignment"), item->widget());
 				savedAlignment = true;
 			}
 		}
 
 		else if((it.key() != QString("name")) && (it.key() != QString("geometry")) && (it.key() != QString("layout")))
-			tclass.appendChild(prop(domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), item->widget()));
+			prop(tclass, domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), item->widget(), lib);
 	}
 	parent.appendChild(tclass);
 
@@ -652,7 +664,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		if(!nodeName.isNull())
 		{
 			layout = domDoc.createElement(nodeName);
-			layout.appendChild(prop(domDoc, "name", "unnamed", item->widget()));
+			prop(layout, domDoc, "name", "unnamed", item->widget());
 			tclass.appendChild(layout);
 		}
 	}
@@ -723,7 +735,6 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 
 	if(insideGrid)
 	{
-		kdDebug() << "FormIO:: we are inside a grid " << endl;
 		QGridLayout *layout = (QGridLayout*)container->layout();
 		if(!layout)
 			kdDebug() << "FormIO::ERROR:: the layout == 0" << endl;
@@ -771,23 +782,29 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 {
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
-		if(n.toElement().tagName() == "property")
+		if((n.toElement().tagName() == "property") || (n.toElement().tagName() == "attribute"))
 		{
-			QString name = n.toElement().attribute("name");
+			QDomElement node = n.toElement();
+			QString name = node.attribute("name");
 			if( ((el.tagName() == "grid") || (el.tagName() == "hbox") || (el.tagName() == "vbox")) &&
 			      (name == "name"))
 				continue;
 
-			QVariant val = readProp(n.toElement().firstChild(), w, name);
-			w->setProperty(name.latin1(), val);
-			tree->addModProperty(name, val);
-		}
+			if(w->metaObject()->findProperty(name.latin1(), true) == -1)
+				lib->readSpecialProperty(w->className(), node, w);
+			else
+			{
+				QVariant val = readProp(node.firstChild(), w, name);
+				w->setProperty(name.latin1(), val);
+				tree->addModProperty(name, val);
+			}
+		}/*
 		if(n.toElement().tagName() == "attribute")
 		{
 			QString name = n.toElement().attribute("name");
 			readAttribute(n.toElement().firstChild(), w, name);
-		}
-		if(n.toElement().tagName() == "widget")
+		}*/
+		else if(n.toElement().tagName() == "widget")
 		{
 			bool insideGrid = (el.tagName() == "grid");
 			if(tree->container())
@@ -795,17 +812,22 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			else
 				loadWidget(container, lib, n.toElement(), w, insideGrid);
 		}
-		if(n.toElement().tagName() == "spacer")
+		else if(n.toElement().tagName() == "spacer")
 		{
 			bool insideGrid = (el.tagName() == "grid");
 			loadWidget(container, lib, n.toElement(), w, insideGrid);
 		}
-		if((n.toElement().tagName() == "vbox") || (n.toElement().tagName() == "hbox") || (n.toElement().tagName() == "grid"))
+		else if((n.toElement().tagName() == "vbox") || (n.toElement().tagName() == "hbox") || (n.toElement().tagName() == "grid"))
 		{
 			loadLayout(n.toElement(), tree);
 			readChildNodes(tree, container, lib, n.toElement(), w);
 			if(n.toElement().tagName() != "grid")
 				container->reloadLayout();
+		}
+		else
+		{
+			QDomElement node = n.toElement();
+			lib->readSpecialProperty(w->className(), node, w);
 		}
 	}
 }

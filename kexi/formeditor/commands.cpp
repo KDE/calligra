@@ -235,6 +235,11 @@ InsertWidgetCommand::execute()
 	if (!m_container->form()->objectTree()->lookup(m_name))
 		m_container->form()->objectTree()->addChild(m_container->m_tree, new ObjectTreeItem(m_container->form()->manager()->lib()->displayName(m_class), m_name, w));
 
+	ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
+	QStringList list(m_container->form()->manager()->lib()->autoSaveProperties(w->className()));
+	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
+		item->addModProperty(*it, w->property((*it).latin1()));
+
 	m_container->reloadLayout();
 
 	m_container->setSelectedWidget(w, false);

@@ -24,6 +24,10 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		virtual void				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 		virtual void		startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
 		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple) { return !multiple;}
+		virtual void     saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
+		                        QDomElement &parentNode, QDomDocument &parent);
+		virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w);
+		virtual QStringList     autoSaveProperties(const QString &classname);
 
 	protected:
 		virtual void  changeText(const QString &newText);

@@ -13,6 +13,7 @@
 #include <qwidget.h>
 #include <qstring.h>
 #include <qpopupmenu.h>
+#include <qdom.h>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -23,6 +24,7 @@
 #include "containerfactory.h"
 #include "container.h"
 #include "form.h"
+#include "formIO.h"
 #include "objecttree.h"
 
 ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStringList &)
@@ -45,7 +47,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wWidget = new KFormDesigner::Widget(this);
 	wWidget->setPixmap("widget");
 	wWidget->setClassName("QWidget");
-	wWidget->setName(i18n("Empty Widget"));
+	wWidget->setName(i18n("Basic container"));
 	wWidget->setDescription(i18n("An empty container with no frame"));
 	m_classes.append(wWidget);
 }
@@ -134,6 +136,35 @@ ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 		return;
 	}
 	return;
+}
+
+void
+ContainerFactory::saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
+{
+	if((name == "title") && (w->parentWidget()->inherits("QWidgetStack")) )
+	{
+		QTabWidget *tab = (QTabWidget*)w->parentWidget()->parentWidget();
+		KFormDesigner::FormIO::saveProperty(parentNode, parent, "attribute", "title", tab->tabLabel(w));
+	}
+
+	return;
+}
+
+void
+ContainerFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w)
+{
+	QString name = node.attribute("name");
+	if((name == "title") && (w->parentWidget()->isA("QTabWidget")))
+	{
+		QTabWidget *tab = (QTabWidget*)w->parentWidget();
+		tab->addTab(w, node.firstChild().toElement().text());
+	}
+}
+
+QStringList
+ContainerFactory::autoSaveProperties(const QString &classname)
+{
+	return QStringList();
 }
 
 void

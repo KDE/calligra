@@ -178,13 +178,12 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(mev->button() == RightButton)
 			{
-				kdDebug() << "Container::eventFilter(): context menu" << endl;
 				KPopupMenu *parent = m_form->manager()->popupMenu();
 				QWidget *w = (QWidget*)s;
 				QString n = m_form->manager()->lib()->displayName(w->className());
 				KPopupMenu *p = new KPopupMenu();
 
-				m_form->manager()->lib()->createMenuActions(n,w,p,this);
+				m_form->manager()->lib()->createMenuActions(w->className(),w,p,this);
 				int id = parent->insertItem(n,p);
 
 				m_form->manager()->setInsertPoint(m_container->mapFromGlobal(QCursor::pos()));

@@ -166,6 +166,24 @@ WidgetLibrary::displayName(const QString &classname)
 		return QString();
 }
 
+void
+WidgetLibrary::saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
+{
+	if(m_widgets.find(classname))
+		m_widgets[classname]->factory()->saveSpecialProperty(classname, name, value, w, parentNode, parent);
+	else
+		return;
+}
+
+void
+WidgetLibrary::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w)
+{
+	if(m_widgets.find(classname))
+		m_widgets[classname]->factory()->readSpecialProperty(classname, node, w);
+	else
+		return;
+}
+
 bool
 WidgetLibrary::showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple)
 {
@@ -173,6 +191,15 @@ WidgetLibrary::showProperty(const QString &classname, QWidget *w, const QString 
 		return m_widgets[classname]->factory()->showProperty(classname, w, property, multiple);
 	else
 		return true;
+}
+
+QStringList
+WidgetLibrary::autoSaveProperties(const QString &classname)
+{
+	if(m_widgets.find(classname))
+		return m_widgets[classname]->factory()->autoSaveProperties(classname);
+	else
+		return QStringList();
 }
 
 WidgetLibrary::~WidgetLibrary()
