@@ -41,7 +41,7 @@ ImageExport::ImageExport () {
   qInitImageIO ();
 #endif
   QImageIO::defineIOHandler ("GIF", "^GIF[0-9][0-9][a-z]", 0, 
-			     0, write_gif_file);
+			     0, write_gif_image);
 }
 
 ImageExport::~ImageExport () {

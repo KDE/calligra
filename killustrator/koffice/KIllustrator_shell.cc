@@ -33,6 +33,7 @@
 
 #include <kfiledialog.h>
 #include <kiconloader.h>
+#include <kimgio.h>
 #include <qmsgbox.h>
 #include <qkeycode.h>
 #include <qfileinfo.h>
@@ -50,6 +51,8 @@ KIllustratorShell::KIllustratorShell () {
   s_lstShells->push_back (this);
 
   if (! previewHandlerRegistered) {
+    kimgioRegister ();
+
     KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
 					       PreviewPixmap);
     KFilePreviewDialog::registerPreviewModule ("wmf", wmfPreviewHandler,

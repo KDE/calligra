@@ -42,7 +42,7 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
 				  Canvas* canvas) {
   if (e->type () == Event_MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     bool flag = me->state () & ControlButton;
@@ -59,7 +59,7 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
       return;
 
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
     rect->setEndPoint (Coord (xpos, ypos));
   }
@@ -68,7 +68,7 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
       return;
 
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     rect->setEndPoint (Coord (xpos, ypos));

@@ -511,11 +511,11 @@ bool GDocument::saveToXml (ostream& os) {
   xml.startTag ("grid", false);
   xml.addAttribute ("dx", gridx);
   xml.addAttribute ("dy", gridy);
-  xml.addAttribute ("align", snapToGrid);
+  xml.addAttribute ("align", snapToGrid ? 1 : 0);
   xml.closeTag (true);
 
   xml.startTag ("helplines", false);
-  xml.addAttribute ("align", snapToHelplines);
+  xml.addAttribute ("align", snapToHelplines ? 1 : 0);
   xml.closeTag ();
   vector<float>::iterator hi;
   for (hi = hHelplines.begin (); hi != hHelplines.end (); hi++) {
@@ -1113,13 +1113,13 @@ void GDocument::invalidateClipRegions () {
 void GDocument::setGrid (float dx, float dy, bool snap) {
   gridx = dx;
   gridy = dy;
-  snapToHelplines = snap;
+  snapToGrid = snap;
 }
 
 void GDocument::getGrid (float& dx, float& dy, bool& snap) {
   dx = gridx;
   dy = gridy;
-  snap = snapToHelplines;
+  snap = snapToGrid;
 }
 
 void GDocument::setHelplines (const vector<float>& hlines, 

@@ -49,7 +49,7 @@ OvalTool::OvalTool (CommandHistory *history) : Tool (history) {
 void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   if (e->type () == Event_MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     pos = Coord (xpos, ypos);
@@ -63,7 +63,7 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (oval == NULL)
       return; 
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
 
     canvas->snapPositionToGrid (xpos, ypos);
 
@@ -92,7 +92,7 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (oval == NULL)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     if (useFixedCenter) {

@@ -82,6 +82,7 @@
 #include <kcombo.h>
 #include <qlayout.h>
 #include <unistd.h>
+#include <kimgio.h>
 
 #include "koPageLayoutDia.h"
 
@@ -156,6 +157,8 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES, canvas->alignToHelplines ());
 
   if (! previewHandlerRegistered) {
+    kimgioRegister ();
+
     KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
 					       PreviewPixmap);
     KFilePreviewDialog::registerPreviewModule ("wmf", wmfPreviewHandler,

@@ -163,24 +163,29 @@ void GText::drawSimpleText (Painter& p) {
     int ws = fm->width (s);
     int xoff = 0;
     if (textInfo.align == TextInfo::AlignCenter)
-      xoff = (max_width - ws) / 2;
+      xoff = -ws / 2;
     else if (textInfo.align == TextInfo::AlignRight)
-      xoff = max_width - ws;
+      xoff = -ws;
     QPoint pos (xoff, (int) y);
     p.drawText (pos, s);
     y += fm->height ();
   }
   if (cursorActive) {
-    float x1, x2, y1, y2;
+    float x1, y1, y2;
     y1 = cursy * fm->height () - 1;
     y2 = y1 + fm->height () + 2;
     const char* s = text[cursy];
+    int ws = fm->width (s);
     x1 = 0;
     for (int i = 0; i < cursx; i++) 
-	x1 += fm->width (s[i]);
-    x2 = x1;
+      x1 += fm->width (s[i]);
+    if (textInfo.align == TextInfo::AlignCenter)
+      x1 += (-ws / 2);
+    else if (textInfo.align == TextInfo::AlignRight)
+      x1 += -ws;
+
     p.setPen (black);
-    p.drawLine (x1, y1, x2, y2);
+    p.drawLine (x1, y1, x1, y2);
   }
 }
 
@@ -396,6 +401,7 @@ void GText::calcBoundingBox () {
   }
   else {
     int width = 0, height = 0;
+    int xp = 0;
     for (it = text.begin (); it != text.end (); it++) {
       const char* s = *it;
       int ws = fm->width (s);
@@ -407,11 +413,16 @@ void GText::calcBoundingBox () {
       height = QMAX(height, fm->height () + 2);
       width += 2;
     }
-    calcUntransformedBoundingBox (Coord (0, 0), 
+    if (textInfo.align == TextInfo::AlignCenter)
+      xp = -max_width / 2;
+    else if (textInfo.align == TextInfo::AlignRight)
+      xp = -max_width;
+    width += xp;
+    calcUntransformedBoundingBox (Coord (xp, 0), 
 				  Coord (width, cursorActive ? -1 : 0),
 				  Coord (width, 
 					 height + (cursorActive ? 2 : 0)),
-				  Coord (0, height + (cursorActive ? 2 : 0)));
+				  Coord (xp, height + (cursorActive ? 2 : 0)));
   }
 }
 

@@ -90,7 +90,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (me->button () != LeftButton)
       return;
 
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     if (line != 0L) {
@@ -155,7 +155,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (line == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     line->setPoint (last, Coord (xpos, ypos));
@@ -164,7 +164,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (line == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     line->setPoint (last, Coord (xpos, ypos));

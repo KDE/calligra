@@ -45,7 +45,7 @@ PolygonTool::PolygonTool (CommandHistory* history) : Tool (history) {
 void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   if (e->type () == Event_MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     obj = new GPolygon (GPolygon::PK_Polygon);
@@ -58,7 +58,7 @@ void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (obj == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners, 
@@ -68,7 +68,7 @@ void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (obj == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners, 

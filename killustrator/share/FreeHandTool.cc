@@ -53,7 +53,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     buttonIsDown = true;
 
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     if (line != 0L) {
@@ -102,7 +102,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (line == 0L || !buttonIsDown)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     Coord np (xpos, ypos);
@@ -120,7 +120,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (line == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     Coord np (xpos, ypos);

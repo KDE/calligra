@@ -149,7 +149,7 @@ void Canvas::setGridDistance (float hdist, float vdist) {
   document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
 }
 
-void Canvas::snapPositionToGrid (int& x, int& y) {
+void Canvas::snapPositionToGrid (float& x, float& y) {
   bool snap = false;
 
   if (helplinesSnapIsOn) {
@@ -157,31 +157,31 @@ void Canvas::snapPositionToGrid (int& x, int& y) {
     vector<float>::iterator i;
     for (i = horizHelplines.begin (); i != horizHelplines.end (); i++) {
       if (fabs (*i - y) <= 10.0) {
-	y = qRound (*i);
+	y = *i;
 	snap = true;
 	break;
       }
     }
     for (i = vertHelplines.begin (); i != vertHelplines.end (); i++) {
       if (fabs (*i - x) <= 10.0) {
-	x = qRound (*i);
+	x = *i;
 	snap = true;
 	break;
       }
     }
   }
   if (gridSnapIsOn && ! snap) {
-    int n = (int) ((float) x / hGridDistance);
-    float r = fmod ((float) x, hGridDistance);
+    int n = (int) (x / hGridDistance);
+    float r = fmod (x, hGridDistance);
     if (r > (hGridDistance / 2.0))
       n++;
-    x = qRound (hGridDistance * (float) n);
+    x = hGridDistance * n;
 
-    n = (int) ((float) y / vGridDistance);
-    r = fmod ((float) y, vGridDistance);
+    n = (int) (y / vGridDistance);
+    r = fmod (y, vGridDistance);
     if (r > (vGridDistance / 2.0))
       n++;
-    y = qRound (vGridDistance * (float) n);
+    y = vGridDistance * n;
   }
 }
 

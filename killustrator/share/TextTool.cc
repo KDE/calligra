@@ -74,7 +74,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     }
     if (text == 0) {
       text = new GText ();
-      int xpos = me->x (), ypos = me->y ();
+      float xpos = me->x (), ypos = me->y ();
       canvas->snapPositionToGrid (xpos, ypos);
 
       if (origState) {

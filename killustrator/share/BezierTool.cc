@@ -125,7 +125,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (me->button () != LeftButton)
       return;
 
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     if (curve == 0L) {
@@ -229,7 +229,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       return;
 
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     curve->setPoint (last, Coord (xpos, ypos));
@@ -238,7 +238,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (curve == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
     
     curve->setPoint (last, Coord (xpos, ypos));

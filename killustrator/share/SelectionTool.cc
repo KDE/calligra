@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include <stdlib.h>
+#include <math.h>
 #include "SelectionTool.h"
 #include "SelectionTool.moc"
 #include "GDocument.h"
@@ -76,7 +77,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
   Handle::Mode mode = Handle::HMode_Default;
 
   doc->handle ().show (true);
-  int xpos = me->x (), ypos = me->y ();
+  float xpos = me->x (), ypos = me->y ();
 
   /**********
    * S_Rubberband
@@ -185,7 +186,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
   }
 
   if (! doc->selectionIsEmpty ()) {
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
 
     //    int xoff = me->x () - firstpos.x ();
     //    int yoff = me->y () - firstpos.y ();
@@ -249,8 +250,8 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
     }
     if (me->state () == LeftButton) {
       canvas->snapPositionToGrid (xpos, ypos);
-      int xoff = xpos - firstpos.x ();
-      int yoff = ypos - firstpos.y ();
+      float xoff = xpos - firstpos.x ();
+      float yoff = ypos - firstpos.y ();
 
       doc->handle ().show (false);
 
@@ -289,11 +290,11 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   int hmask;
   GObject *obj = 0L;
 
-  int xpos = me->x (), ypos = me->y ();
+  float xpos = me->x (), ypos = me->y ();
   canvas->snapPositionToGrid (xpos, ypos);
 
-  firstpos.setX (xpos);
-  firstpos.setY (ypos);
+  firstpos.x (xpos);
+  firstpos.y (ypos);
   
   hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
   bool ctrlFlag = me->state () & ControlButton;
@@ -427,7 +428,7 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
 
 #define BIG_STEP 10
 #define SMALL_STEP 2
-  int dx = 0, dy = 0;
+  float dx = 0, dy = 0;
   bool shift = ke->state () & ShiftButton;
 
   switch (ke->key ()) {
@@ -450,7 +451,7 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
     translate (doc, dx, dy, true);
 }
 
-void SelectionTool::translate (GDocument* doc, int dx, int dy, 
+void SelectionTool::translate (GDocument* doc, float dx, float dy, 
 			       bool permanent) {
   if (permanent) {
     for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
@@ -470,23 +471,23 @@ void SelectionTool::translate (GDocument* doc, int dx, int dy,
   }
 }
 
-void SelectionTool::rotate (GDocument* doc, int dx, int dy,
-			    int xp, int yp, bool permanent) {
-  int adx = abs (dx);
-  int ady = abs (dy);
+void SelectionTool::rotate (GDocument* doc, float dx, float dy,
+			    float xp, float yp, bool permanent) {
+  float adx = fabs (dx);
+  float ady = fabs (dy);
   float angle = 0;
 
   //  Rect r = doc->boundingBoxForSelection ();
   Rect& r = origbox;
 
   if (adx > ady) {
-    angle = (float) adx / r.width () * 180.0;
+    angle = adx / r.width () * 180.0;
     if ((yp > rotCenter.y () && dx > 0) ||
 	(yp < rotCenter.y () && dx < 0))
       angle = -angle;
   }
   else if (adx < ady) {
-    angle = (float) ady / r.height () * 180.0;
+    angle = ady / r.height () * 180.0;
     if ((xp > rotCenter.x () && dy < 0) ||
 	(xp < rotCenter.x () && dy > 0))
       angle = -angle;
@@ -515,7 +516,7 @@ void SelectionTool::rotate (GDocument* doc, int dx, int dy,
   }
 }
 
-void SelectionTool::scale (GDocument* doc, int mask, int dx, int dy, 
+void SelectionTool::scale (GDocument* doc, int mask, float dx, float dy, 
 			   bool permanent) {
   Rect& r = origbox;
 
@@ -561,7 +562,7 @@ void SelectionTool::scale (GDocument* doc, int mask, int dx, int dy,
   }
 }
 
-void SelectionTool::shear (GDocument* doc, int mask, int dx, int dy, 
+void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy, 
 			   bool permanent) {
   Rect& r = origbox;
   float sx = 0.0, sy = 0.0;

@@ -83,7 +83,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
 
   if (e->type () == Event_MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     obj = 0L;
@@ -107,7 +107,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       return;
 
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     if (obj == 0L) {
@@ -147,7 +147,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       return;
 
     QMouseEvent *me = (QMouseEvent *) e;
-    int xpos = me->x (), ypos = me->y ();
+    float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
     if (mode == MovePoint) {
       if (pointIdx != -1) {

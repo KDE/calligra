@@ -43,13 +43,13 @@ public:
   virtual void activate (GDocument* doc, Canvas*);
   virtual void deactivate (GDocument*, Canvas*);
   
-  void rotate (GDocument* doc, int dx, int dy, int xp, int yp,
+  void rotate (GDocument* doc, float dx, float dy, float xp, float yp,
 	       bool permanent = false);
-  void scale (GDocument* doc, int mask, int dx, int dy, 
+  void scale (GDocument* doc, int mask, float dx, float dy, 
 	      bool permanent = false);
-  void shear (GDocument* doc, int mask, int dx, int dy, 
+  void shear (GDocument* doc, int mask, float dx, float dy, 
 	      bool permanent = false);
-  void translate (GDocument* doc, int dx, int dy, bool permanent = false);
+  void translate (GDocument* doc, float dx, float dy, bool permanent = false);
   
   virtual bool consumesRMBEvents () { return false; }
 
@@ -70,7 +70,7 @@ private:
   enum CursorType { C_Arrow, C_Size, C_Move, C_Rotate };
   State state;
   CursorType ctype;
-  QPoint firstpos;
+  Coord firstpos;
   Rect origbox;
   int oldmask;
   Coord selPoint[2];

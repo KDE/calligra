@@ -70,7 +70,7 @@ public:
   float getHorizGridDistance () const { return hGridDistance; }
   float getVertGridDistance () const { return vGridDistance; }
 
-  void snapPositionToGrid (int& x, int& y);
+  void snapPositionToGrid (float& x, float& y);
 
   void setToolController (ToolController *tc);
   
