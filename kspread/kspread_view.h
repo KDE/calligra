@@ -685,7 +685,6 @@ private:
   void initializeAreaOperationActions();
   void initializeGlobalOperationActions();
   void initializeCellOperationActions();
-  void initializeCellPropertyActions();
   void initializeTableActions();
   void initializeSpellChecking();
   void initializeRowColumnActions();

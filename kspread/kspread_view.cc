@@ -292,7 +292,6 @@ public:
     // cell formatting
     KAction* cellLayout;
     KAction* defaultFormat;
-    KSelectAction* selectStyle;
     KToggleAction* bold;
     KToggleAction* italic;
     KToggleAction* underline;
@@ -329,11 +328,14 @@ public:
     KAction* borderOutline;
     KAction* borderRemove;
     TKSelectColorAction* borderColor;
+    KSelectAction* selectStyle;
+    KAction* createStyle;
 
     // cell operations
     KAction* editCell;
     KAction* insertCell;
     KAction* removeCell;
+    KAction* deleteCell;
     KAction* mergeCell;
     KAction* dissociateCell;
     KAction* clearText;
@@ -344,7 +346,6 @@ public:
     KAction* addModifyComment;
     KAction* removeComment;
     KAction* clearComment;
-    KAction* createStyle;
 
     // column & row operations
     KAction* resizeColumn;
@@ -399,7 +400,6 @@ public:
     KAction* cut;
     KAction* copy;
     KAction* paste;
-    KAction* del;
     KAction* specialPaste;
     KAction* insertCellCopy;
     KAction* undo;
@@ -627,7 +627,7 @@ void ViewPrivate::initActions()
 
   actions->money = new KToggleAction( i18n("Money Format"), "money",
       0, ac, "money");
-  QObject::connect( actions->money, SIGNAL( toggled( bool ) ), 
+  QObject::connect( actions->money, SIGNAL( toggled( bool ) ),
       view, SLOT( moneyFormat( bool ) ) );
   actions->money->setToolTip(i18n("Set the cell formatting to look like your local currency."));
 
@@ -683,6 +683,76 @@ void ViewPrivate::initActions()
   QObject::connect( actions->borderColor, SIGNAL( activated() ),
       view, SLOT( changeBorderColor() ) );
   actions->borderColor->setToolTip( i18n( "Select a new border color." ) );
+
+  actions->selectStyle = new KSelectAction( i18n( "St&yle" ),
+      0, ac, "stylemenu" );
+  actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells." ) );
+  QObject::connect( actions->selectStyle, SIGNAL( activated( const QString & ) ),
+      view, SLOT( styleSelected( const QString & ) ) );
+
+  actions->createStyle = new KAction( i18n( "Create Style From Cell..." ),
+      0, view, SLOT( createStyleFromCell()), ac, "createStyle" );
+  actions->createStyle->setToolTip( i18n( "Create a new style based on the currently selected cell." ) );
+
+  // -- cell operation actions --
+
+  actions->editCell = new KAction( i18n("Modify Cell"),"cell_edit",
+      Qt::CTRL+Qt::Key_M, view, SLOT( editCell() ), ac, "editCell" );
+  actions->editCell->setToolTip(i18n("Edit the highlighted cell."));
+
+  actions->insertCell = new KAction( i18n("Insert Cells..."), "insertcell",
+      0, view, SLOT( slotInsert() ), ac, "insertCell" );
+  actions->insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet."));
+
+  actions->removeCell = new KAction( i18n("Remove Cells..."), "removecell",
+      0, view, SLOT( slotRemove() ), ac, "removeCell" );
+  actions->removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet."));
+
+  actions->deleteCell = new KAction( i18n("Delete"), "deletecell",
+      0, view, SLOT( deleteSelection() ), ac, "delete" );
+  actions->deleteCell->setToolTip(i18n("Delete all contents and formatting of the current cell."));
+
+  actions->mergeCell = new KAction( i18n("Merge Cells"),"mergecell",
+      0, view, SLOT( mergeCell() ), ac, "mergecell" );
+  actions->mergeCell->setToolTip(i18n("Merge the selected region into one large cell."));
+
+  actions->dissociateCell = new KAction( i18n("Dissociate Cells"),"dissociatecell",
+      0, view, SLOT( dissociateCell() ), ac, "dissociatecell" );
+  actions->dissociateCell->setToolTip(i18n("Unmerge the current cell."));
+
+  actions->clearText = new KAction( i18n("Text"),
+      0, view, SLOT( clearTextSelection() ), ac, "cleartext" );
+  actions->clearText->setToolTip(i18n("Remove the contents of the current cell."));
+
+  actions->conditional = new KAction( i18n("Conditional Cell Attributes..."),
+      0, view, SLOT( conditional() ), ac, "conditional" );
+  actions->conditional->setToolTip(i18n("Set cell format based on certain conditions."));
+
+
+  actions->clearConditional = new KAction( i18n("Conditional Cell Attributes"),
+      0, view, SLOT( clearConditionalSelection() ), ac, "clearconditional" );
+  actions->clearConditional->setToolTip(i18n("Remove the conditional cell formatting."));
+
+  actions->validity = new KAction( i18n("Validity..."),
+      0, view, SLOT( validity() ), ac, "validity" );
+  actions->validity->setToolTip(i18n("Set tests to confirm cell data is valid."));
+
+  actions->clearValidity = new KAction( i18n("Validity"),
+      0, view, SLOT( clearValiditySelection() ), ac, "clearvalidity" );
+  actions->clearValidity->setToolTip(i18n("Remove the validity tests on this cell."));
+
+  actions->addModifyComment = new KAction( i18n("&Add/Modify Comment..."),"comment",
+      0, view, SLOT( addModifyComment() ), ac, "addmodifycomment" );
+  actions->addModifyComment->setToolTip(i18n("Edit a comment for this cell."));
+
+  actions->removeComment = new KAction( i18n("&Remove Comment"),"removecomment",
+      0,  view, SLOT( removeComment() ), ac, "removecomment" );
+  actions->removeComment->setToolTip(i18n("Remove this cell's comment."));
+
+  actions->clearComment = new KAction( i18n("Comment"),
+      0, view, SLOT( clearCommentSelection() ), ac, "clearcomment" );
+  actions->clearComment->setToolTip(i18n("Remove this cell's comment."));
+
 }
 
 
@@ -830,7 +900,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeAreaOperationActions();
     initializeGlobalOperationActions();
     initializeCellOperationActions();
-    initializeCellPropertyActions();
     initializeTableActions();
     initializeSpellChecking();
     initializeRowColumnActions();
@@ -1251,94 +1320,15 @@ void KSpreadView::initializeGlobalOperationActions()
                                actionCollection(), "styles" );
   d->actions->styleDialog->setToolTip( i18n( "Edit and organize cell styles." ) );
 
-  d->actions->selectStyle = new KSelectAction( i18n( "St&yle" ), 0,
-                                     actionCollection(), "stylemenu" );
-  d->actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells." ) );
-  connect( d->actions->selectStyle, SIGNAL( activated( const QString & ) ), this, SLOT( styleSelected( const QString & ) ) );
-
-  d->actions->createStyle = new KAction( i18n( "Create Style From Cell..." ), 0,
-                               this, SLOT( createStyleFromCell()), actionCollection(), "createStyle" );
-  d->actions->createStyle->setToolTip( i18n( "Create a new style based on the currently selected cell." ) );
 }
 
 
 void KSpreadView::initializeCellOperationActions()
 {
-  d->actions->editCell = new KAction( i18n("Modify Cell"),"cell_edit", CTRL + Key_M, this,
-                            SLOT( editCell() ), actionCollection(), "editCell" );
-  d->actions->editCell->setToolTip(i18n("Edit the highlighted cell."));
-
-  d->actions->del = new KAction( i18n("Delete"),"deletecell", 0, this,
-
-			  SLOT( deleteSelection() ), actionCollection(),
-                          "delete" );
-  d->actions->del->setToolTip(i18n("Delete all contents and formatting of the current cell."));
-
-  d->actions->clearText = new KAction( i18n("Text"), 0, this, SLOT( clearTextSelection() ),
-                             actionCollection(), "cleartext" );
-  d->actions->clearText->setToolTip(i18n("Remove the contents of the current cell."));
 
   d->actions->gotoCell = new KAction( i18n("Goto Cell..."),"goto", 0, this,
                             SLOT( gotoCell() ), actionCollection(), "gotoCell" );
   d->actions->gotoCell->setToolTip(i18n("Move to a particular cell."));
-
-  d->actions->mergeCell = new KAction( i18n("Merge Cells"),"mergecell" ,0, this,
-                             SLOT( mergeCell() ), actionCollection(),
-                             "mergecell" );
-  d->actions->mergeCell->setToolTip(i18n("Merge the selected region into one large cell."));
-
-  d->actions->dissociateCell = new KAction( i18n("Dissociate Cells"),"dissociatecell" ,0,
-                                  this, SLOT( dissociateCell() ),
-                                  actionCollection(), "dissociatecell" );
-  d->actions->dissociateCell->setToolTip(i18n("Unmerge the current cell."));
-
-  d->actions->removeCell = new KAction( i18n("Remove Cells..."), "removecell", 0, this,
-                              SLOT( slotRemove() ), actionCollection(),
-                              "removeCell" );
-  d->actions->removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet."));
-
-  d->actions->insertCell = new KAction( i18n("Insert Cells..."), "insertcell", 0, this,
-                              SLOT( slotInsert() ), actionCollection(),
-                              "insertCell" );
-  d->actions->insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet."));
-
-}
-
-void KSpreadView::initializeCellPropertyActions()
-{
-  d->actions->addModifyComment = new KAction( i18n("&Add/Modify Comment..."),"comment", 0,
-                                    this, SLOT( addModifyComment() ),
-                                    actionCollection(), "addmodifycomment" );
-  d->actions->addModifyComment->setToolTip(i18n("Edit a comment for this cell."));
-
-  d->actions->removeComment = new KAction( i18n("&Remove Comment"),"removecomment", 0,
-                                 this, SLOT( removeComment() ),
-                                 actionCollection(), "removecomment" );
-  d->actions->removeComment->setToolTip(i18n("Remove this cell's comment."));
-
-  d->actions->conditional = new KAction( i18n("Conditional Cell Attributes..."), 0, this,
-                               SLOT( conditional() ), actionCollection(),
-                               "conditional" );
-  d->actions->conditional->setToolTip(i18n("Set cell format based on certain conditions."));
-
-  d->actions->validity = new KAction( i18n("Validity..."), 0, this, SLOT( validity() ),
-                            actionCollection(), "validity" );
-  d->actions->validity->setToolTip(i18n("Set tests to confirm cell data is valid."));
-
-  d->actions->clearComment = new KAction( i18n("Comment"), 0, this,
-                                SLOT( clearCommentSelection() ),
-                                actionCollection(), "clearcomment" );
-  d->actions->clearComment->setToolTip(i18n("Remove this cell's comment."));
-
-  d->actions->clearValidity = new KAction( i18n("Validity"), 0, this,
-                                 SLOT( clearValiditySelection() ),
-                                 actionCollection(), "clearvalidity" );
-  d->actions->clearValidity->setToolTip(i18n("Remove the validity tests on this cell."));
-
-  d->actions->clearConditional = new KAction( i18n("Conditional Cell Attributes"), 0, this,
-                                    SLOT( clearConditionalSelection() ),
-                                    actionCollection(), "clearconditional" );
-  d->actions->clearConditional->setToolTip(i18n("Remove the conditional cell formatting."));
 
 
 }
@@ -4438,7 +4428,7 @@ void KSpreadView::adjustActions( bool mode )
   d->actions->paste->setEnabled( mode );
   d->actions->cut->setEnabled( mode );
   d->actions->specialPaste->setEnabled( mode );
-  d->actions->del->setEnabled( mode );
+  d->actions->deleteCell->setEnabled( mode );
   d->actions->clearText->setEnabled( mode );
   d->actions->clearComment->setEnabled( mode );
   d->actions->clearValidity->setEnabled( mode );
@@ -5481,7 +5471,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
       d->actions->specialPaste->plug( m_pPopupMenu );
       d->actions->insertCellCopy->plug( m_pPopupMenu );
       m_pPopupMenu->insertSeparator();
-      d->actions->del->plug( m_pPopupMenu );
+      d->actions->deleteCell->plug( m_pPopupMenu );
       d->actions->adjust->plug( m_pPopupMenu );
       d->actions->defaultFormat->plug( m_pPopupMenu );
 
