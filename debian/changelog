@@ -1,3 +1,16 @@
+koffice (1:1.3-beta1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ben Burton <bab@debian.org>  Sat, 12 Apr 2003 15:21:35 +1000
+
+koffice (1:1.2.1-5) unstable; urgency=low
+
+  * Built against libvorbis0a (closes: #184722).
+  * Removed special hppa and alpha compile flags.
+
+ -- Ben Burton <bab@debian.org>  Sun, 16 Mar 2003 16:00:19 +1100
+
 koffice (1:1.2.1-4) unstable; urgency=low
 
   * Build-depends on libqt3-compat-headers (closes: #181768).

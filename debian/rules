@@ -28,22 +28,11 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
 endif
 
-ifeq ($(DEB_BUILD_GNU_TYPE),alpha-linux)
-  export CFLAGS +=-O0 -mieee
-  export CXXFLAGS +=-O0 -mieee
-endif
-
-ifeq ($(DEB_BUILD_GNU_TYPE),hppa-linux)
-  export CFLAGS +=-Os -ffunction-sections -Wl,--stub-group-size=50000
-  export CXXFLAGS +=-Os -ffunction-sections -Wl,--stub-group-size=50000
-endif
-
 ifeq ($(DEB_BUILD_GNU_TYPE),i386-linux)
   # Uncomment the following 2 lines to enable i686 optimziation
   # You may want to tweak the settings to your likings
   #export CFLAGS=-O3 -march=i686 -ffast-math -finline-functions
   #export CXXFLAGS=-O3 -march=i686 -ffast-math -finline-functions
-  XINERAMA=--with-xinerama
 endif
 
 -include debian/debiandirs
@@ -73,9 +62,12 @@ configure-stamp:
 	# make build directory
 	mkdir $(objdir)
 
+	# ensure configure is executable
+	chmod +x configure
+
 	# run configure with build tree $(objdir)
 	cd $(objdir) && \
-	../configure $(configkde) $(XINERAMA)
+	../configure $(configkde)
 
 	touch configure-stamp
 
