@@ -111,6 +111,8 @@ public:
     double shadowDistance() const { return m_layout.shadowDistance; }
     int shadowX( KoZoomHandler *zh ) const;
     int shadowY( KoZoomHandler *zh ) const;
+    double shadowDistanceY() const;
+
     /** Get shadow color */
     QColor shadowColor() const { return m_layout.shadowColor; }
     /** Get shadow direction */

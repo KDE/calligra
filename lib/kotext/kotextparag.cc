@@ -312,15 +312,16 @@ int KoTextParag::firstLineMargin() const
 
 int KoTextParag::lineSpacing( int line ) const
 {
+    int shadow=QABS(KoTextZoomHandler::ptToLayoutUnit( shadowDistanceY() ));
     if ( m_layout.lineSpacing >= 0 )
         return KoTextZoomHandler::ptToLayoutUnit(
-            m_layout.lineSpacing );
+            m_layout.lineSpacing )+shadow;
     else {
         KoTextParag * that = const_cast<KoTextParag *>(this);
         if( line >= (int)that->lineStartList().count() )
         {
             kdError() << "KoTextParag::lineSpacing assert(line<lines) failed: line=" << line << " lines=" << that->lineStartList().count() << endl;
-            return 0;
+            return 0+shadow;
         }
         QMap<int, QTextParagLineStart*>::ConstIterator it = that->lineStartList().begin();
         while ( line-- > 0 )
@@ -332,15 +333,15 @@ int KoTextParag::lineSpacing( int line ) const
         {
             // Tricky. During formatting height doesn't include the linespacing,
             // but afterwards (e.g. when drawing the cursor), it does !
-            return isValid() ? height / 3 : height / 2;
+            return shadow+ (isValid() ? height / 3 : height / 2);
         }
         else if ( m_layout.lineSpacing == KoParagLayout::LS_DOUBLE )
         {
-            return isValid() ? height / 2 : height;
+            return shadow+(isValid() ? height / 2 : height);
         }
     }
     kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacing << endl;
-    return 0;
+    return 0+shadow;
 }
 
 QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
@@ -382,7 +383,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
 #endif
 
     // Now draw paragraph border
-    if ( m_layout.hasBorder() )
+    if ( m_layout.hasBorder() &&!textDocument()->drawingShadow())
     {
         KoZoomHandler * zh = textDocument()->paintingZoomHandler();
         assert(zh);
@@ -398,7 +399,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         r.setRight( zh->layoutUnitToPixelX(documentWidth()) - 2 - KoBorder::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 ) );
         r.setTop( zh->layoutUnitToPixelY(lineY( 0 )) );
         int lastLine = lines() - 1;
-        r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) ));
+        r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) )+QABS( shadowY( zh ) ));
         // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
         // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
         if ( m_layout.bottomBorder.ptWidth > 0 )
@@ -736,6 +737,26 @@ void KoTextParag::setShadow( double dist, short int direction, const QColor &col
     invalidate(0);
 }
 
+double KoTextParag::shadowDistanceY() const
+{
+    switch ( m_layout.shadowDirection )
+    {
+    case KoParagLayout::SD_LEFT_UP:
+    case KoParagLayout::SD_UP:
+    case KoParagLayout::SD_RIGHT_UP:
+        return -  m_layout.shadowDistance ;
+    case KoParagLayout::SD_LEFT:
+    case KoParagLayout::SD_RIGHT:
+        return 0;
+    case KoParagLayout::SD_LEFT_BOTTOM:
+    case KoParagLayout::SD_BOTTOM:
+    case KoParagLayout::SD_RIGHT_BOTTOM:
+        return m_layout.shadowDistance ;
+    }
+    return 0;
+}
+
+
 int KoTextParag::shadowX( KoZoomHandler *zh ) const
 {
     switch ( m_layout.shadowDirection )
@@ -757,21 +778,7 @@ int KoTextParag::shadowX( KoZoomHandler *zh ) const
 
 int KoTextParag::shadowY( KoZoomHandler *zh ) const
 {
-    switch ( m_layout.shadowDirection )
-    {
-    case KoParagLayout::SD_LEFT_UP:
-    case KoParagLayout::SD_UP:
-    case KoParagLayout::SD_RIGHT_UP:
-        return - zh->zoomItY( m_layout.shadowDistance );
-    case KoParagLayout::SD_LEFT:
-    case KoParagLayout::SD_RIGHT:
-        return 0;
-    case KoParagLayout::SD_LEFT_BOTTOM:
-    case KoParagLayout::SD_BOTTOM:
-    case KoParagLayout::SD_RIGHT_BOTTOM:
-        return zh->zoomItY( m_layout.shadowDistance );
-    }
-    return 0;
+    return zh->zoomItY(shadowDistanceY());
 }
 
 void KoTextParag::applyStyle( KoStyle *style )
