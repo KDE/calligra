@@ -31,6 +31,7 @@
 #include "kexitableheader.h"
 
 #include <kexidb/roweditbuffer.h>
+#include <widget/utils/kexirecordnavigator.h>
 
 #include <qevent.h>
 #include <qtimer.h>
@@ -194,12 +195,13 @@ class KexiTableViewPrivate
 	KexiTableView::Appearance appearance;
 	
 	/*! Navigation widgets, used if navigationPanelEnabled is true. */
-	QFrame *navPanel; //!< main navigation widget
-	QToolButton *navBtnFirst, *navBtnPrev, *navBtnNext, *navBtnLast, *navBtnNew;
-	KLineEdit *navRowNumber;
-	QIntValidator *navRowNumberValidator;
-	KLineEdit *navRowCount; //!< readonly counter
-	int nav1DigitWidth;
+	KexiRecordNavigator *navPanel; //!< main navigation widget
+	//moved to KexiRecordNavigator
+//	QToolButton *navBtnFirst, *navBtnPrev, *navBtnNext, *navBtnLast, *navBtnNew;
+//	KLineEdit *navRowNumber;
+//	QIntValidator *navRowNumberValidator;
+//	KLineEdit *navRowCount; //!< readonly counter
+//	int nav1DigitWidth;
 
 	QLabel *scrollBarTip;
 	QTimer scrollBarTipTimer;

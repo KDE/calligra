@@ -620,6 +620,7 @@ protected slots:
 	//! for navigator
 	void navRowNumber_ReturnPressed(const QString& text);
 	void navRowNumber_lostFocus();
+	void slotNavRecordNumberEntered(uint r);
 	void navBtnLastClicked();
 	void navBtnPrevClicked();
 	void navBtnNextClicked();
@@ -738,12 +739,12 @@ protected:
 	virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
 
 	void setupNavigator();
-	void setNavRowNumber(int newrow);
-	void setNavRowCount(int newrows);
-	void updateNavPanelGeometry();
+//	void setNavRowNumber(int newrow);
+//	void setNavRowCount(int newrows);
+//	void updateNavPanelGeometry();
 
 	//! used to update info about row count after a change
-	void updateRowCountInfo();
+//	void updateRowCountInfo();
 
 	//! internal, to determine valid row number when navigator text changed
 	int validRowNumber(const QString& text);

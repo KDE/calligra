@@ -114,7 +114,6 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 	skipKeyPress = false;
 	vScrollBarValueChanged_enabled = true;
 	scrollbarToolTipsEnabled = true;
-	navRowNumber = 0;
 	scrollBarTipTimerCnt = 0;
 	scrollBarTip = 0;
 	inside_acceptEditor = false;
