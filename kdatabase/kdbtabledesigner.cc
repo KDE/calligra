@@ -19,9 +19,10 @@
 #include <qtable.h>
 #include <qlayout.h>
 #include <kdebug.h>
+#include <kdatabase_struct.h>
 
-
-KDBTableDesigner::KDBTableDesigner(){
+KDBTableDesigner::KDBTableDesigner(KDBStruct *KDBStruct){
+    myKDBStruct = KDBStruct;
 	QGridLayout *g = new QGridLayout(this);
 
 	this->resize(575,420);
@@ -61,7 +62,10 @@ KDBTableDesigner::~KDBTableDesigner(){
 
 bool KDBTableDesigner::populateTblDesigner(QString tblName){
 
-    //QString myTblName = &tblName + " - Table Designer";
+    KDBTable *myTableInfo = myKDBStruct->getTable(tblName);
+    QString* msg=NULL;
+    QPtrList<TableStructureRow> columnList = myTableInfo->getColumns(&tblName, msg);
+
     tblName.append(" - Table Designer");
     this->setCaption(tblName);
     return(true);

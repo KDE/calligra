@@ -20,6 +20,7 @@
 
 #include <kdialog.h>
 #include <qstringlist.h>
+#include <kdatabase_struct.h>
 //#include <qtable.h>
 
 /**
@@ -42,7 +43,7 @@ public:
 		t_boolen
 	};
 		 
-	KDBTableDesigner();
+	KDBTableDesigner(KDBStruct *KDBStruct);
 	~KDBTableDesigner();
 	bool populateTblDesigner(QString tblName);
 	void addRow(bool primary_key=false, QString name="", DataType type=t_int, int size=10, QString default_v="", bool allow_null=false);
@@ -50,6 +51,7 @@ public:
 private:
 	QTable		*m_table;
 	QStringList	m_comboEntries;
+    KDBStruct* myKDBStruct;
 
 protected:
 	int		m_rows;

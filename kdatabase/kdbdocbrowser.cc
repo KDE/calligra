@@ -62,7 +62,7 @@ void KDBDocBrowser::slotTblItemClicked(QListViewItem *itemClicked){
 
      if(!(itemClicked == NULL)) {
         kdDebug() << "KDatabase:MainDlg tbl Item Clicked - " << itemClicked->text(0) << endl;
-        m_tblDesigner=new KDBTableDesigner();
+        m_tblDesigner=new KDBTableDesigner(m_struct);
         m_tblDesigner->populateTblDesigner(itemClicked->text(0));
         m_tblDesigner->show();
         }

@@ -52,13 +52,15 @@ class KDBTable {
 //KDBTableData is for accessing and modifying data.
 public:
 
-      QPtrList<TableStructureRow> getColumns(QString tableName);
+      QPtrList<TableStructureRow> getColumns(QString *tableName, QString *returnMessage);
       bool insertColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
       bool modifyColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
       bool deleteColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
 
-      KDBTable(void);
+      KDBTable(QDomDocument* KDBFile);
       ~KDBTable(void);
+private:
+    QDomDocument* myKDBNode;
 
 };
 
@@ -94,6 +96,7 @@ public:
     bool renameTable(QString* oldTableName, QString newTableName);
     bool renameView(QString* oldViewName, QString newViewName);
     bool renameForm(QString* oldFormName, QString newFormName);
+    KDBTable* getTable(QString tblName) ;
 
     QPtrList<QString> getTables();
     QPtrList<QString> getViews();

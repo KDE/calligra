@@ -1,7 +1,26 @@
-<?xml version = '1.0' encoding = 'UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <LastCompileConfig>(Default)</LastCompileConfig>
+ <LastCompileConfig>Compile Configuration</LastCompileConfig>
  <Mainframe MaximizeMode="1" />
- <DocsAndViews NumberOfDocuments="0" />
+ <DocsAndViews NumberOfDocuments="6" >
+  <Doc0 CursorPosLine="52" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="0" FileName="/data/cvs/koffice/kdatabase/kdbdocbrowser.h" >
+   <View0 Top="0" Width="683" Attach="1" Height="289" Left="0" Focus="0" Type="KWriteView" MinMaxMode="0" />
+  </Doc0>
+  <Doc1 CursorPosLine="63" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="0" FileName="/data/cvs/koffice/kdatabase/kdatabase_struct.h" >
+   <View0 Top="0" Width="683" Attach="1" Height="289" Left="0" Focus="0" Type="KWriteView" MinMaxMode="0" />
+  </Doc1>
+  <Doc2 CursorPosLine="121" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="0" FileName="/data/cvs/koffice/kdatabase/kdatabase_struct.cc" >
+   <View0 Top="0" Width="683" Attach="1" Height="289" Left="0" Focus="1" Type="KWriteView" MinMaxMode="0" />
+  </Doc2>
+  <Doc3 CursorPosLine="64" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="15" FileName="/data/cvs/koffice/kdatabase/kdbtabledesigner.cc" >
+   <View0 Top="0" Width="683" Attach="1" Height="289" Left="0" Focus="0" Type="KWriteView" MinMaxMode="0" />
+  </Doc3>
+  <Doc4 CursorPosLine="60" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="61" FileName="/data/cvs/koffice/kdatabase/kdbtabledesigner.h" >
+   <View0 Top="0" Width="683" Attach="1" Height="289" Left="0" Focus="0" Type="KWriteView" MinMaxMode="0" />
+  </Doc4>
+  <Doc5 CursorPosLine="64" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="51" FileName="/data/cvs/koffice/kdatabase/kdbdocbrowser.cc" >
+   <View0 Top="0" Width="683" Attach="1" Height="289" Left="0" Focus="0" Type="KWriteView" MinMaxMode="0" />
+  </Doc5>
+ </DocsAndViews>
 </KDevPrjSession>
