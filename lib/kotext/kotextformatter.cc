@@ -622,7 +622,6 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 		tmpfmt->setUnderLineWidth(avg);
 		tmpfmt=format->parent()->format(tmpfmt);
 		string->at(j).setFormat(tmpfmt);
-		delete tmpfmt;
 	    }
 	    nc=0;
 	    current=0;
