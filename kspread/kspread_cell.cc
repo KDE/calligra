@@ -170,8 +170,7 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
 
     setAction(cell->action() );
 
-    if ( m_pPrivate )
-        delete m_pPrivate;
+    delete m_pPrivate;
     m_pPrivate = 0;
     if ( cell->m_pPrivate )
         m_pPrivate = cell->m_pPrivate->copy( this );
@@ -184,9 +183,8 @@ void KSpreadCell::defaultStyle()
   QValueList<KSpreadConditional> emptyList;
   conditions.SetConditionList(emptyList);
 
-  if(m_Validity != NULL)
-        delete m_Validity;
-  m_Validity = NULL;
+  delete m_Validity;
+  m_Validity = 0L;
 }
 
 void KSpreadCell::layoutChanged()
@@ -1500,11 +1498,8 @@ void KSpreadCell::clearFormula()
   NotifyDependancyList(m_lstDepends, false);
 
   m_lstDepends.clear();
-  if ( m_pCode )
-  {
-    delete m_pCode;
-    m_pCode = NULL;
-  }
+  delete m_pCode;
+  m_pCode = 0L;
 }
 
 bool KSpreadCell::calc(bool delay)

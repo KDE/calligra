@@ -8020,8 +8020,7 @@ ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table )
 
 ChartChild::~ChartChild()
 {
-    if ( m_pBinding )
-        delete m_pBinding;
+    delete m_pBinding;
 }
 
 void ChartChild::setDataArea( const QRect& _data )

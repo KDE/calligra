@@ -948,8 +948,7 @@ KSpreadDoc::~KSpreadDoc()
 {
   destroyInterpreter();
 
-  if ( m_pUndoBuffer )
-    delete m_pUndoBuffer;
+  delete m_pUndoBuffer;
 
   delete m_dcop;
   s_docs->removeRef(this);
