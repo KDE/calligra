@@ -253,7 +253,7 @@ don't put a </?xml...> at the end of the file!).
     startingPageNumber CDATA #IMPLIED
     displaylink CDATA #IMPLIED
     underlinelink CDATA #IMPLIED
-    displaycomment CDATA #IMPLIED>
+    displaycomment CDATA #IMPLIED
     displayfieldcode CDATA #IMPLIED>
 
 
@@ -375,7 +375,7 @@ don't put a </?xml...> at the end of the file!).
     col CDATA #IMPLIED
     rows CDATA #IMPLIED
     cols CDATA #IMPLIED
-    protectContent CDATA #IMPLIED>
+    protectContent CDATA #IMPLIED
     protectSize CDATA #IMPLIED>
 
 <!ELEMENT FRAME
@@ -914,7 +914,7 @@ don't put a </?xml...> at the end of the file!).
 <!--    Definition of a picture - contains only one element, the key to the picture.
 -->
 <!ELEMENT PICTURE
-    KEY>
+    (KEY)>
 <!ATTLIST PICTURE
     keepAspectRatio CDATA #REQUIRED>
 
@@ -922,7 +922,7 @@ don't put a </?xml...> at the end of the file!).
         Only for KWord 1.1. compactibility
 -->
 <!ELEMENT IMAGE
-    KEY>
+    (KEY)>
 <!ATTLIST IMAGE
     keepAspectRatio CDATA #REQUIRED>
 
@@ -930,7 +930,7 @@ don't put a </?xml...> at the end of the file!).
         Only for KWord 1.1. compactibility
 -->
 <!ELEMENT CLIPART
-    KEY>
+    (KEY)>
 
 <!--    Variable
         A variable has always two child elements:
@@ -1114,7 +1114,8 @@ don't put a </?xml...> at the end of the file!).
 
 <!ELEMENT BOOKMARKS ( BOOKMARKITEM+ )>
 <!ATTLIST BOOKMARKS >
-<!ELEMENT BOOKMARKITEM name NMTOKEN #REQUIRED 
+<!ELEMENT BOOKMARKITEM EMPTY>
+<!ATTLIST BOOKMARKITEM name NMTOKEN #REQUIRED 
                        cursorIndexStart NMTOKEN #REQUIRED
                        cursorIndexEnd NMTOKEN #REQUIRED
                        frameset NMTOKEN #REQUIRED
