@@ -129,7 +129,7 @@ APPLIXGRAPHICImport::APPLIXGRAPHICImport (KoFilter *parent, const char *name) :
  ******************************************************************************
  *                                                                            *
  *  Short description : - Read inputfile,                                     *
- *                      - convert it to killustrator fileformat and           *
+ *                      - convert it to kontour fileformat and                *
  *                      - save it                                             *
  *                                                                            *
  *                                                                            *
@@ -143,7 +143,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 {
 
     // Check MIME Types
-    if (to!="application/x-killustrator" || from!="application/x-applixgraphic")
+    if (to!="application/x-kontour" || from!="application/x-applixgraphic")
         return false;
 
     // Open Inputfile
