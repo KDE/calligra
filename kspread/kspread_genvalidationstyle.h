@@ -37,7 +37,7 @@ public:
     QString lookup( const KSpreadGenValidationStyle& style );
 
     typedef QMap<KSpreadGenValidationStyle, QString> StyleMap;
-    void writeStyle( KoXmlWriter* writer );
+    void writeStyle( KoXmlWriter& writer );
 
 private:
     QString makeUniqueName( const QString& base ) const;

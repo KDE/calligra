@@ -57,47 +57,47 @@ QString KSpreadGenValidationStyles::makeUniqueName( const QString& base ) const
     return name;
 }
 
-void KSpreadGenValidationStyles::writeStyle( KoXmlWriter* writer )
+void KSpreadGenValidationStyles::writeStyle( KoXmlWriter& writer )
 {
     if ( m_styles.count()>0 )
     {
-        writer->startElement( "table:content-validations" );
+        writer.startElement( "table:content-validations" );
         StyleMap::Iterator it;
         for ( it = m_styles.begin(); it != m_styles.end(); ++it )
         {
-            writer->startElement( "table:content-validation" );
-            writer->addAttribute( "table:name", it.data() );
-            writer->addAttribute( "table:allow-empty-cell", it.key().allowEmptyCell );
-            writer->addAttribute( "table:condition", it.key().condition );
+            writer.startElement( "table:content-validation" );
+            writer.addAttribute( "table:name", it.data() );
+            writer.addAttribute( "table:allow-empty-cell", it.key().allowEmptyCell );
+            writer.addAttribute( "table:condition", it.key().condition );
 
-            writer->startElement( "table:help-message" );
-            writer->addAttribute( "table:title", it.key().title );
-            writer->addAttribute( "table:display", it.key().displayValidationInformation );
+            writer.startElement( "table:help-message" );
+            writer.addAttribute( "table:title", it.key().title );
+            writer.addAttribute( "table:display", it.key().displayValidationInformation );
 
             QStringList text = QStringList::split( "\n", it.key().messageInfo );
             for ( QStringList::Iterator it2 = text.begin(); it2 != text.end(); ++it2 ) {
-                writer->startElement( "text:p" );
-                writer->addTextNode( *it2 );
-                writer->endElement();
+                writer.startElement( "text:p" );
+                writer.addTextNode( *it2 );
+                writer.endElement();
             }
-            writer->endElement();
+            writer.endElement();
 
-            writer->startElement( "table:error-message" );
-            writer->addAttribute( "table:message-type", it.key().messageType );
+            writer.startElement( "table:error-message" );
+            writer.addAttribute( "table:message-type", it.key().messageType );
 
-            writer->addAttribute("table:title", it.key().titleInfo);
-            writer->addAttribute("table:display", it.key().displayMessage);
+            writer.addAttribute("table:title", it.key().titleInfo);
+            writer.addAttribute("table:display", it.key().displayMessage);
             text = QStringList::split( "\n", it.key().message );
             for ( QStringList::Iterator it3 = text.begin(); it3 != text.end(); ++it3 ) {
-                writer->startElement( "text:p" );
-                writer->addTextNode( *it3 );
-                writer->endElement();
+                writer.startElement( "text:p" );
+                writer.addTextNode( *it3 );
+                writer.endElement();
             }
-            writer->endElement();
+            writer.endElement();
 
-            writer->endElement();
+            writer.endElement();
         }
-        writer->endElement();//close table:content-validation
+        writer.endElement();//close table:content-validation
     }
 }
 

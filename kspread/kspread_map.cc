@@ -28,6 +28,8 @@
 #include <koGenStyles.h>
 #include <time.h>
 #include <stdlib.h>
+#include <ktempfile.h>
+#include <qfile.h>
 
 bool KSpreadMap::respectCase = true;
 
@@ -88,11 +90,26 @@ void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _be
 bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
 {
     KSpreadGenValidationStyles valStyle;
+
+    KTempFile bodyTmpFile;
+    bodyTmpFile.setAutoDelete( true );
+    QFile* tmpFile = bodyTmpFile.file();
+    KoXmlWriter bodyTmpWriter( tmpFile );
+
+
     QPtrListIterator<KSpreadSheet> it( m_lstTables );
     for( ; it.current(); ++it )
     {
-        it.current()->saveOasis( xmlWriter, mainStyles, valStyle );
+        it.current()->saveOasis( bodyTmpWriter, mainStyles, valStyle );
     }
+
+    valStyle.writeStyle( xmlWriter );
+
+
+    tmpFile->close();
+    xmlWriter.addCompleteElement( tmpFile );
+    bodyTmpFile.close();
+
     return true;
 }
 
