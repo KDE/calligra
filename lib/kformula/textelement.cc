@@ -39,6 +39,14 @@ TextElement::TextElement(QChar ch, bool beSymbol, BasicElement* parent)
 }
 
 
+TextElement::TextElement( const TextElement& other )
+    : BasicElement( other ),
+      character( other.character ),
+      symbol( other.symbol )
+{
+}
+
+
 TokenType TextElement::getTokenType() const
 {
     if ( isSymbol() ) {
@@ -301,6 +309,11 @@ QString TextElement::formulaString()
 
 EmptyElement::EmptyElement( BasicElement* parent )
     : BasicElement( parent )
+{
+}
+
+EmptyElement::EmptyElement( const EmptyElement& other )
+    : BasicElement( other )
 {
 }
 

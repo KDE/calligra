@@ -43,6 +43,15 @@ FractionElement::~FractionElement()
     delete numerator;
 }
 
+FractionElement::FractionElement( const FractionElement& other )
+    : BasicElement( other ), withLine( other.withLine )
+{
+    numerator = new SequenceElement( *( other.numerator ) );
+    denominator = new SequenceElement( *( other.denominator ) );
+    numerator->setParent( this );
+    denominator->setParent( this );
+}
+
 
 BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
                                         const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
@@ -423,6 +432,16 @@ QString FractionElement::toLatex()
 QString FractionElement::formulaString()
 {
     return "(" + numerator->formulaString() + ")/(" + denominator->formulaString() + ")";
+}
+
+void FractionElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElement( "mfrac" );
+    if ( !withLine ) // why is this no function?
+        de.setAttribute( "linethickness", 0 );
+    numerator->writeMathML( doc, de );
+    denominator->writeMathML( doc, de );
+    parent.appendChild( de );
 }
 
 KFORMULA_NAMESPACE_END

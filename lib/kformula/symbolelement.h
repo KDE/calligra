@@ -31,12 +31,19 @@ KFORMULA_NAMESPACE_BEGIN
  * A symbol is simply a piece of art.
  */
 class SymbolElement : public BasicElement {
+    SymbolElement operator=( const SymbolElement& ) { return *this; }
 public:
 
     //enum { contentPos, upperPos, lowerPos };
 
     SymbolElement(SymbolType type = EmptyBracket, BasicElement* parent = 0);
     ~SymbolElement();
+
+    SymbolElement( const SymbolElement& );
+
+    virtual SymbolElement* clone() {
+        return new SymbolElement( *this );
+    }
 
     /**
      * Sets the cursor and returns the element the point is in.
@@ -209,6 +216,8 @@ public:
     virtual QString toLatex();
 
     virtual QString formulaString();
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 

@@ -2,9 +2,9 @@
 #ifndef TESTFORMULACURSOR_H
 #define TESTFORMULACURSOR_H
 
-#include <TestCaller.h>
-#include <TestCase.h>
-#include <TestSuite.h>
+#include <cppunit/TestCaller.h>
+#include <cppunit/TestCase.h>
+#include <cppunit/TestSuite.h>
 
 #include "kformuladefs.h"
 
@@ -21,9 +21,9 @@ class Document;
 class TextElement;
 
 
-class TestFormulaCursor : public TestCase {
+class TestFormulaCursor : public CppUnit::TestCase {
 public:
-    TestFormulaCursor(string name) : TestCase(name) {}
+    //TestFormulaCursor(std::string name) : CppUnit::TestCase(name) {}
 
     static Test* suite();
 

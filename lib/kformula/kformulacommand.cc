@@ -202,7 +202,7 @@ void KFCRemove::execute()
         element = cursor->replaceByMainChildContent();
     }
     setUnexecuteCursor(cursor);
-    cursor->normalize();
+    cursor->normalize( dir );
     testDirty();
 }
 

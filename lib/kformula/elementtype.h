@@ -23,6 +23,7 @@
 
 #include <qfont.h>
 #include <qstring.h>
+#include <qdom.h>
 
 #include "contextstyle.h"
 #include "kformuladefs.h"
@@ -102,6 +103,8 @@ public:
     void append( ElementType* );
 
     ElementType* getPrev() const { return prev; }
+
+    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
 
 protected:
 
@@ -183,6 +186,7 @@ private:
 class TextType : public MultiElementType {
 public:
     TextType( SequenceParser* parser );
+    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
 };
 
 
@@ -202,6 +206,8 @@ public:
      * sets the painters pen to a appropiate value
      */
     virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
+
+    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
 };
 
 
@@ -226,11 +232,20 @@ public:
      */
     virtual QFont getFont( const ContextStyle& context );
 
+    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
+
 private:
 };
 
 
-class OperatorType : public SingleElementType {
+class AbstractOperatorType : public SingleElementType {
+public:
+    AbstractOperatorType( SequenceParser* parser );
+
+    void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
+};
+
+class OperatorType : public AbstractOperatorType {
 public:
     OperatorType( SequenceParser* parser );
 
@@ -252,7 +267,7 @@ public:
 };
 
 
-class RelationType : public SingleElementType {
+class RelationType : public AbstractOperatorType {
 public:
     RelationType( SequenceParser* parser );
 
@@ -274,7 +289,7 @@ public:
 };
 
 
-class PunctuationType : public SingleElementType {
+class PunctuationType : public AbstractOperatorType {
 public:
     PunctuationType( SequenceParser* parser );
 

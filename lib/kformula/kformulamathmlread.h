@@ -24,41 +24,65 @@
 #include <qobject.h>
 #include <qdom.h>
 #include "kformulainputfilter.h"
+#include "contextstyle.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
+class MathML2KFormulaPrivate;
+
 /**
- This class converts MathML to KFormula XML.
- Right now is implemented only the PresentationMarkup.
-*/
-
-class MathMl2KFormula : public KFInputFilter
+ * This class converts MathML to KFormula XML.
+ * Right now are only parts of the Presentation Markup implemented.
+ */
+class MathML2KFormula : public KFInputFilter
 {
-Q_OBJECT
-    public:
-	/**
-	 * Build a MathML 2 KFormula converter.
-	 * call @startConversion to convert and wait for
-	 * a @conversionFinished signal, than call
-	 * @getKFormulaDom to get the converted DOM
-	 */
-	MathMl2KFormula(QDomDocument *mmldoc);
+    Q_OBJECT
 
-	/*
-	 * Get the just created DOM.
-	 */
-	virtual QDomDocument getKFormulaDom();
+    friend class MathML2KFormulaPrivate;
+
+public:
+
+    /**
+     * Build a MathML 2 KFormula converter.
+     * call @startConversion to convert and wait for
+     * a @conversionFinished signal, than call
+     * @getKFormulaDom to get the converted DOM
+     */
+    MathML2KFormula( QDomDocument mmldoc, const ContextStyle &contextStyle );
+
+    /*
+     * Get the just created DOM.
+     */
+    virtual QDomDocument getKFormulaDom();
 
 
-    public slots:
-	virtual void startConversion();
+public slots:
+    virtual void startConversion();
 
-    private:
+private:
 
-	bool processElement(QDomNode *node,QDomDocument *doc,QDomNode *docnode);
+    bool processElement( QDomNode node, QDomDocument doc,
+                         QDomNode docnode );
 
-	QDomDocument *origdoc;
-	QDomDocument formuladoc;
+    QDomDocument origdoc;
+    QDomDocument formuladoc;
+
+    const ContextStyle& context;
+
+    MathML2KFormulaPrivate* impl;
+
+    enum Type {
+        // Presentation Markup
+        UNKNOWN = 1,
+        TOKEN   = 2, // Token Elements
+        LAYOUT  = 3, // General Layout Schemata
+        SCRIPT  = 4, // Script and Limit Schemata
+        TABLE   = 5, // Tables and Matrices
+        EE      = 6, // Enlivening Expressions
+
+        // Content Markup
+        CONTENT = 12
+    };
 };
 
 KFORMULA_NAMESPACE_END

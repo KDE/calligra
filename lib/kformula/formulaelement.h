@@ -47,6 +47,8 @@ public:
      */
     FormulaElement(FormulaDocument* container);
 
+    virtual FormulaElement* clone() { return 0; }
+
     /**
      * Returns the element the point is in.
      */
@@ -125,6 +127,8 @@ public:
     void setBaseSize( int size );
 
     bool hasOwnBaseSize() const { return ownBaseSize; }
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 

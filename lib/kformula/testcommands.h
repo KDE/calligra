@@ -2,9 +2,9 @@
 #ifndef TESTCOMMANDS_H
 #define TESTCOMMANDS_H
 
-#include <TestCaller.h>
-#include <TestCase.h>
-#include <TestSuite.h>
+#include <cppunit/TestCaller.h>
+#include <cppunit/TestCase.h>
+#include <cppunit/TestSuite.h>
 
 #include "kformuladefs.h"
 
@@ -21,11 +21,11 @@ class Document;
 class TextElement;
 
 
-class TestCommands : public TestCase {
+class TestCommands : public CppUnit::TestCase {
 public:
-    TestCommands(string name) : TestCase(name) {}
+    //TestCommands(std::string name) : CppUnit::TestCase(name) {}
 
-    static Test* suite();
+    static CppUnit::Test* suite();
 
     void setUp();
     void tearDown();

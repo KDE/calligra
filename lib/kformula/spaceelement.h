@@ -35,9 +35,15 @@ KFORMULA_NAMESPACE_BEGIN
  * A element that represents a space.
  */
 class SpaceElement : public BasicElement {
+    SpaceElement operator=( const SpaceElement& ) { return *this; }
 public:
 
     SpaceElement( SpaceWidth space = THIN, BasicElement* parent = 0 );
+    SpaceElement( const SpaceElement& );
+
+    virtual SpaceElement* clone() {
+        return new SpaceElement( *this );
+    }
 
     /**
      * @returns the type of this element. Used for
@@ -88,6 +94,8 @@ public:
      * of the element's children
      */
     virtual QString toLatex();
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 

@@ -153,6 +153,13 @@ void ElementType::output()
     kdDebug( DEBUGID ) << start() << " - " << end() << endl;
 }
 
+void ElementType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+{
+    for ( uint i = from; i < to; ++i ) {
+        se->getChild( i )->writeMathML( doc, de );
+    }
+}
+
 
 SequenceType::SequenceType( SequenceParser* parser )
     : ElementType( parser ), last( 0 )
@@ -231,10 +238,50 @@ TextType::TextType( SequenceParser* parser )
 {
 }
 
+void TextType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+{
+    for ( uint i = start(); i < end(); ++i ) {
+        QDomElement text = doc.createElement( "mi" );
+        BasicElement* be = se->getChild( i );
+        if ( be->getCharacter().latin1() != 0 ) {
+            // A latin-1 character, we can save it as it is.
+            text.appendChild( doc.createTextNode( be->getCharacter() ) );
+        }
+        else {
+            // An unicode char
+            QString s;
+            text.appendChild( doc.createEntityReference( s.sprintf( "#x%05X", be->getCharacter().unicode() ) ) );
+        }
+
+        if ( i != end() - 1 ) {
+            QDomElement op = doc.createElement( "mo" );
+            op.appendChild( doc.createEntityReference( "InvisibleTimes" ) );
+            text.appendChild( op );
+        }
+        de.appendChild( text );
+    }
+}
+
 
 NameType::NameType( SequenceParser* parser )
     : MultiElementType( parser )
 {
+}
+
+void NameType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+{
+    se->getChild( start() )->writeMathML( doc, de );
+
+    /*
+    QDomElement name = doc.createElement( "mi" );
+    QString value;
+    for ( uint i = start(); i < end(); ++i ) {
+        BasicElement* be = se->getChild( i );
+        //TextElement* te = static_cast<TextElement*>( be );
+        value += be->getCharacter();
+    }
+    name.appendChild( doc.createTextNode( value ) );
+    de.appendChild( name );*/
 }
 
 
@@ -258,6 +305,19 @@ void NumberType::setUpPainter(const ContextStyle& context, QPainter& painter)
     painter.setPen(context.getNumberColor());
 }
 
+void NumberType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+{
+    QDomElement name = doc.createElement( "mn" );
+    QString value;
+    for ( uint i = start(); i < end(); ++i ) {
+        BasicElement* be = se->getChild( i );
+        //TextElement* te = static_cast<TextElement*>( be );
+        value += be->getCharacter();
+    }
+    name.appendChild( doc.createTextNode( value ) );
+    de.appendChild( name );
+}
+
 
 SingleElementType::SingleElementType( SequenceParser* parser )
     : ElementType( parser )
@@ -265,8 +325,29 @@ SingleElementType::SingleElementType( SequenceParser* parser )
     parser->setElementType( start(), this );
 }
 
-OperatorType::OperatorType( SequenceParser* parser )
+AbstractOperatorType::AbstractOperatorType( SequenceParser* parser )
     : SingleElementType( parser )
+{
+}
+
+void AbstractOperatorType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+{
+    QDomElement op = doc.createElement( "mo" );
+    BasicElement* be = se->getChild( start() );
+    if ( be->getCharacter().latin1() != 0 ) {
+        // latin-1 char
+        op.appendChild( doc.createTextNode( be->getCharacter() ) );
+    }
+    else {
+        // unicode char
+        QString s;
+        op.appendChild( doc.createEntityReference( s.sprintf( "#x%05X", be->getCharacter().unicode() ) ) );
+    }
+    de.appendChild( op );
+}
+
+OperatorType::OperatorType( SequenceParser* parser )
+    : AbstractOperatorType( parser )
 {
 }
 
@@ -320,7 +401,7 @@ void OperatorType::setUpPainter(const ContextStyle& context, QPainter& painter)
 
 
 RelationType::RelationType( SequenceParser* parser )
-    : SingleElementType( parser )
+    : AbstractOperatorType( parser )
 {
 }
 
@@ -374,7 +455,7 @@ void RelationType::setUpPainter( const ContextStyle& context, QPainter& painter 
 
 
 PunctuationType::PunctuationType( SequenceParser* parser )
-    : SingleElementType( parser )
+    : AbstractOperatorType( parser )
 {
 }
 

@@ -37,7 +37,8 @@ FormulaCursor::FormulaCursor(FormulaElement* element)
         : selectionFlag(false), linearMovement(false),
           hasChangedFlag(true), readOnly(false)
 {
-    setTo(element, 0);
+    //setTo(element, 0);
+    element->goInside( this );
 }
 
 void FormulaCursor::setTo(BasicElement* element, int cursor, int mark)
@@ -612,8 +613,9 @@ void FormulaCursor::elementWillVanish(BasicElement* element)
  */
 void FormulaCursor::formulaLoaded(FormulaElement* rootElement)
 {
-    current = rootElement;
-    setPos(0);
+    //current = rootElement;
+    //setPos(0);
+    rootElement->goInside( this );
     setMark(-1);
     setSelection(false);
 }

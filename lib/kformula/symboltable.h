@@ -148,6 +148,8 @@ public:
     typedef QMap<QString, QChar> EntryTable;
     typedef QValueVector<QFont> FontTable;
 
+    bool inTable( QChar ch ) const { return unicodeTable.contains( ch ); }
+
 private:
 
     void defaultInitUnicode();

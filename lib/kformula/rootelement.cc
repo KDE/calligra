@@ -37,6 +37,9 @@ class RootSequenceElement : public SequenceElement {
 public:
 
     RootSequenceElement( BasicElement* parent = 0 ) : SequenceElement( parent ) {}
+    virtual RootSequenceElement* clone() {
+        return new RootSequenceElement( *this );
+    }
 
     /**
      * This is called by the container to get a command depending on
@@ -93,6 +96,20 @@ RootElement::~RootElement()
 {
     delete index;
     delete content;
+}
+
+
+RootElement::RootElement( const RootElement& other )
+    : BasicElement( other )
+{
+    content = new RootSequenceElement( *dynamic_cast<RootSequenceElement*>( other.content ) );
+    if ( other.index ) {
+        index = new SequenceElement( *( other.index ) );
+        index->setParent( this );
+    }
+    else {
+        index = 0;
+    }
 }
 
 
@@ -546,6 +563,25 @@ QString RootElement::formulaString()
         return "(" + content->formulaString() + ")**(1.0/(" + index->formulaString() + "))";
     }
     return "sqrt(" + content->formulaString() + ")";
+}
+
+void RootElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de;
+
+    if( hasIndex() )
+        de = doc.createElement( "mroot" );
+    else
+        de = doc.createElement( "msqrt" );
+
+    content->writeMathML( doc, de );
+
+    if( hasIndex() )
+    {
+        index->writeMathML( doc, de );
+    }
+
+    parent.appendChild( de );
 }
 
 KFORMULA_NAMESPACE_END

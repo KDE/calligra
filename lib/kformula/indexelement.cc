@@ -37,6 +37,9 @@ class IndexSequenceElement : public SequenceElement {
 public:
 
     IndexSequenceElement( BasicElement* parent = 0 ) : SequenceElement( parent ) {}
+    virtual IndexSequenceElement* clone() {
+        return new IndexSequenceElement( *this );
+    }
 
     /**
      * This is called by the container to get a command depending on
@@ -102,6 +105,57 @@ IndexElement::~IndexElement()
     delete lowerLeft;
     delete lowerMiddle;
     delete lowerRight;
+}
+
+
+IndexElement::IndexElement( const IndexElement& other )
+    : BasicElement( other )
+{
+    content = new IndexSequenceElement( *dynamic_cast<IndexSequenceElement*>( other.content ) );
+
+    if ( other.upperLeft ) {
+        upperLeft = new SequenceElement( *( other.upperLeft ) );
+        upperLeft->setParent( this );
+    }
+    else {
+        upperLeft = 0;
+    }
+    if ( other.upperMiddle ) {
+        upperMiddle = new SequenceElement( *( other.upperMiddle ) );
+        upperMiddle->setParent( this );
+    }
+    else {
+        upperMiddle = 0;
+    }
+    if ( other.upperRight ) {
+        upperRight = new SequenceElement( *( other.upperRight ) );
+        upperRight->setParent( this );
+    }
+    else {
+        upperRight = 0;
+    }
+
+    if ( other.lowerLeft ) {
+        lowerLeft = new SequenceElement( *( other.lowerLeft ) );
+        lowerLeft->setParent( this );
+    }
+    else {
+        lowerLeft = 0;
+    }
+    if ( other.lowerMiddle ) {
+        lowerMiddle = new SequenceElement( *( other.lowerMiddle ) );
+        lowerMiddle->setParent( this );
+    }
+    else {
+        lowerMiddle = 0;
+    }
+    if ( other.lowerRight ) {
+        lowerRight = new SequenceElement( *( other.lowerRight ) );
+        lowerRight->setParent( this );
+    }
+    else {
+        lowerRight = 0;
+    }
 }
 
 
@@ -1237,6 +1291,104 @@ QString IndexElement::formulaString()
         index += "**(" + upperRight->formulaString() + ")";
     }
     return index;
+}
+
+void IndexElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de;
+    QDomElement uo;
+    bool uoscripts = true;
+
+    if ( hasUpperMiddle() && hasLowerMiddle() )
+    {
+        uo = doc.createElement( "munderover" );
+        content->writeMathML( doc, uo ); // base
+        lowerMiddle->writeMathML( doc, uo );
+        upperMiddle->writeMathML( doc, uo );
+    }
+    else if ( hasUpperMiddle() )
+    {
+        uo = doc.createElement( "mover" );
+        content->writeMathML( doc, uo ); // base
+        upperMiddle->writeMathML( doc, uo );
+    }
+    else if ( hasLowerMiddle() )
+    {
+        uo = doc.createElement( "munder" );
+        content->writeMathML( doc, uo ); // base
+        lowerMiddle->writeMathML( doc, uo );
+    }
+    else // no over- or underscripts
+        uoscripts = false;
+
+
+    if ( hasLowerLeft() || hasUpperLeft() )
+    {
+        de = doc.createElement( "mmultiscripts" );
+        if ( !uoscripts ) // base
+            content->writeMathML( doc, de );
+        else
+            de.appendChild( uo );
+
+        if ( hasLowerRight() )
+            lowerRight->writeMathML( doc, de );
+        else
+            de.appendChild( doc.createElement( "none" ) );
+
+        if ( hasUpperRight() )
+            upperRight->writeMathML( doc, de );
+        else
+            de.appendChild( doc.createElement( "none" ) );
+
+        de.appendChild( doc.createElement( "mprescripts" ) );
+
+        if ( hasLowerLeft() )
+            lowerLeft->writeMathML( doc, de );
+        else
+            de.appendChild( doc.createElement( "none" ) );
+
+        if ( hasUpperLeft() )
+            upperLeft->writeMathML( doc, de );
+        else
+            de.appendChild( doc.createElement( "none" ) );
+    }
+    else if ( hasLowerRight() || hasUpperRight() )
+    {
+        if ( !hasUpperRight() )
+        {
+            de = doc.createElement( "msub" );
+            if ( !uoscripts ) // base
+                content->writeMathML( doc, de );
+            else
+                de.appendChild( uo );
+            lowerRight->writeMathML( doc, de );
+        }
+        else if ( !hasLowerRight() )
+        {
+            de = doc.createElement( "msup" );
+            if ( !uoscripts ) // base
+                content->writeMathML( doc, de );
+            else
+                de.appendChild( uo );
+            upperRight->writeMathML( doc, de );
+        }
+        else // both
+        {
+            de = doc.createElement( "msubsup" );
+            if ( !uoscripts ) // base
+                content->writeMathML( doc, de );
+            else
+                de.appendChild( uo );
+            lowerRight->writeMathML( doc, de );
+            upperRight->writeMathML( doc, de );
+        }
+    }
+    else // no mmultiscripts, msubsup, msub or msup
+        de = uo;
+
+
+    parent.appendChild( de );
+
 }
 
 KFORMULA_NAMESPACE_END

@@ -32,10 +32,17 @@ class SequenceElement;
  * The element with up to four indexes in the four corners.
  */
 class IndexElement : public BasicElement {
+    IndexElement& operator=( const IndexElement& ) { return *this; }
 public:
 
     IndexElement(BasicElement* parent = 0);
     ~IndexElement();
+
+    IndexElement( const IndexElement& );
+
+    virtual IndexElement* clone() {
+        return new IndexElement( *this );
+    }
 
     /**
      * Sets the cursor and returns the element the point is in.
@@ -229,6 +236,8 @@ public:
 
     // the upper right index is the only one we show
     virtual QString formulaString();
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 

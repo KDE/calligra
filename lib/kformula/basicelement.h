@@ -74,6 +74,7 @@ class BasicElement
     friend class SequenceElement;
     friend class SequenceParser;
 
+    BasicElement& operator= ( const BasicElement& ) { return *this; }
 public:
 
     /*
@@ -85,6 +86,11 @@ public:
 
     BasicElement(BasicElement* parent = 0);
     virtual ~BasicElement();
+
+    // deep copy
+    BasicElement( const BasicElement& );
+
+    virtual BasicElement* clone() = 0;
 
     /**
      * Provide fast access to the rootElement for each child.
@@ -333,10 +339,20 @@ public:
     QDomElement getElementDom(QDomDocument& doc);
 
     /**
+     * Same as above, just MathML.
+     */
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
+
+    /**
      * Set this element attribute, build children and
      * call their buildFromDom.
      */
     bool buildFromDom(QDomElement& element);
+
+    /**
+     * Heiner's test method. Should read MathML...
+     */
+    //bool buildFromMathMLDom( QDomElement& element );
 
     // debug
     static int getEvilDestructionCount() { return evilDestructionCount; }
@@ -454,10 +470,6 @@ private:
 
     // debug
     static int evilDestructionCount;
-
-    // copying not allowed.
-    BasicElement(BasicElement&) {}
-    BasicElement& operator= (BasicElement&) { return *this; }
 };
 
 KFORMULA_NAMESPACE_END

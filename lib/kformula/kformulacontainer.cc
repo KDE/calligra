@@ -427,7 +427,7 @@ void Container::save(QString file)
         kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
         return;
     }
-    QCString data=domData().toCString();
+    //QCString data=domData().toCString();
     //cerr << (const char *)data << endl;
 
     QTextStream stream(&f);
@@ -443,6 +443,31 @@ void Container::save(QDomNode doc)
 {
     QDomDocument ownerDoc = doc.ownerDocument();
     doc.appendChild(rootElement()->getElementDom(ownerDoc));
+}
+
+void Container::saveMathML(QString file)
+{
+    QFile f( file );
+    if ( !f.open( IO_Truncate | IO_ReadWrite ) ) {
+        kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
+        return;
+    }
+
+    QTextStream stream( &f );
+    stream.setEncoding( QTextStream::UnicodeUTF8 );
+    saveMathML( stream );
+    f.close();
+}
+
+void Container::saveMathML( QTextStream& stream )
+{
+    QDomDocumentType dt = QDomImplementation().createDocumentType( "math",
+                                             "-//W3C//DTD MathML 2.0//EN",
+                          "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
+    QDomDocument doc( dt );
+    rootElement()->writeMathML( doc, doc );
+
+    doc.save( stream, 4 );
 }
 
 void Container::load(QString file)
@@ -467,28 +492,48 @@ void Container::load(QString file)
     f.close();
 }
 
-void Container::loadMathMl(QString file)
+void Container::loadMathML( QString file )
 {
-    QFile f(file);
-    if (!f.open(IO_ReadOnly)) {
+    QFile f( file );
+    if ( !f.open( IO_ReadOnly ) ) {
         kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
         return;
     }
+    QTextStream stream( &f );
+    stream.setEncoding( QTextStream::UnicodeUTF8 );
+    QString content = stream.read();
+
     QDomDocument doc;
-    if (!doc.setContent(&f)) {
+    QString errorMsg; int errorLine; int errorColumn;
+    if ( !doc.setContent( content, true,
+                          &errorMsg, &errorLine, &errorColumn ) ) {
+        kdWarning( DEBUGID ) << "MathML built error: " << errorMsg
+                             << " at line " << errorLine
+                             << " and column " << errorColumn << endl;
         f.close();
         return;
     }
-    MathMl2KFormula filter(&doc);
-    //cerr << "Filtering" << endl;
 
-    filter.startConversion();
-    if(filter.isDone())
-        if (load(filter.getKFormulaDom())) {
-    	    getHistory()->clear();
-	}
+    /*kdDebug( DEBUGID ) << "Container::loadMathML\n"
+      << doc.toCString() << endl;*/
+
+    const ContextStyle& context = document()->getContextStyle();
+    MathML2KFormula *filter = new MathML2KFormula( doc, context );
+    filter->startConversion();
+
+    if ( load( filter->getKFormulaDom() ) ) {
+        getHistory()->clear();
+    }
+    delete filter;
     f.close();
 }
+
+/*
+bool Container::loadMathML( QDomNode doc )
+{
+    return false;
+}
+*/
 
 /**
  * Loads a formula from the document.

@@ -37,11 +37,13 @@ class SequenceElement;
  * (No indexes.)
  */
 class SingleContentElement : public BasicElement {
+    SingleContentElement& operator=( const SingleContentElement& ) { return *this; }
 public:
 
     SingleContentElement(BasicElement* parent = 0);
     ~SingleContentElement();
 
+    SingleContentElement( const SingleContentElement& );
 
     /**
      * @returns the character that represents this element. Used for
@@ -113,6 +115,8 @@ public:
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
+
 protected:
 
     /**
@@ -142,6 +146,7 @@ private:
  * A left and/or right bracket around one child.
  */
 class BracketElement : public SingleContentElement {
+    BracketElement& operator=( const BracketElement& ) { return *this; }
 public:
 
     enum { contentPos };
@@ -149,6 +154,12 @@ public:
     BracketElement(SymbolType left = EmptyBracket, SymbolType right = EmptyBracket,
                    BasicElement* parent = 0);
     ~BracketElement();
+
+    BracketElement( const BracketElement& );
+
+    virtual BracketElement* clone() {
+        return new BracketElement( *this );
+    }
 
     /**
      * @returns the type of this element. Used for
@@ -181,6 +192,8 @@ public:
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 
@@ -232,11 +245,17 @@ private:
  * A line above the content.
  */
 class OverlineElement : public SingleContentElement {
+    OverlineElement& operator=( const OverlineElement& ) { return *this; }
 public:
 
     OverlineElement(BasicElement* parent = 0);
     ~OverlineElement();
 
+    OverlineElement( const OverlineElement& );
+
+    virtual OverlineElement* clone() {
+        return new OverlineElement( *this );
+    }
 
     /**
      * Calculates our width and height and
@@ -262,6 +281,8 @@ public:
     virtual QString toLatex();
 
     virtual QString formulaString();
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 
@@ -280,10 +301,16 @@ private:
  * A line below the content.
  */
 class UnderlineElement : public SingleContentElement {
+    UnderlineElement& operator=( const UnderlineElement& ) { return *this; }
 public:
     UnderlineElement(BasicElement* parent = 0);
     ~UnderlineElement();
 
+    UnderlineElement( const UnderlineElement& );
+
+    virtual UnderlineElement* clone() {
+        return new UnderlineElement( *this );
+    }
 
     /**
      * Calculates our width and height and
@@ -309,6 +336,8 @@ public:
     virtual QString toLatex();
 
     virtual QString formulaString();
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 

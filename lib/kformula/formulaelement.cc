@@ -152,7 +152,7 @@ const SymbolTable& FormulaElement::getSymbolTable() const
 void FormulaElement::writeDom(QDomElement& element)
 {
     inherited::writeDom(element);
-    element.setAttribute( "VERSION", "5" );
+    element.setAttribute( "VERSION", "6" );
     if ( ownBaseSize ) {
         element.setAttribute( "BASESIZE", baseSize );
     }
@@ -172,6 +172,8 @@ bool FormulaElement::readAttributesFromDom(QDomElement& element)
     if ( !versionStr.isNull() ) {
         version = versionStr.toInt();
     }
+    // Version 6 added the MultilineElement (TabMarker)
+    // Version 5 added under- and overlines
     if ( version < 4 ) {
         convertNames( element );
     }
@@ -234,6 +236,14 @@ void FormulaElement::convertNames( QDomNode node )
 QString FormulaElement::toLatex()
 {
     return inherited::toLatex();   //Consider $$ sorround
+}
+
+void FormulaElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElementNS( "http://www.w3.org/1998/Math/MathML",
+                                          "math" );
+    inherited::writeMathML( doc, de );
+    parent.appendChild( de );
 }
 
 KFORMULA_NAMESPACE_END

@@ -30,7 +30,8 @@
 #include <qstring.h>
 
 #include <kcommand.h>
-#include <kocommandhistory.h>
+//#include <kocommandhistory.h>
+#include "kocommandhistory.h"
 #include "kformuladefs.h"
 
 class QColorGroup;
@@ -155,10 +156,11 @@ public:
      */
     QDomDocument domData();
 
+
     /**
      * Save function.
      * Save the formula into the specified file.
-     * It overwrite the file if exists.
+     * It overwrites the file if exists.
      */
     void save(QString file);
 
@@ -167,11 +169,16 @@ public:
      */
     void save(QDomNode doc);
 
+    /* Tries to save MathML */
+    void saveMathML( QString file );
+    void saveMathML( QTextStream& stream );
+
     /**
      * Load function.
      * Load the formula from the specified file containing MathML .
      */
-    void loadMathMl(QString file);
+    void loadMathML( QString file );
+    //bool loadMathML( QDomNode doc );
 
     /**
      * Load function.

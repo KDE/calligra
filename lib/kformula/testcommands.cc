@@ -28,7 +28,7 @@ void TestCommands::setUp()
     rootElement = container->rootElement();
     cursor = container->createCursor();
 
-    element1 = new BracketElement('(', ']');
+    element1 = new BracketElement(LeftSquareBracket, RightSquareBracket);
     element2 = new TextElement('2');
     element3 = new IndexElement();
     element4 = new TextElement('4');
@@ -54,25 +54,25 @@ void TestCommands::tearDown()
 }
 
 
-Test* TestCommands::suite()
+CppUnit::Test* TestCommands::suite()
 {
-    TestSuite *suite = new TestSuite("TestCommands");
+    CppUnit::TestSuite *suite = new CppUnit::TestSuite("TestCommands");
 
-    suite->addTest(new TestCaller<TestCommands>("testRemove",
+    suite->addTest(new CppUnit::TestCaller<TestCommands>("testRemove",
                                                 &TestCommands::testRemove));
-    suite->addTest(new TestCaller<TestCommands>("testReplace",
+    suite->addTest(new CppUnit::TestCaller<TestCommands>("testReplace",
                                                 &TestCommands::testReplace));
-    suite->addTest(new TestCaller<TestCommands>("testAddIndexElement",
+    suite->addTest(new CppUnit::TestCaller<TestCommands>("testAddIndexElement",
                                                 &TestCommands::testAddIndexElement));
-    suite->addTest(new TestCaller<TestCommands>("testAddMatrix",
+    suite->addTest(new CppUnit::TestCaller<TestCommands>("testAddMatrix",
                                                 &TestCommands::testAddMatrix));
-    suite->addTest(new TestCaller<TestCommands>("testPhantom",
+    suite->addTest(new CppUnit::TestCaller<TestCommands>("testPhantom",
                                                 &TestCommands::testPhantom));
-    suite->addTest(new TestCaller<TestCommands>("testFractionBug",
+    suite->addTest(new CppUnit::TestCaller<TestCommands>("testFractionBug",
                                                 &TestCommands::testFractionBug));
-    suite->addTest(new TestCaller<TestCommands>("testCompacting",
+    suite->addTest(new CppUnit::TestCaller<TestCommands>("testCompacting",
                                                 &TestCommands::testCompacting));
-    suite->addTest(new TestCaller<TestCommands>("testAddOneByTwoMatrix",
+    suite->addTest(new CppUnit::TestCaller<TestCommands>("testAddOneByTwoMatrix",
                                                 &TestCommands::testAddOneByTwoMatrix));
     return suite;
 }
@@ -89,16 +89,21 @@ void TestCommands::testRemove()
 
     container->setActiveCursor(cursor);
 
-    container->addText('A');
-    container->addText('B');
-    container->addText('C');
+    TextRequest request( "ABC" );
+    //container->addText('A');
+    //container->addText('B');
+    //container->addText('C');
+    container->performRequest( &request );
 
     cursor->moveLeft(SelectMovement);
     cursor->moveLeft(SelectMovement);
     cursor->moveLeft(SelectMovement);
 
-    container->remove(beforeCursor);
-    container->remove(beforeCursor);
+    //container->remove(beforeCursor);
+    //container->remove(beforeCursor);
+    DirectedRemove remove( req_remove, beforeCursor );
+    container->performRequest( &remove );
+    container->performRequest( &remove );
 
     assert(rootElement->countChildren() == 4);
 
@@ -119,7 +124,9 @@ void TestCommands::testReplace()
     //cursor->moveEnd();
     cursor->moveHome(SelectMovement);
     container->setActiveCursor(cursor);
-    container->addText('A');
+    //container->addText('A');
+    TextRequest request( "A" );
+    container->performRequest( &request );
 
 //     QDomDocument endDoc("Test");
 //     endDoc.appendChild(rootElement->getElementDom(endDoc));
@@ -133,7 +140,9 @@ void TestCommands::testAddIndexElement()
 {
     cursor->moveLeft();
     container->setActiveCursor(cursor);
-    container->addUpperRightIndex();
+    //container->addUpperRightIndex();
+    IndexRequest request( upperRightPos );
+    container->performRequest( &request );
     assert(rootElement->countChildren() == 5);
     assert(element4->getParent() != rootElement);
 }
@@ -144,7 +153,9 @@ void TestCommands::testAddMatrix()
     cursor->moveLeft(SelectMovement);
     cursor->moveLeft(SelectMovement);
     container->setActiveCursor(cursor);
-    container->addMatrix(5, 5);
+    //container->addMatrix(5, 5);
+    MatrixRequest request( 5, 5 );
+    container->performRequest( &request );
     assert(rootElement->countChildren() == 3);
     document->undo();
     assert(rootElement->countChildren() == 5);
@@ -183,9 +194,13 @@ void TestCommands::testFractionBug()
     container->setActiveCursor(cursor);
     cursor->moveHome();
     cursor->moveEnd(SelectMovement);
-    container->remove();
+    //container->remove();
+    DirectedRemove remove( req_remove, beforeCursor );
+    container->performRequest( &remove );
 
-    container->addFraction();
+    //container->addFraction();
+    Request request( req_addFraction );
+    container->performRequest( &request );
     cursor->moveDown();
     container->copy();
     container->paste();
@@ -198,17 +213,21 @@ void TestCommands::testFractionBug()
 void TestCommands::testCompacting()
 {
     container->setActiveCursor(cursor);
-    container->addText('*');
-    container->addText('\\');
-    container->addText('a');
-    container->addText('l');
-    container->addText('p');
-    container->addText('h');
-    container->addText('a');
-    container->compactExpression();
+    TextRequest request1( "*" );
+    container->performRequest( &request1 );
+    Request request2( req_addNameSequence );
+    container->performRequest( &request2 );
+    TextRequest request3( "alpha" );
+    container->performRequest( &request3 );
+    //container->compactExpression();
+    Request ce( req_compactExpression );
+    container->performRequest( &ce );
     assert(rootElement->countChildren() == 7);
-    container->addText('a');
-    container->makeGreek();
+    TextRequest request4( "*" );
+    container->performRequest( &request4 );
+    //container->makeGreek();
+    Request mg( req_makeGreek );
+    container->performRequest( &mg );
     assert(rootElement->countChildren() == 8);
 }
 
@@ -216,7 +235,9 @@ void TestCommands::testCompacting()
 void TestCommands::testAddOneByTwoMatrix()
 {
     container->setActiveCursor(cursor);
-    container->addOneByTwoMatrix();
+    //container->addOneByTwoMatrix();
+    Request request( req_addOneByTwoMatrix );
+    container->performRequest( &request );
     assert(rootElement->countChildren() == 6);
     document->undo();
     assert(rootElement->countChildren() == 5);
@@ -225,7 +246,8 @@ void TestCommands::testAddOneByTwoMatrix()
 
     cursor->moveHome(WordMovement);
     cursor->moveEnd(SelectMovement);
-    container->addOneByTwoMatrix();
+    //container->addOneByTwoMatrix();
+    container->performRequest( &request );
     assert(rootElement->countChildren() == 1);
     document->undo();
     document->redo();

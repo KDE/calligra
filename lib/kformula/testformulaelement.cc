@@ -27,7 +27,7 @@ void TestFormulaElement::setUp()
     rootElement = container->rootElement();
     cursor = container->createCursor();
 
-    element1 = new BracketElement('(', ']');
+    element1 = new BracketElement(LeftSquareBracket, RightSquareBracket);
     element2 = new TextElement('2');
     element3 = new IndexElement();
     element4 = new TextElement('4');
@@ -51,12 +51,12 @@ void TestFormulaElement::tearDown()
 }
 
 
-Test* TestFormulaElement::suite ()
+CppUnit::Test* TestFormulaElement::suite ()
 {
-    TestSuite *suite = new TestSuite("TestFormulaElement");
+    CppUnit::TestSuite *suite = new CppUnit::TestSuite("TestFormulaElement");
 
-    suite->addTest(new TestCaller<TestFormulaElement>("testPosition",
-                                                      &TestFormulaElement::testPosition));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaElement>("testPosition",
+                                                               &TestFormulaElement::testPosition));
     return suite;
 }
 

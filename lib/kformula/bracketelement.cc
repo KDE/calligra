@@ -39,10 +39,20 @@ SingleContentElement::SingleContentElement(BasicElement* parent )
     content = new SequenceElement( this );
 }
 
+
+SingleContentElement::SingleContentElement( const SingleContentElement& other )
+    : BasicElement( other )
+{
+    content = new SequenceElement( other.content );
+    content->setParent( this );
+}
+
+
 SingleContentElement::~SingleContentElement()
 {
     delete content;
 }
+
 
 QChar SingleContentElement::getCharacter() const
 {
@@ -168,6 +178,11 @@ bool SingleContentElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
+void SingleContentElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    content->writeMathML( doc, parent );
+}
+
 
 
 BracketElement::BracketElement(SymbolType l, SymbolType r, BasicElement* parent)
@@ -182,6 +197,14 @@ BracketElement::~BracketElement()
 {
     delete left;
     delete right;
+}
+
+
+BracketElement::BracketElement( const BracketElement& other )
+    : SingleContentElement( other )
+{
+    right = createBracket( other.right->getType() );
+    left = createBracket( other.left->getType() );
 }
 
 
@@ -410,6 +433,18 @@ QString BracketElement::formulaString()
     return "(" + getContent()->formulaString() + ")";
 }
 
+void BracketElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElement( "mfenced" );
+    if ( left->getType() != LeftRoundBracket ||
+         right->getType() != RightRoundBracket )
+    {
+        de.setAttribute( "open",  QString( QChar( left->getType() ) ) );
+        de.setAttribute( "close", QString( QChar( right->getType() ) ) );
+    }
+    SingleContentElement::writeMathML( doc, de );
+    parent.appendChild( de );
+}
 
 
 OverlineElement::OverlineElement( BasicElement* parent )
@@ -418,6 +453,11 @@ OverlineElement::OverlineElement( BasicElement* parent )
 }
 
 OverlineElement::~OverlineElement()
+{
+}
+
+OverlineElement::OverlineElement( const OverlineElement& other )
+    : SingleContentElement( other )
 {
 }
 
@@ -480,6 +520,17 @@ QString OverlineElement::formulaString()
     return getContent()->formulaString();
 }
 
+void OverlineElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElement( "mover" );
+    SingleContentElement::writeMathML( doc, de );
+    QDomElement op = doc.createElement( "mo" );
+    // is this the right entity? Mozilla renders it correctly.
+    op.appendChild( doc.createEntityReference( "OverBar" ) );
+    de.appendChild( op );
+    parent.appendChild( de );
+}
+
 
 UnderlineElement::UnderlineElement( BasicElement* parent )
     : SingleContentElement( parent )
@@ -487,6 +538,12 @@ UnderlineElement::UnderlineElement( BasicElement* parent )
 }
 
 UnderlineElement::~UnderlineElement()
+{
+}
+
+
+UnderlineElement::UnderlineElement( const UnderlineElement& other )
+    : SingleContentElement( other )
 {
 }
 
@@ -549,6 +606,17 @@ QString UnderlineElement::toLatex()
 QString UnderlineElement::formulaString()
 {
     return getContent()->formulaString();
+}
+
+void UnderlineElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElement( "munder" );
+    SingleContentElement::writeMathML( doc, de );
+    QDomElement op = doc.createElement( "mo" );
+    // is this the right entity? Mozilla renders it correctly.
+    op.appendChild( doc.createEntityReference( "UnderBar" ) );
+    de.appendChild( op );
+    parent.appendChild( de );
 }
 
 KFORMULA_NAMESPACE_END

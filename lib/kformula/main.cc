@@ -11,12 +11,14 @@
 #include <qstring.h>
 #include <qtextstream.h>
 #include <qwidget.h>
+#include <qfileinfo.h>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kcommand.h>
 #include <kdebug.h>
+#include <qfiledialog.h>
 
 #include "elementtype.h"
 #include "kformulacommand.h"
@@ -55,6 +57,22 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_I: document->document()->insertColumn(); return;
             case Qt::Key_R: document->document()->removeColumn(); return;
             case Qt::Key_Z: document->document()->redo(); return;
+
+            case Qt::Key_M: document->saveMathML( "test.mml" ); return;
+            case Qt::Key_O: {
+                QString file = QFileDialog::getOpenFileName();
+                kdDebug( DEBUGID ) << file << endl;
+                if( !file.isEmpty() )
+                {
+                    QFileInfo fi( file );
+                    if ( fi.extension() == "mml" ) {
+                        document->loadMathML( file );
+                    }
+                    else if ( fi.extension() == "xml" )
+                        document->load( file );
+                }
+                return;
+        }
         }
     }
     else if (state & Qt::ControlButton) {
@@ -76,8 +94,9 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_G: document->document()->makeGreek(); return;
             case Qt::Key_I: document->document()->insertRow(); return;
             case Qt::Key_R: document->document()->removeRow(); return;
+            case Qt::Key_K: document->document()->addMultiline(); return;
             case Qt::Key_L: document->document()->addGenericLowerIndex(); return;
-            case Qt::Key_M: document->loadMathMl("mathml.xml"); return;
+            case Qt::Key_M: document->loadMathML("test.mml"); return;
             case Qt::Key_O: document->load("test.xml"); return;
             case Qt::Key_Q: kapp->quit(); return;
             case Qt::Key_S: document->save("test.xml"); return;
@@ -140,6 +159,7 @@ void ScrollView::cursorChanged(bool visible, bool /*selecting*/)
 
 
 static const KCmdLineOptions options[]= {
+    { "+file", "File to Open", 0 },
     {0,0,0}
 };
 
@@ -189,6 +209,15 @@ int main(int argc, char** argv)
 
     // to keep things interessting
     mw2a->setReadOnly(true);
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    for ( int i = 0; i < args->count(); ++i ) {
+        QFileInfo fi( args->url( i ).path() );
+        if ( fi.extension() == "mml" )
+            container2->loadMathML( args->url( i ).path() );
+        else if ( fi.extension() == "xml" )
+            container2->load( args->url( i ).path() );
+    }
 
     int result = app.exec();
 

@@ -33,12 +33,19 @@ class SequenceElement;
  * A nice graphical root.
  */
 class RootElement : public BasicElement {
+    RootElement& operator=( const RootElement& ) { return *this; }
 public:
 
     //enum { contentPos, indexPos };
 
     RootElement(BasicElement* parent = 0);
     ~RootElement();
+
+    RootElement( const RootElement& );
+
+    virtual RootElement* clone() {
+        return new RootElement( *this );
+    }
 
     /**
      * Sets the cursor and returns the element the point is in.
@@ -155,6 +162,8 @@ public:
     virtual QString toLatex();
 
     virtual QString formulaString();
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 

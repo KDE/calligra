@@ -27,7 +27,8 @@
 #include <kaction.h>
 #include <kcommand.h>
 #include <kconfig.h>
-#include <kocommandhistory.h>
+//#include <kocommandhistory.h>
+#include "kocommandhistory.h"
 #include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -147,6 +148,7 @@ public:
     KAction* getAddGenericLowerAction();
     KAction* getAddOverlineAction();
     KAction* getAddUnderlineAction();
+    KAction* getAddMultilineAction();
     KAction* getRemoveEnclosingAction();
     KAction* getMakeGreekAction();
     KAction* getInsertSymbolAction();
@@ -205,6 +207,7 @@ public slots:
     void addGenericUpperIndex();
     void addOverline();
     void addUnderline();
+    void addMultiline();
     void removeEnclosing();
     void makeGreek();
     void insertSymbol();

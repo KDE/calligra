@@ -30,6 +30,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 class MatrixSequenceElement;
 
+
 /**
  * A matrix.
  */
@@ -37,9 +38,17 @@ class MatrixElement : public BasicElement {
     friend class KFCRemoveColumn;
     friend class KFCRemoveRow;
     friend class MatrixSequenceElement;
+
+    MatrixElement& operator=( const MatrixElement& ) { return *this; }
 public:
     MatrixElement(uint rows = 1, uint columns = 1, BasicElement* parent = 0);
     ~MatrixElement();
+
+    MatrixElement( const MatrixElement& );
+
+    virtual MatrixElement* clone() {
+        return new MatrixElement( *this );
+    }
 
     /**
      * Sets the cursor and returns the element the point is in.
@@ -168,8 +177,10 @@ public:
 
     virtual QString formulaString();
 
-    uint getRows() { return content.count(); }
-    uint getColumns() { return content.at(0)->count(); }
+    uint getRows() const { return content.count(); }
+    uint getColumns() const { return content.getFirst()->count(); }
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 
@@ -215,6 +226,150 @@ private:
      */
     QPtrList< QPtrList< MatrixSequenceElement > > content;
 };
+
+
+
+class MultilineSequenceElement;
+
+
+/**
+ * Any number of lines.
+ */
+class MultilineElement : public BasicElement {
+    friend class KFCNewLine;
+
+    typedef BasicElement inherited;
+public:
+
+    /**
+     * The container this FormulaElement belongs to must not be 0,
+     * except you really know what you are doing.
+     */
+    MultilineElement( BasicElement* parent = 0 );
+    ~MultilineElement();
+
+    MultilineElement( const MultilineElement& );
+
+    virtual MultilineElement* clone() {
+        return new MultilineElement( *this );
+    }
+
+    /**
+     * Returns the element the point is in.
+     */
+    BasicElement* goToPos( FormulaCursor* cursor, bool& handled,
+                           const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+
+    /**
+     * Sets the cursor inside this element to its start position.
+     * For most elements that is the main child.
+     */
+    virtual void goInside(FormulaCursor* cursor);
+
+    /**
+     * Enters this element while moving to the left starting inside
+     * the element `from'. Searches for a cursor position inside
+     * this element or to the left of it.
+     */
+    virtual void moveLeft( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Enters this element while moving to the right starting inside
+     * the element `from'. Searches for a cursor position inside
+     * this element or to the right of it.
+     */
+    virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Enters this element while moving up starting inside
+     * the element `from'. Searches for a cursor position inside
+     * this element or above it.
+     */
+    virtual void moveUp( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Enters this element while moving down starting inside
+     * the element `from'. Searches for a cursor position inside
+     * this element or below it.
+     */
+    virtual void moveDown( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     */
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+
+    /**
+     * Draws the whole element including its children.
+     * The `parentOrigin' is the point this element's parent starts.
+     * We can use our parentPosition to get our own origin then.
+     */
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPixelPoint& parentOrigin );
+
+    virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
+
+    virtual void normalize(FormulaCursor*, Direction);
+
+    virtual SequenceElement* getMainChild();
+
+    /**
+     * Sets the cursor to select the child. The mark is placed before,
+     * the position behind it.
+     */
+    virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
+
+    /**
+     * @returns the latex representation of the element and
+     * of the element's children
+     */
+    virtual QString toLatex();
+
+    virtual QString formulaString();
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
+
+protected:
+
+    //Save/load support
+
+    /**
+     * Returns the tag name of this element type.
+     */
+    virtual QString getTagName() const { return "MULTILINE"; }
+
+    /**
+     * Appends our attributes to the dom element.
+     */
+    virtual void writeDom(QDomElement& element);
+
+    /**
+     * Reads our attributes from the element.
+     * Returns false if it failed.
+     */
+    virtual bool readAttributesFromDom(QDomElement& element);
+
+    /**
+     * Reads our content from the node. Sets the node to the next node
+     * that needs to be read.
+     * Returns false if it failed.
+     */
+    virtual bool readContentFromDom(QDomNode& node);
+
+
+private:
+
+    /**
+     * The list of sequences. Each one is a line.
+     */
+    QPtrList< MultilineSequenceElement > content;
+};
+
 
 KFORMULA_NAMESPACE_END
 

@@ -38,10 +38,17 @@ class SymbolTable;
  * The children are aligned in one line.
  */
 class SequenceElement : public BasicElement {
+    SequenceElement& operator=( const SequenceElement& ) { return *this; }
 public:
 
     SequenceElement(BasicElement* parent = 0);
     ~SequenceElement();
+
+    SequenceElement( const SequenceElement& );
+
+    virtual SequenceElement* clone() {
+        return new SequenceElement( *this );
+    }
 
     /**
      * @returns true if the sequence contains only text.
@@ -269,6 +276,15 @@ public:
 
     virtual QString formulaString();
 
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
+
+    /**
+     * @returns the child at position i.
+     */
+    BasicElement* getChild(uint i) { return children.at(i); }
+
+    int childPos( BasicElement* child ) { return children.find( child ); }
+
 protected:
 
     //Save/load support
@@ -310,11 +326,6 @@ protected:
      * @param type the desired type of the element
      */
     virtual BasicElement* createElement(QString type);
-
-    /**
-     * @returns the child at position i.
-     */
-    BasicElement* getChild(uint i) { return children.at(i); }
 
     /**
      * @returns the position where the child starts.
@@ -369,6 +380,10 @@ class NameSequence : public SequenceElement {
 public:
 
     NameSequence( BasicElement* parent = 0 );
+
+    virtual NameSequence* clone() {
+        return new NameSequence( *this );
+    }
 
     /**
      * @returns true if the sequence contains only text.
@@ -447,6 +462,8 @@ public:
      * name sequence.
      */
     static bool isValidSelection( FormulaCursor* cursor );
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 

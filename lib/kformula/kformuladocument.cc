@@ -80,6 +80,7 @@ struct Document::Document_Impl {
     KAction* addGenericLowerAction;
     KAction* addOverlineAction;
     KAction* addUnderlineAction;
+    KAction* addMultilineAction;
     KAction* removeEnclosingAction;
     KAction* makeGreekAction;
     KAction* insertSymbolAction;
@@ -174,6 +175,7 @@ KAction* Document::getAddGenericUpperAction()  { return impl->addGenericUpperAct
 KAction* Document::getAddGenericLowerAction()  { return impl->addGenericLowerAction; }
 KAction* Document::getAddOverlineAction()      { return impl->addOverlineAction; }
 KAction* Document::getAddUnderlineAction()     { return impl->addUnderlineAction; }
+KAction* Document::getAddMultilineAction()     { return impl->addMultilineAction; }
 KAction* Document::getRemoveEnclosingAction()  { return impl->removeEnclosingAction; }
 KAction* Document::getMakeGreekAction()        { return impl->makeGreekAction; }
 KAction* Document::getInsertSymbolAction()     { return impl->insertSymbolAction; }
@@ -496,6 +498,12 @@ void Document::createActions(KActionCollection* collection)
                                            0,
                                            this, SLOT(addUnderline()),
                                            collection, "formula_addunderline");
+
+    impl->addMultilineAction = new KAction(i18n("Add Multiline"),
+                                           "multiline",
+                                           0,
+                                           this, SLOT(addMultiline()),
+                                           collection, "formula_addmultiline");
 
     impl->removeEnclosingAction = new KAction(i18n("Remove Enclosing Element"),
                                         0,
@@ -823,6 +831,14 @@ void Document::addUnderline()
 {
     if (hasFormula()) {
         Request r( req_addUnderline );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::addMultiline()
+{
+    if (hasFormula()) {
+        Request r( req_addMultiline );
         formula()->performRequest( &r );
     }
 }

@@ -26,7 +26,7 @@ void TestFormulaCursor::setUp()
     rootElement = container->rootElement();
     cursor = container->createCursor();
 
-    element1 = new BracketElement('(', ']');
+    element1 = new BracketElement(LeftSquareBracket, RightSquareBracket);
     element2 = new TextElement('2');
     element3 = new IndexElement();
     element4 = new TextElement('4');
@@ -51,30 +51,30 @@ void TestFormulaCursor::tearDown()
 }
 
 
-Test* TestFormulaCursor::suite ()
+CppUnit::Test* TestFormulaCursor::suite ()
 {
-    TestSuite *suite = new TestSuite("TestFormulaCursor");
+    CppUnit::TestSuite *suite = new CppUnit::TestSuite("TestFormulaCursor");
 
-    suite->addTest(new TestCaller<TestFormulaCursor>("testTextInsertion",
-                                                     &TestFormulaCursor::testTextInsertion));
-    suite->addTest(new TestCaller<TestFormulaCursor>("testRemoval",
-                                                     &TestFormulaCursor::testRemoval));
-    suite->addTest(new TestCaller<TestFormulaCursor>("testRemoveIndexElementByMainChild",
-                                                     &TestFormulaCursor::testRemoveIndexElementByMainChild));
-    suite->addTest(new TestCaller<TestFormulaCursor>("testRemoveBracketElementByMainChild",
-                                                     &TestFormulaCursor::testRemoveBracketElementByMainChild));
-    suite->addTest(new TestCaller<TestFormulaCursor>("testRemoveBracketElementByNonEmptyMainChild",
-                                                     &TestFormulaCursor::testRemoveBracketElementByNonEmptyMainChild));
-    suite->addTest(new TestCaller<TestFormulaCursor>("testActiveIndexElement",
-                                                     &TestFormulaCursor::testActiveIndexElement));
-    suite->addTest(new TestCaller<TestFormulaCursor>("testReplaceByEmptyContent",
-                                                     &TestFormulaCursor::testReplaceByEmptyContent));
-    suite->addTest(new TestCaller<TestFormulaCursor>("testReplaceByContent",
-                                                     &TestFormulaCursor::testReplaceByContent));
-    suite->addTest(new TestCaller<TestFormulaCursor>("testReplaceSelectionByElement",
-                                                     &TestFormulaCursor::testReplaceSelectionByElement));
-    suite->addTest(new TestCaller<TestFormulaCursor>("testCursorSaving",
-                                                     &TestFormulaCursor::testCursorSaving));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testTextInsertion",
+                                                              &TestFormulaCursor::testTextInsertion));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testRemoval",
+                                                              &TestFormulaCursor::testRemoval));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testRemoveIndexElementByMainChild",
+                                                              &TestFormulaCursor::testRemoveIndexElementByMainChild));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testRemoveBracketElementByMainChild",
+                                                              &TestFormulaCursor::testRemoveBracketElementByMainChild));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testRemoveBracketElementByNonEmptyMainChild",
+                                                              &TestFormulaCursor::testRemoveBracketElementByNonEmptyMainChild));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testActiveIndexElement",
+                                                              &TestFormulaCursor::testActiveIndexElement));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testReplaceByEmptyContent",
+                                                              &TestFormulaCursor::testReplaceByEmptyContent));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testReplaceByContent",
+                                                              &TestFormulaCursor::testReplaceByContent));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testReplaceSelectionByElement",
+                                                              &TestFormulaCursor::testReplaceSelectionByElement));
+    suite->addTest(new CppUnit::TestCaller<TestFormulaCursor>("testCursorSaving",
+                                                              &TestFormulaCursor::testCursorSaving));
 
     return suite;
 }

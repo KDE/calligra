@@ -26,6 +26,7 @@
   <Action name="formula_add_one_by_two_matrix"/>
   <Action name="formula_addoverline"/>
   <Action name="formula_addunderline"/>
+  <Action name="formula_addmultiline"/>
   <Separator/>
   <Action name="formula_addupperindex"/>
   <Action name="formula_addlowerindex"/>
@@ -101,6 +102,7 @@
   <Action name="formula_addlowerleft"/>
   <Action name="formula_addupperright"/>
   <Action name="formula_addlowerright"/>
+  <Action name="formula_addmultiline"/>
   <Separator/>
   <Action name="formula_typeleft"/>
   <Action name="formula_typeright"/>

@@ -10,7 +10,7 @@
 #include <kcmdlineargs.h>
 
 // unit test
-#include <TestRunner.h>
+#include <cppunit/ui/text/TestRunner.h>
 
 // local
 #include "basicelement.h"
@@ -21,9 +21,6 @@
 #include "testformulaelement.h"
 #include "testindexelement.h"
 
-
-static char* array[] = { "", "TestFormulaCursor", "TestFormulaElement",
-                         "TestIndexElement", "TestCommands" };
 
 static const KCmdLineOptions options[]= {
     {0,0,0}
@@ -44,13 +41,13 @@ int main (int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 
-    TestRunner runner;
+    CppUnit::TextUi::TestRunner runner;
 
-    runner.addTest("TestFormulaCursor", TestFormulaCursor::suite());
-    runner.addTest("TestFormulaElement", TestFormulaElement::suite());
-    runner.addTest("TestIndexElement", TestIndexElement::suite());
-    runner.addTest("TestCommands", TestCommands::suite());
-    runner.run( 5, array );
+    runner.addTest(TestFormulaCursor::suite());
+    runner.addTest(TestFormulaElement::suite());
+    runner.addTest(TestIndexElement::suite());
+    runner.addTest(TestCommands::suite());
+    runner.run();
 
     // Make sure there are no elements in the clipboard.
     // Okey for a debug app.
@@ -58,15 +55,15 @@ int main (int argc, char **argv)
 
     int destruct = BasicElement::getEvilDestructionCount();
     if (destruct != 0) {
-        cerr << "BasicElement::EvilDestructionCount: " << destruct << endl;
+        std::cerr << "BasicElement::EvilDestructionCount: " << destruct << std::endl;
     }
     destruct = Command::getEvilDestructionCount();
     if (destruct != 0) {
-        cerr << "Command::EvilDestructionCount: " << destruct << endl;
+        std::cerr << "Command::EvilDestructionCount: " << destruct << std::endl;
     }
     destruct = ElementType::getEvilDestructionCount();
     if (destruct != 0) {
-        cerr << "ElementType::EvilDestructionCount: " << destruct << endl;
+        std::cerr << "ElementType::EvilDestructionCount: " << destruct << std::endl;
     }
 
     return 0;

@@ -21,17 +21,17 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-Test* TestIndexElement::suite()
+CppUnit::Test* TestIndexElement::suite()
 {
-    TestSuite *suite = new TestSuite("TestIndexElement");
+    CppUnit::TestSuite *suite = new CppUnit::TestSuite("TestIndexElement");
 
-    suite->addTest(new TestCaller<TestIndexElement>("testIndexes",
+    suite->addTest(new CppUnit::TestCaller<TestIndexElement>("testIndexes",
 						    &TestIndexElement::testIndexes));
-    suite->addTest(new TestCaller<TestIndexElement>("testIndexesGeneric",
+    suite->addTest(new CppUnit::TestCaller<TestIndexElement>("testIndexesGeneric",
 						    &TestIndexElement::testIndexesGeneric));
-    suite->addTest(new TestCaller<TestIndexElement>("testMainChild",
+    suite->addTest(new CppUnit::TestCaller<TestIndexElement>("testMainChild",
 						    &TestIndexElement::testMainChild));
-    suite->addTest(new TestCaller<TestIndexElement>("testMovement",
+    suite->addTest(new CppUnit::TestCaller<TestIndexElement>("testMovement",
 						    &TestIndexElement::testMovement));
     return suite;
 }

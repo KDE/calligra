@@ -41,6 +41,9 @@ class MatrixSequenceElement : public SequenceElement {
 public:
 
     MatrixSequenceElement( BasicElement* parent = 0 ) : SequenceElement( parent ) {}
+    virtual MatrixSequenceElement* clone() {
+        return new MatrixSequenceElement( *this );
+    }
 
     /**
      * This is called by the container to get a command depending on
@@ -274,6 +277,33 @@ MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
 
 MatrixElement::~MatrixElement()
 {
+}
+
+
+MatrixElement::MatrixElement( const MatrixElement& other )
+    : BasicElement( other )
+{
+    uint rows = other.getRows();
+    uint columns = other.getColumns();
+
+    QPtrListIterator< QPtrList< MatrixSequenceElement > > rowIter( other.content );
+    for (uint r = 0; r < rows; r++) {
+        ++rowIter;
+        QPtrListIterator< MatrixSequenceElement > colIter( *rowIter.current() );
+
+        QPtrList< MatrixSequenceElement >* list = new QPtrList< MatrixSequenceElement >;
+        list->setAutoDelete(true);
+        for (uint c = 0; c < columns; c++) {
+            ++colIter;
+            MatrixSequenceElement *mse =
+                //new MatrixSequenceElement( *( other.getElement( r, c ) ) );
+                new MatrixSequenceElement( *colIter.current() );
+            list->append( mse );
+            mse->setParent( this );
+        }
+        content.append(list);
+    }
+    content.setAutoDelete(true);
 }
 
 
@@ -809,5 +839,926 @@ QString MatrixElement::formulaString()
     matrix += "]";
     return matrix;
 }
+
+void MatrixElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElement( "mtable" );
+    QDomElement row;
+    QDomElement cell;
+
+    uint rows = getRows();
+    uint cols = getColumns();
+
+    for ( uint r = 0; r < rows; r++ )
+    {
+        row = doc.createElement( "mtr" );
+        de.appendChild( row );
+        for ( uint c = 0; c < cols; c++ )
+        {
+            cell = doc.createElement( "mtd" );
+            row.appendChild( cell );
+    	    getElement(r,c)->writeMathML( doc, cell );
+	}
+    }
+
+    parent.appendChild( de );
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+class TabMarker;
+
+
+/**
+ * The lines behaviour is (a little) different from that
+ * of ordinary sequences.
+ */
+class MultilineSequenceElement : public SequenceElement {
+    typedef SequenceElement inherited;
+public:
+
+    MultilineSequenceElement( BasicElement* parent = 0 );
+
+    virtual MultilineSequenceElement* clone() {
+        return new MultilineSequenceElement( *this );
+    }
+
+    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     */
+    virtual void calcSizes( const ContextStyle& context,
+                            ContextStyle::TextStyle tstyle,
+                            ContextStyle::IndexStyle istyle );
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets choosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual KCommand* buildCommand( Container*, Request* );
+
+    virtual KCommand* input( Container* container, QKeyEvent* event );
+
+    virtual KCommand* input( Container* container, QChar ch );
+
+
+    void addTabMarker( TabMarker* marker );
+
+    uint tabCount() const { return tabs.count(); }
+
+    TabMarker* tab( uint i ) { return tabs.at( i ); }
+
+    void moveTabTo( uint i, luPixel pos );
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
+
+protected:
+
+    virtual BasicElement* createElement( QString type );
+
+private:
+
+    QPtrList<TabMarker> tabs;
+};
+
+
+
+/**
+ * An element that may only occur inside a MultilineSequenceElement.
+ */
+class TabMarker : public BasicElement {
+public:
+
+    TabMarker( BasicElement* parent = 0 );
+
+    virtual BasicElement* clone() {
+        return new TabMarker( *this );
+    }
+
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     */
+    virtual void calcSizes( const ContextStyle& context,
+                            ContextStyle::TextStyle tstyle,
+                            ContextStyle::IndexStyle istyle );
+
+    /**
+     * Draws the whole element including its children.
+     * The `parentOrigin' is the point this element's parent starts.
+     * We can use our parentPosition to get our own origin then.
+     */
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPixelPoint& parentOrigin );
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
+
+protected:
+
+    virtual QString getTagName() const { return "TAB"; }
+
+    MultilineElement* multilineElement();
+};
+
+
+TabMarker::TabMarker( BasicElement* parent )
+    : BasicElement( parent )
+{
+}
+
+
+void TabMarker::calcSizes( const ContextStyle& context,
+                           ContextStyle::TextStyle tstyle,
+                           ContextStyle::IndexStyle istyle )
+{
+    setWidth( 0 );
+    setHeight( 0 );
+    static_cast<MultilineSequenceElement*>( getParent() )->addTabMarker( this );
+}
+
+
+void TabMarker::draw( QPainter& painter, const LuPixelRect& r,
+                      const ContextStyle& context,
+                      ContextStyle::TextStyle tstyle,
+                      ContextStyle::IndexStyle istyle,
+                      const LuPixelPoint& parentOrigin )
+{
+}
+
+
+MultilineElement* TabMarker::multilineElement()
+{
+    return static_cast<MultilineElement*>( getParent()->getParent() );
+}
+
+void TabMarker::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    /* There is no representation of a TabMarker in as a tag in
+       MathML, it marks the end of a cell (mtd) instead.
+       Thus, this method doesn't create MathML we will really write
+       to a file, but rather a tag that we will filter later
+       (MultilineSequenceElement::writeMathML). */
+
+    parent.appendChild( doc.createElement( "TAB" ) );
+}
+
+
+// Split the line at position pos.
+class KFCNewLine : public Command {
+public:
+    KFCNewLine( const QString& name, Container* document,
+                MultilineSequenceElement* line, uint pos );
+
+    virtual ~KFCNewLine();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    MultilineSequenceElement* m_line;
+    MultilineSequenceElement* m_newline;
+    uint m_pos;
+};
+
+
+KFCNewLine::KFCNewLine( const QString& name, Container* document,
+                        MultilineSequenceElement* line, uint pos )
+    : Command( name, document ),
+      m_line( line ), m_pos( pos )
+{
+    m_newline = new MultilineSequenceElement( m_line->getParent() );
+}
+
+
+KFCNewLine::~KFCNewLine()
+{
+    delete m_newline;
+}
+
+
+void KFCNewLine::execute()
+{
+    FormulaCursor* cursor = getExecuteCursor();
+    MultilineElement* parent = static_cast<MultilineElement*>( m_line->getParent() );
+    int linePos = parent->content.find( m_line );
+    parent->content.insert( linePos+1, m_newline );
+
+    // If there are children to be moved.
+    if ( m_line->countChildren() > static_cast<int>( m_pos ) ) {
+
+        // Remove anything after position pos from the current line
+        m_line->selectAllChildren( cursor );
+        cursor->setMark( m_pos );
+        QPtrList<BasicElement> elementList;
+        m_line->remove( cursor, elementList, beforeCursor );
+
+        // Insert the removed stuff into the new line
+        m_newline->goInside( cursor );
+        m_newline->insert( cursor, elementList, beforeCursor );
+        cursor->setPos( cursor->getMark() );
+    }
+    else {
+        m_newline->goInside( cursor );
+    }
+
+    // The command no longer owns the new line.
+    m_newline = 0;
+
+    // Tell that something changed
+    FormulaElement* formula = m_line->formula();
+    formula->changed();
+    testDirty();
+}
+
+
+void KFCNewLine::unexecute()
+{
+    FormulaCursor* cursor = getExecuteCursor();
+    MultilineElement* parent = static_cast<MultilineElement*>( m_line->getParent() );
+    int linePos = parent->content.find( m_line );
+
+    // Now the command owns the new line again.
+    m_newline = parent->content.at( linePos+1 );
+
+    // Tell all cursors to leave this sequence
+    FormulaElement* formula = m_line->formula();
+    formula->elementRemoval( m_newline );
+
+    // If there are children to be moved.
+    if ( m_newline->countChildren() > 0 ) {
+
+        // Remove anything from the line to be deleted
+        m_newline->selectAllChildren( cursor );
+        QPtrList<BasicElement> elementList;
+        m_newline->remove( cursor, elementList, beforeCursor );
+
+        // Insert the removed stuff into the previous line
+        m_line->moveEnd( cursor );
+        m_line->insert( cursor, elementList, beforeCursor );
+        cursor->setPos( cursor->getMark() );
+    }
+    else {
+        m_line->moveEnd( cursor );
+    }
+    parent->content.take( linePos+1 );
+
+    // Tell that something changed
+    formula->changed();
+    testDirty();
+}
+
+
+MultilineSequenceElement::MultilineSequenceElement( BasicElement* parent )
+    : SequenceElement( parent )
+{
+    tabs.setAutoDelete( false );
+}
+
+
+BasicElement* MultilineSequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
+                                                 const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
+{
+    //LuPixelPoint myPos(parentOrigin.x() + getX(),
+    //                   parentOrigin.y() + getY());
+    BasicElement* e = inherited::goToPos(cursor, handled, point, parentOrigin);
+
+    if (e == 0) {
+        // If the mouse was behind this line put the cursor to the last position.
+        if ( ( point.x() > getX()+getWidth() ) &&
+             ( point.y() >= getY() ) &&
+             ( point.y() < getY()+getHeight() ) ) {
+            cursor->setTo(this, countChildren());
+            handled = true;
+            return this;
+        }
+    }
+    return e;
+}
+
+
+void MultilineSequenceElement::calcSizes( const ContextStyle& context,
+                                          ContextStyle::TextStyle tstyle,
+                                          ContextStyle::IndexStyle istyle )
+{
+    tabs.clear();
+    inherited::calcSizes( context, tstyle, istyle );
+}
+
+
+KCommand* MultilineSequenceElement::buildCommand( Container* container, Request* request )
+{
+    switch ( *request ) {
+    case req_remove: {
+        // Remove this line if its empty.
+        // Remove the formula if this line was the only one.
+        break;
+    }
+    case req_addNewline: {
+        FormulaCursor* cursor = container->activeCursor();
+        return new KFCNewLine( i18n( "Add Newline" ), container, this, cursor->getPos() );
+    }
+    case req_addTabMark: {
+        KFCReplace* command = new KFCReplace( i18n("Add Tabmark"), container );
+        TabMarker* element = new TabMarker();
+        command->addElement( element );
+        return command;
+    }
+    default:
+        break;
+    }
+    return inherited::buildCommand( container, request );
+}
+
+
+KCommand* MultilineSequenceElement::input( Container* container, QKeyEvent* event )
+{
+    int action = event->key();
+    //int state = event->state();
+    //MoveFlag flag = movementFlag(state);
+
+    switch ( action ) {
+    case Qt::Key_Enter:
+    case Qt::Key_Return: {
+        Request newline( req_addNewline );
+        return buildCommand( container, &newline );
+    }
+    }
+    return inherited::input( container, event );
+}
+
+
+KCommand* MultilineSequenceElement::input( Container* container, QChar ch )
+{
+    int latin1 = ch.latin1();
+    switch (latin1) {
+    case '&': {
+        Request r( req_addTabMark );
+        return buildCommand( container, &r );
+    }
+    }
+    return inherited::input( container, ch );
+}
+
+
+void MultilineSequenceElement::addTabMarker( TabMarker* marker )
+{
+    tabs.append( marker );
+}
+
+
+void MultilineSequenceElement::moveTabTo( uint i, luPixel pos )
+{
+    TabMarker* marker = tab( i );
+    luPixel diff = pos - marker->getX();
+
+    for ( int p = childPos( marker ); p < countChildren(); ++p ) {
+        BasicElement* child = getChild( p );
+        child->setX( child->getX() + diff );
+    }
+
+    setWidth( getWidth()+diff );
+}
+
+
+BasicElement* MultilineSequenceElement::createElement( QString type )
+{
+    if ( type == "TAB" ) return new TabMarker();
+    else {
+        return inherited::createElement( type );
+    }
+}
+
+void MultilineSequenceElement::writeMathML( QDomDocument doc,
+                                            QDomNode parent )
+{
+    // parent is required to be a <mtr> tag
+
+    QDomElement tmp = doc.createElement( "TMP" );
+
+    /*
+    BasicElement* last = getChild( countChildren() - 1 ); // children.last();
+    if ( last != 0 ) {
+        // Create a list (right order!)
+        QPtrList<ElementType> tokenList;
+        ElementType* token = last->getElementType();
+        while ( token != 0 ) {
+            // Add to the list.
+            tokenList.prepend( token );
+            token = token->getPrev();
+        }
+
+        for ( uint i = 0; i < tokenList.count(); ++i ) {
+            tokenList.at( i )->saveMathML( this, doc, tmp );
+        }
+    }
+    */
+    inherited::writeMathML( doc, tmp );
+
+    /* Now we re-parse the Dom tree, because of the TabMarkers
+     * that have no direct representation in MathML but mark the
+     * end of a <mtd> tag.
+     */
+
+    QDomElement mtd = doc.createElement( "mtd" );
+
+    QDomNode n = tmp.firstChild().firstChild();
+    while ( !n.isNull() ) {
+        // the illegal TabMarkers are direct children of tmp.
+        if ( n.isElement() && n.toElement().tagName() == "TAB" ) {
+            parent.appendChild( mtd );
+            mtd = doc.createElement( "mtd" );
+        }
+        else {
+            mtd.appendChild( n.cloneNode() ); // cloneNode needed?
+        }
+        n = n.nextSibling();
+    }
+
+    parent.appendChild( mtd );
+}
+
+
+MultilineElement::MultilineElement( BasicElement* parent )
+    : BasicElement( parent )
+{
+    content.setAutoDelete( true );
+    content.append( new MultilineSequenceElement( this ) );
+}
+
+MultilineElement::~MultilineElement()
+{
+}
+
+MultilineElement::MultilineElement( const MultilineElement& other )
+    : BasicElement( other )
+{
+    content.setAutoDelete( true );
+    uint count = other.content.count();
+    for (uint i = 0; i < count; i++) {
+        MultilineSequenceElement* line = content.at(i)->clone();
+        line->setParent( this );
+        content.append( line );
+    }
+}
+
+
+/**
+ * Returns the element the point is in.
+ */
+BasicElement* MultilineElement::goToPos( FormulaCursor* cursor, bool& handled,
+                                         const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
+{
+    BasicElement* e = inherited::goToPos(cursor, handled, point, parentOrigin);
+    if ( e != 0 ) {
+        LuPixelPoint myPos(parentOrigin.x() + getX(),
+                           parentOrigin.y() + getY());
+
+        uint count = content.count();
+        for ( uint i = 0; i < count; ++i ) {
+            MultilineSequenceElement* line = content.at(i);
+            e = line->goToPos(cursor, handled, point, myPos);
+            if (e != 0) {
+                return e;
+            }
+        }
+        return this;
+    }
+    return 0;
+}
+
+void MultilineElement::goInside( FormulaCursor* cursor )
+{
+    content.at( 0 )->goInside( cursor );
+}
+
+void MultilineElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
+{
+    // If you want to select more than one line you'll have to
+    // select the whole element.
+    if (cursor->isSelectionMode()) {
+        getParent()->moveLeft(cursor, this);
+    }
+    else {
+        // Coming from the parent (sequence) we go to
+        // the very last position
+        if (from == getParent()) {
+            content.at( content.count()-1 )->moveLeft(cursor, this);
+        }
+        else {
+            // Coming from one of the lines we go to the previous line
+            // or to the parent if there is none.
+            int pos = content.find( static_cast<MultilineSequenceElement*>( from ) );
+            if ( pos > -1 ) {
+                if ( pos > 0 ) {
+                    content.at( pos-1 )->moveLeft( cursor, this );
+                }
+                else {
+                    getParent()->moveLeft(cursor, this);
+                }
+            }
+            else {
+                kdDebug( DEBUGID ) << k_funcinfo << endl;
+                kdDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
+            }
+        }
+    }
+}
+
+void MultilineElement::moveRight( FormulaCursor* cursor, BasicElement* from )
+{
+    if (cursor->isSelectionMode()) {
+        getParent()->moveRight(cursor, this);
+    }
+    else {
+        if (from == getParent()) {
+            content.at( 0 )->moveRight(cursor, this);
+        }
+        else {
+            int pos = content.find( static_cast<MultilineSequenceElement*>( from ) );
+            if ( pos > -1 ) {
+                uint upos = pos;
+                if ( upos < content.count() ) {
+                    if ( upos < content.count()-1 ) {
+                        content.at( upos+1 )->moveRight( cursor, this );
+                    }
+                    else {
+                        getParent()->moveRight(cursor, this);
+                    }
+                    return;
+                }
+            }
+            kdDebug( DEBUGID ) << k_funcinfo << endl;
+            kdDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
+        }
+    }
+}
+
+void MultilineElement::moveUp( FormulaCursor* cursor, BasicElement* from )
+{
+    // If you want to select more than one line you'll have to
+    // select the whole element.
+    if (cursor->isSelectionMode()) {
+        getParent()->moveLeft(cursor, this);
+    }
+    else {
+        // Coming from the parent (sequence) we go to
+        // the very last position
+        if (from == getParent()) {
+            content.at( content.count()-1 )->moveLeft(cursor, this);
+        }
+        else {
+            // Coming from one of the lines we go to the previous line
+            // or to the parent if there is none.
+            int pos = content.find( static_cast<MultilineSequenceElement*>( from ) );
+            if ( pos > -1 ) {
+                if ( pos > 0 ) {
+                    //content.at( pos-1 )->moveLeft( cursor, this );
+                    // This is rather hackish.
+                    // But we know what elements we have here.
+                    cursor->setTo( content.at( pos-1 ),
+                                   QMIN( cursor->getPos(),
+                                         content.at( pos-1 )->countChildren() ) );
+                }
+                else {
+                    getParent()->moveLeft(cursor, this);
+                }
+            }
+            else {
+                kdDebug( DEBUGID ) << k_funcinfo << endl;
+                kdDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
+            }
+        }
+    }
+}
+
+void MultilineElement::moveDown( FormulaCursor* cursor, BasicElement* from )
+{
+    if (cursor->isSelectionMode()) {
+        getParent()->moveRight(cursor, this);
+    }
+    else {
+        if (from == getParent()) {
+            content.at( 0 )->moveRight(cursor, this);
+        }
+        else {
+            int pos = content.find( static_cast<MultilineSequenceElement*>( from ) );
+            if ( pos > -1 ) {
+                uint upos = pos;
+                if ( upos < content.count() ) {
+                    if ( upos < content.count()-1 ) {
+                        //content.at( upos+1 )->moveRight( cursor, this );
+                        // This is rather hackish.
+                        // But we know what elements we have here.
+                        cursor->setTo( content.at( upos+1 ),
+                                       QMIN( cursor->getPos(),
+                                             content.at( upos+1 )->countChildren() ) );
+                    }
+                    else {
+                        getParent()->moveRight(cursor, this);
+                    }
+                    return;
+                }
+            }
+            kdDebug( DEBUGID ) << k_funcinfo << endl;
+            kdDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
+        }
+    }
+}
+
+
+void MultilineElement::calcSizes( const ContextStyle& context,
+                                  ContextStyle::TextStyle tstyle,
+                                  ContextStyle::IndexStyle istyle )
+{
+    luPt mySize = context.getAdjustedSize( tstyle );
+    QFont font = context.getDefaultFont();
+    font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
+    QFontMetrics fm( font );
+    luPixel leading = context.ptToLayoutUnitPt( fm.leading() );
+
+    uint count = content.count();
+    luPixel height = -leading;
+    luPixel width = 0;
+    uint tabCount = 0;
+    for ( uint i = 0; i < count; ++i ) {
+        MultilineSequenceElement* line = content.at(i);
+        line->calcSizes( context, tstyle, istyle );
+        tabCount = QMAX( tabCount, line->tabCount() );
+
+        height += leading;
+        line->setX( 0 );
+        line->setY( height );
+        height += line->getHeight();
+        width = QMAX( line->getWidth(), width );
+    }
+
+    // calculate the tab positions
+    for ( uint t = 0; t < tabCount; ++t ) {
+        luPixel pos = 0;
+        for ( uint i = 0; i < count; ++i ) {
+            MultilineSequenceElement* line = content.at(i);
+            if ( t < line->tabCount() ) {
+                pos = QMAX( pos, line->tab( t )->getX() );
+            }
+            else {
+                pos = QMAX( pos, line->getWidth() );
+            }
+        }
+        for ( uint i = 0; i < count; ++i ) {
+            MultilineSequenceElement* line = content.at(i);
+            if ( t < line->tabCount() ) {
+                line->moveTabTo( t, pos );
+                width = QMAX( width, line->getWidth() );
+            }
+        }
+    }
+
+    setHeight( height );
+    setWidth( width );
+    if ( count == 1 ) {
+        setBaseline( content.at( 0 )->getBaseline() );
+    }
+    else {
+        // There's always a first line. No formulas without lines.
+        setBaseline( height/2 + context.axisHeight( tstyle ) );
+    }
+}
+
+void MultilineElement::draw( QPainter& painter, const LuPixelRect& r,
+                             const ContextStyle& context,
+                             ContextStyle::TextStyle tstyle,
+                             ContextStyle::IndexStyle istyle,
+                             const LuPixelPoint& parentOrigin )
+{
+    LuPixelPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
+    uint count = content.count();
+
+    if ( context.edit() ) {
+        uint tabCount = 0;
+        painter.setPen( context.getEmptyColor() );
+        for ( uint i = 0; i < count; ++i ) {
+            MultilineSequenceElement* line = content.at(i);
+            if ( tabCount < line->tabCount() ) {
+                for ( uint t = tabCount; t < line->tabCount(); ++t ) {
+                    TabMarker* marker = line->tab( t );
+                    painter.drawLine( context.layoutUnitToPixelX( myPos.x()+marker->getX() ),
+                                      context.layoutUnitToPixelY( myPos.y() ),
+                                      context.layoutUnitToPixelX( myPos.x()+marker->getX() ),
+                                      context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
+                }
+                tabCount = line->tabCount();
+            }
+        }
+    }
+
+    for ( uint i = 0; i < count; ++i ) {
+        MultilineSequenceElement* line = content.at(i);
+        line->draw( painter, r, context, tstyle, istyle, myPos );
+    }
+}
+
+void MultilineElement::insert( FormulaCursor* cursor,
+                               QPtrList<BasicElement>& newChildren,
+                               Direction direction )
+{
+    MultilineSequenceElement* e = static_cast<MultilineSequenceElement*>(newChildren.take(0));
+    e->setParent(this);
+    content.insert( cursor->getPos(), e );
+
+    if (direction == beforeCursor) {
+        e->moveLeft(cursor, this);
+    }
+    else {
+        e->moveRight(cursor, this);
+    }
+    cursor->setSelection(false);
+    formula()->changed();
+}
+
+void MultilineElement::remove( FormulaCursor* cursor,
+                               QPtrList<BasicElement>& removedChildren,
+                               Direction direction )
+{
+    if ( content.count() == 1 ) { //&& ( cursor->getPos() == 0 ) ) {
+        getParent()->selectChild(cursor, this);
+        getParent()->remove(cursor, removedChildren, direction);
+    }
+    else {
+        MultilineSequenceElement* e = content.take( cursor->getPos() );
+        removedChildren.append( e );
+        formula()->elementRemoval( e );
+        //cursor->setTo( this, denominatorPos );
+        formula()->changed();
+    }
+}
+
+void MultilineElement::normalize( FormulaCursor* cursor, Direction direction )
+{
+    int pos = cursor->getPos();
+    if ( ( cursor->getElement() == this ) &&
+         ( pos > -1 ) && ( static_cast<unsigned>( pos ) <= content.count() ) ) {
+        switch ( direction ) {
+        case beforeCursor:
+            if ( pos > 0 ) {
+                content.at( pos-1 )->moveLeft( cursor, this );
+                break;
+            }
+            // no break! intended!
+        case afterCursor:
+            if ( static_cast<unsigned>( pos ) < content.count() ) {
+                content.at( pos )->moveRight( cursor, this );
+            }
+            else {
+                content.at( pos-1 )->moveLeft( cursor, this );
+            }
+            break;
+        }
+    }
+    else {
+        inherited::normalize( cursor, direction );
+    }
+}
+
+SequenceElement* MultilineElement::getMainChild()
+{
+    return content.at( 0 );
+}
+
+void MultilineElement::selectChild(FormulaCursor* cursor, BasicElement* child)
+{
+    int pos = content.find( dynamic_cast<MultilineSequenceElement*>( child ) );
+    if ( pos > -1 ) {
+        cursor->setTo( this, pos );
+        //content.at( pos )->moveRight( cursor, this );
+    }
+}
+
+
+/**
+ * Appends our attributes to the dom element.
+ */
+void MultilineElement::writeDom(QDomElement& element)
+{
+    BasicElement::writeDom(element);
+
+    uint lineCount = content.count();
+    element.setAttribute( "LINES", lineCount );
+
+    QDomDocument doc = element.ownerDocument();
+    for ( uint i = 0; i < lineCount; ++i ) {
+        QDomElement tmp = content.at( i )->getElementDom(doc);
+        element.appendChild(tmp);
+    }
+}
+
+void MultilineElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElement( "mtable" );
+    QDomElement row; QDomElement cell;
+
+    for ( uint i = 0; i < content.count(); ++i ) {
+        row = doc.createElement( "mtr" );
+        de.appendChild( row );
+        //cell = doc.createElement( "mtd" );
+        //row.appendChild( cell );
+
+        //content.at( i )->writeMathML( doc, cell );
+        content.at( i )->writeMathML( doc, row );
+    }
+
+    parent.appendChild( de );
+}
+
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool MultilineElement::readAttributesFromDom(QDomElement& element)
+{
+    if (!BasicElement::readAttributesFromDom(element)) {
+        return false;
+    }
+    uint lineCount = 0;
+    QString lineCountStr = element.attribute("LINES");
+    if(!lineCountStr.isNull()) {
+        lineCount = lineCountStr.toInt();
+    }
+    if (lineCount == 0) {
+        kdWarning( DEBUGID ) << "lineCount <= 0 in MultilineElement." << endl;
+        return false;
+    }
+
+    content.clear();
+    for ( uint i = 0; i < lineCount; ++i ) {
+        MultilineSequenceElement* element = new MultilineSequenceElement(this);
+        content.append(element);
+    }
+    return true;
+}
+
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool MultilineElement::readContentFromDom(QDomNode& node)
+{
+    if (!BasicElement::readContentFromDom(node)) {
+        return false;
+    }
+
+    uint lineCount = content.count();
+    uint i = 0;
+    while ( !node.isNull() && i < lineCount ) {
+        if ( node.isElement() ) {
+            SequenceElement* element = content.at( i );
+            QDomElement e = node.toElement();
+            if ( !element->buildFromDom( e ) ) {
+                return false;
+            }
+            ++i;
+        }
+        node = node.nextSibling();
+    }
+    return true;
+}
+
+QString MultilineElement::toLatex()
+{
+    uint lineCount = content.count();
+    QString muliline = "\\begin{split} ";
+    for ( uint i = 0; i < lineCount; ++i ) {
+        muliline += content.at( i )->toLatex();
+    	muliline += " \\\\ ";
+    }
+    muliline += "\\end{split}";
+    return muliline;
+}
+
+// Does this make any sense at all?
+QString MultilineElement::formulaString()
+{
+    uint lineCount = content.count();
+    QString muliline = "";
+    for ( uint i = 0; i < lineCount; ++i ) {
+        muliline += content.at( i )->formulaString();
+    	muliline += "\n";
+    }
+    //muliline += "";
+    return muliline;
+}
+
 
 KFORMULA_NAMESPACE_END

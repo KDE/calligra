@@ -64,6 +64,19 @@ SequenceElement::~SequenceElement()
     delete parseTree;
 }
 
+SequenceElement::SequenceElement( const SequenceElement& other )
+    : BasicElement( other )
+{
+    children.setAutoDelete(true);
+    uint count = other.children.count();
+    for (uint i = 0; i < count; i++) {
+        BasicElement* child = children.at(i)->clone();
+        child->setParent( this );
+        children.append( child );
+    }
+}
+
+
 /**
  * Returns the element the point is in.
  */
@@ -844,6 +857,11 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         command->setElement(new UnderlineElement());
         return command;
     }
+    case req_addMultiline: {
+        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Multiline"), container);
+        command->setElement(new MultilineElement());
+        return command;
+    }
     case req_addSpace: {
         KFCReplace* command = new KFCReplace( i18n("Add Space"), container );
         SpaceRequest* sr = static_cast<SpaceRequest*>( request );
@@ -1175,6 +1193,7 @@ BasicElement* SequenceElement::createElement( QString type )
     else if ( type == "NAMESEQUENCE" ) return new NameSequence();
     else if ( type == "OVERLINE" )     return new OverlineElement();
     else if ( type == "UNDERLINE" )    return new UnderlineElement();
+    else if ( type == "MULTILINE" )    return new MultilineElement();
     else if ( type == "SEQUENCE" ) {
         kdWarning( DEBUGID ) << "malformed data: sequence inside sequence." << endl;
         return 0;
@@ -1284,6 +1303,32 @@ QString SequenceElement::formulaString()
     return content;
 }
 
+void SequenceElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElement( "mrow" );
+
+    BasicElement* last = children.last();
+    if ( last != 0 ) {
+        // Create a list (right order!)
+        QPtrList<ElementType> tokenList;
+        ElementType* token = last->getElementType();
+        while ( token != 0 ) {
+            // Add to the list.
+            tokenList.prepend( token );
+            token = token->getPrev();
+        }
+
+        if ( tokenList.count() == 1 ) {
+            tokenList.first()->saveMathML( this, doc, parent.toElement() );
+            return;
+        }
+
+        for ( uint i = 0; i < tokenList.count(); ++i ) {
+            tokenList.at( i )->saveMathML( this, doc, de );
+        }
+    }
+    parent.appendChild( de );
+}
 
 
 NameSequence::NameSequence( BasicElement* parent )
@@ -1483,6 +1528,18 @@ bool NameSequence::isValidSelection( FormulaCursor* cursor )
         return false;
     }
     return sequence->onlyTextSelected( cursor );
+}
+
+void NameSequence::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElement( "mi" );
+    QString value;
+    for ( int i = 0; i < countChildren(); ++i ) {
+        // these are supposed to by TextElements
+        value += getChild( i )->getCharacter();
+    }
+    de.appendChild( doc.createTextNode( value ) );
+    parent.appendChild( de );
 }
 
 KFORMULA_NAMESPACE_END

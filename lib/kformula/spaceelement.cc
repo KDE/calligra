@@ -35,6 +35,13 @@ SpaceElement::SpaceElement( SpaceWidth space, BasicElement* parent )
 {
 }
 
+
+SpaceElement::SpaceElement( const SpaceElement& other )
+    : BasicElement( other ), spaceWidth( other.spaceWidth )
+{
+}
+
+
 void SpaceElement::calcSizes( const ContextStyle& style,
                               ContextStyle::TextStyle tstyle,
                               ContextStyle::IndexStyle /*istyle*/ )
@@ -148,6 +155,55 @@ bool SpaceElement::readAttributesFromDom( QDomElement& element )
 bool SpaceElement::readContentFromDom(QDomNode& node)
 {
     return BasicElement::readContentFromDom( node );
+}
+
+void SpaceElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+
+    QDomElement de = doc.createElement( "mspace" );
+    QString width;
+
+    switch ( spaceWidth ) {
+    case NEGTHIN:
+        width = "-3/18em";
+        break;
+    case THIN:
+        width = "thinmathspace";
+        break;
+    case MEDIUM:
+        width = "mediummathspace";
+        break;
+    case THICK:
+        width = "thickmathspace";
+        break;
+    case QUAD:
+        width = "veryverythickmathspace"; // double 'very' is appropriate.
+        break;
+    }
+
+    de.setAttribute( "width", width );
+
+    parent.appendChild( de );
+
+
+    /* // worked, but I redecided.
+    switch ( spaceWidth )
+    {
+    case NEGTHIN:
+        return doc.createEntityReference( "NegativeThinSpace" );
+    case THIN:
+        return doc.createEntityReference( "ThinSpace" );
+    case MEDIUM:
+        return doc.createEntityReference( "MediumSpace" );
+    case THICK:
+        return doc.createEntityReference( "ThickSpace" );
+    case QUAD:
+        //return doc.createEntityReference( "Space" ); // misused &Space;???
+        QDomElement de = doc.createElement( "mspace" );
+        de.setAttribute( "width", "veryverythickmathspace" );
+        return de;
+    }*/
+
 }
 
 KFORMULA_NAMESPACE_END

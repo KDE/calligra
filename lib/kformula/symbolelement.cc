@@ -97,6 +97,29 @@ SymbolElement::~SymbolElement()
 }
 
 
+SymbolElement::SymbolElement( const SymbolElement& other )
+    : BasicElement( other ), symbol( other.symbol )
+{
+    content = new SymbolSequenceElement( *dynamic_cast<SymbolSequenceElement*>( other.content ) );
+    content->setParent( this );
+
+    if ( other.upper ) {
+        upper = new SequenceElement( *( other.upper ) );
+        upper->setParent( this );
+    }
+    else {
+        upper = 0;
+    }
+    if ( other.lower ) {
+        lower = new SequenceElement( *( other.lower ) );
+        lower->setParent( this );
+    }
+    else {
+        lower = 0;
+    }
+}
+
+
 BasicElement* SymbolElement::goToPos( FormulaCursor* cursor, bool& handled,
                                       const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
@@ -773,6 +796,57 @@ QString SymbolElement::formulaString()
         sym += ", " + upper->formulaString();
     }
     return sym + ")";
+}
+
+void SymbolElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    QDomElement de = doc.createElement( "mrow" );
+    QDomElement mo = doc.createElement( "mo" );
+
+    QString value;
+
+    switch( symbol.getType() )
+    {
+    case EmptyBracket: break;
+    case LeftLineBracket: case RightLineBracket:
+        mo.appendChild( doc.createTextNode( "|" ) ); break;
+    case Integral:
+        mo.appendChild( doc.createEntityReference( "int" ) ); break;
+    case Sum:
+        mo.appendChild( doc.createEntityReference( "sum" ) ); break;
+    case Product:
+        mo.appendChild( doc.createEntityReference( "prod" ) ); break;
+    default:
+        mo.appendChild( doc.createTextNode( QChar( symbol.getType() ) ) );
+    }
+
+    QDomElement between;
+    if ( hasUpper() && hasLower() )
+    {
+        between = doc.createElement( "msubsup" );
+        between.appendChild( mo );
+        lower->writeMathML( doc, between );
+        upper->writeMathML( doc, between );
+    }
+    else if ( hasUpper() )
+    {
+        between = doc.createElement( "msup" );
+        between.appendChild( mo );
+        upper->writeMathML( doc, between );
+    }
+    else if ( hasLower() )
+    {
+        between = doc.createElement( "msub" );
+        between.appendChild( mo );
+        lower->writeMathML( doc, between );
+    }
+    else
+        between = mo;
+
+    de.appendChild( between );
+    content->writeMathML( doc, de );
+
+    parent.appendChild( de );
 }
 
 KFORMULA_NAMESPACE_END

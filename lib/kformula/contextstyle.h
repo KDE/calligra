@@ -30,6 +30,7 @@
 //KDE Include
 #include <kconfig.h>
 #include <kozoomhandler.h>
+//#include "kozoomhandler.h"
 
 //Formula include
 #include "kformuladefs.h"

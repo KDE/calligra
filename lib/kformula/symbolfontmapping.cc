@@ -143,7 +143,7 @@ struct { int unicode; uchar pos; CharClass cl; char* latexName; } symbolFontMap[
     { 0x00B0, 176, ORDINARY, symbolFontMap_degree },
     { 0x00B1, 177, BINOP, symbolFontMap_pm },
     { 0x002B, 43, BINOP, 0 },
-    { 0x002C, 44, PUNCTUATION, 0 },
+    //{ 0x002C, 44, PUNCTUATION, 0 },
     { 0x2228, 218, BINOP, symbolFontMap_vee },
     { 0x2229, 199, BINOP, symbolFontMap_cap },
     { 0x002F, 47, ORDINARY, 0 },

@@ -31,12 +31,19 @@ class SequenceElement;
  * A fraction.
  */
 class FractionElement : public BasicElement {
+    FractionElement& operator=( const FractionElement& ) { return *this; }
 public:
 
     enum { numeratorPos, denominatorPos };
 
     FractionElement(BasicElement* parent = 0);
     ~FractionElement();
+
+    FractionElement( const FractionElement& );
+
+    virtual FractionElement* clone() {
+        return new FractionElement( *this );
+    }
 
     /**
      * @returns the type of this element. Used for
@@ -152,6 +159,8 @@ public:
     virtual QString toLatex();
 
     virtual QString formulaString();
+
+    virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
 protected:
 

@@ -47,6 +47,18 @@ BasicElement::~BasicElement()
     evilDestructionCount--;
 }
 
+BasicElement::BasicElement( const BasicElement& other )
+    : parent( 0 ),
+      m_baseline( other.m_baseline ),
+      elementType( other.elementType )
+{
+    setX( other.getX() );
+    setY( other.getY() );
+    setWidth( other.getWidth() );
+    setHeight( other.getHeight() );
+    evilDestructionCount++;
+}
+
 
 /**
  * Returns the element the point is in.
@@ -137,6 +149,13 @@ QDomElement BasicElement::getElementDom(QDomDocument& doc)
     QDomElement de = doc.createElement(getTagName());
     writeDom(de);
     return de;
+}
+
+
+void BasicElement::writeMathML( QDomDocument doc, QDomNode parent )
+{
+    parent.appendChild( doc.createComment( QString( "MathML Error in %1" )
+                                           .arg( getTagName() ) ) );
 }
 
 bool BasicElement::buildFromDom(QDomElement& element)

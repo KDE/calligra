@@ -2,9 +2,9 @@
 #ifndef TESTFORMULAELEMENT_H
 #define TESTFORMULAELEMENT_H
 
-#include <TestCaller.h>
-#include <TestCase.h>
-#include <TestSuite.h>
+#include <cppunit/TestCaller.h>
+#include <cppunit/TestCase.h>
+#include <cppunit/TestSuite.h>
 
 #include "kformuladefs.h"
 
@@ -21,11 +21,11 @@ class Document;
 class TextElement;
 
 
-class TestFormulaElement : public TestCase {
+class TestFormulaElement : public CppUnit::TestCase {
 public:
-    TestFormulaElement(string name) : TestCase(name) {}
+    //TestFormulaElement(std::string name) : CppUnit::TestCase(name) {}
 
-    static Test* suite();
+    static CppUnit::Test* suite();
 
     void setUp();
     void tearDown();

@@ -35,10 +35,15 @@ KFORMULA_NAMESPACE_BEGIN
  * An element that represents one char.
  */
 class TextElement : public BasicElement {
+    TextElement operator=( const TextElement& ) { return *this; }
 public:
 
     TextElement(QChar ch = ' ', bool beSymbol = false, BasicElement* parent = 0);
+    TextElement( const TextElement& );
 
+    virtual TextElement* clone() {
+        return new TextElement( *this );
+    }
 
     /**
      * @returns the type of this element. Used for
@@ -162,9 +167,15 @@ private:
  * An element that represents an empty box.
  */
 class EmptyElement : public BasicElement {
+    EmptyElement& operator=( const EmptyElement& ) { return *this; }
 public:
 
     EmptyElement( BasicElement* parent = 0 );
+    EmptyElement( const EmptyElement& );
+
+    virtual EmptyElement* clone() {
+        return new EmptyElement( *this );
+    }
 
     /**
      * @returns the character that represents this element. Used for
