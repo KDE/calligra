@@ -40,20 +40,27 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 		KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		~KexiQueryDesignerSQLView();
 
-		QString getQuery();
+		QString sqlText();
 		KexiQueryDesignerSQLEditor *editor() { return m_editor; }
 
 	protected:
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+		void setStatusOk();
+		void setStatusError(const QString& msg);
+
+	protected slots:
+		void slotCheckQuery();
 
 	signals:
 		void queryShortcut();
 
 	private:
 		KexiQueryDesignerSQLEditor *m_editor;
-		KexiQueryDesignerSQLHistory *m_history;
+//		KexiQueryDesignerSQLHistory *m_history;
+		QLabel *m_pixmapStatus, *m_lblStatus;
 		KexiSectionHeader *m_head;
+		QPixmap m_statusPixmapOk, m_statusPixmapErr;
 };
 
 #endif

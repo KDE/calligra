@@ -58,8 +58,9 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 		i++;
 	}
 #endif
-	m_view->installEventFilter(this);
-	setFocusProxy(m_view);
+	setViewWidget(m_view);
+//	m_view->installEventFilter(this);
+//	setFocusProxy(m_view);
 
 //	QPushButton *btnQuery = new QPushButton(i18n("&Query"), this);
 //	btnQuery->setFlat(true);

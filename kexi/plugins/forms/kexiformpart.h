@@ -82,8 +82,9 @@ class KexiFormPart : public KexiPart::Part
 		void addForm(int id, const KexiFormPartItem &item) { m_forms.insert(id, item); }
 
 	protected:
-		virtual void initPartActions( KActionCollection *col );
-		virtual void initInstanceActions( int mode, KActionCollection *col );
+//		virtual void initPartActions( KActionCollection *col );
+//		virtual void initInstanceActions( int mode, KActionCollection *col );
+		virtual void initActions();
 
 	private:
 		KFormDesigner::FormManager *m_manager;

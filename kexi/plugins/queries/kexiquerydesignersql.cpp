@@ -20,8 +20,11 @@
 
 #include <qsplitter.h>
 #include <qlayout.h>
+#include <qhbox.h>
 
 #include <kdebug.h>
+#include <kmessagebox.h>
+#include <kiconloader.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>
@@ -40,29 +43,81 @@
 
 KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
+ , m_statusPixmapOk( DesktopIcon("button_ok") )
+ , m_statusPixmapErr( DesktopIcon("button_cancel") )
 {
 	QSplitter *l = new QSplitter(this);
 	l->setOrientation(Vertical);
-
-	m_history = new KexiQueryDesignerSQLHistory(l, "sqlh");
-	m_head = new KexiSectionHeader(i18n("SQL Text"), Vertical, l);
+//	m_history = new KexiQueryDesignerSQLHistory(l, "sqlh");
+	m_head = new KexiSectionHeader(i18n("SQL Query Text"), Vertical, l);
 	m_editor = new KexiQueryDesignerSQLEditor(mainWin, m_head, "sqle");
 	addChildView(m_editor);
+	setViewWidget(m_editor);
+	l->setFocusProxy(m_editor);
+	setFocusProxy(m_editor);
+
+	QHBox *hbox = new QHBox(l);
+	hbox->setSpacing(0);
+	m_pixmapStatus = new QLabel(hbox);
+	m_pixmapStatus->setFixedWidth(m_statusPixmapOk.width()*3/2);
+	m_pixmapStatus->setAlignment(AlignHCenter | AlignTop);
+	m_pixmapStatus->setMargin(m_statusPixmapOk.width()/4);
+	m_pixmapStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
+
+	m_lblStatus = new QLabel(hbox);
+	m_lblStatus->setAlignment(AlignLeft | AlignTop);
+	m_lblStatus->setMargin(m_statusPixmapOk.width()/4);
+	m_lblStatus->resize(m_lblStatus->width(),m_statusPixmapOk.width()*3);
+	m_lblStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
+	setStatusOk();
 
 	QHBoxLayout *b = new QHBoxLayout(this);
 	b->addWidget(l);
 
-	connect(parent, SIGNAL(queryExecuted(QString, bool, const QString &)), m_history, SLOT(addEvent(QString, bool, const QString &)));
-	connect(m_history, SIGNAL(editRequested(const QString &)), m_editor, SLOT(setText(const QString &)));
+	plugSharedAction("querypart_check_query", this, SLOT(slotCheckQuery())); 
+//	connect(parent, SIGNAL(queryExecuted(QString, bool, const QString &)), m_history, SLOT(addEvent(QString, bool, const QString &)));
+//	connect(m_history, SIGNAL(editRequested(const QString &)), m_editor, SLOT(setText(const QString &)));
 
 //TODO	m_history->setHistory(doc->history());
 
 //	connect(m_editor, SIGNAL(execQ()), parent, SLOT(fastQuery()));
 }
 
+KexiQueryDesignerSQLView::~KexiQueryDesignerSQLView()
+{
+}
+
+void KexiQueryDesignerSQLView::setStatusOk()
+{
+	m_pixmapStatus->setPixmap(m_statusPixmapOk);
+	m_lblStatus->setText("<h2>"+i18n("The query is correct")+"</h2>");
+}
+
+void KexiQueryDesignerSQLView::setStatusError(const QString& msg)
+{
+	m_pixmapStatus->setPixmap(m_statusPixmapErr);
+	m_lblStatus->setText("<h2>"+i18n("The query has error")+"</h2><p>"+msg+"</p>");
+}
+
 bool
 KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
+	return true;
+//TODO
+	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
+		//parse SQL text
+		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+		KexiDB::Parser *parser = mainWin()->project()->sqlParser();
+		parser->parse( m_editor->text() );
+		KexiDB::QuerySchema *query = parser->select();
+		if (!query) {
+			KexiDB::ParserError err = parser->error();
+			KMessageBox::information(this, err.error());
+			return false;
+		}
+		temp->query = query;
+	}
+
 	//TODO
 	/*
 	if (m_doc) {
@@ -103,13 +158,14 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode, bool &cancelled)
 }
 
 QString
-KexiQueryDesignerSQLView::getQuery()
+KexiQueryDesignerSQLView::sqlText()
 {
 	return m_editor->text();
 }
 
-KexiQueryDesignerSQLView::~KexiQueryDesignerSQLView()
+void KexiQueryDesignerSQLView::slotCheckQuery()
 {
+	kdDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()" << endl;
 }
 
 #include "kexiquerydesignersql.moc"

@@ -64,6 +64,7 @@ KexiTablePart::~KexiTablePart()
 {
 }
 
+#if 0
 void KexiTablePart::initPartActions(KActionCollection *)
 {
 //this is automatic? -no
@@ -81,6 +82,12 @@ void KexiTablePart::initInstanceActions( int mode, KActionCollection *col )
 		new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
 		//TODO
 	}
+}
+#endif
+
+void KexiTablePart::initActions()
+{
+	createSharedAction(Kexi::DataViewMode, i18n("Filter"), "filter", 0, "tablepart_filter");
 }
 
 #if 0

@@ -63,6 +63,7 @@ KexiFormPart::~KexiFormPart()
 {
 }
 
+#if 0
 void KexiFormPart::initPartActions(KActionCollection *collection)
 {
 //this is automatic? -no
@@ -83,6 +84,17 @@ void KexiFormPart::initInstanceActions( int mode, KActionCollection *col )
 		new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), m_manager, SLOT(ajustWidgetSize()), col, "adjust");
 	}
 	//TODO
+}
+#endif
+
+void KexiFormPart::initActions()
+{
+//	new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()), 
+//		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
+
+	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode), 0);
+	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
+	createSharedAction(Kexi::DesignViewMode, i18n("Adjust Size"), "viewmagfit", 0, "formpart_adjust_size");
 }
 
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,

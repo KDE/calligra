@@ -52,8 +52,11 @@ KexiDBForm::KexiDBForm(KexiFormPart *m, KexiFormPartItem &i, KexiMainWindow *win
 	m_id = i.item().identifier();
 
 	kdDebug() << "KexiDBForm::KexiDBForm(): connecting" << endl;
-	connect(m->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)), this, SLOT(managerPropertyChanged(KexiPropertyBuffer *)));
-	connect(m->manager(), SIGNAL(dirty(KFormDesigner::Form *)), this, SLOT(slotDirty(KFormDesigner::Form *)));
+	connect(m_part->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)), this, SLOT(managerPropertyChanged(KexiPropertyBuffer *)));
+	connect(m_part->manager(), SIGNAL(dirty(KFormDesigner::Form *)), this, SLOT(slotDirty(KFormDesigner::Form *)));
+
+	plugSharedAction("formpart_taborder", m_part->manager(), SLOT(editTabOrder()));
+	plugSharedAction("formpart_adjust_size", m_part->manager(), SLOT(adjustWidgetSize()));
 }
 
 void

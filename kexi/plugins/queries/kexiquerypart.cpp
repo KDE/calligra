@@ -123,12 +123,35 @@ KexiQueryPart::dataSource()
 	return new KexiQueryDataSource(this);
 }
 
+#if 0
 void KexiQueryPart::initPartActions( KActionCollection *col )
 {
 }
 
 void KexiQueryPart::initInstanceActions( int mode, KActionCollection *col )
 {
+	if (mode==Kexi::DataViewMode) {
+	}
+	else if (mode==Kexi::DesignViewMode) {
+	}
+	else if (mode==Kexi::TextViewMode) {
+//		new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()), col, "querypart_check_query");
+
+//TODO		new KAction(i18n("Execute query"), "?????", 0, this, SLOT(checkQuery()), col, "querypart_execute_query");
+	}
+}
+#endif
+
+void KexiQueryPart::initActions()
+{
+//	new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()), 
+//		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
+
+	KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check query"), "test_it", 0, "querypart_check_query");
+	a->setToolTip(i18n("Check query"));
+	a->setWhatsThis(i18n("Checks query for validity."));
+//	setActionAvailable("querypart_check_query", true);
+
 }
 
 //----------------

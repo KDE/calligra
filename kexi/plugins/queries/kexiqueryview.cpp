@@ -30,6 +30,8 @@
 KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, const char *name)
  : KexiDataTable(win, parent, name)
 {
+	tableView()->setInsertingEnabled(false); //default
+
 	bool c = false;
 	afterSwitchFrom(0, c);
 }

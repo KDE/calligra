@@ -394,7 +394,6 @@ bool
 KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 	kdDebug() << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode << endl;
-	//update the pointer :)
 	if (mode==Kexi::DesignViewMode) {
 		//todo
 		return true;
@@ -445,7 +444,6 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 	temp->query = 0; //will be returend, so: don't keep it
 	(KexiDB::SchemaData&)*query = sdata; //copy main attributes
 
-//	storeObjectSchemaData( *query );
 	if (!m_mainWin->project()->dbConnection()
 			->storeObjectSchemaData( *query, true /*newObject*/ ))
 	{
@@ -453,11 +451,6 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 		return 0;
 	}
 	m_dialog->setId( query->id() );
-
-/*	if (!KexiViewBase::storeNewData(*query)) {
-		delete query;
-		return 0;
-	}*/
 
 	//serialize detailed XML query definition
 	QString xml = "<query_layout>", tmp;
