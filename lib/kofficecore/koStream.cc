@@ -34,22 +34,22 @@ QTextStream& operator<< ( QTextStream& outs, const QRect &_rect )
 
 QRect tagToRect( QValueList<KOMLAttrib>& _attribs )
 {
-  QRect r;
+  int x = 0, y = 0, w = 0, h = 0;
 
   QValueList<KOMLAttrib>::ConstIterator it = _attribs.begin();
   for( ; it != _attribs.end() ; ++it )
   {
     if ( (*it).m_strName == "x" )
-      r.setLeft( (*it).m_strValue.toInt() );
+        x =(*it).m_strValue.toInt();
     else if ( (*it).m_strName == "y" )
-      r.setTop( (*it).m_strValue.toInt() );
+        y = (*it).m_strValue.toInt();
     else if ( (*it).m_strName == "w" )
-      r.setWidth( (*it).m_strValue.toInt() );
+        w =(*it).m_strValue.toInt();
     else if ( (*it).m_strName == "h" )
-      r.setHeight( (*it).m_strValue.toInt() );
+        h = (*it).m_strValue.toInt();
   }
 
-  return r;
+  return QRect( x, y, w, h );
 }
 
 QTextStream& operator<< ( QTextStream& outs, const QColor &_color )
