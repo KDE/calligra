@@ -1574,6 +1574,8 @@ bool kspreadfunc_subtotal( KSContext & context )
   KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
   KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
 
+  kdDebug() << "Range: " << extra[1]->stringValue() << endl;
+
   KSpreadRange range ( extra[1]->stringValue(), map, table );
   if ( !range.isValid() )
   {
@@ -1603,7 +1605,7 @@ bool kspreadfunc_subtotal( KSContext & context )
   for ( ; y <= bottom; ++y )
   {
     cell = table->cellAt( x, y );
-    if ( cell->text().find( "SUBTOTAL", 0, false ) != -1 )
+    if ( cell->isDefault() || cell->text().find( "SUBTOTAL", 0, false ) != -1 )
       continue;
     
     ++count;
