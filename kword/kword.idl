@@ -35,7 +35,7 @@ module KWord
       slot void insertVariableTimeVar();
       slot void insertVariablePageNum();
       slot void insertVariableOther();
-      
+
       slot void formatFont();
       slot void formatColor();
       slot void formatParagraph();
@@ -63,6 +63,7 @@ module KWord
       slot void tableDeleteRow();
       slot void tableDeleteCol();
       slot void tableJoinCells();
+      slot void tableSplitCells();
       slot void tableUngroupTable();
 
       slot void helpContents();

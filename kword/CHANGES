@@ -965,3 +965,12 @@ Reggie, 23.3.1999:
 - Changed the toolbar pixmap which shows the text color - much nicer now
 - Fixes in the GUI
 - Started with internals for joining/splitting cells
+
+Reggie, 24.3.1999:
+------------------
+- Added menu entry for splitting table cells
+- Improved Tables:
+  - It's possible to ungroup a table (each cell becomes an own frameset - ok,
+    they are always own frame sets, but the table manager stops controlling them
+    in this case)
+  - More internal work for joining/splitting frames

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -207,7 +207,7 @@ void KWDocStructRootItem::setOpen(bool o)
 	}
     }
   QListViewItem::setOpen(o);
-} 
+}
 
 /*================================================================*/
 void KWDocStructRootItem::setupArrangement()
@@ -215,8 +215,8 @@ void KWDocStructRootItem::setupArrangement()
   if (childCount() > 0)
     {
       QListViewItem *child = firstChild(),*delChild;
-      
-      while(child) 
+
+      while(child)
 	{
 	  delChild = child;
 	  child = child->nextSibling();
@@ -240,7 +240,7 @@ void KWDocStructRootItem::setupArrangement()
       if (frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager())
 	{
 	  _name.sprintf(i18n("Frameset %d"),++j);
-	  item = new QListViewItem(this,_name); 
+	  item = new QListViewItem(this,_name);
 
 	  parag = dynamic_cast<KWTextFrameSet*>(frameset)->getFirstParag();
 	  while (parag)
@@ -280,7 +280,7 @@ void KWDocStructRootItem::setupArrangement()
 	      parag = parag->getNext();
 	    }
 	}
-    } 
+    }
 
   if (childCount() == 0)
     (void)new QListViewItem(this,i18n("Empty"));
@@ -292,15 +292,15 @@ void KWDocStructRootItem::setupTextFrames()
   if (childCount() > 0)
     {
       QListViewItem *child = firstChild(),*delChild;
-      
-      while(child) 
+
+      while(child)
 	{
 	  delChild = child;
 	  child = child->nextSibling();
 	  delete delChild;
 	}
     }
-  
+
   KWFrameSet *frameset = 0L;
   QListViewItem *item = 0L;
   QString _name;
@@ -313,8 +313,8 @@ void KWDocStructRootItem::setupTextFrames()
       if (frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager())
 	{
 	  _name.sprintf(i18n("Frameset %d"),++k);
-	  item = new QListViewItem(this,_name); 
-	  
+	  item = new QListViewItem(this,_name);
+	
 	  for (int j = frameset->getNumFrames() - 1;j >= 0;j--)
 	    {
 	      if (i == 0 && doc->getProcessingType() == KWordDocument::WP)
@@ -342,20 +342,22 @@ void KWDocStructRootItem::setupTables()
   if (childCount() > 0)
     {
       QListViewItem *child = firstChild(),*delChild;
-      
-      while(child) 
+
+      while(child)
 	{
 	  delChild = child;
 	  child = child->nextSibling();
 	  delete delChild;
 	}
     }
-  
+
   QString _name;
   KWDocStructTableItem *child;
 
   for (int i = doc->getNumGroupManagers() - 1;i >= 0;i--)
     {
+      if (!doc->getGroupManager(i)->isActive()) continue;
+      
       _name.sprintf(i18n("Table %d"),i + 1);
       child = new KWDocStructTableItem(this,_name,doc->getGroupManager(i),gui);
       QObject::connect(listView(),SIGNAL(doubleClicked(QListViewItem*)),child,SLOT(slotDoubleClicked(QListViewItem*)));
@@ -371,15 +373,15 @@ void KWDocStructRootItem::setupPictures()
   if (childCount() > 0)
     {
       QListViewItem *child = firstChild(),*delChild;
-      
-      while(child) 
+
+      while(child)
 	{
 	  delChild = child;
 	  child = child->nextSibling();
 	  delete delChild;
 	}
     }
-  
+
   KWFrameSet *frameset = 0L;
   QString _name;
   KWDocStructPictureItem *child;
@@ -411,15 +413,15 @@ void KWDocStructRootItem::setupEmbedded()
   if (childCount() > 0)
     {
       QListViewItem *child = firstChild(),*delChild;
-      
-      while(child) 
+
+      while(child)
 	{
 	  delChild = child;
 	  child = child->nextSibling();
 	  delete delChild;
 	}
     }
-  
+
   KWFrameSet *frameset = 0L;
   QString _name;
   KWDocStructPartItem *child;
@@ -464,7 +466,7 @@ void KWDocStructTree::setup()
   setSorting(-1);
 
   embedded = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Embedded,gui);
-  QListViewItem *item = new QListViewItem(embedded,"Empty"); 
+  QListViewItem *item = new QListViewItem(embedded,"Empty");
 
   cliparts = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Cliparts,gui);
   item = new QListViewItem(cliparts,"Empty");

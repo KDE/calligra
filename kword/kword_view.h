@@ -166,6 +166,7 @@ public:
   virtual void tableDeleteRow();
   virtual void tableDeleteCol();
   virtual void tableJoinCells();
+  virtual void tableSplitCells();
   virtual void tableUngroupTable();
 
   virtual void helpContents();
@@ -354,6 +355,7 @@ protected:
   CORBA::Long m_idMenuTable_DeleteRow;
   CORBA::Long m_idMenuTable_DeleteCol;
   CORBA::Long m_idMenuTable_JoinCells;
+  CORBA::Long m_idMenuTable_SplitCells;
   CORBA::Long m_idMenuTable_UngroupTable;
 
   // help menu

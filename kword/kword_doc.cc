@@ -1109,8 +1109,11 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     }
 
   for (unsigned int i = 0;i < getNumGroupManagers();i++)
-    getGroupManager(i)->init();
-
+    {
+      if (getGroupManager(i)->isActive())
+	getGroupManager(i)->init();
+    }
+  
   KWordChild *ch = 0L;
   for (ch = m_lstChildren.first();ch != 0;ch = m_lstChildren.next())
     {
@@ -1218,7 +1221,8 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		      {
 			for (unsigned int i = 0;i < getNumGroupManagers();i++)
 			  {
-			    if (getGroupManager(getNumGroupManagers() - 1 - i)->getName() == _name)
+			    if (getGroupManager(getNumGroupManagers() - 1 - i)->isActive() &&
+				getGroupManager(getNumGroupManagers() - 1 - i)->getName() == _name)
 			      {
 				grpMgr = getGroupManager(getNumGroupManagers() - 1 - i);
 				break;
@@ -2351,7 +2355,7 @@ void KWordDocument::copySelectedText()
       firstParag->setNext(0L);
       firstParag->deleteText(0,tmpFC1.getTextPos());
       parag3 = firstParag;
-      
+
       parag = tmpFC1.getParag()->getNext();
       while (parag && parag != tmpFC2.getParag())
 	{
@@ -2360,7 +2364,7 @@ void KWordDocument::copySelectedText()
 	  parag2->setPrev(parag3);
 	  parag2->setNext(0L);
 	  parag3 = parag2;
-	  
+	
 	  clipString += "\n";
 	  if (parag->getTextLen() > 0)
 	    clipString += parag->getKWString()->toString(0,parag->getTextLen());
@@ -2571,7 +2575,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	      delete firstParag;
 	    }
 	}
-      else if ((_mime == "text/plain" && strList.count() == 2) || 
+      else if ((_mime == "text/plain" && strList.count() == 2) ||
 	       (_mime == "application/x-kword" && !firstParag->getNext()->getNext()))
 	{
 	  if (_mime == "text/plain")
@@ -2697,7 +2701,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	      painter.end();
 
 	      KWParag *p = 0L,*prev = _fc->getParag(),*parag = firstParag->getNext(),*next = _fc->getParag()->getNext();
-	      	      
+	      	
 	      while (parag)
 		{
 		  p = new KWParag(*parag);

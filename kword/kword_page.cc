@@ -844,6 +844,8 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	p.begin(this);
 	for (unsigned int i = 0;i < doc->getNumGroupManagers();i++)
 	  {
+	    if (!doc->getGroupManager(i)->isActive()) continue;
+	    
 	    doc->getGroupManager(i)->recalcCols();
 	    doc->getGroupManager(i)->recalcRows(p);
 	  }

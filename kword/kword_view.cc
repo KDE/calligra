@@ -1269,6 +1269,13 @@ void KWordView::tableJoinCells()
 }
 
 /*===============================================================*/
+void KWordView::tableSplitCells()
+{
+
+  sendFocusEvent();
+}
+
+/*===============================================================*/
 void KWordView::tableUngroupTable()
 {
   gui->getPaperWidget()->mmEdit();
@@ -1278,6 +1285,12 @@ void KWordView::tableUngroupTable()
     QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
   else
     {
+      if (QMessageBox::warning(0L,i18n("Warning"),i18n("Ungrouping a table is an irrevesible action!\n"
+						       "Do you really want to do that?"),i18n("Yes"),i18n("No")) == 0)
+	{
+	  grpMgr->ungroup();
+	  gui->getPaperWidget()->repaint(false);
+	}
     }
 
   sendFocusEvent();
@@ -1875,7 +1888,8 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuTable->insertSeparator( -1 );
 
-  m_idMenuTable_JoinCells = m_vMenuTable->insertItem4( i18n("&Join Cells..."), this, "tableJoinCells", 0, -1, -1 );
+  m_idMenuTable_JoinCells = m_vMenuTable->insertItem4( i18n("&Join Cells"), this, "tableJoinCells", 0, -1, -1 );
+  m_idMenuTable_SplitCells = m_vMenuTable->insertItem4( i18n("&Split Cells"), this, "tableSplitCells", 0, -1, -1 );
   m_idMenuTable_UngroupTable = m_vMenuTable->insertItem4( i18n("&Ungroup Table"), this, "tableUngroupTable", 0, -1, -1 );
 
   // extra menu

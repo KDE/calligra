@@ -1978,6 +1978,18 @@ void KWGroupManager::updateTempHeaders()
 }
 
 /*================================================================*/
+void KWGroupManager::ungroup()
+{
+  for (unsigned int i = 0;i < cells.count();i++)
+    cells.at(i)->frameSet->setGroupManager(0L);
+  
+  cells.setAutoDelete(false);
+  cells.clear();
+  
+  active = false;
+}
+
+/*================================================================*/
 bool isAHeader(FrameInfo fi)
 {
   return (fi == FI_FIRST_HEADER || fi == FI_EVEN_HEADER || fi == FI_ODD_HEADER);
