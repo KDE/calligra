@@ -1792,7 +1792,7 @@ void KoTextFormatInterface::setTextSuperScript(bool on)
 }
 
 void KoTextFormatInterface::setDefaultFormat() {
-    QTextFormatCollection * coll = currentFormat()->parent();
+    Qt3::QTextFormatCollection * coll = currentFormat()->parent();
     Q_ASSERT(coll);
     if(coll)
     {

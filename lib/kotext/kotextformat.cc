@@ -133,7 +133,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &fm )
     return *this;
 }
 
-KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll )
+KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, Qt3::QTextFormatCollection * coll )
       : QTextFormat( f, c, coll )
 {
     d = new KoTextFormatPrivate;

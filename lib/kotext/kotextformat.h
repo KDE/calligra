@@ -33,7 +33,7 @@ public:
     KoTextFormat();
     virtual ~KoTextFormat();
     //KoTextFormat( const QStyleSheetItem *s );
-    KoTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll );
+    KoTextFormat( const QFont &f, const QColor &c, Qt3::QTextFormatCollection * coll );
     KoTextFormat( const KoTextFormat &fm );
     KoTextFormat& operator=( const KoTextFormat &fm );
 
@@ -104,7 +104,7 @@ protected:
 /**
  * Our reimplementation of QTextFormatCollection, to provide KoTextFormats.
  */
-class KoTextFormatCollection : public QTextFormatCollection
+class KoTextFormatCollection : public Qt3::QTextFormatCollection
 {
 public:
     KoTextFormatCollection( const QFont & defaultFont );

@@ -702,7 +702,7 @@ public:
     };
 
     QTextDocument( QTextDocument *p );
-    QTextDocument( QTextDocument *d, QTextFormatCollection *f );
+    QTextDocument( QTextDocument *d, Qt3::QTextFormatCollection *f );
     virtual ~QTextDocument();
 
     QTextDocument *parent() const { return par; }
@@ -779,7 +779,7 @@ public:
     QTextCursor *redo( QTextCursor *c  = 0 );
     QTextCommandHistory *commands() const { return commandHistory; }
 
-    QTextFormatCollection *formatCollection() const;
+    Qt3::QTextFormatCollection *formatCollection() const;
 
     bool find( const QString &expr, bool cs, bool wo, bool forward, int *parag, int *index, QTextCursor *cursor );
 

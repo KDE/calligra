@@ -47,7 +47,7 @@
 
 using namespace Qt3;
 
-static QTextFormatCollection *qFormatCollection = 0;
+static Qt3::QTextFormatCollection *qFormatCollection = 0;
 
 #if defined(PARSER_DEBUG)
 static QString debug_indent;
@@ -4653,12 +4653,12 @@ void QTextParag::setPainter( QPainter *p, bool adjust  )
     }
 }
 
-QTextFormatCollection *QTextParag::formatCollection() const
+Qt3::QTextFormatCollection *QTextParag::formatCollection() const
 {
     if ( doc )
 	return doc->formatCollection();
     if ( !qFormatCollection )
-	qFormatCollection = new QTextFormatCollection;
+	qFormatCollection = new Qt3::QTextFormatCollection;
     return qFormatCollection;
 }
 
@@ -5697,7 +5697,7 @@ QTextIndent::QTextIndent()
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-QTextFormatCollection::QTextFormatCollection()
+Qt3::QTextFormatCollection::QTextFormatCollection()
     : cKey( 307 ), sheet( 0 )
 {
 #ifdef DEBUG_COLLECTION
@@ -5711,7 +5711,7 @@ QTextFormatCollection::QTextFormatCollection()
     cachedFormat = 0;
 }
 
-QTextFormatCollection::~QTextFormatCollection()
+Qt3::QTextFormatCollection::~QTextFormatCollection()
 {
 #ifdef DEBUG_COLLECTION
     qDebug("QTextFormatCollection::~QTextFormatCollection %p", this);
@@ -5719,7 +5719,7 @@ QTextFormatCollection::~QTextFormatCollection()
     delete defFormat;
 }
 
-QTextFormat *QTextFormatCollection::format( const QTextFormat *f )
+QTextFormat *Qt3::QTextFormatCollection::format( const QTextFormat *f )
 {
     if ( f->parent() == this || f == defFormat ) {
 #ifdef DEBUG_COLLECTION
@@ -5771,7 +5771,7 @@ QTextFormat *QTextFormatCollection::format( const QTextFormat *f )
     return lastFormat;
 }
 
-QTextFormat *QTextFormatCollection::format( QTextFormat *of, QTextFormat *nf, int flags )
+QTextFormat *Qt3::QTextFormatCollection::format( QTextFormat *of, QTextFormat *nf, int flags )
 {
     if ( cres && kof == of->key() && knf == nf->key() && cflags == flags ) {
 #ifdef DEBUG_COLLECTION
@@ -5813,7 +5813,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *of, QTextFormat *nf, in
     return cres;
 }
 
-QTextFormat *QTextFormatCollection::format( const QFont &f, const QColor &c )
+QTextFormat *Qt3::QTextFormatCollection::format( const QFont &f, const QColor &c )
 {
     if ( cachedFormat && cfont == f && ccol == c ) {
 #ifdef DEBUG_COLLECTION
@@ -5850,7 +5850,7 @@ QTextFormat *QTextFormatCollection::format( const QFont &f, const QColor &c )
     return cachedFormat;
 }
 
-void QTextFormatCollection::remove( QTextFormat *f )
+void Qt3::QTextFormatCollection::remove( QTextFormat *f )
 {
     if ( lastFormat == f )
 	lastFormat = 0;
@@ -5861,7 +5861,7 @@ void QTextFormatCollection::remove( QTextFormat *f )
     cKey.remove( f->key() );
 }
 
-void QTextFormatCollection::setPainter( QPainter *p )
+void Qt3::QTextFormatCollection::setPainter( QPainter *p )
 {
     QDictIterator<QTextFormat> it( cKey );
     QTextFormat *f;
@@ -5871,7 +5871,7 @@ void QTextFormatCollection::setPainter( QPainter *p )
     }
 }
 
-void QTextFormatCollection::debug()
+void Qt3::QTextFormatCollection::debug()
 {
     qDebug( "------------ QTextFormatCollection: debug --------------- BEGIN" );
     QDictIterator<QTextFormat> it( cKey );
@@ -5885,7 +5885,7 @@ void QTextFormatCollection::debug()
     qDebug( "------------ QTextFormatCollection: debug --------------- END" );
 }
 
-void QTextFormatCollection::updateStyles()
+void Qt3::QTextFormatCollection::updateStyles()
 {
     QDictIterator<QTextFormat> it( cKey );
     QTextFormat *f;
@@ -5895,7 +5895,7 @@ void QTextFormatCollection::updateStyles()
     }
 }
 
-void QTextFormatCollection::updateFontSizes( int base )
+void Qt3::QTextFormatCollection::updateFontSizes( int base )
 {
     QDictIterator<QTextFormat> it( cKey );
     QTextFormat *f;
@@ -5913,7 +5913,7 @@ void QTextFormatCollection::updateFontSizes( int base )
     f->update();
 }
 
-void QTextFormatCollection::updateFontAttributes( const QFont &f, const QFont &old )
+void Qt3::QTextFormatCollection::updateFontAttributes( const QFont &f, const QFont &old )
 {
     QDictIterator<QTextFormat> it( cKey );
     QTextFormat *fm;
