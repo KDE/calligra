@@ -21,9 +21,12 @@
 #include <qtabwidget.h>
 #include <qpoint.h>
 #include <qcolor.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
 
 #include <kpresenter_doc.h>
 #include <klocale.h>
+#include <kbuttonbox.h>
 
 /******************************************************************/
 /* Class: KPFooterHeaderEditor                                    */
@@ -33,13 +36,29 @@
 KPFooterHeaderEditor::KPFooterHeaderEditor(KPresenterDoc *_doc)
   : QVBox(0L), _allowClose(false)
 {
+  setMargin(10);
+  
   doc = _doc;
-
+  
   tabwidget = new QTabWidget(this);
 
   setupHeader();
   setupFooter();
 
+  QWidget *w = new QWidget(this);
+  w->setMaximumHeight(10);
+  w->setMinimumHeight(10);
+  
+  KButtonBox *bb = new KButtonBox(this);
+  bb->addStretch();
+  updatePage = bb->addButton(i18n("Update Page"));
+  connect(updatePage,SIGNAL(clicked()),this,SLOT(slotUpdatePage()));
+  closeDia = bb->addButton(i18n("Close"));
+  connect(closeDia,SIGNAL(clicked()),this,SLOT(slotCloseDia()));
+
+  bb->layout();
+  bb->setMaximumHeight(bb->sizeHint().height());
+  
   resize(500,300);
 }
 
@@ -54,6 +73,9 @@ KPFooterHeaderEditor::~KPFooterHeaderEditor()
 void KPFooterHeaderEditor::setupHeader()
 {
   QVBox *back = new QVBox(tabwidget);
+
+  showHeader = new QCheckBox(i18n("Show Header"),back);
+  connect(showHeader,SIGNAL(clicked()),this,SLOT(slotShowHeader()));
   
   QVBox *txtFrame = new QVBox(back);
   txtFrame->setMargin(2);
@@ -71,6 +93,9 @@ void KPFooterHeaderEditor::setupFooter()
 {
   QVBox *back = new QVBox(tabwidget);
   
+  showFooter = new QCheckBox(i18n("Show Footer"),back);
+  connect(showFooter,SIGNAL(clicked()),this,SLOT(slotShowFooter()));
+  
   QVBox *txtFrame = new QVBox(back);
   txtFrame->setMargin(2);
   txtFrame->setBackgroundColor(Qt::white);
@@ -80,4 +105,32 @@ void KPFooterHeaderEditor::setupFooter()
   doc->footer()->getKTextObject()->setBackgroundColor(Qt::white);
   
   tabwidget->addTab(back,i18n("&Footer"));
+}
+
+/*================================================================*/
+void KPFooterHeaderEditor::slotShowHeader()
+{
+  //showHeader->setChecked(!showHeader->isChecked());
+  doc->setHeader(showHeader->isChecked());
+  slotUpdatePage();
+}
+
+/*================================================================*/
+void KPFooterHeaderEditor::slotShowFooter()
+{
+  //showFooter->setChecked(!showFooter->isChecked());
+  doc->setFooter(showFooter->isChecked());
+  slotUpdatePage();
+}
+
+/*================================================================*/
+void KPFooterHeaderEditor::slotUpdatePage()
+{
+  doc->repaint(false);
+}
+
+/*================================================================*/
+void KPFooterHeaderEditor::slotCloseDia()
+{
+  hide();
 }

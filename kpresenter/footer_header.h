@@ -22,6 +22,8 @@
 class KPresenterDoc;
 
 class QTabWidget;
+class QCheckBox;
+class QPushButton;
 
 /******************************************************************/
 /* Class: KPFooterHeaderEditor                                    */
@@ -53,9 +55,17 @@ protected:
   }
   
   QTabWidget *tabwidget;
-
+  QCheckBox *showHeader,*showFooter;
+  QPushButton *updatePage,*closeDia;
+  
   KPresenterDoc *doc;
   bool _allowClose;
+  
+protected slots:
+  void slotShowHeader();
+  void slotShowFooter();
+  void slotUpdatePage();
+  void slotCloseDia();
   
 };
 

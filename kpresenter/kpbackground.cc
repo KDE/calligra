@@ -16,13 +16,16 @@
 #include "kpbackground.h"
 #include "kpbackground.moc"
 
+#include "kpresenter_doc.h"
+
 /******************************************************************/
 /* Class: KPBackGround                                            */
 /******************************************************************/
 
-/*===================== constructor ==============================*/
-KPBackGround::KPBackGround(KPPixmapCollection *_pixmapCollection,KPGradientCollection *_gradientCollection)
-  : QObject(), backPixFilename(), backClipFilename(), backClip(), pixSize(orig_size), data()
+/*================================================================*/
+KPBackGround::KPBackGround(KPPixmapCollection *_pixmapCollection,KPGradientCollection *_gradientCollection,
+			   KPresenterDoc *_doc)
+  : QObject(), backPixFilename(), backClipFilename(), backClip(), pixSize(orig_size), data(), footerHeight(0)
 {
   backType = BT_COLOR;
   backView = BV_CENTER;
@@ -35,9 +38,11 @@ KPBackGround::KPBackGround(KPPixmapCollection *_pixmapCollection,KPGradientColle
   gradientCollection = _gradientCollection;
   backPix = 0;
   gradient = 0;
+  
+  doc = _doc;
 }
 
-/*======================== set backpix filename ==================*/
+/*================================================================*/
 void KPBackGround::setBackPixFilename(QString _filename)
 {
   if (_filename.isEmpty() || _filename == backPixFilename) return;
@@ -59,7 +64,7 @@ void KPBackGround::setBackPixFilename(QString _filename)
   pixSize = backPix->size();
 }
 
-/*========================== set backpix  ========================*/
+/*================================================================*/
 void KPBackGround::setBackPix(QString _filename,QString _data)
 {
   if (_filename.isEmpty() || _data.isEmpty() || _filename == backPixFilename) return;
@@ -82,7 +87,7 @@ void KPBackGround::setBackPix(QString _filename,QString _data)
   pixSize = backPix->size();
 }
 
-/*========================= set backclip filename ================*/
+/*================================================================*/
 void KPBackGround::setBackClipFilename(QString _filename)
 {
   if (_filename.isEmpty()) return;
@@ -91,7 +96,7 @@ void KPBackGround::setBackClipFilename(QString _filename)
   backClip.setClipartName(_filename);
 }
 
-/*========================== draw ================================*/
+/*================================================================*/
 void KPBackGround::draw(QPainter *_painter,KPoint _offset,bool _drawBorders)
 {
   _painter->save();
@@ -128,11 +133,13 @@ void KPBackGround::draw(QPainter *_painter,KPoint _offset,bool _drawBorders)
       drawBorders(_painter);
     }
 
+  drawHeaderFooter(_painter,_offset);
+  
   _painter->setViewport(r);
   _painter->restore();
 }
 
-/*========================== restore =============================*/
+/*================================================================*/
 void KPBackGround::restore()
 {
   if (backType == BT_PICTURE)
@@ -203,7 +210,7 @@ void KPBackGround::restore()
     }
 }
 
-/*========================== save ================================*/
+/*================================================================*/
 void KPBackGround::save(ostream& out)
 {
   out << indent << "<BACKTYPE value=\"" << static_cast<int>(backType) << "\"/>" << endl;
@@ -230,7 +237,7 @@ void KPBackGround::save(ostream& out)
   out << indent << "<PGEFFECT value=\"" << static_cast<int>(pageEffect) << "\"/>" << endl;
 }
 
-/*========================== load ================================*/
+/*================================================================*/
 void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string name;
@@ -402,14 +409,14 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
     }
 }
 
-/*========================== draw ================================*/
+/*================================================================*/
 void KPBackGround::drawBackColor(QPainter *_painter)
 {
   if (gradient)
     _painter->drawPixmap(0,0,*gradient);
 }
 
-/*========================== draw ================================*/
+/*================================================================*/
 void KPBackGround::drawBackPix(QPainter *_painter)
 {
   if (backPix)
@@ -460,13 +467,75 @@ void KPBackGround::drawBackPix(QPainter *_painter)
     }
 }
 
-/*========================== draw ================================*/
+/*================================================================*/
+void KPBackGround::drawHeaderFooter(QPainter *_painter,const KPoint &_offset)
+{
+  if (doc->hasHeader())
+    {
+      QSize s(doc->header()->getKTextObject()->size());
+      QPoint pnt(doc->header()->getKTextObject()->x(),doc->header()->getKTextObject()->y()); 
+      
+      if (doc->header()->getKTextObject()->isModified())
+	doc->header()->setSize(ext.width(),10);
+      
+      doc->header()->setOrig(_offset.x(),_offset.y());
+
+      int h = 0;
+      if (doc->header()->getKTextObject()->isModified())
+	{	
+	  for (unsigned int i = 0;i < doc->header()->getKTextObject()->paragraphs();i++)
+	    h += doc->header()->getKTextObject()->paragraphAt(i)->height();
+	  h += 2;
+	  doc->header()->setSize(ext.width(),h);
+	}
+      
+      doc->header()->draw(_painter,0,0);
+
+      if (doc->header()->getKTextObject()->isModified())
+	doc->header()->getKTextObject()->resize(s.width(),s.height());
+      
+      doc->header()->getKTextObject()->move(pnt.x(),pnt.y());
+      
+      doc->header()->getKTextObject()->toggleModified(false);
+    }
+  
+  if (doc->hasFooter())
+    {
+      QSize s(doc->footer()->getKTextObject()->size());
+      QPoint pnt(doc->footer()->getKTextObject()->x(),doc->footer()->getKTextObject()->y()); 
+      
+      if (doc->footer()->getKTextObject()->isModified())
+	{
+	  doc->footer()->setSize(ext.width(),10);
+
+	  int h = 0;
+	  for (unsigned int i = 0;i < doc->footer()->getKTextObject()->paragraphs();i++)
+	    h += doc->footer()->getKTextObject()->paragraphAt(i)->height();
+	  h += 2;
+	  doc->footer()->setSize(ext.width(),h);
+	  footerHeight = h;
+	}
+      
+      doc->footer()->setOrig(_offset.x(),_offset.y() + ext.height() - footerHeight);
+
+      doc->footer()->draw(_painter,0,0);
+
+      if (doc->footer()->getKTextObject()->isModified())
+	doc->footer()->getKTextObject()->resize(s.width(),s.height());
+      
+      doc->footer()->getKTextObject()->move(pnt.x(),pnt.y());
+      
+      doc->footer()->getKTextObject()->toggleModified(false);
+    }
+}
+
+/*================================================================*/
 void KPBackGround::drawBackClip(QPainter *_painter)
 {
   _painter->drawPicture(*backClip.getPic());
 }
 
-/*========================= draw borders =========================*/
+/*================================================================*/
 void KPBackGround::drawBorders(QPainter *_painter)
 {
   QPen pen(red,1);
@@ -477,7 +546,7 @@ void KPBackGround::drawBorders(QPainter *_painter)
   _painter->drawRect(0,0,ext.width() + 1,ext.height() + 1);
 }
 
-/*======================== remove gradient =======================*/
+/*================================================================*/
 void KPBackGround::removeGradient()
 {
   if (gradient)

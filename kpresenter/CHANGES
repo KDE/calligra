@@ -152,3 +152,8 @@ Reggie, 5.5.1999:
 - Started implementing footers and headers 
 - Fixed a mem leak
 
+Reggie, 6.5.1999:
+-----------------
+- More work on headers and footers
+- KTextObject knows now if it was modified
+

@@ -43,6 +43,8 @@
 
 #include <string.h>
 
+class KPresenterDoc;
+
 /******************************************************************/
 /* Class: KPBackGround                                            */
 /******************************************************************/
@@ -52,7 +54,8 @@ class KPBackGround : public QObject
   Q_OBJECT
 
 public:
-  KPBackGround(KPPixmapCollection *_pixmapCollection,KPGradientCollection *_gradientCollection);
+  KPBackGround(KPPixmapCollection *_pixmapCollection,KPGradientCollection *_gradientCollection,
+	       KPresenterDoc *_doc);
   virtual ~KPBackGround()
     {;}
 
@@ -101,25 +104,26 @@ public:
 
   virtual void restore();
 
-  virtual void save(ostream& out); 
-  virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst); 
+  virtual void save(ostream& out);
+  virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst);
 
 protected:
   virtual void drawBackColor(QPainter *_painter);
   virtual void drawBackPix(QPainter *_painter);
   virtual void drawBackClip(QPainter *_painter);
   virtual void drawBorders(QPainter *_painter);
+  virtual void drawHeaderFooter(QPainter *_painter,const KPoint &_offset);
   virtual void removeGradient();
 
-  BackType backType; 
-  BackView backView; 
+  BackType backType;
+  BackView backView;
   QColor backColor1;
   QColor backColor2;
   BCType bcType;
   QString backPixFilename;
-  QString backClipFilename; 
+  QString backClipFilename;
   PageEffect pageEffect;
-  
+
   QPixmap *backPix;
   KPPixmapCollection *pixmapCollection;
   KPGradientCollection *gradientCollection;
@@ -130,6 +134,9 @@ protected:
   KSize pixSize;
   QString data;
 
+  KPresenterDoc *doc;
+  int footerHeight;
+  
 };
 
 #endif

@@ -1556,7 +1556,8 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
 
   createRBMenu();
 
-  _modified = false;
+  // this is required for correct init of headers/footers
+  _modified = true;
 
   regexpMode = false;
   regExpList.setAutoDelete(true);
@@ -1701,6 +1702,8 @@ void KTextObject::draw(QPainter &p,int _x,int _y,int _w,int _h,bool presMode=fal
 /*====================== zoom text ===============================*/
 void KTextObject::zoom(float _fakt)
 {
+  _modified = true;
+
   TxtObj *txtObj;
   TxtLine *txtLine;
   TxtParagraph *txtParagraph;
@@ -1754,6 +1757,8 @@ void KTextObject::zoom(float _fakt)
 /*==================== zoom to original size =====================*/
 void KTextObject::zoomOrig()
 {
+  _modified = true;
+
   TxtObj *txtObj;
   TxtLine *txtLine;
   TxtParagraph *txtParagraph;
@@ -1792,6 +1797,8 @@ void KTextObject::zoomOrig()
 /*========================= add paragraph ========================*/
 TxtParagraph* KTextObject::addParagraph()
 {
+  _modified = true;
+
   TxtParagraph *para;
   para = new TxtParagraph(false);
   paragraphList.append(para);
@@ -1809,6 +1816,8 @@ TxtParagraph* KTextObject::addParagraph()
 /*======================== clear =================================*/
 void KTextObject::clear(bool init=true)
 {
+  _modified = true;
+
   if (init)
     {
       paragraphList.clear();
@@ -2139,6 +2148,8 @@ void KTextObject::addText(QString text,QFont font,QColor color,
 			  bool newParagraph=false,TxtParagraph::HorzAlign align=TxtParagraph::LEFT,
 			  bool _recalc=true,bool htmlMode=false)
 {
+  _modified = true;
+
   TxtObj *txtObj;
   TxtParagraph *txtParagraph;
   int br = -1,sp = -1;
@@ -2528,6 +2539,8 @@ void KTextObject::openHTML(QString filename)
 /*==================== set linebreak =============================*/
 void KTextObject::setLineBreak(int _width)
 {
+  _modified = true;
+
   linebreak_width = _width;
   recalc();
   repaint(false);
@@ -2536,6 +2549,8 @@ void KTextObject::setLineBreak(int _width)
 /*====================== enable composer mode ====================*/
 void KTextObject::enableComposerMode(QColor quoted_color,QFont quoted_font,QColor normal_color,QFont normal_font)
 {
+  _modified = true;
+
   _quoted_color = quoted_color;
   _quoted_font = quoted_font;
   _normal_color = normal_color;
@@ -2548,6 +2563,8 @@ void KTextObject::enableComposerMode(QColor quoted_color,QFont quoted_font,QColo
 /*======================= enable regexp mode =====================*/
 void KTextObject::enableRegExpMode(QList<TxtParagraph::RegExpMode> &regList)
 {
+  _modified = true;
+
   if (!regExpList.isEmpty())
     regExpList.clear();
 
@@ -2561,6 +2578,8 @@ void KTextObject::enableRegExpMode(QList<TxtParagraph::RegExpMode> &regList)
 /*====================== set auto replacement ====================*/
 void KTextObject::setAutoReplacement(QList<AutoReplace> &aReplace)
 {
+  _modified = true;
+
   if (!autoReplace.isEmpty())
     autoReplace.clear();
 
@@ -2642,6 +2661,8 @@ void KTextObject::cutRegion()
       redrawSelection(startCursor,stopCursor);
       startCursor.setPositionAbs(0);
       stopCursor.setPositionAbs(0);
+      
+      _modified = true;
     }
 }
 
@@ -2656,6 +2677,8 @@ void KTextObject::paste()
   QClipboard *cb = QApplication::clipboard();
   if (cb->text())
     insertText(cb->text(),txtCursor,currFont,currColor);
+
+  _modified = true;
 }
 
 /*================== get number of TxtObjs =======================*/
@@ -2943,6 +2966,8 @@ QList<TxtObj>* KTextObject::regionAt(TxtCursor *_startCursor,TxtCursor *_stopCur
 /*======================= delete item ============================*/
 void KTextObject::deleteItem(int pos)
 {
+  _modified = true;
+
   int para,line;
   getPara(pos,line,para);
 
@@ -2953,6 +2978,8 @@ void KTextObject::deleteItem(int pos)
 /*======================= delete item ============================*/
 void KTextObject::deleteItemInLine(int pos,int line)
 {
+  _modified = true;
+
   int para;
   getPara(line,para);
 
@@ -2963,6 +2990,8 @@ void KTextObject::deleteItemInLine(int pos,int line)
 /*======================= delete item ============================*/
 void KTextObject::deleteItemInPara(int pos,int para)
 {
+  _modified = true;
+
   int line;
   getLine(pos,para,line);
 
@@ -2973,6 +3002,8 @@ void KTextObject::deleteItemInPara(int pos,int para)
 /*======================= delete item ============================*/
 void KTextObject::deleteItem(int pos,int line,int para)
 {
+  _modified = true;
+
   bool breakPara = true;
 
   if (para < static_cast<int>(paragraphs()) && line < static_cast<int>(paragraphAt(para)->lines()) &&
@@ -3007,6 +3038,8 @@ void KTextObject::deleteItem(int pos,int line,int para)
 /*====================== delete word =============================*/
 void KTextObject::deleteWord(int pos)
 {
+  _modified = true;
+
   int x1,x2;
   int _pos = pos;
   getAbsPosOfWord(pos,x1,x2);
@@ -3026,6 +3059,8 @@ void KTextObject::deleteWord(int pos)
 /*====================== delete word =============================*/
 void KTextObject::deleteWordInLine(int pos,int line)
 {
+  _modified = true;
+
   int x1,x2;
   int _pos = pos;
   getAbsPosOfWordInLine(pos,line,x1,x2);
@@ -3045,6 +3080,8 @@ void KTextObject::deleteWordInLine(int pos,int line)
 /*====================== delete word =============================*/
 void KTextObject::deleteWordInPara(int pos,int para)
 {
+  _modified = true;
+
   int x1,x2;
   int _pos = pos;
   getAbsPosOfWordInPara(pos,para,x1,x2);
@@ -3064,6 +3101,8 @@ void KTextObject::deleteWordInPara(int pos,int para)
 /*====================== delete word =============================*/
 void KTextObject::deleteWord(int pos,int line,int para)
 {
+  _modified = true;
+
   int x1,x2;
   int _pos = pos;
   getAbsPosOfWord(pos,line,para,x1,x2);
@@ -3083,6 +3122,8 @@ void KTextObject::deleteWord(int pos,int line,int para)
 /*====================== delete line =============================*/
 void KTextObject::deleteLine(int line)
 {
+  _modified = true;
+
   int para;
   getPara(line,para);
 
@@ -3093,6 +3134,8 @@ void KTextObject::deleteLine(int line)
 /*====================== delete line =============================*/
 void KTextObject::deleteLine(int line,int para)
 {
+  _modified = true;
+
   bool breakPara = true;
 
   if (para < static_cast<int>(paragraphs()) && line < static_cast<int>(paragraphAt(para)->lines()))
@@ -3120,6 +3163,8 @@ void KTextObject::deleteLine(int line,int para)
 /*====================== delete paragraph ========================*/
 void KTextObject::deleteParagraph(int para,bool _update = true)
 {
+  _modified = true;
+
   if (para < static_cast<int>(paragraphs()))
     {
       txtCursor->setMaxPosition(txtCursor->maxPosition() - paragraphAt(para)->paragraphLength());
@@ -3140,6 +3185,8 @@ void KTextObject::deleteParagraph(int para,bool _update = true)
 /*====================== delete region ===========================*/
 void KTextObject::deleteRegion(TxtCursor *_startCursor,TxtCursor *_stopCursor)
 {
+  _modified = true;
+
   // if we have only to delete some objs in one paragraph
   if (_startCursor->positionParagraph() == _stopCursor->positionParagraph())
     {
@@ -3231,6 +3278,8 @@ void KTextObject::deleteRegion(TxtCursor *_startCursor,TxtCursor *_stopCursor)
 /*===================== insert text ==============================*/
 void KTextObject::insertText(QString text,int pos,QFont font,QColor color)
 {
+  _modified = true;
+
   int x1,x2;
   getAbsPosOfWord(pos,x1,x2);
 
@@ -3246,6 +3295,8 @@ void KTextObject::insertText(QString text,int pos,QFont font,QColor color)
 /*===================== insert text ==============================*/
 void KTextObject::insertTextInLine(QString text,int pos,int line,QFont font,QColor color)
 {
+  _modified = true;
+
   int x1,x2;
   getAbsPosOfWordInLine(pos,line,x1,x2);
 
@@ -3261,6 +3312,8 @@ void KTextObject::insertTextInLine(QString text,int pos,int line,QFont font,QCol
 /*===================== insert text ==============================*/
 void KTextObject::insertTextInPara(QString text,int pos,int para,QFont font,QColor color)
 {
+  _modified = true;
+
   int x1,x2;
   getAbsPosOfWordInPara(pos,para,x1,x2);
 
@@ -3276,6 +3329,8 @@ void KTextObject::insertTextInPara(QString text,int pos,int para,QFont font,QCol
 /*===================== insert text ==============================*/
 void KTextObject::insertText(QString text,int pos,int line,int para,QFont font,QColor color)
 {
+  _modified = true;
+
   int x1,x2;
   getAbsPosOfWord(pos,line,para,x1,x2);
 
@@ -3291,6 +3346,8 @@ void KTextObject::insertText(QString text,int pos,int line,int para,QFont font,Q
 /*===================== insert text ==============================*/
 void KTextObject::insertText(QString text,TxtCursor *_cursor,QFont font,QColor color)
 {
+  _modified = true;
+
   if (!text.isEmpty())
     {
       if (text.find('\n') == -1)
@@ -3399,6 +3456,8 @@ void KTextObject::insertText(QString text,TxtCursor *_cursor,QFont font,QColor c
 /*======================== insert items ==========================*/
 void KTextObject::insertItems(QList<TxtObj> *items,int pos)
 {
+  _modified = true;
+
   int line,i,absPos = 0;
   getLine(pos,line);
 
@@ -3417,6 +3476,8 @@ void KTextObject::insertItems(QList<TxtObj> *items,int pos)
 /*======================== insert items ==========================*/
 void KTextObject::insertItemsInLine(QList<TxtObj> *items,int pos,int line)
 {
+  _modified = true;
+
   int i,absPos = 0;
 
   for (i = 0;i < line;i++)
@@ -3434,6 +3495,8 @@ void KTextObject::insertItemsInLine(QList<TxtObj> *items,int pos,int line)
 /*======================== insert items ==========================*/
 void KTextObject::insertItemsInPara(QList<TxtObj> *items,int pos,int para)
 {
+  _modified = true;
+
   int i,absPos = 0;
 
   for (i = 0;i < para;i++)
@@ -3451,6 +3514,8 @@ void KTextObject::insertItemsInPara(QList<TxtObj> *items,int pos,int para)
 /*======================== insert items ==========================*/
 void KTextObject::insertItems(QList<TxtObj> *items,int pos,int line,int para)
 {
+  _modified = true;
+
   int i,absPos = 0;
 
   for (i = 0;i < para;i++)
@@ -3471,6 +3536,8 @@ void KTextObject::insertItems(QList<TxtObj> *items,int pos,int line,int para)
 /*======================== insert items ==========================*/
 void KTextObject::insertItems(QList<TxtObj> *items,TxtCursor *_cursor,bool redraw=true)
 {
+  _modified = true;
+
   TxtObj *item;
 
   unsigned int i,objPos,w = 0;
@@ -3561,6 +3628,8 @@ void KTextObject::insertItems(QList<TxtObj> *items,TxtCursor *_cursor,bool redra
 /*==================== replace region ============================*/
 void KTextObject::replaceItems(QList<TxtObj> *items,int pos,int len)
 {
+  _modified = true;
+
   for (int i = 0;i < len;i++)
     deleteItem(pos);
 
@@ -3570,6 +3639,8 @@ void KTextObject::replaceItems(QList<TxtObj> *items,int pos,int len)
 /*==================== replace items =============================*/
 void KTextObject::replaceItemsInLine(QList<TxtObj> *items,int pos,int line,int len)
 {
+  _modified = true;
+
   for (int i = 0;i < len;i++)
     deleteItemInLine(pos,line);
 
@@ -3579,6 +3650,8 @@ void KTextObject::replaceItemsInLine(QList<TxtObj> *items,int pos,int line,int l
 /*==================== replace items =============================*/
 void KTextObject::replaceItemsInPara(QList<TxtObj> *items,int pos,int para,int len)
 {
+  _modified = true;
+
   for (int i = 0;i < len;i++)
     deleteItemInPara(pos,para);
 
@@ -3588,6 +3661,8 @@ void KTextObject::replaceItemsInPara(QList<TxtObj> *items,int pos,int para,int l
 /*==================== replace items =============================*/
 void KTextObject::replaceItems(QList<TxtObj> *items,int pos,int line,int para,int len)
 {
+  _modified = true;
+
   for (int i = 0;i < len;i++)
     deleteItem(pos,line,para);
 
@@ -3597,6 +3672,8 @@ void KTextObject::replaceItems(QList<TxtObj> *items,int pos,int line,int para,in
 /*==================== replace word ==============================*/
 void KTextObject::replaceWord(QString text,int pos,QFont font,QColor color)
 {
+  _modified = true;
+
   if (text.right(1) != " ") text.append(" ");
   insertText(text,pos,font,color);
   deleteWord(pos + 1);
@@ -3605,6 +3682,8 @@ void KTextObject::replaceWord(QString text,int pos,QFont font,QColor color)
 /*==================== replace word ==============================*/
 void KTextObject::replaceWordInLine(QString text,int pos,int line,QFont font,QColor color)
 {
+  _modified = true;
+
   if (text.right(1) != " ") text.append(" ");
   insertTextInLine(text,pos,line,font,color);
   deleteWordInLine(pos + 1,line);
@@ -3613,6 +3692,8 @@ void KTextObject::replaceWordInLine(QString text,int pos,int line,QFont font,QCo
 /*==================== replace word ==============================*/
 void KTextObject::replaceWordInPara(QString text,int pos,int para,QFont font,QColor color)
 {
+  _modified = true;
+
   if (text.right(1) != " ") text.append(" ");
   insertTextInPara(text,pos,para,font,color);
   deleteWordInPara(pos + 1,para);
@@ -3621,6 +3702,8 @@ void KTextObject::replaceWordInPara(QString text,int pos,int para,QFont font,QCo
 /*==================== replace word ==============================*/
 void KTextObject::replaceWord(QString text,int pos,int line,int para,QFont font,QColor color)
 {
+  _modified = true;
+
   if (text.right(1) != " ") text.append(" ");
   insertText(text,pos,line,para,font,color);
   deleteWord(pos + 1,line,para);
@@ -3629,6 +3712,8 @@ void KTextObject::replaceWord(QString text,int pos,int line,int para,QFont font,
 /*==================== replace region ============================*/
 void KTextObject::replaceRegion(QList<TxtObj> *items,TxtCursor *_startCursor,TxtCursor *_stopCursor)
 {
+  _modified = true;
+
   deleteRegion(_startCursor,_stopCursor);
   insertItems(items,_startCursor);
 }
@@ -3636,6 +3721,8 @@ void KTextObject::replaceRegion(QList<TxtObj> *items,TxtCursor *_startCursor,Txt
 /*==================== replace region ============================*/
 void KTextObject::replaceRegion(QString text,TxtCursor *_startCursor,TxtCursor *_stopCursor,QFont font,QColor color)
 {
+  _modified = true;
+
   deleteRegion(_startCursor,_stopCursor);
   insertText(text,_startCursor,font,color);
 }
@@ -3643,6 +3730,8 @@ void KTextObject::replaceRegion(QString text,TxtCursor *_startCursor,TxtCursor *
 /*================ change attributes of the region ===============*/
 void KTextObject::changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCursor,QFont font,QColor color)
 {
+  _modified = true;
+  
   enum CurPos {C_IN,C_BEFORE,C_AFTER};
   int start_pos = 0,start_cpos = C_IN,i;
   int stop_pos = 0,stop_cpos = C_IN,objnum;
@@ -3739,6 +3828,8 @@ void KTextObject::changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCu
 /*=============== changen alignment of the region ================*/
 void KTextObject::changeRegionAlign(TxtCursor *_startCursor,TxtCursor *_stopCursor,TxtParagraph::HorzAlign _align)
 {
+  _modified = true;
+  
   int start_para = _startCursor->positionParagraph();
   int stop_para = _stopCursor->positionParagraph(),i;
 
@@ -4089,6 +4180,8 @@ bool KTextObject::searchNextRev(QString text,TxtCursor *from,TxtCursor *to,bool 
 /*====================== replace first ===========================*/
 bool KTextObject::replaceFirst(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
 {
+  _modified = true;
+
   searchIndexFrom.setPositionAbs(txtCursor->positionAbs());
   searchIndexTo.setPositionAbs(txtCursor->positionAbs());
 
@@ -4098,6 +4191,8 @@ bool KTextObject::replaceFirst(QString search,QString replace,TxtCursor *from,Tx
 /*====================== replace next ============================*/
 bool KTextObject::replaceNext(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
 {
+  _modified = true;
+  
   bool found = searchNext(search,from,to,caseSensitive);
 
   if (found)
@@ -4127,6 +4222,8 @@ bool KTextObject::replaceNext(QString search,QString replace,TxtCursor *from,Txt
 /*====================== replace first reverse ===================*/
 bool KTextObject::replaceFirstRev(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
 {
+  _modified = true;
+  
   searchIndexFrom.setPositionAbs(txtCursor->positionAbs());
   searchIndexTo.setPositionAbs(txtCursor->positionAbs());
 
@@ -4136,6 +4233,8 @@ bool KTextObject::replaceFirstRev(QString search,QString replace,TxtCursor *from
 /*====================== replace next reverse ====================*/
 bool KTextObject::replaceNextRev(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
 {
+  _modified = true;
+
   bool found = searchNextRev(search,from,to,caseSensitive);
 
   if (found)
@@ -4165,6 +4264,8 @@ bool KTextObject::replaceNextRev(QString search,QString replace,TxtCursor *from,
 /*================================================================*/
 void KTextObject::setFontToAll(QFont _font)
 {
+  _modified = true;
+
   for (unsigned int i = 0;i < paragraphList.count();i++)
     {
       for (unsigned int j = 0;j < paragraphList.at(i)->lines();j++)
@@ -4181,6 +4282,8 @@ void KTextObject::setFontToAll(QFont _font)
 /*================================================================*/
 void KTextObject::setColorToAll(QColor _color)
 {
+  _modified = true;
+
   for (unsigned int i = 0;i < paragraphList.count();i++)
     {
       for (unsigned int j = 0;j < paragraphList.at(i)->lines();j++)
@@ -4197,6 +4300,8 @@ void KTextObject::setColorToAll(QColor _color)
 /*================================================================*/
 void KTextObject::setHorzAlignToAll(TxtParagraph::HorzAlign _align)
 {
+  _modified = true;
+
   for (unsigned int i = 0;i < paragraphList.count();i++)
     {
       paragraphList.at(i)->setHorzAlign(_align);
@@ -4924,6 +5029,8 @@ void KTextObject::recalc(bool breakAllLines=true)
 /*====================== split paragraph =========================*/
 void KTextObject::splitParagraph()
 {
+  _modified = true;
+
   para1 = new TxtParagraph();
   para2 = new TxtParagraph();
   para3 = new TxtParagraph();
@@ -5139,6 +5246,8 @@ void KTextObject::splitParagraph()
 /*======================= join paragraph =========================*/
 void KTextObject::joinParagraphs(unsigned int p1,unsigned int p2)
 {
+  _modified = true;
+
   unsigned int para1n = min(p1,p2);
   unsigned int para2n = max(p1,p2);
   lin = new TxtLine();
@@ -5172,6 +5281,8 @@ void KTextObject::joinParagraphs(unsigned int p1,unsigned int p2)
 /*======================= key backspace ==========================*/
 bool KTextObject::kbackspace()
 {
+  _modified = true;
+
   //unsigned int i;
   unsigned int para = txtCursor->positionParagraph();
   //unsigned int line = txtCursor->positionLine();
@@ -5289,6 +5400,8 @@ bool KTextObject::kdelete(bool _recalc=true)
 /*========================= insert char ==========================*/
 bool KTextObject::insertChar(QChar c)
 {
+  _modified = true;
+
   unsigned int i,objPos,w = 0;
   unsigned int para = txtCursor->positionParagraph();
   QString str;
@@ -5891,6 +6004,8 @@ void KTextObject::redrawSelection(TxtCursor _startCursor,TxtCursor _stopCursor)
 /*======================= change attributes ====================*/
 void KTextObject::changeAttribs()
 {
+  _modified = true;
+
   if (drawSelection && startCursor.positionAbs() != stopCursor.positionAbs())
     changeRegionAttribs(&startCursor,&stopCursor,currFont,currColor);
 }
@@ -5898,6 +6013,8 @@ void KTextObject::changeAttribs()
 /*===================== change align =============================*/
 void KTextObject::changeHorzAlign(TxtParagraph::HorzAlign ha,int p = -1)
 {
+  _modified = true;
+
   if (drawSelection && startCursor.positionAbs() != stopCursor.positionAbs() && p == -1)
     changeRegionAlign(&startCursor,&stopCursor,ha);
   else
@@ -5907,6 +6024,8 @@ void KTextObject::changeHorzAlign(TxtParagraph::HorzAlign ha,int p = -1)
 /*==================== set horizontal alignemnt ==================*/
 void KTextObject::_setHorzAlign(TxtParagraph::HorzAlign ha,int p = -1)
 {
+  _modified = true;
+
   if (p == -1) p = txtCursor->positionParagraph();
 
   paragraphAt(p)->setHorzAlign(ha);
@@ -6027,6 +6146,8 @@ int KTextObject::getDistAfter()
 /*================================================================*/
 void KTextObject::setLineSpacing(int l)
 {
+  _modified = true;
+
   paragraphList.at(txtCursor->positionParagraph())->setLineSpacing(l);
   recalc();
   repaint(true);
@@ -6035,6 +6156,8 @@ void KTextObject::setLineSpacing(int l)
 /*================================================================*/
 void KTextObject::setDistBefore(int d)
 {
+  _modified = true;
+
   paragraphList.at(txtCursor->positionParagraph())->setDistBefore(d);
   recalc();
   repaint(true);
@@ -6043,6 +6166,8 @@ void KTextObject::setDistBefore(int d)
 /*================================================================*/
 void KTextObject::setDistAfter(int d)
 {
+  _modified = true;
+
   paragraphList.at(txtCursor->positionParagraph())->setDistAfter(d);
   recalc();
   repaint(true);
@@ -6051,6 +6176,8 @@ void KTextObject::setDistAfter(int d)
 /*================================================================*/
 void KTextObject::setAllLineSpacing(int l)
 {
+  _modified = true;
+
   for (unsigned int i = 0;i < paragraphList.count();i++)
     {
       paragraphList.at(i)->setLineSpacing(l);
@@ -6061,6 +6188,8 @@ void KTextObject::setAllLineSpacing(int l)
 /*================================================================*/
 void KTextObject::setAllDistBefore(int d)
 {
+  _modified = true;
+
   for (unsigned int i = 0;i < paragraphList.count();i++)
     {
       paragraphList.at(i)->setDistBefore(d);
@@ -6071,6 +6200,8 @@ void KTextObject::setAllDistBefore(int d)
 /*================================================================*/
 void KTextObject::setAllDistAfter(int d)
 {
+  _modified = true;
+
   for (unsigned int i = 0;i < paragraphList.count();i++)
     {
       paragraphList.at(i)->setDistAfter(d);

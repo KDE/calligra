@@ -987,7 +987,7 @@ void KPresenterDoc::setPageLayout(KoPageLayout pgLayout,int diffx,int diffy)
 unsigned int KPresenterDoc::insertNewPage(int diffx,int diffy,bool _restore=true)
 {
 
-  KPBackGround *kpbackground = new KPBackGround(&_pixmapCollection,&_gradientCollection);
+  KPBackGround *kpbackground = new KPBackGround(&_pixmapCollection,&_gradientCollection,this);
   _backgroundList.append(kpbackground);
 
   if (_restore)
