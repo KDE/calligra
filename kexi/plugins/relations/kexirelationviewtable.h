@@ -22,7 +22,7 @@
 
 #include <qframe.h>
 #include <qstringlist.h>
-
+#include <qlabel.h>
 #include <klistview.h>
 
 class KexiRelationView;
@@ -57,6 +57,8 @@ class KexiRelationViewTableContainer : public QFrame
 
 	private:
 		KexiRelationViewTable	*m_tableView;
+	protected slots:
+		void moved();
 };
 
 
@@ -88,6 +90,27 @@ class KexiRelationViewTable : public KListView
 		QString			m_table;
 
 		KexiRelationView	*m_view;
+};
+
+class KexiRelationViewTableContainerHeader : public QLabel
+{
+	Q_OBJECT
+	public:
+		KexiRelationViewTableContainerHeader(const QString& text,QWidget *parent);
+		virtual ~KexiRelationViewTableContainerHeader();
+	
+	protected:
+		bool			eventFilter(QObject *obj, QEvent *ev);
+		void			mousePressEvent(QMouseEvent *ev);
+		void			mouseReleaseEvent(QMouseEvent *ev);
+
+		bool			m_dragging;
+		int			m_grabX;
+		int			m_grabY;
+		int			m_offsetX;
+		int			m_offsetY;
+	signals:
+		void			moved();		
 };
 
 #endif

@@ -22,6 +22,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcursor.h>
+#include <qpoint.h>
 
 #include <kdebug.h>
 
@@ -30,18 +31,22 @@
 
 #include <kexidragobjects.h>
 
+#include <stdlib.h>
+
+//BEGIN KexiRelationViewTableContainer
+
 KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, QString table, QStringList fields)
  : QFrame(parent,"tv", QFrame::Panel | QFrame::Raised)
 {
 //	setFixedSize(100, 150);
 	resize(100, 150);
-	setMouseTracking(true);
+	//setMouseTracking(true);
 	m_mousePressed = false;
 
 	QGridLayout *g = new QGridLayout(this);
 	g->setMargin(3);
 
-	QLabel *l = new QLabel(table, this);
+	QLabel *l = new KexiRelationViewTableContainerHeader(table, this);
 	l->setPaletteBackgroundColor(colorGroup().highlight());
 	g->addWidget(l, 0, 0);
 	
@@ -59,6 +64,11 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 
 
 	setFrameStyle(QFrame::WinPanel | QFrame::Raised);
+	connect(l,SIGNAL(moved()),this,SIGNAL(moved()));
+}
+
+void KexiRelationViewTableContainer::moved() {
+	emit moved(this);
 }
 
 int
@@ -84,6 +94,7 @@ KexiRelationViewTableContainer::mousePressEvent(QMouseEvent *ev)
 void
 KexiRelationViewTableContainer::mouseMoveEvent(QMouseEvent *ev)
 {
+	return;
 	if(m_mousePressed)
 	{
 //		move(ev->x() - m_bX, ev->y() - m_bY);
@@ -92,7 +103,7 @@ KexiRelationViewTableContainer::mouseMoveEvent(QMouseEvent *ev)
 			QPoint movePoint(ev->x() - m_bX, ev->y() - m_bY);
 			move(mapToParent(movePoint));
 		}
-		else if(ev-x() >= width() - 3)
+		else if(ev->x() >= width() - 3)
 		{
 			if(ev->y() >= height() - 6)
 				resize(ev->x(), ev->y());
@@ -130,6 +141,82 @@ KexiRelationViewTableContainer::mouseReleaseEvent(QMouseEvent *ev)
 KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
 {
 }
+
+
+//END KexiRelationViewTableContainer
+
+//BEGIN KexiRelatoinViewTableContainerHeader
+
+KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(const QString& text,QWidget *parent)
+	:QLabel(text,parent),m_dragging(false) {
+	installEventFilter(this);	
+}
+
+KexiRelationViewTableContainerHeader::~KexiRelationViewTableContainerHeader() {
+}
+
+bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev) {
+	if (ev->type()==QEvent::MouseMove)
+	{
+		if (m_dragging) {
+			int diffX,diffY;
+			diffX=static_cast<QMouseEvent*>(ev)->globalPos().x()-m_grabX;
+			diffY=static_cast<QMouseEvent*>(ev)->globalPos().y()-m_grabY;
+			if ((abs(diffX)>2) || (abs(diffY)>2))
+			{
+				QPoint newPos=parentWidget()->pos()+QPoint(diffX,diffY);
+#if 0
+//correct the x position
+				if (newPos.x()<0) {
+					m_offsetX+=newPos.x();
+					newPos.setX(0);
+				}
+				else
+				if (m_offsetX<0) {
+					m_offsetX+=newPos.x();
+					newPos.setX(0);	
+				}
+//correct the y position
+				if (newPos.y()<0) {
+					m_offsetY+=newPos.y();
+					newPos.setY(0);
+				}
+				else
+				if (m_offsetY<0) {
+					m_offsetY+=newPos.y();
+					newPos.setY(0);	
+				}
+//move and update helpers
+#endif
+				parentWidget()->move(newPos);
+				m_grabX=static_cast<QMouseEvent*>(ev)->globalPos().x();
+				m_grabY=static_cast<QMouseEvent*>(ev)->globalPos().y();
+				emit moved();
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev) {
+	kdDebug()<<"KexiRelationViewTableContainerHeader::Mouse Press Event"<<endl;
+	m_dragging=true;
+	m_grabX=ev->globalPos().x();
+	m_grabY=ev->globalPos().y();
+	m_offsetX=0;
+	m_offsetY=0;
+}
+
+void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
+	kdDebug()<<"KexiRelationViewTableContainerHeader::Mouse Release Event"<<endl;	
+	m_dragging=false;
+}
+
+//END KexiRelatoinViewTableContainerHeader
+
+
+
 
 KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table, QStringList fields, const char *name)
  : KListView(parent)
