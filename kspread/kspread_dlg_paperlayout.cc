@@ -179,9 +179,9 @@ void KSpreadPaperLayout::slotOk()
                 {
                     error = false;
                     sheet->setPrintRange ( QRect( QPoint( QMIN( point1.pos.x(), point2.pos.x() ),
-                                                            QMIN( point1.pos.y(), point2.pos.y() ) ),
-                                                    QPoint( QMAX( point1.pos.x(), point2.pos.x() ),
-                                                            QMAX( point1.pos.y(), point2.pos.y() ) ) ) );
+                                                          QMIN( point1.pos.y(), point2.pos.y() ) ),
+                                                  QPoint( QMAX( point1.pos.x(), point2.pos.x() ),
+                                                          QMAX( point1.pos.y(), point2.pos.y() ) ) ) );
                 }
             }
         }
@@ -244,18 +244,18 @@ void KSpreadPaperLayout::slotOk()
       
       if ( pl.format == PG_CUSTOM )
       {
-        sheet->setPaperHeight(pl.ptWidth);
-        sheet->setPaperWidth(pl.ptHeight);
+        sheet->setPaperWidth( qRound( POINT_TO_MM( pl.ptWidth ) *1000 ) / 1000 );
+        sheet->setPaperHeight( qRound( POINT_TO_MM( pl.ptHeight ) *1000 ) / 1000 );
       }
       
       sheet->setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop), POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom), pl.format, pl.orientation );
       
       sheet->setHeadFootLine( sheet->delocalizeHeadFootLine( hf.headLeft  ),
-                                 sheet->delocalizeHeadFootLine( hf.headMid   ),
-                                 sheet->delocalizeHeadFootLine( hf.headRight ),
-                                 sheet->delocalizeHeadFootLine( hf.footLeft  ),
-                                 sheet->delocalizeHeadFootLine( hf.footMid   ),
-                                 sheet->delocalizeHeadFootLine( hf.footRight ) );
+                              sheet->delocalizeHeadFootLine( hf.headMid   ),
+                              sheet->delocalizeHeadFootLine( hf.headRight ),
+                              sheet->delocalizeHeadFootLine( hf.footLeft  ),
+                              sheet->delocalizeHeadFootLine( hf.footMid   ),
+                              sheet->delocalizeHeadFootLine( hf.footRight ) );
       
       sheet->doc()->setUnit( unit );
 
