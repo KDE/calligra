@@ -874,7 +874,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = doc->unzoomPoint( normalPoint );
     if ( m_mousePressed ) {
-        // We need doAutoScroll() (not in KWTextFrameSet), because when moving frames etc. it could be handy
+
 	doAutoScroll();
 
         switch ( m_mouseMode ) {
@@ -1162,8 +1162,7 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
             break;
     }
 
-    repaintAll();
-    m_mousePressed = false;
+    m_mousePressed = true; // needed for the dbl-click + move feature.
 }
 
 void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
@@ -1692,14 +1691,13 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
 
 void KWCanvas::doAutoScroll()
 {
-    if ( !m_mousePressed )
+    if ( !m_mousePressed || !m_currentFrameSetEdit )
 	return;
 
     QPoint pos( mapFromGlobal( QCursor::pos() ) );
     pos = m_viewMode->viewToNormal( viewportToContents( pos ) );
 
-    if ( m_currentFrameSetEdit )
-        m_currentFrameSetEdit->doAutoScroll( pos );
+    m_currentFrameSetEdit->doAutoScroll( pos );
 
     if ( !scrollTimer->isActive() && pos.y() < 0 || pos.y() > height() )
 	scrollTimer->start( 100, FALSE );

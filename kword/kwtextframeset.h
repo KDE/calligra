@@ -58,7 +58,8 @@ public:
 
     // Convert the @p nPoint in the normal coordinate system
     // into a point (@p iPoint) in the internal qtextdoc coordinates.
-    KWFrame * normalToInternal( QPoint nPoint, QPoint &iPoint ) const;
+    // @p mouseSelection tries harder to return a value even if nPoint is out of any frame
+    KWFrame * normalToInternal( QPoint nPoint, QPoint &iPoint, bool mouseSelection = false ) const;
 
     // Convert the @p in the internal qtextdoc coordinates
     // into a point in the normal coordinate system.

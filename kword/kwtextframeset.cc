@@ -115,7 +115,7 @@ int KWTextFrameSet::availableHeight() const
     return m_availableHeight;
 }
 
-KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint ) const
+KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool mouseSelection ) const
 {
     int totalHeight = 0;
     KWFrame * copyFrame = 0L;
@@ -125,8 +125,7 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint ) cons
     {
         KWFrame *frame = frameIt.current();
         QRect frameRect = kWordDocument()->zoomRect( *frame );
-        QRect r( frameRect );
-        if ( r.contains( nPoint ) ) // both r and p are in "normal coordinates"
+        if ( frameRect.contains( nPoint ) ) // both r and p are in "normal coordinates"
         {
             // This translates the coordinates from the normal coord system
             // into the QTextDocument's coordinate system
@@ -141,6 +140,29 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint ) cons
                       << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;*/
             return frame;
         }
+        else if ( mouseSelection ) // try harder if true
+        {
+            QRect openLeftRect( frameRect );
+            openLeftRect.setX( 0 );
+            if ( openLeftRect.contains( nPoint ) )
+            {
+                // We are at the left of this frame (and not in any other frame of this frameset)
+                int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
+                iPoint.setX( 0 );
+                iPoint.setY( nPoint.y() - offsetY );
+                return frame;
+            }
+            QRect openTopRect( frameRect );
+            openTopRect.setY( 0 );
+            if ( openTopRect.contains( nPoint ) )
+            {
+                // We are at the top of this frame (...)
+                iPoint.setX( nPoint.x() - frameRect.left() );
+                iPoint.setY( 0 );
+                return frame;
+            }
+        }
+
         if ( frame->getNewFrameBehaviour() != Copy )
             copyFrame = 0L;
         else if ( !copyFrame )
@@ -3078,8 +3100,9 @@ void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint,
         return;
     }
     QPoint iPoint;
-    if ( textFrameSet()->normalToInternal( nPoint, iPoint ) )
+    if ( textFrameSet()->normalToInternal( nPoint, iPoint, true ) )
         mousePos = iPoint;
+    // The rest is done in doAutoScroll
 }
 
 void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent *, const QPoint &, const KoPoint & )
@@ -3260,11 +3283,14 @@ void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
     if ( mightStartDrag )
         return;
     QPoint iPoint;
-    if ( !textFrameSet()->normalToInternal( pos, iPoint ) )
+    if ( !textFrameSet()->normalToInternal( pos, iPoint, true ) )
         return;
+
     hideCursor();
     QTextCursor oldCursor = *cursor;
     placeCursor( iPoint );
+
+    // Double click + mouse still down + moving the mouse selects full words.
     if ( inDoubleClick ) {
         QTextCursor cl = *cursor;
         cl.gotoWordLeft();

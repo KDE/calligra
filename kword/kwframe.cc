@@ -677,7 +677,15 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->restore();
 
                 // Now draw the frame border
-                drawFrameBorder( p, frame, settingsFrame, crect, viewMode );
+                // Clip frames on top if onlyChanged, but don't clip to the frame
+                reg = frameClipRegion( p, 0L, crect, viewMode, onlyChanged );
+                if ( !reg.isEmpty() )
+                {
+                    p->save();
+                    p->setClipRegion( reg );
+                    drawFrameBorder( p, frame, settingsFrame, crect, viewMode );
+                    p->restore();
+                }
             }
         }
         if ( frame->getNewFrameBehaviour() != Copy )
@@ -1023,8 +1031,9 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
                                      KWViewMode * viewMode, bool onlyChanged )
 {
     KWDocument * doc = kWordDocument();
-    QRect rc = painter->xForm( viewMode->normalToView( doc->zoomRect( *frame ) ) );
-    rc &= painter->xForm( crect ); // intersect
+    QRect rc = painter->xForm( crect );
+    if ( frame )
+        rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( *frame ) ) ); // intersect
     //kdDebug(32002) << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
     //               << " clip region rect=" << DEBUGRECT(rc)
     //               << " rc.isEmpty()=" << rc.isEmpty() << endl;
