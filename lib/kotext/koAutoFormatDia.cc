@@ -209,6 +209,11 @@ void KoAutoFormatDia::setupTab1()
     cbIgnoreDoubleSpace->setChecked( m_autoFormat.getConfigIgnoreDoubleSpace());
     ( void )new QWidget( tab1 );
 
+    cbRemoveSpaceBeginEndLine=new QCheckBox( tab1 );
+    cbRemoveSpaceBeginEndLine->setText( i18n( "Remove space at the begin and end line" ) );
+    cbRemoveSpaceBeginEndLine->resize( cbRemoveSpaceBeginEndLine->sizeHint() );
+    cbRemoveSpaceBeginEndLine->setChecked( m_autoFormat.getConfigRemoveSpaceBeginEndLine());
+    ( void )new QWidget( tab1 );
 
     slotChangeState(state);
 }
@@ -430,6 +435,8 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configAutoDetectUrl( cbDetectUrl->isChecked() );
 
     m_docAutoFormat->configIgnoreDoubleSpace( cbIgnoreDoubleSpace->isChecked());
+    m_docAutoFormat->configRemoveSpaceBeginEndLine( cbRemoveSpaceBeginEndLine->isChecked());
+
 
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );

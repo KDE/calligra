@@ -66,6 +66,7 @@ void KoAutoFormat::readConfig()
     m_advancedAutoCorrect = config.readBoolEntry( "AdvancedAutocorrect", true );
     m_autoDetectUrl = config.readBoolEntry("AutoDetectUrl",false);
     m_ignoreDoubleSpace = config.readBoolEntry("IgnoreDoubleSpace",false);
+    m_removeSpaceBeginEndLine = config.readBoolEntry("RemoveSpaceBeginEndLine",false);
 
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
     m_typographicQuotes.begin = begin[0];
@@ -147,6 +148,7 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "AutoDetectUrl",m_autoDetectUrl);
 
     config.writeEntry( "IgnoreDoubleSpace",m_ignoreDoubleSpace );
+    config.writeEntry( "RemoveSpaceBeginEndLine",m_removeSpaceBeginEndLine );
 
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
@@ -230,23 +232,25 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
 
     if( ch.isSpace())
     {
-        if ( index > 0 )
+        if ( m_autoDetectUrl && index > 0 )
         {
-            if( m_autoDetectUrl)
+            QString word;
+            KoTextString *s = parag->string();
+            for ( int i = index - 1; i >= 0; --i )
             {
-                QString word;
-                KoTextString *s = parag->string();
-                for ( int i = index - 1; i >= 0; --i )
-                {
-                    QChar ch = s->at( i ).c;
-                    if ( ch.isSpace() )
-                        break;
-                    word.prepend( ch );
-                }
-
-                doAutoDetectUrl( textEditCursor, parag,index, word, txtObj );
+                QChar ch = s->at( i ).c;
+                if ( ch.isSpace() )
+                    break;
+                word.prepend( ch );
             }
+            doAutoDetectUrl( textEditCursor, parag,index, word, txtObj );
         }
+    }
+
+    if( ch =='\n' )
+    {
+        if( m_removeSpaceBeginEndLine && index > 1)
+            doRemoveSpaceBeginEndLine( textEditCursor, parag, txtObj );
     }
 
     //kdDebug() << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
@@ -469,6 +473,57 @@ void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *pa
 
 }
 
+void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+{
+    KoTextString *s = parag->string();
+    bool refreshCursor=false;
+    for ( int i = 0 ; i < parag->string()->length() ; i++ )
+    {
+        QChar ch = s->at( i ).c;
+        if( !ch.isSpace())
+        {
+            if( i == 0 )
+                break;
+            KoTextDocument * textdoc = parag->textDocument();
+            QTextCursor cursor( parag->document() );
+            cursor.setParag( parag );
+            cursor.setIndex( 0 );
+            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            cursor.setIndex( i );
+            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+            txtObj->removeSelectedText( textEditCursor, KoTextObject::HighlightSelection,QString::null, false  );
+            refreshCursor=true;
+            break;
+        }
+    }
+    for ( int i = parag->string()->length()-1; i >= 0; --i )
+    {
+        QChar ch = s->at( i ).c;
+        if( !ch.isSpace())
+        {
+            if( i == parag->string()->length()-1 )
+                break;
+            KoTextDocument * textdoc = parag->textDocument();
+            QTextCursor cursor( parag->document() );
+            cursor.setParag( parag );
+            cursor.setIndex( i );
+            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            cursor.setIndex( parag->string()->length() );
+            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+            txtObj->removeSelectedText( textEditCursor, KoTextObject::HighlightSelection,QString::null, false  );
+            refreshCursor=true;
+            break;
+        }
+    }
+    if( refreshCursor)
+    {
+        txtObj->emitHideCursor();
+        textEditCursor->setParag( parag->next() );
+        //textEditCursor->cursorgotoRight();
+        txtObj->emitShowCursor();
+    }
+}
+
 bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch )
 {
     if( m_ignoreDoubleSpace && ch.isSpace() && index > 1 )
@@ -509,6 +564,11 @@ void KoAutoFormat::configAutoDetectUrl(bool _au)
 void KoAutoFormat::configIgnoreDoubleSpace( bool _ids)
 {
     m_ignoreDoubleSpace=_ids;
+}
+
+void KoAutoFormat::configRemoveSpaceBeginEndLine( bool _space)
+{
+    m_removeSpaceBeginEndLine=_space;
 }
 
 bool KoAutoFormat::isUpper( const QChar &c )

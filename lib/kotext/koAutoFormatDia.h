@@ -100,7 +100,7 @@ protected:
     QWidget *tab2;
     QWidget *tab3;
     QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper, *cbDetectUrl,
-        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace;
+        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine;
     QPushButton *pbQuote1, *pbQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDefault,
                 *pbSpecialChar1, *pbSpecialChar2;
     KCharSelect *charselect;

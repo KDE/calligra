@@ -97,6 +97,7 @@ public:
     void configAdvancedAutocorrect( bool _aa );
     void configAutoDetectUrl(bool _au);
     void configIgnoreDoubleSpace( bool _ids);
+    void configRemoveSpaceBeginEndLine( bool _space);
 
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
@@ -112,6 +113,8 @@ public:
     bool getConfigIgnoreDoubleSpace() const
     { return m_ignoreDoubleSpace;}
 
+    bool getConfigRemoveSpaceBeginEndLine() const
+    { return m_removeSpaceBeginEndLine;}
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -164,6 +167,7 @@ protected:
     void buildMaxLen();
 
     void doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
+    void doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
 
 private:
     KoDocument *m_doc;
@@ -172,7 +176,7 @@ private:
 
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
-    bool m_autoDetectUrl, m_ignoreDoubleSpace;
+    bool m_autoDetectUrl, m_ignoreDoubleSpace, m_removeSpaceBeginEndLine;
     TypographicQuotes m_typographicQuotes;
 
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;
