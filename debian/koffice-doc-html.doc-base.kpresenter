@@ -6,7 +6,7 @@ Abstract: KPresenter is the presentations program in the KOffice suite of
 Section: Apps/Tools
 
 Format: HTML
-Index: /usr/share/doc/kpresenter/html/index.html
-Files: /usr/share/doc/kpresenter/html/*.html
+Index: /usr/share/doc/kde/HTML/en/kpresenter/index.html
+Files: /usr/share/doc/kde/HTML/en/kpresenter/*.html
 
   

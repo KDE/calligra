@@ -5,7 +5,7 @@ Abstract: This Handbook describes Kontour Version 0.7.1 by Kai-Uwe Sattler.
 Section: Apps/Graphics
 
 Format: HTML
-Index: /usr/share/doc/kontour/html/index.html
-Files: /usr/share/doc/kontour/html/*.html
+Index: /usr/share/doc/kde/HTML/en/kontour/index.html
+Files: /usr/share/doc/kde/HTML/en/kontour/*.html
 
   
