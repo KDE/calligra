@@ -144,6 +144,7 @@ void ZoomTool::zoomOut (Canvas* cnv)
 
 void ZoomTool::zoomInRegion(int x1, int y1, int x2, int y2)
 {
+
    int tmp;
 
    if (x2<x1)
@@ -182,9 +183,10 @@ void ZoomTool::zoomInRegion(int x1, int y1, int x2, int y2)
       zoom = KILLU_ZOOM_MAX;
    else if(zoom < KILLU_ZOOM_MIN)
       zoom = KILLU_ZOOM_MIN;
-   canvas->setZoomFactor(zoom);
 
-   //canvas->scrollView()->center(x,y);
+   kdDebug()<<"ZoomTool::zoomInRegion() area ( "<<x1<<" | "<<y1<<" ) to ( "<<x2<<" | "<< y2<<" )"<<endl;
+
+   canvas->setZoomFactor(zoom,(x2+x1)/2,(y2+y1)/2);
 }
 
 void ZoomTool::zoomOutRegion(int x1, int y1, int x2, int y2)
@@ -225,8 +227,7 @@ void ZoomTool::zoomOutRegion(int x1, int y1, int x2, int y2)
    else if(zoom < KILLU_ZOOM_MIN)
       zoom = KILLU_ZOOM_MIN;
 
-   canvas->setZoomFactor(zoom);
-
-   //canvas->scrollView()->center(x,y);
+   canvas->setZoomFactor(zoom,(x2+x1)/2,(y2+y1)/2);
+   //canvas->setZoomFactor(zoom);
 }
 

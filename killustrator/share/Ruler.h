@@ -45,7 +45,8 @@ public:
 public slots:
   void setZoomFactor (float zf, int xpos, int ypos);
   void updatePointer (int x, int y);
-  void updateVisibleArea (int xpos, int ypos);
+  //void updateVisibleArea (int xpos, int ypos);
+  void updateVisibleArea (const QRect& area);
 
   void hide ();
   void show ();

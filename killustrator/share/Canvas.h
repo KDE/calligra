@@ -139,8 +139,9 @@ protected:
   //(this doesn't mean you have to call all of them), alex
   void adjustPaperArea1();
   void adjustScrollBarRanges2();
-  void adjustVisibleArea3();
-  void adjustRelativePaperArea4();
+  void adjustScrollBarPositions3(int x, int y);
+  void adjustVisibleArea4();
+  void adjustRelativePaperArea5();
   
   float snapXPositionToGrid (float pos);
   float snapYPositionToGrid (float pos);
@@ -165,7 +166,8 @@ signals:
   void rightButtonAtSelectionClicked (int x, int y);
   void rightButtonClicked (int x, int y);
 
-  void visibleAreaChanged (int x, int y);
+  void visibleAreaChanged (const QRect& area);
+  //void visibleAreaChanged (int x, int y);
   void zoomFactorChanged (float zoom);
 
   void mousePositionChanged (int x, int y);
