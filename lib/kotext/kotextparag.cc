@@ -389,15 +389,14 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         // New solution: occupy the full width
         r.setLeft( KoBorder::zoomWidthX( m_layout.leftBorder.ptWidth, zh, 0 ) );
         // ## documentWidth breaks with variable width. Maybe use currentDrawnFrame() ?
-        r.setRight( documentWidth() - 2 - KoBorder::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 ) );
+        r.setRight( zh->layoutUnitToPixelX(documentWidth()) - 2 - KoBorder::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 ) );
         r.setTop( lineY( 0 ) );
         int lastLine = lines() - 1;
-        r.setBottom( static_cast<int>( lineY( lastLine ) + lineHeight( lastLine ) ) );
+        r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) ));
         // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
         // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
         if ( m_layout.bottomBorder.ptWidth > 0 )
-            r.rBottom() -= lineSpacing( lastLine ) + 1;
-
+            r.rBottom() -= zh->layoutUnitToPixelY(lineSpacing( lastLine )) + 1;
         //kdDebug() << "KoTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
         KoBorder::drawBorders( painter, zh, r,
                                m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
