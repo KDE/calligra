@@ -112,6 +112,8 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
     {
       /* an object will be selected */
       state = S_Pick;
+      canvas->setCursor(Qt::SizeAllCursor);
+      ctype = C_Move;
       if(!shiftFlag)
         page->unselectAllObjects();
       /* add the object to the selection */
@@ -167,7 +169,7 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
     {
       if(ctype == C_Move)
         state = S_Translate;
-      if(ctype == C_Size)
+      else if(ctype == C_Size)
         state = S_Scale;
       else
       {
@@ -358,8 +360,6 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
         xpos = p1.x();
     }
     translate(page, xpos - p1.x(), ypos - p1.y(), true, true);
-    canvas->setCursor(Qt::arrowCursor);
-    ctype = C_Arrow;
   }
   else if(state == S_Scale)
   {
