@@ -17,6 +17,7 @@
 
 class KPresenterDoc;
 class KPresenterView;
+class DCOPObject;
 
 #include <koDocument.h>
 #include <koQueryTypes.h>
@@ -191,7 +192,7 @@ public:
     void insertPie( QRect, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
 		    BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le, bool ,int, int, int diffx, int diffy );
     void insertText( QRect, int, int, QString text = QString::null, KPresenterView *_view = 0L );
-    void insertAutoform( QRect, QPen, QBrush, LineEnd, LineEnd, FillType, QColor, 
+    void insertAutoform( QRect, QPen, QBrush, LineEnd, LineEnd, FillType, QColor,
 			 QColor, BCType, QString, bool ,int, int, int, int );
 
     // get list of pages and objects
@@ -301,7 +302,8 @@ public:
     QValueList<int> getSlides( int currPgNum );
 
     void copyPage( int num );
-    
+    virtual DCOPObject* dcopObject();
+
 signals:
 
     // document modified
@@ -386,7 +388,7 @@ protected:
     bool _clean;
     int objStartY, objStartNum;
     bool docAlreadyOpen;
-    
+
     int _orastX, _orastY;
     PresSpeed presSpeed;
 
@@ -414,7 +416,7 @@ protected:
     PresentSlides presentSlides;
     QMap<int,bool> selectedSlides;
     QValueList<KPPixmapDataCollection::Key> usedPixmaps;
-
+    DCOPObject *dcop;
 
 };
 

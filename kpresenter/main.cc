@@ -22,6 +22,8 @@
 
 #include <koApplication.h>
 
+#include <dcopclient.h>
+
 extern "C"
 {
     void* init_kpresenter();
@@ -33,9 +35,12 @@ int main( int argc, char **argv )
 
     init_kpresenter();
 	
+    app.dcopClient()->attach();
+    app.dcopClient()->registerAs( "kpresenter" );
+
     KPresenterShell* shell = new KPresenterShell;
 
-    KPresenterDoc* doc = new KPresenterDoc;
+    KPresenterDoc* doc = new KPresenterDoc( 0, "Document" );
     doc->initDoc();
     shell->setRootPart( doc );
 

@@ -78,6 +78,8 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "KPresenterDocIface.h"
+
 /******************************************************************/
 /* class KPresenterChild					  */
 /******************************************************************/
@@ -110,6 +112,7 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
       _hasFooter( false ), urlIntern()
 {
     // init
+    dcop = 0;
     docAlreadyOpen = FALSE;
     _clean = true;
     _objectList = new QList<KPObject>;
@@ -160,9 +163,21 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
 
     QObject::connect( &_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
 		      this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
+
+  if ( name )
+      dcopObject();
 }
 
-/*====================== destructor ==============================*/
+/*==============================================================*/
+DCOPObject* KPresenterDoc::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPresenterDocIface( this );
+
+    return dcop;
+}
+
+/*==============================================================*/
 KPresenterDoc::~KPresenterDoc()
 {
 //    sdeb( "KPresenterDoc::~KPresenterDoc()\n" );
@@ -511,9 +526,9 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		urlIntern = KURL( ( *it ).m_strValue.c_str() ).path();
 	}
     }
-    
+
     docAlreadyOpen = FALSE;
-    
+
     // PAPER
     while ( parser.open( 0L, tag ) ) {
 	KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -1291,7 +1306,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 								"*.kpr", "KPresenter",
 								FALSE );
 
-    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", 
+    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template",
 					       KPresenterFactory::global(), _template, true, false, filter,
 					       "application/x-kpresenter" );
 
@@ -3158,7 +3173,7 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 
     QString _template;
 
-    if ( KoTemplateChooseDia::chooseTemplate( "kpresenter_template", KPresenterFactory::global(), 
+    if ( KoTemplateChooseDia::chooseTemplate( "kpresenter_template", KPresenterFactory::global(),
 					      _template, true, true ) !=
 	 KoTemplateChooseDia::Cancel ) {
 	QFileInfo fileInfo( _template );
@@ -3329,7 +3344,7 @@ void KPresenterDoc::loadStream( istream &in )
 
     bool insertPage = FALSE;
     bool ok = FALSE;
-    
+
     KOMLParser::parseTag( tag.c_str(), name, lst );
     vector<KOMLAttrib>::const_iterator it = lst.begin();
     for( ; it != lst.end(); it++ ) {
@@ -3345,7 +3360,7 @@ void KPresenterDoc::loadStream( istream &in )
 
     if ( !ok )
 	return;
-    
+
     if ( !insertPage )
 	loadObjects( parser, lst, true );
     else {
@@ -3356,8 +3371,8 @@ void KPresenterDoc::loadStream( istream &in )
 	    InsertPos _insPos = dia->getInsertPos();
 	    int _page = dia->getPageNum();
 	    InsPageMode _insPageMode = dia->getInsPageMode();
-	    
-	    if ( _insPos == IP_BEFORE ) 
+	
+	    if ( _insPos == IP_BEFORE )
 		_page--;
 
 	    if ( _insPageMode == IPM_MOVE_OBJS ) {
@@ -3368,12 +3383,12 @@ void KPresenterDoc::loadStream( istream &in )
 		}
 	    }
 
-	    if ( _insPos == IP_BEFORE ) 
+	    if ( _insPos == IP_BEFORE )
 		_page++;
 	    pasting = FALSE;
 	    _clean = FALSE;
 
-	    if ( _insPos == IP_AFTER ) 
+	    if ( _insPos == IP_AFTER )
 		_page++;
 	    objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
 	    docAlreadyOpen = TRUE;
@@ -3386,7 +3401,7 @@ void KPresenterDoc::loadStream( istream &in )
 	}
 	delete dia;
     }
-    
+
     repaint( false );
     m_bModified = true;
 }
@@ -3587,7 +3602,7 @@ int KPresenterDoc::getPenBrushFlags()
 	}
     }
 
-    if ( flags == 0 ) 
+    if ( flags == 0 )
 	flags = StyleDia::SdAll;
     return flags;
 }
@@ -3722,13 +3737,13 @@ void KPresenterDoc::copyPage( int num )
     num--;
     if ( num < 0 || num >= (int)_backgroundList.count() )
 	return;
-    
+
     QClipboard *cb = QApplication::clipboard();
     string clip_str;
     tostrstream out( clip_str );
     KPObject *kpobject = 0;
     KPBackGround *kpbackground = _backgroundList.at( num );
-    
+
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org"
 	<< "\" editor=\"" << "KPresenter"
@@ -3745,7 +3760,7 @@ void KPresenterDoc::copyPage( int num )
 	if ( getPageOfObj( i, 0, 0 ) == num + 1 ) {
 	    out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
 	    int y = kpobject->getOrig().y();
-	    kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() - 
+	    kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() -
 			      kpbackground->getSize().height() * num );
 	    kpobject->save( out );
 	    kpobject->setOrig( kpobject->getOrig().x(), y );

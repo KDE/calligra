@@ -25,7 +25,8 @@ kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
 	commandhistory.cc preview.cc gotopage.cc footer_header.cc main.cc \
-	kpresenter_shell.cc kpresenter_factory.cc
+	kpresenter_shell.cc kpresenter_factory.cc \
+	KPresenterDocIface_skel.cpp KPresenterDocIface.cc
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h ktextobject.h styledia.h \
@@ -44,7 +45,8 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
 		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h penbrushcmd.cc \
 		commandhistory.h preview.h gotopage.h webpresentation.h \
-		footer_header.h kpresenter_shell.h kpresenter_factory.h
+		footer_header.h kpresenter_shell.h kpresenter_factory.h \
+		KPresenterDocIface.h
 
 METASOURCES =	kpresenter_doc.moc kpresenter_view.moc \
 		page.moc ktextobject.moc backdia.moc styledia.moc \
@@ -56,8 +58,9 @@ METASOURCES =	kpresenter_doc.moc kpresenter_view.moc \
 		commandhistory.moc gotopage.moc webpresentation.moc \
 		footer_header.moc kpresenter_shell.moc kpresenter_factory.moc
 
-# idl_DATA =	kpresenter.idl
-# kpresenter.h: $(top_builddir)/lib/kofficecore/koffice.idl
+KPresenterDocIface.kidl: KPresenterDocIface.h
+	( kidl KPresenterDocIface.h >KPresenterDocIface.kidl; kidl2cpp --no-stub KPresenterDocIface.kidl )
+KPresenterDocIface_skel.cpp: KPresenterDocIface.kidl
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

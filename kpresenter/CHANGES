@@ -484,3 +484,4 @@ Reggie, 24.10.1999:
 ------------------
 - Rewrote pen/brush (style) dialog
 - Lots of fixes
+- Started makeing KPresenter scriptable
