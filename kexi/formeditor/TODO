@@ -1,5 +1,6 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
+* KMainWindow support : Make an action editor + a toolbar editor (a in MozillaFirebird ?) + a menu editor
 * Automatically set label name to the text
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):
@@ -16,7 +17,6 @@
 
 ****** Bugfixes/Changes : *****
 * Add a grouping ability to Widget
-* Make actions toggable (with KRadioAction)
 
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
 * Move tab between two QTabWidgets by drag'n drop
@@ -57,3 +57,5 @@
 * Manage label buddies using a popup menu (24/05/04)
 * dragging with CTRL key can cause object's copying (25/05/04)
 * Create a PixmapCollection with an editor which allow to choose pixmaps by path or from KDE icons, no inline saving of pixmaps (9/06/04)
+* Make actions toggable (with KToggleAction) (js 11/06/04)
+* Make FormWidget pure virtual (17/06/04)

@@ -19,6 +19,7 @@
 
 #include <qobjectlist.h>
 #include <qlayout.h>
+#include <qpainter.h>
 
 #include <kdebug.h>
 
@@ -59,7 +60,7 @@ void
 KexiDBForm::initForm()
 {
 	if(!m_preview)
-		m_item.form()->createToplevel(this);
+		m_item.form()->createToplevel(this, this);
 	else
 	{
 		m_item.form()->createToplevel(m_preview);
@@ -148,6 +149,70 @@ KexiDBForm::storeData()
 	storeDataBlock(data);//, QString::number(m_id));
 
 	return true;
+}
+
+//repaint all children widgets
+static void repaintAll(QWidget *w)
+{
+	QObjectList *list = w->queryList("QWidget");
+	QObjectListIt it(*list);
+	for (QObject *obj; (obj=it.current()); ++it ) {
+		static_cast<QWidget*>(obj)->repaint();
+	}
+	delete list;
+}
+
+void
+KexiDBForm::drawRect(const QRect& r, int type)
+{
+	QPainter p;
+	p.begin(this, true);
+	bool unclipped = testWFlags( WPaintUnclipped );
+	setWFlags( WPaintUnclipped );
+
+	if (prev_rect.isValid()) {
+		//redraw prev. selection's rectangle
+		p.drawPixmap( QPoint(prev_rect.x()-2, prev_rect.y()-2), buffer, QRect(prev_rect.x()-2, prev_rect.y()-2, prev_rect.width()+4, prev_rect.height()+4));
+	}
+	p.setBrush(QBrush::NoBrush);
+	if(type == 1) // selection rect
+		p.setPen(QPen(white, 1, Qt::DotLine));
+	else if(type == 2) // insert rect
+		p.setPen(QPen(white, 2));
+	p.setRasterOp(XorROP);
+	p.drawRect(r);
+	prev_rect = r;
+
+	if (!unclipped)
+		clearWFlags( WPaintUnclipped );
+	p.end();
+}
+
+void
+KexiDBForm::initRect()
+{
+	repaintAll(this);
+	buffer.resize( width(), height() );
+	buffer = QPixmap::grabWindow( winId() );
+	prev_rect = QRect();
+}
+
+void
+KexiDBForm::clearRect()
+{
+	QPainter p;
+	p.begin(this, true);
+	bool unclipped = testWFlags( WPaintUnclipped );
+	setWFlags( WPaintUnclipped );
+
+	//redraw entire form surface
+	p.drawPixmap( QPoint(0,0), buffer, QRect(0,0,buffer.width(), buffer.height()) );
+
+	if (!unclipped)
+		clearWFlags( WPaintUnclipped );
+	p.end();
+
+	repaintAll(this);
 }
 
 KexiDBForm::~KexiDBForm()

@@ -22,7 +22,7 @@
 #ifndef KFORMDESIGNERFORM_H
 #define KFORMDESIGNERFORM_H
 
-
+#include <qwidget.h>
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qpixmap.h>
@@ -47,6 +47,36 @@ class ObjectTree;
 class ObjectTreeItem;
 typedef QPtrList<ObjectTreeItem> ObjectTreeC;
 
+//! Base (virtual) class for all form widgets
+class KFORMEDITOR_EXPORT FormWidget
+{
+	public:
+		FormWidget() {;}
+		virtual void drawRect(const QRect& r, int type) = 0;
+		virtual void initRect() = 0;
+		virtual void clearRect() = 0;
+};
+
+//! Helper: this widget is used to create form's surface
+class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public FormWidget
+{
+	Q_OBJECT
+
+	public:
+		FormWidgetBase(QWidget *parent = 0, const char *name = 0, int WFlags = 0)
+		: QWidget(parent, name, WFlags)  {}
+		~FormWidgetBase() {;}
+
+		void drawRect(const QRect& r, int type);
+		void initRect();
+		void clearRect();
+
+	private:
+		QPixmap buffer; //!< stores grabbed entire form's area for redraw
+		QRect prev_rect; //!< previously selected rectangle
+};
+
+
 /*!
   This class represents one form and holds the corresponding ObjectTree and Containers.
   It takes care of widget selection and pasting widgets.
@@ -68,13 +98,14 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 * /code QWidget *toplevel = new QWidget(this);
 		 *  form->createToplevel(toplevel); /endcode
 		 */
-		void	createToplevel(QWidget *container, const QString &classname="QWidget");
+		void	createToplevel(QWidget *container, FormWidget *formWidget =0, const QString &classname="QWidget");
 
 		/*!
 		 * \return the toplevel Container or 0 if there isn't any.
 		 */
 		Container			*toplevelContainer() const { return m_toplevel; }
 
+		FormWidget*		formWidget() { return m_formWidget; }
 		//! \return a pointer to this form's ObjectTree.
 		ObjectTree		*objectTree() const { return m_topTree; }
 		//! \return the FormManager parent of this form.
@@ -230,23 +261,14 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		bool			m_autoTabstops;
 
 		PixmapCollection	*m_pixcollection;
-};
+		//! This map is used to store cursors before inserting (so we can restore it later)
+		QMap<QString, QCursor>  *m_cursors;
 
-//! Helper: this widget is used to create form's surface
-class KFORMEDITOR_EXPORT FormWidget : public QWidget
-{
-	Q_OBJECT
+		FormWidget		*m_formWidget;
 
-	public:
-		FormWidget( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
-		void drawSelectionRect(const QRect& r);
-		void initSelectionRect();
-		void clearSelectionRect();
-	
-	protected:
-		QPixmap buffer; //!< stores grabbed entire form's area for redraw
-		QRect prev_rect; //!< previously selected rectangle
+		friend class FormManager;
 };
 
 }
+
 #endif

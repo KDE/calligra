@@ -60,7 +60,6 @@
 
 using namespace KFormDesigner;
 
-
 FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name=0)
    : QObject(parent, name)
 {
@@ -155,8 +154,20 @@ FormManager::insertWidget(const QString &classname)
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
+		form->m_cursors = new QMap<QString, QCursor>();
 		if (form->toplevelContainer())
 			form->toplevelContainer()->widget()->setCursor(QCursor(CrossCursor));
+		QObjectList *l = form->toplevelContainer()->widget()->queryList( "QWidget" );
+		for(QObject *o = l->first(); o; o = l->next())
+		{
+			if( ((QWidget*)o)->ownCursor() )
+			{
+				form->m_cursors->insert(o->name(), ((QWidget*)o)->cursor());
+				((QWidget*)o)->setCursor(QCursor(Qt::CrossCursor));
+			}
+
+		}
+		delete l;
 	}
 
 	m_inserting = true;
@@ -171,6 +182,15 @@ FormManager::stopInsert()
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
 		form->toplevelContainer()->widget()->unsetCursor();
+		QObjectList *l = form->toplevelContainer()->widget()->queryList( "QWidget" );
+		for(QObject *o = l->first(); o; o = l->next())
+		{
+			if( ((QWidget*)o)->ownCursor())
+				((QWidget*)o)->setCursor( (*(form->m_cursors))[o->name()] ) ;
+		}
+		delete l;
+		delete form->m_cursors;
+		form->m_cursors = 0;
 	}
 	m_inserting = false;
 	m_pointer->setChecked(true);
@@ -274,13 +294,12 @@ FormManager::createBlankForm(const QString &classname, const char *name, QWidget
 
 	Form *form = new Form(this, name);
 
-	QWidget *w=0;
 	QString n;
 
 	n = i18n("Form") + QString::number(m_count + 1);
-	w = new FormWidget(parent, n.latin1(), Qt::WDestructiveClose);
+	FormWidgetBase *w = new FormWidgetBase(parent, n.latin1(), Qt::WDestructiveClose);
 
-	form->createToplevel(w, classname);
+	form->createToplevel(w, w, classname);
 	w->setCaption(n);
 	w->setIcon(SmallIcon("form"));
 	w->resize(350, 300);
@@ -298,7 +317,7 @@ FormManager::importForm(QWidget *w, Form *form, bool preview)
 		form = new Form(this, w->name());
 
 	if(!form->toplevelContainer())
-		form->createToplevel(w, w->name());
+		form->createToplevel(w, 0, w->name());
 	w->setCaption(w->name());
 	w->setIcon(SmallIcon("kexi"));
 	w->resize(350, 300);
@@ -319,8 +338,9 @@ FormManager::loadForm(bool preview, const QString &filename)
 {
 //	QString n = "Form" + QString::number(m_count + 1);
 	Form *form = new Form(this);//, n.latin1());
-	QWidget *w = new QWidget(m_parent, 0, Qt::WDestructiveClose);
-	form->createToplevel(w);
+	//QWidget *w = new QWidget(m_parent, 0, Qt::WDestructiveClose);
+	FormWidgetBase *w = new FormWidgetBase(m_parent, 0, Qt::WDestructiveClose);
+	form->createToplevel(w, w);
 	if(!FormIO::loadForm(form, w, filename))
 	{
 		delete form;

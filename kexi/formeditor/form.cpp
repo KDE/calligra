@@ -49,6 +49,7 @@ Form::Form(FormManager *manager, const char *name)
 	m_toplevel = 0;
 	m_topTree = 0;
 	m_collection = 0;
+	m_cursors = 0;
 	m_manager = manager;
 	m_resizeHandles.setAutoDelete(true);
 	m_inter = true;
@@ -60,10 +61,11 @@ Form::Form(FormManager *manager, const char *name)
 }
 
 void
-Form::createToplevel(QWidget *container, const QString &classname)
+Form::createToplevel(QWidget *container, FormWidget *formWidget, const QString &classname)
 {
 	kdDebug() << "Form::createToplevel()" << container->name() << this->name() << endl;
 
+	m_formWidget = formWidget;
 	m_toplevel = new Container(0, container, this, name());
 	EventEater *eater = new EventEater(container, m_toplevel);
 	m_topTree = new ObjectTree(i18n("Form"), container->name(), container, eater, m_toplevel);
@@ -428,14 +430,21 @@ Form::~Form()
 	m_resizeHandles.setAutoDelete(false); // otherwise, it tries to delete widgets which doesn't exist anymore
 }
 
-//------------------
+//////  FormWidgetBase : helper widget to draw rects on top of widgets
 
-FormWidget::FormWidget( QWidget * parent, const char * name, WFlags f )
- : QWidget(parent, name, f)
+//repaint all children widgets
+static void repaintAll(QWidget *w)
 {
+	QObjectList *list = w->queryList("QWidget");
+	QObjectListIt it(*list);
+	for (QObject *obj; (obj=it.current()); ++it ) {
+		static_cast<QWidget*>(obj)->repaint();
+	}
+	delete list;
 }
 
-void FormWidget::drawSelectionRect(const QRect& r)
+void
+FormWidgetBase::drawRect(const QRect& r, int type)
 {
 	QPainter p;
 	p.begin(this, true);
@@ -444,10 +453,13 @@ void FormWidget::drawSelectionRect(const QRect& r)
 
 	if (prev_rect.isValid()) {
 		//redraw prev. selection's rectangle
-		p.drawPixmap( prev_rect.topLeft(), buffer, prev_rect );
+		p.drawPixmap( QPoint(prev_rect.x()-2, prev_rect.y()-2), buffer, QRect(prev_rect.x()-2, prev_rect.y()-2, prev_rect.width()+4, prev_rect.height()+4));
 	}
 	p.setBrush(QBrush::NoBrush);
-	p.setPen(QPen(white, 1, Qt::DotLine));
+	if(type == 1) // selection rect
+		p.setPen(QPen(white, 1, Qt::DotLine));
+	else if(type == 2) // insert rect
+		p.setPen(QPen(white, 2));
 	p.setRasterOp(XorROP);
 	p.drawRect(r);
 	prev_rect = r;
@@ -457,27 +469,17 @@ void FormWidget::drawSelectionRect(const QRect& r)
 	p.end();
 }
 
-//repaint all children widgets
-static void repaintAll(QObject *o)
-{
-	QObjectList *list = o->queryList("QWidget");
-	QObjectListIt it(*list);
-	for (QObject *obj; (obj=it.current()); ++it ) {
-		static_cast<QWidget*>(obj)->repaint();
-	}
-	delete list;
-}
-
-void FormWidget::initSelectionRect()
+void
+FormWidgetBase::initRect()
 {
 	repaintAll(this);
-//repaint(); // TODO: find a less cpu consuming solution
 	buffer.resize( width(), height() );
 	buffer = QPixmap::grabWindow( winId() );
 	prev_rect = QRect();
 }
 
-void FormWidget::clearSelectionRect()
+void
+FormWidgetBase::clearRect()
 {
 	QPainter p;
 	p.begin(this, true);

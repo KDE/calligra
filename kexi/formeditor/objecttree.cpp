@@ -93,6 +93,20 @@ ObjectTreeItem::addModProperty(const QString &property, const QVariant &oldValue
 }
 
 void
+ObjectTreeItem::addPixmapName(const QString &property, const QString &name)
+{
+	m_pixmapNames[property] = name;
+}
+
+QString
+ObjectTreeItem::pixmapName(const QString &property)
+{
+	if(m_pixmapNames.contains(property))
+		return m_pixmapNames[property];
+	return QString::null;
+}
+
+void
 ObjectTreeItem::setGridPos(int row, int col, int rowspan, int colspan)
 {
 	m_row = row;  m_col = col;

@@ -79,7 +79,7 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 		/*! The property \a prop value is now the pixmap in the PixmapCollection whose name is \a pixmapName.*/
 		void addCollectionPixmap(KexiProperty *prop, const QString pixmapName);
 		//! \return the name of the pixmap for the property whose name is \a name.
-		QString pixmapName(const QString &name);
+		QString pixmapName(const char *name);
 
 		/*! Removes all properties from the buffer and destroys them. */
 		virtual void clear();
@@ -98,7 +98,7 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 		void propertyReset(KexiPropertyBuffer &buf, KexiProperty &property);
 
 		//! This signal is emitted when the user chooses an item in the PixmapCollection
-		void collectionItemChoosed(KexiPropertyBuffer &buf, KexiProperty &property, const QString &name);
+		void collectionItemChoosed(KexiPropertyBuffer &buf, KexiProperty &property);
 
 		void destroying();
 
@@ -106,7 +106,6 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 		QString m_typeName;
 		KexiProperty::List m_list;
 		PixmapCollection  *m_collection;
-		QMap<QString, QString>  m_pixmaps;
 
 	friend class KexiProperty;
 };

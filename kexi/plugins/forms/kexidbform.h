@@ -22,6 +22,7 @@
 
 #include <kexiviewbase.h>
 #include <kexipartitem.h>
+#include <form.h>
 
 class KexiFormPart;
 class KexiFormPartItem;
@@ -42,7 +43,7 @@ namespace KFormDesigner
 /**
  * this class is a data-aware form
  */
-class KexiDBForm : public KexiViewBase
+class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 {
 	Q_OBJECT
 	Q_PROPERTY(QString DataSource READ datasource WRITE setDatasource DESIGNABLE true)
@@ -59,6 +60,10 @@ class KexiDBForm : public KexiViewBase
 
 		void initForm();
 		void loadForm();
+
+		void drawRect(const QRect& r, int type);
+		void initRect();
+		void clearRect();
 
 	protected slots:
 		void managerPropertyChanged(KexiPropertyBuffer *b);
@@ -81,6 +86,9 @@ class KexiDBForm : public KexiViewBase
 		KexiFormPartItem m_item;
 		QWidget *m_preview;
 		int m_id;
+
+		QPixmap buffer; //!< stores grabbed entire form's area for redraw
+		QRect prev_rect; //!< previously selected rectangle
 };
 
 #endif

@@ -106,16 +106,17 @@ void KexiPropertyBuffer::debug()
 void
 KexiPropertyBuffer::addCollectionPixmap(KexiProperty *prop, const QString pixmapName)
 {
-	m_pixmaps[prop->name()] = pixmapName;
-	emit collectionItemChoosed(*this, *prop, pixmapName);
+	if(!prop)  return;
+	prop->setPixmapName(pixmapName);
+	emit collectionItemChoosed(*this, *prop);
 }
 
 QString
-KexiPropertyBuffer::pixmapName(const QString &name)
+KexiPropertyBuffer::pixmapName(const char *name)
 {
-	if(!m_pixmaps.contains(name))
-		return QString::null;
-	return m_pixmaps[name];
+	if(find(name))
+		return find(name)->pixmapName();
+	return QString::null;
 }
 
 #include "kexipropertybuffer.moc"

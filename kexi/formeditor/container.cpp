@@ -50,7 +50,7 @@ void installRecursiveEventFilter(QObject *object, QObject *container)
 		return;
 	kdDebug() << "Installing recursive event filter on widget " << object->name() << " of type " << object->className() << endl;
 	object->installEventFilter(container);
-	if( ((QWidget*)object)->cursor().shape() != Qt::ArrowCursor )
+	if(((QWidget*)object)->ownCursor())
 		((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
 
 	if(!object->children())
@@ -175,31 +175,35 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
 
-			if((mev->state() == ControlButton) || (mev->state() == ShiftButton)) // multiple selection mode
+			if(((mev->state() == ControlButton) || (mev->state() == ShiftButton)) && (!m_form->manager()->inserting())) // multiple selection mode
 			{
 				if(m_selected.findRef(m_moving) != -1) // widget is already selected
 				{
 					if(m_form->selectedWidgets()->count() > 1) // we remove it from selection
 						unSelectWidget(m_moving);
 					else // the widget is the only selected, so it means we want to copy it
+					{
 						m_insertRect = m_moving->geometry();
+						if(m_form->formWidget())
+						m_form->formWidget()->initRect();
+					}
 				}
 				else // the widget is not yet selected, we add it
 					setSelectedWidget(m_moving, true);
 			}
-			else if(m_selected.count() > 1) // more than one widget selected
+			else if((m_selected.count() > 1)&& (!m_form->manager()->inserting())) // more than one widget selected
 			{
-				if(m_selected.findRef(m_moving) == -1) // widget is not selected, it becomes theonly selected widget
+				if(m_selected.findRef(m_moving) == -1) // widget is not selected, it becomes the only selected widget
 					setSelectedWidget(m_moving, false);
 				// If the widget is already selected, we do nothing (to ease widget moving, etc.)
 			}
-			else
+			else if(!m_form->manager()->inserting())
 				setSelectedWidget(m_moving, false);
 
 			m_grab = QPoint(mev->x(), mev->y());
 
 			// we are inserting a widget or drawing a selection rect in the form
-			if((s == m_container && m_form->manager()->inserting()) || (!m_toplevel))
+			if((/*s == m_container &&*/ m_form->manager()->inserting()) || (!m_toplevel))
 			{
 				int tmpx,tmpy;
 				int gridX = Form::gridX();
@@ -210,13 +214,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				tmpy*=gridX;
 
 				m_insertBegin = QPoint(tmpx, tmpy);
-				if (!m_form->manager()->inserting()) {
-					//init drawing unclipped selection rectangle
-					if (m_container->inherits("KFormDesigner::FormWidget")) {
-						QWidget *cw = static_cast<QWidget*>(m_container);
-						static_cast<KFormDesigner::FormWidget*>(cw)->initSelectionRect();
-					}
-				}
+				if(m_form->formWidget())
+					m_form->formWidget()->initRect();
 				return true;
 			}
 
@@ -229,17 +228,17 @@ Container::eventFilter(QObject *s, QEvent *e)
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
 			if(m_form->manager()->inserting()) // we insert the widget at cursor pos
 			{
+				if(m_form->formWidget())
+					m_form->formWidget()->clearRect();
 				KCommand *com = new InsertWidgetCommand(this, mev->pos());
 				m_form->addCommand(com, true);
+				return true;
 			}
 			else if(s == m_container && !m_toplevel) // we are drawing a rect to select widgets
 			{
-				m_container->repaint();
-				if (m_container->inherits("KFormDesigner::FormWidget")) {
-					//finish drawing unclipped selection rectangle: clear the surface
-					QWidget *cw = static_cast<QWidget*>(m_container);
-					static_cast<KFormDesigner::FormWidget*>(cw)->clearSelectionRect();
-				}
+				//finish drawing unclipped selection rectangle: clear the surface
+				if(m_form->formWidget())
+					m_form->formWidget()->clearRect();
 				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
 				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
 				int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
@@ -279,9 +278,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton)) // copying a widget by Ctrl+dragging
 			{
+				if(m_form->formWidget())
+					m_form->formWidget()->clearRect();
 				if(s == m_container) // should have no effect on form
 					return true;
-				m_container->repaint();
+				//m_container->repaint();
 				if(m_container->mapFromGlobal(mev->globalPos()) == m_moving->pos())
 				{
 					kdDebug() << "The widget has not been moved. No copying" << endl;
@@ -305,7 +306,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::MouseMove:
 		{
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-			if(s == m_container && m_form->manager()->inserting() && mev->state() != ControlButton) // draw the insert rect
+			if(m_form->manager()->inserting() && ((mev->state() == LeftButton) || (mev->state() == (LeftButton|ControlButton))
+			 || (mev->state() == (LeftButton|ShiftButton)) ) ) // draw the insert rect
 			{
 				int tmpx,tmpy;
 				int gridX = Form::gridX();
@@ -319,17 +321,13 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int topy = (m_insertBegin.y() < tmpy) ? m_insertBegin.y() : tmpy;
 				int botx = (m_insertBegin.x() > tmpx) ? m_insertBegin.x() : tmpx;
 				int boty = (m_insertBegin.y() > tmpy) ? m_insertBegin.y() : tmpy;
-				m_insertRect = QRect(QPoint(topx, topy), QPoint(botx, boty));
+				//m_insertRect = QRect(QPoint(topx, topy), QPoint(botx, boty));
+				m_insertRect = QRect(((QWidget*)s)->mapTo(m_container, QPoint(topx, topy)), ((QWidget*)s)->mapTo(m_container, QPoint(botx, boty)));
 
 				if(m_form->manager()->inserting() && m_insertRect.isValid())
 				{
-					QPainter p(m_container);
-					m_container->repaint(); // TODO: find a less cpu consuming solution
-					p.setBrush(QBrush::NoBrush);
-//					p.setPen(QPen(m_container->paletteForegroundColor(), 2));
-					p.setPen(QPen(white, 2));
-					p.setRasterOp(XorROP);
-					p.drawRect(m_insertRect);
+					if(m_form->formWidget())
+						m_form->formWidget()->drawRect(m_insertRect, 2);
 				}
 				return true;
 			}
@@ -341,29 +339,21 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
 				QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
 
-				if (m_container->inherits("KFormDesigner::FormWidget")) {
-					//draw unclipped selection rectangle
-					QWidget *cw = static_cast<QWidget*>(m_container);
-					static_cast<KFormDesigner::FormWidget*>(cw)->drawSelectionRect(r);
-				}
-//				m_container->drawSelectionRect(r);
+				if(m_form->formWidget())
+					m_form->formWidget()->drawRect(r, 1);
 				return true;
 			}
-			if(mev->state() == (Qt::LeftButton|Qt::ControlButton)) // draw the insert rect for the copied widget
+			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton)) // draw the insert rect for the copied widget
 			{
 				if(s == m_container)
 					return true;
-				QPainter p(m_container);
-				m_container->repaint(); // TODO: find a less cpu consuming solution
-				p.setBrush(QBrush::NoBrush);
-//				p.setPen(QPen(m_container->paletteForegroundColor(), 2, Qt::DotLine));
-				p.setPen(QPen(white, 2, Qt::DotLine));
-				p.setRasterOp(XorROP);
 				m_insertRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()));
-				p.drawRect(m_insertRect);
+
+				if(m_form->formWidget())
+					m_form->formWidget()->drawRect(m_insertRect, 2);
 				return true;
 			}
-			else if(mev->state() == Qt::LeftButton) // we are dragging the widget(s) to move it
+			else if(mev->state() == Qt::LeftButton && !m_form->manager()->inserting()) // we are dragging the widget(s) to move it
 			{
 				QWidget *w = m_moving;
 				if(!m_toplevel && w == m_container) // no effect for form
@@ -459,7 +449,7 @@ Container::setSelectedWidget(QWidget *w, bool add)
 	QWidget *wtmp = w;
 	wtmp->raise();
 	while (wtmp && wtmp->parentWidget() && static_cast<QObject*>(wtmp)!=m_form && !wtmp->inherits("KFormDesigner::FormWidget")
-		&& static_cast<QObject*>(wtmp->parentWidget())!=this && static_cast<QObject*>(wtmp->parentWidget())!=m_form) 
+		&& static_cast<QObject*>(wtmp->parentWidget())!=this && static_cast<QObject*>(wtmp->parentWidget())!=m_form)
 	{
 		wtmp = wtmp->parentWidget();
 		wtmp->raise();
@@ -826,22 +816,5 @@ Container::~Container()
 {
 	kdDebug() << " Container being deleted this == " << name() << endl;
 }
-
-//--------------
-
-/*
-void ContainerWidget::drawSelectionRect(const QRect& r)
-{
-	QPainter p(m_container);
-	bool unclipped = testWFlags( WPaintUnclipped );
-	setWFlags( WPaintUnclipped );
-	m_container->repaint(); // TODO: find a less cpu consuming solution
-	p.setBrush(QBrush::NoBrush);
-	p.setPen(QPen(white, 1, Qt::DotLine));
-	p.setRasterOp(XorROP);
-	p.drawRect(r);
-	if (!unclipped)
-		clearWFlags( WPaintUnclipped );
-}*/
 
 #include "container.moc"

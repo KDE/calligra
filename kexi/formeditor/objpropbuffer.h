@@ -82,6 +82,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void    slotResetProperty(KexiPropertyBuffer &buff, KexiProperty &prop);
 		//! This slot is called when the watched widget is destroyed. Resets the buffer.
 		void    widgetDestroyed();
+		void    storePixmapName(KexiPropertyBuffer &, KexiProperty &);
 
 	signals:
 		/*! This signal is emitted when the name of the widget is modified. \a oldname is the name of the widget before the
@@ -91,17 +92,17 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		/*! This signal is emitted when a property was changed ( with changeProperty() ). \a obj is the widget concerned, \a property
 		  is the name of the modified property, and \a v is the new value of this property.
 		 */
-		void	propertyChanged(QObject *obj, const QString &property, const QVariant &v);
+		void	propertyChanged(QWidget *widg, const QString &property, const QVariant &v);
 
 	protected:
 		/*! This function is used to filter the properties to be shown (ie not show "caption" if the widget isn't toplevel).
 		   \return true if the property should be shown. False otherwise.
 		 */
-		bool    showProperty(const QString &property, const QString &classname=QString::null);
+		bool    showProperty(const QString &property, bool isTopLevel, const QString &classname=QString::null);
 		/*! Creates the properties related to alignment (ie hAlign, vAlign and WordBreak) for the QWidget \a obj. \a meta
 		  is the QMetaProperty for "alignment" property". ( called by setObject() )
 		 */
-		void    createAlignProperty(const QMetaProperty *meta, QObject *obj);
+		void    createAlignProperty(const QMetaProperty *meta, QWidget *obj);
 		/*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak) and modifies the "alignment" property of
 		  the widget. ( called by changeProperty() )
 		 */
@@ -119,7 +120,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void   updateOldValue(ObjectTreeItem *tree, const char *property);
 
 	private:
-		QObject		*m_object;
+		QWidget		*m_widget;
 		QStringList	m_properties;
 		QPtrList<QWidget> m_widgets;
 		bool		m_multiple;

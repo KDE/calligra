@@ -191,6 +191,10 @@ class KEXICORE_EXPORT KexiProperty
 
 		KexiPropertyBuffer*  buffer() { return m_buf; }
 
+		// For pixmaps property only
+		void  setPixmapName(const QString &name) { m_pixmapName = name; }
+		QString  pixmapName() { return m_pixmapName; }
+
 		void debug();
 	protected:
 		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue),
@@ -218,6 +222,7 @@ class KEXICORE_EXPORT KexiProperty
 		QCString		m_name;
 		QString		m_desc;
 		QVariant	m_value;
+		QString		m_pixmapName;
 		QVariant	m_oldValue;
 		class KexiPropertyListData;
 		KexiPropertyListData *m_list;

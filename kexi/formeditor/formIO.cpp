@@ -45,9 +45,13 @@
 
 #include "formIO.h"
 
-QDict<QLabel>  *KFormDesigner::FormIO::m_buddies = 0;
-
 namespace KFormDesigner {
+
+QDict<QLabel>  *FormIO::m_buddies = 0;
+//QWidgdet  *FormIO::m_currentWidget = 0;
+ObjectTreeItem   *FormIO::m_currentItem = 0;
+Form    *FormIO::m_currentForm = 0;
+bool    FormIO::m_savePixmapsInline = false;
 
 // FormIO itself
 
@@ -97,11 +101,17 @@ FormIO::saveForm(Form *form, QByteArray &dest)
 int
 FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 {
+	m_currentForm = form;
+
 	domDoc = QDomDocument("UI");
-        QDomElement uiElement = domDoc.createElement("UI");
+	QDomElement uiElement = domDoc.createElement("UI");
 	domDoc.appendChild(uiElement);
 	uiElement.setAttribute("version", "3.1");
 	uiElement.setAttribute("stdsetdef", 1);
+
+	/// We save the savePixmapsInline property in the Form
+	QDomElement inlinePix = domDoc.createElement("pixmapinproject");
+	uiElement.appendChild(inlinePix);
 
 	// We create the top class element
 	QDomElement baseClass = domDoc.createElement("class");
@@ -133,6 +143,10 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 
 	// Save the Form 's PixmapCollection
 	form->pixmapCollection()->save(uiElement);
+
+	m_currentForm = 0;
+	m_currentItem = 0;
+	//m_currentWidget = 0;
 
 	return 1;
 }
@@ -203,7 +217,13 @@ FormIO::loadForm(Form *form, QWidget *container, const QString &filename)
 int
 FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 {
+	m_currentForm = form;
+
 	QDomElement ui = inBuf.namedItem("UI").toElement();
+	// Load the pixmap collection
+	m_savePixmapsInline = ui.namedItem("pixmapinproject").isNull();
+	form->pixmapCollection()->load(ui.namedItem("collection"));
+
 	QDomElement element = ui.namedItem("widget").toElement();
 	createToplevelWidget(form, container, element);
 
@@ -233,8 +253,9 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 			kdDebug() << "FormIO: error the item is not in list " << endl;
 	}
 
-	// Load the pixmap collection
-	form->pixmapCollection()->load(ui.namedItem("collection"));
+	m_currentForm = 0;
+	//m_currentWidget = 0;
+	m_currentItem = 0;
 
 	return 1;
 }
@@ -465,7 +486,11 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 		case QVariant::Pixmap:
 		{
 			type = parent.createElement("pixmap");
-			valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
+			QString property = parentNode.attribute("name");
+			if(m_savePixmapsInline)
+				valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
+			else
+				valueE = parent.createTextNode(m_currentItem->pixmapName(property));
 			type.appendChild(valueE);
 			break;
 		}
@@ -686,7 +711,11 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	}
 	else if(type == "pixmap")
 	{
-		return loadImage(tag.ownerDocument(), text);
+		if(m_savePixmapsInline)
+			return loadImage(tag.ownerDocument(), text);
+		else if(m_currentForm)
+			return m_currentForm->pixmapCollection()->getPixmap(text);
+		else return QVariant(QPixmap());
 	}
 	else if(type == "enum")
 		return text;
@@ -721,6 +750,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		return;
 	}
 
+	m_currentItem = item;
 	// We create the "widget" element
 	QDomElement tclass = domDoc.createElement("widget");
 	parent.appendChild(tclass);
@@ -913,6 +943,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	else
 		tree = container->form()->objectTree()->lookup(wname); // the ObjectTreeItem has already been created, so we just use it
 
+	m_currentItem = tree;
 	// if we are inside a Grid, we need to insert the widget in the good cell
 	if(el.parentNode().toElement().tagName() == "grid")
 	{
@@ -965,6 +996,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 		form->objectTree()->rename(form->objectTree()->name(), wname);
 	form->setInteractiveMode(false);
 	m_buddies = new QDict<QLabel>();
+	m_currentItem = form->objectTree();
 
 	readChildNodes(form->objectTree(), form->toplevelContainer(), form->manager()->lib(), el, container);
 
@@ -982,6 +1014,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 	}
 	delete m_buddies;
 	m_buddies = 0;
+
 	form->setInteractiveMode(true);
 }
 

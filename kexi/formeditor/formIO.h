@@ -152,6 +152,12 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 	private:
 		// This dict stores buddies associations until the Form is completely loaded.
 		static QDict<QLabel>  *m_buddies;
+
+		/// Instead of having to pass these for every functions, we just store them in the class
+		//static QWidgdet  *m_currentWidget;
+		static ObjectTreeItem   *m_currentItem;
+		static Form    *m_currentForm;
+		static bool    m_savePixmapsInline;
 };
 
 }

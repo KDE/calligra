@@ -44,7 +44,7 @@ namespace KFormDesigner {
 ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent, const char *name)
  : KexiPropertyBuffer(parent, name)
 {
-	m_object = 0;
+	m_widget = 0;
 	m_manager = manager;
 	m_lastcom = 0;
 	m_lastgeocom = 0;
@@ -52,6 +52,8 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 
 	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotChangeProperty(KexiPropertyBuffer&, KexiProperty&)));
 	connect(this, SIGNAL(propertyReset(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotResetProperty(KexiPropertyBuffer&, KexiProperty&)));
+	connect(this, SIGNAL(collectionItemChoosed(KexiPropertyBuffer &, KexiProperty &)), this,
+	    SLOT(storePixmapName(KexiPropertyBuffer &, KexiProperty &)));
 }
 
 void
@@ -64,7 +66,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
 
 	if(property == "name")
-		emit nameChanged(m_object->name(), value.toString());
+		emit nameChanged(m_widget->name(), value.toString());
 
 	if((property == "hAlign") || (property == "vAlign") || (property == "wordbreak"))
 	{
@@ -83,17 +85,17 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 				m_lastcom->setValue(value);
 			else if(!m_undoing) // we are not already undoing -> avoid recursion
 			{
-				m_lastcom = new PropertyCommand(this, QString(m_object->name()), m_object->property(property.latin1()), value, prop.name());
+				m_lastcom = new PropertyCommand(this, QString(m_widget->name()), m_widget->property(property.latin1()), value, prop.name());
 				m_manager->activeForm()->addCommand(m_lastcom, false);
 			}
 
 			// If the property is changed, we add it in ObjectTreeItem modifProp
-			ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_object->name());
+			ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widget->name());
 			if((*this)[property.latin1()]->changed())
-				tree->addModProperty(property, m_object->property(property.latin1()));
+				tree->addModProperty(property, m_widget->property(property.latin1()));
 
-			m_object->setProperty(property.latin1(), value);
-			emit propertyChanged(m_object, property, value);
+			m_widget->setProperty(property.latin1(), value);
+			emit propertyChanged(m_widget, property, value);
 		}
 		else
 		{
@@ -118,7 +120,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 					tree->addModProperty(property, w->property(property.latin1()));
 
 				w->setProperty(property.latin1(), value);
-				emit propertyChanged((QObject*)w, property, value);
+				emit propertyChanged(w, property, value);
 			}
 		}
 	}
@@ -153,12 +155,11 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 			w = w->parentWidget();
 	}
 
-	QObject *obj = (QObject*)widg;
-	if(obj==m_object && !m_multiple)
+	if(w == m_widget && !m_multiple)
 		return;
 
 	m_widgets.clear();
-	m_widgets.append(widg);
+	m_widgets.append(w);
 	m_multiple = false;
 	m_lastcom = 0;
 	m_lastgeocom = 0;
@@ -166,26 +167,27 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	checkModifiedProp();
 	kdDebug() << "loading object = " << widg->name() << endl;
 
-	if(m_object)
-		m_object->removeEventFilter(this);
+	if(m_widget)
+		m_widget->removeEventFilter(this);
 
 	//luci, TODO: m_manager->editor()->reset(false);
 	m_manager->showPropertyBuffer(0);
 	clear();
 
-	m_object = obj;
-	QStrList pList = obj->metaObject()->propertyNames(true);
+	m_widget = w;
+	QStrList pList = m_widget->metaObject()->propertyNames(true);
+	bool isTopLevel = m_manager->isTopLevel(m_widget);
 
 	int count = 0;
 	QStrListIterator it(pList);
 	// We go through the list of properties
 	for(; it.current() != 0; ++it)
 	{
-		count = obj->metaObject()->findProperty(*it, true);
-		const QMetaProperty *meta = obj->metaObject()->property(count, true);
-		if(meta->designable(obj))
+		count = m_widget->metaObject()->findProperty(*it, true);
+		const QMetaProperty *meta = m_widget->metaObject()->property(count, true);
+		if(meta->designable(m_widget))
 		{
-			if(!showProperty(meta->name()))
+			if(!showProperty(meta->name(), isTopLevel))
 				continue;
 
 			QString desc = descFromName(meta->name());
@@ -194,19 +196,19 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 				QStrList keys = meta->enumKeys();
 				if(QString(meta->name()) == QString("alignment"))
 				{
-					createAlignProperty(meta, obj);
+					createAlignProperty(meta, m_widget);
 					break;
 				}
 				else
 				{
 					QStringList values = descList(QStringList::fromStrList(keys));
 
-					add(new KexiProperty(meta->name(), meta->valueToKey(obj->property(meta->name()).toInt()),
+					add(new KexiProperty(meta->name(), meta->valueToKey(m_widget->property(meta->name()).toInt()),
 						QStringList::fromStrList(keys), values, desc));
 				}
 			}
 			else
-				add(new KexiProperty(meta->name(), obj->property(meta->name()), desc));
+				add(new KexiProperty(meta->name(), m_widget->property(meta->name()), desc));
 		}
 
 		if(QString(meta->name()) == "name")
@@ -227,15 +229,15 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 
 	m_manager->showPropertyBuffer(this);
 
-	obj->installEventFilter(this);
-	connect(obj, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
+	m_widget->installEventFilter(this);
+	connect(m_widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
 }
 
 void
 ObjectPropertyBuffer::widgetDestroyed()
 {
-	m_object = 0;
-	kdDebug() << "ObjecPropBuffer :: object is being destroyed, reseting m_object " << endl;
+	m_widget = 0;
+	kdDebug() << "ObjecPropBuffer :: object is being destroyed, reseting m_widget " << endl;
 }
 
 void
@@ -249,15 +251,16 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 	m_lastgeocom = 0;
 	m_properties.clear();
 	QString classn;
-	if(m_object->className() == widg->className())
-		classn = m_object->className();
+	if(m_widget->className() == widg->className())
+		classn = m_widget->className();
 
 	//luci, TODO change back: m_manager->editor()->clear();
 
+	bool isTopLevel = m_manager->isTopLevel(widg);
 	QAsciiDictIterator<KexiProperty> it(*this);
 	for(; it.current(); ++it)
 	{
-		if(!showProperty(it.currentKey(), classn))
+		if(!showProperty(it.currentKey(), isTopLevel, classn))
 			(*this)[it.currentKey()]->setVisible(false);
 	}
 
@@ -265,13 +268,13 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 }
 
 bool
-ObjectPropertyBuffer::showProperty(const QString &property, const QString &classname)
+ObjectPropertyBuffer::showProperty(const QString &property, bool isTopLevel, const QString &classname)
 {
 	if(!m_multiple)
 	{
 		if(m_properties.isEmpty())
 		{
-			if(!m_manager->isTopLevel((QWidget*)m_object))
+			if(!isTopLevel)
 				m_properties << "caption" << "icon" << "sizeIncrement" << "iconText";
 		} // we don't show these properties for a non-toplevel widget
 
@@ -292,13 +295,13 @@ ObjectPropertyBuffer::showProperty(const QString &property, const QString &class
 			return false;
 	}
 
-	return m_manager->lib()->showProperty(m_object->className(), (QWidget*)m_object, property, m_multiple);
+	return m_manager->lib()->showProperty(m_widget->className(), m_widget, property, m_multiple);
 }
 
 bool
 ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 {
-	if(o==m_object && !m_multiple)
+	if(o==m_widget && !m_multiple)
 	{
 		if((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move))
 		{
@@ -334,11 +337,11 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 void
 ObjectPropertyBuffer::checkModifiedProp()
 {
-	if(m_object && m_multiple)
+	if(m_widget && m_multiple)
 	{
 		if(!m_manager->activeForm())
 			return;
-		ObjectTreeItem *treeIt = m_manager->activeForm()->objectTree()->lookup(m_object->name());
+		ObjectTreeItem *treeIt = m_manager->activeForm()->objectTree()->lookup(m_widget->name());
 		if(treeIt)
 		{
 			QString name;
@@ -351,6 +354,17 @@ ObjectPropertyBuffer::checkModifiedProp()
 			}
 		}
 	}
+}
+
+void
+ObjectPropertyBuffer::storePixmapName(KexiPropertyBuffer &buf, KexiProperty &prop)
+{
+	if((&buf != this) || m_multiple)
+		return;
+
+	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widget->name());
+	if(tree)
+		tree->addPixmapName(prop.name(), prop.pixmapName());
 }
 
 // i18n functions /////////////////////////////////
@@ -421,7 +435,7 @@ ObjectPropertyBuffer::addValueDescription(const char *value, const QString &desc
 // Alignment-related functions /////////////////////////////
 
 void
-ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *obj)
+ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 {
 	if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree())
 		return;
@@ -478,19 +492,19 @@ ObjectPropertyBuffer::saveAlignProperty(const QString &property)
 	if( (*this)["wordbreak"]->value().toBool() )
 		list.append("WordBreak");
 
-	int count = m_object->metaObject()->findProperty("alignment", true);
-	const QMetaProperty *meta = m_object->metaObject()->property(count, true);
-	m_object->setProperty("alignment", meta->keysToValue(list));
+	int count = m_widget->metaObject()->findProperty("alignment", true);
+	const QMetaProperty *meta = m_widget->metaObject()->property(count, true);
+	m_widget->setProperty("alignment", meta->keysToValue(list));
 
 	if(m_lastcom && m_lastcom->property() == "alignment" && !m_undoing)
 		m_lastcom->setValue(meta->keysToValue(list));
 	else if(!m_undoing)
 	{
-		m_lastcom = new PropertyCommand(this, QString(m_object->name()), m_object->property("alignment"), meta->keysToValue(list), "alignment");
+		m_lastcom = new PropertyCommand(this, QString(m_widget->name()), m_widget->property("alignment"), meta->keysToValue(list), "alignment");
 		m_manager->activeForm()->addCommand(m_lastcom, false);
 	}
 
-	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_object->name());
+	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widget->name());
 	if(tree && (*this)[property.latin1()]->changed())
 		tree->addModProperty(property, (*this)[property.latin1()]->oldValue());
 }
@@ -531,7 +545,7 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 {
 	Container *cont=0;
 	if(m_manager->activeForm() && m_manager->activeForm()->objectTree()) {
-		cont = m_manager->activeForm()->objectTree()->lookup(m_object->name())->container();
+		cont = m_manager->activeForm()->objectTree()->lookup(m_widget->name())->container();
 	}
 	else
 	{
@@ -547,7 +561,7 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 			m_lastcom->setValue(value);
 		else if(!m_undoing)
 		{
-			m_lastcom = new LayoutPropertyCommand(this, m_object->name(), (*this)["layout"]->oldValue(), value);
+			m_lastcom = new LayoutPropertyCommand(this, m_widget->name(), (*this)["layout"]->oldValue(), value);
 			m_manager->activeForm()->addCommand(m_lastcom, false);
 		}
 
@@ -566,7 +580,7 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 		m_lastcom->setValue(value);
 	else if(!m_undoing)
 	{
-		m_lastcom = new PropertyCommand(this, m_object->name(), (*this)[prop.latin1()]->oldValue(), value, prop.latin1());
+		m_lastcom = new PropertyCommand(this, m_widget->name(), (*this)[prop.latin1()]->oldValue(), value, prop.latin1());
 		m_manager->activeForm()->addCommand(m_lastcom, false);
 	}
 
@@ -581,7 +595,7 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 		cont->layout()->setSpacing(value.toInt());
 	}
 
-	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_object->name());
+	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widget->name());
 	if(tree && (*this)[prop.latin1()]->changed())
 		tree->addModProperty(prop, (*this)[prop.latin1()]->oldValue());
 }

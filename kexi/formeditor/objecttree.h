@@ -75,6 +75,9 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		*/
 		void		addModProperty(const QString &property, const QVariant &value);
 
+		void		addPixmapName(const QString &property, const QString &name);
+		QString		pixmapName(const QString &property);
+
 		int gridRow() const { return m_row; }
 		int gridCol() const { return m_col; }
 		int gridRowSpan() const { return m_rowspan; }
@@ -88,6 +91,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		ObjectTreeC	m_children;
 		QGuardedPtr<Container> m_container;
 		QMap<QString, QVariant> m_props;
+		QMap<QString, QString>  m_pixmapNames;
 		ObjectTreeItem* m_parent;
 		QGuardedPtr<QWidget> m_widget;
 		QGuardedPtr<EventEater> m_eater;

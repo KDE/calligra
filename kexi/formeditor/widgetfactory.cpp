@@ -17,6 +17,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include <qcursor.h>
+#include <qobjectlist.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <klineedit.h>
@@ -34,6 +37,21 @@
 
 
 namespace KFormDesigner {
+
+static void setRecursiveCursor(QWidget *w, Form *form)
+{
+	ObjectTreeItem *tree = form->objectTree()->lookup(w->name());
+	if(tree && ((tree->modifProp()->contains("cursor")) || !tree->children()->isEmpty()) )
+			return; // if the user has set a cursor for this widget or this is a container, don't change it
+
+	if(w->ownCursor())
+		w->setCursor(Qt::ArrowCursor);
+
+	QObjectList *l = w->queryList( "QWidget" );
+	for(QObject *o = l->first(); o; o = l->next())
+		((QWidget*)o)->setCursor(Qt::ArrowCursor);
+	delete l;
+}
 
 ///// Widget Factory //////////////////////////
 
@@ -162,6 +180,7 @@ WidgetFactory::resetEditor()
 			return;
 		}
 		tree->eventEater()->setContainer(m_container);
+		setRecursiveCursor(m_widget, m_container->form());
 	}
 	else if(m_editor)
 	{
@@ -172,6 +191,7 @@ WidgetFactory::resetEditor()
 
 	if(m_widget)
 		disconnect(m_widget, 0, this, 0);
+
 	delete m_handles;
 	m_editor = 0;
 	m_widget = 0;
