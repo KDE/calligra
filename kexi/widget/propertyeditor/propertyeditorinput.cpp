@@ -75,15 +75,15 @@ PropIntSpinBox::eventFilter(QObject *o, QEvent *e)
 {
 	if(o == editor())
 	{
-	if(e->type() == QEvent::KeyPress)
-	{
-		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-		if((ev->key()==Key_Up || ev->key()==Key_Down) && ev->state()!=ControlButton)
+		if(e->type() == QEvent::KeyPress)
 		{
-			parentWidget()->eventFilter(o, e);
-			return true;
+			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+			if((ev->key()==Key_Up || ev->key()==Key_Down) && ev->state()!=ControlButton)
+			{
+				parentWidget()->eventFilter(o, e);
+				return true;
+			}
 		}
-	}
 	}
 	
 	return KIntSpinBox::eventFilter(o, e);
@@ -133,15 +133,15 @@ PropDoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 {
 	if(o == editor())
 	{
-	if(e->type() == QEvent::KeyPress)
-	{
-		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-		if((ev->key()==Key_Up || ev->key()==Key_Down) && ev->state()!=ControlButton)
+		if(e->type() == QEvent::KeyPress)
 		{
-			parentWidget()->eventFilter(o, e);
-			return true;
+			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+			if((ev->key()==Key_Up || ev->key()==Key_Down) && ev->state()!=ControlButton)
+			{
+				parentWidget()->eventFilter(o, e);
+				return true;
+			}
 		}
-	}
 	}
 	
 	return KDoubleSpinBox::eventFilter(o, e);

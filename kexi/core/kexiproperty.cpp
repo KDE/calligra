@@ -88,22 +88,22 @@ KexiProperty::operator=(const KexiProperty &property)
 {
 	if(&property!=this)
 	{
-	if(m_list)
-	{
-		delete m_list;
-		m_list=0;
-	}
+		if(m_list)
+		{
+			delete m_list;
+			m_list=0;
+		}
 	
-	m_name = property.m_name;
-	m_value = property.m_value;
-	m_changed = property.m_changed;
-	m_desc = property.m_desc;
-	m_autosync = property.m_autosync;
+		m_name = property.m_name;
+		m_value = property.m_value;
+		m_changed = property.m_changed;
+		m_desc = property.m_desc;
+		m_autosync = property.m_autosync;
 
-	if(property.m_list)
-		m_list = new QStringList(*(property.m_list));
-	else
-		m_list=0;
+		if(property.m_list)
+			m_list = new QStringList(*(property.m_list));
+		else
+			m_list=0;
 	}
 	return *this;
 }

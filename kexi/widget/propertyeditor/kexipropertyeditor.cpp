@@ -208,11 +208,13 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 			}
 		}
 		else
+		{
 			if(m_editItem->depth()==2)
 			{
 				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
 				parent->getComposedValue();
 			}
+		}
 		emit valueChanged(m_editItem->text(0), value);
 	}
 }
@@ -246,7 +248,7 @@ KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor *editor)
 {
 	if(m_currentEditor)
 	{
-	bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ? 
+		bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ? 
 		         m_sync : (bool)m_editItem->property()->autoSync();
 		if(!sync)
 		{
@@ -274,10 +276,10 @@ KexiPropertyEditor::slotColumnSizeChanged(int section, int, int newS)
 		}
 		else
 		{
-		if(m_defaults->isVisible())
-			m_currentEditor->resize(newS - m_defaults->width(), m_currentEditor->height());
-		else
-			m_currentEditor->resize(newS, m_currentEditor->height());
+			if(m_defaults->isVisible())
+				m_currentEditor->resize(newS - m_defaults->width(), m_currentEditor->height());
+			else
+				m_currentEditor->resize(newS, m_currentEditor->height());
 		}
 	}
 }
@@ -353,10 +355,10 @@ KexiPropertyEditor::resetItem()
 {
 	if(m_editItem)
 	{
-	if(m_currentEditor)
-		m_currentEditor->setValue(m_editItem->oldValue());
-	else
-		m_editItem->setValue(m_editItem->oldValue());
+		if(m_currentEditor)
+			m_currentEditor->setValue(m_editItem->oldValue());
+		else
+			m_editItem->setValue(m_editItem->oldValue());
 	}
 }
 

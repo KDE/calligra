@@ -54,23 +54,23 @@ PropComboBox::eventFilter(QObject *o, QEvent *e)
 
 	if(o == lineEdit())
 	{
-	if(e->type() == QEvent::KeyPress)
-	{
-		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-		if((ev->key()==Key_Up || ev->key()==Key_Down) && ev->state()!=ControlButton)
+		if(e->type() == QEvent::KeyPress)
 		{
-			parentWidget()->eventFilter(o, e);
-			return true;
+			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+			if((ev->key()==Key_Up || ev->key()==Key_Down) && ev->state()!=ControlButton)
+			{
+				parentWidget()->eventFilter(o, e);
+				return true;
+			}
 		}
-	}
 	}
 	if(o==m_listbox)
 	{
-	if(e->type() == QEvent::Show)
-	{
-		QString s = lineEdit()->text();
-		setSelected(QStringList::split("|",s));
-	}
+		if(e->type() == QEvent::Show)
+		{
+			QString s = lineEdit()->text();
+			setSelected(QStringList::split("|",s));
+		}
 	}
 	
 	return KComboBox::eventFilter(o, e);
@@ -136,10 +136,10 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, 
 	m_combo->setAutoCompletion(true);
 	if(property->list())
 	{
-	m_combo->insertStringList(*(property->list()));
-	m_combo->setCurrentText(property->value().asString());
-	KCompletion *comp = m_combo->completionObject();
-	comp->insertItems(*(property->list()));
+		m_combo->insertStringList(*(property->list()));
+		m_combo->setCurrentText(property->value().asString());
+		KCompletion *comp = m_combo->completionObject();
+		comp->insertItems(*(property->list()));
 	}
 	m_combo->show();
 
@@ -184,11 +184,11 @@ PropertyEditorMultiList::PropertyEditorMultiList(QWidget *parent, KexiProperty *
 	m_combo->setAutoCompletion(true);
 	if(property->list())
 	{
-	m_combo->insertStringList(*(property->list()));
-	m_combo->setSelected(property->value().asStringList());
-	m_combo->setEditText(property->value().toStringList().join("|"));
-	KCompletion *comp = m_combo->completionObject();
-	comp->insertItems(*(property->list()));
+		m_combo->insertStringList(*(property->list()));
+		m_combo->setSelected(property->value().asStringList());
+		m_combo->setEditText(property->value().toStringList().join("|"));
+		KCompletion *comp = m_combo->completionObject();
+		comp->insertItems(*(property->list()));
 	}
 	m_combo->show();
 

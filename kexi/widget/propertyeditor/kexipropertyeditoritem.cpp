@@ -91,23 +91,23 @@ valueToCursorName(int shape)
 {
 	switch(shape)
 	{
-	case Qt::ArrowCursor: return i18n("Arrow");
-	case Qt::UpArrowCursor: return i18n("Up Arrow");
-	case Qt::CrossCursor: return i18n("Cross");
-	case Qt::WaitCursor: return i18n("Waiting");
-	case Qt::IbeamCursor: return i18n("iBeam");
-	case Qt::SizeVerCursor: return i18n("Size Vertical");
-	case Qt::SizeHorCursor: return i18n("Size Horizontal");
-	case Qt::SizeFDiagCursor: return i18n("Size Slash");
-	case Qt::SizeBDiagCursor: return i18n("Size Backslash");
-	case Qt::SizeAllCursor: return i18n("Size All");
-	case Qt::BlankCursor: return i18n("Blank");
-	case Qt::SplitVCursor: return i18n("Split Vertical");
-	case Qt::SplitHCursor: return i18n("Split Horizontal");
-	case Qt::PointingHandCursor: return i18n("Pointing Hand");
-	case Qt::ForbiddenCursor: return i18n("Forbidden");
-	case Qt::WhatsThisCursor: return i18n("Whats This");
-	default: return QString();
+		case Qt::ArrowCursor: return i18n("Arrow");
+		case Qt::UpArrowCursor: return i18n("Up Arrow");
+		case Qt::CrossCursor: return i18n("Cross");
+		case Qt::WaitCursor: return i18n("Waiting");
+		case Qt::IbeamCursor: return i18n("iBeam");
+		case Qt::SizeVerCursor: return i18n("Size Vertical");
+		case Qt::SizeHorCursor: return i18n("Size Horizontal");
+		case Qt::SizeFDiagCursor: return i18n("Size Slash");
+		case Qt::SizeBDiagCursor: return i18n("Size Backslash");
+		case Qt::SizeAllCursor: return i18n("Size All");
+		case Qt::BlankCursor: return i18n("Blank");
+		case Qt::SplitVCursor: return i18n("Split Vertical");
+		case Qt::SplitHCursor: return i18n("Split Horizontal");
+		case Qt::PointingHandCursor: return i18n("Pointing Hand");
+		case Qt::ForbiddenCursor: return i18n("Forbidden");
+		case Qt::WhatsThisCursor: return i18n("Whats This");
+		default: return QString();
 	}
 }
 
@@ -337,12 +337,13 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 			p->fillRect(0,0,w, item->height(), QBrush(cg.highlight()));
 			p->fillRect(-50,0,50, item->height(), QBrush(cg.highlight()));
 		}
+
 		if(item->firstChild())
 		{
-		p->drawRect(2, item->height()/2 -4, 9, 9);
-		p->drawLine(4, item->height()/2, 8, item->height()/2);
-		if(!item->isOpen())
-			p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
+			p->drawRect(2, item->height()/2 -4, 9, 9);
+			p->drawLine(4, item->height()/2, 8, item->height()/2);
+			if(!item->isOpen())
+				p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
 		}
 		
 		p->translate(0, item->totalHeight());

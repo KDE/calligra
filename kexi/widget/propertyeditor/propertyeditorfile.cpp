@@ -159,13 +159,13 @@ PropertyEditorPixmap::eventFilter(QObject *o, QEvent *ev)
 		}
 		if(ev->type() == QEvent::KeyPress)
 		{
-		QKeyEvent* e = static_cast<QKeyEvent*>(ev);
-		if((e->key() == Key_Enter) || (e->key()== Key_Space) || (e->key() == Key_Return))
-		{
-			m_button->animateClick();
-			return true;
+			QKeyEvent* e = static_cast<QKeyEvent*>(ev);
+			if((e->key() == Key_Enter) || (e->key()== Key_Space) || (e->key() == Key_Return))
+			{
+				m_button->animateClick();
+				return true;
+			}
 		}
-	}
 	}
 	return KexiPropertySubEditor::eventFilter(o, ev);
 }
