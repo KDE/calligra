@@ -517,6 +517,24 @@ public:
     QString initial;
 };
 
+class Bookmark
+{
+public:
+    Bookmark();
+    /// Bookmark name
+    QString m_name;
+    /// Name of the frameset where the bookmark is
+    QString m_frameset;
+    /// Number of the paragrapgh where the booksmark starts
+    int m_startparag;
+    /// Number of the paragrapgh where the booksmark starts
+    int m_endparag;
+    /// Position where the bookmark starts in the paragraph
+    int m_cursorIndexStart;
+    /// Position where the bookmark ends in the paragraph
+    int m_cursorIndexEnd;
+};
+
 // Helper functions
 
 void CreateMissingFormatData ( QString &paraText, ValueListFormatData &paraFormatDataList );

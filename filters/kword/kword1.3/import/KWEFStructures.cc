@@ -197,3 +197,8 @@ void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormat
     }
 #endif
 }
+
+Bookmark::Bookmark()
+ : m_startparag(-1), m_endparag(-1), m_cursorIndexStart(-1), m_cursorIndexEnd(-1)
+{
+}

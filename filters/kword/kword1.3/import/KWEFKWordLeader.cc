@@ -794,30 +794,39 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
-static void ProcessBookmarkTag ( QDomNode myNode, void *, KWEFKWordLeader *leader )
+static void ProcessBookmarkTag ( QDomNode myNode, void* tag, KWEFKWordLeader *leader )
 {
+    QValueList<Bookmark> * bookmarkList = static_cast< QValueList<Bookmark> * > ( tag );
+
+    Bookmark bookmark;
+
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList
-        << AttrProcessing ( "name" )
-        << AttrProcessing ( "cursorIndexStart" )
-        << AttrProcessing ( "cursorIndexEnd" )
-        << AttrProcessing ( "frameset" )
-        << AttrProcessing ( "startparag" )
-        << AttrProcessing ( "endparag" )
+        << AttrProcessing ( "name", bookmark.m_name )
+        << AttrProcessing ( "cursorIndexStart", bookmark.m_cursorIndexStart )
+        << AttrProcessing ( "cursorIndexEnd", bookmark.m_cursorIndexEnd )
+        << AttrProcessing ( "frameset", bookmark.m_frameset )
+        << AttrProcessing ( "startparag", bookmark.m_startparag )
+        << AttrProcessing ( "endparag", bookmark.m_endparag )
         ;
 
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags( myNode, leader );
+    
+    // ### TODO: some verifications
 
+    kdDebug(30520) << "Bookmark: " << bookmark.m_name << " in frameset " << bookmark.m_frameset << endl;
+
+    bookmarkList->append( bookmark );
 }
 
-static void ProcessBookmarksTag ( QDomNode myNode, void *, KWEFKWordLeader *leader )
+static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "BOOKMARK", ProcessBookmarkTag, 0L );
+    tagProcessingList << TagProcessing ( "BOOKMARK", ProcessBookmarkTag, tag );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
@@ -900,6 +909,7 @@ static void ProcessBookmarksTag ( QDomNode myNode, void *, KWEFKWordLeader *lead
         ProcessFootnoteFramesetsTag(nodeFramesets, &footnotes, leader );
 
     // Process all framesets and pictures
+    QValueList<Bookmark> bookmarkList;
     QValueList<TagProcessing> tagProcessingList;
     QValueList<ParaData> paraList;
 
@@ -912,7 +922,7 @@ static void ProcessBookmarksTag ( QDomNode myNode, void *, KWEFKWordLeader *lead
         << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "CLIPARTS",    ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "EMBEDDED",    NULL,                   NULL      )
-        << TagProcessing ( "BOOKMARKS",   ProcessBookmarksTag,    0 )
+        << TagProcessing ( "BOOKMARKS",   ProcessBookmarksTag,    &bookmarkList )
         ;
 
     // TODO: why are the followings used by KWord 1.2 but are not in its DTD?
