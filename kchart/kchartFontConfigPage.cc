@@ -57,10 +57,10 @@ void KChartFontConfigPage::initList()
 {
   list->insertItem(i18n("Title"));
   if(!_params->isPie())	{
-	list->insertItem(i18n("X-Title"));
-	list->insertItem(i18n("Y-Title"));
-	list->insertItem(i18n("X-Axis"));
-	list->insertItem(i18n("Y-Axis"));
+    list->insertItem(i18n("X-Title"));
+    list->insertItem(i18n("Y-Title"));
+    list->insertItem(i18n("X-Axis"));
+    list->insertItem(i18n("Y-Axis"));
   }
   list->insertItem(i18n("Label"));
   list->setCurrentItem(0);
@@ -68,20 +68,20 @@ void KChartFontConfigPage::initList()
   bool noEnough=false;
   //num <12 because there are 12 colors
   for( QStringList::Iterator it = _params->legend.begin();
-	   it != _params->legend.end(); ++it, num++ ) {
-	if( num<12 )
-	  listColor->insertItem(*it);
-	else {
-	  if( !noEnough ) {
-		listColor->insertItem(i18n("Not enough color"));
-		noEnough = true;
-	  }
-	}
+       it != _params->legend.end(); ++it, num++ ) {
+    if( num<12 )
+      listColor->insertItem(*it);
+    else {
+      if( !noEnough ) {
+	listColor->insertItem(i18n("Not enough color"));
+	noEnough = true;
+      }
+    }
   }
   listColor->setCurrentItem(0);
-  for( unsigned int i = 0; i < _params->legend.count(); i++ ) {
-	if( i<12 )
-	  extColor.setColor(i,_params->ExtColor.color(i));
+  for( unsigned int i = 0; i < _params->ExtColor.count(); i++ ) {
+    if( i<12 )
+      extColor.setColor(i,_params->ExtColor.color(i));
   }
   index = 0;
   colorButton->setColor( extColor.color(index));
@@ -90,15 +90,14 @@ void KChartFontConfigPage::initList()
 void KChartFontConfigPage::changeIndex(int newindex)
 {
   if(index>11)
-	colorButton->setEnabled(false);
-  else
-	{
-	  if(!colorButton->isEnabled())
-		colorButton->setEnabled(true);
-	  extColor.setColor(index,colorButton->color());
-	  colorButton->setColor(extColor.color(newindex));
-	  index=newindex;
-	}
+    colorButton->setEnabled(false);
+  else {
+    if(!colorButton->isEnabled())
+      colorButton->setEnabled(true);
+    extColor.setColor(index,colorButton->color());
+    colorButton->setColor(extColor.color(newindex));
+    index=newindex;
+  }
 }
 
 void KChartFontConfigPage::changeLabelFont()
@@ -136,9 +135,9 @@ void KChartFontConfigPage::init()
   yaxis = _params->yAxisFont();
   label = _params->labelFont();
 
-  for(int i=0;i<12;i++){
-	extColor.setColor(i,_params->ExtColor.color(i));
-  }
+  for(int i=0;i<12;i++)
+    extColor.setColor(i,_params->ExtColor.color(i));
+
   index = 0;
   colorButton->setColor(extColor.color(index));
 }
@@ -146,19 +145,15 @@ void KChartFontConfigPage::init()
 void KChartFontConfigPage::apply()
 {
   _params->setLabelFont(label);
-  if(!_params->isPie())
-  	{
-	  _params->setXAxisFont(xaxis);
-	  _params->setYAxisFont(yaxis);
-	  _params->setXTitleFont(xtitle);
-	  _params->setYTitleFont(ytitle);
-  	}
+  if(!_params->isPie()) {
+    _params->setXAxisFont(xaxis);
+    _params->setYAxisFont(yaxis);
+    _params->setXTitleFont(xtitle);
+    _params->setYTitleFont(ytitle);
+  }
   _params->setTitleFont(title);
 
   extColor.setColor(index,colorButton->color());
   for(unsigned int i=0;i<extColor.count();i++)
-	{
-	  _params->ExtColor.setColor(i,extColor.color(i));
-	}
-
+    _params->ExtColor.setColor(i,extColor.color(i));
 }

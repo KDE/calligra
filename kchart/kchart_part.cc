@@ -40,7 +40,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* 
     _parentWidget( parentWidget )
 {
   m_bLoading = false;
-  kdDebug(35001) << "Contstructor started!" << endl;
+  kdDebug(35001) << "Constructor started!" << endl;
   initDoc();
   // hack
   setModified(true);
@@ -137,7 +137,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
 void KChartPart::setPart( const KChartData& data )
 {
   currentData = data;
-  initLabelAndLegend();
+  //  initLabelAndLegend();
   emit docChanged();
 }
 
@@ -145,9 +145,7 @@ void KChartPart::setPart( const KChartData& data )
 void KChartPart::showWizard()
 {
   KChartWizard* wizard = new KChartWizard( this, _parentWidget, "wizard" );
-  int ret = wizard->exec();
-  if( ret == QDialog::Accepted ) {
-  }
+  (void)wizard->exec();
   delete wizard;
 }
 
@@ -947,6 +945,9 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc ) {
 
   /**
    * $Log$
+   * Revision 1.45  2000/07/18 23:02:17  kalle
+   * implemented loading/saving of missing parameters, removed unnecessary field from param struct
+   *
    * Revision 1.44  2000/07/18 22:19:43  kalle
    * now even compiles :-o
    *

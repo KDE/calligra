@@ -20,17 +20,17 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 {
   chart3d=true;
   /*QFrame* tmpQFrame;
-  tmpQFrame = new QFrame( this, "Frame_2" );
-  tmpQFrame->setGeometry( 10, 10, 240, 220 );
-  tmpQFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-  tmpQFrame->setLineWidth( 2 );*/
+    tmpQFrame = new QFrame( this, "Frame_2" );
+    tmpQFrame->setGeometry( 10, 10, 240, 220 );
+    tmpQFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    tmpQFrame->setLineWidth( 2 );*/
 
   /*
-  preview = new kchartWidget( _chart, tmpQFrame );
-  preview->show();
-  _chart->addAutoUpdate( preview );
-  preview->resize( tmpQFrame->contentsRect().width(),
-				   tmpQFrame->contentsRect().height() );
+    preview = new kchartWidget( _chart, tmpQFrame );
+    preview->show();
+    _chart->addAutoUpdate( preview );
+    preview->resize( tmpQFrame->contentsRect().width(),
+    tmpQFrame->contentsRect().height() );
   */
 
   QGridLayout *grid1 = new QGridLayout(this,2,2,15,15);
@@ -105,7 +105,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   y_interval=new QLineEdit(tmpQGroupBox);
   grid2->addWidget(y_interval,0,1);
   if( _chart->params()->requested_yinterval != -MAXDOUBLE)
-        y_interval->setText( tmp.setNum(_chart->params()->requested_yinterval));
+    y_interval->setText( tmp.setNum(_chart->params()->requested_yinterval));
 
   tmpLabel=new QLabel(tmpQGroupBox);
   tmpLabel->setText(i18n("Y min : "));
@@ -113,7 +113,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   y_min=new QLineEdit(tmpQGroupBox);
   grid2->addWidget(y_min,1,1);
   if( _chart->params()->requested_ymin != MAXDOUBLE)
-        y_min->setText( tmp.setNum(_chart->params()->requested_ymin));
+    y_min->setText( tmp.setNum(_chart->params()->requested_ymin));
 
   tmpLabel=new QLabel(tmpQGroupBox);
   tmpLabel->setText(i18n("Y max : "));
@@ -121,7 +121,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   y_max=new QLineEdit(tmpQGroupBox);
   grid2->addWidget(y_max,2,1);
   if( _chart->params()->requested_ymax != -MAXDOUBLE)
-        y_max->setText( tmp.setNum(_chart->params()->requested_ymax));
+    y_max->setText( tmp.setNum(_chart->params()->requested_ymax));
 
   grid1->addWidget(tmpQGroupBox,1,0);
 
@@ -136,11 +136,10 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   ylabel_fmt=new QLineEdit(tmpQGroupBox);
   grid2->addWidget(ylabel_fmt,0,1);
 
-  if( !_chart->params()->ylabel_fmt.isEmpty())
-        {
-        int len=_chart->params()->ylabel_fmt.length();
-         ylabel_fmt->setText(_chart->params()->ylabel_fmt.right(len-3));
-        }
+  if( !_chart->params()->ylabel_fmt.isEmpty()) {
+    int len=_chart->params()->ylabel_fmt.length();
+    ylabel_fmt->setText(_chart->params()->ylabel_fmt.right(len-3));
+  }
   ylabelFont = new QPushButton( tmpQGroupBox);
   grid2->addWidget(ylabelFont,1,0);
   ylabelFont->setText(i18n("Font"));
@@ -158,11 +157,10 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
   ylabel2_fmt=new QLineEdit(tmpQGroupBox);
   grid2->addWidget(ylabel2_fmt,2,1);
-  if( !_chart->params()->ylabel2_fmt.isEmpty())
-        {
-        int len=_chart->params()->ylabel2_fmt.length();
-         ylabel2_fmt->setText(_chart->params()->ylabel2_fmt.right(len-3));
-        }
+  if( !_chart->params()->ylabel2_fmt.isEmpty()) {
+    int len=_chart->params()->ylabel2_fmt.length();
+    ylabel2_fmt->setText(_chart->params()->ylabel2_fmt.right(len-3));
+  }
 
   grid1->addWidget(tmpQGroupBox,1,1);
 
@@ -172,11 +170,11 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
 
   connect(ylabelColor,SIGNAL(changed( const QColor & )),
-                this,SLOT(changeLabelColor(const QColor &)));
+	  this,SLOT(changeLabelColor(const QColor &)));
   connect(borderColor,SIGNAL(changed( const QColor & )),
-                this,SLOT(changeBorderColor(const QColor &)));
+	  this,SLOT(changeBorderColor(const QColor &)));
   connect(gridColor,SIGNAL(changed( const QColor & )),
-                this,SLOT(changeGridColor(const QColor &)));
+	  this,SLOT(changeGridColor(const QColor &)));
 }
 
 
@@ -187,83 +185,74 @@ KChartWizardSetupAxesPage::~KChartWizardSetupAxesPage()
 
 void KChartWizardSetupAxesPage::changeLabelColor(const QColor &_color)
 {
- ycolor=_color;
+  ycolor=_color;
 }
 
 void KChartWizardSetupAxesPage::changeBorderColor(const QColor &_color)
 {
- colorBorder=_color;
+  colorBorder=_color;
 }
 
 void KChartWizardSetupAxesPage::changeGridColor(const QColor &_color)
 {
- colorGrid=_color;
+  colorGrid=_color;
 }
 
 void KChartWizardSetupAxesPage::changeLabelFont()
 {
- if (KFontDialog::getFont( ylabel,true,this ) == QDialog::Rejected )
-      return;
+  if( KFontDialog::getFont( ylabel,true,this ) == QDialog::Rejected )
+    return;
 }
 
 void KChartWizardSetupAxesPage::paintEvent( QPaintEvent *)
 {
-if(chart3d)
-        {
-        angle->setEnabled(true);
-        depth->setEnabled(true);
-        barWidth->setEnabled(true);
-        }
-else
-        {
-        angle->setEnabled(false);
-        depth->setEnabled(false);
-        barWidth->setEnabled(false);
-        }
+  if(chart3d) {
+    angle->setEnabled(true);
+    depth->setEnabled(true);
+    barWidth->setEnabled(true);
+  } else {
+    angle->setEnabled(false);
+    depth->setEnabled(false);
+    barWidth->setEnabled(false);
+  }
 }
 
 void KChartWizardSetupAxesPage::apply()
 {
- _chart->params()->grid =grid->isChecked() ;
- if( !y_interval->text().isEmpty())
-        _chart->params()->requested_yinterval=y_interval->text().toDouble();
- else
-        _chart->params()->requested_yinterval=0;
- if( !y_max->text().isEmpty())
-        _chart->params()->requested_ymax=y_max->text().toDouble();
- else
-        _chart->params()->requested_ymax=0;
- if( !y_min->text().isEmpty())
-        _chart->params()->requested_ymin=y_min->text().toDouble();
- else
-        _chart->params()->requested_ymin=0;
+  _chart->params()->grid =grid->isChecked() ;
+  if( !y_interval->text().isEmpty())
+    _chart->params()->requested_yinterval=y_interval->text().toDouble();
+  else
+    _chart->params()->requested_yinterval=0;
+  if( !y_max->text().isEmpty())
+    _chart->params()->requested_ymax=y_max->text().toDouble();
+  else
+    _chart->params()->requested_ymax=0;
+  if( !y_min->text().isEmpty())
+    _chart->params()->requested_ymin=y_min->text().toDouble();
+  else
+    _chart->params()->requested_ymin=0;
 
- _chart->params()->border =border->isChecked() ;
- _chart->params()->_3d_angle=angle->value();
- if(! ylabel_fmt->text().isEmpty())
-        {
-        QString tmp="%g "+ylabel_fmt->text();
-        _chart->params()->ylabel_fmt=tmp;
-        }
- else
-        {
-        _chart->params()->ylabel_fmt="";
-        }
- _chart->params()->setYAxisFont(ylabel);
- _chart->params()->YLabelColor=ycolor;
- _chart->params()->GridColor=colorGrid;
- _chart->params()->LineColor=colorBorder;
- _chart->params()->_3d_depth=depth->value();
- _chart->params()->bar_width=barWidth->value();
- if(! ylabel2_fmt->text().isEmpty())
-        {
-        QString tmp="%g "+ylabel2_fmt->text();
-        _chart->params()->ylabel2_fmt=tmp;
-        }
- else
-        {
-        _chart->params()->ylabel2_fmt="";
-        }
+  _chart->params()->border =border->isChecked() ;
+  _chart->params()->_3d_angle=angle->value();
+  if(! ylabel_fmt->text().isEmpty()) {
+    QString tmp="%g "+ylabel_fmt->text();
+    _chart->params()->ylabel_fmt=tmp;
+  } else {
+    _chart->params()->ylabel_fmt="";
+  }
+  _chart->params()->setYAxisFont(ylabel);
+  _chart->params()->YLabelColor=ycolor;
+  _chart->params()->GridColor=colorGrid;
+  _chart->params()->LineColor=colorBorder;
+  _chart->params()->_3d_depth=depth->value();
+  _chart->params()->bar_width=barWidth->value();
+  if(! ylabel2_fmt->text().isEmpty()) {
+    QString tmp="%g "+ylabel2_fmt->text();
+    _chart->params()->ylabel2_fmt=tmp;
+  } else {
+    _chart->params()->ylabel2_fmt="";
+  }
 }
 
 #include "kchartWizardSetupAxesPage.moc"

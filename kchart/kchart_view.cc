@@ -30,43 +30,43 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
   setXMLFile( "kchart.rc" );
 
   m_wizard = new KAction( i18n("Customize with &Wizard"),
-						  "wizard", 0,
-						  this, SLOT( wizard() ),
-						  actionCollection(), "wizard");
+			  "wizard", 0,
+			  this, SLOT( wizard() ),
+			  actionCollection(), "wizard");
   m_edit = new KAction( i18n("&Edit Data"), "data", 0,
-						this, SLOT( edit() ),
-						actionCollection(), "edit");
+			this, SLOT( edit() ),
+			actionCollection(), "edit");
   m_config = new KAction( i18n( "&Config" ), "options", 0,
-						  this, SLOT( config() ),
-						  actionCollection(), "config" );
+			  this, SLOT( config() ),
+			  actionCollection(), "config" );
   m_loadconfig = new KAction( i18n("&Load Config"),
-							  "loadconfig", 0, this,
-							  SLOT( loadConfig() ),
-							  actionCollection(), "loadconfig");
+			      "loadconfig", 0, this,
+			      SLOT( loadConfig() ),
+			      actionCollection(), "loadconfig");
   m_saveconfig = new KAction( i18n("&Save Config"),
-							  "saveconfig",	0, this,
-							  SLOT( saveConfig() ),
-							  actionCollection(), "saveconfig");
+			      "saveconfig",	0, this,
+			      SLOT( saveConfig() ),
+			      actionCollection(), "saveconfig");
   m_defaultconfig = new KAction( i18n("&Default Config"),
-								 "defaultconfig", 0, this,
-								 SLOT( defaultConfig() ),
-								 actionCollection(), "defaultconfig");
+				 "defaultconfig", 0, this,
+				 SLOT( defaultConfig() ),
+				 actionCollection(), "defaultconfig");
 
   m_chartpie = new KToggleAction( i18n("&Pie"), "cakes", 0, this,
-								  SLOT( pieChart() ), actionCollection(),
-								  "piechart");
+				  SLOT( pieChart() ), actionCollection(),
+				  "piechart");
   m_chartpie->setExclusiveGroup( "charttypes" );
   m_chartline = new KToggleAction( i18n("&Line"), "lines", 0, this,
-								   SLOT( lineChart() ), actionCollection(),
-								   "linechart");
+				   SLOT( lineChart() ), actionCollection(),
+				   "linechart");
   m_chartline->setExclusiveGroup( "charttypes" );
   m_chartareas = new KToggleAction( i18n("&Areas"), "areas", 0, this,
-									SLOT( areasChart() ), actionCollection(),
-									"areaschart");
+				    SLOT( areasChart() ), actionCollection(),
+				    "areaschart");
   m_chartareas->setExclusiveGroup( "charttypes" );
   m_chartbars = new KToggleAction( i18n("&Bars"), "bars", 0, this,
-								   SLOT( barsChart() ), actionCollection(),
-								   "barschart");
+				   SLOT( barsChart() ), actionCollection(),
+				   "barschart");
   m_chartbars->setExclusiveGroup( "charttypes" );
   m_chartbars->setChecked( true );
 

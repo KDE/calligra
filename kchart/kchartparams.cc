@@ -222,7 +222,7 @@ void KChartParameters::loadConfig(KConfig *conf) {
   requested_ymin = conf->readNumEntry("requested_ymin", requested_ymin);
   requested_ymax = conf->readNumEntry("requested_ymax", requested_ymax );
   requested_yinterval = conf->readNumEntry("requested_yinterval",
-					requested_yinterval);
+					   requested_yinterval);
   shelf = conf->readBoolEntry("shelf", shelf);
   grid = conf->readBoolEntry("grid", grid);
   xaxis = conf->readBoolEntry("xaxis", xaxis);
@@ -268,10 +268,10 @@ void KChartParameters::loadConfig(KConfig *conf) {
 
   backgroundPixmapName = conf->readEntry( "backgroundPixmapName", QString::null );
   if( !backgroundPixmapName.isNull() ) {
-	backgroundPixmap.load( backgroundPixmapName );
-	backgroundPixmapIsDirty = true;
+    backgroundPixmap.load( backgroundPixmapName );
+    backgroundPixmapIsDirty = true;
   } else
-	backgroundPixmapIsDirty = false;
+    backgroundPixmapIsDirty = false;
   backgroundPixmapScaled = conf->readBoolEntry( "backgroundPixmapScaled", true );
   backgroundPixmapCentered = conf->readBoolEntry( "backgroundPixmapCentered", true );
   backgroundPixmapIntensity = conf->readDoubleNumEntry( "backgroundPixmapIntensity", 0.25 );
@@ -279,74 +279,74 @@ void KChartParameters::loadConfig(KConfig *conf) {
 
 void KChartParameters::defaultConfig()
 {
-	ExtColor.setColor( 0, Qt::red );
-	ExtColor.setColor( 1, Qt::green );
-	ExtColor.setColor( 2, Qt::blue );
-	ExtColor.setColor( 3, Qt::cyan );
-	ExtColor.setColor( 4, Qt::magenta );
-	ExtColor.setColor( 5, Qt::yellow );
-	ExtColor.setColor( 6, Qt::darkRed );
-	ExtColor.setColor( 7, Qt::darkGreen );
-	ExtColor.setColor( 8, Qt::darkBlue );
-	ExtColor.setColor( 9, Qt::darkCyan );
-	ExtColor.setColor( 10, Qt::darkMagenta );
-	ExtColor.setColor( 11, Qt::darkYellow );
+  ExtColor.setColor( 0, Qt::red );
+  ExtColor.setColor( 1, Qt::green );
+  ExtColor.setColor( 2, Qt::blue );
+  ExtColor.setColor( 3, Qt::cyan );
+  ExtColor.setColor( 4, Qt::magenta );
+  ExtColor.setColor( 5, Qt::yellow );
+  ExtColor.setColor( 6, Qt::darkRed );
+  ExtColor.setColor( 7, Qt::darkGreen );
+  ExtColor.setColor( 8, Qt::darkBlue );
+  ExtColor.setColor( 9, Qt::darkCyan );
+  ExtColor.setColor( 10, Qt::darkMagenta );
+  ExtColor.setColor( 11, Qt::darkYellow );
 
-	setTitleFont( QFont( "Helvetica", 12 ) );
-	setYTitleFont( QFont( "Helvetica", 12 ) );
-	setXTitleFont( QFont( "Helvetica", 12 ) );
-	setYAxisFont( QFont( "Helvetica", 10 ) );
-	setXAxisFont( QFont( "Helvetica", 10 ) );
-	setLabelFont( QFont( "Helvetica", 10 ) );
-	setAnnotationFont( QFont( "Helvetica", 10 ) );
+  setTitleFont( QFont( "Helvetica", 12 ) );
+  setYTitleFont( QFont( "Helvetica", 12 ) );
+  setXTitleFont( QFont( "Helvetica", 12 ) );
+  setYAxisFont( QFont( "Helvetica", 10 ) );
+  setXAxisFont( QFont( "Helvetica", 10 ) );
+  setLabelFont( QFont( "Helvetica", 10 ) );
+  setAnnotationFont( QFont( "Helvetica", 10 ) );
 
-	label_dist = 1+8/2;
-	label_line = false;
-	xlabel_spacing = 5;
-	ylabel_density = 80;
-	requested_ymin = MAXDOUBLE;
-	requested_ymax = -MAXDOUBLE;
-	requested_yinterval = -MAXDOUBLE;
-	shelf = true;
-	grid = true;
-	xaxis = true;
-	yaxis = true;
-	yaxis2 = true;
-	yval_style = true;
-	hasxlabel=true;
-	stack_type = KCHARTSTACKTYPE_DEPTH;
-	_3d_depth = 5.0;
-	_3d_angle = 45;
-	bar_width = 75;
-	hlc_style = KCHARTHLCSTYLE_CLOSECONNECTED;
-	hlc_cap_width = 25;
-	if( annotation )
-	  delete annotation;
-	annotation = 0;
-	num_scatter_pts = 0;
-	if( scatter )
-	  delete scatter;
-	scatter = 0;
-	thumbnail = false;
-	thumbval = -MAXFLOAT;
-	border = true;
-	transparent_bg = false;
-	hasxlabel = true;
-	hard_size = false;
-	hard_graphheight = 0;
-	hard_graphwidth = 0;
-	hard_xorig = 0;
-	hard_yorig = 0;
-	percent_labels = KCHARTPCTTYPE_ABOVE;
-	type = KCHARTTYPE_3DBAR;
-	other_threshold = 0;
-	colPie = 0;
-	offsetCol = 0;
+  label_dist = 1+8/2;
+  label_line = false;
+  xlabel_spacing = 5;
+  ylabel_density = 80;
+  requested_ymin = MAXDOUBLE;
+  requested_ymax = -MAXDOUBLE;
+  requested_yinterval = -MAXDOUBLE;
+  shelf = true;
+  grid = true;
+  xaxis = true;
+  yaxis = true;
+  yaxis2 = true;
+  yval_style = true;
+  hasxlabel=true;
+  stack_type = KCHARTSTACKTYPE_DEPTH;
+  _3d_depth = 5.0;
+  _3d_angle = 45;
+  bar_width = 75;
+  hlc_style = KCHARTHLCSTYLE_CLOSECONNECTED;
+  hlc_cap_width = 25;
+  if( annotation )
+    delete annotation;
+  annotation = 0;
+  num_scatter_pts = 0;
+  if( scatter )
+    delete scatter;
+  scatter = 0;
+  thumbnail = false;
+  thumbval = -MAXFLOAT;
+  border = true;
+  transparent_bg = false;
+  hasxlabel = true;
+  hard_size = false;
+  hard_graphheight = 0;
+  hard_graphwidth = 0;
+  hard_xorig = 0;
+  hard_yorig = 0;
+  percent_labels = KCHARTPCTTYPE_ABOVE;
+  type = KCHARTTYPE_3DBAR;
+  other_threshold = 0;
+  colPie = 0;
+  offsetCol = 0;
 
-	// background pixmap stuff
-	backgroundPixmapName = QString::null;
-	backgroundPixmapIsDirty = false; // not dirty until pixmap loaded
-	backgroundPixmapScaled = true;
-	backgroundPixmapCentered = false;
-	backgroundPixmapIntensity = 0.25;
+  // background pixmap stuff
+  backgroundPixmapName = QString::null;
+  backgroundPixmapIsDirty = false; // not dirty until pixmap loaded
+  backgroundPixmapScaled = true;
+  backgroundPixmapCentered = false;
+  backgroundPixmapIntensity = 0.25;
 }
