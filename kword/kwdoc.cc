@@ -1321,16 +1321,19 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWStyle *sty = new KWStyle( styleElem, this, m_defaultFont );
-        kdDebug() << "KWDocument::loadStyleTemplates " << sty->name() << endl;
+        QString styleName = sty->name();
+        //kdDebug() << "KWDocument::loadStyleTemplates " << styleName << endl;
+
         addStyleTemplate( sty );
+        // Warning, sty may be deleted (by addStyleTemplate) at this point.
+
         if(m_styleList.count() > followingStyles.count() )
         {
             QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
-            kdDebug() << " following=" << following << endl;
             followingStyles.append( following );
         }
         else
-            kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+            kdWarning () << "Found duplicate style declaration, overwriting former " << styleName << endl;
     }
 
     ASSERT( followingStyles.count() == m_styleList.count() );
@@ -1353,7 +1356,7 @@ void KWDocument::addStyleTemplate( KWStyle * sty )
     {
         if ( p->name() == sty->name() )
         {
-            kdDebug() << "KWDocument::addStyleTemplate replacing style " << p->name() << endl;
+            //kdDebug() << "KWDocument::addStyleTemplate replacing style " << p->name() << endl;
             // Replace existing style
             *p = *sty;
             //if ( p->name() == "Standard" ) defaultParagLayout = p;
@@ -1925,21 +1928,6 @@ void KWDocument::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
             frameset->createEmptyRegion( crect, emptyRegion, viewMode );
     }
 }
-
-#if 0
-void KWDocument::drawBorders( QPainter *painter, const QRect & crect, KWViewMode * viewMode )
-{
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet *frameset = fit.current();
-        if ( frameset->isVisible() )
-        {
-            frameset->drawBorders( painter, crect, viewMode );
-        }
-    }
-}
-#endif
 
 void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush )
 {
