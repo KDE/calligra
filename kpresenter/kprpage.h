@@ -25,6 +25,7 @@
 #include <global.h>
 #include "kpbackground.h"
 #include <koPoint.h>
+#include <shadowdia.h>
 class KPTextView;
 class KPObject;
 class KPresenterDoc;
@@ -224,6 +225,10 @@ public:
     //return command when we move object
     KCommand *moveObject(KPresenterView *_view, int diffx,int diffy);
     KCommand *moveObject(KPresenterView *m_view,const KoPoint &_move,bool key);
+
+    KCommand *rotateObj(float _newAngle);
+    KCommand *shadowObj(ShadowDirection dir,int dist, const QColor &col);
+
 
     void repaintObj();
 

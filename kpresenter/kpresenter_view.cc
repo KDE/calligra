@@ -3103,86 +3103,51 @@ void KPresenterView::effectOk()
 /*=================== rotate dialog ok ===========================*/
 void KPresenterView::rotateOk()
 {
-    bool newAngle=false;
-    QPtrList<KPObject> _objects;
-    QPtrList<RotateCmd::RotateValues> _oldRotate;
-    float _newAngle;
-    RotateCmd::RotateValues *tmp;
+    bool createMacro=false;
+    float _newAngle=rotateDia->getAngle();
+    KMacroCommand *macro=new KMacroCommand(i18n( "Change Rotation" ));
 
-    _objects.setAutoDelete( false );
-    _oldRotate.setAutoDelete( false );
-
-    _newAngle = rotateDia->getAngle();
-
-    QPtrListIterator<KPObject> it( m_canvas->getObjectList() );
-    for ( ; it.current() ; ++it )
+    KCommand *cmd=m_canvas->activePage()->rotateObj(_newAngle);
+    if( cmd)
     {
-        if ( it.current()->isSelected() ) {
-	    tmp = new RotateCmd::RotateValues;
-	    tmp->angle =it.current()->getAngle();
-
-            if(!newAngle &&tmp->angle!= _newAngle)
-                newAngle=true;
-
-	    _oldRotate.append( tmp );
-	    _objects.append( it.current() );
-	}
+        macro->addCommand(cmd);
+        createMacro=true;
     }
-
-    if ( !_objects.isEmpty() && newAngle ) {
-	RotateCmd *rotateCmd = new RotateCmd( i18n( "Change Rotation" ),
-					      _oldRotate, _newAngle, _objects, kPresenterDoc() );
-	kPresenterDoc()->addCommand( rotateCmd );
-	rotateCmd->execute();
-    } else {
-	_oldRotate.setAutoDelete( true );
-	_oldRotate.clear();
+    cmd=stickyPage()->rotateObj(_newAngle);
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
     }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+        delete macro;
+
 }
 
 /*=================== shadow dialog ok ==========================*/
 void KPresenterView::shadowOk()
 {
-    bool newShadow=false;
-    QPtrList<KPObject> _objects;
-    QPtrList<ShadowCmd::ShadowValues> _oldShadow;
-    ShadowCmd::ShadowValues _newShadow, *tmp;
+    bool createMacro=false;
+    KMacroCommand *macro=new KMacroCommand(i18n( "Change Shadow" ));
 
-    _objects.setAutoDelete( false );
-    _oldShadow.setAutoDelete( false );
-
-    _newShadow.shadowDirection = shadowDia->getShadowDirection();
-    _newShadow.shadowDistance = shadowDia->getShadowDistance();
-    _newShadow.shadowColor = shadowDia->getShadowColor();
-
-    QPtrListIterator<KPObject> it( m_canvas->getObjectList() );
-    for ( ; it.current() ; ++it )
+    KCommand *cmd=m_canvas->activePage()->shadowObj(shadowDia->getShadowDirection(),shadowDia->getShadowDistance(),shadowDia->getShadowColor());
+    if( cmd)
     {
-        if ( it.current()->isSelected() ) {
-	    tmp = new ShadowCmd::ShadowValues;
-	    tmp->shadowDirection = it.current()->getShadowDirection();
-	    tmp->shadowDistance =it.current()->getShadowDistance();
-	    tmp->shadowColor = it.current()->getShadowColor();
-
-            if(!newShadow &&( tmp->shadowDirection!=_newShadow.shadowDirection
-               || tmp->shadowDistance!=_newShadow.shadowDistance
-               || tmp->shadowColor!=_newShadow.shadowColor))
-                newShadow=true;
-
-	    _oldShadow.append( tmp );
-	    _objects.append( it.current() );
-	}
+        macro->addCommand(cmd);
+        createMacro=true;
     }
-
-    if ( !_objects.isEmpty() && newShadow ) {
-	ShadowCmd *shadowCmd = new ShadowCmd( i18n( "Change Shadow" ),
-					      _oldShadow, _newShadow, _objects, kPresenterDoc() );
-	kPresenterDoc()->addCommand( shadowCmd );
-	shadowCmd->execute();
-    } else {
-	_oldShadow.setAutoDelete( true );
-	_oldShadow.clear();
+    cmd=stickyPage()->shadowObj(shadowDia->getShadowDirection(),shadowDia->getShadowDistance(),shadowDia->getShadowColor());
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
     }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+        delete macro;
 }
 
 /*================================================================*/

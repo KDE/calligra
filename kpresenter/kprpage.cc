@@ -3190,3 +3190,89 @@ void KPrPage::repaintObj()
     }
 }
 
+KCommand *KPrPage::rotateObj(float _newAngle)
+{
+    RotateCmd *rotateCmd=0L;
+    bool newAngle=false;
+    QPtrList<KPObject> _objects;
+    QPtrList<RotateCmd::RotateValues> _oldRotate;
+    RotateCmd::RotateValues *tmp;
+
+    _objects.setAutoDelete( false );
+    _oldRotate.setAutoDelete( false );
+
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() ) {
+	    tmp = new RotateCmd::RotateValues;
+	    tmp->angle =it.current()->getAngle();
+
+            if(!newAngle &&tmp->angle!= _newAngle)
+                newAngle=true;
+
+	    _oldRotate.append( tmp );
+	    _objects.append( it.current() );
+	}
+    }
+
+    if ( !_objects.isEmpty() && newAngle )
+    {
+	rotateCmd = new RotateCmd( i18n( "Change Rotation" ),
+                                   _oldRotate, _newAngle, _objects, m_doc );
+	rotateCmd->execute();
+    }
+    else
+    {
+	_oldRotate.setAutoDelete( true );
+	_oldRotate.clear();
+    }
+    return rotateCmd;
+}
+
+KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
+{
+    ShadowCmd *shadowCmd=0L;
+    bool newShadow=false;
+    QPtrList<KPObject> _objects;
+    QPtrList<ShadowCmd::ShadowValues> _oldShadow;
+    ShadowCmd::ShadowValues _newShadow, *tmp;
+
+    _objects.setAutoDelete( false );
+    _oldShadow.setAutoDelete( false );
+
+    _newShadow.shadowDirection = dir;
+    _newShadow.shadowDistance = dist;
+    _newShadow.shadowColor = col;
+
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() ) {
+	    tmp = new ShadowCmd::ShadowValues;
+	    tmp->shadowDirection = it.current()->getShadowDirection();
+	    tmp->shadowDistance =it.current()->getShadowDistance();
+	    tmp->shadowColor = it.current()->getShadowColor();
+
+            if(!newShadow &&( tmp->shadowDirection!=_newShadow.shadowDirection
+               || tmp->shadowDistance!=_newShadow.shadowDistance
+               || tmp->shadowColor!=_newShadow.shadowColor))
+                newShadow=true;
+
+	    _oldShadow.append( tmp );
+	    _objects.append( it.current() );
+	}
+    }
+
+    if ( !_objects.isEmpty() && newShadow ) {
+	shadowCmd = new ShadowCmd( i18n( "Change Shadow" ),
+                                   _oldShadow, _newShadow, _objects, m_doc );
+	shadowCmd->execute();
+    }
+    else
+    {
+	_oldShadow.setAutoDelete( true );
+	_oldShadow.clear();
+    }
+    return shadowCmd;
+}
