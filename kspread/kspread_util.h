@@ -192,6 +192,7 @@ QString convertRangeToRef( const QString & tableName, const QRect & _area );
 
 void insertBracket( QString & s );
 QString convertOasisPenToString( const QPen & pen );
+QPen convertOasisStringToPen( const QString &str );
 
 
 #endif

@@ -557,16 +557,20 @@ void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
          ( m_leftBorderPen == m_rightBorderPen )&&
          ( m_leftBorderPen == m_bottomBorderPen ) )
     {
-        style.addProperty("fo:border", convertOasisPenToString( m_leftBorderPen ) );
+        if ( ( m_leftBorderPen.width() != 0 ) && ( m_leftBorderPen.style() != Qt::NoPen ) )
+            style.addProperty("fo:border", convertOasisPenToString( m_leftBorderPen ) );
     }
     else
     {
         if ( ( m_leftBorderPen.width() != 0 ) && ( m_leftBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-left", convertOasisPenToString( m_leftBorderPen ) );
+
         if ( ( m_rightBorderPen.width() != 0 ) && ( m_rightBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-right", convertOasisPenToString( m_rightBorderPen ) );
+
         if ( ( m_topBorderPen.width() != 0 ) && ( m_topBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-top", convertOasisPenToString( m_topBorderPen ) );
+
         if ( ( m_bottomBorderPen.width() != 0 ) && ( m_bottomBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-bottom", convertOasisPenToString( m_bottomBorderPen ) );
 

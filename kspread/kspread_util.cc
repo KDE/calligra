@@ -1106,8 +1106,39 @@ QString convertRangeToRef( const QString & tableName, const QRect & _area )
 
 QString convertOasisPenToString( const QPen & pen )
 {
-    QString s = QString( "%1pt solid " ).arg( pen.width() );
-    s+=pen.color().name();
-    return "";
+    kdDebug()<<"convertOasisPenToString( const QPen & pen ) :"<<pen<<endl;
+    QString s = QString( "%1pt " ).arg( pen.width() );
+    switch( pen.style() )
+    {
+    case Qt::NoPen:
+        return "none";
+    case Qt::SolidLine:
+        s+="solid";
+        break;
+    case Qt::DashLine:
+        s+="dashed";
+        break;
+    case Qt::DotLine:
+        s=+"dotted";
+        break;
+    case Qt::DashDotLine:
+        s+="dot-dash";
+        break;
+    case Qt::DashDotDotLine:
+        s+="dot-dot-dash";
+        break;
+    }
+    kdDebug()<<" convertOasisPenToString :"<<s<<endl;
+    if ( pen.color().isValid() )
+    {
+        s+=' ';
+        s+=pen.color().name();
+    }
+    return s;
 }
 
+QPen convertOasisStringToPen( const QString &str )
+{
+    //string like "0.088cm solid #800000"
+    return QPen();
+}
