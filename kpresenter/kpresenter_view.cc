@@ -835,6 +835,9 @@ void KPresenterView::extraCreateTemplate()
 					 dirs()->resourceDirs( "kpresenter_template" ),
 					 "kpt" );
     system( QString( "rm %1" ).arg( file ).latin1() );
+    KPresenterFactory::global()->dirs()->addResourceType("kpresenter_template",
+							 KStandardDirs::kde_default( "data" ) + 
+							 "kpresenter/templates/");
 }
 
 /*===============================================================*/
