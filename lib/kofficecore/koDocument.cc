@@ -126,7 +126,7 @@ KOffice::View_ptr KoDocumentChild::createView( KOffice::MainWindow_ptr _main )
   return KOffice::View::_duplicate( v );
 }
 
-bool KoDocumentChild::load( const QDOM::Element& element )
+bool KoDocumentChild::load( const QDomElement& element )
 {
   m_strURL = element.attribute( "url" );
   m_strMimeType = element.attribute( "mime" );
@@ -142,7 +142,7 @@ bool KoDocumentChild::load( const QDOM::Element& element )
     return false;
   }
 
-  QDOM::Element e = element.namedItem( "geometry" ).toElement();
+  QDomElement e = element.namedItem( "geometry" ).toElement();
   if ( e.isNull() )
   {
     kdebug( KDEBUG_INFO, 30003, "Missing RECT in OBJECT" );
@@ -180,12 +180,12 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_form
   return m_rDoc->loadFromURL( m_strURL, _format );
 }
 
-QDOM::Element KoDocumentChild::save( QDOM::Document& doc )
+QDomElement KoDocumentChild::save( QDomDocument& doc )
 {
   CORBA::String_var u = m_rDoc->url();
   CORBA::String_var mime = m_rDoc->mimeType();
 
-  QDOM::Element e = doc.createElement( "object" );
+  QDomElement e = doc.createElement( "object" );
   e.setAttribute( "url", u.in() );
   e.setAttribute( "mime", mime.in() );
   e.appendChild( doc.createElement( "geometry", m_geometry ) );
@@ -566,7 +566,7 @@ bool KoDocument::load( QByteArray& buffer, KOStore::Store_ptr _store )
   // Load XML ?
   if (buffer.size() > 5 && strncasecmp( buffer.data(), "<?xml", 5 ) == 0 )
   {
-    QDOM::Document doc;
+    QDomDocument doc;
     if ( !doc.setContent( QString::fromUtf8( buffer.data(), buffer.size() ) ) )
       return false;
 

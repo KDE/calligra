@@ -6,6 +6,14 @@
 #include <qrect.h>
 #include <qfont.h>
 #include <qpen.h>
+#include <qpoint.h>
+#include <qsize.h>
+#include <qvariant.h>
+
+class QWidget;
+class QLayout;
+class QIODevice;
+class QMimeSourceFactory;
 
 class QDOM_DocumentPrivate;
 class QDOM_DocumentTypePrivate;
@@ -27,81 +35,47 @@ class QDOM_NamedNodeMapPrivate;
 class QDOM_ImplementationPrivate;
 class QTextStream;
 
-struct QDOM
-{
-  class NodeList;
-  class Element;
-  class Text;
-  class Comment;
-  class CDATASection;
-  class ProcessingInstruction;
-  class Attr;
-  class EntityReference;
-  class Document;
-  class NamedNodeMap;
-  class Document;
-  class DocumentFragment;
-  class DocumentType;
-  class Implementation;
-  class Node;
-  class Entity;
-  class Notation;
-  class CharacterData;
+class QDomNodeList;
+class QDomElement;
+class QDomText;
+class QDomComment;
+class QDomCDATASection;
+class QDomProcessingInstruction;
+class QDomAttr;
+class QDomEntityReference;
+class QDomDocument;
+class QDomNamedNodeMap;
+class QDomDocument;
+class QDomDocumentFragment;
+class QDomDocumentType;
+class QDomImplementation;
+class QDomNode;
+class QDomEntity;
+class QDomNotation;
+class QDomCharacterData;
 
-  /* class Namespace
+
+  class QDomImplementation
   {
   public:
-    Namespace();
-    virtual ~Namespace();
-
-    static const unsigned short INDEX_SIZE_ERR     = 1;
-    static const unsigned short DOMSTRING_SIZE_ERR = 2;
-    static const unsigned short HIERARCHY_REQUEST_ERR = 3;
-    static const unsigned short WRONG_DOCUMENT_ERR = 4;
-    static const unsigned short INVALID_CHARACTER_ERR = 5;
-    static const unsigned short NO_DATA_ALLOWED_ERR = 6;
-    static const unsigned short NO_MODIFICATION_ALLOWED_ERR = 7;
-    static const unsigned short NOT_FOUND_ERR      = 8;
-    static const unsigned short NOT_SUPPORTED_ERR  = 9;
-    static const unsigned short INUSE_ATTRIBUTE_ERR = 10;
-  };
-  
-  class Exception
-  {
-  public:
-    Exception();
-    ~Exception();
-
-    virtual unsigned short code();
-
-  private:
-    Exception( const Exception& );
-    Exception& operator= ( const Exception& );
-
-    unsigned short c;
-    }; */
-
-  class Implementation
-  {
-  public:
-    Implementation();
-    Implementation( const Implementation& );
-    virtual ~Implementation();
-    Implementation& operator= ( const Implementation& );
-    bool operator== ( const Implementation& ) const;
-    bool operator!= ( const Implementation& ) const;
+    QDomImplementation();
+    QDomImplementation( const QDomImplementation& );
+    virtual ~QDomImplementation();
+    QDomImplementation& operator= ( const QDomImplementation& );
+    bool operator== ( const QDomImplementation& ) const;
+    bool operator!= ( const QDomImplementation& ) const;
 
     virtual bool hasFeature( const QString& feature, const QString& version );
 
   private:
-    Implementation( QDOM_ImplementationPrivate* );
+    QDomImplementation( QDOM_ImplementationPrivate* );
 
     QDOM_ImplementationPrivate* impl;
 
-    friend class Document;
+    friend class QDomDocument;
   };
 
-  class Node // Ok
+  class QDomNode // Ok
   {
   public:
     enum NodeType {
@@ -121,33 +95,33 @@ struct QDOM
       CharacterDataNode         = 13
     };
 
-    Node();
-    Node( const Node& );
-    Node& operator= ( const Node& );
-    bool operator== ( const Node& ) const;
-    bool operator!= ( const Node& ) const;
-    virtual ~Node();
+    QDomNode();
+    QDomNode( const QDomNode& );
+    QDomNode& operator= ( const QDomNode& );
+    bool operator== ( const QDomNode& ) const;
+    bool operator!= ( const QDomNode& ) const;
+    virtual ~QDomNode();
 
     virtual QString nodeName() const;
     virtual QString nodeValue() const;
     virtual void setNodeValue( const QString& );
     virtual NodeType nodeType() const;
 
-    virtual Node         parentNode() const;
-    virtual NodeList     childNodes() const;
-    virtual Node         firstChild() const;
-    virtual Node         lastChild() const;
-    virtual Node         previousSibling() const;
-    virtual Node         nextSibling() const;
-    virtual NamedNodeMap attributes() const;
-    virtual Document     ownerDocument() const;
+    virtual QDomNode         parentNode() const;
+    virtual QDomNodeList     childNodes() const;
+    virtual QDomNode         firstChild() const;
+    virtual QDomNode         lastChild() const;
+    virtual QDomNode         previousSibling() const;
+    virtual QDomNode         nextSibling() const;
+    virtual QDomNamedNodeMap attributes() const;
+    virtual QDomDocument     ownerDocument() const;
 
-    virtual Node insertBefore( const Node& newChild, const Node& refChild );
-    virtual Node insertAfter( const Node& newChild, const Node& refChild );
-    virtual Node replaceChild( const Node& newChild, const Node& oldChild );
-    virtual Node removeChild( const Node& oldChild );
-    virtual Node appendChild( const Node& newChild );
-    virtual Node cloneNode( bool deep) const;
+    virtual QDomNode insertBefore( const QDomNode& newChild, const QDomNode& refChild );
+    virtual QDomNode insertAfter( const QDomNode& newChild, const QDomNode& refChild );
+    virtual QDomNode replaceChild( const QDomNode& newChild, const QDomNode& oldChild );
+    virtual QDomNode removeChild( const QDomNode& oldChild );
+    virtual QDomNode appendChild( const QDomNode& newChild );
+    virtual QDomNode cloneNode( bool deep) const;
 
     // Qt extension
     virtual bool isAttr() const { return false; }
@@ -164,182 +138,187 @@ struct QDOM
     virtual bool isCharacterData() const { return false; }
 
     /**
-     * Shortcut to avoid dealing with NodeList
+     * Shortcut to avoid dealing with QDomNodeList
      * all the time.
      */
-    Node namedItem( const QString& name ) const;
+    QDomNode namedItem( const QString& name ) const;
 
     bool isNull() const;
     void clear();
 
-    Attr toAttr();
-    CDATASection toCDATASection();
-    DocumentFragment toDocumentFragment();
-    Document toDocument();
-    DocumentType toDocumentType();
-    Element toElement();
-    EntityReference toEntityReference();
-    Text toText();
-    Entity toEntity();
-    Notation toNotation();
-    ProcessingInstruction toProcessingInstruction();
-    CharacterData toCharacterData();
+    QDomAttr toAttr();
+    QDomCDATASection toCDATASection();
+    QDomDocumentFragment toDocumentFragment();
+    QDomDocument toDocument();
+    QDomDocumentType toDocumentType();
+    QDomElement toElement();
+    QDomEntityReference toEntityReference();
+    QDomText toText();
+    QDomEntity toEntity();
+    QDomNotation toNotation();
+    QDomProcessingInstruction toProcessingInstruction();
+    QDomCharacterData toCharacterData();
 
     void save( QTextStream& ) const;
 
   protected:
     QDOM_NodePrivate* impl;
-    Node( QDOM_NodePrivate* );
+    QDomNode( QDOM_NodePrivate* );
 
   private:
-    friend class Document;
-    friend class DocumentType;
-    friend class NodeList;
-    friend class NamedNodeMap;
+    friend class QDomDocument;
+    friend class QDomDocumentType;
+    friend class QDomNodeList;
+    friend class QDomNamedNodeMap;
   };
 
-  class NodeList // Ok
+  class QDomNodeList // Ok
   {
   public:
-    NodeList();
-    NodeList( const NodeList& );
-    NodeList& operator= ( const NodeList& );
-    bool operator== ( const NodeList& ) const;
-    bool operator!= ( const NodeList& ) const;
-    virtual ~NodeList();
+    QDomNodeList();
+    QDomNodeList( const QDomNodeList& );
+    QDomNodeList& operator= ( const QDomNodeList& );
+    bool operator== ( const QDomNodeList& ) const;
+    bool operator!= ( const QDomNodeList& ) const;
+    virtual ~QDomNodeList();
 
-    virtual Node item( int index ) const;
+    virtual QDomNode item( int index ) const;
     virtual uint length() const;
 
   protected:
-    friend class Node;
+    friend class QDomNode;
 
-    NodeList( QDOM_NodeListPrivate* );
+    QDomNodeList( QDOM_NodeListPrivate* );
 
     QDOM_NodeListPrivate* impl;
   };
 
-  class DocumentType : public Node
+  class QDomDocumentType : public QDomNode
   {
   public:
-    DocumentType();
-    DocumentType( const DocumentType& x );
-    DocumentType& operator= ( const DocumentType& );
-    ~DocumentType();
+    QDomDocumentType();
+    QDomDocumentType( const QDomDocumentType& x );
+    QDomDocumentType& operator= ( const QDomDocumentType& );
+    ~QDomDocumentType();
 
     virtual QString name() const;
-    virtual NamedNodeMap entities() const;
-    virtual NamedNodeMap notations() const;
+    virtual QDomNamedNodeMap entities() const;
+    virtual QDomNamedNodeMap notations() const;
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isDocumentType() const;
 
   private:
-    DocumentType( QDOM_DocumentTypePrivate* );
+    QDomDocumentType( QDOM_DocumentTypePrivate* );
 
-    friend class Document;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomNode;
   };
 
-  class Document : public Node
+  class QDomDocument : public QDomNode
   {
   public:
-    Document();
-    Document( const QString& name );
-    Document( const Document& x );
-    Document& operator= ( const Document& );
-    ~Document();
+    QDomDocument();
+    QDomDocument( const QString& name );
+    QDomDocument( QIODevice* dev );
+    QDomDocument( const QDomDocument& x );
+    QDomDocument& operator= ( const QDomDocument& );
+    ~QDomDocument();
 
     // Qt extensions
     bool setContent( const QString& text );
+    QMimeSourceFactory* mimeSourceFactory();
+    const QMimeSourceFactory* mimeSourceFactory() const;
+    void setMimeSourceFactory( QMimeSourceFactory* );
 
-    // Attributes
-    DocumentType doctype() const;
-    Implementation implementation() const;
-    Element documentElement() const;
+    // QDomAttributes
+    QDomDocumentType doctype() const;
+    QDomImplementation implementation() const;
+    QDomElement documentElement() const;
 
     // Factories
-    Element               createElement( const QString& tagName );
-    DocumentFragment      createDocumentFragment();
-    Text                  createTextNode( const QString& data );
-    Comment               createComment( const QString& data );
-    CDATASection          createCDATASection( const QString& data );
-    ProcessingInstruction createProcessingInstruction( const QString& target, const QString& data );
-    Attr                  createAttribute( const QString& name );
-    EntityReference       createEntityReference( const QString& name );
-    NodeList              elementsByTagName( const QString& tagname );
+    QDomElement               createElement( const QString& tagName );
+    QDomDocumentFragment      createDocumentFragment();
+    QDomText                  createTextNode( const QString& data );
+    QDomComment               createComment( const QString& data );
+    QDomCDATASection          createCDATASection( const QString& data );
+    QDomProcessingInstruction createProcessingInstruction( const QString& target, const QString& data );
+    QDomAttr                  createAttribute( const QString& name );
+    QDomEntityReference       createEntityReference( const QString& name );
+    QDomNodeList              elementsByTagName( const QString& tagname );
     // Qt extension factories
-    Element createElement( const QString& tagname, const QRect& rect );
-    Element createElement( const QString& tagname, const QPen& rect );
-    Element createElement( const QString& tagname, const QFont& rect );
+    QDomElement createElement( const QString& tagname, const QRect& rect );
+    QDomElement createElement( const QString& tagname, const QPoint& rect );
+    QDomElement createElement( const QString& tagname, const QSize& rect );
+    QDomElement createElement( const QString& tagname, const QPen& rect );
+    QDomElement createElement( const QString& tagname, const QFont& rect );
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
     virtual bool isDocument() const;
 
   private:
-    Document( QDOM_DocumentPrivate* );
+    QDomDocument( QDOM_DocumentPrivate* );
 
-    friend class Node;
+    friend class QDomNode;
   };
 
-  class NamedNodeMap
+  class QDomNamedNodeMap
   {
   public:
-    NamedNodeMap();
-    NamedNodeMap( const NamedNodeMap& );
-    NamedNodeMap& operator= ( const NamedNodeMap& );
-    bool operator== ( const NamedNodeMap& ) const;
-    bool operator!= ( const NamedNodeMap& ) const;
-    ~NamedNodeMap();
+    QDomNamedNodeMap();
+    QDomNamedNodeMap( const QDomNamedNodeMap& );
+    QDomNamedNodeMap& operator= ( const QDomNamedNodeMap& );
+    bool operator== ( const QDomNamedNodeMap& ) const;
+    bool operator!= ( const QDomNamedNodeMap& ) const;
+    ~QDomNamedNodeMap();
 
-    Node namedItem( const QString& name ) const;
-    Node setNamedItem( const Node& arg );
-    Node removeNamedItem( const QString& name );
-    Node item( int index ) const;
+    QDomNode namedItem( const QString& name ) const;
+    QDomNode setNamedItem( const QDomNode& arg );
+    QDomNode removeNamedItem( const QString& name );
+    QDomNode item( int index ) const;
     uint length() const;
     bool contains( const QString& name ) const;
 
   private:
-    friend class Node;
-    friend class DocumentType;
-    friend class Element;
+    friend class QDomNode;
+    friend class QDomDocumentType;
+    friend class QDomElement;
 
-    NamedNodeMap( QDOM_NamedNodeMapPrivate* );
+    QDomNamedNodeMap( QDOM_NamedNodeMapPrivate* );
 
     QDOM_NamedNodeMapPrivate* impl;
   };
 
-  class DocumentFragment : public Node
+  class QDomDocumentFragment : public QDomNode
   {
   public:
-    DocumentFragment();
-    DocumentFragment( const DocumentFragment& x );
-    DocumentFragment& operator= ( const DocumentFragment& );
-    ~DocumentFragment();
+    QDomDocumentFragment();
+    QDomDocumentFragment( const QDomDocumentFragment& x );
+    QDomDocumentFragment& operator= ( const QDomDocumentFragment& );
+    ~QDomDocumentFragment();
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isDocumentFragment() const;
 
   private:
-    DocumentFragment( QDOM_DocumentFragmentPrivate* );
+    QDomDocumentFragment( QDOM_DocumentFragmentPrivate* );
 
-    friend class Document;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomNode;
   };
 
-  class CharacterData : public Node
+  class QDomCharacterData : public QDomNode
   {
   public:
-    CharacterData();
-    CharacterData( const CharacterData& x );
-    CharacterData& operator= ( const CharacterData& );
-    ~CharacterData();
+    QDomCharacterData();
+    QDomCharacterData( const QDomCharacterData& x );
+    QDomCharacterData& operator= ( const QDomCharacterData& );
+    ~QDomCharacterData();
 
     virtual QString data() const;
     virtual void setData( const QString& );
@@ -351,244 +330,249 @@ struct QDOM
     virtual void    deleteData( unsigned long offset, unsigned long count );
     virtual void    replaceData( unsigned long offset, unsigned long count, const QString& arg );
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isCharacterData() const;
 
   private:
-    CharacterData( QDOM_CharacterDataPrivate* );
+    QDomCharacterData( QDOM_CharacterDataPrivate* );
 
-    friend class Document;
-    friend class Text;
-    friend class Comment;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomText;
+    friend class QDomComment;
+    friend class QDomNode;
   };
 
-  class Attr : public Node
+  class QDomAttr : public QDomNode
   {
   public:
-    Attr();
-    Attr( const Attr& x );
-    Attr& operator= ( const Attr& );
-    ~Attr();
+    QDomAttr();
+    QDomAttr( const QDomAttr& x );
+    QDomAttr& operator= ( const QDomAttr& );
+    ~QDomAttr();
 
     virtual QString  name() const;
     virtual bool     specified() const;
     virtual QString  value() const;
     virtual void setValue( const QString& );
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isAttr() const;
 
   private:
-    Attr( QDOM_AttrPrivate* );
+    QDomAttr( QDOM_AttrPrivate* );
 
-    friend class Document;
-    friend class Element;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomElement;
+    friend class QDomNode;
   };
 
-  class Element : public Node
+  class QDomElement : public QDomNode
   {
   public:
-    Element();
-    Element( const Element& x );
-    Element& operator= ( const Element& );
-    ~Element();
+    QDomElement();
+    QDomElement( const QDomElement& x );
+    QDomElement& operator= ( const QDomElement& );
+    ~QDomElement();
 
+    void setTagName( const QString& name );
     QString  tagName() const;
     QString  attribute( const QString& name ) const;
     void     setAttribute( const QString& name, const QString& value );
     void     setAttribute( const QString& name, int value );
     void     setAttribute( const QString& name, double value );
     void     removeAttribute( const QString& name );
-    Attr     attributeNode( const QString& name);
-    Attr     setAttributeNode( const Attr& newAttr );
-    Attr     removeAttributeNode( const Attr& oldAttr );
+    QDomAttr     attributeNode( const QString& name);
+    QDomAttr     setAttributeNode( const QDomAttr& newAttr );
+    QDomAttr     removeAttributeNode( const QDomAttr& oldAttr );
     bool     hasAttribute( const QString& name ) const;
     // TODO
-    // virtual NodeList elementsByTagName( const QString& name );
+    // virtual QDomNodeList elementsByTagName( const QString& name );
     void     normalize();
 
-    // Overloaded from Node
-    virtual NamedNodeMap attributes() const;
+    // Overloaded from QDomNode
+    virtual QDomNamedNodeMap attributes() const;
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isElement() const;
 
     QRect toRect() const;
     QFont toFont() const;
     QPen toPen() const;
+    QSize toSize() const;
+    QPoint toPoint() const;
+    QWidget* toWidget( QWidget* parent = 0 ) const;
+    QLayout* toLayout( QWidget* parent ) const;
+    QLayout* toLayout( QLayout* parent, QWidget* mainwidget = 0 ) const;
+
+    QVariant property( const QString& name, QVariant::Type ) const;
+    void setProperty( const QString& name, const QVariant& prop );
 
     QString text() const;
 
   private:
-    Element( QDOM_ElementPrivate* );
+    QDomElement( QDOM_ElementPrivate* );
 
-    friend class Document;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomNode;
   };
 
-  class Text : public CharacterData
+  class QDomText : public QDomCharacterData
   {
   public:
-    Text();
-    Text( const Text& x );
-    Text& operator= ( const Text& );
-    ~Text();
+    QDomText();
+    QDomText( const QDomText& x );
+    QDomText& operator= ( const QDomText& );
+    ~QDomText();
 
-    Text splitText( int offset );
+    QDomText splitText( int offset );
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isText() const;
 
   private:
-    Text( QDOM_TextPrivate* );
+    QDomText( QDOM_TextPrivate* );
 
-    friend class CDATASection;
-    friend class Document;
-    friend class Node;
+    friend class QDomCDATASection;
+    friend class QDomDocument;
+    friend class QDomNode;
   };
 
-  class Comment : public CharacterData
+  class QDomComment : public QDomCharacterData
   {
   public:
-    Comment();
-    Comment( const Comment& x );
-    Comment& operator= ( const Comment& );
-    ~Comment();
+    QDomComment();
+    QDomComment( const QDomComment& x );
+    QDomComment& operator= ( const QDomComment& );
+    ~QDomComment();
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isComment() const;
 
   private:    
-    Comment( QDOM_CommentPrivate* );
+    QDomComment( QDOM_CommentPrivate* );
 
-    friend class Document;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomNode;
   };
 
-  class CDATASection : public Text
+  class QDomCDATASection : public QDomText
   {
   public:
-    CDATASection();
-    CDATASection( const CDATASection& x );
-    CDATASection& operator= ( const CDATASection& );
-    ~CDATASection();
+    QDomCDATASection();
+    QDomCDATASection( const QDomCDATASection& x );
+    QDomCDATASection& operator= ( const QDomCDATASection& );
+    ~QDomCDATASection();
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isCDATASection() const;
 
   private:
-    CDATASection( QDOM_CDATASectionPrivate* );
+    QDomCDATASection( QDOM_CDATASectionPrivate* );
 
-    friend class Document;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomNode;
   };
 
-  class Notation : public Node
+  class QDomNotation : public QDomNode
   {
   public:
-    Notation();
-    Notation( const Notation& x );
-    Notation& operator= ( const Notation& );
-    ~Notation();
+    QDomNotation();
+    QDomNotation( const QDomNotation& x );
+    QDomNotation& operator= ( const QDomNotation& );
+    ~QDomNotation();
 
     QString publicId() const;
     QString systemId() const;
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isNotation() const;
 
   private:
-    Notation( QDOM_NotationPrivate* );
+    QDomNotation( QDOM_NotationPrivate* );
 
-    friend class Document;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomNode;
   };
 
-  class Entity : public Node
+  class QDomEntity : public QDomNode
   {
   public:
-    Entity();
-    Entity( const Entity& x );
-    Entity& operator= ( const Entity& );
-    ~Entity();
+    QDomEntity();
+    QDomEntity( const QDomEntity& x );
+    QDomEntity& operator= ( const QDomEntity& );
+    ~QDomEntity();
 
     virtual QString publicId() const;
     virtual QString systemId() const;
     virtual QString notationName() const;
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isEntity() const;
 
   private:
-    Entity( QDOM_EntityPrivate* );
+    QDomEntity( QDOM_EntityPrivate* );
 
-    friend class Node;
+    friend class QDomNode;
   };
 
-  class EntityReference : public Node
+  class QDomEntityReference : public QDomNode
   {
   public:
-    EntityReference();
-    EntityReference( const EntityReference& x );
-    EntityReference& operator= ( const EntityReference& );
-    ~EntityReference();
+    QDomEntityReference();
+    QDomEntityReference( const QDomEntityReference& x );
+    QDomEntityReference& operator= ( const QDomEntityReference& );
+    ~QDomEntityReference();
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isEntityReference() const;
 
   private:
-    EntityReference( QDOM_EntityReferencePrivate* );
+    QDomEntityReference( QDOM_EntityReferencePrivate* );
 
-    friend class Document;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomNode;
   };
 
-  class ProcessingInstruction : public Node
+  class QDomProcessingInstruction : public QDomNode
   {
   public:
-    ProcessingInstruction();
-    ProcessingInstruction( const ProcessingInstruction& x );
-    ProcessingInstruction& operator= ( const ProcessingInstruction& );
-    ~ProcessingInstruction();
+    QDomProcessingInstruction();
+    QDomProcessingInstruction( const QDomProcessingInstruction& x );
+    QDomProcessingInstruction& operator= ( const QDomProcessingInstruction& );
+    ~QDomProcessingInstruction();
 
     virtual QString target() const;
     virtual QString data() const;
     virtual void setData( const QString& d );
 
-    // Overloaded from Node
+    // Overloaded from QDomNode
     virtual NodeType nodeType() const;
-    // virtual Node cloneNode( bool deep) const;
+    // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isProcessingInstruction() const;
 
   private:
-    ProcessingInstruction( QDOM_ProcessingInstructionPrivate* );
+    QDomProcessingInstruction( QDOM_ProcessingInstructionPrivate* );
 
-    friend class Document;
-    friend class Node;
+    friend class QDomDocument;
+    friend class QDomNode;
   };
 
-  // static Element* rectToElement( Document* doc, const QRect& r, const QString& name );
-  // static QRect elementToRect( const Element* );
-};
-
-QTextStream& operator<<( QTextStream&, const QDOM::Node& );
+QTextStream& operator<<( QTextStream&, const QDomNode& );
 
 #endif

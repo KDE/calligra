@@ -2,6 +2,8 @@
 #include "qxml.h"
 
 #include <qtextstream.h>
+#include <qiodevice.h>
+#include <qmime.h>
 
 #include <string.h>
 #include <stdlib.h>
@@ -12,11 +14,11 @@
  *
  **************************************************************/
 
-class QDOMConsumer : public QXMLConsumer
+class QDomConsumer : public QXMLConsumer
 {
 public:
-  QDOMConsumer( QDOM_DocumentPrivate* d );
-  ~QDOMConsumer();
+  QDomConsumer( QDOM_DocumentPrivate* d );
+  ~QDomConsumer();
 
   virtual bool tagStart( const QString& name );
   virtual bool tagEnd( const QString& name );
@@ -45,33 +47,33 @@ private:
 
 /**************************************************************
  *
- * QDOM::Namespace
+ * QDomNamespace
  *
  **************************************************************/
 
-/* QDOM::Namespace::Namespace()
+/* QDomNamespace::Namespace()
 {
 }
 
-QDOM::Namespace::~Namespace()
+QDomNamespace::~Namespace()
 {
 } */
 
 /**************************************************************
  *
- * QDOM::Exception
+ * QDomException
  *
  **************************************************************/
 
-/* QDOM::Exception::Exception()
+/* QDomException::Exception()
 {
 }
 
-QDOM::Exception::~Exception()
+QDomException::~Exception()
 {
 }
 
-unsigned short QDOM::Exception::code()
+unsigned short QDomException::code()
 {
   return c;
   } */
@@ -121,28 +123,28 @@ QDOM_ImplementationPrivate* QDOM_ImplementationPrivate::clone()
 
 /**************************************************************
  *
- * QDOM::Implementation
+ * QDomImplementation
  *
  **************************************************************/
 
-QDOM::Implementation::Implementation()
+QDomImplementation::QDomImplementation()
 {
   impl = 0;
 }
 
-QDOM::Implementation::Implementation( const Implementation& x )
+QDomImplementation::QDomImplementation( const QDomImplementation& x )
 {
   impl = x.impl;
   if ( impl ) impl->ref();
 }
 
-QDOM::Implementation::Implementation( QDOM_ImplementationPrivate* p )
+QDomImplementation::QDomImplementation( QDOM_ImplementationPrivate* p )
 {
   // We want to be co-owners, so increase the reference count
   impl = p;
 }
 
-QDOM::Implementation& QDOM::Implementation::operator= ( const QDOM::Implementation& x )
+QDomImplementation& QDomImplementation::operator= ( const QDomImplementation& x )
 {
   if ( impl && impl->deref() ) delete impl;
   impl = x.impl;
@@ -151,22 +153,22 @@ QDOM::Implementation& QDOM::Implementation::operator= ( const QDOM::Implementati
   return *this;
 }
 
-bool QDOM::Implementation::operator==( const QDOM::Implementation& x ) const
+bool QDomImplementation::operator==( const QDomImplementation& x ) const
 {
   return ( impl == x.impl );
 }
 
-bool QDOM::Implementation::operator!=( const QDOM::Implementation& x ) const
+bool QDomImplementation::operator!=( const QDomImplementation& x ) const
 {
   return ( impl != x.impl );
 }
 
-QDOM::Implementation::~Implementation()
+QDomImplementation::~QDomImplementation()
 {
   if ( impl && impl->deref() ) delete impl;
 }
 
-bool QDOM::Implementation::hasFeature( const QString& feature, const QString& version )
+bool QDomImplementation::hasFeature( const QString& feature, const QString& version )
 {
   if ( !impl )
     return FALSE;
@@ -205,29 +207,29 @@ QDOM_NodeListPrivate::~QDOM_NodeListPrivate()
 
 /**************************************************************
  *
- * QDOM::NodeList
+ * QDomNodeList
  *
  **************************************************************/
 
-QDOM::NodeList::NodeList()
+QDomNodeList::QDomNodeList()
 {
   impl = 0;
 }
 
-QDOM::NodeList::NodeList( QDOM_NodeListPrivate* p )
+QDomNodeList::QDomNodeList( QDOM_NodeListPrivate* p )
 {
   impl = p;
   if ( impl ) impl->ref();
 }
 
-QDOM::NodeList::NodeList( const QDOM::NodeList& n )
+QDomNodeList::QDomNodeList( const QDomNodeList& n )
 {
   impl = n.impl;
   if ( impl )
     impl->ref();
 }
 
-QDOM::NodeList& QDOM::NodeList::operator= ( const QDOM::NodeList& n )
+QDomNodeList& QDomNodeList::operator= ( const QDomNodeList& n )
 {
   if ( impl && impl->deref() ) delete impl;
   impl = n.impl;
@@ -237,30 +239,30 @@ QDOM::NodeList& QDOM::NodeList::operator= ( const QDOM::NodeList& n )
   return *this;
 }
 
-bool QDOM::NodeList::operator== ( const QDOM::NodeList& n ) const
+bool QDomNodeList::operator== ( const QDomNodeList& n ) const
 {
   return ( impl == n.impl );
 }
 
-bool QDOM::NodeList::operator!= ( const QDOM::NodeList& n ) const
+bool QDomNodeList::operator!= ( const QDomNodeList& n ) const
 {
   return ( impl != n.impl );
 }
 
-QDOM::NodeList::~NodeList()
+QDomNodeList::~QDomNodeList()
 {
   if ( impl && impl->deref() ) delete impl;
 }
 
-QDOM::Node QDOM::NodeList::item( int index ) const
+QDomNode QDomNodeList::item( int index ) const
 {
   if ( !impl )
-    return QDOM::Node();
+    return QDomNode();
 
-  return QDOM::Node( impl->item( index ) );
+  return QDomNode( impl->item( index ) );
 }
 
-uint QDOM::NodeList::length() const
+uint QDomNodeList::length() const
 {
   if ( !impl )
     return 0;
@@ -468,6 +470,7 @@ QDOM_NodePrivate* QDOM_NodePrivate::insertBefore( QDOM_NodePrivate* newChild, QD
 
   newChild->m_nextSibling = refChild;
   newChild->m_previousSibling = refChild->previousSibling();
+  refChild->m_previousSibling->m_nextSibling = newChild;
   refChild->m_previousSibling = newChild;
 
   return newChild;
@@ -518,6 +521,7 @@ QDOM_NodePrivate* QDOM_NodePrivate::insertAfter( QDOM_NodePrivate* newChild, QDO
 
   newChild->m_previousSibling = refChild;
   newChild->m_nextSibling = refChild->nextSibling();
+  refChild->m_nextSibling->m_previousSibling = newChild;
   refChild->m_nextSibling = newChild;
 
   return newChild;
@@ -686,30 +690,30 @@ void QDOM_NodePrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::Node
+ * QDomNode
  *
  **************************************************************/
 
 #define IMPL ((QDOM_NodePrivate*)impl)
   
-QDOM::Node::Node()
+QDomNode::QDomNode()
 {
   impl = 0;
 }
 
-QDOM::Node::Node( const Node& n )
+QDomNode::QDomNode( const QDomNode& n )
 {
   impl = n.impl;
   if ( impl ) impl->ref();
 }
 
-QDOM::Node::Node( QDOM_NodePrivate* n )
+QDomNode::QDomNode( QDOM_NodePrivate* n )
 {
   impl = n;
   if ( impl ) impl->ref();
 }
 
-QDOM::Node& QDOM::Node::operator= ( const QDOM::Node& n )
+QDomNode& QDomNode::operator= ( const QDomNode& n )
 {
   if ( impl && impl->deref() ) delete impl;
   impl = n.impl;
@@ -718,171 +722,171 @@ QDOM::Node& QDOM::Node::operator= ( const QDOM::Node& n )
   return *this;
 }
 
-bool QDOM::Node::operator== ( const QDOM::Node& n ) const
+bool QDomNode::operator== ( const QDomNode& n ) const
 {
   return ( impl == n.impl );
 }
 
-bool QDOM::Node::operator!= ( const QDOM::Node& n ) const
+bool QDomNode::operator!= ( const QDomNode& n ) const
 {
   return ( impl != n.impl );
 }
 
-QDOM::Node::~Node()
+QDomNode::~QDomNode()
 {
   if ( impl && impl->deref() ) delete impl;
 }
 
-QString QDOM::Node::nodeName() const
+QString QDomNode::nodeName() const
 {
   if ( !impl )
     return QString::null;
   return IMPL->m_name;
 }
 
-QString QDOM::Node::nodeValue() const
+QString QDomNode::nodeValue() const
 {
   if ( !impl )
     return QString::null;
   return IMPL->m_value;
 }
 
-void QDOM::Node::setNodeValue( const QString& v )
+void QDomNode::setNodeValue( const QString& v )
 {
   if ( !impl )
     return;
   IMPL->setNodeValue( v );
 }
 
-QDOM::Node::NodeType QDOM::Node::nodeType() const
+QDomNode::NodeType QDomNode::nodeType() const
 {
-  return QDOM::Node::BaseNode;
+  return QDomNode::BaseNode;
 }
 
-QDOM::Node QDOM::Node::parentNode() const
-{
-  if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->parentNode() );
-}
-
-QDOM::NodeList QDOM::Node::childNodes() const
+QDomNode QDomNode::parentNode() const
 {
   if ( !impl )
-    return QDOM::NodeList();
-  return QDOM::NodeList( impl );
+    return QDomNode();
+  return QDomNode( IMPL->parentNode() );
 }
 
-QDOM::Node QDOM::Node::firstChild() const
+QDomNodeList QDomNode::childNodes() const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->firstChild() );
+    return QDomNodeList();
+  return QDomNodeList( impl );
 }
 
-QDOM::Node QDOM::Node::lastChild() const
+QDomNode QDomNode::firstChild() const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->lastChild() );
+    return QDomNode();
+  return QDomNode( IMPL->firstChild() );
 }
 
-QDOM::Node QDOM::Node::previousSibling() const
+QDomNode QDomNode::lastChild() const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->previousSibling() );
+    return QDomNode();
+  return QDomNode( IMPL->lastChild() );
 }
 
-QDOM::Node QDOM::Node::nextSibling() const
+QDomNode QDomNode::previousSibling() const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->nextSibling() );
+    return QDomNode();
+  return QDomNode( IMPL->previousSibling() );
 }
 
-QDOM::NamedNodeMap QDOM::Node::attributes() const
+QDomNode QDomNode::nextSibling() const
 {
   if ( !impl )
-    return QDOM::NamedNodeMap();
-
-  return QDOM::NamedNodeMap( impl->attributes() );
+    return QDomNode();
+  return QDomNode( IMPL->nextSibling() );
 }
 
-QDOM::Document QDOM::Node::ownerDocument() const
+QDomNamedNodeMap QDomNode::attributes() const
 {
   if ( !impl )
-    return QDOM::Document();
-  return QDOM::Document( IMPL->ownerDocument() );
+    return QDomNamedNodeMap();
+
+  return QDomNamedNodeMap( impl->attributes() );
 }
 
-QDOM::Node QDOM::Node::cloneNode( bool deep ) const
+QDomDocument QDomNode::ownerDocument() const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->cloneNode( deep ) );
+    return QDomDocument();
+  return QDomDocument( IMPL->ownerDocument() );
 }
 
-QDOM::Node QDOM::Node::insertBefore( const QDOM::Node& newChild, const QDOM::Node& refChild )
+QDomNode QDomNode::cloneNode( bool deep ) const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->insertBefore( newChild.impl, refChild.impl ) );
+    return QDomNode();
+  return QDomNode( IMPL->cloneNode( deep ) );
 }
 
-QDOM::Node QDOM::Node::insertAfter( const QDOM::Node& newChild, const QDOM::Node& refChild )
+QDomNode QDomNode::insertBefore( const QDomNode& newChild, const QDomNode& refChild )
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->insertAfter( newChild.impl, refChild.impl ) );
+    return QDomNode();
+  return QDomNode( IMPL->insertBefore( newChild.impl, refChild.impl ) );
 }
 
-QDOM::Node QDOM::Node::replaceChild( const QDOM::Node& newChild, const QDOM::Node& oldChild )
+QDomNode QDomNode::insertAfter( const QDomNode& newChild, const QDomNode& refChild )
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->replaceChild( newChild.impl, oldChild.impl ) );
+    return QDomNode();
+  return QDomNode( IMPL->insertAfter( newChild.impl, refChild.impl ) );
 }
 
-QDOM::Node QDOM::Node::removeChild( const QDOM::Node& oldChild )
+QDomNode QDomNode::replaceChild( const QDomNode& newChild, const QDomNode& oldChild )
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->removeChild( oldChild.impl ) );
+    return QDomNode();
+  return QDomNode( IMPL->replaceChild( newChild.impl, oldChild.impl ) );
 }
 
-QDOM::Node QDOM::Node::appendChild( const QDOM::Node& newChild )
+QDomNode QDomNode::removeChild( const QDomNode& oldChild )
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->appendChild( newChild.impl ) );
+    return QDomNode();
+  return QDomNode( IMPL->removeChild( oldChild.impl ) );
 }
 
-bool QDOM::Node::isNull() const
+QDomNode QDomNode::appendChild( const QDomNode& newChild )
+{
+  if ( !impl )
+    return QDomNode();
+  return QDomNode( IMPL->appendChild( newChild.impl ) );
+}
+
+bool QDomNode::isNull() const
 {
   return ( impl == 0 );
 }
 
-void QDOM::Node::clear()
+void QDomNode::clear()
 {
   if ( impl && impl->deref() ) delete impl;
   impl = 0;
 }
 
-QDOM::Node QDOM::Node::namedItem( const QString& name ) const
+QDomNode QDomNode::namedItem( const QString& name ) const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( impl->namedItem( name ) );
+    return QDomNode();
+  return QDomNode( impl->namedItem( name ) );
 }
 
-void QDOM::Node::save( QTextStream& str ) const
+void QDomNode::save( QTextStream& str ) const
 {
   if ( impl )
     IMPL->save( str );
 }
 
-QTextStream& operator<<( QTextStream& str, const QDOM::Node& node )
+QTextStream& operator<<( QTextStream& str, const QDomNode& node )
 {
   node.save( str );
 
@@ -1031,30 +1035,30 @@ bool QDOM_NamedNodeMapPrivate::contains( const QString& name ) const
 
 /**************************************************************
  *
- * QDOM::NamedNodeMap
+ * QDomNamedNodeMap
  *
  **************************************************************/
 
 #define IMPL ((QDOM_NamedNodeMapPrivate*)impl)
 
-QDOM::NamedNodeMap::NamedNodeMap()
+QDomNamedNodeMap::QDomNamedNodeMap()
 {
   impl = 0;
 }
 
-QDOM::NamedNodeMap::NamedNodeMap( const QDOM::NamedNodeMap& n )
+QDomNamedNodeMap::QDomNamedNodeMap( const QDomNamedNodeMap& n )
 {
   impl = n.impl;
   if ( impl ) impl->ref();
 }
 
-QDOM::NamedNodeMap::NamedNodeMap( QDOM_NamedNodeMapPrivate* n )
+QDomNamedNodeMap::QDomNamedNodeMap( QDOM_NamedNodeMapPrivate* n )
 {
   impl = n;
   if ( impl ) impl->ref();
 }
 
-QDOM::NamedNodeMap& QDOM::NamedNodeMap::operator= ( const QDOM::NamedNodeMap& n )
+QDomNamedNodeMap& QDomNamedNodeMap::operator= ( const QDomNamedNodeMap& n )
 {
   if ( impl && impl->deref() ) delete impl;
   impl = n.impl;
@@ -1063,57 +1067,57 @@ QDOM::NamedNodeMap& QDOM::NamedNodeMap::operator= ( const QDOM::NamedNodeMap& n 
   return *this;
 }
 
-bool QDOM::NamedNodeMap::operator== ( const QDOM::NamedNodeMap& n ) const
+bool QDomNamedNodeMap::operator== ( const QDomNamedNodeMap& n ) const
 {
   return ( impl == n.impl );
 }
 
-bool QDOM::NamedNodeMap::operator!= ( const QDOM::NamedNodeMap& n ) const
+bool QDomNamedNodeMap::operator!= ( const QDomNamedNodeMap& n ) const
 {
   return ( impl != n.impl );
 }
 
-QDOM::NamedNodeMap::~NamedNodeMap()
+QDomNamedNodeMap::~QDomNamedNodeMap()
 {
   if ( impl && impl->deref() ) delete impl;
 }
 
-QDOM::Node QDOM::NamedNodeMap::namedItem( const QString& name ) const
+QDomNode QDomNamedNodeMap::namedItem( const QString& name ) const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->namedItem( name ) );
+    return QDomNode();
+  return QDomNode( IMPL->namedItem( name ) );
 }
 
-QDOM::Node QDOM::NamedNodeMap::setNamedItem( const Node& arg )
+QDomNode QDomNamedNodeMap::setNamedItem( const QDomNode& arg )
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->setNamedItem( (QDOM_NodePrivate*)arg.impl ) );
+    return QDomNode();
+  return QDomNode( IMPL->setNamedItem( (QDOM_NodePrivate*)arg.impl ) );
 }
 
-QDOM::Node QDOM::NamedNodeMap::removeNamedItem( const QString& name )
+QDomNode QDomNamedNodeMap::removeNamedItem( const QString& name )
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->removeNamedItem( name ) );
+    return QDomNode();
+  return QDomNode( IMPL->removeNamedItem( name ) );
 }
 
-QDOM::Node QDOM::NamedNodeMap::item( int index ) const
+QDomNode QDomNamedNodeMap::item( int index ) const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( IMPL->item( index ) );
+    return QDomNode();
+  return QDomNode( IMPL->item( index ) );
 }
 
-uint QDOM::NamedNodeMap::length() const
+uint QDomNamedNodeMap::length() const
 {
   if ( !impl )
     return 0;
   return IMPL->length();
 }
 
-bool QDOM::NamedNodeMap::contains( const QString& name ) const
+bool QDomNamedNodeMap::contains( const QString& name ) const
 {
   if ( !impl )
     return FALSE;
@@ -1308,36 +1312,36 @@ void QDOM_DocumentTypePrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::DocumentType
+ * QDomDocumentType
  *
  **************************************************************/
 
 #define IMPL ((QDOM_DocumentTypePrivate*)impl)
   
-QDOM::DocumentType::DocumentType() : QDOM::Node()
+QDomDocumentType::QDomDocumentType() : QDomNode()
 {
 }
 
-QDOM::DocumentType::DocumentType( const DocumentType& n )
-  : QDOM::Node( n )
+QDomDocumentType::QDomDocumentType( const QDomDocumentType& n )
+  : QDomNode( n )
 {
 }
 
-QDOM::DocumentType::DocumentType( QDOM_DocumentTypePrivate* n )
-  : QDOM::Node( n )
+QDomDocumentType::QDomDocumentType( QDOM_DocumentTypePrivate* n )
+  : QDomNode( n )
 {
 }
 
-QDOM::DocumentType& QDOM::DocumentType::operator= ( const QDOM::DocumentType& n )
+QDomDocumentType& QDomDocumentType::operator= ( const QDomDocumentType& n )
 {
-  return (QDOM::DocumentType&) QDOM::Node::operator=( n );
+  return (QDomDocumentType&) QDomNode::operator=( n );
 }
 
-QDOM::DocumentType::~DocumentType()
+QDomDocumentType::~QDomDocumentType()
 {
 }
 
-QString QDOM::DocumentType::name() const
+QString QDomDocumentType::name() const
 {
   if ( !impl )
     return QString::null;
@@ -1345,26 +1349,26 @@ QString QDOM::DocumentType::name() const
   return IMPL->nodeName();
 }
 
-QDOM::NamedNodeMap QDOM::DocumentType::entities() const
+QDomNamedNodeMap QDomDocumentType::entities() const
 {
   if ( !impl )
-    return QDOM::NamedNodeMap();
-  return QDOM::NamedNodeMap( IMPL->entities() );
+    return QDomNamedNodeMap();
+  return QDomNamedNodeMap( IMPL->entities() );
 }
 
-QDOM::NamedNodeMap QDOM::DocumentType::notations() const
+QDomNamedNodeMap QDomDocumentType::notations() const
 {
   if ( !impl )
-    return QDOM::NamedNodeMap();
-  return QDOM::NamedNodeMap( IMPL->notations() );
+    return QDomNamedNodeMap();
+  return QDomNamedNodeMap( IMPL->notations() );
 }
 
-QDOM::Node::NodeType QDOM::DocumentType::nodeType() const
+QDomNode::NodeType QDomDocumentType::nodeType() const
 {
   return DocumentTypeNode;
 }
 
-bool QDOM::DocumentType::isDocumentType() const
+bool QDomDocumentType::isDocumentType() const
 {
   return true;
 }
@@ -1421,46 +1425,46 @@ QDOM_NodePrivate* QDOM_DocumentFragmentPrivate::cloneNode( bool deep)
 
 /**************************************************************
  *
- * QDOM::DocumentFragment
+ * QDomDocumentFragment
  *
  **************************************************************/
 
 #define IMPL ((QDOM_DocumentFragmentPrivate*)impl)
 
-QDOM::DocumentFragment::DocumentFragment()
+QDomDocumentFragment::QDomDocumentFragment()
 {
 }
 
-QDOM::DocumentFragment::DocumentFragment( QDOM_DocumentFragmentPrivate* n )
-  : QDOM::Node( n )
+QDomDocumentFragment::QDomDocumentFragment( QDOM_DocumentFragmentPrivate* n )
+  : QDomNode( n )
 {
 }
 
-QDOM::DocumentFragment::DocumentFragment( const QDOM::DocumentFragment& x )
-  : QDOM::Node( x )
+QDomDocumentFragment::QDomDocumentFragment( const QDomDocumentFragment& x )
+  : QDomNode( x )
 {
 }
 
-QDOM::DocumentFragment& QDOM::DocumentFragment::operator= ( const QDOM::DocumentFragment& x )
+QDomDocumentFragment& QDomDocumentFragment::operator= ( const QDomDocumentFragment& x )
 {
-  return (QDOM::DocumentFragment&) QDOM::Node::operator=( x );
+  return (QDomDocumentFragment&) QDomNode::operator=( x );
 }
 
-QDOM::DocumentFragment::~DocumentFragment()
+QDomDocumentFragment::~QDomDocumentFragment()
 {
 }
 
-QDOM::Node::NodeType QDOM::DocumentFragment::nodeType() const
+QDomNode::NodeType QDomDocumentFragment::nodeType() const
 {
-  return QDOM::Node::DocumentFragmentNode;
+  return QDomNode::DocumentFragmentNode;
 }
 
-/* QDOM::Node QDOM::DocumentFragment::cloneNode( bool deep) const
+/* QDomNode QDomDocumentFragment::cloneNode( bool deep) const
 {
-  return QDOM::Node( new QDOM_DocumentFragmentPrivate( IMPL, deep ) );
+  return QDomNode( new QDOM_DocumentFragmentPrivate( IMPL, deep ) );
   } */
 
-bool QDOM::DocumentFragment::isDocumentFragment() const
+bool QDomDocumentFragment::isDocumentFragment() const
 {
   return TRUE;
 }
@@ -1557,92 +1561,92 @@ void QDOM_CharacterDataPrivate::appendData( const QString& arg )
 
 /**************************************************************
  *
- * QDOM::CharacterData
+ * QDomCharacterData
  *
  **************************************************************/
 
 #define IMPL ((QDOM_CharacterDataPrivate*)impl)
 
-QDOM::CharacterData::CharacterData()
+QDomCharacterData::QDomCharacterData()
 {
 }
 
-QDOM::CharacterData::CharacterData( const QDOM::CharacterData& x )
-  : QDOM::Node( x )
+QDomCharacterData::QDomCharacterData( const QDomCharacterData& x )
+  : QDomNode( x )
 {
 }
 
-QDOM::CharacterData::CharacterData( QDOM_CharacterDataPrivate* n )
-  : QDOM::Node( n )
+QDomCharacterData::QDomCharacterData( QDOM_CharacterDataPrivate* n )
+  : QDomNode( n )
 {
 }
 
-QDOM::CharacterData& QDOM::CharacterData::operator= ( const QDOM::CharacterData& x )
+QDomCharacterData& QDomCharacterData::operator= ( const QDomCharacterData& x )
 {
-  return (QDOM::CharacterData&) QDOM::Node::operator=( x );
+  return (QDomCharacterData&) QDomNode::operator=( x );
 }
 
-QDOM::CharacterData::~CharacterData()
+QDomCharacterData::~QDomCharacterData()
 {
 }
 
-QString QDOM::CharacterData::data() const
+QString QDomCharacterData::data() const
 {
   if ( !impl )
     return QString::null;
   return impl->nodeValue();
 }
 
-void QDOM::CharacterData::setData( const QString& v )
+void QDomCharacterData::setData( const QString& v )
 {
   if ( impl )
     impl->setNodeValue( v );
 }
 
-uint QDOM::CharacterData::length() const
+uint QDomCharacterData::length() const
 {
   if ( impl )
     return IMPL->length();
   return 0;
 }
 
-QString QDOM::CharacterData::substringData( unsigned long offset, unsigned long count )
+QString QDomCharacterData::substringData( unsigned long offset, unsigned long count )
 {
   if ( !impl )
     return QString::null;
   return IMPL->substringData( offset, count );
 }
 
-void QDOM::CharacterData::appendData( const QString& arg )
+void QDomCharacterData::appendData( const QString& arg )
 {
   if ( impl )
     IMPL->appendData( arg );
 }
 
-void QDOM::CharacterData::insertData( unsigned long offset, const QString& arg )
+void QDomCharacterData::insertData( unsigned long offset, const QString& arg )
 {
   if ( impl )
     IMPL->insertData( offset, arg );
 }
 
-void QDOM::CharacterData::deleteData( unsigned long offset, unsigned long count )
+void QDomCharacterData::deleteData( unsigned long offset, unsigned long count )
 {
   if ( impl )
     IMPL->deleteData( offset, count );
 }
 
-void QDOM::CharacterData::replaceData( unsigned long offset, unsigned long count, const QString& arg )
+void QDomCharacterData::replaceData( unsigned long offset, unsigned long count, const QString& arg )
 {
   if ( impl )
     IMPL->replaceData( offset, count, arg );
 }
 
-QDOM::Node::NodeType QDOM::CharacterData::nodeType() const
+QDomNode::NodeType QDomCharacterData::nodeType() const
 {
   return CharacterDataNode;
 }
 
-bool QDOM::CharacterData::isCharacterData() const
+bool QDomCharacterData::isCharacterData() const
 {
   return TRUE;
 }
@@ -1733,76 +1737,76 @@ void QDOM_AttrPrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::Attr
+ * QDomAttr
  *
  **************************************************************/
 
 #define IMPL ((QDOM_AttrPrivate*)impl)
 
-QDOM::Attr::Attr()
+QDomAttr::QDomAttr()
 {
 }
 
-QDOM::Attr::Attr( const QDOM::Attr& x )
-  : QDOM::Node( x )
+QDomAttr::QDomAttr( const QDomAttr& x )
+  : QDomNode( x )
 {
 }
 
-QDOM::Attr::Attr( QDOM_AttrPrivate* n )
-  : QDOM::Node( n )
+QDomAttr::QDomAttr( QDOM_AttrPrivate* n )
+  : QDomNode( n )
 {
 }
 
-QDOM::Attr& QDOM::Attr::operator= ( const QDOM::Attr& x )
+QDomAttr& QDomAttr::operator= ( const QDomAttr& x )
 {
-  return (QDOM::Attr&) QDOM::Node::operator=( x );
+  return (QDomAttr&) QDomNode::operator=( x );
 }
 
-QDOM::Attr::~Attr()
+QDomAttr::~QDomAttr()
 {
 }
 
-QString QDOM::Attr::name() const
+QString QDomAttr::name() const
 {
   if ( !impl )
     return QString::null;
   return impl->nodeName();
 }
 
-bool QDOM::Attr::specified() const
+bool QDomAttr::specified() const
 {
   if ( !impl )
     return false;
   return IMPL->specified();
 }
 
-QString QDOM::Attr::value() const
+QString QDomAttr::value() const
 {
   if ( !impl )
     return QString::null;
   return impl->nodeValue();
 }
 
-void QDOM::Attr::setValue( const QString& v )
+void QDomAttr::setValue( const QString& v )
 {
   if ( !impl )
     return;
   impl->setNodeValue( v );
 }
 
-/* QDOM::Node QDOM::Attr::cloneNode( bool deep) const
+/* QDomNode QDomAttr::cloneNode( bool deep) const
 {
   if ( !impl )
-    return QDOM::Node();
-  return QDOM::Node( new QDOM_AttrPrivate( IMPL, deep ) );
+    return QDomNode();
+  return QDomNode( new QDOM_AttrPrivate( IMPL, deep ) );
   } */
 
-QDOM::Node::NodeType QDOM::Attr::nodeType() const
+QDomNode::NodeType QDomAttr::nodeType() const
 {
   return AttributeNode;
 }
 
-bool QDOM::Attr::isAttr() const
+bool QDomAttr::isAttr() const
 {
   return TRUE;
 }
@@ -1952,7 +1956,7 @@ bool QDOM_ElementPrivate::hasAttribute( const QString& name )
 
 // TODO
 /*
-QDOM::NodeList* QDOM_ElementPrivate::elementsByTagName( const QString& name )
+QDomNodeList* QDOM_ElementPrivate::elementsByTagName( const QString& name )
 {
   NodeList* l = new NodeList( FALSE );
 
@@ -1961,9 +1965,9 @@ QDOM::NodeList* QDOM_ElementPrivate::elementsByTagName( const QString& name )
   return l;
 }
 */
-/* const QDOM::Node* QDOM_ElementPrivate::childByTagName( const QString& name ) const
+/* const QDomNode* QDOM_ElementPrivate::childByTagName( const QString& name ) const
 {
-  const QDOM::NodeList* l = childNodes();
+  const QDomNodeList* l = childNodes();
   uint len = l->length();
 
   for( uint i = 0; i < len; ++i )
@@ -2022,68 +2026,74 @@ void QDOM_ElementPrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::Element
+ * QDomElement
  *
  **************************************************************/
 
 #define IMPL ((QDOM_ElementPrivate*)impl)
 
-QDOM::Element::Element()
-  : QDOM::Node()
+QDomElement::QDomElement()
+  : QDomNode()
 {
 }
 
-QDOM::Element::Element( const QDOM::Element& x )
-  : QDOM::Node( x )
+QDomElement::QDomElement( const QDomElement& x )
+  : QDomNode( x )
 {
 }
 
-QDOM::Element::Element( QDOM_ElementPrivate* n )
-  : QDOM::Node( n )
+QDomElement::QDomElement( QDOM_ElementPrivate* n )
+  : QDomNode( n )
 {
 }
 
-QDOM::Element& QDOM::Element::operator= ( const QDOM::Element& x )
+QDomElement& QDomElement::operator= ( const QDomElement& x )
 {
-  return (QDOM::Element&) QDOM::Node::operator=( x );
+  return (QDomElement&) QDomNode::operator=( x );
 }
 
-QDOM::Element::~Element()
+QDomElement::~QDomElement()
 {
 }
 
-/* QDOM::Node QDOM::Element::cloneNode( bool deep) const
+/* QDomNode QDomElement::cloneNode( bool deep) const
 {
-  return QDOM::Node( new QDOM_ElementPrivate( this, deep ) );
+  return QDomNode( new QDOM_ElementPrivate( this, deep ) );
   } */
 
-QDOM::Node::NodeType QDOM::Element::nodeType() const
+QDomNode::NodeType QDomElement::nodeType() const
 {
   return ElementNode;
 }
 
-QString QDOM::Element::tagName() const
+void QDomElement::setTagName( const QString& name )
+{
+  if ( impl )
+    impl->m_name = name;
+}
+
+QString QDomElement::tagName() const
 {
   if ( !impl )
     return QString::null;
   return impl->nodeName();
 }
 
-QString QDOM::Element::attribute( const QString& name ) const
+QString QDomElement::attribute( const QString& name ) const
 {
   if ( !impl )
     return QString::null;
   return IMPL->attribute( name );
 }
 
-void QDOM::Element::setAttribute( const QString& name, const QString& value )
+void QDomElement::setAttribute( const QString& name, const QString& value )
 {
   if ( !impl )
     return;
   IMPL->setAttribute( name, value );
 }
 
-void QDOM::Element::setAttribute( const QString& name, int value )
+void QDomElement::setAttribute( const QString& name, int value )
 {
   if ( !impl )
     return;
@@ -2092,7 +2102,7 @@ void QDOM::Element::setAttribute( const QString& name, int value )
   IMPL->setAttribute( name, x );
 }
 
-void QDOM::Element::setAttribute( const QString& name, double value )
+void QDomElement::setAttribute( const QString& name, double value )
 {
   if ( !impl )
     return;
@@ -2101,71 +2111,71 @@ void QDOM::Element::setAttribute( const QString& name, double value )
   IMPL->setAttribute( name, x );
 }
 
-void QDOM::Element::removeAttribute( const QString& name )
+void QDomElement::removeAttribute( const QString& name )
 {
   if ( !impl )
     return;
   IMPL->removeAttribute( name );
 }
 
-QDOM::Attr QDOM::Element::attributeNode( const QString& name)
+QDomAttr QDomElement::attributeNode( const QString& name)
 {
   if ( !impl )
-    return QDOM::Attr();
-  return QDOM::Attr( IMPL->attributeNode( name ) );
+    return QDomAttr();
+  return QDomAttr( IMPL->attributeNode( name ) );
 }
 
-QDOM::Attr QDOM::Element::setAttributeNode( const Attr& newAttr )
+QDomAttr QDomElement::setAttributeNode( const QDomAttr& newAttr )
 {
   if ( !impl )
-    return QDOM::Attr();
-  return QDOM::Attr( IMPL->setAttributeNode( ((QDOM_AttrPrivate*)newAttr.impl) ) );
+    return QDomAttr();
+  return QDomAttr( IMPL->setAttributeNode( ((QDOM_AttrPrivate*)newAttr.impl) ) );
 }
 
-QDOM::Attr QDOM::Element::removeAttributeNode( const Attr& oldAttr )
+QDomAttr QDomElement::removeAttributeNode( const QDomAttr& oldAttr )
 {
   if ( !impl )
-    return QDOM::Attr();
-  return QDOM::Attr( IMPL->removeAttributeNode( ((QDOM_AttrPrivate*)oldAttr.impl) ) );
+    return QDomAttr();
+  return QDomAttr( IMPL->removeAttributeNode( ((QDOM_AttrPrivate*)oldAttr.impl) ) );
 }
 
 // TODO
-//  NodeList QDOM::Element::elementsByTagName( const QString& name );
+//  NodeList QDomElement::elementsByTagName( const QString& name );
 
-void QDOM::Element::normalize()
+void QDomElement::normalize()
 {
   if ( !impl )
     return;
   IMPL->normalize();
 }
 
-bool QDOM::Element::isElement() const
+bool QDomElement::isElement() const
 {
   return TRUE;
 }
 
-QDOM::NamedNodeMap QDOM::Element::attributes() const
+QDomNamedNodeMap QDomElement::attributes() const
 {
   if ( !impl )
-    return QDOM::NamedNodeMap();
-  return QDOM::NamedNodeMap( IMPL->attributes() );
+    return QDomNamedNodeMap();
+  return QDomNamedNodeMap( IMPL->attributes() );
 }
 
-bool QDOM::Element::hasAttribute( const QString& name ) const
+bool QDomElement::hasAttribute( const QString& name ) const
 {
   if ( !impl )
     return FALSE;
   return IMPL->hasAttribute( name );
 }
 
-QString QDOM::Element::text() const
+QString QDomElement::text() const
 {
   if ( !impl )
     return QString::null;
   return IMPL->text();
 }
 
-QRect QDOM::Element::toRect() const
+QRect QDomElement::toRect() const
 {
   if ( !impl )
     return QRect();
@@ -2173,7 +2183,21 @@ QRect QDOM::Element::toRect() const
 		attribute( "width" ).toInt(), attribute( "height" ).toInt() );
 }
 
-QPen QDOM::Element::toPen() const
+QSize QDomElement::toSize() const
+{
+  if ( !impl )
+    return QSize();
+  return QSize( attribute( "width" ).toInt(), attribute( "height" ).toInt() );
+}
+
+QPoint QDomElement::toPoint() const
+{
+  if ( !impl )
+    return QPoint();
+  return QPoint( attribute( "x" ).toInt(), attribute( "y" ).toInt() );
+}
+
+QPen QDomElement::toPen() const
 {
   if ( !impl )
     return QPen();
@@ -2191,7 +2215,7 @@ QPen QDOM::Element::toPen() const
   return p;
 }
 
-QFont QDOM::Element::toFont() const
+QFont QDomElement::toFont() const
 {
   if ( !impl )
     return QFont();
@@ -2255,7 +2279,7 @@ QDOM_TextPrivate* QDOM_TextPrivate::splitText( int offset )
 {
   if ( !parentNode() )
   {
-    qWarning( "QDOM::Text::splitText  The node has no parent. So I can not split" );
+    qWarning( "QDomText::splitText  The node has no parent. So I can not split" );
     return 0;
   }
 
@@ -2274,54 +2298,54 @@ void QDOM_TextPrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::Text
+ * QDomText
  *
  **************************************************************/
 
 #define IMPL ((QDOM_TextPrivate*)impl)
 
-QDOM::Text::Text()
-  : QDOM::CharacterData()
+QDomText::QDomText()
+  : QDomCharacterData()
 {
 }
 
-QDOM::Text::Text( const QDOM::Text& x )
-  : QDOM::CharacterData( x )
+QDomText::QDomText( const QDomText& x )
+  : QDomCharacterData( x )
 {
 }
 
-QDOM::Text::Text( QDOM_TextPrivate* n )
-  : QDOM::CharacterData( n )
+QDomText::QDomText( QDOM_TextPrivate* n )
+  : QDomCharacterData( n )
 {
 }
 
-QDOM::Text& QDOM::Text::operator= ( const QDOM::Text& x )
+QDomText& QDomText::operator= ( const QDomText& x )
 {
-  return (QDOM::Text&) QDOM::Node::operator=( x );
+  return (QDomText&) QDomNode::operator=( x );
 }
 
-QDOM::Text::~Text()
+QDomText::~QDomText()
 {
 }
 
-/* QDOM::Node QDOM::Text::cloneNode( bool deep) const
+/* QDomNode QDomText::cloneNode( bool deep) const
 {
-  return QDOM::Node( new QDOM_TextPrivate( this, deep ) );
+  return QDomNode( new QDOM_TextPrivate( this, deep ) );
   } */
 
-QDOM::Node::NodeType QDOM::Text::nodeType() const
+QDomNode::NodeType QDomText::nodeType() const
 {
   return TextNode;
 }
 
-QDOM::Text QDOM::Text::splitText( int offset )
+QDomText QDomText::splitText( int offset )
 {
   if ( !impl )
-    return QDOM::Text();
-  return QDOM::Text( IMPL->splitText( offset ) );
+    return QDomText();
+  return QDomText( IMPL->splitText( offset ) );
 }
 
-bool QDOM::Text::isText() const
+bool QDomText::isText() const
 {
   return TRUE;
 }
@@ -2384,47 +2408,47 @@ void QDOM_CommentPrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::Comment
+ * QDomComment
  *
  **************************************************************/
 
 #define IMPL ((QDOM_CommentPrivate*)impl)
 
-QDOM::Comment::Comment()
-  : QDOM::CharacterData()
+QDomComment::QDomComment()
+  : QDomCharacterData()
 {
 }
 
-QDOM::Comment::Comment( const QDOM::Comment& x )
-  : QDOM::CharacterData( x )
+QDomComment::QDomComment( const QDomComment& x )
+  : QDomCharacterData( x )
 {
 }
 
-QDOM::Comment::Comment( QDOM_CommentPrivate* n )
-  : QDOM::CharacterData( n )
+QDomComment::QDomComment( QDOM_CommentPrivate* n )
+  : QDomCharacterData( n )
 {
 }
 
-QDOM::Comment& QDOM::Comment::operator= ( const QDOM::Comment& x )
+QDomComment& QDomComment::operator= ( const QDomComment& x )
 {
-  return (QDOM::Comment&) QDOM::Node::operator=( x );
+  return (QDomComment&) QDomNode::operator=( x );
 }
 
-QDOM::Comment::~Comment()
+QDomComment::~QDomComment()
 {
 }
 
-/* QDOM::Node QDOM::Comment::cloneNode( bool deep) const
+/* QDomNode QDomComment::cloneNode( bool deep) const
 {
-  return QDOM::Node( new QDOM_CommentPrivate( this, deep ) );
+  return QDomNode( new QDOM_CommentPrivate( this, deep ) );
   } */
 
-QDOM::Node::NodeType QDOM::Comment::nodeType() const
+QDomNode::NodeType QDomComment::nodeType() const
 {
   return CommentNode;
 }
 
-bool QDOM::Comment::isComment() const
+bool QDomComment::isComment() const
 {
   return TRUE;
 }
@@ -2488,47 +2512,47 @@ void QDOM_CDATASectionPrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::CDATASection
+ * QDomCDATASection
  *
  **************************************************************/
 
 #define IMPL ((QDOM_CDATASectionPrivate*)impl)
 
-QDOM::CDATASection::CDATASection()
-  : QDOM::Text()
+QDomCDATASection::QDomCDATASection()
+  : QDomText()
 {
 }
 
-QDOM::CDATASection::CDATASection( const QDOM::CDATASection& x )
-  : QDOM::Text( x )
+QDomCDATASection::QDomCDATASection( const QDomCDATASection& x )
+  : QDomText( x )
 {
 }
 
-QDOM::CDATASection::CDATASection( QDOM_CDATASectionPrivate* n )
-  : QDOM::Text( n )
+QDomCDATASection::QDomCDATASection( QDOM_CDATASectionPrivate* n )
+  : QDomText( n )
 {
 }
 
-QDOM::CDATASection& QDOM::CDATASection::operator= ( const QDOM::CDATASection& x )
+QDomCDATASection& QDomCDATASection::operator= ( const QDomCDATASection& x )
 {
-  return (QDOM::CDATASection&) QDOM::Node::operator=( x );
+  return (QDomCDATASection&) QDomNode::operator=( x );
 }
 
-QDOM::CDATASection::~CDATASection()
+QDomCDATASection::~QDomCDATASection()
 {
 }
 
-/* QDOM::Node QDOM::CDATASection::cloneNode( bool deep) const
+/* QDomNode QDomCDATASection::cloneNode( bool deep) const
 {
-  return QDOM::Node( new QDOM_CDATASectionPrivate( this, deep ) );
+  return QDomNode( new QDOM_CDATASectionPrivate( this, deep ) );
   } */
 
-QDOM::Node::NodeType QDOM::CDATASection::nodeType() const
+QDomNode::NodeType QDomCDATASection::nodeType() const
 {
   return CDATASectionNode;
 }
 
-bool QDOM::CDATASection::isCDATASection() const
+bool QDomCDATASection::isCDATASection() const
 {
   return TRUE;
 }
@@ -2605,61 +2629,61 @@ void QDOM_NotationPrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::Notation
+ * QDomNotation
  *
  **************************************************************/
 
 #define IMPL ((QDOM_NotationPrivate*)impl)
 
-QDOM::Notation::Notation()
-  : QDOM::Node()
+QDomNotation::QDomNotation()
+  : QDomNode()
 {
 }
 
-QDOM::Notation::Notation( const QDOM::Notation& x )
-  : QDOM::Node( x )
+QDomNotation::QDomNotation( const QDomNotation& x )
+  : QDomNode( x )
 {
 }
 
-QDOM::Notation::Notation( QDOM_NotationPrivate* n )
-  : QDOM::Node( n )
+QDomNotation::QDomNotation( QDOM_NotationPrivate* n )
+  : QDomNode( n )
 {
 }
 
-QDOM::Notation& QDOM::Notation::operator= ( const QDOM::Notation& x )
+QDomNotation& QDomNotation::operator= ( const QDomNotation& x )
 {
-  return (QDOM::Notation&) QDOM::Node::operator=( x );
+  return (QDomNotation&) QDomNode::operator=( x );
 }
 
-QDOM::Notation::~Notation()
+QDomNotation::~QDomNotation()
 {
 }
 
-/* QDOM::Node QDOM::Notation::cloneNode( bool deep) const
+/* QDomNode QDomNotation::cloneNode( bool deep) const
 {
-  return QDOM::Node( new QDOM_NotationPrivate( this, deep ) );
+  return QDomNode( new QDOM_NotationPrivate( this, deep ) );
   } */
 
-QDOM::Node::NodeType QDOM::Notation::nodeType() const
+QDomNode::NodeType QDomNotation::nodeType() const
 {
   return NotationNode;
 }
 
-QString QDOM::Notation::publicId() const
+QString QDomNotation::publicId() const
 {
   if ( !impl )
     return QString::null;
   return IMPL->m_pub;
 }
 
-QString QDOM::Notation::systemId() const
+QString QDomNotation::systemId() const
 {
   if ( !impl )
     return QString::null;
   return IMPL->m_sys;
 }
 
-bool QDOM::Notation::isNotation() const
+bool QDomNotation::isNotation() const
 {
   return TRUE;
 }
@@ -2742,68 +2766,68 @@ void QDOM_EntityPrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::Entity
+ * QDomEntity
  *
  **************************************************************/
 
 #define IMPL ((QDOM_EntityPrivate*)impl)
 
-QDOM::Entity::Entity()
-  : QDOM::Node()
+QDomEntity::QDomEntity()
+  : QDomNode()
 {
 }
 
-QDOM::Entity::Entity( const QDOM::Entity& x )
-  : QDOM::Node( x )
+QDomEntity::QDomEntity( const QDomEntity& x )
+  : QDomNode( x )
 {
 }
 
-QDOM::Entity::Entity( QDOM_EntityPrivate* n )
-  : QDOM::Node( n )
+QDomEntity::QDomEntity( QDOM_EntityPrivate* n )
+  : QDomNode( n )
 {
 }
 
-QDOM::Entity& QDOM::Entity::operator= ( const QDOM::Entity& x )
+QDomEntity& QDomEntity::operator= ( const QDomEntity& x )
 {
-  return (QDOM::Entity&) QDOM::Node::operator=( x );
+  return (QDomEntity&) QDomNode::operator=( x );
 }
 
-QDOM::Entity::~Entity()
+QDomEntity::~QDomEntity()
 {
 }
 
-/* QDOM::Node QDOM::Entity::cloneNode( bool deep) const
+/* QDomNode QDomEntity::cloneNode( bool deep) const
 {
-  return QDOM::Node( new QDOM_EntityPrivate( this, deep ) );
+  return QDomNode( new QDOM_EntityPrivate( this, deep ) );
   } */
 
-QDOM::Node::NodeType QDOM::Entity::nodeType() const
+QDomNode::NodeType QDomEntity::nodeType() const
 {
   return EntityNode;
 }
 
-QString QDOM::Entity::publicId() const
+QString QDomEntity::publicId() const
 {
   if ( !impl )
     return QString::null;
   return IMPL->m_pub;
 }
 
-QString QDOM::Entity::systemId() const
+QString QDomEntity::systemId() const
 {
   if ( !impl )
     return QString::null;
   return IMPL->m_sys;
 }
 
-QString QDOM::Entity::notationName() const
+QString QDomEntity::notationName() const
 {
   if ( !impl )
     return QString::null;
   return IMPL->m_notationName;
 }
 
-bool QDOM::Entity::isEntity() const
+bool QDomEntity::isEntity() const
 {
   return TRUE;
 }
@@ -2861,47 +2885,47 @@ void QDOM_EntityReferencePrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::EntityReference
+ * QDomEntityReference
  *
  **************************************************************/
 
 #define IMPL ((QDOM_EntityReferencePrivate*)impl)
 
-QDOM::EntityReference::EntityReference()
-  : QDOM::Node()
+QDomEntityReference::QDomEntityReference()
+  : QDomNode()
 {
 }
 
-QDOM::EntityReference::EntityReference( const QDOM::EntityReference& x )
-  : QDOM::Node( x )
+QDomEntityReference::QDomEntityReference( const QDomEntityReference& x )
+  : QDomNode( x )
 {
 }
 
-QDOM::EntityReference::EntityReference( QDOM_EntityReferencePrivate* n )
-  : QDOM::Node( n )
+QDomEntityReference::QDomEntityReference( QDOM_EntityReferencePrivate* n )
+  : QDomNode( n )
 {
 }
 
-QDOM::EntityReference& QDOM::EntityReference::operator= ( const QDOM::EntityReference& x )
+QDomEntityReference& QDomEntityReference::operator= ( const QDomEntityReference& x )
 {
-  return (QDOM::EntityReference&) QDOM::Node::operator=( x );
+  return (QDomEntityReference&) QDomNode::operator=( x );
 }
 
-QDOM::EntityReference::~EntityReference()
+QDomEntityReference::~QDomEntityReference()
 {
 }
 
-/* QDOM::Node QDOM::EntityReference::cloneNode( bool deep) const
+/* QDomNode QDomEntityReference::cloneNode( bool deep) const
 {
-  return QDOM::Node( new QDOM_EntityReferencePrivate( this, deep ) );
+  return QDomNode( new QDOM_EntityReferencePrivate( this, deep ) );
   } */
 
-QDOM::Node::NodeType QDOM::EntityReference::nodeType() const
+QDomNode::NodeType QDomEntityReference::nodeType() const
 {
   return EntityReferenceNode;
 }
 
-bool QDOM::EntityReference::isEntityReference() const
+bool QDomEntityReference::isEntityReference() const
 {
   return TRUE;
 }
@@ -2964,63 +2988,63 @@ void QDOM_ProcessingInstructionPrivate::save( QTextStream& s ) const
 
 /**************************************************************
  *
- * QDOM::ProcessingInstruction
+ * QDomProcessingInstruction
  *
  **************************************************************/
 
 #define IMPL ((QDOM_ProcessingInstructionPrivate*)impl)
 
-QDOM::ProcessingInstruction::ProcessingInstruction()
-  : QDOM::Node()
+QDomProcessingInstruction::QDomProcessingInstruction()
+  : QDomNode()
 {
 }
 
-QDOM::ProcessingInstruction::ProcessingInstruction( const QDOM::ProcessingInstruction& x )
-  : QDOM::Node( x )
+QDomProcessingInstruction::QDomProcessingInstruction( const QDomProcessingInstruction& x )
+  : QDomNode( x )
 {
 }
 
-QDOM::ProcessingInstruction::ProcessingInstruction( QDOM_ProcessingInstructionPrivate* n )
-  : QDOM::Node( n )
+QDomProcessingInstruction::QDomProcessingInstruction( QDOM_ProcessingInstructionPrivate* n )
+  : QDomNode( n )
 {
 }
 
-QDOM::ProcessingInstruction& QDOM::ProcessingInstruction::operator= ( const QDOM::ProcessingInstruction& x )
+QDomProcessingInstruction& QDomProcessingInstruction::operator= ( const QDomProcessingInstruction& x )
 {
-  return (QDOM::ProcessingInstruction&) QDOM::Node::operator=( x );
+  return (QDomProcessingInstruction&) QDomNode::operator=( x );
 }
 
-QDOM::ProcessingInstruction::~ProcessingInstruction()
+QDomProcessingInstruction::~QDomProcessingInstruction()
 {
 }
 
-QDOM::Node::NodeType QDOM::ProcessingInstruction::nodeType() const
+QDomNode::NodeType QDomProcessingInstruction::nodeType() const
 {
   return ProcessingInstructionNode;
 }
 
-QString QDOM::ProcessingInstruction::target() const
+QString QDomProcessingInstruction::target() const
 {
   if ( !impl )
     return QString::null;
   return impl->nodeName();
 }
 
-QString QDOM::ProcessingInstruction::data() const
+QString QDomProcessingInstruction::data() const
 {
   if ( !impl )
     return QString::null;
   return impl->nodeValue();
 }
 
-void QDOM::ProcessingInstruction::setData( const QString& d )
+void QDomProcessingInstruction::setData( const QString& d )
 {
   if ( !impl )
     return;
   impl->setNodeValue( d );
 }
 
-bool QDOM::ProcessingInstruction::isProcessingInstruction() const
+bool QDomProcessingInstruction::isProcessingInstruction() const
 {
   return TRUE;
 }
@@ -3046,6 +3070,8 @@ public:
   ~QDOM_DocumentPrivate();
 
   bool setContent( const QString& text );
+  QMimeSourceFactory* mimeSourceFactory();
+  void setMimeSourceFactory( QMimeSourceFactory* );
 
   // Attributes
   QDOM_DocumentTypePrivate* doctype() { return type; };
@@ -3072,6 +3098,7 @@ public:
   // Variables
   QDOM_ImplementationPrivate* impl;
   QDOM_DocumentTypePrivate* type;
+  QMimeSourceFactory* m_mimeSourceFactory;
 
   static QString* s_docName;
 };
@@ -3081,6 +3108,7 @@ QString* QDOM_DocumentPrivate::s_docName = 0;
 QDOM_DocumentPrivate::QDOM_DocumentPrivate()
   : QDOM_NodePrivate( 0 )
 {
+  m_mimeSourceFactory = 0;
   impl = new QDOM_ImplementationPrivate();
   type = new QDOM_DocumentTypePrivate( this, this );
 
@@ -3092,6 +3120,7 @@ QDOM_DocumentPrivate::QDOM_DocumentPrivate()
 QDOM_DocumentPrivate::QDOM_DocumentPrivate( const QString& name )
   : QDOM_NodePrivate( 0 )
 {
+  m_mimeSourceFactory = 0;
   impl = new QDOM_ImplementationPrivate();
   type = new QDOM_DocumentTypePrivate( this, this );
   type->m_name = name;
@@ -3104,6 +3133,7 @@ QDOM_DocumentPrivate::QDOM_DocumentPrivate( const QString& name )
 QDOM_DocumentPrivate::QDOM_DocumentPrivate( QDOM_DocumentPrivate* n, bool deep )
   : QDOM_NodePrivate::QDOM_NodePrivate( n, deep )
 {
+  m_mimeSourceFactory = n->m_mimeSourceFactory;
   impl = n->impl->clone();
   type = (QDOM_DocumentTypePrivate*)n->type->cloneNode();
 }
@@ -3123,6 +3153,19 @@ void QDOM_DocumentPrivate::clear()
   QDOM_NodePrivate::clear();
 }
 
+QMimeSourceFactory* QDOM_DocumentPrivate::mimeSourceFactory()
+{
+  if ( m_mimeSourceFactory )
+    return m_mimeSourceFactory;
+
+  return QMimeSourceFactory::defaultFactory();
+}
+
+void QDOM_DocumentPrivate::setMimeSourceFactory( QMimeSourceFactory* f )
+{
+  m_mimeSourceFactory = f;
+}
+
 bool QDOM_DocumentPrivate::setContent( const QString& text )
 {
   clear();
@@ -3130,7 +3173,7 @@ bool QDOM_DocumentPrivate::setContent( const QString& text )
   type = new QDOM_DocumentTypePrivate( this, this );
 
   QXMLSimpleParser p;
-  QDOMConsumer c( this );
+  QDomConsumer c( this );
   int pos = p.parse( text, &c );
   if ( pos != -1 )
   {
@@ -3212,21 +3255,21 @@ void QDOM_DocumentPrivate::save( QTextStream& s ) const
 }
 
 /*
-static void qElementsByTagName( const QDOM::Node* node, const QString& tagname, QDOM::NodeList* l )
+static void qElementsByTagName( const QDomNode* node, const QString& tagname, QDomNodeList* l )
 {
-  const QDOM::NodeList* m = node->childNodes();
+  const QDomNodeList* m = node->childNodes();
   uint len = m->length();
   for( uint i = 0; i < len; ++i )
   {
-    const QDOM::Node* n = m->item( i );
+    const QDomNode* n = m->item( i );
     if ( n->nodeName() == tagname )
-      l->appendChild( (QDOM::Node*)n );
+      l->appendChild( (QDomNode*)n );
 
     qElementsByTagName( n, tagname, l );
   }
 }
 
-QDOM::NodeList* QDOM_DocumentPrivate::elementsByTagName( const QString& tagname )
+QDomNodeList* QDOM_DocumentPrivate::elementsByTagName( const QString& tagname )
 {
   NodeList* l = new NodeList( FALSE );
 
@@ -3238,131 +3281,144 @@ QDOM::NodeList* QDOM_DocumentPrivate::elementsByTagName( const QString& tagname 
 
 /**************************************************************
  *
- * QDOM::Document
+ * QDomDocument
  *
  **************************************************************/
 
 #define IMPL ((QDOM_DocumentPrivate*)impl)
 
-QDOM::Document::Document()
+QDomDocument::QDomDocument()
 {
 }
 
-QDOM::Document::Document( const QString& name )
+QDomDocument::QDomDocument( const QString& name )
 {
   // We take over ownership
   impl = new QDOM_DocumentPrivate( name );
 }
 
-QDOM::Document::Document( const QDOM::Document& x )
-  : QDOM::Node( x )
+QDomDocument::QDomDocument( const QDomDocument& x )
+  : QDomNode( x )
 {
 }
 
-QDOM::Document::Document( QDOM_DocumentPrivate* x )
-  : QDOM::Node( x )
+QDomDocument::QDomDocument( QDOM_DocumentPrivate* x )
+  : QDomNode( x )
 {
 }
 
-QDOM::Document& QDOM::Document::operator= ( const QDOM::Document& x )
+QDomDocument::QDomDocument( QIODevice* dev )
 {
-  return (QDOM::Document&) QDOM::Node::operator=( x );
+  uint size = dev->size();
+  char* buffer = new char[ size + 1 ];
+  dev->readBlock( buffer, size );
+  buffer[ size ] = 0;
+
+  QString text = QString::fromUtf8( buffer, size );
+  delete[] buffer;
+
+  setContent( text );
 }
 
-QDOM::Document::~Document()
+QDomDocument& QDomDocument::operator= ( const QDomDocument& x )
+{
+  return (QDomDocument&) QDomNode::operator=( x );
+}
+
+QDomDocument::~QDomDocument()
 {
 }
 
-bool QDOM::Document::setContent( const QString& text )
+bool QDomDocument::setContent( const QString& text )
 {
   if ( !impl )
     impl = new QDOM_DocumentPrivate;
   return IMPL->setContent( text );
 }
 
-QDOM::DocumentType QDOM::Document::doctype() const
+QDomDocumentType QDomDocument::doctype() const
 {
   if ( !impl )
-    return QDOM::DocumentType();
-  return QDOM::DocumentType( IMPL->doctype() );
+    return QDomDocumentType();
+  return QDomDocumentType( IMPL->doctype() );
 }
 
-QDOM::Implementation QDOM::Document::implementation() const
+QDomImplementation QDomDocument::implementation() const
 {
   if ( !impl )
-    return QDOM::Implementation();
-  return QDOM::Implementation( IMPL->implementation() );
+    return QDomImplementation();
+  return QDomImplementation( IMPL->implementation() );
 }
 
-QDOM::Element QDOM::Document::documentElement() const
+QDomElement QDomDocument::documentElement() const
 {
   if ( !impl )
-    return QDOM::Element();
-  return QDOM::Element( IMPL->documentElement() );
+    return QDomElement();
+  return QDomElement( IMPL->documentElement() );
 }
 
-QDOM::Element QDOM::Document::createElement( const QString& tagName )
+QDomElement QDomDocument::createElement( const QString& tagName )
 {
   if ( !impl )
-    return QDOM::Element();
-  return QDOM::Element( IMPL->createElement( tagName ) );
+    return QDomElement();
+  return QDomElement( IMPL->createElement( tagName ) );
 }
 
-QDOM::DocumentFragment QDOM::Document::createDocumentFragment()
+QDomDocumentFragment QDomDocument::createDocumentFragment()
 {
   if ( !impl )
-    return QDOM::DocumentFragment();
-  return QDOM::DocumentFragment( IMPL->createDocumentFragment() );
+    return QDomDocumentFragment();
+  return QDomDocumentFragment( IMPL->createDocumentFragment() );
 }
 
-QDOM::Text QDOM::Document::createTextNode( const QString& value )
+QDomText QDomDocument::createTextNode( const QString& value )
 {
   if ( !impl )
-    return QDOM::Text();
-  return QDOM::Text( IMPL->createTextNode( value ) );
+    return QDomText();
+  return QDomText( IMPL->createTextNode( value ) );
 }
 
-QDOM::Comment QDOM::Document::createComment( const QString& value )
+QDomComment QDomDocument::createComment( const QString& value )
 {
   if ( !impl )
-    return QDOM::Comment();
-  return QDOM::Comment( IMPL->createComment( value ) );
+    return QDomComment();
+  return QDomComment( IMPL->createComment( value ) );
 }
 
-QDOM::CDATASection QDOM::Document::createCDATASection( const QString& value )
+QDomCDATASection QDomDocument::createCDATASection( const QString& value )
 {
   if ( !impl )
-    return QDOM::CDATASection();
-  return QDOM::CDATASection( IMPL->createCDATASection( value ) );
+    return QDomCDATASection();
+  return QDomCDATASection( IMPL->createCDATASection( value ) );
 }
 
-QDOM::ProcessingInstruction QDOM::Document::createProcessingInstruction( const QString& target,
+QDomProcessingInstruction QDomDocument::createProcessingInstruction( const QString& target,
 									 const QString& data )
 {
   if ( !impl )
-    return QDOM::ProcessingInstruction();
-  return QDOM::ProcessingInstruction( IMPL->createProcessingInstruction( target, data ) );
+    return QDomProcessingInstruction();
+  return QDomProcessingInstruction( IMPL->createProcessingInstruction( target, data ) );
 }
 
-QDOM::Attr QDOM::Document::createAttribute( const QString& name )
+QDomAttr QDomDocument::createAttribute( const QString& name )
 {
   if ( !impl )
-    return QDOM::Attr();
-  return QDOM::Attr( IMPL->createAttribute( name ) );
+    return QDomAttr();
+  return QDomAttr( IMPL->createAttribute( name ) );
 }
 
-QDOM::EntityReference QDOM::Document::createEntityReference( const QString& name )
+QDomEntityReference QDomDocument::createEntityReference( const QString& name )
 {
   if ( !impl )
-    return QDOM::EntityReference();
-  return QDOM::EntityReference( IMPL->createEntityReference( name ) );
+    return QDomEntityReference();
+  return QDomEntityReference( IMPL->createEntityReference( name ) );
 }
 
-QDOM::Element QDOM::Document::createElement( const QString& tagname, const QRect& rect )
+QDomElement QDomDocument::createElement( const QString& tagname, const QRect& rect )
 {
   if ( !impl )
-    return QDOM::Element();
-  QDOM::Element e( createElement( tagname ) );
+    return QDomElement();
+  QDomElement e( createElement( tagname ) );
 
   QString str;
   str.setNum( rect.x() );
@@ -3377,11 +3433,41 @@ QDOM::Element QDOM::Document::createElement( const QString& tagname, const QRect
   return e;
 }
 
-QDOM::Element QDOM::Document::createElement( const QString& tagname, const QPen& pen )
+QDomElement QDomDocument::createElement( const QString& tagname, const QPoint& p )
 {
   if ( !impl )
-    return QDOM::Element();
-  QDOM::Element e( createElement( tagname ) );
+    return QDomElement();
+  QDomElement e( createElement( tagname ) );
+
+  QString str;
+  str.setNum( p.x() );
+  e.setAttribute( "x", str );
+  str.setNum( p.y() );
+  e.setAttribute( "y", str );
+
+  return e;
+}
+
+QDomElement QDomDocument::createElement( const QString& tagname, const QSize& s )
+{
+  if ( !impl )
+    return QDomElement();
+  QDomElement e( createElement( tagname ) );
+
+  QString str;
+  str.setNum( s.width() );
+  e.setAttribute( "width", str );
+  str.setNum( s.height() );
+  e.setAttribute( "height", str );
+
+  return e;
+}
+
+QDomElement QDomDocument::createElement( const QString& tagname, const QPen& pen )
+{
+  if ( !impl )
+    return QDomElement();
+  QDomElement e( createElement( tagname ) );
 
   e.setAttribute( "color", pen.color().name() );
   e.setAttribute( "style", (int)pen.style() );
@@ -3390,11 +3476,11 @@ QDOM::Element QDOM::Document::createElement( const QString& tagname, const QPen&
   return e;
 }
 
-QDOM::Element QDOM::Document::createElement( const QString& tagname, const QFont& font )
+QDomElement QDomDocument::createElement( const QString& tagname, const QFont& font )
 {
   if ( !impl )
-    return QDOM::Element();
-  QDOM::Element e( createElement( tagname ) );
+    return QDomElement();
+  QDomElement e( createElement( tagname ) );
 
   e.setAttribute( "family", font.family() );
   e.setAttribute( "size", font.pointSize() );
@@ -3408,16 +3494,61 @@ QDOM::Element QDOM::Document::createElement( const QString& tagname, const QFont
 }
 
 // TODO
-// QDOM::NodeList QDOM::Document::elementsByTagName( const QString& tagname )
+// QDomNodeList QDomDocument::elementsByTagName( const QString& tagname )
 
-QDOM::Node::NodeType QDOM::Document::nodeType() const
+QDomNode::NodeType QDomDocument::nodeType() const
 {
   return DocumentNode;
 }
 
-bool QDOM::Document::isDocument() const
+bool QDomDocument::isDocument() const
 {
   return TRUE;
+}
+
+/*!
+  Returns the factory attached to this document. If no
+  factory was attached until now to this document, then the default
+  factory as delivered by QMimeSourceFactory::defaultFactory is returned.
+
+  \sa setMimeSourceFactory()
+*/
+QMimeSourceFactory* QDomDocument::mimeSourceFactory()
+{
+  if ( !impl )
+    return 0;
+  return IMPL->mimeSourceFactory();
+}
+
+/*!
+  Returns the factory attached to this document. If no
+  factory was attached until now to this document, then the default
+  factory as delivered by QMimeSourceFactory::defaultFactory is returned.
+
+  \sa setMimeSourceFactory()
+*/
+const QMimeSourceFactory* QDomDocument::mimeSourceFactory() const
+{
+  if ( !impl )
+    return 0;
+  return IMPL->mimeSourceFactory();
+}
+
+/*!
+  Changes the factory for this document. If it is set to zero, then
+  the default factory as delivered by QMimeSourceFactory::defaultFactory is
+  used.
+
+  The factory is used to access external data such as pictures which reside
+  on some external storage but are referenced in the document.
+
+  \sa mimeSourceFactory()
+*/
+void QDomDocument::setMimeSourceFactory( QMimeSourceFactory* f )
+{
+  if ( !impl )
+    return;
+  IMPL->setMimeSourceFactory( f );
 }
 
 #undef IMPL
@@ -3426,148 +3557,148 @@ bool QDOM::Document::isDocument() const
 /*               Node casting functions                         */
 /*==============================================================*/
 
-QDOM::Attr QDOM::Node::toAttr()
+QDomAttr QDomNode::toAttr()
 {
   if ( impl && impl->isAttr() )
   {
     impl->ref();
-    return QDOM::Attr( ((QDOM_AttrPrivate*)impl) );
+    return QDomAttr( ((QDOM_AttrPrivate*)impl) );
   }
-  return QDOM::Attr();
+  return QDomAttr();
 }
 
-QDOM::CDATASection QDOM::Node::toCDATASection()
+QDomCDATASection QDomNode::toCDATASection()
 {
   if ( impl && impl->isCDATASection() )
   {
     impl->ref();
-    return QDOM::CDATASection( ((QDOM_CDATASectionPrivate*)impl) );
+    return QDomCDATASection( ((QDOM_CDATASectionPrivate*)impl) );
   }
-  return QDOM::CDATASection();
+  return QDomCDATASection();
 }
 
-QDOM::DocumentFragment QDOM::Node::toDocumentFragment()
+QDomDocumentFragment QDomNode::toDocumentFragment()
 {
   if ( impl && impl->isDocumentFragment() )
   {
     impl->ref();
-    return QDOM::DocumentFragment( ((QDOM_DocumentFragmentPrivate*)impl) );
+    return QDomDocumentFragment( ((QDOM_DocumentFragmentPrivate*)impl) );
   }
-  return QDOM::DocumentFragment();
+  return QDomDocumentFragment();
 }
 
-QDOM::Document QDOM::Node::toDocument()
+QDomDocument QDomNode::toDocument()
 {
   if ( impl && impl->isDocument() )
   {
     impl->ref();
-    return QDOM::Document( ((QDOM_DocumentPrivate*)impl) );
+    return QDomDocument( ((QDOM_DocumentPrivate*)impl) );
   }
-  return QDOM::Document();
+  return QDomDocument();
 }
 
-QDOM::DocumentType QDOM::Node::toDocumentType()
+QDomDocumentType QDomNode::toDocumentType()
 {
   if ( impl && impl->isDocumentType() )
   {
     impl->ref();
-    return QDOM::DocumentType( ((QDOM_DocumentTypePrivate*)impl) );
+    return QDomDocumentType( ((QDOM_DocumentTypePrivate*)impl) );
   }
-  return QDOM::DocumentType();
+  return QDomDocumentType();
 }
 
-QDOM::Element QDOM::Node::toElement()
+QDomElement QDomNode::toElement()
 {
   if ( impl && impl->isElement() )
   {
     impl->ref();
-    return QDOM::Element( ((QDOM_ElementPrivate*)impl) );
+    return QDomElement( ((QDOM_ElementPrivate*)impl) );
   }
-  return QDOM::Element();
+  return QDomElement();
 }
 
-QDOM::EntityReference QDOM::Node::toEntityReference()
+QDomEntityReference QDomNode::toEntityReference()
 {
   if ( impl && impl->isEntityReference() )
   {
     impl->ref();
-    return QDOM::EntityReference( ((QDOM_EntityReferencePrivate*)impl) );
+    return QDomEntityReference( ((QDOM_EntityReferencePrivate*)impl) );
   }
-  return QDOM::EntityReference();
+  return QDomEntityReference();
 }
 
-QDOM::Text QDOM::Node::toText()
+QDomText QDomNode::toText()
 {
   if ( impl && impl->isText() )
   {
     impl->ref();
-    return QDOM::Text( ((QDOM_TextPrivate*)impl) );
+    return QDomText( ((QDOM_TextPrivate*)impl) );
   }
-  return QDOM::Text();
+  return QDomText();
 }
 
-QDOM::Entity QDOM::Node::toEntity()
+QDomEntity QDomNode::toEntity()
 {
   if ( impl && impl->isEntity() )
   {
     impl->ref();
-    return QDOM::Entity( ((QDOM_EntityPrivate*)impl) );
+    return QDomEntity( ((QDOM_EntityPrivate*)impl) );
   }
-  return QDOM::Entity();
+  return QDomEntity();
 }
 
-QDOM::Notation QDOM::Node::toNotation()
+QDomNotation QDomNode::toNotation()
 {
   if ( impl && impl->isNotation() )
   {
     impl->ref();
-    return QDOM::Notation( ((QDOM_NotationPrivate*)impl) );
+    return QDomNotation( ((QDOM_NotationPrivate*)impl) );
   }
-  return QDOM::Notation();
+  return QDomNotation();
 }
 
-QDOM::ProcessingInstruction QDOM::Node::toProcessingInstruction()
+QDomProcessingInstruction QDomNode::toProcessingInstruction()
 {
   if ( impl && impl->isProcessingInstruction() )
   {
     impl->ref();
-    return QDOM::ProcessingInstruction( ((QDOM_ProcessingInstructionPrivate*)impl) );
+    return QDomProcessingInstruction( ((QDOM_ProcessingInstructionPrivate*)impl) );
   }
-  return QDOM::ProcessingInstruction();
+  return QDomProcessingInstruction();
 }
 
-QDOM::CharacterData QDOM::Node::toCharacterData()
+QDomCharacterData QDomNode::toCharacterData()
 {
   if ( impl && impl->isCharacterData() )
   {
     impl->ref();
-    return QDOM::CharacterData( ((QDOM_CharacterDataPrivate*)impl) );
+    return QDomCharacterData( ((QDOM_CharacterDataPrivate*)impl) );
   }
-  return QDOM::CharacterData();
+  return QDomCharacterData();
 }
 
 /*==============================================================*/
-/*                      QDOMConsumer                            */
+/*                      QDomConsumer                            */
 /*==============================================================*/
 
 /**************************************************
  *
- * QDOMConsumer
+ * QDomConsumer
  *
  **************************************************/
 
-QDOMConsumer::QDOMConsumer( QDOM_DocumentPrivate* d )
+QDomConsumer::QDomConsumer( QDOM_DocumentPrivate* d )
 {
   doc = d;
   node = doc;
   firstTag = FALSE;
 }
 
-QDOMConsumer::~QDOMConsumer()
+QDomConsumer::~QDomConsumer()
 {
 }
 
-bool QDOMConsumer::tagStart( const QString& name )
+bool QDomConsumer::tagStart( const QString& name )
 {
   if ( node == doc )
   {
@@ -3588,7 +3719,7 @@ bool QDOMConsumer::tagStart( const QString& name )
   return TRUE;
 }
 
-bool QDOMConsumer::tagEnd( const QString& name )
+bool QDomConsumer::tagEnd( const QString& name )
 {
   qDebug("End=%s\n",name.ascii());
   if ( node == doc )
@@ -3605,7 +3736,7 @@ bool QDOMConsumer::tagEnd( const QString& name )
   return TRUE;
 }
 
-bool QDOMConsumer::attrib( const QString& name, const QString& value )
+bool QDomConsumer::attrib( const QString& name, const QString& value )
 {
   if ( !node->isElement() )
     return FALSE;
@@ -3615,7 +3746,7 @@ bool QDOMConsumer::attrib( const QString& name, const QString& value )
   return TRUE;
 }
 
-bool QDOMConsumer::text( const QString& text )
+bool QDomConsumer::text( const QString& text )
 {
   // No text as child of some document
   if ( node == doc )
@@ -3626,7 +3757,7 @@ bool QDOMConsumer::text( const QString& text )
   return TRUE;
 }
 
-bool QDOMConsumer::entityRef( const QString& name )
+bool QDomConsumer::entityRef( const QString& name )
 {
   qDebug("ENTITYREF=%s\n",name.ascii());
 
@@ -3649,14 +3780,14 @@ bool QDOMConsumer::entityRef( const QString& name )
   return TRUE;
 }
 
-bool QDOMConsumer::processingInstruction( const QString& name, const QString& value )
+bool QDomConsumer::processingInstruction( const QString& name, const QString& value )
 {
   node->appendChild( doc->createProcessingInstruction( name, value ) );
 
   return TRUE;
 }
 
-bool QDOMConsumer::doctype( const QString& name )
+bool QDomConsumer::doctype( const QString& name )
 {
   printf("DOCTYPE %s\n", name.ascii());
   doc->doctype()->m_name = name;
@@ -3664,37 +3795,37 @@ bool QDOMConsumer::doctype( const QString& name )
   return TRUE;
 }
 
-bool QDOMConsumer::doctypeExtern( const QString& publicId, const QString& systemId )
+bool QDomConsumer::doctypeExtern( const QString& publicId, const QString& systemId )
 {
   printf("DOCTYPE EXTERN %s %s\n", publicId.ascii(),systemId.ascii());
   return TRUE;
 }
 
-bool QDOMConsumer::element( const QString& data )
+bool QDomConsumer::element( const QString& data )
 {
   printf("ELEMENT %s\n", data.ascii());
   return TRUE;
 }
 
-bool QDOMConsumer::attlist( const QString& data )
+bool QDomConsumer::attlist( const QString& data )
 {
   printf("ATTLIST %s\n", data.ascii());
   return TRUE;
 }
 
-bool QDOMConsumer::parameterEntity( const QString& name, const QString& publicId, const QString& systemId )
+bool QDomConsumer::parameterEntity( const QString& name, const QString& publicId, const QString& systemId )
 {
   printf("ENTITY PARAM %s %s %s\n", name.ascii(),publicId.ascii(),systemId.ascii());
   return TRUE;
 }
 
-bool QDOMConsumer::parameterEntity( const QString& name, const QString& value )
+bool QDomConsumer::parameterEntity( const QString& name, const QString& value )
 {
   printf("ENTITY PARAM %s %s\n", name.ascii(),value.ascii());
   return TRUE;
 }
 
-bool QDOMConsumer::entity( const QString& name, const QString& publicId, const QString& systemId, const QString& ndata )
+bool QDomConsumer::entity( const QString& name, const QString& publicId, const QString& systemId, const QString& ndata )
 {
   printf("ENTITY %s %s %s %s\n", name.ascii(),publicId.ascii(),systemId.ascii(),ndata.ascii());
   QDOM_EntityPrivate* e = new QDOM_EntityPrivate( doc, 0, name, publicId, systemId, ndata );
@@ -3702,7 +3833,7 @@ bool QDOMConsumer::entity( const QString& name, const QString& publicId, const Q
   return TRUE;
 }
 
-bool QDOMConsumer::entity( const QString& name, const QString& value )
+bool QDomConsumer::entity( const QString& name, const QString& value )
 {
   printf("ENTITY %s %s\n", name.ascii(),value.ascii());
 
@@ -3713,7 +3844,7 @@ bool QDOMConsumer::entity( const QString& name, const QString& value )
   return TRUE;
 }
 
-bool QDOMConsumer::notation( const QString& name, const QString& publicId, const QString& systemId )
+bool QDomConsumer::notation( const QString& name, const QString& publicId, const QString& systemId )
 {
   printf("NOTATION %s %s %s\n", name.ascii(),publicId.ascii(),systemId.ascii());
   QDOM_NotationPrivate* n = new QDOM_NotationPrivate( doc, 0, name, publicId, systemId );
@@ -3721,12 +3852,12 @@ bool QDOMConsumer::notation( const QString& name, const QString& publicId, const
   return TRUE;
 }
 
-void QDOMConsumer::parseError( int )
+void QDomConsumer::parseError( int )
 {
   // TODO
 }
 
-bool QDOMConsumer::finished()
+bool QDomConsumer::finished()
 {
   if ( node != doc )
     return FALSE;
@@ -3740,7 +3871,7 @@ bool QDOMConsumer::finished()
  **************************************************/
 
 /*
-QDOM::Element* QDOM::rectToElement( QDOM::Document* doc, const QRect& r, const QString& name )
+QDomElement* QDomrectToElement( QDomDocument* doc, const QRect& r, const QString& name )
 {
   Element* e = doc->createElement( name );
 
@@ -3757,7 +3888,7 @@ QDOM::Element* QDOM::rectToElement( QDOM::Document* doc, const QRect& r, const Q
   return e;
 }
 
-QRect QDOM::elementToRect( const QDOM::Element* e )
+QRect QDomelementToRect( const QDomElement* e )
 {
   return QRect( e->attribute( "x" ).toInt(), e->attribute( "y" ).toInt(),
 		e->attribute( "width" ).toInt(), e->attribute( "height" ).toInt() );

@@ -110,7 +110,7 @@ protected:
   /**
    *  This function loads a XML document. It is called by @ref KoDocument#load.
    */
-  virtual bool loadXML( const QDOM::Document&, KOStore::Store_ptr  )
+  virtual bool loadXML( const QDomDocument&, KOStore::Store_ptr  )
   { kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadXML not implemented" ); return false; };
   /**
    *  You need to overload this function if your document may contain
@@ -275,13 +275,13 @@ public:
    *  is done in @ref Document_impl. This function just stores information
    *  about the position and id of the embedded document.
    */
-  virtual QDOM::Element save( QDOM::Document& );
+  virtual QDomElement save( QDomDocument& );
   /**
    *  Parses the <object> tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
    *  or @ref #loadDocumentMimePart to actually load the embedded documents.
    */
-  virtual bool load( const QDOM::Element& );
+  virtual bool load( const QDomElement& );
   /**
    *  Actually loads the embedded document from the disk/net or from the store,
    *  depending in @ref #m_strURL. This function is called for all children
