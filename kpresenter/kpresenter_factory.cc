@@ -47,8 +47,6 @@ KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
 				      KStandardDirs::kde_default("data") + "koffice/toolbar/");
     s_global->dirs()->addResourceType("toolbar",
 				      KStandardDirs::kde_default("data") + "kpresenter/toolbar/");
-    KGlobal::dirs()->addResourceType("toolbar",
-				     KStandardDirs::kde_default("data") + "kpresenter/toolbar/");
 }
 
 KPresenterFactory::~KPresenterFactory()
