@@ -80,8 +80,8 @@ void CanvasField::fastProperty()
     QString sValue = props["Field"]->value();
     
     /* Remove the [] brackets around the text */
-    QString sText = KLineEditDlg::getText( i18n( "Change field" ),
-            "Field:", sValue , &accepted );
+    QString sText = KLineEditDlg::getText( i18n( "Change Field" ),
+            i18n("Enter field name:"), sValue , &accepted );
     if ( accepted )
         props["Field"]->setValue( sText );
 

@@ -203,8 +203,8 @@ void CanvasLabel::fastProperty()
 {
     bool accepted;
 
-    QString sText = KLineEditDlg::getText( i18n( "Change label" ), 
-            "", props["Text"]->value(), &accepted );
+    QString sText = KLineEditDlg::getText( i18n( "Change Label" ),
+            i18n("Enter label name:"), props["Text"]->value(), &accepted );
     if ( accepted )
         props["Text"]->setValue( sText );
 }

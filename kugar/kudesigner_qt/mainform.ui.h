@@ -332,19 +332,19 @@ void fmMain::setDetailFooterAttributes(QDomNode *node)
 
 void fmMain::fileOpen()
 {
-    QString fName = QFileDialog::getOpenFileName("", "*.kut", this, "Open report dialog",
+    QString fName = QFileDialog::getOpenFileName("", "*.kut", this, "Open Report Dialog",
 						 "Choose a file");
     if (fName == "")
 	return;
-    
+
     QFile f(fName);
     if (!f.open(IO_ReadOnly))
 	return;
-    
+
     QDomDocument rt;
     if (!rt.setContent(&f))
 	return;
-    
+
     QDomNode report, rep;
     for (QDomNode report = rt.firstChild(); !report.isNull(); report = report.nextSibling())
     {
@@ -355,7 +355,7 @@ void fmMain::fileOpen()
 	}
     }
     report = rep;
-    
+
     //setting report Attributes
     setReportAttributes(&report, fName);
 
@@ -429,7 +429,7 @@ void fmMain::fileSaveAs()
 {
     if (canvas)
     {
-	((MyCanvas*)canvas)->templ->setFileName(QFileDialog::getSaveFileName("", "*.kut", this, "Save report dialog",
+	((MyCanvas*)canvas)->templ->setFileName(QFileDialog::getSaveFileName("", "*.kut", this, "Save Report Dialog",
 				     "Choose a file"));
 	if (((MyCanvas*)canvas)->templ->fileName() != "")
 	    saveReport();
