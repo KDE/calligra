@@ -1,8 +1,6 @@
 
 KDE_CXXFLAGS = $(USE_RTTI) 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
-LDFLAGS	= $(all_libraries) $(KDE_RPATH)
-LDADD = 
 
 ####### Files
 
@@ -12,7 +10,7 @@ lib_LTLIBRARIES = libkpresenter.la
 kpresenter_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kpresenter_LDADD = libkpresenter.la 
 
-libkpresenter_la_LDFLAGS = -avoid-version -module
+libkpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
 libkpresenter_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO)
 
 libkpresenter_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
