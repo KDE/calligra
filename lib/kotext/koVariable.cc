@@ -84,7 +84,7 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 {
     if ( data.type() != QVariant::Date )
     {
-        kdDebug()<<" Error in KoVariableDateFormat::convert \n";
+        kdDebug()<<" Error in KoVariableDateFormat::convert. Value is a " << data.typeName() << endl;
         return QString::null;
     }
     if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())  // FIXME: "Locale" is I18N !
@@ -123,7 +123,7 @@ QString KoVariableTimeFormat::convert( const QVariant & time ) const
 {
     if ( time.type() != QVariant::Time )
     {
-        kdDebug()<<" Error in KoVariableTimeFormat::convert \n";
+        kdDebug()<<" Error in KoVariableTimeFormat::convert. Value is a " << time.typeName() << endl;
         return QString::null;
     }
 
@@ -141,7 +141,7 @@ QString KoVariableStringFormat::convert( const QVariant & string ) const
 {
     if ( string.type() != QVariant::String )
     {
-        kdDebug()<<" Error in KoVariableStringFormat::convert \n";
+        kdDebug()<<" Error in KoVariableStringFormat::convert. Value is a " << string.typeName() << endl;
         return QString::null;
     }
 
@@ -158,7 +158,7 @@ QString KoVariableNumberFormat::convert( const QVariant &value ) const
 {
     if ( value.type() != QVariant::Int )
     {
-        kdDebug()<<" Error in KoVariableNumberFormat::convert \n";
+        kdDebug()<<" Error in KoVariableNumberFormat::convert. Value is a " << value.typeName() << endl;
         return QString::null;
     }
 
