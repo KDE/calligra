@@ -143,7 +143,7 @@ VText::VText( const VText& text )
 
 	// copy glyphs
 	VCompositeListIterator itr( text.m_glyphs );
-	for ( ; itr.current() ; ++itr )
+	for( ; itr.current() ; ++itr )
 		m_glyphs.append( itr.current()->clone() );
 	
 	m_boundingBoxIsInvalid = true;
@@ -204,7 +204,7 @@ VText::transform( const QWMatrix& m )
 	m_basePath.transform( m );
 
 	VCompositeListIterator itr( m_glyphs );
-	for ( ; itr.current() ; ++itr )
+	for( ; itr.current() ; ++itr )
 		itr.current()->transform( m );
 
 	m_boundingBoxIsInvalid = true;
@@ -266,7 +266,7 @@ VText::save( QDomElement& element ) const
 
 		// save all glyphs / paths
 		VCompositeListIterator itr = m_glyphs;
-		for ( ; itr.current() ; ++itr )
+		for( ; itr.current() ; ++itr )
 			itr.current()->save( me );
 	}
 }
@@ -329,12 +329,12 @@ VText::accept( VVisitor& visitor )
 
 void VText::traceText( const KarbonView* view )
 {
-	if ( !view )
+	if( !view )
 	{
 		kdDebug() << "Can't trace a text without a view." << endl;
 		return;
 	}
-	if ( m_basePath.count() == 0 )
+	if( m_basePath.count() == 0 )
 	{
 		kdDebug() << "Can't draw a text without base path (was: " << m_text << ")." << endl;
 		return;
@@ -396,6 +396,9 @@ void VText::traceText( const KarbonView* view )
 			FT_OutlineGlyph g;
 			FT_Get_Glyph( fontFace->glyph, reinterpret_cast<FT_Glyph *>( &g ) );
 			VComposite *composite = new VComposite( this );
+			VFill *fill = composite->fill();
+			fill->setFillRule( VFill::evenOdd );
+			composite->setFill( *fill );
 			FT_Outline_Decompose(&g->outline, &OutlineMethods, composite );
 			//composite->close();
 
@@ -411,16 +414,16 @@ void VText::traceText( const KarbonView* view )
 				oldSeg = seg;
 				seg = ++pathIt;
 			}
-			if ( seg )
+			if( seg )
 			{
 				sp = ( x - fsx ) / seg->length();
 				seg->pointTangentNormal( sp, &point, &tangent, &normal );
 			}
 			else
 			{
-				if ( ext )
-					oldSeg->pointTangentNormal( 1, &extPoint, &tangent, &normal );
 				ext = true;
+				if( ext )
+					oldSeg->pointTangentNormal( 1, &extPoint, &tangent, &normal );
 				point = extPoint + ( x - fsx ) * tangent;
 			}
 			
