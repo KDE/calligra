@@ -380,7 +380,6 @@ QString WinWordDoc::generateFormats(
                     image->type,
                     image->length,
                     image->data);
-
             formats.append("<FORMAT id=\"2\" pos=\"");
             formats.append(QString::number(image->start));
             formats.append("\">\n");
@@ -400,6 +399,8 @@ QString WinWordDoc::generateFormats(
         else
         if (typeid(VectorGraphic) == typeid(*run))
         {
+#warning: disabling killustrator-embedded images
+#ifdef KILLUSTRATOR_WORKS_AGAIN
             VectorGraphic *vectorGraphic = static_cast<VectorGraphic *>(run.data());
             QString ourKey;
             QString uid;
@@ -441,6 +442,7 @@ QString WinWordDoc::generateFormats(
             m_embedded.append("</SETTINGS>\n");
             m_embedded.append(
                 "  </EMBEDDED>\n");
+#endif
         }
         else
         if (typeid(Object) == typeid(*run))
