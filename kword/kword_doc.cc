@@ -1810,11 +1810,12 @@ void KWordDocument::addView( KoView *_view )
 }
 
 /*================================================================*/
-void KWordDocument::removeView( KWordView *_view )
+void KWordDocument::removeView( KoView *_view )
 {
     m_lstViews.setAutoDelete( FALSE );
-    m_lstViews.removeRef( _view );
+    m_lstViews.removeRef( static_cast<KWordView*>(_view) );
     m_lstViews.setAutoDelete( TRUE );
+    KoDocument::removeView( _view );
 }
 
 /*================================================================*/

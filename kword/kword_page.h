@@ -322,8 +322,8 @@ protected:
     void showCursor( bool visible );
 
     bool focusNextPrevChild( bool next );
-    void enterEvent( QEvent * )
-    { setFocus(); }
+//    void enterEvent( QEvent * )
+//    { setFocus(); }
     void focusInEvent( QFocusEvent * );
     void focusOutEvent( QFocusEvent * );
     void keyReleaseEvent( QKeyEvent *e );

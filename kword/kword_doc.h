@@ -125,7 +125,7 @@ public:
     virtual QStrList inputFormats();
 
     virtual void addView( KoView *_view );
-    virtual void removeView( KWordView *_view );
+    virtual void removeView( KoView *_view );
 
     virtual void insertObject( const QRect& _rect, KoDocumentEntry& _e, int diffx, int diffy );
     void setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf );

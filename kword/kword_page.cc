@@ -1242,6 +1242,7 @@ void KWPage::viewportMouseReleaseEvent( QMouseEvent *e )
         repaintScreen( FALSE );
     }
 
+    if ( hasFocus() )
     startBlinkCursor();
 }
 
@@ -1345,6 +1346,7 @@ void KWPage::viewportMouseDoubleClickEvent( QMouseEvent *e )
     else if ( mouseMode == MM_EDIT_FRAME )
         vmdEditFrame( mx, my );
 
+    if ( hasFocus() )
     startBlinkCursor();
 }
 
