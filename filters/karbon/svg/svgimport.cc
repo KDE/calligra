@@ -331,7 +331,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 	}
 	else if( command == "stroke-width" )
 		gc->stroke.setLineWidth( params.toDouble() );
-	else if( command == "stroke-linestyle" )
+	else if( command == "stroke-linejoin" )
 	{
 		if( params == "miter" )
 			gc->stroke.setLineJoin( VStroke::joinMiter );
@@ -404,8 +404,8 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		parsePA( gc, "stroke", e.attribute( "stroke" ) );
 	if( !e.attribute( "stroke-width" ).isEmpty() )
 		parsePA( gc, "stroke-width", e.attribute( "stroke-width" ) );
-	if( !e.attribute( "stroke-linestyle" ).isEmpty() )
-		parsePA( gc, "stroke-linestyle", e.attribute( "stroke-linestyle" ) );
+	if( !e.attribute( "stroke-linejoin" ).isEmpty() )
+		parsePA( gc, "stroke-linejoin", e.attribute( "stroke-linejoin" ) );
 	if( !e.attribute( "stroke-linecap" ).isEmpty() )
 		parsePA( gc, "stroke-linecap", e.attribute( "stroke-linecap" ) );
 	if( !e.attribute( "stroke-dasharray" ).isEmpty() )
