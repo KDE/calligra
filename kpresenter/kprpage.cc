@@ -141,16 +141,16 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                 lstappear->obj = it.current();
                 lstappear->objIndex = indexObj;
                 lstappear->appear = true;
-                kdDebug()<<" indexObj :"<<indexObj<<endl;
+                //kdDebug()<<" indexObj :"<<indexObj<<endl;
                 lstMap::Iterator tmp = listObjectAnimation.find( it.current()->getAppearStep() );
                 if ( tmp!= listObjectAnimation.end() )
                 {
-                    kdDebug()<<" group already exist \n";
+                    //kdDebug()<<" group already exist \n";
                     tmp.data().append( lstappear );
                 }
                 else
                 {
-                    kdDebug()<<" create new list \n";
+                    //kdDebug()<<" create new list \n";
                     QPtrList<listAnimation> tmp2;
                     tmp2.append( lstappear );
                     listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
@@ -162,16 +162,16 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                 lstappear->obj = it.current();
                 lstappear->objIndex = indexObj;
                 lstappear->appear = false;
-                kdDebug()<<" indexObj :"<<indexObj<<endl;
+                //kdDebug()<<" indexObj :"<<indexObj<<endl;
                 lstMap::Iterator tmp = listObjectAnimation.find( it.current()->getDisappearStep() );
                 if ( tmp!= listObjectAnimation.end() )
                 {
-                    kdDebug()<<" group already exist \n";
+                    //kdDebug()<<" group already exist \n";
                     tmp.data().append( lstappear );
                 }
                 else
                 {
-                    kdDebug()<<" create new list \n";
+                    //kdDebug()<<" create new list \n";
                     QPtrList<listAnimation> tmp2;
                     tmp2.append( lstappear );
                     listObjectAnimation.insert( it.current()->getDisappearStep(), tmp2 );

@@ -362,7 +362,7 @@ void KPObject::saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto )
 
 bool KPObject::haveAnimation() const
 {
-    kdDebug()<<" effect :"<<effect<<" effect3 :"<<effect3<<" a_fileName :"<<a_fileName<<" d_fileName :"<<d_fileName<<" appearTimer :"<<appearTimer<<" disappearTimer :"<<disappearTimer<<endl;
+    //kdDebug()<<" effect :"<<effect<<" effect3 :"<<effect3<<" a_fileName :"<<a_fileName<<" d_fileName :"<<d_fileName<<" appearTimer :"<<appearTimer<<" disappearTimer :"<<disappearTimer<<endl;
     if ( effect == EF_NONE && effect3==EF3_NONE && a_fileName.isEmpty() && d_fileName.isEmpty() && ( appearTimer==1 ) && ( disappearTimer==1 ))
         return false;
     else
@@ -2084,86 +2084,86 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
             //try to use style.
             QDomElement* draw = context.oasisStyles().drawStyles()[style];
             if ( draw)
+            {
+                kdDebug()<<"We have a style";
+                int angle = 0;
+                if( draw->hasAttribute( "draw:rotation" ))
                 {
-                    kdDebug()<<"We have a style";
-                    int angle = 0;
-                    if( draw->hasAttribute( "draw:rotation" ))
-                        {
-                            angle = (draw->attribute( "draw:rotation" ).toInt())/10;
-                            kdDebug()<<"angle :"<<angle<<endl;
-                        }
-                    if(draw->hasAttribute( "draw:color" ) )
-                        {
-                            //kdDebug()<<" draw:color :"<<draw->attribute( "draw:color" )<<endl;
-                            tmpBrush.setColor(draw->attribute( "draw:color" ) );
-                        }
-                    if( draw->hasAttribute( "draw:distance" ))
-                        {
-                            //todo implemente it into kpresenter
-                        }
-                    if( draw->hasAttribute("draw:display-name"))
-                        {
-                            //todo implement it into kpresenter
-                        }
-                    if( draw->hasAttribute( "draw:style" ))
-                        {
-                            //todo implemente it into kpresenter
-                            QString styleHash = draw->attribute( "draw:style" );
-                            if( styleHash == "single")
-                                {
-                                    switch( angle )
-                                        {
-                                        case 0:
-                                        case 180:
-                                            tmpBrush.setStyle(Qt::HorPattern );
-                                            break;
-                                        case 45:
-                                        case 225:
-                                            tmpBrush.setStyle(Qt::BDiagPattern );
-                                            break;
-                                        case 90:
-                                        case 270:
-                                            tmpBrush.setStyle(Qt::VerPattern );
-                                            break;
-                                        case 135:
-                                        case 315:
-                                            tmpBrush.setStyle(Qt::FDiagPattern );
-                                            break;
-                                        default:
-                                            //todo fixme when we will have a kopaint
-                                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
-                                            break;
-                                        }
-                                }
-                            else if( styleHash == "double")
-                                {
-                                    switch( angle )
-                                        {
-                                        case 0:
-                                        case 180:
-                                        case 90:
-                                        case 270:
-                                            tmpBrush.setStyle(Qt::CrossPattern );
-                                            break;
-                                        case 45:
-                                        case 135:
-                                        case 225:
-                                        case 315:
-                                            tmpBrush.setStyle(Qt::DiagCrossPattern );
-                                            break;
-                                        default:
-                                            //todo fixme when we will have a kopaint
-                                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
-                                            break;
-                                        }
-
-                                }
-                            else if( styleHash == "triple")
-                                {
-                                    kdDebug()<<" it is not implemented :( \n";
-                                }
-                        }
+                    angle = (draw->attribute( "draw:rotation" ).toInt())/10;
+                    kdDebug()<<"angle :"<<angle<<endl;
                 }
+                if(draw->hasAttribute( "draw:color" ) )
+                {
+                    //kdDebug()<<" draw:color :"<<draw->attribute( "draw:color" )<<endl;
+                    tmpBrush.setColor(draw->attribute( "draw:color" ) );
+                }
+                if( draw->hasAttribute( "draw:distance" ))
+                {
+                    //todo implemente it into kpresenter
+                }
+                if( draw->hasAttribute("draw:display-name"))
+                {
+                    //todo implement it into kpresenter
+                }
+                if( draw->hasAttribute( "draw:style" ))
+                {
+                    //todo implemente it into kpresenter
+                    QString styleHash = draw->attribute( "draw:style" );
+                    if( styleHash == "single")
+                    {
+                        switch( angle )
+                        {
+                        case 0:
+                        case 180:
+                            tmpBrush.setStyle(Qt::HorPattern );
+                            break;
+                        case 45:
+                        case 225:
+                            tmpBrush.setStyle(Qt::BDiagPattern );
+                            break;
+                        case 90:
+                        case 270:
+                            tmpBrush.setStyle(Qt::VerPattern );
+                            break;
+                        case 135:
+                        case 315:
+                            tmpBrush.setStyle(Qt::FDiagPattern );
+                            break;
+                        default:
+                            //todo fixme when we will have a kopaint
+                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                            break;
+                        }
+                    }
+                    else if( styleHash == "double")
+                    {
+                        switch( angle )
+                        {
+                        case 0:
+                        case 180:
+                        case 90:
+                        case 270:
+                            tmpBrush.setStyle(Qt::CrossPattern );
+                            break;
+                        case 45:
+                        case 135:
+                        case 225:
+                        case 315:
+                            tmpBrush.setStyle(Qt::DiagCrossPattern );
+                            break;
+                        default:
+                            //todo fixme when we will have a kopaint
+                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                            break;
+                        }
+
+                    }
+                    else if( styleHash == "triple")
+                    {
+                        kdDebug()<<" it is not implemented :( \n";
+                    }
+                }
+            }
             setBrush( tmpBrush );
         }
         else if ( fill == "gradient" )

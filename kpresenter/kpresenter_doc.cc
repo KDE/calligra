@@ -1268,7 +1268,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QDomElement settings = body.namedItem("presentation:settings").toElement();
     if (!settings.isNull() && !_clean /*don't load settings when we copy/paste a page*/)
     {
-        kdDebug()<<"presentation:settings ********************************************* \n";
+        //kdDebug()<<"presentation:settings ********************************************* \n";
         if (settings.attribute("presentation:endless")=="true")
             _spInfiniteLoop = true;
 
@@ -1450,6 +1450,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         if ( name == "draw:text-box" ) // textbox
         {
             fillStyleStack( o, context );
+
             KPTextObject *kptextobject = new KPTextObject( this );
             kptextobject->loadOasis(o, context, m_loadingInfo);
             if ( groupObject )
@@ -1536,7 +1537,6 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         }
         else if ( name == "draw:path" )
         {
-            fillStyleStack( o, context );
             //we have 4 elements to use here.
             //Cubicbeziercurve/Quadricbeziercurve/closeline/KPFreehandObject
             //we must parse svd:d argument
@@ -1596,6 +1596,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         }
         else if ( name == "draw:object" )
         {
+            fillStyleStack( o, context );
             KPresenterChild *ch = new KPresenterChild( this );
             QRect r;
             KPPartObject *kppartobject = new KPPartObject( ch );
@@ -1608,7 +1609,6 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             insertChild( ch );
             kppartobject->setOrig( r.x(), r.y() );
             kppartobject->setSize( r.width(), r.height() );
-
         }
         else if ( name == "presentation:notes" ) // notes
         {
@@ -1708,7 +1708,7 @@ void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisContext & 
     }
     if ( object.hasAttribute( "text:style-name" ) )
     {
-        kdDebug()<<"Add 'text:style-name' : "<<object.attribute( "text:style-name" )<<endl;
+        //kdDebug()<<"Add 'text:style-name' : "<<object.attribute( "text:style-name" )<<endl;
         addStyles( context.oasisStyles().styles()[object.attribute( "text:style-name" )], context );
     }
 }

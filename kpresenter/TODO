@@ -77,7 +77,6 @@ Todo:
 
 
 Bugs:
--> load text layout format (bug into kpresenter)
 -> fix default value
 -> fix some arrow style  
 -> specific object : header/footer is not sticky object into oo
