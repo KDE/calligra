@@ -960,6 +960,11 @@ void KWView::setupActions()
                                  this, SLOT( sortText() ),
                                  actionCollection(), "sort_text" );
 
+    actionAddPersonalExpression= new KAction( i18n( "Add expression" ), 0,
+                                              this, SLOT( addPersonalExpression() ),
+                                              actionCollection(), "add_personal_expression" );
+
+
     // ---------------------- Tools menu
 
 
@@ -6837,6 +6842,104 @@ void KWView::slotAddIgnoreAllWord()
 void KWView::sortText()
 {
     //todo
+}
+
+void KWView::addPersonalExpression()
+{
+    KWTextFrameSetEdit* edit = currentTextEdit();
+    if ( !(edit && edit->textFrameSet()->hasSelection()))
+        return;
+
+    QString newExpression = edit->textFrameSet()->textObject()->selectedText();
+    //load file !!!
+    QString tmp=locateLocal("data","kword/expression/perso.xml");
+    QFile file( tmp );
+    if ( !file.open( IO_ReadOnly ) )
+	return;
+    QDomDocument doc;
+    doc.setContent( &file );
+    file.close();
+
+    QString group = "";
+    QMap<QString, QStringList>lstOfPersonalExp;
+    QStringList list;
+    QDomNode n = doc.documentElement().firstChild();
+    for( ; !n.isNull(); n = n.nextSibling() )
+    {
+        if ( n.isElement() )
+        {
+            QDomElement e = n.toElement();
+            if ( e.tagName() == "Type" )
+            {
+                list.clear();
+                group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
+
+                QDomNode n2 = e.firstChild();
+                for( ; !n2.isNull(); n2 = n2.nextSibling() )
+                {
+
+                    if ( n2.isElement() )
+                    {
+                        QDomElement e2 = n2.toElement();
+                        if ( e2.tagName() == "Expression" )
+                        {
+                            QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
+                            list<<text;
+                        }
+                    }
+                }
+                lstOfPersonalExp.insert(group,list);
+                group = "";
+            }
+        }
+    }
+    //save
+    doc = QDomDocument( "KWordExpression" );
+    QDomElement begin = doc.createElement( "KWordExpression" );
+    doc.appendChild( begin );
+    QMapIterator<QString, QStringList> itPersonalExp = lstOfPersonalExp.find(i18n("Normal"));
+    if ( itPersonalExp != lstOfPersonalExp.end())
+    {
+        list = itPersonalExp.data();
+        list<<newExpression;
+        lstOfPersonalExp.replace( i18n("Normal"), list);
+    }
+    else
+    {
+        list.clear();
+        list<<newExpression;
+        lstOfPersonalExp.insert( i18n("Normal"), list);
+    }
+
+
+    itPersonalExp = lstOfPersonalExp.begin();
+    for ( ; itPersonalExp != lstOfPersonalExp.end(); ++itPersonalExp )
+    {
+        QDomElement type = doc.createElement( "Type" );
+        begin.appendChild( type );
+        QDomElement typeName = doc.createElement( "TypeName" );
+        type.appendChild( typeName );
+        typeName.appendChild( doc.createTextNode(itPersonalExp.key()  ) );
+        list=itPersonalExp.data();
+        for( uint i=0;i<list.count();i++ )
+        {
+            QDomElement expr = doc.createElement( "Expression" );
+            type.appendChild( expr );
+            QDomElement text = doc.createElement( "Text" );
+            expr.appendChild( text );
+            text.appendChild( doc.createTextNode(list[i] ) );
+        }
+    }
+    QCString s = doc.toCString();
+
+    if ( !file.open( IO_WriteOnly ) )
+    {
+        kdDebug()<<"Error \n";
+	return;
+    }
+    file.writeBlock(s,s.length());
+    file.close();
+    m_doc->refreshMenuExpression();
 }
 
 /******************************************************************/

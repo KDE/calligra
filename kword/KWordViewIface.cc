@@ -381,3 +381,8 @@ void KWordViewIface::addIgnoreAllWord()
 {
     view->slotAddIgnoreAllWord();
 }
+
+void KWordViewIface::addPersonalExpression()
+{
+    view->addPersonalExpression();
+}

@@ -295,3 +295,5 @@ Changes after KWord-1.2
 - Now we can add/remove word in personal dictionary
 - Now we can change backup path
 - Now kotextformat support language
+- Improve statistic dialogbox : count number of lines.
+- Now we can add directly a personal expression

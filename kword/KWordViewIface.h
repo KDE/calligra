@@ -118,6 +118,7 @@ k_dcop:
     void convertTableToText();
     void convertToTextBox();
     void addIgnoreAllWord();
+    void addPersonalExpression();
 
 private:
     KWView *view;

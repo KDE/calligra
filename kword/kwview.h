@@ -247,6 +247,7 @@ public slots:
     void tableStylist();
     void convertTableToText();
     void sortText();
+    void addPersonalExpression();
 
     void slotStyleSelected();
     void slotFrameStyleSelected();
@@ -586,6 +587,7 @@ private:
     KAction *actionTableSplitCells;
     KAction *actionConvertTableToText;
     KAction *actionSortText;
+    KAction *actionAddPersonalExpression;
     KToggleAction *actionTableProtectCells;
 
     KAction *actionTableUngroup;
