@@ -469,7 +469,7 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
         p->setPen( textColor );
     }
 
-    KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y);
+    KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y, h);
 
     //p->setFont( customItemFont ); // already done by the caller
     //kdDebug() << "KoVariable::draw bl=" << bl << << endl;
@@ -1254,7 +1254,7 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
 
     }
 
-    KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y);
+    KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y, h);
 
 
     //p->setFont( customItemFont ); // already done by the caller

@@ -189,6 +189,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     base = zh->layoutUnitToPixelY( y, base );
     size = zh->layoutUnitToPixelX( size );
 
+
     // Now draw any bullet that is required over the space left for it.
     if ( m_layout.counter->isBullet() )
     {
@@ -210,7 +211,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             for ( unsigned int i = 0; i < prefix.length(); i++ )
                 posPrefix += zh->layoutUnitToPixelX(format->width( prefix,i));
 
-            KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x , base, width, y - h  );
+            KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x , base, width, y - h, h );
 
             p->drawText( x-posPrefix, y - h + base, prefix );
         }
@@ -243,7 +244,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
                     p->setFont( bulletFont );
                 }
 
-                KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x - width , base, width, y - h  );
+                KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x - width , base, width, y - h ,h );
 
                 p->drawText( x - width, y - h + base, m_layout.counter->customBulletCharacter() );
                 break;
@@ -252,7 +253,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         }
 	if ( !suffix.isEmpty() )
         {
-            KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x , base, size, y - h  );
+            KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x , base, size, y - h,h  );
 
             p->drawText( x , y - h + base, suffix );
         }
@@ -261,7 +262,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     {
         // There are no bullets...any parent bullets have already been suppressed.
         // Just draw the text! Note: one space is always appended.
-        KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x - size , base, size, y - h );
+        KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x - size , base, size, y - h, h );
 
 
         QString counterText = m_layout.counter->text( this );
@@ -545,7 +546,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	}
     }
 
-    KoTextParag::drawUnderlineDoubleUnderline( &painter, lastFormat, zh, font, textColor, startX, baseLine, bw, lastY);
+    KoTextParag::drawUnderlineDoubleUnderline( &painter, lastFormat, zh, font, textColor, startX, baseLine, bw, lastY, h);
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
@@ -1034,7 +1035,7 @@ void KoTextParag::printRTDebug( int info )
 #endif
 
 
-void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY)
+void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h )
 {
     if ( font.underline() )
     {
@@ -1063,4 +1064,14 @@ void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *form
         //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
 	p->drawLine( startX, y, startX + bw, y );
     }
+
+    if ( font.strikeOut() )
+    {
+        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        p->drawLine( startX, y - h/2 + 2 , startX + bw, y- h/2 +2 );
+        font.setStrikeOut( FALSE );
+	p->setFont( font );
+    }
+
 }
