@@ -571,7 +571,7 @@ void KWordView::formatParagraph()
       delete paragDia;
       paragDia = 0;
     }
-  paragDia = new KWParagDia(0,"",KWParagDia::PD_SPACING | KWParagDia::PD_FLOW | KWParagDia::PD_BORDERS | KWParagDia::PD_NUMBERING);
+  paragDia = new KWParagDia(0,"");
   paragDia->setCaption(i18n("KWord - Paragraph settings"));
   QObject::connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
   paragDia->setLeftIndent(gui->getPaperWidget()->getLeftIndent());

@@ -77,7 +77,7 @@ class KWStylePreview : public QGroupBox
   Q_OBJECT
 
 public:
-  KWStylePreview(const char *title,QWidget *parent = 0,KWParagLayout *_style) : QGroupBox(title,parent,"")
+  KWStylePreview(const char *title,QWidget *parent,KWParagLayout *_style) : QGroupBox(title,parent,"")
     { style = _style; }
 
 protected:
