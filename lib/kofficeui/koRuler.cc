@@ -622,7 +622,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                 // page is too small (infinite loop in the line breaking algorithm)! (Werner)
                 switch ( d->action ) {
                     case A_BR_LEFT: {
-                        if ( d->canvas && mx+diffx < right-10 ) {
+                        if ( d->canvas && mx < right-10 ) {
                             QPainter p;
                             p.begin( d->canvas );
                             p.setRasterOp( NotROP );
@@ -649,9 +649,11 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             p.end();
                             repaint( false );
                         }
+                        else
+                            return;
                     } break;
                     case A_BR_RIGHT: {
-                        if ( d->canvas && mx+diffx > left+10 && mx+diffx <= pw) {
+                        if ( d->canvas && mx > left+10 && mx+diffx <= pw) {
                             QPainter p;
                             p.begin( d->canvas );
                             p.setRasterOp( NotROP );
@@ -678,6 +680,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             d->oldMy = my;
                             repaint( false );
                         }
+                        else
+                            return;
                     } break;
                     case A_FIRST_INDENT: {
                         if ( d->canvas ) {
@@ -763,7 +767,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             } else {
                 switch ( d->action ) {
                     case A_BR_TOP: {
-                        if ( d->canvas && my+diffy < bottom-20 ) {
+                        if ( d->canvas && my < bottom-20 ) {
                             QPainter p;
                             p.begin( d->canvas );
                             p.setRasterOp( NotROP );
@@ -778,9 +782,11 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             d->oldMy = my;
                             repaint( false );
                         }
+                        else
+                            return;
                     } break;
                     case A_BR_BOTTOM: {
-                        if ( d->canvas && my+diffy > top+20 && my+diffy < ph-2) {
+                        if ( d->canvas && my > top+20 && my+diffy < ph-2) {
                             QPainter p;
                             p.begin( d->canvas );
                             p.setRasterOp( NotROP );
@@ -795,6 +801,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             d->oldMy = my;
                             repaint( false );
                         }
+                        else
+                            return;
                     } break;
                     default: break;
                 }
