@@ -43,7 +43,7 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending QTextFormat's enum */
-    enum { StrikeOut = 256 , CharSet = 512, TextBackgroundColor = 1024 };
+    enum { StrikeOut = 512 , CharSet = 1024, TextBackgroundColor = 2048 };
 
     void setPointSizeFloat( float );
     float pointSizeFloat() const { return fn.pointSizeFloat(); }
