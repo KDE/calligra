@@ -1146,7 +1146,7 @@ KoTextFormat::AttributeStyle KoTextFormat::stringToAttributeFont( const QString 
         return KoTextFormat::ATT_NONE;
     else if ( _str == "uppercase")
         return KoTextFormat::ATT_UPPER;
-    else if ( _str == "lowerlower")
+    else if ( _str == "lowercase")
         return KoTextFormat::ATT_LOWER;
     else if ( _str == "smallcaps" )
         return KoTextFormat::ATT_SMALL_CAPS;
