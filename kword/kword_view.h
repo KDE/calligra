@@ -436,8 +436,24 @@ protected:
 /* Class: KWordGUI						  */
 /******************************************************************/
 
+class KWordGUI;
+class KWLayoutWidget : public QWidget
+{
+    Q_OBJECT
+    
+public:
+    KWLayoutWidget( QWidget *parent, KWordGUI *g );
+    
+protected:
+    void resizeEvent( QResizeEvent *e );
+    KWordGUI *gui;
+    
+};
+
 class KWordGUI : public QWidget
 {
+    friend class KWLayoutWidget;
+    
     Q_OBJECT
 
 public:
@@ -489,7 +505,7 @@ protected:
     KoTabChooser *tabChooser;
     KWDocStruct *docStruct;
     QSplitter *panner;
-    QWidget *left;
+    KWLayoutWidget *left;
     bool _showStruct;
 
 };

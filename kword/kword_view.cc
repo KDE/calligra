@@ -3359,6 +3359,18 @@ void KWordView::changeRedo( QString _text, bool _enable )
 /* Class: KWordGUI						  */
 /******************************************************************/
 
+KWLayoutWidget::KWLayoutWidget( QWidget *parent, KWordGUI *g )
+    : QWidget( parent )
+{
+    gui = g;
+}
+ 
+void KWLayoutWidget::resizeEvent( QResizeEvent *e )
+{
+    QWidget::resizeEvent( e );
+    gui->reorganize();
+}
+
 /*================================================================*/
 KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view )
     : QWidget( parent, "" )
@@ -3372,7 +3384,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     panner = new QSplitter( Qt::Horizontal, this );
     docStruct = new KWDocStruct( panner, doc, this );
     docStruct->setMinimumWidth( 0 );
-    left = new QWidget( panner );
+    left = new KWLayoutWidget( panner, this );
     left->show();
     paperWidget = new KWPage( left, doc, this );
 
@@ -3499,29 +3511,16 @@ void KWordGUI::dropEvent( QDropEvent *e )
 /*================================================================*/
 void KWordGUI::reorganize()
 {
-    if ( _show ) {
-	r_vert->show();
-	r_horz->show();
-	tabChooser->show();
+    r_vert->show();
+    r_horz->show();
+    tabChooser->show();
 
-	tabChooser->setGeometry( 0, 0, 20, 20 );
+    tabChooser->setGeometry( 0, 0, 20, 20 );
 
-	panner->setGeometry( 0, 0, width(), height() );
-	paperWidget->setGeometry( 20, 20, left->width() - 20, left->height() - 20 );
-	r_horz->setGeometry( 20, 0, left->width() - 20, 20 );
-	r_vert->setGeometry( 0, 20, 20, left->height() - 20 );
-    } else {
-	r_vert->hide();
-	r_horz->hide();
-	tabChooser->hide();
-
-	QValueList<int> l;
-	l << 0;
-	panner->setSizes( l );
-	panner->setGeometry( 0, 0, width(), height() );
-	paperWidget->setGeometry( 20, 20, left->width() - 20, left->height() - 20 );
-
-    }
+    panner->setGeometry( 0, 0, width(), height() );
+    paperWidget->setGeometry( 20, 20, left->width() - 20, left->height() - 20 );
+    r_horz->setGeometry( 20, 0, left->width() - 20, 20 );
+    r_vert->setGeometry( 0, 20, 20, left->height() - 20 );
 }
 
 /*================================================================*/
