@@ -56,6 +56,38 @@ ExcelImport::ExcelImport ( QObject*, const char*, const QStringList& )
 {
 }
 
+QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
+{
+  QDomElement e = doc.createElement( "format" );
+
+  unsigned align = 0;
+  switch( format.alignment().alignX() )
+  {
+    case Sidewinder::Format::Left: align = 1; break;
+    case Sidewinder::Format::Center: align = 2; break;
+    case Sidewinder::Format::Right: align = 3; break;
+     default: align = 0; break;
+  };
+
+  e.setAttribute( "align", QString::number( align ) );
+
+  QDomElement fontElement = doc.createElement( "font" );
+  const Sidewinder::FormatFont& font = format.font();
+  QString fontFamily = string( font.fontFamily()).string();
+  double fontSize = font.fontSize();
+  fontElement.setAttribute( "family", fontFamily );
+  fontElement.setAttribute( "size", QString::number( fontSize ) );
+  fontElement.setAttribute( "weight", font.bold() ? "75" : "50" );
+  fontElement.setAttribute( "bold", font.bold() ? "yes" : "no" );
+  fontElement.setAttribute( "italic", font.italic() ? "yes" : "no" );
+  fontElement.setAttribute( "underline", font.underline() ? "yes" : "no" );
+  fontElement.setAttribute( "strikeout", font.strikeout() ? "yes" : "no" );
+  e.appendChild( fontElement );
+
+  return e;
+}
+
+
 KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCString& to )
 {
   if (to != "application/x-kspread" || from != "application/msexcel")
@@ -120,6 +152,9 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
         e.setAttribute( "column", QString::number( i+1 ) );
         e.setAttribute( "width", QString::number( column->width() ) );
         table.appendChild( e );
+
+        QDomElement fe = convertFormat( mainDocument, column->format() );
+        e.appendChild( fe );
       }
     }
 
@@ -133,6 +168,9 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
         e.setAttribute( "row", QString::number( i+1 ) );
         e.setAttribute( "height", QString::number( POINT_TO_MM ( row->height() ) ) );
         table.appendChild( e );
+
+        QDomElement fe = convertFormat( mainDocument, row->format() );
+        e.appendChild( fe );
       }
     }
 
@@ -148,36 +186,9 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
           ce.setAttribute( "column", QString::number( col+1 ) );
           table.appendChild( ce );
 
-          const Sidewinder::Format& format = cell->format();
-
-          unsigned align = 0;
-          switch( format.alignment().alignX() )
-          {
-            case Sidewinder::Format::Left: align = 1; break;
-            case Sidewinder::Format::Center: align = 2; break;
-            case Sidewinder::Format::Right: align = 3; break;
-            default: align = 0; break;
-          };
-
-          const Sidewinder::FormatFont& font = format.font();
-
           QDomElement fe;
-          fe = mainDocument.createElement( "format" );
-          fe.setAttribute( "align", QString::number( align ) );
+          fe = convertFormat( mainDocument, cell->format() );
           ce.appendChild( fe );
-
-          QDomElement ff;
-          ff = mainDocument.createElement( "font" );
-          QString fontFamily = string(format.font().fontFamily()).string();
-          unsigned fontSize = font.fontSize();
-          ff.setAttribute( "family", fontFamily );
-          ff.setAttribute( "size", QString::number( fontSize ) );
-          ff.setAttribute( "weight", font.bold() ? "75" : "50" );
-          ff.setAttribute( "bold", font.bold() ? "yes" : "no" );
-          ff.setAttribute( "italic", font.italic() ? "yes" : "no" );
-          ff.setAttribute( "underline", font.underline() ? "yes" : "no" );
-          ff.setAttribute( "strikeout", font.strikeout() ? "yes" : "no" );
-          fe.appendChild( ff );
 
           Sidewinder::Value value = cell->value();
 
