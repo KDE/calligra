@@ -18,6 +18,7 @@
 */
 
 #include <qdom.h>
+#include <qbuffer.h>
 
 #include <kdebug.h>
 
@@ -28,6 +29,7 @@
 #include "vfill.h"
 
 #include <koGenStyles.h>
+#include <koxmlwriter.h>
 
 int VGradient::VColorStopList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
 {
@@ -190,6 +192,27 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 		gradientStyle.addAttribute( "svg:spreadMethod", "reflect" );
 	else
 		gradientStyle.addAttribute( "svg:spreadMethod", "pad" );
+	QBuffer buffer;
+	buffer.open( IO_WriteOnly );
+	KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+
+	// save stops
+	VColorStop* colorstop;
+	QPtrList<VColorStop>& colorStops = const_cast<VColorStopList&>( m_colorStops );
+	for( colorstop = colorStops.first(); colorstop; colorstop = colorStops.next() )
+	{
+		elementWriter.startElement( "svg:stop" );
+		elementWriter.addAttribute( "svg:offset", QString( "%1" ).arg( colorstop->rampPoint ) );
+		elementWriter.addAttribute( "svg:color", QColor( colorstop->color ).name() );
+		if( colorstop->color.opacity() < 1 )
+			elementWriter.addAttribute( "svg:stop-opacity", QString( "%1%" ).arg( colorstop->color.opacity() * 100. ) );
+		elementWriter.endElement();
+	}
+
+	elementWriter.startElement( "svg:stop" );
+	elementWriter.endElement();
+	QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+	gradientStyle.addChildElement( "svg:stop", elementContents );
 	return mainStyles.lookup( gradientStyle, "gradient" );
 }
 

@@ -190,7 +190,7 @@ KarbonPart::saveXML()
 }
 
 bool
-KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDomDocument& settings, KoStore *store )
+KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDomDocument &, KoStore *store )
 {
 	kdDebug(38000) << "Start loading OASIS document..." << endl;
 
@@ -310,12 +310,12 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 	styles = mainStyles.styles( VDocument::STYLE_LINEAR_GRADIENT );
 	it = styles.begin();
 	for( ; it != styles.end() ; ++it )
-		(*it).style->writeStyle( &styleWriter, mainStyles, "svg:linearGradient", (*it).name, "style:graphic-properties", true,  true /*add draw:name*/);
+		(*it).style->writeStyle( &styleWriter, mainStyles, "svg:linearGradient", (*it).name, "", true,  true /*add draw:name*/);
 
 	styles = mainStyles.styles( VDocument::STYLE_RADIAL_GRADIENT );
 	it = styles.begin();
 	for( ; it != styles.end() ; ++it )
-		(*it).style->writeStyle( &styleWriter, mainStyles, "svg:radialGradient", (*it).name, "style:graphic-properties", true,  true /*add draw:name*/);
+		(*it).style->writeStyle( &styleWriter, mainStyles, "svg:radialGradient", (*it).name, "");//, true,  true /*add draw:name*/);
 
 	styleWriter.endElement(); // office:styles
 
