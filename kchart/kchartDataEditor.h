@@ -1,7 +1,8 @@
 #ifndef KCHART_DATA_EDITOR_H
 #define KCHART_DATA_EDITOR_H
 
-#include <kdialogbase.h>   
+#include <kdialogbase.h>
+#include <qspinbox.h>
 #include "kchart_part.h"
 #include <qstrlist.h>
 
@@ -12,6 +13,31 @@ namespace KChart
 {
 
 class KChartParams;
+
+class kchartDataSpinBox : public QSpinBox
+{
+    Q_OBJECT
+public:
+    kchartDataSpinBox(QWidget *);
+    ~kchartDataSpinBox();
+
+public slots:
+    // The user pressed the Up-button
+    void stepUp();
+    // The user pressed the Down-button
+    void stepDown();
+protected:
+    void interpretText(){;};
+    bool eventFilter( QObject *obj, QEvent *ev );
+
+signals:
+    // the value is changed (stepUp/stepDown was called or the focus is lost)
+    void valueChangedSpecial(int);
+
+private:
+    bool m_ignore;
+};
+
 
 class kchartDataEditor : public KDialogBase
 {
@@ -35,16 +61,19 @@ private slots:
     void  slotApply();
     void  setRows(int rows);
     void  setCols(int cols);
-    void  column_clicked(int); //the user clicked on a column in the column header
-    void  row_clicked(int); //the user clicked on a row in the row header
+    //the user clicked on a column in the column header
+    void  column_clicked(int);
+    //the user clicked on a row in the row header
+    void  row_clicked(int);
+    void test();
 
 private:
     // Widgets in the editor
     QTable      *m_table;
     QLabel      *m_rowsLA;
-    QSpinBox    *m_rowsSB;
+    kchartDataSpinBox    *m_rowsSB;
     QLabel      *m_colsLA;
-    QSpinBox    *m_colsSB;
+    kchartDataSpinBox    *m_colsSB;
 
     // This member is set to true if the user shrinks the data table,
     // and confirms this by clicking OK in a warning dialog.

@@ -1,6 +1,7 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qlayout.h>
+#include <qlineedit.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 
@@ -18,6 +19,51 @@
 namespace KChart
 {
 
+kchartDataSpinBox::kchartDataSpinBox(QWidget *parent) : QSpinBox(parent)
+{
+    m_ignore = false;
+}
+
+kchartDataSpinBox::~kchartDataSpinBox()
+{
+}
+
+void kchartDataSpinBox::stepUp()
+{
+    m_ignore = true;
+    uint const new_value = value() + 1;
+    QSpinBox::stepUp();
+    setValue(new_value);
+    //kdDebug() << "Up: " << value() << endl;
+    emit valueChangedSpecial( value() );
+    m_ignore = false;
+}
+
+void kchartDataSpinBox::stepDown()
+{
+    m_ignore = true;
+    uint const new_value = value() - 1;
+    QSpinBox::stepDown();
+    setValue(new_value);
+    //kdDebug() << "Down: " << value() << endl;
+    emit valueChangedSpecial( value() );
+    m_ignore = false;
+}
+
+bool kchartDataSpinBox::eventFilter( QObject *obj, QEvent *ev )
+{
+    if ( obj == editor() ) {
+        if ( ev->type() == QEvent::FocusOut ) {
+            //kdDebug() << "Focus out" << endl;
+            setValue(editor()->text().toInt());
+            // don't call valueChangedSpecial twice when stepUp/stepDown has been called
+            if (!m_ignore)
+                emit valueChangedSpecial( value() );
+        }
+    }
+        // pass the event on to the parent class
+        return QSpinBox::eventFilter( obj, ev );
+}
 
 #define COLUMNWIDTH  80
 
@@ -38,16 +84,16 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     // Create the Rows setting
     m_rowsLA = new QLabel( i18n("# Rows:" ), page );
     m_rowsLA->resize( m_rowsLA->sizeHint() );
-    m_rowsSB = new QSpinBox( page );
+    m_rowsSB = new kchartDataSpinBox( page );
     m_rowsSB->resize( m_rowsSB->sizeHint() );
-    m_rowsSB->setMinValue(0);
+    m_rowsSB->setMinValue(1);
 
     // Create the columns setting
     m_colsLA = new QLabel( i18n("# Columns:" ), page );
     m_colsLA->resize( m_colsLA->sizeHint() );
-    m_colsSB = new QSpinBox( page );
+    m_colsSB = new kchartDataSpinBox( page );
     m_colsSB->resize( m_colsSB->sizeHint() );
-    m_colsSB->setMinValue(0);
+    m_colsSB->setMinValue(1);
 
     // Start the layout.  The table is at the top.
     QVBoxLayout  *topLayout = new QVBoxLayout( page );
@@ -66,9 +112,9 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     topLayout->setStretchFactor(m_table, 1);
 
     // Connect signals from the spin boxes.
-    connect(m_rowsSB, SIGNAL(valueChanged(int)), 
+    connect(m_rowsSB, SIGNAL(valueChangedSpecial(int)), 
 	    this,     SLOT(setRows(int)));
-    connect(m_colsSB, SIGNAL(valueChanged(int)), 
+    connect(m_colsSB, SIGNAL(valueChangedSpecial(int)), 
 	    this,     SLOT(setCols(int)));
 
     connect(m_table->horizontalHeader(), SIGNAL(clicked(int)), this, SLOT(column_clicked(int)) );
@@ -85,16 +131,20 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
 void kchartDataEditor::column_clicked(int column)
 {
-  QString name = KInputDialog::getText(i18n("Column name"), i18n("Type a new column name:"), m_table->horizontalHeader()->label(column), 0, this);
-  if ( !name.isEmpty() )
-    m_table->horizontalHeader()->setLabel(column, name); //rename the column
+    QString name = KInputDialog::getText(i18n("Column name"), i18n("Type a new column name:"), 
+                                      m_table->horizontalHeader()->label(column), 0, this);
+    //rename the column
+    if ( !name.isEmpty() )
+        m_table->horizontalHeader()->setLabel(column, name);
 }
 
 void kchartDataEditor::row_clicked(int row)
 {
-  QString name = KInputDialog::getText(i18n("Row name"), i18n("Type a new row name:"), m_table->verticalHeader()->label(row), 0, this);
-  if ( !name.isEmpty() )
-    m_table->verticalHeader()->setLabel(row, name); //rename the row
+    QString name = KInputDialog::getText(i18n("Row name"), i18n("Type a new row name:"), 
+                                            m_table->verticalHeader()->label(row), 0, this);
+    //rename the row
+    if ( !name.isEmpty() )
+        m_table->verticalHeader()->setLabel(row, name);
 }
 
 // Add Tooltips and WhatsThis help to various parts of the Data Editor.
@@ -299,25 +349,35 @@ static int askUserForConfirmation()
 	     "This message will not be shown again if you click Continue"));
 }
 
-
+void kchartDataEditor::test()
+{
+  kdDebug() << "hej!" << endl;
+}
 // This slot is called when the spinbox for rows is changed.
 //
 void kchartDataEditor::setRows(int rows)
 {
     kdDebug(35001) << "setRows called: rows = " << rows << endl;;
 
-    if (rows > m_table->numRows())
-	{
+    // Sanity check.  This should never happen since the spinbox has a
+    // minvalue of 1, but just to be sure...
+    if (rows < 1) {
+    m_rowsSB->setValue(1);
+    return;
+    }
+
+    if (rows > m_table->numRows()) {
+    int old_rows = m_table->numRows();
 	m_table->setNumRows(rows);
-	m_table->verticalHeader()->setLabel(rows -1,""); //default value for the new row: empty string
+    //default value for the new rows: empty string
+    for (int i=old_rows; i<rows; i++)
+        m_table->verticalHeader()->setLabel(i, "");
 	}
     else if (rows < m_table->numRows()) {
 	bool ask_user = false;
 	//check if the last row is empty...
-		for (int col=0; col<m_table->numCols(); col++)
-		{
-			if (!m_table->text(rows, col).isEmpty())
-			{
+		for (int col=0; col<m_table->numCols(); col++) {
+			if (!m_table->text(rows, col).isEmpty()) {
 				ask_user = true;
 				break;
 			}
@@ -325,12 +385,11 @@ void kchartDataEditor::setRows(int rows)
 	// if it is not, ask if the user really wants to shrink the table.
 	if ( ask_user && !m_userWantsToShrink
 	    && askUserForConfirmation() == KMessageBox::Cancel) {
-
 	    // The user aborts.  Reset the number of rows and return.
 	    m_rowsSB->setValue(m_table->numRows());
 	    return;
 	}
-	
+
 	// Record the fact that the user knows what (s)he is doing.
 	if (ask_user)
 		m_userWantsToShrink = true;
@@ -347,19 +406,27 @@ void kchartDataEditor::setCols(int cols)
 {
     kdDebug(35001) << "setCols called: cols = " << cols << endl;;
 
-    if (cols > m_table->numCols())
-    {
+    // Sanity check.  This should never happen since the spinbox has a
+    // minvalue of 1, but just to be sure...
+    if (cols < 1) {
+    m_colsSB->setValue(1);
+    return;
+    }
+    
+    if (cols > m_table->numCols()) {
+    int old_cols = m_table->numCols();
 	m_table->setNumCols(cols);
 	m_table->setColumnWidth(cols-1, COLUMNWIDTH);
-	m_table->horizontalHeader()->setLabel(cols -1,""); //default value for the new column: empty string
+
+    //default value for the new columns: empty string
+    for (int i=old_cols; i<cols; i++)
+        m_table->horizontalHeader()->setLabel(i, "");
     }
     else if (cols < m_table->numCols()) {
 	bool ask_user = false;
 	//check if the last column is empty...
-	for (int row=0; row<m_table->numRows(); row++)
-	{
-		if (!m_table->text(row, cols).isEmpty())
-		{
+	for (int row=0; row<m_table->numRows(); row++) {
+		if (!m_table->text(row, cols).isEmpty()) {
 			ask_user = true;
 			break;
 		}
