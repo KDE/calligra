@@ -943,7 +943,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             bool abs2 = FALSE;
             bool era1 = FALSE; // if 1st is relative but encoded absolutely
             bool era2 = FALSE;
-    
+
             QChar _t = _text[pos++];
             if ( _t == '$' )
                 abs1 = TRUE;
@@ -958,7 +958,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             if ( !abs1 && !era1 )
                 col += _col;
             // Skip '#' or '$'
-    
+
             _t = _text[pos++];
             if ( _t == '$' )
                  abs2 = TRUE;
@@ -4862,8 +4862,7 @@ void KSpreadCell::saveOasisValue (KoXmlWriter &xmlWriter)
     case KSpreadValue::fmt_Number:
     {
       xmlWriter.addAttribute( "office:value-type", "float" );
-      xmlWriter.addAttribute( "office:value",
-                              QString::number( value().asFloat() ) );
+      xmlWriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
       break;
     }
     case KSpreadValue::fmt_Percent:
@@ -5025,7 +5024,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     kdDebug()<<" table:style-name :"<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        kdDebug()<<"bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )****************************** loadOasisConditionsal\n";
+        //kdDebug()<<"bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )****************************** loadOasisConditionsal\n";
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         kdDebug()<<" bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles ) str :"<<str<<endl;
         QDomElement * style = oasisStyles.styles()[str];
@@ -6419,11 +6418,11 @@ void KSpreadCell::convertFormula( QString & text, const QString & f ) const
 
   kdDebug() << "Formula: " << formula << ", Parameter: " << parameter << ", P: " << p << endl;
 
-
+#if 0 //TODO replace formula name from oocalc if it's necessary (code from oo/import)
   // replace formula names here
   if ( formula == "=MULTIPLE.OPERATIONS" )
     formula = "=MULTIPLEOPERATIONS";
-
+#endif
   QString par;
   bool isPar   = false;
   bool inQuote = false;

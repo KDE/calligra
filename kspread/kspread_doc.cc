@@ -154,6 +154,7 @@ public:
   KSpellConfig *spellConfig;
   bool dontCheckUpperWord:1;
   bool dontCheckTitleCase:1;
+    bool configLoadFromFile:1;
   QStringList spellListIgnoreAll;
 };
 
@@ -176,6 +177,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->activeSheet= 0;
 
   d->pageBorderColor = Qt::red;
+  d->configLoadFromFile = false;
 
   QFont f( KoGlobal::defaultFont() );
   KSpreadFormat::setGlobalRowHeight( f.pointSizeFloat() + 3 );
@@ -2444,6 +2446,16 @@ void KSpreadDoc::flushDamages()
     for( it = d->damages.begin(); it != d->damages.end(); ++it )
       delete *it;
     d->damages.clear();
+}
+
+void KSpreadDoc::loadConfigFromFile()
+{
+    d->configLoadFromFile = true;
+}
+
+bool KSpreadDoc::configLoadFromFile() const
+{
+    return d->configLoadFromFile;
 }
 
 

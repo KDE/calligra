@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 2000-2002 Laurent Montel <montel@kde.org>
+             (C) 2000-2005 Laurent Montel <montel@kde.org>
              (C) 2002 John Dailey <dailey@vt.edu>
              (C) 2002 Phillip Mueller <philipp.mueller@gmx.de>
              (C) 2000 Werner Trobin <trobin@kde.org>
@@ -659,6 +659,10 @@ public:
   void decreaseNumOperation();
 
   void addDamage( KSpread::Damage* damage );
+
+/* Function specific when we load config from file */
+  void loadConfigFromFile();
+  bool configLoadFromFile() const;
 
 public slots:
 

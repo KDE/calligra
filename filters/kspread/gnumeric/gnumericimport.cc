@@ -191,7 +191,7 @@ void  convert_string_to_qcolor(QString color_string, QColor * color)
 
 void set_document_attributes( KSpreadDoc * ksdoc, QDomElement * docElem)
 {
-    //TODO fix kspread to not read config when we load it from this file
+    ksdoc->loadConfigFromFile();
     QDomNode attributes  = docElem->namedItem("gmr:Attributes");
     QDomNode attributeItem = attributes.namedItem("gmr:Attribute");
     while( !attributeItem.isNull() )

@@ -1440,7 +1440,7 @@ void ViewPrivate::updateButton( KSpreadCell *cell, int column, int row)
     toolbarLock = TRUE;
 
     // workaround for bug #59291 (crash upon starting from template)
-    // certain Qt and Fontconfig combination fail miserably if can not 
+    // certain Qt and Fontconfig combination fail miserably if can not
     // find the font name (e.g. not installed in the system)
     QStringList fontList;
     KFontChooser::getFontList( fontList, 0 );
@@ -1451,7 +1451,7 @@ void ViewPrivate::updateButton( KSpreadCell *cell, int column, int row)
         actions->selectFont->setFont( fontFamily );
         break;
       }
-    
+
     actions->selectFontSize->setFontSize( cell->textFontSize( column, row ) );
     actions->bold->setChecked( cell->textFontBold( column, row ) );
     actions->italic->setChecked( cell->textFontItalic(  column, row) );
@@ -1843,15 +1843,19 @@ void KSpreadView::initConfig()
     if ( config->hasGroup("Parameters" ))
     {
         config->setGroup( "Parameters" );
-        d->doc->setShowHorizontalScrollBar(config->readBoolEntry("Horiz ScrollBar",true));
-        d->doc->setShowVerticalScrollBar(config->readBoolEntry("Vert ScrollBar",true));
+        if ( !d->doc->configLoadFromFile() )
+            d->doc->setShowHorizontalScrollBar(config->readBoolEntry("Horiz ScrollBar",true));
+        if ( !d->doc->configLoadFromFile() )
+            d->doc->setShowVerticalScrollBar(config->readBoolEntry("Vert ScrollBar",true));
         d->doc->setShowColHeader(config->readBoolEntry("Column Header",true));
         d->doc->setShowRowHeader(config->readBoolEntry("Row Header",true));
-        d->doc->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
+        if ( !d->doc->configLoadFromFile() )
+            d->doc->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
         d->doc->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(KSpread::Bottom)));
         d->doc->setIndentValue( config->readDoubleNumEntry( "Indent", 10.0 ) );
         d->doc->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(SumOfNumber)));
-	d->doc->setShowTabBar(config->readBoolEntry("Tabbar",true));
+        if ( !d->doc->configLoadFromFile() )
+            d->doc->setShowTabBar(config->readBoolEntry("Tabbar",true));
 
 	d->doc->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
 
