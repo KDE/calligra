@@ -375,10 +375,14 @@ QRect KoTextParag::pixelRect() const
     return rect;
 }
 
-// Reimplemented from QTextParag
+// Reimplemented from QTextParag, called by KoTextDocument::drawParagWYSIWYG
+// (KoTextDocument::drawWithoutDoubleBuffer when printing)
 void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cursor, bool drawSelections,
                          int clipx, int clipy, int clipw, int cliph )
 {
+    //kdDebug() << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
+    //kdDebug() << " clipw in pix (approx) : " << textDocument()->zoomHandler()->layoutUnitToPixelX( clipw ) << endl;
+    //kdDebug() << " cliph in pix (approx) : " << textDocument()->zoomHandler()->layoutUnitToPixelX( cliph ) << endl;
 #if 1
     // We force the alignment to justify during drawing, so that drawParagString is called
     // for at most one word at a time, never more. This allows to make the spaces slightly
