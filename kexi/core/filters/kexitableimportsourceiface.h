@@ -22,7 +22,7 @@
 
 #include <qstringlist.h>
 #include <qvariant.h>
-#include <kexiDB/kexidbtable.h>
+#include <kexidb/table.h>
 #include <qwidget.h>
 #include <qptrlist.h>
 
@@ -39,7 +39,7 @@ public:
 	virtual bool pageChanging(QWidget* from, QWidget *to) {return false;}
 	virtual QPtrList<QWidget> sourceWidgets(QWidget *parent) {};
 
-	virtual KexiDBTable tableStructure()=0;
+	virtual KexiDB::Table tableStructure()=0;
 
 	virtual bool firstTableRow()=0;
 	virtual bool nextTableRow()=0;

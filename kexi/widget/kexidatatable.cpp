@@ -38,11 +38,9 @@
 #include "koApplication.h"
 
 
-#include "kexiDB/kexidb.h"
-#include "kexiDB/kexidbrecordset.h"
-#include "kexiDB/kexidbupdaterecord.h"
-#include "kexiDB/kexidberror.h"
-#include "kexiDB/kexidbwatcher.h"
+#include "kexidb/connection.h"
+#include "kexidb/cursor.h"
+//#include "kexiDB/kexidbupdaterecord.h"
 
 #include "kexidatatable.h"
 #include "kexidatatableview.h"
@@ -128,87 +126,13 @@ KexiDataTable::init(/*QString caption, QString identifier, bool embedd*/)
 
 }
 
-void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
+void KexiDataTable::setDataSet(KexiDB::Cursor *rec)
 {
 	m_tableView->setDataSet(rec);
 // Not yet please. Later special navigating widget will 
 // be added in place of status bar:
 //	m_statusBar->message(i18n("%1 records.").arg(m_tableView->records()));
 	
-#if 0
-	if(!m_first)
-		m_tableView->clearAll();
-
-	if (m_record) disconnect(m_record,0,this,0);
-	m_record=rec;
-
-	if(!m_record)
-	{
-		kdDebug() << "KexiDataTable::setDataSet(): record doesn't exist" << endl;
-		return;
-	}
-
-	connect(m_record,SIGNAL(recordInserted(KexiDBUpdateRecord*)),this,SLOT(recordInsertFinished(KexiDBUpdateRecord*)));
-	for(uint i = 0; i < m_record->fieldCount(); i++)
-	{
-		QVariant defaultval = QVariant("");
-		if(m_record->isForignField(i))
-		{
-			QStringList fdata;
-			KexiDBRecordSet *ftr = m_db->queryRecord("SELECT * FROM `" + m_record->fieldInfo(i)->table() + "`");
-			if(ftr)
-			{
-				while(ftr->next())
-				{
-					fdata.append(ftr->value(m_record->fieldName(i)).toString());
-				}
-
-				defaultval = QVariant(fdata);
-				delete ftr;
-			}
-		}
-
-		m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(),
-		 defaultval, 100, m_record->fieldInfo(i)->auto_increment());
-#ifndef KEXI_NO_DATATABLE_SEARCH
-		m_searchCol->insertItem(m_record->fieldName(i));
-#endif
-	}
-
-	int record = 0;
-	while(m_record->next())
-	{
-//		kdDebug() << "KexiDataTable::setDataSet(): next()" << endl;
-		KexiTableItem *it = new KexiTableItem(m_tableView);
-		for(uint i = 0; i < m_record->fieldCount(); i++)
-		{
-//			it->setInsertItem(false);
-			it->setValue(i, m_record->value(i));
-//			it->setInsertItem(false);
-		}
-		it->setHint(QVariant(record));
-		record++;
-	}
-
-	if(!readOnly())
-	{
-		KexiTableItem *insert = new KexiTableItem(m_tableView);
-		insert->setHint(QVariant(record));
-		insert->setInsertItem(true);
-	}
-
-	//automatically set cursor on 0,0
-	m_tableView->setFocus();
-	m_tableView->setCursor(0,0);
-
-	/*}
-	else {
-		m_tableView->selectRow( m_tableView->rows()-1 );
-	}*/
-	//m_tableView->update();
-
-	m_first = false;
-#endif
 }
 
 bool
@@ -388,6 +312,8 @@ KexiDataTable::slotRemoved(QObject *sender, const QString &table, uint record)
 void
 KexiDataTable::slotRemoveCurrentRecord()
 {
+#warning fixme
+#if 0
 	//IS IT GOOD WE HAVE THIS HERE? maybe move some to KexiDataTableView?
 	if(m_tableView->selectedItem() && !m_tableView->selectedItem()->isInsertItem())
 	{
@@ -395,6 +321,7 @@ KexiDataTable::slotRemoveCurrentRecord()
 		m_tableView->recordSet()->database()->watcher()->remove(this, m_tableView->recordSet()->fieldInfo(0)->table(), m_tableView->selectedItem()->getHint().toInt());
 		m_tableView->remove(m_tableView->selectedItem());
 	}
+#endif
 }
 
 #ifndef KEXI_NO_PRINT

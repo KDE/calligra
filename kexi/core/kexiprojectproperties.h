@@ -24,7 +24,7 @@
 
 #include <kdialogbase.h>
 
-#include <kexiDB/kexidb.h>
+#include "kexiprojectconnectiondata.h"
 
 class QComboBox;
 class KexiDBConnection;
@@ -34,13 +34,14 @@ class KEXICORE_EXPORT KexiProjectProperties : public KDialogBase
 	Q_OBJECT
 
 	public:
-		KexiProjectProperties(QWidget *parent, KexiDBConnection *dbconn);
+		KexiProjectProperties(QWidget *parent, KexiProjectConnectionData *dbconn);
 		~KexiProjectProperties();
-
-		KexiDB::Encoding encoding();
+#warning FIXME
+//		KexiDB::Encoding encoding();
 
 	protected:
-		void		setupDBProperties(KexiDBConnection *db);
+#warning FIXME
+//		void		setupDBProperties(KexiProjectConnectionData *db);
 
 	private:
 		QComboBox	*m_encoding;

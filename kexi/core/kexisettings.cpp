@@ -23,7 +23,12 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <qcombobox.h>
+#include <qlabel.h>
+#include <qstringlist.h>
+#include <kdeversion.h>
 
+#include <kexiview.h>
 #include "kexisettings.h"
 #include "kexi_global.h"
 
@@ -35,9 +40,17 @@ KexiSettings::KexiSettings(QWidget *parent)
 	QCheckBox *showBGAltering = new QCheckBox(i18n("Use background altering for tables"), lnf);
 	showBGAltering->setChecked(true);
 	QGridLayout *gLnf = new QGridLayout(lnf);
+	QLabel *viewModeLabel=new QLabel(i18n("Document view mode"),lnf);
+
+	QComboBox *viewModeCombo=new QComboBox(lnf);
+	viewModeCombo->insertStringList(KexiView::possibleViewModes());
+
 	QSpacerItem *vSpace = new QSpacerItem(20, 60);
 	gLnf->addWidget(showBGAltering,	0, 0);
-	gLnf->addItem(vSpace,		1, 0);
+	gLnf->addWidget(viewModeLabel,	1, 0);
+	gLnf->addWidget(viewModeCombo,	1, 1);
+	gLnf->addItem(vSpace,		2, 0);
+
 }
 
 QPixmap

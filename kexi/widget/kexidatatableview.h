@@ -23,10 +23,12 @@
 
 #include "kexitableview.h"
 
-class KexiDB;
-class KexiDBRecordSet;
 class KexiTableItem;
 class QVariant;
+
+namespace KexiDB {
+	class Cursor;
+}
 
 /**
  * database aware table widget
@@ -43,15 +45,15 @@ class KexiDataTableView : public KexiTableView
 		/**
 		 * creates a table widget and fills it (partly ;) with recordset rec
 		 */
-		KexiDataTableView(QWidget *parent, const char *name, KexiDBRecordSet *rec);
+		KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *rec);
 		~KexiDataTableView();
 
 		/**
 		 * fills a table with recordset rec and clears it before, if there already
 		 * was data.
 		 */
-		void		setDataSet(KexiDBRecordSet *rec);
-		KexiDBRecordSet	*recordSet() { return m_record; }
+		void		setDataSet(KexiDB::Cursor *rec);
+		KexiDB::Cursor *recordSet() { return m_record; }
 
 		/**
 		 * @returns the number of records in the recordset
@@ -71,7 +73,7 @@ class KexiDataTableView : public KexiTableView
 		void		appendInsertItem();
 
 	protected slots:
-		void		recordInsertFinished(KexiDBUpdateRecord*);
+//		void		recordInsertFinished(KexiDBUpdateRecord*);
 		void		slotMoving(int);
 		void		insertNext();
 
@@ -79,13 +81,14 @@ class KexiDataTableView : public KexiTableView
 
 	private:
 		//db stuff
-		KexiDBRecordSet	*m_record;
+		KexiDB::Cursor	*m_record;
 		bool		m_first;
 //use m_record->database() instead:		KexiDB		*m_db;
 		int		m_maxRecord;
 		int		m_records;
 
-		QMap<KexiDBUpdateRecord*,KexiTableItem*> m_insertMapping;
+#warning FIXME
+//		QMap<KexiDBUpdateRecord*,KexiTableItem*> m_insertMapping;
 };
 
 #endif

@@ -179,7 +179,7 @@ void KexiTableImportForm::pageSelected(const QString &) {
 	if (m_sourceWidgets.containsRef(m_previousPage) ||
 		m_sourceWidgets.containsRef(currentPage())) {
 		if (m_filter) {
-			if (!m_filter->pageChanging(m_previousPage,
+			if (!m_filter->pageChanging((m_previousPage==destinationTablePage)?0:m_previousPage,
 				m_sourceWidgets.containsRef(currentPage())?
 				currentPage():((currentPage()==openFilePage)?
 				openFilePage:0))) {

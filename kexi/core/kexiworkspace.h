@@ -39,7 +39,10 @@ class KEXICORE_EXPORT KexiWorkspace
 
 		virtual KexiDialogBase * activeDocumentView()=0;
 		virtual void activateView(KexiDialogBase *kdb)=0;
-		
+		//the last item in the list is the currently active
+//		virtual QPtrList<KexiDialogBase> takeItems()=0;
+		//the last item in the list is the one which should get the focus
+//		virtual insertItems(QPtrList<KexiDialogBase> items)=0;
 	protected:
 		friend class KexiDialogBase;
 		virtual void takeItem(KexiDialogBase *delItem)=0;

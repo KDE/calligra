@@ -26,18 +26,18 @@
 #include <qptrlist.h>
 
 #include <koDocument.h>
-#include "../kexiDB/kexidb.h"
-#include "../kexiDB/kexidberror.h"
+#include "../kexidb/drivermanager.h"
+#include "../kexidb/driver.h"
+#include "../kexidb/connection.h"
 
 class KexiDoc;
 class DCOPObject;
 class KexiRelation;
 class KexiProjectHandler;
 class KexiProjectHandlerProxy;
-class KexiDBConnection;
-class KexiDBInterfaceManager;
 class KexiFilterManager;
 class KexiView;
+class KexiProjectConnectionData;
 
 typedef QPtrList<KexiProjectHandler> ProviderList;
 
@@ -54,20 +54,6 @@ public:
 	QString location;
 };
 
-/*
-struct Credentials
-{
-	KexiDB::DBType type;
-	QString host,
-		database,
-		port,
-		driver,
-		user,
-		password,
-		socket;
-	bool savePassword;
-};
-*/
 
 typedef QMap<QString, QDomElement> Groups;
 typedef QValueList<FileReference> References;
@@ -96,16 +82,16 @@ public:
 	void removeFileReference(FileReference);
 	References fileReferences(const QString &group);
 
-	bool initDBConnection(KexiDBConnection *c, KoStore *store = 0);
-	KexiDBConnection *dbConnection() { return m_dbconnection; }
+	bool initDBConnection(KexiProjectConnectionData *c, KoStore *store = 0);
+	KexiDB::Connection *dbConnection() { return m_dbConnection; }
+	KexiProjectConnectionData *dbConnectionData() { return m_dbConnectionData; }
 
 	void clear();
 
 	void registerProjectHandler(KexiProjectHandler *part);
 	PartList *getParts();
 
-	KexiDB* db()const { return m_db; };
-	KexiDBInterfaceManager* manager() {return m_dbInterfaceManager;}
+	KexiDB::DriverManager* manager() {return m_dbDriverManager;}
 	bool dbIsAvaible()const { return m_dbAvaible; }
 	KexiFilterManager* const filterManager() {return m_filterManager;}
 	QString boolToString(bool b);
@@ -130,15 +116,11 @@ signals:
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 	virtual bool completeSaving( KoStore* store );
-//	virtual bool completeLoading( KoStore* store );
 	void setCurrentDB(){} ;
 	bool saveProject();
 	bool saveProjectAs(const QString&);
 	bool loadProject(const QString&);
 
-//	void removeProjectHandlerItem( KexiProjectHandlerItem &item );
-
-//	virtual void addView( KoView *view );
 	void invokeStartupActions( KexiView *view );
 
 private:
@@ -147,8 +129,6 @@ private:
 	void loadReferences(QDomElement&);
 	void loadHandlers();
 	KexiDoc*        m_settings;
-	KexiDB*         m_db;
-//	Credentials     m_cred;
 	bool            m_dbAvaible;
 	ReferencesM      m_fileReferences;
 	Groups          m_refGroups;
@@ -156,11 +136,10 @@ private:
 	PartList	*m_parts;
 	DCOPObject	*dcop;
 	bool		m_handlersLoaded;
-	KexiDBConnection *m_dbconnection;
-	KexiDBInterfaceManager *m_dbInterfaceManager;
+	KexiDB::Connection *m_dbConnection;
+	KexiDB::DriverManager *m_dbDriverManager;
+	KexiProjectConnectionData *m_dbConnectionData;
 
-	KexiDBConnection *m_projectConnection;
-	KexiDB		*m_projectDB;
 
 	KexiFilterManager *m_filterManager;
 

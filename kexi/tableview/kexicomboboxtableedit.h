@@ -22,7 +22,7 @@
 
 #include <kcombobox.h>
 
-#include "kexiDB/kexidbfield.h"
+#include "kexidb/field.h"
 #include "kexitableedit.h"
 
 /**
@@ -32,7 +32,7 @@
 class KexiComboBoxTableEdit : public KexiTableEdit
 {
 	public:
-		KexiComboBoxTableEdit(KexiDBField::ColumnType t, const QStringList list,
+		KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list,
 			QWidget *parent=0, const char *name=0);
 		
 		virtual QVariant value();

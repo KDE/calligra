@@ -31,9 +31,9 @@ class KMultiTabBarInternal: public QScrollView
 {
         Q_OBJECT
 public:
-        KMultiTabBarInternal(QWidget *parent,KMultiTabBar::KMultiTabBarBasicMode bm);
+        KMultiTabBarInternal(QWidget *parent,KMultiTabBar::KMultiTabBarMode bm);
         int appendTab(const QPixmap &,int=-1,const QString& =QString::null);
-        KMultiTabBarTab *getTab(int);
+        KMultiTabBarTab *tab(int) const;
         void removeTab(int);
         void setPosition(enum KMultiTabBar::KMultiTabBarPosition pos);
         void setStyle(enum KMultiTabBar::KMultiTabBarStyle style);
@@ -43,9 +43,10 @@ private:
         friend class KMultiTabBar;
         QHBox *box;
         QPtrList<KMultiTabBarTab> m_tabs;
-        enum KMultiTabBar::KMultiTabBarPosition position;
+        enum KMultiTabBar::KMultiTabBarPosition m_position;
         bool m_showActiveTabTexts;
         enum  KMultiTabBar::KMultiTabBarStyle m_style;
+	int m_expandedTabSize;
 protected:
         virtual void drawContents ( QPainter *, int, int, int, int);
 

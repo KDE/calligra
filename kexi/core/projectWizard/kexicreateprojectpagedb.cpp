@@ -32,15 +32,15 @@ Boston, MA 02111-1307, USA.
 #include <kapplication.h>
 #include <kiconloader.h>
 
-#include "kexiDB/kexidb.h"
-#include "kexiDB/kexidbinterfacemanager.h"
+#include <kexidb/driver.h>
+#include <kexidb/drivermanager.h>
 
 #include "kexiproject.h"
 #include "kexitabbrowser.h"
 #include "kexicreateprojectpagedb.h"
 #include "kexicreateproject.h"
 #include "kexiview.h"
-#include "kexidbconnection.h"
+#include "kexiprojectconnectiondata.h"
 
 KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPixmap *wpic, const char *name)
  : KexiCreateProjectPage(parent, wpic, name),m_kcp(parent)
@@ -114,24 +114,42 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 
 	m_databases->clear();
 
-	KexiDB *db = m_kcp->project()->manager()->newDBInstance(driver);
-
-	if (!db || !db->connect(host, user, password, socket, port))
+	KexiDB::Driver *db = m_kcp->project()->manager()->driver(driver.utf8());
+	KexiDB::ConnectionData data;
+	data.hostName=host;
+	data.userName=user;
+	data.password=password;
+	data.setFileName(socket);
+	data.port=port.toInt();
+	KexiDB::Connection *con=0;
+	if (!db || !(con=db->createConnection(data)))
 	{
 		KMessageBox::detailedError(0, i18n("Error in databaseconnection"),
-			db ? db->latestError()->message() : "", i18n("Database Connection"));
+			db ? db->errorMsg(): "", i18n("Database Connection"));
+		return false;
+	}
+	if (!con->connect()) {
+		KMessageBox::detailedError(0, i18n("Error in databaseconnection"),
+			 con->errorMsg() , i18n("Database Connection"));
+		delete con;
 		return false;
 	}
 
-	QStringList databases = db->databases();
+	
+	kdDebug()<<"Querying database names"<<endl;
+	QStringList databases = con->databaseNames();
 	QPixmap db_pix = kapp->iconLoader()->loadIcon("db", KIcon::Small);
 	for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
 	{
-		if (!db->isSystemDatabase(*it)) {
+#warning FIXME
+//		if (!db->isSystemDatabase(*it)) {
+		{
 			KListViewItem *item = new KListViewItem(m_databases, (*it));
 			item->setPixmap(0, db_pix);
 		}
 	}
+	con->disconnect();
+	delete con;
 	return true;
 }
 
@@ -139,10 +157,11 @@ bool
 KexiCreateProjectPageDB::connectDB()
 {
 	QString database = data("database").toString();
-	KexiDBConnection *c = new KexiDBConnection(m_driver, m_host, database, m_user,
-                                             m_pass, m_socket, m_port,
-                                             m_newRBtn->isChecked());
-	if(project()->initDBConnection(c))
+
+	KexiProjectConnectionData c = KexiProjectConnectionData(m_driver, database, m_host, m_port.toInt() ,
+				m_user,m_pass,m_socket);
+
+	if(project()->initDBConnection(&c))
 	{
 		return true;
 	}

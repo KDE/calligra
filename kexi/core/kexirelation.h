@@ -23,7 +23,7 @@
 
 #include <qvaluelist.h>
 #include <qvaluestack.h>
-#include "kexiDB/kexidb.h"
+#include "kexidb/connection.h"
 
 
 class KexiProject;
@@ -36,9 +36,11 @@ class KEXICORE_EXPORT KexiRelation : public QObject
 	public:
 		KexiRelation(KexiProject *parent, const char *name="relationmanager");
 		~KexiRelation();
-
+#warning FIXME
+/*
 		RelationList projectRelations();
 		void updateRelationList(QObject *who, RelationList relationList);
+*/
 		void storeRelations(KoStore *store);
 		void loadRelations(KoStore *store);
 		void incUsageCount();
@@ -48,10 +50,11 @@ class KEXICORE_EXPORT KexiRelation : public QObject
 		void relationListUpdated(QObject *sender);
 		
 	private:
-		typedef QValueStack<RelationList> UndoRedoStack;
-		RelationList m_relationList;
+#warning FIXME
+/*		typedef QValueStack<RelationList> UndoRedoStack;
+		RelationList m_relationList;*/
 		KexiProject *m_parent;
-		UndoRedoStack m_undoStack;
+//		UndoRedoStack m_undoStack;
 		int m_usageCount;
 };
 

@@ -29,7 +29,6 @@
 
 #include <koStore.h>
 
-#include "kexiDB/kexidbrecordset.h"
 
 #include "kexiproject.h"
 //#include "kexirelationview.h"
@@ -38,9 +37,13 @@
 KexiRelation::KexiRelation(KexiProject *parent,const char * name)
  : QObject(parent, name)
 {
+
 	m_parent=parent;
+#warning fixme
+#if 0
 	m_relationList.clear();
 	m_undoStack.clear();
+#endif
 	m_usageCount=0;
 }
 
@@ -49,26 +52,34 @@ void KexiRelation::incUsageCount(){m_usageCount++;}
 void KexiRelation::decUsageCount()
 {
 	m_usageCount--;
+#warning fixme
+#if 0
+
 	if (!m_usageCount)
 	{
 		m_undoStack.clear();
 	}
+#endif
 }
 
-
+#warning fixme
+#if 0
 RelationList KexiRelation::projectRelations(){return m_relationList;}
 void KexiRelation::updateRelationList(QObject *who,RelationList relationList)
 {
 	kdDebug() << "KexiRelation::updateRelationList" << endl;
-
 	m_undoStack.push(m_relationList);
 	m_relationList=relationList;
 	emit relationListUpdated(who);
 	m_parent->db()->setRelations(relationList);
 }
+#endif
 
 void KexiRelation::storeRelations(KoStore *store)
 {
+
+#warning fixme
+#if 0
     QDomDocument domDoc("Relations");
     domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
@@ -121,10 +132,13 @@ void KexiRelation::storeRelations(KoStore *store)
 	m_usageCount=0;
     return;
 
+#endif
 }
 
 void KexiRelation::loadRelations(KoStore *store)
 {
+#warning fixme
+#if 0
 	m_relationList.clear();
     if(!store->open("relations.xml"))
         return;
@@ -164,6 +178,7 @@ void KexiRelation::loadRelations(KoStore *store)
 	m_undoStack.clear();
 	m_usageCount=0;
 	m_parent->db()->setRelations(m_relationList);
+#endif
 }
 
 KexiRelation::~KexiRelation()

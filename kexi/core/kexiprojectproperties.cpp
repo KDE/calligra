@@ -26,10 +26,9 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
-#include "kexidbconnection.h"
 #include "kexiprojectproperties.h"
 
-KexiProjectProperties::KexiProjectProperties(QWidget *parent, KexiDBConnection *dbconn)
+KexiProjectProperties::KexiProjectProperties(QWidget *parent, KexiProjectConnectionData *dbconn)
  : KDialogBase(IconList, i18n("Project's Properties"), KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, parent, 0, true)
 {
 	QPixmap pixdb = KGlobal::instance()->iconLoader()->loadIcon("db", KIcon::NoGroup, KIcon::SizeMedium );
@@ -51,9 +50,11 @@ KexiProjectProperties::KexiProjectProperties(QWidget *parent, KexiDBConnection *
 	g->addWidget(m_encoding,	0, 1);
 	g->addMultiCell(vSpace,	1, 1, 0, 1);
 
-	setupDBProperties(dbconn);
+#warning fixme
+//	setupDBProperties(dbconn);
 }
 
+#if 0
 KexiDB::Encoding
 KexiProjectProperties::encoding()
 {
@@ -97,6 +98,8 @@ KexiProjectProperties::setupDBProperties(KexiDBConnection *db)
 			break;
 	}
 }
+
+#endif
 
 KexiProjectProperties::~KexiProjectProperties()
 {

@@ -29,7 +29,7 @@
 #include <qptrlist.h>
 #include <qwidgetstack.h>
 
-#include "kexiDB/kexidb.h"
+#include "kexidb/connection.h"
 
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
@@ -51,7 +51,7 @@
 KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	: KexiDialogBase(view, "KexiTabBrowser", parent, name),
 		m_project( view->project() ),
-		m_tabBar( new KMultiTabBar(this, KMultiTabBar::Vertical) ),
+		m_tabBar( new KMultiTabBar(KMultiTabBar::Vertical,this )),
 		m_stack( new QWidgetStack(this) ),
 		m_tabs( 0 ),
 		m_activeTab( -1 ),
@@ -108,7 +108,7 @@ KexiTabBrowser::addBrowser(KexiBrowser *browser, QPixmap icon, QString text)
 
 //	browser->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum); //(JS)
 
-	connect(m_tabBar->getTab(m_tabs), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
+	connect(m_tabBar->tab(m_tabs), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
 	m_stack->addWidget(browser);
 	m_browserDict.insert(m_tabs, browser);
 

@@ -47,12 +47,23 @@
 #include "kexiworkspaceSDI.h"
 #include "kexiprojectproperties.h"
 #include "KexiViewIface.h"
-#include "kexidbconnection.h"
+#include "kexiprojectconnectiondata.h"
 
 #include "kexicontexthelp.h"
 #include "kexi_factory.h"
 #include "kexi_global.h"
 #include "kexi_utils.h"
+
+
+static QStringList *s_modeDescriptions=0;
+static QStringList *s_viewModeStorageNames=0;
+static QStringList *s_possibleViewModeDescriptions=0;
+
+static int visibleViewModeIndex(KexiView::KexiWindowMode kwt,const QStringList &list) {
+	return list.findIndex(*(s_modeDescriptions->at(kwt)));
+}
+
+KexiView::KexiWindowMode KexiView::defaultMode=KexiView::DefaultMode;
 
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, const char *name )
 : KoView(part,parent,name ? name : "kexi_view")
@@ -65,18 +76,28 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, c
 	,m_project(part)
 	,dcop(0)
 {
+
+	if (m_windowMode==DefaultMode) {
+		if (defaultMode==DefaultMode) {
+			(void) possibleViewModes();
+			KConfig conf("kexirc", true);
+		        conf.setGroup("View");	
+			QString vM=conf.readEntry("default",(*s_viewModeStorageNames)[0]);
+			if (!s_viewModeStorageNames->contains(vM))
+				m_windowMode=MDIMode;
+			else {
+				m_windowMode=(KexiWindowMode)s_viewModeStorageNames->findIndex(vM);
+				if (-1==visibleViewModeIndex(m_windowMode,*s_possibleViewModeDescriptions))
+					m_windowMode=MDIMode;
+			}
+		}
+		else m_windowMode=defaultMode;
+	}
+
 	dcopObject(); // build it
 	setInstance(KexiFactory::global());
 	setXMLFile("kexiui.rc");
 
-	//IMPORTANT !!!!!!!!!! This has to be in the same order as the WindowMode enum
-	m_modeDescriptions<<i18n("Child frames");
-	m_modeDescriptions<<i18n("Tabbed");
-//	m_modeDescriptions<<i18n("Single document");
-	m_possibleModes=m_modeDescriptions;
-#if !KDE_IS_VERSION(3,1,9)
-	m_possibleModes.remove(m_possibleModes.at(1));
-#endif
 	initActions();
 
 	if(winmode != EmbeddedMode)
@@ -90,6 +111,52 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, c
 		m_workspace = new KexiWorkspaceSDI(this, 0, this);
 	}
 }
+
+
+const QString &KexiView::defaultViewMode() {
+	if (!s_modeDescriptions) (void) possibleViewModes();
+
+	return *s_modeDescriptions->at(defaultMode);
+}
+
+
+void KexiView::setDefaultViewMode(const QString& name) {
+	if (!s_modeDescriptions) (void) possibleViewModes();
+	if (!s_possibleViewModeDescriptions->contains(name)) defaultMode=MDIMode;
+	defaultMode=(KexiWindowMode)s_modeDescriptions->findIndex(name);
+        
+	KConfig conf("kexirc");
+        conf.setGroup("View");
+	conf.writeEntry("default",(*s_viewModeStorageNames)[(int)defaultMode]);
+	conf.sync();
+}
+
+QStringList KexiView::possibleViewModes() {
+	if (!s_possibleViewModeDescriptions) {
+		//IMPORTANT !!!!!!!!!! This has to be in the same order as the WindowMode enum and also in kexi settings dialog
+		s_modeDescriptions=new QStringList();
+		*s_modeDescriptions<<"dummy";
+		*s_modeDescriptions<<i18n("Child frames");
+		*s_modeDescriptions<<i18n("Tabbed");
+	//	*s_modeDescriptions<<i18n("Single document");
+
+		s_viewModeStorageNames=new QStringList();
+		*s_viewModeStorageNames<<"childframes"<<"tabbed"<<"sdi";
+		s_possibleViewModeDescriptions=new QStringList(*s_modeDescriptions);
+#if !KDE_IS_VERSION(3,1,9)
+		s_possibleViewModeDescriptions->remove(s_possibleViewModeDescriptions->at(2));
+#endif	
+		s_possibleViewModeDescriptions->remove(s_possibleViewModeDescriptions->at(0));
+	}
+	return *s_possibleViewModeDescriptions;
+}
+
+KexiView::KexiWindowMode KexiView::viewModeFromName(const QString& modeName) {
+	if (!s_modeDescriptions) possibleViewModes();
+	return (KexiWindowMode) s_modeDescriptions->findIndex(modeName);
+
+}
+
 
 DCOPObject* KexiView::dcopObject()
 {
@@ -200,7 +267,7 @@ void KexiView::initActions()
 	KSelectAction *actionViewMode = new KSelectAction(i18n("View Mode"), KShortcut(),
 		actionCollection(),"view_viewmode");
 
-	actionViewMode->setItems(m_possibleModes);
+	actionViewMode->setItems(possibleViewModes());
 	connect(actionViewMode,SIGNAL(activated(const QString&)),this,SLOT(changeViewMode(const QString&)));
 
 #ifndef KEXI_NO_UNFINISHED
@@ -327,11 +394,12 @@ KexiView::slotDBAvaible()
 void
 KexiView::slotShowProjectProps()
 {
-	KexiProjectProperties p(this, project()->dbConnection());
+	KexiProjectProperties p(this, project()->dbConnectionData());
 	if(p.exec())
 	{
-		project()->db()->setEncoding(p.encoding());
-		project()->dbConnection()->setEncoding(p.encoding());
+#warning FIXME
+//		project()->db()->setEncoding(p.encoding());
+//		project()->dbConnection()->setEncoding(p.encoding());
 	}
 }
 
@@ -466,7 +534,7 @@ void KexiView::slotAboutCloseWindow( KexiDialogBase *w )
 
 void KexiView::changeViewMode(const QString& newMode) {
 	kdDebug()<<"KexiView::changeViewMode"<<endl;
-	m_windowMode=(KexiWindowMode) m_modeDescriptions.findIndex(newMode);
+	m_windowMode=viewModeFromName(newMode);
 
 	delete m_workspace;
 	initMainDock();

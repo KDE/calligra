@@ -22,7 +22,7 @@
 #include "kexicomboboxtableedit.h"
 
 
-KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDBField::ColumnType t, const QStringList list, QWidget *parent,
+KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list, QWidget *parent,
  const char *name) : KexiTableEdit(parent, name)
 {
 	m_view = new KComboBox(this, "tableCombo");

@@ -10,14 +10,14 @@ libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	KexiProjectIface.cpp kexihandlerpopupmenu.cpp kexiprojecthandler.cpp \
 	kexirelation.cpp kexidragobjects.cpp kexidataprovider.cpp \
 	kexicontexthelp.cpp kexidatasourcedlg.cpp \
-	kexidatasourcecombobox.cpp kexidbconnection.cpp kexieventhandler.cpp kexisettings.cpp \
+	kexidatasourcecombobox.cpp kexieventhandler.cpp kexisettings.cpp \
 	kexiworkspaceSDI.cpp \
-	kexipartitemaction.cpp
+	kexipartitemaction.cpp kexiprojectconnectiondata.cpp
 
 
 
-libkexicore_la_LDFLAGS = $(all_libraries) -Wnounresolved
-libkexicore_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../kexiDB/libkexidb.la ./filters/libkexifilter.la
+libkexicore_la_LDFLAGS = $(all_libraries) -Wnounresolved -no-undefined
+libkexicore_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../kexidb/libkexidb.la ./filters/libkexifilter.la
 #../formeditor/libkformeditor.la
 
 SUBDIRS = filters . projectWizard

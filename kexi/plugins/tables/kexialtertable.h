@@ -21,7 +21,8 @@
 #define _KEXIALTERTABLE_H_
 
 #include "kexidialogbase.h"
-#include "kexiDB/kexidb.h"
+#include <kexidb/connection.h>
+#include <kexidb/table.h>
 
 class KexiTableView;
 class KexiTableItem;
@@ -33,11 +34,8 @@ class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 {
 	Q_OBJECT
 	public:
-//		KexiAlterTable(KexiView *view, QWidget *parent, QString caption, QString identifier, bool create=false);
 		KexiAlterTable(KexiView *view, KexiProjectHandlerItem *item, QWidget *parent = 0, bool create=false);
 
-//		KexiAlterTable(KexiView *view, QWidget *parent, const QString &table,
-//			bool create = false, const char *name=0);
 
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
@@ -62,7 +60,7 @@ class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 //		QString m_table;
 		KexiTableView* m_fieldTable;
 		PropertyEditor* m_propList;
-		KexiDBTableStruct m_tableFields;
+		KexiDB::Table m_table;
 		bool m_create;
 		PropertyEditorItem* m_nameItem;
 		PropertyEditorItem* m_datatypeItem;

@@ -1234,7 +1234,7 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 			d->pEditor->setFocus();
 			return;
 		case QVariant::StringList:
-			d->pEditor = new KexiComboBoxTableEdit(static_cast<KexiDBField::ColumnType>(val.toInt()),
+			d->pEditor = new KexiComboBoxTableEdit(static_cast<KexiDB::Field::Type>(val.toInt()),
 				d->pColumnDefaults.at(col)->toStringList(), viewport(), "inPlaceEd");
 			break;
 		case QVariant::Date:

@@ -35,8 +35,7 @@
 #include <koStore.h>
 #include <koTemplateChooseDia.h>
 
-#include <kexiDB/kexidberror.h>
-#include <kexiDB/kexidbinterfacemanager.h>
+#include <kexidb/drivermanager.h>
 #include "KexiProjectIface.h"
 #include "kexiproject.h"
 #include "kexiproject.moc"
@@ -46,33 +45,29 @@
 #include "kexirelation.h"
 #include "kexiprojecthandler.h"
 #include "kexiprojecthandlerproxy.h"
-#include "kexidbconnection.h"
+#include "kexidb/connection.h"
 #include "filters/kexifiltermanager.h"
+#include "kexiprojectconnectiondata.h"
 
 #include "koApplication.h"
 #include "kexi_global.h"
 #include "kexi_utils.h"
 #include "kexiworkspaceMDI.h"
 
-#undef JoWenn_VERY_EXPERIMENTAL
 
 
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      m_db(0),
       m_handlersLoaded(false),
-      m_projectConnection(0),
-      m_projectDB(0)
+      m_dbConnection(0)
 {
+	kdDebug()<<"KexiProject::KexiProject()"<<endl;
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
-	//m_db = new KexiDB(this, "db");
-	m_dbInterfaceManager=KexiDBInterfaceManager::self();
-	m_dbInterfaceManager->addRef();
+	m_dbDriverManager=KexiDB::DriverManager::self();
+	m_dbDriverManager->incRefCount();
 	m_filterManager=new KexiFilterManager(this);
-	m_dbconnection = new KexiDBConnection();
-	m_projectConnection=new KexiDBConnection();
 	m_relationManager=new KexiRelation(this);
 	m_invokeActionsOnStartup = true;
 
@@ -84,11 +79,9 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 
 KexiProject::~KexiProject()
 {
-	m_dbconnection->clean();
+	delete m_dbConnection;
 	delete dcop;
-	delete m_projectConnection;
-	delete m_projectDB;
-	m_dbInterfaceManager->remRef();
+	m_dbDriverManager->decRefCount();
 }
 
 KexiRelation *KexiProject::relationManager() { return m_relationManager;}
@@ -103,7 +96,8 @@ DCOPObject* KexiProject::dcopObject()
 
 bool KexiProject::completeSaving( KoStore* store )
 {
-	m_dbconnection->flush(store);
+#warning FIXME
+//	m_dbconnection->flush(store);
 	m_relationManager->storeRelations(store);
 	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
 		hand->store(store);
@@ -112,7 +106,7 @@ bool KexiProject::completeSaving( KoStore* store )
 
 bool KexiProject::completeLoading( KoStore* store )
 {
-	if(!initDBConnection(m_dbconnection, store))
+	if(!initDBConnection(m_dbConnectionData, store))
 		return false;
 
 	m_relationManager->loadRelations(store);
@@ -157,29 +151,8 @@ bool KexiProject::initDoc()
 		delete newDlg;
 		}
 
-		/*create the initial project, which will than be reopened for work*/
-		if (ok) {
-#ifdef JoWenn_VERY_EXPERIMENTAL
-			m_projectConnection= new KexiDBConnection("cql",
-			newProjectFileName,true); //fixme later
-
-			m_projectDB=m_projectConnection->connectDB(m_dbInterfaceManager);
-			if (!m_projectDB) {
-				KMessageBox::error(0, i18n("The CQL++ module for accessing the "
-					"project file failed to initialize"));
-					return false;
-			}
-			m_dbconnection->writeInfo(m_projectDB,0);
-#endif
-		}
 	} else if (ret==KoTemplateChooseDia::File) {
 		loadHandlers();
-#ifdef JoWenn_VERY_EXPERIMENTAL
-		m_projectConnection= new KexiDBConnection("cql",
-			"/home/jowenn/kexidb",true); //fixme later
-		m_projectDB=m_projectConnection->connectDB(m_dbInterfaceManager);
-		if (!m_projectDB) return false;
-#endif
 		KURL url(filename);
 		kdDebug()<<"kexi: opening file: "<<url.prettyURL()<<endl;
 		ok=openURL(url);
@@ -190,7 +163,7 @@ bool KexiProject::initDoc()
 KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
 {
 	kdDebug() << "KoView* KexiProject::createViewInstance()" << endl;
-	KexiView *v= new KexiView( KexiView::MDIMode,this, parent, name );
+	KexiView *v= new KexiView( KexiView::DefaultMode,this, parent, name );
 	for(KexiProjectHandler *part = m_parts->first(); part; part = m_parts->next())
 		part->hookIntoView(v);
 	v->finalizeInit();
@@ -293,7 +266,7 @@ QDomDocument KexiProject::saveXML()
 {
 	kdDebug()<<"KexiProject::saveXML()"<<endl;
 	QDomDocument domDoc=createDomDocument( "KexiProject", "1.0" );
-	m_dbconnection->writeInfo(domDoc);
+	m_dbConnectionData->writeInfo(domDoc);
 	saveReferences(domDoc);
 	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
 		hand->saveXML(domDoc);
@@ -342,7 +315,7 @@ bool KexiProject::loadXML( QIODevice *, const QDomDocument &domDoc )
 		QString tagname=el.tagName();
 		//perhaps the if's should be moved lateron into the methods alone
 		if (tagname=="connectionSettings")
-			m_dbconnection = KexiDBConnection::loadInfo(el);
+			m_dbConnectionData = KexiProjectConnectionData::loadInfo(el);
 		else if (tagname=="references")
 			loadReferences(el);
 		else {
@@ -361,8 +334,10 @@ void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bo
 }
 
 bool
-KexiProject::initDBConnection(KexiDBConnection *connection, KoStore *store)
+KexiProject::initDBConnection(KexiProjectConnectionData *connection, KoStore *store)
 {
+#warning FIXME
+/*
 	if(!connection)
 		return false;
 
@@ -385,6 +360,7 @@ KexiProject::initDBConnection(KexiDBConnection *connection, KoStore *store)
 //		KMessageBox::error(0, i18n("Connection to database failed."), i18n("Database Connection"));
 		return false;
 	}
+*/
 }
 
 void

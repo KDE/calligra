@@ -33,7 +33,7 @@
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
 
-#include "kexiDB/kexidb.h"
+#include "kexidb/connection.h"
 
 #include "kexiview.h"
 #include "kexibrowser.h"

@@ -35,7 +35,6 @@
 #include "kexidatatable.h"
 #include "kexialtertable.h"
 
-#include <kexidberror.h>
 
 KexiTablePart::KexiTablePart(QObject *project,const char *,const QStringList &)
  : KexiProjectHandler(KEXIPROJECT(project)),KexiDataProvider()

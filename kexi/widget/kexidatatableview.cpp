@@ -23,9 +23,8 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include <kexiDB/kexidb.h>
-#include <kexiDB/kexidberror.h>
-#include <kexiDB/kexidbrecordset.h>
+#include <kexidb/connection.h>
+#include <kexidb/cursor.h>
 
 #include "kexitableheader.h"
 #include "kexidatatableview.h"
@@ -36,7 +35,7 @@ KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name)
 	init();
 }
 
-KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDBRecordSet *rec)
+KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *rec)
  : KexiTableView(parent, name)
 {
 	init();
@@ -55,7 +54,7 @@ KexiDataTableView::init()
 	connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
 }
 
-void KexiDataTableView::setDataSet(KexiDBRecordSet *rec)
+void KexiDataTableView::setDataSet(KexiDB::Cursor *rec)
 {
 	if(!m_first)
 		clearAll();

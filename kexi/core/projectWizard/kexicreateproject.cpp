@@ -37,7 +37,7 @@
 
 //#include "kexitabbrowser.h"
 #include "kexicreateproject.h"
-#include "kexidbconnection.h"
+#include "kexiprojectconnectiondata.h"
 //#include "kexiview.h"
 //#include "kexiproject.h"
 
@@ -169,19 +169,10 @@ KexiCreateProject::accept()
 	{
 		kdDebug() << "KexiCreateProject::accept(): local engine..." << endl;
 		//FIXME: care if user selects an existing location :)
-		KexiDBConnection *c;
-		if(m_pageFile->data("persistant").toBool())
-		{
-			c = new KexiDBConnection(m_pageEngine->data("engine").toString(),
-			 m_pageFile->data("ref").toString(), true);
-		}
-		else
-		{
-			c = new KexiDBConnection(m_pageEngine->data("engine").toString(),
-			 QString::null);
-		}
+		KexiProjectConnectionData c;
+		c.setDriverName(m_pageEngine->data("engine").toString());
 
-		if(!project()->initDBConnection(c))
+		if(!project()->initDBConnection(&c))
 			return;
 	}
 	else

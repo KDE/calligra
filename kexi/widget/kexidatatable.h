@@ -32,14 +32,15 @@ class QLabel;
 
 class KPrinter;
 
-class KexiDBRecordSet;
 class KexiDBUpdateRecord;
 class KexiView;
 class KexiDataTableView;
-class KexiDB;
 class KexiProjectHandlerItem;
 class KexiDataTable;
 
+namespace KexiDB {
+	class Cursor;
+}
 
 /*class TableGUIClient : public KXMLGUIClient
 {
@@ -60,7 +61,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		~KexiDataTable();
 
 //		bool executeQuery(const QString &query);
-		void setDataSet(KexiDBRecordSet *rec);
+		void setDataSet(KexiDB::Cursor *rec);
 
 		bool readOnly();
 
@@ -105,7 +106,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 # endif
 
 		//db stuff
-//		KexiDBRecordSet	*m_record;
+//		KexiDB::Cursor	*m_record;
 
 //		bool		m_first;
 //		KexiDB		*m_db;

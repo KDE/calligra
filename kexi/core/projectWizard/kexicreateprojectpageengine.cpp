@@ -34,7 +34,7 @@ Boston, MA 02111-1307, USA.
 #include <kiconloader.h>
 #include <kapp.h>
 
-#include "kexiDB/kexidbinterfacemanager.h"
+#include <kexidb/drivermanager.h>
 #include "kexicreateprojectpageengine.h"
 #include "kexiproject.h"
 
@@ -93,7 +93,7 @@ KexiCreateProjectPageEngine::fill()
 {
 	if (m_engine->count()>0)
 		return;
-	QStringList drivers = project()->manager()->drivers();
+	QStringList drivers = project()->manager()->driverNames();
 	for(QStringList::Iterator it = drivers.begin(); it != drivers.end(); ++it)
 	{
 		m_engine->insertItem( kapp->iconLoader()->loadIcon("exec", KIcon::Small), *it);
@@ -145,10 +145,14 @@ KexiCreateProjectPageEngine::fillSummary()
 	} 
 	else
 #endif
-	{
-		engineSummary = project()->manager()->driverInfo(m_engine->currentText())->comment();
+	{      
+		KService *ptr=project()->manager()->serviceInfo(m_engine->currentText());
+		if (ptr) {
+			engineSummary = ptr->comment();
+			location = project()->manager()->serviceInfo(m_engine->currentText())->property("X-Kexi-Location");
+			setProperty("location", location);
+		} else engineSummary=i18n("Internal error while retrieving information. (No driver installed ?)");
 //		userSummary = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummary);
-		location = project()->manager()->driverInfo(m_engine->currentText())->property("X-Kexi-Location");
 	}
 
 
@@ -157,7 +161,6 @@ KexiCreateProjectPageEngine::fillSummary()
 		m_summary->setText( QString("<b>") + m_engine->currentText() + "</b><br><hr><br>" + engineSummary );
 	}
 
-	setProperty("location", location);
 }
 
 void
