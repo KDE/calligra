@@ -1651,7 +1651,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste ) {
                     kpClosedLinneObject->setOrig( kpClosedLinneObject->getOrig().x(), offset );
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert " ) + kpClosedLinneObject->getTypeString(), kpClosedLinneObject, this , m_pageWhereLoadObject );
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert %1" ).arg(kpClosedLinneObject->getTypeString()), kpClosedLinneObject, this , m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro = true;
 
