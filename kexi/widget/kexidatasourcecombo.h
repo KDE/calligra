@@ -36,7 +36,7 @@ typedef QMap<int, DSInfo> DSList;
  * a combobox listing all availabe datasources with icons etc
  * see KexiPart::DataSource for more info
  */
-class KexiDataSourceCombo : public QComboBox
+class KEXIEXTWIDGETS_EXPORT KexiDataSourceCombo : public QComboBox
 {
 	Q_OBJECT
 

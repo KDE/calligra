@@ -43,7 +43,7 @@ typedef QPair<KexiPart::DataSource*, KexiPart::Item> DSInfo;
  * creating documents (like forms and reports)
  * where fields should be displayed by default
  */
-class KexiDataSourceWizard : public KWizard
+class KEXIEXTWIDGETS_EXPORT KexiDataSourceWizard : public KWizard
 {
 	Q_OBJECT
 
@@ -98,7 +98,7 @@ class KexiDataSourceWizard : public KWizard
 		bool m_used : 1;
 };
 
-class KexiDSPixmap : public QLabel
+class KEXIEXTWIDGETS_EXPORT KexiDSPixmap : public QLabel
 {
 	Q_OBJECT
 

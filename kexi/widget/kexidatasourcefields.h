@@ -41,7 +41,7 @@ namespace KexiPart
  * where users chosen are displayed.
  * the fields can be made visible by << < > >> buttons
  */
-class KexiDataSourceFields : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiDataSourceFields : public QWidget
 {
 	Q_OBJECT
 

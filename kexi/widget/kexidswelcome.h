@@ -29,7 +29,7 @@ class KexiDataSourceWizard;
  * it is the greeting page per default, where people
  * can choose wheather they want to use the wirzard
  */
-class KexiDSWelcome : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiDSWelcome : public QWidget
 {
 	Q_OBJECT
 

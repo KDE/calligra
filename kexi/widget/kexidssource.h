@@ -32,7 +32,7 @@ class KexiDataSourceFields;
  * the datasource and fields that should be used in the produced
  * document (@ref KexiDataSourceFields)
  */
-class KexiDSSource : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiDSSource : public QWidget
 {
 	Q_OBJECT
 
