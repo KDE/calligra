@@ -1031,7 +1031,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     // Do we have to occupy additional cells at the bottom ?
-    if ( m_dOutTextHeight > h - 2 * BORDER_SPACE -
+    if ( ( m_pQML || multiRow( _col, _row ) ) && 
+         m_dOutTextHeight > h - 2 * BORDER_SPACE -
          topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
     {
       int r = m_iRow;
