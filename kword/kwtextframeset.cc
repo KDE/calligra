@@ -1569,17 +1569,12 @@ void KWTextFrameSet::printDebug()
         }
     }
 
-    bool first = true;
     QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
       KWAnchor *anc = dynamic_cast<KWAnchor *>( cit.current() );
-      if (anc) {
-          if ( first )
-              kdDebug() << "-- Inline framesets --" << endl;
-          first = false;
-          anc->frameSet()->printDebug();
-      }
+      if (anc)
+          kdDebug() << "Inline framesets: " << anc->frameSet()->getName() << endl;
     }
 }
 #endif
