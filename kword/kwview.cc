@@ -61,7 +61,6 @@
 #include <koRuler.h>
 #include <koTabChooser.h>
 #include <koPartSelectDia.h>
-#include <kformulaedit.h>
 #include <koTemplateCreateDia.h>
 #include <koFrame.h>
 
