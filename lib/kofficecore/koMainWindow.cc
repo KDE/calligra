@@ -790,7 +790,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 
             // this file exists and we are not just clicking "Save As" to change filter options
             // => ask for confirmation
-            if ( KIO::NetAccess::exists( newURL ) && !justChangingFilterOptions )
+            if ( KIO::NetAccess::exists( newURL, this ) && !justChangingFilterOptions )
             {
                 bOk = KMessageBox::questionYesNo( this,
                                                   i18n("A document with this name already exists.\n"\
