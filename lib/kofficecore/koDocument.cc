@@ -501,6 +501,13 @@ CORBA::Boolean KoDocument::open( const char *_url )
   if ( strncasecmp( buf, "MIME", 4 ) != 0 &&
        strncasecmp( buf, "Magi", 4 ) != 0 )
   {
+#if not_more
+  /*
+   * I've removed this code in order to use my own XML parser in 
+   * my document class. But it shouldn't break the other implementations
+   * because koDocument::load (istream&, bool) does (nearly) the same.
+   * (kus)
+   */
     // Load XML ?
     if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
     {
@@ -512,6 +519,7 @@ CORBA::Boolean KoDocument::open( const char *_url )
     }
     // Load binary data
     else
+#endif
       if ( !load( in, true ) )
 	return false;
     
@@ -664,6 +672,13 @@ CORBA::Boolean KoDocument::openMimePart( OPParts::MimeMultipartDict_ptr _dict, c
   bs.get( buf[0] ); bs.get( buf[1] ); bs.get( buf[2] ); bs.get( buf[3] ); buf[4] = 0;
   bs.unget(); bs.unget(); bs.unget(); bs.unget();
   
+#if not_more
+  /*
+   * I've removed this code in order to use my own XML parser in 
+   * my document class. But it shouldn't break the other implementations
+   * because koDocument::load (istream&, bool) does (nearly) the same.
+   * (kus)
+   */
   // Load XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
   {
@@ -675,6 +690,7 @@ CORBA::Boolean KoDocument::openMimePart( OPParts::MimeMultipartDict_ptr _dict, c
   }
   // Load binary data
   else
+#endif
     if ( !load( bs, false ) )
       return false;
   
