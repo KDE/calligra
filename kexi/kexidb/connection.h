@@ -138,7 +138,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 opened database can contain fewer 'system' tables than in current
 		 KexiDB implementation, if the current one is newer than the one used 
 		 to build the database. */
-		KEXI_DB_EXPORT static const QStringList& kexiDBSystemTableNames();
+		static const QStringList& kexiDBSystemTableNames();
 		
 		/*! \return ids of all table schema names stored in currently 
 		 used database. These ids can be later used as argument for tableSchema().

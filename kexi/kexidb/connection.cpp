@@ -753,7 +753,7 @@ Transaction Connection::beginTransaction()
 		}
 		d->m_default_trans = trans;
 		d->m_transactions.append(trans);
-		return trans;
+		return d->m_default_trans;
 	}
 	else if (m_driver->m_features & Driver::MultipleTransactions) {
 		if (!(trans.m_data = drv_beginTransaction())) {

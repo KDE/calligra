@@ -38,10 +38,11 @@ class KEXI_DB_EXPORT TransactionData
 
 		//helper for debugging
 		static int globalcount;
+		//helper for debugging
+		static int globalCount();
 		
 		Connection *m_conn;
 		bool m_active : 1;
-		bool m_rollbackOnDestuction : 1;
 		uint refcount;
 };
 
@@ -82,6 +83,7 @@ class KEXI_DB_EXPORT Transaction : public QObject
 		static const Transaction null;
 
 		//helper for debugging
+		static int globalCount();
 		static int globalcount;
 	protected:
 		

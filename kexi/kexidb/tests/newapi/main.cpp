@@ -79,8 +79,8 @@ int main(int argc, char** argv)
 
 	int r = conn ? (conn->disconnect() ? 0 : 1) : 0;
 	
-	kdDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalcount << endl;
-	kdDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalcount << endl;
+	kdDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount() << endl;
+	kdDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount() << endl;
 	
 	return r;
 }

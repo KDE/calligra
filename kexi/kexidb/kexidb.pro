@@ -1,6 +1,6 @@
 TEMPLATE	= lib
 
-include( $(KEXI)/common.pro )
+include( $(KEXI)/kexidb/common.pro )
 
 # needed to export library classes:
 DEFINES += MAKE_KEXI_DB_LIB
@@ -22,11 +22,13 @@ driver.cpp \
 connectiondata.cpp \
 connection.cpp \
 field.cpp \
+schemadata.cpp \
 tableschema.cpp \
 queryschema.cpp \
 transaction.cpp \
+indexschema.cpp \
 cursor.cpp \
-index.cpp \
-fieldlist.cpp
+fieldlist.cpp \
+global.cpp
 
 #HEADERS =

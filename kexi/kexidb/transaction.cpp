@@ -27,13 +27,14 @@
 using namespace KexiDB;
 
 //helper for debugging
-int Transaction::globalcount = 0;
-int TransactionData::globalcount = 0;
+KEXI_DB_EXPORT int Transaction::globalcount = 0;
+KEXI_DB_EXPORT int Transaction::globalCount() { return Transaction::globalcount; }
+KEXI_DB_EXPORT int TransactionData::globalcount = 0;
+KEXI_DB_EXPORT int TransactionData::globalCount() { return TransactionData::globalcount; }
 
 TransactionData::TransactionData(Connection *conn)
  : m_conn(conn)
  , m_active(true)
- , m_rollbackOnDestuction(false)
  , refcount(1)
 {
 	assert(conn);
@@ -44,33 +45,10 @@ TransactionData::TransactionData(Connection *conn)
 
 TransactionData::~TransactionData()
 {
-//	if (m_rollbackOnDestuction && conn) {
-//		KexiDBDbg << "-- ~TransactionData(): ROLLBACK ON DESTRUCTION!" << endl;
-//		conn->drv_rollbackTransaction( this );
-//	}
-	
 	TransactionData::globalcount--;
 	KexiDBDbg << "-- TransactionData::globalcount == " << TransactionData::globalcount << endl;
 }
 
-//---------------------------------------------------
-
-/*
-class Transaction::Private
-{
-	public:
-		Transaction::Private()
-		: data(0)
-		{
-		}
-		~Transaction::Private()
-		{
-			delete data;
-		}
-		
-		Connection *conn;
-		TransactionData *data;
-};*/
 //---------------------------------------------------
 
 const Transaction Transaction::null;
@@ -140,7 +118,7 @@ bool Transaction::active() const
 
 bool Transaction::isNull() const
 {
-	return m_data!=NULL;
+	return m_data==0;
 }
 
 //---------------------------------------------------
