@@ -38,8 +38,6 @@ namespace KexiDB {
 	class ConnectionData;
 }
 
-typedef QIntDict<KexiDialogBase> WidgetDict;
-
 /**
  * @short Kexi's main window
  */
@@ -55,7 +53,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		virtual ~KexiMainWindow();
 
 		//! Project data of currently opened project or NULL if no project here yet.
-		KexiProject	*project() { return m_project; }
+		KexiProject	*project();
 
 		/**
 		 * registers a dialog for watching and adds it to the view
@@ -166,11 +164,6 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void slotQuit();
 
 	private:
-		KexiProject	*m_project;
-		KexiBrowser	*m_nav;
-		WidgetDict	m_docs;
-
-		KXMLGUIClient   *m_currentDocumentGUIClient;
 
 		class Private;
 		Private *d;
