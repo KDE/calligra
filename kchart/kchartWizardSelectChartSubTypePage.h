@@ -8,11 +8,11 @@ class QButtonGroup;
 class QPushButton;
 class KChartPart;
 
-class kchartWizardSelectChartSubTypePage : public QWidget
+class KChartWizardSelectChartSubTypePage : public QWidget
 {
   Q_OBJECT
 public:
-  kchartWizardSelectChartSubTypePage( QWidget* parent, KChartPart* chart );
+  KChartWizardSelectChartSubTypePage( QWidget* parent, KChartPart* chart );
 
   bool chartSubType;
 public slots:

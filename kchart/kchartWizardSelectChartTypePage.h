@@ -9,12 +9,12 @@ class QPushButton;
 class QButtonGroup;
 class KChartPart;
 
-class kchartWizardSelectChartTypePage : public QWidget
+class KChartWizardSelectChartTypePage : public QWidget
 {
   Q_OBJECT
 
 public:
-  kchartWizardSelectChartTypePage( QWidget* parent, KChartPart* chart );
+  KChartWizardSelectChartTypePage( QWidget* parent, KChartPart* chart );
 
 public slots:
   void apply();

@@ -889,6 +889,11 @@ QFont KChartPart::toFont(QDomElement &element) const {
 
 /**
  * $Log$
+ * Revision 1.41  2000/07/16 01:52:40  faure
+ * Add support for applying a "pre-processing filter" before loading an
+ * XML document. Used in KPresenter to apply a perl script. Currently
+ * not activated, will be when Reggie commits the new text object.
+ *
  * Revision 1.40  2000/07/14 12:31:01  faure
  * Ported to new loadXML stuff
  *
@@ -1030,7 +1035,7 @@ QFont KChartPart::toFont(QDomElement &element) const {
  *
  * Revision 1.17  2000/01/06 20:32:46  mlaurent
  * Bug fix
- * Now you can choose font and color in kchartWizard
+ * Now you can choose font and color in KChartWizard
  *
  * Revision 1.16  2000/01/05 20:09:51  mlaurent
  * Improved save parameters
@@ -1042,7 +1047,7 @@ QFont KChartPart::toFont(QDomElement &element) const {
  * Start save parameters in file
  *
  * Revision 1.13  2000/01/03 20:26:42  mlaurent
- * Improved kchartWizard and bugfix
+ * Improved KChartWizard and bugfix
  *
  * Revision 1.12  1999/12/21 22:36:17  faure
  * Porting to new QVariant. More like this and I write a script !

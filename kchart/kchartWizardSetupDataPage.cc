@@ -9,11 +9,11 @@
 #include <qbuttongroup.h>
 #include <qlabel.h>
 
-kchartWizardSetupDataPage::kchartWizardSetupDataPage( QWidget* parent,
+KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
 													  KChartPart* chart) :
   QWidget( parent ),
   _chart( chart ),
-  _parent( (kchartWizard*)parent )
+  _parent( (KChartWizard*)parent )
 {
   QButtonGroup* tmpQGroupBox;
   tmpQGroupBox = new QButtonGroup( this, "GroupBox_1" );
@@ -85,7 +85,7 @@ kchartWizardSetupDataPage::kchartWizardSetupDataPage( QWidget* parent,
 }
 
 
-kchartWizardSetupDataPage::~kchartWizardSetupDataPage()
+KChartWizardSetupDataPage::~KChartWizardSetupDataPage()
 {
     /*
   _chart->removeAutoUpdate( preview );
@@ -93,34 +93,34 @@ kchartWizardSetupDataPage::~kchartWizardSetupDataPage()
 }
 
 
-void kchartWizardSetupDataPage::dataInRowsClicked()
+void KChartWizardSetupDataPage::dataInRowsClicked()
 {
-  _parent->emitNeedNewData( _parent->dataArea(), kchartWizard::Row,
+  _parent->emitNeedNewData( _parent->dataArea(), KChartWizard::Row,
 								 coldescript->isChecked(), 
 								 rowdescript->isChecked() );
 }
 
-void kchartWizardSetupDataPage::dataInColsClicked()
+void KChartWizardSetupDataPage::dataInColsClicked()
 {
-  _parent->emitNeedNewData( _parent->dataArea(), kchartWizard::Col,
+  _parent->emitNeedNewData( _parent->dataArea(), KChartWizard::Col,
 							coldescript->isChecked(),
 							rowdescript->isChecked() );
 }
 
-void kchartWizardSetupDataPage::firstColumnIsDescriptionToggled( bool )
+void KChartWizardSetupDataPage::firstColumnIsDescriptionToggled( bool )
 {
   _parent->emitNeedNewData( _parent->dataArea(), 
-							( datarow->isChecked() ? kchartWizard::Row :
-							  kchartWizard::Col ),
+							( datarow->isChecked() ? KChartWizard::Row :
+							  KChartWizard::Col ),
 							coldescript->isChecked(),
 							rowdescript->isChecked() );
 }
 
-void kchartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
+void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
 {
   _parent->emitNeedNewData( _parent->dataArea(), 
-							( datarow->isChecked() ? kchartWizard::Row :
-							  kchartWizard::Col ),
+							( datarow->isChecked() ? KChartWizard::Row :
+							  KChartWizard::Col ),
 							coldescript->isChecked(),
 							rowdescript->isChecked() );
 }

@@ -15,7 +15,7 @@
 #include <klocale.h>
 #include <qlayout.h>
 
-kchartWizardSelectChartSubTypePage::kchartWizardSelectChartSubTypePage( QWidget* parent,
+KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent,
 						    KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
@@ -79,7 +79,7 @@ grid1->addWidget(grp,0,0);
 
 
 
-void kchartWizardSelectChartSubTypePage::apply()
+void KChartWizardSelectChartSubTypePage::apply()
 {
 if(chartSubType)
 {

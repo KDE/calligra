@@ -190,8 +190,8 @@ void KChartView::edit()
 void KChartView::wizard()
 {
   kdDebug(35001) << "Wizard called" << endl;
-  kchartWizard *wiz =
-	new kchartWizard((KChartPart*)koDocument(), this, "KChart Wizard", true);
+  KChartWizard *wiz =
+	new KChartWizard((KChartPart*)koDocument(), this, "KChart Wizard", true);
   kdDebug(35001) << "Executed. Now, display it" << endl;
   wiz->exec();
   repaint();

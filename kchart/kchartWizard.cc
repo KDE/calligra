@@ -16,39 +16,39 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* name,
+KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* name,
 							 bool modal, WFlags f ) :
   KWizard( parent, name, modal, f ),
   _chart( chart )
 {
   // hack
 
-    kdDebug(35001) << "Creating kchartWizard" << endl;
+    kdDebug(35001) << "Creating KChartWizard" << endl;
 
   // First page: select the range
-    //_selectdatapage = new kchartWizardSelectDataPage( this );
+    //_selectdatapage = new KChartWizardSelectDataPage( this );
    //addPage( _selectdatapage, i18n( "Select data" ) );
 
   // Second page: select the major chart type
-  _selectcharttypepage =  new kchartWizardSelectChartTypePage( this, _chart );
+  _selectcharttypepage =  new KChartWizardSelectChartTypePage( this, _chart );
   addPage( _selectcharttypepage, i18n( "Select chart type" ) );
   //finishButton()->setEnabled( TRUE );
   //setFinishEnabled(_selectcharttypepage, true);
 
   // Third page: select the minor chart type
-    _selectchartsubtypepage = new kchartWizardSelectChartSubTypePage( this, _chart );
+    _selectchartsubtypepage = new KChartWizardSelectChartSubTypePage( this, _chart );
    addPage( _selectchartsubtypepage, i18n( "Select chart subtype" ) );
 
   // Fourth page: data setup
-    //_setupdatapage = new kchartWizardSetupDataPage( this, _chart );
+    //_setupdatapage = new KChartWizardSetupDataPage( this, _chart );
   //addPage( _setupdatapage, i18n( "Data setup" ) );
 
   // Fifth page: labels/legends setup
-  _labelslegendpage = new kchartWizardLabelsLegendPage( this, _chart );
+  _labelslegendpage = new KChartWizardLabelsLegendPage( this, _chart );
   addPage( _labelslegendpage, i18n( "Labels and legend" ) );
 
   // Sixth page: axes setup
-  _axespage = new kchartWizardSetupAxesPage( this, _chart );
+  _axespage = new KChartWizardSetupAxesPage( this, _chart );
   addPage( _axespage, i18n( "Setup axes" ) );
   setFinishEnabled(_axespage, true);
   connect( this ,SIGNAL( finished()),_labelslegendpage,SLOT(apply()));
@@ -62,7 +62,7 @@ kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* nam
 }
 
 
-kchartWizard::~kchartWizard()
+KChartWizard::~KChartWizard()
 {
     //delete _selectdatapage;
   delete _selectcharttypepage;
@@ -72,7 +72,7 @@ kchartWizard::~kchartWizard()
   delete _axespage;
 }
 
-void kchartWizard::subType(int _type)
+void KChartWizard::subType(int _type)
 {
  if( ((KChartType)_type==KCHARTTYPE_BAR) || ((KChartType)_type==KCHARTTYPE_3DBAR)
         ||((KChartType)_type==KCHARTTYPE_3DLINE))
@@ -111,7 +111,7 @@ if(((KChartType)_type==KCHARTTYPE_3DHILOCLOSE)||((KChartType)_type==KCHARTTYPE_3
 
 
 }
-bool kchartWizard::appropriate( QWidget * w ) const
+bool KChartWizard::appropriate( QWidget * w ) const
 {
   if ( w == _selectchartsubtypepage )
     // Show the sub-type page only if has anything to show
@@ -121,7 +121,7 @@ bool kchartWizard::appropriate( QWidget * w ) const
 
 }
 
-void kchartWizard::next()
+void KChartWizard::next()
 {
 
   // Some sort of a hack. We want the chart-subtype-page to get
@@ -132,31 +132,31 @@ void kchartWizard::next()
   QWizard::next();
 }
 
-void kchartWizard::accept()
+void KChartWizard::accept()
 {
   emit finished();
   QWizard::accept();
 }
 
-void kchartWizard::reject()
+void KChartWizard::reject()
 {
   emit cancelled();
   QWizard::reject();
 }
 
-void kchartWizard::setDataArea( QString area )
+void KChartWizard::setDataArea( QString area )
 {
   _selectdatapage->rangeED->setText( area );
 }
 
 
-QString kchartWizard::dataArea() const
+QString KChartWizard::dataArea() const
 {
   return _selectdatapage->rangeED->text();
 }
 
 
-void kchartWizard::emitNeedNewData( const char* area, int rowcol,
+void KChartWizard::emitNeedNewData( const char* area, int rowcol,
 				    bool firstRowIsLegend,
 				    bool firstColIsLabel )
 {

@@ -6,20 +6,20 @@
 #include "kchart_part.h"
 
 class KChartPart;
-class kchartWizardSetupAxesPage;
-class kchartWizardLabelsLegendPage;
-class kchartWizardSelectChartSubTypePage;
-class kchartWizardSelectDataPage;
-class kchartWizardSetupDataPage;
-class kchartWizardSelectChartTypePage;
+class KChartWizardSetupAxesPage;
+class KChartWizardLabelsLegendPage;
+class KChartWizardSelectChartSubTypePage;
+class KChartWizardSelectDataPage;
+class KChartWizardSetupDataPage;
+class KChartWizardSelectChartTypePage;
 
-class kchartWizard : public KWizard
+class KChartWizard : public KWizard
 {
     Q_OBJECT
 public:
-    kchartWizard ( KChartPart* chart, QWidget *parent, const char* name,
+    KChartWizard ( KChartPart* chart, QWidget *parent, const char* name,
 				   bool modal = true, WFlags f = 0 );
-    ~kchartWizard();
+    ~KChartWizard();
 
     KChartPart* chart() const { return _chart; };
   void setDataArea( QString area );
@@ -46,12 +46,12 @@ protected slots:
   virtual void subType(int);
 private:
   KChartPart* _chart;
-  kchartWizardSelectDataPage* _selectdatapage;
-  kchartWizardSelectChartTypePage* _selectcharttypepage;
-  kchartWizardSelectChartSubTypePage* _selectchartsubtypepage;
-  kchartWizardSetupDataPage* _setupdatapage;
-  kchartWizardLabelsLegendPage* _labelslegendpage;
-  kchartWizardSetupAxesPage* _axespage;
+  KChartWizardSelectDataPage* _selectdatapage;
+  KChartWizardSelectChartTypePage* _selectcharttypepage;
+  KChartWizardSelectChartSubTypePage* _selectchartsubtypepage;
+  KChartWizardSetupDataPage* _setupdatapage;
+  KChartWizardLabelsLegendPage* _labelslegendpage;
+  KChartWizardSetupAxesPage* _axespage;
 };
 
 #endif

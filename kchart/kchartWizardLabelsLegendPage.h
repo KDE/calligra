@@ -10,13 +10,13 @@ class QRadioButton;
 class KChartPart;
 //class kchartWidget;
 
-class kchartWizardLabelsLegendPage : public QWidget
+class KChartWizardLabelsLegendPage : public QWidget
 {
   Q_OBJECT
 
 public:
-  kchartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart );
-  ~kchartWizardLabelsLegendPage();
+  KChartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart );
+  ~KChartWizardLabelsLegendPage();
 
   bool ytitle2;
 public slots:

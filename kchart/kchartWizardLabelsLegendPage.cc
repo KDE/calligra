@@ -12,7 +12,7 @@
 #include <kfontdialog.h>
 #include <qlayout.h>
 
-kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
+KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
 {
@@ -127,51 +127,51 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
 }
 
 
-kchartWizardLabelsLegendPage::~kchartWizardLabelsLegendPage()
+KChartWizardLabelsLegendPage::~KChartWizardLabelsLegendPage()
 {
   //  _chart->removeAutoUpdate( preview );
 }
 
-void kchartWizardLabelsLegendPage::changeXLabelFont()
+void KChartWizardLabelsLegendPage::changeXLabelFont()
 {
     if (KFontDialog::getFont( xlabel,true,this ) == QDialog::Rejected )
       return;
 
 }
-void kchartWizardLabelsLegendPage::changeYLabelFont()
+void KChartWizardLabelsLegendPage::changeYLabelFont()
 {
     if (KFontDialog::getFont( ylabel ,true,this ) == QDialog::Rejected )
       return;
 
 }
-void kchartWizardLabelsLegendPage::changeTitleFont()
+void KChartWizardLabelsLegendPage::changeTitleFont()
 {
     if (KFontDialog::getFont( title ,true,this ) == QDialog::Rejected )
       return;
 
 }
 
-void kchartWizardLabelsLegendPage::changeXLabelColor(const QColor &_color)
+void KChartWizardLabelsLegendPage::changeXLabelColor(const QColor &_color)
 {
  x_color=_color;
 }
 
-void kchartWizardLabelsLegendPage::changeYLabelColor(const QColor &_color)
+void KChartWizardLabelsLegendPage::changeYLabelColor(const QColor &_color)
 {
 y_color=_color;
 }
 
-void kchartWizardLabelsLegendPage::changeTitleColor(const QColor &_color)
+void KChartWizardLabelsLegendPage::changeTitleColor(const QColor &_color)
 {
 title_color=_color;
 }
 
-void kchartWizardLabelsLegendPage::changeYTitle2Color(const QColor &_color)
+void KChartWizardLabelsLegendPage::changeYTitle2Color(const QColor &_color)
 {
 y_color2=_color;
 }
 
-void kchartWizardLabelsLegendPage::paintEvent( QPaintEvent * )
+void KChartWizardLabelsLegendPage::paintEvent( QPaintEvent * )
 {
 if(ytitle2)
         {
@@ -185,7 +185,7 @@ else
         }
 }
 
-void kchartWizardLabelsLegendPage::apply(  )
+void KChartWizardLabelsLegendPage::apply(  )
 {
    _chart->params()->setXTitleFont(xlabel);
    _chart->params()->setYTitleFont(ylabel);

@@ -13,7 +13,7 @@
 #include <klocale.h>
 #include <kfontdialog.h>
 
-kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
+KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 													  KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
@@ -180,33 +180,33 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
 }
 
 
-kchartWizardSetupAxesPage::~kchartWizardSetupAxesPage()
+KChartWizardSetupAxesPage::~KChartWizardSetupAxesPage()
 {
   // _chart->removeAutoUpdate( preview );
 }
 
-void kchartWizardSetupAxesPage::changeLabelColor(const QColor &_color)
+void KChartWizardSetupAxesPage::changeLabelColor(const QColor &_color)
 {
  ycolor=_color;
 }
 
-void kchartWizardSetupAxesPage::changeBorderColor(const QColor &_color)
+void KChartWizardSetupAxesPage::changeBorderColor(const QColor &_color)
 {
  colorBorder=_color;
 }
 
-void kchartWizardSetupAxesPage::changeGridColor(const QColor &_color)
+void KChartWizardSetupAxesPage::changeGridColor(const QColor &_color)
 {
  colorGrid=_color;
 }
 
-void kchartWizardSetupAxesPage::changeLabelFont()
+void KChartWizardSetupAxesPage::changeLabelFont()
 {
  if (KFontDialog::getFont( ylabel,true,this ) == QDialog::Rejected )
       return;
 }
 
-void kchartWizardSetupAxesPage::paintEvent( QPaintEvent *)
+void KChartWizardSetupAxesPage::paintEvent( QPaintEvent *)
 {
 if(chart3d)
         {
@@ -222,7 +222,7 @@ else
         }
 }
 
-void kchartWizardSetupAxesPage::apply()
+void KChartWizardSetupAxesPage::apply()
 {
  _chart->params()->grid =grid->isChecked() ;
  if( !y_interval->text().isEmpty())

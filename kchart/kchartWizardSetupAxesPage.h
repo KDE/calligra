@@ -13,13 +13,13 @@
 class KChartPart;
 class kchartWidget;
 
-class kchartWizardSetupAxesPage : public QWidget
+class KChartWizardSetupAxesPage : public QWidget
 {
   Q_OBJECT
 
 public:
-  kchartWizardSetupAxesPage( QWidget* parent, KChartPart* chart );
-  ~kchartWizardSetupAxesPage();
+  KChartWizardSetupAxesPage( QWidget* parent, KChartPart* chart );
+  ~KChartWizardSetupAxesPage();
   bool chart3d;
 public slots:
       void apply();

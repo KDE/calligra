@@ -13,7 +13,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-void kchartWizardSelectChartTypePage::addButton(QString name,
+void KChartWizardSelectChartTypePage::addButton(QString name,
 					   QString icon_name,
 					   int type) {
 
@@ -43,7 +43,7 @@ void kchartWizardSelectChartTypePage::addButton(QString name,
   } else pos1++;
 }
 
-kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* parent, KChartPart* chart ) :
+KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* parent, KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
 {
@@ -106,13 +106,13 @@ kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* paren
 }
 
 
-void kchartWizardSelectChartTypePage::chartTypeSelected( int type )
+void KChartWizardSelectChartTypePage::chartTypeSelected( int type )
 {
    _type=(KChartType)type;
    emit chartChange(type);
 }
 
-void kchartWizardSelectChartTypePage::apply()
+void KChartWizardSelectChartTypePage::apply()
 {
  _chart->params()->type = _type;
 }

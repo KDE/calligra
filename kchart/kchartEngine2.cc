@@ -239,10 +239,9 @@ void KChartEngine::prepareColors()
                 if( params->threeD() )
                         ExtColorShd[j][i] = QColor( set_clr.red() / 2, set_clr.green() / 2, set_clr.blue() / 2 );
 	        }
-	   else
-                {
-	        ExtColor[j][i] = PlotColor;
-                if( params->threeD() )
-                        ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
-	        }
+	   else {
+		 ExtColor[j][i] = PlotColor;
+		 if( params->threeD() )
+		   ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
+	   }
 }

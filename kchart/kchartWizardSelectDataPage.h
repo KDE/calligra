@@ -5,12 +5,12 @@
 
 class QLineEdit;
 
-class kchartWizardSelectDataPage : public QWidget
+class KChartWizardSelectDataPage : public QWidget
 {
-friend class kchartWizard;
+friend class KChartWizard;
 
 public:
-  kchartWizardSelectDataPage( QWidget* parent );
+  KChartWizardSelectDataPage( QWidget* parent );
 
 private:
   QLineEdit* rangeED;

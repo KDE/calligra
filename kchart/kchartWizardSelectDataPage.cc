@@ -6,7 +6,7 @@
 #include <qlineedit.h>
 #include <kdebug.h>
 
-kchartWizardSelectDataPage::kchartWizardSelectDataPage( QWidget* parent ) :
+KChartWizardSelectDataPage::KChartWizardSelectDataPage( QWidget* parent ) :
   QWidget( parent )
 {
   rangeED = new QLineEdit( this, "LineEdit_1" );
@@ -22,7 +22,7 @@ kchartWizardSelectDataPage::kchartWizardSelectDataPage( QWidget* parent ) :
   tmpQLabel->setGeometry( 10, 50, 360, 20 );
   tmpQLabel->setText( "you must select another rectangular area here." );
 
-  kdDebug(35001) << "send needNewData() signal here and update area field in kchartWizard" << endl;
+  kdDebug(35001) << "send needNewData() signal here and update area field in KChartWizard" << endl;
 
   setMinimumSize( 600, 300 );
 }
