@@ -2574,7 +2574,6 @@ static bool kspreadfunc_imsub_helper( KSContext& context, QValueList<KSValue::Pt
       {
       double imag,real,imag1,real1;
       bool ok;
-      cout <<"REsult avant :"<<result.ascii()<<endl;
       if(!result.isEmpty())
         {
         imag=imag_complexe(result, ok);
@@ -2589,7 +2588,6 @@ static bool kspreadfunc_imsub_helper( KSContext& context, QValueList<KSValue::Pt
         real1=real_complexe((*it)->stringValue(), ok);
         result=kspreadfunc_create_complex(real1,imag1);
         }
-        cout <<"REsult apreq :"<<result.ascii()<<endl;
       }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
@@ -2603,7 +2601,6 @@ static bool kspreadfunc_imsub_helper( KSContext& context, QValueList<KSValue::Pt
         result=kspreadfunc_create_complex(real-real1,imag-imag1);
       else
         result=kspreadfunc_create_complex(real1,imag1);
-      cout <<"Result2 :"<<result.ascii()<<endl;
       }
     else
       return false;
