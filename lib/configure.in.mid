@@ -1,4 +1,4 @@
-AC_MSG_CHECKING([whetever kopainter should be compiled])
+AC_MSG_CHECKING([whether kopainter should be compiled])
 
 if test -s $srcdir/inst-apps ; then
     SUBDIRLIST=`cat $srcdir/inst-apps`
@@ -11,7 +11,7 @@ if test -z "$SUBDIRLIST" ; then
     SUBDIRLIST=`ls -1 $srcdir`
 fi
 
-# first check which main apllication we could compile
+# first check which main application we could compile
 for args in $SUBDIRLIST ; do
     case $args in
         kontour) COMPILE_LIB_FOR_KONTOUR="$args " ;;
