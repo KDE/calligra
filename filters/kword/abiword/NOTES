@@ -13,11 +13,12 @@
    - the "awml" format,
    - the "anonymous" format,
    - the "numbered" format,
-   - the "unnumbered" format.
+   - the "unnumbered" format,
+   - the "xml" format.
  
  They are NOT official names; it is just how I have named them.
  
- The older formats are XML-like, the "unnumbered" format is in XML.
+ The older formats are XML-like, the "xml" format is in XML.
  
    - The "awml" format starts with a tag <awml> and has no other header before.
 
