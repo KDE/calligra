@@ -430,13 +430,7 @@ void KWFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 {
     //kdDebug() << "KWFind::highlight " << matchingIndex << "," << matchingLength << " " << DEBUGRECT(expose) << endl;
 
-    QTextDocument * textdoc = m_currentFrameSet->textDocument();
-    QTextCursor cursor( textdoc );
-    cursor.setParag( m_currentParag );
-    cursor.setIndex( m_offset + matchingIndex );
-    textdoc->setSelectionStart( HIGHLIGHTSELECTION, &cursor );
-    cursor.setIndex( m_offset + matchingIndex + matchingLength );
-    textdoc->setSelectionEnd( HIGHLIGHTSELECTION, &cursor );
+    selectMatch( m_offset + matchingIndex, matchingLength );
 
     m_canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
                              (expose.top()+expose.bottom()) / 2,
@@ -447,9 +441,23 @@ void KWFindReplace::highlight( const QString &, int matchingIndex, int matchingL
     m_canvas->repaintChanged( m_currentFrameSet, true );
 }
 
-void KWFindReplace::replace( const QString &, int matchingIndex, int, const QRect &expose )
+void KWFindReplace::selectMatch( int index, int matchingLength )
+{
+    QTextDocument * textdoc = m_currentFrameSet->textDocument();
+    QTextCursor cursor( textdoc );
+    cursor.setParag( m_currentParag );
+    cursor.setIndex( index );
+    textdoc->setSelectionStart( HIGHLIGHTSELECTION, &cursor );
+    cursor.setIndex( index + matchingLength );
+    textdoc->setSelectionEnd( HIGHLIGHTSELECTION, &cursor );
+}
+
+void KWFindReplace::replace( const QString &, int matchingIndex,
+                             int matchingLength, const QRect &expose )
 {
     int index = m_offset + matchingIndex;
+     // highlight might not have happened (if 'prompt on replace' is off)
+    selectMatch( index, matchingLength );
     QTextDocument * textdoc = m_currentFrameSet->textDocument();
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
