@@ -205,6 +205,8 @@ public:
   void setBackView(unsigned int,BackView);
   void setBackType(unsigned int,BackType);
   bool setPenBrush(QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType);
+  bool setLineBegin(LineEnd);
+  bool setLineEnd(LineEnd);
   bool setPieSettings(PieType,int,int);
   void setPageEffect(unsigned int,PageEffect);
   BackType getBackType(unsigned int);

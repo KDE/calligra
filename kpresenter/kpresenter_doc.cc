@@ -987,6 +987,86 @@ bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,Fill
 }
 
 /*================================================================*/
+bool KPresenterDoc::setLineBegin(LineEnd lb)
+{
+  KPObject *kpobject = 0;
+  bool ret = false;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  switch (kpobject->getType())
+	    {
+	    case OT_LINE:
+	      {
+		dynamic_cast<KPLineObject*>(kpobject)->setLineBegin(lb);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_AUTOFORM:
+	      {
+		dynamic_cast<KPAutoformObject*>(kpobject)->setLineBegin(lb);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_PIE:
+	      {
+		dynamic_cast<KPPieObject*>(kpobject)->setLineBegin(lb);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    default: break;
+	    }
+	}
+    }
+
+  m_bModified = true;
+  return ret;
+}
+
+/*================================================================*/
+bool KPresenterDoc::setLineEnd(LineEnd le)
+{
+  KPObject *kpobject = 0;
+  bool ret = false;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  switch (kpobject->getType())
+	    {
+	    case OT_LINE:
+	      {
+		dynamic_cast<KPLineObject*>(kpobject)->setLineEnd(le);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_AUTOFORM:
+	      {
+		dynamic_cast<KPAutoformObject*>(kpobject)->setLineEnd(le);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_PIE:
+	      {
+		dynamic_cast<KPPieObject*>(kpobject)->setLineEnd(le);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    default: break;
+	    }
+	}
+    }
+
+  m_bModified = true;
+  return ret;
+}
+
+/*================================================================*/
 bool KPresenterDoc::setPieSettings(PieType pieType,int angle,int len)
 {
   bool ret = false;

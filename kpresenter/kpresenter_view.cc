@@ -718,6 +718,38 @@ void KPresenterView::extraOptions()
   optionDia->show();
 }
 
+/*===============================================================*/
+void KPresenterView::extraLineBegin()
+{
+  page->setToolEditMode(TEM_MOUSE);
+
+  KPoint pnt(QCursor::pos());
+
+  rb_lbegin->popup(pnt);
+
+//   QEvent ev(Event_Leave);
+//   QMouseEvent mev(Event_MouseButtonRelease,
+// 		  QCursor::pos(),LeftButton,LeftButton);
+//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&ev);
+//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&mev);
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineEnd()
+{
+  page->setToolEditMode(TEM_MOUSE);
+
+  KPoint pnt(QCursor::pos());
+
+  rb_lend->popup(pnt);
+
+//   QEvent ev(Event_Leave);
+//   QMouseEvent mev(Event_MouseButtonRelease,
+// 		  QCursor::pos(),LeftButton,LeftButton);
+//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&ev);
+//   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&mev);
+}
+
 /*========================== screen config pages ================*/
 void KPresenterView::screenConfigPages()
 {
@@ -1284,6 +1316,62 @@ void KPresenterView::extraAlignObjCenterVidl()
 void KPresenterView::extraAlignObjBottomidl()
 {
   kPresenterDoc()->alignObjsBottom();
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineBeginNormal()
+{
+  if (!m_pKPresenterDoc->setLineBegin(L_NORMAL))
+    lineBegin = L_NORMAL;
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineBeginArrow()
+{
+  if (!m_pKPresenterDoc->setLineBegin(L_ARROW))
+    lineBegin = L_ARROW;
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineBeginRect()
+{
+  if (!m_pKPresenterDoc->setLineBegin(L_SQUARE))
+    lineBegin = L_SQUARE;
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineBeginCircle()
+{
+  if (!m_pKPresenterDoc->setLineBegin(L_CIRCLE))
+    lineBegin = L_CIRCLE;
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineEndNormal()
+{
+  if (!m_pKPresenterDoc->setLineEnd(L_NORMAL))
+    lineEnd = L_NORMAL;
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineEndArrow()
+{
+  if (!m_pKPresenterDoc->setLineEnd(L_ARROW))
+    lineEnd = L_ARROW;
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineEndRect()
+{
+  if (!m_pKPresenterDoc->setLineEnd(L_SQUARE))
+    lineEnd = L_SQUARE;
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineEndCircle()
+{
+  if (!m_pKPresenterDoc->setLineEnd(L_CIRCLE))
+    lineEnd = L_CIRCLE;
 }
 
 /*===============================================================*/
@@ -2938,6 +3026,40 @@ void KPresenterView::setupPopupMenus()
   rb_oalign->insertItem(pixmap,this,SLOT(extraAlignObjBottom()));
   rb_oalign->setMouseTracking(true);
   rb_oalign->setCheckable(false);
+
+  // create right button line begin
+  rb_lbegin = new QPopupMenu();
+  CHECK_PTR(rb_lbegin);
+  pixmap.load(pixdir + "line_normal_begin.xpm");
+  rb_lbegin->insertItem(pixmap,this,SLOT(extraLineBeginNormal()));
+  rb_lbegin->insertSeparator(-1);
+  pixmap.load(pixdir + "line_arrow_begin.xpm");
+  rb_lbegin->insertItem(pixmap,this,SLOT(extraLineBeginArrow()));
+  rb_lbegin->insertSeparator(-1);
+  pixmap.load(pixdir + "line_rect_begin.xpm");
+  rb_lbegin->insertItem(pixmap,this,SLOT(extraLineBeginRect()));
+  rb_lbegin->insertSeparator(-1);
+  pixmap.load(pixdir + "line_circle_begin.xpm");
+  rb_lbegin->insertItem(pixmap,this,SLOT(extraLineBeginCircle()));
+  rb_lbegin->setMouseTracking(true);
+  rb_lbegin->setCheckable(false);
+
+  // create right button line end
+  rb_lend = new QPopupMenu();
+  CHECK_PTR(rb_lend);
+  pixmap.load(pixdir + "line_normal_end.xpm");
+  rb_lend->insertItem(pixmap,this,SLOT(extraLineEndNormal()));
+  rb_lend->insertSeparator(-1);
+  pixmap.load(pixdir + "line_arrow_end.xpm");
+  rb_lend->insertItem(pixmap,this,SLOT(extraLineEndArrow()));
+  rb_lend->insertSeparator(-1);
+  pixmap.load(pixdir + "line_rect_end.xpm");
+  rb_lend->insertItem(pixmap,this,SLOT(extraLineEndRect()));
+  rb_lend->insertSeparator(-1);
+  pixmap.load(pixdir + "line_circle_end.xpm");
+  rb_lend->insertItem(pixmap,this,SLOT(extraLineEndCircle()));
+  rb_lend->setMouseTracking(true);
+  rb_lend->setCheckable(false);
 }
 
 /*======================= setup toolbar ===================*/
@@ -3305,6 +3427,20 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   tmp += "/kpresenter/toolbar/alignobjs.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_Align = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraAlignObj", true, i18n("Align object"), -1 );
+  m_vToolBarExtra->insertSeparator( -1 );
+
+  // line begin
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/line_begin.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonExtra_LineBegin = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineBegin", 
+							      true, i18n("Line Begin"), -1 );
+  // line end
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/line_end.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonExtra_LineEnd = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineEnd", 
+							      true, i18n("Line End"), -1 );
 
   m_vToolBarExtra->enable( OpenPartsUI::Show );
 

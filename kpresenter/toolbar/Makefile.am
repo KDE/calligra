@@ -14,7 +14,9 @@ toolbar_DATA = 121.xpm alignCenter.xpm alignLeft.xpm alignRight.xpm \
 	mini_autoform.xpm mini_clipart.xpm  mini_picture.xpm  mini_text.xpm \
 	mini_circle.xpm mini_line.xpm mini_rect.xpm pie.xpm mini_pie.xpm \
 	edit_text.xpm edit_pie.xpm mouse.xpm depth-.xpm depth+.xpm \
-	spacing.xpm delslide.xpm newslide.xpm
+	spacing.xpm delslide.xpm newslide.xpm line_begin.xpm line_end.xpm \
+	line_arrow_begin.xpm line_circle_begin.xpm line_rect_begin.xpm line_normal_begin.xpm \
+	line_arrow_end.xpm line_circle_end.xpm line_rect_end.xpm line_normal_end.xpm
 
 toolbardir = $(kde_datadir)/kpresenter/toolbar
 

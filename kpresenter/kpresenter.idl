@@ -48,6 +48,8 @@ module KPresenter
       slot void extraBackground();
       slot void extraLayout();
       slot void extraOptions();
+      slot void extraLineBegin();
+      slot void extraLineEnd();
 
       slot void extraAlignObjLeftidl();
       slot void extraAlignObjCenterHidl();

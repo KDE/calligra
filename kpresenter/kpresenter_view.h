@@ -182,6 +182,8 @@ public:
   virtual void extraBackground();
   virtual void extraLayout();
   virtual void extraOptions();
+  virtual void extraLineBegin();
+  virtual void extraLineEnd();
 
   virtual void extraAlignObjLeftidl();
   virtual void extraAlignObjCenterHidl();
@@ -345,9 +347,16 @@ protected slots:
   void colorChanged(QColor*);
   void alignChanged(TxtParagraph::HorzAlign);
 
-
   void toolsNormRect();
   void toolsRoundRect();
+  void extraLineBeginNormal();
+  void extraLineBeginArrow();
+  void extraLineBeginRect();
+  void extraLineBeginCircle();
+  void extraLineEndNormal();
+  void extraLineEndArrow();
+  void extraLineEndRect();
+  void extraLineEndCircle();
 
   // screen presentation
   void presPen1();
@@ -532,7 +541,7 @@ protected:
   CORBA::Long m_idMenuHelp_Contents;
 
   // right button popup menus
-  QPopupMenu *rb_rect,*rb_pen,*rb_pen_width,*rb_oalign;
+  QPopupMenu *rb_rect,*rb_pen,*rb_pen_width,*rb_oalign,*rb_lbegin,*rb_lend;
 
   int W1,W2,W3,W4,W5,W6,W7,W8,W9,W10,P_COL;
 
@@ -589,6 +598,8 @@ protected:
   CORBA::Long m_idButtonExtra_Rotate;
   CORBA::Long m_idButtonExtra_Shadow;
   CORBA::Long m_idButtonExtra_Align;
+  CORBA::Long m_idButtonExtra_LineBegin;
+  CORBA::Long m_idButtonExtra_LineEnd;
 
   // screen toolbar
   OpenPartsUI::ToolBar_var m_vToolBarScreen;
