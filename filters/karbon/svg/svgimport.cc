@@ -226,6 +226,16 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		else if( e.attribute( "stroke-linecap" ) == "square" )
 			gc->stroke.setLineCap( VStroke::capSquare );
 	}
+	if( !e.attribute( "stroke-dasharray" ).isEmpty() )
+	{
+		QString dasharray = e.attribute( "stroke-dasharray" );
+		QStringList dashes = QStringList::split( ' ', dasharray );
+		QValueList<float> array;
+	    for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
+			array.append( (*it).toFloat() );
+
+		gc->stroke.dashPattern().setArray( array );
+	}
 	// handle opacity
 	if( !e.attribute( "stroke-opacity" ).isEmpty() )
 		strokecolor.setOpacity( e.attribute( "stroke-opacity" ).toFloat() );
@@ -291,6 +301,15 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 				gc->stroke.setLineCap( VStroke::capRound );
 			else if( params == "square" )
 				gc->stroke.setLineCap( VStroke::capSquare );
+		}
+		if( command == "stroke-dasharray" )
+		{
+			QStringList dashes = QStringList::split( ' ', params );
+			QValueList<float> array;
+		    for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
+				array.append( (*it).toFloat() );
+
+			gc->stroke.dashPattern().setArray( array );
 		}
 		// handle opacity
 		else if( command == "stroke-opacity" )
