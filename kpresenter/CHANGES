@@ -14,6 +14,7 @@ Fixes:
 - Ignore sticky objects when duplicating a page
 - Fixed Object Effects are not correctly done (#64384)
 - Fixed drawing of rect with round corners when zoomed and gradient filling
+- Fixed no alpha channel set on mirrored pictures
 
 Changes:
 - Flip now works as in Gimp. Horizontal flip flips on y-axis

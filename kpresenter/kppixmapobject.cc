@@ -904,15 +904,7 @@ QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
 
     _tmpPixmap.convertFromImage( _tmpImage );
 
-    QPixmap tmpPix( _tmpPixmap.size() );
-    tmpPix.fill( Qt::white );
-
-    QPainter _p;
-    _p.begin( &tmpPix );
-    _p.drawPixmap( 0, 0, _tmpPixmap );
-    _p.end();
-
-    return tmpPix;
+    return _tmpPixmap;
 }
 
 void KPPixmapObject::flip( bool horizontal )
