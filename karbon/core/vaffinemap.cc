@@ -26,14 +26,14 @@ VAffineMap::reset()
 }
 
 void
-VAffineMap::translate( const double& dx, const double& dy )
+VAffineMap::translate( const double dx, const double dy )
 {
 	VAffineMap aff_map( 1.0, 0.0, 0.0, 1.0, dx, dy );
 	mul( aff_map );
 }
 
 void
-VAffineMap::rotate( const double& ang )
+VAffineMap::rotate( const double ang )
 {
 	const double sina = sin( ang * VGlobal::pi_180 );
 	const double cosa = cos( ang * VGlobal::pi_180 );
@@ -53,21 +53,21 @@ VAffineMap::mirror( const bool horiz, const bool verti )
 }
 
 void
-VAffineMap::scale( const double& sx, const double& sy )
+VAffineMap::scale( const double sx, const double sy )
 {
 	VAffineMap aff_map( sx, 0.0, 0.0, sy, 0.0, 0.0 );
 	mul( aff_map );
 }
 
 void
-VAffineMap::shear( const double& sh, const double& sv )
+VAffineMap::shear( const double sh, const double sv )
 {
 	VAffineMap aff_map( 1.0, sv, sh, 1.0, 0.0, 0.0 );
 	mul( aff_map );
 }
 
 void
-VAffineMap::skew( const double& ang )
+VAffineMap::skew( const double ang )
 {
 	const double tana = tan( ang * VGlobal::pi_180 );
 
@@ -83,8 +83,8 @@ VAffineMap::mul( const VAffineMap& affMap )
 	const double a21 = affMap.m_a21 * m_a11 + affMap.m_a22 * m_a21;
 	const double a22 = affMap.m_a21 * m_a12 + affMap.m_a22 * m_a22;
 
-	m_v1 += affMap.m_v1  * m_a11 + affMap.m_v2  * m_a21;
-	m_v2 += affMap.m_v1  * m_a12 + affMap.m_v2  * m_a22;
+	m_v1 = affMap.m_a11 * m_v1 + affMap.m_a12 * m_v2 + affMap.m_v1;
+	m_v2 = affMap.m_a21 * m_v1 + affMap.m_a22 * m_v2 + affMap.m_v2;
 
 	m_a11 = a11; m_a12 = a12;
 	m_a21 = a21; m_a22 = a22;
@@ -94,6 +94,6 @@ VPoint
 VAffineMap::map( const VPoint& point ) const
 {
 	return VPoint(
-		m_a11 * point.x() + m_a21 * point.y() + m_v1,
-		m_a12 * point.x() + m_a22 * point.y() + m_v2 );
+		m_a11 * point.x() + m_a12 * point.y() + m_v1,
+		m_a21 * point.x() + m_a22 * point.y() + m_v2 );
 }

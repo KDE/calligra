@@ -4,8 +4,8 @@
 
 #include <kdebug.h>
 
-#include <qpainter.h>
 #include <math.h>
+#include <qpainter.h>
 
 #include "vaffinemap.h"
 #include "vpath.h"
@@ -55,7 +55,7 @@ VFirstPoint::transform( const VAffineMap& affMap )
 }
 
 const QPointArray&
-VFirstPoint::getQPointArray( const VSegment& prevSeg,
+VFirstPoint::getQPointArray( const VSegment* prevSeg,
 	const double zoomFactor ) const
 {
 	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
@@ -87,11 +87,11 @@ VLine::movePointTo( const VPoint* point, const double x, const double y,
 }
 
 const VSegment*
-VLine::revert( const VSegment& prevSeg )
+VLine::revert( const VSegment* prevSeg )
 {
 	return new VLine(
-		prevSeg.lastPoint()->x(),
-		prevSeg.lastPoint()->y() );
+		prevSeg->lastPoint()->x(),
+		prevSeg->lastPoint()->y() );
 }
 
 void
@@ -102,7 +102,7 @@ VLine::transform( const VAffineMap& affMap )
 }
 
 const QPointArray&
-VLine::getQPointArray( const VSegment& prevSeg, const double zoomFactor ) const
+VLine::getQPointArray( const VSegment* prevSeg, const double zoomFactor ) const
 {
 	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
 	{
@@ -134,12 +134,12 @@ VCurve::movePointTo( const VPoint* point, const double x, const double y,
 }
 
 const VSegment*
-VCurve::revert( const VSegment& prevSeg )
+VCurve::revert( const VSegment* prevSeg )
 {
 	return new VCurve(
 		m_lastCtrlPoint.x(), m_lastCtrlPoint.y(),
 		m_firstCtrlPoint.x(), m_firstCtrlPoint.y(),
-		prevSeg.lastPoint()->x(), prevSeg.lastPoint()->y() );
+		prevSeg->lastPoint()->x(), prevSeg->lastPoint()->y() );
 }
 
 void
@@ -153,16 +153,16 @@ VCurve::transform( const VAffineMap& affMap )
 }
 
 const QPointArray&
-VCurve::getQPointArray( const VSegment& prevSeg,
+VCurve::getQPointArray( const VSegment* prevSeg,
 	const double zoomFactor ) const
 {
 	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
 	{
 		// calc all QPoints via a temporary QPointArray and quadBezier():
 		QPointArray pa(4);
-		pa.setPoint( 0, firstPoint( &prevSeg )->getQPoint( zoomFactor ) );
-		pa.setPoint( 1, firstCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
-		pa.setPoint( 2, lastCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 0, firstPoint( prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 1, firstCtrlPoint( prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 2, lastCtrlPoint( prevSeg )->getQPoint( zoomFactor ) );
 		pa.setPoint( 3, lastPoint()->getQPoint( zoomFactor ) );
 
 		pa = pa.quadBezier();
@@ -193,7 +193,7 @@ VCurve1::movePointTo( const VPoint* point, const double x, const double y,
 }
 
 const VSegment*
-VCurve1::revert( const VSegment& prevSeg )
+VCurve1::revert( const VSegment* prevSeg )
 {
 	return new VCurve1();
 }
@@ -208,16 +208,16 @@ VCurve1::transform( const VAffineMap& affMap )
 }
 
 const QPointArray&
-VCurve1::getQPointArray( const VSegment& prevSeg,
+VCurve1::getQPointArray( const VSegment* prevSeg,
 	const double zoomFactor ) const
 {
 	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
 	{
 		// calc all QPoints via a temporary QPointArray and quadBezier():
 		QPointArray pa(4);
-		pa.setPoint( 0, firstPoint( &prevSeg )->getQPoint( zoomFactor ) );
-		pa.setPoint( 1, firstCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
-		pa.setPoint( 2, lastCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 0, firstPoint( prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 1, firstCtrlPoint( prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 2, lastCtrlPoint( prevSeg )->getQPoint( zoomFactor ) );
 		pa.setPoint( 3, lastPoint()->getQPoint( zoomFactor ) );
 
 		pa = pa.quadBezier();
@@ -248,7 +248,7 @@ VCurve2::movePointTo( const VPoint* point, const double x, const double y,
 }
 
 const VSegment*
-VCurve2::revert( const VSegment& prevSeg )
+VCurve2::revert( const VSegment* prevSeg )
 {
 	return new VCurve2();
 }
@@ -263,16 +263,16 @@ VCurve2::transform( const VAffineMap& affMap )
 }
 
 const QPointArray&
-VCurve2::getQPointArray( const VSegment& prevSeg,
+VCurve2::getQPointArray( const VSegment* prevSeg,
 	const double zoomFactor ) const
 {
 	if ( m_isDirty || zoomFactor != s_lastZoomFactor )
 	{
 		// calc all QPoints via a temporary QPointArray and quadBezier():
 		QPointArray pa(4);
-		pa.setPoint( 0, firstPoint( &prevSeg )->getQPoint( zoomFactor ) );
-		pa.setPoint( 1, firstCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
-		pa.setPoint( 2, lastCtrlPoint( &prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 0, firstPoint( prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 1, firstCtrlPoint( prevSeg )->getQPoint( zoomFactor ) );
+		pa.setPoint( 2, lastCtrlPoint( prevSeg )->getQPoint( zoomFactor ) );
 		pa.setPoint( 3, lastPoint()->getQPoint( zoomFactor ) );
 
 		pa = pa.quadBezier();
@@ -295,7 +295,7 @@ VPath::VPath()
 	: VObject(), m_isClosed( false )
 {
 	// create a first (current) point [0.0,0.0]:
-	m_segments.append( new VFirstPoint );
+	m_segments.append( new VFirstPoint() );
 }
 
 VPath::VPath( const VPath& path )
@@ -319,18 +319,20 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 
 	// >>> draw the path contour >>>
 	QListIterator<VSegment> i( m_segments );
+	const VSegment* prev_seg( 0L );	// pointer to previous segment
 	QPointArray qpa;
 
 	// skip first point when path is closed:
 	if ( isClosed() )
+	{
+		prev_seg = i.current();
 		++i;
-
-	const VSegment* prev_seg( 0L );	// pointer to previous segment
+	}
 
 	for ( ; i.current(); ++i )
 	{
 		const QPointArray& seg_qpa =
-			i.current()->getQPointArray( *prev_seg, zoomFactor);
+			i.current()->getQPointArray( prev_seg, zoomFactor);
 
 		uint old_size( qpa.size() );
 		uint add_size( seg_qpa.size() );

@@ -20,9 +20,8 @@ VPoint::VPoint( const VPoint& point )
 const QPoint&
 VPoint::getQPoint( const double zoomFactor ) const
 {
-// TODO: - round instead of casting
-	m_QPoint.setX( static_cast<int> ( m_x*zoomFactor ) );
-	m_QPoint.setY( static_cast<int> ( m_y*zoomFactor ) );
+	m_QPoint.setX( qRound( m_x*zoomFactor ) );
+	m_QPoint.setY( qRound( m_y*zoomFactor ) );
 
 	return m_QPoint;
 }

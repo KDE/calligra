@@ -13,7 +13,7 @@
 #include "karbon_view.h"
 
 // only for test-object:
-#include "vccmd_polygon.h"
+#include "vccmd_ellipse.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -25,7 +25,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_layers.append( new VLayer() );
 
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	VCCmdPolygon* cmd = new VCCmdPolygon( this, 100, 100, 50, 6 );
+	VCCmdEllipse* cmd = new VCCmdEllipse( this, 100, 200, 300, 100 );
 	cmd->execute();
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }

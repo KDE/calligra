@@ -4,7 +4,6 @@
 
 #include <math.h>
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include "vaffinemap.h"
@@ -12,7 +11,8 @@
 #include "vglobal.h"
 #include "vpath.h"
 
-VCCmdPolygon::VCCmdPolygon( KarbonPart* part, const double center_x, const double center_y,
+VCCmdPolygon::VCCmdPolygon( KarbonPart* part,
+		const double center_x, const double center_y,
 		const double radius, const uint edges )
 	: VCommand( part, i18n("Create polygon-shape") ), m_object( 0L ),
 	  m_centerX( center_x ), m_centerY( center_y )
@@ -48,7 +48,7 @@ VCCmdPolygon::execute()
 		m_object->transform( aff_map );
 
 		// add path:
-		m_part->layers().last()->objects().append( m_object );
+		m_part->layers().getLast()->objects().append( m_object );
 	}
 }
 
