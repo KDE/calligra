@@ -55,6 +55,10 @@ OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
   list.clear();
   list << i18n("Document") << i18n("Grid");
   createGridWidget(addPage(list));
+
+  horizLines = doc->horizHelplines();
+  vertLines = doc->vertHelplines();
+  initHelplinesLists();
 }
 
 void OptionDialog::createGeneralWidget (QWidget* parent)
@@ -138,6 +142,8 @@ void OptionDialog::createEditWidget (QWidget* parent)
     bigStep->setValue (psm->bigStepSize ());
 }
 
+/*Grid*/
+
 void OptionDialog::createGridWidget (QWidget* parent)
 {
   QGridLayout *layout=new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
@@ -179,7 +185,8 @@ void OptionDialog::createGridWidget (QWidget* parent)
   layout->addWidget(clabel, 2, 0);
 }
 
-void OptionDialog::createHorizLineWidget (QWidget* parent)
+/*Helplines*/
+void OptionDialog::createHorizLineWidget(QWidget* parent)
 {
 
     QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
@@ -214,9 +221,8 @@ void OptionDialog::createHorizLineWidget (QWidget* parent)
     right->addStretch();
 }
 
-void OptionDialog::createVertLineWidget (QWidget* parent)
+void OptionDialog::createVertLineWidget(QWidget* parent)
 {
-
     QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
     QBoxLayout *left=new QVBoxLayout(layout);
 
@@ -232,7 +238,7 @@ void OptionDialog::createVertLineWidget (QWidget* parent)
     connect (vertList, SIGNAL(highlighted (int)),
              this, SLOT(vertLineSelected(int)));
     left->addWidget(vertList);
-    layout->addSpacing(KDialogBase::spacingHint()*2);
+    layout->addSpacing(KDialogBase::spacingHint() * 2);
 
     QBoxLayout *right=new QVBoxLayout(layout);
     QPushButton *button = new QPushButton(i18n("Add"), parent);
@@ -249,14 +255,145 @@ void OptionDialog::createVertLineWidget (QWidget* parent)
     right->addStretch();
 }
 
+void OptionDialog::initHelplinesLists()
+{
+  QValueList<float>::Iterator i;
+  QString buf;
+  MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+
+  for (i = horizLines.begin (); i != horizLines.end (); ++i)
+  {
+    buf=QString::number(cvtPtToUnit (unit, *i), 'f', 3);
+    buf+=" ";
+    buf+=unitToString (unit);
+    horizList->insertItem (buf);
+  }
+  if(!horizLines.isEmpty())
+    horizValue->setValue(horizLines[0]);
+
+  for (i = vertLines.begin (); i != vertLines.end (); ++i)
+  {
+    buf=QString::number(cvtPtToUnit (unit, *i), 'f', 3);
+    buf+=" ";
+    buf+=unitToString (unit);
+    vertList->insertItem (buf);
+  }
+  if(!vertLines.isEmpty())
+    vertValue->setValue(vertLines[0]);
+}
+
+void OptionDialog::addHorizLine()
+{
+  float value = horizValue->getValue ();
+  horizLines.append(value);
+  MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+  QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+  buf+=" ";
+  buf+=unitToString (unit);
+  horizList->insertItem (buf);
+}
+
+void OptionDialog::updateHorizLine()
+{
+  if(horizLines.isEmpty())
+    return;
+  int idx = horizList->currentItem ();
+  if (idx != -1)
+  {
+    float value = horizValue->getValue ();
+    MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+    QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+    buf+=" ";
+    buf+=unitToString (unit);
+    horizList->blockSignals(true);
+    horizList->changeItem (buf, idx);
+    horizList->blockSignals(false);
+    horizLines[idx] = value;
+  }
+}
+
+void OptionDialog::deleteHorizLine()
+{
+  if(horizLines.isEmpty())
+    return;
+  int idx = horizList->currentItem ();
+  if (idx != -1)
+  {
+    horizLines.remove(horizLines.at(idx));
+    horizList->removeItem(idx);
+  }
+}
+
+void OptionDialog::addVertLine()
+{
+  float value = vertValue->getValue ();
+  vertLines.append(value);
+  MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+  QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+  buf+=" ";
+  buf+=unitToString (unit);
+  vertList->insertItem (buf);
+}
+
+void OptionDialog::updateVertLine()
+{
+  if(vertLines.isEmpty())
+    return;
+  int idx = vertList->currentItem ();
+  if (idx != -1)
+  {
+    float value = vertValue->getValue ();
+    MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+    QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+    buf+=" ";
+    buf+=unitToString (unit);
+    vertList->blockSignals(true);
+    vertList->changeItem (buf, idx);
+    vertList->blockSignals(false);
+    vertLines[idx] = value;
+  }
+}
+
+void OptionDialog::deleteVertLine()
+{
+  if(vertLines.isEmpty())
+    return;
+  int idx = vertList->currentItem ();
+  if(idx != -1)
+  {
+    vertLines.remove(vertLines.at(idx));
+    vertList->removeItem (idx);
+  }
+}
+
+void OptionDialog::horizLineSelected(int idx)
+{
+  if(!horizLines.isEmpty())
+    horizValue->setValue(*horizLines.at(idx));
+}
+
+void OptionDialog::vertLineSelected(int idx)
+{
+  if(!vertLines.isEmpty())
+    vertValue->setValue (*vertLines.at(idx));
+}
+
+/**/
 void OptionDialog::slotOk()
 {
+  /*Document settings*/
+  
+  /*Helplines*/
+  doc->setHorizHelplines(horizLines);
+  doc->setVertHelplines(vertLines);
+  
   /*Grid*/
   doc->setGridDistance(hspinbox->getValue(), vspinbox->getValue());
-  doc->showGrid (gbutton->isOn());
-  doc->snapToGrid (sbutton->isOn());
+  doc->showGrid (sbutton->isOn());
+  doc->snapToGrid (gbutton->isOn());
   doc->gridColor(cbutton->color());
   
+  doc->emitChanged();
   KDialogBase::slotOk();
 }
 

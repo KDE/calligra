@@ -183,7 +183,7 @@ void Canvas::adjustScrollBarPositions3(int x, int y)
    };
    if (vBar->minValue()!=vBar->maxValue())
       vBar->setValue(y-m_paperArea.bottom()/2);
-};
+}
 
 
 void Canvas::adjustVisibleArea4()
@@ -203,7 +203,7 @@ void Canvas::adjustVisibleArea4()
    int firstVisY=h/2-widgetCenterY+vBar->value();
 
    m_visibleArea=QRect(QPoint(firstVisX,firstVisY),QSize(width(),height()));
-};
+}
 
 //this one is called when zooming, resizing, scrolling
 //coordinates are relative to the edges of the canvas widgets
@@ -215,7 +215,7 @@ void Canvas::adjustRelativePaperArea5()
    m_relativePaperArea=QRect(QPoint(-visRect.x(),-visRect.y()),
                              QPoint(+visRect.right()-paperRect.right(),+visRect.bottom()-paperRect.bottom()));
 
-};
+}
 
 //connected to QScrollBar::valueChanged()
 void Canvas::scroll()
@@ -276,7 +276,7 @@ void Canvas::setZoomFactor (float factor, int centerX, int centerY)
 
    emit zoomFactorChanged (zoomFactor);
    emit visibleAreaChanged(m_visibleArea);
-};
+}
 
 void Canvas::setZoomFactor (float factor)
 {
@@ -327,25 +327,26 @@ void Canvas::paintEvent (QPaintEvent* e)
    QPainter p;
    float s = scaleFactor ();
 
+   int w = (int) (document->activePage()->getPaperWidth () * resolution * zoomFactor / 72.0);
+   int h = (int) (document->activePage()->getPaperHeight () * resolution * zoomFactor / 72.0);
+
    // setup the painter
    p.begin (buffer);
    p.setClipRect(rect);
    p.setBackgroundColor(white);
    buffer->fill (white);
 
-
-   // clear the canvas
-
+   p.save();
+   p.translate(m_relativePaperArea.left(),m_relativePaperArea.top());
+   p.fillRect (1, 1, w - 2, h - 2,QBrush(document->bgColor()));
+   p.restore();
    // draw the grid
    if(document->showGrid())
-      drawGrid (p);
-
+     drawGrid (p);
+   
    p.save();
-
-   int w = (int) (document->activePage()->getPaperWidth () * resolution * zoomFactor / 72.0);
-   int h = (int) (document->activePage()->getPaperHeight () * resolution * zoomFactor / 72.0);
-   p.setPen(Qt::black);
    p.translate(m_relativePaperArea.left(),m_relativePaperArea.top());
+   p.setPen(Qt::black);
    p.drawRect (0, 0, w, h);
    p.setPen (QPen(Qt::darkGray, 2));
    p.moveTo (w+1, 1);
@@ -362,8 +363,8 @@ void Canvas::paintEvent (QPaintEvent* e)
   if (! document->activePage()->selectionIsEmpty ())
    document->activePage()->handle ().draw (p);
 
+  
   p.restore();
-
   // draw the help lines
   if (document->showHelplines())
     drawHelplines (p);

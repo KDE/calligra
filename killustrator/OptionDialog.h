@@ -48,8 +48,20 @@ protected:
   void createHorizLineWidget (QWidget* parent);
   void createVertLineWidget (QWidget* parent);
 
+  void initHelplinesLists();
+    
 protected slots:
   void slotOk();
+  
+  void addHorizLine ();
+  void updateHorizLine ();
+  void deleteHorizLine ();
+  void horizLineSelected (int idx);
+  
+  void addVertLine ();
+  void updateVertLine ();
+  void deleteVertLine ();
+  void vertLineSelected (int idx);
 
 private:
   GDocument *doc;
@@ -62,6 +74,7 @@ private:
   /*Helplines*/
   UnitBox *horizValue, *vertValue;
   QListBox *horizList, *vertList;
+  QValueList<float> horizLines, vertLines;
   
   /*Grid*/
   QCheckBox *gbutton, *sbutton;
