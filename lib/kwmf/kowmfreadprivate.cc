@@ -184,6 +184,12 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
             filePos = mBuffer->at();
             st >> size >> numFunction;
 
+            if ( size == 0 ) {
+                kdDebug() << "KoWmfReadPrivate : incorrect file!" << endl;
+                mValid = 0;
+                break;
+            }
+
             numFunction &= 0xFF;
             if ( numFunction == 11 ) {
                 Q_INT16 top, left;
@@ -216,6 +222,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
                 }
             }
             mBuffer->at( filePos + (size<<1) );
+            // ## shouldn't we break from the loop as soon as we found what we were looking for?
         }
     }
 
