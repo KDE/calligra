@@ -23,7 +23,7 @@ DESCRIPTION
 #include <kdebug.h>
 #include <qdatastream.h>
 #include <qfile.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpointarray.h>
 #include <qrect.h>
 #include <qsize.h>
@@ -1133,7 +1133,7 @@ void Msod::Options::walk(U32 bytes, QDataStream &operands)
 
     // First process all simple options, and add all complex options to a list.
 
-    QList<Header> complexOpts;
+    QPtrList<Header> complexOpts;
     complexOpts.setAutoDelete(true);
     bool unsupported;
     while (length + complexLength < (int)bytes)
