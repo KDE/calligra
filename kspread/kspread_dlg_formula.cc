@@ -1605,13 +1605,13 @@ void KSpreadDlgFormula::changeFunction()
     else if(m_funcName=="BINO" || m_funcName=="INVBINO")
     {
         tmp.nb_param=3;
-        tmp.firstElementLabel=i18n("Number of trial\n");
+        tmp.firstElementLabel=i18n("Number of trials\n");
   	if(m_funcName=="BINO")
             tmp.secondElementLabel=i18n("Number of success");
   	else if(m_funcName=="INVBINO")
             tmp.secondElementLabel=i18n("Number of failure");
   	if(m_funcName=="BINO")
-            tmp.thirdElementLabel=i18n("Probabity of success");
+            tmp.thirdElementLabel=i18n("Probabity of successes");
  	else if(m_funcName=="INVBINO")
             tmp.thirdElementLabel=i18n("Probabity of failure");
         tmp2=i18n("Syntax : %1(Int,Int,Double)\n").arg(m_funcName);
@@ -1621,9 +1621,8 @@ void KSpreadDlgFormula::changeFunction()
                 tmp1=i18n("The BINO function returns the binomial distribution\n"
                         "The first parameter is the number of trial, the second\n"
                         "parameter is the number of success, and the third is\n"
-                        "the probability of success. The first parameter should\n"
-                        "be bigger than the number of success\n");
-
+                        "the probability of success.The number of trials should\n"
+                        "be bigger than the number of successes.\n");
                 tmp1+=tmp2;
                 tmp1+=i18n("BINO(12,9,0.8) returns 0.236223201");
 
@@ -1635,8 +1634,8 @@ void KSpreadDlgFormula::changeFunction()
                 tmp1=i18n("The INVBINO function returns the negative binomial \n"
                         "distribution.The first parameter is the number of failure,\n"
                         "the second parameter is the number of success, and\n"
-                        "the third is the probability of failure. The first\n"
-                        "parameter should be bigger than the number of failure\n");
+                        "the third is the probability of failure. The number of\n"
+                        "trials should be bigger than the number of failure.\n");
 
                 tmp1+=tmp2;
                 tmp1+=i18n("INVBINO(12,3,0.8) returns 0.236223201");
