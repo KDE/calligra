@@ -10,7 +10,7 @@ libcsvexport.la libcsvexport_test.la
 
 libcsvfilter_la_SOURCES = csvfilter.cc xmltree.cc csvfilter_factory.cc
 libcsvfilter_la_LDFLAGS	= -module -avoid-version -no-undefined
-libcsvfilter_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspread.la
+libcsvfilter_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
 
 libcsvfilterdia_la_SOURCES = csvfilterdia.cc csvfilterdia_factory.cc
 libcsvfilterdia_la_LDFLAGS = -module -avoid-version -no-undefined
@@ -23,7 +23,7 @@ libcsvexport_la_LIBADD  = $(KOFFICE_LIBS)
 libcsvexport_test_la_SOURCES = csvexport_test.cc csvexport_factory_test.cc
 libcsvexport_test_la_LDFLAGS = -module -avoid-version -no-undefined
 libcsvexport_test_la_LIBADD  = $(KOFFICE_LIBS) \
-../../../kspread/libkspread.la
+../../../kspread/libkspreadpart.la
 
 noinst_HEADERS = csvfilter.h xmltree.h csvfilter_factory.h \
 csvfilterdia.h csvfilterdia_factory.h csvexport.h csvexport_factory.h \

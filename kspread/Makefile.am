@@ -28,7 +28,7 @@ libkspreadpart_la_SOURCES = kspread_canvas.cc \
 	kspread_dlg_oszi.cc KSpreadViewIface.skel KSpreadViewIface.cc \
 	qtai_bar.cpp qtai_base.cpp qtai_meter.cpp qtai_plot.cpp qtai_strip.cpp
 libkspreadpart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkspreadpart_la_LIBADD = $(all_libraries) ../kchart/libkchart.la ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
+libkspreadpart_la_LIBADD = $(all_libraries) ../kchart/libkchartpart.la ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
 libkspreadpart_la_METASOURCES = AUTO
 
 kspread_la_SOURCES = main.cc
