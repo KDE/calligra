@@ -235,7 +235,7 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
       {
         KoFrame *frame = new KoFrame( canvas() );
 	KoView *view = child->document()->createView( frame );
-	view->setContainerStates( child->document()->viewContainerStates( view ) );
+	view->setXMLGUIBuildDocument( child->document()->viewBuildDocument( view ) );
 	
 	view->setPartManager( partManager() );
 	
@@ -401,7 +401,7 @@ void KoView::slotChildActivated( bool a )
   QGuardedPtr<KoDocumentChild> docChild = ch->documentChild();
   QGuardedPtr<KoFrame> chFrame = ch->frame();
   if ( docChild && chFrame && chFrame->view() )
-    docChild->document()->setViewContainerStates( chFrame->view(), chFrame->view()->containerStates() );
+    docChild->document()->setViewBuildDocument( chFrame->view(), chFrame->view()->xmlguiBuildDocument() );
 
   d->m_children.remove( ch );
 

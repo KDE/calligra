@@ -379,8 +379,8 @@ public:
 
   KoDocumentInfo *documentInfo() const;
 
-  void setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states );
-  QMap<QString,QByteArray> viewContainerStates( KoView *view );
+  void setViewBuildDocument( KoView *view, const QDomDocument &doc );
+  QDomDocument viewBuildDocument( KoView *view );
 
   /**
    * Appends the shell to the list of shells which show this

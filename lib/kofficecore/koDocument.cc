@@ -89,7 +89,7 @@ public:
 
   QWidget *m_wrapperWidget;
 
-  QValueList<QMap<QString,QByteArray> > m_viewContainerStates;
+  QValueList<QDomDocument> m_viewBuildDocuments;
   KoDocumentIface * m_dcopObject;
 
   KoDocumentInfo *m_docInfo;
@@ -389,39 +389,39 @@ KoDocumentInfo *KoDocument::documentInfo() const
   return d->m_docInfo;
 }
 
-void KoDocument::setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states )
+void KoDocument::setViewBuildDocument( KoView *view, const QDomDocument &doc )
 {
   if ( d->m_views.find( view ) == -1 )
     return;
 
   uint viewIdx = d->m_views.at();
 
-  if ( d->m_viewContainerStates.count() == viewIdx )
+  if ( d->m_viewBuildDocuments.count() == viewIdx )
   {
-    d->m_viewContainerStates.append( states );
+    d->m_viewBuildDocuments.append( doc );
   }
-  else if ( d->m_viewContainerStates.count() > viewIdx )
+  else if ( d->m_viewBuildDocuments.count() > viewIdx )
   {
-    d->m_viewContainerStates[ viewIdx ] = states;
+    d->m_viewBuildDocuments[ viewIdx ] = doc;
   }
 }
 
-QMap<QString,QByteArray> KoDocument::viewContainerStates( KoView *view )
+QDomDocument KoDocument::viewBuildDocument( KoView *view )
 {
-  QMap<QString,QByteArray> res;
+  QDomDocument res;
 
   if ( d->m_views.find( view ) == -1 )
     return res;
 
   uint viewIdx = d->m_views.at();
 
-  if ( viewIdx >= d->m_viewContainerStates.count() )
+  if ( viewIdx >= d->m_viewBuildDocuments.count() )
     return res;
 
-  res = d->m_viewContainerStates[ viewIdx ];
+  res = d->m_viewBuildDocuments[ viewIdx ];
 
   // make this entry empty. otherwise we get a segfault in QMap ;-(
-  d->m_viewContainerStates[ viewIdx ] = QMap<QString,QByteArray>();
+  d->m_viewBuildDocuments[ viewIdx ] = QDomDocument();
 
   return res;
 }
