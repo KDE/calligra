@@ -549,5 +549,28 @@ protected:
     bool m_bProtect;
 };
 
+struct FrameMarginsStruct {
+    FrameMarginsStruct() {}
+    FrameMarginsStruct( KWFrame *frame );
+    FrameMarginsStruct( double _left, double top, double right, double bottom );
+    double topMargin;
+    double bottomMargin;
+    double leftMargin;
+    double rightMargin;
+};
+
+class KWFrameChangeFrameMarginCommand :public KNamedCommand
+{
+public:
+    KWFrameChangeFrameMarginCommand( const QString &name, FrameIndex _frameIndex, FrameMarginsStruct _frameMarginsBegin, FrameMarginsStruct _frameMarginsEnd );
+    ~KWFrameChangeFrameMarginCommand() {}
+    void execute();
+    void unexecute();
+protected:
+    FrameIndex m_indexFrame;
+    FrameMarginsStruct m_frameMarginsBegin;
+    FrameMarginsStruct m_frameMarginsEnd;
+};
+
 
 #endif

@@ -136,6 +136,7 @@ protected:
     bool frameSetFloating;
 
     double oldX, oldY, oldW, oldH;
+    double oldMarginLeft, oldMarginRight, oldMarginTop, oldMarginBottom;
 
     int /*FrameBehavior*/ frameBehavior;
     KoUnit::Unit frameUnits;

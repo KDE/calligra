@@ -1336,3 +1336,50 @@ void KWProtectContentCommand::unexecute()
     m_pFrameSet->kWordDocument()->updateTextFrameSetEdit();
 }
 
+
+FrameMarginsStruct::FrameMarginsStruct( KWFrame *frame )
+{
+    topMargin = frame->bTop();
+    bottomMargin= frame->bBottom();
+    leftMargin = frame->bLeft();
+    rightMargin= frame->bRight();
+}
+
+FrameMarginsStruct::FrameMarginsStruct( double _left, double _top, double _right, double _bottom ):
+    topMargin(_top),
+    bottomMargin(_bottom),
+    leftMargin(_left),
+    rightMargin(_right)
+{
+}
+
+
+KWFrameChangeFrameMarginCommand::KWFrameChangeFrameMarginCommand( const QString &name, FrameIndex _frameIndex, FrameMarginsStruct _frameMarginsBegin, FrameMarginsStruct _frameMarginsEnd ) :
+    KNamedCommand(name),
+    m_indexFrame(_frameIndex),
+    m_frameMarginsBegin(_frameMarginsBegin),
+    m_frameMarginsEnd(_frameMarginsEnd)
+{
+}
+
+void KWFrameChangeFrameMarginCommand::execute()
+{
+    KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
+    Q_ASSERT( frameSet );
+    KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
+    Q_ASSERT( frame );
+    frame->setFrameMargins( m_frameMarginsEnd.leftMargin,m_frameMarginsEnd.topMargin , m_frameMarginsEnd.rightMargin, m_frameMarginsEnd.bottomMargin);
+    KWDocument * doc = frameSet->kWordDocument();
+    doc->frameChanged( frame );
+}
+
+void KWFrameChangeFrameMarginCommand::unexecute()
+{
+    KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
+    Q_ASSERT( frameSet );
+    KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
+    Q_ASSERT( frame );
+    frame->setFrameMargins( m_frameMarginsBegin.leftMargin,m_frameMarginsBegin.topMargin , m_frameMarginsBegin.rightMargin, m_frameMarginsBegin.bottomMargin);
+    KWDocument * doc = frameSet->kWordDocument();
+    doc->frameChanged( frame );
+}

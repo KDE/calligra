@@ -213,6 +213,7 @@ public:
     /** get bottom margin size */
     double bBottom()const { return bbottom; }
 
+    void setFrameMargins( double _left, double _top, double right, double bottom);
     /** returns a copy of self */
     KWFrame *getCopy();
 

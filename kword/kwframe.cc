@@ -476,6 +476,14 @@ double KWFrame::innerHeight() const
     return height() - bTop() - bBottom();
 }
 
+void KWFrame::setFrameMargins( double _left, double _top, double _right, double _bottom)
+{
+    bleft = _left;
+    btop = _top;
+    bright = _right;
+    bbottom = _bottom;
+}
+
 /******************************************************************/
 /* Class: KWFrameSet                                              */
 /******************************************************************/

@@ -835,6 +835,11 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         smr->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bRight()), doc->getUnit() ) );
         smt->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bTop()), doc->getUnit() ) );
         smb->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bBottom()), doc->getUnit() ) );
+        oldMarginLeft=sml->value();
+
+        oldMarginRight=smr->value();
+        oldMarginTop=smt->value();
+        oldMarginBottom=smb->value();
     }
 
     bool disable = false;
@@ -871,13 +876,12 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     }
     else
         disable = true;
-//#if 0
+#if 0
     sml->setEnabled(false);
     smr->setEnabled(false);
     smt->setEnabled(false);
     smb->setEnabled(false);
-//#endif
-
+#endif
     if ( disable )
     {
         grp2->hide( );
@@ -1452,12 +1456,20 @@ bool KWFrameDia::applyChanges()
     double py=0.0;
     double pw=0.0;
     double ph=0.0;
+    double uLeft = 0.0;
+    double uTop = 0.0;
+    double uBottom = 0.0;
+    double uRight = 0.0;
     if(tab4) {
         px = QMAX(0,KoUnit::ptFromUnit( sx->value(), doc->getUnit() ));
         int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
         py = QMAX(0, KoUnit::ptFromUnit(sy->value(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
         pw = QMAX(KoUnit::ptFromUnit( sw->value(), doc->getUnit() ),0);
         ph = QMAX(KoUnit::ptFromUnit(sh->value(), doc->getUnit() ),0);
+        uLeft=QMAX(0, KoUnit::ptFromUnit( sml->value(), doc->getUnit() ));
+        uRight=QMAX(0, KoUnit::ptFromUnit( smr->value(), doc->getUnit() ));
+        uTop=QMAX(0, KoUnit::ptFromUnit( smt->value(), doc->getUnit() ));
+        uBottom=QMAX(0, KoUnit::ptFromUnit( smb->value(), doc->getUnit() ));
     }
 
     KoRect rect( px, py, pw, ph );
@@ -1573,14 +1585,19 @@ bool KWFrameDia::applyChanges()
                     KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
                 }
             }
+            if ( oldMarginLeft!=sml->value() || oldMarginRight!=smr->value() ||
+                 oldMarginTop!=smt->value() || oldMarginBottom!=smb->value())
+            {
+                FrameIndex index( frame );
+                FrameMarginsStruct tmpMargBegin(frame);
+                FrameMarginsStruct tmpMargEnd(uLeft, uTop, uRight, uBottom);
+                if(!macroCmd)
+                    macroCmd = new KMacroCommand( i18n("Change Margin Frame") );
+                KWFrameChangeFrameMarginCommand *cmd = new KWFrameChangeFrameMarginCommand( i18n("Change Margin Frame"), index, tmpMargBegin, tmpMargEnd) ;
+                cmd->execute();
+                macroCmd->addCommand(cmd);
+            }
         }
-
-        double u1, u2, u3, u4;
-        u1=QMAX(0, KoUnit::ptFromUnit( sml->value(), doc->getUnit() ));
-        u2=QMAX(0, KoUnit::ptFromUnit( smr->value(), doc->getUnit() ));
-        u3=QMAX(0, KoUnit::ptFromUnit( smt->value(), doc->getUnit() ));
-        u4=QMAX(0, KoUnit::ptFromUnit( smb->value(), doc->getUnit() ));
-        doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
     if(macroCmd)
