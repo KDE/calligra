@@ -284,6 +284,10 @@ public:
 
     bool isLoading();
 
+    bool isProtected() const { return !m_strPassword.isNull(); }
+    void setProtected( QCString const & passwd );
+    bool checkPassword( QCString const & passwd ) const { return ( passwd == m_strPassword ); }
+
     void setDefaultHeight( double height );
     void setDefaultWidth( double width );
 
@@ -1201,6 +1205,11 @@ protected:
      */
     KSpreadMap *m_pMap;
     KSpreadDoc *m_pDoc;
+  
+    /**
+     * Password for protecting this sheet
+     */
+    QCString m_strPassword;
 
     /**
      * Needed to get infos about font metrics.

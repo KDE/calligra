@@ -38,6 +38,7 @@
 #include <knotifyclient.h>
 #include <ktempfile.h>
 #include <kstandarddirs.h>
+#include <kpassdlg.h>
 #include <tkcoloractions.h>
 
 #include <dcopclient.h>
@@ -89,6 +90,7 @@
 #include "kspread_undo.h"
 #include <kconfig.h>
 #include "handler.h"
+#include "digest.h"
 
 #include "KSpreadViewIface.h"
 #include <kdebug.h>
@@ -96,6 +98,8 @@
 #include <kapplication.h>
 #include "kspread_dlg_paperlayout.h"
 
+#define NO_MODIFICATION_POSSIBLE \
+  KMessageBox::error( 0, i18n( "You cannot change a protected sheet" ) ); return
 
 /*****************************************************************************
  *
@@ -524,20 +528,19 @@ void KSpreadView::initializeCalcActions()
 
 void KSpreadView::initializeInsertActions()
 {
-  KAction* tmpAction = NULL;
-  tmpAction = new KAction( i18n("&Function..."), "funct", 0, this,
-                           SLOT( insertMathExpr() ), actionCollection(),
-                           "insertMathExpr" );
-  tmpAction->setToolTip(i18n("Insert math expression."));
+  m_insertFunction = new KAction( i18n("&Function..."), "funct", 0, this,
+                                  SLOT( insertMathExpr() ), actionCollection(),
+                                  "insertMathExpr" );
+  m_insertFunction->setToolTip(i18n("Insert math expression."));
 
-  tmpAction = new KAction( i18n("&Series..."),"series", 0, this,
-                           SLOT( insertSeries() ), actionCollection(), "series");
-  tmpAction ->setToolTip(i18n("Insert a series."));
+  m_insertSeries = new KAction( i18n("&Series..."),"series", 0, this,
+                                SLOT( insertSeries() ), actionCollection(), "series");
+  m_insertSeries ->setToolTip(i18n("Insert a series."));
 
-  tmpAction = new KAction( i18n("&Link..."), 0, this,
-                           SLOT( insertHyperlink() ), actionCollection(),
-                           "insertHyperlink" );
-  tmpAction->setToolTip(i18n("Insert an internet hyperlink."));
+  m_insertLink = new KAction( i18n("&Link..."), 0, this,
+                              SLOT( insertHyperlink() ), actionCollection(),
+                              "insertHyperlink" );
+  m_insertLink->setToolTip(i18n("Insert an internet hyperlink."));
 
   m_insertPart=new KoPartSelectAction( i18n("&Object"), "frame_query", this,
                                        SLOT( insertObject() ),
@@ -603,7 +606,7 @@ void KSpreadView::initializeEditActions()
 
   m_find = KStdAction::find(this, SLOT(find()), actionCollection());
 
-  KStdAction::replace(this, SLOT(replace()), actionCollection());
+  m_replace = KStdAction::replace(this, SLOT(replace()), actionCollection());
 }
 
 void KSpreadView::initializeAreaOperationActions()
@@ -697,10 +700,22 @@ void KSpreadView::initializeGlobalOperationActions()
                                          actionCollection(), "showPageBorders");
   connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this,
            SLOT( togglePageBorders( bool ) ) );
-  m_showPageBorders->setToolTip("Show on the spreadsheet where the page borders will be.");
+  m_showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be." ) );
 
   m_viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
                                   actionCollection(), "view_zoom" );
+
+  m_protectSheet = new KToggleAction( i18n( "Protect &Sheet" ), 0,
+                                      actionCollection(), "protectSheet" );
+  m_protectSheet->setToolTip( i18n( "Protect the sheet from being modified" ) );
+  connect( m_protectSheet, SIGNAL( toggled( bool ) ), this, 
+           SLOT( toggleProtectSheet( bool ) ) );
+
+  m_protectDoc = new KToggleAction( i18n( "Protect &Doc" ), 0,
+                                      actionCollection(), "protectDoc" );
+  m_protectDoc->setToolTip( i18n( "Protect the document from being modified" ) );
+  connect( m_protectDoc, SIGNAL( toggled( bool ) ), this, 
+           SLOT( toggleProtectDoc( bool ) ) );
 
   connect( m_viewZoom, SIGNAL( activated( const QString & ) ),
            this, SLOT( viewZoom( const QString & ) ) );
@@ -1877,12 +1892,37 @@ void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
     m_percent->setChecked( ft == KSpreadCell::Percentage );
     m_money->setChecked( ft == KSpreadCell::Money );
 
-    m_removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
+    if ( !m_pTable && !m_pTable->isProtected() )
+      m_removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
 
-    m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
+    if ( !m_pTable && !m_pTable->isProtected() )
+      m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
 
     m_toolbarLock = FALSE;
 
+}
+
+void KSpreadView::adjustActions( KSpreadSheet const * const table, 
+                                 KSpreadCell const * const cell )
+{
+  QRect selection = m_selectionInfo->selection();
+  if ( table->isProtected() && ( cell->isDefault() || cell->notProtected( cell->column(), cell->row() ) ) )
+  {
+    if ( ( selection.width() > 1 ) || ( selection.height() > 1 ) )
+    {
+      adjustActions( true );
+    }
+    else
+    {
+      if ( m_removeComment->isEnabled() )
+        adjustActions( false );
+    }
+  }
+  else if ( table->isProtected() )
+  {
+    if ( m_removeComment->isEnabled() )
+      adjustActions( false );
+  }
 }
 
 void KSpreadView::updateEditWidgetOnPress()
@@ -1902,16 +1942,19 @@ void KSpreadView::updateEditWidgetOnPress()
     else
         editWidget()->setText( cell->text() );
     updateButton(cell, column, row);
-
+    adjustActions( m_pTable, cell );
 }
 
 void KSpreadView::updateEditWidget()
 {
-    bool active=activeTable()->getShowFormula();
-    m_alignLeft->setEnabled(!active);
-    m_alignCenter->setEnabled(!active);
-    m_alignRight->setEnabled(!active);
+    bool active = activeTable()->getShowFormula();
 
+    if ( !m_pTable && !m_pTable->isProtected() )
+    {
+      m_alignLeft->setEnabled(!active);
+      m_alignCenter->setEnabled(!active);
+      m_alignRight->setEnabled(!active);
+    }
 
     int column = m_pCanvas->markerColumn();
     int row    = m_pCanvas->markerRow();
@@ -2139,23 +2182,27 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
 
 void KSpreadView::enableUndo( bool _b )
 {
+  if ( m_pTable && !m_pTable->isProtected() )
     m_undo->setEnabled( _b );
-    m_undo->setText(i18n("Undo: %1").arg(m_pDoc->undoBuffer()->getUndoName()));
+  m_undo->setText(i18n("Undo: %1").arg(m_pDoc->undoBuffer()->getUndoName()));
 }
 
 void KSpreadView::enableRedo( bool _b )
 {
+  if ( m_pTable && !m_pTable->isProtected() )
     m_redo->setEnabled( _b );
-    m_redo->setText(i18n("Redo: %1").arg(m_pDoc->undoBuffer()->getRedoName()));
+  m_redo->setText(i18n("Redo: %1").arg(m_pDoc->undoBuffer()->getRedoName()));
 }
 
 void KSpreadView::enableInsertColumn( bool _b )
 {
+  if ( !m_pTable && !m_pTable->isProtected() )
     m_insertColumn->setEnabled( _b );
 }
 
 void KSpreadView::enableInsertRow( bool _b )
 {
+  if ( !m_pTable && !m_pTable->isProtected() )
     m_insertRow->setEnabled( _b );
 }
 
@@ -2895,6 +2942,10 @@ void KSpreadView::setActiveTable( KSpreadSheet *_t,bool updateTable )
     m_pCanvas->slotMaxRow( m_pTable->maxRow() );
   }
 
+  m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
+  m_protectSheet->setChecked( m_pTable->isProtected() );
+  adjustActions( !m_pTable->isProtected() );
+
   /* see if there was a previous selection on this other table */
   QMapIterator<KSpreadSheet*, QPoint> it = savedAnchors.find(m_pTable);
   QMapIterator<KSpreadSheet*, QPoint> it2 = savedMarkers.find(m_pTable);
@@ -3202,8 +3253,9 @@ void KSpreadView::decreaseIndent()
 
   m_pTable->decreaseIndent( m_selectionInfo );
   KSpreadCell* cell = m_pTable->cellAt( column, row );
-  if(cell)
-      m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
+  if (cell)
+    if ( !m_pTable->isProtected() )
+         m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
 
   m_pDoc->emitEndOperation();
 }
@@ -3589,6 +3641,178 @@ void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
     */
 }
 
+void KSpreadView::toggleProtectSheet( bool mode )
+{
+   if ( !m_pTable )
+       return;
+
+   QCString passwd;
+   if ( mode )
+   {
+     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect sheet" ) );
+     if ( result != KPasswordDialog::Accepted )
+     {
+       m_protectSheet->setChecked( false );
+       return;
+     }
+
+     QCString hash;
+     QString password( passwd );
+     SHA1::getHash( password, hash );
+     m_pTable->setProtected( hash );
+   }
+   else
+   {
+     int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect sheet" ) );
+     if ( result != KPasswordDialog::Accepted )
+     {
+       m_protectSheet->setChecked( true );
+       return;
+     }
+
+
+     QCString hash;
+     QString password( passwd );
+     SHA1::getHash( password, hash );
+     if ( !m_pTable->checkPassword( hash ) )
+     {
+       KMessageBox::error( 0, i18n( "Incorrect password" ) );
+       m_protectSheet->setChecked( true );
+       return;
+     }
+
+     m_pTable->setProtected( QCString() );     
+   }
+   adjustActions( !mode );
+}
+
+void KSpreadView::adjustActions( bool mode )
+{
+  m_replace->setEnabled( mode );
+  m_insertSeries->setEnabled( mode );
+  m_insertLink->setEnabled( mode );
+  m_insertFunction->setEnabled( mode );
+  m_removeComment->setEnabled( mode );
+  m_decreaseIndent->setEnabled( mode );
+  m_bold->setEnabled( mode );
+  m_italic->setEnabled( mode );
+  m_underline->setEnabled( mode );
+  m_strikeOut->setEnabled( mode );
+  m_percent->setEnabled( mode );
+  m_precplus->setEnabled( mode );
+  m_precminus->setEnabled( mode );
+  m_money->setEnabled( mode );
+  m_alignLeft->setEnabled( mode );
+  m_alignCenter->setEnabled( mode );
+  m_alignRight->setEnabled( mode );
+  m_alignTop->setEnabled( mode );
+  m_alignMiddle->setEnabled( mode );
+  m_alignBottom->setEnabled( mode );
+  m_paste->setEnabled( mode );
+  m_cut->setEnabled( mode );
+  m_specialPaste->setEnabled( mode );
+  m_delete->setEnabled( mode );
+  m_clearText->setEnabled( mode );
+  m_clearComment->setEnabled( mode );
+  m_clearValidity->setEnabled( mode );
+  m_clearConditional->setEnabled( mode );
+  m_recalc_workbook->setEnabled( mode );
+  m_recalc_worksheet->setEnabled( mode );
+  m_adjust->setEnabled( mode );
+  m_editCell->setEnabled( mode );
+  m_undo->setEnabled( mode );
+  m_redo->setEnabled( mode );
+  m_paperLayout->setEnabled( mode );
+  m_definePrintRange->setEnabled( mode );
+  m_resetPrintRange->setEnabled( mode );
+  m_insertFromDatabase->setEnabled( mode );
+  m_insertFromTextfile->setEnabled( mode );
+  m_insertFromClipboard->setEnabled( mode );
+  m_conditional->setEnabled( mode );
+  m_validity->setEnabled( mode );
+  m_goalSeek->setEnabled( mode );
+  m_subTotals->setEnabled( mode );
+  m_multipleOperations->setEnabled( mode );
+  m_textToColumns->setEnabled( mode );
+  m_consolidate->setEnabled( mode );
+  m_insertCellCopy->setEnabled( mode );
+  m_multiRow->setEnabled( mode );
+  m_selectFont->setEnabled( mode );
+  m_selectFontSize->setEnabled( mode );
+  m_deleteColumn->setEnabled( mode );
+  m_hideColumn->setEnabled( mode );
+  m_showColumn->setEnabled( mode );
+  m_showSelColumns->setEnabled( mode );
+  m_insertColumn->setEnabled( mode );
+  m_deleteRow->setEnabled( mode );
+  m_insertRow->setEnabled( mode );
+  m_hideRow->setEnabled( mode );
+  m_showRow->setEnabled( mode );
+  m_showSelRows->setEnabled( mode );
+  m_formulaSelection->setEnabled( mode );
+  m_textColor->setEnabled( mode );
+  m_bgColor->setEnabled( mode );
+  m_cellLayout->setEnabled( mode );
+  m_borderLeft->setEnabled( mode );
+  m_borderRight->setEnabled( mode );
+  m_borderTop->setEnabled( mode );
+  m_borderBottom->setEnabled( mode );
+  m_borderAll->setEnabled( mode );
+  m_borderOutline->setEnabled( mode );
+  m_borderRemove->setEnabled( mode );
+  m_borderColor->setEnabled( mode );
+  m_removeTable->setEnabled( mode );
+  m_renameTable->setEnabled( mode );
+  m_autoSum->setEnabled( mode );
+  //   m_scripts->setEnabled( mode );
+  m_default->setEnabled( mode );
+  m_areaName->setEnabled( mode );
+  m_resizeRow->setEnabled( mode );
+  m_resizeColumn->setEnabled( mode );
+  m_fontSizeUp->setEnabled( mode );
+  m_fontSizeDown->setEnabled( mode );
+  m_upper->setEnabled( mode );
+  m_lower->setEnabled( mode );
+  m_equalizeRow->setEnabled( mode );
+  m_equalizeColumn->setEnabled( mode );
+  m_verticalText->setEnabled( mode );
+  m_addModifyComment->setEnabled( mode );
+  m_removeComment->setEnabled( mode );
+  m_insertCell->setEnabled( mode );
+  m_removeCell->setEnabled( mode );
+  m_changeAngle->setEnabled( mode );
+  m_dissociateCell->setEnabled( mode );
+  m_increaseIndent->setEnabled( mode );
+  m_decreaseIndent->setEnabled( mode );
+  m_spellChecking->setEnabled( mode );
+  m_menuCalcMin->setEnabled( mode );
+  m_menuCalcMax->setEnabled( mode );
+  m_menuCalcAverage->setEnabled( mode );
+  m_menuCalcCount->setEnabled( mode );
+  m_menuCalcSum->setEnabled( mode );
+  m_menuCalcNone->setEnabled( mode );
+  m_insertPart->setEnabled( mode );
+
+  m_tableFormat->setEnabled( false );
+  m_sort->setEnabled( false );
+  m_mergeCell->setEnabled( false );
+  m_insertChartFrame->setEnabled( false );
+  m_sortDec->setEnabled( false );
+  m_sortInc->setEnabled( false );
+  m_transform->setEnabled( false );
+
+  if ( mode )
+    canvasWidget()->gotoLocation( m_selectionInfo->marker(), m_pTable );
+}
+
+void KSpreadView::toggleProtectDoc( bool mode )
+{
+   if ( !m_pDoc || !m_pDoc->map() )
+       return;
+
+   //   m_pDoc->map()->setProtected( passwd );
+}
+
 void KSpreadView::togglePageBorders( bool mode )
 {
    if ( !m_pTable )
@@ -3847,19 +4071,22 @@ int KSpreadView::bottomBorder() const
 void KSpreadView::refreshView()
 {
     bool active=activeTable()->getShowFormula();
-    m_alignLeft->setEnabled(!active);
-    m_alignCenter->setEnabled(!active);
-    m_alignRight->setEnabled(!active);
+    if ( !m_pTable && !m_pTable->isProtected() )
+    {
+      m_alignLeft->setEnabled(!active);
+      m_alignCenter->setEnabled(!active);
+      m_alignRight->setEnabled(!active);
+    }
     active=m_pDoc->getShowFormulaBar();
     editWidget()->showEditWidget(active);
     int posFrame=30;
-    if(active)
+    if (active)
       posWidget()->show();
     else
-      {
+    {
       posWidget()->hide();
       posFrame=0;
-      }
+    }
 
     m_pToolWidget->show();
 
@@ -4026,54 +4253,62 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
 
     m_pPopupColumn = new QPopupMenu( this );
 
-    m_cellLayout->plug( m_pPopupColumn );
-	m_pPopupColumn->insertSeparator();
-    m_cut->plug( m_pPopupColumn );
-    m_copy->plug( m_pPopupColumn );
-    m_paste->plug( m_pPopupColumn );
-    m_specialPaste->plug( m_pPopupColumn );
-    m_insertCellCopy->plug( m_pPopupColumn );
-    m_pPopupColumn->insertSeparator();
-    m_default->plug( m_pPopupColumn );
-    // If there is no selection
-    if((util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
+    bool isProtected = m_pTable->isProtected();
+
+    if ( !isProtected )
     {
-      m_areaName->plug( m_pPopupColumn );
+      m_cellLayout->plug( m_pPopupColumn );
+      m_pPopupColumn->insertSeparator();
+      m_cut->plug( m_pPopupColumn );
     }
-
-    m_resizeColumn->plug( m_pPopupColumn );
-    m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
-    m_pPopupColumn->insertSeparator();
-    m_insertColumn->plug( m_pPopupColumn );
-    m_deleteColumn->plug( m_pPopupColumn );
-    m_hideColumn->plug( m_pPopupColumn );
-
-    m_showSelColumns->setEnabled(false);
-
-    int i;
-    ColumnFormat * col;
-    QRect rect = m_selectionInfo->selection();
-    //kdDebug(36001) << "Column: L: " << rect.left() << endl;
-    for ( i = rect.left(); i <= rect.right(); ++i )
+    m_copy->plug( m_pPopupColumn );
+    if ( !isProtected )
     {
-      if (i == 2) // "B"
+      m_paste->plug( m_pPopupColumn );
+      m_specialPaste->plug( m_pPopupColumn );
+      m_insertCellCopy->plug( m_pPopupColumn );
+      m_pPopupColumn->insertSeparator();
+      m_default->plug( m_pPopupColumn );
+      // If there is no selection
+      if ((util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
       {
-        col = activeTable()->columnFormat( 1 );
+        m_areaName->plug( m_pPopupColumn );
+      }
+
+      m_resizeColumn->plug( m_pPopupColumn );
+      m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
+      m_pPopupColumn->insertSeparator();
+      m_insertColumn->plug( m_pPopupColumn );
+      m_deleteColumn->plug( m_pPopupColumn );
+      m_hideColumn->plug( m_pPopupColumn );
+
+      m_showSelColumns->setEnabled(false);
+
+      int i;
+      ColumnFormat * col;
+      QRect rect = m_selectionInfo->selection();
+      //kdDebug(36001) << "Column: L: " << rect.left() << endl;
+      for ( i = rect.left(); i <= rect.right(); ++i )
+      {
+        if (i == 2) // "B"
+        {
+          col = activeTable()->columnFormat( 1 );
+          if ( col->isHide() )
+          {
+            m_showSelColumns->setEnabled(true);
+            m_showSelColumns->plug( m_pPopupColumn );
+            break;
+          }
+        }
+        
+        col = activeTable()->columnFormat( i );
+        
         if ( col->isHide() )
         {
           m_showSelColumns->setEnabled(true);
           m_showSelColumns->plug( m_pPopupColumn );
           break;
         }
-      }
-
-      col = activeTable()->columnFormat( i );
-
-      if ( col->isHide() )
-      {
-        m_showSelColumns->setEnabled(true);
-        m_showSelColumns->plug( m_pPopupColumn );
-        break;
       }
     }
 
@@ -4103,53 +4338,60 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
 
     m_pPopupRow= new QPopupMenu();
 
-    m_cellLayout->plug( m_pPopupRow );
-	m_pPopupRow->insertSeparator();
-    m_cut->plug( m_pPopupRow );
-    m_copy->plug( m_pPopupRow );
-    m_paste->plug( m_pPopupRow );
-    m_specialPaste->plug( m_pPopupRow );
-    m_insertCellCopy->plug( m_pPopupRow );
+    bool isProtected = m_pTable->isProtected();
+
+    if ( !isProtected )
+      m_cellLayout->plug( m_pPopupRow );
     m_pPopupRow->insertSeparator();
-    m_default->plug( m_pPopupRow );
-    // If there is no selection
-    if( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
+    if ( !isProtected )
+      m_cut->plug( m_pPopupRow );
+    m_copy->plug( m_pPopupRow );
+    if ( !isProtected )
+    {
+      m_paste->plug( m_pPopupRow );
+      m_specialPaste->plug( m_pPopupRow );
+      m_insertCellCopy->plug( m_pPopupRow );
+      m_pPopupRow->insertSeparator();
+      m_default->plug( m_pPopupRow );
+      // If there is no selection
+      if ( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
       {
 	m_areaName->plug( m_pPopupRow );
       }
-
-    m_resizeRow->plug( m_pPopupRow );
-    m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
-    m_pPopupRow->insertSeparator();
-    m_insertRow->plug( m_pPopupRow );
-    m_deleteRow->plug( m_pPopupRow );
-    m_hideRow->plug( m_pPopupRow );
-
-    m_showSelColumns->setEnabled(false);
-
-    int i;
-    RowFormat * row;
-    QRect rect = m_selectionInfo->selection();
-    for ( i = rect.top(); i <= rect.bottom(); ++i )
-    {
-        //kdDebug(36001) << "popupRow: " << rect.top() << endl;
-      if (i == 2)
+      
+      m_resizeRow->plug( m_pPopupRow );
+      m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
+      m_pPopupRow->insertSeparator();
+      m_insertRow->plug( m_pPopupRow );
+      m_deleteRow->plug( m_pPopupRow );
+      m_hideRow->plug( m_pPopupRow );
+      
+      m_showSelColumns->setEnabled(false);
+      
+      int i;
+      RowFormat * row;
+      QRect rect = m_selectionInfo->selection();
+      for ( i = rect.top(); i <= rect.bottom(); ++i )
       {
-        row = activeTable()->rowFormat( 1 );
+        //kdDebug(36001) << "popupRow: " << rect.top() << endl;
+        if (i == 2)
+        {
+          row = activeTable()->rowFormat( 1 );
+          if ( row->isHide() )
+          {
+            m_showSelRows->setEnabled(true);
+            m_showSelRows->plug( m_pPopupRow );
+            break;
+          }
+        }
+        
+        row = activeTable()->rowFormat( i );
         if ( row->isHide() )
         {
           m_showSelRows->setEnabled(true);
           m_showSelRows->plug( m_pPopupRow );
           break;
         }
-      }
-
-      row = activeTable()->rowFormat( i );
-      if ( row->isHide() )
-      {
-        m_showSelRows->setEnabled(true);
-        m_showSelRows->plug( m_pPopupRow );
-        break;
       }
     }
 
@@ -4267,53 +4509,61 @@ void KSpreadView::slotItemSelected( int id)
 void KSpreadView::openPopupMenu( const QPoint & _point )
 {
     assert( m_pTable );
-
-
     delete m_pPopupMenu;
 
     if(!koDocument()->isReadWrite() )
         return;
 
     m_pPopupMenu = new QPopupMenu();
-
-    m_cellLayout->plug( m_pPopupMenu );
-	m_pPopupMenu->insertSeparator();
-    m_cut->plug( m_pPopupMenu );
-    m_copy->plug( m_pPopupMenu );
-    m_paste->plug( m_pPopupMenu );
-
-    m_specialPaste->plug( m_pPopupMenu );
-    m_insertCellCopy->plug( m_pPopupMenu );
-    m_pPopupMenu->insertSeparator();
-    m_delete->plug( m_pPopupMenu );
-    m_adjust->plug( m_pPopupMenu );
-    m_default->plug( m_pPopupMenu );
-
-    // If there is no selection
-    if( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
-    {
-      m_areaName->plug( m_pPopupMenu );
-      m_pPopupMenu->insertSeparator();
-      m_insertCell->plug( m_pPopupMenu );
-      m_removeCell->plug( m_pPopupMenu );
-    }
-
-
-
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-    m_pPopupMenu->insertSeparator();
-    m_addModifyComment->plug( m_pPopupMenu );
-    if( !cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty() )
+
+    bool isProtected = m_pTable->isProtected();
+    if ( ( cell->isDefault() || cell->notProtected( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) )
+         && ( selection().width() == 1 ) && ( selection().height() == 1 ) )
+      isProtected = false;
+
+    if ( !isProtected )
     {
-        m_removeComment->plug( m_pPopupMenu );
+      m_cellLayout->plug( m_pPopupMenu );
+      m_pPopupMenu->insertSeparator();
+      m_cut->plug( m_pPopupMenu );
     }
+    m_copy->plug( m_pPopupMenu );
+    if ( !isProtected )
+      m_paste->plug( m_pPopupMenu );
 
+    if ( !isProtected )
+    {
+      m_specialPaste->plug( m_pPopupMenu );
+      m_insertCellCopy->plug( m_pPopupMenu );
+      m_pPopupMenu->insertSeparator();
+      m_delete->plug( m_pPopupMenu );
+      m_adjust->plug( m_pPopupMenu );
+      m_default->plug( m_pPopupMenu );
 
-    if(activeTable()->testListChoose(selectionInfo()))
+      // If there is no selection
+      if( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
+      {
+        m_areaName->plug( m_pPopupMenu );
+        m_pPopupMenu->insertSeparator();
+        m_insertCell->plug( m_pPopupMenu );
+        m_removeCell->plug( m_pPopupMenu );
+      }
+      
+      m_pPopupMenu->insertSeparator();
+      m_addModifyComment->plug( m_pPopupMenu );
+      if( !cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty() )
+      {
+        m_removeComment->plug( m_pPopupMenu );
+      }
+      
+      
+      if(activeTable()->testListChoose(selectionInfo()))
       {
 	m_pPopupMenu->insertSeparator();
 	m_pPopupMenu->insertItem( i18n("Selection List..."), this, SLOT( slotListChoosePopupMenu() ) );
       }
+    }
 
     // Remove informations about the last tools we offered
     m_lstTools.clear();
@@ -4978,7 +5228,7 @@ void KSpreadView::slotUpdateVBorder( KSpreadSheet *_table )
 
 void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
                                        const QRect &oldSelection,
-                                       const QPoint& oldMarker )
+                                       const QPoint& /* oldMarker*/ )
 {
     m_pDoc->emitBeginOperation(false);
     QRect newSelection = m_selectionInfo->selection();
@@ -4991,23 +5241,26 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
     bool colSelected = util_isColumnSelected( selection() );
     bool rowSelected = util_isRowSelected( selection() );
 
-    m_resizeRow->setEnabled( !colSelected );
-    m_equalizeRow->setEnabled( !colSelected );
-    m_validity->setEnabled( !colSelected && !rowSelected);
-    m_conditional->setEnabled( !colSelected && !rowSelected);
+    if ( !m_pTable && !m_pTable->isProtected() )
+    {
+      m_resizeRow->setEnabled( !colSelected );
+      m_equalizeRow->setEnabled( !colSelected );
+      m_validity->setEnabled( !colSelected && !rowSelected);
+      m_conditional->setEnabled( !colSelected && !rowSelected);
 
-    m_resizeColumn->setEnabled( !rowSelected );
-    m_equalizeColumn->setEnabled( !rowSelected );
+      m_resizeColumn->setEnabled( !rowSelected );
+      m_equalizeColumn->setEnabled( !rowSelected );
 
-    bool simpleSelection = m_selectionInfo->singleCellSelection() ||
-			   colSelected || rowSelected;
+      bool simpleSelection = m_selectionInfo->singleCellSelection() 
+        || colSelected || rowSelected;
 
-    m_tableFormat->setEnabled( !simpleSelection );
-    m_sort->setEnabled( !simpleSelection );
-    m_mergeCell->setEnabled( !simpleSelection );
-    m_insertChartFrame->setEnabled( !simpleSelection );
-    m_sortDec->setEnabled( !simpleSelection );
-    m_sortInc->setEnabled( !simpleSelection);
+      m_tableFormat->setEnabled( !simpleSelection );
+      m_sort->setEnabled( !simpleSelection );
+      m_mergeCell->setEnabled( !simpleSelection );
+      m_insertChartFrame->setEnabled( !simpleSelection );
+      m_sortDec->setEnabled( !simpleSelection );
+      m_sortInc->setEnabled( !simpleSelection);
+    }
     resultOfCalc();
     // Send some event around. This is read for example
     // by the calculator plugin.
@@ -5270,6 +5523,8 @@ void KSpreadView::transformPart()
 
 void KSpreadView::slotChildSelected( KoDocumentChild* ch )
 {
+  if ( !m_pTable && !m_pTable->isProtected() )
+  {
     m_transform->setEnabled( TRUE );
 
     if ( !m_transformToolBox.isNull() )
@@ -5277,6 +5532,7 @@ void KSpreadView::slotChildSelected( KoDocumentChild* ch )
         m_transformToolBox->setEnabled( TRUE );
         m_transformToolBox->setDocumentChild( ch );
     }
+  }
 }
 
 void KSpreadView::slotChildUnselected( KoDocumentChild* )
@@ -5352,8 +5608,11 @@ void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
     if( m_pTabBar )
     {
         bool state = (m_pTabBar->listshow().count()>1);
-        m_removeTable->setEnabled( state);
-        m_hideTable->setEnabled( state );
+        if ( !m_pTable && !m_pTable->isProtected() )
+        {
+          m_removeTable->setEnabled( state);
+          m_hideTable->setEnabled( state );
+        }
         static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
     }
 }

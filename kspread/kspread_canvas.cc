@@ -151,7 +151,8 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
 
   installEventFilter(m_pCanvas);
 
-  if ( !m_pCanvas->doc()->isReadWrite() )
+  if ( !m_pCanvas->doc()->isReadWrite() || !m_pCanvas->activeTable()
+       || m_pCanvas->activeTable()->isProtected() )
     setEnabled( false );
   else
   {
@@ -775,17 +776,17 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
   }
 
+  // Working on this table ?
+  KSpreadSheet *table = activeTable();
+  if ( !table )
+    return;
+
   // Special handling for choose mode.
   if( m_bChoose )
   {
     chooseMouseMoveEvent( _ev );
     return;
   }
-
-  // Working on this table ?
-  KSpreadSheet *table = activeTable();
-  if ( !table )
-    return;
 
   double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
@@ -821,10 +822,14 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     col  = table->leftColumn( ev_PosX - doc()->unzoomItX( 2 ), xpos );
     row  = table->topRow( ev_PosY - doc()->unzoomItY( 2 ), ypos );
 
-    setCursor( sizeFDiagCursor );
+    if ( !table->isProtected() )
+      setCursor( sizeFDiagCursor );
   }
   else if ( !m_strAnchor.isEmpty() )
-    setCursor( KCursor::handCursor() );
+  {
+    if ( !table->isProtected() )
+      setCursor( KCursor::handCursor() );
+  }
   else
     setCursor( arrowCursor );
 
@@ -863,7 +868,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   }
 
   // The user started the drag in the lower right corner of the marker ?
-  if ( m_eMouseAction == ResizeCell )
+  if ( m_eMouseAction == ResizeCell && !table->isProtected() )
   {
     QPoint selectionAnchor = selectionInfo->selectionAnchor();
     int x = selectionAnchor.x();
@@ -886,7 +891,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
     m_pView->updateEditWidget();
     if( table->getAutoCalc() ) table->recalc();
   }
-  else if ( m_eMouseAction == AutoFill )
+  else if ( m_eMouseAction == AutoFill && !table->isProtected() )
   {
     QRect dest = selection;
     table->autofill( m_rctAutoFillSrc, dest );
@@ -1100,7 +1105,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   // Paste operation with the middle button ?
   if( _ev->button() == MidButton )
   {
-      if ( m_pView->koDocument()->isReadWrite() )
+      if ( m_pView->koDocument()->isReadWrite() && !table->isProtected() )
       {
           selectionInfo()->setMarker( QPoint( col, row ), table );
           table->paste( QRect(marker(), marker()) );
@@ -1219,7 +1224,8 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::mouseDoubleClickEvent( QMouseEvent*  )
 {
-  if ( m_pView->koDocument()->isReadWrite() )
+  if ( m_pView->koDocument()->isReadWrite() && activeTable()
+       && !activeTable()->isProtected())
     createEditor();
 }
 
@@ -1310,7 +1316,7 @@ void KSpreadCanvas::dragMoveEvent( QDragMoveEvent * _ev )
     _ev->ignore( r1 );
 }
 
-void KSpreadCanvas::dragLeaveEvent(QDragLeaveEvent * _ev)
+void KSpreadCanvas::dragLeaveEvent( QDragLeaveEvent * )
 {
   if ( m_scrollTimer->isActive() )
     m_scrollTimer->stop();  
@@ -1320,7 +1326,7 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
 {
   m_dragging = false;
   KSpreadSheet * table = activeTable();
-  if ( !table )
+  if ( !table || table->isProtected() )
   {
     _ev->ignore();
     return;
@@ -1759,7 +1765,8 @@ void KSpreadCanvas::processF4Key(QKeyEvent* event)
 void KSpreadCanvas::processOtherKey(QKeyEvent *event)
 {
   // No null character ...
-  if ( event->text().isEmpty() || !m_pView->koDocument()->isReadWrite() )
+  if ( event->text().isEmpty() || !m_pView->koDocument()->isReadWrite() 
+       || !activeTable() || activeTable()->isProtected() )
   {
     event->accept();
     return;
@@ -3468,7 +3475,8 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     // Determine row to resize
     double tmp;
     m_iResizedRow = table->topRow( ev_PosY - 1, tmp );
-    paintSizeIndicator( _ev->pos().y(), true );
+    if ( !table->isProtected() )
+      paintSizeIndicator( _ev->pos().y(), true );
   }
   else
   {
@@ -3547,8 +3555,10 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         else
             height = ev_PosY - y;
 
-        if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+        if ( !table->isProtected() )
         {
+          if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+          {
             //just resize
             if( height != 0.0 )
             {
@@ -3562,25 +3572,26 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
                                                                    rect.top(), ( rect.bottom() - rect.top() ) );
                 m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
             }
-        }
-
-        for( int i = start; i <= end; i++ )
-        {
+          }
+          
+          for( int i = start; i <= end; i++ )
+          {
             RowFormat *rl = table->nonDefaultRowFormat( i );
             if( height != 0.0 )
             {
-                if( !rl->isHide() )
-                    rl->setDblHeight( height );
+              if( !rl->isHide() )
+                rl->setDblHeight( height );
             }
             else
-                rl->setHide( true );
-        }
+              rl->setHide( true );
+          }
 
-        if( height == 0.0 )
+          if ( height == 0.0 )
             table->emitHideColumn();
 
-        delete m_lSize;
-        m_lSize = 0;
+          delete m_lSize;
+          m_lSize = 0;
+        }
     }
     else if ( m_bSelection )
     {
@@ -3730,7 +3741,7 @@ void KSpreadVBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
   KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
 
-  if( !m_pView->koDocument()->isReadWrite() )
+  if( !m_pView->koDocument()->isReadWrite() || table->isProtected() )
     return;
 
   adjustRow();
@@ -3751,7 +3762,8 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   // The button is pressed and we are resizing ?
   if ( m_bResize )
   {
-    paintSizeIndicator( _ev->pos().y(), false );
+    if ( !table->isProtected() )
+      paintSizeIndicator( _ev->pos().y(), false );
   }
   // The button is pressed and we are selecting ?
   else if ( m_bSelection )
@@ -4090,7 +4102,8 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     // Determine the column to resize
     double tmp;
     m_iResizedColumn = table->leftColumn( ev_PosX - 1, tmp );
-    paintSizeIndicator( _ev->pos().x(), true );
+    if ( !table->isProtected() )
+      paintSizeIndicator( _ev->pos().x(), true );
   }
   else
   {
@@ -4169,8 +4182,10 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         else
             width = ev_PosX - x;
 
-        if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+        if ( !table->isProtected() )
         {
+          if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+          {
             //just resize
             if( width != 0.0 )
             {
@@ -4182,10 +4197,10 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
                 KSpreadUndoHideColumn *undo = new KSpreadUndoHideColumn( m_pCanvas->doc(), m_pCanvas->activeTable(), rect.left(), (rect.right()-rect.left()));
                 m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
             }
-        }
+          }
 
-        for( int i = start; i <= end; i++ )
-        {
+          for( int i = start; i <= end; i++ )
+          {
             ColumnFormat *cl = table->nonDefaultColumnFormat( i );
             if( width != 0.0 )
             {
@@ -4194,13 +4209,14 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
             else
                 cl->setHide( true );
-        }
+          }
 
-        if( width == 0.0 )
+          if( width == 0.0 )
             table->emitHideRow();
 
-        delete m_lSize;
-        m_lSize = 0;
+          delete m_lSize;
+          m_lSize = 0;
+        }
     }
     else if( m_bSelection )
     {
@@ -4353,7 +4369,7 @@ void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
   KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
 
-  if( !m_pView->koDocument()->isReadWrite() )
+  if( !m_pView->koDocument()->isReadWrite() || table->isProtected() )
     return;
 
   adjustColumn();
@@ -4373,7 +4389,8 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   // The button is pressed and we are resizing ?
   if ( m_bResize )
   {
-    paintSizeIndicator( _ev->pos().x(), false );
+    if ( !table->isProtected() )
+      paintSizeIndicator( _ev->pos().x(), false );
   }
   // The button is pressed and we are selecting ?
   else if ( m_bSelection )

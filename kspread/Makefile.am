@@ -7,7 +7,7 @@ kde_module_LTLIBRARIES = libkspreadpart.la
 
 ## The part
 libkspreadpart_la_SOURCES = kspread_locale.cc \
-	kspread_dlg_formula.cc \
+	kspread_dlg_formula.cc digest.cc \
 	kspread_functions.cc kspread_dlg_csv.cc \
 	kspread_canvas.cc kspread_functions_helper.cc \
 	kspread_doc.cc \

@@ -52,10 +52,15 @@
 #include "KSpreadTableIface.h"
 
 #include <kdebug.h>
+#include <kmdcodec.h>
 #include <assert.h>
 
 #include <koChart.h>
 #include "kspread_sheet.moc"
+
+#define NO_MODIFICATION_POSSIBLE \
+  KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); return
+
 /*****************************************************************************
  *
  * CellBinding
@@ -339,11 +344,17 @@ RowFormat* KSpreadSheet::rowFormat( int _row )
 
 void KSpreadSheet::setDefaultHeight( double height )
 {
+  if ( isProtected() )
+    NO_MODIFICATION_POSSIBLE;
+
   m_pDefaultRowFormat->setDblHeight( height );
 }
 
 void KSpreadSheet::setDefaultWidth( double width )
 {
+  if ( isProtected() )
+    NO_MODIFICATION_POSSIBLE;
+
   m_pDefaultColumnFormat->setDblWidth( width );
 }
 
@@ -622,6 +633,12 @@ KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
 void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool updateDepends )
 {
     KSpreadCell *cell = nonDefaultCell( _column, _row );
+
+    if ( isProtected() )
+    { 
+      if ( cell->notProtected( _column, _row ) )
+        NO_MODIFICATION_POSSIBLE;
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -6337,6 +6354,17 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     table.setAttribute( "showFormulaIndicator", (int)m_bShowFormulaIndicator);
     table.setAttribute( "lcmode", (int)m_bLcMode);
     table.setAttribute( "borders1.2", 1);
+    if ( !m_strName.isNull() )
+    {
+      if ( m_strPassword.size() > 0 )
+      {
+        QCString str = KCodecs::base64Encode( m_strPassword ); 
+        table.setAttribute( "protected", QString( str.data() ) );
+      }
+      else
+        table.setAttribute( "protected", "" );
+      
+    }
 
     // paper parameters
     QDomElement paper = doc.createElement( "paper" );
@@ -6494,6 +6522,11 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 bool KSpreadSheet::isLoading()
 {
     return m_pDoc->isLoading();
+}
+
+void KSpreadSheet::setProtected( QCString const & passwd )
+{
+  m_strPassword = passwd;
 }
 
 bool KSpreadSheet::loadXML( const QDomElement& table )
@@ -6749,6 +6782,19 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     if( !table.hasAttribute( "borders1.2" ) )
     {
       convertObscuringBorders();
+    }
+
+    if ( table.hasAttribute( "protected" ) )
+    {
+      QString passwd = table.attribute( "protected" );
+
+      if ( passwd.length() > 0 )
+      {
+        QCString str( passwd.latin1() );
+        m_strPassword = KCodecs::base64Decode( str );        
+      }
+      else
+        m_strPassword = QCString( "" );
     }
 
     return true;
@@ -7220,6 +7266,9 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
     if ( map()->findTable( name ) )
         return FALSE;
 
+    if ( isProtected() )
+      NO_MODIFICATION_POSSIBLE false;
+
     if ( m_strName == name )
         return TRUE;
 
@@ -7434,6 +7483,9 @@ KoHeadFoot KSpreadSheet::getHeadFootLine() const
 void KSpreadSheet::setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
                                     const QString &_footl, const QString &_footm, const QString &_footr )
 {
+  if ( isProtected() )
+    NO_MODIFICATION_POSSIBLE;
+
   m_headLeft  = _headl;
   m_headRight = _headr;
   m_headMid   = _headm;
@@ -7446,6 +7498,9 @@ void KSpreadSheet::setHeadFootLine( const QString &_headl, const QString &_headm
 
 void KSpreadSheet::setPaperOrientation( KoOrientation _orient )
 {
+  if ( isProtected() )
+    NO_MODIFICATION_POSSIBLE;
+
   m_orientation = _orient;
   calcPaperSize();
   updatePrintRepeatColumnsWidth();
@@ -7475,6 +7530,9 @@ KoPageLayout KSpreadSheet::getPaperLayout() const
 void KSpreadSheet::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
                                    KoFormat _paper, KoOrientation _orientation )
 {
+  if ( isProtected() )
+    NO_MODIFICATION_POSSIBLE;
+
   m_leftBorder   = _leftBorder;
   m_rightBorder  = _rightBorder;
   m_topBorder    = _topBorder;
@@ -7501,6 +7559,9 @@ void KSpreadSheet::setPaperLayout( float _leftBorder, float _topBorder, float _r
 void KSpreadSheet::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
                                    const QString& _paper, const QString& _orientation )
 {
+    if ( isProtected() )
+        NO_MODIFICATION_POSSIBLE;
+
     KoFormat f = paperFormat();
     KoOrientation o = orientation();
 
@@ -7659,6 +7720,9 @@ QString KSpreadSheet::completeHeading( const QString &_data, int _page, const QS
 
 void KSpreadSheet::setPrintRange( QRect _printRange )
 {
+  if ( isProtected() )
+    NO_MODIFICATION_POSSIBLE;
+
   if ( m_printRange == _printRange )
     return;
 

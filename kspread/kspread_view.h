@@ -240,6 +240,8 @@ public slots:
     void reloadScripts();
     void runLocalScript();
     void togglePageBorders( bool );
+    void toggleProtectSheet( bool );
+    void toggleProtectDoc( bool );
     void viewZoom(const QString &);
     void find();
     void replace();
@@ -496,8 +498,12 @@ private:
     KToggleAction* m_alignTop;
     KToggleAction* m_alignMiddle;
     KToggleAction* m_alignBottom;
+    KAction* m_insertSeries;
+    KAction* m_insertLink;
+    KAction* m_insertFunction;
     KAction* m_transform;
     KAction* m_copy;
+    KAction* m_replace;
     KAction* m_find;
     KAction* m_paste;
     KAction* m_cut;
@@ -605,6 +611,9 @@ private:
     KAction* m_createTemplate;
 
     KAction* m_insertChartFrame;
+
+    KToggleAction* m_protectSheet;
+    KToggleAction* m_protectDoc;
 
     KToggleAction* m_menuCalcMin;
     KToggleAction* m_menuCalcMax;
@@ -733,20 +742,23 @@ private:
   KSpreadInsertHandler* m_pInsertHandle;
 
   /* helper functions */
-    void initializeCalcActions();
-    void initializeInsertActions();
-    void initializeEditActions();
-    void initializeAreaOperationActions();
-    void initializeGlobalOperationActions();
-    void initializeCellOperationActions();
-    void initializeCellPropertyActions();
-    void initializeTextFormatActions();
-    void initializeTextLayoutActions();
-    void initializeTextPropertyActions();
-    void initializeTableActions();
-    void initializeSpellChecking();
-    void initializeRowColumnActions();
-    void initializeBorderActions();
+  void initializeCalcActions();
+  void initializeInsertActions();
+  void initializeEditActions();
+  void initializeAreaOperationActions();
+  void initializeGlobalOperationActions();
+  void initializeCellOperationActions();
+  void initializeCellPropertyActions();
+  void initializeTextFormatActions();
+  void initializeTextLayoutActions();
+  void initializeTextPropertyActions();
+  void initializeTableActions();
+  void initializeSpellChecking();
+  void initializeRowColumnActions();
+  void initializeBorderActions();
+  void adjustActions( bool mode );
+  void adjustActions( KSpreadSheet const * const table, 
+                      KSpreadCell const * const cell );
 
 
 };
