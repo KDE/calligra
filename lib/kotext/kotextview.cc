@@ -1072,6 +1072,12 @@ const KoParagLayout * KoTextView::currentParagLayoutFormat() const
     return &(parag->paragLayout());
 }
 
+KoTextParag * KoTextView::currentParag() const
+{
+    return m_cursor->parag();
+}
+
+
 //void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex)
 KCommand* KoTextView::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)
 {

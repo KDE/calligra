@@ -1883,6 +1883,11 @@ const KoParagLayout * KoTextObject::currentParagLayoutFormat() const
     return &(parag->paragLayout());
 }
 
+KoTextParag * KoTextObject::currentParag() const
+{
+    return textDocument()->firstParag();
+}
+
 KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)
 {
     if ( protectContent() )
