@@ -37,6 +37,12 @@ class KPTResource;
   * e.g. The list of employees, computer resources, etc
   */
 
+/* IDEA; lets create a resourceGroup that has the intelligence to import PIM schedules
+ *  from the kroupware project and use the schedules to use the factory pattern to build
+ *  KPTResources (probably a derived class) which returns values on getFirstAvailableTime
+ *  and friends based on the schedules we got from the PIM projects. 
+ *  (Thomas Zander mrt-2003 by suggestion of Shaheed)
+ */
 class KPTResourceGroup {
     public:
 	      KPTResourceGroup();

@@ -77,11 +77,11 @@ void KPTProjectDialog::slotSchedulingChanged(int activated) {
         // TODO please provide nice explenations on this.
         case 0: // ASAP
             label = label.arg(i18n("As Soon As Possible"));
-            label = label.arg(i18n(""));
+            label = label.arg(i18n("Place all events at the earliest possible moment permitted in the schedule"));
             break;
         case 1: // ALAP
-            label = label.arg(i18n("ALAP ?"));
-            label = label.arg(i18n(""));
+            label = label.arg(i18n("As Late As Possible"));
+            label = label.arg(i18n("Place all events at the last possible moment permitted in the schedule"));
             break;
         case 2: // Start not earlier then
             label = label.arg(i18n("Start not Earlier then"));
