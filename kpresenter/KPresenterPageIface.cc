@@ -504,6 +504,7 @@ void KPresenterPageIface::slideSelected(bool _b)
     m_page->slideSelected(_b);
     int pos=m_page->kPresenterDoc()->pageList().findRef(m_page);
     m_page->kPresenterDoc()->updateSideBarItem(pos);
+    m_page->kPresenterDoc()->updatePresentationButton();
 }
 
 void KPresenterPageIface::changePicture( const QString & filename )
