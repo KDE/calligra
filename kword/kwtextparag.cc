@@ -490,7 +490,7 @@ int KWTextParag::counterWidth() const
 }
 
 // Draw the counter/bullet for a paragraph
-void KWTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg )
+void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int base, const QColorGroup& cg )
 {
     if ( !m_counter ) // shouldn't happen
         return;

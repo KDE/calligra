@@ -116,7 +116,8 @@ public:
     void setLineSpacing( QTextCursor * cursor, KWUnit spacing );
     void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder );
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, KWUnit margin );
-    void applyStyle( QTextCursor * cursor, const KWStyle * style );
+    void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard );
+    void applyStyleChange( const QString & changedStyle );
 
     void setTabList( QTextCursor * cursor,const QList<KoTabulator> *tabList ); 
 
@@ -147,7 +148,7 @@ private slots:
     void doChangeInterval();
 
 protected:
-    void storeParagUndoRedoInfo( QTextCursor * cursor );
+    void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
     void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles = false );
     void setLastFormattedParag( QTextParag *parag ) { m_lastFormatted = parag; }
 

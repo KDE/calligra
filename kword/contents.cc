@@ -51,7 +51,8 @@ void KWContents::createContents()
 
     // Remove existing table of contents, based on the style
 
-    QTextCursor cursor( textdoc );
+    QTextCursor start( textdoc );
+    QTextCursor end( textdoc );
     for ( QTextParag *p = textdoc->firstParag(); p ; p = p->next() )
     {
         KWTextParag * parag = static_cast<KWTextParag *>(p);
@@ -60,14 +61,14 @@ void KWContents::createContents()
         {
             kdDebug() << "KWContents::createContents Deleting paragraph " << p << endl;
             // This paragraph is part of the TOC -> remove
-            cursor.setParag( p );
-            cursor.setIndex( 0 );
-            textdoc->setSelectionStart( QTextDocument::Temp, &cursor );
+            start.setParag( p );
+            start.setIndex( 0 );
+            textdoc->setSelectionStart( QTextDocument::Temp, &start );
             ASSERT( p->next() );
-            cursor.setParag( p->next() );
-            cursor.setIndex( 0 );
-            textdoc->setSelectionEnd( QTextDocument::Temp, &cursor );
-            textdoc->removeSelectedText( QTextDocument::Temp, &cursor );
+            end.setParag( p->next() );
+            end.setIndex( 0 );
+            textdoc->setSelectionEnd( QTextDocument::Temp, &end );
+            textdoc->removeSelectedText( QTextDocument::Temp, &end );
         }
     }
 
@@ -125,7 +126,9 @@ void KWContents::createContents()
         // TODO parag->insertTab( txt.length() );
 
         // Find page number for paragraph - maybe not the best way !
-        int pgNum = fs->internalToContents( QPoint(0, p->rect().top()) ).y() / m_doc->ptPaperWidth();
+        int paragY = fs->internalToContents( QPoint(0, p->rect().top()) ).y();
+        kdDebug() << "KWContents::createContents paragY=" << paragY << endl;
+        int pgNum = paragY / m_doc->ptPaperWidth();
         parag->append( "         " ); // HACK, should be a tab
         parag->append( QString::number( pgNum ) );
 
@@ -181,7 +184,7 @@ KWStyle * KWContents::findOrCreateTOCStyle( int depth )
     // the i18n calls in stylenames.cc !
     QString name;
     if ( depth >= 0 )
-        name = QString( "Contents Head %1" ).arg( depth );
+        name = QString( "Contents Head %1" ).arg( depth+1 );
     else
         name = "Contents Title";
     KWStyle * style = m_doc->findStyle( name, true );

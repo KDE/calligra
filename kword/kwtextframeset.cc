@@ -631,54 +631,45 @@ void KWTextFrameSet::load( QDomElement &attributes )
         doc->progressItemLoaded();
     }
 
-
-#if 0
-    while ( parser.open( QString::null, tag ) ) {
-        parser.parseTag( tag, name, lst );
-
-        // paragraph
-        if ( name == "PARAGRAPH" ) {
-            parser.parseTag( tag, name, lst );
-
-            if ( !last ) {
-                delete parags;
-                parags = new KWParag( this, doc, 0L, 0L, doc->getDefaultParagLayout() );
-                if ( doc->getNumFrameSets() == 0 ) {
-                    if(format)
-                        delete format;
-                    format = new KWFormat( doc );
-                    format->setDefaults( doc );
-                    parags->setFormat( 0, 1, *format );
-                }
-                parags->load( parser, lst );
-                last = parags;
-            } else {
-                last = new KWParag( this, doc, last, 0L, doc->getDefaultParagLayout() );
-                last->load( parser, lst );
-            }
-        } else
-            kdError(32001) << "Unknown tag '" << name << "' in FRAMESET" << endl;
-
-        if ( !parser.close( tag ) ) {
-            kdError(32001) << "Closing " << tag << endl;
-            return;
-        }
-    }
-#endif
+    // Get the format timer going now.
+    formatMore();
 }
 
 /*================================================================*/
-void KWTextFrameSet::updateAllStyles()
+void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
 {
-#if 0
-    KWParag *p = getFirstParag();
-
+    kdDebug() << "KWTextFrameSet::applyStyleChange " << changedStyle << endl;
+    QTextDocument * textdoc = textDocument();
+    emit hideCursor();
+    KWStyle * style = doc->findStyle( changedStyle, true );
+    KWTextParag *p = static_cast<KWTextParag *>(textdoc->firstParag());
     while ( p ) {
-        if ( doc->isStyleChanged( p->getParagLayout()->getName() ) )
-            p->applyStyle( p->getParagLayout()->getName() );
-        p = p->getNext();
+        if ( p->styleName() == changedStyle )
+        {
+            if ( style == 0L ) // style has been deleted
+            {
+                p->setStyleName( QString::null ); // so get rid of its name, keep current formatting
+                // TODO, make this undoable !
+            }
+            else
+            {
+                // Apply this style again, to get the changes
+                // To get undo/redo and to reuse code, we call applyStyle with a temp selection
+                // Using Temp+1 to avoid conflicting with QRT's internals (just in case)
+                QTextCursor start( textdoc );
+                QTextCursor end( textdoc );
+                start.setParag( p );
+                start.setIndex( 0 );
+                textdoc->setSelectionStart( QTextDocument::Temp+1, &start );
+                end.setParag( p );
+                end.setIndex( p->string()->length()-1 );
+                textdoc->setSelectionEnd( QTextDocument::Temp+1, &end );
+                applyStyle( 0L, style, QTextDocument::Temp+1 );
+                textdoc->removeSelection( QTextDocument::Temp+1 );
+            }
+        }
+        p = static_cast<KWTextParag *>(p->next());
     }
-#endif
 }
 
 /*================================================================*/
@@ -988,13 +979,16 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, 
     }
 }
 
-void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle )
+void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle, int selectionId )
 {
     QTextDocument * textdoc = textDocument();
-    QString curStyleName = static_cast<KWTextParag*>(cursor->parag())->styleName();
-    if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
-	 newStyle->name() == curStyleName )
-        return;
+    if ( cursor )
+    {
+        QString curStyleName = static_cast<KWTextParag*>(cursor->parag())->styleName();
+        if ( !textdoc->hasSelection( selectionId ) &&
+             newStyle->name() == curStyleName )
+            return;
+    }
     emit hideCursor();
 
     /// Applying a style is three distinct operations :
@@ -1005,13 +999,13 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle 
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Apply style %1").arg(newStyle->name()) );
 
     // 1
-    storeParagUndoRedoInfo( cursor );
+    storeParagUndoRedoInfo( cursor, selectionId );
     undoRedoInfo.type = UndoRedoInfo::Invalid; // tricky, we don't want clear() to create a command
-    if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
+    if ( !textdoc->hasSelection( selectionId ) ) {
 	static_cast<KWTextParag*>(cursor->parag())->setParagLayout( newStyle->paragLayout() );
     } else {
-	QTextParag *start = textdoc->selectionStart( QTextDocument::Standard );
-	QTextParag *end = textdoc->selectionEnd( QTextDocument::Standard );
+	QTextParag *start = textdoc->selectionStart( selectionId );
+	QTextParag *end = textdoc->selectionEnd( selectionId );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag*>(start)->setParagLayout( newStyle->paragLayout() );
     }
@@ -1025,15 +1019,15 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle 
     QValueList<QTextFormat *> lstFormats;
     QTextParag * firstParag;
     QTextParag * lastParag;
-    if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
+    if ( !textdoc->hasSelection( selectionId ) ) {
         // No selection -> apply style formatting to the whole paragraph
         firstParag = cursor->parag();
         lastParag = cursor->parag();
     }
     else
     {
-        firstParag = textdoc->selectionStart( QTextDocument::Standard );
-        lastParag = textdoc->selectionEnd( QTextDocument::Standard );
+        firstParag = textdoc->selectionStart( selectionId );
+        lastParag = textdoc->selectionEnd( selectionId );
     }
 
     QString str;
@@ -1091,7 +1085,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle 
 // This prepares undoRedoInfo for a paragraph formatting change
 // If this does too much, we could pass an enum flag to it.
 // But the main point is to avoid too much duplicated code
-void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor )
+void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId )
 {
     undoRedoInfo.clear();
     QTextDocument * textdoc = textDocument();
@@ -1099,7 +1093,7 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor )
     undoRedoInfo.oldParagLayouts.clear();
     undoRedoInfo.text = " ";
     undoRedoInfo.index = 1;
-    if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
+    if ( !textdoc->hasSelection( selectionId ) ) {
         QTextParag * p = cursor->parag();
         undoRedoInfo.id = p->paragId();
         undoRedoInfo.eid = p->paragId();
@@ -1107,8 +1101,8 @@ void KWTextFrameSet::storeParagUndoRedoInfo( QTextCursor * cursor )
         undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->createParagLayout();
     }
     else{
-	QTextParag *start = textdoc->selectionStart( QTextDocument::Standard );
-	QTextParag *end = textdoc->selectionEnd( QTextDocument::Standard );
+	QTextParag *start = textdoc->selectionStart( selectionId );
+	QTextParag *end = textdoc->selectionEnd( selectionId );
         undoRedoInfo.id = start->paragId();
         undoRedoInfo.eid = end->paragId();
         //int len = end->paragId() - start->paragId() + 1;

@@ -256,18 +256,19 @@ void KWStyleManager::copyStyle()
 	  str=str+i18n( "%1" ).arg(styles.count());
 	}
     }
-   
+
   KWStyle *newStyle=new KWStyle(str);
   KWStyle *oldStyle=styles.at( lStyleList->currentItem() );
   newStyle->format()=oldStyle->format();
   newStyle->paragLayout()=oldStyle->paragLayout();
-  //rename style name because I copy all paragLayout 
+  //rename style name because I copy all paragLayout
   //so I copy also name so I must rename new style
   newStyle->paragLayout().styleName=str;
   doc->addStyleTemplate(newStyle);
   lStyleList->insertItem( str );
   lStyleList->setCurrentItem( lStyleList->count() - 1 );
   editStyle();
+  doc->applyStyleChange(str);
   doc->updateAllStyleLists();
 }
 
@@ -292,7 +293,7 @@ void KWStyleManager::downStyle()
 /*================================================================*/
 void KWStyleManager::addStyle()
 {
-  QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList()); 
+  QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList());
   QString str=i18n( "New Style Template ( %1 )" ).arg(styles.count());
   KWStyle *newStyle=new KWStyle(str);
   doc->addStyleTemplate(newStyle);
@@ -300,6 +301,7 @@ void KWStyleManager::addStyle()
   lStyleList->setCurrentItem( lStyleList->count() - 1 );
   editStyle();
   doc->updateAllStyleLists();
+  doc->applyStyleChange(str);
 }
 
 /*================================================================*/
@@ -308,6 +310,7 @@ void KWStyleManager::deleteStyle()
   QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList());
   doc->removeStyleTemplate(lStyleList->currentText());
   styles.remove( lStyleList->currentItem() );
+  doc->applyStyleChange(lStyleList->currentText());
   updateStyleList();
 }
 
@@ -357,7 +360,7 @@ void KWStyleManager::slotOk()
 /*================================================================*/
 void KWStyleManager::updateStyleList()
 {
-  QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList()); 
+  QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList());
     lStyleList->clear();
     for ( unsigned int i = 0; i < styles.count(); i++ )
         lStyleList->insertItem( styles.at( i )->name() );
@@ -382,9 +385,9 @@ void KWStyleManager::updateButtons( const QString &s )
 	bUp->setEnabled(false);
     else
       bUp->setEnabled(true);
-    
+
     if(lStyleList->currentItem()==(int)(lStyleList->count()-1))
-      bDown->setEnabled(false);					      
+      bDown->setEnabled(false);
     else
       bDown->setEnabled(true);
 
@@ -471,14 +474,14 @@ void KWStyleEditor::setupTab1()
          style->name() == QString( "Bullet List" ) ||
          style->name() == QString( "Alphabetical List" ) )
         eName->setEnabled( false );
-    
+
     lFollowing = new QLabel( i18n( "Following Style Template:" ), nwid );
     lFollowing->resize( lFollowing->sizeHint() );
     lFollowing->setAlignment( AlignRight | AlignVCenter );
     grid2->addWidget( lFollowing, 1, 0 );
 
     cFollowing = new QComboBox( false, nwid );
-     QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList()); 
+     QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList());
      for ( unsigned int i = 0; i < styles.count(); i++ ) {
         cFollowing->insertItem( styles.at( i )->name() );
         if ( styles.at( i )->name() == style->followingStyle() )
@@ -659,7 +662,7 @@ void KWStyleEditor::changeTabulators()
 /*================================================================*/
 void KWStyleEditor::paragDiaOk()
 {
-  
+
    switch ( paragDia->getFlags() ) {
    case KWParagDia::PD_SPACING: {
      style->paragLayout().margins[QStyleSheetItem::MarginTop]=paragDia->spaceBeforeParag() ;
@@ -683,7 +686,7 @@ void KWStyleEditor::paragDiaOk()
      break;
    default: break;
    }
-  
+
     preview->repaint( true );
 }
 /*================================================================*/
@@ -704,7 +707,7 @@ bool KWStyleEditor::apply()
             emit updateStyleList();
         }
     }
-    //doc->setStyleChanged( style->getName() );
+    doc->applyStyleChange(eName->text());
     return true;
 }
 

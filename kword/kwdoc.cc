@@ -416,6 +416,7 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
     }
 
     if ( m_processingType == WP ) {
+
         int headOffset = 0, footOffset = 0;
 
         // Determine number of pages
@@ -428,6 +429,8 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
             }
         }
         pages2=pages2/ptPaperHeight();
+        kdDebug() << "KWDocument::recalcFrames, WP, pages=" << pages << " pages2=" << pages2 << endl;
+
         pages=QMAX(pages2, pages);
 
         for ( unsigned int j = 0;
@@ -1972,27 +1975,26 @@ void KWDocument::setUnitToAll()
 /*================================================================*/
 void KWDocument::updateAllStyleLists()
 {
-    KWView *viewPtr;
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->updateStyleList();
+}
 
-    if ( !m_lstViews.isEmpty() ) {
-        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-                viewPtr->updateStyleList();
-        }
+/*================================================================*/
+void KWDocument::applyStyleChange( const QString & changedStyle )
+{
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit ) {
+        KWTextFrameSet * frameSet = dynamic_cast<KWTextFrameSet*>( fit.current() );
+        if ( frameSet )
+            frameSet->applyStyleChange( changedStyle );
     }
 }
 
 /*================================================================*/
 void KWDocument::refreshAllFrames()
 {
-    KWView *viewPtr;
-
-    if ( !m_lstViews.isEmpty() )
-    {
-        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        {
-            viewPtr->getGUI()->canvasWidget()->repaintAll();
-        }
-    }
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->getGUI()->canvasWidget()->repaintAll();
 }
 
 /*================================================================*/

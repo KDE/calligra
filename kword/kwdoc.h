@@ -219,7 +219,7 @@ public:
     int getApplyStyleTemplate() { return applyStyleTemplate; }
     void setApplyStyleTemplate( int _f ) { applyStyleTemplate = _f; }
 
-    void updateAllStyles();
+    void applyStyleChange( const QString & changedStyle );
     void updateAllStyleLists();
 
     bool isHeaderVisible() const { return m_headerVisible; }
