@@ -280,7 +280,8 @@ public:
         STYLE_CUSTOM       = 7,
         STYLE_CIRCLEBULLET = 8,
         STYLE_SQUAREBULLET = 9,
-        STYLE_DISCBULLET   = 10
+        STYLE_DISCBULLET   = 10,
+        STYLE_BOXBULLET    = 11
     };
 
     Numbering numbering;
