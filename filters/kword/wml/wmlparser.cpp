@@ -50,7 +50,7 @@ WMLParseState::WMLParseState( const WMLParseState& state )
 WMLParseState& WMLParseState::operator=( const WMLParseState& state )
 {
   assign( state );
-  return( *this );
+  return *this ;
 }
 
 void WMLParseState::assign( const WMLParseState& state )
