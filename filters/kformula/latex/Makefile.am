@@ -1,14 +1,14 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
-libkfmlatexexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
-libkfmlatexexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA)
+libkfolatexexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
+libkfolatexexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA)
 
 ####### Files
 
-kde_module_LTLIBRARIES = libkfmlatexexport.la
+kde_module_LTLIBRARIES = libkfolatexexport.la
 
-libkfmlatexexport_la_SOURCES = latexexport.cc
+libkfolatexexport_la_SOURCES = latexexport.cc
 
 noinst_HEADERS = latexexport.h
 

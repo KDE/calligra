@@ -38,7 +38,7 @@
 
 
 typedef KGenericFactory<LATEXExport, KoFilter> LATEXExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkfmlatexexport, LATEXExportFactory( "kformulalatexfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libkfolatexexport, LATEXExportFactory( "kformulalatexfilter" ) );
 
 
 LATEXExport::LATEXExport( KoFilter */*parent*/, const char */*name*/, const QStringList& )

@@ -9,4 +9,4 @@ ImportDescription=KFormula
 Name=KFormula PNG Export Filter
 ServiceTypes=KOfficeFilter
 Type=Service
-X-KDE-Library=libkfmpngexport
+X-KDE-Library=libkfopngexport

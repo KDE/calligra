@@ -1,14 +1,14 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
-libkfmpngexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
-libkfmpngexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA)
+libkfopngexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
+libkfopngexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA)
 
 ####### Files
 
-kde_module_LTLIBRARIES = libkfmpngexport.la
+kde_module_LTLIBRARIES = libkfopngexport.la
 
-libkfmpngexport_la_SOURCES = pngexport.cc pngexportdia.cc
+libkfopngexport_la_SOURCES = pngexport.cc pngexportdia.cc
 
 noinst_HEADERS = pngexport.h pngexportdia.h
 

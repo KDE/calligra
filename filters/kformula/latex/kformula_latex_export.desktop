@@ -9,4 +9,4 @@ ImportDescription=KFormula
 Name=KFormula LaTeX Export Filter
 ServiceTypes=KOfficeFilter
 Type=Service
-X-KDE-Library=libkfmlatexexport
+X-KDE-Library=libkfolatexexport
