@@ -1167,21 +1167,16 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 
 bool KoDocument::saveOasisPreview( KoStore* store )
 {
-    QPixmap pix = generatePreview(QSize(128, 128));
-    QImageIO imageIO;
-    imageIO.setImage( pix.convertToImage().convertDepth(32) );
-
-    // NOTE: we cannot use QDataStream, as it is not 1:1
-    QByteArray imageData;
-    // ### TODO: perhaps use a KoStoreDevice instead
-    QBuffer buffer(imageData);
-    buffer.open(IO_WriteOnly);
-    imageIO.setIODevice(&buffer);
-    imageIO.setFormat("PNG");
-    imageIO.write();
-    buffer.close();
-
-    return store->write( imageData ) == (Q_LONG)imageData.size();
+    QPixmap pix = generatePreview( QSize( 128, 128 ) );
+    QImage preview ( pix.convertToImage().convertDepth( 32 ) );
+    // ### TODO: alpha channel OASIS 16.6 and freedesktop.org Thumbnail specification
+    KoStoreDevice io ( store );
+    if ( !io.open( IO_WriteOnly ) )
+        return false;
+    if ( ! preview.save( &io, "PNG" ) ) // ### TODO What is -9 in quality terms?
+        return false;
+    io.close();
+    return true;
 }
 
 bool KoDocument::savePreview( KoStore* store )
