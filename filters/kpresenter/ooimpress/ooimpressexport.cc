@@ -594,6 +594,27 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target 
     QString nameStr = name.attribute("objectName");
     if( !nameStr.isEmpty() )
       target.setAttribute( "draw:name", nameStr );
+    QDomElement pie = source.namedItem( "PIETYPE").toElement();
+    if( !pie.isNull() )
+      {
+	int typePie = pie.attribute("value").toInt();
+	switch( typePie )
+	  {
+	  case 0:
+	    target.setAttribute( "draw:kind", "section");
+	    break;
+	  case 1:
+	    target.setAttribute( "draw:kind", "arc");
+	    break;
+	  case 2:
+	    target.setAttribute( "draw:kind", "cut");
+	    break;
+	  default:
+	    kdDebug()<<" type unknown : "<<typePie<<endl;
+	    break;
+	  }
+      }
+
 }
 
 void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & target )
