@@ -2,18 +2,18 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VCDLGRECTANGLE_H__
-#define __VCDLGRECTANGLE_H__
+#ifndef __VCDLGELLIPSE_H__
+#define __VCDLGELLIPSE_H__
 
 #include <kdialog.h>
 
 class QLineEdit;
 
-class VCDlgRectangle : public KDialog
+class VCDlgEllipse : public KDialog
 {
 	Q_OBJECT
 public:
-	VCDlgRectangle();
+	VCDlgEllipse();
 
 	double valueWidth() const;
 	double valueHeight() const;

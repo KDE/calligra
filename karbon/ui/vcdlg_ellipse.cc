@@ -14,13 +14,13 @@
 
 #include <klocale.h>
 
-#include "vcdlg_rectangle.h"
+#include "vcdlg_ellipse.h"
 
-VCDlgRectangle::VCDlgRectangle()
-	: KDialog( 0L, i18n( "Rectangle" ), true, Qt::WStyle_Customize |
+VCDlgEllipse::VCDlgEllipse()
+	: KDialog( 0L, i18n( "Ellipse" ), true, Qt::WStyle_Customize |
 	  Qt::WStyle_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Rectangle" ) );
+	setCaption( i18n( "Ellipse" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
@@ -59,19 +59,19 @@ VCDlgRectangle::VCDlgRectangle()
 }
 
 double
-VCDlgRectangle::valueWidth() const
+VCDlgEllipse::valueWidth() const
 {
 	return m_width->text().toDouble();
 }
 
 double
-VCDlgRectangle::valueHeight() const
+VCDlgEllipse::valueHeight() const
 {
 	return m_height->text().toDouble();
 }
 
 void
-VCDlgRectangle::setValueWidth( const double value )
+VCDlgEllipse::setValueWidth( const double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -79,11 +79,11 @@ VCDlgRectangle::setValueWidth( const double value )
 }
 
 void
-VCDlgRectangle::setValueHeight( const double value )
+VCDlgEllipse::setValueHeight( const double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
 	m_height->setText( s );
 }
 
-#include "vcdlg_rectangle.moc"
+#include "vcdlg_ellipse.moc"

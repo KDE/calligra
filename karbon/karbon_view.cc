@@ -12,6 +12,7 @@
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "vctool_ellipse.h"
 #include "vctool_rectangle.h"
 #include "vctool_roundrect.h"
 
@@ -76,6 +77,27 @@ KarbonView::editSelectAll()
 }
 
 void
+KarbonView::ellipseTool()
+{
+	s_currentTool = VCToolEllipse::instance( m_part );
+	m_canvas->viewport()->setCursor( crossCursor );
+}
+
+void
+KarbonView::rectangleTool()
+{
+	s_currentTool = VCToolRectangle::instance( m_part );
+	m_canvas->viewport()->setCursor( crossCursor );
+}
+
+void
+KarbonView::roundRectTool()
+{
+	s_currentTool = VCToolRoundRect::instance( m_part );
+	m_canvas->viewport()->setCursor( crossCursor );
+}
+
+void
 KarbonView::initActions()
 {
 	// edit
@@ -89,20 +111,21 @@ KarbonView::initActions()
 		"edit_selectall" );
 
 	// object
-	new KAction( i18n("&Ellipse"), "ellipse", 0, actionCollection(),
-		"insert_ellipse" );
-	new KAction( i18n("&Polygon"), "polygon", 0, actionCollection(),
-		"insert_polygon" );
+	new KAction( i18n("&Ellipse"), "ellipse", 0, this, SLOT( ellipseTool() ),
+		actionCollection(), "insert_ellipse" );
+	new KAction( i18n("&Polygon"), "polygon", 0,
+		actionCollection(), "insert_polygon" );
 
+	// submenu rectangles:
 	KActionMenu* rects =
 		new KActionMenu( i18n("&Rectangle"), "rectangle", actionCollection(),
 			"insert_rectangles" );
 	rects->insert(
-		new KAction( i18n("&Rectangle"), "rectangle", 0,actionCollection(),
-			"insert_rectangle" ) );
+		new KAction( i18n("&Rectangle"), "rectangle", 0,
+			this, SLOT( rectangleTool() ), actionCollection(), "insert_rectangle" ) );
 	rects->insert(
-		new KAction( i18n("&Round Rectangle"), "roundrect", 0, actionCollection(),
-			"insert_roundrect" ) );
+		new KAction( i18n("&Round Rectangle"), "roundrect", 0,
+			this, SLOT( roundRectTool() ), actionCollection(), "insert_roundrect" ) );
 
 	new KAction( i18n("S&inus"), "sinus", 0, actionCollection(),
 		"insert_sinus" );

@@ -41,6 +41,11 @@ protected slots:
 	void editPaste();
 	void editSelectAll();
 
+	// tools:
+	void ellipseTool();
+	void rectangleTool();
+	void roundRectTool();
+
 protected:
 	virtual void updateReadWrite( bool rw );
 	virtual void resizeEvent( QResizeEvent* event );
@@ -51,6 +56,7 @@ private:
 	KarbonPart* m_part;
 	VCanvas* m_canvas;
 
+	// i currently think that all views should be in the same state (static):
 	static VTool* s_currentTool;
 
 	// actions:

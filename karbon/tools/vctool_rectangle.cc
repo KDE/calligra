@@ -41,17 +41,17 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{
-		// erase old rect:
-		drawTemporaryRect( view );
+		// erase old object:
+		drawTemporaryObject( view );
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		recalcRect();
+		recalcCoords();
 
-		// paint new rect:
-		drawTemporaryRect( view );
+		// paint new object:
+		drawTemporaryObject( view );
 
 		return true;
 	}
@@ -62,8 +62,8 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 		m_isSquare = false;
 		m_isCentered = false;
 
-		// erase old rect:
-		drawTemporaryRect( view );
+		// erase old object:
+		drawTemporaryObject( view );
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
@@ -91,8 +91,8 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 			// temp vpoints (zoomFactor):
 			VPoint tl;
 			VPoint br;
-			tl.setFromQPoint( m_rect.topLeft(), view->zoomFactor() );
-			br.setFromQPoint( m_rect.bottomRight(), view->zoomFactor() );
+			tl.setFromQPoint( m_tl, view->zoomFactor() );
+			br.setFromQPoint( m_br, view->zoomFactor() );
 
 			m_part->addCommand(
 				new VCCmdRectangle( m_part, tl.x(), tl.y(), br.x(), br.y() ) );
@@ -113,8 +113,8 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 			m_isSquare = false;
 			m_isCentered = false;
 
-			// erase old rect:
-			drawTemporaryRect( view );
+			// erase old object:
+			drawTemporaryObject( view );
 
 			return true;
 		}
@@ -126,11 +126,11 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 
 			if ( m_isDragging )
 			{
-				// erase old rect:
-				drawTemporaryRect( view );
-				recalcRect();
-				// draw new old rect:
-				drawTemporaryRect( view );
+				// erase old object:
+				drawTemporaryObject( view );
+				recalcCoords();
+				// draw new old object:
+				drawTemporaryObject( view );
 			}
 
 			return true;
@@ -143,11 +143,11 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 
 			if ( m_isDragging )
 			{
-				// erase old rect:
-				drawTemporaryRect( view );
-				recalcRect();
-				// draw new old rect:
-				drawTemporaryRect( view );
+				// erase old object:
+				drawTemporaryObject( view );
+				recalcCoords();
+				// draw new old object:
+				drawTemporaryObject( view );
 			}
 
 			return true;
@@ -165,11 +165,11 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 
 			if ( m_isDragging )
 			{
-				// erase old rect:
-				drawTemporaryRect( view );
-				recalcRect();
-				// draw new old rect:
-				drawTemporaryRect( view );
+				// erase old object:
+				drawTemporaryObject( view );
+				recalcCoords();
+				// draw new old object:
+				drawTemporaryObject( view );
 			}
 
 			return true;
@@ -181,11 +181,11 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 
 			if ( m_isDragging )
 			{
-				// erase old rect:
-				drawTemporaryRect( view );
-				recalcRect();
-				// draw new old rect:
-				drawTemporaryRect( view );
+				// erase old object:
+				drawTemporaryObject( view );
+				recalcCoords();
+				// draw new old object:
+				drawTemporaryObject( view );
 			}
 
 			return true;
@@ -199,14 +199,14 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
 
-		// set initial rect:
-		m_rect.setLeft( m_fp.x() );
-		m_rect.setTop( m_fp.y() );
-		m_rect.setRight( m_fp.x() + 1 );
-		m_rect.setBottom( m_fp.y() + 1 );
+		// set initial object:
+		m_tl.setX( m_fp.x() );
+		m_tl.setY( m_fp.y() );
+		m_br.setX( m_fp.x() + 1 );
+		m_br.setY( m_fp.y() + 1 );
 
-		// draw initial rect:
-		drawTemporaryRect( view );
+		// draw initial object:
+		drawTemporaryObject( view );
 
 		m_isDragging = true;
 

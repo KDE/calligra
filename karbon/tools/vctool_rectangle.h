@@ -6,7 +6,6 @@
 #define __VCTOOLRECTANGLE_H__
 
 #include <qpoint.h>
-#include <qrect.h>
 
 #include "karbon_view.h"
 #include "vpoint.h"
@@ -30,8 +29,8 @@ protected:
 
 private:
 	// inline helper functions:
-	void recalcRect();
-	void drawTemporaryRect( KarbonView* view );
+	void recalcCoords();
+	void drawTemporaryObject( KarbonView* view );
 
 	static VCToolRectangle* s_instance;
 
@@ -42,14 +41,16 @@ private:
 	bool m_isSquare;
 	bool m_isCentered;
 
-	// temporary variables for the gui:
+	// mouse coordinates::
 	QPoint m_fp;
 	QPoint m_lp;
-	QRect m_rect;
+	// painting coordinates:
+	QPoint m_tl;
+	QPoint m_br;
 };
 
 inline void
-VCToolRectangle::recalcRect()
+VCToolRectangle::recalcCoords()
 {
 	int width;
 	int height;
@@ -72,28 +73,35 @@ VCToolRectangle::recalcRect()
 
 	if ( m_isCentered )
 	{
-		m_rect.setLeft( qRound( m_fp.x() - width*0.5 ) );
-		m_rect.setTop( qRound( m_fp.y() + height*0.5 ) );
-		m_rect.setRight( qRound( m_fp.x() + width*0.5 ) );
-		m_rect.setBottom( qRound( m_fp.y() - height*0.5 ) );
+		m_tl.setX( qRound( m_fp.x() - width*0.5 ) );
+		m_tl.setY( qRound( m_fp.y() + height*0.5 ) );
+		m_br.setX( qRound( m_fp.x() + width*0.5 ) );
+		m_br.setY( qRound( m_fp.y() - height*0.5 ) );
 	}
 	else
 	{
-		m_rect.setLeft( m_fp.x() );
-		m_rect.setTop( m_fp.y() );
-		m_rect.setRight( m_fp.x() + width );
-		m_rect.setBottom( m_fp.y() - height );
+		m_tl.setX( m_fp.x() );
+		m_tl.setY( m_fp.y() );
+		m_br.setX( m_fp.x() + width );
+		m_br.setY( m_fp.y() - height );
 	}
 }
 
 inline void
-VCToolRectangle::drawTemporaryRect( KarbonView* view )
+VCToolRectangle::drawTemporaryObject( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setPen( Qt::black );
 	painter.setRasterOp( Qt::NotROP );
 
-	painter.drawRect( m_rect );
+	// Qt's drawRect() behaves sometimes oddly. we have to paint the rect
+	// this way:
+
+	painter.moveTo( m_tl );
+	painter.lineTo( m_br.x(), m_tl.y() );
+	painter.lineTo( m_br );
+	painter.lineTo( m_tl.x(), m_br.y() );
+	painter.lineTo( m_tl );
 }
 
 #endif

@@ -15,9 +15,9 @@ class VCDlgRoundRect : public KDialog
 public:
 	VCDlgRoundRect();
 
-	double valueWidth();
-	double valueHeight();
-	double valueRound();
+	double valueWidth() const;
+	double valueHeight() const;
+	double valueRound() const;
 	void setValueWidth( const double value );
 	void setValueHeight( const double value );
 	void setValueRound( const double value );

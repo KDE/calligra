@@ -2,47 +2,43 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VCTOOLROUNDRECT_H__
-#define __VCTOOLROUNDRECT_H__
+#ifndef __VCTOOLELLIPSE_H__
+#define __VCTOOLELLIPSE_H__
 
 #include <qpoint.h>
 
 #include "karbon_view.h"
-#include "vccmd_roundrect.h"
-#include "vpath.h"
 #include "vpoint.h"
 #include "vtool.h"
 
 class KarbonPart;
-class VCDlgRoundRect;
+class VCDlgEllipse;
 
-// A singleton state to create a rectangle.
+// A singleton state to create an ellipse
 
-class VCToolRoundRect : public VTool
+class VCToolEllipse : public VTool
 {
 public:
-	virtual ~VCToolRoundRect();
-	static VCToolRoundRect* instance( KarbonPart* part );
+	virtual ~VCToolEllipse();
+	static VCToolEllipse* instance( KarbonPart* part );
 
 	virtual bool eventFilter( KarbonView* view, QEvent* event );
 
 protected:
-	VCToolRoundRect( KarbonPart* part );
+	VCToolEllipse( KarbonPart* part );
 
 private:
 	// inline helper functions:
 	void recalcCoords();
 	void drawTemporaryObject( KarbonView* view );
 
-	static VCToolRoundRect* s_instance;
+	static VCToolEllipse* s_instance;
 
 	KarbonPart* m_part;
-	VCDlgRoundRect* m_dialog;
-
-	double m_round;
+	VCDlgEllipse* m_dialog;
 
 	bool m_isDragging;
-	bool m_isSquare;
+	bool m_isCircle;
 	bool m_isCentered;
 
 	// mouse coordinates::
@@ -54,12 +50,12 @@ private:
 };
 
 inline void
-VCToolRoundRect::recalcCoords()
+VCToolEllipse::recalcCoords()
 {
 	int width;
 	int height;
 
-	if ( m_isSquare )
+	if ( m_isCircle )
 	{
 		width  = m_lp.x() - m_fp.x();
 		height = m_fp.y() - m_lp.y();
@@ -92,30 +88,15 @@ VCToolRoundRect::recalcCoords()
 }
 
 inline void
-VCToolRoundRect::drawTemporaryObject( KarbonView* view )
+VCToolEllipse::drawTemporaryObject( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setPen( Qt::black );
 	painter.setRasterOp( Qt::NotROP );
 
-	// Qt's drawRoundRect() behaves differntely, that's why we have
-	// to take the long way home here.
-
-	VPoint tl;
-	VPoint br;
-	tl.setFromQPoint( m_tl, view->zoomFactor() );
-	br.setFromQPoint( m_br, view->zoomFactor() );
-
-	// let the command create the necessary qpointarray for us:
-	VCCmdRoundRect* cmd =
-		new VCCmdRoundRect( m_part, tl.x(), tl.y(), br.x(), br.y(), m_round );
-
-	VPath* path = cmd->createPath();
-
-	painter.drawPolygon( path->getQPointArray( view->zoomFactor() ) );
-
-	delete( cmd );
-	delete( path );
+	painter.drawEllipse(
+		m_tl.x(), m_tl.y(),
+		m_br.x() - m_tl.x(), m_br.y() - m_tl.y() );
 }
 
 #endif

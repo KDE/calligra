@@ -61,19 +61,19 @@ VCDlgRoundRect::VCDlgRoundRect()
 }
 
 double
-VCDlgRoundRect::valueWidth()
+VCDlgRoundRect::valueWidth() const
 {
 	return m_width->text().toDouble();
 }
 
 double
-VCDlgRoundRect::valueHeight()
+VCDlgRoundRect::valueHeight() const
 {
 	return m_height->text().toDouble();
 }
 
 double
-VCDlgRoundRect::valueRound()
+VCDlgRoundRect::valueRound() const
 {
 	return m_round->text().toDouble();
 }

@@ -2,42 +2,41 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#include "vccmd_roundrect.h"	// command
-#include "vcdlg_roundrect.h"	// dialog
-#include "vctool_roundrect.h"
+#include "vccmd_ellipse.h"	// command
+#include "vcdlg_ellipse.h"	// dialog
+#include "vctool_ellipse.h"
 #include "vpoint.h"
 
-VCToolRoundRect* VCToolRoundRect::s_instance = 0L;
+VCToolEllipse* VCToolEllipse::s_instance = 0L;
 
-VCToolRoundRect::VCToolRoundRect( KarbonPart* part )
-	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
-	  m_isCentered( false ), m_round( 20.0 )
+VCToolEllipse::VCToolEllipse( KarbonPart* part )
+	: m_part( part ), m_isDragging( false ), m_isCircle( false ),
+	  m_isCentered( false )
 {
 	// create config dialog:
-	m_dialog = new VCDlgRoundRect();
+	m_dialog = new VCDlgEllipse();
 	m_dialog->setValueWidth( 100.0 );
 	m_dialog->setValueHeight( 100.0 );
-	m_dialog->setValueRound( m_round );
 }
 
-VCToolRoundRect::~VCToolRoundRect()
+VCToolEllipse::~VCToolEllipse()
 {
 	delete( m_dialog );
 }
 
-VCToolRoundRect*
-VCToolRoundRect::instance( KarbonPart* part )
+VCToolEllipse*
+VCToolEllipse::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VCToolRoundRect( part );
+		s_instance = new VCToolEllipse( part );
 	}
 
 	return s_instance;
 }
 
 bool
-VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
+VCToolEllipse::eventFilter( KarbonView* view, QEvent* event )
 {
 
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
@@ -60,7 +59,7 @@ VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
 	{
 		m_isDragging = false;
-		m_isSquare = false;
+		m_isCircle = false;
 		m_isCentered = false;
 
 		// erase old object:
@@ -80,13 +79,11 @@ VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 				VPoint tl;
 				tl.setFromQPoint( m_fp, view->zoomFactor() );
 
-				m_round = m_dialog->valueRound();
-
 				m_part->addCommand(
-					new VCCmdRoundRect( m_part,
+					new VCCmdEllipse( m_part,
 						tl.x(), tl.y(),
 						tl.x() + m_dialog->valueWidth(),
-						tl.y() + m_dialog->valueHeight(), m_round ) );
+						tl.y() + m_dialog->valueHeight() ) );
 			}
 		}
 		else
@@ -98,7 +95,7 @@ VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 			br.setFromQPoint( m_br, view->zoomFactor() );
 
 			m_part->addCommand(
-				new VCCmdRoundRect( m_part, tl.x(), tl.y(), br.x(), br.y(), m_round ) );
+				new VCCmdEllipse( m_part, tl.x(), tl.y(), br.x(), br.y() ) );
 		}
 
 		return true;
@@ -113,7 +110,7 @@ VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
 		{
 			m_isDragging = false;
-			m_isSquare = false;
+			m_isCircle = false;
 			m_isCentered = false;
 
 			// erase old object:
@@ -125,7 +122,7 @@ VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 		// if SHIFT is pressed, we want a square:
 		if ( key_event->key() == Qt::Key_Shift )
 		{
-			m_isSquare = true;
+			m_isCircle = true;
 
 			if ( m_isDragging )
 			{
@@ -164,7 +161,7 @@ VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 
 		if ( key_event->key() == Qt::Key_Shift )
 		{
-			m_isSquare = false;
+			m_isCircle = false;
 
 			if ( m_isDragging )
 			{
