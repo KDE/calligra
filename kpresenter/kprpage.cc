@@ -1036,16 +1036,21 @@ void KPrPage::raiseObjs(bool forward)
     m_doc->raiseAndLowerObject = true;
 }
 
+void KPrPage::insertObject( const QString &name, KPObject * object, const KoRect &r )
+{
+    object->setOrig( r.x(), r.y() );
+    object->setSize( r.width(), r.height() );
+    object->setSelected( true );
+
+    InsertCmd *insertCmd = new InsertCmd( name, object, m_doc, this );
+    insertCmd->execute();
+    m_doc->addCommand( insertCmd );
+}
+
 void KPrPage::insertLine( const KoRect &r, const QPen & pen, LineEnd lb, LineEnd le, LineType lt )
 {
     KPLineObject *kplineobject = new KPLineObject( pen, lb, le, lt );
-    kplineobject->setOrig( r.x(), r.y() );
-    kplineobject->setSize( r.width(), r.height() );
-    kplineobject->setSelected( true );
-
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, m_doc, this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Line" ), kplineobject, r );
 }
 
 void KPrPage::insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft,
@@ -1054,12 +1059,7 @@ void KPrPage::insertRectangle( const KoRect &r, const QPen & pen, const QBrush &
 {
     KPRectObject *kprectobject = new KPRectObject( pen, brush, ft, g1, g2, gt, rndX, rndY,
                                                    unbalanced, xfactor, yfactor );
-    kprectobject->setOrig( r.x() , r.y() );
-    kprectobject->setSize( r.width(), r.height() );
-    kprectobject->setSelected( true );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, m_doc,this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Rectangle" ), kprectobject, r );
 }
 
 void KPrPage::insertCircleOrEllipse( const KoRect &r, const QPen &pen, const QBrush & brush, FillType ft,
@@ -1068,12 +1068,7 @@ void KPrPage::insertCircleOrEllipse( const KoRect &r, const QPen &pen, const QBr
 {
     KPEllipseObject *kpellipseobject = new KPEllipseObject( pen, brush, ft, g1, g2, gt,
                                                             unbalanced, xfactor, yfactor );
-    kpellipseobject->setOrig( r.x(), r.y() );
-    kpellipseobject->setSize( r.width(), r.height() );
-    kpellipseobject->setSelected( true );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, m_doc,this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Ellipse" ), kpellipseobject, r );
 }
 
 void KPrPage::insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,
@@ -1083,34 +1078,14 @@ void KPrPage::insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, 
 {
     KPPieObject *kppieobject = new KPPieObject( pen, brush, ft, g1, g2, gt, pt, _angle,
                                                 _len, lb, le, unbalanced, xfactor, yfactor );
-    kppieobject->setOrig( r.x(), r.y() );
-    kppieobject->setSize( r.width(), r.height() );
-    kppieobject->setSelected( true );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, m_doc,this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Pie/Arc/Chord" ), kppieobject, r );
 }
 
-KPTextObject* KPrPage::insertTextObject( const KoRect& r, const QString& text, KPresenterView *_view )
+KPTextObject* KPrPage::insertTextObject( const KoRect& r, const QString& /* text */, KPresenterView * /*_view*/ )
 {
     KPTextObject *kptextobject = new KPTextObject( m_doc );
-    kptextobject->setOrig( r.x(), r.y() );
-    kptextobject->setSize( r.width(), r.height() );
-    kptextobject->setSelected( true );
-    if ( !text.isEmpty() && _view ) {
-#if 0
-        if(kptextobject->textObjectView())
-        {
-            kptextobject->textObjectView()->clear();
-            kptextobject->textObjectView()->setText( text );
-            kptextobject->textObject()->document()->setFontToAll( _view->currFont() );
-            kptextobject->textObject()->document()->setColorToAll( _view->currColor() );
-        }
-#endif
-    }
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, m_doc, this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Textbox" ), kptextobject, r );
+
     return kptextobject;
 }
 
@@ -1119,12 +1094,7 @@ void KPrPage::insertAutoform( const KoRect &r, const QPen &pen, const QBrush &br
                               int xfactor, int yfactor ){
     KPAutoformObject *kpautoformobject = new KPAutoformObject( pen, brush, fileName, lb, le, ft,
                                                                g1, g2, gt, unbalanced, xfactor, yfactor );
-    kpautoformobject->setOrig( r.x() , r.y()  );
-    kpautoformobject->setSize( r.width(),r.height() );
-    kpautoformobject->setSelected( true );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, m_doc, this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Autoform" ), kpautoformobject, r );
 }
 
 void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const QPen &pen,
@@ -1132,12 +1102,7 @@ void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const
 {
     KoSize size( r.width(), r.height() );
     KPFreehandObject *kpfreehandobject = new KPFreehandObject( points, size, pen, lb, le );
-    kpfreehandobject->setOrig( r.x(), r.y() );
-    kpfreehandobject->setSize( size );
-    kpfreehandobject->setSelected( true );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, m_doc, this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Freehand" ), kpfreehandobject, r );
 }
 
 void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const QPen &pen,
@@ -1145,12 +1110,7 @@ void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const
 {
     KoSize size( r.width(), r.height() );
     KPPolylineObject *kppolylineobject = new KPPolylineObject( points, size, pen, lb, le );
-    kppolylineobject->setOrig( r.x(), r.y() );
-    kppolylineobject->setSize( size );
-    kppolylineobject->setSelected( true );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, m_doc, this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Polyline" ), kppolylineobject, r );
 }
 
 void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints,
@@ -1161,13 +1121,7 @@ void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPoin
 
     KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject(
         points, allPoints, size, pen, lb, le );
-    kpQuadricBezierCurveObject->setOrig( r.x(), r.y() );
-    kpQuadricBezierCurveObject->setSize( size );
-    kpQuadricBezierCurveObject->setSelected( true );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ),
-                                          kpQuadricBezierCurveObject, m_doc,this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, r );
 }
 
 void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints,
@@ -1177,13 +1131,7 @@ void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointA
     KoSize size( r.width(), r.height() );
 
     KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject( points, allPoints, size, pen, lb, le );
-    kpCubicBezierCurveObject->setOrig( r.x(), r.y() );
-    kpCubicBezierCurveObject->setSize( size );
-    kpCubicBezierCurveObject->setSelected( true );
-
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, m_doc,this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, r );
 }
 
 void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,
@@ -1195,12 +1143,7 @@ void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const 
     KPPolygonObject *kpPolygonObject = new KPPolygonObject( points, size, pen, brush, ft,
                                                             g1, g2, gt, unbalanced, xfactor, yfactor,
                                                             _checkConcavePolygon, _cornersValue, _sharpnessValue );
-    kpPolygonObject->setOrig( r.x(), r.y() );
-    kpPolygonObject->setSize( size );
-    kpPolygonObject->setSelected( true );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, m_doc, this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Polygon" ), kpPolygonObject, r );
 }
 
 void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush,
@@ -1230,6 +1173,8 @@ void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, con
 
     KPClosedLineObject *kpClosedLineObject = new KPClosedLineObject( points, size, pen, brush, ft,
                                                                      g1, g2, gt, unbalanced, xfactor, yfactor, _type );
+    insertObject( _name, kpClosedLineObject, r );
+    /*
     kpClosedLineObject->setOrig( r.x(), r.y() );
     kpClosedLineObject->setSize( size );
     kpClosedLineObject->setSelected( true );
@@ -1239,6 +1184,7 @@ void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, con
     InsertCmd *insertCmd = new InsertCmd( _name, kpClosedLineObject, m_doc, this );
     insertCmd->execute();
     m_doc->addCommand( insertCmd );
+    */
 }
 
 
@@ -1519,15 +1465,9 @@ KPPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
     m_doc->insertObject( ch );
 
     KPPartObject *kppartobject = new KPPartObject( ch );
-    kppartobject->setOrig( _rect.x(), _rect.y() );
-    kppartobject->setSize( _rect.width(), _rect.height() );
-    kppartobject->setSelected( true );
+    insertObject( i18n( "Embed Object" ), kppartobject, _rect );
 
     QWidget::connect(ch, SIGNAL(changed(KoChild *)), kppartobject, SLOT(slot_changed(KoChild *)) );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Embed Object" ), kppartobject, m_doc,this );
-    insertCmd->execute();
-
-    m_doc->addCommand( insertCmd );
 
     //emit sig_insertObject( ch, kppartobject );
     m_doc->repaint( false );
@@ -2138,15 +2078,7 @@ void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
 {
     KoPictureKey key = m_doc->pictureCollection()->loadPicture( _file ).getKey();
     KPPixmapObject *kppixmapobject = new KPPixmapObject( m_doc->pictureCollection(), key );
-
-    kppixmapobject->setOrig( _rect.x(), _rect.y() );
-    kppixmapobject->setSize( _rect.width(), _rect.height() );
-    kppixmapobject->setSelected( true );
-
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, m_doc, this );
-    insertCmd->execute();
-
-    m_doc->addCommand( insertCmd );
+    insertObject( i18n( "Insert Picture" ), kppixmapobject, _rect );
 }
 
 void KPrPage::enableEmbeddedParts( bool f )

@@ -148,7 +148,11 @@ public:
 
     QPen getPen( const QPen & pen ) const;
 
-    // insert an object
+    /**
+     * Insert an object into the page
+     */
+    void insertObject( const QString &name, KPObject * object, const KoRect &r );
+    
     virtual KPPartObject* insertObject( const KoRect&, KoDocumentEntry& );
 
     void insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft,
