@@ -67,7 +67,7 @@
                     </property>
                 </widget>
                 <spacer row="2" column="2">
-                    <property name="name">
+                    <property name="name" stdset="0">
                         <cstring>Spacer3_2</cstring>
                     </property>
                     <property name="orientation">
@@ -134,7 +134,7 @@
                         <cstring>radioEndOfLineLF</cstring>
                     </property>
                     <property name="text">
-                        <string>*&amp;NIX style (recommended; line feed only)</string>
+                        <string>Line &amp;Feed Only</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -145,7 +145,7 @@
                         <cstring>radioEndOfLineCRLF</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Windows style (line feed and carriage return)</string>
+                        <string>&amp;Both: Line Feed And Carriage Return</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -156,7 +156,7 @@
                         <cstring>radioEndOfLineCR</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;MacOS style (carriage return only)</string>
+                        <string>&amp;Carriage Return Only</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -165,7 +165,7 @@
             </vbox>
         </widget>
         <spacer>
-            <property name="name">
+            <property name="name" stdset="0">
                 <cstring>Spacer3</cstring>
             </property>
             <property name="orientation">
