@@ -4649,8 +4649,8 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
     // How much space is on every page for table content ?
     QRect rect;
-    rect.setCoords( 0, 0, (int)( MM_TO_POINT ( m_pDoc->printableWidth() )),
-                    (int)( MM_TO_POINT ( m_pDoc->printableHeight() )) );
+    rect.setCoords( 0, 0, (int)( MM_TO_POINT ( m_pDoc->printableWidth()  )),
+                          (int)( MM_TO_POINT ( m_pDoc->printableHeight() )) );
 
     // Up to this row everything is already handled
     int bottom = 0;
@@ -4707,8 +4707,8 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
             // Look at the cells
             bool empty = TRUE;
-            for( int r = page_range.top(); r <= page_range.bottom(); ++r )
-                for( int c = page_range.left(); c <= page_range.right(); ++c )
+            for( int r = page_range.top(); empty && ( r <= page_range.bottom() ); ++r )
+                for( int c = page_range.left(); empty && ( c <= page_range.right() ); ++c )
                     if ( cellAt( c, r )->needsPrinting() )
                         empty = FALSE;
 
@@ -4717,7 +4717,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
                         rect.width(), rect.height() );
 
             QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
-            for( ; it.current(); ++it )
+            for( ; empty && it.current(); ++it )
             {
                 QRect bound = it.current()->boundingRect();
                 if ( bound.intersects( view ) )
