@@ -1071,7 +1071,7 @@ protected:
 class KPrChangeVerticalAlignmentCommand : public KNamedCommand
 {
 public:
-    KPrChangeVerticalAlignmentCommand( const QString &name, KPTextObject *_obj, VerticalAlignmentType _oldAlign, VerticalAlignmentType _newAlign);
+    KPrChangeVerticalAlignmentCommand( const QString &name, KPTextObject *_obj, VerticalAlignmentType _oldAlign, VerticalAlignmentType _newAlign, KPresenterDoc *_doc);
     ~KPrChangeVerticalAlignmentCommand() {}
 
     virtual void execute();
@@ -1080,6 +1080,8 @@ protected:
     KPTextObject *m_obj;
     VerticalAlignmentType m_oldAlign;
     VerticalAlignmentType m_newAlign;
+    KPrPage *m_page;
+    KPresenterDoc *m_doc;
 };
 
 

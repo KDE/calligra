@@ -2654,12 +2654,14 @@ void KPrChangeMarginCommand::unexecute()
 }
 
 
-KPrChangeVerticalAlignmentCommand::KPrChangeVerticalAlignmentCommand( const QString &name, KPTextObject *_obj, VerticalAlignmentType _oldAlign, VerticalAlignmentType _newAlign) :
+KPrChangeVerticalAlignmentCommand::KPrChangeVerticalAlignmentCommand( const QString &name, KPTextObject *_obj, VerticalAlignmentType _oldAlign, VerticalAlignmentType _newAlign, KPresenterDoc *_doc) :
     KNamedCommand(name),
     m_obj( _obj ),
     m_oldAlign(_oldAlign),
-    m_newAlign(_newAlign)
+    m_newAlign(_newAlign),
+    m_doc( _doc )
 {
+    m_page = m_doc->findSideBarPage( _obj );
 }
 
 void KPrChangeVerticalAlignmentCommand::execute()
@@ -2667,6 +2669,12 @@ void KPrChangeVerticalAlignmentCommand::execute()
     m_obj->setVerticalAligment( m_newAlign );
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(m_page);
+        m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
+    }
+
 }
 
 void KPrChangeVerticalAlignmentCommand::unexecute()
@@ -2674,6 +2682,12 @@ void KPrChangeVerticalAlignmentCommand::unexecute()
     m_obj->setVerticalAligment( m_oldAlign );
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(m_page);
+        m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
+    }
+
 }
 
 

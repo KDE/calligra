@@ -3550,7 +3550,7 @@ KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
             KPTextObject *obj = dynamic_cast<KPTextObject *>(it.current());
             if ( obj  && !obj->isProtectContent())
             {
-                KPrChangeVerticalAlignmentCommand * cmd = new KPrChangeVerticalAlignmentCommand( i18n("Change Vertical Alignment"), obj, obj->verticalAlignment(),_type);
+                KPrChangeVerticalAlignmentCommand * cmd = new KPrChangeVerticalAlignmentCommand( i18n("Change Vertical Alignment"), obj, obj->verticalAlignment(),_type, m_doc);
                 if ( !macro )
                     macro = new KMacroCommand( i18n("Change Vertical Alignment"));
                 macro->addCommand( cmd );
