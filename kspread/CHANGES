@@ -2,6 +2,7 @@ since 1.3
 =========
 - Implement save/load Oasis format
 - Allow to sort without respect case
+- fixed bug 76861: bad rendering of hyperlink
 - Validation: allow to display or not message
 - Add new dcop function
 - Start to port KSpread_undo to kcommand
