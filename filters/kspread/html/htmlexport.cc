@@ -96,6 +96,9 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     QString html_bold = "b";
     QString html_italic = "i";
     QString html_underline = "u";
+    QString html_right= "right";
+    QString html_left= "left";
+    QString html_center= "center";
 
     // Ah ah ah - the document is const, but the map and table aren't. Safety:0.
     QString str;
@@ -223,6 +226,21 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
             line += "  <" + html_cell_tag + html_cell_options;
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
               line += " bgcolor=\"" + bgcolor.name() + "\"";
+
+            switch((KSpreadCell::Align)cell->defineAlignX())
+            {
+            case KSpreadCell::Left:
+                line+=" align=\"" + html_left +"\"";
+                break;
+            case KSpreadCell::Right:
+                line+=" align=\"" + html_right +"\"";
+                break;
+            case KSpreadCell::Center:
+                line+=" align=\"" + html_center +"\"";
+                break;
+            case KSpreadCell::Undefined:
+                break;
+            }
             if (cell->extraXCells()>0)
             {
               QString tmp;
