@@ -214,12 +214,11 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             setBackColorType(BCT_PLAIN);
             setBackType(BT_COLOR);
         }
-#if 0
         else if ( fill == "gradient" )
         {
             kdDebug()<<"gradient \n";
             QString style = styleStack.attribute( "draw:fill-gradient-name" );
-            QDomElement *draw = styles.drawStyles()[style];
+            QDomElement *draw = context.oasisStyles().drawStyles()[style];
             if ( draw )
             {
                 kdDebug()<<" draw style : name :"<<style<<endl;
@@ -302,7 +301,6 @@ void KPBackGround::loadOasis(KoOasisContext & context )
                 }
             }
         }
-#endif
     }
     if ( styleStack.hasAttribute("presentation:transition-style"))
     {
