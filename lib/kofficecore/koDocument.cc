@@ -708,7 +708,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
     KURL url( path );
     Q_ASSERT( url.isLocalFile() );
     QString dir = url.directory(false);
-    QString filename = url.filename();
+    QString filename = url.fileName();
     return dir + '.' + filename + ".autosave";
 }
 
