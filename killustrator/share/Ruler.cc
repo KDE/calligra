@@ -140,9 +140,9 @@ void Ruler::setZoomFactor (float zf, int xpos, int ypos)
 {
    zoom = zf;
    if (orientation == Horizontal)
-      zeroPoint = -xpos;
+      zeroPoint = xpos;
    else
-      zeroPoint = -ypos;
+      zeroPoint = ypos;
    recalculateSize (0L);
    drawRuler ();
    updatePointer (currentPosition, currentPosition);
