@@ -67,6 +67,6 @@ int main( int argc, char** argv )
       if ( !ex.isEmpty() )
           printf("%s\n",ex.local8Bit().data());
   }
-  cout << endl; // till I can come up with a working "flush" :}
+  std::cout << std::endl; // till I can come up with a working "flush" :}
   return 0;
 }
