@@ -273,6 +273,7 @@ void
 VDocumentTab::slotViewportChanged()
 {
 	m_documentPreview->update();
+	updateDocumentInfo();
 }
 
 void

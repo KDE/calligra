@@ -861,6 +861,12 @@ KarbonView::pageLayout()
 	if( KoPageLayoutDia::pageLayout( layout, hf, FORMAT_AND_BORDERS, unit ) )
 	{
 		part()->setPageLayout( layout, unit );
+		// TODO : the default shouldnt be necessary?
+		if( int( part()->pageLayout().ptWidth ) == 0 || int( part()->pageLayout().ptHeight ) == 0 )
+			m_canvas->resizeContents( int( 640 * zoom() ), int( 900 * zoom() ) );
+		else
+			m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoom() ),
+									  int( ( part()->pageLayout().ptHeight + 80 ) * zoom() ) );
 		part()->repaintAllViews();
 	}
 
