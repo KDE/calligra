@@ -108,6 +108,8 @@ KexiActionProxy::~KexiActionProxy()
 
 void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receiver, const char *slot)
 {
+	if (!action_name || !receiver || !slot)
+		return;
 	QPair<QSignal*,bool> *p = m_signals[action_name];
 	if (!p) {
 		p = new QPair<QSignal*,bool>( new QSignal(&m_signal_parent), true );
