@@ -620,12 +620,12 @@ void KoTextView::setFamily(const QString &font){
     textObject()->setFormat( m_cursor, m_currentFormat, &format, QTextFormat::Family );
 }
 
-void KoTextView::setFont( const QFont &font, bool _subscript, bool _superscript, const QColor &col, int flags )
+void KoTextView::setFont( const QFont &font, bool _subscript, bool _superscript, const QColor &col,const QColor &backGroundColor, int flags )
 {
     KoTextFormat format( *m_currentFormat );
     format.setFont( font );
     format.setColor( col );
-
+    format.setTextBackgroundColor(backGroundColor);
     if(!_subscript)
     {
         if(!_superscript)
