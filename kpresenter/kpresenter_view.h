@@ -647,12 +647,14 @@ protected:
     bool spellSwitchToNewPage();
     void spellAddTextObject();
 
-    bool searchInOtherPage();
+    bool switchInOtherPage( const QString & text );
 
     void openThePresentationDurationDialog();
     QString presentationDurationDataFormatChange( int _time );
 
     int getZoomEntirePage();
+
+    KCommand * applyAutoFormatToCurrentPage();
 
 private:
 // ********** variables **********
@@ -984,8 +986,8 @@ private:
     KPrFindReplace *m_findReplace;
     KoFontDia *m_fontDlg;
     KoParagDia *m_paragDlg;
-    int m_searchPage;
-    int m_initSearchPage;
+    int m_switchPage;
+    int m_initSwitchPage;
 
     int xOffsetSaved, yOffsetSaved; // saved when going fullscreen
 };

@@ -272,7 +272,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_searchEntry = 0L;
     m_replaceEntry = 0L;
     m_findReplace = 0L;
-    m_searchPage=-1;
+    m_switchPage=-1;
 
     m_fontDlg=0L;
     m_paragDlg=0L;
@@ -5455,7 +5455,7 @@ void KPresenterView::editFind()
     KPTextView * edit = m_canvas->currentTextObjectView();
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
     KoSearchDia dialog( m_canvas, "find", m_searchEntry,hasSelection );
-    m_searchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
+    m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
 
     //add sticky obj at first page
     QPtrList<KoTextObject> list=m_canvas->activePage()->objectText();
@@ -5505,7 +5505,7 @@ void KPresenterView::editReplace()
         KMessageBox::sorry( this, i18n( "There is no text object!" ) );
         return;
     }
-    m_searchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
+    m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     if ( dialog.exec() == QDialog::Accepted )
     {
         kdDebug() << "KPresenterView::editReplace" << endl;
@@ -5514,40 +5514,22 @@ void KPresenterView::editReplace()
     }
 }
 
-bool KPresenterView::searchInOtherPage()
-{
-    //there is not other page
-    if(m_pKPresenterDoc->pageList().count()==1)
-        return false;
-    m_searchPage++;
-    if( m_searchPage>=(int)m_pKPresenterDoc->pageList().count())
-        m_searchPage=0;
-    if( m_searchPage==m_initSearchPage)
-        return false;
-    if ( KMessageBox::questionYesNo( this,
-                                     i18n( "Do you want to search in new page?") )
-         != KMessageBox::Yes )
-        return false;
-    skipToPage(m_searchPage);
-    return true;
-}
-
 void KPresenterView::doFindReplace()
 {
     KPrFindReplace* findReplace = m_findReplace; // keep a copy. "this" might be deleted before we exit this method
-    m_searchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
-    m_initSearchPage=m_searchPage;
+    m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
+    m_initSwitchPage=m_switchPage;
     findReplace->proceed();
 
     bool aborted = findReplace->aborted();
-    while(!aborted && searchInOtherPage() )
+    while(!aborted && switchInOtherPage(i18n( "Do you want to search in new page?")) )
     {
         m_findReplace->changeListObject(m_canvas->activePage()->objectText());
         findReplace->proceed();
         aborted = findReplace->aborted();
     }
-    m_searchPage=-1;
-    m_initSearchPage=-1;
+    m_switchPage=-1;
+    m_initSwitchPage=-1;
     delete findReplace;
     if ( !aborted ) // Only if we still exist....
         m_findReplace = 0L;
@@ -6407,8 +6389,55 @@ void KPresenterView::applyAutoFormat()
 {
     m_pKPresenterDoc->getAutoFormat()->readConfig();
     KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    bool createmacro = false;
+    m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
+    m_initSwitchPage=m_switchPage;
+    KCommand * cmd = applyAutoFormatToCurrentPage();
+    kdDebug()<<" cmd :"<<cmd <<endl;
+    if ( cmd )
+    {
+        createmacro = true;
+        macro->addCommand( cmd );
+    }
+
+    while(switchInOtherPage(i18n( "Do you want to Apply Autoformat in new page?")) )
+    {
+        KCommand * cmd = applyAutoFormatToCurrentPage();
+        if ( cmd )
+        {
+            createmacro = true;
+            macro->addCommand( cmd );
+        }
+    }
+    if ( createmacro )
+        m_pKPresenterDoc->addCommand(macro);
+    else
+        delete macro;
+    m_switchPage=-1;
+    m_initSwitchPage=-1;
+}
+
+bool KPresenterView::switchInOtherPage( const QString & text )
+{
+    //there is not other page
+    if(m_pKPresenterDoc->pageList().count()==1)
+        return false;
+    m_switchPage++;
+    if( m_switchPage>=(int)m_pKPresenterDoc->pageList().count())
+        m_switchPage=0;
+    if( m_switchPage==m_initSwitchPage)
+        return false;
+    if ( KMessageBox::questionYesNo( this, text) != KMessageBox::Yes )
+        return false;
+    skipToPage(m_switchPage);
+    return true;
+}
+
+
+KCommand * KPresenterView::applyAutoFormatToCurrentPage( )
+{
+    KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
     bool createcmd=false;
-    //todo switch page !!!!!!!!!
     QPtrList<KPTextObject> list(m_canvas->listOfTextObjs());
     QPtrListIterator<KPTextObject> fit(list);
     for ( ; fit.current() ; ++fit )
@@ -6422,11 +6451,11 @@ void KPresenterView::applyAutoFormat()
     }
     if ( createcmd )
     {
-        m_pKPresenterDoc->addCommand( macro );
+        return macro ;
     }
     else
         delete macro;
+    return 0L;
 }
-
 
 #include <kpresenter_view.moc>
