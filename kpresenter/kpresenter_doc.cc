@@ -2058,6 +2058,7 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
         for (; oIt.current(); ++oIt )
         {
             oIt.current()->zoomObject();
+            repaint(oIt.current());
         }
     }
 }
