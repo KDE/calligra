@@ -1,0 +1,203 @@
+<!-- Document Type Definition for the KIllustrator Markup Language 
+     (KIL), the file format for KIllustrator.
+     version = 0.2  status = draft  date = 18/Feb/1999
+     syntax = XML author = kus@iti.cs.uni-magdeburg.de -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--
+     The base_content_attributes, font_attributes
+-->
+<!ENTITY % base_content_attributes
+         'matrix      CDATA   #IMPLIED
+          strokecolor CDATA   "black"
+          strokestyle CDATA   #IMPLIED
+          linewidth   CDATA   "1"
+          fillcolor   CDATA   #IMPLIED
+          fillstyle   (0 | 1 | 2 | 3 | 4) "1"
+          fillpattern CDATA   #IMPLIED
+          gradstyle   (0 | 1 | 2 | 3 | 4 | 5)   #IMPLIED
+          gradcolor1  CDATA   #IMPLIED
+          gradcolor2  CDATA   #IMPLIED
+          id          ID      #IMPLIED
+          ref         IDREF   #IMPLIED'
+>
+
+<!-- ============================================================= -->
+<!--
+     The base_content_model, doc and head elements
+-->
+<!ENTITY % base_content_model
+         '(rectangle | ellipse | text | polyline | polygon | 
+           bezier | group)*'
+>
+
+<!ELEMENT doc (head, %base_content_model;) >
+<!ATTLIST doc editor CDATA "KIllustrator"
+              mime   CDATA "application/x-killustrator"
+>
+
+<!ELEMENT head (layout, grid, helplines, info?) >
+
+<!-- ============================================================= -->
+<!--
+     Header elements.
+-->
+
+<!--
+     The document layout.
+-->
+<!ELEMENT layout EMPTY >
+<!ATTLIST layout format      (a3 | a4 | a5 | usletter | uslegal | custom) "a4"
+                 orientation (portrait | landscape) "portrait"
+                 width       CDATA #IMPLIED
+                 height      CDATA #IMPLIED
+                 lmargin     CDATA #IMPLIED
+                 tmargin     CDATA #IMPLIED
+                 rmargin     CDATA #IMPLIED
+                 bmargin     CDATA #IMPLIED
+                 unit        (mm | cm | pt | inch) "pt"
+>
+
+<!--
+    Information about the document.
+-->
+<!ELEMENT info EMPTY >
+<!ATTLIST info author        CDATA #IMPLIED
+               creation_date CDATA #IMPLIED
+               last_modified CDATA #IMPLIED
+>
+
+<!--
+     The document layout.
+-->
+<!ELEMENT grid EMPTY >
+<!ATTLIST grid dx    CDATA #IMPLIED
+               dy    CDATA #IMPLIED
+               align ( 0 | 1 ) "0"
+>
+
+<!--
+     The help lines.
+-->
+<!ELEMENT helplines (hl | vl)* >
+<!ATTLIST helplines align ( 0 | 1 ) "0"
+>
+
+<!--
+     Horizontal lines.
+-->
+<!ELEMENT hl EMPTY>
+<!ATTLIST hl pos CDATA #IMPLIED
+>
+
+<!--
+     Vertical lines.
+-->
+<!ELEMENT vl EMPTY>
+<!ATTLIST vl pos CDATA #IMPLIED
+>
+
+<!-- ============================================================= -->
+<!--
+     Predefined graphic objects.
+-->
+
+
+<!--
+     rectangle
+     A rectangle with rounded corners.
+-->
+<!ELEMENT rectangle EMPTY >
+<!ATTLIST rectangle %base_content_attributes;
+                    x        CDATA #IMPLIED
+                    y        CDATA #IMPLIED
+                    width    CDATA #IMPLIED
+                    height   CDATA #IMPLIED
+                    rounding CDATA "0"
+>
+
+<!--
+     ellipse
+     An ellipse or an ellipse segment.
+-->
+<!ELEMENT ellipse EMPTY >
+<!ATTLIST ellipse %base_content_attributes;
+                  x        CDATA #IMPLIED
+                  y        CDATA #IMPLIED
+                  rx       CDATA #IMPLIED
+                  ry       CDATA #IMPLIED
+                  angle1   CDATA #IMPLIED
+                  angle2   CDATA #IMPLIED
+                  kind     (full | arc | pie) "full"
+>
+
+<!--
+     text element
+-->
+<!ELEMENT text (font)* >
+<!ATTLIST text %base_content_attributes;
+               x     CDATA       #IMPLIED
+               y     CDATA       #IMPLIED
+               align (0 | 1 | 2) "0"
+>
+
+<!ELEMENT font (#PCDATA | br)* >
+<!ATTLIST font face       CDATA #REQUIRED
+               point-size CDATA #REQUIRED
+               weight     CDATA #REQUIRED
+>
+
+<!--
+     polyline
+     A sequence of paths with optionally arrows at the end.
+-->
+<!ELEMENT polyline (point)* >
+<!ATTLIST polyline %base_content_attributes; 
+                   arrow1 CDATA "0"
+                   arrow2 CDATA "0"
+>
+
+<!--
+     point
+     A single point as part of a line or bezier curve.
+-->
+<!ELEMENT point EMPTY >
+<!ATTLIST point x  CDATA #IMPLIED
+                y  CDATA #IMPLIED
+>
+
+<!--
+     polygon
+     It requires at least 3 points. The first and last are 
+     connected.
+-->
+<!ELEMENT polygon (point)* >
+<!ATTLIST polygon  %base_content_attributes;
+>
+
+<!--
+     group element
+     A group of other graphic objects.
+-->
+<!ELEMENT group (%base_content_model;) >
+<!ATTLIST group  %base_content_attributes;
+>
+
+<!--
+     bezier curve
+     The number of points has to be n*3+1 for n=1,2,3,...
+     Point #1, #4, #7 etc. are endpoints, the others are 
+     supporting points.
+-->
+<!ELEMENT bezier (point)* >
+<!ATTLIST bezier %base_content_attributes;
+                 arrow1 CDATA "0"
+                 arrow2 CDATA "0"
+                 closed (0 | 1) "0"
+>
+
+<!-- ============================================================= -->
+<!--
+     End of DTD for KIL
+-->
