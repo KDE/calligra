@@ -92,3 +92,8 @@ void KPresenterShell_impl::cleanUp()
   m_rDoc = 0L;
 }
 
+/*======================== help about ============================*/
+void KPresenterShell_impl::helpAbout()
+{
+  KoAboutDia::about(KoAboutDia::KPresenter,"0.0.1");
+}

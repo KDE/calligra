@@ -49,6 +49,8 @@ public:
 
   // clean
   virtual void cleanUp();
+
+  virtual void helpAbout();
   
 protected:
 

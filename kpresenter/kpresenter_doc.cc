@@ -219,22 +219,22 @@ bool KPresenterDocument_impl::save(ostream& out)
 /*========================== load ===============================*/
 bool KPresenterDocument_impl::load(const char *_url)
 {
-//   KURL u( _url );
-//   if ( u.isMalformed() )
-//     return FALSE;
+  KURL u(_url);
+  if (u.isMalformed())
+    return false;
   
-//   if ( !u.isLocalFile() )
-//   {
-//     cerr << "Can not save to remote URL" << endl;
-//     return false;
-//   }
+  if (!u.isLocalFile())
+    {
+      cerr << "Can not save to remote URL" << endl;
+      return false;
+    }
 
-//   ifstream in( u.path() );
-//   if ( !in )
-//   {
-//     cerr << "Could not open" << u.path() << endl;
-//     return false;
-//   }
+  ifstream in(u.path());
+  if (!in)
+    {
+      cerr << "Could not open" << u.path() << endl;
+      return false;
+    }
 
 //   KOMLStreamFeed feed( &in );
 //   KOMLParser parser( &feed );
