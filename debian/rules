@@ -82,7 +82,7 @@ binary-arch: build install
 	dh_installchangelogs -pkchart kchart/CHANGES
 	dh_installchangelogs -pkivio kivio/CHANGELOG
 	dh_installchangelogs -pkformula
-	dh_installchangelogs -pkimageshop kimageshop/ChangeLog
+	dh_installchangelogs -pkrayon kimageshop/ChangeLog
 	dh_installchangelogs -pkoffice-dev
 	dh_installmime -a
 	dh_strip -a

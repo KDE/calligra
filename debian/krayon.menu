@@ -1,4 +1,4 @@
-?package(kimageshop):\
+?package(krayon):\
 	needs=x11\
 	section=Apps/Graphics\
 	hints="KDE"\

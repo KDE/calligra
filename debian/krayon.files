@@ -16,4 +16,4 @@ usr/share/icons/locolor/16x16/apps/krayon.png
 usr/share/icons/locolor/32x32/apps/krayon.png
 usr/share/doc/kde/HTML/en/kimageshop/*
 usr/share/doc/kde/HTML/en/krayon/*
-usr/share/lintian/overrides/kimageshop
+usr/share/lintian/overrides/krayon

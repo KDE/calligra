@@ -1,0 +1,5 @@
+# modules
+krayon: shlib-missing-in-control-file libkrayonpart usr/lib/libkrayonpart.so
+krayon: shlib-missing-in-control-file libkisp_example usr/lib/libkisp_example.so
+krayon: shlib-missing-in-control-file krayon usr/lib/krayon.so
+krayon: unused-shlib-entry-in-control-file libkochart
