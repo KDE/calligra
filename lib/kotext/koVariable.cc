@@ -37,22 +37,34 @@
 #include <qvaluelist.h>
 #include <qradiobutton.h>
 #include "timeformatwidget_impl.h"
+#include "dateformatwidget_impl.h"
+
+KoVariableDateFormat::KoVariableDateFormat() : KoVariableFormat()
+{
+    m_bShort = false;
+    m_strFormat="";
+}
 
 QString KoVariableDateFormat::convert( const QDate & date ) const
 {
-    return KGlobal::locale()->formatDate( date, m_bShort );
+    if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())
+	return KGlobal::locale()->formatDate( date,m_bShort );
+    return date.toString(m_strFormat);
 }
 
 QCString KoVariableDateFormat::key() const
 {
-    return QCString("DATE") + (m_bShort ? '1' : '0');
+    return QCString("DATE") + (m_bShort ? '1' : '0')+m_strFormat.utf8();
 }
 
 void KoVariableDateFormat::load( const QCString &key )
 {
     QCString params( key.mid( 4 ) );
     if ( !params.isEmpty() )
+    {
         m_bShort = (params[0] == '1');
+        m_strFormat = QString::fromUtf8(params);
+    }
     // TODO else: use the last setting ?  (useful for the interactive case)
 }
 
@@ -301,8 +313,87 @@ KoVariable * KoVariable::createVariable( int type, int subtype, KoVariableFormat
         // Get the default format for this variable (this method is only called in the interactive case, not when loading)
         switch ( type ) {
         case VT_DATE:
-            varFormat = coll->format( "DATE" );
+        {
+            //varFormat = coll->format( "DATE" );
+            dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
+            widget=new DateFormatWidget(dialog);
+            dialog->setMainWidget(widget);
+            instance=new KInstance(kad);
+            config=instance->config();
+            bool selectLast=false;
+            if( config->hasGroup("Date format history") )
+            {
+                count=0;
+                config->setGroup("Date format history");
+                noe=config->readNumEntry("Number Of Entries", 5);
+                for(int i=0;i<noe;i++)
+                {
+                    QString num, tmpString;
+                    num.setNum(i);
+                    tmpString=config->readEntry("Last Used"+num);
+                    if(tmpString.compare(i18n("Locale"))==0)
+                    {
+                        if(i==0) selectLast = true;
+                        continue;
+                    }
+                    if(stringList.contains(tmpString))
+                        continue;
+                    if(!tmpString.isEmpty())
+                    {
+                        stringList.append(tmpString);
+                        count++;
+                    }
+                }
+                dynamic_cast<DateFormatWidget*>(widget)->combo1->insertStringList(stringList);
+                nope=config->readNumEntry("Number Of Persistent Entries", 5);
+                for(int i=0;i<nope;i++)
+                {
+                    QString num, tmpString;
+                    num.setNum(i);
+                    tmpString=config->readEntry("Persistent"+num);
+                    if(!tmpString.isEmpty())
+                        pstringList.append(tmpString);
+                }
+            }
+            if(!stringList.isEmpty())
+                dynamic_cast<DateFormatWidget*>(widget)->combo1->insertItem("---");
+            if(pstringList.count())
+            {
+                dynamic_cast<DateFormatWidget*>(widget)->combo1->insertStringList(pstringList);
+            }
+            else
+            {
+                dynamic_cast<DateFormatWidget*>(widget)->combo1->insertItem(i18n("Locale"));
+            }
+            if(selectLast) {
+                QComboBox *combo= dynamic_cast<DateFormatWidget*>(widget)->combo1;
+                combo->setCurrentItem(combo->count() -1);
+            }
+
+            if(dialog->exec()==QDialog::Accepted)
+            {
+                string=dynamic_cast<DateFormatWidget*>(dialog->mainWidget())->resultString().utf8();
+            }
+            else
+            {
+                return 0;
+            }
+            config->setGroup("Date format history");
+            stringList.remove(string);
+            stringList.prepend(string);
+            for(int i=0;i<=count;i++)
+            {
+                QString num;
+                num.setNum(i);
+                config->writeEntry("Last Used"+num, stringList[i]);
+            }
+            config->sync();
+            delete dialog;
+            delete kad;
+            delete instance;
+            varFormat = coll->format( "DATE"+string );
             break;
+        }
         case VT_TIME: {
             dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
             widget=new TimeFormatWidget(dialog);

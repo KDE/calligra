@@ -60,11 +60,11 @@ public:
 class KoVariableDateFormat : public KoVariableFormat
 {
 public:
-    KoVariableDateFormat() : KoVariableFormat() { m_bShort = false; }
+    KoVariableDateFormat();
     QString convert( const QDate & date ) const;
     virtual QCString key() const;
     virtual void load( const QCString &key );
-    // TODO custom date formats
+    QString m_strFormat;
 private:
     bool m_bShort;
 };

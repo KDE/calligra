@@ -1,4 +1,4 @@
-#include "timeformatwidget.h"
+#include "timedateformatwidget.h"
 #include "timeformatwidget_impl.h"
 #include "timeformatwidget_impl.moc"
 #include <qdatetime.h>
@@ -16,8 +16,10 @@
  *  name 'name' and widget flags set to 'f'
  */
 TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags fl )
-    : TimeFormatWidgetPrototype( parent, name, fl )
+    : TimeDateFormatWidgetPrototype( parent, name, fl )
 {
+    setCaption( i18n( "TimeFormat", "This dialog allows you to set the format of the time variable" ) );
+
     QStringList listTimeFormat;
     listTimeFormat<<i18n("Locale");
     listTimeFormat<<i18n("hh:mm");
@@ -25,6 +27,16 @@ TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags f
     listTimeFormat<<i18n("hh:mm AP");
     listTimeFormat<<i18n("hh:mm:ss AP");
     listTimeFormat<<i18n("mm:ss.zzz");
+
+    combo2->insertItem( tr2i18n( "Hour" ) );
+    combo2->insertItem( tr2i18n( "Hour (2 digit)" ) );
+    combo2->insertItem( tr2i18n( "Minute" ) );
+    combo2->insertItem( tr2i18n( "Minute (2 digit)" ) );
+    combo2->insertItem( tr2i18n( "Second" ) );
+    combo2->insertItem( tr2i18n( "am/pm" ) );
+    combo2->insertItem( tr2i18n( "AM/PM" ) );
+    combo2->setCurrentItem( 0 );
+
     ComboBox3->insertStringList(listTimeFormat);
 
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));

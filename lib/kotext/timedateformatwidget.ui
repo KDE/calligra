@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
-<class>TimeFormatWidgetPrototype</class>
+<class>TimeDateFormatWidgetPrototype</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>TimeFormatWidgetPrototype</cstring>
+        <cstring>TimeDateFormatWidgetPrototype</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -25,8 +25,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>TimeFormat</string>
-        <comment>This dialog allows you to set the format of the time variable</comment>
+        <string>TimeDateFormatWidgetPrototype</string>
     </property>
     <widget class="QLayoutWidget">
         <property name="name">
@@ -94,41 +93,6 @@
                         </property>
                     </widget>
                     <widget class="QComboBox">
-                        <item>
-                            <property name="text">
-                                <string>Hour</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Hour (2 digit)</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Minute</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Minute (2 digit)</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Second</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>am/pm</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>AM/PM</string>
-                            </property>
-                        </item>
                         <property name="name">
                             <cstring>combo2</cstring>
                         </property>
@@ -182,13 +146,13 @@
     <connection>
         <sender>combo1</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>TimeFormatWidgetPrototype</receiver>
+        <receiver>TimeDateFormatWidgetPrototype</receiver>
         <slot>updateLabel()</slot>
     </connection>
     <connection>
         <sender>combo2</sender>
         <signal>activated(int)</signal>
-        <receiver>TimeFormatWidgetPrototype</receiver>
+        <receiver>TimeDateFormatWidgetPrototype</receiver>
         <slot>comboActivated()</slot>
     </connection>
 </connections>
@@ -196,7 +160,7 @@
     <tabstop>combo1</tabstop>
 </tabstops>
 <includes>
-    <include location="local" impldecl="in implementation">timeformatwidget.ui.h</include>
+    <include location="local" impldecl="in implementation">timedateformatwidget.ui.h</include>
 </includes>
 <slots>
     <slot>comboActivated()</slot>

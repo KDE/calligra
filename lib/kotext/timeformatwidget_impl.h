@@ -1,8 +1,8 @@
 #ifndef TIMEFORMATWIDGET_H
 #define TIMEFORMATWIDGET_H
-#include "timeformatwidget.h"
+#include "timedateformatwidget.h"
 
-class TimeFormatWidget : public TimeFormatWidgetPrototype
+class TimeFormatWidget : public TimeDateFormatWidgetPrototype
 { 
     Q_OBJECT
 
