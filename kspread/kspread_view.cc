@@ -1374,6 +1374,7 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
   m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
   m_pCanvas->slotMaxRow( m_pTable->maxRow() );
   }
+  resultOfCalc();
 }
 
 void KSpreadView::slotRefreshView(  )
