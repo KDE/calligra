@@ -112,6 +112,7 @@ KoShellWindow::~KoShellWindow()
   setRootDocumentDirect( 0L, QPtrList<KoView>() ); // prevent our parent destructor from doing stupid things
 }
 
+/* ###### FIXME - delete that code
 QString KoShellWindow::nativeFormatName() const
 {
   return i18n("KOffice Documents");
@@ -121,14 +122,9 @@ QString KoShellWindow::nativeFormatPattern() const
 {
   return m_filter; // "*.kwd *.ksp *.kpr";
 }
+*/
 
-bool KoShellWindow::openDocument( const KURL & url )
-{
-    return openDocumentInternalKoShell( 0L, url );
-}
-
-// Should be openDocumentInternal if it was virtual in KoMainWindow
-bool KoShellWindow::openDocumentInternalKoShell( KoFilterManager * filterManager, const KURL &url )
+bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
 {
   KMimeType::Ptr mimeType = KMimeType::findByURL( url );
   m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().latin1() );
@@ -140,8 +136,9 @@ bool KoShellWindow::openDocumentInternalKoShell( KoFilterManager * filterManager
   KoDocument* newdoc = m_documentEntry.createDoc();
 
   // Pass the filterManager to the document (who will own it from now on)
-  if ( filterManager )
-      newdoc->setFilterManager( filterManager );
+  // ###### FIXME
+  //if ( filterManager )
+      //newdoc->setFilterManager( filterManager );
 
   connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
   connect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
@@ -169,6 +166,7 @@ void KoShellWindow::slotKSLoadCanceled( const QString & errMsg )
 {
     KMessageBox::error( this, errMsg );
     // ... can't delete the document, it's the one who emitted the signal...
+    // ###### FIXME: This can be done in 3.0 with deleteLater, I assume (Werner)
 
     KoDocument* newdoc = (KoDocument *)(sender());
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -238,7 +236,7 @@ void KoShellWindow::updateCaption()
         if ( name.isEmpty() )
             // Fall back to document URL
             name = rootDocument()->url().fileName();
- 	
+
         if ( !name.isEmpty() ) // else keep Untitled
         {
 	    if ( name.length() > 20 )
@@ -339,10 +337,14 @@ void KoShellWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
-    KoFilterManager * filterManager = new KoFilterManager;
-    filterManager->prepareDialog(dialog, KoFilterManager::Import,
-                                 KoDocument::readNativeFormatMimeType(),
-                                 nativeFormatPattern(), nativeFormatName(), true);
+    dialog->setMimeFilter( KoFilterManager::mimeFilter(
+                               KoDocument::readNativeFormatMimeType(),
+                               KoFilterManager::Import ) );
+    // ##### CHECK
+    //KoFilterManager * filterManager = new KoFilterManager;
+    //filterManager->prepareDialog(dialog, KoFilterManager::Import,
+    //                             KoDocument::readNativeFormatMimeType(),
+    //                             nativeFormatPattern(), nativeFormatName(), true);
     KURL url;
     if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedURL();
@@ -353,20 +355,13 @@ void KoShellWindow::slotFileOpen()
             KRecentDocument::add(url.url(-1), true);
     }
     else
-    {
-        delete filterManager;
         return;
-    }
 
-    filterManager->cleanUp();
     delete dialog;
     if ( url.isEmpty() )
-    {
-        delete filterManager;
         return;
-    }
 
-    (void) openDocumentInternalKoShell( filterManager, url );
+    (void) openDocumentInternal( url );
 }
 
 void KoShellWindow::slotFileClose()

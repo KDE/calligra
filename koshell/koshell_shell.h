@@ -42,7 +42,6 @@ public:
   KoShellWindow();
   virtual ~KoShellWindow();
 
-  virtual bool openDocument( const KURL & url );
   virtual void setRootDocument( KoDocument *doc );
   /**
    * Update caption from document info - call when document info
@@ -52,8 +51,8 @@ public:
 
   virtual QString configFile() const;
 
-  virtual QString nativeFormatPattern() const;
-  virtual QString nativeFormatName() const;
+  //virtual QString nativeFormatPattern() const;
+  //virtual QString nativeFormatName() const;
 
 /*
   bool saveAllPages();
@@ -73,7 +72,7 @@ protected:
 
   virtual bool queryClose();
 
-  bool openDocumentInternalKoShell( KoFilterManager * filterManager, const KURL &url );
+  virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
   void closeDocument();
 
   struct Page
