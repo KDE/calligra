@@ -39,6 +39,7 @@ class Page;
 class KoPoint;
 class KoVariable;
 class KPrTextDrag;
+class KPrTextDocument;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -88,7 +89,7 @@ public:
     /** Return the contained text object */
     KoTextObject * textObject() const { return m_textobj; }
 
-    KoTextDocument *textDocument() const;
+    KPrTextDocument *textDocument() const;
 
     KPresenterDoc* kPresenterDocument() const { return m_doc; }
 

@@ -28,7 +28,7 @@
 /******************************************************************/
 /* Class: KPrPgNumVariable                                         */
 /******************************************************************/
-KPrPgNumVariable::KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc  )
+KPrPgNumVariable::KPrPgNumVariable( KPrTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc  )
     : KoPgNumVariable( textdoc, subtype, varFormat ,_varColl ),m_doc(doc)
 {
 }

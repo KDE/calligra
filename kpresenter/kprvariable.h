@@ -24,7 +24,7 @@
 #include <qasciidict.h>
 #include <koVariable.h>
 
-#include <kotextdocument.h>
+#include "kprtextdocument.h"
 class KPresenterDoc;
 class KoVariable;
 class KoPgNumVariable;
@@ -38,7 +38,7 @@ class QTextFormat;
 class KPrPgNumVariable : public KoPgNumVariable
 {
 public:
-    KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc );
+    KPrPgNumVariable( KPrTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc );
 
     virtual void recalc();
     virtual QString text();

@@ -39,6 +39,7 @@
 #include <kprectobject.h>
 #include <kpresenter_view.h>
 #include <kotextobject.h>
+#include "kprtextdocument.h"
 using namespace Qt3;
 #include <kdebug.h>
 
@@ -1467,7 +1468,7 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
         }
     }
     //kdDebug() << "KWPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
-    KoTextDocument * textdoc = static_cast<KoTextDocument *>(c->parag()->document());
+    KPrTextDocument * textdoc = static_cast<KPrTextDocument *>(c->parag()->document());
 
     cursor.insert( text, true );
 

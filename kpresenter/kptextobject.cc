@@ -103,8 +103,8 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 {
     m_doc=doc;
 
-    KoTextDocument * textdoc = new KoTextDocument( doc->zoomHandler(),
-                                                   new KoTextFormatCollection( doc->defaultFont() ));
+    KPrTextDocument * textdoc = new KPrTextDocument( this ,
+                                                     new KoTextFormatCollection( doc->defaultFont() ));
 
     m_textobj = new KoTextObject( textdoc, doc->standardStyle());
 
@@ -868,9 +868,9 @@ void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisi
     parag->setChanged( wasChanged );      // Maybe we have more changes to draw!
 }
 
-KoTextDocument * KPTextObject::textDocument() const
+KPrTextDocument * KPTextObject::textDocument() const
 {
-    return m_textobj->textDocument();
+    return static_cast<KPrTextDocument*>(m_textobj->textDocument());
 }
 
 void KPTextObject::slotNewCommand( KCommand * cmd)
@@ -1270,7 +1270,7 @@ void KPTextView::insertVariable( int type, int subtype )
     {
         //force to recalc variable
         kpTextObject()->recalcPageNum( doc );
-        var = new KPrPgNumVariable( textObject()->textDocument(),subtype, doc->variableFormatCollection()->format( "NUMBER" ),doc->getVariableCollection(),doc  );
+        var = new KPrPgNumVariable( kpTextObject()->textDocument(),subtype, doc->variableFormatCollection()->format( "NUMBER" ),doc->getVariableCollection(),doc  );
     }
     else
         var = KoVariable::createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc,doc->getVariableCollection());

@@ -109,6 +109,7 @@
 
 #include <kspell.h>
 #include <kstatusbar.h>
+#include "kprtextdocument.h"
 
 #define DEBUG
 
