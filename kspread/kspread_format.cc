@@ -709,7 +709,7 @@ bool KSpreadFormat::loadFontOasisStyle( const QDomElement * font )
   if ( !font )
     return false;
 
-  kdDebug(30518) << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
+  kdDebug() << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
 
   if ( font->hasAttribute( "fo:font-family" ) )
     setTextFontFamily( font->attribute( "fo:font-family" ) );
@@ -743,10 +743,9 @@ bool KSpreadFormat::loadFontOasisStyle( const QDomElement * font )
   return true;
 }
 
-
 bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, const KoOasisStyles& oasisStyles )
 {
-    kdDebug(30518) << "*** Loading style properties *****" << endl;
+    kdDebug() << "*** Loading style properties *****" << endl;
 
     if ( property.hasAttribute( "style:decimal-places" ) )
     {
@@ -872,31 +871,31 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
 #if 0
     if ( property.hasAttribute( "fo:border-bottom" ) )
     {
-        loadBorder( property.attribute( "fo:border-bottom" ), Bottom );
+        loadOasisBorder( property.attribute( "fo:border-bottom" ), Bottom );
         // TODO: style:border-line-width-bottom if double!
     }
 
     if ( property.hasAttribute( "fo:border-right" ) )
     {
-        loadBorder(  property.attribute( "fo:border-right" ), Right );
+        loadOasisBorder(  property.attribute( "fo:border-right" ), Right );
         // TODO: style:border-line-width-right
     }
 
     if ( property.hasAttribute( "fo:border-top" ) )
     {
-        loadBorder(  property.attribute( "fo:border-top" ), Top );
+        loadOasisBorder(  property.attribute( "fo:border-top" ), Top );
         // TODO: style:border-line-width-top
     }
 
     if ( property.hasAttribute( "fo:border-left" ) )
     {
-        loadBorder( property.attribute( "fo:border-left" ), Left );
+        loadOasisBorder( property.attribute( "fo:border-left" ), Left );
         // TODO: style:border-line-width-left
     }
 
     if ( property.hasAttribute( "fo:border" ) )
     {
-        loadBorder( property.attribute( "fo:border" ), Border );
+        loadOasisBorder( property.attribute( "fo:border" ), Border );
         // TODO: style:border-line-width-left
     }
 #endif

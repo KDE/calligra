@@ -6472,6 +6472,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle
     for ( int i = 0; i < number; ++i )
     {
         kdDebug()<<" create non defaultrow format :"<<rowIndex<<endl;
+        kdDebug()<<" number :"<<number<<endl;
         RowFormat * rowL = nonDefaultRowFormat( rowIndex );
         rowL->copy( layout );
         kdDebug()<<"height :"<<height<<endl;
