@@ -140,6 +140,7 @@ public:
 
     void setIgnoreCase ( bool b );
     void setIgnoreAccent ( bool b );
+    void setSpellWordWithNumber ( bool b );
 
     /**
      *
@@ -156,6 +157,7 @@ public:
     bool ignoreCase () const;
     bool ignoreAccent () const;
     int encoding () const;
+    bool spellWordWithNumber()const;
     QStringList ignoreList () const;
     QStringList replaceAllList () const;
 
@@ -212,6 +214,7 @@ protected slots:
     void sChangeEncoding (int);
     void slotIgnoreCase(bool );
     void slotIgnoreAccent(bool);
+    void slotSpellWordWithNumber(bool b);
 
 protected:
     // The options
@@ -222,6 +225,7 @@ protected:
     bool nodialog;
     bool m_bIgnoreCase;
     bool m_bIgnoreAccent;
+    bool m_bSpellWordWithNumber;
     QString qsdict;		// -d [dict]
     QString qspdict;		// -p [dict]
     QStringList ignorelist;
@@ -233,6 +237,7 @@ protected:
     QComboBox *dictcombo, *encodingcombo;
     QCheckBox *cbIgnoreCase;
     QCheckBox *cbIgnoreAccent;
+    QCheckBox *cbSpellWordWithNumber;
 signals:
     void configChanged();
 

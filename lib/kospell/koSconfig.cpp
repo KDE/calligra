@@ -63,6 +63,7 @@ KOSpellConfig::KOSpellConfig (const KOSpellConfig &_ksc)
     setIgnoreAccent( _ksc.ignoreAccent());
     setIgnoreList (_ksc.ignoreList());
     setEncoding (_ksc.encoding());
+    setSpellWordWithNumber( _ksc.spellWordWithNumber());
 }
 
 
@@ -78,6 +79,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
 {
     m_bIgnoreCase = false;
     m_bIgnoreAccent = false;
+    m_bSpellWordWithNumber = false;
     d= new KOSpellConfigPrivate;
     kc = KGlobal::config();
     if( _ksc == 0 )
@@ -96,7 +98,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
         setIgnoreAccent( _ksc->ignoreAccent());
     }
 
-    QGridLayout *glay = new QGridLayout (this, 6, 3, 0, KDialog::spacingHint() );
+    QGridLayout *glay = new QGridLayout (this, 8, 3, 0, KDialog::spacingHint() );
     cb1 = new QCheckBox(i18n("Create root/affix combinations"
                              " not in dictionary"), this );
     connect( cb1, SIGNAL(toggled(bool)), SLOT(sNoAff(bool)) );
@@ -145,7 +147,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     {
         QPushButton *pushButton = new QPushButton( i18n("&Help"), this );
         connect( pushButton, SIGNAL(clicked()), this, SLOT(sHelp()) );
-        glay->addWidget(pushButton, 7, 2);
+        glay->addWidget(pushButton, 8, 2);
     }
 
     cbIgnoreCase = new QCheckBox(i18n("Ignore case when checking words"), this );
@@ -154,9 +156,13 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     cbIgnoreAccent = new QCheckBox(i18n("ignore accents when checking words"), this );
     connect( cbIgnoreAccent , SIGNAL(toggled(bool)), this, SLOT(slotIgnoreAccent(bool)) );
 
+    cbSpellWordWithNumber = new QCheckBox(i18n("Check words with numbers"), this );
+    connect( cbSpellWordWithNumber , SIGNAL(toggled(bool)), this, SLOT(slotSpellWordWithNumber(bool)) );
+
 
     glay->addMultiCellWidget( cbIgnoreCase, 5,5,0 ,2 );
     glay->addMultiCellWidget( cbIgnoreAccent, 6,6,0 ,2 );
+    glay->addMultiCellWidget( cbSpellWordWithNumber, 7,7,0 ,2 );
 
     fillInDialog();
 }
@@ -192,6 +198,7 @@ bool KOSpellConfig::readGlobalSettings ()
   setEncoding (kc->readNumEntry ("KSpell_Encoding", KOS_E_ASCII));
   setIgnoreCase( kc->readNumEntry( "KSpell_IgnoreCase", 0));
   setIgnoreAccent( kc->readNumEntry( "KSpell_IgnoreAccent", 0));
+  setSpellWordWithNumber( kc->readNumEntry("KSpell_SpellWordWithNumber", false));
   return TRUE;
 }
 
@@ -206,8 +213,15 @@ bool KOSpellConfig::writeGlobalSettings ()
 		  TRUE, TRUE);
   kc->writeEntry ("KSpell_IgnoreCase",(int) ignoreCase(), TRUE, TRUE);
   kc->writeEntry( "KSpell_IgnoreAccent", (int)ignoreAccent(), TRUE, TRUE);
+  kc->writeEntry( "KSpell_SpellWordWithNumber", (int)spellWordWithNumber(), TRUE, TRUE);
   kc->sync();
   return TRUE;
+}
+
+void KOSpellConfig::slotSpellWordWithNumber(bool b)
+{
+    setSpellWordWithNumber ( b );
+    emit configChanged();
 }
 
 void KOSpellConfig::slotIgnoreCase(bool b)
@@ -580,6 +594,11 @@ QStringList KOSpellConfig::ignoreList () const
   return ignorelist;
 }
 
+bool KOSpellConfig::spellWordWithNumber()const
+{
+    return m_bSpellWordWithNumber;
+}
+
 void KOSpellConfig::setReplaceAllList (QStringList _replacelist)
 {
   d->replacelist=_replacelist;
@@ -600,6 +619,10 @@ void KOSpellConfig::setIgnoreAccent ( bool b )
     m_bIgnoreAccent=b;
 }
 
+void KOSpellConfig::setSpellWordWithNumber ( bool b )
+{
+    m_bSpellWordWithNumber = b;
+}
 
 QStringList KOSpellConfig::s_aspellLanguageList = QStringList();
 QStringList KOSpellConfig::s_aspellLanguageFileName = QStringList();
