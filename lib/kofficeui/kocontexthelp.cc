@@ -24,6 +24,7 @@
 #include <qfont.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qsimplerichtext.h>
 
 #include <kpixmap.h>
 #include <klocale.h>
@@ -67,16 +68,16 @@ void KoVerticalLabel::paintEvent( QPaintEvent* )
 	ap.drawPixmap( 0, 0, pm );
 } // KoVerticalLabel::paintEvent
 
-static unsigned char upbits[]   = { 0xc, 0x1e, 0x3f };
-static unsigned char downbits[] = { 0x3f, 0x1e, 0xc };
+static unsigned char upbits[]   = { 0xc, 0x1e, 0x3f, 0xff };
+static unsigned char downbits[] = { 0xff, 0x3f, 0x1e, 0xc };
 
 KoHelpNavButton::KoHelpNavButton( NavDirection d, QWidget* parent )
 		: QWidget( parent )
 {
 	m_pressed = false;
-	m_bitmap = QBitmap( 6, 3, ( d == Up ? upbits : downbits ), true );
+	m_bitmap = QBitmap( 8, 4, ( d == Up ? upbits : downbits ), true );
 	m_bitmap.setMask( m_bitmap );
-	setFixedSize( 8, 5 );
+	setFixedSize( 8, 4 );
 	setBackgroundMode( PaletteLight );
 } // KoHelpNavButton::KoHelpNavButton
 
@@ -89,7 +90,7 @@ void KoHelpNavButton::paintEvent( QPaintEvent* )
 			p.setPen( Qt::black );
 		else
 			p.setPen( colorGroup().highlight() );
-		p.drawPixmap( 1, 1, m_bitmap );
+		p.drawPixmap( 0, 0, m_bitmap );
 	}
 } // KoHelpNavButton::paintEvent
 
@@ -175,6 +176,68 @@ void KoTinyButton::mouseReleaseEvent( QMouseEvent* )
 	}
 }; // KoTinyButton::mouseReleaseEvent
 
+KoHelpView::KoHelpView( QWidget* parent )
+		: QWidget( parent )
+{
+	currentText = 0L;
+	parent->installEventFilter( this );
+}; // KoHelpView::KoHelpView
+
+KoHelpView::~KoHelpView()
+{
+	if ( currentText )
+		delete currentText;
+}; // KoHelpView::~KoHelpView
+
+void KoHelpView::setText( const QString& text )
+{
+	if ( currentText )
+		delete currentText;
+	currentText = new QSimpleRichText( text, font() );
+	currentText->setWidth( width() );
+	setFixedHeight( currentText->height() );
+}; // KoHelpView::setText
+
+void KoHelpView::mousePressEvent( QMouseEvent* e )
+{
+	currentAnchor = currentText->anchorAt( e->pos() );
+	if ( !currentAnchor.isEmpty() )
+		e->accept();
+	else
+		e->ignore();
+}; // KoHelpView::mousePressEvent
+
+void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
+{
+	if ( ( !currentAnchor.isEmpty() ) && ( currentAnchor == currentText->anchorAt( e->pos() ) ) )
+	{
+		e->accept();
+		emit linkClicked( currentAnchor );
+		currentAnchor = "";
+	}
+	else
+		e->ignore();
+}; // KoHelpView::mouseReleaseEvent
+
+bool KoHelpView::eventFilter( QObject*, QEvent* e )
+{
+	if ( ( currentText ) && ( e->type() == QEvent::Resize ) )
+	{
+		setFixedWidth( ( (QResizeEvent*)e )->size().width() );
+		currentText->setWidth( width() );
+		setFixedHeight( currentText->height() );
+
+		return true;
+	}
+	return false;
+}; // KoHelpView::resizeEvent
+
+void KoHelpView::paintEvent( QPaintEvent* )
+{
+	QPainter p( this );
+	currentText->draw( &p, 0, 0, QRect(), QColorGroup() );
+}; // KoHelpView::paintEvent
+
 KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 		: QWidget( parent )
 {
@@ -187,10 +250,8 @@ KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 	layout->addColSpacing( 2, 5 );
 	layout->setColStretch( 1, 1 );
 
-	m_helpLabel = new QLabel( m_helpViewport );
-	m_helpLabel->setAlignment( AlignLeft | AlignVCenter | ExpandTabs | WordBreak );
-	m_helpLabel->setBackgroundMode( PaletteLight );
-	m_helpViewport->installEventFilter( this );
+	m_helpView = new KoHelpView( m_helpViewport );
+	m_helpView->setBackgroundMode( PaletteLight );
 	m_helpViewport->setBackgroundMode( PaletteLight );
 	setText( help );
 
@@ -200,29 +261,19 @@ KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 	connect( m_downButton, SIGNAL( pressed() ), this, SLOT( startScrollingDown() ) );
 	connect( m_upButton, SIGNAL( released() ), this, SLOT( stopScrolling() ) );
 	connect( m_downButton, SIGNAL( released() ), this, SLOT( stopScrolling() ) );
+	connect( m_helpView, SIGNAL( linkClicked( const QString& ) ), this, SIGNAL( linkClicked( const QString& ) ) );
 } // KoHelpWidget::KoHelpWidget
-
-bool KoHelpWidget::eventFilter( QObject* w, QEvent* e )
-{
-	if ( w == m_helpViewport && e->type() == QEvent::Resize )
-	{
-		m_helpLabel->setFixedWidth( m_helpViewport->width() );
-		m_helpLabel->setFixedHeight( m_helpLabel->heightForWidth( m_helpViewport->width() ) );
-	}
-	return false;
-} // KoHelpWidget::resizeEvent
 
 void KoHelpWidget::updateButtons()
 {
 	m_upButton->setEnabled( m_ypos < 0 );
-	m_downButton->setEnabled( m_helpViewport->height() - m_helpLabel->height() - m_ypos < 0 );
+	m_downButton->setEnabled( m_helpViewport->height() - m_helpView->height() - m_ypos < 0 );
 } // KoHelpWidget::updateButtons
 
 void KoHelpWidget::setText( QString text )
 {
-	m_helpLabel->setText( text );
-	m_helpLabel->setFixedHeight( m_helpLabel->heightForWidth( m_helpViewport->width() ) );
-	m_helpLabel->move( 0, 0 );
+	m_helpView->setText( text );
+	m_helpView->move( 0, 0 );
 	m_ypos = 0;
 	updateButtons();
 } // KoHelpWidget::setText
@@ -258,7 +309,7 @@ void KoHelpWidget::scrollUp()
 
 void KoHelpWidget::scrollDown()
 {
-	if ( m_helpViewport->height() - m_helpLabel->height() - m_ypos > 0 )
+	if ( m_helpViewport->height() - m_helpView->height() - m_ypos > 0 )
 		stopScrolling();
 	else
 	{
@@ -307,6 +358,7 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 
 	connect( m_close, SIGNAL( clicked() ), this, SIGNAL( wantsToBeClosed() ) );
 	connect( m_sticky, SIGNAL( toggled( bool ) ), this, SLOT( setSticky( bool ) ) );
+	connect( m_helpViewer, SIGNAL( linkClicked( const QString& ) ), this, SIGNAL( linkClicked( const QString& ) ) );
 } // KoContextHelpPopup::KoContextHelpPopup
 
 KoContextHelpPopup::~KoContextHelpPopup()
@@ -427,6 +479,7 @@ KoContextHelpAction::KoContextHelpAction( KActionCollection* parent, QWidget* po
 	m_popup = new KoContextHelpPopup( 0L );
 	connect( m_popup, SIGNAL( wantsToBeClosed() ), this, SLOT( closePopup() ) );
 	connect( this, SIGNAL( toggled( bool ) ), m_popup, SLOT( setShown( bool ) ) );
+	connect( m_popup, SIGNAL( linkClicked( const QString& ) ), this, SIGNAL( linkClicked( const QString& ) ) );
 } // KoContextHelpAction::KoContextHelpAction
 
 KoContextHelpAction::~KoContextHelpAction()
@@ -490,6 +543,7 @@ KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
 	mainWidget->show();
 	setWidget( mainWidget );
 	setContextHelp( i18n( "Context Help" ), i18n( "Here will be shown help according to your actions" ), 0 );
+	connect( m_helpViewer, SIGNAL( linkClicked( const QString& ) ), this, SIGNAL( linkClicked( const QString& ) ) );
 } // KoContextHelpDocker::KoContextHelpDocker
 
 KoContextHelpDocker::~KoContextHelpDocker()

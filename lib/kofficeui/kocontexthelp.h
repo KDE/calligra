@@ -28,6 +28,7 @@
 
 class QPixmap;
 class QLabel;
+class QSimpleRichText;
 
 class KoVerticalLabel : public QWidget
 {
@@ -56,7 +57,7 @@ class KoHelpNavButton : public QWidget
 			Up,
 			Down
 		};
-	
+
 		KoHelpNavButton( NavDirection d, QWidget* parent );
 
 	signals:
@@ -101,18 +102,43 @@ class KoTinyButton : public QWidget
 		bool         m_toggled;
 }; // KoTinyButton
 
+class KoHelpView : public QWidget
+{
+	Q_OBJECT
+
+	public:
+		KoHelpView( QWidget* parent );
+		~KoHelpView();
+
+		void setText( const QString& text );
+		bool eventFilter( QObject* watched, QEvent* e );
+
+	signals:
+		void linkClicked( const QString& link );
+
+	protected:
+		void mousePressEvent( QMouseEvent* e );
+		void mouseReleaseEvent( QMouseEvent* e );
+		void paintEvent( QPaintEvent* e );
+
+	private:
+		QSimpleRichText* currentText;
+		QString currentAnchor;
+}; // KoHelpView
+
 class KoHelpWidget : public QWidget
 {
 	Q_OBJECT
-	
+
 	public:
 		KoHelpWidget( QString help, QWidget* parent );
-		
+
 		void setText( QString text );
 		void timerEvent( QTimerEvent* );
 		void updateButtons();
 
-		virtual bool eventFilter( QObject*, QEvent* );
+	signals:
+		void linkClicked( const QString& link );
 
 	public slots:
 		void scrollUp();
@@ -125,7 +151,7 @@ class KoHelpWidget : public QWidget
 		int              m_ypos;
 		bool             m_scrollDown;
 		QWidget*         m_helpViewport;
-		QLabel*          m_helpLabel;
+		KoHelpView*      m_helpView;
 		KoHelpNavButton* m_upButton;
 		KoHelpNavButton* m_downButton;
 }; // KoHelpWidget
@@ -136,15 +162,15 @@ class KoHelpWidget : public QWidget
 class KoContextHelpPopup : public QWidget
 {
 	Q_OBJECT
-	
+
 	public:
 		KoContextHelpPopup( QWidget* parent = 0 );
 		~KoContextHelpPopup();
-	
+
 	public slots:
 		void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
 		void setSticky( bool sticky ) { m_isSticky = sticky; }
-  
+
 	protected:
 		virtual void mousePressEvent( QMouseEvent* );
 		virtual void mouseMoveEvent( QMouseEvent* );
@@ -153,39 +179,49 @@ class KoContextHelpPopup : public QWidget
 		virtual void windowActivationChange( bool );
 		virtual void keyPressEvent ( QKeyEvent* );
 		virtual void keyReleaseEvent ( QKeyEvent* );
-    
+
 	signals:
 		void wantsToBeClosed();
-		
+		/**
+		 * Connect to this signal to receive the href value of the links clicked.
+		 */
+		void linkClicked( const QString& link );
+
 	private:
 		KoHelpWidget*    m_helpViewer;
 		KoVerticalLabel* m_helpTitle;
 		QLabel*          m_helpIcon;
 		KoTinyButton*    m_close;
 		KoTinyButton*    m_sticky;
-		
+
 		QPoint           m_mousePos;
 		bool             m_isSticky;
 }; // KoContextHelpPopup
 
 /**
  * KoContextHelpAction provides a easy to use context help system.
- * 
+ *
  * This action displays on demand a context help in a popup.
  * The context help is set by the updateHelp slot.
  */
 class KoContextHelpAction : public KToggleAction
 {
 	Q_OBJECT
-	
+
 	public:
 		KoContextHelpAction( KActionCollection* parent, QWidget* parent = 0 );
 		virtual ~KoContextHelpAction();
-		
+
 	public slots:
 		void updateHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
 		void closePopup();
-		
+
+	signals:
+		/**
+		 * Connect to this signal to receive the href value of the links clicked.
+		 */
+		void linkClicked( const QString& link );
+
 	private:
 		KoContextHelpPopup* m_popup;
 }; // KoContextHelpAction
@@ -193,14 +229,14 @@ class KoContextHelpAction : public KToggleAction
 class KoContextHelpWidget : public QWidget
 {
 	Q_OBJECT
-	
+
 	public:
 		KoContextHelpWidget( QWidget* parent = 0, const char* name = 0 );
 		~KoContextHelpWidget();
-		
+
 	public slots:
 		void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
-		
+
 	private:
 		KoHelpWidget*    m_helpViewer;
 		KoVerticalLabel* m_helpTitle;
@@ -210,14 +246,20 @@ class KoContextHelpWidget : public QWidget
 class KoContextHelpDocker : public QDockWindow
 {
 	Q_OBJECT
-	
+
 	public:
 		KoContextHelpDocker( QWidget* parent = 0, const char* name = 0 );
 		~KoContextHelpDocker();
-		
+
 	public slots:
 		void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
-		
+
+	signals:
+		/**
+		 * Connect to this signal to receive the href value of the links clicked.
+		 */
+		void linkClicked( const QString& link );
+
 	private:
 		KoHelpWidget*    m_helpViewer;
 		KoVerticalLabel* m_helpTitle;
