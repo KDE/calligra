@@ -31,7 +31,7 @@
 /* END FOR THE DIRTY HACK */
 #include <qguardedptr.h>
 
-#include "kwutils.h"
+#include <koUtils.h>
 #include "defs.h"
 #include "serialletter_interface.h"
 #include "qtsqlopenwidget.h"

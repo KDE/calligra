@@ -303,8 +303,6 @@ public:
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
-    void openLink();
-
 public slots:
     // Reimplemented from KWFrameSet and connected to KoTextView's signals
     virtual void cut();
