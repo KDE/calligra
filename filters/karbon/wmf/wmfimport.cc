@@ -37,7 +37,7 @@ WMFImport::WMFImport(
     KoFilter *,
     const char *,
     const QStringList&) :
-        KoFilter(), KWmf(75.0 / (2.5 *1.4))
+        KoFilter(), KWmf(75.0 )/// (2.5 *1.4))
 {
 }
 
@@ -47,39 +47,42 @@ WMFImport::~WMFImport()
 
 KoFilter::ConversionStatus WMFImport::convert( const QCString& from, const QCString& to )
 {
-    if (to != "application/x-karbon" || from != "image/x-wmf")
-        return KoFilter::NotImplemented;
+	if( to != "application/x-karbon" || from != "image/x-wmf" )
+		return KoFilter::NotImplemented;
 
-    m_text = "";
-    m_text += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    m_text += "<!DOCTYPE DOC>\n";
-    m_text += "<DOC mime=\"application/x-karbon\" syntaxVersion=\"0.1\" editor=\"WMF import filter\">\n";
-    m_text += "  <LAYER name=\"Layer\" visible=\"1\">\n";
+	// doc header
+	m_text = "";
+	m_text += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	m_text += "<!DOCTYPE DOC>\n";
+	m_text += "<DOC mime=\"application/x-karbon\" syntaxVersion=\"0.1\" editor=\"WMF import filter\">\n";
+	m_text += "  <LAYER name=\"Layer\" visible=\"1\">\n";
 
-    if (!parse(m_chain->inputFile()))
-        return KoFilter::WrongFormat;
-    m_text += "  </LAYER>\n";
-    m_text += "</DOC>\n";
+	// parse body
+	if( !parse( m_chain->inputFile() ) )
+		return KoFilter::WrongFormat;
+	// close doc
+	m_text += "  </LAYER>\n";
+	m_text += "</DOC>\n";
 
-    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
-    if (!out)
-    {
-        kdError(s_area) << "Unable to open output stream" << endl;
-        return KoFilter::StorageCreationError;
-    }
+	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
+	if(!out)
+	{
+		kdError(s_area) << "Unable to open output stream" << endl;
+		return KoFilter::StorageCreationError;
+	}
 	//kdDebug(s_area) << "m_text : " << m_text.latin1() << endl;
-    QCString cstring = m_text.latin1();
-    out->writeBlock((const char*)cstring, cstring.size() - 1);
-    return KoFilter::OK;
+	QCString cstring = m_text.latin1();
+	out->writeBlock( (const char*)cstring, cstring.size() - 1 );
+	return KoFilter::OK;
 }
 
 void WMFImport::gotEllipse(
-    const DrawContext &dc,
-    QString type,
-    QPoint topLeft,
-    QSize halfAxes,
-    unsigned startAngle,
-    unsigned stopAngle)
+    const DrawContext &/*dc*/,
+    QString /*type*/,
+    QPoint /*topLeft*/,
+    QSize /*halfAxes*/,
+    unsigned /*startAngle*/,
+    unsigned /*stopAngle*/)
 {
     //m_text += "<ellipse angle1=\"" + QString::number(startAngle) +
      //           "\" angle2=\"" + QString::number(stopAngle) +
@@ -89,15 +92,6 @@ void WMFImport::gotEllipse(
 //                "\" rx=\"" + QString::number(halfAxes.width()) +
 //                "\" ry=\"" + QString::number(halfAxes.height()) +
 //                "\">\n";
-//    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
-//                "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
-//                "\" linewidth=\"" + QString::number(dc.m_penWidth) +
-//                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
-//                "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
-//                "\">\n";
-//    m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
-//    m_text += " </gobject>\n";
-//    m_text += "</ellipse>\n";
 }
 
 void toRGB(int c, double &r, double &g, double &b)
@@ -154,29 +148,11 @@ void WMFImport::gotPolyline(
 }
 
 void WMFImport::gotRectangle(
-    const DrawContext &dc,
-    const QPointArray &points)
+    const DrawContext &/*dc*/,
+    const QPointArray &/*points*/)
 {
 	kdDebug(s_area) << "WMFImport::gotRectangle" << endl;
     //QRect bounds = points.boundingRect();
-
-    //m_text += "<rectangle width=\"" + QString::number(bounds.width()) +
-    //            "\" x=\"" + QString::number(bounds.x()) +
-    //            "\" y=\"" + QString::number(bounds.y()) +
-    //            "\" height=\"" + QString::number(bounds.height()) +
-    //            "\" rounding=\"0\">\n";
-    //m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
-    //pointArray(points);
-    //m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
-    //            "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
-    //            "\" linewidth=\"" + QString::number(dc.m_penWidth) +
-    //            "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
-    //            "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
-    //            "\">\n";
-    //m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
-    //m_text += " </gobject>\n";
-    //m_text += "</polyline>\n";
-    //m_text += "</rectangle>\n";
 }
 
 void WMFImport::pointArray(
