@@ -608,9 +608,7 @@ void KWView::setupActions()
                         actionCollection(), "extra_autocorrection" );
 
     //------------------------ Settings menu
-    (void) new KAction( i18n( "&Configure..." ),"configure",0,
-                        this, SLOT( configure() ),
-                        actionCollection(), "configure" );
+    KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "configure" );
 }
 
 void KWView::fileStatistics()
