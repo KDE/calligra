@@ -54,6 +54,7 @@ public:
 	}
 protected:
 	friend class KoUnitDoubleValidator;
+	KoUnitDoubleValidator *m_validator;
 	unsigned int m_precision;
 	KoUnit::Unit m_unit;
 };
@@ -68,9 +69,6 @@ public:
 
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
-
-private:
-	KoUnitDoubleValidator *m_validator;
 };
 
 class KoUnitDoubleLineEdit : public QLineEdit, public KoUnitDoubleBase
@@ -88,7 +86,6 @@ protected:
 	 bool eventFilter( QObject* obj, QEvent* ev );
 
 private:
-	KoUnitDoubleValidator *m_validator;
 	double m_value;
 	double m_lower;
 	double m_upper;
@@ -109,7 +106,6 @@ protected:
 	 bool eventFilter( QObject* obj, QEvent* ev );
 
 private:
-	KoUnitDoubleValidator *m_validator;
 	double m_value;
 	double m_lower;
 	double m_upper;
