@@ -5154,7 +5154,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
                 actionList.append(separator);
                 actionList.append(actionGoToFootEndNote);
             }
-            bool state = !frameSet->isHeaderOrFooter() && !frameSet->isFootEndNote();
+            bool state = !frameSet->isHeaderOrFooter() && !frameSet->isFootEndNote() && (frameSet->type()!=FT_HORZLINE);
             state = state && (m_doc->processingType() == KWDocument::WP &&frameSet!=m_doc->frameSet( 0 ));
             if(state)
             {
