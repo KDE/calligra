@@ -39,6 +39,9 @@
 #include <kdeversion.h>
 #include <kglobalsettings.h>
 #include <kparts/componentfactory.h>
+#include <ktip.h>
+#include <kstandarddirs.h>
+#include <kpushbutton.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -165,6 +168,11 @@ class KexiMainWindowImpl::Private
 		//! Indicates that we're inside closeDialog() method - to avoid inf. recursion
 		//! on dialog removing
 		bool insideCloseDialog : 1;
+
+		//! Used in several places to show tip dialog at startup (only once per session) 
+		//! before displaying other stuff
+		bool showTipDialogOnStartup : 1;
+
 	Private()
 		: dialogs(401)
 	{
@@ -184,7 +192,10 @@ class KexiMainWindowImpl::Private
 		forceDialogClosing=false;
 		insideCloseDialog=false;
 		createMenu=0;
+		showTipDialogOnStartup=true;
 //		last_checked_mode=0;
+	}
+	~Private() {
 	}
 
 	/*! Toggles last checked view mode radio action, if available. */
@@ -431,6 +442,10 @@ KexiMainWindowImpl::initActions()
 	action =  KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
 	action->setWhatsThis(i18n("Lets you configure Kexi."));
 
+	//HELP MENU
+	KStdAction::tipOfDay( this, SLOT( slotTipOfTheDayAction() ), actionCollection() )
+		->setWhatsThis(i18n("This shows useful tips on the use of this application."));
+
 //	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
 //	 actionCollection(), "kexi_settings");
 //	actionSettings->setWhatsThis(i18n("Lets you configure Kexi."));
@@ -524,6 +539,7 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 {
 	kdDebug() << "KexiMainWindowImpl::startup()..." << endl;
 	if (!projectData) {
+		tipOfTheDay(true);
 //<TEMP>
 		//some connection data
 		KexiDB::ConnectionData *conndata;
@@ -600,6 +616,9 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 			return;
 	}
 	openProject(projectData);
+
+	//show if wasn't show yet
+	tipOfTheDay(true);
 }
 
 bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
@@ -2095,6 +2114,50 @@ void KexiMainWindowImpl::slotMdiModeHasBeenChangedTo(KMdi::MdiMode)
 	activateFirstWin();
 	activeWindowChanged(activeWindow());
 }
+
+void KexiMainWindowImpl::slotTipOfTheDayAction()
+{
+	tipOfTheDay(false);
+}
+
+void KexiMainWindowImpl::tipOfTheDay(bool onStartup)
+{
+	if (onStartup && !d->showTipDialogOnStartup)
+		return;
+
+	QString key = QString("showImportantInfo %1").arg(KEXI_VERSION_STRING);
+	d->config->setGroup("Startup");
+	bool show = d->config->readBoolEntry(key,true);
+
+	if (show || !onStartup) { //if !onStartup - dialog is always shown
+		d->config->setGroup("TipOfDay");
+		if (!d->config->hasKey("RunOnStart"))
+			d->config->writeEntry("RunOnStart",true);
+
+		KTipDialog tipDialog(new KTipDatabase(locate("data", QString("kexi/tips"))), 0);
+		tipDialog.setCaption(i18n("Important informations"));
+		QObjectList *l = tipDialog.queryList( "KPushButton" );//hack: hide <- -> buttons
+		int i=0;
+		for (QObjectListIt it( *l ); it.current() && i<2; ++it, i++ )
+			static_cast<KPushButton*>(it.current())->hide();
+
+		tipDialog.adjustSize();
+		QRect desk = QApplication::desktop()->screenGeometry( QApplication::desktop()->screenNumber(this) );
+		tipDialog.resize( QMAX(tipDialog.width(),desk.width()*3/5), QMAX(tipDialog.height(),desk.height()*3/5) );
+		KDialog::centerOnScreen(&tipDialog);
+		tipDialog.setModal ( true );
+		tipDialog.exec();
+		//a hack: get user's settings
+		d->config->setGroup("TipOfDay");
+		show = d->config->readBoolEntry("RunOnStart", show);
+	}
+
+	//write our settings back
+	d->config->setGroup("Startup");
+	d->config->writeEntry(key,show);
+	d->showTipDialogOnStartup = false;
+}
+
 
 #include "keximainwindowimpl.moc"
 

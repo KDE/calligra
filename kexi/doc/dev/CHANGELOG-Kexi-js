@@ -324,9 +324,24 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 
 CC_MAIL: dkite@shaw.ca
 
+
+2004-03-27
+Form Editor
+	- buggy deleting fixed: ResizeHandleSet::Dict defined, we're using that instead 
+	  of not-fully-defined QDict<ResizeHandleSet>
+Kexi
+	- added 'Welcome' screen with hot informations for our users
+
+~~~~~~~~~~~~~~~~ beta3 pre1 ~~~~~~~~~~~~~~~~
+
 2004-03-26
 	- pl translate updated
 	- some I18N_NOOP turned to i18n
+	- fixed crash on Relationships window closing due to lack of Part Item
+KexiTableView
+	- "dontAskBeforeDeleteRow" config key is better
+	- after removing a row, all rows below are updated
+	- repaint of bottom few pixels (empty) area fixed when scrolling and resizing
 
 2004-03-25
 KexiTableView

@@ -281,6 +281,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		void slotProjectRelations();
 		void slotQuit();
 
+		//! Shows tipOfTheDay dialog, is \a onStartup is false, it's always shown
+		void tipOfTheDay(bool onStartup);
+		void slotTipOfTheDayAction(); //!< internal; calls tipOfTheDay(false)
+
 		void slotImportFile();
 		void slotImportServer();
 
