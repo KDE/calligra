@@ -23,6 +23,7 @@
 
 #include "vcommand.h"
 #include "vfill.h"
+#include "vgroup.h"
 
 #include <qvaluevector.h>
 
@@ -41,8 +42,12 @@ public:
 
 	virtual bool changesSelection() const { return true; }
 
+	virtual void visitVGroup( VGroup& group );
+	virtual void visitVComposite( VComposite& composite );
+
 protected:
-	VSelection* m_selection;
+	VObjectList m_objects;
+	VSelection *m_selection;
 
 	VFill m_fill;
 

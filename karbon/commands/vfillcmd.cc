@@ -24,6 +24,8 @@
 #include "vfillcmd.h"
 #include "vselection.h"
 #include "vdocument.h"
+#include "vcomposite.h"
+#include "vgroup.h"
 
 VFillCmd::VFillCmd( VDocument *doc, const VFill &fill, const QString &icon )
 	: VCommand( doc, i18n( "Fill Objects" ), icon ), m_fill( fill )
@@ -36,18 +38,42 @@ VFillCmd::VFillCmd( VDocument *doc, const VFill &fill, const QString &icon )
 
 VFillCmd::~VFillCmd()
 {
-	delete( m_selection );
+	m_objects.clear();
+	delete m_selection;
+	m_selection = 0L;
+}
+
+void
+VFillCmd::visitVGroup( VGroup& group )
+{
+	VObjectListIterator itr( group.objects() );
+
+	for( ; itr.current() ; ++itr )
+	{
+		m_oldfills.push_back( VFill( *( itr.current()->fill() ) ) );
+		itr.current()->setFill( m_fill );
+		m_objects.append(itr.current() );
+	}
+}
+
+void 
+VFillCmd::visitVComposite( VComposite& composite )
+{
+	m_oldfills.push_back( VFill( *( composite.fill() ) ) );
+	composite.setFill( m_fill );
+	m_objects.append( &composite );
 }
 
 void
 VFillCmd::execute()
 {
+	if( !m_selection )
+		m_selection = document()->selection()->clone();
 	VObjectListIterator itr( m_selection->objects() );
+
 	for( ; itr.current() ; ++itr )
 	{
-		m_oldfills.push_back( VFill( *itr.current()->fill() ) );
-
-		itr.current()->setFill( m_fill );
+		visit( *itr.current() );
 	}
 
 	setSuccess( true );
@@ -56,7 +82,7 @@ VFillCmd::execute()
 void
 VFillCmd::unexecute()
 {
-	VObjectListIterator itr( m_selection->objects() );
+	VObjectListIterator itr( m_objects );
 
 	int i = 0;
 
@@ -64,6 +90,10 @@ VFillCmd::unexecute()
 	{
 		itr.current()->setFill( m_oldfills[ i++ ] );
 	}
+
+	m_objects.clear();
+	delete m_selection;
+	m_selection = 0L;
 
 	setSuccess( false );
 }
