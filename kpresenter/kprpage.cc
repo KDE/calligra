@@ -127,8 +127,8 @@ void KPrPage::removeObject( int pos)
 KCommand * KPrPage::deleteObjs( bool _add )
 {
     QPtrList<KPObject> _objects;
+    DeleteCmd *deleteCmd=0L;
     _objects.setAutoDelete( false );
-
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -136,16 +136,13 @@ KCommand * KPrPage::deleteObjs( bool _add )
 	    _objects.append( it.current() );
     }
     m_doc->deSelectAllObj();
-
-    DeleteCmd *deleteCmd = new DeleteCmd( i18n( "Delete object(s)" ), _objects, m_doc,this );
-    deleteCmd->execute();
-
-    if ( _add )
-        return deleteCmd;
-
-    m_doc->setModified(true);
-    KCommand *cmd=0L;
-    return 0L;
+    if ( _add &&_objects.count() > 0 ) {
+        deleteCmd = new DeleteCmd( i18n( "Delete object(s)" ), _objects, m_doc,this );
+        deleteCmd->execute();
+    }
+    else
+        m_doc->setModified(true);
+    return deleteCmd ;
 }
 
 void KPrPage::copyObjs()
