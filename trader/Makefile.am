@@ -37,7 +37,7 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths -I./ -I$(top_srcdir)/lib/
 bin_SCRIPTS = kotrader
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kotrader.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kotrader.pot
 
 #trader.h: trader.idl
 #	$(IDL) $(IDL_FLAGS) trader.idl

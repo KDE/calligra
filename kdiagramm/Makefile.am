@@ -74,7 +74,7 @@ uninstall-local:
 	-rm -f $(bindir)/kdiagramm
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kdiagramm.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kdiagramm.pot
 
 kdiagramm.h: kdiagramm.idl
 	$(IDL) $(IDL_FLAGS) $(srcdir)/kdiagramm.idl

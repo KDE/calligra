@@ -30,7 +30,6 @@ messages:
 	done
 	rm -f temp.pot
 	rm -rf po.backup
-	(cd po && $(MAKE) -f Makefile.am merge)
 
 dist-hook:
 	cd $(top_distdir) && perl $(top_srcdir)/admin/am_edit -padmin

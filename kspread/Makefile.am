@@ -64,7 +64,7 @@ uninstall-local:
 	-rm -f $(bindir)/kspread
 	
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kspread.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kspread.pot
 
 kspread.h: kspread.idl $(top_srcdir)/lib/kofficecore/koffice.idl
 	$(IDL) $(IDL_FLAGS) $(srcdir)/kspread.idl
