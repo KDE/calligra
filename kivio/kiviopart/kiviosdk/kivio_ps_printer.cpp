@@ -18,6 +18,8 @@
  */
 #include "kivio_ps_printer.h"
 
+#include <qfile.h>
+
 #include "kivio_line_style.h"
 #include "kivio_fill_style.h"
 #include "kivio_point.h"
@@ -84,7 +86,7 @@ bool KivioPSPrinter::start( const QString &_f, int numPages )
 {
     m_fileName = QString(_f);
 
-    m_fp = fopen( m_fileName.ascii(), "w+" );
+    m_fp = fopen( QFile::encodeName(m_fileName), "w+" );
     if( !m_fp )
         return false;
 
@@ -96,7 +98,7 @@ bool KivioPSPrinter::start( const QString &_f, int numPages )
 			"%%%%PageOrder: Ascend\n"
 			"%%%%BoundingBox: 0 0 596 842\n"
 			"%%%%EndComments\n",
-			m_fileName.ascii(), numPages );
+			QFile::encodeName(m_fileName), numPages );
 			
 	fprintf(m_fp,
 			"%%BeginProlog\n"
