@@ -592,25 +592,40 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
   m_frame->setView( view );
   parentView()->canvasAddChild( this );
 
+
+  /**
+   KoViewChild has basically three geometries to keep in sync.
+   - The KoDocumentChild geometry (i.e. the embedded object's geometry, unzoomed)
+   - Its own geometry (used for hit-test etc.)
+   - The KoFrame geometry (the graphical widget for moving the object when active)
+
+   So we need to subtract the scrollview's offset for the frame geometry, since it's a widget.
+
+   The rules are
+   (R1) frameGeometry = childGeometry * zoom "+" m_frame->{left|right|top|bottom}Border() - scrollview offset,
+   (R2) frameGeometry = myGeometry "+" active_frame_border - scrollview offset.
+
+   So: (R3, unused) myGeometry = childGeometry * zoom "+" m_frame->{left|right|top|bottom}Border() "-" active_frame_border
+
+   Notes: active_frame_border is m_frame->border() (0 when inactive, 5 when active).
+          {left|right|top|bottom}Border are the borders used in kspread (0 when inactive, big when active).
+          "+" border means we add a border, si it's a subtraction on x, y and an addition on width, height.
+   */
+
+  // Set frameGeometry from childGeometry
+  // This initial calculation uses R1 but omits borders because the frame is currently inactive (-> 0)
   QRect geom = child->geometry();
-  m_frame->setGeometry( static_cast<int>(geom.x() * parentView()->zoom()) - parentView()->canvasXOffset(),
-                        static_cast<int>(geom.y() * parentView()->zoom()) - parentView()->canvasYOffset(),
-                        static_cast<int>(geom.width() * parentView()->zoom()),
-                        static_cast<int>(geom.height() * parentView()->zoom()) );
+  double zoom = parentView()->zoom();
+  m_frame->setGeometry( static_cast<int>((double)geom.x() * zoom) - parentView()->canvasXOffset(),
+                        static_cast<int>((double)geom.y() * zoom) - parentView()->canvasYOffset(),
+                        static_cast<int>((double)geom.width() * zoom),
+                        static_cast<int>((double)geom.height() * zoom) );
 
   m_frame->show();
   m_frame->raise();
-  /*
-    geom = frame->geometry();
-    viewChild->setGeometry( geom );*/
-  /*
-    viewChild->setGeometry( QRect( geom.x() - view->leftBorder(),
-                                   geom.y() - view->topBorder(),
-                                   geom.width() + view->rightBorder(),
-                                   geom.height() + view->bottomBorder() ) );
-   */
-
+  // Set myGeometry from frameGeometry
   slotFrameGeometryChanged();
+
   connect( m_frame, SIGNAL( geometryChanged() ),
            this, SLOT( slotFrameGeometryChanged() ) );
   connect( m_child, SIGNAL( changed( KoChild * ) ),
@@ -629,30 +644,58 @@ KoViewChild::~KoViewChild()
   delete d;
 }
 
+#define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
+
 void KoViewChild::slotFrameGeometryChanged()
 {
+  // Set our geometry from the frame geometry (R2 reversed)
   QRect geom = m_frame->geometry();
   int b = m_frame->border();
   QRect borderRect( geom.x() + b + parentView()->canvasXOffset(),
                     geom.y() + b + parentView()->canvasYOffset(),
                     geom.width() - b * 2,
                     geom.height() - b * 2 );
-  QRect borderLessRect( geom.x() + m_frame->leftBorder() + parentView()->canvasXOffset(),
-                        geom.y() + m_frame->topBorder() + parentView()->canvasYOffset(),
-                        geom.width() - m_frame->leftBorder() - m_frame->rightBorder(),
-                        geom.height() - m_frame->topBorder() - m_frame->bottomBorder() );
   setGeometry( borderRect );
+
   if(m_child)
-      m_child->setGeometry( borderLessRect );
+  {
+    // Set the child geometry from the frame geometry (R1 reversed)
+    QRect borderLessRect( geom.x() + m_frame->leftBorder() + parentView()->canvasXOffset(),
+                          geom.y() + m_frame->topBorder() + parentView()->canvasYOffset(),
+                          geom.width() - m_frame->leftBorder() - m_frame->rightBorder(),
+                          geom.height() - m_frame->topBorder() - m_frame->bottomBorder() );
+    double zoom = parentView()->zoom();
+    QRect unzoomedRect( static_cast<int>( (double)borderLessRect.x() / zoom ),
+                        static_cast<int>( (double)borderLessRect.y() / zoom ),
+                        static_cast<int>( (double)borderLessRect.width() / zoom ),
+                        static_cast<int>( (double)borderLessRect.height() / zoom ) );
+    kdDebug() << "KoViewChild::slotFrameGeometryChanged child geometry "
+              << ( m_child->geometry() == unzoomedRect ? "already " : "set to " )
+              << DEBUGRECT( unzoomedRect ) << endl;
+
+    // We don't want to trigger slotDocGeometryChanged again
+    lock();
+    m_child->setGeometry( unzoomedRect );
+    unlock();
+  }
 }
 
 void KoViewChild::slotDocGeometryChanged()
 {
+  if ( locked() )
+      return;
+  // Set frame geometry from child geometry (R1)
+  // The frame's resizeEvent will call slotFrameGeometryChanged.
+  double zoom = parentView()->zoom();
   QRect geom = m_child->geometry();
-  QRect borderRect( geom.x() - m_frame->leftBorder() - parentView()->canvasXOffset(),
-                    geom.y() - m_frame->topBorder() - parentView()->canvasYOffset(),
-                    geom.width() + m_frame->leftBorder() + m_frame->rightBorder(),
-                    geom.height() + m_frame->topBorder() + m_frame->bottomBorder() );
+  QRect borderRect( static_cast<int>( (double)geom.x() * zoom ) - m_frame->leftBorder() - parentView()->canvasXOffset(),
+                    static_cast<int>( (double)geom.y() * zoom ) - m_frame->topBorder() - parentView()->canvasYOffset(),
+                    static_cast<int>( (double)geom.width() * zoom ) + m_frame->leftBorder() + m_frame->rightBorder(),
+                    static_cast<int>( (double)geom.height() * zoom ) + m_frame->topBorder() + m_frame->bottomBorder() );
+  kdDebug() << "KoViewChild::slotDocGeometryChanged frame geometry "
+            << ( m_frame->geometry() == borderRect ? "already " : "set to " )
+            << DEBUGRECT( borderRect ) << endl;
+
   m_frame->setGeometry( borderRect );
 }
 

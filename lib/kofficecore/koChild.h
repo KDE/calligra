@@ -116,7 +116,7 @@ public:
    *         to its parents corrdinate system.
    */
   virtual bool isRectangle() const;
-	
+
   /**
    * Sets the clip region of the painter, so that only pixels of the
    * child part can be drawn.
@@ -152,6 +152,8 @@ public:
   virtual void lock();
 
   virtual void unlock();
+
+  bool locked() const;
 
   virtual QPointArray oldPointArray( const QWMatrix &matrix );
 

@@ -293,6 +293,11 @@ void KoChild::unlock()
   emit changed( this );
 }
 
+bool KoChild::locked() const
+{
+  return d->m_lock;
+}
+
 QPointArray KoChild::oldPointArray( const QWMatrix &matrix )
 {
   QPointArray arr = d->m_old;

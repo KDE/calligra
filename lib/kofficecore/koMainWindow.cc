@@ -939,7 +939,7 @@ void KoMainWindow::slotCloseAllViews() {
 }
 
 void KoMainWindow::slotRemoveView() {
-
+    kdDebug() << "KoMainWindow::slotRemoveView" << endl;
     KoView *view;
     if(d->m_rootViews.findRef(d->m_activeView)!=-1)
         view=d->m_rootViews.current();
@@ -953,6 +953,11 @@ void KoMainWindow::slotRemoveView() {
         d->m_removeView->setEnabled(false);
         d->m_orientation->setEnabled(false);
     }
+    // We'll react on destroyed(), i.e. before the view is removed from the splitter,
+    // so remove by hand first.
+    kdDebug() << "calling d->m_splitter->removeChild" << endl;
+    d->m_splitter->removeChild( view );
+    kdDebug() << "delete view" << endl;
     delete view;
     view=0L;
     d->m_rootViews.first()->setPartManager( d->m_manager );
