@@ -41,12 +41,40 @@ class Field;
 class KEXI_DB_EXPORT ParserError
 {
 	public:
+
+                /**
+		 * Empty constructor.
+		 */
 		ParserError();
+
+                /**
+		 * Constructor.
+		 *
+		 * \param type The errortype.
+		 * \param error A description of the error.
+		 * \param hint Token where the error happend.
+		 * \param at The position where the error happend.
+		 */
 		ParserError(const QString &type, const QString &error, const QString &hint, int at);
+
+                /**
+		 * Destructor.
+		 */
 		~ParserError();
 
+                /**
+		 * \return the errortype.
+		 */
 		QString	type() { return m_type; }
+
+                /**
+		 * \return a descriping error message.
+		 */
 		QString	error() { return m_error; }
+
+                /**
+		 * \return position where the error happend.
+		 */
 		int	at() { return m_at; }
 
 	private:
@@ -65,21 +93,25 @@ class ParserPrivate;
 class KEXI_DB_EXPORT Parser
 {
 	public:
+
+                /**
+                 * The operation-code of the statement.
+                 */
 		enum OPCode
 		{
-			OP_None = 0,	// no statement parsed or reseted
-			OP_Error,	// error while parsing
-			OP_CreateTable,
-			OP_AlterTable,
-			OP_Select,
-			OP_Insert,
-			OP_Update,
-			OP_Delete
+			OP_None = 0,	/// No statement parsed or reseted.
+			OP_Error,	/// Error while parsing.
+			OP_CreateTable, /// Create a table.
+			OP_AlterTable,  /// Alter an existing table
+			OP_Select,      /// Query-statement.
+			OP_Insert,      /// Insert new content.
+			OP_Update,      /// Update existing content.
+			OP_Delete       /// Delete existing content.
 		};
 
 		/**
 		 * constructs an empty object of the parser
-		 * @param db is used for things like wildcard resolution. If 0 parser works in "pure mode"
+		 * \param connection is used for things like wildcard resolution. If 0 parser works in "pure mode"
 		 */
 		Parser(Connection *connection);
 		~Parser();
@@ -99,8 +131,13 @@ class KEXI_DB_EXPORT Parser
 		 */
 		OPCode operation() const;
 
+                /**
+                 * \return the resulting operation as string.
+                 */
+                QString operationString() const;
+
 		/**
-		 * \return a pointer to a KexiDBTable on CREATE TABLE 
+		 * \return a pointer to a KexiDBTable on CREATE TABLE
 		 * or 0 on any other operation or error. Returned object is owned by you.
 		 * You can call this method only once every time after doing parse().
 		 * Next time, the call will return 0.
@@ -108,7 +145,7 @@ class KEXI_DB_EXPORT Parser
 		TableSchema *table();
 
 		/**
-		 * \return a pointer to KexiDBSelect if 'SELECT ...' was called 
+		 * \return a pointer to KexiDBSelect if 'SELECT ...' was called
 		 * or 0 on any other operation or error. Returned object is owned by you.
 		 * You can call this method only once every time after doing parse().
 		 * Next time, the call will return 0.
@@ -128,40 +165,47 @@ class KEXI_DB_EXPORT Parser
 		 */
 		ParserError error() const;
 
+		/**
+                 * \return the statement passed on the last \a parse method-call.
+                 */
 		QString statement() const;
 
-
 		/**
-		 * @internal
+		 * \internal
 		 * sets the operation (only parser will need to call this)
 		 */
 		void setOperation(OPCode op);
 
 		/**
-		 * @internal
+		 * \internal
 		 * creates a new table (only parser will need to call this)
 		 */
 		void createTable(const char *t);
 
 		/**
-		 * @internal
+		 * \internal
 		 * sets \a query schema object (only parser will need to call this)
 		 */
 //todo: other query types
 		void setQuerySchema(QuerySchema *query);
 
 		/**
-		 * @internal
+		 * \internal
 		 * \return query schema
 		 */
 		QuerySchema *select() const;
 
 		/**
-		 * @internal
+		 * \internal
 		 * INTERNAL use only: sets a error
 		 */
 		void setError(const ParserError &err);
 
+                /**
+                 * \a return true if the \param str is an reserved
+                 * keyword (see tokens.cpp for a list of reserved
+                 * keywords).
+                 */
 		bool isReservedKeyword(const char *str);
 
 	protected:

@@ -41,6 +41,29 @@ Parser::~Parser()
 
 Parser::OPCode Parser::operation() const { return (OPCode)d->operation; }
 
+QString
+Parser::operationString() const
+{
+	switch((OPCode)d->operation) {
+		case OP_Error:
+			return "Error";
+		case OP_CreateTable:
+			return "CreateTable";
+		case OP_AlterTable:
+			return "AlterTable";
+		case OP_Select:
+			return "Select";
+		case OP_Insert:
+			return "Insert";
+		case OP_Update:
+			return "Update";
+		case OP_Delete:
+			return "Delete";
+		default: //OP_None
+			return "None";
+	}
+}
+
 TableSchema *Parser::table() { TableSchema *t = d->table; d->table=0; return t; }
 
 QuerySchema *Parser::query() { QuerySchema *s = d->select; d->select=0; return s; }
@@ -71,7 +94,7 @@ Parser::setQuerySchema(QuerySchema *query)
 {
 	if (d->select)
 		delete d->select;
-	
+
 	d->select = query;
 }
 
