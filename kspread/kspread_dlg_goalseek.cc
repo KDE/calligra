@@ -38,8 +38,8 @@
 #include <qvariant.h>
 #include <qwhatsthis.h>
 
-
-KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & marker, 
+#include <math.h>
+KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & marker,
                                         const char * name, bool modal, WFlags fl )
   : QDialog( parent, name, modal, fl ),
     m_pView( parent ),
@@ -49,21 +49,21 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   if ( !name )
     setName( "KSpreadGoalSeekDlg" );
 
-  resize( 458, 153 ); 
+  resize( 458, 153 );
   setCaption( i18n( "Goal seek" ) );
   setSizeGripEnabled( true );
 
-  KSpreadGoalSeekDlgLayout = new QGridLayout( this, 1, 1, 11, 6, "KSpreadGoalSeekDlgLayout"); 
-  
+  KSpreadGoalSeekDlgLayout = new QGridLayout( this, 1, 1, 11, 6, "KSpreadGoalSeekDlgLayout");
+
   m_startFrame = new QFrame( this, "m_startFrame" );
   m_startFrame->setFrameShape( QFrame::StyledPanel );
   m_startFrame->setFrameShadow( QFrame::Raised );
-  m_startFrameLayout = new QGridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout"); 
-  
+  m_startFrameLayout = new QGridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout");
+
   QLabel * TextLabel4 = new QLabel( m_startFrame, "TextLabel4" );
   TextLabel4->setText( i18n( "to value" ) );
   m_startFrameLayout->addWidget( TextLabel4, 1, 0 );
-  
+
   m_targetValueEdit = new QLineEdit( m_startFrame, "m_targetValueEdit" );
   m_startFrameLayout->addWidget( m_targetValueEdit, 1, 1 );
 
@@ -85,7 +85,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   m_startFrameLayout->addWidget( TextLabel3, 0, 0 );
   KSpreadGoalSeekDlgLayout->addWidget( m_startFrame, 0, 0 );
 
-  QVBoxLayout * Layout5 = new QVBoxLayout( 0, 0, 6, "Layout5"); 
+  QVBoxLayout * Layout5 = new QVBoxLayout( 0, 0, 6, "Layout5");
 
   m_buttonOk = new QPushButton( this, "m_buttonOk" );
   m_buttonOk->setText( i18n( "&Start" ) );
@@ -101,18 +101,18 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   Layout5->addWidget( m_buttonCancel );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   Layout5->addItem( spacer );
-  
+
   KSpreadGoalSeekDlgLayout->addMultiCellLayout( Layout5, 0, 1, 1, 1 );
 
   m_resultFrame = new QFrame( this, "m_resultFrame" );
   m_resultFrame->setFrameShape( QFrame::StyledPanel );
   m_resultFrame->setFrameShadow( QFrame::Raised );
   m_resultFrame->setMinimumWidth( 350 );
-  m_resultFrameLayout = new QGridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout"); 
-  
+  m_resultFrameLayout = new QGridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout");
+
   QLabel * TextLabel7 = new QLabel( m_resultFrame, "TextLabel7" );
   TextLabel7->setText( i18n( "Current value:" ) );
-  
+
   m_resultFrameLayout->addWidget( TextLabel7, 2, 0 );
 
   m_newValueDesc = new QLabel( m_resultFrame, "m_newValueDesc" );
@@ -143,7 +143,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   // signals and slots connections
   connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( buttonOkClicked() ) );
   connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( buttonCancelClicked() ) );
-  
+
   // tab order
   setTabOrder( m_targetEdit,      m_targetValueEdit );
   setTabOrder( m_targetValueEdit, m_sourceEdit );
@@ -157,7 +157,7 @@ KSpreadGoalSeekDlg::~KSpreadGoalSeekDlg()
   {
     m_sourceCell->setValue(m_oldSource);
     m_targetCell->setCalcDirtyFlag();
-    m_targetCell->calc();    
+    m_targetCell->calc();
   }
 }
 
@@ -209,7 +209,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
 
       return;
     }
-    
+
     if ( !m_targetCell->isFormula() )
     {
       KMessageBox::error( this, i18n("Target cell must contain a formula!") );
@@ -249,7 +249,7 @@ void KSpreadGoalSeekDlg::buttonCancelClicked()
   {
     m_sourceCell->setValue(m_oldSource);
     m_targetCell->setCalcDirtyFlag();
-    m_targetCell->calc();    
+    m_targetCell->calc();
     m_restored = true;
   }
 
@@ -269,7 +269,7 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
 
   double startA, startB;
   double resultA, resultB;
-  
+
   // save old value
   m_oldSource = m_sourceCell->valueDouble();
   resultA = _goal;
@@ -290,15 +290,15 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     m_sourceCell->setCalcDirtyFlag();
     m_targetCell->calc( false );
     resultA = m_targetCell->valueDouble() - _goal;
-    //    kdDebug() << "Target A: " << m_targetCell->valueDouble() << ", " << m_targetCell->text() << " Calc: " << resultA << endl; 
-    
+    //    kdDebug() << "Target A: " << m_targetCell->valueDouble() << ", " << m_targetCell->text() << " Calc: " << resultA << endl;
+
     m_sourceCell->setValue(startB);
     //    m_sourceCell->updateDepending();
     m_sourceCell->setCalcDirtyFlag();
     m_targetCell->calc( false );
     resultB = m_targetCell->valueDouble() - _goal;
     /*
-      kdDebug() << "Target B: " << m_targetCell->valueDouble() << ", " << m_targetCell->text() << " Calc: " << resultB << endl; 
+      kdDebug() << "Target B: " << m_targetCell->valueDouble() << ", " << m_targetCell->text() << " Calc: " << resultB << endl;
 
       kdDebug() << "Iteration: " << m_maxIter << ", StartA: " << startA
               << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "
