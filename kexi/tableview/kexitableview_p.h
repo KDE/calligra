@@ -30,6 +30,8 @@
 #include "kexitableview.h"
 #include "kexitableheader.h"
 
+#include <kexidb/roweditbuffer.h>
+
 #include <qevent.h>
 #include <qtimer.h>
 #include <qvalidator.h>
@@ -58,6 +60,9 @@ class KexiTableViewPrivate
 	int			curRow;
 	int			curCol;
 	KexiTableItem	*pCurrentItem;
+
+	//! when (current or new) row is edited - changed field values are temporary stored here
+	KexiDB::RowEditBuffer *pRowEditBuffer; 
 
 	// foreign widgets
 	QHeader			*pTopHeader;

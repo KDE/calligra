@@ -48,18 +48,18 @@ void
 KexiDataTableView::init()
 {
 	m_cursor = 0;
-	m_maxRecord = 0;
-	m_records = 0;
-	m_first = false;
+//	m_maxRecord = 0;
+//	m_records = 0;
+//	m_first = false;
 
-	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotMoving(int)));
-	connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
+//	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotMoving(int)));
+//	connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
 }
 
 bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 {
-	if (!m_first)
-		clearColumns();
+//js	if (!m_first)
+//js		clearColumns();
 	if (!cursor) {
 		clearColumns();
 		m_cursor = 0;
@@ -90,12 +90,12 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	}
 
 	uint i = 0;
-	KexiDB::Field::List *list = m_cursor->query()->fieldsExpanded();
-	KexiDB::Field *f = list->first();
-	KexiTableViewData *tv_data = new KexiTableViewData();
-	KexiDBTableViewColumn col;
-	while (f) {
-		col=KexiDBTableViewColumn(*m_cursor->query(), *f);
+	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded();
+	KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
+	KexiDBTableViewColumn* col;
+	for (i=0;i<vector.count();i++) {
+		KexiDB::Field *f = vector[i];// = list->first();
+		col=new KexiDBTableViewColumn(*m_cursor->query(), *f);
 /*		col.type = f->type();
 		if (!f->caption().isEmpty())
 			col.caption = f->caption();
@@ -107,12 +107,13 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 				col.caption = f->name();
 		}*/
 		/*TEMPORARY: not editable -- TODO: set editable if supported*/
-		tv_data->columns.append( col );
+//		tv_data->columns.append( col );
+		tv_data->addColumn( col );
 
 //		addColumn(fname, f->variantType(), 
 //			false/*TEMPORARY: not editable*/
 //		);
-		f = list->next();
+//		f = list->next();
 	}
 
 	QString caption = m_cursor->query()->caption();
@@ -124,13 +125,14 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	//PRIMITIVE!! data setting:
 //	const char **cd = m_cursor->recordData();
 
-	const int fcount = m_cursor->fieldCount();
+	const uint fcount = m_cursor->fieldCount();
 	m_cursor->moveFirst();
 	while (!m_cursor->eof()) {
 		KexiTableItem *item = new KexiTableItem(fcount);
-		for (int f=0; f<fcount; f++) {
+		m_cursor->storeCurrentRow(*item);
+/*		for (uint f=0; f<fcount; f++) {
 			item->at(f) = m_cursor->value(f);
-		}
+		}*/
 		tv_data->append( item );
 		m_cursor->moveNext();
 	}
@@ -277,6 +279,7 @@ KexiDataTableView::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 #endif
 }
 
+#if 0 //js
 void
 KexiDataTableView::slotMoving(int)
 {
@@ -291,6 +294,7 @@ KexiDataTableView::slotMoving(int)
 	}
 	verticalHeader()->setUpdatesEnabled(true);
 }
+#endif
 
 /*QSize
 KexiDataTableView::tableSize() const

@@ -40,8 +40,8 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		/**
 		 * crates a empty table dialog
 		 */
-		KexiDataTable(KexiMainWindow *win, const QString &caption);
-		KexiDataTable(KexiMainWindow *win, const QString &caption, KexiDB::Cursor *cursor);
+		KexiDataTable(KexiMainWindow *win, const QString &caption = QString::null);
+		KexiDataTable(KexiMainWindow *win, KexiDB::Cursor *cursor, const QString &caption = QString::null);
 		~KexiDataTable();
 
 		void			setData(KexiDB::Cursor *cursor);

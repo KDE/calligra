@@ -52,8 +52,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 	lyr->setAutoAdd(true);
 	m_cview = new KLineEdit(this, "tableLineEdit");
 
-	m_view = m_cview;
-	m_view->installEventFilter(this);
+	setView(m_cview);
 	m_cview->setFrame(false);
 	m_calculatedCell = false;
 

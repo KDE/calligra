@@ -22,11 +22,6 @@
    Original Project: buX (www.bux.at)
 */
 
-//#include <qtimer.h>
-//#include <stdarg.h>
-//#include "kexitableheader.h"
-//#include "kexitableview.h"
-//#include "kexitablerm.h"
 #include "kexitableitem.h"
 
 //#include "kexitableview_p.h"
@@ -49,6 +44,12 @@ KexiTableItem::init(int numCols)
 {
 	clear();
 	resize(numCols);
+}
+
+void
+KexiTableItem::clearValues()
+{
+	init(count());
 }
 
 #if 0

@@ -25,6 +25,7 @@
 */
 
 #include "kexitableview_p.h"
+
 #include <qlabel.h>
 
 KexiTableViewPrivate::KexiTableViewPrivate()
@@ -53,6 +54,7 @@ KexiTableViewPrivate::~KexiTableViewPrivate()
 {
 	delete pBufferPm;
 	delete pInsertItem;
+	delete pRowEditBuffer;
 	delete scrollBarTip;
 }
 
@@ -63,6 +65,7 @@ void KexiTableViewPrivate::clearVariables() {
 	curRow = -1;
 	curCol = -1;
 	pCurrentItem=0;
+	pRowEditBuffer=0;
 	pInsertItem = 0;
 	rowEditing = false;
 	newRowEditing = false;

@@ -38,7 +38,8 @@ KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption)
 	init();
 }
 
-KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption, KexiDB::Cursor *cursor)
+KexiDataTable::KexiDataTable(KexiMainWindow *win, KexiDB::Cursor *cursor, 
+	const QString &caption)
  : KexiDialogBase(win, caption)
 {
 	m_view = new KexiDataTableView(this, "view", cursor);
@@ -52,7 +53,7 @@ void KexiDataTable::init()
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
 	resize(m_view->sizeHint());
 //js	m_view->show();
-	setFocusProxy(m_view);
+//	setFocusProxy(m_view);
 	m_view->setFocus();
 	setIcon(SmallIcon("table"));
 	
@@ -68,7 +69,7 @@ KexiDataTable::~KexiDataTable()
 void
 KexiDataTable::initActions()
 {
-#warning FIXME Move this to the table part
+//warning FIXME Move this to the table part
 /*
 	kdDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
 	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");

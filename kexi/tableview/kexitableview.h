@@ -112,6 +112,8 @@ public:
 	QVariant columnDefaultValue(int col) const;
 	bool columnEditable(int col) const;
 	inline KexiTableItem *itemAt(int row) const;
+
+	QVariant* bufferedValueAt(int col);
 	
 	/*! \return true if data represented by this table view 
 	 is not editable using it (it can be editable with other ways although). */
@@ -172,9 +174,10 @@ public:
 	/*! \return true if currently selected row is edited. */
 	bool rowEditing() const;
 
-	void		updateCell(int row, int col);
-//	void		updateRow(int row);
-//	void		remove(int row);
+	/*! Redraws specified cell. */
+	void	updateCell(int row, int col);
+	/*! Redraws all cells of specified row. */
+	void	updateRow(int row);
 
 	// properties
 	bool		backgroundAltering() const;
@@ -338,6 +341,7 @@ protected:
 	virtual void keyPressEvent(QKeyEvent*);
 	virtual void focusInEvent(QFocusEvent*);
 	virtual void focusOutEvent(QFocusEvent*);
+	virtual bool event ( QEvent * e );
 	virtual void resizeEvent(QResizeEvent *);
 	virtual void viewportResizeEvent( QResizeEvent *e );//js
 	virtual void showEvent(QShowEvent *e);
@@ -397,9 +401,16 @@ protected:
 
 inline KexiTableItem *KexiTableView::itemAt(int row) const
 {
-	if (!m_data->at(row))
+	KexiTableItem *item = m_data->at(row);
+	if (!item)
 		kdDebug() << "KexiTableView::itemAt(" << row << "): NO ITEM!!" << endl;
-	return m_data->at(row);
+	else {
+		kdDebug() << "KexiTableView::itemAt(" << row << "):" << endl;
+		int i=1;
+		for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
+			kdDebug() << i<<": " << (*it).toString()<< endl;
+	}
+	return item;
 }
 /*
 inline int KexiTableView::currentRow()

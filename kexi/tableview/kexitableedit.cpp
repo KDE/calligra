@@ -22,21 +22,37 @@
 #include <qpalette.h>
 
 KexiTableEdit::KexiTableEdit(QWidget* parent, const char* name)
-	: QWidget(parent, name)
+	: QWidget(parent, name), m_view(0)
 {
 	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
-	installEventFilter(this);
+//	installEventFilter(this);
+}
+
+void KexiTableEdit::setView(QWidget *v)
+{
+	m_view = v;
+	m_view->installEventFilter(this);
 }
 
 void KexiTableEdit::resize(int w, int h)
 {
 	QWidget::resize(w, h);
-	m_view->resize(w, h);
+	if (m_view)
+		m_view->resize(w, h);
 }
 
 bool
 KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 {
+/*	if (watched == m_view) {
+		if(e->type() == QEvent::KeyPress) {
+			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+			if (ev->key()==Key_Tab) {
+
+			}
+		}
+	}
+*/
 	if(watched == this)
 	{
 		if(e->type() == QEvent::KeyPress)

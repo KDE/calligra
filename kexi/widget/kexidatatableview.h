@@ -61,10 +61,11 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 		KexiDB::Cursor *cursor() { return m_cursor; }
 
 		/**
-		 * @returns the number of records in the recordset
+		 * @returns the number of records in the data set, (if data set is present)
 		 * @note not all of the records have to be processed
 		 */
-		int		records() { return m_records; }
+		int recordCount() { return m_data->count(); }
+//js		int		records() { return m_records; }
 
 		bool readOnly();
 
@@ -79,7 +80,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 
 	protected slots:
 //		void		recordInsertFinished(KexiDBUpdateRecord*);
-		void		slotMoving(int);
+//js		void		slotMoving(int);
 		void		insertNext();
 
 		void		slotItemChanged(KexiTableItem*, int, QVariant);
@@ -87,10 +88,10 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 	private:
 		//db stuff
 		KexiDB::Cursor	*m_cursor;
-		bool		m_first;
+//		bool		m_first;
 //use m_record->database() instead:		KexiDB		*m_db;
-		int		m_maxRecord;
-		int		m_records;
+//js		int		m_maxRecord;
+//js		int		m_records;
 
 #ifndef Q_WS_WIN
 #warning FIXME

@@ -26,6 +26,10 @@
 
 #include <kexidb/field.h>
 #include <kexidb/queryschema.h>
+#include <kexidb/roweditbuffer.h>
+#include <kexidb/cursor.h>
+
+#include <kdebug.h>
 
 unsigned short KexiTableViewData::charTable[]=
 {
@@ -52,6 +56,7 @@ KexiTableViewColumn::KexiTableViewColumn()
 	type = KexiDB::Field::InvalidType;
 	width = 100;
 	readOnly = false;
+	isDBAware = false;
 }
 
 KexiTableViewColumn::KexiTableViewColumn(bool)
@@ -60,6 +65,12 @@ KexiTableViewColumn::KexiTableViewColumn(bool)
 	type = KexiDB::Field::InvalidType;
 	width = 100;
 	readOnly = false;
+	isDBAware = false;
+}
+
+bool KexiTableViewColumn::isNull() const
+{
+	return type == KexiDB::Field::InvalidType;
 }
 
 /*QString KexiTableViewColumn::caption() const
@@ -88,38 +99,40 @@ KexiTableViewColumn::~KexiTableViewColumn()
 //------------------------------------------------------
 
 KexiDBTableViewColumn::KexiDBTableViewColumn()
- : KexiTableViewColumn(), m_field(0)
+ : KexiTableViewColumn(), field(0)
 {
+	isDBAware = true;
 }
 
 KexiDBTableViewColumn::KexiDBTableViewColumn(
-	const KexiDB::QuerySchema &query, KexiDB::Field& field)
- : KexiTableViewColumn(true), m_field(&field)
+	const KexiDB::QuerySchema &query, KexiDB::Field& f)
+ : KexiTableViewColumn(true), field(&f)
 {
-	type = m_field->type();
+	isDBAware = true;
+	type = field->type();
 
-	if (!m_field->caption().isEmpty()) {
-		caption = m_field->caption();
+	if (!field->caption().isEmpty()) {
+		caption = field->caption();
 	}
 	else {
 		//reuse alias if available:
-		caption = query.alias(m_field);
+		caption = query.alias(field);
 		//last hance: use field name
 		if (caption.isEmpty())
-			caption = m_field->name();
+			caption = field->name();
 	}
 }
 
 bool KexiDBTableViewColumn::acceptsFirstChar(const QChar& ch) const
 {
-	if (m_field->isNumericType()) {
+	if (field->isNumericType()) {
 		if (ch=="-")
-			 return !m_field->isUnsigned();
+			 return !field->isUnsigned();
 		if (ch=="+" || (ch>="0" && ch<="9"))
 			return true;
 		return false;
 	}
-	else if (m_field->type() == KexiDB::Field::Boolean)
+	else if (field->type() == KexiDB::Field::Boolean)
 		return false;
 		
 	return true;
@@ -132,26 +145,56 @@ KexiTableViewData::KexiTableViewData()
 	, m_key(0)
 	, m_order(1)
 	, m_type(1)
+	, m_pRowEditBuffer(0)
+	, m_cursor(0)
 	, m_readOnly(false)
 	, m_insertingEnabled(true)
 {
 	setAutoDelete(true);
+	columns.setAutoDelete(true);
 }
 
+KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
+	: KexiTableViewDataBase()
+	, m_key(0)
+	, m_order(1)
+	, m_type(1)
+	, m_pRowEditBuffer(0)
+	, m_cursor(c)
+	, m_readOnly(false)
+	, m_insertingEnabled(true)
+{
+	setAutoDelete(true);
+	columns.setAutoDelete(true);
+}
+
+/*
 KexiTableViewData::KexiTableViewData(KexiTableViewColumnList& cols) 
 	: KexiTableViewDataBase()
 	, columns(cols)
 	, m_key(0)
 	, m_order(1)
 	, m_type(1)
+	, m_pRowEditBuffer(0)
 	, m_readOnly(false)
 	, m_insertingEnabled(true)
 {
 	setAutoDelete(true);
-}
+	columns.setAutoDelete(true);
+}*/
 
 KexiTableViewData::~KexiTableViewData()
 {
+}
+
+void KexiTableViewData::addColumn( KexiTableViewColumn* col )
+{
+//	if (!col->isDBAware) {
+//		if (!m_simpleColumnsByName)
+//			m_simpleColumnsByName = new QDict<KexiTableViewColumn>(101);
+//		m_simpleColumnsByName->insert(col->caption,col);//for faster lookup
+//	}
+	columns.append( col );
 }
 
 void KexiTableViewData::setSorting(int column, bool ascending)
@@ -166,7 +209,7 @@ void KexiTableViewData::setSorting(int column, bool ascending)
 		return;
 	}
 
-	const int t = columns[m_key].type;
+	const int t = columns.at(m_key)->type;
 	if (t == KexiDB::Field::Boolean || KexiDB::Field::isNumericType(t))
 		cmpFunc = &KexiTableViewData::cmpInt;
 	else
@@ -223,4 +266,71 @@ int KexiTableViewData::cmpStr(Item item1, Item item2)
 	return m_order*(au-bu);
 }
 
+void KexiTableViewData::clearRowEditBuffer()
+{
+	//init row edit buffer
+	if (!m_pRowEditBuffer)
+		m_pRowEditBuffer = new KexiDB::RowEditBuffer(isDBAware());
+	else
+		m_pRowEditBuffer->clear();
+}
+
+bool KexiTableViewData::isDBAware()
+{
+	return m_cursor!=0;
+/*	if (columns.count()==0)
+		return false;
+	else
+		return columns.first()->isDBAware;*/
+}
+
+void KexiTableViewData::updateRowEditBuffer(int colnum, QVariant newval)
+{
+	kdDebug() << "KexiTableViewData::updateRowEditBuffer() column #" << colnum << " = " << newval.toString() << endl;
+	KexiTableViewColumn* col = columns.at(colnum);
+	if (!col) {
+		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found! col==0" << endl;
+		return;
+	}
+	if (m_pRowEditBuffer->isDBAware()) {
+		if (!(static_cast<KexiDBTableViewColumn*>(col)->field)) {
+			kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
+			return;
+		}
+		m_pRowEditBuffer->insert( *static_cast<KexiDBTableViewColumn*>(col)->field, newval);
+		return;
+	}
+	//not db-aware:
+	const QString colname = col->caption;
+	if (colname.isEmpty()) {
+		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
+		return;
+	}
+	m_pRowEditBuffer->insert(colname, newval);
+}
+
+//js TODO: if there can be multiple views for this data, we need multiple buffers!
+bool KexiTableViewData::saveRowChanges(KexiTableItem& item)
+{
+	if (!rowEditBuffer())
+		return false;
+	kdDebug() << "KexiTableViewData::saveRowChanges()..." << endl;
+	if (isDBAware()) {
+		if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() ))
+			return false;
+	}
+	else {//js UNTESTED!!! - not db-aware version
+		KexiDB::RowEditBuffer::SimpleMap b = rowEditBuffer()->simpleBuffer();
+		for (KexiDB::RowEditBuffer::SimpleMap::Iterator it = b.begin();it!=b.end();++it) {
+			uint i=0;
+			for (KexiTableViewColumnListIterator it2(columns);it2.current();++it2, i++) {
+				if (it2.current()->caption==it.key()) {
+					kdDebug() << it2.current()->caption << ": "<<item[i].toString()<<" -> "<<it.data().toString()<<endl;
+					item[i] = it.data();
+				}
+			}
+		}
+	}
+	return true;
+}
 

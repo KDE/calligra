@@ -35,6 +35,8 @@
 namespace KexiDB {
 class Field;
 class QuerySchema;
+class RowEditBuffer;
+class Cursor;
 }
 
 /*! Single column definition. */
@@ -49,6 +51,8 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		int type; //!< one of KexiDB::Field::Type
 		uint width;
 		bool readOnly : 1;
+		bool isDBAware : 1; //!< true for KexiDBTableViewColumn object
+		bool isNull() const;
 		
 /*		virtual QString caption() const;
 		virtual void setCaption(const QString& c);
@@ -59,20 +63,24 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		
 //		class Private;
 //		Private *d;
+	friend class KexiTableViewData;
 };
 
+/*! KexiDBTableViewColumn reimplements KexiTableViewColumn for db-aware data. */
 class KEXIDATATABLE_EXPORT KexiDBTableViewColumn : public KexiTableViewColumn {
 	public:
 		KexiDBTableViewColumn();
-		KexiDBTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::Field& field);
+		KexiDBTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::Field& f);
 		virtual bool acceptsFirstChar(const QChar& ch) const;
 	
+		KexiDB::Field* field;
 	protected:
-		KexiDB::Field* m_field;
 };
 
 /*! List of column definitions. */
-typedef QValueVector<KexiTableViewColumn> KexiTableViewColumnList;
+typedef QPtrList<KexiTableViewColumn> KexiTableViewColumnList;
+typedef QPtrListIterator<KexiTableViewColumn> KexiTableViewColumnListIterator;
+//typedef QValueVector<KexiTableViewColumn> KexiTableViewColumnList;
 
 typedef QPtrList<KexiTableItem> KexiTableViewDataBase;
 
@@ -92,7 +100,10 @@ class KEXIDATATABLE_EXPORT KexiTableViewData : public KexiTableViewDataBase
 {
 public: 
 	KexiTableViewData();
-	KexiTableViewData(KexiTableViewColumnList& cols);
+
+	KexiTableViewData(KexiDB::Cursor *c); //db-aware version
+
+//	KexiTableViewData(KexiTableViewColumnList* cols);
 	~KexiTableViewData();
 //js	void setSorting(int key, bool order=true, short type=1);
 
@@ -108,9 +119,15 @@ public:
 	*/
 	bool sortingAscending() const { return m_order == 1; }
 
-	void addColumn( const KexiTableViewColumn& col ) { columns.append( col ); }
+	void addColumn( KexiTableViewColumn* col );
+
+	virtual bool isDBAware();
+
+	inline KexiDB::Cursor* cursor() const { return m_cursor; }
 
 	uint columnsCount() const { return columns.count(); }
+
+	inline KexiTableViewColumn* column(uint c) { return columns.at(c); }
 
 	/*! Columns information */
 	KexiTableViewColumnList columns;
@@ -120,7 +137,26 @@ public:
 
 	virtual bool isInsertingEnabled() const { return m_insertingEnabled; }
 	virtual void setInsertingEnabled(bool set) { m_insertingEnabled = set; }
-	
+
+	/*! Clears and initializes internal row edit buffer for incoming editing. 
+	 Creates buffer using KexiDB::RowEditBuffer(false) (false means not db-aware type) id our data is not db-aware,
+	 or db-aware buffer if data is db-aware (isDBAware()==true).
+	 \sa KexiDB::RowEditBuffer
+	*/
+	void clearRowEditBuffer();
+
+	/*! Updates internal row edit buffer: currently edited column (number \colnum) 
+	 has now assigned new value of \a newval.
+	 Uses column's caption to address the column in buffer 
+	 if the buffer is of simple type, or db-aware buffer if (isDBAware()==true).
+	 (then fields are addressed with KexiDB::Field, instead of caption strings).
+	 \sa KexiDB::RowEditBuffer */
+	void updateRowEditBuffer(int colnum, QVariant newval);
+
+	inline KexiDB::RowEditBuffer* rowEditBuffer() const { return m_pRowEditBuffer; }
+
+	bool saveRowChanges(KexiTableItem& item);
+
 protected:
 	virtual int compareItems(Item item1, Item item2);
 
@@ -131,9 +167,15 @@ protected:
 	short		m_order;
 	short		m_type;
 	static unsigned short charTable[];
+	KexiDB::RowEditBuffer *m_pRowEditBuffer;
+	KexiDB::Cursor *m_cursor;
+
+	//! used to faster lookup columns of simple type (not dbaware)
+//	QDict<KexiTableViewColumn> *m_simpleColumnsByName;
+
 	bool m_readOnly : 1;
 	bool m_insertingEnabled : 1;
-	
+
 	int (KexiTableViewData::*cmpFunc)(void *, void *);
 };
 
