@@ -38,7 +38,6 @@
 #include <qmime.h>
 #include <qsortedlist.h>
 #include <qvaluelist.h>
-#include <qbuffer.h>
 
 #include <kdebug.h>
 #include <klocale.h>

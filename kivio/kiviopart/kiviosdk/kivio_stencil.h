@@ -29,7 +29,7 @@
 #include <kglobalsettings.h>
 #include <koRect.h>
 
-#include <kivio_line_style.h>
+#include "kivio_line_style.h"
 
 class KivioCustomDragData;
 class KivioConnectorPoint;

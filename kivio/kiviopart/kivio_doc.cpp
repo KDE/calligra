@@ -75,7 +75,7 @@
 #include <koTemplateChooseDia.h>
 #include <koFilterManager.h>
 #include <koStoreDevice.h>
-#include <KIvioDocIface.h>
+#include "KIvioDocIface.h"
 #include <kcommand.h>
 #include <kozoomhandler.h>
 #include <koApplication.h>

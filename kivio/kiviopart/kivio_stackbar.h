@@ -22,8 +22,6 @@
 #include <qdockwindow.h>
 #include <qptrdict.h>
 
-class QFrame;
-
 namespace Kivio {
   class DragBarButton;
 }

@@ -22,7 +22,6 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
-#include <qframe.h>
 
 #include <kdebug.h>
 

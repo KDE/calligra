@@ -73,7 +73,6 @@
 #include <koUnitWidgets.h>
 #include <koApplication.h>
 #include <kotabbar.h>
-#include <koPageLayoutDia.h>
 #include <kolinewidthaction.h>
 #include <kolinestyleaction.h>
 #include "kotooldockmanager.h"
