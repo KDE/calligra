@@ -281,15 +281,15 @@ KarbonPart::initConfig()
 		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
 		setBackupFile( config->readNumEntry( "BackupFile", true ) );
 	}
-
+        int undos = 30;
 	if( config->hasGroup( "Misc" ) )
 	{
-		config->setGroup( "Misc" );
-		int undos = config->readNumEntry( "UndoRedo", -1 );
-
-		if( undos != -1 )
-			setUndoRedoLimit( undos );
+            config->setGroup( "Misc" );
+            undos = config->readNumEntry( "UndoRedo", -1 );
 	}
+        if( undos != -1 )
+            setUndoRedoLimit( undos );
+
 }
 
 void
