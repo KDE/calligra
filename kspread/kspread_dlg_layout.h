@@ -206,56 +206,7 @@ protected:
     CellLayoutDlg *dlg;
 };
 
-/**
- */
-class CellLayoutPageBorder : public QWidget
-{
-    Q_OBJECT
-public:
-    CellLayoutPageBorder( QWidget *parent, CellLayoutDlg *_dlg );
 
-    void apply( KSpreadCell *_cell );
-    /**
-     * Apply the changes in the outline to the objects.
-     */
-    void applyOutline( int _left, int _top, int _right, int _bottom );
-
-public slots:
-    void slotUnselect1( KSpreadPatternSelect *_select );
-    void slotUnselect2( KSpreadPatternSelect *_select );
-
-    //void slotColorButton();
-    void slotSetColorButton( const QColor &_color );
-
-protected:
-
-    KSpreadPatternSelect *selectedPattern;
-    KSpreadPatternSelect *selectedBorder;
-
-    KSpreadPatternSelect *left;
-    KSpreadPatternSelect *right;
-    KSpreadPatternSelect *top;
-    KSpreadPatternSelect *bottom;
-    KSpreadPatternSelect *outline;
-    KSpreadPatternSelect *fallDiagonal;
-    KSpreadPatternSelect *goUpDiagonal; 
-    KSpreadPatternSelect* pattern1;
-    KSpreadPatternSelect* pattern2;
-    KSpreadPatternSelect* pattern3;
-    KSpreadPatternSelect* pattern4;
-    KSpreadPatternSelect* pattern5;
-    KSpreadPatternSelect* pattern6;
-    KSpreadPatternSelect* pattern7;
-    KSpreadPatternSelect* pattern8;
-    KSpreadPatternSelect* pattern9;
-    KSpreadPatternSelect* pattern10;
-    //QPushButton* color;
-    KColorButton* color;
-
-    QColor currentColor;
-
-    CellLayoutDlg *dlg;
-};
 
 class CellLayoutPagePosition : public QWidget
 {
@@ -275,6 +226,84 @@ protected:
 };
 
 
+
+class KSpreadBord : public QFrame
+{
+    Q_OBJECT
+public:
+    KSpreadBord( QWidget *parent,const char *_name  );
+signals:
+    void redraw();
+protected:
+    virtual void paintEvent( QPaintEvent *_ev );
+    virtual void mousePressEvent( QMouseEvent* _ev ); 
+};
+
+class KSpreadBorderButton : public QPushButton
+{
+    Q_OBJECT
+public:
+    KSpreadBorderButton( QWidget *parent, const char *_name );
+    void setPenStyle( PenStyle _pat ) { penStyle = _pat;}
+    PenStyle getPenStyle() { return penStyle; }
+    void setColor( const QColor &_col ) { penColor = _col; }
+    const QColor& getColor() { return penColor; }
+    void setPenWidth( int _w ) { penWidth = _w; }
+    int getPenWidth() { return penWidth; }
+    bool isChanged() { return changed; }
+    void setChanged(bool _changed ) { changed=_changed;}
+    void setUndefined();
+ signals:
+    void clicked(KSpreadBorderButton *);
+ protected:
+    virtual void mousePressEvent( QMouseEvent *_ev );
+    PenStyle penStyle;
+    QColor penColor;
+    int penWidth;
+    bool changed;
+
+};
+
+class CellLayoutPageBorder : public QWidget
+{
+  Q_OBJECT
+public:
+    CellLayoutPageBorder( QWidget *parent, CellLayoutDlg *_dlg );
+
+    void applyOutline( int _left, int _top, int _right, int _bottom );
+
+public slots:
+    void changeState(KSpreadBorderButton *_this);
+    void draw();
+    void slotSetColorButton( const QColor &_color );
+    void slotUnselect2( KSpreadPatternSelect *_select );
+    void loadIcon( QString pix,KSpreadBorderButton *_button);
+protected:
+    KSpreadPatternSelect *selectedPattern;
+    KSpreadBorderButton *top;
+    KSpreadBorderButton *bottom;
+    KSpreadBorderButton *left;
+    KSpreadBorderButton *right;
+    KSpreadBorderButton *vertical;
+    KSpreadBorderButton *horizontal;
+    KSpreadBorderButton *fallDiagonal;
+    KSpreadBorderButton *goUpDiagonal;
+    KSpreadPatternSelect* pattern1;
+    KSpreadPatternSelect* pattern2;
+    KSpreadPatternSelect* pattern3;
+    KSpreadPatternSelect* pattern4;
+    KSpreadPatternSelect* pattern5;
+    KSpreadPatternSelect* pattern6;
+    KSpreadPatternSelect* pattern7;
+    KSpreadPatternSelect* pattern8;
+    KSpreadPatternSelect* pattern9;
+    KSpreadPatternSelect* pattern10;
+    KColorButton* color;
+
+    QColor currentColor;
+    KSpreadBord *area;
+    CellLayoutDlg *dlg;
+};
 /**
  */
 class CellLayoutDlg : public QObject
@@ -317,22 +346,33 @@ public:
     bool bBottomBorderStyle;
     QColor bottomBorderColor;
     bool bBottomBorderColor;
-    PenStyle outlineBorderStyle;
-    int outlineBorderWidth;
-    bool bOutlineBorderStyle;
-    QColor outlineBorderColor;
-    bool bOutlineBorderColor;
+
+    PenStyle verticalBorderStyle;
+    int verticalBorderWidth;
+    bool bVerticalBorderStyle;
+    QColor verticalBorderColor;
+    bool bVerticalBorderColor;
+
+    PenStyle horizontalBorderStyle;
+    int horizontalBorderWidth;
+    bool bHorizontalBorderStyle;
+    QColor horizontalBorderColor;
+    bool bHorizontalBorderColor;
 
     PenStyle fallDiagonalStyle;
     int fallDiagonalWidth;
     bool bFallDiagonalStyle;
     QColor fallDiagonalColor;
     bool bfallDiagonalColor;
+
     PenStyle goUpDiagonalStyle;
     int goUpDiagonalWidth;
     bool bGoUpDiagonalStyle;
     QColor goUpDiagonalColor;
     bool bGoUpDiagonalColor;
+
+    bool oneCol;
+    bool oneRow;
 
     QString prefix;
     QString postfix;
@@ -369,7 +409,7 @@ public:
 
 public slots:
     void slotApply();
-    
+
 protected:
 
     /**
@@ -391,7 +431,6 @@ protected:
     CellLayoutPageMisc *miscPage;
     CellLayoutPageFont *fontPage;
     CellLayoutPagePosition *positionPage;
-
     QTabDialog *tab;
 
     /**
