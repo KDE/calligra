@@ -30,6 +30,9 @@ protected:
 
 private:
 	KChart* _chart;
+
+private slots:
+  void newData();
 };
 
 

@@ -1,12 +1,14 @@
 /* $Id$ */
 
 #include "KChartWidget.h"
+#include "KChartWidget.moc"
+#include "KChartData.h"
 
 KChartWidget::KChartWidget( KChartType charttype, QWidget* parent, 
 							const char* name, WFlags f ) :
 	QWidget( parent, name,f )
 {
-	_chart = new KChart( charttype );
+  _chart = new KChart( charttype );
 }
 
 
@@ -32,6 +34,8 @@ KChartType KChartWidget::chartType() const
 void KChartWidget::setChartData( KChartData* data )
 {
   _chart->setChartData( data );
+
+  connect( data, SIGNAL( dataChanged() ), this, SLOT( newData() ) );
 }
 
 
@@ -51,5 +55,12 @@ void KChartWidget::resizeEvent( QResizeEvent* /* event */ )
 {
   _chart->repaintChart( this );
 }
+
+
+void KChartWidget::newData()
+{
+  _chart->repaintChart( this );
+}
+
 
 

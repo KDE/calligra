@@ -15,6 +15,8 @@
 
 #include <kdebug.h>
 
+#include "KChart.moc"
+
 KChart::KChart( KChartType type ) :
   _charttype( type )
 {
