@@ -22,7 +22,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
-
+#include <kurl.h>
 #include <koPicture.h>
 
 #include "rtfimport.h"
