@@ -17,12 +17,12 @@ htmlimportsax.cc ImportTags.cc ImportParser.cc\
 ImportListener.cc ImportEntities.cc
 
 libhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc\
-ExportDialog.cc ExportDialogUI.ui
+ExportDialog.cc ExportDialogUI.ui ExportTagProcessing.cc
 
 noinst_HEADERS = htmlimport.h htmlimport_factory.h htmlimportsax.h\
 htmlexport.h htmlexport_factory.h\
 ImportTags.h ImportParser.h ImportListener.h ImportEntities.h\
-ExportDialog.h ExportDialogUI.h
+ExportDialog.h ExportDialogUI.h ExportTagProcessing.h
 
 METASOURCES = AUTO
 
