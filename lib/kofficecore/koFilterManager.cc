@@ -306,8 +306,11 @@ QString KoFilterManager::import( const QString &_file, QString &mimeType,
         unsigned int j=0;
         while(j<vec[i].export_.count()) {
             ok=import( _file, vec[i].export_[j].local8Bit(), (KoDocument *)0L, storePrefix );
-            if (ok != QString::null)
+            if (ok != QString::null) {
+                // Set the resulting mimeType to that of the filter output that worked.
+                mimeType=vec[i].export_[j];
                 return ok;
+            }
             ++j;
         }
         ++i;
