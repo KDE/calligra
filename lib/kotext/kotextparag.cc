@@ -571,8 +571,8 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
             // we flush when the value of pixelxadj changes
             flush = flush || ( nextchr->pixelxadj != chr->pixelxadj );
 #endif
-	    // we flush on tab
-	    flush = flush || ( chr->c == '\t' );
+	    // we flush before tabs
+	    flush = flush || ( nextchr->c == '\t' );
 	    // we flush on soft hypens
 	    flush = flush || ( chr->c.unicode() == 0xad );
 	    // we flush on custom items
@@ -774,7 +774,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    }
 	}
     }
-    
+
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
