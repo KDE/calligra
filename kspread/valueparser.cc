@@ -17,31 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KSPREAD_CONVERT
-#define KSPREAD_CONVERT
+#include "valueparser.h"
 
-#include "kspread_value.h"
-
-class KLocale;
-
-// KSpread namespace
-namespace KSpread {
-
-/**
-The Convert class contains various methods used to convert between
-various data types of KSpreadValue. Things like number to string,
-string to bool, and so on */
-
-class Convert {
- public:
-  static KSpreadValue toBool (const KSpreadValue &val, KLocale *locale);
-  static KSpreadValue toInteger (const KSpreadValue &val, KLocale *locale);
-  static KSpreadValue toFloat (const KSpreadValue &val, KLocale *locale);
-  static KSpreadValue toString (const KSpreadValue &val, KLocale *locale);
-  static KSpreadValue toDateTime (const KSpreadValue &val, KLocale *locale);
-};
-
-};  //end of KSpread namespace
-
-#endif //KSPREAD_CONVERT
+//TODO
 

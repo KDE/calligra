@@ -17,31 +17,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KSPREAD_CONVERT
-#define KSPREAD_CONVERT
+#ifndef KSPREAD_VALUEFORMATTER
+#define KSPREAD_VALUEFORMATTER
 
-#include "kspread_value.h"
-
-class KLocale;
-
-// KSpread namespace
 namespace KSpread {
 
-/**
-The Convert class contains various methods used to convert between
-various data types of KSpreadValue. Things like number to string,
-string to bool, and so on */
 
-class Convert {
- public:
-  static KSpreadValue toBool (const KSpreadValue &val, KLocale *locale);
-  static KSpreadValue toInteger (const KSpreadValue &val, KLocale *locale);
-  static KSpreadValue toFloat (const KSpreadValue &val, KLocale *locale);
-  static KSpreadValue toString (const KSpreadValue &val, KLocale *locale);
-  static KSpreadValue toDateTime (const KSpreadValue &val, KLocale *locale);
+/** The ValueFormatter class generates a textual representation of
+data stored in a KSpreadValue, with a given formatting */
+
+class ValueFormatter {
+  //TODO: copy stuff from KSpreadCell and kspread_util.*
 };
 
-};  //end of KSpread namespace
 
-#endif //KSPREAD_CONVERT
+};  //namespace KSpread
 
+
+#endif  //KSPREAD_VALUEFORMATTER

@@ -52,6 +52,8 @@ libkspreadcommon_la_SOURCES =  \
         kspread_sheet.cc \
         kspread_sheetprint.cc \
         kspread_util.cc  \
+				valueformatter.cc \
+				valueparser.cc \
         KSpreadAppIface.cc  \
         KSpreadAppIface.skel  \
         KSpreadCellIface.cc \
