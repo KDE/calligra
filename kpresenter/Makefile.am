@@ -84,7 +84,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		rotationdialogimpl.h KPFreehandObjectIface.h kprstylemanager.h \
 		kprbgspellcheck.h kprhelplinedia.h confpicturedia.h \
 		KPPolyLineObjectIface.h kprduplicateobjdia.h kppageeffects.h kpclosedlineobject.h kprimportstyledia.h \
-		imageEffectDia.h
+		imageEffectDia.h kprloadinginfo.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

@@ -42,6 +42,7 @@ class KoStyle;
 class KPrBgSpellCheck;
 class KoTextParag;
 class KoTextObject;
+class KPRLoadingInfo;
 
 class KOSpellConfig;
 class KoOasisContext;
@@ -634,7 +635,7 @@ private:
     QString m_globalLanguage;
     bool m_bGlobalHyphenation;
     KoStyleStack m_styleStack;
-    QDict<QDomElement> m_animations; 
+    KPRLoadingInfo *m_loadingInfo;
 };
 
 #endif

@@ -97,6 +97,8 @@
 #include <kooasiscontext.h>
 #include <koSconfig.h>
 
+#include "kprloadinginfo.h"
+
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;
@@ -135,6 +137,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;
+    m_loadingInfo=0L;
     bgObjSpellChecked = 0L;
     m_tabStop = MM_TO_POINT( 15.0 );
     m_styleColl=new KoStyleCollection();
@@ -898,7 +901,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 {
     QTime dt;
     dt.start();
-
+    m_loadingInfo = new KPRLoadingInfo;
     ignoreSticky = FALSE;
     emit sigProgress( 0 );
     int activePage=0;
@@ -942,8 +945,8 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QDomNode drawPage = body.namedItem( "draw:page" );
     if ( drawPage.isNull() ) // no slides? give up.
         return false;
-
     QDomElement dp = drawPage.toElement();
+    m_loadingInfo = new KPRLoadingInfo;
 
     QString masterPageName = "Standard"; // use default layout as fallback
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
@@ -994,7 +997,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     {
         dp = drawPage.toElement();
         m_styleStack.clear(); // remove all styles
-	m_animations.clear(); // clear all animations 
+	m_loadingInfo->clear(); // clear all animations 
         fillStyleStack( dp, oasisStyles );
         m_styleStack.save();
 
@@ -1023,7 +1026,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             kdDebug()<<" object offset :"<<offset<<endl;
 	    QDomElement * animation = 0L;
 	    if( o.hasAttribute("draw:id"))
-	      animation = m_animations[o.attribute("draw:id")];
+	      animation = m_loadingInfo->animationById(o.attribute("draw:id"));
             m_styleStack.save();
             if ( name == "draw:text-box" ) // textbox
             {
@@ -1117,7 +1120,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         startBackgroundSpellCheck();
 #endif
     }
-
+    delete m_loadingInfo;
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     return true;
 }
@@ -1136,7 +1139,7 @@ void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
             QString name = e.attribute( "draw:shape-id" );
 	    kdDebug()<<" insert animation style : name :"<<name<<endl;
             QDomElement* ep = new QDomElement( e );
-            m_animations.insert( name, ep );
+	    m_loadingInfo->storePresentationAnimation( ep, name );
         }
     }
 }
