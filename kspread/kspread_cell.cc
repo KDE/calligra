@@ -3299,7 +3299,7 @@ int KSpreadCell::defineAlignX()
   int a = align( column(), row() );
   if ( a == KSpreadCell::Undefined )
   {
-    if ( m_value.isBoolean() || m_value.isNumber() || m_pTable->isRightToLeft() )
+    if ( m_value.isBoolean() || m_value.isNumber() || (m_value.isString() && m_value.asString()[0].direction() == QChar::DirR ))
       a = KSpreadCell::Right;
     else
       a = KSpreadCell::Left;
