@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
@@ -18,8 +18,8 @@
    Copyright 1999 Michael Reiher <michael.reiher.gmx.de>
    Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    Copyright 1998-1999 Reginald Stadlbauer <reggie@kde.org>
-   
-   
+
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -43,6 +43,7 @@
 
 #include <qapplication.h>
 #include <qsimplerichtext.h>
+#include <qregexp.h>
 #include <qpopupmenu.h>
 #include <koStyleStack.h>
 
@@ -5156,13 +5157,106 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter )
     if ( isFormula() )
     {
       kdDebug() << "Formula found" << endl;
-#if 0 //FIXME
-      QString formula( convertFormula( text() ) );
-      cellElem.setAttribute( "table:formula", formula );
-#endif
+      QString formula( convertFormulaToOasisFormat( text() ) );
+      xmlwriter.addAttribute( "table:formula", formula );
     }
+    if ( isForceExtraCells() )
+    {
+      int colSpan = mergedXCells() + 1;
+      int rowSpan = mergedYCells() + 1;
+
+      if ( colSpan > 1 )
+        xmlwriter.addAttribute( "table:number-columns-spanned", QString::number( colSpan ) );
+
+      if ( rowSpan > 1 )
+        xmlwriter.addAttribute( "table:number-rows-spanned", QString::number( rowSpan ) );
+    }
+
     xmlwriter.endElement();
     return true;
+}
+
+
+QString KSpreadCell::convertFormulaToOasisFormat( const QString & formula ) const
+{
+    QString s;
+    QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
+    int n = exp.search( formula, 0 );
+    kdDebug() << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length()
+              << ", Matched length: " << exp.matchedLength() << endl;
+
+    bool inQuote1 = false;
+    bool inQuote2 = false;
+    int i = 0;
+    int l = (int) formula.length();
+    if ( l <= 0 )
+        return formula;
+    while ( i < l )
+    {
+        if ( ( n != -1 ) && ( n < i ) )
+        {
+            n = exp.search( formula, i );
+            kdDebug() << "Exp: " << formula.right( l - i ) << ", n: " << n << endl;
+        }
+        if ( formula[i] == '"' )
+        {
+            inQuote1 = !inQuote1;
+            s += formula[i];
+            ++i;
+            continue;
+        }
+        if ( formula[i] == '\'' )
+        {
+            // named area
+            inQuote2 = !inQuote2;
+            ++i;
+            continue;
+        }
+        if ( inQuote1 || inQuote2 )
+        {
+            s += formula[i];
+            ++i;
+            continue;
+        }
+        if ( ( formula[i] == '=' ) && ( formula[i + 1] == '=' ) )
+        {
+            s += '=';
+            ++i;++i;
+            continue;
+        }
+        if ( formula[i] == '!' )
+        {
+            insertBracket( s );
+            s += '.';
+            ++i;
+            continue;
+        }
+        if ( n == i )
+        {
+            int ml = exp.matchedLength();
+            if ( formula[ i + ml ] == '!' )
+            {
+                kdDebug() << "No cell ref but sheet name" << endl;
+                s += formula[i];
+                ++i;
+                continue;
+            }
+            if ( ( i > 0 ) && ( formula[i - 1] != '!' ) )
+                s += "[.";
+            for ( int j = 0; j < ml; ++j )
+            {
+                s += formula[i];
+                ++i;
+            }
+            s += ']';
+            continue;
+        }
+
+        s += formula[i];
+        ++i;
+    }
+
+    return s;
 }
 
 bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )

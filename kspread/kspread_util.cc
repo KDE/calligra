@@ -1077,3 +1077,23 @@ QString convertRefToRange( const QString & table, const QRect & rect )
 
   return s;
 }
+
+void insertBracket( QString & s )
+{
+  QChar c;
+  int i = (int) s.length() - 1;
+
+  while ( i >= 0 )
+  {
+    c = s[i];
+    if ( c == ' ' )
+      s[i] = '_';
+    if ( !(c.isLetterOrNumber() || c == ' ' || c == '.'
+           || c == '_') )
+    {
+      s.insert( i + 1, '[' );
+      return;
+    }
+    --i;
+  }
+}

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002,2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
@@ -13,7 +13,7 @@
    Copyright 1998-1999 Torben Weis <weis@kde.org>
    Copyright 1999 Michael Reiher <michael.reiher.gmx.de>
    Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -933,6 +933,7 @@ private:
 
     void checkForNamedAreas( QString & formula ) const;
     void convertFormula( QString & text, const QString & f ) const;
+    QString convertFormulaToOasisFormat( const QString & formula ) const;
 
 };
 

@@ -188,6 +188,7 @@ int         util_penCompare( QPen const & pen1, QPen const & pen2 );
 
 QString convertRefToRange( const QString & table, const QRect & rect );
 QString convertRefToBase( const QString & table, const QRect & rect );
+void insertBracket( QString & s );
 
 
 #endif
