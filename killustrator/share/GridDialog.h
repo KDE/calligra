@@ -25,40 +25,36 @@
 #ifndef GridDialog_h
 #define GridDialog_h
 
-#include <qdialog.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include "Canvas.h"
-#include "FloatSpinBox.h"
-#include "UnitBox.h"
+#include <kdialogbase.h>
 
-class GridDialog : public QDialog {
-  Q_OBJECT
+class QCheckBox;
+class Canvas;
+class UnitBox;
+
+class GridDialog : public KDialogBase {
+
+    Q_OBJECT
+
 public:
-  GridDialog (QWidget* parent = 0L, const char* name = 0L);
+    GridDialog(QWidget* parent = 0L, const char* name = 0L);
 
-  float horizontalDistance ();
-  float verticalDistance ();
-  bool showGrid ();
-  bool snapToGrid ();
+    float horizontalDistance();
+    float verticalDistance();
+    bool showGrid();
+    bool snapToGrid();
 
-  void setDistances (float h, float v);
-  void setSnapToGridOn (bool flag);
-  void setShowGridOn (bool flag);
+    void setDistances(float h, float v);
+    void setSnapToGridOn(bool flag);
+    void setShowGridOn(bool flag);
 
-
-
-  static void setupGrid (Canvas* canvas);
+    static void setupGrid(Canvas* canvas);
 
 protected:
-  QWidget* createGridWidget (QWidget* parent);
-
-private slots:
-  void helpPressed ();
+    void createGridWidget(QWidget* parent);
 
 private:
-  QCheckBox *gbutton, *sbutton;
-  UnitBox *hspinbox, *vspinbox;
+    QCheckBox *gbutton, *sbutton;
+    UnitBox *hspinbox, *vspinbox;
 };
 
 #endif

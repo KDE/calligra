@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,166 +15,130 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include <kapp.h>
-#include <klocale.h>
-#include <kseparator.h>
-#include <kbuttonbox.h>
+#include <HelplineDialog.h>
+
+#include <qlistbox.h>
 #include <qpushbutton.h>
-#include <qlabel.h>
 #include <qlayout.h>
-#include "HelplineDialog.h"
-#include "HelplineDialog.moc"
-#include "units.h"
-#include "PStateManager.h"
-#include "version.h"
+
+#include <klocale.h>
+
+#include <Canvas.h>
+#include <UnitBox.h>
+#include <units.h>
+#include <PStateManager.h>
 
 using namespace std;
 
-HelplineDialog::HelplineDialog (Canvas* c, QWidget* parent, 
-				const char* name) : 
-    QTabDialog (parent, name, true) {
-  QWidget* widget;
-
+HelplineDialog::HelplineDialog (Canvas* c, QWidget* parent,
+                                const char* name) : KDialogBase(KDialogBase::Tabbed,
+                                                                i18n("Setup Helplines"),
+                                                                KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel,
+                                                                KDialogBase::Ok, parent, name, true) {
   canvas = c;
-  setCaption (i18n ("Setup Helplines"));
-
   horizLines = canvas->getHorizHelplines ();
   vertLines = canvas->getVertHelplines ();
 
-  widget = createHorizLineWidget (this);
-  addTab (widget, i18n ("Horizontal"));
-  widget = createVertLineWidget (this);
-  addTab (widget, i18n ("Vertical"));
-
+  createHorizLineWidget(addPage(i18n("Horizontal")));
+  createVertLineWidget(addPage(i18n("Vertical")));
   initLists ();
-
-  setOkButton (i18n ("OK"));
-  setCancelButton (i18n ("Cancel"));
-
-  connect (this, SIGNAL(applyButtonPressed ()), this, SLOT(applyPressed ()));
-
-  adjustSize ();
- 
-  setMinimumSize (300, 250);
-  setMaximumSize (300, 250);
+  connect (this, SIGNAL(applyClicked()), this, SLOT(applyPressed()));
 }
 
-QWidget* HelplineDialog::createHorizLineWidget (QWidget* parent) {
-  QWidget* w;
-  QPushButton* button;
-  
-  w = new QWidget (parent);
+void HelplineDialog::createHorizLineWidget (QWidget* parent) {
 
-  horizValue = new UnitBox (w);
-  horizValue->setRange (-1000.0, 1000.0);
-  horizValue->setStep (0.1);
-  horizValue->setEditable (true);
-  horizValue->move (10, 20);
+    QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QBoxLayout *left=new QVBoxLayout(layout);
 
-  horizList = new QListBox (w);
-#if QT_VERSION >= 199
-  horizList->setColumnMode (1);
-  horizList->setRowMode (6);
-#else
-  horizList->setFixedVisibleLines (6);
-#endif
-  horizList->move (10, 60);
-  horizList->setMultiSelection (false);
-  connect (horizList, SIGNAL(highlighted (int)), 
-	   this, SLOT(horizLineSelected(int)));
+    horizValue = new UnitBox (parent);
+    horizValue->setRange (-1000.0, 1000.0);
+    horizValue->setStep (0.1);
+    horizValue->setEditable (true);
+    left->addWidget(horizValue);
 
-  button = new QPushButton (w);
-  button->setText (i18n ("Add"));
-  button->move (180, 20);
-  connect (button, SIGNAL(clicked ()), this, SLOT(addHorizLine ()));
+    horizList = new QListBox (parent);
+    horizList->setMultiSelection (false);
+    connect (horizList, SIGNAL(highlighted (int)),
+             this, SLOT(horizLineSelected(int)));
+    left->addWidget(horizList);
+    layout->addSpacing(KDialogBase::spacingHint()*2);
 
-  button = new QPushButton (w);
-  button->setText (i18n ("Update"));
-  button->move (180, 60);
-  connect (button, SIGNAL(clicked ()), this, SLOT(updateHorizLine ()));
+    QBoxLayout *right=new QVBoxLayout(layout);
+    QPushButton *button = new QPushButton (i18n("Add"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(addHorizLine ()));
+    right->addWidget(button);
 
-  button = new QPushButton (w);
-  button->setText (i18n ("Delete"));
-  button->move (180, 100);
-  connect (button, SIGNAL(clicked ()), this, SLOT(deleteHorizLine ()));
+    button = new QPushButton(i18n("Update"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(updateHorizLine ()));
+    right->addWidget(button);
 
-  return w;
+    button = new QPushButton(i18n("Delete"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(deleteHorizLine ()));
+    right->addWidget(button);
+    right->addStretch();
 }
 
-QWidget* HelplineDialog::createVertLineWidget (QWidget* parent) {
-  QWidget* w;
-  QPushButton* button;
-  
-  w = new QWidget (parent);
+void HelplineDialog::createVertLineWidget (QWidget* parent) {
 
-  vertValue = new UnitBox (w);
-  vertValue->setRange (-1000.0, 1000.0);
-  vertValue->setStep (0.1);
-  vertValue->setEditable (true);
-  vertValue->move (10, 20);
+    QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QBoxLayout *left=new QVBoxLayout(layout);
 
-  vertList = new QListBox (w);
-#if QT_VERSION >= 199
-  vertList->setColumnMode (1);
-  vertList->setRowMode (6);
-#else
-  vertList->setFixedVisibleLines (6);
-#endif
-  vertList->move (10, 60);
-  vertList->setMultiSelection (false);
-  connect (vertList, SIGNAL(highlighted (int)), 
-	   this, SLOT(vertLineSelected(int)));
+    vertValue = new UnitBox (parent);
+    vertValue->setRange (-1000.0, 1000.0);
+    vertValue->setStep (0.1);
+    vertValue->setEditable (true);
+    left->addWidget(vertValue);
 
-  button = new QPushButton (w);
-  button->setText (i18n ("Add"));
-  button->move (180, 20);
-  connect (button, SIGNAL(clicked ()), this, SLOT(addVertLine ()));
+    vertList = new QListBox(parent);
+    vertList->setMultiSelection (false);
+    connect (vertList, SIGNAL(highlighted (int)),
+             this, SLOT(vertLineSelected(int)));
+    left->addWidget(vertList);
+    layout->addSpacing(KDialogBase::spacingHint()*2);
 
-  button = new QPushButton (w);
-  button->setText (i18n ("Update"));
-  button->move (180, 60);
-  connect (button, SIGNAL(clicked ()), this, SLOT(updateVertLine ()));
+    QBoxLayout *right=new QVBoxLayout(layout);
+    QPushButton *button = new QPushButton(i18n("Add"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(addVertLine ()));
+    right->addWidget(button);
 
-  button = new QPushButton (w);
-  button->setText (i18n ("Delete"));
-  button->move (180, 100);
-  connect (button, SIGNAL(clicked ()), this, SLOT(deleteVertLine ()));
+    button = new QPushButton(i18n("Update"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(updateVertLine ()));
+    right->addWidget(button);
 
-  return w;
+    button = new QPushButton(i18n("Delete"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(deleteVertLine ()));
+    right->addWidget(button);
+    right->addStretch();
 }
 
 void HelplineDialog::applyPressed () {
-  canvas->setHorizHelplines (horizLines);
-  canvas->setVertHelplines (vertLines);
-  accept ();
-}
-
-void HelplineDialog::helpPressed () {
+    canvas->setHorizHelplines (horizLines);
+    canvas->setVertHelplines (vertLines);
 }
 
 void HelplineDialog::initLists () {
   vector<float>::iterator i;
   QString buf;
-  MeasurementUnit unit = 
+  MeasurementUnit unit =
     PStateManager::instance ()->defaultMeasurementUnit ();
 
   for (i = horizLines.begin (); i != horizLines.end (); i++) {
     float value = *i;
     buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-    horizList->insertItem (STR(buf));
+    horizList->insertItem (buf);
   }
 
   for (i = vertLines.begin (); i != vertLines.end (); i++) {
     float value = *i;
     buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-    vertList->insertItem (STR(buf));
+    vertList->insertItem (buf);
   }
 }
 
@@ -182,10 +146,10 @@ void HelplineDialog::addHorizLine () {
   float value = horizValue->getValue ();
   horizLines.push_back (value);
   QString buf;
-  MeasurementUnit unit = 
+  MeasurementUnit unit =
     PStateManager::instance ()->defaultMeasurementUnit ();
   buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-  horizList->insertItem (STR(buf));
+  horizList->insertItem (buf);
 }
 
 void HelplineDialog::updateHorizLine () {
@@ -193,10 +157,10 @@ void HelplineDialog::updateHorizLine () {
   if (idx != -1) {
     float value = horizValue->getValue ();
     QString buf;
-    MeasurementUnit unit = 
+    MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
     buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-    horizList->changeItem (STR(buf), idx);
+    horizList->changeItem (buf, idx);
     horizLines[idx] = value;
   }
 }
@@ -215,10 +179,10 @@ void HelplineDialog::addVertLine () {
   float value = vertValue->getValue ();
   vertLines.push_back (value);
   QString buf;
-  MeasurementUnit unit = 
+  MeasurementUnit unit =
     PStateManager::instance ()->defaultMeasurementUnit ();
   buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-  vertList->insertItem (STR(buf));
+  vertList->insertItem (buf);
 }
 
 void HelplineDialog::updateVertLine () {
@@ -226,10 +190,10 @@ void HelplineDialog::updateVertLine () {
   if (idx != -1) {
     float value = vertValue->getValue ();
     QString buf;
-    MeasurementUnit unit = 
+    MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
     buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-    vertList->changeItem (STR(buf), idx);
+    vertList->changeItem (buf, idx);
     vertLines[idx] = value;
   }
 }
@@ -258,6 +222,9 @@ void HelplineDialog::vertLineSelected (int idx) {
 
 void HelplineDialog::setup (Canvas *c) {
   HelplineDialog *dialog = new HelplineDialog (c, 0L);
-  dialog->exec ();
+  if(dialog->exec()==Accepted)
+      dialog->applyPressed();
   delete dialog;
-}  
+}
+
+#include <HelplineDialog.moc>

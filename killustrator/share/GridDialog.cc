@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,110 +15,65 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include "GridDialog.h"
-#include "GridDialog.moc"
+#include <GridDialog.h>
 
-#include <stdio.h>
-
-#include <klocale.h>
-#include <kapp.h>
-#include <kbuttonbox.h>
-#include <kseparator.h>
-
-#include <qpushbutton.h>
-#include <qbuttongroup.h>
+#include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <qvgroupbox.h>
 
-GridDialog::GridDialog (QWidget* parent, const char* name) : 
-    QDialog (parent, name, true) {
-  QPushButton* button;
-  QWidget* widget;
+#include <klocale.h>
 
-  setCaption (i18n ("Grid"));
+#include <Canvas.h>
+#include <UnitBox.h>
 
-  QVBoxLayout *vl = new QVBoxLayout (this, 2);
-
-  widget = createGridWidget (this);
-  vl->addWidget (widget);
-
-  KSeparator* sep = new KSeparator (this);
-  vl->addWidget (sep);
-
-  // the standard buttons
-  KButtonBox *bbox = new KButtonBox (this);
-  button = bbox->addButton (i18n ("OK"));
-  connect (button, SIGNAL (clicked ()), SLOT (accept ()));
-  button = bbox->addButton (i18n ("Cancel"));
-  connect (button, SIGNAL (clicked ()), SLOT (reject ()));
-  bbox->addStretch (1);
-  button = bbox->addButton (i18n ("Help"));
-  connect (button, SIGNAL (clicked ()), SLOT (helpPressed ()));
-  bbox->layout ();
-  bbox->setMinimumSize (bbox->sizeHint ());
-
-  vl->addWidget (bbox);
-
-  vl->activate ();
- 
-  setMinimumSize (280, 220);
-  setMaximumSize (290, 220);
+GridDialog::GridDialog (QWidget* parent, const char* name) :
+    KDialogBase(parent, name, true, i18n ("Grid"),
+                KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, true) {
+    createGridWidget(makeMainWidget());
 }
 
-QWidget* GridDialog::createGridWidget (QWidget* parent) {
-  QWidget* w;
-  QGroupBox* box;
+void GridDialog::createGridWidget (QWidget* parent) {
 
-  w = new QWidget (parent);
+    QGridLayout *layout=new QGridLayout(parent, 2, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-  box = new QGroupBox (w);
-  box->setTitle (i18n ("Distance"));
-  box->setGeometry (10, 10, 260, 90);
+    QGroupBox *box=new QGroupBox(i18n("Distance"), parent);
+    layout->addMultiCellWidget(box, 0, 0, 0, 1);
 
-  QLabel* label = new QLabel (box);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Horizontally"));
-  label->move (20, 20);
+    QBoxLayout *vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    vboxlayout->addSpacing(box->fontMetrics().height()/2);
+    QBoxLayout *hboxlayout=new QHBoxLayout(vboxlayout);
+    QLabel* label = new QLabel(i18n("Horizontally"), box);
+    hboxlayout->addWidget(label);
 
-  hspinbox = new UnitBox (box);
-  hspinbox->setFormatString ("%-3.3f");
-  hspinbox->setEditable (true);
-  hspinbox->setRange (0, 1000);
-  hspinbox->move (100, 20);
- 
-  label = new QLabel (box);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Vertically"));
-  label->move (20, 55);
+    hspinbox = new UnitBox(box);
+    hspinbox->setFormatString ("%-3.3f");
+    hspinbox->setEditable (true);
+    hspinbox->setRange (0, 1000);
+    hboxlayout->addWidget(hspinbox, 0, 1);
 
-  vspinbox = new UnitBox (box);
-  vspinbox->setFormatString ("%-3.3f");
-  vspinbox->setEditable (true);
-  vspinbox->setRange (0, 1000);
-  vspinbox->move (100, 55);
+    hboxlayout=new QHBoxLayout(vboxlayout);
+    label=new QLabel(i18n("Vertically"), box);
+    hboxlayout->addWidget(label, 1, 0);
 
-  gbutton = new QCheckBox (w);
-  gbutton->setText (i18n ("Snap To Grid"));
-  gbutton->setGeometry (10, 110, 200, 15);
+    vspinbox = new UnitBox (box);
+    vspinbox->setFormatString ("%-3.3f");
+    vspinbox->setEditable (true);
+    vspinbox->setRange (0, 1000);
+    hboxlayout->addWidget(vspinbox, 1, 1);
 
-  sbutton = new QCheckBox (w);
-  sbutton->setText (i18n ("Show Grid"));
-  sbutton->setGeometry (10, 130, 200, 15);
+    gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
+    layout->addWidget(gbutton, 1, 0);
 
-  w->setMinimumSize (230, 160);
-  w->setMaximumSize (330, 160);
-  return w;
-}
-
-void GridDialog::helpPressed () {
+    sbutton = new QCheckBox(i18n("Show Grid"), parent);
+    layout->addWidget(sbutton, 1, 1);
 }
 
 float GridDialog::horizontalDistance () {
@@ -155,15 +110,15 @@ void GridDialog::setupGrid (Canvas* canvas) {
   dialog.setShowGridOn (canvas->showGrid ());
   dialog.setSnapToGridOn (canvas->snapToGrid ());
   dialog.setDistances ((float) canvas->getHorizGridDistance (),
-		       (float) canvas->getVertGridDistance ());
+                       (float) canvas->getVertGridDistance ());
 
-  int result = dialog.exec ();
-  if (result == Accepted) {
+  if (dialog.exec() == Accepted) {
     canvas->setGridDistance (dialog.horizontalDistance (),
-			     dialog.verticalDistance ());
+                             dialog.verticalDistance ());
     canvas->showGrid (dialog.showGrid ());
     canvas->snapToGrid (dialog.snapToGrid ());
     canvas->updateView ();
   }
 }
-  
+
+#include <GridDialog.moc>

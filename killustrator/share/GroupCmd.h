@@ -27,7 +27,6 @@
 
 #include <list>
 #include <Command.h>
-#include <GObject.h>
 
 class GDocument;
 class GObject;

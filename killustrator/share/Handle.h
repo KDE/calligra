@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -26,9 +26,9 @@
 #define Handle_h_
 
 #include <qobject.h>
-#include <qpainter.h>
-#include "Coord.h"
-#include "Painter.h"
+#include <Coord.h>
+
+class QPainter;
 
 #define Handle_Top     1
 #define Handle_Right   2
@@ -41,11 +41,11 @@ class Handle : public QObject {
 public:
   enum Mode { HMode_Default, HMode_Rotate };
   enum Position { HPos_Top = 1, HPos_Right = 2, HPos_Bottom = 4,
-		  HPos_Left = 8, HPos_Center = 16 };
+                  HPos_Left = 8, HPos_Center = 16 };
 
   Handle ();
   ~Handle ();
-  
+
   void setBox (const Rect& r);
   void setRotCenter (const Coord& p);
   Coord rotCenter () const { return rcenter; }

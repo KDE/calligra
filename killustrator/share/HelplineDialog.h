@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -26,32 +26,26 @@
 #define HelplineDialog_h_
 
 #include <vector>
+#include <kdialogbase.h>
 
-#include <qdialog.h>
-#include <qtabdialog.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlistbox.h>
-#include <ktabctl.h>
+class Canvas;
+class UnitBox;
+class QListBox;
 
-#include "Canvas.h"
-#include "UnitBox.h"
-
-class HelplineDialog : public QTabDialog {
+class HelplineDialog : public KDialogBase {
   Q_OBJECT
 public:
-  HelplineDialog (Canvas* canvas, QWidget* parent = 0L, 
-		  const char* name = 0L);
+  HelplineDialog (Canvas* canvas, QWidget* parent = 0L,
+                  const char* name = 0L);
 
   static void setup (Canvas *c);
 
 protected:
-  QWidget* createHorizLineWidget (QWidget* parent);
-  QWidget* createVertLineWidget (QWidget* parent);
+  void createHorizLineWidget (QWidget* parent);
+  void createVertLineWidget (QWidget* parent);
 
 private slots:
   void applyPressed ();
-  void helpPressed ();
 
   void addHorizLine ();
   void updateHorizLine ();

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,18 +15,21 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
+#include <Gradient.h>
+
+#include <qpixmap.h>
 #include <qpainter.h>
-#include "Gradient.h"
+
 #include <math.h>
 
-Gradient::Gradient (const QColor& c1, const QColor& c2, Style s, int a) 
+Gradient::Gradient (const QColor& c1, const QColor& c2, Style s, int a)
   : color1 (c1), color2 (c2), style (s) {
   angle = a;
 }
@@ -85,8 +88,8 @@ QPixmap Gradient::createPixmap (unsigned int width, unsigned int height) {
   return pix;
 }
 
-void Gradient::createLinGradient (QPainter& p, unsigned int width, 
-				 unsigned int height) {
+void Gradient::createLinGradient (QPainter& p, unsigned int width,
+                                 unsigned int height) {
   QColor col;
   QPen pen;
   double delta, dd;
@@ -106,11 +109,11 @@ void Gradient::createLinGradient (QPainter& p, unsigned int width,
     if(angle < 90 || ( angle > 180 && angle < 270) ){
       if (angle < 90){
          dd = width + height/tan(M_PI/2-angle*2*M_PI/360);
-	 tga = tan(angle*M_PI/360);
+         tga = tan(angle*M_PI/360);
       }
       else{
          dd = width + height/tan(M_PI/2-(angle-180)*2*M_PI/360);
-	 tga = tan((angle-180)*M_PI/360);
+         tga = tan((angle-180)*M_PI/360);
       }
       delta = 1.0/dd;
       pen.setWidth(3);
@@ -133,7 +136,7 @@ void Gradient::createLinGradient (QPainter& p, unsigned int width,
   int rdiff = color1.red ()   - color2.red ();
   int gdiff = color1.green () - color2.green ();
   int bdiff = color1.blue ()  - color2.blue ();
-  
+
   for (double d = 0.0; d < 1.0; d += delta) {
     r = color1.red () - qRound (rdiff * d);
     g = color1.green () - qRound (gdiff * d);
@@ -168,8 +171,8 @@ void Gradient::createLinGradient (QPainter& p, unsigned int width,
   }
 }
 
-void Gradient::createRadGradient (QPainter& p, unsigned int width, 
-				 unsigned int height) {
+void Gradient::createRadGradient (QPainter& p, unsigned int width,
+                                 unsigned int height) {
   QColor col;
   QPen pen;
   double delta, dd, scalx = 1.0, scaly = 1.0;
@@ -204,8 +207,8 @@ void Gradient::createRadGradient (QPainter& p, unsigned int width,
   }
 }
 
-void Gradient::createRectGradient (QPainter& p, unsigned int width, 
-				   unsigned int height) {
+void Gradient::createRectGradient (QPainter& p, unsigned int width,
+                                   unsigned int height) {
   QColor col;
   QPen pen;
   double delta, dd, scalx = 1.0, scaly = 1.0;

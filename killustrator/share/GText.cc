@@ -21,15 +21,12 @@
 
 */
 
-#include <stdlib.h>
-#include <iostream>
 #include <algorithm>
 #include <cassert>
 #include <GText.h>
 #include <GDocument.h>
 
 #include <klocale.h>
-#include <kapp.h>
 
 using namespace std;
 
@@ -384,11 +381,7 @@ void GText::calcBoundingBox () {
       const char *s = *it;
       int slen = strlen (s);
       for (int i = 0; i < slen; i++) {
-#if QT_VERSION >= 199
         QRect r = fm->boundingRect (QChar (s[i]));
-#else
-        QRect r = fm->boundingRect (s[i]);
-#endif
         r = cmatrices[idx].map (r);
         r = tmpMatrix.map (r);
         if (idx == 0)

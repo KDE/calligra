@@ -21,15 +21,13 @@
 
 */
 
-//#include <assert.h>
-//#include <stdlib.h>
-//#include <iostream.h>
-//#include <math.h>
 #include <GPolyline.h>
-#include <GCurve.h>
-#include <qdom.h>
 
+#include <qdom.h>
 #include <klocale.h>
+
+#include <GCurve.h>
+#include <Arrow.h>
 
 GPolyline::GPolyline () {
   connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,

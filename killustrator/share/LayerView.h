@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -27,41 +27,43 @@
 
 #include <qtableview.h>
 #include <qpixmap.h>
-
 #include <vector>
 
 class QLineEdit;
-
 class GDocument;
 class GLayer;
 
 class LayerView : public QTableView {
-  Q_OBJECT
+
+    Q_OBJECT
+
 public:
-  LayerView (QWidget *parent = 0L, const char *name = 0);
-  ~LayerView ();
-  
-  void setActiveDocument (GDocument* doc);
-  
+    LayerView (QWidget *parent = 0L, const char *name = 0);
+    ~LayerView ();
+
+    virtual QSize sizeHint() const { return QSize(280, 100); }
+    virtual QSize minimumSizeHint() const { return QSize(80, 60); }
+    void setActiveDocument (GDocument* doc);
+
 protected:
-  void showLayers (const std::vector<GLayer*>& lvec);
-  
-  virtual int cellWidth (int col);
-  virtual int cellHeight (int row);
-  virtual void paintCell (QPainter *, int row, int col);
-  
-  virtual void mousePressEvent (QMouseEvent *event);
-  virtual void mouseDoubleClickEvent (QMouseEvent *event);
-  
+    void showLayers (const std::vector<GLayer*>& lvec);
+
+    virtual int cellWidth (int col);
+    virtual int cellHeight (int row);
+    virtual void paintCell (QPainter *, int row, int col);
+
+    virtual void mousePressEvent (QMouseEvent *event);
+    virtual void mouseDoubleClickEvent (QMouseEvent *event);
+
 private slots:
-  void lineEditorSlot ();
+    void lineEditorSlot ();
 
 private:
-  GDocument* document;
-  std::vector<GLayer*> layers;
-  QPixmap pixmaps[3];
-  QLineEdit* lineEditor;
-  int editorRow;
+    GDocument* document;
+    std::vector<GLayer*> layers;
+    QPixmap pixmaps[3];
+    QLineEdit* lineEditor;
+    int editorRow;
 };
 
 #endif

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -25,12 +25,12 @@
 #ifndef LayerDialog_h_
 #define LayerDialog_h_
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class GDocument;
 class LayerView;
 
-class LayerDialog : public QDialog {
+class LayerDialog : public KDialogBase {
   Q_OBJECT
 public:
   LayerDialog (QWidget* parent = 0L, const char* name = 0L);
@@ -42,7 +42,6 @@ private slots:
   void downPressed ();
   void newPressed ();
   void deletePressed ();
-  void helpPressed ();
 
 private:
   LayerView* layerView;

@@ -23,6 +23,7 @@
 */
 
 #include <GroupCmd.h>
+
 #include <klocale.h>
 #include <map>
 
@@ -65,7 +66,7 @@ void GroupCmd::execute () {
     document->setAutoUpdate (false);
 
     for (list<GObject*>::iterator it = objects.begin ();
-	 it != objects.end (); it++) {
+         it != objects.end (); it++) {
       GObject* obj = *it;
       group->addObject (obj);
     }

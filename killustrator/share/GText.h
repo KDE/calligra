@@ -25,21 +25,11 @@
 #ifndef GText_h_
 #define GText_h_
 
-#include <qobject.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
-#include <qdatastream.h>
-#include <qdict.h>
-#include <qlist.h>
-
-#include "Coord.h"
-#include "GObject.h"
-
-#include <vector>
+#include <GObject.h>
 
 class GTextState;
+class QFontMetrics;
+class QWMatrix;
 
 class GText : public GObject {
   Q_OBJECT
@@ -63,7 +53,7 @@ public:
   ~GText ();
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
 
   void setOrigin (const Coord& p);
   //  const Coord& origin () const { return opos; }
@@ -144,4 +134,3 @@ private:
 };
 
 #endif
-

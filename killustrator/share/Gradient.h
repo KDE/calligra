@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -25,12 +25,13 @@
 #ifndef Gradient_h_
 #define Gradient_h_
 
-#include <qpixmap.h>
 #include <qcolor.h>
+
+class QPixmap;
 
 class Gradient {
 public:
-  enum Style { 
+  enum Style {
     Linear, Radial, Rectangular
   };
 
@@ -50,12 +51,12 @@ public:
   QPixmap createPixmap (unsigned int width, unsigned int height);
 
 private:
-  void createLinGradient (QPainter& p, unsigned int width, 
-			 unsigned int height);
-  void createRadGradient (QPainter& p, unsigned int width, 
-			  unsigned int height);
-  void createRectGradient (QPainter& p, unsigned int width, 
-			   unsigned int height);
+  void createLinGradient (QPainter& p, unsigned int width,
+                         unsigned int height);
+  void createRadGradient (QPainter& p, unsigned int width,
+                          unsigned int height);
+  void createRectGradient (QPainter& p, unsigned int width,
+                           unsigned int height);
 
   QColor color1, color2;
   Style style;

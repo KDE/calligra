@@ -25,6 +25,7 @@
 #include <values.h>
 #include <GBezier.h>
 #include <GCurve.h>
+#include <Arrow.h>
 
 #include <qdom.h>
 #include <qpointarray.h>

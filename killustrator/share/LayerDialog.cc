@@ -22,87 +22,42 @@
 
 */
 
-#include <iostream.h>
-
-#include "LayerDialog.h"
-#include "LayerDialog.moc"
-
-#include "LayerView.h"
-
-#include <klocale.h>
-#include <kapp.h>
-#include <kbuttonbox.h>
-#include <kseparator.h>
-#include <kiconloader.h>
+#include <LayerDialog.h>
 
 #include <qpushbutton.h>
-#include <qlayout.h>
-#include <qheader.h>
+#include <qvbox.h>
+#include <qhbox.h>
 
-#include "GDocument.h"
-#include "GLayer.h"
+#include <klocale.h>
+#include <kiconloader.h>
+
+#include <LayerView.h>
+#include <GDocument.h>
+#include <GLayer.h>
 
 LayerDialog::LayerDialog (QWidget* parent, const char* name) :
-    QDialog (parent, name, false) {
-  QPushButton* button;
+    KDialogBase(parent, name, false, i18n("Layers"), KDialogBase::Close,
+                KDialogBase::Close, true) {
 
-  document = 0L;
-  setCaption (i18n ("Layers"));
+    document = 0L;
 
-  QVBoxLayout *vl = new QVBoxLayout (this, 10);
+    QVBox *mb=makeVBoxMainWidget();
+    layerView = new LayerView (mb);
 
-  layerView = new LayerView (this);
-  vl->addWidget (layerView, 1);
-
-#define BUTTON_WIDTH  30
-#define BUTTON_HEIGHT 20
-
-  KButtonBox *bbox = new KButtonBox (this);
-  bbox->addStretch (0.5);
-  button = bbox->addButton ("Up");
-  button->setPixmap (UserIcon ("raiselayer"));
-  button->setGeometry (0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-  connect (button, SIGNAL (clicked ()), SLOT (upPressed ()));
-  button = bbox->addButton ("Down");
-  button->setPixmap (UserIcon ("lowerlayer"));
-  button->setGeometry (0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-  connect (button, SIGNAL (clicked ()), SLOT (downPressed ()));
-  button = bbox->addButton ("New");
-  button->setPixmap (UserIcon ("newlayer"));
-  button->setGeometry (0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-  connect (button, SIGNAL (clicked ()), SLOT (newPressed ()));
-  button = bbox->addButton ("Delete");
-  button->setPixmap (UserIcon ("deletelayer"));
-  button->setGeometry (0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-  connect (button, SIGNAL (clicked ()), SLOT (deletePressed ()));
-  bbox->addStretch (0.5);
-
-#undef BUTTON_WIDTH
-#undef BUTTON_HEIGHT
-
-  bbox->setFixedHeight (bbox->sizeHint ().height ());
-  vl->addWidget (bbox);
-
-  // a separator
-  KSeparator* sep = new KSeparator (this);
-  sep->setMaximumHeight (5);
-  vl->addWidget (sep);
-
-  // the standard buttons
-  bbox = new KButtonBox (this);
-  bbox->addStretch (1);
-  button = bbox->addButton (i18n ("Close"));
-  connect (button, SIGNAL (clicked ()), SLOT (reject ()));
-  button = bbox->addButton (i18n ("Help"));
-  connect (button, SIGNAL (clicked ()), SLOT (helpPressed ()));
-  bbox->setFixedHeight (bbox->sizeHint ().height ());
-  vl->addWidget (bbox);
-
-  vl->activate ();
-  adjustSize ();
-
-  setMaximumWidth (300);
- }
+    QHBox *box=new QHBox(mb);
+    QPushButton *button = new QPushButton(box);
+    button->setPixmap(UserIcon("raiselayer"));
+    connect (button, SIGNAL (clicked ()), SLOT (upPressed ()));
+    button = new QPushButton(box);
+    button->setPixmap (UserIcon ("lowerlayer"));
+    connect (button, SIGNAL (clicked ()), SLOT (downPressed ()));
+    button = new QPushButton(box);
+    button->setPixmap (UserIcon ("newlayer"));
+    connect (button, SIGNAL (clicked ()), SLOT (newPressed ()));
+    button = new QPushButton(box);
+    button->setPixmap (UserIcon ("deletelayer"));
+    connect (button, SIGNAL (clicked ()), SLOT (deletePressed ()));
+}
 
 void LayerDialog::manageDocument (GDocument* doc) {
   document = doc;
@@ -131,5 +86,4 @@ void LayerDialog::deletePressed () {
   layerView->setActiveDocument (document);
 }
 
-void LayerDialog::helpPressed () {
-}
+#include <LayerDialog.moc>

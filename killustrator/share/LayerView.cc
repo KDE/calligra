@@ -22,18 +22,13 @@
 
 */
 
-#include "LayerView.h"
-#include "LayerView.moc"
+#include <LayerView.h>
 
 #include <qlineedit.h>
-
-#include <kapp.h>
 #include <kiconloader.h>
 
-#include <iostream.h>
-
-#include "GLayer.h"
-#include "GDocument.h"
+#include <GLayer.h>
+#include <GDocument.h>
 
 #define CELL_HEIGHT 25
 #define CELL1_WIDTH 25
@@ -41,20 +36,20 @@
 
 LayerView::LayerView (QWidget *parent, const char *name)
   : QTableView (parent, name) {
-  setNumCols (4);
-  setBackgroundColor (white);
 
-  document = 0L;
+    setNumCols (4);
+    setBackgroundColor(colorGroup().base());
+    document = 0L;
 
-  pixmaps[0] = UserIcon ("eye");
-  pixmaps[1] = UserIcon ("freehandtool");
-  pixmaps[2] = BarIcon ("fileprint");
-  setMinimumSize (3 * CELL1_WIDTH + CELL2_WIDTH, 4 * CELL_HEIGHT);
-  setTableFlags (Tbl_autoScrollBars | Tbl_smoothScrolling);
-  setFrameStyle (QFrame::Panel | QFrame::Sunken);
-  setLineWidth (2);
-  lineEditor = NULL;
-  editorRow = -1;
+    pixmaps[0] = UserIcon ("eye");
+    pixmaps[1] = UserIcon ("freehandtool");
+    pixmaps[2] = BarIcon ("fileprint");
+
+    setTableFlags (Tbl_autoScrollBars | Tbl_smoothScrolling);
+    setFrameStyle (QFrame::Panel | QFrame::Sunken);
+    setLineWidth (2);
+    lineEditor = 0L;
+    editorRow = -1;
 }
 
 LayerView::~LayerView () {
@@ -77,7 +72,7 @@ int LayerView::cellWidth (int col) {
 }
 
 int LayerView::cellHeight (int) {
-  return QMAX (CELL_HEIGHT, fontMetrics ().lineSpacing () + 1);
+  return QMAX (CELL_HEIGHT, fontMetrics().lineSpacing () + 1);
 }
 
 void LayerView::paintCell (QPainter *p, int row, int col) {
@@ -85,10 +80,10 @@ void LayerView::paintCell (QPainter *p, int row, int col) {
   bool rowIsActive = (document->activeLayer () == layer);
 
   p->save ();
-  p->setPen (rowIsActive ? white : black);
+  p->setPen (rowIsActive ? colorGroup().highlightedText() : colorGroup().text());
   if (col < 3)
     p->fillRect (0, 0, CELL1_WIDTH, cellHeight (row),
-		 QBrush (rowIsActive ? darkBlue : white));
+                 QBrush (rowIsActive ? colorGroup().highlight() : colorGroup().base()));
 
   switch (col) {
   case 0:
@@ -107,37 +102,37 @@ void LayerView::paintCell (QPainter *p, int row, int col) {
       p->drawPixmap (2, 2, pixmaps[col]);
     break;
   case 3:
-    {
+  {
       QFontMetrics fm = p->fontMetrics ();
       int yPos;
       if (CELL_HEIGHT < fm.height ())
-	yPos = fm.ascent () + fm.leading () / 2;
+        yPos = fm.ascent () + fm.leading () / 2;
       else
-	yPos = (CELL_HEIGHT - fm.height ()) / 2 + fm.ascent ();
+        yPos = (CELL_HEIGHT - fm.height ()) / 2 + fm.ascent ();
       if (editorRow == row) {
-	if (lineEditor == NULL) {
-	  lineEditor = new QLineEdit (this);
-	  lineEditor->setMaxLength (20);
-	  lineEditor->setFrame (false);
-	  connect (lineEditor, SIGNAL(returnPressed ()),
-		   this, SLOT(lineEditorSlot ()));
-	}
-	lineEditor->setGeometry (3 * CELL1_WIDTH + 3,
-				 CELL_HEIGHT * editorRow + 1,
-				 CELL2_WIDTH, CELL_HEIGHT);
-	lineEditor->setEnabled (true);
-	lineEditor->show ();
-	lineEditor->setFocus ();
-	lineEditor->setText (layer->name ());
+        if (lineEditor == 0L) {
+          lineEditor = new QLineEdit (this);
+          lineEditor->setMaxLength (20);
+          lineEditor->setFrame (false);
+          connect (lineEditor, SIGNAL(returnPressed ()),
+                   this, SLOT(lineEditorSlot ()));
+        }
+        lineEditor->setGeometry (3 * CELL1_WIDTH + 3,
+                                 CELL_HEIGHT * editorRow + 1,
+                                 CELL2_WIDTH, CELL_HEIGHT);
+        lineEditor->setEnabled (true);
+        lineEditor->show ();
+        lineEditor->setFocus ();
+        lineEditor->setText (layer->name ());
       }
       else {
-	// name
-	p->fillRect (0, 0, width (), cellHeight (row),
-		     QBrush (rowIsActive ? darkBlue : white));
-	p->drawText (5, yPos, layer->name ());
+        // name
+          p->fillRect (0, 0, CELL2_WIDTH, cellHeight(row),
+                       QBrush (rowIsActive ? colorGroup().highlight() : colorGroup().base()));
+          p->drawText (5, yPos, layer->name ());
       }
       break;
-    }
+  }
   default:
     break;
   }
@@ -173,19 +168,19 @@ void LayerView::mousePressEvent (QMouseEvent *event) {
 
       switch (col) {
       case 0:
-	layer->setVisible (! layer->isVisible ());
-	break;
+        layer->setVisible (! layer->isVisible ());
+        break;
       case 1:
-	layer->setEditable (! layer->isEditable ());
-	break;
+        layer->setEditable (! layer->isEditable ());
+        break;
       case 2:
-	layer->setPrintable (! layer->isPrintable ());
-	break;
+        layer->setPrintable (! layer->isPrintable ());
+        break;
       case 3:
-	document->setActiveLayer (layer);
-	break;
+        document->setActiveLayer (layer);
+        break;
       default:
-	break;
+        break;
       }
     }
     repaint ();
@@ -203,3 +198,5 @@ void LayerView::lineEditorSlot () {
 #undef CELL_HEIGHT
 #undef CELL1_WIDTH
 #undef CELL2_WIDTH
+
+#include <LayerView.moc>
