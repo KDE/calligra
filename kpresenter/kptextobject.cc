@@ -156,27 +156,27 @@ QBrush KPTextObject::getBrush() const
     return tmpBrush;
 }
 
+void KPTextObject::resizeTextDocument()
+{
+    textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( getSize().width() ) );
+    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
+    slotAvailableHeightNeeded();
+    m_textobj->formatMore();
+
+}
+
 /*======================= set size ===============================*/
 void KPTextObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-
-    //kdDebug() << " KPTextObject::setSize -> setting doc width to " << m_doc->zoomHandler()->pixelToLayoutUnitX( _width ) << endl;
-    textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( _width ) );
-    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
-    slotAvailableHeightNeeded();
-    m_textobj->formatMore();
+    resizeTextDocument();
 }
 
 /*======================= set size ===============================*/
 void KPTextObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
-    //kdDebug() << " KPTextObject::resizeBy -> setting doc width to " << m_doc->zoomHandler()->pixelToLayoutUnitX( getSize().width() ) << endl;
-    textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( getSize().width() ) );
-    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
-    slotAvailableHeightNeeded();
-    m_textobj->formatMore();
+    resizeTextDocument();
 }
 
 /*========================= save =================================*/
