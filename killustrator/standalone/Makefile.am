@@ -21,7 +21,7 @@
 APPSDIR = $(kde_appsdir)/share/apps
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I../share -I..
+INCLUDES= -I../share -I.. $(all_includes)
 # claim, which subdirectories you want to install
 
 EXTRA_DIST = killustrator.xpm killustrator.kdelnk
