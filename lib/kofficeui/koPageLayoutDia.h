@@ -25,6 +25,7 @@
 #include <qgroupbox.h>
 
 #include <koGlobal.h>
+#include <koUnit.h>
 #include <kdialogbase.h>
 
 class QButtonGroup;
@@ -36,13 +37,8 @@ class QLineEdit;
 class QSpinBox;
 class QRadioButton;
 
-// enums
-const int FORMAT_AND_BORDERS = 1;
-const int HEADER_AND_FOOTER = 2;
-const int COLUMNS = 4;
-const int DISABLE_BORDERS = 8;
-const int KW_HEADER_AND_FOOTER = 16;
-const int DISABLE_UNIT = 32;
+enum { FORMAT_AND_BORDERS = 1, HEADER_AND_FOOTER = 2, COLUMNS = 4, DISABLE_BORDERS = 8,
+       KW_HEADER_AND_FOOTER = 16, DISABLE_UNIT = 32 };
 
 /**
  *  KoPagePreview.
@@ -103,8 +99,9 @@ public:
      *  @param layout   The layout.
      *  @param headfoot The header and the footer.
      *  @param tabs     The number of tabs.
+     *  @param unit       The unit to use for displaying the values to the user
      */
-    KoPageLayoutDia( QWidget* _parent, const char* _name, KoPageLayout _layout, KoHeadFoot _headfoot, int _tabs );
+    KoPageLayoutDia( QWidget* _parent, const char* _name, KoPageLayout _layout, KoHeadFoot _headfoot, int _tabs, KoUnit::Unit unit );
 
     /**
      *  Constructor.
@@ -116,9 +113,10 @@ public:
      *  @param columns    The number of columns on the page.
      *  @param kwheadfoot The KWord header and footer.
      *  @param tabs       The number of tabs.
+     *  @param unit       The unit to use for displaying the values to the user
      */
     KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout layout, KoHeadFoot headfoot,
-		    KoColumns columns, KoKWHeaderFooter kwheadfoot, int tabs );
+		    KoColumns columns, KoKWHeaderFooter kwheadfoot, int tabs, KoUnit::Unit unit );
 
     /**
      *  Destructor.
@@ -127,13 +125,15 @@ public:
 
     /**
      *  Show page layout dialog.
+     *  See constructor for documentation on the parameters
      */
-    static bool pageLayout( KoPageLayout&, KoHeadFoot&, int );
+    static bool pageLayout( KoPageLayout&, KoHeadFoot&, int tabs, KoUnit::Unit& unit);
 
     /**
      *  Show page layout dialog.
+     *  See constructor for documentation on the parameters
      */
-    static bool pageLayout( KoPageLayout&, KoHeadFoot&, KoColumns&, KoKWHeaderFooter&, int );
+    static bool pageLayout( KoPageLayout&, KoHeadFoot&, KoColumns&, KoKWHeaderFooter&, int tabs, KoUnit::Unit& unit );
 
     /**
      *  Retrieves a standard page layout.
@@ -145,6 +145,7 @@ protected:
     KoHeadFoot getHeadFoot();
     KoColumns getColumns();
     KoKWHeaderFooter getKWHeaderFooter();
+    KoUnit::Unit unit() const { return m_unit; }
 
     // setup tabs
     void setupTab1();
@@ -192,6 +193,8 @@ protected:
     KoColumns cl;
     KoKWHeaderFooter kwhf;
 
+    KoUnit::Unit m_unit;
+
     bool retPressed;
     bool enableBorders;
     int flags;
@@ -219,7 +222,7 @@ private slots:
     void nSpaceChanged( const QString & );
 
 private:
-    void changed(QLineEdit *line, double &mm, double &pt, double &inch);
+    void changed(QLineEdit *line, double &pt);
 
     KoPageLayoutDiaPrivate *d;
 };

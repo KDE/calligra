@@ -87,14 +87,24 @@ public:
     static const int F_TABS = 1;
     static const int F_INDENTS = 2;
 
+    /**
+     * Create a ruler
+     * TODO document params
+     */
     KoRuler( QWidget *_parent,  QWidget *_canvas, Orientation _orientation,
-             KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser = 0L );
+             const KoPageLayout& _layout, int _flags, KoUnit::Unit _unit,
+             KoTabChooser *_tabChooser = 0L );
     ~KoRuler();
 
     /**
      * Set the unit to be used. Currently supported are "mm", "pt" and "inch".
+     * You should use the KoUnit::Unit variant instead.
      */
-    void setUnit( const QString& _unit );
+    void setUnit( const QString& unit );
+    /**
+     * Set the unit to be used.
+     */
+    void setUnit( KoUnit::Unit unit );
 
     void setZoom( const double& zoom=1.0 );
     const double& zoom() const { return m_zoom; }
@@ -194,7 +204,7 @@ signals:
     void doubleClicked( double ptPos );
 
     void tabListChanged( const KoTabulatorList & );
-    void unitChanged( QString );
+    void unitChanged( QString ); // TODO KoUnit::Unit instead ?
 
 protected:
     enum Action {A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM,
@@ -234,7 +244,7 @@ protected:
     KoPageLayout layout;
     QPixmap buffer;
     double m_zoom, m_1_zoom;
-    QString unit;
+    KoUnit::Unit m_unit;
     bool hasToDelete;
     bool showMPos;
     int mposX, mposY;
@@ -246,9 +256,9 @@ protected:
     double gridSize;
 
 protected slots:
-    void rbPT() { setUnit( QString::fromLatin1("pt") ); emit unitChanged( unit ); }
-    void rbMM() { setUnit( QString::fromLatin1("mm") ); emit unitChanged( unit ); }
-    void rbINCH() { setUnit( QString::fromLatin1("inch") ); emit unitChanged( unit ); }
+    void rbPT() { setUnit( KoUnit::U_PT ); emit unitChanged( "pt" ); }
+    void rbMM() { setUnit( KoUnit::U_MM ); emit unitChanged( "mm" ); }
+    void rbINCH() { setUnit( KoUnit::U_INCH ); emit unitChanged( "inch" ); }
     void pageLayoutDia() { emit doubleClicked()/*openPageLayoutDia()*/; }
     void rbRemoveTab();
 

@@ -57,13 +57,13 @@ KoPagePreview::~KoPagePreview()
 /*=================== set layout =================================*/
 void KoPagePreview::setPageLayout( const KoPageLayout &_layout )
 {
-    pgWidth = _layout.mmWidth * 0.5;
-    pgHeight = _layout.mmHeight * 0.5;
+    pgWidth = POINT_TO_MM(_layout.ptWidth) * 0.5;
+    pgHeight = POINT_TO_MM(_layout.ptHeight) * 0.5;
 
-    pgX =  _layout.mmLeft * 0.5;
-    pgY = _layout.mmTop * 0.5;
-    pgW = pgWidth - ( _layout.mmLeft + _layout.mmRight ) * 0.5;
-    pgH = pgHeight - ( _layout.mmTop + _layout.mmBottom ) * 0.5;
+    pgX = POINT_TO_MM(_layout.ptLeft) * 0.5;
+    pgY = POINT_TO_MM(_layout.ptTop) * 0.5;
+    pgW = pgWidth - ( POINT_TO_MM(_layout.ptLeft) + POINT_TO_MM(_layout.ptRight) ) * 0.5;
+    pgH = pgHeight - ( POINT_TO_MM(_layout.ptTop) + POINT_TO_MM(_layout.ptBottom) ) * 0.5;
 
     repaint( true );
 }
@@ -110,7 +110,7 @@ void KoPagePreview::drawContents( QPainter *painter )
 
 /*==================== constructor ===============================*/
 KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout _layout,
-                                  KoHeadFoot _hf, int tabs )
+                                  KoHeadFoot _hf, int tabs, KoUnit::Unit unit )
     : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
                    KDialogBase::Ok, parent, name, true)
 {
@@ -121,6 +121,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayou
 
     layout = _layout;
     hf = _hf;
+    m_unit = unit;
 
     cl.columns = 1;
 
@@ -137,7 +138,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayou
 
 /*==================== constructor ===============================*/
 KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout _layout, KoHeadFoot _hf,
-                                 KoColumns _cl, KoKWHeaderFooter _kwhf, int tabs )
+                                 KoColumns _cl, KoKWHeaderFooter _kwhf, int tabs, KoUnit::Unit unit )
     : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
                    KDialogBase::Ok, parent, name, true)
 {
@@ -149,6 +150,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayou
     hf = _hf;
     cl = _cl;
     kwhf = _kwhf;
+    m_unit = unit;
 
     enableBorders = true;
 
@@ -170,15 +172,16 @@ KoPageLayoutDia::~KoPageLayoutDia()
 }
 
 /*======================= show dialog ============================*/
-bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, int _tabs )
+bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, int _tabs, KoUnit::Unit& unit )
 {
     bool res = false;
-    KoPageLayoutDia *dlg = new KoPageLayoutDia( 0, "PageLayout", _layout, _hf, _tabs );
+    KoPageLayoutDia *dlg = new KoPageLayoutDia( 0, "PageLayout", _layout, _hf, _tabs, unit );
 
     if ( dlg->exec() == QDialog::Accepted ) {
         res = true;
         if ( _tabs & FORMAT_AND_BORDERS ) _layout = dlg->getLayout();
         if ( _tabs & HEADER_AND_FOOTER ) _hf = dlg->getHeadFoot();
+        unit = dlg->unit();
     }
 
     delete dlg;
@@ -188,10 +191,10 @@ bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, int _t
 
 /*======================= show dialog ============================*/
 bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, KoColumns& _cl,
-                                  KoKWHeaderFooter &_kwhf, int _tabs )
+                                  KoKWHeaderFooter &_kwhf, int _tabs, KoUnit::Unit& unit )
 {
     bool res = false;
-    KoPageLayoutDia *dlg = new KoPageLayoutDia( 0, "PageLayout", _layout, _hf, _cl, _kwhf, _tabs );
+    KoPageLayoutDia *dlg = new KoPageLayoutDia( 0, "PageLayout", _layout, _hf, _cl, _kwhf, _tabs, unit );
 
     if ( dlg->exec() == QDialog::Accepted ) {
         res = true;
@@ -199,6 +202,7 @@ bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, KoColu
         if ( _tabs & HEADER_AND_FOOTER ) _hf = dlg->getHeadFoot();
         if ( _tabs & COLUMNS ) _cl = dlg->getColumns();
         if ( _tabs & KW_HEADER_AND_FOOTER ) _kwhf = dlg->getKWHeaderFooter();
+        unit = dlg->unit();
     }
 
     delete dlg;
@@ -210,28 +214,14 @@ bool KoPageLayoutDia::pageLayout( KoPageLayout& _layout, KoHeadFoot& _hf, KoColu
 KoPageLayout KoPageLayoutDia::standardLayout()
 {
     KoPageLayout        _layout;
-
     _layout.format = PG_DIN_A4;
     _layout.orientation = PG_PORTRAIT;
-    _layout.mmWidth = PG_A4_WIDTH;
-    _layout.mmHeight = PG_A4_HEIGHT;
-    _layout.mmLeft = 20.0;
-    _layout.mmRight = 20.0;
-    _layout.mmTop = 20.0;
-    _layout.mmBottom = 20.0;
-    _layout.unit = KoUnit::U_MM;
     _layout.ptWidth = MM_TO_POINT( PG_A4_WIDTH );
     _layout.ptHeight = MM_TO_POINT( PG_A4_HEIGHT );
     _layout.ptLeft = MM_TO_POINT( 20.0 );
     _layout.ptRight = MM_TO_POINT( 20.0 );
     _layout.ptTop = MM_TO_POINT( 20.0 );
     _layout.ptBottom = MM_TO_POINT( 20.0 );
-    _layout.inchWidth = MM_TO_INCH( PG_A4_WIDTH );
-    _layout.inchHeight = MM_TO_INCH( PG_A4_HEIGHT );
-    _layout.inchLeft = MM_TO_INCH( 20.0 );
-    _layout.inchRight = MM_TO_INCH( 20.0 );
-    _layout.inchTop = MM_TO_INCH( 20.0 );
-    _layout.inchBottom = MM_TO_INCH( 20.0 );
 
     return  _layout;
 }
@@ -253,7 +243,7 @@ KoHeadFoot KoPageLayoutDia::getHeadFoot()
 KoColumns KoPageLayoutDia::getColumns()
 {
     cl.columns = nColumns->value();
-    cl.ptColumnSpacing=KoUnit::fromUserValue( nCSpacing->text().toDouble(),layout.unit  );
+    cl.ptColumnSpacing = KoUnit::fromUserValue( nCSpacing->text().toDouble(), m_unit  );
     return cl;
 }
 
@@ -267,32 +257,8 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
     else if ( rhEvenOdd->isChecked() )
         kwhf.header = HF_EO_DIFF;
 
-    switch ( layout.unit ) {
-        case KoUnit::U_MM: {
-            kwhf.mmHeaderBodySpacing = nHSpacing->text().toDouble();
-            kwhf.ptHeaderBodySpacing = MM_TO_POINT( kwhf.mmHeaderBodySpacing );
-            kwhf.inchHeaderBodySpacing = MM_TO_INCH( kwhf.mmHeaderBodySpacing );
-            kwhf.mmFooterBodySpacing = nFSpacing->text().toDouble();
-            kwhf.ptFooterBodySpacing = MM_TO_POINT( kwhf.mmFooterBodySpacing );
-            kwhf.inchFooterBodySpacing = MM_TO_INCH( kwhf.mmFooterBodySpacing );
-        } break;
-        case KoUnit::U_PT: {
-            kwhf.ptHeaderBodySpacing = nHSpacing->text().toDouble();
-            kwhf.mmHeaderBodySpacing = POINT_TO_MM( kwhf.ptHeaderBodySpacing );
-            kwhf.inchHeaderBodySpacing = POINT_TO_INCH( kwhf.ptHeaderBodySpacing );
-            kwhf.ptFooterBodySpacing = nFSpacing->text().toDouble();
-            kwhf.mmFooterBodySpacing = POINT_TO_MM( kwhf.ptFooterBodySpacing );
-            kwhf.inchFooterBodySpacing = POINT_TO_INCH( kwhf.ptFooterBodySpacing );
-        } break;
-        case KoUnit::U_INCH: {
-            kwhf.inchHeaderBodySpacing = nHSpacing->text().toDouble();
-            kwhf.ptHeaderBodySpacing = INCH_TO_POINT( kwhf.inchHeaderBodySpacing );
-            kwhf.mmHeaderBodySpacing = INCH_TO_MM( kwhf.inchHeaderBodySpacing );
-            kwhf.inchFooterBodySpacing = nHSpacing->text().toDouble();
-            kwhf.ptFooterBodySpacing = INCH_TO_POINT( kwhf.inchFooterBodySpacing );
-            kwhf.mmFooterBodySpacing = INCH_TO_MM( kwhf.inchFooterBodySpacing );
-        } break;
-    }
+    kwhf.ptHeaderBodySpacing = KoUnit::fromUserValue( nHSpacing->text().toDouble(), m_unit );
+    kwhf.ptFooterBodySpacing = KoUnit::fromUserValue( nFSpacing->text().toDouble(), m_unit );
 
     if ( rfSame->isChecked() )
         kwhf.footer = HF_SAME;
@@ -327,7 +293,7 @@ void KoPageLayoutDia::setupTab1()
         grid1->addWidget( cpgUnit, 1, 0 );
         connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( unitChanged( int ) ) );
     } else {
-        QString str=KoUnit::unitDescription(layout.unit);
+        QString str=KoUnit::unitDescription(m_unit);
 
         lpgUnit = new QLabel( i18n("All values are given in %1.").arg(str), tab1 );
         grid1->addWidget( lpgUnit, 0, 0 );
@@ -541,7 +507,7 @@ void KoPageLayoutDia::setValuesTab1()
 {
     // unit
     if ( !( flags & DISABLE_UNIT ) )
-        cpgUnit->setCurrentItem( layout.unit );
+        cpgUnit->setCurrentItem( m_unit );
 
     // page format
     cpgFormat->setCurrentItem( layout.format );
@@ -555,42 +521,12 @@ void KoPageLayoutDia::setValuesTab1()
 }
 
 void KoPageLayoutDia::setValuesTab1Helper() {
-
-    QString tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
-
-    switch ( layout.unit ) {
-        case KoUnit::U_MM: {
-            tmp1=QString::number(layout.mmWidth, 'f', 2);
-            tmp2=QString::number(layout.mmHeight, 'f', 2);
-            tmp3=QString::number(layout.mmLeft, 'f', 2);
-            tmp4=QString::number(layout.mmRight, 'f', 2);
-            tmp5=QString::number(layout.mmTop, 'f', 2);
-            tmp6=QString::number(layout.mmBottom, 'f', 2);
-        } break;
-        case KoUnit::U_PT: {
-            tmp1=QString::number(layout.ptWidth, 'f', 2);
-            tmp2=QString::number(layout.ptHeight, 'f', 2);
-            tmp3=QString::number(layout.ptLeft, 'f', 2);
-            tmp4=QString::number(layout.ptRight, 'f', 2);
-            tmp5=QString::number(layout.ptTop, 'f', 2);
-            tmp6=QString::number(layout.ptBottom, 'f', 2);
-        } break;
-        case KoUnit::U_INCH: {
-            tmp1=QString::number(layout.inchWidth, 'f', 2);
-            tmp2=QString::number(layout.inchHeight, 'f', 2);
-            tmp3=QString::number(layout.inchLeft, 'f', 2);
-            tmp4=QString::number(layout.inchRight, 'f', 2);
-            tmp5=QString::number(layout.inchTop, 'f', 2);
-            tmp6=QString::number(layout.inchBottom, 'f', 2);
-        } break;
-    }
-
-    epgWidth->setText( tmp1 );
-    epgHeight->setText( tmp2 );
-    ebrLeft->setText( tmp3 );
-    ebrRight->setText( tmp4 );
-    ebrTop->setText( tmp5 );
-    ebrBottom->setText( tmp6 );
+    epgWidth->setText( QString::number( KoUnit::userValue( layout.ptWidth, m_unit ) ) );
+    epgHeight->setText( QString::number( KoUnit::userValue( layout.ptHeight, m_unit ) ) );
+    ebrLeft->setText( QString::number( KoUnit::userValue( layout.ptLeft, m_unit ) ) );
+    ebrRight->setText( QString::number( KoUnit::userValue( layout.ptRight, m_unit ) ) );
+    ebrTop->setText( QString::number( KoUnit::userValue( layout.ptTop, m_unit ) ) );
+    ebrBottom->setText( QString::number( KoUnit::userValue( layout.ptBottom, m_unit ) ) );
 }
 
 /*================ setup header and footer tab ===================*/
@@ -676,7 +612,7 @@ void KoPageLayoutDia::setupTab3()
     nColumns->setValue( cl.columns );
     connect( nColumns, SIGNAL( valueChanged( int ) ), this, SLOT( nColChanged( int ) ) );
 
-    QString str=KoUnit::unitDescription( layout.unit );
+    QString str = KoUnit::unitDescription( m_unit );
 
     QLabel *lCSpacing = new QLabel( i18n("Column Spacing (%1):").arg(str), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
@@ -689,8 +625,7 @@ void KoPageLayoutDia::setupTab3()
     nCSpacing->setFrame( true );
     grid3->addWidget( nCSpacing, 3, 0 );
 
-    double columnSpacing = 0;
-    columnSpacing= KoUnit::userValue(cl.ptColumnSpacing , layout.unit );
+    double columnSpacing = KoUnit::userValue( cl.ptColumnSpacing , m_unit );
 
     nCSpacing->setText( QString::number( columnSpacing ) );
     connect( nCSpacing, SIGNAL( textChanged( const QString & ) ),
@@ -721,7 +656,7 @@ void KoPageLayoutDia::setupTab3()
 /*================================================================*/
 void KoPageLayoutDia::setupTab4()
 {
-    QString str=KoUnit::unitDescription(layout.unit);
+    QString str = KoUnit::unitDescription(m_unit);
 
     QWidget *tab4 = addPage(i18n( "Header and Footer" ));
     QGridLayout *grid4 = new QGridLayout( tab4, 3, 1, 15, 7 );
@@ -757,14 +692,7 @@ void KoPageLayoutDia::setupTab4()
     nHSpacing->setFrame( true );
     headerGrid->addWidget( nHSpacing, 4, 1 );
 
-    switch ( layout.unit ) {
-    case KoUnit::U_MM: nHSpacing->setText( QString::number( kwhf.mmHeaderBodySpacing ) );
-        break;
-    case KoUnit::U_PT: nHSpacing->setText( QString::number( kwhf.ptHeaderBodySpacing ) );
-        break;
-    case KoUnit::U_INCH: nHSpacing->setText( QString::number( kwhf.inchHeaderBodySpacing ) );
-        break;
-    }
+    nHSpacing->setText( QString::number( KoUnit::userValue( kwhf.ptHeaderBodySpacing, m_unit ) ) );
 
     headerGrid->addColSpacing( 0, rhSame->width() / 2 );
     headerGrid->addColSpacing( 1, rhSame->width() / 2 );
@@ -821,14 +749,7 @@ void KoPageLayoutDia::setupTab4()
     nFSpacing->setFrame( true );
     footerGrid->addWidget( nFSpacing, 4, 1 );
 
-    switch ( layout.unit ) {
-    case KoUnit::U_MM: nFSpacing->setText( QString::number( kwhf.mmFooterBodySpacing ) );
-        break;
-    case KoUnit::U_PT: nFSpacing->setText( QString::number( kwhf.ptFooterBodySpacing ) );
-        break;
-    case KoUnit::U_INCH: nFSpacing->setText( QString::number( kwhf.inchFooterBodySpacing ) );
-        break;
-    }
+    nFSpacing->setText( QString::number( KoUnit::userValue( kwhf.ptFooterBodySpacing, m_unit ) ) );
 
     footerGrid->addColSpacing( 0, rfSame->width() / 2 );
     footerGrid->addColSpacing( 1, rfSame->width() / 2 );
@@ -876,7 +797,7 @@ void KoPageLayoutDia::updatePreview( KoPageLayout )
 /*===================== unit changed =============================*/
 void KoPageLayoutDia::unitChanged( int _unit )
 {
-    layout.unit = static_cast<KoUnit::Unit>( _unit );
+    m_unit = static_cast<KoUnit::Unit>( _unit );
     setValuesTab1Helper();
     updatePreview( layout );
 }
@@ -892,39 +813,19 @@ void KoPageLayoutDia::formatChanged( int _format )
         epgWidth->setEnabled( enable );
         epgHeight->setEnabled( enable );
 
-        double w = layout.mmWidth;
-        double h = layout.mmHeight;
+        double w = layout.ptWidth;
+        double h = layout.ptHeight;
         if ( layout.format != PG_CUSTOM )
         {
-            w = KoPageFormat::width( layout.format, layout.orientation );
-            h = KoPageFormat::height( layout.format, layout.orientation );
+            w = MM_TO_POINT( KoPageFormat::width( layout.format, layout.orientation ) );
+            h = MM_TO_POINT( KoPageFormat::height( layout.format, layout.orientation ) );
         }
 
-        layout.mmWidth = w;
-        layout.mmHeight = h;
-        layout.ptWidth = MM_TO_POINT( w );
-        layout.ptHeight = MM_TO_POINT( h );
-        layout.inchWidth = MM_TO_INCH( w );
-        layout.inchHeight = MM_TO_INCH( h );
+        layout.ptWidth = w;
+        layout.ptHeight = h;
 
-        QString tmp1, tmp2;
-        switch ( layout.unit ) {
-            case KoUnit::U_MM: {
-                tmp1=QString::number(layout.mmWidth, 'f', 2);
-                tmp2=QString::number(layout.mmHeight, 'f', 2);
-            } break;
-            case KoUnit::U_PT: {
-                tmp1=QString::number(layout.ptWidth, 'f', 2);
-                tmp2=QString::number(layout.ptHeight, 'f', 2);
-            } break;
-            case KoUnit::U_INCH: {
-                tmp1=QString::number(layout.inchWidth, 'f', 2);
-                tmp2=QString::number(layout.inchHeight, 'f', 2);
-            } break;
-        }
-
-        epgWidth->setText( tmp1 );
-        epgHeight->setText( tmp2 );
+        epgWidth->setText( QString::number( KoUnit::userValue( layout.ptWidth, m_unit ) ) );
+        epgHeight->setText( QString::number( KoUnit::userValue( layout.ptHeight, m_unit ) ) );
 
         updatePreview( layout );
     }
@@ -933,111 +834,29 @@ void KoPageLayoutDia::formatChanged( int _format )
 /*===================== format changed =============================*/
 void KoPageLayoutDia::orientationChanged( int _orientation )
 {
-    // I hate these kinds of fixes (i.e. adding lots of bloat), but the whole dialog
-    // is very brittle and I didn't want to break anything else by fixing that
-    // preview bug (#10775). I hope you don't mind >;)  (Werner)
     if ( ( KoOrientation )_orientation != layout.orientation ) {
 
-        switch ( layout.unit ) {
-            case KoUnit::U_MM:
-                layout.mmWidth = epgWidth->text().toDouble();
-                layout.mmHeight = epgHeight->text().toDouble();
-                layout.mmLeft = ebrLeft->text().toDouble();
-                layout.mmRight = ebrRight->text().toDouble();
-                layout.mmTop =  ebrTop->text().toDouble();
-                layout.mmBottom = ebrBottom->text().toDouble();
-                layout.ptWidth = MM_TO_POINT( layout.mmWidth );
-                layout.ptHeight = MM_TO_POINT( layout.mmHeight );
-                layout.ptLeft = MM_TO_POINT( layout.mmLeft );
-                layout.ptRight = MM_TO_POINT( layout.mmRight );
-                layout.ptTop = MM_TO_POINT( layout.mmTop );
-                layout.ptBottom = MM_TO_POINT( layout.mmBottom );
-                layout.inchWidth = MM_TO_INCH( layout.mmWidth );
-                layout.inchHeight = MM_TO_INCH( layout.mmHeight );
-                layout.inchLeft = MM_TO_INCH( layout.mmLeft );
-                layout.inchRight = MM_TO_INCH( layout.mmRight );
-                layout.inchTop = MM_TO_INCH( layout.mmTop );
-                layout.inchBottom = MM_TO_INCH( layout.mmBottom );
-                break;
-            case KoUnit::U_PT:
-                layout.ptWidth = epgWidth->text().toDouble();
-                layout.ptHeight = epgHeight->text().toDouble();
-                layout.ptLeft = ebrLeft->text().toDouble();
-                layout.ptRight = ebrRight->text().toDouble();
-                layout.ptTop =  ebrTop->text().toDouble();
-                layout.ptBottom = ebrBottom->text().toDouble();
-                layout.mmWidth = POINT_TO_MM( layout.ptWidth );
-                layout.mmHeight = POINT_TO_MM( layout.ptHeight );
-                layout.mmLeft = POINT_TO_MM( layout.ptLeft );
-                layout.mmRight = POINT_TO_MM( layout.ptRight );
-                layout.mmTop = POINT_TO_MM( layout.ptTop );
-                layout.mmBottom = POINT_TO_MM( layout.ptBottom );
-                layout.inchWidth = POINT_TO_INCH( layout.ptWidth );
-                layout.inchHeight = POINT_TO_INCH( layout.ptHeight );
-                layout.inchLeft = POINT_TO_INCH( layout.ptLeft );
-                layout.inchRight = POINT_TO_INCH( layout.ptRight );
-                layout.inchTop = POINT_TO_INCH( layout.ptTop );
-                layout.inchBottom = POINT_TO_INCH( layout.ptBottom );
-                break;
-            case  KoUnit::U_INCH:
-                layout.inchWidth = epgWidth->text().toDouble();
-                layout.inchHeight = epgHeight->text().toDouble();
-                layout.inchLeft = ebrLeft->text().toDouble();
-                layout.inchRight = ebrRight->text().toDouble();
-                layout.inchTop =  ebrTop->text().toDouble();
-                layout.inchBottom = ebrBottom->text().toDouble();
-                layout.ptWidth = INCH_TO_POINT( layout.inchWidth );
-                layout.ptHeight = INCH_TO_POINT( layout.inchHeight );
-                layout.ptLeft = INCH_TO_POINT( layout.inchLeft );
-                layout.ptRight = INCH_TO_POINT( layout.inchRight );
-                layout.ptTop = INCH_TO_POINT( layout.inchTop );
-                layout.ptBottom = INCH_TO_POINT( layout.inchBottom );
-                layout.mmWidth = INCH_TO_MM( layout.inchWidth );
-                layout.mmHeight = INCH_TO_MM( layout.inchHeight );
-                layout.mmLeft = INCH_TO_MM( layout.inchLeft );
-                layout.mmRight = INCH_TO_MM( layout.inchRight );
-                layout.mmTop = INCH_TO_MM( layout.inchTop );
-                layout.mmBottom = INCH_TO_MM( layout.inchBottom );
-                break;
-        }
+        layout.ptWidth = KoUnit::fromUserValue( epgWidth->text().toDouble(), m_unit );
+        layout.ptHeight = KoUnit::fromUserValue( epgHeight->text().toDouble(), m_unit );
+        layout.ptLeft = KoUnit::fromUserValue( ebrLeft->text().toDouble(), m_unit );
+        layout.ptRight = KoUnit::fromUserValue( ebrRight->text().toDouble(), m_unit );
+        layout.ptTop = KoUnit::fromUserValue( ebrTop->text().toDouble(), m_unit );
+        layout.ptBottom = KoUnit::fromUserValue( ebrBottom->text().toDouble(), m_unit );
 
-        qSwap( layout.mmWidth, layout.mmHeight );
         qSwap( layout.ptWidth, layout.ptHeight );
-        qSwap( layout.inchWidth, layout.inchHeight );
 
-        double tmp;
         if ( ( KoOrientation )_orientation == PG_LANDSCAPE ) {
-            tmp = layout.mmLeft;
-            layout.mmLeft = layout.mmBottom;
-            layout.mmBottom = layout.mmRight;
-            layout.mmRight = layout.mmTop;
-            layout.mmTop = tmp;
-            tmp = layout.ptLeft;
+            double tmp = layout.ptLeft;
             layout.ptLeft = layout.ptBottom;
             layout.ptBottom = layout.ptRight;
             layout.ptRight = layout.ptTop;
             layout.ptTop = tmp;
-            tmp = layout.inchLeft;
-            layout.inchLeft = layout.inchBottom;
-            layout.inchBottom = layout.inchRight;
-            layout.inchRight = layout.inchTop;
-            layout.inchTop = tmp;
         } else {
-            tmp = layout.mmTop;
-            layout.mmTop = layout.mmRight;
-            layout.mmRight = layout.mmBottom;
-            layout.mmBottom = layout.mmLeft;
-            layout.mmLeft = tmp;
-            tmp = layout.ptTop;
+            double tmp = layout.ptTop;
             layout.ptTop = layout.ptRight;
             layout.ptRight = layout.ptBottom;
             layout.ptBottom = layout.ptLeft;
             layout.ptLeft = tmp;
-            tmp = layout.inchTop;
-            layout.inchTop = layout.inchRight;
-            layout.inchRight = layout.inchBottom;
-            layout.inchBottom = layout.inchLeft;
-            layout.inchLeft = tmp;
         }
 
         layout.orientation = ( KoOrientation )_orientation;
@@ -1046,71 +865,55 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
     }
 }
 
-void KoPageLayoutDia::changed(QLineEdit *line, double &mm, double &pt, double &inch) {
+void KoPageLayoutDia::changed(QLineEdit *line, double &pt) {
 
     if ( line->text().length() == 0 && retPressed )
         line->setText( i18n("0.00") );
     if ( line->text().toDouble()<0)
         line->setText( i18n("0.00") );
-    switch ( layout.unit ) {
-        case KoUnit::U_MM: {
-            mm = line->text().toDouble();
-            pt = MM_TO_POINT( mm );
-            inch = MM_TO_INCH( mm );
-        } break;
-        case KoUnit::U_PT: {
-            pt = line->text().toDouble();
-            mm = POINT_TO_MM( pt );
-            inch = POINT_TO_INCH( pt );
-        } break;
-        case KoUnit::U_INCH: {
-            inch = line->text().toDouble();
-            mm = INCH_TO_MM( inch );
-            pt = INCH_TO_POINT( inch );
-        } break;
-    }
+    pt = KoUnit::fromUserValue( line->text().toDouble(), m_unit );
     retPressed = false;
 }
 
 /*===================== width changed =============================*/
 void KoPageLayoutDia::widthChanged()
 {
-    changed(epgWidth, layout.mmWidth, layout.ptWidth, layout.inchWidth);
+    changed(epgWidth, layout.ptWidth);
     updatePreview( layout );
 }
 
 /*===================== height changed ============================*/
 void KoPageLayoutDia::heightChanged()
 {
-    changed(epgHeight, layout.mmHeight, layout.ptHeight, layout.inchHeight);
+    changed(epgHeight, layout.ptHeight);
     updatePreview( layout );
 }
 
 /*===================== left border changed =======================*/
 void KoPageLayoutDia::leftChanged()
 {
-    changed(ebrLeft, layout.mmLeft, layout.ptLeft, layout.inchLeft);
+    changed(ebrLeft, layout.ptLeft);
     updatePreview( layout );
 }
 
 /*===================== right border changed =======================*/
 void KoPageLayoutDia::rightChanged()
 {
-    changed(ebrRight, layout.mmRight, layout.ptRight, layout.inchRight);
+    changed(ebrRight, layout.ptRight);
     updatePreview( layout );
 }
 
 /*===================== top border changed =========================*/
 void KoPageLayoutDia::topChanged()
 {
-    changed(ebrTop, layout.mmTop, layout.ptTop, layout.inchTop);
+    changed(ebrTop, layout.ptTop);
     updatePreview( layout );
 }
 
 /*===================== bottom border changed ======================*/
 void KoPageLayoutDia::bottomChanged()
 {
-    changed(ebrBottom, layout.mmBottom, layout.ptBottom, layout.inchBottom);
+    changed(ebrBottom, layout.ptBottom);
     updatePreview( layout );
 }
 
@@ -1124,7 +927,7 @@ void KoPageLayoutDia::nColChanged( int _val )
 /*==================================================================*/
 void KoPageLayoutDia::nSpaceChanged( const QString &_val )
 {
-    cl.ptColumnSpacing=KoUnit::fromUserValue( _val.toDouble(),layout.unit );
+    cl.ptColumnSpacing = KoUnit::fromUserValue( _val.toDouble(), m_unit );
     updatePreview( layout );
 }
 

@@ -62,9 +62,9 @@ public:
 
 /*================================================================*/
 KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
-                 KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser )
+                 const KoPageLayout& _layout, int _flags, KoUnit::Unit _unit, KoTabChooser *_tabChooser )
     : QFrame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
-      unit( "mm" )
+      m_unit( _unit )
 {
     setWFlags( WResizeNoErase );
     setFrameStyle( Box | Raised );
@@ -186,17 +186,22 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     p.setFont( font );
 
     // Draw the numbers
-    if ( unit == "inch" )
+    switch( m_unit ) {
+    case KoUnit::U_INCH:
         dist = INCH_TO_POINT (m_zoom);
-    else if ( unit == "pt" )
+        break;
+    case KoUnit::U_PT:
         dist = 100.0 * m_zoom;
-    else
+        break;
+    case KoUnit::U_MM:
         dist = MM_TO_POINT ( 10.0 * m_zoom );
+        break;
+    }
 
     int maxwidth = 0;
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str=QString::number(j++);
-        if ( unit == "pt" && j!=1)
+        if ( m_unit == KoUnit::U_PT && j!=1)
             str+="00";
         int textwidth = fm.width( str );
         p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
@@ -334,17 +339,22 @@ void KoRuler::drawVertical( QPainter *_painter )
     p.setFont( font );
 
     // Draw the numbers
-    if ( unit == "inch" )
+    switch( m_unit ) {
+    case KoUnit::U_INCH:
         dist = INCH_TO_POINT ( m_zoom );
-    else if ( unit == "pt" )
+        break;
+    case KoUnit::U_PT:
         dist = 100.0 * m_zoom;
-    else
+        break;
+    case KoUnit::U_MM:
         dist = MM_TO_POINT ( 10.0 * m_zoom );
+        break;
+    }
 
     int maxheight = 0;
     for ( double i = 0.0;i <= (double)totalh;i += dist ) {
         str=QString::number(j++);
-        if ( unit == "pt" && j!=1 )
+        if ( m_unit == KoUnit::U_PT && j!=1 )
             str+="00";
         int textheight = fm.height();
         maxheight = QMAX( maxheight, textheight );
@@ -635,8 +645,6 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                         if ( d->canvas && mx < right-10 && mx+diffx-2 > 0) {
                             drawLine( d->oldMx, mx );
                             layout.ptLeft = unZoomIt(static_cast<double>(mx + diffx));
-                            layout.mmLeft = POINT_TO_MM(layout.ptLeft);
-                            layout.inchLeft = POINT_TO_INCH(layout.ptLeft);
                             if( ip_first > right-left-15 ) {
                                 ip_first=right-left-15;
                                 ip_first=ip_first<0 ? 0 : ip_first;
@@ -666,8 +674,6 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                         if ( d->canvas && mx > left+10 && mx+diffx <= pw-2) {
                             drawLine( d->oldMx, mx );
                             layout.ptRight = unZoomIt(static_cast<double>(pw - ( mx + diffx )));
-                            layout.mmRight = POINT_TO_MM( layout.ptRight );
-                            layout.inchRight = POINT_TO_INCH( layout.ptRight );
                             if( ip_first > right-left-15 ) {
                                 ip_first=right-left-15;
                                 ip_first=ip_first<0 ? 0 : ip_first;
@@ -798,8 +804,6 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             p.drawLine( 0, my, d->canvas->width(), my );
                             p.end();
                             layout.ptTop = unZoomIt(static_cast<double>(my + diffy));
-                            layout.mmTop = POINT_TO_MM( layout.ptTop );
-                            layout.inchTop = POINT_TO_INCH( layout.ptTop );
                             d->oldMx = mx;
                             d->oldMy = my;
                             repaint( false );
@@ -815,8 +819,6 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             p.drawLine( 0, my, d->canvas->width(), my );
                             p.end();
                             layout.ptBottom = unZoomIt(static_cast<double>(ph - ( my + diffy )));
-                            layout.mmBottom = POINT_TO_MM( layout.ptBottom );
-                            layout.inchBottom = POINT_TO_INCH( layout.ptBottom );
                             d->oldMx = mx;
                             d->oldMy = my;
                             repaint( false );
@@ -890,9 +892,7 @@ void KoRuler::setTabList( const KoTabulatorList & _tabList )
 
 double KoRuler::makeIntern( double _v )
 {
-    if ( unit == "mm" ) return MM_TO_POINT( _v );
-    if ( unit == "inch" ) return INCH_TO_POINT( _v );
-    return _v;
+    return KoUnit::fromUserValue( _v, m_unit );
 }
 
 void KoRuler::setupMenu()
@@ -920,18 +920,23 @@ void KoRuler::uncheckMenu()
 
 void KoRuler::setUnit( const QString& _unit )
 {
-    unit = _unit;
-    uncheckMenu();
+    setUnit( KoUnit::unit( _unit ) );
+}
 
-    if ( unit == "mm" ) {
+void KoRuler::setUnit( KoUnit::Unit unit )
+{
+    m_unit = unit;
+    uncheckMenu();
+    switch ( m_unit ) {
+    case KoUnit::U_MM:
         d->rb_menu->setItemChecked( d->mMM, true );
-        layout.unit = KoUnit::U_MM;
-    } else if ( unit == "pt" ) {
+        break;
+    case KoUnit::U_PT:
         d->rb_menu->setItemChecked( d->mPT, true );
-        layout.unit = KoUnit::U_PT;
-    } else if ( unit == "inch" ) {
+        break;
+    case KoUnit::U_INCH:
         d->rb_menu->setItemChecked( d->mINCH, true );
-        layout.unit = KoUnit::U_INCH;
+        break;
     }
     repaint( false );
 }

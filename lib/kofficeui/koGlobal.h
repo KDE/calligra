@@ -154,7 +154,7 @@ struct KoPageLayout
     KoOrientation orientation;
 
     /** The user's preferred unit. Should probably be removed later. */
-    KoUnit::Unit unit;
+    //KoUnit::Unit unit;
 
     /** Page width in pt */
     double ptWidth;
@@ -169,50 +169,13 @@ struct KoPageLayout
     /** Bottom margin in pt */
     double ptBottom;
 
-    // Deprecated, DO NOT USE. pt* should be enough.
-    double mmWidth;
-    double mmHeight;
-    double mmLeft;
-    double mmTop;
-    double mmRight;
-    double mmBottom;
-    double inchWidth;
-    double inchHeight;
-    double inchLeft;
-    double inchTop;
-    double inchRight;
-    double inchBottom;
-
     bool operator==( const KoPageLayout& l ) const {
-	if ( unit != l.unit )
-	    return false;
-	switch( unit ) {
-	case KoUnit::U_PT: {
-	    return ( ptWidth == l.ptWidth &&
-		     ptHeight == l.ptHeight &&
-		     ptLeft == l.ptLeft &&
-		     ptRight == l.ptHeight &&
-		     ptTop == l.ptTop &&
-		     ptBottom == l.ptBottom );
-	}
-	case KoUnit::U_MM: {
-	    return ( mmWidth == l.mmWidth &&
-		     mmHeight == l.mmHeight &&
-		     mmLeft == l.mmLeft &&
-		     mmRight == l.mmHeight &&
-		     mmTop == l.mmTop &&
-		     mmBottom == l.mmBottom );
-	}
-	case KoUnit::U_INCH: {
-	    return ( inchWidth == l.inchWidth &&
-		     inchHeight == l.inchHeight &&
-		     inchLeft == l.inchLeft &&
-		     inchRight == l.inchHeight &&
-		     inchTop == l.inchTop &&
-		     inchBottom == l.inchBottom );
-	}
-	}
-	return false;
+       return ( ptWidth == l.ptWidth &&
+                ptHeight == l.ptHeight &&
+                ptLeft == l.ptLeft &&
+                ptRight == l.ptHeight &&
+                ptTop == l.ptTop &&
+                ptBottom == l.ptBottom );
     }
 };
 
@@ -241,12 +204,6 @@ struct KoKWHeaderFooter
     KoHFType footer;
     double ptHeaderBodySpacing;
     double ptFooterBodySpacing;
-
-    // Deprecated, don't use. pt* should be enough.
-    double mmHeaderBodySpacing;
-    double mmFooterBodySpacing;
-    double inchHeaderBodySpacing;
-    double inchFooterBodySpacing;
 };
 
 
