@@ -253,3 +253,14 @@ void KWordDocIface::setShowDocStruct(bool b)
     doc->refreshGUIButton();
     doc->reorganizeGUI();
 }
+
+int KWordDocIface::numberOffset()
+{
+    return doc->getVariableCollection()->variableSetting()->numberOffset();
+}
+
+void KWordDocIface::setNumberOffset(int nb)
+{
+    doc->getVariableCollection()->variableSetting()->setNumberOffset(nb);
+    doc->recalcVariables(VT_PGNUM);
+}
