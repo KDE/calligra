@@ -4244,7 +4244,7 @@ bool KPresenterView::spellSwitchToNewPage()
     if( m_spell.currentSpellPage==m_spell.firstSpellPage)
         return false;
     if ( KMessageBox::questionYesNo( this,
-                                     i18n( "Do you want to spell new page?") )
+                                     i18n( "Do you want to spellcheck new page?") )
          != KMessageBox::Yes )
         return false;
     skipToPage(m_spell.currentSpellPage);
