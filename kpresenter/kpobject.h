@@ -275,8 +275,6 @@ protected:
     bool keepRatio:1;
 
     float presFakt;
-    //KoPoint oldOrig;
-    //KoSize oldExt;
     int subPresStep;
     int cmds;
 
