@@ -64,10 +64,11 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 
 
 	setFrameStyle(QFrame::WinPanel | QFrame::Raised);
-	connect(l,SIGNAL(moved()),this,SIGNAL(moved()));
+	connect(l,SIGNAL(moved()),this,SLOT(moved()));
 }
 
 void KexiRelationViewTableContainer::moved() {
+//	kdDebug()<<"finally emitting moved"<<endl;
 	emit moved(this);
 }
 
@@ -75,9 +76,9 @@ int
 KexiRelationViewTableContainer::globalY(const QString &field)
 {
 //	m_ta
-	kdDebug() << "KexiRelationViewTableContainer::globalY()" << endl;
+//	kdDebug() << "KexiRelationViewTableContainer::globalY()" << endl;
 	QPoint o = mapFromGlobal(QPoint(0, (m_tableView->globalY(field))));
-	kdDebug() << "KexiRelationViewTableContainer::globalY() db2" << endl;
+//	kdDebug() << "KexiRelationViewTableContainer::globalY() db2" << endl;
 	return mapToParent(o).y();
 }
 
@@ -199,6 +200,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev)
 				parentWidget()->move(newPos);
 				m_grabX=static_cast<QMouseEvent*>(ev)->globalPos().x();
 				m_grabY=static_cast<QMouseEvent*>(ev)->globalPos().y();
+//				kdDebug()<<"HEADER:emitting moved"<<endl;
 				emit moved();
 			}
 			return true;
@@ -282,7 +284,7 @@ KexiRelationViewTable::globalY(const QString &item)
 QDragObject *
 KexiRelationViewTable::dragObject()
 {
-	qDebug("KexiRelationViewTable::dragObject()");
+//	qDebug("KexiRelationViewTable::dragObject()");
 	if(selectedItem())
 	{
 		KexiFieldDrag *drag = new KexiFieldDrag(
@@ -296,7 +298,7 @@ KexiRelationViewTable::dragObject()
 bool
 KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 {
-	kdDebug() << "KexiRelationViewTable::acceptDrag()" << endl;
+//	kdDebug() << "KexiRelationViewTable::acceptDrag()" << endl;
 	if(ev->provides("kexi/field") && ev->source() != this)
 		return true;
 
@@ -306,7 +308,7 @@ KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 void
 KexiRelationViewTable::slotDropped(QDropEvent *ev)
 {
-	qDebug("KexiRelationViewTable::slotDropped()");
+//	qDebug("KexiRelationViewTable::slotDropped()");
 
 	QListViewItem *recever = itemAt(ev->pos());
 	if(recever)
@@ -318,7 +320,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		QString srcField;
 		//better check later if the source is really a table
 		KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
-		kdDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
+//		kdDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
 
 		QString rcvField = recever->text(1);
 
