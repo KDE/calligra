@@ -991,12 +991,11 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
 //TODO
 QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
 {
-    //<number:currency-style style:name="N107">
-    //<number:text>-</number:text>
-    //<number:number number:decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+
+    //<number:currency-style style:name="N107P0" style:volatile="true">
+    //<number:number number:decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
     //<number:text> </number:text>
-    //<number:currency-symbol number:language="fr" number:country="FR">€</number:currency-symbol>
-    //<style:map style:condition="value()&gt;=0" style:apply-style-name="N107P0"/>
+    //<number:currency-symbol>VEB</number:currency-symbol>
     //</number:currency-style>
 
     kdDebug()<<"QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
@@ -1013,6 +1012,14 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
     }
     while ( format.length() > 0 );
 
+    elementWriter.startElement( "number:currency-style" );
+    text =  _prefix ;
+    addTextNumber(text, elementWriter );
+
+    text =  _suffix ;
+    addTextNumber(text, elementWriter );
+    elementWriter.endElement();
+
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
     return mainStyles.lookup( currentStyle, "N" );
@@ -1021,6 +1028,10 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
 //TODO
 QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
 {
+
+    //<number:text-style style:name="N100">
+    //<number:text-content/>
+    ///</number:text-style>
 
     kdDebug()<<"QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
@@ -1035,6 +1046,14 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
+
+    elementWriter.startElement( "number:text-style" );
+    text =  _prefix ;
+    addTextNumber(text, elementWriter );
+
+    text =  _suffix ;
+    addTextNumber(text, elementWriter );
+    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
