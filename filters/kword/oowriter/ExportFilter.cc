@@ -727,7 +727,7 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
 QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
     const LayoutData& layout, const bool force, QString& styleKey)
 {
-    QString props; // Props has to remian empty, if there is no difference.
+    QString props; // Props has to remain empty, if there is no difference.
 
     styleKey += layout.styleName;
     styleKey += ',';
@@ -745,8 +745,8 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         }
         else if (layout.alignment == "auto")
         {
-            // ### TODO: bidi!
             props += "fo:text-align=\"left\" ";
+            props += "style:text-auto-align=\"true\" "; // OASIS extension
             styleKey += "A";
         }
         else

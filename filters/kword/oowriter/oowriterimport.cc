@@ -886,6 +886,11 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
     // (This is very important, it's not only an optimization. If no attribute is
     // specified in the .kwd file, the style's property will be used, which might
     // not always be correct).
+    // On 2nd thought, this doesn't seem to happen. If a style property needs undoing
+    // OO always writes it down in the XML, so we write out the property just fine.
+    // Both apps implement a "write property only if necessary" mechanism, I can't'
+    // find a case that breaks yet.
+
     if ( m_styleStack.hasAttribute( "fo:color" ) ) { // 3.10.3
         QColor color( m_styleStack.attribute( "fo:color" ) ); // #rrggbb format
         QDomElement colorElem( doc.createElement( "COLOR" ) );
@@ -1083,10 +1088,15 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
     // Always write out the alignment, it's required
     QDomElement flowElement = doc.createElement("FLOW");
 
-    if ( m_styleStack.hasAttribute( "fo:text-align" ) ) // 3.11.4
-        flowElement.setAttribute( "align", Conversion::importAlignment( m_styleStack.attribute( "fo:text-align" ) ) );
-    else
+    if ( m_styleStack.attribute( "style:text-auto-align" ) == "true" ) // OASIS extension
         flowElement.setAttribute( "align", "auto" );
+    else
+    {
+        if ( m_styleStack.hasAttribute( "fo:text-align" ) ) // 3.11.4
+            flowElement.setAttribute( "align", Conversion::importAlignment( m_styleStack.attribute( "fo:text-align" ) ) );
+        else
+            flowElement.setAttribute( "align", "auto" );
+    }
     layoutElement.appendChild( flowElement );
 
     // Indentation (margins)

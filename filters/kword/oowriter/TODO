@@ -1,5 +1,7 @@
+Import filter:
+==============
+Paragraph direction (http://web4.w3.org/TR/xsl/sliceA.html#writing-mode-add, style:writing-mode (lr-tb|rl-tb|tb-rl|tb-lr|lr|rl|tb|page) "lr-tb")
 Paragraph bullets/counters
-Shadow
 Fields/Variables
 Footnotes/Endnotes
 Images
@@ -14,3 +16,7 @@ Bookmarks
 Embedded objects
 Spellcheck settings?
 Cursor position, etc.
+
+Export filter:
+==============
+[TODO list to be written]

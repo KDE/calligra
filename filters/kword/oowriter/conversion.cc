@@ -17,7 +17,7 @@ QString Conversion::exportAlignment( const QString& align )
 {
     if ( align == "center" || align == "justify" )
         return align;
-    if ( align == "left" || align == "auto" ) // ### How to do "auto" in OO?
+    if ( align == "left" || align == "auto" ) // auto handled by text-auto-align
         return "start";
     if ( align == "right" )
         return "end";
