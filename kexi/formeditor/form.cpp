@@ -95,10 +95,10 @@ Form::setCurrentWidget(QWidget *w)
 	if(w)
 		emit selectionChanged(w);
 
-	if(w->parentWidget()->inherits("QWidgetStack"))
+	/*if(w->parentWidget()->inherits("QWidgetStack"))
 	{
 		w = w->parentWidget()->parentWidget();
-	}
+	}*/
 
 	if(w != m_toplevel->widget() && w)
 	{
@@ -118,6 +118,11 @@ Form::setCurrentWidget(QWidget *w)
 void
 Form::setSelWidget(QWidget *w)
 {
+	if(w->parentWidget()->inherits("QWidgetStack"))
+	{
+		w = w->parentWidget()->parentWidget();
+	}
+
 	Container *cont;
 	ObjectTreeItem *item = m_topTree->lookup(w->name());
 	if(item->container())
@@ -154,7 +159,7 @@ Form::emitChildRemoved(ObjectTreeItem *item)
 }
 
 Container*
-Form::activeContainer()
+Form::activeContainer() const
 {
 	ObjectTreeItem *it = m_topTree->lookup(m_selWidget->name());
 	if (!it)
@@ -166,7 +171,7 @@ Form::activeContainer()
 }
 
 Container*
-Form::parentContainer()
+Form::parentContainer() const
 {
 	ObjectTreeItem *it = m_topTree->lookup(m_selWidget->name());
 	if(it->parent()->container())
@@ -174,7 +179,6 @@ Form::parentContainer()
 	else
 		return it->parent()->parent()->container();
 }
-
 
 void
 Form::pasteWidget(QDomElement &widg, QPoint pos)

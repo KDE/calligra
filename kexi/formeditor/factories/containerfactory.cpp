@@ -67,7 +67,6 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	if(c == "QButtonGroup")
 	{
 		QButtonGroup *w = new QButtonGroup("btn", p, n);
-		kdDebug() << "ContainerFactory::create(): container=" << container << endl;
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}

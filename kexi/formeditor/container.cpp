@@ -23,6 +23,7 @@
 #include <qrect.h>
 #include <qcursor.h>
 #include <qobjectlist.h>
+#include <qlayout.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -36,15 +37,55 @@
 
 namespace KFormDesigner {
 
+// Helper classes for sorting widgets before inserting them in the layout
+class HorWidgetList : public QObjectList
+{
+	public:
+	HorWidgetList() {;}
+	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+	{
+		QWidget *w1 = static_cast<QWidget*>(item1);
+		QWidget *w2 = static_cast<QWidget*>(item2);
+
+		if(w1->x() < w2->x())
+			return -1;
+		if(w1->x() > w2->x())
+			return 1;
+		return 0; // item1 == item2
+	}
+};
+
+class VerWidgetList : public QObjectList
+{
+	public:
+	VerWidgetList() {;}
+	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+	{
+		QWidget *w1 = static_cast<QWidget*>(item1);
+		QWidget *w2 = static_cast<QWidget*>(item2);
+
+		if(w1->y() < w2->y())
+			return -10;
+		if(w1->y() > w2->y())
+			return 1;
+		return 0; // item1 == item2
+	}
+};
+
+// Container itself
+
 Container::Container(Container *toplevel, QWidget *container, QObject *parent, const char *name)
 :QObject(parent, name)
 {
 	m_container = container;
 
 	m_moving = 0;
+	m_move = false;
 	m_selected = 0;
 	m_tree = 0;
 	m_form = 0;
+	m_layout = 0;
+	m_layType = NoLayout;
 	m_toplevel = toplevel;
 
 	container->installEventFilter(this);
@@ -81,7 +122,6 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 bool
 Container::eventFilter(QObject *s, QEvent *e)
 {
-			
 	switch(e->type())
 	{
 		case QEvent::MouseButtonPress:
@@ -90,11 +130,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
 
 			m_moving = static_cast<QWidget*>(s);
-			/*if(m_moving->parent()->inherits("QWidgetStack"))
+			if(m_moving->parent()->inherits("QWidgetStack"))
 			{
 				m_moving = m_moving->parentWidget()->parentWidget();
 				kdDebug() << "composed widget  " << m_moving->name() << endl; 
-			}*/
+			}
 
 			setSelectedWidget(m_moving);
 
@@ -141,12 +181,15 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if (!m_form->objectTree()->lookup(name))
 					m_form->objectTree()->addChild(m_tree, new ObjectTreeItem(m_form->manager()->insertClass(), name, w));
 				kdDebug() << "Container::eventFilter(): widget added " << this << endl;
+
+				LayoutType type = layoutType();
+				setLayout(NoLayout);
+				setLayout(type);
 			}
 			else if(mev->button() == RightButton)
 			{
 				kdDebug() << "Container::eventFilter(): context menu" << endl;
 				KPopupMenu *parent = m_form->manager()->popupMenu();
-				
 				QWidget *w = (QWidget*)s;
 				QString n = w->className();
 				KPopupMenu *p = new KPopupMenu();
@@ -159,6 +202,13 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_form->manager()->setInsertPoint(QPoint());
 
 				parent->removeItem(id);
+			}
+			else if(m_move)
+			{
+				LayoutType type = layoutType();
+				setLayout(NoLayout);
+				setLayout(type);
+				m_move = false;
 			}
 			return true; // eat
 		}
@@ -198,6 +248,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int tmpy = (((m_moving->y()+mev->y()-m_grab.y())+gridY/2)/gridY)*gridY;
 				if((tmpx!=m_moving->x()) ||(tmpy!=m_moving->y()))
 					m_moving->move(tmpx,tmpy);
+				m_move = true;
 			}
 			return true; // eat
 		}
@@ -240,18 +291,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 	return false;
 }
 
-Form *
-Container::form()
-{
-	return m_form;
-}
-
-void
-Container::setForm(Form *form)
-{
-	m_form = form;
-}
-
 void
 Container::setSelectedWidget(QWidget *w)
 {
@@ -259,6 +298,7 @@ Container::setSelectedWidget(QWidget *w)
 	kdDebug() << "slotSelectionChanged " << w->name()<< endl;
 
 	m_selected = w;
+	w->raise();
 
 	if(w)
 		m_form->setCurrentWidget(w);
@@ -280,12 +320,6 @@ Container::toplevel()
 		return this;
 }
 
-ObjectTreeItem*
-Container::tree()
-{
-	return m_tree;
-}
-
 void
 Container::deleteItem()
 {
@@ -304,6 +338,84 @@ Container::widgetDeleted()
 {
 	kdDebug() << "Deleting container : " << m_tree->name() << endl;
 	delete this;
+}
+
+void
+Container::setLayout(LayoutType type)
+{
+	if(m_layType == type)
+		return;
+
+	delete m_layout;
+	m_layout = 0;
+	m_layType = type;
+
+	switch(type)
+	{
+		case NoLayout:
+		{
+			return;
+		}
+		case HBox:
+		{
+			m_layout = (QLayout*) new QHBoxLayout(m_container, 12);
+			createBoxLayout(new HorWidgetList());
+			break;
+		}
+		case VBox:
+		{
+			m_layout = (QLayout*) new QVBoxLayout(m_container, 12);
+			createBoxLayout(new VerWidgetList());
+			break;
+		}
+		case Grid:
+		{
+		//	QGridLayout *grid = new QGridLayout(m_container, 10);
+		//	m_layout = (QLayout*)grid;
+			// TODO: Make Grid Layout work :-)
+			kdDebug() << "GridLayout not implemented yet !! " << endl;
+			return;
+		}
+		default:
+		{
+			kdDebug() << "WRONG LAYOUT TYPE " << endl;
+			return;
+		}
+	}
+}
+
+Container::createBoxLayout(QObjectList *list)
+{
+	QObjectList *olist = m_container->queryList("QWidget", 0, true, false);
+	QBoxLayout *layout = static_cast<QBoxLayout*>(m_layout);
+	QObject *obj;
+
+	QObjectListIt iter(*olist);
+	while ((obj = iter.current()) != 0)
+	{
+		if(obj->isA("ResizeHandle"))
+			break;
+		list->append(obj);
+		++iter;
+	}
+	delete olist;
+
+	if(list->isEmpty())
+		layout->setAutoAdd(true);
+	list->sort();
+
+	QObjectListIt it(*list);
+	while ((obj = it.current()) != 0)
+	{
+		QWidget *w = static_cast<QWidget*>(obj);
+		layout->addWidget(w);
+		++it;
+	}
+	delete list;
+
+	if(!m_container->parentWidget()->inherits("QWidgetStack"))
+		m_container->resize(layout->sizeHint());
+	layout->activate();
 }
 
 Container::~Container()

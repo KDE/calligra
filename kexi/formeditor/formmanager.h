@@ -69,19 +69,19 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview);
 
 		//! \return A pointer to the WidgetLibrary owned by this Manager.
-		WidgetLibrary*    lib() { return m_lib; }
+		WidgetLibrary*    lib() const { return m_lib; }
 		/*! \return true if one of the insert buttons was pressed and the forms are ready to create a widget. 
 		 \return false otherwise.
 		 */
-		bool              inserting() { return m_inserting; }
+		bool              inserting() const { return m_inserting; }
 		/*! \return The name of the class being inserted, corresponding to the menu item or the toolbar button clicked.
 		 */
-		QString           insertClass() { return m_insertClass; }
+		QString           insertClass() const { return m_insertClass; }
 
 		/*! \return The popup menu to be shown when right-clicking on the form. Each container adds a widget-specific part
 		  to this one before showing it. This menu contains Copy/cut/paste/remove.
 		 */
-		KPopupMenu*       popupMenu() { return m_popup; }
+		KPopupMenu*       popupMenu() const { return m_popup; }
 		/*! The Container use this function to indicate the exec point of the contextual menu, which is used to position the 
 		  pasted widgets.
 		 */
@@ -89,14 +89,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		/*! \return The Form actually active and focused.
 		 */
-		Form*             activeForm();
+		Form*             activeForm() const;
 		/*! \return true if \a w is a toplevel widget, ie it is the main widget of a Form (so it should have a caption ,
 		 an icon ...)
 		*/
 		bool              isTopLevel(QWidget *w);
 
 		//! \return A pointer to the KexiPropertyEditor we use. 
-		KexiPropertyEditor* editor() { return m_editor; }
+		KexiPropertyEditor* editor() const { return m_editor; }
 
 		/*! Creates a new blank Form, whose toplevel widget inherits \a classname. The Form is automatically shown. */
 		void createBlankForm(const QString &classname, const char *name);
@@ -128,7 +128,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void deleteWidget();
 		/*! Copies the slected widget and all its children of the active Form using an XML representation. */
 		void copyWidget();
-		/*! Cuts (ie Copies and deletes) the slected widget and all its children of the active Form using an XML representation. */
+		/*! Cuts (ie Copies and deletes) the selected widget and all its children of the active Form using an XML representation. */
 		void cutWidget();
 		/*! Pastes the XML representation of the copied or cut widget. The widget is pasted when the user clicks the Form to
 		  indicate the new position of the widget, or at the position of the contextual menu if there is one.

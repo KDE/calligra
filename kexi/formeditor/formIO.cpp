@@ -27,6 +27,7 @@
 #include <qbuffer.h>
 #include <qimage.h>
 #include <qtabwidget.h>
+#include <qlayout.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -78,11 +79,11 @@ FormIO::saveForm(Form *form, const QString &filename)
 	if(file.open(IO_WriteOnly))
 	{
 		QTextStream stream(&file);
-		stream << domDoc.toString() << endl;
+		stream << domDoc.toString(3) << endl;
 		file.close();
 	}
 	
-	kdDebug() << domDoc.toString() << endl;
+	kdDebug() << domDoc.toString(2) << endl;
 	return 1;
 }
 
@@ -509,11 +510,47 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			tclass.appendChild(prop(domDoc, (*it).latin1(), item->widget()->property((*it).latin1()), item->widget()));
 	}
 	parent.appendChild(tclass);
-	
+
+	// Saving container 's layout if there is one
+	QDomElement layout;
+	if(item->container())
+	{
+		QString nodeName;
+		switch(item->container()->layoutType())
+		{
+			case Container::HBox:
+			{
+				nodeName = "hbox";
+				break;
+			}
+			case Container::VBox:
+			{
+				nodeName = "vbox";
+				break;
+			}
+			case Container::Grid:
+			{
+				nodeName = "grid";
+				break;
+			}
+		}
+		if(!nodeName.isNull())
+		{
+			layout = domDoc.createElement(nodeName);
+			layout.appendChild(prop(domDoc, "name", "unnamed", item->widget()));
+			tclass.appendChild(layout);
+		}
+	}
+
 	if(!item->children()->isEmpty())
 	{
 		for(ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
-			saveWidget(objIt, tclass, domDoc);
+		{
+			if(layout.isNull())
+				saveWidget(objIt, tclass, domDoc);
+			else
+				saveWidget(objIt, layout, domDoc);
+		}
 	}
 }
 
@@ -569,6 +606,40 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			else
 				loadWidget(container, lib, n.toElement(), w);
 		}
+		if((n.toElement().tagName() == "vbox") || (n.toElement().tagName() == "hbox") || (n.toElement().tagName() == "grid"))
+		{
+			loadLayout(n.toElement().tagName(), tree);
+			for(QDomNode m = n.toElement().firstChild(); !m.isNull(); m = m.nextSibling())
+			{
+				if(m.toElement().tagName() == "property")
+				{
+					QString name = m.toElement().attribute("name");
+					if(name == "name")
+						continue;
+
+					QVariant val = readProp(m.toElement().firstChild(), w, name);
+					w->setProperty(name.latin1(), val);
+					tree->addModProperty(name);
+				}
+				if(m.toElement().tagName() == "attribute")
+				{
+					QString name = m.toElement().attribute("name");
+					readAttribute(m.toElement().firstChild(), w, name);
+				}
+				if(m.toElement().tagName() == "widget")
+				{
+					if(tree->container())
+						loadWidget(tree->container(), lib, m.toElement());
+					else
+						loadWidget(container, lib, m.toElement(), w);
+				}
+			}
+			if(tree->container())
+			{
+				tree->container()->layout()->setAutoAdd(false);
+				tree->container()->layout()->activate();
+			}
+		}
 	}
 
 	w->show();
@@ -608,6 +679,27 @@ FormIO::createToplevelWidget(Form *form, QWidget *parent, QDomElement &el)
 	}
 	w->show();
 	form->setInteractiveMode(true);
+}
+
+void
+FormIO::loadLayout(const QString &name, ObjectTreeItem *tree)
+{
+	if(!tree->container())
+		return;
+
+	if(name == "hbox")
+	{
+		tree->container()->setLayout(Container::HBox);
+	}
+	else if(name == "vbox")
+	{
+		tree->container()->setLayout(Container::VBox);
+	}
+	else if(name == "grid")
+	{
+		tree->container()->setLayout(Container::Grid);
+	}
+	tree->container()->layout()->setAutoAdd(true);
 }
 
 QString

@@ -27,6 +27,7 @@
 
 #include "objecttree.h"
 #include "form.h"
+#include "container.h"
 #include "formmanager.h"
 #include "kexipropertyeditor.h"
 #include "kexipropertyeditoritem.h"
@@ -65,6 +66,10 @@ ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &va
 	if((property == "hAlign") || (property == "vAlign") || (property == "wordbreak"))
 	{
 		saveAlignProperty();
+	}
+	else if(property == "layout")
+	{
+		saveLayoutProperty(value.toString());
 	}
 	else
 	{
@@ -122,6 +127,13 @@ ObjectPropertyBuffer::setObject(QWidget *widg)
 				add(new KexiProperty(meta->name(), obj->property(meta->name()), desc));
 		}
 	}
+	
+	if(m_manager->activeForm())
+	{
+		ObjectTreeItem *objectIt = m_manager->activeForm()->objectTree()->lookup(widg->name());
+		if(objectIt && objectIt->container())
+			createLayoutProperty(objectIt->container());
+	}
 
 	m_manager->editor()->setBuffer(this);
 
@@ -174,11 +186,16 @@ ObjectPropertyBuffer::checkModifiedProp()
 		if(treeIt)
 		{
 			QListViewItem *it = m_manager->editor()->firstChild()->firstChild();
+			QString name;
 			while(it)
 			{
 				KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem*>(it);
+				name = item->property()->name();
+				if((name == "hAlign") || (name == "vAlign") || (name == "wordbreak") || (name == "layout"))
+					return;
+
 				if(item->property()->changed())
-					treeIt->addModProperty(item->text(0));
+					treeIt->addModProperty(name);
 				it = it->nextSibling();
 			}
 		}
@@ -274,6 +291,58 @@ ObjectPropertyBuffer::saveAlignProperty()
 	int count = m_object->metaObject()->findProperty("alignment", true);
 	const QMetaProperty *meta = m_object->metaObject()->property(count, true);
 	m_object->setProperty("alignment", meta->keysToValue(list));
+}
+
+void
+ObjectPropertyBuffer::createLayoutProperty(Container *container)
+{
+	QStringList list;
+	QString value;
+
+	switch(container->layoutType())
+	{
+		case Container::NoLayout:
+		{
+			value = "NoLayout";
+			break;
+		}
+		case Container::HBox:
+		{
+			value = "HBox";
+			break;
+		}
+		case Container::VBox:
+		{
+			value = "VBox";
+			break;
+		}
+		case Container::Grid:
+		{
+			value = "Grid";
+			break;
+		}
+	}
+
+	list << "NoLayout" << "HBox" << "VBox" << "Grid";
+	add(new KexiProperty("layout", value, list, descList(list), i18n("Container's layout")));
+}
+
+void
+ObjectPropertyBuffer::saveLayoutProperty(const QString &value)
+{
+	Container *cont=0;
+	if(m_manager->activeForm())
+		cont = m_manager->activeForm()->objectTree()->lookup(m_object->name())->container();
+	else
+	{
+		kdDebug() << "ERROR NO CONTAINER" << endl;
+		return;
+	}
+
+	if(value == "NoLayout")    cont->setLayout(Container::NoLayout);
+	if(value == "HBox")        cont->setLayout(Container::HBox);
+	if(value == "VBox")        cont->setLayout(Container::VBox);
+	if(value == "Grid")        cont->setLayout(Container::Grid);
 }
 
 ObjectPropertyBuffer::~ObjectPropertyBuffer()

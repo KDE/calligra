@@ -36,12 +36,9 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 		~ObjectTreeViewItem() {;}
 
 		//! \return the item name, ie the ObjectTreeItem name
-		const QString	name();
+		const QString	name() const;
 		//! \return the ObjectTreeItem associated to this item.
-		ObjectTreeItem* objectTree() { return m_item; }
-		
-		//void            setActive(bool active) { m_selected = selection; }
-		//bool            isActive() { return m_selected; }
+		ObjectTreeItem* objectTree() const { return m_item; }
 
 	protected:
 		//! Reimplemented to draw custom contents (copied from Property Editor)

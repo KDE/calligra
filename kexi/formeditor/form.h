@@ -66,7 +66,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*!
 		 * \return the toplevel Container or 0 if there isn't any.
 		 */
-		Container			*toplevelContainer() { return m_toplevel; }
+		Container			*toplevelContainer() const { return m_toplevel; }
 
 		/*
 		 * create an instance of this form by using
@@ -80,19 +80,19 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		QWidget			*createEmptyInstance(const QString &c="QWidget", QWidget *parent=0);
 		 */
 		//! \return a pointer to this form's ObjectTree.
-		ObjectTree		*objectTree() { return m_topTree; }
+		ObjectTree		*objectTree() const { return m_topTree; }
 		//! \return the FormManager parent of this form.
-		FormManager*		manager() { return m_manager; }
+		FormManager*		manager() const { return m_manager; }
 		//! \return the widget currently selected in this form, or 0 if there is not.
-		QWidget*		selectedWidget()  {return m_selWidget;}
+		QWidget*		selectedWidget() const {return m_selWidget;}
 		/*! \return A pointer to the currently active Container, ie the parent Container for a simple widget,
 		    and the widget's Container if it is itself a container.
 		 */
-		Container*		activeContainer();
+		Container*		activeContainer() const;
 		/*! \return A pointer to the parent Container of the currently selected widget. It is the same as activeContainer() for 
 		    a simple widget, but unlike this function it will also return the parent Container if the widget itself is a Container.
 		 */
-		Container*		parentContainer();
+		Container*		parentContainer() const;
 		/*! This function is used by child Container to tell Form which widget is selected. The ResizeHandleSet is changed accordingly,
 		   and the PropertyBuffer and ObjectTreeView are updated.
 		 */
@@ -104,7 +104,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		    \return false if the Form is being updated by the program, ie the widget are created by FormIO, and so composed widgets 
 		    should not be populated automatically (such as QTabWidget).
 		 */
-		bool			interactiveMode() { return m_inter; }
+		bool			interactiveMode() const { return m_inter; }
 
 		//! \return the x distance between two dots in the background.
 		static int		gridX() { return 10;}
@@ -123,7 +123,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void			emitChildRemoved(ObjectTreeItem *item);
 
 		//! \return The filename of the UI file this Form was saved to, or QString::null if the Form hasn't be saved yet.
-		QString			filename() { return m_filename; }
+		QString			filename() const { return m_filename; }
 		//! Sets the filename of this Form to \a filename.
 		void			setFilename(const QString &file) { m_filename = file; }
 

@@ -47,7 +47,7 @@ ObjectTreeViewItem::ObjectTreeViewItem(KListView *list)
 }
 
 const QString
-ObjectTreeViewItem::name()
+ObjectTreeViewItem::name() const
 {
 	if(m_item)
 		return m_item->name();
@@ -91,7 +91,7 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 	}
 	
 	p->setPen( QColor(200,200,200) ); //like in t.v.
-	p->drawLine(-50, height()-1, width, height()-1 );
+	p->drawLine(-150, height()-1, width, height()-1 );
 }
 
 void
@@ -110,13 +110,13 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 		p->fillRect(-50,0,50, item->height(), QBrush(item->backgroundColor()));
 		p->save();
 		p->setPen( QColor(200,200,200) ); //like in t.v.
-		p->drawLine(-50, item->height()-1, w, item->height()-1 );
+		p->drawLine(-150, item->height()-1, w, item->height()-1 );
 		p->restore();
 		
 		if(item->isSelected())
 		{
 			p->fillRect(0,0,w, item->height(), QBrush(cg.highlight()));
-			p->fillRect(-50,0,50, item->height(), QBrush(cg.highlight()));
+			p->fillRect(-150,0,50, item->height(), QBrush(cg.highlight()));
 		}
 		if(item->firstChild())
 		{
@@ -197,7 +197,6 @@ ObjectTreeView::setSelWidget(QWidget *w)
 {
 	if(!w)
 		return;
-
 	QString name = w->name();
 
 	ObjectTreeViewItem *objIt = static_cast<ObjectTreeViewItem*>(selectedItem());

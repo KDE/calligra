@@ -114,6 +114,9 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    Decoding code is taken from QT Designer.
 		*/
 		static QPixmap      loadImage(QDomDocument domDoc, QString name);
+		/*! Loads the layout (ie calls Container::setLayout() ) which type is \a name, 
+		   and belonging to the widget represented by the ObjectTreeItem \a tree. */
+		static void         loadLayout(const QString &name, ObjectTreeItem *tree);
 };
 
 }

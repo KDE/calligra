@@ -28,6 +28,7 @@ namespace KFormDesigner {
 
 class Form;
 class FormManager;
+class Container;
 
 //! A buffer which holds the property of the selected widget
 /*! This class inherits KexiPropertyBuffer and holds the properties of the selected widget, which are shown in
@@ -80,11 +81,24 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		   \return true if the property should be shown. False otherwise.
 		 */
 		bool    showProperty(QObject *obj, const QString &property);
+		/*! Creates the properties related to alignment (ie hAlign, vAlign and WordBreak) for the QWidget \a obj. \a meta
+		  is the QMetaProperty for "alignment" property". ( called by setObject() )
+		 */
 		void    createAlignProperty(const QMetaProperty *meta, QObject *obj);
+		/*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak) and modifies the "alignment" property of
+		  the widget. ( called by changeProperty() )
+		 */
 		void    saveAlignProperty();
-		QString descFromName(const QString &name);
-		QString descFromValue(const QString &name);
-		QStringList descList(const QStringList &list);
+		/*! Creates the "layout" property, for the Container \a container. ( called by setObject() ) */
+		void    createLayoutProperty(Container *container);
+		/*! Saves the "layout" property and changes the Container 's layout (using Container::setLayout() ). ( called by changeProperty() )*/
+		void    saveLayoutProperty(const QString &value);
+		/*! \return The i18n'ed name of the property whose name is \a name, that will be displayed in PropertyEditor. */
+		static QString      descFromName(const QString &name);
+		/*! \return The i18n'ed name of the property's vale whose name is \a name. */
+		static QString      descFromValue(const QString &name);
+		/*! \return The i18n'ed list of values, that will be shown by Property Editor (using descFromValue()).*/
+		static QStringList  descList(const QStringList &list);
 	
 	private:
 		QObject		*m_object;

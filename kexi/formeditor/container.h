@@ -25,6 +25,7 @@
 
 class QEvent;
 class QWidget;
+class QLayout;
 
 namespace KFormDesigner {
 
@@ -42,6 +43,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 	Q_OBJECT
 
 	public:
+		enum LayoutType { NoLayout=0, HBox, VBox, Grid };
+	
 		/**
 		 * Creates a Container from the widget \a container, which have \a toplevel as parent Container.
 		 */
@@ -61,7 +64,16 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		/**
 		 * \return The ObjectTreeItem assosiated with this Container's widget.
 		 */
-		ObjectTreeItem	*tree();
+		ObjectTreeItem	*tree() const { return m_tree; }
+
+		//! \return a pointer to the QLayout of this Container, or 0 if there is not.
+		QLayout*        layout() const { return m_layout; }
+		//! \return the type of the layout associated to this Container's widget (see LayoutType enum).
+		LayoutType      layoutType() const { return m_layType; }
+		/*! Sets this Container to use \a type of layout. The widget are inserted automatically in the layout
+		  following their positions.
+		 */
+		void            setLayout(LayoutType type);
 
 	signals:
 		/**
@@ -83,10 +95,10 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QWidget		*widget() { return m_container; }
 
 		//! Sets the Form which this Container belongs to.
-		void		setForm(Form *form);
+		void		setForm(Form *form) { m_form = form; }
 
 		//! \return The form this Container belongs to.
-		Form		*form();
+		Form		*form() const { return m_form; }
 
 		/*! Deletes the selected child item of this Container, and remove it from ObjectTree. */
 		void		deleteItem();
@@ -104,11 +116,17 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		   pop up a menu when right-clicking.
 		  */
 		virtual bool	eventFilter(QObject *o, QEvent *e);
+		/*! Internal function to create a HBoxLayout or VBoxLayout for this container. \a list is a subclass of QObjectList that can sort widgets
+		   following their position (such as HorWidgetList or VerWidgetList).
+		  */
+		void		createBoxLayout(QObjectList *list);
 
 	private:
 		// the watched container and it's toplevel one...
 		QWidget		*m_container;
 		Container 	*m_toplevel;
+		QLayout		*m_layout;
+		LayoutType	m_layType;
 
 		// selection
 		QWidget		*m_selected;
@@ -116,6 +134,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		// moving etc.
 		QPoint		m_grab;
 		QWidget		*m_moving;
+		bool		m_move;
 
 		//inserting
 		QPoint		m_insertBegin;

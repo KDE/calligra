@@ -120,7 +120,7 @@ FormManager::windowChanged(QWidget *w)
 }
 
 Form*
-FormManager::activeForm()
+FormManager::activeForm() const
 {
 	return m_active;
 }

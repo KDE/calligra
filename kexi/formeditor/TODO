@@ -19,8 +19,7 @@
 
 ****** Bugfixes/Changes : *****
 * Add a grouping ability to Widget
-* Add a classname and filename member into Form
-
+* Make actions toggable (with KRadioAction)
 
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
 * Change tab position by drag'n drop
@@ -36,3 +35,4 @@
 * Make FormManager independant of the parent container (ie no longer depends on QWorkspace) (2/23/04)
 * Fix pixmaps in Property Editor (2/24/04)
 * Properties names and values are now i18n'ed (2/24/04)
+* Add a classname and filename member into Form (2/24/04)
