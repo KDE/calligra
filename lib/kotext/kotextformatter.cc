@@ -200,7 +200,7 @@ bool KoTextFormatterCore::format()
                                 parag );
     //else dw = parag->documentVisibleWidth();
 
-    int x = initialLMargin; // as modified by adjustMargins
+    x = initialLMargin; // as modified by adjustMargins
 
     int maxY = doc ? doc->flow()->availableHeight() : -1;
 
