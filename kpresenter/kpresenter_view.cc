@@ -3398,6 +3398,25 @@ void KPresenterView::styleOk()
         macro->addCommand(cmd);
         createMacro=true;
     }
+
+    bool prot = styleDia->isProtected();
+    cmd = m_canvas->setProtectObj(prot);
+    if ( cmd)
+    {
+        createMacro=true;
+        macro->addCommand( cmd );
+    }
+
+    if ( styleDia->isOneObject())
+    {
+        KoRect rect = styleDia->getNewSize();
+        KoRect oldRect = m_canvas->getSelectedObj()->getRect();
+        cmd = new ResizeCmd( i18n("Change Size"), rect.topLeft()-oldRect.topLeft(), rect.size() - oldRect.size(), m_canvas->getSelectedObj(), m_pKPresenterDoc );
+        cmd->execute();
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+
     bool bSticky=styleDia->isSticky();
     //all sticky obj are sticky page => when sticky=false test sticky page
     if(bSticky)
@@ -3421,24 +3440,6 @@ void KPresenterView::styleOk()
         macro->addCommand(cmd);
         createMacro=true;
     }
-    bool prot = styleDia->isProtected();
-    cmd = m_canvas->setProtectObj(prot);
-    if ( cmd)
-    {
-        createMacro=true;
-        macro->addCommand( cmd );
-    }
-
-    if ( styleDia->isOneObject())
-    {
-        KoRect rect = styleDia->getNewSize();
-        KoRect oldRect = m_canvas->getSelectedObj()->getRect();
-        cmd = new ResizeCmd( i18n("Change Size"), rect.topLeft()-oldRect.topLeft(), rect.size() - oldRect.size(), m_canvas->getSelectedObj(), m_pKPresenterDoc );
-        cmd->execute();
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-
 
     if(createMacro)
         kPresenterDoc()->addCommand(macro);
