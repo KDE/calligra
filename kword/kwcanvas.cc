@@ -1818,7 +1818,7 @@ void KWCanvas::slotNewContentsSize()
     QSize size = m_viewMode->contentsSize();
     if ( size != QSize( contentsWidth(), contentsHeight() ) )
     {
-        kdDebug() << "KWCanvas::slotNewContentsSize " << size.width() << "x" << size.height() << endl;
+        //kdDebug() << "KWCanvas::slotNewContentsSize " << size.width() << "x" << size.height() << endl;
         resizeContents( size.width(), size.height() );
     }
 }
