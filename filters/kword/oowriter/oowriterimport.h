@@ -61,13 +61,14 @@ private:
     KoFilter::ConversionStatus openFile();
     bool createStyleMap( const QDomDocument & styles );
     void insertStyles( const QDomElement& element );
+    void importDateTimeStyle( const QDomElement& parent );
     void fillStyleStack( const QDomElement& object, const QString& attrName );
     void addStyles( const QDomElement* style );
     QString appendPicture(QDomDocument& doc, const QDomElement& object);
     QString appendTextBox(QDomDocument& doc, const QDomElement& object);
     void importFrame( QDomElement& frameElementOut, const QDomElement& object, bool isText );
     void anchorFrameset( QDomDocument& doc, QDomElement& formats, uint pos, const QString& frameName );
-    void appendField(QDomDocument& doc, QDomElement& outputFormats, const QDomElement& object, uint pos);
+    void appendField(QDomDocument& doc, QDomElement& outputFormats, QDomElement& object, uint pos);
     void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
         const QString& key, int type, QDomElement& child);
     void appendBookmark( QDomDocument& doc, int paragId, int pos, const QString& name );
@@ -105,6 +106,9 @@ private:
     };
     typedef QMap<QString, BookmarkStart> BookmarkStartsMap;
     BookmarkStartsMap m_bookmarkStarts;
+
+    typedef QMap<QString, QString> DataFormatsMap;
+    DataFormatsMap m_dateTimeFormats; // maybe generalize to include number formats.
 
     uint m_pictureNumber; // Number of the picture (increment *before* use)
     KZip* m_zip; // Input KZip file

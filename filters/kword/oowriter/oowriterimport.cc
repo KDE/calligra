@@ -260,15 +260,19 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
         {
             appendTextBox( doc, t );
         }
+        else if ( name == "text:variable-decls" )
+        {
+            // We don't parse variable-decls since we ignore var types right now
+            // (and just storing a list of available var names wouldn't be much use)
+        }
         // TODO text:sequence-decls
         else
         {
-            kdDebug(30518) << "Unsupported body element '" << name << "'" << endl;
-            m_styleStack.restore();
-            continue;
+            kdWarning(30518) << "Unsupported body element '" << name << "'" << endl;
         }
 
-        currentFramesetElement.appendChild( e );
+        if ( !e.isNull() )
+            currentFramesetElement.appendChild( e );
         m_styleStack.restore(); // remove the styles added by the paragraph or list
     }
 }
@@ -537,7 +541,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   else
     kdDebug(30518) << "No items found" << endl;
 
-  kdDebug(30518) << "Starting reading in auto:styles" << endl;
+  kdDebug(30518) << "Starting reading in office:automatic-styles" << endl;
 
   QDomNode autoStyles = docElement.namedItem( "office:automatic-styles" );
   if ( !autoStyles.isNull() )
@@ -583,7 +587,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 // Perfect copy of OoImpressImport::insertStyles
 void OoWriterImport::insertStyles( const QDomElement& styles )
 {
-    kdDebug(30518) << "Inserting styles from " << styles.tagName() << endl;
+    //kdDebug(30518) << "Inserting styles from " << styles.tagName() << endl;
     for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
@@ -611,10 +615,109 @@ void OoWriterImport::insertStyles( const QDomElement& styles )
             // TODO
         } else if ( tagName == "text:linenumbering-configuration" ) {
             // Not implemented in KWord
+        } else if ( tagName == "number:number-style" ) {
+            // TODO
+        } else if ( tagName == "number:date-style"
+                    || tagName == "number:time-style" ) {
+            importDateTimeStyle( e );
         } else {
-            kdWarning(30518) << "Unknown element " << e.tagName() << " in styles" << endl;
+            kdWarning(30518) << "Unknown element " << tagName << " in styles" << endl;
         }
     }
+}
+
+
+// OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html
+// OpenCalcImport::loadFormat has similar code, but slower, intermixed with other stuff,
+// lacking long-textual forms.
+void OoWriterImport::importDateTimeStyle( const QDomElement& parent )
+{
+    QString format;
+    for( QDomNode node( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
+    {
+        const QDomElement e( node.toElement() );
+        QString tagName = e.tagName();
+        if ( !tagName.startsWith( "number:" ) )
+            continue;
+        tagName.remove( 0, 7 );
+        const QString numberStyle = e.attribute( "number:style" );
+        const bool shortForm = numberStyle == "short" || numberStyle.isEmpty();
+        if ( tagName == "day" ) {
+            format += shortForm ? "d" : "dd";
+        } else if ( tagName == "day-of-week" ) {
+            format += shortForm ? "ddd" : "dddd";
+        } else if ( tagName == "month" ) {
+            // TODO the spec has a strange mention of number:format-source
+            if ( e.attribute( "number:textual" ) == "true" ) {
+                format += shortForm ? "MMM" : "MMMM";
+            } else { // month number
+                format += shortForm ? "M" : "MM";
+            }
+        } else if ( tagName == "year" ) {
+            format += shortForm ? "yy" : "yyyy";
+        } else if ( tagName == "week-of-year" || tagName == "quarter") {
+            // ### not supported in Qt
+        } else if ( tagName == "hours" ) {
+            format += shortForm ? "h" : "hh";
+        } else if ( tagName == "minutes" ) {
+            format += shortForm ? "m" : "mm";
+        } else if ( tagName == "seconds" ) {
+            format += shortForm ? "s" : "ss";
+        } else if ( tagName == "am-pm" ) {
+            format += "ap";
+        } else if ( tagName == "text" ) { // litteral
+            format += e.text();
+        } // TODO number:decimal-places
+    }
+
+#if 0
+    // QDate doesn't work both ways!!! It can't parse something back from
+    // a string and a format (e.g. 01/02/03 and dd/MM/yy, it will assume MM/dd/yy).
+    // So we also need to generate a KLocale-like format, to parse the value
+    // Update: we don't need to parse the date back.
+
+    QString kdeFormat;
+    for( QDomNode node( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
+    {
+        const QDomElement e( node.toElement() );
+        QString tagName = e.tagName();
+        if ( !tagName.startsWith( "number:" ) )
+            continue;
+        tagName.remove( 0, 7 );
+        const QString numberStyle = e.attribute( "number:style" );
+        const bool shortForm = numberStyle == "short" || numberStyle.isEmpty();
+        if ( tagName == "day" ) {
+            kdeFormat += shortForm ? "%e" : "%d";
+        } else if ( tagName == "day-of-week" ) {
+            kdeFormat += shortForm ? "%a" : "%A";
+        } else if ( tagName == "month" ) {
+            // TODO the spec has a strange mention of number:format-source
+            if ( e.attribute( "number:textual" ) == "true" ) {
+                kdeFormat += shortForm ? "%b" : "%B";
+            } else { // month number
+                kdeFormat += shortForm ? "%n" : "%m";
+            }
+        } else if ( tagName == "year" ) {
+            kdeFormat += shortForm ? "%y" : "%Y";
+        } else if ( tagName == "week-of-year" || tagName == "quarter") {
+            // ### not supported in KLocale
+        } else if ( tagName == "hours" ) {
+            kdeFormat += shortForm ? "%k" : "%H"; // TODO should depend on presence of am/pm
+        } else if ( tagName == "minutes" ) {
+            kdeFormat += shortForm ? "%M" : "%M"; // KLocale doesn't have 1-digit minutes
+        } else if ( tagName == "seconds" ) {
+            kdeFormat += shortForm ? "%S" : "%S"; // KLocale doesn't have 1-digit seconds
+        } else if ( tagName == "am-pm" ) {
+            kdeFormat += "%p";
+        } else if ( tagName == "text" ) { // litteral
+            kdeFormat += e.text();
+        } // TODO number:decimal-places
+    }
+#endif
+
+    QString styleName = parent.attribute( "style:name" );
+    kdDebug(30518) << "datetime style: " << styleName << " qt format=" << format << endl;
+    m_dateTimeFormats.insert( styleName, format );
 }
 
 void OoWriterImport::fillStyleStack( const QDomElement& object, const QString& attrName )
@@ -811,6 +914,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         QDomText t ( node.toText() );
 
         bool shouldWriteFormat=false; // By default no <FORMAT> element should be written
+        bool textFoo = tagName.startsWith( "text:" );
 
         // Try to keep the order of the tag names by probability of happening
         if (tagName == "text:span")
@@ -820,12 +924,12 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             parseSpanOrSimilar( doc, ts, outputParagraph, outputFormats, paragraphText, pos);
             m_styleStack.restore();
         }
-        else if (tagName == "text:s")
+        else if ( textFoo && tagName == "text:s")
         {
             textData = OoUtils::expandWhitespace(ts);
             shouldWriteFormat=true;
         }
-        else if ( tagName == "text:tab-stop" )
+        else if ( textFoo && tagName == "text:tab-stop" )
         {
             // KWord currently uses \t.
             // Known bug: a line with only \t\t\t\t isn't loaded - XML (QDom) strips out whitespace.
@@ -833,7 +937,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             textData = '\t';
             shouldWriteFormat=true;
         }
-        else if ( tagName == "text:line-break" )
+        else if ( textFoo && tagName == "text:line-break" )
         {
             textData = '\n';
             shouldWriteFormat=true;
@@ -850,7 +954,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             QString frameName = appendTextBox(doc, ts);
             anchorFrameset( doc, outputFormats, pos, frameName );
         }
-        else if ( tagName == "text:a" )
+        else if ( textFoo && tagName == "text:a" )
         {
             m_styleStack.save();
             QString href( ts.attribute("xlink:href") );
@@ -876,17 +980,31 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             }
             m_styleStack.restore();
         }
-        else if (tagName == "text:date" // fields
-                 || tagName == "text:time"
-                 || tagName == "text:page-number"
-                 || tagName == "text:file-name"
-                 || tagName == "text:author-name"
-                 || tagName == "text:author-initials")
+        else if ( textFoo &&
+                  (tagName == "text:date" // fields
+                   || tagName == "text:print-time"
+                   || tagName == "text:print-date"
+                   || tagName == "text:creation-time"
+                   || tagName == "text:creation-date"
+                   || tagName == "text:modification-time"
+                   || tagName == "text:modification-date"
+                   || tagName == "text:time"
+                   || tagName == "text:page-number"
+                   || tagName == "text:file-name"
+                   || tagName == "text:author-name"
+                   || tagName == "text:author-initials"
+                   || tagName == "text:subject"
+                   || tagName == "text:title"
+                   || tagName == "text:description"
+                   || tagName == "text:variable-set"
+                   || tagName == "text:page-variable-get"
+                   || tagName == "text:user-defined" ) )
+            // TODO in kword: text:printed-by, initial-creator
         {
             textData = "#";     // field placeholder
             appendField(doc, outputFormats, ts, pos);
         }
-        else if ( tagName == "text:bookmark" )
+        else if ( textFoo && tagName == "text:bookmark" )
         {
             // the number of <PARAGRAPH> tags in the frameset element is the parag id
             // (-1 for starting at 0, +1 since not written yet)
@@ -894,16 +1012,19 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
                             pos, ts.attribute( "text:name" ) );
         }
-        else if ( tagName == "text:bookmark-start" ) {
+        else if ( textFoo && tagName == "text:bookmark-start" ) {
             m_bookmarkStarts.insert( ts.attribute( "text:name" ),
                                      BookmarkStart( m_currentFrameset.attribute( "name" ),
                                                     numberOfParagraphs( m_currentFrameset ),
                                                     pos ) );
         }
-        else if ( tagName == "text:bookmark-end" ) {
-            BookmarkStartsMap::iterator it = m_bookmarkStarts.find( ts.attribute( "text:name" ) );
-            if ( it == m_bookmarkStarts.end() ) {
-                kdWarning(30518) << "Found bookmark end without bookmark start!!! Impossible." << endl;
+        else if ( textFoo && tagName == "text:bookmark-end" ) {
+            QString bkName = ts.attribute( "text:name" );
+            BookmarkStartsMap::iterator it = m_bookmarkStarts.find( bkName );
+            if ( it == m_bookmarkStarts.end() ) { // bookmark end without start. This seems to happen..
+                // insert simple bookmark then
+                appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
+                                pos, ts.attribute( "text:name" ) );
             } else {
                 if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
                     // Oh tell me this never happens...
@@ -1663,64 +1784,100 @@ void OoWriterImport::anchorFrameset( QDomDocument& doc, QDomElement& formats, ui
     formatElementOut.appendChild(anchor);
 }
 
-void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, const QDomElement& object, uint pos)
+void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, QDomElement& object, uint pos)
 // Note: QDomElement& outputFormats replaces the parameter QDomElement& e in OoImpressImport::appendField
 //  (otherwise it should be the same parameters.)
 {
-    const QString tag (object.tagName());
+    const QString tagName (object.tagName());
+    //kdDebug(30518) << tagName << endl;
+    int subtype = -1;
 
-    if (tag == "text:date")
+    if ( tagName.endsWith( "date" ) || tagName.endsWith( "time" ) )
     {
-        QDateTime dt(QDate::fromString(object.attribute("text:date-value"), Qt::ISODate));
+        QString dataStyleName = object.attribute( "style:data-style-name" );
+        QString dateFormat = "locale";
+        DataFormatsMap::const_iterator it = m_dateTimeFormats.find( dataStyleName );
+        if ( it != m_dateTimeFormats.end() )
+            dateFormat = (*it);
 
-        bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
-
-        if (!dt.isValid())
+        if ( tagName == "text:date" )
         {
-            dt = QDateTime::currentDateTime(); // OOo docs say so :)
-            fixed = false;
+            subtype = 1; // current (or fixed) date
+            // Standard form of the date is in text:date-value. Example: 2004-01-21T10:57:05
+            QDateTime dt(QDate::fromString(object.attribute("text:date-value"), Qt::ISODate));
+
+            bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
+            if (!dt.isValid())
+            {
+                dt = QDateTime::currentDateTime(); // OOo docs say so :)
+                fixed = false;
+            }
+            const QDate date(dt.date());
+            const QTime time(dt.time());
+            if ( fixed )
+                subtype = 0;
+
+            QDomElement dateElement ( doc.createElement("DATE") );
+            dateElement.setAttribute("fix", fixed ? 1 : 0);
+            dateElement.setAttribute("subtype", subtype);
+            dateElement.setAttribute("day", date.day());
+            dateElement.setAttribute("month", date.month());
+            dateElement.setAttribute("year", date.year());
+            dateElement.setAttribute("hour", time.hour());
+            dateElement.setAttribute("minute", time.minute());
+            dateElement.setAttribute("second", time.second());
+            if (object.hasAttribute("text:date-adjust"))
+                dateElement.setAttribute("correct", object.attribute("text:date-adjust"));
+            appendKWordVariable(doc, outputFormats, object, pos, "DATE" + dateFormat, 0, dateElement);
         }
-        const QDate date(dt.date());
-        const QTime time(dt.time());
-        QDomElement dateElement ( doc.createElement("DATE") );
-        dateElement.setAttribute("fix", fixed ? 1 : 0);
-        dateElement.setAttribute("day", date.day());
-        dateElement.setAttribute("month", date.month());
-        dateElement.setAttribute("year", date.year());
-        dateElement.setAttribute("hour", time.hour());
-        dateElement.setAttribute("minute", time.minute());
-        dateElement.setAttribute("second", time.second());
-        if (object.hasAttribute("text:date-adjust"))
-            dateElement.setAttribute("correct", object.attribute("text:date-adjust"));
-        appendKWordVariable(doc, outputFormats, object, pos, "DATE0locale", 0, dateElement);
+        else if (tagName == "text:time")
+        {
+            // Use QDateTime to work around a possible problem of QTime::FromString in Qt 3.2.2
+            QDateTime dt(QDateTime::fromString(object.attribute("text:time-value"), Qt::ISODate));
 
-    }
-    else if (tag == "text:time")
-    {
-        // Use QDateTime to work around a possible problem of QTime::FromString in Qt 3.2.2
-        QDateTime dt(QDateTime::fromString(object.attribute("text:time-value"), Qt::ISODate));
+            bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
 
-        bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
+            if (!dt.isValid()) {
+                dt = QDateTime::currentDateTime(); // OOo docs say so :)
+                fixed = false;
+            }
 
-        if (!dt.isValid()) {
-            dt = QDateTime::currentDateTime(); // OOo docs say so :)
-            fixed = false;
+            const QTime time(dt.time());
+            QDomElement timeElement (doc.createElement("TIME") );
+            timeElement.setAttribute("fix", fixed ? 1 : 0);
+            timeElement.setAttribute("hour", time.hour());
+            timeElement.setAttribute("minute", time.minute());
+            timeElement.setAttribute("second", time.second());
+            /*if (object.hasAttribute("text:time-adjust"))
+              timeElem.setAttribute("correct", object.attribute("text:time-adjust"));*/ // ### TODO
+            appendKWordVariable(doc, outputFormats, object, pos, "TIME" + dateFormat, 2, timeElement);
+
         }
-
-        const QTime time(dt.time());
-        QDomElement timeElement (doc.createElement("TIME") );
-        timeElement.setAttribute("fix", fixed ? 1 : 0);
-        timeElement.setAttribute("hour", time.hour());
-        timeElement.setAttribute("minute", time.minute());
-        timeElement.setAttribute("second", time.second());
-        /*if (object.hasAttribute("text:time-adjust"))
-          timeElem.setAttribute("correct", object.attribute("text:time-adjust"));*/ // ### TODO
-        appendKWordVariable(doc, outputFormats, object, pos, "TIMElocale", 2, timeElement);
-
-    }
-    else if (tag == "text:page-number")
+        else if ( tagName == "text:print-time"
+                  || tagName == "text:print-date"
+                  || tagName == "text:creation-time"
+                  || tagName == "text:creation-date"
+                  || tagName == "text:modification-time"
+                  || tagName == "text:modification-date" )
+        {
+            if ( tagName.startsWith( "text:print" ) )
+                subtype = 2;
+            else if ( tagName.startsWith( "text:creation" ) )
+                subtype = 3;
+            else if ( tagName.startsWith( "text:modification" ) )
+                subtype = 4;
+            // We do NOT include the date value here. It will be retrieved from
+            // meta.xml
+            QDomElement dateElement ( doc.createElement("DATE") );
+            dateElement.setAttribute("subtype", subtype);
+            if (object.hasAttribute("text:date-adjust"))
+                dateElement.setAttribute("correct", object.attribute("text:date-adjust"));
+            appendKWordVariable(doc, outputFormats, object, pos, "DATE" + dateFormat, 0, dateElement);
+        }
+    }// end of date/time variables
+    else if (tagName == "text:page-number")
     {
-        int subtype = 0;        // VST_PGNUM_CURRENT
+        subtype = 0;        // VST_PGNUM_CURRENT
 
         if (object.hasAttribute("text:select-page"))
         {
@@ -1739,9 +1896,9 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         pgnumElement.setAttribute("value", object.text());
         appendKWordVariable(doc, outputFormats, object, pos, "NUMBER", 4, pgnumElement);
     }
-    else if (tag == "text:file-name")
+    else if (tagName == "text:file-name")
     {
-        int subtype = 5;
+        subtype = 5;
 
         if (object.hasAttribute("text:display"))
         {
@@ -1762,19 +1919,46 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         fieldElement.setAttribute("value", object.text());
         appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, fieldElement);
     }
-    else if (tag == "text:author-name"
-             || tag == "text:author-initials")
+    else if (tagName == "text:author-name"
+             || tagName == "text:author-initials"
+             || tagName == "text:subject"
+             || tagName == "text:title"
+             || tagName == "text:description"
+        )
     {
-        int subtype = 2;        // VST_AUTHORNAME
+        subtype = 2;        // VST_AUTHORNAME
 
-        if (tag == "text:author-initials")
+        if (tagName == "text:author-initials")
             subtype = 16;       // VST_INITIAL
+        else if ( tagName == "text:subject" ) // TODO in kword
+            subtype = 10; // title
+        else if ( tagName == "text:title" )
+            subtype = 10;
+        else if ( tagName == "text:description" )
+            subtype = 11; // Abstract
 
         QDomElement authorElem = doc.createElement("FIELD");
         authorElem.setAttribute("subtype", subtype);
         authorElem.setAttribute("value", object.text());
         appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, authorElem);
     }
+    else if ( tagName == "text:variable-set"
+              || tagName == "text:user-defined" )
+    {
+        // We treat both the same. For OO the difference is that
+        // - variable-set is related to variable-decls (defined in <body>);
+        //                 its value can change in the middle of the document.
+        // - user-defined is related to meta::user-defined in meta.xml
+        QDomElement customElem = doc.createElement( "CUSTOM" );
+        customElem.setAttribute( "name", object.attribute( "text:name" ) );
+        customElem.setAttribute( "value", object.text() );
+        appendKWordVariable(doc, outputFormats, object, pos, "STRING", 6, customElem);
+    }
+    else
+    {
+        kdWarning(30518) << "Unsupported field " << tagName << endl;
+    }
+// TODO tagName == "text:page-variable-get", "initial-creator" and many more
 }
 
 void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
