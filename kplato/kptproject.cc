@@ -710,15 +710,9 @@ int KPTProject::mapNode(int id, KPTNode *node) {
     }
     if (id > m_maxNodeId) {
         m_maxNodeId = id;
-        m_nodeMap[id] = node;
-        return id;
     }
-    if (m_nodeMap.contains(id)) {
-        m_nodeMap[id] = node;
-        return id;
-    }
-    // problem
-    return -1; // not mapped
+    m_nodeMap[id] = node;
+    return id;
 }
 
 KPTResourceGroup *KPTProject::group(int id) {
