@@ -21,13 +21,12 @@
 #ifndef ASCIIIMPORT_H
 #define ASCIIIMPORT_H
 
-#include <qstring.h>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qobject.h>
-
 #include <koFilter.h>
-#include <koStore.h>
+
+class QString;
+class QTextStream;
+class QDomDocument;
+class QDomElement;
 
 #define MAXLINES  1000
 #define MAXCOLUMNS 15
@@ -37,7 +36,7 @@
  const int spacespertab = 6;
  const double leftmargin = 56.0;
 
- const int shortline = 40;  // max length of a "short" line
+ const uint shortline = 40;  // max length of a "short" line
 
  struct Tabs
     {
@@ -68,11 +67,7 @@ public:
                         const QString &from, const QString &to,
                         const QString &config=QString::null);
 private: // not yet changed
-    void WriteOutParagraph( QString name, QString type, QString text,
-       int firstindent, int secondindent, QString &str);
-
-
-
+#if 0
     void WriteOutTableCell( int table_no, int row, int col, Position *pos,
                           QString &str);
 
@@ -83,12 +78,15 @@ private: // not yet changed
 
     bool ListItem( QString *Line, int no_lines,
              QString &str );
-
+#endif
     bool IsListItem( QString FirstLine, QChar mark );
 
 private:
-    void WriteOutIndents(const int firstindent,const int secondindent, QString &str);
-    QString ASCIIImport::escapeXmlText(const QString& strIn) const;
+    void processParagraph(QDomDocument& mainDocument,
+        QDomElement& mainFramesetElement, const QStringList& paragraph);
+    void writeOutParagraph(QDomDocument& mainDocument,
+        QDomElement& mainFramesetElement,  const QString& name,
+        const QString& text, const int firstindent, const int secondindent);
     int Indent(const QString& line) const;
     int MultSpaces(const QString& text, const int index) const;
     bool IsWhiteSpace(const QChar& c) const;

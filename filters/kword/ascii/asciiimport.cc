@@ -27,11 +27,18 @@
 #include <unistd.h>
 #endif
 
+#include <qobject.h>
 #include <qstring.h>
 #include <qregexp.h>
 #include <qtextstream.h>
+#include <qfile.h>
+#include <qtextstream.h>
+#include <qdom.h>
 
 #include <kdebug.h>
+
+#include <koGlobal.h>
+#include <koStore.h>
 
 #include <asciiimport.h>
 #include <asciiimport.moc>
@@ -47,15 +54,9 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
                          const QString &) {
 
 
-  QString text1;  // text processing string
-  QString text;   // text processing string
-  QString Line[MAXLINES];  // lines of the paragraph
-  int firstindent;  // amount that the first line of a paragraph is indented
-  int secondindent;  // amount the second and remaining lines are indented
+  QStringList paragraph;  // lines of the paragraph
   int linecount = 0;  // line counter used to position tables
   int table_no = 0;  // used for table identifiers
-  int i; // counter
-  int begin;  // beginning line number of a paragraph
   int numLines; // Number of lines of the paragraph
 
 
@@ -69,22 +70,76 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
         return false;
     }
 
-    QString str;
     QString tbl;  // string for table XML
 
-    str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    //str += "<!DOCTYPE DOC >\n";
-    str += "<DOC editor=\"KWord plain text import filter\"";
-    // TODO: We claim to be syntax version 2, but we should verify that it is also true.
-    str += " mime=\"application/x-kword\" syntaxVersion=\"2\">\n";
     // TODO: other paper formats
-    str += "<PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" hType=\"0\" fType=\"0\" >\n";
-    str += "<PAPERBORDERS left=\"28\" top=\"42\" right=\"28\" bottom=\"42\" />\n";
-    str += "</PAPER>\n";
-    str += "<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\"/>\n";
-    str += "<FRAMESETS>\n";
-    str += "<FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\">\n";
-    str += "<FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" />\n";
+    KoFormat paperFormat=PG_DIN_A4; // ISO A4
+    KoOrientation paperOrientation=PG_PORTRAIT;
+
+    QDomDocument mainDocument("DOC");
+    mainDocument.appendChild(
+        mainDocument.createProcessingInstruction(
+        "xml","version=\"1.0\" encoding=\"UTF-8\""));
+
+    QDomElement elementDoc;
+    elementDoc=mainDocument.createElement("DOC");
+    elementDoc.setAttribute("editor","KWord's Plain Text Import Filter");
+    elementDoc.setAttribute("mime","application/x-kword");
+    // TODO: We claim to be syntax version 2, but we should verify that it is also true.
+    elementDoc.setAttribute("syntaxVersion",2);
+    mainDocument.appendChild(elementDoc);
+
+    QDomElement element;
+    element=mainDocument.createElement("ATTRIBUTES");
+    element.setAttribute("processing",0);
+    element.setAttribute("standardpage",1);
+    element.setAttribute("hasHeader",0);
+    element.setAttribute("hasFooter",0);
+    element.setAttribute("unit","mm");
+    elementDoc.appendChild(element);
+
+    QDomElement framesetsPluralElementOut=mainDocument.createElement("FRAMESETS");
+    mainDocument.documentElement().appendChild(framesetsPluralElementOut);
+
+    QDomElement mainFramesetElement=mainDocument.createElement("FRAMESET");
+    mainFramesetElement.setAttribute("frameType",1);
+    mainFramesetElement.setAttribute("frameInfo",0);
+    mainFramesetElement.setAttribute("autoCreateNewFrame",1);
+    mainFramesetElement.setAttribute("removable",0);
+    // TODO: "name" attribute (needs I18N)
+    framesetsPluralElementOut.appendChild(mainFramesetElement);
+
+    QDomElement frameElementOut=mainDocument.createElement("FRAME");
+    frameElementOut.setAttribute("left",28);
+    frameElementOut.setAttribute("top",42);
+    frameElementOut.setAttribute("bottom",566);
+    frameElementOut.setAttribute("right",798);
+    frameElementOut.setAttribute("runaround",1);
+    mainFramesetElement.appendChild(frameElementOut);
+
+    QDomElement elementPaper;
+    // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
+    // default paper format of AbiWord is "Letter"
+    elementPaper=mainDocument.createElement("PAPER");
+    elementPaper.setAttribute("format",paperFormat);
+    elementPaper.setAttribute("width",KoPageFormat::width(paperFormat,paperOrientation) * 72.0 / 25.4);
+    elementPaper.setAttribute("height",KoPageFormat::height(paperFormat,paperOrientation) * 72.0 /25.4);
+    elementPaper.setAttribute("orientation",PG_PORTRAIT);
+    elementPaper.setAttribute("columns",1);
+    elementPaper.setAttribute("columnspacing",2);
+    elementPaper.setAttribute("hType",0);
+    elementPaper.setAttribute("fType",0);
+    elementPaper.setAttribute("spHeadBody",9);
+    elementPaper.setAttribute("spFootBody",9);
+    elementPaper.setAttribute("zoom",100);
+    elementDoc.appendChild(elementPaper);
+
+    element=mainDocument.createElement("PAPERBORDERS");
+    element.setAttribute("left",28);
+    element.setAttribute("top",42);
+    element.setAttribute("right",28);
+    element.setAttribute("bottom",42);
+    elementPaper.appendChild(element);
 
     QTextStream stream(&in);
     bool lastCharWasCr=false; // Was the previous character a Carriage Return?
@@ -92,6 +147,7 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
 
     while(!stream.atEnd())
     {
+        paragraph.clear();
         // Read in paragraph
         for(int line_no = numLines = 0; line_no < MAXLINES; line_no++, numLines++)
         {
@@ -101,87 +157,51 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
             strLine=readLine(stream,lastCharWasCr);
             if (strLine.isEmpty())
             {
-                Line[line_no]=QString::null;
+                paragraph.append(QString::null);
                 break;
             }
 
-            int length = strLine.length();
+            const int length = strLine.length();
             if (strLine.at(length-1) == '-')
                 strLine = strLine.left(length-1);  // remove the - at line end
             else
                 strLine += ' '; // add space to end of line
 
-            Line[line_no]=strLine;
+            paragraph.append(strLine);
         } // for(line_no = 0;
 
          //   process tables
+#if 0
         if ( Table( &Line[0], &linecount, numLines, table_no, tbl, str))
             table_no++;
         else
+#else
+        if (true)
+#endif
         {
         // Process bullet and dash lists
+#if 0
         if(ListItem( &Line[0], numLines, str))
-            linecount += (numLines + 1); 
+            linecount += (numLines + 1);
         else
            {
-           // Paragraph with no tables or lists
-
-           text1 = "";
-           begin = 0;  // initial paragraph starts at first line
-           for( i = 0; i < numLines; i++)
-              {
-              if( i > 0)
-                 {
-                 // check for a short line - if short make it a paragraph
-                 if(Line[i].length() <= (uint)shortline)
-                    {
-                    if(!(i == (numLines - 1) && Line[i-1].length() > (uint)shortline))
-                       // skip if short last line of normal paragraph
-                       {
-                       // write out paragraph begin to (i - 1)
-                       firstindent = Indent(Line[begin]);
-                       if((i - begin) > 1)
-                          secondindent = Indent(Line[begin + 1]);
-                       else secondindent = 0;
-                       // process the white space to eliminate unwanted spaces
-                       text = text1.simplifyWhiteSpace();
-                       WriteOutParagraph( "Standard", "", text, firstindent, secondindent, str);
-                       text1 = "";  // reinitialize paragraph text
-                       begin = i;  // reset paragraph start
-                       }  //  if(!(i == (line_no - 1)...
-                    }  // if(Line[i].length()....
-
-                 }  // if i > 0)
-
-                 text1 += Line[i]; // add text to paragraph
-              }  // for( i = 0; i <= line_no; i++)
-
-              // write out paragraph begin to end
-              firstindent = Indent(Line[begin]);
-              if((i - begin) > 1)
-                 secondindent = Indent(Line[begin + 1]);
-              else secondindent = 0;
-              // process the white space to eliminate unwanted spaces
-              text = text1.simplifyWhiteSpace();
-              WriteOutParagraph( "Standard", "", text, firstindent, secondindent, str);
-
-           linecount += ( numLines + 1);  // increment the line count
-           }  // else
+#else
+            if (true)
+            {
+#endif
+                processParagraph(mainDocument,mainFramesetElement,paragraph);
+                linecount += ( numLines + 1);  // increment the line count
+            }  // else
         }  // else
-
-        if( numLines > 0 )
-           {
-           // write out a blank line trailing the paragraph
-           WriteOutParagraph( "Standard", "", "", 0, 0, str);
-           } // if( line[line_no]....
-
      }  // while(!eof)
 
-    // end document
-    str += "</FRAMESET>\n";
+#if 0
+    // Add table info
     if( table_no > 0) str += tbl;
-    str += "</FRAMESETS>\n";
-    str += "<!-- We have a problem here somewhere -->\n";
+#endif
+
+// TODO: give styles with QDomDocument (however KWord 1.2 works well also without)
+#if 0
     str+=" <STYLES>\n";
     str+="  <STYLE>\n";
     str+="   <NAME value=\"Standard\" />\n";
@@ -201,10 +221,10 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     str+="   </FORMAT>\n";
     str+="  </STYLE>\n";
     str+=" </STYLES>\n";
-    str += "</DOC>\n";
+#endif
 
 #if 1
-    kdDebug(30502) << str << endl;
+    kdDebug(30502) << mainDocument.toString() << endl;
 #endif
 
     KoStore out=KoStore(QString(fileOut), KoStore::Write);
@@ -214,56 +234,90 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
         out.close();
         return false;
     }
-    QCString cstring=str.utf8();
+    QCString cstr=mainDocument.toCString();
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-    out.write(cstring,cstring.length());
+    out.write(cstr,cstr.length());
     out.close();
     in.close();
     return true;
 }
 
-
-
-
-void ASCIIImport::WriteOutParagraph( QString name, QString type, QString text,
-    int firstindent, int secondindent, QString &str)
+void ASCIIImport::processParagraph(QDomDocument& mainDocument,
+    QDomElement& mainFramesetElement, const QStringList& paragraph)
 {
-    /* This method writes out a paragraph or a list item (Bullet, Dash)
-        in Kword XML to the output string str. The paragraph is indented according
-       to the first and second line indentation amounts.
-       Arguments
-         QString name - name of the paragraph type
-         Qstring type - attribute in the COUNTER element to designate a list type
-         QString text - text of the paragraph
-         int firstindent - amount in spaces to indent the first line
-         int secondindent - amount to indent the following lines
-         QString str - the output string.
+    // Paragraph with no tables or lists
+    QString text;
+    QStringList::ConstIterator it=paragraph.begin();
+    QStringList::ConstIterator startLine=it;
+    QString previousLine=*it;
 
-       Returns - void
-        */
+    // We work with one line in advance (therefore the two it++)
+    for( it++; it!=paragraph.end(); it++)
+    {
+        // check for a short line - if short make it a paragraph
+        if( previousLine.length() <= shortline)
+        {
+            if((*it).length() > shortline)
+            // skip if short last line of normal paragraph
+            {
+                // write out paragraph begin to (i - 1)
+                const int firstindent = Indent(*startLine);
+                const int secondindent = Indent(previousLine); // We may end of test the same line
+                writeOutParagraph(mainDocument,mainFramesetElement,
+                    "Standard", text.simplifyWhiteSpace(), firstindent, secondindent);
 
-    QString bullet;
+                text = QString::null;  // reinitialize paragraph text
+                startLine=it;  // reset paragraph start
+            }
+        }
+        text += previousLine; // add previous line to paragraph
+        previousLine=*it;
+    }
+    // Do not forget to add the last line!
+    text += previousLine;
+    // write out paragraph begin to end
+    const int firstindent = Indent(*startLine);
+    const int secondindent = Indent(previousLine); // We may end of test the same line
+    writeOutParagraph(mainDocument,mainFramesetElement,
+        "Standard", text.simplifyWhiteSpace(), firstindent, secondindent);
+}
 
-    str += "<PARAGRAPH>\n";
-    str += "<TEXT>";
-    str += escapeXmlText(text);  // Insert text into string
-    str += "</TEXT>\n";
-    str += "<FORMATS>\n";
-    // we do not need any <FORMAT> child, we are using layout and style
-    str += "</FORMATS>\n";
-    str += "<LAYOUT>\n";
+void ASCIIImport::writeOutParagraph(QDomDocument& mainDocument,
+    QDomElement& mainFramesetElement,  const QString& name,
+    const QString& text, const int firstindent, const int secondindent)
+{
+    QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
+    mainFramesetElement.appendChild(paragraphElementOut);
+    QDomElement textElement=mainDocument.createElement("TEXT");
+    paragraphElementOut.appendChild(textElement);
+    QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
+    paragraphElementOut.appendChild(formatsPluralElementOut);
+    QDomElement layoutElement=mainDocument.createElement("LAYOUT");
+    paragraphElementOut.appendChild(layoutElement);
 
-    str += "<NAME value=\"";
-    str += name; // Name of paragraph type
-    str += "\"/>\n";
+    QDomElement element;
+    element=mainDocument.createElement("NAME");
+    element.setAttribute("value",name);
+    layoutElement.appendChild(element);
 
-    str += "<FOLLOWING name=\"";
-    str += name;
-    str += "\"/>\n";
+    element=mainDocument.createElement("FOLLOWING");
+    element.setAttribute("value",name);
+    layoutElement.appendChild(element);
 
-    // if center justified write out a FLOW command
-    //if( justified == center) str += "<FLOW value=\"2\"/>\n";
+    double size;
+    element=mainDocument.createElement("INDENTS");
+    size = firstindent-secondindent;
+    size *= ptsperchar;  // convert indent spaces to points
+    element.setAttribute("first",QString::number(size));
+    size = secondindent;
+    size *= ptsperchar;  // convert indent spaces to points
+    element.setAttribute("left",QString::number(size));
+    element.setAttribute("right",0);
 
+    textElement.appendChild(mainDocument.createTextNode(text));
+    textElement.normalize(); // Put text together (not sure if needed)
+
+#if 0
     // If the paragraph is indented, write out indentation elements.
     // TODO: why not always write identation?
     if (firstindent > 0 || secondindent > 0)         \
@@ -290,37 +344,8 @@ void ASCIIImport::WriteOutParagraph( QString name, QString type, QString text,
     str += "</FORMAT>\n";
     str += "</LAYOUT>\n";
     str += "</PARAGRAPH>\n";
-
-    return;
-
+#endif
 }  // WriteOutParagraph
-
-
-void ASCIIImport::WriteOutIndents(const int firstindent,const int secondindent, QString &str)
-{
-    double size;
-
-    str += "<INDENTS ";
-
-    size = firstindent-secondindent;
-    size *= ptsperchar;  // convert indent spaces to points
-
-    str += "first=\"";
-    str += QString::number(size);
-    str += "\" ";
-
-
-    size = secondindent;
-    size *= ptsperchar;  // convert indent spaces to points
-
-    str += "left=\"";
-    str += QString::number(size);
-    str += "\" ";
-
-    str += "right=\"0\"/>\n";
-
-}  // WriteOutIndents
-
 
    /* The Indent method determines the equivalent number of spaces
       at the beginning of a line   */
@@ -346,42 +371,6 @@ int ASCIIImport::Indent(const QString& line) const
 
 }  // Indent
 
-QString ASCIIImport::escapeXmlText(const QString& strIn) const
-{
-    QString strReturn;
-    QChar ch;
-
-    for (uint i=0; i<strIn.length(); i++)
-    {
-        ch=strIn[i];
-        switch (ch.unicode())
-        {
-        case 38: // &
-            {
-                strReturn+="&amp;";
-                break;
-            }
-        case 60: // <
-            {
-                strReturn+="&lt;";
-                break;
-            }
-        case 62: // >
-            {
-                strReturn+="&gt;";
-                break;
-            }
-        default:
-            {
-                strReturn+=ch;
-                break;
-            }
-        }
-    }
-
-    return strReturn;
-}
-
     /* The WriteOutTableCell method writes out a single table cell
         in Kword XML to the output string str. The table is sized according
        to the spacing in the ascii document.
@@ -395,7 +384,7 @@ QString ASCIIImport::escapeXmlText(const QString& strIn) const
        Returns - void
         */
 
-
+#if 0
    void ASCIIImport::WriteOutTableCell( int table_no, int row,
                          int col, Position *pos, QString &str)
    {
@@ -626,6 +615,7 @@ bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
 
    return true;
    } // end of Table()
+#endif
 
    // the following method finds the location of multiple spaces in a string
 int ASCIIImport::MultSpaces(const QString& text, const int index) const
@@ -648,6 +638,7 @@ int ASCIIImport::MultSpaces(const QString& text, const int index) const
     return -1;
 } // MultSpaces
 
+#if 0
    bool ASCIIImport::ListItem( QString *Line, int no_lines,
              QString &str )
       {
@@ -786,7 +777,7 @@ int ASCIIImport::MultSpaces(const QString& text, const int index) const
 
    return true;
    } // end of ListItem()
-
+#endif
 
 /* The IsListItem method checks a paragraph's first line and determines if
    the text appears to be a list item (bullet or dash).
