@@ -39,18 +39,18 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 
     QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
     const int res = regexp.search( s );
-    QString number, unit;
-    
+   
+    if ( res == -1 )
+    {
+        // Nothing like an unit? The user is probably editing the unit
+        kdDebug(30004) << "Intermediate (no unit)" << endl;    
+        return Intermediate;
+    }
+        
     // ### TODO: are all the QString::stripWhiteSpace really necessary?
-    if ( res > -1 )
-    {
-        number = s.left( res ).stripWhiteSpace();
-        unit = regexp.cap( 1 ).stripWhiteSpace().lower();
-    }
-    else
-    {
-        number = s.stripWhiteSpace();
-    }
+    const QString number ( s.left( res ).stripWhiteSpace() );
+    const QString unit ( regexp.cap( 1 ).stripWhiteSpace().lower() );
+    
     kdDebug(30004) << "Split:" << number << ":" << unit << ":" << endl;
     
     bool ok = false;
@@ -58,9 +58,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     double newVal = 0.0;
     if( ok )
     {
-        if ( unit.isEmpty() )
-            newVal = value; // ### TODO: verify if this is not "Intermediate" instead
-        else if( unit == "mm"  )
+        if ( unit == "mm"  )
             newVal = KoUnit::ptFromUnit( value, KoUnit::U_MM );
         else if( unit == "cm" ) 
             newVal = KoUnit::ptFromUnit( value, KoUnit::U_CM );
@@ -76,25 +74,12 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
             newVal = KoUnit::ptFromUnit( value, KoUnit::U_CC );
         else if( unit == "pi" )
             newVal = KoUnit::ptFromUnit( value, KoUnit::U_PI );
-#if 1
         else
         {
             // Probably the user is trying to edit the unit
-            kdDebug(30004) << "Intermediate" << endl;    
+            kdDebug(30004) << "Intermediate (unknown unit)" << endl;    
             return Intermediate;
         }
-#else
-        else if( unit.startsWith( "m" ) || unit.startsWith( "c" ) || unit.startsWith( "d" ) || unit.startsWith( "i" ) || unit.startsWith( "p" ) )
-        {
-            kdDebug(30004) << "Intermediate" << endl;    
-            return Intermediate;
-        }
-        else
-        {
-            kdWarning(30004) << "Unknown unit: " << unit << endl;    
-            return Invalid;
-        }
-#endif
     }
     else
     {
