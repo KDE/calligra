@@ -164,8 +164,8 @@ void KIllustratorView::createMyGUI()
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 
     // View menu
-    new KAction( i18n("Zoom in"), "viewmag+", Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "zoomin");
-    new KAction( i18n("Zoom out"), "viewmag-", Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "zoomout");
+    new KAction( i18n("Zoom in"), "viewmag+", CTRL+Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "zoomin");
+    new KAction( i18n("Zoom out"), "viewmag-", CTRL+Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "zoomout");
 
     KToggleAction *m_outline = new KToggleAction( i18n("Ou&tline"), 0, actionCollection(), "outline" );
     m_outline->setExclusiveGroup( "Outline" );
