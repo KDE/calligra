@@ -256,6 +256,7 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
   {
       if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
           return false;
+      l.value()->cast( r.value()->type());
   }
 
   switch( l.value()->type() )
@@ -390,6 +391,7 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
   {
     if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
       return false;
+    l.value()->cast( r.value()->type());
   }
 
   switch( l.value()->type() )
@@ -432,6 +434,7 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
   {
     if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
       return false;
+    l.value()->cast( r.value()->type());
   }
 
   switch( l.value()->type() )
@@ -474,6 +477,7 @@ bool KSEval_t_solidus( KSParseNode* node, KSContext& context )
   {
     if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
       return false;
+    l.value()->cast( r.value()->type());
   }
 
   switch( l.value()->type() )
