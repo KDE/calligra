@@ -41,6 +41,10 @@ class KexiBlobTableEdit : public KexiTableEdit
 		bool valueIsEmpty();
 
 		virtual QVariant value(bool &ok);
+
+		virtual void clear();
+		virtual bool cursorAtStart();
+		virtual bool cursorAtEnd();
 	protected:
 		KTempFile* m_tempFile;
 		KProcess* m_proc;

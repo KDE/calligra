@@ -41,3 +41,21 @@ QVariant KexiComboBoxTableEdit::value(bool &ok)
 	ok = true;
 	return QVariant(static_cast<KComboBox*>(m_view)->currentItem());
 }
+
+bool KexiComboBoxTableEdit::cursorAtStart()
+{
+	//TODO?
+	return false;
+}
+
+bool KexiComboBoxTableEdit::cursorAtEnd()
+{
+	//TODO?
+	return false;
+}
+
+void KexiComboBoxTableEdit::clear()
+{
+	static_cast<KComboBox*>(m_view)->clear();
+}
+

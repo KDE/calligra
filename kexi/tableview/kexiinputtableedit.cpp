@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -332,7 +333,6 @@ QVariant KexiInputTableEdit::value(bool &ok)
 			kdDebug() << "KexiInputTableEdit::value() default..." << endl;
 			return QVariant(m_cview->text());
 	}
-#endif
 
 void
 KexiInputTableEdit::end(bool mark)
@@ -345,6 +345,8 @@ KexiInputTableEdit::backspace()
 {
 	m_cview->backspace();
 }
+#endif
+
 
 void
 KexiInputTableEdit::clear()
@@ -352,6 +354,15 @@ KexiInputTableEdit::clear()
 	m_cview->clear();
 }
 
+bool KexiInputTableEdit::cursorAtStart()
+{
+	return m_cview->cursorPosition()==0;
+}
+
+bool KexiInputTableEdit::cursorAtEnd()
+{
+	return m_cview->cursorPosition()==(int)m_cview->text().length();
+}
 
 #if 0 //js: we've QValidator for validating!
 bool

@@ -107,7 +107,6 @@ KexiBlobTableEdit::KexiBlobTableEdit(
 
 }
 
-
 bool KexiBlobTableEdit::valueIsNull()
 {
 //TODO
@@ -275,6 +274,23 @@ KexiBlobTableEdit::saveFile()
 	{
 		KIO::FileCopyJob* job = KIO::file_copy(KURL(m_tempFile->name()), KURL(file), -1, true);
 	}
+}
+
+bool KexiBlobTableEdit::cursorAtStart()
+{
+	//TODO?
+	return false;
+}
+
+bool KexiBlobTableEdit::cursorAtEnd()
+{
+	//TODO?
+	return false;
+}
+
+void KexiBlobTableEdit::clear()
+{
+	//TODO??
 }
 
 #include "kexiblobtableedit.moc"

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Peter Simonsson <psn@linux.se>
+   Copyright (C) 2002 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,6 +38,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 		//! \return true is editor's value is null (not empty)
 		virtual bool valueIsNull() = 0;
+
 		//! \return true is editor's value is empty (not null). 
 		//! Only few field types can accept "EMPTY" property 
 		//! (check this with KexiDB::Field::hasEmptyProperty()), 
@@ -46,11 +48,28 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 		inline KexiDB::Field *field() const { return m_field; }
 
+		/*! \return true if internal editor's cursor (whatever that means, eg. line edit cursor)
+		 is at the beginning of editor's contents. This can inform table view that 
+		 after pressing "left arrow" key should stop editing and move to cell at the left 
+		 hand of the current cell. */
+		virtual bool cursorAtStart() = 0;
+
+		/*! \return true if internal editor's cursor (whatever that means, eg. line edit cursor)
+		 is at the end of editor's contents. This can inform table view that 
+		 after pressing "right arrow" key should stop editing and move to cell at the right 
+		 hand of the current cell. */
+		virtual bool cursorAtEnd() = 0;
+
+		/*! Reimplemented: resizes a view(). */
 		virtual void resize(int w, int h);
-		virtual bool eventFilter(QObject* watched, QEvent* e);
 
 		QWidget* view() const { return m_view; }
+
+		//! clears editor's data, so the data now contains NULL data
+		virtual void clear() = 0;
+
 	protected:
+		virtual bool eventFilter(QObject* watched, QEvent* e);
 		void setView(QWidget *v);
 
 	//		virtual void paintEvent( QPaintEvent *pe );

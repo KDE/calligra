@@ -2496,10 +2496,14 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 	//don't allow to stole key my events by others:
 	if (e->type()==QEvent::KeyPress) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+		int k = ke->key();
 		//cell editor's events:
 		if (d->pEditor && (o==d->pEditor || o==d->pEditor->view())) {
-			if (   (ke->key()==Key_Tab && (ke->state()==NoButton || ke->state()==ShiftButton))
-				|| (ke->key()==Key_Enter || ke->key()==Key_Return) ) {
+			if (   (k==Key_Tab && (k==NoButton || k==ShiftButton))
+				|| (k==Key_Enter || k==Key_Return) 
+				|| (d->pEditor->cursorAtStart() && k==Key_Left)
+				|| (d->pEditor->cursorAtEnd() && k==Key_Right)
+			   ) {
 				keyPressEvent(ke);
 				if (ke->isAccepted())
 					return true;

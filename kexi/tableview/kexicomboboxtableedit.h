@@ -38,6 +38,10 @@ class KexiComboBoxTableEdit : public KexiTableEdit
 //			QWidget *parent=0, const char *name=0);
 		
 		virtual QVariant value(bool &ok);
+
+		virtual void clear();
+		virtual bool cursorAtStart();
+		virtual bool cursorAtEnd();
 };
 
 #endif

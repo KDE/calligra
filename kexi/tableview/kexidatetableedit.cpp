@@ -50,7 +50,6 @@ KexiDateTableEdit::KexiDateTableEdit(
  : KexiTableEdit(value, f, parent,"KexiDateTableEdit")
 {
 	kdDebug() << "KexiDateTableEdit: Date = " << value.toString() << endl;
-	m_datePicker = 0;
 	m_view = new QWidget(this);
 //	m_edit = new KLineEdit(m_view);
 	m_edit = new QDateEdit(m_view);
@@ -188,6 +187,25 @@ KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 	}
 	return false;
 }
+
+bool KexiDateTableEdit::cursorAtStart()
+{
+	//TODO?
+	return false;
+}
+
+bool KexiDateTableEdit::cursorAtEnd()
+{
+	//TODO?
+	return false;
+}
+
+void KexiDateTableEdit::clear()
+{
+	//TODO??
+}
+
+
 
 // we need the date thing
 

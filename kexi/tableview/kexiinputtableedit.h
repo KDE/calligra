@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,10 +48,13 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 
 		virtual QVariant value(bool &ok);
 
+		virtual bool cursorAtStart();
+		virtual bool cursorAtEnd();
+
 //		virtual bool eventFilter(QObject* watched, QEvent* e);
-		void end(bool mark);
-		void backspace();
-		void clear();
+//js		void end(bool mark);
+//js		void backspace();
+		virtual void clear();
 
 	protected slots:
 		void setRestrictedCompletion();
