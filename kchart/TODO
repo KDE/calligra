@@ -51,7 +51,7 @@ Item								   Prio Status
   + 99391: Linear or Logarithmic scale for Y axis		     S2 DONE
 
 * Issues with KSpread
-  + Handling: The chart changes size when selected and unselected.    2 KSPR
+  + Handling: The chart changes size when selected and unselected.    2 DONE
   + Printing: The chart is of thumbnail size, and wrongly placed.     2	KSPR
   + Labels are no longer generated correctly.			      1	DONE
 
