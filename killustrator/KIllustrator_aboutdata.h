@@ -37,7 +37,7 @@ KAboutData * newKIllustratorAboutData()
                                              I18N_NOOP("KIllustrator"),
                                              version, description,
                                              KAboutData::License_GPL,
-                                             "(c) 1998-2000, Kai-Uwe Sattler");
+                                             "(c) 1998-2001, Kai-Uwe Sattler");
     aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
     aboutData->addAuthor("Igor Janssen", 0, "rm@linux.ru.net");
     return aboutData;

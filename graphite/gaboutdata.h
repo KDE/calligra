@@ -30,7 +30,7 @@ KAboutData * newGraphiteAboutData()
 {
     KAboutData * aboutData=new KAboutData("graphite", I18N_NOOP("graphite"),
                                           version, description, KAboutData::License_GPL,
-                                          "(c) 2000, Werner Trobin");
+                                          "(c) 2001, Werner Trobin");
     aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
     return aboutData;
 }

@@ -32,7 +32,7 @@ int main( int argc, char **argv )
 {
   KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOffice Workspace"),
      version, description, KAboutData::License_GPL,
-       "(c) 1998-2000, Torben Weis");
+       "(c) 1998-2001, Torben Weis");
   aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
 
   KCmdLineArgs::init( argc, argv, aboutData );
