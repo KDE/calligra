@@ -491,7 +491,7 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( i );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            txtObj->removeSelectedText( textEditCursor, KoTextObject::HighlightSelection,QString::null, false  );
+            txtObj->removeSelectedText( &cursor, KoTextObject::HighlightSelection,QString::null, false  );
             refreshCursor=true;
             break;
         }
@@ -510,7 +510,7 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( parag->string()->length() );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            txtObj->removeSelectedText( textEditCursor, KoTextObject::HighlightSelection,QString::null, false  );
+            txtObj->removeSelectedText( &cursor, KoTextObject::HighlightSelection,QString::null, false  );
             refreshCursor=true;
             break;
         }
