@@ -207,13 +207,80 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             {
                 // As we do not support anything else than normal text, process only normal text.
                 // TODO: Treat the other types of frames (frameType)
-                if (!frameInfo)
+                if (frameInfo==0)
                 {
                     // Normal Text
                     QValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) paraList ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
+                }
+                else if (frameInfo==1)
+                {
+                    // header for first page
+                    HeaderData header;
+                    header.page = HeaderData::PAGE_FIRST;
+                    QValueList<TagProcessing> tagProcessingList;
+                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &header.para ));
+
+                    ProcessSubtags (myNode, tagProcessingList, leader);
+                    leader->doHeader( header );
+                }
+                else if (frameInfo==2)
+                {
+                    // header for even page
+                    HeaderData header;
+                    header.page = HeaderData::PAGE_EVEN;
+                    QValueList<TagProcessing> tagProcessingList;
+                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &header.para ));
+                    ProcessSubtags (myNode, tagProcessingList, leader);
+                    leader->doHeader( header );
+                }
+                else if (frameInfo==3)
+                {
+                    // header for odd page (or all page, if hType=0)
+                    HeaderData header;
+                    header.page = HeaderData::PAGE_ODD;
+                    QValueList<TagProcessing> tagProcessingList;
+                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &header.para ));
+                    ProcessSubtags (myNode, tagProcessingList, leader);
+                    leader->doHeader( header );
+                }
+                else if (frameInfo==4)
+                {
+                    // footer for first page
+                    FooterData footer;
+                    footer.page = FooterData::PAGE_FIRST;
+                    QValueList<TagProcessing> tagProcessingList;
+                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footer.para ));
+                    ProcessSubtags (myNode, tagProcessingList, leader);
+                    leader->doFooter( footer );
+                }
+                else if (frameInfo==5)
+                {
+                    // footer for even page
+                    FooterData footer;
+                    footer.page = FooterData::PAGE_EVEN;
+                    QValueList<TagProcessing> tagProcessingList;
+                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footer.para ));
+                    ProcessSubtags (myNode, tagProcessingList, leader);
+                    leader->doFooter( footer );
+                }
+                else if (frameInfo==6)
+                {
+                    // footer for odd page (or all page, if fType=0)
+                    FooterData footer;
+                    footer.page = FooterData::PAGE_ODD;
+                    QValueList<TagProcessing> tagProcessingList;
+                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footer.para ));
+                    ProcessSubtags (myNode, tagProcessingList, leader);
+                    leader->doFooter( footer );
                 }
             }
             else
@@ -376,6 +443,8 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
     int orientation = -1;
     double width    = -1.0;
     double height   = -1.0;
+    int hType       = -1;
+    int fType       = -1;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "format",          "int",    (void *) &format      )
@@ -384,13 +453,15 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "orientation",     "int",    (void *) &orientation )
                        << AttrProcessing ( "columns",         "",       NULL                  )
                        << AttrProcessing ( "columnspacing",   "",       NULL                  )
-                       << AttrProcessing ( "hType",           "",       NULL                  )
-                       << AttrProcessing ( "fType",           "",       NULL                  )
+                       << AttrProcessing ( "hType",           "int",    (void*) &hType        )
+                       << AttrProcessing ( "fType",           "int",    (void*) &fType        )
                        << AttrProcessing ( "spHeadBody",      "",       NULL                  )
                        << AttrProcessing ( "spFootBody",      "",       NULL                  );
     ProcessAttributes (myNode, attrProcessingList);
 
     leader->doFullPaperFormat (format, width, height, orientation);
+
+    leader->doPageInfo(hType,fType);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList
@@ -399,7 +470,6 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
-
 
 static void ProcessSpellCheckIgnoreWordTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
 {
@@ -505,7 +575,6 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
     }
 }
 
-
 /*static*/ void ProcessDocTag ( QDomNode         myNode,
     void* /*tagData*/, KWEFKWordLeader* leader )
 {
@@ -542,9 +611,6 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
     else
         ProcessStylesPluralTag (nodeStyles, NULL, leader);
 
-    leader->doCloseHead();
-    leader->doOpenBody();
-
     QValueList<TagProcessing> tagProcessingList;
     QValueList<ParaData> paraList;
 
@@ -564,6 +630,9 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
     tagProcessingList << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               );
 
     ProcessSubtags (myNode, tagProcessingList, leader);
+
+    leader->doCloseHead();
+    leader->doOpenBody();
 
     leader->doFullDocument (paraList);
 
@@ -659,6 +728,13 @@ bool KWEFKWordLeader::doFullPaperBorders (const double top, const double left, c
     return false;
 }
 
+bool KWEFKWordLeader::doPageInfo( int headerType, int footerType )
+{
+    if ( m_worker )
+        return m_worker->doPageInfo( headerType, footerType );
+
+    return false;
+}
 
 bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
 {
@@ -676,6 +752,21 @@ bool KWEFKWordLeader::doFullSpellCheckIgnoreWord (const QString& ignoreword)
     return false;
 }
 
+bool KWEFKWordLeader::doHeader ( const HeaderData& header )
+{
+    if ( m_worker )
+        return m_worker->doHeader (header);
+
+    return false;
+}
+
+bool KWEFKWordLeader::doFooter ( const FooterData& footer )
+{
+    if ( m_worker )
+        return m_worker->doFooter (footer);
+
+    return false;
+}
 
 static bool ParseFile ( QIODevice* subFile, QDomDocument& doc)
 {

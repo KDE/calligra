@@ -50,6 +50,7 @@ class KWEFKWordLeader
         bool doFullDocument (const QValueList<ParaData> &);
         bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
         bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
+        bool doPageInfo(int,int);
         bool doOpenHead (void);
         bool doCloseHead (void);
         bool doOpenBody (void);
@@ -60,6 +61,8 @@ class KWEFKWordLeader
         bool doOpenSpellCheckIgnoreList (void);
         bool doCloseSpellCheckIgnoreList (void);
         bool doFullSpellCheckIgnoreWord (const QString& ignoreword);
+        bool doHeader(const HeaderData&);
+        bool doFooter(const FooterData&);
     protected: // leader/worker functions
         bool doOpenFile (const QString& filenameOut, const QString& to);
         bool doCloseFile (void);

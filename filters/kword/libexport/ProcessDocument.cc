@@ -215,7 +215,7 @@ static void ProcessStringNameTag (QDomNode myNode, void *tagData, KWEFKWordLeade
 // --------------------------------------------------------------------------------
 
 
-static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/ )
 {
     TextFormatting* text=(TextFormatting*) tagData;
     QString str,style;
@@ -255,7 +255,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     }
 }
 
-static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/ )
 {
     TextFormatting* text=(TextFormatting*) tagData;
     QString type, linestyle;
@@ -350,6 +350,34 @@ static void ProcessTypeTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
     ProcessAttributes (myNode, attrProcessingList);
 }
 
+static void ProcessFieldTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
+{
+    VariableData *variable = (VariableData *) tagData;
+    int subtype;
+    QString name, value;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("subtype", "int", &subtype) );
+    attrProcessingList.append ( AttrProcessing ("value", "QString", &value ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    switch( subtype )
+    {
+    case  0:  name = "fileName"; break;
+    case  1:  name = "dirName"; break;
+    case  2:  name = "authorName"; break;
+    case  3:  name = "authorEmail"; break;
+    case  4:  name = "authorCompany"; break;
+    case 10:  name = "docTitle"; break;
+    case 11:  name = "docAbstract"; break;
+    case 16:  name = "authorInitial"; break;
+    default: break;
+    }
+
+    if(!name.isEmpty())
+        variable->setField(name, value);
+}
+
 static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader* leader)
 {
     VariableData *variable = (VariableData *) tagData;
@@ -359,13 +387,13 @@ static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader*
     tagProcessingList
         << TagProcessing ( "TYPE",          ProcessTypeTag,         variable )
         << TagProcessing ( "PGNUM",         ProcessPgNumTag,        variable )
-        << TagProcessing ( "DATE",          NULL,                   NULL      )
-        << TagProcessing ( "TIME",          NULL,                   NULL      )
-        << TagProcessing ( "CUSTOM",        NULL,                   NULL      )
-        << TagProcessing ( "SERIALLETTER",  NULL,                   NULL      )
-        << TagProcessing ( "FIELD",         NULL,                   NULL      )
+        << TagProcessing ( "DATE",          NULL,                   NULL     )
+        << TagProcessing ( "TIME",          NULL,                   NULL     )
+        << TagProcessing ( "CUSTOM",        NULL,                   NULL     )
+        << TagProcessing ( "SERIALLETTER",  NULL,                   NULL     )
+        << TagProcessing ( "FIELD",         ProcessFieldTag,        variable )
         << TagProcessing ( "LINK",          ProcessLinkTag,         variable )
-        << TagProcessing ( "NOTE",          NULL,                   NULL      )
+        << TagProcessing ( "NOTE",          NULL,                   NULL     )
         ;
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
@@ -649,7 +677,7 @@ static void ProcessFollowingTag ( QDomNode myNode, void *tagData, KWEFKWordLeade
     ProcessOneAttrTag (myNode, "name", "QString", tagData, leader);
 }
 
-static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/ )
 {
     LayoutData *layout = (LayoutData *) tagData;
     QString oldValue, spacingType;

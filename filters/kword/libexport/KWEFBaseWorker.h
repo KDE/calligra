@@ -58,6 +58,9 @@ class KWEFBaseWorker
             const double width, const double height, const int orientation); // Like AbiWord's <papersize>
         virtual bool doFullPaperBorders (const double top, const double left,
             const double bottom, const double right); // Like KWord's <PAPERBORDERS>
+        virtual bool doPageInfo(int headerType, int footerType);
+        virtual bool doHeader(const HeaderData& header);
+        virtual bool doFooter(const FooterData& footer);
         virtual bool doOpenHead (void); // Like HTML's <HEAD>
         virtual bool doCloseHead (void); // Like HTML's </HEAD>
         virtual bool doOpenBody (void); // Like HTML's <BODY>

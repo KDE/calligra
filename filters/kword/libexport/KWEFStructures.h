@@ -171,14 +171,14 @@ class FrameAnchor
       Table   table;
 };
 
-
 class VariableData
 {
 public:
     VariableData (): m_type(-1) {}
     VariableData ( const QString& text ) : m_text(text), m_type(-1) {}
     VariableData ( const VariableData& other ) : 
-      m_key(other.m_key), m_text(other.m_text), m_type(other.m_type) {}
+      m_key(other.m_key), m_text(other.m_text), 
+      m_type(other.m_type), propertyMap(other.propertyMap) {}
 public:
     /**
      * Set parameters of a <LINK> element
@@ -187,15 +187,23 @@ public:
     QString getLinkName(void) const; // Name of link (attribute "linkName" of <LINK>)
     QString getHrefName(void) const; // Reference of link (attribute "hrefName" of <LINK>)
     /**
-     * Set paramaeters of a <PGNUM> element
+     * Set parameters of a <PGNUM> element
      */
     void setPgNum(const QString& subtype, const QString& value);
     bool isPageNumber(void) const;
     bool isPageCount(void) const;
+    /*
+     * Set parameters of a <FIELD> element
+     */
+    void setField(const QString& subtype, const QString& value);
+    QString getFieldName(void) const; 
+    QString getFieldValue(void) const;
+
 public:
     QString m_key;
     QString m_text;
     int m_type;
+
 protected:
     QMap<QString,QString> propertyMap;
 };
@@ -378,6 +386,22 @@ struct ParaData
     LayoutData                 layout;
 };
 
+struct HeaderFooterData
+{
+    enum HeaderFooterPage 
+    {
+      PAGE_FIRST,
+      PAGE_ODD,
+      PAGE_EVEN,
+      PAGE_ALL
+    };
+
+    HeaderFooterPage page;
+    QValueList<ParaData> para;
+};
+
+typedef HeaderFooterData HeaderData;
+typedef HeaderFooterData FooterData;
 
 class KWEFDocumentInfo
 {

@@ -96,6 +96,22 @@ bool VariableData::isPageCount(void) const
     return (num==1);
 }
 
+void VariableData::setField(const QString& name, const QString& value)
+{
+    propertyMap["field:name"]=name;
+    propertyMap["field:value"]=value;
+}
+
+QString VariableData::getFieldName(void) const
+{
+    return propertyMap["field:name"];
+}
+
+QString VariableData::getFieldValue(void) const
+{
+    return propertyMap["field:value"];
+}
+
 void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormatDataList)
 {
     ValueListFormatData::Iterator  paraFormatDataIt;
