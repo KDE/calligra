@@ -1269,7 +1269,6 @@ void KPTextObject::recalcPageNum( KPrPage *page )
         {
             switch ( var->subType() ) {
             case KPrPgNumVariable::VST_PGNUM_CURRENT:
-                kdDebug()<<"KPrPgNumVariable::VST_PGNUM_CURRENT**************\n";
                 var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage()-1);
                 break;
             case KPrPgNumVariable::VST_CURRENT_SECTION:
