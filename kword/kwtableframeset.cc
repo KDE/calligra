@@ -280,145 +280,58 @@ bool KWTableFrameSet::isTableHeader( Cell *cell )
     return cell->isRemoveableHeader() || ( cell->m_row == 0 );
 }
 
-void KWTableFrameSet::recalcCols(int _col,int _row)
-{
+void KWTableFrameSet::recalcCols(int _col,int _row) {
+    //kdDebug() << "KWTableFrameSet::recalcCols" << endl;
+    if(m_cells.isEmpty()) return; // assertion
+
+    // check/set sizes of frames
     unsigned int row=0,col=0;
-    if(! m_cells.isEmpty() ) {
-        //get selected cell
-        if(_col!=-1 && _row!=-1)
-        {
-            row=(unsigned int)_row;
-            col=(unsigned int)_col;
-        }
-        else
-            isOneSelected(row,col);
-        // ** check/set sizes of frames **
-        // we assume only left or only right pos has changed.
-        // check if leftCoordinate is same as rest of tableRow
-        Cell *activeCell = getCell(row,col);
-        Cell *cell;
-        double coordinate;
-        // find old coord.
-        coordinate=activeCell->getFrame(0)->left();
-        if(col!=0) { // calculate the old position.
-            coordinate = getCell(row, col-1)->getFrame(0)->right() + tableCellSpacing;
-        } else { // is leftmost, so lets look at other rows..
-            for ( unsigned int i = 0; i < m_rows; i++) {
-                if( !(i>=row &&i<=(activeCell->m_rows+activeCell->m_row-1))) {
-                    cell=getCell(i,col);
-                    if(cell && cell->m_col==col) {
-                        coordinate=cell->getFrame(0)->left();
-                        break;
-                    }
-                }
-            }
-        }
-        double postAdjust=0;
-        if(coordinate != activeCell->getFrame(0)->left()) { // left pos changed
-            // we are now going to move the rest of the cells in this column as well.
-            for ( unsigned int i = 0; i < m_rows; i++) {
-                double difference=0;
-                if(col==0) {// left most cell
-                    cell = getCell(i,col);
-                    if(!cell)
-                        continue;
-                    if(cell==activeCell)
-                        cell=0;
-                    else
-                        difference = -(activeCell->getFrame(0)->left() - coordinate);
-                } else {
-                    cell = getCell(i,col-1);
-                    if(!cell)
-                        continue;
-                    if(cell->m_row == i) // dont resize joined cells more then ones.
-                        difference=activeCell->getFrame(0)->left() - coordinate;
-                    else
-                        cell=0;
-                }
-                if(cell) {
-                    // rescale this cell with the calculated difference
-                    double newWidth=cell->getFrame(0)->width() + difference;
-                    if(newWidth<minFrameWidth) {
-                        if(static_cast<double>(minFrameWidth-newWidth) > postAdjust)
-                            postAdjust = minFrameWidth-newWidth;
-                    }
-                    cell->getFrame(0)->setWidth(newWidth);
-                }
-            }
-
-            // Because we are scaling the cells left of this one, the activeCell has to be
-            // returned to its original size.
-            if(col!=0)
-                activeCell->getFrame(0)->setWidth(
-                  activeCell->getFrame(0)->width() +
-                  activeCell->getFrame(0)->left() - coordinate);
-
-            // if we found cells that ware made to small, we adjust them using the postAdjust var.
-            for ( unsigned int i = 0; i < m_rows; i++) {
-                if(col==0)
-                    col++;
-                cell = getCell(i,col-1);
-                if(cell && cell->m_row == i)
-                    cell->getFrame(0)->setWidth( cell->getFrame(0)->width()+postAdjust);
-            }
-        } else {
-            col+=activeCell->m_cols-1;
-            // find old coord.
-            coordinate=activeCell->getFrame(0)->right();
-            bool found=false;
-            for ( unsigned int i = 0; i < m_rows; i++) {
-                if(!((i>=row && i<=(activeCell->m_rows+activeCell->m_row-1)))) {
-                    cell=getCell(i,activeCell->m_cols+activeCell->m_col-1);
-                    if(cell && cell->m_col+cell->m_cols==activeCell->m_cols+activeCell->m_col) {
-                        coordinate=cell->getFrame(0)->right();
-                        found=true;
-                        break;
-                    }
-                }
-            }
-
-            if(! found && activeCell->m_col + activeCell->m_cols < m_cols) { // if we did not find it and we are not on the right edge of the table.
-               // use the position of the next cell.
-               coordinate = getCell(activeCell->m_row, activeCell->m_col + activeCell->m_cols)->getFrame(0)->left() - tableCellSpacing;
-            }
-            if(coordinate != activeCell->getFrame(0)->right()) { // right pos changed.
-                for ( unsigned int i = 0; i < m_rows; i++) {
-                    Cell *cell = getCell(i,col);
-                    if(cell && (cell != activeCell && cell->m_row == i)) {
-                        double newWidth = cell->getFrame(0)->width() +
-                            activeCell->getFrame(0)->right() - coordinate;
-                        if(newWidth<minFrameWidth) {
-                            if(minFrameWidth-newWidth > postAdjust)
-                                postAdjust = minFrameWidth-newWidth;
-                        }
-                        cell->getFrame(0)->setWidth(newWidth);
-                    }
-                }
-                for ( unsigned int i = 0; i < m_rows; i++) {
-                    cell = getCell(i,col);
-                    if(cell && (cell->m_row == i))
-                        cell->getFrame(0)->setWidth( cell->getFrame(0)->width()+postAdjust);
-                }
-            }
-        }
-        // Move cells
-        double x, nextX=0;
-        if(getCell(0,0) &&  getCell( 0, 0 )->getFrame( 0 ))
-            nextX =getCell( 0, 0 )->getFrame( 0 )->x();
-        for ( unsigned int i = 0; i < m_cols; i++ ) {
-            x=nextX;
-            for ( unsigned int j = 0; j < m_rows; j++ ) {
-                Cell *cell = getCell(j,i);
-                if(!cell)
-                    continue;
-                if(cell->m_col==i && cell->m_row==j) {
-                    cell->getFrame( 0 )->moveTopLeft( KoPoint( x, cell->getFrame( 0 )->y() ) );
-                }
-                if(cell->m_col + cell->m_cols -1 == i)
-                    nextX=cell->getFrame(0) -> right() + tableCellSpacing;
-            }
-        }
+    if(_col!=-1 && _row!=-1)
+    {
+        row=(unsigned int)_row;
+        col=(unsigned int)_col;
     }
+    else
+        isOneSelected(row,col);
+
+    Cell *activeCell = getCell(row,col);
+    double difference = 0;
+
+    if(activeCell->getFrame(0)->left() - activeCell->leftBorder() != m_colPositions[activeCell->m_col]) {
+        // left border moved.
+        col = activeCell->m_row;
+        difference = activeCell->getFrame(0)->left() - activeCell->leftBorder() - m_colPositions[activeCell->m_col];
+    }
+
+    if(activeCell->getFrame(0)->right() - activeCell->rightBorder() != 
+            m_colPositions[activeCell->m_col + activeCell->m_cols]) { // right border moved 
+
+        col = activeCell->m_col + activeCell->m_cols;
+        double difference2 = activeCell->getFrame(0)->right() + activeCell->rightBorder() - m_colPositions[activeCell->m_col + activeCell->m_cols];
+
+    if(difference==difference2) { // we were simply moved.
+            col=0;
+        } else
+            difference = difference2;
+    }
+
+    redrawFromCol=m_cols; // possible reposition col starting with this one, done in recalcRows
+    if(difference!=0) {
+        double last=col==0?0:m_colPositions[col-1];
+        for(unsigned int i=col; i < m_colPositions.count(); i++) {
+            double &colPos = m_colPositions[i];
+            colPos = colPos + difference;
+            if(colPos-last < minFrameWidth) { // Never make it smaller then allowed!
+                difference += minFrameWidth - colPos;
+                colPos = minFrameWidth + last;
+            }
+            last=colPos;
+        }
+        redrawFromCol=col;
+        if(col>0) redrawFromCol--;
+    }
+
+    //kdDebug() << "end KWTableFrameSet::recalcCols" << endl;
 }
 
 void KWTableFrameSet::recalcRows(int _col, int _row) {
@@ -445,14 +358,14 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     if(activeCell->getFrame(0)->top() - activeCell->topBorder() != getPositionOfRow(activeCell->m_row)) {
         // top moved.
         row = activeCell->m_row;
-        difference = activeCell->getFrame(0)->top() - activeCell->topBorder() - getPositionOfRow(row);;
-    } 
+        difference = activeCell->getFrame(0)->top() - activeCell->topBorder() - getPositionOfRow(row);
+    }
 
     if(activeCell->getFrame(0)->bottom() - activeCell->bottomBorder() != 
             getPositionOfRow(activeCell->m_row + activeCell->m_rows)) { // bottom moved 
 
         row = activeCell->m_row + activeCell->m_rows;
-        double difference2 = activeCell->getFrame(0)->bottom() + activeCell->bottomBorder() - getPositionOfRow(row);;
+        double difference2 = activeCell->getFrame(0)->bottom() + activeCell->bottomBorder() - getPositionOfRow(row);
         if(difference==difference2) { // we were simply moved.
             row=0;
         } else
@@ -460,7 +373,9 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     }
 
     unsigned int fromRow=m_rows; // possible reposition rows starting with this one, default to no repositioning
+    unsigned int untilRow=0;     // possible reposition rows ending with this one
     if(difference!=0) {
+        untilRow=m_rows;
         unsigned int adjustment=0;
         QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
         while(pageBound != m_pageBoundaries.end() && (*pageBound) <= row) {
@@ -475,7 +390,10 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 difference += minFrameHeight - rowPos;
                 rowPos = minFrameHeight + last;
             }
-            if(*pageBound == i) break;      // stop at pageBreak.
+            if(*pageBound == i) {
+                untilRow=QMIN(untilRow, *pageBound);
+                break;              // stop at pageBreak.
+            }
             last=rowPos;
         }
         fromRow=row;
@@ -491,13 +409,15 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     QValueList<double>::iterator j = m_rowPositions.begin();
 
     double pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
-    while(++j!=m_rowPositions.end()) {
+    while(++j!=m_rowPositions.end()) { // stuff for multipage tables.
         if(pageBound!=m_pageBoundaries.end() && *pageBound == rowNumber ) {
             if(*j > pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder() ) { // next page marker exists, and is accurate...
                 pageNumber++;
                 pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();    
+                untilRow=QMAX(untilRow, *pageBound);
                 pageBound++;
             } else { // pagebreak marker should be removed, since it is incorrect.
+                untilRow=m_rows;
                 pageBound=m_pageBoundaries.erase(pageBound);
                 QValueList<double>::iterator tmp = j;
                 tmp++;
@@ -513,6 +433,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         }
 
         if((*j) > pageBottom) { // a row falls off the page.
+            untilRow=m_rows;
             bool hugeRow = false;
             unsigned int breakRow = rowNumber;
             for(unsigned int i=0; i < m_cols ; i++) {
@@ -562,9 +483,10 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     // do positioning.
     Cell *cell;
     for(cell=m_cells.first();cell;cell=m_cells.next()) {
-        if(cell->m_row >=fromRow) 
+        if((cell->m_row >=fromRow && cell->m_row < untilRow) || cell->m_col >= redrawFromCol) 
             position(cell, cell->m_row <= row-1 && cell->m_row + cell->m_rows > row-1);
     }
+    redrawFromCol=m_cols;
 
     //kdDebug() << "KWTableFrameSet::recalcRows done" << endl;
 }
