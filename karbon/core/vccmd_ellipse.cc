@@ -10,10 +10,10 @@
 
 #include <kdebug.h>
 VCCmdEllipse::VCCmdEllipse( KarbonPart* part,
-		const double tl_x, const double tl_y,
-		const double br_x, const double br_y )
+		const double tlX, const double tlY,
+		const double brX, const double brY )
 	: VCommand( part, i18n("Create ellipse-shape") ), m_object( 0L ),
-	  m_tlX( tl_x ), m_tlY( tl_y ), m_brX( br_x ), m_brY( br_y )
+	  m_tlX( tlX ), m_tlY( tlY ), m_brX( brX ), m_brY( brY )
 {
 }
 

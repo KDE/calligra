@@ -12,17 +12,17 @@
 #include "vpath.h"
 
 VCCmdStar::VCCmdStar( KarbonPart* part,
-		const double center_x, const double center_y,
-		const double outer_r, const double inner_r, const uint edges )
+		const double centerX, const double centerY,
+		const double outerR, const double innerR, const uint edges )
 	: VCommand( part, i18n("Create star-shape") ), m_object( 0L ),
-	  m_centerX( center_x ), m_centerY( center_y )
+	  m_centerX( centerX ), m_centerY( centerY )
 {
 	// a star should have at least 3 edges:
 	m_edges = edges < 3 ? 3 : edges;
 
 	// make sure, radii are positive:
-	m_outerR = outer_r < 0 ? -outer_r : outer_r;
-	m_innerR = inner_r < 0 ? -inner_r : inner_r;
+	m_outerR = outerR < 0 ? -outerR : outerR;
+	m_innerR = innerR < 0 ? -innerR : innerR;
 }
 
 void

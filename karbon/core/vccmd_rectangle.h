@@ -14,8 +14,8 @@ class VPath;
 class VCCmdRectangle : public VCommand
 {
 public:
-	VCCmdRectangle( KarbonPart* part, const double tl_x, const double tl_y,
-		 const double br_x, const double br_y );
+	VCCmdRectangle( KarbonPart* part, const double tlX, const double tlY,
+		 const double brX, const double brY );
 	virtual ~VCCmdRectangle() {}
 
 	virtual void execute();

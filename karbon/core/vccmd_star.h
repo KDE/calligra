@@ -14,8 +14,8 @@ class VPath;
 class VCCmdStar : public VCommand
 {
 public:
-	VCCmdStar( KarbonPart* part, const double center_x, const double center_y,
-		const double outer_r, const double inner_r, const uint edges );
+	VCCmdStar( KarbonPart* part, const double centerX, const double centerY,
+		const double outerR, const double innerR, const uint edges );
 	virtual ~VCCmdStar() {}
 
 	virtual void execute();

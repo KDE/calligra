@@ -14,7 +14,7 @@ class VPath;
 class VCCmdPolygon : public VCommand
 {
 public:
-	VCCmdPolygon( KarbonPart* part, const double center_x, const double center_y,
+	VCCmdPolygon( KarbonPart* part, const double centerX, const double centerY,
 		const double radius, const uint edges );
 	virtual ~VCCmdPolygon() {}
 
