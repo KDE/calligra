@@ -6,6 +6,7 @@
 #define __KCHARTLEGENDCONFIGPAGE_H__
 
 #include <qwidget.h>
+#include <qbutton.h>
 
 class KChartParams;
 class QRadioButton;
@@ -33,7 +34,7 @@ private:
     KColorButton *legendTitleColor, *legendTextColor;
     QFont titleLegend, textLegend;
     QPushButton *titleLegendFontButton, *textLegendFontButton;
-    bool titleLegendIsRelative, legentTextIsRelative;
+    QButton::ToggleState titleLegendIsRelative, textLegendIsRelative;
 };
 
 #endif

@@ -67,10 +67,11 @@ void KChartFontConfigPage::initList()
     list->insertItem(i18n("Y-Title"));
     list->insertItem(i18n("X-Axis"));
     list->insertItem(i18n("Y-Axis"));
+    list->insertItem(i18n("ALL Axes"));
   }
   list->insertItem(i18n("Label"));
   list->setCurrentItem(0);
-  int num=0;
+  //int num=0;
   bool noEnough=false;
   //init index
   index=0;
@@ -78,7 +79,7 @@ void KChartFontConfigPage::initList()
 
 
   QStringList lst;
-  for(int i =0;i<data->rows();i++)
+  for(uint i =0;i<data->rows();i++)
   {
       if(i<_params->maxDataColor())
           listColor->insertItem(_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i+1) :_params->legendText( i ) );
@@ -119,7 +120,7 @@ void KChartFontConfigPage::initList()
 }
 
 
-void KChartFontConfigPage::changeIndex(int newindex)
+void KChartFontConfigPage::changeIndex(uint newindex)
 {
     if(index>_params->maxDataColor())
         colorButton->setEnabled(false);
@@ -135,27 +136,85 @@ void KChartFontConfigPage::changeIndex(int newindex)
 
 void KChartFontConfigPage::changeLabelFont()
 {
+  QFont *font = 0;
+  QButton::ToggleState *state = 0;
+  bool diffAxes = false;
   if(list->currentText()==i18n("Title")) {
-    if (KFontDialog::getFont( title,false,this,true,&titleIsRelative ) == QDialog::Rejected)
-      return;
+    font  = &title;
+    state = &titleIsRelative;
   } else if(list->currentText()==i18n("X-Title")) {
-    if (KFontDialog::getFont( xtitle,false,this,true,&xtitleIsRelative ) == QDialog::Rejected)
-      return;
+    font  = &xTitle;
+    state = &xTitleIsRelative;
   } else if(list->currentText()==i18n("Y-Title")) {
-    if (KFontDialog::getFont( ytitle,false,this,true,&ytitleIsRelative ) == QDialog::Rejected)
-      return;
+    font  = &yTitle;
+    state = &yTitleIsRelative;
   } else if(list->currentText()==i18n("X-Axis")) {
-    if (KFontDialog::getFont( xaxis,false,this,true,&xaxisIsRelative ) == QDialog::Rejected)
-      return;
+    font  = &xAxis;
+    state = &xAxisIsRelative;
   } else if(list->currentText()==i18n("Y-Axis")) {
-    if (KFontDialog::getFont( yaxis,false,this,true,&yaxisIsRelative ) == QDialog::Rejected)
-      return;
+    font  = &yAxis;
+    state = &yAxisIsRelative;
+  } else if(list->currentText()==i18n("ALL Axes")) {
+    diffAxes = true;
   } else if(list->currentText()==i18n("Label")) {
-    if (KFontDialog::getFont( label,false,this,true,&labelIsRelative ) == QDialog::Rejected)
-      return;
+    font  = &label;
+    state = &labelIsRelative;
   }
-  else {
+  else
     kdDebug( 35001 ) << "Pb in listBox" << endl;
+
+  if( diffAxes ) {
+    QFont newFont;
+    int flags = 0;
+    QButton::ToggleState newState
+                       = (xAxisIsRelative == yAxisIsRelative)
+                       ? (xAxisIsRelative ? QButton::On : QButton::Off)
+                       : QButton::NoChange;
+    if (KFontDialog::getFontDiff( newFont,
+                                  flags,
+                                  false,
+                                  this,
+                                  true,
+                                  &newState ) != QDialog::Rejected) {
+      if( KFontChooser::FamilyList & flags ) {
+        xAxis.setFamily( newFont.family() );
+        yAxis.setFamily( newFont.family() );
+      }
+      if( KFontChooser::StyleList & flags ) {
+        xAxis.setWeight( newFont.weight() );
+        xAxis.setItalic( newFont.italic() );
+        xAxis.setUnderline( newFont.underline() );
+        xAxis.setStrikeOut( newFont.strikeOut() );
+        yAxis.setWeight( newFont.weight() );
+        yAxis.setItalic( newFont.italic() );
+        yAxis.setUnderline( newFont.underline() );
+        yAxis.setStrikeOut( newFont.strikeOut() );
+      }
+      if( KFontChooser::SizeList & flags ) {
+        xAxis.setPointSize( newFont.pointSize() );
+        yAxis.setPointSize( newFont.pointSize() );
+      }
+      // CharSet settings are ignored since we are not Qt 2.x compatible
+      // if( KFontChooser::CharsetList & flags ) {
+      // }
+      if( QButton::NoChange != newState ) {
+        xAxisIsRelative = newState;
+        yAxisIsRelative = newState;
+      }
+    }
+  }
+  else if( font && state ) {
+    QFont newFont( *font );
+    QButton::ToggleState newState = *state;
+    if (KFontDialog::getFont( newFont,
+                              false,
+                              this,
+                              true,
+                              &newState ) != QDialog::Rejected) {
+      *font = newFont;
+      if( QButton::NoChange != newState )
+        *state = newState;
+    }
   }
 }
 
@@ -165,25 +224,26 @@ void KChartFontConfigPage::init()
     KDChartAxisParams leftparms = _params->axisParams( KDChartAxisParams::AxisPosLeft );
     KDChartAxisParams rightparms = _params->axisParams( KDChartAxisParams::AxisPosRight );
     KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
-    xaxis = bottomparms.axisLabelsFont();
-    xaxisIsRelative = bottomparms.axisLabelsFontUseRelSize();
-    if( xaxisIsRelative )
-      xaxis.setPointSize( bottomparms.axisLabelsFontRelSize() );
-    yaxis = leftparms.axisLabelsFont();
-    yaxisIsRelative = leftparms.axisLabelsFontUseRelSize();
-    if( yaxisIsRelative )
-      yaxis.setPointSize( leftparms.axisLabelsFontRelSize() );
+    xAxis = bottomparms.axisLabelsFont();
+    xAxisIsRelative = bottomparms.axisLabelsFontUseRelSize() ? QButton::On : QButton::Off;
+    if( QButton::On == xAxisIsRelative )
+      xAxis.setPointSize( bottomparms.axisLabelsFontRelSize() );
+    yAxis = leftparms.axisLabelsFont();
+    yAxisIsRelative = leftparms.axisLabelsFontUseRelSize() ? QButton::On : QButton::Off;
+    if( QButton::On == yAxisIsRelative )
+      yAxis.setPointSize( leftparms.axisLabelsFontRelSize() );
     // PENDING(khz) Add support for the other 6 possible axes
 
     title = _params->headerFooterFont( KDChartParams::HdFtPosHeader );
-    titleIsRelative = _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosHeader );
-    if( titleIsRelative )
+    titleIsRelative = _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosHeader )
+                    ? QButton::On : QButton::Off;
+    if( QButton::On == titleIsRelative )
       title.setPointSize( _params->headerFooterFontRelSize( KDChartParams::HdFtPosHeader ) );
     // PENDING(khz) Add support for the other 16 possible hd/ft areas
 
 
-//   xtitle = _params->xTitleFont();
-//   ytitle = _params->yTitleFont();
+//   xTitle = _params->xTitleFont();
+//   yTitle = _params->yTitleFont();
 //   label = _params->labelFont();
 
     // PENDING(kalle) Adapt
@@ -204,18 +264,18 @@ void KChartFontConfigPage::apply()
     KDChartAxisParams rightparms = _params->axisParams( KDChartAxisParams::AxisPosRight );
     KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
 
-    leftparms.setAxisLabelsFont( yaxis, !yaxisIsRelative );
-    if( yaxisIsRelative )
-      leftparms.setAxisLabelsFontRelSize( yaxis.pointSize() );
+    leftparms.setAxisLabelsFont( yAxis, QButton::Off == yAxisIsRelative );
+    if( QButton::On == yAxisIsRelative )
+      leftparms.setAxisLabelsFontRelSize( yAxis.pointSize() );
     // PENDING(khz) change right axis handling
     // use left axis settings for the right axis as well
     //   (this must be changed, khz 14.12.2001)
-    rightparms.setAxisLabelsFont( yaxis, !yaxisIsRelative );
-    if( yaxisIsRelative )
-      rightparms.setAxisLabelsFontRelSize( yaxis.pointSize() );
-    bottomparms.setAxisLabelsFont( xaxis, !xaxisIsRelative );
-    if( xaxisIsRelative )
-      bottomparms.setAxisLabelsFontRelSize( xaxis.pointSize() );
+    rightparms.setAxisLabelsFont( yAxis, QButton::Off == yAxisIsRelative );
+    if( QButton::On == yAxisIsRelative )
+      rightparms.setAxisLabelsFontRelSize( yAxis.pointSize() );
+    bottomparms.setAxisLabelsFont( xAxis, QButton::Off == xAxisIsRelative );
+    if( QButton::On == xAxisIsRelative )
+      bottomparms.setAxisLabelsFontRelSize( xAxis.pointSize() );
     // PENDING(khz) Add support for the other 6 possible axes
 
     _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparms );
@@ -223,18 +283,18 @@ void KChartFontConfigPage::apply()
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
     _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader,
                                   title,
-                                  titleIsRelative,
+                                  QButton::On == titleIsRelative,
                                   title.pointSize() );
     // PENDING(khz) change hd2 and ft handling
     // use header settings for header 2 and footer as well
     //   (this must be changed, khz 14.12.2001)
     _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader2,
                                   title,
-                                  titleIsRelative,
+                                  QButton::On == titleIsRelative,
                                   title.pointSize() );
     _params->setHeaderFooterFont( KDChartParams::HdFtPosFooter,
                                   title,
-                                  titleIsRelative,
+                                  QButton::On == titleIsRelative,
                                   title.pointSize() );
     // PENDING(khz) Add support for the other 16 possible hd/ft areas
 

@@ -152,27 +152,35 @@ void KChartLegendConfigPage::init()
     legendTitleColor->setColor(_params->legendTitleTextColor());
     legendTextColor->setColor(_params->legendTextColor());
 
-    titleLegend=_params->legendTitleFont();
-    titleLegendIsRelative = _params->legendTitleFontUseRelSize();
-    if( titleLegendIsRelative )
+    titleLegend = _params->legendTitleFont();
+    titleLegendIsRelative = _params->legendTitleFontUseRelSize()
+                          ? QButton::On
+                          : QButton::Off;
+    if( QButton::On == titleLegendIsRelative )
         titleLegend.setPointSize( _params->legendTitleFontRelSize() );
 
     textLegend=_params->legendFont();
-    legentTextIsRelative= _params->legendFontUseRelSize();
-    if(legentTextIsRelative)
+    textLegendIsRelative = _params->legendFontUseRelSize()
+                         ? QButton::On
+                         : QButton::Off;
+    if( QButton::On == textLegendIsRelative )
         textLegend.setPointSize(_params->legendFontRelSize());
 }
 
 void KChartLegendConfigPage::changeTitleLegendFont()
 {
-    if (KFontDialog::getFont( titleLegend,false,this, true,&titleLegendIsRelative ) == QDialog::Rejected )
-        return;
+    QButton::ToggleState state = titleLegendIsRelative;
+    if (    KFontDialog::getFont( titleLegend,false,this, true,&state ) != QDialog::Rejected
+         && QButton::NoChange != state )
+        titleLegendIsRelative = state;
 }
 
 void KChartLegendConfigPage::changeTextLegendFont()
 {
-    if (KFontDialog::getFont( textLegend,false,this ) == QDialog::Rejected )
-        return;
+    QButton::ToggleState state = textLegendIsRelative;
+    if (    KFontDialog::getFont( textLegend,false,this, true,&state ) != QDialog::Rejected
+         && QButton::NoChange != state )
+        textLegendIsRelative = state;
 }
 
 void KChartLegendConfigPage::apply()
@@ -202,11 +210,11 @@ void KChartLegendConfigPage::apply()
     _params->setLegendTitleTextColor(legendTitleColor->color());
     _params->setLegendTextColor(legendTextColor->color());
 
-    _params->setLegendTitleFont(titleLegend,!titleLegendIsRelative);
-    if( titleLegendIsRelative )
+    _params->setLegendTitleFont(titleLegend, QButton::Off == titleLegendIsRelative);
+    if( QButton::On == titleLegendIsRelative )
         _params->setLegendTitleFontRelSize(titleLegend.pointSize());
-    _params->setLegendFont(textLegend,!legentTextIsRelative);
-    if( legentTextIsRelative)
+    _params->setLegendFont(textLegend, QButton::Off == textLegendIsRelative);
+    if( QButton::On == textLegendIsRelative )
         _params->setLegendFontRelSize(textLegend.pointSize());
 
 }

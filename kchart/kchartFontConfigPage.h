@@ -6,6 +6,7 @@
 #define __KCHARTFONTCONFIGPAGE_H__
 
 #include <qwidget.h>
+#include <qbutton.h>
 
 #include "kchartcolorarray.h"
 #include "kchartDataEditor.h"
@@ -27,7 +28,7 @@ public:
     void initList();
 
 public slots:
-    void changeIndex(int index);
+    void changeIndex(uint index);
     void changeLabelFont();
 private:
     KChartParams* _params;
@@ -37,21 +38,21 @@ private:
     QPushButton *fontButton;
     KColorButton *colorButton;
     QFont title;
-    QFont xtitle;
-    QFont ytitle;
+    QFont xTitle;
+    QFont yTitle;
     QFont label;
-    QFont yaxis;
-    QFont xaxis;
+    QFont yAxis;
+    QFont xAxis;
     QFont legend;
-    bool titleIsRelative;
-    bool xtitleIsRelative;
-    bool ytitleIsRelative;
-    bool labelIsRelative;
-    bool yaxisIsRelative;
-    bool xaxisIsRelative;
-    bool legendIsRelative;
+    QButton::ToggleState titleIsRelative;
+    QButton::ToggleState xTitleIsRelative;
+    QButton::ToggleState yTitleIsRelative;
+    QButton::ToggleState labelIsRelative;
+    QButton::ToggleState yAxisIsRelative;
+    QButton::ToggleState xAxisIsRelative;
+    QButton::ToggleState legendIsRelative;
     KChartColorArray extColor;
-    int index;
+    uint index;
     KoChart::Data *data;
 };
 #endif
