@@ -37,6 +37,7 @@ class KPBackGround;
 class QCheckBox;
 class QTabWidget;
 class KPrPage;
+class KSqueezedTextLabel;
 
 /*******************************************************************
  *
@@ -92,7 +93,8 @@ public:
 protected:
     void showEvent( QShowEvent *e );
 private:
-    QLabel *lPicName, *picPreview;
+    QLabel *picPreview;
+	KSqueezedTextLabel *lPicName;
     QCheckBox *unbalanced;
     QComboBox *cType, *backCombo, *picView;
     QPushButton *picChoose;

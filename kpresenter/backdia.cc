@@ -38,6 +38,7 @@
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kbuttonbox.h>
+#include <ksqueezedtextlabel.h>
 
 #include <koPicture.h>
 
@@ -190,7 +191,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     connect( picChoose, SIGNAL( clicked() ),
              this, SLOT( selectPic() ) );
 
-    lPicName = new QLabel( picTab, "picname" );
+    lPicName = new KSqueezedTextLabel( picTab, "picname" );
     lPicName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     if ( !backPic.isNull() )
         lPicName->setText( backPic.getKey().filename() );
