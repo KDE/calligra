@@ -256,14 +256,14 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       context.setValue( new KSValue(  /*KSValue::Empty*/ 0.0 ) );
     else if(cell->isObscured() && cell->isObscuringForced())
       context.setValue( new KSValue( 0.0 ) );
-    else if ( cell->value().isNumber() )
-      context.setValue( new KSValue( cell->value().asFloat() ) );
     else if ( cell->value().isBoolean() )
       context.setValue( new KSValue( cell->value().asBoolean() ) );
     else if ( cell->isTime() )
       context.setValue( new KSValue( cell->value().asTime() ) );
     else if ( cell->isDate() )
       context.setValue( new KSValue( cell->value().asDate() ) );
+    else if ( cell->value().isNumber() )
+      context.setValue( new KSValue( cell->value().asFloat() ) );
     else if ( cell->value().asString().isEmpty() )
       context.setValue( new KSValue( 0.0  /*KSValue::Empty*/ ) );
     else
@@ -303,14 +303,14 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         context.setValue( new KSValue(  /*KSValue::Empty*/ 0.0 ) );
       else if(cell->isObscured() && cell->isObscuringForced())
         context.setValue( new KSValue( 0.0 ) );
-      else if ( cell->value().isNumber() )
-        context.setValue( new KSValue( cell->value().asFloat() ) );
       else if ( cell->value().isBoolean() )
       context.setValue( new KSValue( cell->value().asBoolean() ) );
       else if ( cell->isTime() )
         context.setValue( new KSValue( cell->value().asTime() ) );
       else if ( cell->isDate() )
         context.setValue( new KSValue( cell->value().asDate() ) );
+      else if ( cell->value().isNumber() )
+        context.setValue( new KSValue( cell->value().asFloat() ) );
       else if ( cell->value().asString().isEmpty() )
         context.setValue( new KSValue( 0.0  /*KSValue::Empty*/ ) );
       else

@@ -51,6 +51,17 @@ class KSpreadValue
       Error
     } Type;
 
+    typedef enum {
+      fmt_None,
+      fmt_Boolean,
+      fmt_Number,
+      fmt_Percent,
+      fmt_Money,
+      fmt_DateTime,
+      fmt_Date,
+      fmt_Time,
+      fmt_String
+    } Format;
     /**
      * Creates an empty value, i.e holds nothing.
      */
@@ -138,6 +149,9 @@ class KSpreadValue
      * Returns the type of the value.
      */
     Type type() const;
+
+    /** Returns the format of the value (i.e. how should it be interpreted) */
+    Format format() const;
 
     /**
      * Returns true if empty.
@@ -230,6 +244,9 @@ class KSpreadValue
      */
     void setValue( const QDate& dt );
 
+    /** Sets format information for this value. */
+    void setFormat (Format fmt);
+    
     /**
      * Returns the boolean value of this value.
      *

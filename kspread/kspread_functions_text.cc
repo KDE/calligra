@@ -37,6 +37,8 @@
 
 #include "kspread_functions.h"
 #include "kspread_util.h"
+#include "kspread_value.h"
+#include "valueconverter.h"
 
 // prototypes
 bool kspreadfunc_char( KSContext& context );
@@ -879,23 +881,43 @@ bool kspreadfunc_substitute( KSContext& context )
 // Function: T
 bool kspreadfunc_t( KSContext& context )
 {
+  // almost identical with the TEXT funcion
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "T", true ) )
     return false;
 
-  QString result = "";
-
-  bool istext = KSUtil::checkType( context, args[0], KSValue::StringType, false );
-  if( istext ) result = args[0]->stringValue();
-
-  context.setValue( new KSValue( result ));
+  KSpreadValue val;
+  
+  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
+    val.setValue (args[0]->stringValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
+    val.setValue (args[0]->timeValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
+    val.setValue (args[0]->dateValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+    val.setValue (args[0]->doubleValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+    val.setValue (args[0]->intValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
+    val.setValue (args[0]->boolValue());
+    
+  val = KSpread::ValueConverter::self()->asString (val, KGlobal::locale());
+  
+  context.setValue( new KSValue( val.asString() ));
   return true;
 }
 
 // Function: TEXT
 bool kspreadfunc_text( KSContext& context )
 {
+  //currently the same as the T function. Well, almost...
+  
   QString format_text;
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -911,26 +933,31 @@ bool kspreadfunc_text( KSContext& context )
 
   // not yet Excel-compatible because format_text is omitted
 
-  QString result = "";
-
+  // currently the same as T
+  
+  KSpreadValue val;
+  
   if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
-    result = args[0]->stringValue();
-
+    val.setValue (args[0]->stringValue());
+  
   else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-    result = KGlobal::locale()->formatNumber( args[0]->doubleValue() );
-
+    val.setValue (args[0]->doubleValue());
+  
   else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
-    result = KGlobal::locale()->formatTime( args[0]->timeValue() );
-
+    val.setValue (args[0]->timeValue());
+  
   else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
-    result = KGlobal::locale()->formatDate( args[0]->dateValue() );
-
+    val.setValue (args[0]->dateValue());
+  
   else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-    result = KGlobal::locale()->formatNumber( args[0]->intValue() );
-
+    val.setValue (args[0]->intValue());
+  
   else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
-    result = args[0]->boolValue() ? i18n("True") : i18n("False");
-  context.setValue( new KSValue( result ));
+    val.setValue (args[0]->boolValue());
+    
+  val = KSpread::ValueConverter::self()->asString (val, KGlobal::locale());
+  
+  context.setValue( new KSValue( val.asString() ));
   return true;
 }
 
@@ -1000,28 +1027,36 @@ bool kspreadfunc_upper( KSContext& context )
 // Function: VALUE
 bool kspreadfunc_value( KSContext& context )
 {
+  //currently the same as the N function
+  
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "VALUE", true ) )
     return false;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  QString str = args[0]->stringValue();
-  if( str.length() <= 0 )
-     return false;
-
-  // try to parse the string as number
-  bool ok;
-  double value = KGlobal::locale()->readNumber(str, &ok);
-  if ( !ok )  value = str.toDouble(&ok);
-  if( ok )
-  {
-     context.setValue( new KSValue( value ) );
-     return true;
-  }
-
-  return false;
-  // TODO parse as boolean/date/time
+  KSpreadValue val;
+  
+  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
+    val.setValue (args[0]->stringValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+    val.setValue (args[0]->doubleValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
+    val.setValue (args[0]->timeValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
+    val.setValue (args[0]->dateValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+    val.setValue (args[0]->intValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
+    val.setValue (args[0]->boolValue());
+    
+  val = KSpread::ValueConverter::self()->asFloat (val, KGlobal::locale());
+  
+  context.setValue( new KSValue( val.asFloat() ));
+  
+  return true;
 }

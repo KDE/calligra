@@ -10,7 +10,6 @@ kde_module_LTLIBRARIES = libkspreadpart.la
 libkspreadcommon_la_SOURCES =  \
         digest.cc \
         commands.cc \
-				convert.cc \
         damages.cc \
         dependencies.cc \
         formula.cc \
@@ -52,6 +51,7 @@ libkspreadcommon_la_SOURCES =  \
         kspread_sheet.cc \
         kspread_sheetprint.cc \
         kspread_util.cc  \
+				valueconverter.cc \
 				valueformatter.cc \
 				valueparser.cc \
         KSpreadAppIface.cc  \

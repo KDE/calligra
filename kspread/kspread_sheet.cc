@@ -1089,6 +1089,9 @@ void KSpreadSheet::valueChanged (KSpreadCell *cell)
   
   //update dependencies
   d->dependencies->cellChanged (c);
+  
+  //nobody else seems to be setting the modified flag, so we do it here
+  d->doc->setModified (true);
 }
 
 /*

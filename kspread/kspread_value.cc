@@ -104,9 +104,10 @@ class KSpreadValueData
   public:
 
     KSpreadValue::Type type:4;
+    KSpreadValue::Format format:4;
 
     // reference count, at least one when object exists
-    unsigned count:12;
+    unsigned int count:24;
     
     union
     {
@@ -142,10 +143,43 @@ class KSpreadValueData
     // true if it's null (which is shared)
     bool isNull(){ return this == s_null; }
 
+    /** set most probable formatting based on the type */
+    void setFormatByType ();
+    
   private:
 
     static KSpreadValueData* s_null;
 };
+
+void KSpreadValueData::setFormatByType ()
+{
+  switch (type) {
+    case KSpreadValue::Empty:
+      format = KSpreadValue::fmt_None;
+    break;
+    case KSpreadValue::Boolean:
+      format = KSpreadValue::fmt_Boolean;
+    break;
+    case KSpreadValue::Integer:
+      format = KSpreadValue::fmt_Number;
+    break;
+    case KSpreadValue::Float:
+      format = KSpreadValue::fmt_Number;
+    break;
+    case KSpreadValue::String:
+      format = KSpreadValue::fmt_String;
+    break;
+    case KSpreadValue::Array:
+      format = KSpreadValue::fmt_None;
+    break;
+    case KSpreadValue::CellRange:
+      format = KSpreadValue::fmt_None;
+    break;
+    case KSpreadValue::Error:
+      format = KSpreadValue::fmt_String;
+    break;
+  };
+}
 
 // to be shared between all empty value
 KSpreadValueData* KSpreadValueData::s_null = 0;
@@ -177,6 +211,7 @@ KSpreadValue::KSpreadValue( KSpreadValue::Type _type )
 {
   d = new KSpreadValueData;
   d->type = _type;
+  d->setFormatByType ();
 }
 
 // copy constructor
@@ -253,6 +288,7 @@ KSpreadValue::KSpreadValue( unsigned columns, unsigned rows )
 {
   d = new KSpreadValueData;
   d->type = Array;
+  d->format = fmt_None;
   d->pa = new ValueArray;
   d->pa->init( columns, rows );
 }
@@ -279,6 +315,7 @@ void KSpreadValue::setValue( bool b )
   detach();
   d->type = Boolean;
   d->b = b;
+  d->format = fmt_Boolean;
 }
 
 // get the value as boolean
@@ -298,6 +335,7 @@ void KSpreadValue::setValue( long i )
   detach();
   d->type = Integer;
   d->i = i;
+  d->format = fmt_Number;
 }
 
 // set the value to integer
@@ -306,6 +344,7 @@ void KSpreadValue::setValue( int i )
   detach();
   d->type = Integer;
   d->i = static_cast<long>( i );
+  d->format = fmt_Number;
 }
 
 // get the value as integer
@@ -333,6 +372,7 @@ void KSpreadValue::setValue( double f )
   detach();
   d->type = Float;
   d->f = f;
+  d->format = fmt_Number;
 }
 
 // get the value as floating-point
@@ -355,6 +395,7 @@ void KSpreadValue::setValue( const QString& s )
   detach();
   d->type = String;
   d->ps = new QString( s );
+  d->format = fmt_String;
 }
 
 // get the value as string
@@ -402,6 +443,7 @@ void KSpreadValue::setValue( const QDateTime& dt )
   f += refTime.secsTo( dt.time() ) / 86400.0;
 
   setValue( f );
+  d->format = fmt_DateTime;
 }
 
 void KSpreadValue::setValue( const QTime& time )
@@ -411,6 +453,7 @@ void KSpreadValue::setValue( const QTime& time )
   double f = refTime.msecsTo( time ) / 86400000.0;
 
   setValue( f );
+  d->format = fmt_Time;
 }
 
 void KSpreadValue::setValue( const QDate& date )
@@ -420,6 +463,7 @@ void KSpreadValue::setValue( const QDate& date )
   double f = refDate.daysTo( date ) + 1.0;
 
   setValue( f );
+  d->format = fmt_Date;
 }
 
 // get the value as date/time
@@ -448,6 +492,16 @@ QTime KSpreadValue::asTime() const
   dt = dt.addMSecs( qRound( (f-(int)f) * 86400 * 1000 ) );
   
   return dt;
+}
+
+KSpreadValue::Format KSpreadValue::format() const
+{
+  return d ? d->format : fmt_None;
+}
+
+void KSpreadValue::setFormat (KSpreadValue::Format fmt)
+{
+  d->format = fmt;
 }
 
 KSpreadValue KSpreadValue::element( unsigned column, unsigned row ) const

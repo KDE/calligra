@@ -74,7 +74,9 @@ void ValueParser::parse (const QString& str, KSpreadCell *cell)
     cell->setFormatType(Money_format);
     cell->setFactor(1.0);
     cell->setPrecision(2);
-    cell->setValue (KSpreadValue (money));
+    KSpreadValue val (money);
+    val.setFormat (KSpreadValue::fmt_Money);
+    cell->setValue (val);
     return;
   }
 
@@ -92,6 +94,56 @@ void ValueParser::parse (const QString& str, KSpreadCell *cell)
 
   // Nothing particular found, then this is simply a string
   cell->setValue (KSpreadValue (str));
+}
+
+KSpreadValue ValueParser::parse (const QString &str, KLocale *locale)
+{
+  KSpreadValue val;
+  
+  // If the text is empty, we don't have a value
+  // If the user stated explicitly that he wanted text
+  // (using the format or using a quote),
+  // then we don't parse as a value, but as string.
+  if ( str.isEmpty() || str.at(0)=='\'' )
+  {
+    val.setValue (str);
+    return val;
+  }
+
+  bool ok;
+  
+  QString strStripped = str.stripWhiteSpace();
+  // Try parsing as various datatypes, to find the type of the string
+  // First as bool
+  val = tryParseBool (strStripped, locale, &ok);
+  if (ok)
+    return val;
+
+  // Then as a number
+  val = tryParseNumber (strStripped, locale, &ok);
+  if (ok)
+    return val;
+
+  // Test for money number
+  double money = locale->readMoney (strStripped, &ok);
+  if (ok)
+  {
+    val.setValue (money);
+    val.setFormat (KSpreadValue::fmt_Money);
+    return val;
+  }
+
+  val = tryParseDate (strStripped, locale, &ok);
+  if (ok)
+    return val;
+
+  val = tryParseTime (strStripped, locale, &ok);
+  if (ok)
+    return val;
+
+  // Nothing particular found, then this is simply a string
+  val.setValue (str);
+  return val;
 }
 
 bool ValueParser::tryParseBool (const QString& str, KSpreadCell *cell)

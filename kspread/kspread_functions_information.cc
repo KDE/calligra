@@ -41,6 +41,8 @@
 #include "kspread_doc.h"
 #include "kspread_sheet.h"
 #include "kspread_interpreter.h"
+#include "kspread_value.h"
+#include "valueconverter.h"
 
 // prototypes (sort alphabetically)
 //bool kspreadfunc_countblank( KSContext & context );
@@ -485,39 +487,36 @@ bool kspreadfunc_filename( KSContext & context )
 // Function: N
 bool kspreadfunc_n( KSContext & context )
 {
+  //currently the same as the VALUE function
+  
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "N", true ) )
     return false;
 
-  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
-  {
-    context.setValue( new KSValue( args[0]->doubleValue() ) );
-    return true;
-  }
-
-  if ( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-  {
-    context.setValue( new KSValue( args[0]->intValue() ) );
-    return true;
-  }
-
-  if ( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
-  {
-    context.setValue( new KSValue( args[0]->boolValue() ) );
-    return true;
-  }
-
-  if ( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
-  {
-    QDate date = args[0]->dateValue();
-    QDate ref = QDate( 1900, 1, 1 );
-    long serialno = -date.daysTo( ref ) + 2;
-    context.setValue( new KSValue( serialno ) );
-    return true;
-  }
-
-  context.setValue( new KSValue( (int)0 ) );
+  KSpreadValue val;
+  
+  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
+    val.setValue (args[0]->stringValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+    val.setValue (args[0]->doubleValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
+    val.setValue (args[0]->timeValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
+    val.setValue (args[0]->dateValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+    val.setValue (args[0]->intValue());
+  
+  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
+    val.setValue (args[0]->boolValue());
+    
+  val = KSpread::ValueConverter::self()->asFloat (val, KGlobal::locale());
+  
+  context.setValue( new KSValue( val.asFloat() ));
   return true;
 
 }

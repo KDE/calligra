@@ -47,6 +47,9 @@ class ValueParser {
   
   /** try to parse the text in a given cell and set value accordingly */
   void parse (const QString& str, KSpreadCell *cell);
+
+  /** try to parse given text, don't set any cell attributes though */
+  KSpreadValue parse (const QString &str, KLocale *locale);
   
   KSpreadValue tryParseBool (const QString& str, KLocale *locale, bool *ok = 0);
   KSpreadValue tryParseNumber (const QString& str, KLocale *locale, bool *ok = 0);
