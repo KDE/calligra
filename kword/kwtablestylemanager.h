@@ -66,6 +66,7 @@ class KWTableStyleListItem
 {
   public:
     KWTableStyleListItem() {}
+    ~KWTableStyleListItem();
     KWTableStyleListItem(KWTableStyle *orig, KWTableStyle *changed) {
         m_origTableStyle = orig;
         m_changedTableStyle = changed;
@@ -96,7 +97,7 @@ class KWTableStyleManager : public KDialogBase
 
 public:
     KWTableStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWTableStyle> & style );
-
+    ~KWTableStyleManager();
     KWTableStyle* addTableStyleTemplate(KWTableStyle *style);
     void removeTableStyleTemplate( KWTableStyle *style );
     void updateAllStyleLists();

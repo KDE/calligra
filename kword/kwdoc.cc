@@ -332,6 +332,7 @@ KWDocument::~KWDocument()
         saveConfig();
     // formula frames have to be deleted before m_formulaDocument
     m_lstFrameSet.clear();
+    m_bookmarkList.setAutoDelete( true );
     m_bookmarkList.clear();
     m_tmpBookMarkList.clear();
     delete m_autoFormat;
@@ -4181,6 +4182,7 @@ void KWDocument::initBookmarkList()
             }
         }
     }
+    m_tmpBookMarkList.setAutoDelete( true );
     m_tmpBookMarkList.clear();
 }
 

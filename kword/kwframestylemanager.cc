@@ -93,6 +93,10 @@ void KWFrameStylePreview::setFrameStyle( KWFrameStyle *_frameStyle )
 /* Class: KWFrameStyleListItem                                    */
 /******************************************************************/
 
+KWFrameStyleListItem::~KWFrameStyleListItem()
+{
+}
+
 void KWFrameStyleListItem::switchStyle()
 {
     delete m_changedFrameStyle;
@@ -146,6 +150,12 @@ KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc, co
     setInitialSize( QSize( 600, 370 ) );
     setButtonText( KDialogBase::User1, i18n("Import From File") );
     connect(this, SIGNAL(user1Clicked()), this, SLOT(importFromFile()));
+}
+
+KWFrameStyleManager::~KWFrameStyleManager()
+{
+    m_frameStyles.setAutoDelete( true );
+    m_frameStyles.clear();
 }
 
 void KWFrameStyleManager::addTab( KWFrameStyleManagerTab * tab )
@@ -599,6 +609,11 @@ KWFrameStyleBordersTab::KWFrameStyleBordersTab( QWidget * parent )
 {
     m_widget = 0L;
     m_borders = new KoParagLayout();
+}
+
+KWFrameStyleBordersTab::~KWFrameStyleBordersTab()
+{
+    delete m_borders;
 }
 
 QString KWFrameStyleBordersTab::tabName()

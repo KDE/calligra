@@ -70,6 +70,7 @@ class KWFrameStyleListItem
 {
   public:
     KWFrameStyleListItem() {}
+    ~KWFrameStyleListItem();
     KWFrameStyleListItem(KWFrameStyle *orig, KWFrameStyle *changed) {
         m_origFrameStyle = orig;
         m_changedFrameStyle = changed;
@@ -100,6 +101,7 @@ class KWFrameStyleManager : public KDialogBase
 
 public:
     KWFrameStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWFrameStyle> & style );
+    ~KWFrameStyleManager();
 
     KWFrameStyle* addFrameStyleTemplate(KWFrameStyle *style);
     void removeFrameStyleTemplate( KWFrameStyle *style );
@@ -190,7 +192,7 @@ class KWFrameStyleBordersTab : public KWFrameStyleManagerTab
     Q_OBJECT
 public:
     KWFrameStyleBordersTab( QWidget * parent );
-
+    ~KWFrameStyleBordersTab();
     void setWidget( KoParagLayoutWidget * widget );
 
     virtual void update();

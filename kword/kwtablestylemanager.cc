@@ -149,6 +149,10 @@ void KWTableStylePreview::setTableStyle( KWTableStyle *_tableStyle )
 /* Class: KWTableStyleListItem                                    */
 /******************************************************************/
 
+KWTableStyleListItem::~KWTableStyleListItem()
+{
+}
+
 void KWTableStyleListItem::switchStyle()
 {
     delete m_changedTableStyle;
@@ -199,6 +203,12 @@ KWTableStyleManager::KWTableStyleManager( QWidget *_parent, KWDocument *_doc, co
     setButtonText( KDialogBase::User1, i18n("Import From File") );
     connect(this, SIGNAL(user1Clicked()), this, SLOT(importFromFile()));
 
+}
+
+KWTableStyleManager::~KWTableStyleManager()
+{
+    m_tableStyles.setAutoDelete( true );
+    m_tableStyles.clear();
 }
 
 void KWTableStyleManager::setupWidget(const QPtrList<KWTableStyle> & styleList)
