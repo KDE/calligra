@@ -106,7 +106,7 @@ QString PalmDocImport::processPlainParagraph( QString text )
 
   QFont font = KoGlobal::defaultFont();
   QString fontFamily = font.family();
-  int fontSize = font.pointSize();
+  double fontSize = font.pointSizeFloat();
 
   // default LAYOUT
   layout.append( "<LAYOUT>\n" );
