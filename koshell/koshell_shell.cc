@@ -47,19 +47,23 @@ KoShellWindow::KoShellWindow()
 
   m_pFrame = new KoShellFrame( m_pLayout );
 
-  m_grpFile = m_pKoolBar->insertGroup("Parts");
+  m_grpFile = m_pKoolBar->insertGroup(i18n("Parts"));
   m_lstComponents = KoDocumentEntry::query();
   QValueList<KoDocumentEntry>::Iterator it = m_lstComponents.begin();
   for( ; it != m_lstComponents.end(); ++it )
+  {
+    kdDebug() << "Inserting into koolbar : " << (*it).name << endl;
     if ( !(*it).icon.isNull() )
     {
-      int id = m_pKoolBar->insertItem( m_grpFile, (*it).icon, (*it).name,
+      int id = m_pKoolBar->insertItem( m_grpFile, DesktopIcon((*it).icon),
+                                       (*it).name,
 				       this, SLOT( slotKoolBar( int, int ) ) );
       m_mapComponents[ id ] = &*it;
     }
+  }
 
-  m_grpDocuments = m_pKoolBar->insertGroup("Documents");
-  m_pKoolBar->insertGroup("Snippets");
+  m_grpDocuments = m_pKoolBar->insertGroup(i18n("Documents"));
+  //m_pKoolBar->insertGroup("Snippets"); //?
 
   m_pKoolBar->setFixedWidth( 80 );
   m_pKoolBar->setMinimumHeight( 300 );
@@ -182,9 +186,7 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
   v->show();
   m_pFrame->setView( v );
 
-  // HACK (Simon)
-  //m_pFrame->resize( m_pFrame->width() + 1, m_pFrame->height() );
-  //m_pFrame->resize( m_pFrame->width() - 1, m_pFrame->height() );
+  v->setGeometry( 0, 0, width(), height() );
 
   // Create a new page
   Page page;
