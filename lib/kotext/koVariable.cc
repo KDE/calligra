@@ -1105,8 +1105,10 @@ QString KoPgNumVariable::fieldCode()
 {
     if ( m_subtype == VST_PGNUM_CURRENT )
         return i18n("Page Current Num");
-    else if (  m_subtype == VST_PGNUM_TOTAL )
+    else if ( m_subtype == VST_PGNUM_TOTAL )
         return i18n("Total Page Num");
+    else if ( m_subtype == VST_CURRENT_SECTION )
+        return i18n("Current Section");
     else
         return i18n("Current Section");
 }
@@ -1117,7 +1119,7 @@ void KoPgNumVariable::saveVariable( QDomElement& parentElem )
     QDomElement pgNumElem = parentElem.ownerDocument().createElement( "PGNUM" );
     parentElem.appendChild( pgNumElem );
     pgNumElem.setAttribute( "subtype", m_subtype );
-    if ( m_subtype == VST_PGNUM_CURRENT || m_subtype == VST_PGNUM_TOTAL )
+    if ( m_subtype != VST_CURRENT_SECTION )
         pgNumElem.setAttribute( "value", m_varValue.toInt() );
     else
         pgNumElem.setAttribute( "value", m_varValue.toString() );
@@ -1130,7 +1132,7 @@ void KoPgNumVariable::load( QDomElement& elem )
     if (!pgNumElem.isNull())
     {
         m_subtype = pgNumElem.attribute("subtype").toInt();
-        if ( m_subtype == VST_PGNUM_CURRENT || m_subtype == VST_PGNUM_TOTAL )
+        if ( m_subtype != VST_CURRENT_SECTION )
             m_varValue = QVariant(pgNumElem.attribute("value").toInt());
         else
             m_varValue = QVariant(pgNumElem.attribute("value"));
