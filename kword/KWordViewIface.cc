@@ -321,3 +321,8 @@ void KWordViewIface::tableProperties()
 {
     view->tableProperties();
 }
+
+void KWordViewIface::importStyle()
+{
+    view->importStyle();
+}

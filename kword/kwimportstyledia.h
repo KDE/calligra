@@ -21,6 +21,7 @@
 #define __KWImportStyleDia__
 
 #include <kdialogbase.h>
+#include <koimportstyledia.h>
 #include <qstringlist.h>
 #include <kwframestyle.h>
 #include <kwtablestyle.h>
@@ -28,6 +29,22 @@ class QLineEdit;
 class QListBox;
 class KWDocument;
 class QPushButton;
+class KWStyle;
+
+class KWImportStyleDia : public KoImportStyleDia
+{
+    Q_OBJECT
+public:
+    KWImportStyleDia( KWDocument *_doc,const QStringList & _list, QWidget *parent, const char *name );
+    ~KWImportStyleDia();
+
+protected:
+    KWStyle *findStyle( const QString & _name);
+    virtual void loadFile();
+private:
+    KWDocument *m_doc;
+};
+
 
 class KWImportFrameTableStyleDia : public KDialogBase
 {

@@ -92,6 +92,7 @@
 #include <koPictureFilePreview.h>
 #include "kwtextdocument.h"
 #include "kwcreatebookmarkdia.h"
+#include "kwimportstyledia.h"
 
 #undef Bool
 #include <kspell.h>
@@ -1088,6 +1089,10 @@ void KWView::setupActions()
                                             this, SLOT( selectBookmark() ),
                                             actionCollection(), "select_bookmark" );
 
+    actionImportStyle= new KAction( i18n( "Import Style..." ), 0,
+                                            this, SLOT( importStyle() ),
+                                            actionCollection(), "import_style" );
+;
 }
 
 void KWView::refreshMenuExpression()
@@ -5867,6 +5872,19 @@ void KWView::selectBookmark()
                 }
             }
         }
+    }
+}
+
+void KWView::importStyle()
+{
+    QStringList lst;
+    QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        lst<<styleIt.current()->translatedName();
+    }
+    KWImportStyleDia dia( m_doc, lst, this, 0L );
+    if ( dia.exec() ) {
     }
 }
 

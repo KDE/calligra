@@ -103,6 +103,7 @@ k_dcop:
     void addBookmark();
     void selectBookmark();
     void tableProperties();
+    void importStyle();
 
 private:
     KWView *view;
