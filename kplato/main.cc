@@ -17,13 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "defs.h"
-#include "kptproject.h"
-#include "kpttask.h"
-#include "kptduration.h"
 #include "kptaboutdata.h"
 
-#include <kdebug.h>
 #include <koApplication.h>
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
