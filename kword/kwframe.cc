@@ -2230,7 +2230,7 @@ void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context
     writer.addAttribute( "xlink:show", "embed" );
     writer.addAttribute( "xlink:actuate", "onLoad" );
     if ( context.savingMode() == KoSavingContext::Store )
-        writer.addAttribute( "xlink:href", "#"+ m_doc->pictureCollection()->getOasisFileName(m_picture) );
+        writer.addAttribute( "xlink:href", m_doc->pictureCollection()->getOasisFileName(m_picture) );
     else {
         writer.startElement( "office:binary-data" );
         m_picture.saveAsBase64( writer );
@@ -2257,7 +2257,7 @@ void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& 
     else
     {
         const QString href( tag.attributeNS( KoXmlNS::xlink, "href", QString::null) );
-        if ( !href.isEmpty() && href[0] == '#' )
+        if ( !href.isEmpty() /*&& href[0] == '#'*/ )
         {
             QString strExtension;
             const int result=href.findRev(".");
@@ -2265,7 +2265,7 @@ void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& 
             {
                 strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
             }
-            QString filename(href.mid(1));
+            QString filename(href/*.mid(1)*/);
             key = KoPictureKey(filename, QDateTime::currentDateTime(Qt::UTC));
             m_picture.setKey(key);
 
