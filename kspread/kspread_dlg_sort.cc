@@ -54,7 +54,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
     setName( "KSpreadSortDlg" );
 
   resize( 528, 316 );
-  setCaption( "KSpread" );
+  setCaption( i18n( "Sorting" ) );
   //setSizeGripEnabled( true );
 
   QVBox *page = makeVBoxMainWidget();
