@@ -61,17 +61,40 @@ int main(int /*argc*/, char */*argv[]*/)
 	for (QStringList::iterator it = l.begin(); it != l.end() ; ++it)
 		kdDebug() << *it << endl;
 
-	while (c->moveNext()) {
-		kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+	if (c) {
+		while (c->moveNext()) {
+			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+		}
+		kdDebug()<<"Cursor error:"<<c->errorMsg()<<endl;
 	}
-	kdDebug()<<"Cursor error:"<<c->errorMsg()<<endl;
-	while (c2->moveNext()) {
-		kdDebug()<<"Cursor2: Value(0)"<<c2->value(0).asString()<<endl;
+	if (c2) {
+		while (c2->moveNext()) {
+			kdDebug()<<"Cursor2: Value(0)"<<c2->value(0).asString()<<endl;
+			kdDebug()<<"Cursor2: Value(1)"<<c2->value(1).asString()<<endl;
+		}
 	}
+	if (c) {
+		kdDebug()<<"Cursor::prev"<<endl;
+		while (c->movePrev()) {
+			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
 
-	kdDebug()<<"Cursor::prev"<<endl;
-	while (c->movePrev()) {
-		kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+		}
+		kdDebug()<<"up/down"<<endl;
+			c->moveNext();
+			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			c->moveNext();
+			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			c->movePrev();
+			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			c->movePrev();
+			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+
 	}
 #if 0
 	KexiDB::Table *t = conn->tableSchema( "persons" );
