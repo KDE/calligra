@@ -39,3 +39,13 @@ DCOPRef KIvioDocIface::map()
     return DCOPRef( kapp->dcopClient()->appId(),
                     doc->map()->dcopObject()->objId() );
 }
+
+void KIvioDocIface::initConfig()
+{
+    doc->initConfig();
+}
+
+void KIvioDocIface::saveConfig()
+{
+    doc->saveConfig();
+}

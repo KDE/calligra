@@ -36,6 +36,8 @@ public:
 k_dcop:
     virtual void aboutKivio();
     virtual DCOPRef map();
+    void initConfig();
+    void saveConfig();
 
 private:
     KivioDoc *doc;
