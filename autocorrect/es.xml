@@ -70,7 +70,6 @@
   <item find="dentrifico" replace="dentifríco" />
   <item find="dentrífico" replace="dentifríco" />
   <item find="desarollo" replace="desarrollo" />
-  <item find="dentrífico" replace="dentifríco" />
   <item find="desed" replace="desde" />
   <item find="desinfestar" replace="desinfectar" />
   <item find="detení" replace="detuve" />
@@ -94,6 +93,7 @@
   <item find="esquíes" replace="esquís" />
   <item find="immediato" replace="inmediato" />
   <item find="preveer" replace="prever" />
+  <item find="oculatación" replace="ocultación" />
   <item find="próxiam" replace="próxima" />
   <item find="próxiom" replace="próximo" />
   <item find="dieciseis" replace="dieciséis" />
