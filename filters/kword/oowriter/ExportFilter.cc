@@ -66,14 +66,14 @@ QString OOWriterWorker::escapeOOText(const QString& strText) const
     return KWEFUtil::EscapeSgmlText(NULL,strText,true,true);
 }
 
-
 QString OOWriterWorker::escapeOOSpan(const QString& strText) const
 // We need not only to escape the classical XML stuff but also to take care of spaces and tabs.
-// ### FIXME: be careful of bordercases like <tag> </tag>  or <tag> <tag2/> </tag>
+// Also we must take care about not falling into the rules in XML about white space between 2 opening tags or between 2 closing tags
 {
     QString strReturn;
     QChar ch;
     int spaceNumber = 0; // How many spaces should be written
+    uint spaceSequenceStart = 9999; // Where does the space sequence start (start value must be non-null)
 
     for (uint i=0; i<strText.length(); i++)
     {
@@ -84,11 +84,16 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
             // The next character is not a space (anymore)
             if ( spaceNumber > 0 )
             {
-                strReturn += ' '; // Always write one space
+                if ( spaceSequenceStart )
+                {   // Generate a real space only if we are not at start
+
+                    strReturn += ' ';
+                    --spaceNumber;
+                }
                 if ( spaceNumber > 1 )
                 {
                     strReturn += "<text:s text:c=\"";
-                    strReturn += QString::number( spaceNumber - 1 );
+                    strReturn += QString::number( spaceNumber );
                     strReturn += "\"/>";
                 }
             }
@@ -117,6 +122,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
                 else
                 {
                     spaceNumber = 1;
+                    spaceSequenceStart = i;
                 }
                 break;
             }
