@@ -66,3 +66,25 @@ int KPresenterObject2DIface::yGradientFactor() const
     return obj->getGYFactor();
 }
 
+QString KPresenterObject2DIface::gradientFillType() const
+{
+    switch(obj->getFillType())
+    {
+    case FT_BRUSH:
+        return QString("BRUSH");
+    case FT_GRADIENT:
+        return QString("GRADIENT");
+
+    }
+    return QString::null;
+}
+
+void KPresenterObject2DIface::setGradientType( const QString & type)
+{
+    if(type=="BRUSH")
+        obj->setFillType(FT_BRUSH);
+    else if(type=="GRADIENT")
+        obj->setFillType(FT_GRADIENT);
+    else
+        kdDebug()<<"Error KPresenterObject2DIface::setGradientType\n";
+}
