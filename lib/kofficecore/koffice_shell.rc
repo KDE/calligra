@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOfficeShell" version="7">
+<kpartgui name="KOfficeShell" version="8">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -43,5 +43,6 @@
   <Action name="file_open" />
   <Action name="file_save" />
   <Action name="file_print" />
+  <Action name="file_print_preview" />
 </ToolBar>
 </kpartgui>
