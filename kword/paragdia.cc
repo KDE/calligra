@@ -1425,7 +1425,9 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * p
 
 void KWParagTabulatorsWidget::slotTabValueChanged( const QString &_text )
 {
-    bAdd->setEnabled(!_text.isEmpty());
+    bool state=!_text.isEmpty();
+    bAdd->setEnabled(state);
+    bModify->setEnabled(state && lTabs->currentItem()!=-1);
 }
 
 void KWParagTabulatorsWidget::addClicked()
@@ -1441,7 +1443,7 @@ void KWParagTabulatorsWidget::addClicked()
 	}
 
         lTabs->insertItem(eTabPos->text());
-        bDel->setEnabled(true);
+        bDel->setEnabled(lTabs->currentItem()!=-1);
         bModify->setEnabled(true);
 
         KoTabulator tab;
