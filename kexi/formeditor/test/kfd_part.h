@@ -77,11 +77,11 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		void open();
 		void slotPreviewForm();
 		void saveAs();
-		//void slotCreateFormSlot(Form *form, const QString &widget, const QString &signal);
+		//void slotCreateFormSlot(KFormDesigner::Form *form, const QString &widget, const QString &signal);
 
 	protected slots:
-		void slotWidgetSelected(Form *form, bool multiple);
-		void slotFormWidgetSelected(Form *form);
+		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
+		void slotFormWidgetSelected(KFormDesigner::Form *form);
 		void slotNoFormSelected();
 		void slotFormModified(KFormDesigner::Form *form, bool isDirty);
 		void setUndoEnabled(bool enabled, const QString &text);

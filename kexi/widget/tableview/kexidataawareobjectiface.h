@@ -498,6 +498,22 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 QScrollView::updateScrollbars() will be usually called here. */
 		virtual void updateWidgetScrollBars() = 0;
 
+		//! Handles KexiTableViewData::rowRepaintRequested() signal
+		virtual void slotRowRepaintRequested(KexiTableItem& item) {}
+
+		//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+		virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, 
+			bool repaint) {}
+
+		//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
+		virtual void slotRowDeleted() {}
+
+		//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
+		virtual void slotRowInserted(KexiTableItem *item, bool repaint) {}
+
+		//! Like above, not db-aware version
+		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint) {}
+
 		//! for sanity checks (return true if m_data is present; else: outputs warning)
 		inline bool hasData() const;
 
@@ -605,7 +621,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 inline bool KexiDataAwareObjectInterface::hasData() const
 {
 	if (!m_data)
-		kdWarning() << "KexiDataAwareObjectInterface: No data assigned!" << endl;
+		kdDebug() << "KexiDataAwareObjectInterface: No data assigned!" << endl;
 	return m_data!=0;
 }
 

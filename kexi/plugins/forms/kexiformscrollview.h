@@ -92,6 +92,21 @@ class KexiFormScrollView :
 	protected slots:
 		void slotResizingStarted();
 
+		//! Handles KexiTableViewData::rowRepaintRequested() signal
+		virtual void slotRowRepaintRequested(KexiTableItem& item);
+
+		//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+		virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
+
+		//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
+		virtual void slotRowDeleted();
+
+		//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
+		virtual void slotRowInserted(KexiTableItem *item, bool repaint);
+
+		//! Like above, not db-aware version
+		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
+
 	protected:
 		//! Implementation for KexiDataAwareObjectInterface
 		virtual void clearColumnsInternal(bool repaint);

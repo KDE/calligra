@@ -674,19 +674,19 @@ protected slots:
 	virtual void reloadData() { KexiDataAwareObjectInterface::reloadData(); }
 
 	//! Handles KexiTableViewData::rowRepaintRequested() signal
-	void slotRowRepaintRequested(KexiTableItem& item);
+	virtual void slotRowRepaintRequested(KexiTableItem& item);
 
 	//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-	void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
+	virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
 
 	//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
-	void slotRowDeleted();
+	virtual void slotRowDeleted();
 
 	//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
-	void slotRowInserted(KexiTableItem *item, bool repaint);
+	virtual void slotRowInserted(KexiTableItem *item, bool repaint);
 
 	//! Like above, not db-aware version
-	void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
+	virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
 
 protected:
 	/*! Reimplementation for KexiDataAwareObjectInterface 

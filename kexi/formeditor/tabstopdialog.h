@@ -45,7 +45,7 @@ class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
 		virtual ~TabStopDialog() {;}
 
 	public slots:
-		int exec(Form *form);
+		int exec(KFormDesigner::Form *form);
 		void MoveItemUp();
 		void MoveItemDown();
 		void updateButtons(QListViewItem*);

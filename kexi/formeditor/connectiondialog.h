@@ -86,10 +86,10 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 
 		/*! This slot is called when the user ends connection creation (when in drag-and-drop mode). The dialog is restored,
 		  and the created connection is added to the list. */
-		void slotConnectionCreated(Form *form, Connection &connection);
+		void slotConnectionCreated(KFormDesigner::Form *form, KFormDesigner::Connection &connection);
 		/*! This slot is called when the user aborts connection creation (when in drag-and-drop mode). The dialog is restored,
 		  and an empty connection is created. */
-		void slotConnectionAborted(Form *form);
+		void slotConnectionAborted(KFormDesigner::Form *form);
 
 		void slotCellSelected(int col, int row);
 		void slotRowInserted(KexiTableItem*,bool);

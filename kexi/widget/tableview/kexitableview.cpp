@@ -838,7 +838,8 @@ void KexiTableView::deleteCurrentRow()
 }
 #endif //moved
 
-void KexiTableView::slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* /*result*/, bool repaint)
+void KexiTableView::slotAboutToDeleteRow(KexiTableItem& item, 
+	KexiDB::ResultInfo* /*result*/, bool repaint)
 {
 	if (repaint) {
 		d->rowWillBeDeleted = m_data->findRef(&item);

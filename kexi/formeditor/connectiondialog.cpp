@@ -367,14 +367,14 @@ ConnectionDialog::newItemByDragnDrop()
 {
 	FormManager *manager = m_form->manager();
 	m_form->manager()->startCreatingConnection();
-	connect(manager, SIGNAL(connectionAborted(Form*)), this, SLOT(slotConnectionAborted(Form*)));
-	connect(manager, SIGNAL(connectionCreated(Form*, Connection&)), this, SLOT(slotConnectionCreated(Form*, Connection&)) );
+	connect(manager, SIGNAL(connectionAborted(KFormDesigner::Form*)), this, SLOT(slotConnectionAborted(KFormDesigner::Form*)));
+	connect(manager, SIGNAL(connectionCreated(KFormDesigner::Form*, Connection&)), this, SLOT(slotConnectionCreated(KFormDesigner::Form*, Connection&)) );
 
 	hide();
 }
 
 void
-ConnectionDialog::slotConnectionCreated(Form *form, Connection &connection)
+ConnectionDialog::slotConnectionCreated(KFormDesigner::Form *form, Connection &connection)
 {
 	show();
 	if(form != m_form)
@@ -391,7 +391,7 @@ ConnectionDialog::slotConnectionCreated(Form *form, Connection &connection)
 }
 
 void
-ConnectionDialog::slotConnectionAborted(Form *form)
+ConnectionDialog::slotConnectionAborted(KFormDesigner::Form *form)
 {
 	show();
 	if(form != m_form)

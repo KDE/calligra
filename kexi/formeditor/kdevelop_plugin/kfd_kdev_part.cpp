@@ -138,16 +138,16 @@ KFormDesignerKDevPart::KFormDesignerKDevPart(QWidget *parent, const char *name, 
 		setModified(false);
 
 		// action stuff
-		connect(m_manager, SIGNAL(widgetSelected(Form*, bool)), SLOT(slotWidgetSelected(Form*, bool)));
-		connect(m_manager, SIGNAL(formWidgetSelected(Form*)), SLOT(slotFormWidgetSelected(Form*)));
+		connect(m_manager, SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
+		connect(m_manager, SIGNAL(formWidgetSelected(KFormDesigner::Form*)), SLOT(slotFormWidgetSelected(KFormDesigner::Form*)));
 		connect(m_manager, SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
 		connect(m_manager, SIGNAL(undoEnabled(bool, const QString&)), SLOT(setUndoEnabled(bool, const QString&)));
 		connect(m_manager, SIGNAL(redoEnabled(bool, const QString&)), SLOT(setRedoEnabled(bool, const QString&)));
 
 		connect(m_manager, SIGNAL(dirty(KFormDesigner::Form*, bool)), this, SLOT(slotFormModified(KFormDesigner::Form*, bool)));
 
-		connect(m_manager, SIGNAL(createFormSlot(Form*, const QString&, const QString&)),
-			this, SLOT(slotCreateFormSlot(Form*, const QString&, const QString &)));
+		connect(m_manager, SIGNAL(createFormSlot(KFormDesigner::Form*, const QString&, const QString&)),
+			this, SLOT(slotCreateFormSlot(KFormDesigner::Form*, const QString&, const QString &)));
 	}
 
 	container->show();

@@ -101,7 +101,7 @@ FormManager::FormManager(QObject *parent,
 
 	m_deleteWidgetLater_list.setAutoDelete(true);
 	connect( &m_deleteWidgetLater_timer, SIGNAL(timeout()), this, SLOT(deleteWidgetLaterTimeout()));
-	connect( this, SIGNAL(connectionCreated(Form*, Connection&)), this, SLOT(slotConnectionCreated(Form*, Connection&)));
+	connect( this, SIGNAL(connectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)), this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
 }
 
 FormManager::~FormManager()

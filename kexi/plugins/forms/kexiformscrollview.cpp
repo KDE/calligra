@@ -217,4 +217,30 @@ void KexiFormScrollView::updateWidgetScrollBars()
 	//! @todo
 }
 
+void KexiFormScrollView::slotRowRepaintRequested(KexiTableItem& item)
+{
+	//! @todo
+}
+
+void KexiFormScrollView::slotAboutToDeleteRow(KexiTableItem& item, 
+	KexiDB::ResultInfo* result, bool repaint)
+{
+	//! @todo
+}
+
+void KexiFormScrollView::slotRowDeleted()
+{
+	//! @todo
+}
+
+void KexiFormScrollView::slotRowInserted(KexiTableItem *item, bool repaint)
+{
+	//! @todo
+}
+
+void KexiFormScrollView::slotRowInserted(KexiTableItem *item, uint row, bool repaint)
+{
+	//! @todo
+}
+
 #include "kexiformscrollview.moc"

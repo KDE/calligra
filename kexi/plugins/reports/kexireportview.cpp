@@ -108,8 +108,8 @@ KexiReportView::KexiReportView(KexiMainWindow *win, QWidget *parent, const char 
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
 		// action stuff
-		connect(reportPart()->manager(), SIGNAL(widgetSelected(Form*, bool)), SLOT(slotWidgetSelected(Form*, bool)));
-		connect(reportPart()->manager(), SIGNAL(formWidgetSelected(Form*)), SLOT(slotFormWidgetSelected(Form*)));
+		connect(reportPart()->manager(), SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
+		connect(reportPart()->manager(), SIGNAL(formWidgetSelected(KFormDesigner::Form*)), SLOT(slotFormWidgetSelected(KFormDesigner::Form*)));
 		connect(reportPart()->manager(), SIGNAL(undoEnabled(bool, const QString&)), this, SLOT(setUndoEnabled(bool)));
 		connect(reportPart()->manager(), SIGNAL(redoEnabled(bool, const QString&)), this, SLOT(setRedoEnabled(bool)));
 

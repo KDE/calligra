@@ -56,6 +56,8 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char 
 //moved , m_currentRow(0)
 //moved , m_currentRowNumber(-1)
 {
+	m_delayedFormContentsResizeOnShow = false;
+
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setAutoAdd(true);
 
@@ -65,6 +67,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char 
 //	m_scrollView->show();
 
 	m_dbform = new KexiDBForm(m_scrollView->viewport(), name/*, conn*/);
+//	m_dbform->resize( m_scrollView->viewport()->size() - QSize(20, 20) );
 //	m_dbform->resize(QSize(400, 300));
 	m_scrollView->setWidget(m_dbform);
 	m_scrollView->setResizingEnabled(viewMode()!=Kexi::DataViewMode);
@@ -84,8 +87,8 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char 
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
 		// action stuff
-		connect(formPart()->manager(), SIGNAL(widgetSelected(Form*, bool)), SLOT(slotWidgetSelected(Form*, bool)));
-		connect(formPart()->manager(), SIGNAL(formWidgetSelected(Form*)), SLOT(slotFormWidgetSelected(Form*)));
+		connect(formPart()->manager(), SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), this, SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
+		connect(formPart()->manager(), SIGNAL(formWidgetSelected(KFormDesigner::Form*)), this, SLOT(slotFormWidgetSelected(KFormDesigner::Form*)));
 		connect(formPart()->manager(), SIGNAL(undoEnabled(bool, const QString&)), this, SLOT(setUndoEnabled(bool)));
 		connect(formPart()->manager(), SIGNAL(redoEnabled(bool, const QString&)), this, SLOT(setRedoEnabled(bool)));
 
@@ -168,10 +171,11 @@ KexiFormView::initForm()
 	setForm( new KFormDesigner::Form(formPart()->manager()) );
 	form()->createToplevel(m_dbform, m_dbform);
 
-	// Show the form wizard if this is a new Form
+	const bool newForm = parentDialog()->id() < 0;
+
 	KexiDB::FieldList *fields = 0;
-	if(parentDialog()->id() < 0)
-	{
+	if (newForm) {
+		// Show the form wizard if this is a new Form
 #ifndef NO_DSWIZARD
 		KexiDataSourceWizard *w = new KexiDataSourceWizard(mainWin(), (QWidget*)mainWin(), "datasource_wizard");
 		if(!w->exec())
@@ -181,8 +185,6 @@ KexiFormView::initForm()
 		delete w;
 #endif
 	}
-	else
-		fields = 0;
 
 	if(fields)
 	{
@@ -200,6 +202,12 @@ KexiFormView::initForm()
 //	m_scrollView->resize( s );
 //	m_dbform->resize(s);
 	m_scrollView->refreshContentsSize();
+
+	if (newForm && !fields) {
+		/* Our form's area will be resized more than once. 
+		Let's resize form widget itself later. */
+		m_delayedFormContentsResizeOnShow = true;
+	}
 }
 
 void
@@ -554,6 +562,10 @@ KexiFormView::resizeEvent( QResizeEvent *e )
 	}
 	KexiViewBase::resizeEvent(e);
 	m_scrollView->updateNavPanelGeometry();
+	if (m_delayedFormContentsResizeOnShow && isVisible()) {
+		m_delayedFormContentsResizeOnShow = false;
+		m_dbform->resize( e->size() - QSize(20, 20) );
+	}
 }
 
 /* moved

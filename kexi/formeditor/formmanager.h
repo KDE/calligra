@@ -210,26 +210,71 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void stopCreatingConnection();
 
 		/*! Calls this slot when the window activated changes (eg connect
-		  to QWorkspace::windowActivated(QWidget*)). You <b>need</b> to connect
-		   to this slot, it will crash otherwise.
-		  */
+		 to QWorkspace::windowActivated(QWidget*)). You <b>need</b> to connect
+		 to this slot, it will crash otherwise.
+		*/
 		void windowChanged(QWidget *w);
 
 		//! Used to delayed widgets' deletion (in Container::deleteItem())
 		void deleteWidgetLater( QWidget *w );
 
+	signals:
+		/*! this signal is emmited as the property buffer switched */
+		void bufferSwitched(KexiPropertyBuffer *buff);
+
+		/*! This signal is emitted when any change is made to the Form \a form, 
+		 so it will need to be saved. */
+		void dirty(KFormDesigner::Form *form, bool isDirty=true);
+
+		/*! Signal emitted when a normal widget is selected inside \a form 
+		 (ie not form widget). If \a multiple is true,
+		 then more than one widget is selected. Use this to update actions state. */
+		void widgetSelected(KFormDesigner::Form *form, bool multiple);
+
+		/*! Signal emitted when the form widget is selected inside \a form. 
+		 Use this to update actions state. */
+		void formWidgetSelected(KFormDesigner::Form *form);
+
+		/*! Signal emitted when no form (or a preview form) is selected. 
+		 Use this to update actions state. */
+		void noFormSelected();
+
+		/*! Signal emitted when undo action activation changes. 
+		 \a text is the full text of the action (including command name). */
+		void undoEnabled(bool enabled, const QString &text = QString::null);
+
+		/*! Signal emitted when redo action activation changes. 
+		 \a text is the full text of the action (including command name). */
+		void redoEnabled(bool enabled, const QString &text = QString::null);
+
+		/*! Signal emitted when the user choose a signal in 'Events' menu 
+		 in context menu, or in 'Events' in property editor.
+		 The code editor should then create the slot connected to this signal. */
+		void createFormSlot(KFormDesigner::Form *form, const QString &widget, const QString &signal);
+
+		/*! Signal emitted when the Connection creation by drag-and-drop ends.
+		 \a connection is the created Connection. You should copy it,
+		  because it is deleted just after the signal is emitted. */
+		void connectionCreated(KFormDesigner::Form *form, KFormDesigner::Connection &connection);
+
+		/*! Signal emitted when the Connection creation by drag-and-drop is aborted by user. */
+		void connectionAborted(KFormDesigner::Form *form);
+
 	protected slots:
 		void deleteWidgetLaterTimeout();
+
 		/*! Slot called when a buddy is choosed in the buddy list. Sets the label buddy. */
 		void buddyChoosed(int id);
+
 		/*! Slot called when the user chooses an item in signal (or slot) menu.
 		 The \ref createdConnection() is updated, and the connection created
 		 (for the signal menu). */
 		void menuSignalChoosed(int id);
+
 		/*! Slot called when the user changes current style using combbox in toolbar or menu. */
 		void slotStyle();
 
-		void slotConnectionCreated(Form*, Connection&);
+		void slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&);
 
 	protected:
 		/*! Inits the Form, adds it to m_forms, and conects slots. */
@@ -239,40 +284,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  currently selected widgets (that must have the same parent).
 		  Calls \ref CreateLayoutCommand. */
 		void createLayout(int layoutType);
+
 		/*! Function called by all other AlignWidgets*() function. Calls \ref AlignWidgetsCommand. */
 		void alignWidgets(int type);
 
-	signals:
-		/*! this signal is emmited as the property buffer switched */
-		void bufferSwitched(KexiPropertyBuffer *buff);
-		/*! This signal is emitted when any change is made to the Form \a form, so it will need to be saved. */
-		void dirty(KFormDesigner::Form *form, bool isDirty=true);
-
-		/*! Signal emitted when a normal widget is selected inside \a form (ie not form widget). If \a multiple is true,
-		  then more than one widget is selected. Use this to update actions state. */
-		void widgetSelected(Form *form, bool multiple);
-		/*! Signal emitted when the form widget is selected inside \a form. Use this to update actions state. */
-		void formWidgetSelected(Form *form);
-		/*! Signal emitted when no form (or a preview form) is selected. Use this to update actions state. */
-		void noFormSelected();
-		/*! Signal emitted when undo action activation changes. \a text is the full text of the action (including command name). */
-		void undoEnabled(bool enabled, const QString &text = QString::null);
-		/*! Signal emitted when redo action activation changes. \a text is the full text of the action (including command name). */
-		void redoEnabled(bool enabled, const QString &text = QString::null);
-
-		/*! Signal emitted when the user choose a signal in 'Events' menu in context menu, or in 'Events' in property editor.
-		  The code editor should then create the slot connected to this signal. */
-		void createFormSlot(Form *form, const QString &widget, const QString &signal);
-		/*! Signal emitted when the Connection creation by drag-and-drop ends.
-		 \a connection is the created Connection. You should copy it,
-		  because it is deleted just after the signal is emitted. */
-		void connectionCreated(Form *form, Connection &connection);
-		/*! Signal emitted when the Connection creation by drag-and-drop is aborted by user. */
-		void connectionAborted(Form *form);
-
 	private:
-		// Enum for menu items indexes
-		enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301, MenuVBox, MenuGrid, MenuNoBuddy = 501 };
+		//! Enum for menu items indexes
+		enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301, 
+			MenuVBox, MenuGrid, MenuNoBuddy = 501 };
 
 		ObjectPropertyBuffer	*m_buffer;
 		WidgetLibrary		*m_lib;
