@@ -785,6 +785,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                 break;
             default:
                 kdDebug(30511) << "Formula contains unhandled ptg " << ptg << endl;
+                return ""; // Return empty formula-string on error
                 break;
         }
     }
@@ -1070,12 +1071,19 @@ bool XMLTree::_format(Q_UINT16, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_formula(Q_UINT16, QDataStream& body)
+bool XMLTree::_formula(Q_UINT16 size, QDataStream& body)
 {
+  char *store = new char[size];
   Q_UINT16 row, column, xf, skip;
+  QByteArray a;
 
   body >> row >> column >> xf;
   body >> skip >> skip >> skip >> skip >> skip >> skip >> skip >> skip;
+
+  body.readRawBytes(store, size-22);
+  a.setRawData(store, size-22);
+  QDataStream fbody(a, IO_ReadOnly);
+  fbody.setByteOrder(QDataStream::LittleEndian);
 
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
@@ -1083,9 +1091,12 @@ bool XMLTree::_formula(Q_UINT16, QDataStream& body)
   e.setAttribute("column", (int) column+1);
 
   QDomElement text = root->createElement("text");
-  text.appendChild(root->createTextNode(getFormula(row, column, body)));
+  text.appendChild(root->createTextNode(getFormula(row, column, fbody)));
   e.appendChild(text);
   table->appendChild(e);
+
+  a.resetRawData(store, size-22);
+  delete []store;
 
   return true;
 }
