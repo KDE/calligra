@@ -243,13 +243,26 @@ bool AmiProParser::parseParagraph( const QString& partext )
     format.len = nextpos - format.pos;
   }
 
+  if( !m_layout.name.isEmpty() )
+  {
+    AmiProStyleList::iterator it;
+    for( it=m_styleList.begin(); it!=m_styleList.end(); ++it )
+    {
+       AmiProStyle& style = *it;
+       if( style.name == m_layout.name )
+         m_layout.applyStyle( style );
+    }
+  } 
+
+  bool result = true;
+
   if( m_listener ) 
-    return m_listener->doParagraph( m_text, m_formatList, m_layout );
+    result = m_listener->doParagraph( m_text, m_formatList, m_layout );
 
   // reinit layout for subsequent paragraph
   m_layout = AmiProLayout();
 
-  return true;
+  return result;
 }
 
 bool AmiProParser::parseStyle( const QStringList& lines )
@@ -261,7 +274,7 @@ bool AmiProParser::parseStyle( const QStringList& lines )
 
   if( lines[2].stripWhiteSpace() != "[fnt]" ) return true;
   style.fontFamily = lines[3].stripWhiteSpace();
-  style.fontSize = lines[4].stripWhiteSpace().toFloat();
+  style.fontSize = lines[4].stripWhiteSpace().toFloat() / 20.0;
 
   unsigned color = lines[5].stripWhiteSpace().toUInt();
   style.fontColor.setRgb( color&255, (color>>8)&255, (color>>16)&255);
@@ -479,7 +492,7 @@ AmiProFormat& AmiProFormat::operator=(  const AmiProFormat& f )
 // paragraph layout
 AmiProLayout::AmiProLayout()
 {
-  name = "Standard";
+  name = "";
   fontFamily = "";
   fontSize = 12;
   fontColor = Qt::black;
@@ -515,6 +528,21 @@ AmiProLayout& AmiProLayout::operator=( const AmiProLayout& l )
 {
   assign( l );
   return *this;
+}
+
+void AmiProLayout::applyStyle( const AmiProStyle& style )
+{
+  fontFamily = style.fontFamily;
+  fontSize = style.fontSize;
+  fontColor = style.fontColor;
+  bold = style.bold;
+  italic = style.italic;
+  underline = style.underline;
+  word_underline = style.word_underline;
+  double_underline = style.double_underline;
+  subscript = style.subscript;
+  superscript = style.superscript;
+  strikethrough = style.strikethrough;
 }
 
 // style definition

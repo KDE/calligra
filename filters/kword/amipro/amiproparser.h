@@ -44,6 +44,8 @@ class AmiProFormat
 
 typedef QValueList<AmiProFormat> AmiProFormatList;
 
+class AmiProStyle;
+
 class AmiProLayout
 {
   public:
@@ -59,6 +61,7 @@ class AmiProLayout
     AmiProLayout( const AmiProLayout& );
     AmiProLayout& operator=( const AmiProLayout& );
     void assign( const AmiProLayout& );
+    void applyStyle( const AmiProStyle& );
 };
 
 class AmiProStyle

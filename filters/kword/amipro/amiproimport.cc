@@ -148,6 +148,8 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
   result.append( "  <PAGEBREAKING />\n" );
   result.append( "  <COUNTER />\n" );
   result.append( "  <FORMAT id=\"1\">\n" );
+  result.append( "    <FONT name=\"" + fontname + "\" />\n" );
+  result.append( "    <SIZE value=\"" + fontsize + "\" />\n" );
   result.append( "    <WEIGHT value=\"" + boldness + "\" />\n" );
   result.append( "    <ITALIC value=\"" + italic  + "\" />\n" );
   result.append( "    <STRIKEOUT value=\"" + strikeout + "\" />\n" );
