@@ -73,7 +73,7 @@ EpsExport::convert( const QCString& from, const QCString& to )
 	doc.load( docNode );
 
 	// find the bounding box of all objects:
-	doc.selectAllObjects();
+	doc.select();
 	const KoRect& rect = doc.selection().boundingBox();
 
 	// header:

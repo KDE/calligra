@@ -278,7 +278,7 @@ void KarbonAIParserBase::gotEndGroup (bool clipping)
 
   if (m_groupStack.isEmpty())
   {
-    m_layer->appendObject (group);
+    m_layer->append( group );
   }
   else
   {
@@ -369,11 +369,11 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
 
   if (m_groupStack.isEmpty())
   {
-    m_layer->appendObject(m_curKarbonPath);
+    m_layer->append( m_curKarbonPath );
   }
   else
   {
-    m_groupStack.top()->insertObject(m_curKarbonPath);
+    m_groupStack.top()->insert( m_curKarbonPath );
   }
 
   m_curKarbonPath = new VPath();
@@ -388,7 +388,7 @@ bool KarbonAIParserBase::parse (QIODevice& fin, QDomDocument &doc)
   if (res)
   {
       qDebug ("before save document");
-      m_document->save (doc);
+//      m_document->save (doc);
       qDebug ("after save document");
   }
   else
