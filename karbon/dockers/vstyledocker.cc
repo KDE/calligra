@@ -267,9 +267,12 @@ ClipartWidget::importClipart()
 		KoFilterManager man( m_part );
 		KoFilter::ConversionStatus status;
 		QString importedFile = man.import( fname, status );
-		m_part->mergeNativeFormat( importedFile );
+		if( status == KoFilter::OK )
+			m_part->mergeNativeFormat( importedFile );
 		if( !importedFile.isEmpty() )
 			unlink( QFile::encodeName( importedFile ) );
+		if( status != KoFilter::OK )
+			return;
 	}
 	m_part->document().selection()->clear();
 	m_part->document().selection()->append( m_part->document().activeLayer()->objects() );
