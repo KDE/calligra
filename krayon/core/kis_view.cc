@@ -1416,13 +1416,13 @@ void KisView::activateTool(KisTool* t)
 	if(m_pTool) {
 		m_pTool -> clearOld();
 		QObject::disconnect(m_pTool);
-		m_pTool -> setChecked(false);
-		m_pTool -> setBrush(m_pBrush);
-		m_pTool -> setPattern(m_pPattern);
 	}
 
 	m_pTool = t;
 	m_pTool -> setChecked(true);
+	m_pTool -> setChecked(false);
+	m_pTool -> setBrush(m_pBrush);
+	m_pTool -> setPattern(m_pPattern);
 
 	QObject::connect(this, SIGNAL(canvasMousePressEvent(QMouseEvent*)), m_pTool, SLOT(mousePress(QMouseEvent*)));
 	QObject::connect(this, SIGNAL(canvasMouseMoveEvent(QMouseEvent*)), m_pTool, SLOT(mouseMove(QMouseEvent*)));
