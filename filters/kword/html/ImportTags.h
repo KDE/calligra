@@ -19,6 +19,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef IMPORTTAGS_H
+#define IMPORTTAGS_H
+
 class ParsingTag
 {
 public:
@@ -32,3 +35,5 @@ private:
 };
 
 bool InitMapTag(QMap<QString,ParsingTag> & mapTag);
+
+#endif
