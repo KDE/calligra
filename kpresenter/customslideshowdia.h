@@ -26,7 +26,6 @@
 class QListBox;
 class QListBoxItem;
 class QLineEdit;
-class QMultiLineEdit;
 class QPushButton;
 class KPresenterDoc;
 class QToolButton;
