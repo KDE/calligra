@@ -1265,7 +1265,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	if ( _clean )
 	    setPageLayout( __pgLayout, 0, 0 );
 	else {
-	    QRect r = getPageRect( 0, 0, 0 );
+	    QRect r = m_pageList.last()->getZoomPageRect();
             m_pageList.last()->background()->setBgSize(r.size());
 	}
 
