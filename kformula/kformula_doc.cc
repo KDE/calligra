@@ -82,9 +82,7 @@ QDomDocument KFormulaDoc::saveXML()
 {
     QDomDocument doc("FORMULA");
     formula->save(doc);
-#ifdef HAVE_KDEPRINT // i.e. kdelibs > 2.1
     history->documentSaved();
-#endif
     return doc;
 }
 
@@ -96,9 +94,7 @@ bool KFormulaDoc::loadXML(QIODevice *, const QDomDocument& doc)
 
     if (formula->load(doc)) {
         history->clear();
-#ifdef HAVE_KDEPRINT // i.e. kdelibs > 2.1
         history->documentSaved();
-#endif
         return true;
     }
     return false;
