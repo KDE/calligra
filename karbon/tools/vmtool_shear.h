@@ -27,6 +27,8 @@ public:
 protected:
 	VMToolShear( KarbonPart* part );
 
+	void setCursor( KarbonView* view ) const;
+
 private:
 	static VMToolShear* s_instance;
 

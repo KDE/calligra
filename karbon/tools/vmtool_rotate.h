@@ -27,12 +27,15 @@ public:
 protected:
 	VMToolRotate( KarbonPart* part );
 
+	void setCursor( KarbonView* view ) const;
+
 private:
 	static VMToolRotate* s_instance;
 
 	// input (mouse coordinates):
 	QPoint m_fp;
 	QPoint m_lp;
+	QPoint m_sp;
 
 	double m_angle;
 

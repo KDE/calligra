@@ -10,9 +10,12 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vmtool_shear.h"
+#include "vmtool_handle.h"
 #include "vmcmd_transform.h"
 
 #include <math.h>
+
+#include <qcursor.h>
 
 VMToolShear* VMToolShear::s_instance = 0L;
 
@@ -38,6 +41,27 @@ VMToolShear::instance( KarbonPart* part )
 }
 
 void
+VMToolShear::setCursor( KarbonView* view ) const
+{
+	switch( VMToolHandle::instance( m_part )->activeNode() )
+	{
+	case NODE_LT:
+	case NODE_RB:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeFDiagCursor ) );
+					break;
+	case NODE_RT:
+	case NODE_LB:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeBDiagCursor ) );
+					break;
+	case NODE_LM:
+	case NODE_RM:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeHorCursor ) );
+					break;
+	case NODE_MT:
+	case NODE_MB:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeVerCursor ) );
+					break;
+	default:		view->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+	}
+}
+
+void
 VMToolShear::drawTemporaryObject( KarbonView* view )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
@@ -49,7 +73,7 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && ( rect.contains( fp ) ) )
 	{
-		// rotate operation
+		// shear operation
 		QWMatrix mat;
 		mat.translate( m_fp.x() / view->zoomFactor(), m_fp.y() / view->zoomFactor() );
 		m_s1 = ( m_lp.x() - m_fp.x() ) / double( rect.width() / 2 );
@@ -84,17 +108,25 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 bool
 VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 {
-	if ( event->type() == QEvent::MouseMove && m_isDragging )
+	if ( event->type() == QEvent::MouseMove )
 	{
-		// erase old object:
-		drawTemporaryObject( view );
+		if( m_isDragging )
+		{
+			// erase old object:
+			drawTemporaryObject( view );
 
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
+			QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
+			m_lp.setX( mouse_event->pos().x() );
+			m_lp.setY( mouse_event->pos().y() );
 
-		// paint new object:
-		drawTemporaryObject( view );
+			// paint new object:
+			drawTemporaryObject( view );
+		}
+		else
+		{
+			VMToolHandle::instance( m_part )->eventFilter( view, event );
+			setCursor( view );
+		}
 
 		return true;
 	}
@@ -140,6 +172,8 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 	// the whole story starts with this event:
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
+		view->painterFactory()->painter()->end();
+        VMToolHandle::instance( m_part )->eventFilter( view, event );
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
