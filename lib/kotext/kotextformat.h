@@ -47,6 +47,7 @@ public:
     ushort m_screenWidths[ 256 ];
     // m_refWidths[ 256 ] would speed things up too, but ushort might not be enough for it
     bool m_bShadowText;
+    float m_relativeTextSize;
 };
 
 
@@ -101,6 +102,9 @@ public:
 
     bool shadowText() const { return d->m_bShadowText;}
     void setShadowText(bool _b);
+
+    double relativeTextSize() const { return d->m_relativeTextSize;}
+    void setRelativeTextSize( double _size );
 
     bool doubleUnderline() const { return (m_underlineLine==U_DOUBLE ); }
     bool waveUnderline() const { return (m_underlineLine==U_WAVE ); }

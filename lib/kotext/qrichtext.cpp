@@ -5993,7 +5993,10 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
     if ( flags & KoTextFormat::Misspelled )
 	missp = nf.missp;
     if ( flags & KoTextFormat::VAlign )
+    {
 	ha = nf.ha;
+        setRelativeTextSize( nf.relativeTextSize());
+    }
     ////// kotext addition
     //if ( flags & KoTextFormat::Size )
     //    fn.setPointSizeFloat( nf.font().pointSizeFloat() );

@@ -138,6 +138,8 @@ KoTextFormat::KoTextFormat()
     m_strikeOutLineStyle = S_SOLID;
     m_spellCheckLanguage = QString::null;
     d->m_bShadowText = true;
+    d->m_relativeTextSize = 0.66;
+
     ////
 //#ifdef DEBUG_COLLECTION
 //    qDebug("KoTextFormat simple ctor, no addRef, no generateKey ! %p",this);
@@ -211,7 +213,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     m_strikeOutLineStyle = S_SOLID;
     m_spellCheckLanguage = QString::null;
     d->m_bShadowText = true;
-
+    d->m_relativeTextSize= 0.66;
     ////
     generateKey();
     addRef();
@@ -253,6 +255,7 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
     m_spellCheckLanguage = f.m_spellCheckLanguage;
     d->m_bShadowText = f.d->m_bShadowText;
+    d->m_relativeTextSize = f.d->m_relativeTextSize;
 
     ////
     addRef();
@@ -307,7 +310,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
     m_spellCheckLanguage = f.m_spellCheckLanguage;
     d->m_bShadowText = f.d->m_bShadowText;
-
+    d->m_relativeTextSize = f.d->m_relativeTextSize;
     ////
     addRef();
     return *this;
@@ -402,6 +405,8 @@ void KoTextFormat::generateKey()
     k += m_spellCheckLanguage;
     k += '/';
     k += QString::number( (int)d->m_bShadowText);
+    k += '/';
+    k += QString::number( d->m_relativeTextSize);
 
     ////
 }

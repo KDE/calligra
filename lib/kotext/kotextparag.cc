@@ -1173,10 +1173,22 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     }
     else if ( format->waveUnderline() )
     {
-        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        int y = lastY + baseLine - KoBorder::zoomWidthY( 1, zh, 0 );
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
         p->save();
+        int offset = 2 * KoBorder::zoomWidthY( 1, zh, 0 );
         p->setPen( QPen( col, 1, Qt::SolidLine ) );
+        int oldy = y;
+        int newy= oldy + offset;
+        int tmp = 0;
+        for ( int zigzag_x = 0/*startX*/; zigzag_x < bw; zigzag_x += offset)
+        {
+            p->drawLine( startX+zigzag_x, oldy, startX+zigzag_x+offset, newy);
+            tmp = oldy;
+            oldy = newy;
+            newy = tmp;
+        }
+#if 0
         // Draw 3 pixel lines with increasing offset and distance 4:
         for( int zigzag_line = 0; zigzag_line < 4; ++zigzag_line )
         {
@@ -1195,6 +1207,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
                 startX + zigzag_x,
                 lastY + h - 2 );
         }
+#endif
         p->restore();
         font.setUnderline( FALSE );
         p->setFont( font );

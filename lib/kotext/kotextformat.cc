@@ -97,6 +97,14 @@ void KoTextFormat::setShadowText(bool _b)
     update();
 }
 
+void KoTextFormat::setRelativeTextSize( double _size )
+{
+    if ( d->m_relativeTextSize == _size)
+        return;
+    d->m_relativeTextSize = _size;
+    update();
+}
+
 
 int KoTextFormat::compare( const KoTextFormat & format ) const
 {
@@ -115,7 +123,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::Size;
     if ( color() != format.color() )
         flags |= KoTextFormat::Color;
-    if ( vAlign() != format.vAlign() )
+    if ( vAlign() != format.vAlign() ||
+        relativeTextSize() != format.relativeTextSize())
         flags |= KoTextFormat::VAlign;
     if ( strikeOutLineType() != format.strikeOutLineType()
         || underlineLineStyle() != format.underlineLineStyle())
@@ -140,7 +149,7 @@ float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
 {
     int pointSizeLU = font().pointSize();
     if ( vAlign() != KoTextFormat::AlignNormal )
-        pointSizeLU = ( ( pointSizeLU * 2 ) / 3 );
+        pointSizeLU = ( ( pointSizeLU *relativeTextSize())/** 2 ) / 3*/ );
 
     return zh->layoutUnitToFontSize( pointSizeLU, false /* forPrint */ );
 }
@@ -149,7 +158,7 @@ float KoTextFormat::refPointSize() const
 {
     int pointSizeLU = font().pointSize();
     if ( vAlign() != KoTextFormat::AlignNormal )
-        pointSizeLU = ( ( pointSizeLU * 2 ) / 3 );
+        pointSizeLU = ( ( pointSizeLU * relativeTextSize())/** 2 ) / 3*/ );
     return KoTextZoomHandler::layoutUnitPtToPt( pointSizeLU );
 }
 
