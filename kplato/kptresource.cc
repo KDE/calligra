@@ -598,6 +598,7 @@ bool KPTAppointmentInterval::isValid() const {
 }
 
 KPTAppointmentInterval KPTAppointmentInterval::firstInterval(const KPTAppointmentInterval &interval, const KPTDateTime &from) const {
+    //kdDebug()<<k_funcinfo<<interval.startTime().toString()<<" - "<<interval.endTime().toString()<<" from="<<from.toString()<<endl;
     KPTDateTime f = from;
     KPTDateTime s1 = m_start;
     KPTDateTime e1 = m_end;
@@ -908,23 +909,33 @@ KPTAppointment KPTAppointment::operator+(const KPTAppointment &app) {
     KPTAppointmentInterval i;
     KPTAppointmentInterval *i1 = m_intervals.first();
     KPTAppointmentInterval *i2 = ai.first();
+    KPTDateTime from;
     while (i1 || i2) {
         if (!i1) {
-            a.addInterval(i2->startTime(), i2->endTime(), i2->load());
+            if (!from.isValid() || from < i2->startTime())
+                from = i2->startTime();
+            a.addInterval(from, i2->endTime(), i2->load());
+            //kdDebug()<<"Interval+ (i2): "<<from.toString()<<" - "<<i2->endTime().toString()<<endl;
+            from = i2->endTime();
             i2 = ai.next();
             continue;
         }
         if (!i2) {
-            a.addInterval(i1->startTime(), i1->endTime(), i1->load());
+            if (!from.isValid() || from < i1->startTime())
+                from = i1->startTime();
+            a.addInterval(from, i1->endTime(), i1->load());
+            //kdDebug()<<"Interval+ (i1): "<<from.toString()<<" - "<<i1->endTime().toString()<<endl;
+            from = i1->endTime();
             i1 = m_intervals.next();
             continue;
         }
-        i =  i1->firstInterval(*i2, i.endTime());
+        i =  i1->firstInterval(*i2, from);
         if (!i.isValid()) {
             break;
         }
         a.addInterval(i);
-        //kdDebug()<<"Interval+ (i): "<<i.startTime().toString()<<" - "<<i.endTime().toString()<<endl;
+        from = i.endTime();
+        //kdDebug()<<"Interval+ (i): "<<i.startTime().toString()<<" - "<<i.endTime().toString()<<" load="<<i.load()<<endl;
         if (i1 && a.endTime() >= i1->endTime()) {
             i1 = m_intervals.next();
         }
