@@ -87,7 +87,6 @@
 #endif
 #endif
 
-QList<GObject> KIllustrator::clipboard;
 QList<KIllustrator> KIllustrator::windows;
 bool KIllustrator::previewHandlerRegistered = false;
 
@@ -118,8 +117,6 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   
   document = new GDocument ();
 
-  clipboard.setAutoDelete (true);
-  
   setupMainView ();
 
   initToolBars ();
@@ -655,13 +652,13 @@ void KIllustrator::menuCallback (int item) {
     tgroup->selectTool (0);
     break;
   case ID_EDIT_CUT:
-    cmdHistory.addCommand (new CutCmd (document, clipboard), true);
+    cmdHistory.addCommand (new CutCmd (document), true);
     break;
   case ID_EDIT_COPY:
-    cmdHistory.addCommand (new CopyCmd (document, clipboard), true);
+    cmdHistory.addCommand (new CopyCmd (document), true);
     break;
   case ID_EDIT_PASTE:
-    cmdHistory.addCommand (new PasteCmd (document, clipboard), true);
+    cmdHistory.addCommand (new PasteCmd (document), true);
     break;
   case ID_EDIT_DELETE:
     cmdHistory.addCommand (new DeleteCmd (document), true);

@@ -631,15 +631,15 @@ void KIllustratorView::editRedo () {
 }
 
 void KIllustratorView::editCut () {
-  cmdHistory.addCommand (new CutCmd (m_pDoc, clipboard), true);
+  cmdHistory.addCommand (new CutCmd (m_pDoc), true);
 }
 
 void KIllustratorView::editCopy () {
-  cmdHistory.addCommand (new CopyCmd (m_pDoc, clipboard), true);
+  cmdHistory.addCommand (new CopyCmd (m_pDoc), true);
 }
 
 void KIllustratorView::editPaste () {
-  cmdHistory.addCommand (new PasteCmd (m_pDoc, clipboard), true);
+  cmdHistory.addCommand (new PasteCmd (m_pDoc), true);
 }
 
 void KIllustratorView::editSelectAll () {
