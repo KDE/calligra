@@ -111,9 +111,9 @@ GPolygon::GPolygon (const list<XmlAttribute>& attribs, Kind pkind)
       else if (attr == "y")
 	y = (*first).floatValue ();
       else if (attr == "width")
-	w = (*first).floatValue () - 1;
+	w = (*first).floatValue ();
       else if (attr == "height")
-	h = (*first).floatValue () - 1;
+	h = (*first).floatValue ();
       else if (attr == "rounding")
 	Roundness = (*first).floatValue ();
       first++;

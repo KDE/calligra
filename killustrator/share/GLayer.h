@@ -25,7 +25,8 @@
 #ifndef GLayer_h_
 #define GLayer_h_
 
-#include <list>
+#include "version.h"
+
 #include <qobject.h>
 #include "GObject.h"
 

@@ -26,8 +26,7 @@
 #include "config.h"
 #endif
 
-#include <string>
-#include <set>
+#include "version.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -78,11 +77,17 @@ bool EPSExport::exportToFile (GDocument* doc) {
 
   Painter paint;
   paint.begin (&printer);
+#if 0
   // define the bounding box as clipping region
   paint.setClipRect (0, 0, box.width () + 2, box.height () + 2);
   // and move the objects to the origin
   paint.translate (-box.left () + 1, -box.top () + 1);
   // force update of cliping regions (only for gradient pixmaps)
+#else
+  paint.setClipRect (box.left (), box.top (), 
+		     box.width () + 2 + box.left (), 
+		     box.height () + 2 + box.top ());
+#endif
   doc->invalidateClipRegions ();
   doc->drawContents (paint);
   doc->invalidateClipRegions ();

@@ -167,7 +167,7 @@ public slots:
   void slotKFMJobDone2 (int id);
   void slotKFMJobDone ();
 
-  void dropActionSlot (KDNDDropZone* dzone);
+  //  void dropActionSlot (KDNDDropZone* dzone);
 
   void showCursorPosition (int x, int y);
   void showCurrentMode (const char* msg);
@@ -255,7 +255,7 @@ private:
   KFM *kfmConn;
 #endif
   // the drop zone
-  KDNDDropZone *dropZone;
+  //  KDNDDropZone *dropZone;
   
   CommandHistory cmdHistory;
 

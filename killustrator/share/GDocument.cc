@@ -333,8 +333,10 @@ void GDocument::deleteSelectedObjects () {
     last = 0L;
     setModified ();
     selBoxIsValid = false;
-    emit changed ();
-    emit selectionChanged ();
+    if (autoUpdate) {
+      emit changed ();
+      emit selectionChanged ();
+    }
   }
 }
 
@@ -355,9 +357,11 @@ void GDocument::deleteObject (GObject* obj) {
     if (selected) {
       selBoxIsValid = false;
       updateHandle ();
-      emit selectionChanged ();
+      if (autoUpdate)
+	emit selectionChanged ();
     }
-    emit changed ();
+    if (autoUpdate)
+      emit changed ();
   } 
 }
 

@@ -84,11 +84,13 @@ void FilterManager::installDefaultFilters () {
 					  "Encapsulated PostScript", "eps",
 					  "Kai-Uwe Sattler",
 					  "0.1", 0L, epsFilter));
+#if not_yet
   CmxImport* cmxFilter = new CmxImport ();
   filters.insert ("CMX", new FilterInfo (FilterInfo::FKind_Import,
 						  "Corel Exchange", "cmx",
 						  "Kai-Uwe Sattler",
 						  "0.1", cmxFilter, 0L));
+#endif
 }
 
 QString FilterManager::importFilters () {

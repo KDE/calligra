@@ -25,8 +25,9 @@
 #ifndef XmlElement_h_
 #define XmlElement_h_
 
-#include <string>
 #include <list>
+#include <string>
+
 #include <qcolor.h>
 #include <qwmatrix.h>
 

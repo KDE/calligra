@@ -25,10 +25,11 @@
 #ifndef XmlWriter_h_
 #define XmlWriter_h_
 
-#include <iostream.h>
 #include <string>
 #include <stack>
 #include <vector>
+
+#include <iostream.h>
 
 #include <qcolor.h>
 #include <qwmatrix.h>

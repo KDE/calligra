@@ -25,9 +25,6 @@
 #ifndef GObject_h_
 #define GObject_h_
 
-#include <string>
-#include <map>
-
 #include <qobject.h>
 #include <qcolor.h>
 #include <qfont.h>
@@ -46,6 +43,9 @@
 
 #include "xmlutils/XmlWriter.h"
 #include "xmlutils/XmlElement.h"
+
+#include <map>
+#include <string>
 
 #ifndef M_PI // not ANSI C++, so it maybe...
 #define M_PI            3.14159265358979323846  /* pi */

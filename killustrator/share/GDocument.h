@@ -25,11 +25,6 @@
 #ifndef GDocument_h_
 #define GDocument_h_
 
-#include <set>
-#include <string>
-#include <vector>
-#include <list>
-
 #include <qobject.h>
 #include <qlist.h>
 #include <qfile.h>

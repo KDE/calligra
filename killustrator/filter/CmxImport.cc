@@ -228,7 +228,7 @@ bool CmxImport::readPageSection (QDataStream& strm, GDocument *doc) {
 }
 
 void CmxImport::skipBytes (QDataStream& strm, int len) {
-  char dummy;
+  Q_INT8 dummy;
   for (int i = 0; i < len; i++)
     strm >> dummy;
 }

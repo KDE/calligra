@@ -28,6 +28,7 @@
 #include <qfileinfo.h>
 #include <qframe.h>
 #include <qclipboard.h>
+#include <qmessagebox.h>
 #include <unistd.h>
 #include "KIllustrator.h"
 #include "KIllustrator.moc"
@@ -79,7 +80,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
-#include <kmsgbox.h>
+//#include <kmsgbox.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <kcombo.h>
@@ -148,9 +149,9 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   statusbar->show ();
   adjustSize ();
 
-  dropZone = new KDNDDropZone (canvas, DndURL);
-  connect (dropZone, SIGNAL(dropAction (KDNDDropZone *)),
-	   this, SLOT (dropActionSlot (KDNDDropZone *)));
+  //  dropZone = new KDNDDropZone (canvas, DndURL);
+  //  connect (dropZone, SIGNAL(dropAction (KDNDDropZone *)),
+  //	   this, SLOT (dropActionSlot (KDNDDropZone *)));
 
   Canvas::initZoomFactors (zFactors);
 
@@ -887,11 +888,11 @@ void KIllustrator::menuCallback (int item) {
 
       if (document->selectionIsEmpty ()) {
 	result =
-	  KMsgBox::yesNo (this, "Warning",
+	  QMessageBox::information (this, "Warning",
 			  i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
-			  KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
+			 i18n ("Yes"), i18n ("No"));
       }
-      if (result == 1)
+      if (result == 0)
 	PropertyEditor::edit (&cmdHistory, document);
     }
     break;
@@ -1174,14 +1175,13 @@ void KIllustrator::quit () {
 bool KIllustrator::askForSave () {
   if (document->isModified ()) {
     int result =
-      KMsgBox::yesNoCancel (this, "Message",
-			    i18n ("This Document has been modified.\nWould you like to save it ?"),
-			    KMsgBox::QUESTION | KMsgBox::DB_FIRST,
-			    i18n ("Yes"), i18n ("No"), i18n ("Cancel"));
-    if (result == 1)
+      QMessageBox::information (this, "Message",
+				i18n ("This Document has been modified.\nWould you like to save it ?"),
+				i18n ("Yes"), i18n ("No"), i18n ("Cancel"));
+    if (result == 0)
       saveFile ();
 
-    return (result == 3 ? false : true);
+    return (result == 2 ? false : true);
   }
   return true;
 }
@@ -1214,12 +1214,12 @@ void KIllustrator::saveAsFile () {
     if (access ((const char *) fname, W_OK) == 0) {
       // there is already a file with the same name
       int result =
-	KMsgBox::yesNoCancel (this, "Message",
+	QMessageBox::information (this, "Message",
 			      i18n ("This Document already exists.\nWould you like to override it ?"),
-			      KMsgBox::QUESTION, i18n ("Yes"),
+			      i18n ("Yes"),
 			      i18n ("No"),
 			      i18n ("Cancel"));
-      if (result != 1)
+      if (result != 0)
 	return;
 
       backupFile (fname);
@@ -1286,10 +1286,10 @@ void KIllustrator::setPenColor (const QBrush& b) {
   }
   else {
     int result =
-      KMsgBox::yesNo (this, "Warning",
+      QMessageBox::information (this, "Warning",
 		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
-		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
-    if (result == 1)
+				i18n ("Yes"), i18n ("No"));
+    if (result == 0)
       GObject::setDefaultOutlineInfo (oInfo);
   }
 }
@@ -1312,14 +1312,15 @@ void KIllustrator::setFillColor (const QBrush& b) {
   }
   else {
     int result =
-      KMsgBox::yesNo (this, "Warning",
+      QMessageBox::information (this, "Warning",
 		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
-		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
-    if (result == 1)
+		      i18n ("Yes"), i18n ("No"));
+    if (result == 0)
       GObject::setDefaultFillInfo (fInfo);
   }
 }
 
+/*
 void KIllustrator::dropActionSlot (KDNDDropZone* dzone) {
   bool firstFile = true;
   QStrList urls = dzone->getURLList ();
@@ -1335,6 +1336,7 @@ void KIllustrator::dropActionSlot (KDNDDropZone* dzone) {
     firstFile = false;
   }
 }
+*/
 
 void KIllustrator::slotKFMJobDone2 (int) {
   slotKFMJobDone ();
