@@ -1,16 +1,21 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Example Component
+Name[bg]=Примерни модули за KOffice
 Name[cy]=Cydran Enghreifftiol KOffice 
 Name[da]=KOffice eksempel-komponent
 Name[es]=Componente de ejemplo de KOffice
 Name[et]=KOffice'i näidiskomponent
 Name[hu]=KOffice mintakomponens
+Name[pt_BR]=Aplicativo Componente do KOffice
 Name[ru]=Пример компонента KOffice
+Name[sr]=Пример KOffice-ове компоненте
 Name[sv]=Koffice-exempelkomponent
 Name[ta]=K office  எடுத்துக்காட்டு பயன்பாடுகள் 
+Name[wa]=Componint di mostraedje di KOffice
 X-KDE-Library=libexamplepart
 MimeType=application/x-example
 Type=Service
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-example
+Icon=example
