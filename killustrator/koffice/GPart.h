@@ -41,7 +41,7 @@ class GPart : public GObject
 public:
   GPart (GDocument* doc);
   GPart (GDocument* doc, KIllustratorChild *c);
-  GPart (GDocument* doc, KIllustratorDocument *doc, const QDomElement &element);
+  GPart (GDocument* doc, KIllustratorDocument *kidoc, const QDomElement &element);
   GPart (const GPart& p);
 
   ~GPart ();
