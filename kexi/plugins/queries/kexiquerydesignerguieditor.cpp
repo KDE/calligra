@@ -435,15 +435,23 @@ KexiQueryDesignerGuiEditor::slotItemSelected(KexiTableItem *)
 	}
 	else if(col == 3 || col == 4)
 	{
-		emit contextHelp(i18n("Queries"), i18n("Folowing conditions are possible:<br>\
-		<font size=\"-1\">\
-		<table width=\"95%\"><tr><td><font size=\"-1\">= 'abc'</td><td><font size=\"-1\">matches string <i>abc</i></td></tr>\
-		<tr><td><font size=\"-1\">= 25</td><td><font size=\"-1\">matches figures 25</td></tr>\
-		<tr><td><font size=\"-1\">&gt; 25</td><td><font size=\"-1\">greater than 25</td></tr>\
-		<tr><td><font size=\"-1\">&lt; 25</td><td><font size=\"-1\">lesser than 25</td></tr>\
-		<tr><td><font size=\"-1\">&lt;&gt; 'ab'</td><td><font size=\"-1\">matches any string except <i>ab</i></td></tr>\
-		<tr><td><font size=\"-1\">like \"%pine%\"</td><td><font size=\"-1\">matches '<i>pine</i>', '<i>pineapple</i>', '<i>porcupine</i>'</td></tr>\
-		</table></font>"));
+            emit contextHelp(i18n("Queries"),
+                             // xgettext:no-c-format
+                             i18n("Folowing conditions are possible:<br>\n"
+                                  "<font size=\"-1\">\n"
+                                  "<table width=\"95%\"><tr><td><font size=\"-1\">= 'abc'</td>\n"
+                                  "<td><font size=\"-1\">matches string <i>abc</i></td></tr>\n"
+                                  "<tr><td><font size=\"-1\">= 25</td>\n"
+                                  "<td><font size=\"-1\">matches figures 25</td></tr>\n"
+                                  "<tr><td><font size=\"-1\">&gt; 25</td>\n"
+                                  "<td><font size=\"-1\">greater than 25</td></tr>\n"
+                                  "<tr><td><font size=\"-1\">&lt; 25</td>\n"
+                                  "<td><font size=\"-1\">lesser than 25</td></tr>\n"
+                                  "<tr><td><font size=\"-1\">&lt;&gt; 'ab'</td>\n"
+                                  "<td><font size=\"-1\">matches any string except <i>ab</i></td></tr>\n"
+                                  "<tr><td><font size=\"-1\">like \"%pine%\"</td>\n"
+                                  "<td><font size=\"-1\">matches '<i>pine</i>', '<i>pineapple</i>', '<i>porcupine</i>'</td></tr>\n"
+                                  "</table></font>"));
 	}
 }
 
