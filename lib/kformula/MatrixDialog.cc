@@ -31,43 +31,33 @@ const int DEFAULT_SIZE = 3;
 const int MAX_SIZE = 200;
 
 MatrixDialog::MatrixDialog( QWidget *parent, int _width, int _height )
-        : QDialog(parent, "Matrix Dialog", true)
+        : KDialogBase(parent, "Matrix Dialog", true,"",Ok|Cancel)
 {
     w = _width;
     h = _height;
 
-    QPushButton *ok, *cancel;
     QLabel *rows, *columns;
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QGridLayout *grid = new QGridLayout(page, 4, 2, 10);
 
-    QGridLayout *grid = new QGridLayout(this, 4, 2, 10);
-
-    rows = new QLabel(i18n("Rows:"), this);
-    columns = new QLabel(i18n("Columns:"), this);
+    rows = new QLabel(i18n("Rows:"), page);
+    columns = new QLabel(i18n("Columns:"), page);
 
     grid->addWidget(rows, 0, 0);
     grid->addWidget(columns, 0, 1);
 
     QSpinBox *width, *height;
 
-    height = new QSpinBox(1, MAX_SIZE, 1, this);
+    height = new QSpinBox(1, MAX_SIZE, 1, page);
     grid->addWidget(height, 1, 0);
     height->setValue(h);
     connect(height, SIGNAL(valueChanged(int)), SLOT(setHeight(int)));
 
-    width = new QSpinBox(1, MAX_SIZE, 1, this);
+    width = new QSpinBox(1, MAX_SIZE, 1, page);
     grid->addWidget(width, 1, 1);
     width->setValue(w);
     connect(width, SIGNAL(valueChanged(int)), SLOT(setWidth(int)));
-
-    ok = new QPushButton(i18n("OK"), this);
-    ok->setDefault(TRUE);
-    grid->addWidget(ok, 3, 0);
-    connect(ok, SIGNAL(clicked()), SLOT(accept()));
-
-    cancel = new QPushButton(i18n("Cancel"), this);
-    grid->addWidget(cancel, 3, 1);
-    connect(cancel, SIGNAL(clicked()), SLOT(reject()));
-
     height->setFocus();
 }
 
