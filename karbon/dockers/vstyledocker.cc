@@ -137,11 +137,11 @@ ClipartWidget::ClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPa
 	m_buttonGroup->insert( m_importClipartButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_deleteClipartButton = new QToolButton( m_buttonGroup ) );
 	m_clipartChooser->setFixedSize( 180, 120 );
-	m_addClipartButton->setIconSet( QPixmap( il.iconPath( "14_layer_newlayer.png", KIcon::Small ) ) );
+	m_addClipartButton->setIconSet( SmallIcon( "14_layer_newlayer" ) );
 	m_addClipartButton->setTextLabel( i18n( "Add" ) );
-	m_importClipartButton->setIconSet( QPixmap( il.iconPath( "fileimport.png", KIcon::Small ) ) );
+	m_importClipartButton->setIconSet( SmallIcon( "fileimport" ) );
 	m_importClipartButton->setTextLabel( i18n( "Import" ) );
-	m_deleteClipartButton->setIconSet( QPixmap( il.iconPath( "14_layer_deletelayer.png", KIcon::Small ) ) );
+	m_deleteClipartButton->setIconSet( SmallIcon( "14_layer_deletelayer" ) );
 	m_deleteClipartButton->setTextLabel( i18n( "Delete" ) );
 
 	m_buttonGroup->setInsideMargin( 3 );
