@@ -374,8 +374,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		bool createTable( KexiDB::TableSchema* tableSchema );
 
-		/*! Drops table defined by \a tableSchema.
-		 Schema information \a tableSchema is destoyed (because it's owned), so don't keep this anymore!
+		/*! Drops a table defined by \a tableSchema.
+		 If true is returned, schema information \a tableSchema is destoyed
+		 (because it's owned), so don't keep this anymore!
 		*/
 //TODO(js): update any structure (e.g. query) that depend on this table!
 		bool dropTable( KexiDB::TableSchema* tableSchema );
@@ -383,6 +384,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! It is a convenience function, does exactly the same as 
 		 bool dropTable( KexiDB::TableSchema* tableSchema ) */
 		bool dropTable( const QString& table );
+
+		/*! Drops a query defined by \a querySchema. 
+		 If true is returned, schema information \a querySchema is destoyed 
+		 (because it's owned), so don't keep this anymore!
+		*/
+		bool dropQuery( KexiDB::QuerySchema* querySchema );
 
 		/*! \return first field from \a fieldlist that has system name, 
 		 null if there are no such field.
@@ -706,6 +713,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 To avoid having deleted table object on its list. */
 		void removeMe(TableSchema *ts);
 				
+		/*! Helper function: removes information about object with ID \a objId 
+		 from internal kexi__object table. \return true on success. */
+		bool removeObject( uint objId );
+
 		QGuardedPtr<ConnectionData> m_data;
 		QString m_name;
 		QString m_usedDatabase; //!< database name that is opened now

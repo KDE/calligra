@@ -71,6 +71,9 @@ class KEXI_DB_EXPORT FieldList
 
 		Field::List* fields() { return &m_fields; }
 
+		/*! \return list of autoincremented fields. The list is owned by this FieldList object. */
+		Field::List* autoIncrementFields();
+
 		/*! \return true if fields in the list are owned by this list. */
 		bool isOwner() const;
 
@@ -105,10 +108,14 @@ class KEXI_DB_EXPORT FieldList
 		 or addField()).
 		*/
 		QString sqlFieldsList();
-	protected:
 
+		/*! Like above, but thsi is convenient static function, so you can pass any \a list here. */
+		static QString sqlFieldsList(Field::List* list);
+
+	protected:
 		Field::List m_fields;
 		QDict<Field> m_fields_by_name;
+		Field::List *m_autoinc_fields;
 	
 	private:
 		//! cached

@@ -945,11 +945,13 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 		createTable_ERR;
 	
 	//add schema info to kexi__* tables
-	TableSchema *ts;
-	ts = m_tables_byname["kexi__objects"];
+	TableSchema *ts = m_tables_byname["kexi__objects"];
+	if (!ts)
+		return false;
 		
 	FieldList *fl = ts->subList("o_type", "o_name", "o_caption", "o_help");
-	if (!fl) return false;
+	if (!fl)
+		return false;
 		
 	QValueList<QVariant> values;
 	if (!insertRecord(*fl, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
@@ -967,6 +969,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	KexiDBDbg << "######## obj_id == " << obj_id << endl;
 	
 	ts = m_tables_byname["kexi__fields"];
+	if (!ts)
+		return false;
 	fl = ts->subList(
 		"t_id",
 		"f_type",
@@ -980,7 +984,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 		"f_caption",
 		"f_help"
 	);
-	if (!fl) return false;
+	if (!fl)
+		return false;
 	
 	Field::List *fields = tableSchema->fields();
 	Field *f = fields->first();
@@ -1015,6 +1020,16 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	return commitAutoCommitTransaction(trans);
 }
 
+//! internal
+bool Connection::removeObject( uint objId )
+{
+	//remove table schema from kexi__* tables
+	TableSchema *ts = m_tables_byname["kexi__objects"];
+	if (!KexiDB::deleteRow(*this, ts, "o_id", objId)) //schema entry
+		return false;
+	return true;
+}
+
 bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 {
 	if (!tableSchema)
@@ -1026,19 +1041,19 @@ bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 			.arg(tableSchema->name()));
 		return false;
 	}
+//js TODO DO THIS INSIDE TRANSACTION!!!!
 
 	if (!drv_executeSQL("DROP TABLE " + tableSchema->name()))
 		return false;
 
-	//remove table schema from kexi__* tables
-	TableSchema *ts;
-	ts = m_tables_byname["kexi__objects"];
-	if (!KexiDB::deleteRow(*this, *ts, "o_id", tableSchema->id())) //schema entry
+	TableSchema *ts = m_tables_byname["kexi__fields"];
+	if (!KexiDB::deleteRow(*this, ts, "t_id", tableSchema->id())) //field entries
 		return false;
 
-	ts = m_tables_byname["kexi__fields"];
-	if (!KexiDB::deleteRow(*this, *ts, "t_id", tableSchema->id())) //field entries
+	//remove table schema from kexi__objects table
+	if (!removeObject( tableSchema->id() )) {
 		return false;
+	}
 
 //TODO(js): update any structure (e.g. query) that depend on this table!
 	m_tables_byname.remove(tableSchema->name().lower());
@@ -1053,6 +1068,35 @@ bool Connection::dropTable( const QString& table )
 		return false;
 	}
 	return dropTable(ts);
+}
+
+bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
+{
+	if (!querySchema)
+		return false;
+
+//js TODO DO THIS INSIDE TRANSACTION!!!!
+	TableSchema *ts = m_tables_byname["kexi__querydata"];
+	if (!KexiDB::deleteRow(*this, ts, "q_id", querySchema->id()))
+		return false;
+
+	ts = m_tables_byname["kexi__queryfields"];
+	if (!KexiDB::deleteRow(*this, ts, "q_id", querySchema->id()))
+		return false;
+
+	ts = m_tables_byname["kexi__querytables"];
+	if (!KexiDB::deleteRow(*this, ts, "q_id", querySchema->id()))
+		return false;
+
+	//remove query schema from kexi__objects table
+	if (!removeObject( querySchema->id() )) {
+		return false;
+	}
+	
+//TODO(js): update any structure that depend on this table!
+	m_queries_byname.remove(querySchema->name().lower());
+	m_queries.remove(querySchema->id());
+	return true;
 }
 
 bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
@@ -1703,7 +1747,34 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
 
-	return res;
+	//fetch autoincremented values
+	Field::List *aif_list = query.parentTable()->autoIncrementFields();
+	if (pkey && !aif_list->isEmpty()) {
+		//now only if PKEY is present:
+		//js TODO more...
+		Field *id_field = aif_list->first();
+		int last_id = lastInsertedAutoIncValue(id_field->name(), query.parentTable()->name());
+		if (last_id==-1) {
+			//err...
+			return false;
+		}
+		KexiDB::RowData aif_data;
+		if (!querySingleRecord(QString("SELECT ")+ FieldList::sqlFieldsList( aif_list ) + " FROM " 
+			+ query.parentTable()->name() + " WHERE "+ id_field->name() + "=" + QString::number(last_id),
+			aif_data))
+		{
+			//err...
+			return false;
+		}
+		Field::ListIterator f_it(*aif_list);
+		Field *f;
+		for (uint i=0; (f = f_it.current()); ++f_it, i++) {
+			kdDebug() << "Connection::insertRow(): AUTOINCREMENTED FIELD " << f->name() << " == " 
+				<< aif_data[i].toInt() << endl;
+			data[ fieldsOrder[ f ] ] = aif_data[i];
+		}
+	}
+	return true;
 }
 
 bool Connection::deleteRow(QuerySchema &query, RowData& data)

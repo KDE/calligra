@@ -70,10 +70,13 @@ KexiQueryPart::instanceName() const
 }*/
 
 bool
-KexiQueryPart::remove(KexiMainWindow *, const KexiPart::Item &)
+KexiQueryPart::remove(KexiMainWindow *win, const KexiPart::Item &item)
 {
-	//TODO
-	return false;
+	if (!win || !win->project() || !win->project()->dbConnection())
+		return false;
+	KexiDB::Connection *conn = win->project()->dbConnection();
+	KexiDB::QuerySchema *sch = conn->querySchema(item.identifier());
+	return conn->dropQuery( sch );
 }
 
 KexiQueryDocument *

@@ -136,7 +136,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		
 		IndexSchema *m_pkey;
 
-		QuerySchema *m_query; //<! query schema that is defined by "select * from <this_table_name>"
+		QuerySchema *m_query; //!< cached query schema that is defined by "select * from <this_table_name>"
 
 	private:
 		bool m_isKexiDBSystem : 1;

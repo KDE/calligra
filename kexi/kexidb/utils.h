@@ -26,9 +26,9 @@
 namespace KexiDB
 {
 	//! for convenience
-	KEXI_DB_EXPORT bool deleteRow(Connection &conn, TableSchema &table, const QString &keyname, const QString &keyval);
-	KEXI_DB_EXPORT bool deleteRow(Connection &conn, TableSchema &table, const QString &keyname, int keyval);
-	KEXI_DB_EXPORT bool replaceRow(Connection &conn, TableSchema &table, const QString &keyname, const QString &keyval, const QString &valname, QVariant val, int ftype);
+	KEXI_DB_EXPORT bool deleteRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval);
+	KEXI_DB_EXPORT bool deleteRow(Connection &conn, TableSchema *table, const QString &keyname, int keyval);
+	KEXI_DB_EXPORT bool replaceRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval, const QString &valname, QVariant val, int ftype);
 
 }
 

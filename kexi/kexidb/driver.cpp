@@ -196,7 +196,7 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 		case Field::InvalidType:
 			return "!INVALIDTYPE!";
 		default:
-			KexiDBDbg << "Connection_valueToSQL(): UNKNOWN!" << endl;
+			KexiDBDbg << "Driver::valueToSQL(): UNKNOWN!" << endl;
 			return QString::null;
 	}
 	return QString::null;

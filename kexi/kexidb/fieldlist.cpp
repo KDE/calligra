@@ -32,10 +32,12 @@ FieldList::FieldList(bool owner)
 	m_fields_by_name.setAutoDelete( false );
 	//reasonable sizes: TODO
 	m_fields_by_name.resize(101);
+	m_autoinc_fields = 0;
 }
 
 FieldList::~FieldList()
 {
+	delete m_autoinc_fields;
 }
 
 void FieldList::clear()
@@ -44,6 +46,8 @@ void FieldList::clear()
 	m_fields.clear();
 	m_fields_by_name.clear();
 	m_sqlFields = QString::null;
+	delete m_autoinc_fields;
+	m_autoinc_fields = 0;
 }
 
 FieldList& FieldList::addField(KexiDB::Field *field)
@@ -152,20 +156,42 @@ QStringList FieldList::names() const
 	return r;
 }
 
+QString FieldList::sqlFieldsList(Field::List* list)
+{
+	if (!list)
+		return QString::null;
+	QString result;
+	Field::ListIterator it( *list );
+	bool start = true;
+	for (; it.current(); ++it) {
+		if (!start)
+			result += ",";
+		else
+			start = false;
+		result += it.current()->name();
+	}
+	return result;
+}
+
 QString FieldList::sqlFieldsList()
 {
 	if (!m_sqlFields.isEmpty())
 		return m_sqlFields;
 
-	Field::ListIterator it( m_fields );
-	bool start = true;
-	for (; it.current(); ++it) {
-		if (!start)
-			m_sqlFields += ",";
-		else
-			start = false;
-		m_sqlFields += it.current()->name();
-	}
+	m_sqlFields = FieldList::sqlFieldsList( &m_fields );
 	return m_sqlFields;
 }
 
+Field::List* FieldList::autoIncrementFields()
+{
+	if (!m_autoinc_fields) {
+		m_autoinc_fields = new Field::List();
+		Field *f;
+		for (Field::ListIterator f_it(m_fields); (f = f_it.current()); ++f_it) {
+			if (f->isAutoIncrement()) {
+				m_autoinc_fields->append( f_it.current() );
+			}
+		}
+	}
+	return m_autoinc_fields;
+}

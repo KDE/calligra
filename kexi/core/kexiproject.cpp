@@ -125,8 +125,8 @@ KexiProject::create()
 	if (!t_db)
 		return false;
 
-	if (!KexiDB::replaceRow(*m_connection, *t_db, "db_property", "project_caption", "db_value", QVariant( m_data->caption() ), KexiDB::Field::Text)
-	 || !KexiDB::replaceRow(*m_connection, *t_db, "db_property", "project_desc", "db_value", QVariant( m_data->description() ), KexiDB::Field::Text) )
+	if (!KexiDB::replaceRow(*m_connection, t_db, "db_property", "project_caption", "db_value", QVariant( m_data->caption() ), KexiDB::Field::Text)
+	 || !KexiDB::replaceRow(*m_connection, t_db, "db_property", "project_desc", "db_value", QVariant( m_data->description() ), KexiDB::Field::Text) )
 		return false;
 
 	if (trans.active() && !m_connection->commitTransaction(trans))
