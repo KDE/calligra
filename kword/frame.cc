@@ -1018,6 +1018,7 @@ QDomElement KWTextFrameSet::save( QDomDocument &doc )
 	if ( p.isNull() )
 	    return p;
 	ps.appendChild( p );
+	parag = parag->getNext();
     }
 
     return frameset;

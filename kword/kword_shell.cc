@@ -261,14 +261,14 @@ bool KWordShell::saveDocument( const char *_url, const char *_format )
         if ( file.isNull() )
             return false;
 
-        KMimeType *t = KMimeType::findByURL( KURL( QString( file ) ), 0, true );
-        if ( t->mimeType() != "application/x-kword" )
-        {
-            m_pDoc->saveToURL( "/tmp/kofficefilter", _format );
-            KoFilterManager::self()->export( "/tmp/kofficefilter", file, "application/x-kword" );
+//         KMimeType *t = KMimeType::findByURL( KURL( QString( file ) ), 0, true );
+//         if ( t->mimeType() != "application/x-kword" )
+//         {
+//             m_pDoc->saveToURL( "/tmp/kofficefilter", _format );
+//             KoFilterManager::self()->export( "/tmp/kofficefilter", file, "application/x-kword" );
 
-            return true;
-        }
+//             return true;
+//         }
 
         _url = file.latin1();
         m_pDoc->setURL( _url );
