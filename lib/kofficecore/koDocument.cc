@@ -609,6 +609,13 @@ bool KoDocument::openFile()
 
   QApplication::setOverrideCursor( waitCursor );
 
+  if ( d->m_bSingleViewMode && !d->m_views.isEmpty() )
+  {
+     // We already had a view (this happens when doing reload in konqueror)
+     delete d->m_views.first();
+     d->m_views.clear();
+  }
+
   d->m_changed=false;
 
   // Launch a filter if we need one for this url ?
