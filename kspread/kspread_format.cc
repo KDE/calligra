@@ -413,19 +413,41 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, 
          && bgColor(_col, _row ).isValid() )
         currentCellStyle.addProperty( "fo:background-color", bgColor(_col, _row).name() );
 
-#if 0
+    QPen leftBorder;
+    QPen rightBorder;
+    QPen topBorder;
+    QPen bottomBorder;
+
     if ( hasProperty( KSpreadFormat::PLeftBorder ) || !hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
-        cs.left  = leftBorderPen( col, row );
-
+        leftBorder = leftBorderPen( _col, _row );
     if ( hasProperty( KSpreadFormat::PRightBorder ) || !hasNoFallBackProperties( KSpreadFormat::PRightBorder ) )
-        cs.right = rightBorderPen( col, row );
-
+        rightBorder = rightBorderPen( _col, _row );
     if ( hasProperty( KSpreadFormat::PTopBorder ) || !hasNoFallBackProperties( KSpreadFormat::PTopBorder ) )
-        cs.top  = topBorderPen( col, row );
-
+        topBorder = topBorderPen( _col, _row );
     if ( hasProperty( KSpreadFormat::PBottomBorder ) || !hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
-        cs.bottom  = bottomBorderPen( col, row );
-#endif
+        bottomBorder = bottomBorderPen( _col, _row );
+    if ( ( leftBorder == rightBorder ) &&
+         ( leftBorder == topBorder ) &&
+         ( leftBorder == bottomBorder ) )
+    {
+        if ( ( leftBorder.width() != 0 ) && ( leftBorder.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty("fo:border", convertOasisPenToString( leftBorder ) );
+    }
+    else
+    {
+        if ( ( leftBorder.width() != 0 ) && ( leftBorder.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "fo:border-left", convertOasisPenToString( leftBorder ) );
+
+        if ( ( rightBorder.width() != 0 ) && ( rightBorder.style() != Qt::NoPen ) )
+           currentCellStyle.addProperty( "fo:border-right", convertOasisPenToString( rightBorder ) );
+
+        if ( ( topBorder.width() != 0 ) && ( topBorder.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "fo:border-top", convertOasisPenToString( topBorder ) );
+
+        if ( ( bottomBorder.width() != 0 ) && ( bottomBorder.style() != Qt::NoPen ) )
+            currentCellStyle.addProperty( "fo:border-bottom", convertOasisPenToString( bottomBorder ) );
+
+    }
 }
 
 QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, bool force, bool copy ) const
@@ -1091,31 +1113,31 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     }
     if ( styleStack.hasAttribute( "fo:border-bottom" ) )
     {
-        setBottomBorderPen( loadOasisBorder( styleStack.attribute( "fo:border-bottom" ) ) );
+        setBottomBorderPen( convertOasisStringToPen( styleStack.attribute( "fo:border-bottom" ) ) );
         // TODO: style:border-line-width-bottom if double!
     }
 
     if ( styleStack.hasAttribute( "fo:border-right" ) )
     {
-        setRightBorderPen( loadOasisBorder(  styleStack.attribute( "fo:border-right" ) ) );
+        setRightBorderPen( convertOasisStringToPen(  styleStack.attribute( "fo:border-right" ) ) );
         // TODO: style:border-line-width-right
     }
 
     if ( styleStack.hasAttribute( "fo:border-top" ) )
     {
-        setTopBorderPen( loadOasisBorder(  styleStack.attribute( "fo:border-top" ) ) );
+        setTopBorderPen( convertOasisStringToPen(  styleStack.attribute( "fo:border-top" ) ) );
         // TODO: style:border-line-width-top
     }
 
     if ( styleStack.hasAttribute( "fo:border-left" ) )
     {
-        setLeftBorderPen( loadOasisBorder( styleStack.attribute( "fo:border-left" ) ) );
+        setLeftBorderPen( convertOasisStringToPen( styleStack.attribute( "fo:border-left" ) ) );
         // TODO: style:border-line-width-left
     }
 
     if ( styleStack.hasAttribute( "fo:border" ) )
     {
-        QPen pen = loadOasisBorder( styleStack.attribute( "fo:border" ) );
+        QPen pen = convertOasisStringToPen( styleStack.attribute( "fo:border" ) );
         setLeftBorderPen( pen );
         setRightBorderPen( pen );
         setTopBorderPen( pen );
@@ -1124,51 +1146,6 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         // TODO: style:border-line-width-left
     }
     return true;
-}
-
-QPen KSpreadFormat::loadOasisBorder( const QString & borderDef  )
-{
-    QPen pen;
-    if ( borderDef == "none" )
-        return pen;
-
-    int p = borderDef.find( ' ' );
-    if ( p < 0 )
-        return pen;
-
-    QString w = borderDef.left( p );
-    pen.setWidth( (int) KoUnit::parseValue( w ) );
-
-
-    ++p;
-    int p2 = borderDef.find( ' ', p );
-    QString s = borderDef.mid( p, p2 - p );
-
-    kdDebug(30518) << "Borderstyle: " << s << endl;
-
-    if ( s == "solid" || s == "double" )
-        pen.setStyle( Qt::SolidLine );
-    else
-    {
-#if 0
-        // TODO: not supported by oocalc
-        pen.setStyle( Qt::DashLine );
-        pen.setStyle( Qt::DotLine );
-        pen.setStyle( Qt::DashDotLine );
-        pen.setStyle( Qt::DashDotDotLine );
-#endif
-        pen.setStyle( Qt::SolidLine ); //default.
-    }
-
-    ++p2;
-    p = borderDef.find( ' ', p2 );
-    if ( p == -1 )
-        p = borderDef.length();
-
-    pen.setColor( QColor( borderDef.right( p - p2 ) ) );
-
-    // TODO Diagonals not supported by oocalc
-    return pen;
 }
 
 

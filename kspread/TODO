@@ -382,3 +382,4 @@ Done:
 -> save/load print range
 -> save/load conditional cell attribute
 -> save/load style
+-> save/load cell border attribute

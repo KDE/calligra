@@ -130,7 +130,6 @@ public:
     virtual void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle );
 
     bool loadFontOasisStyle( KoStyleStack & font );
-    QPen loadOasisBorder( const QString & borderDef );
     ////////////////////////////////
     //
     // Properties
