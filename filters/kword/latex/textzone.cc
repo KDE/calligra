@@ -1,7 +1,7 @@
-/* BUGS : If it's a title, I have a format command : test
- * the parag. style 
+/* MEMO: to see the unicode table
+ * xset +fp /usr/X11R6/lib/X11/fonts/ucs/
+ * xfd -fn '-misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1'
  */
-
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
@@ -24,15 +24,19 @@
 */
 
 #include <kdebug.h>		/* for kdDebug() stream */
+#include <qregexp.h>		/* for QRegExp() --> escapeLatin1 */
 
 #include "textzone.h"
+#include "listepara.h"
 
-TextZone::TextZone(): _useformat(true)
+#define CSTART 0xC0
+
+TextZone::TextZone(Para *para): _para(para)
 {
 
 }
 
-TextZone::TextZone(QString texte): _texte(texte), _useformat(true)
+TextZone::TextZone(QString texte, Para *para): _texte(texte), _para(para)
 {
 }
 
@@ -41,6 +45,108 @@ TextZone::~TextZone()
 	kdDebug() << "Destruction of a area" << endl;
 }
 
+bool TextZone::useFormat() const
+{
+	/* Use the format only if :
+	 *   - the user wants that
+	 *   - it's not a title
+	 */
+	return !_para->isChapter();
+}
+
+/* Convert special caracters (unicode) in latex usable caracters */
+QString TextZone::escapeLatin1(QString text)
+{
+	static const char *escapes[64] =
+	{
+		"\\`{A}", "\\'{A}", "\\^{A}", "\\~{A}",
+		"\\\"{A}", "\\AA", "\\AE", "\\c{C}",
+		"\\`{E}", "\\'{E}", "\\^{E}", "\\\"{E}",
+		"\\`{I}", "\\'{I}", "\\^{I}", "\\\"{I}",
+
+		"", "\\~{N}", "\\`{O}", "\\'{O}",
+		"\\^{O}", "\\~{O}", "\\\"{O}", "",
+		"\\O", "\\`{U}", "\\'{U}", "\\^{U}",
+		"\\\"{U}", "\\'{Y}", "", "\\ss",
+
+		"\\`{a}", "\\'{a}", "\\^{a}", "\\~{a}",
+		"\\\"{a}", "\\aa", "\\ae", "\\c{c}",
+		"\\`{e}", "\\'{e}", "\\^{e}", "\\\"{e}",
+		"\\`{\\i}", "\\'{\\i}", "\\^{\\i}", "\\\"{\\i}",
+
+		"", "\\~{n}", "\\`{o}", "\\'{o}",
+		"\\^{o}", "\\~{o}", "\\\"{o}", "",
+		"\\o", "\\`{u}", "\\'{u}", "\\^{u}",
+		"\\\"{u}", "\\'{y}", "", "\\\"{y}"
+	};
+
+	QString escapedText;
+	int unicode;         /* the character to be escaped */
+
+	escapedText = text;  /* copy input text */
+	
+	/***************************************************************************
+	 * Escape the special punctuation and other symbols in the Latin1 supplement
+	****************************************************************************/
+	convert(escapedText, 0X23, "\\#");
+	//convert(escapedText, 0X24, "\\$");
+	convert(escapedText, 0X25, "\\%");
+	convert(escapedText, 0X26, "\\&");
+	
+	convert(escapedText, 0X3C, "\\textless");
+	convert(escapedText, 0X3E, "\\textgreater");
+
+	//convert(escapedText, 0X5C, "\\textbackslash");
+	//convert(escapedText, 0X5E, "\\^");
+	convert(escapedText, 0X5F, "\\_");
+	
+	convert(escapedText, 0X7B, "\\{");
+	convert(escapedText, 0X7D, "\\}");
+	convert(escapedText, 0X7E, "\\~");
+	
+	convert(escapedText, 0XA1, "!`");
+	convert(escapedText, 0XA3, "\\pounds");
+	convert(escapedText, 0XA6, "\\textbar");
+	convert(escapedText, 0XA7, "\\S");
+	convert(escapedText, 0XA9, "\\copyright");
+	convert(escapedText, 0XAE, "\\textregistered");
+	convert(escapedText, 0XB6, "\\P");
+	convert(escapedText, 0XBF, "?`");
+	
+	/* begin making escape sequences for the 64 consecutive letters starting at C0
+	 * LaTeX has a different escape code when a char is followed by a space so
+	 * two escape sequences are needed for each character.
+	 */
+
+	for(int index = 0; index < 64; index++)
+	{
+		unicode = CSTART + index;
+		convert(escapedText, unicode, escapes[index]);
+	}
+
+	return escapedText;
+}
+
+/* convert all the instance of one caracter in latex usable caracter */
+void TextZone::convert(QString& texte, char unicode, const char* escape)
+{
+	QString expression;
+	QString texte_temp;
+
+	expression = QChar(unicode);
+	expression += " ";  /* character and space is the regular expression */
+	if(QString(escape) != "")
+	{
+		/* We can translate it */
+		texte_temp = texte.replace( QRegExp( expression ), QString(escape) + "\\ ");
+	}
+	else
+		texte_temp = texte;
+	/* One character is the ragular expression */
+	expression = expression.remove(1, 1); /* remove space at the end */
+	texte = texte_temp.replace( QRegExp( expression ), escape);
+}
+		
 void TextZone::analyse(const Markup * balise_initiale)
 {
 	kdDebug() << "FORMAT" << endl;
@@ -51,22 +157,44 @@ void TextZone::analyse(const Markup * balise_initiale)
 	_texte = _texte.mid(getPos(), getLength());
 	
 	kdDebug() << _texte.length() << endl;
-	kdDebug() << _texte.local8Bit() << endl;
+	kdDebug() << _texte.latin1() << endl;
 	kdDebug() << "END FORMAT" << endl;
 }
 
 void TextZone::generate(QTextStream &out)
 {
-	kdDebug() << "." << endl;
 
-	if(_useformat)
+	if(useFormat())
 		generate_format_begin(out);
 
 	// Text
-	out << _texte.latin1();
+	display(escapeLatin1(_texte), out);
 	// Text
-	if(_useformat)
+	if(useFormat())
 		generate_format_end(out);
+}
+
+/* trunc the text in about 80 caracters of width except if there are not 
+ * spaces.
+ */
+void TextZone::display(QString texte, QTextStream& out)
+{
+	QString line;
+	int index = 0, end = 0;
+	end = texte.find(' ', 60, false);
+	if(end != -1)
+		line = texte.mid(index, end - index);
+	else
+		line = texte;
+	while(end < (signed int) texte.length() && end != -1)
+	{
+		/* There are something to display */
+		out << line << endl;
+		index = end;
+		end = texte.find(' ', index + 60, false);
+		line = texte.mid(index, end - index);
+	}
+	out << line;
 }
 
 void TextZone::generate_format_begin(QTextStream & out)

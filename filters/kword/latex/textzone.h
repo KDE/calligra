@@ -1,4 +1,7 @@
-
+/* A TEXT ZONE IS SOME WORDS WITH A SPECIAL STYLE (ITALIC, ...).
+ * IT'S NOT USE FOR TITLE (BUT IN THE FUTURE IT WILL BE USED FOR)
+ * OR FOR SPECIAL PARAG.
+ */
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
@@ -27,27 +30,35 @@
 #include <qstring.h>
 #include "format.h"
 
-class TextZone: public  Format
+class Para;
+
+class TextZone: public Format
 {
 
+	/* TEXT MARKUP */
 	QString _texte;
-	bool    _useformat;
-	
+
+	/* USEFULL DATA */
+	Para*   _para;
+
 	public:
-		TextZone();
-		TextZone(QString);
+		TextZone(Para *para = 0);
+		TextZone(QString, Para *para = 0);
 		virtual ~TextZone();
 
-		void useFormat   () { _useformat = true;  }
-		void notUseFormat() { _useformat = false; }
+		/* Specify if the text must be formated */
+		bool useFormat() const;
 
+		QString escapeLatin1(QString);
+		
 		void analyse(const Markup*);
 		void generate(QTextStream&);
 		void generate_format_begin(QTextStream &);
 		void generate_format_end(QTextStream &);
 
 	private:
-
+		void convert(QString&, char, const char*);
+		void display(QString, QTextStream&);
 };
 
 #endif /* __KWORD_TEXTZONE_H__ */

@@ -72,6 +72,9 @@ class Element: public XmlParser
 
 		virtual ~Element();
 
+		virtual bool  hasColor() = 0;
+		virtual bool  hasUline() = 0;
+		
 		SSect    getSection() const { return _section; }
 		SType    getType()    const { return _type;    }
 		SInfo    getInfo()    const { return _hinfo;   }

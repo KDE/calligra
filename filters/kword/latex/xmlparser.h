@@ -25,24 +25,32 @@
 
 #include "xmlparse.h"
 
+class Header;
+
 class XmlParser
 {
 	const char* _document;
-	const char* _charset;
+	//const char* _charset;
 	int         _index;
 	Token*      _arbreXml;
 	Token*      _tokenCurrent;
 	Token*      _childCurrent;
+	protected:
+		/* All the inherit class must be have a link with 
+		 * the header to specify to use special package
+		 */
+		static Header *_header;
 
 	public:
-		XmlParser(const char *, const char *);
+		XmlParser(const char *);
 		XmlParser();
 		virtual ~XmlParser();
 
-		const char *getDocument() const;
-		Token* getTokenCurrent()  const { return _tokenCurrent; }
+		const char* getDocument()     const;
+		Token*      getTokenCurrent() const { return _tokenCurrent; }
 
 		void   setTokenCurrent (Token * t)     { _tokenCurrent = t; }
+		void   setHeader       (Header* h)     { _header = h; }
 		void   nextToken       ()              { _tokenCurrent = _tokenCurrent->pNext; };
 		Token* enterTokenChild(const Markup*);
 		
@@ -56,3 +64,4 @@ class XmlParser
 };
 
 #endif /* __KWORD_XMLPARSER_H__ */
+

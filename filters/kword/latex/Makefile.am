@@ -26,8 +26,5 @@ xml2latexparser.h xmlparser.h xmlparse.h
 
 METASOURCES = AUTO
 
-data_DATA = x-latex.desktop
-datadir = $(kde_mimedir)/text
-
-service_DATA = kword_latex_import.desktop # kword_latex_export.desktop
+service_DATA = kword_latex_export.desktop #kword_latex_import.desktop
 servicedir = $(kde_servicesdir)

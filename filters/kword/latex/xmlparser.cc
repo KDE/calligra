@@ -23,10 +23,12 @@
 
 #include "xmlparser.h"
 
-XmlParser::XmlParser(const char *data, const char *charset)
+/* Init static data */
+Header* XmlParser::_header = 0;
+
+XmlParser::XmlParser(const char *data)
 {
 	_document     = data;
-	_charset      = charset;	
 	_index        = 0;
 	_childCurrent = 0;
 
@@ -39,7 +41,6 @@ XmlParser::XmlParser(const char *data, const char *charset)
 XmlParser::XmlParser()
 {
 	_document = 0;
-	_charset  = 0;
 	_index    = 0;
 	_arbreXml = 0;
 	_tokenCurrent = 0;

@@ -39,7 +39,7 @@ class Xml2LatexParser : public XmlParser
 	Document    _document;
 
 	public:
-		Xml2LatexParser(QString, const char *, const char *);
+		Xml2LatexParser(QString, const char *);
 		virtual ~Xml2LatexParser() {}
 
 		void analyse();

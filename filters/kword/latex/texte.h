@@ -1,4 +1,4 @@
-
+/* A TEXT IS A SET OF TITLES, A (SET OF) PARAGRAPHS OR LISTS */
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
@@ -26,27 +26,25 @@
 #include "element.h"
 #include "listepara.h"
 
-enum _SEnv
-{
-	SE_AUCUN
-};
-
-typedef enum _SEnv SEnv;
-
 class Texte: public Element
 {
-	SEnv      _env;
-	ListPara _liste;
+	/* DATA MARKUP */
 	int      _left,
 		 _top,
 		 _right,
 		 _bottom;
 	bool     _runaround;
 
+	/* CHILD MARKUP */
+	ListPara _liste;
+
 	public:
 		Texte();
 		virtual ~Texte() {
-			kdDebug() << "Destruction d'un txt" << endl; }
+			kdDebug() << "Destruction of a txt" << endl; }
+		
+		bool  hasColor();
+		bool  hasUline();
 		
 		void analyse(const Markup*);
 		void generate(QTextStream&);

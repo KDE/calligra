@@ -1,29 +1,30 @@
 <PAPER>
-	- format			ANALYSE	SUPORTED
-	- ptWidth
-	- ptHeight
-	- mmWidth ="210"
-	- mmHeight="297"
-	- inchWidth ="8.26772"
-	- inchHeight="11.6929"
-	- orientation			ANALYSE	SUPORTED
-	- columns="1"			ANALYSE	SUPORTED
-	- ptColumnspc="3"
-	- mmColumnspc="1.05833"
-	- inchColumnspc="0.0416667"
-	- hType="0"
+	- format			SUPORTED
+	- ptWidth			SUPORTED
+	- ptHeight			SUPORTED
+	- mmWidth ="210"		SUPORTED
+	- mmHeight="297"		SUPORTED
+	- inchWidth ="8.26772"		SUPORTED
+	- inchHeight="11.6929"		SUPORTED
+	- orientation			SUPORTED
+	- columns="1"			SUPORTED
+	- ptColumnspc="3"		ANALIZED
+	- mmColumnspc="1.05833"		ANALIZED
+	- inchColumnspc="0.0416667"	ANALIZED
+	- hType="0"			SUPORTED
 		0...On all pages (even/odd) the same headers	\chead
 		1...Different header only on first page
 		2...Different headers for even/odd pages	\fancyhead
-	- fType="0"
-	- ptHeadBody="9"
-	- ptFootBody="9"
-	- mmHeadBody="3.5"
-	- mmFootBody="3.5"
-	- inchHeadBody="0.137795"
-	- inchFootBody="0.137795"
+	- fType="0"			SUPORTED
+	- ptHeadBody="9"		SUPORTED
+	- ptFootBody="9"		SUPORTED
+	- mmHeadBody="3.5"		SUPORTED
+	- mmFootBody="3.5"		SUPORTED
+	- inchHeadBody="0.137795"	SUPORTED
+	- inchFootBody="0.137795"	SUPORTED
 
-	<PAPERBORDERS>
+	<PAPERBORDERS>			ALL SUPORTED EXCEPT FOR BOTTOM (don't exist)
+					SPECIAL USE FOR Right and Left.
 	- mmLeft="0"
 	- mmTop="0"
 	- mmRight="0"
@@ -63,7 +64,7 @@
 	    	- 2...Picture frame
 	    	- 3...Part frame (e.g. KImage-Part)
 	- autoCreateNewFrame="1"
-	- frameInfo="0"
+	- frameInfo="0"			SUPORTED
 		- 0...Body
 		- 1...First header
 		- 2...Odd header

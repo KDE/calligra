@@ -48,29 +48,29 @@ void Document::analyse(const Markup * balise_initiale)
 		if(strcmp(balise->token.zText, "FRAMESET")== 0)
 		{
 			Element *elt = 0;
-			kdDebug() <<"ANALYSE D'UNE FRAMESET" << endl;
+			kdDebug() <<"ANALYSE OF A FRAMESET" << endl;
 			switch(getTypeFrameset(balise))
 			{
 				case ST_AUCUN: 
-					kdDebug() << "AUCUN" << endl;
+					kdDebug() << "NONE" << endl;
 					break;
 				case ST_IMAGE:
-					kdDebug() << "IMAGE" << endl;
+					kdDebug() << "PICTURE" << endl;
 					// elt = new Image;
 					// elt->analyse(balise);
 					break;
 				case ST_TEXTE: 
-					kdDebug() << "TEXTE" << endl;
+					kdDebug() << "TEXT" << endl;
 					elt = new Texte;
 					elt->analyse(balise);
 					break;
 				case ST_PARTS:
 					break;
 				default:
-					kdDebug() << "erreur " << elt->getType() << " " << ST_TEXTE << endl;
+					kdDebug() << "error " << elt->getType() << " " << ST_TEXTE << endl;
 			}
 			
-			// 3. Ajouter l'Element dans une des listes
+			/* 3. Add the Element in one of the lists */
 			kdDebug() << "INFO : " << elt->getSection();
 			switch(elt->getSection())
 			{
@@ -81,15 +81,23 @@ void Document::analyse(const Markup * balise_initiale)
 						_enTete.add(elt);
 					break;
 				case SS_CORPS: 	_corps.add(elt);
-						kdDebug() << " CORPS" << endl;
+						kdDebug() << " BODY" << endl;
 					break;
-				default: kdDebug() << "INCONNU" << endl;
+				default: kdDebug() << "UNKNOWN" << endl;
 					break;
 			}
 		}
-		kdDebug() << "FIN D'ANALYSE DE FRAMESET" << endl;
+		kdDebug() << "END OF ANALYSE OF A FRAMESET" << endl;
 	}
-	
+	/* TEST IF AT LEAST ONE ELEMENT USE COLOR OR UNDERLINED
+	 * _header->useColor() and _header->useUnderline()
+	 */
+	// utilisation of _header in Format class
+	//kdDebug() << "Test color and underline" << endl;
+	/*if(_corps.getFirst()->hasColor())
+		_header->useColor();
+	if(_corps.getFirst()->hasUline())
+		_header->useUnderline();*/
 }
 
 SType Document::getTypeFrameset(const Markup *balise)
@@ -103,11 +111,11 @@ SType Document::getTypeFrameset(const Markup *balise)
 		if(strcmp(arg->zName, "FRAMETYPE")== 0)
 		{
 			// A FINIR
-			kdDebug() << "TYPE : TEXTE" << endl;
+			kdDebug() << "TYPE : TEXT" << endl;
 			type = ST_TEXTE;
 		}
 	}
-	kdDebug() << "FIN TYPE" << endl;
+	kdDebug() << "END TYPE" << endl;
 	return type;
 }
 
@@ -119,7 +127,7 @@ void Document::generate(QTextStream &out)
 
 	kdDebug() << "DOC. GENERATION." << endl;
 	
-	// For each header
+	/* For each header */
 	if(getHeader()->hasHeader())
 	{
 		kdDebug() << "header : " << _enTete.getSize() << endl;
@@ -132,7 +140,7 @@ void Document::generate(QTextStream &out)
 		}
 	}
 	
-	// For each footer
+	/* For each footer */
 	if(getHeader()->hasFooter())
 	{
 		kdDebug() << "footer : " << _enTete.getSize() << endl;
@@ -147,7 +155,7 @@ void Document::generate(QTextStream &out)
 	if(getHeader()->hasHeader() || getHeader()->hasFooter())
 		out << "\\pagestyle{fancy}" << endl;
 
-	// Body
+	/* Body */
 	kdDebug() << endl << "body : " << _corps.getSize() << endl;
 
 	out << "\\begin{document}" << endl;
@@ -157,40 +165,74 @@ void Document::generate(QTextStream &out)
 
 void Document::generateTypeHeader(QTextStream &out, Element *header)
 {
-	out << "\\fancyhead[C";
-	switch(header->getInfo())
+	if(_header->getHeadType() == TH_ALL && header->getInfo() == SI_EVEN)
 	{
-		case SI_NONE:
-		case SI_FIRST:
-			break;
-		case SI_ODD:
-			out << "O";
-			break;
-		case SI_EVEN:
-			out << "E";
-			break;
+		out << "\\lhead{}" << endl;
+		out << "\\chead{";
+		header->generate(out);
+		out << "}" << endl;
+		out << "\\rhead{}" << endl;
 	}
-	out << "]{";
-	header->generate(out);
-	out << "}" << endl;
+	else if(_header->getHeadType() == TH_EVODD)
+	{
+		switch(header->getInfo())
+		{
+			case SI_NONE:
+			case SI_FIRST:
+				break;
+			case SI_ODD:
+				out << "\\fancyhead[CO]{";
+				header->generate(out);
+				out << "}" << endl;
+				break;
+			case SI_EVEN:
+				out << "\\fancyhead[CE]{";
+				header->generate(out);
+				out << "}" << endl;
+				break;
+		}
+	}
+	else if(_header->getHeadType() == TH_FIRST && header->getInfo() == SI_FIRST)
+	{
+		out << "\\markright{";
+		header->generate(out);
+		out << "}" << endl;
+		out << "\\thispagestyle{heading}" << endl;
+	}
 }
 
 void Document::generateTypeFooter(QTextStream &out, Element *footer)
 {
-	out << "\\fancyfoot[C";
-	switch(footer->getInfo())
+	if(_header->getFootType() == TH_ALL && footer->getInfo() == SI_EVEN)
 	{
-		case SI_NONE:
-		case SI_FIRST:
-			break;
-		case SI_ODD:
-			out << "O";
-			break;
-		case SI_EVEN:
-			out << "E";
-			break;
+		out << "\\lfoot{}" << endl;
+		out << "\\cfoot{";
+		footer->generate(out);
+		out << "}" << endl;
+		out << "\\rfoot{}" << endl;
 	}
-	out << "]{";
-	footer->generate(out);
-	out << "}" << endl;
+	else if(_header->getFootType() == TH_EVODD)
+	{
+		switch(footer->getInfo())
+		{
+			case SI_NONE:
+			case SI_FIRST:
+				break;
+			case SI_ODD:
+				out << "\\fancyfoot[CO]{";
+				footer->generate(out);
+				out << "}";;
+				break;
+			case SI_EVEN:
+				out << "\\fancyfoot[CE]{";
+				footer->generate(out);
+				out << "}";
+				break;
+		}
+	}
+	else if(_header->getFootType() == TH_FIRST && footer->getInfo() == SI_FIRST)
+	{
+		//out << "\\markright{}" << endl;
+		//out << "\\thispagestyle{heading}" << endl;
+	}
 }

@@ -25,7 +25,7 @@
 
 #include "xml2latexparser.h"
 
-Xml2LatexParser::Xml2LatexParser(QString filename, const char *data, const char *charset): XmlParser(data, charset), _file(filename.latin1())
+Xml2LatexParser::Xml2LatexParser(QString filename, const char *data): XmlParser(data), _file(filename.latin1())
 {
 	kdDebug() << filename.latin1() << endl;
 	_filename = filename;

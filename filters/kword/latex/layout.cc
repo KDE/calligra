@@ -23,6 +23,7 @@
 
 #include <kdebug.h>	/* for kdDebug() stream */
 
+#include "header.h"	/* for _header use */
 #include "layout.h"
 
 /* Static Datas */
@@ -31,14 +32,13 @@ EType   Layout::_last_counter;
 
 Layout::Layout()
 {
-	//_follow_type   = STANDARD;
-	_last_name     = "STANDARD";
-	_last_counter  = STANDARD;
-	_env           = ENV_LEFT;
-	_counterType   = STANDARD;
-	_counterDepth  = 0;
-	_counterBullet = 0;
-	_counterStart  = 0;
+	_last_name     =  "STANDARD";
+	_last_counter  =  TL_STANDARD;
+	_env           =  ENV_LEFT;
+	_counterType   =  TL_STANDARD;
+	_counterDepth  =  0;
+	_counterBullet =  0;
+	_counterStart  =  0;
 	_numberingType = -1;
 }
 
@@ -99,20 +99,6 @@ void Layout::analyseName(const Markup *balise)
 		{
 			setName(arg->zValue);
 			kdDebug() << arg->zValue << endl;
-			/*if(strcmp(arg->zValue, "Standard") == 0)
-				setType(STANDARD);
-			else if(strcmp(arg->zValue, "Head 1") == 0)
-				setType(TITRE1);
-			else if(strcmp(arg->zValue, "Head 2") == 0)
-				setType(TITRE2);
-			else if(strcmp(arg->zValue, "Head 3") == 0)
-				setType(TITRE3);
-			else if(strcmp(arg->zValue, "Enumerated List") == 0)
-				setType(ENUM);
-			else if(strcmp(arg->zValue, "Alphabetical List") == 0)
-				setType(ALPHA);
-			else if(strcmp(arg->zValue, "Bullet List") == 0)
-				setType(BULLET);*/
 		}
 	}
 }
@@ -129,20 +115,6 @@ void Layout::analyseFollowing(const Markup *balise)
 		{
 			setFollowing(arg->zValue);
 			kdDebug() << arg->zValue << endl;
-			/*if(strcmp(arg->zValue, "Standard") == 0)
-				setTypeFollow(STANDARD);
-			else if(strcmp(arg->zValue, "Head 1") == 0)
-				setTypeFollow(TITRE1);
-			else if(strcmp(arg->zValue, "Head 2") == 0)
-				setTypeFollow(TITRE2);
-			else if(strcmp(arg->zValue, "Head 3") == 0)
-				setTypeFollow(TITRE3);
-			else if(strcmp(arg->zValue, "Enumerated List") == 0)
-				setTypeFollow(ENUM);
-			else if(strcmp(arg->zValue, "Alphabetical List") == 0)
-				setTypeFollow(ALPHA);
-			else if(strcmp(arg->zValue, "Bullet List") == 0)
-				setTypeFollow(BULLET);*/
 		}
 	}
 }
@@ -174,6 +146,11 @@ void Layout::analyseCounter(const Markup *balise)
 		if(strcmp(arg->zName, "TYPE")== 0)
 		{
 			setCounterType(atoi(arg->zValue));
+			if(getCounterType() > TL_ARABIC && getCounterType() < TL_BULLET)
+			{
+				kdDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << getCounterType() << endl;
+				_header->useEnumerate();
+			}
 		}
 		else if(strcmp(arg->zName, "DEPTH")== 0)
 		{

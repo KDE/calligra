@@ -29,13 +29,13 @@
 
 enum _EType
 {
-	STANDARD,
-	ARABIC,		/* 1, 2, ... */
-	LLETTER,	/* a, b, ... */
-	CLETTER,	/* A, B, ... */
-	LLNUMBER,	/* i, ii, ... */
-	CLNUMBER,	/* I, II, ... */
-	BULLET		/* - */
+	TL_STANDARD,
+	TL_ARABIC,		/* 1, 2, ... */
+	TL_LLETTER,	/* a, b, ... */
+	TL_CLETTER,	/* A, B, ... */
+	TL_LLNUMBER,	/* i, ii, ... */
+	TL_CLNUMBER,	/* I, II, ... */
+	TL_BULLET		/* - */
 };
 
 enum _EEnv

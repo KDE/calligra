@@ -29,11 +29,45 @@ Texte::Texte()
 	_right     = 0;
 	_top       = 0;
 	_bottom    = 0;
-	_env       = SE_AUCUN;
 	_runaround = false;
 
 	setType(ST_TEXTE);
 	setSection(SS_CORPS);
+}
+
+/* Return TRUE if there is at least one parag. which use color */
+bool Texte::hasColor()
+{
+	bool color;
+	ParaIter iter;
+
+	color = false;
+	iter.setList(_liste);
+	kdDebug() << "TEST COLOR USE" << endl;
+	while(!iter.isTerminate() && !color)
+	{
+		color = iter.getCourant()->isColored();
+		kdDebug() << "coul" << color << endl;
+		iter.next();
+	}
+	return color;
+}
+
+/* Return TRUE if there is at least one parag. which use underline */
+bool Texte::hasUline()
+{
+	bool uline;
+	ParaIter iter;
+
+	uline = false;
+	iter.setList(_liste);
+	kdDebug() << "TEST ULINE USE" << endl;
+	while(!iter.isTerminate() && !uline)
+	{
+		uline = iter.getCourant()->isUlined();
+		iter.next();
+	}
+	return uline;
 }
 
 void Texte::analyse(const Markup * balise_initiale)
@@ -41,14 +75,14 @@ void Texte::analyse(const Markup * balise_initiale)
 	Token* savedToken = 0;
 	Markup* balise    = 0;
 
-	// MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE
+	/* MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE */
 	
-	// Parameters Analyse
+	/* Parameters Analyse */
 	Element::analyse(balise_initiale);
 
 	kdDebug() << "ANALYSE D'UNE FRAME (Texte)" << endl;
 
-	// Chlidren markups Analyse
+	/* Chlidren markups Analyse */
 	savedToken = enterTokenChild(balise_initiale);
 	while((balise = getNextMarkup()) != 0)
 	{
@@ -59,21 +93,21 @@ void Texte::analyse(const Markup * balise_initiale)
 		else if(strcmp(balise->token.zText, "PARAGRAPH")== 0)
 		{
 			// 1. Create a paragraph :
-			Para *prg = new Para;
+			Para *prg = new Para(this);
 			// 2. Add the informations :
 			prg->analyse(balise);
 			// 3. add this parag. in the list
 			_liste.add(prg);
-			kdDebug() << "PARA AJOUTE" << endl;
+			kdDebug() << "PARA ADDED" << endl;
 		}
 		
 	}
-	kdDebug() << "FIN D'UNE FRAME" << endl;
+	kdDebug() << "END OF A FRAME" << endl;
 }
 
 void Texte::analyseParamFrame(const Markup *balise)
 {
-	//<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />
+	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
 	Arg *arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
@@ -106,6 +140,7 @@ void Texte::generate(QTextStream &out)
 	iter.setList(_liste);
 	while(!iter.isTerminate())
 	{
+		//iter.getCourant()->setFrameType(getSection());
 		iter.getCourant()->generate(out);
 		iter.next();
 		kdDebug() << iter.getCourant() << endl;

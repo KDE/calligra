@@ -27,6 +27,8 @@
 //#include "textzone.h"
 #include "elementt.h"
 
+class TextZone;
+
 class ListeTextZone
 {
 	QString _texte;

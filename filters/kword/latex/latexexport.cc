@@ -41,28 +41,20 @@ const bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
         in.close();
         return false;
     }
-    // inout file Reading
-    QCString buf( in.size() );
-    int count = in.read( buf.data(), in.size() );
-    if ( count != in.size() ) {
-      kdError(30503) << "Error reading input file!" << endl;
-      in.close();
-      return false;
-    }
+    // input file Reading
+    QByteArray array=in.read(0xffffffff);
+    QString buf = QString::fromUtf8((const char*)array, array.size());
     in.close();
  
-    QCString charset( "utf-8" );
-
     int begin = buf.find( "<DOC" ); // skip <?...?>
-
+    buf.remove(0, begin);
     kdDebug() << "LATEX FILTER --> BEGIN" << endl;
-    Xml2LatexParser LATEXParser(fileOut, (const char*) buf + begin, charset);
+    Xml2LatexParser LATEXParser(fileOut, buf.latin1());
     LATEXParser.analyse();
     kdDebug() << "---------- generate file -------------" << endl;
     LATEXParser.generate();
     kdDebug() << "LATEX FILTER --> END" << endl;
 
-    // Copie du fichier temporaire dans le fichier finale
     // It would certainly be more efficient if the filter was writing
     // into a QString (using fromUtf8 for the stuff coming from the xml file)
     // instead of using a temporary file !

@@ -1,4 +1,6 @@
-
+/* A PARA IS A TITLE, A SET OF WORDS OR A LIST. TO KNOW ITS TYPE,
+ * YOU MUST LOOK AT IN THE LAYOUT CLASS.
+ */
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
@@ -27,24 +29,35 @@
 #include "xmlparser.h"
 #include "listetextzone.h"
 #include "layout.h"
+#include "element.h"
+
+class Texte;
 
 class Para: public Layout
 {
+	/* MARKUP DATA */
 	QString        _texte;
 	ListeTextZone* _liste;
+
+	/* TO MANAGE THE LIST */
 	Para*          _next;
 	Para*          _previous;
 
+	/* USEFULL DATA */
+	Texte*         _element;
+
 	public:
-		Para();
+		Para(Texte *texte = 0);
 		virtual ~Para();
 
-		Para* getNext     () const { return _next;     }
-		Para* getPrevious () const { return _previous; }
+		bool isColored    () const;
+		bool isUlined     () const;
+		Para* getNext     () const { return _next;      }
+		Para* getPrevious () const { return _previous;  }
+		SSect getFrameType() const;
 		
-		void setNext    (Para *p) { _next     = p;    }
-		void setPrevious(Para *p) { _previous = p;    }
-
+		void setNext    (Para *p)  { _next      = p;    }
+		void setPrevious(Para *p)  { _previous  = p;    }
 
 		void analyse         (const Markup*);
 		void generate        (QTextStream&);
@@ -125,7 +138,7 @@ class ParaIter {
  */
 //@{
 	void next   ()            { _courant = _courant->getNext(); }
-	void setList(ListPara &l) { _courant = l.getFirst();        }
+	void setList(const ListPara &l) { _courant = l.getFirst();        }
 //@}
 
 /**

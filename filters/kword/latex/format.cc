@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 
+#include "header.h"	/* for the use of _header (color and underlined) */
 #include "format.h"
 
 int Format::getColorBlue () const
@@ -179,6 +180,7 @@ void Format::analyseUnderlined(const Markup *balise)
 		{
 			kdDebug() << arg->zName << endl;
 			setUnderlined(arg->zValue);
+			_header->useUnderline();
 		}
 	}
 }
@@ -246,4 +248,5 @@ void Format::analyseColor(const Markup *balise)
 		}
 	}
 	setColor(red, green, blue);
+	_header->useColor();
 }

@@ -26,6 +26,7 @@
 
 #include <kdebug.h>		/* for kdDebug() stream */
 #include "listepara.h"
+#include "texte.h"
 
 ListPara::ListPara()
 {
@@ -84,8 +85,9 @@ void ListPara::vider()
 }
 
 /***********************************************************/
-Para::Para()
+Para::Para(Texte* texte)
 {
+	_element  = texte;
 	_liste    = 0;
 	_next     = 0;
 	_previous = 0;
@@ -98,17 +100,57 @@ Para::~Para()
 		delete _liste;
 }
 
+
+/* Return TRUE if there is at least one text zone which use color */
+/* no use */
+bool Para::isColored() const
+{
+	bool color;
+	TextZoneIter iter;
+
+	color = false;
+	iter.setList(_liste);
+	while(!iter.isTerminate() && !color)
+	{
+		color = iter.getCourant()->isColor();
+		iter.next();
+	}
+	return color;
+}
+
+/* Return TRUE if there is at least one text zone which use uline */
+/* no use */
+bool Para::isUlined() const
+{
+	bool uline;
+	TextZoneIter iter;
+
+	uline = false;
+	iter.setList(_liste);
+	while(!iter.isTerminate() && !uline)
+	{
+		uline = iter.getCourant()->isUnderlined();
+		iter.next();
+	}
+	return uline;
+}
+
+SSect Para::getFrameType() const
+{
+	return _element->getSection();
+}
+
 void Para::analyse(const Markup * balise_initiale)
 {
 	Token* savedToken = 0;
 	Markup* balise    = 0;
 
-	// MARKUP TYPE :  PARAGRAPH
+	/* MARKUP TYPE :  PARAGRAPH */
 
-	// Analyse of the parameters
+	/* Analyse of the parameters */
 	kdDebug() << "ANALYSE A PARAGRAPH" << endl;
 	
-	// Analyse of the children markups
+	/* Analyse of the children markups */
 	savedToken = enterTokenChild(balise_initiale);
 	while((balise = getNextMarkup()) != 0)
 	{
@@ -121,11 +163,11 @@ void Para::analyse(const Markup * balise_initiale)
 					_texte += p->zText;
 				}
 			}
-			kdDebug() << "TEXTE : " << _texte.latin1() << endl;
+			//kdDebug() << "TEXTE : " << _texte.latin1() << endl;
 		}
 		else if(strcmp(balise->token.zText, "FORMATS")== 0)
 		{
-			// IMPORTANT ==> police + style
+			/* IMPORTANT ==> police + style */
 			kdDebug() << "FORMATS" << endl;
 			analyseFormats(balise);
 			
@@ -134,19 +176,20 @@ void Para::analyse(const Markup * balise_initiale)
 		{
 			kdDebug() << "LAYOUT" << endl;
 			analyseLayout(balise);
-			// Hey, it's a title : not use
-			// the format
-			if(isChapter())
+			/* Hey, it's a title : not use
+			 * the format
+			 */
+			/*if(isChapter())
 			{
 				TextZoneIter iter;
 				iter.setList(_liste);
 				while(!iter.isTerminate())
 				{
-					kdDebug() << "NOT USE FORMAT" << endl;
-					iter.getCourant()->notUseFormat();
+					kdDebug() << "DONT USE FORMAT" << endl;
+					//iter.getCourant()->notUseFormat();
 					iter.next();
 				}
-			}
+			}*/
 		}
 	}
 	kdDebug() << "END OF PARAGRAPH" << endl;
@@ -160,14 +203,14 @@ void Para::analyseFormats(const Markup *balise_initiale)
 	savedToken = enterTokenChild(balise_initiale);
 	while((balise = getNextMarkup()) != NULL)
 	{
-		TextZone *texte = new TextZone(_texte);
+		TextZone *texte = new TextZone(_texte, this);
 		if(strcmp(balise->token.zText, "FORMAT")== 0)
 		{
 			texte->analyse(balise);
-			// If it's the first element
+			/* If it's the first element */
 			if(_liste == 0)
 				_liste = new ListeTextZone;
-			// add the text
+			/* add the text */
 			_liste->addLast(texte);
 		}
 		else
@@ -180,14 +223,15 @@ void Para::generate(QTextStream &out)
 {
 
 	kdDebug() << "  GENERATION PARA" << endl;
+	
+	/* If a parag. have a special format (begining) */
+	if(getFrameType() != SS_ENTETE && getFrameType() != SS_PIEDS)
+		generateDebut(out);
+	/*setLastName();
+	setLastCounter();*/
 	/* If a parag. have text :))) */
 	if(_liste != 0)
 	{
-		/* If a parag. have a special format (begining) */
-		generateDebut(out);
-		setLastName();
-		setLastCounter();
-
 		TextZoneIter iter;
 		kdDebug() << "  NB ZONE : " << _liste->getSize() << endl;
 		iter.setList(_liste);
@@ -196,9 +240,12 @@ void Para::generate(QTextStream &out)
 			iter.getCourant()->generate(out);
 			iter.next();
 		}
-		/* id than above : a parag. have a special format. (end) */
-		generateFin(out);
 	}
+	/* id than above : a parag. have a special format. (end) 
+	 * only it's not a header or a footer
+	 */
+	if(getFrameType() != SS_ENTETE && getFrameType() != SS_PIEDS)
+		generateFin(out);
 	kdDebug() << "PARA GENERATED" << endl;
 }
 
@@ -210,41 +257,54 @@ void Para::generateDebut(QTextStream &out)
 		/* switch the type, the depth do*/
 		generateTitle(out);
 	}
-	else if(isList())
-	{
-		/* if it's a list */
-		if(_previous == 0 || !_previous->isList() ||
-			(_previous->isList() && _previous->getCounterDepth() < getCounterDepth()))
-		{
-			switch(getCounterType())
-			{
-				case STANDARD:
-					break;
-				case ARABIC:
-					   out << "\\begin{enumerate}" << endl;
-					break;
-				/*case ALPHA:
-					    out << "\\item ";
-					break;*/
-				case BULLET:
-					     out << "\\begin{itemize}" << endl;
-			}
-		}
-		out << "\\item ";
-	}
 	else
 	{
-		/* It's a parag. */
-		switch(getEnv())
+		if(_previous == 0 || _previous->getEnv() != getEnv())
 		{
-			case ENV_LEFT: out << "\\begin{flushleft}" << endl;
-				break;
-			case ENV_RIGHT: out << "\\begin{flushright}" << endl;
-				break;
-			case ENV_CENTER: out << "\\begin{center}" << endl;
-				break;
-			case ENV_NONE: /* Nothing to do */
-				break;
+			/* It's a parag. */
+			switch(getEnv())
+			{
+				case ENV_LEFT: out << "\\begin{flushleft}" << endl;
+					break;
+				case ENV_RIGHT: out << "\\begin{flushright}" << endl;
+					break;
+				case ENV_CENTER: out << "\\begin{center}" << endl;
+					break;
+				case ENV_NONE: out << endl;
+					break;
+			}
+		}
+		if(isList())
+		{
+			/* if it's a list */
+			if(_previous == 0 || !_previous->isList() ||
+				(_previous->isList() && _previous->getCounterDepth() < getCounterDepth()) ||
+				(_previous->isList() && _previous->getCounterType() != getCounterType()))
+			{
+				switch(getCounterType())
+				{
+					case TL_STANDARD:
+						break;
+					case TL_ARABIC:
+						   out << "\\begin{enumerate}" << endl;
+						break;
+					case TL_LLETTER:	/* a, b, ... */
+						out << "\\begin{enumerate}[a]" << endl;
+						break;
+					case TL_CLETTER:	/* A, B, ... */
+						out << "\\begin{enumerate}[A]" << endl;
+						break;
+					case TL_LLNUMBER:	/* i, ii, ... */
+						out << "\\begin{enumerate}[i]" << endl;
+						break;
+					case TL_CLNUMBER: /* I, II, ... */
+						out << "\\begin{enumerate}[I]" << endl;
+						break;
+					case TL_BULLET:
+						     out << "\\begin{itemize}" << endl;
+				}
+			}
+			out << "\\item ";
 		}
 	}
 }
@@ -254,45 +314,49 @@ void Para::generateFin(QTextStream &out)
 	/* Close a title of chapter */
 	if(isChapter())
 		out << "}" << endl;
-	else if(isList())
+	if(isList())
 	{
 		/* It's a list */
-		out << endl;
 		if(_next == 0 || !_next->isList() ||
-			(_next->isList() && _next->getCounterDepth() > getCounterDepth()))
+			(_next->isList() && _next->getCounterDepth() < getCounterDepth()) ||
+			(_next->isList() && _next->getCounterType() != getCounterType()))
 		{
+			out << endl;
 			/* but the next parag is not a same list */
 			switch(getCounterType())
 			{
-				case STANDARD: out << endl;
+				case TL_STANDARD: out << endl;
 					break;
-				case ARABIC: 
+				case TL_ARABIC:
+				case TL_LLETTER:  /* a, b, ... */
+				case TL_CLETTER:  /* A, B, ... P. 250*/
+				case TL_LLNUMBER: /* i, ii, ... */
+				case TL_CLNUMBER: /* I, II, ... */
 					       out << "\\end{enumerate}" << endl;
 					break;
-				/*case ALPHA:
-					    out << "\\end{alphabetic}" << endl;
-					break;*/
-				case BULLET:
+				case TL_BULLET:
 					     out << "\\end{itemize}" << endl;
 			}
 		}
 	}
-	else
+	if(_previous != 0)
 	{
-		/* It's a parag. */
-		/* Close an environment */
-		out << endl;
-		switch(getEnv())
+		if((_next == 0 || _next->getEnv() != getEnv()) && !_previous->isChapter() && !isChapter())
 		{
-			case ENV_LEFT: out << "\\end{flushleft}" << endl;
-				break;
-			case ENV_RIGHT: out << "\\end{flushright}" << endl;
-				break;
-			case ENV_CENTER: out << "\\end{center}" << endl;
-				break;
-			case ENV_NONE: /* Nothing to do */
-				break;
+			switch(getEnv())
+			{
+				case ENV_LEFT: out << "\\end{flushleft}" << endl;
+					break;
+				case ENV_RIGHT: out << "\\end{flushright}" << endl;
+					break;
+				case ENV_CENTER: out << "\\end{center}" << endl;
+					break;
+				case ENV_NONE: out << endl;
+					break;
+			}
 		}
+		if(_next == 0 || _next->getEnv() == getEnv())
+			out << endl;
 	}
 }
 

@@ -89,6 +89,7 @@ class ElementIter {
 //@{
 	void next()                  { _courant = _courant->getNext(); }
 	void setList(ListElement *l) { _courant = l->getFirst();       }
+	void setList(ListElement l)  { _courant = l.getFirst();        }
 //@}
 
 /**
