@@ -43,7 +43,7 @@ public:
   KWFrame(const QPoint &topleft,const QPoint &bottomright);
   KWFrame(const QPoint &topleft,const QSize &size);
   KWFrame(int left,int top,int width,int height);
-  KWFrame(int left,int top,int width,int height,RunAround _ra);
+  KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap);
 
   void setRunAround(RunAround _ra) { runAround = _ra; }
   RunAround getRunAround() { return runAround; }
@@ -65,9 +65,15 @@ public:
 
   QCursor getMouseCursor(int mx,int my);
 
+  int getRunAroundGap()
+    { return runAroundGap; }
+  void setRunAroundGap(int gap)
+    { runAroundGap = gap; }
+
 protected:
   RunAround runAround;
   bool selected;
+  int runAroundGap;
 
   QList<QRect> intersections;
 

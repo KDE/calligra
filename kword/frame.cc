@@ -37,6 +37,7 @@ KWFrame::KWFrame()
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
   selected = false;
+  runAroundGap = 2;
 }
 
 /*================================================================*/
@@ -46,6 +47,7 @@ KWFrame::KWFrame(const QPoint &topleft,const QPoint &bottomright)
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
   selected = false;
+  runAroundGap = 2;
 } 
 
 /*================================================================*/
@@ -55,6 +57,7 @@ KWFrame::KWFrame(const QPoint &topleft,const QSize &size)
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
   selected = false;
+  runAroundGap = 2;
 }    
 
 /*================================================================*/
@@ -64,15 +67,17 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
   selected = false;
+  runAroundGap = 2;
 }
 
 /*================================================================*/
-KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra) 
+KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap) 
   : QRect(left,top,width,height), intersections() 
 { 
   runAround = _ra; 
   intersections.setAutoDelete(true); 
   selected = false;
+  runAroundGap = _gap;
 }
 
 /*================================================================*/
@@ -96,7 +101,7 @@ int KWFrame::getLeftIndent(int _y,int _h)
       if (rect.intersects(QRect(left(),_y,width(),_h)))
 	{
 	  if (rect.left() == left())
-	    _left = max(_left,rect.width() + 2);
+	    _left = max(_left,rect.width() + runAroundGap);
 	}
     }
 
@@ -118,7 +123,7 @@ int KWFrame::getRightIndent(int _y,int _h)
       if (rect.intersects(QRect(left(),_y,width(),_h)))
 	{
 	  if (rect.right() == right())
-	    _right = max(_right,rect.width() + 2);
+	    _right = max(_right,rect.width() + runAroundGap);
 	}
     }
 
@@ -166,14 +171,14 @@ KWFrameSet::KWFrameSet(KWordDocument_impl *_doc)
 /*================================================================*/
 void KWFrameSet::addFrame(KWFrame _frame)
 {
-  frames.append(new KWFrame(_frame.x(),_frame.y(),_frame.width(),_frame.height(),_frame.getRunAround()));
+  frames.append(new KWFrame(_frame.x(),_frame.y(),_frame.width(),_frame.height(),_frame.getRunAround(),_frame.getRunAroundGap()));
   if (frames.count() == 1) init();
 }
 
 /*================================================================*/
 void KWFrameSet::addFrame(KWFrame *_frame)
 {
-  frames.append(new KWFrame(_frame->x(),_frame->y(),_frame->width(),_frame->height(),_frame->getRunAround()));
+  frames.append(new KWFrame(_frame->x(),_frame->y(),_frame->width(),_frame->height(),_frame->getRunAround(),_frame->getRunAroundGap()));
   if (frames.count() == 1) init();
 }
 
@@ -259,7 +264,8 @@ void KWFrameSet::save(ostream &out)
       frame = getFrame(i);
       out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
 	  << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() 
-	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround()) << "\"/>" << endl;
+	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround()) 
+	  << "\" runaroundGap=\"" << frame->getRunAroundGap() << "\"/>" << endl;
     }
 }
 
@@ -467,8 +473,10 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		rect.setBottom(atoi((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "runaround")
 		rect.setRunAround(static_cast<RunAround>(atoi((*it).m_strValue.c_str())));
+	      else if ((*it).m_strName == "runaroundGap")
+		rect.setRunAroundGap(atoi((*it).m_strValue.c_str()));
 	    }
-	  frames.append(new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround()));
+	  frames.append(new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap()));
 	}
 
       else

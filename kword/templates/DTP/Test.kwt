@@ -25,8 +25,8 @@
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET frameType="1" autoCreateNewFrame="1">
-   <FRAME left="28" top="42" right="300" bottom="600" runaround="1"/>
-   <FRAME left="310" top="42" right="500" bottom="600" runaround="1"/>
+   <FRAME left="28" top="42" right="300" bottom="600" runaround="1" runaroundGap="5"/>
+   <FRAME left="310" top="42" right="500" bottom="600" runaround="1" runaroundGap="5"/>
    <PARAGRAPH>
     <TEXT value=""/>
     <FORMATS>

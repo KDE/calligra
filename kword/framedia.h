@@ -16,6 +16,8 @@
 #ifndef framedia_h
 #define framedia_h
 
+#include <stdlib.h>
+
 #include <qtabdialog.h>
 #include <qwidget.h>
 #include <qlayout.h>
@@ -28,6 +30,7 @@
 #include <qevent.h>
 
 #include <kapp.h>
+#include <krestrictedline.h>
 
 class KWFrame;
 class KWFrameSet;
@@ -54,9 +57,10 @@ protected:
   QGroupBox *runGroup;
   QRadioButton *rRunNo,*rRunBounding,*rRunContur;
   QCheckBox *cAutoCreateFrame;
-  QLabel *lRunNo,*lRunBounding,*lRunContur;
+  QLabel *lRunNo,*lRunBounding,*lRunContur,*lRGap;
   KWFrameSet *frameset;
   KWFrame *frame;
+  KRestrictedLine *eRGap;
 
   void closeEvent(QCloseEvent *e)
     { emit frameDiaClosed(); e->accept(); }

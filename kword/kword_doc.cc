@@ -1410,7 +1410,8 @@ void KWordDocument_impl::appendPage(unsigned int _page,QPainter &_painter)
 	{
 	  frame = frameSet->getFrame(j);
 	  if (frame->intersects(pageRect))
-	    frameList.append(new KWFrame(frame->x(),frame->y() + getPTPaperHeight(),frame->width(),frame->height(),frame->getRunAround()));
+	    frameList.append(new KWFrame(frame->x(),frame->y() + getPTPaperHeight(),frame->width(),frame->height(),frame->getRunAround(),
+					 frame->getRunAroundGap()));
 	}
 
       if (!frameList.isEmpty())

@@ -70,7 +70,7 @@ void KWFrameDia::setupTab2TextFrame()
 {
   tab2 = new QWidget(this);
 
-  grid2 = new QGridLayout(tab2,2,1,15,7);
+  grid2 = new QGridLayout(tab2,3,2,15,7);
 
   runGroup = new QGroupBox(i18n("Text Run Around"),tab2);
   grid2->addWidget(runGroup,0,0);
@@ -130,13 +130,29 @@ void KWFrameDia::setupTab2TextFrame()
 
   runGrid->activate();
 
-  grid2->addWidget(runGroup,0,0);
+  grid2->addMultiCellWidget(runGroup,0,0,0,1);
 
-  grid2->addColSpacing(0,runGroup->width());
-  grid2->setColStretch(0,1);
+  lRGap = new QLabel(i18n("Runaround Gap: (in pt)"),tab2);
+  lRGap->resize(lRGap->sizeHint());
+  lRGap->setAlignment(AlignRight);
+  grid2->addWidget(lRGap,1,0);
+
+  eRGap = new KRestrictedLine(tab2,"","1234567890");
+  eRGap->setText("0");
+  eRGap->setMaxLength(5);
+  eRGap->setEchoMode(QLineEdit::Normal);
+  eRGap->setFrame(true);
+  eRGap->resize(eRGap->sizeHint());
+  grid2->addWidget(eRGap,1,1);
+
+  grid2->addColSpacing(0,lRGap->width());
+  grid2->addColSpacing(1,eRGap->width());
+  grid2->setColStretch(1,1);
 
   grid2->addRowSpacing(0,runGroup->height());
-  grid2->setRowStretch(1,1);
+  grid2->addRowSpacing(1,lRGap->height());
+  grid2->addRowSpacing(1,eRGap->height());
+  grid2->setRowStretch(2,1);
 
   grid2->activate();
 
@@ -152,6 +168,9 @@ void KWFrameDia::setupTab2TextFrame()
     case RA_CONTUR: rRunContur->setChecked(true);
       break;
     }
+  QString str;
+  str.sprintf("%d",frame->getRunAroundGap());
+  eRGap->setText(str.data());
 }
 
 /*================================================================*/
@@ -195,5 +214,6 @@ void KWFrameDia::applyChanges()
 	frame->setRunAround(RA_BOUNDINGRECT);
       else if (rRunContur->isChecked())
 	frame->setRunAround(RA_CONTUR);
+      frame->setRunAroundGap(atoi(eRGap->text()));
     }
 }
