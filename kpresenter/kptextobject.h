@@ -96,7 +96,7 @@ public:
     virtual KTextEdit* getKTextObject()
     { return &ktextobject; }
 
-    virtual void save( QTextStream& out );
+    virtual QDomDocumentFragment save( QDomDocument& doc );
     virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
@@ -112,7 +112,7 @@ public:
     void recalcPageNum( KPresenterDoc *doc );
 
 protected:
-    virtual void saveKTextObject( QTextStream& out );
+    virtual QDomElement saveKTextObject( QDomDocument& doc );
     virtual void loadKTextObject( const QDomElement &e, int type );
     void drawParags( QPainter *p, int from, int to );
 

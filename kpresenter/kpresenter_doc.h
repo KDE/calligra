@@ -49,7 +49,6 @@ class KTextEditFormatCollection;
 #include <komlWriter.h>
 
 class KoDocumentEntry;
-class QTextStream;
 class KPFooterHeaderEditor;
 class KPTextObject;
 class StyleDia;
@@ -73,8 +72,7 @@ public:
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
     bool load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs );
-    bool save( QTextStream & out );
-
+    QDomElement saveXML( QDomDocument& doc );
 };
 
 /*****************************************************************/
@@ -94,7 +92,7 @@ public:
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false );
 
     // save
-    virtual bool saveToStream( QIODevice * dev );
+    virtual QDomDocument saveXML();
     virtual bool completeSaving( KoStore* _store );
 
     // load
@@ -344,8 +342,8 @@ protected:
      */
     virtual bool saveChildren( KoStore* _store, const QString &_path );
 
-    void saveBackground( QTextStream& );
-    void saveObjects( QTextStream& );
+    QDomDocumentFragment saveBackground( QDomDocument& );
+    QDomElement saveObjects( QDomDocument &doc );
     void loadBackground( KOMLParser&, QValueList<KOMLAttrib>& );
     void loadObjects( KOMLParser&, QValueList<KOMLAttrib>&, bool _paste = false );
     virtual bool completeLoading( KoStore* /* _store */ );

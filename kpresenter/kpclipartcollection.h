@@ -27,10 +27,11 @@
 
 #include "global.h"
 
-#include <qtextstream.h>
+class QDomElement;
+class QDomDocument;
 
 /******************************************************************/
-/* Class: KPClipartCollection					  */
+/* Class: KPClipartCollection                                     */
 /******************************************************************/
 
 class KPClipartCollection
@@ -38,45 +39,48 @@ class KPClipartCollection
 public:
     struct Key
     {
-	Key()
-	    : filename(), lastModified()
-	{}
+        Key()
+            : filename(), lastModified()
+        {}
 
-	Key( const QString &fn, const QDateTime &mod )
-	    : filename( fn ), lastModified( mod )
-	{}
-	Key( const Key &key )
-	    : filename( key.filename ), lastModified( key.lastModified )
-	{}
+        Key( const QString &fn, const QDateTime &mod )
+            : filename( fn ), lastModified( mod )
+        {}
+        Key( const Key &key )
+            : filename( key.filename ), lastModified( key.lastModified )
+        {}
 
-	Key &operator=( const Key &key ) {
-	    filename = key.filename;
-	    lastModified = key.lastModified;
-	    return *this;
-	}
+        Key &operator=( const Key &key ) {
+            filename = key.filename;
+            lastModified = key.lastModified;
+            return *this;
+        }
 
-	bool operator==( const Key &key ) const {
-	    return ( key.filename == filename &&
-		     key.lastModified == lastModified );
-	}
+        bool operator==( const Key &key ) const {
+            return ( key.filename == filename &&
+                     key.lastModified == lastModified );
+        }
 
-	bool operator<( const Key &key ) const {
-	    QString s1( key.toString() );
-	    QString s2( toString() );
-	    return ( s1 < s2 );
-	}
+        bool operator<( const Key &key ) const {
+            QString s1( key.toString() );
+            QString s2( toString() );
+            return ( s1 < s2 );
+        }
 
-	QString toString() const {
-	    QString s = QString( "%1_%2" ).arg( filename ).arg( lastModified.toString() );
-	    return QString( s );
-	}
+        QString toString() const {
+            QString s = QString( "%1_%2" ).arg( filename ).arg( lastModified.toString() );
+            return QString( s );
+        }
 
-	QString filename;
-	QDateTime lastModified;
+        QDomElement saveXML( QDomDocument &doc );
+        void setAttributes( QDomElement &elem );
+
+        QString filename;
+        QDateTime lastModified;
     };
 
     KPClipartCollection()
-	: allowChangeRef( true )
+        : allowChangeRef( true )
     { date = QDate::currentDate(); time = QTime::currentTime(); }
     ~KPClipartCollection();
 
@@ -107,7 +111,5 @@ protected:
     bool allowChangeRef;
 
 };
-
-QTextStream& operator<<( QTextStream &out, KPClipartCollection::Key &key );
 
 #endif

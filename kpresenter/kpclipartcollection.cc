@@ -21,10 +21,32 @@
 #include "qwmf.h"
 
 #include <qstring.h>
+#include <qdom.h>
 
 /******************************************************************/
 /* Class: KPClipartCollection                                     */
 /******************************************************************/
+
+QDomElement KPClipartCollection::Key::saveXML( QDomDocument &doc )
+{
+    QDomElement elem=doc.createElement( "BACKCLIPKEY" );
+    setAttributes( elem );
+    return elem;
+}
+
+void KPClipartCollection::Key::setAttributes( QDomElement &elem )
+{
+    QDate date = lastModified.date();
+    QTime time = lastModified.time();
+    elem.setAttribute( "filename", filename );
+    elem.setAttribute( "year", date.year() );
+    elem.setAttribute( "month", date.month() );
+    elem.setAttribute( "day", date.day() );
+    elem.setAttribute( "hour", time.hour() );
+    elem.setAttribute( "minute", time.minute() );
+    elem.setAttribute( "second", time.second() );
+    elem.setAttribute( "msec", time.msec() );
+}
 
 /*================================================================*/
 KPClipartCollection::~KPClipartCollection()
@@ -97,19 +119,4 @@ void KPClipartCollection::removeRef( const Key &key )
         }
     }
 
-}
-
-/*================================================================*/
-QTextStream& operator<<( QTextStream &out, KPClipartCollection::Key &key )
-{
-    QDate date = key.lastModified.date();
-    QTime time = key.lastModified.time();
-
-    out << " filename=\"" << key.filename << "\" year=\""
-        << date.year()
-        << "\" month=\"" << date.month() << "\" day=\"" << date.day()
-        << "\" hour=\"" << time.hour() << "\" minute=\"" << time.minute()
-        << "\" second=\"" << time.second() << "\" msec=\"" << time.msec() << "\" ";
-
-    return out;
 }

@@ -186,25 +186,44 @@ void KPBackGround::restore()
 }
 
 /*================================================================*/
-void KPBackGround::save( QTextStream& out )
+QDomElement KPBackGround::save( QDomDocument &doc )
 {
-    out << indent << "<BACKTYPE value=\"" << static_cast<int>( backType ) << "\"/>" << endl;
-    out << indent << "<BACKVIEW value=\"" << static_cast<int>( backView ) << "\"/>" << endl;
-    out << indent << "<BACKCOLOR1 red=\"" << backColor1.red() << "\" green=\""
-        << backColor1.green() << "\" blue=\"" << backColor1.blue() << "\"/>" << endl;
-    out << indent << "<BACKCOLOR2 red=\"" << backColor2.red() << "\" green=\""
-        << backColor2.green() << "\" blue=\"" << backColor2.blue() << "\"/>" << endl;
-    out << indent << "<BCTYPE value=\"" << static_cast<int>( bcType ) << "\"/>" << endl;
-    out << indent << "<BGRADIENT unbalanced=\"" << static_cast<int>( unbalanced )
-        << "\" xfactor=\"" << xfactor << "\" yfactor=\"" << yfactor << "\"/>" << endl;
+    QDomElement page=doc.createElement("PAGE");
+    QDomElement element=doc.createElement("BACKTYPE");
+    element.setAttribute("value", static_cast<int>( backType ));
+    page.appendChild(element);
+    element=doc.createElement("BACKVIEW");
+    element.setAttribute("value", static_cast<int>( backView ));
+    page.appendChild(element);
+    element=doc.createElement("BACKCOLOR1");
+    element.setAttribute("red", backColor1.red());
+    element.setAttribute("green", backColor1.green());
+    element.setAttribute("blue", backColor1.blue());
+    page.appendChild(element);
+    element=doc.createElement("BACKCOLOR2");
+    element.setAttribute("red", backColor2.red());
+    element.setAttribute("green", backColor2.green());
+    element.setAttribute("blue", backColor2.blue());
+    page.appendChild(element);
+    element=doc.createElement("BCTYPE");
+    element.setAttribute("value", static_cast<int>( bcType ));
+    page.appendChild(element);
+    element=doc.createElement("BGRADIENT");
+    element.setAttribute("unbalanced", static_cast<int>( unbalanced ));
+    element.setAttribute("xfactor", xfactor);
+    element.setAttribute("yfactor", yfactor);
+    page.appendChild(element);
 
     if ( !backImage.isNull() && backType == BT_PICTURE )
-        out << indent << "<BACKPIXKEY " << backImage << " />" << endl;
+        page.appendChild(backImage.key().saveXML(doc));
 
     if ( picture && backType == BT_CLIPART )
-        out << indent << "<BACKCLIPKEY " << clipKey << " />" << endl;
+        page.appendChild(clipKey.saveXML(doc));
 
-    out << indent << "<PGEFFECT value=\"" << static_cast<int>( pageEffect ) << "\"/>" << endl;
+    element=doc.createElement("PGEFFECT");
+    element.setAttribute("value", static_cast<int>( pageEffect ));
+    page.appendChild(element);
+    return page;
 }
 
 /*================================================================*/

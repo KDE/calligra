@@ -28,10 +28,9 @@
 #include <qcursor.h>
 #include <qcolor.h>
 
-#include "global.h"
+#include <komlParser.h>
 
-#include <koStream.h>
-#include <qtextstream.h>
+#include "global.h"
 
 #include "kpgradient.h"
 
@@ -91,8 +90,7 @@ public:
     virtual void setEffect3( Effect3 _effect3)
     { effect3 = _effect3; }
 
-    virtual void save( QTextStream& /*out*/ )
-    {; }
+    virtual QDomDocumentFragment save( QDomDocument& doc );
     virtual void load( KOMLParser& /*parser*/, QValueList<KOMLAttrib>& /*lst*/ )
     {; }
 
@@ -173,6 +171,12 @@ protected:
     void getShadowCoords( int& _x, int& _y, ShadowDirection _direction, int _distance ) const;
     virtual void paintSelection( QPainter *_painter );
     virtual void doDelete();
+
+    QDomElement createValueElement(const QString &tag, int value, QDomDocument &doc);
+    QDomElement createGradientElement(const QString &tag, const QColor &c1, const QColor &c2,
+                                      int type, bool unbalanced, int xfactor, int yfactor, QDomDocument &doc);
+    QDomElement createPenElement(const QString &tag, const QPen &pen, QDomDocument &doc);
+    QDomElement createBrushElement(const QString &tag, const QBrush &brush, QDomDocument &doc);
 
     float angle;
     QPoint orig;

@@ -113,31 +113,16 @@ void KPTextObject::setFillType( FillType _fillType )
 }
 
 /*========================= save =================================*/
-void KPTextObject::save( QTextStream& out )
+QDomDocumentFragment KPTextObject::save( QDomDocument& doc )
 {
-    out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
-    out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
-    out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
-        << static_cast<int>( shadowDirection ) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
-        << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
-    out << indent << "<EFFECTS effect=\"" << static_cast<int>( effect ) << "\" effect2=\""
-        << static_cast<int>( effect2 ) << "\"/>" << endl;
-    out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
-    out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
-    out << indent << "<FILLTYPE value=\"" << static_cast<int>( fillType ) << "\"/>" << endl;
-    out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
-        << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
-        << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
-        << static_cast<int>( gType ) << "\" unbalanced=\"" << (uint)unbalanced << "\" xfactor=\"" << xfactor
-        << "\" yfactor=\"" << yfactor << "\"/>" << endl;
-    out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
-        << "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
-        << "\" style=\"" << static_cast<int>( pen.style() ) << "\"/>" << endl;
-    out << indent << "<BRUSH red=\"" << brush.color().red() << "\" green=\"" << brush.color().green()
-        << "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>( brush.style() ) << "\"/>" << endl;
-    out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
-        << "\" num=\"" << disappearNum << "\"/>" << endl;
-    saveKTextObject( out );
+    QDomDocumentFragment fragment=KPObject::save(doc);
+    fragment.appendChild(KPObject::createValueElement("FILLTYPE", static_cast<int>(fillType), doc));
+    fragment.appendChild(KPObject::createGradientElement("GRADIENT", gColor1, gColor2, static_cast<int>(gType),
+                                                         unbalanced, xfactor, yfactor, doc));
+    fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
+    fragment.appendChild(KPObject::createBrushElement("BRUSH", brush, doc));
+    fragment.appendChild(saveKTextObject( doc ));
+    return fragment;
 }
 
 /*========================== load ================================*/
@@ -563,62 +548,71 @@ void KPTextObject::extendObject2Contents( KPresenterView */*view*/ )
 }
 
 /*=========================== save ktextobject ===================*/
-void KPTextObject::saveKTextObject( QTextStream& out )
+QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 {
     KTextEditParag *parag = ktextobject.document()->firstParag();
     KTextEditDocument::TextSettings textSettings = ktextobject.document()->textSettings();
-    out << otag
-	<< "<TEXTOBJ lineSpacing=\"" << ktextobject.document()->lineSpacing()
-	<< "\" paragSpacing=\"" << ktextobject.document()->paragSpacing()
-	<< "\" margin=\"" << ktextobject.document()->margin()
-	<< "\" bulletType1=\"" << (int)textSettings.bulletType[0]
-	<< "\" bulletType2=\"" << (int)textSettings.bulletType[1]
-	<< "\" bulletType3=\"" << (int)textSettings.bulletType[2]
-	<< "\" bulletType4=\"" << (int)textSettings.bulletType[3]
-	<< "\" bulletColor1=\"" << textSettings.bulletColor[0].name()
-	<< "\" bulletColor2=\"" << textSettings.bulletColor[1].name()
-	<< "\" bulletColor3=\"" << textSettings.bulletColor[2].name()
-	<< "\" bulletColor4=\"" << textSettings.bulletColor[3].name()
-	<< "\">" << endl;
+    QDomElement textobj=doc.createElement("TEXTOBJ");
+    textobj.setAttribute("lineSpacing", ktextobject.document()->lineSpacing());
+    textobj.setAttribute("paragSpacing", ktextobject.document()->paragSpacing());
+    textobj.setAttribute("margin", ktextobject.document()->margin());
+    textobj.setAttribute("bulletType1", (int)textSettings.bulletType[0]);
+    textobj.setAttribute("bulletType2", (int)textSettings.bulletType[1]);
+    textobj.setAttribute("bulletType3", (int)textSettings.bulletType[2]);
+    textobj.setAttribute("bulletType4", (int)textSettings.bulletType[3]);
+    textobj.setAttribute("bulletColor1", textSettings.bulletColor[0].name());
+    textobj.setAttribute("bulletColor2", textSettings.bulletColor[1].name());
+    textobj.setAttribute("bulletColor3", textSettings.bulletColor[2].name());
+    textobj.setAttribute("bulletColor4", textSettings.bulletColor[3].name());
+    // ### fix this loop (Werner)
     while ( parag ) {
-	out << otag << "<P align=\"" << parag->alignment()
-	    << "\" type=\"" << (int)parag->type()
-	    << "\" depth=\"" << parag->listDepth() << "\">" << endl;
-	out << indent;
-	KTextEditFormat *lastFormat = 0;
-	for ( int i = 0; i < parag->length(); ++i ) {
-	    KTextEditString::Char *c = parag->at( i );
-	    if ( !lastFormat || c->format->key() != lastFormat->key() ) {
-		if ( lastFormat )
-		    out << "</TEXT>";
-		lastFormat = c->format;
-		out << "<TEXT family=\"" <<  lastFormat->font().family()
-		    << "\" pointSize=\"" << lastFormat->font().pointSize()
-		    << "\" bold=\"" << (uint)lastFormat->font().bold()
-		    << "\" italic=\"" << (uint)lastFormat->font().italic()
-		    << "\" underline=\"" << (uint)lastFormat->font().underline()
-		    << "\" color=\"" << lastFormat->color().name()
-		    << "\">";
-	    }
-	    QChar chr = c->c;
-	    if ( chr == '&' )
-		out << "&amp;";
-	    else if ( chr == '<' )
-		out << "&lt;";
-	    else if ( chr == '>' )
-		out << "&gt;";
-	    else
-		out << QString(c->c);
-	}
-	if ( lastFormat )
-	    out << "</TEXT>";
-	out << endl;
-
-	out << etag << "</P>" << endl;
-
-	parag = parag->next();
+        QDomElement paragraph=doc.createElement("P");
+        paragraph.setAttribute("align", parag->alignment());
+        paragraph.setAttribute("type", (int)parag->type());
+        paragraph.setAttribute("depth", parag->listDepth());
+        KTextEditFormat *lastFormat = 0;
+        QString tmpText, tmpFamily, tmpColor;
+        int tmpPointSize;
+        unsigned int tmpBold, tmpItalic, tmpUnderline;
+        for ( int i = 0; i < parag->length(); ++i ) {
+            KTextEditString::Char *c = parag->at( i );
+            if ( !lastFormat || c->format->key() != lastFormat->key() ) {
+                if ( lastFormat ) {
+                    QDomElement element=doc.createElement("TEXT");
+                    element.setAttribute("family", tmpFamily);
+                    element.setAttribute("pointSize", tmpPointSize);
+                    element.setAttribute("bold", tmpBold);
+                    element.setAttribute("italic", tmpItalic);
+                    element.setAttribute("underline", tmpUnderline);
+                    element.setAttribute("color", tmpColor);
+                    element.appendChild(doc.createTextNode(tmpText));
+                    paragraph.appendChild(element);
+                }
+                lastFormat = c->format;
+                tmpFamily=lastFormat->font().family();
+                tmpPointSize=lastFormat->font().pointSize();
+                tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
+                tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
+                tmpUnderline=static_cast<unsigned int>(lastFormat->font().underline());
+                tmpColor=lastFormat->color().name();
+            }
+            tmpText+=c->c;
+        }
+        if ( lastFormat ) {
+            QDomElement element=doc.createElement("TEXT");
+            element.setAttribute("family", tmpFamily);
+            element.setAttribute("pointSize", tmpPointSize);
+            element.setAttribute("bold", tmpBold);
+            element.setAttribute("italic", tmpItalic);
+            element.setAttribute("underline", tmpUnderline);
+            element.setAttribute("color", tmpColor);
+            element.appendChild(doc.createTextNode(tmpText));
+            paragraph.appendChild(element);
+        }
+        textobj.appendChild(paragraph);
+        parag = parag->next();
     }
-    out << etag << "</TEXTOBJ>" << endl;
+    return textobj;
 }
 
 /*====================== load ktextobject ========================*/

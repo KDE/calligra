@@ -1,5 +1,45 @@
+/* This file is part of the KDE project
+   Copyright (C) 2001 Simon Hausmann <hausmann@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "kpimage.h"
+#include <qdom.h>
+
+QDomElement KPImageKey::saveXML( QDomDocument &doc )
+{
+    QDomElement elem=doc.createElement( "BACKPIXKEY" );
+    setAttributes( elem );
+    return elem;
+}
+
+void KPImageKey::setAttributes( QDomElement &elem )
+{
+    QDate date = lastModified.date();
+    QTime time = lastModified.time();
+    elem.setAttribute( "filename", filename );
+    elem.setAttribute( "year", date.year() );
+    elem.setAttribute( "month", date.month() );
+    elem.setAttribute( "day", date.day() );
+    elem.setAttribute( "hour", time.hour() );
+    elem.setAttribute( "minute", time.minute() );
+    elem.setAttribute( "second", time.second() );
+    elem.setAttribute( "msec", time.msec() );
+}
 
 KoImage<KPImageKey> KPImageCollection::loadImage( const KPImageKey &key )
 {
@@ -37,29 +77,4 @@ KoImage<KPImageKey> KPImageCollection::loadImage( const KPImageKey &key, const Q
         return res;
 
     return insertImage( key, img );
-}
-
-QTextStream &operator<<( QTextStream &out, KPImageKey &key )
-{
-    QDate date = key.lastModified.date();
-    QTime time = key.lastModified.time();
-
-    out << " filename=\"" << key.filename << "\" year=\""
-        << date.year()
-        << "\" month=\"" << date.month() << "\" day=\"" << date.day()
-        << "\" hour=\"" << time.hour() << "\" minute=\"" << time.minute()
-        << "\" second=\"" << time.second() << "\" msec=\"" << time.msec() << "\" ";
-
-    return out;
-}
-
-QTextStream &operator<<( QTextStream &out, KPImage &img )
-{
-    QSize sz = img.size();
-    KPImageKey k = img.key();
-    out << k
-        << " width=\"" << sz.width()
-        << "\" height=\"" << sz.height() << "\" ";
-
-    return out;
 }

@@ -79,6 +79,42 @@ KPObject &KPObject::operator=( const KPObject & )
     return *this;
 }
 
+QDomDocumentFragment KPObject::save( QDomDocument& doc )
+{
+    QDomDocumentFragment fragment=doc.createDocumentFragment();
+    QDomElement elem=doc.createElement("ORIG");
+    elem.setAttribute("x", orig.x());
+    elem.setAttribute("y", orig.y());
+    fragment.appendChild(elem);
+    elem=doc.createElement("SIZE");
+    elem.setAttribute("width", ext.width());
+    elem.setAttribute("height", ext.height());
+    fragment.appendChild(elem);
+    elem=doc.createElement("SHADOW");
+    elem.setAttribute("distance", shadowDistance);
+    elem.setAttribute("direction", static_cast<int>( shadowDirection ));
+    elem.setAttribute("red", shadowColor.red());
+    elem.setAttribute("green", shadowColor.green());
+    elem.setAttribute("blue", shadowColor.blue());
+    fragment.appendChild(elem);
+    elem=doc.createElement("EFFECTS");
+    elem.setAttribute("effect", static_cast<int>( effect ));
+    elem.setAttribute("effect2", static_cast<int>( effect2 ));
+    fragment.appendChild(elem);
+    elem=doc.createElement("PRESNUM");
+    elem.setAttribute("value", presNum);
+    fragment.appendChild(elem);
+    elem=doc.createElement("ANGLE");
+    elem.setAttribute("value", angle);
+    fragment.appendChild(elem);
+    elem=doc.createElement("DISAPPEAR");
+    elem.setAttribute("effect", static_cast<int>( effect3 ));
+    elem.setAttribute("doit", static_cast<int>( disappear ));
+    elem.setAttribute("num", disappearNum);
+    fragment.appendChild(elem);
+    return fragment;
+}
+
 /*======================= get bounding rect ======================*/
 QRect KPObject::getBoundingRect( int _diffx, int _diffy ) const
 {
@@ -418,4 +454,47 @@ void KPObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
         region.unite( clipRegion );
 
     painter->setClipRegion( region );
+}
+
+QDomElement KPObject::createValueElement(const QString &tag, int value, QDomDocument &doc) {
+    QDomElement elem=doc.createElement(tag);
+    elem.setAttribute("value", value);
+    return elem;
+}
+
+QDomElement KPObject::createGradientElement(const QString &tag, const QColor &c1, const QColor &c2,
+                                            int type, bool unbalanced, int xfactor, int yfactor, QDomDocument &doc) {
+    QDomElement elem=doc.createElement(tag);
+    elem.setAttribute("red1", c1.red());
+    elem.setAttribute("green1", c1.green());
+    elem.setAttribute("blue1", c1.blue());
+    elem.setAttribute("red2", c2.red());
+    elem.setAttribute("green2", c2.green());
+    elem.setAttribute("blue2", c2.blue());
+    elem.setAttribute("type", type);
+    elem.setAttribute("unbalanced", (uint)unbalanced);
+    elem.setAttribute("xfactor", xfactor);
+    elem.setAttribute("yfactor", yfactor);
+    return elem;
+}
+
+QDomElement KPObject::createPenElement(const QString &tag, const QPen &pen, QDomDocument &doc) {
+
+    QDomElement elem=doc.createElement(tag);
+    elem.setAttribute("red", pen.color().red());
+    elem.setAttribute("green", pen.color().green());
+    elem.setAttribute("blue", pen.color().blue());
+    elem.setAttribute("width", pen.width());
+    elem.setAttribute("style", static_cast<int>(pen.style()));
+    return elem;
+}
+
+QDomElement KPObject::createBrushElement(const QString &tag, const QBrush &brush, QDomDocument &doc) {
+
+    QDomElement elem=doc.createElement(tag);
+    elem.setAttribute("red", brush.color().red());
+    elem.setAttribute("green", brush.color().green());
+    elem.setAttribute("blue", brush.color().blue());
+    elem.setAttribute("style", static_cast<int>(brush.style()));
+    return elem;
 }

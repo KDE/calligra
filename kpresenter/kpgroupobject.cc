@@ -118,23 +118,23 @@ void KPGroupObject::resizeBy( int _dx, int _dy )
 }
 
 /*================================================================*/
-void KPGroupObject::save( QTextStream& out )
+QDomDocumentFragment KPGroupObject::save( QDomDocument& doc )
 {
-    out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
-    out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
-    out << indent << "<OBJECTS>" << endl;
+    QDomDocumentFragment fragment=KPObject::save(doc);
+    QDomElement objs=doc.createElement("OBJECTS");
+    fragment.appendChild(objs);
 
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count() ; ++i ) {
         kpobject = objects.at( i );
         if ( kpobject->getType() == OT_PART )
             continue;
-        out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
-        kpobject->save( out );
-        out << etag << "</OBJECT>" << endl;
+        QDomElement object=doc.createElement("OBJECT");
+        object.setAttribute("type", static_cast<int>( kpobject->getType() ));
+        object.appendChild(kpobject->save( doc ));
+        objs.appendChild(object);
     }
-
-    out << indent << "</OBJECTS>" << endl;
+    return fragment;
 }
 
 /*================================================================*/

@@ -25,12 +25,10 @@
 #include <qrect.h>
 #include <qsize.h>
 
+#include <komlParser.h>
 #include "global.h"
 #include "kpimage.h"
 #include "kpclipartcollection.h"
-
-#include <koStream.h>
-#include <qtextstream.h>
 
 class KPresenterDoc;
 class QPainter;
@@ -38,6 +36,8 @@ class QPixmap;
 class KPGradientCollection;
 class QPicture;
 class DCOPObject;
+class QDomDocument;
+class QDomElement;
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
@@ -114,7 +114,7 @@ public:
 
     void restore();
 
-    void save( QTextStream& out );
+    QDomElement save( QDomDocument &doc );
     void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
 protected:

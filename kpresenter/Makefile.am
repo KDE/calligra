@@ -27,7 +27,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
-	textdialog.ui sidebar.cc koStream.cc \
+	textdialog.ui sidebar.cc \
 	insertpagedia.ui generalconfig.ui kpimage.cc \
 	preview.h preview.cc
 
@@ -68,7 +68,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		grpobjcmd.h commandhistory.h gotopage.h webpresentation.h \
 		footer_header.h kpresenter_factory.h kpresenter_aboutdata.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
-		KPresenterBackgroundIface.h sidebar.h textcmd.h koStream.h
+		KPresenterBackgroundIface.h sidebar.h textcmd.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

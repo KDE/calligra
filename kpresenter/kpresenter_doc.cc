@@ -67,6 +67,7 @@
 #include <qpicture.h>
 #include <qbuffer.h>
 #include <qtextstream.h>
+#include <qdom.h>
 
 #include <kurl.h>
 #include <kurldrag.h>
@@ -88,20 +89,37 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <unistd.h>
+#include <config.h>
 
 #include "KPresenterDocIface.h"
 #include <iostream>
 #include <cassert>
 using namespace std;
 
-#ifndef QT_NO_ASCII_CAST
-#define QT_NO_ASCII_CAST
-#endif
-#ifndef QT_NO_CAST_ASCII
-#define QT_NO_CAST_ASCII
-#endif
+static const int CURRENT_SYNTAX_VERSION = 2;
 
-static const int CURRENT_SYNTAX_VERSION = 2; // Reggie: make this 2 when committing the new text object
+// remove me!!
+QRect tagToRect( QValueList<KOMLAttrib>& _attribs )
+{
+  int x = 0, y = 0, w = 0, h = 0;
+
+  QValueList<KOMLAttrib>::ConstIterator it = _attribs.begin();
+  for( ; it != _attribs.end() ; ++it )
+  {
+    if ( (*it).m_strName == "x" )
+        x =(*it).m_strValue.toInt();
+    else if ( (*it).m_strName == "y" )
+        y = (*it).m_strValue.toInt();
+    else if ( (*it).m_strName == "w" )
+        w =(*it).m_strValue.toInt();
+    else if ( (*it).m_strName == "h" )
+        h = (*it).m_strValue.toInt();
+  }
+
+  return QRect( x, y, w, h );
+}
+
 
 /******************************************************************/
 /* class KPresenterChild					  */
@@ -194,17 +212,21 @@ bool KPresenterChild::load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs
 }
 
 
-bool KPresenterChild::save( QTextStream& out )
+QDomElement KPresenterChild::saveXML( QDomDocument& doc )
 {
     if (document()==0)
-        return false;
-    //assert( document() );
+        return QDomElement();
 
-    out << indent << "<OBJECT url=\"" << document()->url().url() << "\" mime=\""
-	<< document()->nativeFormatMimeType() << "\">"
-	<< geometry() << "</OBJECT>" << endl;
-
-    return true;
+    QDomElement object=doc.createElement("OBJECT");
+    object.setAttribute("url", document()->url().url());
+    object.setAttribute("mime", document()->nativeFormatMimeType());
+    QDomElement rect=doc.createElement("RECT");
+    rect.setAttribute( "x", geometry().left() );
+    rect.setAttribute( "y", geometry().top() );
+    rect.setAttribute( "w", geometry().width() );
+    rect.setAttribute( "h", geometry().height() );
+    object.appendChild(rect);
+    return object;
 }
 
 /******************************************************************/
@@ -294,8 +316,6 @@ DCOPObject* KPresenterDoc::dcopObject()
 /*==============================================================*/
 KPresenterDoc::~KPresenterDoc()
 {
-    //    sdeb( "KPresenterDoc::~KPresenterDoc()\n" );
-
     headerFooterEdit->allowClose();
     delete headerFooterEdit;
 
@@ -341,64 +361,87 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 }
 
 /*========================== save ===============================*/
-bool KPresenterDoc::saveToStream(QIODevice * dev)
+QDomDocument KPresenterDoc::saveXML()
 {
-    QTextStream out( dev );
-    out.setEncoding(QTextStream::UnicodeUTF8);
     KPObject *kpobject = 0L;
+    QDomDocument doc("DOC");
+    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    QDomElement presenter=doc.createElement("DOC");
+    presenter.setAttribute("author", "Reginald Stadlbauer");
+    presenter.setAttribute("email", "reggie@kde.org");
+    presenter.setAttribute("editor", "KPresenter");
+    presenter.setAttribute("mime", "application/x-kpresenter");
+    presenter.setAttribute("syntaxVersion", CURRENT_SYNTAX_VERSION);
+    doc.appendChild(presenter);
+    QDomElement paper=doc.createElement("PAPER");
+    paper.setAttribute("format", static_cast<int>( _pageLayout.format ));
+    paper.setAttribute("ptWidth", _pageLayout.ptWidth);
+    paper.setAttribute("ptHeight", _pageLayout.ptHeight);
+    paper.setAttribute("mmWidth", _pageLayout.mmWidth);
+    paper.setAttribute("mmHeight", _pageLayout.mmHeight);
+    paper.setAttribute("inchWidth", _pageLayout.inchWidth);
+    paper.setAttribute("inchHeight", _pageLayout.inchHeight);
+    paper.setAttribute("orientation", static_cast<int>( _pageLayout.orientation ));
+    paper.setAttribute("unit", static_cast<int>( _pageLayout.unit ));
+    QDomElement paperBorders=doc.createElement("PAPERBORDERS");
+    paperBorders.setAttribute("mmLeft", _pageLayout.mmLeft);
+    paperBorders.setAttribute("mmTop", _pageLayout.mmTop);
+    paperBorders.setAttribute("mmRight", _pageLayout.mmRight);
+    paperBorders.setAttribute("mmBottom", _pageLayout.mmBottom);
+    paperBorders.setAttribute("ptLeft", _pageLayout.ptLeft);
+    paperBorders.setAttribute("ptTop", _pageLayout.ptTop);
+    paperBorders.setAttribute("ptRight", _pageLayout.ptRight);
+    paperBorders.setAttribute("ptBottom", _pageLayout.ptBottom);
+    paperBorders.setAttribute("inchLeft", _pageLayout.inchLeft);
+    paperBorders.setAttribute("inchTop", _pageLayout.inchTop);
+    paperBorders.setAttribute("inchRight", _pageLayout.inchRight);
+    paperBorders.setAttribute("inchBottom", _pageLayout.inchBottom);
+    paper.appendChild(paperBorders);
+    presenter.appendChild(paper);
 
-    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-    out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\""
-	<< "KPresenter"
-	<< "\" mime=\"" << "application/x-kpresenter"
-	<< "\" syntaxVersion=\"" << CURRENT_SYNTAX_VERSION << "\">"
-	<< endl;
+    QDomElement element=doc.createElement("BACKGROUND");
+    element.setAttribute("rastX", _rastX);
+    element.setAttribute("rastY", _rastY);
+    element.setAttribute("bred", _txtBackCol.red());
+    element.setAttribute("bgreen", _txtBackCol.green());
+    element.setAttribute("bblue", _txtBackCol.blue());
+    element.appendChild(saveBackground( doc ));
+    presenter.appendChild(element);
 
-    out << otag << "<PAPER format=\"" << static_cast<int>( _pageLayout.format ) << "\" ptWidth=\""
-	<< _pageLayout.ptWidth
-	<< "\" ptHeight=\"" << _pageLayout.ptHeight
-	<< "\" mmWidth =\"" << _pageLayout.mmWidth << "\" mmHeight=\"" << _pageLayout.mmHeight
-	<< "\" inchWidth =\"" << _pageLayout.inchWidth << "\" inchHeight=\"" << _pageLayout.inchHeight
-	<< "\" orientation=\"" << static_cast<int>( _pageLayout.orientation ) << "\" unit=\""
-	<< static_cast<int>( _pageLayout.unit ) << "\">" << endl;
-    out << indent << "<PAPERBORDERS mmLeft=\"" << _pageLayout.mmLeft << "\" mmTop=\"" << _pageLayout.mmTop
-	<< "\" mmRight=\""
-	<< _pageLayout.mmRight << "\" mmBottom=\"" << _pageLayout.mmBottom
-	<< "\" ptLeft=\"" << _pageLayout.ptLeft << "\" ptTop=\"" << _pageLayout.ptTop << "\" ptRight=\""
-	<< _pageLayout.ptRight << "\" ptBottom=\"" << _pageLayout.ptBottom
-	<< "\" inchLeft=\"" << _pageLayout.inchLeft << "\" inchTop=\"" << _pageLayout.inchTop << "\" inchRight=\""
-	<< _pageLayout.inchRight << "\" inchBottom=\"" << _pageLayout.inchBottom << "\"/>" << endl;
-    out << etag << "</PAPER>" << endl;
+    element=doc.createElement("HEADER");
+    element.setAttribute("show", static_cast<int>( hasHeader() ));
+    element.appendChild(_header->save( doc ));
+    presenter.appendChild(element);
 
-    out << otag << "<BACKGROUND" << " rastX=\"" << _rastX << "\" rastY=\"" << _rastY
-	<< "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\"" << _txtBackCol.green() << "\" bblue=\""
-	<< _txtBackCol.blue() << "\">" << endl;
-    saveBackground( out );
-    out << etag << "</BACKGROUND>" << endl;
+    element=doc.createElement("FOOTER");
+    element.setAttribute("show", static_cast<int>( hasFooter() ));
+    element.appendChild(_footer->save( doc ));
+    presenter.appendChild(element);
 
-    out << otag << "<HEADER show=\"" << static_cast<int>( hasHeader() ) << "\">" << endl;
-    _header->save( out );
-    out << etag << "</HEADER>" << endl;
+    presenter.appendChild(saveObjects(doc));
 
-    out << otag << "<FOOTER show=\"" << static_cast<int>( hasFooter() ) << "\">" << endl;
-    _footer->save( out );
-    out << etag << "</FOOTER>" << endl;
-
-    out << otag << "<OBJECTS>" << endl;
-    saveObjects( out );
-    out << etag << "</OBJECTS>" << endl;
-
-    out << indent << "<INFINITLOOP value=\"" << _spInfinitLoop << "\"/>" << endl;
-    out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl;
-    out << indent << "<PRESSPEED value=\"" << static_cast<int>( presSpeed ) << "\"/>" << endl;
+    // ### If we will create a new version of the file format, fix that spelling error
+    element=doc.createElement("INFINITLOOP");
+    element.setAttribute("value", _spInfinitLoop);
+    presenter.appendChild(element);
+    element=doc.createElement("MANUALSWITCH");
+    element.setAttribute("value", _spManualSwitch);
+    presenter.appendChild(element);
+    element=doc.createElement("PRESSPEED");
+    element.setAttribute("value", static_cast<int>( presSpeed ));
+    presenter.appendChild(element);
 
     if ( saveOnlyPage == -1 )
     {
-        out << otag << "<SELSLIDES>" << endl;
+        element=doc.createElement("SELSLIDES");
         QValueList<bool>::Iterator sit = m_selectedSlides.begin();
-        for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i )
-            out << indent << "<SLIDE nr=\"" << i << "\" show=\"" << ( *sit ) << "\"/>" << endl;
-        out << etag << "</SELSLIDES>" << endl;
+        for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i ) {
+            QDomElement slide=doc.createElement("SLIDE");
+            slide.setAttribute("nr", i);
+            slide.setAttribute("show", ( *sit ));
+            element.appendChild(slide);
+        }
+        presenter.appendChild(element);
     }
 
     // Write "OBJECT" tag for every child
@@ -417,73 +460,67 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
             if ( kpobject->getType() == OT_PART &&
                  dynamic_cast<KPPartObject*>( kpobject )->getChild() == chl.current() )
             {
-                out << otag << "<EMBEDDED>" << endl;
-
+                QDomElement embedded=doc.createElement("EMBEDDED");
                 KPresenterChild* curr = (KPresenterChild*)chl.current();
-
-                curr->save( out );
-
-                out << otag << "<SETTINGS>" << endl;
+                embedded.appendChild(curr->save( doc ));
+                QDomElement settings=doc.createElement("SETTINGS");
                 for ( unsigned int i = 0; i < _objectList->count(); i++ ) {
                     kpobject = _objectList->at( i );
                     if ( kpobject->getType() == OT_PART &&
                          dynamic_cast<KPPartObject*>( kpobject )->getChild() == curr )
-                        kpobject->save( out );
+                        settings.appendChild(kpobject->save( doc ));
                 }
-                out << etag << "</SETTINGS> "<< endl;
-
-                out << etag << "</EMBEDDED>" << endl;
+                embedded.appendChild(settings);
+                presenter.appendChild(embedded);
             }
         }
     }
 
     makeUsedPixmapList();
 
-    out << otag << "<PIXMAPS>" << endl;
-
+    QDomElement pixmaps=doc.createElement("PIXMAPS");
     int i = 0;
     KPImageCollection::ConstIterator it = _imageCollection.begin();
     KPImageCollection::ConstIterator end = _imageCollection.end();
 
     for ( ; it != end; ++it ) {
-	if ( usedPixmaps.contains( it.key() ) ) {
-	    KPImageKey key = it.key();
-	    QString format = QFileInfo( key.filename ).extension().upper();
-	    if ( format == "JPG" )
-		format = "JPEG";
-	    if ( QImage::outputFormats().find( format.latin1() ) == -1 )
-		format = "PNG";
-	    QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
-	    if ( !isStoredExtern() )
-		pictureName.prepend( url().url() + "/" );
-	    out << indent << "<KEY " << key << " name=\""
-		<< pictureName << "\" />" << endl;
-	}
+        if ( usedPixmaps.contains( it.key() ) ) {
+            KPImageKey key = it.key();
+            QString format = QFileInfo( key.filename ).extension().upper();
+            if ( format == "JPG" )
+                format = "JPEG";
+            if ( QImage::outputFormats().find( format.latin1() ) == -1 )
+                format = "PNG";
+            QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
+            if ( !isStoredExtern() )
+                pictureName.prepend( url().url() + "/" );
+
+            element=doc.createElement("KEY");
+            key.setAttributes(element);
+            element.setAttribute("name", pictureName);
+            pixmaps.appendChild(element);
+        }
     }
+    presenter.appendChild(pixmaps);
 
-    out << etag << "</PIXMAPS>" << endl;
-
-    out << otag << "<CLIPARTS>" << endl;
-
+    QDomElement cliparts=doc.createElement("CLIPARTS");
     i = 0;
     QMap< KPClipartCollection::Key, QPicture >::Iterator it2 = _clipartCollection.begin();
 
     for( ; it2 != _clipartCollection.end(); ++it2 ) {
-	KPClipartCollection::Key key = it2.key();
-	QString clipartName = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
-	if ( !isStoredExtern() )
-	    clipartName.prepend( url().url() + "/" );
-	out << indent << "<KEY " << key << " name=\""
-	    << clipartName << "\" />" << endl;
+        KPClipartCollection::Key key = it2.key();
+        QString clipartName = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
+        if ( !isStoredExtern() )
+            clipartName.prepend( url().url() + "/" );
+        element=doc.createElement("KEY");
+        key.setAttributes(element);
+        element.setAttribute("name", clipartName);
+        cliparts.appendChild(element);
     }
-
-    out << etag << "</CLIPARTS>" << endl;
-
-    out << etag << "</DOC>" << endl;
+    presenter.appendChild(cliparts);
 
     setModified( false );
-
-    return true;
+    return doc;
 }
 
 /*===============================================================*/
@@ -499,44 +536,47 @@ void KPresenterDoc::enableEmbeddedParts( bool f )
 }
 
 /*========================== save background ====================*/
-void KPresenterDoc::saveBackground( QTextStream& out )
+QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
 {
     KPBackGround *kpbackground = 0;
+    QDomDocumentFragment fragment=doc.createDocumentFragment();
 
     for ( int i = 0; i < static_cast<int>( _backgroundList.count() ); i++ ) {
 	if ( saveOnlyPage != -1 &&
 	     i != saveOnlyPage )
 	    continue;
 	kpbackground = _backgroundList.at( i );
-	out << otag << "<PAGE>" << endl;
-	kpbackground->save( out );
-	out << etag << "</PAGE>" << endl;
+	fragment.appendChild(kpbackground->save( doc ));
     }
+    return fragment;
 }
 
 /*========================== save objects =======================*/
-void KPresenterDoc::saveObjects( QTextStream& out )
+QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
 {
     KPObject *kpobject = 0;
+    QDomElement objects=doc.createElement("OBJECTS");
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	if ( saveOnlyPage != -1 ) {
-	    int pg = getPageOfObj( i, 0, 0 ) - 1;
-	    if ( saveOnlyPage != pg )
-		continue;
-	}
-	kpobject = objectList()->at( i );
-	if ( kpobject->getType() == OT_PART ) continue;
-	out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() )
-	    << "\" sticky=\"" << (int)kpobject->isSticky() << "\">" << endl;
-	QPoint orig = kpobject->getOrig();
-	if ( saveOnlyPage != -1 )
-	    kpobject->moveBy( 0, -saveOnlyPage * getPageRect( 0, 0, 0 ).height() );
-	kpobject->save( out );
-	if ( saveOnlyPage != -1 )
-	    kpobject->setOrig( orig );
-	out << etag << "</OBJECT>" << endl;
+        if ( saveOnlyPage != -1 ) {
+            int pg = getPageOfObj( i, 0, 0 ) - 1;
+            if ( saveOnlyPage != pg )
+                continue;
+        }
+        kpobject = objectList()->at( i );
+        if ( kpobject->getType() == OT_PART ) continue;
+        QDomElement object=doc.createElement("OBJECT");
+        object.setAttribute("type", static_cast<int>( kpobject->getType() ));
+        object.setAttribute("sticky", static_cast<int>(kpobject->isSticky()));
+        QPoint orig = kpobject->getOrig();
+        if ( saveOnlyPage != -1 )
+            kpobject->moveBy( 0, -saveOnlyPage * getPageRect( 0, 0, 0 ).height() );
+        object.appendChild(kpobject->save( doc ));
+        if ( saveOnlyPage != -1 )
+            kpobject->setOrig( orig );
+        objects.appendChild(object);
     }
+    return objects;
 }
 
 /*==============================================================*/
@@ -3539,29 +3579,28 @@ void KPresenterDoc::deleteObjs( bool _add )
 void KPresenterDoc::copyObjs( int diffx, int diffy )
 {
     if ( !numSelected() )
-	return;
-    QString clip_str;
-    QTextStream out( &clip_str, IO_WriteOnly );
+        return;
     KPObject *kpobject = 0;
 
-    out << otag << "<DOC editor=\"" << "KPresenter"
-	<< "\" mime=\"" << "application/x-kpresenter-selection" << "\">" << endl;
+    QDomDocument doc("DOC");
+    QDomElement presenter=doc.createElement("DOC");
+    presenter.setAttribute("editor", "KPresenter");
+    presenter.setAttribute("mime", "application/x-kpresenter-selection");
+    doc.appendChild(presenter);
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	kpobject = objectList()->at( i );
-	if ( kpobject->isSelected() ) {
-	    out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
-	    kpobject->moveBy( -diffx, -diffy );
-	    kpobject->save( out );
-	    kpobject->moveBy( diffx, diffy );
-	    out << etag << "</OBJECT>" << endl;
-	}
+        kpobject = objectList()->at( i );
+        if ( kpobject->isSelected() ) {
+            QDomElement object=doc.createElement("OBJECT");
+            object.setAttribute("type", static_cast<int>( kpobject->getType() ));
+            kpobject->moveBy( -diffx, -diffy );
+            object.appendChild(kpobject->save( doc ));
+            kpobject->moveBy( diffx, diffy );
+        }
     }
-    out << etag << "</DOC>" << endl;
 
     QStoredDrag * drag = new QStoredDrag( "application/x-kpresenter-selection" );
-    drag->setEncodedData( clip_str.utf8() );
+    drag->setEncodedData( doc.toCString() );
     QApplication::clipboard()->setData( drag );
-    //QApplication::clipboard()->setText( clip_str );
 }
 
 /*=============================================================*/

@@ -56,25 +56,14 @@ KPLineObject &KPLineObject::operator=( const KPLineObject & )
 }
 
 /*========================= save =================================*/
-void KPLineObject::save( QTextStream& out )
+QDomDocumentFragment KPLineObject::save( QDomDocument& doc )
 {
-    out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
-    out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
-    out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
-        << static_cast<int>( shadowDirection ) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
-        << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
-    out << indent << "<EFFECTS effect=\"" << static_cast<int>( effect ) << "\" effect2=\""
-        << static_cast<int>( effect2 ) << "\"/>" << endl;
-    out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
-        << "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
-        << "\" style=\"" << static_cast<int>( pen.style() ) << "\"/>" << endl;
-    out << indent << "<LINETYPE value=\"" << static_cast<int>( lineType ) << "\"/>" << endl;
-    out << indent << "<LINEBEGIN value=\"" << static_cast<int>( lineBegin ) << "\"/>" << endl;
-    out << indent << "<LINEEND value=\"" << static_cast<int>( lineEnd ) << "\"/>" << endl;
-    out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
-    out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
-    out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
-        << "\" num=\"" << disappearNum << "\"/>" << endl;
+    QDomDocumentFragment fragment=KPObject::save(doc);
+    fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
+    fragment.appendChild(KPObject::createValueElement("LINETYPE", static_cast<int>(lineType), doc));
+    fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
+    fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+    return fragment;
 }
 
 /*========================== load ================================*/

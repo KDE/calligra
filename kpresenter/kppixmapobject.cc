@@ -122,7 +122,7 @@ void KPPixmapObject::resizeBy( int _dx, int _dy )
 }
 
 /*================================================================*/
-void KPPixmapObject::setPixmap( const QString &_filename, QDateTime _lastModified, const QSize &_size )
+void KPPixmapObject::setPixmap( const QString &_filename, QDateTime _lastModified, const QSize &/*_size*/ )
 {
     if ( !_lastModified.isValid() )
     {
@@ -154,31 +154,18 @@ void KPPixmapObject::setFillType( FillType _fillType )
 }
 
 /*========================= save =================================*/
-void KPPixmapObject::save( QTextStream& out )
+QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc )
 {
-    out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
-    out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
-    out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
-        << static_cast<int>( shadowDirection ) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
-        << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
-    out << indent << "<EFFECTS effect=\"" << static_cast<int>( effect ) << "\" effect2=\""
-        << static_cast<int>( effect2 ) << "\"/>" << endl;
-    out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
-    out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
-    out << indent << "<KEY " << image << "/>" << endl;
-    out << indent << "<FILLTYPE value=\"" << static_cast<int>( fillType ) << "\"/>" << endl;
-    out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
-        << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
-        << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
-        << static_cast<int>( gType ) << "\" unbalanced=\"" << unbalanced << "\" xfactor=\"" << xfactor
-        << "\" yfactor=\"" << yfactor << "\"/>" << endl;
-    out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
-        << "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
-        << "\" style=\"" << static_cast<int>( pen.style() ) << "\"/>" << endl;
-    out << indent << "<BRUSH red=\"" << brush.color().red() << "\" green=\"" << brush.color().green()
-        << "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>( brush.style() ) << "\"/>" << endl;
-    out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
-        << "\" num=\"" << disappearNum << "\"/>" << endl;
+    QDomDocumentFragment fragment=KPObject::save(doc);
+    fragment.appendChild(KPObject::createValueElement("FILLTYPE", static_cast<int>(fillType), doc));
+    fragment.appendChild(KPObject::createGradientElement("GRADIENT", gColor1, gColor2, static_cast<int>(gType),
+                                                         unbalanced, xfactor, yfactor, doc));
+    fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
+    fragment.appendChild(KPObject::createBrushElement("BRUSH", brush, doc));
+    QDomElement elem=doc.createElement("KEY");
+    image.key().setAttributes(elem);
+    fragment.appendChild(elem);
+    return fragment;
 }
 
 /*========================== load ================================*/

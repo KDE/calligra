@@ -28,9 +28,6 @@
 #include <qbrush.h>
 #include <qpixmap.h>
 
-#include <koStream.h>
-#include <qtextstream.h>
-
 class KPGradient;
 class QPainter;
 
@@ -92,7 +89,7 @@ public:
     virtual int getGYFactor() const
     { return yfactor; }
 
-    virtual void save( QTextStream& out );
+    virtual QDomDocumentFragment save( QDomDocument& doc );
     virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
