@@ -58,8 +58,7 @@ VKoPainter::VKoPainter( QWidget *target, int w, int h ) : VPainter( target, w, h
 
 VKoPainter::~VKoPainter()
 {
-	if( m_buffer )
-		art_free( m_buffer );
+	art_free( m_buffer );
 
 	delete m_stroke;
 	delete m_fill;
@@ -76,10 +75,12 @@ VKoPainter::resize( int w, int h )
 	if( !m_buffer || w != m_width || h != m_height )
 	{
 		// TODO : realloc?
-		delete m_buffer;
+		art_free( m_buffer );
+		m_buffer = 0;
 		m_width = w;
 		m_height = h;
-		m_buffer = art_new( art_u8, m_width * m_height * 4 );
+		if ( m_width != 0 && m_height != 0 )
+			m_buffer = art_new( art_u8, m_width * m_height * 4 );
 		clear();
 	}
 }
@@ -285,13 +286,15 @@ VKoPainter::setRasterOp( Qt::RasterOp r )
 void
 VKoPainter::clear()
 {
-	memset( m_buffer, qRgba( 255, 255, 255, 255 ), m_width * m_height * 4 );
+	if ( m_buffer )
+		memset( m_buffer, qRgba( 255, 255, 255, 255 ), m_width * m_height * 4 );
 }
 
 void
 VKoPainter::clear( unsigned int color )
 {
-	memset( m_buffer, qRgba( qRed( color ), qGreen( color ), qBlue( color ), 255 ),
+	if ( m_buffer )
+		memset( m_buffer, qRgba( qRed( color ), qGreen( color ), qBlue( color ), 255 ),
 			m_width * m_height * 4 );
 }
 
