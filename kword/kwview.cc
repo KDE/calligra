@@ -1026,7 +1026,7 @@ void KWView::setupActions()
     actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
                                         this, SLOT( editCustomVariable() ),
                                         actionCollection(), "edit_customvars" );
-    actionApplyAutoFormat= new KAction( i18n( "Apply Autoformat" ), 0,
+    actionApplyAutoFormat= new KAction( i18n( "Apply Autocorrection" ), 0,
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
     actionApplyAutoFormat->setToolTip( i18n( "Manually force KWord to scan the entire document and apply autocorrection." ) );
@@ -1093,7 +1093,7 @@ void KWView::setupActions()
     actionImportStyle= new KAction( i18n( "Import Style..." ), 0,
                                             this, SLOT( importStyle() ),
                                             actionCollection(), "import_style" );
-    
+
     actionCreateFrameStyle = new KAction( i18n( "&Create Framestyle from frame" ), 0,
                                         this, SLOT( createFrameStyle()),
                                         actionCollection(), "create_framestyle" );
@@ -3356,11 +3356,11 @@ void KWView::extraFrameStylist()
 void KWView::createFrameStyle()
 {
     KWFrame* frame = 0L;
-    
+
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count()== 1)
         frame = selectedFrames.first();
-    
+
     if (frame)
     {
         QStringList list;
@@ -5116,7 +5116,7 @@ void KWView::frameSelectedChanged()
     }
 
     actionCreateFrameStyle->setEnabled( nbFrame==1 );
-    
+
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
