@@ -147,10 +147,10 @@ QString AddSpawnerSetAction::dirDesc( const QString& dir )
     QFile file( dir + "/desc" );
 
     if( file.exists()==false )
-        return QString("Unknown - desc does not exist in ") + dir;
+        return i18n("Unknown - desc does not exist in %1").arg(dir);
 
     if( file.open( IO_ReadOnly )==false )
-        return QString("Unknown - desc could not be opened in ") + dir;
+        return i18n("Unknown - desc could not be opened in %1").arg(dir);
 
     QString ret;
 
@@ -197,7 +197,7 @@ void AddSpawnerSetAction::slotActivated(int id)
 AddSpawnerSetDlg::AddSpawnerSetDlg( QWidget *par, const char *name, QString /*rdir*/ )
     : QDialog( par, name, true )
 {
-    setCaption("Load Stencil Set");
+    setCaption(i18n("Load Stencil Set"));
 
     m_rootDir = "/";
 
@@ -210,7 +210,7 @@ AddSpawnerSetDlg::AddSpawnerSetDlg( QWidget *par, const char *name, QString /*rd
     QListView *pListView = new QListView(this, "spawner list");
     QObject::connect( pListView, SIGNAL(selectionChanged(QListViewItem*)),
                     this, SLOT(itemSelected(QListViewItem*)));
-    pListView->addColumn( "Set Name", 250 );
+    pListView->addColumn( i18n("Set Name"), 250 );
     pListView->setRootIsDecorated(true);
 
 
@@ -329,10 +329,10 @@ QString AddSpawnerSetDlg::dirDesc( QString dir )
     QFile file( dir + "/desc" );
 
     if( file.exists()==false )
-        return "Unknown - .desc does not exist";
+        return i18n("Unknown - .desc does not exist");
 
     if( file.open( IO_ReadOnly )==false )
-        return "Unknown - .desc could not be opened";
+        return i18n("Unknown - .desc could not be opened");
 
     QString ret;
 
