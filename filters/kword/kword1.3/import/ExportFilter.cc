@@ -620,38 +620,50 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     {
         if ( formatData.bgColor.isValid() )
         {
-            strElement+="style:text-background-color=\"";
+            strElement+="style:text-background-color=\"";  // ### what is fo:background-color ?
             strElement+=formatData.bgColor.name();
             strElement+="\" ";
             key+=formatData.bgColor.name();
         }
     }
 
-    key += ",";
+    key += ',';
 
-    if (force || (formatOrigin.underline!=formatData.underline)
-        || (formatOrigin.strikeout!=formatData.strikeout))
+    if ( force || ( formatOrigin.underline != formatData.underline ) )
     {
-        strElement+="fo:text-decoration=\"";
+        strElement+="style:text-underline=\"";
         if ( formatData.underline )
         {
-            strElement+="underline";
-            key+='U';
+            strElement+="single";
+            key += 'S';
         }
-        else if ( formatData.strikeout )
-        {
-            strElement+="line-through";
-            key+='T';
-        }
-        else
+         else
         {
             strElement+="none";
-            key+='N';
+            key += 'N';
         }
         strElement+="\" ";
     }
 
-    key += ",";
+    key += ',';
+
+    if ( force || (formatOrigin.strikeout != formatData.strikeout ) )
+    {
+        strElement+="style:text-crossing-out=\"";
+        if ( formatData.strikeout )
+        {
+            strElement+="single-line";
+            key += "SL";
+        }
+        else
+        {
+            strElement+="none";
+            key += 'N';
+        }
+        strElement+="\" ";
+    }
+
+    key += ',';
 
     if ( force || ( formatOrigin.language != formatData.language ) )
     {
