@@ -227,7 +227,7 @@ public:
 
   QString name;
   int id;
-  
+
   KSpreadSheet::LayoutDirection layoutDirection;
 
   // true if sheet is hidden
@@ -6627,7 +6627,7 @@ void KSpreadSheet::checkContentDirection( QString const & name )
     setLayoutDirection( RightToLeft );
   else
     setLayoutDirection( LeftToRight );
-  
+
   emit sig_refreshView();
 }
 
@@ -7512,6 +7512,12 @@ void KSpreadSheet::loadOasisSettings( const KoOasisSettings &settings )
 
     d->doc->loadingInfo()->addMarkerSelection( this, QPoint( cursorX, cursorY ) );
     kdDebug()<<"d->hideZero :"<<d->hideZero<<" d->showGrid :"<<d->showGrid<<" d->firstLetterUpper :"<<d->firstLetterUpper<<" cursorX :"<<cursorX<<" cursorY :"<<cursorY<< endl;
+
+    d->showFormulaIndicator = settings.parseConfigItemInt("ShowFormulaIndicator" );
+    d->showPageBorders = settings.parseConfigItemBool( "ShowPageBorders" );
+    d->lcMode = settings.parseConfigItemBool( "lcmode" );
+    d->showColumnNumber = settings.parseConfigItemBool( "ShowPageBorders" );
+    d->firstLetterUpper = settings.parseConfigItemBool( "FirstLetterUpper" );
 }
 
 void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker )
@@ -7527,6 +7533,12 @@ void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint&
     //<config:config-item config:name="CursorPositionY" config:type="int">34</config:config-item>
     settingsWriter.addConfigItem( "CursorPositionX", marker.x() );
     settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
+
+    settingsWriter.addConfigItem( "ShowFormulaIndicator", d->showFormulaIndicator );
+    settingsWriter.addConfigItem( "ShowPageBorders",d->showPageBorders );
+    settingsWriter.addConfigItem( "lcmode", d->lcMode );
+    settingsWriter.addConfigItem( "ShowPageNumber", d->showColumnNumber );
+    settingsWriter.addConfigItem( "FirstLetterUpper", d->firstLetterUpper );
 }
 
 
@@ -7559,7 +7571,6 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
 
 void KSpreadSheet::saveOasisPrintStyleLayout( KoGenStyle &style )
 {
-//todo
     QString printParameter;
     if ( d->print->printGrid() )
         printParameter="grid ";
@@ -7671,7 +7682,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         d->doc->setErrorMessage( i18n("Invalid document. Table name is empty.") );
         return false;
     }
-    
+
     bool detectDirection = true;
     d->layoutDirection = LeftToRight;
     QString layoutDir = table.attribute( "layoutDirection" );
