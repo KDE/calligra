@@ -9,6 +9,7 @@ Name[ru]=Êœ“Õ’ÃŸ
 Name[sv]=Formler
 Exec=kformula.bin --server
 Comment=The Formula Editor
+Comment[ca]=L'editor de fÛrmules
 Comment[da]=Formeleditor
 Comment[es]=El Editor de Formulas
 Comment[fi]=Kaavaeditori

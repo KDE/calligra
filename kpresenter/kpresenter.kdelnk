@@ -9,6 +9,7 @@ Name[ru]=ğÒÅÚÅÎÔÁÃÉÉ
 Name[sv]=Presentation
 Exec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
+Comment[ca]=El programa de presentacions de Reggie
 Comment[da]=Reggies præsentationsprogram
 Comment[es]=El Software de Presentación de Reggie
 Comment[fi]=Reggien esitysohjelma
