@@ -430,14 +430,11 @@ FormManager::windowChanged(QWidget *w)
 				}
 			}
 
-			if((form != previousActive) && isCreatingConnection())
-				resetCreatedConnection();
-
+			resetCreatedConnection();
 			m_active = form;
 
 			emit dirty(form, false);
 			emit noFormSelected();
-			return;
 		}
 	}
 	//m_active = 0;

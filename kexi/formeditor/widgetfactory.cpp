@@ -22,6 +22,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <ktextedit.h>
 #include <klineedit.h>
 #include <kdialogbase.h>
 #include <keditlistbox.h>
@@ -66,9 +67,37 @@ WidgetFactory::~WidgetFactory()
 
 }
 
-KLineEdit*
-WidgetFactory::createEditor(const QString &text, QWidget *w, Container *container, QRect geometry, int align,  bool useFrame, BackgroundMode background)
+void
+WidgetFactory::createEditor(const QString &text, QWidget *w, Container *container, QRect geometry,  int align,  bool useFrame, BackgroundMode background)
 {
+#ifdef KEXI_KTEXTEDIT
+	KTextEdit *textedit = new KTextEdit(text, QString::null, w->parentWidget());
+	textedit->setTextFormat(Qt::PlainText);
+	textedit->setAlignment(align);
+	textedit->setPalette(w->palette());
+	textedit->setFont(w->font());
+	textedit->setGeometry(geometry);
+	if(background == Qt::NoBackground)
+		textedit->setBackgroundMode(w->backgroundMode());
+	else
+		textedit->setBackgroundMode(background);
+	textedit->setPaletteBackgroundColor(textedit->colorGroup().color( QColorGroup::Background ));
+	for(int i =0; i <= textedit->paragraphs(); i++)
+		textedit->setParagraphBackgroundColor(i, textedit->colorGroup().color( QColorGroup::Background ));
+	textedit->installEventFilter(this);
+	textedit->setFrameShape(useFrame ? QFrame::LineEditPanel : QFrame::NoFrame);
+	textedit->setMargin(2); //to move away from resize handle
+	textedit->show();
+	textedit->setFocus();
+	textedit->selectAll();
+	m_editor = textedit;
+
+	connect(textedit, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
+	connect(textedit, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+
+#else
+
 	KLineEdit *editor = new KLineEdit(text, w->parentWidget());
 	editor->setAlignment(align);
 	editor->setPalette(w->palette());
@@ -88,20 +117,20 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, Container *containe
 	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
 	connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
 
+	m_editor = editor;
+#endif
 	m_handles = new ResizeHandleSet(w, container->form(), true);
 
 	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->name());
 	if(!tree)
-		return 0;
+		return;
 	tree->eventEater()->setContainer(this);
 
-	m_editor = editor;
 	m_widget = w;
 	m_firstText = text;
 	m_container = container;
 
 	changeText(text); // to update size of the widget
-	return editor;
 }
 
 void
@@ -312,6 +341,12 @@ WidgetFactory::showProperty(const QString&, QWidget*, const QString&, bool multi
 void
 WidgetFactory::resizeEditor(QWidget *, const QString&)
 {}
+
+void
+WidgetFactory::slotTextChanged()
+{
+	changeText(m_editor->text());
+}
 
 void
 WidgetFactory::changeText(const QString&)

@@ -33,6 +33,7 @@ template<class type> class QPtrList;
 template<class type> class QDict;
 class QWidget;
 class KLineEdit;
+class KTextEdit;
 class QDomElement;
 class QDomDocument;
 class QVariant;
@@ -213,7 +214,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		  in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
 		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
 		 */
-		KLineEdit*	createEditor(const QString &text, QWidget *w, Container *container, QRect geometry, int align,  bool useFrame=false,
+		void  createEditor(const QString &text, QWidget *w, Container *container, QRect geometry, int align,  bool useFrame=false,
 		     BackgroundMode background = Qt::NoBackground);
 		/*! This function provides a simple editing mode : it justs disable event filtering
 		for the widget, and it install it again when
@@ -253,6 +254,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		property of the widget using changeProperty() (text, or title, etc.).
 		 */
 		virtual void  changeText(const QString &newText);
+		void slotTextChanged();
 		/*! This slot is called when the editor has lost focus or the user pressed Enter.
 		It destroys the editor or installs again the event filter on the widget. */
 		void  resetEditor();
@@ -262,7 +264,11 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 	protected:
 		QGuardedPtr<QWidget> m_widget;
+#ifdef KEXI_KTEXTEDIT
+		QGuardedPtr<KTextEdit>  m_editor;
+#else
 		QGuardedPtr<KLineEdit>  m_editor;
+#endif
 		QString   m_firstText;
 		QGuardedPtr<ResizeHandleSet>  m_handles;
 		QGuardedPtr<Container>      m_container;
