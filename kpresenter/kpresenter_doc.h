@@ -627,7 +627,7 @@ protected:
 
     QMap<KoPictureKey, QString> m_pictureMap;
 
-    typedef QMap<QString, QDict<KPrPage> > ListCustomSlideShow;
+    typedef QMap<QString, QPtrList<KPrPage> > ListCustomSlideShow;
     ListCustomSlideShow m_customListSlideShow;
 
 
