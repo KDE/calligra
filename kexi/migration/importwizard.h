@@ -53,6 +53,8 @@ private:
 private slots:
     void nextClicked(const QString &);
     virtual void accept();
+    void helpClicked();
+    
 public:
     importWizard(QWidget *parent = 0, const char *name = 0);
 

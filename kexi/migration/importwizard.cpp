@@ -24,8 +24,10 @@
 #include <core/kexi.h>
 #include <main/startup/KexiConnSelector.h>
 #include <main/startup/KexiProjectSelector.h>
+#include <main/startup/KexiOpenExistingFile.h>
 #include <kmessagebox.h>
 
+#include <kpushbutton.h>
 #include <kdebug.h>
 #include <klineedit.h>
 
@@ -69,6 +71,7 @@ importWizard::importWizard(QWidget *parent, const char *name)
     setupdst();
     setupfinish();
     connect(this, SIGNAL(selected(const QString &)), this, SLOT(nextClicked(const QString &)));
+    connect(this, SIGNAL(helpClicked()), this, SLOT(helpClicked()));
 }
 
 //===========================================================
@@ -90,10 +93,6 @@ void importWizard::setupintro()
 //
 void importWizard::setupsrcType()
 {
-    QLabel *lblSource = new QLabel(srcTypePage);
-    lblSource->setText(i18n("Here you can choose the type\n"
-                       "of data to import data from"));
-
     QVBox *srcTypeControls = new QVBox(srcTypePage);
     srcTypeCombo = new KComboBox(srcTypeControls);
     srcTypeCombo->insertItem("PostgreSQL Database", 0);
@@ -104,14 +103,9 @@ void importWizard::setupsrcType()
 //
 void importWizard::setupsrcconn()
 {
+   QVBox *srcconnControls = new QVBox(srcConnPage);
 
-    QLabel *lblSource = new QLabel(srcConnPage);
-    lblSource->setText(i18n("Here you can choose the location\n"
-                       "to import data from"));
-
-    QVBox *srcconnControls = new QVBox(srcConnPage);
-
-    srcConn = new KexiConnSelectorWidget(Kexi::connset(), srcconnControls, "ConnSelector");
+    srcConn = new KexiConnSelectorWidget(Kexi::connset(), srcconnControls, "SrcConnSelector");
 
     srcConn->hideHelpers();
 
@@ -121,11 +115,6 @@ void importWizard::setupsrcconn()
 //
 void importWizard::setupsrcdb()
 {
-
-    QLabel *lblSourceDb = new QLabel(srcdbPage);
-    lblSourceDb->setText(i18n("Here you can choose the actual\n"
-                         "database to import data from"));
-
     srcdbControls = new QVBox(srcdbPage);
 
     srcdbname = NULL;
@@ -138,9 +127,6 @@ void importWizard::setupdstType()
     KexiDB::DriverManager manager;
 
     QStringList names = manager.driverNames();
-    QLabel *lblDest = new QLabel(dstTypePage);
-    lblDest->setText(i18n("Here you can choose the location\n"
-                     "to save the data"));
 
     QVBox *dstTypeControls = new QVBox(dstTypePage);
 
@@ -152,16 +138,17 @@ void importWizard::setupdstType()
 //
 void importWizard::setupdst()
 {
-    QLabel *lblDest = new QLabel(dstPage);
-    lblDest->setText(i18n("Here you can choose the location\n"
-                     "to save the data in and the new\n"
-                     "database name"));
-
     QVBox *dstControls = new QVBox(dstPage);
 
-    dstConn = new KexiConnSelectorWidget(Kexi::connset(), dstControls, "ConnSelector");
+    dstConn = new KexiConnSelectorWidget(Kexi::connset(), dstControls, "DstConnSelector");
 
     dstConn->hideHelpers();
+    //dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
+    dstConn->m_file->btn_advanced->hide();
+    dstConn->m_file->label->hide();
+    dstConn->m_file->lbl->hide();
+//    dstConn->m_file->spacer7->hide();
+    
 
     dstNewDBName = new KLineEdit(dstControls);
     dstNewDBName->setText(i18n("Enter new database name here"));
@@ -200,7 +187,7 @@ bool importWizard::checkUserInput()
         problem = true;
         finishtxt = i18n("Source type was not PostgreSQL Database.");
     }
-    if (dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text() == "")
+    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text() == "") && dstTypeCombo->currentText() == "SQLite")
     {
         problem = true;
         finishtxt = finishtxt + i18n("\nNo new database name was entered.");
@@ -226,7 +213,8 @@ void importWizard::accept()
 {
     QGuardedPtr<KexiDB::Connection> kexi_conn;
     KexiMigrate* import;
-
+    KexiDB::ConnectionData *cdata;
+    
     //Start with a driver manager
     KexiDB::DriverManager manager;
 
@@ -238,20 +226,32 @@ void importWizard::accept()
     {
         manager.debugError();
     }
-
-    if (!dstConn->selectedConnectionData())
+    
+    if (dstTypeCombo->currentText() == "PostgreSQL")
     {
-        KMessageBox::error(this, "Destination connection data was NULL", "Panic");
-        return;
+        //server-based project
+        cdata = dstConn->selectedConnectionData();
     }
+    else if (dstTypeCombo->currentText() == "SQLite") 
+    {
+		//file-based project
+		cdata = new KexiDB::ConnectionData;
+		cdata->connName = "/home/piggz/test1.kexi";//dstNewDBName->text();
+		cdata->driverName = "sqlite";
+		cdata->setFileName( dstConn->m_fileDlg->currentFileName() );
+    }
+    else
+        return;
+
+    
     //Create connections to the kexi database
-    kexi_conn = driver->createConnection(*(dstConn->selectedConnectionData()));
+    kexi_conn = driver->createConnection(*cdata);
 
     import = new pqxxMigrate(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, false);
     
     if (import->performImport())
     {
-        KMessageBox::error(this, i18n("Import Succeeded."), i18n("Success"));
+        KMessageBox::information(this, i18n("Import Succeeded."), i18n("Success"));
     }
     else
     {
@@ -349,6 +349,38 @@ void importWizard::createBlankPages()
     this->addPage(dstTypePage, i18n("Destination Database Type"));
     this->addPage(dstPage, i18n("Destination Database"));
     this->addPage(finishPage, i18n("Finished"));
+}
+
+void importWizard::helpClicked()
+{
+    if (currentPage() == introPage)
+    {
+        KMessageBox::information(this, "No help availbale for this page", "Help");
+    }
+    else if (currentPage() == srcTypePage)
+    {
+        KMessageBox::information(this, "Here you can choose the type of data to import data from", "Help");
+    }
+    else if (currentPage() == srcConnPage)
+    {
+        KMessageBox::information(this, "Here you can choose the location to import data from", "Help");
+    }
+    else if (currentPage() == srcdbPage)
+    {
+        KMessageBox::information(this, "Here you can choose the actual database to import data from", "Help");
+    }
+    else if (currentPage() == dstTypePage)
+    {
+        KMessageBox::information(this, "Here you can choose the location to save the data", "Help");
+    }
+    else if (currentPage() == dstPage)
+    {
+        KMessageBox::information(this, "Here you can choose the location to save the data in and the new database name", "Help");
+    }
+    else if (currentPage() == finishPage)
+    {
+        KMessageBox::information(this, "No help availbale for this page", "Help");
+    }
 }
 };
 #include "importwizard.moc"
