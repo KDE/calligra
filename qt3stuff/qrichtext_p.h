@@ -80,8 +80,6 @@
 // We need this to avoid clashes
 namespace Qt3 {
 
-//#define DEBUG_COLLECTION
-
 class QTextDocument;
 class QTextString;
 class QTextPreProcessor;
@@ -1719,133 +1717,6 @@ inline void QTextDocument::setFlow( QTextFlow *f )
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-inline QTextFormat::QTextFormat()
-    : fm( QFontMetrics( fn ) ), linkColor( TRUE ), logicalFontSize( 3 ), stdPointSize( qApp->font().pointSize() ),
-      painter( 0 ), different( NoFlags )
-{
-    ref = 0;
-    missp = FALSE;
-    ha = AlignNormal;
-    collection = 0;
-}
-
-inline QTextFormat::QTextFormat( const QStyleSheetItem *style )
-    : fm( QFontMetrics( fn ) ), linkColor( TRUE ), logicalFontSize( 3 ), stdPointSize( qApp->font().pointSize() ),
-      painter( 0 ), different( NoFlags )
-{
-    qWarning("QTextFormat::QTextFormat( const QStyleSheetItem *style )");
-    ref = 0;
-    this->style = style->name();
-    missp = FALSE;
-    ha = AlignNormal;
-    collection = 0;
-    fn = QFont( style->fontFamily(),
-		style->fontSize(),
-		style->fontWeight(),
-		style->fontItalic() );
-    fn.setUnderline( style->fontUnderline() );
-    col = style->color();
-    fm = QFontMetrics( fn );
-    leftBearing = fm.minLeftBearing();
-    rightBearing = fm.minRightBearing();
-    hei = fm.height();
-    asc = fm.ascent();
-    dsc = fm.descent();
-    missp = FALSE;
-    ha = AlignNormal;
-    memset( widths, 0, 256 );
-    generateKey();
-    addRef();
-    updateStyleFlags();
-}
-
-inline QTextFormat::QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll )
-    : fn( f ), col( c ), fm( QFontMetrics( f ) ), linkColor( TRUE ),
-      logicalFontSize( 3 ), stdPointSize( f.pointSize() ), painter( 0 ),
-      different( NoFlags )
-{
-    ref = 0;
-    collection = coll;
-    leftBearing = fm.minLeftBearing();
-    rightBearing = fm.minRightBearing();
-    hei = fm.height();
-    asc = fm.ascent();
-    dsc = fm.descent();
-    missp = FALSE;
-    ha = AlignNormal;
-    memset( widths, 0, 256 );
-    generateKey();
-    addRef();
-    updateStyleFlags();
-}
-
-inline QTextFormat::QTextFormat( const QTextFormat &f )
-    : fm( f.fm )
-{
-    ref = 0;
-    collection = 0;
-    fn = f.fn;
-    col = f.col;
-    painter = f.painter;
-    leftBearing = f.leftBearing;
-    rightBearing = f.rightBearing;
-    memset( widths, 0, 256 );
-    hei = f.hei;
-    asc = f.asc;
-    dsc = f.dsc;
-    stdPointSize = f.stdPointSize;
-    logicalFontSize = f.logicalFontSize;
-    missp = f.missp;
-    ha = f.ha;
-    k = f.k;
-    anchor_name = f.anchor_name;
-    anchor_href = f.anchor_href;
-    linkColor = f.linkColor;
-    style = f.style;
-    different = f.different;
-    addRef();
-}
-
-inline QTextFormat& QTextFormat::operator=( const QTextFormat &f )
-{
-    ref = 0;
-    collection = f.collection;
-    fn = f.fn;
-    col = f.col;
-    fm = f.fm;
-    leftBearing = f.leftBearing;
-    rightBearing = f.rightBearing;
-    memset( widths, 0, 256 );
-    hei = f.hei;
-    asc = f.asc;
-    dsc = f.dsc;
-    stdPointSize = f.stdPointSize;
-    logicalFontSize = f.logicalFontSize;
-    missp = f.missp;
-    ha = f.ha;
-    k = f.k;
-    anchor_name = f.anchor_name;
-    anchor_href = f.anchor_href;
-    linkColor = f.linkColor;
-    style = f.style;
-    different = f.different;
-    addRef();
-    return *this;
-}
-
-inline void QTextFormat::update()
-{
-    fm = QFontMetrics( fn );
-    leftBearing = fm.minLeftBearing();
-    rightBearing = fm.minRightBearing();
-    hei = fm.height();
-    asc = fm.ascent();
-    dsc = fm.descent();
-    memset( widths, 0, 256 );
-    generateKey();
-    updateStyleFlags();
-}
-
 inline QColor QTextFormat::color() const
 {
     return col;
@@ -1914,26 +1785,6 @@ inline bool QTextFormat::operator==( const QTextFormat &f ) const
 inline QTextFormatCollection *QTextFormat::parent() const
 {
     return collection;
-}
-
-inline void QTextFormat::addRef()
-{
-    ref++;
-#ifdef DEBUG_COLLECTION
-    qDebug( "add ref of '%s' to %d (%p)", k.latin1(), ref, this );
-#endif
-}
-
-inline void QTextFormat::removeRef()
-{
-    ref--;
-    if ( !collection )
-	return;
-#ifdef DEBUG_COLLECTION
-    qDebug( "remove ref of '%s' to %d (%p)", k.latin1(), ref, this );
-#endif
-    if ( ref == 0 )
-	collection->remove( this );
 }
 
 inline QString QTextFormat::key() const

@@ -60,7 +60,7 @@
 using namespace Qt3;
 
 //#define PARSER_DEBUG
-//#define DEBUG_COLLECTION// ---> also in qrichtext_p.h
+//#define DEBUG_COLLECTION
 //#define DEBUG_TABLE_RENDERING
 
 static QTextFormatCollection *qFormatCollection = 0;
@@ -1233,9 +1233,9 @@ QTextDocument::QTextDocument( QTextDocument *p, QTextFormatCollection *c )
 
 void QTextDocument::init()
 {
-#if defined(PARSER_DEBUG)
-    qDebug( debug_indent + "new QTextDocument (%p)", this );
-#endif
+//#if defined(PARSER_DEBUG)
+    qDebug( "new QTextDocument (%p)", this );
+//#endif
     if ( par )
 	par->insertChild( this );
     pProcessor = 0;
@@ -2810,8 +2810,12 @@ void QTextString::clear()
 
 void QTextString::setFormat( int index, QTextFormat *f, bool useCollection )
 {
+    qDebug("QTextString::setFormat index=%d f=%p",index,f);
     if ( useCollection && data[ index ].format() )
+    {
+        qDebug("QTextString::setFormat removing ref on old format %p",data[ index ].format());
 	data[ index ].format()->removeRef();
+    }
     data[ index ].setFormat( f );
 }
 
@@ -3015,9 +3019,9 @@ QTextParag::QTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool u
 	tabStopWidth = defFormat->width( 'x' ) * 8;
 	commandHistory = new QTextCommandHistory( 100 );
     }
-#if defined(PARSER_DEBUG)
-    qDebug( debug_indent + "new QTextParag" );
-#endif
+//#if defined(PARSER_DEBUG)
+    qDebug( "new QTextParag" );
+//#endif
     fullWidth = TRUE;
 
     if ( p ) {
@@ -3060,6 +3064,7 @@ QTextParag::QTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool u
     firstPProcess = TRUE;
 
     str = new QTextString();
+    formatCollection()->defaultFormat()->addRef();
     str->insert( 0, " ", formatCollection()->defaultFormat() );
 }
 
@@ -3558,7 +3563,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	    if ( !chr->isCustom() && chr->c != '\n' )
 		paintEnd = i;
 	    bw = cw;
-	    if ( !chr->isCustom() )
+	    //if ( !chr->isCustom() )
 		continue;
 	}
 
@@ -4865,6 +4870,7 @@ QTextIndent::QTextIndent()
 QTextFormatCollection::QTextFormatCollection()
     : cKey( 307 ), sheet( 0 )
 {
+    qDebug("QTextFormatCollection::QTextFormatCollection %p", this);
     defFormat = new QTextFormat( QApplication::font(),
 				     QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
     lastFormat = cres = 0;
@@ -4875,6 +4881,7 @@ QTextFormatCollection::QTextFormatCollection()
 
 QTextFormatCollection::~QTextFormatCollection()
 {
+    qDebug("QTextFormatCollection::~QTextFormatCollection %p", this);
     delete defFormat;
 }
 
@@ -6710,3 +6717,168 @@ void QTextTableCell::draw( int x, int y, int cx, int cy, int cw, int ch, const Q
 
     painter()->restore();
 }
+
+
+///// Some of this is in qrichtext_p.cpp in qt-rsync at the moment
+
+QTextFormat::QTextFormat()
+    : fm( QFontMetrics( fn ) ), linkColor( TRUE ), logicalFontSize( 3 ), stdPointSize( qApp->font().pointSize() ),
+      painter( 0 ), different( NoFlags )
+{
+    ref = 0;
+    missp = FALSE;
+    ha = AlignNormal;
+    collection = 0;
+#ifdef DEBUG_COLLECTION
+    qDebug("QTextFormat simple ctor, no addRef ! %p",this);
+#endif
+}
+ 
+QTextFormat::QTextFormat( const QStyleSheetItem *style )
+    : fm( QFontMetrics( fn ) ), linkColor( TRUE ), logicalFontSize( 3 ), stdPointSize( qApp->font().pointSize() ),
+      painter( 0 ), different( NoFlags )
+{
+#ifdef DEBUG_COLLECTION
+    qDebug("QTextFormat::QTextFormat( const QStyleSheetItem *style )");
+#endif
+    ref = 0;
+    this->style = style->name();
+    missp = FALSE;
+    ha = AlignNormal;
+    collection = 0;
+    fn = QFont( style->fontFamily(),
+                style->fontSize(),
+                style->fontWeight(),
+                style->fontItalic() );
+    fn.setUnderline( style->fontUnderline() );
+    col = style->color();
+    fm = QFontMetrics( fn );
+    leftBearing = fm.minLeftBearing();
+    rightBearing = fm.minRightBearing();
+    hei = fm.height();
+    asc = fm.ascent();
+    dsc = fm.descent();
+    missp = FALSE;
+    ha = AlignNormal;
+    memset( widths, 0, 256 );
+    generateKey();
+    addRef();
+    updateStyleFlags();
+}
+ 
+QTextFormat::QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll )
+    : fn( f ), col( c ), fm( QFontMetrics( f ) ), linkColor( TRUE ),
+      logicalFontSize( 3 ), stdPointSize( f.pointSize() ), painter( 0 ),
+      different( NoFlags )
+{
+#ifdef DEBUG_COLLECTION
+    qDebug("QTextFormat with font & color & coll (%p), addRef. %p",coll,this);
+#endif
+    ref = 0;
+    collection = coll;
+    leftBearing = fm.minLeftBearing();
+    rightBearing = fm.minRightBearing();
+    hei = fm.height();
+    asc = fm.ascent();
+    dsc = fm.descent();
+    missp = FALSE;
+    ha = AlignNormal;
+    memset( widths, 0, 256 );
+    generateKey();
+    addRef();
+    updateStyleFlags();
+}
+ 
+QTextFormat::QTextFormat( const QTextFormat &f )
+    : fm( f.fm )
+{
+#ifdef DEBUG_COLLECTION
+    qDebug("QTextFormat::QTextFormat %p copy ctor (copying %p). Will addRef.",this,&f);
+#endif
+    ref = 0;
+    collection = 0;
+    fn = f.fn;
+    col = f.col;
+    painter = f.painter;
+    leftBearing = f.leftBearing;
+    rightBearing = f.rightBearing;
+    memset( widths, 0, 256 );
+    hei = f.hei;
+    asc = f.asc;
+    dsc = f.dsc;
+    stdPointSize = f.stdPointSize;
+    logicalFontSize = f.logicalFontSize;
+    missp = f.missp;
+    ha = f.ha;
+    k = f.k;
+    anchor_name = f.anchor_name;
+    anchor_href = f.anchor_href;
+    linkColor = f.linkColor;
+    style = f.style;
+    different = f.different;
+    addRef();
+}
+ 
+QTextFormat& QTextFormat::operator=( const QTextFormat &f )
+{
+#ifdef DEBUG_COLLECTION
+    qDebug("QTextFormat::operator= %p (copying %p). Will addRef",this,&f);
+#endif
+    ref = 0;
+    collection = f.collection;
+    fn = f.fn;
+    col = f.col;
+    fm = f.fm;
+    leftBearing = f.leftBearing;
+    rightBearing = f.rightBearing;
+    memset( widths, 0, 256 );
+    hei = f.hei;
+    asc = f.asc;
+    dsc = f.dsc;
+    stdPointSize = f.stdPointSize;
+    logicalFontSize = f.logicalFontSize;
+    missp = f.missp;
+    ha = f.ha;
+    k = f.k;
+    anchor_name = f.anchor_name;
+    anchor_href = f.anchor_href;
+    linkColor = f.linkColor;
+    style = f.style;
+    different = f.different;
+    addRef();
+    return *this;
+}
+ 
+void QTextFormat::update()
+{
+    fm = QFontMetrics( fn );
+    leftBearing = fm.minLeftBearing();
+    rightBearing = fm.minRightBearing();
+    hei = fm.height();
+    asc = fm.ascent();
+    dsc = fm.descent();
+    memset( widths, 0, 256 );
+    generateKey();
+    updateStyleFlags();
+}
+
+void QTextFormat::addRef()
+{
+    ref++;
+#ifdef DEBUG_COLLECTION
+    qDebug( "add ref of '%s' to %d (%p) (coll %p)", k.latin1(), ref, this, collection );
+#endif
+}
+ 
+void QTextFormat::removeRef()
+{
+    ref--;
+#ifdef DEBUG_COLLECTION
+    qDebug( "remove ref of '%s' to %d (%p) (coll %p)", k.latin1(), ref, this, collection );
+#endif
+    if ( !collection )
+        return;
+    if ( ref == 0 )
+        collection->remove( this );
+}
+
