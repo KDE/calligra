@@ -3638,7 +3638,8 @@ void KWDocument::reorganizeGUI()
 
 void KWDocument::slotDocumentInfoModifed()
 {
-    recalcVariables( VT_FIELD );
+    if (!getVariableCollection()->variableSetting()->displayFiedCode())
+        recalcVariables( VT_FIELD );
 }
 
 void KWDocument::refreshDocStructure(int type)
