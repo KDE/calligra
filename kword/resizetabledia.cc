@@ -55,7 +55,6 @@ void KWResizeTableDia::setupTab1()
     rc->setAlignment( AlignLeft | AlignBottom );
 
     value = new QSpinBox( 1, type == ROW ? table->getRows() : table->getCols(), 1, page );
-    connect( value, SIGNAL( valueChanged ( int )), this, SLOT( slotValueChanged( int )));
     value->resize( value->sizeHint() );
     unsigned int rowSelected;
     unsigned int colSelected;
@@ -67,6 +66,8 @@ void KWResizeTableDia::setupTab1()
     rc = new QLabel( type == ROW ? i18n( "Height (%1):" ).arg(doc->getUnitName()) : i18n( "Width (%1):" ).arg(doc->getUnitName()), page );
     position= new KDoubleNumInput( page );
     slotValueChanged( value->value());
+    connect( value, SIGNAL( valueChanged ( int )), this, SLOT( slotValueChanged( int )));
+
 }
 
 bool KWResizeTableDia::doResize()
