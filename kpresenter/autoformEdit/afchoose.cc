@@ -86,7 +86,7 @@ void AFChoose::setupTabs()
 	    if( d.exists() ) {
 		QStringList files=d.entryList( QDir::Files | QDir::Readable, QDir::Name );
 		for(unsigned int i=0; i<files.count(); ++i)
-		    files[i]=grpPtr->dir.absFilePath() + QChar('/') + files[i];		
+		    files[i]=grpPtr->dir.absFilePath() + QChar('/') + files[i];
 		grpPtr->loadWid->loadFiles(files);
 	    }
 	    //grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.png");
@@ -145,8 +145,8 @@ void AFChoose::chosen()
     {
 	for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
 	{
-	    if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty())
-		emit formChosen(QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent()));
+	    if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty()) 
+		emit formChosen(grpPtr->loadWid->getCurrent());	
 	}
     }
 }
