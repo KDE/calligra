@@ -963,10 +963,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   else if ( _ev->button() == LeftButton )
   {
     m_eMouseAction = Mark;
-    selection.setCoords( col, row,
-                         col + cell->extraXCells(),
-                         row + cell->extraYCells() );
-    table->setSelection( selection, this );
+    gotoLocation(QPoint(col, row), activeTable(), false);
   }
   else if ( _ev->button() == RightButton )
   {
