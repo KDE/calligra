@@ -17,14 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "afchoose.h"
-#include <klocale.h>
-#include "afchoose.moc"
+#include <afchoose.h>
+
+#include <qlabel.h>
 #include <qvbox.h>
 #include <qtextstream.h>
-#include <kstddirs.h>
 #include <qdir.h>
-#include "../kpresenter_factory.h"
+
+#include <klocale.h>
+#include <ksimpleconfig.h>
+#include <kdebug.h>
+#include <kstddirs.h>
+#include <kicondialog.h>
+
+#include <kpresenter_factory.h>
 
 /******************************************************************/
 /* class AFChoose                                                 */
@@ -32,7 +38,7 @@
 
 /*==================== constructor ===============================*/
 AFChoose::AFChoose(QWidget *parent, const QString &caption, const char *name)
-    :QTabDialog(parent,name,true)
+    : QTabDialog(parent,name,true)
 {
     setCaption(caption);
     setCancelButton(i18n("Cancel"));
@@ -51,7 +57,7 @@ AFChoose::~AFChoose()
 /*======================= get Groups =============================*/
 void AFChoose::getGroups()
 {
-    // global autoforms
+    // global autoforms (as we don't have an editor we don't have local ones)
     QString afDir = locate( "autoforms", ".autoforms", KPresenterFactory::global() );
 
     QFile f( afDir );
@@ -62,8 +68,14 @@ void AFChoose::getGroups()
             s = t.readLine();
             if ( !s.isEmpty() ) {
                 grpPtr = new Group;
-                grpPtr->dir.setFile( QFileInfo( afDir ).dirPath() + "/" + s.simplifyWhiteSpace() );
-                grpPtr->name = s.simplifyWhiteSpace();
+                QString directory=QFileInfo( afDir ).dirPath() + "/" + s.simplifyWhiteSpace();
+                grpPtr->dir.setFile(directory);
+                QDir d(directory);
+                if(d.exists(".directory")) {
+                    KSimpleConfig config(d.absPath()+"/.directory", true);
+                    config.setDesktopGroup();
+                    grpPtr->name=config.readEntry("Name");
+                }
                 groupList.append( grpPtr );
             }
         }
@@ -80,62 +92,82 @@ void AFChoose::setupTabs()
         {
             grpPtr->tab = new QVBox(this);
             grpPtr->loadWid = new KIconCanvas(grpPtr->tab);
-            qDebug( "%s", grpPtr->dir.absFilePath().latin1() );
             // Changes for the new KIconCanvas (Werner)
             QDir d( grpPtr->dir.absFilePath() );
-            d.setNameFilter( "*.png" );
+            d.setNameFilter( "*.desktop" );
             if( d.exists() ) {
                 QStringList files=d.entryList( QDir::Files | QDir::Readable, QDir::Name );
-                for(unsigned int i=0; i<files.count(); ++i)
-                    files[i]=grpPtr->dir.absFilePath() + QChar('/') + files[i];
-                grpPtr->loadWid->loadFiles(files);
+                for(unsigned int i=0; i<files.count(); ++i) {
+                    QString path=grpPtr->dir.absFilePath() + QChar('/');
+                    files[i]=path + files[i];
+                    KSimpleConfig config(files[i]);
+                    config.setDesktopGroup();
+                    if (config.readEntry("Type")=="Link") {
+                        QString text=config.readEntry("Name");
+                        QString icon=config.readEntry("Icon");
+                        if(icon[0]!='/') // allow absolute paths for icons
+                            icon=path + icon;
+                        QString filename=config.readEntry("URL");
+                        if(filename[0]!='/') {
+                            if(filename.left(6)=="file:/") // I doubt this will happen
+                                filename=filename.right(filename.length()-6);
+                            filename=path + filename;
+                        }
+                        grpPtr->entries.insert(text, filename);
+                        // now load the icon and create the item
+                         // This code is shamelessly borrowed from KIconCanvas::slotLoadFiles
+                        QImage img;
+                        img.load(icon);
+                        if (img.isNull()) {
+                            kdWarning() << "Couldn't find icon " << icon << endl;
+                            continue;
+                        }
+                        if (img.width() > 60 || img.height() > 60) {
+                            if (img.width() > img.height()) {
+                                int height = (int) ((60.0 / img.width()) * img.height());
+                                img = img.smoothScale(60, height);
+                            } else {
+                                int width = (int) ((60.0 / img.height()) * img.width());
+                                img = img.smoothScale(width, 60);
+                            }
+                        }
+                        QPixmap pic;
+                        pic.convertFromImage(img);
+                        QIconViewItem *item = new QIconViewItem(grpPtr->loadWid, text, pic);
+                        item->setKey(text);
+                        item->setDragEnabled(false);
+                        item->setDropEnabled(false);
+                    } else
+                        continue; // Invalid .desktop file
+                }
             }
-            //grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.png");
             grpPtr->loadWid->setBackgroundColor(colorGroup().base());
-            grpPtr->loadWid->show();
+            grpPtr->loadWid->setResizeMode(QIconView::Adjust);
+            grpPtr->loadWid->sort();
             connect(grpPtr->loadWid,SIGNAL(nameChanged(QString)),
                     this,SLOT(nameChanged(QString)));
-//        connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
-//                this,SLOT(chosen()));
-//        connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
-//                this,SLOT(accept()));
+            connect(this, SIGNAL(currentChanged(QWidget *)), this,
+                    SLOT(tabChanged(QWidget*)));
             grpPtr->label = new QLabel(grpPtr->tab);
             grpPtr->label->setText(" ");
             grpPtr->label->setMaximumHeight(grpPtr->label->sizeHint().height());
-            //grpPtr->tab->setMinimumSize(400,300);
             addTab(grpPtr->tab,grpPtr->name);
         }
     }
 }
 
-/*====================== resize event ============================*/
-void AFChoose::resizeEvent(QResizeEvent *e)
-{
-    QTabDialog::resizeEvent(e);
-//   if (!groupList.isEmpty())
-//     {
-//       for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
-//      {
-//        grpPtr->loadWid->resize(grpPtr->tab->width(),grpPtr->tab->height()-30);
-//        grpPtr->label->setGeometry(10,grpPtr->tab->height()-30,
-//                                   grpPtr->tab->width()-10,30);
-//      }
-//     }
-}
-
 /*====================== name changed ===========================*/
 void AFChoose::nameChanged(QString name)
 {
-    QFileInfo fi(name);
+    for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
+        grpPtr->label->setText(name);
+}
 
-    if (!groupList.isEmpty())
-    {
-        for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
-        {
-            grpPtr->label->setText(fi.baseName());
-            if (grpPtr->label->text().isEmpty())
-                grpPtr->label->setText(" ");
-        }
+void AFChoose::tabChanged(QWidget *w) {
+
+    for(grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next()) {
+        if(grpPtr->tab==w)
+            grpPtr->label->setText(grpPtr->loadWid->getCurrent());
     }
 }
 
@@ -147,7 +179,9 @@ void AFChoose::chosen()
         for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
         {
             if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty())
-                emit formChosen(grpPtr->loadWid->getCurrent());
+                emit formChosen(grpPtr->entries[grpPtr->loadWid->getCurrent()]);
         }
     }
 }
+
+#include <afchoose.moc>

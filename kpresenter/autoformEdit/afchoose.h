@@ -21,20 +21,13 @@
 #define AFCHOOSE_H
 
 #include <qtabdialog.h>
-#include <qwidget.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlistbox.h>
 #include <qlist.h>
+#include <qmap.h>
 #include <qfileinfo.h>
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qevent.h>
-#include <qfile.h>
-#include <qcolor.h>
 
-#include <kicondialog.h>
-#include <kapp.h>
+class QWidget;
+class QLabel;
+class KIconCanvas;
 
 /******************************************************************/
 /* class AFChoose                                                 */
@@ -50,7 +43,7 @@ public:
   AFChoose(QWidget *parent=0, const QString &caption=QString::null, const char *name=0);
   ~AFChoose();
 
-protected:
+private:
 
   // structure of a group
   struct Group
@@ -60,6 +53,7 @@ protected:
     QWidget *tab;
     KIconCanvas *loadWid;
     QLabel *label;
+    QMap<QString, QString> entries;
   };
 
   // set groups
@@ -67,9 +61,6 @@ protected:
 
   // setup tabs
   void setupTabs();
-
-  // resize event
-  void resizeEvent(QResizeEvent *);
 
   // ********** variables **********
 
@@ -81,6 +72,7 @@ private slots:
 
   // name changed
   void nameChanged(QString);
+  void tabChanged(QWidget *);
 
   // autoform chosen
   void chosen();
@@ -91,5 +83,5 @@ signals:
   void formChosen(const QString &);
 
 };
-#endif //AFCHOOSE_H
 
+#endif //AFCHOOSE_H

@@ -74,6 +74,7 @@
 #include <kglobal.h>
 #include <kimageio.h>
 #include <kparts/event.h>
+#include <kdebug.h>
 
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
@@ -2156,7 +2157,7 @@ void KPresenterView::afChooseOk( const QString & c )
 			       fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf",
 			       KPresenterFactory::global() );
 
-    page->deSelectAllObj();
+    //page->deSelectAllObj();
 
     page->deSelectAllObj();
     page->setToolEditMode( INS_AUTOFORM );

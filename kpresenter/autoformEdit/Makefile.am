@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES = -I$(srcdir)/.. $(KOFFICE_INCLUDES) $(all_includes)
 
 ####### Files
 

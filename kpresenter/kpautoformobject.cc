@@ -165,7 +165,7 @@ void KPAutoformObject::save( QTextStream& out )
 
     // The filename contains the absolute path to the autoform. This is
     // bad, so we simply remove everything but the last dir and the name.
-    // e.g. /my/local/path/to/kpresenter/Arrow/Arrow1.atf -> Arrow/Arrow1.atf
+    // e.g. /my/local/path/to/kpresenter/Arrow/.source/Arrow1.atf -> Arrow/.source/Arrow1.atf
     QStringList afDirs = KPresenterFactory::global()->dirs()->resourceDirs("autoforms");
     QValueList<QString>::ConstIterator it=afDirs.begin();
     QString str;
@@ -375,11 +375,19 @@ void KPAutoformObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                 if ( ( *it ).m_strName == "value" )
                 {
                     filename = ( *it ).m_strValue;
-                    // workaround for a bug in the old file format
+                    // workaround for a bug in the (very) old file format
                     if(filename[0]=='/') {
                         kdDebug() << "rubbish ahead! cleaning up..." << endl;
                         // remove the leading absolute path (i.e. to create Arrow/Arrow1.atf)
                         filename=filename.mid(filename.findRev('/', filename.findRev('/')-1)+1);
+                    }
+                    // okay... we changed the file format again and now the autoforms
+                    // are stored in .../kpresenter/autoforms/.source/foo.atf (note: we didn't have .source
+                    // before. Therefore we have to add this dir if it's not already there to make it
+                    // work with old files
+                    if(filename.find(".source")==-1) {
+                        // okay, old file -- add the .source dir
+                        filename=filename.insert(filename.find('/'), "/.source");
                     }
                     filename = locate("autoforms", filename, KPresenterFactory::global());
                     atfInterp.load( filename );
