@@ -166,7 +166,8 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
   BUTTON1( m_idButtonEdit_Areas, m_vToolBarEdit, "fitwithprops.xpm", 2, "viewFitWithProportions", "Fit to view and keep proportions" );
   BUTTON1( m_idButtonEdit_Bars, m_vToolBarEdit, "originalsize.xpm", 3, "viewOriginalSize", "Keep original image size" );
   TB_SEPARATOR( m_vToolBarEdit );
-  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "mini/unknown.xpm", 4, "editEditImage", "Edit image" );
+//BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "mini/unknown.xpm", 4, "editEditImage", "Edit image" );
+  BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "undo.xpm", 4, "editEditImage", "Edit image" );
   TB_SEPARATOR( m_vToolBarEdit );
   BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "undo.xpm", 5, "editUndo", "Undo" );
   BUTTON1( m_idButtonEdit_Cakes, m_vToolBarEdit, "redo.xpm", 6, "editRedo", "Redo" );
@@ -210,7 +211,8 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   MENU( m_vMenuEdit, "&Edit" )
   ITEM3( m_idMenuEdit_Undo, m_vMenuEdit, "undo.xpm", "no Undo possible", "editUndo" )
   ITEM3( m_idMenuEdit_Redo, m_vMenuEdit, "redo.xpm", "no Redo possible", "editRedo" )
-  ITEM3( m_idMenuEdit_Edit, m_vMenuEdit, "mini/unknown.xpm", "&Edit image", "editEditImage" )
+//ITEM3( m_idMenuEdit_Edit, m_vMenuEdit, "mini/unknown.xpm", "&Edit image", "editEditImage" )
+  ITEM3( m_idMenuEdit_Edit, m_vMenuEdit, "redo.xpm", "&Edit image", "editEditImage" )
   MN_SEPARATOR( m_vMenuEdit )
   ITEM2( m_idMenuEdit_Import, m_vMenuEdit, "&Import image", "editImportImage", CTRL + Key_I )
   ITEM2( m_idMenuEdit_Export, m_vMenuEdit, "E&xport image", "editExportImage", CTRL + Key_X )

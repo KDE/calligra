@@ -32,73 +32,77 @@
 #include "kimage_doc.h"
 #include "kimage.h"
 
-#include "kstartparams.h"
-
-bool g_bWithGUI = true;
-
-list<string> g_openFiles;
-
 KOFFICE_DOCUMENT_FACTORY( KImageDoc, KImageFactory, KImage::DocumentFactory_skel )
 typedef OPAutoLoader<KImageFactory> KImageAutoLoader;
 
 KImageApp::KImageApp( int& argc, char** argv ) 
   : KoApplication( argc, argv, "kimage" )
+  , m_params( argc, argv ) // sollte in KoApplcation
+  , m_bWithGUI( true ) // sollte in KoApplication
 {
-  m_pShell = 0L;
+  // sollte in KoApplication
+  if( m_params.paramIsPresent( "--server", "-s" ) )
+  {
+    m_bWithGUI = false;
+    m_params.deleteParam( m_params.getIndex( "--server", "-s" ) );
+  }
 }
 
 KImageApp::~KImageApp()
 {
 }
 
-void KImageApp::start()
-{
-  if( g_bWithGUI )
-  {
-    imr_init();
-    koInitTrader();
-    if( !g_openFiles.size() )
-    {
-      m_pShell = new KImageShell;
-      m_pShell->show();
-      m_pShell->newDocument();
-    }
-    else
-    {
-      list<string>::iterator it = g_openFiles.begin();
-      for( ; it != g_openFiles.end(); ++it )
-      {
-        m_pShell = new KImageShell;
-        m_pShell->show();
-        m_pShell->openDocument( it->c_str(), "" );
-      }
-    }
-  }
+/*************************************************************************************************/
+// sollte in KoApplication.h definiert sein
+
+#define KOFFICE_APPLICATION_START( app_classname, shell_classname ) \
+void app_classname::start() \
+{ \
+  shell_classname* pShell; \
+  QStringList openFiles; \
+  \
+  if( m_bWithGUI ) \
+  { \
+    for( int i = 0; i < m_params.countParams(); i++ ) \
+    { \
+      if( m_params.getParam( i ).left( 1 ) != "-" ) \
+      { \
+        openFiles.append( m_params.getParam( i ) ); \
+      } \
+    } \
+    imr_init(); \
+    koInitTrader(); \
+    if( openFiles.isEmpty() ) \
+    { \
+      pShell = new shell_classname; \
+      pShell->show(); \
+      pShell->newDocument(); \
+    } \
+    else \
+    { \
+      QStringList::Iterator it; \
+      \
+      for( it = openFiles.begin() ; it != openFiles.end() ; ++it ) \
+      { \
+        pShell = new shell_classname; \
+        pShell->show(); \
+        pShell->openDocument( *it, "" ); \
+      } \
+    } \
+  } \
 }
 
-int main( int& argc, char** argv )
+/*************************************************************************************************/
+
+KOFFICE_APPLICATION_START( KImageApp, KImageShell )
+
+int main( int argc, char** argv )
 {
-  debug( "Anzahl der Paramter: %i", argc );
-
-  int i = 1;
   FormatManager* formatManager;
-  KImageAutoLoader loader( "IDL:KImage/DocumentFactory:1.0", "KImage" );
-  KImageApp app( argc, argv );
-
-  debug( "Anzahl der Paramter: %i", argc );
-
   formatManager = new FormatManager();
 
-  if( strcmp( argv[ i ], "-s" ) == 0 || strcmp( argv[ i ], "--server" ) == 0 )
-  {
-    i++;
-    g_bWithGUI = false;
-  }
-
-  for( ; i < argc; i++ )
-  {
-    g_openFiles.push_back( (const char*)argv[i] );
-  }
+  KImageAutoLoader loader( "IDL:KImage/DocumentFactory:1.0", "KImage" );
+  KImageApp app( argc, argv );
 
   app.exec();
 

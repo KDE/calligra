@@ -22,6 +22,8 @@
 
 #include <koApplication.h>
 
+#include "kstartparams.h"
+
 class KImageShell;
 
 class KImageApp : public KoApplication
@@ -35,7 +37,8 @@ public:
   virtual void start();
   
 protected:
-  KImageShell* m_pShell;
+  KStartParams m_params;
+  bool m_bWithGUI;
 };
 
 #endif
