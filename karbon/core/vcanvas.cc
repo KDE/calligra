@@ -188,6 +188,7 @@ VCanvas::setViewport( double centerX, double centerY )
 void
 VCanvas::setContentsRect( const KoRect &r )
 {
+	viewport()->setUpdatesEnabled( false );
 	kdDebug() << r.width() << endl;
 	kdDebug() << r.height() << endl;
 	double zoomX = m_view->zoom() * ( ( visibleWidth() / m_view->zoom() ) / r.width() );
@@ -203,6 +204,7 @@ VCanvas::setContentsRect( const KoRect &r )
 	kdDebug() << "cx : " << centerX << endl;
 	setViewport( centerX, 1.0 - centerY );
 	m_view->setZoom( zoom );
+	viewport()->setUpdatesEnabled( true );
 }
 
 void

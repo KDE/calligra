@@ -627,8 +627,10 @@ KarbonView::zoomChanged()
 	// TODO : I guess we should define a document size member at this point...
 	//kdDebug() << "part()->pageLayout().ptWidth :" << part()->pageLayout().ptWidth << endl;
 	//kdDebug() << "part()->pageLayout().ptHeight :" << part()->pageLayout().ptHeight << endl;
-	// TODO : the default shouldnt be necessary?
 
+	m_canvas->viewport()->setUpdatesEnabled( false );
+
+	// TODO : the default shouldnt be necessary?
 	if( int( part()->pageLayout().ptWidth ) == 0 || int( part()->pageLayout().ptHeight ) == 0 )
 		m_canvas->resizeContents( int( 640 * zoomFactor ), int( 900 * zoomFactor ) );
 	else
