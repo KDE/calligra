@@ -53,6 +53,7 @@ public:
     QString replace() const { return m_replace; }
     KoSearchContext *formatEntryContext()const;
     void createNewEntryContext();
+    void setFormatEntryContext( KoSearchContext * );
 protected:
     QString m_replace;
     // For formatting in the replacement - not implemented yet

@@ -42,6 +42,7 @@
 #include <klineeditdlg.h>
 #include <qcombobox.h>
 #include <qdir.h>
+#include <koSearchDia.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -658,7 +659,29 @@ void KoAutoFormatDia::initTab4()
 
 void KoAutoFormatDia::slotChangeTextFormatEntry()
 {
-    //todo
+    if ( m_pListView->currentItem() )
+    {
+        KoAutoFormatEntry *entry = m_autoFormat.findFormatEntry(m_pListView->currentItem()->text(0));
+        KoSearchContext *tmpFormat = entry->formatEntryContext();
+        bool createNewFormat = false;
+        if ( !tmpFormat )
+        {
+            tmpFormat = new KoSearchContext();
+            createNewFormat = true;
+        }
+
+        KoFormatDia *dia = new KoFormatDia( this, i18n("Change Text Format"), tmpFormat ,  0L);
+        if ( dia->exec())
+        {
+            entry->setFormatEntryContext( tmpFormat );
+        }
+        else
+        {
+            if ( createNewFormat )
+                delete tmpFormat;
+        }
+        delete dia;
+    }
 }
 
 void KoAutoFormatDia::slotRemoveEntry()
