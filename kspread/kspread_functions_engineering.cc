@@ -296,16 +296,22 @@ bool kspreadfunc_oct2dec( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "OCT2DEC", true ) )
     return false;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+  QString str;
+  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
+    str = args[0]->stringValue();
+  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+    str = QString::number( args[0]->intValue() );
+  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+    str = QString::number( args[0]->intValue() );
+  else
     return false;
 
-  QString tmp=args[0]->stringValue();
-  bool ok;
-  long val=tmp.toLong(&ok,8);
-  if(!ok)
-        context.setValue( new KSValue( QString(i18n("Err") )));
+  bool ok = true;
+  long val = str.toLong( &ok, 8 );
+  if( !ok )
+    context.setValue( new KSValue( QString(i18n("Err") )));
   else
-        context.setValue( new KSValue(val));
+    context.setValue( new KSValue( val ) );
 
   return true;
 }
@@ -318,19 +324,22 @@ bool kspreadfunc_oct2bin( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "OCT2BIN", true ) )
     return false;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+  QString str;
+  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
+    str = args[0]->stringValue();
+  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+    str = QString::number( args[0]->intValue() );
+  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+    str = QString::number( args[0]->intValue() );
+  else
     return false;
 
-  QString tmp=args[0]->stringValue();
-  bool ok;
-  long val=tmp.toLong(&ok,8);
-  if(!ok)
-        context.setValue( new KSValue( QString(i18n("Err") )));
+  bool ok = true;
+  long val = str.toLong( &ok, 8 );
+  if( !ok )
+    context.setValue( new KSValue( QString(i18n("Err") )));
   else
-        {
-        tmp=tmp.setNum(val,2);
-        context.setValue( new KSValue(tmp));
-        }
+    context.setValue( new KSValue( QString::number( val, 2 ) ) );
 
   return true;
 }
@@ -343,19 +352,22 @@ bool kspreadfunc_oct2hex( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "OCT2HEX", true ) )
     return false;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+  QString str;
+  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
+    str = args[0]->stringValue();
+  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+    str = QString::number( args[0]->intValue() );
+  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+    str = QString::number( args[0]->intValue() );
+  else
     return false;
 
-  QString tmp=args[0]->stringValue();
-  bool ok;
-  long val=tmp.toLong(&ok,8);
-  if(!ok)
-        context.setValue( new KSValue( QString(i18n("Err") )));
+  bool ok = true;
+  long val = str.toLong( &ok, 8 );
+  if( !ok )
+    context.setValue( new KSValue( QString(i18n("Err") )));
   else
-        {
-        tmp=tmp.setNum(val,16);
-        context.setValue( new KSValue(tmp));
-        }
+    context.setValue( new KSValue( QString::number( val, 16 ).upper() ) );
 
   return true;
 }
