@@ -1,8 +1,11 @@
 [Desktop Entry]
+Encoding=UTF-8
 Icon=.icon/CopperPlain.png
 Name=Copper Plain
 Name[af]=Koper Eenvoudig
+Name[ar]=خام النُّحاس
 Name[bg]=Медно жълто
+Name[br]=Kouevr kriz
 Name[ca]=Coure senzill
 Name[cs]=Měděná
 Name[cy]=Copr Plaen
@@ -28,11 +31,13 @@ Name[se]=Čabu veaiki
 Name[sl]=Navaden bakreni
 Name[sr]=Обично бакарна
 Name[sv]=Vanlig koppar
+Name[ta]=வெற்று செம்பு
+Name[tg]=Якрангаи Мисдор
 Name[tr]=Düz Bakır
 Name[uk]=Мідний
 Name[wa]=Keuve
 Name[xx]=xxCopper Plainxx
-Name[zh_CN]=纯铜
+Name[zh_CN]=金色年华
 Name[zh_TW]=單銅色
 Type=Link
 URL=.source/CopperPlain.kpt

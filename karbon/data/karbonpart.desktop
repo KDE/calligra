@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=KOffice Scalable Graphics Component
 Name[ca]=Component de gràfics escalables de KOffice
 Name[cy]=Cydran Graffeg Graddadwy KOffice
@@ -8,6 +9,8 @@ Name[es]=Componente de gráfico escalable de KOffice
 Name[et]=KOffice'i Scalable Graphics komponent
 Name[fi]=KOfficen vektorigrafiikkakomponentti
 Name[fr]=Composant graphiques vectoriels de KOffice
+Name[nb]=Skalerbar grafikk-komponent for KOffice
+Name[nn]=Skalerbar grafikkomponent for KOffice
 Name[pt]=Componente de Imagens Escaláveis do KOffice
 Name[pt_BR]=Componente de Gráficos Escaláveis do KOffice
 Name[ru]=Компонент векторных рисунков KOffice
