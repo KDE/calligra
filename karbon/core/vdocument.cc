@@ -3,10 +3,13 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qdom.h>
+
 #include "vdocument.h"
 #include "vshape.h"
 
-#include <qdom.h>
+#include <kdebug.h>
+
 
 VDocument::VDocument() : VObject( 0L ),
 		m_mime( "application/x-karbon" ), m_version( "0.1" ),
