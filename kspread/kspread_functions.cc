@@ -79,7 +79,7 @@ KSpreadFunctionParameter::KSpreadFunctionParameter( const QDomElement& element )
     for( ; !n.isNull(); n = n.nextSibling() )
     {
 	if ( n.isElement() )
-	{ 
+	{
 	    QDomElement e = n.toElement();
 	    if ( e.tagName() == "Comment" )
 		m_help = i18n( e.text().latin1() );
@@ -104,7 +104,7 @@ KSpreadFunctionDescription::KSpreadFunctionDescription( const QDomElement& eleme
     for( ; !n.isNull(); n = n.nextSibling() )
     {
 	if ( n.isElement() )
-	{ 
+	{
 	    QDomElement e = n.toElement();
 	    if ( e.tagName() == "Name" )
 		m_name = e.text();
@@ -122,7 +122,7 @@ KSpreadFunctionDescription::KSpreadFunctionDescription( const QDomElement& eleme
 		for( ; !n2.isNull(); n2 = n2.nextSibling() )
 		{
 		    if ( n2.isElement() )
-		    { 
+		    {
 			QDomElement e2 = n2.toElement();
 			if ( e2.tagName() == "Text" )
 			    m_help = i18n( e2.text().latin1() );
@@ -177,11 +177,11 @@ QString KSpreadFunctionDescription::toQML() const
 	    text += "<li><b>Comment:</b> ";
 	    text += (*it).helpText();
 	    text += "<br><b>Type:</b> ";
-	    text += toString( (*it).type(), (*it).hasRange );
+	    text += toString( (*it).type(), (*it).hasRange() );
 	}
 	text += "</ul>";
     }
-    
+
     if ( !m_examples.isEmpty() )
     {
 	text += "<h2>Example</h2><ul>";
@@ -193,9 +193,9 @@ QString KSpreadFunctionDescription::toQML() const
 	}
 	text += "</ul>";
     }
-    
+
     text += "</qt>";
-    
+
     return text;
 }
 
@@ -203,7 +203,7 @@ QString KSpreadFunctionDescription::toQML() const
 KSpreadFunctionRepository::KSpreadFunctionRepository()
 {
     m_funcs.setAutoDelete( TRUE );
-    
+
     // Find all scripts
     QStringList files = KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.xml", TRUE );
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
