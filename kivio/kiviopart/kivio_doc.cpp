@@ -438,7 +438,7 @@ KivioPage* KivioDoc::createPage()
   QString s( i18n("Page%1") );
   s = s.arg( m_iPageId++ );
 
-  KivioPage* t = new KivioPage(m_pMap,s.ascii());	//lukas: FIXME
+  KivioPage* t = new KivioPage(m_pMap, s);
   t->setPageName(s,true);
 
   return t;
