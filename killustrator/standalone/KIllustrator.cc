@@ -46,6 +46,7 @@
 #include "GridDialog.h"
 #include "TransformationDialog.h"
 #include "OptionDialog.h"
+#include "LayerDialog.h"
 #include "ColorField.h"
 #include "PStateManager.h"
 #include "ExportFilter.h"
@@ -63,6 +64,7 @@
 #include "ToolButton.h"
 #include "Preview.h"
 #include "units.h"
+#include "ScriptDialog.h"
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
@@ -106,6 +108,8 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
 
   canvas = 0L;
   transformationDialog = 0L;
+  scriptDialog = 0L;
+  layerDialog = 0L;
   tgroup = new ToolGroup ();
   initMenu ();
   initStatusBar ();
@@ -134,6 +138,8 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   connect (PStateManager::instance (), SIGNAL (settingsChanged ()),
   	   this, SLOT (updateSettings ()));
 
+  view->setItemChecked (ID_VIEW_GRID, canvas->showGrid ());
+
   if (! previewHandlerRegistered) {
     KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
 					       PreviewPixmap);
@@ -159,7 +165,8 @@ KIllustrator::~KIllustrator () {
 }
 
 void KIllustrator::closeEvent (QCloseEvent*) {
-  delete this;
+//  delete this;
+  closeWindow (this);
 }
 
 void KIllustrator::setupMainView () {
@@ -476,6 +483,8 @@ void KIllustrator::initMenu () {
   edit->insertItem (i18n ("Pr&operties"), ID_EDIT_PROPERTIES);
   connect (edit, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
+  view->insertItem (i18n ("Layers..."), ID_VIEW_LAYERS);
+  view->insertSeparator ();
   view->insertItem (i18n ("Show Ruler"), ID_VIEW_RULER);
   view->setItemChecked (ID_VIEW_RULER, true);
   view->insertItem (i18n ("Show Grid"), ID_VIEW_GRID);
@@ -522,6 +531,7 @@ void KIllustrator::initMenu () {
   extras->insertItem (i18n ("&Options..."), ID_EXTRAS_OPTIONS);
   extras->insertSeparator ();
   extras->insertItem (i18n ("&Clipart..."), ID_EXTRAS_CLIPART);
+  extras->insertItem (i18n ("&Scripts..."), ID_EXTRAS_SCRIPTS);
   connect (extras, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
   help->insertItem (i18n ("&Help..."), ID_HELP_HELP);
@@ -653,6 +663,12 @@ void KIllustrator::menuCallback (int item) {
   case ID_EDIT_PROPERTIES:
     PropertyEditor::edit (&cmdHistory, document);
     break;
+  case ID_VIEW_LAYERS:
+    if (!layerDialog) 
+      layerDialog = new LayerDialog ();
+    layerDialog->manageDocument (document);
+    layerDialog->show ();
+    break;
   case ID_VIEW_RULER:
     {
       bool show_it = !view->isItemChecked (ID_VIEW_RULER);
@@ -729,6 +745,13 @@ void KIllustrator::menuCallback (int item) {
       }
       break;
     }
+  case ID_EXTRAS_SCRIPTS:
+    if (!scriptDialog) 
+      scriptDialog = new ScriptDialog ();
+    scriptDialog->setActiveDocument (document);
+    scriptDialog->show ();
+    scriptDialog->loadScripts ();
+    break;
   case ID_HELP_ABOUT_APP:
   case ID_HELP_ABOUT_KDE:
       about (item);
@@ -794,7 +817,8 @@ void KIllustrator::openURL (const char* surl) {
 
 bool KIllustrator::closeWindow (KIllustrator* win) {
   if (win->askForSave ()) {
-    win->close ();
+//    win->close ();
+      delete win;
     
     if (windows.count () == 0) {
       PStateManager::instance ()->saveDefaultSettings ();

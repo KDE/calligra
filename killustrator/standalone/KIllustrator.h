@@ -50,6 +50,8 @@ class Canvas;
 class GDocument;
 class TransformationDialog;
 class PStateManager;
+class ScriptDialog;
+class LayerDialog;
 
 #define ID_FILE_NEW              1
 #define ID_FILE_OPEN             2
@@ -73,8 +75,9 @@ class PStateManager;
 #define ID_EDIT_SELECT_ALL     206
 #define ID_EDIT_PROPERTIES     207
 
-#define ID_VIEW_RULER          300
-#define ID_VIEW_GRID           301
+#define ID_VIEW_LAYERS         301
+#define ID_VIEW_RULER          310
+#define ID_VIEW_GRID           311
 
 #define ID_LAYOUT_PAGE         400
 #define ID_LAYOUT_GRID         401
@@ -94,6 +97,7 @@ class PStateManager;
 
 #define ID_EXTRAS_OPTIONS      700
 #define ID_EXTRAS_CLIPART      701
+#define ID_EXTRAS_SCRIPTS      702
 
 #define ID_HELP_HELP           800
 #define ID_HELP_ABOUT_APP      801
@@ -176,6 +180,8 @@ private:
   Canvas *canvas;
   Ruler *hRuler, *vRuler;
   TransformationDialog *transformationDialog;
+  ScriptDialog *scriptDialog;
+  LayerDialog *layerDialog;
 
   // direction of file transfer
   TransferDirection ioDir;
