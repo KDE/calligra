@@ -199,7 +199,7 @@
 #elif defined(KDE_MAKE_LIB)
 # define KEXIGUIUTILS_EXPORT KDE_IMPORT
 #else
-# define KEXIMIGR_EXPORT //for apps
+# define KEXIGUIUTILS_EXPORT //for apps
 #endif
 
 /* -- compile-time settings -- */
