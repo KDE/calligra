@@ -38,7 +38,7 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
   KSpreadCell *cell = m_pView->activeTable()->cellAt( marker.x(), marker.y() );
-  int size=cell->getAngle(marker.x(), marker.y());
+  int size=-(cell->getAngle(marker.x(), marker.y()));
   m_pSize2=new KIntNumInput(size, this, 10);
   m_pSize2->setRange(-90, 90, 1);
   m_pSize2->setLabel(i18n("Angle"));
@@ -70,7 +70,7 @@ m_pSize2->setEnabled(!m_pDefault->isChecked());
 void KSpreadAngle::slotOk()
 {
 if(!m_pDefault->isChecked())
-        m_pView->activeTable()->setSelectionAngle(marker,m_pSize2->value());
+        m_pView->activeTable()->setSelectionAngle(marker,-m_pSize2->value());
 else
         m_pView->activeTable()->setSelectionAngle(marker,0);
 accept();

@@ -421,7 +421,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
              this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
 
     QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
-
 }
 
 KSpreadView::~KSpreadView()
@@ -1851,11 +1850,13 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_paste->plug( m_pPopupColumn );
     m_specialPaste->plug( m_pPopupColumn );
     m_default->plug( m_pPopupColumn );
+    m_areaName->plug( m_pPopupColumn );
 
-    m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column"), this, SLOT( slotPopupInsertColumn() ) );
-    m_pPopupColumn->insertItem( KSBarIcon("delete_table_col"),i18n("Remove Column"), this, SLOT( slotPopupRemoveColumn() ) );
     m_pPopupColumn->insertItem( KSBarIcon("resizecol"),i18n("Resize..."), this, SLOT( slotPopupResizeColumn() ) );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
+    m_pPopupColumn->insertSeparator();
+    m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column"), this, SLOT( slotPopupInsertColumn() ) );
+    m_pPopupColumn->insertItem( KSBarIcon("delete_table_col"),i18n("Remove Column"), this, SLOT( slotPopupRemoveColumn() ) );
 
     QObject::connect( m_pPopupColumn, SIGNAL(activated( int ) ), this, SLOT(slotActivateTool( int ) ) );
 
@@ -1909,11 +1910,14 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_paste->plug( m_pPopupRow );
     m_specialPaste->plug( m_pPopupRow );
     m_default->plug( m_pPopupRow );
+    m_areaName->plug( m_pPopupRow );
 
-    m_pPopupRow->insertItem( KSBarIcon("insert_table_row"),i18n("Insert Row"), this, SLOT( slotPopupInsertRow() ) );
-    m_pPopupRow->insertItem( KSBarIcon("delete_table_row"),i18n("Remove Row"), this, SLOT( slotPopupRemoveRow() ) );
+
     m_pPopupRow->insertItem( KSBarIcon("resizerow"),i18n("Resize..."), this, SLOT( slotPopupResizeRow() ) );
     m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
+    m_pPopupRow->insertSeparator();
+    m_pPopupRow->insertItem( KSBarIcon("insert_table_row"),i18n("Insert Row"), this, SLOT( slotPopupInsertRow() ) );
+    m_pPopupRow->insertItem( KSBarIcon("delete_table_row"),i18n("Remove Row"), this, SLOT( slotPopupRemoveRow() ) );
 
     QObject::connect( m_pPopupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupRow->popup( _point );
