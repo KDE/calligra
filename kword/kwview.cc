@@ -440,7 +440,7 @@ void KWView::setupActions()
     addVariableActions( VT_SERIALLETTER, KoSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
 
     actionInsertVariable->popupMenu()->insertSeparator();
-    actionRefreshAllVariable = new KAction( i18n( "&Refresh all variable" ), 0,
+    actionRefreshAllVariable = new KAction( i18n( "&Refresh all variables" ), 0,
                                     this, SLOT( refreshAllVariable() ),
                                     actionCollection(), "refresh_all_variable" );
     actionInsertVariable->insert(actionRefreshAllVariable);
