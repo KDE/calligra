@@ -22,8 +22,6 @@
 
 #include <kpobject.h>
 
-#define RAD_FACTOR 180.0 / M_PI
-
 class QPainter;
 class DCOPObject;
 

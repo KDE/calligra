@@ -41,6 +41,8 @@ class KoZoomHandler;
 class KPresenterDoc;
 class KPTextObject;
 
+#define RAD_FACTOR 180.0 / M_PI
+
 /******************************************************************/
 /* Class: KPObject                                                */
 /******************************************************************/

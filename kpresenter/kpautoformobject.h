@@ -26,8 +26,6 @@
 #include <global.h>
 #include <autoformEdit/atfinterpreter.h>
 
-#define RAD_FACTOR 180.0 / M_PI
-
 class KPGradient;
 class DCOPObject;
 

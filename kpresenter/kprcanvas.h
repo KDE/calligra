@@ -33,7 +33,6 @@
 #include <global.h>
 #include <koRect.h>
 #include <qrichtext_p.h>
-#define RAD_FACTOR 180.0 / M_PI
 
 class KoTextFormatInterface;
 class KPresenterView;
