@@ -1625,7 +1625,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
         if ( !keyElement.isNull() )
         {
             KoPictureKey key;
-            key.loadAttributes( keyElement, QDate(), QTime() );
+            key.loadAttributes( keyElement );
             m_image.clear();
             m_image.setKey( key );
             m_doc->addImageRequest( this );
@@ -1638,7 +1638,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
             {
                 QString filename = filenameElement.attribute( "value" );
                 m_image.clear();
-                m_image.setKey( KoPictureKey( filename, QDateTime() ) );
+                m_image.setKey( KoPictureKey( filename ) );
                 m_doc->addImageRequest( this );
             }
             else
@@ -1725,7 +1725,7 @@ void KWClipartFrameSet::load( QDomElement &attributes, bool loadFrames )
         if ( !keyElement.isNull() )
         {
             KoPictureKey key;
-            key.loadAttributes( keyElement, QDate(), QTime() );
+            key.loadAttributes( keyElement );
             m_clipart.clear();
             m_clipart.setKey( key );
             m_doc->addClipartRequest( this );

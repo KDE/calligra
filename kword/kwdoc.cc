@@ -959,19 +959,18 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(85);
 
-    QDateTime defaultDateTime = QDateTime(); // use null default, for old files
     // <PIXMAPS>
     QDomElement pixmapsElem = word.namedItem( "PIXMAPS" ).toElement();
     if ( !pixmapsElem.isNull() )
     {
-        m_pixmapMap = new QMap<KoPictureKey, QString>( m_imageCollection.readXML( pixmapsElem, defaultDateTime ) );
+        m_pixmapMap = new QMap<KoPictureKey, QString>( m_imageCollection.readXML( pixmapsElem ) );
     }
 
     // <CLIPARTS>
     QDomElement clipartsElem = word.namedItem( "CLIPARTS" ).toElement();
     if ( !clipartsElem.isNull() )
     {
-        m_clipartMap = new QMap<KoPictureKey, QString>( m_clipartCollection.readXML( clipartsElem, defaultDateTime ) );
+        m_clipartMap = new QMap<KoPictureKey, QString>( m_clipartCollection.readXML( clipartsElem ) );
     }
 
     emit sigProgress(90);

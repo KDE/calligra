@@ -121,7 +121,7 @@ void KWTextImage::load( QDomElement & parentElem )
     if ( !keyElement.isNull() )
     {
         KoPictureKey key;
-        key.loadAttributes( keyElement, QDate(), QTime() );
+        key.loadAttributes( keyElement );
         doc->addImageRequest( key , this );
     }
     else
