@@ -74,14 +74,14 @@ bool KexiMigrate::performImport()
 	}
 
 	// Check if there are any tables
-	if (!tables.size() > 0) {
+	if (tables.isEmpty()) {
 		kdDebug() << "There were no tables to import" << endl;
 		return false;
 	}
 
 	// Step 3 - Read table schemas
-	for (uint i = 0; i < tables.size(); i++) {
-		if(readTableSchema(tables[i])) {
+	foreach(QStringList::ConstIterator, it, tables) {
+		if(readTableSchema(*it)) {
 			//yeah, got a table
 			//Add it to list of tables which we will create if all goes well
 			v_tableSchemas.push_back(m_table);
