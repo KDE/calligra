@@ -1341,6 +1341,7 @@ KCommand* NameSequence::buildCommand( Container* container, Request* request )
     case req_addFraction:
     case req_addBracket:
     case req_addNameSequence:
+        return 0;
     default:
         break;
     }
