@@ -104,6 +104,8 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
     QByteArray image;
 
+    kdDebug(30503) << "Image " << anchor.picture.koStoreName << " will be written in " << strImageName << endl;
+
     if (loadKoStoreFile(anchor.picture.koStoreName,image))
     {
         QFile file(strImageName);
@@ -121,10 +123,11 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
         *m_streamOut << "src=\"" << escapeHtmlText(strImageName) << "\" ";
         *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key) << "\"";
         *m_streamOut << (isXML()?"/>":">") << "\n";
+        kdDebug(30503) << "Image written" << endl;
     }
     else
     {
-        kdDebug(30503) << "Unable to load image " << anchor.picture.koStoreName << endl;
+        kdWarning(30503) << "Unable to load image " << anchor.picture.koStoreName << endl;
     }
 
     return true;
@@ -296,6 +299,7 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
 bool HtmlWorker::doFullParagraph(const QString& paraText,
     const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
+    kdDebug(30503) << "Entering HtmlWorker::doFullParagraph" << endl << paraText << endl;
     QString strParaText=paraText;
     QString strTag; // Tag that will be written.
 
@@ -392,10 +396,11 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
     ProcessParagraphData(strTag, strParaText, layout, paraFormatDataList);
     closeParagraph(strTag,layout);
 
+    kdDebug(30503) << "Quiting HtmlWorker::doFullParagraph" << endl;
     return true;
 }
 
-bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& to)
+bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
     m_ioDevice=new QFile(filenameOut);
 
@@ -447,9 +452,10 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& to)
 
 bool HtmlWorker::doCloseFile(void)
 {
+  kdDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
     if (m_ioDevice)
         m_ioDevice->close();
-    return (m_ioDevice);
+    return true;
 }
 
 void HtmlWorker::writeDocType(void)
@@ -492,6 +498,7 @@ bool HtmlWorker::doOpenDocument(void)
 
 bool HtmlWorker::doCloseDocument(void)
 {
+  kdDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
     *m_streamOut << "</html>\n";
     return true;
 }

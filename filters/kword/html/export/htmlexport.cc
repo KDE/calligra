@@ -104,7 +104,6 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
         delete worker;
         return KoFilter::StupidError;
     }
-
     KoFilter::ConversionStatus result=leader->convert(m_chain,from,to);
 
     delete leader;
