@@ -274,11 +274,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 			       actionCollection(), "insertRow" );
     m_cellLayout = new KAction( i18n("Cell Layout..."), CTRL + Key_L, this, SLOT( layoutDlg() ),
 			       actionCollection(), "cellLayout" );
-    m_formulaPower = new KAction( i18n("Formula Power"), KSBarIcon("index2"), 0, this, SLOT( formulaPower() ),
+    m_formulaPower = new KAction( i18n("Formula Power"), KSBarIcon("rsup"), 0, this, SLOT( formulaPower() ),
 				actionCollection(), "formulaPower" );
-    m_formulaSubscript = new KAction( i18n("Formula Subscript"), KSBarIcon("index3"), 0, this, SLOT( formulaSubscript() ),
+    m_formulaSubscript = new KAction( i18n("Formula Subscript"), KSBarIcon("rsub"), 0, this, SLOT( formulaSubscript() ),
 				      actionCollection(), "formulaSubscript" );
-    m_formulaParantheses = new KAction( i18n("Formula Parentheses"), KSBarIcon("bra"), 0, this, SLOT( formulaParentheses() ),
+    m_formulaParantheses = new KAction( i18n("Formula Parentheses"), KSBarIcon("paren"), 0, this, SLOT( formulaParentheses() ),
 					actionCollection(), "formulaParentheses" );
     m_formulaAbsValue = new KAction( i18n("Formula Abs Value"), KSBarIcon("abs"), 0, this, SLOT( formulaAbsValue() ),
 				     actionCollection(), "formulaAbsValue" );
@@ -286,19 +286,19 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 				     actionCollection(), "formulaBrackets" );
     m_formulaFraction = new KAction( i18n("Formula Fraction"), KSBarIcon("frac"), 0, this, SLOT( formulaFraction() ),
 				     actionCollection(), "formulaFraction" );
-    m_formulaRoot = new KAction( i18n("Formula Root"), KSBarIcon("root"), 0, this, SLOT( formulaRoot() ),
+    m_formulaRoot = new KAction( i18n("Formula Root"), KSBarIcon("sqrt"), 0, this, SLOT( formulaRoot() ),
 				 actionCollection(), "formulaRoot" );
-    m_formulaIntegral = new KAction( i18n("Formula Integral"), KSBarIcon("integral"), 0, this, SLOT( formulaIntegral() ),
+    m_formulaIntegral = new KAction( i18n("Formula Integral"), KSBarIcon("int"), 0, this, SLOT( formulaIntegral() ),
 				     actionCollection(), "formulaIntegral" );
     m_formulaMatrix = new KAction( i18n("Formula Matrix"), KSBarIcon("matrix"), 0, this, SLOT( formulaMatrix() ),
 				   actionCollection(), "formulaMatrix" );
-    m_formulaLeftSuper = new KAction( i18n("Formula Left Super"), KSBarIcon("index0"), 0, this, SLOT( formulaLeftSuper() ),
+    m_formulaLeftSuper = new KAction( i18n("Formula Left Super"), KSBarIcon("lsup"), 0, this, SLOT( formulaLeftSuper() ),
 				      actionCollection(), "formulaLeftSuper" );
-    m_formulaLeftSub = new KAction( i18n("Formula Left Sub"), KSBarIcon("index1"), 0, this, SLOT( formulaLeftSub() ),
+    m_formulaLeftSub = new KAction( i18n("Formula Left Sub"), KSBarIcon("lsub"), 0, this, SLOT( formulaLeftSub() ),
 				    actionCollection(), "formulaLeftSub" );
     m_formulaSum = new KAction( i18n("Formula Sum"), KSBarIcon("sum"), 0, this, SLOT( formulaSum() ),
 				actionCollection(), "formulaSum" );
-    m_formulaProduct = new KAction( i18n("Formula Product"), KSBarIcon("product"), 0, this, SLOT( formulaProduct() ),
+    m_formulaProduct = new KAction( i18n("Formula Product"), KSBarIcon("prod"), 0, this, SLOT( formulaProduct() ),
 				    actionCollection(), "formulaProduct");
     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
     QStringList lst;
