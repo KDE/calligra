@@ -48,6 +48,7 @@
   <Action name="paperLayout"/>
   <Separator/>
   <Action name="adjust"/>
+  <Action name="tableFormat"/>
  </Menu>
  <Menu name="View"><text>View</text>
   <Action name="newView"/>

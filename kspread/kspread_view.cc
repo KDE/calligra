@@ -66,7 +66,7 @@
 #include "kspread_events.h"
 #include "kspread_global.h"
 #include "kspread_editors.h"
-
+#include "kspread_dlg_format.h"
 
 #include "handler.h"
 #include "toolbox.h"
@@ -286,6 +286,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_borderOutline = new KAction( i18n("Border Outline"), KSBarIcon("borderoutline"), 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
     m_borderColor = new KColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
+    m_tableFormat = new KAction( i18n("Table Format"), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
+
     connect( this, SIGNAL( childSelected( PartChild* ) ),
 	     this, SLOT( slotChildSelected( PartChild* ) ) );
     connect( this, SIGNAL( childUnselected( PartChild* ) ),
@@ -638,6 +640,12 @@ void KSpreadView::showFormulaToolBar( bool show )
 	{
 	 m_vToolBarFormula->enable( OpenPartsUI::Hide );  	
 	 } */
+}
+
+void KSpreadView::tableFormat()
+{
+    KSpreadFormatDlg dlg( this );
+    dlg.exec();
 }
 
 void KSpreadView::changeTextColor()
@@ -1605,11 +1613,11 @@ void KSpreadView::slotResizeRow()
 void KSpreadView::slotInsertRow()
 {
     m_pTable->insertRow( m_pVBorderWidget->markerRow() );
-    
+
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
 	tbl->recalc(true);
-    
+
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef(m_pCanvas->markerColumn(),KSpreadTable::RowInsert,m_pTable->name());
@@ -1620,7 +1628,7 @@ void KSpreadView::slotInsertRow()
 void KSpreadView::slotRemoveRow()
 {
     m_pTable->deleteRow( m_pVBorderWidget->markerRow() );
-    
+
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
 	tbl->recalc(true);
@@ -1648,7 +1656,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_delete->plug( m_pPopupMenu );
     m_clear->plug( m_pPopupMenu );
     m_adjust->plug( m_pPopupMenu );
-    
+
     /* m_pPopupMenu->insertItem( i18n("Layout"), this, SLOT( layoutDlg() ) );
     m_pPopupMenu->insertItem( i18n("Copy"), this, SLOT( slotCopy() ) );
     m_pPopupMenu->insertItem( i18n("Cut"), this, SLOT( slotCut() ) );
@@ -1666,7 +1674,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     	m_pPopupMenu->insertItem( i18n("Insert Cell"),this,SLOT(slotInsert()));
     	m_pPopupMenu->insertItem( i18n("Remove Cell"),this,SLOT(slotRemove()));
     }
-    
+
     // Remove informations about the last tools we offered
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
@@ -1767,7 +1775,7 @@ void KSpreadView::deleteSelection()
     ASSERT( m_pTable );
 
     m_pTable->deleteSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    
+
     updateEditWidget();
 }
 
@@ -2032,6 +2040,11 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
 
     // Emit a signal for internal use
     emit sig_selectionChanged( _table, _new );
+
+    if ( _new.left() == 0 && _new.right() == 0 )
+	m_tableFormat->setEnabled( FALSE );
+    else
+	m_tableFormat->setEnabled( TRUE );
 
     // Send some event around
     KSpreadSelectionChanged ev( _new, activeTable()->name() );

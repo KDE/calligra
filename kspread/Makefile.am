@@ -29,7 +29,7 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	kspread_dlg_insert.cc KSpreadDocIface.skel KSpreadMapIface.skel \
 	KSpreadTableIface.skel KSpreadDocIface.cc KSpreadMapIface.cc \
 	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface.skel \
-	KSpreadAppIface.cc KSpreadAppIface.skel
+	KSpreadAppIface.cc KSpreadAppIface.skel kspread_dlg_format.cc
 
 kspread_SOURCES = main.cc
 
@@ -47,7 +47,7 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 	kspread_events.h kspread_global.h  \
 	kspread_dlg_assistant2.h kspread_dlg_show.h kspread_dlg_insert.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
-	KSpreadAppIface.h
+	KSpreadAppIface.h kspread_dlg_format.h
 
 libkspread_la_METASOURCES = AUTO
 
@@ -60,7 +60,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc kspread_shell.rc
 
-SUBDIRS =  . plugins pics dtd toolbar scripts
+SUBDIRS =  . plugins pics dtd toolbar scripts tablestyles
 
 parser:
 	flex lex.l

@@ -211,6 +211,7 @@ public slots:
     void borderAll();
     void borderRemove();
     void changeBorderColor();
+    void tableFormat();
     void slotInsertRow();
     void slotRemoveRow();
     void slotInsertColumn();
@@ -393,6 +394,8 @@ private:
     KAction* m_borderOutline;
     KAction* m_borderRemove;
     KColorAction* m_borderColor;
+    KAction* m_tableFormat;
+    
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

@@ -24,7 +24,8 @@ KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
 				       KStandardDirs::kde_default("data") + "koffice/toolbar/");
     s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "koffice/scripts/");
     s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "kspread/scripts/");
-
+    s_global->dirs()->addResourceType( "table-styles", KStandardDirs::kde_default("data") + "kspread/tablestyles/");
+    
     (void)new KSpreadAppIface;
 }
 
