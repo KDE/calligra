@@ -245,6 +245,7 @@ KWDocument::~KWDocument()
     delete m_commandHistory;
     delete m_varFormatCollection;
     delete m_slDataBase;
+    delete dcop;
 }
 
 void KWDocument::initConfig()
