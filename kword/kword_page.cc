@@ -705,6 +705,7 @@ bool KWPage::vmpEdit( int mx, int my )
 	//formatChanged( *f, FALSE );
 	gui->getView()->setFormat( *f, TRUE );
 	delete f;
+
 	return TRUE;
     }
     if ( frameset != -1 && doc->getFrameSet( frameset )->getFrameType() == FT_PART ) {
@@ -978,7 +979,9 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
 	    break;
 	default: break;
 	}
-        doc->setModified( TRUE ); // to be refined perhaps
+        // The "edit" modes don't modify the doc. The "create" ones do.
+        if ( mouseMode != MM_EDIT && mouseMode != MM_EDIT_FRAME )
+          doc->setModified( TRUE );
     } break;
     case MidButton:
 	vmpMidButton();
