@@ -20,7 +20,6 @@
 #include "kpresenter_factory.h"
 #include "kpresenter_doc.h"
 #include "kpresenter_aboutdata.h"
-#include "preview.h"
 
 #include <kimageio.h>
 #include <kfiledialog.h>

@@ -185,7 +185,7 @@ KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
     setupSlideList();
     setupPagePreview();
 
-    resize( 600, 400 );
+    setMinimumSize( 600, 400 );
 }
 
 /*================================================================*/
@@ -234,9 +234,9 @@ void KPPresStructView::setupPagePreview()
 }
 
 /*================================================================*/
-void KPPresStructView::resizeEvent( QResizeEvent *e )
+void KPPresStructView::resizeEvent( QResizeEvent * )
 {
-    QDialog::resizeEvent( e );
+    //QDialog::resizeEvent( e );
     hsplit->resize( size() );
 }
 

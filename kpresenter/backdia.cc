@@ -22,7 +22,6 @@
 #include "backdia.moc"
 #include "kpbackground.h"
 #include "kpresenter_doc.h"
-#include "preview.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -391,13 +390,14 @@ int BackDia::getBackYFactor() const
 void BackDia::selectPic()
 {
     KURL url;
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
-    fd.setPreviewWidget( new KImageFilePreview( &fd ) );
 
-    if ( fd.exec() == QDialog::Accepted )
+    url = KFileDialog::getImageOpenURL();
+
+    if( url.isEmpty() )
+        return;
+
+    if ( url.isValid() )
     {
-        url = fd.selectedURL();
-
         chosenPic = QString::null;
         if (!KIO::NetAccess::download( url, chosenPic ))
           return;
@@ -406,7 +406,6 @@ void BackDia::selectPic()
         picChanged = true;
         picLastModified = QDateTime();
         updateConfiguration();
-        // Problem : when to remove the temp file ?
     }
 }
 
@@ -415,7 +414,6 @@ void BackDia::selectClip()
 {
     KURL url;
     KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
-    //fd.setPreviewWidget( new KImageFilePreview( &fd ) );
 
     if ( fd.exec() == QDialog::Accepted )
     {
@@ -428,6 +426,5 @@ void BackDia::selectClip()
         clipChanged = true;
         clipLastModified = QDateTime();
         updateConfiguration();
-        // Problem : when to remove the temp file ?
     }
 }

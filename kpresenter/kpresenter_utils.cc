@@ -82,13 +82,13 @@ QSize getBoundingSize( LineEnd figure, int _w )
     {
         int _h = _w;
         if ( _h % 2 == 0 ) _h--;
-        return QSize( 6 + _w + 4, 6 + _h + 4 );
+        return QSize( 10 + _w, 10 + _h );
     } break;
     case L_CIRCLE:
-        return QSize( 6 + _w + 4, 6 + _w + 4 );
+        return QSize( 10 + _w, 10 + _w );
         break;
     case L_ARROW:
-        return QSize( 10 + _w + 4, 6 + _w + 4 );
+        return QSize( 14 + _w, 14 + _w );
         break;
     default: break;
     }

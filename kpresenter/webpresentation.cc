@@ -23,7 +23,6 @@
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
 #include "page.h"
-#include "preview.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -238,7 +237,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         pgNum = i + 1;
         html = QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
 
-        html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
+        html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
             .arg( chsetName );
 
         html += QString( "</HEAD>\n" );

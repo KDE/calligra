@@ -3344,7 +3344,7 @@ int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt )
         }
     }
     return -1;
-}
+}                               
 
 /*================== get size of page ===========================*/
 QRect KPresenterDoc::getPageRect( unsigned int num, int diffx, int diffy, float fakt , bool decBorders )

@@ -30,6 +30,7 @@
 #include <assert.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+#include <qdir.h>
 #include <qradiobutton.h>
 #include <qclipboard.h>
 
@@ -52,7 +53,6 @@
 #include "shadowcmd.h"
 #include "rotatecmd.h"
 #include "kppartobject.h"
-#include "preview.h"
 #include "textdialog.h"
 #include "sidebar.h"
 #include "insertpagedia.h"
@@ -60,6 +60,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kstdaction.h>
+#include <kio/netaccess.h>
 
 #include "kpresenter_view.h"
 #include "kpresenter_view.moc"
@@ -427,7 +428,7 @@ void KPresenterView::editHeaderFooter()
 void KPresenterView::insertPage()
 {
     InsertPageDia dia( this, 0, TRUE );
-    QString templ = QString::fromLocal8Bit( getenv( "HOME" ) );
+    QString templ = QDir::homeDirPath();
     templ += "/.default.kpr";
     if ( !QFile::exists( templ ) ) {
 	dia.radioDifferent->setChecked( TRUE );
@@ -449,29 +450,20 @@ void KPresenterView::insertPicture()
     page->setToolEditMode( TEM_MOUSE );
     page->deSelectAllObj();
 
-    QString file;
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
-    fd.setCaption(i18n("Insert Picture"));
-    fd.setPreviewWidget( new KImageFilePreview( &fd ) );
-
     KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-	url = fd.selectedURL();
+    url = KFileDialog::getImageOpenURL();
 
-    if( url.isEmpty() )
-      return;
+    if( url.isEmpty() || !url.isValid())
+        return;
 
-    if( !url.isLocalFile() )
-    {
-      KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
-      return;
-    }
-
-    file = url.path();
+    QString file;
+    if (!KIO::NetAccess::download( url, file ))
+        return;
 
     QCursor c = page->cursor();
     page->setCursor( waitCursor );
-    if ( !file.isEmpty() ) m_pKPresenterDoc->insertPicture( file, xOffset, yOffset );
+    if ( !file.isEmpty() )
+        m_pKPresenterDoc->insertPicture( file, xOffset, yOffset );
     page->setCursor( c );
 }
 
@@ -492,29 +484,21 @@ void KPresenterView::insertClipart()
 {
     page->setToolEditMode( TEM_MOUSE );
     page->deSelectAllObj();
-    QString file;
 
     KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Insert Clipart"));
-    //fd.setPreviewWidget( new KImageFilePreview( &fd ) );
 
     KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-	url = fd.selectedURL();
 
-    if( url.isEmpty() )
+    if( url.isEmpty() || !url.isValid())
       return;
 
-    if( !url.isLocalFile() )
-    {
-      KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
-      return;
-    }
+   QString file;
+   if (!KIO::NetAccess::download( url, file ))
+        return;
 
-    file = url.path();
-
-    if ( !file.isEmpty() )
-	m_pKPresenterDoc->insertClipart( file, xOffset, yOffset );
+   if ( !file.isEmpty() )
+        m_pKPresenterDoc->insertClipart( file, xOffset, yOffset );
 }
 
 /*==============================================================*/
@@ -892,7 +876,7 @@ void KPresenterView::extraCreateTemplate()
 
 void KPresenterView::extraDefaultTemplate()
 {
-    QString file = QString::fromLocal8Bit( getenv( "HOME" ) );
+    QString file = QDir::homeDirPath();
     file += "/.default.kpr";\
     m_pKPresenterDoc->savePage( file, currPg );
 }
@@ -1027,7 +1011,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 
     if ( page && !presStarted ) {
 	// disable screensaver
-	QString pidFile = QString::fromLocal8Bit( getenv( "HOME" ) );
+	QString pidFile = QDir::homeDirPath();
 	pidFile += "/.kss.pid";
 	FILE *fp;
 	if ( ( fp = fopen( QFile::encodeName(pidFile), "r" ) ) != NULL ) {
@@ -1109,7 +1093,7 @@ void KPresenterView::screenStop()
 	page->setMouseTracking( true );
 	page->setBackgroundColor( white );
 	// start screensaver again
-	QString pidFile = QString::fromLocal8Bit( getenv( "HOME" ) );
+	QString pidFile = QDir::homeDirPath();
 	pidFile += "/.kss.pid";
 	FILE *fp;
 	if ( ( fp = fopen( QFile::encodeName(pidFile), "r" ) ) != NULL ) {
@@ -2417,28 +2401,15 @@ void KPresenterView::repaint( QRect r, bool erase )
 /*====================== change pciture =========================*/
 void KPresenterView::changePicture( unsigned int, const QString & filename )
 {
-    QFileInfo fileInfo( filename );
+    KURL url;
+    url = KFileDialog::getImageOpenURL();
+
+    if( url.isEmpty() || !url.isValid())
+      return;
 
     QString file;
-
-    KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
-    fd.setCaption(i18n("Select new Picture"));
-    fd.setPreviewWidget( new KImageFilePreview( &fd ) );
-
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-      url = fd.selectedURL();
-
-    if( url.isEmpty() )
-      return;
-
-    if( !url.isLocalFile() )
-    {
-      KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
-      return;
-    }
-
-    file = url.path();
+    if (!KIO::NetAccess::download( url, file ))
+        return;
 
     if ( !file.isEmpty() )
       m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
@@ -2447,27 +2418,17 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
 /*====================== change clipart =========================*/
 void KPresenterView::changeClipart( unsigned int, QString filename )
 {
-    QFileInfo fileInfo( filename );
-    QString file;
-
     KFileDialog fd( filename, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Select new Clipart"));
-    //fd.setPreviewWidget( new KImageFilePreview( &fd ) );
 
     KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-	url = fd.selectedURL();
 
-    if( url.isEmpty() )
+    if( url.isEmpty() || !url.isValid() )
       return;
 
-    if( !url.isLocalFile() )
-    {
-      KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
-      return;
-    }
-
-    file = url.path();
+    QString file;
+    if (!KIO::NetAccess::download( url, file ))
+        return;
 
     if ( !file.isEmpty() )
 	m_pKPresenterDoc->changeClipart( file, xOffset, yOffset );
