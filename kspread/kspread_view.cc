@@ -41,7 +41,6 @@
 #include <kcoloractions.h>
 
 #include <koPartSelectDia.h>
-#include <koAboutDia.h>
 #include <koQueryTypes.h>
 
 #include "kspread_map.h"
