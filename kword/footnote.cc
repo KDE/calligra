@@ -23,10 +23,6 @@
 #include "kword_utils.h"
 
 #include <klocale.h>
-
-#include <komlMime.h>
-#include <strstream>
-#include <fstream>
 #include <unistd.h>
 
 /******************************************************************/

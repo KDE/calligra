@@ -12,8 +12,6 @@
 #include <qregexp.h>
 #include <qcstring.h>
 
-#include <iostream>
-
 class KWordDocument;
 class KWTextFrameSet;
 
@@ -243,6 +241,6 @@ protected:
 };
 
 void freeChar( KWChar& _char, KWordDocument *_doc );
-ostream& operator<<( ostream &out, KWString &_string );
+//ostream& operator<<( ostream &out, KWString &_string );
 
 #endif

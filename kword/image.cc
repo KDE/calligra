@@ -18,11 +18,6 @@
 #include "defs.h"
 #include "kword_utils.h"
 
-#include <komlMime.h>
-#include <strstream>
-#include <fstream>
-#include <unistd.h>
-
 /******************************************************************/
 /* Class: KWImage						  */
 /******************************************************************/

@@ -795,8 +795,8 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
 	return FALSE;
 
     QDomElement pix = word.namedItem( "PIXMAPS" ).toElement();
-    QDomElement key = pix.firstChild();
-    for ( ; !key.isNull(); key = key.nextSibling() )
+    QDomElement key = pix.firstChild().toElement();
+    for ( ; !key.isNull(); key = key.nextSibling().toElement() )
 	pixmapKeys.append( key.attribute( "key" ) );
 
 
@@ -943,8 +943,8 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
 /*================================================================*/
 bool KWordDocument::loadStyleTemplates( const QDomElement& element )
 {
-    QDomElement style = element.firstChild();
-    for ( ; !style.isNull(); style = style.nextSibling() ) {
+    QDomElement style = element.firstChild().toElement();
+    for ( ; !style.isNull(); style = style.nextSibling().toElement() ) {
 	KWParagLayout *pl = new KWParagLayout( this, FALSE );
 	if ( pl->load( style ) )
 	    return FALSE;
@@ -966,8 +966,8 @@ bool KWordDocument::loadFrameSets( const QDomElement &framesets )
     int _row = 0, _col = 0, _rows = 1, _cols = 1;
     bool _visible = true;
 
-    QDomElement frameset = framesets.firstChild();
-    for ( ; !frameset.isNull(); frameset = frameset.nextSibling() ) {
+    QDomElement frameset = framesets.firstChild().toElement();
+    for ( ; !frameset.isNull(); frameset = frameset.nextSibling().toElement() ) {
 	FrameType frameType = FT_BASE;
 	_name = "";
 	_row = _col = 0, _rows = 1, _cols = 1;
@@ -2383,25 +2383,25 @@ void KWordDocument::copySelectedText()
 
     QClipboard *cb = QApplication::clipboard();
 
-    string clip_string;
-    tostrstream out( clip_string );
+//     string clip_string;
+//     tostrstream out( clip_string );
 
-    parag2 = firstParag;
-    out << otag << "<PARAGRAPHS>" << endl;
-    while ( parag2 )
-    {
-	out << otag << "<PARAGRAPH>" << endl;
-	parag2->save( out );
-	out << etag << "</PARAGRAPH>" << endl;
-	parag2 = parag2->getNext();
-    }
-    out << etag << "</PARAGRAPHS>" << endl;
+//     parag2 = firstParag;
+//     out << otag << "<PARAGRAPHS>" << endl;
+//     while ( parag2 )
+//     {
+// 	out << otag << "<PARAGRAPH>" << endl;
+// 	parag2->save( out );
+// 	out << etag << "</PARAGRAPH>" << endl;
+// 	parag2 = parag2->getNext();
+//     }
+//     out << etag << "</PARAGRAPHS>" << endl;
 
-    KWordDrag *d = new KWordDrag;
-    d->setPlain( clipString );
-    d->setKWord( clip_string.c_str() );
+//     KWordDrag *d = new KWordDrag;
+//     d->setPlain( clipString );
+//     d->setKWord( clip_string.c_str() );
 
-    cb->setData( d );
+//     cb->setData( d );
 }
 
 /*================================================================*/

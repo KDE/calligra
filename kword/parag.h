@@ -6,9 +6,7 @@
 #include "paraglayout.h"
 
 #include <assert.h>
-#include <iostream>
 
-#include <koStream.h>
 #include <koRuler.h>
 
 class KWVariable;
@@ -147,7 +145,8 @@ public:
     bool deleteText( unsigned int _pos, unsigned int _len = 1 );
     void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );
 
-    void save( ostream &out );
+    // #### todo
+    //void save( ostream &out );
     // #### todo
     //void load( KOMLParser&, vector<KOMLAttrib>& );
 

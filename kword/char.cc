@@ -918,18 +918,18 @@ void freeChar( KWChar& _char, KWordDocument *_doc )
 }
 
 /*================================================================*/
-ostream& operator<<( ostream &out, KWString &_string )
-{
-    char c = 1;
+// ostream& operator<<( ostream &out, KWString &_string )
+// {
+//     char c = 1;
 
-    for ( unsigned int i = 0; i < _string.size(); i++ )
-    {
-        if ( _string.data()[ i ].c != KWSpecialChar )
-            out << _string.data()[ i ].c;
-        else
-            out << c;
-    }
+//     for ( unsigned int i = 0; i < _string.size(); i++ )
+//     {
+//         if ( _string.data()[ i ].c != KWSpecialChar )
+//             out << _string.data()[ i ].c;
+//         else
+//             out << c;
+//     }
 
-    return out;
-}
+//     return out;
+// }
 

@@ -21,6 +21,7 @@
 #include <qdict.h>
 #include <qstring.h>
 #include <qdom.h>
+#include <qmap.h>
 
 class KWordDocument;
 

@@ -4,11 +4,6 @@
 #include "font.h"
 #include "kword_utils.h"
 
-#include <komlMime.h>
-#include <strstream>
-#include <fstream>
-#include <unistd.h>
-
 /******************************************************************/
 /* Class: KWFormat						  */
 /******************************************************************/
@@ -172,9 +167,11 @@ void KWFormat::incRef()
 }
 
 /*================================================================*/
-QDomElement KWFormat::save( QDomDocument &doc )
+QDomElement KWFormat::save( QDomDocument &doc, int id )
 {
     QDomElement format = doc.createElement( "FORMAT" );
+    if ( id != -1 )
+	format.setAttribute( "id", id );
     format.setAttribute( "color", color.name() );
     format.setAttribute( "font", userFont->getFontName() );
     format.setAttribute( "size", ptFontSize );

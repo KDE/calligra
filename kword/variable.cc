@@ -17,10 +17,6 @@
 #include "parag.h"
 #include "defs.h"
 
-#include <komlMime.h>
-#include <strstream>
-#include <fstream>
-
 #include <unistd.h>
 
 /******************************************************************/
@@ -103,11 +99,11 @@ QString KWVariableTimeFormat::convert( KWVariable *_var )
 QDomElement KWVariable::save( QDomDocument& doc )
 {
     QDomElement var = doc.createElement( "VARIABLE" );
-    
+
     QDomElement type = doc.createElement( "TYPE" );
     var.appendChild( type );
     type.setAttribute( "type", (int)getType() );
-    
+
     QDomElement pos = doc.createElement( "POS" );
     var.appendChild( pos );
     pos.setAttribute( "frameSet", frameSetNum );
@@ -145,11 +141,11 @@ QDomElement KWVariable::save( QDomDocument& doc )
 QDomElement KWPgNumVariable::save( QDomDocument& doc )
 {
     QDomElement var = KWVariable::save( doc );
-    
+
     QDomElement pgnum = doc.createElement( "PGNUM" );
     var.appendChild( pgnum );
     pgnum.setAttribute( "value", pgNum );
-    
+
     return var;
 }
 
@@ -196,14 +192,14 @@ void KWDateVariable::recalc()
 QDomElement KWDateVariable::save( QDomDocument& doc )
 {
     QDomElement var = KWVariable::save( doc );
-    
+
     QDomElement dt = doc.createElement( "DATE" );
     var.appendChild( dt );
     dt.setAttribute( "year", date.year() );
     dt.setAttribute( "month", date.month() );
     dt.setAttribute( "day", date.day() );
     dt.setAttribute( "fix", fix );
-    
+
     return var;
 }
 
@@ -263,7 +259,7 @@ void KWTimeVariable::recalc()
 QDomElement KWTimeVariable::save( QDomDocument& doc )
 {
     QDomElement var = KWVariable::save( doc );
-    
+
     QDomElement tm = doc.createElement( "TIME" );
     var.appendChild( tm );
     tm.setAttribute( "hour", time.hour() );
@@ -271,7 +267,7 @@ QDomElement KWTimeVariable::save( QDomDocument& doc )
     tm.setAttribute( "second", time.second() );
     tm.setAttribute( "msecond", time.msec() );
     tm.setAttribute( "fix", fix );
-    
+
     return var;
 }
 

@@ -3,11 +3,6 @@
 #include "defs.h"
 #include "kword_utils.h"
 
-#include <komlMime.h>
-
-#include <strstream>
-#include <fstream>
-
 #include <unistd.h>
 
 #include <qfont.h>
@@ -55,7 +50,7 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add, QString _name )
     specialTabs = false;
 
     KWFormat f( _doc );
-    f.setDefaults();
+    f.setDefaults( document );
     format = _doc->getFormatCollection()->getFormat( f );
 }
 
@@ -93,7 +88,7 @@ KWParagLayout& KWParagLayout::operator=( const KWParagLayout &_layout )
     top = _layout.top;
     bottom = _layout.bottom;
 
-    setFormat( _layout.format );
+    setFormat( *_layout.format );
 
     tabList.setAutoDelete( true );
     tabList.clear();
@@ -117,30 +112,36 @@ void KWParagLayout::setFormat( const KWFormat &_f )
     if ( format )
 	format->decRef();
     format = 0;
-    format = document->getFormatCollection()->getFormat( f );
+    format = document->getFormatCollection()->getFormat( _f );
 }
 
 /*================================================================*/
-QDomElement KWParagLayout::save( const QDomDocument& doc )
+QDomElement KWParagLayout::save( QDomDocument& doc )
 {
     QDomElement layout = doc.createElement( "PARAGLAYOUT" );
     layout.setAttribute( "name", name );
     layout.setAttribute( "following-parag-layout", followingParagLayout );
     layout.setAttribute( "flow", (int)flow );
-    layout.setAttribute( "head-offset-mm", paragHeadOffset.mm() );
-    layout.setAttribute( "foot-offset-mm", paragFootOffset.mm() );
-    layout.setAttribute( "head-offset-pt", paragHeadOffset.pt() );
-    layout.setAttribute( "foot-offset-pt", paragFootOffset.pt() );
-    layout.setAttribute( "head-offset-inch", paragHeadOffset.inch() );
-    layout.setAttribute( "foot-offset-inch", paragFootOffset.inch() );
-    layout.setAttribute( "first-line-left-indent", firstLineLeftIndent );
-    layout.setAttribute( "left-indent", leftIndent );
-    layout.setAttribute( "line-spacing", lineSpacing );
+    layout.setAttribute( "head-offset-mm", (int)paragHeadOffset.mm() );
+    layout.setAttribute( "foot-offset-mm", (int)paragFootOffset.mm() );
+    layout.setAttribute( "head-offset-pt", (int)paragHeadOffset.pt() );
+    layout.setAttribute( "foot-offset-pt", (int)paragFootOffset.pt() );
+    layout.setAttribute( "head-offset-inch", (int)paragHeadOffset.inch() );
+    layout.setAttribute( "foot-offset-inch", (int)paragFootOffset.inch() );
+    layout.setAttribute( "first-line-left-indent-mm", (int)firstLineLeftIndent.mm() );
+    layout.setAttribute( "first-line-left-indent-inch", (int)firstLineLeftIndent.inch() );
+    layout.setAttribute( "first-line-left-indent-pt", (int)firstLineLeftIndent.pt() );
+    layout.setAttribute( "left-indent-mm", (int)leftIndent.mm() );
+    layout.setAttribute( "left-indent-inch", (int)leftIndent.inch() );
+    layout.setAttribute( "left-indent-pt", (int)leftIndent.pt() );
+    layout.setAttribute( "line-spacing-mm", (int)lineSpacing.mm() );
+    layout.setAttribute( "line-spacing-inch", (int)lineSpacing.inch() );
+    layout.setAttribute( "line-spacing-pt", (int)lineSpacing.pt() );
 
     QDomElement c = doc.createElement( "COUNTER" );
     layout.appendChild( c );
     c.setAttribute( "type", (int)counter.counterType );
-    c.setAttribute( "depth", counter.counterDepth );
+    c.setAttribute( "depth", (int)counter.counterDepth );
     c.setAttribute( "bullet", (int)counter.counterBullet.unicode() );
     c.setAttribute( "start", counter.startCounter );
     c.setAttribute( "numbering-type", (int)counter.numberingType );
@@ -148,24 +149,28 @@ QDomElement KWParagLayout::save( const QDomDocument& doc )
     c.setAttribute( "right-text", counter.counterRightText );
     c.setAttribute( "bullet-font", counter.bulletFont );
 
-    QDomElement b = doc.createElement( "LEFTBORDER", left.color() )
-		      b.setAttribute( "width", left.ptWidth );
-    b.setAttribute( "style", left.style );
+    QDomElement b = doc.createElement( "LEFTBORDER" );
+    b.setAttribute( "color", left.color.name() );
+    b.setAttribute( "width", (int)left.ptWidth );
+    b.setAttribute( "style", (int)left.style );
     layout.appendChild( b );
 
-    QDomElement b = doc.createElement( "RIGHTBORDER", right.color() )
-		      b.setAttribute( "width", right.ptWidth );
-    b.setAttribute( "style", right.style );
+    b = doc.createElement( "RIGHTBORDER" );
+    b.setAttribute( "color", right.color.name() );
+    b.setAttribute( "width", (int)right.ptWidth );
+    b.setAttribute( "style", (int)right.style );
     layout.appendChild( b );
 
-    QDomElement b = doc.createElement( "TOPBORDER", top.color() )
-		      b.setAttribute( "width", top.ptWidth );
-    b.setAttribute( "style", top.style );
+    doc.createElement( "TOPBORDER" );
+    b.setAttribute( "color", top.color.name() );
+    b.setAttribute( "width", (int)top.ptWidth );
+    b.setAttribute( "style", (int)top.style );
     layout.appendChild( b );
 
-    QDomElement b = doc.createElement( "BOTTOMBORDER", bottom.color() )
-		      b.setAttribute( "width", bottom.ptWidth );
-    b.setAttribute( "style", bottom.style );
+    b = doc.createElement( "BOTTOMBORDER" );
+    b.setAttribute( "color", bottom.color.name() );
+    b.setAttribute( "width", (int)bottom.ptWidth );
+    b.setAttribute( "style", (int)bottom.style );
     layout.appendChild( b );
 
     // TOOD: Use only the id of the format
@@ -187,8 +192,8 @@ QDomElement KWParagLayout::save( const QDomDocument& doc )
 	tab.setAttribute( "pos-inch", tabList.at( i )->inchPos );
 	tab.setAttribute( "type", (int)tabList.at( i )->type );
     }
-
-return layout;
+    
+    return layout;
 }
 
 /*================================================================*/
@@ -197,76 +202,81 @@ bool KWParagLayout::load( const QDomElement& layout )
     name = layout.attribute( "name" );
     followingParagLayout = layout.attribute( "following-parag-layout" );
     flow = (Flow)layout.attribute( "flow" ).toInt();
-    firstLineLeftIndent = layout.attribute( "first-line-left-indent" );
-    leftIndent = layout.attribute( "left-indent" );
-    lineSpacing = layout.attribute( "line-spacing" );
-
+    firstLineLeftIndent.setPT_MM_INCH( layout.attribute( "first-line-left-indent-pt" ).toInt(),
+				       layout.attribute( "first-line-left-indent-mm" ).toInt(),
+				       layout.attribute( "first-line-left-indent-inch" ).toInt() );
+    leftIndent.setPT_MM_INCH( layout.attribute( "left-indent-pt" ).toInt(),
+			      layout.attribute( "left-indent-mm" ).toInt(),
+			      layout.attribute( "left-indent-inch" ).toInt() );
+    lineSpacing.setPT_MM_INCH( layout.attribute( "line-spacing-pt" ).toInt(),
+			       layout.attribute( "line-spacing-mm" ).toInt(),
+			       layout.attribute( "line-spacing-inch" ).toInt() );
     paragHeadOffset.setPT_MM_INCH( layout.attribute( "head-offset-pt" ).toInt(),
 				   layout.attribute( "head-offset-mm" ).toInt(),
-				   layout.attribute( "head-offset-inch" ).toInt() )
+				   layout.attribute( "head-offset-inch" ).toInt() );
     paragFootOffset.setPT_MM_INCH( layout.attribute( "foot-offset-pt" ).toInt(),
 				   layout.attribute( "foot-offset-mm" ).toInt(),
-				   layout.attribute( "foot-offset-inch" ).toInt() )
+				   layout.attribute( "foot-offset-inch" ).toInt() );
 
 
-    QDomElement c = layout.namedItem( "COUNTER" );
+    QDomElement c = layout.namedItem( "COUNTER" ).toElement();
     if ( c.isNull() )
-      return false;
+	return false;
     counter.counterType = (CounterType)c.attribute( "type" ).toInt();
     counter.counterDepth = c.attribute( "depth" ).toInt();
     counter.counterBullet = QChar( c.attribute( "bullet" ).toInt() );
     counter.startCounter = c.attribute( "start" );
-    counter.numberingType = c.attribute( "numbering-type" ).toInt();
+    counter.numberingType = (NumType)c.attribute( "numbering-type" ).toInt();
     counter.counterLeftText = c.attribute( "left-text" );
     counter.counterRightText = c.attribute( "right-text" );
     counter.bulletFont = c.attribute( "bullet-font" );
 
-    QDomElement b = layout.namedItem( "LEFTBORDER" );
+    QDomElement b = layout.namedItem( "LEFTBORDER" ).toElement();
     if ( b.isNull() )
-      return false;
-    left.color = b.toColor();
-    left.width = b.attribute( "width" );
-    left.style = (BorderStyle)b.attribute( "style" );
+	return false;
+    left.color = QColor( b.attribute( "color" ) );
+    left.ptWidth = b.attribute( "width" ).toInt();
+    left.style = (BorderStyle)b.attribute( "style" ).toInt();
 
-    b = layout.namedItem( "TOPBORDER" );
+    b = layout.namedItem( "TOPBORDER" ).toElement();
     if ( b.isNull() )
-      return false;
-    top.color = b.toColor();
-    top.width = b.attribute( "width" );
-    top.style = (BorderStyle)b.attribute( "style" );
+	return false;
+    top.color = QColor( b.attribute( "color" ) );
+    top.ptWidth = b.attribute( "width" ).toInt();
+    top.style = (BorderStyle)b.attribute( "style" ).toInt();
 
-    b = layout.namedItem( "RIGHTBORDER" );
+    b = layout.namedItem( "RIGHTBORDER" ).toElement();
     if ( b.isNull() )
-      return false;
-    right.color = b.toColor();
-    right.width = b.attribute( "width" );
-    right.style = (BorderStyle)b.attribute( "style" );
+	return false;
+    right.color = QColor( b.attribute( "color" ) );
+    right.ptWidth = b.attribute( "width" ).toInt();
+    right.style = (BorderStyle)b.attribute( "style" ).toInt();
 
-    b = layout.namedItem( "BOTTOMBORDER" );
+    b = layout.namedItem( "BOTTOMBORDER" ).toElement();
     if ( b.isNull() )
-      return false;
-    bottom.color = b.toColor();
-    bottom.width = b.attribute( "width" );
-    bottom.style = (BorderStyle)b.attribute( "style" );
+	return false;
+    bottom.color = QColor( b.attribute( "color" ) );
+    bottom.ptWidth = b.attribute( "width" ).toInt();
+    bottom.style = (BorderStyle)b.attribute( "style" ).toInt();
 
     KWFormat form( document );
     QDomElement f = layout.namedItem( "FORMAT" ).toElement();
     if ( f.isNull() )
-      return false;
-    if ( !form.load( f ) )
-      return false;
+	return false;
+    // #### todo
+//     if ( !form.load( f ) )
+// 	return false;
     setFormat( form );
 
-    QDomElement tabs = layout.namedItem( "TABULATORS" );
-    QDomElement tab = tabs.firstChild().toElement();
-    for( ; !tab.isNull(); tab = tab.nextSibling().toElement() )
-    {
-      KoTabulator *tab = new KoTabulator;
-      tab->mmPos = tab.attribute( "pos-mm" ).toInt();
-      tab->ptPos = tab.attribute( "pos-pt" ).toInt();
-      tab->inchPos = tab.attribute( "pos-inch" ).toInt();
-      tab->type = (KoTabulators)tab.attribute( "type" ).toInt();
-      tabList.append( tab );
+    QDomElement tabs = layout.namedItem( "TABULATORS" ).toElement();
+    QDomElement ta = tabs.firstChild().toElement();
+    for( ; !ta.isNull(); ta = ta.nextSibling().toElement() ) {
+	KoTabulator *tab = new KoTabulator;
+	tab->mmPos = ta.attribute( "pos-mm" ).toInt();
+	tab->ptPos = ta.attribute( "pos-pt" ).toInt();
+	tab->inchPos = ta.attribute( "pos-inch" ).toInt();
+	tab->type = (KoTabulators)ta.attribute( "type" ).toInt();
+	tabList.append( tab );
     }
 
     return true;
