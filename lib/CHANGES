@@ -1,7 +1,8 @@
 Changes after KOffice-1.3
 =========================
 KOfficeUI:
-- fix overwriting of templates (#73537)
+- Fix overwriting of templates (#73537)
+- Fix loading of icons when creating templates
 
 Changes after KOffice-1.3-rc1
 =============================
