@@ -767,13 +767,13 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( !table )
     return;
 
-  double ev_PosX = doc()->unzoomItX( _ev->pos().x() );
-  double ev_PosY = doc()->unzoomItY( _ev->pos().y() );
+  double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
 
   double xpos;
   double ypos;
-  int col  = table->leftColumn( (ev_PosX + xOffset()), xpos );
-  int row  = table->topRow( (ev_PosY + yOffset()), ypos );
+  int col  = table->leftColumn( ev_PosX, xpos );
+  int row  = table->topRow( ev_PosY, ypos );
 
   if( col > KS_colMax || row > KS_rowMax )
   {
@@ -785,20 +785,21 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   // Test whether the mouse is over some anchor
   {
     KSpreadCell *cell = table->visibleCellAt( col, row );
-    QString anchor = cell->testAnchor( doc()->zoomItX( ev_PosX - xpos + xOffset() ),
-                                       doc()->zoomItY( ev_PosY - ypos + yOffset() ) );
+    QString anchor = cell->testAnchor( doc()->zoomItX( ev_PosX - xpos ),
+                                       doc()->zoomItY( ev_PosY - ypos ) );
     if ( !anchor.isEmpty() && anchor != m_strAnchor )
       setCursor( KCursor::handCursor() );
+
     m_strAnchor = anchor;
   }
 
-  if( selectionHandle.contains( QPoint( doc()->zoomItX( ev_PosX + xOffset() ),
-                                        doc()->zoomItY( ev_PosY + yOffset() ) ) ) )
+  if( selectionHandle.contains( QPoint( doc()->zoomItX( ev_PosX ), 
+                                        doc()->zoomItY( ev_PosY ) ) ) )
   {
     //If the cursor is over the hanlde, than it might be already on the next cell.
     //Recalculate the cell!
-    col  = table->leftColumn( ev_PosX + xOffset() - doc()->unzoomItX( 2 ), xpos );
-    row  = table->topRow( ev_PosY + yOffset() - doc()->unzoomItY( 2 ), ypos );
+    col  = table->leftColumn( ev_PosX - doc()->unzoomItX( 2 ), xpos );
+    row  = table->topRow( ev_PosY - doc()->unzoomItY( 2 ), ypos );
 
     setCursor( sizeFDiagCursor );
   }
@@ -973,8 +974,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( !table )
     return;
 
-  double ev_PosX = doc()->unzoomItX( _ev->pos().x() );
-  double ev_PosY = doc()->unzoomItY( _ev->pos().y() );
+  double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
 
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pEditor )
@@ -997,8 +998,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
   // In which cell did the user click ?
   double tmp;
-  int col = table->leftColumn( (ev_PosX + xOffset()), tmp );
-  int row = table->topRow( (ev_PosY + yOffset()), tmp );
+  int col = table->leftColumn( ev_PosX, tmp );
+  int row = table->topRow( ev_PosY, tmp );
 
   //you cannot move marker when col > KS_colMax or row > KS_rowMax
   if( col > KS_colMax || row > KS_rowMax)
