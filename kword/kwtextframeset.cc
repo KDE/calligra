@@ -3086,7 +3086,7 @@ void KWTextFrameSetEdit::insertComment(const QString &_comment)
 {
     KWDocument * doc = frameSet()->kWordDocument();
     KoVariable * var = new KoNoteVariable( textFrameSet()->textDocument(), _comment, doc->variableFormatCollection()->format( "STRING" ), doc->getVariableCollection() );
-    insertVariable( var );
+    insertVariable( var, 0,false/*don't delete selected text*/ );
 }
 
 
@@ -3168,7 +3168,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     insertVariable( var );
 }
 
-void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/ )
+void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText )
 {
     if ( var )
     {
@@ -3181,7 +3181,7 @@ void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /
         kdDebug() << "KWTextFrameSetEdit::insertVariable format=" << format << endl;
 #endif
         textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
-                                false, true, i18n("Insert Variable"),
+                                false, removeSelectedText, i18n("Insert Variable"),
                                 customItemsMap );
         var->recalc();
         cursor()->parag()->invalidate(0);
