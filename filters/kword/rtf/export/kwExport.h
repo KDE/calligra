@@ -22,9 +22,8 @@
 class TabularData
    {
    public:
-   TabularData() { mmpos = -1; ptpos = -1; type = -1;} // constructor
+   TabularData() { ptpos = -1; type = -1;} // constructor
 
-   int mmpos;  // position of the tab stop in mm
    int ptpos;  // position of the tab stop in pts
    int type;  // alignment of data - 0 = left, 1 = center, 2 = right, 3 = decimal
    }; // end TabularD
@@ -105,28 +104,33 @@ class Attributes
 
    };  // end Attributes class
 
-
 /***************************************************************************/
-
 
 class TextFormatting
 // Container for text format portion of format
 {
    public:
-      TextFormatting () {pos = -1; len = -1; fontSize = -1; fontWeight = -1;
-                         fontName = ""; italic = false; underline = false;
-                         vertalign = -1;}
+      TextFormatting () {formatId = 1; pos = -1; len = -1; fontSize = -1; fontWeight = -1;
+                         fontName = ""; italic = false; underline = false; strikeout = false;
+                         vertalign = -1; red = 0; blue = 0; green = 0;}
 
-      TextFormatting ( int     p,
+      TextFormatting ( int     id,
+                       int     p,
                        int     l,
                        int     s,
                        int     w,
                        QString f,
                        bool    i,
                        bool    u,
-                       int     v ) : pos (p), len (l), fontSize (s), fontWeight (w),
-                       fontName (f), italic (i), underline (u), vertalign(v){}
+                       bool    so,
+                       int     v,
+                       int     r,
+                       int     b,
+                       int     g ) : formatId (id), pos (p), len (l), fontSize (s), fontWeight (w),
+                       fontName (f), italic (i), underline (u), strikeout (so), vertalign(v),
+                       red (r), blue (b), green (g) {}
 
+      int     formatId;
       int     pos;
       int     len;
       int     fontSize;
@@ -134,8 +138,23 @@ class TextFormatting
       QString fontName;
       bool    italic;
       bool    underline;
+      bool    strikeout;
       int     vertalign;
+      int     red;
+      int     blue;
+      int     green;
 };
+
+/***************************************************************************/
+
+class ColorLayout
+   {
+   public:
+
+   int red;
+   int green;
+   int blue;
+   };
 
 /***************************************************************************/
 
@@ -175,7 +194,7 @@ struct ParaLayout
       // default constructor
       ParaLayout() {type = -1; depth = -1; start = -1; lefttext = "";
                     righttext = ""; layout = ""; flow = ""; idFirst = -1;
-                    idLeft = -1; }
+                    idLeft = -1; idRight = -1; lineSpacing = -1; }
 
       int     type;      // indicator for enum type - numeric, alpha, roman num, etc.
       int     depth;     // numbering depth 1, 1.1, 1.1.1, etc
@@ -186,11 +205,13 @@ struct ParaLayout
       QString flow;      // right, left, center, justify
       int     idFirst;   // amount of the first line indentation
       int     idLeft;    // indentation of the remaining lines
-      int lineSpacing;   // in points
-      BorderStyle leftBorder;
+      int     idRight;   // right indentation
+      int     lineSpacing; // in points
+      BorderStyle leftBorder;  // Paragraph border information
       BorderStyle rightBorder;
       BorderStyle topBorder;
       BorderStyle bottomBorder;
+      QValueList < TabularData > tabularData; // Data on tab settings
 };  // end struct ParaLayouts
 
 
@@ -347,6 +368,7 @@ struct DocData
     bool                       ALPHAList;
     bool                       grpMgr;
     QValueList<AnchoredInsert> anchoredInsertList;
+    int                        frameInfo;
 };
 
 /***************************************************************************/
@@ -482,5 +504,9 @@ void ProcessPixmapsTag ( QDomNode   myNode,
 
 AnchoredInsert *findAnchoredInsert (AnchoredInsert   searchElement,
                                     QValueList<AnchoredInsert> &list);
+
+void ProcessColorTag ( QDomNode    myNode,
+                       void       *tagData,
+                       QString    &         );
 
 #endif
