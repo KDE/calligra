@@ -59,6 +59,12 @@ public:
     void setSizeReduction(const ContextStyle& context);
 
     /**
+     * @returns true if there is no visible element in the sequence.
+     * Please note that there might be phantom elements.
+     */
+    bool isEmpty();
+    
+    /**
      * Calculates our width and height and
      * our children's parentPosition.
      */

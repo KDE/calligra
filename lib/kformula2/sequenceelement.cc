@@ -106,13 +106,26 @@ void SequenceElement::setSizeReduction(const ContextStyle& context)
 }
 
 
+bool SequenceElement::isEmpty()
+{
+    uint count = children.count();
+    for (uint i = 0; i < count; i++) {
+        BasicElement* child = children.at(i);
+        if (!child->isPhantom()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 /**
  * Calculates our width and height and
  * our children's parentPosition.
  */
 void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
 {
-    if (children.count() > 0) {
+    if (!isEmpty()) {
         int mySize = parentSize - relativeSize;
         int width = 0;
         int toMidline = 0;
@@ -121,11 +134,19 @@ void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
         uint count = children.count();
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
-            child->calcSizes(context, mySize);
-            child->setX(width);
-            width += child->getWidth();
-            toMidline = QMAX(toMidline, child->getMidline());
-            fromMidline = QMAX(fromMidline, child->getHeight()-child->getMidline());
+            if (!child->isPhantom()) {
+                child->calcSizes(context, mySize);
+                child->setX(width);
+                width += child->getWidth();
+                toMidline = QMAX(toMidline, child->getMidline());
+                fromMidline = QMAX(fromMidline, child->getHeight()-child->getMidline());
+            }
+            else {
+                child->setX(width);
+                child->setWidth(0);
+                child->setHeight(0);
+                child->setMidline(0);
+            }
         }
         setWidth(width);
         setHeight(toMidline+fromMidline);
@@ -162,13 +183,14 @@ void SequenceElement::draw(QPainter& painter, const ContextStyle& context,
     QPoint myPos(parentOrigin.x() + getX(),
                  parentOrigin.y() + getY());
     
-    if (children.count() > 0) {
+    if (!isEmpty()) {
         int mySize = parentSize - relativeSize;
         uint count = children.count();
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
-            child->draw(painter, context, mySize, myPos);
-
+            if (!child->isPhantom()) {
+                child->draw(painter, context, mySize, myPos);
+            }
             // Debug
             //painter.setPen(Qt::green);
             //painter.drawRect(parentOrigin.x() + getX(), parentOrigin.y() + getY(),

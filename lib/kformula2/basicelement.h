@@ -279,6 +279,11 @@ public:
     int getWidth() const { return size.width(); }
     int getHeight() const { return size.height(); }
 
+    void setWidth(int width) { size.setWidth(width); }
+    void setHeight(int height) { size.setHeight(height); }
+    
+    void setMidline(int mline) { midline = mline; }
+
     /**
      * Our position inside our parent.
      */
@@ -331,11 +336,6 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
     
-    void setWidth(int width) { size.setWidth(width); }
-    void setHeight(int height) { size.setHeight(height); }
-    
-    void setMidline(int mline) { midline = mline; }
-
     /**
      * Returns a SequenceElement constructed from the nodes first child
      * if the nodes name matches the given name.
