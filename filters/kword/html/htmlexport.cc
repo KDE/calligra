@@ -1350,7 +1350,10 @@ QString ClassExportFilterHtmlTransitional::getParagraphElement(const QString& st
         strElement+=">";
     }
 
-    if ( layout.formatData.weight >= 75 )
+    // Allow bold only if tag is not a heading!
+    const bool bold=((layout.formatData.weight >= 75) & (strTag[0]!='h'));
+
+    if ( bold )
     {
         strElement+="<b>";
     }
@@ -1400,7 +1403,7 @@ QString ClassExportFilterHtmlTransitional::getParagraphElement(const QString& st
     {
         strElement+="</i>";
     }
-    if ( layout.formatData.weight >= 75 )
+    if ( bold )
     {
         strElement+="</b>";
     }
