@@ -40,9 +40,10 @@ KexiDBForm::KexiDBForm(KexiFormPart *m, KexiFormPartItem &i, KexiMainWindow *win
 	m_part = m;
 	m_conn = conn;
 	m_item = i;
-	QHBoxLayout *l = new QHBoxLayout(this);
+//	QHBoxLayout *l = new QHBoxLayout(this);
 	if(preview)
 	{
+		QHBoxLayout *l = new QHBoxLayout(this);
 		m_preview = new QWidget(this);
 		l->addWidget(m_preview);
 	}
@@ -117,7 +118,9 @@ KexiDBForm::afterSwitchFrom(int mode, bool &cancelled)
 		loadForm();
 		m_part->manager()->importForm(m_preview, m_item.form(), true);
 		m_preview->show();
-		this->layout()->add(m_preview);
+		if (!layout())
+			(void)new QHBoxLayout(this);
+		layout()->add(m_preview);
 	}
 
 	return true;
