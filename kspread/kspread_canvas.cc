@@ -441,7 +441,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
   gotoLocation( _cell.pos.x(), _cell.pos.y(), table );
 }
 
-void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select,bool move_into_area, bool keyPress )
+void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select, bool move_into_area, bool keyPress )
 {
   //  kdDebug(36001) << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
   //    " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
@@ -458,7 +458,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
     int moveY=cell->obscuringCellsRow();
     cell = table->cellAt( moveX, moveY );
     QRect extraCell;
-    extraCell.setCoords(moveX,moveY,moveX+cell->extraXCells(),moveY+cell->extraYCells());
+    extraCell.setCoords( moveX, moveY, moveX+cell->extraXCells(), moveY+cell->extraYCells() );
     if( (x-markerColumn())!=0 && extraCell.contains(QPoint(markerColumn(),markerRow())))
         {
         extraArea.setCoords( markerColumn(), 1, QMIN(KS_colMax, cell->extraXCells()+x-1), KS_rowMax );
@@ -534,15 +534,40 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   //kdDebug(36001) << "KSpreadCanvas::gotoLocation : height=" << height() << endl;
   //kdDebug(36001) << "KSpreadCanvas::gotoLocation : width=" << width() << endl;
 
+  // do we need to scroll left
   if ( xpos < minX )
     horzScrollBar()->setValue( xOffset() + xpos - minX );
-  else if ( xpos > maxX )
-    horzScrollBar()->setValue( xOffset() + xpos - maxX );
 
+  //do we need to scroll right
+  else if ( xpos > maxX ) {
+    int horzScrollBarValue;
+    int horzScrollBarValueMax = table->columnRangeMax() - width();
+
+    horzScrollBarValue = xOffset() + xpos - maxX;
+
+    //We don't want to display any area > KS_colMax value
+    if ( horzScrollBarValue > horzScrollBarValueMax )
+      horzScrollBarValue = horzScrollBarValueMax;
+
+    horzScrollBar()->setValue( horzScrollBarValue );
+  }
+
+  // do we need to scroll up
   if ( ypos < minY )
     vertScrollBar()->setValue( yOffset() + ypos - minY );
-  else if ( ypos > maxY )
-    vertScrollBar()->setValue( yOffset() + ypos - maxY );
+
+  // do we need to scroll down
+  else if ( ypos > maxY ) {
+    int vertScrollBarValue;
+    int vertScrollBarValueMax = table->rowRangeMax() - height();
+    vertScrollBarValue = yOffset() + ypos - maxY;
+
+    //We don't want to display any area > KS_rowMax value
+    if ( vertScrollBarValue > vertScrollBarValueMax )
+      vertScrollBarValue = vertScrollBarValueMax;
+
+    vertScrollBar()->setValue( vertScrollBarValue );
+  }
 
   QRect selection = activeTable()->selectionRect();
 
@@ -617,15 +642,40 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   int maxX = (int) (width() - 100 * zoom()); // more than that, we scroll
   int maxY = (int) (height() - 50 * zoom());
 
+  // do we need to scroll left
   if ( xpos < minX )
-    horzScrollBar()->setValue( xOffset() + xpos - minX);
-  else if ( xpos > maxX )
-    horzScrollBar()->setValue( xOffset() + xpos - maxX );
+    horzScrollBar()->setValue( xOffset() + xpos - minX );
 
+  //do we need to scroll right
+  else if ( xpos > maxX ) {
+    int horzScrollBarValue;
+    int horzScrollBarValueMax = table->columnRangeMax() - width();
+
+    horzScrollBarValue = xOffset() + xpos - maxX;
+
+    //We don't want to display any area > KS_colMax value
+    if ( horzScrollBarValue > horzScrollBarValueMax )
+      horzScrollBarValue = horzScrollBarValueMax;
+
+    horzScrollBar()->setValue( horzScrollBarValue );
+  }
+
+  // do we need to scroll up
   if ( ypos < minY )
     vertScrollBar()->setValue( yOffset() + ypos - minY );
-  else if ( ypos > maxY )
-    vertScrollBar()->setValue( yOffset() + ypos - maxY );
+
+  // do we need to scroll down
+  else if ( ypos > maxY ) {
+    int vertScrollBarValue;
+    int vertScrollBarValueMax = table->rowRangeMax() - height();
+    vertScrollBarValue = yOffset() + ypos - maxY;
+
+    //We don't want to display any area > KS_rowMax value
+    if ( vertScrollBarValue > vertScrollBarValueMax )
+      vertScrollBarValue = vertScrollBarValueMax;
+
+    vertScrollBar()->setValue( vertScrollBarValue );
+  }
 
   if ( !make_select )
     setChooseMarker( QPoint( x, y ) );
@@ -675,8 +725,11 @@ void KSpreadCanvas::slotScrollHorz( int _value )
 {
   if ( activeTable() == 0L )
     return;
-  if ( _value < 0 )
+  if ( _value < 0 ) {
     _value = 0;
+    kdDebug (36001) << "KSpreadCanvas::slotScrollHorz: value out of range (_value: " << _value << ")" << endl;
+  }
+
   int xpos = activeTable()->columnPos( QMIN( KS_colMax, m_pView->activeTable()->maxColumn()+10 ), this );
   if(_value>(xpos + m_iXOffset))
       _value=xpos + m_iXOffset;
@@ -701,8 +754,11 @@ void KSpreadCanvas::slotScrollVert( int _value )
   if ( activeTable() == 0L )
     return;
 
-  if ( _value < 0 )
+  if ( _value < 0 ) {
     _value = 0;
+    kdDebug (36001) << "KSpreadCanvas::slotScrollVert: value out of range (_value: " << _value << ")" << endl;
+  }
+
   int ypos = activeTable()->rowPos( QMIN( KS_rowMax, m_pView->activeTable()->maxRow()+10 ) , this );
   if(_value>(ypos + m_iYOffset))
       _value=ypos + m_iYOffset;
@@ -721,7 +777,11 @@ void KSpreadCanvas::slotScrollVert( int _value )
 
 void KSpreadCanvas::slotMaxColumn( int _max_column )
 {
-  int xpos = activeTable()->columnPos( QMIN( KS_colMax, _max_column+10 ) , this );
+  int xpos = activeTable()->columnPos( QMIN( KS_colMax, _max_column + 10 ), this );
+
+  //Don't go beyond the maximum column range (KS_colMax)
+  if ( ( xOffset() + xpos ) > ( activeTable()->columnRangeMax() - width() ) )
+    xpos = activeTable()->columnRangeMax() - width() - xOffset();
 
   horzScrollBar()->setRange( 0, xpos + xOffset() );
 }
@@ -729,6 +789,10 @@ void KSpreadCanvas::slotMaxColumn( int _max_column )
 void KSpreadCanvas::slotMaxRow( int _max_row )
 {
   int ypos = activeTable()->rowPos( QMIN( KS_rowMax, _max_row + 10 ), this );
+
+  //Don't go beyond the maximum row range (KS_rowMax)
+  if ( ( yOffset() + ypos ) > ( activeTable()->rowRangeMax() - height() ) )
+    ypos = activeTable()->rowRangeMax() - height() - yOffset();
 
   vertScrollBar()->setRange( 0, ypos + yOffset() );
 }
@@ -1988,7 +2052,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
           // we don't need to go to KS_colMax, maxColumn() is enough
           colMax = activeTable()->maxColumn();
 
-	  //If we are already at the end, we skip	
+	  //If we are already at the end, we skip
           if ( !m_bChoose && markerColumn() >= colMax )
 	      return;
 	  //If we are already at the end, we skip

@@ -180,7 +180,13 @@ public:
 
     double zoom() { return m_pView->zoom(); }
 
+    /**
+     * Returns the width of the columns before the current screen
+     */
     int xOffset() { return m_iXOffset; }
+    /**
+     * Returns the height of the rows before the current screen
+     */
     int yOffset() { return m_iYOffset; }
 
     const KSpreadTable* activeTable() const;
@@ -391,11 +397,18 @@ private:
     float m_fZoom;
 
     /**
-     * Horizontal scroll offset of the view.
+     * Non visible range left from current screen
+     * Example:
+     * If the first visible column is 'E', then m_iXOffset stores
+     * the width of the invisible columns 'A' to 'D'.
      */
     int m_iXOffset;
+
     /**
-     * Vertical scroll offset of the view.
+     * Non visible range on top of the current screen
+     * Example:
+     * If the first visible row is '5', then m_iYOffset stores
+     * the height of the invisible rows '1' to '4'.
      */
     int m_iYOffset;
 
