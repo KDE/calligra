@@ -18,10 +18,5 @@ if include_sql
 SQLDIRECTORY=sql
 endif
 
-if need_kde31_compatibility
-else
-KABCDIRECTORY=kabc
-endif
-
-SUBDIRS = . $(KABCDIRECTORY) $(SQLDIRECTORY)
+SUBDIRS = . kabc $(SQLDIRECTORY)
 
