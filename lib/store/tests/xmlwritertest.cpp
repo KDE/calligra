@@ -14,7 +14,7 @@ void speedTest()
     QCString styleName = "Heading 1";
 
     QFile out( "out5.xml" );
-    out.open(IO_WriteOnly);
+    if ( out.open(IO_WriteOnly) )
     {
         KoXmlWriter writer( &out );
         writer.startDocument( "rootelem" );
@@ -30,7 +30,7 @@ void speedTest()
         writer.endDocument();
     }
     out.close();
-    qDebug( "writing %i XML elements using TagWriter: %i ms", numParagraphs, time.elapsed() );
+    qDebug( "writing %i XML elements using KoXmlWriter: %i ms", numParagraphs, time.elapsed() );
 }
 
 int main( int argc, char** argv ) {
