@@ -934,6 +934,12 @@ void KWView::setupActions()
                                         this, SLOT( editFootEndNote()),
                                         actionCollection(), "edit_footendnote" );
 
+
+    actionChangeFootNoteType = new KAction( i18n("Change FootNote/EndNote Parameter"), 0,
+                                        this, SLOT( changeFootNoteType() ),
+                                            actionCollection(), "change_footendtype");
+
+
 }
 
 void KWView::refreshMenuExpression()
@@ -2652,7 +2658,7 @@ void KWView::insertFootNote()
                                       "endnotes into the first frameset."),
                                 i18n("Insert Footnote"));
         } else {
-            KWFootNoteDia dia( m_gui->canvasWidget()->footNoteType(), m_gui->canvasWidget()->numberingFootNoteType(), this, 0 );
+            KWFootNoteDia dia( m_gui->canvasWidget()->footNoteType(), m_gui->canvasWidget()->numberingFootNoteType(), QString::null, this, 0 );
             if ( dia.exec() ) {
                 edit->insertFootNote( dia.noteType(), dia.numberingType(), dia.manualString() );
                 m_gui->canvasWidget()->setFootNoteType( dia.noteType() );
@@ -4511,6 +4517,7 @@ void KWView::slotFrameSetEditChanged()
 void KWView::changeFootNoteMenuItem( bool _footnote)
 {
     actionEditFootEndNote->setText( _footnote? i18n("Edit FootNote"): i18n("Edit EndNote"));
+    actionChangeFootNoteType->setText( _footnote? i18n("Change FootNote Parameter"):i18n("Change EndNote Parameter"));
 }
 
 void KWView::slotUpdateRuler()
@@ -5039,6 +5046,28 @@ void KWView::editFootEndNote()
         if(var && var->frameSet())
         {
             m_gui->canvasWidget()->editFrameSet( var->frameSet());
+        }
+    }
+}
+
+void KWView::changeFootNoteType()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KoVariable * tmpVar=edit->variable();
+        KWFootNoteVariable * var = dynamic_cast<KWFootNoteVariable *>(tmpVar);
+        if(var && var->frameSet())
+        {
+            KWFootNoteDia dia( var->noteType(), var->numberingType(), (var->numberingType()==KWFootNoteVariable::Auto) ? QString::null : var->manualString(), this, 0 );
+            if ( dia.exec() )
+            {
+                FootNoteParameter oldParam( var );
+                FootNoteParameter newParam(dia.noteType(), dia.numberingType(), dia.manualString() );
+                KWChangeFootNoteParametersCommand * cmd = new KWChangeFootNoteParametersCommand( i18n("Change FootNote parameters"), var , oldParam, newParam, m_doc);
+                cmd->execute();
+                m_doc->addCommand ( cmd );
+            }
         }
     }
 }

@@ -255,3 +255,4 @@ bool KWordTextFrameSetIface::isProtectContent() const
     return m_frametext->textObject()->protectContent();
 }
 
+

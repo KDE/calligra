@@ -1472,3 +1472,51 @@ void KWChangeTabStopValueCommand::unexecute()
 {
     m_doc->setTabStopValue ( m_oldValue );
 }
+
+
+
+FootNoteParameter::FootNoteParameter( KWFootNoteVariable *_var )
+{
+    noteType = _var->noteType();
+    numberingType = _var->numberingType();
+    manualString = _var->manualString();
+}
+
+FootNoteParameter::FootNoteParameter( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, const QString &_manualString)
+{
+    noteType= _noteType;
+    numberingType = _numberingType;
+    manualString = _manualString;
+}
+
+KWChangeFootNoteParametersCommand::KWChangeFootNoteParametersCommand( const QString &name, KWFootNoteVariable * _var, FootNoteParameter _oldParameter, FootNoteParameter _newParameter, KWDocument *_doc):
+    KNamedCommand(name),
+    m_doc( _doc ),
+    m_var( _var ),
+    m_oldParameter( _oldParameter ),
+    m_newParameter( _newParameter)
+{
+}
+
+void KWChangeFootNoteParametersCommand::execute()
+{
+    changeVariableParameter( m_newParameter );
+}
+
+void KWChangeFootNoteParametersCommand::unexecute()
+{
+    changeVariableParameter( m_oldParameter );
+}
+
+void KWChangeFootNoteParametersCommand::changeVariableParameter( FootNoteParameter _param )
+{
+    m_var->setNoteType( _param.noteType );
+
+    m_var->setNumberingType( _param.numberingType );
+    m_var->setManualString( _param.manualString );
+    m_var->resize();
+    m_var->frameSet()->setCounterText( m_var->text() );
+    m_var->paragraph()->invalidate(0);
+    m_var->paragraph()->setChanged( true );
+    m_doc->slotRepaintVariable();
+}

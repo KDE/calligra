@@ -34,7 +34,7 @@ class KWFootNoteDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, QWidget *parent, const char *name = 0 );
+    KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType,  const QString & _manualString, QWidget *parent, const char *name = 0 );
 
     NoteType noteType() const;
     KWFootNoteVariable::Numbering numberingType()const;

@@ -26,6 +26,7 @@
 #include <koborder.h>
 #include <koparaglayout.h>
 #include <koparagcounter.h>
+#include "kwvariable.h"
 class KWFrameSet;
 class KWTableFrameSet;
 class KWDocument;
@@ -609,5 +610,31 @@ protected:
     double m_newValue;
 };
 
+
+struct FootNoteParameter {
+    FootNoteParameter() {}
+    FootNoteParameter( KWFootNoteVariable *_var );
+    FootNoteParameter( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, const QString &_manualString);
+    NoteType noteType;
+    KWFootNoteVariable::Numbering numberingType;
+    QString manualString;
+};
+
+class KWChangeFootNoteParametersCommand : public KNamedCommand
+{
+public:
+    KWChangeFootNoteParametersCommand( const QString &name, KWFootNoteVariable * _var, FootNoteParameter _oldParameter, FootNoteParameter _newParameter, KWDocument *_doc);
+
+    ~KWChangeFootNoteParametersCommand() {}
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    void changeVariableParameter( FootNoteParameter _param );
+    KWDocument *m_doc;
+    KWFootNoteVariable *m_var;
+    FootNoteParameter m_oldParameter;
+    FootNoteParameter m_newParameter;
+};
 
 #endif

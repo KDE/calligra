@@ -3418,6 +3418,8 @@ void KWDocument::changeFootNoteConfig()
         {
             static_cast<KWFootNoteVariable *>(it.current())->formatedNote();
             static_cast<KWFootNoteVariable *>(it.current())->resize();
+            static_cast<KWFootNoteVariable *>(it.current())->frameSet()->setCounterText( static_cast<KWFootNoteVariable *>(it.current())->text() );
+
             KoTextParag * parag = it.current()->paragraph();
             if ( parag )
             {

@@ -33,7 +33,7 @@
 /* Class: KWFootNoteDia                                           */
 /******************************************************************/
 
-KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, QWidget *parent, const char *name )
+KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, const QString & _manualString, QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, QString::null, Ok|Cancel, Ok, true )
 {
 
@@ -56,6 +56,7 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     else
         m_rbManual->setChecked( true );
     m_footLine = new QLineEdit( grp);
+    m_footLine->setText( _manualString );
     connect( m_footLine, SIGNAL( textChanged ( const QString & )), this, SLOT(footLineChanged( const QString & )));
     connect( grp, SIGNAL( clicked ( int ) ), this, SLOT(footNoteTypeChanged()));
     grid->addWidget( m_footLine, 1, 1);
