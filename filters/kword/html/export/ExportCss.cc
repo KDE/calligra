@@ -107,9 +107,9 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
             strElement+=escapeHtmlText(fontName);
         else
         {   // If the font name contains a space, it should be quoted.
-            strElement+='"';
+            strElement+='\'';
             strElement+=escapeHtmlText(fontName);
-            strElement+='"';
+            strElement+='\'';
         }
         // ### TODO: add alternative font names
         strElement+="; ";
