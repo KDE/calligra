@@ -21,12 +21,15 @@
 #include <csvimport.h>
 
 #include <kinstance.h>
+#include <kglobal.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 extern "C"
 {
     void* init_libcsvimport()
     {
+	KGlobal::locale()->insertCatalogue("csvfilter");
         return new CSVFilterFactory;
     }
 };
