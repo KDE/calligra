@@ -90,6 +90,11 @@ void KWordTextFrameSetIface::setUnderlineText( bool b )
     m_frametext->textObject()->setUnderlineCommand(b);
 }
 
+void KWordTextFrameSetIface::setDoubleUnderlineText( bool b )
+{
+    m_frametext->textObject()->setDoubleUnderlineCommand(b);
+}
+
 void KWordTextFrameSetIface::setStrikeOutText( bool b )
 {
     m_frametext->textObject()->setStrikeOutCommand(b);
