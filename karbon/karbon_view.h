@@ -55,13 +55,14 @@ public slots:
 	void editDeleteSelection();
 	void editPurgeHistory();
 
+	void objectMoveToTop();
+	void objectMoveToBottom();
+
 protected slots:
 
 	// object related operations:
-	void objectMoveToTop();
 	void objectMoveUp();
 	void objectMoveDown();
-	void objectMoveToBottom();
 	void objectTrafoTranslate();
 	void objectTrafoScale();
 	void objectTrafoRotate();

@@ -160,6 +160,7 @@ KarbonView::editPurgeHistory()
 void
 KarbonView::objectMoveToTop()
 {
+	kdDebug() << "toTOP!!!!!" << endl;
 	m_part->moveSelectionToTop();
 }
 

@@ -187,6 +187,7 @@ KarbonPart::moveSelectionToTop()
 	}
 
 	m_activeLayer = topLayer;
+	repaintAllViews();
 }
 
 void
@@ -217,6 +218,7 @@ KarbonPart::moveSelectionToBottom()
 	}
 
 	m_activeLayer = bottomLayer;
+	repaintAllViews();
 }
 
 void

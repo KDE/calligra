@@ -64,4 +64,13 @@ void KArbonViewIface::editPurgeHistory()
   m_view->editPurgeHistory();
 }
 
+void KArbonViewIface::objectMoveToTop()
+{
+  m_view->objectMoveToTop();
+}
+
+void KArbonViewIface::objectMoveToBottom()
+{
+  m_view->objectMoveToBottom();
+}
 

@@ -40,6 +40,9 @@ k_dcop:
     void editDeleteSelection();
     void editPurgeHistory();
 
+	void objectMoveToTop();
+	void objectMoveToBottom();
+
 private:
     KarbonView *m_view;
 };
