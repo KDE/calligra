@@ -299,8 +299,8 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
 {
     KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
     m_mousePressed = true;
-    frameMoved = false;
-    frameResized = false;
+    m_frameMoved = false;
+    m_frameResized = false;
     m_ctrlClickOnSelectedFrame = false;
 
     if ( e )
@@ -390,7 +390,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
 
     viewport()->setCursor( m_doc->getMouseCursor( nPoint, e && e->state() & ControlButton ) );
 
-    deleteMovingRect = FALSE;
+    m_deleteMovingRect = FALSE;
 }
 
 void KWCanvas::mpCreate( int mx, int my )
@@ -400,7 +400,7 @@ void KWCanvas::mpCreate( int mx, int my )
     double x = mx / m_doc->zoomedResolutionX();
     double y = my / m_doc->zoomedResolutionY();
     m_insRect.setCoords( x, y, 0, 0 );
-    deleteMovingRect = FALSE;
+    m_deleteMovingRect = FALSE;
 }
 
 void KWCanvas::mpCreatePixmap( int mx, int my )
@@ -413,10 +413,11 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
         double x = mx / m_doc->zoomedResolutionX();
         double y = my / m_doc->zoomedResolutionY();
         m_insRect.setCoords( x, y, 0, 0 );
-        deleteMovingRect = false;
+        m_deleteMovingRect = false;
 
         if ( !m_isClipart )
         {
+            // TODO pass the size from the preview instead of loading again!
             QPixmap pix( m_pictureFilename );
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
             uint width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
@@ -427,7 +428,10 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
 
             QPoint nPoint( mx + width, my + height );
             QPoint vPoint = m_viewMode->normalToView( nPoint );
-            QCursor::setPos( viewport()->mapToGlobal( contentsToViewport( vPoint ) ) );
+            vPoint = contentsToViewport( vPoint );
+            QRect viewportRect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
+            if ( viewportRect.contains( vPoint ) ) // Don't move the mouse out of the viewport
+                QCursor::setPos( viewport()->mapToGlobal( vPoint ) );
         }
     }
 }
@@ -688,7 +692,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     QRect newRect( m_viewMode->normalToView( frame->outerRect() ) );
     // Repaing only the changed rects (oldRect U newRect)
     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
-    frameResized = true;
+    m_frameResized = true;
 
     m_gui->getView()->updateFrameStatusBarItem();
 }
@@ -784,7 +788,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         // Can't move frame of floating frameset
         if ( frameset->isFloating() ) continue;
 
-        frameMoved = true;
+        m_frameMoved = true;
         QListIterator<KWFrame> frameIt( frameset->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
@@ -872,7 +876,7 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
     p.setPen( black );
     p.setBrush( NoBrush );
 
-    if ( deleteMovingRect )
+    if ( m_deleteMovingRect )
         drawMovingRect( p );
 
     int page = m_doc->getPageOfRect( m_insRect );
@@ -892,13 +896,27 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
 
     drawMovingRect( p );
     p.end();
-    deleteMovingRect = true;
+    m_deleteMovingRect = true;
 }
 
 void KWCanvas::drawMovingRect( QPainter & p )
 {
     p.setPen( black );
     p.drawRect( m_viewMode->normalToView( m_doc->zoomRect( m_insRect ) ) );
+}
+
+void KWCanvas::deleteMovingRect()
+{
+    ASSERT( m_deleteMovingRect );
+    QPainter p;
+    p.begin( viewport() );
+    p.translate( -contentsX(), -contentsY() );
+    p.setRasterOp( NotROP );
+    p.setPen( black );
+    p.setBrush( NoBrush );
+    drawMovingRect( p );
+    m_deleteMovingRect = false;
+    p.end();
 }
 
 void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
@@ -946,21 +964,21 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
 {
     //kdDebug() << "KWCanvas::mrEditFrame" << endl;
     KWFrame *firstFrame = m_doc->getFirstSelectedFrame();
-    kdDebug() << "KWCanvas::mrEditFrame frameMoved=" << frameMoved << " frameResized=" << frameResized << endl;
-    if ( firstFrame && ( frameMoved || frameResized ) )
+    kdDebug() << "KWCanvas::mrEditFrame m_frameMoved=" << m_frameMoved << " m_frameResized=" << m_frameResized << endl;
+    if ( firstFrame && ( m_frameMoved || m_frameResized ) )
     {
         KWTableFrameSet *table = firstFrame->getFrameSet()->getGroupManager();
         if (table) {
             table->recalcCols();
             table->recalcRows();
             table->updateTempHeaders();
-            if(frameResized)
+            if(m_frameResized)
                 table->refreshSelectedCell();
             //repaintTableHeaders( table );
         }
 
         // Create command
-        if ( frameResized )
+        if ( m_frameResized )
         {
             KWFrame *frame = m_doc->getFirstSelectedFrame();
             // If header/footer, resize the first frame
@@ -1157,22 +1175,8 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
     if ( m_scrollTimer->isActive() )
 	m_scrollTimer->stop();
     if ( m_mousePressed ) {
-        if ( m_mouseMode == MM_CREATE_TEXT || m_mouseMode == MM_CREATE_PIX ||
-             m_mouseMode == MM_CREATE_FORMULA || m_mouseMode == MM_CREATE_TABLE ||
-             m_mouseMode == MM_CREATE_PART )
-        {
-            if ( deleteMovingRect )
-            {
-                QPainter p;
-                p.begin( viewport() );
-                p.translate( -contentsX(), -contentsY() );
-                p.setRasterOp( NotROP );
-                p.setPen( black );
-                p.setBrush( NoBrush );
-                drawMovingRect( p );
-                deleteMovingRect = false;
-            }
-        }
+        if ( m_deleteMovingRect )
+            deleteMovingRect();
 
         QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
@@ -1839,6 +1843,8 @@ void KWCanvas::doAutoScroll()
         viewportToContents(pos.x(), pos.y(), xm, ym);
         if ( m_currentFrameSetEdit )
             m_currentFrameSetEdit->focusOutEvent(); // Hide cursor
+        if ( m_deleteMovingRect )
+            deleteMovingRect();
         ensureVisible( xm, ym, 0, 5 );
         if ( m_currentFrameSetEdit )
             m_currentFrameSetEdit->focusInEvent(); // Show cursor

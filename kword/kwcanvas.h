@@ -229,6 +229,7 @@ private:
                        const QRect & crect, bool onlyChanged, bool resetChanged );
 
     void drawMovingRect( QPainter & p );
+    void deleteMovingRect();
 
 #ifndef NDEBUG
     void printRTDebug( int );
@@ -248,7 +249,7 @@ private:
     KoRect m_insRect;  // when creating a new frame
     KoRect m_boundingRect; // when moving frame(s)
     KoPoint m_hotSpot; // when moving frame(s)
-    bool deleteMovingRect, frameMoved, frameResized;
+    bool m_deleteMovingRect, m_frameMoved, m_frameResized;
     bool m_ctrlClickOnSelectedFrame;
     bool m_isClipart; // when inserting a picture
     QString m_pictureFilename; // when inserting a picture
