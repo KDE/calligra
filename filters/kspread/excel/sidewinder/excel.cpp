@@ -347,6 +347,9 @@ Record* RecordFactory::create( unsigned type )
   if( type == BoundSheetRecord::id )
     record = new BoundSheetRecord();
     
+  if( type == CalcModeRecord::id )
+    record = new CalcModeRecord();
+    
   if( type == ColInfoRecord::id )
     record = new ColInfoRecord();
     
@@ -1016,6 +1019,52 @@ void BoundSheetRecord::dump( std::ostream& out ) const
   out << " Visibility : " << d->visibility << " (";
   if( visible() ) out << "Visible"; else out << "Hidden"; out << ")" << std::endl;
   out << "    BOF pos : " << d->bofPosition << std::endl;
+}
+
+// ========== BACKUP ========== 
+
+const unsigned int CalcModeRecord::id = 0x000d;
+
+class CalcModeRecord::Private
+{
+public:
+  bool autoCalc;
+};
+
+CalcModeRecord::CalcModeRecord():
+  Record()
+{
+  d = new CalcModeRecord::Private();
+  d->autoCalc = false;
+}
+
+CalcModeRecord::~CalcModeRecord()
+{
+  delete d;
+}
+
+bool CalcModeRecord::autoCalc() const
+{
+  return d->autoCalc;
+}
+
+void CalcModeRecord::setAutoCalc( bool b )
+{
+  d->autoCalc = b;
+}
+
+void CalcModeRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 2 ) return;
+  
+  unsigned flag = readU16( data );
+  d->autoCalc = flag != 0;
+}
+
+void CalcModeRecord::dump( std::ostream& out ) const
+{
+  out << "CALCMODE" << std::endl;
+  out << " Auto Calc : " << (autoCalc() ? "Yes" : "No") << std::endl;
 }
 
 // ========== COLINFO ==========
@@ -3092,6 +3141,13 @@ void ExcelReader::handleBlank( BlankRecord* record )
   }
 }
 
+void ExcelReader::handleCalcMode( CalcModeRecord* record )
+{
+  if( !record ) return;
+  
+  d->workbook->setAutoCalc( record->autoCalc() );
+}
+  
 void ExcelReader::handleColInfo( ColInfoRecord* record )
 {
   if( !record ) return;

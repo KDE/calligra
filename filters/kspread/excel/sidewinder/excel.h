@@ -715,6 +715,64 @@ private:
 };
 
 /**
+  Class CalcModeRecord represents CalcMode record, which specifies whether 
+  to (re)calculate formulas manually or automatically.
+ */
+class CalcModeRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  /**
+   * Creates a new CalcMode record.
+   */
+  CalcModeRecord();
+  
+  /**
+   * Destroy the record.
+   */
+  ~CalcModeRecord();
+  
+  /**
+   * Returns true if formulas calculation is performed automatically.
+   * 
+   * \sa setAutoCalc
+   */
+  bool autoCalc() const;
+  
+  /**
+   * If r is true, formulas calculation will be performed automatically.
+   * 
+   * \sa autoCalc
+   */
+  void setAutoCalc( bool r );
+
+  /**
+   \reimpl
+   */
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  /**
+   \reimpl
+   */
+  virtual const char* name(){ return "CALCMODE"; }
+
+  /**
+   \reimpl
+   */
+  virtual void dump( std::ostream& out ) const;
+
+private:
+  // no copy or assign
+  CalcModeRecord( const CalcModeRecord& );
+  CalcModeRecord& operator=( const CalcModeRecord& );
+
+  class Private;
+  Private* d;
+};
+
+/**
   Class ColInfoRecord represents ColInfo record, which provides information
   (such as column width and formatting) for a span of columns.
  */
@@ -2728,6 +2786,7 @@ private:
   void handleBOF( BOFRecord* record );
   void handleBoolErr( BoolErrRecord* record );
   void handleBlank( BlankRecord* record );
+  void handleCalcMode( CalcModeRecord* record );
   void handleColInfo( ColInfoRecord* record );
   void handleDateMode( DateModeRecord* record );
   void handleDimension( DimensionRecord* record );
