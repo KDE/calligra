@@ -8,13 +8,13 @@ module KFormula
        interface View : OPParts::View
 	{
 	  slot void newView();
-	  slot void addB0();
-	  slot void addB1();		
-	  slot void addB4();	
-	  slot void addB4bis();	
-	  slot void addB3();
-	  slot void addB2();
-	  slot void addB5();
+	  slot void addText();
+	  slot void addRoot();		
+	  slot void addFraction();	
+	  slot void addVertSpace();	
+	  slot void addBracket();
+	  slot void addIntegral();
+	  slot void addSymbol();
 	  slot void reduce();
 	  slot void enlarge();
 	  slot void reduceRecur();

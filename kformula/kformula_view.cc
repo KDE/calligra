@@ -133,26 +133,26 @@ void KFormulaView::createGUI()
 	
 	m_idButtonFormula_0 = addToolButton(m_rToolBarFormula, "mini-xy.xpm", 
 					    i18n( "Add/change to simple text" ),
-					    "addB0" );
+					    "addText" );
 
 	m_idButtonFormula_1 = addToolButton(m_rToolBarFormula, "mini-root.xpm", 
-					    i18n( "Add/change to root" ), "addB1" );
+					    i18n( "Add/change to root" ), "addRoot" );
 
 	m_idButtonFormula_2 = addToolButton(m_rToolBarFormula, "mini-frac.xpm",
-					    i18n( "Add/change fract line" ), "addB4");
+					    i18n( "Add/change fract line" ), "addFrac");
 
 	m_idButtonFormula_3 = addToolButton(m_rToolBarFormula, "mini-vspace.xpm",
-					    i18n( "Add/change vertical space" ), "addB4bis");
+					    i18n( "Add/change vertical space" ), "addVertSpace");
 	
 	
 	m_idButtonFormula_4 = addToolButton(m_rToolBarFormula, "mini-bra.xpm",
-					    i18n( "Add/change a bracket block" ), "addB3" );
+					    i18n( "Add/change a bracket block" ), "addBracket" );
 
 	m_idButtonFormula_5 = addToolButton(m_rToolBarFormula, "mini-integral.xpm",
-					    i18n( "Add/change an integral" ), "addB2" );
+					    i18n( "Add/change an integral" ), "addIntegral" );
 
 	m_idButtonFormula_6 = addToolButton(m_rToolBarFormula, "mini-symbols.xpm",
-					    i18n( "Add/change a block with symbols" ), "addB5" );
+					    i18n( "Add/change a block with symbols" ), "addSymbol" );
     }
 
     if ( !CORBA::is_nil( m_vToolBarFactory ) )
@@ -209,15 +209,12 @@ void KFormulaView::createGUI()
 
 void KFormulaView::slotTypeChanged(int type)
 {   
-   debug("qui");
    m_rToolBarType->setItemEnabled(m_idButtonType_0,(type==0));          
    m_rToolBarType->setItemEnabled(m_idButtonType_1,(type==0));          
    m_rToolBarType->setItemEnabled(m_idButtonType_2,(type==1));          
    m_rToolBarType->setItemEnabled(m_idButtonType_3,(type==2));          
    m_rToolBarType->setItemEnabled(m_idButtonType_4,(type==2));          
    m_rToolBarType->setItemEnabled(m_idButtonType_5,(type==3));          
-
-                
 debug("Type Changed");
     update();
 
@@ -244,71 +241,67 @@ void KFormulaView::newView()
     CORBA::release( shell );
 }
 
-void KFormulaView::addB0()
+void KFormulaView::addText()
 {
-    debug("addB0");
-    m_pDoc->addB0();
+    debug("adding Text");
+    m_pDoc->addTextElement();
 }
 
-void KFormulaView::addB1()
+void KFormulaView::addRoot()
 { 
-    debug("addB1");
-    m_pDoc->addB1();
+    debug("adding Root");
+    m_pDoc->addRootElement();
 }
 
-void KFormulaView::addB4()
+void KFormulaView::addFraction()
 {
-    debug("addB4");
-    m_pDoc->addB4();
+    debug("##adding Fraction");
 }
 
-void KFormulaView::addB4bis()
+void KFormulaView::addVertSpace()
 {
-    debug("addB4bis");
-    m_pDoc->addB4bis();
+    debug("##adding VerticalSpace");
 }
 
-void KFormulaView::addB3()
+void KFormulaView::addBracket()
 {
-    debug("addB3");
-    m_pDoc->addB3();
-
+    debug("##adding parenthesis");
 }
 
-void KFormulaView::addB2()
+void KFormulaView::addIntegral()
 {
-    debug("addB2");
-    m_pDoc->addB2(); 
-
+    debug("##adding Integral");
 }
 
-void KFormulaView::addB5()
+void KFormulaView::addSymbol()
 {
-    debug("addB5");
-    m_pDoc->addB5();
-
+    debug("##adding Symbol");
 }
 
 void KFormulaView::reduce()
 {
     debug("reduce");
-    m_pDoc->reduce();
-
+    m_pDoc->activeElement()->scaleNumericFont(FN_REDUCE | FN_ELEMENT);
+    update();
 }
 
 void KFormulaView::enlarge()
 {
     debug("enlarge");
-    m_pDoc->enlarge();
-
+    m_pDoc->activeElement()->scaleNumericFont(FN_ENLARGE | FN_ELEMENT);
+    update();
 }
 
 void KFormulaView::reduceRecur()
 {
+    m_pDoc->activeElement()->scaleNumericFont(FN_REDUCE | FN_ALL);
+    update();
 }
 
 void KFormulaView::enlargeRecur()
 {
+    m_pDoc->activeElement()->scaleNumericFont(FN_ENLARGE | FN_ALL);
+    update();
 }
 
 void KFormulaView::enlargeAll()
@@ -322,22 +315,20 @@ void KFormulaView::setGreek()
 void KFormulaView::addCh1()
 {
     debug("addCh1");
-    m_pDoc->addCh1();
+//    m_pDoc->addRootElement();
 
 }
 
 void KFormulaView::addCh2()
 {
     debug("addCh2");
-    m_pDoc->addCh2();
+//    m_pDoc->addCh2();
 
 }
 
 void KFormulaView::addCh3()
 {
     debug("addCh3");
-    m_pDoc->addCh3();
-
 }
 
 #include "kformula_view.moc"

@@ -15,9 +15,11 @@ LDADD =  ../lib/kofficeui/libkofficeui.la \
 bin_PROGRAMS = kformula.bin
 
 kformula_bin_SOURCES = kformula_main.cc kformula_doc.cc kformula_view.cc \
-	kformula.cc kformula_shell.cc
-noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h \
-	kformula.h kformula_shell.h
+	kformula.cc kformula_shell.cc BasicElement.cc RootElement.cc \
+	TextElement.cc FormulaClass.cc
+noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h formuladef.h \
+	kformula.h kformula_shell.h BasicElement.h RootElement.h TextElement.h\
+	FormulaClass.h
 SRCMETA = kformula_main.moc kformula_view.moc kformula_doc.moc \
 	kformula_shell.moc
 

@@ -84,13 +84,13 @@ protected:
     CORBA::Long m_idButtonType_5;
 
     // IDL
-    virtual void addB0();
-    virtual void addB1();
-    virtual void addB4();
-    virtual void addB4bis();
-    virtual void addB3();
-    virtual void addB2();
-    virtual void addB5();
+    virtual void addText();
+    virtual void addRoot();
+    virtual void addFraction();
+    virtual void addVertSpace();
+    virtual void addBracket();
+    virtual void addIntegral();
+    virtual void addSymbol();
     virtual void reduce();
     virtual void enlarge();
     virtual void reduceRecur();
