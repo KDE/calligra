@@ -134,6 +134,8 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		initNavigator();
 
+		void		slotImportFile();
+
 		/**
 		 * this slot is called if a window changes
 		 */

@@ -11,6 +11,6 @@ libkexifilter_la_METASOURCES = AUTO
 libkexifilter_la_SOURCES = kexifiltermanager.cpp kexifilter.cpp kexifilterwizardbase.cpp \
 	kexitableimportsourceiface.cpp
 
-libkexifilter_la_LIBADD =
+libkexifilter_la_LIBADD = $(LIB_KOFFICECORE)
 
 

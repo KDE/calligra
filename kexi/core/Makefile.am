@@ -1,7 +1,6 @@
 lib_LTLIBRARIES = libkexicore.la
 libkexicore_la_SOURCES = kexi.cpp kexi_global.cpp \
 	kexiproject.cpp keximainwindow.cpp kexidialogbase.cpp \
-	kexistartupdlgui.ui kexistartupdlg.cpp \
 	kexipartmanager.cpp kexipartinfo.cpp kexipartitem.cpp kexipart.cpp \
 	kexibrowser.cpp kexibrowseritem.cpp \
 	kexiprojectdata.cpp kexistatusbar.cpp
@@ -10,11 +9,12 @@ libkexicore_la_SOURCES = kexi.cpp kexi_global.cpp \
 
 libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) -Wnounresolved -no-undefined
 
-SUBDIRS = startup .
+SUBDIRS = startup filters .
 
 libkexicore_la_LIBADD = $(LIB_KEXI_KMDI) \
 	../kexidb/libkexidb.la \
-	./startup/kexicorestartup.la
+	./startup/kexicorestartup.la \
+	./filters/libkexifilter.la
 
 INCLUDES = $(KOFFICE_INCLUDES) \
 	$(LIB_KEXI_KMDI_INCLUDES) \

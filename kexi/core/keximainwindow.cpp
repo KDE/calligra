@@ -42,7 +42,6 @@
 #include "kexidialogbase.h"
 #include "kexipartmanager.h"
 #include "kexipart.h"
-#include "kexistartupdlg.h"
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
 #include "kexi.h"
@@ -204,6 +203,13 @@ KexiMainWindow::initActions()
 //	 actionCollection(), "options_show_contexthelp");
 #endif
 
+
+	new KAction(i18n("From File ..."), "fileopen", 0, 
+		this, SLOT(slotImportFile()), actionCollection(), "import_file");
+	new KAction(i18n("From Server ..."), "server", 0, 
+		this, SLOT(slotImportServer()), actionCollection(), "import_server");
+
+
 	invalidateActions();
 }
 
@@ -319,7 +325,9 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 			not_found_msg += ( (*it).second + " - " + i18n("unknown object type \"%1\"").arg((*it).first)+"<br>" );
 			continue;
 		}
+
 		KexiPart::Item item = d->prj->item(i, (*it).second);
+
 		if (item.isNull()) {
 			not_found_msg += ( (*it).second + " - " + i18n("object not found") +"<br>" );
 			continue;
@@ -791,6 +799,9 @@ KexiMainWindow::showErrorMessage(const QString &title, KexiDB::Object *obj)
 //		KMessageBox::detailedError(this, msg, details);
 	}
 	showErrorMessage(msg, details);
+}
+
+void KexiMainWindow::slotImportFile() {
 }
 
 void
