@@ -2653,6 +2653,36 @@ KoTextDocCommand *KWTextFrameSet::deleteTextCommand( KoTextDocument *textdoc, in
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
+QString KWTextFrameSet::copyTextParag( QDomElement & elem, int selectionId )
+{
+    unzoom();
+    KoTextCursor c1 = textDocument()->selectionStartCursor( selectionId );
+    KoTextCursor c2 = textDocument()->selectionEndCursor( selectionId );
+    QString text;
+    if ( c1.parag() == c2.parag() )
+    {
+        text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
+
+        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c2.index()-1, true );
+    }
+    else
+    {
+        text += c1.parag()->toString( c1.index() ) + "\n";
+
+        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c1.parag()->length()-2, true );
+        KoTextParag *p = c1.parag()->next();
+        while ( p && p != c2.parag() ) {
+            text += p->toString() + "\n";
+            static_cast<KWTextParag *>(p)->save( elem, 0, p->length()-2, true );
+            p = p->next();
+        }
+        text += c2.parag()->toString( 0, c2.index() );
+        static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1, true );
+    }
+    zoom( false );
+    return text;
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2803,36 +2833,10 @@ void KWTextFrameSetEdit::startDrag()
 
 KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
 {
-    textFrameSet()->unzoom();
-    KoTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
-    KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
-
-    QString text;
     QDomDocument domDoc( "PARAGRAPHS" );
     QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
     domDoc.appendChild( elem );
-    if ( c1.parag() == c2.parag() )
-    {
-        text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
-
-        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c2.index()-1, true );
-    }
-    else
-    {
-        text += c1.parag()->toString( c1.index() ) + "\n";
-
-        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c1.parag()->length()-2, true );
-        KoTextParag *p = c1.parag()->next();
-        while ( p && p != c2.parag() ) {
-            text += p->toString() + "\n";
-            static_cast<KWTextParag *>(p)->save( elem, 0, p->length()-2, true );
-            p = p->next();
-        }
-        text += c2.parag()->toString( 0, c2.index() );
-        static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1, true );
-    }
-    textFrameSet()->zoom( false );
-
+    QString text = textFrameSet()->copyTextParag( elem, KoTextDocument::Standard );
     KWTextDrag *kd = new KWTextDrag( parent );
     kd->setPlain( text );
     kd->setFrameSetNumber( textFrameSet()->kWordDocument()->numberOfTextFrameSet( textFrameSet(), true) );
