@@ -46,6 +46,11 @@ public:
     /// Get the "modification" date/time
     QDateTime modificationDate( void ) const;
     /**
+     * Get a document info
+     * \param name name of the document info
+     */
+    QString getDocumentInfo( const QString& name ) const;
+    /**
      * Get a document property 
      * \param name name of the property
      * \param oldName alternative name of the property (in old KWord syntax)

@@ -930,23 +930,34 @@ void KWord13OasisGenerator::writeMetaXml(void)
     strVersion += QString( "$Revision$" ).remove( '$' );
     writer.addTextSpan( strVersion );
     writer.endElement();
-        
-#if 0
-    if (!m_docInfo.title.isEmpty())
+       
+    QString str; // Helper string
+    
+    str = m_kwordDocument->getDocumentInfo( "about:title" );
+    if ( !str.isEmpty() )
     {
         writer.startElement( "dc:title" );
-        writer.addTextSpan( m_docInfo.title );
+        writer.addTextSpan( str );
         writer.endElement();
     }
-    if (!m_docInfo.abstract.isEmpty())
+    
+    str = m_kwordDocument->getDocumentInfo( "about:abstract" );
+    if (!str.isEmpty())
     {
         writer.startElement( "dc:description");
-        writer.addTextSpan( m_docInfo.abstract );
+        writer.addTextSpan( str );
         writer.endElement();
     }
-#endif
     
-    // ### TODO
+    str = m_kwordDocument->getDocumentInfo( "author:full-name" );
+    if ( !str.isEmpty() )
+    {
+        writer.startElement( "dc:creator" );
+        writer.addTextSpan( str );
+        writer.endElement();
+    }
+
+    // ### TODO: what about the other document info of KWord 1.3?
 
     QDateTime dt;
     

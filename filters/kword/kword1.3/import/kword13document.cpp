@@ -123,6 +123,20 @@ void KWord13Document::xmldump( QIODevice* io )
     iostream << "</kworddocument>\n";
 }
 
+QString KWord13Document::getDocumentInfo( const QString& name ) const
+{
+    QMap<QString,QString>::ConstIterator it ( m_documentInfo.find( name ) );
+    if ( it == m_documentInfo.end() )
+    {
+        // Property does not exist
+        return QString::null;
+    }
+    else
+    {
+        return it.data();
+    }
+}
+
 QString KWord13Document::getProperty( const QString& name, const QString& oldName ) const
 {
     const QString result ( getPropertyInternal( name ) );
