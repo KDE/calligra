@@ -52,13 +52,10 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		TableSchema(const TableSchema& ts);
 		
 		virtual ~TableSchema();
-//		QStringList primaryKeys() const;
-//		bool hasPrimaryKeys() const;
 		
 		/*! Inserts \a field into a specified position (\a index).
 		 'order' property of \a field is set automatically. */
 		virtual FieldList& insertField(uint index, Field *field);
-//		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 
 		/*! Reimplemented for internal reasons. */
 		virtual void removeField(KexiDB::Field *field);
@@ -85,8 +82,6 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 			{ return IndexSchema::ListIterator(m_indices); }
 
 		const IndexSchema::List* indices() { return &m_indices; }
-
-//js		void addPrimaryKey(const QString& key);
 
 		/*! Removes all fields from the list, clears name and all other properties. 
 			\sa FieldList::clear() */

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@ using namespace KexiDB;
 
 FieldList::FieldList(bool owner)
  //reasonable sizes: TODO
- : m_fields_by_name(101)
+ : m_fields_by_name(101, false)
 {
 	m_fields.setAutoDelete( owner );
 	m_fields_by_name.setAutoDelete( false );
@@ -92,9 +92,14 @@ void FieldList::removeField(KexiDB::Field *field)
 	assert(field);
 	if (!field)
 		return;
-	m_fields_by_name.remove(field->name().lower());
+	m_fields_by_name.remove(field->name());
 	m_fields.remove(field);
 	m_sqlFields = QString::null;
+}
+
+Field* FieldList::field(const QString& name)
+{
+	return m_fields_by_name[name];
 }
 
 QString FieldList::debugString()
@@ -125,7 +130,7 @@ void FieldList::debug()
 #define _ADD_FIELD(fname) \
 { \
 	if (fname.isEmpty()) return fl; \
-	f = m_fields_by_name[fname.lower()]; \
+	f = m_fields_by_name[fname]; \
 	if (!f) { delete fl; return 0; } \
 	fl->addField(f); \
 }
@@ -169,7 +174,7 @@ QStringList FieldList::names() const
 {
 	QStringList r;
 	for (QDictIterator<Field> it(m_fields_by_name);it.current();++it) {
-		r += it.currentKey();
+		r += it.currentKey().lower();
 	}
 	return r;
 }

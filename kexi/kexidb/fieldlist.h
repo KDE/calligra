@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,7 +53,7 @@ class KEXI_DB_EXPORT FieldList
 		virtual ~FieldList();
 		
 		/*! \return number of fields in the list. */
-		inline unsigned int fieldCount() const { return m_fields.count(); }
+		inline uint fieldCount() const { return m_fields.count(); }
 
 		/*! Adds \a field at the and of field list. */
 		FieldList& addField(Field *field);
@@ -71,10 +71,10 @@ class KEXI_DB_EXPORT FieldList
 		virtual void removeField(KexiDB::Field *field);
 
 		/*! \return field #id or NULL if there is no such a field. */
-		inline Field* field(unsigned int id) { return (id < m_fields.count()) ? m_fields.at(id) : 0; }
+		inline Field* field(uint id) { return (id < m_fields.count()) ? m_fields.at(id) : 0; }
 		
 		/*! \return field with name \a name or NULL if there is no such a field. */
-		inline Field* field(const QString& name) const { return m_fields_by_name[name.lower()]; }
+		virtual Field* field(const QString& name);
 
 		/*! \return true if this list contains given \a field. */
 		inline bool hasField(const Field* field) { return m_fields.findRef(field)!=-1; }
@@ -136,7 +136,7 @@ class KEXI_DB_EXPORT FieldList
 
 	protected:
 		Field::List m_fields;
-		QDict<Field> m_fields_by_name;
+		QDict<Field> m_fields_by_name; //!< Fields collected by name. Unused by QuerySchema.
 		Field::List *m_autoinc_fields;
 	
 	private:

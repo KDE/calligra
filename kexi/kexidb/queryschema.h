@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,9 +48,12 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		typedef QPtrVector<QueryColumnInfo> Vector;
 		typedef QPtrList<QueryColumnInfo> List;
 		typedef QPtrListIterator<QueryColumnInfo> ListIterator;
-		
+
 		QueryColumnInfo(Field *f, QCString _alias, bool _visible)
 		 : field(f), alias(_alias), visible(_visible)
+		{
+		}
+		~QueryColumnInfo()
 		{
 		}
 		Field *field;
@@ -103,7 +106,8 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		FieldList& insertField(uint position, Field *field, bool visible);
 
 		/* Like above method, but you can also explicity bound the new column
-		 to specific position on tables list.
+		 to specific position on tables list. 
+		 If bindToTable==-1, no particular table should be bound.
 		 @see tableBoundToColumn(uint columnPosition) */
 		FieldList& insertField(uint position, Field *field, 
 			int bindToTable, bool visible = true);
@@ -132,10 +136,6 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! Adds \a asterisk at the and of columns list. */
 		FieldList& addAsterisk(QueryAsterisk *asterisk, bool visible = true);
-
-//		int id() { return m_id; }
-//		Field::List::iterator fields() { return m_fields.begin(); }
-//js		void addPrimaryKey(const QString& key);
 
 		/*! Removes all columns and their aliases from the columns list, 
 		 removes all tables and their aliases from the tables list within this query.
@@ -299,6 +299,36 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return list of QueryAsterisk objects defined for this query */
 		Field::List* asterisks() const;
 
+		/*! \return field for \a name or 0 if no field for this name 
+		 was found within the query. fieldsExpanded() method is used 
+		 to lookup expanded list of the query fields, so queries with asterisks 
+		 are processed well.
+		 If a field has alias defined, name is not taken into account, 
+		 but only it's alias. If a field has no alias:
+		 - field's name is checked
+		 - field's table and field's name are checked in a form of "tablename.fieldname",
+		   so you can provide \a name of this form to avoid ambiguity.
+
+		 If there are more than one fields with the same name equal to \a name,
+		 first-found is returned (checking is performed from first to last query field).
+		 Structures needed to compute result of this method are cached, 
+		 so only first usage costs o(n) - another usages cost o(1). 
+
+		 Example:
+		 Let query be defined by "SELECT T.B AS X, * FROM T" statement and T 
+		 is table containing fields A, B, C. 
+		 Expanded list of columns for the query is: T.B AS X, T.A, T.B, T.C.
+		 - Calling field("B") will return a pointer to third query column (not first, 
+		   because it is covered by "X" alias). Additionally, calling field("X") 
+		   will return the same pointer.
+		 - Calling field("T.A") will return the same pointer as field("A").
+		 */
+		Field* field(const QString& name);
+
+		/* Like QuerySchema::field(const QString& name) but returns not only Field
+		 object for \a name but entire QueryColumnInfo object. */
+		QueryColumnInfo* columnInfo(const QString& name);
+
 		/*! QuerySchema::fields() returns vector of fields used for the query columns,
 		 but in a case when there are asterisks defined for the query,
 		 it does not expand QueryAsterisk objects to field lists but return every
@@ -403,12 +433,15 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 	protected:
 		void init();
 
+		void computeFieldsExpanded();
+
 	//		/*! Automatically retrieves query schema via connection. */
 //		QuerySchema(Connection *conn);
 
 		QuerySchemaPrivate *d;
 		
 	friend class Connection;
+	friend class QuerySchemaPrivate;
 };
 
 /*! This class encapsulates information about single asterisk in query definition.
