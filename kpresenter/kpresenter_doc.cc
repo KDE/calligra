@@ -967,17 +967,21 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 r = ch->geometry();
                 insertChild( ch );
                 kppartobject = new KPPartObject( ch );
-                kppartobject->setOrig( r.x(), 0 );
-                kppartobject->setSize( r.width(), r.height() );
-                insertObjectInPage(r.y(), kppartobject);
                 //emit sig_insertObject( ch, kppartobject );
             }
             QDomElement settings=elem.namedItem("SETTINGS").toElement();
+            double offset = 0.0;
             if(!settings.isNull() && kppartobject!=0)
-                kppartobject->load(settings);
+                offset=kppartobject->load(settings);
+            else if ( settings.isNull() ) // all embedded obj must have SETTING tags
+            {
+                delete kppartobject;
+                kppartobject = 0L;
+            }
             if ( kppartobject ) {
-                kppartobject->setOrig( r.x(), r.y() );
+                kppartobject->setOrig( r.x(), 0 );
                 kppartobject->setSize( r.width(), r.height() );
+                insertObjectInPage(offset, kppartobject);
             }
         } else if(elem.tagName()=="PAPER")  {
             if(elem.hasAttribute("format"))

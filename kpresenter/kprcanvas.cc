@@ -6189,7 +6189,6 @@ void KPrCanvas::moveObject( int x, int y, bool key )
         m_boundingRect.moveTopLeft( point );
     }
 
-
     if( m_boundingRect.topLeft() == boundingRect.topLeft() )
         return; // nothing happende (probably due to the grid)
 
