@@ -142,6 +142,7 @@ bool KPresenterChild::loadXML( const QDomElement &element )
             if ( e.hasAttribute( "h" ) )
                 h = e.attribute( "h" ).toInt(&brect);
             m_tmpGeometry = QRect(x, y, w, h);
+            setGeometry( m_tmpGeometry );
         }
     }
 
