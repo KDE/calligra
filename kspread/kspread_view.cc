@@ -2157,7 +2157,7 @@ void KSpreadView::layoutDlg()
 	}
   else
   	{
-  	m_pCanvas->hideMarker();
+  	//m_pCanvas->hideMarker();
 
   	if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
     	   CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
@@ -2170,7 +2170,7 @@ void KSpreadView::layoutDlg()
    	// Update the toolbar (bold/italic/font...)
   	updateEditWidget();
 
-  	m_pCanvas->showMarker();
+  	//m_pCanvas->showMarker();
   	}
 }
 

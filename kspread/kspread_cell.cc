@@ -96,7 +96,8 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_richWidth=0;
   m_richHeight=0;
   m_iPrecision = -1;
-
+  m_iOutTextWidth = 0;
+  m_iOutTextHeight = 0;
   m_firstCondition = 0;
   m_secondCondition = 0;
   m_thirdCondition = 0;
