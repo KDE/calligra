@@ -706,7 +706,9 @@ void KWView::print( QPrinter &prt )
 
     int oldZoom = doc->zoom();
     QPaintDeviceMetrics metrics( &prt );
-    doc->setZoomAndResolution( 100, metrics.logicalDpiX(), metrics.logicalDpiY() );
+    int hackFactor = 1.0; // 2.0 for the hack (improving print-preview's quality)
+    // The real solution is Qt-3.0's QPrinter::setResolution.
+    doc->setZoomAndResolution( 100, metrics.logicalDpiX()*hackFactor, metrics.logicalDpiY()*hackFactor, false );
 
     bool serialLetter = FALSE;
 #if 0
@@ -745,6 +747,7 @@ void KWView::print( QPrinter &prt )
     if ( !serialLetter ) {
         QPainter painter;
         painter.begin( &prt );
+        //painter.scale( 1.0/hackFactor, 1.0/hackFactor );
         gui->canvasWidget()->print( &painter, &prt );
         painter.end();
     } else {
@@ -765,7 +768,7 @@ void KWView::print( QPrinter &prt )
     if ( pgLayout.format == PG_SCREEN )
         doc->setPageLayout( oldPGLayout, cl, hf );
 
-    doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
 
     if (shell()) shell()->setCursor( arrowCursor );
     gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
@@ -1229,7 +1232,7 @@ void KWView::viewZoom( const QString &s )
     z = z.simplifyWhiteSpace();
     int zoom = z.toInt();
     if ( zoom != doc->zoom() ) {
-        doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+        doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), true );
         gui->getHorzRuler()->setZoom( doc->zoomedResolutionX() );
         gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
 

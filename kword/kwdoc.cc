@@ -200,7 +200,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_zoomedResolutionY = 1;
     m_zoom = 100;
 
-    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
     syntaxVersion = CURRENT_SYNTAX_VERSION;
 
     m_pKSpellConfig=0;
@@ -209,7 +209,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     connect( &history, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 }
 
-void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
+void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews )
 {
     //double oldZoomedResolutionX = m_zoomedResolutionX;
     //double oldZoomedResolutionY = m_zoomedResolutionY;
@@ -230,8 +230,11 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
     for ( ; fit.current() ; ++fit )
         fit.current()->zoom();
 
-    updateAllViewportSizes();
-    repaintAllViews( true );
+    if ( updateViews )
+    {
+        updateAllViewportSizes();
+        repaintAllViews( true );
+    }
 }
 
 bool KWDocument::initDoc()
@@ -863,9 +866,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         getPointBasedAttribute( __hf, FooterBodySpacing, paper, "spFootBody", 0.0 );
         __columns.columns = KWDocument::getAttribute( paper, "columns", 0 );
         getPointBasedAttribute( __columns, ColumnSpacing, paper, "columnspacing", 0.0 );
-        m_zoom= KWDocument::getAttribute( paper, "zoom", 100 );
+        m_zoom = KWDocument::getAttribute( paper, "zoom", 100 );
         if(m_zoom!=100)
-            setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+            setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
         // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
         if ( __pgLayout.ptWidth == 0.0 )
             getPointBasedAttribute( __pgLayout, Width, paper, "ptWidth", 0.0 );

@@ -123,7 +123,7 @@ void KWCanvas::print( QPainter *painter, QPrinter *printer )
 
         if ( i > printer->fromPage() ) printer->newPage();
 
-        painter->resetXForm();
+        painter->save();
         int pgNum = i - 1;
         int yOffset = pgNum * doc->paperHeight();
         kdDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
@@ -134,6 +134,7 @@ void KWCanvas::print( QPainter *painter, QPrinter *printer )
         painter->setBrushOrigin( 0, -yOffset );
         drawDocument( 0L, painter, pageRect.x(), pageRect.y(), pageRect.width(), pageRect.height() );
         kapp->processEvents();
+        painter->restore();
     }
 }
 
@@ -796,7 +797,7 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
             p.drawLine( anchor->getOrigin(), m_insRect.topLeft() );
         }
 #endif
-        p.drawRect( m_insRect );
+        p.drawRect( doc->zoomRect( m_insRect ) );
     }
     else {
 #if 0

@@ -328,7 +328,7 @@ public:
      * The same call combines both so that all the updating done behind
      * the scenes is done only once, even if both zoom and DPI must be changed.
      */
-    void setZoomAndResolution( int zoom, int dpiX, int dpiY );
+    void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews );
 
     int zoom() const { return m_zoom; }
 
