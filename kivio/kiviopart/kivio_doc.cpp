@@ -280,8 +280,8 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
   m_pMap->saveLayouts(&styleWriter); // Save layouts for pages thst don't use StandardPageLayout
   styleWriter.endElement(); // office:automatic-styles
   
-  // Save standard master page
   styleWriter.startElement("office:master-styles");
+  // Save standard master page
   styleWriter.startElement("style:master-page");
   styleWriter.addAttribute("style:name", "Standard");
   styleWriter.addAttribute("style:page-layout-name", "StandardPageLayout");
@@ -296,7 +296,7 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
     return false;
   }
 
-  manifestWriter->addManifestEntry("content.xml", "text/xml");
+  manifestWriter->addManifestEntry("styles.xml", "text/xml");
   
   if(!store->open("content.xml")) {
     return false;
