@@ -1,5 +1,5 @@
 <!-- Document Type Definition for the Karbon Markup Language
-     the file format for KArbon.
+     the file format for Karbon.
      version = 0.1  status = draft  date = 11/Mar/2002
      syntax = XML author = dirk.schoenberger@sz-online.de -->
 <!-- ============================================================= -->
@@ -7,7 +7,7 @@
 <!-- ============================================================= -->
 
 <!ELEMENT DOC (LAYER*) >
-<!ATTLIST DOC editor  CDATA "KIllustrator"
+<!ATTLIST DOC editor  CDATA "Karbon"
               mime   CDATA "application/x-karbon"
               version CDATA "0.1"
 >
