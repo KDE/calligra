@@ -9,13 +9,34 @@ frameset for instance)
 * Framesets include: text frameset, picture/clipart frameset, table frameset etc.
 
 * A frameset has a list of frames, KWFrame. A KWFrame is basically a rectangle
-(KoRect) with a bunch of attributes. The data is NOT in the frame, but in the frameset.
-The frames are just the way to visualize the contents of the frameset. Imagine a
-10 pages document, with 1 text frameset and 10 frames, one per page: the frames
-hold no data.
+(KoRect) with a bunch of attributes. 
+The frameset contains the contents, like the text or a picture.
+The frames visualize the contents of the frameset. 
+Imagine a 10 pages document, with 1 text-frameset and 10 frames, because our
+example author wants to have one frame per page.  This means that there is one 
+text, and the frames define where on the pages this text is displayed.
 
 * About text framesets: they hold a text document (KWTextDocument, which is
 a QTextDocument from the QRichText classes - more on QRT later).
+
+* About Tables; one table is a KWTableFrameset. This tableframeset contains
+all the cells as its frames. But because the cells have a different text per
+cell, we contain the cells in their own KWTextFrameset.
+
+   KWTableFrameSet
+    |           |
+    |        TextFrames
+  Cells               +----------+
+     +--+                        |
+        | ---> KWTextFrameSet    |
+        |          +-> KWFrame <-+
+        |                        |
+        | ---> KWTextFrameSet    |
+        |          +-> KWFrame <-+
+        |                        |
+        + ---> KWTextFrameSet    |
+                   +-> KWFrame <-+
+
 
 Painting
 ========
