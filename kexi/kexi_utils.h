@@ -20,6 +20,7 @@
 #ifndef KEXI_UTILS_H
 #define KEXI_UTILS_H
 
+#include <qstring.h>
 #include "kexi_global.h"
 
 //! displays information that feature "feature_name" is not availabe in the current application version
@@ -31,6 +32,19 @@
 //! like above - for use inside KExiActionProxy subclass - reuses feature name from shared action's text
 #define KEXI_UNFINISHED_SHARED_ACTION(action_name) \
 	KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString::null)
+
+namespace Kexi
+{
+	bool isIdentifier(const QString& s) {
+		uint i;
+		for (i=0; i<s.length(); i++) {
+			QChar c = s.at(i).lower();
+			if (!(c=='_' || c>='a' && c<='z' || i>0 && c>='0' && c<='9'))
+				break;
+		}
+		return i>0 && i==s.length();
+	}
+}
 
 #endif
 
