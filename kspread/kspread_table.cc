@@ -2175,6 +2175,24 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
     }
 }
 
+void KSpreadTable::refreshRemoveAreaName(const QString &_areaName)
+{
+ KSpreadCell* c = m_cells.firstCell();
+ QString tmp="'"+_areaName+"'";
+    for( ;c; c = c->nextCell() )
+    {
+        if(c->isFormular() )
+        {
+
+	  if(c->text().find(tmp)!=-1)
+	    {
+	      if ( !c->makeFormular() )
+		kdError(36002) << "ERROR: Syntax ERROR" << endl;
+	    }
+	}
+    }
+}
+
 void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
 {
     KSpreadCell* c = m_cells.firstCell();

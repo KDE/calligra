@@ -509,7 +509,7 @@ void KSpreadView::RecalcWorkBook(){
 	  tbl != 0L; tbl = m_pDoc->map()->nextTable() ){
       tbl->recalc(true);
     }
-
+    
     //    slotUpdateView( activeTable() );
 
 }
@@ -1313,7 +1313,17 @@ void KSpreadView::slotTableRemoved( KSpreadTable *_t )
   {
         //remove Area Name when table target is removed
         if((*it).table_name==m_tableName)
-                doc()->removeArea((*it).ref_name);
+	  {
+	    doc()->removeArea((*it).ref_name);
+	    //now area name is used in formula
+	    //so you must recalc tables when remove areaname
+	    KSpreadTable *tbl;
+	    
+	    for ( tbl = doc()->map()->firstTable(); tbl != 0L; tbl = doc()->map()->nextTable() )
+	      {
+		tbl->refreshRemoveAreaName((*it).ref_name);
+	      }
+	  }
   }
   m_pHorzScrollBar->setValue(activeTable()->getScrollPosX());
   m_pVertScrollBar->setValue(activeTable()->getScrollPosY());

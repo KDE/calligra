@@ -578,6 +578,10 @@ public:
      */
     void changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref,QString tabname,int NbCol=1);
 
+
+    void refreshRemoveAreaName(const QString &_areaName);
+
+
     /**
      * Update chart when you insert or remove row or column
      *

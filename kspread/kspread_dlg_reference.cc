@@ -91,20 +91,28 @@ void KSpreadreference::slotDoubleClicked(QListBoxItem *)
 
 void KSpreadreference::slotRemove()
 {
+  QString textRemove;
   if( list->currentItem()!=-1)
         {
-        m_pView->doc()->removeArea(list->text(list->currentItem()) );
-
-        list->clear();
-        QString text;
-        QValueList<Reference>::Iterator it;
-        QValueList<Reference> area=m_pView->doc()->listArea();
-        for ( it = area.begin(); it != area.end(); ++it )
-    	        {
-    	        text=(*it).ref_name;
-    	        list->insertItem(text);
-    	        }
-        }
+	  QString textRemove=list->text(list->currentItem());
+	  m_pView->doc()->removeArea(textRemove );
+	  
+	  list->clear();
+	  QString text;
+	  QValueList<Reference>::Iterator it;
+	  QValueList<Reference> area=m_pView->doc()->listArea();
+	  for ( it = area.begin(); it != area.end(); ++it )
+	    {
+	      text=(*it).ref_name;
+	      list->insertItem(text);
+	    }
+	  KSpreadTable *tbl;
+	  
+	  for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
+	    {
+	      tbl->refreshRemoveAreaName(textRemove);
+	    }
+	}
 }
 
 void KSpreadreference::slotOk()
