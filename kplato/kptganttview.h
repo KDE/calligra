@@ -94,6 +94,7 @@ private:
     void drawChildren(KDGanttViewSummaryItem *item, KPTNode &node);
     void drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node);
     void drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *node);
+    void drawSummaryTask(KDGanttViewSummaryItem *parentItem, KPTTask *task);
     void drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task);
 	void drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task);
 

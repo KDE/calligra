@@ -253,7 +253,10 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 	        drawProject(parentItem, n);
 		else if (n->type() == KPTNode::Type_Subproject)
 		    drawSubProject(parentItem, n);
-		else if (n->type() == KPTNode::Type_Task) {
+		else if (n->type() == KPTNode::Type_Summarytask) {
+            KPTTask *t = dynamic_cast<KPTTask *>(n);
+		    drawSummaryTask(parentItem, t);
+		} else if (n->type() == KPTNode::Type_Task) {
             KPTTask *t = dynamic_cast<KPTTask *>(n);
 		    drawTask(parentItem, t);
         } else if (n->type() == KPTNode::Type_Milestone) {
@@ -270,6 +273,8 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node
 {
 	KPTDateTime *time = node->getStartTime();
 	KPTDuration *dur = node->getExpectedDuration();
+    if (*dur == KPTDuration::zeroDuration)
+        dur->addSecs(1); // avoid bug in KDGannt
 	KPTGanttViewSummaryItem *item;
 	if ( parentItem) {
 	  item = new KPTGanttViewSummaryItem(parentItem, node);
@@ -293,6 +298,8 @@ void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *n
 {
 	KPTDateTime *time = node->getStartTime();
 	KPTDuration *dur = node->getExpectedDuration();
+    if (*dur == KPTDuration::zeroDuration)
+        dur->addSecs(1); // avoid bug in KDGannt
 	// display summary item
 	KPTGanttViewSummaryItem *item;
 	if ( parentItem) {
@@ -312,10 +319,37 @@ void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *n
 	delete dur;
 }
 
+void KPTGanttView::drawSummaryTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
+{
+	KPTDateTime *time = task->getStartTime();
+	KPTDuration *dur = task->getExpectedDuration();
+    if (*dur == KPTDuration::zeroDuration)
+        dur->addSecs(1); // avoid bug in KDGannt
+	// display summary item
+	KPTGanttViewSummaryItem *item;
+	if ( parentItem) {
+		item = new KPTGanttViewSummaryItem(parentItem, task);
+	}
+	else {
+		// we are on the top level
+		item = new KPTGanttViewSummaryItem(m_gantt, task);
+	}
+	item->setStartTime(*time);
+	item->setEndTime(*time + *dur);
+	item->setOpen(true);
+
+	drawChildren(item, *task);
+
+	delete time;
+	delete dur;
+}
+
 void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
 	KPTDateTime *time = task->getStartTime();
 	KPTDuration *dur = task->getExpectedDuration();
+    if (*dur == KPTDuration::zeroDuration)
+        dur->addSecs(1); // avoid bug in KDGannt
 	// display task item
 	KPTGanttViewTaskItem *item;
 	if ( parentItem ) {

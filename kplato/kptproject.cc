@@ -69,7 +69,7 @@ KPTProject::~KPTProject() {
 int KPTProject::type() const { return KPTNode::Type_Project; }
 
 void KPTProject::calculate() {
-    //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.dateTime().toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.toString()<<endl;
     // clear all resource appointments
     QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
