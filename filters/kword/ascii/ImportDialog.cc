@@ -32,7 +32,7 @@
 #include <ImportDialog.h>
 
 AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
-    : KDialogBase(parent, 0, true, QString::null, Ok|Cancel, No, true),
+    : KDialogBase(parent, 0, true,  i18n("KWord's Plain Text Import Filter"), Ok|Cancel, No, true),
       m_dialog(new ImportDialogUI(this))
 {
 
