@@ -70,7 +70,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   depth=new KDoubleNumInput(0, gb);
   depth->resize(100,depth->sizeHint().height());
   grid1->addWidget(depth,3,1);
-  depth->setRange(0,40, 0.1);
+  depth->setRange(0, 2.0, 0.1);
 
   gb->setAlignment(Qt::AlignLeft);
   grid1->addColSpacing(0,depth->width());

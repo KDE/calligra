@@ -1,4 +1,10 @@
-2005-02-24    <inge@lysator.liu.se>
+2005-02-25  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 99998:
+	* kchartParameter3dConfigPage.cc (KChartParameter3dConfigPage):
+	Make the depth parameter go from 0 to 2.0 instead of 0 to 40.
+
+2005-02-24  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix bug 99390:
 	* kchartBackgroundPixmapConfigPage.{h,cc}: Remove the big unused

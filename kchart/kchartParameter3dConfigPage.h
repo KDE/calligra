@@ -46,7 +46,8 @@ private:
     KChartParams* _params;
     KIntNumInput* angle3d;
     KDoubleNumInput* depth;
-    QCheckBox* bar3d, *drawShadowColor;
+    QCheckBox* bar3d;
+    QCheckBox* drawShadowColor;
 };
 
 }  //KChart namespace
