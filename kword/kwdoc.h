@@ -216,8 +216,8 @@ public:
     void setGridX(int _gridx) {m_gridX=_gridx;}
     void setGridY(int _gridy) {m_gridY=_gridy;}
 
-    int getApplyStyleTemplate() { return applyStyleTemplate; }
-    void setApplyStyleTemplate( int _f ) { applyStyleTemplate = _f; }
+    int applyStyleChangeMask() { return styleMask; }
+    void setApplyStyleChangeMask( int _f ) { styleMask = _f; }
 
     void applyStyleChange( const QString & changedStyle );
     void updateAllStyleLists();
@@ -420,7 +420,7 @@ private:
     ProcessingType m_processingType;
     int m_gridX, m_gridY;
 
-    int applyStyleTemplate;
+    int styleMask;
 
     bool m_headerVisible, m_footerVisible;
 

@@ -178,7 +178,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     setEmpty();
     setModified(false);
 
-    applyStyleTemplate = U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
+    styleMask = U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
                          U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
     m_headerVisible = false;
     m_footerVisible = false;

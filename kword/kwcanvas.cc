@@ -672,6 +672,8 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                                    frame->width() + 2, frame->height() + 2 );
                     // Repaing only the changed rects (oldRect U newRect)
                     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
+                    // Move resize handles to new position
+                    frame->updateResizeHandles();
                 }
             }
         }

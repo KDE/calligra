@@ -191,27 +191,27 @@ void KWStyleManager::setupTab2()
     grid2->setRowStretch( 8, 1 );
 
     cSmart->setChecked( FALSE );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_FONT_FAMILY_SAME_SIZE )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_FONT_FAMILY_SAME_SIZE )
         cFont->setCurrentItem( 1 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_FONT_FAMILY_ALL_SIZE )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_FONT_FAMILY_ALL_SIZE )
         cFont->setCurrentItem( 2 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_FONT_ALL_SAME_SIZE )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_FONT_ALL_SAME_SIZE )
         cFont->setCurrentItem( 3 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_FONT_ALL_ALL_SIZE )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_FONT_ALL_ALL_SIZE )
         cFont->setCurrentItem( 4 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_COLOR )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_COLOR )
         cColor->setCurrentItem( 1 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_INDENT )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_INDENT )
         cIndent->setCurrentItem( 1 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_BORDER )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_BORDER )
         cBorder->setCurrentItem( 1 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_ALIGN )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_ALIGN )
         cAlign->setCurrentItem( 1 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_NUMBERING )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_NUMBERING )
         cNumbering->setCurrentItem( 1 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_TABS )
+    if ( doc->applyStyleChangeMask() & KWDocument::U_TABS )
         cTabs->setCurrentItem( 1 );
-    if ( doc->getApplyStyleTemplate() & KWDocument::U_SMART ) {
+    if ( doc->applyStyleChangeMask() & KWDocument::U_SMART ) {
         cSmart->setChecked( TRUE );
         cFont->setEnabled( FALSE );
         cColor->setEnabled( FALSE );
@@ -344,7 +344,7 @@ bool KWStyleManager::apply()
     if ( cSmart->isChecked() )
         f = f | KWDocument::U_SMART;
 
-    doc->setApplyStyleTemplate( f );
+    doc->setApplyStyleChangeMask( f );
     return true;
 }
 
