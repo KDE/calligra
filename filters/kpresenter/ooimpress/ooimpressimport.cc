@@ -273,6 +273,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement objectElement = doc.createElement( "OBJECTS" );
     QDomElement pictureElement = doc.createElement( "PICTURES" );
     QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
+    QDomElement pageNoteElement = doc.createElement( "PAGENOTES" );
 
     // parse all pages
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
@@ -375,6 +376,24 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 append2DGeometry( doc, e, o, offset );
                 appendImage( doc, e, pictureElement, o );
             }
+            else if ( name == "presentation:notes" ) // notes
+            {
+                QDomNode textBox = o.namedItem( "draw:text-box" );
+                if ( !textBox.isNull() )
+                {
+                    QString note;
+                    for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
+                    {
+                        // We don't care about styles as they are not supported in kpresenter.
+                        // Only add a linebreak for every child.
+                        QDomElement t = text.toElement();
+                        note += t.text() + "\n";
+                    }
+                    QDomElement notesElement = doc.createElement( "Note" );
+                    notesElement.setAttribute( "note", note );
+                    pageNoteElement.appendChild( notesElement );
+                }
+            }
             else
             {
                 kdDebug() << "Unsupported object '" << name << "'" << endl;
@@ -387,6 +406,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     docElement.appendChild( paperElement );
     docElement.appendChild( pageTitleElement );
+    docElement.appendChild( pageNoteElement );
     docElement.appendChild( objectElement );
     docElement.appendChild( pictureElement );
     doccontent.appendChild( doc );
@@ -1049,33 +1069,25 @@ void OoImpressImport::fillStyleStack( const QDomElement& object )
 {
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttribute( "presentation:style-name" ) )
-    {
-        QDomElement *style = m_styles[object.attribute( "presentation:style-name" )];
-        if ( style->hasAttribute( "style:parent-style-name" ) )
-            m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
-        m_styleStack.push( style );
-    }
+        addStyles( m_styles[object.attribute( "presentation:style-name" )] );
+
     if ( object.hasAttribute( "draw:style-name" ) )
-    {
-        QDomElement *style = m_styles[object.attribute( "draw:style-name" )];
-        if ( style->hasAttribute( "style:parent-style-name" ) )
-            m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
-        m_styleStack.push( style );
-    }
+        addStyles( m_styles[object.attribute( "draw:style-name" )] );
+
     if ( object.hasAttribute( "draw:text-style-name" ) )
-    {
-        QDomElement *style = m_styles[object.attribute( "draw:text-style-name" )];
-        if ( style->hasAttribute( "style:parent-style-name" ) )
-            m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
-        m_styleStack.push( style );
-    }
+        addStyles( m_styles[object.attribute( "draw:text-style-name" )] );
+
     if ( object.hasAttribute( "text:style-name" ) )
-    {
-        QDomElement *style = m_styles[object.attribute( "text:style-name" )];
-        if ( style->hasAttribute( "style:parent-style-name" ) )
-            m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
-        m_styleStack.push( style );
-    }
+        addStyles( m_styles[object.attribute( "text:style-name" )] );
+}
+
+void OoImpressImport::addStyles( const QDomElement* style )
+{
+    // this function is necessary as parent styles can have parents themself
+    if ( style->hasAttribute( "style:parent-style-name" ) )
+        addStyles( m_styles[style->attribute( "style:parent-style-name" )] );
+
+    m_styleStack.push( style );
 }
 
 void OoImpressImport::storeObjectStyles( const QDomElement& object )
