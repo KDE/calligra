@@ -36,7 +36,7 @@ static const KCmdLineOptions options[]=
 
 extern "C"
 {
-    void* init_libkformula();
+    void* init_libkformulapart();
 }
 
 int main( int argc, char **argv )
@@ -46,7 +46,7 @@ int main( int argc, char **argv )
 
     KoApplication app;
 
-    init_libkformula();
+    init_libkformulapart();
 
     app.start();
 

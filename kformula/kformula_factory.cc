@@ -14,13 +14,11 @@
 #include <qstringlist.h>
 
 
-
-
 KInstance* KFormulaFactory::s_global = 0;
 
 extern "C"
 {
-    void* init_libkformula()
+    void* init_libkformulapart()
     {
 	return new KFormulaFactory;
     }

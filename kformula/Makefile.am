@@ -1,18 +1,18 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 KDE_CXXFLAGS = $(USE_RTTI)
 kformula_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kformula_LDADD = libkformula.la
+kformula_LDADD = libkformulapart.la
 
-libkformula_la_LDFLAGS = -module -avoid-version
+libkformulapart_la_LDFLAGS = -module -avoid-version
 
-libkformula_la_LIBADD = ../lib/kofficeui/libkofficeui.la
+libkformulapart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 
 ####### Files
 
 bin_PROGRAMS = kformula
-lib_LTLIBRARIES = libkformula.la
+lib_LTLIBRARIES = libkformulapart.la
 
-libkformula_la_SOURCES = kformula_shell.cc kformula_doc.cc \
+libkformulapart_la_SOURCES = kformula_shell.cc kformula_doc.cc \
 	kformula_view.cc kformula_factory.cc BasicElement.cc \
 	RootElement.cc TextElement.cc BracketElement.cc FractionElement.cc\
 	MatrixElement.cc PrefixedElement.cc formula_container.cc matrixwidget.cc
@@ -26,7 +26,7 @@ noinst_HEADERS =  kformula_shell.h kformula_doc.h \
 		  matrixwidget.h formula_container.h
 
 
-libkformula_la_METASOURCES = kformula_shell.moc kformula_doc.moc kformula_view.moc kformula_factory.moc \
+libkformulapart_la_METASOURCES = kformula_shell.moc kformula_doc.moc kformula_view.moc kformula_factory.moc \
 			     matrixwidget.moc
 #			     formula_container.moc
 
@@ -44,5 +44,3 @@ SUBDIRS =  pics
 
 messages:
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po $(podir)/kformula.pot
-
-
