@@ -75,6 +75,11 @@ KoRect &KoRect::operator|=(const KoRect &rhs) {
 
     if(rhs.isEmpty())
         return *this;
+    if(isEmpty())
+    {
+        *this = rhs;
+        return *this;
+    }
     if(m_tl.x() > rhs.left())
         m_tl.setX(rhs.left());
     if(m_tl.y() > rhs.top())
@@ -169,4 +174,9 @@ bool operator==(const KoRect &lhs, const KoRect &rhs) {
 bool operator!=(const KoRect &lhs, const KoRect &rhs) {
     return ( lhs.topLeft()!=rhs.topLeft() ||
              lhs.bottomRight()!=rhs.bottomRight() );
+}
+
+QRect KoRect::toQRect() const
+{
+    return QRect( qRound( left() ), qRound( top() ), qRound( right() ), qRound( bottom() ) );
 }

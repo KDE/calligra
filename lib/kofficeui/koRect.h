@@ -21,6 +21,8 @@
 #define koRect_h
 
 #include "koPoint.h"
+#include <qrect.h>
+
 /**
  * A rect whose coordinates are floating-point values ( "double"s ).
  * The API isn't documented, it's a perfect mirror of QRect.
@@ -29,7 +31,7 @@ class KoRect {
 
 public:
     KoRect()
-        : m_tl(), m_br() {}
+        : m_tl(), m_br(-1, -1) {}
     KoRect(const KoPoint &topleft, const KoPoint &bottomright)
         : m_tl(topleft), m_br(bottomright) {}
     KoRect(const double &left, const double &top, const double &width, const double &height)
@@ -92,6 +94,7 @@ public:
     KoRect intersect(const KoRect &r) const;
     bool intersects(const KoRect &r) const;
 
+    QRect toQRect() const;
 private:
     KoPoint m_tl, m_br;
 };

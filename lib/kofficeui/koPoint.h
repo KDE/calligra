@@ -31,7 +31,6 @@ public:
     KoPoint(const double &x, const double &y) : m_x(x), m_y(y) {}
     ~KoPoint() {}
 
-    KoPoint &operator=(const KoPoint &rhs) { m_x=rhs.x(); m_y=rhs.y(); return *this; }
     bool operator==(const KoPoint &rhs) const { return m_x==rhs.x() && m_y==rhs.y(); }
     bool operator!=(const KoPoint &rhs) const { return m_x!=rhs.x() || m_y!=rhs.y(); }
 
@@ -43,7 +42,9 @@ public:
     double &rx() { return m_x; }
     double &ry() { return m_y; }
 
-    // many missing operators
+    KoPoint &operator=(const KoPoint &rhs) { m_x = rhs.x(); m_y = rhs.y(); return *this; }
+    KoPoint &operator+( const KoPoint &rhs ) { m_x += rhs.x(); m_y += rhs.y(); return *this; }
+    KoPoint &operator-( const KoPoint &rhs ) { m_x -= rhs.x(); m_y -= rhs.y(); return *this; }
 
     // Not in QPoint:
     void setCoords(const double &x, const double &y) { m_x = x; m_y = y; }
