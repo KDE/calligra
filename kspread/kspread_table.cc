@@ -5994,10 +5994,10 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 //      << "  offsety: " << _childOffset.y() << endl;
 
     //Don't paint on the page borders
-    QRegion clipRegion( MM_TO_POINT ( leftBorder() ),
-                        MM_TO_POINT ( topBorder() ),
-                        _childOffset.x() + view.width(),
-                        _childOffset.y() + view.height() );
+    QRegion clipRegion( static_cast<int>MM_TO_POINT ( leftBorder() ),
+                        static_cast<int>MM_TO_POINT ( topBorder() ),
+                        static_cast<int>(_childOffset.x() + view.width()),
+                        static_cast<int>(_childOffset.y() + view.height()) );
     _painter.setClipRegion( clipRegion );
 
     //
