@@ -104,8 +104,8 @@ int rc;
     delete pp;
     if (dlgrc == QDialog::Rejected) return false;
 
-    BlockCipher *cipher = new BlowFish;
-    BlockCipher *cbc = new CipherBlockChain(cipher);
+    BlowFish cipher;
+    CipherBlockChain cbc(&cipher);
     char thekey[512];
 
     // FIXME: make a better hash here.
@@ -113,7 +113,7 @@ int rc;
     thekey[56] = 0;
  
     // propagates to the cipher
-    if (!cbc->setKey((void *)thekey, strlen(thekey)*8)) {
+    if (!cbc.setKey((void *)thekey, strlen(thekey)*8)) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
        KMessageBox::error(NULL, 
                   i18n("There was an internal error preparing the passphrase."),
@@ -122,7 +122,7 @@ int rc;
        return false;
     }
  
-    if (cbc->blockSize() > 0) blocksize = cbc->blockSize();
+    if (cbc.blockSize() > 0) blocksize = cbc.blockSize();
 
     inf.open(IO_ReadOnly);
     outf.open(IO_WriteOnly);
@@ -177,7 +177,7 @@ int rc;
      */
     rc = inf.readBlock(p, blocksize);
     READ_ERROR_CHECK(blocksize);
-    rc = cbc->decrypt(p, blocksize);
+    rc = cbc.decrypt(p, blocksize);
     CRYPT_ERROR_CHECK();
 
     unsigned int previous_rand = ((unsigned char)p[0] + ((unsigned char)p[1] << 8)) % 5120;
@@ -192,7 +192,7 @@ int rc;
     while (previous_rand > 0) {
       rc = inf.readBlock(p, blocksize); 
       READ_ERROR_CHECK(blocksize);
-      rc = cbc->decrypt(p, blocksize);
+      rc = cbc.decrypt(p, blocksize);
       CRYPT_ERROR_CHECK();
       if (previous_rand >= (unsigned int)blocksize) {
          previous_rand -= blocksize;
@@ -209,7 +209,7 @@ int rc;
        if (remaining == 0) {
           rc = inf.readBlock(p, blocksize);
           READ_ERROR_CHECK(blocksize);
-          rc = cbc->decrypt(p, blocksize);
+          rc = cbc.decrypt(p, blocksize);
           CRYPT_ERROR_CHECK();
           remaining = blocksize;
        }
@@ -237,7 +237,7 @@ int rc;
     while (fsize > 0) {
       rc = inf.readBlock(p, blocksize);
       READ_ERROR_CHECK(blocksize);
-      rc = cbc->decrypt(p, blocksize);
+      rc = cbc.decrypt(p, blocksize);
       CRYPT_ERROR_CHECK();
 
       if (fsize >= (unsigned int)blocksize) {

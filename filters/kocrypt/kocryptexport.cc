@@ -116,8 +116,9 @@ int rc;
     delete pp;
     if (dlgrc == QDialog::Rejected) return false;
 
-    BlockCipher *cipher = new BlowFish;
-    BlockCipher *cbc = new CipherBlockChain(cipher);
+    BlowFish cipher;
+    CipherBlockChain cbc(&cipher);
+
     char thekey[512];
 
     // FIXME: obtain the password and ensure that we can use it.
@@ -125,7 +126,7 @@ int rc;
     thekey[56] = 0;
 
     // this propagates to the cipher
-    if (!cbc->setKey((void *)thekey, strlen(thekey)*8)) {
+    if (!cbc.setKey((void *)thekey, strlen(thekey)*8)) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
        KMessageBox::error(NULL,
                   i18n("There was an internal error preparing the passphrase."),
@@ -134,7 +135,7 @@ int rc;
        return false;
     }
 
-    if (cbc->blockSize() > 0) blocksize = cbc->blockSize();
+    if (cbc.blockSize() > 0) blocksize = cbc.blockSize();
 
     outf.open(IO_WriteOnly);
     inf.open(IO_ReadOnly);
@@ -224,7 +225,7 @@ int rc;
        // assert: cursize % blocksize == 0;
 
        for (int i = 0; i < cursize/blocksize; i++) {
-          rc = cbc->encrypt(&(p[i*blocksize]), blocksize);
+          rc = cbc.encrypt(&(p[i*blocksize]), blocksize);
           CRYPT_ERROR_CHECK();
           rc = outf.writeBlock(&(p[i*blocksize]), blocksize);
           WRITE_ERROR_CHECK(blocksize);
