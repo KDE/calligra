@@ -2344,7 +2344,7 @@ bool Connection::deleteAllRows(QuerySchema &query)
 	KexiDBDbg << " -- SQL == " << m_sql << endl;
 
 	if (!executeSQL(m_sql)) {
-		setError(ERR_DELETE_SERVER_ERROR, i18n("Rows deleting on the server failed."));
+		setError(ERR_DELETE_SERVER_ERROR, i18n("Row deletion on the server failed."));
 		return false;
 	}
 	return true;
