@@ -953,13 +953,12 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
             return false;
         }
         b = loadXML( newdoc );
-        ignoreSticky = TRUE;
     }
     else
-    {
         b = loadXML( doc );
-        ignoreSticky = TRUE;
-    }
+
+    ignoreSticky = TRUE;
+
     if(_clean)
     {
         setModified(false);
