@@ -444,7 +444,7 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
 
     QPoint cPoint;
     QRect r = parag->rect();
-    kdDebug(32002) << "KWTextFrameSet::eraseAfter parag=" << parag->paragId() << /*" bottom(iPoint)=" << r.bottom()*/ << endl;
+    kdDebug(32002) << "KWTextFrameSet::eraseAfter parag=" << parag->paragId() << /*" bottom(iPoint)=" << r.bottom()*/ endl;
     KWFrame * frame = internalToContents( r.bottomLeft(), cPoint );
     int frameBottom = kWordDocument()->zoomItY( frame->bottom() );
     ASSERT( cPoint.y() <= frameBottom );
