@@ -28,6 +28,7 @@
 #include <qpicture.h>
 
 class KoFrame;
+class KoViewIf;
 
 class KoFrameResize : public QWidget
 {
@@ -99,6 +100,12 @@ public:
    *         You can force this by a call to @ref QWidget::update.
    */
   virtual bool attachView( KOffice::View_ptr _view );
+  /**
+   * @return true if the function was successfull.
+   *
+   * @see OPFrame::attachLocal
+   */
+  virtual bool attachLocalView( KoViewIf* _view );
   virtual void attach( QPicture * );
   virtual void detach();
   
@@ -144,7 +151,8 @@ protected:
   
   KOffice::View_var m_vView;
   OpenParts::Window m_wView;
-
+  KoViewIf *m_pView;
+  
   KoFrameResize *m_pResizeWin1;
   KoFrameResize *m_pResizeWin2;
   KoFrameResize *m_pResizeWin3;
@@ -163,5 +171,3 @@ protected:
 };
 
 #endif
-
-

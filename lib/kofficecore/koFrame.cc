@@ -18,6 +18,7 @@
 */     
 
 #include "koFrame.h"
+#include "koView.h"
 
 #include <qpainter.h>
 #include <qbrush.h>
@@ -29,6 +30,7 @@ KoFrame::KoFrame( QWidget *_parent, const char *_name ) :
   OPFrame( _parent, _name ), KOffice::Frame_skel()
 {
   m_pPicture = 0L;
+  m_pView = 0;
   
   m_pResizeWin1 = 0L;
   m_pResizeWin2 = 0L;
@@ -65,12 +67,32 @@ bool KoFrame::attachView( KOffice::View_ptr _view )
   
   m_vView = KOffice::View::_duplicate( _view );
   m_wView = m_vView->window();  
-
+  m_pView = 0;
+  
   Window win = (Window)m_wView;
   if ( m_bShowBorders )
     XMoveResizeWindow( qt_xdisplay(), win, 5, 5, width() - 10, height() - 10 );
   else
     XMoveResizeWindow( qt_xdisplay(), win, 0, 0, width(), height() );
+  
+  m_vView->connect( "stateChanged", this, "viewChangedState" );
+    
+  return true;
+}
+
+bool KoFrame::attachLocalView( KoViewIf* _view )
+{
+  if ( !OPFrame::attachLocal( _view ) )
+    return false;
+  
+  m_vView = KOffice::View::_duplicate( _view );
+  m_wView = m_vView->window();  
+  m_pView = _view;
+  
+  if ( m_bShowBorders )
+    _view->widget()->setGeometry( 5, 5, width() - 10, height() - 10 );
+  else
+    _view->widget()->setGeometry( 0, 0, width(), height() );
   
   m_vView->connect( "stateChanged", this, "viewChangedState" );
     
@@ -86,6 +108,7 @@ void KoFrame::detach()
   m_vView->disconnectObject( this );
   
   m_vView = 0L;
+  m_pView = 0;
   OPFrame::detach();
 }
 
@@ -295,11 +318,21 @@ void KoFrame::resizeEvent( QResizeEvent *_ev )
 {
   if ( !CORBA::is_nil( m_vView ) )
   {
-    Window win = (Window)m_wView;
-    if ( m_bShowBorders )
-      XMoveResizeWindow( qt_xdisplay(), win, 5, 5, width() - 10, height() - 10 );
+    if ( m_pView )
+    {
+      if ( m_bShowBorders )
+	m_pView->widget()->setGeometry( 5, 5, width() - 10, height() - 10 );
+      else
+	m_pView->widget()->setGeometry( 0, 0, width(), height() );
+    }
     else
-      XMoveResizeWindow( qt_xdisplay(), win, 0, 0, width(), height() );
+    {
+      Window win = (Window)m_wView;
+      if ( m_bShowBorders )
+	XMoveResizeWindow( qt_xdisplay(), win, 5, 5, width() - 10, height() - 10 );
+      else
+	XMoveResizeWindow( qt_xdisplay(), win, 0, 0, width(), height() );
+    }
   }
   else if ( !CORBA::is_nil( m_rPart ) )
   {

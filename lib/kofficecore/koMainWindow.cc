@@ -80,7 +80,7 @@ KoMainWindow::~KoMainWindow()
 
 void KoMainWindow::cleanUp()
 {
-  setRootPart( 0 );
+  setRootPart( (OpenParts::Id)0 );
 
   interface()->cleanUp();
 }
@@ -121,7 +121,17 @@ void KoMainWindow::setRootPart( unsigned long _part_id )
   }
 }
 
-void KoMainWindow::slotActivePartChanged( unsigned long _new_part_id, unsigned long )
+void KoMainWindow::setRootPart( KoViewIf* _view )
+{
+  if ( !m_pFrame )
+    return;
+  
+  m_pFrame->detach();
+  
+  m_pFrame->attachLocalView( _view );
+}
+
+void KoMainWindow::slotActivePartChanged( unsigned long _new_part_id, unsigned long _old_part_id )
 {
   menuBarManager()->clear();
   toolBarManager()->clear();

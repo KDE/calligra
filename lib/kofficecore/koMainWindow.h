@@ -46,7 +46,8 @@ public:
   virtual void createHelpMenu( OPMenuBar* );
 
   virtual void setRootPart( unsigned long _part_id );
-
+  virtual void setRootPart( KoViewIf* _view );
+  
   virtual void cleanUp();
 
   virtual KOffice::Document_ptr document() = 0L;
