@@ -21,7 +21,7 @@
 
 VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_part( part )
 {
-	setCaption(i18n( "Solid Fill" ));
+	setCaption(i18n( "Uniform Color" ));
 	setCancelButton();
 	QGridLayout *mainLayout;
 
