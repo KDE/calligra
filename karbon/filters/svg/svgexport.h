@@ -28,8 +28,9 @@ private:
 	void exportPath( QTextStream& s, const QDomElement& node );
 	void exportSegments( QTextStream& s, const QDomElement& node );
 	void exportStroke( QTextStream& s, const QDomElement& node );
-	void exportFill( QTextStream& s, const QDomElement& node);
-	void getHexColor( QTextStream& s, const QDomElement& node);
+	void exportFill( QTextStream& s, const QDomElement& node );
+	void getHexColor( QTextStream& s, const QDomElement& node );
+	void exportText( QTextStream& s, const QDomElement& node );
 	int fill_rule;
 };
 

@@ -15,6 +15,8 @@
 
 #include <kdebug.h>
 
+#include <stdio.h>
+
 #include "svgexport.h"
 
 
@@ -70,6 +72,15 @@ SvgExport::convert( const QCString& from, const QCString& to )
 	QTextStream s( &fileOut );
 
 
+	s <<
+		"<?xml version=\"1.0\" standalone=\"no\"?>\n" <<
+		"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" <<
+	endl;
+	
+	s <<
+		"<svg xmlns=\"http://www.w3.org/2000/svg\">" <<
+	endl;
+
 	// parse dom-tree:
 	QDomNodeList list = domIn.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
@@ -82,6 +93,10 @@ SvgExport::convert( const QCString& from, const QCString& to )
 				exportDocument( s, e );
 		}
 	}
+	
+	s <<
+		"</svg>" <<
+	endl;
 
 	fileOut.close();
 	return KoFilter::OK;
@@ -115,6 +130,8 @@ SvgExport::exportLayer( QTextStream& s, const QDomElement& node )
 
 			if( e.tagName() == "PATH" )
 				exportPath( s, e );
+			if( e.tagName() == "TEXT" )
+				exportText( s, e );
 		}
 	}
 }
@@ -123,9 +140,9 @@ void
 SvgExport::exportPath( QTextStream& s, const QDomElement& node )
 {
 
-	s << "<path" << endl;
+	s << "<path";
 	
-	fill_rule = node.attribute("fillRule").toInt();
+	fill_rule = node.attribute( "fillRule" ).toInt();
 
 	QDomNodeList list = node.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
@@ -143,8 +160,7 @@ SvgExport::exportPath( QTextStream& s, const QDomElement& node )
 		}
 	}
 
-	if( node.attribute( "closed" ) != 0 )
-		s << " />" << endl;
+	s << " />" << endl;
 
 }
 
@@ -152,7 +168,7 @@ void
 SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 {
 
-	s << " d=\"" << endl;
+	s << " d=\"";
 
 	QDomNodeList list = node.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
@@ -160,50 +176,50 @@ SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 		if( list.item( i ).isElement() )
 		{
 			QDomElement e = list.item( i ).toElement();
+
+			// TODO: CURVE1 CURVE2
 
 			if( e.tagName() == "CURVE" )
 			{
 				s <<	
-					"C " <<
-					e.attribute( "x1" ) << " " <<
+					"C" <<
+					e.attribute( "x1" ) << "," <<
 					e.attribute( "y1" ) << " " <<
-					e.attribute( "x2" ) << " " <<
+					e.attribute( "x2" ) << "," <<
 					e.attribute( "y2" ) << " " <<
-					e.attribute( "x3" ) << " " <<
-					e.attribute( "y3" ) << " " << 
-				endl;
+					e.attribute( "x3" ) << "," <<
+					e.attribute( "y3" ) << " ";
 			}
 			else if( e.tagName() == "LINE" )
 			{
 				s <<	
-					"L " <<
+					"L" <<
 					e.attribute( "x" ) << " " <<
-					e.attribute( "y" ) << " " << 
-				endl;
+					e.attribute( "y" ) << " ";
 			}
 			else if( e.tagName() == "MOVE" )
 			{
 				s <<	
-					"M " <<
+					"M" <<
 					e.attribute( "x" ) << " " <<
-					e.attribute( "y" ) << " " << 
-				endl;
+					e.attribute( "y" ) << " ";
 			}
 		}
 	}
 	
-	s << "\"" << endl;
+	if( node.attribute( "isClosed" ).toInt() == 1);
+		s << "Z";
+
+	s << "\"";
 }
 
 void
-SvgExport::exportFill( QTextStream& s, const QDomElement& node)
+SvgExport::exportFill( QTextStream& s, const QDomElement& node )
 {
 
-	if(fill_rule == 1)
+	if( fill_rule == 1 )
 	{
-		s <<
-			" fill-rule=\"evenodd\"" <<
-		endl;
+		s << " fill-rule=\"evenodd\"";
 	}
 
 	QDomNodeList list = node.childNodes();
@@ -216,18 +232,16 @@ SvgExport::exportFill( QTextStream& s, const QDomElement& node)
 			if( e.tagName() == "COLOR" )
 			{
 
-				if(!e.attribute("colorSpace").isNull()) // make sure getHexColor returns something
-				{					// shouldn't be needed really
-					s << " fill=\"" << endl;
-					getHexColor(s, e);
-					s << "\"" << endl;
+				if( !e.attribute( "colorSpace" ).isNull() )	// make sure getHexColor returns something
+				{						// shouldn't be needed really
+					s << " fill=\"";
+					getHexColor( s, e );
+					s << "\"";
 				}
 
-				if(!e.attribute("opacity").isNull())
+				if( !e.attribute( "opacity" ).isNull() )
 				{
-					s <<
-						" fill-opacity=\"" << e.attribute("opacity") << "\"" <<
-					endl;
+					s << " fill-opacity=\"" << e.attribute( "opacity" ) << "\"";
 				}
 			}
 		}
@@ -236,36 +250,51 @@ SvgExport::exportFill( QTextStream& s, const QDomElement& node)
 }
 
 void
-SvgExport::exportStroke( QTextStream& s, const QDomElement& node)
+SvgExport::exportStroke( QTextStream& s, const QDomElement& node )
 {
 
-	if(!node.attribute("lineWidth").isNull())
+	// TODO: DASHPATTERN
+
+	if( !node.attribute( "lineWidth" ).isNull() )
 	{
-		s <<
-			" stroke-width=\"" << node.attribute("lineWidth") << "\"" <<
-		endl;
+		s << " stroke-width=\"" << node.attribute( "lineWidth" ) << "\"";
 	}
 
-// 	if(!node.attribute("lineCap").isNull())
-// 	{
-// 		s <<
-// 			" stroke-linecap=\"" << node.attribute("lineCap") << "\"" <<
-// 		endl;
-// 	}
-
-// 	if(!node.attribute("lineJoin").isNull())
-// 	{
-// 		s <<
-// 			" stroke-linejoin=\"" << node.attribute("lineJoin") << "\"" <<
-// 		endl;
-//
-// 	}
-
-	if(!node.attribute("miterLimit").isNull())
+	if( !node.attribute( "lineCap" ).isNull() )
 	{
-		s <<
-			" stroke-miterlimit=\"" << node.attribute("miterLimit") << "\"" <<
-		endl;
+		if( node.attribute( "lineCap" ).toInt() == 0 )
+		{
+			s << " stroke-linecap=\"butt\"";
+		}
+		else if( node.attribute( "lineCap" ).toInt() == 1 )
+		{
+			s << " stroke-linecap=\"round\"";
+		}
+		else if( node.attribute( "lineCap" ).toInt() == 2 )
+		{
+			s << " stroke-linecap=\"square\"";
+		}
+	}
+
+	if( !node.attribute( "lineJoin" ).isNull() )
+	{
+		if( node.attribute( "lineJoin" ).toInt() == 0 )
+		{
+			s << " stroke-linejoin=\"miter\"";
+		}
+		else if( node.attribute( "lineJoin" ).toInt() == 1 )
+		{
+			s << " stroke-linejoin=\"round\"";
+		}
+		else if( node.attribute( "lineJoin" ).toInt() == 2 )
+		{
+			s << " stroke-linejoin=\"bevel\"";
+		}
+	}
+
+	if( !node.attribute( "miterLimit" ).isNull() )
+	{
+		s << " stroke-miterlimit=\"" << node.attribute( "miterLimit" ) << "\"";
 	}
 
 	QDomNodeList list = node.childNodes();
@@ -277,18 +306,16 @@ SvgExport::exportStroke( QTextStream& s, const QDomElement& node)
 
 			if( e.tagName() == "COLOR" )
 			{
-				if(!e.attribute("colorSpace").isNull()) // make sure getHexColor returns something
-				{					// shouldn't be needed really
-					s << " stroke=\"" << endl;
-					getHexColor(s, e);
-					s << "\"" << endl;
+				if( !e.attribute( "colorSpace" ).isNull() )	// make sure getHexColor returns something
+				{						// shouldn't be needed really
+					s << " stroke=\"";
+					getHexColor( s, e );
+					s << "\"";
 				}
 
-				if(!e.attribute("opacity").isNull())
+				if( !e.attribute( "opacity" ).isNull() )
 				{
-					s <<
-						" stroke-opacity=\"" << e.attribute("opacity") << "\"" <<
-					endl;
+					s << " stroke-opacity=\"" << e.attribute( "opacity" ) << "\"";
 				}
 			}
 		}
@@ -297,34 +324,75 @@ SvgExport::exportStroke( QTextStream& s, const QDomElement& node)
 }
 
 void
-SvgExport::getHexColor( QTextStream& s, const QDomElement& node)
+SvgExport::getHexColor( QTextStream& s, const QDomElement& node )
 {
 
+	QString Output;
 
-	if(node.attribute("colorSpace").toInt() == 0) // rgb
+	if( node.attribute( "colorSpace" ).toInt() == 0 ) // rgb
 	{
-		s << printf( "#%02x%02x%02x", int(node.attribute("v1").toFloat()*255), int(node.attribute("v2").toFloat()*255), int(node.attribute("v3").toFloat()*255) ) << endl;
+		Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v1" ).toFloat() * 255 ), int( node.attribute( "v2" ).toFloat() * 255 ), int( node.attribute( "v3" ).toFloat() * 255 ) );
 	}
-	else if(node.attribute("colorSpace").toInt() == 1) // cmyk
+	else if( node.attribute( "colorSpace" ).toInt() == 1 ) // cmyk
 	{
-		s << printf( "#%02x%02x%02x", int((1 - node.attribute("v1").toFloat() - node.attribute("v4").toFloat())*255), int((1 - node.attribute("v2").toFloat() - node.attribute("v4").toFloat())*255), int((1 - node.attribute("v3").toFloat() - node.attribute("v4").toFloat())*255) ) << endl;
+		Output.sprintf( "#%02x%02x%02x", int( ( 1 - node.attribute( "v1" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ), int( ( 1 - node.attribute( "v2" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ), int( ( 1 - node.attribute( "v3" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ) );
 	}
-	else if(node.attribute("colorSpace").toInt() == 2) // hsb
+	else if( node.attribute( "colorSpace" ).toInt() == 2 ) // hsb
 	{
 		// maybe do this manually - or could it stay like this?
 		QColor hsvColor;
 		int rComponent;
 		int gComponent;
 		int bComponent;
-		hsvColor.setHsv(int(node.attribute("v1").toFloat()*359), int(node.attribute("v2").toFloat()*255), int(node.attribute("v3").toFloat()*255));
+		hsvColor.setHsv( int( node.attribute( "v1" ).toFloat() * 359 ), int( node.attribute( "v2" ).toFloat() * 255 ), int( node.attribute( "v3" ).toFloat() * 255 ) );
 		hsvColor.rgb(&rComponent, &gComponent, &bComponent);
 
-		s << printf( "#%02x%02x%02x", rComponent, gComponent, bComponent ) << endl;
+		Output.sprintf( "#%02x%02x%02x", rComponent, gComponent, bComponent );
 	}
-	else if(node.attribute("colorSpace").toInt() == 3) // grey
+	else if( node.attribute( "colorSpace" ).toInt() == 3 ) // grey
 	{
-		s << printf( "#%02x%02x%02x", int(node.attribute("v").toFloat()*255), int(node.attribute("v").toFloat()*255), int(node.attribute("v").toFloat()*255) ) << endl;
+		Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ) );
 	}
+	
+	s << Output;
+
+}
+
+void
+SvgExport::exportText( QTextStream& s, const QDomElement& node )
+{
+
+	s << "<text";
+	
+	if( !node.attribute( "size" ).isNull() )
+	{
+		s << " font-size=\"" << node.attribute( "size" ) << "\"";
+	}
+	
+	if( !node.attribute( "family" ).isNull() )
+	{
+		s << " font-family=\"" << node.attribute( "family" ) << "\"";
+	}
+	
+	if( !node.attribute( "bold" ).isNull() )
+	{
+		s << " font-weight=\"bold\"";
+	}
+	
+	if( !node.attribute( "italic" ).isNull() )
+	{
+		s << " font-style=\"italic\"";
+	}
+
+	s << ">";
+	
+
+	if( !node.attribute( "text" ).isNull() )
+	{
+		s << node.attribute( "text" );
+	}
+	
+	s << "</text>" << endl;
 
 }
 
