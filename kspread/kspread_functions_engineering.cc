@@ -724,6 +724,29 @@ static bool kspread_convert_distance( const QString& fromUnit,
   return true;
 }
 
+static bool kspread_convert_pressure( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> pressureMap;
+
+  // first-time initialization
+  if( pressureMap.isEmpty() )
+  {
+    pressureMap[ "Pa" ] = 1.0;
+    pressureMap[ "atm" ] = 0.9869233e-5;
+    pressureMap[ "mmHg" ] = 0.00750061708;
+    pressureMap[ "psi" ] = 1 / 6894.754;
+    pressureMap[ "Torr" ] = 1 / 133.32237;
+  }
+
+  if( !pressureMap.contains( fromUnit ) ) return false;
+  if( !pressureMap.contains( toUnit ) ) return false;
+
+  result = value * pressureMap[ toUnit ] / pressureMap[ fromUnit ];
+
+  return true;
+}
+
 static bool kspread_convert_temperature( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -774,7 +797,8 @@ bool kspreadfunc_convert( KSContext& context )
 
   if( !kspread_convert_distance( fromUnit, toUnit, value, result ) )
     if( !kspread_convert_temperature( fromUnit, toUnit, value, result ) )
-      return false;
+      if( !kspread_convert_pressure( fromUnit, toUnit, value, result ) )
+        return false;
 
   context.setValue( new KSValue( result ) );
 
