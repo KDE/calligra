@@ -226,6 +226,20 @@ static void ProcessStringNameTag (QDomNode myNode, void *tagData, KWEFKWordLeade
 
 // --------------------------------------------------------------------------------
 
+static void ProcessOldLayoutChildTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/)
+{
+    QValueList<AttrProcessing> attrProcessingList;
+
+    double* d = (double*) ( tagData );
+    *d = 0.0; // Put a sensible default
+
+    attrProcessingList
+        << AttrProcessing ( "pt", *d )
+        << AttrProcessing ( "inch" )
+        << AttrProcessing ( "mm" )
+        ;
+    ProcessAttributes (myNode, attrProcessingList);
+}
 
 static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/ )
 {
@@ -866,7 +880,14 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
 
     if ( leader->m_oldSyntax )
     {
-        tagProcessingList << TagProcessing ( "FLOW", ProcessStringValueTag, &layout->alignment );
+        tagProcessingList
+            << TagProcessing ( "FLOW",   ProcessStringValueTag,    &layout->alignment )
+            << TagProcessing ( "OHEAD",  ProcessOldLayoutChildTag, &layout->marginTop )
+            << TagProcessing ( "OFOOT",  ProcessOldLayoutChildTag, &layout->marginBottom )
+            << TagProcessing ( "ILEFT",  ProcessOldLayoutChildTag, &layout->indentLeft )
+            << TagProcessing ( "IFIRST", ProcessOldLayoutChildTag, &layout->indentFirst )
+            << TagProcessing ( "IRIGHT", ProcessOldLayoutChildTag, &layout->indentRight ) // ### TODO: does this tag really exist?
+            ;
     }
     else
     {
@@ -885,15 +906,13 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
         {
             const char* flows[]={"left", "right", "center", "justify" };
 
-            kdDebug(30508) << "KWord 0.8 flow: " << layout->alignment << endl;
-
             int align = layout->alignment.toInt();
             if ( ( align < 0 ) || ( align > 3) )
                 align = 0; // Unknown, so assume left
 
-            layout->alignment = flows[ align ];
+            kdDebug(30520) << "KWord 0.8 flow: " << layout->alignment << " corrected: " << QString( flows[ align ] ) << endl;
 
-            kdDebug(30508) << "Corrected flow: " << layout->alignment << endl;
+            layout->alignment = flows[ align ];
         }
     }
 

@@ -5,6 +5,7 @@ KFormula (frameType==4)
 Generate Manifest file
 <style:text-underline> (verify that all modes are generated.)
 <style:wrap> with "none" for pictures?
+converting from raw XML KWord document (in KoStore?)
 ...
 
 === Old OOWriter To-Do List ===
@@ -23,11 +24,12 @@ Spellcheck settings?
 Cursor position
 
 === KWord 0.8 ===
-Some files have not even a syntax version
 Document settings
 <FOOTNOTEMGR>, <START>, <FORMAT> as child of <FOOTNOTEMGR>, <FIRSTPARAG>
 <FORMAT id="3"> (tabulator)
 <FORMAT id="5"> (footnote)
+<LINESPACE>
+<HARDBRK> (forced page break)
 ...
 
 === Low Priority ===

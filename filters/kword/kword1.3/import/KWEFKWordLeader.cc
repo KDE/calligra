@@ -541,7 +541,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "slFootNoteLength",    "",       NULL                  )
                        << AttrProcessing ( "slFootNoteWidth",     "",       NULL                  )
                        << AttrProcessing ( "slFootNoteType",      "",       NULL                  );
-    
+
     if ( leader->m_oldSyntax )
     {
         // ### TODO: in syntax 1 hType and fType have other values!
@@ -554,7 +554,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
             << AttrProcessing ( "inchHeight" )
             ;
     }
-    
+
     ProcessAttributes (myNode, attrProcessingList);
 
     leader->setHeaderType( hType );
@@ -778,25 +778,42 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
 {
     //kdDebug (30508) << "Entering ProcessDocTag" << endl;
 
-    QString editor;
+    QString editor, author;
 
     QValueList<AttrProcessing> attrProcessingList;
 
-    attrProcessingList << AttrProcessing ( "xmlns",         "QString", 0  )
-                       << AttrProcessing ( "editor",        "QString", &editor  )
-                       << AttrProcessing ( "mime",          "QString", 0  )
-                       << AttrProcessing ( "syntaxVersion", "int",     &leader->m_syntaxVersion  );
+    attrProcessingList
+        << AttrProcessing ( "xmlns" )
+        << AttrProcessing ( "editor", editor )
+        << AttrProcessing ( "mime" )
+        << AttrProcessing ( "syntaxVersion", leader->m_syntaxVersion )
+        << AttrProcessing ( "author", author )
+        << AttrProcessing ( "email" )
+        ;
 
     ProcessAttributes( myNode, attrProcessingList );
 
     kdDebug(30508) << "Document written by " << editor << endl;
     kdDebug(30508) << "Document of syntax version " << leader->m_syntaxVersion << endl;
 
-    if ( leader->m_syntaxVersion == 1)
+    if ( leader->m_syntaxVersion == 1 )
     {
         leader->m_oldSyntax = true; // Syntax 1 is old syntax
     }
-    // ### TODO: check old syntax when syntax version was not defined
+    else if ( leader->m_syntaxVersion == -1 )
+    {
+        // We do not know the version, but it still might be an old syntax.
+        // However such old documents have still an author attribute, so check its value
+        if ( author == "Reginald Stadlbauer and Torben Weis" )
+        {
+            kdDebug(30520) << "No syntax version but author attribute matches => assuming old syntax" << endl;
+            leader->m_oldSyntax = true;
+        }
+        else
+        {
+            kdWarning(30520) << "No syntax version found, author attribute does not match => assuming new syntax" << endl;
+        }
+    }
 
     leader->doOpenHead();
 
@@ -1044,6 +1061,7 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     kdDebug (30508) << "Processing root..." << endl;
     if (!ProcessStoreFile (subFile, ProcessDocTag, this))
     {
+        // ###TODO: May be the file is only raw XML
         doAbortFile ();
         return KoFilter::StupidError;
     }
