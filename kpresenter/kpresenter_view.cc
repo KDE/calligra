@@ -5466,7 +5466,7 @@ void KPresenterView::viewHeader()
 
 void KPresenterView::showStyle( const QString & styleName )
 {
-    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleList() );
+    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
         if ( styleIt.current()->name() == styleName ) {
@@ -5480,7 +5480,7 @@ void KPresenterView::updateStyleList()
 {
     QString currentStyle = actionFormatStyle->currentText();
     QStringList lst;
-    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleList() );
+    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
     for (; styleIt.current(); ++styleIt ) {
         lst << styleIt.current()->translatedName();
     }
@@ -5493,7 +5493,7 @@ void KPresenterView::extraStylist()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
         edit->hideCursor();
-    KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->getUnit(),m_pKPresenterDoc, m_pKPresenterDoc->styleList());
+    KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->getUnit(),m_pKPresenterDoc, m_pKPresenterDoc->styleCollection()->styleList());
     styleManager->exec();
     delete styleManager;
     if ( edit )
@@ -5505,7 +5505,7 @@ void KPresenterView::textStyleSelected( int index )
     KPTextView *edit=m_canvas->currentTextObjectView();
     if(edit)
     {
-        edit->applyStyle( m_pKPresenterDoc->styleAt( index ) );
+        edit->applyStyle( m_pKPresenterDoc->styleCollection()->styleAt( index ) );
         m_canvas->setFocus();
     }
 }

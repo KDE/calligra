@@ -105,7 +105,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     KPrTextDocument * textdoc = new KPrTextDocument( this ,
                                                      new KoTextFormatCollection( doc->defaultFont() ));
 
-    m_textobj = new KoTextObject( textdoc, m_doc->findStyle( "Standard" ));
+    m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ));
 
     brush = Qt::NoBrush;
     brush.setColor(QColor());

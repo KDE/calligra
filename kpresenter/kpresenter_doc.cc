@@ -135,7 +135,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_styleColl=new KoStyleCollection();
 
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
-    addStyleTemplate( m_standardStyle );
+    m_styleColl->addStyleTemplate( m_standardStyle );
 
     m_defaultFont = KoGlobal::defaultFont();
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
@@ -2474,7 +2474,7 @@ void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
 #endif
         // Style created, now let's try to add it
 
-        sty = addStyleTemplate( sty );
+        sty = m_styleColl->addStyleTemplate( sty );
         if(m_styleList.count() > followingStyles.count() )
         {
             QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
@@ -2491,22 +2491,6 @@ void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
         KoStyle * style = m_styleColl->findStyle(*it);
         m_styleColl->styleAt( i++)->setFollowingStyle( style );
     }
-}
-
-
-KoStyle* KPresenterDoc::addStyleTemplate( KoStyle * sty )
-{
-    return m_styleColl->addStyleTemplate(sty);
-}
-
-void KPresenterDoc::removeStyleTemplate ( KoStyle *style ) {
-    m_styleColl->removeStyleTemplate(style);
-}
-
-
-KoStyle* KPresenterDoc::findStyle( const QString & _name )
-{
-    return m_styleColl->findStyle(_name);
 }
 
 
@@ -2643,15 +2627,6 @@ void KPresenterDoc::changeBackGroundSpellCheckTextObject(KPTextObject *obj)
     m_bgSpellCheck->startBackgroundSpellCheck();
 }
 
-const QPtrList<KoStyle> & KPresenterDoc::styleList() const
-{
-    return m_styleColl->styleList();
-}
-
-KoStyle* KPresenterDoc::styleAt( int i )
-{
-    return m_styleColl->styleAt(i);
-}
 
 
 #include <kpresenter_doc.moc>

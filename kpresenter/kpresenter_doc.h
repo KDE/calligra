@@ -247,20 +247,9 @@ public:
 
     bool raiseAndLowerObject;
 
-    const QPtrList<KoStyle> & styleList() const;
-    /**
-     * Look for a style named @p name. If not found, it will return 0L.
-     */
-    KoStyle* findStyle( const QString & name );
-    /**
-     * Return style number @p i.
-     */
-    KoStyle* styleAt( int i );
+    KoStyleCollection * styleCollection() { return m_styleColl;}
 
 
-    KoStyle* addStyleTemplate( KoStyle *style );
-
-    void removeStyleTemplate ( KoStyle *style );
     void updateAllStyleLists();
     void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 
