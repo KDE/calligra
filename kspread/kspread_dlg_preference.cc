@@ -761,16 +761,23 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QWidget *parent , cha
   QVBoxLayout *box = new QVBoxLayout( this );
   box->setMargin( 5 );
   box->setSpacing( 10 );
-
+  config = KSpreadFactory::global()->config();
   QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Spelling"));
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
-  _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L ,0, false );
-  grid1->addWidget(_spellConfig,0,0);
+  _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L ,m_pView->doc()->getKSpellConfig(), false );
+  grid1->addWidget(_spellConfig,0,0); 
   box->addWidget( tmpQGroupBox);
 }
 void configureSpellPage::apply()
 {
-  _spellConfig->writeGlobalSettings ();
+  config->setGroup( "KSpell kspread" );
+  config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
+  config->writeEntry ("KSpell_RunTogether", (int) _spellConfig->runTogether ());
+  config->writeEntry ("KSpell_Dictionary", _spellConfig->dictionary ());
+  config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
+  config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
+  config->writeEntry ("KSpell_Client",  _spellConfig->client());
+  m_pView->doc()->setKSpellConfig(*_spellConfig);
 }
 #include "kspread_dlg_preference.moc"

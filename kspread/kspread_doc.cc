@@ -38,6 +38,7 @@
 #include <kurl.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <ksconfig.h>
 
 #include <koscript_context.h>
 #include <koTemplateChooseDia.h>
@@ -129,6 +130,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_bShowCommentIndicator=true;
   m_bShowTabBar=true;
   m_bShowFormularBar=true;
+  m_pKSpellConfig=0;
 }
 
 bool KSpreadDoc::initDoc()
@@ -1024,4 +1026,18 @@ void KSpreadDoc::refreshInterface()
 {
 emit sig_refreshView();
 }
+
+void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)
+{
+  if(m_pKSpellConfig==0)
+    m_pKSpellConfig=new KSpellConfig();
+ 
+  m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
+  m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
+  m_pKSpellConfig->setDictionary(_kspell.dictionary ());
+  m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
+  m_pKSpellConfig->setEncoding(_kspell.encoding());
+  m_pKSpellConfig->setClient(_kspell.client());			  
+}
+
 #include "kspread_doc.moc"

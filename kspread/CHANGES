@@ -1175,3 +1175,9 @@ These functions returns hour,second or minutes in a time expression.
 2001-02-07-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Now you can create a hyperlink with internet link or email
+
+2001-02-09-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+Now you can configure spell checking in local.
+You don't change global "spell checking" config.
+ 

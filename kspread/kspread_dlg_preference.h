@@ -139,13 +139,10 @@ class configureSpellPage : public QWidget
 public:
   configureSpellPage( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   void apply();
-/*
-  void slotDefault();
-  void init();*/
 protected:
   KSpreadView* m_pView;
   KSpellConfig * _spellConfig;
-  //KConfig* config;
+  KConfig* config;
 } ;
 
 class KSpreadpreference : public KDialogBase

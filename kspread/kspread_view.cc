@@ -505,6 +505,20 @@ if( config->hasGroup("Parameters" ))
 	
 	m_pDoc->setShowFormularBar(config->readBoolEntry("Formula bar",true));
 	}
+
+ KSpellConfig ksconfig;
+ if( config->hasGroup("KSpell kspread" ) )
+ {
+   config->setGroup( "KSpell kspread" );
+   ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+   ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+   ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+   ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+   ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+   ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
+   m_pDoc->setKSpellConfig(ksconfig);
+ }
+
 }
 
 void KSpreadView::RecalcWorkBook(){
@@ -2430,7 +2444,7 @@ void KSpreadView::slotActivateTool( int _id )
 
   QString text = cell->text();
   QString tmpText=cell->text();
-  if ( tool->run( entry->command, &text, "QString", "text/plain") )
+  if ( tool->run( entry->command, &text, "QString", "text/plain",m_pDoc->getKSpellConfig()) )
       {
       if ( !m_pDoc->undoBuffer()->isLocked() )
         {

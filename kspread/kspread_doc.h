@@ -34,6 +34,7 @@ class DCOPObject;
 
 class QDomDocument;
 
+class KSpellConfig;
 #include <koDocument.h>
 #include <koPageLayoutDia.h>
 
@@ -336,6 +337,12 @@ public:
   void setShowFormularBar(bool _formulaBar) {  m_bShowFormularBar=_formulaBar;}
   bool getShowFormularBar() { return  m_bShowFormularBar;}
 
+  /**
+   * get custom kspell config
+   */
+  void setKSpellConfig(KSpellConfig _kspell);
+  KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -578,6 +585,7 @@ protected:
 
   bool m_bShowCommentIndicator;
   bool m_bShowFormularBar;
+  KSpellConfig *m_pKSpellConfig;
 };
 
 #endif
