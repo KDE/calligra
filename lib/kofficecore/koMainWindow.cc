@@ -89,6 +89,8 @@ public:
   KParts::Part *m_activePart;
   KoView *m_activeView;
 
+  QLabel * statusBarLabel;
+
   QList<KAction> m_splitViewActionList;
   // This additional list is needed, because we don't plug
   // the first list, when an embedded view gets activated (Werner)
@@ -176,6 +178,10 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     config->sync();
 
     buildMainWindowGUI();
+
+    // Status bar
+    d->statusBarLabel = new QLabel( statusBar() );
+    statusBar()->addWidget( d->statusBarLabel, 1, true );
 
     if (QApplication::desktop()->width() > 1100) // very big desktop ?
         resize( 900, 800 );
