@@ -151,7 +151,7 @@
   <Separator/>
   <Action name="apply_autoformat"/>
  </Menu>
- <Menu name="Screen Presentations"><text>Screen &amp;Presentations</text>
+ <Menu name="Slide Show"><text>Sli&amp;de Show</text>
   <Action name="screen_configpages"/>
   <Action name="screen_assigneffect"/>
   <Action name="screen_transeffect"/>

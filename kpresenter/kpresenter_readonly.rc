@@ -5,7 +5,7 @@
   <Separator/>
   <Action name="edit_find"/>
  </Menu>
- <Menu name="Screen Presentations"><text>Screen &amp;Presentations</text>
+ <Menu name="Slide Show"><text>Sli&amp;de Show</text>
   <Action name="screen_first"/>
   <Action name="screen_prev"/>
   <Action name="screen_next"/>
