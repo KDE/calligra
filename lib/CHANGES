@@ -1,3 +1,8 @@
+Changes between KOffice-1.3.3 and KOffice-1.3.4 (not released yet)
+===============================================
+- Integration with konqueror: a "Print" action appears in the popupmenu for koffice files,
+  allowing to print documents from konqueror.
+
 Changes between KOffice-1.3.2 and KOffice-1.3.3
 ===============================================
 KOfficeCore:
