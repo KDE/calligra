@@ -53,6 +53,7 @@ protected: // deprecated
     bool zipWriteData(const QCString& cstr);
     bool zipWriteData(const QString& str); ///< Assumes UTF-8
 protected: // Generating phase
+    /// \deprecated
     void writeStartOfFile( const QString& type );
     /// @param main Is it the main frameset?
     void generateTextFrameset( KoXmlWriter& writer, KWordTextFrameset* frameset, bool main );

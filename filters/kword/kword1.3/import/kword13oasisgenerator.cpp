@@ -57,6 +57,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
         declareLayout( (*it).m_layout );
         for ( KWord13Format* format = (*it).m_formats.first(); format; format = (*it).m_formats.next() )
         {
+            // ### Provisory, as it does not handle id != 1
             KWord13FormatOneData* data = format->getFormatOneData();
             if ( data )
             {
@@ -689,7 +690,43 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
         // Write rawly the paragrapgh (see KoTextParag::saveOasis)
         writer.startElement( "text:p" );
         writer.addAttribute( "text:style-name", (*it).m_layout.m_autoStyleName );
+#if 1        
+        const QString paragraphText( (*it).text() );
+        int currentPos = 0; // Current position where the next character has to be written
+
+        for ( KWord13Format* format = (*it).m_formats.first(); format; format = (*it).m_formats.next() )
+        {
+            // Perhaps we have text before the format's position
+            const int pos = format->m_pos;
+            const int length = format->length();
+            if ( currentPos < pos )
+            {
+                writer.addTextSpan( paragraphText.mid( currentPos, pos - currentPos ) );
+                currentPos = pos;
+            }
+            // Now we have to write the text belonging to the format
+            KWord13FormatOneData* data = format->getFormatOneData();
+            if ( data )
+            {
+                writer.startElement( "text:span" );
+                writer.addAttribute( "text:style-name", data->m_autoStyleName );
+                writer.addTextSpan( paragraphText.mid( pos, length ) );
+                writer.endElement();
+            }
+            else
+            {
+                // ### PROVISORY
+                writer.addTextNode("#"); // Placeholder
+            }
+            currentPos += length;
+        }
+        // We might have still something to write out
+        const QString tailText( paragraphText.mid( currentPos ) );
+        if ( ! tailText.isEmpty() )
+            writer.addTextSpan( tailText );
+#else        
         writer.addTextSpan( (*it).text() );
+#endif
         writer.endElement(); // text:p
     }
 }
