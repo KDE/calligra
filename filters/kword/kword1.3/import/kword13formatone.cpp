@@ -45,3 +45,19 @@ QString KWord13FormatOne::key( void ) const
       
     return strKey;
 }
+
+QString KWord13FormatOne::getProperty( const QString& name ) const
+{
+    QMap<QString,QString>::ConstIterator it ( m_properties.find( name ) );
+    if ( it == m_properties.end() )
+    {
+        // Property does not exist
+        return QString::null;
+    }
+    else
+    {
+        return it.data();
+    }
+}
+
+

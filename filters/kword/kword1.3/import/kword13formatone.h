@@ -27,6 +27,8 @@ public:
      */
     QString key( void ) const;
 
+    QString getProperty( const QString& name ) const;
+
 public:
     QMap<QString,QString> m_properties;
 };
