@@ -32,6 +32,8 @@ KWordPictureHandler::KWordPictureHandler( Document* doc ) : QObject(), m_doc(doc
 {
 }
 
+#ifdef IMAGE_IMPORT
+
 void KWordPictureHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Word97::PICF> /*picf*/ )
 {
     kdDebug(30513) << "Bitmap data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size() << endl;
@@ -71,5 +73,7 @@ void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word9
 void KWordPictureHandler::tiffData( const UString& /*name*/, SharedPtr<const Word97::PICF> /*picf*/ )
 {
 }
+
+#endif // IMAGE_IMPORT
 
 #include "graphicshandler.moc"

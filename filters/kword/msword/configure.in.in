@@ -24,7 +24,7 @@ fi
 
 if test -n "$WV2_CONFIG"; then
   vers=`$WV2_CONFIG --version 2>/dev/null | sed -e 's/libwv2 //' | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
-  if test -n "$vers" && test "$vers" -ge 2000
+  if test -n "$vers" && test "$vers" -ge 1009
   then
      LIBWV2_LIBS="`$WV2_CONFIG --libs`"
      LIBWV2_RPATH=
@@ -40,7 +40,7 @@ if test -n "$WV2_CONFIG"; then
 
      AC_DEFINE_UNQUOTED(HAVE_WV2, 1, [Defines if your system has the wv2 library])
   else
-     AC_MSG_WARN([You need at least version 0.2 of libwv2])
+     AC_MSG_WARN([You need at least version 0.1.9 of libwv2])
   fi
 fi
 

@@ -172,6 +172,7 @@ void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor, wv
     m_currentTable->rows.append( row );
 }
 
+#ifdef IMAGE_IMPORT
 void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFunctor,
                                      wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
@@ -197,6 +198,7 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
 
     emit pictureFound( frameName, pictureName, new wvWare::PictureFunctor( pictureFunctor ) );
 }
+#endif // IMAGE_IMPORT
 
 QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
 {

@@ -26,16 +26,27 @@
 #include <qobject.h>
 #include "document.h"
 
+#ifndef IMAGE_IMPORT
+namespace wvWare
+{
+    class PictureHandler
+    {
+    };
+}
+#endif // IMAGE_IMPORT
+
 class KWordPictureHandler : public QObject, public wvWare::PictureHandler
 {
     Q_OBJECT
 public:
     KWordPictureHandler( Document* doc );
 
+#ifdef IMAGE_IMPORT
     //////// PictureHandler interface
     virtual void bitmapData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
     virtual void wmfData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
     virtual void tiffData( const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
+#endif // IMAGE_IMPORT
 
 private:
     Document* m_doc;

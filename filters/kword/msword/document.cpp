@@ -59,7 +59,9 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setTableHandler( m_tableHandler );
+#ifdef IMAGE_IMPORT
         m_parser->setPictureHandler( m_pictureHandler );
+#endif
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
         processAssociatedStrings();
@@ -491,6 +493,8 @@ KoStoreDevice* Document::createPictureFrameSet( const KoSize& size )
     // The position doesn't matter as long as the picture is inline
     // FIXME for non-inline pics ####
     // To determine the size, look at OOo's filter (WW8PicDesc in ww8graf2.cxx, version 1.50, line 406)
+    // Hint: #i17200#, a bit of guesswork I'm afraid
+    //        if (aPic.dxaGoal == 1000 && aPic.mx == 1)  //100% hack ? (from ww8graf2.cxx)
     createInitialFrame( framesetElement, 0, size.width(), 0, size.height(), false, NoFollowup );
 
     QDomElement pictureElem = m_mainDocument.createElement("PICTURE");

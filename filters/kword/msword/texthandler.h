@@ -73,8 +73,10 @@ public:
 
     virtual void tableRowFound( const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap );
 
+#ifdef IMAGE_IMPORT
     virtual void pictureFound( const wvWare::PictureFunctor& picture, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
+#endif // IMAGE_IMPORT
     ///////// Our own interface, also used by processStyles
 
     // Called at the beginning of a parag/style
