@@ -123,6 +123,7 @@ bool KprKword::filter(const QString &fileIn, const QString &fileOut,
     counter.setAttribute( "depth", 0 );
     counter.setAttribute( "start", 1 );
     counter.setAttribute( "numberingtype", 1 ); // chapter
+    counter.setAttribute( "righttext", ". " );
 
     QDomElement format = outdoc.createElement( "FORMAT" );
     style.appendChild( format );
