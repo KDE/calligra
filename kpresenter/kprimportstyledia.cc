@@ -158,4 +158,9 @@ KoStyle *KPrImportStyleDia::findStyle( const QString & _name)
     return 0L;
 }
 
+void KPrImportStyleDia::generateStyleList()
+{
+}
+
+
 #include "kprimportstyledia.moc"

@@ -41,6 +41,8 @@ public:
 protected:
     KWStyle *findStyle( const QString & _name);
     virtual void loadFile();
+    virtual void generateStyleList();
+
 private:
     KWDocument *m_doc;
 };

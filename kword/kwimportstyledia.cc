@@ -44,6 +44,10 @@ KWImportStyleDia::~KWImportStyleDia()
 {
 }
 
+void KWImportStyleDia::generateStyleList()
+{
+}
+
 
 void KWImportStyleDia::loadFile()
 {
@@ -99,6 +103,11 @@ void KWImportStyleDia::loadFile()
                         //kdDebug(32001) << "KWStyle created  name=" << sty->name() << endl;
                     } else
                         kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
+
+                    QString name =sty->name();
+                    if ( m_list.findIndex( name )!=-1 )
+                        sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
+
 
                     // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
                     sty->setFollowingStyle( sty );
