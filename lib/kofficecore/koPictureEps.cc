@@ -23,6 +23,7 @@
 
 #include <qbuffer.h>
 #include <qpainter.h>
+#include <qpaintdevicemetrics.h> 
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
@@ -65,7 +66,7 @@ bool KoPictureEps::isNull(void) const
     return m_rawData.isNull();
 }
 
-QImage KoPictureEps::scaleWithGhostScript(const QSize& size)
+QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutionx, const int resolutiony )
 // Based on the code of the file kdelibs/kimgio/eps.cpp
 {
     kdDebug(30003) << "Sampling with GhostScript! (in KoPictureEps::scaleWithGhostScript)" << endl;
@@ -98,6 +99,15 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size)
     cmdBuf += QString::number( wantedWidth );
     cmdBuf += "x";
     cmdBuf += QString::number( wantedHeight );
+    
+    if ( ( resolutionx > 0) && ( resolutiony > 0) )
+    {
+        cmdBuf += " -r";
+        cmdBuf += QString::number( resolutionx );
+        cmdBuf += "x";
+        cmdBuf += QString::number( resolutiony );
+    }
+    
     cmdBuf += " -dNOPAUSE -sDEVICE=png16m "; // Device was formally ppm
     //cmdBuf += "-c 255 255 255 setrgbcolor fill 0 0 0 setrgbcolor";
     cmdBuf += " -";
@@ -139,9 +149,10 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size)
     return image;
 }
 
-void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
+void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const int resolutionx, const int resolutiony )
 {
-    kdDebug(30003) << "KoPictureEps::scaleAndCreatePixmap " << size << " " << (fastMode?QString("fast"):QString("slow")) << endl;
+    kdDebug(30003) << "KoPictureEps::scaleAndCreatePixmap " << size << " " << (fastMode?QString("fast"):QString("slow"))
+        << " resolutionx: " << resolutionx << " resolutiony: " << resolutiony << endl;
     if ((size==m_cachedSize)
         && ((fastMode) || (!m_cacheIsInFastMode)))
     {
@@ -176,7 +187,7 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
         time.start();
         
         QApplication::setOverrideCursor( Qt::waitCursor );
-        m_cachedPixmap = scaleWithGhostScript(size); // ### TODO: what happens when EPS file is invalid?
+        m_cachedPixmap = scaleWithGhostScript( size, resolutionx, resolutiony );
         QApplication::restoreOverrideCursor();
         m_cacheIsInFastMode=false;
         m_cachedSize=size;
@@ -193,12 +204,27 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
 
     QSize screenSize( width, height );
     //kdDebug() << "KoPictureEps::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
+    
+    QPaintDeviceMetrics metrics (painter.device());
+    kdDebug(30003) << "Metrics: X: " << metrics.logicalDpiX() << " x Y: " << metrics.logicalDpiX() << " (in KoPictureEps::draw)" << endl;
 
-    scaleAndCreatePixmap(screenSize, fastMode && !painter.device()->isExtDev() );
+    if ( painter.device()->isExtDev() ) // Is it an external device (i.e. printer)
+    {
+        kdDebug(30003) << "Drawing for a printer (in KoPictureEps::draw)" << endl;
+        // For printing, always re-sample the image, as a printer has never the same resolution than a display.
+        QImage image( scaleWithGhostScript( screenSize, metrics.logicalDpiX(), metrics.logicalDpiY() ) );
+        // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawImage
+        // translates it to the (x,y) point -> we need (x+sx, y+sy).
+        painter.drawImage( x + sx, y + sy, image, sx, sy, sw, sh );
+    }
+    else // No, it is simply a display
+    {
+        scaleAndCreatePixmap(screenSize, fastMode, metrics.logicalDpiX(), metrics.logicalDpiY() );
 
-    // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawPixmap
-    // translates it to the (x,y) point -> we need (x+sx, y+sy).
-    painter.drawPixmap( x + sx, y + sy, m_cachedPixmap, sx, sy, sw, sh );
+        // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawPixmap
+        // translates it to the (x,y) point -> we need (x+sx, y+sy).
+        painter.drawPixmap( x + sx, y + sy, m_cachedPixmap, sx, sy, sw, sh );
+    }
 }
 
 bool KoPictureEps::extractPostScriptStream( void )
@@ -301,7 +327,7 @@ QSize KoPictureEps::getOriginalSize(void) const
 
 QPixmap KoPictureEps::generatePixmap(const QSize& size, bool smoothScale)
 {
-    scaleAndCreatePixmap(size,!smoothScale);
+    scaleAndCreatePixmap(size,!smoothScale, 0, 0);
     return m_cachedPixmap;
 }
 
@@ -312,5 +338,6 @@ QString KoPictureEps::getMimeType(const QString&) const
 
 QDragObject* KoPictureEps::dragObject( QWidget *dragSource, const char *name )
 {
-    return new QImageDrag( scaleWithGhostScript ( m_originalSize ) , dragSource, name );
+    // 0, 0 == resolution unknown
+    return new QImageDrag( scaleWithGhostScript ( m_originalSize, 0, 0) , dragSource, name );
 }

@@ -86,8 +86,8 @@ public:
 
 protected:
     QPixmap getPixmap(QImage& image);
-    void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
-    QImage scaleWithGhostScript(const QSize& size);
+    void scaleAndCreatePixmap(const QSize& size, bool fastMode, const int resolutionx, const int resolutiony );
+    QImage scaleWithGhostScript( const QSize& size, const int resolutionx, const int resolutiony );
     bool extractPostScriptStream( void );
 
 
