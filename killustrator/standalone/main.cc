@@ -1,3 +1,5 @@
+// GAH GETOPT_LONG IS EVIL USE A FRIGGING PORTABLE GETOPT
+
 /* -*- C++ -*-
 
   $Id$
