@@ -66,10 +66,10 @@
 #include <tkfloatspinboxaction.h>
 
 #include <kdebug.h>
-
-// TODO: only for testing:
-#include "vwhirlpinch.h"
-
+// TODO: only for testing
+#include "vsegment.h"
+#include "vsegmentlist.h"
+#include "vpath.h"
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -375,20 +375,39 @@ KarbonView::dummyForTesting()
 {
 kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
-	const KoRect& rect = m_part->document().selection()->boundingBox();
+	static uint i = 0;
 
-	VWhirlPinch op(
-		rect.center(),
-		90.0,
-		0.5,
-		200.0 );
+	VSegmentList s( 0L );
 
-	VObjectListIterator itr( m_part->document().selection()->objects() );
-	for ( ; itr.current() ; ++itr )
+	s.moveTo(
+		KoPoint(200,100) );
+	s.curveTo(
+		KoPoint(500,400),
+		KoPoint(100,400),
+		KoPoint(400,50) );
+
+	VPath* p;
+
+	if( i == 0 )
 	{
-		op.visit( *itr.current() );
+		p = new VPath( 0L );
+		p->moveTo(
+			KoPoint(200,100) );
+		p->curveTo(
+			KoPoint(500,400),
+			KoPoint(100,400),
+			KoPoint(400,50) );
+
+		++i;
+	}
+	else
+	{
+		p = new VPath( 0L );
+		p->moveTo( s.getLast()->point(0.85) );
+		p->lineTo( s.getLast()->point(0.85) + s.getLast()->derive(0.85));
 	}
 
+	m_part->document().append( p );
 	m_part->repaintAllViews();
 }
 
