@@ -96,6 +96,7 @@ void KWCanvas::repaintChanged( KWFrameSet * fs )
     //kdDebug() << "KWCanvas::repaintChanged " << fs << endl;
     QPainter p( viewport() );
     p.translate( -contentsX(), -contentsY() );
+    p.setBrushOrigin( -contentsX(), -contentsY() );
     drawDocument( fs, &p, contentsX(), contentsY(), visibleWidth(), visibleHeight() );
 }
 
@@ -117,6 +118,7 @@ bool KWCanvas::isOutOfPage( QRect & r, int page ) const
 void KWCanvas::print( QPainter *painter, QPrinter *printer,
                       float left_margin, float top_margin )
 {
+   kdDebug() << "KWCanvas::print from=" << printer->fromPage() << " to=" << printer->toPage() << endl;
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               printer->toPage() - printer->fromPage() + 2, this );
     int j = 0;
@@ -133,9 +135,13 @@ void KWCanvas::print( QPainter *painter, QPrinter *printer,
 
         painter->resetXForm();
         int pgNum = i - 1;
-        QRect pageRect( 0, pgNum * doc->ptPaperHeight(), doc->ptPaperWidth(), doc->ptPaperHeight() );
+        int yOffset = pgNum * doc->ptPaperHeight();
+kdDebug() << "printing page " << pgNum << " yOffset=" << yOffset << endl;
+        QRect pageRect( 0, yOffset, doc->ptPaperWidth(), doc->ptPaperHeight() );
         painter->fillRect( pageRect, white );
 
+        painter->translate( 0, -yOffset );
+        painter->setBrushOrigin( 0, -yOffset );
         drawDocument( 0L, painter, pageRect.x(), pageRect.y(), pageRect.width(), pageRect.height() );
         kapp->processEvents();
     }
@@ -144,6 +150,7 @@ void KWCanvas::print( QPainter *painter, QPrinter *printer,
 void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 {
     // Note: in drawContents, the painter is already to the contents coordinates
+    painter->setBrushOrigin( -contentsX(), -contentsY() );
     drawDocument( 0L, painter, cx, cy, cw, ch );
 }
 
@@ -152,8 +159,6 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
     //kdDebug() << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << endl;
     bool focus = hasFocus() || viewport()->hasFocus();
     bool onlyChanged = (onlyFrameset != 0L);
-
-    painter->setBrushOrigin( -contentsX(), -contentsY() );
 
     QRect crect( cx, cy, cw, ch );
     if ( !onlyFrameset )      // no need for borders if we're only repainting the text
