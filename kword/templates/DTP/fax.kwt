@@ -9,159 +9,31 @@
  <FOOTNOTESETTING type="0" depth="0" />
  <ENDNOTESETTING type="0" depth="0" />
  <FRAMESETS>
-  <FRAMESET frameType="1" frameInfo="1" protectSize="0" name="First Page Header" visible="0" >
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="2" runaroundSide="biggest" left="0" bottom="841" runaroundGap="2.83465" top="0" autoCreateNewFrame="0" />
-   <PARAGRAPH>
-    <TEXT xml:space="preserve" > </TEXT>
-    <LAYOUT>
-     <NAME value="Standard" />
-     <FLOW align="left" />
-     <FORMAT id="1" pos="0" len="1" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="9" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" frameInfo="3" protectSize="0" name="Even Pages Header" visible="0" >
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="2" runaroundSide="biggest" left="0" bottom="20" runaroundGap="2.83465" top="0" autoCreateNewFrame="0" />
-   <PARAGRAPH>
-    <TEXT xml:space="preserve" > </TEXT>
-    <LAYOUT>
-     <NAME value="Standard" />
-     <FLOW align="left" />
-     <FORMAT id="1" pos="0" len="1" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="9" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" frameInfo="2" protectSize="0" name="Odd Pages Header" visible="0" >
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="2" runaroundSide="biggest" left="0" bottom="20" runaroundGap="2.83465" top="0" autoCreateNewFrame="0" />
-   <PARAGRAPH>
-    <TEXT xml:space="preserve" > </TEXT>
-    <LAYOUT>
-     <NAME value="Standard" />
-     <FLOW align="left" />
-     <FORMAT id="1" pos="0" len="1" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="9" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" frameInfo="4" protectSize="0" name="First Page Footer" visible="0" >
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="2" runaroundSide="biggest" left="0" bottom="841" runaroundGap="2.83465" top="821" autoCreateNewFrame="0" />
-   <PARAGRAPH>
-    <TEXT xml:space="preserve" > </TEXT>
-    <LAYOUT>
-     <NAME value="Standard" />
-     <FLOW align="left" />
-     <FORMAT id="1" pos="0" len="1" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="9" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" frameInfo="6" protectSize="0" name="Even Pages Footer" visible="0" >
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="2" runaroundSide="biggest" left="0" bottom="841" runaroundGap="2.83465" top="821" autoCreateNewFrame="0" />
-   <PARAGRAPH>
-    <TEXT xml:space="preserve" > </TEXT>
-    <LAYOUT>
-     <NAME value="Standard" />
-     <FLOW align="left" />
-     <FORMAT id="1" pos="0" len="1" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="9" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" frameInfo="5" protectSize="0" name="Odd Pages Footer" visible="0" >
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="2" runaroundSide="biggest" left="0" bottom="841" runaroundGap="2.83465" top="821" autoCreateNewFrame="0" />
-   <PARAGRAPH>
-    <TEXT xml:space="preserve" > </TEXT>
-    <LAYOUT>
-     <NAME value="Standard" />
-     <FLOW align="left" />
-     <FORMAT id="1" pos="0" len="1" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="9" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" frameInfo="7" protectSize="0" name="Footnotes" visible="0" >
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="0" runaroundSide="biggest" left="0" bottom="841" runaroundGap="2.83465" top="821" autoCreateNewFrame="0" />
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="0" runaroundSide="biggest" left="0" bottom="1682" runaroundGap="2.83465" top="1662" autoCreateNewFrame="0" />
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="0" runaroundSide="biggest" left="0" bottom="1682" runaroundGap="2.83465" top="1662" autoCreateNewFrame="0" />
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="0" runaroundSide="biggest" left="0" bottom="1682" runaroundGap="2.83465" top="1662" autoCreateNewFrame="0" />
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="0" runaroundSide="biggest" left="0" bottom="2523" runaroundGap="2.83465" top="2503" autoCreateNewFrame="0" />
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="0" runaroundSide="biggest" left="0" bottom="2523" runaroundGap="2.83465" top="2503" autoCreateNewFrame="0" />
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="0" runaroundSide="biggest" left="0" bottom="2523" runaroundGap="2.83465" top="2503" autoCreateNewFrame="0" />
-   <FRAME runaround="1" copy="0" right="595" newFrameBehavior="0" runaroundSide="biggest" left="0" bottom="1682" runaroundGap="2.83465" top="1662" autoCreateNewFrame="0" />
-   <PARAGRAPH>
-    <TEXT xml:space="preserve" > </TEXT>
-    <LAYOUT>
-     <NAME value="Standard" />
-     <FLOW align="left" />
-     <FORMAT id="1" pos="0" len="1" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="9" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
   <FRAMESET frameType="1" frameInfo="0" protectSize="1" name="checkboxes" visible="1" >
-   <FRAME bkBlue="255" runaround="1" copy="0" bkRed="255" right="568.5836102" newFrameBehavior="1" runaroundSide="biggest" left="30" bkStyle="1" bkGreen="255" bottom="188.881009740021" runaroundGap="2.83465" top="160" autoCreateNewFrame="0" />
+   <FRAME bkBlue="255" runaround="1" copy="0" bkRed="255" right="565" newFrameBehavior="1" runaroundSide="biggest" left="28.3465058" bkStyle="1" bkGreen="255" bottom="191" runaroundGap="2.83465" top="160" autoCreateNewFrame="0" />
    <PARAGRAPH>
-    <TEXT xml:space="preserve" >[  ] Urgent	[  ] For Review	[  ] Please Comment	[  ] Please reply	[  ] Please Recycle</TEXT>
-    <FORMATS>
-     <FORMAT id="1" pos="0" len="85" >
-      <SIZE value="12" />
-     </FORMAT>
-    </FORMATS>
+    <TEXT xml:space="preserve" >[  ] Urgent	[  ] For Review	[  ] Please Comment</TEXT>
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="left" />
      <INDENTS left="54" />
      <TABULATOR width="0.5" filling="0" ptpos="228.189" type="0" />
      <TABULATOR width="0.5" filling="0" ptpos="386.93" type="0" />
-     <FORMAT id="1" pos="0" len="85" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="11" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT xml:Space="preserve" >[  ] Please reply	[  ] Please Recycle</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <INDENTS left="54" />
+     <TABULATOR width="0.5" filling="0" ptpos="228.189" type="0" />
+     <TABULATOR width="0.5" filling="0" ptpos="386.93" type="0" />
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET frameType="1" frameInfo="0" protectSize="1" name="Title" protectcontent="1" visible="1" >
-   <FRAME bRed="0" bkBlue="255" bGreen="0" runaround="1" copy="0" bkRed="255" bBlue="0" right="565.3465058" newFrameBehavior="1" bWidth="1" runaroundSide="biggest" left="28.3465058" bkStyle="1" bkGreen="255" bottom="68.3465058" runaroundGap="2.00013" top="28.3465058" autoCreateNewFrame="2" />
+   <FRAME bRed="0" bkBlue="255" bGreen="0" runaround="1" copy="0" bkRed="255" bBlue="0" right="565" newFrameBehavior="1" bWidth="1" runaroundSide="biggest" left="28.3465058" bkStyle="1" bkGreen="255" bottom="68.3465058" runaroundGap="2.00013" top="28.3465058" autoCreateNewFrame="2" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >FAX</TEXT>
     <FORMATS>
@@ -173,17 +45,10 @@
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="center" />
-     <FORMAT id="1" pos="0" len="3" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="11" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET removable="0" cols="1" row="0" grpMgr="Copy-Table 1" frameType="1" frameInfo="0" rows="1" col="0" protectSize="0" name="Copy-Table 1 Cell 0,0" visible="1" >
+  <FRAMESET removable="0" cols="1" row="0" grpMgr="Table 1" frameType="1" frameInfo="0" rows="1" col="0" protectSize="0" name="Table 1 Cell 0,0" visible="1" >
    <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="297.6383109" newFrameBehavior="1" btoppt="2.83465" left="28.3465058" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="89.5582645000004" runaroundGap="2.83465" top="70.8662645" autoCreateNewFrame="0" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >To:	</TEXT>
@@ -191,35 +56,21 @@
      <NAME value="Fax Header" />
      <FLOW align="left" />
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
-     <FORMAT id="1" pos="0" len="4" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET removable="0" cols="1" row="0" grpMgr="Copy-Table 1" frameType="1" frameInfo="0" rows="1" col="1" protectSize="0" name="Copy-Table 1 Cell 0,1" visible="1" >
-   <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="566.930116" newFrameBehavior="1" btoppt="2.83465" left="297.6383109" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="89.5582645000004" runaroundGap="2.83465" top="70.8662645" autoCreateNewFrame="0" />
+  <FRAMESET removable="0" cols="1" row="0" grpMgr="Table 1" frameType="1" frameInfo="0" rows="1" col="1" protectSize="0" name="Table 1 Cell 0,1" visible="1" >
+   <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="565" newFrameBehavior="1" btoppt="2.83465" left="297.6383109" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="89.5582645000004" runaroundGap="2.83465" top="70.8662645" autoCreateNewFrame="0" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >From:	</TEXT>
     <LAYOUT>
      <NAME value="Fax Header" />
      <FLOW align="left" />
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
-     <FORMAT id="1" pos="0" len="6" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET removable="0" cols="1" row="1" grpMgr="Copy-Table 1" frameType="1" frameInfo="0" rows="1" col="0" protectSize="0" name="Copy-Table 1 Cell 1,0" visible="1" >
+  <FRAMESET removable="0" cols="1" row="1" grpMgr="Table 1" frameType="1" frameInfo="0" rows="1" col="0" protectSize="0" name="Table 1 Cell 1,0" visible="1" >
    <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="297.6383109" newFrameBehavior="1" btoppt="2.83465" left="28.3465058" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="111.136264500001" runaroundGap="2.83465" top="89.5582645000004" autoCreateNewFrame="0" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >Fax	</TEXT>
@@ -227,18 +78,11 @@
      <NAME value="Fax Header" />
      <FLOW align="left" />
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
-     <FORMAT id="1" pos="0" len="4" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET removable="0" cols="1" row="1" grpMgr="Copy-Table 1" frameType="1" frameInfo="0" rows="1" col="1" protectSize="0" name="Copy-Table 1 Cell 1,1" visible="1" >
-   <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="566.930116" newFrameBehavior="1" btoppt="2.83465" left="297.6383109" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="111.136264500001" runaroundGap="2.83465" top="89.5582645000004" autoCreateNewFrame="0" />
+  <FRAMESET removable="0" cols="1" row="1" grpMgr="Table 1" frameType="1" frameInfo="0" rows="1" col="1" protectSize="0" name="Table 1 Cell 1,1" visible="1" >
+   <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="565" newFrameBehavior="1" btoppt="2.83465" left="297.6383109" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="111.136264500001" runaroundGap="2.83465" top="89.5582645000004" autoCreateNewFrame="0" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >Pages:	#</TEXT>
     <FORMATS>
@@ -253,17 +97,10 @@
      <NAME value="Fax Header" />
      <FLOW align="left" />
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
-     <FORMAT id="1" pos="0" len="8" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET removable="0" cols="1" row="2" grpMgr="Copy-Table 1" frameType="1" frameInfo="0" rows="1" col="0" protectSize="0" name="Copy-Table 1 Cell 2,0" visible="1" >
+  <FRAMESET removable="0" cols="1" row="2" grpMgr="Table 1" frameType="1" frameInfo="0" rows="1" col="0" protectSize="0" name="Table 1 Cell 2,0" visible="1" >
    <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="297.6383109" newFrameBehavior="1" btoppt="2.83465" left="28.3465058" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="132.728264500002" runaroundGap="2.83465" top="111.136264500001" autoCreateNewFrame="0" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >Phone:	</TEXT>
@@ -271,18 +108,11 @@
      <NAME value="Fax Header" />
      <FLOW align="left" />
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
-     <FORMAT id="1" pos="0" len="7" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET removable="0" cols="1" row="2" grpMgr="Copy-Table 1" frameType="1" frameInfo="0" rows="1" col="1" protectSize="0" name="Copy-Table 1 Cell 2,1" visible="1" >
-   <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="566.930116" newFrameBehavior="1" btoppt="2.83465" left="297.6383109" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="132.728264500002" runaroundGap="2.83465" top="111.136264500001" autoCreateNewFrame="0" />
+  <FRAMESET removable="0" cols="1" row="2" grpMgr="Table 1" frameType="1" frameInfo="0" rows="1" col="1" protectSize="0" name="Table 1 Cell 2,1" visible="1" >
+   <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="565" newFrameBehavior="1" btoppt="2.83465" left="297.6383109" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="132.728264500002" runaroundGap="2.83465" top="111.136264500001" autoCreateNewFrame="0" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >Date:	#</TEXT>
     <FORMATS>
@@ -297,17 +127,10 @@
      <NAME value="Fax Header" />
      <FLOW align="left" />
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
-     <FORMAT id="1" pos="0" len="7" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET removable="0" cols="1" row="3" grpMgr="Copy-Table 1" frameType="1" frameInfo="0" rows="1" col="0" protectSize="0" name="Copy-Table 1 Cell 3,0" visible="1" >
+  <FRAMESET removable="0" cols="1" row="3" grpMgr="Table 1" frameType="1" frameInfo="0" rows="1" col="0" protectSize="0" name="Table 1 Cell 3,0" visible="1" >
    <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="297.6383109" newFrameBehavior="1" btoppt="2.83465" left="28.3465058" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="151.420264500002" runaroundGap="2.83465" top="132.728264500002" autoCreateNewFrame="0" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >Re:	</TEXT>
@@ -315,53 +138,32 @@
      <NAME value="Fax Header" />
      <FLOW align="left" />
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
-     <FORMAT id="1" pos="0" len="4" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET removable="0" cols="1" row="3" grpMgr="Copy-Table 1" frameType="1" frameInfo="0" rows="1" col="1" protectSize="0" name="Copy-Table 1 Cell 3,1" visible="1" >
-   <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="566.930116" newFrameBehavior="1" btoppt="2.83465" left="297.6383109" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="151.420264500002" runaroundGap="2.83465" top="132.728264500002" autoCreateNewFrame="0" />
+  <FRAMESET removable="0" cols="1" row="3" grpMgr="Table 1" frameType="1" frameInfo="0" rows="1" col="1" protectSize="0" name="Table 1 Cell 3,1" visible="1" >
+   <FRAME bkBlue="255" bleftpt="2.83465" copy="0" bbottompt="2.83465" bkRed="255" right="565" newFrameBehavior="1" btoppt="2.83465" left="297.6383109" bkStyle="1" brightpt="2.83465" bkGreen="255" bottom="151.420264500002" runaroundGap="2.83465" top="132.728264500002" autoCreateNewFrame="0" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >CC:	</TEXT>
     <LAYOUT>
      <NAME value="Fax Header" />
      <FLOW align="left" />
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
-     <FORMAT id="1" pos="0" len="4" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET frameType="1" frameInfo="0" protectSize="1" name="Main text" visible="1" >
-   <FRAME bkBlue="255" runaround="1" copy="0" bkRed="255" right="565.3465058" newFrameBehavior="0" runaroundSide="biggest" left="28.3465058" bkStyle="1" bkGreen="255" bottom="779.5289095" runaroundGap="2.00013" top="200" />
+   <FRAME bkBlue="255" runaround="1" copy="0" bkRed="255" right="565" newFrameBehavior="0" runaroundSide="biggest" left="28.3465058" bkStyle="1" bkGreen="255" bottom="779.5289095" runaroundGap="2.00013" top="200" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" > </TEXT>
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="left" />
-     <FORMAT id="1" pos="0" len="1" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="11" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET frameType="1" frameInfo="0" protectSize="1" name="Footer" protectcontent="1" visible="1" >
-   <FRAME bkBlue="255" tGreen="0" runaround="1" copy="0" bkRed="255" tWidth="1" right="565.3465058" newFrameBehavior="2" tBlue="0" runaroundSide="biggest" left="28.3465058" bkStyle="1" bkGreen="255" bottom="809.613438500001" runaroundGap="2.00013" top="793.7021624" autoCreateNewFrame="0" tRed="0" />
+   <FRAME bkBlue="255" tGreen="0" runaround="1" copy="0" bkRed="255" tWidth="1" right="565" newFrameBehavior="2" tBlue="0" runaroundSide="biggest" left="28.3465058" bkStyle="1" bkGreen="255" bottom="809.613438500001" runaroundGap="2.00013" top="793.7021624" autoCreateNewFrame="0" tRed="0" />
    <PARAGRAPH>
     <TEXT xml:space="preserve" >page # of #</TEXT>
     <FORMATS>
@@ -381,13 +183,6 @@
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="right" />
-     <FORMAT id="1" pos="0" len="11" >
-      <WEIGHT value="50" />
-      <!-- Use KWord's default font -->
-      <SIZE value="11" />
-      <ITALIC value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
@@ -397,9 +192,8 @@
    <NAME value="Standard" />
    <FLOW align="left" />
    <FOLLOWING name="Standard" />
-   <FORMAT id="1" >
-    <WEIGHT value="50" />
-    <SIZE value="9" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font -->
    </FORMAT>
   </STYLE>
   <STYLE>
@@ -439,7 +233,6 @@
    <FOLLOWING name="Enumerated List" />
    <FORMAT id="1" >
     <WEIGHT value="50" />
-    <SIZE value="9" />
    </FORMAT>
   </STYLE>
   <STYLE>
@@ -449,7 +242,6 @@
    <FOLLOWING name="Alphabetical List" />
    <FORMAT id="1" >
     <WEIGHT value="50" />
-    <SIZE value="9" />
    </FORMAT>
   </STYLE>
   <STYLE>
@@ -459,7 +251,6 @@
    <FOLLOWING name="Bullet List" />
    <FORMAT id="1" >
     <WEIGHT value="50" />
-    <SIZE value="9" />
    </FORMAT>
   </STYLE>
   <STYLE>
