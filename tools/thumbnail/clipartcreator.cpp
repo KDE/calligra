@@ -36,7 +36,6 @@ bool ClipartCreator::create(const QString &path, int width, int height, QImage &
 {
     QPixmap pixmap;
     QPicture pic;
-    qDebug( "ClipartCreator::create %s", path.latin1() );
     if ( KoClipartCollection::loadFromFile( path, &pic ) )
     {
         pixmap = QPixmap( width, height );
