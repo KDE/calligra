@@ -21,6 +21,7 @@
 #define __ko_query_trader_h__
 
 #include <qstring.h>
+#include <qobject.h>
 #include <kservice.h>
 #include <qstringlist.h>
 #include <qvaluelist.h>
