@@ -239,22 +239,28 @@ void KoHelpWidget::startScrollingDown()
 
 void KoHelpWidget::scrollUp()
 {
-	m_ypos += 2;
-	m_helpViewport->scroll( 0, 2 );
-	m_helpViewport->update();
-	updateButtons();
 	if ( m_ypos > 0 ) 
 		stopScrolling();
+	else
+	{
+		m_ypos += 2;
+		m_helpViewport->scroll( 0, 2 );
+		m_helpViewport->update();
+		updateButtons();
+	}
 } // KoHelpWidget::scrollUp()
 
 void KoHelpWidget::scrollDown()
 {
-	m_ypos -= 2;
-	m_helpViewport->scroll( 0, -2 );
-	m_helpViewport->update();
-	updateButtons();
 	if ( HELPHEIGHT - m_helpLabel->height() - m_ypos > 0 )
 		stopScrolling();
+	else
+	{
+		m_ypos -= 2;
+		m_helpViewport->scroll( 0, -2 );
+		m_helpViewport->update();
+		updateButtons();
+	}
 } // KoHelpWidget::scrollUp()
 
 void KoHelpWidget::timerEvent( QTimerEvent* )
@@ -281,6 +287,8 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 2, 1, 1 );
 	buttonLayout->add( m_close = new KoTinyButton( KoTinyButton::Close, this ) ); 
 	buttonLayout->add( m_sticky = new KoTinyButton( KoTinyButton::Sticky, this ) );
+	layout->addColSpacing( 2, 2 );
+	layout->addRowSpacing( 3, 2 );
 	layout->setMargin( 3 );
 	layout->setSpacing( 1 );
 	layout->setRowStretch( 1, 1 );
@@ -350,12 +358,19 @@ void KoContextHelpPopup::keyPressEvent( QKeyEvent* e )
 {
 	switch ( e->key() )
 	{
-		case Key_Up:
+/*		case Key_Up:
 				m_helpViewer->startScrollingUp();
 			break;
 		
 		case Key_Down:
 				m_helpViewer->startScrollingDown();
+			break;*/
+		case Key_Up:
+				m_helpViewer->scrollUp();
+			break;
+		
+		case Key_Down:
+				m_helpViewer->scrollDown();
 			break;
 	}
 } // KoContextHelpPopup::keyPressEvent
@@ -364,10 +379,10 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 {
 	switch ( e->key() )
 	{
-		case Key_Up:
+		/*case Key_Up:
 		case Key_Down:
 				m_helpViewer->stopScrolling();
-			break;
+			break;*/
 			
 		case Key_Escape:
 				emit wantsToBeClosed();
