@@ -1309,12 +1309,20 @@ void KoTextParag::printRTDebug( int info )
     kdDebug(32500) << "  Text: '" << string()->toString() << "'" << endl;
     if ( info == 0 ) // paragraph info
     {
-        if ( counter() )
-            kdDebug(32500) << "  Counter style=" << counter()->style()
-                      << " numbering=" << counter()->numbering()
-                      << " depth=" << counter()->depth()
+        if ( m_layout.counter )
+        {
+            QString additionalInfo;
+            if ( m_layout.counter->restartCounter() )
+                additionalInfo = "[restartCounter]";
+            static const char * const s_numbering[] = { "List", "Chapter", "None", "Footnote" };
+            kdDebug(32500) << "  Counter style=" << m_layout.counter->style()
+                      << " numbering=" << s_numbering[ m_layout.counter->numbering() ]
+                      << " depth=" << m_layout.counter->depth()
+                      << " number=" << m_layout.counter->number( this )
                       << " text='" << m_layout.counter->text( this ) << "'"
-                      << " width=" << m_layout.counter->width( this ) << endl;
+                      << " width=" << m_layout.counter->width( this )
+                      << additionalInfo << endl;
+        }
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
         static const char * const s_linespacing[] = { "Single", "1.5", "2", "custom", "atLeast", "Multiple", "Fixed" };
         static const char * const s_dir[] = { "DirL", "DirR", "DirEN", "DirES", "DirET", "DirAN", "DirCS", "DirB", "DirS", "DirWS", "DirON", "DirLRE", "DirLRO", "DirAL", "DirRLE", "DirRLO", "DirPDF", "DirNSM", "DirBN" };
