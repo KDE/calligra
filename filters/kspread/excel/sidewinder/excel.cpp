@@ -2259,8 +2259,11 @@ public:
   unsigned parentStyle;
   unsigned horizontalAlignment;
   unsigned verticalAlignment;
+  bool textWrap;
   unsigned rotationAngle;
   bool stackedLetters;
+  unsigned indentLevel;
+  bool shrinkContent;
 };
 
 XFRecord::XFRecord():  Record()
@@ -2273,8 +2276,11 @@ XFRecord::XFRecord():  Record()
   d->parentStyle = 0;
   d->horizontalAlignment = Left;
   d->verticalAlignment = VCentered;
+  d->textWrap = false;
   d->rotationAngle = 0;
   d->stackedLetters = 0;
+  d->indentLevel = 0;
+  d->shrinkContent = 0;
 }
 
 XFRecord::~XFRecord()
@@ -2297,8 +2303,11 @@ XFRecord& XFRecord::operator=( const XFRecord& xf )
   d->parentStyle         = xf.parentStyle();
   d->horizontalAlignment = xf.horizontalAlignment();
   d->verticalAlignment   = xf.verticalAlignment();
+  d->textWrap            = xf.textWrap();
   d->rotationAngle       = xf.rotationAngle();
   d->stackedLetters      = xf.stackedLetters();
+  d->indentLevel         = xf.indentLevel();
+  d->shrinkContent       = xf.shrinkContent();
   return *this;
 }
 
@@ -2403,6 +2412,16 @@ const char* XFRecord::verticalAlignmentAsString() const
   return result;
 }
 
+bool XFRecord::textWrap() const
+{
+  return d->textWrap;
+}
+
+void XFRecord::setTextWrap( bool wrap )
+{
+  d->textWrap = wrap;
+}
+
 unsigned XFRecord::rotationAngle() const
 {
   return d->rotationAngle;
@@ -2423,6 +2442,26 @@ void XFRecord::setStackedLetters( bool stacked )
   d->stackedLetters = stacked;
 }
 
+unsigned XFRecord::indentLevel() const
+{
+  return d->indentLevel;
+}
+
+void XFRecord::setIndentLevel( unsigned i )
+{
+  d->indentLevel = i;
+}
+
+bool XFRecord::shrinkContent() const
+{
+  return d->shrinkContent;
+}
+
+void XFRecord::setShrinkContent( bool s )
+{
+  d->shrinkContent = s;
+}
+
 void XFRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 20 ) return;
@@ -2439,10 +2478,15 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   unsigned align = data[6];
   setHorizontalAlignment( align & 0x07 );
   setVerticalAlignment( align >> 4 );
+  setTextWrap( align & 0x80 );
   
   unsigned angle = data[7];
   setRotationAngle( ( angle != 255 ) ? ( angle & 0x7f ) : 0 );
   setStackedLetters( angle == 255 ); 
+  
+  unsigned options = data[8];
+  setIndentLevel( options & 0x0f );
+  setShrinkContent( options & 0x10 );
 }
 
 void XFRecord::dump( std::ostream& out ) const
@@ -2450,8 +2494,11 @@ void XFRecord::dump( std::ostream& out ) const
   out << "XF" << std::endl;
   out << "       Hor-Align : " << horizontalAlignmentAsString() << std::endl;
   out << "       Ver-Align : " << verticalAlignmentAsString() << std::endl;
+  out << "       Text Wrap : " << ( textWrap() ? "yes" : "no" ) << std::endl;
   out << "       Rotation  : " << rotationAngle() << std::endl;
   out << " Stacked Letters : " << ( stackedLetters() ? "yes" : "no" ) << std::endl;
+  out << "   Indent Level  : " << indentLevel() << std::endl;
+  out << "  Shrink Content : " << ( shrinkContent() ? "yes" : "no" ) << std::endl;
 }
 
 //=============================================

@@ -2289,6 +2289,20 @@ public:
   const char* verticalAlignmentAsString() const; 
   
   /**
+   * Returns true if text is wrapped at right border.
+   *
+   * \sa setTextWrap
+   */
+  bool textWrap() const;
+  
+  /**
+   * Sets whether text should be wrapped at right border.
+   *
+   * \sa textWrap
+   */
+  void setTextWrap( bool wrap );
+  
+  /**
    * Returns the rotation angle of the text. If it is between 1 to 90,
    * the text is rotated 1 to 90 degrees counterclockwise. If it is between
    * 91 to 180, the text is rotated 1 to 90 degrees clockwise.
@@ -2320,6 +2334,34 @@ public:
    * \sa stackedLetters
    */
   void setStackedLetters( bool stacked );
+
+  /**
+   * Returns indent level.
+   *
+   * \sa indentLevel
+   */
+  unsigned indentLevel() const;
+  
+  /**
+   * Sets indent level.
+   *
+   * \sa indentLevel
+   */
+  void setIndentLevel( unsigned i );
+  
+  /**
+   * Returns true if content should be shrunk to fit into cell.
+   *
+   * \sa setShrinkContent
+   */
+  bool shrinkContent() const;
+  
+  /**
+   * Sets whether content should be shrunk to fit into cell.
+   *
+   * \sa shrinkContent
+   */
+  void setShrinkContent( bool s );
   
   /**
    \reimpl
