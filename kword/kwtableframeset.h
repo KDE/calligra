@@ -145,13 +145,13 @@ public:
     void recalcRows(int _col=-1,int _row=-1);
 
     /** returns the number of rows */
-    unsigned int getRows() { return m_rows; }
+    unsigned int getRows()const { return m_rows; }
     /** returns the number of columns */
-    unsigned int getCols() { return m_colPositions.count()-1; }
+    unsigned int getCols()const { return m_colPositions.count()-1; }
 
     /** returns the number of cells the table contains, this includes
      * temporary headers. */
-    unsigned int getNumCells() { return m_cells.count(); }
+    unsigned int getNumCells()const { return m_cells.count(); }
 
     /** returns the fact if one cell (==frame) has been selected */
     bool hasSelectedFrame();
@@ -192,10 +192,10 @@ public:
 
     // the boolean actually works, but is not saved (to xml) yet :(
     void setShowHeaderOnAllPages( bool s ) { m_showHeaderOnAllPages = s; }
-    bool getShowHeaderOnAllPages() { return m_showHeaderOnAllPages; }
+    bool getShowHeaderOnAllPages()const { return m_showHeaderOnAllPages; }
 
     /** redraw contents of temp headers. */
-    bool hasTempHeaders() { return m_hasTmpHeaders; }
+    bool hasTempHeaders()const { return m_hasTmpHeaders; }
 
     /** release the constrains of the table and allow all frames to be
      * edited apart from each other. (ps. there is no way back..) */
@@ -203,7 +203,7 @@ public:
 
     void group();
 
-    bool isActive() { return m_active; }
+    bool isActive()const { return m_active; }
 
     /** merge cells to one cell. Will loose all text not in top-left cell */
     KCommand *joinCells(unsigned int colBegin=0,unsigned int rowBegin=0, unsigned int colEnd=0,unsigned int rowEnd=0);
