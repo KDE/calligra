@@ -410,6 +410,7 @@ KarbonView::objectTrafoTranslate()
 	if (m_TransformDlg->isVisible() == false )
 	{
 		shell()->addDockWindow(m_TransformDlg, DockRight);
+		m_TransformDlg->setTab( Translate );
 		m_TransformDlg->show();
 	}
 }
@@ -417,19 +418,35 @@ KarbonView::objectTrafoTranslate()
 void
 KarbonView::objectTrafoScale()
 {
+	if (m_TransformDlg->isVisible() == false )
+	{
+		shell()->addDockWindow(m_TransformDlg, DockRight);
+		m_TransformDlg->setTab( Scale );
+		m_TransformDlg->show();
+	}
 }
 
 void
 KarbonView::objectTrafoRotate()
 {
+	if (m_TransformDlg->isVisible() == false )
+	{
+		shell()->addDockWindow(m_TransformDlg, DockRight);
+		m_TransformDlg->setTab( Rotate );
+		m_TransformDlg->show();
+	}
 }
 
 void
 KarbonView::objectTrafoShear()
 {
+	if (m_TransformDlg->isVisible() == false )
+	{
+		shell()->addDockWindow(m_TransformDlg, DockRight);
+		m_TransformDlg->setTab( Shear );
+		m_TransformDlg->show();
+	}
 }
-
-
 
 void
 KarbonView::ellipseTool()
