@@ -43,6 +43,7 @@
 #include <qpalette.h>
 #include <qrect.h>
 #include <qbitmap.h>
+#include <qstylesheet.h>
 #include <kdebug.h>
 #include <koGlobal.h>
 #include <math.h>
@@ -867,7 +868,8 @@ void KivioSMLStencil::paintConnectorTargets( KivioIntraStencilData *pData )
 
 void KivioSMLStencil::drawArc( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _a, _l, _x, _y, _w, _h, defWidth, defHeight;
+  double defWidth, defHeight;
+  int _a, _l, _x, _y, _w, _h;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   KivioPoint *pPosition, *pDimensions;
@@ -1040,7 +1042,8 @@ void KivioSMLStencil::drawPie( KivioShape *, KivioIntraStencilData * )
 
 void KivioSMLStencil::drawEllipse( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _x, _y, _w, _h, defWidth, defHeight;
+  double defWidth, defHeight;
+  int _x, _y, _w, _h;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   KivioPoint *pPosition, *pDimensions;
@@ -1082,7 +1085,8 @@ void KivioSMLStencil::drawEllipse( KivioShape *pShape, KivioIntraStencilData *pD
 
 void KivioSMLStencil::drawLineArray( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _x, _y, defWidth, defHeight;
+  double defWidth, defHeight;
+  int _x, _y;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   QPtrList <KivioPoint> *pList;
@@ -1105,7 +1109,7 @@ void KivioSMLStencil::drawLineArray( KivioShape *pShape, KivioIntraStencilData *
     _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
     _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
-    arr.setPoint( i, (int)_x, (int)_y );
+    arr.setPoint( i, _x, _y );
 
     i++;
 
@@ -1122,7 +1126,8 @@ void KivioSMLStencil::drawLineArray( KivioShape *pShape, KivioIntraStencilData *
 
 void KivioSMLStencil::drawRectangle( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _x, _y, _w, _h, defWidth, defHeight;
+  double defWidth, defHeight;
+  int _x, _y, _w, _h;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   KivioPoint *pPosition, *pDimensions;
@@ -1164,7 +1169,8 @@ void KivioSMLStencil::drawRectangle( KivioShape *pShape, KivioIntraStencilData *
 
 void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _rx, _ry, _x, _y, _w, _h, defWidth, defHeight;
+  double defWidth, defHeight;
+  int _rx, _ry, _x, _y, _w, _h;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   KivioPoint *pPosition, *pDimensions;
@@ -1211,7 +1217,8 @@ void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilD
 
 void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _x, _y, defWidth, defHeight;
+  double defWidth, defHeight;
+  int _x, _y;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   QPtrList <KivioPoint> *pList;
@@ -1236,7 +1243,7 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
     _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
 
-    arr.setPoint( i, (int)_x, (int)_y );
+    arr.setPoint( i, _x, _y );
 
     i++;
 
@@ -1269,7 +1276,8 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
 
 void KivioSMLStencil::drawPolyline( KivioShape *pShape, KivioIntraStencilData *pData )
 {
-  double _x, _y, defWidth, defHeight;
+  double defWidth, defHeight;
+  int _x, _y;
   KivioPainter *painter;
   KivioShapeData *pShapeData;
   QPtrList <KivioPoint> *pList;
@@ -1292,7 +1300,7 @@ void KivioSMLStencil::drawPolyline( KivioShape *pShape, KivioIntraStencilData *p
     _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
     _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
-    arr.setPoint( i, (int)_x, (int)_y );
+    arr.setPoint( i, _x, _y );
 
     i++;
 
@@ -1333,22 +1341,9 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
   painter->setFont( f );
   painter->setTextColor( pShapeData->textColor() );
 
-
   int tf = pShapeData->vTextAlign() | pShapeData->hTextAlign();
   painter->drawText( _x, _y, _w, _h, tf | Qt::WordBreak, pShapeData->text() );
-  
   // TODO Implement richtext support
-/*  QSimpleRichText richText(pShapeData->text(), pShapeData->textFont());
-  richText.setWidth(_w);
-  int hdiff = _h - richText.height();
-  
-  if((hdiff > 1) && pShapeData->vTextAlign() == Qt::AlignVCenter) {
-    _y += hdiff / 2;
-  } else if((hdiff > 1) && pShapeData->vTextAlign() == Qt::AlignBottom) {
-    _y += hdiff;
-  }
-
-  richText.draw(static_cast<KivioScreenPainter*>(painter)->painter(), _x, _y, QRect(0, 0, _w, _h), QColorGroup());*/
 }
 
 
