@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2001, Rob Buis <rwlbuis@wanadoo.nl>
+    Copyright (C) 2003, Rob Buis <buis@kde.org>
     This file is part of the KDE project
 
     This library is free software; you can redistribute it and/or

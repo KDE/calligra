@@ -1,6 +1,7 @@
 /*
     Copyright (C) 1998 Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de>
     Copyright (C) 2001, Rob Buis <rwlbuis@wanadoo.nl>
+    Copyright (C) 2003, Rob Buis <buis@kde.org>
     This file is part of the KDE project
 
     This library is free software; you can redistribute it and/or
@@ -39,7 +40,7 @@ DESCRIPTION
 #include <qtl.h>
 #include <kdebug.h>
 
-#include <kontour_doc.h>
+#include <core/vdocument.h>
 namespace std { };
 using namespace std;
 
@@ -161,7 +162,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
                               const QString &from, const QString &to,
                               const QString & ) {
 
-    if( to != "application/x-kontour" || from != "image/x-xfig" )
+    if( to != "application/x-karbon" || from != "image/x-xfig" )
         return false;
 
   char buf[255];
