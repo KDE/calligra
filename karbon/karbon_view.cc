@@ -61,6 +61,7 @@
 //#include "vtext.h"
 #include "vselection.h"
 #include "vtoolcontainer.h"
+#include "vstrokefillpreview.h"
 
 #include <tkfloatspinboxaction.h>
 
@@ -160,7 +161,7 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	m_painterFactory->painter()->resize( width(), height() );
 	m_painterFactory->editpainter()->resize( width(), height() );
 	m_canvas->resize( width(), height() );
-        reorganizeGUI();
+	reorganizeGUI();
 }
 
 void
@@ -602,7 +603,7 @@ KarbonView::solidFillClicked()
 	{
 		VFillDlg* dialog = new VFillDlg( m_part );
 		dialog->exec();
-                delete dialog;
+		delete dialog;
 	}
 }
 
@@ -613,7 +614,7 @@ KarbonView::strokeClicked()
 	{
 		VStrokeDlg* dialog = new VStrokeDlg( m_part );
 		dialog->exec();
-                delete dialog;
+		delete dialog;
 	}
 }
 
@@ -628,6 +629,8 @@ KarbonView::slotStrokeColorChanged( const QColor &c )
 	m_part->document().setDefaultStrokeColor( color );
 
 	m_part->addCommand( new VStrokeCmd( &m_part->document(), color ), true );
+
+	m_toolbox->strokeFillPreview()->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
 }
 
 void
@@ -641,6 +644,8 @@ KarbonView::slotFillColorChanged( const QColor &c )
 	m_part->document().setDefaultFillColor( color );
 
 	m_part->addCommand( new VFillCmd( &m_part->document(), color ), true );
+
+	m_toolbox->strokeFillPreview()->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
 }
 
 void
@@ -884,6 +889,7 @@ KarbonView::initActions()
 
 	// toolbox ---->
 	m_toolbox = VToolContainer::instance( m_part, this );
+	m_toolbox->strokeFillPreview()->update( part()->document().defaultStroke(), part()->document().defaultFill() );
 
 	connect(
 		m_toolbox, SIGNAL( selectToolActivated() ),

@@ -90,6 +90,8 @@ public:
 	void moveSelectionDown();
 	void moveSelectionUp();
 
+	VStroke defaultStroke() { return m_defaultStroke; }
+	VFill defaultFill() { return m_defaultFill; }
 	void setDefaultStrokeColor( const VColor &color ) { m_defaultStroke.setColor( color ); }
 	void setDefaultFillColor( const VColor &color ) { m_defaultFill.setColor( color ); }
 	/// all newly created shapes in this document get the default color by using this method

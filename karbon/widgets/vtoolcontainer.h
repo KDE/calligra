@@ -30,7 +30,7 @@ public:
 	QButtonGroup* btngroup;
 	QButtonGroup* dlggroup;
 	KDualColorButton* m_dualColorButton;
-	VStrokeFillPreview* m_strokeFillPreview;
+	VStrokeFillPreview* strokeFillPreview() { return m_strokeFillPreview; }
 
 signals:
 	// shape tools:
@@ -53,6 +53,7 @@ signals:
 	void gradToolActivated();
 
 private:
+	VStrokeFillPreview* m_strokeFillPreview;
 	enum ButtonChoice
 	{
 		Select, Scale, Rotate, Shear, Ellipse, Rectangle,

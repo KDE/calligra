@@ -28,6 +28,8 @@ public:
 	virtual void resize( unsigned int w, unsigned int h );
 	virtual void begin();
 	virtual void end();
+	void clear();
+	void clear( unsigned int color );
 	virtual void blit( const QRect & );
 
 	// matrix manipulation
@@ -63,8 +65,6 @@ public:
 	virtual QPaintDevice *device() { return m_target; } 
 
 private:
-	void clear();
-	void clear( unsigned int color );
 	void drawVPath( struct _ArtVpath * );
 	void applyGradient( _ArtSVP *, bool );
 	_ArtGradientStop *buildStopArray( VGradient &gradient, int & );

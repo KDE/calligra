@@ -6,8 +6,11 @@
 #define __VSTROKEFILLPREVIEW_H__
 
 #include <qframe.h>
+#include <qpixmap.h>
 
 class VKoPainter;
+class VFill;
+class VStroke;
 
 class VStrokeFillPreview : public QFrame
 {
@@ -24,11 +27,14 @@ public:
 	virtual QSizePolicy sizePolicy() const
 		{ return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ); }
 
+	void update( const VStroke &, const VFill & );
+
 protected:
 	virtual void paintEvent( QPaintEvent* event );
 
 private:
 	VKoPainter* m_painter;
+	QPixmap m_pixmap;
 };
 
 #endif
