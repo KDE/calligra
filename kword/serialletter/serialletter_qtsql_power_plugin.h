@@ -39,11 +39,50 @@
 
 /******************************************************************
  *
+ * DIRTY HACK FOR SOME INFLEXIBILITY IN QT3's SQL stuff
+ *
+ * This class is rom some Trolltech guy on QT-interest
+ ******************************************************************/
+
+
+
+class QMySqlCursor: public QSqlCursor
+{
+public:
+    QMySqlCursor( const QString & query = QString::null, bool autopopulate = 
+TRUE, QSqlDatabase* db = 0 ): QSqlCursor( QString::null, autopopulate, db )
+    {
+        exec( query );
+        if ( autopopulate )
+            *(QSqlRecord*)this = ((QSqlQuery*)this)->driver()->record(
+*(QSqlQuery*)this );
+        setMode( QSqlCursor::ReadOnly );
+    }
+    QMySqlCursor( const QMySqlCursor & other ): QSqlCursor( other ) {}
+    QMySqlCursor( const QSqlQuery & query, bool autopopulate = TRUE ): 
+QSqlCursor( QString::null, autopopulate )
+    {
+        *(QSqlQuery*)this = query;
+        if ( autopopulate )
+            *(QSqlRecord*)this = query.driver()->record( query );
+        setMode( QSqlCursor::ReadOnly );
+    }
+    bool select( const QString & /*filter*/, const QSqlIndex & /*sort*/ = 
+QSqlIndex() ) { return exec( lastQuery() ); }
+    QSqlIndex primaryIndex( bool /*prime*/ = TRUE ) const { return
+QSqlIndex(); }
+    int insert( bool /*invalidate*/ = TRUE ) { return FALSE; }
+    int update( bool /*invalidate*/ = TRUE ) { return FALSE; }
+    int del( bool /*invalidate*/ = TRUE ) { return FALSE; }
+    void setName( const QString& /*name*/, bool /*autopopulate*/ = TRUE ) {}
+};
+
+
+/******************************************************************
+ *
  * Class: KWQTSQLSerialDataSource
  *
  ******************************************************************/
-typedef QValueList< DbRecord > Db;
-
 class KWQTSQLPowerSerialDataSource: public KWSerialLetterDataSource
 {
     public:
@@ -56,9 +95,10 @@ class KWQTSQLPowerSerialDataSource: public KWSerialLetterDataSource
     virtual void load( QDomElement& elem );
     virtual class QString getValue( const class QString &name, int record = -1 ) const;
     virtual int getNumRecords() const {
-        return /*(int)db.count()*/ 0;
+        return (myquery?((myquery->size()<0)?0:myquery->size()):0);
     }
     virtual  bool showConfigDialog(QWidget *,int);
+    virtual void refresh(bool force);
 
     protected:
 	friend class KWQTSQLPowerSerialLetterEditor;
@@ -70,6 +110,10 @@ class KWQTSQLPowerSerialDataSource: public KWSerialLetterDataSource
 	QString databasename;
 	QString query;
 	QGuardedPtr<QSqlDatabase> database;
+	QMySqlCursor *myquery;
+
+    void clearSampleRecord();
+    void addSampleRecordEntry(QString name);
 
 };
 
@@ -94,6 +138,7 @@ private slots:
  void updateDBViews();
  void slotTableChanged ( QListBoxItem * item );
  void slotExecute();
+ void slotSetQuery();
 };
 
 /******************************************************************
@@ -113,47 +158,6 @@ private:
  KWQTSQLOpenWidget *widget;
 private slots:
 void handleOk();
-};
-
-
-/******************************************************************
- *
- * DIRTY HACK FOR SOME INFLEXIBILITY IN QT3's SQL stuff
- *
- * This class is rom some Trolltech guy on QT-interest
- ******************************************************************/
-
-
-
-class QMySqlCursor: public QSqlCursor
-{
-public:
-    QMySqlCursor( const QString & query = QString::null, bool autopopulate = 
-TRUE, QSqlDatabase* db = 0 ): QSqlCursor( QString::null, autopopulate, db )
-    {
-        exec( query );
-        if ( autopopulate )
-            *(QSqlRecord*)this = ((QSqlQuery*)this)->driver()->record( 
-*(QSqlQuery*)this );
-        setMode( QSqlCursor::ReadOnly );
-    }
-    QMySqlCursor( const QMySqlCursor & other ): QSqlCursor( other ) {}
-    QMySqlCursor( const QSqlQuery & query, bool autopopulate = TRUE ): 
-QSqlCursor( QString::null, autopopulate )
-    {
-        *(QSqlQuery*)this = query;
-        if ( autopopulate )
-            *(QSqlRecord*)this = query.driver()->record( query );
-        setMode( QSqlCursor::ReadOnly );
-    }
-    bool select( const QString & /*filter*/, const QSqlIndex & /*sort*/ = 
-QSqlIndex() ) { return exec( lastQuery() ); }
-    QSqlIndex primaryIndex( bool /*prime*/ = TRUE ) const { return 
-QSqlIndex(); }
-    int insert( bool /*invalidate*/ = TRUE ) { return FALSE; }
-    int update( bool /*invalidate*/ = TRUE ) { return FALSE; }
-    int del( bool /*invalidate*/ = TRUE ) { return FALSE; }
-    void setName( const QString& /*name*/, bool /*autopopulate*/ = TRUE ) {}
 };
 
 

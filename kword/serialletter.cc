@@ -130,6 +130,12 @@ QString KWSerialLetterDataBase::getValue( const QString &name, int record ) cons
 		return QString("");
 }
 
+
+void KWSerialLetterDataBase::refresh(bool force)
+{
+	if (plugin) plugin->refresh(force);
+}
+
 const QMap< QString, QString > &KWSerialLetterDataBase::getRecordEntries() const
 {
 	if (plugin)

@@ -1101,9 +1101,12 @@ void KWView::print( KPrinter &prt )
         }
     }
 
-    if ( !m_doc->getSerialLetterDataBase() ||
-         m_doc->getSerialLetterDataBase()->getNumRecords() == 0 )
-        serialLetter = FALSE;
+    if ( !m_doc->getSerialLetterDataBase() ) serialLetter=FALSE;
+	else
+	{
+		m_doc->getSerialLetterDataBase()->refresh(false);
+                if (m_doc->getSerialLetterDataBase()->getNumRecords() == 0 )  serialLetter = FALSE;
+	}
 
     //float left_margin = 0.0;
     //float top_margin = 0.0;

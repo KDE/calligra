@@ -64,6 +64,7 @@ class KWQTSQLSerialDataSource: public KWSerialLetterDataSource
     virtual int getNumRecords() const {
         return /*(int)db.count()*/ 0;
     }
+    virtual void refresh(bool){;}
     virtual  bool showConfigDialog(QWidget *,int);
 
     protected:

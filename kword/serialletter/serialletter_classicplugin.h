@@ -66,6 +66,7 @@ class KWClassicSerialDataSource: public KWSerialLetterDataSource
         return (int)db.count();
     }
     virtual  bool showConfigDialog(QWidget *,int);
+    virtual void refresh(bool){};
 
     protected:
     friend class KWClassicSerialLetterEditor;

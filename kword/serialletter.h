@@ -71,6 +71,8 @@ public:
 
     KWSerialLetterDataSource *loadPlugin(const QString& name);
     KWSerialLetterDataSource *openPluginFor(int type);
+
+    void refresh(bool force);
 protected:
     friend class KWSerialLetterConfigDialog;
     KWDocument *doc;

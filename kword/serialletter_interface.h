@@ -58,6 +58,7 @@ class KWSerialLetterDataSource
     virtual void save(QDomDocument&, QDomElement&)=0;
     virtual void load( class QDomElement& elem )=0;
 
+    virtual void refresh(bool force)=0;
     QByteArray info;
     protected:
     DbRecord sampleRecord;

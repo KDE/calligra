@@ -30,6 +30,7 @@
 #include <qsqlrecord.h>
 #include <qsqlcursor.h>
 #include <qdatatable.h>
+#include <kdebug.h>
 
 #define KWQTSQLBarIcon( x ) BarIcon( x, db->KWInstance() )
 
@@ -40,18 +41,45 @@
  ******************************************************************/
 
 KWQTSQLPowerSerialDataSource::KWQTSQLPowerSerialDataSource(KInstance *inst)
-	: KWSerialLetterDataSource(inst)
+	: KWSerialLetterDataSource(inst),myquery(0)
 {
 	port=i18n("default");
 }
 
 KWQTSQLPowerSerialDataSource::~KWQTSQLPowerSerialDataSource()
 {
+	if (myquery) delete myquery;
+	QSqlDatabase::removeDatabase("KWQTSQLPOWER");
+}
+
+void KWQTSQLPowerSerialDataSource::refresh(bool force)
+{
+	if ((force) || (myquery==0))
+	{
+		if (myquery)
+		{
+			delete myquery;
+			myquery=0;
+		}
+		QString tmp=query.upper();
+		if (!tmp.startsWith("SELECT")) return;
+		if ((!database) || (!database->isOpen()))openDatabase();
+		myquery=new QMySqlCursor(query,true,database);
+		myquery->setMode(QSqlCursor::ReadOnly);
+	}
+	kdDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
 }
 
 QString KWQTSQLPowerSerialDataSource::getValue( const QString &name, int record ) const
 {
-	return QString();
+	int num=record;
+
+	if (!myquery) return name;
+	if ( num < 0 || num > (int)myquery->size() )
+		return name;
+	if (!myquery->seek(num,false)) return i18n(">>>Illegal position within datasource<<<");
+	if (!myquery->contains(name)) return i18n(">>>Field %1 is unknown in the current database query<<<").arg(name);
+	return (myquery->value(name)).toString();
 }
 
 void KWQTSQLPowerSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
@@ -68,7 +96,7 @@ bool KWQTSQLPowerSerialDataSource::showConfigDialog(QWidget *par,int action)
    if (action==KWSLOpen)
    {
    	KWQTSQLPowerSerialLetterOpen *dia=new KWQTSQLPowerSerialLetterOpen(par,this);
-	
+
 	ret=dia->exec();
 	if (ret) openDatabase();
 	delete dia;
@@ -81,6 +109,11 @@ bool KWQTSQLPowerSerialDataSource::showConfigDialog(QWidget *par,int action)
    }
    return ret;
 }
+
+void KWQTSQLPowerSerialDataSource::clearSampleRecord() {sampleRecord.clear();}
+
+void KWQTSQLPowerSerialDataSource::addSampleRecordEntry(QString name)
+{sampleRecord[name]=i18n("No Value");}
 
 bool  KWQTSQLPowerSerialDataSource::openDatabase()
 {
@@ -157,7 +190,15 @@ KWQTSQLPowerSerialLetterEditor::KWQTSQLPowerSerialLetterEditor( QWidget *parent,
 	connect(widget->setup,SIGNAL(clicked()),this,SLOT(openSetup()));
 	connect(widget->tables,SIGNAL(currentChanged(QListBoxItem*)),this,SLOT(slotTableChanged(QListBoxItem*)));
 	connect(widget->execute,SIGNAL(clicked()),this,SLOT(slotExecute()));
+	connect(this,SIGNAL(okClicked()),this,SLOT(slotSetQuery()));
+	widget->query->setText(db->query);
 	updateDBViews();
+}
+
+void KWQTSQLPowerSerialLetterEditor::slotSetQuery()
+{
+	db->query=widget->query->text();
+	db->refresh(true);
 }
 
 void KWQTSQLPowerSerialLetterEditor::slotExecute()
@@ -166,7 +207,12 @@ void KWQTSQLPowerSerialLetterEditor::slotExecute()
 	if (!tmp.startsWith("SELECT")) return;
 	QMySqlCursor *cur=new QMySqlCursor(widget->query->text(),true,db->database);
 	cur->setMode(QSqlCursor::ReadOnly);
-	
+
+	db->clearSampleRecord();
+	kdDebug()<<QString("Fieldname count %1").arg(cur->count())<<endl;
+	for (int i=0;i<cur->count();i++)
+		db->addSampleRecordEntry(cur->fieldName(i));
+
 	widget->queryresult->setSqlCursor(cur,true,true);
 	widget->queryresult->refresh(QDataTable::RefreshAll);
 }
@@ -202,7 +248,7 @@ void KWQTSQLPowerSerialLetterEditor::updateDBViews()
 	widget->fields->clear();
 	widget->tables->clear();
 	if (!db->database) return;
-	widget->tables->insertStringList(db->database->tables());	
+	widget->tables->insertStringList(db->database->tables());
 }
 
 KWQTSQLPowerSerialLetterEditor::~KWQTSQLPowerSerialLetterEditor(){;}
