@@ -1,3 +1,6 @@
+2002-01-11 Joseph Wenninger <jowenn@kde.org>
+	* added DCOP access to maxRow() and maxColumn() of the table  and to isDefault() of the cell
+
 2002-01-10 Lukas Tinkl <lukas@kde.org>
 	* implemented 19 new statistical functions (BETADIST, GAMMADIST, POISSON, etc.)
 	

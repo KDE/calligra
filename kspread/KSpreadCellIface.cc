@@ -12,6 +12,13 @@ void KSpreadCellIface::setCell( KSpreadTable* table, const QPoint& point )
     m_point = point;
 }
 
+bool KSpreadCellIface::isDefault() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->isDefault();
+}
+
+
 QString KSpreadCellIface::text() const
 {
     KSpreadCell* cell = m_table->cellAt( m_point );

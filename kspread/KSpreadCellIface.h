@@ -15,6 +15,8 @@ public:
 
     void setCell( KSpreadTable* table, const QPoint& point );
 k_dcop:
+
+    virtual bool isDefault() const;
     virtual QString text() const;
     virtual void setText( const QString& text );
     virtual void setValue( int value );

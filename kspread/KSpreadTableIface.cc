@@ -119,6 +119,17 @@ QString KSpreadTableIface::name() const
 }
 
 
+int KSpreadTableIface::maxColumn() const
+{
+    return m_table->maxColumn();
+
+}
+
+int KSpreadTableIface::maxRow() const
+{
+    return m_table->maxRow();
+}
+
 bool KSpreadTableIface::processDynamic( const QCString& fun, const QByteArray&/*data*/,
                                         QCString& replyType, QByteArray &replyData )
 {
