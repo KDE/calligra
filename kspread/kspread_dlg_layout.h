@@ -47,10 +47,11 @@
 #include <knuminput.h>
 #include <kcompletion.h>
 #include <klineedit.h>
-
+#include <kspread_view.h>
+#include <kspread_doc.h>
 class CellLayoutDlg;
 class KSpreadTable;
-class KSpreadView;
+//class KSpreadView;
 
 #include "kspread_cell.h"
 
@@ -481,6 +482,8 @@ public:
     KSpreadTable* getTable() {	return table; }
 
     bool isSingleCell() { return ( left == right && top == bottom ); }
+    
+    KLocale* locale(){return m_pView->doc()->locale();}
 
     // The layout of the selected area
     PenStyle leftBorderStyle;

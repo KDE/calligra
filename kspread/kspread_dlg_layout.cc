@@ -1173,8 +1173,8 @@ else if(time->isChecked())
         format->setEnabled(false);
         listFormat->setEnabled(true);
 
-        list+=i18n("System: ")+KGlobal::locale()->formatTime(QTime::currentTime(),false);
-        list+=i18n("System: ")+KGlobal::locale()->formatTime(QTime::currentTime(),true);
+        list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),false);
+        list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),true);
         QString tmp;
         list+=tmp.setNum(10)+":"+tmp.setNum(35) +" " + i18n("PM");
         list+=tmp.setNum(10)+":"+tmp.setNum(35)+":"+tmp.setNum(25)+" " + i18n("PM");
@@ -1205,25 +1205,25 @@ void CellLayoutPageFloat::makeDateFormat()
 {
 QString tmp,tmp2;
 if( listFormat->currentItem()==0)
-        tmp=KGlobal::locale()->formatDate(dlg->m_date,true);
+        tmp=dlg->locale()->formatDate(dlg->m_date,true);
 else if(listFormat->currentItem()==1)
-        tmp=KGlobal::locale()->formatDate(dlg->m_date,false);
+        tmp=dlg->locale()->formatDate(dlg->m_date,false);
 else if(listFormat->currentItem()==2)/*18-Feb-99*/
         {
         tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(), true)+"-";
+        tmp=tmp+"-"+dlg->locale()->monthName(dlg->m_date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
         }
 else if(listFormat->currentItem()==3) /*18-Feb-1999*/
         {
         tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(), true)+"-";
+        tmp=tmp+"-"+dlg->locale()->monthName(dlg->m_date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(dlg->m_date.year());
         }
 else if(listFormat->currentItem()==4) /*18-Feb*/
         {
         tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(), true);
+        tmp=tmp+"-"+dlg->locale()->monthName(dlg->m_date.month(), true);
         }
 else if(listFormat->currentItem()==5) /*18-05*/
         {
@@ -1244,28 +1244,28 @@ else if(listFormat->currentItem()==7) /*18/05/1999*/
         }
 else if(listFormat->currentItem()==8) /*Feb-99*/
         {
-        tmp=KGlobal::locale()->monthName(dlg->m_date.month(), true)+"-";
+        tmp=dlg->locale()->monthName(dlg->m_date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
         }
 else if(listFormat->currentItem()==9) /*February-99*/
         {
-        tmp=KGlobal::locale()->monthName(dlg->m_date.month())+"-";
+        tmp=dlg->locale()->monthName(dlg->m_date.month())+"-";
         tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
         }
 else if(listFormat->currentItem()==10) /*February-1999*/
         {
-        tmp=KGlobal::locale()->monthName(dlg->m_date.month())+"-";
+        tmp=dlg->locale()->monthName(dlg->m_date.month())+"-";
         tmp=tmp+tmp2.setNum(dlg->m_date.year());
         }
 else if(listFormat->currentItem()==11) /*F-99*/
         {
-        tmp=KGlobal::locale()->monthName(dlg->m_date.month()).at(0)+"-";
+        tmp=dlg->locale()->monthName(dlg->m_date.month()).at(0)+"-";
         tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
         }
 else if(listFormat->currentItem()==12) /*18/Feb*/
         {
         tmp=QString().sprintf("%02d", dlg->m_date.day())+"/";
-        tmp+=KGlobal::locale()->monthName(dlg->m_date.month(),true);
+        tmp+=dlg->locale()->monthName(dlg->m_date.month(),true);
         }
 else if(listFormat->currentItem()==13) /*18/02*/
         {
@@ -1275,19 +1275,19 @@ else if(listFormat->currentItem()==13) /*18/02*/
 else if(listFormat->currentItem()==14) /*18/Feb/1999*/
         {
         tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"/"+KGlobal::locale()->monthName(dlg->m_date.month(),true)+"/";
+        tmp=tmp+"/"+dlg->locale()->monthName(dlg->m_date.month(),true)+"/";
         tmp=tmp+tmp2.setNum(dlg->m_date.year());
         }
 else if(listFormat->currentItem()==15) /*2000/Feb/18*/
         {
         tmp=tmp2.setNum(dlg->m_date.year());
-        tmp=tmp+"/"+KGlobal::locale()->monthName(dlg->m_date.month(),true)+"/";
+        tmp=tmp+"/"+dlg->locale()->monthName(dlg->m_date.month(),true)+"/";
         tmp=tmp+QString().sprintf("%02d", dlg->m_date.day());
         }
 else if(listFormat->currentItem()==16) /*2000-Feb-18*/
         {
         tmp=tmp2.setNum(dlg->m_date.year());
-        tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(),true)+"-";
+        tmp=tmp+"-"+dlg->locale()->monthName(dlg->m_date.month(),true)+"-";
         tmp=tmp+QString().sprintf("%02d", dlg->m_date.day());
         }
 else if(listFormat->currentItem()==17) /*2000-02-18*/
@@ -1299,7 +1299,7 @@ else if(listFormat->currentItem()==17) /*2000-02-18*/
  else if( listFormat->currentItem()==18) /*2000-02-18*/
         {
 	   tmp=QString().sprintf("%d", dlg->m_date.day());
-	   tmp=tmp+" "+KGlobal::locale()->monthName(dlg->m_date.month())+" ";
+	   tmp=tmp+" "+dlg->locale()->monthName(dlg->m_date.month())+" ";
 	   tmp=tmp+tmp2.setNum(dlg->m_date.year());
         }
  exampleLabel->setText(tmp);
@@ -1311,21 +1311,21 @@ void CellLayoutPageFloat::init()
 QStringList list;
 QString tmp;
 QString tmp2;
-list+=i18n("System: ")+KGlobal::locale()->formatDate(QDate::currentDate(),true);
-list+=i18n("System: ")+KGlobal::locale()->formatDate(QDate::currentDate(),false);
+list+=i18n("System: ")+dlg->locale()->formatDate(QDate::currentDate(),true);
+list+=i18n("System: ")+dlg->locale()->formatDate(QDate::currentDate(),false);
 /*18-Feb-00*/
 tmp=tmp2.setNum(18);
-tmp+="-"+KGlobal::locale()->monthName(2, true)+"-";
+tmp+="-"+dlg->locale()->monthName(2, true)+"-";
 tmp+=tmp2.setNum(2000).right(2);
 list+=tmp;
 /*18-Feb-1999*/
 tmp=tmp2.setNum(18);
-tmp+="-"+KGlobal::locale()->monthName(2, true)+"-";
+tmp+="-"+dlg->locale()->monthName(2, true)+"-";
 tmp+=tmp2.setNum(2000);
 list+=tmp;
 /*18-Feb*/
 tmp=tmp2.setNum(18);
-tmp=tmp+"-"+KGlobal::locale()->monthName(2, true);
+tmp=tmp+"-"+dlg->locale()->monthName(2, true);
 list+=tmp;
 /*18-2*/
 tmp=tmp2.setNum(18);
@@ -1342,24 +1342,24 @@ tmp=tmp+"/"+QString().sprintf("%02d", 2)+"/";
 tmp=tmp+tmp2.setNum(2000);
 list+=tmp;
 /*Feb-99*/
-tmp=KGlobal::locale()->monthName(2, true)+"-";
+tmp=dlg->locale()->monthName(2, true)+"-";
 tmp=tmp+tmp2.setNum(2000).right(2);
 list+=tmp;
 /*February-99*/
-tmp=KGlobal::locale()->monthName(2)+"-";
+tmp=dlg->locale()->monthName(2)+"-";
 tmp=tmp+tmp2.setNum(2000).right(2);
 list+=tmp;
 /*February-1999*/
-tmp=KGlobal::locale()->monthName(2)+"-";
+tmp=dlg->locale()->monthName(2)+"-";
 tmp=tmp+tmp2.setNum(2000);
 list+=tmp;
 /*F-99*/
-tmp=KGlobal::locale()->monthName(2).at(0)+"-";
+tmp=dlg->locale()->monthName(2).at(0)+"-";
 tmp=tmp+tmp2.setNum(2000).right(2);
 list+=tmp;
 /*18/Feb*/
 tmp=tmp2.setNum(18)+"/";
-tmp+=KGlobal::locale()->monthName(2,true);
+tmp+=dlg->locale()->monthName(2,true);
 list+=tmp;
 /*18/2*/
 tmp=tmp2.setNum(18)+"/";
@@ -1367,17 +1367,17 @@ tmp+=QString().sprintf("%02d", 2);
 list+=tmp;
 /*18/Feb/1999*/
 tmp=tmp2.setNum(18);
-tmp=tmp+"/"+KGlobal::locale()->monthName(2,true)+"/";
+tmp=tmp+"/"+dlg->locale()->monthName(2,true)+"/";
 tmp=tmp+tmp2.setNum(2000);
 list+=tmp;
 /*2000/Feb/18*/
 tmp=tmp2.setNum(2000);
-tmp=tmp+"/"+KGlobal::locale()->monthName(2,true)+"/";
+tmp=tmp+"/"+dlg->locale()->monthName(2,true)+"/";
 tmp=tmp+tmp2.setNum(18);
 list+=tmp;
 /*2000-Feb-18*/
 tmp=tmp2.setNum(2000);
-tmp=tmp+"-"+KGlobal::locale()->monthName(2,true)+"-";
+tmp=tmp+"-"+dlg->locale()->monthName(2,true)+"-";
 tmp=tmp+tmp2.setNum(18);
 list+=tmp;
 /*2000-2-18*/
@@ -1387,7 +1387,7 @@ tmp=tmp+tmp2.setNum(18);
 list+=tmp;
 /*2 february 2000*/
  tmp=tmp2.setNum(18);
- tmp=tmp+" "+KGlobal::locale()->monthName(2)+" ";
+ tmp=tmp+" "+dlg->locale()->monthName(2)+" ";
  tmp=tmp+tmp2.setNum(2000);
 list+=tmp;
 
@@ -1440,7 +1440,7 @@ m_bFormatNumberChanged=true;
 QString tmp;
 int p;
 p = (precision->value() == -1) ? 8 : precision->value();
-QChar decimal_point= KGlobal::locale()->decimalSymbol()[0];
+QChar decimal_point= dlg->locale()->decimalSymbol()[0];
 if(!dlg->m_bValue&&!dlg->m_bDate&&!dlg->m_bTime)
         {
         QString tmpText;
@@ -1464,9 +1464,9 @@ else if(dlg->m_bTime)
                 QString tmp;
                 QString tmpTime;
                 if( listFormat->currentItem()==0)
-                        exampleLabel->setText(KGlobal::locale()->formatTime(dlg->m_time,false));
+                        exampleLabel->setText(dlg->locale()->formatTime(dlg->m_time,false));
                 else if(listFormat->currentItem()==1)
-                        exampleLabel->setText(KGlobal::locale()->formatTime(dlg->m_time,true));
+                        exampleLabel->setText(dlg->locale()->formatTime(dlg->m_time,true));
                 else if(listFormat->currentItem()==2)
                         {
                         if( dlg->m_time.hour()>12)
@@ -1496,11 +1496,11 @@ else if(dlg->m_bTime)
 else if(dlg->m_bValue)
         {
         if(number->isChecked())
-                tmp=KGlobal::locale()->formatNumber(dlg->m_value,p );
+                tmp=dlg->locale()->formatNumber(dlg->m_value,p );
         else if(money->isChecked())
-                tmp=KGlobal::locale()->formatMoney(dlg->m_value,KGlobal::locale()->currencySymbol(),p );
+                tmp=dlg->locale()->formatMoney(dlg->m_value,dlg->locale()->currencySymbol(),p );
         else if(percent->isChecked())
-                tmp=KGlobal::locale()->formatNumber(dlg->m_value*100.0, p)+ " %";
+                tmp=dlg->locale()->formatNumber(dlg->m_value*100.0, p)+ " %";
         else if(scientific->isChecked())
                 {
                 tmp=QString::number(dlg->m_value, 'E', p);
@@ -1619,8 +1619,8 @@ else if(dlg->m_bValue)
             int start=0;
             if(tmp.find('%')!=-1)
                 start=2;
-            else if(tmp.find(KGlobal::locale()->currencySymbol())==((int)(tmp.length()-KGlobal::locale()->currencySymbol().length())))
-                start=KGlobal::locale()->currencySymbol().length()+1;
+            else if(tmp.find(dlg->locale()->currencySymbol())==((int)(tmp.length()-dlg->locale()->currencySymbol().length())))
+                start=dlg->locale()->currencySymbol().length()+1;
             else if((start=tmp.find('E'))!=-1)
                 start=tmp.length()-start;
             else
