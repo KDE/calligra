@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Screen
 Name[af]=Skerm
-Name[ar]=شاشة
 Name[az]=Ekran
 Name[bg]=Екран
 Name[bs]=Ekran
@@ -18,7 +17,7 @@ Name[fr]=Écran
 Name[he]=מסך
 Name[hr]=Ekran
 Name[hu]=Képernyő
-Name[is]=Skjár
+Name[is]=SkjÃ¡r
 Name[it]=Schermo
 Name[ja]=スクリーン
 Name[lt]=Ekranas
@@ -38,6 +37,7 @@ Name[sr]=Ekran
 Name[sv]=Skärm
 Name[ta]=¾¢¨Ã
 Name[th]=หน้าจอ
+Name[tr]=Ekran
 Name[uk]=Екран
 Name[ven]=Tshikirini
 Name[wa]=Waitroûle
