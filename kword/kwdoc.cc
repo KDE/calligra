@@ -2053,22 +2053,34 @@ KWFrameSet * KWDocument::getFrameSetByName( const QString & name )
     return 0L;
 }
 
-KWFrameSet * KWDocument::getFrameSet( double mx, double my )
+KWFrame * KWDocument::frameAtPos( double mx, double my )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( fit.toLast(); fit.current() ; --fit )
+    for ( fit.toLast(); fit.current() ; --fit ) // z-order
     {
         KWFrameSet *frameSet = fit.current();
-        if ( frameSet->contains( mx, my ) ) {
-            //kdDebug() << "KWDocument::getFrameSet found frameset " << frameSet << " at position " << mx << "," << my << endl;
-            if ( !frameSet->isVisible() )
-                continue;
-            if ( frameSet->isRemoveableHeader() )
-                continue;
-            return frameSet;
-        }
+        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
+            continue;
+        KWFrame * frame = frameSet->frameAtPos( mx, my );
+        //kdDebug() << "KWDocument::frameAtPos found frameset " << frameSet << " at position " << mx << "," << my << endl;
+        if ( frame )
+            return frame;
     }
+    return 0L;
+}
 
+KWFrame * KWDocument::frameByBorder( const QPoint & nPoint )
+{
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( fit.toLast(); fit.current() ; --fit ) // z-order
+    {
+        KWFrameSet *frameSet = fit.current();
+        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
+            continue;
+        KWFrame * frame = frameSet->frameByBorder( nPoint );
+        if ( frame )
+            return frame;
+    }
     return 0L;
 }
 
@@ -2085,64 +2097,18 @@ QString KWDocument::generateFramesetName( const QString & templateName )
     return name;
 }
 
-/* Select the first frame where the x and y coords fall into
-   returns 0 if none was selected, return 1 if selected, return 2
-   if the frame was allready selected.
-*/
-int KWDocument::selectFrame( double mx, double my, bool simulate )
-{
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( fit.toLast(); fit.current() ; --fit )
-    {
-        KWFrameSet * frameSet = fit.current();
-        if ( frameSet->contains( mx, my ) ) {
-            if ( !frameSet->isVisible() )
-                continue;
-            if ( frameSet->isRemoveableHeader() )
-                continue;
-            return frameSet->selectFrame( mx, my, simulate );
-        }
-    }
-
-    if ( !simulate )
-        deSelectAllFrames();
-    return 0;
-}
-
-void KWDocument::deSelectFrame( double mx, double my )
-{
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( fit.toLast(); fit.current() ; --fit )
-    {
-        KWFrameSet * frameSet = fit.current();
-        if ( frameSet->contains( mx, my ) )
-            frameSet->deSelectFrame( mx, my );
-    }
-}
-
-void KWDocument::deSelectAllFrames()
-{
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( fit.toLast(); fit.current() ; --fit )
-    {
-        QListIterator<KWFrame> frameIt = fit.current()->frameIterator();
-        for ( ; frameIt.current(); ++frameIt )
-            frameIt.current()->setSelected( FALSE );
-    }
-}
-
-QCursor KWDocument::getMouseCursor( double mx, double my )
+QCursor KWDocument::getMouseCursor( const QPoint &nPoint )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( fit.toLast(); fit.current() ; --fit )
     {
         KWFrameSet *frameSet = fit.current();
-        if ( !frameSet->isVisible() )
+        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
             continue;
-        if ( frameSet->isRemoveableHeader() )
-            continue;
-        if ( frameSet->contains( mx, my ) )
-            return frameSet->getMouseCursor( mx, my );
+
+        QCursor cursor;
+        if ( frameSet->getMouseCursor( nPoint, cursor ) )
+            return cursor;
     }
 
     return arrowCursor;
@@ -2184,10 +2150,6 @@ KWFrame *KWDocument::getFirstSelectedFrame()
         }
     }
     return 0L;
-}
-
-KWFrameSet *KWDocument::getFirstSelectedFrameSet() {
-    return getFirstSelectedFrame()->getFrameSet();
 }
 
 void KWDocument::updateAllFrames()

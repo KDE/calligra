@@ -212,7 +212,7 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
 
 KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( double x, double y )
 {
-    KWFrame *f = getFrame(x,y);
+    KWFrame *f = frameAtPos(x,y);
     if(f) return static_cast<KWTableFrameSet::Cell *> (f->getFrameSet());
     return 0L;
 }
@@ -666,7 +666,7 @@ void KWTableFrameSet::refreshSelectedCell()
 }
 
 void KWTableFrameSet::selectUntil( double x, double y) {
-    KWFrame *f = getFrame(x,y);
+    KWFrame *f = frameAtPos(x,y);
     if(f) selectUntil(static_cast<KWTableFrameSet::Cell *> (f->getFrameSet()));
 }
 

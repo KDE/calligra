@@ -96,7 +96,7 @@ public:
     void editFrameProperties();
 
     // Mouse press
-    void mpEditFrame( QMouseEvent *e, int mx, int my );
+    void mpEditFrame( QMouseEvent *e, const QPoint& nPoint );
     void mpCreate( int mx, int my );
     void mpCreatePixmap( int mx, int my );
     // Mouse move
@@ -184,6 +184,7 @@ protected:
 
     void selectAllFrames( bool select );
     void selectFrame( double mx, double my, bool select );
+    void selectFrame( KWFrame* frame, bool select );
 
     KWTableFrameSet * createTable(); // uses m_insRect and m_table to create the table
 

@@ -131,9 +131,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( doc, SIGNAL( pageNumChanged() ),
              this, SLOT( pageNumChanged()) );
 
-     connect( doc, SIGNAL(currentFrameSetEditChanged()),
-             this, SLOT(updateButtons()) );
-
     connect( doc, SIGNAL( docStructureChanged(TypeStructDocItem) ),
              this, SLOT( docStructChanged(TypeStructDocItem)) );
 
@@ -241,10 +238,6 @@ void KWView::initGui()
 
     MouseMode mouseMode=gui->canvasWidget()->getMouseMode();
     gui->canvasWidget()->setMouseMode( mouseMode );
-    //setTool(mouseMode);
-    if(mouseMode!=MM_EDIT_FRAME)
-        doc->deSelectAllFrames();
-
 
     showFormulaToolbar( FALSE );
 

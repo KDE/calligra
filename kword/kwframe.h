@@ -86,7 +86,7 @@ public:
     void setSelected( bool _selected );
     bool isSelected() { return selected; }
 
-    QCursor getMouseCursor( double mx, double my, bool table );
+    QCursor getMouseCursor( const KoPoint& docPoint, bool table, QCursor defaultCursor );
 
     double getRunAroundGap() { return runAroundGap; }
     void setRunAroundGap( double gap ) { runAroundGap = gap; }
@@ -284,8 +284,12 @@ public:
     virtual void delFrame( unsigned int _num );
     virtual void delFrame( KWFrame *frm, bool remove = true );
 
-    /** retrieve frame from x and y coords (absolute coords) */
-    KWFrame *getFrame( double _x, double _y );
+    /** retrieve frame from x and y coords (unzoomed coords) */
+    KWFrame *frameAtPos( double _x, double _y );
+    /** return a frame if nPoint in on one of its borders */
+    KWFrame *frameByBorder( const QPoint & nPoint );
+
+    /** get a frame by number */
     KWFrame *getFrame( unsigned int _num );
 
     /* Iterator over the child frames */
@@ -356,14 +360,7 @@ public:
     /** returns true if we have a frame occupying that position */
     virtual bool contains( double mx, double my );
 
-    /**
-     * Return 1, if a frame gets selected which was not selected before,<br>
-     * 2, if a frame gets selected which was already selected<br>
-     * Also select the frame if simulate==false.
-     */
-    virtual int selectFrame( double mx, double my, bool simulate = false );
-    virtual void deSelectFrame( double mx, double my );
-    virtual QCursor getMouseCursor( double  mx, double my );
+    virtual bool getMouseCursor( const QPoint &nPoint, QCursor & cursor );
 
     /** create XML to describe yourself */
     virtual void save( QDomElement &parentElem );

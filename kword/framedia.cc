@@ -907,7 +907,7 @@ bool KWFrameDia::applyChanges()
 
     if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                             ( doc->processingType() == KWDocument::WP &&
-                                              doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
+                                              doc->getFrameSetNum( frame->getFrameSet() ) > 0 ) ) ) {
         if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
             double px = KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() );
             double py = KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() );

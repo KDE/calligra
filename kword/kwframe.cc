@@ -76,8 +76,14 @@ KWFrame::~KWFrame()
         anchor()->setDeleted(true);
 }
 
-QCursor KWFrame::getMouseCursor( double mx, double my, bool table )
+QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor defaultCursor )
 {
+    if ( !selected && !table )
+        return defaultCursor;
+
+    double mx = docPoint.x();
+    double my = docPoint.y();
+
     if ( !table ) {
         if ( mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6 )
             return Qt::sizeFDiagCursor;
@@ -98,17 +104,18 @@ QCursor KWFrame::getMouseCursor( double mx, double my, bool table )
         if ( mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height() )
             return Qt::sizeFDiagCursor;
 
-        if ( selected )
-            return Qt::sizeAllCursor;
+        //if ( selected )
+        //    return Qt::sizeAllCursor;
     } else { // Tables
+        // ### TODO move to KWTableFrameSet
         if ( mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + height() )
             return Qt::sizeHorCursor;
         if ( mx >= x() && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height() )
             return Qt::sizeVerCursor;
-        return Qt::sizeAllCursor;
+        //return Qt::sizeAllCursor;
     }
 
-    return Qt::arrowCursor;
+    return defaultCursor;
 }
 
 KWFrame *KWFrame::getCopy() {
@@ -462,11 +469,37 @@ KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
     return new KWDeleteFrameCommand( QString::null, kWordDocument(), frame );
 }
 
-KWFrame * KWFrameSet::getFrame( double _x, double _y )
+KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint )
 {
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
-        if ( frameIt.current()->contains( KoPoint( _x, _y ) ) )
+    {
+        QRect outerRect( frameIt.current()->outerRect() );
+        // Give the user a bit of margin for clicking on it :)
+        outerRect.rLeft() -= 1;
+        outerRect.rTop() -= 1;
+        outerRect.rRight() += 1;
+        outerRect.rBottom() += 1;
+        if ( outerRect.contains( nPoint ) )
+        {
+            QRect innerRect( m_doc->zoomRect( *frameIt.current() ) );
+            innerRect.rLeft() += 1;
+            innerRect.rTop() += 1;
+            innerRect.rRight() -= 1;
+            innerRect.rBottom() -= 1;
+            if ( !innerRect.contains( nPoint ) )
+                return frameIt.current();
+        }
+    }
+    return 0L;
+}
+
+KWFrame * KWFrameSet::frameAtPos( double _x, double _y )
+{
+    KoPoint docPoint( _x, _y );
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+        if ( frameIt.current()->contains( docPoint ) )
             return frameIt.current();
     return 0L;
 }
@@ -639,44 +672,23 @@ bool KWFrameSet::contains( double mx, double my )
     return false;
 }
 
-/* Select the first frame where the x and y coords fall into
-   returns 0 if none was selected, return 1 if selected, return 2
-   if the frame was allready selected.
-*/
-int KWFrameSet::selectFrame( double mx, double my, bool simulate )
+bool KWFrameSet::getMouseCursor( const QPoint &nPoint, QCursor & cursor )
 {
-    for ( unsigned int i = 0; i < frames.count(); i++ ) {
-        if ( frames.at( i )->contains( KoPoint( mx, my ) ) ) {
-            int r = 1;
-            if ( frames.at( i )->isSelected() )
-                r = 2;
-            if ( !simulate )
-                frames.at( i )->setSelected( true );
-            return r;
-        }
+    KoPoint docPoint = m_doc->unzoomPoint( nPoint );
+    // See if we're over a frame border
+    KWFrame * frame = frameByBorder( nPoint );
+    if ( frame )
+    {
+        cursor = frame->getMouseCursor( docPoint, grpMgr ? true : false, Qt::sizeAllCursor );
+        return true;
     }
-    return 0;
-}
 
-void KWFrameSet::deSelectFrame( double mx, double my )
-{
-    QListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
-        if ( frameIt.current()->contains( KoPoint( mx, my ) ) )
-            frameIt.current()->setSelected( false );
-}
-
-QCursor KWFrameSet::getMouseCursor( double mx, double my )
-{
-    KWFrame * frame = getFrame( mx, my );
-
+    frame = frameAtPos( docPoint.x(), docPoint.y() );
     if ( frame == 0L )
-        return Qt::arrowCursor;
+        return false;
 
-    if ( !frame->isSelected() && !grpMgr )
-        return Qt::arrowCursor;
-
-    return frame->getMouseCursor( mx, my, grpMgr ? true : false );
+    cursor = frame->getMouseCursor( docPoint, grpMgr ? true : false, Qt::ibeamCursor );
+    return true;
 }
 
 void KWFrameSet::save( QDomElement &parentElem )

@@ -159,8 +159,10 @@ public:
     // Return the frameset with a given name
     KWFrameSet * getFrameSetByName( const QString & name );
 
-    // Return the frameset that intersects position mx, my (in pt)
-    KWFrameSet * getFrameSet( double mx, double my );
+    // Return the frame that intersects position mx, my (in pt)
+    KWFrame * frameAtPos( double mx, double my );
+    // Return a frame if nPoint in on one of its borders */
+    KWFrame *frameByBorder( const QPoint & nPoint );
 
     // Return the total number of framesets
     unsigned int getNumFrameSets()
@@ -244,14 +246,10 @@ public:
 
     ProcessingType processingType() { return m_processingType;  }
 
-    int selectFrame( double mx, double my, bool simulate = false );
-    void deSelectFrame( double mx, double my );
-    void deSelectAllFrames();
-    QCursor getMouseCursor( double mx, double my );
+    QCursor getMouseCursor( const QPoint& nPoint );
     QList<KWFrame> getSelectedFrames();
     KWFrame *getFirstSelectedFrame();
     int getFrameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }
-    KWFrameSet *getFirstSelectedFrameSet();
 
     void updateAllFrames();
 

@@ -777,7 +777,6 @@ KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWDocument *_do
 
 void KWDeleteTableCommand::execute()
 {
-    m_pDoc->deSelectAllFrames();
     m_pDoc->delFrameSet(m_pTable,false);
     m_pDoc->refreshDocStructure(FT_TABLE);
     m_pDoc->updateAllFrames();
@@ -815,7 +814,6 @@ void KWCreateTableCommand::execute()
 void KWCreateTableCommand::unexecute()
 {
     ASSERT(m_pTable);
-    m_pDoc->deSelectAllFrames();
     m_pDoc->delFrameSet(m_pTable,false);
     m_pDoc->refreshDocStructure(FT_TABLE);
     m_pDoc->updateAllFrames();

@@ -275,44 +275,58 @@ void KWCanvas::refreshViewMode()
     repaintAll( true );
 }
 
-void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in edit-frame mode
+void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse press in edit-frame mode
 // This can be called by KWResizeHandle::mousePressEvent
 {
-    double x = mx / doc->zoomedResolutionX();
-    double y = my / doc->zoomedResolutionY();
+    KoPoint docPoint( doc->unzoomPoint( nPoint ) );
+    double x = docPoint.x();
+    double y = docPoint.y();
     m_mousePressed = true;
     frameMoved = false;
     frameResized = false;
-    if ( e ) {
-        // only simulate selection - we do real selection below
-        int currentSelection = doc->selectFrame( x, y, TRUE );
+    if ( e )
+    {
+        KWFrame * frame;
+        // If nor Ctrl nor Shift are selected, allow click inside a frame to go to edit mode
+        if ( !(e->state() & ControlButton) && !(e->state() & ShiftButton) )
+        {
+            frame = doc->frameByBorder( nPoint );
+            if ( !frame ) // Didn't click on a frame border -> back to edit mode
+            {
+                setMouseMode( MM_EDIT );
+                // Simulate the click again, but this time mousePressEvent will treat it in MM_EDIT mode
+                contentsMousePressEvent( e );
+                return;
+            }
+        } else
+            frame = doc->frameAtPos( x, y );
 
-        KWFrameSet *fs = doc->getFrameSet( x, y );
-        if ( currentSelection != 0 && ( e->state() & ShiftButton ) && fs->getFrameType() == FT_TABLE ) { // is table and we hold shift
+        KWFrameSet *fs = frame ? frame->getFrameSet() : 0;
+        if ( fs && ( e->state() & ShiftButton ) && fs->getFrameType() == FT_TABLE ) { // is table and we hold shift
             curTable = static_cast<KWTableFrameSet *> (fs);
             curTable->selectUntil( x,y );
-        } else if ( currentSelection == 0 ) { // none selected
-            selectAllFrames( FALSE );
-        } else if ( currentSelection == 1 ) { // 1 selected
+        }
+        else if ( !frame->isSelected() ) // clicked on a frame that wasn't selected
+        {
             if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
                 selectAllFrames( FALSE );
-            selectFrame( x, y, TRUE );
-            if(fs->getFrameType() == FT_TABLE) curTable = static_cast<KWTableFrameSet *> (fs);
-            else curTable = 0L;
-        } else if ( currentSelection == 2 ) { // was already selected
+            selectFrame( frame, TRUE );
+        }
+        else  // clicked on a frame that was already selected
+        {
             if ( e->state() & ControlButton || e->state() & ShiftButton ) {
-                selectFrame( x, y, FALSE );
-                if(fs->getFrameType() == FT_TABLE) curTable = static_cast<KWTableFrameSet *> (fs);
-                else curTable = 0L;
+                selectFrame( frame, FALSE );
             } else if ( viewport()->cursor().shape() != SizeAllCursor ) {
                 selectAllFrames( FALSE );
-                selectFrame( x, y, TRUE );
-                if(fs->getFrameType() == FT_TABLE) curTable = static_cast<KWTableFrameSet *> (fs);
-                else curTable = 0L;
+                selectFrame( frame, TRUE );
             }
         }
+        // Set curTable if fs is a table, 0L otherwise
+        curTable = dynamic_cast<KWTableFrameSet *>(fs);
+
         emit frameSelectedChanged();
     }
+
     // At least one frame selected ?
     if( doc->getFirstSelectedFrame() )
     {
@@ -348,11 +362,11 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
         frameindexList.append(index);
         frameindexMove.append(move);
     }
-    m_hotSpot = KoPoint( x,y ) - m_boundingRect.topLeft();
+    m_hotSpot = docPoint - m_boundingRect.topLeft();
     if(frameindexMove.count()!=0)
         cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"),doc,frameindexList, frameindexMove ) ;
 
-    viewport()->setCursor( doc->getMouseCursor( x, y ) );
+    viewport()->setCursor( doc->getMouseCursor( nPoint ) );
 
     deleteMovingRect = FALSE;
 }
@@ -401,30 +415,38 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     switch ( m_mouseMode ) {
         case MM_EDIT:
         {
-            KWFrameSet *fs = doc->getFrameSet( docPoint.x(), docPoint.y() );
-
-
-            bool emitChanged = false; // to emit after mousePressEvent
-            if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
-                terminateCurrentEdit();
-
-            // Edit the frameset under the mouse, if any
-            if ( fs && !m_currentFrameSetEdit )
+            // See if we clicked on a frame's border
+            KWFrame * frame = doc->frameByBorder( normalPoint );
+            if ( frame )
             {
-                m_currentFrameSetEdit = fs->createFrameSetEdit( this );
-                emitChanged = true;
+                setMouseMode( MM_EDIT_FRAME );
+                selectFrame( frame, true );
             }
+            else
+            {
+                frame = doc->frameAtPos( docPoint.x(), docPoint.y() );
+                KWFrameSet * fs = frame ? frame->getFrameSet() : 0L;
+                bool emitChanged = false; // to emit after mousePressEvent [for tables]
+                if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
+                    terminateCurrentEdit();
 
-            if ( m_currentFrameSetEdit )
-                m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
+                // Edit the frameset under the mouse, if any
+                if ( fs && !m_currentFrameSetEdit )
+                {
+                    m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+                    emitChanged = true;
+                }
 
-            if ( emitChanged )
-                emit currentFrameSetEditChanged();
+                if ( m_currentFrameSetEdit )
+                    m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
 
+                if ( emitChanged )
+                    emit currentFrameSetEditChanged();
+            }
         }
         break;
         case MM_EDIT_FRAME:
-            mpEditFrame( e, normalPoint.x(), normalPoint.y() );
+            mpEditFrame( e, normalPoint );
             break;
         case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
         case MM_CREATE_FORMULA:
@@ -453,7 +475,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 break;
             case MM_EDIT_FRAME:
             {
-                if (!doc->getFrameSet( docPoint.x(), docPoint.y() ))
+                if (!doc->frameAtPos( docPoint.x(), docPoint.y() ))
                     m_gui->getView()->openPopupMenuChangeAction( QCursor::pos() );
                 else
                 {
@@ -826,7 +848,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                 int mx = ( normalPoint.x() / doc->gridX() ) * doc->gridX();
                 int my = ( normalPoint.y() / doc->gridY() ) * doc->gridY();
 
-                if ( viewport()->cursor().shape() == SizeAllCursor /*&& ( mx != oldMx || my != oldMy )*/ )
+                if ( viewport()->cursor().shape() == SizeAllCursor )
                     mmEditFrameMove( mx, my );
                 deleteMovingRect = TRUE;
             } break;
@@ -836,12 +858,8 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
             default: break;
         }
     } else {
-        switch ( m_mouseMode ) {
-            case MM_EDIT_FRAME:
-                viewport()->setCursor( doc->getMouseCursor( docPoint.x(), docPoint.y() ) );
-                break;
-            default: break;
-        }
+        if ( m_mouseMode == MM_EDIT || m_mouseMode == MM_EDIT_FRAME )
+            viewport()->setCursor( doc->getMouseCursor( normalPoint ) );
     }
 }
 
@@ -1516,15 +1534,17 @@ void KWCanvas::selectAllFrames( bool select )
 
 void KWCanvas::selectFrame( double mx, double my, bool select )
 {
-    KWFrameSet *frameset = doc->getFrameSet( mx, my );
-    if ( frameset )
-    {
-        KWFrame *frame = frameset->getFrame( mx, my );
-        if ( frame->isSelected() != select )
-            frame->setSelected( select );
-	updateFrameFormat();
-        m_gui->getView()->updatePopupMenuChangeAction();
-    }
+    KWFrame *frame = doc->frameAtPos( mx, my );
+    if ( frame )
+        selectFrame( frame, select );
+}
+
+void KWCanvas::selectFrame( KWFrame * frame, bool select )
+{
+    if ( frame->isSelected() != select )
+        frame->setSelected( select );
+    updateFrameFormat();
+    m_gui->getView()->updatePopupMenuChangeAction();
 }
 
 KWTableFrameSet *KWCanvas::getTable()
@@ -1594,6 +1614,11 @@ void KWCanvas::terminateEditing( KWFrameSet *fs )
 {
     if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == fs )
         terminateCurrentEdit();
+    // Also deselect the frames from this frameset
+    QListIterator<KWFrame> frameIt = fs->frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+        if ( frameIt.current()->isSelected() )
+            frameIt.current()->setSelected( false );
 }
 
 void KWCanvas::setMouseMode( MouseMode newMouseMode )

@@ -118,7 +118,9 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
     mousePressed = true;
     oldX = e->x();
     oldY = e->y();
-    m_canvas->mpEditFrame( 0, x() + e->x(), y() + e->y() );
+    QPoint vPoint( x() + e->x(), y() + e->y() );
+    QPoint nPoint = m_canvas->viewMode()->viewToNormal( vPoint );
+    m_canvas->mpEditFrame( 0, nPoint );
 }
 
 void KWResizeHandle::mouseReleaseEvent( QMouseEvent * )
