@@ -196,8 +196,8 @@ QDomDocument GDocument::saveToXml()
   QDomDocument document("kontour");
   document.appendChild(document.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
   QDomElement kontour = document.createElement("kontour");
-  kontour.setAttribute("editor", "kontour 2.0");
-  kontour.setAttribute("mime", "");
+  kontour.setAttribute("editor", "Kontour 2.0");
+  kontour.setAttribute("mime", "application/x-kontour");
   kontour.setAttribute("version", "1");
   document.appendChild(kontour);
 
@@ -229,7 +229,7 @@ QDomDocument GDocument::saveToXml()
     vl.setAttribute("pos", (*hi));
     helplines.appendChild(vl);
   }
-  grid.appendChild(helplines);
+  head.appendChild(helplines);
 
   for(QPtrListIterator<GPage> pi(pages); pi.current(); ++pi)
   {
@@ -242,65 +242,57 @@ QDomDocument GDocument::saveToXml()
   return document;
 }
 
-bool GDocument::readFromXml(const QDomDocument &/*document*/)
+bool GDocument::readFromXml(const QDomDocument &document)
 {
-  return true;
-  /*if ( document.doctype().name() != "kontour" )
+  if(document.doctype().name() != "kontour")
     return false;
-  QDomElement killustrator = document.documentElement();
-  if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
+  QDomElement kontour = document.documentElement();
+  if(kontour.attribute("mime") != "application/x-kontour" )
     return false;
-  if( killustrator.attribute("version")=="3")
+  if(kontour.attribute("version") != "1")
   {
-    QDomElement head=killustrator.namedItem("head").toElement();
-    setAutoUpdate (false);
-    curPageNum = head.attribute("currentpagenum").toInt();
+    QDomElement head = kontour.namedItem("head").toElement();
+    mCurPageNum = head.attribute("cpn").toInt();
 
-    QDomElement grid=head.namedItem("grid").toElement();
-    gridx=grid.attribute("dx").todouble();
-    gridy=grid.attribute("dy").todouble();
-    gridSnapIsOn = (grid.attribute("align").toInt() == 1);
-    gridIsOn = (grid.attribute("show").toInt() == 1);
+    QDomElement grid = head.namedItem("grid").toElement();
+    mXGrid = grid.attribute("dx").toDouble();
+    mYGrid = grid.attribute("dy").toDouble();
+    mSnapToGrid = (grid.attribute("align").toInt() == 1);
+    mShowGrid = (grid.attribute("show").toInt() == 1);
     mGridColor.setNamedColor(grid.attribute("color"));
 
-    QDomElement helplines=grid.namedItem("helplines").toElement();
-    helplinesSnapIsOn = (helplines.attribute("align").toInt() == 1);
-    helplinesAreOn = (helplines.attribute("show").toInt() == 1);
+    QDomElement helplines = grid.namedItem("helplines").toElement();
+    mSnapToHelplines = (helplines.attribute("align").toInt() == 1);
+    mShowHelplines = (helplines.attribute("show").toInt() == 1);
 
-    QDomElement l=helplines.firstChild().toElement();
-    for( ; !l.isNull(); l=helplines.nextSibling().toElement())
-    {
-      if(l.tagName()=="hl")
-        hHelplines.append(l.attribute("pos").todouble());
-      else
-        if(l.tagName()=="vl")
-          vHelplines.append(l.attribute("pos").todouble());
-    }
+    QDomElement l = helplines.firstChild().toElement();
+    for(; !l.isNull(); l = helplines.nextSibling().toElement())
+      if(l.tagName() == "hl")
+        mHorizHelplines.append(l.attribute("pos").toDouble());
+      else if(l.tagName() == "vl")
+        mVertHelplines.append(l.attribute("pos").toDouble());
 
-    pages.clear ();
-    mActivePage = 0;
-    QDomNode n = killustrator.firstChild();
+    pages.clear();
+    mActivePage = 0L;
+    QDomNode n = kontour.firstChild();
     while(!n.isNull())
     {
-      QDomElement pe=n.toElement();
-      kdDebug(38000) << "Tag=" << pe.tagName() << endl;
-      if (pe.tagName() == "page")
+      QDomElement pe = n.toElement();
+      if(pe.tagName() == "page")
       {
         GPage *page = addPage();
-        if ( !mActivePage )
+        if(!mActivePage)
             mActivePage = page;
         page->readFromXml(pe);
       }
-      n=n.nextSibling();
+      n = n.nextSibling();
     }
-    if ( !mActivePage )
-        kdWarning(38000) << "No page found !" << endl;
 
-    setModified (false);
-    emit gridChanged ();
+    setModified(false);
+//    emit gridChanged ();
     return true;
   }
-  return false;*/
+  return false;
 }
 
 void GDocument::activePage(GPage *page)

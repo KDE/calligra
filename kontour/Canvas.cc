@@ -101,6 +101,13 @@ void Canvas::outlineMode(bool flag)
   }
 }
 
+KoPoint Canvas::point(int x, int y)
+{
+  double xx = static_cast<double>(x - mXOffset) / zoomFactor();
+  double yy = static_cast<double>(y - mYOffset) / zoomFactor();
+  return KoPoint(xx, yy);
+}
+
 QRect Canvas::onCanvas(const KoRect &rr)
 {
   QRect rect;
@@ -477,10 +484,10 @@ void Canvas::scrollY(int v)
 void Canvas::updateRegion(const KoRect &r, bool handle)
 {
   // TODO : small handle size bug
-  int x = static_cast<int>(r.x());
-  int y = static_cast<int>(r.y());
-  int w = static_cast<int>(r.width());
-  int h = static_cast<int>(r.height());
+  int x = static_cast<int>(r.x() * zoomFactor()) + mXOffset;
+  int y = static_cast<int>(r.y() * zoomFactor()) + mYOffset;
+  int w = static_cast<int>(r.width() * zoomFactor());
+  int h = static_cast<int>(r.height() * zoomFactor());
   if(handle)
   {
     x -= 7;
@@ -489,8 +496,7 @@ void Canvas::updateRegion(const KoRect &r, bool handle)
     h += 36;
   }
   kdDebug(38000) << "update: x=" << x << " y=" << y << " w=" << w << " h=" << h <<endl;
-  QRect rr(x * zoomFactor() + mXOffset, y * zoomFactor() + mYOffset,
-           w * zoomFactor(), h * zoomFactor());
+  QRect rr(x, y, w, h);
   updateBuf(rr);
   repaint(rr);
 }

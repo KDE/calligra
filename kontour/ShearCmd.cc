@@ -27,6 +27,8 @@
 
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GPage.h"
 #include "GObject.h"
 
 ShearCmd::ShearCmd(GDocument *aGDoc, const KoPoint &center, double x, double y):
@@ -43,13 +45,12 @@ void ShearCmd::execute()
   m1.translate(-rcenter.x(), -rcenter.y());
   m2.shear(sx, sy);
   m3.translate(rcenter.x(), rcenter.y());
-
   TransformationCmd::execute();
-
-/*  for(unsigned int i = 0; i < objects.count(); i++)
+  for(unsigned int i = 0; i < objects.count(); i++)
   {
     objects[i]->transform(m1);
     objects[i]->transform(m2);
     objects[i]->transform(m3, true);
-  }*/
+  }
+  document()->activePage()->updateSelection();
 }

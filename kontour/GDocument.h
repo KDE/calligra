@@ -153,7 +153,7 @@ private slots:
 
 private:
   KontourDocument *mDoc;
-  
+
   GStyleList mStyles;                  // the list of styles
 
   double mXRes;
@@ -167,19 +167,19 @@ private:
   double mYGrid;                       //
   bool mShowGrid:1;                    //
   bool mSnapToGrid:1;                  //
-  
+
   /*Helplines settings*/
   QValueList<double> mHorizHelplines;  //
   QValueList<double> mVertHelplines;   //
   bool mShowHelplines:1;               //
   bool mSnapToHelplines:1;             //
-  
+
   /*Zoom*/
   double mZoomFactor;                  // zoom factor
-  
+
   int mXCanvas;
   int mYCanvas;
-  
+
   QPtrList<GPage> pages;               // the array of all pages
   GPage *mActivePage;                  // the current page
 

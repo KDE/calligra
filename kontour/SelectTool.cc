@@ -58,10 +58,70 @@ void SelectTool::activate()
 {
   ctype = C_Arrow;
   toolController()->view()->canvas()->setCursor(Qt::arrowCursor);
+  GPage *page = toolController()->view()->activeDocument()->activePage();
+  page->handle().mode(Handle::HMode_Default);
+  page->handle().show(true);
+/*  if(page->lastObject())
+  {
+    if(page->selectionIsEmpty())
+      page->selectObject(page->lastObject());
+    state = S_Pick;
+  }
+  else
+    state = S_Init;*/
+
+  if(page->selectionIsEmpty())
+  {
+    toolController()->view()->setStatus(i18n("Selection Mode"));
+    state = S_Init;
+  }
+  else
+  {
+    KoRect box = page->boundingBoxForSelection();
+    MeasurementUnit unit = toolController()->view()->unit();
+    QString u = unitToString(unit);
+    double x = cvtPtToUnit(unit, box.x());
+    double y = cvtPtToUnit(unit, box.y());
+    double w = cvtPtToUnit(unit, box.width());
+    double h = cvtPtToUnit(unit, box.height());
+    QString msgbuf;
+    if(page->selectionCount() > 1)
+    {
+      msgbuf = i18n("Multiple Selection");
+      msgbuf +=" [";
+      msgbuf += QString::number(x, 'f', 3);
+      msgbuf += QString(" ") + u + QString(", ");
+      msgbuf += QString::number(y, 'f', 3);
+      msgbuf += QString(" ") + u + QString(", ");
+      msgbuf += QString::number(w, 'f', 3);
+      msgbuf += QString(" ") + u + QString(", ");
+      msgbuf += QString::number(h, 'f', 3);
+      msgbuf += QString(" ") + u + QString("]");
+    }
+    else
+    {
+      GObject *sobj = page->getSelection().first();
+      msgbuf =sobj->typeName();
+      msgbuf += " [";
+      msgbuf += QString::number(x, 'f', 3);
+      msgbuf += QString(" ") + u + QString(", ");
+      msgbuf += QString::number(y, 'f', 3);
+      msgbuf += QString(" ") + u + QString(", ");
+      msgbuf += QString::number(w, 'f', 3);
+      msgbuf += QString(" ") + u + QString(", ");
+      msgbuf += QString::number(h, 'f', 3);
+      msgbuf += QString(" ") + u + QString("]");
+    }
+    toolController()->view()->setStatus(msgbuf);
+    state = S_Pick;
+  }
+  page->updateSelection();
 }
 
 void SelectTool::deactivate()
 {
+  toolController()->view()->activeDocument()->activePage()->handle().show(false);
+  toolController()->view()->activeDocument()->activePage()->updateSelection();
 }
 
 void SelectTool::processEvent(QEvent *e)
@@ -87,45 +147,46 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
   int xpos = e->x();
   int ypos = e->y();
   bool shiftFlag = e->state() & Qt::ShiftButton;
+  fp = canvas->point(e->x(), e->y());
   p1.setX(xpos);
   p1.setY(ypos);
-  //TODO * zoom factor....
-  double x = xpos - canvas->xOffset();
-  double y = ypos - canvas->yOffset();
-  if(state == S_Init)
+  if(state == S_Init || state == S_Pick || state == S_RotateSelect)
   {
-    mHL = page->document()->indexOfHorizHelpline(y);
-    if(mHL != -1)
+    if(ctype == C_Arrow)
     {
-      state = S_DragHorizHelpline;
-      prevcoord = ypos;
-      return;
-    }
-    mHL = page->document()->indexOfVertHelpline(x);
-    if(mHL != -1)
-    {
-      state = S_DragVertHelpline;
-      prevcoord = xpos;
-      return;
-    }
-    GObject *obj = page->findContainingObject(x, y);
-    if(obj)
-    {
-      /* an object will be selected */
-      state = S_Pick;
-      canvas->setCursor(Qt::SizeAllCursor);
-      ctype = C_Move;
-      if(!shiftFlag)
+      mHL = page->document()->indexOfHorizHelpline(fp.y());
+      if(mHL != -1)
+      {
+        state = S_DragHorizHelpline;
+        prevcoord = ypos;
+        return;
+      }
+      mHL = page->document()->indexOfVertHelpline(fp.x());
+      if(mHL != -1)
+      {
+        state = S_DragVertHelpline;
+        prevcoord = xpos;
+        return;
+      }
+      GObject *obj = page->findContainingObject(fp.x(), fp.y());
+      if(obj)
+      {
+        /* an object will be selected */
+        state = S_Pick;
+        canvas->setCursor(Qt::SizeAllCursor);
+        ctype = C_Move;
+        if(!shiftFlag)
+          page->unselectAllObjects();
+        /* add the object to the selection */
+        page->selectObject(obj);
+	page->handle().mode(Handle::HMode_Default);
+      }
+      else
+      {
+        /* no object */
+        state = S_Rubberband;
         page->unselectAllObjects();
-      /* add the object to the selection */
-      page->selectObject(obj);
-//      origbox = page->boundingBoxForSelection();
-    }
-    else
-    {
-      /* no object */
-      state = S_Rubberband;
-      page->unselectAllObjects();
+      }
     }
   }
 }
@@ -245,6 +306,8 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
         state = S_MoveRotCenter;
       else if(ctype == C_Shear)
         state = S_Shear;
+      else if(ctype == C_Rotate)
+        state = S_Rotate;
     }
     else
     {
@@ -280,6 +343,30 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
 	{
 	  canvas->setCursor(Qt::sizeVerCursor);
           ctype = C_Shear;
+	  return;
+	}
+	else if(oldmask == Kontour::HPos_Left|Kontour::HPos_Top && ctype != C_Rotate)
+	{
+	  canvas->setCursor(Qt::sizeBDiagCursor);
+          ctype = C_Rotate;
+	  return;
+	}
+	else if(oldmask == Kontour::HPos_Right|Kontour::HPos_Top && ctype != C_Rotate)
+	{
+	  canvas->setCursor(Qt::sizeFDiagCursor);
+          ctype = C_Rotate;
+	  return;
+	}
+	else if(oldmask == Kontour::HPos_Left|Kontour::HPos_Bottom && ctype != C_Rotate)
+	{
+	  canvas->setCursor(Qt::sizeFDiagCursor);
+          ctype = C_Rotate;
+	  return;
+	}
+	else if(oldmask == Kontour::HPos_Right|Kontour::HPos_Bottom && ctype != C_Rotate)
+	{
+	  canvas->setCursor(Qt::sizeBDiagCursor);
+          ctype = C_Rotate;
 	  return;
 	}
       }
@@ -380,6 +467,8 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
 {
   int xpos = e->x();
   int ypos = e->y();
+  double x = e->x() - canvas->xOffset();
+  double y = e->y() - canvas->yOffset();
   if(state == S_Rubberband)
   {
     QPtrList<GObject> olist;
@@ -470,9 +559,12 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
   else if(state == S_Shear)
   {
     state = S_RotateSelect;
-//    mode = Handle::HMode_Rotate;
-//    canvas->snapPositionToGrid (xpos, ypos);
-    shear(page, oldmask, xpos - p1.x(), ypos - p1.y(), true);
+    shear(page, oldmask, x - fp.x(), y - fp.y(), true);
+  }
+  else if(state == S_Rotate)
+  {
+    state = S_RotateSelect;
+    rotate(page, fp.x(), fp.y(), x, y, true);
   }
 }
 
@@ -696,52 +788,31 @@ void SelectTool::shear(GPage *page, int mask, double dx, double dy, bool permane
   toolController()->view()->setStatus(msgbuf);
 }
 
-void SelectTool::rotate(GPage *page, double dx, double dy, double xp, double yp, bool permanent)
+void SelectTool::rotate(GPage *page, double xf, double yf, double xp, double yp, bool permanent)
 {
-  //  float adx = fabs (dx);
-  //  float ady = fabs (dy);
-//  float angle = 0;
+  KoPoint rc = page->handle().rotCenter();
+  double angle;
+  angle = atan2(rc.y() - yp, rc.x() - xp);
+  angle -= atan2(rc.y() - yf, rc.x() - xf);
 
-  //  Rect& r = origbox;
+  angle *= 180.0 / Kontour::pi;
+  if(angle < -180.0)
+    angle += 360.0;
+  if(angle>180.0)
+    angle -= 360.0;
 
-  /*
-  if (adx > ady) {
-    angle = adx / r.width () * 180.0;
-    if ((yp > rotCenter.y () && dx > 0) ||
-        (yp < rotCenter.y () && dx < 0))
-      angle = -angle;
+  if(permanent)
+  {
+    QListIterator<GObject> it(page->getSelection());
+    for(; it.current(); ++it)
+    (*it)->setWorkInProgress(false);
+    KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+    RotateCmd *cmd = new RotateCmd(page->document(), rc, angle);
+    doc->history()->addCommand(cmd);
   }
-  else if (adx < ady) {
-    angle = ady / r.height () * 180.0;
-    if ((xp > rotCenter.x () && dy < 0) ||
-        (xp < rotCenter.x () && dy > 0))
-      angle = -angle;
-  }
-  */
-  // proposed by Stefan Eickeler <eickeler@fb9-ti.uni-duisburg.de>
-/*  angle=atan2 ((float)rotCenter.y()-yp,(float)rotCenter.x()-xp);
-  kdDebug(38000)<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
-  angle-=atan2 ((float)(rotCenter.y()-firstpos.y()),(float)(rotCenter.x()-firstpos.x()));
-  kdDebug(38000)<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
-
-  kdDebug(38000)<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
-  kdDebug(38000)<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
-
-
-
-  angle*=180.0/3.141;
-  if (angle<180.0) angle+=360.0;
-  if (angle>180.0) angle-=360.0;
-
-  if (permanent) {
-      QListIterator<GObject> it(doc->activePage()->getSelection());
-      for( ; it.current(); ++it)
-          (*it)->setWorkInProgress(false);
-      RotateCmd *cmd = new RotateCmd (doc, rotCenter, angle);
-      history->addCommand (cmd, true);
-  }
-  else {
-    QWMatrix m1, m2, m3;
+  else
+  {
+/*    QWMatrix m1, m2, m3;
     m1.translate (-rotCenter.x (), -rotCenter.y ());
     m2.rotate (angle);
     m3.translate (rotCenter.x (), rotCenter.y ());
@@ -752,24 +823,22 @@ void SelectTool::rotate(GPage *page, double dx, double dy, double xp, double yp,
       (*it)->ttransform (m1);
       (*it)->ttransform (m2);
       (*it)->ttransform (m3, true);
-    }
+    }*/
   }
-  MeasurementUnit unit =
-    PStateManager::instance ()->defaultMeasurementUnit ();
-  QString u = unitToString (unit);
-  float xval, yval;
-  xval = cvtPtToUnit (unit, rotCenter.x ());
-  yval = cvtPtToUnit (unit, rotCenter.y ());
+  MeasurementUnit unit = toolController()->view()->unit();
+  QString u = unitToString(unit);
+  double xval = cvtPtToUnit(unit, rc.x());
+  double yval = cvtPtToUnit(unit, rc.y());
 
-  msgbuf=i18n("Rotate");
-  msgbuf+=" [";
-  msgbuf+=QString::number(angle, 'f', 3);
-  msgbuf+=QString(" - ");
-  msgbuf+=QString::number(xval, 'f', 3);
-  msgbuf+=QString(" ") + u + QString(", ");
-  msgbuf+=QString::number(yval, 'f', 3);
-  msgbuf+=QString(" ") + u + QString("]");
-  m_toolController->emitModeSelected (m_id,msgbuf);*/
+  QString msgbuf = i18n("Rotate");
+  msgbuf +=" [";
+  msgbuf += QString::number(angle, 'f', 3);
+  msgbuf += QString(" - ");
+  msgbuf += QString::number(xval, 'f', 3);
+  msgbuf += QString(" ") + u + QString(", ");
+  msgbuf += QString::number(yval, 'f', 3);
+  msgbuf += QString(" ") + u + QString("]");
+  toolController()->view()->setStatus(msgbuf);
 }
 
 #include "SelectTool.moc"

@@ -139,13 +139,76 @@ bool GLine::contains(const KoPoint &p)
 
 QPointArray GLine::getPoints() const
 {
-
+  return QPointArray();
 }
 
 double GLine::length() const
 {
   return Kontour::segLength(points[0], points[1]);
 }
+
+/*      GCubicBezier      */
+
+GCubicBezier::GCubicBezier()
+{
+}
+
+GCubicBezier::GCubicBezier(const QDomElement &element)
+{
+}
+
+const KoPoint &GCubicBezier::point(int i) const
+{
+  return points[i];
+}
+
+void GCubicBezier::point(int i, const KoPoint &c)
+{
+  points[i] = c;
+}
+
+QDomElement GCubicBezier::writeToXml(QDomDocument &document)
+{
+  QDomElement arc = document.createElement("a");
+  arc.setAttribute("x1", points[0].x());
+  arc.setAttribute("y1", points[0].y());
+  arc.setAttribute("x2", points[1].x());
+  arc.setAttribute("y2", points[1].y());
+  return arc;
+}
+
+void GCubicBezier::draw(QPainter &p, bool withBasePoints, bool outline)
+{
+}
+
+void GCubicBezier::movePoint(int idx, double dx, double dy, bool ctrlPressed)
+{
+  points[idx].setX(points[idx].x() + dx);
+  points[idx].setY(points[idx].y() + dy);
+  // TODO Ctrl Pressed
+}
+
+KoRect GCubicBezier::boundingBox()
+{
+  return KoRect(points[0], points[1]);
+}
+
+bool GCubicBezier::contains(const KoPoint &p)
+{
+  return true;
+}
+
+QPointArray GCubicBezier::getPoints() const
+{
+  return QPointArray();
+}
+
+double GCubicBezier::length() const
+{
+  return Kontour::segLength(points[0], points[1]);
+}
+
+/*          GArc          */
 
 GArc::GArc()
 {
@@ -194,11 +257,12 @@ KoRect GArc::boundingBox()
 
 bool GArc::contains(const KoPoint &p)
 {
+  return true;
 }
 
 QPointArray GArc::getPoints() const
 {
-
+  return QPointArray();
 }
 
 double GArc::length() const
@@ -780,6 +844,7 @@ void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMa
 
 int GPath::getNeighbourPoint(const KoPoint &point)
 {
+  return -1;
 }
 
 void GPath::movePoint(int idx, double dx, double dy, bool ctrlPressed)
@@ -806,6 +871,7 @@ bool GPath::contains(const KoPoint &p)
 
 bool GPath::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
 {
+  return false;
 }
 
 void GPath::calcBoundingBox()

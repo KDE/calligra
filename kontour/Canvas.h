@@ -49,6 +49,7 @@ public:
   int xOffset() const {return mXOffset; }
   int yOffset() const {return mYOffset; }
 
+  KoPoint point(int x, int y);
   QRect onCanvas(const KoRect &r);
 
   void outlineMode(bool flag);

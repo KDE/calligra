@@ -27,6 +27,7 @@
 #define __SelectTool_h__
 
 #include "Tool.h"
+#include <koPoint.h>
 
 class GPage;
 class Canvas;
@@ -44,7 +45,7 @@ public:
   void translate(GPage *page, double dx, double dy, bool snap, bool permanent = false);
   void scale(GPage *page, int mask, double dx, double dy, bool type = 0, bool permanent = false);
   void shear(GPage *page, int mask, double dx, double dy, bool permanent = false);
-  void rotate(GPage *page, double dx, double dy, double xp, double yp, bool permanent = false);
+  void rotate(GPage *page, double xf, double yf, double xp, double yp, bool permanent = false);
 
 private:
   void processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
@@ -57,6 +58,7 @@ private:
   State state;
   enum CursorType{ C_Arrow, C_Size, C_Move, C_Shear, C_Rotate, C_Horiz, C_Vert};
   CursorType ctype;
+  KoPoint fp;
   QPoint p1;
   QRect r;
   int mHL;

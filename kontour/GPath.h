@@ -93,13 +93,28 @@ private:
  *
  */
 
-/*class GCubicBezier : public GSegment
+class GCubicBezier : public GSegment
 {
 public:
+  GCubicBezier();
+  GCubicBezier(const QDomElement &element);
 
+  const KoPoint &point(int i) const;
+  void point(int i, const KoPoint &c);
+
+  QDomElement writeToXml(QDomDocument &document);
+  void draw(QPainter &p, bool withBasePoints, bool outline);
+  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
+
+  KoRect boundingBox();
+  bool contains(const KoPoint &p);
+
+  QPointArray getPoints() const;
+
+  double length() const;
 private:
   KoPoint points[4];
-};*/
+};
 
 /**
  * Quadratic Bezier segment.

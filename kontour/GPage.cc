@@ -29,6 +29,7 @@
 
 #include <qdom.h>
 
+#include <klocale.h>
 #include <kdebug.h>
 
 #include "kontour_global.h"
@@ -53,7 +54,7 @@ mHandle(this)
 
   mBGColor = white;
 
-  mCurLayerNum = 0;
+  mCurLayerNum = 1;
 
   // in pt !!
   mPaperWidth = static_cast<int>(cvtMmToPt(mPageLayout.mmWidth));
@@ -64,7 +65,6 @@ mHandle(this)
   layers.clear();
 
   active_layer = addLayer();
-  active_layer->name("adfkkd");
   active_layer->setVisible(true);
   active_layer->setPrintable(true);
   active_layer->setEditable(true);
@@ -172,8 +172,9 @@ GLayer* GPage::activeLayer()
 
 GLayer *GPage::addLayer()
 {
-  GLayer* layer = new GLayer (this);
-//  connect (layer, SIGNAL(propertyChanged ()), this, SLOT(layerChanged ()));
+  GLayer *layer = new GLayer (this);
+  layer->name(i18n("Layer #%1").arg(mCurLayerNum));
+  mCurLayerNum++;
   layers.append(layer);
   unselectAllObjects();
   return layer;
