@@ -43,6 +43,7 @@
 #include <koSize.h>
 #include <koRuler.h>
 #include <koPoint.h>
+#include <kapplication.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -186,15 +187,7 @@ void KivioCanvas::resizeEvent( QResizeEvent* )
 void KivioCanvas::wheelEvent( QWheelEvent* ev )
 {
   ev->accept();
-/*
-  QPoint p = ev->pos();
-  if ((ev->delta()<0)) {
-    zoomIn(p);
-  } else {
-    zoomOut(p);
-  }
-*/
-  //QPoint p = ev->pos();
+  
   if( (ev->delta()>0))
   {
      if(ev->state() == ControlButton) {
@@ -277,10 +270,21 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   painter.begin(m_buffer);
 
   QRect rect( ev->rect() );
-  painter.fillRect(rect,white);
   KoPageLayout pl = page->paperLayout();
   int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
   int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
+  QRect tmp(0, 0, pw, ph);
+  QRegion grayRegion(rect);
+  painter.fillRect(tmp,white);
+  grayRegion -= tmp;
+  // This code comes from KPresenter's kprcanvas.cpp
+  // Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+  painter.save();
+  painter.setClipRegion(grayRegion, QPainter::CoordPainter);
+  painter.setPen(Qt::NoPen);
+  painter.fillRect(grayRegion.boundingRect(), KApplication::palette().active().brush(QColorGroup::Mid));
+  painter.restore();
+  // end of copy...
 
   // Draw Grid
   if (m_pDoc->grid().isShow) {
