@@ -125,7 +125,6 @@ void GPolygon::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool o
     y = mARadius * sin(caa);
     v->lineTo(x, y);
   }
-  v->end();
   v->transform(tmpMatrix * m);
   p->drawVectorPath(v);
   delete v;

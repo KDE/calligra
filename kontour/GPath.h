@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998-1999 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -31,6 +31,8 @@
 #include <qptrlist.h>
 #include <koPoint.h>
 
+class KoVectorPath;
+
 /**
  * Abstract class for path segment.
  *
@@ -47,14 +49,19 @@ public:
 
   KoPoint &point(int i);
   void point(int i, const KoPoint &c);
-  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
+
+  int segBegin() const {return mSegBegin; }
+  void segBegin(int s);
+
+  virtual bool contains(const KoPoint &p) = 0;
 
   virtual QDomElement writeToXml(QDomDocument &document) = 0;
 
   virtual double length() const = 0;
 
 protected:
-  QMemArray<KoPoint> points;
+  QMemArray<KoPoint>    points;
+  int                   mSegBegin;
 };
 
 /**
@@ -69,6 +76,8 @@ public:
   GMove(const QDomElement &element);
 
   const char type() const;
+
+  bool contains(const KoPoint &p);
 
   QDomElement writeToXml(QDomDocument &document);
 
@@ -88,6 +97,8 @@ public:
 
   const char type() const;
 
+  bool contains(const KoPoint &p);
+
   QDomElement writeToXml(QDomDocument &document);
 
   double length() const;
@@ -105,6 +116,8 @@ public:
   GLine(const QDomElement &element);
 
   const char type() const;
+
+  bool contains(const KoPoint &p);
 
   QDomElement writeToXml(QDomDocument &document);
 
@@ -124,6 +137,8 @@ public:
 
   const char type() const;
 
+  bool contains(const KoPoint &p);
+
   QDomElement writeToXml(QDomDocument &document);
 
   double length() const;
@@ -137,6 +152,7 @@ public:
   GPath();
   GPath(const QDomElement &element);
   GPath(const GPath &obj);
+  ~GPath();
 
   virtual GObject *copy() const;
 
@@ -157,12 +173,18 @@ public:
   void removePoint(int idx);
   bool contains(const KoPoint &p);
 
+  int getSegment(const KoPoint &point);
+
   void calcBoundingBox();
   GPath *convertToPath() const;
   bool isConvertible() const;
 
 private:
-  QPtrList<GSegment> segments;
+  void vectorize();
+
+private:
+  QPtrList<GSegment>    segments;
+  KoVectorPath         *mVP;
 };
 
 #endif

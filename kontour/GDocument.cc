@@ -192,7 +192,7 @@ void GDocument::addVertHelpline(double pos)
 
 QDomDocument GDocument::saveToXml()
 {
-  QDomDocument document = mDoc->createDomDocument( "kontour", CURRENT_DTD_VERSION );
+  QDomDocument document = mDoc->createDomDocument("kontour", CURRENT_DTD_VERSION);
   QDomElement kontour = document.documentElement();
   kontour.setAttribute("editor", "Kontour 2.0");
   kontour.setAttribute("mime", "application/x-kontour");

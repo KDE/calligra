@@ -47,6 +47,14 @@ namespace Kontour
     double dy = c2.y() - c1.y();
     return sqrt(dx * dx + dy * dy);
   }
+
+  inline bool lineContains(double x1, double y1, double x2, double y2, const KoPoint  &pp)
+  {
+    if(pp.x() <= QMAX(x1, x2) && pp.x() >= QMIN(x1, x2) && pp.y() <= QMAX(y1, y2) && pp.y() >= QMIN(y1, y2))
+      if(fabs((pp.x() - x1) * (y2 - y1) - (pp.y() - y1) * (x2 - x1)) < 0.0000001)
+        return true;
+    return false;
+  }
 }
 
 #endif

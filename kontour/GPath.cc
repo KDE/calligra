@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998-1999 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -59,11 +59,9 @@ void GSegment::point(int i, const KoPoint &c)
   points[i] = c;
 }
 
-void GSegment::movePoint(int idx, double dx, double dy, bool ctrlPressed)
+void GSegment::segBegin(int s)
 {
-  points[idx].setX(points[idx].x() + dx);
-  points[idx].setY(points[idx].y() + dy);
-  // TODO Ctrl Pressed
+  mSegBegin = s;
 }
 
 /*        GMove      */
@@ -83,6 +81,11 @@ GMove::GMove(const QDomElement &element)
 const char GMove::type() const
 {
   return 'm';
+}
+
+bool GMove::contains(const KoPoint &p)
+{
+  return false;
 }
 
 QDomElement GMove::writeToXml(QDomDocument &document)
@@ -115,6 +118,11 @@ const char GClose::type() const
   return 'z';
 }
 
+bool GClose::contains(const KoPoint &p)
+{
+  return false;
+}
+
 QDomElement GClose::writeToXml(QDomDocument &document)
 {
   QDomElement close = document.createElement("z");
@@ -144,6 +152,11 @@ GLine::GLine(const QDomElement &element)
 const char GLine::type() const
 {
   return 'l';
+}
+
+bool GLine::contains(const KoPoint &p)
+{
+  return false;
 }
 
 QDomElement GLine::writeToXml(QDomDocument &document)
@@ -180,6 +193,11 @@ GCubicBezier::GCubicBezier(const QDomElement &element)
 const char GCubicBezier::type() const
 {
   return 'c';
+}
+
+bool GCubicBezier::contains(const KoPoint &p)
+{
+  return false;
 }
 
 QDomElement GCubicBezier::writeToXml(QDomDocument &document)
@@ -239,6 +257,12 @@ GObject(obj)
   calcBoundingBox();
 }
 
+GPath::~GPath()
+{
+  if(mVP)
+    delete mVP;
+}
+
 GObject *GPath::copy() const
 {
   return new GPath(*this);
@@ -283,6 +307,11 @@ void GPath::curveTo(const double x, const double y, const double x1, const doubl
   seg->point(2, KoPoint(x2, y2));
   segments.append(seg);
   calcBoundingBox();
+  if(mVP)
+  {
+    delete mVP;
+    mVP = 0L;
+  }
 }
 
 void GPath::arcTo(const double x1, const double y1, const double x2, const double y2, const double r)
@@ -370,36 +399,8 @@ void GPath::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outl
 {
   setPen(p);
   setBrush(p);
-  KoVectorPath *v = new KoVectorPath;
-  KoPoint c, c1, c2;
-  KoPoint b;
 
-  for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
-  {
-    GSegment *s = *seg;
-    if(s->type() == 'm')
-    {
-      b = s->point(0).transform(tmpMatrix * m);
-      v->moveTo(b.x(), b.y());
-    }
-    else if(s->type() == 'z')
-    {
-      v->lineTo(b.x(), b.y());
-    }
-    else if(s->type() == 'l')
-    {
-      c = s->point(0).transform(tmpMatrix * m);
-      v->lineTo(c.x(), c.y());
-    }
-    else if(s->type() == 'c')
-    {
-      c = s->point(0).transform(tmpMatrix * m);
-      c1 = s->point(1).transform(tmpMatrix * m);
-      c2 = s->point(2).transform(tmpMatrix * m);
-      v->bezierTo(c.x(), c.y(), c1.x(), c1.y(), c2.x(), c2.y());
-    }
-  }
-  v->end();
+  KoVectorPath *v = new KoVectorPath(*mVP, m);
   p->drawVectorPath(v);
   delete v;
   if(withBasePoints)
@@ -548,30 +549,40 @@ void GPath::removePoint(int idx)
 
 bool GPath::contains(const KoPoint &p)
 {
-  double x;
-  double y;
+  if(!mVP)
+    return false;
   double xc;
   double yc;
-  for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
+  ArtVpath *d = mVP->data();
+  for(; d->code != ART_END; d++)
   {
-    GSegment *s = *seg;
-    if(s->type() == 'm')
+    if(d->code == ART_MOVETO_OPEN || d->code == ART_MOVETO)
     {
-      x = s->point(0).x();
-      y = s->point(0).y();
+      xc = d->x;
+      yc = d->y;
     }
-    else if(s->type() == 'l')
+    else if(d->code == ART_LINETO)
     {
-      x = s->point(0).x();
-      y = s->point(0).y();
-    }
-    else if(s->type() == 'c')
-    {
-      x = s->point(0).x();
-      y = s->point(0).y();
+//      kdDebug(38000) << "TEST! x1 = " << xc << " y1 = " << yc << " x2 = " << d->x << " y2 = " << d->y << " x0 = " << p.x() << " y0 = " << p.y() << endl;
+      if(Kontour::lineContains(xc, yc, d->x, d->y, p))
+        return true;
+      xc = d->x;
+      yc = d->y;
     }
   }
   return false;
+}
+
+int GPath::getSegment(const KoPoint &point)
+{
+  int v = 0;
+  for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg, v++)
+  {
+    GSegment *s = *seg;
+    if(s->contains(point))
+      return v;
+  }
+  return -1;
 }
 
 void GPath::calcBoundingBox()
@@ -605,6 +616,7 @@ void GPath::calcBoundingBox()
   mSBox = KoRect(xmin, ymin, xmax - xmin, ymax - ymin).transform(tmpMatrix);
   mBBox = mSBox;
   adjustBBox(mBBox);
+  vectorize();
 }
 
 GPath *GPath::convertToPath() const
@@ -615,6 +627,40 @@ GPath *GPath::convertToPath() const
 bool GPath::isConvertible() const
 {
   return false;
+}
+
+void GPath::vectorize()
+{
+  if(mVP)
+    delete mVP;
+  mVP = new KoVectorPath;
+  KoPoint c, c1, c2;
+  KoPoint b;
+  for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
+  {
+    GSegment *s = *seg;
+    if(s->type() == 'm')
+    {
+      b = s->point(0).transform(tmpMatrix);
+      mVP->moveTo(b.x(), b.y());
+    }
+    else if(s->type() == 'z')
+    {
+      mVP->lineTo(b.x(), b.y());
+    }
+    else if(s->type() == 'l')
+    {
+      c = s->point(0).transform(tmpMatrix);
+      mVP->lineTo(c.x(), c.y());
+    }
+    else if(s->type() == 'c')
+    {
+      c = s->point(0).transform(tmpMatrix);
+      c1 = s->point(1).transform(tmpMatrix);
+      c2 = s->point(2).transform(tmpMatrix);
+      mVP->bezierTo(c.x(), c.y(), c1.x(), c1.y(), c2.x(), c2.y());
+    }
+  }
 }
 
 #include "GPath.moc"
