@@ -1805,7 +1805,7 @@ void KPTextView::insertComment(const QString &_comment)
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
 
     var = new KoNoteVariable( textObject()->textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
-    insertVariable( var);
+    insertVariable( var, 0,false/*don't delete selected text*/);
 }
 
 
@@ -1831,18 +1831,20 @@ void KPTextView::insertVariable( int type, int subtype )
     doc->recalcPageNum();
 }
 
-void KPTextView::insertVariable( KoVariable *var )
+void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText )
 {
     if ( var )
     {
         CustomItemsMap customItemsMap;
         customItemsMap.insert( 0, var );
+        if (!format)
+            format = currentFormat();
         //kdDebug() << "KPTextView::insertVariable inserting into paragraph" << endl;
 #ifdef DEBUG_FORMATS
         kdDebug() << "KPTextView::insertVariable currentFormat=" << currentFormat() << endl;
 #endif
-        textObject()->insert( cursor(), currentFormat(), KoTextObject::customItemChar(),
-                                false, true, i18n("Insert Variable"),
+        textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
+                                false, removeSelectedText, i18n("Insert Variable"),
                                 customItemsMap );
         var->recalc();
         cursor()->parag()->invalidate(0);

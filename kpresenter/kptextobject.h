@@ -236,7 +236,8 @@ public:
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
-    void insertVariable( KoVariable *var);
+    void insertVariable( KoVariable *var, KoTextFormat *format =0, bool removeSelectedText=true );
+
     void terminate(bool removeSelection=true);
     void insertComment(const QString &_note);
 
