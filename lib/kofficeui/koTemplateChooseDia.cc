@@ -90,6 +90,12 @@ class MyFileDialog : public KFileDialog
             if ( checkURL() )
                 KFileDialog::accept();
         }
+
+        virtual void reject() {
+		KFileDialog::reject();
+		emit cancelClicked();		
+        }
+	
 };
 
 /*================================================================*/
@@ -318,6 +324,9 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * la
 
     connect(d->m_filedialog, SIGNAL(  okClicked() ),
 	    this, SLOT (  slotOk() ));
+
+    connect(d->m_filedialog, SIGNAL( cancelClicked() ),
+	    this, SLOT (  slotCancel() ));
 
 }
 
