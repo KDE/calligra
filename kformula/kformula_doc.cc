@@ -49,7 +49,9 @@
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
 
-
+//static const int CURRENT_SYNTAX_VERSION = 1;
+// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+//static const char * CURRENT_DTD_VERSION = "1.1";
 
 KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode)
         : KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
@@ -78,6 +80,9 @@ KFormulaDoc::~KFormulaDoc()
 QDomDocument KFormulaDoc::saveXML()
 {
     QDomDocument doc("FORMULA");
+    // TODO use this instead (but it also creates the toplevel document-element,
+    // so the rest of the code must be changed)
+    // QDomDocument doc = createDomDocument( "FORMULA", CURRENT_DTD_VERSION );
     formula->save(doc);
     history->documentSaved();
     return doc;
