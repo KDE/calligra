@@ -74,7 +74,7 @@ CqlRecord::commit(unsigned int record, bool insertBuffer=false)
 QVariant
 CqlRecord::value(unsigned int field)
 {
-	return QVariant(CqlDB::cqlString(m_data[field]));
+	return QVariant(CqlDB::cqlString(*m_data[field]));
 	kdDebug() << "CqlRecord::value" << endl;
 }
 
@@ -170,8 +170,8 @@ CqlRecord::next()
 	if(!m_cursor)
 		return false;
 
-	return false;
-//	return m_cursor->fetch();
+//	return false;
+	return m_cursor->fetch();
 }
 
 unsigned long
@@ -192,6 +192,7 @@ CqlRecord::setupCursor()
 		CqlString data;
 		bool flag;
 		m_cursor->bindColumn(fields, data, flag);
+		m_data.insert(fields, &data);
 
 		kdDebug() << "CqlRecord::setupCursor: bind cursor " << fields << endl;
 		fields++;
