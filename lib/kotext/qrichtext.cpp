@@ -42,7 +42,10 @@
 #include <stdlib.h>
 #include "koparagcounter.h" //// kotext
 #include <kdebug.h>
+#include <kdeversion.h>
+#if ! KDE_IS_VERSION(3,1,90)
 #include <kdebugclasses.h>
+#endif
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -4772,7 +4775,7 @@ bool KoTextFormatterBase::isBreakable( KoTextString *string, int pos ) const
     char ch = c.latin1();
     if ( c.isSpace() && ch != '\n' && c.unicode() != 0x00a0U )
 	return TRUE;
-    if ( c.unicode() == 0xad ) // soft hyphen
+    if ( c == '-' || c.unicode() == 0xad ) // hyphen or soft hyphen
 	return TRUE;
     if ( !ch ) {
 	// not latin1, need to do more sophisticated checks for other scripts
