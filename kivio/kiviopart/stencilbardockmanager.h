@@ -27,7 +27,7 @@ namespace Kivio {
 class DragBarButton;
 }
 class KivioStackBar;
-class StencilBarMoveManager;
+class KoToolDockMoveManager;
 class KivioDoc;
 
 class StencilBarDockManager : public QWidget
@@ -66,7 +66,7 @@ class StencilBarDockManager : public QWidget
     KivioDoc *m_pDoc;
     DragBarButton* dragButton;
     QWidget* dragWidget;
-    StencilBarMoveManager* moveManager;
+    KoToolDockMoveManager* moveManager;
     QPtrList<KivioStackBar> m_pBars;
     QPtrList<KivioStackBar> m_pTopLevelBars;
     QSplitter* split1;

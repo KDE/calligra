@@ -19,7 +19,7 @@
 #include "kivio_doc.h"
 #include "stencilbardockmanager.h"
 #include "stencilbarbutton.h"
-#include "stencilbarmovemanager.h"
+#include "kotooldockmovemanager.h"
 #include "kivio_stackbar.h"
 
 #include <qlayout.h>
@@ -41,7 +41,7 @@ StencilBarDockManager::StencilBarDockManager( QWidget* parent, const char* name 
 
   m_pDoc = NULL;
 
-  moveManager = new StencilBarMoveManager();
+  moveManager = new KoToolDockMoveManager();
   connect(moveManager,SIGNAL(positionChanged()),SLOT(slotMoving()));
 
   QVBoxLayout* l = new QVBoxLayout(this);

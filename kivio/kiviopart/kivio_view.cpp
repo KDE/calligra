@@ -76,6 +76,8 @@
 #include <koPageLayoutDia.h>
 #include <kolinewidthaction.h>
 #include <kolinestyleaction.h>
+#include "kotooldockmanager.h"
+#include "kotooldockbase.h"
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -88,8 +90,6 @@
 #include "kivio_grid_data.h"
 
 #include "tkcoloractions.h"
-#include "tooldockmanager.h"
-#include "tooldockbase.h"
 
 #include "kivio_protection_panel.h"
 #include "kivio_stencil_geometry_panel.h"
@@ -161,16 +161,16 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect(m_pDoc, SIGNAL(endProgress()), this, SLOT(removeStatusBarProgress()));
 
   bool isModified = doc->isModified();
-  m_pDockManager = new StencilBarDockManager(this);
-  m_pDockManager->setDoc( doc );
+  m_pStencilBarDockManager = new StencilBarDockManager(this);
+  m_pStencilBarDockManager->setDoc( doc );
 
   // QGridLayout for the entire view
   QGridLayout *viewGrid = new QGridLayout(this);
-  viewGrid->addWidget(m_pDockManager, 0, 0);
+  viewGrid->addWidget(m_pStencilBarDockManager, 0, 0);
 
   // A widget to hold the entire right side (old view)
-  QWidget *pRightSide = new QWidget(m_pDockManager);
-  m_pDockManager->setView(pRightSide);
+  QWidget *pRightSide = new QWidget(m_pStencilBarDockManager);
+  m_pStencilBarDockManager->setView(pRightSide);
 
   // Split tabbar and Horz. Scroll Bar
   QSplitter* tabSplit = new QSplitter(pRightSide);
@@ -236,7 +236,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( this, SIGNAL( invalidated() ), m_pCanvas, SLOT( update() ) );
   connect( this, SIGNAL( regionInvalidated( const QRegion&, bool ) ), m_pCanvas, SLOT( repaint( const QRegion&, bool ) ) );
 
-  m_pToolDock = new ToolDockManager(canvasBase);
+  m_pToolDockManager = new KoToolDockManager(canvasBase);
 
   setInstance(KivioFactory::global());
   if ( !m_pDoc->isReadWrite() )
@@ -304,7 +304,8 @@ DCOPObject* KivioView::dcopObject()
 void KivioView::createGeometryDock()
 {
     m_pStencilGeometryPanel = new KivioStencilGeometryPanel(this);
-    ToolDockBase* stencilGeometryBase = toolDockManager()->createToolDock(m_pStencilGeometryPanel,i18n("Geometry"));
+    KoToolDockBase* stencilGeometryBase = toolDockManager()->createSimpleToolDock(m_pStencilGeometryPanel);
+    stencilGeometryBase -> setCaption(i18n("Geometry"));
     stencilGeometryBase->move(0,0);
 
     connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(double, double)), this, SLOT(slotChangeStencilPosition(double, double)) );
@@ -320,7 +321,8 @@ void KivioView::createGeometryDock()
 void KivioView::createBirdEyeDock()
 {
     m_pBirdEyePanel = new KivioBirdEyePanel(this, this);
-    ToolDockBase* birdEyeBase = toolDockManager()->createToolDock(m_pBirdEyePanel,i18n("Bird's Eye"));
+    KoToolDockBase* birdEyeBase = toolDockManager()->createSimpleToolDock(m_pBirdEyePanel);
+    birdEyeBase -> setCaption(i18n("Bird's Eye"));
     birdEyeBase->move(0,0);
 
     KToggleAction* showBirdEye = new KToggleAction( i18n("Bird's Eye"), 0, actionCollection(), "birdEye" );
@@ -331,7 +333,8 @@ void KivioView::createBirdEyeDock()
 void KivioView::createLayerDock()
 {
     m_pLayersPanel = new KivioLayerPanel( this, this);
-    ToolDockBase* layersBase = toolDockManager()->createToolDock(m_pLayersPanel,i18n("Layers"));
+    KoToolDockBase* layersBase = toolDockManager()->createSimpleToolDock(m_pLayersPanel);
+    layersBase -> setCaption(i18n("Layers"));
     layersBase->move(0,0);
 
     KToggleAction* showLayers = new KToggleAction( i18n("Layers Manager"), CTRL+Key_L, actionCollection(), "layersPanel" );
@@ -342,7 +345,8 @@ void KivioView::createLayerDock()
 void KivioView::createProtectionDock()
 {
   m_pProtectionPanel = new KivioProtectionPanel(this,this);
-  ToolDockBase* protectionBase = toolDockManager()->createToolDock(m_pProtectionPanel,i18n("Protection"));
+  KoToolDockBase* protectionBase = toolDockManager()->createSimpleToolDock(m_pProtectionPanel);
+  protectionBase -> setCaption(i18n("Protection"));
   protectionBase->move(0,0);
 
   KToggleAction *showProtection = new KToggleAction( i18n("Protection"), CTRL+SHIFT+Key_P, actionCollection(), "protection" );
@@ -353,7 +357,8 @@ void KivioView::createProtectionDock()
 void KivioView::createAddStencilSetDock()
 {
   m_addStencilSetPanel = new Kivio::AddStencilSetPanel(this);
-  ToolDockBase* addStencilSetBase = toolDockManager()->createToolDock(m_addStencilSetPanel, i18n("Add Stencil Set"));
+  KoToolDockBase* addStencilSetBase = toolDockManager()->createSimpleToolDock(m_addStencilSetPanel);
+  addStencilSetBase -> setCaption(i18n("Add Stencil Set"));
   addStencilSetBase->move(0,0);
 
   KToggleAction *showAddStencilSet = new KToggleAction( i18n("Add Stencil Set"), 0, actionCollection(), "addStencilSetDock" );
@@ -933,7 +938,7 @@ void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 
   pView->setStencilSpawnerSet( pSpawner );
 
-  m_pDockManager->insertStencilSet(pView, pSpawner->name());
+  m_pStencilBarDockManager->insertStencilSet(pView, pSpawner->name());
 }
 
 void KivioView::setFGColor()

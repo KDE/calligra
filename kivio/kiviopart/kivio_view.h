@@ -35,8 +35,6 @@ class StencilBarDockManager;
 class KivioArrowHeadAction;
 namespace Kivio {
   class ToolController;
-  class ToolDockBase;
-  class ToolDockManager;
   class PluginManager;
   class AddStencilSetPanel;
 }
@@ -48,6 +46,8 @@ class KivioStencilGeometryPanel;
 
 class KoDocumentEntry;
 class KoTabBar;
+class KoToolDockBase;
+class KoToolDockManager;
 
 class KAction;
 class KFontAction;
@@ -101,7 +101,7 @@ class KivioView : public KoView
     KivioStencilSpawnerSet *activeSpawnerSet();
 
     KoTabBar* tabBar()const { return  m_pTabBar;}
-    ToolDockManager* toolDockManager() { return m_pToolDock; }
+    KoToolDockManager* toolDockManager() { return m_pToolDockManager; }
     void updateMenuPage( );
 
     virtual void setupPrinter(KPrinter&);
@@ -145,7 +145,7 @@ class KivioView : public KoView
     QPtrList<KAction> alignActionList();
     QPtrList<KAction> groupActionList();
     QPtrList<KAction> layerActionList();
-    
+
     int hTextAlign();
     int vTextAlign();
 
@@ -322,8 +322,8 @@ class KivioView : public KoView
     KivioPage* m_pActivePage;
     KivioStencilSpawnerSet* m_pActiveSpawnerSet;
 
-    StencilBarDockManager* m_pDockManager;
-    ToolDockManager* m_pToolDock;
+    StencilBarDockManager* m_pStencilBarDockManager;
+    KoToolDockManager* m_pToolDockManager;
 
     KoRuler* vRuler;
     KoRuler* hRuler;
@@ -364,6 +364,7 @@ class KivioView : public KoView
     KoLineStyleAction* m_lineStyleAction;
 
     QProgressBar* m_statusBarProgress;
+
 };
 
 #endif
