@@ -24,7 +24,7 @@ public:
 		{ return false; }
 
 	// only manipulating (opposed to creating) tools have to implement this:
-	virtual VCommand* manipulate( VObject* /*object*/ ) { return 0L; }
+	virtual VCommand* manipulate( VObject* /*object*/ ) const { return 0L; }
 };
 
 #endif

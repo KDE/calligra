@@ -7,11 +7,11 @@
 
 #include <qptrlist.h>
 #include <qpointarray.h>
+#include <koPoint.h>
 
 #include "vobject.h"
 
 class QWMatrix;
-class KoPoint;
 
 class VSegment;
 
@@ -33,15 +33,16 @@ public:
 	VPath& lineTo( const KoPoint& p )
 		{ return lineTo( p.x(), p.y() ); }
 
-	// curveTo():
-	//
-	//   p1          p2
-	//    O   ____   O
-	//    | _/    \_ |
-	//    |/        \|
-	//    x          x
-	// currP         p3
-	//
+	/*
+	curveTo():
+
+	   p1          p2
+	    O   ____   O
+	    | _/    \_ |
+	    |/        \|
+	    x          x
+	currP          p3
+	*/
 	VPath& curveTo(
 		const double& x1, const double& y1,
 		const double& x2, const double& y2,
@@ -52,15 +53,16 @@ public:
 		return curveTo( p1.x(), p1.y(), p2.x(), p2.y(), p3.x(), p3.y() );
 	}
 
-	// curve1To():
-	//
-	//               p2
-	//         ____  O
-	//      __/    \ |
-	//     /        \|
-	//    x          x
-	// currP         p3
-	//
+	/*
+	curve1To():
+
+	               p2
+	         ____  O
+	      __/    \ |
+	     /        \|
+	    x          x
+	currP          p3
+	*/
 	VPath& curve1To(
 		const double& x2, const double& y2,
 		const double& x3, const double& y3 );
@@ -70,15 +72,16 @@ public:
 		return curve1To( p2.x(), p2.y(), p3.x(), p3.y() );
 	}
 
-	// curve2To():
-	//
-	//   p1
-	//    O  ____
-	//    | /    \__
-	//    |/        \
-	//    x          x
-	// currP         p3
-	//
+	/*
+	curve2To():
+
+	   p1
+	    O  ____
+	    | /    \__
+	    |/        \
+	    x          x
+	currP          p3
+	*/
 	VPath& curve2To(
 		const double& x1, const double& y1,
 		const double& x3, const double& y3 );
@@ -89,7 +92,7 @@ public:
 	}
 
 	// this is a convenience function to approximate circular arcs with
-	// beziers. input: 2 tangent vectors and a radius (like in postscript):
+	// beziers. input: 2 tangent vectors and a radius (same as in postscript):
 	VPath& arcTo(
 		const double& x1, const double& y1,
 		const double& x2, const double& y2, const double& r );
@@ -107,7 +110,6 @@ public:
 
 	// perform a boolean operation (unite(0), intersect(1), substract(2), xor(3)):
 	VPath* booleanOp( const VPath* path, int type = 0 ) const;
-
 
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor = 1.0 );

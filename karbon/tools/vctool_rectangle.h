@@ -9,6 +9,8 @@
 #include <qpoint.h>
 
 #include "karbon_view.h"
+#include "vccmd_rectangle.h"
+#include "vpath.h"
 #include "vtool.h"
 
 class KarbonPart;
@@ -91,17 +93,16 @@ inline void
 VCToolRectangle::drawTemporaryObject( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
-	painter.setPen( Qt::black );
-	painter.setRasterOp( Qt::NotROP );
 
-	// Qt's drawRect() behaves sometimes oddly. we have to paint the rect
-	// this way:
+	VCCmdRectangle* cmd =
+		new VCCmdRectangle( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y() );
 
-	painter.moveTo( m_tl );
-	painter.lineTo( m_br.x(), m_tl.y() );
-	painter.lineTo( m_br );
-	painter.lineTo( m_tl.x(), m_br.y() );
-	painter.lineTo( m_tl );
+	VPath* path = cmd->createPath();
+	path->setState( VObject::edit );
+	path->draw( painter, path->boundingBox() );
+
+	delete( cmd );
+	delete( path );
 }
 
 #endif

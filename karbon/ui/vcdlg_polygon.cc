@@ -18,15 +18,16 @@
 #include "vcdlg_polygon.h"
 
 VCDlgPolygon::VCDlgPolygon()
-	: KDialog( 0L, i18n( "Polygon" ), true, Qt::WStyle_Customize |
+	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
 	  Qt::WStyle_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Polygon" ) );
+	setCaption( i18n( "Insert Polygon" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
 	// add input fields on the left:
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Values" ), this );
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this
+ );
  	outerbox->addWidget( group );
 
 	new QLabel( i18n( "Radius:" ), group );

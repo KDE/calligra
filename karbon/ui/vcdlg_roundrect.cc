@@ -17,15 +17,16 @@
 #include "vcdlg_roundrect.h"
 
 VCDlgRoundRect::VCDlgRoundRect()
-	: KDialog( 0L, i18n( "Round Rectangle" ), true, Qt::WStyle_Customize |
+	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
 	  Qt::WStyle_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Round Rectangle" ) );
+	setCaption( i18n( "Insert Round Rectangle" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
 	// add input fields on the left:
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Values" ), this );
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this
+ );
  	outerbox->addWidget( group );
 
 	// add width/height-input:

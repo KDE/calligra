@@ -5,7 +5,8 @@
 #ifndef __VOBJECT_H__
 #define __VOBJECT_H__
 
-#include "koRect.h"
+#include <qrect.h>
+
 #include "vtool.h"
 
 class QPainter;
@@ -18,28 +19,26 @@ class VCommand;
 class VObject
 {
 public:
+	enum VState { normal, edit, deleted, invisible };
+
 	VObject()
-		: m_isDeleted( false ) {}
+		: m_state( normal ) {}
 	virtual ~VObject() {}
 
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor ) = 0;
 
-	virtual VCommand* accept( VTool& tool ) { return tool.manipulate( this ); }
+	virtual VCommand* accept( const VTool& tool ) { return tool.manipulate( this ); }
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;
 
-	const KoRect& boundingBox() const { return m_boundingBox; }
+	QRect boundingBox() const { return QRect(); }
 
-	// the "m_isDeleted" flag is needed e.g to be able to undo deletion of objects:
-	void setDeleted( bool flag = true ) { m_isDeleted = flag; }
-	bool isDeleted() { return m_isDeleted; }
-
-protected:
-	KoRect m_boundingBox;
+	void setState( const VState state ) { m_state = state; }
+	bool state() const { return m_state; }
 
 private:
-	bool m_isDeleted;
+	VState m_state;
 };
 
 #endif

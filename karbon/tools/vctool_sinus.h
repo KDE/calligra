@@ -94,23 +94,17 @@ VCToolSinus::recalcCoords()
 inline void
 VCToolSinus::drawTemporaryObject( KarbonView* view )
 {
-/*	QPainter painter( view->canvasWidget()->viewport() );
-	painter.setPen( Qt::black );
-	painter.setRasterOp( Qt::NotROP );
+	QPainter painter( view->canvasWidget()->viewport() );
 
-	// Qt's drawRoundRect() behaves differntely, that's why we have
-	// to take the long way home here.
-
-	// let the command create the necessary qpointarray for us:
 	VCCmdSinus* cmd =
 		new VCCmdSinus( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(), m_periods );
 
 	VPath* path = cmd->createPath();
-
-	painter.drawPolyline( path->getQPointArray( view->zoomFactor() ) );
+	path->setState( VObject::edit );
+	path->draw( painter, path->boundingBox() );
 
 	delete( cmd );
-	delete( path ); */
+	delete( path );
 }
 
 #endif

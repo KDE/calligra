@@ -94,80 +94,17 @@ VCToolEllipse::recalcCoords()
 inline void
 VCToolEllipse::drawTemporaryObject( KarbonView* view )
 {
-/*
 	QPainter painter( view->canvasWidget()->viewport() );
-	painter.setPen( Qt::yellow );
-	painter.setRasterOp( Qt::XorROP );
+	
+	VCCmdEllipse* cmd =
+		new VCCmdEllipse( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y() );
 
-	// we need a bitmap to avoid selfinteraction of small shapes and
-	// center crosses because of XorROP.
+	VPath* path = cmd->createPath();
+	path->setState( VObject::edit );
+	path->draw( painter, path->boundingBox() );
 
-	// For small shapes use the QBitmap for the whole shape:
-	if ( m_width < 6 || m_height < 6 )
-	{
-		QBitmap bm(
-			// at least show a line when size==0:
-			m_width  < 2 ? 1 : m_width  + 1,
-			m_height < 2 ? 1 : m_height + 1, true );
-		QPainter p;
-
-		p.begin( &bm );
-		// Qt*s drawEllipse actually would be sufficent here, except for one thing:
-		// an ellipse with height/width==1 vanishes. that's why we use
-		// VCCmdEllipse::createPath. this is a bit slower.
-
-		// let the command create the necessary qpointarray for us:
-		VCCmdEllipse* cmd =
-			new VCCmdEllipse( m_part, 0.0, 0.0, m_width, m_height );
-
-		VPath* path = cmd->createPath();
-
-		p.drawPolygon( path->getQPointArray( view->zoomFactor() ) );
-
-		// draw center cross:
-		const int center_x = qRound( m_width  * 0.5 );
-		const int center_y = qRound( m_height * 0.5 );
-		p.drawLine(
-			center_x - 2, center_y - 2,
-			center_x + 2, center_y + 2 );
-		p.drawLine(
-			center_x - 2, center_y + 2,
-			center_x + 2, center_y - 2 );
-
-		p.end();
-
-		bm.setMask( bm );
-
-		painter.drawPixmap(
-			m_signW > 0 ? m_tl.x() : m_br.x(),
-			m_signH > 0 ? m_tl.y() : m_br.y(), bm );
-
-		delete( cmd );
-		delete( path );
-	}
-	else	// large shapes: use QBitmap only for center-cross:
-	{
-		// shape:
-		painter.drawEllipse(
-			m_tl.x() < m_br.x() ? m_tl.x() : m_br.x(),
-			m_tl.y() < m_br.y() ? m_tl.y() : m_br.y(), m_width, m_height );
-
-		// draw center cross:
-		QBitmap bm( 5, 5, true );
-		QPainter p;
-
-		p.begin( &bm );
-		p.drawLine( 0, 0, 4, 4 );
-		p.drawLine( 0, 4, 4, 0 );
-		p.end();
-
-		bm.setMask( bm );
-
-		painter.drawPixmap(
-			m_tl.x() + m_signW * qRound( ( m_width - 1 ) * 0.5 ) - 2,
-			m_tl.y() + m_signH * qRound( ( m_height - 1 ) * 0.5 ) - 2, bm );
- 	}
-*/
+	delete( cmd );
+	delete( path );
 }
 
 #endif

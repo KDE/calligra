@@ -564,11 +564,19 @@ VPath::~VPath()
 }
 
 void
-VPath::draw( QPainter& painter, const QRect& /*rect*/, const double zoomFactor )
+VPath::draw( QPainter& painter, const QRect& /*rect*/, const double /*zoomFactor*/ )
 {
-	if( isDeleted() ) return;
+	if( state() == deleted )
+		return;
 
 	painter.save();
+
+	if( state() == edit )
+	{
+		painter.setPen( Qt::yellow );
+		painter.setRasterOp( Qt::XorROP );
+	}
+
 	QPtrListIterator<VSegment> itr( m_segments );
 
 	for( ; itr.current(); ++itr )
@@ -601,19 +609,22 @@ VPath::draw( QPainter& painter, const QRect& /*rect*/, const double zoomFactor )
 		}
 	}
 
-	painter.setBrush( Qt::NoBrush );
-
-	for( itr.toFirst(); itr.current(); ++itr )
+	if( state() == normal )
 	{
-		// draw boxes:
-		painter.setPen( Qt::black );
-		const uint handleSize = 3;
+		painter.setBrush( Qt::NoBrush );
 
-		painter.drawRect(
-			itr.current()->p3()->x() - handleSize,
-			itr.current()->p3()->y() - handleSize,
-			handleSize*2 + 1,
-			handleSize*2 + 1 );
+		for( itr.toFirst(); itr.current(); ++itr )
+		{
+			// draw boxes:
+			painter.setPen( Qt::black );
+			const uint handleSize = 3;
+
+			painter.drawRect(
+				itr.current()->p3()->x() - handleSize,
+				itr.current()->p3()->y() - handleSize,
+				handleSize*2 + 1,
+				handleSize*2 + 1 );
+		}
 	}
 
 	painter.restore();
@@ -812,7 +823,7 @@ VPath::revert() const
 }
 
 VPath*
-VPath::booleanOp( const VPath* path, int type ) const
+VPath::booleanOp( const VPath* path, int /*type*/ ) const
 {
 	// step one: find intersections.
 

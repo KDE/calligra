@@ -41,7 +41,7 @@ void
 VCCmdEllipse::execute()
 {
 	if ( m_object )
-		m_object->setDeleted( false );
+		m_object->setState( VObject::normal );
 	else
 	{
 		m_object = createPath();
@@ -54,7 +54,7 @@ void
 VCCmdEllipse::unexecute()
 {
 	if ( m_object )
-		m_object->setDeleted();
+		m_object->setState( VObject::deleted );
 }
 
 VPath*

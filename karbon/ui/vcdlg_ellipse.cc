@@ -17,15 +17,16 @@
 #include "vcdlg_ellipse.h"
 
 VCDlgEllipse::VCDlgEllipse()
-	: KDialog( 0L, i18n( "Ellipse" ), true, Qt::WStyle_Customize |
+	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
 	  Qt::WStyle_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
-	setCaption( i18n( "Ellipse" ) );
+	setCaption( i18n( "Insert Ellipse" ) );
 
 	QBoxLayout* outerbox = new QHBoxLayout( this );
 
 	// add input fields on the left:
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Values" ), this );
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this
+ );
  	outerbox->addWidget( group );
 
 	// add width/height-input:
