@@ -1466,3 +1466,5 @@ Reggie, 1.9.1999:
 -----------------
 - Return/Enter is now more flickerfree
 - More redraw improvements
+- More optimations of Return/Enter to make it even more flickerfree
+

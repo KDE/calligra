@@ -374,6 +374,7 @@ protected:
     int currFrameSet;
     QByteArray pasteLaterData;
     QString pasteLaterMimeType;
+    QRect scrollClipRect;
     
 };
 

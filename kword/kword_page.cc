@@ -2383,6 +2383,7 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
     unsigned int tmpTextPos = fc->getTextPos();
 
     int h_ = frameSet->getFrame( oldFrame - 1 )->height();
+    int y_ = fc->getPTY() - 5 - contentsY();
     
     if ( fc->isCursorAtParagEnd() ) {
 	frameSet->insertParag( fc->getParag(), I_AFTER );
@@ -2420,6 +2421,10 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
 
     int yp = contentsY();
     redrawAllWhileScrolling = TRUE;
+    if ( redrawOnlyCurrFrameset ) 
+	scrollClipRect = QRect( 0, y_, visibleWidth(), visibleHeight() - y_ ); 
+    else
+	scrollClipRect = QRect( 0, 0, visibleWidth(), visibleHeight() );
     scrollToCursor( *fc );
     redrawAllWhileScrolling = FALSE;
     bool scrolled = yp != contentsY();
@@ -2797,11 +2802,9 @@ void KWPage::scrollToCursor( KWFormatContext &_fc )
     int cy = isCursorYVisible( _fc );
     int cx = isCursorXVisible( _fc );
 
-    if ( cx == 0 && cy == 0 )
-    {
-	if ( redrawAllWhileScrolling )
-	{
-	    repaintScreen( FALSE );
+    if ( cx == 0 && cy == 0 ) {
+	if ( redrawAllWhileScrolling ) {
+	    repaintScreen( scrollClipRect, FALSE );
 	    QPainter painter;
 	    painter.begin( viewport() );
 	    doc->drawMarker( _fc, &painter, contentsX(), contentsY() );
@@ -2811,16 +2814,14 @@ void KWPage::scrollToCursor( KWFormatContext &_fc )
     }
 
     int oy = contentsY(), ox = contentsX();
-    if ( cy < 0 )
-    {
+    if ( cy < 0 ) {
 	oy = _fc.getPTY();
 	if ( oy < 0 ) oy = 0;
     }
     else if ( cy > 0 )
 	oy = _fc.getPTY() - height() + _fc.getLineHeight() + 10;
 
-    if ( cx < 0 )
-    {
+    if ( cx < 0 ) {
 	ox = _fc.getPTPos() - width() / 3;
 	if ( ox < 0 ) ox = 0;
     }
