@@ -2360,7 +2360,6 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                             inSelection = dropCursor.parag() == endSel.parag() && dropCursor.index() <= endSel.index();
                     }
                 }
-                kdDebug()<<"inSelection! "<<inSelection<<endl;
                 if ( inSelection )
                 {
                     delete macroCmd;
