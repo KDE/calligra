@@ -232,9 +232,8 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 						( jtr.current()->ctrlPoint1Selected() ||
 						  jtr.current()->prev()->knotSelected() ) )
 					{
-						painter->drawNode( jtr.current()->ctrlPoint1(), 3 );
 						painter->setBrush( Qt::blue.light() );
-						painter->fillPath();
+						painter->drawNode( jtr.current()->ctrlPoint1(), 3 );
 					}
 					else
 						painter->setBrush( Qt::NoBrush );
@@ -249,10 +248,8 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 						jtr.current()->ctrlPoint2Selected() ||
 						jtr.current()->knotSelected() )
 					{
-						painter->drawNode( jtr.current()->ctrlPoint2(), 3 );
-
 						painter->setBrush( Qt::blue.light() );
-						painter->fillPath();
+						painter->drawNode( jtr.current()->ctrlPoint2(), 3 );
 					}
 					else
 						painter->setBrush( Qt::NoBrush );
@@ -261,33 +258,25 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 				}
 
 				// Draw knot:
-				painter->newPath();
-
-				painter->drawNode( jtr.current()->knot(), 3 );
+				painter->setPen( Qt::NoPen );
 
 				if( jtr.current()->knotSelected() )
-				{
-					painter->setBrush( Qt::blue.light() );
-					painter->fillPath();
-				}
+					painter->setBrush( Qt::blue );
 				else
-					painter->setBrush( Qt::NoBrush );
+					painter->setBrush( Qt::blue.light() );
 
-				painter->strokePath();
+				painter->drawNode( jtr.current()->knot(), 3 );
 			}
 		}
 
 		// Draw a center node:
 		if( m_drawCenterNode )
 		{
-			painter->newPath();
 			painter->setRasterOp( Qt::NotROP );
 			painter->setPen( Qt::NoPen );
 			painter->setBrush( Qt::blue.light() );
 
 			painter->drawNode( boundingBox().center(), 3 );
-
-			painter->fillPath();
 		}
 	}
 

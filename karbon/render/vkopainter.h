@@ -94,6 +94,7 @@ private:
 	void applyPattern( _ArtSVP *, bool );
 	_ArtGradientStop *buildStopArray( VGradient &gradient, int & );
 	void clampToViewport( const _ArtSVP &, int &, int &, int &, int & );
+	void clampToViewport( int &, int &, int &, int & );
 
 private:
 	struct _ArtBpath *m_path;
@@ -107,6 +108,7 @@ private:
 	VFill *m_fill;
 	double m_zoomFactor;
 	KoRect m_bbox;
+	bool m_aa;
 
 	GC gc;
 };

@@ -71,6 +71,7 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h ) :
 	m_index = 0;
 	resize( m_width, m_height );
 	clear();
+	m_aa = true;
 
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -93,6 +94,7 @@ VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h ) 
 	m_path = 0L;
 	m_index = 0;
 	clear();
+	m_aa = true;
 
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -390,6 +392,20 @@ VKoPainter::boundingBox() const
 }
 
 void
+VKoPainter::clampToViewport( int &x0, int &y0, int &x1, int &y1 )
+{
+	// clamp to viewport
+	x0 = QMAX( x0, 0 );
+	x0 = QMIN( x0, int( m_width ) );
+	y0 = QMAX( y0, 0 );
+	y0 = QMIN( y0, int ( m_height ) );
+	x1 = QMAX( x1, 0 );
+	x1 = QMIN( x1, int( m_width ) );
+	y1 = QMAX( y1, 0 );
+	y1 = QMIN( y1, int( m_height ) );
+}
+
+void
 VKoPainter::clampToViewport( const ArtSVP &svp, int &x0, int &y0, int &x1, int &y1 )
 {
 	// get SVP bbox
@@ -624,7 +640,8 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		if( x0 != x1 && y0 != y1 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
-			art_render_svp( render, svp );
+			if(m_aa)
+				art_render_svp( render, svp );
 			art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
 		}
 	}
@@ -742,11 +759,27 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 void
 VKoPainter::drawNode( const KoPoint& p, int width )
 {
+	newPath();
 	moveTo( KoPoint( p.x() - width / m_zoomFactor, p.y() - width / m_zoomFactor ) );
 	lineTo( KoPoint( p.x() + width / m_zoomFactor, p.y() - width / m_zoomFactor ) );
 	lineTo( KoPoint( p.x() + width / m_zoomFactor, p.y() + width / m_zoomFactor ) );
 	lineTo( KoPoint( p.x() - width / m_zoomFactor, p.y() + width / m_zoomFactor ) );
 	lineTo( KoPoint( p.x() - width / m_zoomFactor, p.y() - width / m_zoomFactor ) );
+
+	if( m_fill )
+	{
+		VGradient grad;
+		grad.clearStops();
+		grad.addStop( m_fill->color(), 0.0, 0.5 );
+		grad.addStop( m_fill->color(), 1.0, 0.5 );
+		m_fill->gradient() = grad;
+		m_fill->setType( VFill::grad );
+	}
+
+	m_aa = false;
+	fillPath();
+	m_aa = true;
+	newPath();
 }
 
 void
