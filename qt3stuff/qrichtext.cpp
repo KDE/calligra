@@ -3444,7 +3444,7 @@ void QTextParag::setFormat( int index, int len, QTextFormat *f, bool useCollecti
     if ( index > str->length() - 1 )
 	index = str->length() - 1;
     if ( index + len >= str->length() )
-	len = str->length() - index - 1; // I had removed the -1 ... ## to be checked
+	len = str->length() - index;
 
     QTextFormatCollection *fc = 0;
     if ( useCollection )
