@@ -61,7 +61,7 @@ AC_SUBST(LIBART_RPATH)
 
 # Check for fontconfig
 KDE_FIND_PATH(fontconfig-config, FONTCONFIG_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
-  AC_MSG_WARN([Could not find fontconfig anywhere, please check http://fontconfig.org])
+  AC_MSG_WARN([Could not find fontconfig-config anywhere])
 ])
 
 if test -n "$FONTCONFIG_CONFIG"; then
@@ -82,6 +82,10 @@ if test -n "$FONTCONFIG_CONFIG"; then
   else
      AC_MSG_WARN([You need at least fontconfig 1.0.1])
   fi
+fi
+
+if test -z "$FONTCONFIG_CONFIG"; then
+	KOFFICE_PKG_CHECK_MODULES(FONTCONFIG, fontconfig)
 fi
 
 AC_SUBST(FONTCONFIG_LIBS)
