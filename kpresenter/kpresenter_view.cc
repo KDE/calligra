@@ -1990,15 +1990,15 @@ void KPresenterView::setupActions()
 					     this, SLOT( extraDefaultTemplate() ),
 					     actionCollection(), "extra_defaulttemplate" );
 
-    actionExtraAlignObjs = new KAction( "Align Objects", "alignobjs", 0,
+    actionExtraAlignObjs = new KAction( i18n("Align Objects"), "alignobjs", 0,
 					this, SLOT( extraAlignObjs() ),
 					actionCollection(), "extra_alignobjs" );
 
-    actionExtraLineBegin = new KAction( "Line Begin", "line_begin", 0,
+    actionExtraLineBegin = new KAction( i18n("Line Begin"), "line_begin", 0,
 					this, SLOT( extraLineBegin() ),
 					actionCollection(), "extra_linebegin" );
 
-    actionExtraLineEnd = new KAction( "Line End", "line_end", 0,
+    actionExtraLineEnd = new KAction( i18n("Line End"), "line_end", 0,
 				      this, SLOT( extraLineEnd() ),
 				      actionCollection(), "extra_lineend" );
 
