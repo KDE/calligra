@@ -404,7 +404,8 @@ void KWDocument::initConfig()
       setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
       setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ) );
       setShowScrollBar( config->readBoolEntry( "ShowScrollBar", true ) );
-
+      if ( isEmbedded() )
+          m_bShowDocStruct = false; // off by default for embedded docs, but still toggleable
   }
   else
       m_zoom = 100;
@@ -425,6 +426,8 @@ void KWDocument::initConfig()
 
 void KWDocument::saveConfig()
 {
+    if ( isEmbedded() )
+        return;
     // Only save the config that is manipulated by the UI directly.
     // The config from the config dialog is saved by the dialog itself.
     KConfig *config = KWFactory::global()->config();
@@ -2410,7 +2413,7 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 
 void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool transparent, double zoomX, double zoomY )
 {
-    //kdDebug(32001) << "************************KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << endl;
+    //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
     m_zoom = 100;
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
     {
