@@ -893,6 +893,12 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
     return true;
 }
 
+bool KPresenterDoc::loadOasis( const QDomDocument&, KoOasisStyles& )
+{
+    //todo
+    return true;
+}
+
 bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 {
     QTime dt;
