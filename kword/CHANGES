@@ -9,14 +9,16 @@ the same size as the real paper page.
 
 Much better performance with huge documents (the text is formatted
  as a background job, the repainting is done much better etc.).
- And the files should be smaller than before (smarter way of saving
+
+File should be smaller than before (smarter way of saving
  the formatting information)
 
 Real document/view separation, working with different views on the same
 document is fully functional, cursors are in each view.
 
-Brand new formula widget (with doc/view design, zoom support etc.),
-redesigned table support, much improved find/replace functionality.
+Brand new formula widget (with doc/view design, zoom support etc.).
+Redesigned table support.
+Much improved find/replace functionality.
 
 Other new features:
  - Real bullets instead of using characters as bullets.
