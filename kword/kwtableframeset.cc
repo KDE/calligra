@@ -817,10 +817,10 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
 
     double height = getCell(copyFromRow,0)->getFrame(0)->height();
 
-    for ( i = 0; i < getCols()/*nbCols*/; i++ ) {
+    for ( i = 0; i < /*getCols()*/nbCols; i++ ) {
         int colSpan = getCell(copyFromRow,i)->m_cols;
         double tmpWidth= colStart[i+colSpan] - colStart[i];
-        if(i+colSpan != getCols()/*nbCols*/)
+        if(i+colSpan != /*getCols()*/nbCols)
             tmpWidth-=tableCellSpacing;
         else
             tmpWidth+=1;
@@ -898,7 +898,7 @@ void KWTableFrameSet::insertCol( unsigned int col )
 
     if(col < m_cols-1) m_cols++;
 
-    recalcCols();
+    //recalcCols();
     finalize();
 }
 
