@@ -237,28 +237,27 @@ QStringList KoVariableDateFormat::staticFormatPropsList()
 // TODO: shouldn't it apply the formats to the value, like the popupmenu does?
 QStringList KoVariableDateFormat::staticTranslatedFormatPropsList()
 {
-    QDateTime now(QDateTime::currentDateTime());
     QStringList listDateFormat;
     listDateFormat<<i18n("Locale date format");
     listDateFormat<<i18n("Short locale date format");
     listDateFormat<<i18n("Locale date & time format");
     listDateFormat<<i18n("Short locale date & time format");
-    listDateFormat<<now.toString("dd/MM/yy");
-    listDateFormat<<now.toString("dd/MM/yyyy");
-    listDateFormat<<now.toString("MMM dd,yy");
-    listDateFormat<<now.toString("MMM dd,yyyy");
-    listDateFormat<<now.toString("dd.MMM.yyyy");
-    listDateFormat<<now.toString("MMMM dd, yyyy");
-    listDateFormat<<now.toString("ddd, MMM dd,yy");
-    listDateFormat<<now.toString("dddd, MMM dd,yy");
-    listDateFormat<<now.toString("MM-dd");
-    listDateFormat<<now.toString("yyyy-MM-dd");
-    listDateFormat<<now.toString("dd/yy");
-    listDateFormat<<now.toString("MMMM");
-    listDateFormat<<now.toString("yyyy-MM-dd hh:mm");
-    listDateFormat<<now.toString("dd.MMM.yyyy hh:mm");
-    listDateFormat<<now.toString("MMM dd,yyyy h:mm AP");
-    listDateFormat<<now.toString("yyyy-MM-ddThh:mm:ss"); // ISO 8601
+    listDateFormat<<"dd/MM/yy";
+    listDateFormat<<"dd/MM/yyyy";
+    listDateFormat<<"MMM dd,yy";
+    listDateFormat<<"MMM dd,yyyy";
+    listDateFormat<<"dd.MMM.yyyy";
+    listDateFormat<<"MMMM dd, yyyy";
+    listDateFormat<<"ddd, MMM dd,yy";
+    listDateFormat<<"dddd, MMM dd,yy";
+    listDateFormat<<"MM-dd";
+    listDateFormat<<"yyyy-MM-dd";
+    listDateFormat<<"dd/yy";
+    listDateFormat<<"MMMM";
+    listDateFormat<<"yyyy-MM-dd hh:mm";
+    listDateFormat<<"dd.MMM.yyyy hh:mm";
+    listDateFormat<<"MMM dd,yyyy h:mm AP";
+    listDateFormat<<"yyyy-MM-ddThh:mm:ss"; // ISO 8601
     return listDateFormat;
 }
 
@@ -316,14 +315,13 @@ QStringList KoVariableTimeFormat::staticFormatPropsList()
 // Used by timeformatwidget_impl
 QStringList KoVariableTimeFormat::staticTranslatedFormatPropsList()
 {
-    QDateTime now(QDateTime::currentDateTime());
     QStringList listTimeFormat;
     listTimeFormat<<i18n("Locale format");
-    listTimeFormat<<now.toString("hh:mm");
-    listTimeFormat<<now.toString("hh:mm:ss");
-    listTimeFormat<<now.toString("hh:mm AP");
-    listTimeFormat<<now.toString("hh:mm:ss AP");
-    listTimeFormat<<now.toString("mm:ss.zzz");
+    listTimeFormat<<"hh:mm";
+    listTimeFormat<<"hh:mm:ss";
+    listTimeFormat<<"hh:mm AP";
+    listTimeFormat<<"hh:mm:ss AP";
+    listTimeFormat<<"mm:ss.zzz";
     return listTimeFormat;
 }
 
