@@ -27,7 +27,6 @@
 #include <qtoolbutton.h>
 #include <qpainter.h>
 #include <qtabwidget.h>
-#include <qcheckbox.h>
 #include <qlabel.h>
 #include <qcursor.h>
 
@@ -63,7 +62,7 @@ VDocumentPreview::VDocumentPreview( KarbonView* view, QWidget* parent )
 	m_dragging = false;
 	m_docpixmap = 0L;
 } // VDocumentPreview::VDocumentPreview
-  
+
 VDocumentPreview::~VDocumentPreview()
 {
 	delete m_docpixmap;
@@ -516,7 +515,7 @@ VHistoryGroupItem::VHistoryGroupItem( VHistoryItem* item, QListView* parent, QLi
 {
 	setPixmap( 0, *item->pixmap( 0 ) );
 	setText( 0, item->text( 0 ) );
-	parent->takeItem( item ); 
+	parent->takeItem( item );
 	insertItem( item );
 	m_key = item->key( 0, true );
 } // VHistoryItem::VHistoryItem
@@ -543,11 +542,11 @@ VHistoryGroupItem::paintCell( QPainter* p, const QColorGroup& cg, int column, in
 	{
 		p->fillRect( 0, 0, width, height(), cg.base() );
 		if ( n > 0 )
-			p->fillRect( 0, 0, width, height(), QBrush( cg.base().dark( 140 ), QBrush::BDiagPattern ) ); 
+			p->fillRect( 0, 0, width, height(), QBrush( cg.base().dark( 140 ), QBrush::BDiagPattern ) );
 	}
 	else
 		p->fillRect( 0, 0, width, height(), cg.base().dark( 140 ) );
-	
+
 	const QPixmap* pixmap = this->pixmap( column );
 	int xstart;
 	if ( pixmap )
@@ -562,7 +561,7 @@ VHistoryGroupItem::paintCell( QPainter* p, const QColorGroup& cg, int column, in
 	p->setPen( cg.text() );
 	p->drawText( xstart, 0, width - xstart, height(), align | Qt::AlignVCenter, text( column ) );
 } // VHistoryGroupItem::paintCell
- 
+
 VHistoryItem::VHistoryItem( VCommand* command, QListView* parent, QListViewItem* after )
 		: QListViewItem( parent, after ), m_command( command )
 {
@@ -623,7 +622,7 @@ VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 	m_history->setResizeMode( QListView::AllColumns );
 	m_history->setRootIsDecorated( true );
 	layout->add( m_groupCommands = new QCheckBox( i18n( "Group commands" ), this ) );
-	
+
 	m_history->setSorting( 0, true );
 	VHistoryGroupItem* group = 0;
 	VHistoryItem* last = 0;
@@ -702,9 +701,9 @@ VHistoryTab::commandExecuted( VCommand* command )
 			}
 		}
 		found = ( item && ( (VHistoryItem*)item )->command() == command );
-		if ( !found ) 
+		if ( !found )
 			item = item->nextSibling();
-	} 
+	}
 	if ( found )
 	{
 		m_history->repaintItem( item );
@@ -751,7 +750,7 @@ VHistoryTab::slotCommandAdded( VCommand* command )
 	}
 	else
 		m_history->setCurrentItem( new VHistoryItem( command, m_history, last ) );
-	
+
 	m_history->sort();
 	m_history->ensureItemVisible( m_history->currentItem() );
 	m_history->update();
@@ -766,7 +765,7 @@ VHistoryTab::removeFirstCommand()
 		else
 		{
 			VHistoryGroupItem* group = (VHistoryGroupItem*)m_history->firstChild();
-			delete group->firstChild(); 
+			delete group->firstChild();
 			if ( group->childCount() == 1 )
 			{
 				new VHistoryItem( ( (VHistoryItem*)group->firstChild() )->command(), m_history, 0 );
@@ -791,7 +790,7 @@ VHistoryTab::removeLastCommand()
 			last = group->firstChild();
 			while ( last && last->nextSibling() )
 				last = last->nextSibling();
-			delete last; 
+			delete last;
 			if ( group->childCount() == 1 )
 			{
 				new VHistoryItem( ( (VHistoryItem*)group->firstChild() )->command(), m_history, group );
@@ -882,12 +881,12 @@ VDocumentDocker::VDocumentDocker( KarbonView* view )
 	tabWidget->addTab( m_documentTab = new VDocumentTab( view, this ), i18n( "Document" ) );
 	tabWidget->addTab( m_layersTab = new VLayersTab( view, this ), i18n( "Layers" ) );
 	tabWidget->addTab( m_historyTab = new VHistoryTab( view->part(), this ), i18n( "History" ) );
-	
+
 	setFixedSize( 200, 200 );
 } // VDocumentDocker::VDocumentDocker
 
 VDocumentDocker::~VDocumentDocker()
 {
 } // VDocumentDocker::~VDocumentDocker
-  
+
 #include "vdocumentdocker.moc"

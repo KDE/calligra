@@ -21,7 +21,6 @@
 #include <qbuttongroup.h>
 #include <qnamespace.h>
 #include <qtoolbutton.h>
-#include <qlayout.h>
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <qlayout.h>
