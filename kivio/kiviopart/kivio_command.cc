@@ -314,3 +314,53 @@ void KivioChangeLayoutCommand::unexecute()
 {
     m_page->setPaperLayout(oldLayout);
 }
+
+KivioChangeStencilHAlignmentCommand::KivioChangeStencilHAlignmentCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldAlign,  int _newAlign)
+    :KNamedCommand( _name),
+     m_page(_page),
+     m_stencil( _stencil ),
+     oldAlign( _oldAlign),
+     newAlign( _newAlign)
+{
+}
+
+KivioChangeStencilHAlignmentCommand::~KivioChangeStencilHAlignmentCommand()
+{
+}
+
+void KivioChangeStencilHAlignmentCommand::execute()
+{
+    m_stencil->setHTextAlign( newAlign );
+    m_page->doc()->updateView(m_page);
+}
+
+void KivioChangeStencilHAlignmentCommand::unexecute()
+{
+    m_stencil->setHTextAlign( oldAlign );
+    m_page->doc()->updateView(m_page);
+}
+
+KivioChangeStencilVAlignmentCommand::KivioChangeStencilVAlignmentCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldAlign,  int _newAlign)
+    :KNamedCommand( _name),
+     m_page(_page),
+     m_stencil( _stencil ),
+     oldAlign( _oldAlign),
+     newAlign( _newAlign)
+{
+}
+
+KivioChangeStencilVAlignmentCommand::~KivioChangeStencilVAlignmentCommand()
+{
+}
+
+void KivioChangeStencilVAlignmentCommand::execute()
+{
+    m_stencil->setHTextAlign( newAlign );
+    m_page->doc()->updateView(m_page);
+}
+
+void KivioChangeStencilVAlignmentCommand::unexecute()
+{
+    m_stencil->setHTextAlign( oldAlign );
+    m_page->doc()->updateView(m_page);
+}

@@ -220,5 +220,39 @@ protected:
     TKPageLayout newLayout;
 };
 
+
+class KivioChangeStencilHAlignmentCommand : public KNamedCommand
+{
+public:
+    KivioChangeStencilHAlignmentCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldAlign,  int _newAlign);
+    ~KivioChangeStencilHAlignmentCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    int oldAlign;
+    int newAlign;
+};
+
+class KivioChangeStencilVAlignmentCommand : public KNamedCommand
+{
+public:
+    KivioChangeStencilVAlignmentCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldAlign,  int _newAlign);
+    ~KivioChangeStencilVAlignmentCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    int oldAlign;
+    int newAlign;
+};
+
+
 #endif
 
