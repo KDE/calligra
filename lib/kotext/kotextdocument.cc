@@ -193,7 +193,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     if ( p->device()->devType() == QInternal::Printer )
 	useDoubleBuffer = FALSE;
     // Can't handle transparency using double-buffering, in case of rotation/scaling (due to bitBlt)
-    if ( !p->worldMatrix().isIdentity() && brush == Qt::NoBrush )
+    if ( !p->worldMatrix().isIdentity() && brush.style() != Qt::SolidPattern )
         useDoubleBuffer = FALSE;
 
     if ( useDoubleBuffer  ) {
@@ -219,12 +219,12 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 
     if ( useDoubleBuffer || is_printer( painter ) ) {
         // Transparent -> grab background from p's device
-        if ( brush == Qt::NoBrush ) {
+        if ( brush.style() != Qt::SolidPattern ) {
             bitBlt( doubleBuffer, 0, 0, p->device(),
                     ir.x() + (int)p->translationX(), ir.y() + (int)p->translationY(),
                     ir.width(), ir.height() );
         }
-	else
+        if ( brush.style() != Qt::NoBrush )
         {
 	    painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ), brush );
         }
