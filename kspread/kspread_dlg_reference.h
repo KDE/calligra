@@ -20,16 +20,14 @@
 #ifndef __kspread_dlg_reference__
 #define __kspread_dlg_reference__
 
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qlabel.h>
 #include <qdialog.h>
 
 class QComboBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
+class QListBox;
+class QListBoxItem;
 
 class KSpreadView;
 
