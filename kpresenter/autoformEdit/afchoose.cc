@@ -17,6 +17,8 @@
 #include <klocale.h>
 #include "afchoose.moc"
 #include <qvbox.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 
 /******************************************************************/
 /* class AFChoose                                                 */
@@ -43,25 +45,26 @@ AFChoose::~AFChoose()
 void AFChoose::getGroups()
 {
   // global autoforms
-  QString afDir = qstrdup(KApplication::kde_datadir());
-  afDir += "/kpresenter/autoforms/";
   QString str;
-  char* c = new char[256];
+  char c[256];
 
-  QFile afInf(afDir + ".autoforms");
+  QStringList autoformDirs = KGlobal::dirs()->getResourceDirs("autoforms");
+  for (QStringList::ConstIterator it = autoformDirs.begin();
+       it != autoformDirs.end(); it++) {
 
-  if (afInf.open(IO_ReadOnly))
+    QFile afInf(*it + ".autoforms");
+
+    if (afInf.open(IO_ReadOnly))
     {
       while (!afInf.atEnd())
 	{
 	  afInf.readLine(c,256);
-	  str = c;
-	  str = str.stripWhiteSpace();
+	  str = QString(c).stripWhiteSpace();
 	  if (!str.isEmpty())
 	    {
 	      grpPtr = new Group;
-	      grpPtr->dir.setFile(afDir + QString(c).stripWhiteSpace() + "/");
-	      grpPtr->name = QString(qstrdup(c)).stripWhiteSpace();
+	      grpPtr->dir.setFile(*it + str + "/");
+	      grpPtr->name = str;
 	      groupList.append(grpPtr);
 	    }
 	  strcpy(c,"");
@@ -69,8 +72,7 @@ void AFChoose::getGroups()
 
       afInf.close();
     }
-
-  delete c;
+  }
 }
 
 /*======================= setup Tabs =============================*/
