@@ -21,13 +21,14 @@
 
 #include <qdir.h>
 #include <kdebug.h>		/* for kdDebug() stream */
+#include <config.h>
 /* Needed to convert picture in eps file. Use ImageMagick. */
-//#ifdef HAVE_MAGICK
-	#include <stdio.h>
-	#include <time.h>
-	#include <sys/types.h>
-	#include <magick/api.h>
-//#endif
+#ifdef HAVE_MAGICK
+#        include <stdio.h>
+#        include <time.h>
+#        include <sys/types.h>
+#        include <magick/api.h>
+#endif
 
 #include "document.h"
 #include "pixmapFrame.h"
@@ -133,7 +134,7 @@ void PixmapFrame::analyseParamFrame(const QDomNode balise)
  */
 void PixmapFrame::convert()
 {
-//#ifdef HAVE_LIBMAGICK
+#ifdef HAVE_MAGICK
 	kdDebug() << "CONVERT PICTURE IN EPS" << endl;
 	ExceptionInfo exception;
 
@@ -179,7 +180,7 @@ void PixmapFrame::convert()
 	DestroyExceptionInfo(&exception);
 	DestroyMagick();
 	kdDebug() << "CONVERTION DONE" << endl;
-//#endif
+#endif
 }
 
 /*******************************************/
