@@ -2553,7 +2553,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoGenStyles mainStyles;
 
     // Save user styles as KoGenStyles
-    m_styleColl->saveOasis( mainStyles, STYLE_USER );
+    m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
 
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
@@ -2571,7 +2571,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     contentWriter.startElement( "office:automatic-styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_AUTO );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
@@ -2598,7 +2598,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
 
 
-    KoGenStyle pageLayout( STYLE_PAGELAYOUT /*no family needed*/ );
+    KoGenStyle pageLayout( KoGenStyle::STYLE_PAGELAYOUT /*no family needed*/ );
     pageLayout.addAttribute( "style:page-usage", "all" );
     pageLayout.addPropertyPt( "fo:page-width", m_pageLayout.ptWidth );
     pageLayout.addPropertyPt( "fo:page-height", m_pageLayout.ptHeight );
@@ -2629,7 +2629,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
 
     stylesWriter.startElement( "office:styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_USER );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
@@ -2637,7 +2637,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter.endElement(); // office:styles
 
     stylesWriter.startElement( "office:automatic-styles" );
-    styles = mainStyles.styles( STYLE_PAGELAYOUT );
+    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     Q_ASSERT( styles.count() == 1 );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
