@@ -387,6 +387,7 @@ KPresenterView::~KPresenterView()
     delete rb_pstyle;
     delete rb_pwidth;
     delete afChoose;
+    delete confPictureDia;
 }
 
 /*=========================== file print =======================*/

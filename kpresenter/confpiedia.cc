@@ -140,6 +140,7 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
 /*===================== destructor ===============================*/
 ConfPieDia::~ConfPieDia()
 {
+    delete piePreview;
 }
 
 /*================================================================*/

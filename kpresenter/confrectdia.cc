@@ -112,6 +112,7 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
 /*===================== destructor ===============================*/
 ConfRectDia::~ConfRectDia()
 {
+    delete rectPreview;
 }
 
 /*================================================================*/
