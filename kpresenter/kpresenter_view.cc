@@ -83,14 +83,22 @@
 #include <koTemplateCreateDia.h>
 #include <kcoloractions.h>
 #include <kaction.h>
+#include <qfontdatabase.h>
 
 #include <stdlib.h>
 #include <signal.h>
 
-#include <X11/Xlib.h>
 #include <kstddirs.h>
 
 #include "KPresenterViewIface.h"
+
+static QFontDatabase *fontDataBase = 0;
+
+static void cleanupFontDatabase()
+{
+    delete fontDataBase;
+    fontDataBase = 0;
+}
 
 #define DEBUG
 
@@ -2970,64 +2978,11 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
 /*===================== load not KDE installed fonts =============*/
 void KPresenterView::getFonts( QStringList &lst )
 {
-    int numFonts;
-    Display *kde_display;
-    char** fontNames;
-    char** fontNames_copy;
-    QString qfontname;
-
-    kde_display = kapp->getDisplay();
-
-    bool have_installed = kapp->kdeFonts( lst );
-
-    if ( have_installed )
-	return;
-
-    fontNames = XListFonts( kde_display, "*", 32767, &numFonts );
-    fontNames_copy = fontNames;
-
-    for( int i = 0; i < numFonts; i++ ){
-
-	if ( **fontNames != '-' )
-	{
-	    fontNames ++;
-	    continue;
-	};
-
-	qfontname = "";
-	qfontname = *fontNames;
-	int dash = qfontname.find ( '-', 1, TRUE );
-
-	if ( dash == -1 )
-	{
-	    fontNames ++;
-	    continue;
-	}
-
-	int dash_two = qfontname.find ( '-', dash + 1 , TRUE );
-
-	if ( dash == -1 )
-	{
-	    fontNames ++;
-	    continue;
-	}
-
-
-	qfontname = qfontname.mid( dash +1, dash_two - dash -1 );
-
-	if ( !qfontname.contains( "open look", TRUE ) )
-	{
-	    if( qfontname != "nil" ){
-		if( lst.find( qfontname ) == lst.end() )
-		    lst.append( qfontname );
-	    }
-	}
-
-	fontNames ++;
-
+    if ( !fontDataBase ) {
+	fontDataBase = new QFontDatabase();
+	qAddPostRoutine( cleanupFontDatabase );
     }
-
-    XFreeFontNames( fontNames_copy );
+    lst = fontDataBase->families();
 }
 
 /*================================================================*/
