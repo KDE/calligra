@@ -38,7 +38,6 @@ Other things: (please add the things you are working on!)
         - print selection only
 - Sheet layout:
         - Move sheet properties to seperate dialog (they are currently part of KSpread config dialog)
-        - Make headers/footers part of sheet not map (so each sheet has it's own header/footer)
 - Scenerios
 - Locked areas (for formulas with a matrix as result)
 - Multible Operations (in Excel: "Data"->"Table")
@@ -71,8 +70,8 @@ John
 Philipp
 =======
 
-- printing enhancements (show real page borders, fix preview, printing headers      (Philipp, haven't started yet)
-        on each page, printing a selection only, ...)
+- printing enhancements (printing a selection only, ...)       (Philipp)
+        
 - Filter, Autofilter                                             (Philipp, but will take long, haven't started yet)
 - Performance improvements at end of ranges - last column/row    (Philipp, started)
 - Support "unlimited" columns/rows,

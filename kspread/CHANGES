@@ -7,6 +7,8 @@ Until beta2:
 - bug fixes
 - perfomance enhancements
 - added show/hide grid on printout option
+- paper layout now a property of sheet (not the whole workbook)
+- header/footer now a property of sheet (not the whole workbook)
 - Sort enhanced for
     - sorting by up to three rows or columns
     - possibility of putting the result of sorting some place else
