@@ -121,23 +121,18 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction,
         // Did we get exactly this mime type ?
         if ( t && mime == t->name() )
         {
-            QStringList patterns = t->patterns();
-            const char* s;
-            for(unsigned int j = 0;j < patterns.count();j++)
-            {
-                s = patterns[j];
-                if ( !ret.isEmpty() )
-                    ret += "\n";
-                ret += s;
-                ret += "|";
-                if ( direction == Import )
-                    ret += vec[i].importDescription;
-                else
-                    ret += vec[i].exportDescription;
-                ret += " (";
-                ret += s;
-                ret += ")";
-            }
+            if ( !ret.isEmpty() )
+                ret += "\n";
+            QString patterns = t->patterns().join(";");
+            ret += patterns;
+            ret += "|";
+            if ( direction == Import )
+                ret += vec[i].importDescription;
+            else
+                ret += vec[i].exportDescription;
+            ret += " (";
+            ret += patterns;
+            ret += ")";
         }
         else
         {
