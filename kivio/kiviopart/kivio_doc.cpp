@@ -202,8 +202,6 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     QString fileName( fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kft" );
     resetURL();
     bool ok = loadNativeFormat( fileName );
-    KivioPage *t = createPage();
-    m_pMap->addPage( t );
     setEmpty();
     return ok;
   } else if ( ret == KoTemplateChooseDia::Empty ) {
