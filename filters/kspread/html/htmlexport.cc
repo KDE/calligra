@@ -279,6 +279,8 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
             case KSpreadCell::Bottom:
                 line+=" valign=\"" + html_bottom +"\"";
                 break;
+            case KSpreadCell::UndefinedY:
+                break;
             }
             line+=" width=\""+QString::number(cell->width())+"\"";
             line+=" height=\""+QString::number(cell->height())+"\"";
