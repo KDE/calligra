@@ -1,3 +1,10 @@
+2005-02-23  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+
+	Fix bug 99715
+	* kchartSubTypeChartPage.h (KChartBarSubTypeChartPage): Rename
+	layer -> stacked and beside -> normal, and change the strings
+	accordingly. 
+
 2005-02-22  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix bug 99765:

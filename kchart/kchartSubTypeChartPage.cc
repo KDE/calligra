@@ -200,12 +200,14 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
     QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
     QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Subtype" ), this );
     toplevel->addWidget( subtypeBG, AlignCenter );
-    layer = new QRadioButton( i18n( "Layer" ), subtypeBG );
-    subtypeBG->insert( layer, KDChartParams::BarStacked );
-    beside = new QRadioButton( i18n( "Beside" ), subtypeBG );
-    subtypeBG->insert( beside, KDChartParams::BarNormal );
+
+    normal = new QRadioButton( i18n( "Normal" ), subtypeBG );
+    subtypeBG->insert( normal, KDChartParams::BarNormal );
+    stacked = new QRadioButton( i18n( "Stacked" ), subtypeBG );
+    subtypeBG->insert( stacked, KDChartParams::BarStacked );
     percent = new QRadioButton( i18n( "Percent" ), subtypeBG );
     subtypeBG->insert( percent, KDChartParams::BarPercent );
+
     subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
@@ -221,10 +223,10 @@ void KChartBarSubTypeChartPage::init()
     // SUM is for areas only and therefore not configurable here.
     switch( _params->barChartSubType() ) {
     case KDChartParams::BarNormal:
-        beside->setChecked( true );
+	normal->setChecked( true );
         break;
     case KDChartParams::BarStacked:
-        layer->setChecked( true );
+        stacked->setChecked( true );
         break;
     case KDChartParams::BarPercent:
         percent->setChecked( true );
@@ -258,10 +260,10 @@ void KChartBarSubTypeChartPage::slotChangeSubType( int type )
 
 void KChartBarSubTypeChartPage::apply()
 {
-    if( layer->isChecked() ) {
-        _params->setBarChartSubType( KDChartParams::BarStacked );
-    } else if( beside->isChecked() ) {
+    if( normal->isChecked() ) {
         _params->setBarChartSubType( KDChartParams::BarNormal );
+    } else if( stacked->isChecked() ) {
+        _params->setBarChartSubType( KDChartParams::BarStacked );
     } else if( percent->isChecked() )	{
         _params->setBarChartSubType( KDChartParams::BarPercent );
     } else {
