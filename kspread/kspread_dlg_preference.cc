@@ -34,6 +34,7 @@
 #include <knuminput.h>
 #include <kspell.h>
 #include <kmessagebox.h>
+#include <kdeversion.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
@@ -715,9 +716,13 @@ colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
 
   QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox,"label20" );
 
-  gridColor = new KColorButton( tmpQGroupBox );
+  gridColor = new KColorButton( _gridColor,
+#if KDE_VERSION >= 305
+                                Qt::lightGray,
+#endif
+                                tmpQGroupBox );
+
   label->setBuddy(gridColor);
-  gridColor->setColor(_gridColor);
 
   QColor _pbColor(Qt::red);
   if ( config->hasGroup("KSpread Color" ) )
@@ -727,9 +732,15 @@ colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
   }
 
   QLabel * label2 = new QLabel( i18n("&Page borders:"), tmpQGroupBox, "label21" );
-  pageBorderColor = new KColorButton( tmpQGroupBox );
+
+  pageBorderColor = new KColorButton( _pbColor,
+#if KDE_VERSION >= 305
+                                Qt::red,
+#endif
+                                tmpQGroupBox );
+
+
   label2->setBuddy(pageBorderColor);
-  pageBorderColor->setColor(_pbColor);
 }
 
 void colorParameters::apply()
