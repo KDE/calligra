@@ -44,6 +44,7 @@
 #include <qtextcodec.h>
 #include <qregexp.h>
 #include <qimage.h>
+#include <qlayout.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -65,6 +66,7 @@
 #include <kcombobox.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
+#include <kdialog.h>
 
 #include "koDocumentInfo.h"
 
@@ -642,7 +644,9 @@ void KPWebPresentationWizard::setupPage1()
     sidebar->setFrameShadow( QFrame::Sunken );
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
-    QVBox *canvas = new QVBox( page1 );
+    QWidget* canvas = new QWidget( page1 );
+    QGridLayout *layout = new QGridLayout( canvas, 6, 2, 
+        KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
@@ -651,28 +655,41 @@ void KPWebPresentationWizard::setupPage1()
                              "Also enter the path into which the "
                              "web presentation should be created. "
                              "(This must be a directory)." ) );
+    layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
 
-    QHBox *row1 = new QHBox( canvas );
-    QHBox *row2 = new QHBox( canvas );
-    QHBox *row3 = new QHBox( canvas );
-    QHBox *row4 = new QHBox( canvas );
+    QLabel *label1 = new QLabel( i18n("Author:"), canvas );
+    label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label1, 1, 0 );
 
-    QLabel *label1 = new QLabel( i18n("Author:"), row1 );
-    label1->setAlignment( Qt::AlignVCenter );
-    QLabel *label2 = new QLabel( i18n("Title:"), row2 );
-    label2->setAlignment( Qt::AlignVCenter );
-    QLabel *label3 = new QLabel( i18n("Email address:"), row3 );
-    label3->setAlignment( Qt::AlignVCenter );
-    QLabel *label4 = new QLabel( i18n("Path:"), row4 );
-    label4->setAlignment( Qt::AlignVCenter );
+    QLabel *label2 = new QLabel( i18n("Title:"), canvas );
+    label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label2, 2, 0 );
 
-    author = new KLineEdit( webPres.getAuthor(), row1 );
-    title = new KLineEdit( webPres.getTitle(), row2 );
-    email = new KLineEdit( webPres.getEmail(), row3 );
+    QLabel *label3 = new QLabel( i18n("Email address:"), canvas );
+    label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label3, 3, 0 );
 
-    path=new KURLRequester( row4 );
+    QLabel *label4 = new QLabel( i18n("Path:"), canvas );
+    label4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label4, 4, 0 );
+
+    author = new KLineEdit( webPres.getAuthor(), canvas );
+    layout->addWidget( author, 1, 1 );
+
+    title = new KLineEdit( webPres.getTitle(), canvas );
+    layout->addWidget( title, 2, 1 );
+
+    email = new KLineEdit( webPres.getEmail(), canvas );
+    layout->addWidget( email, 3, 1 );
+
+    path=new KURLRequester( canvas );
     path->setMode( KFile::Directory);
     path->lineEdit()->setText(webPres.getPath());
+    layout->addWidget( path, 4, 1 );
+
+    QSpacerItem* spacer = new QSpacerItem( 1, 50 );
+    layout->addMultiCell( spacer, 5, 5, 0, 1 );
+
     connect(path, SIGNAL(textChanged(const QString&)),
            this,SLOT(slotChoosePath(const QString&)));
     connect(path, SIGNAL(urlSelected( const QString& )),
