@@ -93,9 +93,6 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     else
         m_name = name;
 
-    dcop = 0;
-    //dcopObject(); // build it
-
     setName( m_name.utf8() ); // store name in the QObject, for DCOP users
     m_currentViewMode = 0L;
     m_currentDrawnFrame = 0L;
@@ -1117,7 +1114,6 @@ KWTextFrameSet::~KWTextFrameSet()
     textDocument()->takeFlow();
     //kdDebug(32001) << "KWTextFrameSet::~KWTextFrameSet" << endl;
     m_doc = 0L;
-    delete dcop;
 }
 
 // This struct is used for sorting frames.

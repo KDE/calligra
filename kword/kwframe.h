@@ -767,6 +767,8 @@ public:
     KWFormulaFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWFormulaFrameSet();
 
+    virtual KWordFrameSetIface* dcopObject();
+
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
@@ -824,6 +826,8 @@ public:
         return formulaView;
     }
 
+    virtual DCOPObject* dcopObject();
+
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent(QKeyEvent*);
     virtual void mousePressEvent(QMouseEvent*, const QPoint & n, const KoPoint & d );
@@ -855,6 +859,7 @@ protected slots:
 
 private:
     KFormula::View* formulaView;
+    DCOPObject *dcop;
 };
 
 #endif

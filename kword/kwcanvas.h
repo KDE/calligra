@@ -171,7 +171,7 @@ public:
     void inlinePictureStarted();
 
     bool checkCurrentTextEdit( KWFrameSet * fs );
-
+    bool checkCurrentEdit( KWFrameSet * fs );
 
 protected:
     void applyGrid( KoPoint &p );
@@ -211,8 +211,6 @@ protected:
     KWTableFrameSet * createTable(); // uses m_insRect and m_table to create the table
 
     void terminateCurrentEdit();
-    bool checkCurrentEdit( KWFrameSet * fs );
-
     void insertInlineTable();
 
 signals:

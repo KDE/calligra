@@ -44,6 +44,9 @@
 #include <float.h>
 #include "KWordFrameSetIface.h"
 #include <dcopobject.h>
+#include "KWordTextFrameSetEditIface.h"
+#include "KWordFormulaFrameSetIface.h"
+#include "KWordFormulaFrameSetEditIface.h"
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -1762,6 +1765,13 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
     */
 }
 
+KWordFrameSetIface* KWFormulaFrameSet::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KWordFormulaFrameSetIface( this );
+
+    return dcop;
+}
 
 KWFormulaFrameSet::~KWFormulaFrameSet()
 {
@@ -1899,7 +1909,16 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
 
     m_canvas->gui()->getView()->showFormulaToolbar(true);
     focusInEvent();
+    dcop=0;
 }
+
+DCOPObject* KWFormulaFrameSetEdit::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KWordFormulaFrameSetEditIface( this );
+    return dcop;
+}
+
 
 KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
 {
@@ -1911,6 +1930,7 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
     formulaView = 0;
     formulaFrameSet()->setChanged();
     m_canvas->repaintChanged( formulaFrameSet(), true );
+    delete dcop;
 }
 
 void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )
