@@ -261,7 +261,7 @@ void TabBar::slotRename()
 
     bool ok;
     QString activeName = page->name();
-    QString newName = KLineEditDlg::getText( i18n("Page Name"), activeName, &ok, this );
+    QString newName = KLineEditDlg::getText( i18n("Page Name"), i18n("Enter name:"), activeName, &ok, this );
 
     // Have a different name ?
     if ( ok ) // User pushed an OK button.

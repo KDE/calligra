@@ -70,10 +70,10 @@ QDockWindow(QDockWindow::InDock, parent, name)
   /* Translate */
   mTranslate = new QWidget(mTab);
   mLayout = new QGridLayout(mTranslate, 3, 2);
-  QLabel *mHorizText = new QLabel(i18n("Horizontal"), mTranslate);
+  QLabel *mHorizText = new QLabel(i18n("Horizontal:"), mTranslate);
   mHorizBox = new QSpinBox(-1000, 1000, 1, mTranslate);
   //connect(mHoriz, SIGNAL(valueChanged(int)), this, SLOT(slotTranslateChanged(int)));
-  QLabel *mVertText = new QLabel(i18n("Vertical"), mTranslate);
+  QLabel *mVertText = new QLabel(i18n("Vertical:"), mTranslate);
   mVertBox = new QSpinBox(-1000, 1000, 1, mTranslate);
   //connect(mVert, SIGNAL(valueChanged(int)), this, SLOT(slotTranslateChanged(int)));
   QCheckBox *mRelative = new QCheckBox(i18n("Relative"), mTranslate, "T");
@@ -105,10 +105,10 @@ QDockWindow(QDockWindow::InDock, parent, name)
   /* Scale */
   mScale = new QWidget(mTab);
   mLayout = new QGridLayout(mScale, 3, 2);
-  QLabel *mScaleXText = new QLabel(i18n("Horizontal"), mScale);
+  QLabel *mScaleXText = new QLabel(i18n("Horizontal:"), mScale);
   mScaleXBox = new QSpinBox(0, 1000, 1, mScale);
   mScaleXBox->setSuffix("%");
-  QLabel *mScaleYText = new QLabel(i18n("Vertical"), mScale);
+  QLabel *mScaleYText = new QLabel(i18n("Vertical:"), mScale);
   mScaleYBox = new QSpinBox(0, 1000, 1, mScale);
   mScaleYBox->setSuffix("%");
   QCheckBox *mSUniform = new QCheckBox(i18n("Uniform"), mScale, "S");
@@ -125,9 +125,9 @@ QDockWindow(QDockWindow::InDock, parent, name)
   /* Shear */
   mShear = new QWidget(mTab);
   mLayout = new QGridLayout(mShear, 3, 2);
-  QLabel *mShearAngleXText = new QLabel(i18n("Horizontal"), mShear);
+  QLabel *mShearAngleXText = new QLabel(i18n("Horizontal:"), mShear);
   mShearAngleXBox = new QSpinBox(-89, 89, 1, mShear);
-  QLabel *mShearAngleYText = new QLabel(i18n("Vertical"), mShear);
+  QLabel *mShearAngleYText = new QLabel(i18n("Vertical:"), mShear);
   mShearAngleYBox = new QSpinBox(-89, 89, 1, mShear);
   QCheckBox *mSRelative = new QCheckBox(i18n("Relative"), mShear, "R");
   connect(mSRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));

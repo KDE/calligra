@@ -63,7 +63,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mStroked = new QCheckBox(i18n("Stroked"), mOutline);
   connect(mStroked, SIGNAL(toggled(bool)), this, SLOT(slotChangeStroked(bool)));
 
-  QLabel *mStartArrowText = new QLabel(i18n("Start Arrow"), mOutline);
+  QLabel *mStartArrowText = new QLabel(i18n("Start arrow:"), mOutline);
   mStartArrowBox = new KComboBox(mOutline); // It's only temporary
   mStartArrowBox->insertItem("no");
   mStartArrowBox->insertItem("<-");
@@ -71,7 +71,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mStartArrowBox->setCurrentItem(0);
   connect(mStartArrowBox, SIGNAL(activated(int)), this, SLOT(slotChangeStartArrow(int)));
 
-  QLabel *mEndArrowText = new QLabel(i18n("End Arrow"), mOutline);
+  QLabel *mEndArrowText = new QLabel(i18n("End arrow:"), mOutline);
   mEndArrowBox = new KComboBox(mOutline); // It's only temporary
   mEndArrowBox->insertItem("no");
   mEndArrowBox->insertItem("->");
@@ -79,7 +79,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mEndArrowBox->setCurrentItem(0);
   connect(mEndArrowBox, SIGNAL(activated(int)), this, SLOT(slotChangeEndArrow(int)));
 
-  QLabel *mOpacityText = new QLabel(i18n("Opacity"), mOutline);
+  QLabel *mOpacityText = new QLabel(i18n("Opacity:"), mOutline);
   mOpacityBox = new QSpinBox(0, 100, 5, mOutline);
   mOpacityBox->setSuffix("%");
   connect(mOpacityBox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeOpacity(int)));
@@ -104,11 +104,11 @@ QDockWindow(QDockWindow::InDock, parent, name)
   QGridLayout *mOutlineStyleLayout = new QGridLayout(mOutlineStyle, 4, 2);
 
   /* Outline width */
-  QLabel *mWidthText = new QLabel(i18n("Width"), mOutlineStyle);
+  QLabel *mWidthText = new QLabel(i18n("Width:"), mOutlineStyle);
   mWidthBox = new QSpinBox(1, 100, 1, mOutlineStyle);
   connect(mWidthBox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeLineWidth(int)));
 
-  QLabel *mLineStyleText = new QLabel(i18n("Line Style"), mOutlineStyle);
+  QLabel *mLineStyleText = new QLabel(i18n("Line style:"), mOutlineStyle);
   mLineStyleBox = new KComboBox(mOutlineStyle); // It's only temporary
   mLineStyleBox->insertItem("----------");
   mLineStyleBox->insertItem("- - - - - ");
@@ -117,7 +117,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   connect(mLineStyleBox, SIGNAL(activated(int)), this, SLOT(slotChangeLineStyle(int)));
 
   /* Join style selection */
-  QLabel *mJoinText = new QLabel(i18n("Join"), mOutlineStyle);
+  QLabel *mJoinText = new QLabel(i18n("Join:"), mOutlineStyle);
   mJoinBox = new QButtonGroup(3, Qt::Horizontal, mOutlineStyle);
   mJoinBox->setFrameStyle(QFrame::NoFrame);
   mJoinBox->setInsideMargin(0);
@@ -141,7 +141,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   connect(mJoinBox, SIGNAL(pressed(int)), this, SLOT(slotJoinPressed(int)));
 
   /* Cap style selection */
-  QLabel *mCapText = new QLabel(i18n("Cap"), mOutlineStyle);
+  QLabel *mCapText = new QLabel(i18n("Cap:"), mOutlineStyle);
   mCapBox = new QButtonGroup(3, Qt::Horizontal, mOutlineStyle);
   mCapBox->setFrameStyle(QFrame::NoFrame);
   mCapBox->setInsideMargin(0);
@@ -351,7 +351,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   QWidget *mPainting = new QWidget(mTab);
   QGridLayout *mPaintingLayout = new QGridLayout(mPainting, 2, 2);
 
-  QLabel *mPaintingText = new QLabel(i18n("Painting"), mPainting);
+  QLabel *mPaintingText = new QLabel(i18n("Painting:"), mPainting);
   mPaintingBox = new KComboBox(mPainting);
   mPaintingBox->insertItem(i18n("No"));
   mPaintingBox->insertItem(i18n("Color"));
@@ -360,7 +360,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mPaintingBox->setCurrentItem(0);
   connect(mPaintingBox, SIGNAL(activated(int)), this, SLOT(slotChangeFilled(int)));
 
-  QLabel *mOpacityText = new QLabel(i18n("Opacity"), mPainting);
+  QLabel *mOpacityText = new QLabel(i18n("Opacity:"), mPainting);
   mOpacityBox = new QSpinBox(0, 100, 5, mPainting);
   connect(mOpacityBox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeOpacity(int)));
   mOpacityBox->setSuffix("%");
