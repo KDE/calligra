@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kstdaccel.h>
+#include <kstdaction.h>
 #include <kglobal.h>
 #include <kformulaedit.h>
 #include <kcoloractions.h>
@@ -96,7 +97,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pDoc = doc;
     m_pPopupMenu = 0;
     m_dcop = 0;
-    
+
     // Vert. Scroll Bar
     m_pVertScrollBar = new QScrollBar( this, "ScrollBar_2" );
     m_pVertScrollBar->setRange( 0, 4096 );
@@ -211,17 +212,17 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 			       actionCollection(), "transform" );
     m_transform->setEnabled( FALSE );
     connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
-    m_copy = new KAction( i18n("Copy"), KSBarIcon("editcopy"), 0, this, SLOT( copySelection() ), actionCollection(), "copy" );
-    m_paste = new KAction( i18n("Paste"), KSBarIcon("editpaste"), 0, this, SLOT( paste() ), actionCollection(), "paste" );
-    m_cut = new KAction( i18n("Cut"), KSBarIcon("editcut"), 0, this, SLOT( cutSelection() ), actionCollection(), "cut" );
+    m_copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(), "copy" );
+    m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste" );
+    m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(), "cut" );
     m_specialPaste = new KAction( i18n("Special Paste"), 0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
     m_editCell = new KAction( i18n("Edit Cell"), CTRL + Key_E, this, SLOT( editCell() ), actionCollection(), "editCell" );
     m_delete = new KAction( i18n("Delete"), 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
     m_clear = new KAction( i18n("Clear"), 0, this, SLOT( clearSelection() ), actionCollection(), "clear" );
     m_adjust = new KAction( i18n("Adjust row and column"), 0, this, SLOT( adjust() ), actionCollection(), "adjust" );
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
-    m_undo = new KAction( i18n("Undo"), KSBarIcon("undo"), 0, this, SLOT( undo() ), actionCollection(), "undo" );
-    m_redo = new KAction( i18n("Redo"), KSBarIcon("redo"), 0, this, SLOT( redo() ), actionCollection(), "redo" );
+    m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
+    m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
     m_paperLayout = new KAction( i18n("Paper Layout"), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
     m_insertTable = new KAction( i18n("Insert Table"), 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
     m_removeTable = new KAction( i18n("Remove Table"), 0, this, SLOT( removeTable() ), actionCollection(), "removeTable" );
@@ -316,7 +317,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_oszi = new KAction( i18n("Oszilloscope"), 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
     m_scripts = new KScriptMenu( DCOPRef( kapp->dcopClient()->appId(), dcopObject()->objId() ), KSpreadFactory::global(),
 				 i18n("Scripts"), actionCollection(), "scripts" );
-    
+
     connect( this, SIGNAL( childSelected( PartChild* ) ),
 	     this, SLOT( slotChildSelected( PartChild* ) ) );
     connect( this, SIGNAL( childUnselected( PartChild* ) ),
