@@ -119,7 +119,7 @@ VObject::load( const QDomElement& element )
 		m_fill->load( element );
 	}
 
-	if( !element.attribute( "ID" ).isEmpty() )
+	if( document() && !element.attribute( "ID" ).isEmpty() )
 		document()->setObjectName( this, element.attribute( "ID" ) );
 }
 

@@ -28,6 +28,8 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <koMainWindow.h>
+#include <koFilterManager.h>
+#include <kfiledialog.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -35,11 +37,14 @@
 #include "karbon_resourceserver.h"
 #include "karbon_drag.h"
 #include "vselection.h"
+#include "vlayer.h"
 #include "vfill.h"
 #include "vfillcmd.h"
 #include "vtransformcmd.h"
 
 #include "vstyledocker.h"
+
+#include <unistd.h>
 
 ClipartChooser::ClipartChooser( QSize iconSize, QWidget *parent, const char *name )
 	: KoIconChooser( iconSize, parent, name )
@@ -140,7 +145,6 @@ ClipartWidget::ClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPa
 	m_deleteClipartButton->setTextLabel( i18n( "Delete" ) );
 
 	m_buttonGroup->setInsideMargin( 3 );
-	m_importClipartButton->setEnabled( false );
 
 	//setFrameStyle( Box | Sunken );
 	layout->setMargin( 3 );
@@ -236,6 +240,38 @@ ClipartWidget::addClipart()
 }
 
 void
+ClipartWidget::importClipart()
+{
+	QStringList filter;
+	filter << "application/x-karbon" << "image/svg+xml" << "image/x-wmf" << "image/x-eps" << "application/postscript";
+	KFileDialog *dialog = new KFileDialog( "foo", QString::null, 0L, "Choose Graphic to Add", true);
+	dialog->setMimeFilter( filter, "application/x-karbon" );
+	if( dialog->exec()!=QDialog::Accepted )
+	{
+		delete dialog;
+		return;
+	}
+	QString fname = dialog->selectedFile();
+	delete dialog;
+	if( m_part->nativeFormatMimeType() == dialog->currentMimeFilter().latin1() )
+		m_part->mergeNativeFormat( fname );
+	else
+	{
+		KoFilterManager man( m_part );
+		KoFilter::ConversionStatus status;
+		QString importedFile = man.import( fname, status );
+		m_part->mergeNativeFormat( importedFile );
+		if( !importedFile.isEmpty() )
+			unlink( QFile::encodeName( importedFile ) );
+	}
+	m_part->document().selection()->clear();
+	m_part->document().selection()->append( m_part->document().activeLayer()->objects() );
+	addClipart();
+	m_part->document().selection()->clear();
+	m_part->document().removeLayer( m_part->document().activeLayer() );
+}
+
+void
 ClipartWidget::deleteClipart()
 {
 	VClipartIconItem* clipartItem = m_clipartItem;
@@ -249,16 +285,9 @@ ClipartWidget::slotButtonClicked( int id )
 {
 	switch( id )
 	{
-		case 0:
-			addClipart();
-			break;
-
-		case 1:  //importClipart();
-			break;
-
-		case 2:
-			deleteClipart();
-			break;
+		case 0: addClipart(); break;
+		case 1: importClipart(); break;
+		case 2: deleteClipart();
 	}
 }
 

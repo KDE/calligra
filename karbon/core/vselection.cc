@@ -103,6 +103,14 @@ VSelection::append( VObject* object )
 	}
 }
 
+void
+VSelection::append( const VObjectList &objects )
+{
+	VObjectListIterator itr = objects;
+	for( ; itr.current(); ++itr )
+		append( itr.current() );
+}
+
 bool
 VSelection::append( const KoRect& rect, bool selectObjects, bool exclusive )
 {

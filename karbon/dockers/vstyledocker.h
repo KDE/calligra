@@ -53,6 +53,7 @@ public:
 
 public slots:
 	void addClipart();
+	void importClipart();
 	void deleteClipart();
 	void clipartSelected( KoIconItem* item );
 

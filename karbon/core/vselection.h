@@ -90,6 +90,8 @@ public:
 	 */
 	void append( VObject* object );
 
+	void append( const VObjectList &objects );
+
 	/**
 	 * Adds all objects ( selectObjects == true ) or all nodes
 	 * ( selectObjects == false ) within rect to the selection.
