@@ -67,6 +67,7 @@ public:
     enum ConstraintType { ASAP, ALAP, MustStartOn, MustFinishOn, StartNotEarlier, FinishNotLater, FixedInterval };
 
     KPTNode(KPTNode *parent = 0);
+    KPTNode(KPTNode &node, KPTNode *parent = 0);
 
 
     // Declare the class abstract
@@ -435,6 +436,8 @@ public:
 		KPTDuration o = KPTDuration::zeroDuration );
 
     KPTEffort ( double e, double p = 0, double o = 0);
+    
+    KPTEffort (const KPTEffort &effort);
     ~KPTEffort();
 
     enum Type { Type_Effort = 0,        // Changing amount of resources changes the task duration

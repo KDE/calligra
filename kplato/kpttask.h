@@ -40,6 +40,7 @@ class KPTDateTime;
 class KPTTask : public KPTNode {
 public:
     KPTTask(KPTNode *parent = 0);
+    KPTTask(KPTTask &task, KPTNode *parent = 0);
     ~KPTTask();
 
     virtual int type() const;

@@ -48,6 +48,18 @@ KPTTask::KPTTask(KPTNode *parent) : KPTNode(parent), m_resource() {
     m_childProxyRelations.setAutoDelete(true);
 }
 
+KPTTask::KPTTask(KPTTask &task, KPTNode *parent) 
+    : KPTNode(task, parent), 
+      m_resource() {
+    m_resource.setAutoDelete(true);
+    m_parentProxyRelations.setAutoDelete(true);
+    m_childProxyRelations.setAutoDelete(true);
+    m_requests = 0;
+    
+    m_effort = task.effort() ? new KPTEffort(*(task.effort())) 
+                             : new KPTEffort(); // Avoid crash, (shouldn't be zero)
+}
+
 
 KPTTask::~KPTTask() {
     delete m_effort;

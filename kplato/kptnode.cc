@@ -35,6 +35,24 @@ KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependPar
     m_id = QString(); // Not mapped
 }
 
+KPTNode::KPTNode(KPTNode &node, KPTNode *parent) 
+    : m_nodes(), 
+      m_dependChildNodes(), 
+      m_dependParentNodes() {
+    m_parent = parent;
+    init();
+    m_name = node.name();
+    m_leader = node.leader();
+    m_startTime = node.startTime();
+    m_endTime = node.endTime();
+    m_duration = node.duration();
+    earliestStart = node.earliestStart;
+    latestFinish = node.latestFinish;
+    m_constraint = (ConstraintType) node.constraint();
+    m_constraintStartTime = node.constraintStartTime();
+    m_constraintEndTime = node.constraintEndTime();
+}
+
 KPTNode::~KPTNode() {
     KPTRelation *rel = 0;
     while ((rel = m_dependParentNodes.getFirst())) {
@@ -554,7 +572,12 @@ KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
   m_pessimisticEffort = p;
   m_optimisticEffort = o;
   m_type = Type_Effort;
-  }
+}
+
+KPTEffort::KPTEffort(const KPTEffort &effort) {
+    set(effort.expected(), effort.pessimistic(), effort.optimistic());
+    setType(effort.type());
+}
 
 KPTEffort::~KPTEffort() {
 }
