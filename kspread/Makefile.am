@@ -106,7 +106,7 @@ parser:
 	bison -p dep -b dep -d yacc.dep.y
 
 messages: rc.cpp
-	perl ../tools/scripts/extractrc --tag-group=koffice extensions/*.xml > xml_doc.cc
-	perl ../tools/scripts/extractrc dialogs/*.ui >> rc.cpp
+	$(EXTRACTRC) --tag-group=koffice extensions/*.xml > xml_doc.cc
+	$(EXTRACTRC) dialogs/*.ui >> rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h dialogs/*.cc -o $(podir)/kspread.pot
 	-rm xml_doc.cc
