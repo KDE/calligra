@@ -1,4 +1,5 @@
-
+#ifndef KWEXPORT_H
+#define KWEXPORT_H
 
 #include <qstring.h>
 #include <qdom.h>
@@ -11,11 +12,11 @@
 
 
 
-
 /***************************************************************************/
 
 // Reportedly, the capability to set tabs will be taken out of kword
 // at some time in the future.
+// Note from David Faure: of course not ! Just needs to be reimplemented, that's all :)
 
 class TabularData
    {
@@ -441,3 +442,5 @@ void ProcessPixmapsTag ( QDomNode   myNode,
 
 AnchoredInsert *findAnchoredInsert (AnchoredInsert   searchElement,
                                     QValueList<AnchoredInsert> &list);
+
+#endif

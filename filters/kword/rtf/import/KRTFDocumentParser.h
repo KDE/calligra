@@ -3,7 +3,7 @@
  */
 
 #ifndef __KRTFDOCUMENTPARSER_H__
-#define __KRTFDocumentPARSER_H__
+#define __KRTFDOCUMENTPARSER_H__
 
 #include "KRTFParser.h"
 
