@@ -1024,7 +1024,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
     for ( QValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
         itCell != table.cellList.end(); ++itCell)
     {
-        // ### TODO: it seems that the OO specification cannot do cells over more than one row!
+        // ### TODO: rows
         if ( rowCurrent != (*itCell).row )
         {
             rowCurrent = (*itCell).row;
@@ -1065,6 +1065,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         if ( (*itCell).m_cols > 1 )
         {
             *m_streamOut << " table:number-columns-spanned=\"" << (*itCell).m_cols << "\"";
+            // ### TODO: we needs "covered cells"
         }
 
         *m_streamOut << ">\n";
