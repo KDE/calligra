@@ -73,21 +73,25 @@ void KSpreadTextEditor::checkChoose()
 	return;
 
     QString t = m_pEdit->text();
-    // QString r = t.mid( t.length() - 1 - canvas()->chooseTextLen(), 1 );
-    QString r = t.mid( m_pEdit->cursorPosition() - 1 - canvas()->chooseTextLen(), 1 );
-    kdDebug(36001) << "r='" << r << "'" << endl;
-    if ( t.left(1) == "=" && ( r == "*" || r == "|" || r == "&" || r == "-" ||
-			       r == "+" || r == "/" || r == "!" || r == "(" ||
-			       r == "^" || r == "," || r == "%" || r == "[" ||
-			       r == "{" || r == "~" || r == "=" ) )
-    {
-	kdDebug(36001) << "Start CHOOSE" << endl;
-	canvas()->startChoose();
-    }
+    if ( t[0] != '=' )
+        canvas()->endChoose();
     else
     {
-	kdDebug(36001) << "End CHOOSE" << endl;
-	canvas()->endChoose();
+      QChar r = t[ m_pEdit->cursorPosition() - 1 - canvas()->chooseTextLen() ];
+      kdDebug(36001) << "r='" << QString(r) << "'" << endl;
+      if ( ( r == '*' || r == '|' || r == '&' || r == '-' ||
+	     r == '+' || r == '/' || r == '!' || r == '(' ||
+	     r == '^' || r == ',' || r == '%' || r == '[' ||
+	     r == '{' || r == '~' || r == '=' ) )
+      {
+	  kdDebug(36001) << "Start CHOOSE" << endl;
+	  canvas()->startChoose();
+      }
+      else
+      {
+	  kdDebug(36001) << "End CHOOSE" << endl;
+	  canvas()->endChoose();
+      }
     }
 }
 

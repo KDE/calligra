@@ -700,3 +700,9 @@ is at the good place.
 It's the same think for percent.
 
 For the moment Date format doesn't work (sorry david).
+
+2000-06-14 David Faure <faure@kde.org>
+-----------------------------------------------------
+Fixed tabbar colors (active table is not 'selected' -> using base())
+Speed up KSpreadTextEditor::checkChoose(), might fix i18n problem as well
+
