@@ -97,7 +97,7 @@ public:
     bool getPictureGrayscal() const { return grayscal; }
     int getPictureBright() const { return bright; }
 
-    void setPictureMirrorType(PictureMirrorType _mirrorType);
+    void setPictureMirrorType(const PictureMirrorType &_mirrorType);
     void setPictureDepth(int _depth);
     void setPictureSwapRGB(bool _swapRGB);
     void setPictureGrayscal(bool _grayscal);

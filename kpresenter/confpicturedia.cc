@@ -482,7 +482,7 @@ void ConfPictureDia::slotBrightValue( int _value )
     bright = _value;
 }
 
-void ConfPictureDia::setPictureMirrorType(PictureMirrorType _mirrorType)
+void ConfPictureDia::setPictureMirrorType(const PictureMirrorType &_mirrorType)
 {
     mirrorType = _mirrorType;
     oldMirrorType = _mirrorType;
