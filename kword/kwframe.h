@@ -62,7 +62,7 @@ class KWFrameSet;
  * A frame is really just a square that is used to place the content
  * of a frameset.
  */
-class KWFrame : public QRect
+class KWFrame : public QRect       // Note, if we inherited KoChild, we could get rid of quite some code
 {
 public:
 

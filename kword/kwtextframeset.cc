@@ -181,10 +181,14 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
                 gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
-                m_lastFormatted = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor );
+                QTextParag * lastDrawn = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor );
+
+                // NOTE: QTextView sets m_lastFormatted to lastDrawn here
+                // But when scrolling up, this causes to reformat a lot of stuff for nothing.
+                // And updateViewArea takes care of formatting things before we even arrive here.
 
                 // Blank area under the last paragraph
-                if ( (m_lastFormatted == text->lastParag() || !m_lastFormatted) && !onlyChanged)
+                if ( (lastDrawn == text->lastParag() || !m_lastFormatted) && !onlyChanged)
                 {
                     int docHeight = text->height();
                     QRect blank( 0, docHeight, frame->width(), totalHeight+frame->height() - docHeight );
@@ -527,7 +531,7 @@ void KWTextFrameSet::updateFrames()
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frame = frameIt.current();
-            //kdDebug() << "KWTextFrameSet::update adding frame " << frame << endl;
+            //kdDebug() << "KWTextFrameSet::updateFrames adding frame " << frame << endl;
             ASSERT( !frames.contains(frame) );
             frames.append( frame );
             m_availableHeight += frame->height();
@@ -540,8 +544,8 @@ void KWTextFrameSet::updateFrames()
             }
         }
     }
-    //kdDebug() << "KWTextFrameSet::update m_availableHeight=" << m_availableHeight << endl;
-    ASSERT( m_availableHeight >= text->height() );
+    kdDebug() << "KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
+    // ASSERT( m_availableHeight >= text->height() ); // not true if we're building frames to cope with the text
     frames.setAutoDelete( true );
 
     KWFrameSet::updateFrames();
@@ -595,6 +599,7 @@ void KWTextFrameSet::load( QDomElement &attributes )
 {
     KWFrameSet::load( attributes );
 
+    text->clear(false); // Get rid of dummy paragraph (and more if any)
     KWTextParag *lastParagraph = 0L;
 
     // <PARAGRAPH>
@@ -605,9 +610,18 @@ void KWTextFrameSet::load( QDomElement &attributes )
 
         KWTextParag *parag = new KWTextParag( text, lastParagraph );
         parag->load( paragraph );
+        if ( !lastParagraph )        // First parag
+            text->setFirstParag( parag );
         lastParagraph = parag;
         doc->progressItemLoaded();
     }
+
+    if ( !lastParagraph )                // We created no paragraph
+        text->setFirstParag( 0L );
+
+    text->setLastParag( lastParagraph );
+    m_lastFormatted = text->firstParag();
+    kdDebug() << "KWTextFrameSet::load done" << endl;
 }
 
 /*================================================================*/
@@ -804,30 +818,24 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
-    //kdDebug() << "KWTextFrameSet::formatMore lastFormatted=" << lastFormatted << " to=" << to << " viewsBottom=" << viewsBottom << endl;
-    for ( int i = 0; ( i < to /*|| firstVisible*/ ) && lastFormatted; ++i )
+    //kdDebug() << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
+    //          << " to=" << to << " viewsBottom=" << viewsBottom << endl;
+
+    // Stop if we have formatted everything or if we need more space
+    // Otherwise, stop formatting after "to" paragraphs,
+    // but make sure we format everything the views need
+    for ( int i = 0; lastFormatted && bottom <= m_availableHeight && ( i < to || lastBottom <= viewsBottom ) ; ++i )
     {
-        //kdDebug() << "KWTextFrameSet::formatMore formatting " << lastFormatted << endl;
+        //kdDebug() << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
 	lastFormatted->format();
-#if 0  // This is only valid for a rectangle being viewed, nor for a region
-	if ( i == 0 )
-	    firstVisible = lastFormatted->rect().intersects( cr );
-	else if ( firstVisible )
-	    firstVisible = lastFormatted->rect().intersects( cr );
-#endif
 	bottom = QMAX( bottom, lastFormatted->rect().top() +
 		       lastFormatted->rect().height() );
 	lastBottom = lastFormatted->rect().top() + lastFormatted->rect().height();
-        if ( i>= to && lastBottom > viewsBottom ) // we've done everything the views need
-            break;
-
 	lastFormatted = lastFormatted->next();
-	if ( lastFormatted )
-	    lastBottom = -1;       // still something to format, so not the real bottom yet
     }
     m_lastFormatted = lastFormatted;
 
-    if ( bottom > availableHeight() )
+    if ( bottom > m_availableHeight )
     {
         kdDebug() << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
@@ -842,6 +850,8 @@ void KWTextFrameSet::formatMore()
                     break;
                 case AutoCreateNewFrame:
                     doc->appendPage();
+                    if ( lastFormatted )
+                        interval = 0;
                     break;
                 case Ignore:
                     break;
@@ -852,17 +862,21 @@ void KWTextFrameSet::formatMore()
             kdWarning() << "KWTextFrameSet::formatMore no more space, but no frame !" << endl;
         }
     }
-    if ( frames.count() > 1 && lastBottom < availableHeight() - frames.last()->height() )
-    {
-        // Last frame is empty -> try removing last page
-        if ( doc->canRemovePage( doc->getPages() - 1, frames.last() ) )
-            doc->removePage( doc->getPages() - 1 );
-    }
+    else
+        if ( frames.count() > 1 && !lastFormatted && lastBottom < m_availableHeight - frames.last()->height() )
+        {
+            // Last frame is empty -> try removing last page
+            if ( doc->canRemovePage( doc->getPages() - 1, frames.last() ) )
+                doc->removePage( doc->getPages() - 1 );
+        }
 
     if ( lastFormatted )
 	formatTimer->start( interval, TRUE );
     else
+    {
 	interval = QMAX( 0, interval );
+        kdDebug() << "KWTextFrameSet::formatMore all formatted" << endl;
+    }
 }
 
 void KWTextFrameSet::doChangeInterval()
@@ -880,6 +894,8 @@ void KWTextFrameSet::updateViewArea( QWidget * w, int maxY )
 
     // Update map
     m_mapViewAreas.replace( w, maxY );
+
+    formatMore();
 }
 
 void KWTextFrameSet::UndoRedoInfo::clear()

@@ -325,8 +325,8 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
     if ( frames.isEmpty() )
         return;
 
-    if ( m_processingType != DTP )
-        pages = 1;
+    //if ( m_processingType != DTP )
+    //    pages = 1;
 
     KWFrameSet *frameset = dynamic_cast<KWFrameSet*>( frames.at( 0 ) );
 
@@ -2040,7 +2040,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
 
                 switch(frameSet->getFrameType()) {
                     case FT_TEXT:  {
-                        kdDebug() << "KWDocument::appendPage, copying text frame" << endl;
+                        //kdDebug() << "KWDocument::appendPage, copying text frame" << endl;
                         // make a new frame.
                         KWFrame *frm = new KWFrame(frame->getFrameSet(), frame->x(), frame->y() + ptPaperHeight(), frame->width(), frame->height(), frame->getRunAround(), frame->getRunAroundGap() );
                         frm->setBackgroundColor( QBrush( frame->getBackgroundColor() ) );
