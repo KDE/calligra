@@ -287,14 +287,15 @@ void Wmf::invokeHandler(
     if (!result)
     {
         if (funcTab[i].name)
-            kdDebug(s_area) << "findFunc: unsupported opcode: " <<
+            kdError(s_area) << "findFunc: unsupported opcode: " <<
                 funcTab[i].name << endl;
         else
-            kdDebug(s_area) << "findFunc: unsupported opcode: 0x" <<
+            kdError(s_area) << "findFunc: unsupported opcode: 0x" <<
                 QString::number(opcode, 16) << endl;
     }
     else
     {
+        kdDebug(s_area) << "findFunc: opcode: " << funcTab[i].name << endl;
         (this->*result)(wordOperands, operands);
     }
 }
