@@ -39,10 +39,10 @@ class GStylePrivate;
 class GStyle
 {
 public:
-  const static int NoFill = 0;
-  const static int ColorFill = 1;
-  const static int GradientFill = 2;
-  const static int PatternFill = 3;
+  static const int NoFill = 0;
+  static const int ColorFill = 1;
+  static const int GradientFill = 2;
+  static const int PatternFill = 3;
 
   GStyle();
   GStyle(const QDomElement &style);
