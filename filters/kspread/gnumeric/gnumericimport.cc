@@ -1933,9 +1933,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     while (!sheet.isNull())
     {
         ++currentTab;
-	table = ksdoc->createTable();
+	table = ksdoc->createSheet();
 
-	ksdoc->addTable(table);
+	ksdoc->addSheet(table);
 
         if ( currentTab == selectedTab )
           selTable = table;
@@ -1944,9 +1944,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         QDomElement sheetElement = sheet.toElement();
 
         if ( !name.isNull() )
-          table->setTableName( name.text(), false, false );
+          table->setSheetName( name.text(), false, false );
         else
-          table->setTableName( "Sheet" + QString::number( num ), false, false );
+          table->setSheetName( "Sheet" + QString::number( num ), false, false );
         table->enableScrollBarUpdates( false );
 
         //kdDebug()<<" sheetElement.hasAttribute( DisplayFormulas ) :"<<sheetElement.hasAttribute( "DisplayFormulas" )<<endl;
@@ -2164,7 +2164,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
       }
 
     if ( selTable )
-      ksdoc->setDisplayTable( selTable );
+      ksdoc->setDisplaySheet( selTable );
 
     emit sigProgress(100);
     if ( bSuccess )

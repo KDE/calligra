@@ -1037,7 +1037,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     QDomElement sheetNameIndex = gnumeric_doc.createElement("gmr:SheetNameIndex");
     workbook.appendChild(sheetNameIndex);
 
-    for (table = ksdoc->map()->firstTable(); table != 0L; table =ksdoc->map()->nextTable())
+    for (table = ksdoc->map()->firstSheet(); table != 0L; table =ksdoc->map()->nextSheet())
     {
         QDomElement sheetName = gnumeric_doc.createElement("gmr:SheetName");
         sheetName.appendChild(gnumeric_doc.createTextNode(table->tableName()));
@@ -1074,7 +1074,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
             areaNameElement.appendChild(gnumeric_doc.createTextNode(( *it ).ref_name) );
             areaName.appendChild( areaNameElement );
             QDomElement areaNameValue = gnumeric_doc.createElement("gmr:value");
-            areaNameValue.appendChild(gnumeric_doc.createTextNode( convertRefToRange( ( *it ).table_name, ( *it ).rect )  ) );
+            areaNameValue.appendChild(gnumeric_doc.createTextNode( convertRefToRange( ( *it ).sheet_name, ( *it ).rect )  ) );
             areaName.appendChild( areaNameValue );
             areaNames.appendChild( areaName );
             //TODO <gmr:position>A1</gmr:position> I don't know what is it.
@@ -1097,11 +1097,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     if (view)
     {
         canvas = view->canvasWidget();
-        activeTableName =  canvas->activeTable()->tableName();
+        activeTableName =  canvas->activeSheet()->sheetName();
     }
     int i = 0;
     int indexActiveTable=0;
-    for (table = ksdoc->map()->firstTable(); table != 0L; table =ksdoc->map()->nextTable(), i++)
+    for (table = ksdoc->map()->firstSheet(); table != 0L; table =ksdoc->map()->nextSheet(), i++)
     {
         if ( table->print()->paperFormat()==PG_CUSTOM )
         {
