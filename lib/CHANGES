@@ -14,4 +14,5 @@ Changes after KOffice-1.3-beta1
   Major reduction of the memory usage per paragraph
   Hyphenation fixes (support for breaking the same words more than once)
   Shadow is now a character property (instead of a paragraph property)
+  More precise painting of paragraph borders
 
