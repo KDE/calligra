@@ -94,7 +94,6 @@ bool KexiMigrate::performImport()
 			{
 				//Create new database as we have all required info ;)
 				return createDatabase(m_todbname);
-				return true;
 			}
 		}
 		else
@@ -133,7 +132,7 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 						failure = true;
 					}
 				}
-				return not failure;
+				return !failure;
 			}
 			else
 			{
@@ -225,3 +224,4 @@ else
 
 }
 
+#include "keximigrate.moc"

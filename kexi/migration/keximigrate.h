@@ -20,8 +20,8 @@
 #ifndef KEXI_IMPORT_H
 #define KEXI_IMPORT_H
 
-#include "./kexidb/connection.h"
-#include "./kexidb/tableschema.h"
+#include "kexidb/connection.h"
+#include "kexidb/tableschema.h"
 #include <qstringlist.h>
 #include <vector>
 
