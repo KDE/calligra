@@ -76,6 +76,7 @@ protected slots:
 	
 	void		slotCreateTable();
 	void		slotAlterTable();
+	void		slotDeleteTable();
 
 	void		slotCreateNewForm();
 

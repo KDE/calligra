@@ -23,6 +23,7 @@
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <klineeditdlg.h>
+#include <kmessagebox.h>
 
 #include <qlayout.h>
 #include <qheader.h>
@@ -120,6 +121,7 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 				if ( r->type() == KexiBrowserItem::Child )
 				{
 					m->insertItem(i18n("Alter Table"), this, SLOT(slotAlterTable()));
+					m->insertItem(i18n("Delete Table"), this, SLOT(slotDeleteTable()));
 				}
 				break;
 			}
@@ -241,6 +243,25 @@ void KexiBrowser::slotCreateQuery()
 {
 	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), "query");
 	kqd->show();
+}
+
+void KexiBrowser::slotDeleteTable()
+{
+	KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
+	
+	if ( r->type() == KexiBrowserItem::Child )
+	{
+		int ans = KMessageBox::questionYesNo(this,
+			i18n("Do you realy want to delete %1?").arg(r->text(0)), i18n("Delete Table?"));
+		
+		if(ans == KMessageBox::Yes)
+		{
+			if(kexi->project()->db()->query("DROP TABLE " + r->text(0)))
+			{
+				delete r;
+			}
+		}
+	}
 }
 
 KexiBrowser::~KexiBrowser(){
