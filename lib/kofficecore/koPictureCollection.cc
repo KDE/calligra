@@ -29,11 +29,13 @@
 #include "koPicture.h"
 #include "koPictureCollection.h"
 
-#define DEBUG_PICTURES
+//#define DEBUG_PICTURES
 
 KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 {
-    //kdDebug(30003) << "KoPictureCollection::findPicture " << key.toString() << endl;
+#ifdef DEBUG_PICTURES
+    kdDebug(30003) << "KoPictureCollection::findPicture " << key.toString() << endl;
+#endif
     ConstIterator it = find( key );
     if ( it == end() )
     {
@@ -47,11 +49,15 @@ KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 
 KoPicture KoPictureCollection::insertPicture(const KoPictureKey& key, const KoPicture& picture)
 {
-    //kdDebug(30003) << "KoPictureCollection::insertPicture " << key.toString() << endl;
+#ifdef DEBUG_PICTURES
+    kdDebug(30003) << "KoPictureCollection::insertPicture " << key.toString() << endl;
+#endif
     KoPicture c = findPicture(key);
     if (c.isNull())
     {
-        //kdDebug(30003) << "KoPictureCollection::insertPicture not found -> inserting" << endl;
+#ifdef DEBUG_PICTURES
+        kdDebug(30003) << "KoPictureCollection::insertPicture not found -> inserting" << endl;
+#endif
         c=picture;
         c.setKey(key); // Be sure that the key is correctly set in the KoPicture!
         insert(key, c);
@@ -66,7 +72,9 @@ KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
 
 KoPicture KoPictureCollection::downloadPicture(const KURL& url)
 {
+#ifdef DEBUG_PICTURES
     kdDebug(30003) << "KoPictureCollection::downloadPicture " << url.prettyURL() << endl;
+#endif
 
     // If it is a local file, we can check the last modification date, so we should better use loadPicture
     if (url.isLocalFile())
@@ -77,7 +85,9 @@ KoPicture KoPictureCollection::downloadPicture(const KURL& url)
     // Therefore we have to always download the file
 
     KoPicture pic;
+#ifdef DEBUG_PICTURES
     kdDebug(30003) << "Trying to download picture from file " << url.prettyURL() << endl;
+#endif
 
     if (pic.setKeyAndDownloadPicture(url))
         insertPicture(pic.getKey(), pic);
@@ -89,7 +99,9 @@ KoPicture KoPictureCollection::downloadPicture(const KURL& url)
 
 KoPicture KoPictureCollection::loadPicture(const QString& fileName)
 {
-    //kdDebug(30003) << "KoPictureCollection::loadPicture " << fileName << endl;
+#ifdef DEBUG_PICTURES
+    kdDebug(30003) << "KoPictureCollection::loadPicture " << fileName << endl;
+#endif
     // Check the last modified date of the file, as it is now.
     KoPictureKey key;
     key.setKeyFromFile(fileName);
@@ -97,7 +109,9 @@ KoPicture KoPictureCollection::loadPicture(const QString& fileName)
     KoPicture c = findPicture(key);
     if (c.isNull())
     {
+#ifdef DEBUG_PICTURES
         kdDebug(30003) << "Trying to load picture from file " << fileName << endl;
+#endif
         if (c.loadFromFile(fileName))
             insertPicture(key, c);
         else
@@ -264,7 +278,9 @@ KoPictureCollection::StoreMap KoPictureCollection::readXML( QDomElement& pixmaps
 
 void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & storeMap )
 {
+#ifdef DEBUG_PICTURES
     kdDebug(30003) << "KoPictureCollection::readFromStore " << store << endl;
+#endif
     StoreMap::ConstIterator it = storeMap.begin();
     for ( ; it != storeMap.end(); ++it )
     {
@@ -272,7 +288,7 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
         if (!c.isNull())
         {
             // Do not load a file that we already have!
-            kdDebug(30003) << store << endl;
+            //kdDebug(30003) << store << endl;
             continue;
         }
         QString u(it.data());
