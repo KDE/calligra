@@ -1,5 +1,6 @@
 lib_LTLIBRARIES = libkexicore.la
-libkexicore_la_SOURCES = kexiproject.cpp keximainwindow.cpp kexidialogbase.cpp \
+libkexicore_la_SOURCES = kexi_global.cpp \
+	kexiproject.cpp keximainwindow.cpp kexidialogbase.cpp \
 	kexistartupdlgui.ui kexistartupdlg.cpp kexiprojectconnectiondata.cpp \
 	kexipartmanager.cpp kexipartinfo.cpp kexipartitem.cpp kexipart.cpp \
 	kexibrowser.cpp kexibrowseritem.cpp \

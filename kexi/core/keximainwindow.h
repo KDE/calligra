@@ -71,6 +71,10 @@ class KexiMainWindow : public KMdiMainFrm
 		 */
 		void		storeSettings();
 
+#if KDE_IS_VERSION(3,2,0)
+		KMdiChildArea* getMainDockWidget() { return m_pMdi; }
+#endif
+
 	protected slots:
 
 		/**
