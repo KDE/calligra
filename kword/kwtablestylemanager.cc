@@ -472,6 +472,8 @@ void KWTableStyleManager::moveUpStyle()
 {
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
+    if ( currentStyleName.isEmpty() )
+        return;
     for ( KWTableStyleListItem* p = m_tableStyles.first(); p->changedTableStyle() != 0L; p = m_tableStyles.next(), ++pos )
     {
         if ( p->changedTableStyle()->name() == currentStyleName )
@@ -490,8 +492,6 @@ void KWTableStyleManager::moveUpStyle()
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
 
-    m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
-    m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
     updateGUI();
 }
 
@@ -499,6 +499,9 @@ void KWTableStyleManager::moveDownStyle()
 {
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
+    if ( currentStyleName.isEmpty() )
+        return;
+
     for ( KWTableStyleListItem* p = m_tableStyles.first(); p->changedTableStyle() != 0L; p = m_tableStyles.next(), ++pos )
     {
         if ( p->changedTableStyle()->name() == currentStyleName )
@@ -519,8 +522,6 @@ void KWTableStyleManager::moveDownStyle()
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
 
-    m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
-    m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
     updateGUI();
 }
 
@@ -583,6 +584,18 @@ void KWTableStyleManager::renameStyle(const QString &theText) {
     enableButtonApply(state);
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
+    m_stylesList->setEnabled( state );
+    if ( state )
+    {
+        m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
+        m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
+    }
+    else
+    {
+        m_moveUpButton->setEnabled(false);
+        m_moveDownButton->setEnabled(false);
+    }
+
 }
 
 /** Show the framestylist and apply changes to the current selected tablestyle.
