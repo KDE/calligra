@@ -1718,8 +1718,9 @@ void KWView::updateReadWrite( bool readwrite )
         actionViewPreviewMode->setEnabled( true );
         actionViewFormattingChars->setEnabled( true );
         actionViewFrameBorders->setEnabled( true );
-        actionViewHeader->setEnabled( true );
-        actionViewFooter->setEnabled( true );
+        // that's not readonly, in fact, it modifies the doc
+        //actionViewHeader->setEnabled( true );
+        //actionViewFooter->setEnabled( true );
         actionViewZoom->setEnabled( true );
         actionInsertComment->setEnabled( true );
         actionAllowAutoFormat->setEnabled( true );
@@ -5518,8 +5519,8 @@ void KWView::switchModeView()
     actionInsertTable->setEnabled(state);
     actionInsertFootEndNote->setEnabled( state );
     actionEditFootEndNote->setEnabled( state );
-    actionViewFooter->setEnabled( state );
-    actionViewHeader->setEnabled( state );
+    actionViewFooter->setEnabled( state && m_doc->processingType() == KWDocument::WP );
+    actionViewHeader->setEnabled( state && m_doc->processingType() == KWDocument::WP );
     actionShowDocStruct->setEnabled(state);
     actionFormatPage->setEnabled(state);
     actionInsertContents->setEnabled( state );
