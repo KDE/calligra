@@ -17,7 +17,7 @@ libkofficeui_la_SOURCES = koGlobal.cc koUnit.cc koFind.cc koReplace.cc \
 	kcoloractions.cpp koToolBox.cpp koTemplates.cc \
 	koRect.cpp koPictureFilePreview.cc \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
-	koCharSelectDia.cc koInsertLink.cc
+	koCharSelectDia.cc koInsertLink.cc koPoint.cpp
 libkofficeui_la_LDFLAGS	= -version-info 2:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE)
 

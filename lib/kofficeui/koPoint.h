@@ -65,12 +65,13 @@ public:
       m.map(m_x, m_y, &x, &y);
       return KoPoint(x, y);
     };
-    
+
     bool isNear(const KoPoint &p, double range) const
     {
       return (p.x() >= m_x - range && p.x() <= m_x + range && p.y() >= m_y - range && p.y() <= m_y + range);
     }
-
+//static
+    static double getAngle( const KoPoint &,const KoPoint & );
 private:
     double m_x, m_y;
 };
