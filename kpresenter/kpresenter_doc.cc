@@ -257,29 +257,14 @@ QDomDocument KPresenterDoc::saveXML()
     paper.setAttribute("ptWidth", _pageLayout.ptWidth);
     paper.setAttribute("ptHeight", _pageLayout.ptHeight);
 
-    //### OPTIMIZATION
-    //paper.setAttribute("mmWidth", _pageLayout.mmWidth);
-    //paper.setAttribute("mmHeight", _pageLayout.mmHeight);
-    //paper.setAttribute("inchWidth", _pageLayout.inchWidth);
-    //paper.setAttribute("inchHeight", _pageLayout.inchHeight);
-
     paper.setAttribute("orientation", static_cast<int>( _pageLayout.orientation ));
     paper.setAttribute("unit", static_cast<int>( _pageLayout.unit ));
     QDomElement paperBorders=doc.createElement("PAPERBORDERS");
 
-    //### OPTIMIZATION
-    //paperBorders.setAttribute("mmLeft", _pageLayout.mmLeft);
-    //paperBorders.setAttribute("mmTop", _pageLayout.mmTop);
-    //paperBorders.setAttribute("mmRight", _pageLayout.mmRight);
-    //paperBorders.setAttribute("mmBottom", _pageLayout.mmBottom);
     paperBorders.setAttribute("ptLeft", _pageLayout.ptLeft);
     paperBorders.setAttribute("ptTop", _pageLayout.ptTop);
     paperBorders.setAttribute("ptRight", _pageLayout.ptRight);
     paperBorders.setAttribute("ptBottom", _pageLayout.ptBottom);
-    //paperBorders.setAttribute("inchLeft", _pageLayout.inchLeft);
-    //paperBorders.setAttribute("inchTop", _pageLayout.inchTop);
-    //paperBorders.setAttribute("inchRight", _pageLayout.inchRight);
-    //paperBorders.setAttribute("inchBottom", _pageLayout.inchBottom);
     paper.appendChild(paperBorders);
     presenter.appendChild(paper);
 
@@ -287,10 +272,6 @@ QDomDocument KPresenterDoc::saveXML()
     element.setAttribute("rastX", _rastX);
     element.setAttribute("rastY", _rastY);
 
-    //### OPTIMIZATION
-    //element.setAttribute("bred", _txtBackCol.red());
-    //element.setAttribute("bgreen", _txtBackCol.green());
-    //element.setAttribute("bblue", _txtBackCol.blue());
     element.setAttribute("color", _txtBackCol.name());
 
     element.appendChild(saveBackground( doc ));
@@ -513,17 +494,17 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	// Launch the perl script on it
 	KTempFile tmpFileOut;
 	tmpFileOut.setAutoDelete( true );
-	QCString cmd = KGlobal::dirs()->findExe("perl").local8Bit();
+	QString cmd = KGlobal::dirs()->findExe("perl");
 	if (cmd.isEmpty())
 	{
 	    KMessageBox::error(0L, i18n("You don't appear to have PERL installed.\nIt is needed to convert this document.\nPlease install PERL and try again."));
 	    return false;
 	}
 	cmd += " ";
-	cmd += QFile::encodeName(locate( "exe", "kprconverter.pl" )) + " ";
-	cmd += QFile::encodeName( tmpFileIn.name() ) + " ";
-	cmd += QFile::encodeName( tmpFileOut.name() );
-	system( cmd );
+	cmd += locate( "exe", "kprconverter.pl" ) + " ";
+	cmd += tmpFileIn.name() + " ";
+	cmd += tmpFileOut.name();
+	system( QFile::encodeName(cmd) );
 
 	// Build a new QDomDocument from the result
 	QDomDocument newdoc;
