@@ -971,60 +971,60 @@ bool KWordDocument::loadXML( const QDomDocument & doc )
 		    __pgLayout.orientation = ( KoOrientation )atoi( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "width" ) {
 		    __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
-		    __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		    __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		    __pgLayout.ptWidth = MM_TO_POINT( __pgLayout.mmWidth );
+		    __pgLayout.inchWidth = MM_TO_INCH( __pgLayout.mmWidth );
 		} else if ( ( *it ).m_strName == "height" ) {
 		    __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
-		    __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		    __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		    __pgLayout.ptHeight = MM_TO_POINT( __pgLayout.mmHeight );
+		    __pgLayout.inchHeight = MM_TO_INCH( __pgLayout.mmHeight );
 		} else if ( ( *it ).m_strName == "columns" )
 		    __columns.columns = atoi( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "columnspacing" ) {
-		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
-		    __columns.mmColumnSpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
-		    __columns.inchColumnSpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
+		    __columns.ptColumnSpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __columns.mmColumnSpacing = POINT_TO_MM( __columns.ptColumnSpacing );
+		    __columns.inchColumnSpacing = POINT_TO_INCH( __columns.ptColumnSpacing );
 		} else if ( ( *it ).m_strName == "hType" )
 		    __hf.header = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "fType" )
 		    __hf.footer = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "spHeadBody" ) {
-		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		    __hf.mmHeaderBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
-		    __hf.inchHeaderBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
+		    __hf.ptHeaderBodySpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __hf.mmHeaderBodySpacing = POINT_TO_MM( __hf.ptHeaderBodySpacing );
+		    __hf.inchHeaderBodySpacing = POINT_TO_INCH( __hf.ptHeaderBodySpacing );
 		} else if ( ( *it ).m_strName == "spFootBody" ) {
-		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		    __hf.mmFooterBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
-		    __hf.inchFooterBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
+		    __hf.ptFooterBodySpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __hf.mmFooterBodySpacing = POINT_TO_MM( __hf.ptFooterBodySpacing );
+		    __hf.inchFooterBodySpacing = POINT_TO_INCH( __hf.ptFooterBodySpacing );
 		} else if ( ( *it ).m_strName == "ptWidth" )
-		    __pgLayout.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+		    __pgLayout.ptWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "inchWidth" )
-		    __pgLayout.inchWidth = atof( ( *it ).m_strValue.c_str() );
+		    __pgLayout.inchWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "mmWidth" )
-		    __pgLayout.mmWidth = atof( ( *it ).m_strValue.c_str() );
+		    __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "ptHeight" )
-		    __pgLayout.ptHeight = atoi( ( *it ).m_strValue.c_str() );
+		    __pgLayout.ptHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "inchHeight" )
-		    __pgLayout.inchHeight = atof( ( *it ).m_strValue.c_str() );
+		    __pgLayout.inchHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "mmHeight" )
-		    __pgLayout.mmHeight = atof( ( *it ).m_strValue.c_str() );
+		    __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "ptHeadBody" )
-		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		    __hf.ptHeaderBodySpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "inchHeadBody" )
-		    __hf.inchHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		    __hf.inchHeaderBodySpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "mmHeadBody" )
-		    __hf.mmHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		    __hf.mmHeaderBodySpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "ptFootBody" )
-		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		    __hf.ptFooterBodySpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "inchFootBody" )
-		    __hf.inchFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		    __hf.inchFooterBodySpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "mmFootBody" )
-		    __hf.mmFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		    __hf.mmFooterBodySpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "mmColumnspc" )
-		    __columns.mmColumnSpacing = atof( ( *it ).m_strValue.c_str() );
+		    __columns.mmColumnSpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "ptColumnspc" )
-		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
+		    __columns.ptColumnSpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "inchColumnspc" )
-		    __columns.inchColumnSpacing = atof( ( *it ).m_strValue.c_str() );
+		    __columns.inchColumnSpacing = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		else
                     kdError(32001) << "Unknown attrib 'PAPER:" << ( *it ).m_strName.c_str() << "'" << endl;
 	    }
@@ -1037,45 +1037,45 @@ bool KWordDocument::loadXML( const QDomDocument & doc )
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "left" ) {
-			    __pgLayout.mmLeft = ( double )atof( ( *it ).m_strValue.c_str() );
-			    __pgLayout.ptLeft = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			    __pgLayout.inchLeft = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.mmLeft = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.ptLeft = MM_TO_POINT( __pgLayout.mmLeft );
+			    __pgLayout.inchLeft = MM_TO_INCH( __pgLayout.mmLeft );
 			} else if ( ( *it ).m_strName == "top" ) {
-			    __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
-			    __pgLayout.ptTop = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			    __pgLayout.inchTop = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.mmTop = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.ptTop = MM_TO_POINT( __pgLayout.mmTop );
+			    __pgLayout.inchTop = MM_TO_INCH( __pgLayout.mmTop );
 			} else if ( ( *it ).m_strName == "right" ) {
-			    __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
-			    __pgLayout.ptRight = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			    __pgLayout.inchRight = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.mmRight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.ptRight = MM_TO_POINT( __pgLayout.mmRight );
+			    __pgLayout.inchRight = MM_TO_INCH( __pgLayout.mmRight );
 			} else if ( ( *it ).m_strName == "bottom" ) {
-			    __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
-			    __pgLayout.ptBottom = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			    __pgLayout.inchBottom = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.mmBottom = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.ptBottom = MM_TO_POINT( __pgLayout.mmBottom );
+			    __pgLayout.inchBottom = MM_TO_INCH( __pgLayout.mmBottom );
 			} else if ( ( *it ).m_strName == "ptLeft" )
-			    __pgLayout.ptLeft = atoi( ( *it ).m_strValue.c_str() );
+			    __pgLayout.ptLeft = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "inchLeft" )
-			    __pgLayout.inchLeft = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.inchLeft = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "mmLeft" )
-			    __pgLayout.mmLeft = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmLeft = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "ptRight" )
-			    __pgLayout.ptRight = atoi( ( *it ).m_strValue.c_str() );
+			    __pgLayout.ptRight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "inchRight" )
-			    __pgLayout.inchRight = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.inchRight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "mmRight" )
-			    __pgLayout.mmRight = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmRight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "ptTop" )
-			    __pgLayout.ptTop = atoi( ( *it ).m_strValue.c_str() );
+			    __pgLayout.ptTop = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "inchTop" )
-			    __pgLayout.inchTop = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.inchTop = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "mmTop" )
-			    __pgLayout.mmTop = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmTop = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "ptBottom" )
-			    __pgLayout.ptBottom = atoi( ( *it ).m_strValue.c_str() );
+			    __pgLayout.ptBottom = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "inchBottom" )
-			    __pgLayout.inchBottom = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.inchBottom = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else if ( ( *it ).m_strName == "mmBottom" )
-			    __pgLayout.mmBottom = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmBottom = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 			else
 	                    kdError(32001) << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName.c_str() << "'" << endl;
 		    }
