@@ -197,6 +197,10 @@ void KexiComboBoxPopup::slotTVItemAccepted(KexiTableItem *item, int row, int)
 
 bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 {
+	if (e->type()==QEvent::MouseButtonPress) {
+		kdDebug() << "QEvent::MousePress" << endl;
+	}
+
 	if (o==d->tv) {
 		if (e->type()==QEvent::KeyPress) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
@@ -215,6 +219,7 @@ void KexiComboBoxPopup::slotDataRefreshRequested()
 {
 	updateSize();
 }
+
 
 #include "kexicomboboxpopup.moc"
 

@@ -35,7 +35,10 @@ class KDownArrowPushButton : public KPushButton
 {
 	public:
 		KDownArrowPushButton( QWidget *parent )
-		 : KPushButton(parent) {}
+		 : KPushButton(parent)
+		{
+			setToggleButton(true);
+		}
 	protected:
 		/**
 		 * Reimplemented from @ref QPushButton. */
@@ -283,12 +286,17 @@ void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, QVariant v
 
 void KexiComboBoxTableEdit::slotButtonClicked()
 {
-	if (!m_popup || !m_popup->isVisible()) {
+	kdDebug() << "KexiComboBoxTableEdit::slotButtonClicked()" << endl;
+//	if (!m_popup || !m_popup->isVisible()) {
+	if (!m_popup || m_button->isOn()) {
+		kdDebug() << "SHOW POPUP" << endl;
 		showPopup();
+		m_button->setOn(true);
 	}
 	else {
 		m_popup->hide();
 		//TODO: cancel selection
+		m_button->setOn(false);
 	}
 }
 
@@ -342,6 +350,7 @@ void KexiComboBoxTableEdit::hide()
 	KexiInputTableEdit::hide();
 	if (m_popup)
 		m_popup->hide();
+	m_button->setOn(false);
 //	m_button->hide();
 }
 
@@ -349,6 +358,7 @@ void KexiComboBoxTableEdit::show()
 {
 	KexiInputTableEdit::show();
 	m_button->show();
+	m_button->setOn(false);
 }
 
 void KexiComboBoxTableEdit::slotRowAccepted(KexiTableItem * item, int /*row*/)

@@ -75,6 +75,8 @@ class KexiComboBoxPopup : public QFrame
 		void setDataInternal( KexiTableViewData *data, bool owner = true ); //!< helper
 
 		KexiComboBoxPopupPrivate *d;
+
+		friend class KexiComboBoxTableEdit;
 };
 
 #endif
