@@ -5040,10 +5040,22 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     QDomElement annotationElement = element.namedItem( "office:annotation" ).toElement();
     if ( !annotationElement.isNull() )
     {
-        QDomElement commentElement = annotationElement.namedItem( "text:p" ).toElement();
-        if ( !commentElement.isNull() )
-            setComment( commentElement.text() );
+        QString comment;
+        QDomNode node = annotationElement.firstChild();
+        while( !node.isNull() )
+        {
+            QDomElement commentElement = node.toElement();
+            if( !commentElement.isNull() )
+                if( commentElement.tagName() == "text:p" )
+                    comment.append( commentElement.text() );
+                    
+            node = node.nextSibling();
+        }
+        
+        if( !comment.isEmpty() )
+            setComment( comment );
     }
+    
     return true;
 }
 
