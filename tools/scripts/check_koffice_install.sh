@@ -6,6 +6,7 @@ fi
 
 instance=kword
 applnks=`kde-config --path apps`:`kde-config --path xdgdata-apps`
+services=`kde-config --path services`
 found=0
 
 function checkname()
@@ -33,13 +34,24 @@ function checkname()
 }
 
 IFS=:
-for dir in $applnks; do
+for dir in $services; do
   if test -n "$dir"; then
-    echo Looking under applnk dir: $dir
-    f="$dir/Office/$instance.desktop"
+    echo Looking for ${instance}part.desktop under services dir: $dir
+    f="$dir/${instance}part.desktop"
     checkname $f
   fi
 done
+
+if [ $found = 0 ]; then
+  # The old way, as fallback
+  for dir in $applnks; do
+    if test -n "$dir"; then
+      echo Looking under applnk dir: $dir
+      f="$dir/Office/$instance.desktop"
+      checkname $f
+    fi
+  done
+fi
 
 if [ $found = 0 ]; then
   echo
