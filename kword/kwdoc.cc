@@ -486,10 +486,10 @@ void KWDocument::initConfig()
   {
       config->setGroup( "Kword Path" );
       if ( config->hasKey( "expression path" ) )
-          m_personalExpressionPath = config->readListEntry( "expression path" );
+          m_personalExpressionPath = config->readPathListEntry( "expression path" );
 #if 0 // KWORD_HORIZONTAL_LINE
       if ( config->hasKey( "horizontal line path" ) )
-          m_horizontalLinePath = config->readListEntry( "horizontal line path" );
+          m_horizontalLinePath = config->readPathListEntry( "horizontal line path" );
 #endif
       if ( config->hasKey( "picture path" ) )
           m_picturePath = config->readPathEntry( "picture path" );

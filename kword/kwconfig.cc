@@ -1018,7 +1018,11 @@ void ConfigurePathPage::apply()
         {
             m_pView->kWordDocument()->setPersonalExpressionPath(lst);
             config->setGroup( "Kword Path" );
+#if KDE_IS_VERSION(3,1,3)
+            config->writePathEntry( "expression path", lst);
+#else
             config->writeEntry( "expression path", lst);
+#endif
         }
     }
 #if 0 // KWORD_HORIZONTAL_LINE
