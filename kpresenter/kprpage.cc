@@ -2457,26 +2457,32 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
     double x=m_doc->zoomHandler()->unzoomItX(_x);
     double y=m_doc->zoomHandler()->unzoomItY(_y);
 
-    kppixmapobject->setOrig( (   x  / m_doc->getGridX() ) * m_doc->getGridX(), ( y  / m_doc->getGridY() ) * m_doc->getGridY());
+    kppixmapobject->setOrig( ( x  / m_doc->getGridX() ) * m_doc->getGridX(),
+                             ( y  / m_doc->getGridY() ) * m_doc->getGridY());
     kppixmapobject->setSelected( true );
 
-    kppixmapobject->setSize( m_doc->zoomHandler()->unzoomItX( 10 ),m_doc->zoomHandler()->unzoomItY( 10 ) );
+    kppixmapobject->setSize(m_doc->zoomHandler()->unzoomItX(kppixmapobject->originalSize().width()),
+                            m_doc->zoomHandler()->unzoomItY(kppixmapobject->originalSize().height()));
 
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, m_doc,this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, m_doc, this );
     insertCmd->execute();
     m_doc->addCommand( insertCmd );
 
-    QRect s = getZoomPageRect();
+    KoRect s = getPageRect();
     float fakt = 1;
     if ( kppixmapobject->getSize().width() > s.width() )
         fakt = (float)s.width() / (float)kppixmapobject->getSize().width();
     if ( kppixmapobject->getSize().height() > s.height() )
         fakt = QMIN( fakt, (float)s.height() / (float)kppixmapobject->getSize().height() );
 
+    kdDebug() << k_funcinfo << "Fakt: " << fakt << endl;
+
     if ( fakt < 1 ) {
         int w = (int)( fakt * (float)kppixmapobject->getSize().width() );
         int h = (int)( fakt * (float)kppixmapobject->getSize().height() );
-        kppixmapobject->setSize( w, h );
+        kdDebug() << k_funcinfo << "Size: " << w << ", " << h << endl;
+        kppixmapobject->setOrig(0,0);
+        kppixmapobject->setSize(w, h);
         m_doc->repaint( false );
     }
 }

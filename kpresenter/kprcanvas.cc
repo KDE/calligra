@@ -4772,7 +4772,6 @@ void KPrCanvas::selectPrev()
     _repaint( false );
 }
 
-/*================================================================*/
 void KPrCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
     if ( m_currentTextObjectView )
@@ -4780,14 +4779,12 @@ void KPrCanvas::dragEnterEvent( QDragEnterEvent *e )
     else if ( QTextDrag::canDecode( e )
               || QImageDrag::canDecode( e )
               || QUriDrag::canDecode(e)) {
-        kdDebug(33001) << "Drag entered" << endl;
         e->accept();
     }
     else
         e->ignore();
 }
 
-/*================================================================*/
 void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
 {
     if( m_currentTextObjectView)
@@ -4806,7 +4803,6 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
     else if ( QTextDrag::canDecode( e )
               || QImageDrag::canDecode( e )
               || QUriDrag::canDecode(e)) {
-        kdDebug(33001) << "Drag moved" << endl;
         e->accept();
     }
     else
@@ -4815,7 +4811,6 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
 
 void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, int posX, int posY )
 {
-    kdDebug(33001) << "Dropping image" << endl;
     setToolEditMode( TEM_MOUSE );
     deSelectAllObj();
 
@@ -4840,7 +4835,6 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
     setCursor( c );
 }
 
-/*================================================================*/
 void KPrCanvas::dropEvent( QDropEvent *e )
 {
     //disallow dropping objects outside the "page"
@@ -5114,6 +5108,7 @@ QPtrList<KPObject> KPrCanvas::objectList() const
 {
     return m_activePage->objectList();
 }
+
 const QPtrList<KPObject> &KPrCanvas::getObjectList() const
 {
     return m_activePage->objectList();
@@ -5146,7 +5141,6 @@ bool KPrCanvas::spManualSwitch() const
 /*================================================================*/
 QRect KPrCanvas::getPageRect( bool decBorders ) const
 {
-    // ### TODO remove diffx, diffy
     return m_view->kPresenterDoc()->getPageRect( decBorders );
 }
 
@@ -5237,50 +5231,50 @@ void KPrCanvas::calcRatio( double &dx, double &dy, ModifyType _modType, double r
     if ( fabs( dy ) > fabs( dx ) )
     {
         if ( _modType == MT_RESIZE_LD || _modType == MT_RESIZE_RU )
-          dx = ( dy ) * -ratio ;
+            dx = ( dy ) * -ratio ;
         else
-          dx = ( dy ) * ratio ;
+            dx = ( dy ) * ratio ;
     }
     else
     {
         if ( _modType == MT_RESIZE_LD || _modType == MT_RESIZE_RU )
-          dy =  -dx  / ratio;
+            dy =  -dx  / ratio;
         else
-          dy =  dx  / ratio;
+            dy =  dx  / ratio;
     }
 }
 
 /*================================================================*/
 void KPrCanvas::exitEditMode()
 {
-  if ( editNum )
+    if ( editNum )
     {
-      if ( editNum->getType() == OT_TEXT )
-	{
-	  if(m_currentTextObjectView)
+        if ( editNum->getType() == OT_TEXT )
+        {
+            if(m_currentTextObjectView)
             {
-	      m_currentTextObjectView->clearSelection();
-	      //hide cursor when we desactivate textObjectView
-	      m_currentTextObjectView->drawCursor( false );
-	      m_currentTextObjectView->terminate();
-              KPTextObject *kpTextObj = m_currentTextObjectView->kpTextObject();
-              kpTextObj->setEditingTextObj( false );
-	      delete m_currentTextObjectView;
-	      m_currentTextObjectView=0L;
+                m_currentTextObjectView->clearSelection();
+                //hide cursor when we desactivate textObjectView
+                m_currentTextObjectView->drawCursor( false );
+                m_currentTextObjectView->terminate();
+                KPTextObject *kpTextObj = m_currentTextObjectView->kpTextObject();
+                kpTextObj->setEditingTextObj( false );
+                delete m_currentTextObjectView;
+                m_currentTextObjectView=0L;
 
-              _repaint( static_cast<KPObject*>( kpTextObj ) );
+                _repaint( static_cast<KPObject*>( kpTextObj ) );
             }
-	  // Title of slide may have changed
-	  emit updateSideBarItem( currPgNum()-1 );
-	  emit objectSelectedChanged();
-	  editNum=0L;
+            // Title of slide may have changed
+            emit updateSideBarItem( currPgNum()-1 );
+            emit objectSelectedChanged();
+            editNum=0L;
         }
-      else if (editNum->getType() == OT_PART )
-	{
-	  static_cast<KPPartObject *>(editNum)->deactivate();
-	  _repaint( editNum );
-	  editNum=0L;
-	  return;
+        else if (editNum->getType() == OT_PART )
+        {
+            static_cast<KPPartObject *>(editNum)->deactivate();
+            _repaint( editNum );
+            editNum=0L;
+            return;
         }
     }
 }
