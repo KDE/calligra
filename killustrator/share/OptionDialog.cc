@@ -69,9 +69,13 @@ QWidget* OptionDialog::createGeneralWidget (QWidget* parent) {
   label->move (10, 20);
 
   unit = new QComboBox (w);
-  unit->insertItem ("pt");
-  unit->insertItem ("mm");
-  unit->insertItem ("inch");
+  unit->insertItem (unitToString (UnitPoint));
+  unit->insertItem (unitToString (UnitMillimeter));
+  unit->insertItem (unitToString (UnitInch));
+  unit->insertItem (unitToString (UnitCentimeter));
+  unit->insertItem (unitToString (UnitPica));
+  unit->insertItem (unitToString (UnitDidot));
+  unit->insertItem (unitToString (UnitCicero));
   unit->move (80, 20);
 
   unit->setCurrentItem ((int) 
@@ -173,6 +177,15 @@ int OptionDialog::setup () {
       break;
     case 2:
       psm->setDefaultMeasurementUnit (UnitInch);
+      break;
+    case 3:
+      psm->setDefaultMeasurementUnit (UnitCentimeter);
+      break;
+    case 4:
+      psm->setDefaultMeasurementUnit (UnitDidot);
+      break;
+    case 5:
+      psm->setDefaultMeasurementUnit (UnitCicero);
       break;
     default:
       break;

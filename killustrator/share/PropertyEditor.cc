@@ -234,10 +234,10 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
   label->setText (i18n ("Width:"));
   label->move (10, 20);
 
-  widthField = new FloatSpinBox (w);
-  widthField->setFormatString ("%-3.3f");
-  //  widthField->setEditable (true);
-  widthField->setRange (0, 20);
+  widthField = new UnitBox (w);
+  widthField->setRange (0.0, 20.0);
+  widthField->setStep (0.1);
+  widthField->setEditable (true);
   widthField->move (80, 20);
 
   label = new QLabel (w);

@@ -26,13 +26,23 @@
 #define units_h_
 
 enum MeasurementUnit { 
-  UnitPoint, UnitMillimeter, UnitInch 
+  UnitPoint, UnitMillimeter, UnitInch, UnitPica, UnitCentimeter, 
+  UnitDidot, UnitCicero
 };
 
 float cvtPtToMm (float value);
+float cvtPtToCm (float value);
 float cvtPtToInch (float value);
-float cvtInchToPt (float value);
+float cvtPtToPica (float value);
+float cvtPtToDidot (float value);
+float cvtPtToCicero (float value);
 float cvtMmToPt (float value);
+float cvtCmToPt (float value);
+float cvtInchToPt (float value);
+float cvtPicaToPt (float value);
+float cvtDidotToPt (float value);
+float cvtCiceroToPt (float value);
+
 float cvtPtToUnit (MeasurementUnit unit, float value);
 float cvtUnitToPt (MeasurementUnit unit, float value);
 

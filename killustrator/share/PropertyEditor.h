@@ -37,12 +37,12 @@
 
 #include "GDocument.h"
 #include "GObject.h"
-#include "FloatSpinBox.h"
 #include "ColorComboBox.h"
 #include "FontSelector.h"
 #include "CommandHistory.h"
 #include "Gradient.h"
 #include "BrushCells.h"
+#include "UnitBox.h"
 
 class QComboBox;
 
@@ -84,7 +84,7 @@ private:
   QLabel* infoLabel[5];
 
   // OutlinePen Tab
-  FloatSpinBox* widthField;
+  UnitBox *widthField;
   //  ColorComboBox* penColorField;
   KColorButton* penColorBttn;
   QComboBox* penStyleField;

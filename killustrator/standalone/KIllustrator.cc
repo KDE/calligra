@@ -746,6 +746,18 @@ void KIllustrator::showCursorPosition (int x, int y) {
   case UnitInch:
     sprintf (buf, "%4.2f:%4.2f inch   ", cvtPtToInch (x), cvtPtToInch (y));
     break;
+  case UnitPica:
+    sprintf (buf, "%4.2f:%4.2f pica   ", cvtPtToPica (x), cvtPtToPica (y));
+    break;
+  case UnitCentimeter:
+    sprintf (buf, "%4.2f:%4.2f cm     ", cvtPtToCm (x), cvtPtToCm (y));
+    break;
+  case UnitDidot:
+    sprintf (buf, "%4.2f:%4.2f didot  ", cvtPtToDidot (x), cvtPtToDidot (y));
+    break;
+  case UnitCicero:
+    sprintf (buf, "%4.2f:%4.2f cicero ", cvtPtToCicero (x), cvtPtToCicero (y));
+    break;
   }
   statusbar->changeItem (buf, 1);
 }
@@ -1216,6 +1228,8 @@ void KIllustrator::saveFile () {
 void KIllustrator::saveAsFile () {
   QString fname = KFileDialog::getSaveFileName ((const char *)
 						lastSaveDir, "*.kil", this);
+  if (fname.right (4).compare (".kil") != 0)
+    fname += ".kil";
   QFileInfo finfo (fname);
     lastSaveDir = finfo.dirPath ();
   if (! fname.isEmpty ()) {
@@ -1407,7 +1421,7 @@ QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
     QString filename;
 
     if (dlg->exec() == QDialog::Accepted) {
-	   filename = dlg->selectedFile ();
+      filename = dlg->selectedFile ();
       QFileInfo finfo (filename);
       lastExportDir = finfo.dirPath ();
     }

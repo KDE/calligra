@@ -55,6 +55,14 @@ void PStateManager::readDefaultSettings () {
     defaultUnit = UnitMillimeter;
   else if (value == "inch")
     defaultUnit = UnitInch;
+  else if (value == "cm")
+    defaultUnit = UnitCentimeter;
+  else if (value == "pica")
+    defaultUnit = UnitPica;
+  else if (value = "didot")
+    defaultUnit = UnitDidot;
+  else if (value == "cicero")
+    defaultUnit = UnitCicero;  
   else
     defaultUnit = UnitPoint;
   UnitBox::setDefaultMeasurementUnit (defaultUnit);
@@ -186,6 +194,18 @@ void PStateManager::saveDefaultSettings () {
     break;
   case UnitInch:
     config->writeEntry ("DefaultUnit", "inch");
+    break;
+  case UnitCentimeter:
+    config->writeEntry ("DefaultUnit", "cm");
+    break;
+  case UnitPica:
+    config->writeEntry ("DefaultUnit", "pica");
+    break;
+  case UnitDidot:
+    config->writeEntry ("DefaultUnit", "didot");
+    break;
+  case UnitCicero:
+    config->writeEntry ("DefaultUnit", "cicero");
     break;
   }
 
