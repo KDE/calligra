@@ -87,7 +87,7 @@ KDChartPiePainter::~KDChartPiePainter()
    with regions representing the data segments, if not null
 */
 void KDChartPiePainter::paintData( QPainter* painter,
-                                   KDChartTableData* data,
+                                   KDChartTableDataBase* data,
                                    bool paint2nd,
                                    KDChartDataRegionList* regions )
 {
@@ -292,7 +292,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
 
 void KDChartPiePainter::drawOnePie( QPainter* painter,
-                                    KDChartTableData* /*data*/,
+                                    KDChartTableDataBase* /*data*/,
                                     uint dataset, uint pie, uint chart,
                                     uint threeDPieHeight,
                                     KDChartDataRegionList* regions )
@@ -733,7 +733,7 @@ QString KDChartPiePainter::fallbackLegendText( uint dataset ) const
 
    \return the number of fallback texts to use
 */
-uint KDChartPiePainter::numLegendFallbackTexts( KDChartTableData* data ) const
+uint KDChartPiePainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
     return data->usedCols();
 }

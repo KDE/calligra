@@ -30,7 +30,7 @@
 #include <KDChartWidget.h>
 #include <KDChart.h>
 #include <KDChartParams.h>
-#include <KDChartTable.h>
+#include <KDChartTableBase.h>
 #ifndef KDCHART_MASTER_CVS
 #include "KDChartWidget.moc"
 #endif
@@ -59,7 +59,7 @@
 */
 
 KDChartWidget::KDChartWidget( KDChartParams* params,
-                              KDChartTableData* data,
+                              KDChartTableDataBase* data,
                               QWidget* parent, const char* name ) :
     QWidget( parent, name ),
 _params( params ),
@@ -254,7 +254,7 @@ void KDChartWidget::setDoubleBuffered( bool doublebuffered )
 /**
    Returns whether the widget uses double-buffering for drawing. See
    \a setDoubleBuffered() for an explanation of double-buffering.
-   
+
    \return true if double-buffering is turned on, false otherwise
 */
 bool KDChartWidget::isDoubleBuffered() const
@@ -276,7 +276,7 @@ void KDChartWidget::setParams( KDChartParams* params )
 /**
     Set an entire new data table.
 */
-void KDChartWidget::setData( KDChartTableData* data )
+void KDChartWidget::setData( KDChartTableDataBase* data )
 {
     _data = data;
 }

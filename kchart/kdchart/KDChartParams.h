@@ -1563,6 +1563,32 @@ public:
             int  positiveDeltaY   =    0,
             int  positiveRotation =    0,
             KDChartEnums::TextLayoutPolicy policy = KDChartEnums::LayoutPolicyRotate );
+            
+    
+    /**
+       Specifies whether a data value text may be drawn even if it's region intersects
+       with another data value text's region.
+
+       By default this is FALSE to prevent ugly mutual overwriting of data value texts
+       and to speed up drawing of cahrts containing thousands of data points.
+    */
+    void setAllowOverlappingDataValueTexts( bool allow )
+    {
+        _allowOverlappingDataValueTexts = allow;
+    }
+
+
+    /**
+       Returns whether a data value text may be drawn even if it's region intersects
+       with another data value text's region.
+
+       By default this is FALSE to prevent ugly mutual overwriting of data value texts
+       and to speed up drawing of cahrts containing thousands of data points.
+    */
+    bool allowOverlappingDataValueTexts() const
+    {
+        return _allowOverlappingDataValueTexts;
+    }
 
 
     /**
@@ -7141,7 +7167,7 @@ private:
     Qt::BrushStyle _shadowPattern;
 
     /**
-       Specifies whether shadowed colors are used for 3D effects. Only used
+       Stores  whether shadowed colors are used for 3D effects. Only used
        for 3D effects in charts that support these.
     */
     bool _threeDShadowColors;
@@ -7222,27 +7248,36 @@ private:
     */
     PrintDataValuesSettings _printDataValuesSettings2;
 
+    /**
+       Stores whether a data value may be drawn near it's respective entry
+       even if it's region intersects with another data value text's region.
+
+       By default this is FALSE to prevent ugly mutual overwriting of data value texts
+       and to speed up drawing of cahrts containing thousands of data points.
+    */
+    bool _allowOverlappingDataValueTexts;
+
 
     /**
-       Specifies the bar chart subtype. Only used when chartType() ==
+       Stores the bar chart subtype. Only used when chartType() ==
        Bar
     */
     BarChartSubType _barChartSubType;
 
     /**
-       Specifies whether the engine should draw the bars in 3D. Only
+       Stores whether the engine should draw the bars in 3D. Only
        used if chartType() == Bar.
     */
     bool _threeDBars;
 
     /**
-       Specifies the angle used for 3D display. Only used if
+       Stores the angle used for 3D display. Only used if
        threeDBars == true.
     */
     int _threeDBarAngle;
 
     /**
-       Specifies the depth of the 3D Effect used for 3D bars
+       Stores the depth of the 3D Effect used for 3D bars
        in relation to the bar width.
        Only used if chartType() == Bar and threeDBars() == true.
     */
@@ -7256,30 +7291,30 @@ private:
     double _cosThreeDBarAngle;
 
     /**
-       Specifies the number of pixels between two dataset values.
+       Stores the number of pixels between two dataset values.
     */
     int _datasetGap;
 
     /**
-       Specifies if the value set by \c setDatasetGap
+       Stores if the value set by \c setDatasetGap
        is a per mille value of the chart data area width.
     */
     bool _datasetGapIsRelative;
 
     /**
-       Specifies the number of pixels between each value block.
+       Stores the number of pixels between each value block.
     */
     int _valueBlockGap;
 
     /**
-       Specifies if the value set by \c setValueBlockGap
+       Stores if the value set by \c setValueBlockGap
        is a per mille value of the chart data area width.
     */
     bool _valueBlockGapIsRelative;
 
     /// LINES/AREAS-specific
     /**
-       Specifies the line chart subtype. Only used when chartType() ==
+       Stores the line chart subtype. Only used when chartType() ==
        Line
     */
     LineChartSubType _lineChartSubType;
@@ -7309,7 +7344,7 @@ private:
 
 
     /**
-       Specifies whether line markers should be drawn. Only used when
+       Stores whether line markers should be drawn. Only used when
        chartType() == Line.
     */
     bool _lineMarker;
@@ -7336,14 +7371,14 @@ private:
     uint _lineWidth;
 
     /**
-       Specifies the area chart subtype. Only used when chartType() ==
+       Stores  the area chart subtype. Only used when chartType() ==
        Area
     */
     AreaChartSubType _areaChartSubType;
 
 
     /**
-       Specifies whether the area above or below the value points should
+       Stores  whether the area above or below the value points should
        be filled.
     */
     AreaLocation _areaLocation;
@@ -7351,13 +7386,13 @@ private:
 
     /// POLAR-specific
     /**
-       Specifies the polar chart subtype. Only used when chartType() ==
+       Stores  the polar chart subtype. Only used when chartType() ==
        Polar
     */
     PolarChartSubType _polarChartSubType;
 
     /**
-       Specifies whether polar markers should be drawn. Only used when
+       Stores  whether polar markers should be drawn. Only used when
        chartType() == Polar.
     */
     bool _polarMarker;
@@ -7760,7 +7795,7 @@ private:
     QFont _legendFont;
 
     /**
-       Specifies whether the size of the legend font is to be calculated
+       Stores  whether the size of the legend font is to be calculated
        on a relative basis.
 
        \sa setLegendFontUseRelSize, setLegendFontRelSize
@@ -7769,7 +7804,7 @@ private:
     bool _legendFontUseRelSize;
 
     /**
-       Specifies the per mille basis for calculating the relative
+       Stores  the per mille basis for calculating the relative
        legend font size.
 
        \sa setLegendFontRelSize, setLegendFontUseRelSize
@@ -7796,7 +7831,7 @@ private:
     QFont _legendTitleFont;
 
     /**
-       Specifies whether the size of the legend title font is to be
+       Stores  whether the size of the legend title font is to be
        calculated on a relative basis.
 
        \sa setLegendTitleFontUseRelSize, setLegendTitleFontRelSize
@@ -7805,7 +7840,7 @@ private:
     bool _legendTitleFontUseRelSize;
 
     /**
-       Specifies the per mille basis for calculating the relative
+       Stores  the per mille basis for calculating the relative
        legend title font size.
 
        \sa setLegendTitleFontRelSize, setLegendTitleFontUseRelSize
@@ -7822,7 +7857,7 @@ private:
 
     /// AXES (private)
     /**
-       Specifies all the settings of all the axis \em plus one more
+       Stores  all the settings of all the axis \em plus one more
        parameter set containing the build-in defauls axis settings.
     */
     struct AxisSettings
@@ -7847,7 +7882,7 @@ private:
     // HEADER/FOOTER (private)
 
     /**
-       Specifies all the settings of all the header sections
+       Stores  all the settings of all the header sections
        and all the footer sections.
     */
     struct HdFtParams

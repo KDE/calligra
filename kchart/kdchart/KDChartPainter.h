@@ -65,7 +65,7 @@ public:
 #endif
     ;
 
-    virtual void paint( QPainter* painter, KDChartTableData* data,
+    virtual void paint( QPainter* painter, KDChartTableDataBase* data,
                         bool paintFirst,
                         bool paintLast,
                         KDChartDataRegionList* regions = 0,
@@ -91,19 +91,24 @@ protected:
     virtual void paintCustomBoxes( QPainter* painter,
                                    KDChartDataRegionList* regions );
 
-    virtual void paintData( QPainter* painter, KDChartTableData* data,
+    virtual void paintData( QPainter* painter, KDChartTableDataBase* data,
                             bool paint2nd,
                             KDChartDataRegionList* regions = 0 ) = 0;
     virtual void paintDataValues( QPainter* painter,
-                                  KDChartTableData* data,
+                                  KDChartTableDataBase* data,
                                   KDChartDataRegionList* regions );
-    virtual void paintAxes( QPainter* painter, KDChartTableData* data );
-    virtual void paintLegend( QPainter* painter, KDChartTableData* data,
+    virtual void paintAxes( QPainter* painter, 
+                            KDChartTableDataBase* data );
+    virtual void paintLegend( QPainter* painter, 
+                              KDChartTableDataBase* data,
                               const QFont& actLegendFont,
                               const QFont& actLegendTitleFont );
-    virtual void paintHeader( QPainter* painter, KDChartTableData* data );
-    virtual void paintFooter( QPainter* painter, KDChartTableData* data );
-    virtual void setupGeometry ( QPainter* painter, KDChartTableData* data,
+    virtual void paintHeader( QPainter* painter, 
+                              KDChartTableDataBase* data );
+    virtual void paintFooter( QPainter* painter, 
+                              KDChartTableDataBase* data );
+    virtual void setupGeometry ( QPainter* painter, 
+                                 KDChartTableDataBase* data,
                                  QFont& actLegendFont,
                                  QFont& actLegendTitleFont,
                                  const QRect* rect = 0 )
@@ -122,7 +127,7 @@ protected:
                                       KDChartDataRegionList* regions ) const;
 
     virtual QString fallbackLegendText( uint dataset ) const;
-    virtual uint numLegendFallbackTexts( KDChartTableData* data ) const;
+    virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
 
     static QPoint pointOnCircle( const QRect& rect, int angle );
 
@@ -195,7 +200,7 @@ private:
     QMap < QString, KDChartPainter* > _customPainters;
     KDChartParams* _params;
 
-    void findLegendTexts( KDChartTableData* );
+    void findLegendTexts( KDChartTableDataBase* );
 };
 
 #endif

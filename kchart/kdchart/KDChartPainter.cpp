@@ -40,7 +40,7 @@
 #include <KDChartEnums.h>
 #include <KDChartParams.h>
 #include <KDChartCustomBox.h>
-#include <KDChartTable.h>
+#include <KDChartTableBase.h>
 #include <KDChartDataRegion.h>
 #include <KDChartUnknownTypeException.h>
 #include <KDChartNotEnoughSpaceException.h>
@@ -220,7 +220,7 @@ throw( KDChartUnknownTypeException )
    regions representing the data segments if not null
 */
 void KDChartPainter::paint( QPainter* painter,
-                            KDChartTableData* data,
+                            KDChartTableDataBase* data,
                             bool paintFirst,
                             bool paintLast,
                             KDChartDataRegionList* regions,
@@ -338,7 +338,7 @@ void KDChartPainter::paintAreaWithGap( QPainter* painter,
     Paints the data value texts near the data representations.
 */
 void KDChartPainter::paintDataValues( QPainter* painter,
-                                      KDChartTableData* data,
+                                      KDChartTableDataBase* data,
                                       KDChartDataRegionList* regions )
 {
 	KDChartDataRegion* region;
@@ -353,13 +353,21 @@ void KDChartPainter::paintDataValues( QPainter* painter,
         painter->save();
 
         QFont font0( params()->dataValuesFont( 0 ) );
-        if( params()->dataValuesUseFontRelSize(  0 ) )
-            font0.setPointSizeFloat( _areaWidthP1000 * params()->dataValuesFontRelSize( 0 ) );
+        if( params()->dataValuesUseFontRelSize(  0 ) ) {
+            float size = _areaWidthP1000 * params()->dataValuesFontRelSize( 0 );
+            if ( 9.0 > size )
+                size = 9.0;
+            font0.setPointSizeFloat( size );
+        }
         QFontMetrics fm0( font0 );
         double fm0HeightP100( fm0.height() / 100.0 );
         QFont font1( params()->dataValuesFont( 1 ) );
-        if( params()->dataValuesUseFontRelSize(  1 ) )
-            font1.setPointSizeFloat( _areaWidthP1000 * params()->dataValuesFontRelSize( 1 ) );
+        if( params()->dataValuesUseFontRelSize(  1 ) ) {
+            float size = _areaWidthP1000 * params()->dataValuesFontRelSize( 1 );
+            if ( 9.0 > size )
+                size = 9.0;
+            font1.setPointSizeFloat( size );
+        }
         QFontMetrics fm1( font1 );
         double fm1HeightP100( fm1.height() / 100.0 );
         bool lastDigitIrrelevant0 = true;
@@ -404,6 +412,7 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                 }
             }
         }
+
         if ( lastDigitIrrelevant0 || lastDigitIrrelevant1 )
             for ( region=regions->first();
                 region != 0;
@@ -413,10 +422,22 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                     && region->text.contains( '.' )
                     && ( 2 < region->text.length() ) )
                     region->text.truncate ( region->text.length() - 2 );
-        // calculate the text regions
+
+
+        // draw the Data Value Texts and calculate the text regions
+        painter->setPen( Qt::black );
+
+        bool allowOverlapping = params()->allowOverlappingDataValueTexts();
+        bool drawThisOne;
+        QRegion lastRegionDone;
+        QFontMetrics actFM( painter->font() );
+        QFont* oldFont = 0;
+        int oldRotation = 0;
+        uint oldChart = UINT_MAX;
+        uint oldDatacolorNo = UINT_MAX;
         for ( region=regions->first();
             region != 0;
-            region = regions->next() )
+            region = regions->next() ) {
             if ( region->text.length() ) {
                 bool zero(    0.0 == data->cell( region->row, region->col ).doubleValue()
                            || 0   == data->cell( region->row, region->col ).doubleValue() );
@@ -460,7 +481,7 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                 case KDChartEnums::PosTopRight:
                 case KDChartEnums::PosCenterRight:
                 case KDChartEnums::PosBottomRight:
-                    rotation += 0;
+                    angle += 0;
                     break;
                 */
                 default:
@@ -506,58 +527,86 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                             rotation += 360;
                         rotation = 360 - rotation;
                     }
-                    region->textRegion =
+
+                    if( rotation != oldRotation ) {
+                        painter->rotate( rotation - oldRotation );
+                        oldRotation = rotation;
+                    }
+
+                    QFont* actFont = region->chart ? &font1 : &font0;
+                    if( oldFont != actFont ) {
+                        painter->setFont( *actFont );
+                        oldFont = actFont;
+                        actFM = QFontMetrics( painter->font() );
+                    }
+
+                    KDDrawTextRegionAndTrueRect infosKDD =
                         KDDrawText::measureRotatedText( painter,
                                                         rotation,
                                                         anchor,
                                                         region->text,
-                                                          region->chart
-                                                        ? &font1
-                                                        : &font0,
-                                                        align );
-
-                    /*
-                    // for testing:
-                    QRegion oldClip( painter->clipRegion() );
-                    painter->setClipRegion( region->textRegion );
-                    painter->fillRect( region->textRegion.boundingRect(), Qt::yellow );
-                    painter->setClipRegion( oldClip );
-                    */
-
-                    /*
-
-                      NOTE: The following will be REMOVED again once
-                            the layout policy feature is implemented !!!
-
-                    */
-                    painter->setFont( region->chart ? font1 : font0 );
-                    if( params()->dataValuesAutoColor( region->chart ) ) {
-                        if( zero )
-                            painter->setPen( Qt::black );
-                        else {
-                            QColor color( params()->dataColor(
-                                (    KDChartParams::Pie   == cType
-                                  || KDChartParams::Ring  == cType )
-                                ? region->col
-                                : region->row ) );
-                            painter->setPen( QColor( static_cast < int > ( 255- color.red() ),
-                                                     static_cast < int > ( 255- color.green() ),
-                                                     static_cast < int > ( 255- color.blue() ) ) );
-                        }
+                                                        0,
+                                                        align,
+                                                        &actFM,
+                                                        true,
+                                                        true,
+                                                        5 );
+                    if( allowOverlapping )
+                        drawThisOne = true;
+                    else {
+                       QRegion sectReg( infosKDD.region.intersect( lastRegionDone ) );
+                        drawThisOne = sectReg.isEmpty();
                     }
-                    else
-                        painter->setPen( params()->dataValuesColor( region->chart ) );
-                    KDDrawText::drawRotatedText( painter,
-                                                 rotation,
-                                                 anchor,
-                                                 region->text,
-                                                 region->chart
-                                                 ? &font1
-                                                 : &font0,
-                                                 align );
+                    if( drawThisOne ) {
+                        lastRegionDone     = lastRegionDone.unite( infosKDD.region );
+                        region->textRegion = infosKDD.region;
+
+
+                        /*
+
+                          NOTE: The following will be REMOVED again once
+                                the layout policy feature is implemented !!!
+
+                        */
+                        if( params()->dataValuesAutoColor( region->chart ) ) {
+                            if( zero ) {
+                                if( oldDatacolorNo != UINT_MAX ) {
+                                    painter->setPen( Qt::black );
+                                    oldDatacolorNo = UINT_MAX;
+                                }
+                            }
+                            else {
+                                uint datacolorNo = (    KDChartParams::Pie   == cType
+                                                    || KDChartParams::Ring  == cType )
+                                                  ? region->col
+                                                  : region->row;
+                                if(  oldDatacolorNo != datacolorNo ) {
+                                    oldDatacolorNo = datacolorNo;
+                                    QColor color( params()->dataColor( datacolorNo ) );
+                                    painter->setPen( QColor(
+                                        static_cast < int > (255-color.red()  ),
+                                        static_cast < int > (255-color.green()),
+                                        static_cast < int > (255-color.blue() )));
+                                }
+                            }
+                        }
+                        else if( oldChart != region->chart ) {
+                            oldChart = region->chart;
+                            painter->setPen( params()->dataValuesColor( region->chart ) );
+                        }
+
+
+                        painter->drawText( infosKDD.x, infosKDD.y,
+                                          infosKDD.width, infosKDD.height,
+                                          Qt::AlignLeft | Qt::AlignTop | Qt::SingleLine,
+                                          region->text );
+                    } // if not intersect
 
                 } else {
+
                     // no rotation:
+                    painter->rotate( -oldRotation );
+                    oldRotation = 0;
                     QFontMetrics & fm = region->chart ? fm1 : fm0;
                     int w = fm.width( region->text );
 
@@ -585,71 +634,59 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                                 dy = -h / 2;
                                 break;
                     }
-                    region->textRegion = QRegion( QRect( anchor.x() + dx,
-                                                         anchor.y() + dy,
-                                                         w,
-                                                         h ) );
-
-
-                    /*
-                    // for testing:
-                    QRect rect( region->textRegion.boundingRect() );
-                    //painter->drawRect( rect );
-                    */
-
-
-                    /*
-
-                      NOTE: The following will be REMOVED again once
-                            the layout policy feature is implemented !!!
-
-                    */
-                    painter->setFont( region->chart ? font1 : font0 );
-                    if( params()->dataValuesAutoColor( region->chart ) ) {
-                        if( zero )
-                            painter->setPen( Qt::black );
-                        else {
-                            QColor color( params()->dataColor(
-                                (    KDChartParams::Pie   == params()->chartType()
-                                  || KDChartParams::Ring  == params()->chartType() )
-                                ? region->col
-                                : region->row ) );
-                            painter->setPen( QColor( static_cast < int > ( 255- color.red() ),
-                                                     static_cast < int > ( 255- color.green() ),
-                                                     static_cast < int > ( 255- color.blue() ) ) );
-                        }
+                    
+                    QRegion thisRegion(
+                        QRect( anchor.x() + dx, anchor.y() + dy, w, h ) );
+                    if( allowOverlapping )
+                        drawThisOne = true;
+                    else {
+                        QRegion sectReg( thisRegion.intersect( lastRegionDone ) );
+                        drawThisOne = sectReg.isEmpty();
                     }
-                    else
-                        painter->setPen( params()->dataValuesColor( region->chart ) );
-                    QRect rect( region->textRegion.boundingRect() );
-                    painter->drawText( rect.left(),rect.top(),rect.width(),rect.height(),
-                                       Qt::AlignLeft | Qt::AlignTop, region->text );
+                    if( drawThisOne ) {
+                        lastRegionDone     = lastRegionDone.unite( thisRegion );
+                        region->textRegion = thisRegion;
+
+
+                        /*
+                        // for testing:
+                        QRect rect( region->textRegion.boundingRect() );
+                        //painter->drawRect( rect );
+                        */
+
+
+                        /*
+
+                          NOTE: The following will be REMOVED again once
+                                the layout policy feature is implemented !!!
+
+                        */
+                        painter->setFont( region->chart ? font1 : font0 );
+                        if( params()->dataValuesAutoColor( region->chart ) ) {
+                            if( zero )
+                                painter->setPen( Qt::black );
+                            else {
+                                QColor color( params()->dataColor(
+                                    (    KDChartParams::Pie   == params()->chartType()
+                                      || KDChartParams::Ring  == params()->chartType() )
+                                    ? region->col
+                                    : region->row ) );
+                                painter->setPen( QColor( static_cast < int > ( 255- color.red() ),
+                                                        static_cast < int > ( 255- color.green() ),
+                                                        static_cast < int > ( 255- color.blue() ) ) );
+                            }
+                        }
+                        else
+                            painter->setPen( params()->dataValuesColor( region->chart ) );
+                        QRect rect( region->textRegion.boundingRect() );
+                        painter->drawText( rect.left(),rect.top(),rect.width(),rect.height(),
+                                          Qt::AlignLeft | Qt::AlignTop, region->text );
+                    }
 
 
                 }
-
-                /*
-                region.region
-
-
-
-
-
-
-                while ( fm.width( strMax ) > pTextsW
-                        && 6.0 < nTxtHeight ) {
-                    nTxtHeight -= 0.5;
-                    actFont.setPointSizeFloat( nTxtHeight );
-                    fm = QFontMetrics( actFont );
-                }
-  */
             }
-
-
-        // print the texts
-
-
-
+        }
         painter->restore();
     }
 }
@@ -912,7 +949,7 @@ QPoint KDChartPainter::pointOnCircle( const QRect& rect, int angle )
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
 */
-void KDChartPainter::paintAxes( QPainter* /*painter*/, KDChartTableData* /*data*/ )
+void KDChartPainter::paintAxes( QPainter* /*painter*/, KDChartTableDataBase* /*data*/ )
 {
     // This method intentionally left blank.
 }
@@ -930,7 +967,7 @@ void KDChartPainter::paintAxes( QPainter* /*painter*/, KDChartTableData* /*data*
    be drawn
 */
 void KDChartPainter::paintLegend( QPainter* painter,
-                                  KDChartTableData* /*data*/,
+                                  KDChartTableDataBase* /*data*/,
                                   const QFont& actLegendFont,
                                   const QFont& /*actLegendTitleFont*/ )
 {
@@ -1001,7 +1038,8 @@ void KDChartPainter::paintLegend( QPainter* painter,
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
 */
-void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* /*data*/ )
+void KDChartPainter::paintHeader( QPainter* painter,
+                                  KDChartTableDataBase* /*data*/ )
 {
     /*
     //
@@ -1019,7 +1057,7 @@ void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* /*data*/ 
 
 */
     const double averageValueP1000 = ( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
- 
+
     painter->save();
 
     QString h1 = params()->header1Text();
@@ -1061,7 +1099,8 @@ void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* /*data*/ 
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
 */
-void KDChartPainter::paintFooter( QPainter* painter, KDChartTableData* /*data*/ )
+void KDChartPainter::paintFooter( QPainter* painter,
+                                  KDChartTableDataBase* /*data*/ )
 {
     /*
     //
@@ -1123,7 +1162,7 @@ void KDChartPainter::paintFooter( QPainter* painter, KDChartTableData* /*data*/ 
    compiled to use exceptions).
 */
 void KDChartPainter::setupGeometry( QPainter* painter,
-                                    KDChartTableData* data,
+                                    KDChartTableDataBase* data,
                                     QFont& actLegendFont,
                                     QFont& actLegendTitleFont,
                                     const QRect* rect )
@@ -1685,7 +1724,7 @@ throw( KDChartNotEnoughSpaceException )
 /**
    This method implements the algorithm to find the texts for the legend.
 */
-void KDChartPainter::findLegendTexts( KDChartTableData* data )
+void KDChartPainter::findLegendTexts( KDChartTableDataBase* data )
 {
     uint dataset;
     switch ( params()->legendSource() ) {
@@ -1771,7 +1810,7 @@ QString KDChartPainter::fallbackLegendText( uint dataset ) const
 
    \return the number of fallback texts to use
 */
-uint KDChartPainter::numLegendFallbackTexts( KDChartTableData* data ) const
+uint KDChartPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
     return data->usedRows();
 }

@@ -42,7 +42,8 @@ protected:
     KDChartLinesPainter( KDChartParams* params );
     virtual ~KDChartLinesPainter();
 
-    virtual void paintData( QPainter* painter, KDChartTableData* data,
+    virtual void paintData( QPainter* painter, 
+                            KDChartTableDataBase* data,
                             bool paint2nd,
                             KDChartDataRegionList* regions = 0 );
     virtual void drawMarker( QPainter* painter,
@@ -51,7 +52,7 @@ protected:
                              uint dataset, uint value, uint chart,
                              KDChartDataRegionList* regions = 0 );
     void paintDataInternal( QPainter* painter,
-                            KDChartTableData* data,
+                            KDChartTableDataBase* data,
                             bool centerThePoints,
                             bool drawMarkers,
                             bool isArea,

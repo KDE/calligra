@@ -84,7 +84,7 @@ KDChartLinesPainter::~KDChartLinesPainter()
    with regions representing the data segments, if not null
 */
 void KDChartLinesPainter::paintData( QPainter* painter,
-                                     KDChartTableData* data,
+                                     KDChartTableDataBase* data,
                                      bool paint2nd,
                                      KDChartDataRegionList* regions )
 {
@@ -117,7 +117,7 @@ void KDChartLinesPainter::paintData( QPainter* painter,
    with regions representing the data segments, if not null
 */
 void KDChartLinesPainter::paintDataInternal( QPainter* painter,
-        KDChartTableData* data,
+        KDChartTableDataBase* data,
         bool centerThePoints,
         bool drawMarkers,
         bool isArea,
@@ -303,10 +303,17 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
                 point++;
 
                 // draw markers if necessary
-                if ( drawMarkers ) {
+                if ( drawMarkers )
                     drawMarker( painter, params()->lineMarkerStyle( dataset ),
                                 params()->dataColor( dataset ), p,
                                 dataset, value, chart, regions );
+                else if( regions ) {
+                    QRect rect( QPoint( p.x() - 1, p.y() - 1 ), QPoint( p.x() + 1, p.y() + 1 ) );
+                    rect.moveBy( _dataRect.x(), _dataRect.y() );
+                    regions->append( new KDChartDataRegion( QRegion( rect ),
+                                                            dataset,
+                                                            value,
+                                                            chart ) );
                 }
 
                 // calculate running sum for stacked and percent

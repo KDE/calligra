@@ -33,6 +33,7 @@
 #endif
 
 const double KDChartAxisParams::AXIS_LABELS_AUTO_DELTA = 140319.64;
+const int KDChartAxisParams::AXIS_LABELS_AUTO_LEAVEOUT = 14364;
 const int KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS = 14364;
 const QColor KDChartAxisParams::DEFAULT_AXIS_GRID_COLOR = QColor( 0xA0, 0xA0, 0xA0 );
 const int KDChartAxisParams::AXIS_GRID_AUTO_LINEWIDTH = 14364;

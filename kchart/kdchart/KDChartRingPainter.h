@@ -42,7 +42,8 @@ protected:
     KDChartRingPainter( KDChartParams* params );
     virtual ~KDChartRingPainter();
 
-    virtual void paintData( QPainter* painter, KDChartTableData* data,
+    virtual void paintData( QPainter* painter, 
+                            KDChartTableDataBase* data,
                             bool paint2nd,
                             KDChartDataRegionList* regions = 0 );
     void drawOneSegment( QPainter* painter,
@@ -53,7 +54,7 @@ protected:
                          KDChartDataRegionList* regions = 0 );
 
     virtual QString fallbackLegendText( uint dataset ) const;
-    virtual uint numLegendFallbackTexts( KDChartTableData* data ) const;
+    virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
 
     QRect _position;
     int _size;

@@ -31,13 +31,13 @@
 
 /**
    \class KDChartAreaPainter KDChartAreaPainter.h
- 
+
    \brief Implements a chart painter that draws area charts.
 */
 
 /**
    Constructor. Sets up internal data structures as necessary.
- 
+
    \param params the KDChartParams structure that defines the chart
 */
 KDChartAreaPainter::KDChartAreaPainter( KDChartParams* params ) :
@@ -59,7 +59,7 @@ KDChartAreaPainter::~KDChartAreaPainter()
 
 /**
    Paints the actual data area.
- 
+
    \param painter the QPainter onto which the chart should be painted
    \param data the data that will be displayed as a chart
    \param paint2nd specifies whether the main chart or the additional chart is to be drawn now
@@ -67,7 +67,7 @@ KDChartAreaPainter::~KDChartAreaPainter()
    with regions representing the data segments, if not null
 */
 void KDChartAreaPainter::paintData( QPainter* painter,
-                                    KDChartTableData* data,
+                                    KDChartTableDataBase* data,
                                     bool paint2nd,
                                     KDChartDataRegionList* regions )
 {

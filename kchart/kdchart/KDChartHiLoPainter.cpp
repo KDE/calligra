@@ -74,7 +74,7 @@ KDChartHiLoPainter::~KDChartHiLoPainter()
    with regions representing the data segments, if not null
 */
 void KDChartHiLoPainter::paintData( QPainter* painter,
-                                    KDChartTableData* data,
+                                    KDChartTableDataBase* data,
                                     bool paint2nd,
                                     KDChartDataRegionList* /* regions */)
 {
@@ -446,7 +446,7 @@ QString KDChartHiLoPainter::fallbackLegendText( uint dataset ) const
 
    \return the number of fallback texts to use
 */
-uint KDChartHiLoPainter::numLegendFallbackTexts( KDChartTableData* data ) const
+uint KDChartHiLoPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
     return data->usedCols();
 }

@@ -87,7 +87,7 @@ KDChartPolarPainter::~KDChartPolarPainter()
    with regions representing the data segments, if not null
 */
 void KDChartPolarPainter::paintData( QPainter* painter,
-                                     KDChartTableData* data,
+                                     KDChartTableDataBase* data,
                                      bool paint2nd,
                                      KDChartDataRegionList* regions )
 {
@@ -784,7 +784,7 @@ QString KDChartPolarPainter::fallbackLegendText( uint dataset ) const
 
    \return the number of fallback texts to use
 */
-uint KDChartPolarPainter::numLegendFallbackTexts( KDChartTableData* data ) const
+uint KDChartPolarPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
     return data->usedRows();
 }

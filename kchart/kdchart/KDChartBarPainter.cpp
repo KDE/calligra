@@ -73,7 +73,7 @@ KDChartBarPainter::~KDChartBarPainter()
    with regions representing the data segments, if not null
 */
 void KDChartBarPainter::paintData( QPainter* painter,
-                                   KDChartTableData* data,
+                                   KDChartTableDataBase* data,
                                    bool paint2nd,
                                    KDChartDataRegionList* regions )
 {

@@ -38,7 +38,11 @@ void KDDrawText::drawRotatedText( QPainter* painter,
                                   const QString& text,
                                   const QFont* font,
                                   int align,
-                                  bool showAnchor )
+                                  bool showAnchor,
+                                  const QFontMetrics* fontMet,
+                                  bool noFirstrotate,
+                                  bool noBackrotate,
+                                  KDDrawTextRegionAndTrueRect* infos )
 {
     drawRotatedTxt( painter,
                     degrees,
@@ -46,18 +50,31 @@ void KDDrawText::drawRotatedText( QPainter* painter,
                     text,
                     font,
                     align,
-                    showAnchor );
+                    showAnchor,
+                    INT_MAX,
+                    INT_MAX,
+                    fontMet,
+                    false,
+                    0 != infos,
+                    noFirstrotate,
+                    noBackrotate,
+                    infos );
 }
 
 
-QRegion KDDrawText::measureRotatedText( QPainter* painter,
-                                        float  degrees,
-                                        QPoint anchor,
-                                        const QString& text,
-                                        const QFont* font,
-                                        int align )
+KDDrawTextRegionAndTrueRect KDDrawText::measureRotatedText(
+    QPainter* painter,
+    float  degrees,
+    QPoint anchor,
+    const QString& text,
+    const QFont* font,
+    int align,
+    const QFontMetrics* fontMet,
+    bool noFirstrotate,
+    bool noBackrotate,
+    int addPercentOfHeightToRegion )
 {
-    QRegion region;
+    KDDrawTextRegionAndTrueRect infos;
     drawRotatedTxt( painter,
                     degrees,
                     anchor,
@@ -67,9 +84,14 @@ QRegion KDDrawText::measureRotatedText( QPainter* painter,
                     false,
                     INT_MAX,
                     INT_MAX,
+                    fontMet,
                     true,
-                    &region );
-    return region;
+                    false,
+                    noFirstrotate,
+                    noBackrotate,
+                    &infos,
+                    addPercentOfHeightToRegion );
+    return infos;
 }
 
 
@@ -82,9 +104,15 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                                  bool showAnchor,
                                  int txtWidth,
                                  int txtHeight,
+                                 const QFontMetrics* fontMet,
                                  bool calculateOnly,
-                                 QRegion* region )
+                                 bool doNotCalculate,
+                                 bool noFirstrotate,
+                                 bool noBackrotate,
+                                 KDDrawTextRegionAndTrueRect* infos,
+                                 int addPercentOfHeightToRegion )
 {
+    bool useInfos = doNotCalculate && infos;
     bool fontChanged = ( 0 != font );
     QFont oldFont;
     if( fontChanged ) {
@@ -93,20 +121,41 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
     }
     else
         font = &painter->font();
-    QFontMetrics fm( *font );
 
-    painter->rotate( degrees );
-    QPoint pos( anchor );
-    pos = painter->xFormDev( pos );
+    if( !noFirstrotate )
+      painter->rotate( degrees );
 
-    if( INT_MAX == txtWidth ) {
-        QFontMetrics fm( painter->font() );
-        txtWidth  = fm.width(  text );
-        txtHeight = fm.height();
+    QPoint pos = useInfos ? infos->pos : painter->xFormDev( anchor );
+    if( useInfos )
+    {
+        txtWidth  = infos->width;
+        txtHeight = infos->height;
     }
-    else if( INT_MAX == txtHeight ) {
-        QFontMetrics fm( painter->font() );
-        txtHeight = fm.height();
+    else
+    {
+        if( INT_MAX == txtWidth ) {
+            if( fontMet ) {
+              txtWidth  = fontMet->width(  text );
+              txtHeight = fontMet->height();
+            } else {
+              QFontMetrics fm( painter->font() );
+              txtWidth  = fm.width(  text );
+              txtHeight = fm.height();
+            }
+        }
+        else if( INT_MAX == txtHeight ) {
+            if( fontMet )
+              txtHeight = fontMet->height();
+            else {
+              QFontMetrics fm( painter->font() );
+              txtHeight = fm.height();
+            }
+        }
+        if( infos ) {
+            infos->pos    = pos;
+            infos->width  = txtWidth;
+            infos->height = txtHeight;
+        }
     }
     if( showAnchor ) {
         int d = txtHeight/4;
@@ -118,29 +167,33 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                            pos.x()+d, pos.y() );
         painter->setPen( savePen );
     }
-    int x = pos.x();
-    switch( align & ( Qt::AlignLeft | Qt::AlignRight | Qt::AlignHCenter ) ) {
-    case Qt::AlignLeft:
-                break;
-    case Qt::AlignRight:
-                x -= txtWidth;
-                break;
-    case Qt::AlignHCenter:
-                x -= txtWidth - txtWidth/2;
-                break;
+    int x = useInfos ? infos->x : pos.x();
+    int y = useInfos ? infos->y : pos.y();
+    if( !useInfos ) {
+        switch( align & ( Qt::AlignLeft | Qt::AlignRight | Qt::AlignHCenter ) ) {
+        case Qt::AlignLeft:
+                    break;
+        case Qt::AlignRight:
+                    x -= txtWidth;
+                    break;
+        case Qt::AlignHCenter:
+                    x -= txtWidth - txtWidth/2;
+                    break;
+        }
+        switch( align & ( Qt::AlignTop | Qt::AlignBottom | Qt::AlignVCenter ) ) {
+        case Qt::AlignTop:
+                    break;
+        case Qt::AlignBottom:
+                    y -= txtHeight;
+                    break;
+        case Qt::AlignVCenter:
+                    y -= txtHeight/2;
+                    break;
+        }
     }
-    int y = pos.y();
-    switch( align & ( Qt::AlignTop | Qt::AlignBottom | Qt::AlignVCenter ) ) {
-    case Qt::AlignTop:
-                break;
-    case Qt::AlignBottom:
-                y -= txtHeight;
-                break;
-    case Qt::AlignVCenter:
-                y -= txtHeight/2;
-                break;
-    }
-    if( region ) {
+    if( infos && !useInfos ) {
+        infos->x = x;
+        infos->y = y;
         QRect rect( painter->boundingRect( x, y,
                                            txtWidth, txtHeight,
                                            Qt::AlignLeft + Qt::AlignTop,
@@ -149,19 +202,33 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
         QPoint topRight(    painter->xForm( rect.topRight()    ) );
         QPoint bottomRight( painter->xForm( rect.bottomRight() ) );
         QPoint bottomLeft(  painter->xForm( rect.bottomLeft()  ) );
+        int additor = addPercentOfHeightToRegion * txtHeight / 100;
         QPointArray points;
-        points.setPoints( 4, topLeft.x(),     topLeft.y(),
-                             topRight.x(),    topRight.y(),
-                             bottomRight.x(), bottomRight.y(),
-                             bottomLeft.x(),  bottomLeft.y() );
-        *region = QRegion( points );
+        points.setPoints( 4, topLeft.x()-additor,     topLeft.y()-additor,
+                             topRight.x()+additor,    topRight.y()-additor,
+                             bottomRight.x()+additor, bottomRight.y()+additor,
+                             bottomLeft.x()-additor,  bottomLeft.y()+additor );
+        infos->region = QRegion( points );
+    }
+    if( showAnchor ) {
+        int d = txtHeight/4;
+        QPen savePen = painter->pen();
+        painter->setPen( QColor( Qt::blue ) );
+        painter->drawLine( x,   y-d,
+                           x,   y+d );
+        painter->drawLine( x-d, y,
+                           x+d, y );
+        painter->setPen( savePen );
     }
     if( !calculateOnly )
         painter->drawText( x, y,
                            txtWidth, txtHeight,
                            Qt::AlignLeft + Qt::AlignTop,
                            text );
-    painter->rotate( -degrees );
+
+    if( !noBackrotate )
+      painter->rotate( -degrees );
+
     if( fontChanged )
         painter->setFont( oldFont );
 }

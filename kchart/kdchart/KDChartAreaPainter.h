@@ -42,7 +42,8 @@ protected:
     KDChartAreaPainter( KDChartParams* params );
     virtual ~KDChartAreaPainter();
 
-    virtual void paintData( QPainter* painter, KDChartTableData* data,
+    virtual void paintData( QPainter* painter, 
+                            KDChartTableDataBase* data,
                             bool paint2nd,
                             KDChartDataRegionList* regions = 0 );
 };

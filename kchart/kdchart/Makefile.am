@@ -49,4 +49,4 @@ METASOURCES = AUTO
 
 INCLUDES  = -I../include $(all_includes)
 
-include_HEADERS = KDChartData.h KDChartTable.h
+include_HEADERS = KDChartData.h KDChartTableBase.h KDChartListTable.h KDChartVectorTable.h KDChartTable.h

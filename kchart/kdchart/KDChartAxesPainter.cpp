@@ -29,6 +29,7 @@
 **********************************************************************/
 #include <qpainter.h>
 
+#include <KDDrawText.h>
 #include "KDChartAxesPainter.h"
 #include "KDChartAxisParams.h"
 #include "KDChartParams.h"
@@ -123,7 +124,7 @@ void KDChartAxesPainter::findInfos( double /*averageValueP1000*/,
    \param data the data that will be displayed as a chart
 */
 void KDChartAxesPainter::paintAxes( QPainter* painter,
-                                    KDChartTableData* data )
+                                    KDChartTableDataBase* data )
 {
     if ( !painter || !data || 0 == params() )
         return ;
@@ -154,6 +155,10 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                 != params()->axisParams( i ).axisType() ) {
 
             const KDChartAxisParams & para = params()->axisParams( i );
+            
+            /* // for debugging:
+            painter->fillRect(para.axisTrueAreaRect(), Qt::yellow);
+            */
 
             // length of little delimiter-marks indicating axis scaling
             double delimLen = 20.0 * averageValueP1000; // per mille of area
@@ -195,8 +200,14 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
             //     - see KDChartAxisParams::setAxisLabelStringLists() -
             //
             // 3rd Before displaying the texts we make sure they fit into
-            //     their space, if needed we will further reduce their
-            //     font height in order to avoid clipping of text parts.
+            //     their space, if needed we will do the following
+            //     in order to avoid clipping of text parts:
+            //
+            //     (a) ABSCISSA axes only: rotate the texts in 5° steps
+            //                             until they are drawn vertically
+            //
+            //     (b) further reduce the texts' font height down to 6pt
+            //         .
             //
             // If the texts *still* don't fit into their space, we are lost
             // and they will be clipped. Such is live.
@@ -242,6 +253,9 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                                  pTextsW,
                                  pTextsH,
                                  textAlign );
+
+            bool isHorizontalAxis = (KDChartAxisParams::AxisPosBottom == basicPos)
+                                 || (KDChartAxisParams::AxisPosTop    == basicPos);
 
             QStringList* labelTexts = ( QStringList* ) para.axisLabelTexts();
             uint nLabels = ( 0 != labelTexts && labelTexts->count() )
@@ -309,57 +323,190 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
             bool bTouchEdges = para.axisLabelsTouchEdges();
 
             if ( nLabels ) {
-                // draw label texts and delimiters and grid
-                painter->setPen( QPen( para.axisLineColor(),
-                                       lineWidth ) );
-                // calculate font size
-                QFont actFont( para.axisLabelsFont() );
-                if ( para.axisLabelsFontUseRelSize() ) {
-                    actFont.setPointSizeFloat( nTxtHeight );
-                }
-                QFontMetrics fm( actFont );
-                if( ! para.axisLabelsDontShrinkFont() ) {
-                    // bad days: in case of labels being too wide
-                    //           to fit into the available space
-                    //           we try to reduce the font size
-                    //
-                    //
-                    // NOTE:  LABEL TEXT ROTATION COULD ALSO HELP HERE
-                    //
-                    //
-                    //   F E A T U R E   P L A N N E D   F O R   F U T U R E . . .
-                    //
-                    //
-                    QString strMax;
-                    int maxLabelsWidth = 0;
-                    for ( QStringList::Iterator it = labelTexts->begin();
-                            it != labelTexts->end();
-                            ++it ) {
-                        if ( fm.width( *it ) > maxLabelsWidth ) {
-                            maxLabelsWidth = fm.width( *it );
-                            strMax = *it;
-                        }
-                    }
-                    while ( fm.width( strMax ) > pTextsW
-                            && 6.0 < nTxtHeight ) {
-                        nTxtHeight -= 0.5;
-                        actFont.setPointSizeFloat( nTxtHeight );
-                        fm = QFontMetrics( actFont );
-                    }
-                }
-                painter->setFont( actFont );
-
-                // set colour of grid pen
-                // (used for grid lines and for sub-grid lines)
-                QPen gridPen;
-                if ( para.axisShowGrid() )
-                    gridPen.setColor( para.axisGridColor() );
-
-                // draw delimiters and labels
                 const double pXDelta = pXDeltaFactor * pDelimDelta;
                 const double pYDelta = pYDeltaFactor * pDelimDelta;
 
                 //qDebug("pYDelta = %f",pYDelta);
+
+                // draw label texts and delimiters and grid
+                painter->setPen( QPen( para.axisLineColor(),
+                                       lineWidth ) );
+                // calculate font size
+                if ( 8.0 > nTxtHeight )
+                    nTxtHeight = 8.0;
+                QFont actFont( para.axisLabelsFont() );
+                if ( para.axisLabelsFontUseRelSize() ) {
+                    actFont.setPointSizeFloat( nTxtHeight );
+                }
+                painter->setFont( actFont );
+                QFontMetrics fm( actFont );
+
+                // make sure all label texts fit into their space
+                // by rotating and/or shrinking the texts
+                // or by leaving out some of the labels
+                QRegion unitedRegions;
+                const double
+                    nUsableAxisHeight = para.axisTrueAreaRect().height()
+                                        - delimLen * 1.33;
+                const int axisWidth  = para.axisTrueAreaRect().width();
+
+                const bool tryLeavingOut =
+                    ( para.axisValueLeaveOut()
+                      == KDChartAxisParams::AXIS_LABELS_AUTO_LEAVEOUT )
+                    || ( 0 < para.axisValueLeaveOut() );
+                int nLeaveOut;
+                if( tryLeavingOut ) {
+                    if( para.axisValueLeaveOut()
+                        == KDChartAxisParams::AXIS_LABELS_AUTO_LEAVEOUT )
+                        nLeaveOut = 0;
+                    else
+                        nLeaveOut = para.axisValueLeaveOut();
+                }
+                else
+                    nLeaveOut = 0;
+                int stepWidthLeaveOut = nLeaveOut+1;
+                int iStepsLeaveOut = 0;
+
+                const bool tryShrinking = para.axisLabelsDontShrinkFont();
+                const double nInitialTxtHeight = nTxtHeight;
+
+                const bool tryRotating = isHorizontalAxis
+                                         && !para.axisLabelsDontAutoRotate();
+                const int nInitialRotation = (360 > para.axisLabelsRotation())
+                                           ? para.axisLabelsRotation()
+                                           : 0;
+                bool rotatingDoesNotHelp = false;
+                int nRotation = nInitialRotation;
+
+                bool textsMatching;
+                do {
+                    // test if all texts match without mutually overlapping
+                    textsMatching = true;
+                    {
+                        unitedRegions = QRegion();
+                        int align = nRotation
+                                  ? (Qt::AlignRight | Qt::AlignVCenter)
+                                  : textAlign;
+                        QPoint anchor(200,200);
+                        int iLeaveOut = 0;
+                        double i=0.0;
+                        for ( QStringList::Iterator it = labelTexts->begin();
+                                it != labelTexts->end();
+                                ++it ) {
+                            i += 1.0;
+                            if( iLeaveOut < nLeaveOut ) {
+                                ++iLeaveOut;
+                            } else {
+                                iLeaveOut = 0;
+                                anchor.setX(
+                                    static_cast < int > ( 200.0 + pXDelta*i ) );
+                                anchor.setY(
+                                    static_cast < int > ( 200.0 + pYDelta*i ) );
+                                KDDrawTextRegionAndTrueRect infosKDD =
+                                    KDDrawText::measureRotatedText( painter,
+                                                                    nRotation,
+                                                                    anchor,
+                                                                    *it,
+                                                                    0,
+                                                                    align,
+                                                                    &fm,
+                                                                    false,
+                                                                    false,
+                                                                    15 );
+                                QRegion sectReg( infosKDD.region.intersect( unitedRegions ) );
+                                if ( sectReg.isEmpty() )
+                                    unitedRegions = unitedRegions.unite( infosKDD.region );
+                                else {
+                                    textsMatching = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    const bool textsOverlapping = !textsMatching;
+                    if( isHorizontalAxis ) {
+                        if( nUsableAxisHeight < unitedRegions.boundingRect().height() )
+                            textsMatching = false;
+                    } else {
+                        if( axisWidth < unitedRegions.boundingRect().width() )
+                            textsMatching = false;
+                    }
+/*if(textsMatching && !i){
+qDebug("--------------------------");
+qDebug(QString::number(nTxtHeight));
+qDebug(QString::number(nRotation));
+qDebug("matching");
+}*/
+                    if( !textsMatching ) {
+                        // step 1: In case of labels being too wide
+                        //         to fit into the available space
+                        //         we try to rotate the texts in 5° steps.
+                        //         This is done for Abscissa axes only.
+                        if ( tryRotating ) {
+                            rotatingDoesNotHelp = false;
+                            if( nRotation ) {
+                                if( 270 < nRotation ) {
+                                    nRotation -= 10;
+                                    if( 270 > nRotation )
+                                        nRotation = 270;
+                                } else {
+                                    nRotation = 0;
+                                }
+                            } else {
+                                // If unitedRegions are too heigh when
+                                // drawing WITHOUT rotation further
+                                // then rotating would not help.
+                                if( textsOverlapping )
+                                    nRotation = 350;
+                                else
+                                    rotatingDoesNotHelp = true;
+                            }                        }
+                        // step 2: In case of labels being too wide and
+                        //         rotating them did not help or is forbidden
+                        //         we try to reduce the font size
+                        if (    !tryRotating
+                             || (nRotation && (270 >= nRotation))
+                             || rotatingDoesNotHelp ) {
+                            if (    !tryShrinking
+                                 || (9.0 >= nTxtHeight) ) {
+                                if(    tryLeavingOut
+                                    && textsOverlapping
+                                    && (nLeaveOut+1
+                                        < static_cast < int > ( nLabels )) ) {
+                                    ++iStepsLeaveOut;
+                                    nLeaveOut =
+                                        iStepsLeaveOut*stepWidthLeaveOut - 1;
+                                    if( tryShrinking )
+                                        nTxtHeight = nInitialTxtHeight;
+                                }
+                                else
+                                    break;
+                            } else {
+                                nTxtHeight -= 1.0;
+                                if ( 9.0 > nTxtHeight )
+                                    nTxtHeight = 9.0;
+                            }
+                            if( tryShrinking ) {
+                                actFont.setPointSizeFloat( nTxtHeight );
+                                painter->setFont( actFont );
+                                fm = QFontMetrics( actFont );
+                                nRotation = nInitialRotation;
+                            }
+                        }
+                    }
+                } while( !textsMatching );
+
+                if( nRotation )
+                    textAlign = (Qt::AlignRight | Qt::AlignVCenter);
+
+                painter->setFont( actFont );
+                fm = QFontMetrics( actFont );
+
+                // set colour of grid pen
+                // (used for grid lines and for sub-grid lines)
+                QPen gridPen, leaveOutGridPen;
+                if ( para.axisShowGrid() )
+                    gridPen.setColor( para.axisGridColor() );
 
                 double pGXMicroAdjust = 0.0;
                 double pGYMicroAdjust = 0.0;
@@ -381,7 +528,8 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                 p1X, p1Y, p2X, p2Y, pGAX, pGAY, pGZX, pGZY, xT, yT;
                 if (    0.0 != nSubDelimFactor
                      && para.axisShowSubDelimiters()
-                     && para.axisLabelsVisible() ) {
+                     && para.axisLabelsVisible()
+                     && !nLeaveOut ) {
                     QPen pen( para.axisLineColor(), 0.5 * lineWidth );
                     uint penWidth = pen.width();
                     bool bOk = true;
@@ -424,22 +572,22 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                         const QPen oldPen( painter->pen() );
                         painter->setPen( pen );
                         double nSubDelim = ( labelTexts->count() - 1 )
-                                           / nSubDelimFactor;
+                                        / nSubDelimFactor;
                         modf( nSubDelim, &nSubDelim );
                         double pXSubDelimDelta = pXDelta * nSubDelimFactor;
                         double pYSubDelimDelta = pYDelta * nSubDelimFactor;
                         for ( double i = 1.0; i <= nSubDelim + 1.0; i += 1.0 ) {
                             if ( para.axisShowGrid() ) {
                                 saveDrawLine( *painter,
-                                              QPoint( pGAX, pGAY ),
-                                              QPoint( pGZX, pGZY ), gridPen );
+                                            QPoint( pGAX, pGAY ),
+                                            QPoint( pGZX, pGZY ), gridPen );
                                 pGAX = xGA + i * pXSubDelimDelta;
                                 pGAY = yGA + i * pYSubDelimDelta;
                                 pGZX = xGZ + i * pXSubDelimDelta;
                                 pGZY = yGZ + i * pYSubDelimDelta;
                             }
                             painter->drawLine( QPoint( p1X, p1Y ),
-                                               QPoint( p2X, p2Y ) );
+                                            QPoint( p2X, p2Y ) );
                             p1X = x1 + i * pXSubDelimDelta;
                             p1Y = y1 + i * pYSubDelimDelta;
                             p2X = x2 + i * pXSubDelimDelta;
@@ -474,40 +622,81 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                     if( !para.axisLineVisible() )
                         saveDrawLine( *painter, orig, dest, gridPen );
                 }
+                if( nLeaveOut ) {
+                    leaveOutGridPen = gridPen;
+                    leaveOutGridPen.setWidth( 0 );
+                    leaveOutGridPen.setStyle( Qt::DotLine );
+                }
+                int iLeaveOut = 0;
                 double i = 0.0;
                 for ( QStringList::Iterator labelit = labelTexts->begin();
                         labelit != labelTexts->end();
                         ++labelit ) {
                     i += 1.0;
+                    if( iLeaveOut < nLeaveOut )
+                        ++iLeaveOut;
+                    else
+                        iLeaveOut = 0;
                     if ( para.axisShowGrid() ) {
-                        saveDrawLine( *painter,
-                                      QPoint( pGAX - pGXMicroAdjust,
-                                              pGAY - pGYMicroAdjust ),
-                                      QPoint( pGZX - pGXMicroAdjust,
-                                              pGZY - pGYMicroAdjust ),
-                                      gridPen );
+                        if( !iLeaveOut )
+                            saveDrawLine( *painter,
+                                        QPoint( pGAX - pGXMicroAdjust,
+                                                pGAY - pGYMicroAdjust ),
+                                        QPoint( pGZX - pGXMicroAdjust,
+                                                pGZY - pGYMicroAdjust ),
+                                        gridPen );
+                        else if( para.axisShowSubDelimiters() )
+                            saveDrawLine( *painter,
+                                        QPoint( pGAX - pGXMicroAdjust,
+                                                pGAY - pGYMicroAdjust ),
+                                        QPoint( pGZX - pGXMicroAdjust,
+                                                pGZY - pGYMicroAdjust ),
+                                        leaveOutGridPen );
                         pGAX = xGA + i * pXDelta;
                         pGAY = yGA + i * pYDelta;
                         pGZX = xGZ + i * pXDelta;
                         pGZY = yGZ + i * pYDelta;
                     }
                     if ( para.axisLabelsVisible() ) {
-                        painter->drawLine( QPoint( p1X, p1Y ), QPoint( p2X, p2Y ) );
-                        if(    para.axisLabelsDontShrinkFont()
-                            && (    (basicPos == KDChartAxisParams::AxisPosTop)
-                                 || (basicPos == KDChartAxisParams::AxisPosBottom) )
-                            && (textAlign & Qt::AlignHCenter) ) {
+/*
+if( 1.0==i ){
+    qDebug("\n  x:");
+    qDebug(QString::number(pTextsX));
+    qDebug("  y:");
+    qDebug(QString::number(pTextsY));
+}
+*/
+                        if( !iLeaveOut ) {
+                            painter->drawLine( QPoint( p1X, p1Y ), QPoint( p2X, p2Y ) );
+                            if(    para.axisLabelsDontShrinkFont()
+                                && isHorizontalAxis
+                                && (Qt::AlignHCenter == (textAlign & Qt::AlignHCenter)) ) {
 
-                            double w = fm.width( *labelit ) + 4.0;
-                            double x0 = pTextsX + pTextsW / 2.0;
-                            painter->drawText( x0 - w / 2.0, pTextsY, w, pTextsH,
-                                               textAlign, *labelit );
+                                double w = fm.width( *labelit ) + 4.0;
+                                double x0 = pTextsX + pTextsW / 2.0;
+                                painter->drawText( x0 - w / 2.0, pTextsY, w, pTextsH,
+                                                textAlign, *labelit );
 
-                        } else
-                            painter->drawText( pTextsX, pTextsY, pTextsW,
-                                               pTextsH, textAlign, *labelit );
+                            } else {
+                                if( nRotation )
+                                    KDDrawText::drawRotatedText(
+                                        painter,
+                                        nRotation,
+                                        QPoint( pTextsX, pTextsY ),
+                                        *labelit,
+                                        0,
+                                        textAlign,
+                                        false,
+                                        &fm );
+                                else
+                                    painter->drawText( pTextsX, pTextsY,
+                                                       pTextsW, pTextsH,
+                                                       textAlign | Qt::DontClip,
+                                                       *labelit );
+                            }
+                        }
                     }
-                    /* for debugging:
+                    /* // for debugging:
                     painter->drawRoundRect(pTextsX,pTextsY,pTextsW,pTextsH);
                     */
                     p1X = x1 + i * pXDelta;
@@ -602,7 +791,7 @@ axis must be set, this means you may only call it when
 */
 /**** static ****/
 void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
-        const KDChartTableData& data,
+        const KDChartTableDataBase& data,
         const KDChartParams& params,
         uint axisNumber,
         double averageValueP1000,
@@ -1303,8 +1492,8 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                                QString::number( -std::fabs( ( s + f ) / 2.0 + delta ),
                                                 'f', precis ) )
                         > pTextsW ) {
-                    prefix = "[ ";
-                    postfix = " ]";
+                    prefix = "";
+                    postfix = "";
                 }
 
                 // now transfer the strings into labelTexts
@@ -1333,8 +1522,8 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                 QFontMetrics fm( font );
                 if ( fm.width( prefix + QString::number( data.usedCols() - 1 ) )
                         > pTextsW ) {
-                    prefix = "[ ";
-                    postfix = " ]";
+                    prefix = "";
+                    postfix = "";
                 }
 
                 // now transfer the strings into labelTexts

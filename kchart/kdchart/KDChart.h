@@ -43,9 +43,9 @@ class KDChart
 {
     friend class KDChartCleanup;
   friend void cleanupPainter();
-  
+
 public:
-    static void paint( QPainter*, KDChartParams*, KDChartTableData*,
+    static void paint( QPainter*, KDChartParams*, KDChartTableDataBase*,
                        KDChartDataRegionList* regions = 0,
                        const QRect* rect = 0 )
     #ifdef USE_EXCEPTIONS

@@ -79,6 +79,15 @@ public:
     */
     static const double AXIS_LABELS_AUTO_DELTA;
     /**
+        Use this to specify that an automatically computed amount of
+        axis labels are to be skipped if there is not enough space
+        for displaying all of them.
+        This is usefull in case you have lots of entries in one dataset.
+
+        \sa setAxisValues
+    */
+    static const int AXIS_LABELS_AUTO_LEAVEOUT;
+    /**
         Use this to specify that the number of digits to be shown
         on the axis labels behind the comma is to be calculated
         automatically.
@@ -1188,6 +1197,7 @@ public:
        to avoid overwriting neighboring areas.
 
        \sa axisLabelsDontShrinkFont
+       \sa setAxisLabelsDontAutoRotate, setAxisLabelsRotation
        \sa setAxisLabelsFontUseRelSize, setAxisLabelsFont
     */
     void setAxisLabelsDontShrinkFont( bool labelsDontShrinkFont )
@@ -1196,17 +1206,70 @@ public:
     }
 
     /**
-       Returns whether the axis labels' font size may be shrinked
+       Returns whether the axis labels' font size may not be shrinked
        to avoid overwriting neighboring areas.
 
        \return whether the axis labels' font size may be shrinked
        to avoid overwriting neighboring areas.
        \sa setAxisLabelsDontShrinkFont
+       \sa axisLabelsDontAutoRotate, setAxisLabelsRotation
        \sa setAxisLabelsFontRelSize, setAxisLabelsFont
     */
     bool axisLabelsDontShrinkFont() const
     {
         return _axisLabelsDontShrinkFont;
+    }
+
+    /**
+       Specifies whether the axis labels may be rotated
+       to avoid overwriting neighboring areas.
+
+       \sa axisLabelsDontAutoRotate
+       \sa setAxisLabelsDontShrinkFont, setAxisLabelsRotation
+       \sa setAxisLabelsFontUseRelSize, setAxisLabelsFont
+    */
+    void setAxisLabelsDontAutoRotate( bool labelsDontAutoRotate )
+    {
+        _axisLabelsDontAutoRotate = labelsDontAutoRotate;
+    }
+
+    /**
+       Returns whether the axis labels may not be rotated
+       to avoid overwriting neighboring areas.
+
+       \return whether the axis labels may not be rotated
+       to avoid overwriting neighboring areas.
+       \sa setAxisLabelsDontAutoRotate
+       \sa axisLabelsDontShrinkFont, setAxisLabelsRotation
+       \sa setAxisLabelsFontRelSize, setAxisLabelsFont
+    */
+    bool axisLabelsDontAutoRotate() const
+    {
+        return _axisLabelsDontAutoRotate;
+    }
+
+    /**
+       Specifies by how many degrees the axis labels shall be rotated.
+
+       \sa axisLabelsDontAutoRotate
+       \sa setAxisLabelsDontShrinkFont, setAxisLabelsRotation
+       \sa setAxisLabelsFontUseRelSize, setAxisLabelsFont
+    */
+    void setAxisLabelsRotation( int rotation )
+    {
+        _axisLabelsRotation = rotation;
+    }
+
+    /**
+       Returns by how many degrees the axis labels will be rotated.
+
+       \sa setAxisLabelsDontAutoRotate
+       \sa axisLabelsDontShrinkFont, setAxisLabelsRotation
+       \sa setAxisLabelsFontRelSize, setAxisLabelsFont
+    */
+    int axisLabelsRotation() const
+    {
+        return _axisLabelsRotation;
     }
 
     /**
@@ -1500,14 +1563,15 @@ public:
        \param axisValueEnd specifies the last label value to be written.
        \param axisValueDelta specifies the length of the steps to be taken from one label text to the next one.
        \param axisDigitsBehindComma specifies how many digits are to be shown behind the axis label texts comma.
-       \param axisMaxEmptyInnerSpan specifies the percentage of the y-axis range that may to contain NO data entries, if - and only if - axisValueStart (or axisValueEnd, resp.) is set to AXIS_LABELS_AUTO_LIMIT(). To prevent \c setAxisValues from changing the current setting you may specify DONT_CHANGE_EMPTY_INNER_SPAN_NOW here, to deactivate taking into account the inner span entirely just use AXIS_IGNORE_EMPTY_INNER_SPAN.
+       \param axisMaxEmptyInnerSpan specifies the percentage of the y-axis range that may to contain NO data entries, if - and only if - axisValueStart (or axisValueEnd, resp.) is set to AXIS_LABELS_AUTO_LIMIT. To prevent \c setAxisValues from changing the current setting you may specify DONT_CHANGE_EMPTY_INNER_SPAN_NOW here, to deactivate taking into account the inner span entirely just use AXIS_IGNORE_EMPTY_INNER_SPAN.
        \param takeLabelsFromDataRow specifies whether the labels texts shall be taken from a special row (reserved for this in each dataset) or not.
        \param axisLabelStringList points to a \c QStringList containing the label texts to be used.
        \param axisShortLabelsStringList points to a \c QStringList containing the label texts to be used in case their full-size counterparts cannot be shown due to limited axis area size.
+       \param axisValueLeaveOut is used for horizontal (top or bottom) axes only; it specifies whether some of the axis labels are to be skipped if there is not enough room for drawing them all without overlapping - this parameter may be set to AXIS_LABELS_AUTO_LEAVEOUT or to zero or to another positive value.
        \sa setAxisValueStart, setAxisValueEnd, setAxisValueDelta
        \sa axisValueStart axisValueEnd, axisValueDelta
        \sa LabelsFromDataRow, axisLabelTextsFormDataRow, axisLabelTexts
-       \sa axisSteadyValueCalc
+       \sa axisSteadyValueCalc, setAxisValueLeaveOut
     */
     void setAxisValues( bool axisSteadyValueCalc = true,
                         KDChartData axisValueStart = AXIS_LABELS_AUTO_LIMIT,
@@ -1518,11 +1582,13 @@ public:
                         LabelsFromDataRow takeLabelsFromDataRow = LabelsFromDataRowNo,
                         int labelTextsDataRow = 0,
                         QStringList* axisLabelStringList = 0,
-                        QStringList* axisShortLabelsStringList = 0 )
+                        QStringList* axisShortLabelsStringList = 0,
+                        int axisValueLeaveOut = AXIS_LABELS_AUTO_LEAVEOUT )
     {
         _axisSteadyValueCalc = axisSteadyValueCalc;
         _axisValueStart = axisValueStart;
         _axisValueEnd = axisValueEnd;
+        _axisValueLeaveOut = axisValueLeaveOut;
         _axisValueDelta = axisValueDelta;
         _axisDigitsBehindComma = axisDigitsBehindComma;
         if ( DONT_CHANGE_EMPTY_INNER_SPAN_NOW != axisMaxEmptyInnerSpan ) {
@@ -1632,6 +1698,30 @@ public:
     double axisValueDelta() const
     {
         return _axisValueDelta;
+    }
+
+
+    /**
+        Specifies how many axis labels are to be skipped
+        if there is not enough space for displaying all of them.
+        This is usefull in case you have lots of entries in one dataset.
+
+        \sa setAxisValues
+    */
+    void setAxisValueLeaveOut( const int leaveOut )
+    {
+        _axisValueLeaveOut = leaveOut;
+    }
+
+    /**
+        Returns how many axis labels are to be skipped
+        if there is not enough space for displaying all of them.
+
+        \sa setAxisValueLeaveOut
+    */
+    int axisValueLeaveOut() const
+    {
+        return _axisValueLeaveOut;
     }
 
 
@@ -2104,12 +2194,15 @@ public:
         _axisLabelsFontUseRelSize = true;
         _axisLabelsFontRelSize = 20;
         _axisLabelsDontShrinkFont = false;
+        _axisLabelsDontAutoRotate = false;
+        _axisLabelsRotation = 0;
         _axisLabelsColor = QColor( 0, 0, 0 );
 
         _axisSteadyValueCalc = true;
         _axisValueStart = AXIS_LABELS_AUTO_LIMIT;
         _axisValueEnd = AXIS_LABELS_AUTO_LIMIT;
         _axisValueDelta = AXIS_LABELS_AUTO_DELTA;
+        _axisValueLeaveOut = AXIS_LABELS_AUTO_LEAVEOUT;
         _axisDigitsBehindComma = AXIS_LABELS_AUTO_DIGITS;
         _axisMaxEmptyInnerSpan = 90;
         _takeLabelsFromDataRow = LabelsFromDataRowNo;
@@ -2173,6 +2266,8 @@ public:
         D._axisLabelsFont = R._axisLabelsFont;
         D._axisLabelsFontUseRelSize = R._axisLabelsFontUseRelSize;
         D._axisLabelsDontShrinkFont = R._axisLabelsDontShrinkFont;
+        D._axisLabelsDontAutoRotate = R._axisLabelsDontAutoRotate;
+        D._axisLabelsRotation = R._axisLabelsRotation;
         D._axisLabelsFontRelSize = R._axisLabelsFontRelSize;
         D._axisLabelsColor = R._axisLabelsColor;
 
@@ -2180,6 +2275,7 @@ public:
         D._axisValueStart = R._axisValueStart;
         D._axisValueEnd = R._axisValueEnd;
         D._axisValueDelta = R._axisValueDelta;
+        D._axisValueLeaveOut = R._axisValueLeaveOut;
         D._axisDigitsBehindComma = R._axisDigitsBehindComma;
         D._axisMaxEmptyInnerSpan = R._axisMaxEmptyInnerSpan;
         D._takeLabelsFromDataRow = R._takeLabelsFromDataRow;
@@ -2198,7 +2294,7 @@ public:
     friend QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
     friend QTextStream& operator>>( QTextStream& s, KDChartParams& p );
     friend class KDChartParams;
-    
+
 signals:
         /**
            This signal is emitted when any of the chart axis
@@ -2379,6 +2475,8 @@ private:
     
     
     bool _axisLabelsDontShrinkFont;
+    bool _axisLabelsDontAutoRotate;
+    int _axisLabelsRotation;
 
 
     /**
@@ -2414,6 +2512,13 @@ private:
         \sa setAxisValues
     */
     double _axisValueDelta;
+    /**
+        Stores how many axis labels are to be skipped after drawing one.
+        This is usefull in case you have lots of entries in one dataset.
+
+        \sa setAxisValues
+    */
+    int _axisValueLeaveOut;
 
     /**
         Specifies the <b>true</b> start value of the axis labels

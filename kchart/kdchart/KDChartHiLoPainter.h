@@ -44,12 +44,13 @@ protected:
     KDChartHiLoPainter( KDChartParams* params );
     virtual ~KDChartHiLoPainter();
 
-    virtual void paintData( QPainter* painter, KDChartTableData* data,
+    virtual void paintData( QPainter* painter, 
+                            KDChartTableDataBase* data,
                             bool paint2nd,
                             KDChartDataRegionList* regions );
 
     virtual QString fallbackLegendText( uint dataset ) const;
-    virtual uint numLegendFallbackTexts( KDChartTableData* data ) const;
+    virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
 };
 
 #endif

@@ -42,10 +42,12 @@ protected:
     KDChartPiePainter( KDChartParams* params );
     virtual ~KDChartPiePainter();
 
-    virtual void paintData( QPainter* painter, KDChartTableData* data,
+    virtual void paintData( QPainter* painter, 
+                            KDChartTableDataBase* data,
                             bool paint2nd,
                             KDChartDataRegionList* regions = 0 );
-    virtual void drawOnePie( QPainter* painter, KDChartTableData* data,
+    virtual void drawOnePie( QPainter* painter, 
+                             KDChartTableDataBase* data,
                              uint dataset, uint pie, uint chart,
                              uint threeDPieHeight,
                              KDChartDataRegionList* regions = 0 );
@@ -65,7 +67,7 @@ protected:
                                QRegion* region = 0 );
 
     virtual QString fallbackLegendText( uint dataset ) const;
-    virtual uint numLegendFallbackTexts( KDChartTableData* data ) const;
+    virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
 
     uint findPieAt( int angle );
     uint findLeftPie( uint pie );

@@ -45,7 +45,8 @@ protected:
     KDChartAxesPainter( KDChartParams* params );
     virtual ~KDChartAxesPainter();
 
-    virtual void paintAxes( QPainter* painter, KDChartTableData* data );
+    virtual void paintAxes( QPainter* painter, 
+                            KDChartTableDataBase* data );
 private:
 public:
     static void saveDrawLine( QPainter& painter,
@@ -53,7 +54,7 @@ public:
                               QPoint pZ,
                               QPen pen );
     static void calculateLabelTexts( QPainter& painter,
-                                      const KDChartTableData& data,
+                                      const KDChartTableDataBase& data,
                                       const KDChartParams& params,
                                       uint axisNumber,
                                       double averageValueP1000,

@@ -32,6 +32,15 @@
 
 #include <qpainter.h>
 
+
+struct KDDrawTextRegionAndTrueRect
+{
+  QRegion region;
+  QPoint pos;
+  int x,y,width,height;
+};
+
+
 class KDDrawText
 {
 public:
@@ -40,16 +49,25 @@ public:
                                  QPoint anchor,
                                  const QString& text,
                                  const QFont* font = 0,
-                                 int align         = Qt::AlignLeft | Qt::AlignTop,
-                                 // usefull for debugging of your layout:
-                                 bool showAnchor   = false );
+                                 int align = Qt::AlignLeft | Qt::AlignTop,
+                                 // useful for debugging of your layout:
+                                 bool showAnchor    = false,
+                                 const QFontMetrics* fontMet = 0,
+                                 bool noFirstrotate = false,
+                                 bool noBackrotate  = false,
+                                 KDDrawTextRegionAndTrueRect* infos = 0 );
 
-    static QRegion measureRotatedText( QPainter* painter,
-                                       float  degrees,
-                                       QPoint anchor,
-                                       const QString& text,
-                                       const QFont* font,
-                                       int align );
+    static KDDrawTextRegionAndTrueRect measureRotatedText(
+              QPainter* painter,
+              float  degrees,
+              QPoint anchor,
+              const QString& text,
+              const QFont* font,
+              int align,
+              const QFontMetrics* fontMet,
+              bool noFirstrotate,
+              bool noBackrotate,
+              int addPercentOfHeightToRegion );
 
 private:
     static void drawRotatedTxt( QPainter* painter,
@@ -57,7 +75,7 @@ private:
                                 QPoint anchor,
                                 const QString& text,
                                 const QFont* font  = 0,
-                                int align          = Qt::AlignLeft | Qt::AlignTop,
+                                int align = Qt::AlignLeft | Qt::AlignTop,
                                 // usefull for debugging of your layout:
                                 bool showAnchor    = false,
                                 // speed-up parameters
@@ -65,8 +83,14 @@ private:
                                 // to avoid duplicate calculation
                                 int txtWidth       = INT_MAX,
                                 int txtHeight      = INT_MAX,
+                                const QFontMetrics* fontMet = 0,
+                                // additional speed-up parameters used by KDChart
                                 bool calculateOnly = false,
-                                QRegion* region    = 0 );
+                                bool doNotCalculate= false,
+                                bool noFirstrotate = false,
+                                bool noBackrotate  = false,
+                                KDDrawTextRegionAndTrueRect* infos = 0,
+                                int addPercentOfHeightToRegion = 0 );
 
 };
 

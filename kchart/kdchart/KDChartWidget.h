@@ -47,7 +47,7 @@ class KDChartWidget : public QWidget
 
 public:
     KDChartWidget( KDChartParams* params,
-                   KDChartTableData* data,
+                   KDChartTableDataBase* data,
                    QWidget* parent = 0, const char* name = 0 );
     ~KDChartWidget();
 
@@ -58,7 +58,7 @@ public slots:
     void setActiveData( bool active );
     void setDoubleBuffered( bool doublebuffered );
     void setParams( KDChartParams* params );
-    void setData( KDChartTableData* data );
+    void setData( KDChartTableDataBase* data );
 
 signals:
     void dataLeftClicked( uint row, uint col );
@@ -79,7 +79,7 @@ protected:
 
 private:
     KDChartParams* _params;
-    KDChartTableData* _data;
+    KDChartTableDataBase* _data;
     bool _activeData;
     bool _doubleBuffered;
     QPixmap _buffer;

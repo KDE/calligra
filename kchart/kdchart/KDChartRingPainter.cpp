@@ -87,7 +87,7 @@ KDChartRingPainter::~KDChartRingPainter()
    with regions representing the data segments, if not null
 */
 void KDChartRingPainter::paintData( QPainter* painter,
-                                    KDChartTableData* data,
+                                    KDChartTableDataBase* data,
                                     bool paint2nd,
                                     KDChartDataRegionList* regions )
 {
@@ -238,7 +238,7 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
         startAngle = 0;
         endAngle = 5759;
     }
-    
+
     painter->setPen( QPen( params()->outlineDataColor(),
                            params()->outlineDataLineWidth() ) );
     painter->setBrush( params()->dataColor( value ) );
@@ -284,7 +284,7 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
     innerArc.makeArc( innerRect.x(), innerRect.y(),
                       innerRect.width(), innerRect.height(),
                       startAngle, endAngle - startAngle + 1 );
-    
+
     // And the points for the outer arc
     QPointArray outerArc;
     outerArc.makeArc( outerRect.x(), outerRect.y(),
@@ -383,7 +383,7 @@ QString KDChartRingPainter::fallbackLegendText( uint dataset ) const
 
    \return the number of fallback texts to use
 */
-uint KDChartRingPainter::numLegendFallbackTexts( KDChartTableData* data ) const
+uint KDChartRingPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
     return data->usedCols();
 }

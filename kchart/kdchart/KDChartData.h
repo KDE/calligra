@@ -36,8 +36,9 @@
 #include <values.h>
 #else
 #include <float.h>
-#define KDCHART_MINDOUBLE DBL_MIN
 #endif
+
+#define KDCHART_MINDOUBLE DBL_MIN
 
 #include "KDChartGlobal.h"
 

@@ -69,6 +69,8 @@ KDChartParams::KDChartParams()
     // this will be called internally by setChartType() below.
     setPrintDataValuesWithDefaultFontParams( KDCHART_ALL_CHARTS, false );
 
+    setAllowOverlappingDataValueTexts( false );
+
     setGlobalLeading( 0,0,0,0 );
 
 
@@ -1715,7 +1717,19 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
             // the LabelsDontShrinkFont element
             KDXML::createBoolNode( doc, axisSettingsElement, "LabelsDontShrinkFont",
                                    _axisSettings[axis].params._axisLabelsDontShrinkFont );
-            
+
+            // the LabelsDontAutoRotate element
+            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsDontAutoRotate",
+                                   _axisSettings[axis].params._axisLabelsDontAutoRotate );
+
+            // the LabelsRotation element
+            KDXML::createIntNode( doc, axisSettingsElement, "LabelsRotation",
+                                  _axisSettings[axis].params._axisLabelsRotation );
+
+            // the LabelsLeaveOut element
+            KDXML::createIntNode( doc, axisSettingsElement, "LabelsLeaveOut",
+                                  _axisSettings[axis].params._axisValueLeaveOut );
+
             // the LabelsColor element
             KDXML::createColorNode( doc, axisSettingsElement, "LabelsColor",
                                     _axisSettings[axis].params._axisLabelsColor );
@@ -1932,6 +1946,16 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
 	KDXML::createStringNode( doc, dataValuesSettings2Element,
                                  "LayoutPolicy",
                                  KDChartEnums::layoutPolicyToString( _printDataValuesSettings2._dataValuesLayoutPolicy ) );
+    }
+
+    // global settings for data value settings of _all_ charts
+    QDomElement dataValuesGlobalSettingsElement =
+    doc.createElement( "DataValuesGlobalSettings" );
+    docRoot.appendChild( dataValuesGlobalSettingsElement );
+    {
+        KDXML::createBoolNode( doc, dataValuesGlobalSettingsElement,
+                                    "allowOverlappingTexts",
+                                    _allowOverlappingDataValueTexts );
     }
 
     // the AreaMap element
@@ -2628,6 +2652,18 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                             bool dontShrink;
                             if( KDXML::readBoolNode( element, dontShrink ) )
                                 axisSettings->_axisLabelsDontShrinkFont = dontShrink;
+                        } else if( tagName == "LabelsDontAutoRotate" ) {
+                            bool dontRotate;
+                            if( KDXML::readBoolNode( element, dontRotate ) )
+                                axisSettings->_axisLabelsDontAutoRotate = dontRotate;
+                        } else if( tagName == "LabelsRotation" ) {
+                            int rotation;
+                            if( KDXML::readIntNode( element, rotation ) )
+                                axisSettings->_axisLabelsRotation = rotation;
+                        } else if( tagName == "LabelsLeaveOut" ) {
+                            int leaveOut;
+                            if( KDXML::readIntNode( element, leaveOut ) )
+                                axisSettings->_axisValueLeaveOut = leaveOut;
                         } else if( tagName == "LabelsColor" ) {
                             QColor color;
                             if( KDXML::readColorNode( element, color ) )
@@ -2935,6 +2971,23 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                     }
                     node = node.nextSibling();
                 }
+            } else if( tagName == "DataValuesGlobalSettings" ) {
+                QDomNode node = element.firstChild();
+                while( !node.isNull() ) {
+                    QDomElement element = node.toElement();
+                    if( !element.isNull() ) { // was really an element
+                        QString tagName = element.tagName();
+                        if( tagName == "allowOverlappingTexts" ) {
+                            bool value;
+                            if( KDXML::readBoolNode( element, value ) )
+                                _allowOverlappingDataValueTexts = value;
+                        }
+                        else
+                            qDebug( "Unknown subelement of DataValuesGlobalSettings found: %s", tagName.latin1() );
+                              // do _not_ return false here (to enable future extentions)
+                    }
+                    node = node.nextSibling();
+                }
             } else if( tagName == "AreaMap" ) {
                 QDomNode node = element.firstChild();
                 while( !node.isNull() ) {
@@ -2950,7 +3003,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                             }
                         }
                         else
-                            qDebug( "Unknown tag in area map" );
+                            qDebug( "Unknown tag in AreaMap found: %s", tagName.latin1() );
                               // do _not_ return false here (to enable future extentions)
                     }
                     node = node.nextSibling();
@@ -2965,14 +3018,14 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         if( tagName == "Number" ) {
                             KDXML::readIntNode( element, curNumber );
                         } else if( tagName == "FrameSettings" ) {
-                        Q_ASSERT( curNumber != -1 ); // there was a Dataset tag before
-                        KDChartCustomBox customBox;
-                        KDChartCustomBox::readCustomBoxNode( element,
-                                                                              customBox );
-                        _customBoxMap.insert( curNumber, customBox );
-                        } else {
-                            qDebug( "Unknown tag in area map" );
+                            Q_ASSERT( curNumber != -1 ); // there was a Dataset tag before
+                            KDChartCustomBox customBox;
+                            KDChartCustomBox::readCustomBoxNode( element,
+                                                                 customBox );
+                            _customBoxMap.insert( curNumber, customBox );
                         }
+                        else
+                            qDebug( "Unknown tag in CustomBoxMap found: %s", tagName.latin1() );
                     }
                     node = node.nextSibling();
                 }

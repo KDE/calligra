@@ -68,7 +68,7 @@ void cleanupPainter();
    can only happen with user-defined chart types.
 */
 void KDChart::paint( QPainter* painter, KDChartParams* params,
-                     KDChartTableData* data,
+                     KDChartTableDataBase* data,
                      KDChartDataRegionList* regions,
                      const QRect* rect )
 #ifdef USE_EXCEPTIONS
