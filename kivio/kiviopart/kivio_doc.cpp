@@ -594,7 +594,7 @@ void KivioDoc::slotDeleteStencilSet( DragBarButton *pBtn, QWidget *w, KivioStack
         {
             if( checkGroupForSpawner( m_pClipboard, pSpawner )==true )
             {
-                if( KMessageBox::questionYesNo(NULL, i18n("The clipboard contains stencils which belong to the set you are trying to remove,\nwould you like to delete what is on the clipboard?\n(Saying no will cause this stencil set not to be removed)"),
+                if( KMessageBox::questionYesNo(NULL, i18n("The clipboard contains stencils which belong to the set you are trying to remove.\nWould you like to delete what is on the clipboard?\n(Saying no will cause this stencil set to not be removed.)"),
                     i18n("Clear the clipboard?"))==KMessageBox::Yes )
                 {
                     delete m_pClipboard;

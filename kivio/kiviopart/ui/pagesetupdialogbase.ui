@@ -409,7 +409,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Make this options default for this document</string>
+                <string>Make these options the default for this document</string>
             </property>
         </widget>
         <widget row="5"  column="0" >
@@ -420,7 +420,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Make this options default global</string>
+                <string>Make these options the default for all documents</string>
             </property>
         </widget>
         <spacer row="1"  column="0" >

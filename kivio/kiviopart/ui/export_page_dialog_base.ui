@@ -119,7 +119,7 @@
             <property>
                 <name>whatsThis</name>
                 <string>&lt;b&gt;All Stencils&lt;/b&gt;&lt;br&gt;
-This will cause the entire page to be exported out to the file.  This means that &lt;i&gt;all&lt;/i&gt; stencils will be exported to file.</string>
+This will cause the entire page to be exported to the file.  This means that &lt;i&gt;all&lt;/i&gt; stencils will be exported.</string>
             </property>
         </widget>
         <widget>
@@ -210,7 +210,7 @@ This will eliminate all blank portions of the drawing.  The picture will only be
         </property>
         <property>
             <name>toolTip</name>
-            <string>The higher the quality, the more space the file takes up</string>
+            <string>The higher the quality, the more space the file takes up.</string>
         </property>
         <property>
             <name>whatsThis</name>

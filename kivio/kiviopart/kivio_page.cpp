@@ -616,7 +616,7 @@ void KivioPage::deleteSelectedStencils()
     {
        if( pStencil->protection()->at(kpDeletion)==true )
        {
-	  KMessageBox::information(NULL, i18n("One of the selected stencils has protection from deletion, and cannot be deleted."),
+	  KMessageBox::information(NULL, i18n("One of the selected stencils has protection from deletion and cannot be deleted."),
 				   i18n("Protection From Deletion") );
 	  return;
        }
