@@ -1580,24 +1580,27 @@ void KPrPage::insertClipart( const QString &filename )
 
 void KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
 {
-
     KoDocument* doc = _e.createDoc( m_doc );
     if ( !doc || !doc->initDoc() ) {
 	return;
     }
-    QRect r=m_doc->zoomHandler()->zoomRect(_rect);
-    KPresenterChild* ch = new KPresenterChild( m_doc, doc, r );
 
+    QRect r = QRect( (int)_rect.left(), (int)_rect.top(),
+                     (int)_rect.width(), (int)_rect.height() );
+    KPresenterChild* ch = new KPresenterChild( m_doc, doc, r );
     m_doc->insertObject( ch );
 
     KPPartObject *kppartobject = new KPPartObject( ch );
-    kppartobject->setOrig( r.x(), r.y() );
-    kppartobject->setSize( r.width(), r.height() );
+    kppartobject->setOrig( _rect.x(), _rect.y() );
+    kppartobject->setSize( _rect.width(), _rect.height() );
     kppartobject->setSelected( true );
+
     QWidget::connect(ch, SIGNAL(changed(KoChild *)), kppartobject, SLOT(slot_changed(KoChild *)) );
     InsertCmd *insertCmd = new InsertCmd( i18n( "Embed Object" ), kppartobject, m_doc,this );
     insertCmd->execute();
+
     m_doc->addCommand( insertCmd );
+
     //emit sig_insertObject( ch, kppartobject );
     m_doc->repaint( false );
 }
@@ -3211,6 +3214,16 @@ bool KPrPage::haveASelectedPictureObj()
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected() && it.current()->getType() == OT_CLIPART)
+            return true;
+    }
+    return false;
+}
+
+bool KPrPage::haveASelectedPartObj()
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_PART )
             return true;
     }
     return false;

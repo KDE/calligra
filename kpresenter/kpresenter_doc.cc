@@ -98,12 +98,14 @@ static const int CURRENT_SYNTAX_VERSION = 2;
 KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect )
     : KoDocumentChild( _kpr, _doc, _rect )
 {
+    m_parent = _kpr;
 }
 
 /*====================== constructor =============================*/
 KPresenterChild::KPresenterChild( KPresenterDoc *_kpr ) :
     KoDocumentChild( _kpr )
 {
+    m_parent = _kpr;
 }
 
 /*====================== destructor ==============================*/

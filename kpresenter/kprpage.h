@@ -218,6 +218,7 @@ public:
     bool oneObjectTextExist();
     bool isOneObjectSelected();
     bool haveASelectedPictureObj();
+    bool haveASelectedPartObj();
     KoRect getBoundingRect(const KoRect &rect, KoZoomHandler *zoomhandler);
 
     bool chPic( KPresenterView *_view);

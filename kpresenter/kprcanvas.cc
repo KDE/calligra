@@ -1992,6 +1992,14 @@ bool KPrCanvas::haveASelectedPictureObj()
     return m_view->kPresenterDoc()->stickyPage()->haveASelectedPictureObj();
 }
 
+bool KPrCanvas::haveASelectedPartObj()
+{
+    bool state = m_activePage->haveASelectedPartObj();
+    if ( state )
+        return true;
+    return m_view->kPresenterDoc()->stickyPage()->haveASelectedPartObj();
+}
+
 QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
 {
     QPtrList<KPTextObject> lst;

@@ -3001,7 +3001,7 @@ void KPresenterView::objectSelectedChanged()
     bool state=m_canvas->isOneObjectSelected();
     actionScreenAssignEffect->setEnabled(state);
     actionExtraRotate->setEnabled(state);
-    actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPictureObj());
+    actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPictureObj() && !m_canvas->haveASelectedPartObj());
     actionExtraAlignObjs->setEnabled(state);
     actionExtraGroup->setEnabled(state && m_canvas->activePage()->numSelected()>1);
     actionExtraUnGroup->setEnabled(state);

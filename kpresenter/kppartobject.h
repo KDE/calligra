@@ -70,7 +70,7 @@ public:
     void enableDrawing( bool f ) { _enableDrawing = f; }
 
 public slots:
-    void slot_changed(KoChild *child);
+    void slot_changed( KoChild *_koChild );
 
 protected:
     void updateChildGeometry();
@@ -78,7 +78,6 @@ protected:
 
     bool _enableDrawing;
     KPresenterChild *child;
-
 };
 
 #endif

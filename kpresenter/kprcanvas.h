@@ -173,6 +173,7 @@ public:
     void setMouseSelectedObject(bool b);
 
     bool haveASelectedPictureObj();
+    bool haveASelectedPartObj();
 
     KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 

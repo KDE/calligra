@@ -77,9 +77,12 @@ public:
     ~KPresenterChild();
 
     // get parent
-    KPresenterDoc* parent() { return (KPresenterDoc*)parent(); }
+    KPresenterDoc* parent() { return m_parent; }
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
+
+protected:
+    KPresenterDoc *m_parent;
 };
 
 /*****************************************************************/
