@@ -632,14 +632,20 @@ void KSpreadDoc::enableRedo( bool _b )
       static_cast<KSpreadView *>( it.current() )->enableRedo( _b );
 }
 
-void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, double /*zoomX*/, double /*zoomY*/ )
+void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
+                               bool transparent, double zoomX, double zoomY )
 {
     KSpreadTable* table = m_pMap->firstTable();
     if ( !table )
         return;
     kdDebug(36001)<<"paintContent-------------------------------------\n";
     // ### TODO support zooming
+    painter.save();
+
+    painter.scale(zoomX, zoomY);
     paintContent( painter, rect, transparent, table,false );
+
+    painter.restore();
 }
 
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadTable* table, bool drawCursor )
