@@ -1003,6 +1003,7 @@ KarbonView::initActions()
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
 	m_gradToolAction->setExclusiveGroup( "Tools" );
+	m_polylineToolAction->setExclusiveGroup( "Tools" );
 	//m_textToolAction->setExclusiveGroup( "Tools" );
 	// tools <-----
 
