@@ -16,3 +16,5 @@ OPTIMIZATION:
 MAKE IT NICE:
 -	add validators to all tool-dialog input-fields
 -	pass all dialogs a parent
+-	use (first introduce of course) centerOfMass() for vpath's
+	"center knot" position. problem: CM for beziers?

@@ -98,9 +98,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 						jtr.current()->ctrlPoint1(),
 						jtr.current()->knot2(),
 						jtr.current()->knot2() );
-				else if(
-					jtr.current()->type() == segment_line ||
-					jtr.current()->type() == segment_end  )
+				else if( jtr.current()->type() == segment_line )
 				{
 					painter->lineTo( jtr.current()->knot2() );
 				}
@@ -149,9 +147,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 						jtr.current()->ctrlPoint1(),
 						jtr.current()->knot2(),
 						jtr.current()->knot2() );
-				else if(
-					jtr.current()->type() == segment_line ||
-					jtr.current()->type() == segment_end  )
+				else if( jtr.current()->type() == segment_line )
 				{
 					painter->lineTo( jtr.current()->knot2() );
 				}

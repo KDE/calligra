@@ -5,14 +5,13 @@
 #ifndef __VBOOLEAN_H__
 #define __VBOOLEAN_H__
 
+
 #include <qvaluelist.h>
 
 #include "vvisitor.h"
 
 
-class VPath;
 class VSegment;
-class VSegmentList;
 
 
 enum VBooleanType

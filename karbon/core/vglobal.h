@@ -18,10 +18,18 @@ namespace VGlobal
 	const double sqrt2		=  1.41421356237309504880;	// sqrt(2)
 	const double one_7		=  0.14285714285714285714;	// 1/7
 
+	/**
+	 * Constants used to decide if a number is equal zero or nearly the same
+	 * as another number.
+	 */
 	const double veryLargeNumber = 1.0e8;
 	const double verySmallNumber = 1.0e-8;
 
-	const double flatnessTolerance	= 0.5;
+	/// A bezier with this flatness is considered "flat". Used in subdividing.
+	const double flatnessTolerance = 0.5;
+
+	/// A range for KoPoint::isNear() check.
+	const double isNearRange = 0.01;
 
 
 	const short copyOffset = 10;        /// the amount at which copied objects get offset in x and y direction

@@ -28,8 +28,7 @@ enum VSegmentType
 	segment_curve,		// curveto (bezier)
 	segment_curve1,		// + first ctrl-point is identical to first knot.
 	segment_curve2,		// + last ctrl-point is identical to last knot.
-	segment_line,		// lineto
-	segment_end
+	segment_line		// lineto
 };
 
 class VSegment

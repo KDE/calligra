@@ -5,10 +5,11 @@
 #ifndef __VROUNDCORNERS_H__
 #define __VROUNDCORNERS_H__
 
+
 #include "vvisitor.h"
 
 
-class VPath;
+class VSegment;
 
 
 class VRoundCorners : public VVisitor
@@ -23,6 +24,10 @@ public:
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 private:
+	double parameter( const VSegment& segment ) const;
+	void roundCorner(
+		const VSegment& current, const VSegment& next, VSegmentList& segmentList ) const;
+
 	double m_radius;
 };
 

@@ -309,21 +309,29 @@ VSegmentList::arcTo(
 void
 VSegmentList::close()
 {
-	// move end-segment if one already exists:
-	if( getLast()->type() == segment_end )
+	// move end-segment if we are already closed:
+	if( m_isClosed )
 	{
 		getLast()->setKnot2( getFirst()->knot2() );
 	}
-	// append one, if no end-segment exists:
-	else if( getLast()->knot2() != getFirst()->knot2() )
+	// append a line, if necessary:
+	else
 	{
-		VSegment* s = new VSegment();
-		s->setType( segment_end );
-		s->setKnot2( getFirst()->knot2() );
-		append( s );
-	}
+		if(
+			getLast()->knot2().isNear(
+				getFirst()->knot2(), VGlobal::isNearRange ) )
+		{
+			// move last knot:
+			getLast()->setKnot2( getFirst()->knot2() );
+		}
+		else
+		{
+			// add a line:
+			lineTo( getFirst()->knot2() );
+		}
 
-	m_isClosed = true;
+		m_isClosed = true;
+	}
 }
 
 const KoRect&
@@ -392,7 +400,7 @@ VSegmentList::save( QDomElement& element ) const
 void
 VSegmentList::load( const QDomElement& element )
 {
-	clear();	// we already have a "begin".
+	clear();	// we already might have a "begin".
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
@@ -407,10 +415,7 @@ VSegmentList::load( const QDomElement& element )
 		}
 	}
 
-	m_isClosed = element.attribute( "isClosed" ) == 0 ? false : true;
-
-	// "end"s are never saved:
-	if( m_isClosed )
+	if( element.attribute( "isClosed" ) == 0 ? false : true )
 		close();
 }
 

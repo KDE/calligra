@@ -5,6 +5,7 @@
 #ifndef __VWHIRLPINCH_H__
 #define __VWHIRLPINCH_H__
 
+
 #include <koPoint.h>
 
 #include "vpath.h"

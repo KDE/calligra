@@ -39,7 +39,7 @@ VPolygonCmd::createPath()
 
 	path->moveTo( p );
 
-	for ( uint i = 0; i < m_edges; ++i )
+	for ( uint i = 0; i < m_edges - 1; ++i )
 	{
 		p.setX(
 			m_radius * cos( m_angle + VGlobal::pi_2

@@ -72,8 +72,7 @@ VSegment::isFlat( double flatness ) const
 	if(
 		!m_prev ||
 		m_type == segment_begin ||
-		m_type == segment_line ||
-		m_type == segment_end )
+		m_type == segment_line )
 	{
 		return true;
 	}
@@ -103,9 +102,7 @@ VSegment::point( double t ) const
 		return KoPoint();
 
 	// lines:
-	if(
-		m_type == segment_line ||
-		m_type == segment_end )
+	if( m_type == segment_line )
 	{
 		return
 			m_prev->m_point[2] +
@@ -216,9 +213,7 @@ VSegment::splitAt( double t )
 	VSegment* segment = new VSegment();
 
 	// lines are easy: no need to change the current segment:
-	if(
-		m_type == segment_line ||
-		m_type == segment_end )
+	if( m_type == segment_line )
 	{
 		segment->m_point[2] =
 			m_prev->m_point[2] +
@@ -263,8 +258,7 @@ VSegment::convertToCurve( double t )
 {
 	if(
 		!m_prev ||
-		m_type == segment_begin ||
-		m_type == segment_end )
+		m_type == segment_begin )
 	{
 		return;
 	}

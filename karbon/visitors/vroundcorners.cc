@@ -27,34 +27,79 @@ VRoundCorners::visitVPath( VPath& path )
 void
 VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 {
+	// temporary list:
 	VSegmentList newList( 0L );
-	newList.moveTo( segmentList.first()->knot2() );
 
-	double t1;
-	double t2;
 
-	// ommit "begin" segment:
+	segmentList.first();
+
+	// begin:
+	if( segmentList.isClosed() )
+	{
+		newList.moveTo(
+			segmentList.current()->next()->point(
+				parameter( *segmentList.current()->next() ) ) );
+	}
+	else
+	{
+		newList.moveTo(
+			segmentList.current()->knot2() );
+	}
+
+
+	// middle part:
 	while(
 		segmentList.next() && 
 		segmentList.current()->next() )
 	{
-		t1 = m_radius / segmentList.current()->length();
-		t2 = m_radius / segmentList.current()->next()->length();
-
-		newList.lineTo(
-			segmentList.current()->point( 1.0 - t1 )
-		);
-
-		newList.curveTo(
-			segmentList.current()->point( 1.0 - 0.5 * t1 ),
-			segmentList.current()->next()->point( 0.5 * t2 ),
-			segmentList.current()->next()->point( t2 )
-		);
+		roundCorner(
+			*segmentList.current(),
+			*segmentList.current()->next(),
+			newList );
 	}
+
+
+	// end:
+	if( segmentList.isClosed() )
+	{
+		roundCorner(
+			*segmentList.current(),
+			*segmentList.getFirst()->next(),
+			newList );
+
+		newList.close();
+	}
+
 
 	segmentList = newList;
 
 	// invalidate bounding box once:
 	segmentList.invalidateBoundingBox();
+}
+
+double
+VRoundCorners::parameter( const VSegment& segment ) const
+{
+	return
+		segment.length() > 2 * m_radius
+			? m_radius / segment.length()
+			: 0.5;
+}
+
+void
+VRoundCorners::roundCorner(
+	const VSegment& current, const VSegment& next, VSegmentList& segmentList ) const
+{
+	double t1 = parameter( current );
+	double t2 = parameter( next );
+
+	segmentList.lineTo(
+		current.point( 1.0 - t1 ) );
+
+	// robust concerning to small segments:
+	segmentList.curveTo(
+		current.point( 1.0 - 0.5 * t1 ),
+		next.point( 0.5 * t2 ),
+		next.point( t2 ) );
 }
 

@@ -5,8 +5,10 @@
 #ifndef __VFLATTEN_H__
 #define __VFLATTE_H__
 
+
 #include "vpath.h"
 #include "vvisitor.h"
+
 
 class VFlatten : public VVisitor
 {
