@@ -31,7 +31,8 @@ void KexiWorkspaceMDI::takeItem(KexiDialogBase *delItem)
 void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 {
 	KexiDialogBase *tmp=static_cast<KexiDialogBase*>(w);
-	if (tmp->isRegistering()) return;
+	if (tmp!=0)
+		if (tmp->isRegistering()) return;
 	if (!m_mainwindow->project()->isReadWrite()) return;
 	kdDebug() << "KexiWorkspace::slotWindowActivated()" << endl;
 	if (!m_mainwindow) return;
@@ -44,14 +45,16 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 		if (m_activeDialog.isNull())
 		{
 			olddialog->deactivateActions();
-			m_mainwindow->removeChildClient(olddialog->guiClient());
+			if (olddialog->guiClient()->factory()==m_mainwindow->factory())
+				m_mainwindow->factory()->removeClient(olddialog->guiClient());
 		}
 		else
 		{
 			if (m_activeDialog->guiClient()!=olddialog->guiClient())
 			{
 				olddialog->deactivateActions();
-				m_mainwindow->factory()->removeClient(olddialog->guiClient());			
+				if (olddialog->guiClient()->factory()==m_mainwindow->factory())
+					m_mainwindow->factory()->removeClient(olddialog->guiClient());			
 				m_mainwindow->factory()->addClient(m_activeDialog->guiClient());
 				m_activeDialog->activateActions();
 			}

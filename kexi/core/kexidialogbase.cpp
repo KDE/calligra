@@ -152,7 +152,7 @@ void KexiDialogBase::closeEvent(QCloseEvent *ev)
 {
 	if ((m_wt!=ToolWindow) && (m_registered==true))
 	{
-//		m_view->workspace()->slotWindowActivated(0);
+		m_view->workspace()->slotWindowActivated(0);
 	}
 	finishUpForClosing();
 	emit closing(this);
