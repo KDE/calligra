@@ -27,13 +27,13 @@ class KSpreadChanges;
 class KSpreadView;
 
 class KComboBox;
-class KLineEdit;
 class KListView;
 class KListViewItem;
 class KPushButton;
 
 class QCheckBox;
 class QDateTimeEdit;
+class QLineEdit;
 
 class FilterSettings;
 
@@ -49,9 +49,9 @@ class FilterMain : public QWidget
   QCheckBox     * m_authorBox;
   QCheckBox     * m_rangeBox;
   QCheckBox     * m_commentBox;
-  KLineEdit     * m_authorEdit;
-  KLineEdit     * m_rangeEdit;
-  KLineEdit     * m_commentEdit;
+  QLineEdit     * m_authorEdit;
+  QLineEdit     * m_rangeEdit;
+  QLineEdit     * m_commentEdit;
   KComboBox     * m_dateUsage;
   QDateTimeEdit * m_timeFirst;
   QDateTimeEdit * m_timeSecond;

@@ -310,7 +310,7 @@ public:
      * It will revert back to the old text if testValidity() returns action==stop.
      * @param updateDepends whether to recalculate the dependent cells (always true nowadays)
      */
-    void setCellText( const QString& _text, bool updateDepends = true );
+    void setCellText( const QString& _text, bool updateDepends = true, bool asString = false );
 
     /**
      * Sets the text in the cell when the user inputs it.

@@ -164,7 +164,7 @@ class KSpreadChanges : public QObject
    public:
     typedef enum E1 { ACCEPTED, FILTERED, PENDING, REJECTED } State;
     typedef enum E2 { CELL, INSERTCOLUMN, INSERTROW, INSERTTABLE, 
-                      DELETECOLUMN, DELETEROW, DELETETABLE } ChangeType;
+                      DELETECOLUMN, DELETEROW, DELETETABLE, MOVE } ChangeType;
 
 
     ChangeRecord();

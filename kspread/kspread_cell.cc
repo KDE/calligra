@@ -26,6 +26,7 @@
 #include <qsimplerichtext.h>
 #include <qpopupmenu.h>
 
+#include "kspread_changes.h"
 #include "kspread_global.h"
 #include "kspread_canvas.h"
 #include "kspread_map.h"
@@ -3498,11 +3499,24 @@ void KSpreadCell::decPrecision()
 
 
 
-void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
+void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool asText )
 {
     QString ctext = _text;
     if( ctext.length() > 5000 )
       ctext = ctext.left( 5000 );
+
+    if ( asText )
+    {
+      m_content = Text;
+
+      m_value.setValue( KSpreadValue( ctext ) );
+      m_strOutText = ctext;
+
+      setFlag(Flag_LayoutDirty);
+      setFlag(Flag_TextFormatDirty);
+      
+      return;
+    }
 
     QString oldText=m_strText;
     setDisplayText( ctext, updateDepends );
@@ -4659,6 +4673,15 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 {
   QString t = text.text();
   t = t.stripWhiteSpace();
+
+  // feed the change recorder
+  if ( !m_pTable->isLoading() && m_pTable->map() && m_pTable->map()->changes() )
+  {
+    m_pTable->map()->changes()->addChange( m_pTable, this, QPoint( m_iColumn, m_iRow ),
+                                           getFormatString( m_iColumn, m_iRow ), this->text() );
+  }
+
+
   setFlag(Flag_LayoutDirty);
   setFlag(Flag_TextFormatDirty);
 

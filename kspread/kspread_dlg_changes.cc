@@ -26,16 +26,17 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <klineedit.h>
 #include <klistview.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 
 #include <qcheckbox.h>
+#include <qdatetime.h>
 #include <qdatetimeedit.h>
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qlineedit.h>
 #include <qtabwidget.h>
 
 FilterMain::FilterMain( FilterSettings * settings, QWidget * parent, 
@@ -67,12 +68,12 @@ FilterMain::FilterMain( FilterSettings * settings, QWidget * parent,
   connect( m_commentBox, SIGNAL( toggled( bool ) ), this, SLOT( slotCommentStateChanged( bool ) ) );
   FilterMainLayout->addWidget( m_commentBox, 4, 0 );
     
-  m_authorEdit = new KLineEdit( this, "m_authorEdit" );
-  connect( m_authorEdit, SIGNAL( textChanged( QString const & ) ),
-           this, SLOT( slotAuthorChanged( QString const & ) ) );
+  m_authorEdit = new QLineEdit( this, "m_authorEdit" );
+  connect( m_authorEdit, SIGNAL( textChanged( QString ) ),
+           this, SLOT( slotAuthorChanged( QString ) ) );
   FilterMainLayout->addMultiCellWidget( m_authorEdit, 2, 2, 1, 2 );
 
-  m_rangeEdit = new KLineEdit( this, "m_rangeEdit" );
+  m_rangeEdit = new QLineEdit( this, "m_rangeEdit" );
   connect( m_rangeEdit, SIGNAL( textChanged( QString const & ) ),
            this, SLOT( slotRangeChanged( QString const & ) ) );
   FilterMainLayout->addMultiCellWidget( m_rangeEdit, 3, 3, 1, 2 );
@@ -80,7 +81,7 @@ FilterMain::FilterMain( FilterSettings * settings, QWidget * parent,
   QSpacerItem * spacer = new QSpacerItem( 20, 16, QSizePolicy::Minimum, QSizePolicy::Expanding );
   FilterMainLayout->addItem( spacer, 5, 1 );
 
-  m_commentEdit = new KLineEdit( this, "m_commentEdit" );
+  m_commentEdit = new QLineEdit( this, "m_commentEdit" );
   connect( m_commentEdit, SIGNAL( textChanged( QString const & ) ),
            this, SLOT( slotCommentChanged( QString const & ) ) );
   FilterMainLayout->addMultiCellWidget( m_commentEdit, 4, 4, 1, 2 );
@@ -104,6 +105,7 @@ FilterMain::FilterMain( FilterSettings * settings, QWidget * parent,
   m_timeFirst = new QDateTimeEdit( this, "m_timeFirst" );
   m_timeFirst->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)5, 
                                            0, 0, m_timeFirst->sizePolicy().hasHeightForWidth() ) );
+  m_timeFirst->setDateTime( QDateTime::currentDateTime() );
   connect( m_timeFirst, SIGNAL( valueChanged( QDateTime ) ),
            this, SLOT( slotFirstTimeChanged( QDateTime const & ) ) );
   layout->addWidget( m_timeFirst );
@@ -111,6 +113,7 @@ FilterMain::FilterMain( FilterSettings * settings, QWidget * parent,
   m_timeSecond = new QDateTimeEdit( this, "m_timeSecond" );
   m_timeSecond->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)5, 
                                             0, 0, m_timeSecond->sizePolicy().hasHeightForWidth() ) );
+  m_timeSecond->setDateTime( m_timeFirst->dateTime() );
   connect( m_timeSecond, SIGNAL( valueChanged( QDateTime ) ),
            this, SLOT( slotSecondTimeChanged( QDateTime const & ) ) );
   layout->addWidget( m_timeSecond );

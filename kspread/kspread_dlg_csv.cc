@@ -620,12 +620,28 @@ void KSpreadCSVDialog::accept()
 
   m_pView->doc()->emitBeginOperation();
 
+  int i;
+  int left = m_targetRect.left();
+  int top  = m_targetRect.top();
+
+  QMemArray<double> widths( numCols );
+  for ( i = 0; i < numCols; ++i )
+  {
+    ColumnFormat * c  = table->nonDefaultColumnFormat( left + i );
+    widths[i] = c->dblWidth();
+  }
+
   for (int row = 0; row < numRows; ++row)
   {
     for (int col = 0; col < numCols; ++col)
     {
-      cell = table->nonDefaultCell( m_targetRect.left() + col, m_targetRect.top() + row );
+      cell = table->nonDefaultCell( left + col, top + row );
       cell->setCellText( getText( row, col ) );
+
+      cell->calculateTextParameters( table->painter(), left + col, top + row );
+      kdDebug() << "Text width: " << cell->textWidth() << endl;
+      if ( cell->textWidth() > widths[col] )
+        widths[col] = cell->textWidth();
 
       switch (getHeader(col))
       {
@@ -643,6 +659,13 @@ void KSpreadCSVDialog::accept()
         break;
       }
     }
+  }
+
+  for ( i = 0; i < numCols; ++i )
+  {
+    ColumnFormat * c  = table->nonDefaultColumnFormat( left + i );
+    c->setDblWidth( widths[i] );
+    table->emit_updateColumn( c, left + i );
   }
 
   m_pView->doc()->emitEndOperation();

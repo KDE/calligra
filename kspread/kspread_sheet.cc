@@ -617,7 +617,7 @@ KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
   return cell;
 }
 
-void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool updateDepends )
+void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool updateDepends, bool asString )
 {
     KSpreadCell * cell = nonDefaultCell( _column, _row );
 
@@ -642,7 +642,7 @@ void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool up
     }
 
     // The cell will force a display refresh itself, so we dont have to care here.
-    cell->setCellText( _text, updateDepends );
+    cell->setCellText( _text, updateDepends, asString );
     //refresh anchor
     if(_text.at(0)=='!')
       emit sig_updateView( this, QRect(_column,_row,_column,_row) );
@@ -1200,7 +1200,10 @@ void KSpreadSheet::setSelectionSize( KSpreadSelection* selectionInfo, int _size 
 
 struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
     int _type;
-    SetSelectionUpperLowerWorker( int type ) : KSpreadSheet::CellWorker( false ), _type( type ) { }
+    KSpreadChanges * _c;
+    KSpreadSheet   * _s;
+    SetSelectionUpperLowerWorker( int type, KSpreadChanges * c, KSpreadSheet * s ) 
+      : KSpreadSheet::CellWorker( false ), _type( type ), _c( c ), _s( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -1210,7 +1213,13 @@ struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
 		 && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
 		 && !c->isObscuringForced() );
     }
-    void doWork( KSpreadCell* cell, bool, int, int ) {
+    void doWork( KSpreadCell* cell, bool, int, int ) 
+    {
+        if ( _c )
+            _c->addChange( _s, cell, QPoint( cell->column(), cell->row() ),
+                           cell->getFormatString( cell->column(), cell->row() ), 
+                           cell->text() );
+
 	cell->setDisplayDirtyFlag();
 	if ( _type == -1 )
 	    cell->setCellText( (cell->text().lower()));
@@ -1223,13 +1232,21 @@ struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
 void KSpreadSheet::setSelectionUpperLower( KSpreadSelection* selectionInfo,
                                            int _type )
 {
-    SetSelectionUpperLowerWorker w( _type );
-    workOnCells( selectionInfo, w );
+  KSpreadChanges * c = 0;
+  if ( map() && map()->changes() )
+    c = map()->changes();
+
+  SetSelectionUpperLowerWorker w( _type, c, this );
+  workOnCells( selectionInfo, w );
 }
 
 
-struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker {
-    SetSelectionFirstLetterUpperWorker( ) : KSpreadSheet::CellWorker( false ) { }
+struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker 
+{
+    KSpreadChanges * _c;
+    KSpreadSheet   * _s;
+    SetSelectionFirstLetterUpperWorker( KSpreadChanges * c, KSpreadSheet * s ) 
+      : KSpreadSheet::CellWorker( false ), _c( c ), _s( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return   new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -1239,7 +1256,12 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker {
 		 && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
 		 && !c->isObscuringForced() );
     }
-    void doWork( KSpreadCell* cell, bool, int, int ) {
+    void doWork( KSpreadCell* cell, bool, int, int ) 
+    {
+        if ( _c )
+            _c->addChange( _s, cell, QPoint( cell->column(), cell->row() ),
+                           cell->getFormatString( cell->column(), cell->row() ), 
+                           cell->text() );
 	cell->setDisplayDirtyFlag();
 	QString tmp = cell->text();
 	int len = tmp.length();
@@ -1250,8 +1272,11 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker {
 
 void KSpreadSheet::setSelectionfirstLetterUpper( KSpreadSelection* selectionInfo)
 {
-    SetSelectionFirstLetterUpperWorker w;
-    workOnCells( selectionInfo, w );
+  KSpreadChanges * c = 0;
+  if ( map() && map()->changes() )
+    c = map()->changes();
+  SetSelectionFirstLetterUpperWorker w( c, this );
+  workOnCells( selectionInfo, w );
 }
 
 
@@ -1611,6 +1636,13 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
       }
 
       //      cell->setCellText(cellText.setNum( incr ));
+      // feed the change recorder
+      if ( map() && map()->changes() )
+      {
+        map()->changes()->addChange( this, cell, QPoint( x, y ),
+                                     cell->getFormatString( x, y ), 
+                                     cell->text() );
+      }
       cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
       if (mode == Column)
       {
@@ -1657,6 +1689,13 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
         cell = cell->obscuringCells().first();
       }
 
+      // feed the change recorder
+      if ( map() && map()->changes() )
+      {
+        map()->changes()->addChange( this, cell, QPoint( x, y ),
+                                     cell->getFormatString( x, y ), 
+                                     cell->text() );
+      }
       //      cell->setCellText(cellText.setNum( incr ));
       cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
       if (mode == Column)
@@ -1703,6 +1742,13 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
         cell = cell->obscuringCells().first();
       }
 
+      // feed the change recorder
+      if ( map() && map()->changes() )
+      {
+        map()->changes()->addChange( this, cell, QPoint( x, y ),
+                                     cell->getFormatString( x, y ), 
+                                     cell->text() );
+      }
       //cell->setCellText(cellText.setNum( incr ));
       cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
       if (mode == Column)
@@ -4565,7 +4611,11 @@ int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
 }
 
 struct ClearTextSelectionWorker : public KSpreadSheet::CellWorker {
-    ClearTextSelectionWorker( ) : KSpreadSheet::CellWorker( ) { }
+    KSpreadChanges * _c;
+    KSpreadSheet   * _s;
+
+    ClearTextSelectionWorker( KSpreadChanges * c, KSpreadSheet * s ) 
+      : KSpreadSheet::CellWorker( ), _c( c ), _s( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -4573,16 +4623,26 @@ struct ClearTextSelectionWorker : public KSpreadSheet::CellWorker {
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscured() );
     }
-    void doWork( KSpreadCell* cell, bool, int, int ) {
+    void doWork( KSpreadCell* cell, bool, int, int ) 
+    {
+        if ( _c )
+            _c->addChange( _s, cell, QPoint( cell->column(), cell->row() ),
+                           cell->getFormatString( cell->column(), cell->row() ), 
+                           cell->text() );
+       
 	cell->setCellText( "" );
     }
 };
 
 void KSpreadSheet::clearTextSelection( KSpreadSelection* selectionInfo )
 {
-  if(areaIsEmpty(selectionInfo->selection()))
+  if (areaIsEmpty(selectionInfo->selection()))
     return;
-  ClearTextSelectionWorker w;
+  KSpreadChanges * c = 0;
+  if ( map() && map()->changes() )
+    c = map()->changes();
+
+  ClearTextSelectionWorker w( c, this );
   workOnCells( selectionInfo, w );
 }
 
@@ -4895,7 +4955,10 @@ QString KSpreadSheet::getWordSpelling(KSpreadSelection* selectionInfo )
 struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
     QStringList& list;
     int pos;
-    SetWordSpellingWorker( QStringList& _list ) : KSpreadSheet::CellWorker( false, false, true ), list( _list ), pos( 0 ) { }
+    KSpreadChanges * ch;
+    KSpreadSheet   * sheet;
+    SetWordSpellingWorker( QStringList & _list, KSpreadChanges * _c, KSpreadSheet * s ) 
+      : KSpreadSheet::CellWorker( false, false, true ), list( _list ), pos( 0 ), ch( _c ), sheet( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -4903,12 +4966,18 @@ struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
     bool testCondition( KSpreadCell* ) {
         return true;
     }
-    void doWork( KSpreadCell* c, bool cellRegion, int, int ) {
+    void doWork( KSpreadCell* c, bool cellRegion, int, int ) 
+    {
 	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
 	    if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
 		 && !c->isDate() && c->content() != KSpreadCell::VisualFormula
 		 && !c->text().isEmpty())
 	    {
+              if ( ch )
+                ch->addChange( sheet, c, QPoint( c->column(), c->row() ),
+                               c->getFormatString( c->column(), c->row() ), 
+                               c->text() );
+
 		c->setCellText( list[pos] );
 		pos++;
 	    }
@@ -4919,8 +4988,12 @@ struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
 void KSpreadSheet::setWordSpelling(KSpreadSelection* selectionInfo,
                                    const QString _listWord )
 {
+    KSpreadChanges * c = 0;
+    if ( map() && map()->changes() )
+      c = map()->changes();
+
     QStringList list = QStringList::split ( '\n', _listWord );
-    SetWordSpellingWorker w( list );
+    SetWordSpellingWorker w( list, c, this );
     workOnCells( selectionInfo, w );
 }
 
@@ -5117,6 +5190,14 @@ void KSpreadSheet::pasteTextPlain( QString &_text, QRect pasteArea)
 
     if ( !isProtected() || cell->notProtected( mx, my + i ) )
     {
+      // feed the change recorder
+      if ( map() && map()->changes() )
+      {
+        map()->changes()->addChange( this, cell, QPoint( mx, my + i ),
+                                     cell->getFormatString( mx, my + 1 ), 
+                                     cell->text() );
+      }
+
       cell->setCellText( rowtext );
       cell->updateChart();
     }
