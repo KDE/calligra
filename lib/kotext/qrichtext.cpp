@@ -4543,22 +4543,10 @@ int KoTextParag::nextTabDefault( int, int x )
 	    ta = doc->tabArray();
 	tabStopWidth = doc->tabStopWidth();
     }
-    if ( ta ) {
-	int i = 0;
-	while ( ta[ i ] ) {
-	    if ( ta[ i ] >= x )
-		return tArray[ i ];
-	    ++i;
-	}
-	return tArray[ 0 ];
-    } else {
-	int d;
-	if ( tabStopWidth != 0 )
-	    d = x / tabStopWidth;
-	else
-	    return x;
-	return tabStopWidth * ( d + 1 );
-    }
+    if ( tabStopWidth != 0 )
+	return tabStopWidth*(x/tabStopWidth+1);
+    else
+        return x;
 }
 
 void KoTextParag::setPainter( QPainter *p, bool adjust  )

@@ -916,8 +916,6 @@ int KoTextParag::nextTab( int chnum, int x )
             else
                 ++i;
         }
-        // No more tabs
-        return tArray[0];
     }
     // No tab list, use tab-stop-width. qrichtext.cpp has the code :)
     return KoTextParag::nextTabDefault( chnum, x );
