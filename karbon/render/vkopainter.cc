@@ -79,6 +79,7 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bo
 
 	m_stroke = 0L;
 	m_fill = 0L;
+	m_fillRule = evenOdd;
 
 	xlib_rgb_init_with_depth( target->x11Display(), XScreenOfDisplay( target->x11Display(),
 							  target->x11Screen() ), target->x11Depth() );
