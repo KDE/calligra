@@ -417,7 +417,7 @@ void KWFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 }
 
 void KWFindReplace::replace( const QString &, int matchingIndex,
-                             int matchingLength ,int matchedLength,  const QRect &/*expose*/ )
+                             int /*matchingLength*/ ,int matchedLength,  const QRect &/*expose*/ )
 {
     int index = m_offset + matchingIndex;
     // highlight might not have happened (if 'prompt on replace' is off)
@@ -426,17 +426,9 @@ void KWFindReplace::replace( const QString &, int matchingIndex,
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
-    // Remove the match
-    m_currentFrameSet->removeSelectedText( &cursor, KWTextFrameSet::HighlightSelection, i18n("Remove Replacement") );
 
-    //textdoc->removeSelectedText( KWTextFrameSet::HighlightSelection, &cursor );
-    // Insert the replacement
-    QTextFormat * format = m_currentParag->at( index )->format();
-    // ## TODO back references (qt3)
-    // TODO a macro command somehow
-    m_currentFrameSet->insert( &cursor, static_cast<KWTextFormat *>(format),
-                               m_replaceDlg->replacement(), true, false,
-                               i18n("Insert Replacement") );
+    m_currentFrameSet->replaceSelection( &cursor,m_replaceDlg->replacement(),KWTextFrameSet::HighlightSelection, i18n("Insert Replacement"));
+
 }
 
 #include "searchdia.moc"
