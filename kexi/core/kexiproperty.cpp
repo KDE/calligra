@@ -316,7 +316,7 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 	}
 
 	//1. Check if the value should be changed
-	bool ch = false;
+	bool ch;
 	if (m_value.type()==QVariant::DateTime
 		|| m_value.type()==QVariant::Time) {
 		//for date and datetime types: compare with strings, because there
@@ -325,11 +325,12 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 	}
 	else if (m_value.type()==QVariant::String) {
 		//property is also changed for string type, if one of value is empty and other isn't
-		if (m_value.toString().isEmpty() != v.toString().isEmpty())
-			ch = true;
+		ch = (m_value.toString().isEmpty() != v.toString().isEmpty());
 	}
+	else
+		ch = (m_value != v);
 
-	if (!ch && m_value == v)
+	if (!ch) // && m_value == v)
 		return;
 
 	if (saveOldValue) {
