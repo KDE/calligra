@@ -1390,8 +1390,41 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             }
             if ( !hyperlink.isNull() )
             {
-                //TODO
+                //<gmr:HyperLink type="GnmHLinkURL" target="www.kde.org"/>
                 kdDebug()<<" import hyperlink \n";
+                if ( hyperlink.toElement().hasAttribute( "type" ) )
+                {
+                    QString linkType= hyperlink.toElement().attribute( "type" );
+                    QString target = hyperlink.toElement().attribute( "target" );
+                    QString tip = hyperlink.toElement().attribute( "tip" );
+                    if ( !tip.isEmpty() )
+                        kspread_cell->setCellText( tip );
+                    if ( linkType=="GnmHLinkURL" )
+                    {
+                        if ( !target.startsWith( "http://" ) )
+                            target="http://"+target;
+                        kspread_cell->setLink( target );
+                    }
+                    else if ( linkType=="GnmHLinkEMail" )
+                    {
+                        if ( !target.startsWith( "mailto:/" ) )
+                            target="mailto:/"+target;
+                        kspread_cell->setLink( target );
+                    }
+                    else if ( linkType=="GnmHLinkExternal" )
+                    {
+                        if ( !target.startsWith( "file://" ) )
+                            target="file://"+target;
+
+                        kspread_cell->setLink( target );
+                    }
+                    else if ( linkType=="GnmHLinkCurWB" )
+                    {
+                        kspread_cell->setLink( target );
+                    }
+                    else
+                        kdDebug()<<" linkType not defined : "<<linkType<<endl;
+                }
             }
           }
         }
