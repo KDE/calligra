@@ -75,34 +75,44 @@ SelectTool::~SelectTool()
  */
 void SelectTool::processEvent( QEvent* e )
 {
-    QMouseEvent *m;
+  QMouseEvent *m;
 
-    switch (e->type())
-    {
+  switch (e->type())
+  {
     case QEvent::MouseButtonDblClick:
-        m = (QMouseEvent *)e;
-        if( m->button() == LeftButton )
-            leftDoubleClick(m->pos());
-        break;
+      m = (QMouseEvent *)e;
+
+      if( m->button() == LeftButton ) {
+        leftDoubleClick(m->pos());
+      }
+
+      m_pCanvas->setFocus();
+      break;
+
     case QEvent::MouseButtonPress:
-        m = (QMouseEvent *)e;
-        if( m->button() == RightButton )
-            showPopupMenu(m->globalPos());
-        else if( m->button() == LeftButton )
-            mousePress( m->pos() );
-        break;
+      m = (QMouseEvent *)e;
+
+      if( m->button() == RightButton ) {
+        showPopupMenu(m->globalPos());
+      } else if( m->button() == LeftButton ) {
+        mousePress( m->pos() );
+      }
+
+      m_pCanvas->setFocus();
+      break;
 
     case QEvent::MouseButtonRelease:
-        mouseRelease( ((QMouseEvent *)e)->pos() );
-        break;
+      mouseRelease( ((QMouseEvent *)e)->pos() );
+      m_pCanvas->setFocus();
+      break;
 
     case QEvent::MouseMove:
-        mouseMove( ((QMouseEvent *)e)->pos() );
-        break;
+      mouseMove( ((QMouseEvent *)e)->pos() );
+      break;
 
     default:
       break;
-    }
+  }
 }
 
 void SelectTool::activate()

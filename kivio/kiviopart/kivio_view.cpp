@@ -144,6 +144,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
     KoPoint xy(0, 0);
     QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
       .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
+    sb->removeItem(MOUSEPOS_TEXT);
     sb->insertItem(text, MOUSEPOS_TEXT, 0, true);
   }
 
