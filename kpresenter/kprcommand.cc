@@ -1720,12 +1720,10 @@ KPrInsertPageCmd::KPrInsertPageCmd( const QString &_name,int _pos, KPrPage *_pag
     m_page(_page),
     position(_pos)
 {
-    kdDebug()<<"page :"<<m_page<<endl;
 }
 
 KPrInsertPageCmd::~KPrInsertPageCmd()
 {
-    //todo
     m_page->deletePage();
 }
 
@@ -1754,7 +1752,6 @@ KPrMovePageCmd::KPrMovePageCmd( const QString &_name,int _oldpos,int _newpos, KP
 
 KPrMovePageCmd::~KPrMovePageCmd()
 {
-    //todo
 }
 
 void KPrMovePageCmd::execute()
@@ -1804,7 +1801,6 @@ KPrChangeCustomVariableValue::KPrChangeCustomVariableValue( const QString &name,
     oldValue(_oldValue),
     m_var(var)
 {
-    kdDebug()<<"newValue :"<<newValue <<" oldValue :"<<oldValue<<endl;
 }
 
 void KPrChangeCustomVariableValue::execute()
