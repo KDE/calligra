@@ -51,6 +51,7 @@ bool kspreadfunc_islogical( KSContext& context );
 bool kspreadfunc_isnottext( KSContext& context );
 bool kspreadfunc_isnum( KSContext& context );
 bool kspreadfunc_isodd( KSContext& context );
+bool kspreadfunc_isref( KSContext& context );
 bool kspreadfunc_istext( KSContext& context );
 bool kspreadfunc_istime( KSContext& context );
 bool kspreadfunc_n( KSContext & context );
@@ -72,6 +73,7 @@ void KSpreadRegisterInformationFunctions()
   repo->registerFunction( "ISNOTTEXT", kspreadfunc_isnottext );
   repo->registerFunction( "ISNUM", kspreadfunc_isnum );
   repo->registerFunction( "ISODD", kspreadfunc_isodd );
+  repo->registerFunction( "ISREF", kspreadfunc_isref );
   repo->registerFunction( "ISTEXT", kspreadfunc_istext );
   repo->registerFunction( "ISTIME", kspreadfunc_istime );
   repo->registerFunction( "N", kspreadfunc_n );
@@ -210,6 +212,25 @@ bool kspreadfunc_istext( KSContext& context )
 
   bool logic = KSUtil::checkType( context, args[0], KSValue::StringType, true );
   context.setValue( new KSValue(logic));
+  return true;
+}
+
+// Function: ISREF
+bool kspreadfunc_isref( KSContext& context )
+{
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ISREF", true ) )
+    return false;
+
+  bool ref;
+
+  if ( !KSUtil::checkType( context, extra[0], KSValue::StringType, true ) )
+    ref = false;
+  else
+    ref = true;
+      
+  context.setValue( new KSValue( ref ) );
   return true;
 }
 
@@ -384,42 +405,68 @@ bool kspreadfunc_countblank( KSContext & context )
 // Function: TYPE
 bool kspreadfunc_type( KSContext & context )
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+  kdDebug() << "Here " << endl;
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "TYPE", true ) )
     return false;
 
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+  kdDebug() << "Here0 " << endl;
+
+  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
   {
     context.setValue( new KSValue( 1 ) );
     return true;
   }
 
-  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) 
-       || KSUtil::checkType( context, args[0], KSValue::IntType, true )
-       || KSUtil::checkType( context, args[0], KSValue::DateType, true )
-       || KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
+  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) 
+       || KSUtil::checkType( context, args[0], KSValue::IntType, false )
+       || KSUtil::checkType( context, args[0], KSValue::DateType, false )
+       || KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
   {
     context.setValue( new KSValue( 2 ) );
     return true;
   }
+  kdDebug() << "Here1 " << endl;
 
-  if ( KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
+  if ( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
   {
     context.setValue( new KSValue( 4 ) );
     return true;
   }
 
-  if ( KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+  kdDebug() << "Here2 " << endl;
+
+  if ( KSUtil::checkType( context, args[0], KSValue::ListType, false ) )
   {
     context.setValue( new KSValue( 64 ) );
     return true;
   }
 
-  // TODO: for errors we need direct access to the cell
-  //  if ( cell->hasError() )
-  //    context.setValue( new KSValue( 16 ) );
-  
+  kdDebug() << "Here3 " << endl;
+
+  QString p( extra[0]->stringValue() );
+  if ( !p.isEmpty() )
+  {
+    KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+    KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+    KSpreadPoint point( p, map, table );
+    if ( point.isValid() )
+    {
+      KSpreadCell * cell = point.table->cellAt( point.pos.x(), point.pos.y() );
+
+      if ( cell->hasError() )
+      {
+        context.setValue( new KSValue( 16 ) );
+        return true;
+      }
+    }
+  }
+
+  context.setValue( new KSValue( 0 ) );
+
   return true;
 }
 

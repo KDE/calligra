@@ -27,6 +27,7 @@ class QDomElement;
 class QDomDocument;
 class DCOPObject;
 
+#include <qbrush.h>
 #include <qpen.h>
 #include <qcolor.h>
 #include <qfont.h>
