@@ -300,14 +300,23 @@
 		type	NMTOKEN #REQUIRED
 		depth	NMTOKEN #REQUIRED>
 
+<!--	Describes a text of a text object
+
+		Attributes:
+                strikeoutstyleline solid, dash, dot, dashdot, dashdotdot
+                underlinestyleline solid, dash, dot, dashdot, dashdotdot
+-->
 <!ELEMENT TEXT (#PCDATA)>
 <!ATTLIST TEXT
 		family	CDATA	#REQUIRED
 		pointSize NMTOKEN #REQUIRED
 		underline ( 0 | 1 | single | double ) #REQUIRED
+                underlinestyleline CDATA #REQUIRED
+                underlinecolor CDATA #REQUIRED
                 bold ( 0 | 1 ) #REQUIRED
                 italic ( 0 | 1 ) #REQUIRED
                 strikeOut (0 | 1) #REQUIRED
+                strikeoutstyleline CDATA #REQUIRED
                 whitespace NMTOKEN #IMPLIED
 		color	CDATA	#REQUIRED
                 textbackcolor CDATA #REQUIRES

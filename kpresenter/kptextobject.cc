@@ -442,7 +442,7 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
     tmpPointSize=static_cast<int>(KoZoomHandler::layoutUnitPtToPt( lastFormat->font().pointSize()));
     tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
     tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
-    tmpUnderline=static_cast<unsigned int>(lastFormat->font().underline());
+    tmpUnderline=static_cast<unsigned int>(lastFormat->underline());
     tmpStrikeOut=static_cast<unsigned int>(lastFormat->font().strikeOut());
     tmpColor=lastFormat->color().name();
     tmpVerticalAlign=static_cast<unsigned int>(lastFormat->vAlign());
@@ -460,8 +460,18 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         element.setAttribute(attrUnderline, "double");
     else if(tmpUnderline)
         element.setAttribute(attrUnderline, tmpUnderline);
+    QString strLineType=lineTypeToString( lastFormat->lineType() );
+    element.setAttribute( "underlinestyleline", strLineType );
+    if ( lastFormat->textUnderlineColor().isValid() )
+    {
+        element.setAttribute( "underlinecolor", lastFormat->textUnderlineColor().name() );
+    }
     if(tmpStrikeOut)
+    {
         element.setAttribute(attrStrikeOut, tmpStrikeOut);
+        QString strLineType=lineTypeToString( lastFormat->strikeOutType() );
+        element.setAttribute( "strikeoutstyleline", strLineType );
+    }
     element.setAttribute(attrColor, tmpColor);
 
     if(!tmpTextBackColor.isEmpty())
@@ -672,7 +682,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     bool italic = false;
     if(n.hasAttribute(attrItalic))
         italic=(bool)n.attribute( attrItalic ).toInt();
-    bool underline=false;
+
     if(n.hasAttribute( attrUnderline ))
     {
         QString value = n.attribute( attrUnderline );
@@ -681,11 +691,24 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
         else if ( value == "single" )
             format.setNbLineType ( KoTextFormat::SIMPLE);
         else
-            underline = (bool)value.toInt();
+            format.setNbLineType ( (bool)value.toInt() ? KoTextFormat::SIMPLE :KoTextFormat::NONE);
+    }
+    if (n.hasAttribute("underlinestyleline") )
+    {
+        format.setLineType( stringToLineType( n.attribute("underlinestyleline") ));
+    }
+    if (n.hasAttribute("underlinecolor"))
+    {
+        format.setTextUnderlineColor(QColor(n.attribute("underlinecolor")));
     }
     bool strikeOut=false;
     if(n.hasAttribute(attrStrikeOut))
         strikeOut = (bool)n.attribute( attrStrikeOut ).toInt();
+    if (n.hasAttribute("strikeoutstyleline"))
+    {
+        QString strLineType = n.attribute("strikeoutstyleline");
+        format.setStrikeOutType( stringToLineType( strLineType ));
+    }
 
     QString color = n.attribute( attrColor );
     fn.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( size ) );
@@ -704,7 +727,6 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
         tmpCol=tmpCol.isValid() ? tmpCol : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
         format.setTextBackgroundColor(tmpCol);
     }
-    //TODO FIXME : value is correct, but format is not good :(
     if(n.hasAttribute(attrVertAlign))
         format.setVAlign( static_cast<KoTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
 
@@ -712,6 +734,47 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     //kdDebug()<<"loadFormat :"<<format.key()<<endl;
     return format;
 }
+
+QString KPTextObject::lineTypeToString( KoTextFormat::LineType _lineType )
+{
+    QString strLineType;
+    switch ( _lineType )
+    {
+    case KoTextFormat::SOLID:
+        strLineType ="solid";
+        break;
+    case KoTextFormat::DASH:
+        strLineType ="dash";
+        break;
+    case KoTextFormat::DOT:
+        strLineType ="dot";
+        break;
+    case KoTextFormat::DASH_DOT:
+        strLineType="dashdot";
+        break;
+    case KoTextFormat::DASH_DOT_DOT:
+        strLineType="dashdotdot";
+        break;
+    }
+    return strLineType;
+}
+
+KoTextFormat::LineType KPTextObject::stringToLineType( const QString & _str )
+{
+    if ( _str =="solid")
+        return KoTextFormat::SOLID;
+    else if ( _str =="dash" )
+        return KoTextFormat::DASH;
+    else if ( _str =="dot" )
+        return KoTextFormat::DOT;
+    else if ( _str =="dashdot")
+        return KoTextFormat::DASH_DOT;
+    else if ( _str=="dashdotdot")
+        return KoTextFormat::DASH_DOT_DOT;
+    else
+        return KoTextFormat::SOLID;
+}
+
 
 KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresenterDoc *doc, bool findStyle)
 {
