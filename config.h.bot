@@ -1,0 +1,10 @@
+
+/* this is for Tru64 Unix (alias OSF, alias Digital Unix) */
+
+#ifdef __osf__
+#ifdef __cplusplus
+#include <iostream.h>
+#endif
+#include <assert.h>
+#endif
+
