@@ -271,10 +271,29 @@ static void ProcessLinkTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
     VariableData *variable = (VariableData *) tagData;
 
+    QString linkName, hrefName;
+
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("linkName", "QString", &variable->m_linkName) );
-    attrProcessingList.append ( AttrProcessing ("hrefName", "QString", &variable->m_hrefName) );
+    attrProcessingList.append ( AttrProcessing ("linkName", "QString", &linkName) );
+    attrProcessingList.append ( AttrProcessing ("hrefName", "QString", &hrefName) );
     ProcessAttributes (myNode, attrProcessingList);
+
+    variable->setLink(linkName, hrefName);
+}
+
+
+static void ProcessPgNumTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
+{
+    VariableData *variable = (VariableData *) tagData;
+
+    QString subtype, value;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("subtype", "QString", &subtype) );
+    attrProcessingList.append ( AttrProcessing ("value",   "QString", &value  ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    variable->setPgNum(subtype, value);
 }
 
 
@@ -294,16 +313,17 @@ static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader*
     VariableData *variable = (VariableData *) tagData;
 
     QValueList<TagProcessing> tagProcessingList;
-    // "TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK"
+    // "TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK|NOTE"
     tagProcessingList
         << TagProcessing ( "TYPE",          ProcessTypeTag,         variable )
-        << TagProcessing ( "PGNUM",         NULL,                   NULL      )
+        << TagProcessing ( "PGNUM",         ProcessPgNumTag,        variable )
         << TagProcessing ( "DATE",          NULL,                   NULL      )
         << TagProcessing ( "TIME",          NULL,                   NULL      )
         << TagProcessing ( "CUSTOM",        NULL,                   NULL      )
         << TagProcessing ( "SERIALLETTER",  NULL,                   NULL      )
         << TagProcessing ( "FIELD",         NULL,                   NULL      )
         << TagProcessing ( "LINK",          ProcessLinkTag,         variable )
+        << TagProcessing ( "NOTE",          NULL,                   NULL      )
         ;
     ProcessSubtags (myNode, tagProcessingList, leader);
 }

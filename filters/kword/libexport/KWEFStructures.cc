@@ -47,6 +47,39 @@ void Table::addCell ( int                   c,
    cellList << TableCell ( c, r, new QValueList<ParaData> (p) );
 }
 
+void VariableData::setLink(const QString& linkName, const QString& hrefName)
+{
+    propertyMap["link:linkName"]=linkName;
+    propertyMap["link:hrefName"]=hrefName;
+}
+
+QString VariableData::getLinkName(void) const
+{
+    return propertyMap["link:linkName"];
+}
+
+QString VariableData::getHrefName(void) const
+{
+    return propertyMap["link:hrefName"];
+}
+
+void VariableData::setPgNum(const QString& subtype, const QString& value)
+{
+    propertyMap["pgnum:subtype"]=subtype;
+    propertyMap["pgnum:value"]=value;
+}
+
+bool VariableData::isPageNumber(void) const
+{
+    const int num=propertyMap["pgnum:subtype"].toInt();
+    return (num==0);
+}
+
+bool VariableData::isPageCount(void) const
+{
+    const int num=propertyMap["pgnum:subtype"].toInt();
+    return (num==1);
+}
 
 void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormatDataList)
 {

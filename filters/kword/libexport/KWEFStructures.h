@@ -38,6 +38,7 @@
 
 #include <qvaluelist.h>
 #include <qstring.h>
+#include <qmap.h>
 #include <qcolor.h>
 #include <qdom.h>
 
@@ -160,11 +161,24 @@ public:
     VariableData () {}
     VariableData ( const QString& text ) : m_text(text) {}
 public:
+    /**
+     * Set parameters of a <LINK> element
+     */
+    void setLink(const QString& linkName, const QString& hrefName);
+    QString getLinkName(void) const; // Name of link (attribute "linkName" of <LINK>)
+    QString getHrefName(void) const; // Reference of link (attribute "hrefName" of <LINK>)
+    /**
+     * Set paramaeters of a <PGNUM> element
+     */
+    void setPgNum(const QString& subtype, const QString& value);
+    bool isPageNumber(void) const;
+    bool isPageCount(void) const;
+public:
     QString m_key;
     QString m_text;
     int m_type;
-    QString m_linkName; // Name of link (attribute "linkName" of <LINK>)
-    QString m_hrefName; // Reference of link (attribute "hrefName" of <LINK>)
+protected:
+    QMap<QString,QString> propertyMap;
 };
 
 class FormatData
