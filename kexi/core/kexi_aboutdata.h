@@ -39,9 +39,9 @@ KAboutData *newKexiAboutData()
 	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Developer"),"psn@linux.se");
 	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Form Designer, UIModes & much more"), "jowenn@kde.org");
 	aboutData->addAuthor("Seth Kurzenberg",I18N_NOOP("CQL++, SQL assistance"),  "seth@cql.com");
-	aboutData->addAuthor("Daniel Molkentin",I18N_NOOP("Design, Improvements"),  "molkentin@kde.org");
 	aboutData->addAuthor("Laurent Montel", I18N_NOOP("Code cleanings"), "montell@club-internet.fr");
 	aboutData->addAuthor("Till Busch", I18N_NOOP("Buxfixes, Original Table Widget"), "till@bux.at");
+	aboutData->addCredit("Daniel Molkentin",I18N_NOOP("Initial design improvements"),  "molkentin@kde.org");
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and UI-Research"), "kristof.borrey@skynet.be");
 	aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
 

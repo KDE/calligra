@@ -199,7 +199,7 @@ QString KexiKugarHandlerItem::generateDataFile() {
 			}
 
 
-			KexiDBRecord  *recs=prov->records(KexiProjectHandler::localIdentifier(queryLine),KexiDataProvider::Parameters());
+			KexiDBRecord  *recs=prov->records(0,KexiProjectHandler::localIdentifier(queryLine),KexiDataProvider::Parameters());
 			if (recs) {
 				kdDebug()<<"There are records"<<endl;
 

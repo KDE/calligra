@@ -48,9 +48,10 @@ class KexiQueryPart : public KexiProjectHandler, KexiDataProvider
 		virtual QPixmap				groupPixmap();
 		virtual QPixmap				itemPixmap();
 
-		virtual QStringList datasets();
-		virtual QStringList datasetNames();
-		virtual KexiDBRecord *records(const QString& identifier,Parameters params);
+		virtual QStringList datasets(QWidget*);
+		virtual QStringList datasetNames(QWidget*);
+		virtual KexiDBRecord *records(QWidget*,const QString& identifier,Parameters params);
+		virtual QStringList fields(QWidget*,const QString& identifier);
 	protected:
 		friend class KexiQueryPartProxy;
 

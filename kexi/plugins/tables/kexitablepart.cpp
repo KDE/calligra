@@ -108,7 +108,7 @@ KexiTablePart::embeddReadOnly(QWidget *w, KexiView *v)
 	return 0;
 }
 
-KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params)
+KexiDBRecord *KexiTablePart::records(QWidget*,const QString& identifier,Parameters params)
 {
 	kdDebug()<<"KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params)"<<endl;
 	kdDebug()<<"KexiDBRecord *KexiTablePart::records(): id: "<< identifier << endl;
@@ -128,17 +128,17 @@ KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params
 	return m_record;
 }
 
-QStringList KexiTablePart::fields(const QString& identifier)
+QStringList KexiTablePart::fields(QWidget*,const QString& identifier)
 {
 	return kexiProject()->db()->getColumns(localIdentifier(identifier));
 }
 
-QStringList KexiTablePart::datasets()
+QStringList KexiTablePart::datasets(QWidget*)
 {
 	return m_tableNames;
 }
 
-QStringList KexiTablePart::datasetNames()
+QStringList KexiTablePart::datasetNames(QWidget*)
 {
 	return m_tableNames;
 }
@@ -147,3 +147,4 @@ QStringList KexiTablePart::datasetNames()
 K_EXPORT_COMPONENT_FACTORY( kexihandler_table, KGenericFactory<KexiTablePart> )
 
 #include "kexitablepart.moc"
+//

@@ -51,7 +51,7 @@ public:
 	void store(KoStore*);
 	void load(KoStore*);
 
-	KexiDBRecord *records(KexiDataProvider::Parameters params=KexiDataProvider::Parameters());
+	KexiDBRecord *records(QWidget*,KexiDataProvider::Parameters params=KexiDataProvider::Parameters());
 
 
 protected:
@@ -59,10 +59,12 @@ protected:
 	friend class KexiQueryDesigerGuiEditor;
 
 private:
+	friend class KexiQueryPart;
 	KexiTableList			*m_designData;
 	QString				m_sql;
 	KexiDataProvider::ParameterList	m_params;
 	KexiQueryDesigner		*m_client;
+	QStringList			m_fields;
 };
 
 #endif

@@ -111,7 +111,7 @@ void KexiQueryPart::hookIntoView(KexiView *view)
 	virtual ParameterList parameters(const QString &identifier) { return ParameterList();}
 #endif
 
-QStringList KexiQueryPart::datasets() {
+QStringList KexiQueryPart::datasets(QWidget*) {
 	QStringList list;
 
 	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it) {
@@ -121,24 +121,28 @@ QStringList KexiQueryPart::datasets() {
 	return list;
 }
 
-KexiDBRecord *KexiQueryPart::records(const QString& identifier,Parameters params) {
+KexiDBRecord *KexiQueryPart::records(QWidget* dpar,const QString& identifier,Parameters params) {
 	QString shortID=localIdentifier(identifier);
 
 	KexiProjectHandlerItem *it=(*items())[shortID];
 	if (it) {
-		return (dynamic_cast<KexiQueryPartItem*>(it))->records(params);
+		return (dynamic_cast<KexiQueryPartItem*>(it))->records(dpar,params);
 	}
-
-	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it) {
-		if (it.current()->shortIdentifier()==shortID) {
-			return (dynamic_cast<KexiQueryPartItem*>(*it))->records(params);
-		}
-	}
-
 	return 0;
 }
 
-QStringList KexiQueryPart::datasetNames() {
+QStringList KexiQueryPart::fields(QWidget*,const QString& identifier) {
+	QString shortID=localIdentifier(identifier);
+	KexiProjectHandlerItem *it=(*items())[shortID];
+	if (it) {
+		return (dynamic_cast<KexiQueryPartItem*>(it))->m_fields;
+	}
+	kdDebug()<<"KexiQueryPart::fields(): couldn't find shortID "<<shortID<<endl;
+	QStringList list;
+	return list;
+}
+
+QStringList KexiQueryPart::datasetNames(QWidget*) {
 	QStringList list;
 
 	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it) {

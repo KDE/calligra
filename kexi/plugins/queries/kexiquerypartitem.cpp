@@ -32,6 +32,7 @@
 #include <kexitablelist.h>
 #include <kexitableitem.h>
 #include <kmessagebox.h>
+#include <kexidbrecord.h>
 
 KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
 		const QString& name, const QString& mime,
@@ -120,6 +121,14 @@ void KexiQueryPartItem::store(KoStore* store)
         	paramsElement.appendChild(param);
 	}
 
+	QDomElement fieldCacheParent = domDoc.createElement("fieldcache");
+	docElement.appendChild(fieldCacheParent);
+	for (QStringList::const_iterator it=m_fields.begin();it!=m_fields.end();++it) {
+		QDomElement fieldCacheElement=domDoc.createElement("field");
+		fieldCacheElement.setAttribute("name",(*it));
+		fieldCacheParent.appendChild(fieldCacheElement);
+	}
+
 	QByteArray data = domDoc.toCString();
 	data.resize(data.size()-1);
 
@@ -184,6 +193,13 @@ KexiQueryPartItem::load(KoStore* store)
                                         ));
 				}
 			}
+			if (readTag.tagName()=="fieldcache") {
+				m_fields.clear();
+				for (QDomElement fieldTag=readTag.firstChild().toElement(); !fieldTag.isNull();fieldTag=fieldTag.nextSibling().toElement())
+				{
+					m_fields<<fieldTag.attribute("name");
+				}
+			}
 		}
 		m_sql = el.namedItem("sql").toElement().attribute("statement");
 
@@ -196,7 +212,7 @@ KexiQueryPartItem::load(KoStore* store)
 }
 
 
-KexiDBRecord *KexiQueryPartItem::records(KexiDataProvider::Parameters params) {
+KexiDBRecord *KexiQueryPartItem::records(QWidget* dpar,KexiDataProvider::Parameters params) {
 	if(m_sql.isEmpty()) return 0;
 
 	QString query=m_sql;
@@ -206,7 +222,7 @@ KexiDBRecord *KexiQueryPartItem::records(KexiDataProvider::Parameters params) {
 			it=m_params.begin();it!=m_params.end();++it)
 		{
 			if (!params.contains((*it).name)) {
-				KexiDynamicQueryParameterDialog d(&params,m_params);
+				KexiDynamicQueryParameterDialog d(dpar,&params,m_params);
 				if (d.exec()==QDialog::Accepted) {
 
 					KexiDataProvider::Parameters::Iterator it;
@@ -248,6 +264,12 @@ KexiDBRecord *KexiQueryPartItem::records(KexiDataProvider::Parameters params) {
                 return 0;
         }
 
+	m_fields.clear();
+	for (int i=0;i<rec->fieldCount();i++)
+	{
+		kdDebug()<<"KexiQueryPartItem::records():adding "<<rec->fieldName(i)<<" to cache"<<endl;
+		m_fields<<rec->fieldName(i);
+	}
 	return rec;
 }
 

@@ -46,7 +46,7 @@
 
 KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name,
  KexiQueryPartItem *item, bool modeview)
- : KexiDialogBase(view,parent, name)
+ : KexiDialogBase(view,parent, name),m_item(item)
 {
 	QVBoxLayout *l = new QVBoxLayout(this);
 	setCaption(i18n("%1 - query").arg(name));
@@ -83,7 +83,6 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 		query();
 	}
 
-	m_item = item;
 	connect(m_tab, SIGNAL(currentChanged(QWidget *)), this, SLOT(viewChanged(QWidget *)));
 	connect(this, SIGNAL(closing(KexiDialogBase *)), this, SLOT(slotClosing(KexiDialogBase *)));
 }
@@ -93,7 +92,7 @@ KexiQueryDesigner::query()
 {
 	m_item->setSQL(m_statement);
 	m_item->setParameters(m_parameters);
-	KexiDBRecord *rec=m_item->records();
+	KexiDBRecord *rec=m_item->records(this);
 	if (rec) {
 		m_view->setDataSet(rec);
 		emit queryExecuted(m_statement,true);

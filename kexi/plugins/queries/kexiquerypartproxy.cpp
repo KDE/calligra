@@ -86,7 +86,7 @@ KexiQueryPartProxy::slotCreateQuery()
     if(ok && name.length() > 0)
     {
 		KexiQueryPartItem *it;
-        part()->items()->insert("kexi/query/" + name,it=new KexiQueryPartItem(part(), name, "kexi/query", name));
+        part()->items()->insert(name,it=new KexiQueryPartItem(part(), name, "kexi/query", name));
         KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it, false);
         emit m_queryPart->itemListChanged(part());
         kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
@@ -98,11 +98,12 @@ KexiQueryPartProxy::slotCreateQuery()
 void
 KexiQueryPartProxy::slotOpen(const QString& identifier)
 {
-	if(kexiView()->activateWindow(identifier))
+	KexiProjectHandlerItem *it=(*(part()->items()))[part()->localIdentifier(identifier)];
+	if (!it) return;
+
+	if(kexiView()->activateWindow(it->identifier()))
 		return;
 
-	KexiProjectHandlerItem *it=(*(part()->items()))[identifier];
-	if (!it) return;
 	KexiQueryPartItem *it1=static_cast<KexiQueryPartItem*>(it->qt_cast("KexiQueryPartItem"));
 	if (!it1) return;
 
@@ -113,11 +114,12 @@ KexiQueryPartProxy::slotOpen(const QString& identifier)
 void
 KexiQueryPartProxy::slotEdit(const QString &identifier)
 {
-	if(kexiView()->activateWindow(identifier))
+	KexiProjectHandlerItem *it=(*(part()->items()))[part()->localIdentifier(identifier)];
+	if (!it) return;
+
+	if(kexiView()->activateWindow(it->identifier()))
 		return;
 
-	KexiProjectHandlerItem *it=(*(part()->items()))[identifier];
-	if (!it) return;
 	KexiQueryPartItem *it1=static_cast<KexiQueryPartItem*>(it->qt_cast("KexiQueryPartItem"));
 	if (!it1) return;
 
@@ -132,7 +134,7 @@ KexiQueryPartProxy::slotDelete(const QString &identifier)
 	kdDebug() << "KexiQueryPartProxy::slotDelete() id: " << identifier << endl;
 	kdDebug() << "KexiQueryPartProxy::slotDelete() name: " << name << endl;
 	kexiView()->project()->removeFileReference("/query/" + name + ".query");
-	part()->items()->remove(identifier);
+	part()->items()->remove(name);
 	KexiQueryPart *npart = static_cast<KexiQueryPart *>(part());
 	emit npart->itemListChanged(part());
 }

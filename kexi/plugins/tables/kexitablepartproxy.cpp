@@ -43,8 +43,8 @@ KexiTablePartProxy::KexiTablePartProxy(KexiTablePart *part,KexiView *view)
 
 	(void*) new KAction(i18n("Create &Table..."), 0,
 		this,SLOT(slotCreate()), actionCollection(), "tablepart_create");
-        
-	setXMLFile("kexitablepartui.rc");	
+
+	setXMLFile("kexitablepartui.rc");
 
 	view->insertChildClient(this);
 }
@@ -99,7 +99,8 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 	kdDebug() << "KexiTablePartProxy::slotOpen(): kexiView = " << kexiView() << endl;
 
 	//trying to get data
-	KexiDBRecord *data=m_tablePart->records(identifier,KexiDataProvider::Parameters());
+	KexiDBRecord  *data=m_tablePart->records(kexiView(),
+		identifier,KexiDataProvider::Parameters());
 	if (!data) {
 		 kdDebug() <<"KexitablePartProxy::slotOpen(): error while retrieving data, aborting"<<endl;
 		 return;

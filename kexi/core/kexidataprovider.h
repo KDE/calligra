@@ -26,7 +26,7 @@
 #include <qstringlist.h>
 
 class KexiDBRecord;
-
+class QWidget;
 
 #define KEXIDATAPROVIDER(obj) ((obj)?static_cast<KexiDataProvider*>((obj)->qt_cast("KexiDataProvider")):0)
 
@@ -51,11 +51,11 @@ public:
 
 	KexiDataProvider();
 	virtual ~KexiDataProvider();
-	virtual QStringList datasets() {return QStringList();}
-	virtual QStringList datasetNames() { return QStringList();}
-	virtual QStringList fields(const QString& identifier) {return QStringList();}
-	virtual KexiDBRecord *records(const QString& identifier,Parameters params) {return 0;}
-	virtual ParameterList parameters(const QString &identifier) { return ParameterList();}
+	virtual QStringList datasets(QWidget*) {return QStringList();}
+	virtual QStringList datasetNames(QWidget*) { return QStringList();}
+	virtual QStringList fields(QWidget*,const QString& identifier) {return QStringList();}
+	virtual KexiDBRecord *records(QWidget*,const QString& identifier,Parameters params) {return 0;}
+	virtual ParameterList parameters(QWidget*,const QString &identifier) { return ParameterList();}
 };
 
 #endif

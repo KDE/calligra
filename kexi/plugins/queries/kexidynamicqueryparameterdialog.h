@@ -30,7 +30,7 @@ class KexiDynamicQueryParameterDialog : public KDialogBase
 {
 	Q_OBJECT
 public:
-	KexiDynamicQueryParameterDialog(KexiDataProvider::Parameters *, const KexiDataProvider::ParameterList &);
+	KexiDynamicQueryParameterDialog(QWidget *parent,KexiDataProvider::Parameters *, const KexiDataProvider::ParameterList &);
 	virtual ~KexiDynamicQueryParameterDialog();
 
 protected:

@@ -27,9 +27,9 @@
 #include <qlineedit.h>
 #include <qobjectlist.h>
 
-KexiDynamicQueryParameterDialog::KexiDynamicQueryParameterDialog(
+KexiDynamicQueryParameterDialog::KexiDynamicQueryParameterDialog(QWidget *parent,
 	KexiDataProvider::Parameters *values, const KexiDataProvider::ParameterList &list):
-		KDialogBase(0, "paramddialog", true, i18n("Query Parameterrs"),
+		KDialogBase(parent, "paramddialog", true, i18n("Query Parameterrs"),
 		KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true )
 {
 	m_values=values;

@@ -119,7 +119,7 @@ void KuKexiFieldComboBox::setValue(const QString value, bool emitChange)
 				kdDebug()<<"Trying to lookup: "<<value;
 				int cnt=count();
 				for (int i=0;i<cnt;++i) {
-					if (text(i)== value) {	
+					if (text(i)== value) {
 						setCurrentItem(i);
 						return;
 					}
@@ -180,7 +180,7 @@ KuKexi::KuKexi(QObject *parent, const char* name, const QStringList& args):KuDes
 	m_kudesigner=static_cast<KudesignerDoc*>(parent->qt_cast("KudesignerDoc"));
 //	m_dialog=((KexiDialogBase*)parent->parent());
 //	m_kexi=(KexiProject*)m_dialog->kexiProject();
-//	m_kexi=(KexiProject*)(((KexiProjectHandlerItem*)parent->parent())->projectPart()->kexiProject());	
+//	m_kexi=(KexiProject*)(((KexiProjectHandlerItem*)parent->parent())->projectPart()->kexiProject());
 	KexiProjectHandlerItem *it=static_cast<KexiProjectHandlerItem*>(parent->parent()->qt_cast("KexiProjectHandlerItem"));
 	m_kexi=(KexiProject*)(it->projectPart()->kexiProject());
 	updateSourceList();
@@ -237,7 +237,7 @@ void KuKexi::slotDataSourceSelected(int level, int value)
 	item.pixmap.detach();
 	KexiProjectHandler *h=m_kexi->handlerForMime(item.mime);
 	KexiDataProvider *dp=static_cast<KexiDataProvider*>(h->qt_cast("KexiDataProvider"));
-	QStringList l=dp->fields(item.identifier);
+	QStringList l=dp->fields(0,item.identifier);
 	for (QStringList::const_iterator strit=l.begin();strit!=l.end();++strit)
 		kdDebug()<<"Field "<<(*strit)<<" added to cache"<<endl;
 	m_fieldMap[value]=l;
@@ -279,9 +279,9 @@ bool KuKexi::store(KoStore*) {
 		*/
 	}
 	cfg.sync();
-	return true;	
+	return true;
 }
-        
+
 bool KuKexi::load(KoStore*) {
 	QString filename;
 	getStorageFile(filename);
@@ -305,7 +305,7 @@ bool KuKexi::load(KoStore*) {
 			QString value=cfg.readEntry(key);
 			if (!value.isEmpty()) {
 				bool found=false;
-				int i=0;			
+				int i=0;
 				for (KexiDataSourceComboBox::ItemList::const_iterator sit=m_sourceMapping.begin();
 					sit!=m_sourceMapping.end();++sit,i++) {
 					kdDebug()<<(*sit).globalIdentifier<<"=="<<value<<"?"<<endl;
@@ -315,7 +315,7 @@ bool KuKexi::load(KoStore*) {
 						found=true;
 						break;
 					}
-					
+
 				}
 				if (found) continue;
 
@@ -343,7 +343,7 @@ void KuKexi::modifyItemPropertyOnSave(CanvasReportItem *item, const PropPtr &p,Q
 void KuKexi::modifyItemPropertyOnLoad(CanvasReportItem *item,const PropPtr &p,QString &propertyName,QString &propertyValue) {
 	if ((item->rtti()==KuDesignerRttiCanvasField) && (p->type()==FieldName)) {
 		propertyValue=KuKexiFieldComboBox::convertFromStorageName(propertyValue);
-	}	
+	}
 }
 
 
