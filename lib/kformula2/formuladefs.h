@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __FORMULADEFS_H
-#define __FORMULADEFS_H
+#ifndef FORMULADEFS_H
+#define FORMULADEFS_H
 
 
 /**
@@ -52,4 +52,16 @@ enum SymbolType {
  */
 enum MoveFlag { NormalMovement = 0, SelectMovement = 1, WordMovement = 2 };
 
-#endif // __FORMULADEFS_H
+
+/**
+ * The token types the sequence parser knows.
+ */
+enum TokenType {
+    TEXT, SYMBOL, NUMBER, ELEMENT, ERROR, END,
+    PLUS='+', MINUS='-', MUL='*', DIV='/',
+    ASSIGN='=', LESS='<', GREATER='>', SEPARATOR='\\',
+    COMMA=',', COLON=':', SEMICOLON=';'
+};
+
+
+#endif // FORMULADEFS_H

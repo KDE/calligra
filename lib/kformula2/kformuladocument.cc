@@ -178,6 +178,11 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                         this, SLOT(removeEnclosing()),
                                         collection, "removeenclosing");
 
+    makeGreekAction = new KAction(i18n("Convert to greek"),
+                                  CTRL + Key_G,
+                                  this, SLOT(makeGreek()),
+                                  collection, "makegreek");
+    
     QStringList delimiter;
     delimiter.append(QString("("));
     delimiter.append(QString("["));
@@ -349,6 +354,13 @@ void KFormulaDocument::removeEnclosing()
 {
     if (hasFormula()) {
         formula->replaceElementWithMainChild();
+    }
+}
+
+void KFormulaDocument::makeGreek()
+{
+    if (hasFormula()) {
+        formula->makeGreek();
     }
 }
 

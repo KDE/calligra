@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __FRACTIONELEMENT_H
-#define __FRACTIONELEMENT_H
+#ifndef FRACTIONELEMENT_H
+#define FRACTIONELEMENT_H
 
 #include "basicelement.h"
 
@@ -168,4 +168,4 @@ private:
 };
 
 
-#endif // __FRACTIONELEMENT_H
+#endif // FRACTIONELEMENT_H

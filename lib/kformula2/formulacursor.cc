@@ -26,11 +26,12 @@
 #include "rootelement.h"
 #include "sequenceelement.h"
 #include "symbolelement.h"
-#include "kformulawidget.h"
+#include "textelement.h"
 
 
 FormulaCursor::FormulaCursor(FormulaElement* element)
-        : selectionFlag(false), linearMovement(false), hasChangedFlag(true)
+        : selectionFlag(false), linearMovement(false),
+          hasChangedFlag(true), readOnly(false)
 {
     setTo(element, 0);
 }
@@ -65,6 +66,9 @@ void FormulaCursor::setMark(int mark)
 
 void FormulaCursor::draw(QPainter& painter)
 {
+    if (readOnly && !isSelection())
+        return;
+    
     // We only draw the cursor if its normalized.
     SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
 
@@ -274,6 +278,8 @@ void FormulaCursor::insert(BasicElement* child, BasicElement::Direction directio
 void FormulaCursor::insert(QList<BasicElement>& children,
                            BasicElement::Direction direction)
 {
+    if (readOnly)
+        return;
     BasicElement* element = getElement();
     element->insert(this, children, direction);
 }
@@ -287,6 +293,8 @@ void FormulaCursor::insert(QList<BasicElement>& children,
 void FormulaCursor::remove(QList<BasicElement>& children,
                            BasicElement::Direction direction)
 {
+    if (readOnly)
+        return;
     SequenceElement* sequence = getNormal();
     if (sequence != 0) {
 
@@ -314,6 +322,8 @@ void FormulaCursor::remove(QList<BasicElement>& children,
 void FormulaCursor::replaceSelectionWith(BasicElement* element,
                                          BasicElement::Direction direction)
 {
+    if (readOnly)
+        return;
     QList<BasicElement> list;
     // we suppres deletion here to get an error if something
     // was left in the list.
@@ -349,6 +359,8 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
  */
 BasicElement* FormulaCursor::replaceByMainChildContent(BasicElement::Direction direction)
 {
+    if (readOnly)
+        return 0;
     QList<BasicElement> childrenList;
     QList<BasicElement> list;
     BasicElement* element = getElement();
@@ -377,6 +389,8 @@ BasicElement* FormulaCursor::replaceByMainChildContent(BasicElement::Direction d
  */
 BasicElement* FormulaCursor::removeEnclosingElement(BasicElement::Direction direction)
 {
+    if (readOnly)
+        return 0;
     BasicElement* parent = getElement()->getParent();
     if (parent != 0) {
         if (getElement() == parent->getMainChild()) {
@@ -478,7 +492,7 @@ RootElement* FormulaCursor::getActiveRootElement()
 
 
 /**
- * Returns the SymbolElement the cursor is on or 0
+ * @returns the SymbolElement the cursor is on or 0
  * if there is non.
  */
 SymbolElement* FormulaCursor::getActiveSymbolElement()
@@ -492,6 +506,15 @@ SymbolElement* FormulaCursor::getActiveSymbolElement()
         }
     }
     return element;
+}
+
+
+/**
+ * @returns the TextElement the cursor is on or 0.
+ */
+TextElement* FormulaCursor::getActiveTextElement()
+{
+    return dynamic_cast<TextElement*>(getSelectedChild());
 }
 
 
@@ -570,6 +593,8 @@ QDomDocument FormulaCursor::copy()
  */
 bool FormulaCursor::buildElementsFromDom(QDomDocument doc, QList<BasicElement>& list)
 {
+    if (readOnly)
+        return false;
     SequenceElement* sequence = getNormal();
     if (sequence != 0) {
         QDomNode n = doc.firstChild();
@@ -591,7 +616,7 @@ bool FormulaCursor::buildElementsFromDom(QDomDocument doc, QList<BasicElement>& 
 FormulaCursor::CursorData* FormulaCursor::getCursorData()
 {
     return new CursorData(current, cursorPos, markPos,
-                          selectionFlag, linearMovement);
+                          selectionFlag, linearMovement, readOnly);
 }
 
 /**
@@ -605,6 +630,7 @@ void FormulaCursor::setCursorData(FormulaCursor::CursorData* data)
     markPos = data->markPos;
     selectionFlag = data->selectionFlag;
     linearMovement = data->linearMovement;
+    readOnly = data->readOnly;
     hasChangedFlag = true;
 }
 

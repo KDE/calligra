@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __SEQUENCEELEMENT_H
-#define __SEQUENCEELEMENT_H
+#ifndef SEQUENCEELEMENT_H
+#define SEQUENCEELEMENT_H
 
 #include <qlist.h>
 #include <qstring.h>
@@ -216,6 +216,15 @@ public:
      */
     bool buildChildrenFromDom(QList<BasicElement>& list, QDomNode n);
     
+    /**
+     * Parses the sequence and generates a new syntax tree.
+     * Has to be called after each modification.
+     *
+     * This is done internally in most cases. Only children that
+     * change their TokenType need to call this.
+     */
+    void parse();
+    
 
 protected:
 
@@ -294,12 +303,6 @@ protected:
 private:
 
     /**
-     * Parses the sequence and generates a new syntax tree.
-     * Has to be called after each modification.
-     */
-    void parse();
-    
-    /**
      * Removes the children at pos and appends it to the list.
      */
     void removeChild(QList<BasicElement>& removedChildren, int pos);
@@ -325,4 +328,4 @@ private:
     int relativeSize;
 };
 
-#endif // __SEQUENCEELEMENT_H
+#endif // SEQUENCEELEMENT_H

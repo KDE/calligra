@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KFORMULADOCUMENT_H
-#define __KFORMULADOCUMENT_H
+#ifndef KFORMULADOCUMENT_H
+#define KFORMULADOCUMENT_H
 
 #include <qobject.h>
 
@@ -110,6 +110,7 @@ public:
     KAction* getAddGenericUpperAction()  { return addGenericUpperAction; }
     KAction* getAddGenericLowerAction()  { return addGenericLowerAction; }
     KAction* getRemoveEnclosingAction()  { return removeEnclosingAction; }
+    KAction* getMakeGreekAction()        { return makeGreekAction; }
     KSelectAction* getLeftBracketAction()  { return leftBracket; }
     KSelectAction* getRightBracketAction() { return rightBracket; }
 
@@ -136,6 +137,7 @@ public slots:
     void addGenericLowerIndex();
     void addGenericUpperIndex();
     void removeEnclosing();
+    void makeGreek();
     void delimiterLeft();
     void delimiterRight();
 
@@ -171,6 +173,7 @@ private:
     KAction* addGenericUpperAction;
     KAction* addGenericLowerAction;
     KAction* removeEnclosingAction;
+    KAction* makeGreekAction;
 
     KSelectAction* leftBracket;
     KSelectAction* rightBracket;
@@ -207,4 +210,4 @@ private:
     ContextStyle contextStyle;
 };
 
-#endif // __KFORMULADOCUMENT_H
+#endif // KFORMULADOCUMENT_H

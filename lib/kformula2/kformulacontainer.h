@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KFORMULACONTAINER_H
-#define __KFORMULACONTAINER_H
+#ifndef KFORMULACONTAINER_H
+#define KFORMULACONTAINER_H
 
 #include <qclipboard.h>
 #include <qlist.h>
@@ -139,7 +139,7 @@ public:
     /**
      * @returns the cursor to be used for editing.
      */
-    FormulaCursor* getActiveCursor() { return activeCursor; }
+    FormulaCursor* getActiveCursor();
 
     /**
      * Sets the cursor that is to be used for any editing.
@@ -270,6 +270,11 @@ public slots:
      * Replaces the current name with its text symbol if it has one.
      */
     void compactExpression();
+
+    /**
+     * Converts the current character into a greek letter.
+     */
+    void makeGreek();
     
     /**
      * Insert data from the clipboard.
@@ -306,9 +311,9 @@ private:
     void execute(KFormulaCommand *command);
 
     /**
-     * @returns true if there is a cursor.
+     * @returns true if there is a cursor that is allowed to edit the formula.
      */
-    bool hasValidCursor() const { return activeCursor != 0; }
+    bool hasValidCursor() const;
 
     /**
      * If true we need to recalc the formula.
@@ -337,4 +342,4 @@ private:
 };
 
 
-#endif // __KFORMULACONTAINER_H
+#endif // KFORMULACONTAINER_H

@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __SYMBOLELEMENT_H
-#define __SYMBOLELEMENT_H
+#ifndef SYMBOLELEMENT_H
+#define SYMBOLELEMENT_H
 
 #include "artwork.h"
 #include "basicelement.h"
@@ -266,4 +266,4 @@ private:
 };
 
 
-#endif // __SYMBOLELEMENT_H
+#endif // SYMBOLELEMENT_H

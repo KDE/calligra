@@ -28,6 +28,7 @@
 #include "indexelement.h"
 #include "matrixelement.h"
 #include "sequenceelement.h"
+#include "textelement.h"
 
 
 int KFormulaCommand::evilDestructionCount = 0;
@@ -328,4 +329,34 @@ void KFCAddIndex::unexecute()
 {
     addIndex.unexecute();
     KFCAddReplacing::unexecute();
+}
+
+
+KFCMakeSymbol::KFCMakeSymbol(KFormulaContainer* document, TextElement* element)
+        : KFormulaCommand(i18n("Changes the char to a symbol"), document),
+          textElement(element)
+{
+}
+
+void KFCMakeSymbol::execute()
+{
+    //FormulaCursor* cursor = getExecuteCursor();
+    textElement->setSymbol(true);
+    //setUnexecuteCursor(cursor);
+    //cursor->setSelection(false);
+    testDirty();
+}
+
+void KFCMakeSymbol::unexecute()
+{
+    //FormulaCursor* cursor = getUnexecuteCursor();
+    textElement->setSymbol(false);
+    //cursor->setSelection(false);
+    //cursor->normalize();
+    testDirty();
+}
+
+bool KFCMakeSymbol::isSenseless()
+{
+    return !textElement->isSymbol();
 }

@@ -39,6 +39,7 @@
 #include "kformulacommand.h"
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
+#include "kformulamathmlread.h"
 #include "kformulamimesource.h"
 #include "kformulawidget.h"
 #include "matrixelement.h"
@@ -46,8 +47,6 @@
 #include "sequenceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
-#include "textsymbolelement.h"
-#include "kformulamathmlread.h"
 
 
 KFormulaContainer::KFormulaContainer(KFormulaDocument* doc)
@@ -97,6 +96,13 @@ void KFormulaContainer::changed()
     dirty = true;
 }
 
+
+FormulaCursor* KFormulaContainer::getActiveCursor()
+{
+    return activeCursor;
+}
+
+
 /**
  * Tells the formula that a view got the focus and might want to
  * edit the formula.
@@ -106,6 +112,13 @@ void KFormulaContainer::setActiveCursor(FormulaCursor* cursor)
     getDocument()->activate(this);
     activeCursor = cursor;
 }
+
+
+bool KFormulaContainer::hasValidCursor() const
+{
+    return (activeCursor != 0) && !activeCursor->isReadOnly();
+}
+
 
 void KFormulaContainer::testDirty()
 {
@@ -391,7 +404,9 @@ void KFormulaContainer::compactExpression()
         QChar ch = getDocument()->getSymbolTable().getSymbolChar(name);
         if (!ch.isNull()) {
             KFCReplace* command = new KFCReplace(i18n("Add symbol"), this);
-            command->addElement(new TextSymbolElement(ch));
+            TextElement* element = new TextElement(ch);
+            element->setSymbol(true);
+            command->addElement(element);
             execute(command);
             return;
         }
@@ -399,6 +414,22 @@ void KFormulaContainer::compactExpression()
 
     // It might have moved the cursor. So tell them.
     emit cursorMoved(cursor);
+}
+
+
+void KFormulaContainer::makeGreek()
+{
+    if (!hasValidCursor())
+        return;
+    FormulaCursor* cursor = getActiveCursor();
+    TextElement* element = cursor->getActiveTextElement();
+    if ((element != 0) && !element->isSymbol()) {
+        const SymbolTable& table = getDocument()->getSymbolTable();
+        if (table.getGreekLetters().find(element->getCharacter()) != -1) {
+            KFCMakeSymbol* command = new KFCMakeSymbol(this, element);
+            execute(command);
+        }
+    }
 }
 
 
@@ -434,12 +465,13 @@ void KFormulaContainer::paste()
 
 void KFormulaContainer::copy()
 {
-    if (!hasValidCursor())
-        return;
+    // read-only cursors are fine for copying.
     FormulaCursor* cursor = getActiveCursor();
-    QDomDocument formula = cursor->copy();
-    QClipboard* clipboard = QApplication::clipboard();
-    clipboard->setData(new KFormulaMimeSource(formula));
+    if (cursor != 0) {
+        QDomDocument formula = cursor->copy();
+        QClipboard* clipboard = QApplication::clipboard();
+        clipboard->setData(new KFormulaMimeSource(formula));
+    }
 }
 
 void KFormulaContainer::cut()
@@ -507,7 +539,7 @@ void KFormulaContainer::load(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
-        cerr << "Error" << endl;
+        cerr << "Error opening file" << endl;
         return;
     }
     QDomDocument doc;
@@ -534,7 +566,7 @@ void KFormulaContainer::loadMathMl(QString file)
         return;
     }
     MathMl2KFormula filter(&doc);
-        cerr << "Filtering" << endl;
+    //cerr << "Filtering" << endl;
 
     filter.startConversion();
     if(filter.isDone())
@@ -549,7 +581,7 @@ void KFormulaContainer::loadMathMl(QString file)
  */
 bool KFormulaContainer::load(QDomDocument doc)
 {
-cerr << "Loading" << endl;
+    //cerr << "Loading" << endl;
     QDomElement fe = doc.firstChild().toElement();
     if (!fe.isNull()) {
         FormulaElement* root = new FormulaElement(this);

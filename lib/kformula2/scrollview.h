@@ -1,6 +1,6 @@
 
-#ifndef __SCROLLVIEW_H
-#define __SCROLLVIEW_H
+#ifndef SCROLLVIEW_H
+#define SCROLLVIEW_H
 
 #include <qscrollview.h>
 
@@ -25,4 +25,4 @@ private:
     KFormulaWidget* child;
 };
 
-#endif // __SCROLLVIEW_H
+#endif // SCROLLVIEW_H

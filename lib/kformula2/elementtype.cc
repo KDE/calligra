@@ -63,16 +63,16 @@ AssignmentSep::AssignmentSep(SequenceParser* parser)
     lhs = new Assignment(parser);
 
     switch (parser->getTokenType()) {
-        case SequenceParser::Comma:
-        case SequenceParser::Colon:
-        case SequenceParser::Semicolon:
+        case COMMA:
+        case COLON:
+        case SEMICOLON:
             setStart(parser->getStart());
             setEnd(parser->getEnd());
             parser->setElementType(parser->getStart(), this);
             parser->nextToken();
             rhs = new AssignmentSep(parser);
             break;
-        case SequenceParser::End:
+        case END:
             break;
         default:
             rhs = new ErrorType(parser);
@@ -86,16 +86,16 @@ Assignment::Assignment(SequenceParser* parser)
     lhs = new Expression(parser);
 
     switch (parser->getTokenType()) {
-        case SequenceParser::Assign:
-        case SequenceParser::Less:
-        case SequenceParser::Greater:
+        case ASSIGN:
+        case LESS:
+        case GREATER:
             setStart(parser->getStart());
             setEnd(parser->getEnd());
             parser->setElementType(parser->getStart(), this);
             parser->nextToken();
             rhs = new Assignment(parser);
             break;
-        case SequenceParser::End:
+        case END:
             break;
         default:
             //rhs = new ErrorType(parser);
@@ -110,15 +110,15 @@ Expression::Expression(SequenceParser* parser)
     lhs = new Term(parser);
 
     switch (parser->getTokenType()) {
-        case SequenceParser::Plus:
-        case SequenceParser::Minus:
+        case PLUS:
+        case MINUS:
             setStart(parser->getStart());
             setEnd(parser->getEnd());
             parser->setElementType(parser->getStart(), this);
             parser->nextToken();
             rhs = new Expression(parser);
             break;
-        case SequenceParser::End:
+        case END:
             break;
         default:
             //rhs = new ErrorType(parser);
@@ -132,27 +132,28 @@ Term::Term(SequenceParser* parser)
 {
     lhs = parser->getPrimitive();
 
-    if (parser->getTokenType() == SequenceParser::Separator) {
+    if (parser->getTokenType() == SEPARATOR) {
         // A separator doesn't have a type
         parser->nextToken();
     }
     
     switch (parser->getTokenType()) {
-        case SequenceParser::Mul:
-        case SequenceParser::Div:
+        case MUL:
+        case DIV:
             setStart(parser->getStart());
             setEnd(parser->getEnd());
             parser->setElementType(parser->getStart(), this);
             parser->nextToken();
             rhs = new Term(parser);
             break;
-        case SequenceParser::Text:
-        case SequenceParser::Number:
-        case SequenceParser::Element:
+        case TEXT:
+        case NUMBER:
+        case SYMBOL:
+        case ELEMENT:
             // assume mul if no operator
             rhs = new Term(parser);
             break;
-        case SequenceParser::End:
+        case END:
             break;
         default:
             break;
@@ -189,6 +190,12 @@ NameType::NameType(SequenceParser* parser, QString n)
 {
 }
 
+
+TextSymbolType::TextSymbolType(SequenceParser* parser)
+        : MultiElementType(parser)
+{
+}
+    
 
 NumberType::NumberType(SequenceParser* parser)
         : MultiElementType(parser)
@@ -277,6 +284,10 @@ QFont NameType::getFont(const ContextStyle& context)
     return context.getNameFont();
 }
 
+QFont TextSymbolType::getFont(const ContextStyle& context)
+{
+    return context.getSymbolFont();
+}
 
 QFont NumberType::getFont(const ContextStyle& context)
 {

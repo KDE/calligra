@@ -47,45 +47,24 @@ void SequenceParser::nextToken()
 {
     tokenStart = tokenEnd;
     if (tokenStart >= list.count()) {
-        type = End;
+        type = END;
         return;
     }
     tokenEnd++;
     BasicElement* element = list.at(tokenStart);
-    QChar ch = element->getCharacter();
-    char latin1 = ch.latin1();
-    switch (latin1) {
-        case '+':
-        case '-':
-        case '*':
-        case '/':
-        case '=':
-        case '<':
-        case '>':
-        case '\\':
-        case ',':
-        case ';':
-        case ':':
-            type = TokenType(latin1);
-            break;
-        case '\0':
-            type = Element;
-            break;
-        default:
-            if (ch.isNumber()) {
-                readNumber();
-                return;
-            }
-            else {
-                readText();
-            }
+    type = element->getTokenType();
+    if (type == TEXT) {
+        readText();
+    }
+    else if (type == NUMBER) {
+        readNumber();
     }
 }
 
 
 void SequenceParser::readNumber()
 {
-    type = Number;
+    type = NUMBER;
     readDigits();
     if (tokenEnd < list.count()-1) {
         QChar ch = getEndChar();
@@ -105,10 +84,11 @@ void SequenceParser::readNumber()
 
         // there might as well be an exponent
         if (tokenEnd < list.count()-1) {
+            BasicElement* element = list.at(tokenEnd);
             ch = getEndChar();
             //if ((ch == 'E') || (ch == 'e')) {
             // Because the symbol font doesn't have a 'e'.
-            if (ch == 'E') {
+            if ((element->getTokenType() == TEXT) && (ch == 'E')) {
                 tokenEnd++;
                 ch = getEndChar();
 
@@ -150,10 +130,10 @@ void SequenceParser::readDigits()
 
 void SequenceParser::readText()
 {
-    type = Text;
+    type = TEXT;
     for (; tokenEnd < list.count(); tokenEnd++) {
-        QChar ch = getEndChar();
-        if (!ch.isLetter()) {
+        BasicElement* element = list.at(tokenEnd);
+        if (element->getTokenType() != TEXT) {
             return;
         }
     }
@@ -169,7 +149,7 @@ QChar SequenceParser::getEndChar()
 ElementType* SequenceParser::getPrimitive()
 {
     switch (type) {
-        case Text: {
+        case TEXT: {
             QString text = getText();
             if (table.contains(text)) {
                 return new NameType(this, text);
@@ -178,18 +158,20 @@ ElementType* SequenceParser::getPrimitive()
                 return new TextType(this);
             }
         }
-        case Number:
+        case NUMBER:
             return new NumberType(this);
-        case Element:
+        case SYMBOL:
+            return new TextSymbolType(this);
+        case ELEMENT:
             return new ComplexElementType(this);
-        case End:
+        case END:
             return 0;
-        case Minus: {
+        case MINUS: {
             // dirty hack: Lets save the current token end
             // so we can undo the next read.
             uint endPos = tokenEnd;
             nextToken();
-            if (type == Number) {
+            if (type == NUMBER) {
                 tokenStart--;
                 return new NumberType(this);
             }
@@ -199,7 +181,7 @@ ElementType* SequenceParser::getPrimitive()
                 return new ErrorType(this);
             }
         }
-        case Error:
+        case ERROR:
         default:
             return new ErrorType(this);
     }

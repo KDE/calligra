@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KFORMULAMATHMLREAD_H
-#define __KFORMULAMATHMLREAD_H
+#ifndef KFORMULAMATHMLREAD_H
+#define KFORMULAMATHMLREAD_H
 
 #include <qobject.h>
 #include <qdom.h>
@@ -59,4 +59,4 @@ Q_OBJECT
 	QDomDocument formuladoc;
 };
 
-#endif // __KFORMULAMATHMLREAD_H
+#endif // KFORMULAMATHMLREAD_H

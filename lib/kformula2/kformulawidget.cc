@@ -36,7 +36,7 @@
 
 KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
     : QWidget(parent, name, f | WRepaintNoErase | WResizeNoErase),
-      cursorVisible(false), cursorHasChanged(true), readOnly(false), document(doc)
+      cursorVisible(false), cursorHasChanged(true), document(doc)
 {
     
     // This is buggy. We do need more/other messages.
@@ -70,6 +70,12 @@ QPoint KFormulaWidget::getCursorPoint() const
 }
 
 
+void KFormulaWidget::setReadOnly(bool ro)
+{
+    cursor->setReadOnly(ro);
+}
+
+
 void KFormulaWidget::paintEvent(QPaintEvent* event)
 {
     //cerr << "void KFormulaWidget::paintEvent(QPaintEvent*): " << cursorVisible << " " << hasFocus() << endl;
@@ -87,7 +93,7 @@ void KFormulaWidget::paintEvent(QPaintEvent* event)
 
 void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 {
-    if (readOnly) {
+    if (cursor->isReadOnly()) {
         return;
     }
     
@@ -178,12 +184,7 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 void KFormulaWidget::focusInEvent(QFocusEvent*)
 {
     //cerr << "void KFormulaWidget::focusInEvent(QFocusEvent*): " << cursorVisible << " " << hasFocus() << endl;
-    if (!readOnly) {
-        document->setActiveCursor(cursor);
-    }
-    else {
-        document->setActiveCursor(0);
-    }
+    document->setActiveCursor(cursor);
     showCursor();
     cursorHasChanged = true;
     emitCursorChanged();
@@ -356,10 +357,6 @@ void KFormulaWidget::hideCursor()
 
 void KFormulaWidget::showCursor()
 {
-    if (readOnly && !cursor->isSelection()) {
-        return;
-    }
-    
     if ((!cursorVisible) && hasFocus()) {
         //cerr << "void KFormulaWidget::showCursor(): " << cursorVisible << " " << hasFocus() << endl;
         cursorVisible = true;

@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __SYMBOLTABLE_H
-#define __SYMBOLTABLE_H
+#ifndef SYMBOLTABLE_H
+#define SYMBOLTABLE_H
 
 #include <qdict.h>
 #include <qstring.h>
@@ -62,13 +62,22 @@ public:
      * the given name.
      */
     QChar getSymbolChar(QString name) const;
+
+    /**
+     * @returns a string with all greek letters.
+     */
+    QString getGreekLetters() const { return greekLetters; }
     
 private:
 
     void addEntry(QString name, QChar ch = QChar::null);
     
     QDict<SymbolTableEnty> entries;
+
+    /**
+     * All greek letters that are known.
+     */
+    QString greekLetters;
 };
 
-
-#endif // __SYMBOLTABLE_H
+#endif // SYMBOLTABLE_H

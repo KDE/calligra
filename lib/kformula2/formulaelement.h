@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __FORMULAELEMENT_H
-#define __FORMULAELEMENT_H
+#ifndef FORMULAELEMENT_H
+#define FORMULAELEMENT_H
 
 // Formula include
 #include "sequenceelement.h"
@@ -113,4 +113,4 @@ private:
     KFormulaContainer* document;
 };
 
-#endif // __FORMULAELEMENT_H
+#endif // FORMULAELEMENT_H

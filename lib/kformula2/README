@@ -36,6 +36,7 @@ Ctrl-4                  root
 Ctrl-5                  fraction
 Ctrl-6                  matrix
 Ctrl-D, Ctrl-R          remove enclosing element
+Ctrl-G                  make current letter a greek one
 
 ^, _, Ctrl-^, Ctrl-_    standart indexes
 (, [, |                 brackets

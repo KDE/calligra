@@ -21,8 +21,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __ARTWORK_H
-#define __ARTWORK_H
+#ifndef ARTWORK_H
+#define ARTWORK_H
 
 #include <qpoint.h>
 #include <qsize.h>
@@ -106,4 +106,4 @@ private:
 };
 
 
-#endif // __ARTWORK_H
+#endif // ARTWORK_H

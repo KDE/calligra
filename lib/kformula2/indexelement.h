@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __INDEXELEMENT_H
-#define __INDEXELEMENT_H
+#ifndef INDEXELEMENT_H
+#define INDEXELEMENT_H
 
 // Formula include
 #include "basicelement.h"
@@ -364,4 +364,4 @@ private:
 };
 
 
-#endif // __INDEXELEMENT_H
+#endif // INDEXELEMENT_H

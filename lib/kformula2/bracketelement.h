@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __BRACKETELEMENT_H
-#define __BRACKETELEMENT_H
+#ifndef BRACKETELEMENT_H
+#define BRACKETELEMENT_H
 
 #include <qpoint.h>
 #include <qsize.h>
@@ -166,4 +166,4 @@ private:
 };
 
 
-#endif // __BRACKETELEMENT_H
+#endif // BRACKETELEMENT_H

@@ -87,6 +87,23 @@ void BasicElement::goInside(FormulaCursor* cursor)
 
 
 /**
+ * Calculates the base line. This is used by all elements
+ * those main child determines the position of the elements
+ * base line.
+ */
+void BasicElement::calcBaseline()
+{
+    BasicElement* content = getMainChild();
+    if (content->getBaseline() > -1) {
+        setBaseline(content->getBaseline() - content->getMidline() + getMidline());
+    }
+    else {
+        setBaseline(-1);
+    }
+}
+
+
+/**
  * Enters this element while moving to the left starting inside
  * the element `from'. Searches for a cursor position inside
  * this element or to the left of it.

@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __ELEMENTINDEX_H
-#define __ELEMENTINDEX_H
+#ifndef ELEMENTINDEX_H
+#define ELEMENTINDEX_H
 
 #include <iostream>
 #include <memory>
@@ -66,4 +66,4 @@ public:
 };
 
 
-#endif // __ELEMENTINDEX_H
+#endif // ELEMENTINDEX_H

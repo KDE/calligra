@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KFORMULAMIMESOURCE_H
-#define __KFORMULAMIMESOURCE_H
+#ifndef KFORMULAMIMESOURCE_H
+#define KFORMULAMIMESOURCE_H
 
 #include <qmime.h>
 #include <qdom.h>
@@ -37,4 +37,4 @@ private:
 
 };
 
-#endif // __KFORMULAMIMESOURCE_H
+#endif // KFORMULAMIMESOURCE_H

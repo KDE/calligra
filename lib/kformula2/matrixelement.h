@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __MATRIXELEMENT_H
-#define __MATRIXELEMENT_H
+#ifndef MATRIXELEMENT_H
+#define MATRIXELEMENT_H
 
 #include <qlist.h>
 
@@ -161,4 +161,4 @@ private:
 };
 
 
-#endif // __MATRIXELEMENT_H
+#endif // MATRIXELEMENT_H

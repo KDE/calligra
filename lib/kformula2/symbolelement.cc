@@ -138,14 +138,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
                            lowerHeight + symbol.getHeight()/2);
     setHeight(toMidline + fromMidline);
     setMidline(toMidline);
-
-    if (content->getBaseline() > -1) {
-        setBaseline(content->getBaseline() - content->getMidline() + getMidline());
-    }
-    else {
-        setBaseline(-1);
-    }
-    
+    calcBaseline();
 
     symbol.setY(toMidline - symbol.getHeight()/2);
     content->setY(toMidline - content->getMidline());

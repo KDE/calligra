@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KFORMULAWIDGET_H
-#define __KFORMULAWIDGET_H
+#ifndef KFORMULAWIDGET_H
+#define KFORMULAWIDGET_H
 
 #include <qdom.h>
 #include <qpoint.h>
@@ -59,7 +59,7 @@ public:
     /**
      * Puts the widget in read only mode.
      */
-    void setReadOnly(bool ro) { readOnly = ro; }
+    void setReadOnly(bool ro);
 
 signals:
 
@@ -155,11 +155,6 @@ private:
     bool cursorHasChanged;
 
     /**
-     * Whether we are only allowed to read.
-     */
-    bool readOnly;
-
-    /**
      * The formula we show.
      */
     KFormulaContainer* document;
@@ -170,4 +165,4 @@ private:
     FormulaCursor* cursor;
 };
 
-#endif // __KFORMULAWIDGET_H
+#endif // KFORMULAWIDGET_H

@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KFORMULAINPUTFILTER_H
-#define __KFORMULAINPUTFILTER_H
+#ifndef KFORMULAINPUTFILTER_H
+#define KFORMULAINPUTFILTER_H
 
 #include <qobject.h>
 #include <qdom.h>

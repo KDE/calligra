@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __CONTEXTSTYLE_H
-#define __CONTEXTSTYLE_H
+#ifndef CONTEXTSTYLE_H
+#define CONTEXTSTYLE_H
 
 //KDE Include
 //#include <kconfig.h>
@@ -129,4 +129,4 @@ private:
     //QString exponentChars;
 };
 
-#endif // __CONTEXTSTYLE_H
+#endif // CONTEXTSTYLE_H

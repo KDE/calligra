@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __ELEMENTTYPE_H
-#define __ELEMENTTYPE_H
+#ifndef ELEMENTTYPE_H
+#define ELEMENTTYPE_H
 
 #include <qfont.h>
 #include <qstring.h>
@@ -166,6 +166,17 @@ private:
 };
 
 
+class TextSymbolType : public MultiElementType {
+public:
+    TextSymbolType(SequenceParser* parser);
+    
+    /**
+     * @returns the font to be used for this kind of element
+     */
+    virtual QFont getFont(const ContextStyle& context);
+};
+
+
 /**
  * A element that doesn't fit into the syntax.
  */
@@ -309,4 +320,4 @@ public:
     virtual void output();
 };
 
-#endif // __ELEMENTTYPE_H
+#endif // ELEMENTTYPE_H

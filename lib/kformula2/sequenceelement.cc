@@ -35,7 +35,6 @@
 #include "sequenceparser.h"
 #include "symbolelement.h"
 #include "textelement.h"
-#include "textsymbolelement.h"
 
 
 SequenceElement::SequenceElement(BasicElement* parent)
@@ -319,6 +318,11 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         if (cursor->getPos() > 0) {
             if (cursor->isSelectionMode()) {
                 cursor->setTo(this, cursor->getPos()-1);
+
+                // phantom elements are not visible so we move on.
+                if (children.at(cursor->getPos())->isPhantom()) {
+                    moveLeft(cursor, this);
+                }
             }
             else {
                 children.at(cursor->getPos()-1)->moveLeft(cursor, this);
@@ -366,6 +370,11 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         if (pos < children.count()) {
             if (cursor->isSelectionMode()) {
                 cursor->setTo(this, pos+1);
+
+                // phantom elements are not visible so we move on.
+                if (children.at(pos)->isPhantom()) {
+                    moveRight(cursor, this);
+                }
             }
             else {
                 children.at(pos)->moveRight(cursor, this);
@@ -764,7 +773,6 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n
 BasicElement* SequenceElement::createElement(QString type)
 {
     if      (type == "TEXT")       return new TextElement();
-    else if (type == "TEXTSYMBOL") return new TextSymbolElement();
     else if (type == "ROOT")       return new RootElement();
     else if (type == "BRACKET")    return new BracketElement();
     else if (type == "MATRIX")     return new MatrixElement();

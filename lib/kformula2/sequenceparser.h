@@ -18,11 +18,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __SEQUENCEPARSER_H
-#define __SEQUENCEPARSER_H
+#ifndef SEQUENCEPARSER_H
+#define SEQUENCEPARSER_H
 
 #include <qlist.h>
 #include <qstring.h>
+
+#include "formuladefs.h"
 
 class BasicElement;
 class ElementType;
@@ -40,15 +42,6 @@ public:
      * @returns a parse tree.
      */
     ElementType* parse(QList<BasicElement>& elements);
-
-    /**
-     * The token types the parser knows.
-     */
-    enum TokenType { Text, Number, Element, Error, End,
-                     Plus='+', Minus='-', Mul='*', Div='/',
-                     Assign='=', Less='<', Greater='>', Separator='\\',
-                     Comma=',', Colon=':', Semicolon=';'
-    };
 
     /**
      * Reads the next token.
@@ -133,4 +126,4 @@ private:
 };
 
 
-#endif // __SEQUENCEPARSER_H
+#endif // SEQUENCEPARSER_H

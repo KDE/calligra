@@ -28,6 +28,7 @@ SymbolTableEnty::SymbolTableEnty(QString n, QChar ch)
 
 
 SymbolTable::SymbolTable()
+        : greekLetters("abgdezhqiklmnxpvrstufjcywGDQLXPSUFYW")
 {
     entries.setAutoDelete(true);
 

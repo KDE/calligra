@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KFORMULACOMMAND_H
-#define __KFORMULACOMMAND_H
+#ifndef KFORMULACOMMAND_H
+#define KFORMULACOMMAND_H
 
 #include <qlist.h>
 
@@ -353,4 +353,26 @@ private:
     KFCAddGenericIndex addIndex;
 };
 
-#endif // __KFORMULACOMMAND_H
+
+class TextElement;
+
+class KFCMakeSymbol : public KFormulaCommand
+{
+public:
+    KFCMakeSymbol(KFormulaContainer* document, TextElement* element);
+
+    virtual void execute();
+    virtual void unexecute();
+
+    /**
+     * A command might have no effect.
+     * @returns true if nothing happened.
+     */
+    virtual bool isSenseless();
+
+private:
+    TextElement* textElement;
+};
+
+
+#endif // KFORMULACOMMAND_H

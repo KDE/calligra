@@ -25,14 +25,48 @@
 #include <qpainter.h>
 
 #include "basicelement.h"
-#include "elementtype.h"
-#include "textelement.h"
 #include "contextstyle.h"
+#include "elementtype.h"
+#include "formulaelement.h"
+#include "sequenceelement.h"
+#include "textelement.h"
 
 
 TextElement::TextElement(QChar ch, BasicElement* parent)
-    : BasicElement(parent), character(ch)
+        : BasicElement(parent), character(ch), symbol(false)
 {
+}
+
+
+TokenType TextElement::getTokenType() const
+{
+    if (isSymbol())
+        return SYMBOL;
+    
+    char latin1 = character.latin1();
+    switch (latin1) {
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+        case '=':
+        case '<':
+        case '>':
+        case '\\':
+        case ',':
+        case ';':
+        case ':':
+            return TokenType(latin1);
+        case '\0':
+            return ELEMENT;
+        default:
+            if (character.isNumber()) {
+                return NUMBER;
+            }
+            else {
+                return TEXT;
+            }
+    }
 }
 
 
@@ -77,6 +111,17 @@ void TextElement::draw(QPainter& painter, const ContextStyle& context,
     painter.setFont(font);
     painter.drawText(parentOrigin.x()+getX()+spaceBefore,
                      parentOrigin.y()+getY()+getBaseline(), character);
+}
+
+
+void TextElement::setSymbol(bool s)
+{
+    symbol = s;
+    SequenceElement* sequence = dynamic_cast<SequenceElement*>(getParent());
+    if (sequence != 0) {
+        sequence->parse();
+    }
+    formula()->changed();
 }
 
 
@@ -128,6 +173,7 @@ void TextElement::writeDom(QDomElement& element)
 {
     BasicElement::writeDom(element);
     element.setAttribute("CHAR", QString(character));
+    if (symbol) element.setAttribute("SYMBOL", "1");
 }
     
 /**
@@ -142,6 +188,10 @@ bool TextElement::readAttributesFromDom(QDomElement& element)
     QString charStr = element.attribute("CHAR");
     if(!charStr.isNull()) {
         character = charStr.at(0);
+    }
+    QString symbolStr = element.attribute("SYMBOL");
+    if(!symbolStr.isNull()) {
+        symbol = symbolStr.toInt() != 0;
     }
     return true;
 }

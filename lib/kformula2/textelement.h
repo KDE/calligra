@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __TEXTELEMENT_H
-#define __TEXTELEMENT_H
+#ifndef TEXTELEMENT_H
+#define TEXTELEMENT_H
 
 #include <qfont.h>
 #include <qstring.h>
@@ -36,6 +36,12 @@ public:
     TextElement(QChar ch = ' ', BasicElement* parent = 0);
 
     
+    /**
+     * @returns the type of this element. Used for
+     * parsing a sequence.
+     */
+    virtual TokenType getTokenType() const;
+
     /**
      * @returns the character that represents this element. Used for
      * parsing a sequence.
@@ -68,6 +74,16 @@ public:
     virtual void draw(QPainter& painter, const ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin);
 
+    /**
+     * @returns whether we are a symbol (greek letter).
+     */
+    bool isSymbol() const { return symbol; }
+    
+    /**
+     * Sets the element to be a symbol.
+     */
+    void setSymbol(bool s);
+    
 protected:
 
     //Save/load support
@@ -99,22 +115,22 @@ protected:
     /**
      * @returns the font to be used for the element.
      */
-    virtual QFont getFont(const ContextStyle& context);
+    QFont getFont(const ContextStyle& context);
 
     /**
      * @returns the space to be left before the character.
      */
-    virtual int getSpaceBefore(const ContextStyle& context, int size);
+    int getSpaceBefore(const ContextStyle& context, int size);
 
     /**
      * @returns the space to be left after the character.
      */
-    virtual int getSpaceAfter(const ContextStyle& context, int size);
+    int getSpaceAfter(const ContextStyle& context, int size);
 
     /**
      * Sets up the painter to be used for drawing.
      */
-    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
+    void setUpPainter(const ContextStyle& context, QPainter& painter);
     
 private:
 
@@ -127,7 +143,12 @@ private:
      * The position of our baseline.
      */
     int baseline;
+
+    /**
+     * Whether this character is a symbol.
+     */
+    bool symbol;
 };
 
 
-#endif // __TEXTELEMENT_H
+#endif // TEXTELEMENT_H

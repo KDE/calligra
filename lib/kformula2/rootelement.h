@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __ROOTELEMENT_H
-#define __ROOTELEMENT_H
+#ifndef ROOTELEMENT_H
+#define ROOTELEMENT_H
 
 #include <qpoint.h>
 
@@ -203,4 +203,4 @@ private:
 };
 
 
-#endif // __ROOTELEMENT_H
+#endif // ROOTELEMENT_H

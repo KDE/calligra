@@ -302,13 +302,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
     setWidth(width);
     setHeight(toMidline+fromMidline);
     setMidline(toMidline);
-    //cout << content->getBaseline() << " " << content->getMidline() << endl;
-    if (content->getBaseline() > -1) {
-        setBaseline(content->getBaseline() - content->getMidline() + getMidline());
-    }
-    else {
-        setBaseline(-1);
-    }
+    calcBaseline();
 }
 
 /**

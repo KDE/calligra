@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __FORMULACURSOR_H
-#define __FORMULACURSOR_H
+#ifndef FORMULACURSOR_H
+#define FORMULACURSOR_H
 
 #include <qstring.h>
 
@@ -30,6 +30,7 @@ class FormulaElement;
 class IndexElement;
 class RootElement;
 class SymbolElement;
+class TextElement;
 
 
 /**
@@ -241,6 +242,12 @@ public:
     SymbolElement* getActiveSymbolElement();
 
     /**
+     * @returns the TextElement the cursor is on or 0.
+     */
+    TextElement* getActiveTextElement();
+    
+
+    /**
      * @returns the name of the name element the cursor is inside
      * Selects the name if one is found.
      */
@@ -271,11 +278,13 @@ public:
         int markPos;
         bool selectionFlag;
         bool linearMovement;
+        bool readOnly;
 
         CursorData(BasicElement* c,
-                   int pos, int mark, bool selection, bool linear)
+                   int pos, int mark, bool selection, bool linear, bool ro)
             : current(c), cursorPos(pos), markPos(mark),
-              selectionFlag(selection), linearMovement(linear) {}
+              selectionFlag(selection), linearMovement(linear),
+              readOnly(ro) {}
     };
 
     /**
@@ -304,6 +313,16 @@ public:
      * @returns the point inside the formula widget where the cursor is.
      */
     QPoint getCursorPoint() const { return cursorPoint; }
+
+    /**
+     * @returns whether we are allowed to alter the document.
+     */
+    bool isReadOnly() const { return readOnly; }
+    
+    /**
+     * Puts the widget in read only mode.
+     */
+    void setReadOnly(bool ro) { readOnly = ro; }
     
 private:
     
@@ -386,7 +405,12 @@ private:
      * widget the cursor belongs to.
      */
     bool hasChangedFlag;
+
+    /**
+     * Whether we are only allowed to read.
+     */
+    bool readOnly;
 };
 
 
-#endif // __FORMULACURSOR_H
+#endif // FORMULACURSOR_H

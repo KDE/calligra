@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __BASICELEMENT_H
-#define __BASICELEMENT_H
+#ifndef BASICELEMENT_H
+#define BASICELEMENT_H
 
 #include <iostream>
 
@@ -35,6 +35,7 @@
 
 // Formula include
 #include "contextstyle.h"
+#include "formuladefs.h"
 
 class ComplexElement;
 class ElementType;
@@ -93,6 +94,12 @@ public:
      * parsing a sequence.
      */
     virtual QChar getCharacter() const { return QChar::null; }
+
+    /**
+     * @returns the type of this element. Used for
+     * parsing a sequence.
+     */
+    virtual TokenType getTokenType() const { return ELEMENT; }
 
     /**
      * @returns true if we don't want to see the element.
@@ -312,6 +319,13 @@ protected:
     void setBaseline(int line) { baseline = line; }
     void setMidline(int mline) { midline = mline; }
 
+    /**
+     * Calculates the base line. This is used by all elements
+     * those main child determines the position of the elements
+     * base line.
+     */
+    void calcBaseline();
+
     //Save/load support
     
     /**
@@ -406,4 +420,4 @@ private:
     BasicElement& operator= (BasicElement&) { return *this; }
 };
 
-#endif // __BASICELEMENT_H
+#endif // BASICELEMENT_H
