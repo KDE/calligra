@@ -4,6 +4,7 @@
  */
 
 
+#include "kdchart/KDChart.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
 #include "kchart_part.h"
@@ -13,6 +14,7 @@
 #include "KChartViewIface.h"
 #include "kchartPageLayout.h"
 #include "kchart_params.h"
+#include "kchartPrinterDlg.h"
 
 #include <qpainter.h>
 #include <qcursor.h>
@@ -22,8 +24,10 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kprinter.h>
 #include <dcopobject.h>
 #include <kxmlguifactory.h>
+#include <qpaintdevicemetrics.h>
 
 
 using namespace std;
@@ -568,6 +572,35 @@ void KChartView::slotConfigPageLayout()
 
     dialog->exec();
     delete dialog;
+}
+
+void KChartView::setupPrinter( KPrinter &printer )
+{
+  printer.addDialogPage( new KChartPrinterDlg( 0, "KChart page" ) );
+}
+
+void KChartView::print(KPrinter &printer)
+{
+  printer.setFullPage( false );
+  QPainter painter;
+  painter.begin(&printer);
+  QPaintDeviceMetrics pdm( &printer );
+  int height, width;
+  if ( !printer.previewOnly() )
+  {
+    	int const scalex = printer.option("kde-kchart-printsizex").toInt();
+	int const scaley = printer.option("kde-kchart-printsizey").toInt();
+	width = (double)pdm.width()/100*scalex;
+	height = (double)pdm.height()/100*scaley;
+  }
+  else
+  { //fill the whole page
+	width = pdm.width();
+	height = pdm.height();
+  }
+ 
+  KDChart::print(&painter,((KChartPart*)koDocument())->params(),((KChartPart*)koDocument())->data(),0, new QRect(0,0, width, height));
+  painter.end();
 }
 
 }  //KChart namespace

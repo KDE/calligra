@@ -50,6 +50,8 @@ public slots:
     void  ringChart();
     void  polarChart();
     void  bwChart();
+    void  print(KPrinter &);
+    void  setupPrinter(KPrinter &);
 
     void  slotRepaint();
     void  slotConfigBack();
