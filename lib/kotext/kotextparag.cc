@@ -1875,7 +1875,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", true );
 
-    writer.startElement( "text:p" );
+    writer.startElement( "text:p", false /*no indent*/ );
     writer.addAttribute( "text:style-name", autoParagStyleName );
 
     if ( to == -1 ) {
@@ -1890,7 +1890,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     // A helper method would need no less than 7 params...
 #define WRITESPAN( next ) \
-    if ( curFormat == paragFormat() && !usesSpan ) { \
+    if ( curFormat == paragFormat() ) { \
         writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
     } else { \
         KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName ); \
@@ -1900,15 +1900,13 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         writer.addAttribute( "text:style-name", autoStyleName ); \
         writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
         writer.endElement(); \
-        usesSpan = true; \
     }
 
-    KoTextFormat *curFormat = paragraphFormat();
+    KoTextFormat *curFormat = 0;
     int startPos = from;
     // Once we have a span, we need to keep using them. Otherwise we might generate
     // <text:span>foo</text:span> <text:span>bar</text:span> and lose the space between
     // the two spans.
-    bool usesSpan = false;
     for ( int i = from; i <= to; ++i ) {
         KoTextStringChar & ch = string()->at(i);
         KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );

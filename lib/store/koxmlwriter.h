@@ -78,8 +78,10 @@ public:
      * @param tagName the name of the tag. Warning: this string must
      * remain alive until endElement, no copy is internally made.
      * Usually tagName is a string constant so this is no problem anyway.
+     * @param indentInside if set to false, there will be no indentation inside
+     * this tag. This is useful for elements where whitespace matters.
      */
-    void startElement( const char* tagName );
+    void startElement( const char* tagName, bool indentInside = true );
 
     /**
      * Overloaded version of addAttribute( const char*, const char* ),
@@ -176,12 +178,13 @@ public:
 
 private:
     struct Tag {
-        Tag( const char* t = 0 ) : tagName( t ), hasChildren( false ),
-                                   openingTagClosed( false ), lastChildIsText( false ) {}
+        Tag( const char* t = 0, bool ind = true )
+            : tagName( t ), hasChildren( false ),
+              openingTagClosed( false ), indentInside( ind ) {}
         const char* tagName;
         bool hasChildren; ///< element or text children
         bool openingTagClosed; ///< true once the '\>' in \<tag a="b"\> is written out
-        bool lastChildIsText;
+        bool indentInside; ///< whether to indent the contents of this tag
     };
 
     /// Write out \n followed by the number of spaces required.
@@ -209,7 +212,7 @@ private:
         }
     }
     char* escapeForXML( const char* source ) const;
-    void prepareForChild();
+    bool prepareForChild();
     void init();
 
     QIODevice* m_dev;

@@ -103,7 +103,8 @@ void KoXmlWriter::endDocument()
     Q_ASSERT( m_tags.isEmpty() );
 }
 
-void KoXmlWriter::prepareForChild()
+// returns the value of indentInside of the parent
+bool KoXmlWriter::prepareForChild()
 {
     if ( !m_tags.isEmpty() ) {
         Tag& parent = m_tags.top();
@@ -111,22 +112,22 @@ void KoXmlWriter::prepareForChild()
             closeStartElement( parent );
             parent.hasChildren = true;
         }
-        // this is for cases like <a>\n<b>\n<c>foo</c>\n</b>text</a> (no \n around text)
-        if ( !parent.lastChildIsText ) {
+        if ( parent.indentInside ) {
             writeIndent();
         }
-        parent.lastChildIsText = false;
+        return parent.indentInside;
     }
+    return true;
 }
 
-void KoXmlWriter::startElement( const char* tagName )
+void KoXmlWriter::startElement( const char* tagName, bool indentInside )
 {
     Q_ASSERT( tagName != 0 );
 
     // Tell parent that it has children
-    prepareForChild();
+    bool parentIndent = prepareForChild();
 
-    m_tags.push( Tag( tagName ) );
+    m_tags.push( Tag( tagName, parentIndent && indentInside ) );
     writeChar( '<' );
     writeCString( tagName );
     //kdDebug() << k_funcinfo << tagName << endl;
@@ -165,7 +166,7 @@ void KoXmlWriter::endElement()
         writeCString( "/>" );
     }
     else {
-        if ( !tag.lastChildIsText ) {
+        if ( tag.indentInside ) {
             writeIndent();
         }
         writeCString( "</" );
@@ -182,7 +183,6 @@ void KoXmlWriter::addTextNode( const char* cstr )
         closeStartElement( parent );
         parent.hasChildren = true;
     }
-    parent.lastChildIsText = true;
 
     char* escaped = escapeForXML( cstr );
     writeCString( escaped );

@@ -248,7 +248,6 @@ static void importTextPosition( const QString& text_position, double fontSize, K
             textPos.truncate( textPos.length() - 1 );
             double val = textPos.toDouble();
             offset = qRound( fontSize * val / 100.0 );
-            kdDebug(32500) << "offset=" << offset << endl;
         }
         if ( textPos == "super" )
             value = KoTextFormat::AlignSuperScript;

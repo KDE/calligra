@@ -66,14 +66,14 @@ int main( int argc, char** argv ) {
 
     TEST_BEGIN( 0, 0 );
     writer.startElement( "a" );
-    writer.startElement( "b" );
+    writer.startElement( "b", false /*no indent*/ );
     writer.startElement( "c" );
     writer.endElement();
     writer.addTextNode( "te" );
     writer.addTextNode( "xt" );
     writer.endElement();
     writer.endElement();
-    TEST_END( "textnode test", "<r>\n <a>\n  <b>\n   <c/>text</b>\n </a>\n</r>\n" );
+    TEST_END( "textnode test", "<r>\n <a>\n  <b><c/>text</b>\n </a>\n</r>\n" );
 
     TEST_BEGIN( 0, 0 );
     writer.addManifestEntry( "foo/bar/blah", "mime/type" );
