@@ -128,7 +128,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double 
 	QSpinBox::setValidator( m_validator );
 	setAcceptLocalizedNumbers( true );
     setUnit( unit );
-    changeValue(  KoUnit::ptToUnit( value, unit ) );
+    changeValue(  KoUnit::ptToUnitUnrounded( value, unit ) );
 }
 
 void
@@ -144,7 +144,7 @@ KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
     setMinValue( KoUnit::ptToUnit( m_lowerInPoints, unit ) );
     setMaxValue( KoUnit::ptToUnit( m_upperInPoints, unit ) );
     setLineStep( KoUnit::ptToUnit( m_stepInPoints, unit ) );
-    KDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
+    KDoubleSpinBox::setValue( KoUnit::ptToUnitUnrounded( oldvalue, unit ) );
     m_unit = unit;
     setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
 }
@@ -164,7 +164,7 @@ KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, doubl
 	m_validator = new KoUnitDoubleValidator( this, this );
 	setValidator( m_validator );
     setUnit( unit );
-    changeValue(  KoUnit::ptToUnit( value, unit ) );
+    changeValue(  KoUnit::ptToUnitUnrounded( value, unit ) );
 }
 
 void
@@ -179,9 +179,9 @@ KoUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 {
 	KoUnit::Unit old = m_unit;
 	m_unit = unit;
-    m_lower = KoUnit::ptToUnit( m_lowerInPoints, unit );
-    m_upper = KoUnit::ptToUnit( m_upperInPoints, unit );
-	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
+    m_lower = KoUnit::ptToUnitUnrounded( m_lowerInPoints, unit );
+    m_upper = KoUnit::ptToUnitUnrounded( m_upperInPoints, unit );
+	changeValue( KoUnit::ptToUnitUnrounded( KoUnit::ptFromUnit( m_value, old ), unit ) );
 }
 
 bool
@@ -215,7 +215,7 @@ KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, doubl
 	m_validator = new KoUnitDoubleValidator( this, this );
 	lineEdit()->setValidator( m_validator );
     setUnit( unit );
-    changeValue(  KoUnit::ptToUnit( value, unit ) );
+    changeValue(  KoUnit::ptToUnitUnrounded( value, unit ) );
 	connect( this, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
 }
 
@@ -257,9 +257,9 @@ KoUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
 {
 	KoUnit::Unit old = m_unit;
 	m_unit = unit;
-    m_lower = KoUnit::ptToUnit( m_lowerInPoints, unit );
-    m_upper = KoUnit::ptToUnit( m_upperInPoints, unit );
-	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
+    m_lower = KoUnit::ptToUnitUnrounded( m_lowerInPoints, unit );
+    m_upper = KoUnit::ptToUnitUnrounded( m_upperInPoints, unit );
+	changeValue( KoUnit::ptToUnitUnrounded( KoUnit::ptFromUnit( m_value, old ), unit ) );
 }
 
 bool
@@ -303,7 +303,7 @@ KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lowe
 	layout->addWidget( down, 1, 0 );
 	connect( down, SIGNAL( clicked() ), this, SLOT( slotDownClicked() ) );
 
-	m_combo = new KoUnitDoubleComboBox( this, KoUnit::ptToUnit( lower, unit ), KoUnit::ptToUnit( upper, unit ), value, unit, precision, name );
+	m_combo = new KoUnitDoubleComboBox( this, KoUnit::ptToUnitUnrounded( lower, unit ), KoUnit::ptToUnitUnrounded( upper, unit ), value, unit, precision, name );
 	connect( m_combo, SIGNAL( valueChanged( double ) ), this, SIGNAL( valueChanged( double ) ) );
 	layout->addMultiCellWidget( m_combo, 0, 1, 2, 2 );
 }
