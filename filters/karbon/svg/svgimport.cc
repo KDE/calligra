@@ -93,10 +93,51 @@ SvgImport::convert()
 	outdoc = m_document.saveXML();
 }
 
+VColor
+SvgImport::parseColor( const QString &s )
+{
+	VColor color;
+	if( s.startsWith( "rgb(" ) )
+	{
+		QString parse = s.stripWhiteSpace();
+		QStringList colors = QStringList::split( ',', parse );
+		QString r = colors[0].right( ( colors[0].length() - 4 ) );
+		QString g = colors[1];
+		QString b = colors[2].left( ( colors[2].length() - 1 ) );
+
+		if( r.contains( "%" ) )
+		{
+			r = r.left( r.length() - 1 );
+			r = QString::number( int( ( double( 255 * r.toDouble() ) / 100.0 ) ) );
+		}
+
+		if( g.contains( "%" ) )
+		{
+			g = g.left( g.length() - 1 );
+			g = QString::number( int( ( double( 255 * g.toDouble() ) / 100.0 ) ) );
+		}
+
+		if( b.contains( "%" ) )
+		{
+			b = b.left( b.length() - 1 );
+			b = QString::number( int( ( double( 255 * b.toDouble() ) / 100.0 ) ) );
+		}
+
+		QColor c( r.toInt(), g.toInt(), b.toInt() );
+		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+	}
+	else
+	{
+		QColor c;
+		c.setNamedColor( s );
+		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+	}
+	return color;
+}
+
 void
 SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 {
-	QColor c;
 	GraphicsContext *gc = new GraphicsContext;
 	// set as default
 	if( m_gc.current() )
@@ -112,8 +153,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 			gc->fill.setType( VFill::none );
 		else
 		{
-			c.setNamedColor( e.attribute( "fill" ) );
-			fillcolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+			fillcolor = parseColor( e.attribute( "fill" ) );
 			gc->fill.setType( VFill::solid );
 		}
 	}
@@ -129,8 +169,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 			gc->stroke.setType( VStroke::none );
 		else
 		{
-			c.setNamedColor( e.attribute( "stroke" ) );
-			strokecolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+			strokecolor = parseColor( e.attribute( "stroke" ) );
 			gc->stroke.setType( VStroke::solid );
 		}
 	}
@@ -179,8 +218,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 				gc->fill.setType( VFill::none );
 			else
 			{
-				c.setNamedColor( params );
-				fillcolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+				fillcolor = parseColor( params );
 				gc->fill.setType( VFill::solid );
 			}
 		}
@@ -197,8 +235,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 				gc->stroke.setType( VStroke::none );
 			else
 			{
-				c.setNamedColor( params );
-				strokecolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+				strokecolor = parseColor( params );
 				gc->stroke.setType( VStroke::solid );
 			}
 		}

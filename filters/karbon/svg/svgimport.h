@@ -59,6 +59,7 @@ protected:
 	QDomDocument outdoc;
 	void convert();
 	const char *getCoord( const char *, double & );
+	VColor parseColor( const QString & );
 
 private:
 	VDocument m_document;
