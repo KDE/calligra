@@ -791,6 +791,8 @@ KWFrame *tmpFrame=frames.at(0);
 
         if(! l->isEmpty())
             frameList.append( l );
+	else
+	    delete l;
     }
 
     frames.setAutoDelete( false );
