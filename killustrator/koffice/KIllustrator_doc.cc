@@ -189,8 +189,8 @@ KOffice::MainWindow_ptr KIllustratorDocument::createMainWindow()
   return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
 
-KIllustratorView* KIllustratorDocument::createKIllustratorView () {
-  KIllustratorView *view = new KIllustratorView (0L, 0L, this);
+KIllustratorView* KIllustratorDocument::createKIllustratorView ( QWidget* _parent ) {
+  KIllustratorView *view = new KIllustratorView (_parent, 0L, this);
   //view->QWidget::show ();
   m_lstViews.append (view);
   return view;

@@ -883,9 +883,9 @@ KOffice::MainWindow_ptr KPresenterDoc::createMainWindow()
 }
 
 /*========================= create a view ========================*/
-KPresenterView* KPresenterDoc::createPresenterView()
+KPresenterView* KPresenterDoc::createPresenterView( QWidget* _parent )
 {
-  KPresenterView *p = new KPresenterView(0L,0L,this);
+  KPresenterView *p = new KPresenterView( _parent,0L,this);
   //p->QWidget::show();
   m_lstViews.append(p);
 

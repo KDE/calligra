@@ -53,7 +53,10 @@ public:
   virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store );
   virtual void cleanUp();
   virtual void removeView( KImageView* _view );
-  virtual KImageView* createImageView();
+
+  // C++
+  virtual KImageView* createImageView( QWidget* _parent = 0 );
+
   virtual CORBA::Boolean init();
   virtual KOffice::MainWindow_ptr createMainWindow();
 

@@ -69,12 +69,12 @@ void KFormulaShell::setDocument( KFormulaDoc *_doc )
   
     m_pDoc = _doc;
     m_pDoc->_ref();
-    m_pView = _doc->createFormulaView();
+    m_pView = _doc->createFormulaView( getFrame() );
     m_pView->incRef();
     m_pView->setMode( KOffice::View::RootMode );
     m_pView->setMainWindow( interface() );
   
-    setRootPart( m_pView->id() );
+    setRootPart( m_pView );
     interface()->setActivePart( m_pView->id() );
 
     if( m_pFileMenu )
@@ -107,13 +107,13 @@ bool KFormulaShell::newDocument()
 	    return false;
 	}
   
-    m_pView = m_pDoc->createFormulaView();
+    m_pView = m_pDoc->createFormulaView( getFrame() );
     m_pView->incRef();
     m_pView->setMode( KOffice::View::RootMode );
     cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
     m_pView->setMainWindow( interface() );
   
-    setRootPart( m_pView->id() );
+    setRootPart( m_pView );
     interface()->setActivePart( m_pView->id() );
   
     if( m_pFileMenu )
@@ -152,12 +152,12 @@ bool KFormulaShell::openDocument( const char *_url, const char *_format )
     if ( !m_pDoc->loadFromURL( _url, _format ) )
 	return false;
   
-    m_pView = m_pDoc->createFormulaView();
+    m_pView = m_pDoc->createFormulaView( getFrame() );
     m_pView->incRef();
     m_pView->setMode( KOffice::View::RootMode );
     m_pView->setMainWindow( interface() );
   
-    setRootPart( m_pView->id() );
+    setRootPart( m_pView );
     interface()->setActivePart( m_pView->id() );
   
     if ( m_pFileMenu )
@@ -254,7 +254,7 @@ void KFormulaShell::releaseDocument()
   
     cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
-    setRootPart( 0 );
+    setRootPart( (OpenParts::Id)0 );
 
     cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 

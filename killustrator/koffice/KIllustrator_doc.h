@@ -108,7 +108,7 @@ public:
 		     CORBA::Float _scale );
 
   virtual int viewCount ();
-  virtual KIllustratorView* createKIllustratorView ();
+  virtual KIllustratorView* createKIllustratorView ( QWidget* _parent = 0 );
 
   virtual bool isEmpty () { return m_bEmpty; }
 

@@ -110,7 +110,7 @@ public:
 
   virtual KOffice::MainWindow_ptr createMainWindow();
 
-  virtual KoHTMLView *createKoHTMLView();
+  virtual KoHTMLView *createKoHTMLView( QWidget* _parent = 0 );
 
   virtual void removeView(KoHTMLView *view);
 

@@ -80,7 +80,7 @@ class KFormulaDoc : public KFormulaContainer,
     // IDL
     virtual OpenParts::View_ptr createView();
     // C++
-    KFormulaView* createFormulaView();
+    KFormulaView* createFormulaView( QWidget* _parent = 0 );
   
     // IDL
     virtual void viewList( OpenParts::Document::ViewList*& _list );

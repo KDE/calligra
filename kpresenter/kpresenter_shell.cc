@@ -118,13 +118,13 @@ void KPresenterShell::setDocument(KPresenterDoc *_doc)
 
   m_pDoc = _doc;
   m_pDoc->_ref();
-  m_pView = _doc->createPresenterView();
+  m_pView = _doc->createPresenterView( getFrame() );
   m_pView->setShell(this);
   m_pView->incRef();
   m_pView->setMode(KOffice::View::RootMode);
   m_pView->setMainWindow(interface());
 
-  setRootPart(m_pView->id());
+  setRootPart(m_pView);
   interface()->setActivePart(m_pView->id());
 
   if(m_pFileMenu)
@@ -159,14 +159,14 @@ bool KPresenterShell::newDocument()
       return false;
     }
 
-  m_pView = m_pDoc->createPresenterView();
+  m_pView = m_pDoc->createPresenterView( getFrame() );
   m_pView->setShell(this);
   m_pView->incRef();
   m_pView->setMode(KOffice::View::RootMode);
   cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   m_pView->setMainWindow(interface());
 
-  setRootPart(m_pView->id());
+  setRootPart(m_pView);
 
   interface()->setActivePart(m_pView->id());
 
@@ -209,13 +209,13 @@ bool KPresenterShell::openDocument(const char *_url,const char *_format)
   if (!m_pDoc->loadFromURL(_url,_format))
     return false;
 
-  m_pView = m_pDoc->createPresenterView();
+  m_pView = m_pDoc->createPresenterView( getFrame() );
   m_pView->setShell(this);
   m_pView->incRef();
   m_pView->setMode(KOffice::View::RootMode);
   m_pView->setMainWindow(interface());
 
-  setRootPart(m_pView->id());
+  setRootPart(m_pView);
   interface()->setActivePart(m_pView->id());
 
   if (m_pFileMenu)
@@ -323,8 +323,8 @@ void KPresenterShell::releaseDocument()
 
   if (m_pView)
     cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
-  
-  setRootPart(0);
+
+  setRootPart((OpenParts::Id)0);
 
   if (m_pView)
     cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;

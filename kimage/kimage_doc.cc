@@ -99,9 +99,9 @@ void KImageDoc::removeView( KImageView* _view )
   m_lstViews.removeRef( _view );
 }
 
-KImageView* KImageDoc::createImageView()
+KImageView* KImageDoc::createImageView( QWidget* _parent )
 {
-  KImageView* p = new KImageView( 0L, 0L, this );
+  KImageView *p = new KImageView( _parent, 0L, this );
 
   m_lstViews.append( p );
   return p;

@@ -136,9 +136,9 @@ void KoHTMLDoc::removeView(KoHTMLView *view)
   m_lstViews.removeRef(view);
 }
 
-KoHTMLView *KoHTMLDoc::createKoHTMLView()
+KoHTMLView *KoHTMLDoc::createKoHTMLView( QWidget* _parent )
 {
-  KoHTMLView *p = new KoHTMLView(0L, 0L, this);
+  KoHTMLView *p = new KoHTMLView(_parent, 0L, this);
   p->QWidget::show();
 
   m_lstViews.append(p);

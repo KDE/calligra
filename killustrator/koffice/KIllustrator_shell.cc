@@ -153,12 +153,12 @@ void KIllustratorShell::setDocument (KIllustratorDocument* doc) {
 
   m_pDoc = doc;
   m_pDoc->_ref ();
-  m_pView = doc->createKIllustratorView ();
+  m_pView = doc->createKIllustratorView ( getFrame() );
   m_pView->incRef ();
   m_pView->setMode (KOffice::View::RootMode);
   m_pView->setMainWindow (interface ());
 
-  setRootPart (m_pView->id ());
+  setRootPart (m_pView);
   interface ()->setActivePart (m_pView->id ());
 
   if (m_pFileMenu) {
@@ -188,13 +188,13 @@ bool KIllustratorShell::newDocument () {
   }
 
   cout << "create KIllustratorView ..." << endl;
-  m_pView = m_pDoc->createKIllustratorView ();
+  m_pView = m_pDoc->createKIllustratorView ( getFrame() );
   m_pView->incRef ();
   m_pView->setMode (KOffice::View::RootMode);
   m_pView->setMainWindow (interface ());
   cout << "setMainWindow done ..." << endl;
 
-  setRootPart (m_pView->id());
+  setRootPart (m_pView);
   interface ()->setActivePart (m_pView->id ());
   cout << "setActivePart done ..." << endl;
 
@@ -231,13 +231,13 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
     return false;
 
   cout << "create new view" << endl;
-  m_pView = m_pDoc->createKIllustratorView ();
+  m_pView = m_pDoc->createKIllustratorView ( getFrame() );
   m_pView->incRef ();
   m_pView->setMode (KOffice::View::RootMode);
   m_pView->setMainWindow (interface ());
 
   cout << "set active part" << endl;
-  setRootPart (m_pView->id());
+  setRootPart (m_pView);
   interface ()->setActivePart (m_pView->id ());
 
   if (m_pFileMenu) {
@@ -456,7 +456,7 @@ void KIllustratorShell::releaseDocument () {
   int views = 0;
   if (m_pDoc)
     views = m_pDoc->viewCount();
-  setRootPart (0);
+  setRootPart( (OpenParts::Id)0 );
   interface ()->setActivePart (0);
   if (m_pView)
     m_pView->decRef ();

@@ -150,7 +150,7 @@ public:
   virtual bool loadXML(KOMLParser&,KOStore::Store_ptr);
   virtual bool loadChildren(KOStore::Store_ptr _store);
 
-  virtual KPresenterView* createPresenterView();
+  virtual KPresenterView* createPresenterView( QWidget* _parent = 0 );
 
   // ------ IDL ------
   virtual CORBA::Boolean init() { return insertNewTemplate(0,0); }

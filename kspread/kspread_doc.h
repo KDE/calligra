@@ -32,7 +32,7 @@ class KSpreadDoc;
 #include <qrect.h>
 #include <qstring.h>
 #include <qpainter.h>
-#include <qprinter.h>
+// #include <qprinter.h>
 #include <qpen.h>
 
 #include "kmetaedit.h"
@@ -75,7 +75,7 @@ public:
   virtual void removeView( KSpreadView* _view );
 
   // C++
-  virtual KSpreadView* createSpreadView();
+  virtual KSpreadView* createSpreadView( QWidget* _parent = 0 );
 
   // IDL
   virtual CORBA::Boolean init();

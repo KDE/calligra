@@ -281,9 +281,9 @@ void KSpreadDoc::removeView( KSpreadView* _view )
   EMIT_EVENT( this, KSpread::Document::eventRemovedView, _view );
 }
 
-KSpreadView* KSpreadDoc::createSpreadView()
+KSpreadView* KSpreadDoc::createSpreadView( QWidget* _parent )
 {
-  KSpreadView *p = new KSpreadView( 0L, 0L, this );
+  KSpreadView *p = new KSpreadView( _parent, 0L, this );
   //p->QWidget::show();
   m_lstViews.append( p );
 
@@ -811,24 +811,14 @@ void KSpreadDoc::initPython()
 	cerr << "Executing " << f << endl;
         //if (strcmp(f.c_str(),"/opt/kde/share/apps/kspread/scripts/xcllib.py") != 0)
 	//{
-          int res = m_pPython->runFile( f.c_str() );
-          cerr << "Done result=" << res << endl;
+	// int res = m_pPython->runFile( f.c_str() );
+	// cerr << "Done result=" << res << endl;
         //}
  	//else cerr << "DISABLED !!" << endl;
       }
     }
 
     closedir( dp );
-
-    /* QString d = kapp->kde_datadir().copy();
-    d += "/kspread/scripts/xcllib.py";
-    assert( access( d, R_OK ) >= 0 );
-    m_pPython->runFile( d );
-
-    d = kapp->kde_datadir().copy();
-    d += "/kspread/scripts/classes.py";
-    assert( access( d, R_OK ) >= 0 );
-    m_pPython->runFile( d ); */
 
     path = kapp->localkdedir().data();
     path += "/share/apps/kspread/scripts";

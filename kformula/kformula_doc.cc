@@ -143,9 +143,9 @@ void KFormulaDoc::removeView( KFormulaView *_view )
     m_lstViews.setAutoDelete( true );
 }
 
-KFormulaView* KFormulaDoc::createFormulaView()
+KFormulaView* KFormulaDoc::createFormulaView( QWidget* _parent )
 {
-    KFormulaView *p = new KFormulaView( 0L, 0L, this );
+    KFormulaView *p = new KFormulaView( _parent, 0L, this );
     //p->QWidget::show();
     m_lstViews.append( p );
 

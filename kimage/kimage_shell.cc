@@ -93,12 +93,12 @@ void KImageShell::setDocument( KImageDoc *_doc )
   
   m_pDoc = _doc;
   m_pDoc->_ref();
-  m_pView = _doc->createImageView();
+  m_pView = _doc->createImageView( getFrame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
   
-  setRootPart( m_pView->id() );
+  setRootPart( m_pView );
   interface()->setActivePart( m_pView->id() );
 
   if( m_pFileMenu )
@@ -131,13 +131,13 @@ bool KImageShell::newDocument()
     return false;
   }
   
-  m_pView = m_pDoc->createImageView();
+  m_pView = m_pDoc->createImageView( getFrame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   debug( "*1) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   m_pView->setMainWindow( interface() );
   
-  setRootPart( m_pView->id() );
+  setRootPart( m_pView );
   interface()->setActivePart( m_pView->id() );
   
   if( m_pFileMenu )
@@ -176,12 +176,12 @@ bool KImageShell::openDocument( const char *_url, const char *_format )
   if ( !m_pDoc->loadFromURL( _url, _format ) )
     return false;
   
-  m_pView = m_pDoc->createImageView();
+  m_pView = m_pDoc->createImageView( getFrame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
   
-  setRootPart( m_pView->id() );
+  setRootPart( m_pView );
   interface()->setActivePart( m_pView->id() );
   
   if ( m_pFileMenu )
@@ -274,7 +274,7 @@ void KImageShell::releaseDocument()
   if ( m_pDoc )
     views = m_pDoc->viewCount();
 
-  setRootPart( 0 );
+  setRootPart( (OpenParts::Id)0 );
 
   interface()->setActivePart( 0 );
 

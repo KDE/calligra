@@ -28,8 +28,8 @@
 #include <kfiledialog.h>
 #include <opMainWindowIf.h>
 #include <kapp.h>
-#include <qmsgbox.h>
 #include <klocale.h>
+#include <qmsgbox.h>
 
 QList<KSpreadShell>* KSpreadShell::s_lstShells = 0L;
 
@@ -89,12 +89,12 @@ void KSpreadShell::setDocument( KSpreadDoc *_doc )
   
   m_pDoc = _doc;
   m_pDoc->_ref();
-  m_pView = _doc->createSpreadView();
+  m_pView = _doc->createSpreadView( getFrame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
   
-  setRootPart( m_pView->id() );
+  setRootPart( m_pView );
   interface()->setActivePart( m_pView->id() );
 
   if( m_pFileMenu )
@@ -102,7 +102,7 @@ void KSpreadShell::setDocument( KSpreadDoc *_doc )
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
@@ -123,18 +123,17 @@ bool KSpreadShell::newDocument()
   m_pDoc = new KSpreadDoc;
   if ( !m_pDoc->init() )
   {
-    releaseDocument();
     cerr << "ERROR: Could not initialize document" << endl;
     return false;
   }
   
-  m_pView = m_pDoc->createSpreadView();
+  m_pView = m_pDoc->createSpreadView( getFrame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   m_pView->setMainWindow( interface() );
   
-  setRootPart( m_pView->id() );
+  setRootPart( m_pView );
   interface()->setActivePart( m_pView->id() );
   
   if( m_pFileMenu )
@@ -142,8 +141,8 @@ bool KSpreadShell::newDocument()
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
- }
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+  }
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
@@ -173,16 +172,17 @@ bool KSpreadShell::openDocument( const char *_url, const char *_format )
   m_pDoc = new KSpreadDoc;
   if ( !m_pDoc->loadFromURL( _url, _format ) )
   {
-    releaseDocument();
+    delete m_pDoc;
+    m_pDoc = 0L;
     return false;
   }
   
-  m_pView = m_pDoc->createSpreadView();
+  m_pView = m_pDoc->createSpreadView( getFrame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
   
-  setRootPart( m_pView->id() );
+  setRootPart( m_pView );
   interface()->setActivePart( m_pView->id() );
   
   if ( m_pFileMenu )
@@ -190,7 +190,7 @@ bool KSpreadShell::openDocument( const char *_url, const char *_format )
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
@@ -277,17 +277,14 @@ void KSpreadShell::releaseDocument()
     views = m_pDoc->viewCount();
   cerr << "############## VIEWS=" << views << " #####################" << endl;
   
-  if ( m_pView )
-    cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
-  setRootPart( 0 );
+  setRootPart( (OpenParts::Id)0 );
 
-  if ( m_pView )
-    cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   interface()->setActivePart( 0 );
 
-  // if ( m_pView )
   // cerr << "-3) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   
   if ( m_pView )
@@ -296,32 +293,18 @@ void KSpreadShell::releaseDocument()
   /* if ( m_pView )
     m_pView->cleanUp(); */
 
-  // if ( m_pView )
   // cerr << "-4) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   if ( m_pDoc && views <= 1 )
     m_pDoc->cleanUp();
-  // if ( m_pView )
   // cerr << "-5) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   // if ( m_pView )
   // CORBA::release( m_pView );
-  // if ( m_pView )
   // cerr << "-6) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   if ( m_pDoc )
     CORBA::release( m_pDoc );
   // cerr << "-7) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   m_pView = 0L;
   m_pDoc = 0L;
-
-  if( m_pFileMenu )
-  {
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Save, false );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, false );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
-    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
-  }
-  
-  opToolBar()->setItemEnabled( TOOLBAR_PRINT, false );
-  opToolBar()->setItemEnabled( TOOLBAR_SAVE, false );
 }
 
 void KSpreadShell::slotFileNew()
@@ -347,8 +330,7 @@ void KSpreadShell::slotFileOpen()
   
   if ( !openDocument( file, "" ) )
   {
-    QString tmp;
-    tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
+    QString tmp( i18n( "Could not open\n%s" ).arg( file.data() ) );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
   }
 }
@@ -384,11 +366,17 @@ void KSpreadShell::slotFileSaveAs()
 
 void KSpreadShell::slotFileClose()
 {
+  if ( documentCount() <= 1 )
+  {
+    slotFileQuit();
+    return;
+  }
+  
   if ( isModified() )
     if ( !requestClose() )
       return;
   
-  releaseDocument();
+  delete this;
 }
 
 void KSpreadShell::slotFilePrint()

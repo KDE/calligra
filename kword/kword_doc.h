@@ -125,7 +125,7 @@ public:
   // IDL
   virtual OpenParts::View_ptr createView();
   // C++
-  KWordView* createWordView();
+  KWordView* createWordView( QWidget* _parent = 0 );
 
   // IDL
   virtual void viewList(KOffice::Document::ViewList*& _list);
