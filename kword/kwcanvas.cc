@@ -43,8 +43,7 @@
 #include <config.h>
 
 KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
-    : QScrollView( parent, "canvas", WNorthWestGravity | WResizeNoErase /*| WRepaintNoErase*/ ), doc( d )
-// it looks like QRT doesn't paint all pixels (e.g. between paragraphs) so we can't use WRepaintNoErase
+    : QScrollView( parent, "canvas", WNorthWestGravity | WResizeNoErase | WRepaintNoErase ), doc( d )
 {
     m_gui = lGui;
     m_currentFrameSetEdit = 0L;
@@ -378,7 +377,9 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
         deleteMovingRect = FALSE;
         //doRaster = FALSE;
         // TODO same zoom stuff as KWImage (for 1x1 at 100%)
-        QCursor::setPos( viewport()->mapToGlobal( QPoint( mx + _pix.width(), my + _pix.height() ) ) );
+        QPoint nPoint( mx + _pix.width(), my + _pix.height() );
+        QPoint vPoint = m_viewMode->normalToView( nPoint );
+        QCursor::setPos( viewport()->mapToGlobal( contentsToViewport( vPoint ) ) );
     }
 }
 
@@ -1726,7 +1727,11 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
 void KWCanvas::slotNewContentsSize()
 {
     QSize size = m_viewMode->contentsSize();
-    resizeContents( size.width(), size.height() );
+    if ( size != QSize( contentsWidth(), contentsHeight() ) )
+    {
+        //kdDebug() << "KWCanvas::slotNewContentsSize " << size.width() << "x" << size.height() << endl;
+        resizeContents( size.width(), size.height() );
+    }
 }
 
 void KWCanvas::resizeEvent( QResizeEvent *e )
