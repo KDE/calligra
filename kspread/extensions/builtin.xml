@@ -154,7 +154,7 @@
     </Function>
 
     <Function>
-      <Name>asin</Name>
+      <Name>asinh</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Angle (rd)</Comment>
@@ -162,7 +162,7 @@
       </Parameter>
       <Help>
 	<Text>The asinh() function  calculates the inverse hyperbolic sine of x; that is the value whose hyperbolic sine is x.</Text>
-	<Syntax>asin(Float)</Syntax>
+	<Syntax>asinh(Float)</Syntax>
 	<Example>asinh(0.8) equals 0.73266826</Example>
 	<Example>asinh(0) equals 0</Example>
       </Help>
@@ -193,8 +193,8 @@
       <Help>
 	<Text>This function calculates the arc tangent of the two variables x and y. It is similar to calculating the arc tangent of y/x, except that the signs of both arguments are used to determine the quadrant of the result.</Text>
 	<Syntax>atan2( value )</Syntax>
-	<Example>atan2(0.5,1.0) equals 1.107149</Example>
-	<Example>atan2(-0.5,2.0) equals 1.815775</Example>
+	<Example>atan2(0.5;1.0) equals 1.107149</Example>
+	<Example>atan2(-0.5;2.0) equals 1.815775</Example>
       </Help>
     </Function>
 
@@ -259,9 +259,9 @@
       </Parameter>
       <Help>
 	<Text>The dayOfYear() function returns the number of the day in the year (1...365).</Text>
-	<Syntax>dayOfYear( year, month, date )</Syntax>
-	<Example>dayOfYear(2000,12,1) returns 336</Example>
-	<Example>dayOfYear(2000,2,29) return 60</Example>
+	<Syntax>dayOfYear( year; month; date )</Syntax>
+	<Example>dayOfYear(2000;12;1) returns 336</Example>
+	<Example>dayOfYear(2000;2;29) return 60</Example>
       </Help>
     </Function>
 
@@ -282,8 +282,8 @@
       </Parameter>
       <Help>
 	<Text>The date() function returns the date formatted with local parameters.</Text>
-	<Syntax>date( year, month, date )</Syntax>
-	<Example>date(2000,5,5) returns Friday 05 May 2000</Example>
+	<Syntax>date( year; month; date )</Syntax>
+	<Example>date(2000;5;5) returns Friday 05 May 2000</Example>
       </Help>
     </Function>
 
@@ -304,8 +304,8 @@
       </Parameter>
       <Help>
 	<Text>The time() function returns the time formatted with local parameters.</Text>
-	<Syntax>time( hours, minutes, seconds )</Syntax>
-	<Example>time(10,2,2) returns 10:02:02</Example>
+	<Syntax>time( hours; minutes; seconds )</Syntax>
+	<Example>time(10;2;2) returns 10:02:02</Example>
       </Help>
     </Function>
 
@@ -429,9 +429,9 @@
       </Parameter>
       <Help>
 	<Text>The EXACT() function returns True if these two strings are equal otherwise returns False.</Text>
-	<Syntax>EXACT( string1, string2 )</Syntax>
-	<Example>EXACT( "Koffice", "Koffice" ) returns True"</Example>
-        <Example>EXACT( "kspread", "Koffice" ) returns False</Example>
+	<Syntax>EXACT( string1; string2 )</Syntax>
+	<Example>EXACT( "Koffice"; "Koffice" ) returns True"</Example>
+        <Example>EXACT( "kspread"; "Koffice" ) returns False</Example>
       </Help>
     </Function>
 
@@ -448,9 +448,9 @@
       </Parameter>
       <Help>
 	<Text>The find() function searches a substring. This function returns True if this substring exists otherwise it returns False.</Text>
-	<Syntax>find( haystack, needle )</Syntax>
-	<Example>find( "Kof", "Koffice" ) returns True"</Example>
-	<Example>find( "kspread", "Koffice") returns False</Example>
+	<Syntax>find( haystack; needle )</Syntax>
+	<Example>find( "Kof"; "Koffice" ) returns True"</Example>
+	<Example>find( "kspread"; "Koffice") returns False</Example>
       </Help>
     </Function>
 
@@ -471,10 +471,10 @@
       </Parameter>
       <Help>
 	<Text>The mid() function returns a substring that contains the len characters of this string, starting at position index.</Text>
-	<Syntax>mid( text, position, length )</Syntax>
-	<Syntax>mid( text, position )</Syntax>
-	<Example>mid( "Koffice", 2, 3 ) returns "ffi"</Example>
-	<Example>mid( "Koffice", 2 ) returns "ffice"</Example>
+	<Syntax>mid( text; position; length )</Syntax>
+	<Syntax>mid( text; position )</Syntax>
+	<Example>mid( "Koffice"; 2; 3 ) returns "ffi"</Example>
+	<Example>mid( "Koffice"; 2 ) returns "ffice"</Example>
       </Help>
     </Function>
 
@@ -518,8 +518,8 @@
       </Parameter>
       <Help>
 	<Text>The join() function returns string which is the concatenation of the strings passed as parameters.</Text>
-	<Syntax>join( values, values, ... )</Syntax>
-	<Example>join( "kspread", "koffice", "kde" ) returns "kspreadkofficekde"</Example>
+	<Syntax>join( values; values; ... )</Syntax>
+	<Example>join( "kspread"; "koffice"; "kde" ) returns "kspreadkofficekde"</Example>
       </Help>
     </Function>
 
@@ -536,9 +536,9 @@
       </Parameter>
       <Help>
 	<Text>The right() function returns a substring that contains the len rightmost characters of the string. The whole string is returned if len exceeds the length of the string.</Text>
-	<Syntax>right( text, len )</Syntax>
-	<Example>right("hello",2) returns "lo"</Example>
-	<Example>right("kspread",10) returns "kspread"</Example>
+	<Syntax>right( text; len )</Syntax>
+	<Example>right("hello";2) returns "lo"</Example>
+	<Example>right("kspread";10) returns "kspread"</Example>
       </Help>
     </Function>
 
@@ -555,9 +555,9 @@
       </Parameter>
       <Help>
 	<Text>The left() function returns a substring that contains the len leftmost characters of the string. The whole string is returned if len exceeds the length of the string.</Text>
-	<Syntax>left( text, len )</Syntax>
-	<Example>left( "hello", 2 ) returns "he"</Example>
-	<Example>left( "kspread", 10 ) returns "kspread"</Example>
+	<Syntax>left( text; len )</Syntax>
+	<Example>left( "hello"; 2 ) returns "he"</Example>
+	<Example>left( "kspread"; 10 ) returns "kspread"</Example>
       </Help>
     </Function>
 
@@ -574,8 +574,8 @@
       </Parameter>
       <Help>
 	<Text>The REPT() function repeats the first parameter as often as told by the second parameter.</Text>
-	<Syntax>REPT( text, count )</Syntax>
-	<Example>REPT( "kspread", 3 ) returns "kspreadkspreadkspread"</Example>
+	<Syntax>REPT( text; count )</Syntax>
+	<Example>REPT( "kspread"; 3 ) returns "kspreadkspreadkspread"</Example>
       </Help>
     </Function>
 
@@ -626,9 +626,9 @@
       </Parameter>
       <Help>
 	<Text>The pow(x,y) function returns the value of x raised to the power of y.</Text>
-	<Syntax>pow( value, value )</Syntax>
-	<Example>pow(1.2,3.4) equals 1.8572</Example>
-	<Example>pow(2,3) equals 8</Example>
+	<Syntax>pow( value; value )</Syntax>
+	<Example>pow(1.2;3.4) equals 1.8572</Example>
+	<Example>pow(2;3) equals 8</Example>
       </Help>
     </Function>
 
@@ -645,9 +645,9 @@
       </Parameter>
       <Help>
 	<Text>The MOD() function returns the remainder after division if the second parameter is null the function returns #DIV/0</Text>
-	<Syntax>MOD( value, value )</Syntax>
-	<Example>MOD(12,5) returns 2</Example>
-	<Example>MOD(5,5) returns 0</Example>
+	<Syntax>MOD( value; value )</Syntax>
+	<Example>MOD(12;5) returns 2</Example>
+	<Example>MOD(5;5) returns 0</Example>
       </Help>
     </Function>
 
@@ -722,10 +722,10 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The sum() function calculates the sum of all the values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12,5,12.5)</Text>
-	<Syntax>sum( values, values, ... )</Syntax>
-	<Example>sum(12,5,7) equals 24</Example>
-	<Example>sum(12.5,2) equals 14.5</Example>
+	<Text>The sum() function calculates the sum of all the values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5)</Text>
+	<Syntax>sum( values; values; ... )</Syntax>
+	<Example>sum(12;5;7) equals 24</Example>
+	<Example>sum(12.5;2) equals 14.5</Example>
       </Help>
     </Function>
 
@@ -754,9 +754,9 @@
       </Parameter>
       <Help>
 	<Text>The max() function returns the biggest value given in the parameters.</Text>
-	<Syntax>max( values, values, ... )</Syntax>
-	<Example>max(12,5,7) returns 12</Example>
-	<Example>max(12.5,2) returns 12.5</Example>
+	<Syntax>max( values; values; ... )</Syntax>
+	<Example>max(12;5;7) returns 12</Example>
+	<Example>max(12.5;2) returns 12.5</Example>
       </Help>
     </Function>
 
@@ -785,9 +785,9 @@
       </Parameter>
       <Help>
 	<Text>The min() function returns the smallest value given in the parameters.</Text>
-	<Syntax>min( values, values, ... )</Syntax>
-	<Example>min(12,5,7) returns 5</Example>
-	<Example>min(12.5,2) returns 2</Example>
+	<Syntax>min( values; values; ... )</Syntax>
+	<Example>min(12;5;7) returns 5</Example>
+	<Example>min(12.5;2) returns 2</Example>
       </Help>
     </Function>
 
@@ -815,10 +815,10 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The multiply() function multiplies all the values given in the parameters.You can multiply values given by a range multiply(A1:B5) or list of values like multiply(12,5,12.5)</Text>
-	<Syntax>multiply( values, values, ... )</Syntax>
-	<Example>multiply(12,5,7) equals 420</Example>
-	<Example>multiply(12.5,2) equals 25</Example>
+	<Text>The multiply() function multiplies all the values given in the parameters.You can multiply values given by a range multiply(A1:B5) or list of values like multiply(12;5;12.5)</Text>
+	<Syntax>multiply( values; values; ... )</Syntax>
+	<Example>multiply(12;5;7) equals 420</Example>
+	<Example>multiply(12.5;2) equals 25</Example>
       </Help>
     </Function>
 
@@ -971,9 +971,9 @@
       </Parameter>
       <Help>
 	<Text>The AND() function returns True if all the values are true, otherwise returns False</Text>
-	<Syntax>AND( values, values, ... )</Syntax>
-	<Example>AND(True,True,True) returns True</Example>
-	<Example>AND(True,False) returns False</Example>
+	<Syntax>AND( values; values; ... )</Syntax>
+	<Example>AND(True;True;True) returns True</Example>
+	<Example>AND(True;False) returns False</Example>
       </Help>
     </Function>
 
@@ -1002,9 +1002,9 @@
       </Parameter>
       <Help>
 	<Text>The OR() function returns True if at least one of the values is true, otherwise returns False</Text>
-	<Syntax>OR( values, values, ... )</Syntax>
-	<Example>OR(False,False,False) returns False</Example>
-	<Example>OR(True,False) returns True</Example>
+	<Syntax>OR( values; values; ... )</Syntax>
+	<Example>OR(False;False;False) returns False</Example>
+	<Example>OR(True;False) returns True</Example>
       </Help>
     </Function>
 
@@ -1033,9 +1033,9 @@
       </Parameter>
       <Help>
 	<Text>The NAND() function returns True if at least one value is not true, otherwise returns False.</Text>
-	<Syntax>NAND( values, values, ... )</Syntax>
-	<Example>NAND(True,False,False) returns True</Example>
-	<Example>NAND(True,True) returns False</Example>
+	<Syntax>NAND( values; values; ... )</Syntax>
+	<Example>NAND(True;False;False) returns True</Example>
+	<Example>NAND(True;True) returns False</Example>
       </Help>
     </Function>
 
@@ -1064,9 +1064,9 @@
       </Parameter>
       <Help>
 	<Text>The NOR() function returns True if all the values given as parameters are of type bool and have the value false. Otherwise it returns False.</Text>
-	<Syntax>NOR( values, values, ... )</Syntax>
-	<Example>NOR(True,False,False) returns False</Example>
-	<Example>NOR(False,False) returns True</Example>
+	<Syntax>NOR( values; values; ... )</Syntax>
+	<Example>NOR(True;False;False) returns False</Example>
+	<Example>NOR(False;False) returns True</Example>
       </Help>
     </Function>
 
@@ -1102,8 +1102,8 @@
       </Parameter>
       <Help>
 	<Text>The if() function is a conditional function. This function returns the second parameter if the condition is True, otherwise it returns the third parameter.</Text>
-	<Syntax>if( condition, if_true, if_false )</Syntax>
-	<Example>A1=4, A2=6, if(A1>A2,5,3) returns 3</Example>
+	<Syntax>if( condition; if_true; if_false )</Syntax>
+	<Example>A1=4; A2=6; if(A1>A2;5;3) returns 3</Example>
       </Help>
     </Function>
 
@@ -1173,8 +1173,8 @@
       </Parameter>
       <Help>
 	<Text>The BINO function returns the binomial distribution. The first parameter is the number of trials, the second parameter is the number of successes, and the third is the probability of success. The number of trials should be bigger than the number of successes and the probability should be smaller or equal to 1.</Text>
-	<Syntax>BINO( trials, success, prob_of_success )</Syntax>
-	<Example>BINO(12,9,0.8) returns 0.236223201</Example>
+	<Syntax>BINO( trials; success; prob_of_success )</Syntax>
+	<Example>BINO(12;9;0.8) returns 0.236223201</Example>
       </Help>
     </Function>
 
@@ -1195,8 +1195,8 @@
       </Parameter>
       <Help>
 	<Text>The INVBINO function returns the negative binomial distribution. The first parameter is the number of trial the second parameter is the number of failure, and the third is the probability of failure. The number of trials should be bigger than the number of successes and the probability should be smaller or equal to 1.</Text>
-	<Syntax>INVBINO( trials, failure, prob_of_failure )</Syntax>
-	<Example>INVBINO(12,3,0.2) returns 0.236223201</Example>
+	<Syntax>INVBINO( trials; failure; prob_of_failure )</Syntax>
+	<Example>INVBINO(12;3;0.2) returns 0.236223201</Example>
       </Help>
     </Function>
 
@@ -1213,9 +1213,9 @@
       </Parameter>
       <Help>
 	<Text>The COMBIN() function calculates the count of possible combinations. The first parameter is the total count of elements. The second parameter is the count of element to choose. These two parameters should be positive, otherwise the function returns an error. The first parameter should be bigger than the second one otherwise the function returns an error, too.</Text>
-	<Syntax>COMBIN( total, choosen )</Syntax>
-	<Example>COMBIN(12,5) returns 792</Example>
-	<Example>COMBIN(5,5) returns 1</Example>
+	<Syntax>COMBIN( total; choosen )</Syntax>
+	<Example>COMBIN(12;5) returns 792</Example>
+	<Example>COMBIN(5;5) returns 1</Example>
       </Help>
     </Function>
 
@@ -1232,9 +1232,9 @@
       </Parameter>
       <Help>
 	<Text>The PERMUT() function returns the number of permutations. The first parameter is the number of elements, and the second parameter is the number of elements used in the permutation.</Text>
-	<Syntax>PERMUT( total, permutated )</Syntax>
-	<Example>PERMUT(8,5) equals 6720</Example>
-	<Example>PERMUT(1,1) equals 1</Example>
+	<Syntax>PERMUT( total; permutated )</Syntax>
+	<Example>PERMUT(8;5) equals 6720</Example>
+	<Example>PERMUT(1;1) equals 1</Example>
       </Help>
     </Function>
 
@@ -1262,10 +1262,10 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The average() function calculates the average of all the values given as parameters. You can calculate the average of a range average(A1:B5) or a list of values like average(12,5,12.5)</Text>
-	<Syntax>average( values, values, ... )</Syntax>
-	<Example>average(12,5,7) equals 8</Example>
-	<Example>average(12.5,2) equals 7.25</Example>
+	<Text>The average() function calculates the average of all the values given as parameters. You can calculate the average of a range average(A1:B5) or a list of values like average(12;5;12.5)</Text>
+	<Syntax>average( values; values; ... )</Syntax>
+	<Example>average(12;5;7) equals 8</Example>
+	<Example>average(12.5;2) equals 7.25</Example>
       </Help>
     </Function>
 
@@ -1294,9 +1294,9 @@
       </Parameter>
       <Help>
 	<Text>The variance() function calculates the variance of each parameter which are member of a population.</Text>
-	<Syntax>variance( values, values, ... )</Syntax>
-	<Example>variance(12,5,7) equals 8.666...</Example>
-	<Example>variance(15,80,3) equals 1144.22...</Example>
+	<Syntax>variance( values; values; ... )</Syntax>
+	<Example>variance(12;5;7) equals 8.666...</Example>
+	<Example>variance(15;80;3) equals 1144.22...</Example>
       </Help>
     </Function>
 
@@ -1325,7 +1325,7 @@
       </Parameter>
       <Help>
 	<Text></Text>
-	<Syntax>stddev( values, values, ... )</Syntax>
+	<Syntax>stddev( values; values; ... )</Syntax>
       </Help>
     </Function>
 
@@ -1349,9 +1349,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The FV() function returns a value that consist of the present value plus multiples periods of interest. If you have $1000 on your bank account, and you get 8% interest then after two years the amount of money you will own is FV( 1000, 0.08, 2 ). That means FV calculates the future value of your money, that it why it is called FV.</Text>
-	<Syntax>FV( present_value, interest, periods )</Syntax>
-	<Example>FV( 1000, 0.08, 2 ) equals 1166.40</Example>
+	<Text>The FV() function returns a value that consist of the present value plus multiples periods of interest. If you have $1000 on your bank account, and you get 8% interest then after two years the amount of money you will own is FV( 1000; 0.08; 2 ). That means FV calculates the future value of your money, that it why it is called FV.</Text>
+	<Syntax>FV( present_value; interest; periods )</Syntax>
+	<Example>FV( 1000; 0.08; 2 ) equals 1166.40</Example>
       </Help>
     </Function>
 
@@ -1371,9 +1371,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The PV() function returns the value that you need if you want to reach the future value after a certain amount of periods and a certain interest. For example if you need $1166.40 for your new computer and you wont to buy it in two years while getting an interest of 8% then PV( 1166.4, 0.08, 2 ) tells you how much money you need now, in the presence. PV calculates the present value that you need to reach a future value, that is why it is called PV.</Text>
-	<Syntax>PV( future_value, interest, periods )</Syntax>
-	<Example>PV( 1166.4, 0.08, 2 ) equals 1000</Example>
+	<Text>The PV() function returns the value that you need if you want to reach the future value after a certain amount of periods and a certain interest. For example if you need $1166.40 for your new computer and you wont to buy it in two years while getting an interest of 8% then PV( 1166.4; 0.08; 2 ) tells you how much money you need now, in the presence. PV calculates the present value that you need to reach a future value, that is why it is called PV.</Text>
+	<Syntax>PV( future_value; interest; periods )</Syntax>
+	<Example>PV( 1166.4; 0.08; 2 ) equals 1000</Example>
       </Help>
     </Function>
 
@@ -1401,9 +1401,9 @@
 	<Type>Boolean</Type>
       </Parameter>
       <Help>
-	<Text>The PV_annuity() function tells you how much cash you need today (in the presence) if you want to reach a certain cash volume in the future. We assume that you put every month a certain amount of money on your bank account which gives you a certain interest. Now you wonder how much money your bank account must have initially so that you have a certain amount of money after some periods. Lets give a concrete example: You need $1374.40 in two years. At the end of each year you add $100 your account and you have 8% interest. Then PV_annuity( 100, 0.08, 2, 1374.4, FALSE ) tells you that your bank account must have $1000 initially. In case you pay the $100 not at the end of the year, but in the beginning, you would choose TRUE as the last parameter.</Text>
-	<Syntax>PV_annuity( amount, interest, periods, future_value, start )</Syntax>
-	<Example>PV_annuity( 100, 0.08, 2, 1374.4, FALSE ) equals 1000</Example>
+	<Text>The PV_annuity() function tells you how much cash you need today (in the presence) if you want to reach a certain cash volume in the future. We assume that you put every month a certain amount of money on your bank account which gives you a certain interest. Now you wonder how much money your bank account must have initially so that you have a certain amount of money after some periods. Lets give a concrete example: You need $1374.40 in two years. At the end of each year you add $100 your account and you have 8% interest. Then PV_annuity( 100; 0.08; 2; 1374.4; FALSE ) tells you that your bank account must have $1000 initially. In case you pay the $100 not at the end of the year, but in the beginning, you would choose TRUE as the last parameter.</Text>
+	<Syntax>PV_annuity( amount; interest; periods; future_value; start )</Syntax>
+	<Example>PV_annuity( 100; 0.08; 2; 1374.4; FALSE ) equals 1000</Example>
       </Help>
     </Function>
 
@@ -1431,9 +1431,9 @@
 	<Type>Boolean</Type>
       </Parameter>
       <Help>
-	<Text>The FV_annuity() function tells you how much money you will have on your account after a certain amount of periods. We assume that you have initially some money and get a certain interest. In addition you put each period some amount of money in addition on your account. Lets have an example: Imagine you have $1000 on your bank account. At the end of every year you add $100 and your interest is 8%. PV_annuity( 100, 0.08, 2, 1000, FALSE ) tells you that after two years you will own $1374.40. If you pay the $100 at the beginning of each year then choose TRUE as the last parameter.</Text>
-	<Syntax>FV_annuity( amount, interest, periods, initial_value, start )</Syntax>
-	<Example>FV_annuity( 100, 0.08, 2, 1000, FALSE ) equals 1374.4</Example>
+	<Text>The FV_annuity() function tells you how much money you will have on your account after a certain amount of periods. We assume that you have initially some money and get a certain interest. In addition you put each period some amount of money in addition on your account. Lets have an example: Imagine you have $1000 on your bank account. At the end of every year you add $100 and your interest is 8%. PV_annuity( 100; 0.08; 2; 1000; FALSE ) tells you that after two years you will own $1374.40. If you pay the $100 at the beginning of each year then choose TRUE as the last parameter.</Text>
+	<Syntax>FV_annuity( amount; interest; periods; initial_value; start )</Syntax>
+	<Example>FV_annuity( 100; 0.08; 2; 1000; FALSE ) equals 1374.4</Example>
       </Help>
     </Function>
 
@@ -1457,9 +1457,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The compound() function calculates how much money you will have on your account after a certain amount of years. We assume that you have some initial cash and a certain interest. This interest is due every year. There are multiple periods per year. Lets give an example: You have $1000 and 8% interest every month. Then compound( 1000, 0.08, 12, 2 ) tells you that after 2 years you will own $1172.89</Text>
-	<Syntax>compound( initial, interest, periods, periods_per_year )</Syntax>
-	<Example>compound( 1000, 0.08, 12, 2 ) equals 1172.89</Example>
+	<Text>The compound() function calculates how much money you will have on your account after a certain amount of years. We assume that you have some initial cash and a certain interest. This interest is due every year. There are multiple periods per year. Lets give an example: You have $1000 and 8% interest every month. Then compound( 1000; 0.08; 12; 2 ) tells you that after 2 years you will own $1172.89</Text>
+	<Syntax>compound( initial; interest; periods; periods_per_year )</Syntax>
+	<Example>compound( 1000; 0.08; 12; 2 ) equals 1172.89</Example>
       </Help>
     </Function>
 
@@ -1480,7 +1480,7 @@
       </Parameter>
       <Help>
 	<Text>Fix me, I am a hack</Text>
-	<Syntax>continuous( principal, interest, years )</Syntax>
+	<Syntax>continuous( principal; interest; years )</Syntax>
       </Help>
     </Function>
 
@@ -1496,9 +1496,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The effective() function calculates the effective interest rate. Assume you get 8% interest per period. If you want to know how much money you have after a certain amount of periods you can call FV( initial, nominal_interest, periods ), or you can calculate initial*effective( nominal_interest, periods ). The result of both is the same. In other words: The effective interest rate is the percentage you get if you earn nominal interest for some periods. That means: If you wonder how much you earn in two years from $1000 with 8% interest, then effective( 0.08, 2 ) equals 0.1664 and that means you eran 16.64%.</Text>
-	<Syntax>effective( nominal, periods )</Syntax>
-	<Example>effective( 0.08, 2 ) equals 0.1664</Example>
+	<Text>The effective() function calculates the effective interest rate. Assume you get 8% interest per period. If you want to know how much money you have after a certain amount of periods you can call FV( initial; nominal_interest; periods ), or you can calculate initial*effective( nominal_interest; periods ). The result of both is the same. In other words: The effective interest rate is the percentage you get if you earn nominal interest for some periods. That means: If you wonder how much you earn in two years from $1000 with 8% interest; then effective( 0.08; 2 ) equals 0.1664 and that means you eran 16.64%.</Text>
+	<Syntax>effective( nominal; periods )</Syntax>
+	<Example>effective( 0.08; 2 ) equals 0.1664</Example>
       </Help>
     </Function>
 
@@ -1514,9 +1514,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The nominal() function calculates the nominal interest rate from an effective interest rate. For example you have $1000 and after 2 years you earned 16.64%, that means you have $1166.64. Then you can calculate how much interest you got every year by calling nominal( 0.1164, 2 ) and the result is 0.08. This means you get 8% interest per year and after two years that is equal to an effective interest of 16.64%. You should know the following equation: </Text>
-	<Syntax>nominal( nominal, periods )</Syntax>
-	<Example>nominal( 0.1664, 2 ) equals 0.1664</Example>
+	<Text>The nominal() function calculates the nominal interest rate from an effective interest rate. For example you have $1000 and after 2 years you earned 16.64%, that means you have $1166.64. Then you can calculate how much interest you got every year by calling nominal( 0.1164; 2 ) and the result is 0.08. This means you get 8% interest per year and after two years that is equal to an effective interest of 16.64%. You should know the following equation: </Text>
+	<Syntax>nominal( nominal; periods )</Syntax>
+	<Example>nominal( 0.1664; 2 ) equals 0.1664</Example>
       </Help>
     </Function>
 
