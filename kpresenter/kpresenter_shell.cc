@@ -34,6 +34,7 @@
 #include <kfiledialog.h>
 #include <kimgio.h>
 #include <koFilterManager.h>
+#include <kurl.h>
 
 #include <stdlib.h>
 
@@ -262,10 +263,11 @@ bool KPresenterShell::saveDocument( const char *_url, const char *_format )
     if ( _format == 0L || *_format == 0 )
         _format = "application/x-kPresenter";
 
-    if ( QFile::exists( _url ) ) {
-	system( QString( "rm -rf %1~" ).arg( _url ) );
+    KURL u( _url );
+    if ( QFile::exists( u.path() ) ) {
+	system( QString( "rm -rf %1~" ).arg( u.path() ) );
 	QString cmd = "cp %1 %2~";
-	cmd = cmd.arg( _url ).arg( _url );
+	cmd = cmd.arg( u.path() ).arg( u.path() );
 	system( cmd.latin1() );
     }
 
