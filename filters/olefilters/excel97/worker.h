@@ -23,6 +23,7 @@
 #include <qptrlist.h>
 #include <qintdict.h>
 #include <qdom.h>
+#include <qstringlist.h>
 
 #include "definitions.h"
 
@@ -72,6 +73,7 @@ protected:
 	bool op_codepage(Q_UINT32 size, QDataStream &body);
 	bool op_colinfo(Q_UINT32 size, QDataStream &body);
 	bool op_eof(Q_UINT32 size, QDataStream &body);
+	bool op_externname(Q_UINT32 size, QDataStream &body);
 	bool op_filepass(Q_UINT32 size, QDataStream &body);
 	bool op_font(Q_UINT32 size, QDataStream &body);
 	bool op_footer(Q_UINT32 size, QDataStream &body);
@@ -86,6 +88,7 @@ protected:
 	bool op_mergecell(Q_UINT32 size, QDataStream &body);
 	bool op_mulblank(Q_UINT32 size, QDataStream &body);
 	bool op_mulrk(Q_UINT32 size, QDataStream &body);
+	bool op_name(Q_UINT32 size, QDataStream &body);
 	bool op_note(Q_UINT32 size, QDataStream &body);
 	bool op_number(Q_UINT32 size, QDataStream &body);
 	bool op_rightmargin(Q_UINT32 size, QDataStream &body);

@@ -23,6 +23,7 @@
 #include <qptrlist.h>
 #include <qintdict.h>
 #include <qdom.h>
+#include <qstringlist.h>
 
 #include <klocale.h>
 
@@ -132,6 +133,8 @@ public:
 	KLocale locale() { return m_locale; }
 
 	void setDate1904(int v) { m_date1904 = v; };
+
+	void addName( const QString& s );
 	
 private:
 	QDomDocument *m_root;
@@ -144,6 +147,8 @@ private:
 
 	QPtrList<SharedFormula> m_formulaList;
 	QPtrList<FormulaTodo> m_todoFormula;
+
+	QStringList m_names;
 
 	KLocale m_locale;
 

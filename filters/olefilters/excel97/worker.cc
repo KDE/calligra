@@ -1014,6 +1014,34 @@ bool Worker::op_eof(Q_UINT32, QDataStream &)
 	return true;
 }
 
+bool Worker::op_externname(Q_UINT32, QDataStream &body)
+{
+	Q_UINT16 option, sheetIndex, dummy;
+	Q_UINT8 len, flag, ch;
+
+	body >> option;
+
+	body >> sheetIndex >> dummy;
+
+	// at the moment, only handle AddIn function
+        // hence, in the case sheetIndex = 0
+	if( sheetIndex != 0 ) return true;
+
+	body >> len >> flag;
+
+
+	QString name;
+	for( unsigned int i=0; i<len; i++ )
+	{
+		body >> ch;
+		name.append( QChar( ch ) );
+	}
+
+	m_helper->addName( name );
+
+	return true;
+}
+
 bool Worker::op_filepass(Q_UINT32, QDataStream &body)
 {
 	Q_UINT16 temp;
@@ -1333,6 +1361,32 @@ bool Worker::op_mulrk(Q_UINT32 size, QDataStream &body)
 	for(i = 0; i < last; ++i, ++column)	{
 		body >> xf >> number;
 		rk_internal(row, column, xf, number);
+	}
+	return true;
+}
+
+bool Worker::op_name(Q_UINT32, QDataStream &body)
+{
+	QString name;
+
+	// only support BIFF 8 so far
+	if( m_biff >= BIFF_8 )
+	{
+		Q_UINT16 option, sizeFormula, dummy, global;
+		Q_UINT8 shortcutKey, lenName;
+		Q_UINT8 lenMenu, lenDesc, lenHelp, lenStatus;
+
+		body >> option >> shortcutKey;
+		body >> lenName >> sizeFormula >> dummy >> global;
+		body >> lenMenu >> lenDesc >> lenHelp >> lenStatus;
+
+		for( unsigned i = 0; i < lenName+20; i++ )
+		{
+			Q_UINT8 ch; body >> ch;
+			name.append( QChar( ch ) );
+		}
+		m_helper->addName( name );
+
 	}
 	return true;
 }

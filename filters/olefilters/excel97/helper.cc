@@ -951,7 +951,6 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "COUNTIF",          346,  2 },
 	{ "COUNTEMPTYCELLS",  347,  1 },
 	{ "ROMAN",            354,  0 },
-	{ "EXTERNAL",         255,  0 },
 	{ "ISPMT",            350,  4 },
 	{ "GETPIVOTDATA",     358,  2 },
 	{ "AVERAGEA",         361,  0 },
@@ -1190,24 +1189,44 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				rgce >> index;
 				index &= 0x7FFF;
 
-				excelFunc = ExcelFunction(index);
-
-				if(excelFunc)
+				if( ( index == 255 ) && ( ptg == 0x22 ) )
 				{
-					newop = QString(excelFunc->name) + "(";
-					count = excelFunc->params;
+					// external function with variable number of arg
+					count = byte & 0x7f;
+					if( parsedFormula.count() >= count )
+					{
+						newop = parsedFormula[ parsedFormula.count() - count];
+						concatValues(&parsedFormula, count-1, ";", newop + "(", ")");
+						// now remove function name still in the list
+						newop = parsedFormula.last();
+						parsedFormula.pop_back();
+						parsedFormula.pop_back();
+						parsedFormula.append( newop );
+					}
 				}
+
 				else
 				{
-					newop = QString("ExcelFunc_%1(").arg(index);
-					kdWarning(30511) << "Formula contains unhandled function "  << index << endl;
-					count = 1;
-				}
+	
+					excelFunc = ExcelFunction(index);
+	
+					if(excelFunc)
+					{
+						newop = QString(excelFunc->name) + "(";
+						count = excelFunc->params;
+					}
+					else
+					{
+						newop = QString("ExcelFunc_%1(").arg(index);
+						kdWarning(30511) << "Formula contains unhandled function "  << index << endl;
+						count = 1;
+					}
 				
 				if(ptg == 0x22) // variable count of arguments
 					count = byte & 0x7F;
-				
 				concatValues(&parsedFormula, count, ";", newop, ")");
+				}
+
 				break;
 
 			case 0x23:  // ptg????
@@ -1272,7 +1291,11 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				Q_UINT16 extno, intno;
 				rgce >> extno >> intno;
 				rgce >> integer;
-				str = QString("extname(EXT(%1),%2)").arg(extno).arg(intno);
+
+				if( intno < m_names.count() )
+					str = m_names[intno-1];
+				else
+					str =  QString("extname(EXT(%1),%2)").arg(extno).arg(intno);
 				parsedFormula.append(str);
 				break;
 			case 0x3a:  // ptgRef3d
@@ -1340,3 +1363,9 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 	
 	return parsedFormula.join("");
 }
+
+void Helper::addName( const QString& s )
+{
+	m_names.append( s );
+}
+
