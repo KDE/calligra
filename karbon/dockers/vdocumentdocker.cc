@@ -164,6 +164,7 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 	{
 		m_docpixmap = new QPixmap( width(), height() );
 		VKoPainter p( m_docpixmap, width(), height() );
+		p.clear( QColor( 195, 194, 193 ) );
 		p.setWorldMatrix( QWMatrix( 1, 0, 0, -1, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
 		p.setZoomFactor( scaleFactor );
 		KoRect rect( -xoffset, -yoffset, m_document->width() + xoffset, m_document->height() + yoffset );
@@ -171,6 +172,7 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		VColor c( Qt::black );
 		VStroke stroke( c, 0L, 1.0 / scaleFactor );
 		p.setPen( stroke );
+		p.setBrush( Qt::white );
 		p.drawRect( KoRect( 2, 2, m_document->width() - 2, m_document->height() - 2 ) );
 		m_document->draw( &p, &rect );
 		p.end();
