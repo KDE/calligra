@@ -87,6 +87,10 @@ class KexiAlterTableDialog : public KexiDataTable
 		/*! Reimplemented from KexiViewBase, because table storage is more complex. */
 		virtual bool storeData(bool &cancel);
 
+		bool buildSchema(KexiDB::TableSchema &schema, bool &cancel);
+
+		QString messageForSavingChanges(bool &emptyTable);
+
 	protected slots:
 //		void slotCellSelected(int col, int row);
 //		void slotUpdateRowActions(int row);
@@ -113,6 +117,7 @@ class KexiAlterTableDialog : public KexiDataTable
 //		void slotEmptyRowInserted(KexiTableItem*, uint index);
 
 	private:
+
 //		KexiTableView *m_view;
 		KexiDB::TableSchema *m_table; //!< original table schema
 
@@ -129,8 +134,10 @@ class KexiAlterTableDialog : public KexiDataTable
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()
 //		bool m_currentBufferCleared : 1;
 
-		//internal
+		//! internal
 		int m_maxTypeNameTextWidth;
+		//! Set to true in beforeSwitchTo() to avoid asking again in storeData()
+		bool m_dontAskOnStoreData : 1; 
 };
 
 #endif

@@ -308,6 +308,14 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 === 2004 LT TODO ===
 
 
+2004-08-04
+KexiDB
+- alterTable() added (now only drops and recreates table)
+- createTable() 'zombie' rows from 'kexi__fields' table is removed for safety 
+Table Designer
+- saving changes to tables works now (data is just dropped, though);
+  user is warned about this, when needed
+
 2004-07-28..2004-08-03
 KexiDB
 - ProjectDB FORMAT CHANGED (remains backward compatible):

@@ -72,7 +72,7 @@ class KEXI_DB_EXPORT SchemaData
 		virtual void setNative(bool set) { m_native=set; }
 
 	protected:
-		//! Clears all properties excpet 'type'.
+		//! Clears all properties except 'type'.
 		void clear();
 
 		int m_type;

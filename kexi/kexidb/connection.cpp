@@ -1135,6 +1135,10 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	TableSchema *ts = m_tables_byname["kexi__fields"];
 	if (!ts)
 		return false;
+	//for sanity: remove field info is any for this table id
+	if (!KexiDB::deleteRow(*this, ts, "t_id", tableSchema->id()))
+		return false;
+
 	FieldList *fl = ts->subList(
 		"t_id",
 		"f_type",
@@ -1185,8 +1189,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		}
 	}*/
 	//store objects locally:
-	m_tables.insert(tableSchema->m_id, tableSchema);
-	m_tables_byname.insert(tableSchema->m_name.lower(), tableSchema);
+	m_tables.insert(tableSchema->id(), tableSchema);
+	m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
 			
 	return commitAutoCommitTransaction(trans);
 }
@@ -1251,6 +1255,28 @@ bool Connection::dropTable( const QString& table )
 		return false;
 	}
 	return dropTable(ts);
+}
+
+bool Connection::alterTable( TableSchema& tableSchema, TableSchema& newTableSchema )
+{
+	clearError();
+	if (&tableSchema == &newTableSchema) {
+		setError(ERR_OBJECT_THE_SAME, i18n("Could not alter table \"%1\" using the same table.")
+			.arg(tableSchema.name()));
+		return false;
+	}
+//TODO(js): implement real altering
+//TODO(js): update any structure (e.g. query) that depend on this table!
+	bool ok, empty;
+#if 0//TODO ucomment:
+	empty = isEmpty( tableSchema, ok ) && ok;
+#else
+	empty = true;
+#endif
+	if (empty) {
+		ok = createTable(&newTableSchema, true/*replace*/);
+	}
+	return ok;
 }
 
 bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
@@ -1733,6 +1759,11 @@ bool Connection::resultExists(const QString& sql, bool &success)
 		return false;
 	}
 	return deleteCursor(cursor);
+}
+
+bool Connection::isEmpty( TableSchema& table, bool &success )
+{
+	return !resultExists( selectStatement( *table.query() ), success );
 }
 
 int Connection::resultCount(const QString& sql)

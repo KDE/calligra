@@ -388,6 +388,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: real executed query is: "SELECT 1 FROM (\a sql) LIMIT 1" */
 		bool resultExists(const QString& sql, bool &success);
 
+		/*! \return true if there is at least one record in \a table. */
+		bool isEmpty( TableSchema& table, bool &success );
+
 //TODO perhaps use Q_ULLONG here?
 		/*! \return number of records in \a sql query.
 		 Does not fetch any records. -1 is returned on query execution errors (>0 otherwise).
@@ -449,6 +452,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! It is a convenience function, does exactly the same as 
 		 bool dropTable( KexiDB::TableSchema* tableSchema ) */
 		bool dropTable( const QString& table );
+
+		/*! Alters \a tableSchema using \a newTableSchema in memory and on the db backend. 
+		 \return true on success. */
+//TODO(js): implement real altering
+//TODO(js): update any structure (e.g. query) that depend on this table!
+		bool alterTable( TableSchema& tableSchema, TableSchema& newTableSchema );
 
 		/*! Drops a query defined by \a querySchema. 
 		 If true is returned, schema information \a querySchema is destoyed 

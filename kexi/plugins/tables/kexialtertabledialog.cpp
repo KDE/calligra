@@ -52,13 +52,9 @@
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
 	KexiDB::TableSchema *table, const char *name)
  : KexiDataTable(win, parent, name, false/*not db-aware*/)
+ , m_table(table) //orig table
+ , m_dontAskOnStoreData(false)
 {
-	m_table = table; //orig table
-//	if (m_table) //deep copy of the original table
-//		m_newTable = new KexiDB::TableSchema(*m_table); 
-//	else //new, empty table
-//		m_newTable = new KexiDB::TableSchema(m_dialog->partItem()->name());
-//	m_currentBufferCleared = false;
 	init();
 }
 
@@ -314,6 +310,15 @@ KexiAlterTableDialog::initActions()
 	propertyBufferSwitched();
 }*/
 
+QString KexiAlterTableDialog::messageForSavingChanges(bool &emptyTable)
+{
+	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+	bool ok;
+	emptyTable = conn->isEmpty( *m_table, ok ) && ok;
+	return i18n("Do you want to save the design now?")
+	+ ( emptyTable ? QString::null : QString("\n\n") + i18n("Note: This table is already filled with data which will be removed.") );
+}
+
 bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 /*	if (mode==Kexi::DesignViewMode) {
@@ -330,10 +335,18 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontS
 		}
 //<temporary>
 		else if (dirty() && !parentDialog()->neverSaved()) {
-			cancelled = (KMessageBox::No == KMessageBox::questionYesNo(this, i18n("Saving changes for existing table design is not yet supported.\nDo you want to discard your changes now?")));
-			dontStore = !cancelled;
-			if (dontStore)
-				setDirty(false);
+//			cancelled = (KMessageBox::No == KMessageBox::questionYesNo(this, i18n("Saving changes for existing table design is not yet supported.\nDo you want to discard your changes now?")));
+
+			KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+			bool emptyTable;
+			cancelled = (KMessageBox::No == KMessageBox::questionYesNo(this, 
+				i18n("Saving changes for existing table design is now required.")
+				+"\n"+messageForSavingChanges(emptyTable)));
+			dontStore = cancelled;
+			if (!dontStore)
+				m_dontAskOnStoreData = true;
+//			if (dontStore)
+//				setDirty(false);
 		}
 //</temporary>
 		//todo
@@ -390,7 +403,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& /*buf*/ ,Kexi
 	//TODO
 }
 
-KexiDB::Field::Type firstTypeForSelectedGroup( int typegroup )
+static KexiDB::Field::Type firstTypeForSelectedGroup( int typegroup )
 {
 	//take the 1st type for the group
 	KexiDB::TypeGroupList tlst = KexiDB::typesForGroup( (KexiDB::Field::TypeGroup)typegroup );
@@ -569,21 +582,11 @@ void KexiAlterTableDialog::slotEmptyRowInserted(KexiTableItem*, uint /*index*/)
 }
 #endif
 
-KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel)
 {
-	if (m_table || m_dialog->schemaData()) //must not be
-		return 0;
-	
 	m_view->acceptRowEdit();
 
-	//create table schema definition
-	m_table = new KexiDB::TableSchema(sdata.name());
-	m_table->setName( sdata.name() );
-	m_table->setCaption( sdata.caption() );
-	m_table->setDescription( sdata.description() );
-
 	bool ok = true;
-
 	//check for duplicates
 	KexiPropertyBuffer *b = 0;
 	bool no_fields = true;
@@ -665,15 +668,29 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 				buf["description"]->value().toString(),
 				buf["width"]->value().toInt()
 			);
-			m_table->addField(f);
+			schema.addField(f);
 		}
 	}
+	return ok;
+}
 
-	//todo
-	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+{
+	if (m_table || m_dialog->schemaData()) //must not be
+		return 0;
+	
+	//create table schema definition
+	m_table = new KexiDB::TableSchema(sdata.name());
+	m_table->setName( sdata.name() );
+	m_table->setCaption( sdata.caption() );
+	m_table->setDescription( sdata.description() );
+
+	bool ok = buildSchema(*m_table, cancel) && !cancel;
 
 	//FINALLY: create table:
 	if (ok) {
+		//todo
+		KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 		ok = conn->createTable(m_table);
 		//todo: show err...?
 	}
@@ -687,22 +704,41 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 
 bool KexiAlterTableDialog::storeData(bool &cancel)
 {
-//	KexiDB::TableSchema *ts = static_cast<KexiDB::TableSchema*>(m_dialog->schemaData());
-	m_view->acceptRowEdit();
-
-//<TODO: remove this in the future>
-//	if (!m_dialog->neverSaved()) {
-		KMessageBox::information(this, i18n("Saving changes for existing table design is not yet supported."));
-//		return KMessageBox::Yes == KMessageBox::questionYesNo(this, i18n("Saving changes for existing table design are not yet supported.\nDo you want to discard your changes now?"));
-		cancel = true;
-//	}
-//</TODO>
-
-/*** TODO: ALTER TABLE CODE IN KEXIDB!
-	if (!ts || !mainWin()->project()->dbConnection()->alterTable(ts))
+	if (!m_table || !m_dialog->schemaData())
 		return 0;
-*/
-	return true;
+
+	if (!m_dontAskOnStoreData) {
+		bool emptyTable;
+		const QString msg = messageForSavingChanges(emptyTable);
+		if (!emptyTable)
+			cancel = (KMessageBox::No == KMessageBox::questionYesNo(this, msg));
+	}
+	m_dontAskOnStoreData = false; //one-time use
+	if (cancel)
+		return false;
+//		KMessageBox::information(this, i18n("Saving changes for existing table design is not yet supported."));
+//		cancel = true;
+
+	KexiDB::TableSchema *newTable = new KexiDB::TableSchema(); 
+	//copy schema data
+	static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*m_table);
+	bool ok = buildSchema(*newTable, cancel) && !cancel;
+
+	kdDebug() << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
+	newTable->debug();
+
+	if (ok) {
+		KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+		ok = conn->alterTable(*m_table, *newTable);
+	}
+	if (ok) {
+		//change current schema
+		m_table = newTable;
+	}
+	else {
+		delete newTable;
+	}
+	return ok;
 }
 
 /*void KexiAlterTableDialog::slotAboutToUpdateRow(
