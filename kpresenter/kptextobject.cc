@@ -997,8 +997,8 @@ void KPTextObject::removeHighlight ()
 void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas* m_canvas )
 {
     m_textobj->highlightPortion( parag, index, length );
-    QRect expose = parag->rect();
-    QRect rect = m_doc->zoomHandler()->zoomRect( getRect() );
+    QRect rect = m_doc->zoomHandler()->zoomRect( getRect());
+    QRect expose = m_doc->zoomHandler()->layoutUnitToPixel( parag->rect() );
     expose.moveBy( rect.x(), rect.y());
     m_canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
                            (expose.top()+expose.bottom()) / 2,
