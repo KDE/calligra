@@ -743,8 +743,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 
 // ###### To be _completely_ removed after KDE 3.1 support is dropped !
 // ###### KFileDialog provides configurable extension handling in 3.2.
-            if (!KDE_IS_VERSION (3, 1, 90))
-            {
+#if (!KDE_IS_VERSION (3, 1, 90))
                 if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
                     // No more extensions in filters. We need to get it from the mimetype.
                     KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
@@ -752,7 +751,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                     kdDebug(30003) << "KoMainWindow::saveDocument outputFormat=" << outputFormat << " extension=" << extension << endl;
                     newURL.setPath( newURL.path() + extension );
                 }
-            }
+#endif
 
             // this file exists and we are not just clicking "Save As" to change filter options
             // => ask for confirmation
