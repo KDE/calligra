@@ -239,6 +239,8 @@ public:
     KWCanvas * canvas() const { return m_canvas; }
     KWFrame * currentFrame() const { return m_currentFrame; }
 
+    virtual KWFrameSetEdit* currentTextEdit(){return 0L;}
+
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
      * See KWFrameSet for explanation about the arguments.

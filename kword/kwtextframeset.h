@@ -242,6 +242,8 @@ class KWTextFrameSetEdit : public QObject, public KWFrameSetEdit
 public:
     KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas );
     virtual ~KWTextFrameSetEdit();
+    
+    virtual KWFrameSetEdit* currentTextEdit(){return this;}
 
     /**
      * Paint this frameset with a cursor

@@ -25,6 +25,7 @@ DESCRIPTION
 #include <kdebug.h>
 #include <kwdoc.h>
 #include <kwtableframeset.h>
+#include "kwcanvas.h"
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc ) :
     KWFrameSet( doc )
@@ -1453,8 +1454,13 @@ void KWTableFrameSetEdit::setCurrentCell( int mx, int my )
 void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs )
 {
     delete m_currentCell;
-    m_currentCell = fs->createFrameSetEdit( m_canvas );
+    m_currentCell =  fs->createFrameSetEdit( m_canvas );
     m_currentFrame = fs->getFrame( 0 );
+}
+
+KWFrameSetEdit* KWTableFrameSetEdit::currentTextEdit()
+{
+    return m_currentCell;
 }
 
 #include "kwtableframeset.moc"
