@@ -3941,6 +3941,9 @@ KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSprea
 
   m_scrollTimer = new QTimer( this );
   connect (m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
+  
+  setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
+  setMinimumWidth( m_pCanvas->doc()->zoomItX( YBORDER_WIDTH ) );
 }
 
 
@@ -4568,6 +4571,9 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
 
   m_scrollTimer = new QTimer( this );
   connect ( m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
+  
+  setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+  setMinimumHeight( m_pCanvas->doc()->zoomItY( KSpreadFormat::globalRowHeight() + 2 ) );
 }
 
 
