@@ -1334,6 +1334,14 @@ bool kspreadfunc_trunc( KSContext & context )
 
   double result = args[0]->doubleValue();
 
+  // if negative, do some rounding
+  if( precision < 0 )
+  {
+      precision = -precision;
+      result = floor( result/pow(10.0,precision)+0.5 ) * pow(10.0,precision);
+      precision = 0;
+  }
+
   int factor = (int) pow( 10, precision );
 
   result = floor( result * factor ) / factor;
