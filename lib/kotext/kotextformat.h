@@ -201,6 +201,8 @@ public:
 #endif
 
 protected:
+    QChar displayedChar( QChar c )const;
+
     QColor m_textBackColor;
     QColor m_textUnderlineColor;
     UnderlineLineType m_underlineLine;

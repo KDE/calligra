@@ -288,21 +288,21 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
         if ( applyZoom )
         {
 	    if ( r ) {
-                pixelww = this->screenFontMetrics( zh ).width( c->c );
+                pixelww = this->screenFontMetrics( zh ).width( displayedChar( c->c) );
 	    } else {
                 // Use the m_screenWidths[] array when possible, even faster
                 Q_ASSERT( unicode < 256 );
 		pixelww = d->m_screenWidths[ unicode ];
                 // Not in cache yet -> calculate
                 if ( pixelww == 0 ) {
-                    pixelww = this->screenFontMetrics( zh ).width( c->c );
+                    pixelww = this->screenFontMetrics( zh ).width( displayedChar( c->c) );
                     Q_ASSERT( pixelww < 65535 );
                     d->m_screenWidths[ unicode ] = pixelww;
                 }
 	    }
         }
         else
-            pixelww = this->refFontMetrics().width( c->c );
+            pixelww = this->refFontMetrics().width( displayedChar( c->c) );
     }
     else {
         // Here we have no choice, we need to create the format
@@ -316,7 +316,7 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
         int off = i - pos;
         int end = QMIN( parag->length(), i + 4 );
         while ( pos < end ) {
-            str += parag->at(pos)->c;
+            str += displayedChar( parag->at(pos)->c);
             pos++;
         }
         pixelww = tmpFormat.width( str, off );
@@ -346,6 +346,21 @@ int KoTextFormat::height() const
         d->m_refHeight = qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
     }
     return d->m_refHeight;
+}
+
+QChar KoTextFormat::displayedChar( QChar c )const
+{
+    if ( m_attributeFont== ATT_NONE)
+        return c;
+    else if ( m_attributeFont== ATT_MAJ)
+        return c.upper();
+    else if ( m_attributeFont== ATT_MIN)
+        return c.lower();
+    else
+    {
+        kdDebug()<<" Error in AttributeStyle \n";
+        return c;
+    }
 }
 
 int KoTextFormat::ascent() const
