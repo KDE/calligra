@@ -21,6 +21,7 @@
 
 #include <qstringlist.h>
 #include <qfile.h>
+#include <qtextstream.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qimage.h>
@@ -31,11 +32,14 @@
 #include <kinstance.h>
 #include <kstddirs.h>
 
+#include <stdlib.h>
+
 
 KoTemplate::KoTemplate(const QString &name, const QString &file,
-		       const QString &picture, const bool &hidden) :
+		       const QString &picture, const bool &hidden,
+		       const bool &touched) :
     m_name(name), m_file(file), m_picture(picture), m_hidden(hidden),
-    m_touched(false), m_cached(false) {
+    m_touched(touched), m_cached(false) {
 }
 
 const QPixmap &KoTemplate::loadPicture() {
@@ -65,8 +69,9 @@ const QPixmap &KoTemplate::loadPicture() {
 }
 
 
-KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir) :
-    m_name(name), m_touched(false) {
+KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
+				 const bool &touched) : m_name(name),
+							m_touched(touched) {
     m_dirs.append(dir);
     m_templates.setAutoDelete(true);
 }
@@ -90,10 +95,12 @@ void KoTemplateGroup::setHidden(const bool &hidden) const {
     m_touched=true;
 }
 
-void KoTemplateGroup::add(KoTemplate *t) {
+void KoTemplateGroup::add(KoTemplate *t, bool touch) {
 
-    if(find(t->name())==0L)
+    if(find(t->name())==0L) {
 	m_templates.append(t);
+	m_touched=touch;
+    }
 }
 
 KoTemplate *KoTemplateGroup::find(const QString &name) const {
@@ -107,7 +114,7 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const {
 
 KoTemplateTree::KoTemplateTree(const QString &templateType,
 			       KInstance *instance, const bool &readTree) :
-    m_templateType(templateType), m_instance(instance), groupAdded(false) {
+    m_templateType(templateType), m_instance(instance) {
 
     m_groups.setAutoDelete(true);
     if(readTree)
@@ -121,18 +128,83 @@ void KoTemplateTree::readTemplateTree() {
 }
 
 void KoTemplateTree::writeTemplateTree() {
-    // TODO
+
+    QStringList localTemplates;
+    // read from the local .templates file
+    createLocalTemplateList(localTemplates);
+    QString localDir=m_instance->dirs()->saveLocation(m_templateType);
+
+    for(KoTemplateGroup *group=m_groups.first(); group!=0L; group=m_groups.next()) {
+	//kdDebug() << "---------------------------------" << endl;
+	//kdDebug() << "group: " << group->name() << endl;
+	
+	bool touched=false;
+	for(KoTemplate *t=group->first(); t!=0L && !touched && !group->touched(); t=group->next())
+	    touched=t->touched();
+	
+	if(group->touched() || touched) {
+	    //kdDebug() << "touched" << endl;
+	    if(!group->isHidden()) {
+		//kdDebug() << "not hidden" << endl;
+		createGroupDir(localDir, group, localTemplates);
+	    }
+	    else {
+		//kdDebug() << "hidden" << endl;
+		if(group->dirs().count()==1 && !group->dirs().grep(localDir).isEmpty()) {
+		    //kdDebug() << "local only" << endl;
+		    QString command="rm -rf ";
+		    command+=group->dirs().first();
+		    //kdDebug() << "command: " << command << endl;
+		    localTemplates.remove(group->name());
+		    system(command);
+		}
+		else {
+		    //kdDebug() << "global" << endl;
+		    createGroupDir(localDir, group, localTemplates);
+		}
+	    }
+	}
+	for(KoTemplate *t=group->first(); t!=0L; t=group->next()) {
+	    //kdDebug() << "template: " << t->name() << endl;
+	    // new template file
+	    if(!t->isHidden() && t->touched()) {
+		//kdDebug() << "new template" << endl;
+		writeTemplate(t, group, localDir);
+	    }
+	    // global template file which should be "deleted"
+	    else if(t->isHidden() && t->touched() && !t->file().contains(localDir)) {
+		//kdDebug() << "delete global template" << endl;
+		writeTemplate(t, group, localDir);
+	    }
+	    // delete local template file
+	    else if(t->isHidden() && t->touched() && t->file().contains(localDir)) {
+		//kdDebug() << "delete local template (rm -rf)" << endl;
+		QString command="rm -rf ";
+		command+=KoTemplates::stripWhiteSpace(localDir+group->name()+'/'+t->name()+".desktop");
+		command+=" ";
+		command+=t->file();
+		command+=" ";
+		command+=t->picture();
+		//kdDebug() << "command: " << command << endl;
+		system(command);
+	    }
+	}
+    }
+    // write back the local .templates file
+    writeOutLocalTemplates(localTemplates);
+
+    // update the KStdDir cache... ugh!
+    if(m_instance->dirs()->resourceDirs(m_templateType).count()==1)
+	m_instance->dirs()->addResourceDir(m_templateType, localDir);
 }
 
 void KoTemplateTree::add(KoTemplateGroup *g) {
 
     KoTemplateGroup *group=find(g->name());
-    if(group==0L) {
+    if(group==0L)
 	m_groups.append(g);
-	groupAdded=true;
-    }
     else
-	group->addDir(g->dirs().first()); // "...there can be only one..." (queen)
+	group->addDir(g->dirs().first()); // "...there can be only one..." (Queen)
 }
 
 KoTemplateGroup *KoTemplateTree::find(const QString &name) const {
@@ -145,23 +217,20 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const {
 
 void KoTemplateTree::readGroups() {
 
-    QString dir;
-    char c[256];
-
     QStringList dirs = m_instance->dirs()->resourceDirs(m_templateType);
     for(QStringList::ConstIterator it=dirs.begin(); it!=dirs.end(); ++it) {
 	//kdDebug() << "dir: " << *it << endl;
 	QFile templateInf(*it + ".templates");
 	if(templateInf.open(IO_ReadOnly)) {
-	    while(!templateInf.atEnd()) {
-		templateInf.readLine(c, 255);
-		c[255]='\0';     // if everything else fails :P
-		dir=c;
-		dir=dir.stripWhiteSpace();
-		//kdDebug() << "string: " << dir << endl;
-		if(!dir.isEmpty()) {
-		    KoTemplateGroup *g=new KoTemplateGroup(dir, *it+dir+"/");
-		    m_groups.append(g);
+	    QTextStream stream(&templateInf);
+	    QString tmp;
+	    while(!stream.atEnd()) {
+		stream >> tmp;
+		tmp=KoTemplates::stripWhiteSpace(tmp);
+		//kdDebug() << "string read: " << tmp << endl;
+		if(!tmp.isEmpty()) {
+		    KoTemplateGroup *g=new KoTemplateGroup(tmp, *it+tmp+QChar('/'));
+		    add(g);
 		}
 	    }
 	    templateInf.close();
@@ -229,11 +298,84 @@ void KoTemplateTree::readTemplates() {
 		    templatePath = filePath; // Note that we store the .png file as the template !
 		    // That's the way it's always been done. Then the app replaces the extension...
 		}
-
-		//kdDebug() << "hiho!" << endl;
 		KoTemplate *t=new KoTemplate(text, templatePath, icon, hidden);
-		groupIt.current()->add(t);
+		groupIt.current()->add(t, false); // false -> don't "touch" the group to avoid useless
+		                                  // creation of dirs in .kde/blah/...
 	    }
 	}
     }
 }
+
+void KoTemplateTree::createLocalTemplateList(QStringList &list) {
+
+    QFile localTemplateFile(m_instance->dirs()->saveLocation(m_templateType)+".templates");
+    if(!localTemplateFile.open(IO_ReadOnly))
+	return;
+
+    QTextStream stream(&localTemplateFile);
+    QString tmp;
+    while(!stream.atEnd()) {
+	stream >> tmp;
+	tmp=KoTemplates::stripWhiteSpace(tmp);
+	if(!tmp.isEmpty())
+	    list.append(tmp);
+    }
+    localTemplateFile.close();
+}
+
+void KoTemplateTree::writeOutLocalTemplates(const QStringList &list) {
+
+    if(list.isEmpty()) {
+	QString command="rm -rf ";
+	command+=m_instance->dirs()->saveLocation(m_templateType)+".templates";
+	system(command);
+	return;
+    }
+
+    QFile localTemplateFile(m_instance->dirs()->saveLocation(m_templateType)+".templates");
+    if(!localTemplateFile.open(IO_WriteOnly))
+	return;
+
+    //kdDebug() << "count: " << list.count() << endl;
+    QTextStream stream(&localTemplateFile);
+    for(QStringList::ConstIterator it=list.begin(); it!=list.end(); ++it) {
+	//kdDebug() << "writing out: " << (*it) << endl;
+	stream << (*it) << endl;
+    }
+    localTemplateFile.close();
+}
+
+void KoTemplateTree::createGroupDir(const QString &localDir, KoTemplateGroup *group,
+				    QStringList &localTemplates) {
+
+    KStandardDirs::makeDir(localDir+group->name()); // create the local group dir
+    if(localTemplates.grep(group->name()).isEmpty()) {
+	//kdDebug() << "adding group ( " << group->name() << " ) locally" << endl;
+	localTemplates.append(group->name());
+    }
+}
+
+void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
+				   const QString &localDir) {
+
+    KSimpleConfig config(KoTemplates::stripWhiteSpace(localDir+group->name()+'/'+t->name()+".desktop"));
+    config.setDesktopGroup();
+    config.writeEntry("Type", "Link");
+    config.writeEntry("URL", t->file());
+    config.writeEntry("Name", t->name());
+    config.writeEntry("Icon", t->picture());
+    config.writeEntry("X-KDE-Hidden", t->isHidden());
+}
+
+namespace KoTemplates {
+QString stripWhiteSpace(const QString &string) {
+
+    QString ret;
+    for(unsigned int i=0; i<string.length(); ++i) {
+	QChar tmp(string[i]);
+	if(!tmp.isSpace())
+	    ret+=tmp;
+    }
+    return ret;
+}
+};

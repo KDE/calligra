@@ -175,7 +175,13 @@ void KoTemplateChooseDia::setupDialog()
     if ( d->tree && d->m_dialogType!=NoTemplates ) {
         d->m_tabs = new QTabWidget( d->m_mainwidget );
 
+	// for sorting stuff (ugly, will be replaced)
+	QDict<QVBox> tabDict;
+	QStringList tabNames;
+
         for ( KoTemplateGroup *group = d->tree->first(); group!=0L; group=d->tree->next() ) {
+	    if(group->isHidden())
+		continue;
 	    QVBox *tab=new QVBox( d->m_tabs );
             MyIconCanvas *canvas = new MyIconCanvas( tab );
             canvas->setBackgroundColor( colorGroup().base() );
@@ -183,13 +189,20 @@ void KoTemplateChooseDia::setupDialog()
             canvas->setWordWrapIconText( true ); // DF
 	    canvas->show();
 	    canvas->load(group);
+	    canvas->sort();
             connect( canvas, SIGNAL( executed( QIconViewItem * ) ),
                      this, SLOT( chosen(QIconViewItem *) ) );
             connect( canvas, SIGNAL( currentChanged( QIconViewItem * ) ),
 		     this, SLOT( currentChanged( QIconViewItem * ) ) );
-            d->m_tabs->addTab( tab, group->name() );
 	    d->canvasDict.insert(group->name(), canvas);
+	    // *uuuugggggllllyyyyyy* (Werner)
+	    tabDict.insert(group->name(), tab);
+	    tabNames.append(group->name());
         }
+	tabNames.sort();
+	for(QStringList::ConstIterator it=tabNames.begin(); it!=tabNames.end(); ++it)
+	    d->m_tabs->addTab( tabDict[(*it)], (*it) );
+
         connect( d->m_tabs, SIGNAL( selected( const QString & ) ), this, SLOT( tabsChanged( const QString & ) ) );
         grid->addWidget( d->m_tabs, 2, 0 );
     }
@@ -332,7 +345,7 @@ void KoTemplateChooseDia::ok() {
 	d->m_returnType = Template;
 	QString groupName=d->m_tabs->tabLabel(d->m_tabs->currentPage());
 	MyIconCanvas *canvas=d->canvasDict.find(groupName);
-	if(!canvas) {
+	if(!canvas || !canvas->currentItem()) {
 	    d->m_returnType=Empty;
 	    return;
 	}

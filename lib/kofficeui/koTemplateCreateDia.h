@@ -64,7 +64,6 @@ private slots:
 private:
     void updatePixmap();
     void fillGroupTree();
-    QString stripWhiteSpace(const QString &string);
 
     QString m_file;
     QPixmap m_pixmap;

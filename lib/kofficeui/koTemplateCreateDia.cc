@@ -69,6 +69,7 @@ public:
     QString m_customFile;
     QPixmap m_customPixmap;
     KListView *m_groups;
+    bool m_changed;
 
     QPopupMenu *m_popup;
     QListViewItem *m_currentItem;
@@ -98,6 +99,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance
     QHBoxLayout *namefield=new QHBoxLayout(leftbox);
     namefield->addWidget(label);
     d->m_name=new KLineEdit(mainwidget);
+    d->m_name->setFocus();
     connect(d->m_name, SIGNAL(textChanged(const QString &)),
 	    this, SLOT(slotNameChanged(const QString &)));
     namefield->addWidget(d->m_name);
@@ -148,6 +150,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance
     pixlayout->addStretch(8);
 
     enableButtonOK(false);
+    d->m_changed=false;
     updatePixmap();
 }
 
@@ -164,8 +167,9 @@ void KoTemplateCreateDia::slotOk() {
     // get the current item, if there is one...
     d->m_currentItem=d->m_groups->currentItem();
     if(!d->m_currentItem)
-	d->m_groups->firstChild();
+	d->m_currentItem=d->m_groups->firstChild();
     if(!d->m_currentItem) {    // save :)
+	d->m_tree->writeTemplateTree();
 	KDialogBase::slotCancel();
 	return;
     }
@@ -173,24 +177,35 @@ void KoTemplateCreateDia::slotOk() {
     if(d->m_currentItem->depth()!=0)
 	d->m_currentItem=d->m_currentItem->parent();
     if(!d->m_currentItem) {    // *very* save :P
+	d->m_tree->writeTemplateTree();
 	KDialogBase::slotCancel();
 	return;
     }
 
     KoTemplateGroup *group=d->m_tree->find(d->m_currentItem->text(0));
     if(!group) {    // even saver
+	d->m_tree->writeTemplateTree();
+	KDialogBase::slotCancel();
+	return;
+    }
+
+    if(d->m_name->text().isEmpty()) {
+	d->m_tree->writeTemplateTree();
 	KDialogBase::slotCancel();
 	return;
     }
 
     // copy the tmp file and the picture the app provides
     QString dir=d->m_tree->instance()->dirs()->saveLocation(d->m_tree->templateType());
-    dir+=stripWhiteSpace(group->name());
+    dir+=KoTemplates::stripWhiteSpace(group->name());
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
-    if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir))
+    if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
+	d->m_tree->writeTemplateTree();
+	KDialogBase::slotCancel();
 	return;
-    QString file=stripWhiteSpace(d->m_name->text());
+    }
+    QString file=KoTemplates::stripWhiteSpace(d->m_name->text());
     QString icon=iconDir+file;
 
     // try to find the extension for the template file :P
@@ -218,7 +233,7 @@ void KoTemplateCreateDia::slotOk() {
     else
 	kdWarning(30004) << "Could not save the preview picture!" << endl;
 
-    KoTemplate *t=new KoTemplate(d->m_name->text(), templateDir+file, icon);
+    KoTemplate *t=new KoTemplate(d->m_name->text(), templateDir+file, icon, false, true);
     group->add(t);
     d->m_tree->writeTemplateTree();
     KDialogBase::slotOk();
@@ -271,7 +286,7 @@ void KoTemplateCreateDia::slotSelect() {
 
 void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 
-    if(name.isEmpty() || !d->m_groups->firstChild())
+    if((name.isEmpty() || !d->m_groups->firstChild()) && !d->m_changed)
 	enableButtonOK(false);
     else
 	enableButtonOK(true);
@@ -297,11 +312,12 @@ void KoTemplateCreateDia::slotNewGroup() {
 
     QString dir=d->m_tree->instance()->dirs()->saveLocation(d->m_tree->templateType());
     dir+=name;
-    KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir);
+    KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, true);
     d->m_tree->add(newGroup);
     (void)new QListViewItem(d->m_groups, name);
     d->m_groups->sort();
     enableButtonOK(true);
+    d->m_changed=true;
 }
 
 void KoTemplateCreateDia::slotRemove() {
@@ -325,8 +341,8 @@ void KoTemplateCreateDia::slotRemove() {
     }
     delete d->m_currentItem;
     d->m_currentItem=0L;
-    if(!d->m_groups->firstChild() || d->m_name->text().isEmpty())
-	enableButtonOK(false);
+    enableButtonOK(true);
+    d->m_changed=true;
 }
 
 void KoTemplateCreateDia::updatePixmap() {
@@ -360,17 +376,6 @@ void KoTemplateCreateDia::fillGroupTree() {
 	    (void)new QListViewItem(groupItem, t->name());
 	}
     }
-}
-
-QString KoTemplateCreateDia::stripWhiteSpace(const QString &string) {
-
-    QString ret;
-    for(unsigned int i=0; i<string.length(); ++i) {
-	QChar tmp(string[i]);
-	if(!tmp.isSpace())
-	    ret+=tmp;
-    }
-    return ret;
 }
 
 

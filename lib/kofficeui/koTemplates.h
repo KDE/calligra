@@ -35,17 +35,12 @@ public:
     KoTemplate(const QString &name,
 	       const QString &file=QString::null,
 	       const QString &picture=QString::null,
-	       const bool &hidden=false);
+	       const bool &hidden=false, const bool &touched=false);
     ~KoTemplate() {}
 
     QString name() const { return m_name; }
-    void setName(const QString &name) { m_name=name; m_touched=true; }
-
     QString file() const { return m_file; }
-    void setFile(const QString &file) { m_file=file; m_touched=true; }
-
     QString picture() const { return m_picture; }
-    void setPicture(const QString &picture) { m_picture=picture; m_touched=true; m_cached=false; }
     const QPixmap &loadPicture();
 
     const bool &isHidden() const { return m_hidden; }
@@ -66,12 +61,11 @@ class KoTemplateGroup {
 
 public:
     KoTemplateGroup(const QString &name,
-		    const QString &dir=QString::null);
+		    const QString &dir=QString::null,
+		    const bool &touched=false);
     ~KoTemplateGroup() {}
 
     QString name() const { return m_name; }
-    void setName(const QString &name) { m_name=name; m_touched=true; }
-
     QStringList dirs() const { return m_dirs; }
     void addDir(const QString &dir) { m_dirs.append(dir); m_touched=true; }
 
@@ -86,7 +80,7 @@ public:
     KoTemplate *prev() { return m_templates.prev(); }
     KoTemplate *current() { return m_templates.current(); }
 
-    void add(KoTemplate *t);
+    void add(KoTemplate *t, bool touch=true);
     KoTemplate *find(const QString &name) const;
 
     const bool &touched() const { return m_touched; }
@@ -123,10 +117,21 @@ public:
 private:
     void readGroups();
     void readTemplates();
+    void createLocalTemplateList(QStringList &list);
+    void writeOutLocalTemplates(const QStringList &list);
+    void createGroupDir(const QString &localDir, KoTemplateGroup *group,
+			QStringList &localTemplates);
+    void writeTemplate(KoTemplate *t, KoTemplateGroup *group,
+		       const QString &localDir);
 
     QString m_templateType;
     KInstance *m_instance;
     QList<KoTemplateGroup> m_groups;
-    bool groupAdded;
 };
+
+
+namespace KoTemplates {
+QString stripWhiteSpace(const QString &string);
+};
+
 #endif
