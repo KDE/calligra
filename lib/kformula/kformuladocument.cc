@@ -326,6 +326,10 @@ void Document::setEnabled( bool enabled )
     m_wrapper->getAddLowerLeftAction()->setEnabled( enabled );
     m_wrapper->getAddUpperRightAction()->setEnabled( enabled );
     m_wrapper->getAddLowerRightAction()->setEnabled( enabled );
+    
+    m_wrapper->getAddGenericUpperAction()->setEnabled( enabled );
+    m_wrapper->getAddGenericLowerAction()->setEnabled( enabled );
+    
     m_wrapper->getAppendColumnAction()->setEnabled( enabled );
     m_wrapper->getInsertColumnAction()->setEnabled( enabled );
     m_wrapper->getRemoveColumnAction()->setEnabled( enabled );
@@ -542,10 +546,12 @@ void DocumentWrapper::createActions( KActionCollection* collection )
                                       collection, "formula_addlowerright");
 
     m_addGenericUpperAction = new KAction(i18n("Add Upper Index"),
+                                      "gsup",
                                               /*CTRL + Key_U*/0,
                                       this, SLOT(addGenericUpperIndex()),
                                       collection, "formula_addupperindex");
     m_addGenericLowerAction = new KAction(i18n("Add Lower Index"),
+                                      "gsub",
                                       0,
                                       this, SLOT(addGenericLowerIndex()),
                                       collection, "formula_addlowerindex");
