@@ -118,7 +118,16 @@ void ContextStyle::readConfig( KConfig* config )
     QString baseSize = config->readEntry( "baseSize", "20" );
     m_baseSize = baseSize.toInt();
 
-    m_fontStyleName = config->readEntry( "fontStyle", "symbol" );
+    QString defaultStyle;
+
+    if (CMStyle::missingFonts().isEmpty())
+        defaultStyle = "tex";
+    else if (EsstixFontStyle::missingFonts().isEmpty())
+    	defaultStyle = "esstix";
+    else
+        defaultStyle = "symbol";
+
+    m_fontStyleName = config->readEntry( "fontStyle", defaultStyle );
 
 #if 0
     m_requestedFonts = config->readListEntry( "usedMathFonts" );

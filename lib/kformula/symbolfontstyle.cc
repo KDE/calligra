@@ -60,6 +60,14 @@ Artwork* SymbolFontStyle::createArtwork( SymbolType type ) const
     return new SymbolArtwork( type );
 }
 
+QStringList SymbolFontStyle::missingFonts()
+{
+    QStringList missing;
+
+    testFont( missing, "symbol" );
+
+    return missing;
+}
 
 inline bool doSimpleRoundBracket( luPt height, luPt baseHeight )
 {

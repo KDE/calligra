@@ -29,11 +29,14 @@ KFORMULA_NAMESPACE_BEGIN
  * The style of the standard symbol font.
  */
 class SymbolFontStyle : public FontStyle {
+public:
 
     /// lazy init support. Needs to be run before anything else.
     virtual bool init( ContextStyle* context );
 
     virtual Artwork* createArtwork( SymbolType type = EmptyBracket ) const;
+
+    static QStringList missingFonts();
 };
 
 

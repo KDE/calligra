@@ -62,6 +62,21 @@ Artwork* CMStyle::createArtwork( SymbolType type ) const
     return new CMArtwork( type );
 }
 
+QStringList CMStyle::missingFonts()
+{
+    QStringList missing;
+
+    testFont( missing, "cmbx10" );
+    testFont( missing, "cmex10" );
+    testFont( missing, "cmmi10" );
+    testFont( missing, "cmr10" );
+    testFont( missing, "cmsy10" );
+    testFont( missing, "msam10" );
+    testFont( missing, "msbm10" );
+
+    return missing;
+}
+
 
 CMAlphaTable::CMAlphaTable()
 {

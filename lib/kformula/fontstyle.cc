@@ -34,6 +34,24 @@ void FontStyle::fillNameTable( SymbolTable::NameTable& names )
     }
 }
 
+static bool fontAvailable( QString fontName )
+{
+    if ( QFontInfo( QFont( fontName ) ).family().lower() == fontName.lower() )
+        return true;
+    else {
+        kdWarning(39001) << "Font '" << fontName << "' not found" << endl;
+        return false;
+    }
+}
+
+
+void FontStyle::testFont( QStringList& missing, const QString& fontName ) {
+    if ( !fontAvailable( fontName ) ) {
+        missing.append( fontName );
+    }
+}
+
+
 
 // We claim that all chars come from the same font.
 // It's up to the font tables to ensure this.

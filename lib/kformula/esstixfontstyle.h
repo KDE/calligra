@@ -41,6 +41,7 @@ private:
 
 
 class EsstixFontStyle : public FontStyle {
+public:
 
     /// lazy init support. Needs to be run before anything else.
     virtual bool init( ContextStyle* context );
@@ -49,6 +50,8 @@ class EsstixFontStyle : public FontStyle {
     virtual const AlphaTable* alphaTable() const;
 
     virtual Artwork* createArtwork( SymbolType type = EmptyBracket ) const;
+
+    static QStringList missingFonts();
 
 private:
 

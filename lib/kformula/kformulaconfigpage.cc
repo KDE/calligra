@@ -48,6 +48,9 @@
 #include "kformulaconfigpage.h"
 #include "kformuladocument.h"
 #include "symboltable.h"
+#include "esstixfontstyle.h"
+#include "cmstyle.h"
+#include "symbolfontstyle.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -208,28 +211,6 @@ QPushButton* ConfigurePage::buildFontLine( QWidget* parent,
 }
 
 
-static bool fontAvailable( QString fontName )
-{
-    QFont f( fontName );
-    QStringList fields = QStringList::split( '-', f.rawName() );
-    if ( ( fields.size() > 1 ) &&
-         ( ( fields[1].upper() == fontName.upper() ) ||
-           ( fields[0].upper() == fontName.upper() ) ) ) {
-        return true;
-    }
-    else {
-        kdWarning(39001) << "Font '" << fontName << "' not found but '" << f.rawName() << "'." << endl;
-        return false;
-    }
-}
-
-
-inline void testFont( QStringList& missing, const QString& fontName ) {
-    if ( !fontAvailable( fontName ) ) {
-        missing.append( fontName );
-    }
-}
-
 void ConfigurePage::apply()
 {
     if ( !m_changed )
@@ -238,24 +219,7 @@ void ConfigurePage::apply()
     if ( esstixStyle->isChecked() ) {
         fontStyle = "esstix";
 
-        QStringList missing;
-        testFont( missing, "esstixeight" );
-        testFont( missing, "esstixeleven" );
-        testFont( missing, "esstixfifteen" );
-        testFont( missing, "esstixfive" );
-        testFont( missing, "esstixfour" );
-        testFont( missing, "esstixfourteen" );
-        testFont( missing, "esstixnine" );
-        testFont( missing, "esstixone" );
-        testFont( missing, "esstixseven" );
-        testFont( missing, "esstixseventeen" );
-        testFont( missing, "esstixsix" );
-        testFont( missing, "esstixsixteen" );
-        testFont( missing, "esstixten" );
-        testFont( missing, "esstixthirteen" );
-        testFont( missing, "esstixthree" );
-        testFont( missing, "esstixtwelve" );
-        testFont( missing, "esstixtwo" );
+        QStringList missing = EsstixFontStyle::missingFonts();
 
         if ( missing.count() > 0 ) {
             QString text = i18n( "The fonts '%1' are missing."
@@ -270,14 +234,7 @@ void ConfigurePage::apply()
     else if ( cmStyle->isChecked() ) {
         fontStyle = "tex";
 
-        QStringList missing;
-        testFont( missing, "cmbx10" );
-        testFont( missing, "cmex10" );
-        testFont( missing, "cmmi10" );
-        testFont( missing, "cmr10" );
-        testFont( missing, "cmsy10" );
-        testFont( missing, "msam10" );
-        testFont( missing, "msbm10" );
+        QStringList missing = CMStyle::missingFonts();
 
         if ( missing.count() > 0 ) {
             QString text = i18n( "The fonts '%1' are missing."
@@ -292,8 +249,7 @@ void ConfigurePage::apply()
     else { // symbolStyle->isChecked ()
         fontStyle = "symbol";
 
-        QStringList missing;
-        testFont( missing, "symbol" );
+        QStringList missing = SymbolFontStyle::missingFonts();
 
         if ( missing.count() > 0 ) {
             QString text = i18n( "The font 'symbol' is missing."
@@ -360,6 +316,12 @@ void ConfigurePage::slotDefault()
     updateFontLabel( operatorFont, operatorFontName );
 
     symbolStyle->setChecked( true );
+    if (CMStyle::missingFonts().isEmpty())
+        cmStyle->setChecked( true );
+    else if (EsstixFontStyle::missingFonts().isEmpty())
+        esstixStyle->setChecked( true );
+    else
+        symbolStyle->setChecked( true );
 
     syntaxHighlighting->setChecked( true );
     syntaxHighlightingClicked();

@@ -72,6 +72,31 @@ Artwork* EsstixFontStyle::createArtwork( SymbolType type ) const
     return new EsstixArtwork( type );
 }
 
+QStringList EsstixFontStyle::missingFonts()
+{
+    QStringList missing;
+
+    testFont( missing, "esstixeight" );
+    testFont( missing, "esstixeleven" );
+    testFont( missing, "esstixfifteen" );
+    testFont( missing, "esstixfive" );
+    testFont( missing, "esstixfour" );
+    testFont( missing, "esstixfourteen" );
+    testFont( missing, "esstixnine" );
+    testFont( missing, "esstixone" );
+    testFont( missing, "esstixseven" );
+    testFont( missing, "esstixseventeen" );
+    testFont( missing, "esstixsix" );
+    testFont( missing, "esstixsixteen" );
+    testFont( missing, "esstixten" );
+    testFont( missing, "esstixthirteen" );
+    testFont( missing, "esstixthree" );
+    testFont( missing, "esstixtwelve" );
+    testFont( missing, "esstixtwo" );
+
+    return missing;
+}
+
 
 EsstixAlphaTable::EsstixAlphaTable()
     : script_font( "esstixthirteen" ),
