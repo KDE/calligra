@@ -54,7 +54,7 @@ K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriteri
 OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )
   : KoFilter(),
     m_insideOrderedList( false ), m_nextItemIsListItem( false ),
-    m_restartNumbering( -1 ),
+    m_hasTOC( false ), m_restartNumbering( -1 ),
     m_pictureNumber(0), m_zip(NULL)
 {
     m_styles.setAutoDelete( true );
@@ -125,6 +125,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     createInitialFrame( mainFramesetElement, 29, 798, 42, 566, false, Reconnect );
     createStyles( mainDocument );
     createDocumentContent( mainDocument, mainFramesetElement );
+    finishDocumentContent( mainDocument );
 
     m_zip->close();
     delete m_zip; // It has to be so late, as pictures might be read.
@@ -184,8 +185,9 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         QDomElement styleElem = doc.createElement("STYLE");
         stylesElem.appendChild( styleElem );
 
+        QString styleName = e.attribute( "style:name" );
         QDomElement element = doc.createElement("NAME");
-        element.setAttribute( "value", e.attribute( "style:name" ) );
+        element.setAttribute( "value", styleName );
         styleElem.appendChild( element );
         //kdDebug(30518) << k_funcinfo << "generating style " << e.attribute( "style:name" ) << endl;
 
@@ -196,6 +198,12 @@ void OoWriterImport::createStyles( QDomDocument& doc )
             element.setAttribute( "name", followingStyle );
             styleElem.appendChild( element );
         }
+
+        // ### In KWord the style says "I'm part of the outline" (TOC)
+        // ### In OOo the paragraph says that (text:h)
+        // Hence this hack...
+        if ( styleName.startsWith( "Heading" ) )
+            styleElem.setAttribute( "outline", "true" );
 
         writeFormat( doc, styleElem, 1, 0, 0 );
         writeLayout( doc, styleElem );
@@ -271,6 +279,10 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
         {
             // We don't parse variable-decls since we ignore var types right now
             // (and just storing a list of available var names wouldn't be much use)
+        }
+        else if ( name == "text:table-of-content" )
+        {
+            appendTOC( doc, t );
         }
         // TODO text:sequence-decls
         else
@@ -2280,6 +2292,50 @@ void OoWriterImport::importFootnotesConfiguration( QDomDocument& doc, const QDom
     settings.setAttribute( "righttext", elem.attribute( "style:num-suffix" ) );
 }
 
-#include "oowriterimport.moc"
+void OoWriterImport::appendTOC( QDomDocument& doc, const QDomElement& toc )
+{
+    // table-of-content OOo SPEC 7.5 p452
+    //fillStyleStack( toc, "text:style-name" ); that's the section style
+
+    //QDomElement tocSource = toc.namedItem( "text:table-of-content-source" );
+    // TODO parse templates and generate "Contents ..." styles from it
+    //for ( QDomNode n(tocSource.firstChild()); !text.isNull(); text = text.nextSibling() )
+    //{
+    //}
+
+    QDomElement tocIndexBody = toc.namedItem( "text:index-body" ).toElement();
+    for ( QDomNode n(tocIndexBody.firstChild()); !n.isNull(); n = n.nextSibling() )
+    {
+        m_styleStack.save();
+        QDomElement t = n.toElement();
+        QString tagName = t.tagName();
+        QDomElement e;
+        if ( tagName == "text:index-title" ) {
+            parseBodyOrSimilar( doc, t, m_currentFrameset ); // recurse again
+        } else if ( tagName == "text:p" ) {
+            fillStyleStack( t, "text:style-name" );
+            e = parseParagraph( doc, t );
+        }
+        if ( !e.isNull() )
+            m_currentFrameset.appendChild( e );
+        m_styleStack.restore();
+    }
+
+    // KWord has a special attribute to know if a TOC is present
+    m_hasTOC = true;
+}
+
 // TODO style:num-format, default number format for page styles,
 // used for page numbers (2.3.1)
+
+void OoWriterImport::finishDocumentContent( QDomDocument& mainDocument )
+{
+    QDomElement attributes = mainDocument.createElement( "ATTRIBUTES" );
+    QDomElement docElement = mainDocument.documentElement();
+    docElement.appendChild( attributes );
+    attributes.setAttribute( "hasTOC", m_hasTOC ? 1 : 0 );
+    // TODO hasHeader, hasFooter, unit?, tabStopValue
+    // TODO activeFrameset, cursorParagraph, cursorIndex
+}
+
+#include "oowriterimport.moc"
