@@ -30,8 +30,8 @@
 #include <kexidb/object.h>
 
 #include <kexidb/connectiondata.h>
-#include <kexidb/table.h>
-#include <kexidb/query.h>
+#include <kexidb/tableschema.h>
+#include <kexidb/queryschema.h>
 
 namespace KexiDB {
 

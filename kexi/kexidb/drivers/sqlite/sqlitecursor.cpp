@@ -44,16 +44,18 @@ class KexiDB::SQLiteCursorData
 //			: curr_cols(0)
 			curr_coldata(0)
 			, curr_colname(0)
-			, rec_stored(false)
+//			, rec_stored(false)
+/* MOVED TO Cursor:
 			, cols_pointers_mem_size(0)
 			, records_in_buf(0)
 			, buffering_completed(false)
-			, at_buffer(false)
+			, at_buffer(false)*/
 		{
 		}
 
 		QCString st;
-		sqlite *data;
+		//for sqlite:
+		sqlite *data; 
 		sqlite_vm *vm;
 		char *utail;
 		char *errmsg;
@@ -63,16 +65,18 @@ class KexiDB::SQLiteCursorData
 		const char **curr_colname;
 
 		int next_cols;
-		const char **next_coldata;
+//		const char **next_coldata;
 //		const char **next_colname;
+//		bool rec_stored : 1; //! true, current record is stored in next_coldata
 
-		bool rec_stored; //! true, current record is stored in next_coldata
-
-		uint cols_pointers_mem_size;
+/* MOVED TO Cursor:
+		uint cols_pointers_mem_size; //! size of record's array of pointers to values
 		int records_in_buf; //! number of records currently stored in the buffer
 		bool buffering_completed; //! true if we have already all records stored in the buffer
 		QPtrVector<const char*> records; //buffer data
 		bool at_buffer; //! true if we already point to the buffer with curr_coldata
+*/
+
 /*		int prev_cols;
 		const char **prev_coldata;
 		const char **prev_colname;*/
@@ -108,23 +112,23 @@ bool SQLiteCursor::drv_open()
 //	m_beforeFirst = true;
 
 	if (isBuffered()) {
-		m_data->records.resize(128); //TODO: manage size dynamically
+		m_records.resize(128); //TODO: manage size dynamically
 	}
 
 	return true;
 }
 
-bool SQLiteCursor::drv_getFirstRecord()
+/*bool SQLiteCursor::drv_getFirstRecord()
 {
-	bool ok = drv_getNextRecord();
+	bool ok = drv_getNextRecord();*/
 /*	if ((m_options & Buffered) && ok) { //1st record is there:
 		//compute parameters for cursor's buffer:
 		//-size of record's array of pointer to values
 		m_data->cols_pointers_mem_size = m_data->curr_cols * sizeof(char*);
 		m_data->records_in_buf = 1;
 	}*/
-	return ok;
-}
+	/*return ok;
+}*/
 
 bool SQLiteCursor::drv_close()
 {
@@ -143,54 +147,35 @@ bool SQLiteCursor::drv_close()
 
 bool SQLiteCursor::drv_getNextRecord()
 {
-	int res = 0;
+	int res = -1;
 
-	if ((m_options & Buffered) && (m_at < (m_data->records_in_buf-1)) ) {
+	if ((m_options & Buffered) && (m_at < (m_records_in_buf-1)) ) {
 		//this cursor is buffered:
 		//-we have next record already buffered:
-		if (m_data->at_buffer) {//we already have got a pointer to buffer
+		if (m_at_buffer) {//we already have got a pointer to buffer
 			m_data->curr_coldata++; //just move to next record in the buffer
 		} else {//we have no pointer
 			//compute a place in the buffer that contain next record's data
-			m_data->curr_coldata = m_data->records.at(m_at+1);
-			m_data->at_buffer = true; //now current record is stored in the buffer
+			m_data->curr_coldata = m_records.at(m_at+1);
+			m_at_buffer = true; //now current record is stored in the buffer
 		}
 	}
-	else {//we need to physically fetch a record:
+	else {//we are after last retrieved record: we need to physically fetch a record:
 		if (!m_readAhead) {//we have no record that was read ahead
-			res = sqlite_step(
-				m_data->vm,
-//				&m_data->curr_cols,
-				&m_fieldCount,
-				&m_data->curr_coldata,
-				&m_data->curr_colname);
-
-			if (res==SQLITE_ROW) {//we have the record
-
-				if (m_data->curr_coldata) {
-					for (int i=0;i<m_fieldCount;i++) {
-						KexiDBDrvDbg<<"col."<< i<<": "<< m_data->curr_colname[i]<<" "<< m_data->curr_colname[m_fieldCount+i]
-						<< " = " << (m_data->curr_coldata[i] ? QString::fromLocal8Bit(m_data->curr_coldata[i]) : "(NULL)") <<endl;
-					}
-				}
-							
+			if (!m_buffering_completed) {
+				//for buffered cursor: only retrieve record 
+				//if we are not at after last buffer's item when buffer is fully filled
+				KexiDBDrvDbg<<"==== sqlite_step ===="<<endl;
+				res = sqlite_step(
+					m_data->vm,
+//					&m_data->curr_cols,
+					&m_fieldCount,
+					&m_data->curr_coldata,
+					&m_data->curr_colname);
+			}
+			if (res!=SQLITE_ROW) {//there is no record
 				if (m_options & Buffered) {
-					//store this record's values in the buffer
-					if (!m_data->cols_pointers_mem_size)
-						m_data->cols_pointers_mem_size = m_fieldCount * sizeof(char*);
-//						m_data->cols_pointers_mem_size = m_data->curr_cols * sizeof(char*);
-					const char **record = (const char**)malloc(m_data->cols_pointers_mem_size);
-					const char **src_col = m_data->curr_coldata;
-					const char **dest_col = record;
-//					for (int i=0; i<m_data->curr_cols; i++,src_col++,dest_col++) {
-					for (int i=0; i<m_fieldCount; i++,src_col++,dest_col++) {
-						*dest_col = strdup(*src_col);
-					}
-					m_data->records.insert(m_data->records_in_buf++,record);
-				}
-			} else {//there is no record
-				if (m_options & Buffered) {
-					m_data->buffering_completed = true; //no more records to buffer
+					m_buffering_completed = true; //no more records to buffer
 				}
 				KexiDBDrvDbg<<"res!=SQLITE_ROW ********"<<endl;
 				m_validRecord = false;
@@ -201,6 +186,28 @@ bool SQLiteCursor::drv_getNextRecord()
 				//SQLITE_ERROR:
 				setError(ERR_CURSOR_RECORD_FETCHING, I18N_NOOP("Cannot fetch a record with a cursor"));
 				return false;
+			}
+			
+			//we have a record
+			if (m_data->curr_coldata) {
+				for (int i=0;i<m_fieldCount;i++) {
+					KexiDBDrvDbg<<"col."<< i<<": "<< m_data->curr_colname[i]<<" "<< m_data->curr_colname[m_fieldCount+i]
+					<< " = " << (m_data->curr_coldata[i] ? QString::fromLocal8Bit(m_data->curr_coldata[i]) : "(NULL)") <<endl;
+				}
+			}
+			if (m_options & Buffered) {
+				//store this record's values in the buffer
+				if (!m_cols_pointers_mem_size)
+					m_cols_pointers_mem_size = m_fieldCount * sizeof(char*);
+//						m_data->cols_pointers_mem_size = m_data->curr_cols * sizeof(char*);
+				const char **record = (const char**)malloc(m_cols_pointers_mem_size);
+				const char **src_col = m_data->curr_coldata;
+				const char **dest_col = record;
+//					for (int i=0; i<m_data->curr_cols; i++,src_col++,dest_col++) {
+				for (int i=0; i<m_fieldCount; i++,src_col++,dest_col++) {
+					*dest_col = strdup(*src_col);
+				}
+				m_records.insert(m_records_in_buf++,record);
 			}
 		}
 		else //we have a record that was read ahead: eat this
@@ -229,19 +236,19 @@ bool SQLiteCursor::drv_getPrevRecord()
 
 		
 	if (m_options & Buffered) {
-		if ((m_at <= 0) || (m_data->records_in_buf <= 0)) {
+		if ((m_at <= 0) || (m_records_in_buf <= 0)) {
 			m_at=-1;
 			m_beforeFirst = true;
 			return false;
 		}
 
 		m_at--;
-		if (m_data->at_buffer) {//we already have got a pointer to buffer
+		if (m_at_buffer) {//we already have got a pointer to buffer
 			m_data->curr_coldata--; //just move to prev record in the buffer
 		} else {//we have no pointer
 			//compute a place in the buffer that contain next record's data
-			m_data->curr_coldata = m_data->records.at(m_at);
-			m_data->at_buffer = true; //now current record is stored in the buffer
+			m_data->curr_coldata = m_records.at(m_at);
+			m_at_buffer = true; //now current record is stored in the buffer
 		}
 		return true;
 	}
@@ -252,12 +259,12 @@ bool SQLiteCursor::drv_getPrevRecord()
 void SQLiteCursor::drv_clearBuffer()
 {
 //	if (!m_data->cols_pointers_mem_size || !m_data->curr_cols )
-	if (!m_data->cols_pointers_mem_size || !m_fieldCount )
+	if (!m_cols_pointers_mem_size || !m_fieldCount )
 		return;
-	const uint records_in_buf = m_data->records_in_buf;
-	const char ***r_ptr = m_data->records.data();
+	const uint records_in_buf = m_records_in_buf;
+	const char ***r_ptr = m_records.data();
 	for (uint i=0; i<records_in_buf; i++, r_ptr++) {
-//		const char **record = m_data->records.at(i);
+//		const char **record = m_records.at(i);
 		const char **field_data = *r_ptr;
 //		for (int col=0; col<m_data->curr_cols; col++, field_data++) {
 		for (int col=0; col<m_fieldCount; col++, field_data++) {
@@ -267,12 +274,13 @@ void SQLiteCursor::drv_clearBuffer()
 	}
 //	m_data->curr_cols=0;
 //	m_fieldCount=0;
-	m_data->records_in_buf=0;
-	m_data->cols_pointers_mem_size=0;
-	m_data->at_buffer=false;
-	m_data->records.clear();
+	m_records_in_buf=0;
+	m_cols_pointers_mem_size=0;
+	m_at_buffer=false;
+	m_records.clear();
 }
 
+/*
 void SQLiteCursor::drv_storeCurrentRecord()
 {
 #if 0
@@ -288,13 +296,14 @@ void SQLiteCursor::drv_storeCurrentRecord()
 	}
 #endif
 }
+*/
 
 /*TODO
 const char *** SQLiteCursor::bufferData()
 {
 	if (!isBuffered())
 		return 0;
-	return m_data->records.data();
+	return m_records.data();
 }*/
 
 const char ** SQLiteCursor::recordData()

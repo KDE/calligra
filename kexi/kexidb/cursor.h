@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qvariant.h>
+#include <qptrvector.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/object.h>
@@ -74,12 +75,16 @@ class KEXI_DB_EXPORT Cursor: public Object
 		/*! Sets this cursor to buffered type or not. See description 
 			of buffered and nonbuffered cursors in class description.
 			This method only works if cursor is not opened (isOpened()==false).
-			You can close already opened cursor.
+			You can close already opened cursor and then switch this option on/off.
 		*/
 		void setBuffered(bool buffered);
-		/*! Moves current position to the first record and retrieves it. */
+		/*! Moves current position to the first record and retrieves it.
+			\return true if the first record was retrieved.
+			False could mean that there was an error or there is no record available. */
 		bool moveFirst();
-		/*! Moves current position to the last record and retrieves it. */
+		/*! Moves current position to the last record and retrieves it. 
+			\return true if the last record was retrieved.
+			False could mean that there was an error or there is no record available. */
 		virtual bool moveLast();
 		/*! Moves current position to the next record and retrieves it. */
 		virtual bool moveNext();
@@ -125,7 +130,6 @@ class KEXI_DB_EXPORT Cursor: public Object
 			eg. to know if there are any records in table. Value returned by this method
 			will be assigned to m_readAhead.
 			Default implementation just calls drv_getNextRecord(). */
-		/*		virtual bool drv_getFirstRecord();*/
 
 		/*! Clears cursor's buffer if this was allocated (only for buffered cursor type).
 			Otherwise do nothing. For reimplementing. Default implementation does nothing. */
@@ -146,6 +150,15 @@ class KEXI_DB_EXPORT Cursor: public Object
 		Q_LLONG m_at;
 		int m_fieldCount; //! cached field count information
 		uint m_options; //! cursor options that describes its behaviour
+
+		//<members related to buffering>
+		uint m_cols_pointers_mem_size; //! size of record's array of pointers to values
+		int m_records_in_buf;          //! number of records currently stored in the buffer
+		QPtrVector<const char*> m_records;//! buffer data
+		bool m_buffering_completed : 1;   //! true if we already have all records stored in the buffer
+		bool m_at_buffer : 1;             //! true if we already point to the buffer with curr_coldata
+		//</members related to buffering>
+	
 	private:
 		class Private;
 		Private *d;

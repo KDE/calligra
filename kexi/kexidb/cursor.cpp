@@ -38,6 +38,12 @@ Cursor::Cursor(Connection* conn, const QString& statement, uint options)
 	, m_at(0)
 	, m_fieldCount(0)//do not know
 	, m_options(options)
+	//<members related to buffering>
+	, m_cols_pointers_mem_size(0)
+	, m_records_in_buf(0)
+	, m_buffering_completed(false)
+	, m_at_buffer(false)
+	//</members related to buffering>
 {
 	assert(m_conn);
 	m_conn->m_cursors.insert(this,this);
@@ -82,11 +88,6 @@ bool Cursor::open( const QString& statement )
 	return !error();
 }
 
-//bool Cursor::drv_getFirstRecord()
-//{
-//	return drv_getNextRecord();
-//}
-
 bool Cursor::close()
 {
 	if (!m_opened)
@@ -117,6 +118,18 @@ bool Cursor::moveFirst()
 		return false;
 //	if (!m_beforeFirst) { //cursor isn't @ first record now: reopen
 	if (!m_readAhead) {
+		if (m_options & Buffered) {
+			if (m_records_in_buf==0 && m_buffering_completed)
+				return false; //buffering completed and there is no records!
+			if (m_records_in_buf>0) {
+				//set state as we would before first:
+				m_at_buffer = false;
+				m_at = -1;
+				//..and move to next, ie. 1st record
+				m_afterLast = m_afterLast = !drv_getNextRecord();
+				return !m_beforeFirst;
+			}
+		}
 		if (!reopen())
 			return false;
 	}
@@ -139,12 +152,9 @@ bool Cursor::moveLast()
 {
 	if (!m_opened)
 		return false;
-	if (m_afterLast) {
+	if (m_afterLast || m_atLast) {
 		return m_validRecord; //we already have valid last record retrieved
 	}
-//		if (!reopen())
-//			return false;
-//	}
 	if (!drv_getNextRecord()) { //at least next record must be retrieved
 //		m_beforeFirst = false;
 		m_afterLast = true;

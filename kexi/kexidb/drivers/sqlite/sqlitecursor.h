@@ -68,10 +68,10 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 //		virtual bool drv_moveFirst();
 		virtual bool drv_getNextRecord();
 		virtual bool drv_getPrevRecord();
-		virtual bool drv_getFirstRecord();
 
-		virtual void drv_storeCurrentRecord();
+//TODO		virtual void drv_storeCurrentRecord();
 
+		//PROTOTYPE:
 		/*! Method called when cursor's buffer need to be cleared
 			(only for buffered cursor type), eg. in close(). */
 		virtual void drv_clearBuffer();

@@ -39,23 +39,23 @@ class KEXI_DB_EXPORT Field
 		/*! Unified (most common used) types of fields. */
 		enum Type
 		{
-			InvalidType = 0,
-			Byte = 1,          /* 1 byte, signed or unsigned */
-			ShortInteger = 2,  /* 2 bytes, signed or unsigned */
-			Integer = 3,       /* 4 bytes, signed or unsigned */
-			BigInteger = 4,    /* 8 bytes, signed or unsigned */
+			InvalidType = 0,   /*! type that cannot be supported or is not implemented */
+			Byte = 1,          /*! 1 byte, signed or unsigned */
+			ShortInteger = 2,  /*! 2 bytes, signed or unsigned */
+			Integer = 3,       /*! 4 bytes, signed or unsigned */
+			BigInteger = 4,    /*! 8 bytes, signed or unsigned */
 //			AutoIncrement, /* 4 bytes, like LongInteger, used for keys */
-			Boolean = 5,       /* 0 or 1 */
-			Date = 6,          /* */
-			DateTime = 7,      /* */
-			Time = 8,          /* */
-			Float = 9,         /* 4 bytes */
-			Double = 10,       /* 8 bytes */
-			Text = 11,         /* other name: Varchar; no more than 200 bytes, for efficiency */
-			LongText = 12,      /* other name: Memo. More than 200 bytes*/
-			BLOB = 13,          /* large binary object */
+			Boolean = 5,       /*! 0 or 1 */
+			Date = 6,          /*! */
+			DateTime = 7,      /*! */
+			Time = 8,          /*! */
+			Float = 9,         /*! 4 bytes */
+			Double = 10,       /*! 8 bytes */
+			Text = 11,         /*! other name: Varchar; no more than 200 bytes, for efficiency */
+			LongText = 12,     /*! other name: Memo. More than 200 bytes*/
+			BLOB = 13,         /*! large binary object */
 
-			LastType = 14	// This line should be at the end of the enum!
+			LastType = 14	//! This line should be at the end of the enum!
 		};
 
 		const int defaultTextLength() { return 200; }
@@ -64,12 +64,12 @@ class KEXI_DB_EXPORT Field
 		enum TypeGroup
 		{
 			InvalidGroup = 0,
-			IntegerGroup,
-			FloatGroup,
-			BooleanGroup,
-			DateTimeGroup,
-			TextGroup,
-			BLOBGroup, /* large binary object */
+			IntegerGroup = 1,
+			FloatGroup = 2,
+			BooleanGroup = 3,
+			DateTimeGroup = 4,
+			TextGroup = 5,
+			BLOBGroup = 6, /* large binary object */
 
 			LastGroup	// This line should be at the end of the enum!
 		};

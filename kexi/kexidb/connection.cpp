@@ -18,14 +18,14 @@
 */
 
 #include <kexidb/connection.h>
-#include <kexidb/schemadata.h>
 
-#include "error.h"
-#include "connectiondata.h"
-#include "driver.h"
-#include "table.h"
-#include "transaction.h"
-#include "cursor.h"
+#include <kexidb/error.h>
+#include <kexidb/connectiondata.h>
+#include <kexidb/driver.h>
+#include <kexidb/schemadata.h>
+#include <kexidb/tableschema.h>
+#include <kexidb/transaction.h>
+#include <kexidb/cursor.h>
 
 #include <qfileinfo.h>
 
