@@ -2,8 +2,8 @@ usr/lib/libkspreadpart.so
 usr/lib/libkspreadpart.la
 usr/lib/kspread.so
 usr/lib/kspread.la
-usr/lib/libkspreadcalc.so
-usr/lib/libkspreadcalc.la
+usr/lib/kde2/libkspreadcalc.so
+usr/lib/kde2/libkspreadcalc.la
 usr/bin/kspread
 usr/share/man/man1/kspread*
 usr/share/applnk/Office/kspread.desktop
