@@ -22,14 +22,9 @@
 #include <qwidget.h>
 #include <qguardedptr.h>
 
-#include <kprinter.h>
 #include <kparts/part.h>
-#include <kparts/partmanager.h>
 
-#include <koDocumentChild.h>
 #include <koChild.h>
-
-#include <klocale.h>
 
 class KAction;
 class KActionCollection;
@@ -41,6 +36,8 @@ class KoViewChild;
 class KoFrame;
 class KStatusBar;
 class KInstance;
+class KPrinter;
+class KoDocumentChild;
 class DCOPObject;
 
 namespace KParts

@@ -28,16 +28,11 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qmultilineedit.h>
-#include <qvbox.h>
 #include <qbuffer.h>
 #include <qdom.h>
-#include <qtextstream.h>
-#include <qfile.h>
 #include <qdir.h>
 
 #include <klocale.h>
-#include <kconfig.h>
-#include <kdialogbase.h>
 #include <ktar.h>
 #include <kdebug.h>
 #include <ktempfile.h>

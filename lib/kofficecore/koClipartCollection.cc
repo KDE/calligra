@@ -23,7 +23,6 @@
 #include "qwmf.h"
 #include <qdom.h>
 #include <kdebug.h>
-#include <koStore.h>
 #include <koStoreDevice.h>
 #include <ktempfile.h>
 #include <qpicture.h>

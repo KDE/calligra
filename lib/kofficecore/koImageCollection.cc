@@ -18,7 +18,6 @@
 */
 
 #include "koImageCollection.h"
-#include <koStore.h>
 #include <koStoreDevice.h>
 #include <kdebug.h>
 #include <qfileinfo.h>

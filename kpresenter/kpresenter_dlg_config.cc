@@ -18,6 +18,7 @@
 */
 
 #include <kapp.h>
+#include <klocale.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>

@@ -26,9 +26,6 @@
 #include <klocale.h>
 #include <kimageio.h>
 #include <kiconloader.h>
-#include <kglobal.h>
-#include <kstddirs.h>
-#include <qstringlist.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
 #include <stdlib.h>

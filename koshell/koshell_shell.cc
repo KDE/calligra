@@ -32,6 +32,7 @@
 #include <kservice.h>
 #include <kmessagebox.h>
 #include <krecentdocument.h>
+#include <kparts/partmanager.h>
 
 #include <koQueryTrader.h>
 #include <koKoolBar.h>

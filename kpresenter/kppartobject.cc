@@ -21,6 +21,7 @@
 #include <kpresenter_doc.h>
 #include <kpresenter_view.h>
 #include <kpgradient.h>
+#include <kparts/partmanager.h>
 
 #include <qpicture.h>
 #include <qpainter.h>

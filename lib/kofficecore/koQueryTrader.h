@@ -20,11 +20,10 @@
 #ifndef __ko_query_trader_h__
 #define __ko_query_trader_h__
 
-#include <qobject.h>
-#include <qstring.h>
 #include <kservice.h>
 #include <qvaluelist.h>
 
+class QObject;
 class QStringList;
 class KoDocument;
 class KoFilter;

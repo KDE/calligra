@@ -24,8 +24,7 @@
 #include <kinstance.h>
 #include <ktrader.h>
 
-#include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include <klibloader.h>
 #include <kdebug.h>

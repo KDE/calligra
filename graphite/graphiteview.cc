@@ -18,6 +18,7 @@
 */
 
 #include <kaction.h>
+#include <klocale.h>
 
 #include <ruler.h>
 #include <graphitepart.h>

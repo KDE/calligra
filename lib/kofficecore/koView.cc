@@ -22,13 +22,12 @@
 #include <koMainWindow.h>
 #include <koFrame.h>
 #include <KoViewIface.h>
+#include <koDocumentChild.h>
 
-#include <kinstance.h>
-#include <kstddirs.h>
+#include <klocale.h>
 #include <kdebug.h>
-#include <kparts/plugin.h>
+#include <kparts/partmanager.h>
 #include <kparts/event.h>
-#include <kstatusbar.h>
 #include <assert.h>
 
 class KoViewPrivate

@@ -19,9 +19,7 @@
 
 #include <handler.h>
 #include <koView.h>
-#include <koFrame.h>
 #include <math.h>
-#include <qwmatrix.h>
 #include <kcursor.h>
 #include <kdebug.h>
 

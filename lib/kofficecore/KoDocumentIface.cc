@@ -20,7 +20,7 @@
 #include "koDocument.h"
 #include "KoDocumentIface.h"
 #include "koView.h"
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 #include <kdcopactionproxy.h>
 #include <kaction.h>

@@ -34,6 +34,8 @@
 #include <qdockarea.h>
 
 #include <kaction.h>
+#include <kprinter.h>
+#include <klocale.h>
 #include <kstdaction.h>
 #include <kpopupmenu.h>
 #include <kcursor.h>
@@ -64,7 +66,7 @@ KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc
 
   objMenu = 0;
   rulerMenu = 0;
-  
+
   setInstance(KontourFactory::global());
   setXMLFile("kontour.rc");
 
@@ -99,20 +101,20 @@ void KontourView::unit(MeasurementUnit u)
 void KontourView::setupActions()
 {
   /* Edit menu */
-  
+
   m_copy = KStdAction::copy(this, SLOT(slotCopy()), actionCollection(), "copy");
   m_paste = KStdAction::paste(this, SLOT(slotPaste()), actionCollection(), "paste");
   m_cut = KStdAction::cut(this, SLOT(slotCut()), actionCollection(), "cut");
-  
+
   m_duplicate = new KAction(i18n("Dup&licate"), 0, this, SLOT(slotDuplicate()), actionCollection(), "duplicate");
   m_delete = new KAction(i18n("&Delete"), "editdelete", 0, this, SLOT(slotDelete()), actionCollection(), "delete");
   m_selectAll = KStdAction::selectAll(this, SLOT(slotSelectAll()), actionCollection(), "selectAll");
-  
+
   /* View menu */
-  
+
   m_zoomIn = new KAction(i18n("Zoom in"), "viewmag+", CTRL+Key_Plus, this, SLOT(slotZoomIn()), actionCollection(), "zoomin");
   m_zoomOut = new KAction(i18n("Zoom out"), "viewmag-", CTRL+Key_Minus, this, SLOT(slotZoomOut()), actionCollection(), "zoomout");
-  
+
   m_viewZoom = new KSelectAction(i18n("&Zoom"), 0, actionCollection(), "view_zoom");
   QStringList zooms;
   zooms << "50%";
@@ -129,7 +131,7 @@ void KontourView::setupActions()
   m_viewZoom->setEditable(true);
   connect(m_viewZoom, SIGNAL(activated(const QString &)),this, SLOT(slotViewZoom(const QString &)));
   m_viewZoom->setCurrentItem(2);
-  
+
   m_outline = new KToggleAction(i18n("Ou&tline"), 0, this, SLOT(slotOutline()), actionCollection(), "outline");
   m_outline->setExclusiveGroup("Outline");
   m_normal = new KToggleAction(i18n("&Normal"), 0, this, SLOT(slotNormal()), actionCollection(), "normal");
@@ -138,13 +140,13 @@ void KontourView::setupActions()
 
   m_showRuler = new KToggleAction(i18n("Show &Ruler"), 0, actionCollection(), "showRuler");
   connect(m_showRuler, SIGNAL(toggled(bool)), this, SLOT(slotShowRuler(bool)));
-  
+
   m_showGrid = new KToggleAction(i18n("Show &Grid"), 0, actionCollection(), "showGrid");
   connect(m_showGrid, SIGNAL(toggled(bool)), this, SLOT(slotShowGrid(bool)));
-  
+
   m_showHelplines = new KToggleAction(i18n("Show &Helplines"), 0, actionCollection(), "showHelplines");
   connect(m_showHelplines, SIGNAL(toggled(bool)), this, SLOT(slotShowHelplines(bool)));
-  
+
   /* Layout menu */
 
   m_snapToGrid = new KToggleAction(i18n("&Align To Grid"), "snap_to_grid", 0, actionCollection(), "alignToGrid");
@@ -162,9 +164,9 @@ void KontourView::setupActions()
 
   new KAction(i18n("&Group"), "group", 0, this, SLOT(slotGroup()), actionCollection(), "group");
   new KAction(i18n("&Ungroup"), "ungroup", 0, this, SLOT(slotUngroup()), actionCollection(), "ungroup");
-  
+
   /* Style menu */
-  
+
   m_styles = new KSelectAction(i18n("&Styles"), 0, actionCollection(), "styles");
   connect(m_styles, SIGNAL(activated(const QString &)),this, SLOT(slotStyles(const QString &)));
 
@@ -177,7 +179,7 @@ void KontourView::setupActions()
   new KAction(i18n("&Dimension..."), 0, this, SLOT(slotTransformDimension()), actionCollection(), "transformDimension");
   new KAction(i18n("&Rotation..."), 0, this, SLOT(slotTransformRotation()), actionCollection(), "transformRotation");
   new KAction(i18n("&Mirror..."), 0, this, SLOT(slotTransformMirror()), actionCollection(), "transformMirror");
-  
+
   m_distribute = new KAction( i18n("&Align/Distribute..."), 0, this, SLOT( slotDistribute() ), actionCollection(), "distribute" );
   new KAction( i18n("&Convert to Path"), 0, this, SLOT( slotConvertToPath() ), actionCollection(), "convertToPath" );
 
@@ -201,18 +203,18 @@ void KontourView::initActions()
 void KontourView::setupCanvas()
 {
   mSplitView = new QSplitter(this);
-  
+
   QGridLayout *viewGrid = new QGridLayout(this);
   viewGrid->addWidget(mSplitView, 0, 0);
-  
+
   QWidget *mLeftSide = new QWidget(mSplitView);
 
-  mRightDock = new QDockArea(Qt::Horizontal, QDockArea::Normal, mSplitView);  
-  
+  mRightDock = new QDockArea(Qt::Horizontal, QDockArea::Normal, mSplitView);
+
   /* create horizontal ruler */
   hRuler = new Ruler(mDoc, Ruler::Horizontal, mUnit, mLeftSide);
   hRuler->setCursor(KCursor::handCursor());
-  
+
   /* create vertical ruler */
   vRuler = new Ruler(mDoc, Ruler::Vertical, mUnit, mLeftSide);
   vRuler->setCursor(KCursor::handCursor());
@@ -230,25 +232,25 @@ void KontourView::setupCanvas()
   mCanvas = new Canvas(mDoc->document(), this, hBar, vBar, mLeftSide);
 
   QPixmap *pm;
-  
+
   mTabBarFirst = new QPushButton(mLeftSide);
   mTabBarFirst->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_first"));
   if(pm)
     mTabBarFirst->setPixmap(*pm);
-  
+
   mTabBarLeft = new QPushButton(mLeftSide);
   mTabBarLeft->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_left"));
   if(pm)
     mTabBarLeft->setPixmap(*pm);
-    
+
   mTabBarRight = new QPushButton(mLeftSide);
   mTabBarRight->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_right"));
   if(pm)
     mTabBarRight->setPixmap(*pm);
-    
+
   mTabBarLast = new QPushButton(mLeftSide);
   mTabBarLast->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_last"));
@@ -305,7 +307,7 @@ void KontourView::setupPanels()
   connect(activeDocument(), SIGNAL(updateLayerView()), mLayerPanel, SLOT(updatePanel()));
   mRightDock->moveDockWindow(win);
 
-  QDockWindow *win1 = new QDockWindow();  
+  QDockWindow *win1 = new QDockWindow();
   win1->setResizeEnabled(true);
   KoColorChooser *mColorPanel = new KoColorChooser(win1);
   win1->setWidget(mColorPanel);
@@ -412,7 +414,7 @@ void KontourView::writeConfig()
   QValueList<int> s = mSplitView->sizes();
   config->writeEntry("LeftSide", s[0]);
   config->writeEntry("RightSide", s[1]);
-  
+
 /* config->setGroup("Panels");
    config->writeEntry("Enabled",m_showLayers->isChecked());
    config->sync();*/

@@ -24,6 +24,7 @@
 #include <qtabwidget.h>
 
 #include <kmessagebox.h>
+#include <klocale.h>
 #include <klineeditdlg.h>
 #include <knotifyclient.h>
 #include <kiconview.h>

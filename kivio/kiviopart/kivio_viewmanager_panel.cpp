@@ -13,6 +13,7 @@
 #include <qdom.h>
 
 #include <ktoolbar.h>
+#include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
 

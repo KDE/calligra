@@ -45,6 +45,8 @@
 
 #include <unistd.h>
 #include <kmessagebox.h>
+#include <klocale.h>
+#include <kprinter.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <kapp.h>

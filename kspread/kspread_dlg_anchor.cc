@@ -28,6 +28,7 @@
 #include <qvbox.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <kseparator.h>

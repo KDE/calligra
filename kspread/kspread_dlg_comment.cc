@@ -22,6 +22,7 @@
 #include "kspread_dlg_comment.h"
 #include "kspread_canvas.h"
 #include "kspread_table.h"
+#include <klocale.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
 #include <qmultilineedit.h>

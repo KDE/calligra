@@ -22,8 +22,6 @@
 #ifndef __koDocumentInfoDlg_h__
 #define __koDocumentInfoDlg_h__
 
-#include <qobject.h>
-
 #include <kpropsdlg.h>
 
 class KDialogBase;

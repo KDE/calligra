@@ -32,6 +32,7 @@
 #include <iostream.h>
 #include "kis_global.h"
 
+#include <klocale.h>
 #include "kis_view.h"
 #include "kis_selection.h"
 #include "kis_framebuffer.h"
@@ -203,8 +204,8 @@ public:
 
     void setImage( QString imageName ); // for print, save file and load file.
 
-    /* 
-     * Pen tool settings 
+    /*
+     * Pen tool settings
      */
     struct PenToolSettings {
         PenToolSettings() {
@@ -220,8 +221,8 @@ public:
 
     PenToolSettings getPenToolSettings() const { return penToolSettings; }
     void setPenToolSettings( PenToolSettings s );
-    
-    /* 
+
+    /*
      * Brush tool settings
      */
     struct BrushToolSettings {
@@ -238,7 +239,7 @@ public:
     BrushToolSettings getBrushToolSettings() const { return brushToolSettings; }
     void setBrushToolSettings( BrushToolSettings s );
 
-    /* 
+    /*
      * Airbrush tool settings
      */
     struct AirbrushToolSettings {
@@ -255,8 +256,8 @@ public:
     AirbrushToolSettings getAirbrushToolSettings() const { return airbrushToolSettings; }
     void setAirbrushToolSettings( AirbrushToolSettings s );
 
-    /* 
-     * Eraser tool settings 
+    /*
+     * Eraser tool settings
      */
     struct EraserToolSettings {
         EraserToolSettings() {
@@ -272,8 +273,8 @@ public:
     EraserToolSettings getEraserToolSettings() const { return eraserToolSettings; }
     void setEraserToolSettings( EraserToolSettings s );
 
-    /* 
-     * Line tool settings 
+    /*
+     * Line tool settings
      */
     struct LineToolSettings {
         LineToolSettings() {
@@ -291,8 +292,8 @@ public:
     LineToolSettings getLineToolSettings() const { return lineToolSettings; }
     void setLineToolSettings( LineToolSettings s );
 
-    /* 
-     * Polyline tool settings 
+    /*
+     * Polyline tool settings
      */
     struct PolylineToolSettings {
         PolylineToolSettings() {
@@ -310,8 +311,8 @@ public:
     PolylineToolSettings getPolyLineToolSettings() const { return polylineToolSettings; }
     void setPolylineToolSettings( PolylineToolSettings s );
 
-    /* 
-     * Polygon tool settings 
+    /*
+     * Polygon tool settings
      */
     struct PolygonToolSettings {
         PolygonToolSettings() {
@@ -333,8 +334,8 @@ public:
     PolygonToolSettings getPolyGonToolSettings() const { return polygonToolSettings; }
     void setPolygonToolSettings( PolygonToolSettings s );
 
-    /* 
-     * Rectangle tool settings 
+    /*
+     * Rectangle tool settings
      */
     struct RectangleToolSettings {
         RectangleToolSettings() {
@@ -352,8 +353,8 @@ public:
     RectangleToolSettings getRectangleToolSettings() const { return rectangleToolSettings; }
     void setRectangleToolSettings( RectangleToolSettings s );
 
-    /* 
-     * Ellipse tool settings 
+    /*
+     * Ellipse tool settings
      */
     struct EllipseToolSettings {
         EllipseToolSettings() {
@@ -371,8 +372,8 @@ public:
     EllipseToolSettings getEllipseToolSettings() const { return ellipseToolSettings; }
     void setEllipseToolSettings( EllipseToolSettings s );
 
-    /* 
-     * Filler tool settings 
+    /*
+     * Filler tool settings
      */
     struct FillerToolSettings {
         FillerToolSettings() {
@@ -388,8 +389,8 @@ public:
     FillerToolSettings getFillerToolSettings() const { return fillerToolSettings; }
     void setFillerToolSettings( FillerToolSettings s );
 
-    /* 
-     * Color changer settings 
+    /*
+     * Color changer settings
      */
     struct ColorChangerSettings {
         ColorChangerSettings() {
@@ -405,7 +406,7 @@ public:
     ColorChangerSettings getColorChangerSettings() const { return colorChangerSettings; }
     void setColorChangerSettings( ColorChangerSettings s );
 
-    /* 
+    /*
      * Stamp (Pattern) tool settings
      */
     struct StampToolSettings {
@@ -421,8 +422,8 @@ public:
     StampToolSettings getStampToolSettings() const { return stampToolSettings; }
     void setStampToolSettings( StampToolSettings s );
 
-    /* 
-     * Gradients settings 
+    /*
+     * Gradients settings
      */
     struct GradientsSettings {
         GradientsSettings() {

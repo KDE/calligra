@@ -18,12 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qfile.h>
-#include <qapplication.h>
 
-#include <kmimetype.h>
-#include <kurl.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kprocess.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -33,6 +29,7 @@
 #include <koDocument.h>
 #include <koFilter.h>
 #include <koFilterManager.h>
+#include <koQueryTrader.h>
 
 #include <unistd.h>
 #include <config.h>

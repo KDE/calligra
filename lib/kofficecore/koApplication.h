@@ -22,7 +22,7 @@
 
 namespace std { };
 using namespace std;
-#include <kapp.h>
+#include <kapplication.h>
 
 #define KOAPP ((KoApplication *)KApplication::kApplication())
 

@@ -27,6 +27,7 @@
 #include <qdragobject.h>
 
 #include <koReplace.h>
+#include <kprinter.h>
 
 #include "kspread_undo.h"
 #include "kspread_map.h"

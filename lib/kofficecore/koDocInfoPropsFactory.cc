@@ -22,7 +22,6 @@
 #include <koDocInfoPropsFactory.h>
 #include <koDocumentInfoDlg.h>
 
-#include <kpropsdlg.h>
 #include <kdebug.h>
 #include <klocale.h>
 

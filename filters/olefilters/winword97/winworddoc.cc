@@ -23,6 +23,7 @@
 #include <properties.h>
 #include <qfile.h>
 #include <qregexp.h>
+#include <qcolor.h>
 #include <winworddoc.h>
 #include <typeinfo>
 #include <unistd.h>

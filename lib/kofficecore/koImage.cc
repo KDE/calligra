@@ -18,7 +18,6 @@
 */
 
 #include "koImage.h"
-#include <qshared.h>
 #include <qdom.h>
 #include <qfileinfo.h>
 #include <assert.h>

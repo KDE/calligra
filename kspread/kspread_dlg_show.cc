@@ -24,6 +24,7 @@
 #include "kspread_view.h"
 #include "kspread_tabbar.h"
 #include <qlayout.h>
+#include <klocale.h>
 #include <kbuttonbox.h>
 
 

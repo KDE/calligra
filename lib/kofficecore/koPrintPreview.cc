@@ -22,15 +22,9 @@
 #include "koPrintPreview.h"
 #include <kdialogbase.h>
 #include <klibloader.h>
-#include <qwidget.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kparts/mainwindow.h>
-#include <qstringlist.h>
-#include <qlayout.h>
-#include <qgrid.h>
-#include <qfile.h>
-#include <kapp.h>
 #include <ktrader.h>
 #include <krun.h>
 

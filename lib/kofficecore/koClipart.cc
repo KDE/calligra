@@ -18,7 +18,6 @@
 */
 
 #include "koClipart.h"
-#include <qshared.h>
 #include <qpicture.h>
 #include <assert.h>
 

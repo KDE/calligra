@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <klibloader.h>
 #include <kparts/factory.h>
 
 #include <koQueryTrader.h>
@@ -25,13 +24,8 @@
 #include <ktrader.h>
 #include <kservicetype.h>
 
-#include <qstringlist.h>
 #include <qfile.h>
 
-#include <klocale.h>
-#include <kglobal.h>
-#include <kstddirs.h>
-#include <kservice.h>
 #include <kdebug.h>
 
 /**

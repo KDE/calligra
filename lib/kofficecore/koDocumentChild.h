@@ -19,8 +19,6 @@
 #ifndef __koDocumentChild_h__
 #define __koDocumentChild_h__
 
-#include <qtextstream.h>
-#include <qwmatrix.h>
 #include <koChild.h>
 
 class QDomDocument;

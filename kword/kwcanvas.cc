@@ -37,6 +37,7 @@
 #include <qobjectlist.h>
 
 #include <ktempfile.h>
+#include <klocale.h>
 #include <kaction.h>
 #include <kcursor.h>
 #include <kdebug.h>

@@ -20,7 +20,6 @@
 #ifndef KODATATOOL_H
 #define KODATATOOL_H
 
-#include <qstring.h>
 #include <qobject.h>
 #include <qvaluelist.h>
 

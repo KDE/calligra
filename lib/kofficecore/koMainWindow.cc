@@ -19,7 +19,6 @@
 
 #include <config.h>
 
-#include <koApplication.h>
 #include <koMainWindow.h>
 #include <koDocument.h>
 #include <koView.h>
@@ -30,25 +29,14 @@
 #include <koPrintPreview.h>
 #include "KoMainWindowIface.h"
 
-#include <qkeycode.h>
-#include <qfile.h>
-#include <qwhatsthis.h>
-#include <qmime.h>
-#include <qmessagebox.h>
-#include <qfileinfo.h>
-#include <qsplitter.h>
 #include <kprinter.h>
 #include <qobjectlist.h>
 
 #include <kstdaction.h>
-#include <kaction.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <kmessagebox.h>
-#include <kmimetype.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>

@@ -25,7 +25,6 @@
 #include "koQueryTrader.h"
 #include "KoDocumentIface.h"
 #include <dcopclient.h>
-#include <kmainwindow.h>
 #include <kdebug.h>
 #include <stdlib.h>
 

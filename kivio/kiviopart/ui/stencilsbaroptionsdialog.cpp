@@ -11,6 +11,7 @@
 #include <qfileinfo.h>
 
 #include <kcolorbtn.h>
+#include <klocale.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kmessagebox.h>

@@ -23,6 +23,7 @@
 #include "kspread_table.h"
 
 #include <qlayout.h>
+#include <klocale.h>
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
 #include <kdebug.h>

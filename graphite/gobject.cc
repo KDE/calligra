@@ -31,6 +31,7 @@
 #include <qimage.h>
 
 #include <kiconloader.h>
+#include <klocale.h>
 #include <kcolorbutton.h>
 #include <kmessagebox.h>
 #include <knuminput.h>

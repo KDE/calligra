@@ -23,6 +23,7 @@
 #include "kspread_table.h"
 #include <qlayout.h>
 #include <kbuttonbox.h>
+#include <klocale.h>
 #include <qbuttongroup.h>
 #include <kfontdialog.h>
 #include <knumvalidator.h>

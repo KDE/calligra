@@ -37,6 +37,8 @@
 #include <kformulaview.h>
 
 #include <kcursor.h>
+#include <klocale.h>
+#include <kparts/partmanager.h>
 #include <kdebug.h>
 #include <float.h>
 

@@ -37,6 +37,7 @@
 #include <koReplace.h>
 #include <koMainWindow.h>
 #include <koPartSelectAction.h>
+#include <kparts/partmanager.h>
 
 
 #include "kspread_map.h"

@@ -27,28 +27,23 @@
 #include <KoDocumentIface.h>
 #include <koDocumentChild.h>
 #include <koView.h>
-#include <koApplication.h>
 #include <koMainWindow.h>
 #include <koStoreDevice.h>
-#include <koQueryTrader.h>
 #include <koFilterManager.h>
 #include <koDocumentInfo.h>
+#include <kprinter.h>
 
-#include <koStore.h>
 #include <kio/netaccess.h>
+#include <kparts/partmanager.h>
 
 #include <klocale.h>
 #include <kmimetype.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 
 #include <qfile.h>
 #include <qpainter.h>
-#include <qcolor.h>
-#include <qpicture.h>
-#include <qdom.h>
-#include <qtextstream.h>
 #include <qtimer.h>
 
 // Define the protocol used here for embedded documents' URL

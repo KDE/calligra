@@ -21,11 +21,7 @@
 #ifndef __koffice_filter_manager_h__
 #define __koffice_filter_manager_h__
 
-#include <qmap.h>
-#include <qwidgetstack.h>
 #include <qobject.h>
-
-#include <koQueryTrader.h>
 
 class QDomDocument;
 

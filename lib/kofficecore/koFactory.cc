@@ -20,7 +20,6 @@
 #include <koFactory.h>
 //#include <koFilterManager.h>
 
-#include <kinstance.h>
 
 class KoFactory::KoFactoryPrivate
 {

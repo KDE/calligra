@@ -21,10 +21,8 @@
 
 #include <koDocumentChild.h>
 #include <koDocument.h>
-#include <koStore.h>
 #include <koQueryTrader.h>
 
-#include <qpainter.h>
 #include <qapplication.h>
 
 #include <kdebug.h>

@@ -23,6 +23,7 @@
 #include <qlayout.h>
 
 #include <kbuttonbox.h>
+#include <klocale.h>
 #include <kdebug.h>
 #include <knuminput.h>
 #include <qcheckbox.h>

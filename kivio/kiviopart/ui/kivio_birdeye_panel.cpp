@@ -12,6 +12,7 @@
 
 #include <ktoolbar.h>
 #include <kaction.h>
+#include <klocale.h>
 
 #include <kiconloader.h>
 
