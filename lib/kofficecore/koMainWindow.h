@@ -275,7 +275,7 @@ public slots:
      */
     void slotExportFile();
 
-protected:
+protected: // protected methods are mostly for koshell, it's the only one deriving from KoMainWindow
 
     /// Helper method for slotFileNew and slotFileClose
     void chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFlags );
@@ -312,14 +312,6 @@ protected:
     virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
 
     /**
-     * Save the list of recent files.
-     */
-    void saveRecentFiles();
-
-    KRecentFilesAction *recentAction() const { return m_recent; }
-
-private:
-    /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
      * call is actually an export operation (like File --> Export).
      *
@@ -338,6 +330,15 @@ private:
      * openDocumentInternal().
      */
     bool isImporting() const;
+
+    /**
+     * Save the list of recent files.
+     */
+    void saveRecentFiles();
+
+    KRecentFilesAction *recentAction() const { return m_recent; }
+
+private:
 
     /**
      * Asks the user if they really want to save the document.
