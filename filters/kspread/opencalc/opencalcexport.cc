@@ -23,6 +23,7 @@
 
 #include <opencalcexport.h>
 
+#include <qdatetime.h>
 #include <qdom.h>
 #include <qfile.h>
 
@@ -469,7 +470,7 @@ bool OpenCalcExport::exportStyles( KoStore * store, KSpreadDoc const * const ksd
   exportPageAutoStyles( doc, autoStyles, ksdoc );
   
   QDomElement masterStyles = doc.createElement( "office:master-styles" );
-  exportMasterStyles( doc, masterStyles );
+  exportMasterStyles( doc, masterStyles, ksdoc );
 
   content.appendChild( fontDecls );
   content.appendChild( officeStyles );
@@ -537,13 +538,16 @@ void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & aut
 {
   QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
   KSpreadSheet const * const sheet = it.toFirst();
+
   float width  = 20.999;
   float height = 29.699;
+
   if ( sheet )
   {
     width  = sheet->paperWidth() / 10;
     height = sheet->paperHeight() / 10;
   }
+
   QString sWidth  = QString( "%1cm" ).arg( width  );
   QString sHeight = QString( "%1cm" ).arg( height );
   
@@ -583,32 +587,239 @@ void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & aut
   autoStyles.appendChild( pageMaster );
 }
 
-void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & masterStyles )
+void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & masterStyles,
+                                         KSpreadDoc const * const ksdoc )
 {
   QDomElement masterPage = doc.createElement( "style:master-page" );
   masterPage.setAttribute( "style:name", "Default" );
   masterPage.setAttribute( "style:page-master-name", "pm1" );
 
-  QDomElement header = doc.createElement( "style:header" );
-  QDomElement text   = doc.createElement( "text:p" );
-  QDomElement name   = doc.createElement( "text:sheet-name" );
-  name.appendChild( doc.createTextNode( "???" ) );
-  text.appendChild( name );
-  header.appendChild( text );
+  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+  KSpreadSheet const * const sheet = it.toFirst();
 
-  masterPage.appendChild( header );
+  QString headerLeft;
+  QString headerCenter;
+  QString headerRight;
+  QString footerLeft;
+  QString footerCenter;
+  QString footerRight;
+  
+  if ( sheet )
+  {
+    headerLeft   = sheet->headLeft();
+    headerCenter = sheet->headMid();
+    headerRight  = sheet->headRight();
+    footerLeft   = sheet->footLeft();
+    footerCenter = sheet->footMid();
+    footerRight  = sheet->footRight();
+  }
 
-  QDomElement footer = doc.createElement( "style:footer" );
-  text               = doc.createElement( "text:p" );
-  text.appendChild( doc.createTextNode( i18n( "Page " ) ) );
-  QDomElement number = doc.createElement( "text:page-number" );
-  number.appendChild( doc.createTextNode( "1" ) );
-  text.appendChild( number );
-  footer.appendChild( text );
+  if ( ( headerLeft.length() > 0 ) || ( headerCenter.length() > 0 )
+       || ( headerRight.length() > 0 ) )
+  {
+    QDomElement header = doc.createElement( "style:header" );
+    QDomElement left   = doc.createElement( "style:region-left" );
+    QDomElement text   = doc.createElement( "text:p" );
+    convertPart( headerLeft, doc, text, ksdoc );
+    left.appendChild( text );
 
-  masterPage.appendChild( footer );
+    QDomElement center = doc.createElement( "style:region-center" );
+    QDomElement text1  = doc.createElement( "text:p" );
+    convertPart( headerCenter, doc, text1, ksdoc );
+    center.appendChild( text1 );
+
+    QDomElement right = doc.createElement( "style:region-right" );
+    QDomElement text2 = doc.createElement( "text:p" );
+    convertPart( headerRight, doc, text2, ksdoc );
+    right.appendChild( text2 );
+
+    header.appendChild( left   );
+    header.appendChild( center );
+    header.appendChild( right  );
+
+    masterPage.appendChild( header );
+  }
+  else
+  {
+    QDomElement header = doc.createElement( "style:header" );
+    QDomElement text   = doc.createElement( "text:p" );
+    QDomElement name   = doc.createElement( "text:sheet-name" );
+    name.appendChild( doc.createTextNode( "???" ) );
+    text.appendChild( name );
+    header.appendChild( text );
+
+    masterPage.appendChild( header );
+  }
+
+  if ( ( footerLeft.length() > 0 ) || ( footerCenter.length() > 0 )
+       || ( footerRight.length() > 0 ) )
+  {
+    QDomElement footer = doc.createElement( "style:footer" );
+    QDomElement left   = doc.createElement( "style:region-left" );
+    QDomElement text   = doc.createElement( "text:p" );
+    convertPart( footerLeft, doc, text, ksdoc );
+    left.appendChild( text );
+
+    QDomElement center = doc.createElement( "style:region-center" );
+    QDomElement text1  = doc.createElement( "text:p" );
+    convertPart( footerCenter, doc, text1, ksdoc );
+    center.appendChild( text1 );
+
+    QDomElement right = doc.createElement( "style:region-right" );
+    QDomElement text2  = doc.createElement( "text:p" );
+    convertPart( footerRight, doc, text2, ksdoc );
+    right.appendChild( text2 );
+
+    footer.appendChild( left   );
+    footer.appendChild( center );
+    footer.appendChild( right  );
+
+    masterPage.appendChild( footer );
+  }
+  else
+  {
+    QDomElement footer = doc.createElement( "style:footer" );
+    QDomElement text   = doc.createElement( "text:p" );
+    text.appendChild( doc.createTextNode( i18n( "Page " ) ) );
+    QDomElement number = doc.createElement( "text:page-number" );
+    number.appendChild( doc.createTextNode( "1" ) );
+    text.appendChild( number );
+    footer.appendChild( text );
+
+    masterPage.appendChild( footer );
+  }
 
   masterStyles.appendChild( masterPage );       
+}
+
+void OpenCalcExport::addText( QString const & text, QDomDocument & doc, 
+                              QDomElement & parent )
+{
+  if (text.length() > 0 )
+    parent.appendChild( doc.createTextNode( text ) );
+}
+
+void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc, 
+                                  QDomElement & parent, KSpreadDoc const * const ksdoc )
+{
+  QString text;
+  QString var;
+
+  bool inVar = false;
+  uint i = 0;
+  uint l = part.length();
+  while ( i < l )
+  {
+    if ( inVar || part[i] == '<' )
+    {
+      inVar = true;
+      var += part[i];
+      if ( part[i] == '>' )
+      {
+        inVar = false;
+        if ( var == "<page>" )
+        {
+          addText( text, doc, parent );
+          
+          QDomElement page = doc.createElement( "text:page-number" );
+          page.appendChild( doc.createTextNode( "1" ) );
+          parent.appendChild( page );
+        }
+        else if ( var == "<pages>" )
+        {
+          addText( text, doc, parent );
+          
+          QDomElement page = doc.createElement( "text:page-count" );
+          page.appendChild( doc.createTextNode( "99" ) );
+          parent.appendChild( page );          
+        }
+        else if ( var == "<date>" )
+        {
+          addText( text, doc, parent );
+
+          QDomElement t = doc.createElement( "text:date" );
+          t.setAttribute( "text:date-value", "0-00-00" );
+          // todo: "style:data-style-name", "N2" 
+          t.appendChild( doc.createTextNode( QDate::currentDate().toString() ) );
+          parent.appendChild( t );
+        }
+        else if ( var == "<time>" )
+        {
+          addText( text, doc, parent );
+
+          QDomElement t = doc.createElement( "text:time" );
+          t.appendChild( doc.createTextNode( QTime::currentTime().toString() ) );
+          parent.appendChild( t );
+        }
+        else if ( var == "<file>" ) // filepath + name
+        {
+          addText( text, doc, parent );
+
+          QDomElement t = doc.createElement( "text:file-name" );
+          t.setAttribute( "text:display", "full" );
+          t.appendChild( doc.createTextNode( "???" ) );
+          parent.appendChild( t );
+        }
+        else if ( var == "<name>" ) // filename
+        {
+          addText( text, doc, parent );
+
+          QDomElement t = doc.createElement( "text:title" );
+          t.appendChild( doc.createTextNode( "???" ) );
+          parent.appendChild( t );
+        }
+        else if ( var == "<author>" )
+        {
+          KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
+          KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
+
+          text += authorPage->fullName();
+
+          addText( text, doc, parent );
+        }
+        else if ( var == "<email>" )
+        {
+          KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
+          KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
+
+          text += authorPage->email();
+
+          addText( text, doc, parent );
+        }
+        else if ( var == "<org>" )
+        {
+          KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
+          KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
+
+          text += authorPage->company();
+
+          addText( text, doc, parent );
+        }
+        else if ( var == "<sheet>" )
+        {
+          addText( text, doc, parent );
+
+          QDomElement s = doc.createElement( "text:sheet-name" );
+          s.appendChild( doc.createTextNode( "???" ) );
+          parent.appendChild( s );
+        }
+        else
+        {
+          // no known variable:
+          text += var;
+          addText( text, doc, parent );          
+        }
+
+        text = "";
+        var  = "";
+      }
+    }
+    else
+    {
+      text += part[i];
+    }
+    ++i;
+  }
 }
 
 bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
