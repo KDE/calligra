@@ -1,0 +1,213 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>ImportDialogUI</class>
+<comment>Import dialog for KWord's MS Write import filter</comment>
+<author>Nicolas GOUTTE &lt;nicog@snafu.de&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ImportDialogUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>299</width>
+            <height>201</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>MS Write Import Dialog</string>
+    </property>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>275</width>
+                <height>175</height>
+            </rect>
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>10</number>
+            </property>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>buttonGroupEncoding</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>3</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="title">
+                    <string>&amp;Encoding</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>Select the encoding of the Write document.&lt;br&gt;&lt;br&gt;Try the Default  Encoding (CP 1252), if unsure.</string>
+                </property>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>comboBoxEncoding</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>130</x>
+                            <y>40</y>
+                            <width>85</width>
+                            <height>24</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioEncodingOther</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>40</y>
+                            <width>113</width>
+                            <height>28</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Other Encoding:</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioEncodingDefault</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>18</y>
+                            <width>200</width>
+                            <height>18</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Default Encoding (CP 1252)</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>0</number>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Most Write documents are stored using this encoding (also known as windows-1252).&lt;br&gt;&lt;br&gt;Select this if unsure.</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer5</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </widget>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupAdvanced</cstring>
+                </property>
+                <property name="title">
+                    <string>&amp;Advanced</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>These advanced options allow you to finetune the importation of formatting information.  They compensate for differences between KWord and MS Write by adding extra formatting information (not found in the original document) to try to make the imported document look as close to the original as possible.&lt;br&gt;&lt;br&gt;It is safe to use the defaults, if unsure.</string>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>checkBoxLinespacing</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>20</y>
+                            <width>253</width>
+                            <height>18</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Compensate for &amp;Linespacing Differences</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string></string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Try to simulate Write's linespacing by adding some spaces before each paragraph.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>checkBoxImageOffset</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>40</y>
+                            <width>250</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Enable &amp;Image Positioning</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Use paragraph indentation to position images.</string>
+                    </property>
+                </widget>
+            </widget>
+        </vbox>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -38,6 +38,7 @@
 #include <stdarg.h>
 
 #include <mswriteimport.h>
+#include "ImportDialog.h"
 
 
 typedef KGenericFactory <MSWRITEImport, KoFilter> MSWRITEImportFactory;
@@ -319,10 +320,10 @@ int MSWRITEImport::pageBreakWrite (void)
 {
 	// later used in paraEndWrite
 	m_pageBreak = true;
-	m_pageBreakOffset = m_charInfoCountLen;
+	m_pageBreakOffset = m_charInfoCountStart + m_charInfoCountLen;
 	
 #if 0
-	debug ("pageBreak with %i\n", m_charInfoCountLen);
+	debug ("pageBreak with %i\n", m_pageBreakOffset);
 #endif
 	return 0;
 }
@@ -473,7 +474,7 @@ int MSWRITEImport::paraInfoStartWrite (const MSWRITE_FPROP_PAP & /*pap*/)
 	// reset charInfo counters
 	m_charInfoCountStart = 0;
 	m_charInfoCountLen = 0;
-
+	
 	return 0;
 }
 
@@ -525,7 +526,7 @@ int MSWRITEImport::paraInfoEndWrite (const MSWRITE_FPROP_PAP &pap)
 			// MSWrite does not add the horizontal offset of the image from the left margin to the Left Indent
 			// -- instead, it selects the bigger one
 			// TODO: proper image positioning (see doc IMPERFECT)
-			if (m_objectHorizOffset > indentLeft)
+			if (m_simulateImageOffset && m_objectHorizOffset > indentLeft)
 			{
 				debug ("image is further away from left margin by itself, rather than using indentLeft (%i > %i)\n",
 							m_objectHorizOffset, indentLeft);
@@ -567,9 +568,9 @@ int MSWRITEImport::paraInfoEndWrite (const MSWRITE_FPROP_PAP &pap)
 			output += "\"/>";
 		}
 
-		// we want the document to _look_ like it does in Write
-		// but we don't care if this changes other document formatting properties...
-		if (!m_wantPureConversion)
+		// Do we want the linespacing to _look_ like it does in Write?
+		// (this adds extra space before each paragraph)
+		if (m_simulateLinespacing)
 		{
 			// emulate Write's linespacing (aligned to bottom)
 			// by using varying amounts of space before the paragraph
@@ -619,17 +620,17 @@ int MSWRITEImport::paraInfoEndWrite (const MSWRITE_FPROP_PAP &pap)
 				m_lineSpacingFromAbove = 0;
 				break;
 			}
-		}	// if (!m_wantPureConversion)	{
+		}	// if (m_simulateLinespacing)	{
 
 		if (m_pageBreak)
 		{
 #if 0
-			debug ("\tpagebrk: output: offset: %i lastcharinfo_len: %i\n",
-				m_pageBreakOffset, m_charInfoCountLenLast);
+			debug ("\tpagebrk: output: offset: %i chars in paragraph: %i\n",
+				m_pageBreakOffset, m_charInfoCountStart + m_charInfoCountLen);
 #endif
 
 			// page break before all the text
-			if (m_pageBreakOffset == 0 && m_charInfoCountLenLast > 0)
+			if (m_pageBreakOffset == 0 && m_charInfoCountStart + m_charInfoCountLen > 0)
 			{
 				output += "<PAGEBREAKING hardFrameBreak=\"true\"/>";
 				m_needAnotherParagraph = false;	// this paragraph is on first page so we don't need another one
@@ -645,8 +646,7 @@ int MSWRITEImport::paraInfoEndWrite (const MSWRITE_FPROP_PAP &pap)
 		}
 		else
 			m_needAnotherParagraph = false;
-		//debug ("pageBreak: %i\n", m_pageBreak);
-
+		
 		// Tabulators
 		for (int i = 0; i < 14; i++)
 		{
@@ -700,7 +700,6 @@ int MSWRITEImport::charInfoEndWrite (const MSWRITE_FPROP_CHP &chp)
 	m_formatOutput += "len=\""; m_formatOutput += QString::number (m_charInfoCountLen); m_formatOutput += "\">";
 
 	m_charInfoCountStart += m_charInfoCountLen;
-	m_charInfoCountLenLast = m_charInfoCountLen;	// used in paraInfoEndWrite()
 	m_charInfoCountLen = 0;
 
 	if (chp.isPageNumber ())
@@ -1035,6 +1034,12 @@ int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
 			m_objectFrameset += QString::number (m_top + (heightTwips * heightScaledRel1000 / 1000) / 20);
 			m_objectFrameset += "\"/>";
 
+#if 0
+		debug ("IMAGE!!!!!! width: %i*%i=%i\t\theight: %i*%i=%i\n",
+		widthTwips, widthScaledRel1000, (widthTwips * widthScaledRel1000 / 1000) / 20,
+		heightTwips, heightScaledRel1000, (heightTwips * heightScaledRel1000 / 1000) / 20);
+#endif
+
 		m_objectFrameset += "<CLIPART>";
 		m_objectFrameset += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
 		m_objectFrameset += " filename=\"";
@@ -1107,14 +1112,13 @@ int MSWRITEImport::imageEndWrite (void)
 
 // constructor
 MSWRITEImport::MSWRITEImport (KoFilter *, const char *, const QStringList &)
-						: KoFilter()
+					: KoFilter()
 {
-	m_wantPureConversion = true;
+	m_simulateLinespacing = false;
+	m_simulateImageOffset = false;
 
 	m_pageBreak = 0;
 	m_needAnotherParagraph = false;
-
-	m_charInfoCountLenLast = 0;
 
 	m_lineSpacingFromAbove = 0;
 
@@ -1142,33 +1146,57 @@ MSWRITEImport::~MSWRITEImport ()
 	closeFiles ();
 }
 
-// * pureConversion is when the document is imported with the formatting "as is"
-// * non-pureConversion is when the filter attempts to compensate for differences in the way MSWrite & KWord
-// 	implement formatting (e.g. see linespacing)
-void MSWRITEImport::wantPureConversion (bool yesorno)
-{
-	m_wantPureConversion = yesorno;
-}
-
 // front-end filter
 KoFilter::ConversionStatus MSWRITEImport::convert (const QCString &from, const QCString &to)
 {
 	if (to != "application/x-kword" || from != "application/x-mswrite")
 		return KoFilter::NotImplemented;
 
+#if 1
+	//MSWriteImportDialog *dialog = new MSWriteImportDialog ();
+	MSWriteImportDialog dialog;
+
+	/*debug ("DIALOG check alloc\n");
+	if (!dialog)
+	{
+		error ("Could not allocate memory for dialog\n");
+		return KoFilter::StupidError;
+	}*/
+
+	debug ("DIALOG EXEC!!!\n");
+	if (!dialog.exec ())
+	{
+		error ("Dialog was aborted! Aborting filter!\n");
+		return KoFilter::UserCancelled;
+	}
+
+	debug ("DIALOG GET!!!\n");
+
+	// read settings from dialog
+	m_codec = dialog.getCodec ();
+	m_simulateLinespacing = dialog.getSimulateLinespacing ();
+	m_simulateImageOffset = dialog.getSimulateImageOffset ();
+	debug ("Import options: simulateLinespacing: %i\tsimulateImageOffset: %i\n",
+				m_simulateLinespacing, m_simulateImageOffset);
+
+	debug ("DIALOG DELETE\n");
+	//delete dialog;
+#endif
 	if (openFiles (m_chain->inputFile().utf8 ()))
 	{
 		error ("Could not open files\n");
 		return KoFilter::FileNotFound;
 	}
 
-	// just select CP 1252 until a "Select Encoding" dialog is added
+#if 0
+	// just select windows-1252 until a "Select Encoding" dialog is added
 	m_codec = QTextCodec::codecForName ("CP 1252");
+#endif
 
 	if (m_codec)
 		m_decoder = m_codec->makeDecoder();
 	else
-		warning ("Cannot convert from win charset!\n");
+		warning ("Cannot convert from Win Charset!\n");
 
 	// output version info of core lib
 	// (so when bug reports come in, we know what lib it was using)

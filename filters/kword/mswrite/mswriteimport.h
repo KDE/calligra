@@ -121,7 +121,10 @@ private:
 	// files
 	FILE *m_infile;
 	KoStoreDevice *m_outfile;
-	bool m_wantPureConversion;
+
+	// import options (compensate for differences between KWord and MS Write)
+	bool m_simulateLinespacing;
+	bool m_simulateImageOffset;
 
 	// page/margin dimensions
 	int m_pageWidth, m_pageHeight;
@@ -132,7 +135,6 @@ private:
 	// formatting
 	QString m_formatOutput;
 	int m_charInfoCountStart, m_charInfoCountLen;
-	int m_charInfoCountLenLast;
 	bool m_pageBreak, m_needAnotherParagraph;
 	int m_pageBreakOffset;
 	int m_lineSpacingFromAbove;
@@ -168,8 +170,6 @@ public:
 	MSWRITEImport ();
 
 	virtual ~MSWRITEImport ();
-
-	void wantPureConversion (bool yesorno);
 
 	// front-end filter function
 	virtual KoFilter::ConversionStatus convert (const QCString &from, const QCString &to);
