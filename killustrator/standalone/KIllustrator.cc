@@ -788,7 +788,7 @@ void KIllustrator::menuCallback (int item) {
 void KIllustrator::openFile (const char* fname) {
   localFile = fname;
   document->readFromXml (fname);
-  document->objectChanged ();
+  //  document->objectChanged ();
   document->setModified (false);
   canvas->calculateSize ();
   setFileCaption (fname);
