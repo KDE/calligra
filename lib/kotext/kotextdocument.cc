@@ -24,6 +24,8 @@
 #include <kdebug.h>
 #include <kcommand.h>
 
+//#define DEBUG_PAINTING
+
 KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollection *fc,
                                 KoTextFormatter *formatter, bool createInitialParag )
     : QTextDocument( 0L /*we don't use parent documents */, fc ),
@@ -380,11 +382,7 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
 		p->fillRect( ir.intersect( crect ), cg.brush( QColorGroup::Base ) );
 	    if ( ir.y() > cy + ch ) {
 		//tmpCursor = 0;
-		if ( ko_buf_pixmap && ko_buf_pixmap->height() > 300 ) {
-		    delete ko_buf_pixmap;
-		    ko_buf_pixmap = 0;
-		}
-		return lastFormatted;
+                goto floating;
 	    }
 	}
         else if ( parag->hasChanged() || !onlyChanged ) {
@@ -396,6 +394,8 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
     }
 
     parag = static_cast<KoTextParag *>( lastParag() );
+
+floating:
     pixelRect = parag->pixelRect(zoomHandler);
     int docheight = zoomHandler->layoutUnitToPixelY( parag->document()->height() );
     if ( pixelRect.y() + pixelRect.height() < docheight ) {

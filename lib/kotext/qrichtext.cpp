@@ -3433,7 +3433,7 @@ void KoTextString::checkBidi() const
 	    }
 	}
 	uchar row = c->c.row();
-	if( (row > 0x04 && row < 0x09) || row > 0xfa ) {
+	if( (row > 0x04 && row < 0x09) || ( row > 0xfa && row < 0xff ) ) {
 	    ((KoTextString *)this)->bidi = TRUE;
 	    return;
 	}
@@ -3709,10 +3709,12 @@ void QTextParag::invalidate( int chr )
 	invalid = chr;
     else
 	invalid = QMIN( invalid, chr );
+#if 0 /// strange code!
     if ( mFloatingItems ) {
 	for ( QTextCustomItem *i = mFloatingItems->first(); i; i = mFloatingItems->next() )
 	    i->move( 0, -1 );
     }
+#endif
     lm = rm = bm = tm = flm = -1;
 }
 
