@@ -394,6 +394,9 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     m_variableNumberOffset=new QLineEdit(gbMiscGroup);
     m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
     m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
+
+    m_displayLink=new QCheckBox(i18n("Displays link"),gbMiscGroup);
+    m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
 }
 
 void ConfigureMiscPage::apply()
@@ -431,12 +434,15 @@ void ConfigureMiscPage::apply()
         cmd->execute();
         doc->addCommand(cmd);
     }
+    doc->getVariableCollection()->variableSetting()->setDisplayLink(m_displayLink->isChecked());
+    doc->recalcVariables( VT_LINK );
 }
 
 void ConfigureMiscPage::slotDefault()
 {
    m_undoRedoLimit->setValue(30);
    m_variableNumberOffset->setText(QString::number(1));
+   m_displayLink->setChecked(true);
 }
 
 ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name )

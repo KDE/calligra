@@ -2594,6 +2594,13 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
                           customItemsMap );
 }
 
+void KWTextFrameSetEdit::insertLink(const QString &_linkName, const QString & hrefName)
+{
+    KoVariable * var = 0L;
+    KWDocument * doc = frameSet()->kWordDocument();
+    var = new KoLinkVariable( textFrameSet()->textDocument(),_linkName,hrefName , doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
+    insertVariable( var);
+}
 
 void KWTextFrameSetEdit::insertCustomVariable( const QString &name)
 {

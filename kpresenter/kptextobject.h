@@ -177,6 +177,7 @@ public:
     void showPopup( KPresenterView *view, const QPoint &point, QPtrList<KAction> &actionList );
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
+    void insertLink(const QString &_linkName, const QString & hrefName);
     void insertVariable( KoVariable *var);
     void terminate();
 

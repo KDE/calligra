@@ -401,7 +401,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|CHARSET|VERTALIGN|ANCHOR|IMAGE|VARIABLE|TEXTBACKGROUNDCOLOR|LINK)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|CHARSET|VERTALIGN|ANCHOR|IMAGE|VARIABLE|TEXTBACKGROUNDCOLOR)*>
 <!ATTLIST FORMAT
     id CDATA #REQUIRED
     pos CDATA #IMPLIED
@@ -435,11 +435,6 @@ don't put a </?xml...> at the end of the file!).
     green CDATA #REQUIRED
     blue CDATA #REQUIRED>
 
-<!ELEMENT LINK
-    EMPTY>
-<!ATTLIST LINK
-    linkName CDATA #REQUIRED
-    hrefName CDATA #REQUIRED>
 
 <!--
         name is the family name. Don't include fontsizes or bold, that is put in another tag.
@@ -788,13 +783,14 @@ don't put a </?xml...> at the end of the file!).
         6... Custom (uses CUSTOM to save it)
         7... Serial Letter (uses SERIALLETTER to save it)
         8... Field (uses FIELD to save it)
+        9... Link
 -->
 <!ELEMENT TYPE
     EMPTY>
 <!ATTLIST TYPE
     type CDATA #REQUIRED>
 
-<!-- TODO PGNUM,DATE,TIME,CUSTOM,SERIALLETTER -->
+<!-- TODO PGNUM,DATE,TIME,CUSTOM,SERIALLETTER,LINK -->
 <!-- TODO modifiers in DATE and TIME - see #24242 -->
 
 <!--    A "field" variable (property of the document)
@@ -815,6 +811,12 @@ don't put a </?xml...> at the end of the file!).
 <!ATTLIST FIELD
     subtype CDATA #REQUIRED,
     value CDATA #REQUIRED>
+
+<!ELEMENT LINK
+    EMPTY>
+<!ATTLIST LINK
+    linkName CDATA #REQUIRED,
+    hrefName CDATA #REQUIRED> 
 
 <!--
         Pixmap collection. This list holds the keys of all the pixmaps

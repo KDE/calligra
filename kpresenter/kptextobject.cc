@@ -92,9 +92,6 @@ const QString &KPTextObject::attrColor=KGlobal::staticQString("color");
 const QString &KPTextObject::attrWhitespace=KGlobal::staticQString("whitespace");
 const QString &KPTextObject::attrTextBackColor=KGlobal::staticQString("textbackcolor");
 const QString &KPTextObject::attrVertAlign=KGlobal::staticQString("VERTALIGN");
-//link
-const QString &KPTextObject::attrLinkName=KGlobal::staticQString("linkName");
-const QString &KPTextObject::attrHrefName=KGlobal::staticQString("hrefName");
 
 
 /*================ default constructor ===========================*/
@@ -386,7 +383,7 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
 {
 
     QDomElement element=doc.createElement(tagTEXT);
-    QString tmpFamily, tmpColor, tmpTextBackColor,tmpLinkName,tmpHrefName;
+    QString tmpFamily, tmpColor, tmpTextBackColor;
     int tmpPointSize=10;
     unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false;
     int tmpVerticalAlign=-1;
@@ -420,13 +417,6 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
     if(tmpVerticalAlign!=-1)
         element.setAttribute(attrVertAlign,tmpVerticalAlign);
 
-    if(!lastFormat->anchorName().isEmpty() && !lastFormat->anchorHref().isEmpty())
-    {
-        tmpLinkName=lastFormat->anchorName();
-        tmpHrefName=lastFormat->anchorHref();
-        element.setAttribute(attrLinkName,tmpLinkName);
-        element.setAttribute(attrHrefName,tmpHrefName);
-    }
 
     if(tmpText.stripWhiteSpace().isEmpty())
         // working around a bug in QDom
@@ -584,11 +574,6 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n )
     if(n.hasAttribute(attrVertAlign))
         format.setVAlign( static_cast<QTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
 
-    if(n.hasAttribute(attrLinkName) && n.hasAttribute(attrHrefName))
-    {
-        format.setAnchorName(n.attribute(attrLinkName));
-        format.setAnchorHref(n.attribute(attrHrefName));
-    }
 
     //kdDebug()<<"loadFormat :"<<format.key()<<endl;
     return format;
@@ -1298,6 +1283,15 @@ void KPTextView::insertCustomVariable( const QString &name)
      var = new KoCustomVariable( textObject()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
      insertVariable( var);
 }
+
+void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
+{
+    KoVariable * var = 0L;
+    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    var = new KoLinkVariable( textObject()->textDocument(),_linkName,hrefName , doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
+    insertVariable( var);
+}
+
 
 void KPTextView::insertVariable( int type, int subtype )
 {

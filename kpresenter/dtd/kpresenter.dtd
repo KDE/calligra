@@ -293,9 +293,7 @@
                 whitespace NMTOKEN #IMPLIED
 		color	CDATA	#REQUIRED
                 textbackcolor CDATA #REQUIRES
-                VERTALIGN CDATA #REQUIRE
-                linkName CDATA #REQUIRED
-                hrefName CDATA #REQUIRED>
+                VERTALIGN CDATA #REQUIRE>
 
 <!-- 
         A paragraph and a style can have counter data.
