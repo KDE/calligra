@@ -48,11 +48,17 @@ class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 		void			clearChildren();
 
 	protected:
+		void initItem();
+		virtual QString key( int column, bool ascending ) const;
+		
 		KexiProjectHandlerItem	*m_item;
 		KexiProjectHandlerProxy	*m_proxy;
 		QString			m_mime;
 		QString			m_name;
 		QString			m_identifier;
+		
+		QString m_sortKey;
+		bool m_fifoSorting : 1;
 };
 
 #endif

@@ -78,11 +78,13 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 				if (olddialog->guiClient()->factory()==m_mainwindow->factory())
 					m_mainwindow->factory()->removeClient(olddialog->guiClient());
 				m_mainwindow->factory()->addClient(m_activeDialog->guiClient());
-			        if(m_mainwindow->help()) {
-			 	       m_mainwindow->help()->setContextHelp(
+#ifndef KEXI_NO_CTXT_HELP
+				if(m_mainwindow->help()) {
+					m_mainwindow->help()->setContextHelp(
 						m_activeDialog->contextHelpTitle(),
 						m_activeDialog->contextHelpMessage());
 				}
+#endif
 
 				m_activeDialog->activateActions();
 				m_activeDialog->aboutToShow();
@@ -91,11 +93,13 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 			else
 			{
 				olddialog->deactivateActions();
-			        if(m_mainwindow->help()) {
-			 	       m_mainwindow->help()->setContextHelp(
+#ifndef KEXI_NO_CTXT_HELP
+				if(m_mainwindow->help()) {
+					m_mainwindow->help()->setContextHelp(
 						m_activeDialog->contextHelpTitle(),
 						m_activeDialog->contextHelpMessage());
 				}
+#endif
 
 				m_activeDialog->activateActions();
 				m_activeDialog->aboutToShow();
@@ -107,11 +111,13 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 	if (!m_activeDialog.isNull())
 	{
 		m_mainwindow->factory()->addClient(m_activeDialog->guiClient());
+#ifndef KEXI_NO_CTXT_HELP
 		if(m_mainwindow->help()) {
 			m_mainwindow->help()->setContextHelp(
 			m_activeDialog->contextHelpTitle(),
 			m_activeDialog->contextHelpMessage());
 		}
+#endif
 
 		m_activeDialog->activateActions();
 		m_activeDialog->aboutToShow();

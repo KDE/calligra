@@ -63,7 +63,7 @@ bool KexiDB::createTable(const KexiDBTable& tableDef)
 	// hack for now, tablestruct should vanish completeyl (jowenn)
 	KexiDBTableStruct s;
 	s.setAutoDelete(true);
-	for (int i=0;i<tableDef.fieldCount();i++) {
+	for (int i=0;i<(int)tableDef.fieldCount();i++) {
 		KexiDBField *tmp=new KexiDBField();
 		(*tmp)=tableDef.field(i);
 		s.append(tmp);
@@ -137,11 +137,8 @@ KexiDB::decode(const char *c)
 			return QString::fromUtf8(c);
 
 		case Ascii:
-#if (QT_VERSION >= 310)
 			return QString::fromAscii(c);
-#else //(js) tmp
-		    return QString::fromLatin1( c );
-#endif
+
 		case Local8Bit:
 #if 0
 QTextCodec *tc = QTextCodec::codecForName("CP1250");

@@ -33,8 +33,8 @@ class KexiKugarHandlerProxy : public KexiProjectHandlerProxy, public KXMLGUIClie
 	public:
 		KexiKugarHandlerProxy(KexiKugarHandler *part, KexiView*view);
 
-                virtual KexiPartPopupMenu       *groupContext();
-                virtual KexiPartPopupMenu       *itemContext(const QString& identifier);
+//                virtual KexiPartPopupMenu       *groupContext();
+//                virtual KexiPartPopupMenu       *itemContext(const QString& identifier);
 
 
 

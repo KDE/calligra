@@ -79,7 +79,7 @@ KexiDBInterfaceManager::lookupDrivers()
 		{
 			KService::Ptr ptr = (*it);
 			m_driverList.insert(ptr->property("X-Kexi-DriverName").toString(), ptr);
-			kdDebug() << "KexiDBInterfaceManager::lookupDrivers(): registerd driver: " << ptr->name() << endl;
+			kdDebug() << "KexiDBInterfaceManager::lookupDrivers(): registered driver: " << ptr->name() << "(" << ptr->library() << ")" << endl;
 		}
 	}
 	else

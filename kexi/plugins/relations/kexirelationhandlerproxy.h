@@ -34,8 +34,8 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationHandlerProxy : public KexiProjectHandle
 	public:
 		KexiRelationHandlerProxy(KexiRelationHandler *part, KexiView*view);
 
-                virtual KexiPartPopupMenu       *groupContext();
-                virtual KexiPartPopupMenu       *itemContext(const QString&);
+//                virtual KexiPartPopupMenu       *groupContext();
+//                virtual KexiPartPopupMenu       *itemContext(const QString&);
 
 		virtual void executeItem(const QString&);
 

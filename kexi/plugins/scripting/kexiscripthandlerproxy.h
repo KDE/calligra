@@ -33,8 +33,8 @@ class KexiScriptHandlerProxy : public KexiProjectHandlerProxy, public KXMLGUICli
 		KexiScriptHandlerProxy(KexiScriptHandler *handler, KexiView *view);
 		~KexiScriptHandlerProxy() {; }
 
-		virtual KexiPartPopupMenu	*groupContext();
-		virtual KexiPartPopupMenu	*itemContext(const QString& identifier);
+//		virtual KexiPartPopupMenu	*groupContext();
+//		virtual KexiPartPopupMenu	*itemContext(const QString& identifier);
 
 	public slots:
 		virtual void	executeItem(const QString &identifier);

@@ -21,6 +21,7 @@
 #include "kexiprojecthandler.h"
 #include "kexiproject.h"
 #include "kexiprojecthandlerproxy.h"
+#include "kexiprojecthandleritem.h"
 
 #include <kdebug.h>
 
@@ -119,5 +120,12 @@ KexiProjectHandler::debug()
 		kdDebug() << "KexiProjectHandlerItem: " << it.currentKey() << " -> (" << it.current()->fullIdentifier() <<", "<< it.current()->title() <<")"<< endl;
 	}
 }
+
+/*(js) void
+KexiProjectHandler::removeProjectHandlerItem( KexiProjectHandlerItem &item )
+{
+
+}*/
+
 
 #include "kexiprojecthandler.moc"

@@ -149,6 +149,7 @@ KexiTabBrowser::slotUpdateBrowsers()
 			connect(part, SIGNAL(itemListChanged(KexiProjectHandler*)), m_db, SLOT(slotItemListChanged(KexiProjectHandler*)));
 		}
 	}
+	m_db->sort();
 }
 
 KexiTabBrowser::~KexiTabBrowser()

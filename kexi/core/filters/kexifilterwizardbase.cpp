@@ -35,3 +35,5 @@ KexiFilterManager *KexiFilterWizardBase::filterManager() {
 }
 
 void KexiFilterWizardBase::setMode(unsigned long) { }
+
+#include "kexifilterwizardbase.moc"

@@ -34,41 +34,66 @@
 #include "kexiquerypartproxy.h"
 #include "kexiquerypartitem.h"
 #include "kexiview.h"
+#include "kexi_global.h"
+#include "kexipartitemaction.h"
 
 KexiQueryPartProxy::KexiQueryPartProxy(KexiQueryPart *part,KexiView *view)
- : KexiProjectHandlerProxy(part,view),KXMLGUIClient()
+ : KexiProjectHandlerProxy(part,view)
+ ,KXMLGUIClient()
+ ,m_queryPart(part)
 {
-    setInstance(part->kexiProject()->instance());
-	m_queryPart=part;
+	setInstance(part->kexiProject()->instance());
+	
 	kdDebug() << "KexiQueryPartProxy::KexiQueryPartProxy()" << endl;
 
-    (void) new KAction(i18n("Create &Query..."), "query", "",
-                       this,SLOT(slotCreateQuery()), actionCollection(), "querypart_create");
+//	m_openAction = new KAction(i18n("Open Query"), "", "",
+//		this,SLOT(slotOpen()), actionCollection(), "querypart_open");
 
-    setXMLFile("kexiquerypartui.rc");
+	m_createAction = new KAction(i18n("Create &Query..."), "query", "",
+		this,SLOT(slotCreateQuery()), actionCollection(), "querypart_create");
 
-    view->insertChildClient(this);
+	m_openAction = new KexiPartItemAction(i18n("Open Query"), "", "",
+		this,SLOT(slotOpen(const QString &)), actionCollection(), "querypart_open");
+	m_editAction = new KexiPartItemAction(i18n("Edit Query"), "edit", "",
+		this,SLOT(slotEdit(const QString &)), actionCollection(), "querypart_edit");
+	m_deleteAction = new KexiPartItemAction(i18n("Delete Query..."), "button_cancel", "",
+		this,SLOT(slotDelete(const QString &)), actionCollection(), "querypart_delete");
+
+	// actions in group menu
+	m_createAction->plug(m_group_pmenu);
+
+	// actions in item menu
+	m_openAction->plug(m_item_pmenu);
+	m_editAction->plug(m_item_pmenu);
+	m_deleteAction->plug(m_item_pmenu);
+	m_item_pmenu->insertSeparator();
+	m_createAction->plug(m_item_pmenu);
+
+	setXMLFile("kexiquerypartui.rc");
+
+	view->insertChildClient(this);
 }
 
-
-KexiPartPopupMenu*
+/*KexiPartPopupMenu*
 KexiQueryPartProxy::groupContext()
 {
-	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Create Query..."), SLOT(slotCreateQuery()));
-	return m;
-}
+//	m->insertAction(i18n("Create Query..."), SLOT(slotCreateQuery()));
+//	m_createAction->plug(m_group_pmenu);
 
-KexiPartPopupMenu*
+	return m_group_pmenu;
+}*/
+
+/*KexiPartPopupMenu*
 KexiQueryPartProxy::itemContext(const QString& identifier)
 {
-	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Open Query"), SLOT(slotOpen(const QString &)));
-	m->insertAction(i18n("Edit Query"), SLOT(slotEdit(const QString &)));
-	m->insertAction(i18n("Delete Query..."), SLOT(slotDelete(const QString &)));
+//	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
+//	m->insertAction(i18n("Open Query"), SLOT(slotOpen(const QString &)));
+//	m->insertAction(i18n("Edit Query"), SLOT(slotEdit(const QString &)));
+//	m->insertAction(i18n("Delete Query..."), SLOT(slotDelete(const QString &)));
 
-	return m;
-}
+
+	return m_item_pmenu;
+}*/
 
 
 void
@@ -84,24 +109,24 @@ KexiQueryPartProxy::slotCreateQuery()
     bool ok = false;
     QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query name:"), "", &ok, kexiView());
 
-    if(ok && name.length() > 0)
-    {
-		KexiQueryPartItem *it=new KexiQueryPartItem(part(), name, "kexi/query", name);
-        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, it, false);
-        part()->items()->insert(it->fullIdentifier(),it);
+    if (!ok || name.isEmpty())
+		return;
+	KexiQueryPartItem *it=new KexiQueryPartItem(part(), name, "kexi/query", name);
+	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, it, false);
+	part()->items()->insert(it->fullIdentifier(),it);
 //        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it, false);
-        emit m_queryPart->itemListChanged(part());
-        kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
-		kqd->setIcon( it->handler()->itemPixmap() );
-		kqd->show();
-        kexiView()->project()->setModified(true);
-    }
+	emit m_queryPart->itemListChanged(part());
+	kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
+	kqd->setIcon( it->handler()->itemPixmap() );
+	kqd->show();
+	kexiView()->project()->setModified(true);
 }
 
 void
 KexiQueryPartProxy::slotOpen(const QString& identifier)
 {
-//	KexiProjectHandlerItem *it=(*(part()->items()))[part()->localIdentifier(identifier)];
+	kdDebug() << "KexiQueryPartProxy::slotOpen(): id=" << identifier <<endl;
+
 	part()->debug();
 	KexiProjectHandlerItem *it=part()->items()->find(identifier);
 	if (!it) return;
@@ -121,7 +146,6 @@ KexiQueryPartProxy::slotOpen(const QString& identifier)
 void
 KexiQueryPartProxy::slotEdit(const QString &identifier)
 {
-//	KexiProjectHandlerItem *it=(*(part()->items()))[part()->localIdentifier(identifier)];
 	part()->debug();
 	KexiProjectHandlerItem *it=part()->items()->find(identifier);
 	if (!it) return;
@@ -141,13 +165,37 @@ KexiQueryPartProxy::slotEdit(const QString &identifier)
 void
 KexiQueryPartProxy::slotDelete(const QString &identifier)
 {
+	part()->debug();
+
+	KexiProjectHandlerItem *it=part()->items()->find(identifier);
+	if (!it) {
+		KMessageBox::sorry( 0, i18n( "Query not found" ) );
+		return;
+	}
+
+	int ans = KMessageBox::questionYesNo(kexiView(),
+		i18n("Do you want to delete \"%1\" query?").arg(it->title()), KEXI_APP_NAME);
+
+	if (ans != KMessageBox::Yes)
+		return;
+
+	//close window if exists
+	KexiDialogBase *w = m_view->findWindow(identifier);
+	if (w && !w->close(true))
+		return; //window do not want to be closed: give up!
+
 	QString name = part()->localIdentifier(identifier);
 	kdDebug() << "KexiQueryPartProxy::slotDelete() id: " << identifier << endl;
 	kdDebug() << "KexiQueryPartProxy::slotDelete() name: " << name << endl;
 	kexiView()->project()->removeFileReference("/query/" + name + ".query");
-	part()->items()->remove(name);
+
+//	part()->items()->remove(name);
+	part()->items()->remove(identifier);
 	KexiQueryPart *npart = static_cast<KexiQueryPart *>(part());
 	emit npart->itemListChanged(part());
+
+	/* TODO: QUERY LIST VIEW REFRESHING DOESN'T WORK!!! 
+	   TODO: SET DIRTY FLAG TO PROJECT*/
 }
 
 #include "kexiquerypartproxy.moc"

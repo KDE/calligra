@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,9 @@
 
 #include <qpopupmenu.h>
 #include <qmemarray.h>
+#include <qintdict.h>
+
+#include "kexipartitemaction.h"
 
 typedef QMemArray<const char*> Slots;
 
@@ -34,19 +38,25 @@ class KEXICORE_EXPORT KexiPartPopupMenu : public QPopupMenu
 		~KexiPartPopupMenu();
 
 		void	insertAction(QString label, const char *slot);
-		void	setIdentifier(QString identifier);
+		void	setPartItemId(QString part_item_id);
+		const QString partItemId() { return m_part_item_id; }
 
 	signals:
-		void	execute(const QString &);
+//		void	execute(int menu_item_id, const QString &part_item_id);
 
 
 	protected slots:
-		void 	slotActivated(int);
+		void slotActivated(int);
 
 	protected:
-		QString	m_identifier;
+		void insertAction( const KexiPartItemAction &a, int id );
+
+		QString	m_part_item_id;
 		QObject	*m_receiver;
 		Slots	m_slots;
+		QIntDict<KexiPartItemAction> m_part_item_actions;
+
+	friend class KexiPartItemAction;
 };
 
 #endif

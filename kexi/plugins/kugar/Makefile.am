@@ -35,9 +35,6 @@ INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 
 METASOURCES = AUTO
 
-rcdir = $(kde_datadir)/kexi
-rc_DATA = kexikugarhandlerui.rc
-
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexikugarhandler.desktop
 

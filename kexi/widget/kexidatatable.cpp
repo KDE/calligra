@@ -66,7 +66,6 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, KexiProjectHandlerI
 void
 KexiDataTable::init(QString caption, QString identifier, bool embedd)
 {
-	m_searchVisible=false;
 	m_record=0;
 	setCaption(i18n("%1 - Table").arg(caption));
 
@@ -150,7 +149,9 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 
 		m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(),
 		 defaultval, 100, m_record->fieldInfo(i)->auto_increment());
+#ifndef KEXI_NO_DATATABLE_SEARCH
 		m_searchCol->insertItem(m_record->fieldName(i));
+#endif
 	}
 
 	int record = 0;
@@ -420,37 +421,37 @@ KexiDataTable::slotSerachColChanged(int index)
 //LinuxTag
 // -- cosider that as a diary entry ;)
 	m_tableView->setSorting(index);
+#ifndef KEXI_NO_DATATABLE_SEARCH
 	m_search->setText("");
 	m_search->setFocus();
+#endif
 }
 
 void
 KexiDataTable::slotSearchChanged(const QString &findQuery)
 {
+#ifndef KEXI_NO_DATATABLE_SEARCH
 	kdDebug() << "KexiDataTable::slotSearchChanged()" << endl;
 	if(m_tableView->sorting() != m_searchCol->currentItem())
 		m_tableView->setSorting(m_searchCol->currentItem());
 	m_tableView->findString(findQuery);
+#endif
 }
 
 void
 KexiDataTable::slotTableSearchChanged(int col)
 {
+#ifndef KEXI_NO_DATATABLE_SEARCH
 	//i have to say programming in trains is a joy!
 
-	#ifndef KEXI_NO_DATATABLE_SEARCH
 	m_searchCol->setCurrentItem(col);
-	#endif
+#endif
 }
 
 void
 KexiDataTable::setSearchVisible(bool visible)
 {
-	#ifdef KEXI_NO_DATATABLE_SEARCH
-	// avoid calling stuff which doesn't exist
-	return;
-	#endif
-
+#ifndef KEXI_NO_DATATABLE_SEARCH
 	if(visible)
 	{
 		m_lSearch->show();
@@ -465,6 +466,7 @@ KexiDataTable::setSearchVisible(bool visible)
 	}
 
 	m_searchVisible = visible;
+#endif
 }
 
 
@@ -478,7 +480,9 @@ KexiDataTable::guiClient()
 TableGUIClient::TableGUIClient(KexiDataTable *t)
 {
 	setXMLFile("kexitableview.rc");
+#ifndef KEXI_NO_DATATABLE_SEARCH
 	new KToggleAction(i18n("Show incremental search"), 0, t, SLOT(showIS), 0, "showISearch");
+#endif
 }
 
 TableGUIClient::~TableGUIClient()

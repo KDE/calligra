@@ -145,12 +145,12 @@ KexiFormBase::KexiFormBase(KexiView *view, QWidget *parent, const char *name, QS
 
 //	initActions();
 
-	setCaption(i18n("%1 [Edit Mode]").arg(identifier));
+	setCaption(i18n("%1 - Form Design").arg(identifier));
 
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));
 
-	resize( 250, 250 );
+//(js)	resize( 250, 250 );
 
 	QVBoxLayout *l=new QVBoxLayout(this);
 	l->setAutoAdd(true);

@@ -23,16 +23,17 @@
 #include <qvariant.h>
 #include <qregexp.h>
 
-#include <kexiquerypartitem.h>
-#include <kexiquerydesigner.h>
-#include <kexidynamicqueryparameterdialog.h>
-#include <kexiproject.h>
 #include <kdebug.h>
 #include <koStore.h>
-#include <kexitablelist.h>
-#include <kexitableitem.h>
 #include <kmessagebox.h>
-#include <kexidbrecordset.h>
+
+#include "kexiquerypartitem.h"
+#include "kexiquerydesigner.h"
+#include "kexidynamicqueryparameterdialog.h"
+#include "kexiproject.h"
+#include "kexitablelist.h"
+#include "kexitableitem.h"
+#include "kexidbrecordset.h"
 
 KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *handler, const QString& ident,
 	const QString& mime, const QString& title)

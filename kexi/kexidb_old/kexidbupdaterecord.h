@@ -64,8 +64,8 @@ private:
 		QVariant value();
 	private:
 		QVariant m_value;
-		bool m_update;
 		QString m_name;
+		bool m_update;
 		QVariant m_resetValue;
 	};
 

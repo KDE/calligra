@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexi" version="95">
+<kpartgui name="kexi" version="96">
 <MenuBar>
   <Menu name="project" noMerge="1">
     <text>&amp;Project</text>
@@ -7,7 +7,7 @@
     <Separator/>
     <Action name="kexi_importfiledata"/>
     <Action name="kexi_importserverdata"/>
-    <Separatpr/>
+    <Separator/>
     <Action name="project_props"/>
   </Menu>
 <Menu name="view"><text>&amp;View</text>
@@ -21,6 +21,11 @@
  <Separator group="settings_show"/>
  <Action name="kexi_settings" group="settings_configure"/>
 </Menu>
+<Menu name="help">
+  <Menu name="help_licenses" noMerge="1"><text>Other &amp;Licenses</text>
+    <Merge />
+  </Menu>
+  <Separator/>
 </MenuBar>
 
 <ToolBar name="mainToolBar" fullWidth="false" noMerge="1">

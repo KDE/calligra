@@ -32,18 +32,36 @@
 
 
 KexiFormHandlerProxy::KexiFormHandlerProxy(KexiFormHandler *handler, KexiView *view)
- : KexiProjectHandlerProxy(handler, view), KXMLGUIClient()
+ : KexiProjectHandlerProxy(handler, view)
+ ,KXMLGUIClient()
+ ,m_formHandler(handler)
 {
-    (void) new KAction(i18n("Create &Form..."), "form", "",
-                       this,SLOT(slotCreate()), actionCollection(), "formpart_create");
+	m_createAction = new KAction(i18n("Create &Form..."), "form", "",
+		this, SLOT(slotCreate()), actionCollection(), "formpart_create");
 
+	m_openAction = new KexiPartItemAction(i18n("Open Form"), "", "",
+		this,SLOT(slotOpen(const QString &)), actionCollection(), "formpart_open");
+	m_editAction = new KexiPartItemAction(i18n("Design Form"), "edit", "",
+		this,SLOT(slotAlter(const QString &)), actionCollection(), "formpart_edit");
+	m_deleteAction = new KexiPartItemAction(i18n("Delete Form..."), "button_cancel", "",
+		this,SLOT(slotDelete(const QString &)), actionCollection(), "formpart_delete");
+
+	// actions in group menu
+	m_createAction->plug(m_group_pmenu);
+
+	// actions in item menu
+	m_openAction->plug(m_item_pmenu);
+	m_editAction->plug(m_item_pmenu);
+	m_deleteAction->plug(m_item_pmenu);
+	m_item_pmenu->insertSeparator();
+	m_createAction->plug(m_item_pmenu);
+					   
     setXMLFile("kexiformpartui.rc");
 
     view->insertChildClient(this);
-
-	m_formHandler = handler;
 }
 
+/*
 KexiPartPopupMenu *
 KexiFormHandlerProxy::groupContext()
 {
@@ -65,7 +83,7 @@ KexiFormHandlerProxy::itemContext(const QString &identifier)
 	m->insertAction(i18n("Create Form..."), SLOT(slotCreate()));
 
 	return m;
-}
+}*/
 
 void
 KexiFormHandlerProxy::slotCreate()

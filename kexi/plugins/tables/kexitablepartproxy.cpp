@@ -38,6 +38,7 @@
 //#include "tables/kexitablefiltermanager.h"
 //#include "tables/kexitableimportfilter.h"
 #include "core/filters/kexifiltermanager.h"
+#include "kexipartitemaction.h"
 
 #include "kexi_global.h"
 
@@ -48,27 +49,50 @@ KexiTablePartProxy::KexiTablePartProxy(KexiTablePart *part,KexiView *view)
 	m_tablePart=part;
 	kdDebug() << "KexiTablePartProxy::KexiTablePartProxy()" << endl;
 
-	(void*) new KAction(i18n("Create &Table..."), "table", "",
+//	(void*) new KAction(i18n("Create &Table..."), "table", "",
+//		this,SLOT(slotCreate()), actionCollection(), "tablepart_create");
+
+	m_createAction = new KAction(i18n("Create &Table..."), "table", "",
 		this,SLOT(slotCreate()), actionCollection(), "tablepart_create");
+
+	m_openAction = new KexiPartItemAction(i18n("Open Table"), "", "",
+		this,SLOT(slotOpen(const QString &)), actionCollection(), "tablepart_open");
+	m_editAction = new KexiPartItemAction(i18n("Alter Table"), "edit", "",
+		this,SLOT(slotAlter(const QString &)), actionCollection(), "tablepart_edit");
+	m_deleteAction = new KexiPartItemAction(i18n("Delete Table..."), "button_cancel", "",
+		this,SLOT(slotDrop(const QString &)), actionCollection(), "querypart_delete");
+
+	// actions in group menu
+	m_createAction->plug(m_group_pmenu);
+
+	// actions in item menu
+	m_openAction->plug(m_item_pmenu);
+	m_editAction->plug(m_item_pmenu);
+	m_deleteAction->plug(m_item_pmenu);
+	m_item_pmenu->insertSeparator();
+	m_createAction->plug(m_item_pmenu);
+
 
 	setXMLFile("kexitablepartui.rc");
 
 	view->insertChildClient(this);
 }
 
+/*
 KexiPartPopupMenu*
 KexiTablePartProxy::groupContext()
 {
 	kdDebug() << "KexiTablePart::groupContext()" << endl;
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Create Table..."), SLOT(slotCreate()));
-/* perhaps this should become a submenu*/
+// perhaps this should become a submenu
 	m->insertAction(i18n("Import Tables/Data from file..."),SLOT(slotFileImport()));
 	m->insertAction(i18n("Import Tables/Data from remote server..."),SLOT(slotServerImport()));
 
 	return m;
-}
+}*/
 
+/*
 KexiPartPopupMenu*
 KexiTablePartProxy::itemContext(const QString& identifier)
 {
@@ -82,7 +106,7 @@ KexiTablePartProxy::itemContext(const QString& identifier)
 
 	return m;
 }
-
+*/
 void
 KexiTablePartProxy::slotCreate()
 {
@@ -191,31 +215,29 @@ KexiTablePartProxy::slotAlter(const QString& identifier)
 void
 KexiTablePartProxy::slotDrop(const QString& identifier)
 {
-        KexiProjectHandlerItem * item = part()->items()->find(identifier);
+	KexiProjectHandlerItem * item = part()->items()->find(identifier);
 
-        if (!item)
-        {
-          KMessageBox::sorry( 0, i18n( "Table not found" ) );
-          return;
-        }
-	//close table window if exists
-	KexiDialogBase *w = m_view->findWindow(identifier);
-	if (w) {
-		if (!w->close(true))
-			return; //window do not want to be closed: give up!
+	if (!item) {
+		KMessageBox::sorry( 0, i18n( "Table not found" ) );
+		return;
 	}
-//	QString rI = item->title();
+
 	int ans = KMessageBox::questionYesNo(kexiView(),
 		i18n("Do you want to delete \"%1\" table?").arg(item->title()), KEXI_APP_NAME);
 
-	if(ans == KMessageBox::Yes)
+	if (ans != KMessageBox::Yes)
+		return;
+
+	//close table window if exists
+	KexiDialogBase *w = m_view->findWindow(identifier);
+	if (w && !w->close(true))
+		return; //window do not want to be closed: give up!
+
+	kdDebug() << "DROP TABLE " << item->identifier() << endl;
+	if(kexiView()->project()->db()->query("DROP TABLE " + item->identifier()))
 	{
-		kdDebug() << "DROP TABLE " << item->identifier() << endl;
-		if(kexiView()->project()->db()->query("DROP TABLE " + item->identifier()))
-		{
-			// FIXME: Please implement a less costly solution.
-			m_tablePart->getTables();
-		}
+		// FIXME: Please implement a less costly solution.
+		m_tablePart->getTables();
 	}
 }
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,9 +27,14 @@ KexiPartPopupMenu::KexiPartPopupMenu(QObject *receiver)
 	kdDebug() << "KexiPartPopupMenu::KexiPartPopupMenu()" << endl;
 
 	m_receiver = receiver;
-	m_slots.resize(0);
+	//m_slots.resize(0);
 
 	connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
+}
+
+void KexiPartPopupMenu::insertAction( const KexiPartItemAction &a, int id )
+{
+	m_part_item_actions.insert(id, &a);
 }
 
 void
@@ -43,19 +49,22 @@ KexiPartPopupMenu::insertAction(QString label, const char *slot)
 }
 
 void
-KexiPartPopupMenu::setIdentifier(QString identifier)
+KexiPartPopupMenu::setPartItemId(QString part_item_id)
 {
-	m_identifier = identifier;
+	m_part_item_id = part_item_id;
 }
 
 void
 KexiPartPopupMenu::slotActivated(int id)
 {
-	connect(this, SIGNAL(execute(const QString&)), m_receiver, m_slots.at(id));
+	KexiPartItemAction *a = m_part_item_actions.find(id);
+	if (!a)
+		return;
+	a->executeAction( m_part_item_id );
 
-	emit execute(m_identifier);
-
-	disconnect(m_receiver);
+//	connect(this, SIGNAL(execute(const QString&)), m_receiver, m_slots.at(id));
+//	emit execute(id, m_part_item_id);
+//	disconnect(m_receiver);
 }
 
 KexiPartPopupMenu::~KexiPartPopupMenu()

@@ -30,15 +30,33 @@ Boston, MA 02111-1307, USA.
 #include "kexiqsahost.h"
 
 KexiScriptHandlerProxy::KexiScriptHandlerProxy(KexiScriptHandler *handler, KexiView *view)
- : KexiProjectHandlerProxy(handler, view), KXMLGUIClient()
+ : KexiProjectHandlerProxy(handler, view)
+	,KXMLGUIClient()
+	,m_scriptHandler(handler)
 {
-	view->insertChildClient(this);
 
-	m_scriptHandler = handler;
-	m_host = handler->host();
+	m_createAction = new KAction(i18n("Create &Script..."), "moc_src", "",
+		this,SLOT(slotCreate()), actionCollection(), "scriptpart_create");
+
+	m_openAction = new KexiPartItemAction(i18n("Open Script"), "", "",
+		this,SLOT(slotOpen(const QString &)), actionCollection(), "scriptpart_open");
+
+	// actions in group menu
+	m_createAction->plug(m_group_pmenu);
+
+	// actions in item menu
+	m_openAction->plug(m_item_pmenu);
+//TODO:	m_editAction->plug(m_item_pmenu);
+//TODO:	m_deleteAction->plug(m_item_pmenu);
+	m_item_pmenu->insertSeparator();
+	m_createAction->plug(m_item_pmenu);
+	
+    setXMLFile("kexiscriptpartui.rc");
+
+    view->insertChildClient(this);
 }
 
-KexiPartPopupMenu *
+/*KexiPartPopupMenu *
 KexiScriptHandlerProxy::groupContext()
 {
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
@@ -53,7 +71,7 @@ KexiScriptHandlerProxy::itemContext(const QString &identifier)
 	m->insertAction(i18n("Open Sourcefile"), SLOT(slotOpen(const QString &)));
 	return m;
 }
-
+*/
 void
 KexiScriptHandlerProxy::slotCreate()
 {

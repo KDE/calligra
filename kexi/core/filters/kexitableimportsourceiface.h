@@ -29,7 +29,7 @@
 #define KEXITABLEIMPORTSOURCEIFACE(obj) (obj?static_cast<KexiTableImportSourceIface*>(\
 		obj->qt_cast("KexiTableImportSourceIface")):0)
 
-class KexiTableImportSourceIface {
+class KEXIFILTER_EXPORT KexiTableImportSourceIface {
 public:
 	KexiTableImportSourceIface() {}
 	virtual ~KexiTableImportSourceIface() {}

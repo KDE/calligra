@@ -25,6 +25,7 @@
 #include <netwm_def.h>
 #include <kdebug.h>
 #include <kstatusbar.h>
+#include <kaction.h>
 
 #include "kexicontexthelp.h"
 
@@ -47,6 +48,7 @@ KexiDialogBase::KexiDialogBase(KexiView* view,QWidget *parent, const char *name)
 	m_contextTitle = QString::null;
 	m_contextMessage = QString::null;
 	m_identifier = QString::null;
+	m_toggleAction = 0;
 #if 0
 	if (s_DocumentWindows==0) s_DocumentWindows=new QPtrList<KexiDialogBase>();
 	if (s_ToolWindows==0) s_ToolWindows=new QPtrList<KexiDialogBase>();
@@ -264,6 +266,28 @@ void KexiDialogBase::hide()
 void KexiDialogBase::setVisible(bool on)
 {
 	on ? show() : hide();
+}
+
+/*! Plugs toggle action, so action is updated after window's visiblility
+	was changed and conversely */
+void KexiDialogBase::plugToggleAction(KToggleAction *toggle_action)
+{
+	m_toggleAction = toggle_action;
+	connect( toggle_action, SIGNAL(toggled(bool)), this, SLOT(setVisible(bool)) );
+}
+
+void KexiDialogBase::hideEvent(QHideEvent *ev)
+{
+	emit hidden();
+	if (m_toggleAction)
+		m_toggleAction->setChecked(false);
+}
+
+void KexiDialogBase::showEvent(QShowEvent *ev)
+{
+	emit shown();
+	if (m_toggleAction)
+		m_toggleAction->setChecked(true);
 }
 
 #include "kexidialogbase.moc"

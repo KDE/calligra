@@ -30,6 +30,7 @@ class KexiProject;
 class QDockWindow;
 
 class KPrinter;
+class KToggleAction;
 
 typedef QPtrList<QWidget> Widgets;
 
@@ -63,6 +64,9 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		void aboutToHide();
 
 		QDockWindow *dock() { return w; }
+
+		void plugToggleAction(KToggleAction *toggle_action);
+
 	public slots:
 		virtual void show();
 		virtual void hide();
@@ -70,6 +74,8 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 
 	signals:
 		void closing(KexiDialogBase *);
+		void hidden(); //! signalled on hide event
+		void shown(); //! signalled on show event
 
 	protected:
 		virtual void focusInEvent ( QFocusEvent *);
@@ -77,6 +83,8 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		void registerAs(KexiDialogBase::WindowType wt, const QString &identifier=QString::null);
 		void registerChild(QWidget *w);
 		virtual void closeEvent(QCloseEvent *ev);
+		virtual void hideEvent(QHideEvent *ev);
+		virtual void showEvent(QShowEvent *ev);
 		virtual void finishUpForClosing(){;}
 		static KexiDialogBase *s_activeDocumentWindow;
 		static KexiDialogBase *s_activeToolWindow;
@@ -96,6 +104,8 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		QString	m_contextMessage;
 		Widgets	m_widgets;
 		QString	m_identifier;
+
+		KToggleAction *m_toggleAction;
 };
 
 #endif

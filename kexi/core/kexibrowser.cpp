@@ -57,6 +57,9 @@ KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectHandler *part
 
 	addColumn("");
 	setShowToolTips(true);
+	setRootIsDecorated(true);
+	setSorting(0);
+	sort();
 //	setResizeMode(QListView::LastColumn);
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
@@ -78,10 +81,10 @@ KexiBrowser::addGroup(KexiProjectHandler *part)
 	KexiBrowserItem *item = new KexiBrowserItem(this,
 		part->proxy(static_cast<KexiDialogBase*>(parent()->parent())->kexiView())
 	);
-	setRootIsDecorated(true);
 
 	item->setPixmap(0, part->groupPixmap());
 	item->setOpen(true);
+	item->setSelectable( false );
 	m_baseItems.insert(part->mime(), item);
 	slotItemListChanged(part);
 }
@@ -91,12 +94,14 @@ KexiBrowser::addItem(KexiProjectHandlerItem *item)
 {
 	if(m_mime == "kexi/db" && m_baseItems.find(item->mime()))
 	{
+		//part object
 		KexiBrowserItem *parent = m_baseItems.find(item->mime());
 		KexiBrowserItem *bitem = new KexiBrowserItem(parent, item);
 		bitem->setPixmap(0, parent->proxy()->part()->itemPixmap());
 	}
 	else if(m_mime == item->mime())
 	{
+		//part objects group
 		KexiBrowserItem *bitem = new KexiBrowserItem(this, item);
 		if(m_part)
 			bitem->setPixmap(0, m_part->itemPixmap());
@@ -143,7 +148,7 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos
 		if(it->identifier().isNull())
 		{
 			// FIXME: Make this less hacky please :)
-			pg = it->proxy()->groupContext();
+			pg = it->proxy()->groupContextMenu();
 		}
 		else
 		{
@@ -151,12 +156,12 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos
 			//a littlebit hacky
 			pg = it->item()->handler()->proxy(
 			static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
-			)->itemContext(it->identifier());
+			)->itemContextMenu(it->identifier());
 		}
 
-		pg->setIdentifier(it->identifier());
+		pg->setPartItemId(it->identifier());
 		pg->exec(pos);
-		delete pg;
+//		delete pg;
 	}
 }
 

@@ -33,6 +33,7 @@ class KexiDoc;
 class DCOPObject;
 class KexiRelation;
 class KexiProjectHandler;
+class KexiProjectHandlerProxy;
 class KexiDBConnection;
 class KexiDBInterfaceManager;
 class KexiFilterManager;
@@ -114,7 +115,6 @@ public:
 	ProviderList providers(const QString &interfaceName);
 	virtual bool completeLoading( KoStore* store );
 
-
 public slots:
 	void	slotImportFileData();
 	void	slotImportServerData();
@@ -132,6 +132,8 @@ protected:
 	bool saveProject();
 	bool saveProjectAs(const QString&);
 	bool loadProject(const QString&);
+
+//	void removeProjectHandlerItem( KexiProjectHandlerItem &item );
 
 private:
 	void saveConnectionSettings(QDomDocument&);

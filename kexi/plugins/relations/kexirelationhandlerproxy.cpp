@@ -39,15 +39,21 @@ KexiRelationHandlerProxy::KexiRelationHandlerProxy(KexiRelationHandler *part,Kex
 {
 	kdDebug() << "KexiRelationHandlerProxy::KexiRelationHandlerProxy()" << endl;
 
-    KAction *createAction = new KAction(i18n("Relations"), "relation", "",
-                                        this,SLOT(slotShowRelationEditor()), actionCollection(), "relations");
+    m_createAction = new KAction(i18n("Relations"), "relation", "",
+    	this,SLOT(slotShowRelationEditor()), actionCollection(), "relations");
+	// actions in group menu
+	m_createAction->plug(m_group_pmenu);
+
+	// actions in item menu
+//	m_item_pmenu->insertSeparator();
+	m_createAction->plug(m_item_pmenu);
 
     setXMLFile("kexirelationhandlerui.rc");
 
     view->insertChildClient(this);
 }
 
-
+/*
 KexiPartPopupMenu*
 KexiRelationHandlerProxy::groupContext()
 {
@@ -59,7 +65,7 @@ KexiRelationHandlerProxy::itemContext(const QString&)
 {
 	return 0;
 }
-
+*/
 
 void
 KexiRelationHandlerProxy::executeItem(const QString&)

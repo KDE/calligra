@@ -34,20 +34,42 @@
 #include "kexiview.h"
 
 KexiKugarHandlerProxy::KexiKugarHandlerProxy(KexiKugarHandler *part,KexiView *view)
- : KexiProjectHandlerProxy(part,view),KXMLGUIClient()
+ : KexiProjectHandlerProxy(part,view)
+ ,KXMLGUIClient()
+ ,m_kugarManager(part)
 {
-	m_kugarManager=part;
 	kdDebug() << "KexiKugarHandlerProxy::KexiKugarHandlerProxy()" << endl;
 
-    (void*) new KAction(i18n("Create &Report..."), "report", "",
-                        this,SLOT(slotCreateReport()), actionCollection(), "kugarhandler_create");
+	m_createAction = new KAction(i18n("Create &Report..."), "report", "",
+		this,SLOT(slotCreateReport()), actionCollection(), "kugarpart_create");
+
+	m_openAction = new KexiPartItemAction(i18n("Open Report"), "", "",
+		this,SLOT(executeItem(const QString &)), actionCollection(), "kugarpart_open");
+	m_editAction = new KexiPartItemAction(i18n("Edit Report"), "edit", "",
+		this,SLOT(slotEdit(const QString &)), actionCollection(), "kugarpart_edit");
+	m_deleteAction = new KexiPartItemAction(i18n("Delete Report..."), "button_cancel", "",
+		this,SLOT(slotDelete(const QString &)), actionCollection(), "kugarpart_delete");
+
+	// actions in group menu
+	m_createAction->plug(m_group_pmenu);
+
+	// actions in item menu
+	m_openAction->plug(m_item_pmenu);
+	m_editAction->plug(m_item_pmenu);
+	m_deleteAction->plug(m_item_pmenu);
+	m_item_pmenu->insertSeparator();
+	m_createAction->plug(m_item_pmenu);
+	
+	//other actions
+	m_createAction = new KAction(i18n("Report Generator Licensing..."), "info", "",
+		this,SLOT(slotGeneratorLicense()), actionCollection(), "kugar_show_license");
 
     setXMLFile("kexikugarhandlerui.rc");
 
     view->insertChildClient(this);
 }
 
-
+/*
 KexiPartPopupMenu*
 KexiKugarHandlerProxy::groupContext()
 {
@@ -68,13 +90,12 @@ KexiKugarHandlerProxy::itemContext(const QString& identifier)
 	m->insertAction(i18n("Report Generator Licensing..."),SLOT(slotGeneratorLicense()));
 	return m;
 }
-
+*/
 
 void KexiKugarHandlerProxy::slotGeneratorLicense()
 {
-	KexiKugarLicense *lic=new KexiKugarLicense(0,0,true);
-	lic->exec();
-	delete lic;
+	KexiKugarLicense lic(0,0,true);
+	lic.exec();
 }
 
 void

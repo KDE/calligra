@@ -35,8 +35,8 @@ class KEXI_HAND_TBL_EXPORT KexiTablePartProxy : public KexiProjectHandlerProxy, 
 		KexiTablePartProxy(KexiTablePart *part, KexiView *view);
 		virtual ~KexiTablePartProxy() {};
 
-		virtual KexiPartPopupMenu	*groupContext();
-		virtual KexiPartPopupMenu	*itemContext(const QString& identifier);
+//		virtual KexiPartPopupMenu	*groupContext();
+//		virtual KexiPartPopupMenu	*itemContext(const QString& identifier);
 
 	public slots:
 		virtual void executeItem(const QString& identifier);

@@ -32,8 +32,8 @@ class KexiFormHandlerProxy : public KexiProjectHandlerProxy, public KXMLGUIClien
 		KexiFormHandlerProxy(KexiFormHandler *handler, KexiView *view);
 		~KexiFormHandlerProxy() {; }
 
-		virtual KexiPartPopupMenu	*groupContext();
-		virtual KexiPartPopupMenu	*itemContext(const QString& identifier);
+//		virtual KexiPartPopupMenu	*groupContext();
+//		virtual KexiPartPopupMenu	*itemContext(const QString& identifier);
 
 	public slots:
 		virtual void executeItem(const QString &identifier);

@@ -21,6 +21,7 @@
 
 #include <qpainter.h>
 #include <qdir.h>
+#include <qptrvector.h>
 
 #include <kdebug.h>
 #include <kpassdlg.h>
@@ -28,6 +29,7 @@
 #include <kmessagebox.h>
 #include <kparts/componentfactory.h>
 #include <kstandarddirs.h>
+#include <kconfig.h>
 
 #include <koStore.h>
 #include <koTemplateChooseDia.h>
@@ -121,10 +123,15 @@ bool KexiProject::initDoc()
 	QString filename;
 
 	KoTemplateChooseDia::DialogType dlgtype;
+
+#ifndef OOPL_VERSION
 	if (initDocFlags() != KoDocument::InitDocFileNew)
         	dlgtype = KoTemplateChooseDia::Everything;
 	else
         	dlgtype = KoTemplateChooseDia::OnlyTemplates;
+#else //for ancient kofficelibs
+        	dlgtype = KoTemplateChooseDia::Everything;
+#endif
 	
 	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(
 		KexiFactory::global(),filename,"application/x-vnd.kde.kexi","*.kexi",
@@ -477,11 +484,34 @@ void KexiProject::loadHandlers()
 	if (m_handlersLoaded) return;
 	m_handlersLoaded=true;
 	kdDebug()<<"***********************Trying to load handlers"<<endl;
+	
+	KConfig conf("kexirc", true);
+	conf.setGroup("Parts");
+	QStringList sl_order = QStringList::split( ",", conf.readEntry("Order") );
+	
 	KTrader::OfferList ol=KTrader::self()->query("Kexi/Handler");
+	
+	const int size = QMAX( ol.count(), sl_order.count() );
+	int offset = size;
+	QPtrVector<KService> ordered( size*2 );
+	
 	for (KTrader::OfferList::ConstIterator it=ol.begin(); it!=ol.end(); ++it)
 	{
-		(void) KParts::ComponentFactory::createInstanceFromService<KexiProjectHandler>(
-			*it,this);
+		KService::Ptr ptr = *it;
+		kdDebug() << "loadHandlers(): library=" << ptr->library() << endl;
+		int idx = sl_order.findIndex( ptr->library() );
+		if (idx!=-1)
+			ordered.insert(idx, (KService*)ptr);
+		else //add to end
+			ordered.insert(offset++, (KService*)ptr);
+	}
+	for (int i = 0; i<ordered.size(); i++) {
+		KService::Ptr ptr = ordered[i];
+		if (ptr) {
+			kdDebug() << "loadHandlers(): adding library=" << ptr->library() << endl;
+			(void) KParts::ComponentFactory::createInstanceFromService<KexiProjectHandler>(
+				ptr,this);
+		}
 	}
 }
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,12 +21,20 @@
 #include "kexiprojecthandlerproxy.h"
 #include "kexiprojecthandler.h"
 #include "kexiview.h"
+#include "kexihandlerpopupmenu.h"
 
 KexiProjectHandlerProxy::KexiProjectHandlerProxy(KexiProjectHandler *part,KexiView *view)
  : QObject(part)
+	,m_view(view)
+	,m_part(part)
+	,m_createAction(0)
+	,m_openAction(0)
+	,m_editAction(0)
+	,m_deleteAction(0)
 {
-	m_part=part;
-	m_view=view;
+	m_group_pmenu = new KexiPartPopupMenu(this);
+	m_item_pmenu = new KexiPartPopupMenu(this);
+
 }
 
 KexiProjectHandler *KexiProjectHandlerProxy::part()const

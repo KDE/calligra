@@ -49,7 +49,7 @@
 
 KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent,
  KexiQueryPartItem *item, bool modeview)
- : KexiDialogBase(view,parent, item->identifier().latin1()),m_item(item)
+ : KexiDialogBase(view, parent, item->identifier().latin1()), m_item(item)
 {
 	QVBoxLayout *l = new QVBoxLayout(this);
 	setCaption(i18n("%1 - Query").arg(item->title()));
@@ -73,7 +73,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent,
 	QStatusBar *status = new QStatusBar(this);
 	l->addWidget(status);
 
-	registerAs(DocumentWindow, item->identifier());
+	registerAs(DocumentWindow, item->fullIdentifier());
 	setContextHelp(i18n("Queries"), i18n("After having set up relations you can drag fields from different tables into the \"query table\"."));
 
 	item->setClient(this);

@@ -27,6 +27,7 @@ class QPixmap;
 #include "kexiprojecthandlerproxy.h"
 
 class KexiView;
+class KexiPartPopupMenu;
 
 class KEXI_HAND_QUERY_EXPORT KexiQueryPartProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
 {
@@ -35,8 +36,8 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryPartProxy : public KexiProjectHandlerProxy
 	public:
 		KexiQueryPartProxy(KexiQueryPart *part, KexiView*view);
 
-                virtual KexiPartPopupMenu       *groupContext();
-                virtual KexiPartPopupMenu       *itemContext(const QString& identifier);
+//                virtual KexiPartPopupMenu       *groupContext();
+//                virtual KexiPartPopupMenu       *itemContext(const QString& identifier);
 
 
 

@@ -66,11 +66,13 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		virtual KXMLGUIClient *guiClient();
 		bool readOnly();
 
+# ifndef KEXI_NO_DATATABLE_SEARCH
 		bool isSarchVisible() { return m_searchVisible; }
+# endif
 
-		#ifndef KEXI_NO_PRINT
+# ifndef KEXI_NO_PRINT
 		virtual void print(KPrinter &printer);
-		#endif
+# endif
 
 	public slots:
 		virtual void setFocus();
@@ -96,11 +98,14 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		//gui
 		KexiTableView	*m_tableView;
 		QStatusBar	*m_statusBar;
+
+# ifndef KEXI_NO_DATATABLE_SEARCH
+		//search stuff
 		QLineEdit	*m_search;
 		QComboBox	*m_searchCol;
 		QLabel		*m_lSearch;
-
 		bool		m_searchVisible;
+# endif
 
 		//db stuff
 		KexiDBRecordSet	*m_record;

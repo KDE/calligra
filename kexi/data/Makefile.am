@@ -1,5 +1,6 @@
 if compile_qsa_plugin
 scripthandler = kexiscripthandler.desktop
+scriptrc = kexiscriptpartui.rc
 endif
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
@@ -24,7 +25,11 @@ endif
 
 rcdir = $(kde_datadir)/kexi
 rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc kexiquerypartui.rc \
-	kexitablepartui.rc kexirelationhandlerui.rc kexiformpartui.rc kexitableview.rc
+	kexitablepartui.rc kexirelationhandlerui.rc kexiformpartui.rc kexitableview.rc \
+	kexikugarhandlerui.rc $(scriptrc)
+
+datadir = $(kde_confdir)
+data_DATA = kexirc
 
 servicetypesdir = $(kde_servicetypesdir)
 servicetypes_DATA=kexihandler.desktop kexitablefilter.desktop  kexiimportfilter.desktop  \

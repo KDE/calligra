@@ -23,6 +23,8 @@
 
 #include "kexibrowseritem.h"
 
+#include <kdebug.h>
+
 KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, QString identifier)
  : KListViewItem(parent, name)
 {
@@ -32,6 +34,9 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, 
 
 	m_proxy = 0;
 	m_item = 0;
+	
+	initItem();
+	m_fifoSorting = 1; //because this is top level item
 }
 
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy *proxy)
@@ -43,6 +48,9 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy *pro
 
 	m_proxy = proxy;
 	m_item = 0;
+	
+	initItem();
+	m_fifoSorting = 1; //because this is top level item
 }
 
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item)
@@ -53,6 +61,9 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item
 	m_identifier = item->fullIdentifier();
 	m_item = item;
 	m_proxy = 0;
+	
+	initItem();
+	m_fifoSorting = 1; //because this is top level item
 }
 
 KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString name, QString identifier)
@@ -63,6 +74,8 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString na
 	m_identifier = identifier;
 	m_proxy = 0;
 	m_item = 0;
+	
+	initItem();
 }
 
 KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item)
@@ -73,6 +86,22 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *
 	m_identifier = item->fullIdentifier();
 	m_item = item;
 	m_proxy = 0;
+	
+	initItem();
+}
+
+void KexiBrowserItem::initItem()
+{
+	m_fifoSorting = 0;
+	int sortKey = 0;
+	// set sorting key with FIFO order
+	if (parent()) {
+		sortKey = parent()->childCount();
+	} else if (listView()) {
+		sortKey = listView()->childCount();
+	}
+	m_sortKey.sprintf("%2.2d",sortKey);
+	kdDebug() << "m_sortKey=" << m_sortKey << endl;
 }
 
 KexiProjectHandlerProxy*
@@ -116,4 +145,8 @@ KexiBrowserItem::clearChildren()
 	}
 }
 
-//#include "kexibrowseritem.moc"
+QString KexiBrowserItem::key( int column, bool ascending ) const
+{
+	return m_fifoSorting ? m_sortKey : KListViewItem::key(column,ascending);
+}
+

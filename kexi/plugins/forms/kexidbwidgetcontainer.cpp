@@ -48,7 +48,8 @@ KexiDBWidgetContainer::KexiDBWidgetContainer(QWidget *parent, const char *name)
 void
 KexiDBWidgetContainer::init(KexiFormHandlerItem *i, const QString &id)
 {
-	m_gui = new FormGUIClient(i->projectPart()->kexiProject()->instance());
+//	m_gui = new FormGUIClient(i->projectPart()->kexiProject()->instance());
+	m_gui = new FormGUIClient(i->handler()->kexiProject()->instance());
 	QPtrList<KAction> a = i->form()->createActions(m_gui->actionCollection());
 	kdDebug() << "KexiDBWidgetContainer::init(): " << a.count() << " items to plug..." << endl;
 	m_gui->plugActionList("widget_list", a);

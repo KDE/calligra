@@ -20,9 +20,10 @@
 #ifndef KEXIQUERYPARTITEM_H
 #define KEXIQUERYPARTITEM_H
 
-#include <kexiprojecthandleritem.h>
-#include <kexidataprovider.h>
 #include <qvaluelist.h>
+
+#include "kexiprojecthandleritem.h"
+#include "kexidataprovider.h"
 
 class QString;
 class KexiProjectHandler;

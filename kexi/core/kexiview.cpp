@@ -54,7 +54,7 @@
 #include "kexi_utils.h"
 
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, const char *name )
-: KoView(part,parent,name)
+: KoView(part,parent,name ? name : "kexi_view")
 	,m_browser(0)
 #ifndef KEXI_NO_CTXT_HELP
 	,m_helper(0)
@@ -141,7 +141,8 @@ void KexiView::initBrowser()
 	m_browser = new KexiTabBrowser(this, m_workspace, "Document Browser");
 	m_browser->show(); //TODO: read settings
 	m_actionBrowser->setChecked(m_browser->isVisible());
-	connect(m_actionBrowser, SIGNAL(toggled(bool)), m_browser, SLOT(setVisible(bool)));
+	m_browser->plugToggleAction(m_actionBrowser);
+
 	kdDebug() << "KexiView::initBrowser: done" << endl;
 }
 
@@ -173,18 +174,18 @@ void KexiView::initActions()
 	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
 	 actionCollection(), "kexi_settings");
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
-#endif
 
-	KAction *actionFileImport = new KAction(i18n("Import file based data..."), "", Key_F34,
+	KAction *actionFileImport = new KAction(i18n("Import file based data..."), "", "",
 	 actionCollection(), "kexi_importfiledata");
 	connect(actionFileImport, SIGNAL(activated()), m_project, SLOT(slotImportFileData()));
 
-	KAction *actionServerImport = new KAction(i18n("Import remote server based data..."), "", Key_F33,
+	KAction *actionServerImport = new KAction(i18n("Import remote server based data..."), "", "",
 	 actionCollection(), "kexi_importserverdata");
 	connect(actionServerImport, SIGNAL(activated()), m_project, SLOT(slotImportServerData()));
+#endif
 
-       m_actionBrowser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
-        actionCollection(), "show_nav");
+	m_actionBrowser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
+	 actionCollection(), "show_nav");
 
 #ifndef KEXI_NO_CTXT_HELP
 	m_actionHelper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
@@ -196,8 +197,8 @@ void KexiView::initActions()
 	//disable some actions:
 #ifdef KEXI_NO_UNFINISHED
 	KActionCollection *parentCollection = shell()->actionCollection();
-  for (int i=0;i<parentCollection->count();i++)
-    kdDebug() << parentCollection->action(i)->name() << endl;
+	for (int i=0;i<(int)parentCollection->count();i++)
+		kdDebug() << parentCollection->action(i)->name() << endl;
 //	parentCollection->action("file_import_file")->setEnabled(false);
 #define INIT_UNF_ACT(act) \
 	{ if (act) connect(act, SIGNAL(activated()), this, SLOT(slotInfoUnfinished())); }
@@ -386,13 +387,11 @@ KexiView::activateWindow(const QString &id)
 	kdDebug() << "KexiView::activateWindow()" << endl;
 	KexiDialogBase *dlg = m_wins[id];
 	kdDebug() << "KexiView::activateWindow(): dlg: " << dlg << endl;
-	if(dlg)
-	{
-		workspace()->activateView(dlg);
-		return true;
-	}
-
-	return false;
+	if (!dlg)
+		return false;
+	
+	workspace()->activateView(dlg);
+	return true;
 }
 
 void
@@ -401,11 +400,10 @@ KexiView::registerDialog(KexiDialogBase *dlg, const QString &identifier)
 	m_wins.insert(identifier, dlg);
 }
 
-void
+bool
 KexiView::removeDialog(const QString &identifier)
 {
-//	if(m_wins)
-	m_wins.remove(identifier);
+	return m_wins.remove(identifier);
 }
 
 KexiDialogBase *
@@ -413,5 +411,14 @@ KexiView::findWindow(const QString &id)
 {
 	return m_wins[ id ];
 }
+
+/*! Method used to connect windows that are before closing when
+	we want to do something in this situation.
+*/
+void KexiView::slotAboutCloseWindow( KexiDialogBase *w )
+{
+	//UNUSED
+}
+
 
 #include "kexiview.moc"
