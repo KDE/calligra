@@ -28,7 +28,7 @@ class KoPainterTest : public QWidget
 {
   Q_OBJECT
 public:
-   KoPainterTest ( QWidget *parent=0, const char *name=0 );
+   KoPainterTest(QWidget *parent = 0L, const char *name = 0L);
    ~KoPainterTest();
 
 private:

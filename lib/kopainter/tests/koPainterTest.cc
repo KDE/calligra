@@ -28,6 +28,7 @@ KoPainterTest::KoPainterTest(QWidget *widget, const char *name):
 QWidget( widget, name )
 {
   setFixedSize(500,300);
+  p = new KoPainter(500, 300);
 }
 
 KoPainterTest::~KoPainterTest()
