@@ -53,7 +53,7 @@
 #include <qdropsite.h>
 #include <qpaintdevice.h>
 #include <qpicture.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <qfile.h>
 
 #include <math.h>
@@ -1137,8 +1137,10 @@ void KWPage::vmrCreateTable()
     insRect = insRect.normalize();
     if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() ) {
 	if ( tcols * 70 + insRect.x() > doc->getPTPaperWidth() )
-	    QMessageBox::critical( 0L, i18n( "Error" ), i18n( "There is not enough space to insert this table!" ),
-				   i18n( "OK" ) );
+	{
+	    KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
+	                               "is not enough space available."));
+	}
 	else {
 	    KWGroupManager *grpMgr = new KWGroupManager( doc );
 	    QString _name;
@@ -1416,8 +1418,9 @@ void KWPage::editPaste( QString _string, const QString &_mime )
 void KWPage::editDeleteFrame()
 {
     if ( mouseMode != MM_EDIT_FRAME ) {
-	QMessageBox::information( this, i18n( "Delete Frame" ),
-				  i18n( "Switch to the frame edit tool, to delete frames" ) );
+	KMessageBox::sorry( this, i18n( "Please switch to the frame edit tool and\n"
+	                                "select the frame you want to delete." ),
+				  i18n( "Delete Frame" ) );
 	return;
     }
 
@@ -1429,8 +1432,9 @@ void KWPage::editDeleteFrame()
 	    KWFrame *_f = f->getFrame( j );
 	    if ( _f->isSelected() ) {
 		if ( frame ) {
-		    QMessageBox::information( this, i18n( "Delete Frame" ),
-					      i18n( "You have to select exactly one frame to delete it!" ) );
+		    KMessageBox::sorry( this, i18n( "You have selected multiple frames.\n"
+		                                    "You can only delete one frame at the time." ),
+					      i18n( "Delete Frame" ) );
 		    return;
 		}
 		frame = _f;
@@ -1440,8 +1444,9 @@ void KWPage::editDeleteFrame()
     }
 
     if ( !frame || !fs ) {
-	QMessageBox::information( this, i18n( "Delete Frame" ),
-				  i18n( "You have to select exactly one frame to delete it!" ) );
+	KMessageBox::sorry( this, i18n( "You have not selected a frame.\n" 
+	                                "You need to select a frame first in order to delete it."),
+				  i18n( "Delete Frame" ) );
 	return;
     }
 
@@ -1453,11 +1458,15 @@ void KWPage::editDeleteFrame()
     if ( fs->getNumFrames() == 1 && fs->getFrameType() == FT_TEXT ) {
 	if ( doc->getProcessingType() == KWordDocument::WP && doc->getFrameSetNum( fs ) == 0 )
 	    return;
-	if ( QMessageBox::warning( this, i18n( "Delete Frame" ),
-				   i18n( "The selected Frame is the last frame of the Frameset\n%1.\n"
-					 "If you delete it, the whole Frameset + its Text will be deleted too!\n"
-					 "Do really want to do that?" ).arg( fs->getName() ),
-				   i18n( "&Yes" ), i18n( "&No" ) ) == 1 )
+	int result;
+	result = KMessageBox::warningContinueCancel(this, 
+			i18n( "You are about to delete the last Frame of the\n"
+			      "Frameset '%1'.\n" 
+			      "Doing so will delete this Frameset and all the\n"
+			      "text contained in it as well!\n\n"
+			      "Are you sure you want to do that?").arg(fs->getName()),
+			      i18n("Delete Frame"), i18n("&Delete"));
+        if (result != KMessageBox::Continue)
 	    return;
     }
 
@@ -1526,8 +1535,9 @@ void KWPage::deleteTable( KWGroupManager *g )
 void KWPage::editReconnectFrame()
 {
     if ( mouseMode != MM_EDIT_FRAME ) {
-	QMessageBox::information( this, i18n( "Reconnect Frame" ),
-				  i18n( "Switch to the frame edit tool, to reconnect a frame" ) );
+	KMessageBox::sorry( this, i18n( "Please switch to the frame edit tool and\n"
+	                                "select the frame you want to reconnect." ),
+				  i18n( "Reconnect Frame" ) );
 	return;
     }
 
@@ -1539,8 +1549,9 @@ void KWPage::editReconnectFrame()
 	    KWFrame *_f = f->getFrame( j );
 	    if ( _f->isSelected() ) {
 		if ( frame ) {
-		    QMessageBox::information( this, i18n( "Reconnect Frame" ),
-					      i18n( "You have to select exactly one frame to reconnect it!" ) );
+		    KMessageBox::sorry( this, i18n( "You have selected multiple frames.\n"
+		                                    "You can only reconnect one frame at the time." ),
+					      i18n( "Reconnect Frame" ) );
 		    return;
 		}
 		frame = _f;
@@ -1550,8 +1561,9 @@ void KWPage::editReconnectFrame()
     }
 
     if ( !frame || !fs ) {
-	QMessageBox::information( this, i18n( "Return Frame" ),
-				  i18n( "You have to select exactly one frame to reconnect it!" ) );
+	KMessageBox::sorry( this, i18n( "You have not selected a frame.\n" 
+	                                "You need to select a frame first in order to reconnect it."),
+				  i18n( "Reconnect Frame" ) );
 	return;
     }
 
@@ -1561,12 +1573,15 @@ void KWPage::editReconnectFrame()
     if ( fs->getNumFrames() == 1 ) {
 	if ( doc->getProcessingType() == KWordDocument::WP && doc->getFrameSetNum( fs ) == 0 )
 	    return;
-	if ( QMessageBox::warning( this, i18n( "Reconnect Frame" ),
-				   i18n( "The selected Frame is the last frame of the Frameset\n%1.\n"
-					 "If you reconnect it to another Frameset, the whole Frameset + its Text will"
-					 "be deleted!\n"
-					 "Do really want to do that?" ).arg( fs->getName() ),
-				   i18n( "&Yes" ), i18n( "&No" ) ) == 1 )
+	int result;
+	result = KMessageBox::warningContinueCancel(this, 
+			i18n( "You are about to reconnect the last Frame of the\n"
+			      "Frameset '%1'.\n" 
+			      "Doing so will delete the Frameset and all the\n"
+			      "text contained in it!\n\n"
+			      "Are you sure you want to do that?").arg(fs->getName()),
+			      i18n("Reconnect Frame"), i18n("&Delete"));
+        if (result != KMessageBox::Continue)
 	    return;
     }
 

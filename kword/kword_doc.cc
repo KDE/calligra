@@ -22,7 +22,7 @@
 #include <qevent.h>
 #include <qregion.h>
 #include <qclipboard.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <qdict.h>
 #include <qpixmap.h>
 #include <qfileinfo.h>
@@ -1782,7 +1782,8 @@ void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
 
     KoDocument* doc = _e.createDoc( this );
     if ( !doc || !doc->initDoc() ) {
-	QMessageBox::critical( ( QWidget* )0L, i18n( "KWord Error" ), i18n( "Could not init" ), i18n( "OK" ) );
+	KMessageBox::error( 0, i18n( "Due to an internal error, KWord could not\n"
+	                             "perform the requested action."));
 	return;
     }
 
