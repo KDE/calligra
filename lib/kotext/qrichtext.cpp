@@ -7975,4 +7975,7 @@ void QTextTableCell::draw( int x, int y, int cx, int cy, int cw, int ch, const Q
     painter()->restore();
 }
 
+#undef QTextDocument
+#undef QTextParag
+#undef QTextFlow
 #endif //QT_NO_RICHTEXT

@@ -746,3 +746,7 @@ KoTextStringChar::~KoTextStringChar()
     }
 }
 
+#undef QTextCustomItem
+#undef QTextFlow
+#undef QTextDocument
+#undef QTextParag
