@@ -146,3 +146,4 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Add support for "Apply autoformat"
 - Add support for find/replace with format
 - Now we can create style directly from selection
+- Paragraph selection, clicking on the left of the text frame
