@@ -26,6 +26,7 @@
 
 #include "kexipartguiclient.h"
 #include "keximainwindow.h"
+#include "kexipartdatasource.h"
 
 #include <qwidgetstack.h>
 
