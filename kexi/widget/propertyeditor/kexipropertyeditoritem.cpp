@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,12 +27,11 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 #include "kexipropertyeditoritem.h"
 
-KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *parent, KexiProperty *property)
+KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property)
  : KListViewItem(parent, property->name(), format(property->value()))
 {
 	m_value = property->value();
@@ -109,13 +109,16 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *parent, KexiProperty *
 	m_childprop->setAutoDelete(true);
 }
 
-KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property)
- : KListViewItem(parent, property->name(), format(property->value() ))
+KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *parent, const QString &text)
+ : KListViewItem(parent, text, "")
 {
-	m_value = property->value();
-	m_property=property;
+	m_value = "";
+	m_property= new KexiProperty();
+	m_oldvalue=m_value;
 	m_childprop = 0;
 	m_children = 0;
+	setSelectable(false);
+	setOpen(true);
 }
 
 
@@ -130,6 +133,8 @@ KexiPropertyEditorItem::setValue(QVariant value)
 void
 KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align)
 {
+	int margin = listView()->itemMargin();
+	
 	if(column == 1)
 	{
 		switch(m_value.type())
@@ -137,7 +142,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 			case QVariant::Pixmap:
 			{
 				p->eraseRect(0,0,width,height());
-				p->drawPixmap(1, 1, m_property->value().toPixmap());
+				p->drawPixmap(margin, margin, m_property->value().toPixmap());
 				break;
 			}
 			case QVariant::Color:
@@ -145,7 +150,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 				p->eraseRect(0,0,width,height());
 				QColor ncolor = m_value.toColor();
 				p->setBrush(ncolor);
-				p->drawRect(2, 2, width - 2, height() - 2);
+				p->drawRect(margin, margin, width - 2*margin, height() - 2*margin);
 				QColorGroup nGroup(cg);
 				break;
 			}
@@ -154,19 +159,21 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 				p->eraseRect(0,0,width,height());
 				if(m_value.toBool())
 				{
-					p->drawPixmap(1, 1, SmallIcon("button_ok"));
-					p->drawText(20, height() -3, i18n("True"));
+					p->drawPixmap(margin, height()/2 -8, SmallIcon("button_ok"));
+					p->drawText(QRect(margin+20,0,width,height()-1), Qt::AlignVCenter, i18n("True"));
 				}
 				else
 				{
-					p->drawPixmap(1, 1, SmallIcon("button_cancel"));
-					p->drawText(20, height()-3, i18n("False"));
+					p->drawPixmap(margin, height()/2 -8, SmallIcon("button_cancel"));
+					p->drawText(QRect(margin+20,0,width,height()-1), Qt::AlignVCenter, i18n("False"));
 				}
 				break;
 			}
 			
 			default:
 			{
+				if(depth()==0)
+					return;
 				KListViewItem::paintCell(p, cg, column, width, align);
 				break;
 			}
@@ -174,13 +181,67 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 	}
 	else
 	{
-	KListViewItem::paintCell(p, cg, column, width, align);
+		if(depth()==0)
+			return;
+		p->eraseRect(0,0,width,height());
+		if(isSelected())
+			p->fillRect(0,0,width, height(), QBrush(cg.highlight()));
+		
+		QFont f = listView()->font();
+		p->save();
+		if(modified())
+			f.setBold(true);
+		p->setFont(f);
+		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, m_property->name());
+		p->restore();
+		
+		p->setPen(cg.background());
+		p->drawLine(width-1, 0, width-1, height());
 	}
-	p->setBrush(Qt::lightGray);
-	//p->drawLine(0, height(), width, height() );
-	//p->drawLine(width, 0, width, height());
+	
+	p->setPen(cg.background());
+	p->drawLine(-50, height()-1, width, height()-1 );
 }
 
+void
+KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h)
+{
+	kdDebug() << "painting branches" << y << " " << h << endl;
+	p->eraseRect(0,0,w,h);
+	QListViewItem *item = firstChild();
+	if(!item)
+		return;
+	
+	p->save();
+	p->translate(0,y);
+	while(item)
+	{
+		if(item->isSelected())
+		{
+			p->fillRect(0,0,w, item->height(), QBrush(cg.highlight()));
+			p->fillRect(-50,0,50, item->height(), QBrush(cg.highlight()));
+		}
+		if(item->firstChild())
+		{
+		p->drawRect(2, item->height()/2 -4, 9, 9);
+		p->drawLine(4, item->height()/2, 8, item->height()/2);
+		if(!item->isOpen())
+			p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
+		}
+		
+		p->translate(0, item->totalHeight());
+		item = item->nextSibling();
+	}
+	p->restore();
+}
+
+void
+KexiPropertyEditorItem::setup()
+{
+	KListViewItem::setup();
+	if(depth()==0)
+		setHeight(0);
+}
 
 QString
 KexiPropertyEditorItem::format(const QVariant &v)
@@ -236,26 +297,53 @@ KexiPropertyEditorItem::getComposedValue()
 		case QVariant::Size:
 		{
 			QSize s;
-			s.setWidth((*m_children)["width"]->value().toInt());
-			s.setHeight((*m_children)["height"]->value().toInt());
+			QVariant v;
+			v = (*m_children)["width"]->value();
+			s.setWidth(v.toInt());
+			(*m_children)["width"]->property()->setValue(v.toInt());
+			
+			v = (*m_children)["height"]->value();
+			s.setHeight(v.toInt());
+			(*m_children)["height"]->property()->setValue(v.toInt());
+			
 			setValue(s);
 			return s;
 		}
 		case QVariant::Point:
 		{
 			QPoint p;
-			p.setX((*m_children)["x"]->value().toInt());
-			p.setY((*m_children)["y"]->value().toInt());
+			QVariant v;
+			v = (*m_children)["x"]->value();
+			p.setX(v.toInt());
+			(*m_children)["x"]->property()->setValue(v.toInt());
+			
+			v = (*m_children)["y"]->value();
+			p.setY(v.toInt());
+			(*m_children)["y"]->property()->setValue(v.toInt());
+			
 			setValue(p);
 			return p;
 		}
 		case QVariant::Rect:
 		{
 			QRect r;
-			r.setX((*m_children)["x"]->value().toInt());
-			r.setY((*m_children)["y"]->value().toInt());
-			r.setWidth((*m_children)["width"]->value().toInt());
-			r.setHeight((*m_children)["height"]->value().toInt());
+			QVariant v;
+			v = (*m_children)["x"]->value();
+			r.setX(v.toInt());
+			(*m_children)["x"]->property()->setValue(v.toInt());
+			
+			v = (*m_children)["y"]->value();
+			r.setY(v.toInt());
+			(*m_children)["y"]->property()->setValue(v.toInt());
+			
+			v = (*m_children)["width"]->value();
+			r.setWidth(v.toInt());
+			(*m_children)["width"]->property()->setValue(v.toInt());
+			
+			v = (*m_children)["height"]->value();
+			r.setHeight(v.toInt());
+			(*m_children)["height"]->property()->setValue(v.toInt());
+			
 			setValue(r);
 			return r;
 		}

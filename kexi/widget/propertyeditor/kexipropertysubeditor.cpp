@@ -60,6 +60,7 @@ void
 KexiPropertySubEditor::setWidget(QWidget *w)
 {
 	m_childWidget = w;
+	setFocusProxy(m_childWidget);
 	m_childWidget->installEventFilter(this);
 }
 

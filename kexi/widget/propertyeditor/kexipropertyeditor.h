@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,13 +58,15 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 	protected:
 		void	createEditor(KexiPropertyEditorItem *i, const QRect &geometry);
+		void 	resizeEvent(QResizeEvent *ev);
 
 	private:
 		KexiPropertySubEditor	*m_currentEditor;
 		KexiPropertyEditorItem	*m_editItem;
+		KexiPropertyEditorItem	*m_topItem;
 		bool 			m_returnToAccept;
 		KexiPropertyBuffer	*m_buffer;
-		KPushButton		*m_defaults;
+		KPushButton		*m_defaults; // "Revert to defaults" button
 };
 
 #endif

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,8 +33,8 @@ typedef QDict<KexiPropertyEditorItem> ChildDict;
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 {
 	public:
-		KexiPropertyEditorItem(KListView *parent, KexiProperty *property);
 		KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property);
+		KexiPropertyEditorItem(KListView *parent, const QString &text);
 		~KexiPropertyEditorItem();
 
 		const QString	name() { return m_property->name(); }
@@ -54,6 +55,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 
 	protected:
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+		virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
+		virtual void setup();
 
 	private:
 		QVariant	m_value;

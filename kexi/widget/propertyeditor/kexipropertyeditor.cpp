@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,9 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qstrlist.h>
-#include <qlineedit.h>
 #include <qheader.h>
+#include <qevent.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,6 +45,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, con
 
 	m_currentEditor = 0;
 	m_buffer = 0;
+	m_topItem = 0;
 	m_returnToAccept = returnToAccept;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
@@ -54,12 +55,10 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, con
 	m_defaults->setPixmap(SmallIcon("reload"));
 	m_defaults->hide();
 	connect(m_defaults, SIGNAL(clicked()), this, SLOT(resetItem()));
-	
-	QColorGroup cg = this->colorGroup();
-//	setAlternateBackground(cg.highlight().light(120));
+
 	setFullWidth(true);
-	setRootIsDecorated(true);
 	setShowSortIndicator(true);
+	setItemMargin(3);
 }
 
 
@@ -187,9 +186,9 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 		m_editItem->setValue(value);
 		if(m_buffer)
 		{
-		if(!m_editItem->parent())
+		if(m_editItem->depth()==1)
 			m_buffer->changeProperty(m_editItem->name().latin1(), value);
-		else
+		else if(m_editItem->depth()==2)
 		{
 			KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
 			m_buffer->changeProperty(parent->name().latin1(), parent->getComposedValue());
@@ -210,7 +209,7 @@ KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor *editor)
 	if(m_currentEditor)
 	{
 		m_currentEditor->hide();
-		m_currentEditor->setFocusPolicy(QWidget::NoFocus);
+		m_currentEditor->clearFocus();
 	}
 }
 
@@ -267,9 +266,14 @@ KexiPropertyEditor::fill()
 
 	KexiPropertyBuffer::Iterator it;
 	
+	if(!m_topItem)
+	{
+	m_topItem = new KexiPropertyEditorItem(this,"Top Item");
+	}
+	
 	for(it = m_buffer->begin(); it != m_buffer->end(); ++it)
 	{
-		new KexiPropertyEditorItem(this, &(it.data()) );
+		new KexiPropertyEditorItem(m_topItem, &(it.data()) );
 	}
 }
 
@@ -285,6 +289,20 @@ KexiPropertyEditor::resetItem()
 	}
 }
 
+void
+KexiPropertyEditor::resizeEvent(QResizeEvent *ev)
+{
+	KListView::resizeEvent(ev);
+	if(m_defaults->isVisible())
+	{
+		QRect r = itemRect(m_editItem);
+		QPoint p = viewport()->mapTo(this, QPoint(r.x() + r.width() - m_defaults->width(), r.y()));
+		m_defaults->move(p.x(), p.y());
+		if(m_currentEditor)
+			m_currentEditor->resize(r.width() - m_defaults->width(), m_currentEditor->y());
+	}
+	
+}
 
 KexiPropertyEditor::~KexiPropertyEditor()
 {
