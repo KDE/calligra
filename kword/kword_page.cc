@@ -53,6 +53,7 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   setMouseTracking(true);
 
   inKeyEvent = false;
+  recalcAll = false;
 
   recalcText();
 //   debug("recalc text");
@@ -399,7 +400,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 	{
 	  if (p->getPrev()) p = p->getPrev();
 	  paintfc->setFrameSet(i + 1);
-	  paintfc->init(p,painter,true,false);
+	  paintfc->init(p,painter,true,recalcAll);
 
 	  bool bend = false;
 	  while (!bend)
@@ -700,7 +701,9 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	scrollToCursor(*fc);
 
+	buffer.fill(white);
 	repaint(false);
+
 	// HACK
 	kbdc.auto_repeat_mode = repeat;
 	XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);

@@ -1610,7 +1610,8 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
 
   reorganize();
 
-  paperWidget->setRuler2Frame(0,0);
+  if (doc->getProcessingType() == KWordDocument_impl::DTP)
+    paperWidget->setRuler2Frame(0,0);
 
   // HACK
   if (doc->getNumViews() == 1)

@@ -76,13 +76,13 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
     {
       parag = _parag;
       ptY = parag->getPTYStart();
-      if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
-	ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
+//       if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
+// 	ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
   
       lineStartPos = 0;
       frame = parag->getStartFrame();
       page = parag->getStartPage();
-	
+      
       makeLineLayout( _painter );
     }
 }
@@ -110,6 +110,8 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     parag->setStartFrame( frame );
     parag->setEndFrame( frame );
     // Vertical position ...
+    if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
+      ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
     parag->setPTYStart( ptY );
 
     if (_updateCounters)
@@ -132,8 +134,6 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     // apply( parag->getParagLayout()->getFormat() );
         
     // Calculate everything about the line we are in.
-    if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
-      ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
     makeLineLayout( _painter );
 }
 

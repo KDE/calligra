@@ -90,11 +90,14 @@ public:
   void setFirstLineIndent(float _first)
     { fc->getParag()->getParagLayout()->setMMFirstLineLeftIndent(static_cast<unsigned int>(_first)); recalcCursor(); }
   void setSpaceBeforeParag(float _before)
-    { fc->getParag()->getParagLayout()->setMMParagHeadOffset(static_cast<unsigned int>(_before)); recalcCursor(); }
+    { fc->getParag()->getParagLayout()->setMMParagHeadOffset(static_cast<unsigned int>(_before));
+    recalcAll = true; recalcCursor(); recalcAll = false; }
   void setSpaceAfterParag(float _after)
-    { fc->getParag()->getParagLayout()->setMMParagFootOffset(static_cast<unsigned int>(_after)); recalcCursor(); }
+    { fc->getParag()->getParagLayout()->setMMParagFootOffset(static_cast<unsigned int>(_after));
+    recalcAll = true; recalcCursor(); recalcAll = false; }
   void setLineSpacing(unsigned int _spacing)
-    { fc->getParag()->getParagLayout()->setPTLineSpacing(_spacing); recalcCursor(); }
+    { fc->getParag()->getParagLayout()->setPTLineSpacing(_spacing);
+    recalcAll = true; recalcCursor(); recalcAll = false; }
 
   void setParagLeftBorder(KWParagLayout::Border _brd)
     { fc->getParag()->getParagLayout()->setLeftBorder(_brd); recalcCursor(); }
@@ -205,6 +208,7 @@ protected:
   
   bool mousePressed;
   bool inKeyEvent;
+  bool recalcAll;
   
 };
 
