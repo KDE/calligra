@@ -34,7 +34,7 @@ KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,int __c,QFont __
   lFont->resize(lFont->sizeHint());
   grid->addWidget(lFont,0,0);
 
-  fontCombo = new QComboBox(false,this);
+  fontCombo = new QComboBox(true,this);
   fontCombo->insertStrList(&fontList);
   fontCombo->resize(fontCombo->sizeHint());
   fontList.find(_font.family());
