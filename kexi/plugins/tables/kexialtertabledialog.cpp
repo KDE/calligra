@@ -85,19 +85,19 @@ void KexiAlterTableDialog::init()
 		data->append(item);
 
 		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
-		buff->insert("pkey", KexiProperty(i18n("Primary Key"), QVariant(field->isPrimaryKey(), 4)));
+		buff->insert("pkey", KexiProperty("pkey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
 		int len = field->length();
 		if(len == 0)
 			len = field->precision();
 
-		buff->insert("len", KexiProperty(i18n("Length"), QVariant(200)));
+		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
 		m_constraints.insert(i, buff);
 	}
 
 	for (int i=m_table->fieldCount(); i<100; i++) {
 		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
-		buff->insert("pkey", KexiProperty(i18n("Primary Key"), QVariant(false, 4)));
-		buff->insert("len", KexiProperty(i18n("Length"), QVariant(200)));
+		buff->insert("pkey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
+		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
 		m_constraints.insert(i, buff);
 		KexiTableItem *item = new KexiTableItem(3);
 		data->append(item);
@@ -209,7 +209,7 @@ bool KexiAlterTableDialog::beforeSwitchTo(int)
 		mainWin()->project()->dbConnection()->dropTable(m_table->name());
 		mainWin()->project()->dbConnection()->createTable(nt);
 	}
-	else
+/*	else
 	{
 		KexiDB::Cursor *cursor = mainWin()->project()->dbConnection()->executeQuery(*s, KexiDB::Cursor::Buffered);
 		mainWin()->project()->dbConnection()->dropTable(m_table->name());
@@ -219,7 +219,7 @@ bool KexiAlterTableDialog::beforeSwitchTo(int)
 			
 		}
 		mainWin()->project()->dbConnection()->deleteCursor(cursor);
-	}
+	}*/
 
 	return true;
 }

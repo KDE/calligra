@@ -31,6 +31,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 {
 	public:
 		KexiProperty(const QString &name, QVariant value);
+		KexiProperty(const QString &name, QVariant value, const QString &desc);
 		KexiProperty(const QString &name, QVariant value, const QStringList &list);
 		KexiProperty(const KexiProperty &property);
 		//KexiProperty(const QString &name, QVariant value, QStringList *list);
@@ -41,6 +42,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 
 		QString		name() { return m_name; }
 		QVariant	value() { return m_value; }
+		QString		desc() { return m_desc; }
 		QVariant::Type  type();
 		QStringList*	list() { return m_list;}
 
@@ -48,6 +50,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 
 	private:
 		QString		m_name;
+		QString		m_desc;
 		QVariant	m_value;
 		QStringList	*m_list;
 };

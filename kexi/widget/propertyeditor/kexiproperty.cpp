@@ -28,6 +28,8 @@ KexiProperty::KexiProperty(const QString &name, QVariant value)
 	m_name = name;
 	m_value = value;
 	m_list = 0;
+	m_desc = name;
+	kdDebug() << "KexiProperty::KexiProperty(): standard property (" << m_desc << ")" << endl;
 }
 
 KexiProperty::KexiProperty(const QString &name, QVariant value, const QStringList &list)
@@ -35,7 +37,17 @@ KexiProperty::KexiProperty(const QString &name, QVariant value, const QStringLis
 	m_name = name;
 	m_value = value;
 	m_list = new QStringList(list);
+	m_desc = name;
 	kdDebug() << "creating stringlist property" << endl;
+}
+
+KexiProperty::KexiProperty(const QString &name, QVariant value, const QString &desc)
+{
+	m_name = name;
+	m_value = value;
+	m_desc = desc;
+	m_list = 0;
+	kdDebug() << "KexiProperty::KexiProperty(): labeled property (" << m_desc << ")" << endl;
 }
 
 /*KexiProperty::KexiProperty(const QString &name, QVariant value, QStringList *list)
@@ -68,6 +80,7 @@ KexiProperty::operator=(const KexiProperty &property)
 	
 	m_name = property.m_name;
 	m_value = property.m_value;
+	m_desc = property.m_desc;
 
 	if(property.m_list)
 		m_list = new QStringList(*(property.m_list));
@@ -84,6 +97,7 @@ QVariant::Type  KexiProperty::type()
 	else
 		return m_value.type();
 }
+
 
 KexiProperty::~KexiProperty()
 {

@@ -32,7 +32,7 @@
 #include "kexipropertyeditoritem.h"
 
 KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property)
- : KListViewItem(parent, property->name(), format(property->value()))
+ : KListViewItem(parent, property->desc(), format(property->value()))
 {
 	m_value = property->value();
 	m_oldvalue = m_value;
@@ -197,7 +197,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 		if(modified())
 			f.setBold(true);
 		p->setFont(f);
-		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, m_property->name());
+		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, text(0));
 		p->restore();
 		
 		p->setPen(cg.background());
