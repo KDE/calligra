@@ -150,7 +150,7 @@
 </ToolBar>
 <ToolBar name="mathToolBar"><Text>Math</Text>
  <Action name="autoSum"/>
- <Action name="function"/>
+ <Action name="insertFormula"/>
  <Action name="formulaSelection"/>
 </ToolBar>
 <ToolBar name="formulaToolBar"><Text>Formula</Text>

@@ -663,3 +663,8 @@ qdom remove all '\n'
 <jpmartin@iroise.com> thanks
 -Now commentLabel works but I can't reload comment
 bug in qdom (qdom removes '\n')
+
+2000-06-20-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Remove a duplicate function (funct() and insertFunction())
+same think

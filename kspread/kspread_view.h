@@ -216,7 +216,6 @@ public slots:
     void sortInc();
     void sortDec();
     void layoutDlg();
-    void funct();
     void formulaPower();
     void formulaSubscript();
     void formulaParentheses();
@@ -428,7 +427,6 @@ private:
     KAction* m_sortInc;
     KSelectColorAction* m_textColor;
     KSelectColorAction* m_bgColor;
-    KAction* m_function;
     KAction* m_cellLayout;
     KAction* m_hideTable;
     KAction* m_showTable;

@@ -347,7 +347,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 	     this, SLOT( formulaSelection( const QString& ) ) );
 
     // Insert menu
-    (void) new KAction( i18n("Formula..."), "sum", 0, this, SLOT( insertFormula() ),
+    (void) new KAction( i18n("Formula..."), "funct", 0, this, SLOT( insertFormula() ),
                         actionCollection(), "insertFormula" );
     (void) new KAction( i18n("Series..."),"series", 0, this, SLOT( series() ), actionCollection(), "series" );
     (void) new KAction( i18n("Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
@@ -365,7 +365,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 			       actionCollection(), "textColor" );
     m_bgColor = new KSelectColorAction( i18n("Background color"), KColorAction::BackgroundColor, 0, this, SLOT( changeBackgroundColor() ),
 			       actionCollection(), "backgroundColor" );
-    m_function = new KAction( i18n("Function"), "funct", 0, this, SLOT( funct() ), actionCollection(), "function" );
     m_borderLeft = new KAction( i18n("Border left"), "border_left", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
     m_borderRight = new KAction( i18n("Border Right"), "border_right", 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
     m_borderTop = new KAction( i18n("Border Top"), "border_top", 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );
@@ -1152,6 +1151,8 @@ void KSpreadView::verticalText(bool b)
 
 void KSpreadView::insertFormula()
 {
+  if ( m_pTable == 0L )
+	return;
   KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor" );
   dlg->show();
   // Is the dialog deleted when it's closed ? (David)
@@ -1289,15 +1290,6 @@ void KSpreadView::sortDec()
 	activeTable()->sortByColumn( r.left(),KSpreadTable::Decrease);
     }	
 
-}
-
-void KSpreadView::funct()
-{
-    if ( m_pTable == 0L )
-	return;
-
-    KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor" );
-    dlg->show();
 }
 
 void KSpreadView::reloadScripts()
