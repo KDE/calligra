@@ -33,13 +33,13 @@
 #include <kgenericfactory.h>
 
 #include <koGlobal.h>
+#include <koFilterChain.h>
 
 #include "ImportHelpers.h"
 #include "ImportFormatting.h"
 #include "ImportStyle.h"
 
 #include "abiwordimport.h"
-#include "abiwordimport.moc"
 
 typedef KGenericFactory<ABIWORDImport, KoFilter> ABIWORDImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory( "kwordabiwordimport" ) );
@@ -242,7 +242,7 @@ bool StartElementField(StackItem* stackItem, StackItem* stackCurrent, const QXml
     return true;
 }
 
-bool charactersElementField (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch)
+bool charactersElementField (StackItem* /*stackItem*/, QDomDocument& /*mainDocument*/, const QString & /*ch*/)
 {
 // TODO
     return true;
@@ -261,7 +261,7 @@ bool EndElementField (StackItem* stackItem, StackItem* stackCurrent)
 }
 
 // <s> (style)
-static bool StartElementS(StackItem* stackItem, StackItem* stackCurrent,
+static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
     const QXmlAttributes& attributes, StyleDataMap& styleDataMap)
 {
     // We do not assume when we are called.
@@ -294,7 +294,7 @@ static bool StartElementS(StackItem* stackItem, StackItem* stackCurrent,
 // <br> (forced line break)
 // <cbr> (forced column break, not supported)
 // <pbr> (forced page break)
-static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
+static bool StartElementBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
                            QDomDocument& mainDocument,
                            QDomElement& mainFramesetElement, const bool pageBreak)
 // pageBreak:
@@ -857,16 +857,14 @@ bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
     }
 }
 
-ABIWORDImport::ABIWORDImport(KoFilter *parent, const char *name, const QStringList &) :
-                     KoFilter(parent, name) {
+ABIWORDImport::ABIWORDImport(KoFilter */*parent*/, const char */*name*/, const QStringList &) :
+                     KoFilter() {
 }
 
-bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
-                               const QString& from, const QString& to,
-                               const QString &)
+KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const QCString& to )
 {
     if ((to != "application/x-kword") || (from != "application/x-abiword"))
-        return false;
+        return KoFilter::NotImplemented;
 
     kdDebug(30506)<<"AbiWord to KWord Import filter"<<endl;
 
@@ -925,6 +923,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     //Find the last extension
     QString strExt;
+    QString fileIn = m_chain->inputFile();
     const int result=fileIn.findRev('.');
     if (result>=0)
     {
@@ -960,7 +959,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     {
         kdError(30506) << "Cannot open file! Aborting!" << endl;
         delete in;
-        return false;
+        return KoFilter::FileNotFound;
     }
 
     QXmlInputSource source(in); // Read the file
@@ -972,23 +971,21 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
         kdError(30506) << "Import (COMPRESSED): Parsing unsuccessful. Aborting!" << endl;
         // TODO: try to give line and column number like the QDom parser does.
         delete in;
-        return false;
+        return KoFilter::StupidError;
     }
     delete in;
-    
-    KoStore out=KoStore(fileOut, KoStore::Write);
-    if(!out.open("root"))
+
+    KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
+    if(!out)
     {
         kdError(30506) << "AbiWord Import unable to open output file!" << endl;
-        out.close();
-        return false;
+        return KoFilter::StorageCreationError;
     }
 
     //Write the document!
     QCString strOut=qDomDocumentOut.toCString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
-    out.write(strOut,strOut.length());
-    out.close();
+    out->writeBlock(strOut,strOut.length());
 
 #if 1
     kdDebug(30506) << qDomDocumentOut.toString();
@@ -996,5 +993,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     kdDebug(30506) << "Now importing to KWord!" << endl;
 
-    return true;
+    return KoFilter::OK;
 }
+
+#include "abiwordimport.moc"

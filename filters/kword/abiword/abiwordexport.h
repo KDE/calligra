@@ -35,11 +35,8 @@
 
 #include <qstring.h>
 #include <qcstring.h>
-#include <qfile.h>
-#include <qobject.h>
 
 #include <koFilter.h>
-#include <koStore.h>
 
 
 class ABIWORDExport : public KoFilter {
@@ -49,9 +46,7 @@ class ABIWORDExport : public KoFilter {
 public:
     ABIWORDExport(KoFilter *parent, const char *name, const QStringList &);
     virtual ~ABIWORDExport() {}
-    /** filtering :) */
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config=QString::null);
+
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 };
 #endif // ABIWORDEXPORT_H

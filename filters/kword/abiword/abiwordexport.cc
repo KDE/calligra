@@ -43,6 +43,7 @@
 #include <kgenericfactory.h>
 
 #include <koGlobal.h>
+#include <koFilterChain.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
@@ -204,7 +205,7 @@ bool AbiWordWorker::doOpenDocument(void)
 bool AbiWordWorker::doCloseDocument(void)
 {
     // We need to create all <data> elements here
-    
+
     if (m_kwordLeader)
     {
         *m_streamOut << "<data>\n";
@@ -396,7 +397,7 @@ bool AbiWordWorker::makeImage(const FrameAnchor& anchor)
     // PROVISORY
     kdDebug(30506) << "New image: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key << endl;
-        
+
     *m_streamOut << "<image dataid=\"" << anchor.picture.key
         << "\"/>"; // NO end of line!
         // TODO: props for image!
@@ -595,7 +596,7 @@ bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& l
 bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
 {
     *m_streamOut << "<s";
-    
+
     // TODO: cook the style name to the standard style names in AbiWord
     *m_streamOut << " name=\"" << EscapeXmlText(layout.styleName,true,true) << "\"";
 
@@ -620,9 +621,9 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
     //TODO: other layout things
     // TODO/FIXME: what if layout->abiprops might is empty!
     *m_streamOut << " props=\"" << abiprops << "\"";
-    
+
     *m_streamOut << "/>\n";
-    
+
     return true;
 }
 
@@ -778,19 +779,15 @@ bool AbiWordWorker::doCloseHead(void)
     return true;
 }
 
-ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name, const QStringList &) :
-                     KoFilter(parent, name) {
+ABIWORDExport::ABIWORDExport(KoFilter */*parent*/, const char */*name*/, const QStringList &) :
+                     KoFilter() {
 }
 
-bool ABIWORDExport::filter ( const QString  &filenameIn,
-                             const QString  &filenameOut,
-                             const QString  &from,
-                             const QString  &to,
-                             const QString  &param )
+KoFilter::ConversionStatus ABIWORDExport::convert( const QCString& from, const QCString& to )
 {
     if ( to != "application/x-abiword" || from != "application/x-kword" )
     {
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     AbiWordWorker* worker=new AbiWordWorker();
@@ -798,7 +795,7 @@ bool ABIWORDExport::filter ( const QString  &filenameIn,
     if (!worker)
     {
         kdError(30506) << "Cannot create Worker! Aborting!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
     KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
@@ -807,13 +804,18 @@ bool ABIWORDExport::filter ( const QString  &filenameIn,
     {
         kdError(30506) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
-        return false;
+        return KoFilter::StupidError;
     }
 
-    bool flag=leader->filter(filenameIn,filenameOut,from,to,param);
+    QString inputFile = m_chain->inputFile();
+    QString outputFile = m_chain->outputFile();
+    bool flag=leader->filter(inputFile,outputFile,from,to,"");
 
     delete leader;
     delete worker;
 
-    return flag;
+    if ( flag )
+        return KoFilter::OK;
+    else
+        return KoFilter::StupidError;
 }
