@@ -18,8 +18,8 @@
 */
 
 #include <qprinter.h>
-#include "kdiagramm_doc.h"
-#include "kdiagramm_shell.h"
+#include "kchart_doc.h"
+#include "kchart_shell.h"
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -555,4 +555,4 @@ KDiagrammDoc::~KDiagrammDoc()
 {
 }
 
-#include "kdiagramm_doc.moc"
+#include "kchart_doc.moc"

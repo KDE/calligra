@@ -18,9 +18,9 @@
 */
 
 #include <qprinter.h>
-#include "kdiagramm_shell.h"
-#include "kdiagramm_doc.h"
-#include "kdiagramm_view.h"
+#include "kchart_shell.h"
+#include "kchart_doc.h"
+#include "kchart_view.h"
 
 #include <koAboutDia.h>
 #include <kfiledialog.h>
@@ -355,5 +355,5 @@ KOffice::View_ptr KDiagrammShell::view()
   return KOffice::View::_duplicate( m_pView );
 }
 
-#include "kdiagramm_shell.moc"
+#include "kchart_shell.moc"
 

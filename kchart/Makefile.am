@@ -7,10 +7,10 @@ LDADD = ../lib/kofficeui/libkofficeui.la
 
 ####### Files
 
-bin_PROGRAMS = kdiagramm
+bin_PROGRAMS = kchart
 
-kdiagramm_SOURCES = kdiagramm.idl kdiagramm_main.cc kdiagramm_shell.cc \
-			kdiagramm_doc.cc kdiagramm_view.cc koDiagramm.cc chart.idl \
+kchart_SOURCES = kchart.idl kchart_main.cc kchart_shell.cc \
+			kchart_doc.cc kchart_view.cc koDiagramm.cc chart.idl \
 			sheet.cc table.cc parser.cc sheetdlg.cc KChartAreaPainter.cpp \
 			KChartAxesPainter.cpp KChartBarsPainter.cpp KChartLinesPainter.cpp\
 			KChartLinesPointsPainter.cpp KChartPainter.cpp \
@@ -22,8 +22,8 @@ kdiagramm_SOURCES = kdiagramm.idl kdiagramm_main.cc kdiagramm_shell.cc \
 			KoDiagrammPointsConfigDialog.cpp KoDiagrammConfigDialog.cpp \
 			KoDiagrammBarConfigPage.cpp KoDiagrammGeometryConfigPage.cpp
 
-noinst_HEADERS =	kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
-					kdiagramm.h kdiagramm_view.h chart.h \
+noinst_HEADERS =	kchart_main.h kchart_shell.h kchart_doc.h \
+					kchart.h kchart_view.h chart.h \
 					sheet.h table.h parser.h sheetdlg.h KChartAreaPainter.h \
 					KChartAxesPainter.h KChartBarsPainter.h \
 					KChartLinesPainter.h KChartLinesPointsPainter.h \
@@ -43,22 +43,22 @@ noinst_HEADERS =	kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
 
 chart_IDLDIR = $(interfacedir)
 
-METASOURCES = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
-	kdiagramm_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc \
+METASOURCES = kchart_main.moc kchart_shell.moc kchart_doc.moc \
+	kchart_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc \
 	KoDiagrammColorConfigPage.moc KoDiagrammBarConfigDialog.moc \
 	KoDiagrammAreaConfigDialog.moc KoDiagrammPieConfigDialog.moc \
 	KoDiagrammLinesConfigDialog.moc KoDiagrammLinesPointsConfigDialog.moc \
 	KoDiagrammPointsConfigDialog.moc KoDiagrammConfigDialog.moc \
 	KoDiagrammBarConfigPage.moc KoDiagrammGeometryConfigPage.moc
 
-noinst_HEADERS = kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
-	         kdiagramm.h kdiagramm_view.h chart.h \
+noinst_HEADERS = kchart_main.h kchart_shell.h kchart_doc.h \
+	         kchart.h kchart_view.h chart.h \
 		 sheet.h table.h parser.h sheetdlg.h
 
-idl_DATA = kdiagramm.idl
-kdiagramm.h : $(top_builddir)/lib/kofficecore/koffice.idl
+idl_DATA = kchart.idl
+kchart.h : $(top_builddir)/lib/kofficecore/koffice.idl
 
-kdelnk_DATA = kdiagramm.desktop
+kdelnk_DATA = kchart.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
 ####### Implicit rules
@@ -68,5 +68,5 @@ kdelnkdir = $(kde_appsdir)/KOffice
 IDL_FLAGS = --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kdiagramm.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kchart.pot
 

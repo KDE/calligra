@@ -17,44 +17,28 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#include <qprinter.h>
-#include "kdiagramm_main.h"
-#include <koFactory.h>
-#include <koDocument.h>
+#ifndef __kdiagramm_main_h__
+#define __kdiagramm_main_h__
+
 #include <koApplication.h>
-#include <koQueryTypes.h>
-#include <opAutoLoader.h>
-#include "kdiagramm_shell.h"
-#include "kdiagramm_doc.h"
-#include "kdiagramm.h"
 
-// DEBUG
-#include <iostream>
+#include "kchart_doc.h"
+#include "kchart_shell.h"
 
-KOFFICE_DOCUMENT_FACTORY( KDiagrammDoc, KDiagrammFactory, KDiagramm::DocumentFactory_skel )
-typedef OPAutoLoader<KDiagrammFactory> KDiagrammAutoLoader;
+class KDiagrammShell;
 
-KDiagrammApp::KDiagrammApp( int &argc, char** argv ) : 
-  KoApplication( argc, argv, "kdiagramm" )
+class KDiagrammApp : public KoApplication
 {
-  //  m_pShell = 0L;
-}
+  Q_OBJECT
+public:
+  KDiagrammApp( int &argc, char** argv );
+  ~KDiagrammApp();
+  
+  class KoMainWindow* createNewShell() {return new KDiagrammShell;};
+  /*
+protected:
+  KDiagrammShell *m_pShell;
+  */
+};
 
-KDiagrammApp::~KDiagrammApp()
-{
-}
-
-int main( int argc, char **argv )
-{
-  KDiagrammAutoLoader loader( "IDL:KDiagramm/DocumentFactory:1.0", "KDiagramm" );
-
-  KDiagrammApp app( argc, argv );
-
-  app.exec();
-
-  cerr << "============ BACK from event loop ===========" << endl;
-
-  return 0;
-}
-
-#include "kdiagramm_main.moc"
+#endif

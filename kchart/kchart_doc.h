@@ -36,8 +36,8 @@ class KDiagrammDoc;
 #include <qprinter.h>
 
 
-#include "kdiagramm.h"
-#include "kdiagramm_view.h"
+#include "kchart.h"
+#include "kchart_view.h"
 #include "koDiagramm.h"
 #include "chart.h"
 

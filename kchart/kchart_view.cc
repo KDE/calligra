@@ -1,5 +1,5 @@
 #include <qprinter.h>
-#include "kdiagramm_view.h"
+#include "kchart_view.h"
 
 #include <kapp.h>
 #include <qmsgbox.h>
@@ -15,8 +15,8 @@
 #include <koPartSelectDia.h>
 #include <koAboutDia.h>
 
-#include "kdiagramm_doc.h"
-#include "kdiagramm_shell.h"
+#include "kchart_doc.h"
+#include "kchart_shell.h"
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -268,4 +268,4 @@ void KDiagrammView::slotUpdateView()
   update();
 }
 
-#include "kdiagramm_view.moc"
+#include "kchart_view.moc"

@@ -37,7 +37,7 @@ class KDiagrammShell;
 #include <qbutton.h>
 #include <qpoint.h>
 
-#include "kdiagramm.h"
+#include "kchart.h"
 #include <koDiagramm.h>
 
 /**
