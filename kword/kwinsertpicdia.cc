@@ -56,6 +56,8 @@ public:
         repaint(false);
     }
 
+    QSize pixmapSize() const { return m_pixmap.size(); }
+
     void setClipart( const QString & filename )
     {
         m_type = IPD_CLIPART;
@@ -168,6 +170,12 @@ QString KWInsertPicDia::selectPicture( KFileDialog & fd )
     if (!KIO::NetAccess::download( url, chosen ))
         return QString::null;
     return chosen;
+}
+
+QSize KWInsertPicDia::pixmapSize() const
+{
+    ASSERT( m_type == IPD_IMAGE );
+    return m_preview->pixmapSize();
 }
 
 #include "kwinsertpicdia.moc"

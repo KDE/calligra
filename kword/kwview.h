@@ -284,7 +284,7 @@ protected:
 
     void createExpressionActions( KActionMenu * parentMenu,const QString& filename );
 
-    void insertPicture( const QString &filename, bool isClipart, bool makeInline );
+    void insertPicture( const QString &filename, bool isClipart, bool makeInline, QSize pixmapSize );
 
     KWTextFrameSetEdit *currentTextEdit();
 

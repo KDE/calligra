@@ -415,13 +415,11 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
         m_insRect.setCoords( x, y, 0, 0 );
         m_deleteMovingRect = false;
 
-        if ( !m_isClipart )
+        if ( !m_isClipart && !m_pixmapSize.isEmpty() )
         {
-            // TODO pass the size from the preview instead of loading again!
-            QPixmap pix( m_pictureFilename );
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-            uint width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
-            uint height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            uint width = qRound( (double)m_pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
+            uint height = qRound( (double)m_pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
             // Apply reasonable limits
             width = QMIN( width, m_doc->paperWidth() );
             height = QMIN( height, m_doc->paperHeight() );
@@ -1775,11 +1773,12 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
     }
 }
 
-void KWCanvas::insertPicture( const QString & filename, bool isClipart )
+void KWCanvas::insertPicture( const QString & filename, bool isClipart, QSize pixmapSize )
 {
     setMouseMode( MM_CREATE_PIX );
     m_pictureFilename = filename;
     m_isClipart = isClipart;
+    m_pixmapSize = pixmapSize;
 }
 
 void KWCanvas::insertPart()

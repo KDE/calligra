@@ -40,22 +40,25 @@ KWAnchor::~KWAnchor()
 
 void KWAnchor::move( int x, int y )
 {
-    kdDebug() << this << " KWAnchor::move " << x << "," << y
-              << " xpos=" << xpos << ", ypos=" << ypos
-              << endl;
-    if ( x != xpos || y != ypos )
+    // This test isn't enough. paragy may have changed. Or anything else
+    // It's up to moveFloatingFrame to check if it really moved.
+    //if ( x != xpos || y != ypos )
+
+    int paragy = paragraph()->rect().y();
+    xpos = x;
+    ypos = y;
+    kdDebug() << this << " KWAnchor::move " << x << "," << y << " paragy=" << paragy << endl;
+    KWTextFrameSet * fs = textDocument()->textFrameSet();
+    QPoint nPoint;
+    if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
     {
-        int paragy = paragraph()->rect().y();
-        xpos = x;
-        ypos = y;
-        KWTextFrameSet * fs = textDocument()->textFrameSet();
-        QPoint nPoint;
-        if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
-        {
-            //kdDebug(32001) << "KWAnchor::move moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
-            // Move the frame to position nPoint.
-            m_frameset->moveFloatingFrame( m_frameNum, nPoint );
-        } else kdDebug(32001) << "KWAnchor::move internalToNormal returned 0L ! paragy=" << paragy << endl;
+        //kdDebug(32001) << "KWAnchor::move moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
+        // Move the frame to position nPoint.
+        m_frameset->moveFloatingFrame( m_frameNum, nPoint );
+    } else
+    {
+        // This can happen if the page hasn't been created yet
+        kdDebug(32001) << "KWAnchor::move internalToNormal returned 0L for " << x << ", " << y+paragy << endl;
     }
 }
 

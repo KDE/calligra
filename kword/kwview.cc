@@ -360,6 +360,7 @@ void KWView::setupActions()
     connect( actionViewZoom, SIGNAL( activated( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
     actionViewZoom->setEditable(true);
+    actionViewZoom->setComboWidth( 50 );
     changeZoomMenu( );
 
     // -------------- Insert menu
@@ -1693,17 +1694,18 @@ void KWView::insertPicture()
     }
     KWInsertPicDia dia( this );
     if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
-        insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline() );
+        insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline(), dia.pixmapSize() );
     else
         setTool( KWCanvas::MM_EDIT );
 }
 
 void KWView::slotEmbedImage( const QString &filename )
 {
-    insertPicture( filename, false, false );
+    insertPicture( filename, false, false, QSize() );
 }
 
-void KWView::insertPicture( const QString &filename, bool isClipart, bool makeInline )
+void KWView::insertPicture( const QString &filename, bool isClipart,
+                            bool makeInline, QSize pixmapSize )
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit && makeInline )
@@ -1722,11 +1724,13 @@ void KWView::insertPicture( const QString &filename, bool isClipart, bool makeIn
         }
         else
         {
-            // New way:
-            QPixmap pix( filename );
+            // For an inline frame we _need_ to find out the size!
+            if ( pixmapSize.isEmpty() )
+                pixmapSize = QPixmap( filename ).size();
+
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-            width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
-            height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            width = qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
+            height = qRound( (double)pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
             // Apply reasonable limits
             width = QMIN( width, m_doc->paperWidth() - m_doc->leftBorder() - m_doc->rightBorder() - m_doc->zoomItX( 10 ) );
             height = QMIN( height, m_doc->paperHeight() - m_doc->topBorder() - m_doc->bottomBorder() - m_doc->zoomItY( 10 ) );
@@ -1745,7 +1749,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart, bool makeIn
     }
     else
     {
-        m_gui->canvasWidget()->insertPicture( filename, isClipart );
+        m_gui->canvasWidget()->insertPicture( filename, isClipart, pixmapSize );
     }
 }
 

@@ -38,6 +38,9 @@ public:
     int type() const { return m_type; }
     bool makeInline() const;
 
+    // For pixmaps only
+    QSize pixmapSize() const;
+
 protected slots:
     void slotChooseImage();
     void slotChooseClipart();

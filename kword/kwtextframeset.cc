@@ -51,7 +51,7 @@
 
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-//#define DEBUG_FORMAT_MORE
+#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
 
 //#define DEBUG_NTI
@@ -679,7 +679,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
             kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " h=" << h
                            << " breakEnd+2 [new value for yp]=" << breakEnd+2 << endl;
 #endif
-            yp = breakEnd + 1;
+            yp = breakEnd /*+ 1*/;
             return true;
         }
         else // Line-level breaking
@@ -715,10 +715,10 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
                             kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                                            << " BREAKING first line -> parag break" << endl;
 #endif
-                            yp = breakEnd + 1;
+                            yp = breakEnd /*+ 1*/;
                             return true;
                         }
-                        dy = breakEnd + 1 - y;
+                        dy = breakEnd /*+ 1*/ - y;
 #ifdef DEBUG_FLOW
                         kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                                        << " BREAKING at line " << line << " dy=" << dy << endl;
@@ -788,15 +788,6 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
 
             if ( check )
             {
-                //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
-
-                // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
-                breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
-
-                // Some people write a single paragraph over 3 frames! So we have to keep looking...
-                //if ( breaked )
-                //    break;
-
                 if ( hardFrameBreak && yp > totalHeight && yp < bottom && !parag->isMovedDown() )
                 {
                     // The paragraph wants a frame break before it, and is in the current frame
@@ -809,6 +800,16 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
 #endif
                     break;
                 }
+
+                //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
+
+                // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
+                breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
+
+                // Some people write a single paragraph over 3 frames! So we have to keep looking...
+                //if ( breaked )
+                //    break;
+
             }
             if ( yp+h < bottom )
                 break; // we've been past the parag, so stop here
@@ -1787,6 +1788,14 @@ void KWTextFrameSet::formatMore()
 
             if ( m_lastFormatted )
             {
+                // Reformat the last paragraph. If it's over the two pages, it will need
+                // the new page (e.g. for inline frames that need itn to work)
+                if ( m_lastFormatted->prev() )
+                {
+                    m_lastFormatted = m_lastFormatted->prev();
+                    m_lastFormatted->invalidate( 0 );
+                }
+
                 //interval = 0;
                 // not good enough, we need to keep formatting right now
                 formatMore(); // that, or a goto ?
@@ -3021,15 +3030,23 @@ void KWTextFrameSet::findPosition( const QPoint &nPoint, QTextParag * & parag, i
     }
 }
 
-void KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
+KCommand * KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
 {
     kdDebug() << "KWTextFrameSet::deleteAnchoredFrame anchor->index=" << anchor->index() << endl;
     ASSERT( anchor );
     QTextCursor c( textdoc );
     c.setParag( anchor->paragraph() );
     c.setIndex( anchor->index() );
-    KWTextFormat * currentFormat = 0L;//unused
-    doKeyboardAction( &c, currentFormat, ActionDelete );
+
+    //KWTextFormat * currentFormat = 0L;//unused
+    //doKeyboardAction( &c, currentFormat, ActionDelete );
+
+    textdoc->setSelectionStart( HighlightSelection, &c );
+    c.setIndex( anchor->index() + 1 );
+    textdoc->setSelectionEnd( HighlightSelection, &c );
+    KCommand *cmd = removeSelectedTextCommand( &c, HighlightSelection );
+    m_doc->repaintAllViews();
+    return cmd;
 }
 
 void KWTextFrameSet::highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas )

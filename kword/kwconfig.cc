@@ -233,6 +233,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QVBox *box, char 
       }
 
     double val = KWUnit::userValue( ptIndent, unit );
+    kdDebug() << "indent val=" << val << endl;
     indent = new KDoubleNumInput( val, tmpQGroupBox );
     indent->setRange(1, 50, 1);
     indent->setLabel(i18n("1 is a unit name", "Indent in %1").arg(unitText));
@@ -313,7 +314,7 @@ void configureInterfacePage::slotDefault()
     m_nbPagePerRow->setValue(4);
     KWDocument * doc = m_pView->kWordDocument();
     double newIndent = KWUnit::userValue( MM_TO_POINT( 10 ), doc->getUnit() );
-    indent->setValue( (int)newIndent );
+    indent->setValue( newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);
     autoSave->setValue(KoDocument::defaultAutoSave());
