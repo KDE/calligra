@@ -143,16 +143,17 @@ void KWImportStyleDia::loadFile()
 
             }
             initList();
+            if(m_styleList.count() == 0) {
+                KMessageBox::error( this,
+                                    i18n("File does not contain any styles, wrong version perhaps?"),
+                                    i18n("Import Style"));
+            }
+
         }
         else
         {
             KMessageBox::error( this,
                                 i18n("File is not a kword file!"),
-                                i18n("Import Style"));
-        }
-        if(m_styleList.count() == 0) {
-            KMessageBox::error( this,
-                                i18n("File does not contain any styles, wrong version perhaps?"),
                                 i18n("Import Style"));
         }
         store->close();
@@ -250,6 +251,12 @@ void KWImportFrameTableStyleDia::loadFile()
                 }
             }
             initList();
+            if(m_tableStyleList.count() == 0 && m_frameStyleList.count()==0) {
+            KMessageBox::error( this,
+                                i18n("File does not contain any styles, wrong version perhaps?"),
+                                i18n("Import Style"));
+            }
+
         }
         else
         {
@@ -258,11 +265,6 @@ void KWImportFrameTableStyleDia::loadFile()
                                 i18n("Import Style"));
         }
 
-        if(m_tableStyleList.count() == 0) {
-            KMessageBox::error( this,
-                                i18n("File does not contain any styles, wrong version perhaps?"),
-                                i18n("Import Style"));
-        }
         store->close();
     }
 
