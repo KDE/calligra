@@ -1153,7 +1153,8 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
   Paragraph properties not implemented in KWord:
     style:text-align-last
     style:justify-single-word
-    fo:background-color (bg color for a paragraph, unlike style:text-background-color)
+    fo:background-color (3.11.25, bg color for a paragraph, unlike style:text-background-color)
+    style:background-image (3.11.26)
     fo:widows
     fo:orphans
     fo:hyphenate
@@ -1179,8 +1180,7 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
 void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElement& object, bool isText )
 {
     double width = 100;
-    if ( object.hasAttribute( "svg:width" ) ) // fixed width
-    {
+    if ( object.hasAttribute( "svg:width" ) ) { // fixed width
         // TODO handle percentage (of enclosing table/frame/page)
         width = KoUnit::parseValue( object.attribute( "svg:width" ) );
     } else if ( object.hasAttribute( "fo:min-width" ) ) {
@@ -1191,8 +1191,7 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     }
     double height = 100;
     bool hasMinHeight = false;
-    if ( object.hasAttribute( "svg:height" ) ) // fixed height
-    {
+    if ( object.hasAttribute( "svg:height" ) ) { // fixed height
         // TODO handle percentage (of enclosing table/frame/page)
         height = KoUnit::parseValue( object.attribute( "svg:height" ) );
     } else if ( object.hasAttribute( "fo:min-height" ) ) {
@@ -1203,28 +1202,42 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     }
 
     int overflowBehavior;
-    if ( isText )
-    {
-        if ( m_styleStack.hasAttribute( "style:overflow-behavior" ) ) // OASIS extension
-        {
+    if ( isText ) {
+        if ( m_styleStack.hasAttribute( "style:overflow-behavior" ) ) { // OASIS extension
             overflowBehavior = Conversion::importOverflowBehavior( m_styleStack.attribute( "style:overflow-behavior" ) );
-        }
-        else
-        {
+        } else {
             // AutoCreateNewFrame not supported in OO-1.1. The presence of min-height tells if it's an auto-resized frame.
             overflowBehavior = hasMinHeight ? 0 /*AutoExtendFrame*/ : 2 /*Ignore, i.e. fixed size*/;
         }
     }
 
+    // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
+    double paddingLeft = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "left" ) );
+    double paddingRight = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "right" ) );
+    double paddingTop = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "top" ) );
+    double paddingBottom = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "bottom" ) );
+
+    // background color (3.11.25)
+    bool transparent = false;
+    QColor bgColor;
+    if ( m_styleStack.hasAttribute( "fo:background-color" ) ) {
+        QString color = m_styleStack.attribute( "fo:background-color" );
+        if ( color == "transparent" )
+            transparent = true;
+        else
+            bgColor.setNamedColor( color );
+    }
+
     // Available in the style: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color,
     // draw:textarea-vertical-align, draw:textarea-horizontal-align
-    // More generally: Anchor (not in kword), Background, Border, Padding, Shadow, Columns
+    // More generally: Anchor (not in kword), Border (3.11.27), Shadow (3.11.30), Columns
 
     // Not supported in KWord: fo:max-height  fo:max-width
-    //                         #### horizontal-pos horizontal-rel vertical-pos vertical-rel anchor-type
-    //                         All the above changes the placement!
 
-    // TODO margins (p98)
+    //  #### horizontal-pos horizontal-rel vertical-pos vertical-rel anchor-type
+    //  All the above changes the placement!
+    //  See 3.8 (p199) for details.
+
     // TODO draw:auto-grow-height  draw:auto-grow-width - hmm? I thought min-height meant auto-grow-height...
 
 
@@ -1243,9 +1256,38 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     frameElementOut.setAttribute("runaround", attribs.first );
     if ( !attribs.second.isEmpty() )
         frameElementOut.setAttribute("runaroundSide", attribs.second );
+    // ## runaroundGap is a problem. KWord has one value, OO has 4 (margins on all sides, see p98).
+    // => TODO, implement 4 values in KWord.
+
     // Not implemented in KWord: contour wrapping
     if ( isText )
         frameElementOut.setAttribute("autoCreateNewFrame", overflowBehavior);
+    // TODO newFrameBehavior (i.e. behavior on new page). Not in OO/OASIS, let's have our own attrib.
+    // TODO copy: ditto
+    // TODO sheetSide (not implemented in KWord, but in its DTD)
+
+    if ( paddingLeft != 0 )
+        frameElementOut.setAttribute( "bleftpt", paddingLeft );
+    if ( paddingRight != 0 )
+        frameElementOut.setAttribute( "brightpt", paddingRight );
+    if ( paddingTop != 0 )
+        frameElementOut.setAttribute( "btoppt", paddingTop );
+    if ( paddingBottom != 0 )
+        frameElementOut.setAttribute( "bbottompt", paddingBottom );
+
+    if ( transparent )
+        frameElementOut.setAttribute( "bkStyle", 0 );
+    else if ( bgColor.isValid() ) {
+        frameElementOut.setAttribute( "bkStyle", 1 );
+        // TODO the OO format doesn't support fill patterns (bkStyle)
+        // To implement this in an OO-like way, we'd need to
+        // 1) convert the Qt fill patterns to draw:hatch elements (in office:styles)
+        // 2) refer to those using draw:fill="hatch" draw:fill-hatch-name="..."
+        // (OASIS extension requested, 17/01/2004)
+        frameElementOut.setAttribute( "bkRed", bgColor.red() );
+        frameElementOut.setAttribute( "bkBlue", bgColor.blue() );
+        frameElementOut.setAttribute( "bkGreen", bgColor.green() );
+    }
 }
 
 QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& object)
