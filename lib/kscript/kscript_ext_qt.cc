@@ -139,7 +139,7 @@ void KS_Qt_Callback::slotDestroyed()
 
 void KS_Qt_Callback::emitSignal( const QValueList<KSValue::Ptr>& params, const char* name )
 {
-  QGuardedPtr<QObject> theSender = const_cast<QObject *>( sender() ); 
+  QGuardedPtr<QObject> theSender = const_cast<QObject *>( sender() );
   QValueList<Connection>::Iterator it =  m_connections.begin();
   while( it != m_connections.end() )
   {
@@ -262,7 +262,6 @@ bool KS_Qt_Object::destructor()
 	m_object = 0;
     }
 
-    qDebug( "WAH!" );
     // In the constructor there is an extra reference count.
     // That is dropped upon calling "destroy".
     if ( deref() )
@@ -279,7 +278,7 @@ KSValue::Ptr KS_Qt_Object::member( KSContext& context, const QString& name )
   //    context.setException( new KSException( "NullPointer", "QObject already dead" ) );
   //    return KSValue::Ptr( 0 );
   }
-   
+
   QMetaObject* meta = m_object->metaObject();
   ASSERT( meta );
   const QMetaProperty *property = meta->property( name, TRUE );
@@ -303,8 +302,8 @@ KSValue::Ptr KS_Qt_Object::member( KSContext& context, const QString& name )
 
   QVariant var = m_object->property( name );
   return unpack( context, var );
-  
-/* 
+
+/*
   KSValue::Ptr ptr;
   if ( name == "name" )
     ptr = new KSValue( QString( m_object->name() ) );
@@ -329,7 +328,7 @@ bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSV
     return KSValue::Ptr( 0 );
   */
   }
-  
+
   QMetaObject* meta = m_object->metaObject();
   ASSERT( meta );
   const QMetaProperty *property = meta->property( name, TRUE );
@@ -344,9 +343,9 @@ bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSV
     }
     return m_object->setProperty( name, var );
   }
-  
+
   return KSObject::setMember( context, name, v );
-/* 
+/*
   if ( name == "name" )
   {
     CHECKTYPE( context, v, StringType );
@@ -355,7 +354,7 @@ bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSV
   }
 
   return KSObject::setMember( context, name, v );
-*/  
+*/
 }
 
 bool KS_Qt_Object::pack( KSContext& context, QVariant& var, const KSValue::Ptr& v )
