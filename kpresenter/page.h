@@ -34,6 +34,7 @@
 #include <qpoint.h>
 
 #include <koQueryTrader.h>
+#include <koprinter.h>
 
 #include "global.h"
 #include "ktextedit.h"
