@@ -2697,7 +2697,8 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     noteTmpWriter.addAttribute( "style:adjustment", tmp );
 
-    //TODO width
+    noteTmpWriter.addAttributePt( "style:width", m_footNoteSeparatorLineWidth);
+
     tmp = QString( "%1%" ).arg( footNoteSeparatorLineLength() );
     noteTmpWriter.addAttribute( "style:rel-width", tmp );
     switch( m_footNoteSeparatorLineType )
