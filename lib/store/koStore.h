@@ -223,12 +223,12 @@ public:
    */
   bool extractFile( const QString &srcName, const QString &fileName );
 
+  //@{
   /// See QIODevice
   bool at( QIODevice::Offset pos );
-  /// See QIODevice
   QIODevice::Offset at() const;
-  /// See QIODevice
   bool atEnd() const;
+  //@}
 
   /**
    * Do not expand file and directory names
@@ -321,7 +321,7 @@ private:
   {
       NAMING_VERSION_2_1,
       NAMING_VERSION_2_2,
-      NAMING_VERSION_RAW  // Never expand file and directory names
+      NAMING_VERSION_RAW  ///< Never expand file and directory names
   } m_namingVersion;
 
   /**
@@ -358,8 +358,8 @@ protected:
   static const int s_area;
 
 private:
-  KoStore( const KoStore& store );  // don't copy
-  KoStore& operator=( const KoStore& store );  // don't assign
+  KoStore( const KoStore& store );  ///< don't copy
+  KoStore& operator=( const KoStore& store );  ///< don't assign
 
   class Private;
   Private * d;
