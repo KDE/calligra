@@ -32,14 +32,13 @@ class GraphiteView : public KoView {
     Q_OBJECT
 
 public:
-    GraphiteView(GraphitePart *part, QWidget *parent=0,
+    GraphiteView(GraphitePart *doc, QWidget *parent=0,
 		 const char *name=0);
     virtual ~GraphiteView();
 
     virtual QWidget *canvas() { return m_canvas; }
 
 protected:
-    //void paintEvent(QPaintEvent *ev);
     void resizeEvent(QResizeEvent *ev);
 
     virtual void updateReadWrite(bool readwrite);

@@ -18,9 +18,11 @@
 */
 
 #include <gcanvas.h>
+//#include <kdebug.h>
 
-GCanvas::GCanvas(QWidget *parent, const char *name) 
-    : QScrollView(parent, name, WNorthWestGravity) {
+GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
+    : QScrollView(reinterpret_cast<QWidget*>(view), "GCanvas", WNorthWestGravity),
+      m_view(view), m_doc(doc) {
 
     setFocusPolicy(QWidget::StrongFocus);
     viewport()->setFocusProxy(this);

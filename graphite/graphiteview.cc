@@ -28,13 +28,13 @@
 #include <graphiteview.h>
 
 
-GraphiteView::GraphiteView(GraphitePart *part, QWidget *parent,
-			   const char *name) : KoView(part, parent, name) {
+GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
+			   const char *name) : KoView(doc, parent, name) {
 
     setInstance(GraphiteFactory::global());
     setXMLFile("graphite.rc");
 
-    m_canvas=new GCanvas(this, "canvas");
+    m_canvas=new GCanvas(this, doc);
 }
 
 GraphiteView::~GraphiteView() {

@@ -23,27 +23,27 @@
 #define gcanvas_h
 
 #include <qscrollview.h>
-//#include <kdebug.h>
 
-//class KGObjectPool;
+class GraphiteView;
+class GraphitePart;
 
 
 class GCanvas : public QScrollView {
 
     Q_OBJECT
 public:
-    GCanvas(QWidget *parent, const char *name=0L);
+    GCanvas(GraphiteView *view, GraphitePart *doc);
     virtual ~GCanvas();
 
 protected:
-    // (TODO): I won't use viewportPaintEvent(), but
-    // drawContents which will call paintEverything
-    // in KoDocument...
-    // virtual void viewportPaintEvent(QPaintEvent *e);
+    //virtual void viewportPaintEvent(QPaintEvent *e);
     // virtual void viewportResizeEvent(QResizeEvent *e);
     // virtual void viewportMousePressEvent(QMouseEvent *e);
     // virtual void viewportMouseReleaseEvent(QMouseEvent *e);
     // virtual void viewportMouseDoubleClickEvent(QMouseEvent *e);
     // virtual void viewportMouseMoveEvent(QMouseEvent *e);
+private:
+    GraphiteView *m_view;
+    GraphitePart *m_doc;
 };
 #endif // gcanvas_h
