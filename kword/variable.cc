@@ -154,7 +154,7 @@ void KWVariable::resize()
     //kdDebug() << "Before KWVariable::resize text=" << txt << " width=" << width << endl;
 }
 
-void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const QFont & customItemFont, int offset )
+void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset )
 {
     KoTextFormat * f = static_cast<KoTextFormat *>(format());
     KoZoomHandler * zh = textDocument()->zoomHandler();
@@ -169,7 +169,7 @@ void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
     p->save();
     p->setPen( QPen( f->color() ) );
     if ( f->textBackgroundColor().isValid() )
-        p->fillRect(   x, y,  zh->layoutUnitToPixelX( width ), h,f->textBackgroundColor() );
+        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, f->textBackgroundColor() );
     if ( selected )
     {
         p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
@@ -181,7 +181,7 @@ void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
         p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
 
-    p->setFont( customItemFont );
+    //p->setFont( customItemFont ); // already done by the caller
     //kdDebug() << "KWVariable::draw bl=" << bl << << endl;
     p->drawText( x, y + bl + offset, text() );
     p->restore();

@@ -63,6 +63,7 @@
 //#define DEBUG_FORMATS
 //#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
+//#define DEBUG_CURSOR
 
 //#define DEBUG_DTI
 //#define DEBUG_ITD
@@ -429,12 +430,14 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     int lineY;
     // Cursor height, in pixels
     int cursorHeight = m_doc->layoutUnitToPixelY( topLeft.y(), cursor->parag()->lineHeightOfChar( cursor->index(), 0, &lineY ) );
-    //kdDebug() << "KWTextFrameSet::drawCursor topLeft=" << topLeft.x() << "," << topLeft.y()
-    //          << " x=" << cursor->x() << " y=" << lineY << endl;
     QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
                    topLeft.y() - cursor->totalOffsetY() + lineY );
-    //kdDebug() << "KWTextFrameSet::drawCursor iPoint=" << iPoint.x() << "," << iPoint.y()
-    //          << "   cursorHeight=" << cursorHeight << endl;
+#ifdef DEBUG_CURSOR
+    kdDebug() << "KWTextFrameSet::drawCursor topLeft=" << topLeft.x() << "," << topLeft.y()
+              << " x=" << cursor->x() << " y=" << lineY << endl;
+    kdDebug() << "KWTextFrameSet::drawCursor iPoint=" << iPoint.x() << "," << iPoint.y()
+              << "   cursorHeight=" << cursorHeight << endl;
+#endif
     KoPoint dPoint;
     KoPoint hintDPoint = frame->topLeft();
     if ( internalToDocumentWithHint( iPoint, dPoint, hintDPoint ) )
@@ -442,34 +445,43 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         QPoint vPoint = viewMode->normalToView( m_doc->zoomPoint( dPoint ) ); // from doc to view contents
         // from now on, iPoint will be in pixels
         iPoint = m_doc->layoutUnitToPixel( iPoint );
-        //kdDebug() << "     iPoint in pixels : " << iPoint.x() << "," << iPoint.y() << endl;
+#ifdef DEBUG_CURSOR
+        kdDebug() << "     iPoint in pixels : " << iPoint.x() << "," << iPoint.y() << endl;
+#endif
         int xadj = cursor->parag()->at( cursor->index() )->pixelxadj;
         iPoint.rx() += xadj;
         vPoint.rx() += xadj;
         // very small clipping around the cursor
         QRect clip( vPoint.x() - 5, vPoint.y(), 10, cursorHeight );
 
-        //kdDebug() << " clip(normal, before intersect)=" << DEBUGRECT(clip) << endl;
+#ifdef DEBUG_CURSOR
+        kdDebug() << " clip(view, before intersect)=" << DEBUGRECT(clip) << endl;
+#endif
 
-        clip &= normalFrameRect; // clip to frame
-        // kdDebug() << "KWTextFrameSet::drawCursor normalFrameRect=" << DEBUGRECT(normalFrameRect)
-        //          << " clip(normal, after intersect)=" << DEBUGRECT(clip) << endl;
-
-        QPoint cPoint = viewMode->normalToView( clip.topLeft() );     // from normal to view contents
-        clip.moveTopLeft( cPoint );
+        QRect viewFrameRect = viewMode->normalToView( normalFrameRect );
+        clip &= viewFrameRect; // clip to frame
+#ifdef DEBUG_CURSOR
+        kdDebug() << "KWTextFrameSet::drawCursor normalFrameRect=" << DEBUGRECT(normalFrameRect)
+                  << " clip(view, after intersect)=" << DEBUGRECT(clip) << endl;
+#endif
 
         QRegion reg = frameClipRegion( p, frame, clip, viewMode, true );
         if ( !reg.isEmpty() )
         {
+#ifdef DEBUG_CURSOR
+            // for debug only!
+            //p->fillRect( clip, QBrush( Qt::red ) );
+#endif
+
             bool wasChanged = cursor->parag()->hasChanged();
             cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
             p->save();
 
             p->setClipRegion( reg );
             // translate to qrt coords - after setting the clip region !
-            QRect viewFrameRect = viewMode->normalToView( normalFrameRect );
             // see internalToNormalWithHint
             p->translate( viewFrameRect.left(), viewFrameRect.top() - frame->internalY() );
+            p->setBrushOrigin( p->brushOrigin().x() + viewFrameRect.left(), p->brushOrigin().y() + viewFrameRect.top() - frame->internalY() );
 
             // The settings come from this frame
             KWFrame * settings = settingsFrame( frame );
@@ -1012,7 +1024,7 @@ int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
         }
         else if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
         {
-            QTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
+            KoTextFormat* lastFormat = static_cast<KoTextFormat *>( parag->at( parag->length() - 1 )->format() );
             parag->setWidth( parag->rect().width() + lastFormat->width('x') );
         }
     }
@@ -2681,7 +2693,9 @@ void KWTextFrameSetEdit::selectAll()
 
 void KWTextFrameSetEdit::drawCursor( bool visible )
 {
-    //kdDebug() << "KWTextFrameSetEdit::drawCursor " << visible << endl;
+#ifdef DEBUG_CURSOR
+    kdDebug() << "KWTextFrameSetEdit::drawCursor " << visible << endl;
+#endif
     KoTextView::drawCursor( visible );
     if ( !cursor()->parag() )
         return;
@@ -2698,7 +2712,6 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
     p.translate( -m_canvas->contentsX(), -m_canvas->contentsY() );
     p.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
 
-    //QRect crect( m_canvas->contentsX(), m_canvas->contentsY(), m_canvas->visibleWidth(), m_canvas->visibleHeight() );
     textFrameSet()->drawCursor( &p, cursor(), visible, m_canvas, m_currentFrame );
 }
 

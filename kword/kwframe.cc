@@ -943,6 +943,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->save();
                 p->setClipRegion( reg );
                 p->translate( r.x() - icrect.x(), r.y() - icrect.y() ); // This assume that viewToNormal() is only a translation
+                p->setBrushOrigin( p->brushOrigin() + r.topLeft() - icrect.topLeft() );
 
                 QBrush bgBrush( settingsFrame->getBackgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );

@@ -73,7 +73,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                     for ( int i = 0 ; i < (int)str.length() ; ++i )
                         width +=  lastFormat->width( str, i );
                     QColorGroup cg2( cg );
-                    cg2.setColor( QColorGroup::Base, Qt::green );
+                    cg2.setColor( QColorGroup::Base, Qt::green ); // for debug
                     int last = length() - 1;
                     QTextParag::drawParagString( painter, str, 0, str.length(),
                                                  last, lastY, at( last )->ascent(),
@@ -84,9 +84,8 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                 else
                 {
                     // drawing the end of the parag
-                    QTextFormat format( * at( length() - 1 )->format() );
-                    format.setPointSize( qRound( zh->layoutUnitToFontSize( format.font().pointSize(), forPrint ) ) );
-                    int w = format.width('x'); // see KWTextFrameSet::adjustFlow
+                    KoTextFormat* format = static_cast<KoTextFormat *>( at( length() - 1 )->format() );
+                    int w = format->screenFontMetrics(zh).width('x'); // see KWTextFrameSet::formatVertically
                     int size = QMIN( w, h * 3 / 4 );
                     int arrowsize = zh->zoomItY( 2 );
                     // x,y is the bottom right corner of the reversed L
@@ -406,7 +405,10 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
 {
     KoTextFormat format;
     if ( refFormat )
+    {
         format = *refFormat;
+        format.setCollection( 0 ); // Out of collection copy
+    }
     QFont font = format.font();
     QDomElement elem;
     elem = formatElem.namedItem( "FONT" ).toElement();

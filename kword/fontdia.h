@@ -40,7 +40,7 @@ public:
     bool getSuperScript() const { return m_superScript->isChecked(); }
     bool getSubScript() const { return m_subScript->isChecked(); }
     QFont getNewFont() const { return m_newFont; }
-    QColor color() const { return m_color; }
+    QColor color() const { return m_chooseFont->color(); }
     QColor backGroundColor() const { return m_backGroundColor;}
     int changedFlags() const { return m_changedFlags; }
 
@@ -61,7 +61,6 @@ private:
     QPushButton *m_colorButton;
     QPushButton *m_backGroundColorButton;
     QFont m_newFont;
-    QColor m_color;
     QColor m_backGroundColor;
     int m_changedFlags;
 };

@@ -70,15 +70,14 @@ one to be redrawn. This method implements the double-buffering, paints the
 background color and the space on the right of the paragraph, and calls
 QTextParag::paint(). Its role is to draw series of characters with the same
 formatting at once (in one go). For each set of chars to be painted,
-QTextParag::drawParagString is called (reimplemented in KoTextParag, to transform
-the coordinates, draw the formatting codes etc.).
+KoTextParag::drawParagString is called.
 
 In short:
 KWFrame::drawContents -> KWTextFrameSet::drawFrame
  -> KoTextDocument::drawWYSIWYG -> KoTextDocument::drawParagWYSIWYG
- -> KoTextParag::paint -> KoTextParag::drawParagString -> QTextParag::drawParagString
+ -> KoTextParag::paint -> KoTextParag::drawParagString -> KoTextParag::drawParagStringInternal
 
-The cursor is drawn by drawParagString, which calls KoTextParag::drawCursor.
+The cursor is also drawn by KoTextParag::paint, which calls KoTextParag::drawCursor.
 The blinking cursor is implemented in KoTextView, which calls a virtual
 drawCursor() method, implemented in KWTextFrameSetEdit.
 
@@ -109,10 +108,16 @@ This is called the "Document" coordinate system.
  V
 Internal coordinates (the coordinates given to QRT - in "layout units")
 
-This last transformation doesn't depend on the view-mode arrangement,
-nor on the zoom. It's only about going from the frameset coord to the
-qrt internal coord (i.e. the high-resolution coordinates in which the
-text layout is done, for WYSIWYG purposes).
+About layout units:
+This is the high-resolution unit in which the text layout is done,
+currently set to 1440 DPI. Everything known the QRT classes will be in
+this coordinate system (including the QTextFormats). When painting, we apply
+ the current zoom and resolution to find the right font size to use, and we 
+have to catch up with rounding differences. However the position of the words
+(i.e. layout) is the one determined previously in layout units. KoZoomHandler
+offers methods for converting between layout units and zoom-dependent points 
+and pixels.
 
-Font sizes: note that the text formats in memory (format collection),
-for characters, styles etc. have font sizes in layout units (very big).
+Wow, you managed to read this until the end ? Good. "GOTO 10" now ;)
+
+David Faure <david@mandrakesoft.com>

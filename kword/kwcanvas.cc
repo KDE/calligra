@@ -2017,8 +2017,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 
     if ( o == this || o == viewport() ) {
 
-	// Pass event to auto-hide-cursor code (see kcursor.h for details)
-	KCursor::autoHideEventFilter( o, e );
+        // Pass event to auto-hide-cursor code (see kcursor.h for details)
+        KCursor::autoHideEventFilter( o, e );
 
         switch ( e->type() ) {
             case QEvent::FocusIn:

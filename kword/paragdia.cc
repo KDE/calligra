@@ -382,7 +382,7 @@ void KWNumPreview::drawContents( QPainter* painter )
 
     painter->translate( textRect.x(), textRect.y() );
 
-    m_textdoc->draw( painter, 0, 0, textRect.width(), textRect.height(),
+    m_textdoc->drawWYSIWYG( painter, 0, 0, textRect.width(), textRect.height(),
                      QApplication::palette().active() );
     painter->restore();
 }

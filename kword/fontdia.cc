@@ -94,9 +94,6 @@ void KWFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscr
 
 void KWFontChooser::setColor( const QColor & col )
 {
-    // TODO: when kdelibs-2.2 is a requirement, get rid of m_color
-    // and use m_chooseFont->color() directly.
-    m_color = col;
     m_chooseFont->setColor( col );
     m_changedFlags = 0;
 }
@@ -157,13 +154,12 @@ void KWFontChooser::slotSuperScriptClicked()
 
 void KWFontChooser::slotChangeColor()
 {
-    QColor color = m_color;
-    if ( KColorDialog::getColor( color ) )
+    QColor color = m_chooseFont->color();
+    if ( KColorDialog::getColor( color, QApplication::palette().color( QPalette::Active, QColorGroup::Text ) ) )
     {
-        if ( color != m_color )
+        if ( color != m_chooseFont->color() )
         {
             m_changedFlags |= QTextFormat::Color;
-            m_color = color;
             m_chooseFont->setColor( color );
         }
     }
@@ -172,9 +168,9 @@ void KWFontChooser::slotChangeColor()
 void KWFontChooser::slotChangeBackGroundColor()
 {
     QColor color = m_backGroundColor;
-    if ( KColorDialog::getColor( color ) )
+    if ( KColorDialog::getColor( color, QApplication::palette().color( QPalette::Active, QColorGroup::Base ) ) )
     {
-        if ( color != m_color )
+        if ( color != m_chooseFont->color() )
         {
             m_changedFlags |= KoTextFormat::TextBackgroundColor;
             m_backGroundColor = color;

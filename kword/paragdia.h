@@ -32,7 +32,6 @@
 
 class KButtonBox;
 class KColorButton;
-class KColorDialog;
 class KWBorderPreview;
 class KWDocument;
 class KWNumPreview;

@@ -59,7 +59,7 @@ void KWTextImage::resize()
     }
 }
 
-void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected , const QFont & /*customItemFont*/, int /*offset*/)
+void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected , int /*offset*/)
 {
     if ( placement() != PlaceInline ) {
         x = xpos;

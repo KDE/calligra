@@ -25,6 +25,8 @@
 
 /**
  * This class is used by "Insert Picture", i.e. having an image inline in a paragraph.
+ * It is going to be removed from KWord (inline picture frames are so much better),
+ * but we might need it in KPresenter !
  */
 class KWTextImage : public KoTextCustomItem
 {
@@ -47,7 +49,7 @@ public:
     void setImage( const KWImage &image );
     KWImage image() const { return m_image; }
 
-    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected , const QFont & customItemFont, int offset );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset );
 
     // Save to XML
     virtual void save( QDomElement & formatElem );

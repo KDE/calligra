@@ -102,6 +102,7 @@ doesn't depend on the zoom, nor on the screen or printer resolution anymore.
 Soft hyphens (manually inserted with Ctrl+'-')
 Support for hyperlinks, for text background color (marker).
 Improved handling of tabulators in ruler.
+Auto-hide mouse cursor while typing.
 
 "Change picture" feature.
 SVG support (for cliparts).

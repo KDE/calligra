@@ -168,7 +168,7 @@ public:
     virtual void resize();
     virtual int widthHint() const { return width; }
     virtual int minimumWidth() const { return width; }
-    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const QFont & customItemFont, int offset);
+    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset);
 
     void setVariableFormat( KWVariableFormat *_varFormat, bool _deleteOld = false )
     { if ( _deleteOld && m_varFormat ) delete m_varFormat; m_varFormat = _varFormat; }
