@@ -898,7 +898,10 @@ void KSpreadDoc::removeArea( QString name)
   for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
     	{
     	if((*it2).ref_name==name)
-                   m_refs.remove(it2);
+                {
+                m_refs.remove(it2);
+                return;
+                }
         }
 }
 

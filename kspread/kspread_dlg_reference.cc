@@ -50,7 +50,7 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
 
   m_pRemove=new QPushButton(i18n("Remove"),this);
   lay1->addWidget( m_pRemove );
-  m_pRemove->setEnabled(false);
+  //m_pRemove->setEnabled(false);
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
@@ -66,14 +66,17 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
     	text=(*it).ref_name;
     	list->insertItem(text);
     	}
-
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
+
+
   resize( 200, 150 );
 
 }
+
+
 
 void KSpreadreference::slotDoubleClicked(QListBoxItem *)
 {
@@ -84,11 +87,9 @@ void KSpreadreference::slotRemove()
 {
   if( list->currentItem()!=-1)
         {
-        //doesn't work for the moment
+        m_pView->doc()->removeArea(list->text(list->currentItem()) );
 
-        //m_pView->doc()->removeArea(list->text(list->currentItem()) );
-
-        /*list->clear();
+        list->clear();
         QString text;
         QValueList<Reference>::Iterator it;
         QValueList<Reference> area=m_pView->doc()->listArea();
@@ -96,7 +97,7 @@ void KSpreadreference::slotRemove()
     	        {
     	        text=(*it).ref_name;
     	        list->insertItem(text);
-    	        }*/
+    	        }
         }
 }
 
