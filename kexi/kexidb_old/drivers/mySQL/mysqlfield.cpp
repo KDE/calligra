@@ -56,8 +56,6 @@ MySqlField::sqlType()
 		case FIELD_TYPE_INT24:
 		case FIELD_TYPE_LONGLONG:
 			return KexiDBField::SQLBigInt;
-			return KexiDBField::SQLBinary;
-			return KexiDBField::SQLBit;
 		case FIELD_TYPE_NEWDATE:
 		case FIELD_TYPE_DATE:
 			return KexiDBField::SQLDate;
@@ -111,7 +109,7 @@ MySqlField::sql2string(KexiDBField::ColumnType sqltype)
 {
 	switch(sqltype)
 	{
-		case SQLLongVarChar:
+		case SQLLongVarchar:
 			return "TEXT";
 		case SQLVarchar:
 			return "VARCHAR";

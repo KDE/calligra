@@ -75,15 +75,25 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 	{
 		if((*it).record == record && (*it).done == false)
 		{
-			QString value = m_db->escape((*it).value.toString());
-			QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
+			QString value;
 			
+			if((*it).value.type() == QVariant::ByteArray)
+			{
+				value = m_db->escape((*it).value.toByteArray());
+			}
+			else
+			{
+				value = m_db->escape((*it).value.toString());
+			}
+			
+			QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
 			int index = m_insertList.findIndex(record);
+			
 			if(!insertBuffer)
 			{
 				kdDebug() << "MySqlRecord::commit: committing update" << endl;
 				QString statement("update " + m_table + " set " + (*it).field + "='" + value + "' where " + m_keyField + "='" + key + "'");
-				kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
+//				kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
 				m_db->query(statement);
 				(*it).done = true;
 			}
@@ -91,7 +101,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 			{
 				kdDebug() << "MySqlRecord::commit: committing suicide" << endl;
 				QString statement("insert into " + m_table + " set " + (*it).field + " = '" + value + "'");
-				kdDebug() << "MySqlRecord::commit(insert): " << statement << endl;
+//				kdDebug() << "MySqlRecord::commit(insert): " << statement << endl;
 				m_db->query(statement);
 				m_insertList.remove(m_insertList.at(index));
 				(*it).done = true;

@@ -46,7 +46,7 @@ KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent, const QString &t
 
 	QStringList strings;
 
-	for(int i = 1; i < 18; i++)
+	for(int i = 1; i < 20; i++)
 	{
 		strings.append(KexiDBField::typeName(static_cast<KexiDBField::ColumnType>(i)));
 	}
@@ -55,6 +55,8 @@ KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent, const QString &t
 	m_view->addColumn(i18n("Length"), QVariant::Int, true);
 	m_view->addColumn(i18n("Required"), QVariant::Bool, true);
 	m_view->addColumn(i18n("Default Value"), QVariant::String, true);
+	m_view->addColumn(i18n("Unsigned"), QVariant::Bool, true);
+	m_view->addColumn(i18n("Decimals"), QVariant::Int, true);
 	m_view->addColumn(i18n("Auto Increment"), QVariant::Bool, true);
 
 	connect(m_view, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
@@ -80,7 +82,9 @@ void KexiAlterTable::initTable()
 		it->setValue(2, record->fieldInfo(i)->length());
 		it->setValue(3, record->fieldInfo(i)->not_null());
 		it->setValue(4, record->fieldInfo(i)->defaultValue());
-		it->setValue(5, record->fieldInfo(i)->auto_increment());
+		it->setValue(5, record->fieldInfo(i)->unsignedType());
+		it->setValue(6, record->fieldInfo(i)->precision());
+		it->setValue(7, record->fieldInfo(i)->auto_increment());
 		it->setHint(QVariant(fc++));
 	}
 
@@ -96,6 +100,18 @@ void KexiAlterTable::initTable()
 
 void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 {
+	KexiDBField::ColumnConstraints constraints = KexiDBField::None;
+	
+	if(i->getValue(3).toBool())
+	{
+		constraints = static_cast<KexiDBField::ColumnConstraints>(constraints + KexiDBField::NotNull);
+	}
+	
+	if(i->getValue(7).toBool())
+	{
+		constraints = static_cast<KexiDBField::ColumnConstraints>(constraints + KexiDBField::AutoInc);
+	}
+	
 	if(i->isInsertItem())
 	{
 		if(i->getValue(0).toString() != "" && i->getValue(1).toInt() != 0)
@@ -103,7 +119,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 			kdDebug() << "Create new field!" << endl;
 			bool ok = kexiProject()->db()->createField(m_table, i->getValue(0).toString(),
 				static_cast<KexiDBField::ColumnType>(i->getValue(1).toInt() + 1), i->getValue(2).toInt(),
-				i->getValue(3).toBool(), i->getValue(4).toString(), i->getValue(5).toBool());
+				i->getValue(6).toInt(), constraints, i->getValue(5).toBool(), false, i->getValue(4).toString());
 
 			if(ok)
 			{
@@ -124,8 +140,8 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 		kdDebug() << "KexiAlterTable::slotItemChanged(" << field << ")" << endl;
 		bool ok = kexiProject()->db()->alterField(m_table, m_fieldnames[field],
 			i->getValue(0).toString(), static_cast<KexiDBField::ColumnType> (i->getValue(1).toInt() + 1),
-			i->getValue(2).toInt(), i->getValue(3).toBool(), i->getValue(4).toString(),
-			i->getValue(5).toBool());
+			i->getValue(2).toInt(), i->getValue(6).toInt(), constraints, i->getValue(5).toBool(), false,
+			i->getValue(4).toString());
 
 		if(ok)
 		{
@@ -141,7 +157,8 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 			i->setValue(2, record->fieldInfo(field)->length());
 			i->setValue(3, record->fieldInfo(field)->not_null());
 			i->setValue(4, record->fieldInfo(field)->defaultValue());
-			i->setValue(5, record->fieldInfo(field)->auto_increment());
+			i->setValue(5, record->fieldInfo(field)->unsignedType());
+			i->setValue(6, record->fieldInfo(field)->auto_increment());
 			delete record;
 		}
 	}

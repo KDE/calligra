@@ -141,16 +141,25 @@ KexiDB::escape(const QString &)
 	return QString::null;
 }
 
+QString
+KexiDB::escape(const QByteArray& str)
+{
+	return QString::null;
+}
+
 bool
-KexiDB::alterField(const QString& table, const QString& field, const QString& newFieldName,
- KexiDBField::ColumnType dtype, int length, bool notNull, const QString& defaultVal, bool autoInc)
+KexiDB::alterField(const QString& /*table*/, const QString& /*field*/, const QString& /*newFieldName*/,
+	KexiDBField::ColumnType /*dtype*/, int /*length*/, int /*precision*/,
+	KexiDBField::ColumnConstraints /*constraints*/, bool /*binary*/, bool /*unsignedType*/,
+	const QString& /*defaultVal*/)
 {
 	return false;
 }
 
 bool
-KexiDB::createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
- int length, bool notNull, const QString& defaultVal, bool autoInc)
+KexiDB::createField(const QString& /*table*/, const QString& /*field*/, KexiDBField::ColumnType /*dtype*/,
+	int /*length*/, int /*precision*/, KexiDBField::ColumnConstraints /*constraints*/, bool /*binary*/,
+	bool /*unsignedType*/, const QString& /*defaultVal*/)
 {
 	return false;
 }
@@ -170,7 +179,7 @@ KexiDB::affectedRows()
 KexiDBTableStruct*
 KexiDB::getStructure(QString)
 {
-	return;
+	return 0;
 }
 
 KexiDB::~KexiDB()

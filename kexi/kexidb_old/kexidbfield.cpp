@@ -29,7 +29,7 @@ KexiDBField::sql2qt(KexiDBField::ColumnType sqltype)
 {
 	switch(sqltype)
 	{
-		case SQLLongVarChar:
+		case SQLLongVarchar:
 		case SQLVarchar:
 			return QVariant::String;
 		case SQLInteger:
@@ -68,8 +68,8 @@ KexiDBField::typeName(ColumnType sqltype)
 {
 	switch(sqltype)
 	{
-		case SQLLongVarChar:
-			return "Long varchar";
+		case SQLLongVarchar:
+			return "Long Varchar";
 		case SQLVarchar:
 			return "Varchar";
 		case SQLInteger:

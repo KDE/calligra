@@ -64,10 +64,13 @@ class KexiDB : public QObject
 
 		virtual bool query(QString statement);
 		virtual QString escape(const QString &str);
-		virtual bool alterField(const QString&, const QString&, const QString&, KexiDBField::ColumnType,
-			int, bool, const QString&, bool);
-		virtual bool createField(const QString&, const QString&, KexiDBField::ColumnType,
-			int, bool, const QString&, bool);
+		virtual QString escape(const QByteArray& str);
+		virtual bool alterField(const QString& table, const QString& field, const QString& newFieldName,
+			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
+			bool binary, bool unsignedType, const QString& defaultVal);
+		virtual bool createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
+			int length, int precision, KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType,
+			const QString& defaultVal);
 
 		virtual KexiDBResult		*getResult();
 

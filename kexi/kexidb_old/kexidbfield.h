@@ -42,7 +42,7 @@ class KexiDBField
 			SQLInteger,
 			SQLInterval,
 			SQLLongVarBinary,
-			SQLLongVarChar,
+			SQLLongVarchar,
 			SQLNumeric,
 			SQLSmallInt,
 			SQLTime,

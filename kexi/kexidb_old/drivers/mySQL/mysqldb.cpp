@@ -65,6 +65,8 @@ MySqlDB::queryRecord(QString querystatement, bool buffer)
 		kdDebug() << "MySqlDB::queryRecord(): abroating..." << endl;
 		throw err;
 	}
+	
+	return 0;
 }
 
 bool
@@ -272,6 +274,17 @@ MySqlDB::escape(const QString &str)
 	return rval;
 }
 
+QString
+MySqlDB::escape(const QByteArray& str)
+{
+	char* escaped = (char*) malloc(str.size() * 2 + 2);
+	mysql_real_escape_string(m_mysql, escaped, str.data(), str.size());
+	
+	QString rval = escaped;
+	free(escaped);
+	return rval;
+}
+
 unsigned long
 MySqlDB::lastAuto()
 {
@@ -280,12 +293,15 @@ MySqlDB::lastAuto()
 
 bool
 MySqlDB::alterField(const QString& table, const QString& field, const QString& newFieldName,
- KexiDBField::ColumnType dtype, int length, bool notNull, const QString& defaultVal, bool autoInc)
+	KexiDBField::ColumnType dtype, int length, int precision,
+	KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType,
+	const QString& defaultVal)
 {
 	kdDebug() << "MySqlDB::alterField: Table: " << table << " Field: " << field << endl;
 	kdDebug() << "MySqlDB::alterField: DataType: " << MySqlField::sql2string(dtype) << "ColumnType: " << dtype << endl;
 	QString qstr = "ALTER TABLE " + table + " CHANGE " + field + " " + newFieldName;
-	qstr += " " + createDefinition(dtype, length, notNull, defaultVal, autoInc);
+	qstr += " " + createDefinition(newFieldName, dtype, length, precision, constraints, binary,
+		unsignedType, defaultVal);
 	
 	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
 	return query(qstr);
@@ -293,28 +309,57 @@ MySqlDB::alterField(const QString& table, const QString& field, const QString& n
 
 bool
 MySqlDB::createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
- int length, bool notNull, const QString& defaultVal, bool autoInc)
+	int length, int precision, KexiDBField::ColumnConstraints constraints, bool binary,
+	bool unsignedType, const QString& defaultVal)
 {
 	kdDebug() << "MySqlDB::createField: Table: " << table << " Field: " << field << endl;
 	kdDebug() << "MySqlDB::createField: DataType: " << MySqlField::sql2string(dtype) << "ColumnType: " << dtype << endl;
 	QString qstr = "ALTER TABLE " + table + " ADD " + field;
-	qstr += " " + createDefinition(dtype, length, notNull, defaultVal, autoInc);
+	qstr += " " + createDefinition(field, dtype, length, precision, constraints, binary, unsignedType, defaultVal);
 	
 	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
 	return query(qstr);
 }
 
 QString
-MySqlDB::createDefinition(KexiDBField::ColumnType dtype, int length, bool notNull,
- const QString& defaultVal, bool autoInc)
+MySqlDB::createDefinition(const QString& field, KexiDBField::ColumnType dtype, int length, int precision,
+ KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType, const QString& defaultVal)
 {
 	QString qstr = MySqlField::sql2string(dtype);
+	bool allowUnsigned = false;
 	
-	if(dtype != KexiDBField::SQLDate) {
-		qstr += "(" + QString::number(length) + ")";
+	switch(dtype)
+	{
+		case KexiDBField::SQLInteger:
+		case KexiDBField::SQLSmallInt:
+		case KexiDBField::SQLTinyInt:
+		case KexiDBField::SQLBigInt:
+			allowUnsigned = true;
+		case KexiDBField::SQLVarchar:
+			qstr += "(" + QString::number(length) + ")";
+			break;
+		case KexiDBField::SQLDecimal:
+		case KexiDBField::SQLFloat:
+		case KexiDBField::SQLDouble:
+		case KexiDBField::SQLNumeric:
+			allowUnsigned = true;
+			qstr += "(" + QString::number(length) + "," + QString::number(precision) + ")";
+			break;
+		case KexiDBField::SQLInvalid:
+		case KexiDBField::SQLBinary:
+		case KexiDBField::SQLBit:
+		case KexiDBField::SQLBoolean:
+		case KexiDBField::SQLDate:
+		case KexiDBField::SQLLongVarBinary:
+		case KexiDBField::SQLTime:
+		case KexiDBField::SQLTimeStamp:
+		case KexiDBField::SQLVarBinary:
+		case KexiDBField::SQLInterval:
+		case KexiDBField::SQLLongVarchar:
+			break;
 	}
 	
-	if(notNull)
+	if(constraints & KexiDBField::NotNull)
 	{
 		qstr += " NOT NULL";
 	}
@@ -323,11 +368,23 @@ MySqlDB::createDefinition(KexiDBField::ColumnType dtype, int length, bool notNul
 		qstr += " NULL";
 	}
 	
-	if(defaultVal != "") {
+	if(binary && (dtype == KexiDBField::SQLVarchar))
+	{
+		qstr += " BINARY";
+	}
+	
+	if(unsignedType && allowUnsigned)
+	{
+		qstr += " UNSIGNED";
+	}
+	
+	if(defaultVal != "")
+	{
 		qstr += " DEFAULT " + defaultVal;
 	}
 	
-	if(autoInc) {
+	if(constraints & KexiDBField::AutoInc)
+	{
 		qstr += " AUTO_INCREMENT";
 	}
 	

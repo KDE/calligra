@@ -74,12 +74,15 @@ class MySqlDB : public KexiDB
 //		int		realQuery(const char *statement, unsigned int length);
 
 		QString		escape(const QString &str);
+		QString		escape(const QByteArray& str);
 		QString		realEscape(const QString &str);
 		QByteArray	realEscape(const QByteArray &a); 
-		virtual bool alterField(const QString& table, const QString& field, const QString& newFieldName,
-			KexiDBField::ColumnType dtype, int length, bool notNull, const QString& defaultVal, bool autoInc);
-		virtual bool createField(const QString& table, const QString& field,
-			KexiDBField::ColumnType dtype, int length, bool notNull, const QString& defaultVal, bool autoInc);
+		bool alterField(const QString& table, const QString& field, const QString& newFieldName,
+			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
+			bool binary, bool unsignedType, const QString& defaultVal);
+		bool createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
+			int length, int precision, KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType,
+			const QString& defaultVal);
 
 		/*!
 		 *  friendy mode
@@ -119,8 +122,8 @@ class MySqlDB : public KexiDB
 		QString		m_password;
 	
 	private:
-		QString createDefinition(KexiDBField::ColumnType dtype, int length, bool notNull,
-			const QString& defaultVal, bool autoInc);
+		QString createDefinition(const QString& field, KexiDBField::ColumnType dtype, int length, int precision,
+			KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType, const QString& defaultVal);
 };
 
 #endif
