@@ -290,65 +290,69 @@ void KWTextFrameSet::layout()
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
-int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
+// Helper for adjust*. Returns marginLeft/marginRight/breakEnd, each for an adjust* method.
+void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd )
 {
-    //kdDebug(32002) << "KWTextFrameSet " << this << " adjustLMargin" << endl;
+    kdDebug(32002) << "KWTextFrameSet " << this << " getMargins" << endl;
     QPoint p;
     KWFrame * frame = internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
     ASSERT(frame);
-    int width = frame ? kWordDocument()->zoomItX( frame->width() ) : 0; // the available width at this height
-    int middle = width / 2;
-    int newMargin = 0;
+    // Everything from there is in contents coordinates.
+    int left = frame ? kWordDocument()->zoomItX( frame->left() ) : 0;
+    int from = left;
+    int to = frame ? kWordDocument()->zoomItX( frame->right() ) : 0;
+    int width = to - from;
 
+    // For every frame on top at this height, we'll move from and to towards each other
+    // The text flows between 'from' and 'to'
     QListIterator<KWFrame> fIt( m_framesOnTop );
-    for ( ; fIt.current() ; ++fIt )
+    for ( ; fIt.current() && from < to ; ++fIt )
     {
         if ( fIt.current()->getRunAround() == RA_BOUNDINGRECT )
         {
             QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
             // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
-            if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
-                 ( frameRect.left() - p.x() < middle ) ) // adjust the left margin only
-                // for frames which are in the left half
+            if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) )
             {
-                newMargin = QMAX( newMargin, ( frameRect.right() - p.x() ) + space );
-                kdDebug() << "KWTextFrameSet::adjustLMargin newMargin=" << newMargin << endl;
+                if ( from < frameRect.left() && to > frameRect.right() )
+                {
+                    int availLeft = frameRect.left() - from;
+                    int availRight = to - frameRect.right();
+                    kdDebug() << "KWTextFrameSet::getMargins availLeft=" << availLeft << " availRight=" << availRight << endl;
+                    if ( availLeft > availRight ) // choose the max
+                        to = frameRect.left();    // flow text at the left of the frame
+                    else
+                        from = frameRect.right(); // flow text at the right of the frame
+                    kdDebug() << "KWTextFrameSet::getMargins from=" << from << " to=" << to << endl;
+                }
             }
         }
     }
+    // Back to the QRT coordinates
+    from -= left;
+    to -= left;
 
-    return QTextFlow::adjustLMargin( yp, h, margin + newMargin, space );
+    if ( marginLeft )
+        *marginLeft = from;
+    if ( marginRight )
+        *marginRight = width - to;
+    // TODO breakEnd
+}
+
+int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
+{
+    int marginLeft;
+    getMargins( yp, h, &marginLeft, 0L, 0L );
+    kdDebug() << "KWTextFrameSet::adjustLMargin " << marginLeft << endl;
+    return QTextFlow::adjustLMargin( yp, h, margin + marginLeft, space );
 }
 
 int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 {
-    QPoint p;
-    KWFrame *frame = internalToContents( QPoint(0, yp), p );
-    ASSERT(frame);
-    int width = frame ? kWordDocument()->zoomItX( frame->width() ) : 0; // the available width at this height
-    if ( frame )
-        p.setX( width );
-    int middle = width / 2;
-    int newMargin = 0;
-
-    QListIterator<KWFrame> fIt( m_framesOnTop );
-    for ( ; fIt.current() ; ++fIt )
-    {
-        if ( fIt.current()->getRunAround() == RA_BOUNDINGRECT )
-        {
-            QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
-            // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
-            if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
-                 p.x() - frameRect.right() < middle ) // adjust the right margin only
-                // for frames which are in the right half
-            {
-                newMargin = QMAX( newMargin, p.x() - frameRect.left() + space );
-                kdDebug() << "KWTextFrameSet::adjustRMargin newMargin=" << newMargin << endl;
-            }
-        }
-    }
-
-    return QTextFlow::adjustRMargin( yp, h, margin + newMargin, space );
+    int marginRight;
+    getMargins( yp, h, 0L, &marginRight, 0L );
+    kdDebug() << "KWTextFrameSet::adjustRMargin " << marginRight << endl;
+    return QTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
 }
 
 // helper for adjustFlow

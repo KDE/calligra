@@ -169,6 +169,7 @@ protected:
     void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, bool copyParagLayouts = false, bool moveCustomItems = false );
     void setLastFormattedParag( QTextParag *parag );
     QTextFormat * zoomFormatFont( const QTextFormat * f );
+    void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd );
     bool checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
 
 private:
