@@ -6313,14 +6313,13 @@ void KSpreadSheet::checkContentDirection( QString const & name )
     emit sig_refreshView();
 }
 
-bool KSpreadSheet::loadTableStyleFormat( KoStyleStack & styleStack, const KoOasisStyles& oasisStyles )
+bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
 {
     QString hleft, hmiddle, hright;
     QString fleft, fmiddle, fright;
-#if 0 //todo implement it.
-    QDomNode header = styleStack.namedItem( "style:header" );
+    QDomNode header = style->namedItem( "style:header" );
 
-    if ( styleStack.hasAttribute( "style:header" ) )
+    if ( !header.isNull() )
     {
         kdDebug(30518) << "Header exists" << endl;
         QDomNode part = header.namedItem( "style:region-left" );
@@ -6369,12 +6368,65 @@ bool KSpreadSheet::loadTableStyleFormat( KoStyleStack & styleStack, const KoOasi
         }
     }
 
-    table->print()->setHeadFootLine( hleft, hmiddle, hright,
-                                     fleft, fmiddle, fright );
-#endif
-    //todo
+    print()->setHeadFootLine( hleft, hmiddle, hright,
+                              fleft, fmiddle, fright );
     return true;
 }
+
+void KSpreadSheet::replaceMacro( QString & text, const QString & old, const QString & newS )
+{
+  int n = text.find( old );
+  if ( n != -1 )
+    text = text.replace( n, old.length(), newS );
+}
+
+
+QString KSpreadSheet::getPart( const QDomNode & part )
+{
+  QString result;
+  QDomElement e = part.namedItem( "text:p" ).toElement();
+  while ( !e.isNull() )
+  {
+    QString text = e.text();
+    kdDebug() << "PART: " << text << endl;
+
+    QDomElement macro = e.namedItem( "text:time" ).toElement();
+    if ( !macro.isNull() )
+      replaceMacro( text, macro.text(), "<time>" );
+
+    macro = e.namedItem( "text:date" ).toElement();
+    if ( !macro.isNull() )
+      replaceMacro( text, macro.text(), "<date>" );
+
+    macro = e.namedItem( "text:page-number" ).toElement();
+    if ( !macro.isNull() )
+      replaceMacro( text, macro.text(), "<page>" );
+
+    macro = e.namedItem( "text:page-count" ).toElement();
+    if ( !macro.isNull() )
+      replaceMacro( text, macro.text(), "<pages>" );
+
+    macro = e.namedItem( "text:sheet-name" ).toElement();
+    if ( !macro.isNull() )
+      replaceMacro( text, macro.text(), "<sheet>" );
+
+    macro = e.namedItem( "text:title" ).toElement();
+    if ( !macro.isNull() )
+      replaceMacro( text, macro.text(), "<name>" );
+
+    macro = e.namedItem( "text:file-name" ).toElement();
+    if ( !macro.isNull() )
+      replaceMacro( text, macro.text(), "<file>" );
+
+    if ( !result.isEmpty() )
+      result += '\n';
+    result += text;
+    e = e.nextSibling().toElement();
+  }
+
+  return result;
+}
+
 
 bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyles& oasisStyles )
 {
@@ -6395,6 +6447,14 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                     bool visible = (properties.attribute( "table:display" ) == "true" ? true : false );
                     m_bTableHide = !visible;
                 }
+            }
+            if ( style->hasAttribute( "style:master-page-name" ) )
+            {
+                QString masterPageStyleName = style->attribute( "style:master-page-name" );
+                kdDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
+                QDomElement *masterStyle = oasisStyles.masterPages()[masterPageStyleName];
+                kdDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
+                loadTableStyleFormat( masterStyle );
             }
         }
     }
