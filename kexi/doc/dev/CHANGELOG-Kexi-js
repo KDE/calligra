@@ -323,6 +323,14 @@ Main Window
 	 -cancels application closing.
 	-only stored objects are added to the Navigator
 	-few methods move to protected
+	-graphical notification about 'dirty'==unsaved data ("*" sign at the right hand) 
+	 added to the names on captions, taskbar and navigator
+	-API for saving kexi dialog's data added, plugged to the main window
+Kexi Dialogs
+	-currently not only dialog is activated when focus come to any of its children,
+	 but also when any children is clicked.
+	-KexiViews have now 'dirty' flag and parent KexiDialog reuses that
+
 
 2004-03-03
 2004-03-02

@@ -767,8 +767,9 @@ void KexiMainWindowImpl::slotPartLoaded(KexiPart::Part* p)
 {
 	if (!p)
 		return;
-	connect(p, SIGNAL(newObjectRequest(KexiPart::Info*)), this, SLOT(newObject(KexiPart::Info*)));
-	p->createGUIClient(this); //new KexiPart::GUIClient(this, p, p->instanceName());
+	connect(p, SIGNAL(newObjectRequest(KexiPart::Info*)), 
+		this, SLOT(newObject(KexiPart::Info*)));
+	p->createGUIClient(this);
 }
 
 //! internal
@@ -792,10 +793,12 @@ void KexiMainWindowImpl::slotCaptionForCurrentMDIChild(bool childrenMaximized)
 	}
 
 	if (childrenMaximized && view) {
-		setCaption( view->caption() + (d->appCaptionPrefix.isEmpty() ? "" : " - " + d->appCaptionPrefix) );
+		setCaption( d->curDialog->caption() 
+			+ (d->appCaptionPrefix.isEmpty() ? "" : " - " + d->appCaptionPrefix) );
 	}
 	else {
-		setCaption( (d->appCaptionPrefix.isEmpty() ? "" : d->appCaptionPrefix + " - ") + d->origAppCaption );
+		setCaption( (d->appCaptionPrefix.isEmpty() ? "" : d->appCaptionPrefix + " - ") 
+			+ d->origAppCaption );
 	}
 }
 
@@ -1018,7 +1021,11 @@ void
 KexiMainWindowImpl::registerChild(KexiDialogBase *dlg)
 {
 	kdDebug() << "KexiMainWindowImpl::registerChild()" << endl;
-	connect(dlg, SIGNAL(activated(KMdiChildView *)), this, SLOT(activeWindowChanged(KMdiChildView *)));
+	connect(dlg, SIGNAL(activated(KMdiChildView *)), 
+		this, SLOT(activeWindowChanged(KMdiChildView *)));
+	connect(dlg, SIGNAL(dirtyChanged(KexiDialogBase*)), 
+		this, SLOT(slotDirtyFlagChanged(KexiDialogBase*)));
+
 //	connect(dlg, SIGNAL(childWindowCloseRequest(KMdiChildView *)), this, SLOT(childClosed(KMdiChildView *)));
 	if(dlg->docID() != -1)
 		d->dialogs.insert(dlg->docID(), dlg);
@@ -1484,6 +1491,8 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
 		if (res==KMessageBox::Cancel)
 			return false;
 		if (res==KMessageBox::Yes) {
+			if (!dlg->saveData())
+				return false;
 			//save it
 			//TODO
 			remove_on_closing = false;
@@ -1497,6 +1506,7 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
 			//TODO: ask if we'd continue and return true/false
 			return false;
 		}
+		d->nav->updateItemName( dlg->partItem(), dlg->dirty() );
 	}
 
 	KXMLGUIClient *client = dlg->guiClient();
@@ -1883,6 +1893,13 @@ void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg)
 	}
 }
 
+void KexiMainWindowImpl::slotDirtyFlagChanged(KexiDialogBase* dlg)
+{
+	KexiPart::Item *item = dlg->partItem();
+	//update text in navigator and app. caption
+	d->nav->updateItemName( item, dlg->dirty() );
+	updateAppCaption();
+}
 
 #include "keximainwindowimpl.moc"
 

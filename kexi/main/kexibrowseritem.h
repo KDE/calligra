@@ -58,6 +58,7 @@ class KEXIMAIN_EXPORT KexiBrowserItem : public KListViewItem
 		//! can be null
 		KexiPart::Item* item() { return m_item; }
 
+		void updateItemName();
 	protected:
 		void initItem();
 		virtual QString key( int column, bool ascending ) const;

@@ -333,7 +333,7 @@ void KexiAlterTableDialog::slotUpdateRowActions(int row)
 
 void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& buf,KexiProperty& prop)
 {
-	m_dirty = true;
+	setDirty();
 	//TODO
 }
 
@@ -361,7 +361,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 
 void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 {
-	m_dirty = true;
+	setDirty();
 
 	//TODO
 	//-check if the row was empty before updating
@@ -428,12 +428,13 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item, 
 	KexiDB::ResultInfo* result)
 {
-	m_dirty = true;
+	setDirty();
 	//TODO
 }
 
 void KexiAlterTableDialog::slotRowDeleted()
 {
+	setDirty();
 	//remove current prop. buffer
 	removeCurrentPropertyBuffer();
 

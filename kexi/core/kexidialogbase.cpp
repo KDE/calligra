@@ -24,6 +24,7 @@
 #include "kexiviewbase.h"
 #include "kexicontexthelp_p.h"
 #include "kexipart.h"
+#include "kexipartitem.h"
 #include "kexipartinfo.h"
 #include "kexipropertybuffer.h"
 #include "kexi_utils.h"
@@ -39,6 +40,7 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  : KMdiChildView(caption, parent, "KexiDialogBase")
  , KexiActionProxy(this, parent)
  , m_isRegistered(false)
+ , m_origCaption(caption)
  , m_neverSaved(false)
 {
 	m_supportedViewModes = 0; //will be set by KexiPart
@@ -59,6 +61,11 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 
 KexiDialogBase::~KexiDialogBase()
 {
+}
+
+KexiViewBase *KexiDialogBase::selectedView() const
+{
+	return static_cast<KexiViewBase*>(m_stack->visibleWidget());
 }
 
 void KexiDialogBase::addView(KexiViewBase *view)
@@ -87,7 +94,7 @@ QSize KexiDialogBase::minimumSizeHint() const
 
 QSize KexiDialogBase::sizeHint() const
 {
-	KexiViewBase *v = static_cast<KexiViewBase*>(m_stack->visibleWidget());
+	KexiViewBase *v = selectedView();
 	if (!v)
 		return KMdiChildView::sizeHint();
 	return v->preferredSizeHint( v->sizeHint() );
@@ -173,15 +180,16 @@ bool KexiDialogBase::tryClose(bool dontSaveChanges)
 
 bool KexiDialogBase::dirty() const
 {
-	KexiViewBase *v = static_cast<KexiViewBase*>(m_stack->visibleWidget());
+	KexiViewBase *v = selectedView();
 	return v ? v->dirty() : false;
 }
 
 QString KexiDialogBase::itemIcon()
 {
 	if (!m_part || !m_part->info()) {
-		if (m_stack->visibleWidget() && m_stack->visibleWidget()->inherits("KexiViewBase")) {
-			return static_cast<KexiViewBase*>(m_stack->visibleWidget())->m_defaultIconName;
+		KexiViewBase *v = selectedView();
+		if (v) {//m_stack->visibleWidget() && m_stack->visibleWidget()->inherits("KexiViewBase")) {
+			return v->m_defaultIconName;
 		}
 		return QString::null;
 	}
@@ -191,17 +199,17 @@ QString KexiDialogBase::itemIcon()
 bool KexiDialogBase::switchToViewMode( int viewMode )
 {
 	kdDebug() << "KexiDialogBase::switchToViewMode()" << endl;
-	QWidget *current = m_stack->visibleWidget();
-	if(current)
-		static_cast<KexiViewBase*>(current)->beforeSwitchTo(viewMode);
+	KexiViewBase *view = selectedView();
+	if (view)
+		view->beforeSwitchTo(viewMode);
 
 	if (m_currentViewMode == viewMode)
 		return true;
 	if (!supportsViewMode(viewMode))
 		return false;
 
-	KexiViewBase *view = (m_stack->widget(viewMode) && m_stack->widget(viewMode)->inherits("KexiViewBase"))
-		? static_cast<KexiViewBase*>(m_stack->widget(viewMode)) : 0;
+//	KexiViewBase *view = (m_stack->widget(viewMode) && m_stack->widget(viewMode)->inherits("KexiViewBase"))
+//		? static_cast<KexiViewBase*>(m_stack->widget(viewMode)) : 0;
 	if (!view) {
 		//ask the part to create view for the new mode
 		view = m_part->createView(m_stack, this, *m_item, viewMode);
@@ -210,11 +218,7 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 			return false;
 		}
 		addView(view, viewMode);
-//		m_stack->addWidget(view, viewMode);
 	}
-//	if (!view->inherits("KexiViewBase"))
-//		return false;
-//	KexiViewBase *view = static_cast<KexiViewBase*>(widget);
 	m_stack->raiseWidget(view);
 	view->afterSwitchFrom(m_currentViewMode);
 	m_currentViewMode = viewMode;
@@ -236,11 +240,10 @@ void KexiDialogBase::setFocus()
 
 KexiPropertyBuffer *KexiDialogBase::propertyBuffer()
 {
-	KexiViewBase *v = static_cast<KexiViewBase*>(m_stack->visibleWidget());
-	if (v) {
-		return v->propertyBuffer();
-	}
-	return 0;
+	KexiViewBase *v = selectedView();
+	if (!v)
+		return 0;
+	return v->propertyBuffer();
 }
 
 bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
@@ -254,6 +257,56 @@ bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 		}
 	}
 	return false;
+}
+
+void KexiDialogBase::dirtyChanged()
+{
+/*	if (!dirty()) {
+		if (caption()!=m_origCaption)
+			KMdiChildView::setCaption(m_origCaption);
+	}
+	else {
+		if (caption()!=(m_origCaption+"*"))
+			KMdiChildView::setCaption(m_origCaption+"*");
+	}*/
+	updateCaption();
+	emit dirtyChanged(this);
+}
+
+/*QString KexiDialogBase::caption() const
+{
+	return m_origCaption;
+	if (dirty())
+		return KMdiChildView::caption()+;
+
+	return KMdiChildView::caption();
+}*/
+
+void KexiDialogBase::updateCaption()
+{
+	if (!m_item || !m_origCaption.isEmpty())
+		return;
+//	m_origCaption = c;
+	QString capt = m_item->name();
+	QString fullCapt = capt;
+	if (m_part)
+		fullCapt += (" : " + m_part->instanceName());
+	if (dirty()) {
+		KMdiChildView::setCaption(fullCapt+"*");
+		KMdiChildView::setTabCaption(capt+"*");
+	}
+	else {
+		KMdiChildView::setCaption(fullCapt);
+		KMdiChildView::setTabCaption(capt);
+	}
+}
+
+bool KexiDialogBase::saveData()
+{
+	KexiViewBase *v = selectedView();
+	if (!v)
+		return true;
+	return v->saveData();
 }
 
 #include "kexidialogbase.moc"

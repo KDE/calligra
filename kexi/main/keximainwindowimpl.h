@@ -277,6 +277,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 
 		virtual void propertyBufferSwitched(KexiDialogBase *dlg);
 
+		/*! Handles changes in 'dirty' flag for dialogs. */
+		void slotDirtyFlagChanged(KexiDialogBase*);
+
 	private:
 
 		class Private;

@@ -74,20 +74,20 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 //	KexiDialogBase *dlg = createInstance(win,item,viewMode);
 //	if (!dlg)
 //		return 0;
-	QString capt = QString("%1 : %2").arg(item.name()).arg(instanceName());
-	KexiDialogBase *dlg = new KexiDialogBase(win, capt);
+//	QString capt = QString("%1 : %2").arg(item.name()).arg(instanceName());
+	KexiDialogBase *dlg = new KexiDialogBase(win);
 	dlg->m_supportedViewModes = m_supportedViewModes;
 	dlg->m_neverSaved = item.neverSaved();
 //	dlg->m_currentViewMode = viewMode;
 	dlg->m_part = this;
 	dlg->m_item = &item;
+	dlg->updateCaption();
 
 //js TODO: apply settings for caption displaying menthod; there can be option for
 //- displaying item.caption() as caption, if not empty, without instanceName
 //- displaying the same as above in tabCaption (or not)
-	dlg->setCaption( capt );
-//	dlg->setTabCaption( dlg->caption() );
-	dlg->setTabCaption( item.name() );
+//	dlg->setCaption( capt );
+//	dlg->setTabCaption( item.name() );
 	dlg->setDocID(item.identifier());
 	dlg->registerDialog();
 	dlg->setIcon( SmallIcon( dlg->itemIcon() ) );

@@ -29,6 +29,10 @@ KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char 
  , m_mainWin(mainWin)
  , m_dirty(false)
 {
+	QWidget *wi=this;
+	while ((wi = wi->parentWidget()) && !wi->inherits("KexiDialogBase"))
+		;
+	m_dialog = (wi && wi->inherits("KexiDialogBase")) ? static_cast<KexiDialogBase*>(wi) : 0;
 }
 
 KexiViewBase::~KexiViewBase()
@@ -43,14 +47,6 @@ bool KexiViewBase::beforeSwitchTo(int /* mode */)
 bool KexiViewBase::afterSwitchFrom(int /* mode */)
 {
 	return true;
-}
-
-KexiDialogBase* KexiViewBase::parentDialog()
-{
-	QWidget *wi=this;
-	while ((wi = wi->parentWidget()) && !wi->inherits("KexiDialogBase"))
-		;
-	return (wi && wi->inherits("KexiDialogBase")) ? static_cast<KexiDialogBase*>(wi) : 0;
 }
 
 QSize KexiViewBase::preferredSizeHint(const QSize& otherSize)
@@ -83,6 +79,27 @@ void KexiViewBase::propertyBufferSwitched()
 
 	if (dlg)
 		m_mainWin->propertyBufferSwitched( dlg );
+}
+
+void KexiViewBase::setDirty(bool set)
+{
+	if (m_dirty == set)
+		return;
+	m_dirty = set;
+	m_dirty = dirty();
+	if (m_dirty!=set)//eventually didn't change
+		return;
+	if (m_dialog)
+		m_dialog->dirtyChanged();
+}
+
+bool KexiViewBase::saveData()
+{
+	//TODO....
+
+	//finally:
+	setDirty(false);
+	return true;
 }
 
 #include "kexiviewbase.moc"

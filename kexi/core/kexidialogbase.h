@@ -45,9 +45,13 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 	Q_OBJECT
 
 	public:
-		KexiDialogBase(KexiMainWindow *parent, const QString &caption);
+		KexiDialogBase(KexiMainWindow *parent, const QString &caption = QString::null);
 		virtual ~KexiDialogBase();
+
 		bool isRegistered();
+
+		//! \return currently seelcted view or 0 if there is no current view
+		KexiViewBase *selectedView() const;
 
 		//! Adds \a view for the dialog. It will be the _only_ view (of unspecified mode) for the dialog
 		void addView(KexiViewBase *view);
@@ -132,15 +136,28 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 or NULL if there is no view set (or the view has no buffer assgned). */
 		KexiPropertyBuffer *propertyBuffer();
 
+		/*! Reimpelmented: "*" is added if for 'dirty' dialog's data. */
+//		QString caption() const;
+
 	public slots:
 //		virtual void detach();
 		virtual void setFocus();
+
+		void updateCaption();
+
+		/*! Tells this dialog to save changes to the backend.
+		 \return true on success. */
+		bool saveData();
 
 	signals:
 		void updateContextHelp();
 
 		//! emitted when the window is about to close
 		void closing();
+
+		/*! Emited to inform the world that 'dirty' flag changes. 
+		 Activated by KexiViewBase::setDirty(). */
+		void dirtyChanged(KexiDialogBase*);
 
 	protected:
 		void registerDialog();
@@ -154,6 +171,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		inline QWidgetStack * stack() const { return m_stack; }
 
+		void dirtyChanged();
+
 	private:
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;
@@ -165,12 +184,14 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		QGuardedPtr<KexiPart::Part> m_part;
 		KexiPart::Item *m_item;
 		QWidgetStack *m_stack;
+		QString m_origCaption; //helper
 		bool m_neverSaved : 1; //!< true, if this dialog's contents were never saved 
 
 		friend class KexiMainWindow;
 //		friend class KexiMainWindowImpl;
 		friend class KexiPart::Part;
 		friend class KexiInternalPart;
+		friend class KexiViewBase;
 };
 
 #endif

@@ -329,6 +329,16 @@ void KexiBrowser::setFocus()
 		m_list->setSelected(m_list->firstChild(), true);
 }
 
+void KexiBrowser::updateItemName( KexiPart::Item *item, bool dirty )
+{
+	if (!item)
+		return;
+	KexiBrowserItem *bitem = m_normalItems[item->identifier()];
+	if (!bitem)
+		return;
+	bitem->setText( 0, " "+ item->name() + (dirty ? "* " : " ") );
+}
+
 /*void KexiBrowser::focusInEvent( QFocusEvent *e )
 {
 	KexiDockBase::focusInEvent(e);

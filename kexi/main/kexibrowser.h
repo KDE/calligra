@@ -63,6 +63,8 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void clear();
 		virtual void setFocus();
 
+		void updateItemName( KexiPart::Item *item, bool dirty );
+
 	signals: 
 		void openItem( KexiPart::Item*, int viewMode );
 		/*! this signal is emmited when user double clicked (or single -depending on settings)

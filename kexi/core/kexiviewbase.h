@@ -40,7 +40,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		inline KexiMainWindow *mainWin() const { return m_mainWin; }
 
 		//! \return parent KexiDialogBase that contains this view, or 0 if no dialog contain this view
-		KexiDialogBase* parentDialog();
+		KexiDialogBase* parentDialog() const { return m_dialog; }
 
 		/*! \return preferred size hint, that can be used to resize the view.
 		 It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size, 
@@ -50,6 +50,11 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		virtual QSize preferredSizeHint(const QSize& otherSize);
 
 	public slots:
+		/*! Tells this view to save data changes to the backend. 
+		 Called by KexiDialogBase::saveData().
+		 Default implementation does nothing, returns true value.
+		 Reimpelment this for your needs. Should return true on success. */
+		virtual bool saveData();
 
 	signals:
 		//! emitted when the view is about to close
@@ -80,6 +85,12 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 flag from internal structures that may be changed. */
 		virtual bool dirty() const { return m_dirty; }
 
+		/*! \sets dirty flag on or off. It the flag changes, 
+		 dirty(bool) signal is emitted by parent dialog (KexiDialog),
+		 to inform the world about that. 
+		 Always use this function to update 'dirty' flag information. */
+		void setDirty(bool set = true);
+
 		virtual void closeEvent( QCloseEvent * e );
 
 		/*! \return a property buffer for this view. For reimplementation. By default returns NULL. */
@@ -93,6 +104,9 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		QString m_defaultIconName;
 
 		KexiMainWindow *m_mainWin;
+
+	private:
+		KexiDialogBase *m_dialog;
 		bool m_dirty : 1;
 
 	friend class KexiDialogBase;
