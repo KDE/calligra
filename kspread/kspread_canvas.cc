@@ -645,7 +645,6 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   /*if ( row == selection.bottom() && col == selection.right() )
     return;
   */
-  hideMarker();
 
   // Set the new lower right corner of the selection
   /*selection.setRight( col );
@@ -666,6 +665,10 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
      }
   else
      selection.setBottom( row );
+
+  bool selectionChanged = ( selection != table->selectionRect() );
+  if ( selectionChanged ) 
+    hideMarker();
 
   table->setSelection( selection, this );
 
@@ -691,7 +694,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   }
 
   updatePosWidget();
-  showMarker();
+  if ( selectionChanged ) 
+    showMarker();
 
   m_bMouseMadeSelection = true;
 }
