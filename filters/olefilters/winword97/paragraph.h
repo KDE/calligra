@@ -58,5 +58,9 @@ private:
 
     MsWord &m_document;
     MsWord::PAP m_pap;
+
+    // The default character properties for this paragraph.
+
+    MsWord::CHP m_chp;
 };
 #endif // PARAGRAPH_H

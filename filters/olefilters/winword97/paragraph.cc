@@ -34,6 +34,14 @@ Paragraph::Paragraph(MsWord &document) :
     m_pap.lspd.fMultLinespace = 1;
     m_pap.lspd.dyaLine = 240;
     m_pap.lvl = 9;
+    memset(&m_chp, 0, sizeof(m_chp));
+    m_chp.hps = 20;
+    m_chp.fcPic_fcObj_lTagObj = (MsWord::U32)-1;
+    m_chp.istd = 10;
+    m_chp.lidDefault = 0x400;
+    m_chp.lidFE = 0x400;
+    m_chp.wCharScale = 100;
+    m_chp.fUsePgsuSettings = (MsWord::U16)-1;
 }
 
 Paragraph::~Paragraph()
@@ -839,6 +847,95 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
         //kdDebug(s_area) << "Paragraph::apply: opcode:" << opcodeValue << endl;
         switch (opcodeValue)
         {
+        case sprmCFRMarkDel: // 0x0800
+        kdDebug(1000) << "Paragraph::apply: *************deleteed:" << opcodeValue << endl;
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.fRMarkDel = tmp == 1;
+            break;
+        case sprmCFRMark: // 0x0801
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.fRMark = tmp == 1;
+            break;
+        case sprmCFFldVanish: // 0x0802
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.fFldVanish = tmp == 1;
+            break;
+        case sprmCFBold: // 0x0835
+            MsWordGenerated::read(in + bytes, &tmp);
+            // TBD: implement access to base chp for >= 128 case!!!
+            if (tmp < 128)
+                m_chp.fBold = tmp == 1;
+            else
+                m_chp.fBold = tmp == 128 ? m_chp.fBold : !m_chp.fBold;
+            break;
+        case sprmCFItalic: // 0x0836
+            MsWordGenerated::read(in + bytes, &tmp);
+            // TBD: implement access to base chp for >= 128 case!!!
+            if (tmp < 128)
+                m_chp.fItalic = tmp == 1;
+            else
+                m_chp.fItalic = tmp == 128 ? m_chp.fItalic : !m_chp.fItalic;
+            break;
+        case sprmCFStrike: // 0x0837
+            MsWordGenerated::read(in + bytes, &tmp);
+            // TBD: implement access to base chp for >= 128 case!!!
+            if (tmp < 128)
+                m_chp.fStrike = tmp == 1;
+            else
+                m_chp.fStrike = tmp == 128 ? m_chp.fStrike : !m_chp.fStrike;
+            break;
+        case sprmCFOutline: // 0x0838
+            MsWordGenerated::read(in + bytes, &tmp);
+            // TBD: implement access to base chp for >= 128 case!!!
+            if (tmp < 128)
+                m_chp.fOutline = tmp == 1;
+            else
+                m_chp.fOutline = tmp == 128 ? m_chp.fOutline : !m_chp.fOutline;
+            break;
+        case sprmCFShadow: // 0x0839
+            MsWordGenerated::read(in + bytes, &tmp);
+            // TBD: implement access to base chp for >= 128 case!!!
+            if (tmp < 128)
+                m_chp.fShadow = tmp == 1;
+            else
+                m_chp.fShadow = tmp == 128 ? m_chp.fShadow : !m_chp.fShadow;
+            break;
+        case sprmCFSmallCaps: // 0x083A
+            MsWordGenerated::read(in + bytes, &tmp);
+            // TBD: implement access to base chp for >= 128 case!!!
+            if (tmp < 128)
+                m_chp.fSmallCaps = tmp == 1;
+            else
+                m_chp.fSmallCaps = tmp == 128 ? m_chp.fSmallCaps : !m_chp.fSmallCaps;
+            break;
+        case sprmCFCaps: // 0x083B
+            MsWordGenerated::read(in + bytes, &tmp);
+            // TBD: implement access to base chp for >= 128 case!!!
+            if (tmp < 128)
+                m_chp.fCaps = tmp == 1;
+            else
+                m_chp.fCaps = tmp == 128 ? m_chp.fCaps : !m_chp.fCaps;
+            break;
+        case sprmCFVanish: // 0x083C
+            MsWordGenerated::read(in + bytes, &tmp);
+            // TBD: implement access to base chp for >= 128 case!!!
+            if (tmp < 128)
+                m_chp.fVanish = tmp == 1;
+            else
+                m_chp.fVanish = tmp == 128 ? m_chp.fVanish : !m_chp.fVanish;
+            break;
+        case sprmCFImprint: // 0x0854
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.fImprint = tmp == 1;
+            break;
+        case sprmCFSpec: // 0x0855
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.fSpec = tmp == 1;
+            break;
+        case sprmCFObj: // 0x0856
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.fObj = tmp == 1;
+            break;
         case sprmPJc: // 0x2403
             MsWordGenerated::read(in + bytes, &m_pap.jc);
             break;
@@ -883,6 +980,30 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
         case sprmPOutLvl: // 0x2640
             MsWordGenerated::read(in + bytes, &m_pap.lvl);
             break;
+        case sprmCKul: // 0x2A3E
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.kul = tmp >> 3;
+            break;
+        case sprmCIco: // 0x2A42
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.ico = tmp >> 0;
+            break;
+        case sprmCIss: // 0x2A48
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.iss = tmp >> 0;
+            break;
+        case sprmCHps: // 0x4A43
+            MsWordGenerated::read(in + bytes, &m_chp.hps);
+            break;
+        case sprmCRgFtc0: // 0x4A4F
+            MsWordGenerated::read(in + bytes, &m_chp.ftcAscii);
+            break;
+        case sprmCRgFtc1: // 0x4A50
+            MsWordGenerated::read(in + bytes, &m_chp.ftcFE);
+            break;
+        case sprmCRgFtc2: // 0x4A51
+            MsWordGenerated::read(in + bytes, &m_chp.ftcOther);
+            break;
         case sprmPWHeightAbs: // 0x442B
             // TBD: NYI
             break;
@@ -891,6 +1012,15 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
             break;
         case sprmPIlfo: // 0x460B
             MsWordGenerated::read(in + bytes, &m_pap.ilfo);
+            break;
+        case sprmCRgLid0: // 0x486D
+            MsWordGenerated::read(in + bytes, &m_chp.lidDefault);
+            break;
+        case sprmCRgLid1: // 0x486E
+            MsWordGenerated::read(in + bytes, &m_chp.lidFE);
+            break;
+        case sprmCIstd: // 0x4A30
+            MsWordGenerated::read(in + bytes, &m_chp.istd);
             break;
         case sprmPDyaLine: // 0x6412
             // TBD: NYI
@@ -906,6 +1036,10 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
             break;
         case sprmPBrcRight: // 0x6427
             MsWordGenerated::read(in + bytes, &m_pap.brcRight);
+            break;
+        case sprmCPicLocation: // 0x6A03
+            MsWordGenerated::read(in + bytes, &m_chp.fcPic_fcObj_lTagObj);
+            m_chp.fSpec = 1;
             break;
         case sprmPDxaRight: // 0x840E
             MsWordGenerated::read(in + bytes, &m_pap.dxaRight);
@@ -1121,7 +1255,8 @@ void Paragraph::apply(MsWord::STD &style)
         if (cbUpx)
         {
             // Apply the grpprl to the base CHP.
-            //apply(grpprl + 1, cbUpx - 1);
+
+            apply(grpprl, cbUpx);
             grpprl += cbUpx;
         }
         cupx--;
