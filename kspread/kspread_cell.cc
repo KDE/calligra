@@ -124,7 +124,7 @@ public:
   // of painting it for example instead of painting 'this'.
   //
   // FIXME (comment): If the list consists of more than one obscuring
-  //                  element, then is there an order between them that 
+  //                  element, then is there an order between them that
   //                  is important?
   QValueList<KSpreadCell*> obscuringCells;
 
@@ -199,7 +199,7 @@ public:
   int  fmAscent;
 
   // Pointers to neighboring cells.
-  // FIXME (comment): Which order? 
+  // FIXME (comment): Which order?
   KSpreadCell  *nextCell;
   KSpreadCell  *previousCell;
 
@@ -278,7 +278,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, int _column, int _row )
 }
 
 
-KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, KSpreadStyle * _style, 
+KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, KSpreadStyle * _style,
 			  int _column, int _row )
   : KSpreadFormat( _sheet, _style )
 {
@@ -381,7 +381,7 @@ QString KSpreadCell::columnName() const
 }
 
 
-// Return the symbolic name of any column.  
+// Return the symbolic name of any column.
 //
 QString KSpreadCell::columnName( uint column )
 {
@@ -1071,9 +1071,9 @@ void KSpreadCell::freeAllObscuredCells()
   if (!d->hasExtra())
     return;
 
-  for ( int x = d->column + d->extra()->mergedXCells; 
+  for ( int x = d->column + d->extra()->mergedXCells;
 	x <= d->column + d->extra()->extraXCells; ++x ) {
-    for ( int y = d->row + d->extra()->mergedYCells; 
+    for ( int y = d->row + d->extra()->mergedYCells;
 	  y <= d->row + d->extra()->extraYCells; ++y ) {
       if ( x != d->column || y != d->row ) {
         KSpreadCell *cell = m_pTable->cellAt( x, y );
@@ -1925,9 +1925,9 @@ bool KSpreadCell::calc(bool delay)
 // other helper functions.
 //
 void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
-                             KSpreadView    *view, 
+                             KSpreadView    *view,
 			     const KoPoint  &coordinate,
-                             const QPoint   &cellRef, 
+                             const QPoint   &cellRef,
 			     bool paintBorderRight, bool paintBorderBottom,
 			     bool paintBorderLeft,  bool paintBorderTop,
 			     QPen & rightPen, QPen & bottomPen,
@@ -1953,7 +1953,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   Q_ASSERT(!(paintingObscured > 0 && d->extra()->obscuringCells.isEmpty()));
 
   // The parameter cellref should be *this, unless this is the default cell.
-  Q_ASSERT(isDefault() 
+  Q_ASSERT(isDefault()
 	   || (((cellRef.x() == d->column) && (cellRef.y() == d->row))));
 
   double left = coordinate.x();
@@ -1961,7 +1961,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   ColumnFormat * colFormat = m_pTable->columnFormat( cellRef.x() );
   RowFormat    * rowFormat = m_pTable->rowFormat( cellRef.y() );
 
-  // Set width, height to the total width and height that this cell covers, 
+  // Set width, height to the total width and height that this cell covers,
   // including obscured cells.
   double  width  = colFormat->dblWidth();
   double  height = rowFormat->dblHeight();
@@ -2034,16 +2034,16 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
 
   // Paint the default borders unless we are painting on a printer.
   if ( painter.device()->devType() != QInternal::Printer )
-    paintDefaultBorders( painter, rect, cellRect, cellRef, 
+    paintDefaultBorders( painter, rect, cellRect, cellRef,
 			 paintBorderRight, paintBorderBottom,
-                         paintBorderLeft,  paintBorderTop, 
+                         paintBorderLeft,  paintBorderTop,
 			 rightPen, bottomPen, leftPen, topPen );
 
   /* Paint all the cells that this one obscures. */
   paintingObscured++;
-  paintObscuredCells( rect, painter, view, cellRect, cellRef, 
+  paintObscuredCells( rect, painter, view, cellRect, cellRef,
 		      paintBorderRight, paintBorderBottom,
-                      paintBorderLeft,  paintBorderTop, 
+                      paintBorderLeft,  paintBorderTop,
 		      rightPen, bottomPen, leftPen, topPen );
   paintingObscured--;
 
@@ -2053,9 +2053,9 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
     painter.setClipping( false );
 
   if ( !isObscuringForced() )
-    paintCellBorders( painter, rect, cellRect, cellRef, 
+    paintCellBorders( painter, rect, cellRect, cellRef,
 		      paintBorderRight, paintBorderBottom,
-                      paintBorderLeft,  paintBorderTop, 
+                      paintBorderLeft,  paintBorderTop,
 		      rightPen, bottomPen, leftPen, topPen );
 
   if ( painter.device()->isExtDev() )
@@ -2063,7 +2063,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
 
   // Paint diagonal lines and page borders..
   paintCellDiagonalLines( painter, cellRect, cellRef );
-  paintPageBorders( painter, cellRect, cellRef, 
+  paintPageBorders( painter, cellRect, cellRef,
 		    paintBorderRight, paintBorderBottom );
 
   // Now print the content, if this cell isn't obscured.
@@ -2087,7 +2087,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
     //  b) something indicates that the text should not be painted
     //  c) the table is protected and the cell is hidden.
     if ( !d->strOutText.isEmpty()
-	 && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), 
+	 && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(),
 								  cellRef.y() ) )
 	 && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
@@ -2112,7 +2112,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
       for ( ; it != end; ++it ) {
         KSpreadCell *obscuringCell = *it;
 
-        listPoints.append( QPoint( obscuringCell->column(), 
+        listPoints.append( QPoint( obscuringCell->column(),
 				   obscuringCell->row() ) );
       }
 
@@ -2120,7 +2120,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
       QValueList<QPoint>::iterator  end1 = listPoints.end();
       for ( ; it1 != end1; ++it1 ) {
         QPoint obscuringCellRef = *it1;
-        KSpreadCell *obscuringCell = m_pTable->cellAt( obscuringCellRef.x(), 
+        KSpreadCell *obscuringCell = m_pTable->cellAt( obscuringCellRef.x(),
 						       obscuringCellRef.y() );
 
         if ( obscuringCell != 0 ) {
@@ -2134,17 +2134,17 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
           KoPoint corner( x, y );
           painter.save();
 
-          QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(), 
+          QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(),
 						     obscuringCellRef.y() ) );
-          QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(), 
+          QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(),
 						      obscuringCellRef.y() ) );
-          QPen lp( obscuringCell->effLeftBorderPen( obscuringCellRef.x(), 
+          QPen lp( obscuringCell->effLeftBorderPen( obscuringCellRef.x(),
 						    obscuringCellRef.y() ) );
-          QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(), 
+          QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(),
 						   obscuringCellRef.y() ) );
 
           obscuringCell->paintCell( rect, painter, view,
-                                    corner, obscuringCellRef, 
+                                    corner, obscuringCellRef,
 				    true, true, true, true,  // borders
 				    rp, bp, lp, tp );        // new pens
           painter.restore();
@@ -2222,7 +2222,7 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 	cell->paintCell( rect, painter, view,
 			 corner,
 			 QPoint( cellRef.x() + x, cellRef.y() + y ),
-			 paintBorderRight, paintBorderBottom, 
+			 paintBorderRight, paintBorderBottom,
 			 paintBorderLeft,  paintBorderTop,
 			 rightPen, bottomPen, leftPen, topPen );
       }
@@ -3391,10 +3391,6 @@ void KSpreadCell::paintCellDiagonalLines( QPainter& painter,
   }
 }
 
-
-# End of painting
-# ================================================================
-#
 
 
 int KSpreadCell::defineAlignX()
