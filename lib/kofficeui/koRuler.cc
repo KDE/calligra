@@ -92,8 +92,8 @@ void KoRuler::setMousePos(int mx,int my)
 
   p.end();
 
-  mposX = mx; 
-  mposY = my; 
+  mposX = mx;
+  mposY = my;
 }
 
 /*================================================================*/
@@ -114,7 +114,7 @@ void KoRuler::drawHorizontal(QPainter *_painter)
   p.setPen(QPen(black,1,SolidLine));
   p.setBrush(white);
 
-  QRect r; 
+  QRect r;
   if (!whileMovingBorderLeft)
     r.setLeft(-diffx + layout.ptLeft);
   else
@@ -130,7 +130,7 @@ void KoRuler::drawHorizontal(QPainter *_painter)
 
   p.setPen(QPen(black,1,SolidLine));
   p.setFont(font);
-  
+
   if (unit == "inch")
     dist = static_cast<int>((1000 * _INCH_TO_POINT) / 1000);
   else if (unit == "pt")
@@ -139,7 +139,7 @@ void KoRuler::drawHorizontal(QPainter *_painter)
     dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
 
   for (unsigned int i = 0;i <= layout.ptWidth;i += dist)
-    {    
+    {
       if (unit == "pt")
 	str.sprintf("%d00",j++);
       else
@@ -274,7 +274,7 @@ void KoRuler::drawVertical(QPainter *_painter)
     dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
 
   for (unsigned int i = 0;i <= layout.ptHeight;i += dist)
-    {    
+    {
       if (unit == "pt")
 	str.sprintf("%d00",j++);
       else
@@ -390,7 +390,7 @@ void KoRuler::mousePressEvent(QMouseEvent *e)
 	  p.end();
 	}
     }
-  else if (tabChooser && (flags & F_TABS) && tabChooser->getCurrTabType() != 0)    
+  else if (tabChooser && (flags & F_TABS) && tabChooser->getCurrTabType() != 0)
     {
       KoTabulator *_tab = new KoTabulator;
       switch (tabChooser->getCurrTabType())
@@ -471,7 +471,7 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
 	  p.drawLine(oldMx,0,oldMx,canvas->height());
 	  p.end();
 	}
-      
+
       repaint(false);
       emit newFirstIndent(i_first);
     }
@@ -486,7 +486,7 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
 	  p.drawLine(oldMx,0,oldMx,canvas->height());
 	  p.end();
 	}
-      
+
       repaint(false);
       int _tmp = i_first;
       emit newLeftIndent(i_left);
@@ -505,8 +505,8 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
 		     tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),canvas->height());
 	  p.end();
 	}
-      if (/*tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart) < layout.ptLeft || 
-	  tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart) > layout.ptWidth - 
+      if (/*tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart) < layout.ptLeft ||
+	  tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart) > layout.ptWidth -
 	  (layout.ptRight + layout.ptLeft) || */e->y() < -50 || e->y() > height() + 50)
 	tabList.remove(currTab);
 
@@ -642,7 +642,7 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 			  p.drawLine(oldMx,0,oldMx,canvas->height());
 			  p.drawLine(mx,0,mx,canvas->height());
 			}
-		      else 
+		      else
 			{
 			  p.end();
 			  return;
@@ -668,7 +668,7 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 			  p.drawLine(oldMx,0,oldMx,canvas->height());
 			  p.drawLine(mx,0,mx,canvas->height());
 			}
-		      else 
+		      else
 			{
 			  p.end();
 			  return;
@@ -796,17 +796,17 @@ void KoRuler::mouseDoubleClickEvent(QMouseEvent*)
       repaint(false);
     }
 
-  emit openPageLayoutDia(); 
+  emit openPageLayoutDia();
 }
 
 /*================================================================*/
 void KoRuler::setTabList(const QList<KoTabulator>* _tabList)
-{ 
+{
   tabList.setAutoDelete(true);
-  tabList.clear(); 
+  tabList.clear();
   tabList.setAutoDelete(false);
   QListIterator<KoTabulator> it(*_tabList);
-  for (it.toFirst(); !it.atLast(); ++it)
+  for (it.toFirst(); it.current(); ++it)
     {
       KoTabulator *t = new KoTabulator;
       t->type = it.current()->type;
@@ -815,7 +815,7 @@ void KoRuler::setTabList(const QList<KoTabulator>* _tabList)
       t->ptPos = it.current()->ptPos;
       tabList.append(t);
     }
-  repaint(false); 
+  repaint(false);
 }
 
 /*================================================================*/
@@ -847,11 +847,11 @@ void KoRuler::uncheckMenu()
 }
 
 /*================================================================*/
-void KoRuler::setUnit(const QString& _unit) 
-{ 
-  unit = _unit; 
+void KoRuler::setUnit(const QString& _unit)
+{
+  unit = _unit;
   uncheckMenu();
-  
+
   if (unit == "mm")
     {
       rb_menu->setItemChecked(mMM,true);
