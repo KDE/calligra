@@ -165,11 +165,11 @@ private:
  *  // Connect signals to code which handles highlighting
  *  // of found text, and on-the-fly replacement.
  *  QObject::connect(
- *      dialog, SIGNAL( highlight( QString &, int, int, QRect & ) ),
- *      this, SLOT( highlight( QString &, int, int, QRect & ) ) );
+ *      dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
+ *      this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
  *  QObject::connect(
- *      dialog, SIGNAL( replace( QString &, int, int, QRect & ) ),
- *      this, SLOT( replace( QString &, int, int, QRect & ) ) );
+ *      dialog, SIGNAL( replace( const QString &, int, int, const QRect & ) ),
+ *      this, SLOT( replace( const QString &, int, int, const QRect & ) ) );
  *
  *  for (text chosen by option SelectedText and in a direction set by FindBackwards)
  *  {
@@ -188,7 +188,7 @@ class KoReplace :
 public:
 
     // Will create a prompt dialog and use it as needed.
-    KoReplace(QString &pattern, QString &replacement, long options, QWidget *parent = 0);
+    KoReplace(const QString &pattern, const QString &replacement, long options, QWidget *parent = 0);
     ~KoReplace();
 
     // Walk the text fragment (e.g. kwrite line, kspread cell) looking for matches.
@@ -198,7 +198,7 @@ public:
     // @param text The text fragment to modify.
     // @param exposeOnReplace The region to expose
     // @return False if the user elected to discontinue the replace.
-    bool replace(QString &text, QRect &expose);
+    bool replace(QString &text, const QRect &expose);
 
     /**
      * Search the given string, and returns whether a match was found. If one is,
@@ -213,18 +213,18 @@ public:
      * @param options. The options to use.
      * @return The index at which a match was found, or -1 if no match was found.
      */
-    static int replace( QString &text, QString &pattern, QString &replacement, int index, long options, int *replacedLength );
-    static int replace( QString &text, QRegExp &pattern, QString &replacement, int index, long options, int *replacedLength );
+    static int replace( QString &text, const QString &pattern, const QString &replacement, int index, long options, int *replacedLength );
+    static int replace( QString &text, const QRegExp &pattern, const QString &replacement, int index, long options, int *replacedLength );
 
 signals:
 
     // Connect to this slot to implement highlighting of found text during the replace
     // operation.
-    void highlight(QString &text, int matchingIndex, int matchedLength, QRect &expose);
+    void highlight(const QString &text, int matchingIndex, int matchedLength, const QRect &expose);
 
     // Connect to this slot to implement updating of replaced text during the replace
     // operation.
-    void replace(QString &text, int replacementIndex, int replacedLength, QRect &expose);
+    void replace(const QString &text, int replacementIndex, int replacedLength, const QRect &expose);
 
 private:
 
@@ -236,13 +236,12 @@ private:
     unsigned m_replacements;
     QString m_text;
     int m_index;
-    QRect *m_expose;
+    QRect m_expose;
     int m_matchedLength;
     bool m_cancelled;
-    bool m_buttonPressed;
     void closeEvent(QCloseEvent *close);
 
-    static int replace( QString &text, QString &replacement, int index, int length );
+    static int replace( QString &text, const QString &replacement, int index, int length );
 
     // Binary compatible extensibility.
     class KoReplacePrivate;

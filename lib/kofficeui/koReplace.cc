@@ -87,7 +87,7 @@ void KoReplaceDialog::slotOk()
 }
 
 // Create the dialog.
-KoReplace::KoReplace(QString &pattern, QString &replacement, long options, QWidget *parent) :
+KoReplace::KoReplace(const QString &pattern, const QString &replacement, long options, QWidget *parent) :
     KDialogBase(parent, __FILE__, false,  // non-modal!
         i18n("Replace %1 with %2?").arg(pattern).arg(replacement),
         User3 | User2 | User1 | Close,
@@ -96,7 +96,6 @@ KoReplace::KoReplace(QString &pattern, QString &replacement, long options, QWidg
         i18n("&All"), i18n("&Skip"), i18n("&Yes"))
 {
     m_cancelled = false;
-    m_buttonPressed = false;
     m_options = options;
     m_parent = parent;
     m_replacements = 0;
@@ -117,10 +116,10 @@ KoReplace::~KoReplace()
 void KoReplace::closeEvent(QCloseEvent */*close*/)
 {
     m_cancelled = true;
-    m_buttonPressed = true;
+    kapp->exit_loop();
 }
 
-bool KoReplace::replace(QString &text, QRect &expose)
+bool KoReplace::replace(QString &text, const QRect &expose)
 {
     if (m_options & KoFindDialog::FindBackwards)
     {
@@ -131,7 +130,7 @@ bool KoReplace::replace(QString &text, QRect &expose)
         m_index = 0;
     }
     m_text = text;
-    m_expose = &expose;
+    m_expose = expose;
     do
     {
         // Find the next match.
@@ -145,13 +144,9 @@ bool KoReplace::replace(QString &text, QRect &expose)
             {
                 // Tell the world about the match we found, in case someone wants to
                 // highlight it.
-                emit highlight(m_text, m_index, m_matchedLength, *m_expose);
-                m_buttonPressed = false;
+                emit highlight(m_text, m_index, m_matchedLength, m_expose);
                 show();
-                while (!m_buttonPressed)
-                {
-                    kapp->processEvents();
-                }
+                kapp->enter_loop();
             }
             else
             {
@@ -166,7 +161,7 @@ bool KoReplace::replace(QString &text, QRect &expose)
     return !m_cancelled;
 }
 
-int KoReplace::replace(QString &text, QString &pattern, QString &replacement, int index, long options, int *replacedLength)
+int KoReplace::replace(QString &text, const QString &pattern, const QString &replacement, int index, long options, int *replacedLength)
 {
     int matchedLength;
 
@@ -182,7 +177,7 @@ int KoReplace::replace(QString &text, QString &pattern, QString &replacement, in
     return index;
 }
 
-int KoReplace::replace(QString &text, QRegExp &pattern, QString &replacement, int index, long options, int *replacedLength)
+int KoReplace::replace(QString &text, const QRegExp &pattern, const QString &replacement, int index, long options, int *replacedLength)
 {
     int matchedLength;
 
@@ -198,7 +193,7 @@ int KoReplace::replace(QString &text, QRegExp &pattern, QString &replacement, in
     return index;
 }
 
-int KoReplace::replace(QString &text, QString &replacement, int index, int length)
+int KoReplace::replace(QString &text, const QString &replacement, int index, int length)
 {
     // TBD: implement backreferences.
     text.replace(index, length, replacement);
@@ -214,21 +209,21 @@ void KoReplace::slotUser1()
 
     // Tell the world about the replacement we made, in case someone wants to
     // highlight it.
-    emit replace(m_text, m_index, replacedLength, *m_expose);
+    emit replace(m_text, m_index, replacedLength, m_expose);
     m_replacements++;
     if (m_options & KoReplaceDialog::FindBackwards)
         m_index--;
     else
         m_index += replacedLength;
     m_options &= ~KoReplaceDialog::PromptOnReplace;
-    m_buttonPressed = true;
+    kapp->exit_loop();
 }
 
 // Skip.
 void KoReplace::slotUser2()
 {
     m_index++;
-    m_buttonPressed = true;
+    kapp->exit_loop();
 }
 
 // Yes.
@@ -240,13 +235,13 @@ void KoReplace::slotUser3()
 
     // Tell the world about the replacement we made, in case someone wants to
     // highlight it.
-    emit replace(m_text, m_index, replacedLength, *m_expose);
+    emit replace(m_text, m_index, replacedLength, m_expose);
     m_replacements++;
     if (m_options & KoReplaceDialog::FindBackwards)
         m_index--;
     else
         m_index += replacedLength;
-    m_buttonPressed = true;
+    kapp->exit_loop();
 }
 
 #include "koReplace.moc"

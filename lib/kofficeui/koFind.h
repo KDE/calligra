@@ -222,8 +222,8 @@ private:
  *  // Connect signals to code which handles highlighting
  *  // of found text.
  *  QObject::connect(
- *      dialog, SIGNAL( highlight( QString &, int, int, QRect & ) ),
- *      this, SLOT( highlight( QString &, int, int, QRect & ) ) );
+ *      dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
+ *      this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
  *
  *  for (text chosen by option SelectedText and in a direction set by FindBackwards)
  *  {
@@ -242,7 +242,7 @@ class KoFind :
 public:
 
     // Will create a prompt dialog and use it as needed.
-    KoFind(QString &pattern, long options, QWidget *parent = 0);
+    KoFind(const QString &pattern, long options, QWidget *parent = 0);
     ~KoFind();
 
     // Walk the text fragment (e.g. kwrite line, kspread cell) looking for matches.
@@ -252,7 +252,7 @@ public:
     // @param text The text fragment to modify.
     // @param exposeOnReplace The region to expose
     // @return False if the user elected to discontinue the find.
-    bool find(QString &text, QRect &expose);
+    bool find(const QString &text, const QRect &expose);
 
     /**
      * Search the given string, and returns whether a match was found. If one is,
@@ -267,14 +267,14 @@ public:
      * @param options. The options to use.
      * @return The index at which a match was found, or -1 if no match was found.
      */
-    static int find( QString &text, QString &pattern, int index, long options, int *matchedlength );
-    static int find( QString &text, QRegExp &pattern, int index, long options, int *matchedlength );
+    static int find( const QString &text, const QString &pattern, int index, long options, int *matchedlength );
+    static int find( const QString &text, const QRegExp &pattern, int index, long options, int *matchedlength );
 
 signals:
 
     // Connect to this slot to implement highlighting of found text during the find
     // operation.
-    void highlight(QString &text, int matchingIndex, int matchedLength, QRect &expose);
+    void highlight(const QString &text, int matchingIndex, int matchedLength, const QRect &expose);
 
 private:
 
@@ -285,14 +285,13 @@ private:
     unsigned m_matches;
     QString m_text;
     int m_index;
-    QRect *m_expose;
+    QRect m_expose;
     int m_matchedLength;
     bool m_cancelled;
-    bool m_buttonPressed;
     void closeEvent(QCloseEvent *close);
 
     static bool isInWord( QChar ch );
-    static bool isWholeWords( QString &text, int starts, int matchedLength );
+    static bool isWholeWords( const QString &text, int starts, int matchedLength );
 
     // Binary compatible extensibility.
     class KoFindPrivate;

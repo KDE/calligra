@@ -331,7 +331,7 @@ void KoFindDialog::slotOk()
 }
 
 // Create the dialog.
-KoFind::KoFind(QString &pattern, long options, QWidget *parent) :
+KoFind::KoFind(const QString &pattern, long options, QWidget *parent) :
     KDialogBase(parent, __FILE__, false,  // non-modal!
         i18n("Find next %1").arg(pattern),
         User1 | Close,
@@ -340,7 +340,6 @@ KoFind::KoFind(QString &pattern, long options, QWidget *parent) :
         i18n("&Yes"))
 {
     m_cancelled = false;
-    m_buttonPressed = false;
     m_options = options;
     m_parent = parent;
     m_matches = 0;
@@ -360,10 +359,10 @@ KoFind::~KoFind()
 void KoFind::closeEvent(QCloseEvent */*close*/)
 {
     m_cancelled = true;
-    m_buttonPressed = true;
+    kapp->exit_loop();
 }
 
-bool KoFind::find(QString &text, QRect &expose)
+bool KoFind::find(const QString &text, const QRect &expose)
 {
     if (m_options & KoFindDialog::FindBackwards)
     {
@@ -374,7 +373,7 @@ bool KoFind::find(QString &text, QRect &expose)
         m_index = 0;
     }
     m_text = text;
-    m_expose = &expose;
+    m_expose = expose;
     do
     {
         // Find the next match.
@@ -386,23 +385,18 @@ bool KoFind::find(QString &text, QRect &expose)
         {
             // Tell the world about the match we found, in case someone wants to
             // highlight it.
-            emit highlight(m_text, m_index, m_matchedLength, *m_expose);
-            m_buttonPressed = false;
+            emit highlight(m_text, m_index, m_matchedLength, m_expose);
             show();
-            while (!m_buttonPressed)
-            {
-                kapp->processEvents();
-            }
+            kapp->enter_loop();
         }
     }
     while ((m_index != -1) && !m_cancelled);
-    text = m_text;
 
     // Should the user continue?
     return !m_cancelled;
 }
 
-int KoFind::find(QString &text, QString &pattern, int index, long options, int *matchedLength)
+int KoFind::find(const QString &text, const QString &pattern, int index, long options, int *matchedLength)
 {
     // Handle regular expressions in the appropriate way.
     if (options & KoFindDialog::RegularExpression)
@@ -470,7 +464,7 @@ int KoFind::find(QString &text, QString &pattern, int index, long options, int *
     return index;
 }
 
-int KoFind::find(QString &text, QRegExp &pattern, int index, long options, int *matchedLength)
+int KoFind::find(const QString &text, const QRegExp &pattern, int index, long options, int *matchedLength)
 {
     if (options & KoFindDialog::WholeWordsOnly)
     {
@@ -533,7 +527,7 @@ bool KoFind::isInWord(QChar ch)
     return ch.isLetter() || ch.isDigit() || ch == '_';
 }
 
-bool KoFind::isWholeWords(QString &text, int starts, int matchedLength)
+bool KoFind::isWholeWords(const QString &text, int starts, int matchedLength)
 {
     if ((starts == 0) || (!isInWord(text[starts - 1])))
     {
@@ -553,7 +547,7 @@ void KoFind::slotUser1()
         m_index--;
     else
         m_index++;
-    m_buttonPressed = true;
+    kapp->exit_loop();
 }
 
 #include "koFind.moc"
