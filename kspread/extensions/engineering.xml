@@ -29,7 +29,7 @@
 
     <Function>
       <Name>BESSELI</Name>
-      <Type>String</Type>
+      <Type>Float</Type>
       <Parameter>
         <Comment>Where the function is evaluated</Comment>
         <Type>Float</Type>
@@ -50,7 +50,7 @@
 
     <Function>
       <Name>BESSELJ</Name>
-      <Type>String</Type>
+      <Type>Float</Type>
       <Parameter>
         <Comment>Where the function is evaluated</Comment>
         <Type>Float</Type>
@@ -71,7 +71,7 @@
 
     <Function>
       <Name>BESSELK</Name>
-      <Type>String</Type>
+      <Type>Float</Type>
       <Parameter>
         <Comment>Where the function is evaluated</Comment>
         <Type>Float</Type>
@@ -92,7 +92,7 @@
 
     <Function>
       <Name>BESSELY</Name>
-      <Type>String</Type>
+      <Type>Float</Type>
       <Parameter>
         <Comment>Where the function is evaluated</Comment>
         <Type>Float</Type>
@@ -129,6 +129,8 @@
       <Help>
         <Text>The CONVERT() function returns a conversion from one measurement system to another.</Text>
         <Text>Supported distance units: m (meter), in (inch), ft (feet).</Text>
+        <Text>Supported pressure units: Pa (Pascal), atm (atmosphere), mmHg (mm of Mercury), psi, Torr.</Text>
+        <Text>Supported energy units: J (Joule), e (erg), c (Thermodynamic calorie), cal (IT calorie), eV (electronvolt), HPh (Horsepower-hour), Wh (Watt-hour), flb (foot-pound), BTU.</Text>
         <Text>Supported temperature units: C (Celcius), F (Fahrenheit), K (Kelvin).</Text>
         <Syntax>CONVERT(Number; From Unit; To Unit)</Syntax>
         <Example>CONVERT(32;"C";"F") equals 89.6</Example>
