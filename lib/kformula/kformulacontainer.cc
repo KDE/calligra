@@ -214,6 +214,7 @@ void Container::testDirty()
 
 void Container::recalc()
 {
+    //kdDebug( DEBUGID ) << "Container::recalc" << endl;
     impl->dirty = false;
     ContextStyle& context = document()->getContextStyle();
     rootElement()->calcSizes( context );
@@ -222,7 +223,6 @@ void Container::recalc()
                          context.layoutUnitToPixelY( rootElement()->getHeight() ) );
     emit formulaChanged( context.layoutUnitPtToPt( context.pixelXToPt( rootElement()->getWidth() ) ),
                          context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getHeight() ) ) );
-    //emit cursorChanged( activeCursor() );
     emit cursorMoved( activeCursor() );
 }
 

@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <kinstance.h>
 #include <klocale.h>
@@ -30,12 +31,13 @@
 
 KFConfig::KFConfig( KFormulaPartView* parent )
     : KDialogBase( KDialogBase::IconList, i18n( "Configure KFormula" ),
-                   KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Default,
+                   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel | KDialogBase::Default,
                    KDialogBase::Ok )
 {
+    //kdDebug( 40000 ) << "KFConfig::KFConfig" << endl;
     QVBox* page = addVBoxPage( i18n( "Formula" ), i18n( "Formula settings" ),
                                BarIcon( "settings", KIcon::SizeMedium ) );
-    _page = new KFormula::ConfigurePage( parent->document()->getDocument(),
+    _page = new KFormula::ConfigurePage( parent->document()->getDocument(), this,
                                          KFormulaFactory::global()->config(),
                                          page );
 

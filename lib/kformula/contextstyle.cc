@@ -21,6 +21,7 @@
 #include <qfontmetrics.h>
 #include <qstring.h>
 
+#include <kdebug.h>
 #include <koGlobal.h>
 
 #include "contextstyle.h"
@@ -43,20 +44,19 @@ void ContextStyle::TextStyleValues::setup( QFont font,
 
 
 ContextStyle::ContextStyle()
-    : defaultFont("times"), nameFont("times"), numberFont("times"),
-      operatorFont("times"), symbolFont("symbol",12,QFont::Normal,FALSE),
+    : defaultFont( "Times", 18, QFont::Normal, true ),
+      nameFont( "Times" ), numberFont( "Times" ),
+      operatorFont( "Times" ), symbolFont( "Symbol" ),
       defaultColor(Qt::black), numberColor(Qt::blue),
       operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
       emptyColor(Qt::blue)
 {
-    defaultFont.setItalic(true);
-
     m_baseTextStyle = displayStyle;
 
     lineWidth = 1;
-    emptyRectWidth = 10;
-    emptyRectHeight = 10;
-    baseSize = 18;
+    //emptyRectWidth = 10;
+    //emptyRectHeight = 10;
+    baseSize = defaultFont.pointSizeFloat();
 
     linearMovement = false;
 
@@ -68,6 +68,21 @@ ContextStyle::ContextStyle()
 
 void ContextStyle::readConfig( KConfig* config )
 {
+    config->setGroup( "kformula Font" );
+    QString fontName = config->readEntry( "defaultFont", defaultFont.toString() );
+    defaultFont.fromString( fontName );
+    fontName = config->readEntry( "nameFont", nameFont.toString() );
+    nameFont.fromString( fontName );
+    fontName = config->readEntry( "numberFont", numberFont.toString() );
+    numberFont.fromString( fontName );
+    fontName = config->readEntry( "operatorFont", operatorFont.toString() );
+    operatorFont.fromString( fontName );
+    //fontName = config->readEntry( "symbolFont", "times,12,-1,5,50,0,0,0,0,0" );
+    //symbolFont.fromString( fontName );
+
+    baseSize = defaultFont.pointSizeFloat();
+    setup();
+
     config->setGroup( "kformula Color" );
     defaultColor  = config->readColorEntry( "defaultColor",  &defaultColor );
     numberColor   = config->readColorEntry( "numberColor",   &numberColor );
@@ -89,7 +104,7 @@ bool ContextStyle::setZoom( double zoomX, double zoomY, bool, bool )
 
 QColor ContextStyle::getNumberColor()   const
 {
-    if ( edit() ) {
+    if ( edit() && syntaxHighlighting() ) {
         return numberColor;
     }
     return getDefaultColor();
@@ -97,7 +112,7 @@ QColor ContextStyle::getNumberColor()   const
 
 QColor ContextStyle::getOperatorColor() const
 {
-    if ( edit() ) {
+    if ( edit() && syntaxHighlighting() ) {
         return operatorColor;
     }
     return getDefaultColor();
@@ -105,7 +120,7 @@ QColor ContextStyle::getOperatorColor() const
 
 QColor ContextStyle::getErrorColor()    const
 {
-    if ( edit() ) {
+    if ( edit() && syntaxHighlighting() ) {
         return errorColor;
     }
     return getDefaultColor();
@@ -113,7 +128,7 @@ QColor ContextStyle::getErrorColor()    const
 
 QColor ContextStyle::getEmptyColor()    const
 {
-    if ( edit() ) {
+    if ( edit() && syntaxHighlighting() ) {
         return emptyColor;
     }
     return getDefaultColor();
@@ -147,7 +162,7 @@ double ContextStyle::getReductionFactor( TextStyle tstyle ) const
 
 luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
-    return ptToLayoutUnitPt( static_cast<luPt>( baseSize*getReductionFactor( tstyle ) ) );
+    return static_cast<luPt>( ptToLayoutUnitPt( baseSize*getReductionFactor( tstyle ) ) );
 }
 
 luPt ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
@@ -189,9 +204,9 @@ luPt ContextStyle::getBaseSize() const
 
 void ContextStyle::setBaseSize( pt size )
 {
-    pt newSize = size;
-    if ( newSize != baseSize ) {
-        baseSize = newSize;
+    //kdDebug( 40000 ) << "ContextStyle::setBaseSize" << endl;
+    if ( size != baseSize ) {
+        baseSize = size;
         setup();
     }
 }
@@ -204,12 +219,12 @@ luPixel ContextStyle::getLineWidth() const
 
 luPixel ContextStyle::getEmptyRectWidth() const
 {
-    return ptToLayoutUnitPixX( emptyRectWidth );
+    return ptToLayoutUnitPixX( baseSize/1.8 );
 }
 
 luPixel ContextStyle::getEmptyRectHeight() const
 {
-    return ptToLayoutUnitPixX( emptyRectHeight );
+    return ptToLayoutUnitPixX( baseSize/1.8 );
 }
 
 

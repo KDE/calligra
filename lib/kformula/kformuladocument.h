@@ -164,6 +164,12 @@ public:
     char leftBracketChar() const;
     char rightBracketChar() const;
 
+    /**
+     * Gets called when the configuration changed.
+     * (Maybe we can find a better solution.)
+     */
+    void updateConfig();
+
 public slots:
 
     void paste();

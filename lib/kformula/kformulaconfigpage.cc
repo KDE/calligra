@@ -19,6 +19,7 @@
 */
 
 #include <qvariant.h>   // first for gcc 2.7.2
+#include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qvbox.h>
@@ -27,6 +28,7 @@
 #include <kcolorbtn.h>
 #include <kconfig.h>
 #include <kdialog.h>
+#include <kfontdialog.h>
 #include <klocale.h>
 
 #include "contextstyle.h"
@@ -37,13 +39,40 @@
 KFORMULA_NAMESPACE_BEGIN
 
 
-ConfigurePage::ConfigurePage( Document* document, KConfig* config, QVBox* box, char* name )
-    : QObject( box->parent(), name ), m_document( document ), m_config( config )
+ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, QVBox* box, char* name )
+    : QObject( box->parent(), name ), m_document( document ), m_view( view ), m_config( config )
 {
-    const ContextStyle& contextStyle = document->getContextStyle();
+    const ContextStyle& contextStyle = document->getContextStyle( true );
 
-//     QVBoxLayout* boxLayout =
-//         new QVBoxLayout( box, KDialog::marginHint(), KDialog::spacingHint() );
+
+    // fonts
+
+    QWidget* fontWidget = new QWidget( box );
+    QGridLayout* fontLayout = new QGridLayout( fontWidget, 4, 1 );
+
+    defaultFont = contextStyle.getDefaultFont();
+    nameFont = contextStyle.getNameFont();
+    numberFont = contextStyle.getNumberFont();
+    operatorFont = contextStyle.getOperatorFont();
+
+    connect( buildFontLine( fontWidget, fontLayout, 0,
+                            defaultFont, i18n( "Default font" ), defaultFontName ), SIGNAL( clicked() ),
+             this, SLOT( selectNewDefaultFont() ) );
+    connect( buildFontLine( fontWidget, fontLayout, 1,
+                            nameFont, i18n( "Name font" ), nameFontName ), SIGNAL( clicked() ),
+             this, SLOT( selectNewNameFont() ) );
+    connect( buildFontLine( fontWidget, fontLayout, 2,
+                            numberFont, i18n( "Number font" ), numberFontName ), SIGNAL( clicked() ),
+             this, SLOT( selectNewNumberFont() ) );
+    connect( buildFontLine( fontWidget, fontLayout, 3,
+                            operatorFont, i18n( "Operator font" ), operatorFontName ), SIGNAL( clicked() ),
+             this, SLOT( selectNewOperatorFont() ) );
+
+
+    // syntax highlighting
+
+    syntaxHighlighting = new QCheckBox( i18n( "Syntax Highlighting" ), box );
+    syntaxHighlighting->setChecked( contextStyle.syntaxHighlighting() );
 
     QWidget* widget = new QWidget( box );
 
@@ -65,7 +94,7 @@ ConfigurePage::ConfigurePage( Document* document, KConfig* config, QVBox* box, c
     layout->addWidget( numberLabel, 1, 0 );
 
     numberColorBtn = new KColorButton( widget, "numberColor" );
-    numberColorBtn->setColor( contextStyle.getNumberColor() );
+    numberColorBtn->setColor( contextStyle.getNumberColorPlain() );
     layout->addWidget( numberColorBtn, 1, 1 );
 
 
@@ -74,7 +103,7 @@ ConfigurePage::ConfigurePage( Document* document, KConfig* config, QVBox* box, c
     layout->addWidget( operatorLabel, 2, 0 );
 
     operatorColorBtn = new KColorButton( widget, "operatorColor" );
-    operatorColorBtn->setColor( contextStyle.getOperatorColor() );
+    operatorColorBtn->setColor( contextStyle.getOperatorColorPlain() );
     layout->addWidget( operatorColorBtn, 2, 1 );
 
 
@@ -83,7 +112,7 @@ ConfigurePage::ConfigurePage( Document* document, KConfig* config, QVBox* box, c
     layout->addWidget( emptyLabel, 3, 0 );
 
     emptyColorBtn = new KColorButton( widget, "emptyColor" );
-    emptyColorBtn->setColor( contextStyle.getEmptyColor() );
+    emptyColorBtn->setColor( contextStyle.getEmptyColorPlain() );
     layout->addWidget( emptyColorBtn, 3, 1 );
 
 
@@ -92,27 +121,76 @@ ConfigurePage::ConfigurePage( Document* document, KConfig* config, QVBox* box, c
     layout->addWidget( errorLabel, 4, 0 );
 
     errorColorBtn = new KColorButton( widget, "errorColor" );
-    errorColorBtn->setColor( contextStyle.getErrorColor() );
+    errorColorBtn->setColor( contextStyle.getErrorColorPlain() );
     layout->addWidget( errorColorBtn, 4, 1 );
-
 
 //     boxLayout->addLayout( layout );
 //     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 //     boxLayout->addItem( spacer );
+
+    connect( syntaxHighlighting, SIGNAL( clicked() ),
+             this, SLOT( syntaxHighlightingClicked() ) );
+
+    syntaxHighlightingClicked();
 }
+
+
+QPushButton* ConfigurePage::buildFontLine( QWidget* fontWidget, QGridLayout* layout, int number,
+                                           QFont font, QString name, QLabel*& fontName )
+{
+    QWidget* fontContainer = new QWidget( fontWidget );
+    QGridLayout* fontLayout = new QGridLayout( fontContainer, 1, 3 );
+
+    fontLayout->setColStretch(0, 0);
+    fontLayout->setColStretch(1, 1);
+    fontLayout->setColStretch(2, 0);
+
+    QLabel* fontTitle = new QLabel( name, fontContainer );
+
+    //font = new QFont();
+    //font->fromString( defaultFont );
+
+    QString labelName = font.family() + ' ' + QString::number( font.pointSize() );
+    fontName = new QLabel( labelName, fontContainer );
+    fontName->setFont( font );
+
+    QPushButton* chooseButton = new QPushButton( i18n( "Choose..." ), fontContainer );
+
+    fontLayout->addWidget( fontTitle, 0, 0 );
+    fontLayout->addWidget( fontName, 0, 1 );
+    fontLayout->addWidget( chooseButton, 0, 2 );
+
+    layout->addWidget( fontContainer, number, 0 );
+    return chooseButton;
+}
+
 
 void ConfigurePage::apply()
 {
-    ContextStyle& contextStyle = m_document->getContextStyle();
-    //contextStyle.setSyntaxHighlighting( ... );
+    ContextStyle& contextStyle = m_document->getContextStyle( true );
+
+    contextStyle.setDefaultFont( defaultFont );
+    contextStyle.setNameFont( nameFont );
+    contextStyle.setNumberFont( numberFont );
+    contextStyle.setOperatorFont( operatorFont );
+
+    contextStyle.setBaseSize( defaultFont.pointSizeFloat() );
+
+    contextStyle.setSyntaxHighlighting( syntaxHighlighting->isChecked() );
     contextStyle.setDefaultColor( defaultColorBtn->color() );
     contextStyle.setNumberColor( numberColorBtn->color() );
     contextStyle.setOperatorColor( operatorColorBtn->color() );
     contextStyle.setEmptyColor( emptyColorBtn->color() );
     contextStyle.setErrorColor( errorColorBtn->color() );
 
+    m_config->setGroup( "kformula Font" );
+    m_config->writeEntry( "defaultFont", defaultFont.toString() );
+    m_config->writeEntry( "nameFont", nameFont.toString() );
+    m_config->writeEntry( "numberFont", numberFont.toString() );
+    m_config->writeEntry( "operatorFont", operatorFont.toString() );
+
     m_config->setGroup( "kformula Color" );
-    //m_config->writeEntry( "syntaxHighlighting", true );
+    m_config->writeEntry( "syntaxHighlighting", syntaxHighlighting->isChecked() );
     m_config->writeEntry( "defaultColor", defaultColorBtn->color() );
     m_config->writeEntry( "numberColor",  numberColorBtn->color() );
     m_config->writeEntry( "operatorColor", operatorColorBtn->color() );
@@ -120,16 +198,99 @@ void ConfigurePage::apply()
     m_config->writeEntry( "errorColor", errorColorBtn->color() );
 
     // notify!!!
-    //document->
+    m_document->updateConfig();
 }
 
 void ConfigurePage::slotDefault()
 {
+    defaultFont = QFont( "Times", 18, QFont::Normal, true );
+    nameFont = QFont( "Times" );
+    numberFont = QFont( "Times" );
+    operatorFont = QFont( "Times" );
+
+    updateFontLabel( defaultFont, defaultFontName );
+    updateFontLabel( nameFont, nameFontName );
+    updateFontLabel( numberFont, numberFontName );
+    updateFontLabel( operatorFont, operatorFontName );
+
+    syntaxHighlighting->setChecked( true );
+    syntaxHighlightingClicked();
     defaultColorBtn->setColor( Qt::black );
     numberColorBtn->setColor( Qt::blue );
     operatorColorBtn->setColor( Qt::darkGreen );
     emptyColorBtn->setColor( Qt::blue );
     errorColorBtn->setColor( Qt::darkRed );
+}
+
+void ConfigurePage::syntaxHighlightingClicked()
+{
+    bool checked = syntaxHighlighting->isChecked();
+    defaultColorBtn->setEnabled( checked );
+    numberColorBtn->setEnabled( checked );
+    operatorColorBtn->setEnabled( checked );
+    emptyColorBtn->setEnabled( checked );
+    errorColorBtn->setEnabled( checked );
+}
+
+void ConfigurePage::selectNewDefaultFont() {
+    QStringList list;
+    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
+    //KFontDialog dlg( m_pView, i18n( "Font Selector" ), false, true, list, true );
+    KFontDialog dlg( m_view, "Font Selector", false, true, list, true );
+    dlg.setFont( defaultFont );
+    int result = dlg.exec();
+    if ( KDialog::Accepted == result ) {
+        defaultFont = dlg.font();
+        updateFontLabel( defaultFont, defaultFontName );
+    }
+}
+
+void ConfigurePage::selectNewNameFont()
+{
+    QStringList list;
+    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
+    //KFontDialog dlg( m_pView, i18n( "Font Selector" ), false, true, list, true );
+    KFontDialog dlg( m_view, "Font Selector", false, true, list, true );
+    dlg.setFont( defaultFont );
+    int result = dlg.exec();
+    if ( KDialog::Accepted == result ) {
+        nameFont = dlg.font();
+        updateFontLabel( nameFont, nameFontName );
+    }
+}
+
+void ConfigurePage::selectNewNumberFont()
+{
+    QStringList list;
+    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
+    //KFontDialog dlg( m_pView, i18n( "Font Selector" ), false, true, list, true );
+    KFontDialog dlg( m_view, "Font Selector", false, true, list, true );
+    dlg.setFont( defaultFont );
+    int result = dlg.exec();
+    if ( KDialog::Accepted == result ) {
+        numberFont = dlg.font();
+        updateFontLabel( numberFont, numberFontName );
+    }
+}
+
+void ConfigurePage::selectNewOperatorFont()
+{
+    QStringList list;
+    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
+    //KFontDialog dlg( m_pView, i18n( "Font Selector" ), false, true, list, true );
+    KFontDialog dlg( m_view, "Font Selector", false, true, list, true );
+    dlg.setFont( defaultFont );
+    int result = dlg.exec();
+    if ( KDialog::Accepted == result ) {
+        operatorFont = dlg.font();
+        updateFontLabel( operatorFont, operatorFontName );
+    }
+}
+
+void ConfigurePage::updateFontLabel( QFont font, QLabel* label )
+{
+    label->setText( font.family() + ' ' + QString::number( font.pointSize() ) );
+    label->setFont( font );
 }
 
 KFORMULA_NAMESPACE_END

@@ -90,6 +90,10 @@ public:
     void setSyntaxHighlighting( bool highlight ) { m_syntaxHighlighting = highlight; }
 
     QColor getDefaultColor()  const { return defaultColor; }
+    QColor getNumberColorPlain()   const { return numberColor; }
+    QColor getOperatorColorPlain() const { return operatorColor; }
+    QColor getErrorColorPlain()    const { return errorColor; }
+    QColor getEmptyColorPlain()    const { return emptyColor; }
     QColor getNumberColor()   const;
     QColor getOperatorColor() const;
     QColor getErrorColor()    const;
@@ -107,12 +111,15 @@ public:
     QFont getOperatorFont()   const { return operatorFont; }
     QFont getSymbolFont()     const { return symbolFont; }
 
+    void setDefaultFont( QFont f )  { defaultFont = f; }
+    void setNameFont( QFont f )     { nameFont = f; }
+    void setNumberFont( QFont f )   { numberFont = f; }
+    void setOperatorFont( QFont f ) { operatorFont = f; }
+
 
     double getReductionFactor( TextStyle tstyle ) const;
 
     luPt getBaseSize() const;
-
-    // a hack! needs fix.
     void setBaseSize( pt pointSize );
 
     TextStyle getBaseTextStyle() const { return m_baseTextStyle; }
@@ -242,8 +249,8 @@ private:
      * The little rect (square in most cases) that marks the
      * empty place where elements might be inserted.
      */
-    pt emptyRectWidth;
-    pt emptyRectHeight;
+    //pt emptyRectWidth;
+    //pt emptyRectHeight;
 
     /**
      * true means to center the symbol between its indexes.

@@ -40,6 +40,7 @@ struct Document::Document_Impl {
             : leftBracketChar('('), rightBracketChar(')'), formula(0)
     {
         formulae.setAutoDelete( false );
+        //kdDebug( DEBUGID ) << "Document::Document_Impl " << formulae.count() << endl;
         readConfig( config );
     }
 
@@ -193,6 +194,7 @@ Document::Document( KConfig* config,
 
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
+    //kdDebug( DEBUGID ) << "Document::Document" << endl;
     impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
 
     if (his == 0) {
@@ -751,9 +753,11 @@ void Document::removeRow()
 
 void Document::toggleSyntaxHighlighting()
 {
+    //kdDebug( DEBUGID ) << "Document::toggleSyntaxHighlighting" << endl;
     impl->contextStyle.setSyntaxHighlighting( impl->syntaxHighlightingAction->isChecked() );
     // Only to notify all views. We don't expect to get new values.
-    //recalc();
+    // Here is a really bad bug.
+    recalc();
 }
 
 void Document::delimiterLeft()
@@ -790,9 +794,16 @@ bool Document::hasFormula()
 
 void Document::recalc()
 {
+    //kdDebug( DEBUGID ) << "Document::recalc " << impl->formulae.count() << endl;
     for ( Container* f = impl->formulae.first(); f != 0; f=impl->formulae.next() ) {
         f->recalc();
     }
+}
+
+void Document::updateConfig()
+{
+    impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
+    recalc();
 }
 
 KFORMULA_NAMESPACE_END

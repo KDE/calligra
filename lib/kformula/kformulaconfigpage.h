@@ -21,14 +21,22 @@
 #ifndef kfconfigpages_h
 #define kfconfigpages_h
 
+#include <qfont.h>
+
 #include <kdialogbase.h>
 
 #include "kformuladefs.h"
 
+class QCheckBox;
 class QColor;
+class QGridLayout;
+class QLabel;
+class QPushButton;
+class QWidget;
 
 class KColorButton;
 class KConfig;
+
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -41,19 +49,45 @@ class ConfigurePage : public QObject
     Q_OBJECT
 public:
 
-    ConfigurePage( Document* document, KConfig* config, QVBox* box, char* name = 0 );
+    ConfigurePage( Document* document, QWidget* view, KConfig* config, QVBox* box, char* name = 0 );
     void apply();
     void slotDefault();
 
+protected slots:
+
+    void syntaxHighlightingClicked();
+    void selectNewDefaultFont();
+    void selectNewNameFont();
+    void selectNewNumberFont();
+    void selectNewOperatorFont();
+
 private:
+
+    QPushButton* buildFontLine( QWidget* fontWidget, QGridLayout* layout, int number,
+                                QFont font, QString name, QLabel*& fontName );
+
+    void updateFontLabel( QFont font, QLabel* label );
+
     Document* m_document;
+    QWidget* m_view;
     KConfig* m_config;
+
+    QFont defaultFont;
+    QFont nameFont;
+    QFont numberFont;
+    QFont operatorFont;
+
+    QLabel* defaultFontName;
+    QLabel* nameFontName;
+    QLabel* numberFontName;
+    QLabel* operatorFontName;
 
     KColorButton* defaultColorBtn;
     KColorButton* numberColorBtn;
     KColorButton* operatorColorBtn;
     KColorButton* emptyColorBtn;
     KColorButton* errorColorBtn;
+    QCheckBox* syntaxHighlighting;
 };
 
 

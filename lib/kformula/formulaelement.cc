@@ -73,7 +73,7 @@ void FormulaElement::cursorHasMoved( FormulaCursor* cursor )
 void FormulaElement::calcSizes( ContextStyle& context )
 {
     //kdDebug( DEBUGID ) << "FormulaElement::calcSizes" << endl;
-    context.setBaseSize( getBaseSize() );
+    //context.setBaseSize( getBaseSize() );
     inherited::calcSizes( context, context.getBaseTextStyle(),
                           ContextStyle::normal );
 }
@@ -85,7 +85,7 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
                            ContextStyle& context )
 {
     //kdDebug( DEBUGID ) << "FormulaElement::draw" << endl;
-    context.setBaseSize( getBaseSize() );
+    //context.setBaseSize( getBaseSize() );
     inherited::draw( painter, r, context, context.getBaseTextStyle(),
                      ContextStyle::normal, LuPixelPoint() );
 }

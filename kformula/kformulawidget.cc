@@ -23,6 +23,7 @@
 #include <qpainter.h>
 
 #include <kapplication.h>
+#include <kdebug.h>
 //#include <klocale.h>
 //#include <kstdaction.h>
 
@@ -128,6 +129,8 @@ void KFormulaWidget::slotFormulaChanged(int width, int height)
     // Magic numbers just to see the cursor.
     resize(width + 5, height + 5);
     buffer.resize(width + 5, height + 5);
+    update();
+    //kdDebug( 40000 ) << "KFormulaWidget::slotFormulaChanged" << endl;
 }
 
 /**
