@@ -955,9 +955,8 @@ void
 VSegment::transform( const QWMatrix& m )
 {
 	for( int i = 0; i < degree(); ++i )
-	{
-		setPoint( i, point( i ).transform( m ) );
-	}
+		if( pointIsSelected( i ) )
+			setPoint( i, point( i ).transform( m ) );
 }
 
 void

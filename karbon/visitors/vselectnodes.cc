@@ -29,6 +29,7 @@ void
 VSelectNodes::visitVPath( VPath& path )
 {
 	path.first();
+	path.first()->selectKnot( false );
 
 	// skip "begin":
 	while( path.next() )
