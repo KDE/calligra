@@ -1146,12 +1146,15 @@ FormManager::adjustWidthToSmall()
 	if(!activeForm())
 		return;
 
-	int gridX = activeForm()->gridX();
-	int tmpw;
+	int tmpw=0;
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		if((tmpw == 0) || (w->width() < tmpw))
+			tmpw = w->width();
+	}
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
 	{
-		tmpw = int( (float)w->width() / ((float)gridX)) * gridX;
 		if(tmpw != w->width())
 			w->resize(tmpw, w->height());
 	}
@@ -1163,12 +1166,15 @@ FormManager::adjustWidthToBig()
 	if(!activeForm())
 		return;
 
-	int gridX = activeForm()->gridX();
-	int tmpw;
+	int tmpw=0;
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		if(w->width() > tmpw)
+			tmpw = w->width();
+	}
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
 	{
-		tmpw = int( (float)w->width() / ((float)gridX) + 1) * gridX;
 		if(tmpw != w->width())
 			w->resize(tmpw, w->height());
 	}
@@ -1180,12 +1186,15 @@ FormManager::adjustHeightToSmall()
 	if(!activeForm())
 		return;
 
-	int gridY = activeForm()->gridY();
-	int tmph;
+	int tmph=0;
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		if((tmph == 0) || (w->height() < tmph))
+			tmph = w->height();
+	}
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
 	{
-		tmph = int( (float)w->height() / ((float)gridY)) * gridY;
 		if(tmph != w->height())
 			w->resize(w->width(), tmph);
 	}
@@ -1197,12 +1206,15 @@ FormManager::adjustHeightToBig()
 	if(!activeForm())
 		return;
 
-	int gridY = activeForm()->gridY();
-	int tmph;
+	int tmph=0;
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		if(w->height() > tmph)
+			tmph = w->height();
+	}
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
 	{
-		tmph = int( (float)w->height() / ((float)gridY) + 1) * gridY;
 		if(tmph != w->height())
 			w->resize(w->width(), tmph);
 	}

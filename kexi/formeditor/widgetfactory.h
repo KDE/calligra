@@ -216,6 +216,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual void  resetEditor();
 		/*! This slot is called when the editor is destroyed.*/
 		virtual void  editorDeleted();
+		virtual void widgetDestroyed();
 
 	protected:
 		QGuardedPtr<QWidget> m_widget;

@@ -220,7 +220,10 @@ InsertWidgetCommand::execute()
 	QWidget *w = m_container->form()->manager()->lib()->createWidget(m_class, m_container->m_container, m_name.latin1(), m_container);
 
 	if(!w)
+	{
+		kdDebug() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
 		return;
+	}
 
 	//m_container->m_insertRect = m_insertRect;
 	// if the insertRect is invalid (ie only one point), we use widget' size hint

@@ -220,10 +220,19 @@ ObjectTree::removeChild(const QString &name)
 QString
 ObjectTree::genName(const QString &c)
 {
-	int appendix = m_names[c] + 1;
+	/*int appendix = m_names[c] + 1;
 	QString name(c);
 	name.append(QString::number(appendix));
-	m_names[c] = appendix;
+	m_names[c] = appendix;*/
+	QString name(c + "1");
+	int i = 1;
+
+	while(lookup(name))
+	{
+		i++;
+		name = name.left(name.length()-1) + QString::number(i);
+	}
+
 	return name;
 }
 

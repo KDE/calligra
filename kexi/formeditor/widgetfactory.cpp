@@ -78,7 +78,7 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, Container *containe
 	editor->show();
 	editor->setFocus();
 	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeText(const QString&)));
-	connect(w, SIGNAL(destroyed()), this, SLOT(resetEditor()));
+	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
 	connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
 
 	m_handles = new ResizeHandleSet(w, container->form(), true);
@@ -111,7 +111,7 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 	m_container = container;
 	m_editor = 0;
 
-	connect(w, SIGNAL(destroyed()), this, SLOT(resetEditor()));
+	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
 }
 
 bool
@@ -229,11 +229,28 @@ WidgetFactory::resetEditor()
 }
 
 void
+WidgetFactory::widgetDestroyed()
+{
+	if(m_editor)
+	{
+		m_editor->deleteLater();
+		m_editor = 0;
+	}
+
+	delete m_handles;
+	m_widget = 0;
+	m_handles = 0;
+	m_container = 0;
+}
+
+void
 WidgetFactory::editorDeleted()
 {
 	delete m_handles;
-	m_editor = 0;
+	m_widget = 0;
 	m_handles = 0;
+	m_container = 0;
+	m_editor= 0;
 }
 
 void
