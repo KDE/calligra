@@ -130,9 +130,23 @@ void KWAutoFormatDia::setupTab2()
 
     pbAdd = new QPushButton( i18n( "Add..."), buttons  );
     pbRemove = new QPushButton( i18n( "Remove" ), buttons );
+    connect(pbRemove,SIGNAL(clicked()),this,SLOT(slotRemoveEntry()));
     ( void )new QWidget( buttons );
     pbEdit = new QPushButton( i18n( "Edit..." ), buttons );
     ( void )new QWidget( buttons );
+}
+
+/*================================================================*/
+void KWAutoFormatDia::slotRemoveEntry()
+{
+    if(entries->currentItem()!=0)
+        {
+            doc->getAutoFormat().removeAutoFormatEntry(entries->currentItem()->text(0));
+            QMap< QString, KWAutoFormatEntry >::Iterator it =  doc->getAutoFormat().firstAutoFormatEntry();
+            entries->clear();
+            for ( ; it != doc->getAutoFormat().lastAutoFormatEntry(); ++it )
+                ( void )new QListViewItem( entries, it.key(), it.data().getReplace() );
+        }
 }
 
 /*================================================================*/

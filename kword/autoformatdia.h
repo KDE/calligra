@@ -62,7 +62,7 @@ protected:
     KWAutoFormat m_autoFormat;
 protected slots:
     virtual void slotOk();
-
+    void slotRemoveEntry();
     void chooseQuote1();
     void chooseQuote2();
 
