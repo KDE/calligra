@@ -570,7 +570,7 @@ static bool writeOutputFileUncompressed(const QString& filename, const QCString&
         return false;
     }
 
-    
+
     //Warning: do not use QString::length() (as in asciiexport.cc) but QCString::length()
     // "QString::length()" gives the number of characters, not the number of bytes needed to represent them in UTF8!
     fileOut.writeBlock ( (const char *) strOut, strOut.length() ); //Write the file
@@ -585,7 +585,6 @@ static bool writeOutputFileGZipped(const QString& filename, const QCString& strO
     gzFile fileOut;
 
     QCString name(filename.local8Bit());
-    kdDebug(30506)<< "Filename: -" << name <<"-"<<endl;
     fileOut=gzopen(name,"wb9"); //Use maximal compression
 
     if (!fileOut)
@@ -602,7 +601,7 @@ static bool writeOutputFileGZipped(const QString& filename, const QCString& strO
     if (num != int(strOut.length()))
     { //We have a problem
     	gzclose (fileOut); //Close the file
-        kdError(30506) << "Unable to write gzipped output file! " << num << " instead of " << strOut.length() << endl;
+        kdError(30506) << "Unable to write gzipped output file! " << num << " bytes written instead of " << strOut.length() << " bytes!" << endl;
     	return false;
     }
 
@@ -652,29 +651,28 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
     stringBufOut += "<abiword version=\"unnumbered\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
     stringBufOut += "<!-- This file is an AbiWord document. -->\n";
-    // Do we need the full four line comment header?
+    // QUESTION: Do we need the full four line comment header?
     stringBufOut += "\n";
 
     // Put the rest of the information in the way AbiWord puts its debug info!
-    // Say who we are in case we have a bug in our filter output!
-    stringBufOut += "<!-- KWord_Home_Page = http://www.koffice.org -->\n";
-    // Put the CVS version keyword into the file
-    stringBufOut += "<!-- KWord_Export_Filter_Version = ";
+
+    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
+    stringBufOut += "<!-- KWord_Export_Filter_Version =";
     QString strVersion("$Revision$");
     // Eliminate the dollar signs
     //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    stringBufOut += strVersion.mid(12).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
-    stringBufOut += " -->\n";
+    stringBufOut += strVersion.mid(10).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
+    stringBufOut += " -->\n\n";
 
 #if 1
-    // Some security to see if I have forgotten to run "make install"
+    // Some "security" to see if I have forgotten to run "make install"
     // (Can be deleted when the filter will be stable.)
-    kdDebug(30506) << "abiwordexport.cc " << __DATE__ " " __TIME__ << endl;
+    kdDebug(30506) << "abiwordexport.cc " << __DATE__ " " __TIME__ << " " << strVersion << endl;
 #endif
 
     // Now that we have the header, we can do the real work!
     ProcessDocTag (docNodeIn, NULL, stringBufOut);
-    
+
     // Add the tail of the file
     stringBufOut += "</abiword>\n"; //Close the file for XML
 
@@ -691,8 +689,6 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
     {
         strExt=filenameOut.mid(result);
     }
-
-    kdDebug(30506) << "AbiWord Filter: -" << strExt << "-" << endl;
 
     if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (standard extension)
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
