@@ -254,7 +254,6 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler, bool
         }
 
         QRect _rect = pointArray.boundingRect();
-        kdDebug() << "KPPolygonObject::paint _rect:" << DEBUGRECT(_rect) << endl;
         _painter->drawPixmap(_w/2, _w/2, pix, 0, 0, _rect.width(), _rect.height() );
 
         _painter->setPen( pen2 );
@@ -324,7 +323,6 @@ void KPPolygonObject::drawPolygon()
 
     double _diffx = (double)_rect.width() / 2.0;
     double _diffy = (double)_rect.height() / 2.0;
-    kdDebug()<<" _diffx :"<<_diffx<<endl;
     int _index = 0;
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;

@@ -194,20 +194,7 @@ void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, boo
     if ( angle == 0 )
         paint( _painter,_zoomHandler, false );
     else {
-        KoRect br = KoRect( 0, 0, ow, oh );
-        double pw = br.width();
-        double ph = br.height();
-        KoRect rr = br;
-        double yPos = -rr.y();
-        double xPos = -rr.x();
-        rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
-
-        QWMatrix m;
-        m.translate( _zoomHandler->zoomItX(pw / 2), _zoomHandler->zoomItY(ph / 2) );
-        m.rotate( angle );
-        m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
-
-        _painter->setWorldMatrix( m, true );
+        rotateObject(_painter,_zoomHandler);
         paint( _painter,_zoomHandler, false );
     }
 

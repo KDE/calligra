@@ -307,7 +307,7 @@ KoRect KPObject::rotateRectObject(KoZoomHandler *_zoomHandler ) const
     KoRect rr = br;
     double yPos = -rr.y();
     double xPos = -rr.x();
-    rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
+    rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
     QWMatrix m;
     m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItY(ph / 2.0) );
     m.rotate( angle );
@@ -315,6 +315,24 @@ KoRect KPObject::rotateRectObject(KoZoomHandler *_zoomHandler ) const
     KoRect r = KoRect::fromQRect(m.mapRect( br.toQRect() )); // see above TODO
     r.moveBy( orig.x() , orig.y() );
     return r;
+}
+
+void KPObject::rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler)
+{
+    KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
+    double pw = br.width();
+    double ph = br.height();
+    KoRect rr = br;
+    double yPos = -rr.y();
+    double xPos = -rr.x();
+    rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
+
+    QWMatrix m;
+    m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItY(ph / 2.0 ));
+    m.rotate( angle );
+    m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
+
+    paint->setWorldMatrix( m, true );
 }
 
 /*======================== contain point ? =======================*/
@@ -510,20 +528,7 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
 
         if ( angle != 0 )
         {
-            KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
-            double pw = br.width();
-            double ph = br.height();
-            KoRect rr = br;
-            double yPos = -rr.y();
-            double xPos = -rr.x();
-            rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
-
-            QWMatrix m;
-            m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItX(ph / 2.0) );
-            m.rotate( angle );
-            m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
-
-            _painter->setWorldMatrix( m, true );
+            rotateObject(_painter,_zoomHandler);
         }
 
         _painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
@@ -542,20 +547,7 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
 
         if ( angle != 0 )
         {
-            KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
-            double pw = br.width();
-            double ph = br.height();
-            KoRect rr = br;
-            double yPos = -rr.y();
-            double xPos = -rr.x();
-            rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
-
-            QWMatrix m;
-            m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItX(ph / 2.0) );
-            m.rotate( angle );
-            m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
-
-            _painter->setWorldMatrix( m, true );
+            rotateObject(_painter,_zoomHandler);
         }
 
         _painter->fillRect( 0, 0, _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
@@ -848,20 +840,7 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
         paint( _painter,_zoomHandler, false );
     else
     {
-        KoRect br = KoRect( 0, 0, ow, oh );
-        double pw = br.width();
-        double ph = br.height();
-        KoRect rr = br;
-        double yPos = -rr.y();
-        double xPos = -rr.x();
-        rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
-
-        QWMatrix m;
-        m.translate( _zoomHandler->zoomItX(pw / 2), _zoomHandler->zoomItY(ph / 2) );
-        m.rotate( angle );
-        m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
-
-        _painter->setWorldMatrix( m, true );
+        rotateObject(_painter,_zoomHandler);
         paint( _painter, _zoomHandler, false );
     }
 

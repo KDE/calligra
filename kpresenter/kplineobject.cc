@@ -161,20 +161,7 @@ void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool dr
         paint( _painter,_zoomhandler );
     else
     {
-        KoRect br = KoRect( 0, 0, ow, oh );
-        double pw = br.width();
-        double ph = br.height();
-        KoRect rr = br;
-        double yPos = -rr.y();
-        double xPos = -rr.x();
-        rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
-
-        QWMatrix m;
-        m.translate( _zoomhandler->zoomItX(pw / 2), _zoomhandler->zoomItY(ph / 2) );
-        m.rotate( angle );
-        m.translate( _zoomhandler->zoomItX(rr.left() +xPos), _zoomhandler->zoomItY(rr.top() + yPos) );
-
-        _painter->setWorldMatrix( m, true );
+        rotateObject(_painter,_zoomhandler);
         paint( _painter,_zoomhandler );
     }
 
