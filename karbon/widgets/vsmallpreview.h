@@ -26,7 +26,6 @@
 
 #include <qwidget.h>
 
-class KarbonPart;
 class QFrame;
 class QLabel;
 class QPixmap;
@@ -38,7 +37,7 @@ class VSmallPreview : public QWidget
 {
 	Q_OBJECT
 public:
-	VSmallPreview( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
+	VSmallPreview( QWidget* parent = 0L, const char* name = 0L );
 	~VSmallPreview();
 
 	void update( const VStroke &, const VFill & );
@@ -54,7 +53,6 @@ private:
 	QLabel *m_fillLabel;
 	QLabel *m_strokeLabel;
 	QPixmap m_pixmap;
-	KarbonPart *m_part;
 	VKoPainter* m_painter;
 	const VFill *m_fill;
 	const VStroke *m_stroke;

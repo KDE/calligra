@@ -27,7 +27,6 @@
 
 #include <klocale.h>
 
-#include "karbon_part.h"
 #include "vcolor.h"
 #include "vfill.h"
 #include "vkopainter.h"
@@ -37,8 +36,8 @@
 
 #define FRAMEWIDTH		40
 
-VSmallPreview::VSmallPreview( KarbonPart *part, QWidget* parent, const char* name )
-	: QWidget( parent, name ), m_part( part )
+VSmallPreview::VSmallPreview( QWidget* parent, const char* name )
+	: QWidget( parent, name )
 {
 	/* Create widget layout */
 	QHBoxLayout *layout = new QHBoxLayout( this, 4 );

@@ -20,7 +20,6 @@
 
 #include <klocale.h>
 
-#include "karbon_part.h"
 #include "vcolor.h"
 #include "vcolordlg.h"
 #include "vcolortab.h"
