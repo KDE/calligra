@@ -21,6 +21,7 @@
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
 #include <koOasisStyles.h>
+#include <koxmlns.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <qdom.h>
@@ -75,9 +76,9 @@ void KSpreadStyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
     for (unsigned int item = 0; item < nStyles; item++) {
         QDomElement styleElem = oasisStyles.userStyles()[item];
         QString name;
-        if ( styleElem.hasAttribute( "style:display-name" ) )
+        if ( styleElem.hasAttributeNS( KoXmlNS::style, "display-name" ) )
         {
-            name = styleElem.attribute( "style:display-name" );
+            name = styleElem.attributeNS( KoXmlNS::style, "display-name", QString::null );
         }
 
         if ( name == "Default" )
@@ -88,7 +89,7 @@ void KSpreadStyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
         else if ( !name.isEmpty() )
         {
             KSpreadCustomStyle * style = 0;
-            if ( styleElem.hasAttribute( "style:parent-style-name" ) && styleElem.attribute( "style:parent-style-name" ) == "Default" )
+            if ( styleElem.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) && styleElem.attributeNS( KoXmlNS::style, "parent-style-name", QString::null ) == "Default" )
                 style = new KSpreadCustomStyle( name, m_defaultStyle );
             else
                 style = new KSpreadCustomStyle( name, 0 );

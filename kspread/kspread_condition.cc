@@ -29,10 +29,11 @@
 #include "kspread_style_manager.h"
 #include "kspread_util.h"
 
-#include <qdom.h>
 #include <koxmlwriter.h>
-#include <qbuffer.h>
+#include <koxmlns.h>
 #include <kdebug.h>
+#include <qdom.h>
+#include <qbuffer.h>
 
 KSpreadConditional::KSpreadConditional():
   val1( 0.0 ), val2( 0.0 ), strVal1( 0 ), strVal2( 0 ),
@@ -418,13 +419,13 @@ void KSpreadConditions::loadOasisConditions( const QDomElement & element )
         if ( elementItem.tagName()== "style:map"  )
         {
             bool ok = true;
-            kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attribute("style:condition" )<<endl;
+            kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
             KSpreadConditional newCondition;
-            loadOasisConditionValue( elementItem.attribute("style:condition" ), newCondition );
-            if ( elementItem.hasAttribute( "style:apply-style-name" ) )
+            loadOasisConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString::null ), newCondition );
+            if ( elementItem.hasAttributeNS( KoXmlNS::style, "apply-style-name" ) )
             {
-                kdDebug()<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attribute( "style:apply-style-name" )<<endl;
-                newCondition.styleName = new QString( elementItem.attribute( "style:apply-style-name" ) );
+                kdDebug()<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
+                newCondition.styleName = new QString( elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null ) );
                 newCondition.style = manager->style( *newCondition.styleName );
                 if ( !newCondition.style )
                     ok = false;

@@ -66,6 +66,7 @@
 #include "valueformatter.h"
 #include "valueparser.h"
 
+#include <koxmlns.h>
 #include <koxmlwriter.h>
 
 #include <kmessagebox.h>
@@ -154,20 +155,20 @@ public:
 
     // Holds the user's input
     /*
-    
+
     Eventually, we'll want to get rid of strText and generate user's input
     on-the-fly. Then, for normal cells, we'll generate this string using
     KSpread::ValueConverter::self()->asString (value())
-    
+
     Here the problem is, that strText also holds the formula - we'll need
     to provide some method to generate it from the parsed version,
     created in KSpread::Formula. Hence, we won't be able to get rid
     of strText until we switch to the new formula parser and until we
     write some method that re-generates the input formula...
-    
+
     Alternately, we can keep using strText for formulas and generate it
     dynamically for static cells...
-    
+
     / Tomas
     */
     QString strText;
@@ -1486,7 +1487,7 @@ void KSpreadCell::setOutputText()
     KSpread::ValueFormatter *formatter = KSpread::ValueFormatter::self();
     d->strOutText = formatter->formatText (this, formatType());
   }
-  
+
   //check conditions if needed
   if ( d->hasExtra() && d->extra()->conditions )
     d->extra()->conditions->checkMatches();
@@ -4523,7 +4524,7 @@ void KSpreadCell::convertToTime ()
   //(Tomas) This is weird. And I mean *REALLY* weird. First, we
   //generate a time (QTime), then we convert it to text, then
   //we give the text to the cell and ask it to parse it. Weird...
-  
+
   if (isDefault() || isEmpty())
     return;
   if (isDate())
@@ -4540,7 +4541,7 @@ void KSpreadCell::convertToDate ()
   //(Tomas) This is weird. And I mean *REALLY* weird. First, we
   //generate a date (QDate), then we convert it to text, then
   //we give the text to the cell and ask it to parse it. Weird...
-  
+
   if (isDefault() || isEmpty())
     return;
   if (isTime())
@@ -4568,14 +4569,14 @@ void KSpreadCell::checkTextInput()
   QString str = d->strText;
 
   KSpread::ValueParser::self()->parse (str, this);
-  
+
   // Parsing as time acts like an autoformat: we even change d->strText
   // [h]:mm:ss -> might get set by ValueParser
   if (isTime() && (formatType() != Time_format7))
     d->strText = locale()->formatTime( value().asDateTime().time(), true);
-  
+
   // convert first letter to uppercase ?
-  if (m_pTable->getFirstLetterUpper() && value().isString() && 
+  if (m_pTable->getFirstLetterUpper() && value().isString() &&
       (!d->strText.isEmpty()))
   {
     QString str = value().asString();
@@ -5034,10 +5035,10 @@ void KSpreadCell::loadOasisConditional( QDomElement * style )
 bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
 {
     QString text;
-    kdDebug()<<" table:style-name :"<<element.attribute( "table:style-name" )<<endl;
-    if ( element.hasAttribute( "table:style-name" ) )
+    kdDebug()<<" table:style-name :"<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
+    if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        QString str = element.attribute( "table:style-name" );
+        QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         QDomElement * style = oasisStyles.styles()[str];
         kdDebug()<<" style :"<<style<<endl;
         KoStyleStack styleStack;
@@ -5055,9 +5056,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             // something in <text:p>, e.g. links
             text = subText.text();
 
-            if ( subText.hasAttribute( "xlink:href" ) )
+            if ( subText.hasAttributeNS( KoXmlNS::xlink, "href" ) )
       {
-                QString link = subText.attribute( "xlink:href" );
+                QString link = subText.attributeNS( KoXmlNS::xlink, "href", QString::null );
                 text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
                 d->extra()->QML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
                 d->strText = text;
@@ -5071,25 +5072,25 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
   }
     }
     bool isFormula = false;
-    if ( element.hasAttribute( "table:formula" ) )
+    if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
     {
-        kdDebug()<<" formula :"<<element.attribute( "table:formula" )<<endl;
+        kdDebug()<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString::null )<<endl;
         isFormula = true;
         QString formula;
-        convertFormula( formula, element.attribute( "table:formula" ) );
+        convertFormula( formula, element.attributeNS( KoXmlNS::table, "formula", QString::null ) );
         setCellText( formula );
     }
-    if ( element.hasAttribute( "table:validation-name" ) )
+    if ( element.hasAttributeNS( KoXmlNS::table, "validation-name" ) )
     {
-        kdDebug()<<" Cel has a validation :"<<element.attribute( "table:validation-name" )<<endl;
-        loadOasisValidation( element.attribute( "table:validation-name" ) );
+        kdDebug()<<" Cel has a validation :"<<element.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
+        loadOasisValidation( element.attributeNS( KoXmlNS::table, "validation-name", QString::null ) );
     }
-    if( element.hasAttribute( "office:value-type" ) )
+    if( element.hasAttributeNS( KoXmlNS::office, "value-type" ) )
     {
-        QString valuetype = element.attribute( "office:value-type" );
+        QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString::null );
         if( valuetype == "boolean" )
         {
-            QString val = element.attribute( "office:boolean-value" );
+            QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString::null );
             if( ( val == "true" ) || ( val == "false" ) )
             {
                 bool value = val == "true";
@@ -5102,7 +5103,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         else if( valuetype == "float" )
         {
             bool ok = false;
-            double value = element.attribute( "office:value" ).toDouble( &ok );
+            double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if ( !isFormula )
                 if( ok )
                     setValue( value );
@@ -5112,19 +5113,19 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         else if( valuetype == "currency" )
         {
             bool ok = false;
-            double value = element.attribute( "office:value" ).toDouble( &ok );
+            double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
                 if ( !isFormula )
                     setValue( value );
-                setCurrency( 1, element.attribute( "office:currency" ) );
+                setCurrency( 1, element.attributeNS( KoXmlNS::office, "currency", QString::null ) );
                 setFormatType (Money_format);
             }
         }
         else if( valuetype == "percentage" )
         {
             bool ok = false;
-            double value = element.attribute( "office:value" ).toDouble( &ok );
+            double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
                 if ( !isFormula )
@@ -5134,9 +5135,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         }
         else if ( valuetype == "date" )
         {
-            QString value = element.attribute( "office:value" );
+            QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
             if ( value.isEmpty() )
-                value = element.attribute( "office:date-value" );
+                value = element.attributeNS( KoXmlNS::office, "date-value", QString::null );
             kdDebug() << "Type: date, value: " << value << endl;
 
             // "1980-10-15"
@@ -5171,9 +5172,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         }
         else if ( valuetype == "time" )
         {
-            QString value = element.attribute( "office:value" );
+            QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
             if ( value.isEmpty() )
-                value = element.attribute( "office:time-value" );
+                value = element.attributeNS( KoXmlNS::office, "time-value", QString::null );
             kdDebug() << "Type: time: " << value << endl;
             // "PT15H10M12S"
             int hours = 0, minutes = 0, seconds = 0;
@@ -5214,9 +5215,9 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         }
         else if( valuetype == "string" )
         {
-          QString value = element.attribute( "office:value" );
+          QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
             if ( value.isEmpty() )
-                value = element.attribute( "office:string-value" );
+                value = element.attributeNS( KoXmlNS::office, "string-value", QString::null );
           setValue( value );
           setFormatType (Text_format);
         }
@@ -5226,16 +5227,16 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     // merged cells ?
     int colSpan = 1;
     int rowSpan = 1;
-    if ( element.hasAttribute( "table:number-columns-spanned" ) )
+    if ( element.hasAttributeNS( KoXmlNS::table, "number-columns-spanned" ) )
     {
         bool ok = false;
-        int span = element.attribute( "table:number-columns-spanned" ).toInt( &ok );
+        int span = element.attributeNS( KoXmlNS::table, "number-columns-spanned", QString::null ).toInt( &ok );
         if( ok ) colSpan = span;
     }
-    if ( element.hasAttribute( "table:number-rows-spanned" ) )
+    if ( element.hasAttributeNS( KoXmlNS::table, "number-rows-spanned" ) )
     {
         bool ok = false;
-        int span = element.attribute( "table:number-rows-spanned" ).toInt( &ok );
+        int span = element.attributeNS( KoXmlNS::table, "number-rows-spanned", QString::null ).toInt( &ok );
         if( ok ) rowSpan = span;
     }
     if ( colSpan > 1 || rowSpan > 1 )
@@ -5273,9 +5274,9 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
     if (d->hasExtra())
       delete d->extra()->validity;
     d->extra()->validity = new KSpreadValidity;
-    if ( element.hasAttribute( "table:condition" ) )
+    if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
-        QString valExpression = element.attribute( "table:condition" );
+        QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString::null );
         kdDebug()<<" element.attribute( table:condition ) "<<valExpression<<endl;
         //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
@@ -5375,12 +5376,12 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             }
         }
     }
-    if ( element.hasAttribute( "table:allow-empty-cell" ) )
+    if ( element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" ) )
     {
-        kdDebug()<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttribute( "table:allow-empty-cell" )<<endl;
-        d->extra()->validity->allowEmptyCell = ( ( element.attribute( "table:allow-empty-cell" )=="true" ) ? true : false );
+        kdDebug()<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" )<<endl;
+        d->extra()->validity->allowEmptyCell = ( ( element.attributeNS( KoXmlNS::table, "allow-empty-cell", QString::null )=="true" ) ? true : false );
     }
-    if ( element.hasAttribute( "table:base-cell-address" ) )
+    if ( element.hasAttributeNS( KoXmlNS::table, "base-cell-address" ) )
     {
         //todo what is it ?
     }
@@ -5388,15 +5389,15 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
     QDomElement help = element.namedItem( "table:help-message" ).toElement();
     if ( !help.isNull() )
     {
-        if ( help.hasAttribute( "table:title" ) )
+        if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
         {
-            kdDebug()<<"help.attribute( table:title ) :"<<help.attribute( "table:title" )<<endl;
-            d->extra()->validity->titleInfo = help.attribute( "table:title" );
+            kdDebug()<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString::null )<<endl;
+            d->extra()->validity->titleInfo = help.attributeNS( KoXmlNS::table, "title", QString::null );
         }
-        if ( help.hasAttribute( "table:display" ) )
+        if ( help.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kdDebug()<<"help.attribute( table:display ) :"<<help.attribute( "table:display" )<<endl;
-            d->extra()->validity->displayValidationInformation = ( ( help.attribute( "table:display" )=="true" ) ? true : false );
+            kdDebug()<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
+            d->extra()->validity->displayValidationInformation = ( ( help.attributeNS( KoXmlNS::table, "display", QString::null )=="true" ) ? true : false );
         }
         QDomElement attrText = help.namedItem( "text:p" ).toElement();
         if ( !attrText.isNull() )
@@ -5409,11 +5410,11 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
     QDomElement error = element.namedItem( "table:error-message" ).toElement();
     if ( !error.isNull() )
     {
-        if ( error.hasAttribute( "table:title" ) )
-            d->extra()->validity->title = error.attribute( "table:title" );
-        if ( error.hasAttribute( "table:message-type" ) )
+        if ( error.hasAttributeNS( KoXmlNS::table, "title" ) )
+            d->extra()->validity->title = error.attributeNS( KoXmlNS::table, "title", QString::null );
+        if ( error.hasAttributeNS( KoXmlNS::table, "message-type" ) )
         {
-            QString str = error.attribute( "table:message-type" );
+            QString str = error.attributeNS( KoXmlNS::table, "message-type", QString::null );
             if ( str == "warning" )
                 d->extra()->validity->m_action = Warning;
             else if ( str == "information" )
@@ -5424,10 +5425,10 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 kdDebug()<<"validation : message type unknown  :"<<str<<endl;
         }
 
-        if ( error.hasAttribute( "table:display" ) )
+        if ( error.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kdDebug()<<" display message :"<<error.attribute( "table:display" )<<endl;
-            d->extra()->validity->displayMessage = (error.attribute( "table:display" )=="true");
+            kdDebug()<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
+            d->extra()->validity->displayMessage = (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true");
         }
         QDomElement attrText = error.namedItem( "text:p" ).toElement();
         if ( !attrText.isNull() )
@@ -6194,7 +6195,7 @@ KSpreadCell::~KSpreadCell()
     }
 
     d->value = KSpreadValue::empty();
-    
+
     if (!isDefault())
       valueChanged ();  //our value has been changed (is now null), but only if we aren't default
 

@@ -30,14 +30,15 @@
 #include "KSpreadLayoutIface.h"
 #include "KSpreadRowIface.h"
 
-#include <dcopobject.h>
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <float.h>
+#include <koxmlns.h>
 #include <koGlobal.h>
 #include <koStyleStack.h>
 #include <koGenStyles.h>
+
+#include <dcopobject.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <float.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <iostream>
@@ -1030,29 +1031,29 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
 
     //kdDebug() << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
 
-  if ( font.hasAttribute( "fo:font-family" ) )
-    setTextFontFamily( font.attribute( "fo:font-family" ) );
-  if ( font.hasAttribute( "fo:color" ) )
-    setTextColor( QColor( font.attribute( "fo:color" ) ) );
-  if ( font.hasAttribute( "fo:font-size" ) )
-      setTextFontSize( (int) KoUnit::parseValue( font.attribute( "fo:font-size" ),10.0 ) );
+  if ( font.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
+    setTextFontFamily( font.attributeNS( KoXmlNS::fo, "font-family" ) );
+  if ( font.hasAttributeNS( KoXmlNS::fo, "color" ) )
+    setTextColor( QColor( font.attributeNS( KoXmlNS::fo, "color" ) ) );
+  if ( font.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
+      setTextFontSize( (int) KoUnit::parseValue( font.attributeNS( KoXmlNS::fo, "font-size" ),10.0 ) );
   else
     setTextFontSize( 10 );
 
-  if ( font.hasAttribute( "fo:font-style" ) )
+  if ( font.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
   {
     kdDebug(30518) << "italic" << endl;
     setTextFontItalic( true ); // only thing we support
   }
-  if ( font.hasAttribute( "fo:font-weight" ) )
+  if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
     setTextFontBold( true ); // only thing we support
-  if ( font.hasAttribute( "fo:font-weight" ) )
+  if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
     setTextFontBold( true ); // only thing we support
-  if ( font.hasAttribute( "fo:text-underline" ) || font.hasAttribute( "style:text-underline" ) )
+  if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || font.hasAttributeNS( KoXmlNS::style, "text-underline" ) )
     setTextFontUnderline( true ); // only thing we support
-  if ( font.hasAttribute( "style:text-crossing-out" ) )
+  if ( font.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) )
     setTextFontStrike( true ); // only thing we support
-  if ( font.hasAttribute( "style:font-pitch" ) )
+  if ( font.hasAttributeNS( KoXmlNS::style, "font-pitch" ) )
   {
     // TODO: possible values: fixed, variable
   }
@@ -1095,9 +1096,9 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
             }
         }
 #endif
-    if (  styleStack.hasAttribute("style:parent-style-name" ) )
+    if (  styleStack.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
     {
-        KSpreadStyle * s = m_pTable->doc()->styleManager()->style( styleStack.attribute("style:parent-style-name" ) );
+        KSpreadStyle * s = m_pTable->doc()->styleManager()->style( styleStack.attributeNS( KoXmlNS::style, "parent-style-name" ) );
 
         //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
         if ( s )
@@ -1106,17 +1107,17 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         }
     }
 
-    if ( styleStack.hasAttribute( "style:decimal-places" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "decimal-places" ) )
     {
         bool ok = false;
-        int p = styleStack.attribute( "style:decimal-places" ).toInt( &ok );
+        int p = styleStack.attributeNS( KoXmlNS::style, "decimal-places" ).toInt( &ok );
         if (ok )
             setPrecision( p );
     }
 
-    if ( styleStack.hasAttribute( "style:font-name" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
     {
-        QDomElement * font = oasisStyles.styles()[ styleStack.attribute( "style:font-name" ) ];
+        QDomElement * font = oasisStyles.styles()[ styleStack.attributeNS( KoXmlNS::style, "font-name" ) ];
         if ( font )
         {
             styleStack.save();
@@ -1138,24 +1139,24 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     //   style:condition="cell-content()=15"
     //     => style:apply-style-name="Result" style:base-cell-address="Sheet6.A5"/>
 
-    if ( styleStack.hasAttribute( "style:rotation-angle" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "rotation-angle" ) )
     {
         bool ok = false;
-        int a = styleStack.attribute( "style:rotation-angle" ).toInt( &ok );
+        int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
         if ( ok )
             setAngle( -a + 1 );
     }
 
-    if (  styleStack.hasAttribute( "fo:margin-left" ) )
+    if (  styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
     {
-        kdDebug()<<"margin-left :"<<KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ),0.0 )<<endl;
-        setIndent( KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ),0.0 ) );
+        kdDebug()<<"margin-left :"<<KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 )<<endl;
+        setIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
     }
 
-    kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttribute( "fo:text-align" )<<endl;
-    if ( styleStack.hasAttribute( "fo:text-align" ) )
+    kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" )<<endl;
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
     {
-        QString s = styleStack.attribute( "fo:text-align" );
+        QString s = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
         if ( s == "center" )
             setAlign( KSpreadFormat::Center );
         else if ( s == "end" )
@@ -1166,19 +1167,19 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
             setAlign( KSpreadFormat::Center );
     }
 
-    kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttribute( "fo:background-color" )<<endl;
+    kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
 
-    if ( styleStack.hasAttribute( "fo:background-color" ) )
-        setBgColor( QColor( styleStack.attribute( "fo:background-color" ) ) );
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
+        setBgColor( QColor( styleStack.attributeNS( KoXmlNS::fo, "background-color" ) ) );
 
-    if ( styleStack.hasAttribute( "style:print-content" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-content" ) )
     {
-        if ( styleStack.attribute( "style:print-content" ) == "false" )
+        if ( styleStack.attributeNS( KoXmlNS::style, "print-content" ) == "false" )
             setDontPrintText( false );
     }
-    if ( styleStack.hasAttribute( "style:cell-protect" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "cell-protect" ) )
     {
-        QString prot( styleStack.attribute( "style:cell-protect" ) );
+        QString prot( styleStack.attributeNS( KoXmlNS::style, "cell-protect" ) );
         if ( prot == "none" )
         {
             setNotProtected( true );
@@ -1214,12 +1215,12 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         kdDebug() << "Cell protected type" << prot << endl;
     }
 
-    if ( styleStack.hasAttribute( "fo:padding-left" ) )
-        setIndent(  KoUnit::parseValue( styleStack.attribute( "fo:padding-left" ) ) );
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-left" ) )
+        setIndent(  KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-left" ) ) );
 
-    if ( styleStack.hasAttribute( "fo:vertical-align" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "vertical-align" ) )
     {
-        QString s = styleStack.attribute( "fo:vertical-align" );
+        QString s = styleStack.attributeNS( KoXmlNS::fo, "vertical-align" );
         if ( s == "middle" )
             setAlignY( KSpreadFormat::Middle );
         else if ( s == "bottom" )
@@ -1230,43 +1231,43 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     else
         setAlignY( KSpreadFormat::Bottom ); //default into ooimpress
 
-    if ( styleStack.hasAttribute( "fo:wrap-option" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" ) )
     {
         setMultiRow( true );
 
         /* we do not support anything else yet
-           QString s = property.attribute( "fo:wrap-option" );
+           QString s = property.attributeNS( KoXmlNS::fo, "wrap-option", QString::null );
            if ( s == "wrap" )
            layout->setMultiRow( true );
         */
     }
-    if ( styleStack.hasAttribute( "fo:border-bottom" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
     {
-        setBottomBorderPen( convertOasisStringToPen( styleStack.attribute( "fo:border-bottom" ) ) );
+        setBottomBorderPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::fo, "border-bottom" ) ) );
         // TODO: style:border-line-width-bottom if double!
     }
 
-    if ( styleStack.hasAttribute( "fo:border-right" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-right" ) )
     {
-        setRightBorderPen( convertOasisStringToPen(  styleStack.attribute( "fo:border-right" ) ) );
+        setRightBorderPen( convertOasisStringToPen(  styleStack.attributeNS( KoXmlNS::fo, "border-right" ) ) );
         // TODO: style:border-line-width-right
     }
 
-    if ( styleStack.hasAttribute( "fo:border-top" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-top" ) )
     {
-        setTopBorderPen( convertOasisStringToPen(  styleStack.attribute( "fo:border-top" ) ) );
+        setTopBorderPen( convertOasisStringToPen(  styleStack.attributeNS( KoXmlNS::fo, "border-top" ) ) );
         // TODO: style:border-line-width-top
     }
 
-    if ( styleStack.hasAttribute( "fo:border-left" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-left" ) )
     {
-        setLeftBorderPen( convertOasisStringToPen( styleStack.attribute( "fo:border-left" ) ) );
+        setLeftBorderPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::fo, "border-left" ) ) );
         // TODO: style:border-line-width-left
     }
 
-    if ( styleStack.hasAttribute( "fo:border" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border" ) )
     {
-        QPen pen = convertOasisStringToPen( styleStack.attribute( "fo:border" ) );
+        QPen pen = convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::fo, "border" ) );
         setLeftBorderPen( pen );
         setRightBorderPen( pen );
         setTopBorderPen( pen );
@@ -1274,13 +1275,13 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
 
         // TODO: style:border-line-width-left
     }
-    if ( styleStack.hasAttribute( "style:diagonal-tl-br" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-tl-br" ) )
     {
-        setFallDiagonalPen( convertOasisStringToPen( styleStack.attribute( "style:diagonal-tl-br" ) ) );
+        setFallDiagonalPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::style, "diagonal-tl-br" ) ) );
     }
-    if ( styleStack.hasAttribute( "style:diagonal-bl-tr" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-bl-tr" ) )
     {
-        setGoUpDiagonalPen( convertOasisStringToPen( styleStack.attribute( "style:diagonal-bl-tr" ) ) );
+        setGoUpDiagonalPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" ) ) );
     }
 
     return true;

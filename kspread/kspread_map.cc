@@ -29,6 +29,7 @@
 #include <koOasisSettings.h>
 #include <kmdcodec.h>
 #include <koGenStyles.h>
+#include <koxmlns.h>
 #include <time.h>
 #include <stdlib.h>
 #include <ktempfile.h>
@@ -218,12 +219,12 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
 
 bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles )
 {
-    if ( body.hasAttribute( "table:structure-protected" ) )
+    if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
         QCString passwd( "" );
-        if ( body.hasAttribute( "table:protection-key" ) )
+        if ( body.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
-            QString p = body.attribute( "table:protection-key" );
+            QString p = body.attributeNS( KoXmlNS::table, "protection-key", QString::null );
             QCString str( p.latin1() );
             kdDebug(30518) << "Decoding password: " << str << endl;
             passwd = KCodecs::base64Decode( str );
@@ -242,11 +243,11 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
         QDomElement tableElement = tableNode.toElement();
         if( !tableElement.isNull() )
         if( tableElement.nodeName() == "table:table" )
-        if( !tableElement.attribute( "table:name" ).isEmpty() )
+        if( !tableElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
             {
                 KSpreadSheet* sheet = m_pDoc->createTable();
                 m_pDoc->addTable( sheet );
-                sheet->setTableName( tableElement.attribute( "table:name" ), true, false );
+                sheet->setTableName( tableElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
             }
 
         tableNode = tableNode.nextSibling();
@@ -259,9 +260,9 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
         QDomElement tableElement = tableNode.toElement();
         if( !tableElement.isNull() )
         if( tableElement.nodeName() == "table:table" )
-        if( !tableElement.attribute( "table:name" ).isEmpty() )
+        if( !tableElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
         {
-            QString name = tableElement.attribute( "table:name" );
+            QString name = tableElement.attributeNS( KoXmlNS::table, "name", QString::null );
             KSpreadSheet* sheet = m_pDoc->map()->findTable( name );
             if( sheet )
                 sheet->loadOasis( tableElement , oasisStyles );

@@ -48,6 +48,7 @@
 #include <koUnit.h>
 #include <koStyleStack.h>
 #include <koOasisSettings.h>
+#include <koxmlns.h>
 
 #include "dependencies.h"
 
@@ -299,7 +300,7 @@ public:
 
   int scrollPosX;
   int scrollPosY;
-  
+
   KSpread::DependencyManager *dependencies;
 };
 
@@ -383,7 +384,7 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
       QObject::setName( s.data() );
   }
   d->print = new KSpreadSheetPrint( this );
-  
+
   //initialize dependencies
   d->dependencies = new KSpread::DependencyManager (this);
 }
@@ -1080,16 +1081,16 @@ void KSpreadSheet::valueChanged (KSpreadCell *cell)
 {
   //TODO: call cell updating, when cell damaging implemented
   //TODO: do nothing is updates are disabled
-  
+
   //prepare the KSpreadPoint structure
   KSpreadPoint c;
   c.setRow (cell->row());
   c.setColumn (cell->column());
   c.table = this;
-  
+
   //update dependencies
   d->dependencies->cellChanged (c);
-  
+
   //nobody else seems to be setting the modified flag, so we do it here
   d->doc->setModified (true);
 }
@@ -6695,8 +6696,8 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
     if ( !headerleft.isNull() )
     {
         QDomElement e = headerleft.toElement();
-        if ( e.hasAttribute( "style:display" ) )
-            kdDebug()<<"header.hasAttribute( style:display ) :"<<e.hasAttribute( "style:display" )<<endl;
+        if ( e.hasAttributeNS( KoXmlNS::style, "display" ) )
+            kdDebug()<<"header.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style, "display" )<<endl;
         else
             kdDebug()<<"header left doesn't has attribute  style:display  \n";
     }
@@ -6705,8 +6706,8 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
     if ( !footerleft.isNull() )
     {
         QDomElement e = footerleft.toElement();
-        if ( e.hasAttribute( "style:display" ) )
-            kdDebug()<<"footer.hasAttribute( style:display ) :"<<e.hasAttribute( "style:display" )<<endl;
+        if ( e.hasAttributeNS( KoXmlNS::style, "display" ) )
+            kdDebug()<<"footer.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style, "display" )<<endl;
         else
             kdDebug()<<"footer left doesn't has attribute  style:display  \n";
     }
@@ -6798,9 +6799,9 @@ QString KSpreadSheet::getPart( const QDomNode & part )
 
 bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyles& oasisStyles )
 {
-    if ( tableElement.hasAttribute( "table:style-name" ) )
+    if ( tableElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        QString stylename = tableElement.attribute( "table:style-name" );
+        QString stylename = tableElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
         kdDebug()<<" style of table :"<<stylename<<endl;
         QDomElement *style = oasisStyles.styles()[stylename];
         Q_ASSERT( style );
@@ -6810,24 +6811,24 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             QDomElement properties( style->namedItem( "style:table-properties" ).toElement() );
             if ( !properties.isNull() )
             {
-                if ( properties.hasAttribute( "table:display" ) )
+                if ( properties.hasAttributeNS( KoXmlNS::table, "display" ) )
                 {
-                    bool visible = (properties.attribute( "table:display" ) == "true" ? true : false );
+                    bool visible = (properties.attributeNS( KoXmlNS::table, "display", QString::null ) == "true" ? true : false );
                     d->hide = !visible;
                 }
             }
-            if ( style->hasAttribute( "style:master-page-name" ) )
+            if ( style->hasAttributeNS( KoXmlNS::style, "master-page-name" ) )
             {
-                QString masterPageStyleName = style->attribute( "style:master-page-name" );
+                QString masterPageStyleName = style->attributeNS( KoXmlNS::style, "master-page-name", QString::null );
                 kdDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
                 QDomElement *masterStyle = oasisStyles.masterPages()[masterPageStyleName];
                 kdDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
                 if ( masterStyle )
                 {
                     loadTableStyleFormat( masterStyle );
-                    if ( masterStyle->hasAttribute( "style:page-layout-name" ) )
+                    if ( masterStyle->hasAttributeNS( KoXmlNS::style, "page-layout-name" ) )
                     {
-                        QString masterPageLayoutStyleName=masterStyle->attribute( "style:page-layout-name" );
+                        QString masterPageLayoutStyleName=masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString::null );
                         kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
                         QDomElement *masterLayoutStyle = oasisStyles.styles()[masterPageLayoutStyleName];
                         kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
@@ -6866,22 +6867,22 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         rowNode = rowNode.nextSibling();
     }
 
-    if ( tableElement.hasAttribute( "table:print-ranges" ) )
+    if ( tableElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
     {
         // e.g.: Sheet4.A1:Sheet4.E28
-        QString range = tableElement.attribute( "table:print-ranges" );
+        QString range = tableElement.attributeNS( KoXmlNS::table, "print-ranges", QString::null );
         KSpreadRange p( translateOpenCalcPoint( range ) );
         if ( tableName() == p.tableName )
             d->print->setPrintRange( p.range );
     }
 
 
-    if ( tableElement.hasAttribute( "table:protected" ) )
+    if ( tableElement.hasAttributeNS( KoXmlNS::table, "protected" ) )
     {
         QCString passwd( "" );
-        if ( tableElement.hasAttribute( "table:protection-key" ) )
+        if ( tableElement.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
-            QString p = tableElement.attribute( "table:protection-key" );
+            QString p = tableElement.attributeNS( KoXmlNS::table, "protection-key", QString::null );
             QCString str( p.latin1() );
             kdDebug(30518) << "Decoding password: " << str << endl;
             passwd = KCodecs::base64Decode( str );
@@ -6907,56 +6908,56 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     // Laurent : Why we stored layout information as Millimeter ?!!!!!
     // kspread used point for all other attribute
     // I don't understand :(
-    if ( styleStack.hasAttribute( "fo:page-width" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "page-width" ) )
     {
-        width = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:page-width" ) ) );
+        width = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "page-width" ) ) );
     }
-    if ( styleStack.hasAttribute( "fo:page-height" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "page-height" ) )
     {
-        height = KoUnit::toMM( KoUnit::parseValue( styleStack.attribute( "fo:page-height" ) ) );
+        height = KoUnit::toMM( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "page-height" ) ) );
     }
-    if ( styleStack.hasAttribute( "fo:margin-top" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-top" ) )
     {
-        top = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-top" ) ) );
+        top = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-top" ) ) );
     }
-    if ( styleStack.hasAttribute( "fo:margin-bottom" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-bottom" ) )
     {
-        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-bottom" ) ) );
+        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-bottom" ) ) );
     }
-    if ( styleStack.hasAttribute( "fo:margin-left" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
     {
-        left = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ) ) );
+        left = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ) ) );
     }
-    if ( styleStack.hasAttribute( "fo:margin-right" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-right" ) )
     {
-        right = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-right" ) ) );
+        right = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-right" ) ) );
     }
-    if ( styleStack.hasAttribute( "style:writing-mode" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" ) )
     {
-        kdDebug()<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttribute( "style:writing-mode" )<<endl;
+        kdDebug()<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" )<<endl;
     }
-    if ( styleStack.hasAttribute( "style:print-orientation" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-orientation" ) )
     {
-        orientation = ( styleStack.attribute( "style:print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
+        orientation = ( styleStack.attributeNS( KoXmlNS::style, "print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
     }
-    if ( styleStack.hasAttribute("style:num-format" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "num-format" ) )
     {
         //not implemented into kspread
         //These attributes specify the numbering style to use.
         //If a numbering style is not specified, the numbering style is inherited from
         //the page style. See section 6.7.8 for information on these attributes
-        kdDebug()<<" num-format :"<<styleStack.attribute("style:num-format" )<<endl;
+        kdDebug()<<" num-format :"<<styleStack.attributeNS( KoXmlNS::style, "num-format" )<<endl;
 
     }
-    if ( styleStack.hasAttribute( "fo:background-color" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
         //todo
-        kdDebug()<<" fo:background-color :"<<styleStack.attribute( "fo:background-color" )<<endl;
+        kdDebug()<<" fo:background-color :"<<styleStack.attributeNS( KoXmlNS::fo, "background-color" )<<endl;
     }
-    if ( styleStack.hasAttribute( "style:print" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "print" ) )
     {
         //todo parsing
-        QString str = styleStack.attribute( "style:print" );
+        QString str = styleStack.attributeNS( KoXmlNS::style, "print" );
         kdDebug()<<" style:print :"<<str<<endl;
 
         if (str.contains( "headers" ) )
@@ -6993,9 +6994,9 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
             //todo it's not implemented
         }
     }
-    if ( styleStack.hasAttribute( "style:table-centering" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "table-centering" ) )
     {
-        QString str = styleStack.attribute( "style:table-centering" );
+        QString str = styleStack.attributeNS( KoXmlNS::style, "table-centering" );
         //not implemented into kspread
         kdDebug()<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
 #if 0
@@ -7032,14 +7033,14 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
 {
     kdDebug()<<"bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
-    bool collapsed = ( column.attribute( "table:visibility" ) == "collapse" );
+    bool collapsed = ( column.attributeNS( KoXmlNS::table, "visibility", QString::null ) == "collapse" );
     KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
     int number = 1;
     double width   = 10;//POINT_TO_MM( colWidth ); FIXME
-    if ( column.hasAttribute( "table:number-columns-repeated" ) )
+    if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
     {
         bool ok = true;
-        number = column.attribute( "table:number-columns-repeated" ).toInt( &ok );
+        number = column.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
         if ( !ok )
             number = 1;
         kdDebug() << "Repeated: " << number << endl;
@@ -7047,10 +7048,10 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
 
     KoStyleStack styleStack;
     styleStack.setTypeProperties("cell"); //style for column is cell format
-    if ( column.hasAttribute( "table:default-cell-style-name" ) )
+    if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
         //todo load cell attribute default into this column
-        QString str = column.attribute( "table:default-cell-style-name" );
+        QString str = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
         kdDebug()<<" default-cell-style-name :"<<str<<endl;
         QDomElement *style = oasisStyles.styles()[str];
         kdDebug()<<"default column style :"<<style<<endl;
@@ -7063,24 +7064,24 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     }
 
     styleStack.setTypeProperties("column");
-    if ( column.hasAttribute( "table:style-name" ) )
+    if ( column.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        QString str = column.attribute( "table:style-name" );
+        QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
         QDomElement *style = oasisStyles.styles()[str];
         styleStack.push( *style );
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
 
-    if ( styleStack.hasAttribute( "style:column-width" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "column-width" ) )
     {
-        width = KoUnit::parseValue( styleStack.attribute( "style:column-width" ) , -1 );
+        width = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "column-width" ) , -1 );
         kdDebug()<<" style:column-width : width :"<<width<<endl;
     }
 
     bool insertPageBreak = false;
-    if ( styleStack.hasAttribute( "fo:break-before" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "break-before" ) )
     {
-        QString str = styleStack.attribute( "fo:break-before" );
+        QString str = styleStack.attributeNS( KoXmlNS::fo, "break-before" );
         if ( str == "page" )
         {
             insertPageBreak = true;
@@ -7121,33 +7122,33 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
     KoStyleStack styleStack;
     styleStack.setTypeProperties( "row" );
     int backupRow = rowIndex;
-    if ( row.hasAttribute( "table:style-name" ) )
+    if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        QString str = row.attribute( "table:style-name" );
+        QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
         QDomElement *style = oasisStyles.styles()[str];
         styleStack.push( *style );
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
     layout.loadOasisStyleProperties( styleStack, oasisStyles );
-    if ( styleStack.hasAttribute( "style:row-height" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
     {
-        height = KoUnit::parseValue( styleStack.attribute( "style:row-height" ) , -1 );
+        height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ) , -1 );
         kdDebug()<<" properties style:row-height : height :"<<height<<endl;
     }
 
     int number = 1;
-    if ( row.hasAttribute( "table:number-rows-repeated" ) )
+    if ( row.hasAttributeNS( KoXmlNS::table, "number-rows-repeated" ) )
     {
         bool ok = true;
-        int n = row.attribute( "table:number-rows-repeated" ).toInt( &ok );
+        int n = row.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt( &ok );
         if ( ok )
             number = n;
         kdDebug() << "Row repeated: " << number << endl;
     }
     bool collapse = false;
-    if ( row.hasAttribute( "table:visibility" ) )
+    if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
     {
-        QString visible = row.attribute( "table:visibility" );
+        QString visible = row.attributeNS( KoXmlNS::table, "visibility", QString::null );
         kdDebug()<<" row.attribute( table:visibility ) "<<visible<<endl;
         if ( visible == "collapse" )
             collapse=true;
@@ -7169,9 +7170,9 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
     }
 
     bool insertPageBreak = false;
-    if ( styleStack.hasAttribute( "fo:break-before" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "break-before" ) )
     {
-        QString str = styleStack.attribute( "fo:break-before" );
+        QString str = styleStack.attributeNS( KoXmlNS::fo, "break-before" );
         if ( str == "page" )
         {
             insertPageBreak = true;
@@ -7211,10 +7212,10 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                 KSpreadCell* cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisStyles );
 
-                if( cellElement.hasAttribute( "table:number-columns-repeated" ) )
+                if( cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
-                    int cols = cellElement.attribute( "table:number-columns-repeated" ).toInt( &ok );
+                    int cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
                     if( ok )
                         for( int i = 1; i < cols; i++ )
                         {
@@ -8278,7 +8279,7 @@ KSpreadSheet::~KSpreadSheet()
     delete d->dcop;
 
     delete d->dependencies;
-    
+
     delete d;
 }
 

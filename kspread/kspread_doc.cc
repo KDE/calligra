@@ -68,7 +68,8 @@
 
 #include "KSpreadDocIface.h"
 
-#include "koApplication.h"
+#include <koApplication.h>
+#include <koxmlns.h>
 
 using namespace std;
 using namespace KSpread;
@@ -2102,8 +2103,8 @@ void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
             {
                 QDomElement element = n.toElement();
                 if ( element.tagName() ==  "table:content-validation" ) {
-                    d->m_loadingInfo->appendValidation(element.attribute("table:name" ), element );
-                    kdDebug()<<" validation found :"<<element.attribute("table:name" )<<endl;
+                    d->m_loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString::null ), element );
+                    kdDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString::null )<<endl;
                 }
                 else {
                     kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
@@ -2142,7 +2143,7 @@ void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
         while ( !area.isNull() )
         {
             QDomElement e = area.toElement();
-            if ( e.isNull() || !e.hasAttribute( "table:name" ) || !e.hasAttribute( "table:cell-range-address" ) )
+            if ( e.isNull() || !e.hasAttributeNS( KoXmlNS::table, "name" ) || !e.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
             {
                 kdDebug() << "Reading in named area failed" << endl;
                 area = area.nextSibling();
@@ -2150,8 +2151,8 @@ void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
             }
 
             // TODO: what is: table:base-cell-address
-            QString name  = e.attribute( "table:name" );
-            QString areaPoint = e.attribute( "table:cell-range-address" );
+            QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
+            QString areaPoint = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
 
             d->m_loadingInfo->addWordInAreaList( name );
             kdDebug() << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
