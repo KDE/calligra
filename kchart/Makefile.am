@@ -20,7 +20,15 @@ kchart_SOURCES = chart.idl kchart.idl kchart_main.cc kchart_shell.cc \
 			KoChartPieConfigDialog.cpp KoChartLinesConfigDialog.cpp \
 			KoChartLinesPointsConfigDialog.cpp \
 			KoChartPointsConfigDialog.cpp KoChartConfigDialog.cpp \
-			KoChartBarConfigPage.cpp KoChartGeometryConfigPage.cpp
+			KoChartBarConfigPage.cpp KoChartGeometryConfigPage.cpp \
+			KChartWizard.cpp \
+			KChartWizardLabelsLegendPage.cpp \
+			KChartWizardSelectChartSubTypePage.cpp \
+			KChartWizardSelectChartTypePage.cpp \
+			KChartWizardSelectDataPage.cpp \
+			KChartWizardSetupAxesPage.cpp \
+			KChartWizardSetupDataPage.cpp 
+
 
 noinst_HEADERS =	kchart_main.h kchart_shell.h kchart_doc.h \
 					kchart.h kchart_view.h chart.h \
@@ -38,7 +46,15 @@ noinst_HEADERS =	kchart_main.h kchart_shell.h kchart_doc.h \
 					KChartPointsConfigDialog.h \
 					KChartConfigDialog.h \
 					KChartBarConfigPage.h \
-					KChartGeometryConfigPage.h
+					KChartGeometryConfigPage.h \
+					KChartWizard.h \
+					KChartWizardLabelsLegendPage.h \
+					KChartWizardSelectChartSubTypePage.h \
+					KChartWizardSelectChartTypePage.h \
+					KChartWizardSelectDataPage.h \
+					KChartWizardSetupAxesPage.h \
+					KChartWizardSetupDataPage.h 
+
 
 
 chart_IDLDIR = $(interfacedir)
@@ -49,7 +65,16 @@ METASOURCES = kchart_main.moc kchart_shell.moc kchart_doc.moc \
 	KoChartAreaConfigDialog.moc KoChartPieConfigDialog.moc \
 	KoChartLinesConfigDialog.moc KoChartLinesPointsConfigDialog.moc \
 	KoChartPointsConfigDialog.moc KoChartConfigDialog.moc \
-	KoChartBarConfigPage.moc KoChartGeometryConfigPage.moc
+	KoChartBarConfigPage.moc KoChartGeometryConfigPage.moc \
+	KChartWizard.moc \
+	KChartWizardLabelsLegendPage.moc \
+	KChartWizardSelectChartSubTypePage.moc \
+	KChartWizardSelectChartTypePage.moc \
+	KChartWizardSelectDataPage.moc \
+	KChartWizardSetupAxesPage.moc \
+	KChartWizardSetupDataPage.moc 
+
+
 
 noinst_HEADERS = kchart_main.h kchart_shell.h kchart_doc.h \
 	         kchart.h kchart_view.h chart.h \
