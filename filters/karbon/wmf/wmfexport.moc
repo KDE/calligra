@@ -1,0 +1,92 @@
+/****************************************************************************
+** WMFExport meta object code from reading C++ file 'wmfexport.h'
+**
+** Created: Wed Apr 9 18:36:15 2003
+**      by: The Qt MOC ($Id$)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#undef QT_NO_COMPAT
+#include "wmfexport.h"
+#include <qmetaobject.h>
+#include <qapplication.h>
+
+#include <private/qucomextra_p.h>
+#if !defined(Q_MOC_OUTPUT_REVISION) || (Q_MOC_OUTPUT_REVISION != 26)
+#error "This file was generated using the moc from 3.1.2. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+const char *WMFExport::className() const
+{
+    return "WMFExport";
+}
+
+QMetaObject *WMFExport::metaObj = 0;
+static QMetaObjectCleanUp cleanUp_WMFExport( "WMFExport", &WMFExport::staticMetaObject );
+
+#ifndef QT_NO_TRANSLATION
+QString WMFExport::tr( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "WMFExport", s, c, QApplication::DefaultCodec );
+    else
+	return QString::fromLatin1( s );
+}
+#ifndef QT_NO_TRANSLATION_UTF8
+QString WMFExport::trUtf8( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "WMFExport", s, c, QApplication::UnicodeUTF8 );
+    else
+	return QString::fromUtf8( s );
+}
+#endif // QT_NO_TRANSLATION_UTF8
+
+#endif // QT_NO_TRANSLATION
+
+QMetaObject* WMFExport::staticMetaObject()
+{
+    if ( metaObj )
+	return metaObj;
+    QMetaObject* parentObject = KoFilter::staticMetaObject();
+    metaObj = QMetaObject::new_metaobject(
+	"WMFExport", parentObject,
+	0, 0,
+	0, 0,
+#ifndef QT_NO_PROPERTIES
+	0, 0,
+	0, 0,
+#endif // QT_NO_PROPERTIES
+	0, 0 );
+    cleanUp_WMFExport.setMetaObject( metaObj );
+    return metaObj;
+}
+
+void* WMFExport::qt_cast( const char* clname )
+{
+    if ( !qstrcmp( clname, "WMFExport" ) )
+	return this;
+    return KoFilter::qt_cast( clname );
+}
+
+bool WMFExport::qt_invoke( int _id, QUObject* _o )
+{
+    return KoFilter::qt_invoke(_id,_o);
+}
+
+bool WMFExport::qt_emit( int _id, QUObject* _o )
+{
+    return KoFilter::qt_emit(_id,_o);
+}
+#ifndef QT_NO_PROPERTIES
+
+bool WMFExport::qt_property( int id, int f, QVariant* v)
+{
+    return KoFilter::qt_property( id, f, v);
+}
+
+bool WMFExport::qt_static_property( QObject* , int , int , QVariant* ){ return FALSE; }
+#endif // QT_NO_PROPERTIES

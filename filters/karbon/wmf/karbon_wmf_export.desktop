@@ -1,0 +1,10 @@
+[Desktop Entry]
+Icon=
+Name=Karbon14 WMF Export Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Export=image/x-wmf
+X-KDE-Import=application/x-karbon
+X-KDE-Weight=1
+X-KDE-Library=libwmfexport
+

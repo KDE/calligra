@@ -24,50 +24,19 @@ DESCRIPTION
 #define WMFIMPORT_H
 
 #include <koFilter.h>
-#include <qstring.h>
-#include <kwmf.h>
+#include <koStore.h>
 
-class WMFImport :
-    public KoFilter, protected KWmf
+
+class WMFImport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    WMFImport(
-        KoFilter *parent,
-        const char *name,
-        const QStringList&);
+    WMFImport( KoFilter *parent, const char *name, const QStringList&);
     virtual ~WMFImport();
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
-protected:
-
-    virtual void gotEllipse(
-        const DrawContext &dc,
-        QString type,
-        QPoint topLeft,
-        QSize halfAxes,
-        unsigned startAngle,
-        unsigned stopAngle);
-    virtual void gotPolygon(
-        const DrawContext &dc,
-        const QPointArray &points);
-    virtual void gotPolyline(
-        const DrawContext &dc,
-        const QPointArray &points);
-    virtual void gotRectangle(
-        const DrawContext &dc,
-        const QPointArray &points);
-
-private:
-    // Debug support.
-
-    static const int s_area;
-
-    QString m_text;
-    void pointArray(
-        const QPointArray &points);
 };
 
 #endif
