@@ -1388,10 +1388,20 @@ bool XMLTree::_bof(Q_UINT32, QDataStream &body)
 				break;
 			case 0x10:
 				table = tables.dequeue();
+				// FIXME: can happen as long as
+				//        the boundsheet stuff isn't _fully_ implemented
+				//		  (macrosheet etc..) (Niko)
+				if(!table)
+					break;
 				kdDebug(s_area) << "BOF: Worksheet: " << table->attribute("name") << endl;
 				break;
 			case 0x20:
 				table = tables.dequeue();
+				// FIXME: can happen as long as
+				//        the boundsheet stuff isn't _fully_ implemented
+				//		  (macrosheet etc..) (Niko)
+				if(!table)
+					break;	
 				kdDebug(s_area) << "BOF: Chart: " << table->attribute("name") << endl;
 				break;
 			default:
