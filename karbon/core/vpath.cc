@@ -408,8 +408,28 @@ VPath::combine( const VPath& path )
 void
 VPath::combineSegmentList( const VSegmentList& segmentList )
 {
+	// If current segmentlist is empty (only contains a "begin" segment),
+	// clear it before combining:
+	if(
+		m_segmentLists.count() == 1 &&
+		m_segmentLists.getLast()->count() == 1 )
+	{
+		m_segmentLists.clear();
+	}
+
 	VSegmentList* list = segmentList.clone();
 	list->setParent( this );
+
+// TODO: do complex inside tests instead:
+	// Make new segments clock wise oriented:
+	if( m_segmentLists.count() > 0 )
+	{
+		if( list->counterClockwise() )
+		{
+			list->revert();
+		}
+	}
+
 	m_segmentLists.append( list );
 }
 
@@ -497,6 +517,7 @@ VPath::load( const QDomElement& element )
 			{
 				VSegmentList sl( this );
 				sl.load( child );
+
 				combineSegmentList( sl );
 			}
 			else

@@ -523,6 +523,11 @@ VSegment::revert() const
 	segment->m_node[1] = m_node[0];
 	segment->m_node[2] = m_prev->m_node[2];
 
+	// Swap node selection:
+	segment->m_nodeSelected[0] = m_nodeSelected[1];
+	segment->m_nodeSelected[1] = m_nodeSelected[0];
+	segment->m_nodeSelected[2] = m_prev->m_nodeSelected[2];
+
 	// Swap control point fixing:
 	if( m_ctrlPointFixing == first )
 		segment->m_ctrlPointFixing = second;

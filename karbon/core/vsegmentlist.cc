@@ -353,6 +353,10 @@ VSegmentList::close()
 			lineTo( getFirst()->knot() );
 		}
 
+		// Make sure we are counter clockwise:
+		if( !counterClockwise() )
+			revert();
+
 		m_isClosed = true;
 	}
 }
@@ -416,7 +420,6 @@ void
 VSegmentList::revert()
 {
 	VSegmentList list( parent() );
-
 	list.moveTo( m_last->knot() );
 
 	VSegment* segment = m_last;
