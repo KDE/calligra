@@ -32,7 +32,7 @@ class QPainter;
 /* Class: KPPolylineObject                                        */
 /******************************************************************/
 
-class KPPolylineObject : public KPObject
+class KPPolylineObject : public KPShadowObject
 {
 public:
     KPPolylineObject();
@@ -41,22 +41,16 @@ public:
 
     KPPolylineObject &operator=( const KPPolylineObject & );
 
-    virtual void setPen( const QPen &_pen ) { pen = _pen; }
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }
 
     virtual ObjType getType() const { return OT_POLYLINE; }
     virtual QString getTypeString() const { return i18n("Polyline"); }
-
-    virtual QPen getPen() const { return pen; }
     virtual LineEnd getLineBegin() const { return lineBegin; }
     virtual LineEnd getLineEnd() const { return lineEnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
-
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       bool drawSelection, bool drawContour = FALSE );
 
     virtual void setSize( double _width, double _height );
     virtual void setSize( const KoSize & _size )
@@ -66,13 +60,13 @@ public:
 
 protected:
     float getAngle( const QPoint &p1, const QPoint &p2 );
-    void paint( QPainter *_painter,KoZoomHandler*_zoomHandler, bool drawContour );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
+			bool drawingShadow, bool drawContour = FALSE );
 
     void updatePoints( double _fx, double _fy );
 
     KoPointArray origPoints, points;
     KoSize origSize;
-    QPen pen;
     LineEnd lineBegin, lineEnd;
 };
 

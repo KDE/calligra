@@ -35,7 +35,7 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPLineObject::KPLineObject()
-    : KPObject(), pen()
+    : KPShadowObject()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
@@ -44,7 +44,7 @@ KPLineObject::KPLineObject()
 
 /*================== overloaded constructor ======================*/
 KPLineObject::KPLineObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd, LineType _lineType )
-    : KPObject(), pen( _pen )
+    : KPShadowObject( _pen )
 {
     lineBegin = _lineBegin;
     lineEnd = _lineEnd;
@@ -68,7 +68,6 @@ DCOPObject* KPLineObject::dcopObject()
 QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPObject::save(doc, offset);
-    fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
     if (lineType!=LT_HORZ)
         fragment.appendChild(KPObject::createValueElement("LINETYPE", static_cast<int>(lineType), doc));
     if (lineBegin!=L_NORMAL)
@@ -82,10 +81,7 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
 double KPLineObject::load(const QDomElement &element)
 {
     double offset=KPObject::load(element);
-    QDomElement e=element.namedItem("PEN").toElement();
-    if(!e.isNull())
-        setPen(KPObject::toPen(e));
-    e=element.namedItem("LINETYPE").toElement();
+    QDomElement e=element.namedItem("LINETYPE").toElement();
     if(!e.isNull()) {
         int tmp=0;
         if(e.hasAttribute("value"))
@@ -107,59 +103,6 @@ double KPLineObject::load(const QDomElement &element)
         lineEnd=static_cast<LineEnd>(tmp);
     }
     return offset;
-}
-
-/*========================= draw =================================*/
-void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler,
-			 bool drawSelection, bool drawContour )
-{
-    double ox = orig.x();
-    double oy = orig.y();
-    double ow = ext.width();
-    double oh = ext.height();
-
-    _painter->save();
-
-    if ( shadowDistance > 0 )
-    {
-        QPen tmpPen( pen );
-        pen.setColor( shadowColor );
-
-        if ( angle == 0 )
-        {
-            double sx = ox;
-            double sy = oy;
-            getShadowCoords( sx, sy,_zoomhandler );
-
-            _painter->translate( _zoomhandler->zoomItX(sx), _zoomhandler->zoomItY(sy) );
-            paint( _painter, _zoomhandler );
-        }
-        else
-        {
-            _painter->translate( _zoomhandler->zoomItX(ox), _zoomhandler->zoomItY(oy) );
-            rotateObjectWithShadow(_painter,_zoomhandler );
-            paint( _painter,_zoomhandler );
-        }
-
-        pen = tmpPen;
-    }
-
-    _painter->restore();
-
-    _painter->save();
-    _painter->translate( _zoomhandler->zoomItX(ox), _zoomhandler->zoomItY(oy) );
-
-    if ( angle == 0 )
-        paint( _painter,_zoomhandler );
-    else
-    {
-        rotateObject(_painter,_zoomhandler);
-        paint( _painter,_zoomhandler );
-    }
-
-    _painter->restore();
-
-    KPObject::draw( _painter, _zoomhandler, drawSelection );
 }
 
 /*===================== get angle ================================*/
@@ -202,12 +145,21 @@ float KPLineObject::getAngle( const KoPoint &p1, const KoPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler )
+void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
+			  bool drawingShadow, bool drawContour )
 {
     double ow = ext.width();
     double oh = ext.height();
-    QPen pen2(pen);
-    pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
+
+    QPen pen2;
+    if ( drawContour )
+	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+    else {
+	pen2 = pen;
+	pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
+   }
+    _painter->setPen( pen2 );
+
     switch ( lineType )
     {
     case LT_HORZ:
@@ -230,7 +182,6 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler )
         if ( lineEnd != L_NORMAL )
             drawFigure( lineEnd, _painter, KoPoint( ow - unzoom_diff2_width / 2.0, oh / 2.0 ), pen2.color(), (int)_w, 0.0, _zoomHandler );
 
-        _painter->setPen( pen2 );
         _painter->drawLine( (int)diff1.width() / 2, _zoomHandler->zoomItY( oh / 2 ),
                             _zoomHandler->zoomItX( ow - unzoom_diff2_width / 2 ), _zoomHandler->zoomItY( oh / 2) );
     } break;
@@ -254,7 +205,6 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler )
         if ( lineEnd != L_NORMAL )
             drawFigure( lineEnd, _painter, KoPoint( ow / 2.0, oh - unzoom_diff2_width / 2.0 ), pen2.color(), (int)_w, 90.0, _zoomHandler );
 
-        _painter->setPen( pen2 );
         _painter->drawLine( _zoomHandler->zoomItX( ow / 2 ), (int)diff1.width() / 2,
                             _zoomHandler->zoomItX( ow / 2 ), _zoomHandler->zoomItY( oh - unzoom_diff2_width / 2 ) );
     } break;
@@ -296,8 +246,6 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler )
             drawFigure( lineEnd, _painter, KoPoint( 0, 0 ), pen2.color(), (int)_w, _angle - 180, _zoomHandler );
             _painter->restore();
         }
-
-        _painter->setPen( pen2 );
         _painter->drawLine( _zoomHandler->zoomItX( unzoom_diff1_height / 2 + _w / 2 ),
                             _zoomHandler->zoomItY( unzoom_diff1_width / 2 + _w / 2 ),
                             _zoomHandler->zoomItX( ow - unzoom_diff2_height / 2 - _w / 2 ),
@@ -340,8 +288,6 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler )
             drawFigure( lineEnd, _painter, KoPoint( 0, 0 ), pen2.color(), (int)_w, _angle - 180,_zoomHandler );
             _painter->restore();
         }
-
-        _painter->setPen( pen2 );
         _painter->drawLine( _zoomHandler->zoomItX( unzoom_diff1_height / 2 + _w / 2 ),
                             _zoomHandler->zoomItY( oh - unzoom_diff1_width / 2 - _w / 2 ),
                             _zoomHandler->zoomItX( ow - unzoom_diff2_height / 2 - _w / 2 ),

@@ -34,33 +34,28 @@ class DCOPObject;
 /* Class: KPQuadricBezierCurveObject                              */
 /******************************************************************/
 
-class KPQuadricBezierCurveObject : public KPObject
+class KPQuadricBezierCurveObject : public KPShadowObject
 {
 public:
     KPQuadricBezierCurveObject();
-    KPQuadricBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize &_size,
+    KPQuadricBezierCurveObject( const KoPointArray &_controlPoints,
+				const KoPointArray &_allPoints, const KoSize &_size,
                                 const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPQuadricBezierCurveObject() {}
 
     KPQuadricBezierCurveObject &operator=( const KPQuadricBezierCurveObject & );
     virtual DCOPObject* dcopObject();
 
-    virtual void setPen( const QPen &_pen ) { pen = _pen; }
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }
 
     virtual ObjType getType() const { return OT_QUADRICBEZIERCURVE; }
     virtual QString getTypeString() const { return i18n("Quadric Bezier Curve"); }
-
-    virtual QPen getPen() const { return pen; }
     virtual LineEnd getLineBegin() const { return lineBegin; }
     virtual LineEnd getLineEnd() const { return lineEnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
-
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       bool drawSelection, bool drawContour = FALSE );
 
     virtual void setSize( double _width, double _height );
     virtual void setSize( const KoSize & _size )
@@ -70,7 +65,8 @@ public:
 
 protected:
     float getAngle( const QPoint &p1, const QPoint &p2 );
-    void paint( QPainter *_painter,KoZoomHandler*_zoomHandler, bool drawContour );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
+		bool drawingShadow, bool drawContour = FALSE );
 
     void updatePoints( double _fx, double _fy );
 
@@ -79,7 +75,6 @@ protected:
     KoPointArray origControlPoints, controlPoints;
     KoPointArray origAllPoints, allPoints;
     KoSize origSize;
-    QPen pen;
     LineEnd lineBegin, lineEnd;
 };
 

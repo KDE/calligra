@@ -31,7 +31,7 @@ class DCOPObject;
 /* Class: KPLineObject                                            */
 /******************************************************************/
 
-class KPLineObject : public KPObject
+class KPLineObject : public KPShadowObject
 {
 public:
     KPLineObject();
@@ -43,8 +43,6 @@ public:
 
     KPLineObject &operator=( const KPLineObject & );
 
-    virtual void setPen( const QPen &_pen )
-    { pen = _pen; }
     virtual void setLineBegin( LineEnd _lineBegin )
     { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd )
@@ -56,9 +54,6 @@ public:
     { return OT_LINE; }
     virtual QString getTypeString() const
     { return i18n("Line"); }
-
-    virtual QPen getPen() const
-    { return pen; }
     virtual LineEnd getLineBegin() const
     { return lineBegin; }
     virtual LineEnd getLineEnd() const
@@ -69,14 +64,11 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
-		       bool drawSelection, bool drawContour = FALSE );
-
 protected:
     float getAngle( const KoPoint &p1, const KoPoint &p2 );
-    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler );
+    virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
+			bool drawingShadow, bool drawContour = FALSE );
 
-    QPen pen;
     LineEnd lineBegin, lineEnd;
     LineType lineType;
 

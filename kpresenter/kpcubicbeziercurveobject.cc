@@ -36,7 +36,7 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPCubicBezierCurveObject::KPCubicBezierCurveObject()
-    : KPObject(), pen()
+    : KPShadowObject()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
@@ -44,9 +44,11 @@ KPCubicBezierCurveObject::KPCubicBezierCurveObject()
 
 
 /*================== overloaded constructor ======================*/
-KPCubicBezierCurveObject::KPCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints,
-                                                    const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPObject(), pen( _pen )
+KPCubicBezierCurveObject::KPCubicBezierCurveObject( const KoPointArray &_controlPoints,
+						    const KoPointArray &_allPoints,
+                                                    const KoSize &_size, const QPen &_pen,
+						    LineEnd _lineBegin, LineEnd _lineEnd )
+    : KPShadowObject( _pen )
 {
     controlPoints = KoPointArray( _controlPoints );
     origControlPoints = KoPointArray( _controlPoints );
@@ -76,7 +78,6 @@ DCOPObject* KPCubicBezierCurveObject::dcopObject()
 QDomDocumentFragment KPCubicBezierCurveObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment = KPObject::save( doc,offset );
-    fragment.appendChild( KPObject::createPenElement( "PEN", pen, doc ) );
     if ( !controlPoints.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
 	KoPointArray::ConstIterator it;
@@ -104,11 +105,7 @@ QDomDocumentFragment KPCubicBezierCurveObject::save( QDomDocument& doc, double o
 double KPCubicBezierCurveObject::load(const QDomElement &element)
 {
     double offset=KPObject::load( element );
-    QDomElement e = element.namedItem( "PEN" ).toElement();
-    if ( !e.isNull() )
-        setPen( KPObject::toPen( e ) );
-
-    e = element.namedItem( "POINTS" ).toElement();
+    QDomElement e = element.namedItem( "POINTS" ).toElement();
     if ( !e.isNull() ) {
         QDomElement elemPoint = e.firstChild().toElement();
         unsigned int index = 0;
@@ -148,54 +145,6 @@ double KPCubicBezierCurveObject::load(const QDomElement &element)
         lineEnd = static_cast<LineEnd>( tmp );
     }
     return offset;
-}
-
-/*========================= draw =================================*/
-void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-				     bool drawSelection, bool drawContour )
-{
-    /// See comment in KPFreehandObject::draw about future plans
-    double ox = orig.x();
-    double oy = orig.y();
-    double ow = ext.width();
-    double oh = ext.height();
-
-    _painter->save();
-    if ( shadowDistance > 0 ) {
-        QPen tmpPen( pen );
-        pen.setColor( shadowColor );
-        if ( angle == 0 ) {
-            double sx = ox;
-            double sy = oy;
-            getShadowCoords( sx, sy, _zoomHandler );
-
-            _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY(sy) );
-            paint( _painter,_zoomHandler, true, drawContour );
-        }
-        else {
-            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-            rotateObjectWithShadow(_painter,_zoomHandler);
-            paint( _painter,_zoomHandler, true, drawContour );
-        }
-
-        pen = tmpPen;
-    }
-
-    _painter->restore();
-
-    _painter->save();
-    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-
-    if ( angle == 0 )
-        paint( _painter,_zoomHandler, false, drawContour );
-    else {
-        rotateObject(_painter,_zoomHandler);
-        paint( _painter,_zoomHandler, false, drawContour );
-    }
-
-    _painter->restore();
-
-    KPObject::draw( _painter, _zoomHandler, drawSelection );
 }
 
 /*===================== get angle ================================*/
@@ -238,11 +187,17 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHan
 				      bool /*drawingShadow*/, bool drawContour )
 {
     int _w = pen.width();
-    QPen pen2(pen);
-    pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
-    QPointArray pointArray = allPoints.zoomPointArray( _zoomHandler, _w );
 
+    QPen pen2;
+    if ( drawContour )
+	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+    else {
+	pen2 = pen;
+	pen2.setWidth( _w );
+   }
     _painter->setPen( pen2 );
+
+    QPointArray pointArray = allPoints.zoomPointArray( _zoomHandler, _w );
     _painter->drawPolyline( pointArray );
 
     if ( lineBegin != L_NORMAL ) {

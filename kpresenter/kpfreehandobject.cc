@@ -35,16 +35,16 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPFreehandObject::KPFreehandObject()
-    : KPObject(), pen()
+    : KPShadowObject()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
 }
 
 /*================== overloaded constructor ======================*/
-KPFreehandObject::KPFreehandObject(  const KoPointArray &_points, const KoSize &_size, const QPen &_pen,
-                                     LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPObject(), pen( _pen )
+KPFreehandObject::KPFreehandObject(  const KoPointArray &_points, const KoSize &_size,
+				     const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+    : KPShadowObject( _pen )
 {
     points = KoPointArray( _points );
     origPoints = KoPointArray( _points );
@@ -70,7 +70,6 @@ DCOPObject* KPFreehandObject::dcopObject()
 QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )
 {
     QDomDocumentFragment fragment = KPObject::save( doc, offset );
-    fragment.appendChild( KPObject::createPenElement( "PEN", pen, doc ) );
     if ( !points.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
 	KoPointArray::ConstIterator it;
@@ -98,11 +97,8 @@ QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )
 double KPFreehandObject::load( const QDomElement &element )
 {
     double offset=KPObject::load( element );
-    QDomElement e = element.namedItem( "PEN" ).toElement();
-    if ( !e.isNull() )
-        setPen( KPObject::toPen( e ) );
 
-    e = element.namedItem( "POINTS" ).toElement();
+    QDomElement e = element.namedItem( "POINTS" ).toElement();
     if ( !e.isNull() ) {
         QDomElement elemPoint = e.firstChild().toElement();
         unsigned int index = 0;
@@ -140,58 +136,6 @@ double KPFreehandObject::load( const QDomElement &element )
         lineEnd = static_cast<LineEnd>( tmp );
     }
     return offset;
-}
-
-/*========================= draw =================================*/
-void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			     bool drawSelection, bool drawContour )
-{
-    // Hmm, this code is so much like KP2DObject::draw, but KPFreehandObject isn't a KP2DObject,
-    // it doesn't have gradients etc.
-    // Maybe this standard shadow-drawing code should be moved to KPObject in fact.
-    double ox = orig.x();
-    double oy = orig.y();
-    double ow = ext.width();
-    double oh = ext.height();
-
-    _painter->save();
-
-    if ( shadowDistance > 0 ) {
-        QPen tmpPen( pen );
-        pen.setColor( shadowColor );
-
-        if ( angle == 0 ) {
-            double sx = ox;
-            double sy = oy;
-            getShadowCoords( sx, sy, _zoomHandler );
-
-            _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
-            paint( _painter, _zoomHandler, true );
-        }
-        else {
-            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-            rotateObjectWithShadow(_painter,_zoomHandler);
-            paint( _painter,_zoomHandler, true );
-        }
-
-        pen = tmpPen;
-    }
-
-    _painter->restore();
-
-    _painter->save();
-    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-
-    if ( angle == 0 )
-        paint( _painter,_zoomHandler, false );
-    else {
-        rotateObject(_painter,_zoomHandler);
-        paint( _painter,_zoomHandler, false );
-    }
-
-    _painter->restore();
-
-    KPObject::draw( _painter, _zoomHandler, drawSelection );
 }
 
 /*===================== get angle ================================*/
@@ -234,12 +178,18 @@ void KPFreehandObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 			      bool /*drawingShadow*/, bool drawContour )
 {
     int _w = _zoomHandler->zoomItX(pen.width());
-    QPen pen2(pen);
-    pen2.setWidth( _w );
+
+    QPen pen2;
+    if ( drawContour )
+	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+    else {
+	pen2 = pen;
+	pen2.setWidth( _w );
+   }
+    _painter->setPen( pen2 );
 
     QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
 
-    _painter->setPen( pen2 );
     _painter->drawPolyline( pointArray );
 
 

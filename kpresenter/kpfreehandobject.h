@@ -33,7 +33,7 @@ class DCOPObject;
 /* Class: KPFreehandObject                                        */
 /******************************************************************/
 
-class KPFreehandObject : public KPObject
+class KPFreehandObject : public KPShadowObject
 {
 public:
     KPFreehandObject();
@@ -42,24 +42,16 @@ public:
     virtual DCOPObject* dcopObject();
 
     KPFreehandObject &operator=( const KPFreehandObject & );
-
-    virtual void setPen( const QPen &_pen ) { pen = _pen; }
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }
 
     virtual ObjType getType() const { return OT_FREEHAND; }
     virtual QString getTypeString() const { return i18n("Freehand"); }
-
-    virtual QPen getPen() const { return pen; }
     virtual LineEnd getLineBegin() const { return lineBegin; }
     virtual LineEnd getLineEnd() const { return lineEnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
     virtual double load( const QDomElement &element );
-
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       bool drawSelection, bool drawContour );
-
     virtual void setSize( double _width, double _height );
     virtual void setSize( const KoSize & _size )
     { setSize( _size.width(), _size.height() ); }
@@ -75,7 +67,6 @@ protected:
 
     KoPointArray origPoints, points;
     KoSize origSize;
-    QPen pen;
     LineEnd lineBegin, lineEnd;
 };
 

@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
+#include "kpobject.h"
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -475,14 +477,6 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
     return Qt::sizeAllCursor;
 }
 
-/*======================== draw ==================================*/
-void KPObject::draw( QPainter *_painter, KoZoomHandler *_zoomHandler,
-		     bool drawSelection, bool drawContour )
-{
-    if ( drawSelection &&  !drawContour )
-	paintSelection( _painter, _zoomHandler );
-}
-
 /*====================== get shadow coordinates ==================*/
 void KPObject::getShadowCoords( double& _x, double& _y ,KoZoomHandler *_zoomHandler) const
 {
@@ -697,8 +691,115 @@ QColor KPObject::retrieveColor(const QDomElement &element, const QString &cattr,
     return ret;
 }
 
+void KPObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+		     bool drawSelection, bool drawContour )
+{
+    if ( drawSelection &&  !drawContour )
+	paintSelection( _painter, _zoomHandler );
+}
+
+
+KPShadowObject::KPShadowObject()
+    : KPObject()
+{
+}
+
+KPShadowObject::KPShadowObject( const QPen &_pen )
+    : KPObject(), pen( _pen )
+{
+}
+
+KPShadowObject::KPShadowObject( const QPen &_pen, const QBrush &_brush )
+    : KPObject(), pen( _pen ), brush( _brush )
+{
+}
+
+KPShadowObject &KPShadowObject::operator=( const KPShadowObject & )
+{
+    return *this;
+}
+
+QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
+{
+    QDomDocumentFragment fragment=KPObject::save(doc, offset);
+
+    if(pen.color()!=Qt::black || pen.width()!=1 || pen.style()!=Qt::SolidLine)
+        fragment.appendChild(KPObject::createPenElement(tagPEN, pen, doc));
+    if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
+        fragment.appendChild(KPObject::createBrushElement(tagBRUSH, brush, doc));
+    return fragment;
+}
+
+double KPShadowObject::load(const QDomElement &element)
+{
+    double offset=KPObject::load(element);
+    QDomElement e=element.namedItem(tagPEN).toElement();
+    if(!e.isNull())
+        setPen(KPObject::toPen(e));
+    else
+        pen=QPen();
+    e=element.namedItem(tagBRUSH).toElement();
+    if(!e.isNull())
+        setBrush(KPObject::toBrush(e));
+    else
+        brush=QBrush();
+    e=element.namedItem(tagFILLTYPE).toElement();
+    return offset;
+}
+
+
+void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+		       bool drawSelection, bool drawContour )
+{
+    double ox = orig.x();
+    double oy = orig.y();
+    double ow = ext.width();
+    double oh = ext.height();
+    _painter->save();
+
+    // Draw the shadow if any
+    if ( shadowDistance > 0 && !drawContour )
+    {
+        _painter->save();
+        QPen tmpPen( pen );
+        pen.setColor( shadowColor );
+        QBrush tmpBrush( brush );
+        brush.setColor( shadowColor );
+
+        if ( angle == 0 )
+        {
+            double sx = ox;
+            double sy = oy;
+            getShadowCoords( sx, sy, _zoomHandler );
+
+            _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
+            paint( _painter, _zoomHandler, true, drawContour );
+        }
+        else
+        {
+            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
+            rotateObjectWithShadow(_painter, _zoomHandler);
+            paint( _painter, _zoomHandler, true, drawContour );
+        }
+
+        pen = tmpPen;
+        brush = tmpBrush;
+        _painter->restore();
+    }
+
+    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
+
+    if ( angle != 0 )
+        rotateObject(_painter,_zoomHandler);
+    paint( _painter, _zoomHandler, false, drawContour );
+
+    _painter->restore();
+
+    KPObject::draw( _painter, _zoomHandler, drawSelection, drawContour );
+}
+
 KP2DObject::KP2DObject()
-    : KPObject(), pen(), brush(), gColor1( Qt::red ), gColor2( Qt::green )
+    : KPShadowObject(), gColor1( Qt::red ), gColor2( Qt::green )
 {
     gradient = 0;
     fillType = FT_BRUSH;
@@ -711,7 +812,7 @@ KP2DObject::KP2DObject()
 KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
                         const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor )
-    : KPObject(), pen( _pen ), brush( _brush ), gColor1( _gColor1 ), gColor2( _gColor2 )
+    : KPShadowObject( _pen, _brush ), gColor1( _gColor1 ), gColor2( _gColor2 )
 {
     gType = _gType;
     fillType = _fillType;
@@ -795,52 +896,3 @@ double KP2DObject::load(const QDomElement &element)
     return offset;
 }
 
-void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       bool drawSelection, bool drawContour )
-{
-    double ox = orig.x();
-    double oy = orig.y();
-    double ow = ext.width();
-    double oh = ext.height();
-    _painter->save();
-
-    // Draw the shadow if any
-    if ( shadowDistance > 0 && !drawContour )
-    {
-        _painter->save();
-        QPen tmpPen( pen );
-        pen.setColor( shadowColor );
-        QBrush tmpBrush( brush );
-        brush.setColor( shadowColor );
-
-        if ( angle == 0 )
-        {
-            double sx = ox;
-            double sy = oy;
-            getShadowCoords( sx, sy, _zoomHandler );
-
-            _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
-            paint( _painter, _zoomHandler, true, drawContour );
-        }
-        else
-        {
-            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-            rotateObjectWithShadow(_painter, _zoomHandler);
-            paint( _painter, _zoomHandler, true, drawContour );
-        }
-
-        pen = tmpPen;
-        brush = tmpBrush;
-        _painter->restore();
-    }
-
-    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-
-    if ( angle != 0 )
-        rotateObject(_painter,_zoomHandler);
-    paint( _painter, _zoomHandler, false, drawContour );
-
-    _painter->restore();
-
-    KPObject::draw( _painter, _zoomHandler, drawSelection, drawContour );
-}

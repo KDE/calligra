@@ -282,8 +282,49 @@ private:
     KPObject &operator=(const KPObject &rhs);
 };
 
+class KPShadowObject : public KPObject
+{
+public:
+    KPShadowObject();
+    KPShadowObject( const QPen &_pen );
+    KPShadowObject( const QPen &_pen, const QBrush &_brush );
 
-class KP2DObject : public KPObject
+    KPShadowObject &operator=( const KPShadowObject & );
+
+    virtual void setPen( const QPen &_pen )
+    { pen = _pen; }
+    virtual void setBrush( const QBrush &_brush )
+    { brush = _brush; }
+
+    virtual QPen getPen() const
+    { return pen; }
+    virtual QBrush getBrush() const
+    { return brush; }
+
+    virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
+    virtual double load(const QDomElement &element);
+
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+		       bool drawSelection, bool drawContour = FALSE );
+protected:
+    /**
+     * This method is to be implemented by all KShadowObjects, to draw themselves.
+     * @ref draw took care of the shadow and of preparing @p painter for rotation.
+     * @ref paint must take care of the gradient itself!
+     *
+     * @param drawingShadow true if called to draw the shadow of the object. Usually
+     * objects will want to draw a simpler version of themselves in that case.
+     *
+     * This method isn't pure virtual because some objects implement draw() directly.
+     */
+    virtual void paint( QPainter* painter, KoZoomHandler* zoomHandler,
+			bool drawingShadow, bool drawContour =  FALSE ) {}
+    QPen pen;
+    QBrush brush;
+};
+
+
+class KP2DObject : public KPShadowObject
 {
 public:
     KP2DObject();
@@ -294,10 +335,6 @@ public:
 
     KP2DObject &operator=( const KP2DObject & );
 
-    virtual void setPen( const QPen &_pen )
-    { pen = _pen; }
-    virtual void setBrush( const QBrush &_brush )
-    { brush = _brush; }
     virtual void setFillType( FillType _fillType );
     virtual void setGColor1( const QColor &_gColor1 )
     { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
@@ -312,10 +349,6 @@ public:
     virtual void setGYFactor( int f )
     { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
 
-    virtual QPen getPen() const
-    { return pen; }
-    virtual QBrush getBrush() const
-    { return brush; }
     virtual FillType getFillType() const
     { return fillType; }
     virtual QColor getGColor1() const
@@ -334,25 +367,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       bool drawSelection, bool drawContour = FALSE );
-
 protected:
-    /**
-     * This method is to be implemented by all KP2DObjects, to draw themselves.
-     * @ref draw took care of the shadow and of preparing @p painter for rotation.
-     * @ref paint must take care of the gradient itself!
-     *
-     * @param drawingShadow true if called to draw the shadow of the object. Usually
-     * objects will want to draw a simpler version of themselves in that case.
-     *
-     * This method isn't pure virtual because some objects implement draw() directly.
-     */
-    virtual void paint( QPainter* painter, KoZoomHandler* zoomHandler,
-			bool drawingShadow, bool drawContour =  FALSE ) {}
-
-    QPen pen;
-    QBrush brush;
     QColor gColor1, gColor2;
     BCType gType;
     FillType fillType;

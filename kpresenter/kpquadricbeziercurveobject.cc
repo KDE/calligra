@@ -36,16 +36,18 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPQuadricBezierCurveObject::KPQuadricBezierCurveObject()
-    : KPObject(), pen()
+    : KPShadowObject()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
 }
 
 /*================== overloaded constructor ======================*/
-KPQuadricBezierCurveObject::KPQuadricBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints,
-                                                        const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPObject(), pen( _pen )
+KPQuadricBezierCurveObject::KPQuadricBezierCurveObject( const KoPointArray &_controlPoints,
+							const KoPointArray &_allPoints,
+                                                        const KoSize &_size, const QPen &_pen,
+							LineEnd _lineBegin, LineEnd _lineEnd )
+    : KPShadowObject( _pen )
 {
     controlPoints = KoPointArray( _controlPoints );
     origControlPoints = KoPointArray( _controlPoints );
@@ -76,7 +78,6 @@ KPQuadricBezierCurveObject &KPQuadricBezierCurveObject::operator=( const KPQuadr
 QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment = KPObject::save( doc, offset );
-    fragment.appendChild( KPObject::createPenElement( "PEN", pen, doc ) );
     if ( !controlPoints.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
 	KoPointArray::ConstIterator it;
@@ -104,11 +105,7 @@ QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, double
 double KPQuadricBezierCurveObject::load(const QDomElement &element)
 {
     double offset=KPObject::load( element );
-    QDomElement e = element.namedItem( "PEN" ).toElement();
-    if ( !e.isNull() )
-        setPen( KPObject::toPen( e ) );
-
-    e = element.namedItem( "POINTS" ).toElement();
+    QDomElement e = element.namedItem( "POINTS" ).toElement();
     if ( !e.isNull() ) {
         QDomElement elemPoint = e.firstChild().toElement();
         unsigned int index = 0;
@@ -150,55 +147,6 @@ double KPQuadricBezierCurveObject::load(const QDomElement &element)
     return offset;
 }
 
-/*========================= draw =================================*/
-void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-				       bool drawSelection, bool drawContour )
-{
-    double ox = orig.x();
-    double oy = orig.y();
-    double ow = ext.width();
-    double oh = ext.height();
-
-    _painter->save();
-
-    if ( shadowDistance > 0 ) {
-        QPen tmpPen( pen );
-        pen.setColor( shadowColor );
-
-        if ( angle == 0 ) {
-            double sx = ox;
-            double sy = oy;
-            getShadowCoords( sx, sy, _zoomHandler );
-
-            _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY(sy) );
-            paint( _painter,_zoomHandler, drawContour );
-        }
-        else {
-            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-            rotateObjectWithShadow(_painter,_zoomHandler );
-            paint( _painter,_zoomHandler, drawContour );
-        }
-
-        pen = tmpPen;
-    }
-
-    _painter->restore();
-
-    _painter->save();
-    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-
-    if ( angle == 0 )
-        paint( _painter,_zoomHandler, drawContour );
-    else {
-        rotateObject(_painter,_zoomHandler );
-        paint( _painter,_zoomHandler, drawContour );
-    }
-
-    _painter->restore();
-
-    KPObject::draw( _painter, _zoomHandler, drawSelection );
-}
-
 /*===================== get angle ================================*/
 float KPQuadricBezierCurveObject::getAngle( const QPoint &p1, const QPoint &p2 )
 {
@@ -235,14 +183,21 @@ float KPQuadricBezierCurveObject::getAngle( const QPoint &p1, const QPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler, bool drawContour )
+void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
+					bool drawingShadow, bool drawContour )
 {
     int _w =_zoomHandler->zoomItX( pen.width() );
-    QPen pen2(pen);
-    pen2.setWidth(_w);
-    QPointArray pointArray = allPoints.zoomPointArray( _zoomHandler, _w );
 
+    QPen pen2;
+    if ( drawContour )
+	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+    else {
+	pen2 = pen;
+	pen2.setWidth( _w );
+   }
     _painter->setPen( pen2 );
+
+    QPointArray pointArray = allPoints.zoomPointArray( _zoomHandler, _w );
     _painter->drawPolyline( pointArray );
 
     if ( lineBegin != L_NORMAL ) {
