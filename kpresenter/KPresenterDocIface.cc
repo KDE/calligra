@@ -26,6 +26,7 @@
 #include <dcopclient.h>
 #include <koVariable.h>
 #include "kprvariable.h"
+#include <koAutoFormat.h>
 
 KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
     : KoDocumentIface( doc_ )
@@ -336,4 +337,56 @@ void KPresenterDocIface::startBackgroundSpellCheck()
 void KPresenterDocIface::reactivateBgSpellChecking()
 {
     doc->reactivateBgSpellChecking();
+}
+
+void KPresenterDocIface::setConfigUpperCase( bool _uc )
+{
+    doc->getAutoFormat()->configUpperCase(_uc);
+}
+
+void KPresenterDocIface::setConfigUpperUpper( bool _uu )
+{
+    doc->getAutoFormat()->configUpperUpper(_uu);
+}
+
+void KPresenterDocIface::setConfigAdvancedAutocorrect( bool _aa )
+{
+    doc->getAutoFormat()->configAdvancedAutocorrect( _aa );
+
+}
+
+void KPresenterDocIface::setConfigAutoDetectUrl(bool _au)
+{
+    doc->getAutoFormat()->configAutoDetectUrl(_au);
+}
+
+void KPresenterDocIface::setConfigIgnoreDoubleSpace( bool _ids)
+{
+    doc->getAutoFormat()->configIgnoreDoubleSpace(_ids);
+}
+
+bool KPresenterDocIface::configUpperCase() const
+{
+    return doc->getAutoFormat()->getConfigUpperCase();
+}
+
+bool KPresenterDocIface::configUpperUpper() const
+{
+    return doc->getAutoFormat()->getConfigUpperUpper();
+}
+
+bool KPresenterDocIface::configAdvancedAutoCorrect() const
+{
+    return doc->getAutoFormat()->getConfigAdvancedAutoCorrect();
+
+}
+bool KPresenterDocIface::configAutoDetectUrl() const
+{
+    return doc->getAutoFormat()->getConfigAutoDetectUrl();
+
+}
+
+bool KPresenterDocIface::configIgnoreDoubleSpace() const
+{
+    return doc->getAutoFormat()->getConfigIgnoreDoubleSpace();
 }
