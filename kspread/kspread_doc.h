@@ -35,6 +35,8 @@ class DCOPObject;
 class QDomDocument;
 
 class KSpellConfig;
+
+
 #include <koDocument.h>
 #include <koPageLayoutDia.h>
 
@@ -356,6 +358,8 @@ public:
 
   void insertChild( KoDocumentChild *child ) { KoDocument::insertChild( child ); }
 
+
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -603,6 +607,7 @@ protected:
   bool m_bShowStatusBar;
 
   KSpellConfig *m_pKSpellConfig;
+
 };
 
 #endif

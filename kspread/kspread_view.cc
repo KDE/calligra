@@ -44,7 +44,6 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
-#include <kformulaedit.h>
 #include <kcoloractions.h>
 #include <tkcoloractions.h>
 #include <kaction.h>
@@ -375,34 +374,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                actionCollection(), "insertCellCopy" );
     m_cellLayout = new KAction( i18n("Cell Layout..."),"cell_layout", CTRL + Key_L, this, SLOT( layoutDlg() ),
                                actionCollection(), "cellLayout" );
-    m_formulaPower = new KAction( i18n("Formula Power"), "rsup", 0, this, SLOT( formulaPower() ),
-                                actionCollection(), "formulaPower" );
-    m_formulaSubscript = new KAction( i18n("Formula Subscript"), "rsub", 0, this, SLOT( formulaSubscript() ),
-                                      actionCollection(), "formulaSubscript" );
-    m_formulaParantheses = new KAction( i18n("Formula Parentheses"), "paren", 0, this, SLOT( formulaParentheses() ),
-                                        actionCollection(), "formulaParentheses" );
-    m_formulaAbsValue = new KAction( i18n("Formula Abs Value"), "abs", 0, this, SLOT( formulaAbsValue() ),
-                                     actionCollection(), "formulaAbsValue" );
-    m_formulaBrackets = new KAction( i18n("Formula Brackets"), "brackets", 0, this, SLOT( formulaBrackets() ),
-                                     actionCollection(), "formulaBrackets" );
-    m_formulaFraction = new KAction( i18n("Formula Fraction"), "frac", 0, this, SLOT( formulaFraction() ),
-                                     actionCollection(), "formulaFraction" );
-    m_formulaRoot = new KAction( i18n("Formula Root"), "sqrt", 0, this, SLOT( formulaRoot() ),
-                                 actionCollection(), "formulaRoot" );
-    m_formulaIntegral = new KAction( i18n("Formula Integral"), "int", 0, this, SLOT( formulaIntegral() ),
-                                     actionCollection(), "formulaIntegral" );
-    m_formulaMatrix = new KAction( i18n("Formula Matrix"), "matrix", 0, this, SLOT( formulaMatrix() ),
-                                   actionCollection(), "formulaMatrix" );
-    m_formulaLeftSuper = new KAction( i18n("Formula Left Super"), "lsup", 0, this, SLOT( formulaLeftSuper() ),
-                                      actionCollection(), "formulaLeftSuper" );
-    m_formulaLeftSub = new KAction( i18n("Formula Left Sub"), "lsub", 0, this, SLOT( formulaLeftSub() ),
-                                    actionCollection(), "formulaLeftSub" );
-    m_formulaSum = new KAction( i18n("Formula Sum"), "sum", 0, this, SLOT( formulaSum() ),
-                                actionCollection(), "formulaSum" );
-    m_formulaProduct = new KAction( i18n("Formula Product"), "prod", 0, this, SLOT( formulaProduct() ),
-                                    actionCollection(), "formulaProduct");
     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
-
     QStringList lst;
     lst.append( "sum");
     lst.append( "cos");
@@ -416,8 +388,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // Insert menu
     (void) new KAction( i18n("&Math expression..."), "funct", 0, this, SLOT( insertMathExpr() ),
                         actionCollection(), "insertMathExpr" );
-    (void) new KAction( i18n("&Formula"), "formula", 0, this, SLOT( insertFormula() ),
-                        actionCollection(), "insertFormula" );
     (void) new KAction( i18n("&Series..."),"series", 0, this, SLOT( insertSeries() ), actionCollection(), "series" );
     (void) new KAction( i18n("&Hyperlink..."), 0, this, SLOT( insertHyperlink() ), actionCollection(), "insertHyperlink" );
     (void) new KAction( i18n("&Object..."), "parts", 0, this, SLOT( insertObject() ),
@@ -521,7 +491,7 @@ if( config->hasGroup("Parameters" ))
         m_pDoc->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
         m_pDoc->setMoveToValue((MoveTo)config->readNumEntry("Move",(int)(Bottom)));
         m_pDoc->setIndentValue(config->readNumEntry( "Indent",10 ) );
-        m_pDoc->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(Sum)));
+        m_pDoc->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(SumOfNumber)));
 	m_pDoc->setShowTabBar(config->readBoolEntry("Tabbar",true));
 
 	m_pDoc->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
@@ -580,7 +550,7 @@ void KSpreadView::initCalcMenu()
 {
     switch( doc()->getTypeOfCalc())
     {
-        case  Sum:
+        case  SumOfNumber:
             m_menuCalcSum->setChecked(true);
             break;
         case  Min:
@@ -723,10 +693,6 @@ void KSpreadView::updateEditWidget()
 
 void KSpreadView::activateFormulaEditor()
 {
-    if ( m_pCanvas->editor() && !m_pCanvas->editor()->inherits("KSpreadFormulaEditor") )
-        ASSERT( 0 );
-
-    m_pCanvas->createEditor( KSpreadCanvas::FormulaEditor );
 }
 
 void KSpreadView::updateReadWrite( bool readwrite )
@@ -755,96 +721,6 @@ void KSpreadView::updateReadWrite( bool readwrite )
   // m_oszi->setEnabled( true );
 }
 
-void KSpreadView::formulaPower()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::POWER );
-}
-
-void KSpreadView::formulaSubscript()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::SUB );
-}
-
-void KSpreadView::formulaParentheses()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::PAREN );
-}
-
-void KSpreadView::formulaAbsValue()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::ABS );
-}
-
-void KSpreadView::formulaBrackets()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::BRACKET );
-}
-
-void KSpreadView::formulaFraction()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::DIVIDE );
-}
-
-void KSpreadView::formulaRoot()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::SQRT );
-}
-
-void KSpreadView::formulaIntegral()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::INTEGRAL );
-}
-
-void KSpreadView::formulaMatrix()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::MATRIX );
-}
-
-void KSpreadView::formulaLeftSuper()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::LSUP );
-}
-
-void KSpreadView::formulaLeftSub()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::LSUB );
-}
-
-void KSpreadView::formulaSum()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::SUM );
-}
-
-void KSpreadView::formulaProduct()
-{
-    activateFormulaEditor();
-
-    canvasWidget()->insertFormulaChar(Box::PRODUCT );
-}
 
 void KSpreadView::tableFormat()
 {
@@ -1139,11 +1015,6 @@ void KSpreadView::verticalText(bool b)
     if( r.right() != 0x7FFF && r.bottom() != 0x7FFF )
         m_pCanvas->adjustArea(false);
     updateEditWidget();
-}
-
-void KSpreadView::insertFormula()
-{
-    activateFormulaEditor();
 }
 
 void KSpreadView::insertMathExpr()
@@ -3077,7 +2948,7 @@ void KSpreadView::resultOfCalc()
                     double val=c->valueDouble();
                     switch(tmpMethod)
                     {
-                        case Sum:
+                        case SumOfNumber:
                             result+=val;
                             break;
                         case Average:
@@ -3119,7 +2990,7 @@ void KSpreadView::resultOfCalc()
                     double val=c->valueDouble();
                     switch(tmpMethod )
                     {
-                        case Sum:
+                        case SumOfNumber:
                             result+=val;
                             break;
                         case Average:
@@ -3158,7 +3029,7 @@ void KSpreadView::resultOfCalc()
                     double val= cell->valueDouble();
                     switch(tmpMethod )
                     {
-                        case Sum:
+                        case SumOfNumber:
                             result+=val;
                             break;
                         case Average:
@@ -3189,7 +3060,7 @@ void KSpreadView::resultOfCalc()
     QString tmp;
     switch(tmpMethod )
     {
-        case Sum:
+        case SumOfNumber:
             tmp=i18n(" Sum: %1").arg(result);
             break;
         case Average:
@@ -3242,7 +3113,7 @@ void KSpreadView::menuCalc(bool)
     }
     else if(m_menuCalcSum->isChecked())
     {
-        doc()->setTypeOfCalc(Sum);
+        doc()->setTypeOfCalc(SumOfNumber);
     }
     resultOfCalc();
 }
@@ -3325,23 +3196,6 @@ void KSpreadView::slotChildUnselected( KoDocumentChild* )
     }
 }
 
-void KSpreadView::enableFormulaToolBar( bool b )
-{
-    // qDebug("TOOLBARS mode=%s", b ? "TRUE" : "FALSE" );
-    m_formulaPower->setEnabled( b );
-    m_formulaSubscript->setEnabled( b );
-    m_formulaParantheses->setEnabled( b );
-    m_formulaAbsValue->setEnabled( b );
-    m_formulaBrackets->setEnabled( b );
-    m_formulaFraction->setEnabled( b );
-    m_formulaRoot->setEnabled( b );
-    m_formulaIntegral->setEnabled( b );
-    m_formulaMatrix->setEnabled( b );
-    m_formulaLeftSuper->setEnabled( b );
-    m_formulaLeftSub->setEnabled( b );
-    m_formulaSum->setEnabled( b );
-    m_formulaProduct->setEnabled( b );
-}
 
 void KSpreadView::deleteEditor( bool saveChanges )
 {

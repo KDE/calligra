@@ -24,7 +24,6 @@ class KSpreadCell;
 class KSpreadTable;
 class KSpreadCanvas;
 
-class KFormula;
 
 class QSimpleRichText;
 class QDomElement;
@@ -674,6 +673,7 @@ public:
 
     void freeAllObscuredCells();
 
+
 protected:
     /**
      * @reimp
@@ -911,10 +911,6 @@ protected:
      * Perhaps this cell contains QML ?
      */
     QSimpleRichText *m_pQML;
-    /**
-     * Perhaps this cell contains a visual formula ?
-     */
-    KFormula* m_pVisualFormula;
 
     /**
      * The parse tree of the real formula (e.g: "=A1*A2").

@@ -370,11 +370,6 @@ KSpreadTable* KSpreadCanvas::findTable( const QString& _name )
   return m_pDoc->map()->findTable( _name );
 }
 
-void KSpreadCanvas::insertFormulaChar(int c)
-{
-  m_pEditor->insertFormulaChar(c);
-}
-
 const KSpreadTable* KSpreadCanvas::activeTable() const
 {
   return m_pView->activeTable();
@@ -1742,14 +1737,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	  if ( !m_pEditor && !m_bChoose )
 	      {
-		  if ( _ev->text() == QString::fromLatin1("*") )
-		      createEditor( FormulaEditor );
-		  else
-		      {
-			  // Switch to editing mode
-			  createEditor( CellEditor );
-			  m_pEditor->handleKeyPressEvent( _ev );
-		      }
+                  // Switch to editing mode
+                  createEditor( CellEditor );
+                  m_pEditor->handleKeyPressEvent( _ev );
 	      }
 	  else if ( m_pEditor )
 	      m_pEditor->handleKeyPressEvent( _ev );
@@ -1976,8 +1966,11 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
   // We need to set the line-edit out of edit mode,
   // but only if we are using it (text editor)
   // A bit of a hack - perhaps we should store the editor mode ?
+  bool textEditor=true;
   if ( m_pEditor->inherits("KSpreadTextEditor") )
     m_pEditWidget->setEditMode( false );
+else
+    textEditor=false;
 
   QString t = m_pEditor->text();
   // Delete the cell editor first and after that update the document.
@@ -1986,32 +1979,21 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
   delete m_pEditor;
   m_pEditor = 0;
 
-  if (saveChanges)
+  if (saveChanges && textEditor)
     m_pView->setText( t );
   else
     m_pView->updateEditWidget();
 
   setFocus();
-
-  m_pView->enableFormulaToolBar( TRUE );
 }
 
 void KSpreadCanvas::createEditor()
 {
   KSpreadCell* cell = activeTable()->cellAt( markerColumn(), markerRow() );
 
-  if ( cell && cell->content() == KSpreadCell::VisualFormula )
-  {
-    QString tmp = cell->text();
-    createEditor( FormulaEditor );
-    m_pEditor->setText( tmp.right( tmp.length() - 1 ) );
-  }
-  else
-  {
-    createEditor( CellEditor );
-    if ( cell )
+  createEditor( CellEditor );
+  if ( cell )
       m_pEditor->setText(cell->text());
-  }
 }
 
 void KSpreadCanvas::createEditor( EditorType ed )
@@ -2022,16 +2004,9 @@ void KSpreadCanvas::createEditor( EditorType ed )
     KSpreadCell* cell = activeTable()->cellAt( marker() );
     if ( ed == CellEditor )
     {
-      m_pView->enableFormulaToolBar( FALSE );
       m_pEditWidget->setEditMode( true );
 
       m_pEditor = new KSpreadTextEditor( cell, this );
-    }
-    else if( ed == FormulaEditor )
-    {
-      m_pView->enableFormulaToolBar( TRUE );
-
-      m_pEditor = new KSpreadFormulaEditor( cell, this );
     }
 
     int w, h;

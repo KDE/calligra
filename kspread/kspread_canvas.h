@@ -107,8 +107,6 @@ public:
      */
     void init();
 
-    void insertFormulaChar(int c);
-
     KSpreadCellEditor* editor() { return m_pEditor ; }
 
     // ###### Torben: Many of these functions are not used or can be made private

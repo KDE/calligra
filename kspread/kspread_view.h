@@ -132,11 +132,6 @@ public:
     void paintContent( QPainter& painter, const QRect& rect, bool transparent );
 
     /**
-     * Enables/Disables all actions of the formula toolbar.
-     */
-    void enableFormulaToolBar( bool );
-
-    /**
      * Fills the @ref KSpreadEditWidget with the current cells
      * content. This function is usually called after the
      * cursor moved.
@@ -249,7 +244,6 @@ public slots:
     void showRow();
     void hideColumn();
     void showColumn();
-    void insertFormula();
     void insertMathExpr();
     void formulaSelection( const QString &_math );
     void changeTextColor();
@@ -257,19 +251,6 @@ public slots:
     void sortInc();
     void sortDec();
     void layoutDlg();
-    void formulaPower();
-    void formulaSubscript();
-    void formulaParentheses();
-    void formulaAbsValue();
-    void formulaBrackets();
-    void formulaFraction();
-    void formulaRoot();
-    void formulaIntegral();
-    void formulaMatrix();
-    void formulaLeftSuper();
-    void formulaLeftSub();
-    void formulaSum();
-    void formulaProduct();
     void borderBottom();
     void borderRight();
     void borderLeft();
@@ -488,19 +469,6 @@ private:
     KAction* m_insertRow;
     KAction* m_hideRow;
     KAction* m_showRow;
-    KAction* m_formulaPower;
-    KAction* m_formulaSubscript;
-    KAction* m_formulaParantheses;
-    KAction* m_formulaAbsValue;
-    KAction* m_formulaBrackets;
-    KAction* m_formulaFraction;
-    KAction* m_formulaRoot;
-    KAction* m_formulaIntegral;
-    KAction* m_formulaMatrix;
-    KAction* m_formulaLeftSuper;
-    KAction* m_formulaLeftSub;
-    KAction* m_formulaSum;
-    KAction* m_formulaProduct;
     KSelectAction* m_formulaSelection;
     KAction* m_sortDec;
     KAction* m_sortInc;

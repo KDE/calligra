@@ -569,7 +569,7 @@ switch( m_pView->doc()->getMoveToValue( ))
 
 switch( m_pView->doc()->getTypeOfCalc())
         {
-        case  Sum:
+        case  SumOfNumber:
                 typeCalc->setCurrentItem(0);
                 break;
         case  Min:
@@ -655,11 +655,11 @@ void miscParameters::apply()
         config->writeEntry( "Move", (int)tmpMoveTo);
     }
 
-    MethodOfCalc tmpMethodCalc=Sum;
+    MethodOfCalc tmpMethodCalc=SumOfNumber;
     switch(typeCalc->currentItem())
     {
         case 0:
-            tmpMethodCalc =Sum;
+            tmpMethodCalc =SumOfNumber;
             break;
         case 1:
             tmpMethodCalc=Min;

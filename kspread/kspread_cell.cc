@@ -38,12 +38,13 @@
 #include "kspread_util.h"
 #include "kspread_factory.h"
 
-#include <kformula.h>
 #include <kinstance.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <koscript_parsenode.h>
+
+#include <kdebug.h>
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->updateCell( this, m_iColumn, m_iRow );
@@ -66,7 +67,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_pCode = 0;
   m_pPrivate = 0L;
   m_pQML = 0;
-  m_pVisualFormula = 0;
+
   m_bError = false;
 
   m_lstDepends.setAutoDelete( TRUE );
@@ -772,97 +773,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         }
         m_iExtraYCells = r - _row - 1;
         m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
-        m_bLayoutDirtyFlag = false;
-        return;
-    }
-    /**
-     * A visual formula
-     */
-    else if ( m_pVisualFormula )
-    {
-        // Calculate how many cells we could use in addition right hand
-        // Never use more then 10 cells.
-        int right = 0;
-        int max_width = width( _col );
-        bool ende = false;
-        int c;
-
-        for( c = _col + 1; !ende && c <= _col + 10; ++c )
-        {
-            KSpreadCell *cell = m_pTable->cellAt( c, _row );
-            if ( cell && !cell->isEmpty() )
-                ende = true;
-            else
-            {
-                ColumnLayout *cl = m_pTable->columnLayout( c );
-                max_width += cl->width();
-                ++right;
-            }
-        }
-
-        // How may space do we need now ?
-        // TODO: We have to initialize sizes here ....
-        _painter.save();
-        _painter.setPen( textPen(_col,_row).color() );
-        _painter.setFont( textFont(_col,_row ));
-        m_pVisualFormula->setPos( -1000, -1000 );
-        m_pVisualFormula->redraw( _painter );
-        _painter.restore();
-        QSize size = m_pVisualFormula->size();
-        int h = size.height();
-        int w = size.width();
-
-        kdDebug(36001) << "Formula w=" << w << " h=" << h << endl;
-        m_richWidth=w;
-        m_richHeight=h;
-
-        // Occupy the needed extra cells in horizontal direction
-        max_width = width( _col );
-        ende = ( max_width >= w );
-        for( c = _col + 1; !ende && c <= _col + right; ++c )
-        {
-            KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
-            cell->obscure( this, _col, _row );
-            ColumnLayout *cl = m_pTable->columnLayout( c );
-            max_width += cl->width();
-            if ( max_width >= w )
-                ende = true;
-        }
-        m_iExtraXCells = c - _col - 1;
-        m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
-
-        // Occupy the needed extra cells in vertical direction
-        int max_height = height( 0 );
-        int r = _row;
-        ende = ( max_height >= h );
-        for( r = _row + 1; !ende && r < _row + 500; ++r )
-        {
-            bool empty = true;
-            for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
-            {
-                KSpreadCell *cell = m_pTable->cellAt( c, r );
-                if ( cell && !cell->isEmpty() )
-                    empty = false;
-            }
-            if ( !empty )
-                ende = true;
-            else
-            {
-                // Occupy this row
-                for( c = _col; c <= _col + m_iExtraXCells; ++c )
-                {
-                    KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
-                    cell->obscure( this, _col, _row );
-                }
-                RowLayout *rl = m_pTable->rowLayout( r );
-                max_height += rl->height();
-                if ( max_height >= h )
-                    ende = true;
-            }
-        }
-        m_iExtraYCells = r - _row - 1;
-        m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
-
         m_bLayoutDirtyFlag = false;
         return;
     }
@@ -1914,21 +1824,13 @@ bool KSpreadCell::calc( bool _makedepend )
     if ( m_pQML )
         delete m_pQML;
     m_pQML = 0;
-    if ( m_pVisualFormula )
-        delete m_pVisualFormula;
-    m_pVisualFormula = 0;
     m_bError =false;
     m_bValue = false;
     m_bBool = false;
     m_bDate=false;
     m_bTime=false;
     m_strFormularOut = context.value()->toString( context );
-    if( !m_strFormularOut.isEmpty() && m_strFormularOut[0] == '*' )
-        {
-        m_pVisualFormula = new KFormula();
-        m_pVisualFormula->parse( m_strFormularOut.mid( 1 ) );
-        }
-  else if ( !m_strFormularOut.isEmpty() && m_strFormularOut[0] == '!' )
+    if ( !m_strFormularOut.isEmpty() && m_strFormularOut[0] == '!' )
         {
         m_pQML = new QSimpleRichText( m_strFormularOut.mid(1),  QApplication::font() );//, m_pTable->widget() );
         }
@@ -2399,21 +2301,6 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
       {
         _painter.save();
         m_pQML->draw( &_painter, _tx, _ty, QRegion( QRect( _tx, _ty, w, h ) ), defaultColorGroup, 0 );
-        _painter.restore();
-    }
-    /**
-     * Visual Formula ?
-     */
-    else if ( m_pVisualFormula && (!_painter.device()->isExtDev()||(_painter.device()->isExtDev() && !getDontprintText(_col,_row)) ))
-    {
-        _painter.save();
-        _painter.setPen( textPen(_col,_row)/*.color()??*/ );
-        _painter.setFont( textFont(_col,_row ) );
-        // TODO: No better method to set new font ?
-        if ( old_layoutflag )
-            m_pVisualFormula->parse( m_strText.mid(1) );
-        m_pVisualFormula->setPos( _tx + w2/2, _ty + h2/2 );
-        m_pVisualFormula->redraw( _painter );
         _painter.restore();
     }
     /**
@@ -3341,6 +3228,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 }
 
 
+
 void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
 {
   m_bError = false;
@@ -3353,9 +3241,6 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
   if ( m_pQML )
     delete m_pQML;
   m_pQML = 0;
-  if ( m_pVisualFormula )
-    delete m_pVisualFormula;
-  m_pVisualFormula = 0;
   if ( isFormular() )
     clearFormular();
 
@@ -3391,21 +3276,6 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
     m_bTime=false;
     m_bLayoutDirtyFlag = true;
     m_content = RichText;
-  }
-  /**
-   * A visual formula.
-   */
-  else if ( !m_strText.isEmpty() && m_strText[0] == '*' )
-  {
-    m_pVisualFormula = new KFormula();
-    m_pVisualFormula->parse( m_strText.mid( 1 ) );
-    m_bError =false;
-    m_bValue = false;
-    m_bBool = false;
-    m_bDate = false;
-    m_bTime=false;
-    m_bLayoutDirtyFlag = true;
-    m_content = VisualFormula;
   }
   /**
    * Some numeric value or a string.
@@ -3695,9 +3565,6 @@ void KSpreadCell::setValue( double _d )
     if ( m_pQML )
         delete m_pQML;
     m_pQML = 0;
-    if ( m_pVisualFormula )
-        delete m_pVisualFormula;
-    m_pVisualFormula = 0;
     if ( isFormular() )
         clearFormular();
 
@@ -4238,7 +4105,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         }
         // Have to be saved in some CDATA section because of too many
         // special charatcers.
-        else if ( content() == RichText || content() == VisualFormula )
+        else if ( content() == RichText )//|| content() == VisualFormula )
         {
             QDomElement text = doc.createElement( "text" );
             text.appendChild( doc.createCDATASection( m_strText ) );
@@ -4765,8 +4632,6 @@ KSpreadCell::~KSpreadCell()
         delete m_pPrivate;
     if ( m_pQML )
         delete m_pQML;
-    if ( m_pVisualFormula )
-        delete m_pVisualFormula;
 
     if(m_firstCondition!=0)
         delete m_firstCondition;

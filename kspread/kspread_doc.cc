@@ -127,7 +127,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_iIndentValue=10;
   m_EMoveTo=Bottom;
   m_bShowError=false;
-  m_EMethodOfCalc=Sum;
+  m_EMethodOfCalc=SumOfNumber;
   m_bShowCommentIndicator=true;
   m_bShowTabBar=true;
   m_bShowFormularBar=true;
@@ -1044,5 +1044,7 @@ void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)
   m_pKSpellConfig->setEncoding(_kspell.encoding());
   m_pKSpellConfig->setClient(_kspell.client());
 }
+
+
 
 #include "kspread_doc.moc"

@@ -174,19 +174,23 @@
  <Action name="increaseindent"/>
 </ToolBar>
 <ToolBar fullWidth="false" hidden="true" name="formulaToolBar" position="bottom"><text>Formula</text>
- <Action name="formulaPower"/>
- <Action name="formulaSubscript"/>
- <Action name="formulaParentheses"/>
- <Action name="formulaAbsValue"/>
- <Action name="formulaBrackets"/>
- <Action name="formulaFraction"/>
- <Action name="formulaRoot"/>
- <Action name="formulaIntegral"/>
- <Action name="formulaMatrix"/>
- <Action name="formulaLeftSuper"/>
- <Action name="formulaLeftSub"/>
- <Action name="formulaSum"/>
- <Action name="formulaProduct"/>
+  <Action name="formula_addtext"/>
+  <Action name="formula_addroot"/>
+  <Action name="formula_addfrac"/>
+  <Action name="formula_addbra"/>
+  <Action name="formula_addsqrbra"/>
+  <Action name="formula_addcurbra"/>
+  <Action name="formula_addabsbra"/>
+  <Action name="formula_addintegral"/>
+  <Action name="formula_addsum"/>
+  <Action name="formula_addproduct"/>
+  <Action name="formula_addmatrix"/>
+  <Action name="formula_addupperleft"/>
+  <Action name="formula_addlowerleft"/>
+  <Action name="formula_addupperright"/>
+  <Action name="formula_addlowerright"/>
+  <Action name="formula_typeleft"/>
+  <Action name="formula_typeright"/>
 </ToolBar>
 <ToolBar fullWidth="false" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
  <Action name="borderLeft"/>
