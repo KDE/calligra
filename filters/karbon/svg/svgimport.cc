@@ -132,8 +132,6 @@ SvgImport::convert()
 		QString viewbox( docElem.attribute( "viewBox" ) );
 		QStringList points = QStringList::split( ' ', viewbox.replace( QRegExp(","), " ").simplifyWhiteSpace() );
 
-		points[2].toFloat();
-		points[3].toFloat();
 		gc->matrix.scale( width / points[2].toFloat() , height / points[3].toFloat() );
 	}
 
