@@ -5,14 +5,14 @@
   <item find="(R)" replace="®" />
   <item find="(c)" replace="©" />
   <item find="(r)" replace="®" />
-  <item find="Http://" replace="http://" />
-  <item find="htp://" replace="http://" />
-  <item find="htpp://" replace="http://" />
-  <item find="http:/" replace="http://" />
-  <item find="http:\\" replace="http://" />
-  <item find="Thorvalds" replace="Torvalds" />
-  <item find="Torvald" replace="Torvalds" />
   <item find="X Windows" replace="X Window" />
+  <item find="é" replace="è" />
+  <item find="É" replace="È" />
+  <item find="E'" replace="È" />
+  <item find="E`" replace="È" />
+  <item find="pò" replace="po'" />
+  <item find="perchè" replace="perché" />
+  <item find="poichè" replace="poiché" />
  </items>
  <UpperCaseExceptions>
   <word exception="es." />
@@ -51,9 +51,9 @@
   <superscript find="othernb" super="o" />
  </SuperScript>
  <DoubleQuote>
-  <doublequote begin="&#8220;" end="&#8221;" />
+  <doublequote begin="&#x201C;" end="&#x201D;" />
  </DoubleQuote>
  <SimpleQuote>
-  <simplequote begin="&#8216;" end="&#8217;" />
+  <simplequote begin="&#x2018;" end="&#x2019;" />
  </SimpleQuote>
 </Word>

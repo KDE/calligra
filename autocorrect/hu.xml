@@ -120,9 +120,9 @@
   <word exception="MT" />
  </TwoUpperLetterExceptions>
  <DoubleQuote>
-  <doublequote begin="&#201C;" end="&#201D;" />
+  <doublequote begin="&#x201C;" end="&#x201D;" />
  </DoubleQuote>
  <SimpleQuote>
-  <simplequote begin="&#2018;" end="&#2019;" />
+  <simplequote begin="&#x2018;" end="&#x2019;" />
  </SimpleQuote>
 </Word>
