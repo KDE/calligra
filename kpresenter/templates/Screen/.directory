@@ -1,3 +1,7 @@
 [Desktop Entry]
 Name=Screen
+Name[da]=Skærm
+Name[hu]=Képernyő
+Name[ko]=화면
+Name[lv]=Ekrāns
 X-KDE-DefaultTab=true
