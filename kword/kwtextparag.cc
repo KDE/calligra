@@ -720,6 +720,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
             formatElem.setAttribute( "len", 1 );
             static_cast<KWTextCustomItem *>( ch.customItem() )->save( formatElem );
             startPos = -1;
+            curFormat = paragraphFormat();
 
             if ( saveAnchorsFramesets && dynamic_cast<KWAnchor *>( ch.customItem() ) )
                 static_cast<KWAnchor *>( ch.customItem() )->frameSet()->save( parentElem );
