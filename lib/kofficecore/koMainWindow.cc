@@ -68,7 +68,6 @@ public:
   KoMainWindowPrivate()
   {
     m_rootDoc = 0L;
-    m_rootViews = 0L;
     m_manager = 0L;
     bMainWindowGUIBuilt = false;
     m_activePart = 0L;
@@ -83,7 +82,7 @@ public:
   }
 
   KoDocument *m_rootDoc;
-  QList<KoView> *m_rootViews;
+  QList<KoView> m_rootViews;
   KParts::PartManager *m_manager;
 
   KParts::Part *m_activePart;
@@ -174,8 +173,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
     setView( d->m_splitter );
 
-    d->m_rootViews=new QList<KoView>;
-
     buildMainWindowGUI();
 
     if (QApplication::desktop()->width() > 1100) // very big desktop ?
@@ -193,12 +190,8 @@ KoMainWindow::~KoMainWindow()
     if (d->m_rootDoc)
         d->m_rootDoc->removeShell(this);
 
-    KoView *view=d->m_rootViews->first();
-    for ( ; view!=0L; view=d->m_rootViews->next()) {
-	delete view;
-	view=0L;
-    }
-    delete d->m_rootViews;
+    d->m_rootViews.setAutoDelete( true );
+    d->m_rootViews.clear();
 
     // We have to check if this was a root document.
     // -> We aren't allowed to delete the (embedded) document!
@@ -228,8 +221,8 @@ KoMainWindow::~KoMainWindow()
 void KoMainWindow::setRootDocument( KoDocument *doc )
 {
   kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
-  QList<KoView> *oldRootViews = new QList<KoView>(*d->m_rootViews);
-  d->m_rootViews->clear();
+  QList<KoView> oldRootViews = d->m_rootViews;
+  d->m_rootViews.clear();
   KoDocument *oldRootDoc = d->m_rootDoc;
 
   if ( oldRootDoc )
@@ -240,25 +233,22 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( doc )
   {
     doc->setSelectable( false );
-    d->m_rootViews->append( doc->createView( d->m_splitter ) );
-    d->m_rootViews->current()->setPartManager( d->m_manager );
+    d->m_rootViews.append( doc->createView( d->m_splitter ) );
+    d->m_rootViews.current()->setPartManager( d->m_manager );
 
-    d->m_rootViews->current()->show();
+    d->m_rootViews.current()->show();
     d->m_rootDoc->addShell( this );
     d->m_removeView->setEnabled(false);
   }
 
   updateCaption();
 
-  d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews->current() );
+  d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
   d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
 
-  if ( !oldRootViews->isEmpty() ) {
-    for(KoView *view=oldRootViews->first(); view!=0L; view=oldRootViews->next()) {
-      delete view;
-      view=0L;
-    }
-  }
+  oldRootViews.setAutoDelete( true );
+  oldRootViews.clear();
+
   if ( oldRootDoc && oldRootDoc->viewCount() == 0 )
   {
     kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
@@ -304,7 +294,7 @@ KoDocument *KoMainWindow::rootDocument() const
 
 KoView *KoMainWindow::rootView() const
 {
-  return d->m_rootViews->first();
+  return d->m_rootViews.first();
 }
 
 KParts::PartManager *KoMainWindow::partManager()
@@ -609,10 +599,10 @@ void KoMainWindow::slotHelpAbout()
 void KoMainWindow::slotSplitView() {
 
     kdDebug(30003) << "KoMainWindow::slotSplitView() called" << endl;
-    d->m_rootViews->append(d->m_rootDoc->createView(d->m_splitter));
-    d->m_rootViews->current()->show();
-    d->m_rootViews->current()->setPartManager( d->m_manager );
-    d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews->current() );
+    d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter));
+    d->m_rootViews.current()->show();
+    d->m_rootViews.current()->setPartManager( d->m_manager );
+    d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
     d->m_removeView->setEnabled(true);
 }
 
@@ -631,19 +621,19 @@ void KoMainWindow::slotRemoveView() {
     kdDebug(30003) << "KoMainWindow::slotRemoveView() called" << endl;
 
     KoView *view;
-    if(d->m_rootViews->findRef(d->m_activeView)!=-1)
-        view=d->m_rootViews->current();
+    if(d->m_rootViews.findRef(d->m_activeView)!=-1)
+        view=d->m_rootViews.current();
     else
-	view=d->m_rootViews->first();
+	view=d->m_rootViews.first();
     view->hide();
-    d->m_rootViews->removeRef(view);
+    d->m_rootViews.removeRef(view);
 
-    if(d->m_rootViews->count()==1)
+    if(d->m_rootViews.count()==1)
 	d->m_removeView->setEnabled(false);
     delete view;
     view=0L;
-    d->m_rootViews->first()->setPartManager( d->m_manager );
-    d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews->first() );
+    d->m_rootViews.first()->setPartManager( d->m_manager );
+    d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.first() );
 }
 
 void KoMainWindow::slotSetOrientation() {
@@ -746,7 +736,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     factory->plugActionList(d->m_activeView, "view_closeallviews",
 			    d->m_veryHackyActionList);
     // This one only for root views
-    if(d->m_rootViews->findRef(d->m_activeView)!=-1)
+    if(d->m_rootViews.findRef(d->m_activeView)!=-1)
 	factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList );
 
     // Create and plug toolbar list for Settings menu
