@@ -62,6 +62,10 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 	m_innerAngle->setMinValue( 0 );
 	m_innerAngle->setMaxValue( 360 );
 
+	new QLabel( i18n( "Roundness:" ), this );
+	m_roundness = new KDoubleNumInput( 0.0, this );
+	m_roundness->setRange( 0.0, 1.0, 0.05 );
+
 	typeChanged( VStar::star_outline );
 
 	setInsideMargin( 4 );
@@ -91,6 +95,12 @@ void
 VStarOptionsWidget::setOuterRadius( double v )
 {
 	m_outerR->changeValue( v );
+}
+
+double
+VStarOptionsWidget::roundness() const
+{
+	return m_roundness->value();
 }
 
 int
@@ -179,8 +189,8 @@ VStarTool::shape( bool interactive ) const
 				m_p,
 				KoUnit::ptFromUnit( m_optionsWidget->outerRadius(), view()->part()->unit() ),
 				KoUnit::ptFromUnit( m_optionsWidget->innerRadius(), view()->part()->unit() ),
-				m_optionsWidget->edges(), 0.0,
-				m_optionsWidget->innerAngle(), (VStar::VStarType)m_optionsWidget->type() );
+				m_optionsWidget->edges(), 0.0, m_optionsWidget->innerAngle(), 
+				m_optionsWidget->roundness(), (VStar::VStarType)m_optionsWidget->type() );
 	}
 	else
 		return
@@ -191,7 +201,8 @@ VStarTool::shape( bool interactive ) const
 				m_optionsWidget->innerRadius() * m_d1 /
 				m_optionsWidget->outerRadius(),
 				m_optionsWidget->edges(),
-				m_d2, m_optionsWidget->innerAngle(), (VStar::VStarType)m_optionsWidget->type() );
+				m_d2, m_optionsWidget->innerAngle(),
+				m_optionsWidget->roundness(), (VStar::VStarType)m_optionsWidget->type() );
 }
 
 #include "vstartool.moc"

@@ -44,6 +44,7 @@ public:
 	int edges() const;
 	double innerRadius() const;
 	double outerRadius() const;
+	double roundness() const;
 	uint type() const;
 	uint innerAngle() const;
 	void setEdges( int );
@@ -56,6 +57,7 @@ public slots:
 private:
 	KoUnitDoubleSpinBox	*m_innerR;
 	KoUnitDoubleSpinBox	*m_outerR;
+	KDoubleNumInput		*m_roundness;
 	KIntSpinBox			*m_edges;
 	KIntSpinBox			*m_innerAngle;
 	KComboBox			*m_type;
