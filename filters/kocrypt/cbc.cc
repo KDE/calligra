@@ -28,6 +28,8 @@ CipherBlockChain::CipherBlockChain(BlockCipher *cipher) : _cipher(cipher) {
    _register = 0;
    _len = -1;
    _reader = _writer = 0;
+   if (cipher)
+     _blksz = cipher->blockSize();
 }
 
 

@@ -109,6 +109,7 @@ int rc;
     while ((previous_rand % 5120) < (unsigned int)blocksize)
        previous_rand = rand() % 0x10000;
 
+kdDebug() << "++++++++++++++++++ Output blocksize: " << blocksize << endl;
 kdDebug() << "++++++++++++++++++ Output previous_rand: " << previous_rand%5120 << endl;
     for (char *t = p+2; t-p < (int)(previous_rand % 5120)+2; t += sizeof(int)) {
        *((int *)t) = rand();
@@ -132,6 +133,7 @@ kdDebug() << "++++++++++++++++++ Output fsize: " << filelen << endl;
     bool done = false;
     int cursize = (previous_rand % 5120) + 6;
     int shortness = cursize % blocksize;
+kdDebug() << "++++++++ Cursize is " << cursize << endl;
 
     if (shortness != 0) {
        char *tp = &(p[cursize]);
@@ -142,12 +144,14 @@ kdDebug() << "++++++++++++++++++ Output fsize: " << filelen << endl;
        // if we ran out of data already (!?!?) append random data.
        cursize += rc;
        shortness = blocksize - (cursize % blocksize);
-       while (shortness > 0) {
+       while (shortness < blocksize && shortness > 0) {
           p[cursize++] = (char) (rand()%0x100);
           shortness--;
           done = true;
        }
     }
+
+kdDebug() << "++++++++ Cursize is " << cursize << endl;
 
     for (;;) {
        // assert: cursize % blocksize == 0;
