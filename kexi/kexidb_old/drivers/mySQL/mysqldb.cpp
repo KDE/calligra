@@ -25,7 +25,7 @@ Boston, MA 02111-1307, USA.
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-#include "../../kexiDB/kexidbresult.h"
+#include <kexidbresult.h>
 
 #include "mysqldb.h"
 #include "mysqlresult.h"
@@ -71,7 +71,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 	}
 	
 	mysql_real_connect(m_mysql, host.local8Bit(), user.local8Bit(), password.local8Bit(), 0,
-		port.toUInt(), socket, 0);
+		port.toUInt(), socket.local8Bit(), 0);
 	if(mysql_errno(m_mysql) == 0)
 	{
 		m_connected = true;

@@ -19,7 +19,7 @@ Boston, MA 02111-1307, USA.
 
 #include <kdebug.h>
 
-#include "../../kexiDB/kexidb.h"
+#include <kexidb.h>
 
 #include "mysqldb.h"
 #include "mysqlresult.h"

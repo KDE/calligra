@@ -31,8 +31,8 @@ Boston, MA 02111-1307, USA.
 
 #include "mysqlresult.h"
 
-#include "../../kexiDB/kexidbrecord.h"
-#include "../../kexiDB/kexidbfield.h"
+#include <kexidbrecord.h>
+#include <kexidbfield.h>
 
 class KexiDB;
 class MySqlRecord;

@@ -23,8 +23,8 @@ Boston, MA 02111-1307, USA.
 
 #include <qstringlist.h>
 
-#include "../../kexiDB/kexidb.h"
-#include "../../kexiDB/kexidbresult.h"
+#include <kexidb.h>
+#include <kexidbresult.h>
 
 typedef struct st_mysql MYSQL;
 

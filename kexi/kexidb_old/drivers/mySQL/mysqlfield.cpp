@@ -20,7 +20,7 @@
 
 #include "mysqlfield.h"
 
-#include "../../kexiDB/kexidbfield.h"
+#include <kexidbfield.h>
 
 MySqlField::MySqlField(MYSQL_FIELD *field, unsigned int column)
  : KexiDBField(QString::fromLatin1(field->table), column)

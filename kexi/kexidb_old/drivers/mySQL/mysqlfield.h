@@ -22,7 +22,7 @@ Boston, MA 02111-1307, USA.
 
 #include <mysql/mysql.h>
 
-#include "../../kexiDB/kexidbfield.h"
+#include <kexidbfield.h>
 
 class MySqlField : public KexiDBField
 {

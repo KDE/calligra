@@ -22,8 +22,8 @@ Boston, MA 02111-1307, USA.
 
 #include <kdebug.h>
 
-#include "mysqlresult.h"
-#include "mysqlfield.h"
+#include <mysqlresult.h>
+#include <mysqlfield.h>
 
 MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(parent)
 {

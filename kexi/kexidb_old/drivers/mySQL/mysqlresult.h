@@ -25,8 +25,8 @@ Boston, MA 02111-1307, USA.
 #include <qmap.h>
 #include <qintdict.h>
 
-#include "../../kexiDB/kexidbresult.h"
-#include "../../kexiDB/kexidbfield.h"
+#include "../../kexidbresult.h"
+#include "../../kexidbfield.h"
 
 #include "mysqlfield.h"
 //#include "mysqlrecord.h"
