@@ -266,10 +266,10 @@ void KoFilterManager::cleanUp() {
             KoFilterDialog *dia=originalDialogs.find(id).data();
             if(dia!=0L) {
                 config=dia->state();
-                kDebugInfo(30003, config);
+                kdDebug(30003) << config << endl;
             }
             else
-                kDebugWarning(30003, "default dia - no config!");
+                kdWarning(30003) << "default dia - no config!" << endl;
         }
     }
 }
@@ -393,7 +393,7 @@ const QString KoFilterManager::prepareExport( const QString & file, const char *
 
     if ( mimeType == _native_format )
     {
-        kDebugInfo( 30003, "Native format, returning without conversion. " );
+        kdDebug(30003) << "Native format, returning without conversion. " << endl;
         return file;
     }
 

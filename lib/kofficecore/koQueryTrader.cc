@@ -213,7 +213,7 @@ KoFilterEntry::KoFilterEntry( const KoComponentEntry& _e ) : KoComponentEntry( _
 
 QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_count*/ )
 {
-  kDebugInfo( 30003, "KoFilterEntry::query( %s, <ignored> )", _constr );
+  kdDebug(30003) << "KoFilterEntry::query( " << _constr << ", <ignored> )" << endl;
   QValueList<KoFilterEntry> lst;
 
   KTrader *trader = KTrader::self();
@@ -222,7 +222,7 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  kDebugInfo( 30003, "Query returned %d offers\n", max);
+  kdDebug(30003) << "Query returned " << max << " offers" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
     KoFilterEntry f( koParseFilterProperties( *it ) );
@@ -292,7 +292,7 @@ KoFilterDialogEntry::KoFilterDialogEntry( const KoComponentEntry& _e ) : KoCompo
 
 QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const char *_constr, int /*_count*/ )
 {
-  kDebugInfo( 30003, "KoFilterDialogEntry::query( %s, <ignored> )", _constr );
+  kdDebug(30003) << "KoFilterDialogEntry::query( " << _constr << ", <ignored> )" << endl;
   QValueList<KoFilterDialogEntry> lst;
 
   KTrader *trader = KTrader::self();
@@ -301,7 +301,7 @@ QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const char *_constr,
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  kDebugInfo( 30003, "Query returned %d offers\n", max);
+  kdDebug(30003) << "Query returned " << max << " offers" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
     KoFilterDialogEntry f( koParseFilterDialogProperties( *it ) );

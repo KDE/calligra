@@ -5,6 +5,7 @@
 #include <kstddirs.h>
 
 #include <klibloader.h>
+#include <kdebug.h>
 
 /*************************************************
  *
@@ -23,7 +24,8 @@ KoDataToolInfo::KoDataToolInfo( const KService::Ptr& service )
 
     if ( !!m_service && !m_service->serviceTypes().contains( "KoDataTool" ) )
     {
-	qDebug("The service %s does not feature the service type KoDataTool", m_service->name().latin1() );
+	kdDebug(30003) << "The service " << m_service->name().latin1()
+		       << " does not feature the service type KoDataTool" << endl;
 	m_service = 0;
     }
 }

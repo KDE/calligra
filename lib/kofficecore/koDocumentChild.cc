@@ -415,17 +415,17 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
       m_tmpMimeType = (*it).m_strValue.c_str();
     }
     else
-      kDebugInfo( 30003, "Unknown attrib 'OBJECT:%s'", (*it).m_strName.c_str() );
+      kdDebug(30003) << "Unknown attrib 'OBJECT:" << (*it).m_strName.c_str() << "'" << endl;
   }
 
   if ( m_tmpURL.isEmpty() )
   {	
-    kDebugInfo( 30003, "Empty 'url' attribute in OBJECT" );
+    kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
     return false;
   }
   else if ( m_tmpMimeType.isEmpty() )
   {
-    kDebugInfo( 30003, "Empty 'mime' attribute in OBJECT" );
+    kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
     return false;
   }
 
@@ -447,18 +447,18 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
       setGeometry( m_tmpGeometry );
     }
     else
-      kDebugInfo( 30003, "Unknown tag '%s' in OBJECT", tag.c_str() );
+      kdDebug(30003) << "Unknown tag '" << tag.c_str() << "' in OBJECT" << endl;
 
     if ( !parser.close( tag ) )
     {
-      kDebugInfo( 30003, "ERR: Closing Child in OBJECT" );
+      kdDebug(30003) << "ERR: Closing Child in OBJECT" << endl;
       return false;
     }
   }
 
   if ( !brect )
   {
-    kDebugInfo( 30003, "Missing RECT in OBJECT" );
+    kdDebug(30003) << "Missing RECT in OBJECT" << endl;
     return false;
   }
 
@@ -474,12 +474,12 @@ bool KoDocumentChild::load( const QDomElement& element )
 
     if ( m_tmpURL.isEmpty() )
     {	
-	kDebugInfo( 30003, "Empty 'url' attribute in OBJECT" );
+	kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
 	return false;
     }
     if ( m_tmpMimeType.isEmpty() )
     {
-	kDebugInfo( 30003, "Empty 'mime' attribute in OBJECT" );
+	kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
 	return false;
     }
 
@@ -496,7 +496,7 @@ bool KoDocumentChild::load( const QDomElement& element )
 
     if ( !brect )
     {
-	kDebugInfo( 30003, "Missing RECT in OBJECT" );
+	kdDebug(30003) << "Missing RECT in OBJECT" << endl;
 	return false;
     }
 
@@ -512,12 +512,12 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
 {
   assert( !m_tmpURL.isEmpty() );
 
-  kDebugInfo( 30003, QString("Trying to load %1").arg(m_tmpURL) );
+  kdDebug(30003) << "Trying to load " << m_tmpURL << endl;
 
   KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
   if ( e.isEmpty() )
   {
-    kDebugInfo( 30003, "ERROR: Could not create child document" );
+    kdDebug(30003) << "ERROR: Could not create child document" << endl;
     return false;
   }
 

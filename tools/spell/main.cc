@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 #include <kspell.h>
+#include <kdebug.h>
 
 /***************************************************
  *
@@ -69,20 +70,20 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
 {
     if ( command != "spellcheck" )
     {
-	qDebug("SpellChecker does only accept the command 'spellcheck'");
-	qDebug("   The commands %s is not accepted", command.latin1() );
+	kdDebug(31000) << "SpellChecker does only accept the command 'spellcheck'" << endl;
+	kdDebug(31000) << "   The commands " << command << " is not accepted" << endl;
 	return FALSE;
     }
 
     // Check wether we can accept the data
     if ( datatype != "QString" )
     {
-	qDebug("SpellChecker does only accept datatype QString");
+	kdDebug(31000) << "SpellChecker does only accept datatype QString" << endl;
 	return FALSE;
     }
     if ( mimetype != "text/plain" )
     {
-	qDebug("SpellChecker does only accept mimetype text/plain");
+	kdDebug(31000) << "SpellChecker does only accept mimetype text/plain" << endl;
 	return FALSE;
     }
 

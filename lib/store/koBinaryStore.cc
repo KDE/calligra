@@ -32,7 +32,8 @@ KoBinaryStore::KoBinaryStore( const QString & _filename, KoStore::Mode _mode )
   m_mode = _mode;
   m_id = 0;
 
-  kDebugInfo( 30002, "KoBinaryStore Constructor filename = %s mode = %d", _filename.data(), _mode);
+  kdDebug(30002) << "KoBinaryStore Constructor filename = " << _filename
+		 << " mode = " << _mode << endl;
 
   if ( _mode == Write )
   {
@@ -61,7 +62,7 @@ KoBinaryStore::KoBinaryStore( const QString & _filename, KoStore::Mode _mode )
 
 KoBinaryStore::~KoBinaryStore()
 {
-  kDebugInfo( 30002, "###################### DESTRUCTOR ####################" );
+  kdDebug(30002) << "###################### DESTRUCTOR ####################" << endl;
   if ( m_mode == Write )
   {
     m_out.close();
@@ -150,16 +151,17 @@ void KoBinaryStore::list()
 
 bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
 {
-  kDebugInfo( 30002, "KoBinaryStore: opening for %s, mimetype %s", _name.data(), _mime_type.data());
+  kdDebug(30002) << "KoBinaryStore: opening for " << _name << " mimetype " << _mime_type << endl;
   if ( m_bIsOpen )
   {
-    kDebugInfo( 30002, "KoBinaryStore: File is already opened" );
+    kdDebug(30002) << "KoBinaryStore: File is already opened" << endl;
     return false;
   }
 
   if ( _mime_type.isNull() && m_mode != Read )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Mimetype omitted while opening entry %s for writing", _name.data() );
+    kdDebug(30002) << "KoBinaryStore: Mimetype omitted while opening entry "
+		   << _name << " for writing" << endl;
     return false;
   }
 
@@ -174,7 +176,7 @@ bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
     QMapIterator<QString, Entry> it =  m_map.find( _name );
     if ( it == m_map.end() )
     {
-      kDebugInfo( 30002, "KoBinaryStore: Duplicate filename %s", _name.data() );
+      kdDebug(30002) << "KoBinaryStore: Duplicate filename " << _name << endl;
       return false;
     }
 
@@ -188,18 +190,19 @@ bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
   }
   else if ( m_mode == Read )
   {
-    kDebugInfo( 30002, "Opening for reading %s", _name.data() );
+    kdDebug(30002) << "Opening for reading " << _name << endl;
 
     QMapIterator<QString, Entry> it =  m_map.find( _name );
     if ( it == m_map.end() )
     {
-      kDebugInfo( 30002, "Unknown filename %s", _name.data() );
+      kdDebug(30002) << "Unknown filename " << _name << endl;
       return false;
     }
     if ( !_mime_type.isEmpty()  && (*it).mimetype != _mime_type )
     {
-      kDebugInfo( 30002, "Wrong mime_type in file %s", _name.data() );
-      kDebugInfo( 30002, "Expected %s but got %s", _mime_type.data(), (*it).mimetype.data() );
+      kdDebug(30002) << "Wrong mime_type in file " << _name << endl;
+      kdDebug(30002) << "Expected " << _mime_type  << " but got "
+		     << (*it).mimetype.data() << endl;
       return false;
     }
     m_in.seekg( (*it).data );
@@ -217,11 +220,11 @@ bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
 
 void KoBinaryStore::close()
 {
-  kDebugInfo( 30002, "koBinaryStore: Closing" );
+  kdDebug(30002) << "koBinaryStore: Closing" << endl;
 
   if ( !m_bIsOpen )
   {
-    kDebugInfo( 30002, "KoBinaryStore: You must open before closing" );
+    kdDebug(30002) << "KoBinaryStore: You must open before closing" << endl;
     return;
   }
 
@@ -244,20 +247,20 @@ QByteArray KoBinaryStore::read( unsigned long int max )
 
   if ( !m_bIsOpen )
   {
-    kDebugInfo( 30002, "KoBinaryStore: You must open before reading" );
+    kdDebug(30002) << "KoBinaryStore: You must open before reading" << endl;
     data.resize( 0 );
     return data;
   }
   if ( m_mode != Read )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Can not read from store that is opened for writing" );
+    kdDebug(30002) << "KoBinaryStore: Can not read from store that is opened for writing" << endl;
     data.resize( 0 );
     return data;
   }
 
   if ( m_in.eof() )
   {
-    kDebugInfo( 30002, "EOF" );
+    kdDebug(30002) << "EOF" << endl;
     data.resize( 0 );
     return data;
   }
@@ -266,7 +269,7 @@ QByteArray KoBinaryStore::read( unsigned long int max )
     max = m_current.size - m_readBytes;
   if ( max == 0 )
   {
-    kDebugInfo( 30002, "EOF 2" );
+    kdDebug(30002) << "EOF 2" << endl;
     data.resize( 0 );
     return data;
   }
@@ -276,7 +279,7 @@ QByteArray KoBinaryStore::read( unsigned long int max )
   unsigned int len = m_in.gcount();
   if ( len != max )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Error while reading" );
+    kdDebug(30002) << "KoBinaryStore: Error while reading" << endl;
     data.resize( 0 );
     return data;
   }
@@ -291,12 +294,12 @@ long KoBinaryStore::read( char *_buffer, unsigned long _len )
 {
   if ( !m_bIsOpen )
   {
-    kDebugInfo( 30002, "KoBinaryStore: You must open before reading" );
+    kdDebug(30002) << "KoBinaryStore: You must open before reading" << endl;
     return -1;
   }
   if ( m_mode != Read )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Can not read from store that is opened for writing" );
+    kdDebug(30002) << "KoBinaryStore: Can not read from store that is opened for writing" << endl;
     return -1;
   }
 
@@ -312,7 +315,7 @@ long KoBinaryStore::read( char *_buffer, unsigned long _len )
   unsigned int len = m_in.gcount();
   if ( len != _len )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Error while reading" );
+    kdDebug(30002) << "KoBinaryStore: Error while reading" << endl;
     return -1;
   }
 
@@ -325,12 +328,12 @@ long KoBinaryStore::size() const
 {
   if ( !m_bIsOpen )
   {
-    kDebugInfo( 30002, "KoBinaryStore: You must open before asking for size" );
+    kdDebug(30002) << "KoBinaryStore: You must open before asking for size" << endl;
     return -1;
   }
   if ( m_mode != Read )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Can not get size from store that is opened for writing" );
+    kdDebug(30002) << "KoBinaryStore: Can not get size from store that is opened for writing" << endl;
     return -1;
   }
   return m_current.size;
@@ -344,12 +347,12 @@ bool KoBinaryStore::write( const QByteArray& data )
 
   if ( !m_bIsOpen )
   {
-    kDebugInfo( 30002, "KoBinaryStore: You must open before writing" );
+    kdDebug(30002) << "KoBinaryStore: You must open before writing" << endl;
     return 0L;
   }
   if ( m_mode != Write )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Can not write to store that is opened for reading" );
+    kdDebug(30002) << "KoBinaryStore: Can not write to store that is opened for reading" << endl;
     return 0L;
   }
 
@@ -358,7 +361,7 @@ bool KoBinaryStore::write( const QByteArray& data )
 
   if ( bad() )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Error while writing" );
+    kdDebug(30002) << "KoBinaryStore: Error while writing" << endl;
     return false;
   }
   return true;
@@ -370,12 +373,12 @@ bool KoBinaryStore::write( const char* _data, unsigned long _len )
 
   if ( !m_bIsOpen )
   {
-    kDebugInfo( 30002, "KoBinaryStore: You must open before writing" );
+    kdDebug(30002) << "KoBinaryStore: You must open before writing" << endl;
     return 0L;
   }
   if ( m_mode != Write )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Can not write to store that is opened for reading" );
+    kdDebug(30002) << "KoBinaryStore: Can not write to store that is opened for reading" << endl;
     return 0L;
   }
 
@@ -384,7 +387,7 @@ bool KoBinaryStore::write( const char* _data, unsigned long _len )
 
   if ( bad() )
   {
-    kDebugInfo( 30002, "KoBinaryStore: Error while writing" );
+    kdDebug(30002) << "KoBinaryStore: Error while writing" << endl;
     return false;
   }
 

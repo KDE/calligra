@@ -351,10 +351,10 @@ QMap<QString,QByteArray> KoDocument::viewContainerStates( KoView *view )
     return res;
 
   res = d->m_viewContainerStates[ viewIdx ];
-  
+
   // make this entry empty. otherwise we get a segfault in QMap ;-(
   d->m_viewContainerStates[ viewIdx ] = QMap<QString,QByteArray>();
-  
+
   return res;
 }
 
@@ -432,8 +432,8 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
 bool KoDocument::saveChildren( KoStore* /*_store*/, const char * /*_path*/ )
 {
   // Lets assume that we do not have children
-  kDebugWarning( 30003, "KoDocument::saveChildren( KoStore*, const char * )");
-  kDebugWarning( 30003, "Not implemented ( not really an error )" );
+  kdWarning(30003) << "KoDocument::saveChildren( KoStore*, const char * )" << endl;
+  kdWarning(30003) << "Not implemented ( not really an error )" << endl;
   return true;
 }
 
@@ -498,7 +498,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
 
 bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const QString & _path )
 {
-  kDebugInfo( 30003, "Saving document to store" );
+  kdDebug(30003) << "Saving document to store" << endl;
 
   // Use the path as the internal url
   m_url = _path;
@@ -520,14 +520,14 @@ bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const Q
   if ( !completeSaving( _store ) )
     return false;
 
-  kDebugInfo( 30003, "Saved document to store" );
+  kdDebug(30003) << "Saved document to store" << endl;
 
   return true;
 }
 
 bool KoDocument::openFile()
 {
-  kdDebug(30003) << QString("KoDocument::openFile for %1").arg( m_file ) << endl;
+  kdDebug(30003) << "KoDocument::openFile for " << m_file << endl;
 
   QApplication::setOverrideCursor( waitCursor );
 
@@ -536,7 +536,7 @@ bool KoDocument::openFile()
   // Launch a filter if we need one for this url ?
   QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType(), this );
 
-  kdDebug(30003) << QString("KoDocument::openFile - importedFile %1").arg( importedFile ) << endl;
+  kdDebug(30003) << "KoDocument::openFile - importedFile " << importedFile << endl;
 
   QApplication::restoreOverrideCursor();
 
@@ -581,7 +581,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 {
   QApplication::setOverrideCursor( waitCursor );
 
-  kDebugInfo( 30003, QString("KoDocument::loadNativeFormat( %1 )").arg( file ) );
+  kdDebug(30003) << "KoDocument::loadNativeFormat( " << file << " )" << endl;
 
   ifstream in( file );
   if ( !in )
@@ -595,7 +595,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();
 
-  //kDebugInfo( 30003, "PATTERN=%s", buf );
+  //kdDebug(30003) << "PATTERN=" << buf << endl;
 
   // Is it plain XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
@@ -641,7 +641,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     if ( !loadChildren( store ) )
     {	
-      kDebugError( 30003, "ERROR: Could not load children" );
+      kdError(30003) << "ERROR: Could not load children" << endl;
       delete store;
       QApplication::restoreOverrideCursor();
       return false;
@@ -668,7 +668,7 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 
   if ( !loadChildren( _store ) )
   {	
-    kDebugError( 30003, "ERROR: Could not load children" );
+    kdError(30003) << "ERROR: Could not load children" << endl;
     return false;
   }
 
@@ -677,13 +677,13 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 
 bool KoDocument::load( istream& in, KoStore* _store )
 {
-  kDebugInfo( 30003, "KoDocument::load( istream& in, KoStore* _store )");
+  kdDebug(30003) << "KoDocument::load( istream& in, KoStore* _store )" << endl;
   // Try to find out whether it is a mime multi part file
   char buf[5];
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();
 
-  kDebugInfo( 30003, "PATTERN2=%s", buf );
+  kdDebug(30003) << "PATTERN2=" << buf << endl;
 
   // Load XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
@@ -729,13 +729,13 @@ void KoDocument::changedByFilter( bool changed ) const
 
 bool KoDocument::loadBinary( istream& , bool, KoStore* )
 {
-    kDebugError( 30003, "KoDocument::loadBinary not implemented" );
+    kdError(30003) << "KoDocument::loadBinary not implemented" << endl;
     return false;
 }
 
 bool KoDocument::loadXML( KOMLParser&, KoStore*  )
 {
-    kDebugError( 30003, "KoDocument::loadXML not implemented" );
+    kdError(30003) << "KoDocument::loadXML not implemented" << endl;
     return false;
 }
 
@@ -756,7 +756,7 @@ bool KoDocument::completeSaving( KoStore* )
 
 bool KoDocument::save( ostream&, const char* )
 {
-    kDebugError( 30003, "KoDocument::save not implemented" );
+    kdError(30003) << "KoDocument::save not implemented" << endl;
     return false;
 }
 

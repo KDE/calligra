@@ -4,6 +4,7 @@
 
 #include <qpainter.h>
 #include <kparts/event.h>
+#include <kdebug.h>
 
 class KoFramePrivate
 {
@@ -219,7 +220,7 @@ void KoFrame::mousePressEvent( QMouseEvent* ev )
   if ( d->m_state == Active )
     d->m_mode = 0;
 
-  qDebug("---- MODE=%i", d->m_mode );
+  kdDebug(30003) << "---- MODE=" << d->m_mode << endl;
 
   d->m_mousePressPos = mapToParent( ev->pos() );
   d->m_framePos = mapToParent( QPoint( 0, 0 ) );
@@ -338,7 +339,7 @@ bool KoFrame::eventFilter( QObject* obj, QEvent* ev )
 {
   if ( obj == d->m_view && KParts::PartActivateEvent::test( ev ) )
   {
-    qDebug("Activate event");
+    kdDebug(30003) << "Activate event"<< endl;
     KParts::PartActivateEvent* e = (KParts::PartActivateEvent*)ev;
     if ( e->part() == (KParts::Part *)d->m_view->koDocument() )
     {
@@ -350,7 +351,7 @@ bool KoFrame::eventFilter( QObject* obj, QEvent* ev )
   }
   else if ( obj == d->m_view && KParts::PartSelectEvent::test( ev ) )
   {
-    qDebug("Selected event");
+    kdDebug(30003) << "Selected event" << endl;
     KParts::PartSelectEvent* e = (KParts::PartSelectEvent*)ev;
     if ( e->part() == (KParts::Part *)d->m_view->koDocument() )
     {
@@ -360,6 +361,6 @@ bool KoFrame::eventFilter( QObject* obj, QEvent* ev )
         setState( Inactive );
     }
   }
-  
+
   return FALSE;
 }

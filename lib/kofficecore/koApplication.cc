@@ -51,7 +51,7 @@ void KoApplication::start()
     QCString nativeFormat = KoDocument::readNativeFormatMimeType();
     if ( nativeFormat.isEmpty() )
     {
-        kdError() << "Couldn't find the native MimeType in " << kapp->name() << "'s desktop file. Check your installation !" << endl;
+        kdError(30003) << "Couldn't find the native MimeType in " << kapp->name() << "'s desktop file. Check your installation !" << endl;
         ::exit(1);
     }
 
@@ -59,7 +59,7 @@ void KoApplication::start()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( nativeFormat );
     if ( entry.isEmpty() )
     {
-        kdError() << "Unknown KOffice MimeType " << nativeFormat << ". Check your installation !" << endl;
+        kdError(30003) << "Unknown KOffice MimeType " << nativeFormat << ". Check your installation !" << endl;
         ::exit(1);
     }
 

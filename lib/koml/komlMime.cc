@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <string.h>
 #include <assert.h>
@@ -38,7 +38,7 @@ void Base64::encode( char *_dest, unsigned char c1, unsigned char c2, unsigned c
     'w','x','y','z','0','1','2','3',
     '4','5','6','7','8','9','+','/'
   };
-  
+
   /* Transform the 3x8 bits to 4x6 bits, as required by
      base64.  */
   *_dest++ = tbl[ c1 >> 2 ];
@@ -46,7 +46,7 @@ void Base64::encode( char *_dest, unsigned char c1, unsigned char c2, unsigned c
   *_dest++ = tbl[ ( ( c2 & 0xf) << 2 ) | ( c3 >> 6 ) ];
   *_dest++ = tbl[ c3 & 0x3f ];
   *_dest = 0;
-  
+
   if ( _len == 2 )
     *(_dest - 1) = '=';
   else if ( _len == 1 )
@@ -79,7 +79,7 @@ int Base64::decode( char *_dest, unsigned char c1, unsigned char c2, unsigned ch
     conv = 1;
   else if ( c4 == '=' )
     conv = 2;
-  
+
   c1 = tbl[ c1 ];
   c2 = tbl[ c2 ];
   c3 = tbl[ c3 ];
@@ -105,10 +105,10 @@ int Base64DecodeBuffer::underflow()
 
     if ( m_in.eof() )
     {
-      kDebugError( 30001, "Unexpected end of input" );
+      kdError(30001) << "Unexpected end of input" << endl;
       m_bEnd = true;
     }
-    
+
     if ( m_bEnd )
       return EOF;
 
@@ -128,7 +128,7 @@ int Base64DecodeBuffer::underflow()
 
     int want = ( m_iBufferSize - 4 ) * 4 / 3;
     char *buf = new char[ want ];
-    
+
     int got = 0;
     while( !m_in.eof() && !m_bEnd && got < want )
     {
@@ -136,13 +136,13 @@ int Base64DecodeBuffer::underflow()
       buf[ got ] = c;
       if ( c == '=' )
       {
-	kDebugInfo( 30001, "END OF BASE64" );
+	kdDebug(30001) << "END OF BASE64" << endl;
 	
 	if ( got % 4 == 2 )
 	{
 	  if ( m_in.eof() )
 	  {
-	    kDebugError( 30001, "Unexpected EOF" );
+	    kdError(30001) << "Unexpected EOF" << endl;
 	    delete [] buf;
 	    return EOF;
 	  }
@@ -150,7 +150,7 @@ int Base64DecodeBuffer::underflow()
 	  c = m_in.get();
 	  if ( c != '=' )
 	  {
-	    kDebugError( 30001, "Not correct base64" );
+	    kdError(30001) << "Not correct base64" << endl;
 	    delete [] buf;
 	    return EOF;
 	  }
@@ -162,9 +162,9 @@ int Base64DecodeBuffer::underflow()
 	  got++;
 	  m_bEnd = true;
 	}
-	else 
+	else
 	{
-	  kDebugError( 30001, "Unexpected =" );
+	  kdError(30001) << "Unexpected =" << endl;
 	  delete [] buf;
 	  return EOF;
 	}
@@ -172,14 +172,14 @@ int Base64DecodeBuffer::underflow()
       else if ( !isspace( c ) )
 	got++;
     }
-    
+
     if( got % 4 != 0 )
     {
-      kDebugError( 30001, "Unexpected EOF 2" );
+      kdError(30001) << "Unexpected EOF 2" << endl;
       delete [] buf;
       return EOF;
     }
-    
+
     int anz = 0;
     int cnt = got / 4;
     for( int j = 0; j < cnt; j++ )
@@ -188,7 +188,7 @@ int Base64DecodeBuffer::underflow()
       assert( conv == 3 || j == cnt - 1 );
       anz += conv;
     }
-        
+
     /* Puffer-Zeiger neu setzen
      */
     setg ( m_buffer + ( 4 - anzPutback ),   // Putback-Anfang
@@ -200,5 +200,3 @@ int Base64DecodeBuffer::underflow()
     // naechstes Zeichen zurueckliefern
     return *gptr();
 }
-
-

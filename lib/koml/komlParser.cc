@@ -212,7 +212,7 @@ bool KOMLParser::readText( string &_str )
   }
 
   encode(_str);
-  
+
   return true;
 }
 
@@ -343,7 +343,7 @@ bool KOMLParser::close( string& _tag, bool _emit )
     return true;
   }
 
-  // kDebugError( 30001, "... Closing '%s'", m_vecStack.back().c_str() );
+  // kdError(30001) << "... Closing '" << m_vecStack.back().c_str() << "'" << endl;
 
   if ( _emit )
   {
@@ -400,7 +400,7 @@ bool KOMLParser::close( string& _tag, bool _emit )
 	  tmp.assign( m_pData, prev );
 	else
 	  tmp.assign( m_pData + m_iEmitStart, prev - m_iEmitStart );
-	kDebugError( 30001, "EL: %s", tmp.c_str() );	
+	kdError(30001) << "EL: " << tmp.c_str() << endl;	
       }
 
       END_EMIT;
@@ -423,10 +423,10 @@ void KOMLParser::free( KOMLData* _data )
 
   if ( m_iEmitStart != -1 )
   {
-    kDebugError( 30001, "EF: %i %i", _data->data(), m_iEmitStart );
+    kdError(30001) << "EF: " << _data->data() << " " << m_iEmitStart << endl;
     m_iEmitStart = -1;
   }
-  else kDebugError( 30001, "E: %i", _data->data() );
+  else kdError(30001) << "E: " << _data->data() << endl;
 
   m_pFeed->free( _data );
 }

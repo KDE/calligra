@@ -164,7 +164,7 @@ KoMainWindow::~KoMainWindow()
 
 void KoMainWindow::setRootDocument( KoDocument *doc )
 {
-  kdDebug(31000) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
+  kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
   KoView *oldRootView = d->m_rootView;
 
   if ( d->m_rootDoc )
@@ -512,13 +512,13 @@ void KoMainWindow::buildMainWindowGUI()
 
 void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 {
-  kdDebug(31000) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " <<
+  kdDebug(30003) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " <<
     newPart << endl;
-  kdDebug(31000) <<  "active part is " << d->m_activePart << endl;
+  kdDebug(30003) <<  "active part is " << d->m_activePart << endl;
 
   if ( d->m_activePart && d->m_activePart == newPart )
   {
-    kdDebug(31000) << "no need to change the GUI" << endl;
+    kdDebug(30003) << "no need to change the GUI" << endl;
     return;
   }
 
