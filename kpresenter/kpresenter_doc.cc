@@ -956,7 +956,8 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 
     contentTmpWriter.startElement( "office:body" );
-
+	contentTmpWriter.startElement( "office:presentation" );
+	
     int indexObj = 1;
     int partIndexObj = 0;
 //save page
@@ -970,6 +971,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 
     saveOasisPresentationSettings( contentTmpWriter );
+	contentTmpWriter.endElement(); //office:presentation
     contentTmpWriter.endElement(); //office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
@@ -1374,7 +1376,14 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     }
-    //load settings
+    body = body.namedItem( "office:presentation" ).toElement();
+    if ( body.isNull() )
+    {
+        kdError(33001) << "No office:presentation found!" << endl;
+        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
+       return false;
+    }	
+	//load settings
     QDomElement settings = body.namedItem("presentation:settings").toElement();
     if (!settings.isNull() && !_clean /*don't load settings when we copy/paste a page*/)
     {

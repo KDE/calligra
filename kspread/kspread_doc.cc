@@ -624,13 +624,14 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     //todo fixme just add a element for testing saving content.xml
     contentTmpWriter.startElement( "office:body" );
-
+	contentTmpWriter.startElement( "office:spreadsheet" );
 
     d->workbook->saveOasis( contentTmpWriter, mainStyles );
     d->styleManager->saveOasis( mainStyles );
 
     saveOasisAreaName( contentTmpWriter );
-    contentTmpWriter.endElement(); ////office:body
+    contentTmpWriter.endElement(); ////office:spreadsheet
+	contentTmpWriter.endElement(); ////office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     contentWriter.startElement( "office:automatic-styles" );
@@ -820,6 +821,14 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         d->m_loadingInfo = 0L;
         return false;
     }
+    body = body.namedItem( "office:spreadsheet" ).toElement();
+    if ( body.isNull() )
+    {
+        setErrorMessage( i18n( "Invalid document. No office:spreadsheet." ));
+        delete d->m_loadingInfo;
+        d->m_loadingInfo = 0L;
+        return false;
+    }	
     //load in first
     d->styleManager->loadOasisStyleTemplate( oasisStyles );
 
