@@ -3284,6 +3284,11 @@ void KWView::frameSelectedChanged()
         }
     }
     actionBackgroundColor->setEnabled( frameDifferentOfPart );
+    if ( frameDifferentOfPart ) {
+        KWFrame *frame = m_doc->getFirstSelectedFrame();
+        if ( frame )
+            actionBackgroundColor->setCurrentColor( frame->getBackgroundColor().color() );
+    }
 
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
