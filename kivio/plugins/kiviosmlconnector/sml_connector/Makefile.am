@@ -1,4 +1,4 @@
-lib_LTLIBRARIES =libsml_connector.la
+kde_module_LTLIBRARIES =sml_connector.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
@@ -8,17 +8,17 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 
 METASOURCES = AUTO
 
-libsml_connector_la_SOURCES = sml_connector.cpp
-libsml_connector_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-libsml_connector_la_LIBADD = $(top_builddir)/kivio/kiviopart/libkiviopart.la
+sml_connector_la_SOURCES = sml_connector.cpp
+sml_connector_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+sml_connector_la_LIBADD = $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 stencildir = $(kde_datadir)/kivio/autoloadStencils
 stencil_DATA = sml_connector.xpm
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(stencildir)
-	$(RM) $(DESTDIR)$(stencildir)/libsml_connector.so
-	$(LN_S) $(kde_moduledir)/libsml_connector.so $(DESTDIR)$(stencildir)/libsml_connector.so
+	$(RM) $(DESTDIR)$(stencildir)/sml_connector.so
+	$(LN_S) $(kde_moduledir)/sml_connector.so $(DESTDIR)$(stencildir)/sml_connector.so
 
 uninstall-local:
-	$(RM) $(DESTDIR)$(stencildir)/libsml_connector.so
+	$(RM) $(DESTDIR)$(stencildir)/sml_connector.so

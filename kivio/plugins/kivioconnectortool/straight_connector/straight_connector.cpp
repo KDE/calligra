@@ -46,7 +46,7 @@ static QPixmap *pIcon = NULL;
 static KivioStencilSpawnerInfo sinfo = KivioStencilSpawnerInfo("Dave Marotti", "Straight Connector", "Dave Marotti - Straight Connector", "Basic Straight Connector", "0.1", "http://localhost/", "", "off");
 
 #include <kgenericfactory.h>
-K_EXPORT_COMPONENT_FACTORY( libstraight_connector, KGenericFactory<KivioConnectorFactory>( "KivioConnectorFactory" ) );
+K_EXPORT_COMPONENT_FACTORY( straight_connector, KGenericFactory<KivioConnectorFactory>( "KivioConnectorFactory" ) );
 
 KivioConnectorFactory::KivioConnectorFactory(QObject *parent, const char* name, const QStringList& args) :
 	KivioStencilFactory(parent, name, args)
