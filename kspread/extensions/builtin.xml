@@ -678,7 +678,7 @@
 	<Text>This function multiplies each value by -1</Text>
 	<Syntax>INV( Value )</Syntax>
 	<Example>INV(-5) equals 5</Example>
-	<Example>INV(5) equals 5</Example>
+	<Example>INV(5) equals -5</Example>
 	<Example>INV(0) equals 0</Example>
       </Help>
     </Function>
