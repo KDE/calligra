@@ -133,32 +133,32 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>13 Nov 2001</td>
+     <td>16 Feb 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
      <td>
-        - Export to HTML 4.01 or XHTML 1.0 documents (with CSS2)<br>
-        - UTF-8 or locale encoding<br>
+        - Export to HTML 4.01 or XHTML 1.0 documents<br>
+        - UTF-8 or locale or other encoding<br>
+        - Three modes: light, basic and enhanced<br>
+        - Uses CSS2 in enhanced mode<br>
         - Lists<br>
         - Character formatting<br>
         - Paragraph formatting<br>
-        - Indentations<br>
-        - Links</br>
+        - Links<br>
+        - Tables<br>
+        - Inline images (PNG or JPEG)<br>
      </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
      <td>
-        - Finish the complete re-write<br>
-        - Tables<br>
-        - Images<br>
+        - Other inline images types<br>
+        - Non-inlined images<br>
+        - Cliparts<br>
         - Fix white space problems (space at start, space at end, multiple consecutive spaces)<br>
-        - Other Unicode encodings (e.g. UTF-16)<br>
-        - Other non-Unicode encodings (e.g. ASCII)<br>
-        - Paragraph layout<br>
         - Special treatement for paragraphs in fixed fonts (needed or not?)<br>
      </td>
     </tr>
@@ -169,7 +169,8 @@
         04 Feb 2001 Start of complete re-write.<br>
         06 Feb 2001 First version that can export XHTML 1.0.<br>
         ?? Nov 2001 New version with simplier dialog.<br>
-        13 Nov 2001 Links and full support for locale encoding
+        13 Nov 2001 Links and full support for locale encoding<br>
+        16 Feb 2002 New modes and new naming of modes: light, basic, enhanced<br>
      </td>
     </tr>
 
@@ -190,9 +191,13 @@
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
+     <td VALIGN=TOP><b><font size=+1>Comments</font></b></td>
      <td>
-        NOTE: this status describe the version of the filter for KOffice 1.2 (CVS HEAD)
+        NOTE: this status describes the version of the filter for KOffice 1.2 (CVS HEAD)<br><br>
+        <b>Modes:</b><br>
+        - Light: converts mainly the document structure; uses strict (X)HTML<br>
+        - Basic: converts most of the document; uses transitional (X)HTML<br>
+        - Enhanced: converts as much as possible of the document; uses strict (X)HTML with CSS2<br>
      </td>
     </tr>
    </table>
