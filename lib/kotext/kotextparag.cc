@@ -40,7 +40,11 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 KoTextParag::~KoTextParag()
 {
     if ( !textDocument()->isDestroying() )
+    {
+        // TODO let the text document emit a signal paragraphDeleted ?
+        // needed for background spellcheck
         invalidateCounters();
+    }
     //kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
     delete m_item;
 }
@@ -678,7 +682,7 @@ int KoTextParag::nextTab( int chnum, int x )
         if ( string()->isRightToLeft() )
             i = m_layout.tabList().size() - 1;
 
-        while ( i >= 0 && i < m_layout.tabList().size() ) {
+        while ( i >= 0 && i < (int)m_layout.tabList().size() ) {
             //kdDebug() << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
             int tab = tArray[ i ];
             if ( string()->isRightToLeft() )

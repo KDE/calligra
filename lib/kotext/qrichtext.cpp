@@ -3262,6 +3262,7 @@ int QTextFormat::width( const QString &str, int pos ) const
 KoTextString::KoTextString()
 {
     textChanged = FALSE;
+    bNeedsSpellCheck = true;
     bidi = FALSE;
     rightToLeft = FALSE;
     dir = QChar::DirON;
@@ -3270,6 +3271,7 @@ KoTextString::KoTextString()
 KoTextString::KoTextString( const KoTextString &s )
 {
     textChanged = s.textChanged;
+    bNeedsSpellCheck = s.bNeedsSpellCheck;
     bidi = s.bidi;
     rightToLeft = s.rightToLeft;
     dir = s.dir;
@@ -3301,6 +3303,7 @@ void KoTextString::insert( int index, const QString &s, QTextFormat *f )
 	data[ (int)index + i ].setFormat( f );
     }
     textChanged = TRUE;
+    bNeedsSpellCheck = true;
 }
 
 KoTextString::~KoTextString()
@@ -3327,6 +3330,7 @@ void KoTextString::insert( int index, KoTextStringChar *c )
     data[ (int)index ].type = KoTextStringChar::Regular;
     data[ (int)index ].setFormat( c->format() );
     textChanged = TRUE;
+    bNeedsSpellCheck = true;
 }
 
 void KoTextString::truncate( int index )
@@ -3347,6 +3351,7 @@ void KoTextString::truncate( int index )
     }
     data.truncate( index );
     textChanged = TRUE;
+    bNeedsSpellCheck = true;
 }
 
 void KoTextString::remove( int index, int len )
@@ -3365,6 +3370,7 @@ void KoTextString::remove( int index, int len )
 	     sizeof( KoTextStringChar ) * ( data.size() - index - len ) );
     data.resize( data.size() - len );
     textChanged = TRUE;
+    bNeedsSpellCheck = true;
 }
 
 void KoTextString::clear()
@@ -3687,6 +3693,11 @@ Qt3::QTextParag::~QTextParag()
     if ( mSelections ) delete mSelections;
     if ( mFloatingItems ) delete mFloatingItems;
     if ( mStyleSheetItemsVec ) delete mStyleSheetItemsVec;
+
+    if (p)
+       p->setNext(n);
+    if (n)
+       n->setPrev(p);
 }
 
 #define QTextParag Qt3::QTextParag

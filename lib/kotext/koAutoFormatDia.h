@@ -99,7 +99,8 @@ protected:
     QWidget *tab1;
     QWidget *tab2;
     QWidget *tab3;
-    QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper, *cbAdvancedAutoCorrection, *cbDetectUrl;
+    QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper, *cbDetectUrl,
+        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection;
     QPushButton *pbQuote1, *pbQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDefault,
                 *pbSpecialChar1, *pbSpecialChar2;
     KCharSelect *charselect;

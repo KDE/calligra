@@ -132,7 +132,6 @@ public:
      * Returns the index in the paragraph */
     int findCustomItem( const KoTextCustomItem * custom ) const;
 
-
     /** Reimplemented from QTextParag to implement non-left-aligned tabs */
     virtual int nextTab( int chnum, int x );
 

@@ -81,9 +81,6 @@ public:
      */
     static QString getLastWord( KoTextParag *parag, int index );
 
-    //void setEnabled( bool e ) { m_enabled = e; }
-    //bool isEnabled() { return m_enabled; }
-
     // Config for the typographic quotes. Used by the dialog.
     struct TypographicQuotes
     {
@@ -95,9 +92,8 @@ public:
     void configTypographicQuotes( TypographicQuotes _tq );
     void configUpperCase( bool _uc );
     void configUpperUpper( bool _uu );
-    void configAdvancedAutocorrect( bool _aa);
+    void configAdvancedAutocorrect( bool _aa );
     void configAutoDetectUrl(bool _au);
-
 
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
@@ -105,10 +101,8 @@ public:
     { return m_convertUpperCase; }
     bool getConfigUpperUpper() const
     { return m_convertUpperUpper; }
-
     bool getConfigAdvancedAutoCorrect() const
     { return m_advancedAutoCorrect;}
-
     bool getConfigAutoDetectUrl() const
     { return m_autoDetectUrl;}
 
@@ -159,7 +153,6 @@ public:
 protected:
     bool doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj );
     void doUpperCase( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
-    void doSpellCheck( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word );
     void doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj );
     void buildMaxLen();
 
@@ -170,7 +163,6 @@ private:
     KoVariableCollection *m_varCollection;
     KoVariableFormatCollection *m_varFormatCollection;
 
-    //bool m_enabled;
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
     bool m_autoDetectUrl;

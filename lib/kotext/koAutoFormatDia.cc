@@ -212,10 +212,10 @@ void KoAutoFormatDia::setupTab2()
     QHBoxLayout *grid = new QHBoxLayout(tab2, 10, 5);
     grid->setAutoAdd( true );
 
-    QVBox *right = new QVBox( tab2 );
-    cbAdvancedAutoCorrection=new QCheckBox(i18n("Active autocorrection"),right);
+    QVBox *left = new QVBox( tab2 );
+    cbAdvancedAutoCorrection=new QCheckBox(i18n("Active autocorrection"),left);
     cbAdvancedAutoCorrection->setChecked(m_autoFormat.getConfigAdvancedAutoCorrect());
-    QHBox *text = new QHBox( right );
+    QHBox *text = new QHBox( left );
     text->setSpacing( 3 );
     text->setMargin( 3 );
     m_find = new KoAutoFormatLineEdit( text );
@@ -233,7 +233,7 @@ void KoAutoFormatDia::setupTab2()
              SLOT( slotAddEntry()));
     pbSpecialChar2 = new QPushButton( "...", text );
     connect(pbSpecialChar2,SIGNAL(clicked()),this,SLOT(chooseSpecialChar2()));
-    m_pListView = new KListView( right );
+    m_pListView = new KListView( left );
     m_pListView->addColumn( i18n( "Find" ) );
     m_pListView->addColumn( i18n( "Replace" ) );
     m_pListView->setAllColumnsShowFocus( true );
@@ -426,7 +426,7 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
     m_docAutoFormat->copyListException(abbreviation->getListException());
     m_docAutoFormat->copyListTwoUpperCaseException(twoUpperLetter->getListException());
-    m_docAutoFormat->configAdvancedAutocorrect( cbAdvancedAutoCorrection->isChecked());
+    m_docAutoFormat->configAdvancedAutocorrect( cbAdvancedAutoCorrection->isChecked() );
     // Save to config file
     m_docAutoFormat->saveConfig();
 

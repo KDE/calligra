@@ -43,7 +43,9 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_varFormatCollection(_varFormatCollection),
       m_configRead( false ),
       m_convertUpperCase( false ), m_convertUpperUpper( false ),
-      m_typographicQuotes(), /*m_enabled( true ),*/
+      m_advancedAutoCorrect( true ),
+      m_autoDetectUrl( false ),
+      m_typographicQuotes(),
       m_maxlen( 0 )
 {
 }
@@ -60,7 +62,7 @@ void KoAutoFormat::readConfig()
     KConfigGroupSaver cgs( &config, "AutoFormat" );
     m_convertUpperCase = config.readBoolEntry( "ConvertUpperCase", false );
     m_convertUpperUpper = config.readBoolEntry( "ConvertUpperUpper", false );
-    m_advancedAutoCorrect= config.readBoolEntry( "AdvancedAutocorrect", true);
+    m_advancedAutoCorrect = config.readBoolEntry( "AdvancedAutocorrect", true );
     m_autoDetectUrl = config.readBoolEntry("AutoDetectUrl",false);
 
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
@@ -139,7 +141,7 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "TypographicQuotesBegin", QString( m_typographicQuotes.begin ) );
     config.writeEntry( "TypographicQuotesEnd", QString( m_typographicQuotes.end ) );
     config.writeEntry( "TypographicQuotesEnabled", m_typographicQuotes.replace );
-    config.writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect);
+    config.writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect );
     config.writeEntry( "AutoDetectUrl",m_autoDetectUrl);
 
     config.setGroup( "AutoFormatEntries" );
@@ -189,7 +191,7 @@ void KoAutoFormat::saveConfig()
 
     QFile f(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
     if(!f.open(IO_WriteOnly)) {
-        kdDebug()<<"Error during saving...........\n";
+        kdWarning()<<"Error during saving autoformat to " << f.name() << endl;
 	return;
     }
     QTextStream ts(&f);
@@ -247,18 +249,14 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
     //if ( !m_enabled )
     //    return;
     // Auto-correction happens when pressing space, tab, CR, punct etc.
-    if ( ch.isSpace() || ch.isPunct() )
+    if ( ( ch.isSpace() || ch.isPunct() ) && index > 0 )
     {
-        if ( index > 0 )
+        QString lastWord = getLastWord(parag, index);
+        //kdDebug() << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
+        if ( !doAutoCorrect( textEditCursor, parag, index, txtObj ) )
         {
-            QString lastWord = getLastWord(parag, index);
-            //kdDebug() << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
-            if ( !doAutoCorrect( textEditCursor, parag, index,txtObj ) )
-            {
-                if ( m_convertUpperUpper || m_convertUpperCase )
-                    doUpperCase( textEditCursor, parag, index, lastWord,txtObj );
-                // todo doSpellCheck( textEditCursor, parag, index, lastWord );
-            }
+            if ( m_convertUpperUpper || m_convertUpperCase )
+                doUpperCase( textEditCursor, parag, index, lastWord, txtObj );
         }
     }
     if ( ch == '"' && m_typographicQuotes.replace )
@@ -465,26 +463,6 @@ void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *pa
 }
 
 
-void KoAutoFormat::doSpellCheck( QTextCursor *,KoTextParag */*parag*/, int /*index*/, const QString & /*word*/ )
-{
-#if 0
-    if ( !enabled || !doc->onLineSpellCheck() )
-	return;
-    if ( isSeparator( parag->string()->data()[ fc->getTextPos() ].c ) ) {
-	if ( !spBuffer.isEmpty() && spBegin ) {
-	    //qDebug( "spellcheck: %s", spBuffer.latin1() );
-	    spBuffer = QString::null;
-	    spBegin = 0;
-	}
-	return;
-    }
-
-    if ( spBuffer.isEmpty() )
-	spBegin = &parag->string()->data()[ fc->getTextPos() ];
-    spBuffer += parag->string()->data()[ fc->getTextPos() ].c;
-#endif
-}
-
 void KoAutoFormat::configTypographicQuotes( TypographicQuotes _tq )
 {
     m_typographicQuotes = _tq;
@@ -500,7 +478,7 @@ void KoAutoFormat::configUpperUpper( bool _uu )
     m_convertUpperUpper = _uu;
 }
 
-void KoAutoFormat::configAdvancedAutocorrect( bool _aa)
+void KoAutoFormat::configAdvancedAutocorrect( bool _aa )
 {
     m_advancedAutoCorrect = _aa;
 }
@@ -509,7 +487,6 @@ void KoAutoFormat::configAutoDetectUrl(bool _au)
 {
     m_autoDetectUrl=_au;
 }
-
 
 bool KoAutoFormat::isUpper( const QChar &c )
 {

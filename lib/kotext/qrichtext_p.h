@@ -189,6 +189,10 @@ public:
     QChar::Direction direction() const;
     void setDirection( QChar::Direction d ) { dir = d; textChanged = TRUE; }
 
+    /** Set dirty flag for background spell-checking */
+    void setNeedsSpellCheck( bool b ) { bNeedsSpellCheck = b; }
+    bool needsSpellCheck() const { return bNeedsSpellCheck; }
+
     QMemArray<KoTextStringChar> subString( int start = 0, int len = 0xFFFFFF ) const;
     QMemArray<KoTextStringChar> rawData() const { return data; }
 
@@ -204,6 +208,7 @@ private:
     uint bidi : 1; // true when the paragraph has right to left characters
     uint rightToLeft : 1;
     uint dir : 5;
+    uint bNeedsSpellCheck : 1;
 };
 
 inline bool KoTextString::isBidi() const
