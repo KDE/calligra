@@ -1934,10 +1934,13 @@ int KPrPage::getPenBrushFlags() const
                     break;
                 case OT_RECT: case OT_PART:  case OT_ELLIPSE:
                 case OT_POLYGON:
-                case OT_TEXT: case OT_PICTURE: case OT_CLIPART: {
+                case OT_TEXT: case OT_CLIPART: {
                     flags = flags | StyleDia::SdPen;
                     flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
                 }
+                    break;
+                case OT_PICTURE:
+                    flags = flags | StyleDia::SdPen;
                     break;
                 case OT_AUTOFORM:
                 {

@@ -57,7 +57,7 @@ PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
 
     switch ( paintType ) {
     case Pen:
-	setFixedHeight( 30 );
+	setFixedHeight( 40 );
 	break;
     default:
 	setMinimumWidth( 230 );
@@ -86,25 +86,31 @@ void PBPreview::drawContents( QPainter *painter )
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
 			   colorGroup().base() );
 	KoSize diff1( 0, 0 ), diff2( 0, 0 );
-        double _w =_zoomHandler->zoomItX( pen.width());
+        double _w = _zoomHandler->zoomItX( pen.width() );
 
 	if ( lineBegin != L_NORMAL )
-	    diff1 = getBoundingSize( lineBegin, _w,_zoomHandler );
+	    diff1 = getBoundingSize( lineBegin, _w, _zoomHandler );
 
 	if ( lineEnd != L_NORMAL )
-	    diff2 = getBoundingSize( lineEnd, _w,_zoomHandler );
+	    diff2 = getBoundingSize( lineEnd, _w, _zoomHandler );
+
+        double unzoom_diff1_width = _zoomHandler->unzoomItX( (int)diff1.width() );
+        double unzoom_diff2_width = _zoomHandler->unzoomItX( (int)diff2.width() );
 
 	if ( lineBegin != L_NORMAL )
-	    drawFigure( lineBegin, painter, KoPoint( diff1.width() / 2, contentsRect().height() / 2 ),
-			pen.color(), _w, 180.0,_zoomHandler );
+	    drawFigure( lineBegin, painter, KoPoint( unzoom_diff1_width / 2, _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
+			pen.color(), (int)_w, 180.0, _zoomHandler );
 
 	if ( lineEnd != L_NORMAL )
-	    drawFigure( lineEnd, painter, KoPoint( _zoomHandler->unzoomItX(contentsRect().width()) - diff2.width() / 2,
-						  contentsRect().height() / 2 ), pen.color(), _w, 0.0,_zoomHandler );
+	    drawFigure( lineEnd, painter, KoPoint( _zoomHandler->unzoomItX( contentsRect().width() ) - unzoom_diff2_width / 2,
+                                                   _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
+                        pen.color(), (int)_w, 0.0, _zoomHandler );
 
 	painter->setPen( pen );
-	painter->drawLine( _zoomHandler->zoomItX (diff1.width() / 2), _zoomHandler->zoomItY (contentsRect().height() / 2),
-			  contentsRect().width() - _zoomHandler->zoomItX (diff2.width() / 2), _zoomHandler->zoomItY (contentsRect().height()/2) );
+	painter->drawLine( (int)unzoom_diff1_width / 2,
+                           contentsRect().height() / 2,
+                           contentsRect().width() - (int)unzoom_diff2_width / 2,
+                           contentsRect().height() / 2 );
 
     } else if ( paintType == Brush ) {
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
