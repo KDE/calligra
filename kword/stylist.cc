@@ -239,10 +239,12 @@ void KWStyleManager::addStyle() {
     m_currentStyle->setFollowingStyle(oldStyle->followingStyle());
     m_currentStyle->paragLayout().setStyleName( str );
 
+    noSignals=true;
     m_changedStyles.insert(str, m_currentStyle);
     m_stylesList->insertItem( str );
     m_styleCombo->insertItem( str );
     m_stylesList->setCurrentItem( m_stylesList->count() - 1 );
+    noSignals=false;
 
     updateGUI();
 }
