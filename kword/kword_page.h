@@ -109,9 +109,9 @@ public:
     int isCursorYVisible( KWFormatContext &_fc );
     int isCursorXVisible( KWFormatContext &_fc );
 
-    void scrollToCursor( KWFormatContext &_fc );
+    void scrollToCursor();
     void scrollToParag( KWParag *_parag );
-    void scrollToOffset( int _x, int _y, KWFormatContext &_fc );
+    void scrollToOffset( int _x, int _y );
 
     void formatChanged( KWFormat &_format, bool _redraw = TRUE, int flags = KWFormat::All );
     void setFlow( KWParagLayout::Flow _flow );
@@ -277,9 +277,22 @@ public slots:
 
 protected slots:
     void frameDiaClosed();
+    /**
+     * Show the cursor and toggle it at regular intervals.
+     */
     void startBlinkCursor();
+
+    /**
+     * Toggle the cursor.
+     */
     void blinkCursor();
-    void stopBlinkCursor();
+    
+    /**
+     * Stop toggling the cursor.
+     * @param visible Indicates how the cursor is left behind.
+     */
+    void stopBlinkCursor( bool visible=false );
+
     void contentsWillMove( int, int );
     void doAutoScroll();
     void formatMore();
@@ -295,6 +308,13 @@ protected:
     unsigned int ptPaperHeight();
     unsigned int ptColumnWidth();
     unsigned int ptColumnSpacing();
+
+    void doSelect(int mx, int my);
+
+    /**
+     * Show or hide the cursor depending on @param visible.
+     */
+    void showCursor( bool visible );
 
     bool focusNextPrevChild( bool next );
     void enterEvent( QEvent * )
@@ -383,7 +403,6 @@ protected:
     void cursorGotoPrevTableCell();
 
     KWordDocument *doc;
-    bool markerIsVisible;
 
     unsigned int firstVisiblePage;
     unsigned int lastVisiblePage;
