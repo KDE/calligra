@@ -135,7 +135,7 @@ const char *MsWord::lid2codepage(U16 lid)
     case 0x0416:    /*Brazilian Portuguese*/        return cp1252;
     case 0x0816:    /*Portuguese*/                  return cp1252;
     case 0x0417:    /*Rhaeto-Romanic*/              return cp1252;
-    case 0x0418:    /*Romanian*/                    return cp1250;
+    case 0x0418:    /*Romanian*/                    return cp1252;
     case 0x0419:    /*Russian*/                     return cp1251;
     case 0x041a:    /*Croato-Serbian (Latin)*/      return cp1250;
     case 0x081a:    /*Serbo-Croatian (Cyrillic) */  return cp1252;
