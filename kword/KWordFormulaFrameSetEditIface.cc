@@ -20,8 +20,12 @@
 #include "KWordFormulaFrameSetEditIface.h"
 
 #include "kwframe.h"
+#include "kwdoc.h"
 #include <kapplication.h>
 #include <dcopclient.h>
+#include <kformulacontainer.h>
+#include <kformuladocument.h>
+#include <kformulaview.h>
 
 KWordFormulaFrameSetEditIface::KWordFormulaFrameSetEditIface( KWFormulaFrameSetEdit *_framesetedit )
     :DCOPObject()
@@ -48,3 +52,74 @@ void KWordFormulaFrameSetEditIface::selectAll()
 {
     m_framesetedit->selectAll();
 }
+
+void KWordFormulaFrameSetEditIface::addThinSpace()
+{
+   m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addThinSpace();
+}
+
+void KWordFormulaFrameSetEditIface::addMediumSpace()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addMediumSpace();
+}
+
+void KWordFormulaFrameSetEditIface::addThickSpace()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addThickSpace();
+}
+
+void KWordFormulaFrameSetEditIface::addQuadSpace()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addQuadSpace();
+}
+
+void KWordFormulaFrameSetEditIface::addDefaultBracket()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addDefaultBracket();
+}
+
+void KWordFormulaFrameSetEditIface::addSquareBracket()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addSquareBracket();
+}
+
+void KWordFormulaFrameSetEditIface::addCurlyBracket()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addCurlyBracket();
+}
+
+void KWordFormulaFrameSetEditIface::addLineBracket()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addLineBracket();
+}
+
+void KWordFormulaFrameSetEditIface::addFraction()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addFraction();
+}
+
+void KWordFormulaFrameSetEditIface::addRoot()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addRoot();
+}
+
+void KWordFormulaFrameSetEditIface::addIntegral()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addIntegral();
+}
+
+void KWordFormulaFrameSetEditIface::addProduct()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addProduct();
+}
+
+void KWordFormulaFrameSetEditIface::addSum()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addSum();
+}
+
+void KWordFormulaFrameSetEditIface::addMatrix()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addMatrix();
+}
+

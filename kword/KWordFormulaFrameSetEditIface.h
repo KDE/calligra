@@ -38,6 +38,22 @@ k_dcop:
     virtual void cut();
     virtual void paste();
     virtual void selectAll();
+
+    void addThinSpace();
+    void addMediumSpace();
+    void addThickSpace();
+    void addQuadSpace();
+    void addDefaultBracket();
+    void addSquareBracket();
+    void addCurlyBracket();
+    void addLineBracket();
+    void addFraction();
+    void addRoot();
+    void addIntegral();
+    void addProduct();
+    void addSum();
+    void addMatrix();
+
 private:
     KWFormulaFrameSetEdit *m_framesetedit;
 
