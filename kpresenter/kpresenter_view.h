@@ -504,6 +504,7 @@ public:
     PictureMirrorType getPictureMirrorType() const { return mirrorType; }
     int getPictureDepth() const { return depth; }
     bool getPictureSwapRGB() const { return swapRGB; }
+    bool getPictureGrayscal() const { return grayscal; }
     int getPictureBright() const { return bright; }
 
     int getPresentationDuration() const;
@@ -697,6 +698,7 @@ private:
     PictureMirrorType mirrorType;
     int depth;
     bool swapRGB;
+    bool grayscal;
     int bright;
 
     // the page

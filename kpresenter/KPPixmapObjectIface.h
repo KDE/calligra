@@ -39,12 +39,14 @@ k_dcop:
     QString fileName() const;
     int depth() const;
     bool swapRGB() const;
+    bool grayscal() const;
     int pictureMirrorType() const;
     int bright() const;
 
     void setDepth(int depth );
     void setBright(int bright );
     void setSwapRGB(bool swapRGB );
+    void setGrayscal( bool grayscal );
 
 private:
     KPPixmapObject *obj;

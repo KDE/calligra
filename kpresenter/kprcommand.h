@@ -620,6 +620,7 @@ public:
         PictureMirrorType mirrorType;
         int depth;
         bool swapRGB;
+        bool grayscal;
         int bright;
     };
 

@@ -870,7 +870,8 @@ bool KPrPage::getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue
     return false;
 }
 
-bool KPrPage::getPictureSettingsAndPixmap( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, int *_bright, QPixmap *_origPixmap )
+bool KPrPage::getPictureSettingsAndPixmap( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, bool *_grayscal,
+                                           int *_bright, QPixmap *_origPixmap )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it ) {
@@ -878,13 +879,15 @@ bool KPrPage::getPictureSettingsAndPixmap( PictureMirrorType *_mirrorType, int *
             PictureMirrorType tmp_mirrorType;
             int tmp_depth;
             bool tmp_swapRGB;
+            bool tmp_grayscal;
             int tmp_bright;
             KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
             if( obj ) {
-                obj->getPictureSettings( &tmp_mirrorType, &tmp_depth, &tmp_swapRGB, &tmp_bright );
+                obj->getPictureSettings( &tmp_mirrorType, &tmp_depth, &tmp_swapRGB, &tmp_grayscal, &tmp_bright );
                 *_mirrorType = tmp_mirrorType;
                 *_depth = tmp_depth;
                 *_swapRGB = tmp_swapRGB;
+                *_grayscal = tmp_grayscal;
                 *_bright = tmp_bright;
                 *_origPixmap = obj->getOrignalPixmap();
                 return true;
@@ -2149,7 +2152,7 @@ KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersVa
     return polygonSettingCmd;
 }
 
-KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, int _bright )
+KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal, int _bright )
 {
     bool changed = false;
     PictureSettingCmd *pictureSettingCmd = 0L;
@@ -2163,6 +2166,7 @@ KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth
     _newSettings.mirrorType = _mirrorType;
     _newSettings.depth = _depth;
     _newSettings.swapRGB = _swapRGB;
+    _newSettings.grayscal = _grayscal;
     _newSettings.bright = _bright;
 
     QPtrListIterator<KPObject> it( m_objectList );
@@ -2173,6 +2177,7 @@ KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth
                 dynamic_cast<KPPixmapObject*>( it.current() )->getPictureSettings( &tmp->mirrorType,
                                                                                    &tmp->depth,
                                                                                    &tmp->swapRGB,
+                                                                                   &tmp->grayscal,
                                                                                    &tmp->bright );
                 _oldSettings.append( tmp );
                 _objects.append( it.current() );
@@ -2180,6 +2185,7 @@ KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth
                 if( !changed && ( tmp->mirrorType != _newSettings.mirrorType
                                   || tmp->depth != _newSettings.depth
                                   || tmp->swapRGB != _newSettings.swapRGB
+                                  || tmp->grayscal != _newSettings.grayscal
                                   || tmp->bright != _newSettings.bright ) )
                     changed = true;
             }

@@ -265,6 +265,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
+    grayscal = false;
     bright = 0;
 
     m_searchEntry = 0L;
@@ -1058,13 +1059,15 @@ void KPresenterView::extraConfigPicture()
     PictureMirrorType _mirrorType;
     int _depth;
     bool _swapRGB;
+    bool _grayscal;
     int _bright;
     QPixmap _origPixmap;
 
-    if ( !m_canvas->activePage()->getPictureSettingsAndPixmap( &_mirrorType, &_depth, &_swapRGB, &_bright, &_origPixmap ) ) {
+    if ( !m_canvas->activePage()->getPictureSettingsAndPixmap( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright, &_origPixmap ) ) {
         _mirrorType = mirrorType;
         _depth = depth;
         _swapRGB= swapRGB;
+        _grayscal = grayscal;
         _bright = bright;
         _origPixmap = QPixmap();
     }
@@ -1080,7 +1083,7 @@ void KPresenterView::extraConfigPicture()
     }
 
 
-    confPictureDia = new ConfPictureDia( this, "ConfPictureDia", _mirrorType, _depth, _swapRGB, _bright, _origPixmap );
+    confPictureDia = new ConfPictureDia( this, "ConfPictureDia", _mirrorType, _depth, _swapRGB, _grayscal, _bright, _origPixmap );
     confPictureDia->setMaximumSize( confPictureDia->width(), confPictureDia->height() );
     confPictureDia->setMinimumSize( confPictureDia->width(), confPictureDia->height() );
 
@@ -3608,6 +3611,7 @@ void KPresenterView::confPictureOk()
     KCommand *cmd = m_canvas->activePage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
                                                                 confPictureDia->getPictureDepth(),
                                                                 confPictureDia->getPictureSwapRGB(),
+                                                                confPictureDia->getPictureGrayscal(),
                                                                 confPictureDia->getPictureBright() );
     if ( cmd ) {
         macro->addCommand( cmd );
@@ -3616,6 +3620,7 @@ void KPresenterView::confPictureOk()
     cmd = stickyPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
                                             confPictureDia->getPictureDepth(),
                                             confPictureDia->getPictureSwapRGB(),
+                                            confPictureDia->getPictureGrayscal(),
                                             confPictureDia->getPictureBright() );
     if ( cmd ) {
         macro->addCommand( cmd );
@@ -3627,6 +3632,7 @@ void KPresenterView::confPictureOk()
         mirrorType = confPictureDia->getPictureMirrorType();
         depth = confPictureDia->getPictureDepth();
         swapRGB = confPictureDia->getPictureSwapRGB();
+        grayscal = confPictureDia->getPictureGrayscal();
         bright = confPictureDia->getPictureBright();
 
         delete macro;
@@ -4173,7 +4179,7 @@ void KPresenterView::updatePageParameter()
         page->getPolygonSettings( &checkConcavePolygon, &cornersValue, &sharpnessValue );
 
         QPixmap tmpPix;
-        page->getPictureSettingsAndPixmap( &mirrorType, &depth, &swapRGB, &bright, &tmpPix );
+        page->getPictureSettingsAndPixmap( &mirrorType, &depth, &swapRGB, &grayscal, &bright, &tmpPix );
 
         lineBegin=page->getLineEnd( lineBegin );
         lineEnd=page->getLineBegin( lineEnd );

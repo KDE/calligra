@@ -46,7 +46,7 @@ class PicturePreview : public QFrame
 
 public:
     PicturePreview( QWidget* parent, const char* name, PictureMirrorType _mirrorType,
-                    int _dept, bool _swapRGB, int _bright, QPixmap _origPixmap );
+                    int _dept, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap );
     ~PicturePreview() {}
 
     void setDepth( int depth);
@@ -65,6 +65,8 @@ public slots:
 
     void slotSwapRGBPicture( bool _on );
 
+    void slotGrayscalPicture( bool _on );
+
     void slotBrightValue( int _value );
 
 protected:
@@ -74,6 +76,7 @@ protected:
     int depth;
     bool swapRGB;
     int bright;
+    bool grayscal;
     QPixmap origPixmap;
 };
 
@@ -87,18 +90,20 @@ class ConfPictureDia : public KDialogBase
 
 public:
     ConfPictureDia( QWidget *parent, const char *name, PictureMirrorType _mirrorType,
-                    int _depth, bool _swapRGB, int _bright, QPixmap _origPixmap );
+                    int _depth, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap );
     ~ConfPictureDia();
 
     PictureMirrorType getPictureMirrorType() const { return mirrorType; }
     int getPictureDepth() const { return depth; }
     bool getPictureSwapRGB() const { return swapRGB; }
+    bool getPictureGrayscal() const { return grayscal; }
     int getPictureBright() const { return bright; }
 
 protected:
     QRadioButton *m_normalPicture, *m_horizontalMirrorPicture, *m_verticalMirrorPicture, *m_horizontalAndVerticalMirrorPicture;
     QRadioButton *m_depth0, *m_depth1, *m_depth8, *m_depth16, *m_depth32;
     QCheckBox *m_swapRGBCheck;
+    QCheckBox *m_grayscalCheck;
     KIntNumInput *m_brightValue;
 
     QGroupBox *gSettings;
@@ -109,6 +114,7 @@ protected:
 
     int depth, bright, oldDepth, oldBright;
     bool swapRGB, oldSwapRGB;
+    bool grayscal, oldGrayscal;
 
 protected slots:
     void slotNormalPicture();
@@ -123,6 +129,8 @@ protected slots:
     void slotPictureDepth32();
 
     void slotSwapRGBPicture( bool _on );
+
+    void slotGrayscalPicture( bool _on );
 
     void slotBrightValue( int _value );
 

@@ -73,8 +73,8 @@ public:
 		       SelectionMode selectionMode, bool drawContour = FALSE );
 
     QPixmap getOrignalPixmap();
-    void setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, int _bright );
-    void getPictureSettings( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, int *_bright );
+    void setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal, int _bright );
+    void getPictureSettings( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, bool *_grayscal, int *_bright );
 
 protected:
     KPPixmapObject() {}
@@ -88,6 +88,7 @@ protected:
     PictureMirrorType mirrorType;
     int depth;
     bool swapRGB;
+    bool grayscal;
     int bright;
 };
 

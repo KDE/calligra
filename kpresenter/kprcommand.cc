@@ -1476,6 +1476,7 @@ void PictureSettingCmd::execute()
             obj->setPictureSettings( newSettings.mirrorType,
                                      newSettings.depth,
                                      newSettings.swapRGB,
+                                     newSettings.grayscal,
                                      newSettings.bright );
 	}
     }
@@ -1491,6 +1492,7 @@ void PictureSettingCmd::unexecute()
             obj->setPictureSettings( oldSettings.at( i )->mirrorType,
                                      oldSettings.at( i )->depth,
                                      oldSettings.at( i )->swapRGB,
+                                     oldSettings.at( i )->grayscal,
                                      oldSettings.at( i )->bright );
 	}
     }

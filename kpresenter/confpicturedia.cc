@@ -43,13 +43,14 @@
 
 /*==================== constructor ===============================*/
 PicturePreview::PicturePreview( QWidget* parent, const char* name, PictureMirrorType _mirrorType,
-                                int _depth, bool _swapRGB, int _bright, QPixmap _origPixmap )
+                                int _depth, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap )
     : QFrame( parent, name )
 {
     setFrameStyle( WinPanel | Sunken );
     mirrorType = _mirrorType;
     depth = _depth;
     swapRGB = _swapRGB;
+    grayscal = _grayscal;
     bright = _bright;
     origPixmap = _origPixmap;
 
@@ -85,6 +86,35 @@ void PicturePreview::drawContents( QPainter *painter )
 
     if ( swapRGB )
         img = img.swapRGB();
+
+
+    if ( grayscal ) {
+        if ( depth == 1 || depth == 8 ) {
+            for ( int i = 0; i < img.numColors(); ++i ) {
+                QRgb rgb = img.color( i );
+                int gray = qGray( rgb );
+                rgb = qRgb( gray, gray, gray );
+                img.setColor( i, rgb );
+            }
+        }
+        else {
+            int _width = img.width();
+            int _height = img.height();
+            int _x = 0;
+            int _y = 0;
+
+            for ( _x = 0; _x < _width; ++_x ) {
+                for ( _y = 0; _y < _height; ++_y ) {
+                    if ( img.valid( _x, _y ) ) {
+                        QRgb rgb = img.pixel( _x, _y );
+                        int gray = qGray( rgb );
+                        rgb = qRgb( gray, gray, gray );
+                        img.setPixel( _x, _y, rgb );
+                    }
+                }
+            }
+        }
+    }
 
 
     if ( bright != 0 ) {
@@ -204,6 +234,12 @@ void PicturePreview::slotSwapRGBPicture( bool _on )
     repaint();
 }
 
+void PicturePreview::slotGrayscalPicture( bool _on )
+{
+    grayscal = _on;
+    repaint();
+}
+
 void PicturePreview::slotBrightValue( int _value )
 {
     bright = _value;
@@ -228,17 +264,19 @@ void PicturePreview::setMirrorType (PictureMirrorType _t)
 
 /*==================== constructor ===============================*/
 ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirrorType _mirrorType,
-                                int _depth, bool _swapRGB, int _bright, QPixmap _origPixmap )
+                                int _depth, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap )
     : KDialogBase( parent, name, true ,i18n( "KPresenter - Configure Picture" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok)
 {
     mirrorType = _mirrorType;
     depth = _depth;
     swapRGB = _swapRGB;
     bright = _bright;
+    grayscal = _grayscal;
 
     oldMirrorType = _mirrorType;
     oldDepth = _depth;
     oldSwapRGB = _swapRGB;
+    oldGrayscal = _grayscal;
     oldBright = _bright;
 
     origPixmap = _origPixmap;
@@ -273,7 +311,7 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     m_depth0 = new QRadioButton( i18n( "Default Color Mode" ), depthGroup );
     connect( m_depth0, SIGNAL( clicked() ), this, SLOT( slotPictureDepth0() ) );
 
-    m_depth1 = new QRadioButton( i18n( "Grayscal Color Mode" ), depthGroup );
+    m_depth1 = new QRadioButton( i18n( "1 Bit Color Mode" ), depthGroup );
     connect( m_depth1, SIGNAL( clicked() ), this, SLOT( slotPictureDepth1() ) );
 
     m_depth8 = new QRadioButton( i18n( "8 Bit Color Mode" ), depthGroup );
@@ -289,6 +327,10 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     connect( m_swapRGBCheck, SIGNAL( toggled( bool ) ), this, SLOT( slotSwapRGBPicture( bool ) ) );
 
 
+    m_grayscalCheck = new QCheckBox( i18n( "Grayscal" ), gSettings );
+    connect( m_grayscalCheck, SIGNAL( toggled( bool ) ), this, SLOT( slotGrayscalPicture( bool ) ) );
+
+
     m_brightValue = new KIntNumInput( bright, gSettings );
     m_brightValue->setRange( -1000, 1000, 10 );
     m_brightValue->setLabel( i18n( "Bright:" ) );
@@ -298,7 +340,7 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     hbox->addWidget( gSettings );
 
     // ------------------------ preview
-    picturePreview = new PicturePreview( page, "preview", mirrorType, depth, swapRGB, bright, origPixmap );
+    picturePreview = new PicturePreview( page, "preview", mirrorType, depth, swapRGB, grayscal, bright, origPixmap );
     hbox->addWidget( picturePreview );
 
 
@@ -321,6 +363,8 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     connect( m_depth32, SIGNAL( clicked() ), picturePreview, SLOT( slotPictureDepth32() ) );
 
     connect( m_swapRGBCheck, SIGNAL( toggled( bool ) ), picturePreview, SLOT( slotSwapRGBPicture( bool ) ) );
+
+    connect( m_grayscalCheck, SIGNAL( toggled( bool ) ), picturePreview, SLOT( slotGrayscalPicture( bool ) ) );
 
     connect( m_brightValue, SIGNAL( valueChanged( int ) ), picturePreview, SLOT( slotBrightValue( int ) ) );
 
@@ -360,6 +404,7 @@ void ConfPictureDia::slotReset()
     picturePreview->setMirrorType (mirrorType);
     m_brightValue->setValue( oldBright );
     m_swapRGBCheck->setChecked( oldSwapRGB );
+    m_grayscalCheck->setChecked( oldGrayscal );
 }
 
 void ConfPictureDia::slotNormalPicture()
@@ -410,6 +455,11 @@ void ConfPictureDia::slotPictureDepth32()
 void ConfPictureDia::slotSwapRGBPicture( bool _on )
 {
     swapRGB = _on;
+}
+
+void ConfPictureDia::slotGrayscalPicture( bool _on )
+{
+    grayscal = _on;
 }
 
 void ConfPictureDia::slotBrightValue( int _value )

@@ -50,6 +50,7 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
+    grayscal = false;
     bright = 0;
 }
 
@@ -65,6 +66,7 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoP
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
+    grayscal = false;
     bright = 0;
 
     setPixmap( key );
@@ -103,6 +105,7 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
     elemSettings.setAttribute( "mirrorType", static_cast<int>( mirrorType ) );
     elemSettings.setAttribute( "depth", depth );
     elemSettings.setAttribute( "swapRGB", static_cast<int>( swapRGB ) );
+    elemSettings.setAttribute( "grayscal", static_cast<int>( grayscal ) );
     elemSettings.setAttribute( "bright", bright );
 
     fragment.appendChild( elemSettings );
@@ -168,6 +171,7 @@ double KPPixmapObject::load(const QDomElement &element)
         PictureMirrorType _mirrorType = PM_NORMAL;
         int _depth = 0;
         bool _swapRGB = false;
+        bool _grayscal = false;
         int _bright = 0;
 
         if ( e.hasAttribute( "mirrorType" ) )
@@ -176,18 +180,22 @@ double KPPixmapObject::load(const QDomElement &element)
             _depth = e.attribute( "depth" ).toInt();
         if ( e.hasAttribute( "swapRGB" ) )
             _swapRGB = static_cast<bool>( e.attribute( "swapRGB" ).toInt() );
+        if ( e.hasAttribute( "grayscal" ) )
+            _grayscal = static_cast<bool>( e.attribute( "grayscal" ).toInt() );
         if ( e.hasAttribute( "bright" ) )
             _bright = e.attribute( "bright" ).toInt();
 
         mirrorType = _mirrorType;
         depth = _depth;
         swapRGB = _swapRGB;
+        grayscal = _grayscal;
         bright = _bright;
     }
     else {
         mirrorType = PM_NORMAL;
         depth = 0;
         swapRGB = false;
+        grayscal = false;
         bright = 0;
     }
 
@@ -376,19 +384,21 @@ QPixmap KPPixmapObject::getOrignalPixmap()
     return _pixmap;
 }
 
-void KPPixmapObject::setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, int _bright )
+void KPPixmapObject::setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal, int _bright )
 {
     mirrorType = _mirrorType;
     depth = _depth;
     swapRGB = _swapRGB;
+    grayscal = _grayscal;
     bright = _bright;
 }
 
-void KPPixmapObject::getPictureSettings( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, int *_bright )
+void KPPixmapObject::getPictureSettings( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, bool *_grayscal, int *_bright )
 {
     *_mirrorType = mirrorType;
     *_depth = depth;
     *_swapRGB = swapRGB;
+    *_grayscal = grayscal;
     *_bright = bright;
 }
 
@@ -416,6 +426,34 @@ QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
 
     if ( swapRGB )
         _tmpImage = _tmpImage.swapRGB();
+
+    if ( grayscal ) {
+        if ( depth == 1 || depth == 8 ) {
+            for ( int i = 0; i < _tmpImage.numColors(); ++i ) {
+                QRgb rgb = _tmpImage.color( i );
+                int gray = qGray( rgb );
+                rgb = qRgb( gray, gray, gray );
+                _tmpImage.setColor( i, rgb );
+            }
+        }
+        else {
+            int _width = _tmpImage.width();
+            int _height = _tmpImage.height();
+            int _x = 0;
+            int _y = 0;
+
+            for ( _x = 0; _x < _width; ++_x ) {
+                for ( _y = 0; _y < _height; ++_y ) {
+                    if ( _tmpImage.valid( _x, _y ) ) {
+                        QRgb rgb = _tmpImage.pixel( _x, _y );
+                        int gray = qGray( rgb );
+                        rgb = qRgb( gray, gray, gray );
+                        _tmpImage.setPixel( _x, _y, rgb );
+                    }
+                }
+            }
+        }
+    }
 
     if ( bright != 0 ) {
         if ( depth == 1 || depth == 8 ) {
