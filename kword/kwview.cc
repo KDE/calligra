@@ -233,11 +233,6 @@ void KWView::setupActions()
                                         actionCollection(), "edit_sldatabase" );
 
     // -------------- View actions
-// DEBUG info
-    (void) new KAction( "Print debug info" , 0,
-                                       this, SLOT( printDebug() ),
-                                       actionCollection(), "printdebug" );
-
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
                                                    this, SLOT( viewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
@@ -2920,11 +2915,6 @@ int KWView::canvasYOffset() const
 void KWView::canvasAddChild( KoViewChild *child )
 {
     gui->canvasWidget()->addChild( child->frame() );
-}
-
-/*===============================================================*/
-void KWView::printDebug() {
-    doc->printDebug();
 }
 
 #include "kwview.moc"

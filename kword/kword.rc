@@ -29,9 +29,6 @@
   <Action name="edit_customvars"/>
  </Menu>
  <Menu name="view"><text>&amp;View</text>
- <!-- REMOVE THOSE TWO LATER -->
-    <Action name="printdebug" />
-    <Action name="printrtdebug" />
   <Action name="view_newview"/>
   <ActionList name="view_closeallviews"/>
   <Separator/>

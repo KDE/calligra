@@ -149,9 +149,6 @@ public:
     int getVertRulerPos(int y=-1);
     int getHorzRulerPos(int x=-1);
 
-public slots:
-    void printRTDebug();
-
 protected:
     /** Set format changes on selection on current cursor */
     void setFormat( QTextFormat *, int flags);
@@ -198,6 +195,8 @@ private:
      * @param crect the area to be repainted, in contents coordinates
      */
     void drawBorders( QPainter *painter, const QRect &crect );
+
+    void printRTDebug();
 
     KWDocument *doc;
     KWFrameSetEdit *m_currentFrameSetEdit;

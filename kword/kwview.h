@@ -133,9 +133,6 @@ public:
     void updatePopupMenuChangeAction();
 
 public slots:
-    // TEMP functions. Purely for debugging.
-    void printDebug();
-
     void editCut();
     void editCopy();
     void editPaste();

@@ -81,11 +81,6 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
              this, SLOT( resizeContents( int, int ) ) );
     resizeContents( doc->paperWidth(), doc->pageTop( doc->getPages() ) );
 
-    // Add an action for debugging
-    (void) new KAction( "Print richtext debug info" , 0,
-                        this, SLOT( printRTDebug() ),
-                        m_gui->getView()->actionCollection(), "printrtdebug" );
-
     // Create the current frameset-edit last, to have everything ready for it
     m_currentFrameSetEdit = doc->getFrameSet( 0 )->createFrameSetEdit( this );
 }
@@ -1668,11 +1663,25 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     m_currentFrameSetEdit->focusOutEvent();
                 return TRUE;
             case QEvent::KeyPress:
+            {
+                QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+#ifndef NDEBUG
+                // Debug keys
+                if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
+                {
+                    if ( keyev->key() == Key_P ) // 'P' -> paragraph debug
+                        printRTDebug();
+                    if ( keyev->key() == Key_F ) // 'F' -> frames debug
+                        doc->printDebug();
+                    // For some reason 'T' doesn't work (maybe kxkb)
+                }
+#endif
                 if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT )
                 {
-                    m_currentFrameSetEdit->keyPressEvent( static_cast<QKeyEvent *>(e) );
+                    m_currentFrameSetEdit->keyPressEvent( keyev );
                     return TRUE;
                 }
+            } break;
             default:
                 break;
 	}
