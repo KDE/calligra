@@ -490,8 +490,8 @@ public:
     virtual void setPageSize( int ps ) { pagesize = ps; }
     int pageSize() const { return pagesize; }
 
-    virtual int adjustLMargin( int yp, int margin, int space );
-    virtual int adjustRMargin( int yp, int margin, int space );
+    virtual int adjustLMargin( int yp, int h, int margin, int space );
+    virtual int adjustRMargin( int yp, int h, int margin, int space );
 
     virtual void registerFloatingItem( QTextCustomItem* item, bool right = FALSE );
     virtual void unregisterFloatingItem( QTextCustomItem* item );
@@ -766,6 +766,7 @@ public:
     void setStyleSheet( QStyleSheet *s );
     void updateStyles();
     void updateFontSizes( int base );
+    void updateFontAttributes( const QFont &f, const QFont &old );
     void setMimeSourceFactory( QMimeSourceFactory *f ) { if ( f ) factory_ = f; }
     void setContext( const QString &c ) { if ( !c.isEmpty() ) contxt = c; }
 
@@ -1241,6 +1242,8 @@ public:
     int wrapAtColumn() const { return wrapColumn;}
     virtual void setWrapEnabled( bool b ) { wrapEnabled = b; }
     virtual void setWrapAtColumn( int c ) { wrapColumn = c; }
+    virtual void setAllowBreakInWords( bool b ) { biw = b; }
+    bool allowBreakInWords() const { return biw; }
 
 protected:
     virtual QTextParagLineStart *formatLine( QTextParag *parag, QTextString *string, QTextParagLineStart *line, QTextStringChar *start,
@@ -1254,6 +1257,7 @@ protected:
 private:
     bool wrapEnabled;
     int wrapColumn;
+    bool biw;
 
 #ifdef HAVE_THAI_BREAKS
     static QCString *thaiCache;
@@ -1439,6 +1443,7 @@ public:
     void setStyleSheet( QStyleSheet *s ) { sheet = s; }
     void updateStyles();
     void updateFontSizes( int base );
+    void updateFontAttributes( const QFont &f, const QFont &old );
 
 private:
     QTextFormat *defFormat, *lastFormat, *cachedFormat;

@@ -2175,16 +2175,37 @@ bool QTextDocument::inSelection( int selId, const QPoint &pos ) const
 	startParag = sel.endCursor.parag();
     }
 
-    QRect r = startParag->rect();
-    r = r.unite( endParag->rect() );
-
-    if ( r.contains( pos ) ) {
-	if ( startParag->rect().contains( pos ) && pos.x() < startParag->at( startParag->selectionStart( selId ) )->x )
-	    return FALSE;
-	if ( endParag->rect().contains( pos ) && pos.x() > endParag->at( endParag->selectionEnd( selId ) )->x )
-	    return FALSE;
-	return TRUE;
+    QTextParag *p = startParag;
+    while ( p ) {
+	if ( p->rect().contains( pos ) ) {
+	    bool inSel = FALSE;
+	    int selStart = p->selectionStart( selId );
+	    int selEnd = p->selectionEnd( selId );
+	    int y = 0;
+	    int h = 0;
+	    for ( int i = 0; i < p->length(); ++i ) {
+		if ( i == selStart )
+		    inSel = TRUE;
+		if ( i == selEnd )
+		    break;
+		if ( p->at( i )->lineStart ) {
+		    y = (*p->lineStarts.find( i ))->y;
+		    h = (*p->lineStarts.find( i ))->h;
+		}
+		if ( pos.y() - p->rect().y() >= y && pos.y() - p->rect().y() <= y + h ) {
+		    if ( inSel && pos.x() >= p->at( i )->x &&
+			 pos.x() <= p->at( i )->x + p->at( i )->format()->width( p->at( i )->c ) )
+			return TRUE;
+		}
+	    }
+	}
+	if ( pos.y() < p->rect().y() )
+	    break;
+	if ( p == endParag )
+	    break;
+	p = p->next();
     }
+
     return FALSE;
 }
 
@@ -2787,6 +2808,14 @@ void QTextDocument::updateFontSizes( int base )
     fCollection->updateFontSizes( base );
 }
 
+void QTextDocument::updateFontAttributes( const QFont &f, const QFont &old )
+{
+    for ( QTextDocument *d = childList.first(); d; d = childList.next() )
+	d->updateFontAttributes( f, old );
+    invalidate();
+    fCollection->updateFontAttributes( f, old );
+}
+
 void QTextStringChar::setFormat( QTextFormat *f )
 {
     if ( type == Regular ) {
@@ -3008,6 +3037,8 @@ void QTextParag::truncate( int index )
 
 void QTextParag::remove( int index, int len )
 {
+    if ( index + len - str->length() > 0 )
+	return;
     for ( int i = index; i < len; ++i ) {
 	QTextStringChar *c = at( i );
 	if ( doc && c->isCustom() ) {
@@ -3527,7 +3558,6 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	}
 	painter.restore();
     }
-
 }
 
 void QTextParag::drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
@@ -4058,7 +4088,7 @@ QTextPreProcessor::QTextPreProcessor()
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 QTextFormatter::QTextFormatter()
-    : wrapEnabled( TRUE ), wrapColumn( -1 )
+    : wrapEnabled( TRUE ), wrapColumn( -1 ), biw( FALSE )
 {
 }
 
@@ -4143,7 +4173,7 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag *parag, QTextSt
     int left = parag->document() ? parag->leftMargin() + 4 : 4;
     int x = left + ( parag->document() ? parag->firstLineMargin() : 0 );
     if ( parag->document() )
-	x = parag->document()->flow()->adjustLMargin( parag->rect().y(), left, 4 );
+	x = parag->document()->flow()->adjustLMargin( parag->rect().y(), parag->rect().height(), left, 4 );
     int numSpaces = 0;
     // set the correct alignment. This is a bit messy....
     if( align == Qt3::AlignAuto ) {
@@ -4322,9 +4352,9 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
     int h = 0;
     int len = parag->length();
     if ( doc )
-	x = doc->flow()->adjustLMargin( y + parag->rect().y(), x, 4 );
+	x = doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), x, 4 );
     int rm = parag->rightMargin();
-    int w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), rm, 4 ) : 0 );
+    int w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0 );
     bool fullWidth = TRUE;
     int minw = 0;
 
@@ -4363,8 +4393,8 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
 
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
 	    if ( doc )
-		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), left, 4 ) : left;
-	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), rm, 4 ) : 0 );
+		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4 ) : left;
+	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0 );
 	    c->customItem()->resize( parag->painter(), dw );
 	    if ( x != left || w != dw )
 		fullWidth = FALSE;
@@ -4383,7 +4413,7 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
 	     ( wrapAtColumn() == -1 && x + ww > w ||
 	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
 	       parag->isNewLinesAllowed() && lastChr == '\n' ) {
-	    x = doc ? parag->document()->flow()->adjustLMargin( y + parag->rect().y(), left, 4 ) : left;
+	    x = doc ? parag->document()->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4 ) : left;
 	    if ( x != left )
 		fullWidth = FALSE;
 	    w = dw;
@@ -4445,12 +4475,12 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int h = 0;
     int len = parag->length();
     if ( doc )
-	x = doc->flow()->adjustLMargin( y + parag->rect().y(), x, 4 );
+	x = doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), x, 4 );
     int dw = parag->documentVisibleWidth() - ( doc ? ( left != x ? 0 : 8 ) : -4 );
 
     curLeft = x;
     int rm = parag->rightMargin();
-    int rdiff = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), rm, 4 ) : 0;
+    int rdiff = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0;
     int w = dw - rdiff;
     bool fullWidth = TRUE;
     int marg = left + rdiff;
@@ -4505,8 +4535,8 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	}
 
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
-	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), left, 4 ) : left;
-	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), rm, 4 ) : 0 );
+	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4 ) : left;
+	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0 );
 	    QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, c-1, align, w - x );
 	    c->customItem()->resize( parag->painter(), dw );
 	    if ( x != left || w != dw )
@@ -4539,10 +4569,13 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		tminw = marg;
 	    continue;
 	}
-	if ( isWrapEnabled() && lastBreak != -1 &&
-	     ( wrapAtColumn() == -1 && x + ww > w ||
+	if ( isWrapEnabled() && ( lastBreak != -1 || allowBreakInWords() ) &&
+	     ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
+	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
 	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
 	       parag->isNewLinesAllowed() && lastChr == '\n' ) {
+	    if ( wrapAtColumn() != -1 )
+		minw = QMAX( minw, x + ww );
 	    if ( lastBreak < 0 ) {
 		if ( lineStart ) {
 		    lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
@@ -4550,8 +4583,8 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		    lineStart->h = h;
 		}
 		lineStart = formatLine( parag, string, lineStart, firstChar, c-1, align, w - x );
-		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), left, 4 ) : left;
-		w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), rm, 4 ) : 0 );
+		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4 ) : left;
+		w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0 );
 		if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
 		    int nx = parag->nextTab( x );
 		    if ( nx < x )
@@ -4577,8 +4610,8 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	    } else {
 		i = lastBreak;
 		lineStart = formatLine( parag, string, lineStart, firstChar, parag->at( lastBreak ), align, w - string->at( i ).x );
-		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), left, 4 ) : left;
-		w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), rm, 4 ) : 0 );
+		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4 ) : left;
+		w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0 );
 		if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
 		    int nx = parag->nextTab( x );
 		    if ( nx < x )
@@ -4874,6 +4907,41 @@ void QTextFormatCollection::updateFontSizes( int base )
 	f->fn.setPointSize( f->stdPointSize );
 	styleSheet()->scaleFont( f->fn, f->logicalFontSize );
 	f->update();
+    }
+    f = defFormat;
+    f->stdPointSize = base;
+    f->fn.setPointSize( f->stdPointSize );
+    styleSheet()->scaleFont( f->fn, f->logicalFontSize );
+    f->update();
+}
+
+void QTextFormatCollection::updateFontAttributes( const QFont &f, const QFont &old )
+{
+    QDictIterator<QTextFormat> it( cKey );
+    QTextFormat *fm;
+    while ( ( fm = it.current() ) ) {
+	++it;
+	if ( fm->fn.family() == old.family() &&
+	     fm->fn.weight() == old.weight() &&
+	     fm->fn.italic() == old.italic() &&
+	     fm->fn.underline() == old.underline() ) {
+	    fm->fn.setFamily( f.family() );
+	    fm->fn.setWeight( f.weight() );
+	    fm->fn.setItalic( f.italic() );
+	    fm->fn.setUnderline( f.underline() );
+	    fm->update();
+	}
+    }
+    fm = defFormat;
+    if ( fm->fn.family() == old.family() &&
+	 fm->fn.weight() == old.weight() &&
+	 fm->fn.italic() == old.italic() &&
+	 fm->fn.underline() == old.underline() ) {
+	fm->fn.setFamily( f.family() );
+	fm->fn.setWeight( f.weight() );
+	fm->fn.setItalic( f.italic() );
+	fm->fn.setUnderline( f.underline() );
+	fm->update();
     }
 }
 
@@ -5730,7 +5798,7 @@ void QTextFlow::setWidth( int w )
     width = w;
 }
 
-int QTextFlow::adjustLMargin( int yp, int margin, int space )
+int QTextFlow::adjustLMargin( int yp, int, int margin, int space )
 {
     for ( QTextCustomItem* item = leftItems.first(); item; item = leftItems.next() ) {
 	if ( item->ypos == -1 )
@@ -5741,7 +5809,7 @@ int QTextFlow::adjustLMargin( int yp, int margin, int space )
     return margin;
 }
 
-int QTextFlow::adjustRMargin( int yp, int margin, int space )
+int QTextFlow::adjustRMargin( int yp, int, int margin, int space )
 {
     for ( QTextCustomItem* item = rightItems.first(); item; item = rightItems.next() ) {
 	if ( item->ypos == -1 )
