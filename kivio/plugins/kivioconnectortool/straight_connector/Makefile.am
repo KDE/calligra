@@ -13,6 +13,7 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
+	-I$(top_srcdir)/lib/kotext\
 	$(KOFFICE_INCLUDES) $(all_includes)
 libstraight_connector_la_METASOURCES = AUTO
 libstraight_connector_la_SOURCES = \
