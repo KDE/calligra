@@ -1,3 +1,14 @@
+Wed Aug 25 12:43:00 1999  Michael Koch  <koch@kde.org>
+
+        * kimageshop_config.cc,h:
+        Added new class BaseKFDConfig
+        It saves and restores the state and position of a KFD.
+        All dialog config classes should be derived from it and
+        call the constructor of BaseKFDConfig with a title. This
+        title is used as group name in the config file. Furthermore
+        loadConfig() and saveConfig() have to call first the same
+        methods of BaseKFDConfig.
+
 Tue Aug 24 23:35:15 1999  Carsten Pfeiffer  <pfeiffer@kde.org>
 
 	* kimageshop_config.cc,h:
