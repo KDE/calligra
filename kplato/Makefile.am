@@ -1,5 +1,3 @@
-SUBDIRS = kdgantt templates pics
-
 INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir)/kdgantt \
                    $(all_includes)
 
