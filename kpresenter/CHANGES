@@ -97,3 +97,4 @@ Reggie, 12.4.1999:
   to jump.
 - Added a menu entry to the screen presentation menu to be able to exit a screen presentation
   using this menu too
+- rmb presentation menu is initialized correctly for presentations now

@@ -1579,6 +1579,9 @@ KTextObject *Page::haveASelectedTextObj()
 /*====================== start screenpresentation ================*/
 void Page::startScreenPresentation(bool zoom)
 {
+  presMenu->setItemChecked(PM_SM,true);
+  presMenu->setItemChecked(PM_DM,false);
+
   setCursor(waitCursor);
   KPObject *kpobject = 0;
 
