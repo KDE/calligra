@@ -326,7 +326,6 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
         //if(activeCell) activeCell->frame(0)->setMinFrameHeight(0);
     }
     updateFrames();
-    layout();
     //kdDebug(32004) << "end KWTableFrameSet::recalcCols" << endl;
 }
 
