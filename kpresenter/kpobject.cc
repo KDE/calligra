@@ -198,8 +198,15 @@ void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj )
     xmlWriter.addAttributePt( "svg:width", ext.width() );
     xmlWriter.addAttributePt( "svg:height", ext.height() );
     //FIXME create style (protect object etc)
-}
 
+    if ( angle!=0.0 )
+    {
+        double value = -1 * ( ( double )angle* M_PI )/180.0;
+        QString str=QString( "rotate (%1)" ).arg( value );
+        xmlWriter.addAttribute( "draw:transform", str );
+
+    }
+}
 
 void KPObject::saveOasisObjectStyle( KoGenStyle &styleobjectauto )
 {
