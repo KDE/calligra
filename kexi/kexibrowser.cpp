@@ -52,7 +52,7 @@ KexiBrowser::KexiBrowser(QWidget *parent, Section s, const char *name ) : KListV
 	header()->hide();
 //	setRootIsDecorated(true);
 	
-	addColumn(i18n("Database content"));
+	addColumn(i18n("Database Content"));
 	setResizeMode(QListView::LastColumn);
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
@@ -136,7 +136,7 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 				if (r->type()==KexiBrowserItem::Child)
 				{
 					m->insertItem(i18n("Delete Form"), this, SLOT(slotDelete()));
-					m->insertItem(i18n("Edit Form"), this, SLOT(slotEdit()));			
+					m->insertItem(i18n("Edit Form"), this, SLOT(slotEdit()));
 				}
 				break;
 			}
@@ -160,8 +160,8 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 		{
 			if ( r->type() == KexiBrowserItem::Child)
 			{
-			    kexi->project()->formManager()->showForm(r->identifier(), KexiFormManager::View,
-				kexi->mainWindow()->workspaceWidget()); 
+				kexi->project()->formManager()->showForm(r->identifier(), KexiFormManager::View,
+					kexi->mainWindow()->workspaceWidget()); 
 
 //    			    KexiFormBase *fb = new KexiFormBase(kexi->mainWindow()->workspace(), "form",r->identifier());
 //			    kexi->mainWindow()->workspace()->addItem(fb);
@@ -177,7 +177,6 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 				KexiDataTable *kt = new KexiDataTable(kexi->mainWindow()->workspaceWidget(), r->text(0), "table");
 				if(kt->executeQuery("select * from " + r->text(0)))
 				{
-					kdDebug() << "Show Tsble" << endl;
 					kt->show();
 				}
 				else
