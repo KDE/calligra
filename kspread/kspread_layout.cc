@@ -1779,7 +1779,7 @@ double RowLayout::mmHeight()
 QDomElement RowLayout::save( QDomDocument& doc, int yshift )
 {
     QDomElement row = doc.createElement( "row" );
-    row.setAttribute( "ptHeight", m_fHeight );
+    row.setAttribute( "height", m_fHeight );
     row.setAttribute( "row", m_iRow - yshift );
     if( m_bHide)
         row.setAttribute( "hide", (int)m_bHide );
@@ -1791,15 +1791,13 @@ QDomElement RowLayout::save( QDomDocument& doc, int yshift )
 bool RowLayout::load( const QDomElement& row, int yshift, PasteMode sp)
 {
     bool ok;
-    if ( row.hasAttribute( "ptHeight" ) )
-    {
-	m_fHeight = row.attribute( "ptHeight" ).toDouble( &ok );
-	if ( !ok ) return false;
-    }
-    //compatibility with old format - was in millimeter
     if ( row.hasAttribute( "height" ) )
     {
-	m_fHeight = MM_TO_POINT ( row.attribute( "height" ).toFloat( &ok ) );
+	if ( m_pTable->doc()->syntaxVersion() < 1.0 ) //compatibility with old format - was in millimeter
+	    m_fHeight = MM_TO_POINT( row.attribute( "height" ).toDouble( &ok ) );
+	else
+	    m_fHeight = row.attribute( "height" ).toDouble( &ok );
+
 	if ( !ok ) return false;
     }
 
@@ -2013,7 +2011,7 @@ double ColumnLayout::mmWidth()
 QDomElement ColumnLayout::save( QDomDocument& doc, int xshift )
 {
   QDomElement col = doc.createElement( "column" );
-  col.setAttribute( "ptWidth", m_fWidth );
+  col.setAttribute( "width", m_fWidth );
   col.setAttribute( "column", m_iColumn - xshift );
   if( m_bHide)
         col.setAttribute( "hide", (int)m_bHide );
@@ -2025,16 +2023,13 @@ QDomElement ColumnLayout::save( QDomDocument& doc, int xshift )
 bool ColumnLayout::load( const QDomElement& col, int xshift,PasteMode sp )
 {
     bool ok;
-    if ( col.hasAttribute( "ptWidth" ) )
-    {
-	m_fWidth = col.attribute( "ptWidth" ).toDouble( &ok );
-	if ( !ok ) return false;
-    }
-
-    //combatibility to old format - was in millimeter
     if ( col.hasAttribute( "width" ) )
     {
-	m_fWidth = MM_TO_POINT ( col.attribute( "width" ).toFloat( &ok ) );
+	if ( m_pTable->doc()->syntaxVersion() < 1.0 ) //combatibility to old format - was in millimeter
+	    m_fWidth = MM_TO_POINT ( col.attribute( "width" ).toDouble( &ok ) );
+	else
+	    m_fWidth = col.attribute( "width" ).toDouble( &ok );
+
 	if ( !ok ) return false;
     }
 

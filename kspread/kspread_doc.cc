@@ -313,6 +313,20 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     return false;
   }
 
+  m_syntaxVersion = KSpreadDoc::getAttribute( spread, "syntaxVersion", 0 );
+  if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION )
+  {
+      int ret = KMessageBox::warningContinueCancel(
+          0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
+                  "Opening it in this version of KWord will lose some information.").arg(m_syntaxVersion),
+          i18n("File format mismatch"), i18n("Continue") );
+      if ( ret == KMessageBox::Cancel )
+      {
+          setErrorMessage( "USER_CANCELED" );
+          return false;
+      }
+  }
+
   // <locale>
   QDomElement locale = spread.namedItem( "locale" ).toElement();
   if ( !locale.isNull() )

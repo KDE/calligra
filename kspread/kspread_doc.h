@@ -371,7 +371,36 @@ public:
   bool delayCalculation();
 
 
-    void updateBorderButton();
+  void updateBorderButton();
+
+  /**
+   * Returns the syntax version of the currently opened file
+   */
+  int syntaxVersion( ) const { return m_syntaxVersion; }
+
+  static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
+  {
+    return element.attribute( attributeName, defaultValue );
+  }
+
+  static int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)
+  {
+    QString value;
+    if ( ( value = element.attribute( attributeName ) ) != QString::null )
+	return value.toInt();
+    else
+	return defaultValue;
+  }
+
+  static double getAttribute(QDomElement &element, const char *attributeName, double defaultValue)
+  {
+    QString value;
+      if ( ( value = element.attribute( attributeName ) ) != QString::null )
+	return value.toDouble();
+      else
+	return defaultValue;
+  }
+
 
 public slots:
   /**
@@ -527,6 +556,11 @@ protected:
    * @see #load
    */
   QString m_strFileURL;
+
+  /**
+  * Contains the syntax version of the opened file
+  */
+  int m_syntaxVersion;
 
   /**
    * This variable hold the KScript Interpreter.

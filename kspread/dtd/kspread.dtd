@@ -331,11 +331,11 @@
 		Attributes:
 
 		column	the column number
-		ptWidth	the width of the column in points
+		width	the width of the column in points
 -->
 <!ELEMENT column format>
 <!ATTLIST column  column  CDATA #REQUIRED
-                  ptWidth   CDATA #REQUIRED>
+                  width   CDATA #REQUIRED>
 
 
 <!--	Describes one row
@@ -343,11 +343,11 @@
 		Attributes:
 
 		row	the row number
-		ptHeight	the height of the row in points
+		height	the height of the row in points
 -->
 <!ELEMENT row format>
 <!ATTLIST row  row  CDATA #REQUIRED
-               ptHeight   CDATA #REQUIRED>
+               height   CDATA #REQUIRED>
 
 
 <!--	Describes an embedded chart.
