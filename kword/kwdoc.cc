@@ -185,7 +185,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
 
-    m_formulaDocument = new KFormula::Document(actionCollection(), m_commandHistory);
+    m_formulaDocument = new KFormula::Document( kapp->config(), actionCollection(), m_commandHistory );
 
     setEmpty();
     setModified(false);
@@ -209,7 +209,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_hasTOC=false;
 
     initConfig();
-    getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
+    getFormulaDocument()->setZoom( m_zoomedResolutionX, m_zoomedResolutionY, false, false );
 
     // Get default font from KDE
     m_defaultFont = KGlobalSettings::generalFont();
@@ -297,7 +297,7 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool update
 
 void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 {
-    getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
+    getFormulaDocument()->setZoom( m_zoomedResolutionX, m_zoomedResolutionY, updateViews, forPrint );
 
     // Update all fonts
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
