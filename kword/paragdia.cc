@@ -76,6 +76,85 @@ void KWPagePreview::drawContents(QPainter* p)
 
 }
 
+/******************************************************************/
+/* class KWPagePreview2                                           */
+/******************************************************************/
+
+/*================================================================*/
+KWPagePreview2::KWPagePreview2(QWidget* parent,const char* name)
+  : QGroupBox(i18n("Preview"),parent,name)
+{
+  flow = KWParagLayout::LEFT;
+}
+
+/*================================================================*/
+void KWPagePreview2::drawContents(QPainter* p)
+{
+  int wid = 148;
+  int hei = 210;
+  int _x = (width() - wid) / 2;
+  int _y = (height() - hei) / 2;
+
+  // draw page
+  p->setPen(QPen(black));
+  p->setBrush(QBrush(black));
+
+  p->drawRect(_x + 1,_y + 1,wid,hei);
+  
+  p->setBrush(QBrush(white));
+  p->drawRect(_x,_y,wid,hei);
+
+  // draw parags
+  p->setPen(NoPen);
+  p->setBrush(QBrush(lightGray));
+
+  for (int i = 1;i <= 4;i++)
+    p->drawRect(_x + 6,_y + 6 + (i - 1) * 12 + 2,wid - 12 - ((i / 4) * 4 == i ? 50 : 0),6);
+  
+  p->setBrush(QBrush(darkGray));
+
+  int __x = 0,__w = 0;
+  for (int i = 5;i <= 8;i++)
+    {
+      switch (i)
+	{
+	case 5: __w = wid - 12;
+	  break;
+	case 6: __w = wid - 52;
+	  break;
+	case 7: __w = wid - 33;
+	  break;
+	case 8: __w = wid - 62;
+	default: break;
+	}
+
+      switch (flow)
+	{
+	case KWParagLayout::LEFT:
+	  __x = _x + 6;
+	  break;
+	case KWParagLayout::CENTER:
+	  __x = _x + (wid - __w) / 2;
+	  break;
+	case KWParagLayout::RIGHT:
+	  __x = _x + (wid - __w) - 6;
+	  break;
+	case KWParagLayout::BLOCK:
+	  {
+	    if (i < 8) __w = wid - 12;
+	    __x = _x + 6;
+	  } break;
+	}
+
+      p->drawRect(__x,_y + 6 + (i - 1) * 12 + 2 + (i - 5),__w,6);
+    }
+
+  p->setBrush(QBrush(lightGray));
+
+  for (int i = 9;i <= 12;i++)
+    p->drawRect(_x + 6,_y + 6 + (i - 1) * 12 + 2 + 3,wid - 12 - ((i / 4) * 4 == i ? 50 : 0),6);
+
+}
 
 /******************************************************************/
 /* Class: KWParagDia                                              */
@@ -139,6 +218,40 @@ void KWParagDia::setLineSpacing(unsigned int  _spacing)
   QString str;
   str.sprintf("%d",_spacing);
   eSpacing->setText(str);
+}
+
+/*================================================================*/
+void KWParagDia::setFlow(KWParagLayout::Flow _flow)
+{
+  prev2->setFlow(_flow);
+
+  clearFlows();
+  switch (_flow)
+    {
+    case KWParagLayout::LEFT:
+      rLeft->setChecked(true);
+      break;
+    case KWParagLayout::CENTER:
+      rCenter->setChecked(true);
+      break;
+    case KWParagLayout::RIGHT:
+      rRight->setChecked(true);
+      break;
+    case KWParagLayout::BLOCK:
+      rBlock->setChecked(true);
+      break;
+    }
+}
+
+/*================================================================*/
+KWParagLayout::Flow KWParagDia::getFlow()
+{
+  if (rLeft->isChecked()) return KWParagLayout::LEFT;
+  else if (rCenter->isChecked()) return KWParagLayout::CENTER;
+  else if (rRight->isChecked()) return KWParagLayout::RIGHT;
+  else if (rBlock->isChecked()) return KWParagLayout::BLOCK;
+  
+  return KWParagLayout::LEFT;
 }
 
 /*================================================================*/
@@ -325,6 +438,70 @@ void KWParagDia::setupTab1()
 /*================================================================*/
 void KWParagDia::setupTab2()
 {
+  tab2 = new QWidget(this);
+
+  grid2 = new QGridLayout(tab2,6,2,15,7);
+
+  lFlow = new QLabel(i18n("Flow:"),tab2);
+  lFlow->resize(lFlow->sizeHint());
+  grid2->addWidget(lFlow,0,0);
+
+  rLeft = new QRadioButton(i18n("Left"),tab2);
+  rLeft->resize(rLeft->sizeHint());
+  grid2->addWidget(rLeft,1,0);
+  connect(rLeft,SIGNAL(clicked()),this,SLOT(flowLeft()));
+
+  rCenter = new QRadioButton(i18n("Center"),tab2);
+  rCenter->resize(rCenter->sizeHint());
+  grid2->addWidget(rCenter,2,0);
+  connect(rCenter,SIGNAL(clicked()),this,SLOT(flowCenter()));
+
+  rRight = new QRadioButton(i18n("Right"),tab2);
+  rRight->resize(rRight->sizeHint());
+  grid2->addWidget(rRight,3,0);
+  connect(rRight,SIGNAL(clicked()),this,SLOT(flowRight()));
+
+  rBlock = new QRadioButton(i18n("Block"),tab2);
+  rBlock->resize(rBlock->sizeHint());
+  grid2->addWidget(rBlock,4,0);
+  connect(rBlock,SIGNAL(clicked()),this,SLOT(flowBlock()));
+
+  clearFlows();
+  rLeft->setChecked(true);
+
+  // --------------- preview --------------------
+  prev2 = new KWPagePreview2(tab2,"");
+  grid2->addMultiCellWidget(prev2,0,5,1,1);
+
+  // --------------- main grid ------------------
+  grid2->addColSpacing(0,lFlow->width());
+  grid2->addColSpacing(0,rLeft->width());
+  grid2->addColSpacing(0,rCenter->width());
+  grid2->addColSpacing(0,rRight->width());
+  grid2->addColSpacing(0,rBlock->width());
+  grid2->addColSpacing(1,250);
+  grid2->setColStretch(1,1);
+
+  grid2->addRowSpacing(0,lFlow->height());
+  grid2->addRowSpacing(1,rLeft->height());
+  grid2->addRowSpacing(2,rCenter->height());
+  grid2->addRowSpacing(3,rRight->height());
+  grid2->addRowSpacing(4,rBlock->height());
+  grid2->addRowSpacing(5,20);
+  grid2->setRowStretch(5,1);
+
+  grid2->activate();
+
+  addTab(tab2,i18n("Flows"));
+}
+
+/*================================================================*/
+void KWParagDia::clearFlows()
+{
+  rLeft->setChecked(false);
+  rCenter->setChecked(false);
+  rRight->setChecked(false);
+  rBlock->setChecked(false);
 }
 
 /*================================================================*/
@@ -388,4 +565,36 @@ void KWParagDia::beforeChanged(const char* _text)
 void KWParagDia::afterChanged(const char* _text)
 {
   prev1->setAfter(atof(_text));
+}
+
+/*================================================================*/
+void KWParagDia::flowLeft()
+{
+  prev2->setFlow(KWParagLayout::LEFT);
+  clearFlows();
+  rLeft->setChecked(true);
+}
+
+/*================================================================*/
+void KWParagDia::flowCenter()
+{
+  prev2->setFlow(KWParagLayout::CENTER);
+  clearFlows();
+  rCenter->setChecked(true);
+}
+
+/*================================================================*/
+void KWParagDia::flowRight()
+{
+  prev2->setFlow(KWParagLayout::RIGHT);
+  clearFlows();
+  rRight->setChecked(true);
+}
+
+/*================================================================*/
+void KWParagDia::flowBlock()
+{
+  prev2->setFlow(KWParagLayout::BLOCK);
+  clearFlows();
+  rBlock->setChecked(true);
 }

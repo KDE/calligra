@@ -184,3 +184,8 @@ Reggie, 5.10.1998:
 - Bugfixes in copy to clipboard
 - Implemented Paste (ASCII text)
 - Bugfix in cursor navigation
+
+Reggie, 6.10.1998:
+------------------
+- Implemented tab for setting the flow in the paragraph settings dialog
+  (I also wrote a nice preview widget for that :-)

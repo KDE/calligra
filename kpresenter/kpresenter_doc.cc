@@ -730,6 +730,7 @@ void KPresenterDocument_impl::changeChildGeometry(KPresenterChild *_child,const 
   _child->_setGeometry(QRect(_rect.left() + _diffx,_rect.top() + _diffy,_rect.right(),_rect.bottom()));
 
   emit sig_updateChildGeometry(_child);
+
   m_bModified = true;
 }
 

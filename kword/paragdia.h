@@ -27,6 +27,7 @@
 #include <qbrush.h>
 #include <qpainter.h>
 #include <qcolor.h>
+#include <qradiobutton.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
@@ -34,6 +35,7 @@
 #include <stdlib.h>
 
 #include "defs.h"
+#include "paraglayout.h"
 
 /******************************************************************/
 /* class KWPagePreview                                            */
@@ -68,6 +70,28 @@ protected:
 };
 
 /******************************************************************/
+/* class KWPagePreview2                                           */
+/******************************************************************/
+
+class KWPagePreview2 : public QGroupBox
+{
+  Q_OBJECT
+
+public:
+  KWPagePreview2(QWidget*,const char*);
+  ~KWPagePreview2() {}
+  
+  void setFlow(KWParagLayout::Flow _flow)
+    { flow = _flow; repaint(false); }
+
+protected:
+  void drawContents(QPainter*);
+
+  KWParagLayout::Flow flow;
+
+};
+
+/******************************************************************/
 /* Class: KWParagDia                                              */
 /******************************************************************/
 
@@ -85,6 +109,8 @@ public:
   void setSpaceBeforeParag(float _before);
   void setLineSpacing(unsigned int _spacing);
 
+  void setFlow(KWParagLayout::Flow _flow);
+
   float getLeftIndent()
     { return atof(eLeft->text()); } 
   float getFirstLineIndent()
@@ -95,19 +121,24 @@ public:
     { return atof(eAfter->text()); } 
   unsigned int getLineSpacing()
     { return atoi(eSpacing->text()); } 
+
+  KWParagLayout::Flow getFlow();
   
 
 protected:
   void setupTab1();
   void setupTab2();
+  void clearFlows();
 
   QWidget *tab1,*tab2;
-  QGridLayout *grid1,*indentGrid,*spacingGrid,*pSpaceGrid;
+  QGridLayout *grid1,*grid2,*indentGrid,*spacingGrid,*pSpaceGrid;
   KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing,*eBefore,*eAfter;
-  QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter;
+  QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow;
   QGroupBox *indentFrame,*spacingFrame,*pSpaceFrame;
   QComboBox *cSpacing;
+  QRadioButton *rLeft,*rCenter,*rRight,*rBlock;
   KWPagePreview *prev1;
+  KWPagePreview2 *prev2;
 
 protected slots:
   void leftChanged(const char*);
@@ -117,7 +148,11 @@ protected slots:
   void spacingChanged(const char*);
   void beforeChanged(const char*);
   void afterChanged(const char*);
-
+  void flowLeft();
+  void flowCenter();
+  void flowRight();
+  void flowBlock();
+  
 };
 
 #endif

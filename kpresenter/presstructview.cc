@@ -256,11 +256,192 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
     {
     case OT_RECT:
       {
-	list->appendItem(i18n("Pen:"));
-	if (dynamic_cast<KPRectObject*>(_obj)->getPen() == NoPen)
-	  list->changeItemPart("No Pen",list->count() - 1,1);
+	list->appendItem(i18n("Pen Color"));
+	if (dynamic_cast<KPRectObject*>(_obj)->getPen().style() == NoPen)
+	  list->changeItemPart("no pen",list->count() - 1,1);
 	else
 	  list->changeItemPart(getColor(dynamic_cast<KPRectObject*>(_obj)->getPen().color()),list->count() - 1,1);
+
+	list->appendItem(i18n("Pen Style"));
+	list->changeItemPart(i18n(PenStyleName[static_cast<int>(dynamic_cast<KPRectObject*>(_obj)->getPen().style())]),
+			     list->count() - 1,1);
+
+	str.sprintf("%d",dynamic_cast<KPRectObject*>(_obj)->getPen().width());
+	list->appendItem(i18n("Pen Width"));
+	list->changeItemPart(str,list->count() - 1,1);
+
+	if (dynamic_cast<KPRectObject*>(_obj)->getFillType() == FT_BRUSH)
+	  {
+	    list->appendItem(i18n("Brush Color"));
+	    if (dynamic_cast<KPRectObject*>(_obj)->getBrush().style() == NoBrush)
+	      list->changeItemPart("no brush",list->count() - 1,1);
+	    else
+	      list->changeItemPart(getColor(dynamic_cast<KPRectObject*>(_obj)->getBrush().color()),list->count() - 1,1);
+	    
+	    list->appendItem(i18n("Brush Style"));
+	    list->changeItemPart(i18n(BrushStyleName[static_cast<int>(dynamic_cast<KPRectObject*>(_obj)->getBrush().style())]),
+				 list->count() - 1,1);
+	  }
+	else
+	  {
+	    list->appendItem(i18n("Gradient Color1"));
+	    list->changeItemPart(getColor(dynamic_cast<KPRectObject*>(_obj)->getGColor1()),list->count() - 1,1);
+
+	    list->appendItem(i18n("Gradient Color2"));
+	    list->changeItemPart(getColor(dynamic_cast<KPRectObject*>(_obj)->getGColor2()),list->count() - 1,1);
+
+	    list->appendItem(i18n("Gradient Type"));
+	    list->changeItemPart(i18n(BackColorTypeName[static_cast<int>(dynamic_cast<KPRectObject*>(_obj)->getGType())]),
+				 list->count() - 1,1);
+	  }
+
+	if (dynamic_cast<KPRectObject*>(_obj)->getRectType() == RT_ROUND)
+	  {
+	    int rndx,rndy;
+	    dynamic_cast<KPRectObject*>(_obj)->getRnds(rndx,rndy);
+	    
+	    list->appendItem(i18n("Roundedness X"));
+	    str.sprintf("%d",rndx);
+	    list->changeItemPart(str,list->count() - 1,1);
+	    
+	    list->appendItem(i18n("Roundedness Y"));
+	    str.sprintf("%d",rndy);
+	    list->changeItemPart(str,list->count() - 1,1);
+	  }
+      } break;
+    case OT_ELLIPSE:
+      {
+	list->appendItem(i18n("Pen Color"));
+	if (dynamic_cast<KPEllipseObject*>(_obj)->getPen().style() == NoPen)
+	  list->changeItemPart("no pen",list->count() - 1,1);
+	else
+	  list->changeItemPart(getColor(dynamic_cast<KPEllipseObject*>(_obj)->getPen().color()),list->count() - 1,1);
+
+	list->appendItem(i18n("Pen Style"));
+	list->changeItemPart(i18n(PenStyleName[static_cast<int>(dynamic_cast<KPEllipseObject*>(_obj)->getPen().style())]),
+			     list->count() - 1,1);
+
+	str.sprintf("%d",dynamic_cast<KPEllipseObject*>(_obj)->getPen().width());
+	list->appendItem(i18n("Pen Width"));
+	list->changeItemPart(str,list->count() - 1,1);
+
+	if (dynamic_cast<KPEllipseObject*>(_obj)->getFillType() == FT_BRUSH)
+	  {
+	    list->appendItem(i18n("Brush Color"));
+	    if (dynamic_cast<KPEllipseObject*>(_obj)->getBrush().style() == NoBrush)
+	      list->changeItemPart("no brush",list->count() - 1,1);
+	    else
+	      list->changeItemPart(getColor(dynamic_cast<KPEllipseObject*>(_obj)->getBrush().color()),list->count() - 1,1);
+	    
+	    list->appendItem(i18n("Brush Style"));
+	    list->changeItemPart(i18n(BrushStyleName[static_cast<int>(dynamic_cast<KPEllipseObject*>(_obj)->getBrush().style())]),
+				 list->count() - 1,1);
+	  }
+	else
+	  {
+	    list->appendItem(i18n("Gradient Color1"));
+	    list->changeItemPart(getColor(dynamic_cast<KPEllipseObject*>(_obj)->getGColor1()),list->count() - 1,1);
+
+	    list->appendItem(i18n("Gradient Color2"));
+	    list->changeItemPart(getColor(dynamic_cast<KPEllipseObject*>(_obj)->getGColor2()),list->count() - 1,1);
+
+	    list->appendItem(i18n("Gradient Type"));
+	    list->changeItemPart(i18n(BackColorTypeName[static_cast<int>(dynamic_cast<KPEllipseObject*>(_obj)->getGType())]),
+				 list->count() - 1,1);
+	  }
+      } break;
+    case OT_LINE:
+      {
+	list->appendItem(i18n("Direction"));
+	list->changeItemPart(i18n(LineTypeName[static_cast<int>(dynamic_cast<KPLineObject*>(_obj)->getLineType())]),
+			     list->count() - 1,1);
+
+	list->appendItem(i18n("Pen Color"));
+	if (dynamic_cast<KPLineObject*>(_obj)->getPen().style() == NoPen)
+	  list->changeItemPart("no pen",list->count() - 1,1);
+	else
+	  list->changeItemPart(getColor(dynamic_cast<KPLineObject*>(_obj)->getPen().color()),list->count() - 1,1);
+
+	list->appendItem(i18n("Pen Style"));
+	list->changeItemPart(i18n(PenStyleName[static_cast<int>(dynamic_cast<KPLineObject*>(_obj)->getPen().style())]),
+			     list->count() - 1,1);
+
+	str.sprintf("%d",dynamic_cast<KPLineObject*>(_obj)->getPen().width());
+	list->appendItem(i18n("Pen Width"));
+	list->changeItemPart(str,list->count() - 1,1);
+
+	list->appendItem(i18n("Line Begin"));
+	list->changeItemPart(i18n(LineEndName[static_cast<int>(dynamic_cast<KPLineObject*>(_obj)->getLineBegin())]),
+			     list->count() - 1,1);
+
+	list->appendItem(i18n("Line End"));
+	list->changeItemPart(i18n(LineEndName[static_cast<int>(dynamic_cast<KPLineObject*>(_obj)->getLineEnd())]),
+			     list->count() - 1,1);
+      } break;
+    case OT_AUTOFORM:
+      {
+	list->appendItem(i18n("Name"));
+
+	QString filename = dynamic_cast<KPAutoformObject*>(_obj)->getFileName();
+	QFileInfo fi(filename);
+	list->changeItemPart(fi.baseName(),list->count() - 1,1);
+
+	list->appendItem(i18n("Pen Color"));
+	if (dynamic_cast<KPAutoformObject*>(_obj)->getPen().style() == NoPen)
+	  list->changeItemPart("no pen",list->count() - 1,1);
+	else
+	  list->changeItemPart(getColor(dynamic_cast<KPAutoformObject*>(_obj)->getPen().color()),list->count() - 1,1);
+
+	list->appendItem(i18n("Pen Style"));
+	list->changeItemPart(i18n(PenStyleName[static_cast<int>(dynamic_cast<KPAutoformObject*>(_obj)->getPen().style())]),
+			     list->count() - 1,1);
+
+	str.sprintf("%d",dynamic_cast<KPAutoformObject*>(_obj)->getPen().width());
+	list->appendItem(i18n("Pen Width"));
+	list->changeItemPart(str,list->count() - 1,1);
+
+	list->appendItem(i18n("Line Begin"));
+	list->changeItemPart(i18n(LineEndName[static_cast<int>(dynamic_cast<KPAutoformObject*>(_obj)->getLineBegin())]),
+			     list->count() - 1,1);
+
+	list->appendItem(i18n("Line End"));
+	list->changeItemPart(i18n(LineEndName[static_cast<int>(dynamic_cast<KPAutoformObject*>(_obj)->getLineEnd())]),
+			     list->count() - 1,1);
+
+	if (dynamic_cast<KPAutoformObject*>(_obj)->getFillType() == FT_BRUSH)
+	  {
+	    list->appendItem(i18n("Brush Color"));
+	    if (dynamic_cast<KPAutoformObject*>(_obj)->getBrush().style() == NoBrush)
+	      list->changeItemPart("no brush",list->count() - 1,1);
+	    else
+	      list->changeItemPart(getColor(dynamic_cast<KPAutoformObject*>(_obj)->getBrush().color()),list->count() - 1,1);
+	    
+	    list->appendItem(i18n("Brush Style"));
+	    list->changeItemPart(i18n(BrushStyleName[static_cast<int>(dynamic_cast<KPAutoformObject*>(_obj)->getBrush().style())]),
+				 list->count() - 1,1);
+	  }
+	else
+	  {
+	    list->appendItem(i18n("Gradient Color1"));
+	    list->changeItemPart(getColor(dynamic_cast<KPAutoformObject*>(_obj)->getGColor1()),list->count() - 1,1);
+
+	    list->appendItem(i18n("Gradient Color2"));
+	    list->changeItemPart(getColor(dynamic_cast<KPAutoformObject*>(_obj)->getGColor2()),list->count() - 1,1);
+
+	    list->appendItem(i18n("Gradient Type"));
+	    list->changeItemPart(i18n(BackColorTypeName[static_cast<int>(dynamic_cast<KPAutoformObject*>(_obj)->getGType())]),
+				 list->count() - 1,1);
+	  }
+      } break;
+    case OT_PICTURE:
+      {
+	list->appendItem(i18n("Filename"));
+	list->changeItemPart(dynamic_cast<KPPixmapObject*>(_obj)->getFileName(),list->count() - 1,1);
+      } break;
+    case OT_CLIPART:
+      {
+	list->appendItem(i18n("Filename"));
+	list->changeItemPart(dynamic_cast<KPClipartObject*>(_obj)->getFileName(),list->count() - 1,1);
       } break;
     default: break;
     }
@@ -269,20 +450,36 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
 /*================================================================*/
 QString PresStructViewer::getColor(QColor _color)
 {
-//   QFile rgbFile("/usr/X11R6/lib/X11/rgb.txt");
+  QFile rgbFile("/usr/X11R6/lib/X11/rgb.txt");
   QString str;
   
-//   if (rgbFile.exists())
-//     {
-//       int r,g,b;
-//       QString tmp;
+  if (rgbFile.exists())
+    {
+      int r,g,b;
+      str.sprintf("(%d,%d,%d)",_color.red(),_color.green(),_color.blue());
 
-//       _color.rgb(&r,&g,&b);
-//       tmp.sprintf("%3d %3d %3d",r,g,b);
+      QTextStream t(&rgbFile);
+      QString s = "";
 
-//       str = tmp;
-//     }
-//   else
+      char name[255];
+
+      if (rgbFile.open(IO_ReadOnly))
+	{
+	  while (!t.eof())
+	    {
+	      s = t.readLine();
+	      sscanf(s,"%d %d %d %s",&r,&g,&b,name);
+	      if (r == _color.red() && g == _color.green() && b == _color.blue())
+		{
+		  str.sprintf("%s",name);
+		  str = str.stripWhiteSpace();
+		  break;
+		}
+	    }
+	  rgbFile.close();   
+	}
+    }
+  else
     str.sprintf("(%d,%d,%d)",_color.red(),_color.green(),_color.blue());
     
   return str;

@@ -360,6 +360,7 @@ void KWordView_impl::formatParagraph()
   paragDia->setSpaceBeforeParag(gui->getPaperWidget()->getSpaceBeforeParag());
   paragDia->setSpaceAfterParag(gui->getPaperWidget()->getSpaceAfterParag());
   paragDia->setLineSpacing(gui->getPaperWidget()->getLineSpacing());
+  paragDia->setFlow(gui->getPaperWidget()->getFlow());
   paragDia->show();
 }
 
@@ -1087,6 +1088,8 @@ void KWordView_impl::paragDiaOk()
   gui->getPaperWidget()->setLineSpacing(paragDia->getLineSpacing());
   gui->getHorzRuler()->setLeftIndent(static_cast<int>(paragDia->getLeftIndent()));
   gui->getHorzRuler()->setFirstIndent(static_cast<int>(paragDia->getFirstLineIndent()));
+  gui->getPaperWidget()->setFlow(paragDia->getFlow());
+  setFlow(paragDia->getFlow());
 }
 
 /*================================================================*/

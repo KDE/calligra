@@ -95,6 +95,8 @@ public:
   void setLineSpacing(unsigned int _spacing)
     { fc->getParag()->getParagLayout()->setPTLineSpacing(_spacing); recalcCursor(); }
 
+  KWParagLayout::Flow getFlow()
+    { return fc->getParag()->getParagLayout()->getFlow(); }
   float getLeftIndent()
     { return POINT_TO_MM(static_cast<float>(fc->getParag()->getParagLayout()->getPTLeftIndent())); }
   float getFirstLineIndent()

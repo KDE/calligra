@@ -26,6 +26,8 @@
 #include <qlist.h>
 #include <qcolor.h>
 #include <qfile.h>
+#include <qtextstream.h>
+#include <qfileinfo.h>
 
 #include <knewpanner.h>
 #include <ktreelist.h>
@@ -52,6 +54,13 @@ const QString EffectName[] = {"No Effect","Come from right","Come from left","Co
 			      "Come from right/bottom","Come from left/top","Come from left/bottom","Wipe from left","Wipe from right",
 			      "Wipe from top","Wipe from bottom"};
 const QString Effect2Name[] = {"No Effect","Paragraph after paragraph"};
+const QString PenStyleName[] = {"no pen","solid line","dash line (----)","dot line (****)","dash dot line (-*-*)",
+				"dash dot dot line (-**-)"};
+const QString BrushStyleName[] = {"no brush","100% fill pattern","94% fill pattern","88% fill pattern","63% fill pattern",
+				  "50% fill pattern","37% fill pattern","12% fill pattern","6% fill pattern","horizontal lines",
+				  "vertical lines","crossing lines","diagonal lines (/)","diagonal lines (\\)","diagonal crossing lines"};
+const QString LineTypeName[] = {"Horizontal","Vertical","Left/Top - Right/Bottom","Left/Bottom - Right/Top"};
+const QString LineEndName[] = {"Normal","Arrow","Square","Circle"};
 
 /******************************************************************/
 /* Class: PresStructViewer                                        */
