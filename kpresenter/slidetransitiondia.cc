@@ -71,7 +71,7 @@ SlideTransitionDia::SlideTransitionDia( QWidget *parent, const char *name, KPres
         h = 300;
     }
 
-    const QImage img(m_pixmap.convertToImage().smoothScale( w, h, QImage::ScaleMin ));
+    const QImage img(m_pixmap.convertToImage().smoothScale( w, h ));
     m_pixmap.convertFromImage(img);
 
     m_dialog->previewPixmap->setPixmap( m_pixmap );
