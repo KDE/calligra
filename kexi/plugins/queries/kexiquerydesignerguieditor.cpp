@@ -30,7 +30,7 @@
 #include "kexitableview.h"
 #include "kexitableitem.h"
 #include "kexiquerydesignerguieditor.h"
-//#include "kexirelationdialog.h"
+#include "kexidragobjects.h"
 #include "kexiproject.h"
 #include "kexiview.h"
 
@@ -73,13 +73,15 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 void
 KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 {
-#if 0
 	kdDebug() << "KexiQueryDesignerGuiEditor::slotDropped()" << endl;
 
-	KexiRelationViewTable *sourceTable = static_cast<KexiRelationViewTable *>(ev->source());
+	QString srcTable;
+	QString srcField;
+        QString dummy;
+        //better check later if the source is really a table
+        KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
+        kdDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
 
-	QString srcTable = sourceTable->table();
-	QString srcField(ev->encodedData("kexi/field"));
 
 	uint i=0;
 	for(QStringList::Iterator it = m_sourceList.begin(); it != m_sourceList.end(); it++)
@@ -102,7 +104,6 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 	newInsert->setValue(2, true);
 	newInsert->setInsertItem(true);
 	m_insertItem = newInsert;
-#endif
 }
 
 void
