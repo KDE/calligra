@@ -296,11 +296,10 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
     }
 
     // font attribute (uppercase, lowercase (not in MSWord), small caps)
-    if ( !refChp || refChp->fCaps != chp->fCaps )
+    if ( !refChp || refChp->fCaps != chp->fCaps || refChp->fSmallCaps != chp->fSmallCaps )
     {
         QDomElement fontAttrib( mainDocument().createElement( "FONTATTRIBUTE" ) );
-        fontAttrib.setAttribute( "value", chp->fCaps ? "uppercase" : "none" );
-        // TODO in KWord: small caps
+        fontAttrib.setAttribute( "value", chp->fSmallCaps ? "smallcaps" : chp->fCaps ? "uppercase" : "none" );
         format.appendChild( fontAttrib );
     }
     if ( !refChp || refChp->iss != chp->iss ) { // superscript/subscript
