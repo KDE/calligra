@@ -27,11 +27,7 @@
 #include <excelimport.h>
 #include <excelimport.moc>
 
-#include <qfile.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
 #include <qstring.h>
-#include <qregexp.h>
 #include <qdom.h>
 
 #include <kdebug.h>
@@ -54,20 +50,6 @@ inline QConstString string( const Sidewinder::UString& str ) {
    // Let's hope there's no copying of the QConstString happening...
    return QConstString( reinterpret_cast<const QChar*>( str.data() ), str.length() );
 }
-
-// encode text for XML-ness
-// FIXME could be faster without QRegExp
-QString encodeXML( const QString& s )
-{
-  QString text = s;
-  text.replace( QRegExp("&"), "&amp;" );
-  text.replace( QRegExp("<"), "&lt;" );
-  text.replace( QRegExp(">"), "&gt;" );
-  text.replace( QRegExp("\""), "&quot;" );
-  text.replace( QRegExp("'"), "&apos;" );
-  return text;
-}
-
 
 ExcelImport::ExcelImport ( QObject*, const char*, const QStringList& )
     : KoFilter()
