@@ -8,16 +8,17 @@
 #include "KRTFParser.h"
 
 class KRTFTokenizer;
+class QDomDocument;
 
 class KRTFFileParser : public KRTFParser
 {
 public:
-    KRTFFileParser( KRTFTokenizer* tokenizer ) {
+    KRTFFileParser( KRTFTokenizer* tokenizer, KoStore *store) {
 	_tokenizer = tokenizer;
+        _store = store;
     }
 
     bool parse();
-    
 private:
 };
 

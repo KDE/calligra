@@ -5,6 +5,9 @@
 #include "KRTFParser.h"
 #include "KRTFToken.h"
 #include "KRTFTokenizer.h"
+#include <qstring.h>
+#include <qcstring.h>
+#include <koStore.h>
 
 /*!
  * Reads and discards all tokens until the current group is closed.

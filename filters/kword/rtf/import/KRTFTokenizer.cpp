@@ -75,15 +75,18 @@ KRTFToken* KRTFTokenizer::nextToken()
 	    param += (char)ch;
 	    ch = _file->getch();
 	    while( isalnum( ch ) ) {
-		param += (char)ch;
-		ch = _file->getch();
+   		param += (char)ch;
+	   	ch = _file->getch();
 	    }
-	}
+       _file->ungetch(ch);
+	} else {
+       _file->ungetch(ch);
+   }
 
 	token->_text = text;
 	token->_param = param;
 	break;
-    case PlainText:
+    case ::PlainText:
 	// everything until next backslash, opener or closer
 	ch = _file->getch();
 	while( ch != '\\' && ch != '{'  && ch != '}' ) {
@@ -94,7 +97,20 @@ KRTFToken* KRTFTokenizer::nextToken()
 	// give back last char
 	_file->ungetch( ch );
     }
-
+#if 0
+    QString typenam="no type";
+    if (token->_type==ControlWord) typenam=("controlword");
+    if (token->_type==ControlSymbol) typenam=("controlsymbol");
+    if (token->_type==OpenGroup) typenam=("opengroup");
+    if (token->_type==CloseGroup) typenam=("closegroup");
+    if (token->_type==::PlainText) typenam=("plaintext");
+    if (token->_type==Unknown) typenam=("unknown");
+    if (token->_type==TokenEOF) typenam=("eof");
+    char a[2];
+    a[0]=ch;
+    a[1]=0;
+    qWarning((tr("TOKEN type=\"")+typenam+"\" text=\""+token->_text+"\" params=\"" +token->_param+"\"").latin1());
+#endif
     return token;
 }
 

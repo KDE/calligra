@@ -9,7 +9,8 @@ librtfimport_la_LIBADD = $(KOFFICE_LIBS)
 kde_module_LTLIBRARIES = librtfimport.la
 
 librtfimport_la_SOURCES = KRTFTokenizer.cpp KRTFParser.cpp KRTFFileParser.cpp \
-                KRTFHeaderParser.cpp KRTFDocumentParser.cpp
+	KRTFHeaderParser.cpp KRTFDocumentParser.cpp rtfimport.cpp \
+	rtfimport_factory.cpp
 
 check_PROGRAMS = rtfimport
 rtfimport_SOURCES = main.cpp
@@ -20,4 +21,3 @@ METASOURCES = AUTO
 
 service_DATA = kword_rtf_import.desktop
 servicedir = $(kde_servicesdir)
-

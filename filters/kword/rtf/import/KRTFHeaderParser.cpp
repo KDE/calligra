@@ -6,6 +6,7 @@
 #include "KRTFToken.h"
 #include "KRTFTokenizer.h"
 
+
 bool KRTFHeaderParser::parse()
 {
     // Syntax for <header> is:
@@ -72,6 +73,19 @@ bool KRTFHeaderParser::parse()
     _tokenizer->pushBack( token );
     _tokenizer->pushBack( token2 );
 
+    // kervel: basic document header.
+    QString str;
+    str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC >\n";
+    str += "<DOC  editor=\"KWord\" mime=\"application/x-kword\">\n";
+    str += "<PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" hType=\"0\" fType=\"0\" >\n";
+    str += "<PAPERBORDERS left=\"28\" top=\"42\" right=\"28\" bottom=\"42\" />\n";
+    str += "</PAPER>\n";
+    str += "<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\"/>\n";
+    str += "<FRAMESETS>\n";
+    str += "<FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\">\n";
+    str += "<FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" />\n";
+    str += "</FRAMESET></FRAMESETS></DOC>\n";
+    _dom->setContent(str);
     // the currently read token should already be the end of the header,
     // no need to overread anything
 

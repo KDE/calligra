@@ -1,6 +1,5 @@
 [Desktop Entry]
 Type=Service
-Patterns=*.csv;*.CSV;
 Name=KWord RTF Import Filter
 Name[af]=KWORD RTF IN VOER FILTER
 Name[az]=KWord RTF İdxal Süzgəci
@@ -31,9 +30,11 @@ Name[sk]=RTF filter pre import do KWord-u
 Name[sl]=Uvozni filter RTF za KWord
 Name[sv]=Kword RTF-importfilter
 Name[ta]=KWord RTF ­ÈìÌÁ¾¢ ÅÊ¸ðÊ
+Name[th]=ตัวกรองการนำเข้า RTF ของ KWord
 Name[tr]=KWord RTF Alma Süzgeci
 Name[uk]=Фільтр експорту RTF для KWord
 Name[vi]=Trình lọc nhập vào file KWord RTF 
+Name[xh]=KWord RTF Icebo lokucoca ulwelo olurhwetyiweyo ngaphakathi
 Name[zh_CN.GB2312]=KWord RTF 导入过滤程序
 Import=text/rtf
 ImportDescription=RTF
