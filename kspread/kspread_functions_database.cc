@@ -649,20 +649,27 @@ bool kspreadfunc_dget( KSContext & context )
 
   QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
 
-  double value = 0.0;
+  KSValue value;
   int count = 0;
 
   KSpreadCell * cell = cells->first();
 
   while ( cell )
   {
-    if ( cell->value().isNumber() )
+    if ( !cell->isEmpty() )
     {
       ++count;
       if ( count > 1 )
         return false;
 
-      value = cell->value().asFloat();
+      if ( cell->value().isNumber() )
+        value.setValue( cell->value().asFloat() );
+      else if ( cell->value().isString() )
+        value.setValue( cell->value().asString() );
+      else if ( cell->value().isBoolean() )
+        value.setValue( cell->value().asBoolean() );
+      else
+        return false;
     }
 
     cell = cells->next();
