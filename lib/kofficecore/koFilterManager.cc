@@ -152,9 +152,9 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
     return chain->invokeChain();
 }
 
-// This class is needed only for the static mimeFilter method
 namespace  // in order not to mess with the global namespace ;)
 {
+    // This class is needed only for the static mimeFilter method
     class Vertex
     {
     public:
@@ -174,103 +174,154 @@ namespace  // in order not to mess with the global namespace ;)
         QCString m_mimeType;
         QPtrList<Vertex> m_edges;
     };
+
+    // Some helper methods for the static stuff
+    // This method builds up the graph in the passed ascii dict
+    void buildGraph( QAsciiDict<Vertex>& vertices, KoFilterManager::Direction direction )
+    {
+        vertices.setAutoDelete( true );
+
+        // partly copied from build graph, but I don't see any other
+        // way without crude hacks, as we have to obey the direction here
+        QValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
+        QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+        QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+
+        while ( partIt != partEnd ) {
+            QCString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
+            if ( !key.isEmpty() )
+                vertices.insert( key, new Vertex( key ) );
+            ++partIt;
+        }
+
+        QValueList<KoFilterEntry::Ptr> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
+        QValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
+        QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+
+        for ( ; it != end; ++it ) {
+            // First add the "starting points" to the dict
+            QStringList::ConstIterator importIt = ( *it )->import.begin();
+            QStringList::ConstIterator importEnd = ( *it )->import.end();
+            for ( ; importIt != importEnd; ++importIt ) {
+                QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
+                // already there?
+                if ( !vertices[ key ] )
+                    vertices.insert( key, new Vertex( key ) );
+            }
+
+            // Are we allowed to use this filter at all?
+            if ( KoFilterManager::filterAvailable( *it ) ) {
+                QStringList::ConstIterator exportIt = ( *it )->export_.begin();
+                QStringList::ConstIterator exportEnd = ( *it )->export_.end();
+
+                for ( ; exportIt != exportEnd; ++exportIt ) {
+                    // First make sure the export vertex is in place
+                    QCString key = ( *exportIt ).latin1();  // latin1 is okay here
+                    Vertex* exp = vertices[ key ];
+                    if ( !exp ) {
+                        exp = new Vertex( key );
+                        vertices.insert( key, exp );
+                    }
+                    // Then create the appropriate edges depending on the
+                    // direction (import/export)
+                    // This is the chunk of code which actually differs from the
+                    // graph stuff (apart from the different vertex class)
+                    importIt = ( *it )->import.begin();
+                    if ( direction == KoFilterManager::Import ) {
+                        for ( ; importIt != importEnd; ++importIt )
+                            exp->addEdge( vertices[ ( *importIt ).latin1() ] );
+                    } else {
+                        for ( ; importIt != importEnd; ++importIt )
+                            vertices[ ( *importIt ).latin1() ]->addEdge( exp );
+                    }
+                }
+            }
+            else
+                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " not available." << endl;
+        }
+    }
+
+    // This method runs a BFS on the graph to determine the connected
+    // nodes. Make sure that the graph is "cleared" (the colors of the
+    // nodes are all white)
+    QStringList connected( const QAsciiDict<Vertex>& vertices, const QCString& mimetype )
+    {
+        if ( mimetype.isEmpty() )
+            return QStringList();
+        Vertex *v = vertices[ mimetype ];
+        if ( !v )
+            return QStringList();
+
+        v->setColor( Vertex::Gray );
+        std::queue<Vertex*> queue;
+        queue.push( v );
+        QStringList connected;
+
+        while ( !queue.empty() ) {
+            v = queue.front();
+            queue.pop();
+            QPtrList<Vertex> edges = v->edges();
+            QPtrListIterator<Vertex> it( edges );
+            for ( ; it.current(); ++it ) {
+                if ( it.current()->color() == Vertex::White ) {
+                    it.current()->setColor( Vertex::Gray );
+                    queue.push( it.current() );
+                }
+            }
+            v->setColor( Vertex::Black );
+            connected.append( v->mimeType() );
+        }
+        return connected;
+    }
+
+    // This method restores the initial color of the nodes for a new
+    // BFS run (KoShell case)
+    void resetGraph( QAsciiDict<Vertex>& vertices )
+    {
+        QAsciiDictIterator<Vertex> it( vertices );
+        for ( ; it.current(); ++it )
+            it.current()->setColor( Vertex::White );
+    }
 }
 
 // The static method to figure out to which parts of the
-// graph this mimetype has a connection to. Note: This method
-// looks quite similar to the KoFilterChain stuff, but it isn't :(
-// The main reason this can't be solved cleanly is the distinction
-// between export and import, which is important in a directed
-// graph... :}
+// graph this mimetype has a connection to.
 QStringList KoFilterManager::mimeFilter( const QCString& mimetype, Direction direction )
 {
     QAsciiDict<Vertex> vertices;
-    vertices.setAutoDelete( true );
-    // partly copied from build graph, but I don't see any other
-    // way without crude hacks
+    buildGraph( vertices, direction );
+    return connected( vertices, mimetype );
+}
+
+QStringList KoFilterManager::mimeFilter()
+{
+    QAsciiDict<Vertex> vertices;
+    buildGraph( vertices, KoFilterManager::Import );
+
     QValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
     QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
     QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
-    while ( partIt != partEnd ) {
-        QCString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
-        if ( !key.isEmpty() )
-            vertices.insert( key, new Vertex( key ) );
-        ++partIt;
-    }
-
-    QValueList<KoFilterEntry::Ptr> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
-    QValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
-    QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
-
-    for ( ; it != end; ++it ) {
-        // First add the "starting points" to the dict
-        QStringList::ConstIterator importIt = ( *it )->import.begin();
-        QStringList::ConstIterator importEnd = ( *it )->import.end();
-        for ( ; importIt != importEnd; ++importIt ) {
-            QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
-            // already there?
-            if ( !vertices[ key ] )
-                vertices.insert( key, new Vertex( key ) );
-        }
-
-        // Are we allowed to use this filter at all?
-        if ( KoFilterManager::filterAvailable( *it ) ) {
-            QStringList::ConstIterator exportIt = ( *it )->export_.begin();
-            QStringList::ConstIterator exportEnd = ( *it )->export_.end();
-
-            for ( ; exportIt != exportEnd; ++exportIt ) {
-                // First make sure the export vertex is in place
-                QCString key = ( *exportIt ).latin1();  // latin1 is okay here
-                Vertex* exp = vertices[ key ];
-                if ( !exp ) {
-                    exp = new Vertex( key );
-                    vertices.insert( key, exp );
-                }
-                // Then create the appropriate edges depending on the
-                // direction (import/export)
-                // This is the chunk of code which actually differs from the
-                // graph stuff (apart from the different vertex class)
-                importIt = ( *it )->import.begin();
-                if ( direction == Import ) {
-                    for ( ; importIt != importEnd; ++importIt )
-                        exp->addEdge( vertices[ ( *importIt ).latin1() ] );
-                } else {
-                    for ( ; importIt != importEnd; ++importIt )
-                        vertices[ ( *importIt ).latin1() ]->addEdge( exp );
-                }
-            }
-        }
-        else
-            kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " not available." << endl;
-    }
-
-    // Now that the graph is ready we run a breadth-first search on it
-    // to find connected parts of it.
-    Vertex *v = vertices[ mimetype ];
-    if ( !v )
+    if ( partIt == partEnd )
         return QStringList();
 
-    v->setColor( Vertex::Gray );
-    std::queue<Vertex*> queue;
-    queue.push( v );
-    QStringList connected;
+    // Okay, parts not empty... no merging for the first call
+    QStringList filters = connected( vertices, ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
+    ++partIt;
 
-    while ( !queue.empty() ) {
-        v = queue.front();
-        queue.pop();
-        QPtrList<Vertex> edges = v->edges();
-        QPtrListIterator<Vertex> it( edges );
-        for ( ; it.current(); ++it ) {
-            if ( it.current()->color() == Vertex::White ) {
-                it.current()->setColor( Vertex::Gray );
-                queue.push( it.current() );
-            }
-        }
-        v->setColor( Vertex::Black );
-        connected.append( v->mimeType() );
+    while ( partIt != partEnd ) {
+        // get the connected items for the next KOffice mimetype
+        QStringList tmp = connected( vertices,
+                                     ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
+        // merge the result with the new list
+        QStringList::ConstIterator it = tmp.begin();
+        QStringList::ConstIterator end = tmp.end();
+        for ( ; it!=end; ++it )
+            if ( filters.find( *it ) == filters.end() )
+                filters.append( *it );
+        ++partIt;
     }
-    return connected;
+    return filters;
 }
 
 // Here we check whether the filter is available. This stuff is quite slow,

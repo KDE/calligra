@@ -74,6 +74,13 @@ public:
     // information here.
     static QStringList mimeFilter( const QCString& mimetype, Direction direction );
 
+    // The same method as above for KoShell.
+    // We don't need the mimetype, as we will simply use all available
+    // KOffice mimetypes, the Direction enum is omitted, as we only
+    // call this for importing. When saving we already know the KOffice
+    // part we're using.
+    static QStringList mimeFilter();
+
     // Is that filter available at all?
     // Note: Slow, but cached (static)
     static bool filterAvailable( KoFilterEntry::Ptr entry );

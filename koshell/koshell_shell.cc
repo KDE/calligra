@@ -325,14 +325,8 @@ void KoShellWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
-    dialog->setMimeFilter( KoFilterManager::mimeFilter(
-                               KoDocument::readNativeFormatMimeType(),
-                               KoFilterManager::Import ) );
-    // ##### CHECK
-    //KoFilterManager * filterManager = new KoFilterManager;
-    //filterManager->prepareDialog(dialog, KoFilterManager::Import,
-    //                             KoDocument::readNativeFormatMimeType(),
-    //                             nativeFormatPattern(), nativeFormatName(), true);
+    dialog->setMimeFilter( KoFilterManager::mimeFilter() );
+
     KURL url;
     if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedURL();
