@@ -16,14 +16,15 @@ noinst_HEADERS = \
 	vfill.h \
 	vglobal.h \
 	vgradient.h \
-	vpattern.h \
 	vgroup.h \
 	vlayer.h \
 	vobject.h \
 	vpath.h \
+	vpattern.h \
 	vsegment.h \
 	vselection.h \
-	vstroke.h
+	vstroke.h \
+	vvisitor.h
 #	vtext.h
 
 libkarboncore_la_SOURCES = \
@@ -34,14 +35,15 @@ libkarboncore_la_SOURCES = \
 	vdocument.cc \
 	vfill.cc \
 	vgradient.cc \
-	vpattern.cc \
 	vgroup.cc \
 	vlayer.cc \
 	vobject.cc \
 	vpath.cc \
+	vpattern.cc \
 	vsegment.cc \
 	vselection.cc \
-	vstroke.cc
+	vstroke.cc \
+	vvisitor.cc
 #	vtext.cc
 
 libkarboncore_la_METASOURCES = \

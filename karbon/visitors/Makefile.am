@@ -11,26 +11,16 @@ noinst_LTLIBRARIES = libkarbonvisitors.la
 noinst_HEADERS = \
 	vboolean.h \
 	vcleanup.h \
-	vflatten.h \
-	vinsertknots.h \
-	vroundcorners.h \
 	vselectnodes.h \
 	vselectobjects.h \
-	vtransformnodes.h \
-	vvisitor.h \
-	vwhirlpinch.h
+	vtransformnodes.h 
 
 libkarbonvisitors_la_SOURCES = \
 	vboolean.cc \
 	vcleanup.cc \
-	vflatten.cc \
-	vinsertknots.cc \
-	vroundcorners.cc \
 	vselectnodes.cc \
 	vselectobjects.cc \
-	vtransformnodes.cc \
-	vvisitor.cc \
-	vwhirlpinch.cc
+	vtransformnodes.cc 
 
 libkarbonvisitors_la_METASOURCES = \
 	AUTO

@@ -21,16 +21,19 @@
 #ifndef __VCOMMAND_H__
 #define __VCOMMAND_H__
 
+
 #include <assert.h>
 
 #include <kcommand.h>
 
 #include "karbon_part.h"
+#include "vvisitor.h"
 
 
 class VDocument;
 
-class VCommand : public KNamedCommand
+
+class VCommand : public KNamedCommand, protected VVisitor
 {
 public:
 	VCommand( VDocument* doc, const QString& name )

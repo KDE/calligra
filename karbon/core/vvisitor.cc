@@ -17,12 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include "vcomposite.h"
 #include "vdocument.h"
 #include "vgroup.h"
 #include "vlayer.h"
 #include "vpath.h"
 #include "vvisitor.h"
+
 
 bool
 VVisitor::visit( VObject& object )

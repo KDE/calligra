@@ -19,8 +19,12 @@
 
 #include <klocale.h>
 
+#include "vcomposite.h"
+#include "vglobal.h"
+//#include "vinsertknots.h"
+#include "vpath.h"
+#include "vsegment.h"
 #include "vselection.h"
-#include "vwhirlpinch.h"
 #include "vwhirlpinchcmd.h"
 
 
@@ -44,15 +48,116 @@ VWhirlPinchCmd::~VWhirlPinchCmd()
 void
 VWhirlPinchCmd::execute()
 {
-	VWhirlPinch op( m_center, m_angle, m_pinch, m_radius );
-
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
-		op.visit( *itr.current() );
+		visit( *itr.current() );
 }
 
 void
 VWhirlPinchCmd::unexecute()
 {
+}
+
+void
+VWhirlPinchCmd::visitVComposite( VComposite& composite )
+{
+	// first subdivide:
+//	VInsertKnots insertKnots( 2 );
+//	insertKnots.visit( composite );
+
+	VVisitor::visitVComposite( composite );
+}
+
+void
+VWhirlPinchCmd::visitVPath( VPath& path )
+{
+	QWMatrix m;
+	KoPoint delta;
+	double dist;
+
+	path.first();
+
+	while( path.current() )
+	{
+		path.current()->convertToCurve();
+
+
+		// Apply three times separately to each segment node.
+
+		delta = path.current()->knot() - m_center;
+		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
+
+		if( dist < m_radius )
+		{
+			m.reset();
+
+			dist /= m_radius;
+
+			// pinch:
+			m.scale(
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
+
+			// whirl:
+			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
+			m.translate( m_center.x(), m_center.y() );
+
+			path.current()->setKnot( delta.transform( m ) );
+		}
+
+
+		delta = path.current()->ctrlPoint1() - m_center;
+		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
+
+		if( dist < m_radius )
+		{
+			m.reset();
+
+			dist /= m_radius;
+
+			// Pinch.
+			m.scale(
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
+
+			// Whirl.
+			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
+			m.translate( m_center.x(), m_center.y() );
+
+			path.current()->setCtrlPoint1( delta.transform( m ) );
+		}
+
+
+		delta = path.current()->ctrlPoint2() - m_center;
+		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
+
+		if( dist < m_radius )
+		{
+			m.reset();
+
+			dist /= m_radius;
+
+			// Pinch.
+			m.scale(
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
+				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
+
+			// Whirl.
+			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
+			m.translate( m_center.x(), m_center.y() );
+
+			path.current()->setCtrlPoint2( delta.transform( m ) );
+		}
+
+
+		if( !success() )
+			setSuccess();
+
+
+		path.next();
+	}
+
+	// Invalidate bounding box once.
+	path.invalidateBoundingBox();
 }
 

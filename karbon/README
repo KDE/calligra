@@ -46,9 +46,5 @@ tests/
 tools/
 	Stuff you can do with the mouse.
 
-visitors/
-	Classes which need full access to vobjects.
-	Mostly path manipulation stuff.
-
 widgets/
 	Widgets.

@@ -23,6 +23,8 @@
 #include "vcommand.h"
 
 
+class VComposite;
+class VPath;
 class VSelection;
 
 
@@ -37,6 +39,9 @@ public:
 	virtual void unexecute();
 
 private:
+	virtual void visitVComposite( VComposite& composite );
+	virtual void visitVPath( VPath& path );
+
 	VSelection* m_selection;
 
 	KoPoint m_center;

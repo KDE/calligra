@@ -23,6 +23,7 @@
 #include "vcommand.h"
 
 
+class VPath;
 class VSelection;
 
 
@@ -36,6 +37,8 @@ public:
 	virtual void unexecute();
 
 private:
+	virtual void visitVPath( VPath& path );
+
 	VSelection* m_selection;
 
 	double m_flatness;

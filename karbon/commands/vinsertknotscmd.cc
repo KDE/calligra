@@ -19,8 +19,9 @@
 
 #include <klocale.h>
 
-#include "vinsertknots.h"
 #include "vinsertknotscmd.h"
+#include "vpath.h"
+#include "vsegment.h"
 #include "vselection.h"
 
 
@@ -40,12 +41,10 @@ VInsertKnotsCmd::~VInsertKnotsCmd()
 void
 VInsertKnotsCmd::execute()
 {
-	VInsertKnots op( m_knots );
-
 	VObjectListIterator itr( m_selection->objects() );
 
 	for ( ; itr.current() ; ++itr )
-		op.visit( *itr.current() );
+		visit( *itr.current() );
 }
 
 void
@@ -53,3 +52,23 @@ VInsertKnotsCmd::unexecute()
 {
 }
 
+void
+VInsertKnotsCmd::visitVPath( VPath& path )
+{
+	path.first();
+
+	// ommit "begin" segment:
+	while( path.next() )
+	{
+		for( uint i = m_knots; i > 0; --i )
+		{
+			path.insert(
+				path.current()->splitAt( 1.0 / ( i + 1.0 ) ) );
+
+			path.next();
+		}
+
+		if( !success() )
+			setSuccess();
+	}
+}
