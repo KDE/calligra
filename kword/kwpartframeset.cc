@@ -264,4 +264,23 @@ void KWPartFrameSetEdit::slotChildActivated(bool b)
 }
 #endif
 
+void KWPartFrameSet::storeInternal()
+{
+    if ( getChild()->document()->storeInternal() )
+    {
+        KWFramePartExternalCommand* cmd =new KWFramePartExternalCommand( i18n("Make Document External"), this );
+        m_doc->addCommand(cmd);
+        getChild()->document()->setStoreInternal(false);;
+    }
+    else 
+    {
+        KWFramePartInternalCommand* cmd =new KWFramePartInternalCommand( i18n("Make Document Internal"), this );
+        m_doc->addCommand(cmd);
+        getChild()->document()->setStoreInternal(true);
+    }
+    
+    kdDebug()<<k_funcinfo<<"url: "<<getChild()->url().url()<<" store internal="<<getChild()->document()->storeInternal()<<endl;
+}
+
+
 #include "kwpartframeset.moc"

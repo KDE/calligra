@@ -768,6 +768,40 @@ bool KWFramePartMoveCommand::frameMoved()
     return  (m_frameMove.sizeOfBegin!=m_frameMove.sizeOfEnd);
 }
 
+KWFramePartInternalCommand::KWFramePartInternalCommand( const QString &name, KWPartFrameSet *part ) :
+    KNamedCommand(name),
+    m_part(part)
+{
+}
+
+void KWFramePartInternalCommand::execute()
+{
+    m_part->getChild()->document()->setStoreInternal(true);    
+}
+
+void KWFramePartInternalCommand::unexecute()
+{
+    m_part->getChild()->document()->setStoreInternal(false);    
+}
+
+
+KWFramePartExternalCommand::KWFramePartExternalCommand( const QString &name, KWPartFrameSet *part ) :
+    KNamedCommand(name),
+    m_part(part)
+{
+}
+
+void KWFramePartExternalCommand::execute()
+{
+    m_part->getChild()->document()->setStoreInternal(false);    
+}
+
+void KWFramePartExternalCommand::unexecute()
+{
+    m_part->getChild()->document()->setStoreInternal(true);    
+}
+
+
 KWFrameMoveCommand::KWFrameMoveCommand( const QString &name, QPtrList<FrameIndex> &_frameIndex, QPtrList<FrameResizeStruct>&_frameMove  ) :
     KNamedCommand(name),
     m_indexFrame(_frameIndex),

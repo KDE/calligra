@@ -89,6 +89,8 @@ public:
 
     void setDeleted( bool on = true );
 
+    virtual void storeInternal();
+    
 private:
     KWChild *m_child;
     KWFramePartMoveCommand *m_cmdMoveChild;

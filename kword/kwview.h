@@ -412,8 +412,10 @@ public slots:
     void insertHorizontalLine();
     void changeHorizontalLine();
 
+    void embeddedStoreInternal();
+    
     void addWordToDictionary();
-
+    
     void deleteFrameSet();
 
 protected slots:
@@ -685,6 +687,8 @@ private:
     KAction *actionInsertHorizontalLine;
     KAction *actionChangeHorizontalLine;
 
+    KToggleAction *actionEmbeddedStoreInternal;
+    
     KAction *actionAddWordToPersonalDictionary;
 
     KToggleAction *actionInsertDirectCursor;

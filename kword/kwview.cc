@@ -1248,6 +1248,10 @@ void KWView::setupActions()
                                                    this, SLOT( addWordToDictionary() ),
                                                    actionCollection(), "add_word_to_dictionary" );
 
+    actionEmbeddedStoreInternal=new KToggleAction( i18n( "Store Document Internally" ),0,
+                                            this, SLOT( embeddedStoreInternal() ),
+                                            actionCollection(), "embedded_store_internal" );
+
 }
 
 void KWView::refreshMenuExpression()
@@ -5263,6 +5267,14 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
                 actionList.append(actionChangeHorizontalLine);
                 actionList.append(actionSavePicture);
             }
+            else if ( frameSet->type() == FT_PART )
+            {
+                KWPartFrameSet *part = static_cast<KWPartFrameSet *>(frameSet);
+                actionEmbeddedStoreInternal->setChecked(part->getChild()->document()->storeInternal());
+                actionEmbeddedStoreInternal->setEnabled(part->getChild()->document()->hasExternURL());
+                actionList.append(separator);
+                actionList.append(actionEmbeddedStoreInternal);
+            }
             else if(frameSet->isHeaderOrFooter())
             {
                 actionList.append(separator);
@@ -5283,9 +5295,9 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
                 actionList.append(actionInlineFrame);
             }
         }
-        plugActionList( "picture_action", actionList );
+        plugActionList( "frameset_type_action", actionList );
         ((QPopupMenu*)factory()->container("frame_popup",this))->exec(_point);
-        unplugActionList( "picture_action" );
+        unplugActionList( "frameset_type_action" );
         delete separator;
         delete separator2;
     }
@@ -7227,6 +7239,14 @@ void KWView::addWordToDictionary()
         if ( !word.isEmpty())
             m_doc->addWordToDictionary( word);
     }
+}
+
+void KWView::embeddedStoreInternal()
+{
+    kdDebug()<<k_funcinfo<<endl;
+    KWFrame * frame = m_doc->getFirstSelectedFrame();
+    KWPartFrameSet *part = static_cast<KWPartFrameSet *>(frame->frameSet());
+    part->storeInternal();
 }
 
 void KWView::deleteFrameSet( KWFrameSet * frameset)

@@ -33,6 +33,7 @@ class KWFrameSet;
 class KWTableStyle;
 class KWTableTemplate;
 class KWTableFrameSet;
+class KWPartFrameSet;
 class KWDocument;
 class KoCustomVariable;
 class KoLinkVariable;
@@ -294,6 +295,36 @@ public:
 protected:
     FrameIndex m_indexFrame;
     FrameResizeStruct m_frameMove;
+};
+
+/**
+ * Command created when a part with an external document is changed to be stored internal
+ */
+class KWFramePartInternalCommand : public KNamedCommand
+{
+public:
+    KWFramePartInternalCommand( const QString &name, KWPartFrameSet *part ) ;
+    ~KWFramePartInternalCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWPartFrameSet *m_part;
+};
+
+/**
+ * Command created when a part with an external document is changed to be stored internal
+ */
+class KWFramePartExternalCommand : public KNamedCommand
+{
+public:
+    KWFramePartExternalCommand( const QString &name, KWPartFrameSet *part ) ;
+    ~KWFramePartExternalCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWPartFrameSet *m_part;
 };
 
 /**
