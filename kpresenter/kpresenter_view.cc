@@ -256,6 +256,9 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     }
     connect( page, SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
+
+    connect( h_ruler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), this,
+             SLOT( tabListChanged( const KoTabulatorList & ) ) );
 }
 
 /*=============================================================*/
@@ -2626,6 +2629,7 @@ void KPresenterView::objectSelectedChanged()
 
     actionExtraShadow->setEnabled(!page->haveASelectedPictureObj());
 
+    slotUpdateRuler();
 
 }
 
@@ -3058,6 +3062,11 @@ void PageBase::resizeEvent( QResizeEvent *e )
 	if ( view->v_ruler )
 	    view->v_ruler->setGeometry( 0, 20, 20, view->page->height() );
 	view->setRanges();
+        if(view->getTabChooser())
+        {
+            view->getTabChooser()->setGeometry(0,0,20,20);
+            view->getTabChooser()->show();
+        }
     } else {
 	view->horz->hide();
 	view->vert->hide();
@@ -3065,6 +3074,7 @@ void PageBase::resizeEvent( QResizeEvent *e )
 	view->pgPrev->hide();
 	view->h_ruler->hide();
 	view->v_ruler->hide();
+        view->getTabChooser()->hide();
 	view->page->move( 0, 0 );
 	view->page->resize( s.width(), s.height() );
     }
@@ -3250,7 +3260,11 @@ void KPresenterView::setupScrollbars()
 /*==============================================================*/
 void KPresenterView::setupRulers()
 {
-    h_ruler = new KoRuler( pageBase, page, Qt::Horizontal, kPresenterDoc()->pageLayout(), 0 );
+    tabChooser = new KoTabChooser( pageBase, KoTabChooser::TAB_ALL );
+    tabChooser->setReadWrite(kPresenterDoc()->isReadWrite());
+
+    h_ruler = new KoRuler( pageBase, page, Qt::Horizontal, kPresenterDoc()->pageLayout(), KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
+    h_ruler->changeFlags(0);
     h_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
     v_ruler = new KoRuler( pageBase, page, Qt::Vertical, kPresenterDoc()->pageLayout(), 0 );
     v_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
@@ -3271,6 +3285,10 @@ void KPresenterView::setupRulers()
 		      this, SLOT( newPageLayout( KoPageLayout ) ) );
     QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
 		      this, SLOT( openPageLayoutDia() ) );
+
+    connect( h_ruler, SIGNAL( newLeftIndent( double ) ), this, SLOT( newLeftIndent( double ) ) );
+    connect( h_ruler, SIGNAL( newFirstIndent( double ) ), this, SLOT( newFirstIndent( double ) ) );
+    connect( h_ruler, SIGNAL( newRightIndent( double ) ), this, SLOT( newRightIndent( double ) ) );
 
     h_ruler->setUnit( m_pKPresenterDoc->getUnitName() );
     v_ruler->setUnit( m_pKPresenterDoc->getUnitName() );
@@ -4256,5 +4274,82 @@ void KPresenterView::openLink()
     if ( edit )
         edit->openLink();
 }
+
+void KPresenterView::showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin )
+{
+  KoRuler * hRuler = getHRuler();
+  if ( hRuler )
+  {
+      hRuler->setFirstIndent( KoUnit::userValue( _firstLine + _leftMargin, m_pKPresenterDoc->getUnit() ) );
+      hRuler->setLeftIndent( KoUnit::userValue( _leftMargin, m_pKPresenterDoc->getUnit() ) );
+      hRuler->setRightIndent( KoUnit::userValue( _rightMargin, m_pKPresenterDoc->getUnit() ) );
+      actionTextDepthMinus->setEnabled( _leftMargin>0);
+  }
+}
+
+void KPresenterView::tabListChanged( const KoTabulatorList & tabList )
+{
+    if(!m_pKPresenterDoc->isReadWrite())
+        return;
+
+    KPTextView *edit=page->currentTextObjectView();
+    if (!edit)
+        return;
+    KCommand *cmd=edit->setTabListCommand( tabList );
+    if(cmd)
+        m_pKPresenterDoc->addCommand(cmd);
+}
+
+void KPresenterView::newFirstIndent( double _firstIndent )
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if (!edit) return;
+    double val = _firstIndent - edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+    KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, val );
+    if(cmd)
+        m_pKPresenterDoc->addCommand(cmd);
+}
+
+void KPresenterView::newLeftIndent( double _leftIndent)
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if (edit)
+    {
+        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, _leftIndent );
+        if(cmd)
+            m_pKPresenterDoc->addCommand(cmd);
+    }
+}
+
+void KPresenterView::newRightIndent( double _rightIndent)
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if (edit)
+    {
+        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, _rightIndent );
+        if(cmd)
+            m_pKPresenterDoc->addCommand(cmd);
+    }
+}
+
+void KPresenterView::slotUpdateRuler()
+{
+    // Set the "frame start" in the ruler (tabs are relative to that position)
+    KPTextView *edit=page->currentTextObjectView();
+    QRect r;
+    if ( edit )
+    {
+        KPTextObject *txtobj= edit->kpTextObject();
+        if ( txtobj )
+            r= txtobj->getBoundingRect(page->diffx(),page->diffy() );
+    }
+    else
+    {
+        r=m_pKPresenterDoc->getPageRect( currPg, page->diffx(), page->diffy() );
+    }
+    getHRuler()->setFrameStartEnd( r.left() /*- pc.x()*/, r.right() /*- pc.x()*/ );
+    getVRuler()->setFrameStartEnd( r.top() /*- pc.y()*/, r.bottom() /*- pc.y()*/ );
+}
+
 
 #include <kpresenter_view.moc>

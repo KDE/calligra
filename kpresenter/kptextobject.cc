@@ -54,6 +54,7 @@
 #include <koVariable.h>
 #include <koVariableDlgs.h>
 #include "kprvariable.h"
+#include <koRuler.h>
 
 using namespace std;
 
@@ -879,12 +880,21 @@ KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
     connect( textView(), SIGNAL( paste() ), SLOT( paste() ) );
     updateUI( true, true );
     m_actionList.setAutoDelete( true );
+    if( m_page->getView() && m_page->getView()->getHRuler())
+    {
+        m_page->getView()->getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
+        m_page->getView()->getHRuler()->repaint();
+    }
 
 }
 
 KPTextView::~KPTextView()
 {
-
+    if( m_page->getView() && m_page->getView()->getHRuler())
+    {
+        m_page->getView()->getHRuler()->changeFlags(0);
+        m_page->getView()->getHRuler()->repaint();
+    }
 }
 
 void KPTextView::terminate()
@@ -961,8 +971,6 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
         //m_canvas->gui()->getView()->showStyle( m_paragLayout.style->name() );
     }
 
-
-
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)
         || m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine)
         || m_paragLayout.margins[QStyleSheetItem::MarginRight] != parag->margin(QStyleSheetItem::MarginRight)
@@ -971,9 +979,12 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
         m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
         m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
         m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
-        //todo Perhaps change koRuler properties
-        //m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight] );
+        m_page->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight] );
     }
+    m_paragLayout.setTabList( parag->tabList() );
+    KoRuler * hr = m_page->getView()->getHRuler();
+    if ( hr )
+        hr->setTabList( parag->tabList() );
 }
 
 void KPTextView::ensureCursorVisible()

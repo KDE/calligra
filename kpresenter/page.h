@@ -154,6 +154,9 @@ public:
 
     void stopSound();
 
+    int diffx() const;
+    int diffy() const;
+
 public slots:
     void exitEditMode();
 
@@ -227,8 +230,6 @@ protected:
     const QPtrList<KPBackGround> *backgroundList() const;
     const QPtrList<KPObject> *objectList() const;
     unsigned int objNums();
-    int diffx() const;
-    int diffy() const;
     unsigned int currPgNum();
     unsigned int rastX() const;
     unsigned int rastY() const;

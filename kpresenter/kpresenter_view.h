@@ -27,6 +27,7 @@
 #include <kpresenter_doc.h>
 #include <global.h>
 #include <searchdia.h>
+#include <koRuler.h>
 
 class QPopupMenu;
 class DCOPObject;
@@ -282,6 +283,13 @@ public slots:
     void increaseFontSize();
     void decreaseFontSize();
 
+    void tabListChanged( const KoTabulatorList & tabList );
+
+    void newLeftIndent( double _leftIndent);
+    void newFirstIndent( double _firstIndent);
+    void newRightIndent( double _rightIndent);
+    void slotUpdateRuler();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -316,6 +324,7 @@ public:
 
     KoRuler *getHRuler() { return h_ruler; }
     KoRuler *getVRuler() { return v_ruler; }
+    KoTabChooser *getTabChooser() { return tabChooser; }
     QScrollBar *getHScrollBar() { return horz; }
     QScrollBar *getVScrollBar() { return vert; }
 
@@ -394,6 +403,8 @@ public:
     void showCounter( KoParagCounter &c );
 
     QPopupMenu * popupMenu( const QString& name );
+
+    void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin );
 
 protected slots:
     // dialog slots
@@ -528,7 +539,7 @@ private:
     // the page
     Page *page;
     KoRuler *h_ruler, *v_ruler;
-
+    KoTabChooser *tabChooser;
     // text toolbar values
     QFont tbFont;
     int tbAlign;
