@@ -133,6 +133,11 @@ bool Connection::connect()
 	return m_is_connected;
 }
 
+bool Connection::isDatabaseUsed()
+{
+	return !m_usedDatabase.isEmpty() && m_is_connected && drv_isDatabaseUsed();
+}
+
 bool Connection::disconnect()
 {
 	clearError();

@@ -75,7 +75,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return true, both if connection is properly estableshed
 		 and any database within this connection is properly used
 		 with useDatabase(). */
-		bool isDatabaseUsed() { return !m_usedDatabase.isEmpty() && m_is_connected; }
+		bool isDatabaseUsed();
 		
 		/*! Disconnects to driver with given parameters. 
 		 Database (if used) is closed, and any active transactions 
@@ -470,6 +470,21 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! For reimplemenation: closes previously opened database 
 			using connection. */
 		virtual bool drv_closeDatabase() = 0;
+		
+		/*! \return true if internal driver's structure is still in opened/conencted 
+		 state and database is used. 
+		 Note for driver developers: Put here every test that you can do using your 
+		 internal engine's database API, 
+		 eg (a bit schematic):  my_connection_struct->isConnected()==true. 
+		 Do not check things like Connection::isDatabaseUsed() here or other things 
+		 that "KexiDB already knows" at its level. 
+		 If you cannot test anything, just leave default implementation (that returns true).
+		 
+		 Result of this method is used as an addtional chance to check for isDatabaseUsed().
+		 Do not call this method from your driver's code, it should be used at KexiDB 
+		 level only.
+		*/
+		virtual bool drv_isDatabaseUsed() const { return true; }
 
 		/*! For reimplemenation: drops database from the server
 			using connection. After drop, database shouldn't be accessible 
