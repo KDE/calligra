@@ -2021,7 +2021,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		{
 		  if (w > 0 && linePtr->height() > 0)
 		    {
-		      pix = new QPixmap(cellWidth(0) - xstart,linePtr->height());
+		      pix = new QPixmap(w,linePtr->height());
 		      pix->fill(backgroundColor());
 		      p->begin(pix);
 		    }
