@@ -143,28 +143,16 @@ GBool PDFDoc::setup(GString *ownerPassword, GString *userPassword) {
 
 PDFDoc::~PDFDoc() {
 #ifndef DISABLE_OUTLINE
-  if (outline) {
     delete outline;
-  }
 #endif
-  if (catalog) {
     delete catalog;
-  }
-  if (xref) {
     delete xref;
-  }
-  if (str) {
     delete str;
-  }
-  if (file) {
-    fclose(file);
-  }
-  if (fileName) {
+    if (file) {
+        fclose(file);
+    }
     delete fileName;
-  }
-  if (links) {
     delete links;
-  }
 }
 
 // Check for a PDF header on this stream.  Skip past some garbage
