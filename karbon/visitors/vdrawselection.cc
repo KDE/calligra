@@ -28,7 +28,7 @@
 void
 VDrawSelection::visitVComposite( VComposite &composite )
 {
-	if( !m_selection.containsRef( &composite ) || composite.state() == VObject::deleted || composite.state() == VObject::hidden || composite.state() == VObject::hidden_locked )
+	if( composite.state() == VObject::deleted || composite.state() == VObject::hidden || composite.state() == VObject::hidden_locked )
 		return;
 
 	//if( rect && !rect->intersects( composite.boundingBox() ) )
