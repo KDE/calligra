@@ -586,10 +586,13 @@ VPath::~VPath()
 }
 
 void
-VPath::draw( QPainter& painter, const QRect& /*rect*/,
+VPath::draw( QPainter& painter, const QRect& rect,
 	const double /*zoomFactor*/ )
 {
 	if( state() == deleted )
+		return;
+
+	if( !rect.intersects( boundingBox() ) )
 		return;
 
 	painter.save();
@@ -971,7 +974,7 @@ VPath::boundingBox() const
 		if( r.m_tl.y() > top )
 			top = r.m_tl.y();
 	}
-	rect.setCoords( left, top, right, bottom );
+	rect.setCoords( left, bottom, right, top );
 
 	return rect;
 }

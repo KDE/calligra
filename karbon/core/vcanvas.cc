@@ -12,8 +12,8 @@
 #include "vcanvas.h"
 
 VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
-	: QScrollView( view, "canvas", WNorthWestGravity | WResizeNoErase /*|
-	  WRepaintNoErase*/ ), m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
+	: QScrollView( view, "canvas", WNorthWestGravity | WResizeNoErase |
+	  WRepaintNoErase ), m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
 {
 	viewport()->setFocusPolicy( QWidget::StrongFocus );
 
@@ -39,6 +39,8 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 void
 VCanvas::drawDocument( QPainter* painter, const QRect& rect )
 {
+	erase( rect );
+
 	QPtrListIterator<VLayer> i = m_part->layers();
 	for ( ; i.current(); ++i )
 		if ( i.current()->isVisible() )

@@ -122,8 +122,8 @@ KarbonPart::repaintAllViews( bool /*erase*/ )
 // TODO: any better solution for this?
 //		static_cast<KarbonView*> ( itr.current() )->canvasWidget()->repaintAll(
 // erase );
- 		static_cast<KarbonView*> ( itr.current() )->canvasWidget()->repaintAll( true
- );
+ 		static_cast<KarbonView*>( itr.current() )->
+			canvasWidget()->repaintAll( true );
 }
 
 

@@ -1,4 +1,9 @@
-INCLUDES  = -I$(srcdir) -I$(srcdir)/core -I$(srcdir)/tools $(all_includes)
+INCLUDES = \
+	-I$(srcdir) \
+	-I$(srcdir)/core \
+	-I$(srcdir)/tools \
+	-I$(srcdir)/ui \
+	$(all_includes)
 
 SUBDIRS = core ui tools . data pics
 

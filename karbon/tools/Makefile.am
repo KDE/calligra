@@ -13,7 +13,8 @@ noinst_HEADERS = \
 	vctool_ellipse.h \
 	vctool_rectangle.h \
 	vctool_roundrect.h \
-	vctool_sinus.h
+	vctool_sinus.h \
+	vctool_star.h
 
 libkarbontools_la_SOURCES = \
 	vccmd_ellipse.cc \
@@ -26,7 +27,8 @@ libkarbontools_la_SOURCES = \
 	vctool_ellipse.cc \
 	vctool_rectangle.cc \
 	vctool_roundrect.cc \
-	vctool_sinus.cc
+	vctool_sinus.cc \
+	vctool_star.cc
 
 libkarbontools_la_LIBADD = \
         ../ui/libkarbonui.la

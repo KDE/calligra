@@ -17,6 +17,7 @@
 #include "vctool_rectangle.h"
 #include "vctool_roundrect.h"
 #include "vctool_sinus.h"
+#include "vctool_star.h"
 
 #include <kdebug.h>
 
@@ -131,7 +132,7 @@ KarbonView::spiralTool()
 void
 KarbonView::starTool()
 {
-//	s_currentTool = VCToolStar::instance( m_part );
+	s_currentTool = VCToolStar::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
 

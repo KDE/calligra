@@ -10,11 +10,11 @@
 
 #include "karbon_view.h"
 #include "vccmd_roundrect.h"
+#include "vcdlg_roundrect.h"
 #include "vpath.h"
 #include "vtool.h"
 
 class KarbonPart;
-class VCDlgRoundRect;
 
 // A singleton state to create a rectangle.
 
@@ -38,8 +38,6 @@ private:
 
 	KarbonPart* m_part;
 	VCDlgRoundRect* m_dialog;
-
-	double m_round;
 
 	bool m_isDragging;
 	bool m_isSquare;
@@ -97,7 +95,8 @@ VCToolRoundRect::drawTemporaryObject( KarbonView* view )
 	QPainter painter( view->canvasWidget()->viewport() );
 
 	VCCmdRoundRect* cmd =
-		new VCCmdRoundRect( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(), m_round );
+		new VCCmdRoundRect( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(),
+			m_dialog->valueRound() );
 
 	VPath* path = cmd->createPath();
 	path->setState( VObject::edit );

@@ -10,6 +10,7 @@
 
 #include "karbon_view.h"
 #include "vccmd_sinus.h"
+#include "vcdlg_sinus.h"
 #include "vpath.h"
 #include "vtool.h"
 
@@ -38,8 +39,6 @@ private:
 
 	KarbonPart* m_part;
 	VCDlgSinus* m_dialog;
-
-	uint m_periods;
 
 	bool m_isDragging;
 	bool m_isSquare;
@@ -97,7 +96,8 @@ VCToolSinus::drawTemporaryObject( KarbonView* view )
 	QPainter painter( view->canvasWidget()->viewport() );
 
 	VCCmdSinus* cmd =
-		new VCCmdSinus( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(), m_periods );
+		new VCCmdSinus( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(),
+			m_dialog->valuePeriods() );
 
 	VPath* path = cmd->createPath();
 	path->setState( VObject::edit );

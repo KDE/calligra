@@ -2,41 +2,41 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#include "vccmd_roundrect.h"	// command
-#include "vcdlg_roundrect.h"	// dialog
-#include "vctool_roundrect.h"
+#include "vccmd_star.h"	// command
+#include "vcdlg_star.h"	// dialog
+#include "vctool_star.h"
 
-VCToolRoundRect* VCToolRoundRect::s_instance = 0L;
+VCToolStar* VCToolStar::s_instance = 0L;
 
-VCToolRoundRect::VCToolRoundRect( KarbonPart* part )
-	: m_part( part ), m_isDragging( false ), 
-      m_isSquare( false ), m_isCentered( false )
+VCToolStar::VCToolStar( KarbonPart* part )
+	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
+		m_isCentered( false ), m_width( 0.0 ), m_height( 0.0 )
 {
 	// create config dialog:
-	m_dialog = new VCDlgRoundRect();
-	m_dialog->setValueWidth( 100.0 );
-	m_dialog->setValueHeight( 100.0 );
-	m_dialog->setValueRound( 20.0 );
+	m_dialog = new VCDlgStar();
+	m_dialog->setValueOuterR( 100.0 );
+	m_dialog->setValueInnerR( 50.0 );
+	m_dialog->setValueEdges( 3 );
 }
 
-VCToolRoundRect::~VCToolRoundRect()
+VCToolStar::~VCToolStar()
 {
 	delete( m_dialog );
 }
 
-VCToolRoundRect*
-VCToolRoundRect::instance( KarbonPart* part )
+VCToolStar*
+VCToolStar::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VCToolRoundRect( part );
+		s_instance = new VCToolStar( part );
 	}
 
 	return s_instance;
 }
 
 bool
-VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
+VCToolStar::eventFilter( KarbonView* view, QEvent* event )
 {
 
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
@@ -65,7 +65,7 @@ VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 		// erase old object:
 		drawTemporaryObject( view );
 
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
+		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
@@ -76,18 +76,22 @@ VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 			if ( m_dialog->exec() )
 			{
 				m_part->addCommand(
-					new VCCmdRoundRect( m_part,
+					new VCCmdStar( m_part,
 						m_fp.x(), m_fp.y(),
-						m_fp.x() + m_dialog->valueWidth(),
-						m_fp.y() + m_dialog->valueHeight(),
-						m_dialog->valueRound() ) );
+						m_dialog->valueOuterR(),
+						m_dialog->valueInnerR(),
+						m_dialog->valueEdges() ) );
 			}
 		}
 		else
 		{
 			m_part->addCommand(
-				new VCCmdRoundRect( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(),
-					m_dialog->valueRound() ) );
+				new VCCmdStar( m_part, m_tl.x(), m_tl.y(),
+					qRound( m_width / 2 ),
+					qRound( m_dialog->valueInnerR() *
+						m_width / ( m_dialog->valueOuterR() * 2 ) ),
+					m_dialog->valueEdges() )
+ );
 		}
 
 		return true;

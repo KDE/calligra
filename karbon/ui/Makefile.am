@@ -7,7 +7,8 @@ noinst_HEADERS = \
 	vcdlg_polygon.h \
 	vcdlg_rectangle.h \
 	vcdlg_roundrect.h \
-	vcdlg_sinus.h
+	vcdlg_sinus.h \
+	vcdlg_star.h
 
 libkarbonui_la_SOURCES = \
 	dummy.cc \
@@ -15,7 +16,8 @@ libkarbonui_la_SOURCES = \
 	vcdlg_polygon.cc \
 	vcdlg_rectangle.cc \
 	vcdlg_roundrect.cc \
-	vcdlg_sinus.cc
+	vcdlg_sinus.cc \
+	vcdlg_star.cc
 
 METASOURCES = AUTO
 

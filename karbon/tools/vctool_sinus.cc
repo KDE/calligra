@@ -9,14 +9,14 @@
 VCToolSinus* VCToolSinus::s_instance = 0L;
 
 VCToolSinus::VCToolSinus( KarbonPart* part )
-	: m_part( part ), m_periods( 1 ), m_isDragging( false ), m_isSquare( false ),
+	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
 	  m_isCentered( false )
 {
 	// create config dialog:
 	m_dialog = new VCDlgSinus();
 	m_dialog->setValueWidth( 100.0 );
 	m_dialog->setValueHeight( 100.0 );
-	m_dialog->setValuePeriods( m_periods );
+	m_dialog->setValuePeriods( 1 );
 }
 
 VCToolSinus::~VCToolSinus()
@@ -75,19 +75,19 @@ VCToolSinus::eventFilter( KarbonView* view, QEvent* event )
 			// we didnt drag => show a config-dialog:
 			if ( m_dialog->exec() )
 			{
-				m_periods = m_dialog->valuePeriods();
-
 				m_part->addCommand(
 					new VCCmdSinus( m_part,
 						m_fp.x(), m_fp.y(),
 						m_fp.x() + m_dialog->valueWidth(),
-						m_fp.y() + m_dialog->valueHeight(), m_periods ) );
+						m_fp.y() + m_dialog->valueHeight(),
+						m_dialog->valuePeriods() ) );
 			}
 		}
 		else
 		{
 			m_part->addCommand(
-				new VCCmdSinus( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(), m_periods )
+				new VCCmdSinus( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(),
+					m_dialog->valuePeriods() )
  );
 		}
 
