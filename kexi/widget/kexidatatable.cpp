@@ -44,6 +44,7 @@
 
 #include "kexidatatable.h"
 #include "kexitableview.h"
+#include "kexitableheader.h"
 #include "kexiproject.h"
 #include "kexiview.h"
 #include "kexiprojecthandleritem.h"
@@ -60,7 +61,7 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, KexiProjectHandlerI
 	init(item->title(), item->fullIdentifier(), embedd);
 }
 
-void 
+void
 KexiDataTable::init(QString caption, QString identifier, bool embedd)
 {
 	m_record=0;
@@ -108,7 +109,7 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 
 	if (m_record) disconnect(m_record,0,this,0);
 	m_record=rec;
-	
+
 	if(!m_record)
 	{
 		kdDebug() << "KexiDataTable::setDataSet(): record doesn't exist" << endl;
@@ -229,6 +230,10 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 		KexiTableItem *newinsert = new KexiTableItem(m_tableView);
 		newinsert->setHint(QVariant(i->getHint().toInt() + 1));
 		newinsert->setInsertItem(true);
+
+		m_tableView->takeInsertItem();
+		m_tableView->recordMarker()->setInsertRow(m_tableView->rows());
+		m_tableView->setInsertItem(newinsert);
 	}
 	else
 	{
