@@ -1,4 +1,3 @@
-// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002-2004 Thorsten Zachmann <zachmann@kde.org>
@@ -344,16 +343,16 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect, KPrPage * 
     if ( edit )
     {
         QRect pageRect = page->getZoomPageRect();
-        
+
         if ( rect.intersects( pageRect ) )
             page->background()->draw( painter, m_view->zoomHandler(), rect, true );
-        
+
         // Include the border
         pageRect.rLeft() -= 1;
         pageRect.rTop() -= 1;
         pageRect.rRight() += 1;
         pageRect.rBottom() += 1;
-        
+
         QRegion grayRegion( rect );
         grayRegion -= pageRect;
 
@@ -379,25 +378,25 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
 }
 
 
-void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPObject> &objects, SelectionMode selectionMode, 
+void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPObject> &objects, SelectionMode selectionMode,
                              bool contour, KPTextView * textView ) const
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current(); ++it )
     {
         SelectionMode selMode = selectionMode;
-        if ( selectionMode != SM_NONE 
-             && it.current()->isSelected() 
-             && ( m_view->kPresenterDoc()->isHeaderFooter(it.current()) 
+        if ( selectionMode != SM_NONE
+             && it.current()->isSelected()
+             && ( m_view->kPresenterDoc()->isHeaderFooter(it.current())
                   || it.current()->isProtect() ) )
             selMode = SM_PROTECT;
-        
+
         it.current()->draw( painter, m_view->zoomHandler(), selMode, (it.current()->isSelected()) && contour );
 
         it.current()->setSubPresStep( 0 );
         it.current()->doSpecificEffects( false );
     }
-    
+
     if ( textView )
     {
         textView->kpTextObject()->paintEdited( painter, m_view->zoomHandler(), false /*onlyChanged. Pass as param ?*/,
@@ -409,26 +408,26 @@ void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPObject> &object
 void KPrCanvas::drawObjectsPres( QPainter *painter, const QPtrList<KPObject> &_objects, PresStep step ) const
 {
     QPtrList<KPObject> objects;
-    
+
     QPtrListIterator<KPObject> it( _objects );
     for ( ; it.current(); ++it )
     {
         if ( objectIsAHeaderFooterHidden(it.current()) )
             continue;
-        if ( it.current()->getAppearStep() <= step.m_step 
-             && ( ! it.current()->getDisappear() 
-                  || it.current()->getDisappear() 
+        if ( it.current()->getAppearStep() <= step.m_step
+             && ( ! it.current()->getDisappear()
+                  || it.current()->getDisappear()
                      && it.current()->getDisappearStep() > step.m_step ) )
         {
             if ( step.m_animate && it.current()->getAppearStep() == step.m_step && it.current()->getEffect() != EF_NONE )
                 continue;
-            
+
             if ( step.m_animateSub && it.current()->getAppearStep() == step.m_step )
             {
                 it.current()->setSubPresStep( step.m_subStep );
                 it.current()->doSpecificEffects( true, false );
             }
-            
+
             objects.append( it.current() );
         }
     }
@@ -436,18 +435,18 @@ void KPrCanvas::drawObjectsPres( QPainter *painter, const QPtrList<KPObject> &_o
 }
 
 
-void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects, 
+void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects,
                                  SelectionMode selectionMode ) const
 {
     QPtrList<KPObject> objects;
-    
+
     KPTextView * textView = NULL;
     QPtrListIterator<KPObject> it( _objects );
     for ( ; it.current(); ++it )
     {
         if ( objectIsAHeaderFooterHidden(it.current()) )
             continue;
-        
+
         if ( rect.intersects( it.current()->getBoundingRect() ) )
         {
             if ( m_currentTextObjectView && m_currentTextObjectView->kpTextObject() == it.current() )
@@ -462,7 +461,7 @@ void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const QP
 }
 
 
-void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect, 
+void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
                               KPrPage *page, SelectionMode selectionMode ) const
 {
     KoRect rect = m_view->zoomHandler()->unzoomRect(_rect);
@@ -500,8 +499,8 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
     double offsetX = doc->getGridX();
     double offsetY = doc->getGridY();
 
-    for ( double i = offsetX; ( zoomedX = m_view->zoomHandler()->zoomItX( i ) ) < pageRect.width(); i += offsetX )
-        for ( double j = offsetY; ( zoomedY = m_view->zoomHandler()->zoomItY( j ) ) < pageRect.height(); j += offsetY )
+    for ( double i = offsetX; ( zoomedX = m_view->zoomHandler()->zoomItX( i )+pageRect.left() ) < pageRect.right(); i += offsetX )
+        for ( double j = offsetY; ( zoomedY = m_view->zoomHandler()->zoomItY( j )+pageRect.top() ) < pageRect.bottom(); j += offsetY )
             if( rect2.contains(  zoomedX, zoomedY ) )
                 painter->drawPoint( zoomedX, zoomedY );
 
@@ -2048,11 +2047,11 @@ void KPrCanvas::limitSizeOfObject()
     QRect pageRect=m_activePage->getZoomPageRect();
 
     if(insRect.right()>pageRect.right()-1)
-        insRect.setRight(pageRect.width()-1);
+        insRect.setRight(pageRect.right()-1);
     else if( insRect.right()<pageRect.left()-1)
         insRect.setRight(pageRect.left()+1);
     if(insRect.bottom()>pageRect.bottom()-1)
-        insRect.setBottom(pageRect.height()-1);
+        insRect.setBottom(pageRect.bottom()-1);
     else if( insRect.bottom()<pageRect.top()-1)
         insRect.setBottom(pageRect.top()+1);
 }
@@ -2062,11 +2061,11 @@ QPoint KPrCanvas::limitOfPoint(const QPoint& _point) const
     QRect pageRect=m_activePage->getZoomPageRect();
     QPoint point(_point);
     if(point.x()>pageRect.right()-1)
-        point.setX(pageRect.width()-1);
+        point.setX(pageRect.right()-1);
     else if( point.x()<pageRect.left()-1)
         point.setX(pageRect.left()+1);
     if(point.y()>pageRect.bottom()-1)
-        point.setY(pageRect.height()-1);
+        point.setY(pageRect.bottom()-1);
     else if( point.y()<pageRect.top()-1)
         point.setY(pageRect.top()+1);
     return point;
@@ -2091,21 +2090,21 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
         switch ( e->key() ) {
         case Key_Space: case Key_Right: case Key_Down: case Key_Next:
             setSwitchingMode( false );
-            m_view->screenNext(); 
+            m_view->screenNext();
             break;
         case Key_Backspace: case Key_Left: case Key_Up: case Key_Prior:
             setSwitchingMode( false );
-            m_view->screenPrev(); 
+            m_view->screenPrev();
             break;
         case Key_Escape: case Key_Q: case Key_X:
             setSwitchingMode( false );
-            m_view->screenStop(); 
+            m_view->screenStop();
             break;
         case Key_G:
             // setSwitchingMode( false ) not needed as it is allready done in slotGotoPage;
             if ( !spManualSwitch() )
                 m_view->stopAutoPresTimer();
-            slotGotoPage(); 
+            slotGotoPage();
             break;
         case Key_Home:  // go to first page
             setSwitchingMode( false );
@@ -3169,7 +3168,7 @@ bool KPrCanvas::pNext( bool )
     }
 
     KPresenterDoc * doc = m_view->kPresenterDoc();
-    
+
     // Then try to see if there is still one step to do in the current page
     if ( m_step.m_step < *( --m_pageEffectSteps.end() ) )
     {
@@ -3183,7 +3182,7 @@ bool KPrCanvas::pNext( bool )
         {
             QPainter p;
             p.begin( this );
-            drawBackground( &p, 
+            drawBackground( &p,
                             QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ),
                             doc->pageList().at( m_step.m_pageNumber ) );
             p.end();
@@ -3242,7 +3241,7 @@ bool KPrCanvas::pNext( bool )
         int yOffset = ( presPage() - 1 ) * pageHeight;
         if ( height() > pageHeight )
             yOffset -= ( height() - pageHeight ) / 2;
-        */    
+        */
         drawCurrentPageInPix( _pix2 );
 
         QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
@@ -3327,7 +3326,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         repaint( false );
         return false;
     } else {
-        // when we go back on the first slide, thats like starting the presentation again 
+        // when we go back on the first slide, thats like starting the presentation again
         if ( m_presentationSlidesIterator == m_presentationSlides.begin() ) {
             m_pageEffectSteps = m_view->kPresenterDoc()->getPageEffectSteps( m_step.m_pageNumber );
             m_step.m_step = *m_pageEffectSteps.begin();
@@ -3491,7 +3490,7 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
     //kdDebug(33001) << "Page::drawCurrentPageInPix" << endl;
 
     // avoid garbage on "weird" DPIs
-    _pix.fill(Qt::black);      
+    _pix.fill(Qt::black);
 
     QPainter p;
     p.begin( &_pix );
@@ -4947,7 +4946,7 @@ void KPrCanvas::slotGotoPage()
     setSwitchingMode( false );
     //setCursor( blankCursor );
     int pg = m_step.m_pageNumber + 1;
-    
+
     m_view->setPageDuration( m_step.m_pageNumber );
 
     pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), m_presentationSlides, pg, this );
@@ -5223,10 +5222,10 @@ void KPrCanvas::setDrawingMode()
 void KPrCanvas::setSwitchingMode( bool continueTimer )
 {
     m_presMenu->setItemChecked( PM_DM, false );
-    
+
     // the following have to be done even when nothing changed
     // we don't want to see the cursor nor the automatic pesentation stopped
-    m_drawMode = false; 
+    m_drawMode = false;
     m_drawLineInDrawMode = false;
     setCursor( blankCursor );
 
@@ -5439,9 +5438,9 @@ void KPrCanvas::moveObject( int x, int y, bool key )
         point.setX( pageRect.left() );
         m_boundingRect.moveTopLeft( point );
     }
-    else if ( ( boundingRect.left()+m_hotSpot.x() > pageRect.width() ) || ( m_boundingRect.right() > pageRect.width() ) )
+    else if ( ( boundingRect.left()+m_hotSpot.x() > pageRect.right() ) || ( m_boundingRect.right() > pageRect.right() ) )
     {
-        point.setX( pageRect.width()-m_boundingRect.width() );
+        point.setX( pageRect.right()-m_boundingRect.width() );
         m_boundingRect.moveTopLeft( point );
     }
 
@@ -5454,9 +5453,9 @@ void KPrCanvas::moveObject( int x, int y, bool key )
         point.setY( pageRect.top() );
         m_boundingRect.moveTopLeft( point );
     }
-    else if( ( boundingRect.top()+m_hotSpot.y() > pageRect.height() ) || ( m_boundingRect.bottom() > pageRect.height() ) )
+    else if( ( boundingRect.top()+m_hotSpot.y() > pageRect.bottom() ) || ( m_boundingRect.bottom() > pageRect.bottom() ) )
     {
-        point.setY( pageRect.height() - m_boundingRect.height() );
+        point.setY( pageRect.bottom() - m_boundingRect.height() );
         m_boundingRect.moveTopLeft( point );
     }
 
@@ -5535,7 +5534,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             kpobject->moveBy( KoPoint( dx, 0 ) );
     } break;
     case MT_RESIZE_LD: {
-        if( (objRect.bottom() + dy) > pageRect.height())
+        if( (objRect.bottom() + dy) > pageRect.bottom())
             dy = pageRect.bottom() - objRect.bottom();
         if( (objRect.left() + dx) < (pageRect.left() - 1) )
             dx = pageRect.left() - objRect.left();
@@ -5548,7 +5547,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             kpobject->moveBy( KoPoint( dx, 0 ) );
     } break;
     case MT_RESIZE_RU: {
-        if( (objRect.right() + dx) > pageRect.width() )
+        if( (objRect.right() + dx) > pageRect.right() )
             dx = pageRect.right() - objRect.right();
         if( (objRect.top() + dy) < (pageRect.top() - 1) )
             dy = pageRect.top() - objRect.top();
@@ -5562,7 +5561,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     case MT_RESIZE_RT: {
         dy = 0;
-        if( (objRect.right() + dx) > pageRect.width() )
+        if( (objRect.right() + dx) > pageRect.right() )
             dx = pageRect.right() - objRect.right();
         dx = applyGridX( objRect.right() + dx ) - objRect.right();
         if ( m_keepRatio && m_ratio != 0.0 )
@@ -5570,9 +5569,9 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         kpobject->resizeBy( dx, dy );
     } break;
     case MT_RESIZE_RD: {
-        if( (objRect.bottom() + dy) > pageRect.height() )
+        if( (objRect.bottom() + dy) > pageRect.bottom() )
             dy = pageRect.bottom() - objRect.bottom();
-        if( (objRect.right() + dx) > pageRect.width() )
+        if( (objRect.right() + dx) > pageRect.right() )
             dx = pageRect.right() - objRect.right();
         dx = applyGridX( objRect.right() + dx ) - objRect.right();
         dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
@@ -5594,7 +5593,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     case MT_RESIZE_DN: {
         dx = 0;
-        if( (objRect.bottom() + dy) > pageRect.height() )
+        if( (objRect.bottom() + dy) > pageRect.bottom() )
             dy = pageRect.bottom() - objRect.bottom();
         dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
         if ( m_keepRatio && m_ratio != 0.0 )
