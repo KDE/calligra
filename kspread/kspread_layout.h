@@ -488,7 +488,7 @@ public:
     /**
      * @return the width in millimeters.
      */
-    float mmHeight() { return m_fHeight; }
+    float mmHeight() { return m_bHide ? 0 : m_fHeight; }
     /**
      * Sets the height to _h zoomed pixels.
      *
@@ -605,7 +605,7 @@ public:
     /**
      * @return the width in millimeters.
      */
-    float mmWidth() { return m_fWidth; }
+    float mmWidth() { return m_bHide ? 0 : m_fWidth; }
     /**
      * Sets the width to _w zoomed pixels.
      *

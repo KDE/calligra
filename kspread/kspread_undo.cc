@@ -1038,10 +1038,13 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
            ColumnLayout *cl=table->columnLayout(y);
-           columnSize tmpSize;
-           tmpSize.columnNumber=y;
-           tmpSize.columnWidth=/*cl->width();*/cl->mmWidth();
-           listCol.append(tmpSize);
+	   if(!cl->isHide())
+	     {
+	       columnSize tmpSize;
+	       tmpSize.columnNumber=y;
+	       tmpSize.columnWidth=cl->mmWidth();
+	       listCol.append(tmpSize);
+	     }
         }
     }
     else if(m_rctRect.right()==0x7FFF) // entire row(s)
@@ -1049,10 +1052,13 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
            RowLayout *rw=table->rowLayout(y);
-           rowSize tmpSize;
-           tmpSize.rowNumber=y;
-           tmpSize.rowHeight=/*rw->height();*/rw->mmHeight();
-           listRow.append(tmpSize);
+	   if(!rw->isHide())
+	     {
+	       rowSize tmpSize;
+	       tmpSize.rowNumber=y;
+	       tmpSize.rowHeight=rw->mmHeight();
+	       listRow.append(tmpSize);
+	     }
         }
     }
     else //row and column
@@ -1060,18 +1066,24 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
            ColumnLayout *cl=table->columnLayout(y);
-           columnSize tmpSize;
-           tmpSize.columnNumber=y;
-           tmpSize.columnWidth=cl->mmWidth();/*cl->width();*/
-           listCol.append(tmpSize);
+	   if(!cl->isHide())
+	     {
+	       columnSize tmpSize;
+	       tmpSize.columnNumber=y;
+	       tmpSize.columnWidth=cl->mmWidth();
+	       listCol.append(tmpSize);
+	     }
         }
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
            RowLayout *rw=table->rowLayout(y);
-           rowSize tmpSize;
-           tmpSize.rowNumber=y;
-           tmpSize.rowHeight=rw->mmHeight();//rw->height();
-           listRow.append(tmpSize);
+	   if(!rw->isHide())
+	     {
+	       rowSize tmpSize;
+	       tmpSize.rowNumber=y;
+	       tmpSize.rowHeight=rw->mmHeight();
+	       listRow.append(tmpSize);
+	     }
         }
 
     }
