@@ -479,3 +479,8 @@ Reggie, 23.10.1999:
 ------------------
 - Rewrite background configuration dialog
 - Some fixes
+
+Reggie, 24.10.1999:
+------------------
+- Rewrote pen/brush (style) dialog
+- Lots of fixes

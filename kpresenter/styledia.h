@@ -16,66 +16,53 @@
 #ifndef STYLEDIA_H
 #define STYLEDIA_H
 
-#include <stdlib.h>
+#include "global.h"
 
 #include <qtabdialog.h>
-#include <qlabel.h>
-#include <qpushbt.h>
 #include <qframe.h>
-#include <qbttngrp.h>
-#include <qcombo.h>
 #include <qpen.h>
 #include <qbrush.h>
-#include <qpainter.h>
-#include <qcolor.h>
-#include <qsize.h>
-#include <qradiobutton.h>
-#include <qslider.h>
-#include <qspinbox.h>
-#include <qcheckbox.h>
 
-#include <kcolordlg.h>
-#include <kcolorbtn.h>
-
-#include "global.h"
-#include "kpresenter_utils.h"
-#include "kpgradient.h"
-
-#ifndef min
-#define min(a,b) ((a)<(b)?(a):(b))
-#endif
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#endif
+class QPainter;
+class KColorButton;
+class QComboBox;
+class QSpinBox;
+class QCheckBox;
+class QSlider;
+class KPGradient;
+class QResizeEvent;
+class QWidgetStack;
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
 /******************************************************************/
 
-class PBPreview : public QWidget
+class PBPreview : public QFrame
 {
     Q_OBJECT
 
 public:
+    enum PaintType {
+	Pen,
+	Brush,
+	Gradient
+    };
 
-    // constructor
-    PBPreview( QWidget* parent=0, const char* name=0, int _paintType=0 );
+    PBPreview( QWidget* parent, const char* name, PaintType _paintType );
 
-    // set values
-    void setPen( QPen _pen ) {pen = _pen; repaint( FALSE ); }
-    void setBrush( QBrush _brush ) {brush = _brush; repaint( FALSE ); }
-    void setLineBegin( LineEnd lb ) {lineBegin = lb; repaint( FALSE ); }
-    void setLineEnd( LineEnd le ) {lineEnd = le; repaint( FALSE ); }
-    void setGradient( KPGradient *g ) {gradient = g; repaint( FALSE ); }
-
+    void setPen( QPen _pen ) { pen = _pen; repaint( TRUE ); }
+    void setBrush( QBrush _brush ) { brush = _brush; }
+    void setLineBegin( LineEnd lb ) { lineBegin = lb; repaint( TRUE ); }
+    void setLineEnd( LineEnd le ) { lineEnd = le; repaint( TRUE ); }
+    void setGradient( KPGradient *g ) { gradient = g; }
+    void setPaintType( PaintType pt ) { paintType = pt; }
+    
 protected:
-
-    // paint event
-    void paintEvent( QPaintEvent* );
-
+    void drawContents( QPainter *p );
+    void resizeEvent( QResizeEvent *e );
+    
 private:
-
-    int paintType;
+    PaintType paintType;
     QPen pen;
     QBrush brush;
     LineEnd lineBegin, lineEnd;
@@ -87,86 +74,63 @@ private:
 /* class StyleDia						  */
 /******************************************************************/
 
-static const int SD_PEN = 1;
-static const int SD_BRUSH = 2;
-
 class StyleDia : public QTabDialog
 {
     Q_OBJECT
 
 public:
+    enum PbType {
+	SdPen = 1,
+	SdBrush = 2,
+	SdAll = SdPen | SdBrush
+    };
 
-    // constructor - destructor
-    StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SD_PEN | SD_BRUSH );
+    StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SdAll );
     ~StyleDia();
 
-    // set values
-    void setPen( QPen _pen );
-    void setBrush( QBrush _brush );
+    void setPen( const QPen &_pen );
+    void setBrush( const QBrush &_brush );
     void setLineBegin( LineEnd lb );
     void setLineEnd( LineEnd le );
     void setFillType( FillType ft );
-    void setGradient( QColor _c1, QColor _c2, BCType _t, bool _unbalanced, int _xfactor, int _yfactor );
+    void setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
+		      bool _unbalanced, int _xfactor, int _yfactor );
 
-    // get values
-    QPen getPen() { return pen; }
-    QBrush getBrush() { return brush; }
-    LineEnd getLineBegin() { return lineBegin; }
-    LineEnd getLineEnd() { return lineEnd; }
-    FillType getFillType() { if ( fillStyle->isChecked() ) return FT_BRUSH; return FT_GRADIENT; }
-    QColor getGColor1() { return gradient1->color(); }
-    QColor getGColor2() { return gradient2->color(); }
-    BCType getGType() { return static_cast<BCType>( gradients->currentItem() + 1 ); }
-    bool getGUnbalanced() { return unbalanced->isChecked(); }
-    int getGXFactor() { return xfactor->value(); }
-    int getGYFactor() { return yfactor->value(); }
-    
+    QPen getPen();
+    QBrush getBrush();
+    LineEnd getLineBegin();
+    LineEnd getLineEnd();
+    FillType getFillType();
+    QColor getGColor1();
+    QColor getGColor2();
+    BCType getGType();
+    bool getGUnbalanced();
+    int getGXFactor();
+    int getGYFactor();
+
 private:
+    void setupTab1();
+    void setupTab2();
 
-    // dialog objects
-    QWidget *penFrame, *brushFrame;
-    QPushButton *choosePCol, *chooseBCol;
-    QLabel *penStyle, *brushStyle, *penWidth, *llineBegin, *llineEnd;
-    QComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd;
+    QWidgetStack *stack;
+    KColorButton *choosePCol, *chooseBCol;
+    QComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd, *cFillType;
     QSpinBox *choosePWidth;
-    QPushButton *okBut, *applyBut, *cancelBut;
-    PBPreview *penPrev, *brushPrev, *gPrev;
-    QRadioButton *fillStyle, *fillGradient;
+    PBPreview *penPrev, *brushPrev;
     QCheckBox *unbalanced;
     QComboBox *gradients;
     KColorButton *gradient1, *gradient2;
-    QLabel *gColors, *gStyle;
-    QFrame *line;
     QSlider *xfactor, *yfactor;
-    
-    // pen and brush
-    QBrush brush;
-    QPen pen;
-    LineEnd lineBegin, lineEnd;
     KPGradient *gradient;
-
+    bool lockUpdate;
+    int flags;
+    
 private slots:
-
-    // slots
-    void changePCol();
-    void changeBCol();
-    void changePStyle( int item );
-    void changeBStyle( int item );
-    void changePWidth( int item );
-    void changeLineBegin( int item );
-    void changeLineEnd( int item );
-    void gColor1( const QColor &newColor );
-    void gColor2( const QColor &newColor );
-    void gcStyle( int item );
-    void rBrush();
-    void rGradient();
-    void rUnbalanced();
-    void gXFactor( int v );
-    void gYFactor( int v );
-    void styleDone() {emit styleOk(); }
+    void styleDone() { emit styleOk(); }
+    void updatePenConfiguration();
+    void updateBrushConfiguration();
 
 signals:
-
     void styleOk();
 
 };

@@ -45,7 +45,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
 {
     view = _view;
     KPObject *obj = objs.at( 0 );
-    
+
     back = new QVBox( this );
     back->setMargin( 10 );
     back->setSpacing( 5 );
@@ -158,7 +158,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
     connect( disappear, SIGNAL( clicked() ), this, SLOT( disappearChanged() ) );
     disappearChanged();
 
-    resize( 630, 300 );
+    resize( 630, 260 );
 }
 
 /*================================================================*/
@@ -176,7 +176,7 @@ void EffectDia::slotEffectDiaOk()
 	e.disappear = o->getDisappear();
 	oldEffects << e;
     }
-    
+
     EffectCmd::EffectStruct eff;
     eff.presNum = eNum->value();
     eff.disappearNum = eDisappear->value();

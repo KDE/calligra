@@ -63,7 +63,10 @@ BackPreview::BackPreview( QWidget *parent, KPresenterDoc *doc )
 void BackPreview::drawContents( QPainter *p )
 {
     QFrame::drawContents( p );
+    p->save();
+    p->translate( contentsRect().x(), contentsRect().y() );
     back->draw( p, QPoint( 0, 0 ), FALSE );
+    p->restore();
 }
 
 /*=============================================================*/
@@ -98,7 +101,7 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     vbox->setSpacing( 5 );
 
     vbox->addWidget( new QLabel( i18n( "Background Type:" ), this ) );
-    
+
     backCombo = new QComboBox( FALSE, this );
     backCombo->insertItem( i18n( "Color/Gradient" ) );
     backCombo->insertItem( i18n( "Picture" ) );
@@ -106,24 +109,24 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     backCombo->setCurrentItem( (int)backType );
     connect( backCombo, SIGNAL( activated( int ) ),
 	     this, SLOT( updateConfiguration() ) );
-    
+
     vbox->addWidget( backCombo );
 
     QTabWidget *tabWidget = new QTabWidget( this );
     vbox->addWidget( tabWidget );
-    
+
     // color/gradient tab ---------------
-    
+
     QVBox *colorTab = new QVBox( tabWidget );
     colorTab->setSpacing( 5 );
     colorTab->setMargin( 5 );
-    
+
     color1Choose = new KColorButton( backColor1, colorTab );
-    connect( color1Choose, SIGNAL( changed( const QColor& ) ), 
+    connect( color1Choose, SIGNAL( changed( const QColor& ) ),
 	     this, SLOT( updateConfiguration() ) );
 
     color2Choose = new KColorButton( backColor2, colorTab );
-    connect( color2Choose, SIGNAL( changed( const QColor& ) ), 
+    connect( color2Choose, SIGNAL( changed( const QColor& ) ),
 	     this, SLOT( updateConfiguration() ) );
 
     cType = new QComboBox( FALSE, colorTab );
@@ -137,14 +140,14 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     cType->insertItem( i18n( "PipeCross Gradient" ), -1 );
     cType->insertItem( i18n( "Pyramid Gradient" ), -1 );
     cType->setCurrentItem( _bcType );
-    connect( cType, SIGNAL( activated( int ) ), 
+    connect( cType, SIGNAL( activated( int ) ),
 	     this, SLOT( updateConfiguration() ) );
 
     unbalanced = new QCheckBox( i18n( "Unbalanced" ), colorTab );
     connect( unbalanced, SIGNAL( clicked() ),
 	     this, SLOT( updateConfiguration() ) );
     unbalanced->setChecked( _unbalanced );
-    
+
     (void)new QLabel( i18n( "X-Factor:" ), colorTab );
 
     xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
@@ -153,23 +156,23 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     xfactor->setValue( _xfactor );
 
     (void)new QLabel( i18n( "Y-Factor:" ), colorTab );
-    
+
     yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( updateConfiguration() ) );
     yfactor->setValue( _yfactor );
-    
+
     tabWidget->addTab( colorTab, i18n( "&Color/Gradient" ) );
-    
+
     // picture tab ---------------------
-    
+
     QVBox *picTab = new QVBox( tabWidget );
     picTab->setSpacing( 5 );
     picTab->setMargin( 5 );
 
     QLabel *l = new QLabel( i18n( "View Mode:" ), picTab );
     l->setFixedHeight( l->sizeHint().height() );
-    
+
     picView = new QComboBox( FALSE, picTab );
     picView->insertItem( i18n( "Zoomed" ) );
     picView->insertItem( i18n( "Centered" ) );
@@ -179,44 +182,44 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
 	     this, SLOT( updateConfiguration() ) );
 
     picChoose = new QPushButton( i18n( "Choose Picture..." ), picTab, "picChoose" );
-    connect( picChoose, SIGNAL( clicked() ), 
+    connect( picChoose, SIGNAL( clicked() ),
 	     this, SLOT( selectPic() ) );
 
-    if ( backPic ) 
+    if ( backPic )
 	chosenPic = backPic;
-    else 
+    else
 	chosenPic = QString::null;
 
     lPicName = new QLabel( picTab, "picname" );
     lPicName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    if ( !backPic.isEmpty() ) 
+    if ( !backPic.isEmpty() )
 	lPicName->setText( backPic );
-    else 
+    else
 	lPicName->setText( i18n( "No Picture" ) );
     lPicName->setFixedHeight( lPicName->sizeHint().height() );
 
     (void)new QWidget( picTab );
-    
+
     tabWidget->addTab( picTab, i18n( "&Picture" ) );
-    
+
     // clipart tab--------------------------
-    
+
     QVBox *clipTab = new QVBox( tabWidget );
     clipTab->setSpacing( 5 );
     clipTab->setMargin( 5 );
-    
+
     clipChoose = new QPushButton( i18n( "Choose Clipart..." ), clipTab, "clipChoose" );
-    connect( clipChoose, SIGNAL( clicked() ), 
+    connect( clipChoose, SIGNAL( clicked() ),
 	     this, SLOT( selectClip() ) );
 
-    if ( !backClip.isEmpty() ) 
+    if ( !backClip.isEmpty() )
 	chosenClip = backClip;
 
     lClipName = new QLabel( clipTab, "clipname" );
     lClipName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    if ( !backClip.isEmpty() ) 
+    if ( !backClip.isEmpty() )
 	lClipName->setText( backClip );
-    else 
+    else
 	lClipName->setText( i18n( "No Clipart" ) );
     lClipName->setFixedHeight( lClipName->sizeHint().height() );
 
@@ -225,10 +228,10 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     tabWidget->addTab( clipTab, i18n( "Clip&art" ) );
 
     // ------------------------ preview
-    
+
     preview = new BackPreview( this, doc );
     hbox->addWidget( preview );
-    
+
     // ------------------------ buttons
 
     KButtonBox *bb = new KButtonBox( this );
@@ -240,20 +243,20 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     cancelBut = bb->addButton( i18n( "&Close" ) );
     okBut->setDefault( true );
 
-    connect( okBut, SIGNAL( clicked() ), 
+    connect( okBut, SIGNAL( clicked() ),
 	     this, SLOT( Ok() ) );
-    connect( applyBut, SIGNAL( clicked() ), 
+    connect( applyBut, SIGNAL( clicked() ),
 	     this, SLOT( Apply() ) );
-    connect( applyGlobalBut, SIGNAL( clicked() ), 
+    connect( applyGlobalBut, SIGNAL( clicked() ),
 	     this, SLOT( ApplyGlobal() ) );
-    connect( cancelBut, SIGNAL( clicked() ), 
+    connect( cancelBut, SIGNAL( clicked() ),
 	     this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ), 
+    connect( okBut, SIGNAL( clicked() ),
 	     this, SLOT( accept() ) );
     bb->layout();
-    
+
     layout->addWidget( bb );
-    
+
     picChanged = clipChanged = TRUE;
     lockUpdate = FALSE;
     updateConfiguration();
@@ -264,7 +267,7 @@ void BackDia::updateConfiguration()
 {
     if ( lockUpdate )
 	return;
-    
+
     if ( getBackColorType() == BCT_PLAIN ) {
 	unbalanced->setEnabled( FALSE );
 	xfactor->setEnabled( FALSE );
@@ -272,11 +275,16 @@ void BackDia::updateConfiguration()
 	color2Choose->setEnabled( FALSE );
     } else {
 	unbalanced->setEnabled( TRUE );
-	xfactor->setEnabled( TRUE );
-	yfactor->setEnabled( TRUE );
+	if ( unbalanced->isChecked() ) {
+	    xfactor->setEnabled( TRUE );
+	    yfactor->setEnabled( TRUE );
+	} else {
+	    xfactor->setEnabled( FALSE );
+	    yfactor->setEnabled( FALSE );
+	}
 	color2Choose->setEnabled( TRUE );
     }
-    
+
     picChanged = getBackType() == BT_PICTURE;
     clipChanged = getBackType() == BT_CLIPART;
     preview->backGround()->setBackType( getBackType() );
@@ -296,7 +304,7 @@ void BackDia::updateConfiguration()
 	preview->backGround()->restore();
 	preview->repaint( FALSE );
     }
-    
+
     picChanged = clipChanged = FALSE;
 }
 
@@ -313,39 +321,39 @@ BackView BackDia::getBackView()
 }
 
 /*=============================================================*/
-QColor BackDia::getBackColor1() 
+QColor BackDia::getBackColor1()
 {
-    return color1Choose->color(); 
+    return color1Choose->color();
 }
 
 /*=============================================================*/
-QColor BackDia::getBackColor2() 
+QColor BackDia::getBackColor2()
 {
-    return color2Choose->color(); 
+    return color2Choose->color();
 }
 
 /*=============================================================*/
-BCType BackDia::getBackColorType() 
-{ 
+BCType BackDia::getBackColorType()
+{
     return (BCType)cType->currentItem();
 }
 
 /*=============================================================*/
-QString BackDia::getBackPixFilename() 
-{ 
-    return chosenPic; 
+QString BackDia::getBackPixFilename()
+{
+    return chosenPic;
 }
 
 /*=============================================================*/
-QString BackDia::getBackClipFilename() 
-{ 
-    return chosenClip; 
+QString BackDia::getBackClipFilename()
+{
+    return chosenClip;
 }
 
 /*=============================================================*/
-bool BackDia::getBackUnbalanced() 
-{ 
-    return unbalanced->isChecked(); 
+bool BackDia::getBackUnbalanced()
+{
+    return unbalanced->isChecked();
 }
 
 /*=============================================================*/

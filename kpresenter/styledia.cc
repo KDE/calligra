@@ -15,30 +15,72 @@
 
 #include "styledia.h"
 #include "styledia.moc"
+
 #include <kapp.h>
 #include <klocale.h>
+#include <kcolordlg.h>
+#include <kcolorbtn.h>
+
+#include <qlayout.h>
+#include <qhbox.h>
+#include <qvbox.h>
+#include <qpainter.h>
+#include <qwidgetstack.h>
+#include <qlabel.h>
+#include <qcombobox.h>
+#include <qpen.h>
+#include <qbrush.h>
+#include <qslider.h>
+#include <qspinbox.h>
+#include <qcheckbox.h>
+#include <qevent.h>
+
+#include "kpresenter_utils.h"
+#include "kpgradient.h"
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
 /******************************************************************/
 
-/*====================== constructor =============================*/
-PBPreview::PBPreview( QWidget* parent, const char* name, int _paintType )
-    : QWidget( parent, name )
+/*==============================================================*/
+PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
+    : QFrame( parent, name )
 {
     paintType = _paintType;
     pen = QPen( black, 1, SolidLine );
     brush = QBrush( white, SolidPattern );
     gradient = 0;
+
+    setFrameStyle( WinPanel | Sunken );
+
+    switch ( paintType ) {
+    case Pen:
+	setFixedHeight( 30 );
+	break;
+    default:
+	setMinimumWidth( 230 );
+	break;
+    }
 }
 
-/*================== paint event =================================*/
-void PBPreview::paintEvent( QPaintEvent* )
+/*==============================================================*/
+void PBPreview::resizeEvent( QResizeEvent *e )
 {
-    QPainter painter;
+    QFrame::resizeEvent( e );
+    if ( gradient )
+	gradient->setSize( QSize( contentsRect().width(),
+				  contentsRect().height() ) );
+}
 
-    painter.begin( this );
-    if ( paintType == 0 ) {
+/*==============================================================*/
+void PBPreview::drawContents( QPainter *painter )
+{
+    painter->save();
+    painter->translate( contentsRect().x(), contentsRect().y() );
+
+    if ( paintType == Pen ) {
+	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
+			   colorGroup().base() );
 	QSize diff1( 0, 0 ), diff2( 0, 0 );
 	int _w = pen.width();
 
@@ -49,188 +91,222 @@ void PBPreview::paintEvent( QPaintEvent* )
 	    diff2 = getBoundingSize( lineEnd, _w );
 
 	if ( lineBegin != L_NORMAL )
-	    drawFigure( lineBegin, &painter, QPoint( diff1.width() / 2, height() / 2 ), pen.color(), _w, 180.0 );
+	    drawFigure( lineBegin, painter, QPoint( diff1.width() / 2, contentsRect().height() / 2 ),
+			pen.color(), _w, 180.0 );
 
 	if ( lineEnd != L_NORMAL )
-	    drawFigure( lineEnd, &painter, QPoint( width() - diff2.width() / 2, height() / 2 ), pen.color(), _w, 0.0 );
+	    drawFigure( lineEnd, painter, QPoint( contentsRect().width() - diff2.width() / 2,
+						  contentsRect().height() / 2 ), pen.color(), _w, 0.0 );
 
-	painter.setPen( pen );
-	painter.drawLine( diff1.width() / 2, height()/2, width() - diff2.width() / 2, height()/2 );
-    } else if ( paintType == 1 ) {
-	painter.fillRect( 0, 0, width(), height(), white );
-	painter.fillRect( 2, 2, width() - 4, height() - 4, brush );
-    } else if ( paintType == 2 && gradient ) {
-	gradient->setSize( size() );
-	painter.drawPixmap( 0, 0, *gradient->getGradient() );
+	painter->setPen( pen );
+	painter->drawLine( diff1.width() / 2, contentsRect().height() / 2,
+			  contentsRect().width() - diff2.width() / 2, contentsRect().height()/2 );
+    } else if ( paintType == Brush ) {
+	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
+			   colorGroup().base() );
+	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(), brush );
+    } else if ( paintType == Gradient && gradient ) {
+	painter->drawPixmap( 0, 0, *gradient->getGradient() );
     }
 
-    painter.end();
+    painter->restore();
 }
 
 /******************************************************************/
 /* class StyleDia						  */
 /******************************************************************/
 
-/*==================== constructor ===============================*/
-StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
-    : QTabDialog( parent, name, true )
+/*==============================================================*/
+StyleDia::StyleDia( QWidget* parent, const char* name, int flags_ )
+    : QTabDialog( parent, name, true ), flags( flags_ )
 {
-    penFrame = new QWidget( this, "penGrp" );
+    lockUpdate = TRUE;
+    setupTab1();
+    setupTab2();
+    lockUpdate = FALSE;
+    
+    if ( flags & SdPen )
+	updatePenConfiguration();
+    if ( flags & SdBrush )
+	updateBrushConfiguration();
 
-    choosePCol = new QPushButton( penFrame, "PCol" );
-    choosePCol->setText( i18n( "Choose color..." ) );
-    choosePCol->move( 10, 20 );
-    choosePCol->resize( choosePCol->sizeHint() );
-    connect( choosePCol, SIGNAL( clicked() ), this, SLOT( changePCol() ) );
+    setCancelButton( i18n( "&Close" ) );
+    setOKButton( i18n( "&OK" ) );
+    setApplyButton( i18n( "&Apply" ) );
 
-    penStyle = new QLabel( penFrame );
-    penStyle->setText( i18n( "Choose style:" ) );
-    penStyle->move( choosePCol->x(), choosePCol->y()+choosePCol->height()+20 );
-    penStyle->resize( penStyle->sizeHint() );
+    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( styleDone() ) );
+    connect( this, SIGNAL( cancelButtonPressed() ), this, SLOT( reject() ) );
+}
 
-    choosePStyle = new QComboBox( false, penFrame, "PStyle" );
-    choosePStyle->move( choosePCol->x(), penStyle->y()+penStyle->height()+10 );
-    choosePStyle->insertItem( i18n( "solid line" ) );
-    choosePStyle->insertItem( i18n( "dash line ( ---- )" ) );
-    choosePStyle->insertItem( i18n( "dot line ( **** )" ) );
-    choosePStyle->insertItem( i18n( "dash dot line ( -*-* )" ) );
-    choosePStyle->insertItem( i18n( "dash dot dot line ( -**- )" ) );
-    choosePStyle->insertItem( i18n( "no pen" ) );
-    choosePStyle->resize( choosePStyle->sizeHint() );
-    choosePCol->resize( choosePStyle->width(), choosePCol->height() );
-    connect( choosePStyle, SIGNAL( activated( int ) ), this, SLOT( changePStyle( int ) ) );
+/*==============================================================*/
+void StyleDia::setupTab1()
+{
+    QWidget *tab = new QWidget( this );
+    QVBoxLayout *layout = new QVBoxLayout( tab );
+    QHBoxLayout *config = new QHBoxLayout( layout );
 
-    penWidth = new QLabel( penFrame );
-    penWidth->setText( i18n( "Choose width:" ) );
-    penWidth->move( choosePCol->x(), choosePStyle->y()+choosePStyle->height()+20 );
-    penWidth->resize( penWidth->sizeHint() );
+    layout->setMargin( 5 );
+    layout->setSpacing( 15 );
+    config->setSpacing( 5 );
 
-    choosePWidth = new QSpinBox( 1, 10, 1, penFrame );
-    choosePWidth->move( choosePCol->x(), penWidth->y()+penWidth->height()+10 );
-    choosePWidth->resize( choosePStyle->width(), choosePWidth->sizeHint().height() );
-    connect( choosePWidth, SIGNAL( valueChanged( int ) ), this, SLOT( changePWidth( int ) ) );
+    QVBox *left = new QVBox( tab );
+    config->addWidget( left );
+    QVBox *right = new QVBox( tab );
+    config->addWidget( right );
 
-    pen = QPen( black, 1, SolidLine );
+    left->setSpacing( 5 );
+    right->setSpacing( 5 );
 
-    llineBegin = new QLabel( penFrame );
-    llineBegin->setText( i18n( "Choose line begin:" ) );
-    llineBegin->move( choosePCol->x() + choosePCol->width() + 10, penStyle->y() );
-    llineBegin->resize( llineBegin->sizeHint() );
+    QLabel *l = new QLabel( i18n( "Pen Color:" ), left );
+    l->setFixedHeight( l->sizeHint().height() );
 
-    clineBegin = new QComboBox( false, penFrame, "lineBegin" );
-    clineBegin->move( llineBegin->x(), llineBegin->y() + llineBegin->height() + 10 );
-    clineBegin->resize( choosePStyle->width(), clineBegin->sizeHint().height() );
+    choosePCol = new KColorButton( Qt::black, left );
+    connect( choosePCol, SIGNAL( changed( const QColor& ) ),
+	     this, SLOT( updatePenConfiguration() ) );
+
+    l = new QLabel( i18n( "Pen Style:" ), left );
+    l->setFixedHeight( l->sizeHint().height() );
+
+    choosePStyle = new QComboBox( FALSE, left, "PStyle" );
+    choosePStyle->insertItem( i18n( "Solid Line" ) );
+    choosePStyle->insertItem( i18n( "Dash Line ( ---- )" ) );
+    choosePStyle->insertItem( i18n( "Dot Line ( **** )" ) );
+    choosePStyle->insertItem( i18n( "Dash Dot Line ( -*-* )" ) );
+    choosePStyle->insertItem( i18n( "Dash Dot Dot Line ( -**- )" ) );
+    choosePStyle->insertItem( i18n( "No Pen" ) );
+    connect( choosePStyle, SIGNAL( activated( int ) ),
+	     this, SLOT( updatePenConfiguration() ) );
+
+    l = new QLabel( i18n( "Pen Width:" ), left );
+    l->setFixedHeight( l->sizeHint().height() );
+
+    choosePWidth = new QSpinBox( 1, 10, 1, left );
+    connect( choosePWidth, SIGNAL( valueChanged( int ) ),
+	     this, SLOT( updatePenConfiguration() ) );
+
+    l = new QLabel( i18n( "Line Begin:" ), right );
+    l->setFixedHeight( l->sizeHint().height() );
+
+    clineBegin = new QComboBox( FALSE, right, "lineBegin" );
     clineBegin->insertItem( "Normal" );
     clineBegin->insertItem( "Arrow" );
     clineBegin->insertItem( "Square" );
     clineBegin->insertItem( "Circle" );
-    connect( clineBegin, SIGNAL( activated( int ) ), this, SLOT( changeLineBegin( int ) ) );
+    connect( clineBegin, SIGNAL( activated( int ) ),
+	     this, SLOT( updatePenConfiguration() ) );
 
-    llineEnd = new QLabel( penFrame );
-    llineEnd->setText( i18n( "Choose line end:" ) );
-    llineEnd->move( llineBegin->x(), clineBegin->y() + clineBegin->height() + 20 );
-    llineEnd->resize( llineEnd->sizeHint() );
+    l = new QLabel( i18n( "Line End:" ), right );
+    l->setFixedHeight( l->sizeHint().height() );
 
-    clineEnd = new QComboBox( false, penFrame, "lineEnd" );
-    clineEnd->move( llineBegin->x(), llineEnd->y()+llineEnd->height()+10 );
-    clineEnd->resize( choosePStyle->width(), clineEnd->sizeHint().height() );
+    clineEnd = new QComboBox( FALSE, right, "lineEnd" );
     clineEnd->insertItem( "Normal" );
     clineEnd->insertItem( "Arrow" );
     clineEnd->insertItem( "Square" );
     clineEnd->insertItem( "Circle" );
-    connect( clineEnd, SIGNAL( activated( int ) ), this, SLOT( changeLineEnd( int ) ) );
+    connect( clineEnd, SIGNAL( activated( int ) ),
+	     this, SLOT( updatePenConfiguration() ) );
 
-    penPrev = new PBPreview( penFrame, "penPrev", 0 );
-    penPrev->move( choosePCol->x(), clineEnd->y()+clineEnd->height()+20 );
-    penPrev->resize( choosePCol->width() + clineEnd->width() + 10, 25 );
-    penPrev->setPen( pen );
+    //hack for better layout
+    l = new QLabel( " ", right );
+    l->setFixedHeight( l->sizeHint().height() );
+    l = new QLabel( " ", right );
+    l->setFixedHeight( clineEnd->sizeHint().height() );
 
-    choosePCol->resize( penPrev->width(), choosePCol->height() );
+    layout->addWidget( new QWidget( tab ) );
 
-    if ( flags & SD_PEN )
-	addTab( penFrame, i18n( "Pen" ) );
+    penPrev = new PBPreview( tab, "penPrev", PBPreview::Pen );
+    layout->addWidget( penPrev );
+
+    layout->addWidget( new QWidget( tab ) );
+
+    if ( flags & SdPen )
+	addTab( tab, i18n( "&Pen Configuration" ) );
     else
-	penFrame->hide();
+	tab->hide();
+}
 
-    brushFrame = new QWidget( this, "brushGrp" );
-    QButtonGroup *tmp = new QButtonGroup( brushFrame );
-    tmp->hide();
-    tmp->setExclusive( true );
+/*==============================================================*/
+void StyleDia::setupTab2()
+{
+    QWidget *tab = new QWidget( this );
+    QHBoxLayout *layout = new QHBoxLayout( tab );
+    layout->setMargin( 5 );
+    layout->setSpacing( 5 );
 
-    fillStyle = new QRadioButton( i18n( "Fill with brush:" ), brushFrame, "" );
-    fillStyle->resize( fillStyle->sizeHint() );
-    fillStyle->move( 10, 20 );
-    tmp->insert( fillStyle );
-    connect( fillStyle, SIGNAL( clicked() ), this, SLOT( rBrush() ) );
+    QVBox *left = new QVBox( tab );
+    layout->addWidget( left );
 
-    chooseBCol = new QPushButton( brushFrame, "BCol" );
-    chooseBCol->setText( i18n( "Choose color..." ) );
-    chooseBCol->move( fillStyle->x(), fillStyle->y() + fillStyle->height() + 20 );
-    chooseBCol->resize( chooseBCol->sizeHint() );
-    connect( chooseBCol, SIGNAL( clicked() ), this, SLOT( changeBCol() ) );
+    left->setSpacing( 5 );
 
-    brushStyle = new QLabel( brushFrame );
-    brushStyle->setText( i18n( "Choose style:" ) );
-    brushStyle->move( chooseBCol->x(), chooseBCol->y()+chooseBCol->height()+20 );
-    brushStyle->resize( brushStyle->sizeHint() );
+    QLabel *l = new QLabel( i18n( "Fill with:" ), left );
+    l->setFixedHeight( l->sizeHint().height() );
 
-    chooseBStyle = new QComboBox( false, brushFrame, "BStyle" );
-    chooseBStyle->move( brushStyle->x(), brushStyle->y()+brushStyle->height()+10 );
-    chooseBStyle->insertItem( i18n( "100% fill pattern" ) );
-    chooseBStyle->insertItem( i18n( "94% fill pattern" ) );
-    chooseBStyle->insertItem( i18n( "88% fill pattern" ) );
-    chooseBStyle->insertItem( i18n( "63% fill pattern" ) );
-    chooseBStyle->insertItem( i18n( "50% fill pattern" ) );
-    chooseBStyle->insertItem( i18n( "37% fill pattern" ) );
-    chooseBStyle->insertItem( i18n( "12% fill pattern" ) );
-    chooseBStyle->insertItem( i18n( "6% fill pattern" ) );
-    chooseBStyle->insertItem( i18n( "horizontal lines" ) );
-    chooseBStyle->insertItem( i18n( "vertical lines" ) );
-    chooseBStyle->insertItem( i18n( "crossing lines" ) );
-    chooseBStyle->insertItem( i18n( "diagonal lines ( / )" ) );
-    chooseBStyle->insertItem( i18n( "diagonal lines ( \\ )" ) );
-    chooseBStyle->insertItem( i18n( "diagonal crossing lines" ) );
-    chooseBStyle->insertItem( i18n( "no brush" ) );
-    chooseBStyle->resize( chooseBStyle->sizeHint() );
-    chooseBCol->resize( chooseBStyle->width(), chooseBCol->height() );
-    connect( chooseBStyle, SIGNAL( activated( int ) ), this, SLOT( changeBStyle( int ) ) );
+    cFillType = new QComboBox( FALSE, left );
+    cFillType->insertItem( i18n( "Brush" ) );
+    cFillType->insertItem( i18n( "Gradient" ) );
 
-    brush = QBrush( white, SolidPattern );
+    connect( cFillType, SIGNAL( activated( int ) ),
+	     this, SLOT( updateBrushConfiguration() ) );
 
-    brushPrev = new PBPreview( brushFrame, "brushPrev", 1 );
-    brushPrev->move( brushStyle->x(), chooseBStyle->y()+chooseBStyle->height()+20 );
-    brushPrev->resize( chooseBStyle->width(), 25 );
-    brushPrev->setBrush( brush );
+    (void)new QWidget( left );
 
-    gradient1 = new KColorButton( red, brushFrame );
-    gradient1->resize( chooseBCol->size() );
+    stack = new QWidgetStack( left );
+    connect( cFillType, SIGNAL( activated( int ) ),
+	     stack, SLOT( raiseWidget( int ) ) );
 
-    fillGradient = new QRadioButton( i18n( "Fill with gradient:" ), brushFrame, "" );
-    fillGradient->resize( fillGradient->sizeHint() );
-    fillGradient->move( penPrev->x() + penPrev->width() - gradient1->width(), fillStyle->y() );
-    tmp->insert( fillGradient );
-    connect( fillGradient, SIGNAL( clicked() ), this, SLOT( rGradient() ) );
+    QVBox *brushConfig = new QVBox( stack );
+    brushConfig->setSpacing( 5 );
+    stack->addWidget( brushConfig, 0 );
 
-    gColors = new QLabel( brushFrame );
-    gColors->setText( i18n( "Choose gradient colors:" ) );
-    gColors->move( fillGradient->x(), fillGradient->y() + fillGradient->height() + 20 );
-    gColors->resize( gColors->sizeHint() );
+    l = new QLabel( i18n( "Brush Color:" ), brushConfig );
+    l->setFixedHeight( l->sizeHint().height() );
 
-    gradient1->move( gColors->x(), gColors->y() + gColors->height() + 10 );
-    connect( gradient1, SIGNAL( changed( const QColor & ) ), this, SLOT( gColor1( const QColor & ) ) );
+    chooseBCol = new KColorButton( Qt::white, brushConfig );
+    connect( chooseBCol, SIGNAL( changed( const QColor & ) ),
+	     this, SLOT( updateBrushConfiguration() ) );
 
-    gradient2 = new KColorButton( green, brushFrame );
-    gradient2->resize( chooseBCol->size() );
-    gradient2->move( gradient1->x(), gradient1->y() + gradient1->height() + 10 );
-    connect( gradient2, SIGNAL( changed( const QColor & ) ), this, SLOT( gColor2( const QColor & ) ) );
+    l = new QLabel( i18n( "Brush Style:" ), brushConfig );
+    l->setFixedHeight( l->sizeHint().height() );
 
-    gStyle = new QLabel( brushFrame );
-    gStyle->setText( i18n( "Choose gradient style:" ) );
-    gStyle->move( gradient2->x(), gradient2->y() + gradient2->height() + 20 );
-    gStyle->resize( gStyle->sizeHint() );
+    chooseBStyle = new QComboBox( FALSE, brushConfig, "BStyle" );
+    chooseBStyle->insertItem( i18n( "100% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "94% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "88% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "63% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "50% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "37% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "12% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "6% fill Pattern" ) );
+    chooseBStyle->insertItem( i18n( "Horizontal Lines" ) );
+    chooseBStyle->insertItem( i18n( "Vertical Lines" ) );
+    chooseBStyle->insertItem( i18n( "Crossing Lines" ) );
+    chooseBStyle->insertItem( i18n( "Diagonal Lines ( / )" ) );
+    chooseBStyle->insertItem( i18n( "Diagonal Lines ( \\ )" ) );
+    chooseBStyle->insertItem( i18n( "Diagonal Crossing Lines" ) );
+    chooseBStyle->insertItem( i18n( "No Brush" ) );
+    connect( chooseBStyle, SIGNAL( activated( int ) ),
+	     this, SLOT( updateBrushConfiguration() ) );
 
-    gradients = new QComboBox( false, brushFrame, "" );
-    gradients->move( gStyle->x(), gStyle->y() + gStyle->height() + 10 );
+    (void)new QWidget( brushConfig );
+
+    QVBox *gradientConfig = new QVBox( left );
+    stack->addWidget( gradientConfig, 1 );
+    gradientConfig->setSpacing( 5 );
+
+    l = new QLabel( i18n( "Gradient Colors:" ), gradientConfig );
+    l->setFixedHeight( l->sizeHint().height() );
+
+    gradient1 = new KColorButton( red, gradientConfig );
+    connect( gradient1, SIGNAL( changed( const QColor & ) ),
+	     this, SLOT( updateBrushConfiguration() ) );
+    gradient2 = new KColorButton( green, gradientConfig );
+    connect( gradient2, SIGNAL( changed( const QColor & ) ),
+	     this, SLOT( updateBrushConfiguration() ) );
+
+    l = new QLabel( i18n( "Gradient Style:" ), gradientConfig );
+    l->setFixedHeight( l->sizeHint().height() );
+
+    gradients = new QComboBox( FALSE, gradientConfig );
     gradients->insertItem( i18n( "Horizontal Gradient" ), -1 );
     gradients->insertItem( i18n( "Vertical Gradient" ), -1 );
     gradients->insertItem( i18n( "Diagonal Gradient 1" ), -1 );
@@ -239,303 +315,329 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     gradients->insertItem( i18n( "Rectangle Gradient" ), -1 );
     gradients->insertItem( i18n( "PipeCross Gradient" ), -1 );
     gradients->insertItem( i18n( "Pyramid Gradient" ), -1 );
-    gradients->resize( chooseBStyle->size() );
-    connect( gradients, SIGNAL( activated( int ) ), this, SLOT( gcStyle( int ) ) );
+    connect( gradients, SIGNAL( activated( int ) ),
+	     this, SLOT( updateBrushConfiguration() ) );
 
-    unbalanced = new QCheckBox( i18n( "Unbalanced" ), brushFrame );
-    unbalanced->resize( unbalanced->sizeHint() );
-    unbalanced->move( gradients->x(), gradients->y() + gradients->height() + 20 );
+    unbalanced = new QCheckBox( i18n( "Unbalanced" ), gradientConfig );
     connect( unbalanced, SIGNAL( clicked() ),
-	     this, SLOT( rUnbalanced() ) );
-    
-    yfactor = new QSlider( -200, 200, 1, 100, QSlider::Vertical, brushFrame );
-    yfactor->resize( yfactor->sizeHint().width(),
-		     gradients->width() - yfactor->sizeHint().width() - 10 );
-    yfactor->move( gradients->x() + gradients->width() - yfactor->sizeHint().width() ,
-		   unbalanced->y() + unbalanced->height() + 20 );
+	     this, SLOT( updateBrushConfiguration() ) );
+
+    l = new QLabel( i18n( "X-Factor:" ), gradientConfig );
+    l->setFixedHeight( l->sizeHint().height() );
+
+    xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, gradientConfig );
+    connect( xfactor, SIGNAL( valueChanged( int ) ),
+	     this, SLOT( updateBrushConfiguration() ) );
+
+    l = new QLabel( i18n( "Y-Factor:" ), gradientConfig );
+    l->setFixedHeight( l->sizeHint().height() );
+
+    yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, gradientConfig );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( gYFactor( int ) ) );
+	     this, SLOT( updateBrushConfiguration() ) );
 
     gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, QSize( chooseBCol->width(), 25 ),
 			       FALSE, 100, 100 );
 
-    gPrev = new PBPreview( brushFrame, "", 2 );
-    gPrev->move( gradients->x(), unbalanced->y() + unbalanced->height() + 20 );
-    gPrev->resize( chooseBCol->width() - yfactor->width() - 10 , 
-		   gradients->width() - yfactor->sizeHint().width() - 10 );
-    gPrev->setGradient( gradient );
+    (void)new QWidget( gradientConfig );
+    (void)new QWidget( left );
 
-    xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, brushFrame );
+    brushPrev = new PBPreview( tab, "", PBPreview::Brush );
+    brushPrev->setGradient( gradient );
 
-    xfactor->resize( gPrev->width(), xfactor->sizeHint().height() );
-    xfactor->move( gPrev->x(), gPrev->y() + gPrev->height() );
-    connect( xfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( gXFactor( int ) ) );
+    layout->addWidget( brushPrev );
 
-    chooseBCol->move( chooseBCol->x(), gradient1->y() );
-    brushStyle->move( brushStyle->x(), gStyle->y() );
-    chooseBStyle->move( chooseBStyle->x(), gradients->y() );
-    brushPrev->move( brushPrev->x(), gPrev->y() );
+    stack->raiseWidget( 0 );
 
-    if ( flags & SD_BRUSH )
-	addTab( brushFrame, i18n( "Brush" ) );
+    if ( flags & SdBrush )
+	addTab( tab, i18n( "&Brush Configuration" ) );
     else
-	brushFrame->hide();
-
-    resize( 400, 525 );
-
-    setCancelButton( i18n( "Cancel" ) );
-    setOKButton( i18n( "OK" ) );
-    setApplyButton( i18n( "Apply" ) );
-
-    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( styleDone() ) );
-    connect( this, SIGNAL( cancelButtonPressed() ), this, SLOT( reject() ) );
+	tab->hide();
 }
 
-/*=================================================================*/
+/*==============================================================*/
 StyleDia::~StyleDia()
 {
     delete gradient;
 }
 
-/*=========================== set pen =============================*/
-void StyleDia::setPen( QPen _pen )
+/*==============================================================*/
+void StyleDia::updatePenConfiguration()
 {
-    pen = _pen;
+    if ( lockUpdate )
+	return;
+
+    QPen pen = getPen();
     penPrev->setPen( pen );
-    switch ( pen.style() ) {
-    case NoPen: choosePStyle->setCurrentItem( 5 ); break;
-    case SolidLine: choosePStyle->setCurrentItem( 0 ); break;
-    case DashLine: choosePStyle->setCurrentItem( 1 ); break;
-    case DotLine: choosePStyle->setCurrentItem( 2 ); break;
-    case DashDotLine: choosePStyle->setCurrentItem( 3 ); break;
-    case DashDotDotLine: choosePStyle->setCurrentItem( 4 ); break;
-    }
-    choosePWidth->setValue( pen.width() );
+    penPrev->setLineBegin( getLineBegin() );
+    penPrev->setLineEnd( getLineEnd() );
 }
 
-/*========================= set brush =============================*/
-void StyleDia::setBrush( QBrush _brush )
+/*==============================================================*/
+void StyleDia::updateBrushConfiguration()
 {
-    brush = _brush;
-    brushPrev->setBrush( brush );
-    switch ( brush.style() ) {
-    case SolidPattern: chooseBStyle->setCurrentItem( 0 ); break;
-    case Dense1Pattern: chooseBStyle->setCurrentItem( 1 ); break;
-    case Dense2Pattern: chooseBStyle->setCurrentItem( 2 ); break;
-    case Dense3Pattern: chooseBStyle->setCurrentItem( 3 ); break;
-    case Dense4Pattern: chooseBStyle->setCurrentItem( 4 ); break;
-    case Dense5Pattern: chooseBStyle->setCurrentItem( 5 ); break;
-    case Dense6Pattern: chooseBStyle->setCurrentItem( 6 ); break;
-    case Dense7Pattern: chooseBStyle->setCurrentItem( 7 ); break;
-    case HorPattern: chooseBStyle->setCurrentItem( 8 ); break;
-    case VerPattern: chooseBStyle->setCurrentItem( 9 ); break;
-    case CrossPattern: chooseBStyle->setCurrentItem( 10 ); break;
-    case BDiagPattern: chooseBStyle->setCurrentItem( 11 ); break;
-    case FDiagPattern: chooseBStyle->setCurrentItem( 12 ); break;
-    case DiagCrossPattern: chooseBStyle->setCurrentItem( 13 ); break;
-    case NoBrush: chooseBStyle->setCurrentItem( 14 ); break;
-    case CustomPattern: break;
+    if ( lockUpdate )
+	return;
+
+    if ( !unbalanced->isChecked() ) {
+	xfactor->setEnabled( FALSE );
+	yfactor->setEnabled( FALSE );
+    } else {
+	xfactor->setEnabled( TRUE );
+	yfactor->setEnabled( TRUE );
+    }
+    
+    if ( getFillType() == FT_BRUSH ) {
+	brushPrev->setPaintType( PBPreview::Brush );
+	brushPrev->setBrush( getBrush() );
+	brushPrev->repaint( TRUE );
+    } else {
+	brushPrev->setPaintType( PBPreview::Gradient );
+	gradient->setColor1( getGColor1() );
+	gradient->setColor2( getGColor2() );
+	gradient->setBackColorType( getGType() );
+	gradient->setUnbalanced( getGUnbalanced() );
+	gradient->setXFactor( getGXFactor() );
+	gradient->setYFactor( getGYFactor() );
+	brushPrev->repaint( FALSE );
     }
 }
 
-/*======================== set line beginning =====================*/
+/*==============================================================*/
+void StyleDia::setPen( const QPen &_pen )
+{
+    if ( lockUpdate )
+	return;
+
+    switch ( _pen.style() ) {
+    case NoPen: choosePStyle->setCurrentItem( 5 );
+	break;
+    case SolidLine: choosePStyle->setCurrentItem( 0 );
+	break;
+    case DashLine: choosePStyle->setCurrentItem( 1 );
+	break;
+    case DotLine: choosePStyle->setCurrentItem( 2 );
+	break;
+    case DashDotLine: choosePStyle->setCurrentItem( 3 );
+	break;
+    case DashDotDotLine: choosePStyle->setCurrentItem( 4 );
+	break;
+    }
+    choosePWidth->setValue( _pen.width() );
+    choosePCol->setColor( _pen.color() );
+    updatePenConfiguration();
+}
+
+/*==============================================================*/
+void StyleDia::setBrush( const QBrush &_brush )
+{
+    if ( lockUpdate )
+	return;
+
+    switch ( _brush.style() ) {
+    case SolidPattern: chooseBStyle->setCurrentItem( 0 );
+	break;
+    case Dense1Pattern: chooseBStyle->setCurrentItem( 1 );
+	break;
+    case Dense2Pattern: chooseBStyle->setCurrentItem( 2 );
+	break;
+    case Dense3Pattern: chooseBStyle->setCurrentItem( 3 );
+	break;
+    case Dense4Pattern: chooseBStyle->setCurrentItem( 4 );
+	break;
+    case Dense5Pattern: chooseBStyle->setCurrentItem( 5 );
+	break;
+    case Dense6Pattern: chooseBStyle->setCurrentItem( 6 );
+	break;
+    case Dense7Pattern: chooseBStyle->setCurrentItem( 7 );
+	break;
+    case HorPattern: chooseBStyle->setCurrentItem( 8 );
+	break;
+    case VerPattern: chooseBStyle->setCurrentItem( 9 );
+	break;
+    case CrossPattern: chooseBStyle->setCurrentItem( 10 );
+	break;
+    case BDiagPattern: chooseBStyle->setCurrentItem( 11 );
+	break;
+    case FDiagPattern: chooseBStyle->setCurrentItem( 12 );
+	break;
+    case DiagCrossPattern: chooseBStyle->setCurrentItem( 13 );
+	break;
+    case NoBrush: chooseBStyle->setCurrentItem( 14 );
+	break;
+    case CustomPattern:
+	break;
+    }
+    chooseBCol->setColor( _brush.color() );
+    updateBrushConfiguration();
+}
+
+/*==============================================================*/
 void StyleDia::setLineBegin( LineEnd lb )
 {
-    lineBegin = lb;
-    penPrev->setLineBegin( lineBegin );
-    clineBegin->setCurrentItem( static_cast<int>( lineBegin ) );
+    if ( lockUpdate )
+	return;
+
+    clineBegin->setCurrentItem( (int)lb );
+    updatePenConfiguration();
 }
 
-/*======================== set line end ===========================*/
+/*==============================================================*/
 void StyleDia::setLineEnd( LineEnd le )
 {
-    lineEnd = le;
-    penPrev->setLineEnd( lineEnd );
-    clineEnd->setCurrentItem( static_cast<int>( lineEnd ) );
+    if ( lockUpdate )
+	return;
+
+    clineEnd->setCurrentItem( (int)le );
+    updatePenConfiguration();
 }
 
-/*================================================================*/
+/*==============================================================*/
 void StyleDia::setFillType( FillType ft )
 {
-    if ( ft == FT_BRUSH ) {
-	fillStyle->setChecked( true );
-	fillGradient->setChecked( false );
-	rBrush();
-    } else {
-	fillStyle->setChecked( false );
-	fillGradient->setChecked( true );
-	rGradient();
-    }
+    if ( lockUpdate )
+	return;
+
+    cFillType->setCurrentItem( (int)ft );
+    stack->raiseWidget( (int)ft );
+    updateBrushConfiguration();
 }
 
-/*================================================================*/
-void StyleDia::setGradient( QColor _c1, QColor _c2, BCType _t, bool _unbalanced, int _xfactor, int _yfactor )
+/*==============================================================*/
+void StyleDia::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
+			    bool _unbalanced, int _xfactor, int _yfactor )
 {
+    if ( lockUpdate )
+	return;
+
     gradient1->setColor( _c1 );
     gradient2->setColor( _c2 );
-    gradients->setCurrentItem( static_cast<int>( _t - 1 ) );
+    gradients->setCurrentItem( (int)_t - 1 );
     unbalanced->setChecked( _unbalanced );
     xfactor->setValue( _xfactor );
     yfactor->setValue( _yfactor );
-        
-    gradient->setColor1( QColor( _c1 ) );
-    gradient->setColor2( QColor( _c2 ) );
-    gradient->setBackColorType( _t );
-    gradient->setUnbalanced( _unbalanced );
-    gradient->setXFactor( _xfactor );
-    gradient->setYFactor( _yfactor );
-    gPrev->setGradient( gradient );
+    updateBrushConfiguration();
 }
 
-/*====================== change pen-color =========================*/
-void StyleDia::changePCol()
+/*==============================================================*/
+QPen StyleDia::getPen()
 {
-    QColor currColor;
-
-    currColor = pen.color();
-    if ( KColorDialog::getColor( currColor ) ) {
-	pen.setColor( currColor );
-	penPrev->setPen( pen );
-    }
-}
-
-/*==================== change brush-color =========================*/
-void StyleDia::changeBCol()
-{
-    QColor currColor;
-
-    currColor = brush.color();
-    if ( KColorDialog::getColor( currColor ) ) {
-	brush.setColor( currColor );
-	brushPrev->setBrush( brush );
-    }
-}
-
-/*====================== change pen-style =========================*/
-void StyleDia::changePStyle( int item )
-{
-    switch ( item ) {
-    case 5: pen.setStyle( NoPen ); break;
-    case 0: pen.setStyle( SolidLine ); break;
-    case 1: pen.setStyle( DashLine ); break;
-    case 2: pen.setStyle( DotLine ); break;
-    case 3: pen.setStyle( DashDotLine ); break;
-    case 4: pen.setStyle( DashDotDotLine ); break;
-    }
-    penPrev->setPen( pen );
-}
-
-/*====================== change brush-style =======================*/
-void StyleDia::changeBStyle( int item )
-{
-    switch ( item ) {
-    case 0: brush.setStyle( SolidPattern ); break;
-    case 1: brush.setStyle( Dense1Pattern ); break;
-    case 2: brush.setStyle( Dense2Pattern ); break;
-    case 3: brush.setStyle( Dense3Pattern ); break;
-    case 4: brush.setStyle( Dense4Pattern ); break;
-    case 5: brush.setStyle( Dense5Pattern ); break;
-    case 6: brush.setStyle( Dense6Pattern ); break;
-    case 7: brush.setStyle( Dense7Pattern ); break;
-    case 8: brush.setStyle( HorPattern ); break;
-    case 9: brush.setStyle( VerPattern ); break;
-    case 10: brush.setStyle( CrossPattern ); break;
-    case 11: brush.setStyle( BDiagPattern ); break;
-    case 12: brush.setStyle( FDiagPattern ); break;
-    case 13: brush.setStyle( DiagCrossPattern ); break;
-    case 14: brush.setStyle( NoBrush ); break;
-    }
-    brushPrev->setBrush( brush );
-}
-
-/*====================== change pen-width =========================*/
-void StyleDia::changePWidth( int item )
-{
-    pen.setWidth( item );
-    penPrev->setPen( pen );
-}
-
-/*====================== change line beginning ====================*/
-void StyleDia::changeLineBegin( int item )
-{
-    lineBegin = ( LineEnd )item;
-    penPrev->setLineBegin( lineBegin );
-}
-
-/*====================== change line end ==========================*/
-void StyleDia::changeLineEnd( int item )
-{
-    lineEnd = ( LineEnd )item;
-    penPrev->setLineEnd( lineEnd );
-}
-
-/*=================================================================*/
-void StyleDia::gColor1( const QColor &newColor )
-{
-    gradient->setColor1( QColor( newColor ) );
-    gPrev->setGradient( gradient );
-}
-
-/*=================================================================*/
-void StyleDia::gColor2( const QColor &newColor )
-{
-    gradient->setColor2( QColor( newColor ) );
-    gPrev->setGradient( gradient );
-}
-
-/*=================================================================*/
-void StyleDia::gcStyle( int item )
-{
-    gradient->setBackColorType( static_cast<BCType>( item + 1 ) );
-    gPrev->setGradient( gradient );
-}
-
-/*=================================================================*/
-void StyleDia::rBrush()
-{
-    gradients->setEnabled( false );
-    gradient1->setEnabled( false );
-    gradient2->setEnabled( false );
-    unbalanced->setEnabled( FALSE );
-    xfactor->setEnabled( FALSE );
-    yfactor->setEnabled( FALSE );
-
-    chooseBCol->setEnabled( true );
-    chooseBStyle->setEnabled( true );
-}
-
-/*=================================================================*/
-void StyleDia::rGradient()
-{
-    gradients->setEnabled( true );
-    gradient1->setEnabled( true );
-    gradient2->setEnabled( true );
-    unbalanced->setEnabled( TRUE );
-    xfactor->setEnabled( TRUE );
-    yfactor->setEnabled( TRUE );
+    QPen pen;
     
-    chooseBCol->setEnabled( false );
-    chooseBStyle->setEnabled( false );
+    switch ( choosePStyle->currentItem() ) {
+    case 5: pen.setStyle( NoPen );
+	break;
+    case 0: pen.setStyle( SolidLine );
+	break;
+    case 1: pen.setStyle( DashLine );
+	break;
+    case 2: pen.setStyle( DotLine );
+	break;
+    case 3: pen.setStyle( DashDotLine );
+	break;
+    case 4: pen.setStyle( DashDotDotLine );
+	break;
+    }
+
+    pen.setColor( choosePCol->color() );
+    pen.setWidth( choosePWidth->value() );
+    
+    return pen;
 }
 
-/*=================================================================*/
-void StyleDia::rUnbalanced()
+/*==============================================================*/
+QBrush StyleDia::getBrush()
 {
-    gradient->setUnbalanced( unbalanced->isChecked() );
-    gPrev->setGradient( gradient );
+    QBrush brush;
+
+    switch ( chooseBStyle->currentItem() ) {
+    case 0: brush.setStyle( SolidPattern );
+	break;
+    case 1: brush.setStyle( Dense1Pattern );
+	break;
+    case 2: brush.setStyle( Dense2Pattern );
+	break;
+    case 3: brush.setStyle( Dense3Pattern );
+	break;
+    case 4: brush.setStyle( Dense4Pattern );
+	break;
+    case 5: brush.setStyle( Dense5Pattern );
+	break;
+    case 6: brush.setStyle( Dense6Pattern );
+	break;
+    case 7: brush.setStyle( Dense7Pattern );
+	break;
+    case 8: brush.setStyle( HorPattern );
+	break;
+    case 9: brush.setStyle( VerPattern );
+	break;
+    case 10: brush.setStyle( CrossPattern );
+	break;
+    case 11: brush.setStyle( BDiagPattern );
+	break;
+    case 12: brush.setStyle( FDiagPattern );
+	break;
+    case 13: brush.setStyle( DiagCrossPattern );
+	break;
+    case 14: brush.setStyle( NoBrush );
+	break;
+    }
+
+    brush.setColor( chooseBCol->color() );
+    
+    return brush;
 }
 
-/*=================================================================*/
-void StyleDia::gXFactor( int v )
+/*==============================================================*/
+LineEnd StyleDia::getLineBegin()
 {
-    gradient->setXFactor( v );
-    gPrev->setGradient( gradient );
+    return (LineEnd)clineBegin->currentItem();
 }
 
-/*=================================================================*/
-void StyleDia::gYFactor( int v )
+/*==============================================================*/
+LineEnd StyleDia::getLineEnd()
 {
-    gradient->setYFactor( v );
-    gPrev->setGradient( gradient );
+    return (LineEnd)clineEnd->currentItem();
+}
+
+/*==============================================================*/
+FillType StyleDia::getFillType()
+{
+    return (FillType)cFillType->currentItem();
+}
+
+/*==============================================================*/
+QColor StyleDia::getGColor1()
+{
+    return gradient1->color();
+}
+
+/*==============================================================*/
+QColor StyleDia::getGColor2()
+{
+    return gradient2->color();
+}
+
+/*==============================================================*/
+BCType StyleDia::getGType()
+{
+    return (BCType)( gradients->currentItem() + 1 );
+}
+
+/*==============================================================*/
+bool StyleDia::getGUnbalanced()
+{
+    return unbalanced->isChecked();
+}
+
+/*==============================================================*/
+int StyleDia::getGXFactor()
+{
+    return xfactor->value();
+}
+
+/*==============================================================*/
+int StyleDia::getGYFactor()
+{
+    return yfactor->value();
 }

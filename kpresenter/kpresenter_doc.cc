@@ -3575,19 +3575,20 @@ int KPresenterDoc::getPenBrushFlags()
 	if ( kpobject->isSelected() ) {
 	    switch ( kpobject->getType() ) {
 	    case OT_LINE:
-		flags = flags | SD_PEN;
+		flags = flags | StyleDia::SdPen;
 		break;
 	    case OT_AUTOFORM: case OT_RECT: case OT_ELLIPSE: case OT_PIE: case OT_PART:
 	    case OT_TEXT: case OT_PICTURE: case OT_CLIPART: {
-		flags = flags | SD_PEN;
-		flags = flags | SD_BRUSH;
+		flags = flags | StyleDia::SdPen;
+		flags = flags | StyleDia::SdBrush;
 	    } break;
 	    default: break;
 	    }
 	}
     }
 
-    if ( flags == 0 ) flags = SD_PEN | SD_BRUSH;
+    if ( flags == 0 ) 
+	flags = StyleDia::SdAll;
     return flags;
 }
 
@@ -3719,7 +3720,7 @@ void KPresenterDoc::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, 
 void KPresenterDoc::copyPage( int num )
 {
     num--;
-    if ( num < 0 || num >= _backgroundList.count() )
+    if ( num < 0 || num >= (int)_backgroundList.count() )
 	return;
     
     QClipboard *cb = QApplication::clipboard();

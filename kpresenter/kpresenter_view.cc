@@ -461,7 +461,7 @@ void KPresenterView::toolsMouse()
 /*=========================== insert line =======================*/
 void KPresenterView::toolsLine()
 {
-    if ( !( (KToggleAction*)actionToolsMouse )->isChecked() )
+    if ( !( (KToggleAction*)actionToolsLine )->isChecked() )
 	return;
     page->setToolEditMode( INS_LINE, FALSE );
     page->deSelectAllObj();

@@ -57,7 +57,7 @@ public:
     { return xFactor; }
     virtual int getYFactor()
     { return yFactor; }
-    
+
     virtual void setColor1( QColor _color )
     { color1 = _color; paint(); }
     virtual void setColor2( QColor _color )
@@ -69,15 +69,19 @@ public:
     virtual void setXFactor( int i )
     { xFactor = i; paint(); }
     virtual void setYFactor( int i )
-    { yFactor = i; paint(); }    
-    
+    { yFactor = i; paint(); }
+
     virtual QPixmap* getGradient()
     { return (QPixmap*)&pixmap; }
     virtual QSize getSize()
     { return pixmap.size(); }
 
-    virtual void setSize( QSize _size )
-    { pixmap.resize( _size ); paint(); }
+    virtual void setSize( QSize _size ) { 
+	if ( _size != pixmap.size() ) {
+	    pixmap.resize( _size ); 
+	    paint(); 
+	}
+    }
 
     virtual void addRef();
     virtual bool removeRef();
@@ -95,7 +99,7 @@ protected:
 
     bool unbalanced;
     int xFactor, yFactor;
-    
+
 };
 
 #endif

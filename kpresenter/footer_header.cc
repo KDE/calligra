@@ -353,7 +353,7 @@ void KPFooterHeaderEditor::slotHeaderPenBrush()
 {
     KPTextObject *header = doc->header();
 
-    StyleDia *styleDia = new StyleDia( 0, "StyleDia", SD_PEN | SD_BRUSH );
+    StyleDia *styleDia = new StyleDia( 0, "StyleDia" );
     styleDia->setMaximumSize( styleDia->width(), styleDia->height() );
     styleDia->setMinimumSize( styleDia->width(), styleDia->height() );
     styleDia->setPen( header->getPen() );
@@ -391,7 +391,7 @@ void KPFooterHeaderEditor::slotFooterPenBrush()
 {
     KPTextObject *footer = doc->footer();
 
-    StyleDia *styleDia = new StyleDia( 0, "StyleDia", SD_PEN | SD_BRUSH );
+    StyleDia *styleDia = new StyleDia( 0, "StyleDia" );
     styleDia->setMaximumSize( styleDia->width(), styleDia->height() );
     styleDia->setMinimumSize( styleDia->width(), styleDia->height() );
     styleDia->setPen( footer->getPen() );
