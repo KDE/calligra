@@ -372,47 +372,182 @@
     <GroupName>Text</GroupName>
 
     <Function>
-      <Name>DECBIN</Name>
+      <Name>DEC2BIN</Name>
       <Type>String</Type>
       <Parameter>
 	<Comment>The value to convert</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The DECBIN() function returns the value formatted as a binary number.</Text>
-	<Syntax>DECBIN( value )</Syntax>
-	<Example>DECBIN(12) returns "1100"</Example>
-	<Example>DECBIN(55) returns "110111"</Example>
+	<Text>The DEC2BIN() function returns the value formatted as a binary number.</Text>
+	<Syntax>DEC2BIN( value )</Syntax>
+	<Example>DEC2BIN(12) returns "1100"</Example>
+	<Example>DEC2BIN(55) returns "110111"</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>DECHEX</Name>
+      <Name>DEC2HEX</Name>
       <Type>String</Type>
       <Parameter>
 	<Comment>The value to convert</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The DECHEX() function returns the value formatted as a hexadecimal number.</Text>
-	<Syntax>DECHEX( value )</Syntax>
-	<Example>DECHEX(12) returns "c"</Example>
-	<Example>DECHEX(55) returns "37"</Example>
+	<Text>The DEC2HEX() function returns the value formatted as a hexadecimal number.</Text>
+	<Syntax>DEC2HEX( value )</Syntax>
+	<Example>DEC2HEX(12) returns "c"</Example>
+	<Example>DEC2HEX(55) returns "37"</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>DECOCT</Name>
+      <Name>DEC2OCT</Name>
       <Type>String</Type>
       <Parameter>
 	<Comment>The value to convert</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The DECOCT() function returns the value formatted as an octal number.</Text>
-	<Syntax>DECOCT( value )</Syntax>
-	<Example>DECOCT(12) returns "14"</Example>
-	<Example>DECOCT(55) returns "67"</Example>
+	<Text>The DEC2OCT() function returns the value formatted as an octal number.</Text>
+	<Syntax>DEC2OCT( value )</Syntax>
+	<Example>DEC2OCT(12) returns "14"</Example>
+	<Example>DEC2OCT(55) returns "67"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OCT2BIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The OCT2BIN() function returns the value formatted as a binary number.</Text>
+	<Syntax>OCT2BIN( value )</Syntax>
+	<Example>OCT2BIN("12") returns "1010"</Example>
+	<Example>OCT2BIN("55") returns "101101"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OCT2DEC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The OCT2DEC() function returns the value formatted as a decimal number.</Text>
+	<Syntax>OCT2DEC( value )</Syntax>
+	<Example>OCT2DEC("12") returns  10 </Example>
+	<Example>OCT2DEC("55") returns 45 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OCT2HEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The OCT2HEX() function returns the value formatted as an hexadecimal number.</Text>
+	<Syntax>OCT2HEX( value )</Syntax>
+	<Example>OCT2HEX("12") returns "a"</Example>
+	<Example>OCT2HEX("55") returns "2d"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BIN2DEC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The BIN2DEC() function returns the value formatted as a decimal number.</Text>
+	<Syntax>BIN2DEC( value )</Syntax>
+	<Example>BIN2DEC("1010") returns 10 </Example>
+	<Example>BIN2DEC("11111") returns 31 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BIN2OCT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The BIN2OCT() function returns the value formatted as a octal number.</Text>
+	<Syntax>BIN2OCT( value )</Syntax>
+	<Example>BIN2OCT("1010") returns  "12" </Example>
+	<Example>BIN2OCT("11111") returns "37" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BIN2HEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The BIN2HEX() function returns the value formatted as an hexadecimal number.</Text>
+	<Syntax>BIN2HEX( value )</Syntax>
+	<Example>BIN2HEX("1010") returns "a"</Example>
+	<Example>BIN2HEX("11111") returns "1f"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HEX2DEC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The HEX2DEC() function returns the value formatted as a decimal number.</Text>
+	<Syntax>HEX2DEC( value )</Syntax>
+	<Example>HEX2DEC("a") returns 10 </Example>
+	<Example>HEX2DEC("37") returns 55 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HEX2OCT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HEX2OCT() function returns the value formatted as a octal number.</Text>
+	<Syntax>HEX2OCT( value )</Syntax>
+	<Example>HEX2OCT("a") returns  "12" </Example>
+	<Example>HEX2OCT("37") returns "67" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HEX2BIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HEX2BIN() function returns the value formatted as an hexadecimal number.</Text>
+	<Syntax>HEX2BIN( value )</Syntax>
+	<Example>HEX2BIN("a") returns "1010"</Example>
+	<Example>HEX2BIN("37") returns "110111"</Example>
       </Help>
     </Function>
 

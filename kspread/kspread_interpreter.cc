@@ -1887,11 +1887,11 @@ static bool kspreadfunc_inv( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_dechex( KSContext& context )
+static bool kspreadfunc_dec2hex( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "DECHEX", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "DECHEX", true ) ||!KSUtil::checkArgumentsCount( context, 1, "DEC2HEX", true ))
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
@@ -1904,11 +1904,11 @@ static bool kspreadfunc_dechex( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_decoct( KSContext& context )
+static bool kspreadfunc_dec2oct( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "DECOCT", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "DEC2OCT", true )  || !KSUtil::checkArgumentsCount( context, 1, "DECOCT", true ))
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
@@ -1921,11 +1921,11 @@ static bool kspreadfunc_decoct( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_decbin( KSContext& context )
+static bool kspreadfunc_dec2bin( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "DECBIN", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "DEC2BIN", true )  || !KSUtil::checkArgumentsCount( context, 1, "DECBIN", true ))
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
@@ -1938,11 +1938,11 @@ static bool kspreadfunc_decbin( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_bindec( KSContext& context )
+static bool kspreadfunc_bin2dec( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "BINDEC", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "BIN2DEC", true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
@@ -1955,6 +1955,192 @@ static bool kspreadfunc_bindec( KSContext& context )
         context.setValue( new KSValue( QString(i18n("Err") )));
   else
         context.setValue( new KSValue(val));
+
+  return true;
+}
+
+static bool kspreadfunc_bin2oct( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "BIN2OCT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString tmp=args[0]->stringValue();
+  bool ok;
+  long val=tmp.toLong(&ok,2);
+  if(!ok)
+        context.setValue( new KSValue( QString(i18n("Err") )));
+  else
+        {
+        tmp=tmp.setNum(val,8);
+        context.setValue( new KSValue(tmp));
+        }
+
+  return true;
+}
+
+static bool kspreadfunc_bin2hex( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "BIN2HEX", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString tmp=args[0]->stringValue();
+  bool ok;
+  long val=tmp.toLong(&ok,2);
+  if(!ok)
+        context.setValue( new KSValue( QString(i18n("Err") )));
+  else
+        {
+        tmp=tmp.setNum(val,16);
+        context.setValue( new KSValue(tmp));
+        }
+
+  return true;
+}
+
+static bool kspreadfunc_oct2dec( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "OCT2DEC", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString tmp=args[0]->stringValue();
+  bool ok;
+  long val=tmp.toLong(&ok,8);
+  if(!ok)
+        context.setValue( new KSValue( QString(i18n("Err") )));
+  else
+        context.setValue( new KSValue(val));
+
+  return true;
+}
+
+static bool kspreadfunc_oct2bin( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "OCT2BIN", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString tmp=args[0]->stringValue();
+  bool ok;
+  long val=tmp.toLong(&ok,8);
+  if(!ok)
+        context.setValue( new KSValue( QString(i18n("Err") )));
+  else
+        {
+        tmp=tmp.setNum(val,2);
+        context.setValue( new KSValue(tmp));
+        }
+
+  return true;
+}
+
+static bool kspreadfunc_oct2hex( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "OCT2HEX", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString tmp=args[0]->stringValue();
+  bool ok;
+  long val=tmp.toLong(&ok,8);
+  if(!ok)
+        context.setValue( new KSValue( QString(i18n("Err") )));
+  else
+        {
+        tmp=tmp.setNum(val,16);
+        context.setValue( new KSValue(tmp));
+        }
+
+  return true;
+}
+
+static bool kspreadfunc_hex2dec( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "HEX2DEC", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString tmp=args[0]->stringValue();
+  bool ok;
+  long val=tmp.toLong(&ok,16);
+  if(!ok)
+        context.setValue( new KSValue( QString(i18n("Err") )));
+  else
+        context.setValue( new KSValue(val));
+
+  return true;
+}
+
+static bool kspreadfunc_hex2bin( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "HEX2BIN", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString tmp=args[0]->stringValue();
+  bool ok;
+  long val=tmp.toLong(&ok,16);
+  if(!ok)
+        context.setValue( new KSValue( QString(i18n("Err") )));
+  else
+        {
+        tmp=tmp.setNum(val,2);
+        context.setValue( new KSValue(tmp));
+        }
+
+  return true;
+}
+
+static bool kspreadfunc_hex2oct( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "HEX2OCT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString tmp=args[0]->stringValue();
+  bool ok;
+  long val=tmp.toLong(&ok,16);
+  if(!ok)
+        context.setValue( new KSValue( QString(i18n("Err") )));
+  else
+        {
+        tmp=tmp.setNum(val,8);
+        context.setValue( new KSValue(tmp));
+        }
 
   return true;
 }
@@ -2219,13 +2405,27 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "sign", new KSValue( new KSBuiltinFunction( module,"sign",kspreadfunc_sign) ) );
   module->addObject( "atan2", new KSValue( new KSBuiltinFunction( module,"atan2",kspreadfunc_atan2) ) );
   module->addObject( "INV", new KSValue( new KSBuiltinFunction( module,"INV",kspreadfunc_inv) ) );
-  module->addObject( "DECBIN", new KSValue( new KSBuiltinFunction( module,"DECBIN",kspreadfunc_decbin) ) );
-  module->addObject( "DECOCT", new KSValue( new KSBuiltinFunction( module,"DECOCT",kspreadfunc_decoct) ) );
-  module->addObject( "DECHEX", new KSValue( new KSBuiltinFunction( module,"DECHEX",kspreadfunc_dechex) ) );
+
+  module->addObject( "DEC2BIN", new KSValue( new KSBuiltinFunction( module,"DEC2BIN",kspreadfunc_dec2bin) ) );
+  module->addObject( "DEC2OCT", new KSValue( new KSBuiltinFunction( module,"DEC2OCT",kspreadfunc_dec2oct) ) );
+  module->addObject( "DEC2HEX", new KSValue( new KSBuiltinFunction( module,"DEC2HEX",kspreadfunc_dec2hex) ) );
+  //compatibility with old formula
+  module->addObject( "DECHEX", new KSValue( new KSBuiltinFunction( module,"DECHEX",kspreadfunc_dec2hex) ) );
+  module->addObject( "DECBIN", new KSValue( new KSBuiltinFunction( module,"DECBIN",kspreadfunc_dec2bin) ) );
+  module->addObject( "DECOCT", new KSValue( new KSBuiltinFunction( module,"DECOCT",kspreadfunc_dec2oct) ) );
+
   module->addObject( "ROUNDDOWN", new KSValue( new KSBuiltinFunction( module,"ROUNDDOWN",kspreadfunc_rounddown) ) );
   module->addObject( "ROUNDUP", new KSValue( new KSBuiltinFunction( module,"ROUNDUP",kspreadfunc_roundup) ) );
   module->addObject( "ROUND", new KSValue( new KSBuiltinFunction( module,"ROUND",kspreadfunc_round) ) );
-  module->addObject( "BINDEC", new KSValue( new KSBuiltinFunction( module,"BINDEC",kspreadfunc_bindec) ) );
+  module->addObject( "BIN2DEC", new KSValue( new KSBuiltinFunction( module,"BIN2DEC",kspreadfunc_bin2dec) ) );
+  module->addObject( "BIN2OCT", new KSValue( new KSBuiltinFunction( module,"BIN2OCT",kspreadfunc_bin2oct) ) );
+  module->addObject( "BIN2HEX", new KSValue( new KSBuiltinFunction( module,"BIN2HEX",kspreadfunc_bin2hex) ) );
+  module->addObject( "OCT2BIN", new KSValue( new KSBuiltinFunction( module,"OCT2BIN",kspreadfunc_oct2bin) ) );
+  module->addObject( "OCT2DEC", new KSValue( new KSBuiltinFunction( module,"OCT2DEC",kspreadfunc_oct2dec) ) );
+  module->addObject( "OCT2HEX", new KSValue( new KSBuiltinFunction( module,"OCT2HEX",kspreadfunc_oct2hex) ) );
+  module->addObject( "HEX2BIN", new KSValue( new KSBuiltinFunction( module,"HEX2BIN",kspreadfunc_hex2bin) ) );
+  module->addObject( "HEX2DEC", new KSValue( new KSBuiltinFunction( module,"HEX2DEC",kspreadfunc_hex2dec) ) );
+  module->addObject( "HEX2OCT", new KSValue( new KSBuiltinFunction( module,"HEX2OCT",kspreadfunc_hex2oct) ) );
   return module;
 }
 

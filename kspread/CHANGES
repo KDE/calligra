@@ -1054,3 +1054,9 @@ Now you can apply parameters at a entire column/row
 -Now you can hide zero value, it's an option (kspread_dlg_preference -> hide zero)
 -Now you can convert first letter in upper case (kspread_dlg_preference-> "convert ...")
 -You can used special paste on a column/row
+
+2000-11-08-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Add new functions : OCT2BIN ,OCT2HEX,OCT2DEC ; HEX2BIN ,HEX2OCT,HEX2DEC ; BIN2HEX ,BIN2OCT,BIN2DEC
+renamed DECBIN -> DEC2BIN  , DECHEx -> DEC2HEX , DECOCT -> DEC2OCT but there is against
+compatibility with old function you can used against DECHEX, DECOCT, DECBIN
