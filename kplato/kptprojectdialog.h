@@ -34,8 +34,9 @@ class KPTProjectDialogImpl : public KPTProjectDialogBase {
     Q_OBJECT
 public:
     KPTProjectDialogImpl (QWidget *parent);
+
 private slots:
-    void slotCheckAllFiedsFilled();
+    void slotCheckAllFieldsFilled();
     void slotSchedulingChanged(int activated);
 	void slotChooseLeader();
 

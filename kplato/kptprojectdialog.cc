@@ -50,11 +50,16 @@ KPTProjectDialog::KPTProjectDialog(KPTProject &p, QWidget *parent, const char *n
     setMainWidget(dia);
     enableButtonOK(false);
 
+	dia->namefield->setText(project.name());
+	dia->leaderfield->setText(project.leader());
+
     connect(dia, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
     connect(dia, SIGNAL( schedulingTypeChanged(int) ), this, SLOT( slotSchedulingChanged(int) ));
 
     slotSchedulingChanged(dia->schedulerType->currentItem());
     dia->namefield->setFocus();
+
+    connect(resourcesTab, SIGNAL( changed() ), dia, SLOT( slotCheckAllFieldsFilled() ));
 }
 
 
@@ -70,6 +75,8 @@ void KPTProjectDialog::slotOk() {
     project.setName(dia->namefield->text());
     project.setLeader(dia->leaderfield->text());
     project.setDescription(dia->descriptionfield->text());
+
+	resourcesTab->ok();
 
     accept();
 }
@@ -110,13 +117,13 @@ void KPTProjectDialog::slotSchedulingChanged(int activated) {
 }
 
 KPTProjectDialogImpl::KPTProjectDialogImpl (QWidget *parent) : KPTProjectDialogBase(parent) {
-    connect (namefield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFiedsFilled()) );
-    connect (leaderfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFiedsFilled()) );
+    connect (namefield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect (leaderfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
     connect (schedulerType, SIGNAL(activated( int )), this, SLOT(slotSchedulingChanged( int )) );
 	connect (chooseLeader, SIGNAL(pressed()), this, SLOT(slotChooseLeader()));
 }
 
-void KPTProjectDialogImpl::slotCheckAllFiedsFilled() {
+void KPTProjectDialogImpl::slotCheckAllFieldsFilled() {
     emit obligatedFieldsFilled( !(namefield->text().isEmpty() || leaderfield->text().isEmpty()));
 }
 

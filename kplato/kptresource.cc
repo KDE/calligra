@@ -39,6 +39,10 @@ KPTRisk* KPTResourceGroup::getRisk(int) {
     return 0L;
 }
 
+void KPTResourceGroup::removeResource(KPTResource *resource) {
+    m_resources.removeRef(resource);
+}
+
 void KPTResourceGroup::removeResource(int) {
 }
     

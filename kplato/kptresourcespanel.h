@@ -41,7 +41,7 @@ public:
 class KPTResourceItem : public QListBoxText {
 public:
     KPTResourceItem(KPTResource *item)
-        : QListBoxText(item->name()) { m_resource = item; }
+        : QListBoxText(item->name()) { m_resource = item; m_group = NULL; }
 
     void setName(const QString &newName) {
         m_resource->setName(newName);
@@ -49,12 +49,15 @@ public:
     }
 
     KPTResource *m_resource;
+    KPTResourceGroup *m_group; // The group this resource belongs to. (For delete)
 };
 
 class KPTResourcesPanel : public ResourcesPanelBase {
     Q_OBJECT
 public:
     KPTResourcesPanel (QWidget *parent, KPTProject *project);
+
+	void ok();
 
 protected slots:
     void slotAddGroup();
@@ -67,9 +70,14 @@ protected slots:
     void slotResourceRename(const QString &newName);
     void slotResourceChanged( QListBoxItem*);
 
+signals:
+	void changed();
+
 private:
     KPTProject *project;
     KPTGroupItem *m_groupItem;
+	QPtrList<KPTResourceGroup> m_deletedGroups;
+	QPtrList<KPTResourceItem> m_deletedResources;
 };
 
 #endif // KPTPRESOURCESPANEL_H
