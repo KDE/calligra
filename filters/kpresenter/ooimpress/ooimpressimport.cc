@@ -1851,59 +1851,18 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
         // underlining
         if ( m_styleStack.hasAttributeNS( ooNS::style, "text-underline" ) ) // 3.10.22
         {
-            QString underType = m_styleStack.attributeNS( ooNS::style, "text-underline" );
+            QString underline;
+            QString styleline;
+            OoUtils::importUnderline( m_styleStack.attributeNS( ooNS::style, "text-underline" ),
+                                      underline, styleline );
             QString underLineColor = m_styleStack.attributeNS( ooNS::style, "text-underline-color" );// 3.10.23
-            if ( underType == "single" )
-            {
-                text.setAttribute( "underline", 1 );
-                text.setAttribute( "underlinestyleline", "solid" );
-                text.setAttribute( "underlinecolor", underLineColor );
-            }
-            else if ( underType == "double" )
-            {
-                text.setAttribute( "underline", "double" );
-                text.setAttribute( "underlinestyleline", "solid" );
-                text.setAttribute( "underlinecolor", underLineColor );
-            }
-            else if ( underType == "bold" )
-            {
-                text.setAttribute( "underline", "single-bold" );
-                text.setAttribute( "underlinestyleline", "solid" );
-                text.setAttribute( "underlinecolor", underLineColor );
-            }
-            else if ( underType == "wave" )
-            {
-                text.setAttribute( "underline", "wave" );
-                text.setAttribute( "underlinestyleline", "solid" );
-                text.setAttribute( "underlinecolor", underLineColor );
-            }
-            else if ( underType == "dotted" )
-            {
-                text.setAttribute( "underline", 1 );
-                text.setAttribute( "underlinestyleline", "dot" );
-                text.setAttribute( "underlinecolor", underLineColor );
 
-            }
-            else if ( underType == "dash" )
-            {
-                text.setAttribute( "underline", 1 );
-                text.setAttribute( "underlinestyleline", "dash" );
-                text.setAttribute( "underlinecolor", underLineColor );
-            }
-            else if ( underType == "dot-dash" )
-            {
-                text.setAttribute( "underline", 1 );
-                text.setAttribute( "underlinestyleline", "dash" );
-                text.setAttribute( "underlinecolor", underLineColor );
-            }
-            else if ( underType == "bold-dotted" )
-            {
-                text.setAttribute( "underline", "single-bold" );
-                text.setAttribute( "underlinestyleline", "dot" );
-                text.setAttribute( "underlinecolor", underLineColor );
-            }
+            text.setAttribute( "value", underline );
+            text.setAttribute( "styleline", styleline );
 
-            if (wordByWord)
+            if ( !underLineColor.isEmpty() && underLineColor != "font-color" )
+                text.setAttribute("underlinecolor", underLineColor);
+            if ( wordByWord )
                 text.setAttribute("wordbyword", 1);
         }
 #if 0 // strange ooimpress doesn't implement it
