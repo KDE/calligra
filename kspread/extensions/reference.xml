@@ -59,7 +59,7 @@
         <Type range="true">String</Type>
       </Parameter>
       <Help>
-	<Text>Returns the number of areas in the reference string. An area can be a a single cell or a set of cells.</Text>
+	<Text>Returns the number of areas in the reference string. An area can be asingle cell or a set of cells.</Text>
 	<Syntax>AREAS(reference)</Syntax>
 	<Example>AREAS(A1) returns 1</Example>
 	<Example>AREAS((A1; A2:A4)) returns 2</Example>
