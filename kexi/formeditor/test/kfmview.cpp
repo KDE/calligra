@@ -85,19 +85,19 @@ KFMView::KFMView()
 	new KAction(i18n("Send Widget to Back"), "lower", KShortcut(0), manager, SLOT(sendWidgetToBack()), actionCollection(), "format_lower");
 
 	KActionMenu *alignMenu = new KActionMenu(i18n("Align Widgets position"), QString::null, actionCollection(), "align_menu");
-	alignMenu->insert( new KAction(i18n("Align To Left"), "aoleft", KShortcut(0), manager, SLOT(alignWidgetsToLeft()), actionCollection(), "align_to_left") );
-	alignMenu->insert( new KAction(i18n("Align To Right"), "aoright", KShortcut(0), manager, SLOT(alignWidgetsToRight()), actionCollection(), "align_to_right") );
-	alignMenu->insert( new KAction(i18n("Align To Top"), "aotop", KShortcut(0), manager, SLOT(alignWidgetsToTop()), actionCollection(), "align_to_top") );
-	alignMenu->insert( new KAction(i18n("Align To Bottom"), "aobottom", KShortcut(0), manager, SLOT(alignWidgetsToBottom()), actionCollection(), "align_to_bottom") );
-	alignMenu->insert( new KAction(i18n("Align To Grid"), "grid", KShortcut(0), manager, SLOT(alignWidgetsToGrid()), actionCollection(), "align_to_grid") );
+	alignMenu->insert( new KAction(i18n("To Left"), "aoleft", KShortcut(0), manager, SLOT(alignWidgetsToLeft()), actionCollection(), "align_to_left") );
+	alignMenu->insert( new KAction(i18n("To Right"), "aoright", KShortcut(0), manager, SLOT(alignWidgetsToRight()), actionCollection(), "align_to_right") );
+	alignMenu->insert( new KAction(i18n("To Top"), "aotop", KShortcut(0), manager, SLOT(alignWidgetsToTop()), actionCollection(), "align_to_top") );
+	alignMenu->insert( new KAction(i18n("To Bottom"), "aobottom", KShortcut(0), manager, SLOT(alignWidgetsToBottom()), actionCollection(), "align_to_bottom") );
+	alignMenu->insert( new KAction(i18n("To Grid"), "aopos2grid", KShortcut(0), manager, SLOT(alignWidgetsToGrid()), actionCollection(), "align_to_grid") );
 
 	KActionMenu *sizeMenu = new KActionMenu(i18n("Adjust Widgets size"), QString::null, actionCollection(), "adjust_size_menu");
-	sizeMenu->insert( new KAction(i18n("To fit"), "viewmagfit", KShortcut(0), manager, SLOT(adjustWidgetSize()), actionCollection(), "adjust_to_fit") );
-	sizeMenu->insert( new KAction(i18n("To grid"), QString::null, KShortcut(0), manager, SLOT(adjustSizeToGrid()), actionCollection(), "adjust_size_grid") );
-	sizeMenu->insert( new KAction(i18n("To shortest"), QString::null, KShortcut(0), manager, SLOT(adjustHeightToSmall()), actionCollection(), "adjust_height_small") );
-	sizeMenu->insert( new KAction(i18n("To tallest"), QString::null, KShortcut(0), manager, SLOT(adjustHeightToBig()), actionCollection(), "adjust_height_big") );
-	sizeMenu->insert( new KAction(i18n("To narrowest"), QString::null, KShortcut(0), manager, SLOT(adjustWidthToSmall()), actionCollection(), "adjust_width_small") );
-	sizeMenu->insert( new KAction(i18n("To widest"), QString::null, KShortcut(0), manager, SLOT(adjustWidthToBig()), actionCollection(), "adjust_width_big") );
+	sizeMenu->insert( new KAction(i18n("To Fit"), "aofit", KShortcut(0), manager, SLOT(adjustWidgetSize()), actionCollection(), "adjust_to_fit") );
+	sizeMenu->insert( new KAction(i18n("To Grid"), "aogrid", KShortcut(0), manager, SLOT(adjustSizeToGrid()), actionCollection(), "adjust_size_grid") );
+	sizeMenu->insert( new KAction(i18n("To Shortest"), "aoshortest", KShortcut(0), manager, SLOT(adjustHeightToSmall()), actionCollection(), "adjust_height_small") );
+	sizeMenu->insert( new KAction(i18n("To Tallest"), "aotallest", KShortcut(0), manager, SLOT(adjustHeightToBig()), actionCollection(), "adjust_height_big") );
+	sizeMenu->insert( new KAction(i18n("To Narrowest"), "aonarrowest", KShortcut(0), manager, SLOT(adjustWidthToSmall()), actionCollection(), "adjust_width_small") );
+	sizeMenu->insert( new KAction(i18n("To Widest"), "aowidest", KShortcut(0), manager, SLOT(adjustWidthToBig()), actionCollection(), "adjust_width_big") );
 
 	manager->createActions(actionCollection(), this);
 	connect(manager, SIGNAL(createFormSlot(Form*, const QString &, const QString &)),
