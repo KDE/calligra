@@ -251,7 +251,7 @@ void TxtCursor::setPositionParagraph(unsigned int paragraph,unsigned int pos)
   absPos = 0;
   int i;
 
-  for (i = 0;i < paragraph;i++)
+  for (i = 0;i < (int)paragraph;i++)
     absPos += txtObj->paragraphAt(i)->paragraphLength();
 
   absPos += pos;
@@ -265,10 +265,10 @@ void TxtCursor::setPositionParagraph(unsigned int paragraph,unsigned int line,un
   absPos = 0;
   int i;
 
-  for (i = 0;i < paragraph;i++)
+  for (i = 0;i < (int)paragraph;i++)
     absPos += txtObj->paragraphAt(i)->paragraphLength();
 
-  for (i = 0;i < line;i++)
+  for (i = 0;i < (int)line;i++)
     absPos += txtObj->paragraphAt(paragraph)->lineAt(i)->lineLength();
 
   absPos += pos;
@@ -282,7 +282,7 @@ void TxtCursor::setPositionLine(unsigned int line,unsigned int pos)
   absPos = 0;
   int i;
 
-  for (i = 0;i < line;i++)
+  for (i = 0;i < (int)line;i++)
     absPos += txtObj->lineAt(i)->lineLength();
 
   absPos += pos;
@@ -413,7 +413,7 @@ int TxtObj::getPos(int pos)
   QFontMetrics fm(objFont);
   int w = 0;
 
-  for (int i = 0;i < objText.length();i++)
+  for (int i = 0;i < (int)objText.length();i++)
     {
       if (pos >= w && pos <= w + fm.width(objText[i]))
 	return i;
@@ -461,7 +461,7 @@ void TxtLine::deleteChar(unsigned int pos)
 
   if (obj != -1)
     {
-      unsigned int relPos,i,w = 0;
+      int relPos,i,w = 0;
 //       TxtObj *obj1 = new TxtObj();
 //       TxtObj *obj2 = new TxtObj();
       
@@ -492,7 +492,7 @@ void TxtLine::backspaceChar(unsigned int pos)
 
   if (obj != -1)
     {
-      unsigned int relPos,i,w = 0;
+      int relPos,i,w = 0;
 
       // get the cursor position relative to the object 
       for (i = 0;i < obj;i++)
@@ -599,7 +599,7 @@ void TxtLine::splitObj(unsigned int pos)
 
   if (obj != -1)
     {
-      unsigned int relPos,i,w = 0;
+      int relPos,i,w = 0;
       TxtObj *obj1 = new TxtObj();
       TxtObj *obj2 = new TxtObj();
       
@@ -725,14 +725,14 @@ QString TxtLine::getPartOfText(int _from,int _to)
   int currPos = 0;
   int _f,_t;
 
-  for (int i = 0;i < items();i++)
+  for (int i = 0;i < (int)items();i++)
     {
       _f = _from - currPos;
       _f = _f > 0 ? _f : 0;
-      _f = _f < itemAt(i)->textLength() ? _f : itemAt(i)->textLength();
+      _f = _f < (int)itemAt(i)->textLength() ? _f : (int)itemAt(i)->textLength();
       _t = _to - currPos;
       _t = _t > 0 ? _t : 0;
-      _t = _t < itemAt(i)->textLength() ? _t : itemAt(i)->textLength();
+      _t = _t < (int)itemAt(i)->textLength() ? _t : (int)itemAt(i)->textLength();
       str.append(itemAt(i)->text().mid(_f,_t - _f));
 
       currPos += itemAt(i)->textLength();
@@ -755,7 +755,7 @@ unsigned int TxtLine::words()
       while (true)
 	{
 	  _ind = str.find(" ",ind);
-	  if (_ind == -1) break;
+	  if ((int)_ind == -1) break;
 	  _words++;
 	  ind = _ind + 1;
 	}
@@ -786,7 +786,7 @@ QString TxtLine::wordAt(unsigned int pos,int &ind)
 
 	      if (_ind == -1) break;
 
-	      if (_word == pos) return str.mid(ind,_ind - ind);
+	      if (_word == (int)pos) return str.mid(ind,_ind - ind);
 	      
 	      _word++;
 	      ind = _ind + 1;
@@ -955,6 +955,8 @@ QRect TxtParagraph::breakLines(unsigned int wid)
 			  TxtObj::NORMAL,TxtObj::SEPARATOR);
     }
   //debug("break lines end");
+
+  return QRect();
 }
 
 /*===================== break lines ==============================*/
@@ -1011,7 +1013,7 @@ void TxtParagraph::break_Lines(unsigned int wid)
 /*==================== concat all lines to one line ==============*/
 TxtLine* TxtParagraph::toOneLine()
 {
-  unsigned int i,j;
+  unsigned int i;
   linePtr = new TxtLine();
 
   if (!lineList.isEmpty())
@@ -1045,7 +1047,7 @@ void TxtParagraph::doComposerMode(QColor quoted_color,QFont quoted_font,QColor n
 	  quoted = false;
 	  if (linePtr->items() == 0) break;
 	  
-	  for (i = 0;i < linePtr->items();i++)
+	  for (i = 0;i < (int)linePtr->items();i++)
 	    {
 	      obj = linePtr->itemAt(i);
 	      
@@ -1062,7 +1064,7 @@ void TxtParagraph::doComposerMode(QColor quoted_color,QFont quoted_font,QColor n
 	      else break;
 	    }     
 
-	  for (i = 0;i < linePtr->items();i++)
+	  for (i = 0;i < (int)linePtr->items();i++)
 	    {
 	      if (quoted)
 		{
@@ -1086,7 +1088,7 @@ unsigned int TxtParagraph::items()
 
   if (!lineList.isEmpty())
     {
-      for (int i = 0;i < lineList.count();i++)
+      for (int i = 0;i < (int)lineList.count();i++)
 	_items += lineList.at(i)->items();
     }
   
@@ -1100,7 +1102,7 @@ unsigned int TxtParagraph::words()
 
   if (!lineList.isEmpty())
     {
-      for (int i = 0;i < lineList.count();i++)
+      for (int i = 0;i < (int)lineList.count();i++)
 	_words += lineList.at(i)->words();
     }
   
@@ -1114,7 +1116,7 @@ TxtObj* TxtParagraph::itemAt(unsigned int pos)
   
   if (!lineList.isEmpty())
     {
-      for (int i = 0;i < lines();i++)
+      for (int i = 0;i < (int)lines();i++)
 	{
 	  if (pos < _item + lineAt(i)->items())
 	    {
@@ -1124,6 +1126,8 @@ TxtObj* TxtParagraph::itemAt(unsigned int pos)
 	  else _item += lineAt(i)->items();
 	}
     }
+
+  return 0;
 }
 
 /*======================= get word ===============================*/
@@ -1134,7 +1138,7 @@ QString TxtParagraph::wordAt(unsigned int pos,int &ind)
 
   if (pos < words() && !lineList.isEmpty())
     {
-      for (int i = 0;i < lines();i++)
+      for (int i = 0;i < (int)lines();i++)
 	{
 	  if (pos < _word + lineAt(i)->words())
 	    {
@@ -1311,7 +1315,7 @@ QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false,in
     }
   else
     {
-      for (unsigned i = 0;i < paragraphs();i++)
+      for (int i = 0;i < (int)paragraphs();i++)
 	{
 	  if (from == -1 && to == -1 || from <= i && to >= i)
 	    paintCell(&p,i,0);
@@ -1496,6 +1500,7 @@ QString KTextObject::toASCII(bool linebreak=true)
 		      (const char*)objEnumListType.after);	      
 	    str += chr;
 	  } break;
+	default: break;
 	}
 
       for (j = 0;j < txtParagraph->lines();j++)
@@ -1508,6 +1513,7 @@ QString KTextObject::toASCII(bool linebreak=true)
 		case PLAIN: break;
 		case UNSORT_LIST: str += "  "; break;
 		case ENUM_LIST: str += space.left(chr.length()); break;
+		default: break;
 		}
 	    }
 
@@ -1624,6 +1630,7 @@ QString KTextObject::toHTML(bool clean=false,bool onlyBody=false)
 	
 	str += "<OL>\n";
        } break;
+    default: break;
     }
 
   for (i = 0;i < paragraphs();i++)
@@ -1654,6 +1661,7 @@ QString KTextObject::toHTML(bool clean=false,bool onlyBody=false)
 	case ENUM_LIST:
 	  str += "<LI>\n";
 	  break;
+	default: break;
 	}
 
       for (j = 0;j < txtParagraph->lines();j++)
@@ -1715,6 +1723,7 @@ QString KTextObject::toHTML(bool clean=false,bool onlyBody=false)
       break;
     case ENUM_LIST: str += "</OL>\n";
       break;
+    default: break;
     }
 
   // foot
@@ -1753,7 +1762,6 @@ void KTextObject::addText(QString text,QFont font,QColor color,
 {
   TxtObj *txtObj;
   TxtParagraph *txtParagraph;
-  int i;
   int br = -1,sp = -1;
 
   if (htmlMode)
@@ -1876,7 +1884,6 @@ void KTextObject::parseHTML(QString text)
 
   text = text.simplifyWhiteSpace();
 
-  int i;
   ParsedTag parsedTag;
   QFont font,oldFont;
   QColor color,oldColor;
@@ -2057,6 +2064,7 @@ void KTextObject::parseHTML(QString text)
 	    case BREAK:
 	      newPara = true;
 	      break;
+	    default: break;
 	    }
 	}
     }	  
@@ -2241,9 +2249,9 @@ unsigned int KTextObject::items()
 {
   unsigned int _items = 0;
 
-  for (int i = 0;i < paragraphs();i++)
+  for (int i = 0;i < (int)paragraphs();i++)
     {
-      for (int j = 0;j < paragraphAt(i)->lines();j++)
+      for (int j = 0;j < (int)paragraphAt(i)->lines();j++)
 	_items += paragraphAt(i)->lineAt(j)->items();
     }
 
@@ -2253,7 +2261,7 @@ unsigned int KTextObject::items()
 /*=================== get number of TxtObjs  in a line ===========*/
 unsigned int KTextObject::itemsInLine(int line)
 {
-  if (line < lines())
+  if (line < (int)lines())
     return lineAt(line)->items();
 
   return 0;
@@ -2262,7 +2270,7 @@ unsigned int KTextObject::itemsInLine(int line)
 /*========== get number of TxtObjs in a line in a para ===========*/
 unsigned int KTextObject::itemsInLine(int line,int para)
 {
-  if (para < paragraphs() && line < paragraphAt(para)->lines())
+  if (para < (int)paragraphs() && line < (int)paragraphAt(para)->lines())
     return paragraphAt(para)->lineAt(line)->items();
   return 0;
 }
@@ -2270,7 +2278,7 @@ unsigned int KTextObject::itemsInLine(int line,int para)
 /*=================== get number of TxtObjs in a para ============*/
 unsigned int KTextObject::itemsInParagraph(int para)
 {
-  if (para < paragraphs())
+  if (para < (int)paragraphs())
     return paragraphAt(para)->items();
   return 0;
 }
@@ -2282,9 +2290,9 @@ unsigned int KTextObject::words()
   QString str;
   int ind,_ind;
 
-  for (int i = 0;i < paragraphs();i++)
+  for (int i = 0;i < (int)paragraphs();i++)
     {
-      for (int j = 0;j < paragraphAt(i)->lines();j++)
+      for (int j = 0;j < (int)paragraphAt(i)->lines();j++)
 	{
 	  str = paragraphAt(i)->lineAt(j)->getText();
 	  str = str.simplifyWhiteSpace();
@@ -2309,7 +2317,7 @@ unsigned int KTextObject::words()
 /*=================== get number of words in a line ==============*/
 unsigned int KTextObject::wordsInLine(int line)
 {
-  if (line < lines())
+  if (line < (int)lines())
     return lineAt(line)->words();
 
   return 0;
@@ -2318,7 +2326,7 @@ unsigned int KTextObject::wordsInLine(int line)
 /*========== get number of words in a line in a para =============*/
 unsigned int KTextObject::wordsInLine(int line,int para)
 {
-  if (para < paragraphs() && line < paragraphAt(para)->lines())
+  if (para < (int)paragraphs() && line < (int)paragraphAt(para)->lines())
     return paragraphAt(para)->lineAt(line)->words();
 
   return 0;
@@ -2327,7 +2335,7 @@ unsigned int KTextObject::wordsInLine(int line,int para)
 /*=================== get number of words in a para ==============*/
 unsigned int KTextObject::wordsInParagraph(int para)
 {
-  if (para < paragraphs())
+  if (para < (int)paragraphs())
     return paragraphAt(para)->words();
 
   return 0;
@@ -2338,7 +2346,7 @@ unsigned int KTextObject::lines()
 {
   unsigned int _lines = 0;
 
-  for (int i = 0;i < paragraphs();i++)
+  for (int i = 0;i < (int)paragraphs();i++)
     _lines += paragraphAt(i)->lines();
   
   return _lines;
@@ -2347,7 +2355,7 @@ unsigned int KTextObject::lines()
 /*=================== get number of lines in a para ==============*/
 unsigned int KTextObject::linesInParagraph(int para)
 {
-  if (para < paragraphs())
+  if (para < (int)paragraphs())
     return paragraphAt(para)->lines();
 
   return 0;
@@ -2356,13 +2364,13 @@ unsigned int KTextObject::linesInParagraph(int para)
 /*==================== get TxtObj ================================*/
 TxtObj* KTextObject::itemAt(int pos)
 {
-  if (pos < items())
+  if (pos < (int)items())
     {
       int _item = 0; 
 
-      for (int i = 0;i < paragraphs();i++)
+      for (int i = 0;i < (int)paragraphs();i++)
 	{
-	  if (pos < _item + paragraphAt(i)->items())
+	  if (pos < (int)_item + (int)paragraphAt(i)->items())
 	    {
 	      pos -= _item;
 	      return paragraphAt(i)->itemAt(pos);
@@ -2377,7 +2385,7 @@ TxtObj* KTextObject::itemAt(int pos)
 /*==================== get TxtObj ================================*/
 TxtObj* KTextObject::itemAtLine(int pos,int line)
 {
-  if (line < lines() && pos < lineAt(line)->items())
+  if (line < (int)lines() && pos < (int)lineAt(line)->items())
     return lineAt(line)->itemAt(pos);
   
   return 0;
@@ -2386,7 +2394,7 @@ TxtObj* KTextObject::itemAtLine(int pos,int line)
 /*==================== get TxtObj ================================*/
 TxtObj* KTextObject::itemAtPara(int pos,int para)
 {
-  if (para < paragraphs() && pos < paragraphAt(para)->items())
+  if (para < (int)paragraphs() && pos < (int)paragraphAt(para)->items())
     return paragraphAt(para)->itemAt(pos);
 
   return 0;
@@ -2395,8 +2403,8 @@ TxtObj* KTextObject::itemAtPara(int pos,int para)
 /*==================== get TxtObj ================================*/
 TxtObj* KTextObject::itemAt(int pos,int line,int para)
 {
-  if (para < paragraphs() && line < paragraphAt(para)->lines() && 
-      pos < paragraphAt(para)->lineAt(line)->items())
+  if (para < (int)paragraphs() && line < (int)paragraphAt(para)->lines() && 
+      pos < (int)paragraphAt(para)->lineAt(line)->items())
     return paragraphAt(para)->lineAt(line)->itemAt(pos);
     
   return 0;
@@ -2408,11 +2416,11 @@ QString KTextObject::wordAt(int pos,int &ind)
   int _word = 0;
   ind = 0;
 
-  if (pos < words())
+  if (pos < (int)words())
     {
-      for (int i = 0;i < paragraphs();i++)
+      for (int i = 0;i < (int)paragraphs();i++)
 	{
-	  if (pos < _word + paragraphAt(i)->words())
+	  if (pos < (int)_word + (int)paragraphAt(i)->words())
 	    {
 	      pos -= _word;
 	      QString r = paragraphAt(i)->wordAt(pos,ind);
@@ -2430,7 +2438,7 @@ QString KTextObject::wordAtLine(int pos,int line,int &ind)
 {
   ind = 0;
 
-  if (line < lines() && pos < lineAt(line)->words())
+  if (line < (int)lines() && pos < (int)lineAt(line)->words())
     {
       QString r = lineAt(line)->wordAt(pos,ind);
       return r;
@@ -2444,7 +2452,7 @@ QString KTextObject::wordAtPara(int pos,int para,int &ind)
 {
   ind = 0;
 
-  if (para < paragraphs() && pos < paragraphAt(para)->words())
+  if (para < (int)paragraphs() && pos < (int)paragraphAt(para)->words())
     {    
       QString r = paragraphAt(para)->wordAt(pos,ind);
       return r;
@@ -2458,8 +2466,8 @@ QString KTextObject::wordAt(int pos,int line,int para,int &ind)
 {
   ind = 0;
 
-  if (para < paragraphs() && line < paragraphAt(para)->lines() && 
-      pos < paragraphAt(para)->lineAt(line)->words())
+  if (para < (int)paragraphs() && line < (int)paragraphAt(para)->lines() && 
+      pos < (int)paragraphAt(para)->lineAt(line)->words())
     {    
       QString r = paragraphAt(para)->lineAt(line)->wordAt(pos,ind);
       return r;
@@ -2471,13 +2479,13 @@ QString KTextObject::wordAt(int pos,int line,int para,int &ind)
 /*===================== get line =================================*/
 TxtLine* KTextObject::lineAt(int line)
 {
-  if (line < lines())
+  if (line < (int)lines())
     {
       int _line = 0; 
 
-      for (int i = 0;i < paragraphs();i++)
+      for (int i = 0;i < (int)paragraphs();i++)
 	{
-	  if (line < _line + paragraphAt(i)->lines())
+	  if (line < _line + (int)paragraphAt(i)->lines())
 	    {
 	      line -= _line;
 	      return paragraphAt(i)->lineAt(line);
@@ -2487,12 +2495,14 @@ TxtLine* KTextObject::lineAt(int line)
     }
 
   else return 0;
+
+  return 0;
 }
 
 /*===================== get line =================================*/
 TxtLine* KTextObject::lineAt(int line,int para)
 {
-  if (para < paragraphs() && line < paragraphAt(para)->lines())
+  if (para < (int)paragraphs() && line < (int)paragraphAt(para)->lines())
     return paragraphAt(para)->lineAt(line);
  
   return 0;
@@ -2522,7 +2532,7 @@ void KTextObject::deleteItem(int pos)
   int para,line;
   getPara(pos,line,para);
 
-  if (para >= 0 && para < paragraphs() && line >= 0 && line < paragraphAt(para)->lines())
+  if (para >= 0 && para < (int)paragraphs() && line >= 0 && line < (int)paragraphAt(para)->lines())
     deleteItem(pos,line,para);
 }
 
@@ -2532,7 +2542,7 @@ void KTextObject::deleteItemInLine(int pos,int line)
   int para;
   getPara(line,para);
 
-  if (para >= 0 && para < paragraphs() && line >= 0 && line < paragraphAt(para)->lines())
+  if (para >= 0 && para < (int)paragraphs() && line >= 0 && line < (int)paragraphAt(para)->lines())
     deleteItem(pos,line,para);
 }
 
@@ -2542,7 +2552,7 @@ void KTextObject::deleteItemInPara(int pos,int para)
   int line;
   getLine(pos,para,line);
 
-  if (para >= 0 && para < paragraphs() && line >= 0 && line < paragraphAt(para)->lines())
+  if (para >= 0 && para < (int)paragraphs() && line >= 0 && line < (int)paragraphAt(para)->lines())
     deleteItem(pos,line,para);
 }
 
@@ -2551,8 +2561,8 @@ void KTextObject::deleteItem(int pos,int line,int para)
 {
   bool breakPara = true;
 
-  if (para < paragraphs() && line < paragraphAt(para)->lines() &&
-      pos < paragraphAt(para)->lineAt(line)->items())
+  if (para < (int)paragraphs() && line < (int)paragraphAt(para)->lines() &&
+      pos <(int) paragraphAt(para)->lineAt(line)->items())
     {
       txtCursor->setMaxPosition(txtCursor->maxPosition() - paragraphAt(para)->lineAt(line)->itemAt(pos)->textLength());
       txtCursor->setPositionAbs(txtCursor->positionAbs() - paragraphAt(para)->lineAt(line)->itemAt(pos)->textLength());
@@ -2662,7 +2672,7 @@ void KTextObject::deleteLine(int line)
   int para;
   getPara(line,para);
 
-  if (para >= 0 && para < paragraphs() && line >= 0 && line < paragraphAt(para)->lines())
+  if (para >= 0 && para < (int)paragraphs() && line >= 0 && line < (int)paragraphAt(para)->lines())
     deleteLine(line,para);
 }
 
@@ -2671,7 +2681,7 @@ void KTextObject::deleteLine(int line,int para)
 {
   bool breakPara = true;
  
-  if (para < paragraphs() && line < paragraphAt(para)->lines())
+  if (para < (int)paragraphs() && line < (int)paragraphAt(para)->lines())
     {
       txtCursor->setMaxPosition(txtCursor->maxPosition() - paragraphAt(para)->lineAt(line)->lineLength());
       txtCursor->setPositionAbs(txtCursor->positionAbs() - paragraphAt(para)->lineAt(line)->lineLength());
@@ -2696,7 +2706,7 @@ void KTextObject::deleteLine(int line,int para)
 /*====================== delete paragraph ========================*/
 void KTextObject::deleteParagraph(int para)
 {
-  if (para < paragraphs())
+  if (para < (int)paragraphs())
     {
       txtCursor->setMaxPosition(txtCursor->maxPosition() - paragraphAt(para)->paragraphLength());
       txtCursor->setPositionAbs(txtCursor->positionAbs() - paragraphAt(para)->paragraphLength());
@@ -2863,7 +2873,7 @@ void KTextObject::insertText(QString text,TxtCursor *_cursor,QFont font,QColor c
 	    {
 	    case ' ':
 	      {
-		if (!(_ind == text.length() - 1 && spaceAppended))
+		if (!(_ind == (int)text.length() - 1 && spaceAppended))
 		  {
 		    TxtObj *o = new TxtObj(" ",font,color,TxtObj::NORMAL,TxtObj::SEPARATOR);
 		    il.append(o);
@@ -2871,7 +2881,7 @@ void KTextObject::insertText(QString text,TxtCursor *_cursor,QFont font,QColor c
 		
 		insertItems(&il,_cursor,false);
 		
-		if (!(_ind == text.length() - 1 && spaceAppended))
+		if (!(_ind == (int)text.length() - 1 && spaceAppended))
 		  _cursor->setPositionAbs(_cursor->positionAbs() + str.length() + 1);
 		else 
 		  _cursor->setPositionAbs(_cursor->positionAbs() + str.length());
@@ -2986,7 +2996,7 @@ void KTextObject::insertItems(QList<TxtObj> *items,TxtCursor *_cursor,bool redra
 
   unsigned int i,objPos,w = 0;
   unsigned int para = _cursor->positionParagraph();
-  int _h = cellHeight(para);
+  //int _h = cellHeight(para);
 
   lin = paragraphAt(para)->toOneLine();
   paragraphAt(para)->append(lin);
@@ -3009,7 +3019,7 @@ void KTextObject::insertItems(QList<TxtObj> *items,TxtCursor *_cursor,bool redra
 		  objPos = lin->getAfterObj(inLine)+1;
 		else
 		  objPos = lin->getBeforeObj(inLine);
-		if (objPos != -1)
+		if ((int)objPos != -1)
 		  {
 		    obj = new TxtObj(item->text(),item->font(),item->color(),item->vertAlign(),item->type());
 		    lin->insert(objPos,obj);
@@ -3053,7 +3063,7 @@ void KTextObject::insertItems(QList<TxtObj> *items,TxtCursor *_cursor,bool redra
 		      objPos = lin->getAfterObj(inLine)+1;
 		    else
 		      objPos = lin->getBeforeObj(inLine);
-		    if (objPos != -1)
+		    if ((int)objPos != -1)
 		      {
 			obj = new TxtObj(item->text(),item->font(),item->color(),TxtObj::NORMAL,TxtObj::TEXT);
 			lin->insert(objPos,obj);
@@ -3159,10 +3169,10 @@ void KTextObject::changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCu
   int stop_pos = 0,stop_cpos = C_IN,objnum;
   int start,stop;
 
-  for (i = 0;i < _startCursor->positionParagraph();i++)
+  for (i = 0;i < (int)_startCursor->positionParagraph();i++)
     start_pos += paragraphAt(i)->items();  
 
-  for (i = 0;i < _startCursor->positionLine();i++)
+  for (i = 0;i < (int)_startCursor->positionLine();i++)
     start_pos += paragraphAt(_startCursor->positionParagraph())->lineAt(i)->items();
 
   objnum = paragraphAt(_startCursor->positionParagraph())->lineAt(_startCursor->positionLine())->getInObj(_startCursor->positionInLine());
@@ -3186,10 +3196,10 @@ void KTextObject::changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCu
   
   start_pos += objnum;
 
-  for (i = 0;i < _stopCursor->positionParagraph();i++)
+  for (i = 0;i < (int)_stopCursor->positionParagraph();i++)
     stop_pos += paragraphAt(i)->items();  
 
-  for (i = 0;i < _stopCursor->positionLine();i++)
+  for (i = 0;i < (int)_stopCursor->positionLine();i++)
     stop_pos += paragraphAt(_stopCursor->positionParagraph())->lineAt(i)->items();
 
   objnum = paragraphAt(_stopCursor->positionParagraph())->lineAt(_stopCursor->positionLine())->getInObj(_stopCursor->positionInLine());
@@ -3237,7 +3247,7 @@ void KTextObject::changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCu
 
   for (i = start;i <= stop;i++)
     {    
-      if (i < items())
+      if (i < (int)items())
 	{
 	  itemAt(i)->setFont(font);
 	  itemAt(i)->setColor(color);
@@ -3265,7 +3275,7 @@ void KTextObject::getAbsPosOfWord(int pos,int &x1,int &x2)
   int line = 0,_pos = pos,i,ind;
 
   line = lines() - 1;
-  for (i = 0;i < lines();i++)
+  for (i = 0;i < (int)lines();i++)
     {
       _pos -= lineAt(i)->words() - 1;
       if (_pos <= 0)
@@ -3322,7 +3332,7 @@ void KTextObject::getAbsPosOfWordInPara(int pos,int para,int &x1,int &x2)
     x1 += paragraphAt(i)->paragraphLength();
 
   line = paragraphAt(para)->lines() - 1; 
-  for (i = 0;i < paragraphAt(para)->lines();i++)
+  for (i = 0;i < (int)paragraphAt(para)->lines();i++)
     {
       _pos -= paragraphAt(para)->lineAt(i)->words() - 1;
       if (_pos <= 0)
@@ -3377,13 +3387,13 @@ void KTextObject::getLine(int &pos,int &line)
 {
   line = -1;
 
-  if (pos < items())
+  if (pos < (int)items())
     {
       int _item = 0; 
 
-      for (int i = 0;i < lines();i++)
+      for (int i = 0;i < (int)lines();i++)
 	{
-	  if (pos < _item + lineAt(i)->items())
+	  if (pos < (int)_item + (int)lineAt(i)->items())
 	    {
 	      pos -= _item;
 	      line = i;
@@ -3399,13 +3409,13 @@ void KTextObject::getLine(int &pos,int para,int &line)
 {
   line = -1;
 
-  if (para < paragraphs())
+  if (para < (int)paragraphs())
     {
       int _item = 0; 
 
-      for (int i = 0;i < paragraphAt(para)->lines();i++)
+      for (int i = 0;i < (int)paragraphAt(para)->lines();i++)
 	{
-	  if (pos < _item + paragraphAt(para)->lineAt(i)->items())
+	  if (pos < (int)_item + (int)paragraphAt(para)->lineAt(i)->items())
 	    {
 	      pos -= _item;
 	      line = i;
@@ -3421,13 +3431,13 @@ void KTextObject::getPara(int &line,int &para)
 {
   para = -1;
 
-  if (line < lines())
+  if (line < (int)lines())
     {
       int _line = 0; 
 
-      for (int i = 0;i < paragraphs();i++)
+      for (int i = 0;i < (int)paragraphs();i++)
 	{
-	  if (line < _line + paragraphAt(i)->lines())
+	  if (line < (int)_line + (int)paragraphAt(i)->lines())
 	    {
 	      para = i;
 	      line -= _line;
@@ -3455,7 +3465,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
   paragraphPtr2 = 0;
   paragraphPtr = 0;
   int x = xstart,y = ystart;
-  int w = cellWidth(0),h = cellHeight(row);
+  int w = cellWidth(0);//,h = cellHeight(row);
   unsigned int i = 0,j = 0,chars = 0,len = 0;
   bool drawCursor = false,cursorDrawn = false;
   QPoint c1,c2;
@@ -3538,8 +3548,8 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 
 	  // check, if the line should be drawn
 	  if (drawLine == -1 || drawParagraph == -1 ||
-	      !drawBelow && drawLine == i && drawParagraph == row ||
-	      drawBelow && (row > drawParagraph || row == drawParagraph && i >= drawLine))
+	      !drawBelow && drawLine == (int)i && drawParagraph == row ||
+	      drawBelow && (row > drawParagraph || row == drawParagraph && (int)i >= drawLine))
 	    {
 
 	      if (!drawPic)
@@ -3558,6 +3568,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		case TxtParagraph::LEFT: w -= scrBar; break;
 		case TxtParagraph::CENTER: x += (w - linePtr->width()) / 2 - scrBar / 2; break;
 		case TxtParagraph::RIGHT: x += w - linePtr->width() - scrBar; break;
+		default: break;
 		}
 
 	      // draw all objects of the line
@@ -3569,7 +3580,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		  p->setFont(objPtr->font());
 
 		  // check, if cursor should be drawn - if yes calculate it
-		  if (drawCursor = !drawPic && !cursorDrawn && showCursor() && txtCursor->positionParagraph() == row && 
+		  if (drawCursor = !drawPic && !cursorDrawn && showCursor() && (int)txtCursor->positionParagraph() == row && 
 		      txtCursor->positionLine() == i && txtCursor->positionInLine() >= chars && 
 		      txtCursor->positionInLine() <= chars+len)
 		    {
@@ -3747,7 +3758,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
   //debug("keyPressEvent begin");
   if (showCursor())
     {
-      unsigned int i;
+      unsigned int i = 0;
       bool drawAbove = false;
       changedParagraphs.clear();
       bool drawFullPara = false;
@@ -4070,6 +4081,7 @@ void KTextObject::recalc(bool breakAllLines=true)
 	QFontMetrics fm(objUnsortListType.font);
 	xstart = fm.width(objUnsortListType.chr);
       } break;
+    default: break;
     }
   
   cellWidths.at(0)->wh = width()-xstart;
@@ -4094,7 +4106,7 @@ void KTextObject::recalc(bool breakAllLines=true)
 	  else
 	    {
 	      paragraphPtr->break_Lines(linebreak_width);
-	      _width = max(_width,paragraphPtr->width());
+	      _width = max(_width,(int)paragraphPtr->width());
 	      cellWidths.at(0)->wh = _width;
 	    }
 
@@ -4116,7 +4128,7 @@ void KTextObject::splitParagraph()
   para1 = new TxtParagraph();
   para2 = new TxtParagraph();
   para3 = new TxtParagraph();
-  unsigned int i;
+  int i;
   unsigned int para = txtCursor->positionParagraph();
   unsigned int line = txtCursor->positionLine();
   int p1 = para+1,p2 = para+2;
@@ -4144,7 +4156,7 @@ void KTextObject::splitParagraph()
       else 
 	{
 	  // 1. paragraph: text before the line, in which the cursor is
- 	  for (i = 0;i < line;i++)
+ 	  for (i = 0;i < (int)line;i++)
 	    para1->append(paragraphAt(para)->lineAt(i));
 	  
 	  // 2. paragraph: empty (new) pragraph
@@ -4153,7 +4165,7 @@ void KTextObject::splitParagraph()
 	  para2->append(lin);
 
 	  // 3. paragraph: text after the line in which the cursor is
- 	  for (i = line;i < paragraphAt(para)->lines();i++)
+ 	  for (i = line;i < (int)paragraphAt(para)->lines();i++)
 	    para3->append(paragraphAt(para)->lineAt(i));
 
 	  // remove original paragraph
@@ -4204,7 +4216,7 @@ void KTextObject::splitParagraph()
       else 
 	{
 	  // 1. paragraph: text before the line, in which the cursor is, and text of the line in which the cursor is
-  	  for (i = 0;i <= line;i++)
+  	  for (i = 0;i <= (int)line;i++)
  	    para1->append(paragraphAt(para)->lineAt(i));
 	  
 	  // 2. paragraph: empty (new) pragraph
@@ -4213,7 +4225,7 @@ void KTextObject::splitParagraph()
  	  para2->append(lin);
 
 	  // 3. paragraph: text after the line in which the cursor is
-  	  for (i = line+1;i < paragraphAt(para)->lines();i++)
+  	  for (i = line+1;i < (int)paragraphAt(para)->lines();i++)
  	    para3->append(paragraphAt(para)->lineAt(i));
 
 	  // remove original paragraph
@@ -4271,7 +4283,7 @@ void KTextObject::splitParagraph()
 	para1->append(lin->itemAt(i));
       
       // insert the objects, which are after the cursor, into the secont paragraph
-      for (i = lin->getBeforeObj(inLine);i < lin->items();i++)
+      for (i = lin->getBeforeObj(inLine);i < (int)lin->items();i++)
 	para2->append(lin->itemAt(i));
       
       // remove the original paragraph
@@ -4335,9 +4347,9 @@ void KTextObject::joinParagraphs(unsigned int p1,unsigned int p2)
 /*======================= key backspace ==========================*/
 bool KTextObject::kbackspace()
 {
-  unsigned int i;
+  //unsigned int i;
   unsigned int para = txtCursor->positionParagraph();
-  unsigned int line = txtCursor->positionLine();
+  //unsigned int line = txtCursor->positionLine();
 
   changedParagraphs.append((int*)para);
   int tmp = para-1;
@@ -4393,7 +4405,7 @@ bool KTextObject::kbackspace()
 /*========================= key delete ===========================*/
 bool KTextObject::kdelete(bool _recalc=true)
 {
-  unsigned int i;
+  //unsigned int i;
   unsigned int para = txtCursor->positionParagraph();
   unsigned int line = txtCursor->positionLine();
 
@@ -4479,7 +4491,7 @@ bool KTextObject::insertChar(char c)
 	  objPos = lin->getAfterObj(inLine)+1;
 	else
 	  objPos = lin->getBeforeObj(inLine);
-	if (objPos != -1)
+	if ((int)objPos != -1)
 	  {
 	    obj = new TxtObj(" ",currFont,currColor,TxtObj::NORMAL,TxtObj::SEPARATOR);
 	    lin->insert(objPos,obj);
@@ -4520,7 +4532,7 @@ bool KTextObject::insertChar(char c)
 	    objPos = lin->getAfterObj(inLine)+1;
 	  else
 	    objPos = lin->getBeforeObj(inLine);
-	  if (objPos != -1)
+	  if ((int)objPos != -1)
 	    {
 	      obj = new TxtObj((const char*)str,currFont,currColor,TxtObj::NORMAL,TxtObj::TEXT);
 	      lin->insert(objPos,obj);
@@ -4544,10 +4556,10 @@ bool KTextObject::makeCursorVisible()
 {
   bool _update = false;
 
-  if (height() - 16 <= txtCursor->ypos() + txtCursor->height())
+  if ((int)height() - 16 <= (int)txtCursor->ypos() + (int)txtCursor->height())
     {
       _update = true;
-      setYOffset((yOffset() + txtCursor->height() < totalHeight() - height() + 16 ?
+      setYOffset(((int)yOffset() + (int)txtCursor->height() < (int)totalHeight() - (int)height() + 16 ?
 		  yOffset() + txtCursor->height() : totalHeight() - height() + 16));
       if (yOffset() == totalHeight() - height() + 16) _update = false;
     }
@@ -4584,9 +4596,9 @@ TxtCursor KTextObject::getCursorPos(int _x,int _y,bool &changed,bool set=false,b
   TxtCursor tmpCursor((KTextObject*)this);
 
   para = paragraphs() - 1;
-  for (i = 0;i < paragraphs();i++)
+  for (i = 0;i < (int)paragraphs();i++)
     {
-      if (y >= h && y <= h + paragraphAt(i)->height())
+      if (y >= h && y <= h + (int)paragraphAt(i)->height())
 	{
 	  para = i;
 	  break;
@@ -4595,9 +4607,9 @@ TxtCursor KTextObject::getCursorPos(int _x,int _y,bool &changed,bool set=false,b
     }
   
   line = paragraphAt(para)->lines() - 1;
-  for (i = 0;i < paragraphAt(para)->lines();i++)
+  for (i = 0;i < (int)paragraphAt(para)->lines();i++)
     {
-      if (y >= h && y <= h + paragraphAt(para)->lineAt(i)->height())
+      if (y >= h && y <= h + (int)paragraphAt(para)->lineAt(i)->height())
 	{
 	  line = i;
 	  break;
@@ -4615,14 +4627,15 @@ TxtCursor KTextObject::getCursorPos(int _x,int _y,bool &changed,bool set=false,b
     case TxtParagraph::LEFT: break;
     case TxtParagraph::CENTER: x -= (cellWidth(0) - linePtr->width()) / 2 - scrBar / 2; break;
     case TxtParagraph::RIGHT: x -= cellWidth(0) - linePtr->width() - scrBar; break;
+    default: break;
     }
   
   int x2 = x >= 0 ? x : 0;
 
   objPos = paragraphAt(para)->lineAt(line)->items() - 1;
-  for (i = 0;i < paragraphAt(para)->lineAt(line)->items();i++)
+  for (i = 0;i <(int) paragraphAt(para)->lineAt(line)->items();i++)
     {
-      if (x2 >= w && x2 <= w + paragraphAt(para)->lineAt(line)->itemAt(i)->width())
+      if (x2 >= w && x2 <= w + (int)paragraphAt(para)->lineAt(line)->itemAt(i)->width())
 	{
 	  objPos = i;
 	  break;
@@ -4862,7 +4875,7 @@ KTextObject::ParsedTag KTextObject::parseTag(QString tag)
 /*====================== convert hex-string to color ============*/
 QColor KTextObject::hexStringToQColor(QString str)
 {
-  int r,g,b;
+  //int r,g,b;
   
   QColor c(str);
 
@@ -4877,7 +4890,7 @@ bool KTextObject::isValid(QString str)
   str = str.simplifyWhiteSpace();
   if (str.length() == 0) return false;
 
-  for (int i = 0;i < str.length();i++)
+  for (int i = 0;i < (int)str.length();i++)
     if (str.mid(i,1) != " ") return true;
 
   return false;
@@ -4901,9 +4914,9 @@ bool KTextObject::selectionInObj(int para,int line,int item)
     {
       bool start = false,stop = false;
 
-      if (startCursor.positionParagraph() < para || startCursor.positionParagraph() == para 
-	  && startCursor.positionLine() < line) start = true;
-      else if (startCursor.positionParagraph() == para && startCursor.positionLine() == line)
+      if ((int)startCursor.positionParagraph() < para || (int)startCursor.positionParagraph() == para 
+	  && (int)startCursor.positionLine() < line) start = true;
+      else if ((int)startCursor.positionParagraph() == para && (int)startCursor.positionLine() == line)
 	{
 	  int startInLine = startCursor.positionInLine();
 	  int startItem;
@@ -4919,9 +4932,9 @@ bool KTextObject::selectionInObj(int para,int line,int item)
 	  if (startItem <= item) start = true;
 	}
 
-      if (stopCursor.positionParagraph() > para || stopCursor.positionParagraph() == para 
-	  && stopCursor.positionLine() > line) stop = true;
-      else if (stopCursor.positionParagraph() == para && stopCursor.positionLine() == line)
+      if ((int)stopCursor.positionParagraph() > para || (int)stopCursor.positionParagraph() == para 
+	  && (int)stopCursor.positionLine() > line) stop = true;
+      else if ((int)stopCursor.positionParagraph() == para && (int)stopCursor.positionLine() == line)
 	{
 	  int stopInLine = stopCursor.positionInLine();
 	  int stopItem;
@@ -4950,7 +4963,7 @@ bool KTextObject::selectFull(int para,int line,int item,int &sx,int &sw)
   bool select_full = true;
   int i,wid;
 
-  if (startCursor.positionParagraph() == para && startCursor.positionLine() == line)
+  if ((int)startCursor.positionParagraph() == para && (int)startCursor.positionLine() == line)
     {
       int startInLine = startCursor.positionInLine();
       int startItem = paragraphAt(para)->lineAt(line)->getInObj(startInLine);
@@ -4975,7 +4988,7 @@ bool KTextObject::selectFull(int para,int line,int item,int &sx,int &sw)
 	}
     }
 
-  if (stopCursor.positionParagraph() == para && stopCursor.positionLine() == line)
+  if ((int)stopCursor.positionParagraph() == para && (int)stopCursor.positionLine() == line)
     {
       wid = 0;
       int stopInLine = stopCursor.positionInLine();
@@ -5009,7 +5022,7 @@ void KTextObject::redrawSelection(TxtCursor _startCursor,TxtCursor _stopCursor)
   // should be rewritten - this is too slow
   drawLine = -1;
   drawParagraph = -1;
-  for (int i = _startCursor.positionParagraph(); i <= _stopCursor.positionParagraph();i++)
+  for (int i = (int)_startCursor.positionParagraph(); i <= (int)_stopCursor.positionParagraph();i++)
     updateCell(i,0,false);
 }
 

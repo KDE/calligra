@@ -75,9 +75,10 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
       {
 	cEffect2->insertItem(i18n("Paragraph after paragraph"));
       } break;
+    default: break;
     }
 
-  if (view->KPresenterDoc()->objList()->at(_objNum-1)->effect2 == EF_NONE)
+  if (view->KPresenterDoc()->objList()->at(_objNum-1)->effect2 == EF2_NONE)
     cEffect2->setCurrentItem((int)view->KPresenterDoc()->objList()->at(_objNum-1)->effect2);
   else
     {
@@ -86,6 +87,7 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
 	case OT_TEXT:
 	  cEffect2->setCurrentItem((int)view->KPresenterDoc()->objList()->at(_objNum-1)->effect2+TxtObjOffset);
 	  break;
+	default: break;
 	}
     }
 

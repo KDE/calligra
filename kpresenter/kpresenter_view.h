@@ -126,6 +126,8 @@ public:
   // ------ IDL ------
   virtual CORBA::Boolean printDlg();
   // edit menu
+  virtual void editUndo();
+  virtual void editRedo();
   virtual void editCut();
   virtual void editCopy();
   virtual void editPaste();
@@ -238,6 +240,9 @@ public:
 
   Page* getPage() {return page;}
 
+  void changeUndo(QString,bool);
+  void changeRedo(QString,bool);
+
 public slots:
 
   // Document signals
@@ -325,6 +330,8 @@ protected:
 
   // edit menu
   CORBA::Long m_idMenuEdit;
+  CORBA::Long m_idMenuEdit_Undo;
+  CORBA::Long m_idMenuEdit_Redo;
   CORBA::Long m_idMenuEdit_Cut;
   CORBA::Long m_idMenuEdit_Copy;
   CORBA::Long m_idMenuEdit_Paste;

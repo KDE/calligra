@@ -7,6 +7,8 @@ module KPresenter
 {
   interface KPresenterView : OPParts::View
     {
+      slot void editUndo();
+      slot void editRedo();
       slot void editCut();
       slot void editCopy();
       slot void editPaste();

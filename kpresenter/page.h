@@ -44,6 +44,7 @@
 #include "graphobj.h"
 #include "global.h"
 #include "qwmf.h"
+#include "undo_redo.h"
 
 #include <dither.h>
 
@@ -170,10 +171,16 @@ protected:
   void drawObject(PageObjects*,QPixmap*,int,int,int,int,int,int);
   int isInPicCache(int,int);
 
+  void clearUndoList();
+  void appendUndoList(PageObjects*);
+  void clearUndoListNew();
+  void appendUndoListNew(PageObjects*);
+
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
   Background *pagePtr;            
-  PageObjects *objPtr;            
+  PageObjects *objPtr,*_page_obj_,*_page_obj_new_;
+  QList<PageObjects> *_page_obj_list_,*_page_obj_list_new_;
   unsigned int oldx,oldy;                             
   bool mousePressed;              
   unsigned int modType;                    
@@ -188,10 +195,9 @@ protected:
   float _presFakt;
   QList<int> presStepList;
   QList<PicCache> picCache;
-
   int PM_DM,PM_SM;
-
   QPen presPen;
+  bool _clear_undo_list_,_append_undo_list_,_assign_page_obj_;
 
 private slots:
 

@@ -161,6 +161,18 @@ CORBA::Boolean KPresenterView_impl::printDlg()
   return true;
 }
 
+/*========================== edit undo ==========================*/
+void KPresenterView_impl::editUndo()
+{
+  m_pKPresenterDoc->undo();
+}
+
+/*========================== edit redo ==========================*/
+void KPresenterView_impl::editRedo()
+{
+  m_pKPresenterDoc->redo();
+}
+
 /*========================== edit cut ===========================*/
 void KPresenterView_impl::editCut()
 {
@@ -1228,6 +1240,7 @@ void KPresenterView_impl::alignChanged(TxtParagraph::HorzAlign align)
 	    m_rToolBarText->setButton(m_idButtonText_ARight,true); 
 	    m_rMenuBar->setItemChecked(m_idMenuExtra_TAlign_Right,true);
 	  } break;
+	default: break;
 	}
     }
 }
@@ -1441,6 +1454,28 @@ void KPresenterView_impl::showParts()
     it.current()->show();
 }
 
+/*========================= change undo =========================*/
+void KPresenterView_impl::changeUndo(QString _text,bool _enable)
+{
+  if (!_text.isEmpty())
+    {
+      // changeItem needed in OpenParts! TORBEN!!!!!
+    }
+
+  m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo,_enable);
+}
+
+/*========================= change redo =========================*/
+void KPresenterView_impl::changeRedo(QString _text,bool _enable)
+{
+  if (!_text.isEmpty())
+    {
+      // changeItem needed in OpenParts! TORBEN!!!!!
+    }
+
+  m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo,_enable);
+}
+
 /*======================= setup menu ============================*/
 void KPresenterView_impl::setupMenu()
 {
@@ -1457,6 +1492,13 @@ void KPresenterView_impl::setupMenu()
       QString tmp = kapp->kde_toolbardir().copy();
       tmp += "/editcut.xpm";
       QString pix = loadPixmap(tmp);
+      m_idMenuEdit_Undo = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Undo")),m_idMenuEdit,
+						 this,CORBA::string_dup("editUndo"));
+      m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo,false);
+      m_idMenuEdit_Redo = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Redo")),m_idMenuEdit,
+						 this,CORBA::string_dup("editRedo"));
+      m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo,false);
+      m_rMenuBar->insertSeparator(m_idMenuEdit);
       m_idMenuEdit_Cut = m_rMenuBar->insertItemP(CORBA::string_dup(pix),CORBA::string_dup(i18n("&Cut")),m_idMenuEdit,
 						this,CORBA::string_dup("editCut"));
       tmp = kapp->kde_toolbardir().copy();

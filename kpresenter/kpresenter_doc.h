@@ -60,6 +60,7 @@ class KPresenterView_impl;
 #include <komlWriter.h>
 
 #include "kpresenter_utils.h"
+#include "undo_redo.h"
 
 #include <iostream.h>
 #include <fstream.h>
@@ -286,6 +287,10 @@ public:
   QList<int> reorderPage(unsigned int,int,int,float fakt = 1.0);
   int getPageOfObj(int,int,int,float fakt = 1.0);
 
+  void addUndo(UndoRedoBaseClass*);
+  void undo();
+  void redo();
+
 signals:
 
   // document modified
@@ -300,6 +305,9 @@ signals:
 
   // restore back color
   void restoreBackColor(unsigned int);
+
+protected slots:
+  void undoRedoChange(QString,bool,QString,bool);
 
 protected:
 
@@ -331,7 +339,7 @@ protected:
   void replaceObjs();
   QString toPixString(Background *_page,QString _filename);
   int isInPixCache(QString _filename);
-  
+
   // ************ variables ************
 
   struct PixCache
@@ -380,6 +388,8 @@ protected:
 
   bool _clean;
   int objStartY,objStartNum;
+
+  UndoRedoAdmin *undo_redo;
 
 };
 

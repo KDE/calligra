@@ -612,6 +612,7 @@ void GraphObj::paintObj(QPainter *painter)
 	  }
 
       } break;
+    default: break;
     }
 }
 

@@ -31,7 +31,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
     {
       mousePressed = false;
       modType = MT_NONE;
-      resizeObjNum = 0;
+      resizeObjNum =  0;
       editNum = 0;
       drawBack = true;
       graphPtr = 0;
@@ -50,6 +50,12 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       presPen.operator=(QPen(red,3,SolidLine));
       picCache.setAutoDelete(true);
       fillBlack = true;
+      _page_obj_list_ = 0;
+      _append_undo_list_ = true;
+      _clear_undo_list_ = true;
+      _page_obj_ = 0;
+      _page_obj_new_ = 0;
+      _assign_page_obj_ = true;
     }
   else 
     {
@@ -126,7 +132,7 @@ void Page::paintBackground(QPainter *painter,QRect rect)
       painter->resetXForm();
       r = painter->viewport();
       if ((rect.intersects(QRect(getPageSize(pagePtr->pageNum,_presFakt))) && editMode) ||
-	  (!editMode && currPresPage == pageList()->at()+1))
+	  (!editMode && (int)currPresPage == pageList()->at()+1))
 	{
 	  switch (pagePtr->backType)
 	    {
@@ -237,7 +243,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
       /* draw the objects */
       if ((rect.intersects(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
 				 objPtr->ow,objPtr->oh)) && editMode) ||
-	  (!editMode && getPageOfObj(objPtr->objNum,_presFakt) == currPresPage &&
+	  (!editMode && getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage &&
 	   objPtr->presNum <= currPresStep))
 	{     
 	  switch (objPtr->objType)
@@ -474,6 +480,33 @@ void Page::mousePressEvent(QMouseEvent *e)
 /*=================== handle mouse released ======================*/
 void Page::mouseReleaseEvent(QMouseEvent *e)
 {
+  if (modType == MT_MOVE)
+    {
+      clearUndoListNew();
+      for (int i = 0;i <= (int)objList()->count() - 1;i++)
+	{
+	  if (objList()->at(i)->isSelected)
+	    {
+	      objPtr = objList()->at(i);
+	      appendUndoListNew(objPtr);
+	    }
+	}
+      
+      UndoRedoPageObjectsList *l = new UndoRedoPageObjectsList(_page_obj_list_,_page_obj_list_new_,i18n("Move object(s)")); 
+
+      view->KPresenterDoc()->addUndo(l);
+      _append_undo_list_ = true;
+      _clear_undo_list_ = true;
+    }
+  else if (modType != MT_NONE)
+    {
+      _page_obj_new_ = getObject(resizeObjNum);
+      _assign_page_obj_ = true;
+
+      UndoRedoPageObjects *o = new UndoRedoPageObjects(_page_obj_,_page_obj_new_,i18n("Resize object"));
+      view->KPresenterDoc()->addUndo(o);
+    }
+
   mousePressed = false;
   modType = MT_NONE;
   resizeObjNum = 0;
@@ -553,15 +586,19 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 	{
 	  if (modType == MT_MOVE) /* move object(s) */
 	    {
+	      if (_clear_undo_list_)
+	      clearUndoList();
 	      mx = (mx / rastX()) * rastX();
 	      my = (my / rastY()) * rastY();
 	      oldMx = (oldMx / rastX()) * rastX();
 	      oldMy = (oldMy / rastY()) * rastY();
-	      for (i=0;i<=objList()->count()-1;i++)
+	      for (i = 0;i <= objList()->count() - 1;i++)
 		{
 		  if (objList()->at(i)->isSelected)
 		    {
 		      objPtr = objList()->at(i);
+		      if (_append_undo_list_)
+			appendUndoList(objPtr);
 		      oox = objPtr->ox; ooy = objPtr->oy;
 		      oow = objPtr->ow; ooh = objPtr->oh;
 		      objPtr->ox = objPtr->ox + (mx - oldMx);
@@ -584,6 +621,9 @@ void Page::mouseMoveEvent(QMouseEvent *e)
  		      if ((ox < oox) && (oy < ooy)) _repaint(ox+ow,oy+oh,oox-ox,ooy-oy,false);
 		    }
 		}
+	      
+	      _append_undo_list_ = false;
+
 	    }
 	  else
 	    {	    
@@ -594,6 +634,14 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		  selectObj(resizeObjNum);
 		}
 	      objNum = resizeObjNum;
+
+	      if (_assign_page_obj_ && getObject(objNum))
+		{
+		  _assign_page_obj_ = false;
+		  _page_obj_ = new PageObjects;
+		  *_page_obj_ = *getObject(objNum);
+		}
+
 	      mx = (mx / rastX()) * rastX();
 	      my = (my / rastY()) * rastY();
 	      oldMx = (oldMx / rastX()) * rastX();
@@ -755,7 +803,7 @@ PageObjects* Page::getObject(int num)
   if (!objList()->isEmpty())
     {
       for (objPtr=objList()->first();objPtr != 0;objPtr=objList()->next())
-	if (objPtr->objNum == num) return objPtr;
+	if ((int)objPtr->objNum == num) return objPtr;
     }
   return 0;
 }
@@ -830,7 +878,7 @@ void Page::resizeObjTop(int diff,PageObjects* obj)
 {
   int ox,oy,ow,oh,ooy,ooh;
   
-  if ((diff > 0) || (obj->oh > 2* rastY()))
+  if ((diff > 0) || (obj->oh > 2* (int)rastY()))
     {
       ooy = obj->oy; ooh = obj->oh;
       obj->oy = obj->oy - diff;
@@ -858,7 +906,7 @@ void Page::resizeObjLeft(int diff,PageObjects* obj)
 {
   int ox,oy,ow,oh,oox,oow;
   
-  if ((diff > 0) || (obj->ow > 2* rastX()))
+  if ((diff > 0) || (obj->ow > 2 * (int)rastX()))
     {
       oox = obj->ox; oow = obj->ow;
       obj->ox = obj->ox - diff;
@@ -886,7 +934,7 @@ void Page::resizeObjBot(int diff,PageObjects* obj)
 {
   int ox,oy,ow,oh,ooh;
   
-  if ((diff < 0) || (obj->oh > 2* rastY()))
+  if ((diff < 0) || (obj->oh > 2* (int)rastY()))
     {
       ooh = obj->oh;
       obj->oh = obj->oh - diff;
@@ -912,7 +960,7 @@ void Page::resizeObjRight(int diff,PageObjects* obj)
 {
   int ox,oy,ow,oh,oow;
   
-  if ((diff < 0) || (obj->ow > 2* rastX()))
+  if ((diff < 0) || (obj->ow > 2* (int)rastX()))
     {
       oow = obj->ow;
       obj->ow = obj->ow - diff;
@@ -1311,7 +1359,7 @@ bool Page::pNext(bool)
       for (i = 0;i < objList()->count();i++)
 	{
 	  objPtr = objList()->at(i);
-	  if (getPageOfObj(objPtr->objNum,_presFakt) == currPresPage && objPtr->presNum == currPresStep
+	  if (getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage && objPtr->presNum == currPresStep
 	      && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
 	    {
 	      if (subPresStep < objPtr->textObj->paragraphs()-1)
@@ -1359,7 +1407,7 @@ bool Page::pNext(bool)
 	  for (unsigned int i = 0;i < objList()->count();i++)
 	    {
 	      objPtr = objList()->at(i);
-	      if (getPageOfObj(objPtr->objNum,_presFakt) == currPresPage && objPtr->presNum == currPresStep
+	      if (getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage && objPtr->presNum == currPresStep
 		  && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
 		{
 		  if (subPresStep < objPtr->textObj->paragraphs()-1)
@@ -1386,7 +1434,7 @@ bool Page::pNext(bool)
       for (unsigned int i = 0;i < objList()->count();i++)
 	{
 	  objPtr = objList()->at(i);
-	  if (getPageOfObj(objPtr->objNum,_presFakt) == currPresPage && objPtr->presNum == currPresStep
+	  if (getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage && objPtr->presNum == currPresStep
 	      && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
 	    {
 	      if (subPresStep < objPtr->textObj->paragraphs()-1)
@@ -1876,9 +1924,10 @@ void Page::doObjEffects()
   unsigned int i;
   QTime _time;
   int _step = 0,_steps1 = 0,_steps2 = 0,x_pos1 = 0,y_pos1 = 0;
-  int x_pos2 = kapp->desktop()->width(),y_pos2 = kapp->desktop()->height(),_step_width,_step_height;
+  int x_pos2 = kapp->desktop()->width(),y_pos2 = kapp->desktop()->height(),_step_width = 0,_step_height = 0;
   int w_pos1 = 0,h_pos1;
   bool effects = false;
+  bool nothingHappens = false;
 
   bitBlt(&screen_orig,0,0,this,0,0,kapp->desktop()->width(),kapp->desktop()->height());
   QPixmap *screen = new QPixmap(screen_orig);
@@ -1886,7 +1935,7 @@ void Page::doObjEffects()
   for (i = 0;i < objList()->count();i++)
     {
       objPtr = objList()->at(i);
-      if (getPageOfObj(objPtr->objNum,_presFakt) == currPresPage && objPtr->presNum == currPresStep)
+      if (getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage && objPtr->presNum == currPresStep)
 	{
 	  if (objPtr->effect != EF_NONE)
 	    {
@@ -1937,6 +1986,7 @@ void Page::doObjEffects()
 		case EF_WIPE_BOTTOM:
 		  y_pos1 = max(y_pos1,objPtr->oh);
 		  break;
+		default: break;
 		}
 	      effects = true;
 	    }
@@ -1952,7 +2002,6 @@ void Page::doObjEffects()
 	(kapp->desktop()->width() - x_pos2) / _step_width : (kapp->desktop()->height() - y_pos2) / _step_height;
       _time.start();
 
-      bool nothingHappens = false;
       for (;;)
 	{
 	  kapp->processEvents();
@@ -2101,6 +2150,7 @@ void Page::doObjEffects()
  			    if (h_pos1 != 0) nothingHappens = false;
 			  }
 		      } break;
+		    default: break;
 		    }
 		}
 	      
@@ -2347,4 +2397,56 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   fillBlack = true;
   editMode = true;
   repaint(false);
+}
+
+/*====================== clear undolist ==========================*/
+void Page::clearUndoList()
+{
+  if (_page_obj_list_)
+    {  
+      //_page_obj_list_->clear();
+      //delete _page_obj_list_;
+      _page_obj_list_ = 0;
+    }
+  _clear_undo_list_ = false;
+}
+
+/*====================== append undolist =========================*/
+void Page::appendUndoList(PageObjects *o)
+{
+  if (!_page_obj_list_)
+    {  
+      _page_obj_list_ = new QList<PageObjects>;
+      _page_obj_list_->setAutoDelete(true);
+    }
+
+  if (o)
+    {
+      PageObjects *p = new PageObjects;
+      *p = *o;
+      _page_obj_list_->append(p);
+    }
+}
+
+/*====================== clear undolist new =====================*/
+void Page::clearUndoListNew()
+{
+  if (_page_obj_list_new_)
+    {  
+      //_page_obj_list_orig_->clear();
+      //delete _page_obj_list_orig_;
+      _page_obj_list_new_ = 0;
+    }
+}
+
+/*====================== append undolist new ====================*/
+void Page::appendUndoListNew(PageObjects *o)
+{
+  if (!_page_obj_list_new_)
+    {  
+      _page_obj_list_new_ = new QList<PageObjects>;
+      _page_obj_list_new_->setAutoDelete(false);
+    }
+
+  _page_obj_list_new_->append(o);
 }

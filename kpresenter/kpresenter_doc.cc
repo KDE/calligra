@@ -119,6 +119,8 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   objStartNum = 0;
   setPageLayout(_pageLayout,0,0);
   pixCache.setAutoDelete(true);
+  undo_redo = new UndoRedoAdmin(64);
+  QObject::connect(undo_redo,SIGNAL(undo_redo_change(QString,bool,QString,bool)),this,SLOT(undoRedoChange(QString,bool,QString,bool)));
 }
 
 /*====================== constructor =============================*/
@@ -159,6 +161,8 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   objStartNum = 0;
   insertNewTemplate(0,0,true);
   pixCache.setAutoDelete(true);
+  undo_redo = new UndoRedoAdmin(64);
+  QObject::connect(undo_redo,SIGNAL(undo_redo_change(QString,bool,QString,bool)),this,SLOT(undoRedoChange(QString,bool,QString,bool)));
 }
 
 /*====================== destructor ==============================*/
@@ -169,6 +173,7 @@ KPresenterDocument_impl::~KPresenterDocument_impl()
   _pageList.clear();
   cleanUp();
   edeb("...KPresenterDocument_impl::~KPresenterDocument_impl() %i\n",_refcnt());
+  delete undo_redo;
 }
 
 /*======================== draw contents as QPicture =============*/
@@ -214,6 +219,7 @@ bool KPresenterDocument_impl::hasToWriteMultipart()
   return false;
 }
 
+/*======================= make child list intern ================*/
 void KPresenterDocument_impl::makeChildListIntern( OPParts::Document_ptr _doc, const char *_path )
 {
   int i = 0;
@@ -1518,6 +1524,8 @@ unsigned int KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool
   objStartNum = 0;
   objStartY = 0;
   _clean = true;
+
+  return 0;
 }
 
 /*==================== set background color ======================*/
@@ -1550,7 +1558,7 @@ void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPi
  	  
 	  pagePtr->backPic = qstrdup(backPic);
 
-	  for (i = i;i < pageNum;i++)
+	  for (i = 1;i < pageNum;i++)
 	    {
 	      if (_pageList.at(i-1)->backPic == backPic &&
 		  _pageList.at(i-1)->backPicView == pagePtr->backPicView)
@@ -1589,7 +1597,7 @@ void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPi
   
 	  pagePtr->backPic = qstrdup(backPic);
 
-	  for (i = i;i < pageNum;i++)
+	  for (i = 1;i < pageNum;i++)
 	    {
 	      if (_pageList.at(i-1)->backPic == backPic &&
 		  _pageList.at(i-1)->backPicView == pagePtr->backPicView)
@@ -2194,7 +2202,7 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
       for (unsigned int i = 0;i < _objList.count();i++)
 	{
 	  objPtr = _objList.at(i);
-	  if (getPageOfObj(objPtr->objNum,diffx,diffy,fakt) == num)
+	  if (getPageOfObj(objPtr->objNum,diffx,diffy,fakt) == (int)num)
 	    {
 	      objPtr = _objList.at(i);
 	      if (orderList.find((int*)objPtr->presNum) == -1)
@@ -2229,12 +2237,12 @@ int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float f
   int i,j;
   QRect rect;
 
-  for (i = 0;i < _objList.count();i++)
+  for (i = 0;i < (int)_objList.count();i++)
     {
       objPtr = _objList.at(i);
-      if (objPtr->objNum == objNum)
+      if ((int)objPtr->objNum == objNum)
 	{
-	  for (j = 0;j < _pageList.count();j++)
+	  for (j = 0;j < (int)_pageList.count();j++)
 	    {
 	      rect = getPageSize(j+1,diffx,diffy,fakt);
 	      rect.setWidth(QApplication::desktop()->width());
@@ -2269,6 +2277,27 @@ QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,
   QRect rect(10 - diffx,(10 + ph * (num - 1) +
 			 (num - 1) * 10) - diffy,pw,ph);
   return rect;
+}
+
+/*========================= add undo =============================*/
+void KPresenterDocument_impl::addUndo(UndoRedoBaseClass* _class)
+{
+  undo_redo->add_undo_item(_class);
+  m_bModified = true;
+}
+
+/*=========================== do undo ============================*/
+void KPresenterDocument_impl::undo()
+{
+  m_bModified = true;
+  undo_redo->undo();
+}
+
+/*=========================== do redo ============================*/
+void KPresenterDocument_impl::redo()
+{
+  m_bModified = true;
+  undo_redo->redo();
 }
 
 /*==================== rearrange objects =========================*/
@@ -2744,3 +2773,18 @@ int KPresenterDocument_impl::isInPixCache(QString _filename)
   else return -1;
 }
 
+/*====================== revert done =============================*/
+void KPresenterDocument_impl::undoRedoChange(QString _undo,bool _eundo,QString _redo,bool _eredo)
+{
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	{
+	  viewPtr->changeUndo(_undo,_eundo);
+	  viewPtr->changeRedo(_redo,_eredo);
+	  viewPtr->repaint(false);
+	}
+    }
+
+  m_bModified = true;
+}

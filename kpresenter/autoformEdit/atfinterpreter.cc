@@ -292,7 +292,7 @@ void ATFInterpreter::insertPoint(int index,bool pos)
 /*=========================== delete point =======================*/
 void ATFInterpreter::deletePoint(int pnt)
 {
-  if (!pointList.isEmpty() && pnt < pointList.count())
+  if (!pointList.isEmpty() && pnt < (int)pointList.count())
     {
       pointList.remove(pnt);
       if (!pointList.isEmpty())
