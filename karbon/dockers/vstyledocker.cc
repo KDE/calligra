@@ -194,7 +194,10 @@ ClipartWidget::addClipart()
 	VSelection* selection = m_part->document().selection();
 
 	if( selection->objects().count() == 1 )
+	{
 		clipart = selection->objects().getFirst()->clone();
+		clipart->setParent( 0L );
+	}
 
 	if( selection->objects().count() > 1 )
 	{
@@ -203,7 +206,11 @@ ClipartWidget::addClipart()
 		VGroup* group = new VGroup( 0L );
 
 		for( unsigned int i = 0; i < objects.count(); i++ )
-			group->append( objects[ i ]->clone() );
+		{
+			VObject *obj = objects[ i ]->clone();
+			obj->setParent( 0L );
+			group->append( obj );
+		}
 
 		clipart = group;
 	}
