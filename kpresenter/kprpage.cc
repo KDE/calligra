@@ -79,7 +79,8 @@ KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
     , m_masterPage( masterPage )
     , m_dcop( 0 )
     , m_selectedSlides( true )
-    , m_bHasHeader( true ), m_bHasFooter( true )
+    , m_bHasHeader( false )
+    , m_bHasFooter( false )
 
 {
     kdDebug(33001)<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;
