@@ -1135,16 +1135,16 @@ QString KoFieldVariable::fieldCode()
         return i18n("Filename");
         break;
     case VST_DIRECTORYNAME:
-        return i18n("Directory name");
+        return i18n("Directory Name");
         break;
     case VST_PATHFILENAME:
-        return i18n("Path filename");
+        return i18n("Path Filename");
         break;
     case VST_FILENAMEWITHOUTEXTENSION:
         return i18n("Filename Without Extension");
         break;
     case VST_AUTHORNAME:
-        return i18n("Author name");
+        return i18n("Author Name");
         break;
     case VST_EMAIL:
         return i18n("Email");
