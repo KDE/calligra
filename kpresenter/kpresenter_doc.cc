@@ -475,6 +475,15 @@ QDomDocument KPresenterDoc::saveXML()
         }
         presenter.appendChild(element);
     }
+
+    if ( saveOnlyPage == -1 )
+    {
+        QDomElement styles = doc.createElement( "STYLES" );
+        presenter.appendChild( styles );
+        for ( KoStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+            saveStyle( p, styles );
+    }
+
     // Write "OBJECT" tag for every child
     QPtrListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
@@ -968,6 +977,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             loadTitle(elem);
         } else if(elem.tagName()=="PAGENOTES") {
             loadNote(elem);
+        } else if( _clean && elem.tagName()=="STYLES"){
+            // Load all styles before the corresponding paragraphs try to use them!
+            loadStyleTemplates( elem );
         } else if(elem.tagName()=="OBJECTS") {
             //FIXME**********************
 #if 0
