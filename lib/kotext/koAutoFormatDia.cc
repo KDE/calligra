@@ -626,7 +626,7 @@ void KoAutoFormatDia::defaultSimpleQuote()
 void KoAutoFormatDia::chooseBulletStyle()
 {
     QString f = font().family();
-    QChar c = oSimpleBegin;
+    QChar c = bulletStyle;
     if ( KoCharSelectDia::selectChar( f, c, false ) )
     {
         pbBulletStyle->setText( c );
