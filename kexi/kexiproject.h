@@ -75,11 +75,11 @@ public:
 
 	void setModified();
 
-	KexiDB* db() { return m_db; };
-	KexiFormManager *formManager() {return m_formManager;}
-	QString url() { return m_url; }
-	bool modified() { return m_modified; }
-	bool dbIsAvaible() { return m_dbAvaible; }
+	KexiDB* db()const { return m_db; };
+	KexiFormManager *formManager()const {return m_formManager;}
+	QString url()const { return m_url; }
+	bool modified()const { return m_modified; }
+	bool dbIsAvaible()const { return m_dbAvaible; }
 	QString boolToString(bool b);
 	bool stringToBool(const QString s);
 
@@ -90,7 +90,7 @@ signals:
 
 protected:
 	void setCurrentDB(){} ;
-	
+
 private:
 	KexiDoc*	m_settings;
 	KexiDB*		m_db;

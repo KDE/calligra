@@ -126,15 +126,17 @@ KexiCreateProjectPageDB::connectDB()
 	m_cred.database = data("database").toString();
 	if(kexi->project()->initDbConnection(m_cred, data("create").toBool()))
 	{
-		return true;
-		kexi->mainWindow()->browser()->generateView();
+                kexi->mainWindow()->browser()->generateView();
+                return true;
+
 	}
+        return true;
 }
 
 void
 KexiCreateProjectPageDB::slotDatabaseChanged()
 {
-	if(!m_databases->currentItem())
+    if(!m_databases->currentItem() && m_existingRBtn->isChecked())
 		return;
 
 	if(!data("create").toBool())
