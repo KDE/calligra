@@ -4737,7 +4737,7 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
         hasComment = true;
     }
 #endif
-    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_CELL /*Name?????*/ );
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_CELL,"table-cell" );
     saveOasisCellStyle( currentCellStyle );
     xmlwriter.addAttribute( "table:style-name", mainStyles.lookup( currentCellStyle, "ce" ) );
     // group empty cells with the same style
@@ -4747,7 +4747,7 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
       while ( j <= maxCols )
       {
         KSpreadCell *nextCell = m_pTable->cellAt( j, row );
-        KoGenStyle nextCellStyle( KSpreadDoc::STYLE_CELL /*Name?????*/ );
+        KoGenStyle nextCellStyle( KSpreadDoc::STYLE_CELL,"table-cell" );
         nextCell->saveOasisCellStyle( nextCellStyle );
 
         if ( nextCell->isEmpty() && !nextCell->hasProperty( KSpreadFormat::PComment )
