@@ -2090,7 +2090,7 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
         KWFrameSet *table = fIt.current()->frameSet()->getGroupManager();
         if(table) {
             for (QPtrListIterator<KWFrame> cellIt(table->frameIterator()  ); cellIt.current() ; ++cellIt ) {
-                if(frames.contains(cellIt.current() ) ==0 && cellIt.current()->pageNum()==pageNum) 
+                if(frames.contains(cellIt.current() ) ==0 && cellIt.current()->pageNum()==pageNum)
                     frames.append(cellIt.current());
             }
         }
@@ -2100,7 +2100,7 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
     QString actionName;
     for (QPtrListIterator<KWFrame> fIt( frames ); fIt.current() ; ++fIt ) {
         KWFrame* frame = fIt.current();
-        int newZOrder;
+        int newZOrder=0;
         switch(moveType) {
             case RaiseFrame:
                 newZOrder=raiseFrame(frames,frame);
