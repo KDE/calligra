@@ -660,7 +660,7 @@ void KIllustrator::initMenu () {
 	   SLOT (menuCallback (int)));
 
   arrangement->insertItem (i18n ("Transform"), transformations);
-  arrangement->insertItem (i18n ("Align..."), ID_ARRANGE_ALIGN);
+  arrangement->insertItem (i18n ("Align/Distribute..."), ID_ARRANGE_ALIGN);
   arrangement->setAccel (CTRL + Key_A, ID_ARRANGE_ALIGN);
   arrangement->insertItem (i18n ("To Front"), ID_ARRANGE_FRONT);
   arrangement->setAccel (SHIFT + Key_PageUp, ID_ARRANGE_FRONT);
@@ -682,7 +682,7 @@ void KIllustrator::initMenu () {
   arrangement->insertItem (i18n ("Convert to Curve"), ID_ARRANGE_TO_CURVE);
   connect (arrangement, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
-  effects->insertItem (i18n ("Blend"), ID_EFFECTS_BLEND);
+  effects->insertItem (i18n ("Blend..."), ID_EFFECTS_BLEND);
   connect (effects, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
   //  extras->insertItem (i18n ("Load &Palette..."), ID_EXTRAS_LOAD_PALETTE);
@@ -720,7 +720,7 @@ void KIllustrator::initMenu () {
   popupMenu->insertSeparator ();
   popupMenu->insertItem (i18n ("Properties..."), ID_EDIT_PROPERTIES);
   popupMenu->insertSeparator ();
-  popupMenu->insertItem (i18n ("Align..."), ID_ARRANGE_ALIGN);
+  popupMenu->insertItem (i18n ("Align/Distribute..."), ID_ARRANGE_ALIGN);
   popupMenu->insertSeparator ();
   popupMenu->insertItem (i18n ("To Front"), ID_ARRANGE_FRONT);
   popupMenu->insertItem (i18n ("To Back"), ID_ARRANGE_BACK);

@@ -321,27 +321,28 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   // Menu: Layout
   text = i18n ("&Layout") ;
   menubar->insertMenu (text, m_vMenuLayout, -1, -1);
+  m_vMenuLayout->setCheckable (true);
+  
   text = i18n ("Page Layout...") ;
   m_idMenuLayout_PageLayout =
-    m_vMenuLayout->insertItem (text, this, "setupPage", 0);
+    m_vMenuLayout->insertItem4 (text, this, "setupPage", 0,-1,-1);
   m_vMenuLayout->insertSeparator (-1);
   text = i18n ("Setup Grid...") ;
   m_idMenuLayout_SetupGrid =
-    m_vMenuLayout->insertItem (text, this, "setupGrid", 0);
+    m_vMenuLayout->insertItem4 (text, this, "setupGrid", 0,-1,-1);
   text = i18n ("Setup Helplines...");
   m_idMenuLayout_SetupHelplines =
-    m_vMenuLayout->insertItem (text, this,
-			       "setupHelplines", 0);
+    m_vMenuLayout->insertItem4 (text, this,
+			       "setupHelplines", 0,-1,-1);
   m_vMenuLayout->insertSeparator (-1);
   text = i18n ("Align to Grid") ;
   m_idMenuLayout_AlignToGrid =
-    m_vMenuLayout->insertItem (text, this, "alignToGrid", 0);
-  m_vMenuLayout->setCheckable (true);
+    m_vMenuLayout->insertItem4 (text, this, "alignToGrid", 0,-1,-1);
   m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToGrid, false);
   text = i18n ("Align to Helplines") ;
   m_idMenuLayout_AlignToHelplines =
-    m_vMenuLayout->insertItem (text, this,
-			       "alignToHelplines", 0);
+    m_vMenuLayout->insertItem4 (text, this,
+			       "alignToHelplines", 0,-1,-1);
   m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToHelplines, false);
 
   // Menu: Arrange
@@ -349,7 +350,7 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   menubar->insertMenu (text, m_vMenuArrange, -1, -1);
   text = i18n ("Transform") ;
   m_vMenuArrange->insertItem8 (text, m_vMenuTransform, -1, -1);
-  text = i18n ("Align...") ;
+  text = i18n ("Align/Distribute...") ;
   m_idMenuArrange_Align = m_vMenuArrange->insertItem (text, this,
 						      "arrangeAlign", 0);
   text = i18n ("To Front") ;

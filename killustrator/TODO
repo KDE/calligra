@@ -74,12 +74,22 @@ Bugs and features from the bug and wish website
 
 Projects:
 * Import/Export filters: AI, XCF, (CMX) etc.
+  SVG filter (export/import or both) or other filters (Adobe
+  Illustrator, Corel CMX, GIMP XCF or GFig, etc.) 
   PGML: http://www.w3.org/TR/1998/NOTE-PGML
 * Autotrace plugin support, http://homepages.go.com/~martweb/AutoTrace.htm
 * WMF import/(export) filter; presently only inserting as QWmfObjects works,
   but this cannot be edited (see Edit|Insert|Clipart)
 
 Bigger ones
+* Support an nonpage drawing area and make sure no object is goes over this
+  extra area.
+  (for implemention: Consider that it might be possible that KIll. is extended
+  to multipage and that a facing page view (starting on the left or right)
+  will be come possible.)
+  
+* Export selected objects only (e.g. to eps, kil etc.)
+
 * Moving Objects between layers
   (and honor the vertical position, harder for objects which are partly in a
   layer below and above)

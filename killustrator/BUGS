@@ -23,8 +23,9 @@ Bugs from above bug page:
   Solution: Don't save these files and don't crash, when loading them!
 
 * KO: View: Grid and Helpline are initialy unchecked, despite their status
+  Align to Grid/Helpline isn't checkable (visual problem)
 
-* statusbar for the Koffice version, or is this lack a feature?
+* statusbar for the Koffice version
 
 * Available menu commands and toolbar arrangement differ between
   the standardalone version and the koffice version.

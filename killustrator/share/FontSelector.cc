@@ -41,6 +41,7 @@
 
 #include <klocale.h>
 #include <kapp.h>
+#include "version.h"
 
 #define YOFFSET  5
 #define XOFFSET  5
@@ -296,9 +297,14 @@ FontSelector::FontSelector (QWidget *parent, const char *name,
 
   
   setColors();
+
+#if NEWKDE
+  connect(KApplication::kApplication(),SIGNAL(kdisplayPaletteChanged()),
+          this,SLOT(setColors()));
+#else
   connect(KApplication::getKApplication(),SIGNAL(kdisplayPaletteChanged()),
 	  this,SLOT(setColors()));
-
+#endif
 }
 
 

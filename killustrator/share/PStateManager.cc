@@ -27,6 +27,7 @@
 
 #include <kapp.h>
 #include <qvector.h>
+#include "version.h"
 #include "GObject.h"
 #include "GText.h"
 #include "UnitBox.h"
@@ -46,7 +47,11 @@ PStateManager* PStateManager::instance () {
 }
 
 void PStateManager::readDefaultSettings () {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
   
   config->setGroup ("General");
@@ -181,7 +186,11 @@ bool PStateManager::showSplashScreen () {
 }
 
 void PStateManager::saveDefaultSettings () {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
 
   config->setGroup ("General");
