@@ -2559,6 +2559,7 @@ void KWordView::spellCheckerDone( const QString & )
     gui->getPaperWidget()->recalcWholeText();
     gui->getPaperWidget()->recalcCursor( TRUE );
     kspell->cleanUp();
+    spellCheckerFinished();
 }
 
 /*================================================================*/
