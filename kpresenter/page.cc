@@ -1046,66 +1046,80 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 void Page::keyPressEvent( QKeyEvent *e )
 {
     if ( !editMode ) {
-        switch ( e->key() ) {
-        case Key_Space: case Key_Right: case Key_Down: case Key_Next:
-            view->screenNext(); break;
-        case Key_Backspace: case Key_Left: case Key_Up: case Key_Prior:
-            view->screenPrev(); break;
-        case Key_Escape: case Key_Q: case Key_X:
-            view->screenStop(); break;
-        case Key_G:
-            slotGotoPage(); break;
-        default: break;
-        }
+	switch ( e->key() ) {
+	case Key_Space: case Key_Right: case Key_Down: case Key_Next:
+	    view->screenNext(); break;
+	case Key_Backspace: case Key_Left: case Key_Up: case Key_Prior:
+	    view->screenPrev(); break;
+	case Key_Escape: case Key_Q: case Key_X:
+	    view->screenStop(); break;
+	case Key_G:
+	    slotGotoPage(); break;
+	default: break;
+	}
     } else if ( editNum != -1 ) {
-        if ( e->key() == Key_Escape ) {
-            KPObject *kpobject = objectList()->at( editNum );
-            editNum = -1;
-            if ( kpobject->getType() == OT_TEXT ) {
-                KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-                kptextobject->deactivate( view->kPresenterDoc() );
-                kptextobject->getKTextObject()->clearFocus();
-                disconnect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
-                            this, SLOT( toFontChanged( const QFont & ) ) );
-                disconnect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
-                            this, SLOT( toColorChanged( const QColor & ) ) );
-                disconnect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
-                            this, SLOT( toAlignChanged( int ) ) );
-                disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
-                            this, SLOT( exitEditMode() ) );
-            } else if ( kpobject->getType() == OT_PART ) {
-                kpobject->deactivate();
-                _repaint( kpobject );
-            }
-        } else if ( objectList()->at( editNum )->getType() == OT_TEXT )
-            QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->
-                                     getKTextObject(), e );
+	if ( e->key() == Key_Escape ) {
+	    KPObject *kpobject = objectList()->at( editNum );
+	    editNum = -1;
+	    if ( kpobject->getType() == OT_TEXT ) {
+		KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+		kptextobject->deactivate( view->kPresenterDoc() );
+		kptextobject->getKTextObject()->clearFocus();
+		disconnect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
+			    this, SLOT( toFontChanged( const QFont & ) ) );
+		disconnect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
+			    this, SLOT( toColorChanged( const QColor & ) ) );
+		disconnect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
+			    this, SLOT( toAlignChanged( int ) ) );
+		disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			    this, SLOT( exitEditMode() ) );
+	    } else if ( kpobject->getType() == OT_PART ) {
+		kpobject->deactivate();
+		_repaint( kpobject );
+	    }
+	} else if ( objectList()->at( editNum )->getType() == OT_TEXT )
+	    QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->
+				     getKTextObject(), e );
     } else {
-        switch ( e->key() ) {
-        case Key_Next:
-            view->screenNext(); break;
-        case Key_Prior:
-            view->screenPrev(); break;
-        case Key_Down:
-            view->getVScrollBar()->addLine(); break;
-        case Key_Up:
-            view->getVScrollBar()->subtractLine(); break;
-        case Key_Right:
-            view->getHScrollBar()->addLine(); break;
-        case Key_Left:
-            view->getHScrollBar()->subtractLine(); break;
-        case Key_Tab:
-            selectNext(); break;
-        case Key_Backtab:
-            selectPrev(); break;
-        case Key_Home:
-            view->getVScrollBar()->setValue( 0 ); break;
-        case Key_End:
-            view->getVScrollBar()->setValue( view->getVScrollBar()->maxValue()); break;
-        case Key_Delete:
-            view->editDelete(); break;
-        default: break;
-        }
+	switch ( e->key() ) {
+	case Key_Next:
+	    view->screenNext(); 
+	    break;
+	case Key_Prior:
+	    view->screenPrev(); 
+	    break;
+	case Key_Down:
+	    view->getVScrollBar()->addLine(); 
+	    break;
+	case Key_Up:
+	    view->getVScrollBar()->subtractLine(); 
+	    break;
+	case Key_Right:
+	    view->getHScrollBar()->addLine(); 
+	    break;
+	case Key_Left:
+	    view->getHScrollBar()->subtractLine(); 
+	    break;
+	case Key_Tab:
+	    selectNext(); 
+	    break;
+	case Key_Backtab:
+	    selectPrev(); 
+	    break;
+	case Key_Home:
+	    view->getVScrollBar()->setValue( 0 ); 
+	    break;
+	case Key_End:
+	    view->getVScrollBar()->setValue( view->getVScrollBar()->maxValue()); 
+	    break;
+	case Key_Delete:
+	    view->editDelete(); 
+	    break;
+	case Key_Escape:
+	    setToolEditMode( TEM_MOUSE );
+	    break;
+	default: break;
+	}
     }
 }
 
