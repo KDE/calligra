@@ -160,11 +160,13 @@ public:
 
     virtual void undo();
     virtual void redo();
+    void createList( QValueList<int>&list,KSpreadTable *_tab );
 
 protected:
     QString m_tableName;
     int m_iColumn;
     int m_iNbCol;
+    QValueList<int> listCol;
 };
 
 class KSpreadUndoHideRow : public KSpreadUndoAction
@@ -175,11 +177,13 @@ public:
 
     virtual void undo();
     virtual void redo();
+    void createList( QValueList<int>&list,KSpreadTable *_tab );
 
 protected:
     QString m_tableName;
     int m_iRow;
     int m_iNbRow;
+    QValueList<int> listRow;
 };
 
 class KSpreadUndoShowColumn : public KSpreadUndoAction
@@ -190,11 +194,13 @@ public:
 
     virtual void undo();
     virtual void redo();
+    void createList( QValueList<int>&list,KSpreadTable *_tab ); 
 
 protected:
     QString m_tableName;
     int m_iColumn;
     int m_iNbCol;
+    QValueList<int> listCol;
 };
 
 class KSpreadUndoShowRow : public KSpreadUndoAction
@@ -205,11 +211,13 @@ public:
 
     virtual void undo();
     virtual void redo();
+    void createList( QValueList<int>&list,KSpreadTable *_tab );
 
 protected:
     QString m_tableName;
     int m_iRow;
     int m_iNbRow;
+    QValueList<int> listRow;
 };
 
 
