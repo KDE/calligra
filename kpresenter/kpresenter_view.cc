@@ -4531,34 +4531,17 @@ void KPresenterView::tabListChanged( const KoTabulatorList & tabList )
 
 void KPresenterView::newFirstIndent( double _firstIndent )
 {
-    KPTextView *edit=page->currentTextObjectView();
-    if (!edit) return;
-    double val = _firstIndent - edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-    KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, val );
-    if(cmd)
-        m_pKPresenterDoc->addCommand(cmd);
+    page->setNewFirstIndent(_firstIndent);
 }
 
 void KPresenterView::newLeftIndent( double _leftIndent)
 {
-    KPTextView *edit=page->currentTextObjectView();
-    if (edit)
-    {
-        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, _leftIndent );
-        if(cmd)
-            m_pKPresenterDoc->addCommand(cmd);
-    }
+    page->setNewLeftIndent(_leftIndent);
 }
 
 void KPresenterView::newRightIndent( double _rightIndent)
 {
-    KPTextView *edit=page->currentTextObjectView();
-    if (edit)
-    {
-        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, _rightIndent );
-        if(cmd)
-            m_pKPresenterDoc->addCommand(cmd);
-    }
+    page->setNewRightIndent(_rightIndent);
 }
 
 void KPresenterView::slotUpdateRuler()

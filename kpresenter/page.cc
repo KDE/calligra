@@ -1851,6 +1851,34 @@ void Page::setTextDepthMinus()
         it.current()->setMargin(QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ));
 }
 
+void Page::setNewFirstIndent(double _firstIndent)
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    double index=0.0;
+    if(!lst.isEmpty())
+        index=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    double val = _firstIndent - index;
+    for ( ; it.current() ; ++it )
+        it.current()->setMargin(QStyleSheetItem::MarginFirstLine, val);
+}
+
+void Page::setNewLeftIndent(double _leftIndent)
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setMargin(QStyleSheetItem::MarginLeft, _leftIndent);
+}
+
+void Page::setNewRightIndent(double _rightIndent)
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setMargin(QStyleSheetItem::MarginRight, _rightIndent);
+}
+
 /*================================================================*/
 bool Page::haveASelectedPictureObj()
 {

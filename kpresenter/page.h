@@ -90,6 +90,9 @@ public:
     void setTextAlign( int );
     void setTextDepthPlus();
     void setTextDepthMinus();
+    void setNewRightIndent(double _rightIndent);
+    void setNewLeftIndent(double _leftIndent);
+    void setNewFirstIndent(double _firstIndent);
     void setTabList( const KoTabulatorList & tabList );
     void setTextBold( bool b );
     void setTextItalic( bool b );
