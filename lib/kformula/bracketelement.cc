@@ -50,11 +50,11 @@ BracketElement::~BracketElement()
 
 
 BasicElement* BracketElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                      const QPoint& point, const QPoint& parentOrigin)
+                                      const KoPoint& point, const KoPoint& parentOrigin)
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        QPoint myPos(parentOrigin.x() + getX(),
+        KoPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
         e = content->goToPos(cursor, handled, point, myPos);
         if (e != 0) {
@@ -62,8 +62,8 @@ BasicElement* BracketElement::goToPos(FormulaCursor* cursor, bool& handled,
         }
 
         // We are in one of those gaps.
-        int dx = point.x() - myPos.x();
-        int dy = point.y() - myPos.y();
+        double dx = point.x() - myPos.x();
+        double dy = point.y() - myPos.y();
 
         if ((dx > content->getX()+content->getWidth()) ||
             (dy > content->getY()+content->getHeight())) {
@@ -102,8 +102,8 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
                             right->getY() + right->getHeight())));
     }
     else {
-        int contentHeight = 2 * QMAX(content->getMidline(),
-                                     content->getHeight() - content->getMidline());
+        double contentHeight = 2 * QMAX(content->getMidline(),
+                                        content->getHeight() - content->getMidline());
         left->calcSizes(style, contentHeight);
         right->calcSizes(style, contentHeight);
 
@@ -135,10 +135,10 @@ void BracketElement::draw(QPainter& painter, const QRect& r,
                           const ContextStyle& style,
 			  ContextStyle::TextStyle tstyle,
 			  ContextStyle::IndexStyle istyle,
-			  const QPoint& parentOrigin)
+			  const KoPoint& parentOrigin)
 {
-    QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    if (!QRect(myPos, getSize()).intersects(r))
+    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
         return;
 
     content->draw(painter, r, style, tstyle, istyle, myPos);
@@ -148,8 +148,8 @@ void BracketElement::draw(QPainter& painter, const QRect& r,
         right->draw(painter, r, style, tstyle, myPos);
     }
     else {
-        int contentHeight = 2 * QMAX(content->getMidline(),
-                                     content->getHeight() - content->getMidline());
+        double contentHeight = 2 * QMAX(content->getMidline(),
+                                        content->getHeight() - content->getMidline());
         left->draw(painter, r, style, contentHeight, myPos);
         right->draw(painter, r, style, contentHeight, myPos);
     }

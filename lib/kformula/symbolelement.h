@@ -45,7 +45,7 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
-                                  const QPoint& point, const QPoint& parentOrigin);
+                                  const KoPoint& point, const KoPoint& parentOrigin);
 
     // drawing
     //
@@ -69,7 +69,7 @@ public:
                       const ContextStyle& context,
 		      ContextStyle::TextStyle tstyle,
 		      ContextStyle::IndexStyle istyle,
-                      const QPoint& parentOrigin);
+                      const KoPoint& parentOrigin);
 
 
     // navigation
@@ -119,15 +119,15 @@ public:
      */
     //virtual void removeChild(FormulaCursor* cursor, BasicElement* child);
 
-    
+
     // main child
     //
     // If an element has children one has to become the main one.
-    
+
     virtual SequenceElement* getMainChild() { return content; }
     //virtual void setMainChild(SequenceElement*);
 
-    
+
     /**
      * Inserts all new children at the cursor position. Places the
      * cursor according to the direction.

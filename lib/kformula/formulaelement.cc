@@ -36,10 +36,10 @@ FormulaElement::FormulaElement(FormulaDocument* container)
 /**
  * Returns the element the point is in.
  */
-BasicElement* FormulaElement::goToPos(FormulaCursor* cursor, const QPoint& point)
+BasicElement* FormulaElement::goToPos(FormulaCursor* cursor, const KoPoint& point)
 {
     bool handled = false;
-    BasicElement* element = inherited::goToPos(cursor, handled, point, QPoint());
+    BasicElement* element = inherited::goToPos(cursor, handled, point, KoPoint());
     if (element == 0) {
         //if ((point.x() > getWidth()) || (point.y() > getHeight())) {
             cursor->setTo(this, countChildren());
@@ -74,7 +74,7 @@ void FormulaElement::calcSizes(const ContextStyle& context)
 void FormulaElement::draw(QPainter& painter, const QRect& r,
                           const ContextStyle& context)
 {
-    inherited::draw(painter, r, context, context.getBaseTextStyle(), ContextStyle::normal, QPoint());
+    inherited::draw(painter, r, context, context.getBaseTextStyle(), ContextStyle::normal, KoPoint());
 }
 
 

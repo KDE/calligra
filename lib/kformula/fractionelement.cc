@@ -43,11 +43,11 @@ FractionElement::~FractionElement()
 
 
 BasicElement* FractionElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                       const QPoint& point, const QPoint& parentOrigin)
+                                       const KoPoint& point, const KoPoint& parentOrigin)
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        QPoint myPos(parentOrigin.x() + getX(),
+        KoPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
         e = numerator->goToPos(cursor, handled, point, myPos);
         if (e != 0) {
@@ -58,8 +58,8 @@ BasicElement* FractionElement::goToPos(FormulaCursor* cursor, bool& handled,
             return e;
         }
 
-        int dx = point.x() - myPos.x();
-        int dy = point.y() - myPos.y();
+        double dx = point.x() - myPos.x();
+        double dy = point.y() - myPos.y();
 
         // the positions after the numerator / denominator
         if ((dx > numerator->getX()) &&
@@ -92,12 +92,12 @@ void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
     denominator->calcSizes(style, style.convertTextStyleFraction( tstyle ),
 			   style.convertIndexStyleLower( istyle ));
 
-    int distX = style.getDistanceX(tstyle);
-    int distY = style.getDistanceY(tstyle);
+    double distX = style.getDistanceX(tstyle);
+    double distY = style.getDistanceY(tstyle);
 
     setWidth(QMAX(numerator->getWidth(), denominator->getWidth()) + distX);
     setHeight(numerator->getHeight() + distY + denominator->getHeight());
-    setMidline(numerator->getHeight() + distY / 2);
+    setMidline(numerator->getHeight() + .5*distY);
     setBaseline(-1);
 
     numerator->setX((getWidth() - numerator->getWidth()) / 2);
@@ -117,11 +117,11 @@ void FractionElement::draw(QPainter& painter, const QRect& r,
                            const ContextStyle& style,
                            ContextStyle::TextStyle tstyle,
 			   ContextStyle::IndexStyle istyle,
-			   const QPoint& parentOrigin)
+			   const KoPoint& parentOrigin)
 {
-    QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
 
-    if (!QRect(myPos, getSize()).intersects(r))
+    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
         return;
 
     numerator->draw(painter, r, style,
@@ -132,10 +132,11 @@ void FractionElement::draw(QPainter& painter, const QRect& r,
 		      style.convertIndexStyleLower( istyle ), myPos);
 
     if (withLine) {
-        int distX = style.getDistanceX(tstyle);
+        int distX = static_cast<int>( style.getDistanceX(tstyle) );
+        int halfDistX = static_cast<int>( .5*style.getDistanceX(tstyle) );
         painter.setPen(QPen(style.getDefaultColor(), style.getLineWidth()));
-        painter.drawLine(myPos.x() + distX/2, myPos.y() + getMidline(),
-                         myPos.x() + getWidth() - (distX - distX/2), myPos.y() + getMidline());
+        painter.drawLine(myPos.x() + halfDistX, myPos.y() + getMidline(),
+                         myPos.x() + getWidth() - (distX - halfDistX), myPos.y() + getMidline());
     }
 }
 

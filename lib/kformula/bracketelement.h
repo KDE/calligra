@@ -48,7 +48,7 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
-                                  const QPoint& point, const QPoint& parentOrigin);
+                                  const KoPoint& point, const KoPoint& parentOrigin);
 
     /**
      * Calculates our width and height and
@@ -63,9 +63,9 @@ public:
      */
     virtual void draw(QPainter& painter, const QRect& r,
                       const ContextStyle& style,
-                      ContextStyle::TextStyle tstyle, 
+                      ContextStyle::TextStyle tstyle,
 		      ContextStyle::IndexStyle istyle,
-		      const QPoint& parentOrigin);
+		      const KoPoint& parentOrigin);
 
     /**
      * Enters this element while moving to the left starting inside

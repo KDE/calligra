@@ -36,6 +36,9 @@
  * Contains all the style information for the formela. The idea
  * is to change the values here (user configurable) and have
  * the elements paint themselves with this information.
+ *
+ * All distances are stored in point. Most methods return pixel
+ * values.
  */
 class ContextStyle
 {
@@ -90,12 +93,12 @@ public:
 
 
     double getReductionFactor(TextStyle tstyle) const;
-    int getDistanceX(TextStyle tstyle) const;
-    int getDistanceY(TextStyle tstyle) const;
-    int getOperatorSpace(TextStyle tstyle) const;
-    int getBaseSize() const;
+    double getDistanceX(TextStyle tstyle) const;
+    double getDistanceY(TextStyle tstyle) const;
+    double getOperatorSpace(TextStyle tstyle) const;
+    double getBaseSize() const;
     TextStyle getBaseTextStyle() const { return m_baseTextStyle; }
-    int getMinimumSize() const;
+    double getMinimumSize() const;
 
     /**
      * Calculates the font size corresponding to the given TextStyle.
@@ -103,10 +106,14 @@ public:
      * Takes into account the current zoom factor.
      **/
     double getAdjustedSize( TextStyle tstyle ) const;
-    int getLineWidth() const;
 
-    int getEmptyRectWidth() const;
-    int getEmptyRectHeight() const;
+    /**
+     * All simple lines like the one that makes up a fraction.
+     */
+    double getLineWidth() const;
+
+    double getEmptyRectWidth() const;
+    double getEmptyRectHeight() const;
 
     Alignment getMatrixAlignment() const { return center; }
 
@@ -178,6 +185,9 @@ public:
 
 private:
 
+    /**
+     * The resolution in pixel/point*zoom.
+     */
     double m_zoomedResolutionX;
     double m_zoomedResolutionY;
 

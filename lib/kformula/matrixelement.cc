@@ -49,11 +49,11 @@ MatrixElement::~MatrixElement()
 
 
 BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                     const QPoint& point, const QPoint& parentOrigin)
+                                     const KoPoint& point, const KoPoint& parentOrigin)
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        QPoint myPos(parentOrigin.x() + getX(),
+        KoPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
 
         uint rows = getRows();
@@ -70,8 +70,8 @@ BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
         }
 
         // We are in one of those gaps.
-        int dx = point.x() - myPos.x();
-        int dy = point.y() - myPos.y();
+        double dx = point.x() - myPos.x();
+        double dy = point.y() - myPos.y();
 
         uint row = rows;
         for (uint r = 0; r < rows; r++) {
@@ -144,9 +144,9 @@ BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
  */
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    QArray<int> toMidlines(getRows());
-    QArray<int> fromMidlines(getRows());
-    QArray<int> widths(getColumns());
+    QArray<double> toMidlines(getRows());
+    QArray<double> fromMidlines(getRows());
+    QArray<double> widths(getColumns());
 
     toMidlines.fill(0);
     fromMidlines.fill(0);
@@ -168,13 +168,13 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         }
     }
 
-    int distX = style.getDistanceX(tstyle);
-    int distY = style.getDistanceY(tstyle);
+    double distX = style.getDistanceX(tstyle);
+    double distY = style.getDistanceY(tstyle);
 
-    int yPos = 0;
+    double yPos = 0;
     for (uint r = 0; r < rows; r++) {
         QList<SequenceElement>* list = content.at(r);
-        int xPos = 0;
+        double xPos = 0;
         yPos += toMidlines[r];
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
@@ -195,8 +195,8 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         yPos += fromMidlines[r] + distY;
     }
 
-    int width = distX * (columns - 1);
-    int height = distY * (rows - 1);
+    double width = distX * (columns - 1);
+    double height = distY * (rows - 1);
 
     for (uint r = 0; r < rows; r++) height += toMidlines[r] + fromMidlines[r];
     for (uint c = 0; c < columns; c++) width += widths[c];
@@ -220,11 +220,11 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
 void MatrixElement::draw(QPainter& painter, const QRect& rect,
                          const ContextStyle& style,
 			 ContextStyle::TextStyle tstyle,
-			 ContextStyle::IndexStyle istyle,		     
-                         const QPoint& parentOrigin)
+			 ContextStyle::IndexStyle istyle,
+                         const KoPoint& parentOrigin)
 {
-    QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    if (!QRect(myPos, getSize()).intersects(rect))
+    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(rect))
         return;
 
     uint rows = getRows();
@@ -232,9 +232,9 @@ void MatrixElement::draw(QPainter& painter, const QRect& rect,
 
     for (uint r = 0; r < rows; r++) {
         for (uint c = 0; c < columns; c++) {
-            getElement(r, c)->draw(painter, rect, style, 
+            getElement(r, c)->draw(painter, rect, style,
 				   style.convertTextStyleFraction(tstyle),
-				   style.convertIndexStyleUpper(istyle), 
+				   style.convertIndexStyleUpper(istyle),
 				   myPos);
         }
     }

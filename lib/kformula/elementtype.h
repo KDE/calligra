@@ -53,7 +53,7 @@ public:
      * @returns whether we want to see this element.
      */
     virtual bool isPhantom(const TextElement&) const { return false; }
-    
+
     /**
      * @returns the position of the first character
      */
@@ -68,13 +68,13 @@ public:
      * @returns the space to be left before each char
      * for the given style and font size.
      */
-    virtual int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    virtual double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     /**
      * @returns the space to be left after each char
      * for the given style and font size.
      */
-    virtual int getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    virtual double getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     /**
      * @returns the font to be used for this kind of element
@@ -241,13 +241,13 @@ public:
      * @returns the space to be left before each char
      * for the given style and font size.
      */
-    virtual int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    virtual double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     /**
      * @returns the space to be left after each char
      * for the given style and font size.
      */
-    virtual int getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    virtual double getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     /**
      * @returns the font to be used for this kind of element
@@ -287,9 +287,9 @@ class Term : public OperatorType {
 public:
     Term(SequenceParser* parser);
 
-    virtual int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    virtual double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
-    virtual int getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    virtual double getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     // debug
     virtual void output();
@@ -315,7 +315,7 @@ class AssignmentSep : public OperatorType {
 public:
     AssignmentSep(SequenceParser* parser);
 
-    virtual int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    virtual double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 };

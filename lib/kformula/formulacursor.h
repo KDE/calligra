@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -47,9 +47,9 @@ class FormulaCursor {
 
     // Yes, we do have a friend.
     friend class SequenceElement;
-    
+
 public:
-	    
+
     /**
      * Creates a cursor and puts is at the beginning
      * of the formula.
@@ -59,7 +59,7 @@ public:
     FormulaCursor(FormulaElement* element);
 
     FormulaCursor& operator= (const FormulaCursor&);
-    
+
     // where the cursor and the mark are
     int getPos() const { return cursorPos; }
     int getMark() const { return markPos; }
@@ -74,7 +74,7 @@ public:
      * if it has drawn the cursor.
      */
     void clearChangedFlag() { hasChangedFlag = false; }
-    
+
     /**
      * Returns wether we are in selection mode.
      */
@@ -95,16 +95,16 @@ public:
      * the cursor can be drawn.
      */
     void calcCursorSize(bool smallCursor);
-    
+
     /**
      * Draws the cursor at its current position.
      * The cursor will always be drawn in xor mode.
      */
     void draw(QPainter&, bool smallCursor);
 
-    
+
     // simple cursor movement.
-    
+
     void moveLeft(int flag = NormalMovement);
     void moveRight(int flag = NormalMovement);
     void moveUp(int flag = NormalMovement);
@@ -114,7 +114,7 @@ public:
     void moveEnd(int flag = NormalMovement);
 
     // how to travel
-    
+
     bool getLinearMovement() const { return linearMovement; }
 
     /**
@@ -122,7 +122,7 @@ public:
      * element just by moving left and right.
      */
     void setLinearMovement(bool linear) { linearMovement = linear; }
-    
+
     /**
      * Moves the cursor inside the element. Selection is turned off.
      */
@@ -133,13 +133,13 @@ public:
     void mousePress(const QPoint&, int flags);
     void mouseMove(const QPoint&, int flags);
     void mouseRelease(const QPoint&, int flags);
-    
+
     /**
      * Inserts the child at the current position.
      * Ignores the selection.
      */
     void insert(BasicElement*, BasicElement::Direction = BasicElement::beforeCursor);
-        
+
     /**
      * Inserts the listed children at the current position.
      * Ignores the selection.
@@ -184,14 +184,14 @@ public:
      * Elements are senseless as soon as they only contain a main child.
      */
     bool elementIsSenseless();
-    
-    
+
+
     // The range that is selected. Makes no sense if there is
     // no selection.
 
     int getSelectionStart() const { return QMIN(getPos(), getMark()); }
     int getSelectionEnd() const { return QMAX(getPos(), getMark()); }
-    
+
 
     /**
      * Sets the cursor to a new position.
@@ -220,7 +220,7 @@ public:
      */
     BasicElement* getElement() { return current; }
 
-    
+
     /**
      * Moves the cursor to a normal position. That is somewhere
      * inside a SequenceElement.
@@ -229,7 +229,7 @@ public:
      */
     void normalize(BasicElement::Direction direction = BasicElement::beforeCursor);
 
-    
+
     /**
      * Returns the IndexElement the cursor is on or 0
      * if there is non.
@@ -241,7 +241,7 @@ public:
      * if there is non.
      */
     RootElement* getActiveRootElement();
-    
+
     /**
      * Returns the SymbolElement the cursor is on or 0
      * if there is non.
@@ -252,7 +252,7 @@ public:
      * @returns the TextElement the cursor is on or 0.
      */
     TextElement* getActiveTextElement();
-    
+
 
     /**
      * @returns the name of the name element the cursor is inside
@@ -270,9 +270,9 @@ public:
      * the list. Returns true on success.
      */
     bool buildElementsFromDom(QDomDocument doc, QList<BasicElement>& list);
-    
+
     // undo/redo support
-    
+
     /**
      * A black box that is supposed to contain everything
      * which is needed to describe a cursor. Only the cursor
@@ -305,7 +305,7 @@ public:
      * so you better make sure the point exists.
      */
     void setCursorData(CursorData* data);
-    
+
     /**
      * The element is going to leave the formula with and all its children.
      */
@@ -325,24 +325,24 @@ public:
      * @returns the area the cursor is currently on.
      */
     QRect getCursorSize() const { return cursorSize; }
-    
+
     /**
      * @returns whether we are allowed to alter the document.
      */
     bool isReadOnly() const { return readOnly; }
-    
+
     /**
      * Puts the widget in read only mode.
      */
     void setReadOnly(bool ro) { readOnly = ro; }
-    
+
 private:
-    
+
     /**
      * Returns the sequence the cursor is in if we are normal. If not returns 0.
      */
     SequenceElement* getNormal();
-    
+
     /**
      * Returns the child the cursor points to. Depending on the
      * direction this might be the child before or after the
@@ -365,13 +365,13 @@ private:
      * main child and to the place behind its last child.
      */
     bool pointsAfterMainChild(BasicElement*);
-    
+
     /**
      * Sets the selection according to the shift key.
      */
     void handleSelectState(int flag);
 
-    
+
     /**
      * The element the cursor is inside right now.
      */

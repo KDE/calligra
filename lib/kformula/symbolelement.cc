@@ -44,11 +44,11 @@ SymbolElement::~SymbolElement()
 
 
 BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                     const QPoint& point, const QPoint& parentOrigin)
+                                     const KoPoint& point, const KoPoint& parentOrigin)
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        QPoint myPos(parentOrigin.x() + getX(),
+        KoPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
 
         e = content->goToPos(cursor, handled, point, myPos);
@@ -69,8 +69,8 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
         }
 
         // the positions after the indexes.
-        int dx = point.x() - myPos.x();
-        int dy = point.y() - myPos.y();
+        double dx = point.x() - myPos.x();
+        double dy = point.y() - myPos.y();
         if (dy < symbol.getY()) {
             if (hasUpper() && (dx > upper->getX())) {
                 upper->moveLeft(cursor, this);
@@ -98,17 +98,17 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
  */
 void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle )
 {
-    double mySize = style.getAdjustedSize(tstyle);
-    int distX = style.getDistanceX(tstyle);
-    int distY = style.getDistanceY(tstyle);
+    double mySize = style.getAdjustedSize( tstyle );
+    double distX = style.getDistanceX( tstyle );
+    double distY = style.getDistanceY( tstyle );
 
     symbol.calcSizes(style, qRound(mySize*1.5));
     content->calcSizes(style, tstyle, istyle);
 
     //symbol.scale(((double)parentSize)/symbol.getHeight()*2);
 
-    int upperWidth = 0;
-    int upperHeight = 0;
+    double upperWidth = 0;
+    double upperHeight = 0;
     if (hasUpper()) {
         upper->calcSizes(style, style.convertTextStyleIndex( tstyle ),
 			 style.convertIndexStyleUpper( istyle ) );
@@ -116,8 +116,8 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         upperHeight = upper->getHeight() + distY;
     }
 
-    int lowerWidth = 0;
-    int lowerHeight = 0;
+    double lowerWidth = 0;
+    double lowerHeight = 0;
     if (hasLower()) {
         lower->calcSizes(style, style.convertTextStyleIndex( tstyle ),
 			 style.convertIndexStyleLower( istyle ) );
@@ -126,7 +126,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     }
 
     // widths
-    int xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth));
+    double xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth));
     if (style.getCenterSymbol()) {
         symbol.setX((xOffset - symbol.getWidth()) / 2);
     }
@@ -140,11 +140,11 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
 
     // heights
     //int toMidline = QMAX(content->getHeight() / 2,
-    int toMidline = QMAX(content->getMidline(),
-                         upperHeight + symbol.getHeight()/2);
+    double toMidline = QMAX(content->getMidline(),
+                            upperHeight + symbol.getHeight()/2);
     //int fromMidline = QMAX(content->getHeight() / 2,
-    int fromMidline = QMAX(content->getHeight() - content->getMidline(),
-                           lowerHeight + symbol.getHeight()/2);
+    double fromMidline = QMAX(content->getHeight() - content->getMidline(),
+                              lowerHeight + symbol.getHeight()/2);
     setHeight(toMidline + fromMidline);
     setMidline(toMidline);
 
@@ -192,11 +192,11 @@ void SymbolElement::draw(QPainter& painter, const QRect& r,
                          const ContextStyle& style,
 			 ContextStyle::TextStyle tstyle,
 			 ContextStyle::IndexStyle istyle,
-                         const QPoint& parentOrigin)
+                         const KoPoint& parentOrigin)
 {
-    QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     double mySize = style.getAdjustedSize( tstyle );
-    if (!QRect(myPos, getSize()).intersects(r))
+    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
         return;
 
     symbol.draw(painter, r, style, qRound(mySize), myPos);

@@ -217,12 +217,12 @@ ComplexElementType::ComplexElementType(SequenceParser* parser)
 }
 
 
-int ElementType::getSpaceBefore(const ContextStyle&, ContextStyle::TextStyle /*tstyle */)
+double ElementType::getSpaceBefore(const ContextStyle&, ContextStyle::TextStyle /*tstyle */)
 {
     return 0;
 }
 
-int ElementType::getSpaceAfter(const ContextStyle&, ContextStyle::TextStyle /*tstyle */)
+double ElementType::getSpaceAfter(const ContextStyle&, ContextStyle::TextStyle /*tstyle */)
 {
     return 0;
 }
@@ -238,12 +238,12 @@ void ElementType::setUpPainter(const ContextStyle& context, QPainter& painter)
 }
 
 
-int OperatorType::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+double OperatorType::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
     return context.getOperatorSpace(tstyle);
 }
 
-int OperatorType::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+double OperatorType::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
     return context.getOperatorSpace(tstyle);
 }
@@ -259,18 +259,18 @@ void OperatorType::setUpPainter(const ContextStyle& context, QPainter& painter)
 }
 
 
-int Term::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+double Term::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
     return OperatorType::getSpaceBefore(context, tstyle) / 2;
 }
 
-int Term::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+double Term::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
     return OperatorType::getSpaceAfter(context, tstyle) / 2;
 }
 
 
-int AssignmentSep::getSpaceBefore(const ContextStyle&, ContextStyle::TextStyle /*tstyle*/)
+double AssignmentSep::getSpaceBefore(const ContextStyle&, ContextStyle::TextStyle /*tstyle*/)
 {
     return 0;
 }

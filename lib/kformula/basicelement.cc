@@ -32,7 +32,7 @@ using namespace std;
 int BasicElement::evilDestructionCount = 0;
 
 BasicElement::BasicElement(BasicElement* p)
-        : parent(p), baseline(0), midline(0), elementType(0)
+        : parent(p), m_baseline(0), m_axis(0), elementType(0)
 {
     setWidth(0);
     setHeight(0);
@@ -48,11 +48,11 @@ BasicElement::~BasicElement()
 /**
  * Returns the element the point is in.
  */
-BasicElement* BasicElement::goToPos(FormulaCursor*, bool&, const QPoint& point, const QPoint& parentOrigin)
+BasicElement* BasicElement::goToPos(FormulaCursor*, bool&, const KoPoint& point, const KoPoint& parentOrigin)
 {
-    int x = point.x() - (parentOrigin.x() + getX());
+    double x = point.x() - (parentOrigin.x() + getX());
     if ((x >= 0) && (x < getWidth())) {
-        int y = point.y() - (parentOrigin.y() + getY());
+        double y = point.y() - (parentOrigin.y() + getY());
         if ((y >= 0) && (y < getHeight())) {
             return this;
         }
@@ -63,15 +63,15 @@ BasicElement* BasicElement::goToPos(FormulaCursor*, bool&, const QPoint& point, 
 /**
  * Returns our position inside the widget.
  */
-QPoint BasicElement::widgetPos()
+KoPoint BasicElement::widgetPos()
 {
-    int x = 0;
-    int y = 0;
+    double x = 0;
+    double y = 0;
     for (BasicElement* element = this; element != 0; element = element->parent) {
         x += element->getX();
         y += element->getY();
     }
-    return QPoint(x, y);
+    return KoPoint(x, y);
 }
 
 

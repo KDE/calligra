@@ -41,7 +41,7 @@ public:
      * @returns true if the sequence contains only text.
      */
     bool isTextOnly() const { return textSequence; }
-    
+
     /**
      * Sets the cursor and returns the element the point is in.
      * The handled flag shows whether the cursor has been set.
@@ -49,7 +49,7 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
-                                  const QPoint& point, const QPoint& parentOrigin);
+                                  const KoPoint& point, const KoPoint& parentOrigin);
 
     // drawing
     //
@@ -84,7 +84,7 @@ public:
                       const ContextStyle& context,
 		      ContextStyle::TextStyle tstyle,
 		      ContextStyle::IndexStyle istyle,
-		      const QPoint& parentOrigin);
+		      const KoPoint& parentOrigin);
 
     void calcCursorSize(FormulaCursor* cursor, bool smallCursor);
 
@@ -299,7 +299,7 @@ protected:
      *
      * @param child the child's number
      */
-    int getChildPosition(uint child);
+    double getChildPosition(uint child);
 
 
 private:

@@ -87,10 +87,10 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
 {
     double mySize = context.getAdjustedSize( tstyle );
 
-    QFont font = getFont(context);
-    font.setPointSizeFloat(mySize);
-    int spaceBefore = getSpaceBefore(context, tstyle);
-    int spaceAfter = getSpaceAfter(context, tstyle);
+    QFont font = getFont( context );
+    font.setPointSizeFloat( mySize );
+    double spaceBefore = getSpaceBefore( context, tstyle );
+    double spaceAfter = getSpaceAfter( context, tstyle );
 
     QFontMetrics fm(font);
     //QRect bound = fm.boundingRect(character);
@@ -114,17 +114,17 @@ void TextElement::draw(QPainter& painter, const QRect& r,
                        const ContextStyle& context,
 		       ContextStyle::TextStyle tstyle,
 		       ContextStyle::IndexStyle /*istyle*/,
-		       const QPoint& parentOrigin)
+		       const KoPoint& parentOrigin)
 {
-    QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     double mySize = context.getAdjustedSize( tstyle );
-    if (!QRect(myPos, getSize()).intersects(r))
+    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
         return;
 
     QFont font = getFont(context);
     font.setPointSizeFloat(mySize);
     setUpPainter(context, painter);
-    int spaceBefore = getSpaceBefore(context, tstyle);
+    int spaceBefore = static_cast<int>( getSpaceBefore(context, tstyle) );
     //int spaceAfter = getSpaceAfter(context, tstyle);
 
     painter.setFont(font);
@@ -164,7 +164,7 @@ QFont TextElement::getFont(const ContextStyle& context)
     }
 }
 
-int TextElement::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+double TextElement::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
     if (getElementType() != 0) {
         return getElementType()->getSpaceBefore(context, tstyle);
@@ -174,7 +174,7 @@ int TextElement::getSpaceBefore(const ContextStyle& context, ContextStyle::TextS
     }
 }
 
-int TextElement::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+double TextElement::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
 {
     if (getElementType() != 0) {
         return getElementType()->getSpaceAfter(context, tstyle);

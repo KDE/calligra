@@ -18,6 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qstring.h>
+#include <koGlobal.h>
 
 #include "contextstyle.h"
 
@@ -31,17 +33,21 @@ ContextStyle::ContextStyle()
           emptyColor(Qt::blue)
 {
     defaultFont.setItalic(true);
-    distance = 4;
-    operatorSpace = 4;
-    linearMovement = false;
-    baseSize = 18;
+
     m_baseTextStyle = displayStyle;
     m_scriptStyleReduction = .7;
     m_scriptScriptStyleReduction = .49;
+
     minimumSize = 8;
     lineWidth = 1;
     emptyRectWidth = 10;
     emptyRectHeight = 10;
+    distance = 4;
+    operatorSpace = 4;
+    baseSize = 18;
+
+    linearMovement = false;
+
     centerSymbol = false;
     syntaxHighlighting = true;
 }
@@ -99,29 +105,29 @@ double ContextStyle::getReductionFactor(TextStyle tstyle) const
     }
 }
 
-int ContextStyle::getDistanceX(TextStyle tstyle) const
+double ContextStyle::getDistanceX(TextStyle tstyle) const
 {
-    return static_cast<int>(zoomItX( distance*getReductionFactor( tstyle ))+.5);
+    return zoomItX( distance*getReductionFactor( tstyle ))+.5;
 }
 
-int ContextStyle::getDistanceY(TextStyle tstyle) const
+double ContextStyle::getDistanceY(TextStyle tstyle) const
 {
-    return static_cast<int>(zoomItY( distance*getReductionFactor( tstyle ))+.5);
+    return zoomItY( distance*getReductionFactor( tstyle ))+.5;
 }
 
-int ContextStyle::getOperatorSpace(TextStyle tstyle) const
+double ContextStyle::getOperatorSpace(TextStyle tstyle) const
 {
-    return static_cast<int>(zoomItX( operatorSpace*getReductionFactor( tstyle ))+.5);
+    return zoomItX( operatorSpace*getReductionFactor( tstyle ))+.5;
 }
 
-int ContextStyle::getBaseSize() const
+double ContextStyle::getBaseSize() const
 {
-    return static_cast<int>( zoomItY( baseSize ) );
+    return zoomItY( baseSize );
 }
 
-int ContextStyle::getMinimumSize() const
+double ContextStyle::getMinimumSize() const
 {
-    return static_cast<int>( zoomItY( minimumSize ) );
+    return zoomItY( minimumSize );
 }
 
 double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
@@ -147,20 +153,20 @@ double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 }
 
 
-int ContextStyle::getLineWidth() const
+double ContextStyle::getLineWidth() const
 {
-    return static_cast<int>( zoomItY( lineWidth ) );
+    return zoomItY( lineWidth );
 }
 
 
-int ContextStyle::getEmptyRectWidth() const
+double ContextStyle::getEmptyRectWidth() const
 {
-    return static_cast<int>( zoomItY( emptyRectWidth ) );
+    return zoomItY( emptyRectWidth );
 }
 
-int ContextStyle::getEmptyRectHeight() const
+double ContextStyle::getEmptyRectHeight() const
 {
-    return static_cast<int>( zoomItY( emptyRectHeight ) );
+    return zoomItY( emptyRectHeight );
 }
 
 

@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream>
 #include <stdlib.h>
+#include <math.h>
 
 #include <qpainter.h>
 
@@ -55,11 +55,11 @@ SequenceElement::~SequenceElement()
  * Returns the element the point is in.
  */
 BasicElement* SequenceElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                       const QPoint& point, const QPoint& parentOrigin)
+                                       const KoPoint& point, const KoPoint& parentOrigin)
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        QPoint myPos(parentOrigin.x() + getX(),
+        KoPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
 
         uint count = children.count();
@@ -80,7 +80,7 @@ BasicElement* SequenceElement::goToPos(FormulaCursor* cursor, bool& handled,
             }
         }
 
-        int dx = point.x() - myPos.x();
+        double dx = point.x() - myPos.x();
         //int dy = point.y() - myPos.y();
 
         for (uint i = 0; i < count; i++) {
@@ -126,14 +126,14 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
 {
     if (!isEmpty()) {
         double mySize = context.getAdjustedSize( tstyle );
-        int width = 0;
-        int toBaseline = 0;
-        int fromBaseline = 0;
+        double width = 0;
+        double toBaseline = 0;
+        double fromBaseline = 0;
 
         QFont font = context.getDefaultFont();
         font.setPointSizeFloat(mySize);
         QFontMetrics fm(font);
-        int fromMidline = fm.strikeOutPos();
+        double fromMidline = fm.strikeOutPos();
 
         uint count = children.count();
 
@@ -176,12 +176,12 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
         setChildrenPositions();
     }
     else {
-        int w = context.getEmptyRectWidth();
-        int h = context.getEmptyRectHeight();
+        double w = context.getEmptyRectWidth();
+        double h = context.getEmptyRectHeight();
         setWidth( w );
         setHeight( h );
         setBaseline( h );
-        setMidline( h/2 );
+        setMidline( h*.5 );
     }
 }
 
@@ -210,11 +210,11 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
                            const ContextStyle& context,
                            ContextStyle::TextStyle tstyle,
 			   ContextStyle::IndexStyle istyle,
-			   const QPoint& parentOrigin)
+			   const KoPoint& parentOrigin)
 {
-    QPoint myPos(parentOrigin.x() + getX(),
+    KoPoint myPos(parentOrigin.x() + getX(),
                  parentOrigin.y() + getY());
-    if (!QRect(myPos, getSize()).intersects(r))
+    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
         return;
 
     if (!isEmpty()) {
@@ -239,23 +239,25 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
 
 void SequenceElement::calcCursorSize(FormulaCursor* cursor, bool smallCursor)
 {
-    QPoint point = widgetPos();
+    KoPoint point = widgetPos();
     uint pos = cursor->getPos();
 
-    int posX = getChildPosition(pos);
-    int height = getHeight();
+    double posX = getChildPosition(pos);
+    double height = getHeight();
+
+    // Here are those evil constants that describe the cursor size.
 
     if (cursor->isSelection()) {
         uint mark = cursor->getMark();
-        int markX = getChildPosition(mark);
-        int x = QMIN(posX, markX);
-        int width = abs(posX - markX);
+        double markX = getChildPosition(mark);
+        double x = QMIN(posX, markX);
+        double width = fabs(posX - markX);
 
         if (smallCursor) {
             cursor->cursorSize.setRect(point.x()+x, point.y(), width, height);
         }
         else {
-            cursor->cursorSize.setRect(point.x()+x, point.y()-2, width, height+4);
+            cursor->cursorSize.setRect(point.x()+x, point.y()-2, width+1, height+4);
         }
     }
     else {
@@ -263,7 +265,7 @@ void SequenceElement::calcCursorSize(FormulaCursor* cursor, bool smallCursor)
             cursor->cursorSize.setRect(point.x()+posX, point.y(), 1, height);
         }
         else {
-            cursor->cursorSize.setRect(point.x(), point.y()-2, getWidth()+1, height+6);
+            cursor->cursorSize.setRect(point.x(), point.y()-2, getWidth()+2, height+6);
         }
     }
 
@@ -279,12 +281,13 @@ void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter, bool 
 {
     painter.setRasterOp(Qt::XorROP);
     if (cursor->isSelection()) {
-        painter.fillRect(cursor->cursorSize, Qt::white);
+        const QRect& r = cursor->cursorSize;
+        painter.fillRect(r.x(), r.y(), r.width(), r.height(), Qt::white);
     }
     else {
         painter.setPen(Qt::white);
-        QPoint point = cursor->cursorPoint;
-        QRect size = cursor->cursorSize;
+        const QPoint& point = cursor->cursorPoint;
+        const QRect& size = cursor->cursorSize;
         if (smallCursor) {
             painter.drawLine(point.x(), size.top(),
                              point.x(), size.bottom());
@@ -300,7 +303,7 @@ void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter, bool 
 }
 
 
-int SequenceElement::getChildPosition(uint child)
+double SequenceElement::getChildPosition(uint child)
 {
     if (child < children.count()) {
         return children.at(child)->getX();

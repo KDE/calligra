@@ -75,7 +75,7 @@ public:
                       const ContextStyle& context,
 		      ContextStyle::TextStyle tstyle,
 		      ContextStyle::IndexStyle istyle,
-                      const QPoint& parentOrigin);
+                      const KoPoint& parentOrigin);
 
     /**
      * Moves the cursor away from the given child. The cursor is
@@ -135,12 +135,12 @@ protected:
     /**
      * @returns the space to be left before the character.
      */
-    int getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     /**
      * @returns the space to be left after the character.
      */
-    int getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    double getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     /**
      * Sets up the painter to be used for drawing.

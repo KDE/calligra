@@ -47,7 +47,7 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
-                                  const QPoint& point, const QPoint& parentOrigin);
+                                  const KoPoint& point, const KoPoint& parentOrigin);
 
     /**
      * Calculates our width and height and
@@ -64,7 +64,7 @@ public:
                       const ContextStyle& style,
 		      ContextStyle::TextStyle tstyle,
 		      ContextStyle::IndexStyle istyle,
-		      const QPoint& parentOrigin);
+		      const KoPoint& parentOrigin);
 
     /**
      * Enters this element while moving to the left starting inside
@@ -214,7 +214,7 @@ private:
     /**
      * The point the artwork relates to.
      */
-    QPoint rootOffset;
+    KoPoint rootOffset;
 };
 
 

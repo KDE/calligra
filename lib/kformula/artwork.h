@@ -21,8 +21,8 @@
 #ifndef ARTWORK_H
 #define ARTWORK_H
 
-#include <qpoint.h>
-#include <qsize.h>
+#include <koPoint.h>
+#include <qrect.h>
 
 #include "contextstyle.h"
 #include "formuladefs.h"
@@ -42,9 +42,9 @@ public:
     void calcSizes(const ContextStyle& style, int parentSize);
     void calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle);
     void draw(QPainter& painter, const QRect& r, const ContextStyle& style,
-              int parentSize, const QPoint& origin);
+              int parentSize, const KoPoint& origin);
     void draw(QPainter& painter, const QRect& r, const ContextStyle& style,
-              ContextStyle::TextStyle tstyle, const QPoint& parentOrigin);
+              ContextStyle::TextStyle tstyle, const KoPoint& parentOrigin);
 
     int getWidth() const { return size.width(); }
     int getHeight() const { return size.height(); }
@@ -55,11 +55,11 @@ public:
     int getBaseline() const { return baseline; }
     void setBaseline(int line) { baseline = line; }
 
-    int getX() const { return point.x(); }
-    int getY() const { return point.y(); }
+    double getX() const { return point.x(); }
+    double getY() const { return point.y(); }
 
-    void setX(int x) { point.setX(x); }
-    void setY(int y) { point.setY(y); }
+    void setX(double x) { point.setX(x); }
+    void setY(double y) { point.setY(y); }
 
     SymbolType getType() const { return type; }
     void setType(SymbolType t) { type = t; }
@@ -93,7 +93,7 @@ private:
     void drawBigCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, int height);
 
     QSize size;
-    QPoint point;
+    KoPoint point;
 
     /**
      * Used if we are a character.

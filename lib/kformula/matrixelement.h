@@ -41,7 +41,7 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
-                                  const QPoint& point, const QPoint& parentOrigin);
+                                  const KoPoint& point, const KoPoint& parentOrigin);
 
     // drawing
     //
@@ -62,10 +62,10 @@ public:
      * We can use our parentPosition to get our own origin then.
      */
     virtual void draw(QPainter& painter, const QRect& r,
-                      const ContextStyle& context, 
-		      ContextStyle::TextStyle tstyle, 
+                      const ContextStyle& context,
+		      ContextStyle::TextStyle tstyle,
 		      ContextStyle::IndexStyle istyle,
-                      const QPoint& parentOrigin);
+                      const KoPoint& parentOrigin);
 
 
     // navigation
@@ -152,7 +152,7 @@ public:
      * be replaced by its main child's content.
      */
     //virtual bool isSenseless();
-    
+
     /**
      * @returns the latex representation of the element and
      * of the element's children

@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -77,7 +77,7 @@ void FormulaCursor::draw(QPainter& painter, bool smallCursor)
 {
     if (readOnly && !isSelection())
         return;
-    
+
     // We only draw the cursor if its normalized.
     SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
 
@@ -178,7 +178,7 @@ void FormulaCursor::moveEnd(int flag)
 void FormulaCursor::mousePress(const QPoint& pos, int flag)
 {
     FormulaElement* formula = getElement()->formula();
-    formula->goToPos(this, pos);
+    formula->goToPos( this, KoPoint( pos.x(), pos.y() ) );
     if (flag & SelectMovement) {
         setSelection(true);
         if (getMark() == -1) {
@@ -198,7 +198,7 @@ void FormulaCursor::mouseMove(const QPoint& point, int)
     int mark = getMark();
 
     FormulaElement* formula = getElement()->formula();
-    formula->goToPos(this, point);
+    formula->goToPos(this, KoPoint( point.x(), point.y() ));
     BasicElement* newElement = getElement();
     int pos = getPos();
 
@@ -337,12 +337,12 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
     // we suppres deletion here to get an error if something
     // was left in the list.
     //list.setAutoDelete(true);
-    
+
     //remove(list, direction);
     if (isSelection()) {
         getElement()->remove(this, list, direction);
     }
-    
+
     insert(element, direction);
     SequenceElement* mainChild = element->getMainChild();
     if (mainChild != 0) {

@@ -44,7 +44,7 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
-                                  const QPoint& point, const QPoint& parentOrigin);
+                                  const KoPoint& point, const KoPoint& parentOrigin);
 
     /**
      * Calculates our width and height and
@@ -61,7 +61,7 @@ public:
                       const ContextStyle& style,
 		      ContextStyle::TextStyle tstyle,
 		      ContextStyle::IndexStyle istyle,
-                      const QPoint& parentOrigin);
+                      const KoPoint& parentOrigin);
 
     /**
      * Enters this element while moving to the left starting inside
@@ -137,7 +137,7 @@ public:
      * Tells whether the fraction should be drawn with a line.
      */
     void showLine(bool line) { withLine = line; }
-    
+
     /**
      * @returns the latex representation of the element and
      * of the element's children

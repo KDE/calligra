@@ -234,10 +234,10 @@ void Artwork::calcSizes(const ContextStyle& style,
 
 
 void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
-                   int parentSize, const QPoint& origin)
+                   int parentSize, const KoPoint& origin)
 {
-    int myX = origin.x() + getX();
-    int myY = origin.y() + getY();
+    double myX = origin.x() + getX();
+    double myY = origin.y() + getY();
     if (!QRect(myX, myY, getWidth(), getHeight()).intersects(r))
         return;
 
@@ -330,10 +330,10 @@ void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
 
 
 void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
-                   ContextStyle::TextStyle, const QPoint& parentOrigin)
+                   ContextStyle::TextStyle, const KoPoint& parentOrigin)
 {
-    int myX = parentOrigin.x() + getX();
-    int myY = parentOrigin.y() + getY();
+    double myX = parentOrigin.x() + getX();
+    double myY = parentOrigin.y() + getY();
     if (!QRect(myX, myY, getWidth(), getHeight()).intersects(r))
         return;
 

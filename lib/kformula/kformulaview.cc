@@ -138,10 +138,10 @@ void KFormulaView::draw(QPainter& painter, const QRect& rect, const QColorGroup&
     if (cursorVisible()) {
         cursor()->draw(p, smallCursor());
     }
-    int sx = QMAX(0, rect.x() - formulaRect.x());
-    int sy = QMAX(0, rect.y() - formulaRect.y());
-    int sw = QMIN(formulaRect.width() - sx, rect.width());
-    int sh = QMIN(formulaRect.height() - sy, rect.height());
+    int sx = static_cast<int>( QMAX(0, rect.x() - formulaRect.x()) );
+    int sy = static_cast<int>( QMAX(0, rect.y() - formulaRect.y()) );
+    int sw = static_cast<int>( QMIN(formulaRect.width() - sx, rect.width()) );
+    int sh = static_cast<int>( QMIN(formulaRect.height() - sy, rect.height()) );
     painter.drawPixmap(QMAX(formulaRect.x(), rect.x()), QMAX(formulaRect.y(), rect.y()),
                        buffer, sx, sy, sw, sh);
 }

@@ -59,11 +59,11 @@ IndexElement::~IndexElement()
  * Returns the element the point is in.
  */
 BasicElement* IndexElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                    const QPoint& point, const QPoint& parentOrigin)
+                                    const KoPoint& point, const KoPoint& parentOrigin)
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+        KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
         e = content->goToPos(cursor, handled, point, myPos);
         if (e != 0) return e;
 
@@ -92,8 +92,8 @@ BasicElement* IndexElement::goToPos(FormulaCursor* cursor, bool& handled,
             if (e != 0) return e;
         }
 
-        int dx = point.x() - myPos.x();
-        int dy = point.y() - myPos.y();
+        double dx = point.x() - myPos.x();
+        double dy = point.y() - myPos.y();
 
         // the positions after the left indexes
         if (dx < content->getX()+content->getWidth()) {
@@ -175,13 +175,13 @@ void IndexElement::setMiddleX(int xOffset, int middleWidth)
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     //int distX = contextStyle.getDistanceX(tstyle);
-    int distY = contextStyle.getDistanceY(tstyle);
+    double distY = contextStyle.getDistanceY(tstyle);
 
     // get the indexes size
-    int ulWidth = 0, ulHeight = 0, ulMidline = 0;
+    double ulWidth = 0, ulHeight = 0, ulMidline = 0;
     if (hasUpperLeft()) {
         upperLeft->calcSizes(contextStyle,
 			     contextStyle.convertTextStyleIndex(tstyle),
@@ -191,7 +191,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         ulMidline = upperLeft->getMidline();
     }
 
-    int umWidth = 0, umHeight = 0, umMidline = 0;
+    double umWidth = 0, umHeight = 0, umMidline = 0;
     if (hasUpperMiddle()) {
 	upperMiddle->calcSizes(contextStyle,
 			       contextStyle.convertTextStyleIndex(tstyle),
@@ -201,7 +201,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         umMidline = upperMiddle->getMidline();
     }
 
-    int urWidth = 0, urHeight = 0, urMidline = 0;
+    double urWidth = 0, urHeight = 0, urMidline = 0;
     if (hasUpperRight()) {
         upperRight->calcSizes(contextStyle,
 			      contextStyle.convertTextStyleIndex(tstyle),
@@ -211,7 +211,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         urMidline = upperRight->getMidline();
     }
 
-    int llWidth = 0, llHeight = 0, llMidline = 0;
+    double llWidth = 0, llHeight = 0, llMidline = 0;
     if (hasLowerLeft()) {
         lowerLeft->calcSizes(contextStyle,
 			     contextStyle.convertTextStyleIndex(tstyle),
@@ -221,7 +221,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         llMidline = lowerLeft->getMidline();
     }
 
-    int lmWidth = 0, lmHeight = 0, lmMidline = 0;
+    double lmWidth = 0, lmHeight = 0, lmMidline = 0;
     if (hasLowerMiddle()) {
         lowerMiddle->calcSizes(contextStyle,
 			       contextStyle.convertTextStyleIndex(tstyle),
@@ -231,7 +231,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         lmMidline = lowerMiddle->getMidline();
     }
 
-    int lrWidth = 0, lrHeight = 0, lrMidline = 0;
+    double lrWidth = 0, lrHeight = 0, lrMidline = 0;
     if (hasLowerRight()) {
         lowerRight->calcSizes(contextStyle,
 			      contextStyle.convertTextStyleIndex(tstyle),
@@ -243,9 +243,9 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
 
     // get the contents size
     content->calcSizes(contextStyle, tstyle, istyle);
-    int width = QMAX(content->getWidth(), QMAX(umWidth, lmWidth));
-    int toMidline = content->getMidline();
-    int fromMidline = content->getHeight() - toMidline;
+    double width = QMAX(content->getWidth(), QMAX(umWidth, lmWidth));
+    double toMidline = content->getMidline();
+    double fromMidline = content->getHeight() - toMidline;
 
     // calculate the x offsets
     if (ulWidth > llWidth) {
@@ -276,10 +276,10 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
     width += QMAX(urWidth, lrWidth);
 
     // calculate the y offsets
-    int ulOffset = 0;
-    int urOffset = 0;
-    int llOffset = 0;
-    int lrOffset = 0;
+    double ulOffset = 0;
+    double urOffset = 0;
+    double llOffset = 0;
+    double lrOffset = 0;
     if (content->isTextOnly()) {
         double mySize = contextStyle.getAdjustedSize( tstyle );
         QFont font = contextStyle.getDefaultFont();
@@ -288,10 +288,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         QFontMetrics fm(font);
         QRect bound = fm.boundingRect('x');
 
-        //setWidth(fm.width(character) + spaceBefore + spaceAfter);
-        //exHeight = bound.height();
         int exBaseline = -bound.top();
-        //setMidline(getBaseline() - fm.strikeOutPos());
 
         // the upper half
         ulOffset = ulHeight + exBaseline - content->getBaseline();
@@ -310,7 +307,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         llOffset = QMAX(content->getHeight()-llMidline, content->getMidline());
         lrOffset = QMAX(content->getHeight()-lrMidline, content->getMidline());
     }
-    int height = QMAX(umHeight, QMAX(ulOffset, urOffset));
+    double height = QMAX(umHeight, QMAX(ulOffset, urOffset));
 
     // the upper half
     content->setY(height);
@@ -360,10 +357,10 @@ void IndexElement::draw(QPainter& painter, const QRect& r,
                         const ContextStyle& contextStyle,
 			ContextStyle::TextStyle tstyle,
 			ContextStyle::IndexStyle istyle,
-                        const QPoint& parentOrigin)
+                        const KoPoint& parentOrigin)
 {
-    QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    if (!QRect(myPos, getSize()).intersects(r))
+    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
         return;
 
     content->draw(painter, r, contextStyle, tstyle, istyle, myPos);

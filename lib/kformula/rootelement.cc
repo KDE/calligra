@@ -44,11 +44,11 @@ RootElement::~RootElement()
 
 
 BasicElement* RootElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                   const QPoint& point, const QPoint& parentOrigin)
+                                   const KoPoint& point, const KoPoint& parentOrigin)
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        QPoint myPos(parentOrigin.x() + getX(),
+        KoPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
 
         e = content->goToPos(cursor, handled, point, myPos);
@@ -63,7 +63,7 @@ BasicElement* RootElement::goToPos(FormulaCursor* cursor, bool& handled,
         }
 
         //int dx = point.x() - myPos.x();
-        int dy = point.y() - myPos.y();
+        double dy = point.y() - myPos.y();
 
         // the position after the index
         if (hasIndex()) {
@@ -89,8 +89,8 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
     content->calcSizes(style, tstyle,
 		       style.convertIndexStyleLower(istyle));
 
-    int indexWidth = 0;
-    int indexHeight = 0;
+    double indexWidth = 0;
+    double indexHeight = 0;
     if (hasIndex()) {
 	index->calcSizes(style,
 			 style.convertTextStyleIndex(tstyle),
@@ -99,25 +99,25 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
         indexHeight = index->getHeight();
     }
 
-    int distX = style.getDistanceX(tstyle);
-    int distY = style.getDistanceY(tstyle);
-    int unit = (content->getHeight() + distY)/ 3;
+    double distX = style.getDistanceX(tstyle);
+    double distY = style.getDistanceY(tstyle);
+    double unit = (content->getHeight() + distY)/ 3;
 
     if (hasIndex()) {
         if (indexWidth > unit) {
             index->setX(0);
-            rootOffset.setX(indexWidth - unit);
+            rootOffset.setX( indexWidth - unit );
         }
         else {
-            index->setX((unit - indexWidth)/2);
+            index->setX( ( unit - indexWidth )/2 );
             rootOffset.setX(0);
         }
         if (indexHeight > unit) {
             index->setY(0);
-            rootOffset.setY(indexHeight - unit);
+            rootOffset.setY( indexHeight - unit );
         }
         else {
-            index->setY(unit - indexHeight);
+            index->setY( unit - indexHeight );
             rootOffset.setY(0);
         }
     }
@@ -126,12 +126,12 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
         rootOffset.setY(0);
     }
 
-    setWidth(content->getWidth() + unit+unit/3+ rootOffset.x() + distX/2);
-    setHeight(content->getHeight() + distY + rootOffset.y());
-    setMidline(getHeight() - content->getHeight() + content->getMidline());
+    setWidth( content->getWidth() + unit+unit/3+ rootOffset.x() + distX/2 );
+    setHeight( content->getHeight() + distY + rootOffset.y() );
+    setMidline( getHeight() - content->getHeight() + content->getMidline() );
 
-    content->setX(rootOffset.x() + unit+unit/3);
-    content->setY(rootOffset.y() + distY);
+    content->setX( rootOffset.x() + unit+unit/3 );
+    content->setY( rootOffset.y() + distY );
     calcBaseline();
 }
 
@@ -144,10 +144,10 @@ void RootElement::draw(QPainter& painter, const QRect& r,
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
 		       ContextStyle::IndexStyle istyle,
-		       const QPoint& parentOrigin)
+		       const KoPoint& parentOrigin)
 {
-    QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    if (!QRect(myPos, getSize()).intersects(r))
+    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
         return;
 
     content->draw(painter, r, style, tstyle,
@@ -158,21 +158,32 @@ void RootElement::draw(QPainter& painter, const QRect& r,
 		    style.convertIndexStyleUpper(istyle), myPos);
     }
 
-    int x = myPos.x() + rootOffset.x();
-    int y = myPos.y() + rootOffset.y();
+    double x = myPos.x() + rootOffset.x();
+    double y = myPos.y() + rootOffset.y();
     //int distX = style.getDistanceX(tstyle);
-    int distY = style.getDistanceY(tstyle);
-    int unit = (content->getHeight() + distY)/ 3;
+    double distY = style.getDistanceY(tstyle);
+    double unit = (content->getHeight() + distY)/ 3;
 
     painter.setPen(QPen(style.getDefaultColor(), 2*style.getLineWidth()));
-    painter.drawLine(x+unit/3, y+unit+distY/2,
-                     x+unit/2+unit/3, myPos.y()+getHeight());
+    painter.drawLine( static_cast<int>( x+unit/3 ),
+                      static_cast<int>( y+unit+distY/2 ),
+                      static_cast<int>( x+unit/2+unit/3 ),
+                      static_cast<int>( myPos.y()+getHeight() ) );
 
     painter.setPen(QPen(style.getDefaultColor(), style.getLineWidth()));
 
-    painter.drawLine(x+unit+unit/3, y+distY/2, x+unit/2+unit/3, myPos.y()+getHeight());
-    painter.drawLine(x+unit+unit/3, y+distY/2, x+unit+unit/3+content->getWidth(), y+distY/2);
-    painter.drawLine(x+unit/3, y+unit+distY/2, x, y+unit+unit/2);
+    painter.drawLine( static_cast<int>( x+unit+unit/3 ),
+                      static_cast<int>( y+distY/2 ),
+                      static_cast<int>( x+unit/2+unit/3 ),
+                      static_cast<int>( myPos.y()+getHeight() ) );
+    painter.drawLine( static_cast<int>( x+unit+unit/3 ),
+                      static_cast<int>( y+distY/2 ),
+                      static_cast<int>( x+unit+unit/3+content->getWidth() ),
+                      static_cast<int>( y+distY/2 ) );
+    painter.drawLine( static_cast<int>( x+unit/3 ),
+                      static_cast<int>( y+unit+distY/2 ),
+                      x,
+                      static_cast<int>( y+unit+unit/2 ) );
 }
 
 /**

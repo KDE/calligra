@@ -21,8 +21,6 @@
 #ifndef BASICELEMENT_H
 #define BASICELEMENT_H
 
-#include <iostream>
-
 // Qt Include
 #include <qlist.h>
 #include <qrect.h>
@@ -30,7 +28,8 @@
 #include <qdom.h>
 
 // KDE Include
-
+#include <koPoint.h>
+#include <koRect.h>
 
 // Formula include
 #include "contextstyle.h"
@@ -113,12 +112,12 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
-                                  const QPoint& point, const QPoint& parentOrigin);
+                                  const KoPoint& point, const KoPoint& parentOrigin);
 
     /**
      * Returns our position inside the widget.
      */
-    QPoint widgetPos();
+    KoPoint widgetPos();
 
 
     // drawing
@@ -143,7 +142,7 @@ public:
                       const ContextStyle& context,
 		      ContextStyle::TextStyle tstyle,
 		      ContextStyle::IndexStyle istyle,
-		      const QPoint& parentOrigin) = 0;
+		      const KoPoint& parentOrigin) = 0;
 
 
     // navigation
@@ -212,14 +211,14 @@ public:
      */
     //virtual void removeChild(FormulaCursor* cursor, BasicElement* child) {}
 
-    
+
     // main child
     //
     // If an element has children one has to become the main one.
-    
+
     virtual SequenceElement* getMainChild() { return 0; }
     //virtual void setMainChild(SequenceElement*) {}
-    
+
 
     // editing
     //
@@ -279,30 +278,30 @@ public:
      */
     virtual void childWillVanish(FormulaCursor*, BasicElement*) {}
 
-    
+
     // basic support
 
     BasicElement* getParent() { return parent; }
     void setParent(BasicElement* p) { parent = p; }
 
-    int getX() const { return position.x(); }
-    int getY() const { return position.y(); }
+    double getX() const { return m_x; }
+    double getY() const { return m_y; }
 
-    void setX(int x) { position.setX(x); }
-    void setY(int y) { position.setY(y); }
+    void setX(double x) { m_x = x; }
+    void setY(double y) { m_y = y; }
 
     //QSize getSize() { return size; }
 
-    int getWidth() const { return size.width(); }
-    int getHeight() const { return size.height(); }
+    double getWidth() const { return m_width; }
+    double getHeight() const { return m_height; }
 
     /**
      * Our position inside our parent.
      */
-    //QPoint getParentPosition() { return position; }
+    //KoPoint getParentPosition() { return position; }
 
-    int getBaseline() const { return baseline; }
-    int getMidline() const { return midline; }
+    double getBaseline() const { return m_baseline; }
+    double getMidline() const { return m_axis; }
 
 
     /**
@@ -323,13 +322,13 @@ public:
 
 protected:
 
-    QSize& getSize() { return size; }
+    //KoPoint getSize() { return KoPoint( m_width, m_height ); }
 
-    void setWidth(int width)   { size.setWidth(width); }
-    void setHeight(int height) { size.setHeight(height); }
+    void setWidth(double width)   { m_width = width; }
+    void setHeight(double height) { m_height = height; }
 
-    void setBaseline(int line) { baseline = line; }
-    void setMidline(int mline) { midline = mline; }
+    void setBaseline(double line) { m_baseline = line; }
+    void setMidline(double axis) { m_axis = axis; }
 
     /**
      * Calculates the base line. This is used by all elements
@@ -403,12 +402,16 @@ private:
     /**
      * This elements size.
      */
-    QSize size;
+    //QSize size;
+    double m_width;
+    double m_height;
 
     /**
      * Our position relative to our parent.
      */
-    QPoint position;
+    //KoPoint position;
+    double m_x;
+    double m_y;
 
     /**
      * The position of our base line from
@@ -418,15 +421,15 @@ private:
      * There are elements (like matrix) that don't have a base line. It is
      * -1 in this case. The alignment is done using the middle line.
      */
-    int baseline;
+    double m_baseline;
 
     /**
      * The position of our middle line from
      * the upper border. The strike out position.
      *
-     * This will have to go.
+     * This will have to go. (?)
      */
-    int midline;
+    double m_axis;
 
     /**
      * The token that describes our type. Please note that we don't
