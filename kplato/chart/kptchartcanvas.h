@@ -24,6 +24,7 @@
 #include <qcanvas.h>
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qptrlist.h>
 
 #include <math.h>
 
@@ -81,9 +82,48 @@ protected:
     virtual void contentsContextMenuEvent(QContextMenuEvent *e);
 
 private:
+    template<class type>
+    class CanvasPtrList : public QPtrList<type> {
+        public:
+            CanvasPtrList() {}
+            void hide() {
+                while (count() > 0)
+                    hide(getFirst());
+            }
+            void hide(type *item) {
+                if (item->isVisible()) {
+                    item->hide();
+                    m_hidden.append(item);
+                    removeRef(item);
+                }
+            }
+            void show(type *item) {
+                if (!item->isVisible()) {
+                    item->show();
+                    append(item);
+                    m_hidden.removeRef(item);
+                }
+            }
+            type *getItem(QCanvas *canvas=0) {
+                type *item = m_hidden.getFirst();
+                if (item == 0) {
+                    item = new type(canvas);
+                    m_hidden.append(item);
+                }
+                return item;  
+            }
+        private:
+            QPtrList<type> m_hidden;    
+    };
+
     QCanvasText *m_description;
-    QPtrList<QCanvasLine> m_xGridLines;
-    QPtrList<QCanvasLine> m_yGridLines;
+    CanvasPtrList<QCanvasLine> m_xGridLines;
+    CanvasPtrList<QCanvasLine> m_yGridLines;
+    CanvasPtrList<QCanvasLine> m_horisontalLines;
+    QCanvasLine *m_yZeroLine;
+
+    CanvasPtrList<QCanvasLine> m_lines;
+    CanvasPtrList<QCanvasRectangle> m_bars;
 };
 
 } // KPlato namespace
