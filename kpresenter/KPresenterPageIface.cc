@@ -212,11 +212,6 @@ bool KPresenterPageIface::getBackUnbalanced()const
     return (int)m_page->getBackUnbalanced();
 }
 
-QSize KPresenterPageIface::getSize()const
-{
-    return m_page->background()->getSize();
-}
-
 bool KPresenterPageIface::setRectSettings( int _rx, int _ry )
 {
     return m_page->setRectSettings(_rx,_ry);

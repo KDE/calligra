@@ -78,7 +78,6 @@ k_dcop:
     virtual QString getBackClipFilename()const;
     virtual int getPageEffect()const;
     virtual bool getBackUnbalanced()const ;
-    virtual QSize getSize()const;
 
     virtual bool setRectSettings( int _rx, int _ry );
 
