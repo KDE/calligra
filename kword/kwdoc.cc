@@ -1386,7 +1386,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     frames.append( fs );
 
                 // Now we can start the formatting (which creates more pages/frames if necessary)
-//                fs->formatMore();
+                fs->formatMore();
 
             } break;
             case FT_PICTURE: {

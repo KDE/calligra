@@ -270,7 +270,7 @@ void KWTextFrameSet::layout()
 
 void KWTextFrameSet::setWidth( int w )
 {
-    kdDebug() << "KWTextFrameSet " << this << " setWidth " << w << endl;
+    //kdDebug() << "KWTextFrameSet " << this << " setWidth " << w << endl;
     m_width = w;
     QTextFlow::setWidth( w );
 }
@@ -1388,7 +1388,6 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
     QTextCursor c2 = textdoc->selectionEndCursor( QTextDocument::Standard );
     //undoRedoInfo.oldAligns.resize( undoRedoInfo.oldAligns.size() + QMAX( 0, c2.parag()->paragId() - c1.parag()->paragId() + 1 ) );
     readFormats( c1, c2, oldLen, undoRedoInfo.text, TRUE );
-    undoRedoInfo.index=QMIN(c1.index(),c2.index());
     textdoc->removeSelectedText( QTextDocument::Standard, cursor );
     ensureCursorVisible();
     setLastFormattedParag( cursor->parag() );

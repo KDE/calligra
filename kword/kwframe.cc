@@ -453,7 +453,7 @@ void KWFrameSet::updateFrames()
             }
         }
     }
-    kdDebug() << "KWTextFrameSet::updateFrames frame on top:" << m_framesOnTop.count() << endl;
+    //kdDebug() << "KWTextFrameSet::updateFrames frame on top:" << m_framesOnTop.count() << endl;
 }
 
 /*================================================================*/
@@ -920,7 +920,7 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
             painter->save();
             QRect r = painter->viewport();
             painter->setClipRegion( reg );
-            painter->setViewport( frame->x(), frame->y(), r.width(), r.height() );
+            painter->setWindow( -frame->x(), -frame->y(), r.width(), r.height() );
             painter->drawPicture( *pic );
             painter->setViewport( r );
             painter->restore();
