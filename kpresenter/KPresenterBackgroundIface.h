@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPRESENTER_DOC_IFACE_H
-#define KPRESENTER_DOC_IFACE_H
+#ifndef KPRESENTER_BGND_IFACE_H
+#define KPRESENTER_BGND_IFACE_H
 
 #include <dcopobject.h>
 #include <dcopref.h>
