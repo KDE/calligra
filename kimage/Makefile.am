@@ -2,7 +2,7 @@ SUBDIRS = pics
 
 INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = $(LIB_KOFFICEUI) $(LIB_KIMGIO) -lkparts -lkpartsui -lkom -lmico2.2.3
+LDADD = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
 
 ####### Files
 
