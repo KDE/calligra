@@ -210,9 +210,8 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
             origHeight = (long) (MM_TO_TWIP(bottom-top)/100);
 
             // throw away WMF metaheader (22 bytes)
-            QByteArray tmp;
-            for( unsigned i=0; i<image.size()-22; i++)
-                image[i] = image[i+22];
+            for( uint i=0; i<image.size()-22; i++)
+                image.at(i) = image.at(i+22); // As we use uint, we need at()  ( [] uses int only .)
             image.resize( image.size()-22 );
         }
     } 
