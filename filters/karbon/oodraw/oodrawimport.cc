@@ -301,10 +301,10 @@ OoDrawImport::convert()
 			else if( name == "draw:polygon" ) // polygon
 			{
 				storeObjectStyles( o );
-				VPolygon *polygon = new VPolygon( &m_document );
-				polygon->load( o );
-				//VComposite *polygon = new VComposite( &m_document );
-				//appendPoints( *polygon, o );
+				//VPolygon *polygon = new VPolygon( &m_document );
+				//polygon->load( o );
+				VComposite *polygon = new VComposite( &m_document );
+				appendPoints( *polygon, o );
 				appendPen( *polygon );
 				appendBrush( *polygon );
 				obj = polygon;
