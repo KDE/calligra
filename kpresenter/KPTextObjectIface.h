@@ -52,6 +52,8 @@ k_dcop:
     void setTextSuperScript( bool b );
     void setTextDefaultFormat();
     void setTextBackgroundColor(const QColor & col);
+    void setTextFamilyFont(const QString &font);
+
     QColor textColor() const;
     QFont textFont() const;
     QString textFontFamily()const;

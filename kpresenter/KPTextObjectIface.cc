@@ -134,3 +134,8 @@ QColor KPTextObjectIface::textBackgroundColor() const
     return m_textobject->textObject()->textBackgroundColor();
 }
 
+void KPTextObjectIface::setTextFamilyFont(const QString &font)
+{
+    m_textobject->textObject()->setFamilyCommand(font);
+}
+
