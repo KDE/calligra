@@ -22,7 +22,7 @@
 
 #include "koVariable.h"
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qptrlist.h>
 #include <qstring.h>
 #include <qlistview.h>
@@ -39,7 +39,7 @@ class QCloseEvent;
  *
  ******************************************************************/
 
-class KoVariableNameDia : public QDialog
+class KoVariableNameDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -54,12 +54,9 @@ protected slots:
     void textChanged ( const QString &_text );
 protected:
     void init();
-    void resizeEvent( QResizeEvent *e );
 
     QComboBox *names;
     QVBox *back;
-    QPushButton *ok;
-
 };
 
 /******************************************************************

@@ -37,21 +37,18 @@
  ******************************************************************/
 
 KoVariableNameDia::KoVariableNameDia( QWidget *parent )
-    : QDialog( parent, "", TRUE )
+    : KDialogBase( parent, "", TRUE,i18n( "Entry Name" ),Ok|Cancel )
 {
-    setCaption( i18n( "Entry Name" ) );
-
     init();
 }
 
 
 KoVariableNameDia::KoVariableNameDia( QWidget *parent, const QPtrList<KoVariable>& vars )
-    : QDialog( parent, "", TRUE )
+    : KDialogBase( parent, "", TRUE, i18n( "Variable Name" ), Ok|Cancel )
 {
-    setCaption( i18n( "Variable Name" ) );
 
     init();
-    ok->setEnabled(false);
+    enableButtonOK(false);
     QPtrListIterator<KoVariable> it( vars );
      for ( ; it.current() ; ++it ) {
         KoVariable *var = it.current();
@@ -63,9 +60,7 @@ KoVariableNameDia::KoVariableNameDia( QWidget *parent, const QPtrList<KoVariable
 
 void KoVariableNameDia::init()
 {
-    back = new QVBox( this );
-    back->setSpacing( 5 );
-    back->setMargin( 5 );
+    back = makeVBoxMainWidget();
 
     QHBox *row1 = new QHBox( back );
     row1->setSpacing( 5 );
@@ -75,20 +70,13 @@ void KoVariableNameDia::init()
     names = new QComboBox( TRUE, row1 );
     names->setFocus();
 
-    KButtonBox *bb = new KButtonBox( back );
-    bb->addStretch();
-    ok = bb->addButton( i18n( "&OK"  ) );
-    ok->setDefault( TRUE );
-    QPushButton *cancel = bb->addButton( i18n( "&Cancel"  ) );
-    bb->layout();
-
     connect( names, SIGNAL( textChanged ( const QString & )),
              this, SLOT( textChanged ( const QString & )));
-    connect( ok, SIGNAL( clicked() ),
+    connect( this, SIGNAL( okClicked() ),
              this, SLOT( accept() ) );
-    connect( cancel, SIGNAL( clicked() ),
+    connect( this, SIGNAL( cancelClicked() ),
              this, SLOT( reject() ) );
-    ok->setEnabled(!names->currentText().isEmpty());
+    enableButtonOK( !names->currentText().isEmpty() );
     resize( 350, 100 );
 }
 
@@ -97,15 +85,9 @@ QString KoVariableNameDia::getName() const
     return names->currentText();
 }
 
-void KoVariableNameDia::resizeEvent( QResizeEvent *e )
-{
-    QDialog::resizeEvent( e );
-    back->resize( size() );
-}
-
 void KoVariableNameDia::textChanged ( const QString &_text )
 {
-    ok->setEnabled(!_text.isEmpty());
+    enableButtonOK(!_text.isEmpty());
 }
 
 /******************************************************************
