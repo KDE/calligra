@@ -27,6 +27,16 @@
 
 #include <klocale.h>
 
+
+class KoTabChooserPrivate {
+public:
+    KoTabChooserPrivate() {
+    }
+    ~KoTabChooserPrivate() {}
+
+    bool m_bReadWrite;
+};
+
 /******************************************************************/
 /* Class: KoTabChooser						  */
 /******************************************************************/
@@ -37,6 +47,9 @@ KoTabChooser::KoTabChooser( QWidget *parent, int _flags )
 {
     setFrameStyle( Box | Raised );
     flags = _flags;
+    d=new KoTabChooserPrivate();
+
+    d->m_bReadWrite=true;
 
     currType = 0;
 
@@ -52,6 +65,9 @@ KoTabChooser::KoTabChooser( QWidget *parent, int _flags )
 void KoTabChooser::mousePressEvent( QMouseEvent *e )
 {
     if ( currType == 0 ) return;
+
+    if( !d->m_bReadWrite)
+        return;
 
     switch ( e->button() ) {
     case LeftButton: case MidButton: {
@@ -147,6 +163,12 @@ void KoTabChooser::setupMenu()
 
 KoTabChooser::~KoTabChooser() {
     delete rb_menu;
+    delete d;
+}
+
+void KoTabChooser::setReadWrite(bool _readWrite)
+{
+    d->m_bReadWrite=_readWrite;
 }
 
 #include <koTabChooser.moc>

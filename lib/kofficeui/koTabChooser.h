@@ -30,6 +30,8 @@ class QPopupMenu;
  *  class KoTabChooser
  */
 
+class KoTabChooserPrivate;
+
 class KoTabChooser : public QFrame
 {
     Q_OBJECT
@@ -45,6 +47,12 @@ public:
     ~KoTabChooser();
 
     int getCurrTabType() { return currType; }
+    
+    /**
+     * put m_bReadWrite to true as default
+     * and used setReadWrite(false) to make in readOnly mode
+     */
+    void setReadWrite(bool _readWrite);
 
 protected:
     void mousePressEvent( QMouseEvent *e );
@@ -58,6 +66,8 @@ protected:
     int mRight;
     int mCenter;
     int mDecPoint;
+
+    KoTabChooserPrivate *d;
 
 protected slots:
     void rbLeft() { currType = TAB_LEFT; repaint( true ); }
