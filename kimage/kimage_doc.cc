@@ -190,7 +190,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     {
       if ( it->m_strValue != "application/x-kimage" )
       {
-		cerr << "Unknown mime type " << it->m_strValue << endl;
+		debug( "Unknown mime type %s", it->m_strValue.c_str() );
 		return false;
       }
     }
@@ -212,16 +212,16 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
       vector<KOMLAttrib>::const_iterator it = lst.begin();
       for( ; it != lst.end(); it++ )
       {
-	if ( it->m_strName == "format" )
-	{
-	  format = it->m_strValue.c_str();
-	}
-	else if ( it->m_strName == "orientation" )
-	{
-	  orientation = it->m_strValue.c_str();
-	}
-	else
-	  cerr << "Unknown attrib PAPER:'" << it->m_strName << "'" << endl;
+		if ( it->m_strName == "format" )
+		{
+		  format = it->m_strValue.c_str();
+		}
+		else if ( it->m_strName == "orientation" )
+		{
+		  orientation = it->m_strValue.c_str();
+		}
+		else
+		  debug( "Unknown attrib PAPER:'%s'",it->m_strName.c_str() );
       }
 
       // PAPERBORDERS, HEAD, FOOT
@@ -252,7 +252,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		      bottom = atof( it->m_strValue.c_str() );
 		    }
 		    else
-		      cerr << "Unknown attrib 'PAPERBORDERS:" << it->m_strName << "'" << endl;
+		      debug( "Unknown attrib 'PAPERBORDERS:%s'", it->m_strName.c_str() );
 		  }
 		}
       	else if ( name == "HEAD" )
@@ -274,7 +274,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		      hr = it->m_strValue.c_str();
 		    }
 	        else
-	          cerr << "Unknown attrib 'HEAD:" << it->m_strName << "'" << endl;
+	          debug( "Unknown attrib 'HEAD:%s'", it->m_strName.c_str() );
 	      }
 	    }
         else if ( name == "FOOT" )
@@ -296,11 +296,11 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	          fr = it->m_strValue.c_str();
 	        }
 	        else
-	          cerr << "Unknown attrib 'FOOT:" << it->m_strName << "'" << endl;
+	          debug( "Unknown attrib 'FOOT:%s'", it->m_strName.c_str() );
 	      }
 	    }
 	    else
-		  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
+		  debug( "Unknown tag '%s' in PAPER", tag.c_str() );
 	
 	    if ( !parser.close( tag ) )
         {
@@ -310,7 +310,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
       }
     }
     else
-      cerr << "Unknown tag '" << tag << "' in DOC" << endl;
+      debug( "Unknown tag '%s' in DOC", tag.c_str() );
 
     if ( !parser.close( tag ) )
     {
