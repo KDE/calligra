@@ -11,24 +11,10 @@
 #include <stdlib.h>
 #include <math.h>
 
-static double fact( double val, double end )
-{
-  /* fact =i*(i-1)*(i-2)*...*1 */
-  if(val<0.0 || end<0.0)
-    return (-1);
-  if(val==0.0)
-    return (1);
-  else if (val==end)
-    return(1);
-  /*val==end => you don't multiplie it */
-  else
-    return (val*fact((double)(val-1),end));
-}
-
 // Function: permut
 bool kspreadfunc_arrang( KSContext& context )
-{ /* arrang : fact(n)/(fact(n-m) */
-  double result; 
+{ /* arrang : util_fact(n)/(util_fact(n-m) */
+  double result;
   QString tmp;
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
@@ -50,9 +36,9 @@ bool kspreadfunc_arrang( KSContext& context )
 
   else
         {
-        result=fact((double)args[0]->intValue(),
+        result=util_fact((double)args[0]->intValue(),
         ((double)args[0]->intValue()-(double)args[1]->intValue()));
-        //In fact function val must be positive
+        //In util_fact function val must be positive
 
         if(result==-1)
                 context.setValue( new KSValue(tmp));
@@ -110,7 +96,7 @@ static bool kspreadfunc_median_helper
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
-  bool returnVal = true; 
+  bool returnVal = true;
 
   /* loop through each value, adding it to the sorted list (recursing
      whenever necessary */
@@ -135,7 +121,7 @@ static bool kspreadfunc_median_helper
       }
       sortedList.insert(ptr, *it);
     }
-    ++it;   
+    ++it;
   }
 
   return returnVal;
@@ -212,9 +198,9 @@ bool kspreadfunc_variance( KSContext& context )
   if ( b )
   {
     avera = result / (double)number;
-    result = 0.0; 
+    result = 0.0;
     bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera );
-    if(b)   
+    if(b)
       context.setValue( new KSValue(result / (double)number ) );
   }
 
@@ -259,7 +245,7 @@ bool kspreadfunc_stddev( KSContext& context )
     avera=result/number;
     result=0.0;
     bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result,avera );
-    if(b)   
+    if(b)
       context.setValue( new KSValue(sqrt(result/((double)(number - 1)) )) );
   }
 
@@ -268,7 +254,7 @@ bool kspreadfunc_stddev( KSContext& context )
 
 // Function: combin
 bool kspreadfunc_combin( KSContext& context )
-{ /*combin : fact(n)/(fact(n-m)*fact(m)) */
+{ /*combin : util_fact(n)/(util_fact(n-m)*util_fact(m)) */
   double result;
   QString tmp;
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -291,10 +277,10 @@ bool kspreadfunc_combin( KSContext& context )
 
   else
         {
-        result=(fact((double)args[0]->intValue(),
+        result=(util_fact((double)args[0]->intValue(),
         ((double)args[0]->intValue()-(double)args[1]->intValue()))
-        /fact((double)args[1]->intValue(),0));
-        //In fact function val must be positive
+        /util_fact((double)args[1]->intValue(),0));
+        //In util_fact function val must be positive
 
         if(result==-1)
                 context.setValue( new KSValue(tmp));
@@ -335,10 +321,10 @@ bool kspreadfunc_bino( KSContext& context )
     context.setValue( new KSValue(tmp ));
   else
   {
-    result=(fact(args[0]->doubleValue(),
+    result=(util_fact(args[0]->doubleValue(),
                  (args[0]->doubleValue()-args[1]->doubleValue()))
-            /fact(args[1]->doubleValue(),0));
-    //In fact function val must be positive
+            /util_fact(args[1]->doubleValue(),0));
+    //In util_fact function val must be positive
 
     if(result==-1)
       context.setValue( new KSValue(tmp));
@@ -386,10 +372,10 @@ bool kspreadfunc_bino_inv( KSContext& context )
     context.setValue( new KSValue(tmp ));
   else
   {
-        result=(fact(args[0]->doubleValue(),
+        result=(util_fact(args[0]->doubleValue(),
         (args[0]->doubleValue()-args[1]->doubleValue()))
-        /fact(args[1]->doubleValue(),0));
-        //In fact function val must be positive
+        /util_fact(args[1]->doubleValue(),0));
+        //In util_fact function val must be positive
 
         if(result==-1)
           context.setValue( new KSValue(tmp));
@@ -1057,7 +1043,7 @@ bool kspreadfunc_poisson( KSContext& context ) {
     if (lambda == 0.0)
       result = 0;
     else
-      result = exp(-lambda) * pow(lambda,x) / fact(x,0);
+      result = exp(-lambda) * pow(lambda,x) / util_fact(x,0);
     }
   else { // distribution
     if (lambda == 0.0)

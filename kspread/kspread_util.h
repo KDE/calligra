@@ -127,5 +127,6 @@ QString util_timeFormat( KLocale* locale, QTime _time, KSpreadCell::FormatType f
 
 QString util_fractionFormat( double value , KSpreadCell::FormatType fmtType);
 
-#endif
+double util_fact( double val, double end );
 
+#endif

@@ -1018,20 +1018,6 @@ static bool kspreadfunc_mod( KSContext& context )
   return true;
 }
 
-static double fact( double val, double end )
-{
-  /* fact =i*(i-1)*(i-2)*...*1 */
-  if(val<0.0 || end<0.0)
-    return (-1);
-  if(val==0.0)
-    return (1);
-  else if (val==end)
-    return(1);
-  /*val==end => you don't multiplie it */
-  else
-    return (val*fact((double)(val-1),end));
-}
-
 static bool kspreadfunc_fact( KSContext& context )
 {
   double result;
@@ -1044,8 +1030,8 @@ static bool kspreadfunc_fact( KSContext& context )
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
     return false;
 
-  result=fact((double)args[0]->intValue(),0);
-  //In fact function val must be positive
+  result=util_fact((double)args[0]->intValue(),0);
+  //In util_fact function val must be positive
   tmp=i18n("Err");
   if(result==-1)
         context.setValue( new KSValue(tmp));

@@ -514,3 +514,17 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
     topFixed = ul.rowFixed;
     bottomFixed = lr.rowFixed;
 }
+
+double util_fact( double val, double end )
+{
+  /* fact =i*(i-1)*(i-2)*...*1 */
+  if(val<0.0 || end<0.0)
+    return (-1);
+  if(val==0.0)
+    return (1);
+  else if (val==end)
+    return(1);
+  /*val==end => you don't multiplie it */
+  else
+    return (val*util_fact((double)(val-1),end));
+}
