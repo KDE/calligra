@@ -1,5 +1,5 @@
-#ifndef __img_idl__
-#define __img_idl__
+#ifndef __kspread_idl__
+#define __kspread_idl__
 
 #include <openparts.idl>
 #include <koffice.idl>
