@@ -45,7 +45,7 @@ DCOPRef KoApplicationIface::createDocument( const QString &nativeFormat )
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( nativeFormat );
     if ( entry.isEmpty() )
     {
-        KMessageBox::questionYesNo( 0, i18n( "Unknown KOffice MimeType %s. Check your installation !" ).arg( nativeFormat ) );
+        KMessageBox::questionYesNo( 0, i18n( "Unknown KOffice MimeType %s. Check your installation." ).arg( nativeFormat ) );
         return DCOPRef();
     }
     KoDocument* doc = entry.createDoc( 0 );
