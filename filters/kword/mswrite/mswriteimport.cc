@@ -390,7 +390,7 @@ public:
 		kdDebug (30509) << "adjusted::: leftMargin: " << m_leftMargin
 								<< "  rightMargin: " << m_rightMargin
 								<< "  topMargin: " << m_topMargin
-								<< "  bottomMargin: %i" << m_bottomMargin
+								<< "  bottomMargin: " << m_bottomMargin
 								<< endl;
 
 		// start document
