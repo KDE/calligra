@@ -158,7 +158,19 @@ void ConnectorTool::mousePress( QMouseEvent *e )
     if(!m_pStencil || (m_type == StraightConnector)) {
       ok = startRubberBanding(e);
     } else {
-      // TODO Add point to polyline connector here...
+      if(m_pStencil) {
+        Kivio::PolyLineConnector* connector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
+        KivioCanvas* canvas = view()->canvasWidget();
+        KivioPage* pPage = canvas->activePage();
+        bool hit = false;
+        KoPoint point = pPage->snapToTarget(canvas->mapFromScreen(e->pos()), 8.0, hit);
+      
+        if(!hit) {
+          point = canvas->snapToGrid(startPoint);
+        }
+        
+        connector->addPoint(point);
+      }
     }
     
     if(ok) {
@@ -187,17 +199,20 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
   KivioCanvas* canvas = view()->canvasWidget();
   KivioDoc* doc = view()->doc();
   KivioPage* pPage = canvas->activePage();
-  KivioStencilSpawner* ss;
   
   if(m_type == StraightConnector) {
-    ss = doc->findInternalStencilSpawner("Dave Marotti - Straight Connector");
+    KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Straight Connector");
+    
+    if (!ss) {
+      kdDebug(43000) << "ConnectorTool: Failed to find StencilSpawner!" << endl;
+      return false;
+    }
+    
+    // Create the stencil
+    m_pStencil = static_cast<Kivio1DStencil*>(ss->newStencil());
   } else {
-    ss = doc->findInternalStencilSpawner("Kivio Internal - Polyline Connector");
-  }
-
-  if (!ss) {
-    kdDebug(43000) << "ConnectorTool: Failed to find StencilSpawner!" << endl;
-    return false;
+    // Create the stencil
+    m_pStencil = static_cast<Kivio1DStencil*>(new Kivio::PolyLineConnector());
   }
 
   bool hit = false;
@@ -207,8 +222,6 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
     startPoint = canvas->snapToGrid(startPoint);
   }
 
-  // Create the stencil
-  m_pStencil = static_cast<Kivio1DStencil*>(ss->newStencil());
   
   if(!m_pStencil) {
     return false;
@@ -235,7 +248,6 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
     connector->customDrag(m_pDragData);
   } else {
     Kivio::PolyLineConnector* connector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
-    kdDebug() << "Type: " << connector->type() << endl;
     connector->addPoint(startPoint);
     connector->addPoint(startPoint);
   }

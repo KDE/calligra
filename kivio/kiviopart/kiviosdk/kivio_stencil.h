@@ -163,6 +163,8 @@ class KivioStencil
 
     virtual double h() { return m_h; }
     virtual void setH( double f ) { if( f > 0 ) { m_h=f;  updateGeometry(); } }
+    
+    virtual void move(double xOffset, double yOffset);
 
     virtual KoRect rect();
 

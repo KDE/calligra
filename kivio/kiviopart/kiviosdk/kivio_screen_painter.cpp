@@ -549,7 +549,7 @@ void KivioScreenPainter::drawPolyline( QPointArray &pArray )
   m_pPainter->setPen(m_pLineStyle->pen(1.0f));
   m_pPainter->setBrush( QBrush::NoBrush );
 
-  m_pPainter->drawPolyline( pArray );
+  m_pPainter->drawPolyline( pArray, 0, pArray.size() );
 }
 
 void KivioScreenPainter::drawPolygon( QPointArray &pArray )

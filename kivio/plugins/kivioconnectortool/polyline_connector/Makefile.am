@@ -6,21 +6,10 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 
 METASOURCES = AUTO
 
-kde_module_LTLIBRARIES =  libpolyline_connector.la
-# Hack to make it work (dave m)
+noinst_LTLIBRARIES =  libpolyline_connector.la
 libpolyline_connector_la_LIBADD = $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
 
-libpolyline_connector_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-libpolyline_connector_la_SOURCES =  kiviopolylineconnectorfactory.cpp kiviopolylineconnector.cpp
+libpolyline_connector_la_LDFLAGS = $(all_libraries)
+libpolyline_connector_la_SOURCES = kiviopolylineconnector.cpp
 
-noinst_HEADERS =  kiviopolylineconnectorfactory.h kiviopolylineconnector.h
-
-stencildir = $(kde_datadir)/kivio/autoloadStencils
-
-install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(stencildir)
-	-rm -f $(DESTDIR)$(stencildir)/libpolyline_connector.so
-	$(LN_S) $(kde_moduledir)/libpolyline_connector.so $(DESTDIR)$(stencildir)/libpolyline_connector.so
-
-uninstall-local:
-	-rm -f $(DESTDIR)$(stencildir)/libpolyline_connector.so
+noinst_HEADERS = kiviopolylineconnector.h

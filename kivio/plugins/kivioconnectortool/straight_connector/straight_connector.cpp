@@ -105,7 +105,6 @@ KivioStraightConnector::~KivioStraightConnector()
 {
    delete m_startAH;
    delete m_endAH;
-    // FIXME: THe parents destructor gets called right?
 }
 
 void KivioStraightConnector::setStartPoint( double x, double y )

@@ -31,9 +31,6 @@
 KivioStencilSpawnerInfo KivioPolyLineConnectorFactory::s_ssinfo = KivioStencilSpawnerInfo("Kivio Internal",
   "Polyline Connector", "Kivio Internal - Polyline Connector", "Polyline Connector", "0.1", "http://localhost/", "", "off");
 
-K_EXPORT_COMPONENT_FACTORY(libpolyline_connector,
-  KGenericFactory<KivioPolyLineConnectorFactory>("KivioPolyLineConnectorFactory"))
-
 KivioPolyLineConnectorFactory::KivioPolyLineConnectorFactory(QObject *parent, const char* name, const QStringList& args)
  : KivioStencilFactory(parent, name, args)
 {

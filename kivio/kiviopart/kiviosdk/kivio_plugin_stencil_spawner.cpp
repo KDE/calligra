@@ -44,28 +44,30 @@ KivioPluginStencilSpawner::~KivioPluginStencilSpawner()
 
 bool KivioPluginStencilSpawner::load( const QString &f )
 {
-	QFileInfo lib(f);
-	if( lib.exists())
-	{
-		    m_fileName = lib.baseName();
-	}
-	else
-		return false;
+  QFileInfo lib(f);
+  
+  if( lib.exists())
+  {
+    m_fileName = lib.baseName();
+  } else {
+    return false;
+  }
 
-	fac= KParts::ComponentFactory::createInstanceFromLibrary<KivioStencilFactory>(m_fileName.latin1());
+  fac = KParts::ComponentFactory::createInstanceFromLibrary<KivioStencilFactory>(m_fileName.local8Bit());
 
-	 if( !fac)
-	 {
-	 	kdDebug(43000) << "Failed to load: " << m_fileName << endl;
-	 	return false;
-	}
-    // Get the icon
-    m_pIcon = fac->GetIcon();
+  if( !fac)
+  {
+    kdDebug(43000) << "Failed to load: " << m_fileName << endl;
+    return false;
+  }
+  
+  // Get the icon
+  m_pIcon = fac->GetIcon();
 
-    // Get the info
-    m_pSInfo = fac->GetSpawnerInfo();
+  // Get the info
+  m_pSInfo = fac->GetSpawnerInfo();
 
-    return true;
+  return true;
 }
 
 QDomElement KivioPluginStencilSpawner::saveXML( QDomDocument &doc )

@@ -249,3 +249,9 @@ void KivioStencil::setRotation(int d)
   m_pinPoint.setCoords(m_w / 2.0, m_h / 2.0);
   updateGeometry();
 }
+
+void KivioStencil::move(double xOffset, double yOffset)
+{
+  setX(x() + xOffset);
+  setY(y() + yOffset);
+}
