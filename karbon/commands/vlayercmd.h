@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _VLAYERCOMMAND_H_
-#define _VLAYERCOMMAND_H_
+#ifndef __VLAYERCMD_H__
+#define __VLAYERCMD_H__
 
 #include "vcommand.h"
 #include "vobject.h"
@@ -29,29 +29,30 @@ class VDocument;
 class VLayer;
 
 
-class VLayerCommand : public VCommand
+class VLayerCmd : public VCommand
 {
 public:
 	/**
-	 * The different type of layer commands.
+	 * The different types of layer commands.
 	 */
-	enum VOrder {
-		AddLayer,
-		RaiseLayer,
-		LowerLayer,
-		DeleteLayer
+	enum VLayerCmdType
+	{
+		addLayer,
+		raiseLayer,
+		lowerLayer,
+		deleteLayer
 	};
 
-	VLayerCommand( VDocument* doc, const QString& name, VLayer* layer, VOrder order );
-	virtual ~VLayerCommand() {}
+	VLayerCmd( VDocument* doc, const QString& name, VLayer* layer, VLayerCmdType order );
+	virtual ~VLayerCmd() {}
 	
 	virtual void execute();
 	virtual void unexecute();
 
 protected:
-	VLayer*           m_layer;
-	VOrder            m_order;
-	VObject::VState   m_oldState;
+	VLayer* m_layer;
+	VLayerCmdType m_cmdType;
+	VObject::VState m_oldState;
 };
 
 #endif

@@ -19,61 +19,63 @@
 */
 
 #include "vlayer.h"
-#include "vlayercommand.h"
+#include "vlayercmd.h"
 
-VLayerCommand::VLayerCommand( VDocument* doc, const QString& name, VLayer* layer, VOrder order )
-	: VCommand( doc, name), m_layer( layer ), m_order( order )
+VLayerCmd::VLayerCmd( VDocument* doc, const QString& name, VLayer* layer, VLayerCmdType order )
+	: VCommand( doc, name), m_layer( layer ), m_cmdType( order )
 {
-	if ( order == AddLayer )
+	if( order == addLayer )
 	{
 		layer->setState( VObject::deleted );
 		document()->insertLayer( layer );
 	}
 
 	m_oldState = layer->state();
-} // VLayerCommand::VLayerCommand
+}
 
-void VLayerCommand::execute()
+void
+VLayerCmd::execute()
 {
-	switch ( m_order )
+	switch( m_cmdType )
 	{
-		case AddLayer:
-				m_layer->setState( VObject::normal );
-			break;
+		case addLayer:
+			m_layer->setState( VObject::normal );
+		break;
 
-		case DeleteLayer:
-				m_layer->setState( VObject::deleted );
-			break;
+		case deleteLayer:
+			m_layer->setState( VObject::deleted );
+		break;
 
-		case RaiseLayer:
-				document()->raiseLayer( m_layer );
-			break;
+		case raiseLayer:
+			document()->raiseLayer( m_layer );
+		break;
 
-		case LowerLayer:
-				document()->lowerLayer( m_layer );
-			break;
+		case lowerLayer:
+			document()->lowerLayer( m_layer );
+		break;
 	}
-} // VLayerCommand::execute
+}
 
-void VLayerCommand::unexecute()
+void
+VLayerCmd::unexecute()
 {
-	switch ( m_order )
+	switch ( m_cmdType )
 	{
-		case AddLayer:
-				m_layer->setState( VObject::deleted );
-			break;
+		case addLayer:
+			m_layer->setState( VObject::deleted );
+		break;
 
-		case DeleteLayer:
-				m_layer->setState( m_oldState );
-			break;
+		case deleteLayer:
+			m_layer->setState( m_oldState );
+		break;
 
-		case RaiseLayer:
-				document()->lowerLayer( m_layer );
-			break;
+		case raiseLayer:
+			document()->lowerLayer( m_layer );
+		break;
 
-		case LowerLayer:
-				document()->raiseLayer( m_layer );
-			break;
+		case lowerLayer:
+			document()->raiseLayer( m_layer );
+		break;
 	}
+}
 
-} // VLayerCommand::execute

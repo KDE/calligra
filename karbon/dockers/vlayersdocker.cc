@@ -35,7 +35,7 @@
 #include "vlayer.h"
 #include "vselection.h"
 #include "vlayersdocker.h"
-#include "vlayercommand.h"
+#include "vlayercmd.h"
 
 VLayerListViewItem::VLayerListViewItem( QListView* parent, KarbonView* view, VLayer* layer )
 	: QCheckListItem( parent, 0L, CheckBox ), m_view( view ), m_layer( layer )
@@ -146,8 +146,8 @@ void VLayersDocker::addLayer()
 	{
 		VLayer* layer = new VLayer( &( m_view->part()->document() ) );
 		layer->setName( name );
-		VLayerCommand* cmd = new VLayerCommand( &m_view->part()->document(), i18n("Delete layer"), 
-				layer, VLayerCommand::AddLayer );
+		VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n("Delete layer"), 
+				layer, VLayerCmd::addLayer );
 		m_view->part()->addCommand( cmd, true );
 		updateLayers();
 	}
@@ -158,8 +158,8 @@ void VLayersDocker::raiseLayer()
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
 		return;
-	VLayerCommand* cmd = new VLayerCommand( &m_view->part()->document(), i18n("Raise layer"), 
-			layerItem->layer(), VLayerCommand::RaiseLayer );
+	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n("Raise layer"), 
+			layerItem->layer(), VLayerCmd::raiseLayer );
 	m_view->part()->addCommand( cmd, true );
 	updatePreviews();
 } // VLayersDocker::raiseLayer
@@ -169,8 +169,8 @@ void VLayersDocker::lowerLayer()
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
 		return;
-	VLayerCommand* cmd = new VLayerCommand( &m_view->part()->document(), i18n("Lower layer"), 
-			layerItem->layer(), VLayerCommand::LowerLayer );
+	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n("Lower layer"), 
+			layerItem->layer(), VLayerCmd::lowerLayer );
 	m_view->part()->addCommand( cmd, true );
 	updatePreviews();
 } // VLayersDocker::lowerLayer
@@ -180,8 +180,8 @@ void VLayersDocker::deleteLayer()
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
 		return;
-	VLayerCommand* cmd = new VLayerCommand( &m_view->part()->document(), i18n("Delete layer"), 
-			layerItem->layer(), VLayerCommand::DeleteLayer );
+	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n("Delete layer"), 
+			layerItem->layer(), VLayerCmd::deleteLayer );
 	m_view->part()->addCommand( cmd, true );
 	updateLayers();
 } // VLayersDocker::deleteLayer
