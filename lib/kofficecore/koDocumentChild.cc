@@ -266,6 +266,8 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
         }
     }
 
+    QApplication::restoreOverrideCursor();
+
     return res;
 }
 
