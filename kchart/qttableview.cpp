@@ -13,6 +13,7 @@
 **********************************************************************/
 
 #include "qttableview.h"
+#include "qttableview.moc"
 #ifndef QT_NO_QTTABLEVIEW
 #include "qscrollbar.h"
 #include "qpainter.h"
