@@ -34,6 +34,7 @@ public:
     virtual void pageBreak();
 
 private:
+    QString getFont(unsigned fc) const;
     void writeOutParagraph( const QString& styleName, const QString& text );
 
     QString m_paragraph;

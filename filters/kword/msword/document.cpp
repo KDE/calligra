@@ -5,6 +5,8 @@
 #include <word97_generated.h>
 #include <parser.h>
 #include <parserfactory.h>
+#include <qfont.h>
+#include <qfontinfo.h>
 
 
 wvWare::U8 KWordCharacterHandler::hardLineBreak()
@@ -71,7 +73,16 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
     // This is also why the code below seems to test stuff twice ;)
 
     // TODO: COLOR  .... see chp.ico where to put the conversion code? here or in wv2?
-    // TODO: FONT
+
+    // Font name
+    QString fontName = getFont( chp->ftc );
+
+    if ( !fontName.isEmpty() )
+    {
+        QDomElement fontElem( m_mainDocument.createElement( "FONT" ) );
+        fontElem.setAttribute( "name", fontName );
+        format.appendChild( fontElem );
+    }
 
     QDomElement fontSize( m_mainDocument.createElement( "SIZE" ) );
     fontSize.setAttribute( "value", (int)(chp->hps / 2) ); // hps is in half points
@@ -153,6 +164,70 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
         m_formats.appendChild( format );
 
     m_index += text.length();
+}
+
+//#define FONT_DEBUG
+
+// Return the name of a font. We have to convert the Microsoft font names to
+// something that might just be present under X11.
+QString Document::getFont(unsigned fc) const
+{
+    Q_ASSERT( m_parser );
+    if ( !m_parser )
+        return QString::null;
+    const wvWare::Word97::FFN* ffn = m_parser->font( fc );
+    Q_ASSERT( ffn );
+    if ( !ffn )
+        return QString::null;
+
+    QConstString fontName( (QChar *)ffn->xszFfn.data(), ffn->xszFfn.length() );
+    QString font = fontName.string();
+
+#ifdef FONT_DEBUG
+    kdDebug() << "MS-FONT: " << font << endl;
+#endif
+
+    static const unsigned ENTRIES = 6;
+    static const char* const fuzzyLookup[ENTRIES][2] =
+    {
+        // MS contains      X11 font family
+        // substring.       non-AA name.
+        { "times",          "times" },
+        { "courier",        "courier" },
+        { "andale",         "monotype" },
+        { "monotype.com",   "monotype" },
+        { "georgia",        "times" },
+        { "helvetica",      "helvetica" }
+    };
+
+    // When Xft is available, Qt will do a good job of looking up our local
+    // equivalent of the MS font. But, we want to work even without Xft.
+    // So, first, we do a fuzzy match of some common MS font names.
+    unsigned i;
+
+    for (i = 0; i < ENTRIES; i++)
+    {
+        // The loop will leave unchanged any MS font name not fuzzy-matched.
+        if (font.find(fuzzyLookup[i][0], 0, FALSE) != -1)
+        {
+            font = fuzzyLookup[i][1];
+            break;
+        }
+    }
+
+#ifdef FONT_DEBUG
+    kdDebug() << "FUZZY-FONT: " << font << endl;
+#endif
+
+    // Use Qt to look up our canonical equivalent of the font name.
+    QFont xFont( font );
+    QFontInfo info( xFont );
+
+#ifdef FONT_DEBUG
+    kdDebug() << "QT-FONT: " << info.family() << endl;
+#endif
+
+    return info.family();
 }
 
 void Document::pageBreak()
