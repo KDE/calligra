@@ -250,6 +250,9 @@ KoMainWindow::~KoMainWindow()
     if (d->m_rootDoc)
         d->m_rootDoc->removeShell(this);
 
+    // safety first ;)
+    d->m_manager->setActivePart(0);
+
     if(d->m_rootViews.findRef(d->m_activeView)==-1) {
         delete d->m_activeView;
         d->m_activeView=0L;
@@ -274,8 +277,6 @@ KoMainWindow::~KoMainWindow()
     config->sync();
 
     delete d->m_manager;
-    delete d->m_splitter;
-    d->m_splitter=0L;
     delete d;
 }
 
@@ -392,9 +393,9 @@ bool KoMainWindow::openDocument( const KURL & url )
     KoDocument *newdoc=createDoc();
     d->m_firstTime=true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    if ( !newdoc || !newdoc->openURL( url ) )
+    if(!newdoc || !newdoc->openURL(url))
     {
-        newdoc->delayedDestruction();
+        delete newdoc;
         return false;
     }
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -409,10 +410,9 @@ bool KoMainWindow::openDocument( const KURL & url )
         // Open in a new shell
         // (Note : could create the shell first and the doc next for this
         // particular case, that would give a better user feedback...)
-//       KoMainWindow *s = newdoc->createShell();
         KoMainWindow *s = new KoMainWindow( newdoc->instance() );
-       s->show();
-       s->setRootDocument( newdoc );
+        s->show();
+        s->setRootDocument( newdoc );
     }
     else
     {
@@ -541,9 +541,9 @@ void KoMainWindow::slotFileNew()
     KoDocument* doc = rootDocument();
     KoDocument *newdoc=createDoc();
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    if ( !newdoc || !newdoc->initDoc() )
+    if(!newdoc || !newdoc->initDoc())
     {
-        newdoc->delayedDestruction();
+        delete newdoc;
         return;
     }
     if ( doc && doc->isEmpty() && !doc->isEmbedded() )
@@ -553,7 +553,6 @@ void KoMainWindow::slotFileNew()
     }
     else if ( doc && !doc->isEmpty() )
     {
-//        KoMainWindow *s = newdoc->createShell();
         KoMainWindow *s = new KoMainWindow( newdoc->instance() );
         s->show();
         s->setRootDocument( newdoc );
@@ -702,17 +701,25 @@ void KoMainWindow::slotSplitView() {
 
 void KoMainWindow::slotCloseAllViews() {
 
-  d->m_forQuit=true;
-  if(queryClose()) {
-    KoDocument *doc=d->m_rootDoc;
-    // get the tompost parent document (save because of inherits())
-    while(doc && doc->isEmbedded())
-      doc = static_cast<KoDocument*>(doc->parent());
-    doc->delayedDestruction();
-  }
-  d->m_forQuit=false;
+    d->m_forQuit=true;
+    if(queryClose()) {
+        hide();
+        d->m_rootDoc->removeShell(this);
+        // In case the document is embedded we close all open "extra-shells"
+        if(d->m_rootDoc && d->m_rootDoc->isEmbedded()) {
+            for(KoMainWindow *w=d->m_rootDoc->firstShell(); w!=0L; w=d->m_rootDoc->nextShell()) {
+                w->hide();
+                delete w;
+            }
+        }
+        // not embedded -> destroy the document and all shells/views ;)
+        else {
+            delete d->m_rootDoc;
+            QTimer::singleShot(0, this, SLOT(slotDelayedDestruction()));
+        }
+    }
+    d->m_forQuit=false;
 }
-
 
 void KoMainWindow::slotRemoveView() {
 
@@ -830,7 +837,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     for (; pIt.current(); ++pIt )
       factory->addClient( pIt.current() );
 
-    // This gets plugged in even for embedded views!
+    // This gets plugged in even for embedded views
     factory->plugActionList(d->m_activeView, "view_closeallviews",
                             d->m_veryHackyActionList);
     // This one only for root views
@@ -934,6 +941,11 @@ bool KoMainWindow::eventFilter(QObject *obj, QEvent *ev)
     }
 
     return KParts::MainWindow::eventFilter( obj, ev );
+}
+
+void KoMainWindow::slotDelayedDestruction() {
+    d->m_rootDoc=0;  // has already been deleted
+    delete this;
 }
 
 #include <koMainWindow.moc>

@@ -88,8 +88,6 @@ public:
    */
   virtual ~KoDocument();
 
-  virtual void delayedDestruction();
-
   /**
    * Tells whether this document is in singleview mode. This mode can only be set
    * in the constructor.
@@ -522,7 +520,6 @@ protected:
 private slots:
   void slotChildChanged( KoChild *c );
   void slotChildDestroyed();
-  void slotDestruct();
 
 private:
 

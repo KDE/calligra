@@ -42,7 +42,6 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include <qtimer.h>
 #include <qfile.h>
 #include <qpainter.h>
 #include <qcolor.h>
@@ -162,20 +161,11 @@ KoDocument::~KoDocument()
   d->m_children.setAutoDelete( true );
   d->m_children.clear();
 
-  QListIterator<KoMainWindow> shellIt( d->m_shells );
-  for (; shellIt.current(); ++shellIt )
-    shellIt.current()->setRootDocumentDirect( 0L, QList<KoView>() );
-
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
 
   delete d;
   s_documentList->removeRef(this);
-}
-
-void KoDocument::delayedDestruction()
-{
-  QTimer::singleShot(0, this, SLOT(slotDestruct()));
 }
 
 bool KoDocument::isSingleViewMode() const
@@ -348,13 +338,6 @@ void KoDocument::slotChildDestroyed()
 
     const KoDocumentChild *child = static_cast<const KoDocumentChild *>( sender() );
     d->m_children.removeRef( child );
-}
-
-void KoDocument::slotDestruct()
-{
-  delete this;
-  if(s_documentList->isEmpty())
-    kapp->quit();
 }
 
 QList<KoDocumentChild> &KoDocument::children() const

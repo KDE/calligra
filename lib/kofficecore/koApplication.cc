@@ -46,7 +46,8 @@ KoApplication::KoApplication()
 
     // Quit when last window closed
     // This shouldn't be needed anymore, KTMW does it (David)
-    //connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
+    // It seems that we still need this one (Werner)
+    connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
 
     // Prepare a DCOP interface
     dcopClient()->setDefaultObject( (new KoApplicationIface())->objId() );
@@ -80,7 +81,6 @@ bool KoApplication::start()
         KoDocument* doc = entry.createDoc( 0, "Document" );
         if ( !doc )
             return false;
-//        KoMainWindow* shell = doc->createShell();
         KoMainWindow *shell = new KoMainWindow( doc->instance() );
         shell->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
@@ -102,7 +102,6 @@ bool KoApplication::start()
             if ( doc )
             {
                 // show a shell asap
-//                KoMainWindow* shell = doc->createShell();
                 KoMainWindow *shell = new KoMainWindow( doc->instance() );
                 shell->show();
                 // now try to load

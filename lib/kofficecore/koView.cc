@@ -46,7 +46,7 @@ public:
   {
   }
 
-  KoDocument *m_doc;
+  QGuardedPtr<KoDocument> m_doc;
   QGuardedPtr<KParts::PartManager> m_manager;
   double m_zoom;
   QList<KoViewChild> m_children;
@@ -84,14 +84,13 @@ KoView::~KoView()
 {
   kdDebug(30003) << "KoView::~KoView " << this << endl;
   delete d->m_dcopObject;
-  if ( !koDocument()->isSingleViewMode() )
+  if ( koDocument() && !koDocument()->isSingleViewMode() )
   {
-    if ( d->m_manager && d->m_registered )  // if we aren't registered we mustn't unregister :)
+    if ( d->m_manager && d->m_registered ) // if we aren't registered we mustn't unregister :)
       d->m_manager->removePart( koDocument() );
     d->m_doc->removeView(this);
   }
   delete d;
-  kdDebug(30003) << "leaving KoView::~KoView()" << endl;
 }
 
 KoDocument *KoView::koDocument() const
@@ -432,10 +431,9 @@ void KoView::print( QPrinter & )
 }
 
 void KoView::newView() {
-    assert( ( d!=0L && d->m_doc != 0L ) );
+    assert( ( d!=0L && d->m_doc ) );
 
     KoDocument *thisDocument = d->m_doc;
-//    KoMainWindow *shell = thisDocument->createShell();
     KoMainWindow *shell = new KoMainWindow( thisDocument->instance() );
     shell->setRootDocument(thisDocument);
     shell->show();
