@@ -282,5 +282,7 @@ struct FIB {
     unsigned long lcbSttbListNames;
     long fcSttbfUssr;   // 890
     unsigned long lcbSttbfUssr;
+
+    bool ok;
 };
 #endif // FIB_H

@@ -31,5 +31,7 @@ struct PCD {
     long fc;
     unsigned short prm;
     bool unicode;
+
+    bool ok;
 };
 #endif // PCD_H

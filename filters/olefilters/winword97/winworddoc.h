@@ -50,7 +50,22 @@ public:
     const bool convert();
     const QDomDocument * const part();
 
-    const PCD readPCD(const long &pos);
+    /////////////////////////////////////////////////////////////
+    const PCD pcd(const long &pos);
+    const unsigned short numPCD() { return m_ptCount; }
+
+    const ATRD atrd(const long &pos);
+    const unsigned short numATRD() { return m_atrdCount; }
+
+    const BKF bkf(const long &pos);
+    const unsigned short numBKF() { return m_bkfCount; }
+
+    const BKL bkl(const long &pos);
+    const unsigned short numBKL() { return m_bklCount; }
+
+    void sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned long &lcb,
+               const unsigned char * const stream);
+    //////////////////////////////////////////////////////////
 
 private:
     WinWordDoc(const WinWordDoc &);
@@ -62,16 +77,14 @@ private:
     void convertSimple();
     void convertComplex();
 
-    const bool locatePieceTbl();
-    const bool checkBinTables();
-    const bool readAtrdList();
-    const bool readCommentStuff();
-    const bool readBKF();
-    const bool readBKL();
-    const bool browseDop();
+    const bool locatePCD();
+    void locateATRD();
+    void locateBKF();
+    void locateBKL();
 
-    const bool readSTTBF(STTBF &sttbf, const unsigned long &fc,
-                         const unsigned long &lcb, const unsigned char * const stream);
+    const bool checkBinTables();
+    void browseDop();
+    void readCommentStuff();
 
     bool m_success, m_ready;
     FIB *m_fib;
@@ -80,14 +93,15 @@ private:
 
     // Stylesheet
     StyleSheet *m_styleSheet;
-
-    // Piece table (pt)
+    // Piece table (pt), PCD stuff
     long m_ptCPBase, m_ptSize, m_ptCount, m_ptPCDBase;
+    // ATRD
+    unsigned long m_atrdBase, m_atrdCount;
+    // BKF
+    unsigned long m_bkfBase, m_bkfCount;
+    // BKL
+    unsigned long m_bklBase, m_bklCount;
 
-    // Comments & stuff
-    QList<ATRD> m_atrdList;
     STTBF m_grpXst, m_atnbkmk;
-    QList<BKF> m_bkfList;
-    QList<BKL> m_bklList;
 };
 #endif // WINWORDDOC_H

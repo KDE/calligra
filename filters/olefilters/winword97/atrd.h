@@ -30,11 +30,15 @@ struct ATRD {
     short ak;
     unsigned short grfbmc;
     long lTagBkmk;
+
+    bool ok;
 };
 
 struct Xst {
     QString string;
     Xst *next;
     unsigned long num;
+
+    bool ok;
 };
 #endif // ATRD_H

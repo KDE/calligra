@@ -30,5 +30,7 @@ struct STTBF {
     unsigned short extraDataLen;
     QStringList stringList;
     QList< QArray<unsigned char> > extraData;
+
+    bool ok;
 };
 #endif // STTBF_H

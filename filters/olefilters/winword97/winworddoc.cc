@@ -28,7 +28,11 @@ WinWordDoc::WinWordDoc(QDomDocument &part, const myFile &mainStream,
     m_ready=false;
     m_fib=0L;
     m_styleSheet=0L;
-    m_ptSize=-1;      // it's safer that way
+    m_ptSize=-1;
+    m_atrdCount=0;
+    m_bkfCount=0;
+    m_bklCount=0;
+
     readFIB();
 
     if(m_fib->fEncrypted==1) {
@@ -42,7 +46,7 @@ WinWordDoc::WinWordDoc(QDomDocument &part, const myFile &mainStream,
 
     m_styleSheet=new StyleSheet(m_table, m_fib);
     // print some debug info
-    FIBInfo();
+    // FIBInfo();
 }
 
 WinWordDoc::~WinWordDoc() {
@@ -58,12 +62,6 @@ WinWordDoc::~WinWordDoc() {
     delete m_styleSheet;
     m_styleSheet=0L;
 
-    for(ATRD *tmp=m_atrdList.first(); tmp!=0L; tmp=m_atrdList.next()) {
-        delete tmp;
-        tmp=0L;
-    }
-    m_atrdList.clear();
-
     m_grpXst.stringList.clear();
     for(QArray<unsigned char> *tmp=m_grpXst.extraData.first(); tmp!=0L; tmp=m_grpXst.extraData.next()) {
         delete tmp;
@@ -77,35 +75,21 @@ WinWordDoc::~WinWordDoc() {
         tmp=0L;
     }
     m_atnbkmk.extraData.clear();
-
-    for(BKF *tmp=m_bkfList.first(); tmp!=0L; tmp=m_bkfList.next()) {
-        delete tmp;
-        tmp=0L;
-    }
-    m_bkfList.clear();
-
-    for(BKL *tmp=m_bklList.first(); tmp!=0L; tmp=m_bklList.next()) {
-        delete tmp;
-        tmp=0L;
-    }
-    m_bklList.clear();
 }
 
 const bool WinWordDoc::convert() {
 
     if(!m_success || m_ready)
         return false;
-    if(!browseDop())              // DOP==Document Properties
-        return false;
-    if(!locatePieceTbl())         // get some information about our piece table
+    browseDop();                  // DOP==Document Properties
+    if(!locatePCD())              // get some information about our piece table
         return false;
     if(!checkBinTables())         // are the bin tables ok (==not compressed)
         return false;
-    if(!readAtrdList())           // annotation reference descriptors
-        return false;
-    if(!readCommentStuff())
-        return false;
-
+    locateATRD();
+    locateBKF();
+    locateBKL();
+    readCommentStuff();
 
     if(m_fib->fComplex==0)
         convertSimple();
@@ -170,6 +154,162 @@ const QDomDocument * const WinWordDoc::part() {
             "</DOC>\n"));
         return &m_part;
     }
+}
+
+const PCD WinWordDoc::pcd(const long &pos) {
+
+    PCD ret;
+    ret.ok=false;
+
+    if(m_ptSize==-1)
+        return ret;       // undefined, so don't call this one
+                          // before you call locatePieceTbl()!
+
+    long tmpPos=m_ptPCDBase+pos*8;
+    unsigned short *tmp=(unsigned short*)&ret;
+
+    *tmp=read16(m_table.data+tmpPos);
+    ret.fc=read32(m_table.data+tmpPos+2);
+    if((ret.fc & 0x40000000) == 0x40000000) {
+        ret.fc=(ret.fc & 0xBFFFFFFF)/2;
+        ret.unicode=false;
+    }
+    else
+        ret.unicode=true;
+    ret.prm=read16(m_table.data+tmpPos+6);
+    ret.ok=true;
+    return ret;
+}
+
+const ATRD WinWordDoc::atrd(const long &pos) {
+
+    ATRD atrd;
+    atrd.ok=false;
+    if(m_atrdCount!=0) {
+        unsigned long base=m_atrdBase+pos*30;
+        for(unsigned short i=0;i<10;++i)
+                atrd.xstUsrInitl[i]=read16(m_table.data+base+i);
+            atrd.ibst=read16(m_table.data+base+20);
+            atrd.ak=read16(m_table.data+base+22);
+            atrd.grfbmc=read16(m_table.data+base+24);
+            atrd.lTagBkmk=read32(m_table.data+base+26);
+            atrd.ok=true;
+    }
+    return atrd;
+}
+
+const BKF WinWordDoc::bkf(const long &pos) {
+
+    BKF bkf;
+    bkf.ok=false;
+    if(m_bkfCount!=0) {
+        unsigned long base=m_bkfBase+pos*4;
+        unsigned short *tmp;
+        bkf.ibkl=read16(m_table.data+base);
+        tmp=(unsigned short*)&bkf;
+        ++tmp;
+        *tmp=read16(m_table.data+base+2);
+        bkf.ok=true;
+    }
+    return bkf;
+}
+
+const BKL WinWordDoc::bkl(const long &pos) {
+
+    BKL bkl;
+    bkl.ok=false;
+    if(m_bklCount!=0) {
+        bkl.ibkf=read16(m_table.data+m_bklBase+pos*4);
+        bkl.ok=true;
+    }
+    return bkl;
+}
+
+void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned long &lcb,
+                              const unsigned char * const stream) {
+
+    if(lcb==0) {
+        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty STTBF");
+        sttbf.ok=false;
+    }
+
+    QString str;
+    unsigned long base=fc+4;
+    unsigned short len, i, j;
+    bool unicode=false;
+    unsigned short numStrings=read16(stream+fc);
+    sttbf.extraDataLen=read16(stream+fc+2);
+
+    if(numStrings==0xffff) {
+        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extended...");
+        unicode=true;
+        base=fc+6;
+        numStrings=sttbf.extraDataLen;
+        sttbf.extraDataLen=read16(stream+fc+4);
+    }
+
+    // TODO: unroll this loops :)
+    if(unicode) {
+        for(i=0; i<numStrings; ++i) {
+            len=read16(stream+base);
+            base+=2;
+            if(len==0) {
+                sttbf.stringList.append(QString(""));
+                kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty string");
+            }
+            else {
+                str="";
+
+                for(j=0; j<len*2; j+=2)
+                    str+=QChar(read16(stream+base+j));
+
+                sttbf.stringList.append(str);
+                kdebug(KDEBUG_INFO, 31000, str);
+                base+=j;   // j==len*2 :)
+
+                if(sttbf.extraDataLen!=0) {
+                    kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extra data");
+                    QArray<unsigned char> *tmpArray=new QArray<unsigned char>;
+                    tmpArray->resize(sttbf.extraDataLen);
+                    for(j=0; j<sttbf.extraDataLen; ++j)
+                        tmpArray[j]=*(stream+base+j);
+                    base+=j;
+                    sttbf.extraData.append(tmpArray);
+                }
+            }
+        }
+    }
+    else {
+        for(i=0; i<numStrings; ++i) {
+            len=*(stream+base);
+            ++base;
+            if(len==0) {
+                sttbf.stringList.append(QString(""));
+                kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty string");
+            }
+            else {
+                str="";
+
+                for(j=0; j<len; ++j)
+                    str+=QChar(char2uni(*(stream+base+j)));
+
+                sttbf.stringList.append(str);
+                kdebug(KDEBUG_INFO, 31000, str);
+                base+=j;   // j==len :)
+
+                if(sttbf.extraDataLen!=0) {
+                    kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extra data");
+                    QArray<unsigned char> *tmpArray=new QArray<unsigned char>;
+                    tmpArray->resize(sttbf.extraDataLen);
+                    for(j=0; j<sttbf.extraDataLen; ++j)
+                        tmpArray[j]=*(stream+base+j);
+                    base+=j;
+                    sttbf.extraData.append(tmpArray);
+                }
+            }
+        }
+    }
+    sttbf.ok=true;
 }
 
 void WinWordDoc::FIBInfo() {
@@ -255,6 +395,8 @@ void WinWordDoc::readFIB() {
     tmpL=(unsigned long*)&m_fib->fcStshfOrig;
     for(i=0; i<186; ++i, ++tmpL)
         *tmpL=read32(m_main.data+154+4*i);
+
+    m_fib->ok=true;
 }
 
 void WinWordDoc::convertSimple() {
@@ -265,30 +407,7 @@ void WinWordDoc::convertComplex() {
     m_success=false;
 }
 
-const PCD WinWordDoc::readPCD(const long &pos) {
-
-    PCD ret;
-
-    if(m_ptSize==-1)
-        return ret;       // undefined, so don't call this one
-                          // before you call locatePieceTbl()!
-
-    long tmpPos=m_ptPCDBase+pos*8;
-    unsigned short *tmp=(unsigned short*)&ret;
-
-    *tmp=read16(m_table.data+tmpPos);
-    ret.fc=read32(m_table.data+tmpPos+2);
-    if((ret.fc & 0x40000000) == 0x40000000) {
-        ret.fc=(ret.fc & 0xBFFFFFFF)/2;
-        ret.unicode=false;
-    }
-    else
-        ret.unicode=true;
-    ret.prm=read16(m_table.data+tmpPos+6);
-    return ret;
-}
-
-const bool WinWordDoc::locatePieceTbl() {
+const bool WinWordDoc::locatePCD() {
 
     long tmp=m_fib->fcClx;
     QString r;
@@ -316,6 +435,30 @@ const bool WinWordDoc::locatePieceTbl() {
     return found;
 }
 
+void WinWordDoc::locateATRD() {
+
+    if(m_fib->lcbPlcfandRef!=0) {
+        m_atrdCount=static_cast<unsigned short>((m_fib->lcbPlcfandRef-4)/34); // 34 == (sizeof(ATRD)==30 + sizeof(long))
+        m_atrdBase=m_fib->fcPlcfandRef+(m_atrdCount+1)*4;
+    }
+}
+
+void WinWordDoc::locateBKF() {
+
+    if(m_fib->lcbPlcfAtnbkf!=0) {
+        m_bkfCount=static_cast<unsigned short>((m_fib->lcbPlcfAtnbkf-4)/8);
+        m_bkfBase=m_fib->fcPlcfAtnbkf+(m_bkfCount+1)*4;
+    }
+}
+
+void WinWordDoc::locateBKL() {
+
+    if(m_fib->lcbPlcfAtnbkl!=0) {
+        m_bklCount=static_cast<unsigned short>((m_fib->lcbPlcfAtnbkl-4)/6);
+        m_bklBase=m_fib->fcPlcfAtnbkl+(m_bklCount+1)*4;
+    }
+}
+
 const bool WinWordDoc::checkBinTables() {
 
     bool notCompressed=false;
@@ -329,171 +472,11 @@ const bool WinWordDoc::checkBinTables() {
     return notCompressed;
 }
 
-const bool WinWordDoc::readAtrdList() {
-
-    if(m_fib->lcbPlcfandRef==0)
-        return true;
-    else {
-        unsigned short count=static_cast<unsigned short>((m_fib->lcbPlcfandRef-4)/34); // 34 == (sizeof(ATRD)==30 + sizeof(long))
-        unsigned long base=m_fib->fcPlcfandRef+(count+1)*4;
-
-        ATRD *atrd;
-        for(unsigned short i=0;i<count;++i) {
-            atrd=new ATRD;
-            for(unsigned short j=0;j<10;++j)
-                atrd->xstUsrInitl[j]=read16(m_table.data+base+j);
-            atrd->ibst=read16(m_table.data+base+20);
-            atrd->ak=read16(m_table.data+base+22);
-            atrd->grfbmc=read16(m_table.data+base+24);
-            atrd->lTagBkmk=read32(m_table.data+base+26);
-            base+=30;                       // sizeof(ATRD)==30!
-            m_atrdList.append(atrd);
-        }
-    }
-    return true;
-}
-
-const bool WinWordDoc::readCommentStuff() {
-
-    readSTTBF(m_grpXst, m_fib->fcGrpXstAtnOwners, m_fib->lcbGrpXstAtnOwners, m_table.data);
-    readSTTBF(m_atnbkmk, m_fib->fcSttbfAtnbkmk, m_fib->lcbSttbfAtnbkmk, m_table.data);
-    readBKF();
-    readBKL();
-    return true;
-}
-
-const bool WinWordDoc::readBKF() {
-
-    if(m_fib->lcbPlcfAtnbkf==0) {
-        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::readBKF(): empty");
-        return false;
-    }
-    else {
-        unsigned short count=static_cast<unsigned short>((m_fib->lcbPlcfAtnbkf-4)/8);
-        unsigned long base=m_fib->fcPlcfAtnbkf+(count+1)*4;
-        unsigned short *tmp;
-        BKF *bkf;
-        for(unsigned i=0;i<count;++i) {
-            bkf=new BKF;
-            bkf->ibkl=read16(m_table.data+base);
-            tmp=(unsigned short*)&bkf;
-            ++tmp;
-            *tmp=read16(m_table.data+base+2);
-            m_bkfList.append(bkf);
-            base+=4;
-        }
-    }
-    return true;
-}
-
-const bool WinWordDoc::readBKL() {
-
-    if(m_fib->lcbPlcfAtnbkl==0) {
-        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::readBKL(): empty");
-        return false;
-    }
-    else {
-        unsigned short count=static_cast<unsigned short>((m_fib->lcbPlcfAtnbkl-4)/6);
-        unsigned long base=m_fib->fcPlcfAtnbkl+(count+1)*4;
-        BKL *bkl;
-        for(unsigned i=0;i<count;++i) {
-            bkl=new BKL;
-            bkl->ibkf=read16(m_table.data+base);
-            m_bklList.append(bkl);
-            base+=2;
-        }
-    }
-    return true;
-}
-
-const bool WinWordDoc::browseDop() {
+void WinWordDoc::browseDop() {
     // TODO
-    return true;
 }
 
-const bool WinWordDoc::readSTTBF(STTBF &sttbf, const unsigned long &fc,
-                                 const unsigned long &lcb, const unsigned char * const stream) {
-
-    if(lcb==0) {
-        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::readSTTBF(): empty STTBF");
-        return false;
-    }
-
-    QString str;
-    unsigned long base=fc+4;
-    unsigned short len, i, j;
-    bool unicode=false;
-    unsigned short numStrings=read16(stream+fc);
-    sttbf.extraDataLen=read16(stream+fc+2);
-
-    if(numStrings==0xffff) {
-        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::readSTTBF(): extended...");
-        unicode=true;
-        base=fc+6;
-        numStrings=sttbf.extraDataLen;
-        sttbf.extraDataLen=read16(stream+fc+4);
-    }
-
-    // TODO: unroll this loops :)
-    if(unicode) {
-        for(i=0; i<numStrings; ++i) {
-            len=read16(stream+base);
-            base+=2;
-            if(len==0) {
-                sttbf.stringList.append(QString(""));
-                kdebug(KDEBUG_INFO, 31000, "WinWordDoc::readSTTBF(): empty string");
-            }
-            else {
-                str="";
-
-                for(j=0; j<len*2; j+=2)
-                    str+=QChar(read16(stream+base+j));
-
-                sttbf.stringList.append(str);
-                kdebug(KDEBUG_INFO, 31000, str);
-                base+=j;   // j==len*2 :)
-
-                if(sttbf.extraDataLen!=0) {
-                    kdebug(KDEBUG_INFO, 31000, "WinWordDoc::readSTTBF(): extra data");
-                    QArray<unsigned char> *tmpArray=new QArray<unsigned char>;
-                    tmpArray->resize(sttbf.extraDataLen);
-                    for(j=0; j<sttbf.extraDataLen; ++j)
-                        tmpArray[j]=*(stream+base+j);
-                    base+=j;
-                    sttbf.extraData.append(tmpArray);
-                }
-            }
-        }
-    }
-    else {
-        for(i=0; i<numStrings; ++i) {
-            len=*(stream+base);
-            ++base;
-            if(len==0) {
-                sttbf.stringList.append(QString(""));
-                kdebug(KDEBUG_INFO, 31000, "WinWordDoc::readSTTBF(): empty string");
-            }
-            else {
-                str="";
-
-                for(j=0; j<len; ++j)
-                    str+=QChar(char2uni(*(stream+base+j)));
-
-                sttbf.stringList.append(str);
-                kdebug(KDEBUG_INFO, 31000, str);
-                base+=j;   // j==len :)
-
-                if(sttbf.extraDataLen!=0) {
-                    kdebug(KDEBUG_INFO, 31000, "WinWordDoc::readSTTBF(): extra data");
-                    QArray<unsigned char> *tmpArray=new QArray<unsigned char>;
-                    tmpArray->resize(sttbf.extraDataLen);
-                    for(j=0; j<sttbf.extraDataLen; ++j)
-                        tmpArray[j]=*(stream+base+j);
-                    base+=j;
-                    sttbf.extraData.append(tmpArray);
-                }
-            }
-        }
-    }
-    return true;
+void WinWordDoc::readCommentStuff() {
+    sttbf(m_grpXst, m_fib->fcGrpXstAtnOwners, m_fib->lcbGrpXstAtnOwners, m_table.data);
+    sttbf(m_atnbkmk, m_fib->fcSttbfAtnbkmk, m_fib->lcbSttbfAtnbkmk, m_table.data);
 }

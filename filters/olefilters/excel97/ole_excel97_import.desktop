@@ -1,18 +1,8 @@
 [Desktop Entry]
 Type=Service
 Name=OLEExcel97Filter
-Name[eo]=Filtrilo OLEExcel97
-Name[hu]=OLEExcel97Szûrõ
-Name[ja]=OLE Excel97 ¥Õ¥£¥ë¥¿¡¼
-Name[mi]=OLEExcel97Szûrõ
 Comment=KSpread Excel 97 Filter
-Comment[ca]=Filtre d'Excel 97 pel KSpread
-Comment[eo]=Filtrilo por Tabelkalkulilo el Excel 97
-Comment[fi]=KSpreak Excel 97 suodatin
-Comment[hu]=Excel 97 szûrõ a KSzámolótáblához
-Comment[ja]=KSpread Excel97 ¥Õ¥£¥ë¥¿¡¼
-Comment[mi]=Excel 97 szûrõ a KSzámolótáblához
-Comment[no_NY]=Excel 97-filter for KSpread
+Comment[de]=Excel 97 Filter für KSpread
 Comment[sr]=Excel 97 filter za KSpread
 Export=application/x-kspread
 ExportDescription=KSpread
