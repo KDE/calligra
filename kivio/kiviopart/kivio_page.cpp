@@ -1110,26 +1110,40 @@ KivioLayer *KivioPage::layerAt( int pos )
 void KivioPage::alignStencils(AlignData d)
 {
     KivioStencil* pStencil = m_lstSelection.first();
+
     if(!pStencil)
         return;
+
     if (d.centerOfPage) {
-      float w = m_pPageLayout.ptWidth;
-      float h = m_pPageLayout.ptHeight;
-      while( pStencil )
-      {
-          pStencil->setPosition((w-pStencil->w())/2,(h-pStencil->h())/2);
-          pStencil = m_lstSelection.next();
-      }
-      return;
+        KMacroCommand *macro = new KMacroCommand(i18n("Center Stencil"));
+        float w = m_pPageLayout.ptWidth;
+        float h = m_pPageLayout.ptHeight;
+
+        while( pStencil )
+        {
+            KivioRect oldRect = pStencil->rect();
+            pStencil->setPosition((w-pStencil->w())/2,(h-pStencil->h())/2);
+            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Align Stencil"),
+              pStencil, oldRect, pStencil->rect(), this);
+            macro->addCommand(cmd);
+            pStencil = m_lstSelection.next();
+        }
+
+        m_pDoc->addCommand(macro);
+        return;
     }
 
     if (d.v != AlignData::None || d.h != AlignData::None) {
+        KMacroCommand *macro = new KMacroCommand(i18n("Align Stencil"));
         float x = pStencil->x();
         float y = pStencil->y();
         float w = pStencil->w();
         float h = pStencil->h();
+
         while( pStencil )
         {
+            KivioRect oldRect = pStencil->rect();
+
             switch (d.v) {
                 case AlignData::Top:
                   pStencil->setY(y);
@@ -1156,8 +1170,14 @@ void KivioPage::alignStencils(AlignData d)
                 default:
                   break;
             }
+
+            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Align Stencil"),
+              pStencil, oldRect, pStencil->rect(), this);
+            macro->addCommand(cmd);
             pStencil = m_lstSelection.next();
         }
+
+        m_pDoc->addCommand(macro);
     }
 }
 
@@ -1203,10 +1223,13 @@ void KivioPage::distributeStencils(DistributeData d)
 
   XYSortedStencilList xSortList(true);
   XYSortedStencilList ySortList(false);
+  QValueList<KivioRect> oldRects;
+
   while( pStencil )
   {
       xSortList.append(pStencil);
       ySortList.append(pStencil);
+      oldRects.append(pStencil->rect());
       pStencil = m_lstSelection.next();
   }
   xSortList.sort();
@@ -1385,6 +1408,21 @@ void KivioPage::distributeStencils(DistributeData d)
       break;
     default:
       break;
+  }
+
+  if(d.v != DistributeData::None || d.h != DistributeData::None) {
+    KMacroCommand *macro = new KMacroCommand(i18n("Distribute Stencil"));
+    QValueListIterator<KivioRect> it;
+    pStencil = m_lstSelection.first();
+
+    for(it = oldRects.begin(); it != oldRects.end(); ++it) {
+      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand(i18n("Distribute Stencil"),
+        pStencil, (*it), pStencil->rect(), this);
+      macro->addCommand( cmd);
+      pStencil = m_lstSelection.next();
+    }
+
+    m_pDoc->addCommand( macro );
   }
 }
 
