@@ -253,27 +253,26 @@ void KWDocStructRootItem::setupArrangement()
                     item = new QListViewItem( this, frameset->getName() );
                     KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
                     textdoc= tmpParag->textDocument();
-
-
                     parag = static_cast<KWTextParag *>(textdoc->firstParag());
                     while ( parag )
                         {
-                            if ( (parag->counter()->style() != Counter:: STYLE_NONE) &&  (parag->counter()->numbering() == Counter::NUM_CHAPTER) )
+                            Counter *tmpCounter=parag->counter();
+                            if ( (tmpCounter->style() != Counter:: STYLE_NONE) &&  (tmpCounter->numbering() == Counter::NUM_CHAPTER) )
                                 {
-                                    int _depth = parag->counter()->depth();
+                                    int _depth = tmpCounter->depth();
                                     if ( _depth == 0 )
                                         {
                                             if ( item->childCount() == 0 )
-                                                parags.replace( _depth, new KWDocStructParagItem( item,QString( parag->counter()->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                                                parags.replace( _depth, new KWDocStructParagItem( item,QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
                                             else
-                                                parags.replace( _depth, new KWDocStructParagItem( item, parags[ _depth ],QString( parag->counter()->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                                                parags.replace( _depth, new KWDocStructParagItem( item, parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
                                         }
                                     else
                                         {
                                             if ( parags[ _depth - 1 ]->childCount() == 0 )
-                                                parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ],QString( parag->counter()->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                                                parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
                                             else
-                                                parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ], parags[ _depth ],QString( parag->counter()->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                                                parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ], parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
                                         }
                                     QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), parags[ _depth ], SLOT( slotDoubleClicked( QListViewItem* ) ) );
                                 }
@@ -355,7 +354,8 @@ void KWDocStructRootItem::setupTables()
 
     for ( int i = doc->getNumGroupManagers() - 1; i >= 0; i-- )
     {
-        if ( !doc->getGroupManager( i )->isActive() ) continue;
+        if ( !doc->getGroupManager( i )->isActive() )
+            continue;
 
         _name=i18n( "Table %1" ).arg(QString::number( i + 1 ));
         child = new KWDocStructTableItem( this, _name, doc->getGroupManager( i ), gui );
