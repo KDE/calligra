@@ -1837,28 +1837,9 @@ void KWTextFrameSet::loadOasisTextBox( const QDomElement& tag, KoOasisContext& c
     }
 }
 
-KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KWTextParag* lastParagraph )
-{
-    return static_cast<KWTextParag *>(textDocument()->loadOasisText( bodyElem, context, lastParagraph, m_doc->styleCollection() ) );
-}
-
 void KWTextFrameSet::loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context )
 {
-    textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
-    m_textobj->setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
-
-    KWTextParag *lastParagraph = loadOasisText( bodyElem, context, 0 );
-
-    if ( !lastParagraph )                // We created no paragraph
-    {
-        // Create an empty one, then. See KWTextDocument ctor.
-        textDocument()->clear( true );
-        static_cast<KWTextParag *>( textDocument()->firstParag() )->setStyle( m_doc->styleCollection()->findStyle( "Standard" ) );
-    }
-    else
-        textDocument()->setLastParag( lastParagraph );
-
-    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
+    return m_textobj->loadOasisContent( bodyElem, context, m_doc->styleCollection() );
 }
 
 KWFrame* KWTextFrameSet::loadOasis( const QDomElement &tag, KoOasisContext& context )

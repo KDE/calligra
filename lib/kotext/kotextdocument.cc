@@ -1449,8 +1449,7 @@ KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
     return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
-
-KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * _styleCol )
+KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl )
 {
     // was OoWriterImport::parseBodyOrSimilar
     for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
@@ -1466,7 +1465,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
                 context.fillStyleStack( tag, "text:style-name" );
 
                 KoTextParag *parag = createParag( this, lastParagraph );
-                parag->loadOasis( tag, context, _styleCol );
+                parag->loadOasis( tag, context, styleColl );
                 if ( !lastParagraph )        // First parag
                     setFirstParag( parag );
                 lastParagraph = parag;
@@ -1496,7 +1495,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
                     restartNumbering = tag.attribute( "text:start-value" ).toInt();
 
                 KoTextParag *parag = createParag( this, lastParagraph );
-                parag->loadOasis( tag, context, _styleCol );
+                parag->loadOasis( tag, context, styleColl );
                 if ( !lastParagraph )        // First parag
                     setFirstParag( parag );
                 lastParagraph = parag;
@@ -1509,7 +1508,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
                       || tagName == "text:list" )  // OASIS
             {
                 kdDebug(32500)<<" list \n";
-                lastParagraph = loadList( tag, context, lastParagraph, _styleCol );
+                lastParagraph = loadList( tag, context, lastParagraph, styleColl );
                 context.styleStack().restore();
                 continue;
             }
@@ -1517,7 +1516,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
             {
                 kdDebug(32500) << "Section found!" << endl;
                 context.fillStyleStack( tag, "text:style-name" );
-                lastParagraph = loadOasisText( tag, context, lastParagraph, _styleCol );
+                lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl );
             }
             else if ( tagName == "text:variable-decls" )
             {
@@ -1535,7 +1534,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
     return lastParagraph;
 }
 
-KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * _styleCol )
+KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl )
 {
     //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
@@ -1556,7 +1555,7 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
         if ( listItem.hasAttribute( "text:start-value" ) )
             restartNumbering = listItem.attribute( "text:start-value" ).toInt();
         KoTextParag* oldLast = lastParagraph;
-        lastParagraph = loadOasisText( listItem, context, lastParagraph, _styleCol );
+        lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl );
         KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
         // It's either list-header (normal text on top of list) or list-item
         if ( listItem.tagName() != "text:list-header" && firstListItem ) {

@@ -1897,6 +1897,25 @@ bool KoTextObject::rtl() const
     return textdoc->firstParag()->string()->isRightToLeft();
 }
 
+void KoTextObject::loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl )
+{
+    textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
+    setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
+
+    KoTextParag *lastParagraph = textDocument()->loadOasisText( bodyElem, context, 0, styleColl );
+
+    if ( !lastParagraph )                // We created no paragraph
+    {
+        // Create an empty one, then. See KoTextDocument ctor.
+        textDocument()->clear( true );
+        textDocument()->firstParag()->setStyle( styleColl->findStyle( "Standard" ) );
+    }
+    else
+        textDocument()->setLastParag( lastParagraph );
+
+    setLastFormattedParag( textDocument()->firstParag() );
+}
+
 KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)
 {
     if ( protectContent() )

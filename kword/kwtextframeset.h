@@ -325,8 +325,6 @@ private:
     double footNoteSize( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
     bool createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference );
-    KWTextParag* loadList( const QDomElement& list, KoOasisContext& context, KWTextParag* lastParagraph );
-    KWTextParag * loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KWTextParag* lastParagraph );
 
 private:
     /** The contained text object */

@@ -200,8 +200,8 @@ public:
     int length() const;
     void clear( bool createEmptyParag = FALSE );
 
-    virtual KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * _styleCol );
-    virtual KoTextParag * loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * _styleCol );
+    KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl );
+    KoTextParag* loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl );
 
     virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
 

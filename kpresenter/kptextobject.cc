@@ -204,7 +204,10 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPTextObject::loadOasis(const QDomElement &element,  const KoStyleStack &styleStack, KoOasisStyles&oasisStyles, QDomElement *animation )
+void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context,
+                             const KoStyleStack &styleStack, // ### remove, part of context
+                             KoOasisStyles&oasisStyles, // ### remove, part of context
+                             QDomElement *animation )
 {
     KP2DObject::loadOasis(element, styleStack, oasisStyles, animation);
     //todo other attribute
@@ -230,33 +233,9 @@ void KPTextObject::loadOasis(const QDomElement &element,  const KoStyleStack &st
     }
     kdDebug()<<" vertical Alignment :"<< ( ( m_textVertAlign== KP_TOP ) ? "top" : ( m_textVertAlign==  KP_CENTER ) ? "center": "bottom" )<<endl;
 
+    m_textobj->loadOasisContent( element, context, m_doc->styleCollection() );
 }
 
-KoTextParag * KPTextObject::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph )
-{
-    kdDebug()<<" KPTextObject::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph ) -----------------------------\n";
-    return textDocument()->loadOasisText( bodyElem, context, lastParagraph, m_doc->styleCollection() );
-}
-
-
-void KPTextObject::loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context )
-{
-    textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
-    m_textobj->setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
-
-    KoTextParag *lastParagraph = loadOasisText( bodyElem, context, 0 );
-
-    if ( !lastParagraph )                // We created no paragraph
-    {
-        // Create an empty one, then. See KoTextDocument ctor.
-        textDocument()->clear( true );
-        textDocument()->firstParag()->setStyle( m_doc->styleCollection()->findStyle( "Standard" ) );
-    }
-    else
-        textDocument()->setLastParag( lastParagraph );
-
-    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
-}
 
 double KPTextObject::load(const QDomElement &element)
 {

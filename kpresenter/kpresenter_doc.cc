@@ -1042,9 +1042,8 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             {
                 fillStyleStack( o, oasisStyles );
                 KPTextObject *kptextobject = new KPTextObject( this );
-                kptextobject->loadOasis(o, m_loadingInfo->styleStack(),oasisStyles, animationShow);
+                kptextobject->loadOasis(o, context, m_loadingInfo->styleStack(),oasisStyles, animationShow);
                 newpage->appendObject(kptextobject);
-                kptextobject->loadOasisContent( o, context );
             }
             else if ( name == "draw:rect" ) // rectangle
             {

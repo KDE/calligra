@@ -396,6 +396,8 @@ public:
     QString textChangedCase(const QString& _text, KoChangeCaseDia::TypeOfCase _type);
     KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,KoTextCursor *cursor, KoTextParag *parag);
 
+    void loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl );
+
 #ifndef NDEBUG
     void printRTDebug(int);
 #endif
