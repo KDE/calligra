@@ -32,7 +32,7 @@ DESCRIPTION
 #pragma pack(1)
 #endif
 
-#ifdef DECCXX
+#ifdef __DECCXX
 #define __UNAL __unaligned
 #else
 #define __UNAL
