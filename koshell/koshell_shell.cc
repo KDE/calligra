@@ -31,6 +31,7 @@
 #include <klibloader.h>
 #include <kservice.h>
 #include <kmessagebox.h>
+#include <krecentdocument.h>
 
 #include <koQueryTrader.h>
 #include <koKoolBar.h>
@@ -38,6 +39,7 @@
 #include <koDocument.h>
 #include <koView.h>
 #include <koPartSelectDia.h>
+#include <koFilterManager.h>
 
 KoShellWindow::KoShellWindow()
  : KoMainWindow( KGlobal::instance() )
@@ -120,6 +122,12 @@ QString KoShellWindow::nativeFormatPattern() const
 
 bool KoShellWindow::openDocument( const KURL & url )
 {
+    return openDocumentInternalKoShell( 0L, url );
+}
+
+// Should be openDocumentInternal if it was virtual in KoMainWindow
+bool KoShellWindow::openDocumentInternalKoShell( KoFilterManager * filterManager, const KURL &url )
+{
   KMimeType::Ptr mimeType = KMimeType::findByURL( url );
   m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().latin1() );
   if ( m_documentEntry.isEmpty() )
@@ -128,6 +136,11 @@ bool KoShellWindow::openDocument( const KURL & url )
   m_recent->addURL( url );
 
   KoDocument* newdoc = m_documentEntry.createDoc();
+
+  // Pass the filterManager to the document (who will own it from now on)
+  if ( filterManager )
+      newdoc->setFilterManager( filterManager );
+
   connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
   connect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
   connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
@@ -319,6 +332,42 @@ void KoShellWindow::slotFileNew()
 
     partManager()->addPart( newdoc, false );
     setRootDocument( newdoc );
+}
+
+// ### This is an ugly copy of KoMainWindow::slotFileOpen, due to the fact
+// that openDocumentInternal isn't virtual
+void KoShellWindow::slotFileOpen()
+{
+    KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
+    dialog->setCaption( i18n("Open document") );
+    KoFilterManager * filterManager = new KoFilterManager;
+    filterManager->prepareDialog(dialog, KoFilterManager::Import,
+                                 KoDocument::readNativeFormatMimeType(),
+                                 nativeFormatPattern(), nativeFormatName(), true);
+    KURL url;
+    if(dialog->exec()==QDialog::Accepted) {
+        url=dialog->selectedURL();
+        m_recent->addURL( url );
+        if ( url.isLocalFile() )
+            KRecentDocument::add(url.path(-1));
+        else
+            KRecentDocument::add(url.url(-1), true);
+    }
+    else
+    {
+        delete filterManager;
+        return;
+    }
+
+    filterManager->cleanUp();
+    delete dialog;
+    if ( url.isEmpty() )
+    {
+        delete filterManager;
+        return;
+    }
+
+    (void) openDocumentInternalKoShell( filterManager, url );
 }
 
 void KoShellWindow::slotFileClose()

@@ -63,7 +63,7 @@ protected slots:
 
   virtual void slotFileNew();
   virtual void slotFileClose();
-
+  virtual void slotFileOpen();
   void slotKoolBar( int _grp, int _item );
 
   void slotKSLoadCompleted();
@@ -73,6 +73,7 @@ protected:
 
   virtual bool queryClose();
 
+  bool openDocumentInternalKoShell( KoFilterManager * filterManager, const KURL &url );
   void closeDocument();
 
   struct Page
