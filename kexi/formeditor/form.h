@@ -212,7 +212,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 	private:
 		FormManager		*m_manager;
-		Container		*m_toplevel;
+		QGuardedPtr<Container> m_toplevel;
 		ObjectTree		*m_topTree;
 
 		QtWidgetList		m_selected;

@@ -194,7 +194,8 @@ ObjectTree::removeChild(const QString &name)
 {
 	kdDebug() << "ObjectTree:: remove the object item " << name << endl;
 	ObjectTreeItem *c = lookup(name);
-	m_container->form()->emitChildRemoved(c);
+	if (m_container && m_container->form())
+		m_container->form()->emitChildRemoved(c);
 	for(ObjectTreeItem *it = c->children()->first(); it; it = c->children()->next())
 		removeChild(it->name());
 	m_treeDict.remove(name);

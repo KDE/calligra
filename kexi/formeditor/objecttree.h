@@ -86,11 +86,11 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QString		m_className;
 		QString		m_name;
 		ObjectTreeC	m_children;
-		Container*	m_container;
+		QGuardedPtr<Container> m_container;
 		QMap<QString, QVariant> m_props;
 		ObjectTreeItem* m_parent;
-		QGuardedPtr<QWidget>	m_widget;
-		EventEater*     m_eater;
+		QGuardedPtr<QWidget> m_widget;
+		QGuardedPtr<EventEater> m_eater;
 
 		int m_row, m_col, m_rowspan, m_colspan;
 		bool m_span;

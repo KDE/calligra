@@ -186,8 +186,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 	private:
 		// the watched container and it's toplevel one...
-		QGuardedPtr<QWidget>	m_container;
-		Container 	*m_toplevel;
+		QGuardedPtr<QWidget> m_container;
+		QGuardedPtr<Container> m_toplevel;
 
 		// Layout
 		QLayout		*m_layout;
@@ -207,7 +207,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QRect		m_insertRect;
 		ObjectTreeItem	*m_tree;
 
-		Form		*m_form;
+		QGuardedPtr<Form> m_form;
 
 		friend class InsertWidgetCommand;
 		friend class PasteWidgetCommand;
