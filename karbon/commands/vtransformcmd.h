@@ -29,6 +29,7 @@
 class QWMatrix;
 class VComposite;
 class VPath;
+class VSegment;
 class VSelection;
 
 
@@ -86,6 +87,20 @@ public:
 	VRotateCmd( VDocument *doc, const KoPoint& p, double angle );
 };
 
+class VTranslateBezierCmd : public VCommand
+{
+public:
+	VTranslateBezierCmd( VSegment *segment, double d1, double d2 );
+	virtual ~VTranslateBezierCmd();
+
+	virtual void execute();
+	virtual void unexecute();
+
+protected:
+	QWMatrix m_mat;
+	VSegment *m_segment;
+	VSegment *m_segmentcopy;
+};
 
 #endif
 

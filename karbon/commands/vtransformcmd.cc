@@ -170,3 +170,38 @@ VRotateCmd::VRotateCmd( VDocument *doc, const KoPoint& p, double angle )
 	m_mat.translate( -p.x(), -p.y() );
 }
 
+VTranslateBezierCmd::VTranslateBezierCmd( VSegment *segment, double d1, double d2 )
+		: VCommand( 0L, i18n( "Translate Bezier" ) ), m_segment( segment )
+{
+	m_mat.translate( d1, d2 );
+	m_segmentcopy = 0L;
+}
+
+VTranslateBezierCmd::~VTranslateBezierCmd()
+{
+	//delete m_segmentcopy;
+}
+
+void
+VTranslateBezierCmd::execute()
+{
+	if( m_segment->type() == VSegment::curve )
+	{
+		//m_segmentcopy = m_segment->clone();
+		m_segment->transform( m_mat );
+	}
+	setSuccess( true );
+}
+
+void
+VTranslateBezierCmd::unexecute()
+{
+	m_mat = m_mat.invert();
+	if( m_segment->type() == VSegment::curve )
+	{
+		m_segment->transform( m_mat );
+		//*m_segment = *m_segmentcopy;
+	}
+	setSuccess( false );
+}
+

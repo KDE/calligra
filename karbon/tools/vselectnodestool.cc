@@ -186,14 +186,24 @@ VSelectNodesTool::mouseDragRelease()
 {
 	if( m_state >= moving )
 	{
-
 		view()->part()->document().selection()->setState( VObject::selected );
-		VTranslateCmd *cmd;
-		if( m_state == movingbezier2 )
-			cmd = new VTranslateCmd(
-					&view()->part()->document(),
-					qRound( ( first().x() - last().x() ) ),
-					qRound( ( first().y() - last().y() ) ) );
+		VCommand *cmd;
+		if( m_state == movingbezier1 || m_state == movingbezier2 )
+		{
+			double tolerance = 2.0 / view()->zoom();
+
+			KoRect selrect( first().x() - tolerance, first().y() - tolerance,
+							2 * tolerance + 1.0, 2 * tolerance + 1.0 );
+			QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
+			if( m_state == movingbezier2 )
+				cmd = new VTranslateBezierCmd( segments.at( 0 )->prev(),
+						qRound( ( first().x() - last().x() ) ),
+						qRound( ( first().y() - last().y() ) ) );
+			else
+				cmd = new VTranslateBezierCmd( segments.at( 0 ),
+						qRound( ( last().x() - first().x() ) ),
+						qRound( ( last().y() - first().y() ) ) );
+		}
 		else
 			cmd = new VTranslateCmd(
 					&view()->part()->document(),
