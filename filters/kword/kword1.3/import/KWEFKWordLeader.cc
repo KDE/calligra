@@ -200,7 +200,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     }
     ProcessSubtags (myNode, tagProcessingList, leader);
 
-    leader->createBookmarkFormatData( paraData ); // ### TODO
+    leader->createBookmarkFormatData( paraData );
     CreateMissingFormatData (paraData.text, paraData.formattingList);
 
     // TODO/FIXME: why !paraData.text.isEmpty()
