@@ -42,7 +42,7 @@
 #include <iostream>
 
 typedef KGenericFactory<ExcelImport, KoFilter> ExcelImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libexcelimport, ExcelImportFactory( "kspreadexcelfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libexcelimport, ExcelImportFactory( "kofficefilters" ) )
 
 
 // UString -> QConstString conversion. Use .string() to get the QString.
