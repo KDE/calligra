@@ -77,7 +77,7 @@ VSelectNodesTool::draw()
 	{
 		if( m_state == normal )
 		{
-			if( segments.count() == 1 && segments.at( 0 )->knotIsSelected() == false )
+			if( segments.count() == 1 && !selrect.contains( segments.at( 0 )->knot() ) )
 				view()->part()->document().selection()->append( selrect.normalize(), false, true );
 			m_state = moving;
 			recalc();
