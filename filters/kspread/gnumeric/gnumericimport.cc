@@ -1391,7 +1391,6 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             if ( !hyperlink.isNull() )
             {
                 //<gmr:HyperLink type="GnmHLinkURL" target="www.kde.org"/>
-                kdDebug()<<" import hyperlink \n";
                 if ( hyperlink.toElement().hasAttribute( "type" ) )
                 {
                     QString linkType= hyperlink.toElement().attribute( "type" );
@@ -1631,7 +1630,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 		row    = e.attribute( "Row" ).toInt() + 1;
 
 		QString cell_content( content.text() );
-                kdDebug()<<"cell_content :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<cell_content<<endl;
+                //kdDebug()<<"cell_content :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<cell_content<<endl;
                 if ( cell_content[0] == '=' )
                   convertFormula( cell_content );
 
@@ -1673,6 +1672,32 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 	    }
 	    else
             {
+
+                column = e.attribute( "Col" ).toInt() + 1;
+		row    = e.attribute( "Row" ).toInt() + 1;
+
+		QString cell_content( e.text() );
+                //kdDebug()<<"cell_content :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<cell_content<<endl;
+                if ( cell_content[0] == '=' )
+                  convertFormula( cell_content );
+
+                KSpreadCell * kspread_cell = table->nonDefaultCell( column, row );
+
+                if (e.hasAttribute("ValueType"))
+                {
+                  // TODO: what is this for?
+                }
+
+                if (e.hasAttribute( "ValueFormat" ))
+                {
+                  QString formatString = e.attribute( "ValueFormat" );
+                  if ( !setType( kspread_cell, formatString, cell_content ) )
+                    table->setText(row, column, cell_content, false);
+                }
+                else
+                  table->setText(row, column, cell_content, false);
+
+
                 if (e.hasAttribute("ExprID"))
                 {
 		    column = e.attribute("Col").toInt() + 1;
