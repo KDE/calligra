@@ -24,7 +24,7 @@
 
 /**
  * KoChild is an abstract base class that represents the geometry
- * associtated with an embedded document. In general handles its position
+ * associatated with an embedded document. In general it handles its position
  * relative to the embedded documents parent.
  *
  * In detail it handles size, matrix operations and can give you
