@@ -99,7 +99,7 @@ KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 	setMaxValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( maxValue(), m_unit ), unit ) );
 	KDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
 	m_unit = unit;
-	setSuffix( KoUnit::unitName( unit ) );
+	setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
 }
 
 
