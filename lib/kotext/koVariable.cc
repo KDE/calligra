@@ -455,6 +455,11 @@ void KoVariable::resize()
     //kdDebug() << "Before KoVariable::resize text=" << txt << " width=" << width << endl;
 }
 
+QString KoVariable::text()
+{
+    return m_varFormat->convert( m_varType );
+}
+
 void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
 {
     KoTextFormat * fmt = format();
@@ -755,11 +760,6 @@ void KoDateVariable::recalc()
     resize();
 }
 
-QString KoDateVariable::text()
-{
-    return m_varFormat->convert( m_varType );
-}
-
 void KoDateVariable::saveVariable( QDomElement& varElem )
 {
     QDomElement elem = varElem.ownerDocument().createElement( "DATE" );
@@ -847,10 +847,6 @@ void KoTimeVariable::recalc()
     resize();
 }
 
-QString KoTimeVariable::text()
-{
-    return m_varFormat->convert( m_varType );
-}
 
 void KoTimeVariable::saveVariable( QDomElement& parentElem )
 {
@@ -1034,11 +1030,6 @@ void KoPgNumVariable::load( QDomElement& elem )
         else
             m_varType = QVariant(pgNumElem.attribute("value"));
     }
-}
-
-QString KoPgNumVariable::text()
-{
-    return m_varFormat->convert( m_varType );
 }
 
 QStringList KoPgNumVariable::actionTexts()

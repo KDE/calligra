@@ -289,9 +289,7 @@ public:
      * It doesn't need to be cached, convert() is fast, and it's the actual
      * value (date, time etc.) that is cached in the variable already.
      */
-    virtual QString text() = 0;
-   // { return varFormat->convert( variantValue() ); } too bad QVariant doesn't have QDate/QTime :(
-    // Hmm, it has now (Qt3). Maybe rethink this?
+    virtual QString text() ;
 
     /** Variables reimplement this method to recalculate their value
      * They must call resize() after having done that.
@@ -336,7 +334,6 @@ public:
 
     virtual void recalc();
 
-    virtual QString text();
     void setDate( const QDate & _date ) { m_varType = QVariant(_date); }
 
     virtual void saveVariable( QDomElement &parentElem );
@@ -365,7 +362,6 @@ public:
 
     virtual void recalc();
 
-    virtual QString text();
     void setTime( const QTime & _time ) { m_varType = QVariant(_time); }
 
     virtual void saveVariable( QDomElement &parentElem );
@@ -495,7 +491,6 @@ public:
     short int subtype() const { return m_subtype; }
 
     virtual void recalc() = 0;
-    virtual QString text();
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
