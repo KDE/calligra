@@ -145,6 +145,8 @@ public:
 
     bool inTable( QChar ch, CharStyle style=anyChar ) const;
 
+    bool esstixDelimiter() const { return m_esstixDelimiter; }
+
 private:
 
     UnicodeTable& unicodeTable( CharStyle style );
@@ -183,6 +185,8 @@ private:
      * Basic symbol font support.
      */
     SymbolFontHelper symbolFontHelper;
+
+    bool m_esstixDelimiter;
 };
 
 KFORMULA_NAMESPACE_END

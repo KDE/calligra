@@ -278,7 +278,7 @@ void SymbolTable::init( ContextStyle* /*context*/ )
     if ( fontAvailable( "esstixone" ) ) {
         initFont( esstixoneMap, "esstixone", tempNames, normalChar );
     }
-    if ( fontAvailable( "esstixseven" ) ) {
+    if ( m_esstixDelimiter = fontAvailable( "esstixseven" ) ) {
         initFont( esstixsevenMap, "esstixseven", tempNames, normalChar );
     }
     if ( fontAvailable( "esstixseventeen" ) ) {

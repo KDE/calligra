@@ -280,8 +280,8 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
                           const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-        return;
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    //    return;
 
     luPt mySize = style.getAdjustedSize( tstyle );
     symbol.draw( painter, r, style, tstyle, mySize, myPos );

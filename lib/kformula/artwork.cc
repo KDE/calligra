@@ -95,8 +95,59 @@ const QChar rightCurlyBracket[] = {
 };
 
 
+const char esstixseven_LeftSquareBracket = 0x3f;
+const char esstixseven_RightSquareBracket = 0x40;
+const char esstixseven_LeftCurlyBracket = 0x41;
+const char esstixseven_RightCurlyBracket = 0x42;
+const char esstixseven_LeftCornerBracket = 0x43;
+const char esstixseven_RightCornerBracket = 0x44;
+const char esstixseven_LeftRoundBracket = 0x3d;
+const char esstixseven_RightRoundBracket = 0x3e;
+//const char esstixseven_SlashBracket = '/';
+//const char esstixseven_BackSlashBracket = '\\';
+const char esstixseven_LeftLineBracket = 0x4b;
+const char esstixseven_RightLineBracket = 0x4b;
+
+
+// esstixseven is a special font with symbols in three sizes.
+static char esstixseven_nextchar( char ch )
+{
+    switch ( ch ) {
+        // small
+    case 61: return 33;
+    case 62: return 35;
+    case 63: return 36;
+    case 64: return 37;
+    case 65: return 38;
+    case 66: return 40;
+    case 67: return 41;
+    case 68: return 42;
+    case 69: return 43;
+    case 70: return 44;
+    case 75: return 45;
+    case 76: return 47;
+
+        // middle
+    case 33: return 48;
+    case 35: return 49;
+    case 36: return 50;
+    case 37: return 51;
+    case 38: return 52;
+    case 40: return 53;
+    case 41: return 54;
+    case 42: return 55;
+    case 43: return 56;
+    case 44: return 57;
+    case 45: return 58;
+    case 46: return 59;
+    case 47: return 60;
+    }
+    return 0;
+}
+
+
 Artwork::Artwork(SymbolType t)
-    : baseline( -1 ), type(t)
+    : baseline( -1 ), esstixChar( -1 ), type(t)
 {
 }
 
@@ -122,39 +173,61 @@ void Artwork::calcSizes( const ContextStyle& style,
                          luPt parentSize )
 {
     setBaseline( -1 );
+    esstixChar = -1;
     luPt mySize = style.getAdjustedSize( tstyle );
+    const SymbolTable& symbolTable = style.symbolTable();
     switch (type) {
     case LeftSquareBracket:
-        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            calcRoundBracket( style, leftSquareBracket, parentSize, mySize );
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_LeftSquareBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
         }
-        else {
+        if ( doSimpleSquareBracket( parentSize, mySize ) ) {
             calcCharSize( style, mySize, leftSquareBracketChar );
+            return;
         }
+        calcRoundBracket( style, leftSquareBracket, parentSize, mySize );
         break;
     case RightSquareBracket:
-        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            calcRoundBracket( style, rightSquareBracket, parentSize, mySize );
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_RightSquareBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
         }
-        else {
+        else if ( doSimpleSquareBracket( parentSize, mySize ) ) {
             calcCharSize(style, mySize, rightSquareBracketChar);
+            return;
         }
+        calcRoundBracket( style, rightSquareBracket, parentSize, mySize );
         break;
     case LeftLineBracket:
-        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            calcRoundBracket( style, leftLineBracket, parentSize, mySize );
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_LeftLineBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
         }
-        else {
+        else if ( doSimpleSquareBracket( parentSize, mySize ) ) {
             calcCharSize(style, mySize, verticalLineChar);
+            return;
         }
+        calcRoundBracket( style, leftLineBracket, parentSize, mySize );
         break;
     case RightLineBracket:
-        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            calcRoundBracket( style, rightLineBracket, parentSize, mySize );
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_RightLineBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
         }
-        else {
+        else if ( doSimpleSquareBracket( parentSize, mySize ) ) {
             calcCharSize(style, mySize, verticalLineChar);
+            return;
         }
+        calcRoundBracket( style, rightLineBracket, parentSize, mySize );
         break;
     case SlashBracket:
         //calcCharSize(style, mySize, '/');
@@ -163,26 +236,48 @@ void Artwork::calcSizes( const ContextStyle& style,
         //calcCharSize(style, mySize, '\\');
         break;
     case LeftCornerBracket:
-        calcCharSize(style, mySize, leftAngleBracketChar);
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_LeftCornerBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
+        }
+        else calcCharSize(style, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
-        calcCharSize(style, mySize, rightAngleBracketChar);
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_RightCornerBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
+        }
+        else calcCharSize(style, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
-        if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
-            calcRoundBracket( style, leftRoundBracket, parentSize, mySize );
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_LeftRoundBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
         }
-        else {
+        else if ( doSimpleRoundBracket( parentSize, mySize ) ) {
             calcCharSize(style, mySize, leftParenthesisChar);
+            return;
         }
+        calcRoundBracket( style, leftRoundBracket, parentSize, mySize );
         break;
     case RightRoundBracket:
-        if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
-            calcRoundBracket( style, rightRoundBracket, parentSize, mySize );
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_RightRoundBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
         }
-        else {
+        else if ( doSimpleRoundBracket( parentSize, mySize ) ) {
             calcCharSize(style, mySize, rightParenthesisChar);
+            return;
         }
+        calcRoundBracket( style, rightRoundBracket, parentSize, mySize );
         break;
     case EmptyBracket:
         setHeight(parentSize);
@@ -190,20 +285,30 @@ void Artwork::calcSizes( const ContextStyle& style,
         setWidth(0);
         break;
     case LeftCurlyBracket:
-        if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
-            calcCurlyBracket( style, leftCurlyBracket, parentSize, mySize );
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_LeftCurlyBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
         }
-        else {
+        else if ( doSimpleCurlyBracket( parentSize, mySize ) ) {
             calcCharSize(style, mySize, leftCurlyBracketChar);
+            return;
         }
+        calcCurlyBracket( style, leftCurlyBracket, parentSize, mySize );
         break;
     case RightCurlyBracket:
-        if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
-            calcCurlyBracket( style, rightCurlyBracket, parentSize, mySize );
+        if ( symbolTable.esstixDelimiter() ) {
+            if ( calcEsstixDelimiterSize( style, esstixseven_RightCurlyBracket,
+                                          mySize, parentSize ) ) {
+                return;
+            }
         }
-        else {
+        else if ( doSimpleCurlyBracket( parentSize, mySize ) ) {
             calcCharSize(style, mySize, rightCurlyBracketChar);
+            return;
         }
+        calcCurlyBracket( style, rightCurlyBracket, parentSize, mySize );
         break;
     case Integral:
         calcCharSize( style, qRound( 1.5*mySize ), integralChar );
@@ -282,10 +387,14 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         return;
 
     painter.setPen(style.getDefaultColor());
+    const SymbolTable& symbolTable = style.symbolTable();
 
     switch (type) {
     case LeftSquareBracket:
-        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
             drawBigRoundBracket( painter, style, leftSquareBracket, myX, myY, mySize );
         }
         else {
@@ -293,7 +402,10 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         }
         break;
     case RightSquareBracket:
-        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
             drawBigRoundBracket( painter, style, rightSquareBracket, myX, myY, mySize );
         }
         else {
@@ -301,7 +413,10 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         }
         break;
     case LeftCurlyBracket:
-        if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
             drawBigCurlyBracket( painter, style, leftCurlyBracket, myX, myY, mySize );
         }
         else {
@@ -309,7 +424,10 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         }
         break;
     case RightCurlyBracket:
-        if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
             drawBigCurlyBracket( painter, style, rightCurlyBracket, myX, myY, mySize );
         }
         else {
@@ -317,7 +435,10 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         }
         break;
     case LeftLineBracket:
-        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
             drawBigRoundBracket( painter, style, leftLineBracket, myX, myY, mySize );
         }
         else {
@@ -325,7 +446,10 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         }
         break;
     case RightLineBracket:
-        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
             drawBigRoundBracket( painter, style, rightLineBracket, myX, myY, mySize );
         }
         else {
@@ -345,7 +469,10 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
-        if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
             drawBigRoundBracket( painter, style, leftRoundBracket, myX, myY, mySize );
         }
         else {
@@ -353,7 +480,10 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         }
         break;
     case RightRoundBracket:
-        if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
+        if ( symbolTable.esstixDelimiter() && ( esstixChar != -1 ) ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
             drawBigRoundBracket( painter, style, rightRoundBracket, myX, myY, mySize );
         }
         else {
@@ -442,7 +572,7 @@ void Artwork::calcCharSize( const ContextStyle& style, luPt height, QChar ch )
     //QFont f = style.getSymbolFont();
     uchar c = style.symbolTable().character( ch );
     QFont f = style.symbolTable().font( ch );
-    f.setPointSizeFloat( style.layoutUnitPtToPt( height ) );
+    f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
     //f.setPointSize( height );
 
     QFontMetrics fm(f);
@@ -464,10 +594,52 @@ void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style, luPix
     painter.drawText( style.layoutUnitToPixelX( x ),
                       style.layoutUnitToPixelY( y+getBaseline() ),
                       QString( QChar( c ) ) );
+}
 
-    //painter.drawRect(bound);
-    //painter.drawRect(x, y, getWidth(), getHeight());
-    //cerr << bound.x() << " " << bound.y() << " " << bound.width() << " " << bound.height() << endl;
+
+bool Artwork::calcEsstixDelimiterSize( const ContextStyle& context,
+                                       char c,
+                                       luPt fontSize,
+                                       luPt parentSize )
+{
+    QFont f( "esstixseven" );
+
+    for ( char i=1; c != 0; ++i ) {
+        f.setPointSizeFloat( context.layoutUnitToFontSize( i*fontSize, false ) );
+        QFontMetrics fm( f );
+        LuPixelRect bound = fm.boundingRect( c );
+
+        luPt height = context.ptToLayoutUnitPt( bound.height() );
+        if ( height >= parentSize ) {
+            luPt width = context.ptToLayoutUnitPt( fm.width( c ) );
+            luPt baseline = context.ptToLayoutUnitPt( -bound.top() );
+
+            setHeight( height );
+            setWidth( width );
+            setBaseline( baseline );
+            esstixChar = c;
+            fontSizeFactor = i;
+            return true;
+        }
+        c = esstixseven_nextchar( c );
+    }
+
+    // Build it up from pieces.
+    return false;
+}
+
+
+void Artwork::drawEsstixDelimiter( QPainter& painter, const ContextStyle& style,
+                                   luPixel x, luPixel y,
+                                   luPt height )
+{
+    QFont f( "esstixseven" );
+    f.setPointSizeFloat( style.layoutUnitToFontSize( fontSizeFactor*height, false ) );
+
+    painter.setFont( f );
+    painter.drawText( style.layoutUnitToPixelX( x ),
+                      style.layoutUnitToPixelY( y + getBaseline() ),
+                      QString( QChar( esstixChar ) ) );
 }
 
 

@@ -145,8 +145,8 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
                             const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-        return;
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    //    return;
 
     numerator->draw(painter, r, style,
 		    style.convertTextStyleFraction( tstyle ),

@@ -163,7 +163,9 @@ void KFormulaWidget::slotCursorChanged(bool visible, bool selecting)
 //                      << formulaView.getDirtyArea().width() << " "
 //                      << formulaView.getDirtyArea().height() << " "
 //                      << endl;
-    update(formulaView.getDirtyArea());
+    // sadly this doesn't work
+    //update(formulaView.getDirtyArea());
+    update();
 }
 
 #include "kformulawidget.moc"

@@ -126,15 +126,15 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void TextElement::draw( QPainter& painter, const LuPixelRect& r,
+void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                         const ContextStyle& context,
                         ContextStyle::TextStyle tstyle,
                         ContextStyle::IndexStyle /*istyle*/,
                         const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-        return;
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    //    return;
 
     setUpPainter( context, painter );
 
@@ -405,7 +405,7 @@ void EmptyElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     */
 
     if ( context.edit() ) {
-        painter.setPen( context.getEmptyColor() );
+        painter.setPen( context.getHelpColor() );
         painter.drawLine( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y() ),
                           context.layoutUnitToPixelX( myPos.x() ),

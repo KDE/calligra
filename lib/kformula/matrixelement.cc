@@ -492,8 +492,8 @@ void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
                           const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( rect ) )
-        return;
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( rect ) )
+    //    return;
 
     uint rows = getRows();
     uint columns = getColumns();

@@ -65,10 +65,15 @@ public:
     SymbolType getType() const { return type; }
     void setType(SymbolType t) { type = t; }
 
+    char getFontSizeFactor() const { return fontSizeFactor; }
+
 private:
 
     void calcCharSize( const ContextStyle& style, luPt height, QChar ch );
     void drawCharacter( QPainter& painter, const ContextStyle& style, luPixel x, luPixel y, luPt height, QChar ch );
+
+    bool calcEsstixDelimiterSize( const ContextStyle& context, char c, luPt fontSize, luPt parentSize );
+    void drawEsstixDelimiter( QPainter& painter, const ContextStyle& style, luPixel x, luPixel y, luPt height );
 
     void calcRoundBracket(  const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
     void calcCurlyBracket(  const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
@@ -83,6 +88,8 @@ private:
      * Used if we are a character.
      */
     luPixel baseline;
+    char esstixChar;
+    char fontSizeFactor;
 
     SymbolType type;
 };

@@ -216,7 +216,7 @@ BracketElement::BracketElement( const BracketElement& other )
 
 void BracketElement::entered( SequenceElement* /*child*/ )
 {
-    formula()->tell( i18n( "Delimiter" ) );
+    formula()->tell( i18n( "Delimited list" ) );
 }
 
 BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
@@ -287,13 +287,13 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
         content->setY(getHeight() / 2 - content->axis( style, tstyle ));
         setBaseline(content->getBaseline() + content->getY());
 
-        if ( left->getBaseline() != -1 ) {
+        if ( ( left->getBaseline() != -1 ) && ( left->getFontSizeFactor() == 1 ) ) {
             left->setY(getBaseline() - left->getBaseline());
         }
         else {
             left->setY((getHeight() - left->getHeight())/2);
         }
-        if ( right->getBaseline() != -1 ) {
+        if ( ( right->getBaseline() != -1 ) && ( right->getFontSizeFactor() == 1 ) ) {
             right->setY(getBaseline() - right->getBaseline());
         }
         else {
@@ -328,8 +328,8 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
                            const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-        return;
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    //    return;
 
     SequenceElement* content = getContent();
     content->draw(painter, r, style, tstyle, istyle, myPos);
@@ -502,8 +502,8 @@ void OverlineElement::draw( QPainter& painter, const LuPixelRect& r,
                             const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-        return;
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    //    return;
 
     SequenceElement* content = getContent();
     content->draw( painter, r, style, tstyle,
@@ -596,8 +596,8 @@ void UnderlineElement::draw( QPainter& painter, const LuPixelRect& r,
                              const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-        return;
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    //    return;
 
     SequenceElement* content = getContent();
     content->draw( painter, r, style, tstyle,
