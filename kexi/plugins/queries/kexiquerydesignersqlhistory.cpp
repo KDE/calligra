@@ -61,6 +61,15 @@ void
 KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 {
 	m_history.append(e);
+
+	int y = 0;
+	for(HistoryEntry *it = m_history.first(); it; it = m_history.next())
+	{
+		y += it->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
+	}
+
+	resizeContents(visibleWidth() - 1, y);
+	ensureVisible(0, y);
 }
 
 KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()

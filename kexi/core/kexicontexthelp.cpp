@@ -33,7 +33,8 @@ KexiContextHelp::KexiContextHelp(KexiView *view,QWidget *parent, const char *nam
         registerAs(KexiDialogBase::ToolWindow);
 }
 
-void KexiContextHelp::setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 ) {
+void KexiContextHelp::setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 )
+{
 	m_widget->setContextHelp(title,text,icon);
 }
 

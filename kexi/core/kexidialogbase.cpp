@@ -69,9 +69,9 @@ KexiView *KexiDialogBase::kexiView()const
 void
 KexiDialogBase::setContextHelp(const QString &title, const QString &message)
 {
+	m_contextTitle = title;
+	m_contextMessage = message;
 	m_view->help()->setContextHelp(title, message);
-
-
 }
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)

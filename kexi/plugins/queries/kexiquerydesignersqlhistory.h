@@ -30,7 +30,6 @@ class HistoryEntry
 		HistoryEntry(bool, const QTime &, const QString &);
 		~HistoryEntry();
 
-
 		QRect	geometry(int y, int width, QFontMetrics f);
 		void	drawItem(QPainter *p, int width);
 
