@@ -82,32 +82,20 @@ void KoStyleStack::push( const QDomElement& style )
 bool KoStyleStack::hasAttribute( const QString& name, const QString& detail, const QString &typeProperties ) const
 {
     QString fullName( name );
-    if (  !detail.isEmpty() )
+    if ( !detail.isEmpty() )
     {
         fullName += '-';
         fullName += detail;
     }
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
     QString nameProperties = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
-    if ( fullName == name )
+    while ( it != m_stack.begin() )
     {
-        while ( it != m_stack.begin() )
-        {
-            --it;
-            QDomElement properties = (*it).namedItem( nameProperties ).toElement();
-            if ( properties.hasAttribute( name ) || properties.hasAttribute( fullName ) )
-                return true;
-        }
-    }
-    else
-    {
-        while ( it != m_stack.begin() )
-        {
-            --it;
-            QDomElement properties = (*it).namedItem( nameProperties ).toElement();
-            if ( properties.hasAttribute( name ) )
-                return true;
-        }
+        --it;
+        QDomElement properties = (*it).namedItem( nameProperties ).toElement();
+        if ( properties.hasAttribute( name ) ||
+             ( !detail.isEmpty() && properties.hasAttribute( fullName ) ) )
+            return true;
     }
     return false;
 }
@@ -122,29 +110,14 @@ QString KoStyleStack::attribute( const QString& name, const QString& detail, con
     }
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
     QString nameProperties = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
-    if ( fullName == name )
+    while ( it != m_stack.begin() )
     {
-
-        while ( it != m_stack.begin() )
-        {
-            --it;
-            QDomElement properties = (*it).namedItem( nameProperties ).toElement();
-            if ( properties.hasAttribute( fullName ) )
-                return properties.attribute( fullName );
-            if ( properties.hasAttribute( name ) )
-                return properties.attribute( name );
-        }
-    }
-    else
-    {
-        while ( it != m_stack.begin() )
-        {
-            --it;
-            QDomElement properties = (*it).namedItem( nameProperties ).toElement();
-            if ( properties.hasAttribute( name ) )
-                return properties.attribute( name );
-        }
-
+        --it;
+        QDomElement properties = (*it).namedItem( nameProperties ).toElement();
+        if ( properties.hasAttribute( name ) )
+            return properties.attribute( name );
+        if ( !detail.isEmpty() && properties.hasAttribute( fullName ) )
+            return properties.attribute( fullName );
     }
     return QString::null;
 }
