@@ -8,6 +8,7 @@
 #include <qptrlist.h>
 #include <koPoint.h>
 
+#include "vobject.h"
 #include "vsegment.h"
 
 class QDomElement;
@@ -18,12 +19,12 @@ class QWMatrix;
 
 class VSegmentListIteratorList;
 
-class VSegmentList
+class VSegmentList : public VObject
 {
 friend class VSegmentListIterator;
 
 public:
-	VSegmentList();
+	VSegmentList( VObject* parent = 0L );
 	VSegmentList( const VSegmentList& list );
 	virtual ~VSegmentList();
 
@@ -43,32 +44,15 @@ public:
 	bool isClosed() const { return m_isClosed; }
 	void close();
 
-	/**
-	 * Calculates the tightest bounding box around the objects.
-	 *
-	 * @return the bounding box.
-	 */
-	const KoRect& boundingBox() const;
+	virtual void draw( VPainter* painter, const KoRect& rect ) {}
 
-	/**
-	 * Checks if the bounding box is invalid and needs to be recalculated.
-	 *
-	 * @return true if bounding box is invalid.
-	 */
-	bool boundingBoxIsInvalid() const
-		{ return m_boundingBoxIsInvalid; }
+	virtual void transform( const QWMatrix& m );
 
-	/**
-	 * Invalidates the bounding box, so it has to be recalculated.
-	 */
-	void invalidateBoundingBox()
-		{ m_boundingBoxIsInvalid = true; }
+	virtual const KoRect& boundingBox() const;
 
-	void transform( const QWMatrix& m );
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
 
-	void save( QDomElement& element ) const;
-
-	void load( const QDomElement& element );
 
 	// general list stuff:
 	VSegmentList& operator=( const VSegmentList& list );

@@ -24,15 +24,17 @@ class VVisitor;
 class VObject
 {
 public:
-	VObject( VObject *parent = 0L ) : m_parent( parent )
+	VObject( VObject* parent = 0L ) : m_parent( parent )
 	{
 		m_boundingBoxIsInvalid = true;
 	}
-	VObject( const VObject &obj )
+
+	VObject( const VObject& obj )
 	{
 		m_boundingBoxIsInvalid = true;
 		m_parent = obj.m_parent;
 	}
+
 	virtual ~VObject() {}
 
 	/**
@@ -73,10 +75,15 @@ public:
 	 * Invalidates the bounding box, so it has to be recalculated.
 	 */
 	void invalidateBoundingBox()
-		{ m_boundingBoxIsInvalid = true; }
+	{
+		m_boundingBoxIsInvalid = true;
+
+		if( m_parent )
+			m_parent->invalidateBoundingBox();
+	}
 
 	/**
-	 * Tests whether this object intersects the given rectangle.
+	 * Tests whether this object is inside or intersects the given rectangle.
 	 * Default is false, each VObject derivative has to implement
 	 * this method.
 	 *
@@ -101,8 +108,8 @@ public:
 	/// Accept a VVisitor.
 	virtual void accept( VVisitor& /*visitor*/ ) {}
 
-	void setParent( VObject *parent ) { m_parent = parent; }
-	VObject *parent() { return m_parent; }
+	void setParent( VObject* parent ) { m_parent = parent; }
+	VObject* parent() { return m_parent; }
 
 protected:
 	/// Bounding box.
@@ -110,7 +117,8 @@ protected:
 	mutable bool m_boundingBoxIsInvalid;
 
 private:
-	VObject *m_parent;
+	VObject* m_parent;
 };
 
 #endif
+

@@ -103,7 +103,8 @@ private:
 };
 
 
-VSegmentList::VSegmentList()
+VSegmentList::VSegmentList( VObject* parent )
+	: VObject( parent )
 {
 	m_isClosed = false;
 
@@ -119,6 +120,7 @@ VSegmentList::VSegmentList()
 }
 
 VSegmentList::VSegmentList( const VSegmentList& list )
+	: VObject( list )
 {
 	m_isClosed = list.m_isClosed;
 
@@ -309,28 +311,12 @@ VSegmentList::close()
 		append( s );
 	}
 
-
 	m_isClosed = true;
 }
 
 const KoRect&
 VSegmentList::boundingBox() const
 {
-	// check bbox-validity of subobjects:
-	if( !m_boundingBoxIsInvalid )
-	{
-		VSegment* segment = m_first;
-		while( segment )
-		{
-			if( segment->boundingBoxIsInvalid() )
-			{
-				m_boundingBoxIsInvalid = true;
-				break;
-			}
-			segment = segment->m_next;
-		}
-	}
-
 	if( m_boundingBoxIsInvalid )
 	{
 		// clear:
@@ -359,10 +345,10 @@ VSegmentList::transform( const QWMatrix& m )
 		segment->setCtrlPoint2( segment->ctrlPoint2().transform( m ) );
 		segment->setKnot2( segment->knot2().transform( m ) );
 
-		segment->invalidateBoundingBox();
-
 		segment = segment->m_next;
 	}
+
+	invalidateBoundingBox();
 }
 
 void
@@ -449,6 +435,8 @@ VSegmentList::insert( const VSegment* segment )
 	m_current = s;
 	++m_number;
 
+	invalidateBoundingBox();
+
 	return true;
 }
 
@@ -482,6 +470,8 @@ VSegmentList::insert( uint index, const VSegment* segment )
 	m_current = s;
 	++m_number;
 
+	invalidateBoundingBox();
+
 	return true;
 }
 
@@ -501,6 +491,8 @@ VSegmentList::prepend( const VSegment* segment )
 
 	++m_number;
 	m_currentIndex = 0;
+
+	invalidateBoundingBox();
 }
 
 void
@@ -519,6 +511,8 @@ VSegmentList::append( const VSegment* segment )
 
 	m_currentIndex = m_number;
 	++m_number;
+
+	invalidateBoundingBox();
 }
 
 void
@@ -540,6 +534,8 @@ VSegmentList::clear()
 		segment = segment->m_next;
 		delete prev;
 	}
+
+	invalidateBoundingBox();
 }
 
 VSegment*

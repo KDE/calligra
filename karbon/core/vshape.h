@@ -28,18 +28,22 @@ enum VState
 class VShape : public VObject
 {
 public:
-	VShape( VObject *parent = 0L, VState state = state_normal ) : VObject( parent )
+	VShape( VObject *parent = 0L, VState state = state_normal )
+		: VObject( parent )
 	{
 		m_state = state;
 		m_boundingBoxIsInvalid = true;
 	}
-	VShape( const VShape &shape ) : VObject( shape )
+
+	VShape( const VShape &shape )
+		: VObject( shape )
 	{
 		m_fill   = shape.m_fill;
 		m_stroke = shape.m_stroke;
 		m_state  = shape.m_state;
 		m_boundingBoxIsInvalid = true;
 	}
+
 	virtual ~VShape() {}
 
 	/**

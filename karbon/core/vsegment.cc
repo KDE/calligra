@@ -127,8 +127,6 @@ VSegment::VSegment()
 
 	m_type = segment_begin;
 	m_smooth = false;
-
-	m_boundingBoxIsInvalid = true;
 }
 
 VSegment::VSegment( const VSegment& segment )
@@ -139,10 +137,9 @@ VSegment::VSegment( const VSegment& segment )
 	m_point[0] = segment.m_point[0];
 	m_point[1] = segment.m_point[1];
 	m_point[2] = segment.m_point[2];
+
 	m_type = segment.m_type;
 	m_smooth = segment.m_smooth;
-
-	m_boundingBoxIsInvalid = true;
 }
 
 bool
@@ -175,58 +172,52 @@ VSegment::isFlat( double flatness ) const
 	return false;
 }
 
-const KoRect&
+KoRect
 VSegment::boundingBox() const
 {
-	if( m_boundingBoxIsInvalid )
+	KoRect rect;
+
+	if( m_prev )
 	{
-		// clear:
-		m_boundingBox = KoRect( m_point[2], m_point[2] );
-
-		if( m_prev )
-		{
-			if( m_prev->m_point[2].x() < m_boundingBox.left() )
-				m_boundingBox.setLeft( m_prev->m_point[2].x() );
-			if( m_prev->m_point[2].x() > m_boundingBox.right() )
-				m_boundingBox.setRight( m_prev->m_point[2].x() );
-			if( m_prev->m_point[2].y() < m_boundingBox.top() )
-				m_boundingBox.setTop( m_prev->m_point[2].y() );
-			if( m_prev->m_point[2].y() > m_boundingBox.bottom() )
-				m_boundingBox.setBottom( m_prev->m_point[2].y() );
-		}
-
-		if(
-			m_type == segment_curve1 ||
-			m_type == segment_curve )
-		{
-			if( m_point[1].x() < m_boundingBox.left() )
-				m_boundingBox.setLeft( m_point[1].x() );
-			if( m_point[1].x() > m_boundingBox.right() )
-				m_boundingBox.setRight( m_point[1].x() );
-			if( m_point[1].y() < m_boundingBox.top() )
-				m_boundingBox.setTop( m_point[1].y() );
-			if( m_point[1].y() > m_boundingBox.bottom() )
-				m_boundingBox.setBottom( m_point[1].y() );
-		}
-
-		if(
-			m_type == segment_curve2 ||
-			m_type == segment_curve )
-		{
-			if( m_point[0].x() < m_boundingBox.left() )
-				m_boundingBox.setLeft( m_point[0].x() );
-			if( m_point[0].x() > m_boundingBox.right() )
-				m_boundingBox.setRight( m_point[0].x() );
-			if( m_point[0].y() < m_boundingBox.top() )
-				m_boundingBox.setTop( m_point[0].y() );
-			if( m_point[0].y() > m_boundingBox.bottom() )
-				m_boundingBox.setBottom( m_point[0].y() );
-		}
-
-		m_boundingBoxIsInvalid = false;
+		if( m_prev->m_point[2].x() < rect.left() )
+			rect.setLeft( m_prev->m_point[2].x() );
+		if( m_prev->m_point[2].x() > rect.right() )
+			rect.setRight( m_prev->m_point[2].x() );
+		if( m_prev->m_point[2].y() < rect.top() )
+			rect.setTop( m_prev->m_point[2].y() );
+		if( m_prev->m_point[2].y() > rect.bottom() )
+			rect.setBottom( m_prev->m_point[2].y() );
 	}
 
-	return m_boundingBox;
+	if(
+		m_type == segment_curve1 ||
+		m_type == segment_curve )
+	{
+		if( m_point[1].x() < rect.left() )
+			rect.setLeft( m_point[1].x() );
+		if( m_point[1].x() > rect.right() )
+			rect.setRight( m_point[1].x() );
+		if( m_point[1].y() < rect.top() )
+			rect.setTop( m_point[1].y() );
+		if( m_point[1].y() > rect.bottom() )
+			rect.setBottom( m_point[1].y() );
+	}
+
+	if(
+		m_type == segment_curve2 ||
+		m_type == segment_curve )
+	{
+		if( m_point[0].x() < rect.left() )
+			rect.setLeft( m_point[0].x() );
+		if( m_point[0].x() > rect.right() )
+			rect.setRight( m_point[0].x() );
+		if( m_point[0].y() < rect.top() )
+			rect.setTop( m_point[0].y() );
+		if( m_point[0].y() > rect.bottom() )
+			rect.setBottom( m_point[0].y() );
+	}
+
+	return rect;
 }
 
 VSegment*

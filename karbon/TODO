@@ -1,4 +1,7 @@
+-	move vobject::accept() -> vshape?
+-	move vobject::draw() -> vshape?
 -	mirror coordinate-system so origin is bottom-left
+-	replace VObject::isInside() with a polygonizevisitor in vselectool (lenny)
 -	rotate/scale/shear tool dont work
 -	remove temporary solution for vpath::intersects()
 -	painting (NotROP) while shape creation isnt good. creation should instead

@@ -22,7 +22,7 @@ class VPainter;
 class VPath : public VShape
 {
 public:
-	VPath();
+	VPath( VObject* parent = 0L );
 	VPath( const VPath& path );
 	virtual ~VPath();
 

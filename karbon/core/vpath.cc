@@ -16,12 +16,13 @@
 #include <kdebug.h>
 
 
-VPath::VPath() : VShape()
+VPath::VPath( VObject* parent )
+	: VShape( parent )
 {
 	m_segmentLists.setAutoDelete( true );
 
 	// add an initial segmentlist:
-	m_segmentLists.append( new VSegmentList() );
+	m_segmentLists.append( new VSegmentList( this ) );
 }
 
 VPath::VPath( const VPath& path )
@@ -202,7 +203,7 @@ VPath::moveTo( const KoPoint& p )
 	else
 	{
 		// add an initial segmentlist:
-		VSegmentList* list = new VSegmentList();
+		VSegmentList* list = new VSegmentList( this );
 		m_segmentLists.append( list );
 		m_segmentLists.getLast()->moveTo( p );
 	}
@@ -282,20 +283,6 @@ VPath::transform( const QWMatrix& m )
 const KoRect&
 VPath::boundingBox() const
 {
-	// check bbox-validity of subobjects:
-	if( !m_boundingBoxIsInvalid )
-	{
-		QPtrListIterator<VSegmentList> itr( m_segmentLists );
-		for( itr.toFirst(); itr.current(); ++itr )
-		{
-			if( itr.current()->boundingBoxIsInvalid() )
-			{
-				m_boundingBoxIsInvalid = true;
-				break;
-			}
-		}
-	}
-
 	if( m_boundingBoxIsInvalid )
 	{
 		// clear:
