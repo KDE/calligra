@@ -85,20 +85,26 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         crect = QRect( x, y+paragy, width, height );
     else
         crect = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
+
     //kdDebug() << "KWAnchor::draw crect ( in internal coords ) = " << DEBUGRECT( crect ) << endl;
     QPoint cnPoint = crect.topLeft(); //fallback
     (void) fs->internalToNormal( crect.topLeft(), cnPoint );
-    //kdDebug() << "KWAnchor::draw cnPoint " << cnPoint.x() << "," << cnPoint.y() << endl;
+    //kdDebug() << "KWAnchor::draw cnPoint in normal coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
     cnPoint = fs->currentViewMode()->normalToView( cnPoint );
+    //kdDebug() << "KWAnchor::draw cnPoint in view coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
     crect.setLeft( cnPoint.x() );
     crect.setTop( cnPoint.y() );
     QPoint brnPoint; // bottom right in normal coords
     if ( fs->internalToNormal( crect.bottomRight(), brnPoint ) )
     {
+        //kdDebug() << "KWAnchor::draw brnPoint in normal coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
         brnPoint = fs->currentViewMode()->normalToView( brnPoint );
+        //kdDebug() << "KWAnchor::draw brnPoint in view coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
         crect.setRight( brnPoint.x() );
         crect.setBottom( brnPoint.y() );
     }
+    else
+        kdWarning() << "internalToNormal returned 0L for bottomRight=" << crect.right() << "," << crect.bottom() << endl;
     //kdDebug() << "KWAnchor::draw crect ( in view coords ) = " << DEBUGRECT( crect ) << endl;
 
     // and make painter go back to view coord system
@@ -108,6 +114,8 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( fs->normalToInternal( frameTopLeft, iPoint ) )
     {
         QPoint vPoint = fs->currentViewMode()->normalToView( frameTopLeft );
+        //kdDebug() << "KWAnchor::draw vPoint=" << vPoint.x() << "," << vPoint.y()
+        //          << " translating by " << iPoint.x() - vPoint.x() << "," << iPoint.y() - vPoint.y() - paragy << endl;
         p->translate( iPoint.x() - vPoint.x(), iPoint.y() - vPoint.y() - paragy );
     } else
         kdWarning() << "normalToInternal returned 0L in KWAnchor::draw - shouldn't happen. "

@@ -409,7 +409,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     m_currentViewMode = viewMode;
     m_currentDrawnFrame = frame;
 
-    //QRect normalFrameRect( m_doc->zoomRect( *frame ) );
+    QRect normalFrameRect( m_doc->zoomRect( *frame ) );
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
     int lineY;
     int h = cursor->parag()->lineHeightOfChar( cursor->index(), 0, &lineY );
@@ -419,16 +419,21 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                    topLeft.y() - cursor->totalOffsetY() + lineY );
     //kdDebug() << "KWTextFrameSet::drawCursor iPoint=" << iPoint.x() << "," << iPoint.y() << "   h=" << h << endl;
     QPoint nPoint;
-    QPoint hintNPoint = m_doc->zoomPoint( frame->topLeft() );
+    QPoint hintNPoint = normalFrameRect.topLeft();
     if ( internalToNormalWithHint( iPoint, nPoint, hintNPoint ) )
     {
-        QPoint cPoint = viewMode->normalToView( nPoint );     // from normal to view contents
         // very small clipping around the cursor
-        QRect clip( cPoint.x() - 5, cPoint.y(), 10, h );
+        QRect clip( nPoint.x() - 5, nPoint.y(), 10, h );
+        clip &= normalFrameRect; // clip to frame
+        //kdDebug() << "KWTextFrameSet::drawCursor normalFrameRect=" << DEBUGRECT(normalFrameRect)
+        //          << " clip(normal, after intersect)=" << DEBUGRECT(clip) << endl;
+
+        QPoint cPoint = viewMode->normalToView( nPoint );     // from normal to view contents
+        clip.moveTopLeft( QPoint( cPoint.x() - 5, cPoint.y() ) );
 
         //kdDebug(32002) << "KWTextFrameSet::drawCursor "
         //               << " cPoint=(" << cPoint.x() << "," << cPoint.y() << ")  h=" << h << endl;
-        //kdDebug(32002) << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
+        //kdDebug(32002) << " Clip for cursor (internal coords) : " << DEBUGRECT(clip) << endl;
 
         QRegion reg = frameClipRegion( p, frame, clip, viewMode, true );
         if ( !reg.isEmpty() )
@@ -439,6 +444,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 
             p->setClipRegion( reg );
             // translate to qrt coords - after setting the clip region !
+            //kdDebug(32002) << "KWTextFrameSet::drawCursor translating by "
+            //               << cPoint.x() - iPoint.x() << "," << cPoint.y() - iPoint.y() << endl;
             p->translate( cPoint.x() - iPoint.x(), cPoint.y() - iPoint.y() );
 
             // The settings come from this frame
@@ -450,7 +457,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
             cg.setBrush( QColorGroup::Base, bgBrush );
 
-            textdoc->drawParag( p, cursor->parag(), iPoint.x() - 5, iPoint.y(), 10, h,
+            textdoc->drawParag( p, cursor->parag(),
+                                iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
                                 pix, cg, cursorVisible, cursor );
             p->restore();
             cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
