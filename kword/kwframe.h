@@ -1089,7 +1089,7 @@ private:
 /******************************************************************/
 /* Class: KWHorzLineFrameSet                                      */
 /******************************************************************/
-class KWHorzLineFrameSet : public KWFrameSet
+class KWHorzLineFrameSet : public KWPictureFrameSet
 {
 public:
     KWHorzLineFrameSet( KWDocument *_doc, const QString & name );
@@ -1103,18 +1103,6 @@ public:
      */
     virtual FrameSetType type( void );
     virtual bool ownLine() const;
-    /**
-     * Called when the user resizes a frame.
-     */
-    virtual void resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize );
-
-    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
-    virtual void load( QDomElement &attributes, bool loadFrames = true );
-
-    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
-                                    const QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                                    KWFrameSetEdit * edit, KWViewMode *viewMode );
-
 };
 
 #endif

@@ -2562,7 +2562,7 @@ void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
 /* Class: KWHorzLineFrameSet                                      */
 /******************************************************************/
 KWHorzLineFrameSet::KWHorzLineFrameSet( KWDocument *_doc, const QString & name )
-    : KWFrameSet( _doc )
+    : KWPictureFrameSet( _doc, "none" /*don't generate name in kwpictureframeset*/)
 {
     kdDebug(32001) << "KWHorzLineFrameSet::KWHorzLineFrameSet" << endl;
     if ( name.isEmpty() )
@@ -2576,33 +2576,9 @@ KWHorzLineFrameSet::~KWHorzLineFrameSet()
     //todo
 }
 
-
 FrameSetType KWHorzLineFrameSet::type( void )
 {
     return FT_HORZLINE;
-}
-
-void KWHorzLineFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
-{
-    KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
-}
-
-QDomElement KWHorzLineFrameSet::save( QDomElement &/*parentElem*/, bool /*saveFrames*/ )
-{
-    //todo
-    return QDomElement();
-}
-
-void KWHorzLineFrameSet::load( QDomElement &/*attributes*/, bool /*loadFrames*/ )
-{
-    //todo
-}
-
-void KWHorzLineFrameSet::drawFrameContents( KWFrame * /*frame*/, QPainter */*painter*/, const QRect & /*crect*/,
-                                            const QColorGroup &/*cg*/, bool /*onlyChanged*/, bool /*resetChanged*/,
-                                            KWFrameSetEdit * /*edit*/, KWViewMode */*viewMode*/ )
-{
-    //todo
 }
 
 bool KWHorzLineFrameSet::ownLine() const
