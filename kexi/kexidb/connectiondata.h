@@ -26,7 +26,10 @@
 
 namespace KexiDB {
 
-/** @internal **/
+/*! @internal
+ Used by ConnectionData. 
+ It is easier to internally operate on non-QObject-derived object, 
+ e.g.: to copy data members in ConnectionData ctor. */
 class ConnectionDataBase
 {
 	public:
