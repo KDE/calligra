@@ -284,7 +284,7 @@ int util_decodeColumnLabelText( QString _col )
     return col;
 }
 
-QString util_encpdeColumnLabelText( int column )
+QString util_encodeColumnLabelText( int column )
 {
     int tmp;
 
