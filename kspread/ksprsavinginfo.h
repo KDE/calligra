@@ -26,14 +26,14 @@ class KSPRSavingInfo
 public:
     KSPRSavingInfo() {styleNumber = 0;}
     ~KSPRSavingInfo() {}
-
+    typedef QMap<QString, QString> StylePageMap;
     void appendMasterPage( const QString &styleName, const QString &displayName ){ m_masterPageStyle.insert( styleName,displayName );}
     QString masterPageName( const QString &name) { return m_masterPageStyle[name];}
     bool findStyleName(const QString & name) const { return (m_masterPageStyle.find( name ) != m_masterPageStyle.end());}
-    
+    StylePageMap stylePageMap() const { return m_masterPageStyle;}
     int styleNumber;
 private:
-    QMap<QString,QString> m_masterPageStyle;
+    StylePageMap m_masterPageStyle;
 };
 
 #endif /* KPRSAVINGINFO_H */

@@ -684,9 +684,6 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
 {
-    typedef QMap<QString, QString> layoutMap;
-    layoutMap pageLayoutName;
-
     KoStoreDevice stylesDev( store );
     KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
 
@@ -701,23 +698,20 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter.startElement( "office:automatic-styles" );
     styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     it = styles.begin();
-    int i = 0;
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
         stylesWriter.endElement();
-        if ( i == 0 )
-            pageLayoutName.insert ( (*it).name, "Standard");
-        else
-            pageLayoutName.insert ( (*it).name, QString("Standard-%1" ).arg( i ));
-        ++i;
     }
 
     stylesWriter.endElement(); // office:automatic-styles
-
+    kdDebug()<<" save :::::::::::::::::::::\n";
     //code from kword
     stylesWriter.startElement( "office:master-styles" );
-    layoutMap::Iterator it2;
-    for ( it2 = pageLayoutName.begin(); it2 != pageLayoutName.end(); ++it2 ) {
+    KSPRSavingInfo::StylePageMap map = d->m_savingInfo->stylePageMap();
+    KSPRSavingInfo::StylePageMap::const_iterator it2 = d->m_savingInfo->stylePageMap().begin();
+    for ( ; it2 != map.end(); ++it2 ) {
+        kdDebug()<<" save page layout !!!!!!!!!!!!!!!!!!!!\n";
+        kdDebug()<<" it2.key() :"<<it2.key()<<" it2.data() :"<<it2.data()<<endl;
         stylesWriter.startElement( "style:master-page" );
         stylesWriter.addAttribute( "style:name", it2.data() );
         stylesWriter.addAttribute( "style:page-layout-name", it2.key() );
