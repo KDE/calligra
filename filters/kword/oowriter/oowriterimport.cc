@@ -199,7 +199,7 @@ void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& main
 
     for ( QDomNode text = body.firstChild(); !text.isNull(); text = text.nextSibling() )
     {
-        m_styleStack.setMark( StyleStack::ObjectMark );
+        m_styleStack.save();
         QDomElement t = text.toElement();
         QString name = t.tagName();
 
@@ -217,11 +217,12 @@ void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& main
         else
         {
             kdDebug(30518) << "Unsupported texttype '" << name << "'" << endl;
+            m_styleStack.restore();
             continue;
         }
 
         mainFramesetElement.appendChild( e );
-        m_styleStack.popToMark( StyleStack::ObjectMark ); // remove the styles added by the child-objects
+        m_styleStack.restore(); // remove the styles added by the paragraph or list
     }
 }
 
@@ -608,6 +609,7 @@ QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& lis
         isOrdered = false;
 
     // take care of nested lists
+    // ### DF: I think this doesn't take care of them the right way. We need to save/parse-whole-list/restore.
     QDomElement e;
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.firstChild() )
     {
@@ -628,6 +630,7 @@ QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& lis
         if ( name == "text:p" )
             break;
     }
+    // ### Where are the sibling paragraphs of 'e' parsed?
 
     QDomElement p = parseParagraph( doc, e );
 
@@ -648,9 +651,8 @@ QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& lis
     return p;
 }
 
-// Name suggestion: parseRunOfText (DF)
 void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
-    QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos)
+    QDomElement& outputParagraph, QDomElement& outputFormats, QString& paragraphText, uint& pos)
 {
     // parse every child node of the parent
     for( QDomNode node ( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
@@ -665,10 +667,10 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         // Try to keep the order of the tag names by probability of happening
         if (tagName == "text:span")
         {
-            m_styleStack.setMark( StyleStack::SpanMark );
+            m_styleStack.save();
             fillStyleStack( ts );
-            parseSpanOrSimilar( doc, ts, kwordParagraph, kwordFormats, paragraphText, pos);
-            m_styleStack.popToMark( StyleStack::SpanMark  );
+            parseSpanOrSimilar( doc, ts, outputParagraph, outputFormats, paragraphText, pos);
+            m_styleStack.restore();
         }
         else if (tagName == "text:s")
         {
@@ -691,17 +693,17 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         else if ( tagName == "draw:image" )
         {
             textData = '#'; // anchor placeholder
-            appendPicture(doc, kwordFormats, ts, pos);
+            appendPicture(doc, outputFormats, ts, pos);
         }
         else if ( tagName == "text:a" )
         {
-            m_styleStack.setMark( StyleStack::SpanMark );
+            m_styleStack.save();
             QString href( ts.attribute("xlink:href") );
             if ( href.startsWith("#") )
             {
                 // We have a reference to a bookmark (### TODO)
                 // As we do not support it now, treat it as a <text:span> without formatting
-                parseSpanOrSimilar( doc, ts, kwordParagraph, kwordFormats, paragraphText, pos);
+                parseSpanOrSimilar( doc, ts, outputParagraph, outputFormats, paragraphText, pos);
             }
             else
             {
@@ -715,10 +717,11 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
                 QDomElement linkElement (doc.createElement("LINK"));
                 linkElement.setAttribute("hrefName",ts.attribute("xlink:href"));
                 linkElement.setAttribute("linkName",text);
-                appendKWordVariable(doc, kwordFormats, ts, pos, "STRING", 9, text, linkElement);
+                appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 9, text, linkElement);
             }
-            m_styleStack.popToMark( StyleStack::SpanMark  );
+            m_styleStack.restore();
         }
+        // ### Fields should be moved to an appendField method like in OoImpressImport
         else if (tagName == "text:date")
         {
             textData = '#';     // field placeholder
@@ -728,7 +731,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             dateElement.setAttribute("month",1);
             dateElement.setAttribute("day",1);
             dateElement.setAttribute("fix",0);  // Has OOWriter fixed dates?
-            appendKWordVariable(doc, kwordFormats, ts, pos, "DATE0Locale", 0, "-", dateElement);
+            appendKWordVariable(doc, outputFormats, ts, pos, "DATE0Locale", 0, "-", dateElement);
         }
         else if (tagName == "text:time")
         {
@@ -739,7 +742,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             timeElement.setAttribute("minute",0);
             timeElement.setAttribute("second",0);
             timeElement.setAttribute("fix",0); // Has OOWriter fixed times?
-            appendKWordVariable(doc, kwordFormats, ts, pos, "TIMELocale", 2, "-", timeElement);
+            appendKWordVariable(doc, outputFormats, ts, pos, "TIMELocale", 2, "-", timeElement);
         }
         else if ( tagName == "text:page-number" )
         {
@@ -747,7 +750,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             QDomElement pgnumElement ( doc.createElement("PGNUM") );
             pgnumElement.setAttribute("subtype",0);
             pgnumElement.setAttribute("value",1);
-            appendKWordVariable(doc, kwordFormats, ts, pos, "NUMBER", 4, "1", pgnumElement);
+            appendKWordVariable(doc, outputFormats, ts, pos, "NUMBER", 4, "1", pgnumElement);
         }
         else if ( tagName == "text:file-name" )
         {
@@ -755,7 +758,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             QDomElement fieldElement ( doc.createElement("FIELD") );
             fieldElement.setAttribute("subtype",0);
             fieldElement.setAttribute("value","?");
-            appendKWordVariable(doc, kwordFormats, ts, pos, "STRING", 8, "?", fieldElement);
+            appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 8, "?", fieldElement);
         }
         else if ( tagName == "text:author-name"
                  || tagName == "text:author-initials")
@@ -779,8 +782,8 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
 
         if (shouldWriteFormat)
         {
-            writeFormat( doc, kwordFormats, 1 /* id for normal text */, pos, length );
-            //appendShadow( doc, kwordParagraph ); // this is necessary to take care of shadowed paragraphs
+            writeFormat( doc, outputFormats, 1 /* id for normal text */, pos, length );
+            //appendShadow( doc, outputParagraph ); // this is necessary to take care of shadowed paragraphs
         }
 
         pos += length;
@@ -794,17 +797,16 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
 
     // parse the paragraph-properties
     fillStyleStack( paragraph );
-    m_styleStack.setMark( StyleStack::ParagraphMark );
 
     QDomElement formats = doc.createElement( "FORMATS" );
 
     QString paragraphText;
     uint pos = 0;
 
+    m_styleStack.save();
     // parse every child node of the paragraph
     parseSpanOrSimilar( doc, paragraph, p, formats, paragraphText, pos);
-
-    m_styleStack.popToMark( StyleStack::ParagraphMark  ); // remove possible garbage (should not be needed)
+    m_styleStack.restore(); // remove possible garbage (should not be needed)
 
     QDomElement text = doc.createElement( "TEXT" );
     text.appendChild( doc.createTextNode( paragraphText ) );
