@@ -525,6 +525,7 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
     ASSERT( frame );
     if ( frame->topLeft() != position )
     {
+        kdDebug() << "KWFrameSet::moveFloatingFrame " << position.x() << "," << position.y() << endl;
         frame->moveTopLeft( position );
         kWordDocument()->updateAllFrames();
     }
@@ -570,10 +571,23 @@ int KWFrameSet::getFrameFromPtr( KWFrame *frame )
 /*================================================================*/
 void KWFrameSet::updateFrames()
 {
+    m_framesOnTop.clear();
+
+    // hack: table cells are not handled here, since they're not in the doc's frameset list.
+    // ( so 'this' will never be found, and the whole method is useless )
+    // TODO: hmm, well, store the "parent of this frameset", whether doc or frameset,
+    // and look for the frameset list there. Hmm.
+    if ( grpMgr )
+        return;
+
+    // Not visible ? Don't bother then.
+    if ( !isVisible() )
+        return;
+
+    //kdDebug() << "KWFrameSet::updateFrames " << this << " " << getName() << endl;
     // Iterate over ALL framesets, to find those which have frames on top of us.
     // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
     // So we want it cached.
-    m_framesOnTop.clear();
     QListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     bool foundThis = false;
     for (; framesetIt.current(); ++framesetIt )
@@ -589,7 +603,12 @@ void KWFrameSet::updateFrames()
         if ( !foundThis || !frameSet->isVisible() )
             continue;
 
+        // Only consider floating frames which we host
+        if ( frameSet->isFloating() && frameSet->anchorFrameset() != this )
+            continue;
+
         //kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
+
         QList<KWFrame> allFrames = frameSet->allFrames();
         QListIterator<KWFrame> frameIt( allFrames );
         for ( ; frameIt.current(); ++frameIt )
@@ -607,8 +626,8 @@ void KWFrameSet::updateFrames()
             }
         }
     }
-    kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
-                   << m_framesOnTop.count() << endl;
+    //kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
+    //               << m_framesOnTop.count() << endl;
 
     if ( isFloating() )
     { // The frame[s] might have been resized -> invalidate the parag to recompute widths & heights
@@ -910,7 +929,14 @@ bool KWFrameSet::hasSelectedFrame()
     return false;
 }
 
-/*================================================================*/
+void KWFrameSet::setVisible( bool v )
+{
+    visible = v;
+    if ( visible )
+        // updateFrames was disabled while we were invisible
+        updateFrames();
+}
+
 bool KWFrameSet::isVisible()
 {
     return ( visible &&
@@ -927,7 +953,7 @@ void KWFrameSet::zoom()
 
 void KWFrameSet::finalize()
 {
-    kdDebug() << "KWFrameSet::finalize ( calls updateFrames + zoom ) " << this << endl;
+    //kdDebug() << "KWFrameSet::finalize ( calls updateFrames + zoom ) " << this << endl;
     updateFrames();
     zoom();
 }
@@ -938,9 +964,9 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 {
     QRect rc = painter->xForm( kWordDocument()->zoomRect( *frame ) );
     rc &= painter->xForm( crect ); // intersect
-    //kdDebug() << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
-    //          << " clip region rect=" << DEBUGRECT(rc)
-    //          << " rc.isEmpty()=" << rc.isEmpty() << endl;
+    //kdDebug(32002) << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
+    //               << " clip region rect=" << DEBUGRECT(rc)
+    //               << " rc.isEmpty()=" << rc.isEmpty() << endl;
     if ( !rc.isEmpty() )
     {
         QRegion reg( rc );
@@ -948,7 +974,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         for ( ; fIt.current() ; ++fIt )
         {
             QRect r = painter->xForm( fIt.current()->outerRect() );
-            //kdDebug() << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
+            //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
             reg -= r; // subtract
         }
         return reg;

@@ -101,6 +101,7 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
     KoPoint currentPos = getCell( 0, 0 )->getFrame( 0 )->topLeft();
     if ( currentPos != position )
     {
+        kdDebug() << "KWTableFrameSet::moveFloatingFrame " << position.x() << "," << position.y() << endl;
         KoPoint offset = position - currentPos;
         moveBy( offset.x(), offset.y() );
         // ## TODO apply page breaking
@@ -108,7 +109,7 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
         // Recalc all "frames on top" everywhere
         kWordDocument()->updateAllFrames();
         // Draw the table in the new position
-        kWordDocument()->slotRepaintChanged( this );
+        kWordDocument()->repaintAllViews(true /* ARGL*/);
     }
 }
 
@@ -206,7 +207,7 @@ QList<KWFrame> KWTableFrameSet::allFrames()
         Cell *cell = m_cells.at( i );
         lst.append( cell->getFrame( 0 ) );
     }
-    kdDebug() << "KWTableFrameSet::allFrames returning " << lst.count() << " frames" << endl;
+    //kdDebug() << "KWTableFrameSet::allFrames returning " << lst.count() << " frames" << endl;
     return lst;
 }
 
@@ -1489,6 +1490,8 @@ void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
 
 KWTableFrameSetEdit::~KWTableFrameSetEdit()
 {
+    if ( m_currentCell )
+        m_currentCell->terminate();
     delete m_currentCell;
 }
 

@@ -427,6 +427,8 @@ public:
     void setFixed();
     /** Return true if this frameset is floating, false if it's fixed */
     bool isFloating() { return m_anchorPos.parag && m_anchorPos.textfs; }
+    /** Return the frameset in which our anchor is - assuming isFloating() */
+    KWTextFrameSet * anchorFrameset() const { return m_anchorPos.textfs; }
 
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */
@@ -462,7 +464,7 @@ public:
     virtual bool isVisible();
 
     /** get the visibility of the frameset. */
-    void setVisible( bool v ) { visible = v; }
+    void setVisible( bool v );
 
     /** get/set frameset name. For tables in particular, this _must_ be unique */
     QString getName() const { return m_name; }

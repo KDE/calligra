@@ -168,10 +168,10 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
 
 void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor, bool resetChanged )
 {
-    //kdDebug(32002) << "KWTextFrameSet::drawContents drawCursor=" << drawCursor << " onlyChanged=" << onlyChanged
-    //               << " resetChanged=" << resetChanged << endl;
-    //if ( !cursorVisible )
-    //drawCur = FALSE;
+    //kdDebug(32002) << "KWTextFrameSet::drawContents " << this << " " << getName()
+                // << " drawCursor=" << drawCursor << " onlyChanged=" << onlyChanged
+                //   << " resetChanged=" << resetChanged
+    //               << endl;
     if ( !textdoc->firstParag() )
         return;
 
@@ -199,6 +199,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
             // (which doesn't have frames, borders, etc.)
             r.moveBy( -frameRect.left(), -frameRect.top() + totalHeight );   // portion of the frame to be drawn, in qrt coords
             QRegion reg = frameClipRegion( p, frame, crect );
+            //kdDebug(32002) << "KWTextFrameSet::drawContents frameClipRegion is EMPTY " << endl;
             if ( !reg.isEmpty() )
             {
                 p->save();
@@ -207,7 +208,8 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 p->translate( frameRect.left(), frameRect.top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
                 gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
-                QTextParag * lastFormatted = textdoc->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor, resetChanged );
+                QTextParag * lastFormatted = textdoc->draw( p, r.x(), r.y(), r.width(), r.height(),
+                                                            gb, onlyChanged, drawCursor, cursor, resetChanged );
 
                 // The last paragraph of this frame might have a bit in the next frame too.
                 // In that case, and if we're only drawing changed paragraphs, (and resetting changed),
@@ -379,7 +381,9 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     QListIterator<KWFrame> fIt( m_framesOnTop );
     for ( ; fIt.current() && from < to ; ++fIt )
     {
-        if ( fIt.current()->getRunAround() == RA_BOUNDINGRECT )
+        // Look for "bounding rect runaround" frames, but skip floating frames.
+        // Otherwise those keep trying to avoid themselves, and oscillate between two positions...
+        if ( fIt.current()->getRunAround() == RA_BOUNDINGRECT && !fIt.current()->getFrameSet()->isFloating() )
         {
             QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
 #ifdef DEBUG_FLOW
@@ -558,7 +562,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     QList<KWFrame> frames( m_framesOnTop );
     for ( KWFrame *f = frames.first(); f ; f = frames.next() )
     {
-        if ( f->getRunAround() == RA_SKIP )
+        if ( f->getRunAround() == RA_SKIP && !f->getFrameSet()->isFloating() /* see getMargins */)
         {
             int top = kWordDocument()->zoomItY( f->top() );
             int bottom = kWordDocument()->zoomItY( f->bottom() );
@@ -751,7 +755,7 @@ void KWTextFrameSet::updateFrames()
             }
         }
     }
-    kdDebugBody(32002) << this << " KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
+    //kdDebugBody(32002) << this << " KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
     frames.setAutoDelete( true );
 
     KWFrameSet::updateFrames();
