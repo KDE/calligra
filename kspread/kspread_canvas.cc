@@ -602,14 +602,32 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     m_strAnchor = cell->testAnchor( _ev->pos().x() - xpos, _ev->pos().y() - ypos, this );
     comment=cell->getComment();
     }
-  int  u = cell->width( col, this );
-   if ( _ev->pos().x() >= xpos + u - 10 && _ev->pos().x() <= xpos + u  &&
-         _ev->pos().y() >= ypos  && _ev->pos().y() <= ypos +10 && !comment.isEmpty())
+
+  cell = table->cellAt( col, row );
+  int u= cell->width( col, this );
+  int extraCol=col;
+  int extraRow=row;
+  int xpos1=xpos;
+  int ypos1=ypos;
+  if ( cell->isObscured() && cell->isObscuringForced() )
+  {
+    int moveX=cell->obscuringCellsColumn();
+    int moveY=cell->obscuringCellsRow();
+    cell = table->cellAt( moveX, moveY );
+    u= cell->width( moveX, this );
+    extraCol=moveX;
+    extraRow=moveY;
+    xpos1 = table->columnPos( extraCol, this );
+    ypos1 = table->rowPos( extraRow, this );
+  }
+
+  if ( _ev->pos().x() >= xpos1 + u - 10 && _ev->pos().x() <= xpos1 + u  &&
+         _ev->pos().y() >= ypos1  && _ev->pos().y() <= ypos1 +10 && !comment.isEmpty())
          {
          if(!labelComment)
-                showComment(row,col);
+                showComment(extraRow,extraCol);
          }
-    else if(labelComment)
+  else if(labelComment)
          {
          delete labelComment;
          labelComment=0;

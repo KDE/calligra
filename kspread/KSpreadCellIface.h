@@ -14,7 +14,6 @@ public:
     KSpreadCellIface();
 
     void setCell( KSpreadTable* table, const QPoint& point );
-
 k_dcop:
     virtual QString text() const;
     virtual void setText( const QString& text );
@@ -28,6 +27,7 @@ k_dcop:
     virtual void setTextColor(int r,int g,int b);
     virtual QString textColor()const ;
     virtual void setComment(const QString &_comment);
+
 private:
     QPoint m_point;
     KSpreadTable* m_table;
