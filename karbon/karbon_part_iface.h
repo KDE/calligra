@@ -45,7 +45,6 @@ k_dcop:
 	void setShowStatusBar( bool b );
 	void setUndoRedoLimit( int undo );
 	void initConfig();
-	int maxRecentFiles() const;
 	void clearHistory();
 	QString unitName() const;
 

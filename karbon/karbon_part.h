@@ -48,7 +48,7 @@ class VCommandHistory;
 class KarbonPart : public KoDocument
 {
 	Q_OBJECT
-
+        Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
 public:
 	KarbonPart( QWidget* parentWidget = 0L, const char* widgetName = 0L,
 				QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );

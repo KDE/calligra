@@ -64,11 +64,6 @@ void KarbonPartIface::initConfig()
 	m_part->initConfig();
 }
 
-int KarbonPartIface::maxRecentFiles() const
-{
-	return m_part->maxRecentFiles();
-}
-
 
 void KarbonPartIface::clearHistory()
 {
