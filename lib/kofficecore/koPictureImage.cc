@@ -33,8 +33,7 @@
 
 KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
 {
-    // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
-    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
+    m_cachedPixmap.setOptimization(QPixmap::NormalOptim);
 }
 
 KoPictureImage::~KoPictureImage(void)
