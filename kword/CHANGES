@@ -215,6 +215,7 @@ Bugfixes:
 - More robustness in DCOP calls (to prevent crashes)
 - Faster pasting of text
 - Fix use keyboard when frameset is protect content.
+- Fix reload PgUp and PgDn config
 
 KoText library fixes:
 - Fixed preview in paragraph dialog (was truncated)
