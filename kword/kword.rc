@@ -26,7 +26,7 @@
   <ActionList name="view_closeallviews"/>
   <Separator/>
   <ActionList name="view_split" />
-  <Menu name="view_displaymodes"><text>&Display Mode</text>
+  <Menu name="view_displaymodes"><text>&amp;Display Mode</text>
     <Action name="view_pagemode"/>
     <Action name="view_previewmode"/>
     <Action name="view_textmode"/>

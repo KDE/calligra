@@ -11,7 +11,7 @@
  </Menu>
  <Menu name="view"><text>&amp;View</text>
   <Separator/>
-  <Menu name="view_displaymodes"><text>&Display Mode</text>
+  <Menu name="view_displaymodes"><text>&amp;Display Mode</text>
     <Action name="view_pagemode"/>
     <Action name="view_previewmode"/>
     <Action name="view_textmode"/>
