@@ -330,12 +330,16 @@ void KPresenterShell::releaseDocument()
 
 void KPresenterShell::slotFileNew()
 {
+  m_pDoc->enableEmbeddedParts(false);
   if ( !newDocument() )    
     QMessageBox::critical( this, i18n("KPresenter Error"), i18n("Could not create new document"), i18n("Ok") );
+  m_pDoc->enableEmbeddedParts(true);
+  m_pView->getPage()->repaint(false);
 }
 
 void KPresenterShell::slotFileOpen()
 {
+  m_pDoc->enableEmbeddedParts(false);
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
   if ( file.isNull() )
@@ -347,6 +351,8 @@ void KPresenterShell::slotFileOpen()
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
   }
+  m_pDoc->enableEmbeddedParts(true);
+  m_pView->getPage()->repaint(false);
 }
 
 void KPresenterShell::slotFileSave()

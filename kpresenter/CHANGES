@@ -17,3 +17,7 @@ Reggie, 19.1.1999:
 Reggie, 21.1.1999:
 ------------------
 - KPresenter doesn't eat all the CPU anymore after inserting some pages
+
+Reggie, 25.1.1999:
+------------------
+- Another fix with embedded objects
