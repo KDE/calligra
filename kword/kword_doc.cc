@@ -1012,7 +1012,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     __pgLayout.inchTop = border.attribute( "inchTop" ).toInt();
     __pgLayout.inchBottom = border.attribute( "inchBottom" ).toInt();
 
-    QDomElement attribs = doc.namedItem( "ATTRIBUTES" ).toElement();
+    QDomElement attribs = word.namedItem( "ATTRIBUTES" ).toElement();
     if ( attribs.isNull() )
 	return false;
     processingType = (ProcessingType)attribs.attribute( "processing" ).toInt();
