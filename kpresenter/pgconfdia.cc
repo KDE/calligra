@@ -13,6 +13,7 @@
 /* Module: Page Configuration Dialog                              */
 /******************************************************************/
 
+#include <kapp.h>
 #include "pgconfdia.h"
 #include "pgconfdia.moc"
 
