@@ -5,5 +5,5 @@ X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
 Comment=Calculator plugin for KSpread
-Type=KPlugin
+Type=Service
 ServiceTypes=KPlugin
