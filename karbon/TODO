@@ -70,4 +70,6 @@ MAKE IT NICE:
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent
 -	think about using ghostscript's flatten algo (see comments in vflatten.cc)
+-	check fill/stroke commands, they feel clumsy/suboptimal?
+-	why represent opacity as float, not as short?
 
