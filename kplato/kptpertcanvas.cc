@@ -80,7 +80,7 @@ void KPTPertCanvas::draw(KPTProject& project)
 
 	QPtrListIterator<KPTNode> it(project.childNodeIterator()); 
     for ( ; it.current(); ++it ) {
-        drawChildren(it.current(), true);
+        drawChildren(it.current());
 	}
 
 	project.drawPertRelations(m_canvas);
