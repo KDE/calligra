@@ -1148,19 +1148,38 @@ void BrushCmd::execute()
 {
     Brush tmpBrush = newBrush;
 
-    for ( int i = 0; i < static_cast<int>( objects.count() ); i++ ) {
-//         newBrush.gColor1 = oldBrush.at( i )->gColor1;
-//         newBrush.gColor2 = oldBrush.at( i )->gColor2;
-//         newBrush.unbalanced = oldBrush.at( i )->unbalanced;
-//         newBrush.xfactor = oldBrush.at( i )->xfactor;
-//         newBrush.yfactor = oldBrush.at( i )->yfactor;
-//         newBrush.gType = oldBrush.at( i )->gType;
+    for ( int i = 0; i < static_cast<int>( objects.count() ); i++ )
+    {
+        if (!(flags & BrushColor))
+            if (newBrush.brush != Qt::NoBrush)
+                newBrush.brush = QBrush(oldBrush.at( i )->brush.color(), newBrush.brush.style());
+            else
+                newBrush.brush = QBrush(oldBrush.at( i )->brush.color(), Qt::NoBrush);
 
-//         if (newBrush.brush != Qt::NoBrush)
-//             newBrush.brush = QBrush( newBrush.brush.color(),
-//                                      oldBrush.at( i )->brush.style() != Qt::NoBrush ? oldBrush.at( i )->brush.style() : Qt::SolidPattern );
-//         else
-//             newBrush.brush = QBrush( oldBrush.at( i )->brush.color(), Qt::NoBrush );
+        if (!(flags & BrushStyle))
+            if (newBrush.brush != Qt::NoBrush)
+                newBrush.brush = QBrush(newBrush.brush.color(), oldBrush.at( i )->brush.style());
+            else
+                newBrush.brush = QBrush(oldBrush.at( i )->brush.color(), Qt::NoBrush);
+
+        if (!(flags & BrushGradientSelect))
+            newBrush.fillType = oldBrush.at( i )->fillType;
+
+        if (!(flags & GradientColor1))
+            newBrush.gColor1 = oldBrush.at( i )->gColor1;
+
+        if (!(flags & GradientColor2))
+            newBrush.gColor2 = oldBrush.at( i )->gColor2;
+
+        if (!(flags & GradientType))
+            newBrush.gType = oldBrush.at( i )->gType;
+
+        if (!(flags & GradientBalanced))
+        {
+            newBrush.unbalanced = oldBrush.at( i )->unbalanced;
+            newBrush.xfactor = oldBrush.at( i )->xfactor;
+            newBrush.yfactor = oldBrush.at( i )->yfactor;
+        }
 
         applyBrush(objects.at( i ), &newBrush);
     }
@@ -1435,8 +1454,8 @@ void PgLayoutCmd::unexecute()
 
 /*======================== constructor ===========================*/
 PieValueCmd::PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
-                          QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
-    : KNamedCommand( _name ), oldValues( _oldValues ), objects( _objects )
+                          QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
+    : KNamedCommand( _name ), oldValues( _oldValues ), objects( _objects ), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldValues.setAutoDelete( false );
@@ -1467,9 +1486,12 @@ void PieValueCmd::execute()
         KPPieObject* obj=dynamic_cast<KPPieObject*>( it.current() );
         if(obj)
 	{
-	  obj->setPieType( newValues.pieType );
-	  obj->setPieAngle( newValues.pieAngle );
-	  obj->setPieLength( newValues.pieLength );
+            if (flags & Type)
+                obj->setPieType( newValues.pieType );
+            if (flags & Angle)
+                obj->setPieAngle( newValues.pieAngle );
+            if (flags & Length)
+                obj->setPieLength( newValues.pieLength );
 	}
     }
   doc->repaint( false );
@@ -1497,8 +1519,8 @@ void PieValueCmd::unexecute()
 
 /*======================== constructor ===========================*/
 PolygonSettingCmd::PolygonSettingCmd( const QString &_name, QPtrList<PolygonSettings> &_oldSettings,
-                                      PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
-    : KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
+                                      PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
+    : KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects ), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldSettings.setAutoDelete( false );
@@ -1529,8 +1551,11 @@ void PolygonSettingCmd::execute()
         KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( it.current() );
         if(obj)
 	{
-            obj->setCheckConcavePolygon(newSettings.checkConcavePolygon);
-            obj->setCornersValue(newSettings.cornersValue);
+            if (flags & ConcaveConvex)
+                obj->setCheckConcavePolygon(newSettings.checkConcavePolygon);
+            if (flags & Corners)
+                obj->setCornersValue(newSettings.cornersValue);
+            if (flags & Sharpness)
             obj->setSharpnessValue(newSettings.sharpnessValue );
 	}
     }
@@ -1621,8 +1646,8 @@ doc->repaint( false );
 
 /*======================== constructor ===========================*/
 RectValueCmd::RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
-                            QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
-    : KNamedCommand( _name ), oldValues( _oldValues ), objects( _objects )
+                            QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
+    : KNamedCommand( _name ), oldValues( _oldValues ), objects( _objects ), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldValues.setAutoDelete( false );
@@ -1654,7 +1679,21 @@ void RectValueCmd::execute()
     {
         KPRectObject *obj=dynamic_cast<KPRectObject*>(it.current() );
         if(obj)
-            obj->setRnds( newValues.xRnd, newValues.yRnd );
+        {
+            if (flags & XRnd)
+            {
+                int xtmp, ytmp;
+                obj->getRnds(xtmp, ytmp);
+                obj->setRnds(newValues.xRnd, ytmp);
+            }
+
+            if (flags & YRnd)
+            {
+                int xtmp, ytmp;
+                obj->getRnds(xtmp, ytmp);
+                obj->setRnds(xtmp, newValues.yRnd);
+            }
+        }
     }
     doc->repaint( false );
 }

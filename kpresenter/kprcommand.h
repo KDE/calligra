@@ -462,7 +462,7 @@ public:
     };
 
     PenCmd(const QString &_name, QPtrList<Pen> &_oldPen, Pen _newPen,
-           QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0);
+           QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All);
     ~PenCmd();
     void applyPen(KPObject *kpobject, Pen *tmpPen);
 
@@ -506,8 +506,20 @@ public:
 	}
     };
 
+    // the flags indicate what has changed
+    enum BrushConfigChange {
+        BrushColor = 1,
+        BrushStyle = 2,
+        BrushGradientSelect = 4,
+        GradientColor1 = 8,
+        GradientColor2 = 16,
+        GradientType = 32,
+        GradientBalanced = 64,
+        All = BrushColor | BrushStyle | BrushGradientSelect | GradientColor1 | GradientColor2 | GradientType | GradientBalanced
+    };
+
     BrushCmd(const QString &_name, QPtrList<Brush> &_oldBrush, Brush _newBrush,
-             QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0);
+             QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All);
     ~BrushCmd();
     void applyBrush(KPObject *kpobject, Brush *tmpBrush);
 
@@ -586,8 +598,16 @@ public:
         int pieAngle, pieLength;
     };
 
+    // the flags indicate what has changed
+    enum PieConfigChange {
+        Type = 1,
+        Angle = 2,
+        Length = 4,
+        All = Type | Angle | Length
+    };
+
     PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
-                 QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+                 QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All );
     ~PieValueCmd();
 
     virtual void execute();
@@ -599,7 +619,7 @@ protected:
     QPtrList<PieValues> oldValues;
     QPtrList<KPObject> objects;
     PieValues newValues;
-
+    int flags;
 };
 
 /******************************************************************/
@@ -616,8 +636,16 @@ public:
         int sharpnessValue;
     };
 
+    // the flags indicate what has changed
+    enum PolygonConfigChange {
+        ConcaveConvex = 1,
+        Corners = 2,
+        Sharpness = 4,
+        All = ConcaveConvex | Corners | Sharpness
+    };
+
     PolygonSettingCmd( const QString &_name, QPtrList<PolygonSettings> &_oldSettings,
-                       PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+                       PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All );
     ~PolygonSettingCmd();
 
     virtual void execute();
@@ -629,7 +657,7 @@ protected:
     QPtrList<PolygonSettings> oldSettings;
     QPtrList<KPObject> objects;
     PolygonSettings newSettings;
-
+    int flags;
 };
 
 /******************************************************************/
@@ -675,8 +703,15 @@ public:
         int xRnd, yRnd;
     };
 
+    // the flags indicate what has changed
+    enum PolygonConfigChange {
+        XRnd = 1,
+        YRnd = 2,
+        All = XRnd | YRnd
+    };
+
     RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
-                  QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+                  QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All );
     ~RectValueCmd();
 
     virtual void execute();
@@ -688,7 +723,7 @@ protected:
     QPtrList<RectValues> oldValues;
     QPtrList<KPObject> objects;
     RectValues newValues;
-
+    int flags;
 };
 
 /******************************************************************/
