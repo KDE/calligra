@@ -18,10 +18,11 @@
 */
 
 #include <gcanvas.h>
+#include <graphiteview.h>
 
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
-    : QScrollView(reinterpret_cast<QWidget*>(view), "GCanvas", WNorthWestGravity),
+    : QScrollView(view, "GCanvas", WNorthWestGravity),
       m_view(view), m_doc(doc) {
 
     // Note: Not sure about NWGravity! Check if properly repainted!
