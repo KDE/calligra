@@ -132,14 +132,10 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;
-
-    m_styleList.setAutoDelete( false );
-    m_deletedStyles.setAutoDelete( true );
+    m_styleColl=new KoStyleCollection();
 
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
     addStyleTemplate( m_standardStyle );
-
-    m_lastStyle = 0L;
 
     m_defaultFont = KoGlobal::defaultFont();
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
@@ -352,6 +348,8 @@ KPresenterDoc::~KPresenterDoc()
     delete dcop;
     delete m_stickyPage;
     delete m_bgSpellCheck;
+    delete m_styleColl;
+
     tmpSoundFileList.setAutoDelete( true );
     tmpSoundFileList.clear();
 }
@@ -485,6 +483,7 @@ QDomDocument KPresenterDoc::saveXML()
     {
         QDomElement styles = doc.createElement( "STYLES" );
         presenter.appendChild( styles );
+        QPtrList<KoStyle> m_styleList(m_styleColl->styleList());
         for ( KoStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
             saveStyle( p, styles );
     }
@@ -2443,6 +2442,8 @@ void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterV
 void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
 {
     QValueList<QString> followingStyles;
+    QPtrList<KoStyle>m_styleList(m_styleColl->styleList());
+
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
@@ -2474,7 +2475,6 @@ void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
         // Style created, now let's try to add it
 
         sty = addStyleTemplate( sty );
-
         if(m_styleList.count() > followingStyles.count() )
         {
             QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
@@ -2488,55 +2488,25 @@ void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
 
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
-        KoStyle * style = findStyle(*it);
-        m_styleList.at(i++)->setFollowingStyle( style );
+        KoStyle * style = m_styleColl->findStyle(*it);
+        m_styleColl->styleAt( i++)->setFollowingStyle( style );
     }
 }
 
 
 KoStyle* KPresenterDoc::addStyleTemplate( KoStyle * sty )
 {
-    // First check for duplicates.
-    for ( KoStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
-    {
-        if ( p->name() == sty->name() ) {
-            // Replace existing style
-            if ( sty != p )
-            {
-                *p = *sty;
-                delete sty;
-            }
-            return p;
-        }
-    }
-    m_styleList.append( sty );
-    return sty;
+    return m_styleColl->addStyleTemplate(sty);
 }
 
 void KPresenterDoc::removeStyleTemplate ( KoStyle *style ) {
-    if( m_styleList.removeRef(style)) {
-        // Remember to delete this style when deleting the document
-        m_deletedStyles.append(style);
-    }
+    m_styleColl->removeStyleTemplate(style);
 }
 
 
 KoStyle* KPresenterDoc::findStyle( const QString & _name )
 {
-    // Caching, to speed things up
-    if ( m_lastStyle && m_lastStyle->name() == _name )
-        return m_lastStyle;
-
-    QPtrListIterator<KoStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->name() == _name ) {
-            m_lastStyle = styleIt.current();
-            return m_lastStyle;
-        }
-    }
-
-    return 0L;
+    return m_styleColl->findStyle(_name);
 }
 
 
@@ -2671,6 +2641,16 @@ void KPresenterDoc::changeBackGroundSpellCheckTextObject(KPTextObject *obj)
 {
     m_bgSpellCheck->objectForSpell(obj);
     m_bgSpellCheck->startBackgroundSpellCheck();
+}
+
+const QPtrList<KoStyle> & KPresenterDoc::styleList() const
+{
+    return m_styleColl->styleList();
+}
+
+KoStyle* KPresenterDoc::styleAt( int i )
+{
+    return m_styleColl->styleAt(i);
 }
 
 

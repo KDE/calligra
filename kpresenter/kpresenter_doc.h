@@ -65,6 +65,7 @@ class KPPartObject;
 
 class KoStyle;
 class KSpellConfig;
+class KoStyleCollection;
 
 /******************************************************************/
 /* class KPresenterChild                                          */
@@ -246,7 +247,7 @@ public:
 
     bool raiseAndLowerObject;
 
-    const QPtrList<KoStyle> & styleList() const { return m_styleList; }
+    const QPtrList<KoStyle> & styleList() const;
     /**
      * Look for a style named @p name. If not found, it will return 0L.
      */
@@ -254,7 +255,7 @@ public:
     /**
      * Return style number @p i.
      */
-    KoStyle* styleAt( int i ) { return m_styleList.at(i); }
+    KoStyle* styleAt( int i );
 
 
     KoStyle* addStyleTemplate( KoStyle *style );
@@ -476,13 +477,8 @@ private:
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
     KPrPage *m_stickyPage;
-
-    QPtrList<KoStyle> m_styleList;
-    QPtrList<KoStyle> m_deletedStyles;
-
-    // Cached value for findStyle()
-    KoStyle *m_lastStyle;
     KPrBgSpellCheck *m_bgSpellCheck;
+    KoStyleCollection *m_styleColl;
 };
 
 #endif
