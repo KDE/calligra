@@ -190,6 +190,8 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 	// the whole story starts with this event:
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
+		view->painterFactory()->painter()->end();
+		VMToolHandle::instance( m_part )->eventFilter( view, event );
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
