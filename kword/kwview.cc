@@ -3928,7 +3928,7 @@ void KWView::tableInsertCol()
         dia.setCaption( i18n( "Insert Column" ) );
         dia.exec();
     } */
-    KWInsertDia dia( this, "", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
+    KWInsertDia dia( this, "insert_column_dialog", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
     dia.setCaption( i18n( "Insert Column" ) );
     dia.exec();
 }

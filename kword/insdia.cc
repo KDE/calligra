@@ -59,12 +59,12 @@ void KWInsertDia::setupTab1()
 
     grid2 = new QGridLayout( grp, 3, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    rBefore = new QRadioButton( i18n( "Before" ), grp );
+    rBefore = new QRadioButton( i18n( "Before" ), grp, "before_radio_button" );
     rBefore->resize( rBefore->sizeHint() );
     grp->insert( rBefore );
     grid2->addWidget( rBefore, 1, 0 );
 
-    rAfter = new QRadioButton( i18n( "After" ), grp );
+    rAfter = new QRadioButton( i18n( "After" ), grp,  "after_radio_button");
     rAfter->resize( rAfter->sizeHint() );
     grp->insert( rAfter );
     grid2->addWidget( rAfter, 2, 0 );
@@ -88,7 +88,8 @@ void KWInsertDia::setupTab1()
     rc->setAlignment( AlignLeft | AlignBottom );
     grid1->addWidget( rc, 1, 0 );
 
-    value = new QSpinBox( 1, type == ROW ? table->getRows() : table->getCols(), 1, tab1 );
+    value = new QSpinBox( 1, type == ROW ? table->getRows() : table->getCols(),
+        1, tab1, "row_col_spinbox" );
     value->resize( value->sizeHint() );
 
     unsigned int rowSelected;
