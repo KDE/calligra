@@ -5,48 +5,48 @@
 /* E-Mail: reggie@kde.org                                         */
 /* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
 /* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
 /* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
 /* needs OpenParts and Kom (weis@kde.org)                         */
+/* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: clipart object (header)                                */
+/* Module: Insert Command (header)                                */
 /******************************************************************/
 
-#ifndef kpclipartobject_h
-#define kpclipartobject_h
+#ifndef insertcmd_h
+#define insertcmd_h
 
+#include <qpoint.h>
+#include <qrect.h>
+#include <qpoint.h>
+#include <qsize.h>
+
+#include "command.h"
 #include "kpobject.h"
-#include "kpclipart.h"
+
+class KPresenterDocument_impl;
 
 /******************************************************************/
-/* Class: KPClipartObject                                         */
+/* Class: InsertCmd                                               */
 /******************************************************************/
 
-class KPClipartObject : public KPObject
+class InsertCmd : public Command
 {
   Q_OBJECT
 
 public:
-  KPClipartObject();
-  KPClipartObject(QString _filename);
-
-  virtual void setFileName(QString _filename)
-    { filename = _filename; clipart.setClipartName(filename); }
-
-  virtual ObjType getType()
-    { return OT_CLIPART; }
-  virtual QString getFileName()
-    { return filename; }
-
-  virtual void save(ostream& out);
-  virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst);
-
-  virtual void draw(QPainter *_painter,int _diffx,int _diffy);
+  InsertCmd(QString _name,KPObject *_object,KPresenterDocument_impl *_doc);
+  ~InsertCmd();
+  
+  virtual void execute();
+  virtual void unexecute();
 
 protected:
-  QString filename;
-  KPClipart clipart;
+  InsertCmd()
+    {;}
+
+  KPObject *object;
+  KPresenterDocument_impl *doc;
 
 };
 

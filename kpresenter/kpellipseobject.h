@@ -29,8 +29,6 @@ class KPEllipseObject : public KPObject
 public:
   KPEllipseObject();
   KPEllipseObject(QPen _pen,QBrush _brush);
-  virtual ~KPEllipseObject()
-    {;}
 
   virtual void setPen(QPen _pen)
     { pen = _pen; }

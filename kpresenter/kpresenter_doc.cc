@@ -1100,9 +1100,10 @@ void KPresenterDocument_impl::insertPicture(QString filename,int diffx,int diffy
   kppixmapobject->setOrig(diffx + 10,diffy + 10);
   kppixmapobject->setSelected(true);
 
-  _objectList.append(kppixmapobject);
+  InsertCmd *insertCmd = new InsertCmd(i18n("Insert picture"),kppixmapobject,this);
+  insertCmd->execute();
+  _commands.addCommand(insertCmd);
 
-  repaint(kppixmapobject);
   m_bModified = true;
 }
 
@@ -1114,9 +1115,10 @@ void KPresenterDocument_impl::insertClipart(QString filename,int diffx,int diffy
   kpclipartobject->setSize(150,150);
   kpclipartobject->setSelected(true);
 
-  _objectList.append(kpclipartobject);
+  InsertCmd *insertCmd = new InsertCmd(i18n("Insert clipart"),kpclipartobject,this);
+  insertCmd->execute();
+  _commands.addCommand(insertCmd);
 
-  repaint(kpclipartobject);
   m_bModified = true;
 }
 
@@ -1166,9 +1168,10 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType
   kplineobject->setSize(150,150);
   kplineobject->setSelected(true);
 
-  _objectList.append(kplineobject);
+  InsertCmd *insertCmd = new InsertCmd(i18n("Insert line"),kplineobject,this);
+  insertCmd->execute();
+  _commands.addCommand(insertCmd);
 
-  repaint(kplineobject);
   m_bModified = true;
 }
 
@@ -1180,9 +1183,10 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   kprectobject->setSize(150,150);
   kprectobject->setSelected(true);
 
-  _objectList.append(kprectobject);
+  InsertCmd *insertCmd = new InsertCmd(i18n("Insert rectangle"),kprectobject,this);
+  insertCmd->execute();
+  _commands.addCommand(insertCmd);
 
-  repaint(kprectobject);
   m_bModified = true;
 }
 
@@ -1194,9 +1198,10 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   kpellipseobject->setSize(150,150);
   kpellipseobject->setSelected(true);
 
-  _objectList.append(kpellipseobject);
+  InsertCmd *insertCmd = new InsertCmd(i18n("Insert ellipse"),kpellipseobject,this);
+  insertCmd->execute();
+  _commands.addCommand(insertCmd);
 
-  repaint(kpellipseobject);
   m_bModified = true;
 }
 
@@ -1208,9 +1213,10 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   kptextobject->setSize(170,150);
   kptextobject->setSelected(true);
 
-  _objectList.append(kptextobject);
+  InsertCmd *insertCmd = new InsertCmd(i18n("Insert text"),kptextobject,this);
+  insertCmd->execute();
+  _commands.addCommand(insertCmd);
 
-  repaint(kptextobject);
   m_bModified = true;
 }
 
@@ -1222,9 +1228,10 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
   kpautoformobject->setSize(150,150);
   kpautoformobject->setSelected(true);
 
-  _objectList.append(kpautoformobject);
+  InsertCmd *insertCmd = new InsertCmd(i18n("Insert autoform"),kpautoformobject,this);
+  insertCmd->execute();
+  _commands.addCommand(insertCmd);
 
-  repaint(kpautoformobject);
   m_bModified = true;
 }
 

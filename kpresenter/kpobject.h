@@ -50,8 +50,6 @@ class KPObject : public QObject
 
 public:
   KPObject();
-  virtual ~KPObject()
-    {;}
 
   virtual void setSelected(bool _selected)
     { selected = _selected; }
@@ -140,9 +138,11 @@ public:
     {;}
 
   virtual void removeFromObjList()
-    { inObjList = false; }
+    { inObjList = false; doDelete(); }
+  virtual void addToObjList()
+    { inObjList = true; }
   virtual void incCmdRef()
-    { cmds--; doDelete(); }
+    { cmds++; }
   virtual void decCmdRef()
     { cmds--; doDelete(); }
 

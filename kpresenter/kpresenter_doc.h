@@ -66,6 +66,7 @@ class KPresenterView_impl;
 #include "kpgradientcollection.h"
 
 #include "movecmd.h"
+#include "insertcmd.h"
 #include "commandhistory.h"
 
 #include <komlParser.h>

@@ -29,8 +29,6 @@ class KPRectObject : public KPObject
 public:
   KPRectObject();
   KPRectObject(QPen _pen,QBrush _brush,RectType _rectType,int _xRnd,int _yRnd);
-  virtual ~KPRectObject()
-    {;}
 
   virtual void setPen(QPen _pen)
     { pen = _pen; }

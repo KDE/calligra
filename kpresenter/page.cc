@@ -339,7 +339,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_MOVE:
       {
-	if (firstX != e->x() || firstY != e->y())
+	if (firstX != mx || firstY != my)
 	  {
 	    
 	    for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
@@ -355,7 +355,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_UP:
       {
-	if (firstX != e->x() || firstY != e->y())
+	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object up"),QPoint(0,my - firstY),QSize(0,firstY - my),
@@ -365,7 +365,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_DN:
       {
-	if (firstX != e->x() || firstY != e->y())
+	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object down"),QPoint(0,0),QSize(0,my - firstY),
@@ -375,7 +375,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_LF:
       {
-	if (firstX != e->x() || firstY != e->y())
+	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left"),QPoint(mx - firstX,0),QSize(firstX - mx,0),
@@ -385,7 +385,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_RT:
       {
-	if (firstX != e->x() || firstY != e->y())
+	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right"),QPoint(0,0),QSize(mx - firstX,0),
@@ -395,7 +395,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_LU:
       {
-	if (firstX != e->x() || firstY != e->y())
+	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left up"),QPoint(mx - firstX,my - firstY),
@@ -405,7 +405,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_LD:
       {
-	if (firstX != e->x() || firstY != e->y())
+	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left down"),QPoint(mx - firstX,0),
@@ -415,7 +415,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_RU:
       {
-	if (firstX != e->x() || firstY != e->y())
+	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right up"),QPoint(0,my - firstY),
@@ -425,7 +425,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_RD:
       {
-	if (firstX != e->x() || firstY != e->y())
+	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right down"),QPoint(0,0),QSize(mx - firstX,my - firstY),

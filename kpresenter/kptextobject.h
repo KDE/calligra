@@ -32,8 +32,6 @@ class KPTextObject : public KPObject
 
 public:
   KPTextObject();
-  virtual ~KPTextObject()
-    {;}
 
   virtual void setSize(int _width,int _height);
   virtual void resizeBy(int _dx,int _dy);

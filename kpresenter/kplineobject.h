@@ -32,8 +32,6 @@ class KPLineObject : public KPObject
 public:
   KPLineObject();
   KPLineObject(QPen _pen,LineEnd _lineBegin,LineEnd _lineEnd,LineType _lineType);
-  virtual ~KPLineObject()
-    {;}
 
   virtual void setPen(QPen _pen)
     { pen = _pen; }

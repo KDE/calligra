@@ -32,8 +32,6 @@ class KPPixmapObject : public KPObject
 public:
   KPPixmapObject(KPPixmapCollection *_pixmapCollection);
   KPPixmapObject(KPPixmapCollection *_pixmapCollection,QString _filename);
-  virtual ~KPPixmapObject()
-    {;}
 
   virtual void setSize(int _width,int _height);
   virtual void resizeBy(int _dx,int _dy);

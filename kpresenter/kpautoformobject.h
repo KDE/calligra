@@ -36,8 +36,6 @@ class KPAutoformObject : public KPObject
 public:
   KPAutoformObject();
   KPAutoformObject(QPen _pen,QBrush _brush,QString _filename,LineEnd _lineBegin,LineEnd _lineEnd);
-  virtual ~KPAutoformObject()
-    {;}
 
   virtual void setPen(QPen _pen)
     { pen = _pen; }
