@@ -200,7 +200,9 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
 
     QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
 
-    QString tmp(m_pEdit->text());
+    int cur = m_pEdit->cursorPosition();
+    QString tmp( m_pEdit->text().left( cur ) );
+    QString tmp2( m_pEdit->text().right( m_pEdit->text().length() - cur ) );
 
     int n = exp.search(tmp);
 
@@ -219,10 +221,12 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
 
     QString newString = tmp.left(n);
     newString += newPart;
+    cur = newString.length();
+    newString += tmp2;
 
     m_pEdit->setText(newString);
     m_pEdit->setFocus();
-    m_pEdit->setCursorPosition(newString.length());
+    m_pEdit->setCursorPosition( cur );
 
     _ev->accept();
 
