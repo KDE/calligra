@@ -46,14 +46,18 @@ enum StackItemElementType{
     ElementTypeContent,     // <c> (not child of <a>), also <a> if it points to a bookmark
     ElementTypeRealData,    // <d>
     ElementTypeAnchor,      // <a>
-    ElementTypeAnchorContent// <c> when child of <a>
+    ElementTypeAnchorContent,// <c> when child of <a>
+    ElementTypeIgnoreWord   // <iw>
 };
 
 // Tags that we do not care of:
 //  <abiword> (or <awml>), <data>, <styles>, <ignorewords>, <lists>
 //
-// Tags that we do not or cannot support:
-//  <iw>, <bookmark>, <l>
+// Tags that we do not support (however KWord could):
+//  <bookmark>, <l>
+//
+// Tags that we cannot support (lack of support in KWord):
+//  N/A
 //
 // Properties that we do not or cannot support:
 //  page-margin-footer, page-margin-header, lang, font-stretch, keep-with-next
@@ -84,6 +88,7 @@ public:
                           // for <a>: link reference
     QString     strTemp2; // for <d>: collecting the data
                           // for <a>: link name
+                          // for <iw>: collecting the data (i.e. word to ignore)
 };
 
 class StackItemStack : public QPtrStack<StackItem>

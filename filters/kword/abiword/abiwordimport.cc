@@ -104,7 +104,8 @@ private:
     QDomElement pixmapsElement;         // <PIXMAPS>
     QDomElement clipartsElement;        // <CLIPARTS>
     QDomElement m_paperElement;         // <PAPER>
-    QDomElement m_paperBordersElement;   // <PAPERBORDER>
+    QDomElement m_paperBordersElement;  // <PAPERBORDER>
+    QDomElement m_ignoreWordsElement;    // <SPELLCHECKIGNORELIST>
     StyleDataMap styleDataMap;
     KoFilterChain* m_chain;
     uint m_pictureNumber;                   // unique: increment *before* use
@@ -951,7 +952,9 @@ bool StructureParser::complexForcedPageBreak(StackItem* stackItem)
     return success;
 }
 
-bool StructureParser::StartElementSection(StackItem* stackItem, StackItem* stackCurrent,
+
+// <section>
+bool StructureParser::StartElementSection(StackItem* stackItem, StackItem* /*stackCurrent*/,
     const QXmlAttributes& attributes)
 {
     //TODO: non main text sections (e.g. footers)
@@ -989,6 +992,22 @@ bool StructureParser::StartElementSection(StackItem* stackItem, StackItem* stack
             m_paperBordersElement.setAttribute("right",ValueWithLengthUnit(str));
         }
     }
+    return true;
+}
+
+// <iw>
+
+static bool EndElementIW(StackItem* stackItem, StackItem* /*stackCurrent*/,
+    QDomDocument& mainDocument, QDomElement& m_ignoreWordsElement)
+{
+    if (!stackItem->elementType==ElementTypeIgnoreWord)
+    {
+        kdError(30506) << "Wrong element type!! Aborting! (in endElementIW)" << endl;
+        return false;
+    }
+    QDomElement wordElement=mainDocument.createElement("SPELLCHECKIGNOREWORD");
+    wordElement.setAttribute("word",stackItem->strTemp2.stripWhiteSpace());
+    m_ignoreWordsElement.appendChild(wordElement);
     return true;
 }
 
@@ -1110,6 +1129,11 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     {
         success=StartElementD(stackItem,structureStack.current(),attributes);
     }
+    else if (name=="iw") // No upper-case
+    {
+        stackItem->elementType=ElementTypeIgnoreWord;
+        success=true;
+    }
     else
     {
         stackItem->elementType=ElementTypeUnknown;
@@ -1165,6 +1189,10 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     else if (name=="d")
     {
         success=EndElementD(stackItem);
+    }
+    else if (name=="iw") // No upper-case
+    {
+        success=EndElementIW(stackItem,structureStack.current(), mainDocument, m_ignoreWordsElement);
     }
     else
     {
@@ -1228,6 +1256,11 @@ bool StructureParser :: characters ( const QString & ch )
     else if (stackItem->elementType==ElementTypeRealData)
     {
         success=CharactersElementD(stackItem,mainDocument,ch);
+    }
+    else if (stackItem->elementType==ElementTypeIgnoreWord)
+    {
+        stackItem->strTemp2+=ch; // Just collect the data
+        success=true;
     }
     else
     {
@@ -1340,7 +1373,9 @@ void StructureParser :: createDocument(void)
     // TODO: a few attributes are missing
     mainFramesetElement.appendChild(frameElementOut);
 
-    // As we are manipulating the document, create the PIXMAPS and CLIPARTS element
+    // As we are manipulating the document, create a few particular elements
+    m_ignoreWordsElement=mainDocument.createElement("SPELLCHECKIGNORELIST");
+    mainDocument.documentElement().appendChild(m_ignoreWordsElement);
     pixmapsElement=mainDocument.createElement("PIXMAPS");
     mainDocument.documentElement().appendChild(pixmapsElement);
     clipartsElement=mainDocument.createElement("CLIPARTS");
