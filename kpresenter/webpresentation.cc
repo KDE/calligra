@@ -279,7 +279,8 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
         QString filename = pics[ index ];
         filename += ".png";
         srcurl.setPath( locate( "slideshow", filename, KPresenterFactory::global() ) );
-        desturl.setPath ( path + "/pics/" + filename );
+        desturl = path;
+        desturl.addPath( "/pics/" + filename );
         KIO::NetAccess::del( desturl ); // Copy does not remove existing destination file
         KIO::NetAccess::copy( srcurl, desturl );
         p = progressBar->progress();
