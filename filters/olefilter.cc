@@ -24,10 +24,8 @@ OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
             fileOutName.truncate(fileOutName.length()-7);
 
         QString tmp;
-        QChar c;
         int i=1;
-
-        c=fileOutName[fileOutName.length()];
+        QChar c=fileOutName[fileOutName.length()];
 
         while(c!='/') {
             c=fileOutName[fileOutName.length()-i];
@@ -38,14 +36,11 @@ OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
             tmp="/nix";
 
         dir=tmp.right(tmp.length()-1);
-
         tmp=dir;
         dir+='/';
+        fileOut->writeDir(tmp, "", "");
 
-        fileOut->writeDir(tmp, "koffice", "users");
-
-        kdebug(KDEBUG_INFO, 31000, (const char*)tmp);
-        kdebug(KDEBUG_INFO, 31000, (const char*)dir);
+        partMap.insert("root-dir", tmp);
     }
 }
 
@@ -62,33 +57,63 @@ OLEFilter::~OLEFilter() {
 }
 
 const bool OLEFilter::filter() {
-    convert(fileOutName);
+    convert("root-dir");
     return success;
 }
 
 void OLEFilter::slotSavePic(const char *data, const char *type,
-                            const unsigned int size, char *nameOUT) {
+                            const unsigned int size, char **nameOUT) {
 
     QString name;
 
     name+="pic";
-
     name+=QString::number(numPic);
     ++numPic;
     name+='.';
     name+=type;
-
-    nameOUT=new char[name.length()+1];
-    strncpy(nameOUT, (const char*)name, name.length());
-    nameOUT[name.length()]='\0';
-
+    *nameOUT=new char[name.length()+1];
+    strncpy(*nameOUT, (const char*)name, name.length());
+    *nameOUT[name.length()]='\0';
     name.prepend(dir);
-
-    fileOut->writeFile(name, "koffice", "users", size, data);
+    fileOut->writeFile(name, "", "", size, data);
 }
 
-void OLEFilter::slotPart(const char *, char *) {
+void OLEFilter::slotPart(const char *nameIN, const char *type,
+                         char **nameOUT) {
+
+    if(nameIN!=0) {
+        QMap<QString, QString>::Iterator it=partMap.find(nameIN);
+        QString value;
+
+        if(it!=partMap.end())
+            value=partMap[nameIN];
+        else {
+            QString key=QString(nameIN);
+            value="part";
+            value+=QString::number(numPart);
+            numPart++;
+            value+='.';
+            value+=type;
+            partMap.insert(key, value);
+        }
+        *nameOUT=new char[value.length()+1];
+        strncpy(*nameOUT, (const char*)value, value.length());
+        *nameOUT[value.length()]='\0';
+    }
 }
 
-void OLEFilter::convert(const QString &) {
+void OLEFilter::convert(const QString &dirname) {
+
+    QList<OLENode> list=docfile->parseCurrentDir();
+    OLENode *node;
+
+    for(node=list.first(); node!=0; node=list.next()) {
+        if(node->type==1) {         // it is a dir!
+            docfile->enterDir(node->handle);
+            convert(node->name);
+            docfile->leaveDir();
+        }
+    }
+    kdebug(KDEBUG_INFO, 31000, (const char*)dirname);
+    // more to come...
 }

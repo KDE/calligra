@@ -56,12 +56,12 @@ const QString FilterBase::part() {
 }
 
 void FilterBase::slotSavePic(const char *data, const char *type, const unsigned int size,
-                             char *nameOUT) {
+                             char **nameOUT) {
     emit signalSavePic(data, type, size, nameOUT);
 }
 
-void FilterBase::slotPart(const char *nameIN, char *nameOUT) {
-    emit signalPart(nameIN, nameOUT);
+void FilterBase::slotPart(const char *nameIN, const char *type, char **nameOUT) {
+    emit signalPart(nameIN, type, nameOUT);
 }
 
 void FilterBase::slotFilterError() {

@@ -29,8 +29,8 @@ public:
 
 protected slots:
     void slotSavePic(const char *data, const char *type, const unsigned int size,
-                     char *nameOUT);
-    void slotPart(const char *nameIN, char *nameOUT);
+                     char **nameOUT);
+    void slotPart(const char *nameIN, const char *type, char **nameOUT);
 
 private:
     void convert(const QString &name);   // do the real work, recursively

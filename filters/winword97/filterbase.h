@@ -3,6 +3,8 @@
 
 #include <qobject.h>
 
+// Attention: The nameOUT Strings are allocated with new[] in the
+// slots!!! Therefore you have to delete [] them!
 class FilterBase : public QObject {
 
     Q_OBJECT
@@ -17,13 +19,13 @@ public:
 
 signals:
     virtual void signalSavePic(const char *data, const char *type, const unsigned int size,
-                               char *nameOUT);
-    virtual void signalPart(const char *nameIN, char *nameOUT);
+                               char **nameOUT);
+    virtual void signalPart(const char *nameIN, const char *type, char **nameOUT);
 
 protected slots:
     virtual void slotSavePic(const char *data, const char *type, const unsigned int size,
-                             char *nameOUT);
-    virtual void slotPart(const char *nameIN, char *nameOUT);
+                             char **nameOUT);
+    virtual void slotPart(const char *nameIN, const char *type, char **nameOUT);
 
     virtual void slotFilterError();
 
