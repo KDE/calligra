@@ -29,29 +29,28 @@
 #include <kiconloader.h>
 
 #include "vgradientwidget.h"
-#include "vgradientdlg.h"
 #include "vcolordlg.h"
-#include "vfill.h" 
+#include "vfill.h"
 #include "../render/vkopainter.h"
 
 static unsigned char midPoint_bits[] =
 {
 	0x4, 0x4, 0xe, 0xe, 0x15, 0x15, 0x4, 0x4
 };
- 
+
 static unsigned char colorStopBorder_bits[] =
 {
-	0x8, 0x14, 0x14, 0x22, 0x22, 0x41, 0x41, 0x7f 
+	0x8, 0x14, 0x14, 0x22, 0x22, 0x41, 0x41, 0x7f
 };
 
 static unsigned char colorStop_bits[] =
 {
-	0x0, 0x4, 0x4, 0xe, 0xe, 0x1f, 0x1f 
+	0x0, 0x4, 0x4, 0xe, 0xe, 0x1f, 0x1f
 };
 
 VGradientWidget::VGradientWidget( VGradient*& gradient, QWidget* parent, const char* name )
 		: QWidget( parent, name ), m_lpgradient( &gradient )
-{  
+{
 	setBackgroundMode( Qt::NoBackground );
 	setMinimumSize( 105, 35 );
 } // VGradientWidget::VGradientWidget
@@ -63,12 +62,12 @@ VGradientWidget::~VGradientWidget()
 void VGradientWidget::paintColorStop( QPainter& p, int x, VColor& color )
 {
 	QBitmap bitmap;
-	
+
 	bitmap = QBitmap( 5, 8, colorStop_bits, true );
 	bitmap.setMask( bitmap );
 	p.setPen( color.toQColor() );
 	p.drawPixmap( x - 2, 1, bitmap );
-	
+
 	bitmap = QBitmap( 7, 8, colorStopBorder_bits, true );
 	bitmap.setMask( bitmap );
 	p.setPen( Qt::black );
@@ -109,9 +108,9 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	gp.setBrush( fill );
 	gp.fillPath();
 	gp.end();
-	
+
 	QPainter p( &pixmap );
-	
+
 	p.setPen( colorGroup().light() );
 	p.moveTo( 1, height()-17 );
 	p.lineTo( 1, 1 );
@@ -131,23 +130,23 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	p.lineTo( width() - 1, 0 );
 	p.moveTo( width() - 2, 2 );
 	p.lineTo( width() - 2, height() - 16 );
-	p.lineTo( 2, height() - 16 );    
+	p.lineTo( 2, height() - 16 );
 	p.moveTo( 1, height() - 14 );
 	p.lineTo( width() - 1, height() - 14 );
 	p.moveTo( width() - 2, height() - 13 );
 	p.lineTo( 1, height() - 13 );
 	p.lineTo( 1, height() - 2 );
 	p.fillRect( 2, height() - 12, width() - 4, 10, colorGroup().background() );
-	
+
 	p.setClipRect( 2, height() - 12, width() - 4, 10 );
 	p.translate( 2, height() - 12 );
-	int w = width() - 5;  
-	
+	int w = width() - 5;
+
 	QPtrList<VColorStop>& colorStops = ( *m_lpgradient )->m_colorStops;
 	if ( colorStops.count() > 1 )
 	{
 		VColorStop* stop, *nextstop;
-		for ( stop = colorStops.first(), nextstop = colorStops.next(); 
+		for ( stop = colorStops.first(), nextstop = colorStops.next();
 				nextstop; stop = nextstop, nextstop = colorStops.next() )
 		{
 			paintColorStop( p, (int)( stop->rampPoint * w ), stop->color );
@@ -163,11 +162,11 @@ void VGradientWidget::mousePressEvent( QMouseEvent* e )
 {
 	if ( !( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 3 ) ) )
 		return;
-	
+
 	QPtrList<VColorStop>& colorStops = ( *m_lpgradient )->m_colorStops;
 
 	currentPoint = 0;
-	
+
 	int i = colorStops.count() - 1;
 	int r, m;
 	VColorStop* stop, *nextstop = 0;
@@ -232,7 +231,7 @@ void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 {
 	QPtrList<VColorStop>& colorStops = ( *m_lpgradient )->m_colorStops;
-	
+
 	if ( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) )
 	{
 		if ( currentPoint % 2 == 1 )

@@ -15,15 +15,8 @@ noinst_HEADERS = \
 	vfilldlg.h \
 	vcolortab.h \
 	vflattendlg.h \
-	vgradientdlg.h \
 	vinsertknotsdlg.h \
-	vpolygondlg.h \
-	vrectangledlg.h \
 	vroundcornersdlg.h \
-	vroundrectdlg.h \
-	vsinusdlg.h \
-	vspiraldlg.h \
-	vstardlg.h \
 	vstrokedlg.h \
 	vtransformdlg.h \
 	vwhirlpinchdlg.h
@@ -35,15 +28,8 @@ libkarbondialogs_la_SOURCES = \
 	vfilldlg.cc \
 	vcolortab.cc \
 	vflattendlg.cc \
-	vgradientdlg.cc \
 	vinsertknotsdlg.cc \
-	vpolygondlg.cc \
-	vrectangledlg.cc \
 	vroundcornersdlg.cc \
-	vroundrectdlg.cc \
-	vsinusdlg.cc \
-	vspiraldlg.cc \
-	vstardlg.cc \
 	vstrokedlg.cc \
 	vtransformdlg.cc \
 	vwhirlpinchdlg.cc
