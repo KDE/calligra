@@ -22,6 +22,8 @@ DESCRIPTION
     This file implements KWord tables.
 */
 
+// ### TODO: Doxygen-ify the description above
+
 #include <kdebug.h>
 #include <klocale.h>
 #include "kwdoc.h"
@@ -39,6 +41,9 @@ DESCRIPTION
 #include "KWordTableFrameSetIface.h"
 #include <kmessagebox.h>
 #include <qclipboard.h>
+
+// ### TODO : multi page tables
+#define SUPPORT_MULTI_PAGE_TABLES 1
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
@@ -92,6 +97,32 @@ void KWTableFrameSet::updateFrames( int flags )
 
 void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
 {
+    // TODO multi-page case
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+    const double dx = position.x() - m_colPositions[0];
+    const double dy = position.y() - m_rowPositions[0];
+
+    const int oldPageNumberStart = getCell(0,0)->frame(0)->pageNum();
+    const int oldPageNumberEnd = getCell( getRows(), 0 )->frame( 0 )->pageNum();
+
+    moveBy( dx, dy );
+
+    if ( dx || dy ) {
+        updateFrames();
+        const int newPageNumberStart = getCell(0,0)->frame(0)->pageNum();
+        const int newPageNumberEnd = getCell( getRows(), 0 )->frame( 0 )->pageNum();
+        
+        // First modified page
+        const int startPageNumber = kMin( oldPageNumberStart, newPageNumberStart );
+        // Last modified page
+        const int endPageNumber = kMax( oldPageNumberEnd, newPageNumberEnd );
+
+        // ### TODO: can the end page change while processing? Probably, yes, so this code is not right        
+        for ( int i = startPageNumber; i <= endPageNumber; ++i ) {
+            m_doc->updateFramesOnTopOrBelow( i );
+        }
+    }
+#else
     double dx = position.x() - m_colPositions[0];
     double dy = position.y() - m_rowPositions[0];
 
@@ -107,6 +138,7 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
         if ( oldPageNumber != newPageNumber )
             m_doc->updateFramesOnTopOrBelow( oldPageNumber );
     }
+#endif
 }
 
 KoSize KWTableFrameSet::floatingFrameSize( int /*frameNum*/ )
