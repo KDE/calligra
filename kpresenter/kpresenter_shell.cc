@@ -154,8 +154,8 @@ bool KPresenterShell::newDocument()
 
   m_pDoc = new KPresenterDoc;
   if (!m_pDoc->init())
-    {
-      cerr << "ERROR: Could not initialize document" << endl;
+    { // user selected cancel
+      releaseDocument();
       return false;
     }
 
@@ -321,14 +321,17 @@ void KPresenterShell::releaseDocument()
     views = m_pDoc->viewCount();
   cerr << "############## VIEWS=" << views << " #####################" << endl;
 
-  cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
-
+  if (m_pView)
+    cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  
   setRootPart(0);
 
-  cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  if (m_pView)
+    cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   interface()->setActivePart(0);
 
+  // if (m_pView)
   // cerr << "-3) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   if (m_pView)
@@ -337,35 +340,56 @@ void KPresenterShell::releaseDocument()
   /* if (m_pView)
     m_pView->cleanUp(); */
 
+  // if (m_pView)
   // cerr << "-4) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   if (m_pDoc && views <= 1)
     m_pDoc->cleanUp();
+  // if (m_pView)
   // cerr << "-5) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   // if (m_pView)
   // CORBA::release(m_pView);
+  // if (m_pView)
   // cerr << "-6) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   if (m_pDoc)
     CORBA::release(m_pDoc);
+  // if (m_pView)
   // cerr << "-7) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   m_pView = 0L;
   m_pDoc = 0L;
+
+  if(m_pFileMenu)
+    {
+      m_pFileMenu->setItemEnabled(m_idMenuFile_Save,false);
+      m_pFileMenu->setItemEnabled(m_idMenuFile_SaveAs,false);
+      m_pFileMenu->setItemEnabled(m_idMenuFile_Print,false);
+      m_pFileMenu->setItemEnabled(m_idMenuFile_Close,false);
+    }
+  opToolBar()->setItemEnabled(TOOLBAR_PRINT,false);
+  opToolBar()->setItemEnabled(TOOLBAR_SAVE,false);
 }
 
 /*================================================================*/
 void KPresenterShell::slotFileNew()
 {
-  m_pDoc->enableEmbeddedParts(false);
+  if (m_pDoc)
+    m_pDoc->enableEmbeddedParts(false);
   if (!newDocument())
-    QMessageBox::critical(this,i18n("KPresenter Error"),i18n("Could not create new document"),i18n("Ok"));
-  m_pDoc->enableEmbeddedParts(true);
-  m_pView->getPage()->repaint(false);
+    ;
+    // QMessageBox::critical(this,i18n("KPresenter Error"),i18n("Could not create new document"),i18n("Ok"));
+    // no error message. user simply selected cancel.
+  if (m_pDoc)
+    m_pDoc->enableEmbeddedParts(true);
+  if (m_pView)
+    m_pView->getPage()->repaint(false);
 }
 
 /*================================================================*/
 void KPresenterShell::slotFileOpen()
 {
-  m_pView->getPage()->setToolEditMode(TEM_MOUSE);
-  m_pDoc->enableEmbeddedParts(false);
+  if (m_pView)
+    m_pView->getPage()->setToolEditMode(TEM_MOUSE);
+  if (m_pDoc)
+    m_pDoc->enableEmbeddedParts(false);
   QString file = KFileDialog::getOpenFileName(getenv("HOME"));
 
   if (file.isNull())
@@ -377,8 +401,10 @@ void KPresenterShell::slotFileOpen()
       tmp.sprintf(i18n("Could not open\n%s"),file.data());
       QMessageBox::critical(this,i18n("IO Error"),tmp,i18n("OK"));
     }
-  m_pDoc->enableEmbeddedParts(true);
-  m_pView->getPage()->repaint(false);
+  if (m_pDoc)
+    m_pDoc->enableEmbeddedParts(true);
+  if (m_pView)
+    m_pView->getPage()->repaint(false);
 }
 
 /*================================================================*/
@@ -433,17 +459,20 @@ void KPresenterShell::slotFileSaveAs()
 /*================================================================*/
 void KPresenterShell::slotFileClose()
 {
+  /*
   if (documentCount() <= 1)
     {
       slotFileQuit();
       return;
     }
+  */
 
   if (isModified())
     if (!requestClose())
       return;
 
-  delete this;
+  releaseDocument();
+  //delete this;
 }
 
 /*================================================================*/
