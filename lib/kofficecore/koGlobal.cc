@@ -376,31 +376,41 @@ QFont KoGlobal::defaultFont()
     return font;
 }
 
+QStringList KoGlobal::listTagOfLanguage()
+{
+    if ( s_languageTag.count()==0 )
+        createListOfLanguage();
+    return s_languageTag;
+}
+
+void KoGlobal::createListOfLanguage()
+{
+    QStringList alllang = KGlobal::dirs()->findAllResources("locale",
+                                                            QString::fromLatin1("*/entry.desktop"));
+    QStringList langlist=alllang;
+    for ( QStringList::ConstIterator it = langlist.begin();
+          it != langlist.end(); ++it )
+    {
+        KSimpleConfig entry(*it);
+        entry.setGroup("KCM Locale");
+        QString name = entry.readEntry("Name",
+                                       KGlobal::locale()->translate("without name"));
+
+        QString tag = *it;
+        int index = tag.findRev('/');
+        tag = tag.left(index);
+        index = tag.findRev('/');
+        tag = tag.mid(index+1);
+        s_languageList.append(name);
+        s_languageTag.append(tag);
+    }
+
+}
+
 QStringList KoGlobal::listOfLanguage()
 {
     if ( s_languageList.count()==0 )
-    {
-        QStringList alllang = KGlobal::dirs()->findAllResources("locale",
-                                                                QString::fromLatin1("*/entry.desktop"));
-        QStringList langlist=alllang;
-        kdDebug()<<" alllang :"<<alllang.count()<<endl;
-        for ( QStringList::ConstIterator it = langlist.begin();
-              it != langlist.end(); ++it )
-        {
-            KSimpleConfig entry(*it);
-            entry.setGroup("KCM Locale");
-            QString name = entry.readEntry("Name",
-                                           KGlobal::locale()->translate("without name"));
-
-            QString tag = *it;
-            int index = tag.findRev('/');
-            tag = tag.left(index);
-            index = tag.findRev('/');
-            tag = tag.mid(index+1);
-            s_languageList.append(name);
-            s_languageTag.append(tag);
-        }
-    }
+        createListOfLanguage();
     return s_languageList;
 }
 

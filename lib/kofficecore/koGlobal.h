@@ -229,12 +229,14 @@ public:
     static QFont defaultFont();
 
     static QStringList listOfLanguage();
+    static QStringList listTagOfLanguage();
     static QString tagOfLanguage( const QString & _lang);
     static int languageIndexFromTag( const QString &_lang);
     static QString languageFromTag( const QString &_lang );
 protected:
     KoGlobal(){} // don't use
 private:
+    static void createListOfLanguage();
     static int s_pointSize;
     static QStringList s_languageList;
     static QStringList s_languageTag;
