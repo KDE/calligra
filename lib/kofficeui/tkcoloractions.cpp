@@ -22,24 +22,22 @@ void TKColorPopupMenu::updateItemSize()
   styleChange(style());
 }
 /****************************************************************************************/
-TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name, bool inMenu )
+TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name )
 : TKAction(parent,name)
 {
   setText(text);
   m_type = type;
-  m_inMenu = inMenu;
   init();
 }
 
 TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
                                           QObject* receiver, const char* slot,
-                                          QObject* parent, const char* name, bool inMenu )
+                                          QObject* parent, const char* name )
 : TKAction(parent,name)
 {
   setText(text);
   m_type = type;
   connect( this, SIGNAL( activated() ), receiver, slot );
-  m_inMenu = inMenu;
   init();
 }
 
@@ -158,10 +156,7 @@ void TKSelectColorAction::selectColorDialog()
 // Called when activating the menu item
 void TKSelectColorAction::slotActivated()
 {
-    if ( m_inMenu )
-        selectColorDialog();
-    else
-        activate();
+    selectColorDialog();
 }
 
 void TKSelectColorAction::activate()
