@@ -182,7 +182,7 @@ void QtCalculator::InitializeCalculator(void) {
   sigaction(SIGFPE, &fpe_trap, NULL);
 
   RefreshCalculator();
-  pi = ASIN(1L) * 2L;
+  pi = ASIN(1.0) * 2L;
 }
 
 void fpe_handler(int fpe_parm)
@@ -261,12 +261,12 @@ void QtCalculator::EnterDigit(int data)
     if (DISPLAY_AMOUNT < 0)
       DISPLAY_AMOUNT = decimal_point ?
         DISPLAY_AMOUNT - ((CALCAMNT)data /
-                          POW(current_base, decimal_point++)) :
+                          POW((float)current_base, decimal_point++)) :
     (current_base * DISPLAY_AMOUNT) - data;
     else
       DISPLAY_AMOUNT = decimal_point ?
         DISPLAY_AMOUNT + ((CALCAMNT)data /
-                          POW(current_base, decimal_point++)) :
+                          POW((float)current_base, decimal_point++)) :
     (current_base * DISPLAY_AMOUNT) + data;
 
   if (decimal_point){
