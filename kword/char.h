@@ -2,9 +2,10 @@
 #define __char_h__
 
 #include "format.h"
+#include "image.h"
 
 #include <qimage.h>
-#include <qpixmap.h>
+#include <qstring.h>
 
 enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2};
  
@@ -48,15 +49,20 @@ protected:
 class KWCharImage : public KWCharAttribute
 {
 public:
-  KWCharImage() { classId = ID_KWCharImage; }
-  ~KWCharImage() {}
+  KWCharImage() { classId = ID_KWCharImage; image = 0L; }
+  KWCharImage(KWImage *_image) : KWCharAttribute() { classId = ID_KWCharImage; image = _image; }
+  ~KWCharImage() { image->decRef(); image = 0L; }
+
+  virtual KWImage* getImage()
+    { return image; }
+  virtual void setImage(KWImage *_image)
+    { image = _image; }
 
 protected:
   // We need the image because it has full resolution and
   // color depths. The pixmap may be reduced in both aspects
   // depending on the resolution and color depth of the display.
-  QImage image;
-  QPixmap pixmap;
+  KWImage *image;
 
 };
 
@@ -84,8 +90,9 @@ public:
   unsigned int max()
     { return _max_; }
   void append(KWChar *_text,unsigned int _len);
-  void insert(unsigned int _pos, const char *_text);
-  void insert(unsigned int _pos, const char _c);
+  void insert(unsigned int _pos,const char *_text);
+  void insert(unsigned int _pos,const char _c);
+  void insert(unsigned int _pos,KWCharImage *_image);
   void resize(unsigned int _size,bool del = true);
   bool remove(unsigned int _pos,unsigned int _len = 1);
   KWChar* split(unsigned int _pos);

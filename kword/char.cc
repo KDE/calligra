@@ -99,6 +99,21 @@ void KWString::insert( unsigned int _pos, const char _c )
   _data_[ _pos ].attrib = 0L;  
 }
 
+void KWString::insert(unsigned int _pos,KWCharImage *_image)
+{
+  assert(_pos <= _len_);
+
+  unsigned int l = _len_;
+  
+  resize(_len_ + 1);
+  
+  if (_pos < l)
+    memmove(_data_ + _pos + 1,_data_ + _pos,sizeof(KWChar) * (l - _pos));
+  
+  _data_[ _pos ].c = 0;
+  _data_[ _pos ].attrib = _image;
+}
+
 bool KWString::remove( unsigned int _pos,unsigned int _len = 1 )
 {
   if (_pos + _len <= _len_ && (int)_pos >= 0)

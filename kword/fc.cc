@@ -25,6 +25,10 @@ KWFormatContext::KWFormatContext( KWordDocument_impl *_doc ) : KWFormat()
   spacingError = 0;
   ptTextLen = 0;
   textPos = 0;
+
+  lineStartPos = 0;
+  lineEndPos = 0;
+  specialHeight = 0;
 }
 
 KWFormatContext::~KWFormatContext()
@@ -122,7 +126,7 @@ void KWFormatContext::gotoStartOfParag( QPainter & )
 
 bool KWFormatContext::isCursorAtLastChar()
 {
-  if ( textPos == lineEndPos - 1 )
+  if ( textPos >= lineEndPos - 1 )
     return true;
 
   return false;
@@ -164,6 +168,8 @@ bool KWFormatContext::isCursorAtParagEnd()
 
 bool KWFormatContext::isCursorAtLineEnd()
 {
+  //debug("pos: %d, end: %d",textPos,lineEndPos);
+
     // Torben: I commented this out since it looks strange
   /* if (isCursorInLastLine())
 	return isCursorAtParagEnd(); */
@@ -462,6 +468,9 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
         if ( text[ pos ].c == 0 )
 	{
 	  // Handle specials here
+	  ptPos += ((KWCharImage*)text[pos].attrib)->getImage()->width();
+	  specialHeight = ((KWCharImage*)text[pos].attrib)->getImage()->height();
+	  pos++;
 	}
 	else
 	{
@@ -550,6 +559,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
   if (parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT || 
       parag->getParagLayout()->getFlow() == KWParagLayout::CENTER)
     calcTextLen();
+
+    specialHeight = 0;
 
     ptPos = 0;
     spaces = 0;
@@ -696,6 +707,10 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	    textPos += 2 + sizeof( KWFormat* );
 	    tmpPTAscender = font->getPTAscender();
 	    tmpPTDescender = font->getPTDescender(); */
+	  ptPos += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
+	  tmpPTWidth += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
+	  specialHeight = ((KWCharImage*)text[textPos].attrib)->getImage()->height();
+	  textPos++;
 	}
 	else // A usual character ...
 	{ 
@@ -748,6 +763,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	}
     }
 
+    //debug("start: %d, end: %d",lineStartPos,lineEndPos);
+
     // If we are in the last line, return FALSE
     if ( lineEndPos == parag->getTextLen() )
 	return FALSE;
@@ -762,7 +779,9 @@ unsigned short KWFormatContext::getCounter( unsigned int _counternr, unsigned in
 
 unsigned int KWFormatContext::getLineHeight()
 { 
-  return ptMaxAscender + ptMaxDescender + getParag()->getParagLayout()->getPTLineSpacing(); 
+  unsigned int hei = ptMaxAscender + ptMaxDescender;
+
+  return max(hei,specialHeight) + getParag()->getParagLayout()->getPTLineSpacing(); 
 }
 
 void KWFormatContext::makeCounterLayout( QPainter &_painter )

@@ -171,6 +171,7 @@ protected:
     unsigned int ptPos;
     unsigned int WantedPtPos;
     bool during_vertical_cursor_movement;
+    unsigned int specialHeight;
     
     unsigned int page;
     unsigned int column;

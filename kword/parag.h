@@ -118,6 +118,7 @@ public:
     void setPTYStart( unsigned int _y ) { ptYStart = _y; }
 
     void insertText( unsigned int _pos, const char *_text);
+    void insertPictureAsChar(unsigned int _pos,QString _filename);
     void appendText(KWChar *_text,unsigned int _len);
     bool deleteText( unsigned int _pos, unsigned int _len = 1);
     void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );

@@ -20,6 +20,7 @@
 #include "fc.h"
 #include "format.h"
 #include "paraglayout.h"
+#include "char.h"
 
 #include <qevent.h>
 #include <math.h>
@@ -107,6 +108,8 @@ public:
   void recalcCursor();
 
   int getVertRulerPos();
+
+  void insertPictureAsChar(QString _filename);
 
 public slots:
   void newLeftIndent(int _left)

@@ -92,6 +92,13 @@ int KWPage::getVertRulerPos()
 }
 
 /*================================================================*/
+void KWPage::insertPictureAsChar(QString _filename)
+{
+  fc->getParag()->insertPictureAsChar(fc->getTextPos(),_filename);
+  recalcCursor();
+}
+
+/*================================================================*/
 void KWPage::paintEvent(QPaintEvent* e)
 {
   QPainter painter;
@@ -149,8 +156,8 @@ void KWPage::paintEvent(QPaintEvent* e)
 	  doc->printLine(*paintfc,painter,xOffset,yOffset);
 	  bend = !paintfc->makeNextLineLayout(painter);
 	  if (paintfc->getPage() > lastVisiblePage || 
-	      (int)paintfc->getPTY() + (int)paintfc->getPTMaxAscender() + (int)paintfc->getPTMaxDescender() 
-	      - (int)yOffset > height() + (int)paintfc->getPTMaxAscender() + (int)paintfc->getPTMaxDescender())
+	      (int)paintfc->getPTY() + (int)paintfc->getLineHeight() - (int)yOffset > 
+	      height() + (int)paintfc->getLineHeight())
 	    bend = true; 
 	}
 	
@@ -300,21 +307,19 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    painter.fillRect(paintfc.getPTLeft() - xOffset,
 			     paintfc.getPTY() - yOffset,
 			     paintfc.getPTWidth(),
-			     paintfc.getPTMaxAscender() + paintfc.getPTMaxDescender(),
+			     paintfc.getLineHeight(),
 			     QBrush(white));
 	    doc->printLine(paintfc,painter,xOffset,yOffset);
 	    bend = !paintfc.makeNextLineLayout(painter);
 	    if (paintfc.getPage() > lastVisiblePage || 
-		(int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
-		- (int)yOffset > height() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender())
+		(int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset > 
+		height() + (int)paintfc.getLineHeight())
 	      bend = true; 
 	  }
 
-	if ((int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
-	    - (int)yOffset < height())
+	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset < height())
 	  {
-	    int _y = (int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
-	      - (int)yOffset;
+	    int _y = (int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset;
 	    painter.fillRect(paintfc.getPTLeft() - xOffset,
 			     _y,paintfc.getPTWidth(),
 			     height() - _y,
@@ -388,21 +393,19 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    painter.fillRect(paintfc.getPTLeft() - xOffset,
 			     paintfc.getPTY() - yOffset,
 			     paintfc.getPTWidth(),
-			     paintfc.getPTMaxAscender() + paintfc.getPTMaxDescender(),
+			     paintfc.getLineHeight(),
 			     QBrush(white));
 	    doc->printLine(paintfc,painter,xOffset,yOffset);
 	    bend = !paintfc.makeNextLineLayout(painter);
 	    if (paintfc.getPage() > lastVisiblePage || 
-		(int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
-		- (int)yOffset > height() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender())
+		(int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset > 
+		height() + (int)paintfc.getLineHeight())
 	      bend = true; 
 	  }
 
-	if ((int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
-	    - (int)yOffset < height())
+	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset < height())
 	  {
-	    int _y = (int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
-	      - (int)yOffset;
+	    int _y = (int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset;
 	    painter.fillRect(paintfc.getPTLeft() - xOffset,
 			     _y,paintfc.getPTWidth(),
 			     height() - _y,
@@ -465,13 +468,13 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		painter.fillRect(paintfc.getPTLeft() - xOffset,
 				 paintfc.getPTY() - yOffset,
 				 paintfc.getPTWidth(),
-				 paintfc.getPTMaxAscender() + paintfc.getPTMaxDescender(),
+				 paintfc.getLineHeight(),
 				 QBrush(white));
 		doc->printLine(paintfc,painter,xOffset,yOffset);
 		bend = !paintfc.makeNextLineLayout(painter);
 		if (paintfc.getPage() > lastVisiblePage || 
-		    (int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
-		    - (int)yOffset > height() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender())
+		    (int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset > 
+		    height() + (int)paintfc.getLineHeight())
 		  bend = true; 
 	      }
 	    

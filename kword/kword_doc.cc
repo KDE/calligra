@@ -14,6 +14,7 @@
 /******************************************************************/
 
 #include "kword_doc.h"
+#include "kword_page.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -60,7 +61,7 @@ KWordChild::~KWordChild()
 
 /*================================================================*/
 KWordDocument_impl::KWordDocument_impl()
-  : formatCollection(this)
+  : formatCollection(this), imageCollection(this)
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0");
 
@@ -396,6 +397,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
   _painter.setClipRegion(cr);
 
   // Shortcut to the text memory segment
+  unsigned int textLen = _fc.getParag()->getTextLen() - 1;
   KWChar* text = _fc.getParag()->getText();
   // Shortcut to the current paragraph layout
   KWParagLayout *lay = _fc.getParag()->getParagLayout();
@@ -439,10 +441,25 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	  //cerr << "Switch1 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
 	}
       
+      //debug("%d",i);
+      if (i > 200 || _fc.getTextPos() > textLen) 
+	{
+	  warning("Reggie: WOW - something has gone really wrong here!!!!!");
+	  return;
+	}
+
       buffer[i] = text[ _fc.getTextPos() ].c;
       
       if ( buffer[i] == 0 )
 	{
+	  buffer[i] = '\0';
+	  _painter.drawText( tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
+			     _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset, buffer );
+	  i = 0;
+
+	  _painter.drawImage(QPoint(tmpPTPos - xOffset, _fc.getPTY() - yOffset),
+			     *((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage());
+	  _fc.cursorGotoNextChar( _painter );
 	  // Torben: TODO: Handle special objects like images here
 	}
       else
@@ -466,7 +483,8 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	      // there was a blank _or_ there will be a font switch _or_ a special object next, so print 
 	      // what we have so far
 	      buffer[i] = '\0';
-	      _painter.drawText( tmpPTPos - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, buffer );
+	      _painter.drawText( tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
+				 _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset, buffer );
 	      //cerr << "#'" << buffer << "'" << endl;
 	      i = 0;
 	      // Blanks are not printed at all
@@ -488,10 +506,14 @@ void KWordDocument_impl::drawMarker(KWFormatContext &_fc,QPainter *_painter,int 
   pen.setWidth(2);
   _painter->setPen(pen);
   
+//   _painter->drawLine(_fc.getPTPos() - xOffset + 1,
+// 		     _fc.getPTY() + _fc.getPTMaxAscender() - _fc.getPTAscender() - yOffset,
+// 		     _fc.getPTPos() - xOffset + 1,
+// 		     _fc.getPTY() + _fc.getPTMaxAscender() + _fc.getPTDescender() - yOffset);
   _painter->drawLine(_fc.getPTPos() - xOffset + 1,
-		     _fc.getPTY() + _fc.getPTMaxAscender() - _fc.getPTAscender() - yOffset,
+		     _fc.getPTY() - yOffset,
 		     _fc.getPTPos() - xOffset + 1,
-		     _fc.getPTY() + _fc.getPTMaxAscender() + _fc.getPTDescender() - yOffset);
+		     _fc.getPTY() + _fc.getLineHeight() - _fc.getPTSpacing() - yOffset);
   
   _painter->setRasterOp(rop);
 }
@@ -609,4 +631,10 @@ void KWordDocument_impl::splitParag(KWParag *_parag,unsigned int _pos)
   if (_next) _next->setPrev(_new);
   
   _new->appendText(_string,len);
+}
+
+/*================================================================*/
+void KWordDocument_impl::insertPicture(QString _filename,KWPage *_paperWidget)
+{
+  _paperWidget->insertPictureAsChar(_filename);
 }

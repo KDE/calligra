@@ -93,6 +93,19 @@ void KWParag::insertText( unsigned int _pos, const char *_text)
   text.insert( _pos, _text);
 }
 
+void KWParag::insertPictureAsChar(unsigned int _pos,QString _filename)
+{
+  KWImage _image = KWImage(document,_filename);
+  QString key;
+
+  KWImage *image = document->getImageCollection()->getImage(_image,key);
+  KWCharImage *i = new KWCharImage(image);
+
+  text.insert(_pos,i);
+  //freeChar( text.data()[ _pos ] );
+  //text.data()[_pos].attrib = i;
+}
+
 void KWParag::appendText(KWChar *_text,unsigned int _len)
 {
   text.append(_text,_len);
@@ -118,7 +131,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 	  ((KWCharFormat*)text.data()[_pos + i].attrib)->setFormat(0L);
 	}
       freeChar( text.data()[ _pos + i] );
-      text.data()[ _pos ].attrib = f;
+      text.data()[ _pos + i ].attrib = f;
     }
 }
 

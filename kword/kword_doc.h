@@ -17,6 +17,7 @@
 #define kword_doc_h
 
 class KWordDocument_impl;
+class KWPage;
 
 #include <koDocument.h>
 #include <koPrintExt.h>
@@ -32,6 +33,9 @@ class KWordDocument_impl;
 #include "parag.h"
 #include "paraglayout.h"
 #include "formatcollection.h"
+#include "imagecollection.h"
+#include "image.h"
+#include "char.h"
 
 #include <qlist.h>
 #include <qobject.h>
@@ -39,6 +43,7 @@ class KWordDocument_impl;
 #include <qevent.h>
 #include <qpainter.h>
 #include <qregion.h>
+#include <qstring.h>
 
 #include <koPageLayoutDia.h>
 
@@ -230,6 +235,10 @@ public:
 
   KWFormatCollection *getFormatCollection()
     { return &formatCollection; }
+  KWImageCollection *getImageCollection()
+    { return &imageCollection; }
+
+  void insertPicture(QString _filename,KWPage *_paperWidget);
 
 signals:
   void sig_imageModified();
@@ -290,6 +299,7 @@ protected:
   int pages;
 
   KWFormatCollection formatCollection;
+  KWImageCollection imageCollection;
 
 };
 
