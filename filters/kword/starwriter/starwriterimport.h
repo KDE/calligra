@@ -41,7 +41,7 @@ private:
 
     // supplementary variables
     Q_UINT8 frames;
-    QString tableFrames, pictureFrames;
+    QString bodyStuff, tablesStuff, picturesStuff;
 
     // needed for ATTRIBUTES
     bool hasHeader;

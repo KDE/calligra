@@ -82,6 +82,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QCString& from, const
     if (!addFooters()) return KoFilter::ParsingError;
     if (!addStyles()) return KoFilter::ParsingError;
     if (!addPageProperties()) return KoFilter::ParsingError;
+    maindoc = bodyStuff + tablesStuff + picturesStuff;   // + lots of other things :)
     if (!addKWordHeader()) return KoFilter::ParsingError;
 
     // Prepare storage device and return
@@ -126,19 +127,16 @@ bool StarWriterImport::checkDocumentVersion()
 bool StarWriterImport::addKWordHeader()
 {
     // Proper prolog and epilog
-    QString prolog = "<!DOCTYPE DOC>\n";
-    prolog.append("<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
-    prolog.append("<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n");
-    prolog.append(" <PAPERBORDERS left=\"36\" right=\"36\" top=\"36\" bottom=\"36\" />\n");
-    prolog.append("</PAPER>\n");
-    prolog.append("<ATTRIBUTES standardpage=\"1\" unit=\"mm\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n");
-    prolog.append("<FRAMESETS>\n");
+    maindoc.prepend("<!DOCTYPE DOC>\n");
+    maindoc.prepend("<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
+    maindoc.prepend("<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n");
+    maindoc.prepend(" <PAPERBORDERS left=\"36\" right=\"36\" top=\"36\" bottom=\"36\" />\n");
+    maindoc.prepend("</PAPER>\n");
+    maindoc.prepend("<ATTRIBUTES standardpage=\"1\" unit=\"mm\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n");
+    maindoc.prepend("<FRAMESETS>\n");
 
-    QString epilog.append("</FRAMESETS>\n");
-    epilog.append("</DOC>");
-
-    maindoc.prepend(prolog);
-    maindoc.append(epilog);
+    maindoc.append("</FRAMESETS>\n");
+    maindoc.append("</DOC>");
 
     return true;
 }
@@ -193,10 +191,10 @@ bool StarWriterImport::addBody()
       data[k] = StarWriterDocument[p+k];
     return parseNodes(data);
 
-    // add proper tags to maindoc
-    maindoc.prepend("<FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" autoCreateNewFrame=\"1\">\n");
-    maindoc.prepend("<FRAME right=\"567\" left=\"28\" top=\"42\" bottom=\"799\" />\n");
-    maindoc.append("</FRAMESET>\n");
+    // add proper tags
+    bodyStuff.prepend("<FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" autoCreateNewFrame=\"1\">\n");
+    bodyStuff.prepend("<FRAME right=\"567\" left=\"28\" top=\"42\" bottom=\"799\" />\n");
+    bodyStuff.append("</FRAMESET>\n");
 }
 
 QString StarWriterImport::convertToKWordString(QByteArray s)
@@ -255,7 +253,7 @@ bool StarWriterImport::parseText(QByteArray n)
 {
     QByteArray s;
     Q_UINT32 len;
-    QString paragraph;
+    QString text;
 
     // Preliminary check
     if (n[0x00] != 'T') return false;
@@ -267,10 +265,10 @@ bool StarWriterImport::parseText(QByteArray n)
         s[k] = n[0x0B+k];
 
     // Write it to the variable
-    QString text = convertToKWordString(s);
-    maindoc.append("<PARAGRAPH>\n");
-    maindoc.append("<TEXT>" + text + "</TEXT>\n");
-    maindoc.append("</PARAGRAPH>\n");
+    text = convertToKWordString(s);
+    bodyStuff.append("<PARAGRAPH>\n");
+    bodyStuff.append("<TEXT>" + text + "</TEXT>\n");
+    bodyStuff.append("</PARAGRAPH>\n");
 
     return true;
 }
