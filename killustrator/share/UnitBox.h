@@ -63,6 +63,7 @@ protected slots:
 
 private:
   FloatSpinBox *valueBox;
+  bool isUnitEnabled;
   QComboBox *unitCombo;
   MeasurementUnit unit;
   float ptMinVal, ptMaxVal; // the minimal and maximal value in points

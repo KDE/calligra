@@ -48,6 +48,7 @@ UnitBox::UnitBox (QWidget* parent, const char* name) : QWidget (parent, name) {
 	   this, SLOT(slotValueChange (float)));
   setMinimumSize (valueBox->width () + unitCombo->width () + 5,
 	          valueBox->height ());
+  isUnitEnabled = true;
 }
  
 UnitBox::~UnitBox () {
@@ -62,7 +63,10 @@ float UnitBox::getValue () {
 }
 
 void UnitBox::setValue (float value) {
-  valueBox->setValue (cvtPtToUnit (unit, value));
+  if(isUnitEnabled)
+     valueBox->setValue (cvtPtToUnit (unit, value));
+  else
+     valueBox->setValue (value);
 }
   
 void UnitBox::setStep (float step) {
@@ -108,4 +112,5 @@ void UnitBox::slotValueChange (float f) {
 
 void UnitBox::enableUnits (bool flag) {
   unitCombo->setEnabled (flag);
+  isUnitEnabled = flag;
 }

@@ -614,15 +614,15 @@ void TransformationDialog::updateProportionalDimension (float /*value*/) {
 }
 
 void TransformationDialog::slotAbsScale () {
-  horizDim->setValue (selWidth);
   horizDim->enableUnits (true);
-  vertDim->setValue (selHeight);
+  horizDim->setValue (selWidth);
   vertDim->enableUnits (true);
+  vertDim->setValue (selHeight);
 }
 
 void TransformationDialog::slotPercentScale () {
-  horizDim->setValue (100.0);
   horizDim->enableUnits (false);
-  vertDim->setValue (100.0);
+  horizDim->setValue (100.0);
   vertDim->enableUnits (false);
+  vertDim->setValue (100.0);
 }

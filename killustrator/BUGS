@@ -74,4 +74,3 @@ Bugs from above bug page:
   More bugs: You cannot select a point using a fine grid
 
 * Arrange|Transform: Choosing relative should reset the values to 0
-  percentual isn't always default to 100%
