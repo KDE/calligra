@@ -174,7 +174,7 @@ Key KoImage<Key>::key() const
 template <class Key>
 bool KoImage<Key>::isNull() const
 {
-    return d == 0;
+    return d == 0 || d->m_image.isNull();
 }
 
 template <class Key>
