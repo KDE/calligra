@@ -79,6 +79,22 @@ KSpreadSheetPrint::~KSpreadSheetPrint()
 {
   // nothing todo yet
 }
+
+QString KSpreadSheetPrint::saveOasisTableStyleLayout( KoGenStyles &mainStyles )
+{
+    KoGenStyle pageLayout( KoGenStyle::STYLE_PAGELAYOUT );
+    //pageLayout.addAttribute( "style:page-usage", "all" ); FIXME
+    pageLayout.addPropertyPt( "fo:page-width", POINT_TO_MM( paperWidth() ) );
+    pageLayout.addPropertyPt( "fo:page-height", POINT_TO_MM( paperHeight() ) );
+    pageLayout.addProperty( "style:print-orientation", orientation() == PG_LANDSCAPE ? "landscape" : "portrait" );
+    pageLayout.addPropertyPt( "fo:margin-left", POINT_TO_MM(leftBorder() ) );
+    pageLayout.addPropertyPt( "fo:margin-top", POINT_TO_MM(topBorder() ) );
+    pageLayout.addPropertyPt( "fo:margin-right", POINT_TO_MM(rightBorder() ) );
+    pageLayout.addPropertyPt( "fo:margin-bottom", POINT_TO_MM(bottomBorder() ) );
+    return mainStyles.lookup( pageLayout, "pm" );
+}
+
+
 QRect KSpreadSheetPrint::cellsPrintRange()
 {
     // Find maximum right/bottom cell with content

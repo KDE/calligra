@@ -23,6 +23,7 @@
 
 class KSpreadDoc;
 class KSpreadPrintNewPageEntry;
+class KoGenStyles;
 
 #include <qobject.h>
 
@@ -36,6 +37,8 @@ public:
 
     KSpreadSheetPrint( KSpreadSheet *sheet );
     ~KSpreadSheetPrint();
+
+    QString saveOasisTableStyleLayout( KoGenStyles &mainStyles );
 
     /**
      * @return false if nothing to print.

@@ -6990,10 +6990,12 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
 QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
 {
     KoGenStyle pageStyle( KSpreadDoc::STYLE_PAGE, "table"/*FIXME I don't know if name is table*/ );
-    pageStyle.addAttribute( "style:master-page-name",  "Standard" ); //FIXME me style
+    //FIXME !!!!!!!!!!!!!
+    pageStyle.addAttribute( "style:master-page-name",  "Standard" /*m_pPrint->saveOasisTableStyleLayout( mainStyles )*/ ); //FIXME me style
     pageStyle.addProperty( "table:display", !m_bTableHide );
     return mainStyles.lookup( pageStyle, "ta" );
 }
+
 
 void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, KSpreadGenValidationStyles &valStyle )
 {
