@@ -8,7 +8,7 @@ lib_LTLIBRARIES = example.la libexamplepart.la
 
 libexamplepart_la_SOURCES = example_shell.cc example_part.cc \
                             example_view.cc example_factory.cc
-libexamplepart_la_LDFLAGS = -module -avoid-version
+libexamplepart_la_LDFLAGS = -module -avoid-version -no-undefined
 libexamplepart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 libexamplepart_la_METASOURCES = AUTO
 
