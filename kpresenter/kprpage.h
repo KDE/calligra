@@ -263,7 +263,7 @@ public:
     bool chPic( KPresenterView *_view);
 
     //return command when we move object
-    KCommand *moveObject(KPresenterView *_view, int diffx,int diffy);
+    KCommand *moveObject(KPresenterView *_view, double diffx, double diffy);
     KCommand *moveObject(KPresenterView *m_view,const KoPoint &_move,bool key);
 
     KCommand *rotateObj(float _newAngle, bool addAngle=false);

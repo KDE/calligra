@@ -570,7 +570,8 @@ private:
     KoRect m_boundingRect; // when moving object(s)
     KoPoint m_hotSpot; // when moving frame(s)
 
-    KoRect m_initBoundingRect;
+    KoPoint moveStartPosMouse; // start position for move with mouse
+    KoPoint moveStartPosKey; // start position for move with key
     int m_tmpHelpPoint;
     KoPoint tmpHelpPointPos;
 

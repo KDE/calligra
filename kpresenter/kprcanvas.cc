@@ -536,7 +536,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
     if(!m_view->koDocument()->isReadWrite())
         return;
-    m_initBoundingRect =objectSelectedBoundingRect();
+    moveStartPosMouse = objectSelectedBoundingRect().topLeft();
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
@@ -701,7 +701,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( !(e->state() & ShiftButton)) {
                         selectObj( kpobject );
                         raiseObject( kpobject );
-                        m_initBoundingRect = objectSelectedBoundingRect();
+                        moveStartPosMouse = objectSelectedBoundingRect().topLeft();
                     }
                     else
                         deSelectObj( kpobject );
@@ -1252,17 +1252,15 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         case MT_MOVE: {
             if ( firstX != mx || firstY != my ) {
                 KMacroCommand *macro=0L;
-                KoRect newPos( objectSelectedBoundingRect() );
-                int x=m_view->zoomHandler()->zoomItX(newPos.x()-m_initBoundingRect.x());
-                int y=m_view->zoomHandler()->zoomItY( newPos.y()-m_initBoundingRect.y());
-                KCommand *cmd=m_activePage->moveObject(m_view,x,y);
+                KoPoint move( objectSelectedBoundingRect().topLeft() - moveStartPosMouse );
+                KCommand *cmd=m_activePage->moveObject(m_view, move.x(), move.y());
                 if(cmd)
                 {
                     if ( !macro )
                         macro=new KMacroCommand(i18n("Move Objects"));
                     macro->addCommand(cmd);
                 }
-                cmd=stickyPage()->moveObject(m_view,x,y);
+                cmd=stickyPage()->moveObject(m_view, move.x(), move.y());
                 if(cmd)
                 {
                     if ( !macro )
@@ -2218,8 +2216,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 
             if ( !m_keyPressEvent )
             {
-                firstX = m_view->zoomHandler()->zoomItX(m_boundingRect.x());
-                firstY = m_view->zoomHandler()->zoomItY(m_boundingRect.y());
+                moveStartPosKey = m_boundingRect.topLeft();
             }
             switch ( e->key() ) {
             case Key_Up:
@@ -2258,8 +2255,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 
             if ( !m_keyPressEvent )
             {
-                firstX = m_view->zoomHandler()->zoomItX(m_boundingRect.x());
-                firstY = m_view->zoomHandler()->zoomItY(m_boundingRect.y());
+                moveStartPosKey = m_boundingRect.topLeft();
             }
             switch ( e->key() ) {
             case Key_Up:
@@ -2279,7 +2275,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                 break;
             case Key_Left:
                 m_keyPressEvent = true;
-                moveObject( -offsety, 0, false );
+                moveObject( -offsetx, 0, false );
                 m_origBRect = m_boundingRect;
                 break;
             case Key_Delete: case Key_Backspace:
@@ -2345,16 +2341,15 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
                 if ( !e->isAutoRepeat() )
                 {
                     KMacroCommand *macro=0L;
-                    int x=(m_view->zoomHandler()->zoomItX(m_boundingRect.x()) - firstX);
-                    int y=(m_view->zoomHandler()->zoomItY(m_boundingRect.y()) - firstY);
-                    KCommand *cmd=m_activePage->moveObject(m_view,x,y);
+                    KoPoint move( m_boundingRect.topLeft() - moveStartPosKey);
+                    KCommand *cmd=m_activePage->moveObject(m_view, move.x(), move.y());
                     if(cmd)
                     {
                         if ( ! macro )
                             macro=new KMacroCommand(i18n("Move Objects"));
                         macro->addCommand(cmd);
                     }
-                    cmd=stickyPage()->moveObject(m_view,x,y);
+                    cmd=stickyPage()->moveObject(m_view, move.x(), move.y());
                     if(cmd)
                     {
                         if ( ! macro )

@@ -3051,7 +3051,7 @@ bool KPrPage::savePicture( KPresenterView *_view ) const
 }
 
 // move object for releasemouseevent
-KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
+KCommand *KPrPage::moveObject(KPresenterView *_view, double diffx, double diffy)
 {
     bool createCommand=false;
     MoveByCmd *moveByCmd=0L;
@@ -3060,19 +3060,21 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't move a header/footer
+        if ( it.current() == m_doc->header() || it.current() == m_doc->footer())
+            continue;
         if ( it.current()->isSelected() && !it.current()->isProtect())
         {
             _objects.append( it.current() );
             QRect br = _view->zoomHandler()->zoomRect(it.current()->getBoundingRect() );
-            br.moveBy( diffx, diffy );
+            br.moveBy( _view->zoomHandler()->zoomItX( diffx ), _view->zoomHandler()->zoomItY( diffy ) );
             m_doc->repaint( br ); // Previous position
             m_doc->repaint( it.current() ); // New position
             createCommand=true;
         }
     }
     if(createCommand) {
-        moveByCmd = new MoveByCmd( i18n( "Move Objects" ),
-                                   KoPoint( _view->zoomHandler()->unzoomItX (diffx),_view->zoomHandler()->unzoomItY( diffy) ),
+        moveByCmd = new MoveByCmd( i18n( "Move Objects" ), KoPoint( diffx, diffy ),
                                    _objects, m_doc,this );
 
         int pos=m_doc->pageList().findRef(this);
