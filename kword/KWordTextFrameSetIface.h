@@ -85,7 +85,7 @@ k_dcop:
     double relativeTextSize() const;
     void setRelativeTextSize( double _size );
 
-    double wordByWord() const;
+    bool wordByWord() const;
     void setWordByWord( bool _b );
 
 private:

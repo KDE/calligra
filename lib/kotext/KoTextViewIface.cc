@@ -673,3 +673,14 @@ void KoTextViewIface::removeLink()
 {
     m_textView->removeLink();
 }
+
+bool KoTextViewIface::wordByWord() const
+{
+    return m_textView->wordByWord();
+}
+
+void KoTextViewIface::setWordByWord( bool _b )
+{
+    KCommand *cmd=m_textView->setWordByWordCommand(_b );
+    delete cmd;
+}

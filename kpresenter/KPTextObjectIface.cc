@@ -350,3 +350,14 @@ void KPTextObjectIface::setRelativeTextSize( double _size )
     KCommand *cmd=m_textobject->textObject()->setRelativeTextSizeCommand(_size );
     delete cmd;
 }
+
+bool KPTextObjectIface::wordByWord() const
+{
+    return m_textobject->textObject()->wordByWord();
+}
+
+void KPTextObjectIface::setWordByWord( bool _b )
+{
+    KCommand *cmd=m_textobject->textObject()->setWordByWordCommand(_b );
+    delete cmd;
+}

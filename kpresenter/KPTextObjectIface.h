@@ -94,6 +94,9 @@ k_dcop:
     double relativeTextSize() const;
     void setRelativeTextSize( double _size );
 
+    bool wordByWord() const;
+    void setWordByWord( bool _b );
+
 private:
     KPTextObject *m_textobject;
 };

@@ -280,7 +280,7 @@ void KWordTextFrameSetIface::setRelativeTextSize( double _size )
     delete cmd;
 }
 
-double KWordTextFrameSetIface::wordByWord() const
+bool KWordTextFrameSetIface::wordByWord() const
 {
     return m_frametext->textObject()->wordByWord();
 }

@@ -64,7 +64,9 @@ k_dcop:
     bool textSuperScript() const;
     bool textShadow() const;
     double relativeTextSize() const;
+    bool wordByWord() const;
 
+    void setWordByWord( bool _b );
     void setTextColor(const QColor &color);
     void setTextBackgroundColor(const QColor &);
     void setAlign(int align);
