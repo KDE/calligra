@@ -31,7 +31,7 @@
 #include "KIllustrator_factory.h"
 #include "MainView.h"
 
-#include "QwViewport.h"
+#include <qscrollview.h>
 #include "GDocument.h"
 #include "Canvas.h"
 #include "Tool.h"
@@ -80,7 +80,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <qmessagebox.h>
-#include <qlayout.h>
 #include <unistd.h>
 #include <qfileinfo.h>
 
@@ -100,8 +99,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     m_pDoc = doc;
     m_bShowGUI = true;
     m_bShowRulers = true;
-    mainWidget = 0L;
-    viewport = 0L;
+    scrollview = 0L;
     layerDialog = 0L;
     objMenu = 0L;
     // restore default settings
@@ -309,22 +307,20 @@ void KIllustratorView::setupPopups()
 
 void KIllustratorView::setupCanvas()
 {
-    QWidget *w = new QWidget (this);
-    w->resize (500, 500);
-
-    grid = new QGridLayout (w, 2, 2);
-
     MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
-    hRuler = new Ruler (Ruler::Horizontal, mu, w);
-    vRuler = new Ruler (Ruler::Vertical, mu, w);
-    grid->addWidget (hRuler, 0, 1);
-    grid->addWidget (vRuler, 1, 0);
+    hRuler = new Ruler (Ruler::Horizontal, mu, this);
+    hRuler->setGeometry(30, 0, width()-30, 30);
+    vRuler = new Ruler (Ruler::Vertical, mu, this);
+    vRuler->setGeometry(0, 30, 30, height()-30);
 
-    viewport = new QwViewport (w);
+    scrollview = new QScrollView(this);
+    scrollview->setGeometry(30, 30, width()-30, height()-30);
 
-    canvas = new Canvas (m_pDoc->gdoc(), 72.0, viewport, viewport->portHole ());
+    canvas = new Canvas (m_pDoc->gdoc(), 72.0, scrollview, scrollview->viewport());
+    scrollview->addChild(canvas);
+    //scrollview->viewport()->setBackgroundMode(QWidget::PaletteBackground);
     QObject::connect (canvas, SIGNAL(sizeChanged ()),
-                      viewport, SLOT(resizeScrollBars ()));
+                      scrollview, SLOT(updateScrollBars()));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
                       hRuler, SLOT(updateVisibleArea (int, int)));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
@@ -355,12 +351,8 @@ void KIllustratorView::setupCanvas()
     connect (vRuler, SIGNAL (addHelpline(int, int, bool)),
              canvas, SLOT(addHelpline(int, int, bool)));
 
-    setFocusPolicy (QWidget::StrongFocus);
-    setFocusProxy (canvas);
-
-    grid->addWidget (viewport, 1, 1);
-    grid->setRowStretch (1, 20);
-    grid->setColStretch (1, 20);
+    setFocusPolicy(QWidget::StrongFocus);
+    setFocusProxy(canvas);
 
     tcontroller = new ToolController (this);
 
@@ -423,21 +415,13 @@ void KIllustratorView::setupCanvas()
     tcontroller->toolSelected( ID_TOOL_SELECT );
     // m_idActiveTool = ID_TOOL_SELECT;
 
-    canvas->setToolController (tcontroller);
-    grid->activate ();
-    w->show ();
-    mainWidget = w;
+    canvas->setToolController(tcontroller);
 }
 
 void KIllustratorView::showCurrentMode (const QString& ) {
     //  statusbar->changeItem (msg, 2);
 }
-/*
-void KIllustratorView::newView ()
-{
-    m_pDoc->createShell();
-}
-*/
+
 void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 {
     m_undo->setEnabled( undoPossible );
@@ -454,31 +438,14 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
     m_redo->setText( label );
 }
 
-void KIllustratorView::resizeEvent (QResizeEvent* )
-{
-    // ######## Torben
-    if ( mainWidget )
-    {
-        mainWidget->resize( width(), height() );
-        /* if ((KoViewIf::hasFocus () || mode () == KOffice::View::RootMode) &&
-           m_bShowGUI) */
-        {
-            if (m_bShowRulers)
-            {
-                // draw rulers
-                hRuler->show ();
-                vRuler->show ();
-            }
-            viewport->showScrollBars ();
-        }
-        /*      else
-                {
-                hRuler->hide ();
-                vRuler->hide ();
-                viewport->hideScrollBars ();
-                grid->activate ();
-                } */
+void KIllustratorView::resizeEvent(QResizeEvent* ) {
+    if(m_bShowRulers) {
+        hRuler->setGeometry(30, 0, width()-30, 30);
+        vRuler->setGeometry(0, 30, 30, height()-30);
+        scrollview->setGeometry(30, 30, width()-30, height()-30);
     }
+    else
+        scrollview->setGeometry(0, 0, width(), height());
 }
 
 void KIllustratorView::updateReadWrite( bool /*readwrite*/ )
@@ -907,7 +874,6 @@ void KIllustratorView::slotShowRuler( bool b )
         vRuler->hide ();
     }
     // recalculate layout
-    grid->activate ();
     resizeEvent (0L);
 }
 

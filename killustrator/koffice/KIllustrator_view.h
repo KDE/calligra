@@ -65,7 +65,6 @@ class KIllustratorChild;
 class KIllustratorDocument;
 class Canvas;
 class GDocument;
-class QwViewport;
 class LayerDialog;
 class ToolController;
 class Canvas;
@@ -73,8 +72,8 @@ class Ruler;
 class EditPointTool;
 class InsertPartTool;
 class GPart;
-class QGridLayout;
 class FilterManager;
+class QScrollView;
 
 class KAction;
 class KToggleAction;
@@ -187,7 +186,7 @@ protected slots:
     void resetTools();
     QString getExportFileName (FilterManager *filterMgr);
 
-  void showCurrentMode (const QString &msg);
+    void showCurrentMode (const QString &msg);
     /* protected slots:
   void editCutSlot ();
   void editCopySlot ();
@@ -264,8 +263,8 @@ private slots:
     void slotDeleteNode( bool );
     void slotSplitLine( bool );
     void slotLayers();
-  void slotViewZoom (const QString&);
-  void slotLoadPalette ();
+    void slotViewZoom (const QString&);
+    void slotLoadPalette ();
 
 protected:
   KIllustratorDocument *m_pDoc;
@@ -277,12 +276,10 @@ protected:
   bool m_bShowRulers;
 
   ToolController *tcontroller;
-  QwViewport *viewport;
+  QScrollView *scrollview;
   Canvas *canvas;
   Ruler *hRuler, *vRuler;
   LayerDialog *layerDialog;
-  QWidget *mainWidget;
-  QGridLayout *grid;
   CommandHistory cmdHistory;
 
     // int m_idActiveTool;
@@ -342,7 +339,7 @@ protected:
     KToggleAction* m_newNode;
     KToggleAction* m_deleteNode;
     KToggleAction* m_splitLine;
-  KSelectAction* m_viewZoom;
+    KSelectAction* m_viewZoom;
     QString lastOpenDir, lastSaveDir, lastBitmapDir, lastClipartDir,
             lastExportDir, lastImportDir, lastPaletteDir;
     QString lastExport;

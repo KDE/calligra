@@ -32,7 +32,7 @@
 class GDocument;
 class GObject;
 class ToolController;
-class QwViewport;
+class QScrollView;
 class QPixmap;
 class QPainter;
 class Rect;
@@ -40,7 +40,7 @@ class Rect;
 class Canvas : public QWidget {
   Q_OBJECT
 public:
-  Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent = 0,
+  Canvas (GDocument* doc, float res, QScrollView* sv, QWidget* parent = 0,
           const char* name = 0);
   ~Canvas ();
 
@@ -144,9 +144,9 @@ private:
   void drawHelplines (QPainter& p);
   void redrawView (bool repaintFlag = true);
 
-  QwViewport* viewport;
+  QScrollView* scrollview;
   QPixmap* pixmap;
-  int width, height;
+  int m_width, m_height;
   float resolution;
   float zoomFactor;
   GDocument* document;

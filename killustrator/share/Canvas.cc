@@ -39,7 +39,7 @@
 #include <GDocument.h>
 #include <Handle.h>
 #include <ToolController.h>
-#include <QwViewport.h>
+#include <qscrollview.h>
 #include <kconfig.h>
 #include <kapp.h>
 
@@ -47,7 +47,7 @@
 #include <GLayer.h>
 #include <SelectionTool.h>
 
-Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
+Canvas::Canvas (GDocument* doc, float res, QScrollView* sv, QWidget* parent,
                 const char* name) : QWidget (parent, name) {
   zoomFactors.append(0.5);
   zoomFactors.append(1.0);
@@ -62,7 +62,7 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
   resolution = res;
   zoomFactor = 1.0;
   drawBasePoints = false;
-  viewport = vp;
+  scrollview = sv;
 
   installEventFilter (this);
 
@@ -103,18 +103,18 @@ void Canvas::ensureVisibility (bool flag) {
 }
 
 void Canvas::calculateSize () {
-  width = (int) (document->getPaperWidth () * resolution *
+  m_width = (int) (document->getPaperWidth () * resolution *
                  zoomFactor / 72.0) + 4;
-  height = (int) (document->getPaperHeight () * resolution *
+  m_height = (int) (document->getPaperHeight () * resolution *
                   zoomFactor / 72.0 + 4);
-  resize (width, height);
+  resize (m_width, m_height);
 
   if (pixmap != 0L)
     delete pixmap;
   pixmap = 0L;
   if (zoomFactor < 3.0)
-    pixmap = new QPixmap (width, height);
-  viewport->recalculateChildPosition (this);
+    pixmap = new QPixmap (m_width, m_height);
+  //viewport->recalculateChildPosition (this);
   updateView ();
   emit sizeChanged ();
 }
@@ -311,7 +311,7 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
     else if (e->type () == QEvent::MouseButtonRelease && e->button () == LeftButton)
       dragging = false;
     else if (e->type () == QEvent::MouseMove && dragging)
-      viewport->ensureVisible (e->x (), e->y (), 10, 10);
+      scrollview->ensureVisible (e->x (), e->y (), 10, 10);
   }
 
   if (e->button () == RightButton &&
@@ -629,7 +629,7 @@ void Canvas::zoomIn (int x, int y) {
   for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
     if (*i == getZoomFactor ()) {
       setZoomFactor(*(++i));
-      viewport->centerOn (x, y);
+      scrollview->center(x, y);
       emit zoomFactorChanged(*(++i));
       break;
     }

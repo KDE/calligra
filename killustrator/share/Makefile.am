@@ -11,7 +11,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 SelectionTool.h PolygonTool.h ToolController.h \
 		 EditPointTool.h BezierTool.h ZoomTool.h \
 		 Canvas.h \
-		 QwViewport.h GDocument.h \
+		 GDocument.h \
 		 Coord.h PropertyEditor.h FloatSpinBox.h \
                              AlignmentDialog.h \
 		 GridDialog.h PolygonConfigDialog.h PolygonPreview.h \
@@ -49,7 +49,7 @@ libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  SelectionTool.cc PolygonTool.cc ToolController.cc \
 			  EditPointTool.cc BezierTool.cc ZoomTool.cc \
 			  Canvas.cc \
-                          QwViewport.cc GDocument.cc \
+                                            GDocument.cc \
 			  Coord.cc PropertyEditor.cc FloatSpinBox.cc \
                                             AlignmentDialog.cc \
 			  PolygonConfigDialog.cc PolygonPreview.cc \
