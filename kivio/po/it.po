@@ -1,0 +1,594 @@
+# Kivio Italian translation.
+# Copyright (C) 2000 theKompany.com
+# Alessandro Praduroux <pradu@thekompany.com>, 2000.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kivio 1.0\n"
+"POT-Creation-Date: 2000-11-17 01:39+0300\n"
+"PO-Revision-Date: 2000-10-31 14:49GMT+1\n"
+"Last-Translator: Alessandro Praduroux <pradu@thekompany.com>\n"
+"Language-Team: it <it@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.7alpha\n"
+
+#: kiviopart/kivio_dlg_pagename.cpp:36
+msgid "Change Page Name"
+msgstr "Rinomina pagina"
+
+#: kiviopart/kivio_dlg_pagename.cpp:44
+msgid "Page Name"
+msgstr "Nome pagina"
+
+#: kiviopart/kivio_dlg_pagename.cpp:69
+msgid "Page name cannot be empty."
+msgstr "Il nome pagina è obbligatorio"
+
+#: kiviopart/kivio_dlg_pagename.cpp:69 kiviopart/kivio_dlg_pagename.cpp:77
+msgid "Change page name"
+msgstr "Modifica nome pagina"
+
+#: kiviopart/kivio_dlg_pagename.cpp:77
+msgid "A page with this name already exists."
+msgstr "Una pagina con questo nome esiste già"
+
+#: kiviopart/kivio_dlg_pageshow.cpp:46
+#, fuzzy
+msgid "Pages hidden"
+msgstr "Pagine nascoste"
+
+#: kiviopart/kivio_doc.cpp:349
+#, c-format
+msgid "Page%1"
+msgstr "Pagina %1"
+
+#: kiviopart/kivio_doc.cpp:507
+msgid ""
+"Cannot delete stencil set because there are stencils using it's spawners"
+msgstr ""
+"Impossibile cancellare il catalogo forme poiché ci sono oggetti che "
+"utilizzano le forme del catalogo"
+
+#: kiviopart/kivio_doc.cpp:508
+msgid "Cannot Delete Stencil Set"
+msgstr "Impossibile cancellare il catalogo forme"
+
+#: kiviopart/kivio_doc.cpp:517
+msgid ""
+"The clipboard contains stencils that use these spawners,\n"
+"would you like to delete what is on the clipboard?\n"
+"(Saying no will cause this set of spawners to not be removed)"
+msgstr ""
+"Gli appunti contengono forme che utilizzano questo catalogo.\n"
+"Vuoi cancellare il contenuto degli appunti?\n"
+"(Rispondendo di no la cancellazione viene annullata)"
+
+#: kiviopart/kivio_doc.cpp:518
+msgid "Clear The Clipboard?"
+msgstr "Vuoi pulire gli appunti?"
+
+#: kiviopart/kivio_factory.cpp:30
+msgid "KOffice Kivio Application"
+msgstr "KOffice Kivio"
+
+#: kiviopart/kivio_factory.cpp:79
+msgid "Kivio"
+msgstr "Kivio"
+
+#: kiviopart/kivio_shell.cpp:42
+msgid "theKompany.com - Kivio"
+msgstr "theKompany.com - Kivio"
+
+#: kiviopart/kivio_tabbar.cpp:217 kiviopart/kivio_view.cpp:569
+msgid "You cannot delete the only page of the map."
+msgstr "Non puoi eliminare l'ultima pagina del documento"
+
+#: kiviopart/kivio_tabbar.cpp:217 kiviopart/kivio_tabbar.cpp:221
+#: kiviopart/kivio_tabbar.cpp:356 kiviopart/kivio_view.cpp:569
+#: kiviopart/kivio_view.cpp:573
+msgid "Remove page"
+msgstr "Elimina pagina"
+
+#: kiviopart/kivio_tabbar.cpp:221 kiviopart/kivio_view.cpp:573
+msgid ""
+"You are going to remove the active page.\n"
+"Do you want to continue?"
+msgstr ""
+"Stai cancellando la pagina attiva.\n"
+"Desideri procedere?"
+
+#: kiviopart/kivio_tabbar.cpp:354
+msgid "Rename page..."
+msgstr "Rinomina pagina..."
+
+#: kiviopart/kivio_tabbar.cpp:355
+msgid "Insert page"
+msgstr "Inserisci pagina"
+
+#: kiviopart/kivio_tabbar.cpp:386
+msgid "This name is already used."
+msgstr "Il nome è in uso"
+
+#: kiviopart/kivio_tabbar.cpp:595
+msgid "You cannot hide the last page visible."
+msgstr "Non puoi nascondere l'ultima pagina visibile"
+
+#: kiviopart/kivio_view.cpp:247
+msgid "Add Stencil Set"
+msgstr "Aggiungi catalogo forme"
+
+#: kiviopart/kivio_view.cpp:250
+msgid "Align && Distribute"
+msgstr ""
+
+#: kiviopart/kivio_view.cpp:256
+msgid "Select All"
+msgstr "Seleziona tutto"
+
+#: kiviopart/kivio_view.cpp:257
+#, fuzzy
+msgid "Select None"
+msgstr "Annulla selezione"
+
+#: kiviopart/kivio_view.cpp:259 plugins/kivioselecttool/tool_select.cpp:800
+msgid "Group Selected Stencils"
+msgstr "Raggruppa forme selezionate"
+
+#: kiviopart/kivio_view.cpp:260 plugins/kivioselecttool/tool_select.cpp:801
+msgid "Ungroup Selected Stencils"
+msgstr "Separa forme selezionate"
+
+#: kiviopart/kivio_view.cpp:262 plugins/kivioselecttool/tool_select.cpp:805
+msgid "Bring To Front"
+msgstr "Porta in primo piano"
+
+#: kiviopart/kivio_view.cpp:263 plugins/kivioselecttool/tool_select.cpp:806
+msgid "Send To Back"
+msgstr "Porta in secondo piano"
+
+#: kiviopart/kivio_view.cpp:266
+msgid "Set Foreground Color"
+msgstr "Colore primo piano"
+
+#: kiviopart/kivio_view.cpp:268
+msgid "Set Background Color"
+msgstr "Colore sfondo"
+
+#: kiviopart/kivio_view.cpp:273
+msgid "Set Font Family"
+msgstr "Famiglia del carattere"
+
+#: kiviopart/kivio_view.cpp:276
+msgid "Set Font Size"
+msgstr "Dimensione del carattere"
+
+#: kiviopart/kivio_view.cpp:279
+msgid "Set Text Color"
+msgstr "Colore del testo"
+
+#: kiviopart/kivio_view.cpp:282
+msgid "Toggle Bold Text"
+msgstr "Grassetto"
+
+#: kiviopart/kivio_view.cpp:285
+msgid "Toggle Italics Text"
+msgstr "Italico"
+
+#: kiviopart/kivio_view.cpp:288
+msgid "Toggle Underline Text"
+msgstr "Sottolineato"
+
+#: kiviopart/kivio_view.cpp:296
+msgid "Set Line Width"
+msgstr "Dimensione della linea"
+
+#: kiviopart/kivio_view.cpp:304
+msgid "Paper Layout..."
+msgstr "Formattazione pagina"
+
+#: kiviopart/kivio_view.cpp:305
+msgid "Insert Page"
+msgstr "Inserisci pagina"
+
+#: kiviopart/kivio_view.cpp:306
+msgid "Remove Page"
+msgstr "Elimina pagina"
+
+#: kiviopart/kivio_view.cpp:307
+msgid "Show Page..."
+msgstr "Visualizza pagina..."
+
+#: kiviopart/kivio_view.cpp:308
+msgid "Hide Page"
+msgstr "Nascondi pagina"
+
+#: kiviopart/kivio_view.cpp:310
+msgid "Show page borders"
+msgstr "Visualizza bordi"
+
+#: kiviopart/kivio_view.cpp:315
+msgid "Show page margins"
+msgstr "Visualizza margini"
+
+#: kiviopart/kivio_view.cpp:320
+msgid "Show rulers"
+msgstr "Visualizza righelli"
+
+#: kiviopart/gridsetupdialog.cpp:132 kiviopart/kivio_view.cpp:326
+msgid "Show grid"
+msgstr "Visualizza griglia"
+
+#: kiviopart/kivio_view.cpp:331
+#, fuzzy
+msgid "Snap grid"
+msgstr "Visualizza griglia"
+
+#: kiviopart/gridsetupdialog.cpp:39 kiviopart/kivio_view.cpp:366
+msgid "Grid Setup"
+msgstr ""
+
+#: kiviopart/kivio_view.cpp:367 kiviopart/ui/guidessetupdialogbase.cpp:39
+msgid "Guides Setup"
+msgstr ""
+
+#: kiviopart/main.cpp:30
+msgid "File To Open"
+msgstr "Documento da aprire"
+
+#: kiviopart/stencil_text_dlg.cpp:24
+msgid "Stencil Text"
+msgstr "Testo della forma"
+
+#: kiviopart/tklib/tkunits.cpp:23
+msgid "pt"
+msgstr ""
+
+#: kiviopart/tklib/tkunits.cpp:24
+msgid "mm"
+msgstr ""
+
+#: kiviopart/tklib/tkunits.cpp:25 kiviopart/tklib/tkunits.cpp:35
+msgid "inch"
+msgstr ""
+
+#: kiviopart/tklib/tkunits.cpp:26 kiviopart/tklib/tkunits.cpp:36
+msgid "pica"
+msgstr ""
+
+#: kiviopart/tklib/tkunits.cpp:27
+msgid "cm"
+msgstr ""
+
+#: kiviopart/tklib/tkunits.cpp:28 kiviopart/tklib/tkunits.cpp:38
+msgid "didot"
+msgstr ""
+
+#: kiviopart/tklib/tkunits.cpp:29 kiviopart/tklib/tkunits.cpp:39
+msgid "cicero"
+msgstr ""
+
+#: kiviopart/tklib/tkunits.cpp:33
+msgid "point"
+msgstr ""
+
+#: kiviopart/tklib/tkunits.cpp:34
+msgid "milimetre"
+msgstr ""
+
+#: kiviopart/tklib/tkunits.cpp:37
+msgid "cantimetre"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:637 kiviopart/gridsetupdialog.cpp:160
+#: kiviopart/ui/guidessetupdialogbase.cpp:51
+msgid "Ok"
+msgstr ""
+
+#: kiviopart/gridsetupdialog.cpp:51 kiviopart/ui/guidessetupdialogbase.cpp:62
+msgid "Units:"
+msgstr ""
+
+#: kiviopart/ui/guidessetupdialogbase.cpp:67
+#, fuzzy
+msgid "Show guides"
+msgstr "Visualizza griglia"
+
+#: kiviopart/ui/guidessetupdialogbase.cpp:72
+#, fuzzy
+msgid "Snap to guides"
+msgstr "Visualizza griglia"
+
+#: kiviopart/aligndialog.cpp:429 kiviopart/aligndialog.cpp:569
+#: kiviopart/ui/guidessetupdialogbase.cpp:79
+msgid "Vertical"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:377 kiviopart/aligndialog.cpp:491
+#: kiviopart/ui/guidessetupdialogbase.cpp:82
+msgid "Horizontal"
+msgstr ""
+
+#: kiviopart/ui/guidessetupdialogbase.cpp:85
+msgid "All"
+msgstr ""
+
+#: kiviopart/ui/guidessetupdialogbase.cpp:88
+msgid "Presets"
+msgstr ""
+
+#: kiviopart/ui/guidessetupdialogbase.cpp:91
+msgid "Custom Presets"
+msgstr ""
+
+#: kiviopart/ui/guidessetupdialogbase.cpp:101
+msgid "Guides color:"
+msgstr ""
+
+#: kiviopart/ui/guidessetupdialogbase.cpp:106
+msgid "Selected guides color:"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:362
+msgid "Align and Distribute"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:392 kiviopart/aligndialog.cpp:461
+#: kiviopart/aligndialog.cpp:512 kiviopart/aligndialog.cpp:584
+msgid "Center"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:398 kiviopart/aligndialog.cpp:539
+msgid "Right"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:404 kiviopart/aligndialog.cpp:506
+msgid "Left"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:439 kiviopart/aligndialog.cpp:595
+msgid "Top"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:450 kiviopart/aligndialog.cpp:611
+#, fuzzy
+msgid "Bottom"
+msgstr "Ingrandimento"
+
+#: kiviopart/aligndialog.cpp:478
+#, fuzzy
+msgid "Center of page"
+msgstr "Inserisci pagina"
+
+#: kiviopart/aligndialog.cpp:483
+msgid "Align"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:528 kiviopart/aligndialog.cpp:617
+#: kiviopart/gridsetupdialog.cpp:62
+msgid "Spacing"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:558
+msgid "Extent of selection"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:563
+msgid "Extent of page"
+msgstr ""
+
+#: kiviopart/aligndialog.cpp:623
+msgid "Distribute"
+msgstr ""
+
+#: kiviopart/gridsetupdialog.cpp:72
+msgid "Place Horizontal grid lines every:"
+msgstr ""
+
+#: kiviopart/gridsetupdialog.cpp:77
+msgid "Place Vertical grid lines every:"
+msgstr ""
+
+#: kiviopart/gridsetupdialog.cpp:92
+msgid "Snap distance"
+msgstr ""
+
+#: kiviopart/gridsetupdialog.cpp:102
+msgid "Snap to grid Horizontal distance:"
+msgstr ""
+
+#: kiviopart/gridsetupdialog.cpp:107
+msgid "Snap to grid Vertical distance:"
+msgstr ""
+
+#: kiviopart/gridsetupdialog.cpp:126
+msgid "Grid color:"
+msgstr ""
+
+#: kiviopart/gridsetupdialog.cpp:137
+#, fuzzy
+msgid "Snap to grid"
+msgstr "Visualizza griglia"
+
+#: plugins/kivioselecttool/tool_select.cpp:48
+msgid "Select"
+msgstr "Seleziona"
+
+#: plugins/kivioselecttool/tool_select.cpp:57
+#, fuzzy
+msgid "Select Tool Menu"
+msgstr "Seleziona"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:45
+msgid "Zoom"
+msgstr "Ingrandimento"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:46
+msgid "Hand"
+msgstr "Mano"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:52
+msgid "Zoom plus"
+msgstr "Aumenta ingrandimento"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:55
+#, fuzzy
+msgid "Zoom minus"
+msgstr "Aumenta ingrandimento"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:58
+msgid "Zoom width"
+msgstr "Ingrandisci alla larghezza pagina"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:61
+msgid "Zoom height"
+msgstr "Ingrandisci all'altezza pagina"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:64
+msgid "Zoom page"
+msgstr "Pagina intera"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:67
+msgid "Zoom selected"
+msgstr "Ingrandisci selezione"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:70
+msgid "Zoom all objects"
+msgstr "Ingrandisci tutti gli oggetti"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:73
+msgid "Zoom manager"
+msgstr "Gestore ingrandimenti"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:92
+#, fuzzy
+msgid "Zoom Manager"
+msgstr "Gestore ingrandimenti"
+
+#: plugins/kiviozoomtool/tool_zoom.cpp:105
+#, fuzzy
+msgid "Zoom Menu"
+msgstr "Aumenta ingrandimento"
+
+#: plugins/kiviotexttool/tool_text.cpp:44
+msgid "Edit Stencil Text"
+msgstr "Modifica il testo della forma"
+
+#: plugins/kivioconnectortool/tool_connector.cpp:45
+#, fuzzy
+msgid "Edit Stencil Connector"
+msgstr "Modifica il testo della forma"
+
+#: res.cpp:2
+#, fuzzy
+msgid "&Zoom"
+msgstr "Ingrandimento"
+
+#: res.cpp:3
+msgid "P&age"
+msgstr "P&agina"
+
+#: res.cpp:5
+#, fuzzy
+msgid "&Selection"
+msgstr "Annulla selezione"
+
+#~ msgid "Printing is disabled for the technology preview."
+#~ msgstr "La stampa e' disabilitata nella versione corrente"
+
+#, fuzzy
+#~ msgid "&amp;Zoom"
+#~ msgstr "Ingrandimento"
+
+#, fuzzy
+#~ msgid "SelectToolFactory"
+#~ msgstr "&Selezione"
+
+#, fuzzy
+#~ msgid "SelectColorAction"
+#~ msgstr "&Selezione"
+
+#, fuzzy
+#~ msgid "KivioCanvas"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioConfig"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioPageName"
+#~ msgstr "Nome pagina"
+
+#, fuzzy
+#~ msgid "KivioPageShow"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioDoc"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioFactory"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioIconView"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioPage"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioRuler"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioShell"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioStackBar"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioTabBar"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "KivioView"
+#~ msgstr "Kivio"
+
+#, fuzzy
+#~ msgid "ZoomAction"
+#~ msgstr "Diminuisci ingrandimento"
+
+#, fuzzy
+#~ msgid "KivioStencilTextDlg"
+#~ msgstr "Testo della forma"
+
+#, fuzzy
+#~ msgid "StencilBarDockManager"
+#~ msgstr "Gestore ingrandimenti"
+
+#, fuzzy
+#~ msgid "ToolDockBaseBorder"
+#~ msgstr "Gestore ingrandimenti"
+
+#, fuzzy
+#~ msgid "ToolDockButton"
+#~ msgstr "Gestore ingrandimenti"
+
+#, fuzzy
+#~ msgid "ToolDockBaseCaptionManager"
+#~ msgstr "Gestore ingrandimenti"
+
+#, fuzzy
+#~ msgid "ToolDockBase"
+#~ msgstr "Gestore ingrandimenti"
+
+#, fuzzy
+#~ msgid "ToolDockManager"
+#~ msgstr "Gestore ingrandimenti"

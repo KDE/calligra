@@ -1,0 +1,19 @@
+This file is just for miscellaneous notes on how things work in Kivio.
+
+
+- Removing a stencil set by clicking on the button 'x'.  There are quite
+  a few things which happen as a result of a user clicking the 'x' on
+  a DragBarButton.
+  DragBarButton emits a closeRequired( DragBarButton * ) signal,
+  KivioStackBar catches it with slotDeleteButton( DragBarButton * ),
+  KivioStackBar then emits deleteButton(DragBarButton *, QWidget *, KivioStackBar *),
+  KivioDocument then catches this with slotDeleteStencilSet( signature ) and
+    iterates through all stencils on all pages of the document making sure it
+	is ok to delete this stencil set.  If it is, it removes the stencil (spawner) set
+	with a call to removeSpawnerSet( ... ) and emits the signal
+	sig_deleteStencilSet( DragBarButton *, QWidget *, KivioStackBar * )
+  StencilBarDockManager catches this with slotDeleteStencilSet( .... ) and tells the
+    KivioStackBar object to delete the passed DragBarButton and widget associated with
+	it.  It then checks if any pages are visible on the KivioStackBar object.  If
+	there are not, it then removes it from either the bars list, or topLevel bars list
+	and then deletes the KivioStackBar object.

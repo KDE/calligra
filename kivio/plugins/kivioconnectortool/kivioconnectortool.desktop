@@ -1,0 +1,8 @@
+[Desktop Entry]
+X-KDE-Library=libkivioconnectortool
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+Name=ConnectorTool for Kivio
+Type=Service
+ServiceTypes=KPlugin

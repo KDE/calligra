@@ -1,0 +1,108 @@
+(Dave Marotti)
+10/26/2000  
+    - Created this file
+    - Saving/Loading connections now works
+    - Paste now pastes at +10 pixels to the left and down
+    - Group/Ungroup preserves connections
+    - Double clicking as stencil's icon in the dock now adds a new stencil
+      to the page at (0,0)
+    - Deleting a stencil with multiple connections now properly disconnects
+      the connections and doesn't leave dangling targets.
+    - With multiple StraightConnectors selected, dragging an endpoint no
+      longer drags *aLL* their endpoints.
+    - Added a 'lineJoin' type to the KivioPainter object with the default
+      type of "RoundJoin".  Need to make it use this in the PS painter.
+
+(Max Judin)
+10/27/2000
+    - Added Text Tool.
+
+(Dave Marotti)
+10/27/2000
+    - Fixed some group stencil bugs.  Text properties were not passed along
+      to the grouped stencils.
+
+(Dave Marotti)
+10/29/2000
+    - Moved all text properties from KivioShapeData to KivioTextShapeData and
+      created a pointer to them inside KivioShapeData.  This should cut down
+      on the memory needed for each shape since most shapes don't care about
+      text/text-alignment/etc...
+    - Changed the way KivioConnectorTargets look now.  They are blue x's
+      outlined in white.  They are alot easier to see on dark backgrounds now.
+      They are also drawn as pixmaps, not as lines.
+    - Cancel works on stencil text dialogs now
+
+(Max Judin)
+10/31/2000
+    - Added connector tool.
+	
+(Dave Marotti)
+10/31/2000
+    - Added LICENSE file, and inserted GPL statements into the front of every
+      source code file.
+    - Changed the order in which stencil pieces get drawn.  Now they draw in
+      this order: stencil, targets, resize-handles.  This way, connections
+      show through properly and are not obfuscated by targets.
+
+(Dave Marotti)
+11/12/2000
+    - Added a right-mouse-button menu to the select and zoom tools.
+
+(Max Judin)
+11/13/2000
+    - Moved coloractions to the tklib.
+    - Added findTool() to ToolController so one tool can set focus to another
+      tool.
+
+(Dave Marotti)
+11/13/2000
+    - Double clicking a stencil with the select tool now allows you to edit
+      the stencil's text.
+    - Changed TextController::toolSelected() to selectTool().
+
+(Dave Marotti)
+11/18/2000
+    - Added KivioBaseConnector stencil to make it easier to create connector
+      stencils (plugin style).
+      
+(Dave Marotti)
+11/19/2000
+    - Added KivioRect class.  Similar to QRect, but with floating point values.
+    - Added KivioStencil::rect() for getting the geometry of a stencil in one
+      call.
+    - Removed the size and position actions from the toolbar.  They now resize
+      in a dock window.  View->Stencil Geometry Panel will show it.
+    - Implemented snap to grid for dragging and resizing.
+
+(Max Judin)
+11/20/2000
+    - Made geometry panel update the units when the rulers changed units.
+
+(Dave Marotti)
+11/20/2000
+    - Made the default grid color a bit lighter.  Changed snap to grid, and
+      show grid to true by default.  Made the default snap to grid units
+      10.0 and 10.0.
+
+(Max Judin)
+11/2?/2000
+    - Implemented zoom-selected and zoom-all.
+	- Start working on configuration dialog.
+
+(Dave Marotti)
+11/24/2000
+    - Added insert/remove/toggle-visiblity/toggle connectivity to the layers
+	  panel.
+	- Added QPrinter printing.  Everything prints, but curves aren't true
+	  curves.
+
+(Dave Marotti)
+11/25/2000
+    - Added move-layer-up and move-layer-down.
+	- Fixed insertion order of layers in layer-panel.
+	- Added snap-to-grid while drawing a new connector.
+
+(Dave Marotti)
+11/26/2000
+    - Added KivioLineStyle and KivioTextStyle.

@@ -1,0 +1,170 @@
+<!DOCTYPE UI><UI>
+<class>KivioBirdEyePanelBase</class>
+<include location="local">kiconloader.h</include>
+<pixmapfunction>BarIcon</pixmapfunction>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>KivioBirdEyePanelBase</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>374</width>
+            <height>233</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>BirdEyeView</string>
+    </property>
+    <property>
+        <name>layoutMargin</name>
+    </property>
+    <property>
+        <name>layoutSpacing</name>
+    </property>
+    <vbox>
+        <property stdset="1">
+            <name>margin</name>
+            <number>0</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>0</number>
+        </property>
+        <widget>
+            <class>KToolBar</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>bar</cstring>
+            </property>
+        </widget>
+        <widget>
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout1</cstring>
+            </property>
+            <property>
+                <name>layoutSpacing</name>
+            </property>
+            <grid>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>0</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>3</number>
+                </property>
+                <widget row="0"  column="0"  rowspan="1"  colspan="2" >
+                    <class>QFrame</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>canvas</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>frameShadow</name>
+                        <enum>Raised</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>frameShape</name>
+                        <enum>Box</enum>
+                    </property>
+                </widget>
+                <widget row="1"  column="0" >
+                    <class>QSlider</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>slider</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>minValue</name>
+                        <number>5</number>
+                    </property>
+                    <property stdset="1">
+                        <name>maxValue</name>
+                        <number>500</number>
+                    </property>
+                </widget>
+                <widget row="1"  column="1" >
+                    <class>QSpinBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>zoomBox</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>suffix</name>
+                        <string>%</string>
+                    </property>
+                    <property stdset="1">
+                        <name>minValue</name>
+                        <number>5</number>
+                    </property>
+                    <property stdset="1">
+                        <name>buttonSymbols</name>
+                        <enum>PlusMinus</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>maxValue</name>
+                        <number>10000</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KToolBar</class>
+        <header location="local">ktoolbar.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image>
+        <name>image0</name>
+        <data format="XPM.GZ" length="646">789c6dd2c10ac2300c00d07bbf2234b7229d1ddec44f503c0ae2a154410f53d0ed20e2bf6bdb656dd6861dd23d9a66591b0587fd1654235ebded6f0edcd53e419d87ae7b1f4f9b8f906d0bfe012317426a70b07bdc2f3ec77f8ed6b89559061a0343d06a124cc105596482585094bc0ae599b04646c9018926491b2205e140c485cace25755c175d0a967b622ff900b8cc9c7d29af594ea722d589167f813aa852ba07d94b9dce296e883fe7bb163f23896753</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>KivioBirdEyePanelBase</receiver>
+        <slot>zoomChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>zoomBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>slider</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>zoomBox</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <slot access="public">zoomChanged(int)</slot>
+    <slot access="public">zoomMinus()</slot>
+    <slot access="public">zoomPlus()</slot>
+</connections>
+</UI>

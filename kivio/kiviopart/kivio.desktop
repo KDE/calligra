@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Kivio
+Exec=kiviopart
+Comment=The Open Language of Business
+X-KDE-Library=libkiviopart
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+MimeType=application/x-kivio
+Type=Application
+Icon=kivio
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-kivio

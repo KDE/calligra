@@ -1,0 +1,62 @@
+/*
+ * Kivio - Visual Modelling and Flowcharting
+ * Copyright (C) 2000 theKompany.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+#ifndef STENCILBARBUTTON_H
+#define STENCILBARBUTTON_H
+
+#include <qpushbutton.h>
+
+class QPixmap;
+
+class DragBarButton : public QPushButton
+{ Q_OBJECT
+public:
+  DragBarButton( const QString&, QWidget* parent, const char* name = 0 );
+  ~DragBarButton();
+
+  void setIcon( const QString& );
+  void setPixmap( const QPixmap& );
+
+  QSize sizeHint() const;
+
+signals:
+  void beginDrag();
+  void finishDrag();
+  void closeRequired(DragBarButton *);
+
+protected:
+  void drawButton( QPainter* );
+  void mousePressEvent( QMouseEvent* );
+  void mouseReleaseEvent( QMouseEvent* );
+  void mouseMoveEvent( QMouseEvent* );
+
+  void enterEvent( QEvent* );
+  void leaveEvent( QEvent* );
+
+private:
+  QPixmap* m_pClosePix;
+  QPixmap* m_pIcon;
+  bool m_bPressed;
+  bool m_bDragged;
+  bool m_bMouseOn;
+  bool m_bClose;
+  QPoint m_ppoint;
+};
+
+#endif
+

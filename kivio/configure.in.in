@@ -1,0 +1,4 @@
+#MIN_CONFIG
+
+dnl Image readers/writers
+KDE_CHECK_KIMGIO

@@ -1,0 +1,8 @@
+# KDE Config File
+[Desktop Entry]
+MimeType=application/x-kivio
+Comment=Kivio
+Icon=kivio
+Type=MimeType
+Patterns=*.flw;
+X-KDE-AutoEmbed=false

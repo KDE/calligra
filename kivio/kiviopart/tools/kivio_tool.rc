@@ -1,0 +1,4 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="2">
+<ToolBar name="ToolsToolBar" fullWidth="false" position="left" >
+</ToolBar>
+</kpartgui>

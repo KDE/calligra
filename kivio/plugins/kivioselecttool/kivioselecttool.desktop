@@ -1,0 +1,8 @@
+[Desktop Entry]
+X-KDE-Library=libkivioselecttool
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+Name=SelectTool for Kivio
+Type=Service
+ServiceTypes=KPlugin
