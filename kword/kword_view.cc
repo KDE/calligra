@@ -66,11 +66,8 @@
 #include <kcolordlg.h>
 #include <kiconloader.h>
 #include <kglobal.h>
-
+#include <stdlib.h>
 #define DEBUG
-
-// Qt bug
-char *getenv( const char *name );
 
 /******************************************************************/
 /* Class: KWordFrame                                              */
@@ -369,7 +366,7 @@ CORBA::Boolean KWordView::printDlg()
 }
 
 /*================================================================*/
-void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_page = true, bool _redraw = true )
+void KWordView::setFormat( KWFormat &_format, bool _check, bool _update_page, bool _redraw )
 {
     if ( _check && _format == format || !m_vToolBarText ) return;
 
@@ -714,7 +711,7 @@ void KWordView::setTool( MouseMode _mouseMode )
 }
 
 /*===============================================================*/
-void KWordView::updateStyle( QString _styleName, bool _updateFormat = true )
+void KWordView::updateStyle( QString _styleName, bool _updateFormat )
 {
     styleList.find( _styleName );
 
@@ -3114,16 +3111,16 @@ void KWordView::spellCheckerReady()
     }
 
     QString text = currParag->getKWString()->toString( 0, currParag->getTextLen() );
-    kspell->check( ( char* )text.data() );
+    kspell->check( text.data() );
 }
 
 /*================================================================*/
-void KWordView::spellCheckerMisspelling( char* orig, QStrList* suggestions, unsigned pos )
+void KWordView::spellCheckerMisspelling( char* , QStrList* , unsigned )
 {
 }
 
 /*================================================================*/
-void KWordView::spellCheckerCorrected( char* orig, char* correct, unsigned pos )
+void KWordView::spellCheckerCorrected( char* , char* , unsigned )
 {
 }
 
@@ -3239,7 +3236,7 @@ void KWordView::sendFocusEvent()
 /******************************************************************/
 
 /*================================================================*/
-KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView *_view )
+KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view )
     : QWidget( parent, "" )
 {
     doc = _doc;

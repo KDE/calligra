@@ -244,7 +244,7 @@ void KWordDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHead
 }
 
 /*================================================================*/
-void KWordDocument::recalcFrames( bool _cursor = false, bool _fast = false )
+void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 {
     if ( processingType != DTP )
         pages = 1;
@@ -1568,8 +1568,9 @@ QListIterator<KWordChild> KWordDocument::childIterator()
 }
 
 /*================================================================*/
-void KWordDocument::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-                          CORBA::Float _scale )
+void KWordDocument::draw( QPaintDevice* , CORBA::Long, 
+			  CORBA::Long ,
+                          CORBA::Float )
 {
 }
 
@@ -1720,7 +1721,7 @@ KWParag* KWordDocument::findFirstParagOfRect( unsigned int _ypos, unsigned int _
 
 /*================================================================*/
 bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h,
-                               bool _viewFormattingChars = false, bool _drawVarBack = true )
+                               bool _viewFormattingChars, bool _drawVarBack )
 {
     if ( !getFrameSet( _fc.getFrameSet() - 1 )->isVisible() )
         return false;
@@ -2045,7 +2046,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 }
 
 /*================================================================*/
-void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, int _w, int _h )
+void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, int, int )
 {
     KWFrameSet *frameset = 0;
     KWFrame *tmp;
@@ -2150,7 +2151,7 @@ void KWordDocument::drawMarker( KWFormatContext &_fc, QPainter *_painter, int xO
 }
 
 /*================================================================*/
-void KWordDocument::updateAllViews( KWordView *_view, bool _clear = false )
+void KWordDocument::updateAllViews( KWordView *_view, bool _clear )
 {
     KWordView *viewPtr;
 
@@ -2253,7 +2254,7 @@ void KWordDocument::updateAllStyleLists()
 }
 
 /*================================================================*/
-void KWordDocument::drawAllBorders( QPainter *_painter = 0 )
+void KWordDocument::drawAllBorders( QPainter *_painter  )
 {
     KWordView *viewPtr;
     QPainter p;
@@ -2630,7 +2631,7 @@ void KWordDocument::setFormat( KWFormat &_format )
 }
 
 /*================================================================*/
-void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format = 0L, const QString &_mime = "text/plain" )
+void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format, const QString &_mime )
 {
     QStrList strList;
     KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L;
@@ -3118,7 +3119,8 @@ KWFrameSet *KWordDocument::getFirstSelectedFrameSet()
 }
 
 /*================================================================*/
-void KWordDocument::print( QPainter *painter, QPrinter *printer, float left_margin, float top_margin )
+void KWordDocument::print( QPainter *painter, QPrinter *printer, 
+			   float /*left_margin*/, float /*top_margin*/ )
 {
     QList<KWFormatContext> fcList;
     fcList.setAutoDelete( true );
@@ -3333,7 +3335,7 @@ void KWordDocument::updateAllFrames()
 }
 
 /*================================================================*/
-void KWordDocument::recalcWholeText( bool _cursor = false, bool _fast )
+void KWordDocument::recalcWholeText( bool _cursor, bool _fast )
 {
     KWordView *viewPtr;
 
@@ -3643,7 +3645,9 @@ void KWordDocument::setFrameCoords( unsigned int x, unsigned int y, unsigned int
 }
 
 /*================================================================*/
-void KWordDocument::saveParagInUndoBuffer( QList<KWParag> parags, int frameset, KWFormatContext *_fc )
+void KWordDocument::saveParagInUndoBuffer( QList<KWParag> /*parags*/, 
+					   int /*frameset*/, 
+					   KWFormatContext */*_fc*/ )
 {
 }
 

@@ -18,7 +18,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add = true, QString _name = "Standard" )
+KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add, QString _name )
     : format( _doc ), paragFootOffset(), paragHeadOffset(), firstLineLeftIndent(), leftIndent(), lineSpacing()
 {
     flow = LEFT;

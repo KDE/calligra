@@ -7,7 +7,7 @@ LDADD = ../lib/kofficeui/libkofficeui.la -lkspell $(LIBQIMGIO) $(LIB_KIMGIO)
 
 bin_PROGRAMS = kword.bin
 
-kword_bin_SOURCES = char.cc kword_main.cc kword_doc.cc kword_view.cc kword.cc kword_shell.cc \
+kword_bin_SOURCES = kword_doc.cc char.cc kword_main.cc kword_view.cc kword.cc kword_shell.cc \
 		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc \
 		formatcollection.cc paragdia.cc imagecollection.cc image.cc \
 		formats.cc frame.cc framedia.cc stylist.cc kcharselectdia.cc \
@@ -39,7 +39,7 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 kdemime_DATA = x-kword.kdelnk
 kdemimedir = $(kde_mimedir)/application
 
-SUBDIRS = toolbar templates filters dtd
+SUBDIRS = . toolbar templates filters dtd
 
 ####### Implicit rules
 
@@ -58,7 +58,6 @@ kword.h: kword.idl $(micodir)/include/CORBA.h
 	rm -f kword.h
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kword.idl
 
-BUILT_SOURCES = kword.h
 fc.cc: fc.h
 font.cc: font.h
 format.cc: format.h

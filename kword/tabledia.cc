@@ -44,7 +44,7 @@
 /******************************************************************/
 
 /*================================================================*/
-void KWTablePreview::paintEvent( QPaintEvent *e )
+void KWTablePreview::paintEvent( QPaintEvent * )
 {
     int wid = ( width() - 10 ) / cols;
     int hei = ( height() - 10 ) / rows;

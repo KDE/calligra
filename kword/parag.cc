@@ -252,7 +252,7 @@ void KWParag::appendText( KWChar *_text, unsigned int _len )
 }
 
 /*================================================================*/
-bool KWParag::deleteText( unsigned int _pos, unsigned int _len = 1 )
+bool KWParag::deleteText( unsigned int _pos, unsigned int _len )
 {
     return text.remove( _pos, _len );
 }
@@ -574,19 +574,22 @@ int KWParag::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _inde
 }
 
 /*================================================================*/
-int KWParag::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false )
+int KWParag::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, 
+		   int _index, int &_len, bool _cs, bool _wildcard )
 {
     return text.find( _regexp, _format, _index, _len, _cs, _wildcard );
 }
 
 /*================================================================*/
-int KWParag::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole )
+int KWParag::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, 
+		      int _index, bool _cs, bool _whole )
 {
     return text.findRev( _expr, _format, _index, _cs, _whole );
 }
 
 /*================================================================*/
-int KWParag::findRev( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false )
+int KWParag::findRev( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, 
+		      int _index, int &_len, bool _cs, bool _wildcard )
 {
     return text.findRev( _regexp, _format, _index, _len, _cs, _wildcard );
 }

@@ -241,7 +241,7 @@ void KWString::clear()
 }
 
 /*================================================================*/
-bool KWString::remove( unsigned int _pos, unsigned int _len = 1 )
+bool KWString::remove( unsigned int _pos, unsigned int _len )
 {
     if ( _pos + _len <= _len_ && ( int )_pos >= 0 )
     {
@@ -368,7 +368,7 @@ void KWString::saveFormat( ostream &out )
 }
 
 /*================================================================*/
-void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc, KWTextFrameSet *_frameset )
+void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc, KWTextFrameSet * )
 {
     string tag;
     string name;
@@ -563,7 +563,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 }
 
 /*================================================================*/
-void KWString::resize( unsigned int _size, bool del = true )
+void KWString::resize( unsigned int _size, bool del )
 {
     if ( _size == _len_ )
         return;
@@ -765,7 +765,7 @@ int KWString::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _ind
 }
 
 /*================================================================*/
-int KWString::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false )
+int KWString::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard )
 {
     QString str = toString( 0, size() );
     _regexp.setWildcard( _wildcard );
@@ -863,7 +863,7 @@ int KWString::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _
 }
 
 /*================================================================*/
-int KWString::findRev( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false )
+int KWString::findRev( QRegExp /*_regexp*/, KWSearchDia::KWSearchEntry */*_format*/, int /*_index*/, int &/*_len*/, bool /*_cs*/, bool /*_wildcard*/ )
 {
     return -1;
 }
@@ -884,7 +884,7 @@ QString KWString::decoded()
 }
 
 /*================================================================*/
-QCString KWString::utf8( bool _decoded = true )
+QCString KWString::utf8( bool _decoded )
 {
     QString str;
     if ( _decoded )

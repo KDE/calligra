@@ -23,7 +23,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWordDrag::KWordDrag( QWidget *dragSource = 0L, const char *name = 0L )
+KWordDrag::KWordDrag( QWidget *dragSource, const char *name )
     : QDragObject( dragSource, name ), kword(), plain(), html()
 {
 }

@@ -35,8 +35,7 @@ public:
     virtual bool operator==( const KWCharAttribute &_attrib )
     { return classId == const_cast<KWCharAttribute>( _attrib ).getClassId(); }
 
-    virtual void save( ostream &out )
-    {; }
+    virtual void save( ostream & ) {}
 
 protected:
     int classId;

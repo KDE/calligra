@@ -220,7 +220,7 @@ protected:
 
 private:
     // disabe normal copy constructor
-    KWFormat( const KWFormat& _format ) { ref = 0; doc = 0L; }
+    KWFormat( const KWFormat& _format );
 
 };
 

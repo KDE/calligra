@@ -243,7 +243,8 @@ KWAutoFormat::KWAutoFormat( KWordDocument *_doc )
 }
 
 /*================================================================*/
-void KWAutoFormat::startAutoFormat( KWParag *parag, KWFormatContext *fc )
+void KWAutoFormat::startAutoFormat( KWParag */*parag*/, 
+				    KWFormatContext */*fc*/ )
 {
     if ( !enabled )
         return;
@@ -302,7 +303,7 @@ bool KWAutoFormat::doAutoFormat( KWParag *parag, KWFormatContext *fc )
 }
 
 /*================================================================*/
-void KWAutoFormat::endAutoFormat( KWParag *parag, KWFormatContext *fc )
+void KWAutoFormat::endAutoFormat( KWParag */*parag*/, KWFormatContext */*fc*/ )
 {
     if ( !enabled )
         return;

@@ -273,7 +273,7 @@ KWNumPreview::KWNumPreview( QWidget* parent, const char* name )
 }
 
 /*================================================================*/
-void KWNumPreview::drawContents( QPainter* painter )
+void KWNumPreview::drawContents( QPainter* )
 {
 }
 
@@ -1315,17 +1315,17 @@ void KWParagDia::brdBottomToggled( bool _on )
 }
 
 /*================================================================*/
-void KWParagDia::brdStyleChanged( const QString &_style )
+void KWParagDia::brdStyleChanged( const QString & )
 {
 }
 
 /*================================================================*/
-void KWParagDia::brdWidthChanged( const QString &_width )
+void KWParagDia::brdWidthChanged( const QString & )
 {
 }
 
 /*================================================================*/
-void KWParagDia::brdColorChanged( const QColor &_color )
+void KWParagDia::brdColorChanged( const QColor & )
 {
 }
 

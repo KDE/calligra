@@ -37,7 +37,7 @@ public:
 
 protected:
     void setupTab1();
-    void closeEvent( QCloseEvent *e ) { emit cancelButtonPressed(); }
+    void closeEvent( QCloseEvent * ) { emit cancelButtonPressed(); }
 
     QWidget *tab1;
 

@@ -1431,7 +1431,7 @@ QPicture *KWPartFrameSet::getPicture()
 }
 
 /*================================================================*/
-void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffxx )
+void KWPartFrameSet::activate( QWidget */*_widget*/, int diffx, int diffy, int diffxx )
 {
     view->setGeometry( frames.at( 0 )->x() - diffx + diffxx, frames.at( 0 )->y() - diffy + 20, frames.at( 0 )->width(), frames.at( 0 )->height() );
     view->show();

@@ -23,7 +23,7 @@
  * A preview handler for the KFilePreviewDialag that shows
  * a WMF object.
  */
-bool wmfPreviewHandler( const KFileInfo* fInfo, const QString fileName, QString&, QPixmap& pixmap )
+bool wmfPreviewHandler( const KFileInfo*, const QString, QString&, QPixmap& )
 {
     bool res = false;
 //   QString ext = fileName.right( 3 ).lower();

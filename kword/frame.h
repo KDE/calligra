@@ -139,10 +139,8 @@ protected:
     KWUnit bleft, bright, btop, bbottom;
 
 private:
-    KWFrame &operator=( KWFrame &_frame )
-    { return _frame; }
-    KWFrame ( const KWFrame &_frame )
-    {; }
+    KWFrame &operator=( KWFrame &_frame );
+    KWFrame ( const KWFrame &_frame );
 
 };
 
@@ -172,8 +170,8 @@ public:
     virtual unsigned int getNumFrames()
     { return frames.count(); }
 
-    virtual bool isPTYInFrame( unsigned int _frame, unsigned int _ypos )
-    { return true; }
+    virtual bool isPTYInFrame( unsigned int /*_frame*/, unsigned int /*_ypos */ )
+	{ return true; }
 
     virtual void update()
     {; }

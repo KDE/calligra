@@ -1193,7 +1193,7 @@ void KWPage::mouseDoubleClickEvent( QMouseEvent *e )
 }
 
 /*================================================================*/
-void KWPage::recalcCursor( bool _repaint = true, int _pos = -1, KWFormatContext *_fc = 0L )
+void KWPage::recalcCursor( bool _repaint, int _pos, KWFormatContext *_fc )
 {
     bool blinking = blinkTimer.isActive();
     if ( blinking )
@@ -1295,7 +1295,7 @@ void KWPage::editCopy()
 }
 
 /*================================================================*/
-void KWPage::editPaste( QString _string, const QString &_mime = "text/plain" )
+void KWPage::editPaste( QString _string, const QString &_mime )
 {
     bool blinking = blinkTimer.isActive();
     if ( blinking )
@@ -1342,7 +1342,7 @@ void KWPage::recalcText()
 }
 
 /*================================================================*/
-void KWPage::recalcWholeText( bool _cursor = false, bool _fast = false )
+void KWPage::recalcWholeText( bool _cursor, bool )
 {
     bool blinking = blinkTimer.isActive();
     if ( blinking )
@@ -2767,7 +2767,7 @@ void KWPage::scroll( int dx, int dy )
 }
 
 /*================================================================*/
-void KWPage::formatChanged( KWFormat &_format, bool _redraw = true )
+void KWPage::formatChanged( KWFormat &_format, bool _redraw )
 {
     format = _format;
 
@@ -3004,7 +3004,7 @@ void KWPage::drawFrameSelection( QPainter &_painter, KWFrame *_frame )
 }
 
 /*================================================================*/
-void KWPage::frameSizeChanged( KoPageLayout _layout )
+void KWPage::frameSizeChanged( KoPageLayout /* _layout */)
 {
     setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
     return;
@@ -3578,8 +3578,10 @@ void KWPage::tabListChanged( QList<KoTabulator> *_tablist )
 }
 
 /*================================================================*/
-bool KWPage::find( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _first, bool _cs, bool _whole,
-                   bool _regexp, bool _wildcard, bool &_addlen, bool _select = true )
+bool KWPage::find( QString _expr, KWSearchDia::KWSearchEntry *_format, 
+		   bool _first, bool _cs, bool _whole,
+                   bool _regexp, bool _wildcard, 
+		   bool &_addlen, bool _select )
 {
     if ( _first || !currFindParag )
     {
@@ -3648,13 +3650,15 @@ bool KWPage::find( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _fir
 }
 
 /*================================================================*/
-bool KWPage::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _first, bool _cs, bool _whole,
-                      bool _regexp, bool _wildcard, bool &_addlen, bool _select = true )
+bool KWPage::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, 
+		      bool _first, bool _cs, bool _whole,
+                      bool _regexp, bool _wildcard, 
+		      bool &_addlen, bool _select )
 {
     _addlen = false;
     if ( _first || !currFindParag )
     {
-        for ( unsigned int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+        for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
         {
             if ( doc->getFrameSet( i )->getFrameType() == FT_TEXT && doc->getFrameSet( i )->getFrameInfo() == FI_BODY )
             {
@@ -3698,7 +3702,7 @@ bool KWPage::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _
                 currFindPos = -1;
                 if ( currFindFS > 0 )
                 {
-                    for ( unsigned int i = currFindFS - 1; i >= 0; i-- )
+                    for ( int i = currFindFS - 1; i >= 0; i-- )
                     {
                         if ( doc->getFrameSet( i )->getFrameType() == FT_TEXT && doc->getFrameSet( i )->getFrameInfo() == FI_BODY )
                         {
@@ -3760,7 +3764,7 @@ void KWPage::replace( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _
 }
 
 /*================================================================*/
-void KWPage::selectText( int _pos, int _len, int _frameSetNum, KWTextFrameSet *_frameset, KWParag *_parag, bool _select = true )
+void KWPage::selectText( int _pos, int _len, int _frameSetNum, KWTextFrameSet */*_frameset*/, KWParag *_parag, bool _select )
 {
     removeSelection();
 
@@ -4223,7 +4227,7 @@ void KWPage::startDrag()
 }
 
 /*================================================================*/
-void KWPage::dragEnterEvent( QDragEnterEvent *e )
+void KWPage::dragEnterEvent( QDragEnterEvent * )
 {
     stopBlinkCursor();
     //printf( "void KWPage::dragEnterEvent( QDragEnterEvent *e )\n" );
@@ -4320,14 +4324,14 @@ void KWPage::dragMoveEvent( QDragMoveEvent *e )
 }
 
 /*================================================================*/
-void KWPage::dragLeaveEvent( QDragLeaveEvent *e )
+void KWPage::dragLeaveEvent( QDragLeaveEvent * )
 {
     startBlinkCursor();
     //debug( "void KWPage::dragLeaveEvent( QDragLeaveEvent *e )" );
 }
 
 /*================================================================*/
-void KWPage::dropEvent( QDropEvent *e )
+void KWPage::dropEvent( QDropEvent * )
 {
     //debug( "void KWPage::dropEvent( QDropEvent *e )" );
 
@@ -4506,7 +4510,7 @@ void KWPage::stopBlinkCursor()
 }
 
 /*================================================================*/
-void KWPage::keyReleaseEvent( QKeyEvent *e )
+void KWPage::keyReleaseEvent( QKeyEvent * )
 {
     //QWidget::keyReleaseEvent( e );
     startBlinkCursor();

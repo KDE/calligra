@@ -15,8 +15,10 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
-                    char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 )
+KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color, 
+		    KWUserFont *_font, int _font_size, int _weight,
+                    char _italic, char _underline, 
+		    VertAlign _vertAlign, char _math, char _direct )
 {
     doc = _doc;
     color = _color;

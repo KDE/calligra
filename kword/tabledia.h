@@ -111,7 +111,7 @@ public:
 protected:
     void setupTab1( int rows, int cols );
     void setupTab2();
-    void closeEvent( QCloseEvent *e ) { emit cancelButtonPressed(); }
+    void closeEvent( QCloseEvent * ) { emit cancelButtonPressed(); }
 
     QWidget *tab1;
     QGridLayout *grid1;

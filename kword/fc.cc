@@ -51,8 +51,9 @@ KWFormatContext::~KWFormatContext()
 
 
 /*================================================================*/
-void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true,
-                            int _frame = -1, int _page = -1 )
+void KWFormatContext::init( KWParag *_parag, QPainter &_painter, 
+			    bool _updateCounters, bool _fromStart ,
+                            int _frame, int _page )
 {
     outOfFrame = false;
     specialHeight = 0;
@@ -107,7 +108,8 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
 }
 
 /*================================================================*/
-void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters = true )
+void KWFormatContext::enterNextParag( QPainter &_painter, 
+				      bool /* _updateCounters */ )
 {
     // Set the context to the given paragraph
     if ( parag != 0L )
@@ -714,7 +716,7 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my, QPa
 }
 
 /*================================================================*/
-void KWFormatContext::cursorGotoPixelInLine( unsigned int mx, unsigned int my, QPainter &_painter )
+void KWFormatContext::cursorGotoPixelInLine( unsigned int mx, unsigned int , QPainter &_painter )
 {
     if ( isCursorAtLineEnd() ) return;
     unsigned int oldPTPos, oldDist = 0, dist = 0;
@@ -761,7 +763,7 @@ KWCharAttribute* KWFormatContext::getObjectType( unsigned int mx, unsigned int m
 }
 
 /*================================================================*/
-int KWFormatContext::cursorGotoNextChar( QPainter & _painter )
+int KWFormatContext::cursorGotoNextChar( QPainter &  )
 {
     // If we are already at lineend, then we wont move further
     if ( isCursorAtLineEnd() )
@@ -870,7 +872,8 @@ int KWFormatContext::cursorGotoNextChar( QPainter & _painter )
     if ( isCursorAtLineEnd() )
         return -2;
 
-    if ( parag->getText()[ textPos ].c != 0 && parag->getText()[ textPos ].attrib == 0 ||
+    if ( parag->getText()[ textPos ].c != 0 && 
+	 parag->getText()[ textPos ].attrib == 0 ||
          textPos - 1 >= 0 && parag->getText()[ textPos - 1 ].c != 0 &&
          *( ( KWCharFormat* )parag->getText()[ textPos - 1 ].attrib ) == *( ( KWCharFormat* )parag->getText()[ textPos ].attrib ) )
         return 1;
@@ -913,7 +916,7 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 }
 
 /*================================================================*/
-bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects = true, bool _checkTabs = true )
+bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects, bool _checkTabs )
 {
     if ( !document->getFrameSet( frameSet - 1 )->isVisible() )
         return false;
@@ -1367,7 +1370,7 @@ unsigned int KWFormatContext::getLineHeight()
 }
 
 /*================================================================*/
-void KWFormatContext::makeCounterLayout( QPainter &_painter )
+void KWFormatContext::makeCounterLayout( QPainter & )
 {
     if ( parag->getParagLayout()->getCounterType() == KWParagLayout::CT_NONE ) return;
 
