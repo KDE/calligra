@@ -19,6 +19,10 @@
 
 #include <fstream>
 
+#ifdef KDE_USE_FINAL
+#include <CUTE.h> // include first, to get POA stuff (hack)
+#endif
+
 #include "koDocument.h"
 #include "koStream.h"
 #include "koQueryTypes.h"
