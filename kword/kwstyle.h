@@ -35,10 +35,6 @@ public:
     // Create a style from a saved document
     KWStyle( QDomElement & styleElem, const QFont & defaultFont );
 
-    // Create a style from another style (UI for that is missing,
-    // but this already happens when loading styles)
-    //KWStyle( const KWStyle & style );
-
     QString name() const { return m_paragLayout.styleName(); }
 
     const KWParagLayout & paragLayout() const { return m_paragLayout; }
@@ -49,15 +45,17 @@ public:
     const QTextFormat & format() const { return m_format; }
     QTextFormat & format() { return m_format; }
 
-    QString followingStyle() const { return m_followingStyle; }
-    void setFollowingStyle( const QString & fst ) { m_followingStyle = fst; }
+    //QString followingStyle() const { return m_followingStyle; }
+    KWStyle *followingStyle() { return m_followingStyle; }
+    void setFollowingStyle( KWStyle *fst ) { m_followingStyle = fst; }
+    //void setFollowingStyle( const QString & fst ) { m_followingStyle = fst; }
 
     void save( QDomElement parentElem );
 
 private:
     KWParagLayout m_paragLayout;
     QTextFormat m_format;
-    QString m_followingStyle;
+    KWStyle *m_followingStyle;
 };
 
 #endif

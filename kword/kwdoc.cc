@@ -114,7 +114,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 {
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
-    m_styleList.setAutoDelete( true );
+    m_styleList.setAutoDelete( false );
+    m_deletedStyles.setAutoDelete( false );
 //    varFormats.setAutoDelete(true);
     frames.setAutoDelete( true );
 
@@ -1196,16 +1197,22 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 /*================================================================*/
 void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 {
-    // <STYLE>
+    QValueList<QString> followingStyles;
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
-    for (unsigned int item = 0; item < listStyles.count(); item++)
-    {
+    for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWStyle *sty = new KWStyle( styleElem, m_defaultFont );
         //kdDebug(32001) << "KWDocument::addStyleTemplate style's name is " << sty->name() << endl;
         addStyleTemplate( sty );
+        followingStyles.append(styleElem.namedItem("FOLLOWING").toElement().attribute("name"));
     }
+
+    unsigned int i=0;
+    for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
+        m_styleList.at(i++)->setFollowingStyle(findStyle(*it));
+    }
+        
 }
 
 void KWDocument::addStyleTemplate( KWStyle * sty )
@@ -1228,16 +1235,9 @@ void KWDocument::addStyleTemplate( KWStyle * sty )
     m_styleList.append( sty );
 }
 
-void KWDocument::removeStyleTemplate ( const QString & _styleName )
-{
-  for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
-    {
-        if ( p->name() == _styleName )
-        {
-            // Remove (and delete) style
-	    m_styleList.remove( p );
-            return;
-        }
+void KWDocument::removeStyleTemplate ( KWStyle *style ) {
+    if( m_styleList.removeRef(style)) {
+        m_deletedStyles.append(style);
     }
 }
 

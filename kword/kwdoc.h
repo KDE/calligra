@@ -423,7 +423,7 @@ public:
 
     void addStyleTemplate( KWStyle *style );
 
-    void removeStyleTemplate ( const QString & _styleName);
+    void removeStyleTemplate ( KWStyle *style);
 
     void moveDownStyleTemplate ( const QString & _styleName);
 
@@ -504,6 +504,7 @@ private:
     KWImageCollection m_imageCollection;
     QList<KWFrameSet> frames;
     QList<KWStyle> m_styleList;
+    QList<KWStyle> m_deletedStyles;
 
     // Cached value for findStyle()
     KWStyle *m_lastStyle;

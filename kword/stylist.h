@@ -74,10 +74,11 @@ protected:
 
     void setupWidget();
     void addGeneralTab();
-    void renameStyle(QString oldname, QString newname);
     void apply();
     void updateGUI();
     void save();
+    KWStyle * copyStyle(KWStyle *orig);
+    int getStyleByName(const QString name);
 
     QTabWidget *m_tabs;
     QListBox *m_stylesList;
@@ -89,8 +90,8 @@ protected:
     KWStylePreview *preview;
 
     KWStyle *m_currentStyle;
-    QDict<KWStyle> m_changedStyles;   // internal list of changed styles (that have not been applied yet)
-    QDict<KWStyle> m_deletedStyles;   // internal list of deletedStyles, will be delete from the main doc on apply
+    QList<KWStyle> m_origStyles;      // internal list of orig styles we have modified
+    QList<KWStyle> m_changedStyles;   // internal list of changed styles.
     QList<basicTab> m_tabsList;
     int numStyles;
     bool noSignals;

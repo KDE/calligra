@@ -30,7 +30,7 @@ KWStyle::KWStyle( const QString & name )
 KWStyle::KWStyle( QDomElement & styleElem, const QFont & defaultFont )
     : m_paragLayout( styleElem ) // Load the paraglayout from the <STYLE> element
 {
-    m_followingStyle = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
+    //m_followingStyle = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
 
     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
     if ( !formatElem.isNull() )
@@ -49,7 +49,7 @@ void KWStyle::save( QDomElement parentElem )
 
     QDomElement element = doc.createElement( "FOLLOWING" );
     styleElem.appendChild( element );
-    element.setAttribute( "name", m_followingStyle );
+    element.setAttribute( "name", m_followingStyle->name() );
 
     QDomElement formatElem = KWTextParag::saveFormat( doc, &m_format, 0L, 0, 0 );
     styleElem.appendChild( formatElem );

@@ -52,14 +52,24 @@
 /* Class: KWStyleManager                                          */
 /******************************************************************/
 
+/* keep 2 qlists with the styles.
+   1 of the origs, another with the changed ones (in order of the stylesList)
+   When an orig entry is empty and the other is not, a new one has to be made,
+   when the orig is present and the other is not, the orig has be be deleted.
+   Otherwise all changes are copied from the changed ones to the origs on OK
+   OK also frees all the changed ones and updates the doc if styles are deleted.
+*/
+
 /*================================================================*/
 KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc, QStringList _fontList )
-    : QDialog(_parent, "Stylist", true), m_changedStyles(10007, false), m_deletedStyles(10007, false) {
+    : QDialog(_parent, "Stylist", true) {
     setWFlags(getWFlags() || WDestructiveClose);
     m_fontList = _fontList;
     m_doc = _doc;
     m_currentStyle =0L;
     noSignals=true;
+    m_origStyles.setAutoDelete(false);
+    m_changedStyles.setAutoDelete(false);
 
     setupWidget(); // build the widget with the buttons and the list selector.
     addGeneralTab();
@@ -91,8 +101,11 @@ void KWStyleManager::setupWidget() {
     m_stylesList = new QListBox( Frame1, "stylesList" );
     for ( unsigned int i = 0; i < styles.count(); i++ ) {
         m_stylesList->insertItem( styles.at( i )->name() );
+        m_origStyles.append(styles.at(i));
+        m_changedStyles.append(styles.at(i));
+
+kdDebug() << " style " << i << ": " << styles.at(i)->name() << " (" << styles.at(i) << ") with following: " << styles.at(i)->followingStyle()->name() << " (" << styles.at(i)->followingStyle() << ")" << endl;
     }
-    m_currentStyle = styles.first();
  
     Frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
  
@@ -176,23 +189,42 @@ void KWStyleManager::switchStyle() {
     if(noSignals) return;
     noSignals=true;
 
-    save();
+    if(m_currentStyle !=0L)
+        save();
 
-    KWStyle *style = m_changedStyles[m_stylesList->currentText()];
-    if(! style) {
-kdDebug() << "creating new style: " << m_stylesList->currentText() << endl;
-        style = new KWStyle("a");
-        
-        KWStyle *oldStyle=m_doc->findStyle(m_stylesList->currentText());
-        style->format()=oldStyle->format();
-        style->setFollowingStyle(oldStyle->followingStyle());
-        style->paragLayout()=oldStyle->paragLayout();
-        m_changedStyles.insert(m_stylesList->currentText(), style);
+    m_currentStyle = 0L;
+    int num = m_stylesList->currentItem();
+    if(m_origStyles.at(num) == m_changedStyles.at(num)) {
+        m_currentStyle = copyStyle(m_origStyles.at(num));
+        m_changedStyles.take(num);
+        m_changedStyles.insert(num, m_currentStyle);
+    } else {
+        m_currentStyle = m_changedStyles.at(num);
     }
-    m_currentStyle = style;
     updateGUI();
 
     noSignals=false;
+}
+
+int KWStyleManager::getStyleByName(const QString name) {
+    for(unsigned int i=0; i < m_changedStyles.count(); i++) {
+
+kdDebug() << " style " << i << ": " << m_changedStyles.at(i)->name() << " (" << m_changedStyles.at(i) << ") with following: " << m_changedStyles.at(i)->followingStyle()->name() << " (" << m_changedStyles.at(i)->followingStyle() << ")" << endl;
+        if(m_changedStyles.at(i)->name() == name)
+            return i;
+    }
+    return 0;
+}
+
+KWStyle * KWStyleManager::copyStyle(KWStyle *orig) {
+kdDebug() << "creating new style: " << orig->name() << endl;
+    KWStyle *style = new KWStyle("a");
+    
+    style->format()=orig->format();
+    style->setFollowingStyle(orig->followingStyle());
+    style->paragLayout()=orig->paragLayout();
+    style->paragLayout().setStyleName( orig->name());
+    return style;
 }
 
 void KWStyleManager::updateGUI() {
@@ -202,7 +234,7 @@ void KWStyleManager::updateGUI() {
     m_nameString->setText(m_currentStyle->name());
     
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
-        if ( m_styleCombo->text( i ) == m_currentStyle->followingStyle() ) {
+        if ( m_styleCombo->text( i ) == m_currentStyle->followingStyle()->name() ) {
             m_styleCombo->setCurrentItem( i );
             break;
         }
@@ -221,9 +253,12 @@ void KWStyleManager::save() {
         for (unsigned int i =0; m_tabsList.count(); i++) {
             m_tabsList.at(i)->save();
         }
-        if(m_currentStyle->name() != m_nameString->text())
-            renameStyle(m_currentStyle->name(), m_nameString->text());
-        m_currentStyle->setFollowingStyle(m_styleCombo->currentText());
+        m_currentStyle->paragLayout().setStyleName( m_nameString->text());
+kdDebug() << "following style1: " << m_styleCombo->currentText() << endl;
+kdDebug() << "following style2: " << getStyleByName(m_styleCombo->currentText()) << endl;
+kdDebug() << "following style3: " << m_changedStyles.at(getStyleByName(m_styleCombo->currentText())) << endl;
+kdDebug() << "following style4: " << m_changedStyles.at(getStyleByName(m_styleCombo->currentText()))->name() << endl;
+        m_currentStyle->setFollowingStyle(m_changedStyles.at(getStyleByName(m_styleCombo->currentText())));
     }
 }
 
@@ -240,7 +275,8 @@ void KWStyleManager::addStyle() {
     m_currentStyle->paragLayout().setStyleName( str );
 
     noSignals=true;
-    m_changedStyles.insert(str, m_currentStyle);
+    m_origStyles.append(0L);
+    m_changedStyles.append(m_currentStyle);
     m_stylesList->insertItem( str );
     m_styleCombo->insertItem( str );
     m_stylesList->setCurrentItem( m_stylesList->count() - 1 );
@@ -250,11 +286,15 @@ void KWStyleManager::addStyle() {
 }
 
 void KWStyleManager::deleteStyle() {
-    save();
-    unsigned int cur = m_stylesList->currentItem();
 
-    KWStyle *s = m_changedStyles.take(m_stylesList->currentText());
-    m_deletedStyles.insert(m_stylesList->currentText(),s);
+    save(); 
+
+    unsigned int cur = getStyleByName(m_stylesList->currentText());
+    KWStyle *s = m_changedStyles.at(cur);
+    m_changedStyles.remove(cur);
+    m_changedStyles.insert(cur,0L);
+    delete s;
+
     m_stylesList->removeItem(cur);
     m_styleCombo->removeItem(cur);
     if(cur > m_stylesList->count()) cur--;
@@ -276,27 +316,31 @@ void KWStyleManager::slotOk() {
 }
 
 void KWStyleManager::apply() {
-    // delete all styles from doc which are in deletedStyles;
-    QDictIterator<KWStyle> it( m_deletedStyles );
-    while ( it.currentKey()!= 0L ) {
-kdDebug() << "deleting: " << it.currentKey() << endl;
-        m_doc->removeStyleTemplate(it.currentKey());
-        m_doc->applyStyleChange(it.currentKey());
-        ++it;
-    }
-    //m_deletedStyles.clear();
-
-    // update all styles in doc which are in updatedStyles
-    QDictIterator<KWStyle> it2( m_changedStyles );
-    while ( it2.current() ) {
-        KWStyle *s=it2.current();
-kdDebug() << "commiting: " << s->name() << endl;
-        m_doc->addStyleTemplate(s);
-        m_doc->applyStyleChange(it2.currentKey());
-        ++it2;
+    noSignals=true;
+    for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
+kdDebug() << "i: " << i << endl;
+        if(m_origStyles.at(i) == 0) {           // newly added style
+kdDebug() << "adding new " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
+            m_doc->addStyleTemplate(m_changedStyles.at(i));
+        } else if(m_changedStyles.at(i) == 0) { // deleted style
+kdDebug() << "deleting orig " <<  m_origStyles.at(i)->name() << " (" << i << ")" <<  endl;
+            m_doc->removeStyleTemplate(m_origStyles.at(i));
+        } else if(m_changedStyles.at(i) != m_origStyles.at(i)) {
+kdDebug() << "update style " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
+                                                // simply updated style
+            KWStyle *orig=m_origStyles.at(i);
+            KWStyle *changed = m_changedStyles.at(i);
+            //orig->format()=changed->format();
+            orig->setFollowingStyle(changed->followingStyle());
+            orig->paragLayout()=changed->paragLayout();
+            orig->paragLayout().setStyleName( changed->name());
+        } else {
+kdDebug() << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
+        }
     }
 
     m_doc->updateAllStyleLists();
+    noSignals=false;
 }
 
 void KWStyleManager::renameStyle(const QString &theText) {
@@ -313,41 +357,6 @@ void KWStyleManager::renameStyle(const QString &theText) {
     m_stylesList->changeItem(theText, m_stylesList->currentItem());
     noSignals=false;
 }
-
-void KWStyleManager::renameStyle(QString oldName, QString newName) {
-    if(! m_changedStyles[oldName]) return;
-
-    KWStyle *s = m_changedStyles[oldName];
-    m_changedStyles.remove(oldName);
-    m_changedStyles.insert(newName, s);
-    m_deletedStyles.insert(oldName, s);
-    s->paragLayout().setStyleName( newName );
-
-    //check all styles for followingStyle() and rename then as well.
-    QList<KWStyle> styles = const_cast<QList<KWStyle> & >(m_doc->styleList());
-    for ( unsigned int i = 0; i < styles.count(); i++ ) {
-        KWStyle *s = styles.at(i);
-        if(m_changedStyles[s->name()]) continue;
-        if(m_deletedStyles[s->name()]) continue;
-        if(s->followingStyle() == oldName) {
-            KWStyle *newStyle=new KWStyle(s->name());
-
-            newStyle->format()=s->format();
-            newStyle->paragLayout()=s->paragLayout();
-            newStyle->setFollowingStyle(newName);
-            newStyle->paragLayout().setStyleName( s->name());
-            m_changedStyles.insert(newName, newStyle);
-            m_deletedStyles.insert(oldName, 0L);
-        }
-    }
-    QDictIterator<KWStyle> it( m_changedStyles );
-    while ( it.current()) {
-        if(it.current()->followingStyle() == oldName)
-            it.current()->setFollowingStyle(newName);
-        ++it;
-    }
-}
-
 
 /******************************************************************/
 /* Class: KWStylePreview                                          */

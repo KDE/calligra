@@ -762,7 +762,8 @@ void KWFrameDia::setFrameBehaviourInputOff() {
 void KWFrameDia::slotFloatingToggled(bool b)
 {
     grp1->setEnabled( !b ); // Position doesn't make sense for a floating frame
-    // grp2->setEnabled( !b ); do margins make sense for floating frames ?
+    if(tab1) tab1->setEnabled( !b ); // frame setting are irrelevant for floating frames.
+    // grp2->setEnabled( !b ); do margins make sense for floating frames ?  (I think so; Thomas) 
 }
 
 /*================================================================*/

@@ -331,9 +331,9 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     KWStyle * style = doc->findStyle( parag->styleName(), true );
     // Obey "following style" setting
     bool styleApplied = false;
-    if ( style && !style->followingStyle().isEmpty() )
+    if ( style && style->followingStyle() )
     {
-        KWStyle * newStyle = doc->findStyle( style->followingStyle(), true );
+        KWStyle * newStyle = style->followingStyle();
         if (!newStyle)
             kdWarning() << "Following style " << style->followingStyle() << " not found" << endl;
         else if ( style != newStyle ) // if same style, keep paragraph-specific changes as usual
