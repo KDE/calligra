@@ -1909,12 +1909,11 @@ FrameSetType KWPictureFrameSet::typeAsKOffice1Dot1( void )
 
 bool KWPictureFrameSet::keepAspectRatio() const
 {
-    return ( m_keepAspectRatio && ( !m_picture.isClipartAsKOffice1Dot1() ) );
+    return m_keepAspectRatio;
 }
 
 void KWPictureFrameSet::setKeepAspectRatio( bool b )
 {
-    // Not sure if we can check if it is a clipart, as it might not be loaded yet
     m_keepAspectRatio = b;
 }
 

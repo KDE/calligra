@@ -154,7 +154,7 @@ void KWInsertPicDia::slotChooseImage()
         {
             m_type = IPD_CLIPART;
             enableButtonOK( true );
-            m_cbKeepRatio->setEnabled( false );
+            m_cbKeepRatio->setEnabled( true );
             m_cbKeepRatio->setChecked( false );
         }
     }
