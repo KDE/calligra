@@ -2295,7 +2295,7 @@ void ExcelReader::handleBoundSheet( BoundSheetRecord* record )
     // create a new sheet
     Sheet* sheet = new Sheet( d->workbook );
     sheet->setName( record->sheetName() );
-    sheet->properties()->setVisible( record->visible() );
+    sheet->setVisible( record->visible() );
 
     d->workbook->appendSheet( sheet );
 

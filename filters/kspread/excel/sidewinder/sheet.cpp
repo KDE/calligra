@@ -28,109 +28,26 @@
 namespace Sidewinder
 {
 
-class SheetProperties::Private
-{
-public:
-  bool visible;
-  bool protect;
-  double leftMargin;
-  double rightMargin;
-  double topMargin;
-  double bottomMargin;
-};
-
 class Sheet::Private
 {
 public:
   Workbook* workbook;
   UString name;
-  SheetProperties* properties;
-  
+    
   // hash to store cell, FIXME replace with quad-tree
   std::map<unsigned,Cell*> cells;
   unsigned maxRow;
   unsigned maxColumn;
-};
-
+  
+  bool visible;
+  bool protect;
+  double leftMargin;
+  double rightMargin;
+  double topMargin;
+  double bottomMargin;};
 };
 
 using namespace Sidewinder;
-
-SheetProperties::SheetProperties()
-{
-  d = new SheetProperties::Private();
-  d->visible      = true;
-  d->protect      = false;
-  d->leftMargin   = 1.0;
-  d->rightMargin  = 1.0;
-  d->topMargin    = 1.0;
-  d->bottomMargin = 1.0;
-}
-
-SheetProperties::~SheetProperties()
-{
-  delete d;
-}
-
-bool SheetProperties::visible() const
-{
-  return d->visible;
-}
-
-void SheetProperties::setVisible( bool v )
-{
-  d->visible = v;
-}
-
-bool SheetProperties::protect() const
-{
-  return d->protect;
-}
-
-void SheetProperties::setProtect( bool p )
-{
-  d->protect = p;
-}
-
-double SheetProperties::leftMargin() const
-{
-  return d->leftMargin;
-}
-
-void SheetProperties::setLeftMargin( double m ) 
-{
-  d->leftMargin = m;
-}
-
-double SheetProperties::rightMargin() const
-{
-  return d->rightMargin;
-}
-
-void SheetProperties::setRightMargin( double m ) 
-{
-  d->rightMargin = m;
-}
-
-double SheetProperties::topMargin() const
-{
-  return d->topMargin;
-}
-
-void SheetProperties::setTopMargin( double m ) 
-{
-  d->topMargin = m;
-}
-
-double SheetProperties::bottomMargin() const
-{
-  return d->bottomMargin;
-}
-
-void SheetProperties::setBottomMargin( double m ) 
-{
-  d->bottomMargin = m;
-}
 
 Sheet::Sheet( Workbook* wb )
 {
@@ -139,14 +56,17 @@ Sheet::Sheet( Workbook* wb )
   d->name = "Sheet"; // FIXME better name ?
   d->maxRow = 0;
   d->maxColumn = 0;
-  d->properties = new SheetProperties();
+  d->visible      = true;
+  d->protect      = false;
+  d->leftMargin   = 1.0;
+  d->rightMargin  = 1.0;
+  d->topMargin    = 1.0;
+  d->bottomMargin = 1.0;
 }
 
 Sheet::~Sheet()
 {
   // TODO delete all cells;
-
-  delete d->properties;
   delete d;
 }
 
@@ -163,11 +83,6 @@ UString Sheet::name() const
 void Sheet::setName( const UString& name )
 {
   d->name = name;
-}
-
-SheetProperties* Sheet::properties()
-{
-  return d->properties;
 }
 
 Cell* Sheet::cell( unsigned column, unsigned row, bool autoCreate )
@@ -197,3 +112,64 @@ unsigned Sheet::maxColumn() const
 {
   return d->maxColumn;
 }
+
+bool Sheet::visible() const
+{
+  return d->visible;
+}
+
+void Sheet::setVisible( bool v )
+{
+  d->visible = v;
+}
+
+bool Sheet::protect() const
+{
+  return d->protect;
+}
+
+void Sheet::setProtect( bool p )
+{
+  d->protect = p;
+}
+
+double Sheet::leftMargin() const
+{
+  return d->leftMargin;
+}
+
+void Sheet::setLeftMargin( double m ) 
+{
+  d->leftMargin = m;
+}
+
+double Sheet::rightMargin() const
+{
+  return d->rightMargin;
+}
+
+void Sheet::setRightMargin( double m ) 
+{
+  d->rightMargin = m;
+}
+
+double Sheet::topMargin() const
+{
+  return d->topMargin;
+}
+
+void Sheet::setTopMargin( double m ) 
+{
+  d->topMargin = m;
+}
+
+double Sheet::bottomMargin() const
+{
+  return d->bottomMargin;
+}
+
+void Sheet::setBottomMargin( double m ) 
+{
+  d->bottomMargin = m;
+}
+
