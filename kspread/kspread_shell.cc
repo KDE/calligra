@@ -170,7 +170,11 @@ bool KSpreadShell::openDocument( const char *_url, const char *_format )
   
   m_pDoc = new KSpreadDoc;
   if ( !m_pDoc->loadFromURL( _url, _format ) )
+  {
+    delete m_pDoc;
+    m_pDoc = 0L;
     return false;
+  }
   
   m_pView = m_pDoc->createSpreadView();
   m_pView->incRef();
