@@ -45,8 +45,6 @@ class KTextEditFormatCollection;
 #include <kpclipartcollection.h>
 #include <commandhistory.h>
 
-#include <komlParser.h>
-
 class KoDocumentEntry;
 class KPFooterHeaderEditor;
 class KPTextObject;
@@ -70,7 +68,9 @@ public:
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
-    bool load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs );
+    // We don't use the KoDocumentChild methods here, because we
+    // have uppercase tags in KPresenter :}
+    bool loadXML( const QDomElement &element );
     QDomElement saveXML( QDomDocument& doc );
 };
 
@@ -95,16 +95,12 @@ public:
     virtual bool completeSaving( KoStore* _store );
 
     // load
-    virtual bool loadXML( KOMLParser & parser );
+    virtual bool loadXML( const QDomDocument& doc );
     virtual bool loadXML( QIODevice *, const QDomDocument & doc );
     virtual bool loadChildren( KoStore* _store );
 
     virtual bool initDoc() { return insertNewTemplate( 0, 0, true ); }
     void initEmpty();
-
-    // get output- and inputformats [obsolete?]
-    virtual QStrList outputFormats();
-    virtual QStrList inputFormats();
 
     // insert an object
     virtual void insertObject( const QRect&, KoDocumentEntry&, int, int );
@@ -343,8 +339,8 @@ protected:
 
     QDomDocumentFragment saveBackground( QDomDocument& );
     QDomElement saveObjects( QDomDocument &doc );
-    void loadBackground( KOMLParser&, QValueList<KOMLAttrib>& );
-    void loadObjects( KOMLParser&, QValueList<KOMLAttrib>&, bool _paste = false );
+    void loadBackground( const QDomElement &element );
+    void loadObjects( const QDomElement &element, bool _paste = false );
     virtual bool completeLoading( KoStore* /* _store */ );
     void makeUsedPixmapList();
 
@@ -380,7 +376,6 @@ protected:
 
     bool _clean;
     int objStartY, objStartNum;
-    bool docAlreadyOpen;
 
     int _orastX, _orastY;
     PresSpeed presSpeed;

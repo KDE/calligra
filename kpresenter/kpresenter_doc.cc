@@ -80,28 +80,6 @@ using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;
 
-// remove me!!
-QRect tagToRect( QValueList<KOMLAttrib>& _attribs )
-{
-  int x = 0, y = 0, w = 0, h = 0;
-
-  QValueList<KOMLAttrib>::ConstIterator it = _attribs.begin();
-  for( ; it != _attribs.end() ; ++it )
-  {
-    if ( (*it).m_strName == "x" )
-        x =(*it).m_strValue.toInt();
-    else if ( (*it).m_strName == "y" )
-        y = (*it).m_strValue.toInt();
-    else if ( (*it).m_strName == "w" )
-        w =(*it).m_strValue.toInt();
-    else if ( (*it).m_strName == "h" )
-        h = (*it).m_strValue.toInt();
-  }
-
-  return QRect( x, y, w, h );
-}
-
-
 /******************************************************************/
 /* class KPresenterChild					  */
 /******************************************************************/
@@ -128,65 +106,49 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
     return 0L;
 }
 
-bool KPresenterChild::load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs )
+bool KPresenterChild::loadXML( const QDomElement &element )
 {
-    QValueList<KOMLAttrib>::ConstIterator it = _attribs.begin();
-    for( ; it != _attribs.end(); ++it )
-    {
-	if ( (*it).m_strName == "url" )
-	{
-	    m_tmpURL = (*it).m_strValue;
-	}
-	else if ( (*it).m_strName == "mime" )
-	{
-	    m_tmpMimeType = (*it).m_strValue;
-	}
-	else
-	    kdDebug(30003) << "Unknown attrib 'OBJECT:" << (*it).m_strName << "'" << endl;
-    }
+    if ( element.hasAttribute( "url" ) )
+        m_tmpURL = element.attribute("url");
+    if ( element.hasAttribute("mime") )
+        m_tmpMimeType = element.attribute("mime");
 
     if ( m_tmpURL.isEmpty() )
     {
-	kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
-	return false;
+        kdDebug() << "Empty 'url' attribute in OBJECT" << endl;
+        return false;
     }
-    else if ( m_tmpMimeType.isEmpty() )
+    if ( m_tmpMimeType.isEmpty() )
     {
-	kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
-	return false;
+        kdDebug() << "Empty 'mime' attribute in OBJECT" << endl;
+        return false;
     }
 
-    QString tag;
-    QValueList<KOMLAttrib> lst;
-    QString name;
-
-    bool brect = false;
-
-    // RECT
-    while( parser.open( QString::null, tag ) )
+   bool brect = false;
+    QDomElement e = element.firstChild().toElement();
+    for( ; !e.isNull(); e = e.nextSibling().toElement() )
     {
-	parser.parseTag( tag, name, lst );
-
-	if ( name == "RECT" )
-	{
-	    brect = true;
-	    m_tmpGeometry = tagToRect( lst );
-	    setGeometry( m_tmpGeometry );
-	}
-	else
-	    kdDebug(30003) << "Unknown tag '" << tag << "' in OBJECT" << endl;
-
-	if ( !parser.close( tag ) )
-	{
-	    kdDebug(30003) << "ERR: Closing Child in OBJECT" << endl;
-	    return false;
-	}
+        if ( e.tagName() == "RECT" )
+        {
+            brect = true;
+            int x, y, w, h;
+            x=y=w=h=0;
+            if ( e.hasAttribute( "x" ) )
+                x = e.attribute( "x" ).toInt(&brect);
+            if ( e.hasAttribute( "y" ) )
+                y = e.attribute( "y" ).toInt(&brect);
+            if ( e.hasAttribute( "w" ) )
+                w = e.attribute( "w" ).toInt(&brect);
+            if ( e.hasAttribute( "h" ) )
+                h = e.attribute( "h" ).toInt(&brect);
+            m_tmpGeometry = QRect(x, y, w, h);
+        }
     }
 
     if ( !brect )
     {
-	kdDebug(30003) << "Missing RECT in OBJECT" << endl;
-	return false;
+        kdDebug() << "Missing RECT in OBJECT" << endl;
+        return false;
     }
 
     return true;
@@ -224,7 +186,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     setInstance( KPresenterFactory::global() );
 
     dcop = 0;
-    docAlreadyOpen = false;
     _clean = true;
     _objectList = new QList<KPObject>;
     _objectList->setAutoDelete( false );
@@ -670,14 +631,12 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	// Build a new QDomDocument from the result
 	QDomDocument newdoc;
 	newdoc.setContent( tmpFileOut.file() );
-	KOMLParser parser( newdoc );
-	b = loadXML( parser );
+	b = loadXML( newdoc );
 	ignoreSticky = TRUE;
     }
     else
     {
-	KOMLParser parser( doc );
-	b = loadXML( parser );
+	b = loadXML( doc );
 	ignoreSticky = TRUE;
     }
     setModified(false);
@@ -685,423 +644,254 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 }
 
 /*========================== load ===============================*/
-bool KPresenterDoc::loadXML( KOMLParser & parser )
+bool KPresenterDoc::loadXML( const QDomDocument &doc )
 {
-    QString tag;
-    QValueList<KOMLAttrib> lst;
-    QString name;
-
     pixmapCollectionKeys.clear();
     pixmapCollectionNames.clear();
     clipartCollectionKeys.clear();
     clipartCollectionNames.clear();
     lastObj = -1;
-    bool allSlides = FALSE;
+    bool allSlides = false;
 
     // clean
     if ( _clean ) {
-	//KoPageLayout __pgLayout;
-	__pgLayout = KoPageLayoutDia::standardLayout();
-	__pgLayout.unit = PG_MM;
+        //KoPageLayout __pgLayout;
+        __pgLayout = KoPageLayoutDia::standardLayout();
+        __pgLayout.unit = PG_MM;
 
-	if ( !_backgroundList.isEmpty() )
-	    _backgroundList.clear();
-	delete _objectList;
-	_objectList = new QList<KPObject>;
-	_objectList->setAutoDelete( false );
-	_spInfinitLoop = false;
-	_spManualSwitch = true;
-	_rastX = 20;
-	_rastY = 20;
-	_xRnd = 20;
-	_yRnd = 20;
-	_txtBackCol = white;
-	urlIntern = url().path();
+        if ( !_backgroundList.isEmpty() )
+            _backgroundList.clear();
+        delete _objectList;
+        _objectList = new QList<KPObject>;
+        _objectList->setAutoDelete( false );
+        _spInfinitLoop = false;
+        _spManualSwitch = true;
+        _rastX = 20;
+        _rastY = 20;
+        _xRnd = 20;
+        _yRnd = 20;
+        _txtBackCol = white;
+        urlIntern = url().path();
         m_selectedSlides.clear();
     }
 
-    if ( !docAlreadyOpen ) {
-	// DOC
-	if ( !parser.open( "DOC", tag ) ) {
-	    kdWarning() << "Missing DOC" << endl;
-	    return false;
-	}
-
-	parser.parseTag( tag, name, lst );
-	QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	for( ; it != lst.end(); ++it ) {
-	    if ( ( *it ).m_strName == "mime" ) {
-		if ( ( *it ).m_strValue != "application/x-kpresenter" ) {
-		    kdError() << "Unknown mime type " << ( *it ).m_strValue << endl;
-		    return false;
-		}
-	    } else if ( ( *it ).m_strName == "url" )
-		urlIntern = KURL( ( *it ).m_strValue ).path();
-	}
+    QDomElement document=doc.documentElement();
+    // DOC
+    if(document.tagName()!="DOC") {
+        kdWarning() << "Missing DOC" << endl;
+        return false;
     }
 
-    docAlreadyOpen = false;
+    if(!document.hasAttribute("mime") || document.attribute("mime")!="application/x-kpresenter") {
+        kdError() << "Unknown mime type " << document.attribute("mime") << endl;
+        return false;
+    }
+    if(document.hasAttribute("url"))
+        urlIntern=KURL(document.attribute("url")).path();
 
-    // PAPER
-    while ( parser.open( QString::null, tag ) ) {
-	parser.parseTag( tag, name, lst );
+    QDomElement elem=document.firstChild().toElement();
+    while(!elem.isNull()) {
+        if(elem.tagName()=="EMBEDDED") {
+            KPresenterChild *ch = new KPresenterChild( this );
+            KPPartObject *kppartobject = 0L;
+            QRect r;
 
-	if ( name == "EMBEDDED" ) {
-	    parser.parseTag( tag, name, lst );
-	    KPresenterChild *ch = new KPresenterChild( this );
-	    KPPartObject *kppartobject = 0L;
-	    QRect r;
+            QDomElement object=elem.namedItem("OBJECT").toElement();
+            if(!object.isNull()) {
+                ch->loadXML(object);
+                r = ch->geometry();
+                insertChild( ch );
+                kppartobject = new KPPartObject( ch );
+                kppartobject->setOrig( r.x(), r.y() );
+                kppartobject->setSize( r.width(), r.height() );
+                _objectList->append( kppartobject );
+                //emit sig_insertObject( ch, kppartobject );
+            }
+            QDomElement settings=elem.namedItem("SETTINGS").toElement();
+            if(!settings.isNull() && kppartobject!=0)
+                kppartobject->load(settings);
+            if ( kppartobject ) {
+                kppartobject->setOrig( r.x(), r.y() );
+                kppartobject->setSize( r.width(), r.height() );
+            }
+        } else if(elem.tagName()=="PAPER")  {
+            if(elem.hasAttribute("format"))
+                __pgLayout.format=static_cast<KoFormat>(elem.attribute("format").toInt());
+            if(elem.hasAttribute("orientation"))
+                __pgLayout.orientation=static_cast<KoOrientation>(elem.attribute("orientation").toInt());
+            if(elem.hasAttribute("ptWidth"))
+                __pgLayout.ptWidth = elem.attribute("ptWidth").toDouble();
+            if(elem.hasAttribute("inchWidth"))
+                __pgLayout.inchWidth = elem.attribute("inchWidth").toDouble();
+            if(elem.hasAttribute("mmWidth"))
+                __pgLayout.mmWidth = elem.attribute("mmWidth").toDouble();
+            if(elem.hasAttribute("ptHeight"))
+                __pgLayout.ptHeight = elem.attribute("ptHeight").toDouble();
+            if(elem.hasAttribute("inchHeight"))
+                __pgLayout.inchHeight = elem.attribute("inchHeight").toDouble();
+            if(elem.hasAttribute("mmHeight"))
+                __pgLayout.mmHeight = elem.attribute("mmHeight").toDouble();
+            if(elem.hasAttribute("unit"))
+                __pgLayout.unit = static_cast<KoUnit>(elem.attribute("unit").toInt());
+            if(elem.hasAttribute("width")) {
+                __pgLayout.mmWidth = elem.attribute("width").toDouble();
+                __pgLayout.ptWidth = MM_TO_POINT( __pgLayout.mmWidth );
+                __pgLayout.inchWidth = MM_TO_INCH( __pgLayout.mmWidth );
+            }
+            if(elem.hasAttribute("height")) {
+                __pgLayout.mmHeight = elem.attribute("height").toDouble();
+                __pgLayout.ptHeight = MM_TO_POINT( __pgLayout.mmHeight );
+                __pgLayout.inchHeight = MM_TO_INCH( __pgLayout.mmHeight );
+            }
 
-	    while ( parser.open( QString::null, tag ) ) {
-		parser.parseTag( tag, name, lst );
-		if ( name == "OBJECT" ) {
-		    ch->load( parser, lst );
-		    r = ch->geometry();
-		    insertChild( ch );
-		    kppartobject = new KPPartObject( ch );
-		    kppartobject->setOrig( r.x(), r.y() );
-		    kppartobject->setSize( r.width(), r.height() );
-		    _objectList->append( kppartobject );
-		    //emit sig_insertObject( ch, kppartobject );
-		} else if ( name == "SETTINGS" ) {
-		    parser.parseTag( tag, name, lst );
-		    // yeah - let's iterate a little bit - it's fun after all ;) (Werner)
-		    //vector<KOMLAttrib>::const_iterator it = lst.begin();
-		    //for( ; it != lst.end(); it++ ) {
-		    //}
-                    if (kppartobject!=0)
-                        kppartobject->load( parser, lst );
-		} else
-		    kdError() << "Unknown tag '" << tag << "' in EMBEDDED" << endl;
-
-		if ( !parser.close( tag ) ) {
-		    kdError() << "ERR: Closing Child" << endl;
-		    return false;
-		}
-	    }
-	    if ( kppartobject ) {
-		kppartobject->setOrig( r.x(), r.y() );
-		kppartobject->setSize( r.width(), r.height() );
-	    }
-	} else if ( name == "PAPER" ) {
-	    parser.parseTag( tag, name, lst );
-	    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    for( ; it != lst.end(); ++it ) {
-		if ( ( *it ).m_strName == "format" )
-		    __pgLayout.format = ( KoFormat )( *it ).m_strValue.toInt();
-		else if ( ( *it ).m_strName == "orientation" )
-		    __pgLayout.orientation = ( KoOrientation )( *it ).m_strValue.toInt();
-		else if ( ( *it ).m_strName == "width" ) {
-		    __pgLayout.mmWidth = ( *it ).m_strValue.toDouble();
-		    __pgLayout.ptWidth = MM_TO_POINT( __pgLayout.mmWidth );
-		    __pgLayout.inchWidth = MM_TO_INCH( __pgLayout.mmWidth );
-		} else if ( ( *it ).m_strName == "height" ) {
-		    __pgLayout.mmHeight = ( *it ).m_strValue.toDouble();
-		    __pgLayout.ptHeight = MM_TO_POINT( __pgLayout.mmHeight );
-		    __pgLayout.inchHeight = MM_TO_INCH( __pgLayout.mmHeight );
-		}
-		else if ( ( *it ).m_strName == "ptWidth" )
-		    __pgLayout.ptWidth = ( *it ).m_strValue.toDouble();
-		else if ( ( *it ).m_strName == "inchWidth" )
-		    __pgLayout.inchWidth = ( *it ).m_strValue.toDouble();
-		else if ( ( *it ).m_strName == "mmWidth" )
-		    __pgLayout.mmWidth = ( *it ).m_strValue.toDouble();
-		else if ( ( *it ).m_strName == "ptHeight" )
-		    __pgLayout.ptHeight = ( *it ).m_strValue.toDouble();
-		else if ( ( *it ).m_strName == "inchHeight" )
-		    __pgLayout.inchHeight = ( *it ).m_strValue.toDouble();
-		else if ( ( *it ).m_strName == "mmHeight" )
-		    __pgLayout.mmHeight = ( *it ).m_strValue.toDouble();
-		else if ( ( *it ).m_strName == "unit" )
-		    __pgLayout.unit = static_cast<KoUnit>( ( *it ).m_strValue.toInt() );
-		else
-		    kdError() << "Unknown attrib PAPER:'" << ( *it ).m_strName << "'" << endl;
-	    }
-
-	    // PAPERBORDERS, HEAD, FOOT
-	    while ( parser.open( QString::null, tag ) ) {
-		parser.parseTag( tag, name, lst );
-		if ( name == "PAPERBORDERS" ) {
-		    parser.parseTag( tag, name, lst );
-		    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-		    for( ; it != lst.end(); ++it ) {
-			if ( ( *it ).m_strName == "left" ) {
-			    __pgLayout.mmLeft = ( *it ).m_strValue.toDouble();
-			    __pgLayout.ptLeft = MM_TO_POINT( __pgLayout.mmLeft );
-			    __pgLayout.inchLeft = MM_TO_INCH( __pgLayout.mmLeft );
-			} else if ( ( *it ).m_strName == "top" ) {
-			    __pgLayout.mmTop = ( *it ).m_strValue.toDouble();
-			    __pgLayout.ptTop = MM_TO_POINT( __pgLayout.mmTop );
-			    __pgLayout.inchTop = MM_TO_INCH( __pgLayout.mmTop );
-			} else if ( ( *it ).m_strName == "right" ) {
-			    __pgLayout.mmRight = ( *it ).m_strValue.toDouble();
-			    __pgLayout.ptRight = MM_TO_POINT( __pgLayout.mmRight );
-			    __pgLayout.inchRight = MM_TO_INCH( __pgLayout.mmRight );
-			} else if ( ( *it ).m_strName == "bottom" ) {
-			    __pgLayout.mmBottom = ( *it ).m_strValue.toDouble();
-			    __pgLayout.ptBottom = MM_TO_POINT( __pgLayout.mmBottom );
-			    __pgLayout.inchBottom = MM_TO_INCH( __pgLayout.mmBottom );
-			}
-			else if ( ( *it ).m_strName == "ptLeft" )
-			    __pgLayout.ptLeft = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "inchLeft" )
-			    __pgLayout.inchLeft = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "mmLeft" )
-			    __pgLayout.mmLeft = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "ptRight" )
-			    __pgLayout.ptRight = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "inchRight" )
-			    __pgLayout.inchRight = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "mmRight" )
-			    __pgLayout.mmRight = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "ptTop" )
-			    __pgLayout.ptTop = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "inchTop" )
-			    __pgLayout.inchTop = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "mmTop" )
-			    __pgLayout.mmTop = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "ptBottom" )
-			    __pgLayout.ptBottom = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "inchBottom" )
-			    __pgLayout.inchBottom = ( *it ).m_strValue.toDouble();
-			else if ( ( *it ).m_strName == "mmBottom" )
-			    __pgLayout.mmBottom = ( *it ).m_strValue.toDouble();
-			else
-			    kdError() << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName << "'" << endl;
-		    }
-		} else
-		    kdError() << "Unknown tag '" << tag << "' in PAPER" << endl;
-
-		if ( !parser.close( tag ) ) {
-		    kdError() << "ERR: Closing Child" << endl;
-		    return false;
-		}
-	    }
-
-	} else if ( name == "BACKGROUND" ) {
-	    parser.parseTag( tag, name, lst );
-	    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    for( ; it != lst.end(); ++it ) {
-		if ( ( *it ).m_strName == "rastX" )
-		    _rastX = ( *it ).m_strValue.toInt();
-		else if ( ( *it ).m_strName == "rastY" )
-		    _rastY = ( *it ).m_strValue.toInt();
-		else if ( ( *it ).m_strName == "xRnd" )
-		    _xRnd = ( *it ).m_strValue.toInt();
-		else if ( ( *it ).m_strName == "yRnd" )
-		    _yRnd = ( *it ).m_strValue.toInt();
-		else if ( ( *it ).m_strName == "bred" )
-		    _txtBackCol.setRgb( ( *it ).m_strValue.toInt(),
-					_txtBackCol.green(), _txtBackCol.blue() );
-		else if ( ( *it ).m_strName == "bgreen" )
-		    _txtBackCol.setRgb( _txtBackCol.red(), ( *it ).m_strValue.toInt(),
-					_txtBackCol.blue() );
-		else if ( ( *it ).m_strName == "bblue" )
-		    _txtBackCol.setRgb( _txtBackCol.red(), _txtBackCol.green(),
-					( *it ).m_strValue.toInt() );
-		else
-		    kdError() << "Unknown attrib BACKGROUND:'" << ( *it ).m_strName << "'" << endl;
-	    }
-	    loadBackground( parser, lst );
-	} else if ( name == "HEADER" ) {
-	    if ( _clean || !hasHeader() ) {
-		parser.parseTag( tag, name, lst );
-		QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-		for( ; it != lst.end(); ++it ) {
-		    if ( ( *it ).m_strName == "show" ) {
-			setHeader( static_cast<bool>( ( *it ).m_strValue.toInt() ) );
-			headerFooterEdit->setShowHeader( hasHeader() );
-		    }
-		}
-		_header->load( parser, lst );
-	    }
-	} else if ( name == "FOOTER" ) {
-	    if ( _clean || !hasFooter() ) {
-		parser.parseTag( tag, name, lst );
-		QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-		for( ; it != lst.end(); ++it ) {
-		    if ( ( *it ).m_strName == "show" ) {
-			setFooter( static_cast<bool>( ( *it ).m_strValue.toInt() ) );
-			headerFooterEdit->setShowFooter( hasFooter() );
-		    }
-		}
-		_footer->load( parser, lst );
-	    }
-	} else if ( name == "OBJECTS" ) {
-	    parser.parseTag( tag, name, lst );
-	    lastObj = _objectList->count() - 1;
-	    loadObjects( parser, lst );
-	} else if ( name == "INFINITLOOP" ) {
-	    parser.parseTag( tag, name, lst );
-	    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    for( ; it != lst.end(); ++it ) {
-		if ( ( *it ).m_strName == "value" )
-		    _spInfinitLoop = static_cast<bool>( ( *it ).m_strValue.toInt() );
-	    }
-	} else if ( name == "PRESSPEED" ) {
-	    parser.parseTag( tag, name, lst );
-	    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    for( ; it != lst.end(); ++it ) {
-		if ( ( *it ).m_strName == "value" )
-		    presSpeed = static_cast<PresSpeed>( ( *it ).m_strValue.toInt() );
-	    }
-	} else if ( name == "MANUALSWITCH" ) {
-	    parser.parseTag( tag, name, lst );
-	    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    for( ; it != lst.end(); ++it ) {
-		if ( ( *it ).m_strName == "value" )
-		    _spManualSwitch = static_cast<bool>( ( *it ).m_strValue.toInt() );
-	    }
-	} else if ( name == "PRESSLIDES" ) {
-	    parser.parseTag( tag, name, lst );
-	    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    for( ; it != lst.end(); ++it ) {
-		if ( ( *it ).m_strName == "value" )
-		    if ( ( *it ).m_strValue.toInt() == 0 )
-			allSlides = TRUE;
-	    }
-	} else if ( name == "SELSLIDES" ) {
-	    parser.parseTag( tag, name, lst );
-	    while ( parser.open( QString::null, tag ) ) {
-		parser.parseTag( tag, name, lst );
-                if ( _clean ) // Skip this when loading a single page
-                    if ( name == "SLIDE" ) {
+            QDomElement borders=elem.namedItem("PAPERBORDERS").toElement();
+            if(!borders.isNull()) {
+                if(borders.hasAttribute("left")) {
+                    __pgLayout.mmLeft = borders.attribute("left").toDouble();
+                    __pgLayout.ptLeft = MM_TO_POINT( __pgLayout.mmLeft );
+                    __pgLayout.inchLeft = MM_TO_INCH( __pgLayout.mmLeft );
+                }
+                if(borders.hasAttribute("top")) {
+                    __pgLayout.mmTop = borders.attribute("top").toDouble();
+                    __pgLayout.ptTop = MM_TO_POINT( __pgLayout.mmTop );
+                    __pgLayout.inchTop = MM_TO_INCH( __pgLayout.mmTop );
+                }
+                if(borders.hasAttribute("right")) {
+                    __pgLayout.mmRight = borders.attribute("right").toDouble();
+                    __pgLayout.ptRight = MM_TO_POINT( __pgLayout.mmRight );
+                    __pgLayout.inchRight = MM_TO_INCH( __pgLayout.mmRight );
+                }
+                if(borders.hasAttribute("bottom")) {
+                    __pgLayout.mmBottom = borders.attribute("bottom").toDouble();
+                    __pgLayout.ptBottom = MM_TO_POINT( __pgLayout.mmBottom );
+                    __pgLayout.inchBottom = MM_TO_INCH( __pgLayout.mmBottom );
+                }
+                if(borders.hasAttribute("ptLeft"))
+                    __pgLayout.ptLeft = borders.attribute("ptLeft").toDouble();
+                if(borders.hasAttribute("inchLeft"))
+                    __pgLayout.inchLeft = borders.attribute("inchLeft").toDouble();
+                if(borders.hasAttribute("mmLeft"))
+                    __pgLayout.mmLeft = borders.attribute("mmLeft").toDouble();
+                if(borders.hasAttribute("ptRight"))
+                    __pgLayout.ptRight = borders.attribute("ptRight").toDouble();
+                if(borders.hasAttribute("inchRight"))
+                    __pgLayout.inchRight = borders.attribute("inchRight").toDouble();
+                if(borders.hasAttribute("mmRight"))
+                    __pgLayout.mmRight = borders.attribute("mmRight").toDouble();
+                if(borders.hasAttribute("ptTop"))
+                    __pgLayout.ptTop = borders.attribute("ptTop").toDouble();
+                if(borders.hasAttribute("inchTop"))
+                    __pgLayout.inchTop = borders.attribute("inchTop").toDouble();
+                if(borders.hasAttribute("mmTop"))
+                    __pgLayout.mmTop = borders.attribute("mmTop").toDouble();
+                if(borders.hasAttribute("ptBottom"))
+                    __pgLayout.ptBottom = borders.attribute("ptBottom").toDouble();
+                if(borders.hasAttribute("inchBottom"))
+                    __pgLayout.inchBottom = borders.attribute("inchBottom").toDouble();
+                if(borders.hasAttribute("mmBottom"))
+                    __pgLayout.mmBottom = borders.attribute("inchBottom").toDouble();
+            }
+        } else if(elem.tagName()=="BACKGROUND") {
+            int red=0, green=0, blue=0;
+            if(elem.hasAttribute("rastX"))
+                _rastX = elem.attribute("rastX").toInt();
+            if(elem.hasAttribute("rastY"))
+                _rastY = elem.attribute("rastY").toInt();
+            if(elem.hasAttribute("xRnd"))
+                _xRnd = elem.attribute("xRnd").toInt();
+            if(elem.hasAttribute("yRnd"))
+                _yRnd = elem.attribute("yRnd").toInt();
+            if(elem.hasAttribute("bred"))
+                red = elem.attribute("bred").toInt();
+            if(elem.hasAttribute("bgreen"))
+                green = elem.attribute("bgreen").toInt();
+            if(elem.hasAttribute("bblue"))
+                blue = elem.attribute("bblue").toInt();
+            _txtBackCol.setRgb(red, green, blue);
+            loadBackground(elem);
+        } else if(elem.tagName()=="HEADER") {
+            if ( _clean || !hasHeader() ) {
+                if(elem.hasAttribute("show")) {
+                    setHeader(static_cast<bool>(elem.attribute("show").toInt()));
+                    headerFooterEdit->setShowHeader( hasHeader() );
+                }
+                _header->load(elem);
+            }
+        } else if(elem.tagName()=="FOOTER") {
+            if ( _clean || !hasFooter() ) {
+                if(elem.hasAttribute("show")) {
+                    setFooter( static_cast<bool>(elem.attribute("show").toInt() ) );
+                    headerFooterEdit->setShowFooter( hasFooter() );
+                }
+                _footer->load(elem);
+            }
+        } else if(elem.tagName()=="OBJECTS") {
+            lastObj = _objectList->count() - 1;
+            loadObjects(elem);
+        } else if(elem.tagName()=="INFINITLOOP") {
+            if(elem.hasAttribute("value"))
+                _spInfinitLoop = static_cast<bool>(elem.attribute("value").toInt());
+        } else if(elem.tagName()=="PRESSPEED") {
+            if(elem.hasAttribute("value"))
+                presSpeed = static_cast<PresSpeed>(elem.attribute("value").toInt());
+        } else if(elem.tagName()=="MANUALSWITCH") {
+            if(elem.hasAttribute("value"))
+                _spManualSwitch = static_cast<bool>(elem.attribute("value").toInt());
+        } else if(elem.tagName()=="PRESSLIDES") {
+            if(elem.hasAttribute("value") && elem.attribute("value").toInt()==0)
+                allSlides = TRUE;
+        } else if(elem.tagName()=="SELSLIDES") {
+            QDomElement slide=elem.firstChild().toElement();
+            while(!slide.isNull()) {
+                if( _clean ) // Skip this when loading a single page
+                    if(slide.tagName()=="SLIDE") {
                         int nr = -1;
                         bool show = false;
-                        parser.parseTag( tag, name, lst );
-                        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-                        for( ; it != lst.end(); ++it ) {
-                            if ( ( *it ).m_strName == "nr" )
-                                nr = ( *it ).m_strValue.toInt();
-                            else if ( ( *it ).m_strName == "show" )
-                                show = static_cast<bool>( ( *it ).m_strValue.toInt() );
-                        }
+                        if(slide.hasAttribute("nr"))
+                            nr=slide.attribute("nr").toInt();
+                        if(slide.hasAttribute("show"))
+                            show=static_cast<bool>(slide.attribute("show").toInt());
                         // We assume that the PAGE tags were found before the
                         // SELSLIDES tag (this is always the case)
                         if ( nr >= 0 )
                         {
-                            kdDebug() << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
+                            //kdDebug() << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
                             ASSERT( nr < (int)m_selectedSlides.count() );
                             m_selectedSlides[nr] = show;
                         } else kdWarning() << "Parse error. No nr in <SLIDE> !" << endl;
-                    } else
-                        kdError() << "Unknown tag '" << tag << "' in SELSLIDES" << endl;
-
-		if ( !parser.close( tag ) ) {
-		    kdError() << "ERR: Closing Child" << endl;
-		    return false;
-		}
-	    }
-	} else if ( name == "PIXMAPS" ) {
-	    parser.parseTag( tag, name, lst );
-	    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    for( ; it != lst.end(); ++it ) {
-	    }
-
-	    while ( parser.open( QString::null, tag ) ) {
-                KPImageKey key;
-		int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
-		QString n;
-
-		parser.parseTag( tag, name, lst );
-		if ( name == "KEY" ) {
-		    parser.parseTag( tag, name, lst );
-		    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-		    n = QString::null;
-		    for( ; it != lst.end(); ++it ) {
-			if ( ( *it ).m_strName == "filename" )
-			    key.filename = ( *it ).m_strValue;
-			else if ( ( *it ).m_strName == "year" )
-			    year = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "month" )
-			    month = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "day" )
-			    day = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "hour" )
-			    hour = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "minute" )
-			    minute = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "second" )
-			    second = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "msec" )
-			    msec = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "name" )
-			    n = ( *it ).m_strValue;
-			else
-			    kdError() << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
-		    }
-		    key.lastModified.setDate( QDate( year, month, day ) );
-		    key.lastModified.setTime( QTime( hour, minute, second, msec ) );
-
-		    pixmapCollectionKeys.append( key );
-		    pixmapCollectionNames.append( n );
-		} else
-		    kdError() << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
-
-		if ( !parser.close( tag ) ) {
-		    kdError() << "ERR: Closing Child" << endl;
-		    return false;
-		}
-	    }
-	} else if ( name == "CLIPARTS" ) {
-	    parser.parseTag( tag, name, lst );
-	    //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    //for( ; it != lst.end(); ++it ) {
-	    //}
-
-	    while ( parser.open( QString::null, tag ) ) {
-		KPClipartCollection::Key key;
-		int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
-		QString n;
-
-		parser.parseTag( tag, name, lst );
-		if ( name == "KEY" ) {
-		    n = QString::null;
-		    parser.parseTag( tag, name, lst );
-		    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-		    for( ; it != lst.end(); ++it )
-		    {
-			if ( ( *it ).m_strName == "filename" )
-			    key.filename = ( *it ).m_strValue;
-			else if ( ( *it ).m_strName == "year" )
-			    year = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "month" )
-			    month = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "day" )
-			    day = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "hour" )
-			    hour = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "minute" )
-			    minute = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "second" )
-			    second = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "msec" )
-			    msec = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "name" )
-			    n = ( *it ).m_strValue;
-			else
-			    kdError() << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
-		    }
-		    key.lastModified.setDate( QDate( year, month, day ) );
-		    key.lastModified.setTime( QTime( hour, minute, second, msec ) );
-
-		    clipartCollectionKeys.append( key );
-		    clipartCollectionNames.append( n );
-		} else
-		    kdError() << "Unknown tag '" << tag << "' in CLIPARTS" << endl;
-
-		if ( !parser.close( tag ) ) {
-		    kdError() << "ERR: Closing Child" << endl;
-		    return false;
-		}
-	    }
-	} else
-	    kdError() << "Unknown tag '" << tag << "' in PRESENTATION" << endl;
-
-	if ( !parser.close( tag ) ) {
-	    kdError() << "ERR: Closing Child" << endl;
-	    return false;
-	}
+                    }
+                slide=slide.nextSibling().toElement();
+            }
+        } else if(elem.tagName()=="PIXMAPS") {
+            QDomElement keyElement=elem.firstChild().toElement();
+            while(!keyElement.isNull()) {
+                if(keyElement.tagName()=="KEY") {
+                    KPImageKey key;
+                    QString n;
+                    key.loadAttributes(keyElement, QDate(), QTime());
+                    if(keyElement.hasAttribute("name"))
+                        n=keyElement.attribute("name");
+                    pixmapCollectionKeys.append( key );
+                    pixmapCollectionNames.append( n );
+                }
+                keyElement=keyElement.nextSibling().toElement();
+            }
+        } else if(elem.tagName()=="CLIPARTS") {
+            QDomElement keyElement=elem.firstChild().toElement();
+            while(!keyElement.isNull()) {
+                if(keyElement.tagName()=="KEY") {
+                    KPClipartCollection::Key key;
+                    QString n;
+                    key.loadAttributes(keyElement, QDate(), QTime());
+                    if(keyElement.hasAttribute("name"))
+                        n=keyElement.attribute("name");
+                    clipartCollectionKeys.append( key );
+                    clipartCollectionNames.append( n );
+                }
+                keyElement=keyElement.nextSibling().toElement();
+            }
+        }
+        elem=elem.nextSibling().toElement();
     }
 
     if ( _rastX == 0 ) _rastX = 10;
@@ -1111,9 +901,9 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
     if ( allSlides && _clean ) {
         //kdDebug() << "KPresenterDoc::loadXML allSlides" << endl;
-	QValueList<bool>::Iterator sit = m_selectedSlides.begin();
-	for ( ; sit != m_selectedSlides.end(); ++sit )
-	    (*sit) = true;
+        QValueList<bool>::Iterator sit = m_selectedSlides.begin();
+        for ( ; sit != m_selectedSlides.end(); ++sit )
+            (*sit) = true;
     }
 
     setModified(false);
@@ -1121,175 +911,141 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 }
 
 /*====================== load background =========================*/
-void KPresenterDoc::loadBackground( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
+void KPresenterDoc::loadBackground( const QDomElement &element )
 {
-    QString tag;
-    QString name;
-
-    while ( parser.open( QString::null, tag ) ) {
-	parser.parseTag( tag, name, lst );
-
-	// page
-	if ( name == "PAGE" ) {
-	    insertNewPage( 0, 0, false ); // appends an entry to _backgroundList
-	    KPBackGround *kpbackground = _backgroundList.last();
-	    kpbackground->load( parser, lst );
-            m_selectedSlides.append( true ); // create an entry for this page
-	} else
-	    kdWarning() << "Unknown tag '" << tag << "' in BACKGROUND" << endl;
-
-	if ( !parser.close( tag ) ) {
-	    kdWarning() << "ERR: Closing Child" << endl;
-	    return;
-	}
+    QDomElement page=element.firstChild().toElement();
+    while(!page.isNull()) {
+        insertNewPage( 0, 0, false ); // appends an entry to _backgroundList
+        KPBackGround *kpbackground = _backgroundList.last();
+        kpbackground->load( page );
+        m_selectedSlides.append( true ); // create an entry for this page
+        page=page.nextSibling().toElement();
     }
 }
 
 /*========================= load objects =========================*/
-void KPresenterDoc::loadObjects( KOMLParser& parser, QValueList<KOMLAttrib>& lst, bool _paste )
+void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
 {
-    QString tag;
-    QString name;
     ObjType t = OT_LINE;
+    QDomElement obj=element.firstChild().toElement();
+    while(!obj.isNull()) {
+        if(obj.tagName()=="OBJECT" ) {
+            bool sticky=false;
+            int tmp=0;
+            if(obj.hasAttribute("type"))
+                tmp=obj.attribute("type").toInt();
+            t=static_cast<ObjType>(tmp);
+            if(obj.hasAttribute("sticky"))
+                tmp=obj.attribute("sticky").toInt();
+            sticky=static_cast<bool>(tmp);
 
-    while ( parser.open( QString::null, tag ) ) {
-	parser.parseTag( tag, name, lst );
+            switch ( t ) {
+            case OT_LINE: {
+                KPLineObject *kplineobject = new KPLineObject();
+                kplineobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this );
+                    insertCmd->execute();
+                    _commands.addCommand( insertCmd );
+                } else
+                    _objectList->append( kplineobject );
+            } break;
+            case OT_RECT: {
+                KPRectObject *kprectobject = new KPRectObject();
+                kprectobject->setRnds( _xRnd, _yRnd );
+                kprectobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this );
+                    insertCmd->execute();
+                    _commands.addCommand( insertCmd );
+                } else
+                    _objectList->append( kprectobject );
+            } break;
+            case OT_ELLIPSE: {
+                KPEllipseObject *kpellipseobject = new KPEllipseObject();
+                kpellipseobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this );
+                    insertCmd->execute();
+                    _commands.addCommand( insertCmd );
+                } else
+                    _objectList->append( kpellipseobject );
+            } break;
+            case OT_PIE: {
+                KPPieObject *kppieobject = new KPPieObject();
+                kppieobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chors" ), kppieobject, this );
+                    insertCmd->execute();
+                    _commands.addCommand( insertCmd );
+                } else
+                    _objectList->append( kppieobject );
+            } break;
+            case OT_AUTOFORM: {
+                KPAutoformObject *kpautoformobject = new KPAutoformObject();
+                kpautoformobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this );
+                    insertCmd->execute();
+                    _commands.addCommand( insertCmd );
+                } else
+                    _objectList->append( kpautoformobject );
+            } break;
+            case OT_CLIPART: {
+                KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection );
+                kpclipartobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this );
+                    insertCmd->execute();
+                    _commands.addCommand( insertCmd );
+                    kpclipartobject->reload();
+                } else
+                    _objectList->append( kpclipartobject );
+            } break;
+            case OT_TEXT: {
+                KPTextObject *kptextobject = new KPTextObject( this );
+                kptextobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this );
+                    insertCmd->execute();
+                    _commands.addCommand( insertCmd );
+                } else
+                    _objectList->append( kptextobject );
+            } break;
+            case OT_PICTURE: {
+                KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection );
+                kppixmapobject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this );
+                    insertCmd->execute();
+                    _commands.addCommand( insertCmd );
+                    kppixmapobject->reload();
+                } else
+                    _objectList->append( kppixmapobject );
+            } break;
+            case OT_GROUP: {
+                KPGroupObject *kpgroupobject = new KPGroupObject();
+                kpgroupobject->load(obj, this);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this );
+                    insertCmd->execute();
+                    _commands.addCommand( insertCmd );
+                } else
+                    _objectList->append( kpgroupobject );
+            } break;
+            default: break;
+            }
 
-	// object
-	if ( name == "OBJECT" ) {
-	    parser.parseTag( tag, name, lst );
-	    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-	    bool sticky = FALSE;
-	    for( ; it != lst.end(); ++it ) {
-		if ( ( *it ).m_strName == "type" )
-		    t = ( ObjType )( *it ).m_strValue.toInt();
-
-		if ( ( *it ).m_strName == "sticky" )
-		    sticky = (bool)( *it ).m_strValue.toInt();
-	    }
-
-	    switch ( t ) {
-	    case OT_LINE: {
-		KPLineObject *kplineobject = new KPLineObject();
-		kplineobject->load( parser, lst );
-
-		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this );
-		    insertCmd->execute();
-		    _commands.addCommand( insertCmd );
-		} else
-		    _objectList->append( kplineobject );
-	    } break;
-	    case OT_RECT: {
-		KPRectObject *kprectobject = new KPRectObject();
-		kprectobject->setRnds( _xRnd, _yRnd );
-		kprectobject->load( parser, lst );
-
-		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this );
-		    insertCmd->execute();
-		    _commands.addCommand( insertCmd );
-		} else
-		    _objectList->append( kprectobject );
-	    } break;
-	    case OT_ELLIPSE: {
-		KPEllipseObject *kpellipseobject = new KPEllipseObject();
-		kpellipseobject->load( parser, lst );
-
-		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this );
-		    insertCmd->execute();
-		    _commands.addCommand( insertCmd );
-		} else
-		    _objectList->append( kpellipseobject );
-	    } break;
-	    case OT_PIE: {
-		KPPieObject *kppieobject = new KPPieObject();
-		kppieobject->load( parser, lst );
-
-		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chors" ), kppieobject, this );
-		    insertCmd->execute();
-		    _commands.addCommand( insertCmd );
-		} else
-		    _objectList->append( kppieobject );
-	    } break;
-	    case OT_AUTOFORM: {
-		KPAutoformObject *kpautoformobject = new KPAutoformObject();
-		kpautoformobject->load( parser, lst );
-
-		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this );
-		    insertCmd->execute();
-		    _commands.addCommand( insertCmd );
-		} else
-		    _objectList->append( kpautoformobject );
-	    } break;
-	    case OT_CLIPART: {
-		KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection );
-		kpclipartobject->load( parser, lst );
-
-		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this );
-		    insertCmd->execute();
-		    _commands.addCommand( insertCmd );
-		    kpclipartobject->reload();
-		} else
-		    _objectList->append( kpclipartobject );
-	    } break;
-	    case OT_TEXT: {
-		KPTextObject *kptextobject = new KPTextObject( this );
-		kptextobject->load( parser, lst );
-
-		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this );
-		    insertCmd->execute();
-		    _commands.addCommand( insertCmd );
-		} else
-		    _objectList->append( kptextobject );
-	    } break;
-	    case OT_PICTURE: {
-		KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection );
-		kppixmapobject->load( parser, lst );
-
-		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this );
-		    insertCmd->execute();
-		    _commands.addCommand( insertCmd );
-		    kppixmapobject->reload();
-		} else
-		    _objectList->append( kppixmapobject );
-	    } break;
-	    case OT_GROUP: {
-		KPGroupObject *kpgroupobject = new KPGroupObject();
-		kpgroupobject->load( parser, lst, this );
-
-		if ( _paste ) {
-		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this );
-		    insertCmd->execute();
-		    _commands.addCommand( insertCmd );
-		} else
-		    _objectList->append( kpgroupobject );
-	    } break;
-	    default: break;
-	    }
-
-	    if ( objStartY > 0 )
-		_objectList->last()->moveBy( 0, objStartY );
-	    if ( pasting ) {
-		_objectList->last()->moveBy( pasteXOffset, pasteYOffset );
-		_objectList->last()->setSelected( true );
-	    }
- 	    if ( !ignoreSticky )
-		_objectList->last()->setSticky( sticky );
-
-	} else
-	    kdWarning() << "Unknown tag '" << tag << "' in OBJECTS" << endl;
-
-	if ( !parser.close( tag ) ) {
-	    kdWarning() << "ERR: Closing Child" << endl;
-	    return;
-	}
+            if ( objStartY > 0 )
+                _objectList->last()->moveBy( 0, objStartY );
+            if ( pasting ) {
+                _objectList->last()->moveBy( pasteXOffset, pasteYOffset );
+                _objectList->last()->setSelected( true );
+            }
+            if ( !ignoreSticky )
+                _objectList->last()->setSticky( sticky );
+        }
+        obj=obj.nextSibling().toElement();
     }
 }
 
@@ -1414,18 +1170,6 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 //    _pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
 
     return true;
-}
-
-/*========================== output formats ======================*/
-QStrList KPresenterDoc::outputFormats()
-{
-    return new QStrList();
-}
-
-/*========================== input formats =======================*/
-QStrList KPresenterDoc::inputFormats()
-{
-    return new QStrList();
 }
 
 /*========================= insert an object =====================*/
@@ -3648,34 +3392,24 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int )
 {
     QDomDocument doc;
     doc.setContent( in );
-    KOMLParser parser( doc );
 
-    QString tag;
-    QValueList<KOMLAttrib> lst;
-    QString name;
+    QDomElement document=doc.documentElement();
 
     // DOC
-    if ( !parser.open( "DOC", tag ) ) {
-	kdError() << "Missing DOC" << endl;
-	return;
+    if (document.tagName()!="DOC") {
+        kdError() << "Missing DOC" << endl;
+        return;
     }
 
     bool ok = false;
 
-    parser.parseTag( tag, name, lst );
-    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-    for( ; it != lst.end(); ++it ) {
-	if ( ( *it ).m_strName == "mime" ) {
-	    if ( ( *it ).m_strValue == "application/x-kpresenter-selection" ) {
-		ok = true;
-	    }
-	}
-    }
+    if(document.hasAttribute("mime") && document.attribute("mime")=="application/x-kpresenter-selection")
+        ok=true;
 
     if ( !ok )
-	return;
+        return;
 
-    loadObjects( parser, lst, true );
+    loadObjects(document, true);
 
     repaint( false );
     setModified( true );

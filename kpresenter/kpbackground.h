@@ -21,7 +21,6 @@
 #define kpbackground_h
 
 #include <qsize.h>
-#include <komlParser.h>
 #include <global.h>
 #include <kpimage.h>
 #include <kpclipartcollection.h>
@@ -77,9 +76,6 @@ public:
 
     void setBgSize( QSize _size, bool visible = true );
 
-    //void setBgSize( int width, int height )
-    //{ setBgSize( QSize( width, height ) ); }
-
     BackType getBackType() const
     { return backType; }
     BackView getBackView() const
@@ -111,7 +107,7 @@ public:
     void restore();
 
     QDomElement save( QDomDocument &doc );
-    void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
+    void load( const QDomElement &element );
 
 protected:
     void drawBackColor( QPainter *_painter );

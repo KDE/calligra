@@ -71,6 +71,7 @@ public:
 
         QDomElement saveXML( QDomDocument &doc );
         void setAttributes( QDomElement &elem );
+        void loadAttributes( const QDomElement &elem, const QDate &dDate, const QTime &dTime );
 
         QString filename;
         QDateTime lastModified;

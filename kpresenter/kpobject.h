@@ -25,13 +25,14 @@
 #include <qbrush.h>
 #include <qcursor.h>
 
-#include <komlParser.h>
-
 #include <global.h>
 #include <kpgradient.h>
 
 class QPainter;
 class DCOPObject;
+class QDomDocumentFragment;
+class QDomDocument;
+class QDomElement;
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -87,8 +88,7 @@ public:
     { effect3 = _effect3; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load( KOMLParser& /*parser*/, QValueList<KOMLAttrib>& /*lst*/ )
-    {; }
+    virtual void load(const QDomElement &element);
 
     virtual ObjType getType() const
     { return OT_UNDEFINED; }
@@ -171,8 +171,14 @@ protected:
     QDomElement createValueElement(const QString &tag, int value, QDomDocument &doc);
     QDomElement createGradientElement(const QString &tag, const QColor &c1, const QColor &c2,
                                       int type, bool unbalanced, int xfactor, int yfactor, QDomDocument &doc);
+    void toGradient(const QDomElement &element, QColor &c1, QColor &c2, BCType &type,
+                    bool &unbalanced, int &xfactor, int &yfactor) const;
+
     QDomElement createPenElement(const QString &tag, const QPen &pen, QDomDocument &doc);
+    QPen toPen(const QDomElement &element) const;
+
     QDomElement createBrushElement(const QString &tag, const QBrush &brush, QDomDocument &doc);
+    QBrush toBrush(const QDomElement &element) const;
 
     float angle;
     QPoint orig;

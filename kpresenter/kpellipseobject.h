@@ -85,7 +85,7 @@ public:
     { return yfactor; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
+    virtual void load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

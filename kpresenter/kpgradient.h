@@ -33,56 +33,43 @@ class QPainter;
 class KPGradient
 {
 public:
-    KPGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size,
-		bool _unbalanced, int _xfactor, int _yfactor );
-    virtual ~KPGradient()
-    {}
+    KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
+                const QSize &_size, bool _unbalanced, int _xfactor, int _yfactor );
+    ~KPGradient() {}
 
-    virtual QColor getColor1() const
-    { return color1; }
-    virtual QColor getColor2() const
-    { return color2; }
-    virtual BCType getBackColorType() const
-    { return bcType; }
-    virtual bool getUnbalanced() const
-    { return unbalanced; }
-    virtual int getXFactor() const
-    { return xFactor; }
-    virtual int getYFactor() const
-    { return yFactor; }
+    QColor getColor1() const { return color1; }
+    QColor getColor2() const { return color2; }
+    BCType getBackColorType() const { return bcType; }
+    bool getUnbalanced() const { return unbalanced; }
+    int getXFactor() const { return xFactor; }
+    int getYFactor() const { return yFactor; }
 
-    virtual void setColor1( QColor _color )
-    { color1 = _color; paint(); }
-    virtual void setColor2( QColor _color )
-    { color2 = _color; paint(); }
-    virtual void setBackColorType( BCType _type )
-    { bcType = _type; paint(); }
-    virtual void setUnbalanced( bool b )
-    { unbalanced = b; paint(); }
-    virtual void setXFactor( int i )
-    { xFactor = i; paint(); }
-    virtual void setYFactor( int i )
-    { yFactor = i; paint(); }
+    void setColor1( const QColor &_color ) { color1 = _color; paint(); }
+    void setColor2( const QColor &_color ) { color2 = _color; paint(); }
+    void setBackColorType( BCType _type ) { bcType = _type; paint(); }
+    void setUnbalanced( bool b ) { unbalanced = b; paint(); }
+    void setXFactor( int i ) { xFactor = i; paint(); }
+    void setYFactor( int i ) { yFactor = i; paint(); }
 
-    virtual QPixmap* getGradient() const
-    { return (QPixmap*)&pixmap; }
-    virtual QSize getSize() const
-    { return pixmap.size(); }
+    void init(const QColor &c1, const QColor &c2, BCType _type,
+              bool _unbalanced, int xf, int yf);
 
-    virtual void setSize( QSize _size ) {
+    QPixmap* getGradient() const { return (QPixmap*)&pixmap; }
+    QSize getSize() const { return pixmap.size(); }
+
+    void setSize( const QSize &_size ) {
 	if ( _size != pixmap.size() ) {
 	    pixmap.resize( _size );
 	    paint();
 	}
     }
 
-    virtual void addRef();
-    virtual bool removeRef();
+    void addRef();
+    bool removeRef();
 
 protected:
-    KPGradient()
-    {; }
-    virtual void paint();
+    KPGradient() {}
+    void paint();
 
     QColor color1, color2;
     BCType bcType;
@@ -92,7 +79,6 @@ protected:
 
     bool unbalanced;
     int xFactor, yFactor;
-
 };
 
 #endif

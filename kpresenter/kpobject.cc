@@ -26,8 +26,7 @@
 #include <qwmatrix.h>
 #include <qpointarray.h>
 #include <qregion.h>
-
-#include <komlParser.h>
+#include <qdom.h>
 
 #include <stdlib.h>
 #include <fstream.h>
@@ -62,6 +61,7 @@ KPObject::KPObject()
     inObjList = true;
     cmds = 0;
     move = false;
+    sticky = false;
     dcop = 0;
 }
 
@@ -98,13 +98,100 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc )
     elem.setAttribute("effect2", static_cast<int>( effect2 ));
     fragment.appendChild(elem);
     fragment.appendChild(KPObject::createValueElement("PRESNUM", presNum, doc));
-    fragment.appendChild(KPObject::createValueElement("ANGLE", angle, doc));
+    elem=doc.createElement("ANGLE");
+    elem.setAttribute("value", angle);
+    fragment.appendChild(elem);
     elem=doc.createElement("DISAPPEAR");
     elem.setAttribute("effect", static_cast<int>( effect3 ));
     elem.setAttribute("doit", static_cast<int>( disappear ));
     elem.setAttribute("num", disappearNum);
     fragment.appendChild(elem);
     return fragment;
+}
+
+void KPObject::load(const QDomElement &element) {
+
+    QDomElement e=element.namedItem("ORIG").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("x"))
+            tmp=e.attribute("x").toInt();
+        orig.setX(tmp);
+        tmp=0;
+        if(e.hasAttribute("y"))
+            tmp=e.attribute("y").toInt();
+        orig.setY(tmp);
+    }
+    e=element.namedItem("SIZE").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("width"))
+            tmp=e.attribute("width").toInt();
+        ext.setWidth(tmp);
+        tmp=0;
+        if(e.hasAttribute("height"))
+            tmp=e.attribute("height").toInt();
+        ext.setHeight(tmp);
+    }
+    e=element.namedItem("SHADOW").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("distance"))
+            tmp=e.attribute("distance").toInt();
+        shadowDistance=tmp;
+        tmp=0;
+        if(e.hasAttribute("direction"))
+            tmp=e.attribute("direction").toInt();
+        shadowDirection=static_cast<ShadowDirection>(tmp);
+        int red=0, green=0, blue=0;
+        if(e.hasAttribute("red"))
+            red=e.attribute("red").toInt();
+        if(e.hasAttribute("green"))
+            green=e.attribute("green").toInt();
+        if(e.hasAttribute("blue"))
+            blue=e.attribute("blue").toInt();
+        shadowColor.setRgb(red, green, blue);
+    }
+    e=element.namedItem("EFFECTS").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("effect"))
+            tmp=e.attribute("effect").toInt();
+        effect=static_cast<Effect>(tmp);
+        tmp=0;
+        if(e.hasAttribute("effect2"))
+            tmp=e.attribute("effect2").toInt();
+        effect2=static_cast<Effect2>(tmp);
+    }
+    e=element.namedItem("ANGLE").toElement();
+    if(!e.isNull()) {
+        float tmp=0.0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toFloat();
+        angle=tmp;
+    }
+    e=element.namedItem("PRESNUM").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        presNum=tmp;
+    }
+    e=element.namedItem("DISAPPEAR").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("effect"))
+            tmp=e.attribute("effect").toInt();
+        effect3=static_cast<Effect3>(tmp);
+        tmp=0;
+        if(e.hasAttribute("doit"))
+            tmp=e.attribute("doit").toInt();
+        disappear=static_cast<bool>(tmp);
+        tmp=0;
+        if(e.hasAttribute("num"))
+            tmp=e.attribute("num").toInt();
+        disappearNum=tmp;
+    }
 }
 
 /*======================= get bounding rect ======================*/
@@ -470,6 +557,35 @@ QDomElement KPObject::createGradientElement(const QString &tag, const QColor &c1
     return elem;
 }
 
+void KPObject::toGradient(const QDomElement &element, QColor &c1, QColor &c2, BCType &type,
+                          bool &unbalanced, int &xfactor, int &yfactor) const {
+    int red=0, green=0, blue=0, t=0;
+    if(element.hasAttribute("red1"))
+        red=element.attribute("red1").toInt();
+    if(element.hasAttribute("green1"))
+        green=element.attribute("green1").toInt();
+    if(element.hasAttribute("blue1"))
+        blue=element.attribute("blue1").toInt();
+    c1.setRgb(red, green, blue);
+    red=green=blue=0;
+    if(element.hasAttribute("red2"))
+        red=element.attribute("red2").toInt();
+    if(element.hasAttribute("green2"))
+        green=element.attribute("green2").toInt();
+    if(element.hasAttribute("blue2"))
+        blue=element.attribute("blue2").toInt();
+    c2.setRgb(red, green, blue);
+    if(element.hasAttribute("type"))
+        t=element.attribute("type").toInt();
+    type=static_cast<BCType>(t);
+    if(element.hasAttribute("unbalanced"))
+        unbalanced=static_cast<bool>(element.attribute("unbalanced").toInt());
+    if(element.hasAttribute("xfactor"))
+        xfactor=element.attribute("xfactor").toInt();
+    if(element.hasAttribute("yfactor"))
+        yfactor=element.attribute("yfactor").toInt();
+}
+
 QDomElement KPObject::createPenElement(const QString &tag, const QPen &pen, QDomDocument &doc) {
 
     QDomElement elem=doc.createElement(tag);
@@ -481,6 +597,26 @@ QDomElement KPObject::createPenElement(const QString &tag, const QPen &pen, QDom
     return elem;
 }
 
+QPen KPObject::toPen(const QDomElement &element) const {
+
+    QPen pen;
+    int red=0, green=0, blue=0;
+
+    if(element.hasAttribute("red"))
+        red=element.attribute("red").toInt();
+    if(element.hasAttribute("green"))
+        green=element.attribute("green").toInt();
+    if(element.hasAttribute("blue"))
+        blue=element.attribute("blue").toInt();
+    pen.setColor(QColor(red, green, blue));
+    if(element.hasAttribute("style"))
+        pen.setStyle(static_cast<Qt::PenStyle>(element.attribute("style").toInt()));
+    if(element.hasAttribute("width"))
+        pen.setWidth(element.attribute("width").toInt());
+    return pen;
+}
+
+
 QDomElement KPObject::createBrushElement(const QString &tag, const QBrush &brush, QDomDocument &doc) {
 
     QDomElement elem=doc.createElement(tag);
@@ -489,4 +625,21 @@ QDomElement KPObject::createBrushElement(const QString &tag, const QBrush &brush
     elem.setAttribute("blue", brush.color().blue());
     elem.setAttribute("style", static_cast<int>(brush.style()));
     return elem;
+}
+
+QBrush KPObject::toBrush(const QDomElement &element) const {
+
+    QBrush brush;
+    int red=0, green=0, blue=0;
+
+    if(element.hasAttribute("red"))
+        red=element.attribute("red").toInt();
+    if(element.hasAttribute("green"))
+        green=element.attribute("green").toInt();
+    if(element.hasAttribute("blue"))
+        blue=element.attribute("blue").toInt();
+    brush.setColor(QColor(red, green, blue));
+    if(element.hasAttribute("style"))
+        brush.setStyle(static_cast<Qt::BrushStyle>(element.attribute("style").toInt()));
+    return brush;
 }

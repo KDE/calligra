@@ -22,6 +22,7 @@
 
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <qdom.h>
 #include <kdebug.h>
 
 #include <math.h>
@@ -66,183 +67,32 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPLineObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
+void KPLineObject::load(const QDomElement &element)
 {
-    QString tag;
-    QString name;
-
-    while ( parser.open( QString::null, tag ) )
-    {
-        parser.parseTag( tag, name, lst );
-
-        // orig
-        if ( name == "ORIG" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "x" )
-                    orig.setX( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "y" )
-                    orig.setY( ( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // size
-        else if ( name == "SIZE" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "width" )
-                    ext.setWidth( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "height" )
-                    ext.setHeight( ( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // disappear
-        else if ( name == "DISAPPEAR" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "effect" )
-                    effect3 = ( Effect3 )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "doit" )
-                    disappear = ( bool )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "num" )
-                    disappearNum = ( *it ).m_strValue.toInt();
-            }
-        }
-
-        // shadow
-        else if ( name == "SHADOW" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "distance" )
-                    shadowDistance = ( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "direction" )
-                    shadowDirection = ( ShadowDirection )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "red" )
-                    shadowColor.setRgb( ( *it ).m_strValue.toInt(),
-                                        shadowColor.green(), shadowColor.blue() );
-                if ( ( *it ).m_strName == "green" )
-                    shadowColor.setRgb( shadowColor.red(), ( *it ).m_strValue.toInt(),
-                                        shadowColor.blue() );
-                if ( ( *it ).m_strName == "blue" )
-                    shadowColor.setRgb( shadowColor.red(), shadowColor.green(),
-                                        ( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // effects
-        else if ( name == "EFFECTS" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "effect" )
-                    effect = ( Effect )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "effect2" )
-                    effect2 = ( Effect2 )( *it ).m_strValue.toInt();
-            }
-        }
-        // pen
-        else if ( name == "PEN" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "red" )
-                    pen.setColor( QColor( ( *it ).m_strValue.toInt(), pen.color().green(), pen.color().blue() ) );
-                if ( ( *it ).m_strName == "green" )
-                    pen.setColor( QColor( pen.color().red(), ( *it ).m_strValue.toInt(), pen.color().blue() ) );
-                if ( ( *it ).m_strName == "blue" )
-                    pen.setColor( QColor( pen.color().red(), pen.color().green(), ( *it ).m_strValue.toInt() ) );
-                if ( ( *it ).m_strName == "width" )
-                    pen.setWidth( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "style" )
-                    pen.setStyle( ( Qt::PenStyle )( *it ).m_strValue.toInt() );
-            }
-            setPen( pen );
-        }
-
-        // lineType
-        else if ( name == "LINETYPE" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    lineType = ( LineType )( *it ).m_strValue.toInt();
-            }
-        }
-
-        // lineBegin
-        else if ( name == "LINEBEGIN" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    lineBegin = ( LineEnd )( *it ).m_strValue.toInt();
-            }
-        }
-
-        // lineEnd
-        else if ( name == "LINEEND" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    lineEnd = ( LineEnd )( *it ).m_strValue.toInt();
-            }
-        }
-
-        // angle
-        else if ( name == "ANGLE" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    angle = ( *it ).m_strValue.toDouble();
-            }
-        }
-
-        // presNum
-        else if ( name == "PRESNUM" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    presNum = ( *it ).m_strValue.toInt();
-            }
-        }
-        else
-            kdError() << "Unknown tag '" << tag << "' in LINE_OBJECT" << endl;
-
-        if ( !parser.close( tag ) )
-        {
-            kdError() << "ERR: Closing Child" << endl;
-            return;
-        }
+    KPObject::load(element);
+    QDomElement e=element.namedItem("PEN").toElement();
+    if(!e.isNull())
+        setPen(KPObject::toPen(e));
+    e=element.namedItem("LINETYPE").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        lineType=static_cast<LineType>(tmp);
+    }
+    e=element.namedItem("LINEBEGIN").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        lineBegin=static_cast<LineEnd>(tmp);
+    }
+    e=element.namedItem("LINEEND").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        lineEnd=static_cast<LineEnd>(tmp);
     }
 }
 

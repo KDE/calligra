@@ -46,6 +46,30 @@ void KPClipartCollection::Key::setAttributes( QDomElement &elem )
     elem.setAttribute( "msec", time.msec() );
 }
 
+void KPClipartCollection::Key::loadAttributes( const QDomElement &elem, const QDate &dDate, const QTime &dTime )
+{
+    int year=dDate.year(), month=dDate.month(), day=dDate.day();
+    int hour=dTime.hour(), minute=dTime.minute(), second=dTime.second(), msec=dTime.msec();
+    if( elem.hasAttribute( "filename" ) )
+        filename=elem.attribute( "filename" );
+    if( elem.hasAttribute( "year" ) )
+        year=elem.attribute( "year" ).toInt();
+    if( elem.hasAttribute( "month" ) )
+        month=elem.attribute( "month" ).toInt();
+    if( elem.hasAttribute( "day" ) )
+        day=elem.attribute( "day" ).toInt();
+    if( elem.hasAttribute( "hour" ) )
+        hour=elem.attribute( "hour" ).toInt();
+    if( elem.hasAttribute( "minute" ) )
+        minute=elem.attribute( "minute" ).toInt();
+    if( elem.hasAttribute( "second" ) )
+        second=elem.attribute( "second" ).toInt();
+    if( elem.hasAttribute( "msec" ) )
+        msec=elem.attribute( "msec" ).toInt();
+    lastModified.setDate( QDate( year, month, day ) );
+    lastModified.setTime( QTime( hour, minute, second, msec ) );
+}
+
 /*================================================================*/
 KPClipartCollection::~KPClipartCollection()
 {

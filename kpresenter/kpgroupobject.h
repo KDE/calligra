@@ -60,7 +60,7 @@ public:
     { return OT_GROUP; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst, KPresenterDoc *doc );
+    virtual void load(const QDomElement &element, KPresenterDoc *doc);
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

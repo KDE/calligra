@@ -125,221 +125,53 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPTextObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
+void KPTextObject::load(const QDomElement &element)
 {
-    QString tag;
-    QString name;
+    KPObject::load(element);
 
-    while ( parser.open( QString::null, tag ) ) {
-        parser.parseTag( tag, name, lst );
-
-        // orig
-        if ( name == "ORIG" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "x" )
-                    orig.setX( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "y" )
-                    orig.setY( ( *it ).m_strValue.toInt() );
-            }
+    QDomElement e=element.namedItem("PEN").toElement();
+    if(!e.isNull())
+        setPen(KPObject::toPen(e));
+    e=element.namedItem("BRUSH").toElement();
+    if(!e.isNull())
+        setBrush(KPObject::toBrush(e));
+    e=element.namedItem("FILLTYPE").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        setFillType(static_cast<FillType>(tmp));
+    }
+    e=element.namedItem("GRADIENT").toElement();
+    if(!e.isNull()) {
+        KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
+        if(gradient)
+            gradient->init(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
+    }
+    e=element.namedItem("TEXTOBJ").toElement();
+    if(!e.isNull()) {
+        ktextobject.document()->setLineSpacing( e.attribute( "lineSpacing" ).toInt() );
+        ktextobject.document()->setParagSpacing( e.attribute( "paragSpacing" ).toInt() );
+        ktextobject.document()->setMargin( e.attribute( "margin" ).toInt() );
+        KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
+        settings.bulletColor[0] = QColor( e.attribute( "bulletColor1", Qt::black.name() ) );
+        settings.bulletColor[1] = QColor( e.attribute( "bulletColor2", Qt::black.name() ) );
+        settings.bulletColor[2] = QColor( e.attribute( "bulletColor3", Qt::black.name() ) );
+        settings.bulletColor[3] = QColor( e.attribute( "bulletColor4", Qt::black.name() ) );
+        settings.bulletType[0] = (KTextEditDocument::Bullet)e.attribute( "bulletType1", 0 ).toInt();
+        settings.bulletType[1] = (KTextEditDocument::Bullet)e.attribute( "bulletType2", 0 ).toInt();
+        settings.bulletType[2] = (KTextEditDocument::Bullet)e.attribute( "bulletType3", 0 ).toInt();
+        settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( "bulletType4", 0 ).toInt();
+        ktextobject.document()->setTextSettings( settings );
+        QString type = e.attribute( "objType" );
+        int t = -1;
+        if ( !type.isEmpty() ) {
+            if ( type == "1" )
+                t = KTextEdit::EnumList;
+            if ( type == "2" )
+                t = KTextEdit::BulletList;
         }
-
-        // disappear
-        else if ( name == "DISAPPEAR" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "effect" )
-                    effect3 = ( Effect3 )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "doit" )
-                    disappear = ( bool )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "num" )
-                    disappearNum = ( *it ).m_strValue.toInt();
-            }
-        }
-
-        // size
-        else if ( name == "SIZE" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "width" )
-                    ext.setWidth( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "height" )
-                    ext.setHeight( ( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // shadow
-        else if ( name == "SHADOW" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "distance" )
-                    shadowDistance = ( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "direction" )
-                    shadowDirection = ( ShadowDirection )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "red" )
-                    shadowColor.setRgb( ( *it ).m_strValue.toInt(),
-                                        shadowColor.green(), shadowColor.blue() );
-                if ( ( *it ).m_strName == "green" )
-                    shadowColor.setRgb( shadowColor.red(), ( *it ).m_strValue.toInt(),
-                                        shadowColor.blue() );
-                if ( ( *it ).m_strName == "blue" )
-                    shadowColor.setRgb( shadowColor.red(), shadowColor.green(),
-                                        ( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // effects
-        else if ( name == "EFFECTS" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "effect" )
-                    effect = ( Effect )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "effect2" )
-                    effect2 = ( Effect2 )( *it ).m_strValue.toInt();
-            }
-        }
-
-        // angle
-        else if ( name == "ANGLE" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "value" )
-                    angle = ( *it ).m_strValue.toDouble();
-            }
-        }
-
-        // presNum
-        else if ( name == "PRESNUM" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "value" )
-                    presNum = ( *it ).m_strValue.toInt();
-            }
-        }
-
-        // KTextObject
-        else if ( name == "TEXTOBJ" ) {
-            QDomElement e = parser.currentElement();
-            ktextobject.document()->setLineSpacing( e.attribute( "lineSpacing" ).toInt() );
-            ktextobject.document()->setParagSpacing( e.attribute( "paragSpacing" ).toInt() );
-            ktextobject.document()->setMargin( e.attribute( "margin" ).toInt() );
-            KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
-            settings.bulletColor[0] = QColor( e.attribute( "bulletColor1", Qt::black.name() ) );
-            settings.bulletColor[1] = QColor( e.attribute( "bulletColor2", Qt::black.name() ) );
-            settings.bulletColor[2] = QColor( e.attribute( "bulletColor3", Qt::black.name() ) );
-            settings.bulletColor[3] = QColor( e.attribute( "bulletColor4", Qt::black.name() ) );
-            settings.bulletType[0] = (KTextEditDocument::Bullet)e.attribute( "bulletType1", 0 ).toInt();
-            settings.bulletType[1] = (KTextEditDocument::Bullet)e.attribute( "bulletType2", 0 ).toInt();
-            settings.bulletType[2] = (KTextEditDocument::Bullet)e.attribute( "bulletType3", 0 ).toInt();
-            settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( "bulletType4", 0 ).toInt();
-            ktextobject.document()->setTextSettings( settings );
-            QString type = e.attribute( "objType" );
-            int t = -1;
-            if ( !type.isEmpty() ) {
-                if ( type == "1" )
-                    t = KTextEdit::EnumList;
-                if ( type == "2" )
-                    t = KTextEdit::BulletList;
-            }
-
-            loadKTextObject( e, t );
-        }
-
-        // pen
-        else if ( name == "PEN" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "red" )
-                    pen.setColor( QColor( ( *it ).m_strValue.toInt(), pen.color().green(), pen.color().blue() ) );
-                if ( ( *it ).m_strName == "green" )
-                    pen.setColor( QColor( pen.color().red(), ( *it ).m_strValue.toInt(), pen.color().blue() ) );
-                if ( ( *it ).m_strName == "blue" )
-                    pen.setColor( QColor( pen.color().red(), pen.color().green(), ( *it ).m_strValue.toInt() ) );
-                if ( ( *it ).m_strName == "width" )
-                    pen.setWidth( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "style" )
-                    pen.setStyle( ( Qt::PenStyle )( *it ).m_strValue.toInt() );
-            }
-            setPen( pen );
-        }
-
-        // brush
-        else if ( name == "BRUSH" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "red" )
-                    brush.setColor( QColor( ( *it ).m_strValue.toInt(), brush.color().green(), brush.color().blue() ) );
-                if ( ( *it ).m_strName == "green" )
-                    brush.setColor( QColor( brush.color().red(), ( *it ).m_strValue.toInt(), brush.color().blue() ) );
-                if ( ( *it ).m_strName == "blue" )
-                    brush.setColor( QColor( brush.color().red(), brush.color().green(), ( *it ).m_strValue.toInt() ) );
-                if ( ( *it ).m_strName == "style" )
-                    brush.setStyle( ( Qt::BrushStyle )( *it ).m_strValue.toInt() );
-            }
-            setBrush( brush );
-        }
-
-        // fillType
-        else if ( name == "FILLTYPE" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "value" )
-                    fillType = static_cast<FillType>( ( *it ).m_strValue.toInt() );
-            }
-            setFillType( fillType );
-        }
-
-        // gradient
-        else if ( name == "GRADIENT" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "red1" )
-                    gColor1 = QColor( ( *it ).m_strValue.toInt(), gColor1.green(), gColor1.blue() );
-                if ( ( *it ).m_strName == "green1" )
-                    gColor1 = QColor( gColor1.red(), ( *it ).m_strValue.toInt(), gColor1.blue() );
-                if ( ( *it ).m_strName == "blue1" )
-                    gColor1 = QColor( gColor1.red(), gColor1.green(), ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "red2" )
-                    gColor2 = QColor( ( *it ).m_strValue.toInt(), gColor2.green(), gColor2.blue() );
-                if ( ( *it ).m_strName == "green2" )
-                    gColor2 = QColor( gColor2.red(), ( *it ).m_strValue.toInt(), gColor2.blue() );
-                if ( ( *it ).m_strName == "blue2" )
-                    gColor2 = QColor( gColor2.red(), gColor2.green(), ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "type" )
-                    gType = static_cast<BCType>( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "unbalanced" )
-                    unbalanced = static_cast<bool>( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "xfactor" )
-                    xfactor = ( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "yfactor" )
-                    yfactor = ( *it ).m_strValue.toInt();
-            }
-            setGColor1( gColor1 );
-            setGColor2( gColor2 );
-            setGType( gType );
-            setGUnbalanced( unbalanced );
-            setGXFactor( xfactor );
-            setGYFactor( yfactor );
-        }
-
-        else
-            kdError() << "Unknown tag '" << tag << "' in TEXT_OBJECT" << endl;
-
-        if ( !parser.close( tag ) ) {
-            kdError() << "ERR: Closing Child" << endl;
-            return;
-        }
+        loadKTextObject( e, t );
     }
     setSize( ext.width(), ext.height() );
 }

@@ -21,7 +21,6 @@
 #define kplineobject_h
 
 #include <kpobject.h>
-//#include <global.h>
 
 #define RAD_FACTOR 180.0 / M_PI
 
@@ -62,7 +61,7 @@ public:
     { return lineType; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
+    virtual void load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

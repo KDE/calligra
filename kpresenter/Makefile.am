@@ -32,7 +32,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	preview.h preview.cc
 
 libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN)
-libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la ../lib/koml/libkoml.la
+libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
 libkpresenterpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module

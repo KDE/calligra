@@ -24,6 +24,7 @@
 #include <qpointarray.h>
 #include <qlist.h>
 #include <qregion.h>
+#include <qdom.h>
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -170,271 +171,63 @@ QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPAutoformObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
+void KPAutoformObject::load(const QDomElement &element)
 {
-    QString tag;
-    QString name;
-
-    while ( parser.open( QString::null, tag ) )
-    {
-        parser.parseTag( tag, name, lst );
-
-        // orig
-        if ( name == "ORIG" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "x" )
-                    orig.setX( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "y" )
-                    orig.setY( ( *it ).m_strValue.toInt() );
-            }
+    KPObject::load(element);
+    QDomElement e=element.namedItem("PEN").toElement();
+    if(!e.isNull())
+        setPen(KPObject::toPen(e));
+    e=element.namedItem("BRUSH").toElement();
+    if(!e.isNull())
+        setBrush(KPObject::toBrush(e));
+    e=element.namedItem("LINEBEGIN").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        lineBegin=static_cast<LineEnd>(tmp);
+    }
+    e=element.namedItem("LINEEND").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        lineEnd=static_cast<LineEnd>(tmp);
+    }
+    e=element.namedItem("FILENAME").toElement();
+    if(!e.isNull()) {
+        QString filename;
+        if(e.hasAttribute("value"))
+            filename=e.attribute("value");
+        // workaround for a bug in the (very) old file format
+        if(filename[0]=='/') {
+            kdDebug() << "rubbish ahead! cleaning up..." << endl;
+            // remove the leading absolute path (i.e. to create Arrow/Arrow1.atf)
+            filename=filename.mid(filename.findRev('/', filename.findRev('/')-1)+1);
         }
-
-        // size
-        else if ( name == "SIZE" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "width" )
-                    ext.setWidth( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "height" )
-                    ext.setHeight( ( *it ).m_strValue.toInt() );
-            }
+        // okay... we changed the file format again and now the autoforms
+        // are stored in .../kpresenter/autoforms/.source/foo.atf (note: we didn't have .source
+        // before. Therefore we have to add this dir if it's not already there to make it
+        // work with old files
+        if(filename.find(".source")==-1) {
+            // okay, old file -- add the .source dir
+            filename=filename.insert(filename.find('/'), "/.source");
         }
-
-        // shadow
-        else if ( name == "SHADOW" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "distance" )
-                    shadowDistance = ( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "direction" )
-                    shadowDirection = ( ShadowDirection )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "red" )
-                    shadowColor.setRgb( ( *it ).m_strValue.toInt(),
-                                        shadowColor.green(), shadowColor.blue() );
-                if ( ( *it ).m_strName == "green" )
-                    shadowColor.setRgb( shadowColor.red(), ( *it ).m_strValue.toInt(),
-                                        shadowColor.blue() );
-                if ( ( *it ).m_strName == "blue" )
-                    shadowColor.setRgb( shadowColor.red(), shadowColor.green(),
-                                        ( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // effects
-        else if ( name == "EFFECTS" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "effect" )
-                    effect = ( Effect )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "effect2" )
-                    effect2 = ( Effect2 )( *it ).m_strValue.toInt();
-            }
-        }
-
-        // disappear
-        else if ( name == "DISAPPEAR" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "effect" )
-                    effect3 = ( Effect3 )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "doit" )
-                    disappear = ( bool )( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "num" )
-                    disappearNum = ( *it ).m_strValue.toInt();
-            }
-        }
-
-        // pen
-        else if ( name == "PEN" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "red" )
-                    pen.setColor( QColor( ( *it ).m_strValue.toInt(), pen.color().green(), pen.color().blue() ) );
-                if ( ( *it ).m_strName == "green" )
-                    pen.setColor( QColor( pen.color().red(), ( *it ).m_strValue.toInt(), pen.color().blue() ) );
-                if ( ( *it ).m_strName == "blue" )
-                    pen.setColor( QColor( pen.color().red(), pen.color().green(), ( *it ).m_strValue.toInt() ) );
-                if ( ( *it ).m_strName == "width" )
-                    pen.setWidth( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "style" )
-                    pen.setStyle( ( Qt::PenStyle )( *it ).m_strValue.toInt() );
-            }
-            setPen( pen );
-        }
-
-        // brush
-        else if ( name == "BRUSH" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "red" )
-                    brush.setColor( QColor( ( *it ).m_strValue.toInt(), brush.color().green(), brush.color().blue() ) );
-                if ( ( *it ).m_strName == "green" )
-                    brush.setColor( QColor( brush.color().red(), ( *it ).m_strValue.toInt(), brush.color().blue() ) );
-                if ( ( *it ).m_strName == "blue" )
-                    brush.setColor( QColor( brush.color().red(), brush.color().green(), ( *it ).m_strValue.toInt() ) );
-                if ( ( *it ).m_strName == "style" )
-                    brush.setStyle( ( Qt::BrushStyle )( *it ).m_strValue.toInt() );
-            }
-            setBrush( brush );
-        }
-
-        // angle
-        else if ( name == "ANGLE" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    angle = ( *it ).m_strValue.toDouble();
-            }
-        }
-
-        // lineBegin
-        else if ( name == "LINEBEGIN" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    lineBegin = ( LineEnd )( *it ).m_strValue.toInt();
-            }
-        }
-
-        // lineEnd
-        else if ( name == "LINEEND" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    lineEnd = ( LineEnd )( *it ).m_strValue.toInt();
-            }
-        }
-
-        // presNum
-        else if ( name == "PRESNUM" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    presNum = ( *it ).m_strValue.toInt();
-            }
-        }
-
-        // filename
-        else if ( name == "FILENAME" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                {
-                    filename = ( *it ).m_strValue;
-                    // workaround for a bug in the (very) old file format
-                    if(filename[0]=='/') {
-                        kdDebug() << "rubbish ahead! cleaning up..." << endl;
-                        // remove the leading absolute path (i.e. to create Arrow/Arrow1.atf)
-                        filename=filename.mid(filename.findRev('/', filename.findRev('/')-1)+1);
-                    }
-                    // okay... we changed the file format again and now the autoforms
-                    // are stored in .../kpresenter/autoforms/.source/foo.atf (note: we didn't have .source
-                    // before. Therefore we have to add this dir if it's not already there to make it
-                    // work with old files
-                    if(filename.find(".source")==-1) {
-                        // okay, old file -- add the .source dir
-                        filename=filename.insert(filename.find('/'), "/.source");
-                    }
-                    filename = locate("autoforms", filename, KPresenterFactory::global());
-                    atfInterp.load( filename );
-                }
-            }
-        }
-
-        // fillType
-        else if ( name == "FILLTYPE" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    fillType = static_cast<FillType>( ( *it ).m_strValue.toInt() );
-            }
-            setFillType( fillType );
-        }
-
-        // gradient
-        else if ( name == "GRADIENT" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "red1" )
-                    gColor1 = QColor( ( *it ).m_strValue.toInt(), gColor1.green(), gColor1.blue() );
-                if ( ( *it ).m_strName == "green1" )
-                    gColor1 = QColor( gColor1.red(), ( *it ).m_strValue.toInt(), gColor1.blue() );
-                if ( ( *it ).m_strName == "blue1" )
-                    gColor1 = QColor( gColor1.red(), gColor1.green(), ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "red2" )
-                    gColor2 = QColor( ( *it ).m_strValue.toInt(), gColor2.green(), gColor2.blue() );
-                if ( ( *it ).m_strName == "green2" )
-                    gColor2 = QColor( gColor2.red(), ( *it ).m_strValue.toInt(), gColor2.blue() );
-                if ( ( *it ).m_strName == "blue2" )
-                    gColor2 = QColor( gColor2.red(), gColor2.green(), ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "type" )
-                    gType = static_cast<BCType>( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "unbalanced" )
-                    unbalanced = static_cast<bool>( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "xfactor" )
-                    xfactor = ( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "yfactor" )
-                    yfactor = ( *it ).m_strValue.toInt();
-            }
-            setGColor1( gColor1 );
-            setGColor2( gColor2 );
-            setGType( gType );
-            setGUnbalanced( unbalanced );
-            setGXFactor( xfactor );
-            setGYFactor( yfactor );
-        }
-
-        else
-            kdError() << "Unknown tag '" << tag << "' in AUTOFORM_OBJECT" << endl;
-
-        if ( !parser.close( tag ) )
-        {
-            kdError() << "ERR: Closing Child" << endl;
-            return;
-        }
+        filename = locate("autoforms", filename, KPresenterFactory::global());
+        atfInterp.load( filename );
+    }
+    e=element.namedItem("FILLTYPE").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        setFillType(static_cast<FillType>(tmp));
+    }
+    e=element.namedItem("GRADIENT").toElement();
+    if(!e.isNull()) {
+        KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
+        if(gradient)
+            gradient->init(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
     }
 }
 

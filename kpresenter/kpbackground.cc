@@ -215,197 +215,102 @@ QDomElement KPBackGround::save( QDomDocument &doc )
 }
 
 /*================================================================*/
-void KPBackGround::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
+void KPBackGround::load( const QDomElement &element )
 {
-    QString name;
-    QString tag;
-
-    while ( parser.open( QString::null, tag ) )
-    {
-        parser.parseTag( tag, name, lst );
-
-        // backtype
-        if ( name == "BACKTYPE" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    setBackType( ( BackType )( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // pageEffect
-        else if ( name == "PGEFFECT" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    setPageEffect( ( PageEffect )( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // backview
-        else if ( name == "BACKVIEW" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    setBackView( ( BackView )( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // backcolor 1
-        else if ( name == "BACKCOLOR1" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "red" )
-                    setBackColor1( QColor( ( *it ).m_strValue.toInt(),
-                                           backColor1.green(), backColor1.blue() ) );
-                if ( ( *it ).m_strName == "green" )
-                    setBackColor1( QColor( backColor1.red(),
-                                           ( *it ).m_strValue.toInt(), backColor1.blue() ) );
-                if ( ( *it ).m_strName == "blue" )
-                    setBackColor1( QColor( backColor1.red(), backColor1.green(),
-                                           ( *it ).m_strValue.toInt() ) );
-            }
-        }
-
-        // gradient
-        else if ( name == "BGRADIENT" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "unbalanced" )
-                    setBackUnbalanced( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "xfactor" )
-                    setBackXFactor( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "yfactor" )
-                    setBackYFactor( ( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // backcolor 2
-        else if ( name == "BACKCOLOR2" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "red" )
-                    setBackColor2( QColor( ( *it ).m_strValue.toInt(),
-                                           backColor2.green(), backColor2.blue() ) );
-                if ( ( *it ).m_strName == "green" )
-                    setBackColor2( QColor( backColor2.red(),
-                                           ( *it ).m_strValue.toInt(), backColor2.blue() ) );
-                if ( ( *it ).m_strName == "blue" )
-                    setBackColor2( QColor( backColor2.red(), backColor2.green(),
-                                           ( *it ).m_strValue.toInt() ) );
-            }
-        }
-
-        // backColorType
-        else if ( name == "BCTYPE" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                    setBackColorType( ( BCType )( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // back pixmap
-        else if ( name == "BACKPIXKEY" )
-        {
-            KPImageKey key;
-            QSize size;
-            int year, month, day, hour, minute, second, msec;
-
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "filename" )
-                    key.filename = ( *it ).m_strValue;
-                else if ( ( *it ).m_strName == "year" )
-                    year = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "month" )
-                    month = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "day" )
-                    day = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "hour" )
-                    hour = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "minute" )
-                    minute = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "second" )
-                    second = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "msec" )
-                    msec = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "width" )
-                    size.setWidth( ( *it ).m_strValue.toInt() );
-                else if ( ( *it ).m_strName == "height" )
-                    size.setHeight( ( *it ).m_strValue.toInt() );
-            }
-            key.lastModified.setDate( QDate( year, month, day ) );
-            key.lastModified.setTime( QTime( hour, minute, second, msec ) );
-
-            // ### the size attributes seem unused. What are they supposed to
-            // be used for?
-
-            // create a 'temporary' image. Later on restore() will be called
-            // called through setBgSize() from setPageLayout() from
-            // completeLoading(), where we load the real image.
-            backImage = KPImage( key, QImage() );
-        }
-
-        // backpic
-        else if ( name == "BACKPIX" )
-        {
-            KPImageKey key;
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-
+    QDomElement e=element.namedItem("BACKTYPE").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        setBackType(static_cast<BackType>(tmp));
+    }
+    e=element.namedItem("BACKVIEW").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        setBackView(static_cast<BackView>(tmp));
+    }
+    e=element.namedItem("BACKCOLOR1").toElement();
+    if(!e.isNull()) {
+        int red=0, green=0, blue=0;
+        if(e.hasAttribute("red"))
+            red=e.attribute("red").toInt();
+        if(e.hasAttribute("green"))
+            green=e.attribute("green").toInt();
+        if(e.hasAttribute("blue"))
+            blue=e.attribute("blue").toInt();
+        setBackColor1(QColor(red, green, blue));
+    }
+    e=element.namedItem("BACKCOLOR2").toElement();
+    if(!e.isNull()) {
+        int red=0, green=0, blue=0;
+        if(e.hasAttribute("red"))
+            red=e.attribute("red").toInt();
+        if(e.hasAttribute("green"))
+            green=e.attribute("green").toInt();
+        if(e.hasAttribute("blue"))
+            blue=e.attribute("blue").toInt();
+        setBackColor2(QColor(red, green, blue));
+    }
+    e=element.namedItem("PGEFFECT").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        setPageEffect(static_cast<PageEffect>(tmp));
+    }
+    e=element.namedItem("BGRADIENT").toElement();
+    if(!e.isNull()) {
+        int xf=0, yf=0, unbalanced=0;
+        if(e.hasAttribute("xfactor"))
+            xf=e.attribute("xfactor").toInt();
+        setBackXFactor(xf);
+        if(e.hasAttribute("yfactor"))
+            yf=e.attribute("yfactor").toInt();
+        setBackYFactor(yf);
+        if(e.hasAttribute("unbalanced"))
+            unbalanced=e.attribute("unbalanced").toInt();
+        setBackUnbalanced(static_cast<bool>(unbalanced));
+    }
+    e=element.namedItem("BCTYPE").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        setBackColorType(static_cast<BCType>(tmp));
+    }
+    e=element.namedItem("BACKPIXKEY").toElement();
+    if(!e.isNull()) {
+        KPImageKey key;
+        key.loadAttributes(e, imageCollection->tmpDate(), imageCollection->tmpTime());
+        backImage = KPImage( key, QImage() );
+    }
+    else {
+        // try to find a BACKPIX tag if the BACKPIXKEY is not available...
+        KPImageKey key;
+        e=element.namedItem("BACKPIX").toElement();
+        if(!e.isNull()) {
             bool openPic = true;
             QString _data;
             QString _fileName;
-
-            for( ; it != lst.end(); ++it )
+            if(e.hasAttribute("data"))
+                _data=e.attribute("data");
+            if ( _data.isEmpty() )
+                openPic = true;
+            else
+                openPic = false;
+            if(e.hasAttribute("filename"))
+                _fileName=e.attribute("filename");
+            if ( !_fileName.isEmpty() )
             {
-                if ( ( *it ).m_strName == "data" )
+                if ( int _envVarB = _fileName.find( '$' ) >= 0 )
                 {
-                    _data = ( *it ).m_strValue;
-                    if ( _data.isEmpty() )
-                        openPic = true;
-                    else
-                        openPic = false;
-                }
-                else if ( ( *it ).m_strName == "filename" )
-                {
-                    _fileName = ( *it ).m_strValue;
-                    if ( !_fileName.isEmpty() )
-                    {
-                        if ( int _envVarB = _fileName.find( '$' ) >= 0 )
-                        {
-                            int _envVarE = _fileName.find( '/', _envVarB );
-                            QString path = getenv( QFile::encodeName(_fileName.mid( _envVarB, _envVarE-_envVarB )) );
-                            _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
-                        }
-                    }
+                    int _envVarE = _fileName.find( '/', _envVarB );
+                    QString path = getenv( QFile::encodeName(_fileName.mid( _envVarB, _envVarE-_envVarB )) );
+                    _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
                 }
             }
-
             key.filename = _fileName;
             key.lastModified.setDate( imageCollection->tmpDate() );
             key.lastModified.setTime( imageCollection->tmpTime() );
@@ -420,70 +325,29 @@ void KPBackGround::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
 
             backImage = backImage.scale( ext );
         }
-
-        // back clipart
-        else if ( name == "BACKCLIPKEY" )
-        {
-            int year, month, day, hour, minute, second, msec;
-
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
+    }
+    e=element.namedItem("BACKCLIPKEY").toElement();
+    if(!e.isNull())
+        clipKey.loadAttributes(e, clipartCollection->tmpDate(), clipartCollection->tmpTime());
+    else {
+        // try to find a BACKCLIP tag if the BACKCLIPKEY is not available...
+        e=element.namedItem("BACKCLIP").toElement();
+        if(!e.isNull()) {
+            QString _fileName;
+            if(e.hasAttribute("filename"))
+                _fileName=e.attribute("filename");
+            if ( !_fileName.isEmpty() )
             {
-                if ( ( *it ).m_strName == "filename" )
-                    clipKey.filename = ( *it ).m_strValue;
-                else if ( ( *it ).m_strName == "year" )
-                    year = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "month" )
-                    month = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "day" )
-                    day = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "hour" )
-                    hour = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "minute" )
-                    minute = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "second" )
-                    second = ( *it ).m_strValue.toInt();
-                else if ( ( *it ).m_strName == "msec" )
-                    msec = ( *it ).m_strValue.toInt();
-            }
-            clipKey.lastModified.setDate( QDate( year, month, day ) );
-            clipKey.lastModified.setTime( QTime( hour, minute, second, msec ) );
-        }
-
-        // backclip
-        else if ( name == "BACKCLIP" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "filename" )
+                if ( int _envVarB = _fileName.find( '$' ) >= 0 )
                 {
-                    QString _fileName = ( *it ).m_strValue;
-                    if ( !_fileName.isEmpty() )
-                    {
-                        if ( int _envVarB = _fileName.find( '$' ) >= 0 )
-                        {
-                            int _envVarE = _fileName.find( '/', _envVarB );
-                            QString path = getenv( QFile::encodeName(_fileName.mid( _envVarB, _envVarE-_envVarB )) );
-                            _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
-                        }
-                    }
-                    clipKey.filename = _fileName;
-                    clipKey.lastModified.setDate( clipartCollection->tmpDate() );
-                    clipKey.lastModified.setTime( clipartCollection->tmpTime() );
+                    int _envVarE = _fileName.find( '/', _envVarB );
+                    QString path = getenv( QFile::encodeName(_fileName.mid( _envVarB, _envVarE-_envVarB )) );
+                    _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
                 }
             }
-        }
-
-        else
-            qDebug("Unknown tag '%s' in CLPARTOBJECT", tag.latin1());
-
-        if ( !parser.close( tag ) )
-        {
-            qDebug("ERR: Closing Child");
-            return;
+            clipKey.filename = _fileName;
+            clipKey.lastModified.setDate( clipartCollection->tmpDate() );
+            clipKey.lastModified.setTime( clipartCollection->tmpTime() );
         }
     }
 }

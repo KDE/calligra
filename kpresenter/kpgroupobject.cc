@@ -137,137 +137,71 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-void KPGroupObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst,
-                          KPresenterDoc *doc )
+void KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
 {
-    QString tag;
-    QString name;
-
+    KPObject::load(element);
     updateObjs = false;
-
-    while ( parser.open( QString::null, tag ) ) {
-        parser.parseTag( tag, name, lst );
-
-        // orig
-        if ( name == "ORIG" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "x" )
-                    orig.setX( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "y" )
-                    orig.setY( ( *it ).m_strValue.toInt() );
-            }
-        }
-
-        // size
-        else if ( name == "SIZE" ) {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it ) {
-                if ( ( *it ).m_strName == "width" )
-                    ext.setWidth( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "height" )
-                    ext.setHeight( ( *it ).m_strValue.toInt() );
-            }
-        } else if ( name == "OBJECTS" ) {
-            parser.parseTag( tag, name, lst );
-            //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            //for( ; it != lst.end(); ++it ) {
-            //}
-
+    QDomElement group=element.namedItem("OBJECTS").toElement();
+    if(!group.isNull()) {
+        QDomElement current=group.firstChild().toElement();
+        while(!current.isNull()) {
             ObjType t = OT_LINE;
-
-            while ( parser.open( QString::null, tag ) ) {
-                parser.parseTag( tag, name, lst );
-
-                // object
-                if ( name == "OBJECT" ) {
-                    parser.parseTag( tag, name, lst );
-                    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-                    for( ; it != lst.end(); ++it ) {
-                        if ( ( *it ).m_strName == "type" )
-                            t = ( ObjType )( *it ).m_strValue.toInt();
-                    }
-
-                    switch ( t ) {
+            if(current.tagName()=="OBJECT") {
+                if(current.hasAttribute("type"))
+                    t=static_cast<ObjType>(current.attribute("type").toInt());
+                switch ( t ) {
                     case OT_LINE: {
                         KPLineObject *kplineobject = new KPLineObject();
-                        kplineobject->load( parser, lst );
-
+                        kplineobject->load(current);
                         objects.append( kplineobject );
                     } break;
                     case OT_RECT: {
                         KPRectObject *kprectobject = new KPRectObject();
                         kprectobject->setRnds( doc->getRndX(), doc->getRndY() );
-                        kprectobject->load( parser, lst );
-
+                        kprectobject->load(current);
                         objects.append( kprectobject );
                     } break;
                     case OT_ELLIPSE: {
                         KPEllipseObject *kpellipseobject = new KPEllipseObject();
-                        kpellipseobject->load( parser, lst );
-
+                        kpellipseobject->load(current);
                         objects.append( kpellipseobject );
                     } break;
                     case OT_PIE: {
                         KPPieObject *kppieobject = new KPPieObject();
-                        kppieobject->load( parser, lst );
-
+                        kppieobject->load(current);
                         objects.append( kppieobject );
                     } break;
                     case OT_AUTOFORM: {
                         KPAutoformObject *kpautoformobject = new KPAutoformObject();
-                        kpautoformobject->load( parser, lst );
-
+                        kpautoformobject->load(current);
                         objects.append( kpautoformobject );
                     } break;
                     case OT_CLIPART: {
                         KPClipartObject *kpclipartobject = new KPClipartObject( doc->getClipartCollection() );
-                        kpclipartobject->load( parser, lst );
-
+                        kpclipartobject->load(current);
                         objects.append( kpclipartobject );
                     } break;
                     case OT_TEXT: {
                         KPTextObject *kptextobject = new KPTextObject( doc );
-                        kptextobject->load( parser, lst );
-
+                        kptextobject->load(current);
                         objects.append( kptextobject );
                     } break;
                     case OT_PICTURE: {
                         KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getImageCollection() );
-                        kppixmapobject->load( parser, lst );
-
+                        kppixmapobject->load(current);
                         objects.append( kppixmapobject );
                     } break;
                     case OT_GROUP: {
                         KPGroupObject *kpgroupobject = new KPGroupObject();
-                        kpgroupobject->load( parser, lst, doc );
-
+                        kpgroupobject->load(current, doc);
                         objects.append( kpgroupobject );
                     } break;
                     default: break;
-                    }
-
-                } else
-                    kdError() << "Unknown tag '" << tag << "' in OBJECTS" << endl;
-
-                if ( !parser.close( tag ) ) {
-                    kdError() << "ERR: Closing Child" << endl;
-                    return;
                 }
             }
-
-
-        } else
-            kdError() << "Unknown tag '" << tag << "' in GROUP_OBJECT" << endl;
-
-        if ( !parser.close( tag ) ) {
-            kdError() << "ERR: Closing Child" << endl;
-            return;
+            current=current.nextSibling().toElement();
         }
     }
-
     updateObjs = true;
 }
 

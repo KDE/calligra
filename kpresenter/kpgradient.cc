@@ -26,13 +26,25 @@
 /******************************************************************/
 
 /*======================= constructor ============================*/
-KPGradient::KPGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size,
-			bool _unbalanced, int _xfactor, int _yfactor )
+KPGradient::KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
+                        const QSize &_size, bool _unbalanced, int _xfactor, int _yfactor )
     : color1( _color1 ), color2( _color2 ), pixmap(), refCount( 0 ), unbalanced( _unbalanced ),
       xFactor( _xfactor ), yFactor( _yfactor )
 {
     bcType = _bcType;
     pixmap.resize( _size );
+    paint();
+}
+
+
+void KPGradient::init(const QColor &c1, const QColor &c2, BCType _type,
+                      bool _unbalanced, int xf, int yf) {
+    color1=c1;
+    color2=c2;
+    bcType=_type;
+    unbalanced=_unbalanced;
+    xFactor=xf;
+    yFactor=yf;
     paint();
 }
 
