@@ -213,6 +213,7 @@ public slots:
     void textBold();
     void textItalic();
     void textUnderline();
+    void textStrikeOut();
     void textColor();
     void textAlignLeft();
     void textAlignCenter();
@@ -353,6 +354,7 @@ protected:
     KToggleAction *actionFormatBold;
     KToggleAction *actionFormatItalic;
     KToggleAction *actionFormatUnderline;
+    KToggleAction *actionFormatStrikeOut;
     KColorAction *actionFormatColor;
     KToggleAction *actionFormatAlignLeft;
     KToggleAction *actionFormatAlignCenter;

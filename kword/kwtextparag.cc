@@ -875,6 +875,12 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, QTextFormat * curFormat
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().underline()) );
     }
+    if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut() )
+    {
+        elem = doc.createElement( "STRIKEOUT" );
+        formatElem.appendChild( elem );
+        elem.setAttribute( "value", static_cast<int>(curFormat->font().strikeOut()) );
+    }
     if( !refFormat || curFormat->vAlign() != refFormat->vAlign() )
     {
         elem = doc.createElement( "VERTALIGN" );
@@ -1016,6 +1022,9 @@ QTextFormat KWTextParag::loadFormat( QDomElement &formatElem, QTextFormat * refF
     elem = formatElem.namedItem( "UNDERLINE" ).toElement();
     if ( !elem.isNull() )
         font.setUnderline( elem.attribute("value").toInt() == 1 );
+    elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
+    if ( !elem.isNull() )
+        font.setStrikeOut( elem.attribute("value").toInt() == 1 );
     elem = formatElem.namedItem( "VERTALIGN" ).toElement();
     if ( !elem.isNull() )
         format.setVAlign( static_cast<QTextFormat::VerticalAlignment>( elem.attribute("value").toInt() ) );

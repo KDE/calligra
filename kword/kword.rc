@@ -150,6 +150,7 @@
   <Action name="format_bold"/>
   <Action name="format_italic"/>
   <Action name="format_underline"/>
+  <Action name="format_strike"/>
   <Separator/>
   <Action name="format_color"/>
   <Separator/>

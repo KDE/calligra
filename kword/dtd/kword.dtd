@@ -366,7 +366,7 @@ don't put a </?xml...> at the end of the file!).
                                 format is used. 1 for all ids except "normal text".
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|VERTALIGN|ANCHOR|IMAGE)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|ANCHOR|IMAGE)*>
 <!ATTLIST FORMAT
     id CDATA #REQUIRED
     pos CDATA #REQUIRED
@@ -432,6 +432,14 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT UNDERLINE
     EMPTY>
 <!ATTLIST UNDERLINE
+    value CDATA #REQUIRED>
+
+<!-- STRIKEOUT
+        Value is either 0 or 1 with 1=true and 0=false
+-->
+<!ELEMENT STRIKEOUT
+    EMPTY>
+<!ATTLIST STRIKEOUT
     value CDATA #REQUIRED>
 
 <!-- VERTALIGN

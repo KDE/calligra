@@ -407,6 +407,10 @@ void KWView::setupActions()
     actionFormatUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Key_U,
                                            this, SLOT( textUnderline() ),
                                            actionCollection(), "format_underline" );
+    actionFormatStrikeOut = new KToggleAction( i18n( "&Strike out" ), "text_strike", 0 ,
+                                           this, SLOT( textStrikeOut() ),
+                                           actionCollection(), "format_strike" );
+
     actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "alignLeft", ALT + Key_L,
                                        this, SLOT( textAlignLeft() ),
                                        actionCollection(), "format_alignleft" );
@@ -804,6 +808,8 @@ void KWView::showFormat( const QTextFormat &currentFormat )
     actionFormatBold->setChecked( currentFormat.font().bold());
     actionFormatItalic->setChecked( currentFormat.font().italic() );
     actionFormatUnderline->setChecked( currentFormat.font().underline());
+    actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
+
     actionFormatColor->setColor( currentFormat.color() );
 
     switch(currentFormat.vAlign())
@@ -1510,7 +1516,7 @@ void KWView::formatFont()
     KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit() );
     if (edit) // TODO disable action if not text frameset
     {
-        KWFontDia *fontDia = new KWFontDia( this, "",tmpFont,actionFormatUnderline->isChecked(),actionFormatSub->isChecked(), actionFormatSuper->isChecked());
+        KWFontDia *fontDia = new KWFontDia( this, "",tmpFont,actionFormatUnderline->isChecked(),actionFormatSub->isChecked(), actionFormatSuper->isChecked(),actionFormatStrikeOut->isChecked());
         connect( fontDia, SIGNAL( okClicked() ), this, SLOT( fontDiaOk() ) );
 
         fontDia->show();
@@ -1549,7 +1555,7 @@ void KWView::fontDiaOk()
         return;
     const KWFontDia * fontDia = static_cast<const KWFontDia*>(sender());
     if ( edit )
-        edit->setFont(tbFont,fontDia->getUnderline(),fontDia->getSubScript(),fontDia->getSuperScript());
+        edit->setFont(tbFont,fontDia->getUnderline(),fontDia->getSubScript(),fontDia->getSuperScript(),fontDia->getStrikeOut());
 }
 
 /*===============================================================*/
@@ -2089,6 +2095,14 @@ void KWView::textUnderline()
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setUnderline(actionFormatUnderline->isChecked());
+}
+
+/*======================== text strike out =======================*/
+void KWView::textStrikeOut()
+{
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    if ( edit )
+        edit->setStrikeOut(actionFormatStrikeOut->isChecked());
 }
 
 /*=========================== text color ========================*/

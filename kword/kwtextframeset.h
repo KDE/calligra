@@ -280,10 +280,11 @@ public:
     void setBold(bool on);
     void setItalic(bool on);
     void setUnderline(bool on);
+    void setStrikeOut(bool on);
     void setTextColor(const QColor &color);
     void setPointSize( int s );
     void setFamily(const QString &font);
-    void setFont(const QFont &font,bool _underline,bool _subscript,bool _superscript);
+    void setFont(const QFont &font,bool _underline,bool _subscript,bool _superscript, bool _strikeOut);
     void setTextSubScript(bool on);
     void setTextSuperScript(bool on);
 

@@ -31,18 +31,19 @@ class KWFontDia : public QDialog
 {
   Q_OBJECT
 public:
-  KWFontDia(  KWView* parent, const char* name, const QFont &_font, bool _underline, bool _subscript,bool _superscript);
+  KWFontDia(  KWView* parent, const char* name, const QFont &_font, bool _underline, bool _subscript,bool _superscript,bool _strikeOut);
 
   bool getUnderline() const { return m_underline->isChecked();}
   bool getSuperScript() const { return m_superScript->isChecked();}
   bool getSubScript() const { return m_subScript->isChecked();}
+  bool getStrikeOut() const { return m_strikeOut->isChecked();}
 
 private:
   KFontChooser *m_chooseFont;
   QCheckBox *m_underline;
   QCheckBox *m_superScript;
   QCheckBox *m_subScript;
-
+  QCheckBox *m_strikeOut;
 public slots:
   void slotOk();
   void slotCancel();

@@ -2407,6 +2407,14 @@ void KWTextFrameSetEdit::setUnderline( bool on ) {
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Underline );
 }
 
+void KWTextFrameSetEdit::setStrikeOut( bool on ) {
+    QTextFormat format( *currentFormat );
+    QFont _font=currentFormat->font();
+    _font.setStrikeOut(on);
+    format.setFont( _font );
+    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Font );
+}
+
 QColor KWTextFrameSetEdit::textColor() const {
     return currentFormat->color();
 }
@@ -2435,9 +2443,12 @@ void KWTextFrameSetEdit::setFamily(const QString &font){
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Family );
 }
 
-void KWTextFrameSetEdit::setFont(const QFont &font,bool _underline,bool _subscript,bool _superscript){
+void KWTextFrameSetEdit::setFont(const QFont &font,bool _underline,bool _subscript,bool _superscript, bool _strikeOut){
     QTextFormat format( *currentFormat );
-    format.setFont( font );
+    QFont _font=font;
+    _font.setStrikeOut( _strikeOut);
+    format.setFont( _font );
+
     if(!_subscript)
         {
             if(!_superscript)
@@ -2450,7 +2461,7 @@ void KWTextFrameSetEdit::setFont(const QFont &font,bool _underline,bool _subscri
 
     format.setUnderline( _underline );
 
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Font|QTextFormat::VAlign|QTextFormat::Underline /* zoom the font size */);
+    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Format /* zoom the font size */);
 }
 
 void KWTextFrameSetEdit::setTextColor(const QColor &color) {

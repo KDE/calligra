@@ -34,7 +34,7 @@
 #include <qpushbutton.h>
 
 
-KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font, bool _underline, bool _subscript,bool _superscript)
+KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font, bool _underline, bool _subscript,bool _superscript, bool _strikeOut)
     :QDialog( parent, name, true )
 {
     QVBoxLayout *lay1 = new QVBoxLayout( this );
@@ -55,6 +55,11 @@ KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font, bool
     m_subScript=new QCheckBox(i18n("SubScript"),this);
     m_subScript->setChecked( _subscript);
     lay1->addWidget(m_subScript);
+
+    m_strikeOut=new QCheckBox(i18n("Strike Out"),this);
+    m_strikeOut->setChecked( _strikeOut);
+    lay1->addWidget(m_strikeOut);
+
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
     QPushButton *m_pOk = bb->addButton( i18n("OK") );
