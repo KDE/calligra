@@ -95,6 +95,9 @@ protected:
         const QPointArray &points) = 0;
 
 private:
+    Msod(const Msod &);
+    const Msod &operator=(const Msod &);
+
     // Debug support.
 
     static const int s_area = 30505;
@@ -126,13 +129,13 @@ private:
             U32 info;
             struct
             {
-                U32 ver:4;
+                U32 ver: 4;
                 U32 inst: 12;
                 U32 fbt: 16;
             } fields;
         } opcode;
         U32 cbLength;
-    } MSOFBH;
+    } Header;
 
     typedef enum
     {
@@ -164,51 +167,51 @@ private:
     // Opcode handling and painter methods.
 
     void walk(
-        U32 byteOperands,
-        QDataStream &stream);
+        U32 bytes,
+        QDataStream &operands);
     void skip(
-        U32 byteOperands,
+        U32 bytes,
         QDataStream &operands);
     void invokeHandler(
-        MSOFBH &op,
-        U32 wordOperands,
+        Header &op,
+        U32 bytes,
         QDataStream &operands);
 
-    void opAlignrule(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opAnchor(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opArcrule(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opBlip(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opBstorecontainer(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opCalloutrule(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opChildanchor(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opClientanchor(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opClientdata(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opClientrule(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opClienttextbox(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opClsid(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opColormru(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opConnectorrule(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opDeletedpspl(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opDg(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opDgcontainer(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opDgg(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opDggcontainer(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opOleobject(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opOpt(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opRegroupitems(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opSelection(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opSolvercontainer(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opSp(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opSpcontainer(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opSpgr(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opSpgrcontainer(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opSplitmenucolors(MSOFBH &op, U32 byteOperands, QDataStream &operands);
-    void opTextbox(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
+    void opAlignrule(Header &op, U32 bytes, QDataStream &operands);
+    void opAnchor(Header &op, U32 bytes, QDataStream &operands);
+    void opArcrule(Header &op, U32 bytes, QDataStream &operands);
+    void opBlip(Header &op, U32 bytes, QDataStream &operands);
+    void opBse(Header &op, U32 bytes, QDataStream &operands);
+    void opBstorecontainer(Header &op, U32 bytes, QDataStream &operands);
+    void opCalloutrule(Header &op, U32 bytes, QDataStream &operands);
+    void opChildanchor(Header &op, U32 bytes, QDataStream &operands);
+    void opClientanchor(Header &op, U32 bytes, QDataStream &operands);
+    void opClientdata(Header &op, U32 bytes, QDataStream &operands);
+    void opClientrule(Header &op, U32 bytes, QDataStream &operands);
+    void opClienttextbox(Header &op, U32 bytes, QDataStream &operands);
+    void opClsid(Header &op, U32 bytes, QDataStream &operands);
+    void opColormru(Header &op, U32 bytes, QDataStream &operands);
+    void opConnectorrule(Header &op, U32 bytes, QDataStream &operands);
+    void opDeletedpspl(Header &op, U32 bytes, QDataStream &operands);
+    void opDg(Header &op, U32 bytes, QDataStream &operands);
+    void opDgcontainer(Header &op, U32 bytes, QDataStream &operands);
+    void opDgg(Header &op, U32 bytes, QDataStream &operands);
+    void opDggcontainer(Header &op, U32 bytes, QDataStream &operands);
+    void opOleobject(Header &op, U32 bytes, QDataStream &operands);
+    void opOpt(Header &op, U32 bytes, QDataStream &operands);
+    void opRegroupitems(Header &op, U32 bytes, QDataStream &operands);
+    void opSelection(Header &op, U32 bytes, QDataStream &operands);
+    void opSolvercontainer(Header &op, U32 bytes, QDataStream &operands);
+    void opSp(Header &op, U32 bytes, QDataStream &operands);
+    void opSpcontainer(Header &op, U32 bytes, QDataStream &operands);
+    void opSpgr(Header &op, U32 bytes, QDataStream &operands);
+    void opSpgrcontainer(Header &op, U32 bytes, QDataStream &operands);
+    void opSplitmenucolors(Header &op, U32 bytes, QDataStream &operands);
+    void opTextbox(Header &op, U32 bytes, QDataStream &operands);                                                               // do nothing
 
-    void shpLine(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
-    void shpPictureFrame(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
-    void shpRectangle(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
+    void shpLine(Header &op, U32 bytes, QDataStream &operands);                                                               // do nothing
+    void shpPictureFrame(Header &op, U32 bytes, QDataStream &operands);                                                               // do nothing
+    void shpRectangle(Header &op, U32 bytes, QDataStream &operands);                                                               // do nothing
 
     // Option handling.
 
