@@ -1755,6 +1755,7 @@ void KIllustrator::restoreMenubarStatus () {
 #endif
   QString oldgroup = config->group ();
 
+/* This doesn´t work anymore - menubar is unmovable -- sven
   QString str = config->readEntry ("Menubar Position");
   if (! str.isNull ()) {
     if (str == "Bottom")
@@ -1762,7 +1763,7 @@ void KIllustrator::restoreMenubarStatus () {
     else
       menubar->setMenuBarPos (KMenuBar::Top);
   }
-
+*/
    config->setGroup (oldgroup);
 }
 
@@ -1773,14 +1774,14 @@ void KIllustrator::saveMenubarStatus () {
   KConfig* config = kapp->getConfig ();
 #endif
   QString oldgroup = config->group ();
-
+/* This doesn´t work anymore - menubar is unmovable -- sven
   QString str;
   if ( menubar->menuBarPos() == KMenuBar::Bottom )
     str = "Bottom";
   else
     str = "Top";
   config->writeEntry( "Menubar Position", str.data() );
-
+*/
   config->setGroup (oldgroup);
   config->sync ();
 }
