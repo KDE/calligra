@@ -79,7 +79,7 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrLi
     addTab( newTab );
 
     newTab = new KoStyleParagTab( m_tabs );
-    newTab->setWidget( new KoParagCounterWidget( newTab ) );
+    newTab->setWidget( new KoParagCounterWidget( false , newTab ) );
     addTab( newTab );
 
     newTab = new KoStyleParagTab( m_tabs );
