@@ -2540,7 +2540,53 @@ public:
    * \sa diagonalColor, setDiagonalStyle
    */
   void setDiagonalColor( unsigned color );
-    
+  
+  /**
+   * Returns fill pattern.
+   *
+   * \sa setFillPattern
+   */
+  unsigned fillPattern() const;
+  
+  /**
+   * Sets fill pattern.
+   *
+   * \sa fillPattern
+   */
+  void setFillPattern( unsigned pattern );
+  
+  /**
+   * Returns the fill foreground color. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa setPatternForeColor, patternBackColor
+   */
+  unsigned patternForeColor() const;
+  
+  /**
+   * Sets the fill foreground color. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa patternForeColor, setPatternBackColor
+   */
+  void setPatternForeColor( unsigned color );
+  
+  /**
+   * Returns the fill background color. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa setPatternBackColor, patternForeColor
+   */
+  unsigned patternBackColor() const;    
+  
+  /**
+   * Sets the fill background color. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa patternBackColor, setPatternForeColor
+   */
+  void setPatternBackColor( unsigned color );
+  
   /**
    \reimpl
    */

@@ -2276,6 +2276,9 @@ public:
   bool diagonalBottomLeft;
   unsigned diagonalStyle;
   unsigned diagonalColor;
+  unsigned fillPattern;
+  unsigned patternForeColor;
+  unsigned patternBackColor;
 };
 
 XFRecord::XFRecord():  Record()
@@ -2305,6 +2308,9 @@ XFRecord::XFRecord():  Record()
   d->diagonalBottomLeft = false;
   d->diagonalStyle = 0;
   d->diagonalColor = 0;
+  d->fillPattern = 0;
+  d->patternForeColor = 0;
+  d->patternBackColor = 0;
 }
 
 XFRecord::~XFRecord()
@@ -2344,6 +2350,9 @@ XFRecord& XFRecord::operator=( const XFRecord& xf )
   d->diagonalBottomLeft  = xf.diagonalBottomLeft();
   d->diagonalStyle       = xf.diagonalStyle();
   d->diagonalColor       = xf.diagonalColor();
+  d->fillPattern         = xf.fillPattern();
+  d->patternForeColor    = xf.patternForeColor();
+  d->patternBackColor    = xf.patternBackColor();
   return *this;
 }
 
@@ -2616,6 +2625,36 @@ unsigned XFRecord::diagonalColor() const
 void XFRecord::setDiagonalColor( unsigned color )
 {
   d->diagonalColor = color;
+}
+
+unsigned XFRecord::fillPattern() const
+{
+  return d->fillPattern;
+}
+
+void XFRecord::setFillPattern( unsigned pattern ) 
+{
+  d->fillPattern = pattern;
+}
+
+unsigned XFRecord::patternForeColor() const
+{
+  return d->patternForeColor;
+}
+
+void XFRecord::setPatternForeColor( unsigned color )
+{
+  d->patternForeColor = color;
+}
+
+unsigned XFRecord::patternBackColor() const
+{
+  return d->patternBackColor;
+}
+
+void XFRecord::setPatternBackColor( unsigned color )
+{
+  d->patternBackColor = color;
 }
 
 void XFRecord::setData( unsigned size, const unsigned char* data )
