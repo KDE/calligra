@@ -9,8 +9,8 @@ LDADD = ../lib/kofficeui/libkofficeui.la
 
 bin_PROGRAMS = kdiagramm
 
-kdiagramm_SOURCES = kdiagramm_main.cc kdiagramm_shell.cc kdiagramm_doc.cc \
-			kdiagramm.cc kdiagramm_view.cc koDiagramm.cc chart.cc \
+kdiagramm_SOURCES = kdiagramm.cc kdiagramm_main.cc kdiagramm_shell.cc \
+			kdiagramm_doc.cc kdiagramm_view.cc koDiagramm.cc chart.cc \
 			sheet.cc table.cc parser.cc sheetdlg.cc KChartAreaPainter.cpp \
 			KChartAxesPainter.cpp KChartBarsPainter.cpp KChartLinesPainter.cpp\
 			KChartLinesPointsPainter.cpp KChartPainter.cpp \
@@ -70,9 +70,11 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kdiagramm.pot
 
+kdiagramm.cc: kdiagramm.h
 kdiagramm.h: kdiagramm.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(srcdir)/kdiagramm.idl
 
+chart.cc: chart.h
 chart.h: $(interfacedir)/chart.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
 
