@@ -17,7 +17,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
 	kpbackground.cc kpclipartcollection.cc kpgradient.cc \
 	kpgradientcollection.cc \
-	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
+	movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc textcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
