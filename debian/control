@@ -201,8 +201,7 @@ Package: koffice-data
 Architecture: all
 Section: libs
 Depends: koffice-libs (= ${Source-Version})
-Recommends: openoffice.org-mimelnk
-Suggests: khelpcenter, koffice-doc-html
+Suggests: openoffice.org-mimelnk, khelpcenter, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.2.90-0), kugar (<< 1:1.2.90-0)
 Replaces: koffice-libs (<< 1:1.2.90-0), kugar (<< 1:1.2.90-0)
 Description: common shared data for the KDE Office Suite
