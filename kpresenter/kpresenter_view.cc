@@ -4183,6 +4183,9 @@ void KPresenterView::updateReadWrite( bool readwrite )
     {
         refreshPageButton();
         actionViewZoom->setEnabled( true );
+        actionEditSearch->setEnabled( true );
+        actionEditSelectAll->setEnabled( true );
+        actionEditDeSelectAll->setEnabled( true );
     }
     else
     {

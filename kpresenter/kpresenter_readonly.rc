@@ -1,14 +1,9 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="3">
 <MenuBar>
  <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_copy"/>
   <Separator/>
-  <Action name="edit_selectall"/>
-  <Action name="edit_deselectall"/>
-  <Separator/>
   <Action name="edit_find"/>
-  <Separator/>
-  <Action name="edit_copypage"/>
  </Menu>
  <Menu name="Screen Presentations"><text>Screen &amp;Presentations</text>
   <Action name="screen_first"/>
