@@ -29,7 +29,7 @@ KPrTextDrag::KPrTextDrag( QWidget *dragSource, const char *name )
 
 QByteArray KPrTextDrag::encodedData( const char *mime ) const
 {
-    if ( strcmp( selectionMimeType(), mime ) == 0)
+    if ( ( strcmp( selectionMimeType(), mime ) == 0 ) || QString( mime ).startsWith( KPrTextDrag::acceptSelectionMimeType()) )
         return kpresenter;
     else if( strcmp( "application/x-kpresenter-textobjectnumber", mime ) == 0)
     {
@@ -43,9 +43,26 @@ QByteArray KPrTextDrag::encodedData( const char *mime ) const
         return QTextDrag::encodedData(mime);
 }
 
+bool KPrTextDrag::provides( QMimeSource* e , const char* mimeType, const char* acceptMimeType, QString &returnedTypeMime)
+{
+    const char* fmt;
+    for (int i=0; (fmt = e->format(i)); i++)
+    {
+        if ( !qstricmp(mimeType,fmt) || QString( fmt ).startsWith( acceptMimeType ))
+        {
+            kdDebug()<<" mimeType :"<<mimeType<<endl;
+            kdDebug()<<" fmt :"<<fmt<<endl;
+            returnedTypeMime = fmt;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 bool KPrTextDrag::canDecode( QMimeSource* e )
 {
-    if ( e->provides( selectionMimeType() ) )
+    QString tmp;
+    if ( KPrTextDrag::provides( e, selectionMimeType(), acceptSelectionMimeType(), tmp ) )
         return true;
     return QTextDrag::canDecode(e);
 }
@@ -65,6 +82,12 @@ const char * KPrTextDrag::selectionMimeType()
 {
     return "application/vnd.oasis.openoffice.presentation";
 }
+
+const char * KPrTextDrag::acceptSelectionMimeType()
+{
+    return "application/vnd.oasis.openoffice.";
+}
+
 
 void KPrTextDrag::setTextObjectNumber( int number )
 {

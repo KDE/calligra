@@ -12,6 +12,7 @@ Fixes:
 - Fixed copy and paste when one pic is in the copied objects
 - Fixed crash in history of group/ungroup commands
 
+
 Changes:
 - Flip now works as in Gimp. Horizontal flip flips on y-axis
   vertical filp on x-axis
@@ -25,6 +26,7 @@ Changes:
 - Now PresSpeed is into each page
 - Now PageUp/PageDown during presentation go to beginning of the next/previous slide
 - Each object effect can have it's own speed now
+- Copy between kword/kpresenter
 
 Changes after KPresenter 1.3 RC1
 ================================

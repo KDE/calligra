@@ -43,10 +43,12 @@ public:
     static bool canDecode( QMimeSource* e );
 
     static const char * selectionMimeType();
+    static const char * acceptSelectionMimeType();
 
     void setFrameSetNumber( int number );
 
     static int decodeFrameSetNumber( QMimeSource *e );
+    static bool provides( QMimeSource* e , const char* mimeType, const char* acceptMimeType, QString &returnedTypeMime);
 
 protected:
     QCString kword;

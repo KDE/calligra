@@ -44,10 +44,12 @@ public:
     static bool canDecode( QMimeSource* e );
 
     static const char * selectionMimeType();
+    static const char * acceptSelectionMimeType();
 
     void setTextObjectNumber( int number );
 
     static int decodeTextObjectNumber( QMimeSource *e );
+    static bool provides( QMimeSource* e , const char* mimeType, const char* acceptMimeType, QString &returnedTypeMime);
 
 protected:
     QCString kpresenter;

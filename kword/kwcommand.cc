@@ -265,13 +265,17 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
         kdError(30518) << "No office:body found!" << endl;
         return 0;
     }
-    body = body.namedItem( "office:text" ).toElement();
-#if 0 //don't test it otherwise we can't dnd between kword and kpresenter
-    if ( body.isNull() ) {
-        kdError(30518) << "No office:text found!" << endl;
-        return 0;
+    QDomElement tmpbody = body.namedItem( "office:text" ).toElement();
+    if ( tmpbody.isNull() )
+    {
+        //find a better method to find body element
+        tmpbody = body.namedItem( "office:presentation" ).toElement();
+        if ( tmpbody.isNull() ) {
+            kdError(30518) << "No office:text found!" << endl;
+            return 0;
+        }
     }
-#endif
+
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
     KWTextFrameSet * textFs = textdoc->textFrameSet();
     KWDocument * doc = textFs->kWordDocument();
@@ -279,7 +283,7 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     KoOasisStyles oasisStyles;
     oasisStyles.createStyleMap( domDoc );
     KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
-    *c = textFs->textObject()->pasteOasisText( body, context, cursor, doc->styleCollection() );
+    *c = textFs->textObject()->pasteOasisText( tmpbody, context, cursor, doc->styleCollection() );
 
     textFs->textObject()->setNeedSpellCheck( true );
     // In case loadFormatting queued any image request

@@ -8,6 +8,7 @@ Changes after KWord-1.3
 - Support for "protect content" in all types of framesets
 - Support for different run-around-gaps on every side of the frame
 - Use kspell2
+- Copy/paste between kword/kpresenter
 
 Changes between KWord-1.3-rc and KWord-1.3
 ==========================================

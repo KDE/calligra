@@ -3155,9 +3155,10 @@ void KWTextFrameSetEdit::paste()
 {
     QMimeSource *data = QApplication::clipboard()->data();
     // Hmm, we could reuse the result of KWView::checkClipboard...
-    if ( data->provides( KWTextDrag::selectionMimeType() ) )
+    QString returnedTypeMime;
+    if ( KWTextDrag::provides( data , KWTextDrag::selectionMimeType(), KWTextDrag::acceptSelectionMimeType(), returnedTypeMime) )
     {
-        QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
+        QByteArray arr = data->encodedData( returnedTypeMime.latin1() );
         if ( arr.size() )
         {
             KCommand *cmd =textFrameSet()->pasteOasis( cursor(), QCString( arr, arr.size()+1 ), true );
@@ -3561,10 +3562,10 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             textDocument()->removeSelection( KoTextDocument::Standard );
             textObject()->selectionChangedNotify();
         }
-
-        if ( e->provides( KWTextDrag::selectionMimeType() ) )
+        QString returnedTypeMime;
+        if ( KWTextDrag::provides( e , KWTextDrag::selectionMimeType(), KWTextDrag::acceptSelectionMimeType(),returnedTypeMime ))
         {
-            QByteArray arr = e->encodedData( KWTextDrag::selectionMimeType() );
+            QByteArray arr = e->encodedData( returnedTypeMime.latin1() );
             if ( arr.size() )
             {
                 KCommand *cmd=textFrameSet()->pasteOasis( cursor(), QCString(arr, arr.size()+1 ), false );

@@ -33,7 +33,7 @@ KWTextDrag::KWTextDrag( QWidget *dragSource, const char *name )
 
 QByteArray KWTextDrag::encodedData( const char *mime ) const
 {
-    if ( strcmp( selectionMimeType(), mime ) == 0)
+    if ( ( strcmp( selectionMimeType(), mime ) == 0 )|| QString( mime ).startsWith( KWTextDrag::acceptSelectionMimeType()))
         return kword;
     else if( strcmp( "application/x-kword-framesetnumber", mime ) == 0)
     {
@@ -47,9 +47,23 @@ QByteArray KWTextDrag::encodedData( const char *mime ) const
         return QTextDrag::encodedData(mime);
 }
 
+bool KWTextDrag::provides( QMimeSource* e , const char* mimeType, const char* acceptMimeType, QString &returnedTypeMime)
+{
+    const char* fmt;
+    for (int i=0; (fmt = e->format(i)); i++) {
+	if ( !qstricmp(mimeType,fmt) || QString( fmt ).startsWith( acceptMimeType ))
+        {
+            returnedTypeMime = fmt;
+	    return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 bool KWTextDrag::canDecode( QMimeSource* e )
 {
-    if ( e->provides( selectionMimeType() ) )
+    QString tmp;
+    if ( KWTextDrag::provides( e, selectionMimeType(), acceptSelectionMimeType(),tmp ) )
        return true;
     return QTextDrag::canDecode(e);
 }
@@ -68,6 +82,11 @@ const char* KWTextDrag::format( int i ) const
 const char * KWTextDrag::selectionMimeType()
 {
     return "application/vnd.oasis.openoffice.text";
+}
+
+const char * KWTextDrag::acceptSelectionMimeType()
+{
+    return "application/vnd.oasis.openoffice.";
 }
 
 void KWTextDrag::setFrameSetNumber( int number )
