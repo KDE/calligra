@@ -123,8 +123,8 @@ private:
         unsigned tableNumber);
     virtual void gotTableRow(
         unsigned tableNumber,
-        const QVector<QString> &texts,
-        QVector<Attributes> &styles,
+        const QString texts[],
+        const Attributes styles[],
         MsWordGenerated::TAP &row);
     void gotTableRow(
         unsigned tableNumber, unsigned rowNumber, const QString texts[], const MsWordGenerated::PAP styles[],
@@ -151,8 +151,8 @@ private:
     {
     public:
         TableRow(
-            const QVector<QString> &texts,
-            QVector<Attributes> &styles,
+            const QString texts[],
+            const Attributes styles[],
             MsWordGenerated::TAP &row);
         ~TableRow();
         QValueList<Attributes> m_styles;

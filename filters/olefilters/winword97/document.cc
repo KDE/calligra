@@ -299,13 +299,27 @@ Document::~Document()
 {
 }
 
+// Paragrpahs end with a control character that we want to suppress.
+QString Document::cleanText(
+    const QString &text)
+{
+    QString cleantext = text;
+    unsigned length = cleantext.length() - 1;
+    QChar last = cleantext[length];
+
+    if ((last == QChar('\r')) ||
+        (last == QChar('\a')))
+        cleantext.truncate(length);
+    return cleantext;
+}
+
 void Document::gotParagraph(
     const QString &text,
     const PAP &pap,
     const CHPXarray &chpxs)
 {
     Attributes attributes;
-    QString cleantext = text;
+    QString cleantext = cleanText(text);
 
     createAttributes(cleantext, pap, chpxs, attributes);
     gotParagraph(cleantext, attributes);
@@ -318,7 +332,7 @@ void Document::gotHeadingParagraph(
     const CHPXarray &chpxs)
 {
     Attributes attributes;
-    QString cleantext = text;
+    QString cleantext = cleanText(text);
 
     createAttributes(cleantext, pap, chpxs, attributes);
     gotHeadingParagraph(cleantext, attributes);
@@ -331,7 +345,7 @@ void Document::gotListParagraph(
     const CHPXarray &chpxs)
 {
     Attributes attributes;
-    QString cleantext = text;
+    QString cleantext = cleanText(text);
 
     createAttributes(cleantext, pap, chpxs, attributes);
     gotListParagraph(cleantext, attributes);
@@ -356,21 +370,22 @@ void Document::gotTableRow(
     const CHPXarray chpxs[],
     TAP &row)
 {
-    QVector<QString> outTexts(row.itcMac);
-    QVector<Attributes> outStyles(row.itcMac);
+    QString *outTexts = new QString[row.itcMac];
+    Attributes *outStyles = new Attributes[row.itcMac];
     unsigned i;
 
     for (i = 0; i < row.itcMac; i++)
     {
         Attributes attributes;
-        QString cleantext = texts[i];
-
+        QString cleantext = cleanText(texts[i]);
         createAttributes(cleantext, styles[i], chpxs[i], attributes);
-        outStyles.insert(i, &attributes);
-        outTexts.insert(i, &cleantext);
+        outStyles[i] = attributes;
+        outTexts[i] = cleantext;
         m_characterPosition += cleantext.length();
     }
     gotTableRow(m_tableNumber, outTexts, outStyles, row);
+    delete [] outTexts;
+    delete [] outStyles;
 }
 
 void Document::parse()

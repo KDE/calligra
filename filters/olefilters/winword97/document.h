@@ -131,8 +131,8 @@ protected:
         unsigned tableNumber) = 0;
     virtual void gotTableRow(
         unsigned tableNumber,
-        const QVector<QString> &texts,
-        QVector<Attributes> &styles,
+        const QString texts[],
+        const Attributes styles[],
         MsWordGenerated::TAP &row) = 0;
 
 private:
@@ -266,6 +266,9 @@ private:
     void rewriteField(
         QString &text,
         CHPXarray &chpxs);
+
+    QString cleanText(
+        const QString &text);
 
     // Override the base class functions.
 

@@ -195,6 +195,7 @@ bool WinWordDoc::convert()
         m_body.append(
             "</DOC>\n");
         m_result = m_body.utf8();
+//        kdDebug() << m_result << endl;
         m_isConverted = true;
     }
     return m_success;
@@ -644,10 +645,16 @@ void WinWordDoc::gotTableEnd(
 
             cell.append("<FRAMESET frameType=\"1\" frameInfo=\"0\" grpMgr=\"grpmgr_");
             cell.append(QString::number(tableNumber));
+            cell.append("\" name=\"Table");
+            cell.append(QString::number(tableNumber));
+            cell.append('_');
+            cell.append(QString::number(y));
+            left = cacheCellEdge(tableNumber, computeCellEdge(row, x));
+            cell.append(',');
+            cell.append(QString::number(left));
             cell.append("\" row=\"");
             cell.append(QString::number(y));
             cell.append("\" col=\"");
-            left = cacheCellEdge(tableNumber, computeCellEdge(row, x));
             cell.append(QString::number(left));
             cell.append("\" rows=\"");
             cell.append(QString::number(1));
@@ -703,8 +710,8 @@ void WinWordDoc::gotTableEnd(
 
 void WinWordDoc::gotTableRow(
     unsigned tableNumber,
-    const QVector<QString> &texts,
-    QVector<Attributes> &styles,
+    const QString texts[],
+    const Attributes styles[],
     MsWordGenerated::TAP &row)
 {
     unsigned i;
@@ -829,16 +836,16 @@ char WinWordDoc::numbering(unsigned nfc) const
 }
 
 WinWordDoc::TableRow::TableRow(
-    const QVector<QString> &texts,
-    QVector<Attributes> &styles,
+    const QString texts[],
+    const Attributes styles[],
     MsWordGenerated::TAP &row)
 {
     m_texts.clear();
     m_styles.clear();
     for (int i = 0; i < row.itcMac; i++)
     {
-        m_texts.append(*texts[i]);
-        m_styles.append(*styles[i]);
+        m_texts.append(texts[i]);
+        m_styles.append(styles[i]);
     }
     m_row = row;
 }
