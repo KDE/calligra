@@ -21,7 +21,6 @@
 #include <qdatastream.h>
 #include <qstring.h>
 #include <xmltree.h>
-#include <assert.h>
 
 ExcelFilter::ExcelFilter(const QByteArray &mainStream):FilterBase(), length(mainStream.size())
 {
@@ -58,7 +57,7 @@ bool ExcelFilter::filter()
 	*s >> size;
 	count += size;
 
-        assert( size <= record.size() );
+        Q_ASSERT( size <= record.size() );
 	s->readRawBytes(record.data(), size);
 	*s >> readAhead;
 
