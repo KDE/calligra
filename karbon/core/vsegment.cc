@@ -59,7 +59,7 @@ height(
 }
 
 
-VSegment::VSegment( unsigned degree )
+VSegment::VSegment( unsigned degree ) : m_degree( degree )
 {
 	m_nodes = new VNodeData[ degree ];
 	m_type = begin;
@@ -82,9 +82,10 @@ VSegment::VSegment( unsigned degree )
 
 VSegment::VSegment( const VSegment& segment )
 {
-	m_nodes = new VNodeData[ segment.m_degree ];
-	m_type = segment.m_type;
-	m_state = segment.m_state;
+	m_degree	= segment.m_degree;
+	m_nodes		= new VNodeData[ segment.m_degree ];
+	m_type		= segment.m_type;
+	m_state		= segment.m_state;
 
 	// Copying the pointers m_prev/m_next has some advantages (see VSegment::length()).
 	// Inserting a segment into a path overwrites these anyway.
@@ -126,6 +127,7 @@ VSegment::setDegree( unsigned degree )
 
 	// Allocate new node data.
 	m_nodes = new VNodeData[ degree ];
+	m_degree = degree;
 }
 
 void
@@ -137,7 +139,7 @@ VSegment::draw( VPainter* painter ) const
 
 	if( type() == curve )
 	{
-		painter->curveTo( point( 0 ), point( 1 ), point( 3 ) );
+		painter->curveTo( point( 0 ), point( 1 ), point( 2 ) );
 	}
 	else if( type() == line )
 	{
