@@ -141,10 +141,10 @@ int KPQuadricBezierCurveObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
+void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
     if ( move ) {
-        KPObject::draw( _painter,_zoomHandler );
+        KPObject::draw( _painter, _zoomHandler, drawSelection );
         return;
     }
 
@@ -221,7 +221,7 @@ void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHa
 
     _painter->restore();
 
-    KPObject::draw( _painter,_zoomHandler );
+    KPObject::draw( _painter, _zoomHandler, drawSelection );
 }
 
 /*===================== get angle ================================*/

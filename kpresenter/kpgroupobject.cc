@@ -244,20 +244,20 @@ int KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
 }
 
 /*================================================================*/
-void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler )
+void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool drawSelection )
 {
     if ( move ) {
-        KPObject::draw( _painter,_zoomhandler );
+        KPObject::draw( _painter, _zoomhandler, drawSelection );
         return;
     }
 
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
         kpobject = objects.at( i );
-        kpobject->draw( _painter,_zoomhandler );
+        kpobject->draw( _painter, _zoomhandler, drawSelection );
     }
 
-    KPObject::draw( _painter,_zoomhandler );
+    KPObject::draw( _painter, _zoomhandler, drawSelection );
 }
 
 /*================================================================*/

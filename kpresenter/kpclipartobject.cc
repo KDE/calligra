@@ -111,11 +111,11 @@ int KPClipartObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
+void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
     if ( move )
     {
-        KPObject::draw( _painter,_zoomHandler );
+        KPObject::draw( _painter, _zoomHandler, drawSelection );
         return;
     }
 
@@ -203,5 +203,5 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
 
     _painter->restore();
 
-    KPObject::draw( _painter,_zoomHandler );
+    KPObject::draw( _painter, _zoomHandler, drawSelection );
 }

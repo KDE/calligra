@@ -145,8 +145,7 @@ public:
     void setAutoForm( const QString &_autoform )
     { autoform = _autoform; }
 
-    void drawPageInPix( QPixmap&, int );
-    void drawPageInPix2( QPixmap&, int );
+    void drawPageInPix2( QPixmap&, int pgnum );
 
     void gotoPage( int pg );
 
@@ -235,7 +234,8 @@ protected:
     virtual void paintEvent( QPaintEvent* );
     void paintBackground( QPainter*, const QRect& );
     void drawBackground( QPainter*, const QRect& );
-    void drawObjects( QPainter*, const QRect&, bool drawCursor );
+    void drawObjects( QPainter*, const QRect&, bool drawCursor, bool drawSelection, bool doSpecificEffects );
+    void drawCurrentPageInPix( QPixmap& );
     virtual void mousePressEvent( QMouseEvent *e );
     virtual void mouseReleaseEvent( QMouseEvent *e );
     virtual void mouseMoveEvent( QMouseEvent *e );

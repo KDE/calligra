@@ -101,11 +101,11 @@ int KPLineObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler )
+void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool drawSelection )
 {
     if ( move )
     {
-        KPObject::draw( _painter,_zoomhandler );
+        KPObject::draw( _painter, _zoomhandler, drawSelection );
         return;
     }
 
@@ -186,7 +186,7 @@ void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler )
 
     _painter->restore();
 
-    KPObject::draw( _painter,_zoomhandler );
+    KPObject::draw( _painter, _zoomhandler, drawSelection );
 }
 
 /*===================== get angle ================================*/

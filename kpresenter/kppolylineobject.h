@@ -55,7 +55,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load( const QDomElement &element );
 
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
 
     virtual void setSize( double _width, double _height );
     virtual void resizeBy( const KoSize &_size );

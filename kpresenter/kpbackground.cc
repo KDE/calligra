@@ -506,7 +506,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter )
 
         doc->header()->setSize( ext.width(), doc->header()->textObject()->document()->lastParag()->rect().bottom() + 1 );
 #endif
-        m_page->kPresenterDoc()->header()->draw( _painter,m_page->kPresenterDoc()->zoomHandler() );
+        m_page->kPresenterDoc()->header()->draw( _painter, m_page->kPresenterDoc()->zoomHandler(), true );
 #if 0
         if ( doc->header()->textObject()->isModified() )
             doc->header()->textObject()->resize( s );
@@ -534,7 +534,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter )
             pgnum = 0;
         doc->footer()->textObject()->setPageNum( ++pgnum );
 #endif
-        m_page->kPresenterDoc()->footer()->draw( _painter,m_page->kPresenterDoc()->zoomHandler() );
+        m_page->kPresenterDoc()->footer()->draw( _painter, m_page->kPresenterDoc()->zoomHandler(), true );
 #if 0
         if ( doc->footer()->textObject()->isModified() )
             doc->footer()->textObject()->resize( s.width(), s.height() );

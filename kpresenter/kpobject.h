@@ -164,9 +164,6 @@ public:
     virtual int getDisappearNum() const
     { return disappearNum; }
 
-    virtual void drawSelection( bool _dSelection )
-    { dSelection = _dSelection; }
-
     virtual void setOwnClipping( bool _ownClipping )
     { ownClipping = _ownClipping; }
     virtual void setSubPresStep( int _subPresStep )
@@ -174,7 +171,12 @@ public:
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true )
     { specEffects = _specEffects; onlyCurrStep = _onlyCurrStep; }
 
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
+    /**
+     * The main drawing method.
+     * @param drawSelection if true and the object is selected, draw the handles around it
+     * (this can be set to false when printing, when generating previews etc.)
+     */
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
 
     virtual bool contains( const KoPoint &_point ) const;
     virtual bool intersects( const KoRect & _rect ) const;
@@ -249,7 +251,6 @@ protected:
     bool appearSoundEffect:1;
     bool disappearSoundEffect:1;
     bool selected:1;
-    bool dSelection:1;
     bool specEffects:1;
     bool onlyCurrStep:1;
     bool ownClipping:1;
@@ -339,10 +340,10 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
 
 protected:
-    virtual void paint( QPainter */*_painter*/,KoZoomHandler* /*_zoomHandler*/  ) {}
+    virtual void paint( QPainter* /*_painter*/,KoZoomHandler* /*_zoomHandler*/  ) {}
 
     QPen pen;
     QBrush brush;

@@ -78,8 +78,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
-    void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
+    void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged, bool drawSelection );
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
 
     virtual void extendObject2Contents( KPresenterView *view = 0 );
@@ -121,8 +121,8 @@ protected:
     QDomElement saveHelper(const QString &tmpText,KoTextFormat*lastFormat ,QDomDocument &doc);
 
     virtual void loadKTextObject( const QDomElement &e, int type );
-    void drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
-    void drawParags( QPainter *p, const QColorGroup& cg, int from, int to );
+    void drawText( QPainter* _painter, KoZoomHandler* zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
+    void drawParags( QPainter *p, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
 protected slots:

@@ -1795,9 +1795,7 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
     for (; oIt.current(); ++oIt )
         if ( rect.intersects( oIt.current()->getBoundingRect( 0, 0 ) ) )
         {
-            oIt.current()->drawSelection( false );
-            oIt.current()->draw( &painter, 0, 0 );
-            oIt.current()->drawSelection( true );
+            oIt.current()->draw( &painter, 0, 0, flag for "don't draw selection" );
         }
 #endif
 }

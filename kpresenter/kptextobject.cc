@@ -148,7 +148,7 @@ void KPTextObject::setSize( double _width, double _height )
         return;
 
     //kdDebug() << " KPTextObject::setSize -> setting doc width to " << m_doc->zoomHandler()->pixelToLayoutUnitX( _width ) << endl;
-    textDocument()->setWidth( m_doc->zoomHandler()->pixelToLayoutUnitX( _width ) );
+    textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( _width ) );
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     slotAvailableHeightNeeded();
     m_textobj->formatMore();
@@ -163,7 +163,7 @@ void KPTextObject::resizeBy( double _dx, double _dy )
     if ( move )
         return;
     //kdDebug() << " KPTextObject::resizeBy -> setting doc width to " << m_doc->zoomHandler()->pixelToLayoutUnitX( getSize().width() ) << endl;
-    textDocument()->setWidth( m_doc->zoomHandler()->pixelToLayoutUnitX( getSize().width() ) );
+    textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( getSize().width() ) );
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     slotAvailableHeightNeeded();
     m_textobj->formatMore();
@@ -227,22 +227,23 @@ int KPTextObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
+void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
     if ( move )
     {
-        KPObject::draw( _painter,_zoomHandler );
+        KPObject::draw( _painter, _zoomHandler, drawSelection );
         return;
     }
 
-    draw( _painter,_zoomHandler, false, 0L, true );
+    draw( _painter,_zoomHandler, false, 0L, true, drawSelection );
 }
 
 void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                         bool onlyChanged, QTextCursor* cursor, bool resetChanged )
+                         bool onlyChanged, QTextCursor* cursor, bool resetChanged,
+                         bool drawSelection )
 {
     _painter->save();
-#if 0 //FIXMS
+#if 0 //FIXME
     setupClipRegion( _painter, getBoundingRect(  ) );
 #endif
     double ox = orig.x();// - _diffx;
@@ -262,20 +263,20 @@ void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
       if ( fillType == FT_BRUSH || !gradient )
         _painter->drawRect( penw, penw, _zoomHandler->zoomItX( ext.width() - 2 * penw), _zoomHandler->zoomItY( ext.height() - 2 * penw) );
       else
-        _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+        _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX( ow - 2 * penw ), _zoomHandler->zoomItY( oh - 2 * penw ) );
 
-      drawText( _painter, onlyChanged, cursor, resetChanged );
+      drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
     }
     else
     {
-      QRect br = QRect( 0, 0, ow, oh );
-      int pw = br.width();
-      int ph = br.height();
-      QRect rr = br;
-      int yPos = -rr.y();
-      int xPos = -rr.x();
-      br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
-      rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+      KoRect br = KoRect( 0, 0, ow, oh );
+      double pw = br.width();
+      double ph = br.height();
+      KoRect rr = br;
+      double yPos = -rr.y();
+      double xPos = -rr.x();
+      br.moveTopLeft( KoPoint( -br.width() / 2, -br.height() / 2 ) );
+      rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
       QWMatrix m;
       m.translate( pw / 2, ph / 2 );
@@ -287,25 +288,25 @@ void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
       if ( fillType == FT_BRUSH || !gradient )
         _painter->drawRect( _zoomHandler->zoomItX(rr.left() + xPos + penw), _zoomHandler->zoomItY(rr.top() + yPos + penw), _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
       else
-        _painter->drawPixmap( rr.left() + xPos + penw, rr.top() + yPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+        _painter->drawPixmap( _zoomHandler->zoomItX( rr.left() + xPos + penw ), _zoomHandler->zoomItY( rr.top() + yPos + penw ), *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX( ow - 2 * penw ), _zoomHandler->zoomItY( oh - 2 * penw ) );
 
       _painter->translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY( rr.top() + yPos) );
-      drawText( _painter, onlyChanged, cursor, resetChanged );
+      drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
     }
     _painter->restore();
 
-    KPObject::draw( _painter,m_doc->zoomHandler() );
+    KPObject::draw( _painter, _zoomHandler, drawSelection );
 }
 
 // This method simply draws the paragraphs in the given painter
 // Assumes the painter is already set up correctly.
-void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
+void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
     //kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
     //// ### Transparent background - TODO use configuration ?
     cg.setBrush( QColorGroup::Base, NoBrush );
-    QRect r( 0, 0, ext.width(), ext.height() );
+    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, ext.width(), ext.height() ) );
 
     if ( specEffects )
     {
@@ -313,12 +314,12 @@ void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* 
         {
         case EF2T_PARA:
             kdDebug(33001) << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
-            drawParags( _painter, cg, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
+            drawParags( _painter, zoomHandler, cg, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
             break;
         default:
             /*Qt3::QTextParag * lastFormatted =*/ textDocument()->drawWYSIWYG(
                 _painter, r.x(), r.y(), r.width(), r.height(),
-                cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
+                cg, zoomHandler,
                 onlyChanged, cursor != 0, cursor, resetChanged );
         }
     }
@@ -327,7 +328,7 @@ void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* 
         //kdDebug() << "KPTextObject::drawText r=" << DEBUGRECT(r) << endl;
         /*Qt3::QTextParag * lastFormatted = */ textDocument()->drawWYSIWYG(
             _painter, r.x(), r.y(), r.width(), r.height(),
-            cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
+            cg, zoomHandler,
             onlyChanged, cursor != 0, cursor, resetChanged );
     }
 }
@@ -841,7 +842,7 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc )
 #endif
 }
 
-void KPTextObject::drawParags( QPainter *painter, const QColorGroup& cg, int from, int to )
+void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to )
 {
     // The fast and difficult way would be to call drawParagWYSIWYG
     // only on the paragraphs to be drawn. Then we have duplicate quite some code
@@ -850,7 +851,7 @@ void KPTextObject::drawParags( QPainter *painter, const QColorGroup& cg, int fro
     // we call KoTextDocument::drawWYSIWYG with a cliprect.
     Q_ASSERT( from <= to );
     int i = 0;
-    QRect r( 0, 0, ext.width(), ext.height() );
+    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, ext.width(), ext.height() ) );
     Qt3::QTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         if ( !parag->isValid() )
@@ -874,19 +875,21 @@ void KPTextObject::drawParags( QPainter *painter, const QColorGroup& cg, int fro
 
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
+    KoZoomHandler *zh = m_doc->zoomHandler();
+    QPoint origPix = zh->zoomPoint( orig );
     // Painter is already translated for diffx/diffy, but not for the object yet
-    p->translate( m_doc->zoomHandler()->zoomItX( orig.x()), m_doc->zoomHandler()->zoomItY(orig.y()) );
+    p->translate( origPix.x(), origPix.y() );
     KoTextParag* parag = static_cast<KoTextParag *>(cursor->parag());
 
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
     int lineY;
     // Cursor height, in pixels
-    int cursorHeight = m_doc->zoomHandler()->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
+    int cursorHeight = zh->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
     QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
                    topLeft.y() - cursor->totalOffsetY() + lineY );
-    iPoint = m_doc->zoomHandler()->layoutUnitToPixel( iPoint );
+    iPoint = zh->layoutUnitToPixel( iPoint );
 
-    QPoint vPoint( iPoint.x() + orig.x(), iPoint.y() + orig.y() );
+    QPoint vPoint = iPoint + origPix;
     int xadj = parag->at( cursor->index() )->pixelxadj;
     iPoint.rx() += xadj;
     vPoint.rx() += xadj;
@@ -928,7 +931,7 @@ void KPTextObject::slotNewCommand( KCommand * cmd)
 
 void KPTextObject::slotAvailableHeightNeeded()
 {
-    int ah = m_doc->zoomHandler()->pixelToLayoutUnitY( getSize().height() );
+    int ah = m_doc->zoomHandler()->ptToLayoutUnitPixY( getSize().height() );
     m_textobj->setAvailableHeight( ah );
     //kdDebug()<<"slotAvailableHeightNeeded: height=:"<<ah<<endl;
 }

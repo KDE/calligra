@@ -91,7 +91,6 @@ KPObject::KPObject()
     angle = 0.0;
     shadowDirection = SD_RIGHT_BOTTOM;
     shadowDistance = 0;
-    dSelection = true;
     selected = false;
     ownClipping = true;
     subPresStep = 0;
@@ -300,7 +299,7 @@ KoRect KPObject::getBoundingRect( ) const
     {
         QWMatrix mtx;
         mtx.rotate( angle );
-        KoRect rr = KoRect::fromQRect(mtx.mapRect( r.toQRect() ));
+        KoRect rr = KoRect::fromQRect(mtx.mapRect( r.toQRect() )); /// TODO: we need a method in KoRect for this
 
         double diffw = std::abs( rr.width() - r.width() );
         double diffh = std::abs( rr.height() - r.height() );
@@ -334,7 +333,7 @@ bool KPObject::contains( const KoPoint &_point ) const
         m.rotate( angle );
         m.translate( rr.left() + xPos, rr.top() + yPos );
 
-        KoRect r = KoRect::fromQRect(m.mapRect( br.toQRect() ));
+        KoRect r = KoRect::fromQRect(m.mapRect( br.toQRect() )); // see above TODO
         r.moveBy( orig.x() , orig.y() );
 
         return r.contains( _point );
@@ -441,9 +440,9 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType ) const
 }
 
 /*======================== draw ==================================*/
-void KPObject::draw( QPainter *_painter,KoZoomHandler *_zoomHandler )
+void KPObject::draw( QPainter *_painter, KoZoomHandler *_zoomHandler, bool drawSelection )
 {
-    if ( dSelection )
+    if ( drawSelection )
     {
         _painter->save();
         _painter->translate( _zoomHandler->zoomItX(orig.x()) , _zoomHandler->zoomItY( orig.y()) );
@@ -791,11 +790,11 @@ int KP2DObject::load(const QDomElement &element)
     return offset;
 }
 
-void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
+void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
     if ( move )
     {
-        KPObject::draw( _painter,_zoomHandler );
+        KPObject::draw( _painter, _zoomHandler, drawSelection );
         return;
     }
 
@@ -882,5 +881,5 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
 
     _painter->restore();
 
-    KPObject::draw( _painter,_zoomHandler );
+    KPObject::draw( _painter, _zoomHandler, drawSelection );
 }

@@ -60,7 +60,7 @@ public:
     virtual QString getTypeString() const
     { return i18n("Embedded object"); }
 
-    virtual void draw( QPainter *_painter,KoZoomHandler *_zoomhandler );
+    virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection );
 
     virtual void activate( QWidget *_widget, int diffx, int diffy );
     virtual void deactivate();

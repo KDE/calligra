@@ -115,11 +115,11 @@ void KPPartObject::resizeBy( double _dx, double _dy )
 }
 
 /*======================== draw ==================================*/
-void KPPartObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler )
+void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection )
 {
     if ( move )
     {
-        KPObject::draw( _painter,_zoomhandler );
+        KPObject::draw( _painter, _zoomhandler, drawSelection );
         return;
     }
 
@@ -186,7 +186,7 @@ void KPPartObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler )
 
     _painter->restore();
 
-    KPObject::draw( _painter,_zoomhandler );
+    KPObject::draw( _painter, _zoomhandler, drawSelection );
 }
 
 /*================================================================*/
