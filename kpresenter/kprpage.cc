@@ -132,6 +132,9 @@ KCommand * KPrPage::deleteObjs( bool _add )
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if(it.current()->isSelected())
         {
 	    _objects.append( it.current() );
