@@ -8,7 +8,7 @@ LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
 bin_PROGRAMS = kformviewer
 
 kformviewer_SOURCES = \
- kformviewer.cc \
+ kformviewer.idl \
  kformviewer_main.cc \
  kformviewer_shell.cc \
  kformviewer_doc.cc \
@@ -29,10 +29,7 @@ METASOURCES = \
 
 idl_DATA = kformviewer.idl
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
-
 kdelnk_DATA = kformviewer.desktop
-
 kdelnkdir = $(kde_appsdir)/KOffice
 
 ####### Implicit rules
@@ -44,11 +41,3 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/koffi
 messages:
 	(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kformviewer.pot
 
-kformviewer.h: kformviewer.idl $(micodir)/include/CORBA.h
-	$(IDL) $(IDL_FLAGS) $(srcdir)/kformviewer.idl
-
-kformviewer.cc: kformviewer.h
-kformviewer_doc.cc: kformviewer.h
-kformviewer_main.cc: kformviewer.h
-kformviewer_shell.cc: kformviewer.h
-kformviewer_view.cc: kformviewer.h
