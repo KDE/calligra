@@ -161,6 +161,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( m_gui->canvasWidget(), SIGNAL(docStructChanged(int)),
              this, SLOT(docStructChanged(int)));
 
+    connect( m_gui->canvasWidget(), SIGNAL(updateRuler()),
+             this, SLOT(slotUpdateRuler()));
+
     if(shell())
         connect( shell(), SIGNAL( documentSaved()), m_doc,SLOT(slotDocumentInfoModifed() ) );
 
@@ -762,10 +765,15 @@ void KWView::updatePageInfo()
         m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
 
         m_sbPageLabel->setText( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->getPages())+' ' );
-        QPoint rulerTopLeft = m_gui->canvasWidget()->rulerPos();
-        m_gui->getHorzRuler()->setOffset( rulerTopLeft.x(), 0 );
-        m_gui->getVertRuler()->setOffset( 0, rulerTopLeft.y() );
+        slotUpdateRuler();
     }
+}
+
+void KWView::slotUpdateRuler()
+{
+    QPoint rulerTopLeft = m_gui->canvasWidget()->rulerPos();
+    m_gui->getHorzRuler()->setOffset( rulerTopLeft.x(), 0 );
+    m_gui->getVertRuler()->setOffset( 0, rulerTopLeft.y() );
 }
 
 void KWView::pageNumChanged()

@@ -458,6 +458,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 
                 if ( emitChanged ) // emitted after mousePressEvent [for tables]
                     emit currentFrameSetEditChanged();
+                 emit updateRuler();
             }
         }
         break;

@@ -257,6 +257,8 @@ public slots:
 
     void editPersonalExpr();
 
+    void slotUpdateRuler();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );

@@ -199,6 +199,7 @@ signals:
     // ### DF: IMHO this should be only emitted by KWDocument (e.g. addFrameSet)
     void docStructChanged(int _type);
 
+    void updateRuler();
 private slots:
     void slotContentsMoving( int, int );
     void slotNewContentsSize();
