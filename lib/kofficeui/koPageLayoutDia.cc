@@ -109,7 +109,7 @@ void KoPagePreview::drawContents( QPainter *painter )
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, 
+KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
 				  const KoPageLayout& _layout,
                                   const KoHeadFoot& _hf, int tabs,
 				  KoUnit::Unit unit )
@@ -142,7 +142,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
 KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
 				  const KoPageLayout& _layout,
 				  const KoHeadFoot& _hf,
-				  const KoColumns& _cl, 
+				  const KoColumns& _cl,
 				  const KoKWHeaderFooter& _kwhf,
 				  int tabs, KoUnit::Unit unit )
     : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
@@ -592,7 +592,8 @@ void KoPageLayoutDia::setupTab2()
     eFootRight->setText( hf.footRight );
 
     QLabel *lMacros2 = new QLabel( i18n("<qt>You can insert several tags in the text:"
-                           "<ul><li>&lt;page&gt;: The current page</li>"
+                           "<ul><li>&lt;table&gt;: The table name</li>"
+                           "<li>&lt;page&gt;: The current page</li>"
                            "<li>&lt;name&gt;: The filename or URL</li>"
                            "<li>&lt;file&gt;: The filename with complete path or the URL</li>"
                            "<li>&lt;time&gt;: The current time</li>"
