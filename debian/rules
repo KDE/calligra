@@ -66,6 +66,18 @@ binary-arch: build
 	dh_installchangelogs
 	dh_strip
 	dh_perl
+	-rm debian/tmp/usr/share/doc/kde/HTML/en/katabase/common
+	cd debian/tmp/usr/share/doc/kde/HTML/en/katabase/ && ln -s ../common .
+	-rm debian/tmp/usr/share/doc/kde/HTML/en/killustrator/common
+	cd debian/tmp/usr/share/doc/kde/HTML/en/killustrator/ && ln -s ../common .
+	-rm debian/tmp/usr/share/doc/kde/HTML/en/koffice/common
+	cd debian/tmp/usr/share/doc/kde/HTML/en/koffice/ && ln -s ../common .
+	-rm debian/tmp/usr/share/doc/kde/HTML/en/kpresenter/common
+	cd debian/tmp/usr/share/doc/kde/HTML/en/kpresenter/ && ln -s ../common .
+	-rm debian/tmp/usr/share/doc/kde/HTML/en/kspread/common
+	cd debian/tmp/usr/share/doc/kde/HTML/en/kspread/ && ln -s ../common .
+	-rm debian/tmp/usr/share/doc/kde/HTML/en/kword/common
+	cd debian/tmp/usr/share/doc/kde/HTML/en/kword/ && ln -s ../common .
 	dh_compress
 	dh_fixperms
 	dh_suidregister

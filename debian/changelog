@@ -1,3 +1,9 @@
+koffice (2.0-20000831-0) experimental; urgency=low
+
+  * More upstream fixes
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 31 Aug 2000 20:00:00 -0700
+
 koffice (2.0-20000827-0) experimental; urgency=low
  
   * More upstream fixes
