@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002 - 2005, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,13 +20,9 @@
 #include <qdom.h>
 #include <qbuffer.h>
 
-#include <kdebug.h>
-
-#include "vgradient.h"
 #include "vdocument.h"
 #include "vglobal.h"
-#include "vkopainter.h"
-#include "vfill.h"
+#include "vgradient.h"
 
 #include <koGenStyles.h>
 #include <koxmlwriter.h>
@@ -63,10 +59,10 @@ VGradient::VGradient( const VGradient& gradient )
 {
 	m_colorStops.setAutoDelete( true );
 
-	m_origin		= gradient.m_origin;
+	m_origin	= gradient.m_origin;
 	m_focalPoint	= gradient.m_focalPoint;
-	m_vector		= gradient.m_vector;
-	m_type			= gradient.m_type;
+	m_vector	= gradient.m_vector;
+	m_type		= gradient.m_type;
 	m_repeatMethod	= gradient.m_repeatMethod;
 
 	m_colorStops.clear();
@@ -83,10 +79,10 @@ VGradient& VGradient::operator=( const VGradient& gradient )
 	if ( this == &gradient )
 		return *this;
 
-	m_origin		= gradient.m_origin;
+	m_origin	= gradient.m_origin;
 	m_focalPoint	= gradient.m_focalPoint;
-	m_vector		= gradient.m_vector;
-	m_type			= gradient.m_type;
+	m_vector	= gradient.m_vector;
+	m_type		= gradient.m_type;
 	m_repeatMethod	= gradient.m_repeatMethod;
 
 	m_colorStops.clear();
@@ -95,7 +91,7 @@ VGradient& VGradient::operator=( const VGradient& gradient )
 		m_colorStops.append( new VColorStop( *cs[i] ) );
 	m_colorStops.sort();
 
-	return *this;	
+	return *this;
 } // VGradient::operator=
 
 const QPtrVector<VColorStop> VGradient::colorStops() const
@@ -103,7 +99,7 @@ const QPtrVector<VColorStop> VGradient::colorStops() const
 	QPtrVector<VColorStop> v;
 	m_colorStops.toVector( &v );
 	v.setAutoDelete( false );
-	return v; 
+	return v;
 } // VGradient::colorStops()
 
 void
@@ -300,8 +296,7 @@ VGradient::load( const QDomElement& element )
 void
 VGradient::transform( const QWMatrix &m )
 {
-	m_origin		= m_origin.transform( m );	
-	m_focalPoint	= m_focalPoint.transform( m );	
-	m_vector		= m_vector.transform( m );	
+	m_origin	= m_origin.transform( m );
+	m_focalPoint	= m_focalPoint.transform( m );
+	m_vector	= m_vector.transform( m );
 }
-

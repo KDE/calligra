@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002 - 2005, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,23 +22,24 @@
 
 #include <qptrlist.h>
 #include <qptrvector.h>
-#include <koPoint.h>
-#include "vcolor.h"
+
 #include <koffice_export.h>
+#include <koPoint.h>
+
+#include "vcolor.h"
 
 class QDomElement;
 class KoGenStyle;
 class KoGenStyles;
 class KoStyleStack;
 
-
 class VColorStop
 {
 	public:
 		VColorStop( double r, double m, VColor c )
-				{ rampPoint = r; midPoint = m; color = c; };
+			{ rampPoint = r; midPoint = m; color = c; };
 		VColorStop( const VColorStop& colorStop )
-				{ rampPoint = colorStop.rampPoint; midPoint = colorStop.midPoint; color = colorStop.color; };
+			{ rampPoint = colorStop.rampPoint; midPoint = colorStop.midPoint; color = colorStop.color; };
 
 		VColor color;
 
@@ -115,7 +116,7 @@ protected:
 	VColorStopList        m_colorStops;
   
 private:
-	VGradientType         m_type			: 2;
+	VGradientType         m_type		: 2;
 	VGradientRepeatMethod m_repeatMethod	: 2;
 
 	// coordinates:
