@@ -218,7 +218,7 @@ void KSpreadCell::defaultStyle()
   setTextColor( Qt::black );
   setBgColor( Qt::white );
   setFaktor( 1 );
-  setPrecision( 0 );
+  setPrecision( -1 );
   setPostfix( "" );
   setPrefix( "" );
   if(m_firstCondition!=0)
@@ -841,18 +841,18 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
     {
       int i = localizedNumber.length();
-      bool bend = FALSE;
-      while ( !bend && i > 0 )
+      bool bFinished = FALSE;
+      while ( !bFinished && i > 0 )
       {
-	if ( localizedNumber[ i - 1 ] == '0' )
+	QChar ch = localizedNumber[ i - 1 ];
+        if ( ch == '0' )
 	  localizedNumber.truncate( --i );
-	else if ( localizedNumber[ i - 1 ] == decimal_point )
-	{
-	  bend = TRUE;
-	  localizedNumber.truncate( --i );
-	}
 	else
-	  bend = TRUE;
+        {
+	  bFinished = TRUE;
+          if ( ch == decimal_point )
+            localizedNumber.truncate( --i );
+        }
       }
     }
 
@@ -2615,9 +2615,12 @@ void KSpreadCell::incPrecision()
     int pos = m_strOutText.find(decimal_point);
     if ( pos == -1 )
       m_iPrecision = 1;
-    m_iPrecision = m_strOutText.length() - pos;
-    if ( m_iPrecision < 0 )
-      m_iPrecision = 0;
+    else
+    {
+      m_iPrecision = m_strOutText.length() - pos;
+      if ( m_iPrecision < 0 )
+        m_iPrecision = 0;
+    }
     m_bLayoutDirtyFlag = TRUE;
   }
   else if ( m_iPrecision < 10 )

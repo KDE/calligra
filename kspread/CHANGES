@@ -551,3 +551,7 @@ Laurent, use kdebugdialog to turn it off so that it won't annoy you :)
 -I get some strange "QPainter: Internal error; no available GC" when inserting a row...
 They come from the regionInvalidated stuff and I got 507 levels of recursive calls in
 the backtrace :(
+
+-Added Format/Default (everything in the popupmenu should be in the menus too...)
+-Fixed that default to precision = -1
+-Fixed stupid bug in incPrecision (I think I'm responsible for that one :)

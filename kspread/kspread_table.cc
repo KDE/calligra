@@ -3269,7 +3269,7 @@ void KSpreadTable::defaultSelection( const QPoint &_marker )
 		}
 
 		cell->defaultStyle();
-	    	}
+            }
 
 	emit sig_updateView( this, r );
     }

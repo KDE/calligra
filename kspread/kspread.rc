@@ -28,6 +28,7 @@
   <Action name="precplus"/>
   <Action name="precminus"/>
   <Action name="money"/>
+  <Action name="default"/>
   <Separator/>
   <Action name="left"/>
   <Action name="center"/>
