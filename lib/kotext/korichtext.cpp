@@ -2408,6 +2408,7 @@ void KoTextParag::setDirection( QChar::Direction d )
 	invalidate( 0 );
         //// kotext
         m_layout.direction = d;
+	invalidateCounters(); // #47178
         ////
     }
 }
