@@ -109,8 +109,8 @@ SvgExport::visitVDocument( VDocument& document )
 	// select all objects:
 	document.selection()->append();
 
-	// get the bounding box of all selected objects:
-	const KoRect& rect = document.selection()->boundingBox();
+	// get the bounding box of the page
+	KoRect rect( 0, 0, document.width(), document.height() );
 
 	// standard header:
 	*m_defs <<
@@ -127,10 +127,10 @@ SvgExport::visitVDocument( VDocument& document )
 
 	*m_defs <<
 		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <<
-		rect.width() << "\" height=\"" << rect.height() << "\">" << endl;
+		rect.width() << "px\" height=\"" << rect.height() << "px\">" << endl;
 	*m_defs << "<defs>" << endl;
 
-	*m_body << "<g transform=\"scale(1, -1) translate(0, -" << rect.bottom() << ")\">" << endl;
+	*m_body << "<g transform=\"scale(1, -1) translate(0, -" << rect.height() << ")\">" << endl;
 
 	// we dont need the selection anymore:
 	document.selection()->clear();
