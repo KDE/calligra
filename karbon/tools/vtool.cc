@@ -157,6 +157,7 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 		
 		// draw initial object:
+		recalcCoords();
 		drawTemporaryObject( view, m_p, m_d1, m_d2 );
 
 		m_isDragging = true;
