@@ -14,23 +14,24 @@
 #include <stdarg.h>
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
+#include <kdebug.h>
 
 
 void kchartEngine::drawData() {
   switch( params->type ) {
   case KCHARTTYPE_3DBAR: // depth, width, y interval need to allow for whitespace between bars
   case KCHARTTYPE_BAR:
-    qDebug("drawing bars");
+    kdDebug(35001) << "drawing bars" << endl;
     drawBars();
     break;
   case KCHARTTYPE_LINE:
   case KCHARTTYPE_COMBO_LINE_BAR:
   case KCHARTTYPE_COMBO_LINE_AREA:
-    qDebug("drawing lines");
+    kdDebug(35001) << "drawing lines" << endl;
     drawLines();
     if( params->cross)
       {
-        qDebug("drawing cross");
+	kdDebug(35001) << "drawing cross" << endl;
         drawCross();
       }
 
@@ -39,30 +40,30 @@ void kchartEngine::drawData() {
   case KCHARTTYPE_3DLINE:
   case KCHARTTYPE_3DCOMBO_LINE_BAR:
   case KCHARTTYPE_3DCOMBO_LINE_AREA:
-    qDebug("drawing 3D lines");
+    kdDebug(35001) << "drawing 3D lines" << endl;
     draw3DLines();
     break;
   case KCHARTTYPE_AREA:
   case KCHARTTYPE_3DAREA:
-    qDebug("drawing areas");
+    kdDebug(35001) << "drawing areas" << endl;
     drawArea();
     break;
   case KCHARTTYPE_3DHILOCLOSE:
   case KCHARTTYPE_3DCOMBO_HLC_BAR:
   case KCHARTTYPE_3DCOMBO_HLC_AREA:
-    qDebug("drawing 3D combos");
+    kdDebug(35001) << "drawing 3D combos" << endl;
     draw3DCombo();
     break;
   case KCHARTTYPE_HILOCLOSE:
   case KCHARTTYPE_COMBO_HLC_BAR:
   case KCHARTTYPE_COMBO_HLC_AREA:
-    qDebug("drawing combos");
+    kdDebug(35001) << "drawing combos" << endl;
     drawCombo();
     break;
 
   case KCHARTTYPE_3DPIE:
   case KCHARTTYPE_2DPIE:
-    qDebug("drawing pie");
+    kdDebug(35001) << "drawing pie" << endl;
     drawPie();
     break;
   }

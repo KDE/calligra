@@ -14,38 +14,42 @@
 #include <stdarg.h>
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
-
+#include <kdebug.h>
 
 
 int kchartEngine::doLabels() {
   // Finally, the x labels are taken from the first row
   QArray<QString> xlbl( data->cols() );
 #ifdef NOXLABELSFORNOW
-  debug( "Creating xlbl with %d entries", data->cols() );
+  kdDebug(35001) <<  "Creating xlbl with " << data->cols() << " entries" << endl;
   for( int labels = 0; labels < data->cols(); labels++ ) {
-    debug( "Retrieving value at position %d", labels );
+    kdDebug(35001) <<  "Retrieving value at position "  << labels << endl;
     const KChartValue& cellval = data->cell( 0, labels );
-    debug( "type of field %d in row 0 is %s", labels, QVariant::typeToName( cellval.value.type() ) );
+    kdDebug(35001) <<  "type of field " << labels << " in row 0 is "
+		   << QVariant::typeToName( cellval.value.type() ) << endl;
     if( !cellval.exists ) {
-      debug( "No value for x label in col %d", labels );
+      kdDebug(35001) <<  "No value for x label in col " << labels << endl;
       continue;
     }
     if( cellval.value.type() != QVariant::String ) {
     //if( cellval.value.type() != QVariant::CString ) {
-      debug( "Value for x label in col %d is not a string", labels );
+      kdDebug(35001) <<  "Value for x label in col " labels 
+		     << " is not a string" << endl;
       continue;
     }
 
-    //debug( "Setting label %d to %s", labels, cellval.value.stringValue().latin1() );
-    debug( "Setting label %d to %s", labels, cellval.value.toString().latin1() );
+    //kdDebug(35001) << "Setting label " << labels << " to "
+    //               << cellval.value.stringValue() << endl;
+    kdDebug(35001) <<  "Setting label " << labels << " to "
+		   << cellval.value.toString() << endl;
     //		QString l = cellval.value.stringValue();
     //xlbl.at( labels ) = cellval.value.stringValue();
     xlbl.at( labels ) = cellval.value.toString();
-    debug( "Done setting label" );
+    kdDebug(35001) << "Done setting label" << endl;
     //hasxlabels = true;
   }
 #endif
-  debug( "labels read" );
+  kdDebug(35001) << "labels read" << endl;
 };
 
 
@@ -160,7 +164,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  	sprintf( whole, "%d", w );
 		}
 
-	//qDebug( "drawing 1" );
+	//kdDebug(35001) << "drawing 1" << endl;
 
 	if( params->grid )
 	{
@@ -184,7 +188,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  // set back to foremost
 	}
 
-	// qDebug( "drawing 2" );
+	// kdDebug(35001) << "drawing 2" << endl;
 
 	// PENDING(kalle) Originally, here was always used one
 	// font smaller than params->yAxisFont. Do that again?
@@ -206,7 +210,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	    }
 
 
-	    // qDebug( "drawing 3" );
+	    // kdDebug(35001) << "drawing 3" << endl;
 
 	    // PENDING( original uses a 1 step smaller
 	    // font here. Do that, too?
@@ -238,7 +242,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 			 ylbl_str );
 	  }
 
-	  // qDebug( "drawing 4" );
+	  // kdDebug(35001) << "drawing 4" << endl;
 
 	if( params->do_vol() && params->yaxis2 ) {
 	  char	vylbl[16];
@@ -267,7 +271,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	     ((i<0) && ((tmp_y -= ylbl_interval) > lowest)) );
     }
 
-    // qDebug( "drawing 5" );
+    // kdDebug(35001) << "drawing 5" << endl;
 
     /* catch last (bottom) grid line - specific to an "off" requested interval */
     if( params->grid && params->threeD() ) {

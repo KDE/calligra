@@ -1,6 +1,7 @@
 #include "kchartDataEditor.h"
 #include "kchartDataEditor.moc"
 #include "klocale.h"
+#include <kdebug.h>
 
 kchartDataEditor::kchartDataEditor() :
   KDialog(0,i18n("KChart Data Editor"),true) {
@@ -16,7 +17,7 @@ kchartDataEditor::kchartDataEditor() :
 void kchartDataEditor::setData(KChartData* dat) {
   for (unsigned int row = 0;row != dat->rows();row++)
     for (unsigned int col = 0; col !=dat->cols(); col++) {
-      cerr << "Set dialog cell for " << row << "," << col << "\n";
+      kdDebug(35001) << "Set dialog cell for " << row << "," << col << endl;
       KChartValue t = dat->cell(row,col);
       // fill it in from the part
       if (t.exists) {
@@ -25,7 +26,8 @@ void kchartDataEditor::setData(KChartData* dat) {
 	  _widget->fillCell(row, col, t.value.toDouble());
 	  break;
 	case QVariant::String:
-	  cerr << "A string in the table I cannot handle this yet\n";
+	  kdDebug(35001) << "A string in the table I cannot handle this yet"
+			 << endl;
 	  break;
 	default:
 	  break;
@@ -46,7 +48,7 @@ void kchartDataEditor::getData(KChartData* dat) {
 	else
 	    t.exists= true;
 	t.value = val;
-	cerr << "Set cell for " << row << "," << col << "\n";
+	kdDebug(35001) << "Set cell for " << row << "," << col << endl;
 	dat->setCell(row,col,t);
 	//   maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
       }

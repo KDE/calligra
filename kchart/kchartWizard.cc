@@ -14,6 +14,7 @@
 
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* name,
 							 bool modal, WFlags f ) :
@@ -22,7 +23,7 @@ kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* nam
 {
   // hack
 
-  cerr << "Creating kchartWizard\n";
+    kdDebug(35001) << "Creating kchartWizard" << endl;
 
   // First page: select the range
     //_selectdatapage = new kchartWizardSelectDataPage( this );
@@ -57,7 +58,7 @@ kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* nam
   connect( _selectcharttypepage ,SIGNAL( chartChange(int)),this,SLOT(subType(int)));
   //resize( 620, 380 );
   subType((int)_chart->params()->type);
-  cerr << "kchartwizard created\n";
+  kdDebug(35001) << "kchartwizard created" << endl;
 }
 
 

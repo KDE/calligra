@@ -9,6 +9,7 @@
 #include <klocale.h>
 #include <kinstance.h>
 #include <kaboutdata.h>
+#include <kdebug.h>
 
 static const char* description=I18N_NOOP("KOffice Chart Generator");
 static const char* version="0.1";
@@ -30,7 +31,7 @@ KChartFactory::KChartFactory( QObject* parent, const char* name )
 
 KChartFactory::~KChartFactory()
 {
-    if ( s_global ) 
+    if ( s_global )
       delete s_global;
 }
 
@@ -38,7 +39,7 @@ QObject* KChartFactory::create( QObject* parent, const char* name, const char *c
 {
 /*
     if ( parent && !parent->inherits("KoDocument") ) {
-		qDebug("KChartFactory: parent does not inherit KoDocument");
+		kdDebug(35001) << "KChartFactory: parent does not inherit KoDocument" << endl;
 		return 0;
     }
 */

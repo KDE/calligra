@@ -119,7 +119,7 @@ smallarrow( QPainter* p,
 			char up,
 			int	arrwclr )
 {
-    debug( "+++smallarrow" );
+    kdDebug(35001) << "+++smallarrow" << endl;
 	QFont f( "Helvetica", 10 );
 	QFontMetrics fm( f );
 	int h = fm.height();

@@ -14,6 +14,7 @@
 #include <stdarg.h>
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
+#include <kdebug.h>
 
 void kchartEngine::drawAnnotation() {
   int x1 = PX(params->annotation->point+(params->do_bar()?1:0));
@@ -95,7 +96,7 @@ void kchartEngine::titleText() {
 				Qt::AlignCenter, params->title );
         }
 
-    qDebug( "done with the title text" );
+    kdDebug(35001) << "done with the title text" << endl;
 
     if( !params->xtitle.isEmpty() )
         {
@@ -223,7 +224,7 @@ void kchartEngine::prepareColors()
         for(int j=0; j<num_sets; ++j )
           if( params->ExtColor.count() )
                 {
-	        //cerr << "Ext color\n";
+	        //kdDebug(35001) << "Ext color" << endl;
 	        // changed by me, BL
 	        //QColor ext_clr = params->ExtColor.color( num_points*j+i );
                 //Montel change to allow that all same think has the same color

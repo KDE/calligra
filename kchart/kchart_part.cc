@@ -16,7 +16,8 @@
 #include <engine.h>
 #include <kchartparams.h>
 #include <kglobal.h>
-#include <iostream>
+//#include <iostream> // only for cerr?
+#include <kdebug.h> // "ported" to kdDebug(35001)
 
 using namespace std;
 
@@ -38,7 +39,7 @@ KChartPart::KChartPart( KoDocument* parent, const char* name, bool singleViewMod
     _params( 0 )
 {
   m_bLoading = false;
-  cerr << "Contstructor started!\n";
+  kdDebug(35001) << "Contstructor started!" << endl;
   initDoc();
   // hack
   setModified(true);
@@ -46,7 +47,7 @@ KChartPart::KChartPart( KoDocument* parent, const char* name, bool singleViewMod
 
 KChartPart::~KChartPart()
 {
-  cerr << "Part is going to be destroyed now!!!";
+  kdDebug(35001) << "Part is going to be destroyed now!!!" << endl;
   if (_params != NULL)
     delete _params;
 }
@@ -56,7 +57,7 @@ bool KChartPart::initDoc()
 {
   // Initialize the parameter set for this chart document
   // PENDING(kalle,torben) Where to delete this?
-  cerr << "InitDOC";
+  kdDebug(35001) << "InitDOC" << endl;
   _params = new KChartParameters;
   initRandomData();
   // PENDING(lotzi) This is where to start the wizard and fill the
@@ -71,14 +72,14 @@ void KChartPart::initRandomData()
     int col,row;
     // initialize some data, if there is none
     if (currentData.rows() == 0) {
-      cerr << "Initialize with some data!!!\n";
+      kdDebug(35001) << "Initialize with some data!!!" << endl;
       currentData.expand(4,4);
       for (row = 0;row < 4;row++)
 	for (col = 0;col < 4;col++) {
 	  KChartValue t;
 	  t.exists= true;
 	  t.value = (double)row+col;
-	  // cerr << "Set cell for " << row << "," << col << "\n";
+	  // kdDebug(35001) << "Set cell for " << row << "," << col << endl;
 	  currentData.setCell(row,col,t);
 	 }
     }
@@ -113,7 +114,7 @@ KoMainWindow* KChartPart::createShell()
 void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transparent )
 {
   if (isLoading()) {
-    cerr << "Loading... Do not paint!!!...\n";
+    kdDebug(35001) << "Loading... Do not paint!!!..." << endl;
     return;
   }
   // if params is 0, initDoc() has not been called
@@ -123,7 +124,9 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
   if( !transparent )
     painter.eraseRect( rect );
 
-  // debug( "KChartPart::paintContent called, rows = %d, cols = %d", currentData.rows(), currentData.cols() );
+  // kdDebug(35001) << "KChartPart::paintContent called, rows = "
+  //                << currentData.rows() << ", cols = "
+  //                << currentData.cols() << endl;
 
   // Need to draw only the document rectangle described in the parameter rect.
   //  return;
@@ -197,7 +200,7 @@ void KChartPart::saveConfig( KConfig *conf ) {
 }
 
 bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
-  cerr << "save kchart called!\n";
+  kdDebug(35001) << "save kchart called!" << endl;
   QDomDocument doc( "chart" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
   QDomElement chart = doc.createElement( "chart" );
@@ -213,7 +216,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   for (unsigned int row = 0;row < currentData.rows();row++) {
       for (unsigned int col = 0;col < currentData.cols();col++) {
 	// later we need a value
-	cerr << "Row " << row << "\n";
+	kdDebug(35001) << "Row " << row << endl;
 	KChartValue t = currentData.cell(row, col);
 	QDomElement e = doc.createElement("cell");
         e.setAttribute("hide", (int)_params->missing[currentData.cols()*col+row]);
@@ -390,7 +393,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
         }
 
 
-  cerr << "Ok, till here!!!";
+  kdDebug(35001) << "Ok, till here!!!" << endl;
   QBuffer buffer;
   buffer.open( IO_WriteOnly );
   QTextStream str( &buffer );
@@ -404,12 +407,12 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
 };
 
 bool KChartPart::loadChildren( KoStore* /*_store*/ ) {
-  cerr << "kchart loadChildren called\n";
+  kdDebug(35001) << "kchart loadChildren called" << endl;
   return true;
 };
 
 bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
-  cerr << "kchart loadXML called\n";
+  kdDebug(35001) << "kchart loadXML called" << endl;
   // <spreadsheet>
   //  m_bLoading = true;
   if ( doc.doctype().name() != "chart" )
@@ -418,24 +421,24 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
     return false;
   }
 
-  cerr << "Ok, it is a chart\n";
+  kdDebug(35001) << "Ok, it is a chart" << endl;
 
   QDomElement chart = doc.documentElement();
   if ( chart.attribute( "mime" ) != "application/x-kchart" )
     return false;
 
-  cerr << "Mimetype ok\n";
+  kdDebug(35001) << "Mimetype ok" << endl;
 
   QDomElement data = chart.namedItem("data").toElement();
   bool ok;
   int cols = data.attribute("cols").toInt(&ok);
-  cerr << "cols readed as:" << cols << "\n";
+  kdDebug(35001) << "cols readed as:" << cols << endl;
   if (!ok)  { return false; }
   int rows = data.attribute("rows").toInt(&ok);
   if (!ok)  { return false; }
-  cerr << rows << " x " << cols << "\n";
+  kdDebug(35001) << rows << " x " << cols << endl;
   currentData.expand(rows, cols);
-  cerr << "Expanded!";
+  kdDebug(35001) << "Expanded!" << endl;
   QDomNode n = data.firstChild();
   QArray<int> tmpExp(rows*cols);
   QArray<bool> tmpMissing(rows*cols);
@@ -446,7 +449,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
      {
       if (n.isNull())
       {
-	qDebug("Some problems, there is less data than it should be!");
+	kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
 	break;
       }
       QDomElement e = n.toElement();
@@ -455,11 +458,11 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 	  // add the cell to the corresponding place...
 	  double val = e.attribute("value").toDouble(&ok);
 	  if (!ok)  {  return false; }
-	  cerr << i << " " << j << "=" << val << "\n";
+	  kdDebug(35001) << i << " " << j << "=" << val << endl;
 	  KChartValue t;
 	  t.exists= true;
 	  t.value = val;
-	  // cerr << "Set cell for " << row << "," << col << "\n";
+	  // kdDebug(35001) << "Set cell for " << row << "," << col << endl;
 	  currentData.setCell(i,j,t);
           if ( e.hasAttribute( "hide" ) )
                 {
@@ -795,7 +798,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
   {
   if (name.isNull())
         {
-	qDebug("Some problems, there is less data than it should be!");
+	kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
 	break;
         }
    QDomElement element = name.toElement();
@@ -819,7 +822,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
   {
   if (label.isNull())
         {
-	qDebug("Some problems, there is less data than it should be!");
+	kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
 	break;
         }
    QDomElement element = label.toElement();
@@ -843,7 +846,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
   {
   if (color.isNull())
         {
-	qDebug("Some problems, there is less data than it should be!");
+	kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
 	break;
         }
    QDomElement element = color.toElement();
@@ -865,7 +868,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 
 bool KChartPart::load( istream& in, KoStore* store )
 {
-  cerr << "kchart load colled\n";
+  kdDebug(35001) << "kchart load called" << endl;
   m_bLoading = true;
   _params = new KChartParameters;
     QBuffer buffer;
@@ -900,6 +903,10 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.31  2000/04/08 16:43:13  mlaurent
+ * Now "Chart Combo*" works
+ * Bug fix
+ *
  * Revision 1.30  2000/04/02 16:41:46  mlaurent
  * Now you can add an annotation
  * Bug fix

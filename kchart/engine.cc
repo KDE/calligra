@@ -24,7 +24,9 @@
 #include <stdarg.h>
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
-#include <iostream>
+//#include <iostream>
+
+#include <kdebug.h>
 
 using namespace std;
 
@@ -60,7 +62,7 @@ int kchartEngine::out_graph() {
   if (init()== -1) {
     return -1;
   }
-  cerr << "Initialization successfull, proceed\n";
+  kdDebug(35001) << "Initialization successfull, proceed" << endl;
   doLabels();
     //  i.e., not up against Y axes
   do_ylbl_fractions =   // %f format not given, or
@@ -71,14 +73,14 @@ int kchartEngine::out_graph() {
 		params->xaxis = FALSE;
 		params->yaxis = FALSE;
     }
-    debug( "done thumbnails" );
+    kdDebug(35001) << "done thumbnails" << endl;
     /* ----- highest & lowest values ----- */
     computeMinMaxValues();
     /* ----- graph height and width within the gif height width ----- */
     /* grapheight/height is the actual size of the scalable graph */
     // scaled, sized, ready
     computeSize();
-    qDebug( "scaled, sized, ready" );
+    kdDebug(35001) << "scaled, sized, ready" << endl;
 
 
     BGColor = params->BGColor;
@@ -101,78 +103,78 @@ int kchartEngine::out_graph() {
     /* attempt to import optional background image */
     // PENDING(kalle) Put back in
     if( GDC_BGImage ) {
-      qDebug("before bgimage");
+      kdDebug(35001) << "before bgimage" << endl;
       drawBackgroundImage();
     }
-    qDebug("Color settings coming!");
+    kdDebug(35001) << "Color settings coming!" << endl;
     prepareColors();
     // PENDING(kalle) Do some sophisticated things that involve QPixmap::createHeuristicMask
     // or Matthias' stuff from bwin
-    qDebug("before transparent bg");
+    kdDebug(35001) << "before transparent bg" << endl;
     if( params->transparent_bg )
-      debug( "Sorry, transparent backgrounds are not supported yet." );
+      kdDebug(35001) << "Sorry, transparent backgrounds are not supported yet." << endl;
     //     if( params->transparent_bg )
     // 	gdImageColorTransparent( im, BGColor );
-    qDebug( "Title text is coming" );
+    kdDebug(35001) << "Title text is coming" << endl;
     titleText();
-    qDebug( "start drawing, first the grids" );
+    kdDebug(35001) << "start drawing, first the grids" << endl;
     if(!params->isPie())
     	{
     	drawGridAndLabels(do_ylbl_fractions);
-    	qDebug("more advanced grids");
+    	kdDebug(35001) << "more advanced grids" << endl;
     	}
     /* interviening set grids */
     /*  0 < setno < num_sets   non-inclusive, they've already been covered */
     if( params->grid && params->threeD() && !params->isPie())
     {
-      qDebug("drawing 3d grids");
+      kdDebug(35001) << "drawing 3d grids" << endl;
       draw3DGrids();
     }
     if( ( params->grid || params->shelf ) && /* line color grid at 0 */
 		( (lowest < 0.0 && highest > 0.0) ||
 		  (lowest < 0.0 && highest > 0.0) ) && !params->isPie()) {
-      qDebug("drawing shelf grids");
+      kdDebug(35001) << "drawing shelf grids" << endl;
       drawShelfGrids();
     }
     /* x ticks and xlables */
     if( (params->grid || params->xaxis) &&!params->isPie() )	
     {
 
-      qDebug("drawing  x ticks and xlabels");
-       //Commented out because it is prone to math error
+      kdDebug(35001) << "drawing  x ticks and xlabels" << endl;
+      //Commented out because it is prone to math error
       drawXTicks();
     }
     /* ----- solid poly region (volume) ----- */
     /*  so that grid lines appear under solid */
     if( params->do_vol() && !params->isPie() ) {
-      qDebug("Doing volume grids");
+      kdDebug(35001) << "Doing volume grids" << endl;
       drawVolumeGrids();
     }		// volume polys done
     if( params->annotation && params->threeD() &&!params->isPie())
     {		/* back half of annotation line */
-      qDebug("drawing 3d annotation");
+      kdDebug(35001) << "drawing 3d annotation" << endl;
       draw3DAnnotation();
     }
 
-    qDebug("drawing the data!!!");
+    kdDebug(35001) << "drawing the data!!!" << endl;
     drawData();
     setno = 0;
     if( params->scatter && !params->isPie())
     {
-      qDebug("scatter");
+	kdDebug(35001) << "scatter" << endl;
       drawScatter();
     }
     // overlay with a value and an arrow (e.g., total daily change)
     if( params->thumbnail )
     {
-      qDebug("scatter");
+      kdDebug(35001) << "scatter" << endl;
       drawThumbnails();
     }
     /* box it off */
     /*  after plotting so the outline covers any plot lines */
     if (params->border && !params->isPie())
     {
-      qDebug("scatter");
+      kdDebug(35001) << "scatter" << endl;
       drawBorder();
     }
 
@@ -185,7 +187,7 @@ int kchartEngine::out_graph() {
 
     if (params->annotation && !params->isPie())
     {
-      qDebug("Draw annotation");
+      kdDebug(35001) << "Draw annotation" << endl;
       drawAnnotation();
     }
 }

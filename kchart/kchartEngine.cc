@@ -14,7 +14,7 @@
 #include <stdarg.h>
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
-
+#include <kdebug.h>
 
 
 int kchartEngine::init() {
@@ -47,7 +47,7 @@ int kchartEngine::init() {
   // No data sets left -> bail out
   if( num_sets < 1 )
         {
-        debug( "No data" );
+	kdDebug(35001) << "No data" << endl;
         return -1;
         }
 
@@ -61,7 +61,7 @@ int kchartEngine::init() {
   if( imagewidth <= 0 || imageheight <=0 || !p  )
     return -1;
   if( num_points <= 0 ) {
-    debug( "No Data Available" );
+    kdDebug(35001) << "No Data Available" << endl;
     return -1;
   }
   return 1;

@@ -15,6 +15,7 @@
 #include <stdarg.h>
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
+#include <kdebug.h>
 
 
 void kchartEngine::computeSize() {
@@ -33,7 +34,7 @@ void kchartEngine::computeSize() {
   int ytics = params->grid||params->yaxis? 1+3: 0;
   int vtics = params->yaxis&& params->do_vol() ? 3+1: 0;
 
-  qDebug( "done width, height, tics computation" );
+  kdDebug(35001) << "done width, height, tics computation" << endl;
 
 
   xdepth_3D      = params->threeD() ? (int)( cos(RAD_DEPTH) * HYP_DEPTH ): 0;
@@ -52,7 +53,7 @@ void kchartEngine::computeSize() {
     2: 0;										/* space to chart */
   annote_len *= params->annotationFontWidth();
 
-  qDebug( "done annote_len computation" );
+  kdDebug(35001) << "done annote_len computation" << endl;
 
   // for the time being: no x labels
   //hasxlabels = 0;
@@ -80,7 +81,7 @@ void kchartEngine::computeSize() {
     grapheight = params->hard_graphheight;
   params->hard_graphheight = grapheight;
 
-  qDebug( "done grapheight computation" );
+  kdDebug(35001) << "done grapheight computation" << endl;
 
   // before width can be known...
   /* ----- y labels intervals ----- */
@@ -98,11 +99,11 @@ void kchartEngine::computeSize() {
     max_num_ylbls = grapheight / (3+params->yAxisFontHeight());
     if( max_num_ylbls < 3 ) {
 	/* gdImageDestroy(im);		haven't yet created it */
-      debug( "Insufficient Height" );
+      kdDebug(35001) << "Insufficient Height" << endl;
       //      return 2;
       return;
     }
-    cerr << "Here it is still ok!\n";
+    kdDebug(35001) << "Here it is still ok!" << endl;
     /* one "space" interval above + below */
     int jumpout_value = NUM_YPOINTS-1;
     for(unsigned int i=1; i<NUM_YPOINTS; ++i ) {
@@ -122,7 +123,7 @@ void kchartEngine::computeSize() {
       params->requested_yinterval > ypoints[jumpout_value-1] ?
       params->requested_yinterval:
       ypoints[jumpout_value-1];
-    cout << "ylbl_interval:" << ylbl_interval << "\n";
+    kdDebug(35001) << "ylbl_interval:" << ylbl_interval << endl;
     // FIXME: This seems to be a total mess: != ???
 
     /* perform floating point remainders */
@@ -136,7 +137,7 @@ void kchartEngine::computeSize() {
 				// 			   ( (float)((int)((lowest-ypoints[0])/ylbl_interval))*ylbl_interval ) );
       lowest = ylbl_interval * (float)(int)((lowest-ypoints[0])/ylbl_interval);
     }
-    cerr << "Alive and healthy!\n";
+    kdDebug(35001) << "Alive and healthy!" << endl;
 
     /* find smallest interval-point > highest */
     tmp_highest = lowest;
@@ -151,7 +152,7 @@ void kchartEngine::computeSize() {
       char foo[32];
 
       if( params->yaxis )	{ /* XPG2 compatibility */
-	//cerr << "At least I am doing something\n";
+	//kdDebug(35001) << "At least I am doing something" << endl;
 
 		sprintf( foo, do_ylbl_fractions ? QString( "%.0f" ): params->ylabel_fmt, tmp_highest );
 
@@ -202,7 +203,7 @@ void kchartEngine::computeSize() {
     graphwidth = params->hard_graphwidth;
   params->hard_graphwidth = graphwidth;
 
-  qDebug( "done graphwidth computation" );
+  kdDebug(35001) << "done graphwidth computation" << endl;
 
   /* ----- scale to gif size ----- */
   /* offset to 0 at lower left (where it should be) */
@@ -210,7 +211,7 @@ void kchartEngine::computeSize() {
   yscl = -((float)grapheight) / (float)(highest-lowest);
   if( params->do_vol() ) {
     float	hilow_diff = vhighest-vlowest==0.0? 1.0: vhighest-vlowest;
-    
+
     vyscl = -((float)grapheight) / hilow_diff;
     vyorig = (float)grapheight
       + ABS(vyscl) * QMIN(vlowest,vhighest)
@@ -243,17 +244,17 @@ void kchartEngine::computeSize() {
 
 
 void kchartEngine::computeMinMaxValues() {
-  
+
   bool set_neg=false;
   switch(params->stack_type) {
   case KCHARTSTACKTYPE_SUM:	// need to walk sideways
-    qDebug("Sum stacktype");
+    kdDebug(35001) << "Sum stacktype" << endl;
     for(int j=0; j<num_points; ++j ) {
       float set_sum = 0.0;
       for(int i=0; i<num_sets; ++i ) {
-	//debug( "vor dem crash" );
+	//kdDebug(35001) << "vor dem crash" << endl;
 	if( CELLEXISTS( i, j ) ) {
-	  //debug( "nach dem crash" );
+	  //kdDebug(35001) << "nach dem crash" << endl;
 	  set_sum += CELLVALUE( i, j );
 	  highest = QMAX( highest, set_sum );
 	  lowest  = QMIN( lowest,  set_sum );
@@ -262,7 +263,7 @@ void kchartEngine::computeMinMaxValues() {
     }
     break;
   case  KCHARTSTACKTYPE_LAYER: // need to walk sideways
-    qDebug("Layer stacktype");
+    kdDebug(35001) << "Layer stacktype" << endl;
     for(int j=0; j<num_points; ++j ) {
       float neg_set_sum = 0.0, pos_set_sum = 0.0;
       for(int i=0; i<num_sets; ++i )
@@ -276,7 +277,7 @@ void kchartEngine::computeMinMaxValues() {
     }
     break;
   case  KCHARTSTACKTYPE_PERCENT: // need to walk sideways
-    qDebug("Percent stacktype");
+    kdDebug(35001) << "Percent stacktype" << endl;
     //bool set_neg=false;
     for(int j=0; j<num_points; ++j )
     {
@@ -295,29 +296,29 @@ void kchartEngine::computeMinMaxValues() {
     break;
 
   default:
-    qDebug("Other stacktype");
+    kdDebug(35001) << "Other stacktype" << endl;
     for(int i=0; i<num_sets; ++i ) {
       for(int j=0; j<num_points; ++j ) {
-	//debug( "Vor dem crash" );
+	//kdDebug(35001) << "Vor dem crash" << endl;
 	if( CELLEXISTS( i, j ) ) {
-	  //debug( "nach dem crash" );
+	  //kdDebug(35001) << "nach dem crash" << endl;
 	  highest = QMAX( CELLVALUE( i, j ), highest );
 	  lowest  = QMIN( CELLVALUE( i, j ), lowest );
 	}
       }
     }
   }
-  qDebug( "done computation highest and lowest value" );
-  cerr << "Highest:" << highest << " lowest " << lowest << "\n";
+  kdDebug(35001) << "done computation highest and lowest value: "
+		 << "Highest:" << highest << " lowest " << lowest << endl;
 
   if( params->scatter )
-    cerr << "doing scattering?\n";
+      kdDebug(35001) << "doing scattering?" << endl;
     for(int i=0; i<params->num_scatter_pts; ++i ) {
       highest = QMAX( ((params->scatter)+i)->val, highest );
       lowest  = QMIN( ((params->scatter)+i)->val, lowest  );
     }
 
-  cerr << "Highest:" << highest << " lowest " << lowest << "\n";
+  kdDebug(35001) << "Highest:" << highest << " lowest " << lowest << endl;
 
   if( params->do_vol() )
   { // for now only one combo set allowed
@@ -343,7 +344,7 @@ void kchartEngine::computeMinMaxValues() {
       vlowest = 0.0;// vol should always start at 0
   }
 
-  debug( "done vlowest computation" );
+  kdDebug(35001) << "done vlowest computation" << endl;
 
   if( lowest == MAXFLOAT )
     lowest = 0.0;
@@ -363,5 +364,5 @@ void kchartEngine::computeMinMaxValues() {
   if( params->requested_ymax != -MAXDOUBLE && params->requested_ymax > highest )
     highest = params->requested_ymax;
 
-  qDebug( "done requested_* computation" );
+  kdDebug(35001) << "done requested_* computation" << endl;
 }

@@ -15,7 +15,8 @@
 #include <qpainter.h>
 #include <kaction.h>
 #include <kglobal.h>
-#include <iostream>
+//#include <iostream>
+#include <kdebug.h>
 
 using namespace std;
 
@@ -93,7 +94,7 @@ void KChartView::paintEvent( QPaintEvent* /*ev*/ )
     painter.end();
 }
 
-void KChartView::updateReadWrite( bool readwrite )
+void KChartView::updateReadWrite( bool /*readwrite*/ )
 {
 #ifdef __GNUC__
 #warning TODO
@@ -112,7 +113,7 @@ void KChartView::createTempData()
     nbcol=4;
     if (dat->rows() == 0)
     {
-	cerr << "Initialize with some data!!!\n";
+	kdDebug(35001) << "Initialize with some data!!!" << endl;
 	dat->expand(4,4);
 	for (row = 0;row < nbrow;row++)
 	    for (col = 0;col < nbcol;col++)
@@ -121,7 +122,7 @@ void KChartView::createTempData()
 		KChartValue t;
 		t.exists= true;
 		t.value = (double)row+col;
-		cerr << "Set cell for " << row << "," << col << "\n";
+		kdDebug(35001) << "Set cell for " << row << "," << col << endl;
 		dat->setCell(row,col,t);
 	    }
 	//      _dlg->exec();
@@ -188,13 +189,13 @@ void KChartView::edit()
 
 void KChartView::wizard()
 {
-    qDebug("Wizard called");
+    kdDebug(35001) << "Wizard called" << endl;
     kchartWizard *wiz =
       new kchartWizard((KChartPart*)koDocument(), this, "KChart Wizard", true);
-    qDebug("Executed. Now, display it");
+    kdDebug(35001) << "Executed. Now, display it" << endl;
     wiz->exec();
     repaint();
-    qDebug("Ok, executed...");
+    kdDebug(35001) << "Ok, executed..." << endl;
 }
 
 
@@ -229,26 +230,26 @@ void KChartView::config()
     case KCHARTTYPE_3DPIE:
     case KCHARTTYPE_2DPIE:
         {
-        //qDebug( "Sorry, not implemented: no config dialog for this chart type" );
+        //kdDebug(35001) << "Sorry, not implemented: no config dialog for this chart type" << endl;
         KChartConfigDialog* d = new KChartConfigDialog( params, this );
 	d->exec();
 	delete d;
         break;
         }
     default:
-	qDebug( "Unknown chart type" );
+	kdDebug(35001) <<  "Unknown chart type" << endl;
     }
     repaint();
 }
 
 
 void KChartView::saveConfig() {
-    qDebug("Save config...");
+    kdDebug(35001) << "Save config..." << endl;
     ((KChartPart*)koDocument())->saveConfig( KGlobal::config() );
 }
 
 void KChartView::loadConfig() {
-    qDebug("Load config...");
+    kdDebug(35001) << "Load config..." << endl;
     KGlobal::config()->reparseConfiguration();
     ((KChartPart*)koDocument())->loadConfig( KGlobal::config() );
     //refresh chart when you load config
