@@ -153,18 +153,10 @@ VSelectNodesTool::keyReleased( Qt::Key key )
 {
 	if( key == Qt::Key_Delete )
 	{
-		//KoRect selrect( view()->part()->document().selection()->boundingBox() );
-		//QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
-		//unsigned int i = -1;
-		//while( ++i < segments.count() )
-	//		if( segments.at( i )->knotIsSelected() && !segments.at( i )->state() == VSegment::deleted )
-	//		{
-				// erase old object:
-				//draw();
-				view()->part()->addCommand( new VDeleteNodeCmd( &view()->part()->document() ), true );
-				return true;
-	//		}
-	//	return true;
+		if( view()->part()->document().selection()->objects().count() > 0 )
+			view()->part()->addCommand( new VDeleteNodeCmd( &view()->part()->document() ), true );
+
+		return true;
 	}
 	return false;
 }

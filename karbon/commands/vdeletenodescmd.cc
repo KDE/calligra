@@ -43,7 +43,7 @@ VDeleteNodeCmd::visitVPath( VPath& path )
 	path.next(); // skip begin segment
 	while( segment )
 	{
-		if( segment->knotIsSelected() )
+		if( segment->state() != VSegment::deleted && segment->knotIsSelected() )
 		{
 			segment->setState( VSegment::deleted );
 			m_segments.append( segment );
@@ -60,7 +60,7 @@ VDeleteNodeCmd::execute()
 	for( ; itr.current() ; ++itr )
 		visit( *itr.current() );
 
-	setSuccess( true );
+	setSuccess( m_segments.count() > 0 );
 }
 
 void
