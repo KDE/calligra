@@ -61,6 +61,8 @@ const QChar KWSpecialChar( static_cast<char>( 0 ) );
 #define KWBarIcon( x ) BarIcon( x, KWFactory::global() )
 
 #define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
+#define DEBUGREGION(reg) { QArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
+                           kdDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
 
 const unsigned int minFrameWidth=18;
 const unsigned int minFrameHeight=20;

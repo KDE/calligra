@@ -162,14 +162,14 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 
 void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch, bool resetChanged )
 {
-    //kdDebug() << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << endl;
+    QRect crect( cx, cy, cw, ch );
+    //kdDebug(32002) << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << " crect: " << DEBUGRECT( crect ) << endl;
     bool focus = hasFocus() || viewport()->hasFocus();
     if ( painter->device()->devType() == QInternal::Printer )
         focus = false;
 
     bool onlyChanged = (onlyFrameset != 0L);
 
-    QRect crect( cx, cy, cw, ch );
     if ( !onlyFrameset )      // no need for borders if we're only repainting the text
         drawBorders( 0L /*onlyFrameset*/, painter, crect );
 
@@ -216,6 +216,7 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
             frameRect.rTop() -= 1;
             frameRect.rRight() += 1;
             frameRect.rBottom() += 1;
+            //kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
             if ( !crect.intersects( frameRect ) )
                 continue;
 
@@ -334,8 +335,8 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
             // Exclude red border line
             pageRect.rLeft() += 1;
             pageRect.rTop() += 1;
-            pageRect.rRight() -= 2;
-            pageRect.rBottom() -= 2;
+            pageRect.rRight() -= 1;
+            pageRect.rBottom() -= 1;
             pageContentsReg += pageRect; // unite
         }
 
@@ -346,7 +347,18 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
             painter->save();
 
             region &= pageContentsReg; // intersect
-            painter->setClipRegion( region );
+
+            // Region, but in device coordinates
+            // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
+            QRegion devReg;
+            QArray<QRect>rs = region.rects();
+            rs.detach();
+            for ( int i = 0 ; i < rs.size() ; ++i )
+                rs[i] = painter->xForm( rs[i] );
+            devReg.setRects( rs.data(), rs.size() );
+            painter->setClipRegion( devReg );
+
+            //kdDebug() << "KWCanvas::drawBorders clearEmptySpace in " << DEBUGRECT( region.boundingRect() ) << endl;
             painter->fillRect( region.boundingRect(), colorGroup().brush( QColorGroup::Base ) );
             painter->restore();
         }
