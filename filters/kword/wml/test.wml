@@ -1,0 +1,27 @@
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
+      "http://www.wapforum.org/DTD/wml_1.1.xml" >
+<wml>
+<card name="Test file for KWord">
+<p>The quick brown fox jumps over the lazy dog</p>
+</card>
+
+<card>
+<p>Here is the second card.</p>
+</card>
+
+<card>
+<p>Some formatting test:</p>
+<p><b>bold</b>, <i>italic</i>, <u>underline</u></p>
+</card>
+
+<card>
+<p align="left">left justify</p>
+<p align="center">center</p>
+<p align="right">right justify</p>
+</card>
+
+<card>
+<p>The very last card</p>
+</card>
+
+</wml>
