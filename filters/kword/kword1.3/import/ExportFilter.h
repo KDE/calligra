@@ -84,7 +84,7 @@ private:
         const FormatData& formatData);
     void processTextImage ( const QString&,
         const TextFormatting& formatLayout,
-        const QString& fileName);
+        const FormatData& formatData);
     QString textFormatToStyle(const TextFormatting& formatOrigin,
         const TextFormatting& formatData, const bool force, QString& key);
     QString layoutToParagraphStyle(const LayoutData& layoutOrigin,

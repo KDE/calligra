@@ -80,7 +80,7 @@ class TextFormatting
             weight (w), fontSize (sz), fgColor (fg),
             bgColor (bg), verticalAlignment (v), missing (false) {}
 
-        QString fontName; // font name, except for text images where it is the image file name
+        QString fontName;
 
         bool    italic;
 

@@ -652,8 +652,8 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
               formattingIt != (*paraIt).formattingList.end();
               formattingIt++ )
         {
-            if ( (*formattingIt).id              == 6    &&
-                 (*formattingIt).frameAnchor.key == key )
+            if ( ( ( (*formattingIt).id == 6 ) || ( (*formattingIt).id == 2 ) )
+                 && (*formattingIt).frameAnchor.key == key )
             {
                 kdDebug(30508) << "Found anchor " << (*formattingIt).frameAnchor.key.toString() << endl;
                 (*formattingIt).frameAnchor.picture.koStoreName = name;

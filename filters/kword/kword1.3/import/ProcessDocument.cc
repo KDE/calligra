@@ -494,9 +494,17 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
 
     FormatData formatData(2, formatPos, formatLen);
     QValueList<TagProcessing> tagProcessingList;
-    // As we cannot have a font, we re-use the fontName to store the filename
-    tagProcessingList.append(TagProcessing("FILENAME", ProcessStringValueTag, &formatData.text.fontName));
+
+    QString fileName;
+    tagProcessingList.append(TagProcessing("FILENAME", ProcessStringValueTag, &fileName));
     ProcessSubtags (myNode, tagProcessingList, leader);
+
+    if ( !fileName.isEmpty() )
+    {
+        kdDebug(30508) << "Text image: " << fileName << endl;
+        formatData.frameAnchor.key = KoPictureKey( fileName );
+        formatData.frameAnchor.picture.key = formatData.frameAnchor.key;
+    }
 
     (*formatDataList) << formatData;
 }
