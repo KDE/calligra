@@ -99,6 +99,16 @@ Documentation and other data files will still use the regular prefix.
 with an extra prefix or suffix on their names by giving `configure' the
 option `--program-prefix=PREFIX' or `--program-suffix=SUFFIX'.
 
+KDE Specific
+============
+
+If you use ./configure --prefix to install KOffice in a different
+location than the rest of KDE, you need to tell KDE about it.
+For this, either set $KDEDIRS so that it contains both prefixes,
+or add this to /etc/kderc :
+[Directories]
+prefixes=/the/prefix/I/used/to/install/koffice/
+
 Optional Features
 =================
 
