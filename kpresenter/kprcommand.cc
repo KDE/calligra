@@ -1309,67 +1309,100 @@ void PieValueCmd::unexecute()
 }
 
 
-PolygonSettingCmd::PolygonSettingCmd( const QString &_name, QPtrList<PolygonSettings> &_oldSettings,
-                                      PolygonSettings _newSettings, QPtrList<KPObject> &_objects,
-                                      KPresenterDoc *_doc, KPrPage *_page, int _flags )
-    : KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects ), flags(_flags)
+PolygonSettingCmd::PolygonSettingCmd( const QString &name, PolygonSettings newSettings,
+                                      QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                                      KPrPage *page, int flags )
+: KNamedCommand( name )
+, m_doc( doc )
+, m_page( page )
+, m_newSettings( newSettings )
+, m_flags( flags )
 {
-    objects.setAutoDelete( false );
-    oldSettings.setAutoDelete( false );
-    doc = _doc;
-    m_page = _page;
-    newSettings = _newSettings;
+    m_objects.setAutoDelete( false );
+    m_oldSettings.setAutoDelete( false );
 
     QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        KPPolygonObject * obj = dynamic_cast<KPPolygonObject*>( it.current() );
+        if( obj )
+        {
+            it.current()->incCmdRef();
+            m_objects.append( it.current() );
+            PolygonSettings *setting = new PolygonSettings;
+            setting->checkConcavePolygon = obj->getCheckConcavePolygon();
+            setting->cornersValue = obj->getCornersValue();
+            setting->sharpnessValue = obj->getSharpnessValue();
+            m_oldSettings.append( setting );
+        }
+    }
+}
+
+
+PolygonSettingCmd::PolygonSettingCmd( const QString &name, QPtrList<PolygonSettings> &oldSettings,
+                                      PolygonSettings newSettings, QPtrList<KPObject> &objects,
+                                      KPresenterDoc *doc, KPrPage *page, int flags )
+: KNamedCommand( name )
+, m_doc( doc )
+, m_page( page )
+, m_oldSettings( oldSettings )
+, m_objects( objects )
+, m_newSettings( newSettings )
+, m_flags( flags )
+{
+    m_objects.setAutoDelete( false );
+    m_oldSettings.setAutoDelete( false );
+
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 PolygonSettingCmd::~PolygonSettingCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
-    oldSettings.setAutoDelete( true );
-    oldSettings.clear();
+    m_oldSettings.setAutoDelete( true );
+    m_oldSettings.clear();
 }
 
 void PolygonSettingCmd::execute()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( it.current() );
         if(obj)
         {
-            if (flags & ConcaveConvex)
-                obj->setCheckConcavePolygon(newSettings.checkConcavePolygon);
-            if (flags & Corners)
-                obj->setCornersValue(newSettings.cornersValue);
-            if (flags & Sharpness)
-                obj->setSharpnessValue(newSettings.sharpnessValue );
+            if (m_flags & ConcaveConvex)
+                obj->setCheckConcavePolygon(m_newSettings.checkConcavePolygon);
+            if (m_flags & Corners)
+                obj->setCornersValue(m_newSettings.cornersValue);
+            if (m_flags & Sharpness)
+                obj->setSharpnessValue(m_newSettings.sharpnessValue );
         }
     }
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    doc->updateSideBarItem( m_page );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void PolygonSettingCmd::unexecute()
 {
-    for ( unsigned int i = 0; i < objects.count(); ++i )
+    for ( unsigned int i = 0; i < m_objects.count(); ++i )
     {
-        KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( objects.at(i) );
+        KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( m_objects.at(i) );
         if(obj)
         {
-            obj->setCheckConcavePolygon(oldSettings.at( i )->checkConcavePolygon);
-            obj->setCornersValue(oldSettings.at( i )->cornersValue);
-            obj->setSharpnessValue(oldSettings.at( i )->sharpnessValue);
+            obj->setCheckConcavePolygon(m_oldSettings.at( i )->checkConcavePolygon);
+            obj->setCornersValue(m_oldSettings.at( i )->cornersValue);
+            obj->setSharpnessValue(m_oldSettings.at( i )->sharpnessValue);
         }
     }
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    doc->updateSideBarItem( m_page );
+    m_doc->updateSideBarItem( m_page );
 }
 
 

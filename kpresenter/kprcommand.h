@@ -595,9 +595,12 @@ public:
         All = ConcaveConvex | Corners | Sharpness
     };
 
-    PolygonSettingCmd( const QString &_name, QPtrList<PolygonSettings> &_oldSettings,
-                       PolygonSettings _newSettings, QPtrList<KPObject> &_objects,
-                       KPresenterDoc *_doc,  KPrPage *_page, int _flags = All );
+    PolygonSettingCmd( const QString &name, PolygonSettings newSettings,
+                       QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                       KPrPage *page, int flags = All );
+    PolygonSettingCmd( const QString &name, QPtrList<PolygonSettings> &oldSettings,
+                       PolygonSettings newSettings, QPtrList<KPObject> &objects,
+                       KPresenterDoc *doc,  KPrPage *page, int flags = All );
     ~PolygonSettingCmd();
 
     virtual void execute();
@@ -605,12 +608,12 @@ public:
 
 protected:
 
-    KPresenterDoc *doc;
+    KPresenterDoc *m_doc;
     KPrPage *m_page;
-    QPtrList<PolygonSettings> oldSettings;
-    QPtrList<KPObject> objects;
-    PolygonSettings newSettings;
-    int flags;
+    QPtrList<PolygonSettings> m_oldSettings;
+    QPtrList<KPObject> m_objects;
+    PolygonSettings m_newSettings;
+    int m_flags;
 };
 
 class PictureSettingCmd : public KNamedCommand
