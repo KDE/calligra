@@ -54,7 +54,7 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
         addTab( _piepage, i18n( "&Pie" ) );
     }
 
-    _parameterfontpage = new KChartFontConfigPage(_params,this );
+    _parameterfontpage = new KChartFontConfigPage(_params,this, dat );
     addTab( _parameterfontpage, i18n( "&Font" ) );
 
     //_backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );

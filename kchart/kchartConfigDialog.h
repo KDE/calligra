@@ -8,7 +8,7 @@
 #define __KCHARTCONFIGDIALOG_H__
 
 #include <qtabdialog.h>
-
+#include "kchartDataEditor.h"
 class KDChartParams;
 class KChartColorConfigPage;
 class KChartParameterConfigPage;
