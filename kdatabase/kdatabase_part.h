@@ -23,7 +23,7 @@
 #include <koDocument.h>
 #include <klocale.h>
 
-#include "maindlg2.h"
+#include "kdbdocbrowser.h"
 #include "kdatabase_struct.h"
 
 class KDatabasePart;

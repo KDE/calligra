@@ -29,7 +29,7 @@
 class QTable;
 class QStringList;
 
-class clsTblDesigner2 : public KDialog  {
+class KDBTableDesigner : public KDialog  {
          Q_OBJECT
 public: 
 
@@ -42,8 +42,8 @@ public:
 		t_boolen
 	};
 		 
-	clsTblDesigner2();
-	~clsTblDesigner2();
+	KDBTableDesigner();
+	~KDBTableDesigner();
 	bool populateTblDesigner(QString tblName);
 	void addRow(bool primary_key=false, QString name="", DataType type=t_int, int size=10, QString default_v="", bool allow_null=false);
 

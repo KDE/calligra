@@ -14,14 +14,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "clstbldesigner2.h"
+#include "kdbtabledesigner.h"
 #include <qheader.h>
 #include <qtable.h>
 #include <qlayout.h>
 #include <kdebug.h>
 
 
-clsTblDesigner2::clsTblDesigner2(){
+KDBTableDesigner::KDBTableDesigner(){
 	QGridLayout *g = new QGridLayout(this);
 
 	this->resize(575,420);
@@ -55,11 +55,11 @@ clsTblDesigner2::clsTblDesigner2(){
 	this->addRow(false, "name", t_char, 10, "nobody");
 }
 
-clsTblDesigner2::~clsTblDesigner2(){
+KDBTableDesigner::~KDBTableDesigner(){
 }
 
 
-bool clsTblDesigner2::populateTblDesigner(QString tblName){
+bool KDBTableDesigner::populateTblDesigner(QString tblName){
 
     //QString myTblName = &tblName + " - Table Designer";
     tblName.append(" - Table Designer");
@@ -67,7 +67,7 @@ bool clsTblDesigner2::populateTblDesigner(QString tblName){
     return(true);
 }
 
-void clsTblDesigner2::addRow(bool primary_key, QString name, DataType type, int size, QString default_v, bool allow_null)
+void KDBTableDesigner::addRow(bool primary_key, QString name, DataType type, int size, QString default_v, bool allow_null)
 {
 	kdDebug() << "clsTblDesigner2::addRow: adding row " << m_rows << endl;
 	QComboTableItem *dataTypeView = new QComboTableItem(m_table, m_comboEntries, false);
@@ -123,4 +123,4 @@ void clsTblDesigner2::addRow(bool primary_key, QString name, DataType type, int 
 	m_rows++;
 }
 
-#include "clstbldesigner2.moc"
+#include "kdbtabledesigner.moc"

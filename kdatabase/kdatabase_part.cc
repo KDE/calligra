@@ -23,7 +23,7 @@
 #include "kdebug.h"
 #include "kstandarddirs.h"	
 
-#include "maindlg2.h"
+#include "kdbdocbrowser.h"
 #include <koTemplateChooseDia.h>
 
 #include <qpainter.h>

@@ -18,7 +18,7 @@
 #define MAINDLG2_H
 
 #include <kdialog.h>
-#include <clstbldesigner2.h>
+#include "kdbtabledesigner.h"
 #include <qbuilddlg.h>
 #include <qpaintdevice.h>
 #include "kdatabase_struct.h"
@@ -30,12 +30,12 @@
   *@author root
   */
 
-class MainDlg2 : public KDialog  {
+class KDBDocBrowser : public KDialog  {
        Q_OBJECT
 
 public:
-	MainDlg2(QWidget *parentWidget=0, const char * widgetName=0, bool isModal=false);
-	~MainDlg2(void);
+	KDBDocBrowser(QWidget *parentWidget=0, const char * widgetName=0, bool isModal=false);
+	~KDBDocBrowser(void);
    bool initStruct(QDomDocument *kdbFile);
 public slots:
    virtual void slotTblItemClicked(QListViewItem *itemClicked);
@@ -48,9 +48,9 @@ private:
    bool refreshViewView(QDomNode viewSection);
    bool refreshFormView(QDomNode formSection);
 
-    clsTblDesigner2* myTblDesigner;
-    QBuildDlg* myQueryBuilder;
-    KDBStruct* myStruct;
+    KDBTableDesigner *m_tblDesigner;
+    QBuildDlg *myQueryBuilder;
+    KDBStruct *m_struct;
 
     KTabCtl *tabWidget;
     QDomDocument* myKDBFile;

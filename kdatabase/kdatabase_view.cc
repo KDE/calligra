@@ -20,7 +20,7 @@
 #include "kdatabase_view.h"
 #include "kdatabase_factory.h"
 #include "kdatabase_part.h"
-#include "maindlg2.h"
+#include "kdbdocbrowser.h"
 
 #include <qpainter.h>
 #include <qiconset.h>
@@ -39,15 +39,15 @@ KDatabaseView::KDatabaseView( KDatabasePart* part, QWidget* parent, const char* 
     KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
     KStdAction::paste(this, SLOT( paste() ), actionCollection(), "paste" );
     
-    m_actionToggleDocBrowser = new KToggleAction(i18n("&View document browser"), "toggle_docbrowser", this, SLOT(toggleDocBrowser()),
+    m_actionToggleDocBrowser = new KToggleAction(i18n("&View document browser"), "toggle_docbrowser", Key_F2, this, SLOT(toggleDocBrowser()),
     			actionCollection(), "toggle_docbrowser");
     m_actionToggleDocBrowser->setChecked(true);
     
     
-    myMainDlg = new MainDlg2(this,name);
-    connect(myMainDlg, SIGNAL(hideing()), this, SLOT(toggleDocBrowser()));
-    myMainDlg->initStruct(part->getKDBFile());
-    myMainDlg->show();
+    m_docBrowser = new KDBDocBrowser(this,name);
+    connect(m_docBrowser, SIGNAL(hideing()), this, SLOT(toggleDocBrowser()));
+    m_docBrowser->initStruct(part->getKDBFile());
+    m_docBrowser->show();
     m_docBrowserVisible = true;
 
     // Note: Prefer KStdAction::* to any custom action if possible.
@@ -95,13 +95,13 @@ void KDatabaseView::toggleDocBrowser()
     kdDebug(31000) << "KDatabaseView::toggleDocBrowser(): called" << endl;
     if(m_docBrowserVisible)
     {
-	myMainDlg->hide();
+	m_docBrowser->hide();
 	m_docBrowserVisible = false;
 	m_actionToggleDocBrowser->setChecked(false);
     }
     else
     {
-	myMainDlg->show();
+	m_docBrowser->show();
 	m_docBrowserVisible = true;
 	m_actionToggleDocBrowser->setChecked(true);
     }

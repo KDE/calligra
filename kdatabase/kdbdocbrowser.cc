@@ -14,14 +14,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "maindlg2.h"
+#include "kdbdocbrowser.h"
 #include "kdebug.h"
 #include "kdatabase_struct.h"
 #include <klistview.h>
 #include <qlayout.h>
 #include "ktabctl.h"
 
-MainDlg2::MainDlg2(QWidget *parentWidget, const char * widgetName, bool isModal):KDialog(parentWidget,widgetName,isModal){
+KDBDocBrowser::KDBDocBrowser(QWidget *parentWidget, const char * widgetName, bool isModal):KDialog(parentWidget,widgetName,isModal){
    tabWidget = new KTabCtl(this, "tabWidget");
    QGridLayout *g = new QGridLayout(this);
    g->addWidget(tabWidget, 0, 0);
@@ -55,20 +55,20 @@ MainDlg2::MainDlg2(QWidget *parentWidget, const char * widgetName, bool isModal)
    resize(525,360);
    }
 
-MainDlg2::~MainDlg2(){
+KDBDocBrowser::~KDBDocBrowser(){
 }
 
-void MainDlg2::slotTblItemClicked(QListViewItem *itemClicked){
+void KDBDocBrowser::slotTblItemClicked(QListViewItem *itemClicked){
 
      if(!(itemClicked == NULL)) {
         kdDebug() << "KDatabase:MainDlg tbl Item Clicked - " << itemClicked->text(0) << endl;
-        myTblDesigner=new clsTblDesigner2();
-        myTblDesigner->populateTblDesigner(itemClicked->text(0));
-        myTblDesigner->show();
+        m_tblDesigner=new KDBTableDesigner();
+        m_tblDesigner->populateTblDesigner(itemClicked->text(0));
+        m_tblDesigner->show();
         }
 }
 
-void MainDlg2::slotViewItemClicked(QListViewItem *itemClicked){
+void KDBDocBrowser::slotViewItemClicked(QListViewItem *itemClicked){
 
      if(!(itemClicked == NULL)) {
         kdDebug() << "KDatabase:MainDlg view Item Clicked - " << itemClicked->text(0) << endl;
@@ -77,24 +77,24 @@ void MainDlg2::slotViewItemClicked(QListViewItem *itemClicked){
         }
 }
 
-void MainDlg2::slotFormItemClicked(QListViewItem *itemClicked){
+void KDBDocBrowser::slotFormItemClicked(QListViewItem *itemClicked){
      kdDebug() << "KDatabase:MainDlg form Item Clicked" << endl;
 }
 
-void MainDlg2::slotAllItemClicked(QListViewItem *itemClicked){
+void KDBDocBrowser::slotAllItemClicked(QListViewItem *itemClicked){
      kdDebug() << "KDatabase:MainDlg all Item Clicked" << endl;
 }
 
 
-bool MainDlg2::initStruct(QDomDocument *kdbFile){
+bool KDBDocBrowser::initStruct(QDomDocument *kdbFile){
 
     myKDBFile = kdbFile;
-    myStruct = new KDBStruct(kdbFile);
+    m_struct = new KDBStruct(kdbFile);
     refreshStructView();
     return(true);
 }		
 
-bool MainDlg2::refreshStructView(){
+bool KDBDocBrowser::refreshStructView(){
 
     kdDebug() << "KDatabase:MainDlg refreshStructView" << endl;
     QDomElement mainElement=myKDBFile->documentElement();
@@ -106,13 +106,13 @@ bool MainDlg2::refreshStructView(){
 return(true);
 }
 
-bool MainDlg2::refreshTableView(QDomNode tableSection){
+bool KDBDocBrowser::refreshTableView(QDomNode tableSection){
 
     QPtrList<QString> myList; //maybe you noticed, that we have got a QStringList ;)
     QString myItemName;
 
     kdDebug() << "KDatabase:MainDlg refreshTableView" << endl;
-    myList = myStruct->getTables();
+    myList = m_struct->getTables();
     QPtrListIterator<QString> myIterator(myList);
     if(!(myIterator.isEmpty())) {
        while(!(myIterator==NULL)) {
@@ -125,21 +125,21 @@ bool MainDlg2::refreshTableView(QDomNode tableSection){
     return(true);
 }
 
-bool MainDlg2::refreshViewView(QDomNode viewSection){
+bool KDBDocBrowser::refreshViewView(QDomNode viewSection){
 
     kdDebug() << "KDatabase:MainDlg refreshViewView" << endl;
     return(true);
 }
 
-bool MainDlg2::refreshFormView(QDomNode formSection){
+bool KDBDocBrowser::refreshFormView(QDomNode formSection){
 
     kdDebug() << "KDatabase:MainDlg refreshFormView" << endl;
     return(true);
 }
 
-void MainDlg2::closeEvent(QCloseEvent *ev)
+void KDBDocBrowser::closeEvent(QCloseEvent *ev)
 {
 	emit hideing();
 }
 
-#include "maindlg2.moc"
+#include "kdbdocbrowser.moc"

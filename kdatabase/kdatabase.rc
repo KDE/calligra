@@ -6,6 +6,10 @@
   <Action name="cut"/>
   <Action name="paste"/>
  </Menu>
+ 
+ <Menu name="View"><text>View</text>
+  <Action name="toggle_docbrowser"/>
+ </Menu>
 </MenuBar>
 
 

@@ -21,8 +21,8 @@
 #define KDATABASE_VIEW
 
 #include <koView.h>
-#include "maindlg2.h"
-#include "clstbldesigner2.h"
+#include "kdbdocbrowser.h"
+#include "kdbtabledesigner.h"
 
 class KAction;
 class KToggleAction;
@@ -50,7 +50,7 @@ protected:
 private:
     //KAction* m_cut;
     KToggleAction *m_actionToggleDocBrowser;
-    MainDlg2* myMainDlg;
+    KDBDocBrowser* m_docBrowser;
     
     bool m_docBrowserVisible;
 };
