@@ -58,6 +58,27 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
     return true;
 }
 
+bool KoDocumentInfo::loadOasis( const QDomDocument& metaDoc )
+{
+    kdDebug()<<" metaDoc.toString() :"<<metaDoc.toString()<<endl;
+    QStringList lst = pages();
+    QStringList::ConstIterator it = lst.begin();
+    for( ; it != lst.end(); ++it )
+    {
+        KoDocumentInfoPage* p = page( *it );
+        Q_ASSERT( p );
+        QDomNode meta   = metaDoc.namedItem( "office:document-meta" );
+        QDomNode office = meta.namedItem( "office:meta" );
+        if ( office.isNull() )
+            return false;
+
+        if ( !p->loadOasis( office ) )
+            return false;
+    }
+    return true;
+}
+
+
 QDomDocument KoDocumentInfo::save()
 {
     QDomDocument doc = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
@@ -137,6 +158,12 @@ KoDocumentInfoLog::KoDocumentInfoLog( KoDocumentInfo* info )
 {
 }
 
+bool KoDocumentInfoLog::loadOasis( const QDomNode& /*metaDoc*/ )
+{
+    //todo
+    return true;
+}
+
 bool KoDocumentInfoLog::load( const QDomElement& e )
 {
     m_newLog = QString::null;
@@ -212,6 +239,21 @@ void KoDocumentInfoAuthor::initParameters()
         m_city=config->readEntry( "city" );
         m_street=config->readEntry( "street" );
     }
+}
+
+bool KoDocumentInfoAuthor::loadOasis( const QDomNode& metaDoc )
+{
+    QDomElement e  = metaDoc.namedItem( "dc:title" ).toElement();
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        m_title = e.text();
+    }
+    e = metaDoc.namedItem( "dc:creator" ).toElement();
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        m_fullName = e.text();
+    }
+    return true;
 }
 
 bool KoDocumentInfoAuthor::load( const QDomElement& e )
@@ -417,6 +459,16 @@ void KoDocumentInfoAuthor::setStreet( const QString& n )
 KoDocumentInfoAbout::KoDocumentInfoAbout( KoDocumentInfo* info )
     : KoDocumentInfoPage( info, "about" )
 {
+}
+
+bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
+{
+    QDomElement e  = metaDoc.namedItem( "dc:description" ).toElement();
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        m_abstract = e.text();
+    }
+    return true;
 }
 
 bool KoDocumentInfoAbout::load( const QDomElement& e )

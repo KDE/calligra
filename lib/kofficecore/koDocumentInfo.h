@@ -26,7 +26,7 @@ class QString;
 class QStringList;
 class QDomDocument;
 class QDomElement;
-
+class QDomNode;
 class KoDocumentInfoPage;
 
 class KoDocumentInfo : public QObject
@@ -37,6 +37,8 @@ public:
     virtual ~KoDocumentInfo();
 
     bool load( const QDomDocument& doc );
+    bool loadOasis( const QDomDocument& metaDoc );
+
     QDomDocument save();
 
     /**
@@ -59,6 +61,7 @@ public:
 
     virtual bool load( const QDomElement& e ) = 0;
     virtual QDomElement save( QDomDocument& doc ) = 0;
+    virtual bool loadOasis( const QDomNode& metaDoc ) = 0;
 };
 
 class KoDocumentInfoLog : public KoDocumentInfoPage
@@ -69,6 +72,7 @@ public:
 
     virtual bool load( const QDomElement& e );
     virtual QDomElement save( QDomDocument& doc );
+    virtual bool loadOasis( const QDomNode& metaDoc );
 
     void setNewLog( const QString& log );
     void setOldLog( const QString& log );
@@ -89,6 +93,7 @@ public:
 
     virtual bool load( const QDomElement& e );
     virtual QDomElement save( QDomDocument& doc );
+    virtual bool loadOasis( const QDomNode& metaDoc );
 
     QString fullName() const;
     QString initial() const;
@@ -137,6 +142,7 @@ public:
 
     virtual bool load( const QDomElement& e );
     virtual QDomElement save( QDomDocument& doc );
+    virtual bool loadOasis( const QDomNode& metaDoc );
 
     QString title() const;
     QString abstract() const;
