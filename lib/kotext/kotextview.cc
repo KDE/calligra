@@ -300,6 +300,11 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 		}
             }
 
+            if ( e->key() == Qt::Key_Space )
+            {
+                if (doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1) )
+                        break;
+            }
             if ( e->text().length() &&
 //               !( e->state() & AltButton ) &&
                  ( !e->ascii() || e->ascii() >= 32 ) ||
