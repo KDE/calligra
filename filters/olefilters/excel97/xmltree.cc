@@ -1698,8 +1698,41 @@ bool XMLTree::_window1(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_window2(Q_UINT16, QDataStream&)
+bool XMLTree::_window2(Q_UINT16, QDataStream & body)
 {
+  Q_UINT16 nOpt;
+  body>> nOpt;
+  if(table!=0)
+    {
+      if( nOpt & 0x0001 )
+	{
+	  // Display Formulas
+	  kdDebug()<<"Show formular\n"; 
+	}
+      else
+	kdDebug()<<"Hide formular\n"; 
+      
+      if( nOpt & 0x0002 )
+	{
+	  // Display Gridlines
+	  kdDebug()<<"Show grid\n"; 
+	}
+      else
+	{
+	  // Display No Gridlines
+	  kdDebug()<<"Hide grid\n"; 
+	}
+      
+      if( nOpt & 0x0004 )
+	kdDebug()<<"Show col/row hearder\n"; 
+      else
+	kdDebug()<<"Hide col/row hearder\n"; 
+      
+      if( nOpt & 0x0010 )
+	kdDebug()<<"Show zero value\n"; 
+      else
+	kdDebug()<<"Hide zero value\n"; 
+    }
   return true;
 }
 
