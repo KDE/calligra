@@ -51,63 +51,91 @@ KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name,const QPoint &_m
   lay2->addWidget(grp,0,0);
   rb_row = new QRadioButton( i18n("Row"), grp );
   rb_column = new QRadioButton( i18n("Column"), grp );
-  rb_row->setChecked(true);
+
 
   combo=new QComboBox(this);
   lay2->addWidget(combo,0,1);
-  list_column=new QListBox();
-  list_row=new QListBox();
-  init();
-  //combo->setListBox(list_row);
+
+
   m_pOk = new QPushButton( i18n("Sort"), this );
 
   lay2->addWidget(m_pOk,1,0);
   m_pClose = new QPushButton( i18n("Close"), this );
   lay2->addWidget(m_pClose,1,1);
-
+  init();
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( grp, SIGNAL(pressed(int)),this,SLOT(slotpress(int)));
+
 }
 
 void KSpreadsort::init()
 {
-
-
  QRect r( m_pView->activeTable()-> selectionRect() );
+ cout <<"left : "<<r.left()<<"Right() : " <<r.right()<<"bottom : " <<r.bottom()<<"top: "<<r.top()<<endl;
  if ( r.left() == 0 || r.top() == 0 ||
        r.right() == 0 || r.bottom() == 0 )
-  {
-  r.setCoords( marker.x(), marker.y(), marker.x(), marker.y() );
-  }
- cout <<"left : "<<r.left()<<"Right() : " <<r.right()<<"bottom : " <<r.bottom()<<"top: "<<r.top()<<endl;
- for(int i=r.left();i<=r.right();i++)
- 	{
- 	QString tmp=i18n("Column ")+util_columnLabel(i);
- 	list_column->insertItem(tmp);
+  	{
+  	m_pOk->setEnabled(false);
+  	combo->setEnabled(false);
+  	rb_row->setEnabled(false);
+  	rb_column->setEnabled(false);
+  	QMessageBox::warning( 0L, i18n("Error"), i18n("One cell was selected!"),
+			   i18n("Ok") );
+	
+  	}
+  else
+  	{
+ 	if(r.top()==r.bottom())
+ 		{
+ 		for(int i=r.left();i<=r.right();i++)
+ 			{
+ 			list_column+=i18n("Column ")+util_columnLabel(i);
+ 			}
+ 		rb_row->setEnabled(false);
+  		combo->insertStringList(list_column);
+  		rb_column->setChecked(true);
+ 		}
+ 	else if(r.left()==r.right())
+ 		{
+ 		QString toto;
+ 		for(int i=r.top();i<=r.bottom();i++)
+ 			{
+ 			list_row+=i18n("Row ")+toto.setNum(i);
+ 			}
+ 		rb_column->setEnabled(false);
+  		combo->insertStringList(list_row);
+  		rb_row->setChecked(true);
+ 		}
+ 	else
+ 		{
+ 		for(int i=r.left();i<=r.right();i++)
+ 			{
+ 			list_column+=i18n("Column ")+util_columnLabel(i);
+ 			}
+ 		QString toto;
+ 		for(int i=r.top();i<=r.bottom();i++)
+ 			{
+ 			list_row+=i18n("Row ")+toto.setNum(i);
+ 			}
+ 		combo->insertStringList(list_column);
+  		rb_column->setChecked(true);
+ 		}
  	}
- for(int i=r.top();i<=r.bottom();i++)
- 	{
- 	QString tmp2;
- 	QString tmp=i18n("Row ")+tmp2.setNum(i);
- 	list_row->insertItem(tmp);
- 	}
- 	
 }
 
 void KSpreadsort::slotpress(int id)
 {
-cout <<"Presse : "<<id<<endl;
 switch(id)
 	{
 	case 0 :
 		combo->clear();
-		combo->setListBox(list_row);
+		combo->insertStringList(list_row);
 		break;
 	case 1 :
 		combo->clear();
-		combo->setListBox(list_column);
+		combo->insertStringList(list_column);
 		break;
 	default :
 		cout <<"Error in signal : pressed(int id)\n";

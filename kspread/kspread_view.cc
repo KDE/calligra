@@ -669,9 +669,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_idButtonLayout_Chart = m_vToolBarLayout->insertButton2( pix, 13, SIGNAL( clicked() ), this, "insertChart", true, ( wstr = Q2C( i18n( "Insert Chart" ) ) ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
-  //pix.data = CORBA::string_dup( colorToPixString( _format.getColor(), TXT_COLOR ) );
-  //m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
-  // color
+
 
   tbColor = black;
   OpenPartsUI::Pixmap* colpix = new OpenPartsUI::Pixmap;
@@ -682,7 +680,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 							  true, (wstr=Q2C( i18n( "Text Color" ))), -1 );
 
   bgColor = white;
-  //OpenPartsUI::Pixmap* colpix = new OpenPartsUI::Pixmap;
+
   colpix->data = CORBA::string_dup( colorToPixString( bgColor,  BACK_COLOR) );
   pix = colpix;
 
@@ -1369,8 +1367,8 @@ void KSpreadView::replace()
 void KSpreadView::sort()
 {
 //don't work for the moment
-  //KSpreadsort* dlg = new KSpreadsort( this, "Sort" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  //dlg->show();
+  KSpreadsort* dlg = new KSpreadsort( this, "Sort" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  dlg->show();
 }
 
 

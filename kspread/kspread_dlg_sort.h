@@ -27,7 +27,7 @@
 #include <qcombobox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-#include <qlistbox.h>
+#include <qstringlist.h>
 
 class KSpreadView;
 class KSpreadTable;
@@ -38,6 +38,8 @@ class KSpreadsort : public QDialog
   Q_OBJECT
 public:
   KSpreadsort( KSpreadView* parent, const char* name,const QPoint &_marker );
+
+
   void init();
 public slots:
   void slotOk();
@@ -56,8 +58,8 @@ protected:
   QPushButton* m_pOk;
   QPushButton* m_pClose;
   QPoint  marker;
-  QListBox *list_column;
-  QListBox *list_row;
+  QStringList list_column;
+  QStringList list_row;
 
 };
 
