@@ -288,10 +288,10 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		ArtSVP *temp;
 		temp = art_svp_from_vpath( vec );
 
-		//if(m_drawShape->getFillRule() == "evenodd")
+		if( m_fill->fillRule() == evenOdd )
 			swr = art_svp_writer_rewind_new( ART_WIND_RULE_ODDEVEN );
-		//else
-		//	swr = art_svp_writer_rewind_new( ART_WIND_RULE_NONZERO );
+		else
+			swr = art_svp_writer_rewind_new( ART_WIND_RULE_NONZERO );
 
 		art_svp_intersector( temp, swr );
 		fillSvp = art_svp_writer_rewind_reap( swr );

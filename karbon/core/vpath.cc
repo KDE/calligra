@@ -19,7 +19,7 @@
 
 
 VPath::VPath()
-	: VObject(), m_closed( false ), m_fillRule( evenOdd )
+	: VObject(), m_closed( false )
 {
 	m_segments.setAutoDelete( true );
 
@@ -56,7 +56,6 @@ VPath::VPath( const VPath& path )
 	}
 
 	m_closed = path.m_closed;
-	m_fillRule = path.m_fillRule;
 }
 
 VPath::~VPath()
@@ -82,7 +81,7 @@ VPath::draw( VPainter *painter, const QRect& rect,
 	if( state() != edit )
 	{
 		// paint fill:
-		m_fill.begin_draw( painter, zoomFactor, m_fillRule );
+		m_fill.begin_draw( painter, zoomFactor );
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
 			m_fill.draw( *( itr.current() ) );
@@ -443,7 +442,6 @@ VPath::save( QDomElement& element ) const
 		element.appendChild( me );
 
 		me.setAttribute( "closed", m_closed );
-		me.setAttribute( "fillRule", m_fillRule );
 
 		m_stroke.save( me );
 		m_fill.save( me );
@@ -470,7 +468,6 @@ VPath::load( const QDomElement& element )
 
 	setState( normal );
 	m_closed   = element.attribute( "closed" ) == 0 ? false : true;
-	m_fillRule = element.attribute( "fillRule" ) == 0 ? evenOdd : winding;
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )

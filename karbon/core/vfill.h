@@ -8,6 +8,8 @@
 
 #include "vcolor.h"
 
+enum VFillRule { evenOdd = 0, winding = 1 };
+
 class QDomElement;
 
 class VFill
@@ -29,6 +31,9 @@ public:
 	VPServerMode mode() const { return m_mode; }
 	void setMode( VPServerMode mode ) { m_mode = mode; }
 
+	VFillRule fillRule() const { return m_fillRule; }
+	void setFillRule( VFillRule fillRule ) { m_fillRule = fillRule; }
+
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
@@ -36,6 +41,7 @@ private:
 	VColor m_color;
 	float m_opacity;
 	VPServerMode m_mode;
+	VFillRule m_fillRule;
 };
 
 #endif

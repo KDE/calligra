@@ -11,15 +11,13 @@
 
 class VPainter;
 
-enum VFillRule { evenOdd = 0, winding = 1 };
-
 class VPathFill : public VFill, VSegmentListTraverser
 {
 public:
 	VPathFill();
 	virtual ~VPathFill() {}
 
-	void begin_draw( VPainter *painter, const double zoomFactor, VFillRule rule );
+	void begin_draw( VPainter *painter, const double zoomFactor );
 	void draw( const VSegmentList& list );
 	void end_draw();
 
@@ -37,7 +35,6 @@ private:
 	VPainter* m_painter;
 	double m_zoomFactor;
 	QPointArray m_pa;
-	VFillRule m_fillRule;
 };
 
 #endif

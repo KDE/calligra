@@ -136,8 +136,8 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
-	VFillRule fillRule() { return m_fillRule; }
-	void setFillRule( VFillRule rule ) { m_fillRule = rule; }
+	VFillRule fillRule() { return m_fill.fillRule(); }
+	void setFillRule( VFillRule rule ) { m_fill.setFillRule( rule ); }
 
 private:
 // TODO: this looks ugly somehow:
@@ -150,7 +150,6 @@ private:
 	VPathFill m_fill;			// fill.
 
 	bool m_closed;
-	VFillRule m_fillRule;
 };
 
 #endif
