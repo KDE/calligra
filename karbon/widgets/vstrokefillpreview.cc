@@ -63,7 +63,6 @@ VStrokeFillPreview::VStrokeFillPreview(
 #endif
 
 	installEventFilter( this );
-
 	m_pixmap.resize( PANEL_SIZEX, PANEL_SIZEY );
 	m_painter = new VKoPainter( &m_pixmap, PANEL_SIZEX, PANEL_SIZEY );
 }
@@ -71,6 +70,8 @@ VStrokeFillPreview::VStrokeFillPreview(
 VStrokeFillPreview::~VStrokeFillPreview()
 {
 	delete( m_painter );
+	delete( m_fill );
+	delete( m_stroke );
 }
 
 void
@@ -94,36 +95,70 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 
 	if( event && event->type() == QEvent::MouseButtonPress )
 	{
-		if( ex >= FILL_TOPX && ex <= FILL_BOTTOMX && ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
-			emit fillSelected();
-		else if(
-			ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX &&
-			ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
+		if ( m_strokeWidget )
 		{
-			emit strokeSelected();
+			if(
+				ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX &&
+				ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
+			{
+				m_strokeWidget = true;
+				emit strokeSelected();
+			}
+			else if(
+				ex >= FILL_TOPX && ex <= FILL_BOTTOMX &&
+				ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
+			{
+				m_strokeWidget = false;
+				emit fillSelected();
+			}
 		}
+		else
+		{
+			if(
+				ex >= FILL_TOPX && ex <= FILL_BOTTOMX &&
+				ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
+			{
+				m_strokeWidget = false;
+				emit fillSelected();
+			}
+			else if(
+				ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX &&
+				ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
+			{
+				m_strokeWidget = true;
+				emit strokeSelected();
+			}
+		}
+		update( *m_stroke, *m_fill );
 	}
 
 	if( event && event->type() == QEvent::MouseButtonDblClick )
 	{
-		if( ex >= FILL_TOPX && ex <= FILL_BOTTOMX && ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
+		if(
+			ex >= FILL_TOPX && ex <= FILL_BOTTOMX &&
+			ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
 		{
 			VFillDlg* dialog = new VFillDlg( m_part );
-			connect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
+			connect( dialog, SIGNAL( fillChanged( const VFill & ) ),
+				this, SIGNAL( fillChanged( const VFill & ) ) );
 			dialog->exec();
 			delete dialog;
-			disconnect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
+			disconnect( dialog, SIGNAL( fillChanged( const VFill & ) ),
+				this, SIGNAL( fillChanged( const VFill & ) ) );
 		}
-		else if( ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX && ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
+		else if(
+			ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX
+			&& ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
 		{
 			VStrokeDlg* dialog = new VStrokeDlg( m_part );
-			connect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SIGNAL( strokeChanged( const VStroke & ) ) );
+			connect( dialog, SIGNAL( strokeChanged( const VStroke & ) ),
+				this, SIGNAL( strokeChanged( const VStroke & ) ) );
 			dialog->exec();
 			delete dialog;
-			disconnect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SIGNAL( strokeChanged( const VStroke & ) ) );
+			disconnect( dialog, SIGNAL( strokeChanged( const VStroke & ) ),
+				this, SIGNAL( strokeChanged( const VStroke & ) ) );
 		}
 	}
-
 	return false;
 }
 
@@ -131,6 +166,8 @@ void
 VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 {
 	m_painter->begin();
+	if ( ! m_fill ) m_fill = new VFill( f );
+	if ( ! m_stroke ) m_stroke = new VStroke( s );
 
 	// draw checkerboard
 	VFill fill;
@@ -144,6 +181,113 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 			m_painter->drawRect( x, y, 10, 10 );
 		}
 
+	if ( m_strokeWidget )
+	{
+		drawFill( f );
+		drawStroke( s );
+	}
+	else
+	{
+ 		drawStroke( s );
+		drawFill( f );
+	}
+
+	m_painter->end();
+
+	repaint();
+}
+
+void
+VStrokeFillPreview::drawFill( const VFill &f )
+{
+	VStroke stroke;
+
+	if( f.type() != VFill::none )
+	{
+		if( f.type() != VFill::solid )
+		{
+			VFill fill;
+			fill = f;
+
+			if( f.type() == VFill::grad )
+			{
+				if( f.gradient().type() == VGradient::linear )
+				{
+					fill.gradient().setOrigin( KoPoint( 30, 20 ) );
+					fill.gradient().setVector( KoPoint( 30, 50 ) );
+				}
+				else if( f.gradient().type() == VGradient::radial ||
+						 f.gradient().type() == VGradient::conic )
+				{
+					fill.gradient().setOrigin( KoPoint( 30, 35 ) );
+					fill.gradient().setFocalPoint( KoPoint( 30, 35 ) );
+					fill.gradient().setVector( KoPoint( 30, 50 ) );
+				}
+			}
+			else
+			{
+				fill.pattern() = f.pattern();
+				fill.pattern().setOrigin( KoPoint( 20, 10 ) );
+				fill.pattern().setVector( KoPoint( 30, 10 ) );
+				fill.setType( VFill::patt );
+			}
+
+			m_painter->setBrush( fill );
+		}
+		else
+			m_painter->setBrush( f );
+		m_painter->drawRect( KoRect( FILL_TOPX, FILL_TOPY, FILL_BOTTOMX - FILL_TOPX, FILL_BOTTOMY - FILL_TOPY ) );
+	}
+	else
+	{
+		VFill fill;
+		fill.setColor( Qt::white );
+		m_painter->setBrush( fill );
+		m_painter->setPen( Qt::NoPen );
+
+		m_painter->drawRect( KoRect(	FILL_TOPX, FILL_TOPY,
+										FILL_BOTTOMX - FILL_TOPX,
+										FILL_BOTTOMY - FILL_TOPY ) );
+	}
+
+	// show 3D outline of fill part
+	VColor color;
+
+	m_painter->setBrush( Qt::NoBrush );
+	color.set( 1.0, 1.0, 1.0 );
+	stroke.setColor( color );
+	m_painter->setPen( stroke );
+
+	m_painter->newPath();
+	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
+	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
+	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+	m_painter->strokePath();
+
+	color.set( 0.5, 0.5, 0.5 );
+	stroke.setColor( color );
+	m_painter->setPen( stroke );
+
+	m_painter->newPath();
+	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
+	m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
+	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+	m_painter->strokePath();
+
+	if( f.type() == VFill::none )
+	{
+		stroke.setColor( Qt::red );
+		m_painter->setPen( stroke );
+		m_painter->newPath();
+		m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
+		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+		m_painter->strokePath();
+	}
+}
+
+void
+VStrokeFillPreview::drawStroke( const VStroke &s )
+{
 	VStroke stroke;
 	stroke.setLineWidth( 2.0 );
 
@@ -279,91 +423,6 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_BOTTOMY ) );
 		m_painter->strokePath();
 	}
-
-	if( f.type() != VFill::none )
-	{
-		if( f.type() != VFill::solid )
-		{
-			VFill fill;
-			fill = f;
-
-			if( f.type() == VFill::grad )
-			{
-				if( f.gradient().type() == VGradient::linear )
-				{
-					fill.gradient().setOrigin( KoPoint( 30, 20 ) );
-					fill.gradient().setVector( KoPoint( 30, 50 ) );
-				}
-				else if( f.gradient().type() == VGradient::radial ||
-						 f.gradient().type() == VGradient::conic )
-				{
-					fill.gradient().setOrigin( KoPoint( 30, 35 ) );
-					fill.gradient().setFocalPoint( KoPoint( 30, 35 ) );
-					fill.gradient().setVector( KoPoint( 30, 50 ) );
-				}
-			}
-			else
-			{
-				fill.pattern() = f.pattern();
-				fill.pattern().setOrigin( KoPoint( 20, 10 ) );
-				fill.pattern().setVector( KoPoint( 30, 10 ) );
-				fill.setType( VFill::patt );
-			}
-
-			m_painter->setBrush( fill );
-		}
-		else
-			m_painter->setBrush( f );
-
-		m_painter->drawRect( KoRect( FILL_TOPX, FILL_TOPY, FILL_BOTTOMX - FILL_TOPX, FILL_BOTTOMY - FILL_TOPY ) );
-	}
-	else
-	{
-		VFill fill;
-		fill.setColor( Qt::white );
-		m_painter->setBrush( fill );
-		m_painter->setPen( Qt::NoPen );
-
-		m_painter->drawRect( KoRect(	FILL_TOPX, FILL_TOPY,
-										FILL_BOTTOMX - FILL_TOPX,
-										FILL_BOTTOMY - FILL_TOPY ) );
-	}
-
-	// show 3D outline of fill part
-	m_painter->setBrush( Qt::NoBrush );
-	color.set( 1.0, 1.0, 1.0 );
-	stroke.setColor( color );
-	m_painter->setPen( stroke );
-
-	m_painter->newPath();
-	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
-	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
-	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
-	m_painter->strokePath();
-
-	color.set( 0.5, 0.5, 0.5 );
-	stroke.setColor( color );
-	m_painter->setPen( stroke );
-
-	m_painter->newPath();
-	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
-	m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
-	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
-	m_painter->strokePath();
-
-	if( f.type() == VFill::none )
-	{
-		stroke.setColor( Qt::red );
-		m_painter->setPen( stroke );
-		m_painter->newPath();
-		m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
-		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
-		m_painter->strokePath();
-	}
-
-	m_painter->end();
-
-	repaint();
 }
 
 #include "vstrokefillpreview.moc"

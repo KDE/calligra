@@ -37,7 +37,7 @@ public:
 	~VStrokeFillPreview();
 
 	virtual QSize sizeHint() const
-		{ return QSize( 50, 60 ); }
+		{ return QSize( 50, 50 ); }
 	virtual QSize minimumSizeHint() const
 		{ return QSize( 20, 20 ); }
 	virtual QSizePolicy sizePolicy() const
@@ -58,8 +58,13 @@ protected:
 
 private:
 	VKoPainter* m_painter;
+	void drawFill( const VFill & );
+	void drawStroke( const VStroke & );
 	QPixmap m_pixmap;
 	KarbonPart *m_part;
+	bool m_strokeWidget;
+	VFill* m_fill;
+	VStroke* m_stroke;
 };
 
 #endif
