@@ -149,47 +149,58 @@ void MSODImport::gotPicture(
     unsigned length,
     const char *data)
 {
-    Part part;
-    QMap<unsigned, Part>::Iterator it = m_parts.find(key);
+    KTempFile tempFile(QString::null, "." + extension);
 
-    if (it != m_parts.end())
+    tempFile.file()->writeBlock(data, length);
+    tempFile.close();
+    if ((extension == "wmf") ||
+        (extension == "emf") ||
+        (extension == "pict"))
     {
-        // This part is already known! Extract the duplicate part.
+        Part part;
+        QMap<unsigned, Part>::Iterator it = m_parts.find(key);
 
-        part = m_parts[key];
-    }
-    else
-    {
-        KoFilterManager *mgr = KoFilterManager::self();
-        KTempFile tempFile(QString::null, "." + extension);
-
-        // It's not here, so let's generate one.
-
-        part.storageName = m_prefixOut + '/' + QString::number(m_nextPart);
-
-        // Save the data supplied into a temporary file, then run the filter
-        // on it.
-
-        tempFile.file()->writeBlock(data, length);
-        tempFile.close();
-        part.file = mgr->import(tempFile.name(), part.mimeType, "", part.storageName.mid(sizeof("tar:") - 1));
-        if (part.file != QString::null)
+        if (it != m_parts.end())
         {
-        kdError(s_area) << "file: " << part.file << endl;
-            unlink(tempFile.name().local8Bit());
-            m_parts.insert(key, part);
-            m_nextPart++;
+            // This part is already known! Extract the duplicate part.
+
+            part = m_parts[key];
         }
         else
         {
-            // Whoops. We could not import it as a part. Try as an image.
+            KoFilterManager *mgr = KoFilterManager::self();
 
-            m_text += "<pixmap src=\"" + tempFile.name() + "\">\n"
-                        " <gobject fillstyle=\"0\" linewidth=\"1\" strokecolor=\"#000000\" strokestyle=\"1\">\n"
-                        "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n"
-                        " </gobject>\n"
-                        "</pixmap>\n";
+            // It's not here, so let's generate one.
+
+            part.storageName = m_prefixOut + '/' + QString::number(m_nextPart);
+
+            // Save the data supplied into a temporary file, then run the filter
+            // on it.
+
+            part.file = mgr->import(tempFile.name(), part.mimeType, "", part.storageName.mid(sizeof("tar:") - 1));
+            if (part.file != QString::null)
+            {
+                m_parts.insert(key, part);
+                m_nextPart++;
+            }
+            else
+            {
+                kdError(s_area) << "could not create part" << endl;
+            }
         }
+        unlink(tempFile.name().local8Bit());
+    }
+    else
+    {
+        // We could not import it as a part. Try as an image.
+
+        m_text += "<pixmap src=\"" + tempFile.name() + "\">\n"
+                    " <gobject fillstyle=\"0\" linewidth=\"1\" strokecolor=\"#000000\" strokestyle=\"1\">\n"
+                    "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n"
+                    " </gobject>\n"
+                    "</pixmap>\n";
+
+        // Note that we cannot delete the file...
     }
 }
 

@@ -26,6 +26,7 @@ DESCRIPTION
 #include <qlist.h>
 #include <qpointarray.h>
 #include <msod.h>
+#include <zlib.h>
 
 Msod::Msod(
     unsigned dpi)
@@ -191,30 +192,97 @@ void Msod::opArcrule(MSOFBH &, U32, QDataStream &)
 
 void Msod::opBlip(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
-    U32 data = 0;;
-    U8 isNotCompressed = (U8)true;
-
-    // Skip any explicit primary header (m_rgbUidprimary)..
-
-    if (m_blipHasPrimaryId)
+    typedef enum
     {
-        data += 16;
+        msobiWMF = 0x216,       // Metafile header then compressed WMF.
+        msobiEMF = 0x3D4,       // Metafile header then compressed EMF.
+        msobiPICT = 0x542,      // Metafile header then compressed PICT.
+        msobiPNG = 0x6E0,       // One byte tag then PNG data.
+        msobiJPEG = 0x46A,      // One byte tag then JFIF data.
+        msobiDIB = 0x7A8,       // One byte tag then DIB data.
+        msobiClient = 0x800     // Clients should set this bit.
+    } MSOBI;
+    typedef enum
+    {
+        msocompressionDeflate,
+        msocompressionNone = 254,
+        msocompressionTest
+    } MSOBLIPCOMPRESSION;
+
+    bool hasPrimaryId;
+    U32 length = 0;
+    struct
+    {
+        U32 cb;
+        struct
+        {
+            U32 x;
+            U32 y;
+            U32 w;
+            U32 h;
+        } bounds;
+        struct
+        {
+            U32 w;
+            U32 h;
+        } ptSize;
+        U32 cbSave;
+        U8 compression;
+        U8 filter;
+    } data;
+
+    // Skip any explicit primary header (m_rgbUidprimary).
+
+    switch (m_blipType)
+    {
+    case msoblipEMF:
+        hasPrimaryId = (m_blipType ^ msobiEMF) != 0;
+        break;
+    case msoblipWMF:
+        hasPrimaryId = (m_blipType ^ msobiWMF) != 0;
+        break;
+    case msoblipPICT:
+        hasPrimaryId = (m_blipType ^ msobiPICT) != 0;
+        break;
+    case msoblipJPEG:
+        hasPrimaryId = (m_blipType ^ msobiJPEG) != 0;
+        break;
+    case msoblipPNG:
+        hasPrimaryId = (m_blipType ^ msobiPNG) != 0;
+        break;
+    case msoblipDIB:
+        hasPrimaryId = (m_blipType ^ msobiDIB) != 0;
+        break;
+    default:
+        hasPrimaryId = (m_blipType ^ msobiClient) != 0;
+        break;
+    }
+    if (hasPrimaryId)
+    {
+        length += 16;
         skip(16, operands);
     }
+
+    // Process the rest of the header.
+
+    data.compression = msocompressionNone;
     switch (m_blipType)
     {
     case msoblipEMF:
     case msoblipWMF:
     case msoblipPICT:
-        data += 18;
-        skip(18, operands);
-        operands >> isNotCompressed;
+        length += 34;
+        operands >> data.cb;
+        operands >> data.bounds.x >> data.bounds.y >> data.bounds.w >> data.bounds.h;
+        operands >> data.ptSize.w >> data.ptSize.h;
+        operands >> data.cbSave;
+        operands >> data.compression >> data.filter;
         break;
     case msoblipJPEG:
     case msoblipPNG:
     case msoblipDIB:
         // Skip the "tag".
-        data += 1;
+        length += 1;
         skip(1, operands);
         break;
     default:
@@ -248,9 +316,29 @@ void Msod::opBlip(MSOFBH &, U32 byteOperands, QDataStream &operands)
         image->extension = "img";
         break;
     }
-    image->length = byteOperands - data;
+    image->length = byteOperands - length;
     image->data = new char[image->length];
     operands.readRawBytes((char *)image->data, image->length);
+    if (data.compression == msocompressionDeflate)
+    {
+        const char *tmp;
+        uLongf destLen = data.cb;
+        int result;
+
+        tmp = new char[data.cb];
+        result = uncompress((U8 *)tmp, &destLen, (U8 *)image->data, image->length);
+        if (result != Z_OK)
+        {
+            kdError(s_area) << "opBlip: uncompress failed: " << result << endl;
+        }
+        if (destLen != data.cb)
+        {
+            kdError(s_area) << "opBlip: uncompressed " << destLen << " instead of " << data.cb << endl;
+        }
+        delete [] image->data;
+        image->data = tmp;
+        image->length = destLen;
+    }
     m_images.resize(m_images.size() + 1);
     m_images.insert(m_images.size() - 1, image);
 }
@@ -275,11 +363,9 @@ void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
     } data;
     unsigned i;
 
-    // Work out the type of the BLIP,and whether it has a primary header.
+    // Work out the type of the BLIP.
 
     m_blipType = static_cast<MSOBLIPTYPE>(op.opcode.fields.inst);
-    m_blipHasPrimaryId = ((op.opcode.fields.inst ^ op.opcode.fields.fbt) & 1) == 1;
-
     operands >> data.btWin32 >> data.btMacOS;
     for (i = 0; i < sizeof(data.rgbUid); i++)
         operands >> data.rgbUid[i];

@@ -129,7 +129,6 @@ private:
     } MSOBLIPTYPE;
 
     MSOBLIPTYPE m_blipType;
-    bool m_blipHasPrimaryId;
     unsigned m_imageId;
     class Image
     {
