@@ -37,6 +37,7 @@
 #include "tool.h"
 #include "movetool.h"
 #include "brushtool.h"
+#include "pentool.h"
 #include "zoomtool.h"
 #include "gradienttool.h"
 
@@ -93,6 +94,9 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), KImageShopBarIcon("viewmag"), 0, this,
 			     SLOT( tool_zoom() ),actionCollection(), "tool_zoom");
   m_tool_zoom->setExclusiveGroup( "tools" );
+  m_tool_pen = new KToggleAction( i18n("&Pen tool"), KImageShopBarIcon("pen"), 0, this,
+			      SLOT( tool_pen() ),actionCollection(), "tool_pen");
+  m_tool_pen->setExclusiveGroup( "tools" );
   m_tool_brush = new KToggleAction( i18n("&Brush tool"), KImageShopBarIcon("paintbrush"), 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
   m_tool_brush->setExclusiveGroup( "tools" );
@@ -141,9 +145,10 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
 
   // color dialog
   m_pColorDialog = new ColorDialog( this );
-  m_pColorDialog->move(100, 20);
-  m_pColorDialog->hide();
+  m_pColorDialog->move(519, 387);
+  m_pColorDialog->show();
   //addDialog(m_pColorDialog);
+  m_dialog_color->setChecked(true);
 
   connect(m_pColorDialog, SIGNAL(fgColorChanged(const QColor&)), this, SLOT(slotSetFGColor(const QColor&)));
   connect(m_pColorDialog, SIGNAL(bgColorChanged(const QColor&)), this, SLOT(slotSetBGColor(const QColor&)));
@@ -151,7 +156,7 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   // brush dialog
   m_pBrushDialog = new BrushDialog(this);
   m_pBrushDialog->resize(205, 267);
-  m_pBrushDialog->move(405, 20);
+  m_pBrushDialog->move(22, 297);
   m_pBrushDialog->hide();
   //addDialog(m_pBrushDialog);
 
@@ -163,7 +168,7 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   // layer dialog
   m_pLayerDialog = new LayerDialog( m_pDoc, this );
   m_pLayerDialog->resize( 205, 267 );
-  m_pLayerDialog->move( 200, 20 );
+  m_pLayerDialog->move( 563, 21 );
   m_pLayerDialog->show();
   m_pLayerDialog->setFocus();
   m_dialog_layer->setChecked(true);
@@ -188,6 +193,9 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   
   // create brush tool
   m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
+
+  // create pen tool
+  m_pPenTool = new PenTool(m_pDoc, this, m_pBrush);
   
   // create zoom tool
   m_pZoomTool = new ZoomTool(this);
@@ -418,6 +426,11 @@ void KImageShopView::tool_brush()
   activateTool(m_pBrushTool);
 }
 
+void KImageShopView::tool_pen()
+{
+  activateTool(m_pPenTool);
+}
+
 void KImageShopView::tool_gradient()
 {
 }
@@ -592,6 +605,8 @@ void KImageShopView::slotSetBrush(const Brush* b)
   m_pBrush = b;
   if (m_pBrushTool)
     m_pBrushTool->setBrush(b);
+  if (m_pPenTool)
+    m_pPenTool->setBrush(b);
   m_pBrush->dump();
 }
 

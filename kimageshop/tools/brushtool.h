@@ -36,7 +36,7 @@ class BrushTool : public Tool
   QString toolName() { return QString("BrushTool"); }
 
   void setBrush(const Brush *_brush);
-  void paintBrush(QPoint pos);
+  void paint(QPoint pos);
 
  public slots:
   virtual void mousePress(QMouseEvent*); 

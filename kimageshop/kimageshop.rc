@@ -50,6 +50,7 @@
  <ToolBar position="left">
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>
+  <Action name="tool_pen"/>	
   <Action name="tool_brush"/>
   <Action name="tool_gradient"/>
  </ToolBar>

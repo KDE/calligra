@@ -27,7 +27,7 @@
 KImageShopShell::KImageShopShell( QWidget* parent, const char* name )
     : KoMainWindow( parent, name )
 {
-  resize(640, 480);
+  resize(800, 600);
 }
 
 KImageShopShell::~KImageShopShell()

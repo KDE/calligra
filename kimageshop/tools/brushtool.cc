@@ -46,13 +46,13 @@ void BrushTool::mousePress(QMouseEvent *e)
   m_dragging = true;
   m_dragStart = e->pos();
   
-  paintBrush(e->pos());
+  paint(e->pos());
   
   QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
   m_pDoc->compositeImage(updateRect);
 }
 
-void BrushTool::paintBrush(QPoint pos)
+void BrushTool::paint(QPoint pos)
 {
   if (!m_pBrush)
     return;
@@ -117,7 +117,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
       
       if (length < 10)
 	{
-	  paintBrush(e->pos());
+	  paint(e->pos());
 	  updateRect = QRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
 	}
       else
@@ -129,12 +129,12 @@ void BrushTool::mouseMove(QMouseEvent *e)
 	    {
 	      if (i == steps)
 		{
-		  paintBrush(e->pos());
+		  paint(e->pos());
 		}
 	      else
 		{
 		  KVector bpos = start + moveVec * i * 10;
-		  paintBrush(QPoint(bpos.x(), bpos.y()));
+		  paint(QPoint(bpos.x(), bpos.y()));
 		}
 	    }
 	  
