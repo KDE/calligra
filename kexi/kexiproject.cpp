@@ -21,9 +21,10 @@
 #include <qcstring.h>
 #include <qdom.h>
 
+#include <koStore.h>
+
 #include "kexiapplication.h"
 #include "kexiproject.h"
-#include "kexidoc.h"
 
 #include <kdebug.h>
 
@@ -32,6 +33,7 @@ KexiProject::KexiProject(QObject* parent) : QObject(parent)
 	//hope that changes soon too
 	m_db = new KexiDB(this);
 	m_formManager=new KexiFormManager();
+	m_url = "";
 }
 
 KexiProject::~KexiProject()
@@ -41,6 +43,11 @@ KexiProject::~KexiProject()
 bool
 KexiProject::saveProject()
 {
+	if(m_url == "")
+	{
+		return false;
+	}
+	
 	QDomDocument domDoc("KexiProject");
 	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 	
@@ -81,21 +88,39 @@ KexiProject::saveProject()
 	QByteArray data = domDoc.toCString();
 	data.resize(data.size()-1);
 
-	if(kexi->store()->store("/project.xml", data))
+	KoStore* store = KoStore::createStore(m_url, KoStore::Write, "application/x-kexi");
+	
+	if(store)
 	{
+		store->open("/project.xml");
+		store->write(data);
+		store->close();
+		delete store;
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	
+	return false;
 }
 
 bool
-KexiProject::loadProject()
+KexiProject::saveProjectAs(const QString& url)
 {
-	QByteArray data = kexi->store()->readData("/project.xml");
+	m_url = url;
+	return saveProject();
+}
 
+bool
+KexiProject::loadProject(const QString& url)
+{
+	m_url = url;
+	KoStore* store = KoStore::createStore(m_url, KoStore::Read, "application/x-kexi");
+	
+	if(!store)
+	{
+		return false;
+	}
+	
+	store->open("/project.xml");
 	QDomDocument inBuf;
 	
 	//error reporting
@@ -103,7 +128,10 @@ KexiProject::loadProject()
 	int errorLine;
 	int errorCol;
 	
-	bool parsed = inBuf.setContent(data, &errorMsg, &errorLine, &errorCol);
+	bool parsed = inBuf.setContent(store->device(), false, &errorMsg, &errorLine, &errorCol);
+	store->close();
+	delete store;
+	
 	if(!parsed)
 	{
 		kdDebug() << "coudn't parse:" << endl;
@@ -128,6 +156,8 @@ KexiProject::loadProject()
 	parsedCred.password = passElement.text();
 	
 	initDbConnection(parsedCred);
+	
+	return true;
 }
 
 bool 

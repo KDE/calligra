@@ -49,12 +49,14 @@ public:
 	~KexiProject();
 
 	bool saveProject();
-	bool loadProject();
+	bool saveProjectAs(const QString& url);
+	bool loadProject(const QString& url);
 	bool initDbConnection(const Credentials& cred, const bool create = false);
 	bool initHostConnection(const Credentials &cred);
 	
 	KexiDB* db() { return m_db; };
 	KexiFormManager *formManager() {return m_formManager;}
+	QString url() { return m_url; }
 signals:
 	void docModified();
 
@@ -66,6 +68,7 @@ private:
 	KexiDB* m_db;
 	KexiFormManager *m_formManager;
 	Credentials m_cred;
+	QString m_url;
 };
 
 #endif
