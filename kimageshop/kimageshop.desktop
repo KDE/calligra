@@ -5,7 +5,7 @@ Name[is]=Myndvinnsla
 Name[pt_BR]=Manipulador de Imagens
 Exec=kimageshop
 MapNotify=true
-X-KDE-Library=libkimageshoppart
+X-KDE-Library=libkimageshop
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
@@ -14,7 +14,8 @@ Comment[ca]=Aplicació de manipulació d'imatges KOffice.
 Comment[cs]=Program pro manipulaci s obrázky pro KOffice
 Comment[da]=KOffice billedmanipulations program.
 Comment[de]=KOffice-Programm für die Bildbearbeitung
-Comment[el]=Εφαρμογή επεξεργασίας εικόνας του KOffice.
+Comment[el]=Εφαρμογή επεξεργασίας εικόνας του 
+KOffice.
 Comment[eo]=Bildmanipulilo de Oficejo
 Comment[es]=Aplicación de manipulación de imágenes de KOffice.
 Comment[et]=KOffice'i pilditöötlus programm
@@ -27,7 +28,8 @@ Comment[hu]=A KOffice képmanipuláló programja.
 Comment[is]=kimageshop:  Myndvinnsluforrit K-vöndulsins
 Comment[it]=Applicazione di manipolazione immagini di KOffice
 Comment[lt]=KOffice manipuliavimo paveikslėliais programa
-Comment[mk]=Апликација за манипулација со слики за KOffice
+Comment[mk]=Апликација за манипулација со слики 
+за KOffice
 Comment[nl]=KOffice's beeldbewerkingsprogramma
 Comment[no]=KOffices bildemanipuleringsprogram.
 Comment[no_NY]=Biletebehandling for KDE
@@ -35,7 +37,8 @@ Comment[pl]=Program graficzny do KOffice
 Comment[pt]=Uma aplicação de manipulação de imagens do KOffice
 Comment[pt_BR]=Aplicação de manipulação de imagens do KOffice
 Comment[ro]=Aplicaţie KOffice de prelucrat imagini
-Comment[ru]=Программа для манипуляции изображениями
+Comment[ru]=Программа для манипуляции 
+изображениями
 Comment[sk]=KOffice kresliaci program
 Comment[sl]=Program za obdelavo slik iz KOffice
 Comment[sv]=Bildmanipuleringsprogram för KOffice.
@@ -48,3 +51,4 @@ Type=Application
 Icon=kimageshop
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kimageshop
+
