@@ -24,6 +24,30 @@
     </Function>
 
     <Function>
+      <Name>FIXED</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Decimals</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>No_commas</Comment>
+	<Type>Bool</Type>
+      </Parameter>
+      <Help>
+	<Text>The FIXED() function rounds a number to the specified number of decimals, formats the number in decimal format string, and returns the result as text. If deciamls is negative, number is rounded to the left ot the decimal point. If you omit decimals, it is assumed to be 2. If optional parameter no_commas is True, thousand separators will not show up.</Text>
+	<Syntax>FIXED(number,decimals,no_commas)</Syntax>
+	<Example>FIXED(1234.567;1) returns "1,234.6"</Example>
+	<Example>FIXED(1234.567;1;FALSE) returns "1234.6"</Example>
+	<Example>FIXED(44.332) returns "44.33"</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>PROPER</Name>
       <Type>String</Type>
       <Parameter>

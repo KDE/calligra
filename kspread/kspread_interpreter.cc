@@ -153,7 +153,7 @@ bool kspreadfunc_concatenate( KSContext& context );
 bool kspreadfunc_dollar( KSContext& context ); 
 bool kspreadfunc_exact( KSContext& context );
 bool kspreadfunc_find( KSContext& context );
-bool kspreadfunc_fixed( KSContext& context ); //TODO
+bool kspreadfunc_fixed( KSContext& context ); 
 bool kspreadfunc_join( KSContext& context );    // obsolete, use CONCATENATE
 bool kspreadfunc_left( KSContext& context );
 bool kspreadfunc_len( KSContext& context );
@@ -639,7 +639,7 @@ static const functionEntry funcTab[] = {
   { "DOLLAR", kspreadfunc_dollar },
   { "EXACT", kspreadfunc_exact },
   { "FIND", kspreadfunc_find },
-  //{ "FIXED", kspreadfunc_fixed },
+  { "FIXED", kspreadfunc_fixed },
   { "JOIN", kspreadfunc_join }, // obsolete, use CONCATENATE
   { "LEFT", kspreadfunc_left },
   { "LEN", kspreadfunc_len },

@@ -221,7 +221,7 @@ bool kspreadfunc_find( KSContext& context )
 
     // conforms to Excel behaviour
     if( start_num <= 0 ) return false;
-    if( start_num > within_text.length() ) return false;
+    if( start_num > (int)within_text.length() ) return false;
 
     int pos = within_text.find( find_text, start_num-1 );
     if( pos < 0 ) return false;
@@ -229,6 +229,64 @@ bool kspreadfunc_find( KSContext& context )
     context.setValue( new KSValue( pos + 1 ) );
     return true;
 }
+
+// Function: FIXED
+bool kspreadfunc_fixed( KSContext& context )
+{
+  int decimals = 2;
+  bool no_commas = FALSE;
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "FIXED", true ) &&
+       !KSUtil::checkArgumentsCount( context, 2, "FIXED", true ) &&
+       !KSUtil::checkArgumentsCount( context, 3, "FIXED", true ) )
+         return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( KSUtil::checkArgumentsCount( context, 2, "FIXED", false ) ||
+       KSUtil::checkArgumentsCount( context, 3, "FIXED", false ) )
+    if ( KSUtil::checkType( context, args[1], KSValue::IntType, false ) )
+      decimals = args[1]->intValue();
+
+  if ( KSUtil::checkArgumentsCount( context, 3, "FIXED", false ) )
+    if ( KSUtil::checkType( context, args[2], KSValue::BoolType, false ) )
+       no_commas = args[2]->boolValue();
+
+  double number = args[0]->doubleValue();
+
+  QString result;
+
+  // unfortunately, we can't just use KLocale::formatNumber because
+  // * if decimals < 0, number is rounded 
+  // * if no_commas is TRUE, thousand separators shouldn't show up
+
+  if( decimals < 0 )
+  {
+    decimals = -decimals;
+    number = floor( number/pow(10.0,decimals)+0.5 ) * pow(10.0,decimals);
+    decimals = 0;
+  } 
+ 
+  bool neg = number < 0;
+  result = QString::number( neg ? -number:number, 'f', decimals );
+
+  int pos = result.find('.');
+  if (pos == -1) pos = result.length();
+    else result.replace(pos, 1, KGlobal::locale()->decimalSymbol());
+  if( !no_commas )
+    while (0 < (pos -= 3))
+      result.insert(pos, KGlobal::locale()->thousandsSeparator()); 
+ 
+  result.prepend( neg ? KGlobal::locale()->negativeSign():
+    KGlobal::locale()->positiveSign() );
+
+  context.setValue( new KSValue( result ) );
+  return true;
+}
+
 
 // Function: JOIN
 // This is obsolete, use CONCATENATE
