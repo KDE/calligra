@@ -700,6 +700,12 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
             tab.ptPos=0.0;
             if(element.hasAttribute("ptpos"))
                 tab.ptPos=element.attribute("ptpos").toDouble();
+            tab.filling=TF_BLANK;
+            if(element.hasAttribute("filling"))
+                tab.filling = static_cast<KoTabulatorFilling>( element.attribute("filling").toInt());
+            tab.ptWidth=0.5;
+            if(element.hasAttribute("width"))
+                tab.ptWidth=element.attribute("width").toDouble();
             tabList.append( tab );
         }
     }
@@ -809,6 +815,8 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
         parentElem.appendChild( element );
         element.setAttribute( "type", (*it).type );
         element.setAttribute( "ptpos", (*it).ptPos );
+        element.setAttribute( "filling", (*it).filling );
+        element.setAttribute( "width", (*it).ptWidth );
     }
 
     if(layout.shadowDistance!=0 || layout.shadowDirection!=KoParagLayout::SD_RIGHT_BOTTOM)
