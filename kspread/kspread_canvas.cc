@@ -2349,17 +2349,33 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
   QRect selection( table->selectionRect() );
 
+  QFont normalFont = painter.font();
+  QFont boldFont = normalFont;
+  boldFont.setBold( TRUE );
+  
   for ( int y = top_row; y <= bottom_row; y++ )
   {
-    bool selected = ( selection.left() != 0 && selection.right() == 0x7FFF &&
-                      y >= selection.top() && y <= selection.bottom() );
+    bool highlighted = ( selection.left() != 0 && y >= selection.top() && 
+                      y <= selection.bottom() );
+    bool selected = ( highlighted && selection.bottom() == 0x7FFF );
 
     RowLayout *row_lay = table->rowLayout( y );
 
     if ( selected )
     {
-      static QBrush fill2( colorGroup().brush( QColorGroup::Highlight ) );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1, &fill2 );
+      static QBrush fillSelected( 
+                  colorGroup().brush( QColorGroup::Highlight ) );
+      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, 
+                  row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1, 
+                  &fillSelected );
+    }
+    else if ( highlighted )
+    {
+      static QBrush fillHighlighted( 
+                  colorGroup().brush( QColorGroup::Background ) );
+      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, 
+                  row_lay->height( m_pCanvas ), colorGroup(), FALSE, 2, 
+                  &fillHighlighted );
     }
     else
     {
@@ -2370,10 +2386,14 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     char buffer[ 20 ];
     sprintf( buffer, "%i", y );
 
+    // Reset painter
+    painter.setFont( normalFont );
+    painter.setPen( colorGroup().text() );
+    
     if ( selected )
       painter.setPen( colorGroup().highlightedText() );
-    else
-      painter.setPen( colorGroup().text() );
+    else if ( highlighted )
+      painter.setFont( boldFont );
     int len = painter.fontMetrics().width(buffer );
     painter.drawText( (YBORDER_WIDTH-len)/2, ypos +
                     ( row_lay->height( m_pCanvas ) + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
@@ -2711,31 +2731,47 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
   QRect selection( table->selectionRect() );
 
+  QFont normalFont = painter.font();
+  QFont boldFont = normalFont;
+  boldFont.setBold( TRUE );
+
   for ( int x = left_col; x <= right_col; x++ )
   {
-    bool selected = ( selection.left() != 0 && selection.bottom() == 0x7FFF &&
-                      x >= selection.left() && x <= selection.right() );
+    bool highlighted = ( selection.left() != 0 && x >= selection.left() && 
+                      x <= selection.right() );
+    bool selected = ( highlighted && selection.bottom() == 0x7FFF );
 
     ColumnLayout *col_lay = table->columnLayout( x );
 
     if ( selected )
     {
-      static QBrush fill2( colorGroup().brush( QColorGroup::Highlight ) );
+      static QBrush fillSelected( 
+                  colorGroup().brush( QColorGroup::Highlight ) );
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
-                       XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill2 );
+                  XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fillSelected );
+    }
+    else if ( highlighted )
+    {
+      static QBrush fillHighlighted( 
+                  colorGroup().brush( QColorGroup::Background ) );
+      qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
+                  XBORDER_HEIGHT, colorGroup(), FALSE, 2, &fillHighlighted );
     }
     else
     {
       static QBrush fill( colorGroup().brush( QColorGroup::Background ) );
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
-                       XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
+                  XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
     }
 
+    // Reset painter
+    painter.setFont( normalFont );
+    painter.setPen( colorGroup().text() );
 
     if ( selected )
       painter.setPen( colorGroup().highlightedText() );
-    else
-      painter.setPen( colorGroup().text() );
+    else if ( highlighted ) 
+      painter.setFont( boldFont );
     if(!m_pView->activeTable()->getShowColumnNumber())
     	{
     	int len = painter.fontMetrics().width( util_columnLabel(x) );
