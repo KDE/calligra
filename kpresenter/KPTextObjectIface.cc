@@ -282,3 +282,31 @@ double KPTextObjectIface::ptMarginBottom()const
 {
     return m_textobject->bBottom();
 }
+
+void KPTextObjectIface::setVerticalAligment( const QString & type)
+{
+    if ( type.lower() =="center" )
+        m_textobject->setVerticalAligment( KPTextObject::KP_CENTER );
+    else if ( type.lower() =="top" )
+        m_textobject->setVerticalAligment( KPTextObject::KP_TOP );
+    else if ( type.lower() =="bottom" )
+        m_textobject->setVerticalAligment( KPTextObject::KP_BOTTOM );
+}
+
+QString KPTextObjectIface::verticalAlignment() const
+{
+    switch( m_textobject->verticalAlignment() )
+    {
+    case KPTextObject::KP_CENTER:
+        return QString("center");
+        break;
+    case KPTextObject::KP_TOP:
+        return QString("top");
+        break;
+    case KPTextObject::KP_BOTTOM:
+        return QString("bottom");
+        break;
+    default:
+        break;
+    }
+}

@@ -99,7 +99,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     : KP2DObject()
 {
     m_doc=doc;
-
+    m_textVertAlign = KP_TOP;
     KPrTextDocument * textdoc = new KPrTextDocument( this ,
                                                      new KoTextFormatCollection( doc->defaultFont() ));
 
@@ -1590,7 +1590,7 @@ void KPTextView::drawCursor( bool b )
 
 void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &/*_pos*/)
 {
-    QPoint iPoint=e->pos() - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig());
+    QPoint iPoint=e->pos() - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()) );
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
 
     handleMousePressEvent( e, iPoint );
@@ -1792,7 +1792,7 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
         e->ignore();
         return;
     }
-    QPoint iPoint=e->pos() - doc->zoomHandler()->zoomPoint(kpTextObject()->getOrig());
+    QPoint iPoint=e->pos() - doc->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()));
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
 
     textObject()->emitHideCursor();
@@ -1813,7 +1813,7 @@ void KPTextView::dropEvent( QDropEvent * e )
     {
         e->acceptAction();
         KoTextCursor dropCursor( textDocument() );
-        QPoint dropPoint=e->pos() - doc->zoomHandler()->zoomPoint( kpTextObject()->getOrig());
+        QPoint dropPoint=e->pos() - doc->zoomHandler()->zoomPoint( kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()));
         dropPoint=doc->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         dropCursor.place( dropPoint, textDocument()->firstParag() );

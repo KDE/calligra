@@ -55,6 +55,8 @@ public:
     KPTextObject( KPresenterDoc *doc );
     virtual ~KPTextObject();
 
+    enum VerticalAlignmentType { KP_CENTER=0, KP_TOP=1, KP_BOTTOM=2};
+
     virtual DCOPObject* dcopObject();
 
     virtual void setSize( double _width, double _height );
@@ -153,6 +155,9 @@ public:
     double innerHeight() const;
     void resizeTextDocument();
 
+    VerticalAlignmentType verticalAlignment() const { return m_textVertAlign; }
+    void setVerticalAligment( VerticalAlignmentType _type) { m_textVertAlign = _type;}
+
 signals:
     void repaintChanged( KPTextObject* );
 
@@ -188,7 +193,7 @@ private:
     KoTextObject *m_textobj;
     KPresenterDoc *m_doc;
     KoParagLayout m_paragLayout;
-
+    VerticalAlignmentType m_textVertAlign;
     double bleft, bright, btop, bbottom; // margins
 
     bool drawEditRect, drawEmpty;

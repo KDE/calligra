@@ -563,7 +563,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint,m_view->zoomHandler() ))
         {
-            KoPoint pos = docPoint - txtObj->getOrig(); // in pt, but now translated into the object's coordinate system
+            KoPoint pos = docPoint - txtObj->innerRect().topLeft(); // in pt, but now translated into the object's coordinate system
             mousePressed=true;
             if(e->button() == RightButton)
             {
@@ -1524,7 +1524,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint,m_view->zoomHandler() )&&mousePressed)
         {
-            KoPoint pos = docPoint - txtObj->getOrig();
+            KoPoint pos = docPoint - txtObj->innerRect().topLeft();
             m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
         }
         return;

@@ -84,6 +84,9 @@ k_dcop:
     void setPtMarginTop(double val);
     void setPtMarginBottom(double val);
 
+    void setVerticalAligment( const QString & type);
+    QString verticalAlignment() const;
+
 private:
     KPTextObject *m_textobject;
 };
