@@ -1,7 +1,7 @@
 class kchartEngine {
 public:
   KChartParameters* params;
-  KChartData* data;
+  KChartData const * data;
   QPainter *p;
   int imagewidth;
   int imageheight;  
