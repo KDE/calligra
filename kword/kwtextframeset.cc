@@ -3875,20 +3875,28 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                 // Dropping into the selection itself ?
                 QTextCursor startSel = textDocument()->selectionStartCursor( QTextDocument::Standard );
                 QTextCursor endSel = textDocument()->selectionEndCursor( QTextDocument::Standard );
-                // Looking at first line first:
-                bool inSelection = dropCursor.parag() == startSel.parag() && dropCursor.index() >= startSel.index();
-                if ( !inSelection )
+                bool inSelection = false;
+                if ( startSel.parag() == endSel.parag() )
+                    inSelection = ( dropCursor.parag() == startSel.parag() )
+                                    && dropCursor.index() >= startSel.index()
+                                    && dropCursor.index() <= endSel.index();
+                else
                 {
-                    // Look at all paragraphs except last one
-                    QTextParag *p = startSel.parag();
-                    while ( !inSelection && p && p != endSel.parag() )
-                    {
-                        inSelection = ( p == dropCursor.parag() );
-                        p = p->next();
-                    }
-                    // Look at last paragraph
+                    // Looking at first line first:
+                    inSelection = dropCursor.parag() == startSel.parag() && dropCursor.index() >= startSel.index();
                     if ( !inSelection )
-                        inSelection = dropCursor.parag() == endSel.parag() && dropCursor.index() <= endSel.index();
+                    {
+                        // Look at all other paragraphs except last one
+                        QTextParag *p = startSel.parag()->next();
+                        while ( !inSelection && p && p != endSel.parag() )
+                        {
+                            inSelection = ( p == dropCursor.parag() );
+                            p = p->next();
+                        }
+                        // Look at last paragraph
+                        if ( !inSelection )
+                            inSelection = dropCursor.parag() == endSel.parag() && dropCursor.index() <= endSel.index();
+                    }
                 }
                 if ( inSelection )
                 {
