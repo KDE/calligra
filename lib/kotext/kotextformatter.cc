@@ -17,6 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qglobal.h>
+#if QT_VERSION >= 0x030200
+#define INDIC
+#endif
+
 #include "kotextformatter.h"
 #include "kotextformat.h"
 #include "kotextdocument.h"
@@ -39,9 +44,6 @@
 
 /////// keep in sync with kotextformat.cc !
 //#define REF_IS_LU
-
-// ### TODO: check Qt version
-#define INDIC
 
 KoTextFormatter::KoTextFormatter()
 {

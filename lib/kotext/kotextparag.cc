@@ -30,8 +30,10 @@
 
 //#define DEBUG_PAINT
 
-// ### TODO: make it depend on the Qt version
+#include <qglobal.h>
+#if QT_VERSION >= 0x030200
 #define INDIC
+#endif
 
 // Return the counter associated with this paragraph.
 KoParagCounter *KoTextParag::counter()

@@ -33,9 +33,6 @@
 **
 **********************************************************************/
 
-// ### TODO: make it depend on Qt version
-#define INDIC
-
 #include "korichtext.h"
 #include "kotextformat.h"
 
@@ -4516,19 +4513,16 @@ bool KoTextFormatterBase::isStretchable( KoTextString *string, int pos ) const
 
 bool KoTextFormatterBase::isBreakable( KoTextString *string, int pos ) const
 {
+#ifdef INDIC
+    //if (string->at(pos).nobreak)
+    //    return FALSE;
+    return (pos < string->length()-1 && string->at(pos+1).softBreak);
+#endif
+
 #ifndef INDIC
     const QChar &c = string->at( pos ).c;
     char ch = c.latin1();
     if ( c.isSpace() && ch != '\n' && c.unicode() != 0x00a0U )
-#else
-    //if (string->at(pos).nobreak)
-    //    return FALSE;
-    return (pos < string->length()-1 && string->at(pos+1).softBreak);
-
-#if 0
-    const QChar &c = string->at(pos).c;
-    if ( c.isSpace() && c.unicode() != '\n' && c.unicode() != 0x00a0U )
-#endif
 	return TRUE;
     if ( c == '-' || c.unicode() == 0xad ) // hyphen or soft hyphen
 	return TRUE;

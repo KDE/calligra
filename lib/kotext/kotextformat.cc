@@ -17,6 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qglobal.h>
+#if QT_VERSION >= 0x030200
+#define INDIC
+#endif
+
 #include "kotextformat.h"
 #include "korichtext.h" // for KoTextParag etc.
 #include "kozoomhandler.h"
@@ -733,8 +738,13 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
                              const KoTextParag* parag, int i ) const
 {
     ushort unicode = c->c.unicode();
+#ifndef INDIC
+    if ( unicode == 0xad ) // soft hyphen
+	return 0;
+#else
     if ( !c->charStop || unicode == 0xad || unicode == 0x2028 )
 	 return 0;
+#endif
     Q_ASSERT( !c->isCustom() ); // actually it's a bit stupid to call this for custom items
     if( c->isCustom() ) {
 	 if( c->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
@@ -747,7 +757,11 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
     }
     int pixelww;
     int r = c->c.row();
+#ifndef INDIC
+    if( r < 0x06 || r > 0x1f )
+#else
     if( /*r < 0x06 || r > 0x1f*/ r < 0x06 || (r > 0x1f && !(r > 0xd7 && r < 0xe0)) )
+#endif
     {
         // Small caps -> we can't use the cached font metrics from KoTextFormat
         if ( attributeFont() == KoTextFormat::ATT_SMALL_CAPS && c->c.upper() != c->c )
@@ -782,10 +796,19 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
         const QFontMetrics& fontMetrics = smallCaps ? smallCapsFont( zh, applyZoom ) : applyZoom ? screenFontMetrics( zh ) : refFontMetrics();
         QString str;
         int pos = 0;
+#ifndef INDIC
+        if( i > 4 )
+            pos = i - 4;
+#else
         if( i > 8 )
             pos = i - 8;
+#endif
         int off = i - pos;
+#ifndef INDIC
+        int end = QMIN( parag->length(), i + 4 );
+#else
         int end = QMIN( parag->length(), i + 8 );
+#endif
         while ( pos < end ) {
             str += displayedChar( parag->at(pos)->c );
             pos++;

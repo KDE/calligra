@@ -83,8 +83,10 @@
 #include "qapplication.h"
 #endif // QT_H
 
-// ### TODO: make it depend on Qt version
+#include <qglobal.h>
+#if QT_VERSION >= 0x030200
 #define INDIC
+#endif
 
 class KoTextParag;
 class KoTextString;
