@@ -345,7 +345,7 @@ void KWView::setupActions()
                                                   this, SLOT( toolsFormula() ),
                                                   actionCollection(), "tools_formula" );
     actionToolsCreateFormula->setExclusiveGroup( "tools" );
-    actionToolsCreatePart = new KToggleAction( i18n( "&Create Part Frame" ), "parts", Key_F12,
+    actionToolsCreatePart = new KToggleAction( i18n( "&Create Object Frame" ), "parts", Key_F12,
                                                this, SLOT( toolsPart() ),
                                                actionCollection(), "tools_part" );
     actionToolsCreatePart->setExclusiveGroup( "tools" );
