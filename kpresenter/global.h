@@ -60,7 +60,7 @@ enum PieType {PT_PIE = 0,PT_ARC = 1,PT_CHORD = 2};
 enum ToolEditMode {TEM_MOUSE = 0,INS_RECT = 1,INS_ELLIPSE = 2,INS_TEXT = 3,INS_PIE = 4,INS_OBJECT = 5,INS_LINE = 6,INS_DIAGRAMM = 7,\
 		   INS_TABLE = 8,INS_FORMULA = 9,INS_AUTOFORM = 10};
 
-static const float ObjSpeed[] = {80.0,60.0,40.0};
+static const float ObjSpeed[] = {70.0,50.0,30.0};
 static const float PageSpeed[] = {8.0,16.0,32.0};
 
 // offsets of the effects in the Effect2 enum accoording to a objType
