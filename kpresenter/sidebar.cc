@@ -23,6 +23,7 @@
 #include <qpopupmenu.h>
 #include <qimage.h>
 #include <qtabwidget.h>
+#include <qtooltip.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -36,6 +37,44 @@
 #include "kprcanvas.h"
 #include <qapplication.h>
 #include "kprcommand.h"
+
+class ThumbToolTip : public QToolTip
+{
+public:
+    ThumbToolTip(QWidget *parent)
+     : QToolTip(parent)
+     {}
+
+protected:
+    void maybeTip(const QPoint &pos)
+    {
+        QString title;
+        QRect r(((ThumbBar*)parentWidget())->tip(pos, title));
+        if (!r.isValid())
+            return;
+
+        tip(r, title);
+    }
+};
+
+class OutlineToolTip : public QToolTip
+{
+public:
+    OutlineToolTip(QWidget *parent)
+     : QToolTip(parent)
+     {}
+
+protected:
+    void maybeTip( const QPoint &pos )
+    {
+        QString title;
+        QRect r(((Outline*)parentWidget())->tip(pos, title));
+        if (!r.isValid())
+            return;
+
+        tip(r, title);
+    }
+};
 
 class OutlineItem: public QCheckListItem
 {
@@ -97,13 +136,35 @@ ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 {
   uptodate = false;
 
-  setArrangement(QIconView::TopToBottom);
-  setAutoArrange(false);
+  setArrangement(QIconView::LeftToRight);
+  setAutoArrange(true);
   setSorting(false);
   setItemsMovable(false);
+  setResizeMode(QIconView::Adjust);
+
+  thumbTip = new ThumbToolTip(this);
 
   connect(this, SIGNAL(currentChanged(QIconViewItem *)),
           this, SLOT(itemClicked(QIconViewItem *)));
+}
+
+ThumbBar::~ThumbBar()
+{
+    delete thumbTip;
+}
+
+QRect ThumbBar::tip(const QPoint &pos, QString &title)
+{
+    QIconViewItem *item = findItem(viewportToContents(pos));
+    if (!item)
+        return QRect(0, 0, -1, -1);
+
+    int pagenr =  item->index();
+    title = doc->pageList().at(pagenr)->pageTitle(i18n("Slide %1").arg(pagenr + 1));
+
+    QRect r = item->pixmapRect(FALSE);
+    r = QRect(contentsToViewport(QPoint(r.x(), r.y())), QSize(r.width(), r.height()));
+    return r;
 }
 
 void ThumbBar::rebuildItems()
@@ -119,7 +180,6 @@ void ThumbBar::rebuildItems()
     QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
     item->setDragEnabled(false);  //no dragging for now
   }
-  arrangeItemsInGrid(QSize(130, 120), true);
 
   uptodate = true;
 
@@ -154,6 +214,11 @@ QPixmap ThumbBar::getSlideThumb(int slideNr)
   const QImage img(pix.convertToImage().smoothScale( w, h, QImage::ScaleMin ));
   pix.convertFromImage(img);
 
+  // draw a frame around the thumb to show its size
+  QPainter p(&pix);
+  p.setPen(Qt::black);
+  p.drawRect(pix.rect());
+
   return pix;
 }
 
@@ -173,6 +238,9 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     addColumn( i18n( "Slide" ) );
     addColumn( i18n( "Number" ) );
     setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+
+    outlineTip = new OutlineToolTip(this);
+
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
     connect( this, SIGNAL( moved( QListViewItem *, QListViewItem *, QListViewItem * ) ),
              this, SLOT( movedItems( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
@@ -188,6 +256,11 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
 
 }
 
+Outline::~Outline()
+{
+    delete outlineTip;
+}
+
 void Outline::rebuildItems()
 {
     clear();
@@ -198,7 +271,10 @@ void Outline::rebuildItems()
         //kdDebug(33001) << "Outline::rebuildItems slide " << i+1 << " selected:" << doc->isSlideSelected( i ) << endl;
         item->setOn( doc->isSlideSelected( i ) ); // calls itemStateChange !
         item->setText( 1, QString::number( i + 1 ) ); // page number
-        item->setText( 0, title );
+        if (title.length() > 12) // restrict to a maximum of 12 characters
+            item->setText(0, title.left(5) + "..." + title.right(4));
+        else
+            item->setText( 0, title );
     }
 }
 
@@ -211,7 +287,11 @@ void Outline::updateItem( int pagenr /* 0-based */)
         if ( it.current()->text(1).toInt() == pagenr+1 )
         {
             QString title = doc->pageList().at(pagenr)->pageTitle( i18n( "Slide %1" ).arg( pagenr + 1 ) );
-            it.current()->setText( 0, title );
+            if (title.length() > 12) // restrict to a maximum of 12 characters
+                it.current()->setText( 0, title.left(5) + "..." + title.right(4));
+            else
+                it.current()->setText( 0, title );
+
             it.current()->setText( 1, QString::null ); // hack, to make itemStateChange do nothing
             static_cast<OutlineItem*>(it.current())->setOn( doc->isSlideSelected( pagenr ) );
             it.current()->setText( 1, QString::number( pagenr + 1 ) ); // page number
@@ -226,6 +306,18 @@ void Outline::itemStateChange( OutlineItem * item, bool state )
     QString text = item->text( 1 );
     if ( !text.isEmpty() ) // empty if we are called from rebuildItems
         emit selectPage( text.toInt() - 1, state );
+}
+
+QRect Outline::tip(const QPoint &pos, QString &title)
+{
+    QListViewItem *item = itemAt( pos );
+    if (!item)
+        return QRect(0, 0, -1, -1);
+
+    int pagenr = item->text(1).toInt() - 1;
+    title = doc->pageList().at(pagenr)->pageTitle(i18n("Slide %1").arg(pagenr + 1));
+
+    return itemRect(item);
 }
 
 void Outline::itemClicked( QListViewItem *i )

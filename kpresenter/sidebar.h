@@ -20,6 +20,7 @@
 #ifndef SIDEBAR_H
 #define SIDEBAR_H
 
+#include <qrect.h>
 #include <qtabwidget.h>
 
 #include <kiconview.h>
@@ -33,7 +34,8 @@ class QPopupMenu;
 class Outline;
 class OutlineItem;
 class ThumbBar;
-
+class ThumbToolTip;
+class OutlineToolTip;
 
 class ThumbBar : public KIconView
 {
@@ -41,6 +43,9 @@ class ThumbBar : public KIconView
 
 public:
   ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
+  ~ThumbBar();
+  QRect tip(const QPoint &pos, QString &title);
+
   bool uptodate;
 
 signals:
@@ -54,9 +59,10 @@ private slots:
 
 private:
   QPixmap getSlideThumb(int slideNr);
-  
+
   KPresenterDoc *doc;
   KPresenterView *view;
+  ThumbToolTip *thumbTip;
 };
 
 
@@ -67,12 +73,14 @@ class Outline: public KListView
 
 public:
     Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v );
+    ~Outline();
     void setCurrentPage( int pg );
     void setOn( int pg, bool on );
     QSize sizeHint() const { return QSize( 145, KListView::sizeHint().height() ); }
     void updateItem( int pagenr );
     // Called by OutlineItem
     void itemStateChange( OutlineItem * item, bool state );
+    QRect tip(const QPoint &pos, QString &title);
 
 protected:
     void contentsDropEvent( QDropEvent *e );
@@ -97,6 +105,7 @@ private:
     KPresenterDoc *doc;
     KPresenterView *view;
     QListViewItem *movedItem, *movedAfter;
+    OutlineToolTip *outlineTip;
 };
 
 
