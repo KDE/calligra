@@ -52,7 +52,7 @@
 #include <kspell.h>
 
 #include <KWordDocIface.h>
-
+#include "kwautoformat.h"
 //#define DEBUG_PAGES
 
 /******************************************************************/
@@ -152,7 +152,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_lastViewMode="ModeNormal";
 
-    m_autoFormat = new KoAutoFormat(this);
+    m_autoFormat = new KWAutoFormat(this);
 
     m_commandHistory = new KWCommandHistory( this );
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
