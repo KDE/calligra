@@ -593,7 +593,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
         m.translate( pw / 2, ph / 2 );
         m = mtx * m;
 
-        _painter->setWorldMatrix( m );
+        _painter->setWorldMatrix( m, true );
 
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );

@@ -165,7 +165,9 @@ public:
 
     virtual void setSticky( bool b ) { sticky = b; }
     bool isSticky() const { return sticky; }
-    
+
+    static void setupClipRegion( QPainter *painter, const QRegion &clipRegion );
+
 protected:
     virtual void getShadowCoords( int& _x, int& _y, ShadowDirection _direction, int _distance );
     virtual void paintSelection( QPainter *_painter );
@@ -197,7 +199,7 @@ protected:
     int cmds;
     bool move;
     bool sticky;
-    
+
     DCOPObject *dcop;
 
 };

@@ -365,7 +365,8 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
     }
 
     _painter->save();
-    _painter->setClipRect( getBoundingRect( _diffx, _diffy ) );
+//    _painter->setClipRect( getBoundingRect( _diffx, _diffy ) );
+    setupClipRegion( _painter, getBoundingRect( _diffx, _diffy ) );
 
     int ox = orig.x() - _diffx;
     int oy = orig.y() - _diffy;
@@ -422,7 +423,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             m.translate( pw / 2, ph / 2 );
             m = mtx * m;
 
-            _painter->setWorldMatrix( m );
+            _painter->setWorldMatrix( m, true );
 
             int sx = 0;
             int sy = 0;
@@ -485,7 +486,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         m.translate( pw / 2, ph / 2 );
         m = mtx * m;
 
-        _painter->setWorldMatrix( m );
+        _painter->setWorldMatrix( m, true );
 
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );

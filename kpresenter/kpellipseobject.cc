@@ -420,7 +420,7 @@ void KPEllipseObject::draw( QPainter *_painter, int _diffx, int _diffy )
             m2.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
             m = m2 * mtx * m;
 
-            _painter->setWorldMatrix( m );
+            _painter->setWorldMatrix( m, true );
             paint( _painter );
         }
 
@@ -455,7 +455,7 @@ void KPEllipseObject::draw( QPainter *_painter, int _diffx, int _diffy )
         m2.translate( rr.left() + xPos, rr.top() + yPos );
         m = m2 * mtx * m;
 
-        _painter->setWorldMatrix( m );
+        _painter->setWorldMatrix( m, true );
         paint( _painter );
     }
 
@@ -497,7 +497,8 @@ void KPEllipseObject::paint( QPainter* _painter )
             if ( _painter->hasClipping() )
                 clipregion = _painter->clipRegion().intersect( clipregion );
 
-            _painter->setClipRegion( clipregion );
+//            _painter->setClipRegion( clipregion );
+            setupClipRegion( _painter, clipregion );
 
             _painter->drawPixmap( pw, pw, *gradient->getGradient() );
 
@@ -513,7 +514,8 @@ void KPEllipseObject::paint( QPainter* _painter )
                 QPainter p;
 
                 p.begin( &pic );
-                p.setClipRegion( clipregion );
+//                p.setClipRegion( clipregion );
+                setupClipRegion( &p, clipregion );
                 p.drawPixmap( 0, 0, *gradient->getGradient() );
                 p.end();
 

@@ -497,7 +497,7 @@ void KPPieObject::draw( QPainter *_painter, int _diffx, int _diffy )
             m2.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
             m = m2 * mtx * m;
 
-            _painter->setWorldMatrix( m );
+            _painter->setWorldMatrix( m, true );
             paint( _painter );
         }
 
@@ -532,7 +532,7 @@ void KPPieObject::draw( QPainter *_painter, int _diffx, int _diffy )
         m2.translate( rr.left() + xPos, rr.top() + yPos );
         m = m2 * mtx * m;
 
-        _painter->setWorldMatrix( m );
+        _painter->setWorldMatrix( m, true );
         paint( _painter );
     }
 

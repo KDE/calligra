@@ -331,8 +331,8 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
     KPresenterView *view = (KPresenterView*)firstView(); // ####### do some syncing between views
     if ( view )
 	selectedSlides = view->selectedSlideMap();
-    
-    
+
+
     QTextStream out( dev );
     out.setEncoding(QTextStream::UnicodeUTF8);
     KPObject *kpobject = 0L;
@@ -638,7 +638,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
     clipartCollectionNames.clear();
     lastObj = -1;
     bool allSlides = FALSE;
-    
+
     // clean
     if ( _clean ) {
         //KoPageLayout __pgLayout;
@@ -1053,7 +1053,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 	    selectedSlides.replace( k, TRUE );
 	}
     }
-    
+
     return true;
 }
 
@@ -3390,7 +3390,7 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 	QString cmd = "cp " + fileName + " " + QString( getenv( "HOME" )  ) + "/.default.kpr";
 	system( cmd.latin1() );
     }
-	
+
     _clean = false;
 
     if ( _insPos == IP_AFTER )
@@ -3900,9 +3900,23 @@ KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 }
 
 /*================================================================*/
-void KPresenterDoc::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/ )
+void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/ )
 {
-    qDebug("------------------ ::paintContent still unimplemented ----------" );
+    unsigned int i = 0;
+    QListIterator<KPBackGround> bIt( _backgroundList );
+    for (; bIt.current(); ++bIt, i++ )
+    {
+        QRect r = getPageSize( i, 0, 0, 1.0, false );
+        if ( rect.intersects( r ) )
+            bIt.current()->draw( &painter, QPoint( r.x(), r.y() ), false );
+    }
+
+
+    QListIterator<KPObject> oIt( *_objectList );
+    for (; oIt.current(); ++oIt )
+        if ( rect.intersects( oIt.current()->getBoundingRect( 0, 0 ) ) )
+            oIt.current()->draw( &painter, 0, 0 );
+
 }
 
 /*================================================================*/

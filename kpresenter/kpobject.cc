@@ -366,7 +366,7 @@ void KPObject::paintSelection( QPainter *_painter )
             m2.translate( rr.left() + xPos, rr.top() + yPos );
             m = m2 * mtx * m;
 
-            _painter->setWorldMatrix( m );
+            _painter->setWorldMatrix( m, true );
         }
 
         _painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
@@ -408,4 +408,15 @@ DCOPObject* KPObject::dcopObject()
         dcop = new KPresenterObjectIface( this );
 
     return dcop;
+}
+
+void KPObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
+{
+    QRegion region = painter->clipRegion();
+    if ( region.isEmpty() )
+        region = clipRegion;
+    else
+        region.unite( clipRegion );
+
+    painter->setClipRegion( region );
 }
