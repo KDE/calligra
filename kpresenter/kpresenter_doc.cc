@@ -1018,15 +1018,31 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     m_pictureCollection.saveOasisToStore( store, usedPictures, manifestWriter);
 
+    if(!store->open("settings.xml"))
+        return false;
+
+    KoXmlWriter settingsWriter(&contentDev, "office:document-settings");
+    settingsWriter.startElement("office:settings");
+    settingsWriter.startElement("config:config-item-set");
+    settingsWriter.addAttribute("config:name", "kspread:settings");
+
+    KoUnit::saveOasis(&settingsWriter, m_unit);
+
+    settingsWriter.endElement(); // config:config-item-set
+    settingsWriter.endElement(); // office:settings
+    settingsWriter.endElement(); // Root element
+    settingsWriter.endDocument();
+
+    if(!store->close())
+        return false;
+
+    manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
     //reset progressbar
     emit sigProgress( 100 );
     emit sigProgress( -1 );
 
     setModified( false );
-
-    // TODO settings.xml
-    // manifestWriter->addManifestEntry( "settings.xml", "text/xml" );
 
     return true;
 }

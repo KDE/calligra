@@ -664,6 +664,25 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->close() ) // done with styles.xml
         return false;
 
+    if(!store->open("settings.xml"))
+        return false;
+
+    KoXmlWriter settingsWriter(&dev, "office:document-settings");
+    settingsWriter.startElement("office:settings");
+    settingsWriter.startElement("config:config-item-set");
+    settingsWriter.addAttribute("config:name", "kspread:settings");
+
+    KoUnit::saveOasis(&settingsWriter, unit());
+
+    settingsWriter.endElement(); // config:config-item-set
+    settingsWriter.endElement(); // office:settings
+    settingsWriter.endElement(); // Root element
+    settingsWriter.endDocument();
+
+    if(!store->close())
+        return false;
+
+    manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
     setModified( false );
 
