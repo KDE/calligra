@@ -289,6 +289,9 @@ void Canvas::compositeImage(QRect r)
     for(int x=0;x<xTiles;x++)
       if (r.isNull() ||
 					r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE))) {
+				// set the alpha channel to opaque
+				memset(compose->channelMem(0, 0,0, true),255, 
+							 TILE_SIZE*TILE_SIZE);
 				compositeTile(x,y, compose, 0);
 				
 				convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
@@ -461,6 +464,7 @@ void Canvas::renderTileQuadrant(const Layer *srcLay, int srcTile,
   int leadIn=(TILE_SIZE-w);
 
 	uchar *composeD=dstLay->channelMem(dstTile, dstX, dstY);
+	uchar *composeA=dstLay->channelMem(dstTile, dstX, dstY, true);
 	uchar *channelD=srcLay->channelMem(srcTile, srcX, srcY);
 	uchar *alpha   =srcLay->channelMem(srcTile, srcX, srcY, true);
 
@@ -485,12 +489,18 @@ void Canvas::renderTileQuadrant(const Layer *srcLay, int srcTile,
 			opac=(*alpha*opacity)/255;
 			invOpac=255-opac;
 			// fix this (in a fast way for colour spaces
-			*composeD++ = (*composeD * invOpac + *channelD++ * opac)/255;
-			*composeD++ = (*composeD * invOpac + *channelD++ * opac)/255;
-			*composeD++ = (*composeD * invOpac + *channelD++ * opac)/255;
+			*composeD++ = (((*composeD * *composeA)/255) * invOpac + 
+										 *channelD++ * opac)/255;
+			*composeD++ = (((*composeD * *composeA)/255) * invOpac + 
+										 *channelD++ * opac)/255;
+			*composeD++ = (((*composeD * *composeA)/255) * invOpac + 
+										 *channelD++ * opac)/255;
+			*composeA=*alpha + *composeA - (*alpha * *composeA)/255;
+			composeA+=alphaInc;
 			alpha+=alphaInc;
 		}
 		composeD+=leadIn;
+		composeA+=alphaLeadIn;
 		channelD+=leadIn;
 		alpha+=alphaLeadIn;
 	}
