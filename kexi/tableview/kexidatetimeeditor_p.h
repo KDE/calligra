@@ -65,6 +65,7 @@ private:
 	int offset;
 };
 
+#ifdef KEXIDATETIMEEDITOR_P_IMPL
 uint QDateTimeEditorPrivate::sectionCount() const { return (uint)sections.count(); }
 
 int QDateTimeEditorPrivate::focusSection() const { return focusSec; }
@@ -110,6 +111,8 @@ uint QDateTimeEditor::sectionCount() const
 {
 	return d->sectionCount();
 }
+
+#endif //KEXIDATATIMEEDITOR_P_IMPL
 
 #endif
 

@@ -20,6 +20,8 @@
  */
 
 #include "kexidatetableedit.h"
+
+#define KEXIDATETIMEEDITOR_P_IMPL
 #include "kexidatetimeeditor_p.h"
 
 #include <qapplication.h>
