@@ -6,13 +6,13 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
 kde_module_LTLIBRARIES = libkwordpart.la
 
 ## The part
-libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc kwformulaframe.cc \
+libkwordpart_la_SOURCES = kwtableframeset.cc kwcanvas.cc kwframe.cc kwformulaframe.cc \
 		kwfactory.cc kwdoc.cc \
 		kwview.cc  \
                 kwviewmode.cc \
 		kwtextparag.cc kwtextdocument.cc \
 		kwtextframeset.cc kwpartframeset.cc \
-                kwtableframeset.cc kwtextimage.cc kwanchor.cc \
+                kwtextimage.cc kwanchor.cc \
                 kwdrag.cc kwconfig.cc \
 		kwvariable.cc \
 		framedia.cc footnotedia.cc \
