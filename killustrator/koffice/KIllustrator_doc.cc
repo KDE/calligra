@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -32,9 +32,9 @@
 #include <opApplication.h>
 #include <qmessagebox.h>
 
-KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu, 
-				      const QRect& rect, 
-				      KOffice::Document_ptr doc) 
+KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu,
+				      const QRect& rect,
+				      KOffice::Document_ptr doc)
   : KoDocumentChild (rect, doc) {
   m_pKilluDoc = killu;
   cout << "mime type = " << (const char *) m_strMimeType << endl;
@@ -60,7 +60,7 @@ const char* KIllustratorChild::urlForSave () {
 
 KIllustratorDocument::KIllustratorDocument () {
   ADD_INTERFACE("IDL:KOffice/Print:1.0")
-  cout << "create new KIllustratorDocument: ior = " 
+  cout << "create new KIllustratorDocument: ior = "
        << opapp_orb->object_to_string (this) << endl;
 
   GObject::registerPrototype ("object", new GPart ());
@@ -82,9 +82,9 @@ bool KIllustratorDocument::save (ostream& os, const char* fmt) {
 void KIllustratorDocument::cleanUp () {
   if (m_bIsClean)
     return;
-  
+
   m_lstChildren.clear ();
-  
+
   KoDocument::cleanUp ();
 }
 
@@ -117,11 +117,11 @@ bool KIllustratorDocument::loadChildren (KOStore::Store_ptr store) {
     if (! it.current ()->loadDocument (store, it.current ()->mimeType ()))
       return false;
   }
-  
+
   return true;
 }
 
-void KIllustratorDocument::makeChildListIntern (KOffice::Document_ptr _root, 
+void KIllustratorDocument::makeChildListIntern (KOffice::Document_ptr _root,
 						const char *_path) {
   cout << "KIllustrator::makeChildListIntern ()" << endl;
   int i = 0;
@@ -131,8 +131,8 @@ void KIllustratorDocument::makeChildListIntern (KOffice::Document_ptr _root,
     tmp.sprintf ("/%i", i++);
     QString path (_path);
     path += tmp.data ();
-    
-    KOffice::Document_var doc = it.current ()->document ();    
+
+    KOffice::Document_var doc = it.current ()->document ();
     doc->makeChildList (_root, path);
   }
 }
@@ -141,14 +141,14 @@ bool KIllustratorDocument::hasToWriteMultipart () {
   return (m_lstChildren.count () > 0);
 }
 
-void KIllustratorDocument::insertPart (const QRect& rect, 
+void KIllustratorDocument::insertPart (const QRect& rect,
 				       KoDocumentEntry& e) {
   KOffice::Document_var doc = imr_createDoc (e);
   if (CORBA::is_nil (doc))
     return;
 
   if (! doc->init ()) {
-    QMessageBox::critical ((QWidget *) 0L, i18n ("KIllustrator Error"), 
+    QMessageBox::critical ((QWidget *) 0L, i18n ("KIllustrator Error"),
 			   i18n ("Could not insert document"), i18n ("OK"));
     return;
   }
@@ -168,7 +168,7 @@ void KIllustratorDocument::insertChild (KIllustratorChild* child) {
   setModified (true);
 }
 
-void KIllustratorDocument::changeChildGeometry (KIllustratorChild* child, 
+void KIllustratorDocument::changeChildGeometry (KIllustratorChild* child,
 						const QRect& r) {
   child->setGeometry (r);
   setModified (true);
@@ -190,7 +190,7 @@ KOffice::MainWindow_ptr KIllustratorDocument::createMainWindow()
 
 KIllustratorView* KIllustratorDocument::createKIllustratorView () {
   KIllustratorView *view = new KIllustratorView (0L, 0L, this);
-  view->QWidget::show ();
+  //view->QWidget::show ();
   m_lstViews.append (view);
   return view;
 }
@@ -227,7 +227,7 @@ void KIllustratorDocument::setModified (bool f) {
     m_bEmpty = false;
 }
 
-void KIllustratorDocument::draw (QPaintDevice* dev, 
+void KIllustratorDocument::draw (QPaintDevice* dev,
 				 CORBA::Long w, CORBA::Long h,
 				 CORBA::Float _scale ) {
   Painter painter;
@@ -235,7 +235,7 @@ void KIllustratorDocument::draw (QPaintDevice* dev,
 
   if ( _scale != 1.0 )
     painter.scale( _scale, _scale );
-  
+
   GDocument::drawContents (painter);
   painter.end ();
 }
@@ -252,7 +252,7 @@ KIllustrator::GfxObjectSeq* KIllustratorDocument::getSelection () {
   for (list<GObject*>::iterator i = selection.begin ();
        i != selection.end (); i++) {
     GfxWrapper* wobj = (GfxWrapper *) (*i)->getWrapper ();
-    if (wobj == 0L) 
+    if (wobj == 0L)
       wobj = new GfxWrapper (this, *i);
     (*seq)[n++] = KIllustrator::GfxObject::_duplicate (wobj);
   }
@@ -263,7 +263,7 @@ KIllustrator::GfxObjectSeq* KIllustratorDocument::getSelection () {
 void KIllustratorDocument::addToSelection (KIllustrator::GfxObject_ptr obj) {
 }
 
-void 
+void
 KIllustratorDocument::removeFromSelection (KIllustrator::GfxObject_ptr obj) {
 }
 
