@@ -859,17 +859,24 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
 /*================================================================*/
 void KWTableFrameSet::insertCol( unsigned int col )
 {
+    unsigned int _cols = m_cols;
     double x=0, width = 60;
-    if(col < m_cols) {
+    if(col < m_cols)
+    {
         // move others out of the way.
-        for(unsigned int i = 0; i < m_cells.count(); i++) {
+        for(unsigned int i = 0; i < m_cells.count(); i++)
+        {
             Cell *cell = m_cells.at(i);
             if(cell->m_col == col)
                 x= cell->getFrame(0)->x();
             if(cell->m_col >= col)
+            {
                 cell->m_col++;
+            }
         }
-    } else {
+    }
+    else
+    {
         x = boundingRect().right() + tableCellSpacing;
     }
 
@@ -902,9 +909,7 @@ void KWTableFrameSet::insertCol( unsigned int col )
         }
     }
 
-    if(col < m_cols-1) m_cols++;
-
-    //recalcCols();
+    m_cols = ++_cols;
     finalize();
 }
 
