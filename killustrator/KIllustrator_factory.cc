@@ -1,14 +1,12 @@
 #include <KIllustrator_factory.h>
 #include <KIllustrator_doc.h>
+#include <KIllustrator_aboutdata.h>
 
 #include <kinstance.h>
 #include <kiconloader.h>
 #include <kstddirs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-
-static const char* description=I18N_NOOP("KOffice Illustration Tool");
-static const char* version="0.2";
 
 extern "C"
 {
@@ -29,30 +27,16 @@ KIllustratorFactory::KIllustratorFactory( QObject* parent, const char* name )
 
 KIllustratorFactory::~KIllustratorFactory()
 {
-  if( s_aboutData )
-  {
     delete s_aboutData;
     s_aboutData=0;
-  }
-  if ( s_global )
-  {
     delete s_global;
     s_global = 0L;
-  }
 }
 
 KAboutData* KIllustratorFactory::aboutData()
 {
   if( !s_aboutData )
-  {
-    s_aboutData= new KAboutData ("killustrator",
-                                 I18N_NOOP("KIllustrator"),
-                                 version, description,
-                                 KAboutData::License_GPL,
-                                 "(c) 1998-2000, Kai-Uwe Sattler");
-    s_aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
-    s_aboutData->addAuthor("Igor Janssen", 0, "rm@linux.ru.net");
-  }
+      s_aboutData=newKIllustratorAboutData();
   return s_aboutData;
 }
 
