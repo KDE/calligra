@@ -211,6 +211,8 @@ void KoHTMLDoc::openURL(const char *_url)
 
 void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height)
 {
+  return; //disabled for now... hope this makes KoHTML more stable :)
+  
   if (!m_bDocumentDone) return;
 
   m_vInternalView->draw(dev, width, height);
