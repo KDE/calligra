@@ -1,5 +1,5 @@
 ISO8859-2
-% Huhyphn - hungarian hyphenation patterns v20030513
+% Huhyphn - hungarian hyphenation patterns v20030422
 %
 % Copyright (C) 2003, NAGY Bence <gimb@freemail.hu>
 % This file can be distributed under the terms of the
@@ -756,7 +756,6 @@ a2k1id
 a2k1i2p
 ak1i1ro
 ak1is.
-aki2s1a
 a2k1is1k2
 a2k1ism
 ak1izm
@@ -867,7 +866,7 @@ alo2m1o2k
 alo1mo
 2alor
 alos1s
-2aló3g2i1á
+2alógi1á
 a1ló
 al2óg
 aló1gi
@@ -4055,7 +4054,7 @@ eont2
 eon1tr
 eo1p2
 eo2pe
-e2or3g2i2á
+e2orgi2á
 eor1gi
 e2os.
 eo2so
@@ -5876,7 +5875,6 @@ gi2a1s1zi
 gi2a1s1zo
 gi2a1ta
 gi2av
-3g2i1á
 3g2i1dá
 gi2de
 2g1i2dé
@@ -6862,7 +6860,8 @@ i2s1a1pa
 i2s1a1pá
 i2s1ar.
 i2s1a2ra
-i2s1as2z
+is1ass
+is1as2z
 is1a1tá
 is1atl
 i2s1a1u
@@ -7735,6 +7734,7 @@ ki1sa
 ki2s1aj1tó
 ki2sal
 ki2sa2n
+ki2sas
 ki2sat
 ki2s1emb
 ki1se
@@ -8539,8 +8539,6 @@ l1ka
 lk2a1te
 lke2ma
 l1ke
-lki1s1a
-l1ki
 lkó2c3
 l1kó
 l1k2v
@@ -9788,7 +9786,6 @@ nki2g
 n1ki
 n2k1i1ga
 nk1ing
-nki2s1a
 nk1k2
 nk1old
 n1ko
@@ -10619,7 +10616,7 @@ o2r1ép
 2orgi1a
 or1gi
 org2i2a1i
-2or3g2i1á
+2orgi1á
 or1i2de
 o1ri
 1o2ri1e
@@ -12005,7 +12002,6 @@ p2o1pl
 p2op1s
 po2re2s
 po1re
-por1s
 por2t1el
 por1te
 por2tes
@@ -12838,6 +12834,7 @@ r2s1a2la
 r2s1a1lu
 rs1a2n2y
 rs1a1ra
+r1s2c2h
 rs1e1le
 r1se
 rs1es2z
@@ -13078,7 +13075,6 @@ sa2ri
 s2a2s1or
 sas3s1ze
 sas2s2z
-2s1as1s1zo
 sa2su
 2s1a2tom
 sa1to
@@ -13329,7 +13325,6 @@ skás3s2
 s1ká
 1s2kic
 s1ki
-ski2s1a
 s1kl
 s1kv
 1s2lag
@@ -15704,8 +15699,6 @@ yí2rór
 yí1ró
 yí2rót
 y1í2v
-yki2s1a
-y1ki
 y1k2l
 y2k1uj
 y1ku
@@ -16569,4 +16562,3 @@ z1zá
 z2z1áll
 z2z2s2
 zz3st2
-
