@@ -47,9 +47,11 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 		void setStatusOk();
 		void setStatusError(const QString& msg);
+		void setStatusEmpty();
 
 	protected slots:
 		void slotCheckQuery();
+		void slotTextChanged();
 
 	signals:
 		void queryShortcut();
@@ -59,7 +61,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 //		KexiQueryDesignerSQLHistory *m_history;
 		QLabel *m_pixmapStatus, *m_lblStatus;
 		KexiSectionHeader *m_head;
-		QPixmap m_statusPixmapOk, m_statusPixmapErr;
+		QPixmap m_statusPixmapOk, m_statusPixmapErr, m_statusPixmapInfo;
 };
 
 #endif

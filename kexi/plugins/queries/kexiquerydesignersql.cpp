@@ -53,13 +53,14 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
  : KexiViewBase(mainWin, parent, name)
  , m_statusPixmapOk( DesktopIcon("button_ok") )
  , m_statusPixmapErr( DesktopIcon("button_cancel") )
+ , m_statusPixmapInfo( DesktopIcon("info") )
 {
 	QSplitter *l = new QSplitter(this);
 	l->setOrientation(Vertical);
 //	m_history = new KexiQueryDesignerSQLHistory(l, "sqlh");
 	m_head = new KexiSectionHeader(i18n("SQL Query Text"), Vertical, l);
 	m_editor = new KexiQueryDesignerSQLEditor(mainWin, m_head, "sqle");
-	connect(m_editor, SIGNAL(textChanged()), this, SLOT(setDirty()));
+	connect(m_editor, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 	addChildView(m_editor);
 	setViewWidget(m_editor);
 	l->setFocusProxy(m_editor);
@@ -77,6 +78,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	m_lblStatus = new QLabel(hbox);
 	m_lblStatus->setAlignment(AlignLeft | AlignTop);
 	m_lblStatus->setMargin(m_statusPixmapOk.width()/4);
+	m_lblStatus->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding );
 	m_lblStatus->resize(m_lblStatus->width(),m_statusPixmapOk.width()*3);
 	m_lblStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
 	setStatusOk();
@@ -106,7 +108,13 @@ void KexiQueryDesignerSQLView::setStatusOk()
 void KexiQueryDesignerSQLView::setStatusError(const QString& msg)
 {
 	m_pixmapStatus->setPixmap(m_statusPixmapErr);
-	m_lblStatus->setText("<h2>"+i18n("The query has error")+"</h2><p>"+msg+"</p>");
+	m_lblStatus->setText("<h2>"+i18n("The query is incorrect")+"</h2><p>"+msg+"</p>");
+}
+
+void KexiQueryDesignerSQLView::setStatusEmpty()
+{
+	m_pixmapStatus->setPixmap(m_statusPixmapInfo);
+	m_lblStatus->setText(i18n("Please enter your query and execute \"Check query\" function to verify it."));
 }
 
 bool
@@ -119,7 +127,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontSt
 		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
 		KexiDB::Parser *parser = mainWin()->project()->sqlParser();
 		parser->parse( m_editor->text() );
-		KexiDB::QuerySchema *query = parser->select();
+		KexiDB::QuerySchema *query = parser->query();
 		if (!query) {
 			KexiDB::ParserError err = parser->error();
 			KMessageBox::information(this, err.error());
@@ -176,6 +184,23 @@ KexiQueryDesignerSQLView::sqlText()
 void KexiQueryDesignerSQLView::slotCheckQuery()
 {
 	kdDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()" << endl;
+	KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+	KexiDB::Parser *parser = mainWin()->project()->sqlParser();
+	parser->parse( m_editor->text() );
+	KexiDB::QuerySchema *query = parser->query();
+	if (!query) {
+		KexiDB::ParserError err = parser->error();
+		setStatusError(err.error());
+	}
+	else {
+		setStatusOk();
+	}
+}
+
+void KexiQueryDesignerSQLView::slotTextChanged()
+{
+	setDirty(true);
+	setStatusEmpty();
 }
 
 #include "kexiquerydesignersql.moc"

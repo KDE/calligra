@@ -86,7 +86,9 @@ int main(int argc, char **argv)
 			case KexiDB::Parser::OP_Select:
 			{
 				kdDebug() << "Select statement: " << endl;
-				parser->select()->debug();
+				KexiDB::QuerySchema *q = parser->query();
+				q->debug();
+				delete q;
 				break;
 			}
 			default:

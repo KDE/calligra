@@ -111,7 +111,7 @@ class KEXI_DB_EXPORT Parser
 		 * You can call this method only once every time after doing parse().
 		 * Next time, the call will return 0.
 		 */
-		QuerySchema	*select() { QuerySchema *s = m_select; m_select=0; return s; }
+		QuerySchema	*query() { QuerySchema *s = m_select; m_select=0; return s; }
 
 		/**
 		 * \return a pointer to the used database connection or 0 if not set
@@ -146,9 +146,15 @@ class KEXI_DB_EXPORT Parser
 
 		/**
 		 * @internal
-		 * returns a INTERNAL list of fields
+		 * \return a INTERNAL list of fields
 		 */
 		PFieldList	*fieldList() { return m_fieldList; }
+
+		/**
+		 * @internal
+		 * \return query schema
+		 */
+		QuerySchema	*select() { return m_select; }
 
 		/**
 		 * @internal

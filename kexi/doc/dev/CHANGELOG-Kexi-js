@@ -317,7 +317,6 @@ CC_MAIL: dkite@shaw.ca
 CCPASTEUR: 
 	-why pixmap's code is in kexiproperty/kexipropertybuffer?
 	-perhaps we'd reuse KDE Menu editor GUI?
-	-inserting widget by single clicking should setup proper human-visible size, not just 1 pixel size
 	-backgroundOrigin property should have 'ParentOrigin' as default 
 	 (not it's as in QtDesigner, and it's not intuitive)
 
@@ -328,6 +327,13 @@ KexiCore
 Widgets
 - SQL Editor: now properly emits signal about text changes.
 - SQL Editor: now has QT_ONLY_SQL_EDITOR compile-time option (both modes works on win32)
+Utils
+- Kexi::setWaitCursor(), Kexi::removeWaitCursor() -for delayed cursors added (eg. user on view opening)
+KexiMain
+- --edittext [<object_type>:]<object_name> C.L. option added:
+  like --open, but the object will\nbe opened in Text Mode
+KexiDB
+- Parser::query() public function added; select() is now internal
 
 2004-06-23
 KexiCore

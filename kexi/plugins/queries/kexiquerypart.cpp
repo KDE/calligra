@@ -110,7 +110,7 @@ KexiQueryPart::data(KexiDB::Connection *conn, KexiPart::Item &i)
 	KexiDB::Parser *parser = new KexiDB::Parser(conn);
 	parser->parse(data.at(0).toString());
 
-	doc = new KexiQueryDocument(i.identifier(), conn, parser->select());
+	doc = new KexiQueryDocument(i.identifier(), conn, parser->query());
 	m_data.insert(i.identifier(), doc);
 
 	delete parser;
@@ -148,7 +148,8 @@ void KexiQueryPart::initActions()
 //	new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()), 
 //		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
 
-	KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check query"), "test_it", 0, "querypart_check_query");
+	KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check query"), "test_it", 
+		CTRL|Key_Return, "querypart_check_query");
 	a->setToolTip(i18n("Check query"));
 	a->setWhatsThis(i18n("Checks query for validity."));
 //	setActionAvailable("querypart_check_query", true);

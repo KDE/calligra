@@ -116,7 +116,7 @@ KexiQueryDesigner::sqlQuery()
 	KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
 	parser->parse(m_statement);
 	if(parser->operation() == KexiDB::Parser::OP_Select)
-		rec = mainWin()->project()->dbConnection()->executeQuery(*parser->select());
+		rec = mainWin()->project()->dbConnection()->executeQuery(*parser->query());
 	else
 		rec = mainWin()->project()->dbConnection()->executeQuery(m_statement);
 

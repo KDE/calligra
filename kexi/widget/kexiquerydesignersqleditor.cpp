@@ -67,7 +67,6 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	lyr->addWidget(fr);
 	lyr = new QVBoxLayout(fr);
 	lyr->setMargin( 2 );
-
 #ifdef QT_ONLY_SQL_EDITOR
 	d->view = new KTextEdit( "", QString::null, fr, "sqlDoc_editor" );
 	connect(d->view, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
@@ -87,10 +86,8 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #endif
 	setViewWidget(d->view);
+//	setFocusProxy(d->view);
 	lyr->addWidget(d->view);
-
-//	m_view->installEventFilter(this);
-//	setFocusProxy(m_view);
 
 //	QPushButton *btnQuery = new QPushButton(i18n("&Query"), this);
 //	btnQuery->setFlat(true);
@@ -106,6 +103,7 @@ KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
 {
 }
 
+#if 0
 bool
 KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 {
@@ -127,6 +125,7 @@ KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 
 	return false;
 }
+#endif
 
 // === KexiQueryDesignerSQLEditor impelmentation using KTextEditor ===
 

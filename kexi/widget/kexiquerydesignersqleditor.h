@@ -41,7 +41,6 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 	Q_OBJECT
 
 	public:
-//		KexiQueryDesignerSQLEditor(QWidget *parent, const char *name = 0);
 		KexiQueryDesignerSQLEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		virtual ~KexiQueryDesignerSQLEditor();
 
@@ -53,7 +52,7 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 		void		setText(const QString &text);
 
 	protected:
-		virtual bool	eventFilter(QObject *w, QEvent *ev);
+//		virtual bool	eventFilter(QObject *w, QEvent *ev);
 
 	signals:
 		void		execQ();

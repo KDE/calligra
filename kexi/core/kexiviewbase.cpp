@@ -210,10 +210,13 @@ void KexiViewBase::setViewWidget(QWidget* w)
 {
 	if (m_viewWidget == w)
 		return;
+	if (m_viewWidget) {
+		m_viewWidget->removeEventFilter(this);
+	}
 	m_viewWidget = w;
 	if (m_viewWidget) {
 		m_viewWidget->installEventFilter(this);
-//		setFocusProxy(m_viewWidget);
+		setFocusProxy(m_viewWidget); //js: ok?
 	}
 }
 
