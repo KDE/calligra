@@ -1,4 +1,4 @@
-if include_KARBON
+if compile_filter_KARBON
 KOPAINTERDIR = kopainter
 endif
 if include_KOSPELL
