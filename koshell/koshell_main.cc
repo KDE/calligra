@@ -27,7 +27,7 @@
 #include "koshell_shell.h"
 
 static const char* description=I18N_NOOP("KOffice Workspace");
-static const char* version="1.2 Beta1";
+static const char* version="1.2 Beta2";
 
 int main( int argc, char **argv )
 {
