@@ -485,11 +485,8 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         // drawBorders paints outside the give rect, so we need to 'subtract' the border
         // width on all sides.
         r.setLeft( KoBorder::zoomWidthX( m_layout.leftBorder.width(), zh, 0 ) );
-        // ## TODO: ####### documentWidth breaks with variable width. Maybe use currentDrawnFrame() ?
-        // Impossible in kotext. We need a "doc width for this parag value stored in the parag", or a callback.
-
         // The +1 is because if border is 1 pixel, nothing to subtract. 2 pixels -> subtract 1.
-        r.setRight( zh->layoutUnitToPixelX(documentWidth()) - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) );
+        r.setRight( zh->layoutUnitToPixelX(rect().width()) - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) );
         r.setTop( zh->layoutUnitToPixelY(lineY( 0 )) );
 
         int lastLine = lines() - 1;

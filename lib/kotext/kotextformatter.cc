@@ -84,18 +84,22 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     int lineHeight = 0;
     int len = parag->length();
 
-    int initialHeight = c->height(); // remember what adjustLMargin was called with
-    if ( doc )
-	x = doc->flow()->adjustLMargin( y + parag->rect().y(), initialHeight, x, 4, parag );
-    int initialLMargin = x;	      // and remember the resulting adjustement we got
-    int dw = parag->documentVisibleWidth(); // QRT: -(doc?(left!=x?0:doc->rightMargin()):-4);
+    int initialHeight = c->height(); // remember what adjustMargins was called with
 
-    curLeft = x;
-    int rm = parag->rightMargin();
-    int currentRightMargin = rm;
+    int currentRightMargin = parag->rightMargin(); // 'rm' in QRT
     if ( doc && rtl )
         currentRightMargin += parag->firstLineMargin();
-    int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), initialHeight, currentRightMargin, 4, parag ) : 0;
+    int initialRMargin = currentRightMargin;
+    int dw = 0;
+
+    if (doc)
+        doc->flow()->adjustMargins( y + parag->rect().y(), initialHeight, x, initialRMargin, dw, parag );
+    else // never the case in kotext
+        dw = parag->documentVisibleWidth();
+
+    int initialLMargin = x;
+    curLeft = x;
+
     int maxY = doc ? doc->flow()->availableHeight() : -1;
 
     int availableWidth = dw - initialRMargin; // 'w' in QRT
@@ -185,8 +189,11 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #ifdef DEBUG_FORMATTER
             kdDebug(32500) << "i=" << i << "/" << len << " custom item with ownline" << endl;
 #endif
-	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4,parag ) : left;
-	    int w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4,parag ) : 0 );
+            int rightMargin = currentRightMargin;
+            x = left;
+            if ( doc )
+                doc->flow()->adjustMargins( y + parag->rect().y(), parag->rect().height(), x, rightMargin, dw, parag );
+	    int w = dw - rightMargin;
             c->customItem()->resize( w - x );
 	    y += lineHeight;
 	    lineHeight = c->height();
@@ -194,6 +201,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
             // Added for kotext (to be tested)
             lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
             lineStart->h += lineStart->lineSpacing;
+            lineStart->w = dw;
 	    insertLineStart( parag, i, lineStart );
 	    c->lineStart = 1;
 	    firstChar = c;
@@ -283,6 +291,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
                 lineHeight = lineStart->baseLine + belowBaseLine;
                 lineStart->h = lineHeight;
+                lineStart->w = dw;
 
 		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
                 lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
@@ -296,12 +305,15 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		lineStart = lineStart2;
 		tmph = c->height();
 		lineHeight = 0;
-                currentRightMargin = rm;
-		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), tmph, left, 4, parag ) : left;
+
+                initialRMargin = currentRightMargin;
+                x = left;
+                if ( doc )
+                    doc->flow()->adjustMargins( y + parag->rect().y(), tmph, x, initialRMargin, dw, parag );
+
                 pixelx = zh->layoutUnitToPixelX( x );
 		initialHeight = tmph;
 		initialLMargin = x;
-		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), tmph, currentRightMargin, 4, parag ) : 0 );
 		availableWidth = dw - initialRMargin;
 		if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
 		    int nx = parag->nextTab( i, x );
@@ -358,6 +370,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 }
 		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, spaceAfterLine );
                 lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
+                lineStart->w = dw;
 		lineStart->h += lineStart->lineSpacing;
 		y += lineStart->h;
 		lineStart = lineStart2;
@@ -371,12 +384,15 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #endif
 		tmph = c->height();
 		lineHeight = tmph;
-		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), lineHeight, left, 4, parag ) : left;
-                currentRightMargin = rm;
+
+                initialRMargin = currentRightMargin;
+                x = left;
+                if ( doc )
+                    doc->flow()->adjustMargins( y + parag->rect().y(), tmph, x, initialRMargin, dw, parag );
+
                 pixelx = zh->layoutUnitToPixelX( x );
 		initialHeight = lineHeight;
 		initialLMargin = x;
-		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), lineHeight, currentRightMargin, 4, parag ) : 0 );
 		availableWidth = dw - initialRMargin;
 		if ( x != left || availableWidth != dw )
 		    fullWidth = FALSE;
@@ -414,22 +430,25 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
 	    lineHeight = lineStart->baseLine + belowBaseLine;
 	    lineStart->h = lineHeight;
-	    // if h > initialHeight,  call adjust[LR]Margin, and if the result is != initial[LR]Margin,
+            lineStart->w = dw;
+	    // if h > initialHeight,  call adjustMargins, and if the result is != initial[LR]Margin,
 	    // format this line again
 	    if ( doc && lineHeight > initialHeight )
 	    {
 		int lm = left + ( ( firstChar == &string->at(0) && doc && !rtl ) ? parag->firstLineMargin() : 0 );
-                currentRightMargin = rm - ( ( firstChar == &string->at(0) && doc && rtl ) ? parag->firstLineMargin() : 0 );
 #ifdef DEBUG_FORMATTER
                 kdDebug(32500) << "left=" << left << ", firstlinepargin=" << (( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0) << " => lm=" << lm << endl;
 #endif
-		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), lineHeight, lm, 4, parag );
-		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), lineHeight, currentRightMargin, 4, parag );
+		int newLMargin = lm;
+		int newRMargin = currentRightMargin - ( ( firstChar == &string->at(0) && doc && rtl ) ? parag->firstLineMargin() : 0 );
+                int newPageWidth = dw;
+                doc->flow()->adjustMargins( y + parag->rect().y(), lineHeight, newLMargin, newRMargin, newPageWidth, parag );
+
 		initialHeight = lineHeight;
 #ifdef DEBUG_FORMATTER
 		kdDebug(32500) << "new height: " << lineHeight << " => left=" << left << " lm=" << lm << " first-char=" << (firstChar==&string->at(0)) << " newLMargin=" << newLMargin << " newRMargin=" << newRMargin << endl;
 #endif
-		if ( newLMargin != initialLMargin || newRMargin != initialRMargin )
+		if ( newLMargin != initialLMargin || newRMargin != initialRMargin || newPageWidth != dw )
 		{
 #ifdef DEBUG_FORMATTER
 		    kdDebug(32500) << "formatting again" << endl;
@@ -440,6 +459,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		    availableWidth = dw - newRMargin;
 		    initialLMargin = newLMargin;
 		    initialRMargin = newRMargin;
+                    dw = newPageWidth;
 		    c = &string->at( i );
 		    tmph = c->height();
 		    lineHeight = tmph;
@@ -522,7 +542,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	int belowBaseLine = QMAX( lineHeight - lineStart->baseLine, tmph - tmpBaseLine );
 	lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
 	lineHeight = lineStart->baseLine + belowBaseLine;
-	lineStart->h = lineHeight;
+        lineStart->w = dw;
 	//kdDebug(32500) << " -> lineStart->baseLine/lineStart->h : " << lineStart->baseLine << "/" << lineStart->h << endl;
 	// last line in a paragraph is not justified
 	if ( align == Qt::AlignJustify )
@@ -549,7 +569,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #endif
     y += lineHeight + m;
 
-    wused += rm;
+    wused += currentRightMargin;
     if ( !wrapEnabled || wrapAtColumn() != -1  )
 	minw = QMAX(minw, wused);
     thisminw = minw;
@@ -657,6 +677,7 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	    current += format->pointSize(); //pointSize() is independent of {Sub,Super}Script in contrast to height()
 	}
     }
+#if 0
     if ( last >= 0 && last < string->length() ) {
         KoTextStringChar &chr = string->at( last );
 	line->w = chr.x + chr.width; //string->width( last );
@@ -665,6 +686,7 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
             line->w += KoTextZoomHandler::ptToLayoutUnitPt( chr.format()->refFontMetrics().width( QChar(0xad) ) );
     } else
 	line->w = 0;
+#endif
 
     return new KoTextParagLineStart();
 }
@@ -807,7 +829,7 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
 	r = runs->next();
     }
 
-    line->w = xmax + 10;
+    //line->w = xmax /*+ 10*/; // Why +10 ?
     KoTextParagLineStart *ls = new KoTextParagLineStart( control->context, control->status );
     delete control;
     delete runs;

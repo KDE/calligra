@@ -1324,10 +1324,10 @@ void KoTextDocument::init()
     //cy = 2;
     //if ( par )
 	cx = cy = 0;
-    cw = 600;
+    cw = 600; // huh?
     vw = 0;
     flow_ = new KoTextFlow;
-    flow_->setWidth( cw );
+    //flow_->setWidth( cw );
 
     leftmargin = 0; // 4 in QRT
     rightmargin = 0; // 4 in QRT
@@ -1396,8 +1396,9 @@ int KoTextDocument::height() const
     int h = 0;
     if ( lParag )
 	h = lParag->rect().top() + lParag->rect().height() + 1;
-    int fh = flow_->boundingRect().height();
-    return QMAX( h, fh );
+    //int fh = flow_->boundingRect().height();
+    //return QMAX( h, fh );
+    return h;
 }
 
 
@@ -3426,20 +3427,20 @@ void KoTextParag::format( int start, bool doMove )
     for ( ; it != oldLineStarts.end(); ++it )
 	delete *it;
 
-    KoTextStringChar *c = 0;
-    if ( hasBorder() || string()->isRightToLeft() )
+/*    if ( hasBorder() || string()->isRightToLeft() )
         ////kotext: border extends to doc width
         ////        and, bidi parags might have a counter, which will be right-aligned...
     {
         setWidth( textDocument()->width() - 1 );
     }
-    else
+    else*/
     {
         if ( lineStarts.count() == 1 ) { //&& ( !doc || doc->flow()->isEmpty() ) ) {
-            if ( !string()->isBidi() ) {
-                c = &str->at( str->length() - 1 );
+// kotext: for proper parag borders, we want all parags to be as wide as linestart->w
+/*            if ( !string()->isBidi() ) {
+                KoTextStringChar *c = &str->at( str->length() - 1 );
                 r.setWidth( c->x + c->width );
-            } else {
+            } else*/ {
                 r.setWidth( lineStarts[0]->w );
             }
         }
@@ -5308,7 +5309,7 @@ QString KoTextDocument::parseCloseTag( const QString& doc, int& pos )
 
 KoTextFlow::KoTextFlow()
 {
-    w = pagesize = 0;
+    w = 0;
     leftItems.setAutoDelete( FALSE );
     rightItems.setAutoDelete( FALSE );
 }
@@ -5323,11 +5324,18 @@ void KoTextFlow::clear()
     rightItems.clear();
 }
 
+// Called by KoTextDocument::setWidth
 void KoTextFlow::setWidth( int width )
 {
     w = width;
 }
 
+void KoTextFlow::adjustMargins( int, int, int&, int&, int& pageWidth, KoTextParag* )
+{
+    pageWidth = w;
+}
+
+#if 0
 int KoTextFlow::adjustLMargin( int yp, int, int margin, int space, KoTextParag* )
 {
     for ( KoTextCustomItem* item = leftItems.first(); item; item = leftItems.next() ) {
@@ -5349,10 +5357,11 @@ int KoTextFlow::adjustRMargin( int yp, int, int margin, int space, KoTextParag* 
     }
     return margin;
 }
+#endif
 
-
-int KoTextFlow::adjustFlow( int y, int /*w*/, int h )
+int KoTextFlow::adjustFlow( int /*y*/, int, int /*h*/ )
 {
+#if 0
     if ( pagesize > 0 ) { // check pages
 	int yinpage = y % pagesize;
 	if ( yinpage <= 2 )
@@ -5361,6 +5370,7 @@ int KoTextFlow::adjustFlow( int y, int /*w*/, int h )
 	    if ( yinpage + h > pagesize - 2 )
 		return ( pagesize - yinpage ) + 2;
     }
+#endif
     return 0;
 }
 
@@ -5381,6 +5391,7 @@ void KoTextFlow::registerFloatingItem( KoTextCustomItem* item )
     }
 }
 
+#if 0
 QRect KoTextFlow::boundingRect() const
 {
     QRect br;
@@ -5396,6 +5407,7 @@ QRect KoTextFlow::boundingRect() const
     }
     return br;
 }
+#endif
 
 int KoTextFlow::availableHeight() const
 {
@@ -5418,7 +5430,7 @@ void KoTextFlow::drawFloatingItems( QPainter* p, int cx, int cy, int cw, int ch,
     }
 }
 
-void KoTextFlow::setPageSize( int ps ) { pagesize = ps; }
+//void KoTextFlow::setPageSize( int ps ) { pagesize = ps; }
 bool KoTextFlow::isEmpty() { return leftItems.isEmpty() && rightItems.isEmpty(); }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

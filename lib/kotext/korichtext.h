@@ -527,22 +527,29 @@ public:
     virtual ~KoTextFlow();
 
     virtual void setWidth( int width );
-    int width() const;
+    int width() const { return w; }
 
-    virtual void setPageSize( int ps );
-    int pageSize() const { return pagesize; }
+    //virtual void setPageSize( int ps );
+    //int pageSize() const { return pagesize; }
 
-    virtual int adjustLMargin( int yp, int h, int margin, int space, KoTextParag* parag );
-    virtual int adjustRMargin( int yp, int h, int margin, int space, KoTextParag* parag );
+    /**
+     * Called by the formatter to find out the left and right margin for a paragraph at ( yp, yp+h )
+     * @param leftMargin returns the left margin
+     * @param rightMargin returns the right margin (from the page width)
+     * @param pageWidth returns the page width at that point
+     * This method merges QRichText's adjustLMargin and adjustRMargin for efficiency reasons
+     */
+    virtual void adjustMargins( int yp, int h, int& leftMargin, int& rightMargin, int& pageWidth, KoTextParag* parag );
 
     virtual void registerFloatingItem( KoTextCustomItem* item );
     virtual void unregisterFloatingItem( KoTextCustomItem* item );
-    virtual QRect boundingRect() const;
+    //virtual QRect boundingRect() const;
+
     /// kotext addition. Allows the textformatter to stop when it goes too far.
     virtual int availableHeight() const;
     virtual void drawFloatingItems(QPainter* p, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
 
-    virtual int adjustFlow( int  y, int w, int h ); // adjusts y according to the defined pagesize. Returns the shift.
+    virtual int adjustFlow( int y, int w, int h ); // adjusts y according to the defined pagesize. Returns the shift.
 
     virtual bool isEmpty();
 
@@ -550,14 +557,12 @@ public:
 
 private:
     int w;
-    int pagesize;
+    //int pagesize;
 
     QPtrList<KoTextCustomItem> leftItems;
     QPtrList<KoTextCustomItem> rightItems;
 
 };
-
-inline int KoTextFlow::width() const { return w; }
 
 #ifdef QTEXTTABLE_AVAILABLE
 class KoTextTable;
