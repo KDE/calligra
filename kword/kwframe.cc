@@ -311,11 +311,8 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
              doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
     frames.setAutoDelete( true );
     frameInfo = FI_BODY;
-    current = 0;
+    m_current = 0;
     grpMgr = 0L;
-    m_anchorTextFs = 0L;
-    m_anchorParag = 0L;
-    m_anchorIndex = 0;
 }
 
 KWFrameSet::~KWFrameSet()
@@ -508,12 +505,20 @@ void KWFrameSet::setFloating()
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index )
 {
+    ASSERT( textfs );
+    ASSERT( parag );
+    KWAnchorPosition pos;
+    pos.textfs = textfs;
+    pos.parag = parag;
+    pos.index = index;
+    setAnchored( pos );
+}
+
+void KWFrameSet::setAnchored( KWAnchorPosition & pos )
+{
     if ( isFloating() )
         deleteAnchors();
-    ASSERT( parag );
-    m_anchorTextFs = textfs;
-    m_anchorParag = parag;
-    m_anchorIndex = index;
+    m_anchorPos = pos;
     updateAnchors();
 }
 
@@ -521,44 +526,42 @@ void KWFrameSet::setFixed()
 {
     if ( isFloating() )
         deleteAnchors();
-    m_anchorTextFs = 0L;
-    m_anchorParag = 0L;
-    m_anchorIndex = 0;
+    m_anchorPos.makeInvalid();
 }
 
 void KWFrameSet::updateAnchors()
 {
     kdDebug() << "KWFrameSet::updateAnchors" << endl;
-    int index = m_anchorIndex;
+    int index = m_anchorPos.index;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt, ++index )
     {
         if ( ! frameIt.current()->anchor() )
         {
             // Anchor this frame, after the previous one
-            KWAnchor * anchor = new KWAnchor( m_anchorTextFs->textDocument(), frameIt.current() );
-            m_anchorParag->insert( index, QChar('@') /*whatever*/ );
-            m_anchorParag->setCustomItem( index, anchor, 0 );
+            KWAnchor * anchor = new KWAnchor( m_anchorPos.textfs->textDocument(), frameIt.current() );
+            m_anchorPos.parag->insert( index, QChar('@') /*whatever*/ );
+            m_anchorPos.parag->setCustomItem( index, anchor, 0 );
             frameIt.current()->setAnchor( anchor );
         }
     }
-    m_anchorParag->setChanged( true );
+    m_anchorPos.parag->setChanged( true );
     //kdDebug() << "KWFrameSet::updateAnchors emit repaintChanged" << endl;
-    emit repaintChanged( m_anchorTextFs );
+    emit repaintChanged( m_anchorPos.textfs );
 }
 
 void KWFrameSet::deleteAnchors()
 {
     kdDebug() << "KWFrameSet::deleteAnchors" << endl;
     findFirstAnchor();
-    int index = m_anchorIndex;
+    int index = m_anchorPos.index;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         if ( frameIt.current()->anchor() )
         {
             // Delete anchor (after removing anchor char)
-            m_anchorParag->at( index )->loseCustomItem();
-            m_anchorParag->remove( index, 1 );
+            m_anchorPos.parag->at( index )->loseCustomItem();
+            m_anchorPos.parag->remove( index, 1 );
             frameIt.current()->deleteAnchor();
         }
 }
@@ -569,11 +572,11 @@ void KWFrameSet::findFirstAnchor()
     if ( frames.count() > 0 && frames.first()->anchor() )
     {
         KWAnchor * anchor = frames.first()->anchor();
-        m_anchorParag = static_cast<KWTextParag *>( anchor->paragraph() );
-        m_anchorIndex = m_anchorParag->findCustomItem( anchor );
+        m_anchorPos.parag = static_cast<KWTextParag *>( anchor->paragraph() );
+        m_anchorPos.index = m_anchorPos.parag->findCustomItem( anchor );
     } else {
         kdDebug() << "KWFrameSet::findFirstAnchor no anchor !" << endl;
-        m_anchorParag = 0L;
+        m_anchorPos.parag = 0L;
     }
 }
 
@@ -642,7 +645,7 @@ void KWFrameSet::updateFrames()
 
     if ( isFloating() )
     { // The frame[s] might have been resized -> invalidate the parag to recompute widths & heights
-        m_anchorParag->invalidate( 0 );
+        m_anchorPos.parag->invalidate( 0 );
         QListIterator<KWFrame> frameIt = frameIterator();
         for ( ; frameIt.current(); ++frameIt )
         {

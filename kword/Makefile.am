@@ -8,7 +8,7 @@ kde_module_LTLIBRARIES = libkwordpart.la
 libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 kwtextparag.cc kwstyle.cc kwformat.cc kwtextdocument.cc \
 		kwframe.cc kwtextframeset.cc \
-                kwtableframeset.cc kwanchor.cc \
+                kwtableframeset.cc kwtextimage.cc kwanchor.cc \
                 kwimage.cc kwdrag.cc kwconfig.cc \
 		paragdia.cc searchdia.cc \
 		framedia.cc kcharselectdia.cc kwutils.cc preview.cc \

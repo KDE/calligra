@@ -22,9 +22,11 @@
 
 #include "defs.h"
 #include "kwimage.h"
+#include "kwanchorpos.h"
 
 #include <koRect.h>
 #include <qpicture.h>
+#include <qbrush.h>
 #include <qlist.h>
 
 #include "border.h"
@@ -399,17 +401,18 @@ public:
     KWDocument* kWordDocument() const { return m_doc; }
 
     // only used for headers and footers...
-    void setCurrent( int i ) { current = i; }
-    int getCurrent() { return current; }
+    void setCurrent( int i ) { m_current = i; }
+    int getCurrent() { return m_current; }
 
     /** Make this frameset floating, as close to its current position as possible. */
     void setFloating();
     /** Make this frameset floating, with the anchor at @p parag,@p index in the text frameset @p textfs */
-    void setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index );
+    void setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index ); // convenience method
+    void setAnchored( KWAnchorPosition & pos );
     /** Make this frameset fixed, i.e. not anchored */
     void setFixed();
     /** Return true if this frameset is floating, false if it's fixed */
-    bool isFloating() { return m_anchorParag && m_anchorTextFs; }
+    bool isFloating() { return m_anchorPos.parag && m_anchorPos.textfs; }
 
     /** make this frameset part of a groupmanager
      * @see KWTableFrameSet
@@ -462,13 +465,11 @@ protected:
     QList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
 
     FrameInfo frameInfo;
-    int current;
+    int m_current; // used for headers and footers, not too sure what it means
     KWTableFrameSet *grpMgr;
     bool removeableHeader, visible;
     QString name;
-    KWTextFrameSet* m_anchorTextFs;
-    KWTextParag* m_anchorParag;
-    int m_anchorIndex;
+    KWAnchorPosition m_anchorPos;
 };
 
 /******************************************************************/

@@ -42,7 +42,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
 
     int paragy = paragraph()->rect().y();
-    //kdDebug(32001) << "KWAnchor::draw " << x << "," << y << "  paragy=" << paragy << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+    kdDebug(32001) << "KWAnchor::draw " << x << "," << y << "  paragy=" << paragy << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
     KWDocument * doc = m_frame->getFrameSet()->kWordDocument();
     KWTextFrameSet * fs = textDocument()->textFrameSet();
     QPoint cPoint;

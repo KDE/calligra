@@ -48,6 +48,7 @@ class KWVariableFormat;
 #include <koDocumentChild.h>
 
 #include "kwimage.h"
+#include "kwanchorpos.h"
 #include "kwunit.h"
 
 #include <qlist.h>
@@ -276,10 +277,13 @@ public:
 
     KWAutoFormat * getAutoFormat() { return m_autoFormat; }
 
+    // This is used upon loading, to delay certain things until completeLoading.
     // For KWTextImage
     void addImageRequest( const QString &filename, KWTextImage *img );
     // For KWPictureFrameSet
     void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
+    // For KWTextParag
+    void addAnchorRequest( int fsnum, const KWAnchorPosition &anchorPos );
 
     /**
      * Find or create a format for this type of variable
@@ -507,8 +511,10 @@ private:
     QString urlIntern;
 
     QStringList pixmapKeys, pixmapNames;
-    QMap<QString, KWTextImage *> imageRequests;
-    QMap<QString, KWPictureFrameSet *> imageRequests2;
+
+    QMap<QString, KWTextImage *> m_imageRequests;
+    QMap<QString, KWPictureFrameSet *> m_imageRequests2;
+    QMap<int, KWAnchorPosition> m_anchorRequests;
 
     QMap<int, KWVariableFormat*> m_mapVariableFormats;
     QList<KWVariable> variables;

@@ -23,6 +23,8 @@
 #include "kwstyle.h"
 #include "kwdoc.h"
 #include "kwformat.h"
+#include "kwanchor.h"
+#include "kwtextimage.h"
 #include "kwtextframeset.h"
 #include "counter.h"
 #include <kdebug.h>
@@ -38,10 +40,15 @@ KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool
 
 KWTextParag::~KWTextParag()
 {
-    if ( !static_cast<KWTextDocument *>(document())->isDestroying() )
+    if ( !textDocument()->isDestroying() )
         invalidateCounters();
     //kdDebug() << "KWTextParag::~KWTextParag " << this << endl;
     delete m_item;
+}
+
+KWTextDocument * KWTextParag::textDocument() const
+{
+    return static_cast<KWTextDocument *>( document() );
 }
 
 // There is one QStyleSheetItems per paragraph, created on demand,
@@ -249,24 +256,21 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
 int KWTextParag::topMargin() const
 {
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
+    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItY(
         m_layout.margins[ QStyleSheetItem::MarginTop ]
         + m_layout.topBorder.ptWidth ) );
 }
 
 int KWTextParag::bottomMargin() const
 {
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
+    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItY(
         m_layout.margins[ QStyleSheetItem::MarginBottom ]
         + m_layout.bottomBorder.ptWidth ) );
 }
 
 int KWTextParag::leftMargin() const
 {
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
+    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItX(
         m_layout.margins[ QStyleSheetItem::MarginLeft ]
         + m_layout.leftBorder.ptWidth )
         + counterWidth() /* shouldn't be zoomed, it depends on the font sizes */);
@@ -274,23 +278,20 @@ int KWTextParag::leftMargin() const
 
 int KWTextParag::rightMargin() const
 {
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
+    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItX(
         m_layout.margins[ QStyleSheetItem::MarginRight ]
         + m_layout.rightBorder.ptWidth ) );
 }
 
 int KWTextParag::firstLineMargin() const
 {
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
+    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItX(
         m_layout.margins[ QStyleSheetItem::MarginFirstLine ] ) );
 }
 
 int KWTextParag::lineSpacing() const
 {
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-    return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
+    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItY(
         m_layout.lineSpacing ) );
 }
 
@@ -306,8 +307,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
          || m_layout.leftBorder.ptWidth > 0
          || m_layout.rightBorder.ptWidth > 0 )
     {
-        KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-        KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+        KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
         int leftX = 0;
         int rightX = documentWidth()-1;
         int topY = lineY( 0 ); // Maybe this is always 0. Not sure.
@@ -343,8 +343,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
 void KWTextParag::copyParagData( QTextParag *_parag )
 {
     KWTextParag * parag = static_cast<KWTextParag *>(_parag);
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(parag->document());
-    KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
     // Style of the previous paragraph
     KWStyle * style = doc->findStyle( parag->styleName(), true );
     // Obey "following style" setting
@@ -357,7 +356,7 @@ void KWTextParag::copyParagData( QTextParag *_parag )
         else if ( style != newStyle ) // if same style, keep paragraph-specific changes as usual
         {
             setParagLayout( newStyle->paragLayout() );
-            QTextFormat * format = textdoc->formatCollection()->format( &newStyle->format() );
+            QTextFormat * format = document()->formatCollection()->format( &newStyle->format() );
             setFormat( format );
             string()->setFormat( 0, format, true ); // prepare format for text insertion
             styleApplied = true;
@@ -409,8 +408,7 @@ void KWTextParag::setTabList( const KoTabulatorList &tabList )
 {
     // TODO support for centered tabs, right-aligned tabs etc.
     m_layout.setTabList( tabList );
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-    KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
     KoTabulatorList::ConstIterator it = tabList.begin();
     QValueList<int> sortedTabs;
     for ( int i = 0; it != tabList.end() ; ++it, ++i )
@@ -521,22 +519,8 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
             formatsElem.appendChild( formatElem );
             formatElem.setAttribute( "pos", index );
             formatElem.setAttribute( "len", 1 );
-            // Is it an image ?
-            KWTextImage * ti = dynamic_cast<KWTextImage *>( ch.customItem() );
-            if ( ti )
-            {
-                formatElem.setAttribute( "id", 2 ); // code for a picture
-                QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
-                formatElem.appendChild( imageElem );
-                QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
-                imageElem.appendChild( elem );
-                elem.setAttribute( "value", ti->image().key() );
-                startPos = -1;
-            }
-            else
-            {
-                // ... TODO
-            }
+            saveCustomItem( formatElem, ch.customItem() );
+            startPos = -1;
         }
         else
         {
@@ -584,6 +568,39 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
     // pass it instead of 0L, to only save the non-default attributes
     QDomElement paragFormatElement = saveFormat( doc, paragFormat(), 0L, 0, to - from + 1 );
     layoutElem.appendChild( paragFormatElement );
+}
+
+void KWTextParag::saveCustomItem( QDomElement & formatElem, QTextCustomItem * item )
+{
+    // Is it an image ?
+    KWTextImage * ti = dynamic_cast<KWTextImage *>( item );
+    if ( ti )
+    {
+        formatElem.setAttribute( "id", 2 ); // code for a picture
+        QDomElement imageElem = formatElem.ownerDocument().createElement( "IMAGE" );
+        formatElem.appendChild( imageElem );
+        QDomElement elem = formatElem.ownerDocument().createElement( "FILENAME" );
+        imageElem.appendChild( elem );
+        elem.setAttribute( "value", ti->image().key() );
+        return;
+    }
+
+    // Is it an anchor ?
+    KWAnchor * anchor = dynamic_cast<KWAnchor *>( item );
+    if ( anchor )
+    {
+        formatElem.setAttribute( "id", 6 ); // code for an anchor
+        QDomElement anchorElem = formatElem.ownerDocument().createElement( "ANCHOR" );
+        formatElem.appendChild( anchorElem );
+        anchorElem.setAttribute( "type", "frameset" ); // the only possible value currently
+        KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+        // ## TODO save the frame number as well ? Only the first frame ? to be determined
+        // ## or maybe use len=<number of frames>. Difficult :}
+        int num = doc->getFrameSetNum( anchor->frame()->getFrameSet() );
+        anchorElem.setAttribute( "instance", num );
+        return;
+    }
+    // else ....
 }
 
 //static
@@ -641,8 +658,7 @@ void KWTextParag::loadLayout( QDomElement & attributes )
     QDomElement layout = attributes.namedItem( "LAYOUT" ).toElement();
     if ( !layout.isNull() )
     {
-        KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-        KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+        KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
         KWParagLayout paragLayout( layout, doc );
         setParagLayout( paragLayout );
 
@@ -692,8 +708,7 @@ void KWTextParag::load( QDomElement &attributes )
 
 void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
 {
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-    KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
     if ( !formatsElem.isNull() )
     {
@@ -717,7 +732,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 case 2: // Picture
                 {
                     ASSERT( len == 1 );
-                    KWTextImage * custom = new KWTextImage( textdoc, QString::null );
+                    KWTextImage * custom = new KWTextImage( textDocument(), QString::null );
                     kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
                     setCustomItem( index, custom, paragFormat() );
                     // <IMAGE>
@@ -735,6 +750,31 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                     } else
                         kdError(32001) << "Missing IMAGE tag in FORMAT wth id=2" << endl;
 
+                    break;
+                }
+                case 6:
+                {
+                    ASSERT( len == 1 );
+                    QDomElement anchorElem = formatElem.namedItem( "ANCHOR" ).toElement();
+                    if ( !anchorElem.isNull() ) {
+                        QString type = anchorElem.attribute( "type" );
+                        if ( type == "grpMgr" ) // old syntax
+                            // TODO, set table floating
+                            kdWarning() << "floating tables not implemented yet" << endl;
+                        else if ( type == "frameset" )
+                        {
+                            int num = anchorElem.attribute( "instance" ).toInt();
+                            KWAnchorPosition pos;
+                            pos.textfs = textDocument()->textFrameSet();
+                            pos.parag = this;
+                            pos.index = index;
+                            doc->addAnchorRequest( num, pos );
+                        }
+                        else
+                            kdWarning() << "Anchor type not supported: " << type << endl;
+                    }
+                    else
+                        kdWarning() << "Missing ANCHOR tag" << endl;
                     break;
                 }
                 default:

@@ -17,25 +17,27 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kwimage_h__
-#define __kwimage_h__
+#ifndef kwanchorpos_h
+#define kwanchorpos_h
 
-#include <qstring.h>
-
-#include <koImage.h>
-#include <koImageCollection.h>
-
-class KWTextDocument;
-typedef KoImageCollection<QString>::Image KWImage;
-
-class KWImageCollection : public KoImageCollection<QString>
+class KWTextFrameSet;
+class KWTextParag;
+/**
+ * Definition of an anchor's position:
+ * - A text frameset
+ * - A paragraph in this frameset
+ * - An index in the paragraph
+ * This is used in KWFrameSet for floating framesets
+ * and in KWDocument for making framesets floating upon loading.
+ */
+struct KWAnchorPosition
 {
-public:
+    KWAnchorPosition() { makeInvalid(); }
+    void makeInvalid() { textfs = 0L; parag = 0L; index = 0; }
 
-    /**
-     * Find or create an image
-     */
-    KWImage image( const QString & fileName );
+    KWTextFrameSet* textfs;
+    KWTextParag* parag;
+    int index;
 };
 
 #endif

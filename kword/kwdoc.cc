@@ -61,6 +61,7 @@
 #include "kwview.h"
 #include "kwfactory.h"
 #include "kwcommand.h"
+#include "kwtextimage.h"
 #include <kdebug.h>
 #include <kfontdialog.h>
 
@@ -773,8 +774,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     kdDebug(32001) << "KWDocument::loadXML" << endl;
     pixmapKeys.clear();
     pixmapNames.clear();
-    imageRequests.clear();
-    imageRequests2.clear();
+    m_imageRequests.clear();
+    m_imageRequests2.clear();
+    m_anchorRequests.clear();
 
     m_pageLayout.unit = PG_MM;
 
@@ -1170,7 +1172,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     repaintAllViews( true );     // in case any view exists already
 
-    kdDebug(32001) << "KWDocument::loadXML done" << endl;
+    //kdDebug(32001) << "KWDocument::loadXML done" << endl;
 
     setModified( false );
 
@@ -1431,6 +1433,17 @@ bool KWDocument::completeLoading( KoStore *_store )
 
     processImageRequests();
 
+    QMapIterator<int, KWAnchorPosition> itanch = m_anchorRequests.begin();
+    for ( ; itanch != m_anchorRequests.end(); ++itanch )
+    {
+        //kdDebug(32001) << "KWDocument::completeLoading anchoring frameset " << itanch.key() << endl;
+        KWFrameSet * fs = getFrameSet( itanch.key() );
+        ASSERT( fs );
+        if ( fs )
+            fs->setAnchored( itanch.data() );
+    }
+    m_anchorRequests.clear();
+
     // Finalize all the existing framesets
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1441,18 +1454,18 @@ bool KWDocument::completeLoading( KoStore *_store )
 
 void KWDocument::processImageRequests()
 {
-    QMapIterator<QString,KWTextImage *> it2 = imageRequests.begin();
-    for ( ; it2 != imageRequests.end(); ++it2 )
+    QMapIterator<QString,KWTextImage *> it2 = m_imageRequests.begin();
+    for ( ; it2 != m_imageRequests.end(); ++it2 )
     {
         kdDebug(32001) << "KWDocument::completeLoading loading image " << it2.key() << endl;
         it2.data()->setImage( m_imageCollection.findImage( it2.key() ) );
     }
-    imageRequests.clear();
+    m_imageRequests.clear();
 
-    QMapIterator<QString,KWPictureFrameSet *> it3 = imageRequests2.begin();
-    for ( ; it3 != imageRequests2.end(); ++it3 )
+    QMapIterator<QString,KWPictureFrameSet *> it3 = m_imageRequests2.begin();
+    for ( ; it3 != m_imageRequests2.end(); ++it3 )
         it3.data()->setImage( m_imageCollection.findImage( it3.key() ) );
-    imageRequests2.clear();
+    m_imageRequests2.clear();
 }
 
 /*================================================================*/
@@ -2244,16 +2257,19 @@ void KWDocument::setFrameMargins( double l, double r, double t, double b )
     setModified(TRUE);
 }
 
-/*================================================================*/
 void KWDocument::addImageRequest( const QString &filename, KWTextImage *img )
 {
-    imageRequests.insert( filename, img );
+    m_imageRequests.insert( filename, img );
 }
 
-/*================================================================*/
 void KWDocument::addImageRequest( const QString &filename, KWPictureFrameSet *fs )
 {
-    imageRequests2.insert( filename, fs );
+    m_imageRequests2.insert( filename, fs );
+}
+
+void KWDocument::addAnchorRequest( int fsnum, const KWAnchorPosition &anchorPos )
+{
+    m_anchorRequests.insert( fsnum, anchorPos );
 }
 
 KWVariableFormat * KWDocument::variableFormat( int type )
@@ -2302,7 +2318,6 @@ KWVariableFormat * KWDocument::variableFormat( int type )
     }
 }
 
-/*================================================================*/
 void KWDocument::registerVariable( KWVariable *var )
 {
     if ( !var )

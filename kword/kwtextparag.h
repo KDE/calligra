@@ -31,6 +31,7 @@
 using namespace Qt3;
 class QDomDocument;
 class KWTextFrameSet;
+class KWTextDocument;
 class KWDocument;
 class KWTextParag;
 class Counter;
@@ -84,6 +85,8 @@ class KWTextParag : public QTextParag
 public:
     KWTextParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
     ~KWTextParag();
+
+    KWTextDocument * textDocument() const;
 
     // Sets all the parameters from a paraglayout struct
     void setParagLayout( const KWParagLayout &layout );
@@ -178,6 +181,7 @@ protected:
     virtual void copyParagData( QTextParag *_parag );
     void invalidateCounters();
     void checkItem( QStyleSheetItem * & item, const char * name );
+    void saveCustomItem( QDomElement & formatElem, QTextCustomItem * item );
 
 private:
     QStyleSheetItem * m_item;

@@ -20,6 +20,7 @@
 #include <qrichtext_p.h>
 
 #include "kwtextframeset.h"
+#include "kwtextimage.h"
 #include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwview.h"

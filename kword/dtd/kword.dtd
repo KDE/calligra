@@ -660,11 +660,13 @@ don't put a </?xml...> at the end of the file!).
 
             type:               What kind of object is being anchored?
 
-                                    grpMgr...a table
+                                    grpMgr: a table [deprecated]
+                                    frameset: a frameset [default]
 
             instance:           An identifier that uniquely names the
                                 particular instance of the type of object
                                 being anchored.
+                                For framesets, this is the frameset number in the doc.
 -->
 <!ELEMENT ANCHOR
     EMPTY>
