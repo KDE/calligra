@@ -2538,6 +2538,16 @@ void KWDocument::refreshFrameBorderButton()
     }
 }
 
+void KWDocument::updateResizeHandles( )
+{
+   QList<KWFrame> selectedFrames = getSelectedFrames();
+   KWFrame *frame=0L;
+   for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
+   {
+       frame->updateResizeHandles();
+   }
+}
+
 void KWDocument::reorganizeGUI()
 {
    QListIterator<KWView> it( m_lstViews );

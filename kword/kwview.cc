@@ -958,6 +958,7 @@ void KWView::setTool( MouseMode _mouseMode )
         actionToolsCreatePix->setChecked( TRUE );
         break;
     case MM_CREATE_TABLE:
+    case MM_CREATE_FORMULA:
         // no such tool
         break;
     case MM_CREATE_PART:
@@ -1224,6 +1225,7 @@ void KWView::viewFrameBorders()
 void KWView::viewHeader()
 {
     doc->setHeaderVisible( actionViewHeader->isChecked() );
+    doc->updateResizeHandles( );
     /*
     KoPageLayout pgLayout;
     KoColumns cl;
@@ -1237,6 +1239,7 @@ void KWView::viewHeader()
 void KWView::viewFooter()
 {
     doc->setFooterVisible( actionViewFooter->isChecked() );
+    doc->updateResizeHandles( );
     /*
     KoPageLayout pgLayout;
     KoColumns cl;
@@ -1297,18 +1300,13 @@ void KWView::viewZoom( const QString &s )
         gui->getHorzRuler()->setZoom( doc->zoomedResolutionX() );
         gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
 
-        //After zoom refresh all resize handle
-        QList<KWFrame> selectedFrames = doc->getSelectedFrames();
-        KWFrame *frame=0L;
-        for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-        {
-            frame->updateResizeHandles();
-        }
+        doc->updateResizeHandles( );
     }
     gui->canvasWidget()->repaintAll();
     gui->canvasWidget()->setFocus();
 
 }
+
 
 /*===============================================================*/
 void KWView::insertPicture()
@@ -1631,12 +1629,7 @@ void KWView::formatPage()
         doc->setPageLayout( pgLayout, cl, kwhf );
         doc->updateRuler();
 
-        QList<KWFrame> selectedFrames = doc->getSelectedFrames();
-        KWFrame *frame=0L;
-        for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-        {
-            frame->updateResizeHandles();
-        }
+        doc->updateResizeHandles();
 #if 0
         gui->canvasWidget()->frameSizeChanged( pgLayout );
 #endif
@@ -2483,12 +2476,7 @@ void KWView::newPageLayout( KoPageLayout _layout )
 
     doc->updateRuler();
 
-    QList<KWFrame> selectedFrames = doc->getSelectedFrames();
-    KWFrame *frame=0L;
-    for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-    {
-        frame->updateResizeHandles();
-    }
+    doc->updateResizeHandles();
 }
 
 void KWView::newFirstIndent( double _firstIndent )
@@ -2604,7 +2592,7 @@ void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
     ASSERT( fs );
     if ( !fs ) return;
     QTextParag * p = fs->textDocument()->firstParag();
-    while ( p && pos >= p->length() )
+    while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
         p = p->next();
@@ -2623,7 +2611,7 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
     ASSERT( fs );
     if ( !fs ) return;
     QTextParag * p = fs->textDocument()->firstParag();
-    while ( p && pos >= p->length() )
+    while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
         p = p->next();

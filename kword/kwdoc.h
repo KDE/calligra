@@ -444,6 +444,9 @@ public:
     bool getShowRuler(){return m_bShowRuler;}
 
     void reorganizeGUI();
+    //necessary to update resize handle when you change layout
+    // make zoom, add header, add footer etc...
+    void updateResizeHandles();
 
 signals:
     void sig_imageModified();
