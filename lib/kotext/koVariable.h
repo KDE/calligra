@@ -64,7 +64,7 @@ class KoVariableSettings
 
     bool underlineLink()const { return m_underlineLink; }
     void setUnderlineLink( bool b){ m_underlineLink=b; }
-    
+
     bool displayComment()const { return m_displayComment; }
     void setDisplayComment( bool b){ m_displayComment=b; }
 
@@ -502,7 +502,6 @@ public:
                         VST_AUTHORNAME = 2, VST_EMAIL = 3, VST_COMPANYNAME = 4,
 			VST_PATHFILENAME = 5, VST_FILENAMEWITHOUTEXTENSION=6,
                         VST_TELEPHONE = 7, VST_FAX = 8, VST_COUNTRY = 9,
-                        // room for more 'author' page info fields if asked for
                         VST_TITLE = 10, VST_ABSTRACT = 11,
                         VST_POSTAL_CODE = 12, VST_CITY = 13, VST_STREET = 14,
                         VST_AUTHORTITLE = 15, VST_INITIAL = 16};
