@@ -451,6 +451,12 @@ double util_fact( double val, double end )
     return (val*util_fact((double)(val-1),end));
 }
 
+bool util_isAllSelected(const QRect &selection)
+{
+  return ( selection.top() == 1 && selection.bottom() == KS_rowMax 
+	   && selection.left() == 1 && selection.right() == KS_colMax);
+}
+
 bool util_isColumnSelected(const QRect &selection)
 {
   return ( (selection.top() == 1) && (selection.bottom() == KS_rowMax) );
