@@ -4,7 +4,7 @@ SUBDIRS = filter pics templates
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(srcdir)/filter -I$(srcdir) $(all_includes)
 
 messages: rc.cpp
-	$(XGETTEXT) -kI18N -kSI18N rc.cpp *.cc KIllustrator_aboutdata.h -o $(podir)/killustrator.pot
+	$(XGETTEXT) -kI18N -kSI18N rc.cpp *.cc KIllustrator_aboutdata.h -o $(podir)/kontour.pot
 
 kdelnk_DATA = killustrator.desktop kontour.desktop
 kdelnkdir = $(kde_appsdir)/Office
