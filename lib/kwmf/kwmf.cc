@@ -345,6 +345,18 @@ bool KWmf::parse(
         S32 bottom;
     } RECTL;
 
+    typedef struct _SIZE
+    {
+        S16 width;
+        S16 height;
+    } SIZE;
+
+    typedef struct _SIZEL
+    {
+        S32 width;
+        S32 height;
+    } SIZEL;
+
     struct WmfEnhMetaHeader
     {
         S32 iType;                  // Record type EMR_HEADER
@@ -365,8 +377,8 @@ bool KWmf::parse(
         S32 offDescription;         // Offset to the metafile description record.
                                     // This is 0 if there is no description string
         S32 nPalEntries;            // Number of entries in the metafile palette.
-        S32 szlDevice;              // Size of the reference device in pels
-        S32 szlMillimeters;         // Size of the reference device in millimeters
+        SIZEL szlDevice;            // Size of the reference device in pels
+        SIZEL szlMillimeters;       // Size of the reference device in millimeters
     };
     #define ENHMETA_SIGNATURE       0x464D4520
 
@@ -470,8 +482,10 @@ bool KWmf::parse(
         stream >> eheader.nDescription;
         stream >> eheader.offDescription;
         stream >> eheader.nPalEntries;
-        stream >> eheader.szlDevice;
-        stream >> eheader.szlMillimeters;
+        stream >> eheader.szlDevice.width;
+        stream >> eheader.szlDevice.height;
+        stream >> eheader.szlMillimeters.width;
+        stream >> eheader.szlMillimeters.height;
 
         kdError(s_area) << "WMF Extended Header NOT YET IMPLEMENTED, SORRY." << endl;
         /*

@@ -221,8 +221,10 @@ bool QWinMetaFile::load( QBuffer &buffer )
         st >> eheader.nDescription;
         st >> eheader.offDescription;
         st >> eheader.nPalEntries;
-        st >> eheader.szlDevice;
-        st >> eheader.szlMillimeters;
+        st >> eheader.szlDevice.width;
+        st >> eheader.szlDevice.height;
+        st >> eheader.szlMillimeters.width;
+        st >> eheader.szlMillimeters.height;
 
         if ( mSingleStep )
         {

@@ -6,9 +6,7 @@
 
 typedef short WORD;
 typedef int DWORD;
-typedef Q_INT32 SIZE;
 typedef Q_INT32 LONG;
-typedef SIZE SIZEL;
 typedef void* _HANDLE;
 
 typedef struct _RECT
@@ -26,6 +24,18 @@ typedef struct _RECTL
     LONG right;
     LONG bottom;
 } RECTL;
+
+typedef struct _SIZE
+{
+    WORD width;
+    WORD height;
+} SIZE;
+
+typedef struct _SIZEL
+{
+    LONG width;
+    LONG height;
+} SIZEL;
 
 
 struct WmfEnhMetaHeader
