@@ -14,36 +14,35 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/
+ */
 
 #ifndef EXCELFILTER_H
 #define EXCELFILTER_H
 
 #include <filterbase.h>
 #include <qarray.h>
+
 class QDataStream;
 class XMLTree;
 
-class ExcelFilter :
-    public FilterBase
+class ExcelFilter : public FilterBase
 {
-    Q_OBJECT
-
+	Q_OBJECT
 public:
-    ExcelFilter(const QByteArray &mainStream);
-    ~ExcelFilter();
+	ExcelFilter(const QByteArray &mainStream);
+	~ExcelFilter();
 
-    virtual bool filter();
-    virtual const QDomDocument *const part();
+	virtual bool filter();
+	virtual const QDomDocument *const part();
 
 private slots:
-    void slotGotAuthor(const QString &author);
+	void slotGotAuthor(const QString &author);
 
 private:
-    QDataStream *s;
-    XMLTree *tree;
-    double length;
-    static const int MAX_RECORD_SIZE = 0x2024;
+	QDataStream *s;
+	XMLTree *tree;
+	double length;
+	static const int MAX_RECORD_SIZE = 0x2024;
 };
 
 #endif
