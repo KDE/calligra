@@ -92,7 +92,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
   if ( !name )
   {
-    QString tmp( "Document%1" );
+    QString tmp( "Document%1" );	//lukas: FIXME
     tmp = tmp.arg( s_docId++ );
     setName( tmp.latin1() );
   }
@@ -366,10 +366,10 @@ bool KivioDoc::completeLoading( KoStore* )
 
 KivioPage* KivioDoc::createPage()
 {
-  QString s( i18n("Page%1") );
+  QString s( i18n("Page%1") );	
   s = s.arg( m_iPageId++ );
 
-  KivioPage* t = new KivioPage(m_pMap,s.ascii());
+  KivioPage* t = new KivioPage(m_pMap,s.ascii());	//lukas: FIXME
   t->setPageName(s,true);
 
   return t;
