@@ -147,13 +147,13 @@ void KIllustratorView::createGUI()
     setupCanvas ();
 
     // File menu
-    m_import = new KAction( i18n("Import"), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
-    m_export = new KAction( i18n("Export"), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
-    m_docInfo = new KAction( i18n("Document Info"), 0, this, SLOT( slotDocumentInfo() ), actionCollection(), "documentInfo" );
+    m_import = new KAction( i18n("Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
+    m_export = new KAction( i18n("Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
+    m_docInfo = new KAction( i18n("Document Info..."), 0, this, SLOT( slotDocumentInfo() ), actionCollection(), "documentInfo" );
 	
     // Insert menu
-    m_insertBitmap = new KAction( i18n("Insert Bitmap"), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
-    m_insertClipart = new KAction( i18n("Insert Clipart"), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
+    m_insertBitmap = new KAction( i18n("Insert Bitmap..."), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
+    m_insertClipart = new KAction( i18n("Insert Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
 
     // Edit menu
     m_copy = new KAction( i18n("Copy"), KIBarIcon("editcopy"), 0, this, SLOT( slotCopy() ), actionCollection(), "copy" );
@@ -164,7 +164,7 @@ void KIllustratorView::createGUI()
     m_duplicate = new KAction( i18n("Duplicate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
     m_delete = new KAction( i18n("Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
     m_selectAll = new KAction( i18n("Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
-    m_properties = new KAction( i18n("Properties"), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
+    m_properties = new KAction( i18n("Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 	
     // View menu
     m_outline = new KToggleAction( i18n("Outline"), 0, actionCollection(), "outline" );
@@ -474,9 +474,9 @@ void KIllustratorView::resizeEvent (QResizeEvent* )
 void KIllustratorView::updateReadWrite( bool readwrite )
 {
 #ifdef __GNUC__
-#warning TODO 
+#warning TODO
 #endif
-} 
+}
 
 void KIllustratorView::showTransformationDialog( int id )
 {

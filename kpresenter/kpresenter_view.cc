@@ -1861,11 +1861,11 @@ void KPresenterView::setupActions()
 				    this, SLOT( extraLower() ),
 				    actionCollection(), "extra_lower" );
 
-    actionExtraRotate = new KAction( i18n( "R&otate object(s)" ), KPBarIcon( "rotate" ), 0,
+    actionExtraRotate = new KAction( i18n( "R&otate object(s)..." ), KPBarIcon( "rotate" ), 0,
 				     this, SLOT( extraRotate() ),
 				     actionCollection(), "extra_rotate" );
 
-    actionExtraShadow = new KAction( i18n( "&Shadow object(s)" ), KPBarIcon( "shadow" ), 0,
+    actionExtraShadow = new KAction( i18n( "&Shadow object(s)..." ), KPBarIcon( "shadow" ), 0,
 				     this, SLOT( extraShadow() ),
 				     actionCollection(), "extra_shadow" );
 
@@ -1946,7 +1946,7 @@ void KPresenterView::setupActions()
 					   this, SLOT( screenConfigPages() ),
 					   actionCollection(), "screen_configpages" );
 
-    actionScreenPresStructView = new KAction( i18n( "&Open Presentationstructor Editor..." ),
+    actionScreenPresStructView = new KAction( i18n( "&Open Presentation Structure Editor..." ),
 					   0,
 					   this, SLOT( screenPresStructView() ),
 					   actionCollection(), "screen_presstruct" );
@@ -2661,9 +2661,9 @@ void KPresenterView::doAutomaticScreenPres()
 void KPresenterView::updateReadWrite( bool readwrite )
 {
 #ifdef __GNUC__
-#warning TODO 
+#warning TODO
 #endif
-} 
+}
 
 /*========================= change undo =========================*/
 void KPresenterView::changeUndo( QString _text, bool _enable )
