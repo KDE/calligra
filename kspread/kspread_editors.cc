@@ -46,7 +46,7 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   setFocusProxy( m_pEdit );
   setFontPropagation( AllChildren );
   setPalettePropagation( AllChildren );
-  m_pEdit->setBackgroundColor(_cell->bgColor(_cell->column(),_cell->row()));
+
   connect( m_pEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotTextChanged( const QString& ) ) );
   connect( m_pEdit, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
 
