@@ -16,13 +16,10 @@
  * USA.
  */
 
-#include <qfile.h>
 #include <qfileinfo.h>
-#include <qpainter.h>
-#include <qdatastream.h>
 #include <assert.h>
-#include <qcolor.h>
 #include <qapplication.h>
+#include <qbuffer.h>
 #include <kdebug.h>
 
 #ifdef HAVE_CONFIG_H

@@ -26,7 +26,6 @@
 #include <qbuffer.h>
 #include <kdebug.h>
 #include <ktar.h>
-#include <kapp.h>
 #include <config.h>
 
 #define ROOTPART "root"

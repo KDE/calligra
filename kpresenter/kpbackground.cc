@@ -27,6 +27,7 @@
 #include <kptextobject.h>
 
 #include <qpainter.h>
+#include <qpicture.h>
 #include <qfileinfo.h>
 
 // for getenv ()

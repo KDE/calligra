@@ -30,10 +30,10 @@ DESCRIPTION
 #ifndef KWMF_H
 #define KWMF_H
 
-#include <qdatastream.h>
-#include <qpointarray.h>
-#include <qrect.h>
 #include <qvaluestack.h>
+
+class QDataStream;
+class QPointArray;
 
 class KWmf
 {

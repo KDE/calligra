@@ -26,10 +26,10 @@ DESCRIPTION
 
 #include <kdebug.h>
 #include <math.h>
-#include <qdatastream.h>
 #include <qfile.h>
 #include <qpointarray.h>
 #include <kwmf.h>
+#include <qrect.h>
 
 #define PI (3.14159265358979323846)
 

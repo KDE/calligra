@@ -18,22 +18,15 @@
 #ifndef qwmf_h
 #define qwmf_h
 
-#include <qstring.h>
 #include <qpainter.h>
 #include <qpointarray.h>
-#include <qbrush.h>
-#include <qpen.h>
-#include <qcolor.h>
-#include <qpicture.h>
-#include <qrect.h>
 
-class QPainter;
+class QString;
 class WmfCmd;
 class WinObjHandle;
 class WinObjPenHandle;
 class WinObjBrushHandle;
 struct WmfPlaceableHeader;
-class QPaintDevice;
 
 class QWinMetaFile
 {

@@ -26,6 +26,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <ktempfile.h>
+#include <qpicture.h>
 
 // Can't do that yet
 //#define SAVE_IN_SVG_FORMAT
