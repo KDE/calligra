@@ -274,52 +274,55 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
     {
         dp = drawPage.toElement();
-        m_styleStack.clear(); // remove all styles
-        fillStyleStack( dp );
-        m_styleStack.save();
-        int pagePos = dp.attribute( "draw:id" ).toInt() - 1;
-        // take care of a possible page background or slide transition or sound
-        if ( m_styleStack.hasAttribute( "draw:fill" )
-             || m_styleStack.hasAttribute( "presentation:transition-style" ))
+        if ( dp.tagName()=="draw:page" && dp.hasAttribute( "draw:id" ))
         {
-            appendBackgroundPage( doc, backgroundElement,pictureElement, soundElement );
-        }
-        else if ( !m_styleStack.hasAttribute( "draw:fill" ) && backgroundStyle)
-        {
+            m_styleStack.clear(); // remove all styles
+            fillStyleStack( dp );
             m_styleStack.save();
-            m_styleStack.push( *backgroundStyle );
-            appendBackgroundPage( doc, backgroundElement,pictureElement, soundElement );
+            int pagePos = dp.attribute( "draw:id" ).toInt() - 1;
+            // take care of a possible page background or slide transition or sound
+            if ( m_styleStack.hasAttribute( "draw:fill" )
+                 || m_styleStack.hasAttribute( "presentation:transition-style" ))
+            {
+                appendBackgroundPage( doc, backgroundElement,pictureElement, soundElement );
+            }
+            else if ( !m_styleStack.hasAttribute( "draw:fill" ) && backgroundStyle)
+            {
+                m_styleStack.save();
+                m_styleStack.push( *backgroundStyle );
+                appendBackgroundPage( doc, backgroundElement,pictureElement, soundElement );
+                m_styleStack.restore();
+                kdDebug()<<" load standard bacground \n";
+            }
+            if ( m_styleStack.hasAttribute( "presentation:visibility" ) )
+            {
+                QString str = m_styleStack.attribute( "presentation:visibility" );
+                QDomElement slide = doc.createElement("SLIDE");
+                slide.setAttribute( "nr", pagePos );
+                slide.setAttribute( "show", ( ( str=="hidden" ) ? "0" : "1" ));
+                selSlideElement.appendChild( slide );
+
+                //todo add support
+                kdDebug()<<"m_styleStack.hasAttribute( presentation:visibility ) :"<<str<<" position page "<<pagePos<<endl;
+            }
+            // set the pagetitle
+            QDomElement titleElement = doc.createElement( "Title" );
+            titleElement.setAttribute( "title", dp.attribute( "draw:name" ) );
+            pageTitleElement.appendChild( titleElement );
+
+            // The '+1' is necessary to avoid that objects that start on the first line
+            // of a slide will show up on the last line of the previous slide.
+            double offset = CM_TO_POINT( ( dp.attribute( "draw:id" ).toInt() - 1 ) * pageHeight ) + 1;
+
+            // animations (object effects)
+            createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement() );
+
+            // parse all objects
+            appendObject(drawPage, doc, soundElement,pictureElement,pageNoteElement,objectElement, offset);
+
+            //m_animations.clear();
             m_styleStack.restore();
-            kdDebug()<<" load standard bacground \n";
         }
-        if ( m_styleStack.hasAttribute( "presentation:visibility" ) )
-        {
-            QString str = m_styleStack.attribute( "presentation:visibility" );
-            QDomElement slide = doc.createElement("SLIDE");
-            slide.setAttribute( "nr", pagePos );
-            slide.setAttribute( "show", ( ( str=="hidden" ) ? "0" : "1" ));
-            selSlideElement.appendChild( slide );
-
-            //todo add support
-            kdDebug()<<"m_styleStack.hasAttribute( presentation:visibility ) :"<<str<<" position page "<<pagePos<<endl;
-        }
-        // set the pagetitle
-        QDomElement titleElement = doc.createElement( "Title" );
-        titleElement.setAttribute( "title", dp.attribute( "draw:name" ) );
-        pageTitleElement.appendChild( titleElement );
-
-        // The '+1' is necessary to avoid that objects that start on the first line
-        // of a slide will show up on the last line of the previous slide.
-        double offset = CM_TO_POINT( ( dp.attribute( "draw:id" ).toInt() - 1 ) * pageHeight ) + 1;
-
-        // animations (object effects)
-       createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement() );
-
-        // parse all objects
-       appendObject(drawPage, doc, soundElement,pictureElement,pageNoteElement,objectElement, offset);
-
-        //m_animations.clear();
-        m_styleStack.restore();
     }
 
     docElement.appendChild( paperElement );
