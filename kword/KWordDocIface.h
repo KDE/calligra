@@ -158,6 +158,9 @@ k_dcop:
     bool configIncludeTwoUpperUpperLetterException() const;
     void setConfigIncludeTwoUpperUpperLetterException( bool b);
 
+    bool configIncludeAbbreviation() const;
+    void setConfigIncludeAbbreviation( bool b);
+
     //init/save config
     virtual void initConfig();
     virtual void saveConfig();

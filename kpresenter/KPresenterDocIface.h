@@ -152,6 +152,9 @@ k_dcop:
     bool configIncludeTwoUpperUpperLetterException() const;
     void setConfigIncludeTwoUpperUpperLetterException( bool b);
 
+    bool configIncludeAbbreviation() const;
+    void setConfigIncludeAbbreviation( bool b);
+
 
 private:
     KPresenterDoc *doc;

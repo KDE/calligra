@@ -547,3 +547,13 @@ void KWordDocIface::setConfigIncludeTwoUpperUpperLetterException( bool b)
 {
     doc->getAutoFormat()->configIncludeTwoUpperUpperLetterException( b );
 }
+
+bool KWordDocIface::configIncludeAbbreviation() const
+{
+    return doc->getAutoFormat()->getConfigIncludeAbbreviation();
+}
+
+void KWordDocIface::setConfigIncludeAbbreviation( bool b)
+{
+    doc->getAutoFormat()->configIncludeAbbreviation( b );
+}

@@ -510,3 +510,14 @@ void KPresenterDocIface::setConfigIncludeTwoUpperUpperLetterException( bool b)
 {
     doc->getAutoFormat()->configIncludeTwoUpperUpperLetterException( b );
 }
+
+bool KPresenterDocIface::configIncludeAbbreviation() const
+{
+    return doc->getAutoFormat()->getConfigIncludeAbbreviation();
+}
+
+void KPresenterDocIface::setConfigIncludeAbbreviation( bool b)
+{
+    doc->getAutoFormat()->configIncludeAbbreviation( b );
+}
+
