@@ -23,6 +23,7 @@
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
+#define DO_UPDATE m_pTable->emit_updateCell( this, m_iColumn, m_iRow )
 
 /*****************************************************************************
  *
@@ -936,6 +937,9 @@ bool KSpreadCell::calc( bool _makedepend )
 	
   m_bProgressFlag = FALSE;
   m_bCalcDirtyFlag = FALSE;
+
+  DO_UPDATE;
+  
   return TRUE;
 }
 
@@ -1881,7 +1885,13 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 
   text.stripWhiteSpace();
   cerr << "TEXT: '" << text << "'" << endl;
-  setText( text.c_str() );
+  if ( text[0] == '=' )
+  {
+    QString tmp = decodeFormular( text.c_str(), m_iColumn, m_iRow );
+    setText( tmp );
+  }
+  else
+    setText( text.c_str() );
   
   return true;
 }

@@ -1,6 +1,9 @@
-
+from math import *
 
 print "Library started"
+
+def TestMe():
+	return 100.2
 
 def xclCellTest( table, column, row):
 	print "xclCell"
