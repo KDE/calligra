@@ -391,7 +391,9 @@ bool KoStore::addLocalFile( const QString &fileName, const QString &destName )
   uint total = 0;
   for ( int block = 0; ( block = file.readBlock ( data.data(), data.size() ) ) > 0; total += block )
   {
+    data.resize(block);
     write( data );
+    data.resize(8*1024);
   }
   Q_ASSERT( total == size );
 
@@ -418,7 +420,7 @@ bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
   uint total = 0;
   for( int block = 0; ( block = read ( data.data(), data.size() ) ) > 0; total += block )
   {
-    file.writeBlock ( data.data(), data.size() );
+    file.writeBlock ( data.data(), block );
   }
 
   if( size() != -1 )
