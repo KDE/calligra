@@ -2503,31 +2503,14 @@ void KPrCanvas::savePicture()
     stickyPage()->savePicture(m_view);
 }
 
-void KPrCanvas::setFont(const QFont &font, int fontFlags,  const QColor &col, const QColor &backGroundColor,
-                        const QColor & underlineColor, KoTextFormat::UnderlineLineType underlineType,
-                        KoTextFormat::UnderlineLineStyle underlineStyle, KoTextFormat::StrikeOutLineType strikeOutType,
-                        KoTextFormat::StrikeOutLineStyle strikeOutStyle, KoTextFormat::AttributeStyle _att,
-                        double _relativeSize, int _offsetFromBaseLine, const QString &_lang, int flags)
+void KPrCanvas::setTextFormat(const KoTextFormat &format, int flags)
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Text Font") );
     QPtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it ) {
-        KCommand *cmd = it.current()->setFontCommand(font,
-                                                     fontFlags,
-                                                     col,
-                                                     backGroundColor,
-                                                     underlineColor,
-                                                     underlineStyle,
-                                                     underlineType,
-                                                     strikeOutType,
-                                                     strikeOutStyle,
-                                                     _att,
-                                                     _relativeSize,
-                                                     _offsetFromBaseLine,
-                                                     _lang,
-                                                     flags);
+        KCommand *cmd = it.current()->setFormatCommand(&format, flags, true);
 
         if (cmd)
             macroCmd->addCommand( cmd );
@@ -5906,7 +5889,7 @@ void KPrCanvas::scrollCanvas(const KoRect & oldPos)
     else if( m_boundingRect.top() < visiblePage.top() + tmpdiffy )
     {
         m_view->kPresenterDoc()->repaint( rect );
-        int y = m_view->zoomHandler()->zoomItY( visiblePage.top() + tmpdiffy ) 
+        int y = m_view->zoomHandler()->zoomItY( visiblePage.top() + tmpdiffy )
               - m_view->zoomHandler()->zoomItY( m_boundingRect.top() );
         m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->value() - y );
     }
@@ -5914,7 +5897,7 @@ void KPrCanvas::scrollCanvas(const KoRect & oldPos)
     if( m_boundingRect.left() < ( visiblePage.left() + tmpdiffx ) )
     {
         m_view->kPresenterDoc()->repaint( rect );
-        int x = m_view->zoomHandler()->zoomItX( visiblePage.left() + tmpdiffx ) 
+        int x = m_view->zoomHandler()->zoomItX( visiblePage.left() + tmpdiffx )
               - m_view->zoomHandler()->zoomItX( m_boundingRect.left() );
         m_view->getHScrollBar()->setValue( m_view->getHScrollBar()->value() - x );
     }
@@ -5922,7 +5905,7 @@ void KPrCanvas::scrollCanvas(const KoRect & oldPos)
     {
         m_view->kPresenterDoc()->repaint( rect );
 
-        int x = m_view->zoomHandler()->zoomItX( m_boundingRect.right() ) 
+        int x = m_view->zoomHandler()->zoomItX( m_boundingRect.right() )
               - m_view->zoomHandler()->zoomItX( visiblePage.right() + tmpdiffx );
         m_view->getHScrollBar()->setValue( m_view->getHScrollBar()->value() + x );
     }
@@ -6198,7 +6181,7 @@ void KPrCanvas::flipObject( bool _horizontal )
     QPtrList<KPObject> lst;
     QPtrListIterator<KPObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && 
+        if ( it.current()->isSelected() &&
              it.current()->getType() != OT_AUTOFORM &&
              it.current()->getType() != OT_PART &&
              it.current()->getType() != OT_TEXT ) {
@@ -6208,7 +6191,7 @@ void KPrCanvas::flipObject( bool _horizontal )
     //get sticky obj
     it=stickyPage()->objectList();
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && 
+        if ( it.current()->isSelected() &&
              it.current()->getType() != OT_AUTOFORM &&
              it.current()->getType() != OT_PART &&
              it.current()->getType() != OT_TEXT ) {
@@ -6219,7 +6202,7 @@ void KPrCanvas::flipObject( bool _horizontal )
         return;
 
     KPrFlipObjectCommand *flipCmd = new KPrFlipObjectCommand( i18n("Flip Objects"),
-                                                              m_view->kPresenterDoc(), 
+                                                              m_view->kPresenterDoc(),
                                                               _horizontal, lst );
     flipCmd->execute();
     m_view->kPresenterDoc()->addCommand( flipCmd );

@@ -1791,31 +1791,7 @@ void KPresenterView::mtextFont()
         delete m_fontDlg;
         m_fontDlg = 0L;
     }
-    uint fontAttributeFlags = 0;
-    if ( actionFormatSub->isChecked() )
-        fontAttributeFlags |= KoFontDia::FontAttributeSubscript;
-    if( actionFormatSuper->isChecked() )
-        fontAttributeFlags |= KoFontDia::FontAttributeSuperScript;
-    if( textIface->textShadow() )
-        fontAttributeFlags |= KoFontDia::FontAttributeShadowText;
-    if( textIface->wordByWord() )
-        fontAttributeFlags |= KoFontDia::FontAttributeWordByWord;
-    if( textIface->hyphenation() )
-        fontAttributeFlags |= KoFontDia::FontAttributeHyphenation;
-
-    m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
-                               (KoFontDia::FontAttributeFlags)fontAttributeFlags,
-                               textIface->textColor(),
-                               col,
-                               textIface->textUnderlineColor(),
-                               textIface->underlineLineStyle(),
-                               textIface->underlineLineType(),
-                               textIface->strikeOutLineType(),
-                               textIface->strikeOutLineStyle(),
-                               textIface->fontAttribute(),
-                               textIface->language(),
-                               textIface->relativeTextSize(),
-                               textIface->offsetFromBaseLine());
+    m_fontDlg = new KoFontDia( *textIface->currentFormat(), this, 0L );
 
     connect( m_fontDlg, SIGNAL( applyFont() ),
              this, SLOT( slotApplyFont() ) );
@@ -1830,34 +1806,7 @@ void KPresenterView::slotApplyFont()
     int flags = m_fontDlg->changedFlags();
     if ( flags )
     {
-        uint fontAttributeFlags = 0;
-        if ( m_fontDlg->getSubScript() )
-            fontAttributeFlags |= KoFontDia::FontAttributeSubscript;
-        if( m_fontDlg->getSuperScript() )
-            fontAttributeFlags |= KoFontDia::FontAttributeSuperScript;
-        if( m_fontDlg->getShadowText() )
-            fontAttributeFlags |= KoFontDia::FontAttributeShadowText;
-        if( m_fontDlg->getWordByWord() )
-            fontAttributeFlags |= KoFontDia::FontAttributeWordByWord;
-        if( m_fontDlg->getHyphenation() )
-            fontAttributeFlags |= KoFontDia::FontAttributeHyphenation;
-
-
-// The "change all the format" call
-        m_canvas->setFont(m_fontDlg->getNewFont(),
-                          (int)fontAttributeFlags,
-                          m_fontDlg->color(),
-                          m_fontDlg->backGroundColor(),
-                          m_fontDlg->underlineColor(),
-                          m_fontDlg->getUnderlineLineType(),
-                          m_fontDlg->getUnderlineLineStyle(),
-                          m_fontDlg->getStrikeOutLineType(),
-                          m_fontDlg->getStrikeOutLineStyle(),
-                          m_fontDlg->getFontAttribute(),
-                          m_fontDlg->getRelativeTextSize(),
-                          m_fontDlg->getOffsetFromBaseLine(),
-                          m_fontDlg->getLanguage(),
-                          flags);
+        m_canvas->setTextFormat(m_fontDlg->newFormat(), flags);
     }
 }
 
@@ -5289,7 +5238,7 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
         m_paragDlg = new KoParagDia( this, "",
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_BORDERS | KoParagDia::PD_NUMBERING |
-                                     KoParagDia::PD_TABS | KoParagDia::PD_SHADOW,
+                                     KoParagDia::PD_TABS,
                                      m_pKPresenterDoc->getUnit(),
                                      edit->kpTextObject()->getSize().width(),false );
         m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
@@ -5412,16 +5361,6 @@ void KPresenterView::slotApplyParag()
     {
         cmd=edit->setBordersCommand( m_paragDlg->leftBorder(), m_paragDlg->rightBorder(),
                                      m_paragDlg->topBorder(), m_paragDlg->bottomBorder() );
-        if(cmd)
-        {
-            macroCommand->addCommand(cmd);
-            changed=true;
-        }
-    }
-
-    if( m_paragDlg->isShadowChanged())
-    {
-        cmd=edit->setShadowCommand( m_paragDlg->shadowDistance(),m_paragDlg->shadowDirection(), m_paragDlg->shadowColor() );
         if(cmd)
         {
             macroCommand->addCommand(cmd);

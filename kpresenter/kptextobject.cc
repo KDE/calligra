@@ -244,17 +244,43 @@ void KPTextObject::shadowCompatibility()
 {
     if ( shadowDistance != 0)
     {
-        KoTextParag *parag = textDocument()->firstParag();
-        while ( parag ) {
-            // The double->int conversion for shadowDistance assumes pt=pixel. Bah.
-            static_cast<KoTextParag *>(parag)->setShadow( (int)shadowDistance, shadowDirection, shadowColor );
-            parag = parag->next();
+        int sx = 0;
+        int sy = 0;
+        switch ( shadowDirection )
+        {
+        case SD_LEFT_BOTTOM:
+        case SD_LEFT:
+        case SD_LEFT_UP:
+            sx = - shadowDistance;
+        case SD_RIGHT_UP:
+        case SD_RIGHT:
+        case SD_RIGHT_BOTTOM:
+            sx = shadowDistance;
+        default:
+            break;
         }
+        switch ( shadowDirection )
+        {
+        case SD_LEFT_UP:
+        case SD_UP:
+        case SD_RIGHT_UP:
+            sy = - shadowDistance;
+        case SD_LEFT_BOTTOM:
+        case SD_BOTTOM:
+        case SD_RIGHT_BOTTOM:
+            sy = shadowDistance;
+        default:
+            break;
+        }
+        KoTextFormat tmpFormat;
+        tmpFormat.setShadow( sx, sy, shadowColor );
+        KCommand* cmd = m_textobj->setFormatCommand( &tmpFormat, KoTextFormat::ShadowText );
+        delete cmd;
     }
     //force to reset shadow compatibility between koffice 1.1 and 1.2
     shadowDirection = SD_RIGHT_BOTTOM;
     shadowDistance = 0;
-    shadowColor =Qt::gray;
+    shadowColor = Qt::gray;
 }
 
 
@@ -491,30 +517,30 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         element.setAttribute(attrBold, tmpBold);
     if(tmpItalic)
         element.setAttribute(attrItalic, tmpItalic);
-    if ( lastFormat->underlineLineType()!= KoTextFormat::U_NONE )
+    if ( lastFormat->underlineType()!= KoTextFormat::U_NONE )
     {
         if(lastFormat->doubleUnderline())
             element.setAttribute(attrUnderline, "double");
-        if(lastFormat->underlineLineType()==KoTextFormat::U_SIMPLE_BOLD)
+        if(lastFormat->underlineType()==KoTextFormat::U_SIMPLE_BOLD)
             element.setAttribute(attrUnderline, "single-bold");
-        else if( lastFormat->underlineLineType()==KoTextFormat::U_WAVE)
+        else if( lastFormat->underlineType()==KoTextFormat::U_WAVE)
             element.setAttribute(attrUnderline, "wave");
         else if(tmpUnderline)
             element.setAttribute(attrUnderline, tmpUnderline);
-        QString strLineType=KoTextFormat::underlineStyleToString( lastFormat->underlineLineStyle() );
+        QString strLineType=KoTextFormat::underlineStyleToString( lastFormat->underlineStyle() );
         element.setAttribute( "underlinestyleline", strLineType );
         if ( lastFormat->textUnderlineColor().isValid() )
             element.setAttribute( "underlinecolor", lastFormat->textUnderlineColor().name() );
     }
-    if ( lastFormat->strikeOutLineType()!= KoTextFormat::S_NONE )
+    if ( lastFormat->strikeOutType()!= KoTextFormat::S_NONE )
     {
         if ( lastFormat->doubleStrikeOut() )
             element.setAttribute(attrStrikeOut, "double");
-        else if ( lastFormat->strikeOutLineType()== KoTextFormat::S_SIMPLE_BOLD)
+        else if ( lastFormat->strikeOutType()== KoTextFormat::S_SIMPLE_BOLD)
             element.setAttribute(attrStrikeOut, "single-bold");
         else if(tmpStrikeOut)
             element.setAttribute(attrStrikeOut, tmpStrikeOut);
-        QString strLineType=KoTextFormat::strikeOutStyleToString( lastFormat->strikeOutLineStyle() );
+        QString strLineType=KoTextFormat::strikeOutStyleToString( lastFormat->strikeOutStyle() );
         element.setAttribute( "strikeoutstyleline", strLineType );
 
     }
@@ -529,8 +555,9 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
             element.setAttribute("relativetextsize",lastFormat->relativeTextSize());
     }
 
-    if ( !lastFormat->shadowText() )
-        element.setAttribute("shadowtext", false);
+    if ( lastFormat->shadowDistanceX() != 0
+        || lastFormat->shadowDistanceY() != 0)
+        element.setAttribute("text-shadow", lastFormat->shadowAsCss());
     if ( lastFormat->offsetFromBaseLine()!=0 )
         element.setAttribute( "offsetfrombaseline" , lastFormat->offsetFromBaseLine());
     if ( lastFormat->wordByWord() )
@@ -775,18 +802,18 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     {
         QString value = n.attribute( attrUnderline );
         if ( value == "double" )
-            format.setUnderlineLineType ( KoTextFormat::U_DOUBLE);
+            format.setUnderlineType ( KoTextFormat::U_DOUBLE);
         else if ( value == "single" )
-            format.setUnderlineLineType ( KoTextFormat::U_SIMPLE);
+            format.setUnderlineType ( KoTextFormat::U_SIMPLE);
         else if ( value == "single-bold" )
-            format.setUnderlineLineType ( KoTextFormat::U_SIMPLE_BOLD);
+            format.setUnderlineType ( KoTextFormat::U_SIMPLE_BOLD);
         else if( value =="wave" )
-            format.setUnderlineLineType( KoTextFormat::U_WAVE);
+            format.setUnderlineType( KoTextFormat::U_WAVE);
         else
-            format.setUnderlineLineType ( (bool)value.toInt() ? KoTextFormat::U_SIMPLE :KoTextFormat::U_NONE);
+            format.setUnderlineType ( (bool)value.toInt() ? KoTextFormat::U_SIMPLE :KoTextFormat::U_NONE);
     }
     if (n.hasAttribute("underlinestyleline") )
-        format.setUnderlineLineStyle( KoTextFormat::stringToUnderlineStyle( n.attribute("underlinestyleline") ));
+        format.setUnderlineStyle( KoTextFormat::stringToUnderlineStyle( n.attribute("underlinestyleline") ));
 
     if (n.hasAttribute("underlinecolor"))
         format.setTextUnderlineColor(QColor(n.attribute("underlinecolor")));
@@ -795,19 +822,19 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     {
         QString value = n.attribute( attrStrikeOut );
         if ( value == "double" )
-            format.setStrikeOutLineType ( KoTextFormat::S_DOUBLE);
+            format.setStrikeOutType ( KoTextFormat::S_DOUBLE);
         else if ( value == "single" )
-            format.setStrikeOutLineType ( KoTextFormat::S_SIMPLE);
+            format.setStrikeOutType ( KoTextFormat::S_SIMPLE);
         else if ( value == "single-bold" )
-            format.setStrikeOutLineType ( KoTextFormat::S_SIMPLE_BOLD);
+            format.setStrikeOutType ( KoTextFormat::S_SIMPLE_BOLD);
         else
-            format.setStrikeOutLineType ( (bool)value.toInt() ? KoTextFormat::S_SIMPLE :KoTextFormat::S_NONE);
+            format.setStrikeOutType ( (bool)value.toInt() ? KoTextFormat::S_SIMPLE :KoTextFormat::S_NONE);
     }
 
     if (n.hasAttribute("strikeoutstyleline"))
     {
         QString strLineType = n.attribute("strikeoutstyleline");
-        format.setStrikeOutLineStyle( KoTextFormat::stringToStrikeOutStyle( strLineType ));
+        format.setStrikeOutStyle( KoTextFormat::stringToStrikeOutStyle( strLineType ));
     }
 
     QString color = n.attribute( attrColor );
@@ -828,8 +855,8 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     }
     if(n.hasAttribute(attrVertAlign))
         format.setVAlign( static_cast<KoTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
-    if ( n.hasAttribute("shadowtext") )
-        format.setShadowText( static_cast<int>(n.attribute("shadowtext").toInt() ) );
+    if ( n.hasAttribute("text-shadow") )
+        format.parseShadowFromCss( n.attribute("text-shadow") );
     if ( n.hasAttribute("relativetextsize") )
         format.setRelativeTextSize( n.attribute("relativetextsize").toDouble() ) ;
     if ( n.hasAttribute("offsetfrombaseline") )
@@ -1021,23 +1048,6 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
     layout.setTabList( tabList );
 
 
-    element = parentElem.namedItem( "SHADOW" ).toElement();
-    if ( !element.isNull() )
-    {
-        layout.shadowDistance=element.attribute("distance").toInt();
-        layout.shadowDirection=element.attribute("direction").toInt();
-        if ( element.hasAttribute(attrColor) ) {
-            layout.shadowColor.setNamedColor(element.attribute(attrColor));
-        }
-        else if ( element.hasAttribute("red") )  //compatibility
-        {
-            int r = element.attribute("red").toInt();
-            int g = element.attribute("green").toInt();
-            int b = element.attribute("blue").toInt();
-            layout.shadowColor.setRgb( r, g, b );
-        }
-    }
-
     return layout;
 }
 
@@ -1148,16 +1158,6 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
         element.setAttribute( "ptpos", (*it).ptPos );
         element.setAttribute( "filling", (*it).filling );
         element.setAttribute( "width", (*it).ptWidth );
-    }
-
-    if(layout.shadowDistance!=0 || layout.shadowDirection!=static_cast<int>(KoParagLayout::SD_RIGHT_BOTTOM))
-    {
-        element = doc.createElement( "SHADOW" );
-        parentElem.appendChild( element );
-        element.setAttribute( "distance", layout.shadowDistance );
-        element.setAttribute( "direction", layout.shadowDirection );
-        if (layout.shadowColor.isValid())
-            element.setAttribute(attrColor, layout.shadowColor.name());
     }
 }
 
@@ -1436,21 +1436,38 @@ KCommand * KPTextObject::pasteKPresenter( KoTextCursor * cursor, const QCString 
 
 void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color)
 {
-    //todo apply to all parag
-
-    //don't apply shadow to obj but at paragraph.
-    //In text obj shadow is a paragraph propertie.
-#if 0
-    shadowDistance = _distance;
-    shadowDirection = _direction;
-    shadowColor = _color;
-#endif
-    KoTextParag *parag = textDocument()->firstParag();
-    while ( parag ) {
-        // The double->int conversion for shadowDistance assumes pt=pixel. Bah.
-        static_cast<KoTextParag *>(parag)->setShadow( (int)_distance, _direction, _color );
-        parag = parag->next();
+    int sx = 0;
+    int sy = 0;
+    switch ( _direction )
+    {
+    case SD_LEFT_BOTTOM:
+    case SD_LEFT:
+    case SD_LEFT_UP:
+        sx = - _distance;
+    case SD_RIGHT_UP:
+    case SD_RIGHT:
+    case SD_RIGHT_BOTTOM:
+        sx = _distance;
+    default:
+        break;
     }
+    switch ( _direction )
+    {
+    case SD_LEFT_UP:
+    case SD_UP:
+    case SD_RIGHT_UP:
+        sy = - _distance;
+    case SD_LEFT_BOTTOM:
+    case SD_BOTTOM:
+    case SD_RIGHT_BOTTOM:
+        sy = _distance;
+    default:
+        break;
+    }
+    KoTextFormat tmpFormat;
+    tmpFormat.setShadow( sx, sy, _color );
+    KCommand* cmd = m_textobj->setFormatCommand( &tmpFormat, KoTextFormat::ShadowText );
+    m_doc->addCommand(cmd);
 }
 
 void KPTextObject::slotFormatChanged(const KoTextFormat &_format)

@@ -318,16 +318,16 @@ QString KPTextObjectIface::verticalAlignment() const
     return QString::null;
 }
 
-bool KPTextObjectIface::textShadow() const
-{
-    return m_textobject->textObject()->textShadow();
-}
+//bool KPTextObjectIface::textShadow() const
+//{
+    //return m_textobject->textObject()->textShadow();
+//}
 
-void KPTextObjectIface::setTextShadow( bool b )
-{
-    KCommand *cmd=m_textobject->textObject()->setShadowTextCommand( b );
-    delete cmd;
-}
+//void KPTextObjectIface::setTextShadow( bool b )
+//{
+    //KCommand *cmd=m_textobject->textObject()->setShadowTextCommand( b );
+    //delete cmd;
+//}
 
 double KPTextObjectIface::relativeTextSize() const
 {
@@ -358,10 +358,10 @@ QString KPTextObjectIface::fontAttibute()const
 
 QString KPTextObjectIface::underlineLineStyle() const
 {
-    return KoTextFormat::underlineStyleToString( m_textobject->textObject()->underlineLineStyle() );
+    return KoTextFormat::underlineStyleToString( m_textobject->textObject()->underlineStyle() );
 }
 
 QString KPTextObjectIface::strikeOutLineStyle()const
 {
-    return KoTextFormat::strikeOutStyleToString( m_textobject->textObject()->strikeOutLineStyle() );
+    return KoTextFormat::strikeOutStyleToString( m_textobject->textObject()->strikeOutStyle() );
 }

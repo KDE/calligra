@@ -340,6 +340,11 @@
      [...]
       wordbyword: 0 or 1. If 1, spaces are not striked out. Opposite of fo:score-spaces.
 
+      text-shadow:
+        The value is the CSS specification for text-shadow (also used by XSL-FO).
+        http://www.w3.org/TR/REC-CSS2/text.html#text-shadow-props
+        KPresenter only supports a single shadow, and no blur radius, so it amounts to
+        either "none" or "color length length".
 TODO: finish documentation
 
 -->
@@ -358,12 +363,12 @@ TODO: finish documentation
 		color	CDATA	#REQUIRED
                 textbackcolor CDATA #REQUIRED
                 VERTALIGN CDATA #REQUIRED
-                shadowtext CDATA #REQUIRED
-                relativetextsize CDATA #REQUIRED
-                offsetfrombaseline CDATA #REQUIRED
-                wordbyword CDATA #REQUIRED
+                relativetextsize CDATA #IMPLIED
+                offsetfrombaseline CDATA #IMPLIED
+                wordbyword CDATA #IMPLIED
                 fontattribute (none | upper | lower)#REQUIRED
-                language CDATA #REQUIRED>
+                language CDATA #IMPLIED
+                text-shadow CDATA #IMPLIED>
 
 <!-- 
         A paragraph and a style can have counter data.
@@ -546,29 +551,6 @@ TODO: finish documentation
     ptpos CDATA #REQUIRED
     filling CDATA #IMPLIED
     width CDATA #IMPLIED>
-
-<!--    Defines the position of a tabulation
-        Attributes:
-
-            distance:           Shadow distance in pt
-
-            direction:          Direction of the shadow
-                                1 = SD_LEFT_UP
-                                2 = SD_UP
-                                3 = SD_RIGHT_UP
-                                4 = SD_RIGHT
-                                5 = SD_RIGHT_BOTTOM
-                                6 = SD_BOTTOM
-                                7 = SD_LEFT_BOTTOM
-                                8 = SD_LEFT
-            color:   color of shadow
-
--->
-<!ELEMENT SHADOW EMPTY>
-<!ATTLIST SHADOW
-    distance CDATA #REQUIRED
-    direction CDATA #REQUIRED
-    color CDATA #REQUIRED>
 
 <!ELEMENT PEN EMPTY>
 <!ATTLIST PEN	color   CDATA	#REQUIRED
