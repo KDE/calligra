@@ -4,7 +4,6 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDChartAreaPainter.cpp	\
 			KDChartAxesPainter.cpp	\
 			KDChartAxisParams.cpp	\
-			KDChartAxisParams.moc.cpp	\
 			KDChartBarPainter.cpp	\
 			KDChartCustomBox.cpp 	\
 			KDChartData.cpp 	\
@@ -12,16 +11,13 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDChartLinesPainter.cpp	\
 			KDChartPainter.cpp	\
 			KDChartParams.cpp	\
-			KDChartParams.moc.cpp	\
 			KDChartPiePainter.cpp	\
 			KDChartPolarPainter.cpp	\
 			KDChartRingPainter.cpp	\
 			KDChartTextPiece.cpp	\
 			KDChartWidget.cpp 	\
-			KDChartWidget.moc.cpp	\
-			KDDrawText.cpp		\ 
+			KDDrawText.cpp		\
 			KDFrame.cpp 		\
-			KDFrame.moc.cpp		\
 			KDFrameProfileSection.cpp \
 			KDXMLTools.cpp
 
@@ -48,7 +44,6 @@ noinst_HEADERS =	KDChart.h 		\
 			KDFrame.h 		\
 			KDFrameProfileSection.h \
 			KDXMLTools.h
-			
 
 METASOURCES = AUTO
 

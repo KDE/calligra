@@ -89,6 +89,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 
     // make sure there is always some test data
     createTempData();
+    updateGuiTypeOfChart();
 }
 
 void KChartView::paintEvent( QPaintEvent* /*ev*/ )
@@ -181,6 +182,7 @@ void KChartView::wizard()
     kdDebug(35001) << "Executed. Now, display it" << endl;
     wiz->exec();
     repaint();
+    updateGuiTypeOfChart();
     kdDebug(35001) << "Ok, executed..." << endl;
 }
 
@@ -314,6 +316,42 @@ void KChartView::polarChart()
     }
     else
         m_chartpolar->setChecked( true ); // always one has to be checked !
+}
+
+
+void KChartView::updateGuiTypeOfChart()
+{
+  KDChartParams* params = ((KChartPart*)koDocument())->params();
+  switch(params->chartType())
+    {
+    case KDChartParams::Bar:
+      m_chartbars->setChecked(true);
+      break;
+    case KDChartParams::Line:
+      m_chartline->setChecked(true);
+      break;
+    case KDChartParams::Area:
+      m_chartareas->setChecked(true);
+      break;
+    case KDChartParams::Pie:
+      m_chartpie->setChecked(true);
+      break;
+    case KDChartParams::HiLo:
+      m_charthilo->setChecked(true);
+      break;
+    case KDChartParams::Gantt:
+      //todo
+      break;
+    case KDChartParams::Ring:
+      m_chartring->setChecked(true);
+      break;
+    case KDChartParams::Polar:
+        m_chartpolar->setChecked(true);
+        break;
+    default:
+      //todo
+      break;
+    }
 }
 
 #include "kchart_view.moc"

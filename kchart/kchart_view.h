@@ -20,6 +20,7 @@ class KChartView : public KoView
     Q_OBJECT
 public:
     KChartView( KChartPart* part, QWidget* parent = 0, const char* name = 0 );
+    void updateGuiTypeOfChart();
 
 protected slots:
       void edit();
