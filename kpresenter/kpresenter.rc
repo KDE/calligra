@@ -1,4 +1,4 @@
-<!DOCTYPE QConfig ><QConfig name="KPresenter">
+<!DOCTYPE KPartGUI ><KPartGUI name="KPresenter">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="edit_undo"/>
@@ -129,8 +129,9 @@
   <Separator/>
   <Action name="edit_delete"/>
 </ToolBar>
-<ToolBar position="left">
-  <Action name="insertToolBar" name="insert_page"/>
+<ToolBar name="insertToolBar" position="left">
+  <Action name="insertToolBar"/>
+  <Action name="insert_page"/>
   <Separator/>
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
@@ -206,4 +207,4 @@
 <ToolBar name="colorBar" position="right">
   <Action name="colorbar"/>
 </ToolBar>
-</QConfig>
+</KPartGUI>
