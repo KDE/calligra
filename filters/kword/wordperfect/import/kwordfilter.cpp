@@ -57,8 +57,8 @@ KWordFormat::KWordFormat()
   color = highlight = FALSE;
   red = green = blue = 0;
   bgred = bggreen = bgblue = 255;
-  fontsize = 12.0;
-  fontface = "Helvetica";
+  fontsize = 0.0;
+  fontface = "";
 }
 
 QString KWordFormat::asXML()
@@ -73,9 +73,11 @@ QString KWordFormat::asXML()
   if( subscript ) result.append( "<VERTALIGN value=\"1\" />\n" );
   if( superscript ) result.append( "<VERTALIGN value=\"2\" />\n" );
 
-  result.append( "<FONT name=\"" + fontface + "\" />\n" );
+  if( !fontface.isEmpty() )
+    result.append( "<FONT name=\"" + fontface + "\" />\n" );
 
-  result.append( "    <SIZE value=\"" + QString::number(fontsize) + "\" />\n" );
+  if( fontsize > 0.0 )
+    result.append( "    <SIZE value=\"" + QString::number(fontsize) + "\" />\n" );
 
   if( color )
     result.append( "    <COLOR red=\"" + QString::number(red) +
@@ -275,7 +277,6 @@ KWordFilter::parse (const QString & filename)
           layout.append( "    <STRIKEOUT value=\"0\" />\n" );
           layout.append( "    <CHARSET value=\"0\" />\n" );
           layout.append( "    <VERTALIGN value=\"0\" />\n" );
-          layout.append( "    <FONT name=\"Helvetica\" />\n" );
           layout.append( "  </FORMAT>\n" );
           layout.append( "</LAYOUT>\n" );
 
