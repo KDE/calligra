@@ -516,14 +516,23 @@ bool Container::load( QDomElement fe )
 }
 
 
-void Container::saveMathML( QTextStream& stream )
+void Container::saveMathML( QTextStream& stream, bool oasisFormat )
 {
-    QDomDocumentType dt = QDomImplementation().createDocumentType( "math",
-                                             "-//W3C//DTD MathML 2.0//EN",
-                          "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
-    QDomDocument doc( dt );
-    rootElement()->writeMathML( doc, doc );
-    doc.save( stream, 2 );
+    if ( !oasisFormat )
+    {
+        QDomDocumentType dt = QDomImplementation().createDocumentType( "math",
+                                                                       "-//W3C//DTD MathML 2.0//EN",
+                                                                       "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
+        QDomDocument doc( dt );
+        rootElement()->writeMathML( doc, doc, oasisFormat );
+        doc.save( stream, 2 );
+    }
+    else
+    {
+        QDomDocument doc;
+        rootElement()->writeMathML( doc, doc, oasisFormat );
+        doc.save( stream, 2 );
+    }
 }
 
 bool Container::loadMathML( QDomDocument doc )

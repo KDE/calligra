@@ -186,7 +186,7 @@ public:
     /**
      * Save formula as MathML.
      */
-    void saveMathML( QTextStream& stream );
+    void saveMathML( QTextStream& stream, bool oasisFormat = false );
 
     /**
      * Load function.

@@ -43,7 +43,7 @@ private:
 };
 
 
-void save( QString filename, QDomDocument doc )
+void save( const QString &filename, QDomDocument doc )
 {
     QFile f( filename );
     if(!f.open(IO_Truncate | IO_ReadWrite)) {
@@ -58,7 +58,7 @@ void save( QString filename, QDomDocument doc )
 }
 
 
-void load( KFormula::Document* document, QString filename )
+void load( KFormula::Document* document, const QString &filename )
 {
     QFile f(filename);
     if (!f.open(IO_ReadOnly)) {
@@ -80,7 +80,7 @@ void load( KFormula::Document* document, QString filename )
 }
 
 
-void saveMathML( KFormula::Container* formula, const QString &filename )
+void saveMathML( KFormula::Container* formula, const QString &filename, bool oasisFormat )
 {
     QFile f( filename );
     if ( !f.open( IO_Truncate | IO_ReadWrite ) ) {
@@ -90,7 +90,7 @@ void saveMathML( KFormula::Container* formula, const QString &filename )
 
     QTextStream stream( &f );
     stream.setEncoding( QTextStream::UnicodeUTF8 );
-    formula->saveMathML( stream );
+    formula->saveMathML( stream, oasisFormat );
     f.close();
 }
 
@@ -143,8 +143,8 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_I: document->document()->wrapper()->insertColumn(); return;
             case Qt::Key_R: document->document()->wrapper()->removeColumn(); return;
             case Qt::Key_Z: document->document()->wrapper()->redo(); return;
-
-            case Qt::Key_M: saveMathML( document, "test.mml" ); return;
+        case Qt::Key_F: saveMathML( document, "test.mml", true/*save to oasis format*/ ); return;
+            case Qt::Key_M: saveMathML( document, "test.mml", false ); return;
             case Qt::Key_O: {
                 QString file = KFileDialog::getOpenFileName();
                 kdDebug( DEBUGID ) << file << endl;

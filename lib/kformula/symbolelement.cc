@@ -847,10 +847,10 @@ QString SymbolElement::formulaString()
     return sym + ")";
 }
 
-void SymbolElement::writeMathML( QDomDocument doc, QDomNode parent )
+void SymbolElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat  )
 {
-    QDomElement de = doc.createElement( "mrow" );
-    QDomElement mo = doc.createElement( "mo" );
+    QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
+    QDomElement mo = doc.createElement( oasisFormat ? "math:mo" : "mo" );
 
     QString value;
 
@@ -872,28 +872,28 @@ void SymbolElement::writeMathML( QDomDocument doc, QDomNode parent )
     QDomElement between;
     if ( hasUpper() && hasLower() )
     {
-        between = doc.createElement( "msubsup" );
+        between = doc.createElement( oasisFormat ? "math:msubsup" : "msubsup" );
         between.appendChild( mo );
-        lower->writeMathML( doc, between );
-        upper->writeMathML( doc, between );
+        lower->writeMathML( doc, between, oasisFormat );
+        upper->writeMathML( doc, between, oasisFormat );
     }
     else if ( hasUpper() )
     {
-        between = doc.createElement( "msup" );
+        between = doc.createElement( oasisFormat ? "math:msup" : "msup" );
         between.appendChild( mo );
-        upper->writeMathML( doc, between );
+        upper->writeMathML( doc, between, oasisFormat );
     }
     else if ( hasLower() )
     {
-        between = doc.createElement( "msub" );
+        between = doc.createElement( oasisFormat ? "math:msub" : "msub" );
         between.appendChild( mo );
-        lower->writeMathML( doc, between );
+        lower->writeMathML( doc, between, oasisFormat );
     }
     else
         between = mo;
 
     de.appendChild( between );
-    content->writeMathML( doc, de );
+    content->writeMathML( doc, de, oasisFormat );
 
     parent.appendChild( de );
 }

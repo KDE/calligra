@@ -191,9 +191,9 @@ bool SingleContentElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
-void SingleContentElement::writeMathML( QDomDocument doc, QDomNode parent )
+void SingleContentElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
-    content->writeMathML( doc, parent );
+    content->writeMathML( doc, parent, oasisFormat );
 }
 
 
@@ -456,16 +456,16 @@ QString BracketElement::formulaString()
     return "(" + getContent()->formulaString() + ")";
 }
 
-void BracketElement::writeMathML( QDomDocument doc, QDomNode parent )
+void BracketElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
-    QDomElement de = doc.createElement( "mfenced" );
+    QDomElement de = doc.createElement( oasisFormat ? "math:mfenced" : "mfenced" );
     if ( left->getType() != LeftRoundBracket ||
          right->getType() != RightRoundBracket )
     {
         de.setAttribute( "open",  QString( QChar( leftType ) ) );
         de.setAttribute( "close", QString( QChar( rightType ) ) );
     }
-    SingleContentElement::writeMathML( doc, de );
+    SingleContentElement::writeMathML( doc, de, oasisFormat );
     parent.appendChild( de );
 }
 
@@ -555,11 +555,11 @@ QString OverlineElement::formulaString()
     return getContent()->formulaString();
 }
 
-void OverlineElement::writeMathML( QDomDocument doc, QDomNode parent )
+void OverlineElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
-    QDomElement de = doc.createElement( "mover" );
-    SingleContentElement::writeMathML( doc, de );
-    QDomElement op = doc.createElement( "mo" );
+    QDomElement de = doc.createElement( oasisFormat ? "math:mover" : "mover" );
+    SingleContentElement::writeMathML( doc, de, oasisFormat );
+    QDomElement op = doc.createElement( oasisFormat ? "math:mo" : "mo" );
     // is this the right entity? Mozilla renders it correctly.
     op.appendChild( doc.createEntityReference( "OverBar" ) );
     de.appendChild( op );
@@ -655,11 +655,11 @@ QString UnderlineElement::formulaString()
     return getContent()->formulaString();
 }
 
-void UnderlineElement::writeMathML( QDomDocument doc, QDomNode parent )
+void UnderlineElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
-    QDomElement de = doc.createElement( "munder" );
-    SingleContentElement::writeMathML( doc, de );
-    QDomElement op = doc.createElement( "mo" );
+    QDomElement de = doc.createElement( oasisFormat ? "math:munder" : "munder" );
+    SingleContentElement::writeMathML( doc, de, oasisFormat );
+    QDomElement op = doc.createElement( oasisFormat ? "math:mo" : "mo" );
     // is this the right entity? Mozilla renders it correctly.
     op.appendChild( doc.createEntityReference( "UnderBar" ) );
     de.appendChild( op );

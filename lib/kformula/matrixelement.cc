@@ -880,9 +880,9 @@ SequenceElement* MatrixElement::elementAt(uint row, uint column)
 }
 
 
-void MatrixElement::writeMathML( QDomDocument doc, QDomNode parent )
+void MatrixElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
-    QDomElement de = doc.createElement( "mtable" );
+    QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
     QDomElement row;
     QDomElement cell;
 
@@ -891,13 +891,13 @@ void MatrixElement::writeMathML( QDomDocument doc, QDomNode parent )
 
     for ( uint r = 0; r < rows; r++ )
     {
-        row = doc.createElement( "mtr" );
+        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
         de.appendChild( row );
         for ( uint c = 0; c < cols; c++ )
         {
-            cell = doc.createElement( "mtd" );
+            cell = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
             row.appendChild( cell );
-    	    getElement(r,c)->writeMathML( doc, cell );
+    	    getElement(r,c)->writeMathML( doc, cell, oasisFormat );
 	}
     }
 
@@ -962,7 +962,7 @@ public:
     /// Return the position of tab i.
     int tabPos( uint i );
 
-    virtual void writeMathML( QDomDocument doc, QDomNode parent );
+    virtual void writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat = false );
 
 private:
 
@@ -1226,20 +1226,20 @@ int MultilineSequenceElement::tabPos( uint i )
 
 
 void MultilineSequenceElement::writeMathML( QDomDocument doc,
-                                            QDomNode parent )
+                                            QDomNode parent, bool oasisFormat )
 {
     // parent is required to be a <mtr> tag
 
     QDomElement tmp = doc.createElement( "TMP" );
 
-    inherited::writeMathML( doc, tmp );
+    inherited::writeMathML( doc, tmp, oasisFormat );
 
     /* Now we re-parse the Dom tree, because of the TabMarkers
      * that have no direct representation in MathML but mark the
      * end of a <mtd> tag.
      */
 
-    QDomElement mtd = doc.createElement( "mtd" );
+    QDomElement mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
 
     // The mrow, if it exists.
     QDomNode n = tmp.firstChild().firstChild();
@@ -1247,7 +1247,7 @@ void MultilineSequenceElement::writeMathML( QDomDocument doc,
         // the illegal TabMarkers are children of the mrow, child of tmp.
         if ( n.isElement() && n.toElement().tagName() == "TAB" ) {
             parent.appendChild( mtd );
-            mtd = doc.createElement( "mtd" );
+            mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
         }
         else {
             mtd.appendChild( n.cloneNode() ); // cloneNode needed?
@@ -1703,19 +1703,19 @@ void MultilineElement::writeDom(QDomElement element)
     }
 }
 
-void MultilineElement::writeMathML( QDomDocument doc, QDomNode parent )
+void MultilineElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
-    QDomElement de = doc.createElement( "mtable" );
+    QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
     QDomElement row; QDomElement cell;
 
     for ( uint i = 0; i < content.count(); ++i ) {
-        row = doc.createElement( "mtr" );
+        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
         de.appendChild( row );
         //cell = doc.createElement( "mtd" );
         //row.appendChild( cell );
 
         //content.at( i )->writeMathML( doc, cell );
-        content.at( i )->writeMathML( doc, row );
+        content.at( i )->writeMathML( doc, row, oasisFormat );
     }
 
     parent.appendChild( de );

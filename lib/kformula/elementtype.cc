@@ -203,10 +203,10 @@ void ElementType::output()
     kdDebug( DEBUGID ) << start() << " - " << end() << endl;
 }
 
-void ElementType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+void ElementType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
 {
     for ( uint i = from; i < to; ++i ) {
-        se->getChild( i )->writeMathML( doc, de );
+        se->getChild( i )->writeMathML( doc, de, oasisFormat );
     }
 }
 
@@ -289,10 +289,10 @@ TextType::TextType( SequenceParser* parser )
 {
 }
 
-void TextType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+void TextType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
 {
     for ( uint i = start(); i < end(); ++i ) {
-        QDomElement text = doc.createElement( "mi" );
+        QDomElement text = doc.createElement( oasisFormat ? "math:mi" : "mi" );
         BasicElement* be = se->getChild( i );
         TextElement* te = static_cast<TextElement*>( be );
         QString mathvariant = format2variant( te->getCharStyle(), te->getCharFamily());
@@ -309,7 +309,7 @@ void TextType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de
         }
 
         if ( i != end() - 1 ) {
-            QDomElement op = doc.createElement( "mo" );
+            QDomElement op = doc.createElement( oasisFormat ? "math:mo" : "mo" );
             op.appendChild( doc.createEntityReference( "InvisibleTimes" ) );
             text.appendChild( op );
         }
@@ -323,9 +323,9 @@ NameType::NameType( SequenceParser* parser )
 {
 }
 
-void NameType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+void NameType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
 {
-    se->getChild( start() )->writeMathML( doc, de );
+    se->getChild( start() )->writeMathML( doc, de, oasisFormat );
 
     /*
     QDomElement name = doc.createElement( "mi" );
@@ -360,9 +360,9 @@ void NumberType::setUpPainter(const ContextStyle& context, QPainter& painter)
     painter.setPen(context.getNumberColor());
 }
 
-void NumberType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+void NumberType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
 {
-    QDomElement name = doc.createElement( "mn" );
+    QDomElement name = doc.createElement( oasisFormat ? "math:mn"  : "mn" );
     QString value;
     for ( uint i = start(); i < end(); ++i ) {
         BasicElement* be = se->getChild( i );
@@ -389,9 +389,9 @@ AbstractOperatorType::AbstractOperatorType( SequenceParser* parser )
 {
 }
 
-void AbstractOperatorType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de )
+void AbstractOperatorType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
 {
-    QDomElement op = doc.createElement( "mo" );
+    QDomElement op = doc.createElement( oasisFormat ? "math:mo" : "mo" );
     BasicElement* be = se->getChild( start() );
     if ( be->getCharacter().latin1() != 0 ) {
         // latin-1 char

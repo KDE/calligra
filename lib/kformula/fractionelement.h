@@ -176,7 +176,7 @@ public:
 
     virtual QString formulaString();
 
-    virtual void writeMathML( QDomDocument doc, QDomNode parent );
+    virtual void writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat = false );
 
 protected:
 

@@ -310,11 +310,16 @@ QString FormulaElement::toLatex()
     return inherited::toLatex();   //Consider $$ sorround
 }
 
-void FormulaElement::writeMathML( QDomDocument doc, QDomNode parent )
+void FormulaElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
-    QDomElement de = doc.createElementNS( "http://www.w3.org/1998/Math/MathML",
-                                          "math" );
-    inherited::writeMathML( doc, de );
+    QDomElement de;
+    if ( !oasisFormat )
+        de = doc.createElementNS( "http://www.w3.org/1998/Math/MathML",
+                                              "math" );
+    else
+        de =doc.createElement( "math:semantics" );
+
+    inherited::writeMathML( doc, de, oasisFormat );
     parent.appendChild( de );
 }
 

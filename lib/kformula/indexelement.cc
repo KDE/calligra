@@ -1369,7 +1369,7 @@ QString IndexElement::formulaString()
     return index;
 }
 
-void IndexElement::writeMathML( QDomDocument doc, QDomNode parent )
+void IndexElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
     QDomElement de;
     QDomElement uo;
@@ -1378,21 +1378,21 @@ void IndexElement::writeMathML( QDomDocument doc, QDomNode parent )
     if ( hasUpperMiddle() && hasLowerMiddle() )
     {
         uo = doc.createElement( "munderover" );
-        content->writeMathML( doc, uo ); // base
-        lowerMiddle->writeMathML( doc, uo );
-        upperMiddle->writeMathML( doc, uo );
+        content->writeMathML( doc, uo, oasisFormat ); // base
+        lowerMiddle->writeMathML( doc, uo, oasisFormat );
+        upperMiddle->writeMathML( doc, uo,oasisFormat );
     }
     else if ( hasUpperMiddle() )
     {
         uo = doc.createElement( "mover" );
-        content->writeMathML( doc, uo ); // base
-        upperMiddle->writeMathML( doc, uo );
+        content->writeMathML( doc, uo,oasisFormat ); // base
+        upperMiddle->writeMathML( doc, uo,oasisFormat );
     }
     else if ( hasLowerMiddle() )
     {
         uo = doc.createElement( "munder" );
-        content->writeMathML( doc, uo ); // base
-        lowerMiddle->writeMathML( doc, uo );
+        content->writeMathML( doc, uo, oasisFormat ); // base
+        lowerMiddle->writeMathML( doc, uo,oasisFormat );
     }
     else // no over- or underscripts
         uoscripts = false;
@@ -1402,29 +1402,29 @@ void IndexElement::writeMathML( QDomDocument doc, QDomNode parent )
     {
         de = doc.createElement( "mmultiscripts" );
         if ( !uoscripts ) // base
-            content->writeMathML( doc, de );
+            content->writeMathML( doc, de, oasisFormat );
         else
             de.appendChild( uo );
 
         if ( hasLowerRight() )
-            lowerRight->writeMathML( doc, de );
+            lowerRight->writeMathML( doc, de, oasisFormat );
         else
             de.appendChild( doc.createElement( "none" ) );
 
         if ( hasUpperRight() )
-            upperRight->writeMathML( doc, de );
+            upperRight->writeMathML( doc, de, oasisFormat );
         else
             de.appendChild( doc.createElement( "none" ) );
 
         de.appendChild( doc.createElement( "mprescripts" ) );
 
         if ( hasLowerLeft() )
-            lowerLeft->writeMathML( doc, de );
+            lowerLeft->writeMathML( doc, de, oasisFormat );
         else
             de.appendChild( doc.createElement( "none" ) );
 
         if ( hasUpperLeft() )
-            upperLeft->writeMathML( doc, de );
+            upperLeft->writeMathML( doc, de, oasisFormat );
         else
             de.appendChild( doc.createElement( "none" ) );
     }
@@ -1434,29 +1434,29 @@ void IndexElement::writeMathML( QDomDocument doc, QDomNode parent )
         {
             de = doc.createElement( "msub" );
             if ( !uoscripts ) // base
-                content->writeMathML( doc, de );
+                content->writeMathML( doc, de, oasisFormat );
             else
                 de.appendChild( uo );
-            lowerRight->writeMathML( doc, de );
+            lowerRight->writeMathML( doc, de, oasisFormat );
         }
         else if ( !hasLowerRight() )
         {
             de = doc.createElement( "msup" );
             if ( !uoscripts ) // base
-                content->writeMathML( doc, de );
+                content->writeMathML( doc, de, oasisFormat );
             else
                 de.appendChild( uo );
-            upperRight->writeMathML( doc, de );
+            upperRight->writeMathML( doc, de, oasisFormat );
         }
         else // both
         {
             de = doc.createElement( "msubsup" );
             if ( !uoscripts ) // base
-                content->writeMathML( doc, de );
+                content->writeMathML( doc, de, oasisFormat );
             else
                 de.appendChild( uo );
-            lowerRight->writeMathML( doc, de );
-            upperRight->writeMathML( doc, de );
+            lowerRight->writeMathML( doc, de, oasisFormat );
+            upperRight->writeMathML( doc, de,oasisFormat );
         }
     }
     else // no mmultiscripts, msubsup, msub or msup

@@ -460,13 +460,13 @@ QString FractionElement::formulaString()
     return "(" + numerator->formulaString() + ")/(" + denominator->formulaString() + ")";
 }
 
-void FractionElement::writeMathML( QDomDocument doc, QDomNode parent )
+void FractionElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
-    QDomElement de = doc.createElement( "mfrac" );
+    QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );
     if ( !withLine ) // why is this no function?
         de.setAttribute( "linethickness", 0 );
-    numerator->writeMathML( doc, de );
-    denominator->writeMathML( doc, de );
+    numerator->writeMathML( doc, de, oasisFormat );
+    denominator->writeMathML( doc, de, oasisFormat );
     parent.appendChild( de );
 }
 

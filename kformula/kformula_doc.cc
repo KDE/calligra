@@ -31,6 +31,7 @@
 #include <qprinter.h>
 #include <qstring.h>
 #include <qwmatrix.h>
+#include <qfile.h>
 
 #include <config.h>
 #include <unistd.h>
@@ -47,6 +48,7 @@
 #include <kurl.h>
 #include <koxmlwriter.h>
 #include <koStoreDevice.h>
+#include <ktempfile.h>
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
@@ -90,11 +92,21 @@ bool KFormulaDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoXmlWriter contentWriter( &dev, "math:math" );
 
 
-    contentWriter.startElement( "math:semantics" );
+    KTempFile contentTmpFile;
+    contentTmpFile.setAutoDelete( true );
+    QFile* tmpFile = contentTmpFile.file();
+    KoXmlWriter contentTmpWriter( tmpFile, 1 );
 
     //todo save content
+    QTextStream stream(tmpFile);
+    stream.setEncoding( QTextStream::UnicodeUTF8 );
+    formula->saveMathML( stream, true );
 
-    contentWriter.endElement();
+    tmpFile->close();
+    contentWriter.addCompleteElement( tmpFile );
+    contentTmpFile.close();
+
+
 
     contentWriter.endElement();
 

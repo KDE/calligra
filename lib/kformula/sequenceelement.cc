@@ -1444,9 +1444,9 @@ QString SequenceElement::formulaString()
 }
 
 
-void SequenceElement::writeMathML( QDomDocument doc, QDomNode parent )
+void SequenceElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
-    QDomElement de = doc.createElement( "mrow" );
+    QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
 
     BasicElement* last = children.last();
     if ( last != 0 ) {
@@ -1460,12 +1460,12 @@ void SequenceElement::writeMathML( QDomDocument doc, QDomNode parent )
         }
 
         if ( tokenList.count() == 1 ) {
-            tokenList.first()->saveMathML( this, doc, parent.toElement() );
+            tokenList.first()->saveMathML( this, doc, parent.toElement(), oasisFormat );
             return;
         }
 
         for ( uint i = 0; i < tokenList.count(); ++i ) {
-            tokenList.at( i )->saveMathML( this, doc, de );
+            tokenList.at( i )->saveMathML( this, doc, de, oasisFormat );
         }
     }
     parent.appendChild( de );
@@ -1691,9 +1691,9 @@ bool NameSequence::isValidSelection( FormulaCursor* cursor )
     return sequence->onlyTextSelected( cursor );
 }
 
-void NameSequence::writeMathML( QDomDocument doc, QDomNode parent )
+void NameSequence::writeMathML( QDomDocument doc, QDomNode parent,bool oasisFormat )
 {
-    QDomElement de = doc.createElement( "mi" );
+    QDomElement de = doc.createElement( oasisFormat ? "math:mi" : "mi" );
     QString value;
     for ( int i = 0; i < countChildren(); ++i ) {
         // these are supposed to by TextElements

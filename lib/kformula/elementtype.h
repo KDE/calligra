@@ -110,7 +110,7 @@ public:
 
     ElementType* getPrev() const { return prev; }
 
-    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
+    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat = false );
 
     virtual bool multiElement() const { return false; }
 
@@ -200,7 +200,7 @@ private:
 class TextType : public MultiElementType {
 public:
     TextType( SequenceParser* parser );
-    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
+    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat = false );
 };
 
 
@@ -221,7 +221,7 @@ public:
      */
     virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 
-    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
+    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat = false );
 };
 
 
@@ -246,7 +246,7 @@ public:
      */
     virtual QFont getFont( const ContextStyle& context );
 
-    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
+    virtual void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat = false );
 
 private:
 };
@@ -256,7 +256,7 @@ class AbstractOperatorType : public SingleElementType {
 public:
     AbstractOperatorType( SequenceParser* parser );
 
-    void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de );
+    void saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat = false  );
 };
 
 class OperatorType : public AbstractOperatorType {

@@ -604,20 +604,20 @@ QString RootElement::formulaString()
     return "sqrt(" + content->formulaString() + ")";
 }
 
-void RootElement::writeMathML( QDomDocument doc, QDomNode parent )
+void RootElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
 {
     QDomElement de;
 
     if( hasIndex() )
-        de = doc.createElement( "mroot" );
+        de = doc.createElement( oasisFormat ? "math:mroot" : "mroot" );
     else
-        de = doc.createElement( "msqrt" );
+        de = doc.createElement( oasisFormat ? "math:msqrt" : "msqrt" );
 
-    content->writeMathML( doc, de );
+    content->writeMathML( doc, de, oasisFormat );
 
     if( hasIndex() )
     {
-        index->writeMathML( doc, de );
+        index->writeMathML( doc, de, oasisFormat );
     }
 
     parent.appendChild( de );
