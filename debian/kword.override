@@ -2,4 +2,3 @@
 kword: shlib-missing-in-control-file kword usr/lib/kword.so
 kword: shlib-missing-in-control-file libkwordpart usr/lib/libkwordpart.so
 kword: unused-shlib-entry-in-control-file libkochart
-

@@ -1,6 +1,7 @@
 koffice (2.1-20010115-1) unstable; urgency=low
  
   * more upstream fixes
+  * This was already done (Closes: #82280)
  
  -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 15 Jan 2001 01:00:00 -0700
 
