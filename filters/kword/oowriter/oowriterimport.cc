@@ -106,7 +106,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
         // We do not care about the failure
         OoUtils::loadThumbnail( thumbnail, m_zip );
     }
-    
+
     if ( preStatus != KoFilter::OK )
     {
         m_zip->close();
@@ -169,7 +169,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     }
 
     // store preview
-    
+
     if ( ! thumbnail.isNull() )
     {
         // ### TODO: thumbnail.setAlphaBuffer( false ); // legacy KOffice previews have no alpha channel
@@ -793,15 +793,29 @@ void OoWriterImport::fillStyleStack( const QDomElement& object, const QString& a
 {
     // find all styles associated with an object and push them on the stack
     // OoImpressImport has more tests here, but I don't think they're relevant to OoWriterImport
-    if ( object.hasAttribute( attrName ) )
-        addStyles( m_styles[object.attribute( attrName )] );
+    if ( object.hasAttribute( attrName ) ) {
+        const QString styleName = object.attribute( attrName );
+        const QDomElement* style = m_styles[styleName];
+        if ( style )
+            addStyles( style );
+        else
+            kdWarning(30518) << "fillStyleStack: no style named " << styleName << " found." << endl;
+    }
 }
 
 void OoWriterImport::addStyles( const QDomElement* style )
 {
+    Q_ASSERT( style );
+    if ( !style ) return;
     // this recursive function is necessary as parent styles can have parents themselves
-    if ( style->hasAttribute( "style:parent-style-name" ) )
-        addStyles( m_styles[style->attribute( "style:parent-style-name" )] );
+    if ( style->hasAttribute( "style:parent-style-name" ) ) {
+        const QString parentStyleName = style->attribute( "style:parent-style-name" );
+        QDomElement* parentStyle = m_styles[ parentStyleName ];
+        if ( parentStyle )
+            addStyles( parentStyle );
+        else
+            kdWarning(30518) << "Parent style not found: " << parentStyleName << endl;
+    }
     else if ( !m_defaultStyle.isNull() ) // on top of all, the default style
         m_styleStack.push( m_defaultStyle );
 
