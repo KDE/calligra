@@ -2582,9 +2582,9 @@ FrameSetType KWHorzLineFrameSet::type( void )
     return FT_HORZLINE;
 }
 
-void KWHorzLineFrameSet::resizeFrame( KWFrame* /*frame*/, double /*newWidth*/, double /*newHeight*/, bool /*finalSize*/ )
+void KWHorzLineFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
 {
-    //todo
+    KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
 }
 
 QDomElement KWHorzLineFrameSet::save( QDomElement &/*parentElem*/, bool /*saveFrames*/ )
