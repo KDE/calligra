@@ -22,11 +22,13 @@
 #include <qstring.h>
 #include <qdom.h>
 
+#include <klocale.h>
+
 #include "ImportField.h"
 
 QString getFootnoteFramesetName(const QString& id)
 {
-    return QString("Footnote %1").arg(id); // ### TODO: I18N
+    return i18n("Framset name","Footnote %1").arg(id);
 }
 
 static void InsertTimeVariable(QDomDocument& mainDocument,

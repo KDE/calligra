@@ -36,6 +36,7 @@
 #include <kmdcodec.h>
 #include <kfilterdev.h>
 #include <kgenericfactory.h>
+#include <kmessagebox.h>
 
 #include <koGlobal.h>
 #include <koStore.h>
@@ -520,8 +521,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
         kdDebug(30506) << "Image: " << strDataId << endl;
     }
 
-    QString strPictureFrameName("Picture ");
-    strPictureFrameName+=QString::number(++m_pictureFrameNumber);
+    QString strPictureFrameName(i18n("Framset name","Picture %1").arg(++m_pictureFrameNumber));
 
     // Create the frame set of the image
 
@@ -1508,7 +1508,7 @@ void StructureParser :: createDocument(void)
     mainFramesetElement.setAttribute("frameType",1);
     mainFramesetElement.setAttribute("frameInfo",0);
     mainFramesetElement.setAttribute("visible",1);
-    mainFramesetElement.setAttribute("name","Main Frameset");
+    mainFramesetElement.setAttribute("name",i18n("Framset name","Main Text Frameset"));
     framesetsPluralElement.appendChild(mainFramesetElement);
 
     QDomElement frameElementOut=mainDocument.createElement("FRAME");
@@ -1618,8 +1618,10 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     if (!reader.parse( source ))
     {
         kdError(30506) << "Import: Parsing unsuccessful. Aborting!" << endl;
-        // TODO: try to give line and column number like the QDom parser does.
         delete in;
+        // ### TODO: try to give line and column number like the QDom parser does.
+        KMessageBox::error(NULL, i18n("An error occured during the load of the AbiWord file: %1").arg(from),
+            i18n("KWord's AbiWord Import Filter"),0);
         return KoFilter::StupidError;
     }
     delete in;
@@ -1632,6 +1634,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     if(!out)
     {
         kdError(30506) << "AbiWord Import unable to open output file! (Documentinfo)" << endl;
+        KMessageBox::error(NULL, i18n("Unable to save document information"),i18n("KWord's AbiWord Import Filter"),0);
         return KoFilter::StorageCreationError;
     }
 
@@ -1645,6 +1648,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     if(!out)
     {
         kdError(30506) << "AbiWord Import unable to open output file! (Root)" << endl;
+        KMessageBox::error(NULL, i18n("Unable to save main document"),i18n("KWord's AbiWord Import Filter"),0);
         return KoFilter::StorageCreationError;
     }
 
