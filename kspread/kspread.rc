@@ -151,6 +151,7 @@
  <Action name="selectFont"/>
  <Action name="selectFontSize"/>
  <Separator/>
+ <Action name="textColor"/>
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
@@ -200,7 +201,6 @@
  <Action name="dissociatecell"/>
  <Action name="mergecell"/>
  <Separator/>
- <Action name="textColor"/>
  <Action name="backgroundColor"/>
 </ToolBar>
 </kpartgui>
