@@ -498,7 +498,7 @@ void KoDocumentInfoPropsPage::applyChanges()
   d->m_dst = 0;
 }
 
-void KoDocumentInfoPropsPage::copy( const QString &path, const KTarEntry *entry )
+void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *entry )
 {
   kdDebug( 30003 ) << "copy " << entry->name() << endl;
   if ( entry->isFile() )
