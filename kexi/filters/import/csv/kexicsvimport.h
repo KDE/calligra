@@ -20,7 +20,7 @@
 #ifndef KEXICSVIMPORTFILTER_H
 #define KEXICSVIMPORTFILTER_H
 
-#include "kexitableimportfilter.h"
+#include "core/filters/kexifilter.h"
 #include <qmap.h>
 
 class Preview;
@@ -28,7 +28,7 @@ class KexiDB;
 //class KexiCSVImport;
 typedef QMap<int, int> DataTypes;
 
-class KexiCSVImport : public KexiTableImportFilter
+class KexiCSVImport : public KexiFilter
 {
 	Q_OBJECT
 
@@ -44,9 +44,11 @@ class KexiCSVImport : public KexiTableImportFilter
 		~KexiCSVImport();
 
 		virtual QString name();
-		virtual bool	open(KexiDB *);
+//		virtual bool	open(KexiDB *);
 
 		bool		parseFile(const QString &file, ImportDlg *p);
+
+		bool import(const KURL& url,unsigned long allowedTypes);
 
 	public slots:
 		void		reparse();

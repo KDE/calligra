@@ -22,6 +22,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kio/netaccess.h>
 
 #include <qtable.h>
 #include <qwidget.h>
@@ -39,8 +40,11 @@
 #include "preview.h"
 #include "kexicsvimport.h"
 
-KexiCSVImport::KexiCSVImport(QObject *parent, const char *name, const QStringList &)
- : KexiTableImportFilter(parent, name)
+#include "core/filters/kexifiltermanager.h"
+#include "core/kexiproject.h"
+
+KexiCSVImport::KexiCSVImport(QObject *parent, const char *name, const QStringList &l)
+ : KexiFilter(KEXIFILTERMANAGER(parent), name,l)
 {
 }
 
@@ -50,14 +54,18 @@ KexiCSVImport::name()
 	return i18n("csv file");
 }
 
-bool
-KexiCSVImport::open(KexiDB *db)
-{
-	m_file = KFileDialog::getOpenFileName();
-	if(m_file.isEmpty())
-		return false;
 
-	m_db = db;
+bool
+KexiCSVImport::import(const KURL& url,unsigned long allowedTypes)
+{
+	m_db = filterManager()->project()->db();
+
+	QString tmpFile;
+     	if( ! KIO::NetAccess::download( url, tmpFile ) )
+	{
+#warning DISPLAY SOME ERROR
+		return false;
+	}
 
 	m_dlg = new ImportDlg();
 	connect(m_dlg->delimiter, SIGNAL(activated(const QString &)), this, SLOT(reparse(const QString &)));
@@ -69,17 +77,26 @@ KexiCSVImport::open(KexiDB *db)
 
 	connect(m_dlg->btnImport, SIGNAL(clicked()), this, SLOT(import()));
 
-	if(!parseFile(m_file, m_dlg))
-		return false;
 
-	return m_dlg->exec();
+	bool result=false;
 
-//	return true;
+	m_file=tmpFile;
+
+	if(parseFile(m_file, m_dlg))
+	{
+		result=m_dlg->exec();
+	}
+
+	KIO::NetAccess::removeTempFile( tmpFile );
+
+	return result;
 }
 
 bool
 KexiCSVImport::parseFile(const QString &file, ImportDlg *p)
 {
+
+
 	QFile f(file);
 	if(!f.exists() || !f.open(IO_ReadOnly))
 	{
@@ -175,6 +192,7 @@ KexiCSVImport::typeChanged(int type)
 	m_dataTypes.insert(m_dlg->preview->currentColumn(), type, true);
 }
 
+
 void
 KexiCSVImport::import()
 {
@@ -231,16 +249,19 @@ KexiCSVImport::import()
 
 	for(int row=0; row < m_dlg->preview->numRows(); row++)
 	{
-		int magic = rec->insert();
+		KexiDBUpdateRecord *ur=rec->insert();
+		if (!ur)
+		{
+			//show a nice error
+			delete rec;
+			return;
+		}
 		for(int col=0; col < m_dlg->preview->numCols(); col++)
 		{
-			rec->update(magic, col + 1, QVariant(m_dlg->preview->text(row, col)));
-			if(col == 0)
-				rec->commit(magic, true);
+			ur->setValue(col + 1, QVariant(m_dlg->preview->text(row, col)));
 		}
-		rec->commit(magic, false);
 	}
-
+	rec->writeOut();
 	delete rec;
 
 //	m_dlg->accept();

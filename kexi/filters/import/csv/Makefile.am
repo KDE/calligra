@@ -2,7 +2,7 @@ lib_LTLIBRARIES = kexicsvimport.la
 
 kexicsvimport_la_SOURCES = preview.ui kexicsvimport.cpp
 kexicsvimport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
-kexicsvimport_la_LIBADD = ../../../kexiDB/libkexidb.la ../kexitablefilters.la
+kexicsvimport_la_LIBADD = ../../../core/libkexicore.la
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 

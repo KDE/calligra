@@ -1,15 +1,18 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-ServiceTypes=Kexi/TableFilter
+ServiceTypes=Kexi/ImportFilter
 
 Name=KexiCSVImport
 Name[sv]=Kexi CSV-import
 Comment=Import CSV File...
-Comment[hu]=CSV fájl importálása
-Comment[pt]=Importa um ficheiro CSV
-Comment[pt_BR]=Importa Arquivo CSV
-Comment[sv]=Importera CSV-fil
+Comment[da]=Importér CSV-fil...
+Comment[es]=Importar archivo CSV...
+Comment[hu]=CSV fájl importálása...
+Comment[pt]=Importar um Ficheiro CSV...
+Comment[pt_BR]=Importar Arquivo CSV...
+Comment[sv]=Importera CSV-fil...
 
 X-KDE-Library=kexicsvimport
-X-Kexi-Direction=import
+X-KEXI-Import=text/x-csv
+X-KEXI-ImportTypes=kexi/table
