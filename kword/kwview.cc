@@ -1134,7 +1134,7 @@ void KWView::setupActions()
                                             actionCollection(), "select_frameset" );
 
 
-    actionAddBookmark= new KAction( i18n( "Add Bookmark..." ), 0,
+    actionAddBookmark= new KAction( i18n( "Bookmark..." ), 0,
                                             this, SLOT( addBookmark() ),
                                             actionCollection(), "add_bookmark" );
     actionSelectBookmark= new KAction( i18n( "Select Bookmark..." ), 0,
