@@ -45,6 +45,7 @@ class KChartPart : public KoChart::Part
  protected:
   void initRandomData();
   virtual KoView* createViewInstance( QWidget* parent, const char* name );
+  bool loadOldXML( const QDomDocument& doc );
 
  private:
   QDomElement createElement(const QString &tagName, const QFont &font, QDomDocument &doc) const;
