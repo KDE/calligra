@@ -509,7 +509,7 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
         if ( src.left() != dest.right() )
             dest.setRight( dest.right() - 1 );
 
-        for ( int y = src.top(); y <= src.bottom(); y++ )
+        for ( int y = dest.top(); y <= dest.bottom(); y++ )
         {
             int x;
             QPtrList<KSpreadCell> destList;
