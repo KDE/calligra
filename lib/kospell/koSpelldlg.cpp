@@ -182,10 +182,11 @@ void KOSpellDlg::init(const QString & _word, QStringList * _sugg)
 
     wordlabel->setText(_word);
 
-    changeButtonState( _sugg );
     if (sugg->count() == 0) {
         editbox->setText(_word);
     }
+    changeButtonState( _sugg );
+
 }
 
 void KOSpellDlg::changeButtonState( QStringList * _sugg )
