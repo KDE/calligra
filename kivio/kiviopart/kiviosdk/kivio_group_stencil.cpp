@@ -117,7 +117,7 @@ void KivioGroupStencil::setLineWidth( double f )
     }
 }
 
-KivioCollisionType KivioGroupStencil::checkForCollision( KivioPoint *p, double threshhold )
+KivioCollisionType KivioGroupStencil::checkForCollision( KivioPoint *p, double threshold )
 {
     KivioCollisionType colType;
 
@@ -125,7 +125,7 @@ KivioCollisionType KivioGroupStencil::checkForCollision( KivioPoint *p, double t
     KivioStencil *pStencil = m_pGroupList->last();
     while( pStencil )
     {
-        colType = pStencil->checkForCollision( p, threshhold );
+        colType = pStencil->checkForCollision( p, threshold );
         if( colType != kctNone ) {
             return colType;
         }

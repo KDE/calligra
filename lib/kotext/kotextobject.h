@@ -51,7 +51,7 @@ public:
     /**
      * Interface for setting the modified format
      * @param format can be a temporary format
-     * @param zoomFont set to true if the font size was used-speficied (e.g. in KoFontDia)
+     * @param zoomFont set to true if the font size was used-specified (e.g. in KoFontDia)
      */
     virtual KCommand *setFormatCommand( const KoTextFormat *format, int flags, bool zoomFont = false ) = 0;
 

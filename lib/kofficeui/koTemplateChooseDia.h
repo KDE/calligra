@@ -104,7 +104,7 @@ class KoTemplateChooseDia : public KDialogBase
 	 * on the input of the user.
 	 * Cancel = The user pressed 'Cancel'
 	 * Template = The user selected a template
-	 * File = The user has choosen a file
+	 * File = The user has chosen a file
 	 * Empty = The user selected "Empty document"
 	 */
 	enum ReturnType { Cancel, Template, File, Empty };

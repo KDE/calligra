@@ -53,7 +53,7 @@ CSqlCursor::CSqlCursor( const QString & strSql, bool autopopulate, QSqlDatabase*
 			append( *it );
 		}	    
 	}else {
-		// an error occured if the cursor is not active
+		// an error occurred if the cursor is not active
 		if ( !isActive() ) {
 			QSqlError err = lastError();
 			QString errStr ( "The database reported an error\n" );

@@ -128,7 +128,7 @@ public slots:
 	void setRelations(const RelationList& r) { m_relations = r; }
 
 	/*!
-	 *  the last error which occured. The pointer must neither be stored by the caller nor
+	 *  the last error which occurred. The pointer must neither be stored by the caller nor
 	 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
 	 */
 	void latestError(KexiDBError **error);
@@ -145,7 +145,7 @@ public slots:
 
 public:
 	/*!
-	 *  the last error which occured. The pointer must neither be stored by the caller nor
+	 *  the last error which occurred. The pointer must neither be stored by the caller nor
 	 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
 	 */
 	virtual KexiDBError *latestError()=0;

@@ -421,7 +421,7 @@ void KSpreadCell::clearObscuringCells()
 
 void KSpreadCell::obscure( KSpreadCell *cell, bool isForcing )
 {
-  m_ObscuringCells.remove( cell ); // removes *all* occurences
+  m_ObscuringCells.remove( cell ); // removes *all* occurrences
   cell->clearObscuringCells();
   if ( isForcing )
   {
@@ -1311,7 +1311,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     QString localizedNumber= locale()->formatNumber( value, p );
     int pos = 0;
 
-    // round the number, based on desired precision if not scientific is choosen (scientific has relativ precision)
+    // round the number, based on desired precision if not scientific is chosen (scientific has relativ precision)
     if( formatType() != Scientific )
     {
         double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
@@ -2654,7 +2654,7 @@ void KSpreadCell::paintText( QPainter& painter,
   //Set the font according to condition
   applyZoomedFont( painter, cellRef.x(), cellRef.y() );
 
-  //Check for red font color for negativ values
+  //Check for red font color for negative values
   if ( !m_conditions || !m_conditions->matchedStyle() )
   {
     if ( m_value.isNumber()
@@ -4394,7 +4394,7 @@ void KSpreadCell::checkTextInput()
         str = m_strFormulaOut;
 
     // If the text is empty, we don't have a value
-    // If the user stated explicitely that he wanted text (using the format or using a quote),
+    // If the user stated explicitly that he wanted text (using the format or using a quote),
     // then we don't parse as a value, but as string.
     if ( str.isEmpty() || formatType() == Text_format || str.at(0)=='\'' )
     {

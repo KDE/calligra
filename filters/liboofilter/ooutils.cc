@@ -126,13 +126,13 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
     else if ( styleStack.hasAttribute("style:line-height-at-least") ) // 3.11.2
     {
         QString value = styleStack.attribute( "style:line-height-at-least" );
-        // kotext has "atleast" but that's for the linespacing, not for the entire line height!
+        // kotext has "at least" but that's for the linespacing, not for the entire line height!
         // Strange. kotext also has "at least" for the whole line height....
         // Did we make the wrong choice in kotext?
         //kdWarning() << "Unimplemented support for style:line-height-at-least: " << value << endl;
         // Well let's see if this makes a big difference.
         QDomElement lineSpacing = parentElement.ownerDocument().createElement("LINESPACING");
-        lineSpacing.setAttribute("type", "atleast");
+        lineSpacing.setAttribute("type", "at least");
         lineSpacing.setAttribute("spacingvalue", KoUnit::parseValue(value));
         parentElement.appendChild(lineSpacing);
     }
@@ -212,7 +212,7 @@ void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& st
             case '.':
                 filling = 1; break;
             case '-':
-            case '_':  // TODO in KWord: differenciate --- and ___
+            case '_':  // TODO in KWord: differentiate --- and ___
                 filling = 2; break;
             default:
                 // KWord doesn't have support for "any char" as filling.

@@ -112,7 +112,7 @@ VTransformDocker::update()
 void
 VTransformDocker::transform()
 {
-	//FIXME: Needs an apropriate transform command which takes absolute values of object size
+	//FIXME: Needs an appropriate transform command which takes absolute values of object size
 	m_part->repaintAllViews( true );
 }
 

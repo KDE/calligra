@@ -98,7 +98,7 @@ public:
 	/**
 	 * Returns the segment type ("begin", "line" or "curve").
 	 */
-	// TODO: this is a backward compatibilty function. It should go someday
+	// TODO: this is a backward compatibility function. It should go someday
 	// together with VSegmentType.
 	VSegmentType type() const
 	{

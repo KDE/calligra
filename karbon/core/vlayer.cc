@@ -39,7 +39,7 @@ VLayer::VLayer( VObject* parent, VState state )
 	: VGroup( parent, state )
 {
 	setName( "Layer" );
-	// HACK : vlayer just shouldnt have fill/stroke at all
+	// HACK : vlayer just shouldn't have fill/stroke at all
 	delete m_fill;
 	m_fill = 0L;
 	delete m_stroke;

@@ -132,7 +132,7 @@ bool Document::loadXML( QDomDocument doc )
     //clear();
     QDomElement root = doc.documentElement();
 
-    // backward compatiblity
+    // backward compatibility
     if ( root.tagName() == "FORMULA" ) {
         Container* formula = newFormula( 0 );
         return formula->load( root );

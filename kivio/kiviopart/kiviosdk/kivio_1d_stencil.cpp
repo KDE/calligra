@@ -634,7 +634,7 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage )
   delete [] done;
 }
 
-void Kivio1DStencil::searchForConnections( KivioPage *pPage, double threshhold )
+void Kivio1DStencil::searchForConnections( KivioPage *pPage, double threshold )
 {
   bool *done = new bool[ m_pConnectorPoints->count()];
   int i;
@@ -685,7 +685,7 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage, double threshhold )
         {
           if( !done[i] && p->target() == 0 )
           {
-            if( pStencil->connectToTarget( p, threshhold ) )
+            if( pStencil->connectToTarget( p, threshold ) )
             {
                 done[i] = true;
             }

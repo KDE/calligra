@@ -49,7 +49,7 @@ VStroke::VStroke( const VColor &c, VObject* parent, float width, const VLineCap 
 
 VStroke::VStroke( const VStroke& stroke )
 {
-	// doesnt copy parent:
+	// doesn't copy parent:
 	*this = stroke;
 }
 

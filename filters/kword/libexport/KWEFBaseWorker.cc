@@ -72,7 +72,7 @@ bool KWEFBaseWorker::doFullAllParagraphs (const QValueList<ParaData>& paraList)
 bool KWEFBaseWorker::loadSubFile(const QString& fileName, QByteArray& array) const
 // return value:
 //   true if the file is not empty
-//   false if the file is empty or if an error occured
+//   false if the file is empty or if an error occurred
 {
     bool flag=false;
     if (m_kwordLeader)

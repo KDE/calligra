@@ -892,7 +892,7 @@ bool KoMainWindow::saveDocument( bool saveas )
             ret = false;
     }
 
-// Now that there's a File/Export option, this is no longer neccessary.
+// Now that there's a File/Export option, this is no longer necessary.
 // If you continue to use File/Save to export to a foreign format,
 // this signals your intention to continue working in a foreign format.
 // You have already been warned by the DoNotAskAgain exportConfirmation

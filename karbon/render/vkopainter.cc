@@ -112,7 +112,7 @@ VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h, b
 VKoPainter::~VKoPainter()
 {
 	// If we are in target mode, we created a buffer, else if we used the other ctor
-	// we didnt.
+	// we didn't.
 	if( m_target )
 		art_free( m_buffer );
 

@@ -409,7 +409,7 @@ public:
 	// you can choose to not display it on the first page
 	//
 	// This filter aims to be as lossless as possible so if we can't
-	// accomodate the types of headers/footers found in KWord, we at least
+	// accommodate the types of headers/footers found in KWord, we at least
 	// print out the paragraphs in the body
 	bool doPageInfo (int headerType, int footerType)
 	{
@@ -1252,7 +1252,7 @@ public:
 
 		MSWrite::FormatParaProperty paraProp; paraProp = *paraPropIn;
 		paraProp.setIsObject (true);
-		paraProp.setLeftIndent (0);	// not neccessary but...
+		paraProp.setLeftIndent (0);	// not necessary but...
 		if (!m_generator->writeParaInfoBegin (&paraProp, NULL, &image))
 			return false;
 

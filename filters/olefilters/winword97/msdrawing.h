@@ -40,7 +40,7 @@ public:
 
     typedef enum
     {
-        msoblipERROR,               // An error occured during loading.
+        msoblipERROR,               // An error occurred during loading.
         msoblipUNKNOWN,             // An unknown blip type.
         msoblipEMF,                 // Windows Enhanced Metafile.
         msoblipWMF,                 // Windows Metafile.

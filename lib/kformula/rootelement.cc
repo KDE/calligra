@@ -45,7 +45,7 @@ public:
 
     /**
      * This is called by the container to get a command depending on
-     * the current cursor position (this is how the element gets choosen)
+     * the current cursor position (this is how the element gets chosen)
      * and the request.
      *
      * @returns the command that performs the requested action with
@@ -569,7 +569,7 @@ bool RootElement::readContentFromDom(QDomNode& node)
             return false;
         }
     }
-    // backward compatiblity
+    // backward compatibility
     else if ( node.nodeName().upper() == "INDEX" ) {
         if ( !buildChild( index=new SequenceElement( this ), node, "INDEX" ) ) {
             return false;

@@ -69,7 +69,7 @@ public slots:
 signals:
 
     /**
-     * Is emitted everytime the cursor might have changed.
+     * Is emitted every time the cursor might have changed.
      */
     void cursorChanged(bool visible, bool selecting);
 

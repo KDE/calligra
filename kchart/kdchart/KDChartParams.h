@@ -714,7 +714,7 @@ public:
     /**
        Specifies the chart type. The default is bar charts (Bar).
 
-       \note Allways call this <b>before</b> specifying other
+       \note Always call this <b>before</b> specifying other
        axis properties and before calling \c setAdditionalChartType().<br>
        \c setChartType() deactivates the right axis and also sets the
        axisLabelsTouchEdges back to their default for all bottom and
@@ -1429,7 +1429,7 @@ public:
        Calling setPrintDataValuesWithDefaultFontParams( chart ) will
        <b>reset</b> the respective font size and colour and position parameters (but not the
        QFont itself) and <b>activate</b> printing of the values for the \c chart
-       speficied (or for all charts by using \c KDChartParams::KDCHART_ALL_CHARTS, resp.).
+       specified (or for all charts by using \c KDChartParams::KDCHART_ALL_CHARTS, resp.).
 
        \param active specifies whether the value texts are to be printed or not.
        \param chart The number of the chart: 0 for the first chart, 1 for
@@ -1449,7 +1449,7 @@ public:
        Changing of one or more of <b>the following parameters</b> automatically
        de-activates all future font parameter adjustments that would otherwise
        take place after each call of setChartType (or setAdditionalChartType, resp.).
-       To re-enable this usefull feature you may call setPrintDataValuesWithDefaultFontParams
+       To re-enable this useful feature you may call setPrintDataValuesWithDefaultFontParams
        at any time afterwards...
 
        \param size (in per mille of the chart width) the dynamic size of
@@ -1489,7 +1489,7 @@ public:
        made via parameter \c size.
        \param negativeRotation The amount of degrees (using a circle of 360 degrees) taken to
        rotate the text. Positive values rotate clockwise, negative values rotate counter-clockwise.
-       There are two special values that you might find usefull for Pie charts or for Ring charts:
+       There are two special values that you might find useful for Pie charts or for Ring charts:
        \c KDChartParams::SAGGITAL_ROTATION and \c KDChartParams::TANGENTIAL_ROTATION both
        leading to individual calculation of appropriate rotation for each data value.
        Rotation will be performed around the internal <b>alignment point</b> of the text
@@ -1520,7 +1520,7 @@ public:
        made via parameter \c size.
        \param positiveRotation The amount of degrees (using a circle of 360 degrees) taken to
        rotate the text. Positive values rotate clockwise, negative values rotate counter-clockwise.
-       There are two special values that you might find usefull for Pie charts or for Ring charts:
+       There are two special values that you might find useful for Pie charts or for Ring charts:
        \c KDChartParams::SAGGITAL_ROTATION and \c KDChartParams::TANGENTIAL_ROTATION both
        leading to individual calculation of appropriate rotation for each data value.
        Rotation will be performed around the internal <b>alignment point</b> of the text
@@ -1666,7 +1666,7 @@ public:
        Calling this methode results in resetting the respective font
        size and colour and position parameters but not the QFont itself.
        By setting \c callSetPrintDataValues to true you select
-       general enabling of text printing, when doing so it is <b>not</b> neccessary
+       general enabling of text printing, when doing so it is <b>not</b> necessary
        to call setPrintDataValues() after calling
        setPrintDataValuesWithDefaultFontParams().
 
@@ -6119,7 +6119,7 @@ public:
        like department name, print date, page number... <br>
        <b>Note:</b> Those headers <b>share the same area</b> so make sure to
        specify propper horizontal alignment for each section when using more than
-       one of them. By default \c HdFtPosHeader0 has centered alignement,
+       one of them. By default \c HdFtPosHeader0 has centered alignment,
        \c HdFtPosHeader0A is aligned to the left and \c HdFtPosHeader0B to the
        right side. All of them are vertically aligned to the bottom, you may
        change this at your own risk: the resulting output might look strange. <br>

@@ -2744,7 +2744,7 @@ void PSOutputDev::dumpColorSpaceL2(GfxColorSpace *colorSpace) {
     break;
 
   case csSeparation:
-    //~ this is a kludge -- the correct thing would to ouput a
+    //~ this is a kludge -- the correct thing would to output a
     //~ separation color space, with the specified alternate color
     //~ space and tint transform
     separationCS = (GfxSeparationColorSpace *)colorSpace;

@@ -952,7 +952,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
 	// Loop over all destination cells
 	while ( cell )
 	{
-          kdDebug() << "Valid intervall, cell: " << cell->row() << " block: " << block << endl;
+          kdDebug() << "Valid interval, cell: " << cell->row() << " block: " << block << endl;
 
 	  // End of block? -> start again from beginning
           if (down)

@@ -32,7 +32,7 @@
 
 /**
  * This class hold all general information about the doc : does it use a color markup, ... ?
- * paper size, ... and generate the information about the doc (packages and extentions
+ * paper size, ... and generate the information about the doc (packages and extensions
  * to include, ...). It's the configuration latex file used to incldue the needed packages,
  * define the paper format, ...
  */

@@ -49,8 +49,8 @@ KoPageLayout Kivio::loadPageLayout(const QDomElement& e)
   KoPageLayout layout;
 
   if(e.hasAttribute("unit")) {
-    // Compatability with Kivio <= 1.2.x
-    kdDebug() << "Compatability mode..." << endl;
+    // Compatibility with Kivio <= 1.2.x
+    kdDebug() << "Compatibility mode..." << endl;
     KoUnit::Unit unit = Kivio::convToKoUnit(XmlReadInt(e, "unit", 0));
     layout.ptWidth = KoUnit::ptFromUnit(XmlReadFloat(e, "width", 0.0), unit);
     layout.ptHeight = KoUnit::ptFromUnit(XmlReadFloat(e, "height", 0.0), unit);
@@ -173,7 +173,7 @@ KoSize Kivio::loadSize(const QDomElement& e, const QString& name, const KoSize& 
 {
   KoSize size;
   if(e.hasAttribute(name + "Unit")) {
-    // Compatability with Kivio <= 1.2.x
+    // Compatibility with Kivio <= 1.2.x
     KoUnit::Unit unit = Kivio::convToKoUnit(XmlReadInt(e, name + "Unit", 0));
     size.setWidth(KoUnit::ptFromUnit(XmlReadFloat(e, name + "Width", def.width()), unit));
     size.setHeight(KoUnit::ptFromUnit(XmlReadFloat(e, name + "Height", def.height()), unit));

@@ -31,7 +31,7 @@ Report::Report(QWidget* parent, const char* name)
 	rptviewer = new KReportViewer(this);
 
 	connect(rptviewer,SIGNAL(preferedTemplate(const QString &)),
-			  SLOT(slotPreferedTemplate(const QString &)));
+			  SLOT(slotPreferredTemplate(const QString &)));
 
 	setCentralWidget(rptviewer);
 
@@ -182,7 +182,7 @@ QSize Report::sizeHint() const
 
 // Handle a request from the data to use a particular template.
 
-void Report::slotPreferedTemplate(const QString &tplname)
+void Report::slotPreferredTemplate(const QString &tplname)
 {
 //	setReportTemplate(tplname);
 }

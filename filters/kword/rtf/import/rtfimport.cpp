@@ -269,7 +269,7 @@ RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
  * @param fileOut the name of the output (KWord) file
  * @param from the mimetype for RTF
  * @param to the mimetype for KWord
- * @return true if the document was succesfully converted
+ * @return true if the document was successfully converted
  */
 KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCString& to )
 {

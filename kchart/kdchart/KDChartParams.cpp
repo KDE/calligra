@@ -1099,7 +1099,7 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
 
 QDomDocument KDChartParams::saveXML( bool withPI ) const
 {
-    // Create an inital DOM document
+    // Create an initial DOM document
     QString docstart = "<ChartParams/>";
 
     QDomDocument doc( "ChartParams" );
@@ -2984,7 +2984,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         }
                         else
                             qDebug( "Unknown subelement of DataValuesGlobalSettings found: %s", tagName.latin1() );
-                              // do _not_ return false here (to enable future extentions)
+                              // do _not_ return false here (to enable future extensions)
                     }
                     node = node.nextSibling();
                 }
@@ -3004,7 +3004,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         }
                         else
                             qDebug( "Unknown tag in AreaMap found: %s", tagName.latin1() );
-                              // do _not_ return false here (to enable future extentions)
+                              // do _not_ return false here (to enable future extensions)
                     }
                     node = node.nextSibling();
                 }

@@ -368,7 +368,7 @@ namespace KOffice
         // If the "to" mimetype isEmpty() then we try to find the
         // closest KOffice mimetype and use that as destination.
         // After such a search "to" will contain the dest. mimetype (return value)
-        // if the search was successfull. Might return 0!
+        // if the search was successful. Might return 0!
         KoFilterChain::Ptr chain( const KoFilterManager* manager, QCString& to ) const;
 
         // debugging

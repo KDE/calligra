@@ -718,7 +718,7 @@ public:
      * is inserted before A.
      *
      * @param pos the point of insertion (only one coordinate may be used, depending
-     * on the other paramaters).
+     * on the other parameters).
      * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
      *                        if false, we inserted or removed a cell
      * @param ref see ChangeRef
@@ -738,7 +738,7 @@ public:
      * Update chart when you insert or remove row or column
      *
      * @param pos the point of insertion (only one coordinate may be used, depending
-     * on the other paramaters).
+     * on the other parameters).
      * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
      *                        if false, we inserted or removed a cell
      * @param ref see ChangeRef
@@ -1234,7 +1234,7 @@ protected:
 
     /**
      * Max range of canvas in y direction.
-     * Depends on KS_rowMax and the heigth of all rows
+     * Depends on KS_rowMax and the height of all rows
      */
     double m_dSizeMaxY;
 

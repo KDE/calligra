@@ -95,7 +95,7 @@ VZOrderCmd::execute()
 
 		VObjectList objects;
 
-		// TODO : this doesnt work for objects inside groups!
+		// TODO : this doesn't work for objects inside groups!
 		VLayerListIterator litr( document()->layers() );
 		while( !selection.objects().isEmpty() && litr.current() )
 		{

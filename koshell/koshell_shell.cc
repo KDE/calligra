@@ -153,7 +153,7 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
       return false;
     }
 
-    // If the conversion was successfull we get the mimetype of the
+    // If the conversion was successful we get the mimetype of the
     // chosen KOffice part back.
     m_documentEntry = KoDocumentEntry::queryByMimeType( mimetype );
     if ( m_documentEntry.isEmpty() ) {
@@ -502,7 +502,7 @@ bool KoShellWindow::queryClose()
 }
 
 /*
-// Should this be an additionnal action in the File menu ?
+// Should this be an additional action in the File menu ?
 bool KoShellWindow::saveAllPages()
 {
   // TODO

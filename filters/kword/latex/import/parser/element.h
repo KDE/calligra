@@ -45,7 +45,7 @@ class Element
 		/* setters */
 		void setType(EType t) { _type = t; }
 
-		/* usefull methods */
+		/* useful methods */
 		//void addParams(QPtrList<Param> params) { }
 		//void addGroups(QPtrList<QPtrList<Element> >* elts) {  }
 		virtual void print(int tab = 0) = 0;

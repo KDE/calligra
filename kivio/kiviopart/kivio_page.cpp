@@ -572,7 +572,7 @@ bool KivioPage::isStencilSelected( KivioStencil *pStencil )
  * for stencils.  The first one it finds will be returned.
  * If none are found, it will return NULL.
  */
-KivioStencil *KivioPage::checkForStencil( KivioPoint *pPoint, int *collisionType, float threshhold, bool selectedOnly )
+KivioStencil *KivioPage::checkForStencil( KivioPoint *pPoint, int *collisionType, float threshold, bool selectedOnly )
 {
     KivioStencil *pStencil;
     int colType;
@@ -598,7 +598,7 @@ KivioStencil *KivioPage::checkForStencil( KivioPoint *pPoint, int *collisionType
     }
     */
 
-    pStencil = m_pCurLayer->checkForStencil( pPoint, &colType, threshhold, selectedOnly );
+    pStencil = m_pCurLayer->checkForStencil( pPoint, &colType, threshold, selectedOnly );
     if( pStencil )
     {
         *collisionType = colType;

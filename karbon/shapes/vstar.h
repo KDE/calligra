@@ -40,7 +40,7 @@
  * Edges          - number of edges, which must be greater or equal to 3.
  * Outer radius   - radius amount of circumcircle of the star.
  * Inner radius   - inner radius where star has to connect to. This value
- *                  doesnt apply to polygon, spoke and wheel.
+ *                  doesn't apply to polygon, spoke and wheel.
  * Inner angle    - extra radius amount for inner radius.
  * Roundness      - uses curves instead of lines for the star shape.
  */

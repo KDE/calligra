@@ -82,7 +82,7 @@ public:
         Use this to specify that an automatically computed amount of
         axis labels are to be skipped if there is not enough space
         for displaying all of them.
-        This is usefull in case you have lots of entries in one dataset.
+        This is useful in case you have lots of entries in one dataset.
 
         \sa setAxisValues
     */
@@ -277,7 +277,7 @@ public:
           boundary values for start and end of the scale automatically.
           -> This will produce good looking results without you having
              to fiddle around with the settings.
-             Unfortunately these charts will not allways be comparable to
+             Unfortunately these charts will not always be comparable to
              each other if the axes' labels change since both the size of
              the area reserved for the chart and the scaling of the
              scales will vary if the data values do so.
@@ -664,7 +664,7 @@ public:
 
        \param axisAreaMax the true axis area width (or height, resp.)
         as it was calculated and drawn.
-        This is allways an absolute value.
+        This is always an absolute value.
 
         \note Do <b>not call</b> this function unless you are knowing
         exactly what you are doing. \c setAxisTrueAreaSize is normally
@@ -1479,14 +1479,14 @@ public:
     This would specify a default ordinate-axis obtaining its values from the
     attached dataset. Looks nice but it is difficult to compare it to another
     chart representing slightly different min/max values since it neither starts
-    at zero nor ends at an allways same value.
+    at zero nor ends at an always same value.
 
     \verbatim
     setAxisValues( true, KDChartData( 0.0 ) );
     \endverbatim
     This would specify a half-automatical ordinate-axis obtaining its values from
     the attached dataset. Looks nice and can be slightly easier compared to
-    another chart since it allways starts at zero, causing negative values to be
+    another chart since it always starts at zero, causing negative values to be
     ignored completely.
 
     \verbatim
@@ -1500,7 +1500,7 @@ public:
     of the dataset values are ignored completely.</b>
     It will show one digit behind the comma.
     The resulting chart can be perfectly compared to
-    another chart since it allways starts and ends at the very same level - no
+    another chart since it always starts and ends at the very same level - no
     matter what the dataset values are about actually.
 
     \verbatim
@@ -1544,7 +1544,7 @@ public:
     p.setAxisParams( KDChartAxisParams::AxisPosBottom, pa );
     \endverbatim
     This would specify a default abscissa-axis starting with 'Monday' and
-    counting the days of the week as far as neccessary to represent
+    counting the days of the week as far as necessary to represent
     all the entries in the associated dataset.
     Note this \c LabelsFromDataRowNo indicating that the texts are <b>not</b> to
     be taken from a data row and note \c &abscissaNames indicating the
@@ -1704,7 +1704,7 @@ public:
     /**
         Specifies how many axis labels are to be skipped
         if there is not enough space for displaying all of them.
-        This is usefull in case you have lots of entries in one dataset.
+        This is useful in case you have lots of entries in one dataset.
 
         \sa setAxisValues
     */
@@ -2049,7 +2049,7 @@ public:
     \c setAxisValues since (regarding Start and/or End and/or Delta value) it
     might be only a subset of that list. Whenever labels text are calculated
     automatically the resulting labels also stored in this list - it will
-    allways be a true copy of the texts painted at the axis.
+    always be a true copy of the texts painted at the axis.
 
         \return a \c QStringList containing the label texts actually being used.
         \sa setAxisValues
@@ -2514,7 +2514,7 @@ private:
     double _axisValueDelta;
     /**
         Stores how many axis labels are to be skipped after drawing one.
-        This is usefull in case you have lots of entries in one dataset.
+        This is useful in case you have lots of entries in one dataset.
 
         \sa setAxisValues
     */

@@ -124,7 +124,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                      i18n( "If you check this box, the selected image will "
                            "be scaled to fit the total size of the selected "
                            "area. Image ratio will be adjusted to match "
-                           "the area size and height if neccessary." ) );
+                           "the area size and height if necessary." ) );
     scaledRB = new QRadioButton( i18n( "Scaled" ), right );
     QWhatsThis::add( scaledRB,
                      i18n( "If you check this box, the selected image will "

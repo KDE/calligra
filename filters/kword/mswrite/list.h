@@ -96,7 +96,7 @@ namespace MSWrite
 	class ListIterator
 	{
 	private:
-		bool m_foward;
+		bool m_forward;
 		ListElement <dtype> *m_upto;
 
 		void setPtr (ListElement <dtype> *ptr)
@@ -105,14 +105,14 @@ namespace MSWrite
 		}
 
 	public:
-		ListIterator (const bool foward = true)
+		ListIterator (const bool forward = true)
 		{
-			m_foward = foward;
+			m_forward = forward;
 		}
 
 		ListIterator <dtype> &prev (void)
 		{
-			if (m_foward)
+			if (m_forward)
 				m_upto = m_upto->m_prev;
 			else
 				m_upto = m_upto->m_next;
@@ -132,7 +132,7 @@ namespace MSWrite
 
 		ListIterator <dtype> &next (void)
 		{
-			if (m_foward)
+			if (m_forward)
 				m_upto = m_upto->m_next;
 			else
 				m_upto = m_upto->m_prev;
@@ -308,10 +308,10 @@ namespace MSWrite
 		typedef ListIterator <dtype> Iterator;
 		friend class ListIterator <dtype>;
 
-		ListIterator <dtype> begin (const bool foward = true) const
+		ListIterator <dtype> begin (const bool forward = true) const
 		{
-			ListIterator <dtype> ret (foward);
-			if (foward)
+			ListIterator <dtype> ret (forward);
+			if (forward)
 				ret.setPtr (m_head);
 			else
 				ret.setPtr (m_tail);

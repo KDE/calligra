@@ -45,7 +45,7 @@ public slots:
 	void setForcedUserTemplate(const QString &name){;}
 
 private slots:
-        void slotPreferedTemplate(const QString &);
+        void slotPreferredTemplate(const QString &);
 
 };
 

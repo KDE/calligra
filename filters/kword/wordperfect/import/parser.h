@@ -170,7 +170,7 @@ namespace WP
 
     /**
      * Parses given filename.
-     * @returns TRUE if parsing was succesful, otherwise FALSE.
+     * @returns TRUE if parsing was successful, otherwise FALSE.
      *
      */
     bool parse (const QString & filename);

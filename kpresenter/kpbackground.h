@@ -111,7 +111,7 @@ public:
     // Uses the @p zoomHandler to determine the size of the background
     void draw( QPainter *_painter, const KoZoomHandler* zoomHandler,
                const QRect& crect, bool _drawBorders );
-    // Draw the background. The size of the background is passed explicitely
+    // Draw the background. The size of the background is passed explicitly
     void draw( QPainter *_painter, const QSize& ext,
                const QRect& crect, bool _drawBorders );
 

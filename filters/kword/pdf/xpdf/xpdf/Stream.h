@@ -515,7 +515,7 @@ private:
   int b1;			// index into refLine
   short *codingLine;		// coding line changing elements
   int a0;			// index into codingLine
-  int outputBits;		// remaining ouput bits
+  int outputBits;		// remaining output bits
   int buf;			// character buffer
 
   short getTwoDimCode();

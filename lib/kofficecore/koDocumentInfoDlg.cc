@@ -144,7 +144,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   (void) new QLabel( i18n( "Name:" ), grid );
   d->m_leFullName = new QLineEdit( authorInfo->fullName(), grid );
 
-  if ( authorInfo->fullName().isNull() ) // only if null. Empty means the user made it explicitely empty.
+  if ( authorInfo->fullName().isNull() ) // only if null. Empty means the user made it explicitly empty.
   {
     QString name = d->m_emailCfg->readEntry( "FullName" );
     if ( !name.isEmpty() )

@@ -93,7 +93,7 @@ public:
   /**
    * The global context is needed for destructors, callbacks etc.
    *
-   * This method is internal. DONT USE.
+   * This method is internal. DON'T USE.
    */
   KSContext& context() { return m_globalContext; }
 
@@ -166,7 +166,7 @@ protected:
   /**
    * When reading in files with the <> operator, then this variable tells us
    * which file we just opened. So it is used like this: m_args[ m_currentArg ].
-   * The inital value is -1, that means no argument file was opened until now.
+   * The initial value is -1, that means no argument file was opened until now.
    *
    * @see #m_args.
    */

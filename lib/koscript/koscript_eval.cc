@@ -2290,7 +2290,7 @@ extern bool KSEval_t_catch( KSParseNode* node, KSContext& context )
     nspace.insert( node->getIdent(), new KSValue( *value ) );
     context.scope()->localScope()->pushNamespace( &nspace );
 
-    // Clear the exception since we catched it
+    // Clear the exception since we caught it
     context.setException( 0 );
 
     // Evaluate the catch code

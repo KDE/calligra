@@ -30,8 +30,8 @@
 #include <string.h>
 
 #include "structures_generated.h"
-#include "structures_private.h"	// for foward references to embedded structures
-#include "structures.h"	// for foward references to embedded structures
+#include "structures_private.h"	// for forward references to embedded structures
+#include "structures.h"	// for forward references to embedded structures
 
 namespace MSWrite
 {
@@ -431,7 +431,7 @@ namespace MSWrite
 		// --- allocate memory for embedded structures ---
 		for (int i = 0; i < 2; i++)
 		{
-			m_sed [i] = new SectionDescriptor;	// foward ref to structures*.cpp
+			m_sed [i] = new SectionDescriptor;	// forward ref to structures*.cpp
 			if (!m_sed [i]) return;
 		}
 		
@@ -1160,7 +1160,7 @@ namespace MSWrite
 		// --- allocate memory for embedded structures ---
 		for (int i = 0; i < 14; i++)
 		{
-			m_tab [i] = new FormatParaPropertyTabulator;	// foward ref to structures*.cpp
+			m_tab [i] = new FormatParaPropertyTabulator;	// forward ref to structures*.cpp
 			if (!m_tab [i]) return;
 		}
 		
@@ -1968,7 +1968,7 @@ namespace MSWrite
 		m_bmh = NULL;
 		
 		// --- allocate memory for embedded structures ---
-		m_bmh = new BitmapHeader;	// foward ref to structures*.cpp
+		m_bmh = new BitmapHeader;	// forward ref to structures*.cpp
 		if (!m_bmh) return;
 		
 		// --- set defaults for variables --

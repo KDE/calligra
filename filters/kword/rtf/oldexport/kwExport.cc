@@ -690,7 +690,7 @@ AnchoredInsert *findAnchoredInsert (
 
 
 
-// FormatData is a container for data retreived from the FORMAT tag
+// FormatData is a container for data retrieved from the FORMAT tag
 // and its subtags to be used in the PARAGRAPH tag.
 
 /***************************************************************************/

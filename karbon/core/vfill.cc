@@ -43,7 +43,7 @@ VFill::VFill( const VColor &c )
 
 VFill::VFill( const VFill& fill )
 {
-	// doesnt copy parent:
+	// doesn't copy parent:
 	*this = fill;
 }
 

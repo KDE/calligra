@@ -32,7 +32,7 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name)
 bool
 ObjectTreeItem::rename(const QString &name)
 {
-	//do something usefull (e.g. update the list etc)
+	//do something useful (e.g. update the list etc)
 	return true;
 }
 
@@ -52,7 +52,7 @@ ObjectTree::ObjectTree(const QString &classn, const QString &name)
 bool
 ObjectTree::rename(const QString &name)
 {
-	//do something usefull (e.g. update the list etc)
+	//do something useful (e.g. update the list etc)
 	return true;
 }
 

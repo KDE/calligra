@@ -146,7 +146,7 @@ public:
     void cursorHasMoved( FormulaCursor* );
 
     /**
-     * Inside the formula occured an event that must be handled
+     * Inside the formula occurred an event that must be handled
      * outside.
      */
     void moveOutLeft( FormulaCursor* );

@@ -98,7 +98,7 @@ KPObject *KPrPage::getObject(int num)
 }
 
 /*
- * Check if object name allready exists.
+ * Check if object name already exists.
  */
 bool KPrPage::objectNameExists( KPObject *object, QPtrList<KPObject> &list ) {
     QPtrListIterator<KPObject> it( list );
@@ -121,7 +121,7 @@ bool KPrPage::objectNameExists( KPObject *object, QPtrList<KPObject> &list ) {
 
 /*
  * Create a uniq name for a object.
- * if the name allready exists append ' (x)'.
+ * if the name already exists append ' (x)'.
  */
 void KPrPage::unifyObjectName( KPObject *object ) {
     if ( object->getObjectName().isEmpty() ) {

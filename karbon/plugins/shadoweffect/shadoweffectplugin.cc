@@ -140,7 +140,7 @@ VCreateShadowCmd::execute()
 {
 	// Did we have at least once a success? Otherwise we don't get inserted
 	// into the command history.
-	bool successfull = false;
+	bool successful = false;
 
 
 	// Create new shapes if they don't exist yet.
@@ -165,7 +165,7 @@ VCreateShadowCmd::execute()
 			else
 				newObject = new VShadowDecorator( itr.current()->clone(), 0L, m_distance, m_angle, m_opacity );
 
-			successfull = true;
+			successful = true;
 
 			if(newObject)
 			{
@@ -201,7 +201,7 @@ VCreateShadowCmd::execute()
 
 
 	// Tell command history wether we had success at least once.
-	setSuccess( successfull );
+	setSuccess( successful );
 }
 
 void

@@ -41,7 +41,7 @@ VReplacingCmd::execute()
 {
 	// Did we have at least once a success? Otherwise we don't get inserted
 	// into the command history.
-	bool successfull = false;
+	bool successful = false;
 
 
 	// Create new shapes if they don't exist yet.
@@ -63,7 +63,7 @@ VReplacingCmd::execute()
 			// Success.
 			if( visit( *newObject ) )
 			{
-				successfull = true;
+				successful = true;
 
 				// Insert new shape right before old shape.
 				itr.current()->parent()->insertInfrontOf(
@@ -111,7 +111,7 @@ VReplacingCmd::execute()
 
 
 	// Tell command history wether we had success at least once.
-	setSuccess( successfull );
+	setSuccess( successful );
 }
 
 void

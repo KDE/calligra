@@ -901,7 +901,7 @@ QString listStart( QString font, int fontSize, QString listMarker)
 // roman numerals in upper or lower case.
 QString listMarkup( int firstIndent,int listType, int startNumber, int depth,
                     int fontSize, QString font,
-                    QString preceedingText, QString followingText,
+                    QString precedingText, QString followingText,
                     bool section, bool multiLevel)
    {
 
@@ -992,10 +992,10 @@ QString listMarkup( int firstIndent,int listType, int startNumber, int depth,
          markup += font;
          }
 
-   if( preceedingText != "" && preceedingText != "{" && preceedingText != "}" )
+   if( precedingText != "" && precedingText != "{" && precedingText != "}" )
       {
       markup += "{\\pntxtb ";
-      markup += preceedingText;
+      markup += precedingText;
       markup += "}";
       }
    if( followingText != "" && followingText != "{" && followingText != "}" )
@@ -1187,7 +1187,7 @@ QValueList < FormatData > combineFormatData(  QValueList<FormatData> &paraFormat
         formatIt++ )
       {
 
-         // use layout format data (firts occurance) if FORMATS tag attribute was not set
+         // use layout format data (firts occurrence) if FORMATS tag attribute was not set
          if( (*formatIt).text.fontSize == -1 )
             {
             (*formatIt).text.fontSize  = (*paraFormatDataIt).text.fontSize ;

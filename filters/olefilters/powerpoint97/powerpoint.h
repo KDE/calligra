@@ -41,7 +41,7 @@ typedef Q_UINT16 uint2; // 2-byte
 typedef Q_INT8 bool1; // 1-byte boolean
 typedef Q_UINT8 ubyte1; // unsigned byte value
 typedef uint2 psrType;
-typedef uint4 psrSize; // each record is preceeded by
+typedef uint4 psrSize; // each record is preceded by
 // pssTypeType and pssSizeType.
 typedef uint2 psrInstance;
 typedef uint2 psrVersion;

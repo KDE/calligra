@@ -1085,7 +1085,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
 
     // Frames have moved -> update the "frames on top" lists
     //m_doc->updateAllFrames();
-    // Not yet in fact. If we relayout the text everytime it's too slow.
+    // Not yet in fact. If we relayout the text every time it's too slow.
     // But we can fix the clipping easily
     m_doc->updateFramesOnTopOrBelow( topPage );
 

@@ -88,7 +88,7 @@ void KChartPieConfigPage::initList()
     // PENDING(kalle) Put back in
     //     for( ; it.current(); ++it )	{
 //         index = _params->legend.findIndex(((QCheckListItem*)it.current())->text());
-//         ((QCheckListItem*)it.current())->setOn(_params->missing[_params->legend.count()*col+indice]) ;
+//         ((QCheckListItem*)it.current())->setOn(_params->missing[_params->legend.count()*col+index]) ;
 //     }
 //     value.duplicate(_params->explode);
 }
@@ -121,13 +121,13 @@ void KChartPieConfigPage::changeValue(int val)
     for( ; it.current(); ++it )	{
         // PENDING(kalle) Put back in
         //         index = _params->legend.findIndex(((QCheckListItem*)it.current())->text());
-//         ((QCheckListItem*)it.current())->setOn(_params->missing[_params->legend.count()*col+indice]) ;
+//         ((QCheckListItem*)it.current())->setOn(_params->missing[_params->legend.count()*col+index]) ;
     }
 
     if(pos!=-1) {
         value[pos]=dist->value();
         // PENDING(kalle) Put back in
-        //         pos=_params->legend.count()*col+indice;
+        //         pos=_params->legend.count()*col+index;
         dist->setValue(value[pos]);
     }
 }
@@ -142,7 +142,7 @@ void KChartPieConfigPage::init()
     for( ; it.current(); ++it )	{
         // PENDING(kalle) Put back in
         //        index = _params->legend.findIndex(((QCheckListItem*)it.current())->text());
-        //         ((QCheckListItem*)it.current())->setOn(_params->missing[_params->legend.count()*col+indice]) ;
+        //         ((QCheckListItem*)it.current())->setOn(_params->missing[_params->legend.count()*col+index]) ;
     }
 
     // PENDING(kalle) Put back in
@@ -163,7 +163,7 @@ void KChartPieConfigPage::apply()
     for( ; it.current(); ++it )	{
         // PENDING(kalle) Put back in
         //         index = _params->legend.findIndex(((QCheckListItem*)it.current())->text());
-//         _params->missing[_params->legend.count()*col+indice]=((QCheckListItem*)it.current())->isOn() ;
+//         _params->missing[_params->legend.count()*col+index]=((QCheckListItem*)it.current())->isOn() ;
     }
     //     _params->colPie=col;
 

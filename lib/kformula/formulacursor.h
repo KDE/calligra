@@ -423,7 +423,7 @@ private:
     bool selectionFlag;
 
     /**
-     * Tells whether we want to travel throught all elements by
+     * Tells whether we want to travel through all elements by
      * left and right movement.
      */
     bool linearMovement;

@@ -256,7 +256,7 @@ public:
     class MarkedIterator : public GridIter {
     public:
         MarkedIterator(KWTableFrameSet *table);
-        Cell *operator++();	// overriden from base but not virtual   
+        Cell *operator++();	// overridden from base but not virtual   
 
     };
     

@@ -218,7 +218,7 @@ public:
 
     /**
      * Called from @ref KSpreadEditWidget and KSpreadCellEditor
-     * if they loose the focus becuase the user started a "choose selection".
+     * if they loose the focus because the user started a "choose selection".
      * This is done because the editor wants to get its focus back afterwards.
      * But somehow KSpreadCanvas must know whether the EditWidget or the CellEditor
      * lost the focus when the user clicked on the canvas.
@@ -226,12 +226,12 @@ public:
     void setLastEditorWithFocus( EditorType type ) { m_focusEditorType = type; }
 
     /**
-     * Switches to choose mode and sets the inital selection to the
+     * Switches to choose mode and sets the initial selection to the
      * position returned by @ref #marker.
      */
     void startChoose();
     /**
-     * Switches to choose mode and sets the inital @p selection.
+     * Switches to choose mode and sets the initial @p selection.
      */
     void startChoose( const QRect& selection );
     void endChoose();

@@ -34,7 +34,7 @@ private slots:
 	void slotPrint();
 	void slotViewToolBar();
 	void slotViewStatusBar();
-	void slotPreferedTemplate(const QString &);
+	void slotPreferredTemplate(const QString &);
   
 private:
 	KReportViewer *rptviewer;	// The viewer widget.

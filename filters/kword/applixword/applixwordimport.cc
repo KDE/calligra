@@ -248,7 +248,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QCString& from, cons
           // Remove ending >
           mystr.remove (mystr.length()-1, 1);
 
-          // Seperate textstring "
+          // Separate textstring "
           ok = true;
           int y=0;
           do

@@ -1171,7 +1171,7 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
             m_line_height = QString( "%1%" ).arg( l.attribute( "spacingvalue" ).toInt() * 100 );
         else if ( type == "custom" )
             m_line_spacing = StyleFactory::toCM( l.attribute( "spacingvalue" ) );
-        else if ( type == "atleast" )
+        else if ( type == "at least" )
             m_line_height_at_least = StyleFactory::toCM( l.attribute( "spacingvalue" ) );
     }
 }

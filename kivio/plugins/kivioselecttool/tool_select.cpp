@@ -249,13 +249,13 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
   int colType;
 
   // Figure out how big 4 pixels is in terms of points
-  double threshhold =  m_pView->zoomHandler()->unzoomItY(4);
+  double threshold =  m_pView->zoomHandler()->unzoomItY(4);
 
   KoPoint pagePoint = m_pCanvas->mapFromScreen( pos );
 
   kPoint.set( pagePoint.x(), pagePoint.y() );
 
-  pStencil = pPage->checkForStencil( &kPoint, &colType, threshhold, onlySelected );
+  pStencil = pPage->checkForStencil( &kPoint, &colType, threshold, onlySelected );
 
   if( !pStencil )
     return false;
@@ -710,7 +710,7 @@ void SelectTool::changeMouseCursor(const QPoint &pos)
     KoPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     KivioStencil *pStencil;
     KivioPoint col;
-    double threshhold = m_pView->zoomHandler()->unzoomItY(4);
+    double threshold = m_pView->zoomHandler()->unzoomItY(4);
     int cursorType;
 
     double x = pagePoint.x();
@@ -758,7 +758,7 @@ void SelectTool::changeMouseCursor(const QPoint &pos)
                 return;
 
             default:
-                if( pStencil->checkForCollision( &col, threshhold )!= kctNone )
+                if( pStencil->checkForCollision( &col, threshold )!= kctNone )
                 {
                     m_pCanvas->setCursor( sizeAllCursor );
                     return;

@@ -218,12 +218,12 @@ void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
 	{
 		e->accept();
 		if (currentAnchor.startsWith("help://#")) {
-			//that's not really usefull, since koffice documents can be embedded
+			//that's not really useful, since koffice documents can be embedded
 			kapp->invokeHelp(currentAnchor.right(currentAnchor.length()-8));
 		}
 		else
 		if (currentAnchor.startsWith("help://")) {
-			// that's the usefull version of a help link
+			// that's the useful version of a help link
 			QString helpapp=currentAnchor.right(currentAnchor.length()-7);
 			QString helpanchor;
 			int pos;

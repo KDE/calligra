@@ -66,7 +66,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		/**
 		 * you can restrict the loaded factories by setting the filter to a pattern
 		 * like 'kexi|containers' in that case only factory containing 'kexi' or containers will be loaded.
-		 * this is usefull if you want to embedd formeditor and provide e.g. a LineEdit with special features
+		 * this is useful if you want to embedd formeditor and provide e.g. a LineEdit with special features
 		 * but don't want to confuse the user... are you confused now?
 		 */
 		void	setFilter(const QRegExp &expr);

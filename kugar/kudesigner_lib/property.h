@@ -53,7 +53,7 @@ enum PropertyType {
     Symbol,        /*unicode symbol's code*/
     FontName,      /*font name - "times new roman"*/
     LineStyle,     /*combobox with lines at the place of combo items descriptions */
-    FieldName,      /*normally behaves like a StringValue, but can be overriden */
+    FieldName,      /*normally behaves like a StringValue, but can be overridden */
     UserDefined=1024 /*plugin defined properties should start here*/
 };
 

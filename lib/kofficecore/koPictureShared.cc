@@ -43,7 +43,7 @@ KoPictureShared::~KoPictureShared(void)
 }
 
 KoPictureShared::KoPictureShared(const KoPictureShared &other)
-    : QShared() // Some compilers want it explicitely!
+    : QShared() // Some compilers want it explicitly!
 {
     // We need to use newCopy, because we want a real copy, not just a copy of the part of KoPictureBase
     if (other.m_base)

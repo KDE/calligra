@@ -63,8 +63,8 @@ class XSLTProc
 
 		void addParam(QString name, QString value);
 
-		/** Process fileIn throught the stylesheet.
-		 * @return return 0 if no error occured
+		/** Process fileIn through the stylesheet.
+		 * @return return 0 if no error occurred
 		 */
 		int parse();
 

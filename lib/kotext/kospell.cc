@@ -269,7 +269,7 @@ void KoSpell::KoSpell2 (KProcIO *)
 		return;
 	}
 
-	// put ispell in "terse-mode" -- not outputing a '*' for each correct word
+	// put ispell in "terse-mode" -- not outputting a '*' for each correct word
 	proc->fputs("!");
 
 	NOOUTPUT (KoSpell2);

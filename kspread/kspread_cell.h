@@ -165,7 +165,7 @@ public:
      * @param _x_offset ...
      * @param _y_offset ...
      * @param force if set to true, all the properties of the format are stored (used for "Copy")
-     * Usually this is false, to only store the properties explicitely set.
+     * Usually this is false, to only store the properties explicitly set.
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false );
 

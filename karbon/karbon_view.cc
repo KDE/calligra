@@ -657,7 +657,7 @@ KarbonView::zoomChanged( const KoPoint &p )
 	kdDebug() << "centerY : " << centerY << endl;
 	kdDebug() << "zoomFactor : " << zoomFactor << endl;
 
-	// above 2000% probably doesnt make sense... (Rob)
+	// above 2000% probably doesn't make sense... (Rob)
 	if( zoomFactor > 20 )
 	{
 		zoomFactor = 20;

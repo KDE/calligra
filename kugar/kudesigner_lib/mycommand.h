@@ -252,7 +252,7 @@ signals:
      */
     void commandExecuted();
     /**
-     * Emitted everytime we reach the index where you
+     * Emitted every time we reach the index where you
      * saved the document for the last time. See @ref documentSaved
      */
     void documentRestored();

@@ -650,7 +650,7 @@ void KivioPyStencil::paintConnectorTargets( KivioIntraStencilData *pData )
  * Attempts to connect a KivioConnectorPoint to this stencil.
  *
  * This function will attempt to locate a KivioConnectorTarget in this
- * stencil with-in a given threshhold.  If it finds it, it will connect
+ * stencil with-in a given threshold.  If it finds it, it will connect
  * the point to it, and return the target of the connection.
  */
 KivioConnectorTarget *KivioPyStencil::connectToTarget( KivioConnectorPoint *p, double threshHold )

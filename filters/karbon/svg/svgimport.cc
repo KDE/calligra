@@ -113,7 +113,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	QCString cstring = outdoc.toCString(); // utf-8 already
 	out->writeBlock( cstring.data(), cstring.length() );
 
-	return KoFilter::OK; // was successfull
+	return KoFilter::OK; // was successful
 }
 
 void

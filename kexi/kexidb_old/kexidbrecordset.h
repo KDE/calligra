@@ -44,7 +44,7 @@ class KEXIDB_EXPORT KexiDBRecordSet : public QObject
 		 *  using KexiDBRecord instead of manual insert/update/delte queries is highly recommanded,
 		 *  because the ANSI query hasn't to be translated into database native query!
 		 *
-		 *  this class will be subclassed, so the queries (caused by updates, inserts and deletes) are database-independend
+		 *  this class will be subclassed, so the queries (caused by updates, inserts and deletes) are database-independent
 		 *  @param buffer use true if you have e.g. a form-desingner and don't want to save your own,
 		 *  but note, that it will be quite memory-consuming so use it with care
 		 */
@@ -119,7 +119,7 @@ class KEXIDB_EXPORT KexiDBRecordSet : public QObject
 
 		/*!
 		 *  deletes the current record
-		 *  the changes have to be commited in order to take effect
+		 *  the changes have to be committed in order to take effect
 		 *  returns true, if delete is possible
 		 */
 		virtual bool deleteRecord(uint record) = 0;
@@ -174,13 +174,13 @@ class KEXIDB_EXPORT KexiDBRecordSet : public QObject
 		virtual bool isForignField(uint field) { return false; }
 
 /*!
-		 *  the last error which occured. The pointer must neither be stored by the caller nor
+		 *  the last error which occurred. The pointer must neither be stored by the caller nor
 		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
 		 */
 		void latestError(KexiDBError **error);
 	public:
 /*!
-		 *  the last error which occured. The pointer must neither be stored by the caller nor
+		 *  the last error which occurred. The pointer must neither be stored by the caller nor
 		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
 		 */
 		virtual KexiDBError *latestError()=0;

@@ -556,7 +556,7 @@ namespace MSWrite
 					m_device->error (Error::Warn, "pages don't follow each other\n");
 
 				if (pp.getFirstCharByte () <= lastCharByte)
-					ErrorAndQuit (Error::InvalidFormat, "pageTable is not going foward?\n");
+					ErrorAndQuit (Error::InvalidFormat, "pageTable is not going forward?\n");
 			}
 
 			// for checking, on next iteration
@@ -854,7 +854,7 @@ namespace MSWrite
 
 		// check that it continues on from the last
 		if (formatPointerAfterEndCharByte <= m_nextCharByte)
-			m_device->error (Error::Warn, "FormatPointer afterEndCharByte does not go foward\n");
+			m_device->error (Error::Warn, "FormatPointer afterEndCharByte does not go forward\n");
 		m_nextCharByte = formatPointerAfterEndCharByte;
 
 		// check whether it is the last one (EOF-wise)

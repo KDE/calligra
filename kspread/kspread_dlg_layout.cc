@@ -431,7 +431,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView * _view, KSpreadSheet * _table,
   RowFormat *rl;
   ColumnFormat *cl;
   widthSize = 0.0;
-  heigthSize = 0.0;
+  heightSize = 0.0;
 
   if ( !isRowSelected )
   {
@@ -447,7 +447,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView * _view, KSpreadSheet * _table,
     for ( int y = _top; y <= _bottom; y++ )
     {
       rl = m_pView->activeTable()->rowFormat(y);
-      heigthSize = QMAX( rl->dblHeight(), heigthSize );
+      heightSize = QMAX( rl->dblHeight(), heightSize );
     }
   }
 
@@ -1069,7 +1069,7 @@ void CellFormatDlg::slotApply()
       }
     
     // Check for a change in the height and width of the cells
-    if ( int( positionPage->getSizeHeight() ) != int( heigthSize )
+    if ( int( positionPage->getSizeHeight() ) != int( heightSize )
          || int( positionPage->getSizeWidth() ) != int( widthSize ) )
     {
       if ( !m_doc->undoBuffer()->isLocked() )
@@ -1081,7 +1081,7 @@ void CellFormatDlg::slotApply()
         macroUndo->addCommand( undo2 );
       }
     }
-    if ( int( positionPage->getSizeHeight() ) != int( heigthSize ) )
+    if ( int( positionPage->getSizeHeight() ) != int( heightSize ) )
     {
       for ( int x = top; x <= bottom; x++ ) // The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
         m_pView->vBorderWidget()->resizeRow( positionPage->getSizeHeight(), x, false );
@@ -1106,7 +1106,7 @@ void CellFormatDlg::slotApply()
       protectPage->apply( rw );
     }
     //        miscPage->applyRow( );
-    if ( int( positionPage->getSizeHeight() ) != int( heigthSize ) )
+    if ( int( positionPage->getSizeHeight() ) != int( heightSize ) )
     {
       if ( !m_doc->undoBuffer()->isLocked())
       {
@@ -3381,9 +3381,9 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
 
     height=new KDoubleNumInput( grp );
     height->setPrecision( 2 );
-    height->setValue( KoUnit::ptToUnit( dlg->heigthSize, dlg->getDoc()->getUnit() ) );
+    height->setValue( KoUnit::ptToUnit( dlg->heightSize, dlg->getDoc()->getUnit() ) );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
-    dlg->heigthSize = KoUnit::ptFromUnit( height->value(), dlg->getDoc()->getUnit() );
+    dlg->heightSize = KoUnit::ptFromUnit( height->value(), dlg->getDoc()->getUnit() );
 
     if ( dlg->isColumnSelected )
         height->setEnabled(false);

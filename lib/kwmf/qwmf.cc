@@ -939,10 +939,10 @@ void QWinMetaFile::createBrushIndirect( long, short* parm )
       Qt::FDiagPattern,   /* hatched */
       Qt::Dense4Pattern,  /* should be custom bitmap pattern */
       Qt::HorPattern,     /* should be BS_INDEXED (?) */
-      Qt::VerPattern,     /* should be device-independend bitmap */
-      Qt::Dense6Pattern,  /* should be device-independend packed-bitmap */
+      Qt::VerPattern,     /* should be device-independent bitmap */
+      Qt::Dense6Pattern,  /* should be device-independent packed-bitmap */
       Qt::Dense2Pattern,  /* should be BS_PATTERN8x8 */
-      Qt::Dense3Pattern   /* should be device-independend BS_DIBPATTERN8x8 */
+      Qt::Dense3Pattern   /* should be device-independent BS_DIBPATTERN8x8 */
     };
     Qt::BrushStyle style;
     short arg;

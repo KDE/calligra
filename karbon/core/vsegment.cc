@@ -443,7 +443,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 
 	/* This function solves the "nearest point on curve" problem. That means, it
-	 * calculates the point q (to be precise: it's paramter t) on this segment, which
+	 * calculates the point q (to be precise: it's parameter t) on this segment, which
 	 * is located nearest to the input point P.
 	 * The basic idea is best described (because it is freely available) in "Phoenix:
 	 * An Interactive Curve Design System Based on the Automatic Fitting of

@@ -23,7 +23,7 @@
  * A formula consists of a tree of those elements.
  *
  * To be able to work on the element tree in a generic way there is a
- * @ref FormulaCursor . Every edit operation goes throught it. This way
+ * @ref FormulaCursor . Every edit operation goes through it. This way
  * the cursor separetes the element tree from the outside world.
  *
  * If you want to edit the formula you ask the document (@ref Container )

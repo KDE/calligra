@@ -175,12 +175,12 @@ int KoParagCounter::number( const KoTextParag *paragraph )
                 if ( ( otherCounter->m_depth == m_depth ) &&
                    ( otherCounter->m_style == m_style ) )
                 {
-                    // Found a preceeding paragraph of exactly our type!
+                    // Found a preceding paragraph of exactly our type!
                     m_cache.number = otherCounter->number( otherParagraph ) + 1;
                 }
                 else
                 {
-                    // Found a preceeding paragraph of higher level!
+                    // Found a preceding paragraph of higher level!
                     m_cache.number = m_startNumber;
                 }
                 break;
@@ -202,12 +202,12 @@ int KoParagCounter::number( const KoTextParag *paragraph )
                     if ( ( otherCounter->m_depth == m_depth ) &&
                        ( otherCounter->m_style == m_style ) )
                     {
-                        // Found a preceeding paragraph of exactly our type!
+                        // Found a preceding paragraph of exactly our type!
                         m_cache.number = otherCounter->number( otherParagraph ) + 1;
                     }
                     else
                     {
-                        // Found a preceeding paragraph of higher level!
+                        // Found a preceding paragraph of higher level!
                         m_cache.number = m_startNumber;
                     }
                     break;
@@ -514,7 +514,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     if ( !m_cache.text.isNull() )
         return m_cache.text;
 
-    // If necessary, grab the text of the preceeding levels.
+    // If necessary, grab the text of the preceding levels.
     if ( m_displayLevels > 1 )
     {
         KoTextParag* p = parent( paragraph );
@@ -525,7 +525,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
             {
                 KoParagCounter* counter = p->counter();
                 QString str = counter->levelText( p );
-                // If the preceeding level is a bullet, replace it with blanks.
+                // If the preceding level is a bullet, replace it with blanks.
                 if ( counter->isBullet() )
                     for ( unsigned i = 0; i < str.length(); i++ )
                         str[i] = ' ';

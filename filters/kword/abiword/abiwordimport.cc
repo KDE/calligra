@@ -148,7 +148,7 @@ private:
 bool StructureParser::StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
 {
     // <c> elements can be nested in <p> elements, in <a> elements or in other <c> elements
-    // AbiWord does not nest <c> elements in other <c> elements, but explicitely allows external programs to do it!
+    // AbiWord does not nest <c> elements in other <c> elements, but explicitly allows external programs to do it!
 
     // <p> or <c> (not child of <a>)
     if ((stackCurrent->elementType==ElementTypeParagraph)||(stackCurrent->elementType==ElementTypeContent))
@@ -1596,7 +1596,7 @@ bool StructureParser::fatalError (const QXmlParseException& exception)
     kdError(30506) << "XML parsing fatal error: line " << exception.lineNumber()
         << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
     m_fatalerror=true;
-    KMessageBox::error(NULL, i18n("An error has occured while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3")
+    KMessageBox::error(NULL, i18n("An error has occurred while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3")
         .arg(exception.lineNumber()).arg(exception.columnNumber()).arg(i18n(exception.message().utf8())),
         i18n("AbiWord Import Filter"),0);
     return false; // Stop parsing now, we do not need further errors.
@@ -1777,7 +1777,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
         if (!handler.wasFatalError())
         {
             // As the parsing was stopped for something else than a fatal error, we have not yet get an error message. (Can it really happen?)
-            KMessageBox::error(NULL, i18n("An error occured during the load of the AbiWord file: %1").arg(from),
+            KMessageBox::error(NULL, i18n("An error occurred during the load of the AbiWord file: %1").arg(from),
                 i18n("AbiWord Import Filter"),0);
         }
         return KoFilter::ParsingError;

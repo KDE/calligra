@@ -67,7 +67,7 @@ public:
 	 * Draw the object to a painting device.
 	 *
 	 * @param painter abstraction that is used to render to a painting device.
-	 * @param rect represents the visible rectangular area. If this object doesnt
+	 * @param rect represents the visible rectangular area. If this object doesn't
 	 *             intersect with this area it is not drawn.
 	 */
 	virtual void draw( VPainter* /*painter*/, const KoRect* /*rect*/ = 0L ) const {}

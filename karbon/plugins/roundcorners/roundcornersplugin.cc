@@ -101,7 +101,7 @@ VRoundCornersCmd::visitVSubpath( VSubpath& path )
 	if( path.isEmpty() )
 		return;
 
-	// Note: we modiy segments from path. that doesnt hurt, since we
+	// Note: we modiy segments from path. that doesn't hurt, since we
 	// replace "path" with the temporary path "newPath" afterwards.
 
 	VSubpath newPath( 0L );
@@ -182,7 +182,7 @@ VRoundCornersCmd::visitVSubpath( VSubpath& path )
 	 *           0                     0
 	 *
 	 *    Now make the second next segment (the original path[1] segment in our example)
-	 *    the current one. Split it at paramter t
+	 *    the current one. Split it at parameter t
 	 *
 	 *        t = path[n]->param( m_radius )
 	 *

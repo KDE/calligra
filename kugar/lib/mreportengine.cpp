@@ -154,7 +154,7 @@ void MReportEngine::initData()
 
 			records = n.childNodes();
 
-			// See if there is a prefered template given.
+			// See if there is a preferred template given.
 
 			QDomNamedNodeMap attr = n.attributes();
 			QDomNode tempattr = attr.namedItem("Template");
@@ -211,7 +211,7 @@ void MReportEngine::slotCancelRendering(){
 	cancelRender = true;
 }
 
-/** Finds the detail header object, which is apropriate for the given level */
+/** Finds the detail header object, which is appropriate for the given level */
 MReportSection *MReportEngine::findDetailHeader(int level)
 {
 	MReportSection *sec;
@@ -223,7 +223,7 @@ MReportSection *MReportEngine::findDetailHeader(int level)
 	return NULL;
 }
 
-/** Finds the detail object, which is apropriate for the given level */
+/** Finds the detail object, which is appropriate for the given level */
 MReportDetail *MReportEngine::findDetail(int level)
 {
 	MReportDetail *sec;
@@ -235,7 +235,7 @@ MReportDetail *MReportEngine::findDetail(int level)
 	return NULL;
 }
 
-/** Finds the detail footer object, which is apropriate for the given level */
+/** Finds the detail footer object, which is appropriate for the given level */
 MReportSection *MReportEngine::findDetailFooter(int level)
 {
 	MReportSection *sec;

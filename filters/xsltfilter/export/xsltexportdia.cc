@@ -162,7 +162,7 @@ void XSLTExportDia::chooseSlot()
     bool local = u.isLocalFile();
 
     bool ok = !url.isEmpty();
-    if (local) // additionnal checks for local files
+    if (local) // additional checks for local files
         ok = ok && (QFileInfo( filename ).isFile() ||
                     (QFileInfo( filename ).isSymLink() &&
                      !QFileInfo( filename ).readLink().isEmpty() &&

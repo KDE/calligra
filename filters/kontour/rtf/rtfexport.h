@@ -110,7 +110,7 @@ QString         listStart(QString font, int fontSize, QString listMarker);
 
 QString         listMarkup(int firstIndent, int listType, int startNumber,
                            int depth, int fontSize, QString font,
-                           QString preceedingText, QString followingText,
+                           QString precedingText, QString followingText,
                            bool section, bool multiLevel);
 
 QString         escapeRTFsymbols(QString text);

@@ -1248,7 +1248,7 @@ bool Worker::op_header(Q_UINT32, QDataStream &body)
 
 bool Worker::op_imdata(Q_UINT32, QDataStream &)
 {
-	/* Could be used to find out if this document was writting
+	/* Could be used to find out if this document was writing
 	 * on Windows or on Macintosh, same for the bitmap format
 	 */
 	return true;

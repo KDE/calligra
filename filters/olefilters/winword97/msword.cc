@@ -1016,7 +1016,7 @@ void MsWord::parse()
         // Start with the grpprl and PCD.
         //
         // For the grpprl array, we store the offset to the
-        // byte count preceeding the first entry, and the number of entries.
+        // byte count preceding the first entry, and the number of entries.
         //
         // For the text plex, we store the start and size of the plex in the table
 

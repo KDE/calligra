@@ -53,7 +53,7 @@ public:
 	KoRect boundingBox() const;
 
 	/**
-	 * Adjusts the viewport top-left position. This doesnt change the zoom level.
+	 * Adjusts the viewport top-left position. This doesn't change the zoom level.
 	 * Note that centerX and centerY is a value between 0.0 and 1.0, indicating a
 	 * percentage of the total width/height. Thus centerX/centerY indicates the
 	 * center of the viewport.

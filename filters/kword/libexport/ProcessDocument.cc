@@ -757,7 +757,7 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
             layout->lineSpacingType = LayoutData::LS_DOUBLE;
         else if ( spacingType == "custom" )
             layout->lineSpacingType = LayoutData::LS_CUSTOM;
-        else if ( spacingType == "atleast" )
+        else if ( spacingType == "at least" )
             layout->lineSpacingType = LayoutData::LS_ATLEAST;
         else if ( spacingType == "multiple" )
             layout->lineSpacingType = LayoutData::LS_MULTIPLE;

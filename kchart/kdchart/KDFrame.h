@@ -735,7 +735,7 @@ public:
        use KDFrame::PaintBackground to draw only the background, use KDFrame::PaintEdges to draw just the edges,
        use KDFrame::PaintCorners to draw only the corners.
        \param innerRect The area inside the frame. Use this parameter to temporarily override the \c innerRect set by
-       the constructor of KDFrame or by setInnerRect(). This approach can be usefull if you want to draw several
+       the constructor of KDFrame or by setInnerRect(). This approach can be useful if you want to draw several
        frames that differ only regarding to their position and size but share the same edges/corners/bachgrouns settings.
        In this case you could decide to instantiate only one KDFrame set up the desired settings and just call
        its paint() methode several time - giving it the appropriate innerRect for each frame. This would result in

@@ -199,7 +199,7 @@ void TextFrame::generate(QTextStream &out)
 			_lastEnv = currentPara->getEnv();
 		}
 
-		/* List managment */
+		/* List management */
 		if(isBeginEnum(lastPara, currentPara))
 		{
 			currentPara->openList(out);
@@ -211,13 +211,13 @@ void TextFrame::generate(QTextStream &out)
 		lastPara = currentPara;
 		currentPara = _parags.next();
 
-		/* list managment */
+		/* list management */
 		if(isCloseEnum(lastPara, currentPara))
 		{
 			lastPara->closeList(out, currentPara);
 			_lastTypeEnum = TL_NONE;
 		}
-		/* layout managment (left, center, justify, right) */
+		/* layout management (left, center, justify, right) */
 		if((!lastPara->isChapter() && _lastEnv != getNextEnv(_parags, _parags.at()) &&
 			lastPara->notEmpty()) ||
 			_lastEnv != getNextEnv(_parags, _parags.at()))

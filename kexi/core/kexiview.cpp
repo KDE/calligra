@@ -110,7 +110,7 @@ void KexiView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
-/*!	This function should contain initalization done after hooking parts into view.
+/*!	This function should contain initialization done after hooking parts into view.
 	It is done in KexiProject::createViewInstance() automatically. */
 void KexiView::finalizeInit()
 {

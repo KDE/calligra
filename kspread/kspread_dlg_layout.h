@@ -641,7 +641,7 @@ public:
     bool bHideAll;
     bool bIsProtected;
 
-    double heigthSize;
+    double heightSize;
     double widthSize;
 
     double indent;

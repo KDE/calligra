@@ -1170,7 +1170,7 @@ void KWTableFrameSet::insertNewRow( uint idx, bool recalc, bool _removeable)
     unsigned int untilRow=m_rows;
     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
     while(pageBound != m_pageBoundaries.end() && (*pageBound) <= idx) {
-        // Find out how many pages we allready had.
+        // Find out how many pages we already had.
         adjustment++;
         pageBound++;
     }

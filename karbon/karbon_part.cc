@@ -187,7 +187,7 @@ KarbonPart::saveXML()
 void
 KarbonPart::insertObject( VObject* object )
 {
-	// don't repaint here explicitely. some commands might want to insert many
+	// don't repaint here explicitly. some commands might want to insert many
 	// objects.
 	m_doc.append( object );
 	setModified( true );

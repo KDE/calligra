@@ -96,7 +96,7 @@ public:
      * @param method is the name of the method for which we test the argument list.
      * @param fatal determines wether an exception is set on error.
      *
-     * @return TRUE if the check was successfull.
+     * @return TRUE if the check was successful.
      *
      * The signature is a sequence of the following characters:
      * <ul>
@@ -130,7 +130,7 @@ public:
      * @param method is the name of the method for which we test the argument list.
      * @param fatal determines wether an exception is set on error.
      *
-     * @return TRUE if the check was successfull.
+     * @return TRUE if the check was successful.
      *
      * The signature is a sequence of the following characters:
      * <ul>

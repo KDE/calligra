@@ -229,7 +229,7 @@ private:
         { return content.at(row)->at(column); }
 
     /**
-     * Searches throught the matrix for the element. Sets the
+     * Searches through the matrix for the element. Sets the
      * row and column if found.
      * Returns true if the element was found. false otherwise.
      */

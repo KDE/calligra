@@ -3069,7 +3069,7 @@ public:
         // true if the start-at value is overridden
         U8 fStartAt:1;
 
-        // true if the formatting is overriden (in which case the LFOLVL
+        // true if the formatting is overridden (in which case the LFOLVL
         // should contain a pointer to a LVL)
         U8 fFormatting:1;
 
@@ -3158,7 +3158,7 @@ public:
         U8 fPrevSpace:1;
 
         // true if this level was from a converted Word 6 document. If it is
-        // true, all of the Word 6 compability options become valid;
+        // true, all of the Word 6 compatibility options become valid;
         // otherwise they are ignored.
         U8 fWord6:1;
 

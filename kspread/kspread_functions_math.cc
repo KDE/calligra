@@ -133,7 +133,7 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "FACTDOUBLE",    kspreadfunc_factdouble );
   repo->registerFunction( "FIB",           kspreadfunc_fib ); // KSpread-specific, like Quattro-Pro's FIB
   repo->registerFunction( "FLOOR",         kspreadfunc_floor );
-  repo->registerFunction( "G_PRODUCT",     kspreadfunc_kproduct ); // Gnumeric compatiblity
+  repo->registerFunction( "G_PRODUCT",     kspreadfunc_kproduct ); // Gnumeric compatibility
   repo->registerFunction( "GCD",           kspreadfunc_gcd );
   repo->registerFunction( "INT",           kspreadfunc_int );
   repo->registerFunction( "INV",           kspreadfunc_inv );

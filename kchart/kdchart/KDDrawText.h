@@ -78,7 +78,7 @@ private:
                                 const QString& text,
                                 const QFont* font  = 0,
                                 int align = Qt::AlignLeft | Qt::AlignTop,
-                                // usefull for debugging of your layout:
+                                // useful for debugging of your layout:
                                 bool showAnchor    = false,
                                 // speed-up parameters
                                 // used internally by drawCircleText()

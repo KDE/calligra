@@ -39,7 +39,7 @@ KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName, QObject* pa
 	setInstance(KugarFactory::global(),false);
 	m_reportEngine=new MReportEngine();
         connect(m_reportEngine,SIGNAL(preferedTemplate(const QString &)),
-                     SLOT(slotPreferedTemplate(const QString &)));
+                     SLOT(slotPreferredTemplate(const QString &)));
 }
 
 KugarPart::~KugarPart()
@@ -142,9 +142,9 @@ KoView* KugarPart::createViewInstance( QWidget* parent, const char* name )
 }
 
 
-void KugarPart::slotPreferedTemplate(const QString &tpl)
+void KugarPart::slotPreferredTemplate(const QString &tpl)
 {
-    kdDebug() << "slotPreferedTemplate called !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tpl = " << tpl.latin1() << endl;
+    kdDebug() << "slotPreferredTemplate called !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tpl = " << tpl.latin1() << endl;
 //        KURL url(m_forcedUserTemplate.isEmpty()?tpl:m_forcedUserTemplate);
 	KURL url(tpl);
         QString localtpl;

@@ -195,7 +195,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
             // 2nd This height is given to calculateLabelTexts() to
             //     calculate the delimiter and sub-delimiter distances as
             //     well as the axis scaling factors.
-            //     If neccessary and possible the short replacement strings
+            //     If necessary and possible the short replacement strings
             //     are taken that might have been specified by the user.
             //     - see KDChartAxisParams::setAxisLabelStringLists() -
             //
@@ -1007,7 +1007,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
             else
                 tmpList = para.axisLabelStringList();
 
-            // prepare transfering the strings into the labelTexts list
+            // prepare transferring the strings into the labelTexts list
             double ddelta
             = ( KDChartAxisParams::AXIS_LABELS_AUTO_DELTA == para.axisValueDelta() )
               ? 1.0

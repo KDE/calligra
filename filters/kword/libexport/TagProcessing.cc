@@ -120,7 +120,7 @@ void AllowNoSubtags ( QDomNode, KWEFKWordLeader* )
 // attributes. If don't expect any attributes you call AllowNoAttributes ().
 // Otherwise you create a list of AttrProcessing elements and pass
 // that to ProcessAttributes () which will go through all attributes
-// it can find, retreive the value in the datatype defined, and do all
+// it can find, retrieve the value in the datatype defined, and do all
 // the necessary error handling.
 
 void ProcessAttributes ( QDomNode                     myNode,

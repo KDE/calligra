@@ -71,7 +71,7 @@ void KWBrushStylePreview::drawContents( QPainter* painter )
 /* Class: KWFrameDia                                              *
  *
  *  TAB Frame Options
- *      Set options dependend of frametype
+ *      Set options dependent of frametype
  *  TAB Text Runaround
  *      Set the text behaviour of this frame
  *  TAB Frameset
@@ -711,7 +711,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     /*
      * here the user can select from the current TEXT framesets, a new one is
      * included in the list.
-     * Afterwards (on ok) the frame should be checked if it is allready owned by a
+     * Afterwards (on ok) the frame should be checked if it is already owned by a
      * frameset, if so that connection must be disconnected (if different) and
      * framebehaviour will be copied from the frameset
      * then the new connection should be made.

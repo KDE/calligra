@@ -47,7 +47,7 @@ Maybe the LEVEL1 should only be generate when there is a need for more than 1 LE
 
 LEVEL1 maybe reallocated.
 
-Another interesting possibility would be to differenciate between x size and y size. Currently both
+Another interesting possibility would be to differentiate between x size and y size. Currently both
 are equal in both matrizes, but normally it will be the regular case, that you have more need for
 a lot of rows than columns. Maybe something like LEVEL1=128/256 and LEVEL2=256/128 (x/y), still keeping
 2^15 values/cells in each direction (benefit: you won't loose memory in empty columns).

@@ -871,7 +871,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
 		{
 		    cell = cellAt( i, rw->row() );
 		    if ( cell == m_pDefaultCell )
-			// '&& worker.create_if_default' unneccessary as never used in type A
+			// '&& worker.create_if_default' unnecessary as never used in type A
 		    {
 			cell = new KSpreadCell( this, i, rw->row() );
 			insertCell( cell );
