@@ -48,6 +48,7 @@
 #include <qcolor.h>
 #include <qdom.h>
 
+#include <koPictureKey.h>
 
 // FormatData is a container for data retreived from the FORMAT tag
 // and its subtags to be used in the PARAGRAPH tag.
@@ -137,7 +138,7 @@ class Picture
     public:
         Picture () {}
 
-        QString key;           // IMAGE/PIXMAPS KEY filename - where the picture came from
+        KoPictureKey key;           // IMAGE/PIXMAPS KEY filename - where the picture came from
         QString koStoreName;   // PIXMAPS KEY name           - filename within kwd archive
 };
 
@@ -147,9 +148,9 @@ class FrameAnchor
    public:
       FrameAnchor () {}
 
-      FrameAnchor ( const QString& n  ) : name (n), type (-1) {}
+      FrameAnchor ( const KoPictureKey& n  ) : key (n), type (-1) {}
 
-      QString name;
+      KoPictureKey key; // KoPictureKey
       int     type;
       double  top;      // Frame top
       double  bottom;   // frame bottom

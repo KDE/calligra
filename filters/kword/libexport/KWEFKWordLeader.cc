@@ -50,9 +50,10 @@
 #include "KWEFKWordLeader.h"
 
 
-static FrameAnchor *findAnchor ( QString              &name,
-                                 QValueList<ParaData> &paraList )
+static FrameAnchor *findAnchor ( const KoPictureKey& key,
+                                 QValueList<ParaData>& paraList )
 {
+    kdDebug(30508) << "findAnchor " << key.toString() << endl;
     QValueList<ParaData>::Iterator paraIt;
 
     for ( paraIt = paraList.begin (); paraIt != paraList.end (); paraIt++ )
@@ -63,9 +64,10 @@ static FrameAnchor *findAnchor ( QString              &name,
               formattingIt != (*paraIt).formattingList.end ();
               formattingIt++ )
         {
-            if ( (*formattingIt).id               == 6    &&
-                 (*formattingIt).frameAnchor.name == name    )
+            if ( (*formattingIt).id              == 6    &&
+                 (*formattingIt).frameAnchor.key == key )
             {
+                kdDebug(30508) << "Trying anchor " << (*formattingIt).frameAnchor.key.toString() << endl;
                 return &(*formattingIt).frameAnchor;
             }
         }
@@ -122,25 +124,12 @@ static void ProcessParagraphTag ( QDomNode         myNode,
 
 static void ProcessImageKeyTag ( QDomNode         myNode,
                                  void            *tagData,
-                                 KWEFKWordLeader *leader )
+                                 KWEFKWordLeader *)
 {
-    QString *key = (QString *) tagData;   // the name where the picture came from used as the identifier
+    KoPictureKey *key = (KoPictureKey*) tagData;
 
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList
-        << AttrProcessing ( "year",     NULL,      NULL         )
-        << AttrProcessing ( "month",    NULL,      NULL         )
-        << AttrProcessing ( "day",      NULL,      NULL         )
-        << AttrProcessing ( "hour",     NULL,      NULL         )
-        << AttrProcessing ( "minute",   NULL,      NULL         )
-        << AttrProcessing ( "second",   NULL,      NULL         )
-        << AttrProcessing ( "msec",     NULL,      NULL         )
-        << AttrProcessing ( "filename", "QString", key          )
-        << AttrProcessing ( "name",     NULL,    NULL         )
-        ;
-    ProcessAttributes (myNode, attrProcessingList);
-
-    AllowNoSubtags (myNode, leader);
+    // Let KoPicture do the loading
+    key->loadAttributes(myNode.toElement());
 }
 
 
@@ -300,7 +289,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 kdDebug (30508) << "DEBUG: FRAMESET IMAGE KEY filename of picture is " << frameAnchor->picture.key << endl;
 #endif
 
-                frameAnchor->name = frameAnchor->picture.key;
+                frameAnchor->key = frameAnchor->picture.key;
             }
             else
             {
@@ -418,22 +407,14 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
 {
     QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
 
-    QString   fileName;   // the name where the picture came from used as the identifier
-    QString   name;       // the location where the picture is stored withing the kwd file
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "hour",     NULL,      NULL               )
-                       << AttrProcessing ( "msec",     NULL,      NULL               )
-                       << AttrProcessing ( "day",      NULL,      NULL               )
-                       << AttrProcessing ( "minute",   NULL,      NULL               )
-                       << AttrProcessing ( "second",   NULL,      NULL               )
-                       << AttrProcessing ( "month",    NULL,      NULL               )
-                       << AttrProcessing ( "year",     NULL,      NULL               )
-                       << AttrProcessing ( "filename", "QString", &fileName )
-                       << AttrProcessing ( "name",     "QString", &name     );
-    ProcessAttributes (myNode, attrProcessingList);
+    KoPictureKey key;
 
+    // Let KoPicture do most of the loading
+    key.loadAttributes(myNode.toElement());
+    QString name(myNode.toElement().attribute("name"));
 
-    FrameAnchor *frameAnchor = findAnchor (fileName, *paraList);
+    // TODO/FIXME: an image could be re-used a few times!
+    FrameAnchor *frameAnchor = findAnchor (key, *paraList);
 
     if ( frameAnchor )
     {
@@ -446,7 +427,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     }
     else
     {
-        kdWarning (30508) << "Could find anchor for picture " << fileName << "!" << endl;
+        kdWarning (30508) << "Could find anchor for picture " << key.toString() << endl;
     }
 
 
