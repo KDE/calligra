@@ -206,7 +206,7 @@ void KSpreadDlgValidity::init()
   KSpreadValidity * tmpValidity=c->getValidity(0);
   if(tmpValidity!=0)
         {
-        message->setText(tmpValidity->avertissment);
+        message->setText(tmpValidity->message);
         title->setText(tmpValidity->title);
         QString tmp;
         val_max->setText(tmp.setNum(tmpValidity->valMax));
@@ -280,7 +280,7 @@ if( chooseType->currentItem()==0)
         result.m_allow=Allow_All;
         result.m_action=Stop;
         result.m_cond=Equal;
-        result.avertissment=message->text();
+        result.message=message->text();
         result.title=title->text();
         result.valMin=val_min->text().toDouble();
         result.valMax=val_max->text().toDouble();
@@ -341,7 +341,7 @@ else
                 default :
                         break;
                 }
-        result.avertissment=message->text();
+        result.message=message->text();
         result.title=title->text();
         result.valMin=val_min->text().toDouble();
         result.valMax=val_max->text().toDouble();

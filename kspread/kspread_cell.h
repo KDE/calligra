@@ -60,7 +60,7 @@ struct KSpreadConditional
 
 struct KSpreadValidity
 {
- QString avertissment;
+ QString message;
  QString title;
  double valMin;
  double valMax;

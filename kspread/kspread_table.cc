@@ -4144,7 +4144,7 @@ void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
                 else
                         {
                         tmpValidity =c->getValidity();
-                        tmpValidity->avertissment=tmp.avertissment;
+                        tmpValidity->message=tmp.message;
                         tmpValidity->title=tmp.title;
                         tmpValidity->valMin=tmp.valMin;
                         tmpValidity->valMax=tmp.valMax;
@@ -4175,7 +4175,7 @@ void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
                 else
                         {
                         tmpValidity =c->getValidity();
-                        tmpValidity->avertissment=tmp.avertissment;
+                        tmpValidity->message=tmp.message;
                         tmpValidity->title=tmp.title;
                         tmpValidity->valMin=tmp.valMin;
                         tmpValidity->valMax=tmp.valMax;
@@ -4217,7 +4217,7 @@ void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
                 else
                         {
                         tmpValidity =cell->getValidity();
-                        tmpValidity->avertissment=tmp.avertissment;
+                        tmpValidity->message=tmp.message;
                         tmpValidity->title=tmp.title;
                         tmpValidity->valMin=tmp.valMin;
                         tmpValidity->valMax=tmp.valMax;

@@ -3643,13 +3643,13 @@ if(!valid &&m_Validity!=0 )
         switch (m_Validity->m_action)
                 {
                 case Stop:
-                        KMessageBox::error((QWidget*)0L , m_Validity->avertissment,m_Validity->title);
+                        KMessageBox::error((QWidget*)0L , m_Validity->message,m_Validity->title);
                         break;
                 case Warning:
-                        KMessageBox::warningYesNo((QWidget*)0L , m_Validity->avertissment,m_Validity->title);
+                        KMessageBox::warningYesNo((QWidget*)0L , m_Validity->message,m_Validity->title);
                         break;
                 case Information:
-                        KMessageBox::information((QWidget*)0L , m_Validity->avertissment,m_Validity->title);
+                        KMessageBox::information((QWidget*)0L , m_Validity->message,m_Validity->title);
                         break;
                 }
         }
@@ -4109,9 +4109,9 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
         QDomElement title = doc.createElement( "title" );
         title.appendChild( doc.createTextNode( m_Validity->title ) );
         validity.appendChild( title );
-        QDomElement avertissement = doc.createElement( "avertissement" );
-        avertissement.appendChild( doc.createCDATASection( m_Validity->avertissment ) );
-        validity.appendChild( avertissement );
+        QDomElement message = doc.createElement( "message" );
+        message.appendChild( doc.createCDATASection( m_Validity->message ) );
+        validity.appendChild( message );
 
         cell.appendChild( validity );
     }
@@ -4386,10 +4386,10 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         {
                  m_Validity->title= title.text();
         }
-        QDomElement avertissement = validity.namedItem( "avertissement" ).toElement();
-        if(!avertissement.isNull())
+        QDomElement message = validity.namedItem( "message" ).toElement();
+        if(!message.isNull())
         {
-                 m_Validity->avertissment= avertissement.text();
+                 m_Validity->message= message.text();
         }
     }
 
