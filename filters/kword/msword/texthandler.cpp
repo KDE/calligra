@@ -56,8 +56,10 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
       m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 ),
       m_currentTable( 0L ),
       m_bInParagraph( false ),
-      m_insideField( false), m_fieldAfterSeparator( false ), m_fieldType( 0 )
+      m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 )
 {
+    for ( int i = 0; i < 9; ++i )
+        m_previousLSID[ i ] = 0;  // 0 == invalid
 }
 
 void KWordTextHandler::sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
@@ -717,10 +719,13 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
     }
     else
     {
-        counterElement.setAttribute( "start", listInfo->startAt() );
-        if ( listInfo->startAtOverridden() )
-            counterElement.setAttribute( "restart", "true" );
         const wvWare::Word97::PAP& pap = paragraphProperties.pap();
+        counterElement.setAttribute( "start", listInfo->startAt() );
+        if ( listInfo->startAtOverridden() ||
+             ( m_previousLSID[ pap.ilvl ] != 0 && m_previousLSID[ pap.ilvl ] != listInfo->lsid() ) )
+            counterElement.setAttribute( "restart", "true" );
+        m_previousLSID[ pap.ilvl ] = listInfo->lsid(); // update the ID
+
         int depth = pap.ilvl; /*both are 0 based*/
         // Heading styles don't set the ilvl, but must have a depth coming
         // from their heading level (the style's STI)
@@ -766,7 +771,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
         }
         if ( displayLevels > 1 )
         {
-            // This is a hierarchical list numbering e.g. <1>.<0>.
+            // This is a hierarchical list numbering e.g. <0>.<1>.
             // (unless this is about a heading, in which case we've set numberingtype to 1 already
             // so it will indeed look like that).
             // The question is whether the '.' is the suffix of the parent level already..
