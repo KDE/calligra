@@ -1,5 +1,4 @@
 /*
- * $Id$
  *
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
@@ -18,7 +17,7 @@ class KChartBarConfigDialog : public KChartConfigDialog
 
 public:
     KChartBarConfigDialog( KDChartParams* params, 
-                           QWidget* parent );
+                           QWidget* parent, int flag );
 
 public slots:
     virtual void apply();

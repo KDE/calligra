@@ -28,7 +28,7 @@
 #include "kdchart/KDChartParams.h"
 
 KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
-					QWidget* parent ) :
+					QWidget* parent, int flags ) :
     QTabDialog( parent, "Chart config dialog", true ),
     _params( params ),
     _subTypePage( 0 )
@@ -99,6 +99,7 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
 
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( apply() ) );
     connect( this, SIGNAL( defaultButtonPressed() ), this, SLOT( defaults() ) );
+    setCurrentPage( flags );
 }
 
 
@@ -135,7 +136,7 @@ void KChartConfigDialog::apply()
     bottomparams.setAxisLabelsColor( _colorpage->xLabelColor() );
     leftparams.setAxisLabelsColor( _colorpage->yLabelColor() );
     rightparams.setAxisLabelsColor( _colorpage->yLabel2Color() );
-    
+
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
     _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
     _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparams );
@@ -224,4 +225,21 @@ void KChartConfigDialog::defaults()
 }
 
 
+void KChartConfigDialog::setCurrentPage( int page )
+{
+    switch(page)
+    {
+    case KC_FONT:
+        showPage(  _parameterfontpage );
+        break;
+    case  KC_COLORS:
+        showPage( _colorpage);
+        break;
+    case KC_BACK:
+        showPage( _backgroundpixpage);
+        break;
+    default:
+        break;
+    }
+}
 

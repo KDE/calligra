@@ -25,9 +25,11 @@ class KChartConfigDialog : public QTabDialog
     Q_OBJECT
 
 public:
+    enum { KC_FONT = 1, KC_COLORS = 2, KC_BACK = 4 };
     KChartConfigDialog( KDChartParams* params,
-                        QWidget* parent );
+                        QWidget* parent, int flags );
 
+    void setCurrentPage( int page );
 signals:
 	void dataChanged();
 

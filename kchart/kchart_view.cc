@@ -45,7 +45,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                           this, SLOT( edit() ),
                           actionCollection(), "edit");
     m_config = new KAction( i18n( "&Config" ), "configure", 0,
-                            this, SLOT( config() ),
+                            this, SLOT( slotConfig() ),
                             actionCollection(), "config" );
     m_loadconfig = new KAction( i18n("&Load Config"),
                                 "fileopen", 0, this,
@@ -85,6 +85,19 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      SLOT( ringChart() ), actionCollection(),
                                      "ringchart");
     m_chartring->setExclusiveGroup( "charttypes" );
+
+
+    m_colorConfig = new KAction( i18n( "&Configure colors" ), 0,
+                            this, SLOT( slotConfigColor() ),
+                            actionCollection(), "color_config" );
+
+    m_fontConfig = new KAction( i18n( "&Configure font" ), 0,
+                            this, SLOT( slotConfigFont() ),
+                            actionCollection(), "font_config" );
+
+    m_backConfig = new KAction( i18n( "&Configure background" ), 0,
+                            this, SLOT( slotConfigBack() ),
+                            actionCollection(), "back_config" );
 
     // initialize the configuration
     //    loadConfig();
@@ -220,18 +233,22 @@ void KChartView::updateGuiTypeOfChart()
     }
 }
 
-void KChartView::config()
+void KChartView::slotConfig()
+{
+    config(KChartConfigDialog::KC_COLORS);
+}
+
+void KChartView::config(int flags)
 {
     // open a config dialog depending on the chart type
     KDChartParams* params = ((KChartPart*)koDocument())->params();
 
-    KChartConfigDialog* d = new KChartConfigDialog( params, this );
+    KChartConfigDialog* d = new KChartConfigDialog( params, this, flags );
     connect( d, SIGNAL( dataChanged() ),
              this, SLOT( slotRepaint() ) );
     d->exec();
     delete d;
 }
-
 
 void KChartView::slotRepaint()
 {
@@ -347,6 +364,21 @@ void KChartView::mousePressEvent ( QMouseEvent *e )
         return;
     if( e->button() == RightButton )
         ((QPopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
+}
+
+void KChartView::slotConfigColor()
+{
+    config(KChartConfigDialog::KC_COLORS);
+}
+
+void KChartView::slotConfigFont()
+{
+    config(KChartConfigDialog::KC_FONT);
+}
+
+void KChartView::slotConfigBack()
+{
+    config(KChartConfigDialog::KC_BACK);
 }
 
 #include "kchart_view.moc"

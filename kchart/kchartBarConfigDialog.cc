@@ -1,5 +1,4 @@
 /*
- * $Id$
  *
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
@@ -15,8 +14,8 @@
 #include "kdchart/KDChartParams.h"
 
 KChartBarConfigDialog::KChartBarConfigDialog( KDChartParams* params,
-					      QWidget* parent ) :
-    KChartConfigDialog( params, parent  )
+					      QWidget* parent, int flag ) :
+    KChartConfigDialog( params, parent, flag  )
 {
     // Bar page
     _barpage = new KChartBarConfigPage( this );

@@ -27,9 +27,11 @@ public:
     void updateGuiTypeOfChart();
     virtual DCOPObject* dcopObject();
 
+    void config(int flag);
+
 public slots:
       void edit();
-      void config();
+      void slotConfig();
       void wizard();
       void saveConfig();
       void loadConfig();
@@ -42,6 +44,9 @@ public slots:
       void hiLoChart();
       void ringChart();
       void slotRepaint();
+      void slotConfigBack();
+      void slotConfigFont();
+      void slotConfigColor();
 
 protected:
     void paintEvent( QPaintEvent* );
@@ -58,6 +63,9 @@ private:
     KAction* m_saveconfig;
     KAction* m_loadconfig;
     KAction* m_defaultconfig;
+    KAction *m_colorConfig;
+    KAction* m_fontConfig;
+    KAction* m_backConfig;
     KToggleAction* m_chartpie;
     KToggleAction* m_chartareas;
     KToggleAction* m_chartbars;

@@ -41,7 +41,7 @@ void KChartViewIface::editData()
 
 void KChartViewIface::configureChart()
 {
-    view->config();
+    view->slotConfig();
 }
 
 
