@@ -1,14 +1,18 @@
 [Desktop Entry]
 Name=Kontour
+Name[eo]=Konturo
+Name[hu]=Kontour vektoros rajzolóprogram
 Exec=kontour
 X-KDE-Library=libkontourpart
 Comment=Drawings
 Comment[az]=Rəsmlər
 Comment[bg]=Рисунки
+Comment[cs]=Kresby
 Comment[da]=Tegninger
 Comment[de]=Zeichnungen
 Comment[eo]=Desegnaĵoj
 Comment[es]=Dibujos
+Comment[et]=KDE vektorgraafika redaktor
 Comment[fi]=Piirrokset
 Comment[fr]=Dessins
 Comment[he]=םירויצ
@@ -34,5 +38,5 @@ Type=Application
 Icon=kontour
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kontour
-MapNotify=true
 DocPath=killustrator/index.html
+KDE-X-StartupNotify=true
