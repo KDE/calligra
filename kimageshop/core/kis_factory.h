@@ -35,10 +35,9 @@ public:
     KisFactory( QObject* parent = 0, const char* name = 0 );
     ~KisFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* name = 0,
-							 const char* classname = "QObject", const QStringList &args = QStringList() );
+    virtual KParts::Part *createPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() ); 
 
-	static KAboutData        *aboutData();
+    static KAboutData        *aboutData();
     static KInstance         *global();
     static KisPluginServer   *pServer();
     static KisResourceServer *rServer();
@@ -47,7 +46,7 @@ private:
     static KInstance           *s_global;
     static KisPluginServer     *s_pserver;
     static KisResourceServer   *s_rserver;
-	static KAboutData          *s_aboutData;
+    static KAboutData          *s_aboutData;
 };
 
 #endif

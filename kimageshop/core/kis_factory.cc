@@ -73,7 +73,7 @@ KisFactory::~KisFactory()
   delete s_global;
 }
 
-QObject* KisFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KisFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
