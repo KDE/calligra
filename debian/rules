@@ -20,7 +20,7 @@ $(BUILDDIR)/build-stamp:
 	test -d $(BUILDDIR) || mkdir $(BUILDDIR) ;\
 	cd $(BUILDDIR) ;\
 	$$PWD/../configure $(configkde) \
-	--libdir=/$(kde_libdir) --includedir=/$(kde_includedir)
+	--libdir=$(kde_libdir) --includedir=$(kde_includedir)
 
 	make -C $(BUILDDIR)
 
@@ -98,7 +98,7 @@ binary-indep: build install
 binary-arch: build install binary-indep
 	dh_testdir
 	dh_testroot
-	for i in `find debian/tmp/$(kde_bindir) | sed -e 's#^debian/tmp/$(kde_bindir)/##'  | grep -v "debian/tmp"`; do \
+	for i in `find debian/tmp/usr/bin | sed -e 's#^debian/tmp/usr/bin/##'  | grep -v "debian/tmp"`; do \
 		echo "$$i.1" >> debian/undocumented ;\
 	done
 	for i in `cat debian/undocumented.in | grep -v "#"`; do \
@@ -106,33 +106,33 @@ binary-arch: build install binary-indep
 	done
 	dh_undocumented
 	list=`cd debian/tmp && find ./ -type l -name "lib*.so" | sed -e 's#^./##'` ;\
-	dh_movefiles -pkoffice-dev $$list $(kde_libdir)/*.a $(kde_includedir)
-	dh_movefiles -pkchart $(kde_bindir)/kchart usr/share/apps/kchart/* \
+	dh_movefiles -pkoffice-dev $$list usr/lib/*.a usr/include
+	dh_movefiles -pkchart usr/bin/kchart usr/share/apps/kchart/* \
 		usr/share/applnk/Office/kchart.desktop \
 		usr/share/mimelnk/application/x-kchart.desktop \
 		usr/share/man/man1/kchart*
-	dh_movefiles -pkillustrator $(kde_bindir)/killustrator \
+	dh_movefiles -pkillustrator usr/bin/killustrator \
 		usr/share/apps/killustrator/* \
 		usr/share/doc/kde/HTML/en/killustrator/* \
 		usr/share/doc/koffice/killustrator/* \
 		usr/share/applnk/Office/killustrator.desktop \
 		usr/share/mimelnk/application/x-killustrator.desktop \
 		usr/share/man/man1/killustrator*
-	dh_movefiles -pkpresenter $(kde_bindir)/kpresenter \
+	dh_movefiles -pkpresenter usr/bin/kpresenter \
 		usr/share/apps/kpresenter/* \
 		usr/share/doc/kde/HTML/en/kpresenter/* \
 		usr/share/doc/koffice/kpresenter/* \
 		usr/share/applnk/Office/kpresenter.desktop \
 		usr/share/mimelnk/application/x-kpresenter.desktop \
 		usr/share/man/man1/kpresenter*
-	dh_movefiles -pkspread $(kde_bindir)/kspread \
+	dh_movefiles -pkspread usr/bin/kspread \
 		usr/share/apps/kspread/* \
 		usr/share/doc/kde/HTML/en/kspread/*  \
 		usr/share/doc/koffice/kspread/* \
 		usr/share/applnk/Office/kspread.desktop \
 		usr/share/mimelnk/application/x-kspread.desktop \
 		usr/share/man/man1/kspread*
-	dh_movefiles -pkword $(kde_bindir)/kword \
+	dh_movefiles -pkword usr/bin/kword \
 		usr/share/apps/kword/* \
 		usr/share/doc/kde/HTML/en/kword/* \
 		usr/share/doc/koffice/kword/* \
@@ -154,7 +154,6 @@ binary-arch: build install binary-indep
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums 
-	perl -w admin/debianrules update
 	dh_builddeb -pkword
 	dh_builddeb -pkspread
 	dh_builddeb -pkillustrator
