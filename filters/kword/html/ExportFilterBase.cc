@@ -22,7 +22,7 @@
 
 #include "ExportFilterBase.h"
 
-// Most of the code is in htmlexport.cc
+// NOTE: ClassExportFilterBase::filter is still in htmlexport.cc
 
 void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList)
 {
@@ -59,4 +59,59 @@ bool ClassExportFilterBase::isXML(void) const
 QString ClassExportFilterBase::getStyleElement(void)
 {
     return QString::null; //Default is no style
+}
+
+QString ClassExportFilterBase::getHtmlOpeningTagExtraAttributes(void) const
+{
+    if (isXML())
+    {
+        // XHTML must return an extra attribute defining its namespace (in the <html> opening tag)
+        return " xmlns=\"http://www.w3.org/1999/xhtml\""; // Leading space is important!
+    }
+    return QString::null;
+}
+
+QString ClassExportFilterBase::escapeText(const QString& strIn) const
+{
+    QString strReturn;
+    QChar ch;
+
+    for (uint i=0; i<strIn.length(); i++)
+    {
+        ch=strIn[i];
+        switch (ch.unicode())
+        {
+        case 38: // &
+            {
+                strReturn+="&amp;";
+                break;
+            }
+        case 60: // <
+            {
+                strReturn+="&lt;";
+                break;
+            }
+        case 62: // >
+            {
+                strReturn+="&gt;";
+                break;
+            }
+        case 34: // "
+            {
+                strReturn+="&quot;";
+                break;
+            }
+        // NOTE: the apostrophe ' is not escaped,
+        // NOTE:  as HTML does not define &apos; by default (only XML/XHTML does)
+        default:
+            {
+                // TODO: verify that the character ch can be expressed in the
+                // TODO:  encoding in which we will write the HTML file.
+                strReturn+=ch;
+                break;
+            }
+        }
+    }
+
+    return strReturn;
 }
