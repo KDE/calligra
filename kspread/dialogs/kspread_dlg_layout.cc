@@ -155,7 +155,9 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDlg * dlg )
   m_parentBox = new KComboBox( false, groupBox, "m_parentBox" );
   m_parentBox->clear();
   m_parentBox->insertItem( i18n( "<None>" ) );
-  m_parentBox->insertStringList( m_dlg->getStyleManager()->styleNames() );
+  QStringList tmp = m_dlg->getStyleManager()->styleNames();
+  tmp.remove( m_dlg->styleName );
+  m_parentBox->insertStringList( tmp );
 
   if ( m_dlg->getStyle()->parent() )
     m_parentBox->setCurrentText( m_dlg->getStyle()->parentName() );
@@ -1158,7 +1160,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     grp->setRadioButtonExclusive( true );
     generic=new QRadioButton(i18n("Generic"),grp);
     grid->addWidget(generic,1,0);
-    
+
     number=new QRadioButton(i18n("Number"),grp);
     grid->addWidget(number,2,0);
 
@@ -1388,13 +1390,13 @@ void CellFormatPageFloat::slotChangeState()
     listFormat->clear();
     currency->hide();
     currencyLabel->hide();
-    
+
     // start with enabled, they get disabled when inappropriate further down
     precision->setEnabled(true);
     prefix->setEnabled(true);
     postfix->setEnabled(true);
     format->setEnabled(true);
-    
+
     if (generic->isChecked() || number->isChecked() || percent->isChecked() ||
         scientific->isChecked() || textFormat->isChecked())
       listFormat->setEnabled(false);
@@ -1511,7 +1513,7 @@ void CellFormatPageFloat::slotChangeState()
       customFormatEdit->setHidden( true );
 
     m_bFormatTypeChanged=true;
-        
+
     makeformat();
 }
 
@@ -1523,7 +1525,7 @@ void CellFormatPageFloat::init()
     QDate tmpDate( 2000,2,18);
     list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), true);
     list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), false);
-    
+
     KSpread::ValueFormatter *fmt = dlg->getDoc()->formatter();
 
     /*18-Feb-00*/
@@ -1734,7 +1736,7 @@ void CellFormatPageFloat::makeformat()
 {
   m_bFormatTypeChanged=true;
   QString tmp;
-  
+
   updateFormatType();
   KSpread::ValueFormatter *fmt = dlg->getDoc()->formatter();
   tmp = fmt->formatText (dlg->value, newFormatType,
