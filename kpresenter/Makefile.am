@@ -2,7 +2,7 @@
 INCLUDES = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = autoformEdit/libaf.a $(KOFFICE_LIBS) \
-	-lkparts -lkpartsui -lkom $(LIB_KIMGIO) $(LIB_KIO) $(LIBMICO) $(LIB_KFILE)
+	-lkparts -lkpartsui -lkom $(LIB_KIO) $(LIB_KFILE) $(LIB_KIMGIO)  $(LIBMICO)
 
 ####### Files
 
@@ -90,7 +90,7 @@ kpresenter.h: kpresenter.idl
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kpresenter.idl
 
 kpresenter.cc: kpresenter.h
-kpresenter_main.cc: kpresenter.h 
-kpresenter_shell.cc: kpresenter.h 
-kpresenter_view.cc: kpresenter.h 
+kpresenter_main.cc: kpresenter.h
+kpresenter_shell.cc: kpresenter.h
+kpresenter_view.cc: kpresenter.h
 page.cc:  kpresenter.h
