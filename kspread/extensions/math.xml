@@ -5,6 +5,39 @@
     <GroupName>Math</GroupName>
 
     <Function>
+      <Name>SUBTOTAL</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Function</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUBTOTAL() function returnsa subtotal of a given list of arguments ignoring other subtotal results in there. Function can be one of the following numbers: 1 - Average, 2 - Count, 3 - CountA, 4 - Max, 5 - Min, 6 - Product, 7 - StDev, 8 - StDevP, 9 - Sum, 10 - Var, 11 - VarP.</Text>
+	<Syntax>SUBTOTAL(value; value)</Syntax>
+	<Example>If A1:A5 contains 7, 24, 23, 56 and 9:</Example>
+	<Example>SUBTOTAL(1; A1:A5) returns 23.8</Example>
+	<Example>SUBTOTAL(4; A1:A5) returns 56</Example>
+	<Example>SUBTOTAL(9; A1:A5) returns 119</Example>
+	<Example>SUBTOTAL(11; A1:A5) returns 307.76</Example>
+	<Related>AVERAGE</Related>
+	<Related>COUNT</Related>
+	<Related>COUNTA</Related>
+	<Related>MAX</Related>
+	<Related>MIN</Related>
+	<Related>PRODUCT</Related>
+	<Related>STDEV</Related>
+	<Related>STDEVP</Related>
+	<Related>SUM</Related>
+	<Related>VAR</Related>
+	<Related>VARP</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>LCM</Name>
       <Type>Float</Type>
       <Parameter>
@@ -239,7 +272,41 @@
 	<Syntax>COUNT(value;value;value...)</Syntax>
 	<Example>COUNT(-5;"KSpread";2) returns 2</Example>
 	<Example>COUNT(5) returns 1</Example>
+	<Related>COUNTA</Related>
+	<Related>COUNTIF</Related>
 	<Related>SUM</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COUNTA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>This function returns the count of all non empty arguments passed. You can count using a range: COUNTA(A1:B5) or using a list of values like COUNTA(12;5;12.5).</Text>
+	<Syntax>COUNTA(value;value;value...)</Syntax>
+	<Example>COUNTA(-5;"KSpread";2) returns 3</Example>
+	<Example>COUNTA(5) returns 1</Example>
+	<Related>COUNT</Related>
 	<Related>COUNTIF</Related>
       </Help>
     </Function>
@@ -349,11 +416,45 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The PRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range: PRODUCT(A1:B5) or a list of values like product(12;5;12.5).</Text>
+	<Text>The PRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range: PRODUCT(A1:B5) or a list of values like product(12;5;12.5). If no numeric values are found 0 is returned.</Text>
 	<Syntax>PRODUCT(value;value;...)</Syntax>
 	<Example>PRODUCT(3;5;7) equals 105</Example>
 	<Example>PRODUCT(12.5;2) equals 25</Example>
 	<Related>MULTIPLY</Related>
+	<Related>KPRODUCT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>KPRODUCT</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The KPRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range: KPRODUCT(A1:B5) or a list of values like product(12;5;12.5). If no numeric values are found 1 is returned.</Text>
+	<Syntax>KPRODUCT(value;value;...)</Syntax>
+	<Example>KPRODUCT(3;5;7) equals 105</Example>
+	<Example>KPRODUCT(12.5;2) equals 25</Example>
+	<Related>MULTIPLY</Related>
+	<Related>PRODUCT</Related>
       </Help>
     </Function>
 
@@ -617,7 +718,6 @@
       </Help>
     </Function>
 
-
     <Function>
       <Name>ROOTN</Name>
       <Type>Float</Type>
@@ -697,6 +797,28 @@
 	<Syntax>CEIL(x)</Syntax>
 	<Example>CEIL(12.5) equals 13</Example>
 	<Example>CEIL(-12.5) equals -12</Example>
+	<Related>CEILING</Related>
+	<Related>FLOOR</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CEILING</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Significance (optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The CEILING() function rounds x up to the nearest multiple of significance.</Text>
+	<Syntax>CEILING(x)</Syntax>
+	<Example>CEILING(12.5) equals 13</Example>
+	<Example>CEILING(6.43; 4) equals 8</Example>
+	<Related>CEIL</Related>
 	<Related>FLOOR</Related>
       </Help>
     </Function>
@@ -756,6 +878,101 @@
 	<Text>The RAND() function returns a pseudo-random number between 0 and 1.</Text>
 	<Syntax>RAND()</Syntax>
 	<Example>RAND() equals for example 0.78309922...</Example>
+        <Related>RANDBETWEEN</Related>
+        <Related>RANDEXP</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>RANDEXP</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value (greater 0)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The RANDEXP() function returns an exponentially-distributed pseudo-random number.</Text>
+	<Syntax>RANDEXP(x)</Syntax>
+	<Example>RANDEXP(0.88)</Example>
+        <Related>RAND</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>RANDPOISSON</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value (greater 0)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The RANDPOISSON() function returns a poison-distributed pseudo-random number.</Text>
+	<Syntax>RANDPOISSON(x)</Syntax>
+	<Example>RANDPOISSON(4)</Example>
+        <Related>RAND</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>RANDBINOM</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value (between 0 and 1)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Trials (greater 0)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The RANDBINOM() function returns a binomially-distributed pseudo-random number.</Text>
+	<Syntax>RANDBINOM(x)</Syntax>
+	<Example>RANDBINOM(4)</Example>
+        <Related>RAND</Related>
+        <Related>RANDNEGBINOM</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>RANDNEGBINOM</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value (between 0 and 1)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Failures (greater 0)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The RANDNEGBINOM() function returns a negative binomially-distributed pseudo-random number.</Text>
+	<Syntax>RANDNEGBINOM(x)</Syntax>
+	<Example>RANDNEGBINOM(4)</Example>
+        <Related>RAND</Related>
+        <Related>RANDBINOM</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>RANDBERNOULLI</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value (between 0 and 1)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The RANDBERNOULLI() function returns a Bernoulli-distributed pseudo-random number.</Text>
+	<Syntax>RANDBERNOULLI(x)</Syntax>
+	<Example>RANDBERNOULLI(0.45)</Example>
+        <Related>RAND</Related>
       </Help>
     </Function>
 
@@ -774,9 +991,48 @@
 	<Text>The RANDBETWEEN() function returns a pseudo-random number between bottom and top value. If bottom > top this function returns Err.</Text>
 	<Syntax>RANDBETWEEN(bottom;top)</Syntax>
 	<Example>RANDBETWEEN(12;78) equals for example 61.0811...</Example>
+        <Related>RAND</Related>
       </Help>
     </Function>
 
+static char *help_mround = {
+	N_("@FUNCTION=MROUND\n"
+	   "@SYNTAX=MROUND(number,multiple)\n"
+
+	   "@DESCRIPTION="
+	   "MROUND function rounds a given number to the desired multiple. "
+	   "@number is the number you want rounded and @multiple is the "
+	   "the multiple to which you want to round the number. "
+	   "\n"
+	   "If @number and @multiple have different sign, MROUND "
+	   "returns #NUM! error.\n"
+	   "This function is Excel compatible.\n"
+	   "\n"
+	   "@EXAMPLES=\n"
+	   "MROUND(1.7,0.2) equals 1.8.\n"
+	   "MROUND(321.123,0.12) equals 321.12.\n"
+	   "\n"
+	   "@SEEALSO=ROUNDDOWN,ROUND,ROUNDUP")
+};
+    <Function>
+      <Name>MROUND</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Multiple</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The MROUND() function returns the value rounded to the specified multiple. The value and the multiple must have the same sign</Text>
+	<Syntax>MROUND(value; multiple)</Syntax>
+	<Example>MROUND(1.252; 0.5) equals 1.5</Example>
+	<Example>MROUND(-1.252; -0.5) equals -1.5</Example>
+	<Related>ROUND</Related>
+      </Help>
+    </Function>
 
     <Function>
       <Name>ROUND</Name>
@@ -797,6 +1053,9 @@
 	<Example>ROUND(1.258;2) equals 1.26</Example>
 	<Example>ROUND(-12.25;-1) equals -10</Example>
 	<Example>ROUND(-1.252;0) equals -1</Example>
+	<Related>MROUND</Related>
+	<Related>ROUNDDOWN</Related>
+	<Related>ROUNDUP</Related>
       </Help>
     </Function>
 
@@ -817,6 +1076,8 @@
 	<Example>ROUNDUP(1.252;2) equals 1.26</Example>
 	<Example>ROUNDUP(-1.252;2) equals -1.25</Example>
 	<Example>ROUNDUP(-1.252) equals -1</Example>
+	<Related>ROUND</Related>
+	<Related>ROUNDDOWN</Related>
       </Help>
     </Function>
 
@@ -837,6 +1098,8 @@
 	<Example>ROUNDDOWN(1.252;2) equals 1.25</Example>
 	<Example>ROUNDDOWN(-1.252;2) equals -1.26</Example>
 	<Example>ROUNDDOWN(-1.252) equals -2</Example>
+	<Related>ROUND</Related>
+	<Related>ROUNDUP</Related>
       </Help>
     </Function>
 

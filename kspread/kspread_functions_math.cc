@@ -41,6 +41,7 @@
 namespace math_local
 {
   bool gWorking = false;
+  KSpreadCell * gCell = 0;
 }
 
 using namespace math_local;
@@ -48,7 +49,9 @@ using namespace math_local;
 // prototypes
 bool kspreadfunc_abs( KSContext& context );
 bool kspreadfunc_ceil( KSContext& context );
+bool kspreadfunc_ceiling( KSContext& context );
 bool kspreadfunc_count( KSContext& context );
+bool kspreadfunc_counta( KSContext& context );
 bool kspreadfunc_countif( KSContext& context );
 bool kspreadfunc_cur( KSContext& context );
 bool kspreadfunc_div( KSContext& context );
@@ -62,13 +65,17 @@ bool kspreadfunc_floor( KSContext& context );
 bool kspreadfunc_gcd( KSContext & context );
 bool kspreadfunc_int( KSContext& context );
 bool kspreadfunc_inv( KSContext& context );
+bool kspreadfunc_kproduct( KSContext& context );
 bool kspreadfunc_lcm( KSContext & context );
 bool kspreadfunc_ln( KSContext& context );
 bool kspreadfunc_log( KSContext& context );
+bool kspreadfunc_log2( KSContext& context );
+bool kspreadfunc_log10( KSContext& context );
 bool kspreadfunc_logn( KSContext& context );
 bool kspreadfunc_max( KSContext& context );
 bool kspreadfunc_min( KSContext& context );
 bool kspreadfunc_mod( KSContext& context );
+bool kspreadfunc_mround( KSContext& context );
 bool kspreadfunc_mult( KSContext& context );
 bool kspreadfunc_multinomial( KSContext& context );
 bool kspreadfunc_odd( KSContext& context );
@@ -77,6 +84,11 @@ bool kspreadfunc_quotient( KSContext& context );
 bool kspreadfunc_product( KSContext& context );
 bool kspreadfunc_rand( KSContext& context );
 bool kspreadfunc_randbetween( KSContext& context );
+bool kspreadfunc_randbernoulli( KSContext & context );
+bool kspreadfunc_randbinom( KSContext & context );
+bool kspreadfunc_randexp( KSContext & context );
+bool kspreadfunc_randnegbinom( KSContext & context );
+bool kspreadfunc_randpoisson( KSContext & context );
 bool kspreadfunc_rootn( KSContext& context );
 bool kspreadfunc_round( KSContext& context );
 bool kspreadfunc_rounddown( KSContext& context );
@@ -96,53 +108,67 @@ bool kspreadfunc_subtotal( KSContext& context );
 void KSpreadRegisterMathFunctions()
 {
   gWorking = false;
+  gCell = 0;
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
 
   repo->registerFunction( "MULTIPLEOPERATIONS", kspreadfunc_multipleOP );
   repo->registerFunction( "SUBTOTAL",    kspreadfunc_subtotal );
-  repo->registerFunction( "ABS",         kspreadfunc_abs );
-  repo->registerFunction( "CEIL",        kspreadfunc_ceil );
-  repo->registerFunction( "COUNT",       kspreadfunc_count );
-  repo->registerFunction( "COUNTIF",     kspreadfunc_countif );
-  repo->registerFunction( "CUR",         kspreadfunc_cur );
-  repo->registerFunction( "DIV",         kspreadfunc_div );
-  repo->registerFunction( "EPS",         kspreadfunc_eps );
-  repo->registerFunction( "EVEN",        kspreadfunc_even );
-  repo->registerFunction( "EXP",         kspreadfunc_exp );
-  repo->registerFunction( "FACT",        kspreadfunc_fact );
-  repo->registerFunction( "FACTDOUBLE",  kspreadfunc_factdouble );
-  repo->registerFunction( "FIB",         kspreadfunc_fib ); // KSpread-specific, like Quattro-Pro's FIB
-  repo->registerFunction( "FLOOR",       kspreadfunc_floor );
-  repo->registerFunction( "GCD",         kspreadfunc_gcd );
-  repo->registerFunction( "INT",         kspreadfunc_int );
-  repo->registerFunction( "INV",         kspreadfunc_inv );
-  repo->registerFunction( "LCD",         kspreadfunc_gcd ); // obsolete, use GCD instead, remove in 1.4
-  repo->registerFunction( "LCM",         kspreadfunc_lcm );
-  repo->registerFunction( "LN",          kspreadfunc_ln );
-  repo->registerFunction( "LOG",         kspreadfunc_log );
-  repo->registerFunction( "LOGN",        kspreadfunc_logn );
-  repo->registerFunction( "MAX",         kspreadfunc_max );
-  repo->registerFunction( "MIN",         kspreadfunc_min );
-  repo->registerFunction( "MOD",         kspreadfunc_mod );
-  repo->registerFunction( "MULTIPLY",    kspreadfunc_mult );
-  repo->registerFunction( "MULTINOMIAL", kspreadfunc_multinomial );
-  repo->registerFunction( "ODD",         kspreadfunc_odd );
-  repo->registerFunction( "POW",         kspreadfunc_pow );
-  repo->registerFunction( "POWER",       kspreadfunc_pow );
-  repo->registerFunction( "QUOTIENT",    kspreadfunc_quotient );
-  repo->registerFunction( "PRODUCT",     kspreadfunc_product );
-  repo->registerFunction( "RAND",        kspreadfunc_rand );
-  repo->registerFunction( "RANDBETWEEN", kspreadfunc_randbetween );
-  repo->registerFunction( "ROOTN",       kspreadfunc_rootn );
-  repo->registerFunction( "ROUND",       kspreadfunc_round );
-  repo->registerFunction( "ROUNDDOWN",   kspreadfunc_rounddown );
-  repo->registerFunction( "ROUNDUP",     kspreadfunc_roundup );
-  repo->registerFunction( "SIGN",        kspreadfunc_sign );
-  repo->registerFunction( "SQRT",        kspreadfunc_sqrt );
-  repo->registerFunction( "SQRTPI",      kspreadfunc_sqrtpi );
-  repo->registerFunction( "SUM",         kspreadfunc_sum );
-  repo->registerFunction( "SUMSQ",       kspreadfunc_sumsq );
-  repo->registerFunction( "TRUNC",       kspreadfunc_trunc );
+
+  repo->registerFunction( "ABS",           kspreadfunc_abs );
+  repo->registerFunction( "CEIL",          kspreadfunc_ceil );
+  repo->registerFunction( "CEILING",       kspreadfunc_ceiling );
+  repo->registerFunction( "COUNT",         kspreadfunc_count );
+  repo->registerFunction( "COUNTA",        kspreadfunc_counta );
+  repo->registerFunction( "COUNTIF",       kspreadfunc_countif );
+  repo->registerFunction( "CUR",           kspreadfunc_cur );
+  repo->registerFunction( "DIV",           kspreadfunc_div );
+  repo->registerFunction( "EPS",           kspreadfunc_eps );
+  repo->registerFunction( "EVEN",          kspreadfunc_even );
+  repo->registerFunction( "EXP",           kspreadfunc_exp );
+  repo->registerFunction( "FACT",          kspreadfunc_fact );
+  repo->registerFunction( "FACTDOUBLE",    kspreadfunc_factdouble );
+  repo->registerFunction( "FIB",           kspreadfunc_fib ); // KSpread-specific, like Quattro-Pro's FIB
+  repo->registerFunction( "FLOOR",         kspreadfunc_floor );
+  repo->registerFunction( "G_PRODUCT",     kspreadfunc_kproduct ); // Gnumeric compatiblity
+  repo->registerFunction( "GCD",           kspreadfunc_gcd );
+  repo->registerFunction( "INT",           kspreadfunc_int );
+  repo->registerFunction( "INV",           kspreadfunc_inv );
+  repo->registerFunction( "KPRODUCT",      kspreadfunc_kproduct );
+  repo->registerFunction( "LCD",           kspreadfunc_gcd ); // obsolete, use GCD instead, remove in 1.4
+  repo->registerFunction( "LCM",           kspreadfunc_lcm );
+  repo->registerFunction( "LN",            kspreadfunc_ln );
+  repo->registerFunction( "LOG",           kspreadfunc_log );
+  repo->registerFunction( "LOG2",          kspreadfunc_log2 );
+  repo->registerFunction( "LOG10",         kspreadfunc_log10 );
+  repo->registerFunction( "LOGN",          kspreadfunc_logn );
+  repo->registerFunction( "MAX",           kspreadfunc_max );
+  repo->registerFunction( "MIN",           kspreadfunc_min );
+  repo->registerFunction( "MOD",           kspreadfunc_mod );
+  repo->registerFunction( "MROUND",        kspreadfunc_mround );
+  repo->registerFunction( "MULTIPLY",      kspreadfunc_mult );
+  repo->registerFunction( "MULTINOMIAL",   kspreadfunc_multinomial );
+  repo->registerFunction( "ODD",           kspreadfunc_odd );
+  repo->registerFunction( "POW",           kspreadfunc_pow );
+  repo->registerFunction( "POWER",         kspreadfunc_pow );
+  repo->registerFunction( "QUOTIENT",      kspreadfunc_quotient );
+  repo->registerFunction( "PRODUCT",       kspreadfunc_product );
+  repo->registerFunction( "RAND",          kspreadfunc_rand );
+  repo->registerFunction( "RANDBERNOULLI", kspreadfunc_randbernoulli );
+  repo->registerFunction( "RANDBETWEEN",   kspreadfunc_randbetween );
+  repo->registerFunction( "RANDBINOM",     kspreadfunc_randbinom );
+  repo->registerFunction( "RANDEXP",       kspreadfunc_randexp );
+  repo->registerFunction( "RANDNEGBINOM",  kspreadfunc_randnegbinom );
+  repo->registerFunction( "RANDPOISSON",   kspreadfunc_randpoisson );
+  repo->registerFunction( "ROOTN",         kspreadfunc_rootn );
+  repo->registerFunction( "ROUND",         kspreadfunc_round );
+  repo->registerFunction( "ROUNDDOWN",     kspreadfunc_rounddown );
+  repo->registerFunction( "ROUNDUP",       kspreadfunc_roundup );
+  repo->registerFunction( "SIGN",          kspreadfunc_sign );
+  repo->registerFunction( "SQRT",          kspreadfunc_sqrt );
+  repo->registerFunction( "SQRTPI",        kspreadfunc_sqrtpi );
+  repo->registerFunction( "SUM",           kspreadfunc_sum );
+  repo->registerFunction( "SUMSQ",         kspreadfunc_sumsq );
+  repo->registerFunction( "TRUNC",         kspreadfunc_trunc );
 }
 
 /*********************************************************************
@@ -288,18 +314,69 @@ bool kspreadfunc_exp( KSContext& context )
 // Function: ceil
 bool kspreadfunc_ceil( KSContext& context )
 {
-  kdDebug() << "Ceil" << endl;
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ceil", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "CEIL", true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
-  if (approx_equal(floor(args[0]->doubleValue()),args[0]->doubleValue()))
-    context.setValue( new KSValue(args[0]->doubleValue()));
+  if ( approx_equal( floor( args[0]->doubleValue() ), args[0]->doubleValue() ) )
+    context.setValue( new KSValue( args[0]->doubleValue() ) );
   else
     context.setValue( new KSValue( ceil( args[0]->doubleValue() ) ) );
+
+  return true;
+}
+
+// Function: ceiling
+bool kspreadfunc_ceiling( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  double res;
+  double number;
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "CEILING", true ) )
+  {
+    if ( !KSUtil::checkArgumentsCount( context, 1, "CEILING", true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+      return false;
+
+    number = args[0]->doubleValue();
+
+    if ( number >= 0 )
+      res = 1.0;
+    else
+      res = -1.0;
+  }
+  else
+  {
+    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+      return false;
+
+    number = args[0]->doubleValue();
+
+    res = args[1]->doubleValue();
+  }
+
+  if ( res == 0 )
+    return false;
+
+  double d = number / res;
+
+  if ( d < 0 )
+    return false;
+
+  if ( approx_equal( floor( d ), d ) )
+    context.setValue( new KSValue( d * res ) );
+  else
+    context.setValue( new KSValue( ceil( d ) * res ) );
 
   return true;
 }
@@ -366,6 +443,46 @@ bool kspreadfunc_logn( KSContext& context )
   return true;
 }
 
+// Function: LOG2
+bool kspreadfunc_log2( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "LOG2", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double d = args[0]->doubleValue();
+
+  if ( d <= 0 )
+    return false;
+
+  context.setValue( new KSValue( log( d ) /log( 10 ) ) );
+  return true;
+}
+
+// Function: LOG10
+bool kspreadfunc_log10( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "LOG10", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double d = args[0]->doubleValue();
+
+  if ( d <= 0 )
+    return false;
+
+  context.setValue( new KSValue( log( d ) / log( 10 ) ) );
+  return true;
+}
+
 // Function: log
 bool kspreadfunc_log( KSContext& context )
 {
@@ -425,7 +542,7 @@ bool kspreadfunc_sum( KSContext& context )
 
 static bool kspreadfunc_product_helper( KSContext & context,
                                         QValueList<KSValue::Ptr> & args,
-                                        double & result )
+                                        double & result, int & number )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
@@ -434,11 +551,12 @@ static bool kspreadfunc_product_helper( KSContext & context,
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_product_helper( context, (*it)->listValue(), result ) )
+      if ( !kspreadfunc_product_helper( context, (*it)->listValue(), result, number ) )
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
+      ++number;
       result *= (*it)->doubleValue();
     }
   }
@@ -450,9 +568,28 @@ static bool kspreadfunc_product_helper( KSContext & context,
 bool kspreadfunc_product( KSContext& context )
 {
   double result = 1.0;
+  int number = 0;
   bool b = kspreadfunc_product_helper( context,
                                        context.value()->listValue(),
-                                       result );
+                                       result, number );
+
+  if ( number == 0 )
+    result = 0.0; // Excel specific
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+// Function: product
+bool kspreadfunc_kproduct( KSContext& context )
+{
+  double result = 1.0;
+  int number = 0;
+  bool b = kspreadfunc_product_helper( context,
+                                       context.value()->listValue(),
+                                       result, number );
 
   if ( b )
     context.setValue( new KSValue( result ) );
@@ -469,12 +606,13 @@ static int kspreadfunc_div_helper( KSContext & context,
 
   result = (*it)->doubleValue();
   ++it;
+  int number = 0;
 
   for( ; it != end; ++it )
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_product_helper( context, (*it)->listValue(), result ) )
+      if ( !kspreadfunc_product_helper( context, (*it)->listValue(), result, number ) )
         return 0;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
@@ -919,6 +1057,152 @@ bool kspreadfunc_eps( KSContext& context )
     return true;
 }
 
+bool kspreadfunc_randexp( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "RANDEXP", true ) )
+    return false;
+
+  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double d = args[0]->doubleValue();
+
+  d = -1 * d * log( (double) rand() / ( RAND_MAX + 1.0 ) );
+
+  context.setValue( new KSValue( d ) );
+  return true;
+}
+
+bool kspreadfunc_randbinom( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "RANDBINOM", true ) )
+    return false;
+
+  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  double d  = args[0]->doubleValue();
+  int    tr = args[1]->intValue();
+
+  if ( d < 0 || d > 1 )
+    return false;
+
+  if ( tr < 0 )
+    return false;
+
+  // taken from gnumeric
+  double x = pow(1 - d, tr);
+  double r = (double) rand() / ( RAND_MAX + 1.0 );
+  double t = x;
+  double i = 0;
+  
+  while (r > t) 
+  {
+    x *= (((tr - i) * d) / ((1 + i) * (1 - d)));
+    i += 1;
+    t += x;
+  }
+
+  context.setValue( new KSValue( i ) );
+  return true;
+}
+
+bool kspreadfunc_randnegbinom( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "RANDNEGBINOM", true ) )
+    return false;
+
+  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  double d = args[0]->doubleValue();
+  int    f = args[1]->intValue();
+
+  if ( d < 0 || d > 1 )
+    return false;
+
+  if ( f < 0 )
+    return false;
+
+  // taken from Gnumeric
+  double x = pow(d, f);
+  double r = (double) rand() / ( RAND_MAX + 1.0 );
+  double t = x;
+  double i = 0;
+  
+  while (r > t) 
+  {
+    x *= ( ( ( f + i ) * ( 1 - d ) ) / (1 + i) ) ;
+    i += 1;
+    t += x;
+  }
+  
+  context.setValue( new KSValue( i ) );
+  return true;
+}
+
+bool kspreadfunc_randbernoulli( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "RANDBERNOULLI", true ) )
+    return false;
+
+  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double d = args[0]->doubleValue();
+  if ( d < 0 || d > 1 )
+    return false;
+  
+  // taken from Gnumeric
+  double r = (double) rand() / ( RAND_MAX + 1.0 );
+
+  context.setValue( new KSValue( ( r <= d ) ? 1.0 : 0.0 ) );
+  return true;
+}
+
+bool kspreadfunc_randpoisson( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "RANDPOISSON", true ) )
+    return false;
+
+  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double d = args[0]->doubleValue();
+  if ( d < 0 )
+    return false;
+
+  // taken from Gnumeric...
+  double x = exp( -1 * d );
+  double r = ( double ) rand() / ( RAND_MAX + 1.0 );
+  double t = x;
+  double i = 0;
+
+  while ( r > t ) 
+  {
+    x *= d / ( i + 1 );
+    i += 1;
+    t += x;
+  }
+
+  context.setValue( new KSValue( i ) );
+  return true;
+}
+
 // Function: rand
 bool kspreadfunc_rand( KSContext& context )
 {
@@ -1125,6 +1409,45 @@ bool kspreadfunc_inv( KSContext& context )
   return true;
 }
 
+bool kspreadfunc_mround( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "MROUND", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  double d = args[0]->doubleValue();
+  double m = args[1]->doubleValue();
+
+  if ( ( d > 0 && m < 0 )
+      || ( d < 0 && m > 0 ) )
+    return false;
+
+  int sign = 1;
+
+  if ( d < 0 ) 
+  {
+    sign = -1;
+    d = -d;
+    m = -m;
+  }
+
+  // from gnumeric:
+  double mod = fmod( d, m );
+  double div = d - mod;
+
+  double accuracyLimit = 0.0000003;
+  double result = sign * ( div + ( ( mod + accuracyLimit >= m / 2 ) ? m : 0 ) );
+
+  context.setValue( new KSValue( result ) );
+  return true;
+}
+
 // Function: ROUNDDOWN
 bool kspreadfunc_rounddown( KSContext& context )
 {
@@ -1132,22 +1455,22 @@ bool kspreadfunc_rounddown( KSContext& context )
   double result=0;
   int digits=0;
   if ( !KSUtil::checkArgumentsCount( context, 2, "ROUNDDOWN", true ) )
-        {
+  {
         //just 1 argument => number of decimal =0 by default
         if ( !KSUtil::checkArgumentsCount( context, 1, "ROUNDDOWN", true ) )
                 return false;
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
             return false;
         digits=0;
-        }
+  }
   else
-        {
+  {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
         if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
                 return false;
         digits=args[1]->intValue();
-        }
+  }
   result=args[0]->doubleValue()*pow(10.0, digits);
   context.setValue( new KSValue( floor( result )/pow(10.0, digits) ) );
 
@@ -1161,22 +1484,22 @@ bool kspreadfunc_roundup( KSContext& context )
   double result=0;
   int digits=0;
   if ( !KSUtil::checkArgumentsCount( context, 2, "ROUNDUP", true ) )
-        {
+  {
         //just 1 argument => number of decimal =0 by default
         if ( !KSUtil::checkArgumentsCount( context, 1, "ROUNDUP", true ) )
                 return false;
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
             return false;
         digits=0;
-        }
+  }
   else
-        {
+  {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
         if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
                 return false;
         digits=args[1]->intValue();
-        }
+  }
   // This is not correct solution for problem with floating point numbers and probably
   // will fail in platforms where float and double lenghts are same.
   if (approx_equal(floor(args[0]->doubleValue()*::pow(10,digits)), args[0]->doubleValue()*::pow(10,digits)))
@@ -1289,23 +1612,32 @@ bool kspreadfunc_odd( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result)
+static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double & result, int & resultA)
 {
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
 
   for( ; it != end; ++it )
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-      {
-
-	if ( !kspreadfunc_count_helper( context, (*it)->listValue(), result ) )
-	  return false;
-      }
+    {
+      if ( !kspreadfunc_count_helper( context, (*it)->listValue(), result, resultA ) )
+        return false;
+    }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
-	result++;
-      }
+    {
+	++result;
+        ++resultA;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
+    {
+      if ( !(*it)->stringValue().isEmpty() )
+        ++resultA;
+    }
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
+    {
+      ++resultA;
+    }
   }
 
   return true;
@@ -1355,11 +1687,26 @@ bool kspreadfunc_trunc( KSContext & context )
 bool kspreadfunc_count( KSContext& context )
 {
   double result = 0.0;
+  int resultA = 0;
 
-  bool b = kspreadfunc_count_helper( context, context.value()->listValue(), result );
+  bool b = kspreadfunc_count_helper( context, context.value()->listValue(), result, resultA );
 
   if ( b )
     context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+// Function: COUNTA
+bool kspreadfunc_counta( KSContext& context )
+{
+  double result = 0.0;
+  int resultA = 0;
+
+  bool b = kspreadfunc_count_helper( context, context.value()->listValue(), result, resultA );
+
+  if ( b )
+    context.setValue( new KSValue( resultA ) );
 
   return b;
 }
@@ -1456,7 +1803,10 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
 bool kspreadfunc_multipleOP( KSContext& context )
 {
   if (gWorking)
+  {
+    //    context.setValue( new KSValue( ((KSpreadInterpreter *) context.interpreter() )->cell()->strOutText() ) );
     return true;
+  }
 
   gWorking = true;
 
@@ -1479,6 +1829,8 @@ bool kspreadfunc_multipleOP( KSContext& context )
       return false;
     }
   }
+
+  //  gCell = ((KSpreadInterpreter *) context.interpreter() )->cell();
 
   ((KSpreadInterpreter *) context.interpreter() )->document()->emitBeginOperation();
 
@@ -1529,6 +1881,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
   context.setValue( new KSValue( (double) d ) );
 
   gWorking = false;
+  gCell = 0;
   return true;
 }
 
@@ -1707,6 +2060,8 @@ bool kspreadfunc_subtotal( KSContext & context )
     context.setValue( new KSValue( max ) );
     break;
    case 6: // Product
+    if ( countA == 0 )
+      sum = 0.0;       // Excel compatibility :-(
     context.setValue( new KSValue( sum ) );
     break;
    case 7: // StDev
