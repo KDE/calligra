@@ -41,7 +41,7 @@ KSpreadFactory::~KSpreadFactory()
   }
 }
 
-KParts::Part* KSpreadFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KSpreadFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
   bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
