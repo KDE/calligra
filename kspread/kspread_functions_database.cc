@@ -43,6 +43,9 @@
 #include <qrect.h>
 #include <qvaluelist.h>
 
+// namespace is necessary so that e.g. string doesn't conflict with the STL string
+namespace KSpreadDB
+{
 enum Comp { isEqual, isLess, isGreater, lessEqual, greaterEqual, notEqual };
 enum Type { numeric, string };
 
@@ -56,6 +59,7 @@ struct Condition
 };
 
 typedef QValueList<Condition> ConditionList;
+};
 
 // prototypes
 bool kspreadfunc_dsum( KSContext& context );
@@ -83,45 +87,45 @@ static bool approx_equal (double a, double b)
   return (x < 0.0 ? -x : x)  <  ((a < 0.0 ? -a : a) * DBL_EPSILON);
 }
 
-void getCond( Condition & cond, QString text )
+void getCond( KSpreadDB::Condition & cond, QString text )
 {
   text = text.stripWhiteSpace();
 
   if ( text.startsWith( "<=" ) )
   {
-    cond.comp = lessEqual;
+    cond.comp = KSpreadDB::lessEqual;
     text = text.remove( 0, 2 );
   }
   else if ( text.startsWith( ">=" ) )
   {
-    cond.comp = greaterEqual;
+    cond.comp = KSpreadDB::greaterEqual;
     text = text.remove( 0, 2 );
   }
   else if ( text.startsWith( "!=" ) || text.startsWith( "<>" ) )
   {
-    cond.comp = notEqual;
+    cond.comp = KSpreadDB::notEqual;
     text = text.remove( 0, 2 );
   }
   else if ( text.startsWith( "==" ) )
   {
-    cond.comp = isEqual;
+    cond.comp = KSpreadDB::isEqual;
     text = text.remove( 0, 2 );
   }
   else if ( text.startsWith( "<" ) )
   {
-    cond.comp = isLess;
+    cond.comp = KSpreadDB::isLess;
     text = text.remove( 0, 1 );
-  }          
+  }
   else if ( text.startsWith( ">" ) )
   {
-    cond.comp = isGreater;
+    cond.comp = KSpreadDB::isGreater;
     text = text.remove( 0, 1 );
-  }          
+  }
   else if ( text.startsWith( "=" ) )
   {
-    cond.comp = isEqual;
+    cond.comp = KSpreadDB::isEqual;
     text = text.remove( 0, 1 );
-  }          
+  }
 
   text = text.stripWhiteSpace();
 
@@ -129,13 +133,13 @@ void getCond( Condition & cond, QString text )
   double d = text.toDouble( &ok );
   if ( ok )
   {
-    cond.type = numeric;
+    cond.type = KSpreadDB::numeric;
     cond.value = d;
     kdDebug() << "Numeric: " << d << ", Op: " << cond.comp << endl;
   }
   else
   {
-    cond.type = string;
+    cond.type = KSpreadDB::string;
     cond.stringValue = text;
     kdDebug() << "String: " << text << ", Op: " << cond.comp << endl;
   }
@@ -162,7 +166,7 @@ int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadTab
   return -1;
 }
 
-void parseConditions( QPtrList<ConditionList> * result, QRect const & database, QRect const & conditions, KSpreadTable * table )
+void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const & database, QRect const & conditions, KSpreadTable * table )
 {
   int cCols  = conditions.width();
   int right  = conditions.right();
@@ -192,14 +196,14 @@ void parseConditions( QPtrList<ConditionList> * result, QRect const & database, 
 
   for ( int r = top + 1; r <= bottom; ++r ) // first row are headers
   {
-    ConditionList * criteria = new ConditionList();
+    KSpreadDB::ConditionList * criteria = new KSpreadDB::ConditionList();
     
     for ( int c = 0; c < cCols; ++c )
     {
       if ( list[c] == -1 )
         continue;
 
-      Condition cond;
+      KSpreadDB::Condition cond;
       cond.index = list[c];
 
       kdDebug() << "Cell: " << c+left << ", " << r << ", Str: " 
@@ -215,7 +219,7 @@ void parseConditions( QPtrList<ConditionList> * result, QRect const & database, 
   kdDebug() << "Criterias: " << result->count() << endl;
 }
 
-bool conditionMatches( Condition cond, KSpreadCell * cell )
+bool conditionMatches( KSpreadDB::Condition cond, KSpreadCell * cell )
 {
   if ( !cell || cell->isEmpty() || cell->isDefault() )
   {
@@ -223,7 +227,7 @@ bool conditionMatches( Condition cond, KSpreadCell * cell )
     return false;
   }
 
-  if ( cond.type == numeric )
+  if ( cond.type == KSpreadDB::numeric )
   {
     if ( !cell->isNumeric() )
       return false;
@@ -234,37 +238,37 @@ bool conditionMatches( Condition cond, KSpreadCell * cell )
 
     switch ( cond.comp )
     {
-     case isEqual: 
+     case KSpreadDB::isEqual: 
       if ( approx_equal( d, cond.value ) )
         return true;
 
       return false;
 
-     case isLess: 
+     case KSpreadDB::isLess: 
       if ( d < cond.value )
         return true;
 
       return false;
 
-     case isGreater: 
+     case KSpreadDB::isGreater: 
       if ( d > cond.value )
         return true;
 
       return false;
 
-     case lessEqual: 
+     case KSpreadDB::lessEqual: 
       if ( d <= cond.value )
         return true;
 
       return false;
 
-     case greaterEqual: 
+     case KSpreadDB::greaterEqual: 
       if ( d >= cond.value )
         return true;
 
       return false;
 
-     case notEqual: 
+     case KSpreadDB::notEqual: 
       if ( d != cond.value )
         return true;
 
@@ -281,37 +285,37 @@ bool conditionMatches( Condition cond, KSpreadCell * cell )
 
     switch ( cond.comp )
     {
-     case isEqual: 
+     case KSpreadDB::isEqual: 
       if ( d == cond.stringValue )
         return true;
 
       return false;
 
-     case isLess: 
+     case KSpreadDB::isLess: 
       if ( d < cond.stringValue )
         return true;
 
       return false;
 
-     case isGreater: 
+     case KSpreadDB::isGreater: 
       if ( d > cond.stringValue )
         return true;
 
       return false;
 
-     case lessEqual: 
+     case KSpreadDB::lessEqual: 
       if ( d <= cond.stringValue )
         return true;
 
       return false;
 
-     case greaterEqual: 
+     case KSpreadDB::greaterEqual: 
       if ( d >= cond.stringValue )
         return true;
 
       return false;
 
-     case notEqual: 
+     case KSpreadDB::notEqual: 
       if ( d != cond.stringValue )
         return true;
 
@@ -325,7 +329,7 @@ bool conditionMatches( Condition cond, KSpreadCell * cell )
   return true;
 }
 
-QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadTable * table, int column, QPtrList<ConditionList> * conditions )
+QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadTable * table, int column, QPtrList<KSpreadDB::ConditionList> * conditions )
 {
   kdDebug() << "***** getCellList *****" << endl;
 
@@ -335,8 +339,8 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadTable * table, int
   QPtrList<KSpreadCell> * result = new QPtrList<KSpreadCell>();
   result->setAutoDelete( false ); // better not delete the cells...
 
-  QValueList<Condition>::const_iterator it;
-  QValueList<Condition>::const_iterator end;
+  QValueList<KSpreadDB::Condition>::const_iterator it;
+  QValueList<KSpreadDB::Condition>::const_iterator end;
   KSpreadCell * cell    = 0;
   KSpreadCell * conCell = 0;
 
@@ -350,7 +354,7 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadTable * table, int
     // go through conditions
     //   go through criterias => all have to match
     //   if first condition matches => add cell, next row
-    ConditionList * criterias = conditions->first();
+    KSpreadDB::ConditionList * criterias = conditions->first();
 
     bool add = true; 
     while ( criterias )
@@ -362,7 +366,7 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadTable * table, int
 
       for ( ; it != end; ++it )
       {        
-        Condition cond = *it;
+        KSpreadDB::Condition cond = *it;
         conCell = table->cellAt( cond.index, row );
         kdDebug() << "Checking cell: " << cond.index << ", " << row << " - " << conCell->strOutText() << endl;
         if ( !conditionMatches( cond, conCell ) )
@@ -411,7 +415,7 @@ bool kspreadfunc_dsum( KSContext & context )
 
   kdDebug() << "Fieldindex: " << fieldIndex << endl;
 
-  QPtrList<ConditionList> * cond = new QPtrList<ConditionList>();
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
   cond->setAutoDelete( true );
 
   parseConditions( cond, db.range, conditions.range, table );
