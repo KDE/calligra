@@ -159,7 +159,7 @@ KexiFormBase::KexiFormBase(KexiView *view, QWidget *parent, const char *name, QS
 	peditor->show();
 	connect(topLevelEditor, SIGNAL(activated(QObject *)), peditor, SLOT(setObject(QObject *)));
 
-	
+
 //	mainWindow()->guiFactory()->addClient(guiClient());
 //	activateActions();
 	registerAs(DocumentWindow);
@@ -192,7 +192,7 @@ void KexiFormBase::slotWidgetLineEdit()
 
 void KexiFormBase::slotWidgetPushButton()
 {
-	topLevelEditor->addInteractive(new QPushButton("push button",topLevelEditor));
+	topLevelEditor->addInteractive(new QPushButton(i18n("Push button"),topLevelEditor));
 }
 
 void KexiFormBase::slotWidgetFrame()

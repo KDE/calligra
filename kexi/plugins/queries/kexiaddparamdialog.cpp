@@ -45,6 +45,3 @@ QString KexiAddParamDialog::parameterName() {
 int KexiAddParamDialog::parameterType() {
 	return m_wid->typecombo->currentItem()+1;
 }
-
-
-#include "kexiprojectproperties.moc"

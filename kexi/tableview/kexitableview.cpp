@@ -393,7 +393,7 @@ void KexiTableView::sort()
 		return;
 	}
 
-	
+
 	m_contents->sort();
 
 	m_curRow = m_contents->findRef(m_pCurrentItem);
@@ -581,7 +581,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		}
 		case QVariant::Double:
 		{
-			QString f = KGlobal::_locale->formatNumber(item->getValue(col).toDouble());
+			QString f = KGlobal::locale()->formatNumber(item->getValue(col).toDouble());
 			if(item->isInsertItem() && m_pColumnModes->at(col) == 3)  //yes that isn't beautiful
 			{
 				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, "[Auto]");
@@ -617,7 +617,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			if(item->getValue(col).toDate().isValid())
 			{
 				#ifdef USE_KDE
-				s = KGlobal::_locale->formatDate(item->getValue(col).toDate(), true);
+				s = KGlobal::locale()->formatDate(item->getValue(col).toDate(), true);
 				#else
 				s = item->getDate(col).toString(Qt::LocalDate);
 				#endif
@@ -943,7 +943,7 @@ void KexiTableView::gotoNext()
 {
 	int oldCol = m_curCol;
 	m_curCol = QMIN( cols() - 1, m_curCol + 1 );
-	
+
 	if(m_curCol != oldCol)
 	{
 		if (hasFocus() || viewport()->hasFocus())
@@ -966,7 +966,7 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 	{
 		case QVariant::Date:
 			#ifdef USE_KDE
-//			val = KGlobal::_locale->formatDate(m_pCurrentItem->getDate(col), true);
+//			val = KGlobal::locale()->formatDate(m_pCurrentItem->getDate(col), true);
 
 			#else
 //			val = m_pCurrentItem->getDate(col).toString(Qt::LocalDate);
@@ -1264,9 +1264,9 @@ void KexiTableView::updateContextMenu()
 	{
 		m_pContextMenu = new QPopupMenu(this);
 		if(m_additionPolicy != NoAdd)
-			m_pContextMenu->insertItem(tr("&neuer datensatz"), this, SLOT(addRecord()), ALT+Key_Insert);
+			m_pContextMenu->insertItem(i18n("Add record"), this, SLOT(addRecord()), ALT+Key_Insert);
 		if(m_deletionPolicy != NoDelete)
-			m_pContextMenu->insertItem(tr("datensatz &löschen"), this, SLOT(removeRecord()), ALT+Key_Delete);
+			m_pContextMenu->insertItem(i18n("Remove record"), this, SLOT(removeRecord()), ALT+Key_Delete);
 	}
 }
 
@@ -1344,7 +1344,7 @@ KexiTableView::print(KPrinter &printer)
 				xOffset = xOffset + columnWidth(col);
 				right = xOffset;
 			}
-		
+
 			row++;
 			yOffset = topMargin  + row * m_rowHeight;
 		}

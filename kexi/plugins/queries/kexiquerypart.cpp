@@ -41,7 +41,7 @@ KexiQueryPart::KexiQueryPart(QObject *project,const char *,const QStringList &)
 QString
 KexiQueryPart::name()
 {
-	return QString(i18n("Queries"));
+	return i18n("Queries");
 }
 
 QString
@@ -93,7 +93,7 @@ void KexiQueryPart::load (KoStore *ks)
 		list->insert((*it).name,qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
 		qpi->load(ks);
 	}
-	
+
 	emit itemListChanged(this);
 
 }

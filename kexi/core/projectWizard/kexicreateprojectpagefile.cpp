@@ -41,13 +41,13 @@ KexiCreateProjectPageFile::KexiCreateProjectPageFile(KexiCreateProject *parent, 
 	//widgets
 	QButtonGroup *buttonBase = new QButtonGroup(this);
 	buttonBase->hide();
-	m_btnEmbedd = new QRadioButton(i18n("Embedd new file into project"), this);
+	m_btnEmbedd = new QRadioButton(i18n("Embed new file into project"), this);
 	m_btnEmbedd->toggle();
 	m_btnExtern = new QRadioButton(i18n("Use external file reference"), this);
 	connect(m_btnExtern, SIGNAL(toggled(bool)), this, SLOT(slotExternToggle(bool)));
 	buttonBase->insert(m_btnEmbedd);
 	buttonBase->insert(m_btnExtern);
-	
+
 	m_externURL = new KURLRequester(this);
 
 	//layout

@@ -119,9 +119,9 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 	m_tb->setFixedWidth(80);
 	sb->addWidget(m_tb);
 	m_tb->showActiveTabTexts(false);
-        addTab(SmallIcon("state_edit"), "Graphical Designer", m_editor,m_widgetStack->id(m_editor));
-        addTab(SmallIcon("state_sql"), "Sql Editor", m_sqlView,m_widgetStack->id(m_sqlView));
-        addTab(SmallIcon("table"), "Result", m_view,m_widgetStack->id(m_view));
+        addTab(SmallIcon("state_edit"), i18n("Graphical Designer"), m_editor,m_widgetStack->id(m_editor));
+        addTab(SmallIcon("state_sql"), i18n("SQL Editor"), m_sqlView,m_widgetStack->id(m_sqlView));
+        addTab(SmallIcon("table"), i18n("Result"), m_view,m_widgetStack->id(m_view));
 	sb->setFixedHeight(sb->sizeHint().height());
 	l->addWidget(sb);
 	l->activate();
@@ -142,7 +142,7 @@ void KexiQueryDesigner::loadQuery()
 	m_editor->clear();
 	for(KexiQueryPartItem::QueryEntryList::iterator it=list.begin();it!=list.end();++it)
 		m_editor->appendLine((*it).source,(*it).field,(*it).show,(*it).andC,(*it).orC);
-	
+
 }
 
 
@@ -250,7 +250,7 @@ void KexiQueryDesigner::saveBack()
 			list.append(item);
                 }
 	}
-	m_item->setQueryData(list);	
+	m_item->setQueryData(list);
 }
 
 void

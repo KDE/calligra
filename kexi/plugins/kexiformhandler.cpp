@@ -39,7 +39,7 @@ KexiFormHandler::KexiFormHandler(QObject *project,const char *,const QStringList
 QString
 KexiFormHandler::name()
 {
-	return QString(i18n("Forms"));
+	return i18n("Forms");
 }
 
 QString

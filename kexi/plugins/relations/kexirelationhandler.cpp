@@ -37,7 +37,7 @@ KexiRelationHandler::KexiRelationHandler(QObject *project,const char *,const QSt
 QString
 KexiRelationHandler::name()
 {
-	return QString(i18n("Relation"));
+	return i18n("Relation");
 }
 
 QString

@@ -45,7 +45,7 @@ CqlDB::CqlDB(QObject *parent, const char *name, const QStringList &)
 		cerr << ex << endl;
 		m_db = 0;
 	}
-	
+
 	kdDebug() << "CqlDB::CqlDB(): handle:" << m_db << endl;
 }
 
@@ -62,7 +62,7 @@ CqlDB::load(QString file)
 
 	if(!m_db)
 		return false;
-	
+
 	kdDebug() << "CqlDB::load(): proceeding" << endl;
 
 	try
@@ -72,7 +72,7 @@ CqlDB::load(QString file)
 	catch(CqlException& ex)
 	{
 		cerr << ex << endl;
-		throw new KexiDBError(0, i18n("connection faild"));
+		throw new KexiDBError(0, i18n("Connection failed"));
 	}
 }
 
@@ -93,7 +93,7 @@ bool
 CqlDB::query(QString statement)
 {
 	kdDebug() << "CqlDB::query()" << endl;
-	
+
 	if(!m_db)
 		return false;
 
@@ -106,7 +106,7 @@ CqlDB::query(QString statement)
 	}
 	catch(CqlException& ex)
 	{
-		throw new KexiDBError(0, "query faild");
+		throw new KexiDBError(0, i18n("Query failed"));
 		cerr << ex << endl;
 	}
 

@@ -43,11 +43,11 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 		switch(m_type)
 		{
 			case QVariant::Double:
-				if(ov == KGlobal::_locale->decimalSymbol() || ov == KGlobal::_locale->monetaryDecimalSymbol())
+				if(ov == KGlobal::locale()->decimalSymbol() || ov == KGlobal::locale()->monetaryDecimalSymbol())
 					static_cast<QLineEdit*>(m_view)->setText(ov);
 
 			case QVariant::Int:
-				if(ov == KGlobal::_locale->negativeSign())
+				if(ov == KGlobal::locale()->negativeSign())
 					static_cast<QLineEdit*>(m_view)->setText(ov);
 
 			case QVariant::UInt:
@@ -92,11 +92,11 @@ KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 			switch(m_type)
 			{
 				case QVariant::Double:
-					if(ev->text() == KGlobal::_locale->decimalSymbol() || ev->text() == KGlobal::_locale->monetaryDecimalSymbol())
+					if(ev->text() == KGlobal::locale()->decimalSymbol() || ev->text() == KGlobal::locale()->monetaryDecimalSymbol())
 						return false;
 
 				case QVariant::Int:
-					if(ev->text() == KGlobal::_locale->negativeSign())
+					if(ev->text() == KGlobal::locale()->negativeSign())
 						return false;
 
 				case QVariant::UInt:
@@ -183,9 +183,9 @@ KexiInputTableEdit::value()
 			if(!m_calculatedCell)
 			{
 				qDebug("KexiInputTableEdit::value() converting => %s", static_cast<QLineEdit*>(m_view)->text().latin1());
-				v = static_cast<QLineEdit*>(m_view)->text().replace(QRegExp("\\" + KGlobal::_locale->thousandsSeparator()), "");
-				v = v.replace(QRegExp("\\" + KGlobal::_locale->decimalSymbol()), ".");
-				v = v.replace(QRegExp("\\" + KGlobal::_locale->negativeSign()), "-");
+				v = static_cast<QLineEdit*>(m_view)->text().replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
+				v = v.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
+				v = v.replace(QRegExp("\\" + KGlobal::locale()->negativeSign()), "-");
 				qDebug("KexiInputTableEdit::value() converting => %s", v.latin1());
 				return QVariant(v);
 			}
@@ -194,8 +194,8 @@ KexiInputTableEdit::value()
 				//ok here should the formula be parsed so, just feel like in perl :)
 				double result = 0;
 				QString real = static_cast<QLineEdit*>(m_view)->text().right(static_cast<QLineEdit*>(m_view)->text().length() - 1);
-				real = real.replace(QRegExp("\\" + KGlobal::_locale->thousandsSeparator()), "");
-				real = real.replace(QRegExp("\\" + KGlobal::_locale->decimalSymbol()), ".");
+				real = real.replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
+				real = real.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
 //				qDebug("KexiInputTableEdit::value() calculating '%s'", real.latin1());
 				QStringList values = QStringList::split(QRegExp("[\\+|\\*|\\/|-]"), real, false);
 				QStringList ops = QStringList::split(QRegExp("[0-9]{1,8}(?:\\.[0-9]+)?"), real, false);

@@ -55,16 +55,16 @@ KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *na
 	QHBoxLayout* layout = new QHBoxLayout(m_view);
 	layout->addWidget(m_edit);
 	layout->addWidget(btn);
-	
+
 	bool ok;
-	QDate date = KGlobal::_locale->readDate(v.toString(), &ok);
-	
+	QDate date = KGlobal::locale()->readDate(v.toString(), &ok);
+
 	if(!ok)
 	{
 		date = QDate::currentDate();
 	}
 
-	m_edit->setText(KGlobal::_locale->formatDate(date, true));
+	m_edit->setText(KGlobal::locale()->formatDate(date, true));
 	m_oldVal = date;
 	setFocusProxy(m_edit);
 }
@@ -72,7 +72,7 @@ KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *na
 void
 KexiDateTableEdit::slotDateChanged(QDate date)
 {
-	m_edit->setText(KGlobal::_locale->formatDate(date, true));
+	m_edit->setText(KGlobal::locale()->formatDate(date, true));
 	repaint();
 }
 
@@ -80,13 +80,13 @@ QVariant
 KexiDateTableEdit::value()
 {
 	bool ok;
-	QDate date = KGlobal::_locale->readDate(m_edit->text(), &ok);
-	
+	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
+
 	if(!ok)
 	{
 		date = m_oldVal;
 	}
-	
+
 	return QVariant(date.toString(Qt::ISODate));
 }
 
@@ -94,8 +94,8 @@ void
 KexiDateTableEdit::slotShowDatePicker()
 {
 	bool ok;
-	QDate date = KGlobal::_locale->readDate(m_edit->text(), &ok);
-	
+	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
+
 	if(!ok)
 	{
 		date = QDate::currentDate();
