@@ -2,10 +2,7 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) $(all_includes)
-# TODO: get rid of libkoml. But this breaks binary compatibility even if the
-# apps doesn't use it ! So we have to keep it - even when we make it empty.
 libkofficecore_la_LIBADD  = \
-        $(top_builddir)/lib/koml/libkoml.la \
 	$(top_builddir)/lib/store/libkstore.la $(LIB_KPARTS) $(LIB_KDEPRINT)
 
 ####### Files
