@@ -403,9 +403,9 @@ bool KexiStartupHandler::init(int argc, char **argv)
 		conndata = new KexiDB::ConnectionData();
 			conndata->connName = "My connection";
 			conndata->driverName = "mysql";
-			conndata->hostName = "myhost.org";
-			conndata->userName = "otheruser";
-			conndata->port = 53121;
+			conndata->hostName = "localhost";
+//			conndata->userName = "otheruser";
+//			conndata->port = 53121;
 		Kexi::connset().addConnectionData(conndata);
 		conndata = new KexiDB::ConnectionData();
 			conndata->connName = "Local pgsql connection";
