@@ -38,23 +38,23 @@ class KWord13Format;
  *
  * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>
  */
-enum StackItemElementType
+enum StackItemKWord13Type
 {
-    ElementTypeUnknown  = 0,
-    ElementTypeBottom,      ///< Bottom of the stack
-    ElementTypeIgnore,      ///< Element is known but ignored
-    ElementTypeEmpty,       ///< Element is empty
-    ElementTypeDocument,    ///< Element is the document ( \<DOC\> )
-    ElementTypePaper,       ///< \<PAPER\>
-    ElementTypeFrameset,    ///< \<FRAMESET\>
-    ElementTypeUnknownFrameset, ///< a \<FRAMESET\> which is not supported
-    ElementTypeParagraph,   ///< \<PARAGRAPH\>
-    ElementTypeText,        ///< \<TEXT\>
-    ElementTypeLayout,      ///< \<STYLE\> and \<LAYOUT\>
-    ElementTypeFormat,      ///< \<FORMAT\>, child of \<FORMATS\>
-    ElementTypeLayoutFormatOne,///< \<FORMAT id="1"\> as child of \<LAYOUT\>
-    ElementTypeFormatsPlural,///< \<FORMATS\>, as child of \<PARAGRAPH\>
-    ElementTypeVariable     ///< \<FORMAT id="4"\> or \<VARIABLE\>
+    KWord13TypeUnknown  = 0,
+    KWord13TypeBottom,      ///< Bottom of the stack
+    KWord13TypeIgnore,      ///< Element is known but ignored
+    KWord13TypeEmpty,       ///< Element is empty
+    KWord13TypeDocument,    ///< Element is the document ( \<DOC\> )
+    KWord13TypePaper,       ///< \<PAPER\>
+    KWord13TypeFrameset,    ///< \<FRAMESET\>
+    KWord13TypeUnknownFrameset, ///< a \<FRAMESET\> which is not supported
+    KWord13TypeParagraph,   ///< \<PARAGRAPH\>
+    KWord13TypeText,        ///< \<TEXT\>
+    KWord13TypeLayout,      ///< \<STYLE\> and \<LAYOUT\>
+    KWord13TypeFormat,      ///< \<FORMAT\>, child of \<FORMATS\>
+    KWord13TypeLayoutFormatOne,///< \<FORMAT id="1"\> as child of \<LAYOUT\>
+    KWord13TypeFormatsPlural,///< \<FORMATS\>, as child of \<PARAGRAPH\>
+    KWord13TypeVariable     ///< \<FORMAT id="4"\> or \<VARIABLE\>
 };
 
 class StackItem
@@ -64,7 +64,7 @@ public:
     ~StackItem();
 public:
     QString itemName;   ///< Name of the tag (only for error purposes)
-    StackItemElementType elementType;
+    StackItemKWord13Type elementType;
     KWord13Frameset* m_currentFrameset;
 };
 
@@ -109,7 +109,7 @@ protected:
     bool startElementFrameset( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem );
     /// Process opening tag of some elements that are children of \<DOC\> and which only define document properties
     bool startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes,
-        StackItem *stackItem, const StackItemElementType& allowedParentType, const StackItemElementType& newType );
+        StackItem *stackItem, const StackItemKWord13Type& allowedParentType, const StackItemKWord13Type& newType );
     /**
      * Get a picture key out of the individual \<KEY\> attributes
      *
