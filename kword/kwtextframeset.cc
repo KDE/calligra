@@ -53,7 +53,6 @@
 #include <kdebug.h>
 #include <kdebugclasses.h>
 #include <assert.h>
-#include <koStore.h>
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
 //#define DEBUG_FORMATS
@@ -3312,70 +3311,6 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
         }
     }
 }
-
-void KWTextFrameSetEdit::insertFile(const QString & file )
-{
-    KoStore* store=KoStore::createStore( file, KoStore::Read );
-    bool state = store->open("maindoc.xml");
-    if ( state )
-    {
-        QDomDocument doc;
-        doc.setContent( store->device() );
-        QDomElement word = doc.documentElement();
-
-        QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
-        if ( !framesets.isNull() )
-        {
-            QDomElement framesetElem = framesets.firstChild().toElement();
-            // Workaround the slowness of QDom's elementsByTagName
-            QValueList<QDomElement> framesetsList;
-            for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
-            {
-                if ( framesetElem.tagName() == "FRAMESET" )
-                {
-                    framesetsList.append( framesetElem );
-                }
-            }
-
-
-            QValueList<QDomElement> paragList;
-
-            QValueList<QDomElement>::Iterator it = framesetsList.begin();
-            QValueList<QDomElement>::Iterator end = framesetsList.end();
-            for ( ; it != end ; ++it )
-            {
-                QDomElement frame = (*it).firstChild().toElement();
-                QDomNode n = (*it).firstChild().toElement();
-                while( !n.isNull() ) {
-                    QDomElement e =n.toElement(); // try to convert the node to an element.
-                    if( !e.isNull() ) {
-                        if (e.tagName() == "PARAGRAPH" )
-                            paragList.append( e );
-                    }
-                    n = n.nextSibling();
-                }
-            }
-
-            QDomDocument domDoc( "PARAGRAPHS" );
-            QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
-            domDoc.appendChild( elem );
-
-            it = paragList.begin();
-            end = paragList.end();
-            for ( ; it!= end ; ++it )
-            {
-                elem.appendChild( *it );
-            }
-            KCommand *cmd =textFrameSet()->pasteKWord( cursor(), domDoc.toCString(), true );
-            if ( cmd )
-                frameSet()->kWordDocument()->addCommand(cmd);
-        }
-
-    }
-    store->close();
-    delete store;
-}
-
 
 //////
 

@@ -44,6 +44,7 @@
 #include <koVariable.h>
 #include <koVariableDlgs.h>
 #include <kotextobject.h>
+#include <koStore.h>
 
 #include "kwcanvas.h"
 #include "defs.h"
@@ -589,7 +590,10 @@ void KWView::setupActions()
     actionToolsCreatePart->setToolTip( i18n( "Insert an object into a new frame." ) );
     actionToolsCreatePart->setWhatsThis( i18n( "Insert an object into a new frame." ) );
 
-    //actionToolsCreatePart->setExclusiveGroup( "tools" );
+    actionInsertFile = new KAction( i18n( "Fi&le..." ), 0,
+                                   this, SLOT( insertFile() ),
+                                   actionCollection(), "insert_file" );
+
 
     // ------------------------- Format menu
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
@@ -1053,10 +1057,6 @@ void KWView::setupActions()
     actionSelectedFrameSet = new KAction( i18n( "Select FrameSet" ), 0,
                                             this, SLOT( selectFrameSet() ),
                                             actionCollection(), "select_frameset" );
-
-    actionInsertFile= new KAction( i18n( "Insert File..." ), 0,
-                                   this, SLOT( insertFile() ),
-                                   actionCollection(), "insert_file" );
 
 
 }
@@ -5643,26 +5643,114 @@ void KWView::editFrameSet()
 
 void KWView::insertFile()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
+    KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
+    fd.setMimeFilter( "application/x-kword" );
+    fd.setCaption(i18n("Insert File"));
+    KURL url;
+    if ( fd.exec() != QDialog::Accepted )
+        return;
+    url = fd.selectedURL();
+    if( url.isEmpty() )
     {
-        KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
-        fd.setMimeFilter( "application/x-kword" );
-        fd.setCaption(i18n("Insert File"));
-        KURL url;
-        if ( fd.exec() == QDialog::Accepted )
+        KMessageBox::sorry( this,
+                            i18n("File name is empty"),
+                            i18n("Insert File"));
+        return;
+    }
+    // ### TODO network transparency
+    KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
+    if ( store->open("maindoc.xml") )
+    {
+        QDomDocument doc;
+        doc.setContent( store->device() );
+        QDomElement word = doc.documentElement();
+
+        QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
+        if ( !framesets.isNull() )
         {
-            url = fd.selectedURL();
-            if( url.isEmpty() )
+            QDomElement framesetElem = framesets.firstChild().toElement();
+            // just in case
+            while ( !framesetElem.isNull() && framesetElem.tagName() != "FRAMESET" )
+                framesetElem = framesetElem.nextSibling().toElement();
+
+            if ( !framesetElem.isNull() )
             {
-                KMessageBox::sorry( this,
-                                    i18n("File name is empty"),
-                                    i18n("Insert File"));
-                return;
+                KWTextFrameSet *textFrameSet = dynamic_cast<KWTextFrameSet *>( m_doc->frameSet(0) );
+                KoTextCursor insertionCursor( textFrameSet->textDocument() );
+                KWTextFrameSetEdit* edit = currentTextEdit();
+                if ( edit ) {
+                    textFrameSet = edit->textFrameSet();
+                    insertionCursor = *edit->cursor();
+                }
+                KMacroCommand* macroCmd = 0L;
+
+                // Handle the main textframeset special - concatenate the text
+                QDomDocument domDoc( "PARAGRAPHS" );
+                QDomElement paragsElem = domDoc.createElement( "PARAGRAPHS" );
+                domDoc.appendChild( paragsElem );
+
+                // Need an intermediate list otherwise nextSibling doesn't work after moving the node
+                // to the other DOM tree ;)
+                QValueList<QDomElement> paragList;
+
+                QDomNode n = framesetElem.firstChild().toElement();
+                while( !n.isNull() ) {
+                    QDomElement e = n.toElement(); // try to convert the node to an element.
+                    if( !e.isNull() && e.tagName() == "PARAGRAPH" )
+                        paragList.append( e );
+                    n = n.nextSibling();
+                }
+
+                QValueList<QDomElement>::Iterator it = paragList.begin();
+                QValueList<QDomElement>::Iterator end = paragList.end();
+                for ( ; it!= end ; ++it )
+                    paragsElem.appendChild( *it );
+
+                kdDebug() << k_funcinfo << domDoc.toCString() << endl;
+                KCommand *cmd = textFrameSet->pasteKWord( &insertionCursor, domDoc.toCString(), true );
+
+                if ( cmd ) {
+                    macroCmd = new KMacroCommand( i18n("Insert File") );
+                    macroCmd->addCommand( cmd );
+                }
+
+                // The other framesets
+                framesetElem = framesetElem.nextSibling().toElement();
+                QValueList<QDomElement> framesetsList;
+
+                QDomDocument domDocFrames( "SELECTION" ); // see KWCanvas::copySelectedFrames
+                QDomElement topElem = domDoc.createElement( "SELECTION" );
+                domDoc.appendChild( topElem );
+                for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
+                {
+                    if ( framesetElem.tagName() == "FRAMESET" )
+                        framesetsList.append( framesetElem );
+                }
+
+                it = framesetsList.begin();
+                end = framesetsList.end();
+                for ( ; it != end ; ++it )
+                {
+                    framesetElem = (*it);
+                    FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
+                    KWFrameSet::Info info = static_cast<KWFrameSet::Info>( framesetElem.attribute("frameInfo").toInt() );
+                    // We skip headers and footers
+                    if ( frameSetType != FT_TEXT || info == KWFrameSet::FI_BODY || info == KWFrameSet::FI_FOOTNOTE )
+                    {
+                        topElem.appendChild( framesetElem );
+                    }
+                }
+
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Insert File") );
+
+                m_doc->pasteFrames( topElem, macroCmd );
+                m_doc->addCommand( macroCmd );
             }
-            edit->insertFile(url.path());
         }
     }
+    store->close();
+    delete store;
 }
 
 void KWView::addBookmark()
