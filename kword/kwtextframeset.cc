@@ -1301,7 +1301,7 @@ void KWTextFrameSet::formatMore()
             kdWarning(32002) << "KWTextFrameSet::formatMore no more space, but no frame !" << endl;
         }
     }
-    else
+    else 
         if ( frames.count() > 1 && !lastFormatted && !isAHeader() && !isAFooter()
              && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
         {
@@ -1310,11 +1310,12 @@ void KWTextFrameSet::formatMore()
             // Last frame is empty -> try removing last page, and more if necessary
             while ( lastPage > 0 && frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
             {
-                delFrame(frames.last());
-                m_doc->removePage( lastPage );
-                if ( m_doc->getPages() - 1 >= lastPage ) // removing didn't work
-                    break;
-                lastPage = m_doc->getPages() - 1;
+                lastPage = m_doc->getPages()-1;
+                if(m_doc->canRemovePage(lastPage, frames.last())) {
+                    m_doc->removePage( lastPage );
+                } else {
+                    delFrame(frames.last());
+                }
             }
         }
 
