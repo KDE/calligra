@@ -1250,19 +1250,33 @@ bool StructureParser::startDocument(void)
 
 bool StructureParser::endDocument(void)
 {
-    // TODO: put styles in the KWord document.
     QDomElement stylesPluralElement=mainDocument.createElement("STYLES");
+    // insert before <PICTURES>, as <PICTURES> must remain last.
     mainDocument.documentElement().insertBefore(stylesPluralElement,m_picturesElement);
 
     kdDebug(30506) << "###### Start Style List ######" << endl;
     StyleDataMap::ConstIterator it;
+    
+    // At first, we put the Normal style
+    it=styleDataMap.find("Normal");
+    if (it!=styleDataMap.end())
+    {
+        kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
+        QDomElement styleElement=mainDocument.createElement("STYLE");
+        stylesPluralElement.appendChild(styleElement);
+        AddStyle(styleElement, it.key(),it.data(),mainDocument);
+    }
+    else
+        kdWarning(30506) << "No 'Normal' style" << endl;
 
     for (it=styleDataMap.begin();it!=styleDataMap.end();it++)
     {
+        if (it.key()=="Normal")
+            continue;
+
         kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
 
         QDomElement styleElement=mainDocument.createElement("STYLE");
-        // insert before <PICTURES>, as <PICTURES> must remain last.
         stylesPluralElement.appendChild(styleElement);
 
         AddStyle(styleElement, it.key(),it.data(),mainDocument);
