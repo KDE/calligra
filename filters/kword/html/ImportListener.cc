@@ -52,12 +52,6 @@ public:
     virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes);
     virtual bool doEndElement(const QString& tagName);
     virtual bool doCharacters(const QString& strChars);
-    virtual bool doSgmlProcessingInstruction(const QString& /*tagName*/,const QString&  /*strInstruction*/) { return true;}
-    virtual bool doXmlProcessingInstruction(const QString& /*tagName*/, const HtmlAttributes& /*attributes*/) { return true;}
-protected:
-    // We are not interesed in WriteOut events.
-    virtual void WriteOut(const QChar& ) { }
-    virtual void WriteOut(const QString& ) { }
 private:
     QString indent; // DEBUG
     QStack<StackItem> structureStack;
