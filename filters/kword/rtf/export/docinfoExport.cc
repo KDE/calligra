@@ -119,7 +119,6 @@ void ProcessDocumentInfoTag ( QDomNode   myNode,
                                              void      *,
                                              QString   &outputText )
 {
-        kdError (KDEBUG_TAGPROCESSING) << " Starting DOCinfo " << endl;
     AllowNoAttributes (myNode);
 
     BookInfo bookInfo;
@@ -128,12 +127,10 @@ void ProcessDocumentInfoTag ( QDomNode   myNode,
     tagProcessingList << TagProcessing ( "log",    NULL,             NULL               )
                       << TagProcessing ( "author", ProcessAuthorTag, (void *) &bookInfo )
                       << TagProcessing ( "about",  ProcessAboutTag,  (void *) &bookInfo );
-        kdError (KDEBUG_TAGPROCESSING) << "  DOCinfo list formed " << endl;
     ProcessSubtags (myNode, tagProcessingList, outputText);
-        kdError (KDEBUG_TAGPROCESSING) << " DOCinfo processed " << endl;
 
     // Process the parsed data into markup
-    ProcessDocumentData ( bookInfo );
+    outputText = ProcessDocumentData ( bookInfo );
 
 
 } // end ProcessDocumrntInfoTag()

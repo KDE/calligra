@@ -45,7 +45,6 @@ void ProcessSubtags ( QDomNode                    parentNode,
 
     for ( childNode = parentNode.firstChild (); !childNode.isNull (); childNode = childNode.nextSibling () )
     {
-//      if ( childNode.isElement () )   // doesn't work!!!
         if ( childNode.nodeType () == QDomNode::ElementNode )
         {
             bool found = false;
@@ -56,8 +55,10 @@ void ProcessSubtags ( QDomNode                    parentNode,
                   !found && tagProcessingIt != tagProcessingList.end ();
                   tagProcessingIt++ )
             {
+
                 if ( childNode.nodeName () == (*tagProcessingIt).name )
                 {
+//                kdError (KDEBUG_TAGPROCESSING) << " Tag Processing Tag " << (*tagProcessingIt).name << endl;
                     found = true;
 
                     if ( (*tagProcessingIt).processor != NULL )

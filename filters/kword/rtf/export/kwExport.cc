@@ -28,6 +28,7 @@
 #define TABLES_WITH_TITLES   0
 
 // Global variables
+QValueList<FormatData> paraFormatDataList; // for processing formats tag
 BorderStyle leftBorder;
 BorderStyle rightBorder;
 BorderStyle topBorder;
@@ -112,9 +113,10 @@ void ProcessTabulatorTag ( QDomNode    myNode,
     TabularData *tabulatorData = (TabularData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "mmpos", "double", (void *) &tabulatorData->mmpos )
-                       << AttrProcessing ( "ptpos", "double", (void *) &tabulatorData->ptpos )
-                       << AttrProcessing ( "type",  "int",    (void *) &tabulatorData->type  );
+    attrProcessingList << AttrProcessing ( "mmpos",   "int",   (void *) &tabulatorData->mmpos )
+                       << AttrProcessing ( "ptpos",   "int",   (void *) &tabulatorData->ptpos )
+                       << AttrProcessing ( "inchpos", "",      NULL                           )
+                       << AttrProcessing ( "type",    "int",   (void *) &tabulatorData->type  );
     ProcessAttributes (myNode, attrProcessingList);
 
 
@@ -132,7 +134,6 @@ void ProcessAttributesTag ( QDomNode    myNode,
 
 {
     Attributes *attributes = (Attributes *) tagData;
-                kdError (KDEBUG_KWFILTER) << "Entering ATTRIBUTES Tag " <<  endl;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "processing",   "int",    (void *) &attributes->processing   )
@@ -157,18 +158,10 @@ void ProcessPaperBordersTag ( QDomNode    myNode,
     PaperBorders *paperborders = (PaperBorders *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "mmLeft",     "double",    (void *) &paperborders->mmLeft   )
-                       << AttrProcessing ( "mmRight",    "double",    (void *) &paperborders->mmRight  )
-                       << AttrProcessing ( "mmTop",      "double",    (void *) &paperborders->mmTop    )
-                       << AttrProcessing ( "mmBottom",   "double",    (void *) &paperborders->mmBottom )
-                       << AttrProcessing ( "ptBottom",   "",          NULL                             )
-                       << AttrProcessing ( "ptTop",      "",          NULL                             )
-                       << AttrProcessing ( "ptRight",    "",          NULL                             )
-                       << AttrProcessing ( "ptLeft",     "",          NULL                             )
-                       << AttrProcessing ( "inchBottom", "",          NULL                             )
-                       << AttrProcessing ( "inchTop",    "",          NULL                             )
-                       << AttrProcessing ( "inchRight",  "",          NULL                             )
-                       << AttrProcessing ( "inchLeft",   "",          NULL                             );
+    attrProcessingList << AttrProcessing ( "left",     "int", (void *) &paperborders->left   )
+                       << AttrProcessing ( "right",    "int", (void *) &paperborders->right  )
+                       << AttrProcessing ( "top",      "int", (void *) &paperborders->top    )
+                       << AttrProcessing ( "bottom",   "int", (void *) &paperborders->bottom );
     ProcessAttributes (myNode, attrProcessingList);
 
 
@@ -181,19 +174,23 @@ void ProcessPaperBordersTag ( QDomNode    myNode,
 void ProcessIndentTag ( QDomNode    myNode,
                         void       *tagData,
                         QString    &         )
-// Gets the attributes in the indentation tags - IFIRST and ILEFT
+// Gets the attributes in the indentation tags - first and left
 // called by ProcessLayoutTag()
 
 {
-    double *mm = (double *) tagData;
+    ParaLayout *layout = (ParaLayout *) tagData;
+
+    layout->idFirst = -1;  //  initialize
+    layout->idLeft  = -1;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "mm",   "double",    (void *) mm   );
+    attrProcessingList << AttrProcessing ( "first", "int", (void *) &layout->idFirst  )
+                       << AttrProcessing ( "left",  "int", (void *) &layout->idLeft   );
     ProcessAttributes (myNode, attrProcessingList);
 
 
     AllowNoSubtags (myNode);
-}   // end ProcessPaperBordersTag
+}   // end ProcessIndentTag
 
 /***************************************************************************/
 
@@ -205,44 +202,32 @@ void ProcessPaperTag ( QDomNode    myNode,
 
 {
     PaperAttributes *paperattributes = (PaperAttributes *) tagData;
-                kdError (KDEBUG_KWFILTER) << "Entering PAPER Tag " <<  endl;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "format",       "int",    (void *) &paperattributes->format     )
-                       << AttrProcessing ( "mmWidth",      "int",    (void *) &paperattributes->width      )
-                       << AttrProcessing ( "mmHeight",     "int",    (void *) &paperattributes->height     )
-                       << AttrProcessing ( "ptWidth",       "",       NULL                                  )
-                       << AttrProcessing ( "ptHeight",      "",       NULL                                  )
-                       << AttrProcessing ( "inchWidth",     "",       NULL                                  )
-                       << AttrProcessing ( "inchHeight",    "",       NULL                                  )
-                       << AttrProcessing ( "orientation",   "int",    (void *) &paperattributes->orientation )
-                       << AttrProcessing ( "columns",       "int",    (void *) &paperattributes->columns    )
-                       << AttrProcessing ( "mmColumnspc",   "double", (void *) &paperattributes->colSpacing )
-                       << AttrProcessing ( "ptColumnspc",   "",       NULL                                  )
-                       << AttrProcessing ( "inchColumnspc", "",       NULL                                  )
-                       << AttrProcessing ( "hType",        "int",     (void *) &paperattributes->hType      )
-                       << AttrProcessing ( "fType",        "int",     (void *) &paperattributes->fType      )
-                       << AttrProcessing ( "ptHeadBody",   "",        NULL                                  )
-                       << AttrProcessing ( "ptFootBody",   "",        NULL                                  )
-                       << AttrProcessing ( "inchHeadBody", "",        NULL                                  )
-                       << AttrProcessing ( "inchFootBody", "",        NULL                                  )
-                       << AttrProcessing ( "mmHeadBody",   "double",  (void *) &paperattributes->spHeadBody )
-                       << AttrProcessing ( "mmFootBody",   "double",  (void *) &paperattributes->spFootBody );
+    attrProcessingList << AttrProcessing ( "format",        "int", (void *) &paperattributes->format     )
+                       << AttrProcessing ( "width",         "int", (void *) &paperattributes->width      )
+                       << AttrProcessing ( "height",        "int", (void *) &paperattributes->height     )
+                       << AttrProcessing ( "orientation",   "int", (void *) &paperattributes->orientation)
+                       << AttrProcessing ( "columns",       "int", (void *) &paperattributes->columns    )
+                       << AttrProcessing ( "columnspacing", "int", (void *) &paperattributes->colSpacing )
+                       << AttrProcessing ( "hType",         "int", (void *) &paperattributes->hType      )
+                       << AttrProcessing ( "fType",         "int", (void *) &paperattributes->fType      )
+                       << AttrProcessing ( "spHeadBody",    "",    NULL                                  )
+                       << AttrProcessing ( "spFootBody",    "",    NULL                                  );
     ProcessAttributes (myNode, attrProcessingList);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "PAPERBORDERS", ProcessPaperBordersTag,(void *) &paperBorders);
     ProcessSubtags (myNode, tagProcessingList, outputText);
-                kdError (KDEBUG_KWFILTER) << "Processed PAPER Tag " <<  endl;
 
 }   // end ProcessPaperTag
 
 /***************************************************************************/
 
-// ProcessValueTag is the processing function for both the ITALIC tag
+// ProcessValueTag is the processing function for both the FILENAME tag
 // and the LAYOUT NAME tag.
 
-void ProcessValueTagAsString ( QDomNode   myNode,
+void ProcessValueTag ( QDomNode   myNode,
                        void      *tagData,
                        QString   &         )
 {
@@ -252,10 +237,15 @@ void ProcessValueTagAsString ( QDomNode   myNode,
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "value", "QString", (void *) value );
     ProcessAttributes (myNode, attrProcessingList);
+    AllowNoSubtags (myNode);
 
-}
+}  // end ProcessValueTag()
 
-void ProcessValueTagAsInt ( QDomNode   myNode,
+/***************************************************************************/
+
+// ProcessIntValueTag is used to process value attributes with a numeric value.
+
+void ProcessIntValueTag ( QDomNode   myNode,
                        void      *tagData,
                        QString   &         )
 {
@@ -265,8 +255,9 @@ void ProcessValueTagAsInt ( QDomNode   myNode,
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "value", "int", (void *) value );
     ProcessAttributes (myNode, attrProcessingList);
+    AllowNoSubtags (myNode);
 
-}
+}  // end ProcessIntValueTag()
 
 /***************************************************************************/
 
@@ -311,11 +302,15 @@ void ProcessCounterTag ( QDomNode    myNode,
     QString righttext;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "type",      "int",     (void *) &type      )
-                       << AttrProcessing ( "depth",     "int",     (void *) &depth     )
-                       << AttrProcessing ( "start",     "int",     (void *) &start     )
-                       << AttrProcessing ( "lefttext",  "QString", (void *) &lefttext  )
-                       << AttrProcessing ( "righttext", "QString", (void *) &righttext );
+    attrProcessingList << AttrProcessing ( "type",          "int",     (void *) &type      )
+                       << AttrProcessing ( "depth",         "int",     (void *) &depth     )
+                       << AttrProcessing ( "start",         "int",     (void *) &start     )
+                       << AttrProcessing ( "bullet",        "",        NULL                )
+                       << AttrProcessing ( "numberingtype", "",        NULL                )
+                       << AttrProcessing ( "bulletfont",    "",        NULL                )
+                       << AttrProcessing ( "customdef",     "",        NULL                )
+                       << AttrProcessing ( "lefttext",      "QString", (void *) &lefttext  )
+                       << AttrProcessing ( "righttext",     "QString", (void *) &righttext );
     ProcessAttributes (myNode, attrProcessingList);
 
     // Put info into layout structure
@@ -337,9 +332,10 @@ void   ProcessFlowTag ( QDomNode    myNode,
 // Gets the align attribute in the flow tag
 {
     ParaLayout *layout = (ParaLayout *) tagData;
-    QString flow;
+    QString flow = "";
 
     QValueList<AttrProcessing> attrProcessingList;
+//    attrProcessingList << AttrProcessing ( "align", "QString", (void *) &flow );
     attrProcessingList << AttrProcessing ( "align", "QString", (void *) &flow );
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -347,7 +343,7 @@ void   ProcessFlowTag ( QDomNode    myNode,
     layout->flow = flow;
 
     AllowNoSubtags (myNode);
-}   // end ProcessCounterTag
+}   // end ProcessFlowTag
 
 /***************************************************************************/
 
@@ -358,19 +354,21 @@ void ProcessLayoutTag ( QDomNode   myNode,
 {
     ParaLayout *layout = (ParaLayout *) tagData;
     QString name;
-                kdError (KDEBUG_KWFILTER) << "Entering LAYOUTS Tag " <<  endl;
 
     AllowNoAttributes (myNode);
 
     TabularData tabulator;  // tabulator data
+    paraFormatDataList.clear(); // clear global value list for new layout
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "NAME",         ProcessValueTagAsString,(void *) &name                 )
+    tagProcessingList << TagProcessing ( "NAME",         ProcessValueTag,        (void *) &name                 )
                       << TagProcessing ( "COUNTER",      ProcessCounterTag,      (void *) layout               )
                       << TagProcessing ( "TABULATOR",    ProcessTabulatorTag,    (void *) &tabulator           )
                       << TagProcessing ( "FLOW",         ProcessFlowTag,         (void *) layout               )
-                      << TagProcessing ( "IFIRST",       ProcessIndentTag,       (void *) &layout->mmFirst     )
-                      << TagProcessing ( "ILEFT",        ProcessIndentTag,       (void *) &layout->mmLeft      )
+                      << TagProcessing ( "INDENTS",      ProcessIndentTag,       (void *) layout               )
+                      << TagProcessing ( "LINESPACING",  ProcessIntValueTag,     (void *) &layout->lineSpacing )
+                      << TagProcessing ( "FORMAT",       ProcessFormatTag,       (void *) &paraFormatDataList  )
+                      << TagProcessing ( "FOLLOWING",    NULL,                   NULL                          )
                       << TagProcessing ( "LEFTBORDER",   ProcessBordersStyleTag, (void *) &layout->leftBorder  )
                       << TagProcessing ( "RIGHTBORDER",  ProcessBordersStyleTag, (void *) &layout->rightBorder )
                       << TagProcessing ( "TOPBORDER",    ProcessBordersStyleTag, (void *) &layout->topBorder   )
@@ -382,13 +380,12 @@ void ProcessLayoutTag ( QDomNode   myNode,
     rightBorder =  layout->rightBorder;
     topBorder =    layout->topBorder;
     bottomBorder = layout->bottomBorder;
-                kdError (KDEBUG_KWFILTER) << "Processed LAYOUT Tag " <<  endl;
 
     if ( (name).length () == 0 )
     {
-        name = "Standard";   // error - set to default
+        name = "Standard";  // No name is same as standard
 
-        kdError (KDEBUG_KWFILTER) << "Bad layout name value!" << endl;
+//        kdError (KDEBUG_KWFILTER) << "Bad layout name value!" << endl;
     }
     layout->layout = name;
 }  // end ProcessLayoutTag
@@ -418,6 +415,10 @@ void ProcessItalicTag ( QDomNode   myNode,
 
         case -1:
             kdError (KDEBUG_KWFILTER) << "Bad attributes in ITALIC tag!" << endl;
+            break;
+
+        case 0:
+            *italic = false;
             break;
 
         default:
@@ -555,7 +556,8 @@ void Table::addCell ( int     c,
                       BorderStyle l,
                       BorderStyle ri,
                       BorderStyle tp,
-                      BorderStyle b  )
+                      BorderStyle b,
+                      Frame f  )
 
 {
    if ( c + 1 > cols )
@@ -563,7 +565,7 @@ void Table::addCell ( int     c,
       cols = c + 1;
    }
 
-   cellList << TableCell ( c, r, t, l, ri, tp, b );
+   cellList << TableCell ( c, r, t, l, ri, tp, b, f );
 }   // end addCell()
 
 
@@ -580,14 +582,13 @@ void ProcessFormatTag ( QDomNode   myNode,
                         void      *tagData,
                         QString   &outputText )
 {
-    kdDebug (KDEBUG_KWFILTER) << "Entering FORMAT Tag " <<  endl;
     QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
 
     int formatId  = -1;
     int formatPos = -1;
     int formatLen = -1;
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "id",  "int", (void *) &formatId            )
+    attrProcessingList << AttrProcessing ( "id",  "int", (void *) &formatId  )
                        << AttrProcessing ( "pos", "int", (void *) &formatPos )
                        << AttrProcessing ( "len", "int", (void *) &formatLen );
     ProcessAttributes (myNode, attrProcessingList);
@@ -597,18 +598,19 @@ void ProcessFormatTag ( QDomNode   myNode,
        case 1:   // regular text
           if ( formatPos != -1 && formatLen != -1 )
           {
-             int fontSize = -1;
-             int fontWeight = -1;
-             int vertalign = -1;
+             int fontSize     = -1;
+             int fontWeight   = -1;
+             int vertalign    = -1;
              QString fontName = "";
-             bool    italic = false;
+             bool    italic    = false;
              bool    underline = false;
              QValueList<TagProcessing> tagProcessingList;
-             tagProcessingList << TagProcessing ( "SIZE",      ProcessValueTagAsInt,(void *) &fontSize   )
-                               << TagProcessing ( "WEIGHT",    ProcessValueTagAsInt,(void *) &fontWeight )
+             tagProcessingList << TagProcessing ( "SIZE",      ProcessIntValueTag,  (void *) &fontSize   )
+                               << TagProcessing ( "WEIGHT",    ProcessIntValueTag,  (void *) &fontWeight )
                                << TagProcessing ( "UNDERLINE", ProcessItalicTag,    (void *) &underline  )
                                << TagProcessing ( "FONT",      ProcessFontTag,      (void *) &fontName   )
-                               << TagProcessing ( "VERTALIGN", ProcessValueTagAsInt,(void *) &vertalign  )
+                               << TagProcessing ( "VERTALIGN", ProcessIntValueTag,  (void *) &vertalign  )
+                               << TagProcessing ( "COLOR",     NULL,                NULL                 )
                                << TagProcessing ( "ITALIC",    ProcessItalicTag,    (void *) &italic     );
              ProcessSubtags (myNode, tagProcessingList, outputText);
 
@@ -628,7 +630,7 @@ void ProcessFormatTag ( QDomNode   myNode,
           {
              QString pictureName;
              QValueList<TagProcessing> tagProcessingList;
-             tagProcessingList << TagProcessing ( "FILENAME", ProcessValueTagAsString, &pictureName );
+             tagProcessingList << TagProcessing ( "FILENAME", ProcessValueTag, &pictureName );
              ProcessSubtags (myNode, tagProcessingList, outputText);
 
              (*formatDataList) << FormatData ( PictureAnchor (formatPos, pictureName ) );
@@ -642,7 +644,7 @@ void ProcessFormatTag ( QDomNode   myNode,
        case 6:   // tables
           if ( formatPos != -1 && formatLen == -1 )
           {
-             QString instance;
+             QString instance = "";
 
              QValueList<TagProcessing> tagProcessingList;
              tagProcessingList << TagProcessing ( "ANCHOR", ProcessAnchorTag, (void *) &instance );
@@ -671,7 +673,6 @@ void ProcessFormatTag ( QDomNode   myNode,
           (*formatDataList) << FormatData (formatId);
 #endif
     }
-    kdDebug (KDEBUG_KWFILTER) << "Processed FORMAT Tag " <<  endl;
 }  // end ProcessFormatTag
 
 /***************************************************************************/
@@ -694,6 +695,36 @@ void ProcessFormatsTag ( QDomNode   myNode,
     ProcessSubtags (myNode, tagProcessingList, outputText);
 }  // end ProcessFormatsTag
 
+/***************************************************************************/
+
+void ProcessFrameTag ( QDomNode    myNode,
+                        void       *tagData,
+                        QString    &         )
+// Gets the attributes in the FRAME tags - Frame positions
+// called by ProcessFramesetTag()
+
+{
+    Frame *frame = (Frame *) tagData;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "right",             "int",    (void *) &frame->right              )
+                       << AttrProcessing ( "left",              "int",    (void *) &frame->left               )
+                       << AttrProcessing ( "top",               "int",    (void *) &frame->top                )
+                       << AttrProcessing ( "bottom",            "int",    (void *) &frame->bottom             )
+                       << AttrProcessing ( "brightpt",          "",       NULL                                )
+                       << AttrProcessing ( "bleftpt",           "",       NULL                                )
+                       << AttrProcessing ( "btoppt",            "",       NULL                                )
+                       << AttrProcessing ( "bbottompt",         "",       NULL                                )
+                       << AttrProcessing ( "runaround",         "int",    (void *) &frame->runaround          )
+                       << AttrProcessing ( "runaroundGap",      "int",    (void *) &frame->runaroundGap       )
+                       << AttrProcessing ( "autoCreateNewFrame","int",    (void *) &frame->autoCreateNewFrame )
+                       << AttrProcessing ( "newFrameBehaviour", "int",    (void *) &frame->newFrameBehaviour  )
+                       << AttrProcessing ( "sheetSide",         "int",    (void *) &frame->sheetSide          );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode);
+}   // end ProcessAttributesTag
+
 
 /***************************************************************************/
 
@@ -701,7 +732,7 @@ void ProcessFramesetTag ( QDomNode   myNode,
                           void      *tagData,
                           QString   &outputText )
 {
-    DocData  *docData = (DocData *) tagData;
+    DocData *docData = (DocData *) tagData;
 
     int col (-1);
     int row (-1);
@@ -709,6 +740,7 @@ void ProcessFramesetTag ( QDomNode   myNode,
     int rows (-1);
     QString grpMgr = "";
     int frameInfo = -1;
+    Frame frame;
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "col",       "int",     (void *) &col       )
                        << AttrProcessing ( "row",       "int",     (void *) &row       )
@@ -721,17 +753,18 @@ void ProcessFramesetTag ( QDomNode   myNode,
                        << AttrProcessing ( "visible",   "",        NULL                )
                        << AttrProcessing ( "name",      "",        NULL                );
     ProcessAttributes (myNode, attrProcessingList);
-
+    (*docData).grpMgr = false;  // indicate no group manager
     if ( grpMgr.length () == 0 )  // no grpMgr, not a table
     {
         // process as a paragraph
         QValueList<TagProcessing> tagProcessingList;
         tagProcessingList << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) docData )
-                          << TagProcessing ( "FRAME",     NULL,                 NULL            );
+                          << TagProcessing ( "FRAME",     ProcessFrameTag,     (void *) &frame  );
         ProcessSubtags (myNode, tagProcessingList, outputText);
     }
     else  // grpMgr indicates a table
     {
+    (*docData).grpMgr = true;
         if ( col != -1 && row != -1 )
         {
             if ( cols == 1 && rows == 1 )
@@ -746,7 +779,7 @@ void ProcessFramesetTag ( QDomNode   myNode,
 
                 QValueList<TagProcessing> tagProcessingList;
                 tagProcessingList << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) docData )
-                                  << TagProcessing ( "FRAME",     NULL,                 NULL            );
+                                  << TagProcessing ( "FRAME",     ProcessFrameTag,     (void *) &frame   );
                 ProcessSubtags ( myNode, tagProcessingList, cellText );
 
                 AnchoredInsert *anchoredInsert = findAnchoredInsert ( AnchoredInsert ( Table (grpMgr),
@@ -757,7 +790,7 @@ void ProcessFramesetTag ( QDomNode   myNode,
                 {
                     anchoredInsert->table.addCell ( col, row, cellText,
                                                     leftBorder, rightBorder,
-                                                    topBorder, bottomBorder );
+                                                    topBorder, bottomBorder, frame );
                 }
                 else
                 {
@@ -788,14 +821,11 @@ void ProcessFramesetsTag ( QDomNode   myNode,
                            QString   &outputText  )
 // FRAMESETS is a container tag for one or more framesets
 {
-    kdDebug (KDEBUG_KWFILTER) << "Entering FRAMESETS Tag " <<  endl;
-
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "FRAMESET", ProcessFramesetTag, tagData );
     ProcessSubtags (myNode, tagProcessingList, outputText);
-                kdError (KDEBUG_KWFILTER) << "Processed FRAMESETS Tag " <<  endl;
 
 }  // end ProcessFramesetsTag
 
@@ -810,7 +840,6 @@ void ProcessPixmapsKeyTag ( QDomNode   myNode,
     QString   key;
     QString   name;
     QValueList<AttrProcessing> attrProcessingList;
-        kdError (KDEBUG_KWFILTER) << "Entered KEY Tag " << endl;
     attrProcessingList << AttrProcessing ( "key",  "QString", (void *) &key  )
                        << AttrProcessing ( "name", "QString", (void *) &name );
     ProcessAttributes (myNode, attrProcessingList);
@@ -838,7 +867,6 @@ void ProcessPixmapsTag ( QDomNode   myNode,
                          void      *tagData,
                          QString   &outputText )
 {
-        kdError (KDEBUG_KWFILTER) << "Entered PIXMAPS Tag " << endl;
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
@@ -859,24 +887,23 @@ void ProcessParagraphTag ( QDomNode   myNode,
                            void      *tagData,
                            QString   &outputText )
 {
-    kdDebug (KDEBUG_KWFILTER) << "Entered PARAGRAPH Tag " << endl;
     DocData  *docData = (DocData *) tagData;
 
     AllowNoAttributes (myNode);
 
     QString paraText;
     ParaLayout layout;
-    QValueList<FormatData> paraFormatDataList;
+    QValueList<FormatData> paraFormatDataFormats;
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "TEXT",    ProcessTextTag,    (void *) &paraText           )
-                      << TagProcessing ( "FORMATS", ProcessFormatsTag, (void *) &paraFormatDataList )
-                      << TagProcessing ( "LAYOUT",  ProcessLayoutTag,  (void *) &layout             );
+    tagProcessingList << TagProcessing ( "TEXT",    ProcessTextTag,    (void *) &paraText )
+// Change made for version 2 of DTD
+                      << TagProcessing ( "FORMATS", ProcessFormatsTag, (void *) &paraFormatDataFormats )
+//                      << TagProcessing ( "FORMATS", NULL,              NULL               )
+                      << TagProcessing ( "LAYOUT",  ProcessLayoutTag,  (void *) &layout   );
     ProcessSubtags (myNode, tagProcessingList, outputText);
 
-    kdDebug (KDEBUG_KWFILTER) << "Processing:" << paraText << endl;
-    ProcessParagraph ( paraText, paraFormatDataList, outputText,
-                   layout, docData );
-    kdDebug (KDEBUG_KWFILTER) << "Processed PARAGRAPH Tag " << endl;
+ProcessParagraph ( paraText, paraFormatDataList, paraFormatDataFormats,
+                   outputText, layout, docData );
 
 }   // end ProcessParagraphTag()
 
@@ -892,12 +919,11 @@ void ProcessDocTag ( QDomNode   myNode,
     FilterData *filterData = (FilterData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-                kdError (KDEBUG_KWFILTER) << " DOC TAG entered " <<  endl;
     attrProcessingList << AttrProcessing ( "editor",        "", NULL )
                        << AttrProcessing ( "mime",          "", NULL )
+                       << AttrProcessing ( "url",           "", NULL )
                        << AttrProcessing ( "syntaxVersion", "", NULL );
     ProcessAttributes (myNode, attrProcessingList);
-                kdError (KDEBUG_KWFILTER) << " DOC TAG attributes processed " <<  endl;
 
     DocData docData;   // hopefully also initializes docData.anchoredInsertList
     docData.article          = false;
@@ -915,13 +941,11 @@ void ProcessDocTag ( QDomNode   myNode,
                       << TagProcessing ( "ATTRIBUTES",   ProcessAttributesTag,  (void *) &attributes  )
                       << TagProcessing ( "PIXMAPS",      ProcessPixmapsTag,     (void *) &docData     )
                       << TagProcessing ( "SERIALL",      NULL,                  NULL                  )
-                      << TagProcessing ( "SYTLE",        NULL,                  NULL                  )
+                      << TagProcessing ( "STYLES",        NULL,                  NULL                  )
                       << TagProcessing ( "FOOTNOTEMGR",  NULL,                  NULL                  )
                       << TagProcessing ( "FRAMESETS",    ProcessFramesetsTag,   (void *) &docData     );
-                kdError (KDEBUG_KWFILTER) << " DOC Tag Processing list formed " <<  endl;
     ProcessSubtags (myNode, tagProcessingList, outputText);
 
-                kdError (KDEBUG_KWFILTER) << " DOC TAG Processed " <<  endl;
 
     // Process the paper size and margins
     paperSize( paper, paperBorders );
@@ -949,5 +973,5 @@ void ProcessDocTag ( QDomNode   myNode,
         }
     }
 
-}
+} // end ProcessDocTag()
 

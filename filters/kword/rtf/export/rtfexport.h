@@ -22,7 +22,7 @@
 #define RTFEXPORT_H
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <qcstring.h> 
 #include <qfile.h>
 #include <qobject.h>
 
@@ -80,28 +80,19 @@ QString fontTableMarkup(QString fontName, QValueList< FontTable > &fontTable,
 
 QString listStart( QString font, int fontSize, QString listMarker);
 
-QString listMarkup( int firstIndent,
-                    int listType, int startNumber, QString preceedingText,
-                    QString followingText);
-
-void CloseItemizedList ( DocData  &docData);
-
-void CloseEnumeratedList ( DocData  &docData);
-
-void CloseAlphabeticalList ( DocData  &docData);
-
-void CloseLists ( DocData &docData);
-
-void OpenArticleUnlessHead1 ( DocData  &docData);
-
-void CloseHead3 ( DocData  &docData);
-
-void CloseHead2 ( DocData  &docData);
-
-void CloseHead1AndArticle ( DocData  &docData);
+QString listMarkup( int firstIndent, int listType, int startNumber, int depth,
+                    int fontSize, QString font,
+                    QString preceedingText, QString followingText);
 
 QString escapeRTFsymbols( QString text);
 
 void paperSize( PaperAttributes &paper, PaperBorders &paperBorders  );
+
+void ProcessParagraphData ( QString                     &paraText,
+                            QValueList<FormatData>      &paraFormatDataList,
+                            QValueList<AnchoredInsert>  &anchoredInsertList,
+                            QString                     &outputText          );
+
+QString encodeSevenBit( QString text);
 
 #endif // RTFEXPORT_H

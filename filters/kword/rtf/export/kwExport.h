@@ -12,19 +12,20 @@
 
 
 
+
 /***************************************************************************/
 
 // Reportedly, the capability to set tabs will be taken out of kword
 // at some time in the future.
-// Note from David Faure: of course not ! Just needs to be reimplemented, that's all :)
+// Note from David Faure: of course not ! Just needs to be reimplemented, that's all :) 
 
 class TabularData
    {
    public:
-   TabularData() { mmpos = -1.0; ptpos = -1.0; type = -1;} // constructor
+   TabularData() { mmpos = -1; ptpos = -1; type = -1;} // constructor
 
-   double mmpos;  // position of the tab stop in mm
-   double ptpos;  // position of the tab stop in pts
+   int mmpos;  // position of the tab stop in mm
+   int ptpos;  // position of the tab stop in pts
    int type;  // alignment of data - 0 = left, 1 = center, 2 = right, 3 = decimal
    }; // end TabularD
 
@@ -52,19 +53,19 @@ class PaperAttributes
    public:
    // default constructor
    PaperAttributes() { format = -1; width = -1; height = -1; orientation = -1;
-                       columns = -1; colSpacing = -1.0; hType = -1; fType = -1;
+                       columns = -1; colSpacing = -1; hType = -1; fType = -1;
                        spHeadBody = -1; spFootBody = -1;}
 
    int format;  // Paper size code A4, Letter, etc.
-   int width;  // in mm
-   int height;  // in mm
+   int width;  // in pts
+   int height;  // in pts
    int orientation; // 0 = portrait, 1 = landscape
    int columns;  // no. of columns
-   double colSpacing;  // in mm
+   int colSpacing;  // in mm
    int hType;  // Header type
    int fType;  // Footer type
-   double spHeadBody;
-   double spFootBody;
+   int spHeadBody;
+   int spFootBody;
 
 
    };  // end PaperAttributes class
@@ -77,12 +78,12 @@ class PaperBorders
    public:
 
    // default constructor
-   PaperBorders() { mmLeft = -1.0; mmRight = -1.0; mmBottom = -1.0; mmTop = -1.0;}
+   PaperBorders() { left = -1; right = -1; bottom = -1; top = -1;}
 
-   double mmLeft;
-   double mmRight;
-   double mmBottom;
-   double mmTop;
+   int left;
+   int right;
+   int bottom;
+   int top;
 
    }; // end PaperBorders class
 
@@ -112,7 +113,9 @@ class TextFormatting
 // Container for text format portion of format
 {
    public:
-      TextFormatting () {}
+      TextFormatting () {pos = -1; len = -1; fontSize = -1; fontWeight = -1;
+                         fontName = ""; italic = false; underline = false;
+                         vertalign = -1;}
 
       TextFormatting ( int     p,
                        int     l,
@@ -155,7 +158,7 @@ class TableAnchor
 // container for table anchor tag name and position
 {
    public:
-      TableAnchor () {}
+      TableAnchor () {pos = -1; name = "";}
 
       TableAnchor ( int     p,
                     QString n  ) : pos (p), name (n) {}
@@ -169,16 +172,21 @@ class TableAnchor
 struct ParaLayout
 // container for paragraph type, flow and counter information
 {
+      // default constructor
+      ParaLayout() {type = -1; depth = -1; start = -1; lefttext = "";
+                    righttext = ""; layout = ""; flow = ""; idFirst = -1;
+                    idLeft = -1; }
 
-      int     type;   // indicator for enum type - numeric, alpha, roman num, etc.
-      int     depth;  // numbering depth 1, 1.1, 1.1.1, etc
-      int     start;  // starting number
-      QString lefttext; // text left of the enumerator
+      int     type;      // indicator for enum type - numeric, alpha, roman num, etc.
+      int     depth;     // numbering depth 1, 1.1, 1.1.1, etc
+      int     start;     // starting number
+      QString lefttext;  // text left of the enumerator
       QString righttext; // text right of the enumerator
-      QString layout; // Kword paragraph style
-      QString flow;   // right, left, center, justify
-      double  mmFirst; // amount of the first line indentation
-      double  mmLeft;  // indentation of the remaining lines
+      QString layout;    // Kword paragraph style
+      QString flow;      // right, left, center, justify
+      int     idFirst;   // amount of the first line indentation
+      int     idLeft;    // indentation of the remaining lines
+      int lineSpacing;   // in points
       BorderStyle leftBorder;
       BorderStyle rightBorder;
       BorderStyle topBorder;
@@ -205,6 +213,29 @@ class FormatData
         PictureAnchor    pictureAnchor;
         TableAnchor      tableAnchor;
 };
+/***************************************************************************/
+
+struct Frame
+// structure for FRAME tag information.
+{
+      // default constructor
+      Frame() {left = -1; right = -1; top = -1; bottom = -1;
+               runaround = -1; runaroundGap = -1; autoCreateNewFrame = -1;
+               newFrameBehaviour = -1; sheetSide = -1; }
+
+      int left;
+      int right;
+      int top;
+      int bottom;
+      int runaround;
+      int runaroundGap;
+      int autoCreateNewFrame;
+      int newFrameBehaviour;
+      int sheetSide;
+
+};  // end struct Frame
+
+
 
 /***************************************************************************/
 
@@ -226,8 +257,10 @@ class TableCell
                   const BorderStyle &l,
                   const BorderStyle &ri,
                   const BorderStyle &tp,
-                  const BorderStyle &b  ) : col (c), row (r), text (t),
-                                     left (l), right (ri), top (tp), bottom (b) {}
+                  const BorderStyle &b,
+                  const Frame &f  ) : col (c), row (r), text (t),
+                                     left (l), right (ri), top (tp),
+                                     bottom (b), frame (f) {}
 
       int     col;
       int     row;
@@ -236,6 +269,7 @@ class TableCell
       BorderStyle right;
       BorderStyle top;
       BorderStyle bottom;
+      Frame frame;
 };  // end TableCell
 
 /***************************************************************************/
@@ -253,7 +287,8 @@ class Table
                      BorderStyle l,
                      BorderStyle ri,
                      BorderStyle tp,
-                     BorderStyle b  );
+                     BorderStyle b,
+                     Frame f        );
 
       QString               name;
       int                   cols;
@@ -306,7 +341,11 @@ struct DocData
     bool                       head3;
     bool                       bulletList;
     bool                       enumeratedList;
+    bool                       romanList;
+    bool                       ROMANList;
     bool                       alphabeticalList;
+    bool                       ALPHAList;
+    bool                       grpMgr;
     QValueList<AnchoredInsert> anchoredInsertList;
 };
 
@@ -334,6 +373,7 @@ void ProcessTableData ( Table   &table,
 
 void ProcessParagraph ( QString &paraText,
                         QValueList<FormatData> &paraFormatDataList,
+                        QValueList<FormatData> &paraFormatDataFormats,
                         QString &outputText,
                         ParaLayout &layout,
                         DocData *docData );
@@ -368,11 +408,11 @@ void ProcessPaperTag ( QDomNode    myNode,
                         void       *tagData,
                         QString    &         );
 
-void ProcessValueTagAsString ( QDomNode   myNode,
+void ProcessValueTag ( QDomNode   myNode,
                        void      *tagData,
                        QString   &         );
 
-void ProcessValueTagAsInt ( QDomNode   myNode,
+void ProcessIntValueTag ( QDomNode   myNode,
                        void      *tagData,
                        QString   &         );
 
