@@ -17,6 +17,9 @@
 #include "aiimport.h"
 
 
+void parseAI( const char* in );	// from yacc/bison
+
+
 class AiImportFactory : KGenericFactory<AiImport, KoFilter>
 {
 public:
@@ -63,6 +66,7 @@ AiImport::convert( const QCString& from, const QCString& to )
 	QByteArray byteArrayIn = koStoreIn.read( koStoreIn.size() );
 	koStoreIn.close();
 
+	parseAI( byteArrayIn.data() );
 
 	fileOut.close();
 	return KoFilter::OK;
