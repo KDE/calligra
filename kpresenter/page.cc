@@ -462,7 +462,8 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
 					for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
 					{
 						kpobject = objectList()->at( i );
-						if ( rubber.intersects( kpobject->getBoundingRect( diffx(), diffy() ) ) )
+						//if ( rubber.intersects( kpobject->getBoundingRect( diffx(), diffy() ) ) )
+						if ( kpobject->intersects( rubber, diffx(), diffy() ) )
 							selectObj( kpobject );
 					}
 				}
@@ -3356,274 +3357,274 @@ void Page::slotGotoPage()
 
 /*================================================================*/
 KTextObject* Page::kTxtObj()
-{ 
+{
 	return ( ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) ?
-			 dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject() : 0 ); 
+			 dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject() : 0 );
 }
 
 /*================================================================*/
-void Page::deleteObjs() 
+void Page::deleteObjs()
 {
-	view->kPresenterDoc()->deleteObjs(); 
-	setToolEditMode( toolEditMode ); 
+	view->kPresenterDoc()->deleteObjs();
+	setToolEditMode( toolEditMode );
 }
 
 /*================================================================*/
-void Page::rotateObjs() 
+void Page::rotateObjs()
 {
-	view->extraRotate(); 
-	setToolEditMode( toolEditMode ); 
+	view->extraRotate();
+	setToolEditMode( toolEditMode );
 }
 
 /*================================================================*/
-void Page::shadowObjs() 
+void Page::shadowObjs()
 {
-	view->extraShadow(); 
-	setToolEditMode( toolEditMode ); 
+	view->extraShadow();
+	setToolEditMode( toolEditMode );
 }
 
 /*================================================================*/
 void Page::enterEvent( QEvent *e )
-{ 
-	view->setRulerMousePos( ( ( QMouseEvent* )e )->x(), ( ( QMouseEvent* )e )->y() ); 
-	view->setRulerMouseShow( true ); 
+{
+	view->setRulerMousePos( ( ( QMouseEvent* )e )->x(), ( ( QMouseEvent* )e )->y() );
+	view->setRulerMouseShow( true );
 }
 
 /*================================================================*/
 void Page::leaveEvent( QEvent *e )
-{ 
-	view->setRulerMouseShow( false ); 
+{
+	view->setRulerMouseShow( false );
 }
 
 /*================================================================*/
-QList<KPBackGround> *Page::backgroundList() 
+QList<KPBackGround> *Page::backgroundList()
 {
-	return view->kPresenterDoc()->backgroundList(); 
+	return view->kPresenterDoc()->backgroundList();
 }
 
 /*================================================================*/
-QList<KPObject> *Page::objectList() 
+QList<KPObject> *Page::objectList()
 {
-	return view->kPresenterDoc()->objectList(); 
+	return view->kPresenterDoc()->objectList();
 }
 
 /*================================================================*/
-unsigned int Page::objNums() 
+unsigned int Page::objNums()
 {
-	return view->kPresenterDoc()->objNums(); 
+	return view->kPresenterDoc()->objNums();
 }
 
 /*================================================================*/
-unsigned int Page::currPgNum() 
+unsigned int Page::currPgNum()
 {
-	return view->getCurrPgNum(); 
+	return view->getCurrPgNum();
 }
 
 /*================================================================*/
-unsigned int Page::rastX() 
+unsigned int Page::rastX()
 {
-	return view->kPresenterDoc()->rastX(); 
+	return view->kPresenterDoc()->rastX();
 }
 
 /*================================================================*/
-unsigned int Page::rastY() 
+unsigned int Page::rastY()
 {
-	return view->kPresenterDoc()->rastY(); 
+	return view->kPresenterDoc()->rastY();
 }
 
 /*================================================================*/
-QColor Page::txtBackCol() 
+QColor Page::txtBackCol()
 {
-	return view->kPresenterDoc()->txtBackCol(); 
+	return view->kPresenterDoc()->txtBackCol();
 }
 
 /*================================================================*/
-bool Page::spInfinitLoop() 
+bool Page::spInfinitLoop()
 {
-	return view->kPresenterDoc()->spInfinitLoop(); 
+	return view->kPresenterDoc()->spInfinitLoop();
 }
 
 /*================================================================*/
-bool Page::spManualSwitch() 
+bool Page::spManualSwitch()
 {
-	return view->kPresenterDoc()->spManualSwitch(); 
+	return view->kPresenterDoc()->spManualSwitch();
 }
 
 /*================================================================*/
 KRect Page::getPageSize( unsigned int p, float fakt=1.0, bool decBorders = true )
 {
-	return view->kPresenterDoc()->getPageSize( p, diffx(), diffy(), fakt, decBorders ); 
+	return view->kPresenterDoc()->getPageSize( p, diffx(), diffy(), fakt, decBorders );
 }
 
 /*================================================================*/
-unsigned int Page::pageNums() 
+unsigned int Page::pageNums()
 {
-	return view->kPresenterDoc()->getPageNums(); 
+	return view->kPresenterDoc()->getPageNums();
 }
 
 /*================================================================*/
-int Page::getPageOfObj( int i, float fakt = 1.0 ) 
+int Page::getPageOfObj( int i, float fakt = 1.0 )
 {
-	return view->kPresenterDoc()->getPageOfObj( i, diffx(), diffy(), fakt ); 
+	return view->kPresenterDoc()->getPageOfObj( i, diffx(), diffy(), fakt );
 }
 
 /*================================================================*/
-float Page::objSpeedFakt() 
+float Page::objSpeedFakt()
 {
-	return ObjSpeed[ static_cast<int>( view->kPresenterDoc()->getPresSpeed() ) ]; 
+	return ObjSpeed[ static_cast<int>( view->kPresenterDoc()->getPresSpeed() ) ];
 }
 
 /*================================================================*/
-float Page::pageSpeedFakt() 
+float Page::pageSpeedFakt()
 {
-	return PageSpeed[ static_cast<int>( view->kPresenterDoc()->getPresSpeed() ) ]; 
+	return PageSpeed[ static_cast<int>( view->kPresenterDoc()->getPresSpeed() ) ];
 }
 
 /*================================================================*/
-void Page::_repaint( bool erase=true ) 
+void Page::_repaint( bool erase=true )
 {
-	view->kPresenterDoc()->repaint( false ); 
+	view->kPresenterDoc()->repaint( false );
 }
 
 /*================================================================*/
-void Page::_repaint( KRect r ) 
+void Page::_repaint( KRect r )
 {
-	view->kPresenterDoc()->repaint( r ); 
+	view->kPresenterDoc()->repaint( r );
 }
 
 /*================================================================*/
-void Page::_repaint( KPObject *o ) 
+void Page::_repaint( KPObject *o )
 {
-	view->kPresenterDoc()->repaint( o ); 
+	view->kPresenterDoc()->repaint( o );
 }
 
 /*================================================================*/
 void Page::alignObjLeft()
 {
-	view->extraAlignObjLeftidl(); 
+	view->extraAlignObjLeftidl();
 }
 
 /*================================================================*/
 void Page::alignObjCenterH()
-{ 
-	view->extraAlignObjCenterHidl(); 
+{
+	view->extraAlignObjCenterHidl();
 }
 
 /*================================================================*/
 void Page::alignObjRight()
-{ 
-	view->extraAlignObjRightidl(); 
+{
+	view->extraAlignObjRightidl();
 }
 
 /*================================================================*/
 void Page::alignObjTop()
-{ 
-	view->extraAlignObjTopidl(); 
+{
+	view->extraAlignObjTopidl();
 }
 
 /*================================================================*/
 void Page::alignObjCenterV()
-{ 
-	view->extraAlignObjCenterVidl(); 
+{
+	view->extraAlignObjCenterVidl();
 }
 
 /*================================================================*/
 void Page::alignObjBottom()
-{ 
-	view->extraAlignObjBottomidl(); 
+{
+	view->extraAlignObjBottomidl();
 }
 
 /*================================================================*/
 void Page::pageLayout()
-{ 
-	view->extraLayout(); 
+{
+	view->extraLayout();
 }
 
 /*================================================================*/
 void Page::pageBackground()
-{ 
-	view->extraBackground(); 
+{
+	view->extraBackground();
 }
 
 /*================================================================*/
 void Page::pageInsert()
-{ 
-	view->insertPage(); 
+{
+	view->insertPage();
 }
 
 /*================================================================*/
 void Page::pageDelete()
-{ 
-	view->editDelPage(); 
+{
+	view->editDelPage();
 }
 
 /*================================================================*/
 void Page::pagePaste()
-{ 
-	view->editPaste(); 
+{
+	view->editPaste();
 }
 
 /*================================================================*/
 void Page::configPages()
-{ 
-	view->screenConfigPages(); 
+{
+	view->screenConfigPages();
 }
 
 /*================================================================*/
 void Page::presStructView()
-{ 
-	view->screenPresStructView(); 
+{
+	view->screenPresStructView();
 }
 
 /*================================================================*/
 void Page::slotExitPres()
-{ 
-	view->screenStop(); 
+{
+	view->screenStop();
 }
 
 /*================================================================*/
 void Page::slotEditHF()
-{ 
-	view->editHeaderFooter(); 
+{
+	view->editHeaderFooter();
 }
 
 /*================================================================*/
 void Page::slotTextContents2Height()
-{ 
-	view->textContentsToHeight(); 
+{
+	view->textContentsToHeight();
 }
 
 /*================================================================*/
-void Page::objConfigPie() 
+void Page::objConfigPie()
 {
-	view->extraConfigPie(); 
+	view->extraConfigPie();
 }
 
 /*================================================================*/
-void Page::objConfigRect() 
+void Page::objConfigRect()
 {
-	view->extraConfigRect(); 
+	view->extraConfigRect();
 }
 
 /*================================================================*/
-void Page::assignEffect() 
+void Page::assignEffect()
 {
-	view->screenAssignEffect(); 
+	view->screenAssignEffect();
 }
 
 /*================================================================*/
 void Page::drawingMode()
-{ 
-	presMenu->setItemChecked( PM_DM, true ); 
-	presMenu->setItemChecked( PM_SM, false ); 
-	drawMode = true; 
-	setCursor( arrowCursor ); 
+{
+	presMenu->setItemChecked( PM_DM, true );
+	presMenu->setItemChecked( PM_SM, false );
+	drawMode = true;
+	setCursor( arrowCursor );
 }
 
 /*================================================================*/
 void Page::switchingMode()
-{ 
-	presMenu->setItemChecked( PM_DM, false ); 
-	presMenu->setItemChecked( PM_SM, true ); 
-	drawMode = false; setCursor( blankCursor ); 
+{
+	presMenu->setItemChecked( PM_DM, false );
+	presMenu->setItemChecked( PM_SM, true );
+	drawMode = false; setCursor( blankCursor );
 }

@@ -469,31 +469,31 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
 	_painter->setPen( pen );
 	_painter->setBrush( brush );
 
-	int pw = pen.width();
+	int penw = pen.width();
 
 	_painter->save();
 	_painter->setViewport( ox, oy, r.width(), r.height() );
-	if ( fillType == FT_BRUSH || !gradient )
-		_painter->drawRect( pw, pw, ext.width() - 2 * pw, ext.height() - 2 * pw );
-	else
-    {
-		if ( angle == 0 )
-			_painter->drawPixmap( pw, pw, *gradient->getGradient(), 0, 0, ow - 2 * pw, oh - 2 * pw );
-		else
-		{
-			QPixmap pix( ow - 2 * pw, oh - 2 * pw );
-			QPainter p;
-			p.begin( &pix );
-			p.drawPixmap( 0, 0, *gradient->getGradient() );
-			p.end();
+// 	if ( fillType == FT_BRUSH || !gradient )
+// 		_painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+// 	else
+//     {
+// 		if ( angle == 0 )
+// 			_painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+// 		else
+// 		{
+// 			QPixmap pix( ow - 2 * penw, oh - 2 * penw );
+// 			QPainter p;
+// 			p.begin( &pix );
+// 			p.drawPixmap( 0, 0, *gradient->getGradient() );
+// 			p.end();
 	
-			_painter->drawPixmap( pw, pw, pix );
-		}
+// 			_painter->drawPixmap( penw, penw, pix );
+// 		}
 
-		_painter->setPen( pen );
-		_painter->setBrush( Qt::NoBrush );
-		_painter->drawRect( pw, pw, ow - 2 * pw, oh - 2 * pw );
-    }
+// 		_painter->setPen( pen );
+// 		_painter->setBrush( Qt::NoBrush );
+// 		//_painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
+//     }
 	_painter->setViewport( r );
 	_painter->restore();
 
@@ -549,7 +549,20 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
 	_painter->save();
 
 	if ( angle == 0 )
+	{
+		_painter->setPen( Qt::NoPen );
+		_painter->setBrush( brush );
+		if ( fillType == FT_BRUSH || !gradient )
+			_painter->drawRect( ox + penw, oy + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+		else
+ 			_painter->drawPixmap( ox + penw, oy + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+
 		_painter->drawPixmap( ox, oy, *pixmap );
+		
+		_painter->setPen( pen );
+		_painter->setBrush( Qt::NoBrush );
+		_painter->drawRect( ox + penw, oy + penw, ow - 2 * penw, oh - 2 * penw );
+	}
 	else
     {
 		r = _painter->viewport();
@@ -571,7 +584,19 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
 		_painter->setWorldMatrix( m );
 		
+		_painter->setPen( Qt::NoPen );
+		_painter->setBrush( brush );
+
+		if ( fillType == FT_BRUSH || !gradient )
+			_painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+		else
+			_painter->drawPixmap( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+		
 		_painter->drawPixmap( rr.left() + pixXPos, rr.top() + pixYPos, *pixmap );
+		
+		_painter->setPen( pen );
+		_painter->setBrush( Qt::NoBrush );
+		_painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ow - 2 * penw, oh - 2 * penw );
 
 		_painter->setViewport( r );
     }

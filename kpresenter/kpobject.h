@@ -74,7 +74,9 @@ public:
     { effect2 = _effect2; }
 	virtual void setPresNum( int _presNum )
     { presNum = _presNum; }
-
+	virtual void setDrawSelectionRect( bool b )
+	{ drawSelectionRect = b; }
+	
 	virtual void save( ostream& out )
     {; }
 	virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst )
@@ -105,7 +107,9 @@ public:
     { return presNum; }
 	virtual int getSubPresSteps()
     { return 0; }
-
+	virtual bool getDrawSelectionRect()
+	{ return drawSelectionRect; }
+	
 	virtual void drawSelection( bool _dSelection )
     { dSelection = _dSelection; }
 
@@ -121,6 +125,7 @@ public:
 	virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
 	virtual bool contains( KPoint _point, int _diffx, int _diffy );
+	virtual bool intersects( KRect _rect, int _diffx, int _diffy );
 	virtual QCursor getCursor( KPoint _point, int _diffx, int _diffy, ModifyType &_modType );
 
 	virtual void activate( QWidget *_widget, int diffx, int diffy )
@@ -168,7 +173,8 @@ protected:
 	bool inObjList;
 	int cmds;
 	bool move;
-
+	bool drawSelectionRect;
+	
 };
 
 #endif

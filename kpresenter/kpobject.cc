@@ -18,6 +18,8 @@
 
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <qpointarray.h>
+#include <qregion.h>
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -55,6 +57,7 @@ KPObject::KPObject()
 	inObjList = true;
 	cmds = 0;
 	move = false;
+	drawSelectionRect = true;
 }
 
 /*======================= get bounding rect ======================*/
@@ -96,6 +99,15 @@ bool KPObject::contains( KPoint _point, int _diffx, int _diffy )
 			 ext.width(), ext.height() );
 
 	return r.contains( _point );
+}
+
+/*================================================================*/
+bool KPObject::intersects( KRect _rect, int _diffx, int _diffy )
+{
+	KRect r( orig.x() - _diffx, orig.y() - _diffy,
+			 ext.width(), ext.height() );
+
+	return r.intersects( _rect );
 }
 
 /*======================== get cursor ============================*/
@@ -200,7 +212,7 @@ void KPObject::zoomOrig()
 /*======================== draw ==================================*/
 void KPObject::draw( QPainter *_painter, int _diffx, int _diffy )
 {
-	if ( dSelection && selected || dSelection && getType() == OT_TEXT )
+	if ( dSelection )
     {
 		_painter->save();
 		KRect r = _painter->viewport();
@@ -273,7 +285,7 @@ void KPObject::paintSelection( QPainter *_painter )
 
 	_painter->setRasterOp( Qt::NotROP );
 
-	if ( getType() == OT_TEXT && dynamic_cast<KPTextObject*>( this )->getDrawEditRect() )
+ 	if ( getType() == OT_TEXT && dynamic_cast<KPTextObject*>( this )->getDrawEditRect() )
     {
 		_painter->save();
 
@@ -303,6 +315,13 @@ void KPObject::paintSelection( QPainter *_painter )
 		_painter->restore();
     }
 
+// 	if ( angle != 0 && drawSelectionRect )
+// 	{
+// 		_painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
+// 		_painter->setBrush( Qt::NoBrush );
+// 		_painter->drawRect( 0, 0, ext.width(), ext.height() );
+// 	}
+	
 	_painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
 	_painter->setBrush( Qt::black );
 

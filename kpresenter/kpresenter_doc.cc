@@ -103,7 +103,8 @@ KPresenterChild::~KPresenterChild()
 
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc()
-	: _pixmapCollection(), _gradientCollection(), _commands(), _hasHeader( false ), _hasFooter( false )
+	: _pixmapCollection(), _gradientCollection(), _commands(), _hasHeader( false ), 
+	  _hasFooter( false ), drawSelectionRect( true )
 {
 	ADD_INTERFACE( "IDL:KOffice/Print:1.0" )
 		// Use CORBA mechanism for deleting views
@@ -250,7 +251,7 @@ void KPresenterDoc::makeChildListIntern( KOffice::Document_ptr _doc, const char 
 /*========================== save ===============================*/
 bool KPresenterDoc::save(ostream& out,const char * /* format */)
 {
-	QApplication::setOverrideCursor(waitCursor); 
+	QApplication::setOverrideCursor( waitCursor );
 	KPObject *kpobject = 0L;
 
 	out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
@@ -414,7 +415,7 @@ bool KPresenterDoc::load_template( const QString &_url )
 /*========================== load ===============================*/
 bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
-	QApplication::setOverrideCursor(waitCursor);
+	QApplication::setOverrideCursor( waitCursor );
 	string tag;
 	vector<KOMLAttrib> lst;
 	string name;

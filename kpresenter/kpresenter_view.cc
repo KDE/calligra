@@ -498,6 +498,14 @@ void KPresenterView::newView()
 	sendFocusEvent();
 }
 
+/*==============================================================*/
+void KPresenterView::viewSelectionRect()
+{
+	m_vMenuView->setItemChecked( m_idMenuView_SelectionRect, m_vMenuView->isItemChecked( m_idMenuView_SelectionRect ) );
+	m_pKPresenterDoc->setDrawSelectionRect( m_vMenuView->isItemChecked( m_idMenuView_SelectionRect ) );
+	repaint( false );
+}
+
 /*====================== insert a new page ======================*/
 void KPresenterView::insertPage()
 {
@@ -3092,6 +3100,13 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 	text = Q2C( i18n( "&New View" ) );
 	m_idMenuView_NewView = m_vMenuView->insertItem( text, this, "newView", 0 );
 
+// 	m_vMenuView->insertSeparator( -1 );
+	
+// 	text = Q2C( i18n( "View Selection &Rectangle of rotated Objects" ) );
+// 	m_idMenuView_SelectionRect = m_vMenuView->insertItem( text, this, "viewSelectionRect", 0 );
+
+// 	m_vMenuView->setCheckable( true );
+
 	// MENU Insert
 	text = Q2C( i18n( "&Insert" ) );
 	_menubar->insertMenu( text, m_vMenuInsert, -1, -1 );
@@ -3412,6 +3427,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 	// Torben: Reggie, Check/uncheck all checked menu items to their actual value in this function
 	m_vMenuText_TAlign->setItemChecked( m_idMenuText_TAlign_Left, true );
 	m_vMenuScreen_PenWidth->setItemChecked( m_idMenuScreen_PenW3, true );
+// 	m_vMenuView->setItemChecked( m_idMenuView_SelectionRect, true );
 
 //   setupAccelerators();
 
@@ -4249,17 +4265,17 @@ QString KPresenterView::colorToPixString( QColor c )
 
 	pix += "static char * text_xpm[] = {\n";
 
-	line.sprintf( "%c 20 20 1 1 %c, \n", 34, 34 );
+	line.sprintf( "%c 20 20 1 1 %c,\n", 34, 34 );
 	pix += line.copy();
 
-	line.sprintf( "%c c #%02X%02X%02X %c, \n", 34, r, g, b, 34 );
+	line.sprintf( "%c c #%02X%02X%02X %c,\n", 34, r, g, b, 34 );
 	pix += line.copy();
 
-	line.sprintf( "%c                    %c, \n", 34, 34 );
+	line.sprintf( "%c                    %c,\n", 34, 34 );
 	for ( unsigned int i = 1; i <= 20; i++ )
 		pix += line.copy();
 
-	line.sprintf( "%c                    %c}; \n", 34, 34 );
+	line.sprintf( "%c                    %c};\n", 34, 34 );
 	pix += line.copy();
 
 	return QString( pix );
@@ -4338,14 +4354,14 @@ void KPresenterView::sendFocusEvent()
 
 /*================================================================*/
 void KPresenterView::setRulerMouseShow( bool _show )
-{ 
-	v_ruler->showMousePos( _show ); 
-	h_ruler->showMousePos( _show ); 
+{
+	v_ruler->showMousePos( _show );
+	h_ruler->showMousePos( _show );
 }
 
 /*================================================================*/
 void KPresenterView::setRulerMousePos( int mx, int my )
-{ 
-	v_ruler->setMousePos( mx, my ); 
-	h_ruler->setMousePos( mx, my ); 
+{
+	v_ruler->setMousePos( mx, my );
+	h_ruler->setMousePos( mx, my );
 }

@@ -204,3 +204,11 @@ Reggie, 16.5.1999:
 ------------------
 - More fixes for loading pixmaps
 - Removed code in effectdia which was commented out
+- Fixed setting pen and brush for pixmaps
+  (of course a brush is only visible if the pixmap is transparent)
+- Fixed selecting rotated objects 
+- Fixed some problems with toolbar icons
+- Fixed bug reported by David:
+   Insert a picture (F2), then change it on the hard disk, remove the picture from
+   kpresenter, and try to insert it again : it gets cached, and the old one gets inserted.
+

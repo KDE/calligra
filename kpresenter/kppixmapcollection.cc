@@ -16,6 +16,7 @@
 
 #include <qstring.h>
 #include <qpixmap.h>
+#include <qimage.h>
 
 /******************************************************************/
 /* Class: KPPixmapCollection                                      */
@@ -226,7 +227,16 @@ int KPPixmapCollection::inPixmapList( QString _filename, KSize _size )
 			if ( kppixmap->getFilename() == _filename && ( kppixmap->getSize() == _size ||
 														   _size == orig_size &&
 														   kppixmap->getSize() == kppixmap->getOrigSize() ) )
+			{
+				QImage img1, img2;
+				img1 = *kppixmap->getOrigPixmap();
+				img2 = QPixmap( _filename );
+				
+				if ( img1 != img2 )
+					continue;
+				
 				return i;
+			}
 		}
 		return -1;
     }
