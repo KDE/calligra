@@ -1098,8 +1098,6 @@ QString IndexElement::toLatex()
     bool onlyRight=!hasUpperLeft() && !hasLowerLeft() 
 		    && !hasUpperMiddle() && !hasLowerMiddle();    
 
-    bool onlyRight=!hasUpperLeft() & !hasLowerLeft() & !hasUpperMiddle() & !hasLowerMiddle();
-
     if(onlyRight){
 
         index+="{"+content->toLatex()+"}";
