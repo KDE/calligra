@@ -27,7 +27,7 @@
 #include "GClipart.h"
 
 InsertClipartCmd::InsertClipartCmd (GDocument* doc, const char* fname) :
- Command(i18n("Insert"))
+ Command(i18n("Insert Clipart"))
 {
   document = doc;
   filename = fname;

@@ -27,7 +27,7 @@
 SetPropertyCmd::SetPropertyCmd (GDocument* doc, 
 				const GObject::OutlineInfo& oinfo,
 				const GObject::FillInfo& finfo) :
-  ObjectManipCmd (doc) {
+  ObjectManipCmd (doc, i18n("Set property")) {
   outline = oinfo;
   fill = finfo;
   tprops.mask = 0;
@@ -37,7 +37,7 @@ SetPropertyCmd::SetPropertyCmd (GDocument* doc,
 				const GObject::OutlineInfo& oinfo,
 				const GObject::FillInfo& finfo,
 				const GText::TextInfo& tinfo) :
-  ObjectManipCmd (doc) {
+  ObjectManipCmd (doc, i18n("Set property")) {
   outline = oinfo;
   fill = finfo;
   tprops = tinfo;

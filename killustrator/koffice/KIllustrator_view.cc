@@ -109,6 +109,9 @@ void KIllustratorView::createGUI () {
   setupToolsToolbar ();
   setupColorToolbar ();
   setupCanvas ();
+  setUndoStatus(false, false);
+  QObject::connect(&cmdHistory, SIGNAL(changed(bool, bool)), 
+	  SLOT(setUndoStatus(bool, bool)));
 }
 
 void KIllustratorView::setupCanvas () {
@@ -478,6 +481,26 @@ void KIllustratorView::newView () {
   shell->setDocument (m_pDoc);
 
   CORBA::release (shell);
+}
+
+void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
+{
+  // we do this " " trick to avoid double translation of "Undo" and "Undo "
+  m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo, undoPossible);
+  /*
+    if (undoPossible) 
+    m_rMenuBar->changeItem(QString(i18n("Undo")) + " " + 
+    cmdHistory.getUndoName(), 
+    m_idMenuEdit_Undo);
+  */
+    
+  m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo, redoPossible);
+  /*
+    if (redoPossible)
+    m_rMenuBar->changeItem(QString(i18n("Redo")) + " " + 
+    cmdHistory.getRedoName(),
+    m_idMenuEdit_Redo);
+  */
 }
 
 void KIllustratorView::resizeEvent (QResizeEvent* ) {

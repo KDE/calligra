@@ -24,8 +24,8 @@
 
 #include "Command.h"
 
-ObjectManipCmd::ObjectManipCmd (GDocument* doc) : 
-  Command(i18n("Manipulate")) 
+ObjectManipCmd::ObjectManipCmd (GDocument* doc, const QString& name) : 
+  Command(name) 
 {
   objects.resize (doc->selectionCount ());
   states.resize (doc->selectionCount ());

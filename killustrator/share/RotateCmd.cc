@@ -26,7 +26,7 @@
 #include "RotateCmd.h"
 
 RotateCmd::RotateCmd (GDocument* doc, const Coord& center, float a) :
-  ObjectManipCmd (doc) {
+  ObjectManipCmd (doc, i18n("Rotate")) {
   rcenter = center;
   angle = a;
 }

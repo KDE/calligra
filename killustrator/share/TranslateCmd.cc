@@ -25,7 +25,7 @@
 #include "TranslateCmd.h"
 
 TranslateCmd::TranslateCmd (GDocument* doc, float x, float y) :
-  ObjectManipCmd (doc) {
+  ObjectManipCmd (doc, i18n("Translate")) {
   dx = x; dy = y;
 }
 

@@ -27,7 +27,9 @@
 
 DistributeCmd::DistributeCmd (GDocument* doc, HorizDistribution hdistrib, 
 			      VertDistribution vdistrib, 
-			      DistributionMode dmode) : ObjectManipCmd (doc) {
+			      DistributionMode dmode) : 
+   ObjectManipCmd (doc, i18n("Distribute")) 
+{
   hDistrib = hdistrib;
   vDistrib = vdistrib;
   mode = dmode;

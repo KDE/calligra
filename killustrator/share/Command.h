@@ -43,7 +43,6 @@ public:
   // only undoable commands have to implement this
   virtual void unexecute () {}
 
-  // to save memory we implement this as function
   const QString& getName() const { return name; }
 
 private:
@@ -53,7 +52,7 @@ private:
 
 class ObjectManipCmd : public Command {
 protected:
-  ObjectManipCmd (GDocument* doc);
+  ObjectManipCmd (GDocument* doc, const QString& name);
 
 public:
   ~ObjectManipCmd ();

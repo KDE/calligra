@@ -27,7 +27,7 @@
 
 AlignCmd::AlignCmd (GDocument* doc, HorizAlignment halign, 
                     VertAlignment valign, bool centerToPage, 
-		    bool snapToGrid) : ObjectManipCmd (doc) {
+		    bool snapToGrid) : ObjectManipCmd (doc, i18n("Align")) {
   horizAlign = halign;
   vertAlign = valign;
   center = centerToPage;

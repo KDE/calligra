@@ -134,6 +134,11 @@ protected:
   void setupCanvas ();
   void resizeEvent (QResizeEvent*);
 
+protected slots:
+  void setUndoStatus(bool undoPossible, bool redoPossible);
+
+protected:
+
   OPParts::MenuBarFactory_var m_vMenuBarFactory;
   OPParts::ToolBarFactory_var m_vToolBarFactory;
 

@@ -26,14 +26,15 @@
 #include "ScaleCmd.h"
 
 ScaleCmd::ScaleCmd (GDocument* doc, int mask, float x, float y) : 
-  ObjectManipCmd (doc) {
+  ObjectManipCmd (doc, i18n("Scale")) 
+{
   box = doc->boundingBoxForSelection ();
   sx = x; sy = y;
   hmask = mask;
 }
 
 ScaleCmd::ScaleCmd (GDocument* doc, int mask, float x, float y, Rect r) :
-  ObjectManipCmd (doc) {
+  ObjectManipCmd (doc, i18n("Scale")) {
   sx = x; sy = y;
   hmask = mask;
   box = r;
