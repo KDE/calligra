@@ -197,27 +197,50 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
     docElement.setAttribute( "mime", "application/x-kword" );
     docElement.setAttribute( "syntaxVersion", "2" );
 
+    
+    KoOrientation orientation;
+    double width, height;
+    KoFormat paperFormat;
+    double marginLeft, marginTop, marginRight, marginBottom;
+    
     QDomElement *style = m_styles[m_masterPage.attribute( "style:page-master-name" )];
-    Q_ASSERT(style);
-    QDomElement properties = style->namedItem( "style:properties" ).toElement();
+    if ( style )
+    {
+        QDomElement properties( style->namedItem( "style:properties" ).toElement() );
+        orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
+        width = KoUnit::parseValue(properties.attribute("fo:page-width"));
+        height = KoUnit::parseValue(properties.attribute("fo:page-height"));
+        // guessFormat takes millimeters
+        // ### TODO use style:num-format instead of guessing
+        if ( orientation == PG_LANDSCAPE )
+            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(height), MM_TO_POINT(width) );
+        else
+            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(width), MM_TO_POINT(height) );
+            
+        marginLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
+        marginTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
+        marginRight = KoUnit::parseValue(properties.attribute("fo:margin-right"));
+        marginBottom = KoUnit::parseValue(properties.attribute("fo:margin-bottom"));
+    }
+    else
+    {
+        // We have no master page! We need defaults.
+        orientation=PG_PORTRAIT;
+        paperFormat=PG_DIN_A4;
+        width=MM_TO_POINT(KoPageFormat::width(paperFormat, orientation));
+        height=MM_TO_POINT(KoPageFormat::height(paperFormat, orientation));
+        // ### TODO: better defaults for margins?
+        marginLeft=MM_TO_POINT(10.0);
+        marginRight=MM_TO_POINT(10.0);
+        marginTop=MM_TO_POINT(15.0);
+        marginBottom=MM_TO_POINT(15.0);
+    }
 
     QDomElement elementPaper = mainDocument.createElement("PAPER");
-
-    bool landscape = properties.attribute("style:print-orientation") != "portrait";
-    elementPaper.setAttribute("orientation", landscape ? PG_LANDSCAPE : PG_PORTRAIT );
-
-    double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
-    double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
+    elementPaper.setAttribute("orientation", int(orientation) );
     elementPaper.setAttribute("width", width);
     elementPaper.setAttribute("height", height);
-
-    // guessFormat takes millimeters
-    // ## TODO use style:num-format instead of guessing
-    width = POINT_TO_MM( width );
-    height = POINT_TO_MM( height );
-    KoFormat paperFormat = KoPageFormat::guessFormat( landscape ? height : width, landscape ? width : height );
     elementPaper.setAttribute("format",paperFormat);
-
     elementPaper.setAttribute("columns",1);
     elementPaper.setAttribute("columnspacing",2);
     elementPaper.setAttribute("hType",0);
@@ -229,10 +252,10 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
 
     // Page margins
     QDomElement element = mainDocument.createElement("PAPERBORDERS");
-    element.setAttribute("left", KoUnit::parseValue(properties.attribute("fo:margin-left")));
-    element.setAttribute("top", KoUnit::parseValue(properties.attribute("fo:margin-top")));
-    element.setAttribute("right", KoUnit::parseValue(properties.attribute("fo:margin-right")));
-    element.setAttribute("bottom", KoUnit::parseValue(properties.attribute("fo:margin-bottom")));
+    element.setAttribute("left", marginLeft);
+    element.setAttribute("top", marginTop);
+    element.setAttribute("right", marginRight);
+    element.setAttribute("bottom", marginBottom);
     elementPaper.appendChild(element);
 
     framesetsElem=mainDocument.createElement("FRAMESETS");
