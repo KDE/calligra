@@ -1,5 +1,5 @@
-if need_kde31_compatibility
-  KDE31MIMEDIR = kde31
+if need_kde32_compatibility
+  KDE31MIMEDIR = kde32
 endif
 
-SUBDIRS = $(KDE31MIMEDIR)
+SUBDIRS = $(KDE32MIMEDIR)
