@@ -1,4 +1,8 @@
-INCLUDES= -I$(srcdir)/.. -I$(srcdir)/../../lib/kofficeui $(all_includes)
+INCLUDES= -I$(srcdir)/.. \
+          -I$(srcdir)/../../lib/kofficeui \
+          -I$(srcdir)/../../lib/kofficecore \
+          -I$(srcdir)/../../lib/koml \
+          $(all_includes)
 
 datadir = $(kde_datadir)/killustrator
 
