@@ -5047,7 +5047,10 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             QDomElement commentElement = node.toElement();
             if( !commentElement.isNull() )
                 if( commentElement.tagName() == "text:p" )
+                {
+                    if( !comment.isEmpty() ) comment.append( '\n' );
                     comment.append( commentElement.text() );
+                }
                     
             node = node.nextSibling();
         }
