@@ -21,7 +21,6 @@
 #include <qprinter.h>
 #include <qevent.h>
 #include <qregion.h>
-#include <qclipboard.h>
 #include <kmessagebox.h>
 #include <qdict.h>
 #include <qpixmap.h>
@@ -49,7 +48,6 @@
 #include "kwcanvas.h"
 #include "kwtextparag.h"
 #include "defs.h"
-#include "clipbrd_dnd.h"
 #include "kwutils.h"
 //#include "serialletter.h"
 #include "contents.h"

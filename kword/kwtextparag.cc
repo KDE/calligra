@@ -869,7 +869,7 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, QTextFormat * curFormat
     return formatElem;
 }
 
-void KWTextParag::save( QDomElement &parentElem )
+void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int to /* default -1 */ )
 {
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement paragElem = doc.createElement( "PARAGRAPH" );
@@ -878,19 +878,22 @@ void KWTextParag::save( QDomElement &parentElem )
     paragElem.appendChild( textElem );
     QString text = string()->toString();
     ASSERT( text.right(1)[0] == ' ' );
-    textElem.appendChild( doc.createTextNode( text.left( text.length()-1 ) ) );
+    if ( to == -1 )
+        to = string()->length()-2; // 'to' is inclusive, and length-1 is the trailing space
+    textElem.appendChild( doc.createTextNode( text.mid( from, to - from + 1 ) ) );
 
     QDomElement formatsElem = doc.createElement( "FORMATS" );
     int startPos = -1;
+    int index = 0; // Usually same as 'i' but if from>0, 'i' indexes the parag's text and this one indexes the output
     QTextFormat *curFormat = paragFormat();
-    for ( int i = 0; i < string()->length(); ++i )
+    for ( int i = from; i <= to; ++i, ++index )
     {
         QTextFormat * newFormat = string()->at(i).format();
         if ( newFormat != curFormat )
         {
             // Format changed.
             if ( startPos > 0 && curFormat) { // Save former format
-                QDomElement formatElem = saveFormat( doc, curFormat, paragFormat(), startPos, i-startPos );
+                QDomElement formatElem = saveFormat( doc, curFormat, paragFormat(), startPos, index-startPos );
                 if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
                     formatsElem.appendChild( formatElem );
             }
@@ -898,7 +901,7 @@ void KWTextParag::save( QDomElement &parentElem )
             // Format different from paragraph's format ?
             if( newFormat != paragFormat() )
             {
-                startPos = i;
+                startPos = index;
                 curFormat = newFormat;
             }
             else

@@ -25,6 +25,7 @@
 #include "kwutils.h"
 #include "kwcommand.h"
 #include "kwgroupmanager.h"
+#include "kwdrag.h"
 #include <qclipboard.h>
 #include <qdragobject.h>
 
@@ -1506,7 +1507,7 @@ void KWTextFrameSet::undo()
     // It sucks a bit for useability, but otherwise one view might still have
     // a cursor inside a deleted paragraph -> crash.
     emit setCursor( c );
-    setLastFormattedParag( 0 );
+    setLastFormattedParag( 0 ); // ??
     emit ensureCursorVisible();
     emit repaintChanged();
     emit updateUI();
@@ -1892,15 +1893,44 @@ void KWTextFrameSetEdit::paste()
 void KWTextFrameSetEdit::cut()
 {
     if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
-	textDocument()->copySelectedText( QTextDocument::Standard );
+	copy();
 	textFrameSet()->removeSelectedText( cursor );
     }
 }
 
 void KWTextFrameSetEdit::copy()
 {
-    if ( !textDocument()->selectedText( QTextDocument::Standard ).isEmpty() )
-	textDocument()->copySelectedText( QTextDocument::Standard );
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+        QTextCursor c1 = textDocument()->selectionStartCursor( QTextDocument::Standard );
+        QTextCursor c2 = textDocument()->selectionEndCursor( QTextDocument::Standard );
+
+        QString text;
+        QDomDocument domDoc( "PARAGRAPHS" );
+        QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
+        domDoc.appendChild( elem );
+        if ( c1.parag() == c2.parag() )
+        {
+            text = c1.parag()->string()->toString().mid( c1.index(), c2.index() - c1.index() );
+            static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c2.index()-1 );
+        }
+        else
+        {
+            text += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
+            static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), -1 );
+            QTextParag *p = c1.parag()->next();
+            while ( p && p != c2.parag() ) {
+                text += p->string()->toString() + "\n";
+                static_cast<KWTextParag *>(p)->save( elem );
+                p = p->next();
+            }
+            text += c2.parag()->string()->toString().left( c2.index() );
+            static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1 );
+        }
+        KWDrag *kd = new KWDrag;
+        kd->setPlain( text );
+        kd->setKWord( domDoc.toCString() );
+        QApplication::clipboard()->setData( kd );
+    }
 }
 
 void KWTextFrameSetEdit::ensureCursorVisible()

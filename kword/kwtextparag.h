@@ -227,7 +227,7 @@ public:
     static QDomElement saveFormat( QDomDocument & doc, QTextFormat * curFormat, QTextFormat * refFormat, int pos, int len );
     static QTextFormat loadFormat( QDomElement &formatElem, QTextFormat * refFormat );
 
-    void save( QDomElement &parentElem );
+    void save( QDomElement &parentElem, int from = 0, int to = -1 );
     void load( QDomElement &attributes );
 
     const QList<KoTabulator> *tabList() const { return &m_tabList; }

@@ -17,22 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef clipbrd_dnd_h
-#define clipbrd_dnd_h
+#ifndef kwdrag_h
+#define kwdrag_h
 
 #include <qdragobject.h>
 #include <qstring.h>
-#include <qlist.h>
-
-#include "defs.h"
-
-class KWParag;
 
 /******************************************************************/
 /* Class: KWDrag                                               */
 /******************************************************************/
-
-
 class KWDrag : public QTextDrag
 {
     Q_OBJECT
@@ -41,8 +34,8 @@ public:
     KWDrag( QWidget *dragSource = 0L, const char *name = 0L );
 
     void setPlain( const QString &_plain );
-    void setKWord( const QString &_kword );
-    void setHTML( const QString &_html );
+    void setKWord( const QCString &_kword ) { kword = _kword; }
+    //void setHTML( const QString &_html );
 
     QByteArray encodedData( const char *mime ) const;
 
@@ -50,7 +43,8 @@ public:
     static bool decode( QMimeSource* e, QString& s );
 
 protected:
-    QString plain, kword, html;
+    //QString plain, html;
+    QCString kword;
 };
 
 

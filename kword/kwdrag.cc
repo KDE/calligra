@@ -17,11 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "clipbrd_dnd.h"
-#include "clipbrd_dnd.moc"
+#include "kwdrag.h"
+#include "kwdrag.moc"
 #include "defs.h"
-
-static const char *MimeTypes[2] = { MIME_TYPE, "text/html" };
 
 /******************************************************************/
 /* Class: KWDrag                                               */
@@ -37,39 +35,27 @@ KWDrag::KWDrag( QWidget *dragSource, const char *name )
 void KWDrag::setPlain( const QString &_plain )
 {
     setText(_plain);
-    plain = _plain;
-}
-
-/*================================================================*/
-void KWDrag::setKWord( const QString &_kword )
-{
-    kword = _kword;
-}
-
-/*================================================================*/
-void KWDrag::setHTML( const QString &_html )
-{
-    html = _html;
+    //plain = _plain;
 }
 
 /*================================================================*/
 QByteArray KWDrag::encodedData( const char *mime ) const
 {
-    if ( strcmp(mime, MimeTypes[ 1 ]) == 0 )
+    /*if ( strcmp(mime, "text/html") == 0 )
     {
         KWDrag *non_const_this = const_cast<KWDrag *>(this);
         non_const_this->setText(html);
     }
-    else if ( strcmp( mime, MimeTypes[ 0 ]) == 0 )
+    else */
+    if ( strcmp( mime, MIME_TYPE ) == 0 )
     {
-        QCString result = kword.utf8();
-        return result;
+        return kword;
     }
-    else
+    /*else
     {
         KWDrag *non_const_this = const_cast<KWDrag *>(this);
         non_const_this->setText(plain);
-    }
+    }*/
 
     return QTextDrag::encodedData(mime);
 }
@@ -77,7 +63,7 @@ QByteArray KWDrag::encodedData( const char *mime ) const
 /*================================================================*/
 bool KWDrag::canDecode( QMimeSource* e )
 {
-    if ( e->provides( MimeTypes[ 0 ] ) )
+    if ( e->provides( MIME_TYPE ) )
        return true;
     return QTextDrag::canDecode(e);
 }
@@ -85,7 +71,8 @@ bool KWDrag::canDecode( QMimeSource* e )
 /*================================================================*/
 bool KWDrag::decode( QMimeSource* e, QString& s )
 {
-    QByteArray ba = e->encodedData( MimeTypes[ 0 ] );
+    ////// ### Shouldn't the caller have a way to find out which one was used ???
+    QByteArray ba = e->encodedData( MIME_TYPE );
     if ( ba.size() )
     {
         s = QString::fromUtf8( ba.data(), ba.size() );

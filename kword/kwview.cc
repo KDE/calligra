@@ -38,7 +38,6 @@
 #include "kwview.moc"
 #include "kwframe.h"
 #include "kwgroupmanager.h"
-#include "clipbrd_dnd.h"
 #include "defs.h"
 #include "paragdia.h"
 #include "searchdia.h"
@@ -892,6 +891,16 @@ void KWView::updateReadWrite( bool readwrite )
         QValueList<KAction*>::ConstIterator aEnd = actions.end();
         for (; aIt != aEnd; ++aIt )
             (*aIt)->setEnabled( readwrite );
+        // A few harmless actions
+        actionEditCopy->setEnabled( true );
+        actionViewFormattingChars->setEnabled( true );
+        actionViewFrameBorders->setEnabled( true );
+        actionViewTableGrid->setEnabled( true );
+        actionViewHeader->setEnabled( true );
+        actionViewFooter->setEnabled( true );
+        actionViewFootNotes->setEnabled( true );
+        actionViewEndNotes->setEnabled( true );
+        actionViewZoom->setEnabled( true );
     }
 }
 
@@ -1033,23 +1042,6 @@ void KWView::editCopy()
 /*===============================================================*/
 void KWView::editPaste()
 {
-#if 0
-    if ( gui->canvasWidget()->formulaIsActive() )
-        gui->canvasWidget()->insertFormulaChar( PASTE_CHAR );
-    else {
-        QClipboard *cb = QApplication::clipboard();
-
-        if ( cb->data()->provides( MIME_TYPE ) ) {
-            if ( cb->data()->encodedData( MIME_TYPE ).size() )
-                gui->canvasWidget()->editPaste( cb->data()->encodedData( MIME_TYPE ), MIME_TYPE );
-        } else if ( cb->data()->provides( "text/plain" ) ) {
-            if ( cb->data()->encodedData( "text/plain" ).size() )
-                gui->canvasWidget()->editPaste( QString::fromLocal8Bit(cb->data()->encodedData( "text/plain" )) );
-        } else if ( !cb->text().isEmpty() )
-            gui->canvasWidget()->editPaste( cb->text() );
-    }
-#endif
-
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         edit->paste();
