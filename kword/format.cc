@@ -195,7 +195,8 @@ bool KWFormat::load( const QDomElement& element, KWordDocument* _doc )
     weight = element.attribute( "weight" ).toInt();
     italic = (char)element.attribute( "italic" ).toInt();
     vertAlign = (VertAlign)element.attribute( "vertalign" ).toInt();
-    
+    underline = (char)element.attribute( "underline" ).toInt();
+	
     return TRUE;
 }
 

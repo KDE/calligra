@@ -960,14 +960,17 @@ bool KWCharFormat::load( const QDomElement& element, KWordDocument* doc, KWStrin
     
     // Load the text
     QString t = element.text();
-    text->insert( 0, t );
+    int start = text->size();
+    text->insert( start, t );
     
+    // Fill with attributes
+    // ### todo: Reggie: you should use chared KWCharFormat here
     uint len = t.length();
     KWChar* p = text->data();
     for( uint i = 0; i < len; ++i )
     {
 	format->incRef();
-	p[i].attrib = new KWCharFormat( format );
+	p[ start + i ].attrib = new KWCharFormat( format );
     }
     format->decRef();
     

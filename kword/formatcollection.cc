@@ -123,7 +123,7 @@ bool KWFormatCollection::load( const QDomElement& element )
     for( ; !e.isNull(); e = e.nextSibling().toElement() )
     {
 	KWFormat f( doc );
-	if ( !f.load( element, doc ) )
+	if ( !f.load( e, doc ) )
 	    return FALSE;
 	
 	// This will insert
