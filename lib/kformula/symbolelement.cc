@@ -50,7 +50,7 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
         KoPoint myPos(parentOrigin.x() + getX(),
-                     parentOrigin.y() + getY());
+                      parentOrigin.y() + getY());
 
         e = content->goToPos(cursor, handled, point, myPos);
         if (e != 0) {
@@ -85,6 +85,14 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
                 handled = true;
                 return lower;
             }
+        }
+
+        // Have the cursor jump behind the integral.
+        if ( ( dx < symbol.getX()+symbol.getWidth() ) &&
+             ( dx > symbol.getX()+symbol.getWidth()/2 ) ) {
+            content->moveRight( cursor, this );
+            handled = true;
+            return content;
         }
 
         return this;
