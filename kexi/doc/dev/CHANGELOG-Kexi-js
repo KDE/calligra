@@ -145,11 +145,63 @@ Jowenn's KexiDataProvider class functionality seems to be something like kexidb 
 
 </RENAME_PROPOSALS>
 
+TODO: (tableview):
+- add top-left putton that allow select all rows
+- enable clicked vheader button to select given row
+- enable column dragging
+- add action "restore original column order"
+- enable up/down moving even when cell editor is activated
+
 TODO:
 - In mysql and pgsql drivers Connection::fileName() is reused for socket names.
   It's not ok. Add another member: localSocketFileName(), because fileName() 
   is for file-based engines only.
 
+2003-10-22
+- KexiTableView: 
+ - sorting works again
+ - before sorting, row editing is cancelled
+ - better "ensure visible" code when scrolling on small area
+ - inserting rows code completed
+ - vheader repaint fixed
+ 
+2003-10-21
+- tests/newapi : Now all test types accept <db_name>
+- KexiTableView: 
+ - page down key also move cursor to "insert row" if one is present
+ - double clicking on cell (opening cell editor) fixed
+ - fixed cell's repaint when autoscroll is performed after clicking cell at different row
+ - sorting by column enabled, full set of methods added for this
+ - new feature: empty row is appended right after start of editing new row (like in MSA), 
+ to allow user to move to a next row
+- KexiDB driver services' properties updated:
+   - X-Kexi-DriverType=[File|Network]
+   - and X-Kexi-FileDBDriverMime (for file-based drivers only; 
+      for sqlite it is: application/x-sqlite)
+   -MimeType property removed
+- startup speed improoved: drivers lookup in KexiDB::DriverManager is now on demand.
+- Driver name now reuses QObject::name()
+- Connection::lastInsertedAutoIncValue() introduced
+
+2003-10-19
+- Connection::useTemporaryDatabaseIfNeeded() now is also reused 
+  for databaseExists() and databaseNames(), so these methods work when engine 
+  needs used any database before asking for info
+- ConnectionPrivate::m_skip_databaseExists_check_in_useDatabase used
+	to avoid endless recursion between useDatabase() and databaseExists()
+	when useTemporaryDatabaseIfNeeded() is working
+- Connection::setupKexiDBSystemSchema() added check to prevent creating 
+ system tables schema more that once per connection
+
+- Connection: reomved default values from useDatabase() and createDatabase()
+	because this might be confusing to use first-found database name here; (thanks piggz!)
+- FieldList: cached string == comma-separated list of fields added
+- Connection: valueToSQL() overload added, insertRecord() overload added so we can omit 
+	some fields from inserting; this is also internally used when kexi__* tables are 
+	filled what improoves backward compatibility
+- FieldList now offers lookup by field name, list of field names, it can create 
+  subLists, usable to define list of fields for data inserting
+- fixed compiler-dependent bug in insertRecord()
 
 2003-10-18  
 - Connection:
@@ -166,8 +218,9 @@ TODO:
    application that make use of KexiDB library can set to tune connection 
    behaviour when it need to temporary connect to any database
    in the server to do some work (e.g. DROP DATABASE).
-- Connection cleaning up bug fixed a bit.
-- Naming Conventions document added
+ - Connection cleaning up bug fixed a bit.
+ - Naming Conventions document added
+ - drv_isDatabaseUsed() introduced for additional state-checks
 
 2003-10-17
 - Driver developers should not change values of several important Connection
@@ -178,10 +231,6 @@ TODO:
  - maany repainting, updating, resizing improoved, code simplifications
  - editing row session introduced: edits for the same row is not accepted until move to another row
   This allows multiple fields editing before row editing accept.
-
-TODO: append empty row right after start of editing new row (like in MSA), to allow user to move 
-to a next row
-
 
 2003-10-15
 - missing QuerySchema::addAsterisk(QueryAsterisk *asterisk) added
@@ -245,7 +294,6 @@ to a next row
 - fixed crash on mass transactions closing during closeDatabase()
 - added tables creation subtest to kexidb/tests/newapi
 - SQLite* classes: last operation's result is now stored for later checking
-
 
 2003-10-09
 KexiDB::Connection: 

@@ -80,7 +80,7 @@ kexi__objects
 	o_type byte, //type id taken from KexiDB::ObjectTypes
 	o_name varchar(200),
 	o_caption varchar(200), //optional, enriched name that is not 
-	f_help varchar
+	o_help varchar
 
 //This table contains additional information for query schemas
 kexi__querydata
