@@ -1,5 +1,6 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>StencilsBarOptionsDialogBase</class>
+<include location="global">kcolorbutton.h</include>
 <widget class="QWidget">
     <property name="name">
         <cstring>StencilsBarOptionsDialogBase</cstring>
