@@ -11,6 +11,12 @@
 #include <qmsgbox.h>
 #include <qkeycode.h>
 
+#include "BracketElement.h"
+#include "RootElement.h"
+#include "TextElement.h"
+#include "FractionElement.h"
+#include "MatrixElement.h"
+
 /**********************************************************
  *
  * KFormulaView
@@ -68,8 +74,9 @@ void KFormulaView::setDocument( KFormulaDocument *_doc )
     QObject::connect( m_pDoc, SIGNAL( sig_modified() ), 
 		      this, SLOT( slotModified() ) );
 
-    QObject::connect( m_pDoc, SIGNAL( sig_changeType(int) ), 
-		      this, SLOT( slotTypeChanged(int) ) );
+    QObject::connect( m_pDoc, 
+		      SIGNAL( sig_changeType(const BasicElement *elm) ), 
+		      SLOT( slotTypeChanged(const BasicElement *elm) ) );
 
 }
 
@@ -569,37 +576,47 @@ void KFormulaView::createGUI()
 }
 
 
-void KFormulaView::slotTypeChanged(int type)
+void KFormulaView::slotTypeChanged(const BasicElement *elm)
 {  
-    m_rToolBarType->setItemEnabled(m_idButtonType_Spl,(type==EL_TEXT));          
-    m_rToolBarType->setItemEnabled(m_idComboType_DelLeft,(type==EL_BRACKET));          
-    m_rToolBarType->setItemEnabled(m_idComboType_DelRight,(type==EL_BRACKET));           
-    m_rToolBarType->setItemEnabled(m_idButtonType_RIn,(type==EL_ROOT));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_UAl,(type==EL_FRACTION));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_DAl,(type==EL_FRACTION));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_MAl,(type==EL_FRACTION));           
-    m_rToolBarType->setItemEnabled(m_idButtonType_Mid,(type==EL_FRACTION));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_CAl,(type==EL_FRACTION));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_LAl,(type==EL_FRACTION));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_RAl,(type==EL_FRACTION));           
-    m_rToolBarType->setItemEnabled(m_idButtonType_Les,(type==EL_FRACTION));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_Mor,(type==EL_FRACTION));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_AddH,(type==EL_INTEGRAL));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_AddL,(type==EL_INTEGRAL));          
-    m_rToolBarType->setItemEnabled(m_idButtonType_SetM,(type==EL_MATRIX));           
-    m_rToolBarType->setItemEnabled(m_idButtonType_InC,(type==EL_MATRIX));
-    m_rToolBarType->setItemEnabled(m_idButtonType_InR,(type==EL_MATRIX));
-    m_rToolBarType->setItemEnabled(m_idButtonType_ReC,(type==EL_MATRIX));    
-    m_rToolBarType->setItemEnabled(m_idButtonType_ReR,(type==EL_MATRIX));
-    if(type==EL_FRACTION){ 
+    const type_info& type = typeid(*elm);
+    
+    bool isText = type == typeid(TextElement);
+    bool isBracket = type == typeid(BracketElement);
+    bool isFraction = type == typeid(FractionElement);
+    // bool isIntegral = type == typeid(IntegralElement);
+    bool isIntegral = false;
+    bool isMatrix = type == typeid(MatrixElement);
+
+    m_rToolBarType->setItemEnabled(m_idButtonType_Spl,isText);
+    m_rToolBarType->setItemEnabled(m_idComboType_DelLeft,isBracket);
+    m_rToolBarType->setItemEnabled(m_idComboType_DelRight,isBracket);
+    m_rToolBarType->setItemEnabled(m_idButtonType_RIn,type == typeid(RootElement));
+    m_rToolBarType->setItemEnabled(m_idButtonType_UAl,isFraction);
+    m_rToolBarType->setItemEnabled(m_idButtonType_DAl,isFraction); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_MAl,isFraction);  
+    m_rToolBarType->setItemEnabled(m_idButtonType_Mid,isFraction); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_CAl,isFraction); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_LAl,isFraction); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_RAl,isFraction);  
+    m_rToolBarType->setItemEnabled(m_idButtonType_Les,isFraction); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_Mor,isFraction); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_AddH,isIntegral); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_AddL,isIntegral); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_SetM,isMatrix);  
+    m_rToolBarType->setItemEnabled(m_idButtonType_InC,isMatrix);
+    m_rToolBarType->setItemEnabled(m_idButtonType_InR,isMatrix);
+    m_rToolBarType->setItemEnabled(m_idButtonType_ReC,isMatrix);    
+    m_rToolBarType->setItemEnabled(m_idButtonType_ReR,isMatrix);
+
+    if (isFraction) { 
 	QString content=m_pDoc->activeElement()->getContent();
-	m_rToolBarType->setButton(m_idButtonType_UAl,content[1]=='U');          
-	m_rToolBarType->setButton(m_idButtonType_DAl,content[1]=='D');          
-	m_rToolBarType->setButton(m_idButtonType_MAl,content[1]=='M');          
-	m_rToolBarType->setButton(m_idButtonType_CAl,content[2]=='C');          
-	m_rToolBarType->setButton(m_idButtonType_LAl,content[2]=='L');          
-	m_rToolBarType->setButton(m_idButtonType_RAl,content[2]=='R');          
-	m_rToolBarType->setButton(m_idButtonType_Mid,content[0]=='F');          
+	m_rToolBarType->setButton(m_idButtonType_UAl,content[1]=='U'); 
+	m_rToolBarType->setButton(m_idButtonType_DAl,content[1]=='D'); 
+	m_rToolBarType->setButton(m_idButtonType_MAl,content[1]=='M'); 
+	m_rToolBarType->setButton(m_idButtonType_CAl,content[2]=='C'); 
+	m_rToolBarType->setButton(m_idButtonType_LAl,content[2]=='L'); 
+	m_rToolBarType->setButton(m_idButtonType_RAl,content[2]=='R'); 
+	m_rToolBarType->setButton(m_idButtonType_Mid,content[0]=='F'); 
     }
     debug("Type Changed");
     update();
@@ -855,10 +872,19 @@ void KFormulaView::sizeSelected(const char *size)
 void KFormulaView::fontSelected(const char *font)
 {
     BasicElement *el=m_pDoc->activeElement();
-    if (el==0) return;
-    if (el->type()!=EL_TEXT) return;
-    if(font=="(default)") font="";
-    ((TextElement *)(el))->changeFontFamily(font);
+
+    if (el==0) 
+	return;
+
+    TextElement *te = dynamic_cast<TextElement*>(el);
+
+    if (te)
+	return;
+
+    if (font == "(default)") 
+	font="";
+    
+    te->changeFontFamily(font);
     warning(font);
     update();
 }

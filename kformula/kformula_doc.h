@@ -103,9 +103,9 @@ class KFormulaDocument : public QObject,
 
     void setPainter(QPainter* p) { thePainter=p; }
     void setActiveElement(BasicElement* c); 
-    void setCursor(QRect r) { theCursor=r; }
-    void setFont(QFont f) { theFont=f;}
-    void setColor(QColor c) { theColor=c;}
+    void setCursor(const QRect& r) { theCursor=r; }
+    void setFont(const QFont& f) { theFont=f;}
+    void setColor(const QColor& c) { theColor=c;}
     void setFirstElement(BasicElement* c);
     QPainter * painter() const { return thePainter; } 
     BasicElement *activeElement() const { return theActiveElement; } 
@@ -117,7 +117,7 @@ class KFormulaDocument : public QObject,
     void sig_modified();
 
     void sig_changeText( const char * );
-    void sig_changeType( int );
+    void sig_changeType( const BasicElement* );
   
  protected:
     QList<KFormulaView> m_lstViews;

@@ -1,3 +1,6 @@
+#ifndef _FORMULA_DEF_H_
+#define _FORMULA_DEF_H_
+
 /*
  formuladef.h
  Project KOffice/KFormula
@@ -6,8 +9,6 @@
  License:GPL
 */
 
-#ifndef _FORMULA_DEF_H_
-#define _FORMULA_DEF_H_
 
 /*
  * Fonts enalarge/reduce constants
@@ -50,15 +51,15 @@ Lower Bits:
 /*
  * Elements Type
  */
-#define EL_BASIC       0
-#define EL_TEXT        1
-#define EL_ROOT        2
-#define EL_INTEGRAL    3
-#define EL_FRACTION    4
-#define EL_DECORATION  5
-#define EL_SYMBOL      6
-#define EL_MATRIX      7
-#define EL_BRACKET     8
+/* #define EL_BASIC       0 */
+/* #define EL_TEXT        1 */
+/* #define EL_ROOT        2 */
+/* #define EL_INTEGRAL    3 */
+/* #define EL_FRACTION    4 */
+/* #define EL_DECORATION  5 */
+/* #define EL_SYMBOL      6 */
+/* #define EL_MATRIX      7 */
+/* #define EL_BRACKET     8 */
 /*
  * Formula Commands
  */

@@ -1,3 +1,6 @@
+#ifndef  _BRACKET_ELEMENT_H_
+#define  _BRACKET_ELEMENT_H_
+
 /*
  BracketElement.h 
  Project KOffice/KFormula
@@ -14,15 +17,16 @@
 #include <qfont.h>
 #include "BasicElement.h"
 
-#ifndef  _BRACKET_ELEMENT_H_
-#define  _BRACKET_ELEMENT_H_
 class BracketElement : public BasicElement
 {
  public:
     /*
      * Normal constructor, Get font from prev element
      */
-    BracketElement(KFormulaDocument *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
+    BracketElement(KFormulaDocument *Formula,
+		   BasicElement *Prev=NULL,
+		   int Relation=-1,
+		   BasicElement *Next=NULL,
 		   QString Content="");
        
     /*
@@ -65,8 +69,6 @@ class BracketElement : public BasicElement
      */
     virtual int takeAsciiFromKeyb(int action);
    
-    virtual int type() {return EL_BRACKET; }   
-
     /*
      * Again, in  the future....
      */

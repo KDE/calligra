@@ -1,3 +1,6 @@
+#ifndef  _TEXT_ELEMENT_H_
+#define  _TEXT_ELEMENT_H_
+
 /*
  TextElement.h 
  Project KOffice/KFormula
@@ -13,9 +16,6 @@
 #include <qrect.h> 
 #include <qfont.h>
 #include "BasicElement.h"
-
-#ifndef  _TEXT_ELEMENT_H_
-#define  _TEXT_ELEMENT_H_
 
 class TextElement : public BasicElement
  {
@@ -95,7 +95,6 @@ class TextElement : public BasicElement
    
    virtual int takeActionFromKeyb(int action);
  
-   virtual int type() {return EL_TEXT; }   
    /*
     * Again, in  the future....
     */

@@ -1,3 +1,6 @@
+#ifndef  _ROOT_ELEMENT_H_
+#define  _ROOT_ELEMENT_H_
+
 /*
  RootElement.h 
  Project KOffice/KFormula
@@ -14,8 +17,6 @@
 #include <qfont.h>
 #include "BasicElement.h"
 
-#ifndef  _ROOT_ELEMENT_H_
-#define  _ROOT_ELEMENT_H_
 class RootElement : public BasicElement
 {
  public:
@@ -80,8 +81,6 @@ class RootElement : public BasicElement
      * this drawIndexes() draw index[0] in (here)
      */
     virtual void drawIndexes(QPainter *pen,int resolution=72);    
-
-    virtual int type() {return EL_ROOT; }   
 
     /*
      * Again, in  the future....

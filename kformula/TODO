@@ -9,10 +9,8 @@ Elements:
 -implement openMe()  //Bad name :-(
 -scaleFont modifications
 -usedColor fucntion 
--use of typeid() or typeof() or boh()...
 
 Interface/doc:
--merge FormulaClass with KFormulaDoc
 -Open/Save functions (need saveMe() )
 -Toolbars,widgets,properties dialogs etc..
 -Font

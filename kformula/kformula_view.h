@@ -17,12 +17,14 @@ class KFormulaDocument;
 #include <qlist.h>
 #include <qkeycode.h>
 
+class BasicElement;
+
 class KFormulaView : public QWidget,
-		   virtual public View_impl,
-		   virtual public KFormula::View_skel
+		     virtual public View_impl,
+		     virtual public KFormula::View_skel
 {
     Q_OBJECT
-public:
+ public:
     // C++
     KFormulaView( QWidget *_parent = 0, const char *_name = 0 );
     virtual ~KFormulaView();
@@ -37,7 +39,7 @@ public:
 public slots:
     // Document signals
     void slotModified();
-    void slotTypeChanged(int type);
+    void slotTypeChanged(const BasicElement *elm);
 
 protected:
     virtual void cleanUp();
@@ -214,8 +216,8 @@ protected:
     virtual void generalFont();
     virtual void delimiterLeft(const char*);
     virtual void delimiterRight(const char*);    
-protected slots:
-   void insertIndex(int i);
+ protected slots:
+    void insertIndex(int i);
 };
 
 #endif

@@ -120,39 +120,33 @@ OPParts::View_ptr KFormulaDocument::createView()
 
 void KFormulaDocument::emitModified()
 {
-    if(theActiveElement!=0)
-	emit sig_changeType(theActiveElement->type());
-    else 
-	emit sig_changeType(0);
-     
+    emit sig_changeType(theActiveElement);
     emit sig_modified();
 }
 
 void KFormulaDocument::addRootElement()
 {   
-    BasicElement *nextElement;
     BasicElement *newElement;
     if(theActiveElement==0L)
 	setActiveElement(theFirstElement);
   
-    if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
-	{					//It change it into a Root
-	    theActiveElement->substituteElement(newElement = new RootElement(this));
-	    delete theActiveElement;
-	    theActiveElement = 0;
-	}         
-    else 
-	{
-	    nextElement=theActiveElement->getNext();
-	    if(nextElement!=0L){       //If there's a next insert root before next
-		nextElement->insertElement(newElement=new RootElement(this));
-	    }
-	    else              //If there isn't a next append only.
-		activeElement()->setNext(newElement=new RootElement(this,theActiveElement));
-	}
+    //If current Element is a Basic, change it into a Root
+    if (typeid(theActiveElement) == typeid(BasicElement)) {
+	newElement = new RootElement(this);
+	theActiveElement->substituteElement(newElement);
+	delete theActiveElement;
+	theActiveElement = 0;
+    } else {
+	BasicElement *nextElement=theActiveElement->getNext();
+	if(nextElement!=0L){       //If there's a next insert root before next
+	    nextElement->insertElement(newElement=new RootElement(this));
+	} else  //If there isn't a next append only.
+	    activeElement()->setNext(newElement=new RootElement(this,theActiveElement));
+    }
     setActiveElement(newElement);  
     //RootElement need a child[0] i.e. root content
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
+    newElement = new BasicElement(this,theActiveElement,4);
+    theActiveElement->setChild(newElement,0);
     setActiveElement(newElement); //I prefere to AutoActivate RootContent 
     emitModified();
 }
@@ -164,7 +158,7 @@ void KFormulaDocument::addFractionElement(QString cont)
     if(theActiveElement==0L)
 	setActiveElement(theFirstElement);
   
-    if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
+    if(typeid(theActiveElement) == typeid(BasicElement))  //If current Element is a Basic
 	{					//It change it into a Root
 	    theActiveElement->substituteElement(newElement = new FractionElement(this));
 	    delete theActiveElement;
@@ -199,7 +193,7 @@ void KFormulaDocument::addMatrixElement(QString cont)
     if(theActiveElement==0L)
 	setActiveElement(theFirstElement);
   
-    if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
+    if(typeid(theActiveElement) == typeid(BasicElement))  //If current Element is a Basic
 	{					//It change it into a Root
 	    theActiveElement->substituteElement(newElement = new MatrixElement(this));
 	    delete theActiveElement;
@@ -232,7 +226,7 @@ void KFormulaDocument::addBracketElement(QString cont)
     if(theActiveElement==0L)
 	setActiveElement(theFirstElement);
   
-    if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
+    if(typeid(theActiveElement) == typeid(BasicElement))  //If current Element is a Basic
 	{					//It change it into a Bracket
 	    theActiveElement->substituteElement(newElement = new BracketElement(this));
 	    delete theActiveElement;
@@ -286,7 +280,7 @@ void KFormulaDocument::addTextElement()
     if(theActiveElement==0L)
 	setActiveElement(theFirstElement); 
 
-    if(theActiveElement->type()==EL_BASIC)  //see addRootElement()
+    if(typeid(theActiveElement) == typeid(BasicElement))  //see addRootElement()
 	{
 	    theActiveElement->substituteElement(newElement = new TextElement(this));
 	    delete theActiveElement;
@@ -410,23 +404,25 @@ void KFormulaDocument::paintEvent( QPaintEvent *, QWidget *paintGround )
     thePainter->setPen( black );
     theFirstElement->checkSize();
     theFirstElement->draw(QPoint(0,0)-theFirstElement->getSize().topLeft());
-    if(theActiveElement!=0L)
-	if(theActiveElement->type()==EL_TEXT)
-	    thePainter->drawWinFocusRect(theCursor);
+    if(theActiveElement && typeid(theActiveElement) == typeid(TextElement))
+	thePainter->drawWinFocusRect(theCursor);
     thePainter->end();
 }
 
 void KFormulaDocument::setActiveElement(BasicElement* c)
 { 
-    if(theActiveElement!=0L) theActiveElement->setActive(FALSE);
-    theActiveElement=c;
-    if(c!=0L)theActiveElement->setActive(TRUE);    
+    if(theActiveElement) 
+	theActiveElement->setActive(false);
+    theActiveElement = c;
+    if (theActiveElement)
+	theActiveElement->setActive(true);
 }
 
 void KFormulaDocument::setFirstElement(BasicElement* c)
 { 
   
-    if(c!=0L) theFirstElement=c;
+    if (c) 
+	theFirstElement = c;
     else
 	warning("Try to set first element to 0L");
 }
