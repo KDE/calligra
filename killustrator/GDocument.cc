@@ -77,7 +77,7 @@ void GDocument::initialize ()
   gridy = 20.0;
   gridSnapIsOn = false;
   gridIsOn = false;
-  mGridColor = blue;
+  mGridColor = lightGray;
 
   helplinesSnapIsOn = false;
   helplinesAreOn = true;
@@ -234,10 +234,13 @@ QDomDocument GDocument::saveToXml ()
   grid.setAttribute ("dx", gridx);
   grid.setAttribute ("dy", gridy);
   grid.setAttribute ("align", gridSnapIsOn ? 1 : 0);
+  grid.setAttribute ("show", gridIsOn ? 1 : 0);
+  grid.setAttribute ("color", mGridColor.name());
   head.appendChild(grid);
 
   QDomElement helplines=document.createElement("helplines");
   helplines.setAttribute ("align", helplinesSnapIsOn ? 1 : 0);
+  helplines.setAttribute ("show", helplinesAreOn ? 1 : 0);
   QValueList<float>::Iterator hi;
   for(hi = hHelplines.begin(); hi != hHelplines.end(); ++hi)
   {
@@ -281,10 +284,13 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     QDomElement grid=head.namedItem("grid").toElement();
     gridx=grid.attribute("dx").toFloat();
     gridy=grid.attribute("dy").toFloat();
-    gridSnapIsOn = (grid.attribute("align").toInt()==1);
-
+    gridSnapIsOn = (grid.attribute("align").toInt() == 1);
+    gridIsOn = (grid.attribute("show").toInt() == 1);
+    mGridColor.setNamedColor(grid.attribute("color"));
+    
     QDomElement helplines=grid.namedItem("helplines").toElement();
-    helplinesSnapIsOn = (helplines.attribute("align").toInt()==1);
+    helplinesSnapIsOn = (helplines.attribute("align").toInt() == 1);
+    helplinesAreOn = (helplines.attribute("show").toInt() == 1);
 
     QDomElement l=helplines.firstChild().toElement();
     for( ; !l.isNull(); l=helplines.nextSibling().toElement())
