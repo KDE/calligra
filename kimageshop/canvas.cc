@@ -695,11 +695,36 @@ void Canvas::setBackgroundLayer( unsigned int _layer )
   }
 }
 
-int Canvas::rotateLayer180(Layer *_layer)
+void Canvas::rotateLayer180(Layer *_layer)
 {
 	_layer = layerPtr( _layer );
 	_layer->rotate180();
 }
+
+void Canvas::rotateLayerLeft90(Layer *_layer)
+{
+	_layer = layerPtr( _layer );
+	_layer->rotateLeft90();
+}
+
+void Canvas::rotateLayerRight90(Layer *_layer)
+{
+	_layer = layerPtr( _layer );
+	_layer->rotateRight90();
+}
+
+void Canvas::mirrorLayerX(Layer *_layer)
+{
+	_layer = layerPtr( _layer );
+	_layer->mirrorX();
+}
+
+void Canvas::mirrorLayerY(Layer *_layer)
+{
+	_layer = layerPtr( _layer );
+	_layer->mirrorY();
+}
+
 
 
 

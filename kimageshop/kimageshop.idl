@@ -82,6 +82,10 @@ module KImageShop
 
 		// Image menu
 		slot void slotRotateLayer180();
+		slot void slotRotateLayerLeft90();
+		slot void slotRotateLayerRight90();
+		slot void slotMirrorLayerX();
+		slot void slotMirrorLayerY();
 	};
 
 	interface Document : KOffice::Document, KOffice::Print

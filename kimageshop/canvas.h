@@ -104,7 +104,11 @@ public:
   void paintBrush( QPoint pt, const Brush *brush );
   LayerList layerList() { return layers; };
 
-	rotateLayer180(Layer *_layer);
+	void rotateLayer180(Layer *_layer);
+	void rotateLayerLeft90(Layer *_layer);
+	void rotateLayerRight90(Layer *_layer);
+	void mirrorLayerX(Layer *_layer);
+	void mirrorLayerY(Layer *_layer);
 
 public slots:
 

@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include "misc.h"
 
+
 ChannelData::ChannelData(int _numChannels, enum cSpace _cspace)
 {
 	puts("new ChannelData");
@@ -32,10 +33,20 @@ ChannelData::ChannelData(int _numChannels, enum cSpace _cspace)
   tileInfo=0;
   imageRect=QRect();
   tilesRect=QRect();
-	lastTileXOffset=0;
-	lastTileYOffset=0;
 	channels=_numChannels;
 	colorSpace=_cspace;
+}
+
+int ChannelData::lastTileOffsetX()
+{
+	int lastTileXOffset=TILE_SIZE-(tilesRect.right()-imageRect.right());
+	return((lastTileXOffset) ? lastTileXOffset :  TILE_SIZE);
+}
+
+int ChannelData::lastTileOffsetY()
+{
+	int lastTileYOffset=TILE_SIZE-(tilesRect.bottom()-imageRect.bottom());
+	return((lastTileYOffset) ? lastTileYOffset :  TILE_SIZE);
 }
 
 void ChannelData::loadViaQImage(QImage img)
@@ -235,11 +246,6 @@ void ChannelData::allocateRect(QRect newRect)
 				else
 					memset(tileInfo[(y*xTilesNo)+x], 255, channels*TILE_SIZE*TILE_SIZE);
 			}
-
-	lastTileXOffset=(imageRect.width()+offset().x())%TILE_SIZE;
-	if (lastTileXOffset==0) lastTileXOffset=TILE_SIZE;
-	lastTileYOffset=(imageRect.height()+offset().y())%TILE_SIZE;
-	if (lastTileYOffset==0) lastTileYOffset=TILE_SIZE;
 }
 
 
@@ -257,7 +263,6 @@ void ChannelData::dumpTileBlock()
 	  puts("");
 	}
   puts("");
-	printf("mx=%d my=%d\n", lastTileXOffset, lastTileYOffset);
 }
 
 void ChannelData::moveBy(int dx, int dy)
@@ -283,10 +288,167 @@ QRect ChannelData::tileRect(int tileNo)
 	return(tr);
 }
 
+
 void ChannelData::rotate180()
 {
-	uchar *tmp,tmpC, buf[TILE_SIZE*channels];
+	uchar *tmp, tmpC;
+	uchar **newTileInfo=new uchar* [xTilesNo*yTilesNo];
+
+	int top=0, bot=xTilesNo*yTilesNo-1;	
+	for(int tile=xTilesNo*yTilesNo; tile; tile--)
+		newTileInfo[top++]=tileInfo[bot--];
+	delete tileInfo;
+	tileInfo=newTileInfo;
+
+	for(int y=0; y<yTilesNo; y++) {
+		for(int x=0; x<xTilesNo; x++) {
+			tmp=tileInfo[y*xTilesNo+x];
+			if (tmp) {
+				uchar *top=tmp;
+				uchar *bot=tmp+TILE_SIZE*TILE_SIZE*channels-channels;
+				for(int pix=TILE_SIZE*TILE_SIZE/2; pix; pix--) {
+					for(int c=channels; c; c--) {
+						tmpC=*top;
+						*top++=*bot;
+						*bot++=tmpC;
+					}
+					bot-=2*channels;
+				}
+			}
+		}
+	}
 	
+ 	tilesRect.moveBy(imageRect.left()-tilesRect.left() -
+									 (tilesRect.right()-imageRect.right()),
+									 imageRect.top()-tilesRect.top() -
+ 									 (tilesRect.bottom()-imageRect.bottom()));
+}
+
+void ChannelData::rotateRight90()
+{
+	uchar **newTileInfo=new uchar* [xTilesNo*yTilesNo];
+	int tmpI;
+
+	for(int y=0; y<yTilesNo; y++)
+		for(int x=0; x<xTilesNo; x++)
+			newTileInfo[x*yTilesNo + yTilesNo-1-y] = tileInfo[y*xTilesNo+x];
+	tmpI=xTilesNo;
+	xTilesNo=yTilesNo;
+	yTilesNo=tmpI;
+	delete tileInfo;
+	tileInfo=newTileInfo;
+
+	uchar *newBlk=new uchar[TILE_SIZE*TILE_SIZE*channels];
+
+	for(int y=0; y<yTilesNo; y++) {
+		for(int x=0; x<xTilesNo; x++) {
+			uchar *tmp=tileInfo[y*xTilesNo+x];
+			if (tmp) {
+				for(int yp=0; yp<TILE_SIZE; yp++)
+					for(int xp=0; xp<TILE_SIZE; xp++)
+						for(int c=0; c<channels; c++) {
+							*(newBlk+((xp+1)*TILE_SIZE-1-yp)*channels+c) = 
+								*(tmp+(yp*TILE_SIZE+xp)*channels+c);
+						}
+				tileInfo[y*xTilesNo+x]=newBlk;
+				newBlk=tmp;
+			}
+		}
+	}
+	delete newBlk;
+
+	int tmp;
+	int newOffX=tilesRect.bottom()-imageRect.bottom();
+	int newOffY=imageRect.left()-tilesRect.left();
+
+	imageRect.setSize(QSize(imageRect.height(), imageRect.width()));
+
+	tilesRect=QRect(imageRect.x()-newOffX, imageRect.y()-newOffY,
+									tilesRect.height(), tilesRect.width());
+}
+
+void ChannelData::rotateLeft90()
+{
+	uchar **newTileInfo=new uchar* [xTilesNo*yTilesNo];
+	int tmpI;
+
+	for(int y=0; y<yTilesNo; y++)
+		for(int x=0; x<xTilesNo; x++)
+			newTileInfo[(xTilesNo-1-x)*yTilesNo + y] = tileInfo[y*xTilesNo+x];
+	tmpI=xTilesNo;
+	xTilesNo=yTilesNo;
+	yTilesNo=tmpI;
+	delete tileInfo;
+	tileInfo=newTileInfo;
+
+	uchar *newBlk=new uchar[TILE_SIZE*TILE_SIZE*channels];
+
+	for(int y=0; y<yTilesNo; y++) {
+		for(int x=0; x<xTilesNo; x++) {
+			uchar *tmp=tileInfo[y*xTilesNo+x];
+			if (tmp) {
+				for(int yp=0; yp<TILE_SIZE; yp++)
+					for(int xp=0; xp<TILE_SIZE; xp++)
+						for(int c=0; c<channels; c++) {
+							*(newBlk+((TILE_SIZE-1-xp)*TILE_SIZE+yp)*channels+c) = 
+								*(tmp+(yp*TILE_SIZE+xp)*channels+c);
+						}
+				tileInfo[y*xTilesNo+x]=newBlk;
+				newBlk=tmp;
+			}
+		}
+	}
+	delete newBlk;
+
+	int tmp;
+	int newOffX=imageRect.top()-tilesRect.top();
+	int newOffY=tilesRect.right()-imageRect.right();
+
+	imageRect.setSize(QSize(imageRect.height(), imageRect.width()));
+
+	tilesRect=QRect(imageRect.x()-newOffX, imageRect.y()-newOffY,
+									tilesRect.height(), tilesRect.width());
+}
+
+void ChannelData::mirrorX()
+{
+	uchar *tmp, tmpC;
+	
+	
+	for(int y=0; y<yTilesNo; y++) {
+		for(int x=0; x<=(xTilesNo-1)/2; x++) {
+			tmp=tileInfo[y*xTilesNo+x];
+			tileInfo[y*xTilesNo+x]=tileInfo[(y+1)*xTilesNo-x-1];
+			tileInfo[(y+1)*xTilesNo-x-1]=tmp;
+		}
+	}
+
+	for(int y=0; y<yTilesNo; y++) {
+		for(int x=0; x<xTilesNo; x++) {
+			tmp=tileInfo[y*xTilesNo+x];
+			if (tmp) {
+				for(int line=0; line<TILE_SIZE; line++) {
+					uchar *left =tmp+line*TILE_SIZE*channels;
+					uchar *right=left+(TILE_SIZE-1)*channels;
+					for(int i=TILE_SIZE/2; i; i--) {
+						for(int c=channels; c ; c--) {
+							tmpC=*left;
+							*left++=*right;
+							*right++=tmpC;
+						}
+						right-=2*channels;
+					}
+				}
+			}
+		}
+	}
+	tilesRect.moveBy(imageRect.left()-tilesRect.left() -
+									 (tilesRect.right()-imageRect.right()) , 0);
+}
+
+void ChannelData::mirrorY()
+{
+	uchar *tmp, buf[TILE_SIZE*channels];
 	
 	for(int y=0; y<=(yTilesNo-1)/2; y++) {
 		for(int x=0; x<xTilesNo; x++) {
@@ -313,24 +475,4 @@ void ChannelData::rotate180()
 	
 	tilesRect.moveBy(0, imageRect.top()-tilesRect.top() -
 									 (tilesRect.bottom()-imageRect.bottom()));
-
-// 	for(int y=0; y<yTilesNo; y++) {
-// 		for(int x=0; x<xTilesNo; x++) {
-// 			tmp=tileInfo[y*xTilesNo+x];
-// 			if (tmp) {
-// 				for(int line=0; line<TILE_SIZE/2; line++) {
-// 					uchar *top=tmp+line*TILE_SIZE*channels;
-// 					uchar *bot=tmp+(TILE_SIZE-line)*TILE_SIZE*channels-channels;
-// 					for(int pix=TILE_SIZE*channels; pix ; pix--) {
-// 						for(int c=channels; c ; c--) {
-// 							tmpC=*bot;
-// 							*bot++=*top;
-// 							*top++=tmpC;
-// 						}
-// 						bot-=channels;
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
 }

@@ -360,6 +360,10 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   // image menu
   menubar->insertMenu( i18n( "&Image" ), m_vMenuImage, -1, -1 );
   m_idMenuImage_Rotate180 = m_vMenuImage->insertItem( i18n( "&Rotate 180" ), this, "slotRotateLayer180", 0 );
+  m_idMenuImage_RotateLeft90 = m_vMenuImage->insertItem( i18n( "&Rotate Left 90" ), this, "slotRotateLayerLeft90", 0 );
+  m_idMenuImage_RotateRight90 = m_vMenuImage->insertItem( i18n( "&Rotate Right 90" ), this, "slotRotateLayerRight90", 0 );
+  m_idMenuImage_MirrorX = m_vMenuImage->insertItem( i18n( "&Mirror X" ), this, "slotMirrorLayerX", 0 );
+  m_idMenuImage_MirrorY = m_vMenuImage->insertItem( i18n( "&Mirror Y" ), this, "slotMirrorLayerY", 0 );
 /*
   // plugins menu
   menubar->insertMenu( i18n( "&Plugins" ), m_vMenuPlugIns, -1, -1 );
@@ -1018,6 +1022,26 @@ void  KImageShopView::slotSetBGColor(const KColor& c)
 void KImageShopView::slotRotateLayer180()
 {
 	m_pDoc->rotateLayer180(0);
+}
+
+void KImageShopView::slotRotateLayerLeft90()
+{
+	m_pDoc->rotateLayerLeft90(0);
+}
+
+void KImageShopView::slotRotateLayerRight90()
+{
+	m_pDoc->rotateLayerRight90(0);
+}
+
+void KImageShopView::slotMirrorLayerX()
+{
+	m_pDoc->mirrorLayerX(0);
+}
+
+void KImageShopView::slotMirrorLayerY()
+{
+	m_pDoc->mirrorLayerY(0);
 }
 
 #include "kimageshop_view.moc"

@@ -64,19 +64,24 @@ public:
 	uchar** tileBlock()    { return tileInfo;  };
 	int     width()        { return imageRect.width();  };
 	int     height()       { return imageRect.height(); };
-	int lastTileOffsetX()  { return lastTileXOffset;    };
-	int lastTileOffsetY()  { return lastTileYOffset;    };
 	QPoint  offset()       { return imageRect.topLeft()-tilesRect.topLeft(); };
+	int lastTileOffsetX();
+	int lastTileOffsetY();
+
+
+	void rotate180();
+	void rotateLeft90();	
+	void rotateRight90();
+	void mirrorX();
+	void mirrorY();
 
 	// Debugging
 	void dumpTileBlock();
-	void rotate180();
-
 
  private:
 	enum    cSpace colorSpace;
 	QRect   imageRect, tilesRect;
-	int     xTilesNo, yTilesNo, lastTileXOffset, lastTileYOffset;
+	int     xTilesNo, yTilesNo;
 	int     channels;
 	uchar** tileInfo;
 };

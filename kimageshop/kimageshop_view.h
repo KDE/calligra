@@ -124,6 +124,10 @@ public slots:
   virtual void slotActivateGradientTool();
 
 	virtual void slotRotateLayer180();
+	virtual void slotRotateLayerLeft90();
+	virtual void slotRotateLayerRight90();
+	virtual void slotMirrorLayerX();
+	virtual void slotMirrorLayerY();
 
   void changeUndo( QString, bool);
   void changeRedo( QString, bool);
@@ -178,6 +182,10 @@ protected:
 
   OpenPartsUI::Menu_var m_vMenuImage;
 	long m_idMenuImage_Rotate180;
+	long m_idMenuImage_RotateLeft90;
+	long m_idMenuImage_RotateRight90;
+	long m_idMenuImage_MirrorX;
+	long m_idMenuImage_MirrorY;
 
   OpenPartsUI::Menu_var m_vMenuPlugIns;
   OpenPartsUI::Menu_var m_vMenuOptions;

@@ -193,4 +193,28 @@ void Layer::rotate180()
 	dataChannels->rotate180();
 }
 
+void Layer::rotateLeft90()
+{
+	alphaChannel->rotateLeft90();
+	dataChannels->rotateLeft90();
+}
+
+void Layer::rotateRight90()
+{
+	alphaChannel->rotateRight90();
+	dataChannels->rotateRight90();
+}
+
+void Layer::mirrorX()
+{
+	alphaChannel->mirrorX();
+	dataChannels->mirrorX();
+}
+
+void Layer::mirrorY()
+{
+	alphaChannel->mirrorY();
+	dataChannels->mirrorY();
+}
+
 #include "layer.moc"

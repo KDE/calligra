@@ -70,6 +70,10 @@ class Layer : public QObject {
 	void    setPixel(int x, int y, uint val);
 
 	void    rotate180();
+	void    rotateLeft90();
+	void    rotateRight90();
+	void    mirrorX();
+	void    mirrorY();
 
  signals:
 	void layerPropertiesChanged();
