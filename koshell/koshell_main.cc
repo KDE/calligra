@@ -1,18 +1,23 @@
 #include <qprinter.h>
 
-#include "koshell_main.h"
-
 #include <koApplication.h>
 #include <kdebug.h>
+
+#include "koshell_main.h"
+#include "koshell_shell.h"
 
 KoShellApp::KoShellApp( int &argc, char** argv ) : 
   KoApplication( argc, argv, "KoShell" )
 {
-  m_pShell = 0L;
 }
 
 KoShellApp::~KoShellApp()
 {
+}
+
+KoMainWindow* KoShellApp::createNewShell()
+{
+  return new KoShellWindow();
 }
 
 int main( int argc, char **argv )

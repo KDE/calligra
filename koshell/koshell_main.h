@@ -5,8 +5,6 @@
 
 #include "koshell_shell.h"
 
-class KoShellShell;
-
 class KoShellApp : public KoApplication
 {
   Q_OBJECT
@@ -15,10 +13,8 @@ public:
 
   KoShellApp( int& argc, char** argv );
   ~KoShellApp();
-  
-protected:
 
-  KoShellWindow* m_pShell;
+  virtual KoMainWindow* createNewShell();  
 };
 
 #endif
