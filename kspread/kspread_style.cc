@@ -158,8 +158,8 @@ void KSpreadStyle::loadOasisStyle( const QDomElement & element )
 
     if ( styleStack.hasAttribute( "fo:wrap-option" )&&( styleStack.attribute( "fo:wrap-option" )=="wrap" ) )
     {
-       setProperty( PMultiRow );
-       m_featuresSet |= SMultiRow;
+        setProperty( PMultiRow );
+        m_featuresSet |= SMultiRow;
     }
     if ( styleStack.hasAttribute( "style:cell-protect" ) )
     {
@@ -195,251 +195,250 @@ void KSpreadStyle::loadOasisStyle( const QDomElement & element )
         m_featuresSet |= SDontPrintText;
 
     }
+    if ( styleStack.hasAttribute( "fo:direction" ) && ( styleStack.attribute( "fo:direction" )=="ttb" ) )
+    {
+        setProperty( PVerticalText );
+        m_featuresSet |= SVerticalText;
 
+    }
+    if ( styleStack.hasAttribute( "style:rotation-angle" ) )
+    {
+        bool ok;
+        int a = styleStack.attribute( "style:rotation-angle" ).toInt( &ok );
+        kdDebug()<<" rotation-angle :"<<a<<endl;
+        m_rotateAngle= ( -a + 1 );
+        m_featuresSet |= SAngle;
+    }
+    if ( styleStack.hasAttribute( "fo:margin-left" ) )
+    {
+        //todo fix me
+        setIndent( KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ),0.0 ) );
+        m_featuresSet |= SIndent;
+    }
 #if 0
     bool ok;
-  if ( format.hasAttribute( "type" ) )
-  {
-    m_type = (StyleType) format.attribute( "type" ).toInt( &ok );
-    if ( !ok )
-      return false;
-  }
-
-  if ( format.hasAttribute( "verticaltext" ) )
-  {
-    setProperty( PVerticalText );
-    m_featuresSet |= SVerticalText;
-  }
-
-  if ( format.hasAttribute( "precision" ) )
-  {
-    int i = format.attribute( "precision" ).toInt( &ok );
-    if ( i < -1 )
-    {
-      kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
-      return false;
-    }
-    m_precision = i;
-    m_featuresSet |= SPrecision;
-  }
-
-  if ( format.hasAttribute( "float" ) )
-  {
-    KSpreadFormat::FloatFormat a = (KSpreadFormat::FloatFormat)format.attribute( "float" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
-    {
-      m_floatFormat = a;
-      m_featuresSet |= SFloatFormat;
-    }
-  }
-
-  if ( format.hasAttribute( "floatcolor" ) )
-  {
-    KSpreadFormat::FloatColor a = (KSpreadFormat::FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
-    if ( !ok ) return false;
-    if ( (unsigned int) a >= 1 || (unsigned int) a <= 2 )
-    {
-      m_floatColor = a;
-      m_featuresSet |= SFloatColor;
-    }
-  }
-
-  if ( format.hasAttribute( "factor" ) )
-  {
-    m_factor = format.attribute( "factor" ).toDouble( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SFactor;
-  }
-
-  if ( format.hasAttribute( "format" ) )
-  {
-    int fo = format.attribute( "format" ).toInt( &ok );
-    if ( ! ok )
-      return false;
-    m_formatType = ( KSpreadFormat::FormatType ) fo;
-    m_featuresSet |= SFormatType;
-  }
-  if ( format.hasAttribute( "custom" ) )
-  {
-    m_strFormat = format.attribute( "custom" );
-    m_featuresSet |= SCustomFormat;
-  }
-  if ( m_formatType == KSpreadFormat::Money )
-  {
     if ( format.hasAttribute( "type" ) )
     {
-      m_currency.type   = format.attribute( "type" ).toInt( &ok );
-      if (!ok)
-        m_currency.type = 1;
+        m_type = (StyleType) format.attribute( "type" ).toInt( &ok );
+        if ( !ok )
+            return false;
     }
-    if ( format.hasAttribute( "symbol" ) )
+
+    if ( format.hasAttribute( "precision" ) )
     {
-      m_currency.symbol = format.attribute( "symbol" );
+        int i = format.attribute( "precision" ).toInt( &ok );
+        if ( i < -1 )
+        {
+            kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
+            return false;
+        }
+        m_precision = i;
+        m_featuresSet |= SPrecision;
     }
-  }
-  if ( format.hasAttribute( "angle" ) )
-  {
-    m_rotateAngle = format.attribute( "angle" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SAngle;
-  }
-  if ( format.hasAttribute( "indent" ) )
-  {
-    m_indent = format.attribute( "indent" ).toDouble( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SIndent;
-  }
 
-  // TODO: remove that...
-  QDomElement font = format.namedItem( "font" ).toElement();
-  if ( !font.isNull() )
-  {
-    QFont f( util_toFont( font ) );
-    m_fontFamily = f.family();
-    m_fontSize = f.pointSize();
-    if ( f.italic() )
-      m_fontFlags |= FItalic;
-    if ( f.bold() )
-      m_fontFlags |= FBold;
-    if ( f.underline() )
-      m_fontFlags |= FUnderline;
-    if ( f.strikeOut() )
-      m_fontFlags |= FStrike;
+    if ( format.hasAttribute( "float" ) )
+    {
+        KSpreadFormat::FloatFormat a = (KSpreadFormat::FloatFormat)format.attribute( "float" ).toInt( &ok );
+        if ( !ok )
+            return false;
+        if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
+        {
+            m_floatFormat = a;
+            m_featuresSet |= SFloatFormat;
+        }
+    }
 
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFamily;
-    m_featuresSet |= SFontFlag;
-    m_featuresSet |= SFontSize;
-  }
+    if ( format.hasAttribute( "floatcolor" ) )
+    {
+        KSpreadFormat::FloatColor a = (KSpreadFormat::FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
+        if ( !ok ) return false;
+        if ( (unsigned int) a >= 1 || (unsigned int) a <= 2 )
+        {
+            m_floatColor = a;
+            m_featuresSet |= SFloatColor;
+        }
+    }
 
-  if ( format.hasAttribute( "font-family" ) )
-  {
-    m_fontFamily = format.attribute( "font-family" );
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFamily;
-  }
-  if ( format.hasAttribute( "font-size" ) )
-  {
-    m_fontSize = format.attribute( "font-size" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontSize;
-  }
+    if ( format.hasAttribute( "factor" ) )
+    {
+        m_factor = format.attribute( "factor" ).toDouble( &ok );
+        if ( !ok )
+            return false;
+        m_featuresSet |= SFactor;
+    }
 
-  if ( format.hasAttribute( "font-flags" ) )
-  {
-    m_fontFlags = format.attribute( "font-flags" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
+    if ( format.hasAttribute( "format" ) )
+    {
+        int fo = format.attribute( "format" ).toInt( &ok );
+        if ( ! ok )
+            return false;
+        m_formatType = ( KSpreadFormat::FormatType ) fo;
+        m_featuresSet |= SFormatType;
+    }
+    if ( format.hasAttribute( "custom" ) )
+    {
+        m_strFormat = format.attribute( "custom" );
+        m_featuresSet |= SCustomFormat;
+    }
+    if ( m_formatType == KSpreadFormat::Money )
+    {
+        if ( format.hasAttribute( "type" ) )
+        {
+            m_currency.type   = format.attribute( "type" ).toInt( &ok );
+            if (!ok)
+                m_currency.type = 1;
+        }
+        if ( format.hasAttribute( "symbol" ) )
+        {
+            m_currency.symbol = format.attribute( "symbol" );
+        }
+    }
 
-  if ( format.hasAttribute( "brushcolor" ) )
-  {
-    m_backGroundBrush.setColor( QColor( format.attribute( "brushcolor" ) ) );
-    m_featuresSet |= SBackgroundBrush;
-  }
+    // TODO: remove that...
+    QDomElement font = format.namedItem( "font" ).toElement();
+    if ( !font.isNull() )
+    {
+        QFont f( util_toFont( font ) );
+        m_fontFamily = f.family();
+        m_fontSize = f.pointSize();
+        if ( f.italic() )
+            m_fontFlags |= FItalic;
+        if ( f.bold() )
+            m_fontFlags |= FBold;
+        if ( f.underline() )
+            m_fontFlags |= FUnderline;
+        if ( f.strikeOut() )
+            m_fontFlags |= FStrike;
 
-  if ( format.hasAttribute( "brushstyle" ) )
-  {
-    m_backGroundBrush.setStyle( (Qt::BrushStyle) format.attribute( "brushstyle" ).toInt( &ok )  );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SBackgroundBrush;
-  }
+        m_featuresSet |= SFont;
+        m_featuresSet |= SFontFamily;
+        m_featuresSet |= SFontFlag;
+        m_featuresSet |= SFontSize;
+    }
 
-  QDomElement pen = format.namedItem( "pen" ).toElement();
-  if ( !pen.isNull() )
-  {
-    m_textPen = util_toPen( pen );
-    m_featuresSet |= STextPen;
-  }
+    if ( format.hasAttribute( "font-family" ) )
+    {
+        m_fontFamily = format.attribute( "font-family" );
+        m_featuresSet |= SFont;
+        m_featuresSet |= SFontFamily;
+    }
+    if ( format.hasAttribute( "font-size" ) )
+    {
+        m_fontSize = format.attribute( "font-size" ).toInt( &ok );
+        if ( !ok )
+            return false;
+        m_featuresSet |= SFont;
+        m_featuresSet |= SFontSize;
+    }
 
-  QDomElement left = format.namedItem( "left-border" ).toElement();
-  if ( !left.isNull() )
-  {
-    QDomElement pen = left.namedItem( "pen" ).toElement();
+    if ( format.hasAttribute( "font-flags" ) )
+    {
+        m_fontFlags = format.attribute( "font-flags" ).toInt( &ok );
+        if ( !ok )
+            return false;
+        m_featuresSet |= SFont;
+        m_featuresSet |= SFontFlag;
+    }
+
+    if ( format.hasAttribute( "brushcolor" ) )
+    {
+        m_backGroundBrush.setColor( QColor( format.attribute( "brushcolor" ) ) );
+        m_featuresSet |= SBackgroundBrush;
+    }
+
+    if ( format.hasAttribute( "brushstyle" ) )
+    {
+        m_backGroundBrush.setStyle( (Qt::BrushStyle) format.attribute( "brushstyle" ).toInt( &ok )  );
+        if ( !ok )
+            return false;
+        m_featuresSet |= SBackgroundBrush;
+    }
+
+    QDomElement pen = format.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
     {
-      m_leftBorderPen = util_toPen( pen );
-      m_featuresSet |= SLeftBorder;
+        m_textPen = util_toPen( pen );
+        m_featuresSet |= STextPen;
     }
-  }
 
-  QDomElement top = format.namedItem( "top-border" ).toElement();
-  if ( !top.isNull() )
-  {
-    QDomElement pen = top.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    QDomElement left = format.namedItem( "left-border" ).toElement();
+    if ( !left.isNull() )
     {
-      m_topBorderPen = util_toPen( pen );
-      m_featuresSet |= STopBorder;
+        QDomElement pen = left.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            m_leftBorderPen = util_toPen( pen );
+            m_featuresSet |= SLeftBorder;
+        }
     }
-  }
 
-  QDomElement right = format.namedItem( "right-border" ).toElement();
-  if ( !right.isNull() )
-  {
-    QDomElement pen = right.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    QDomElement top = format.namedItem( "top-border" ).toElement();
+    if ( !top.isNull() )
     {
-      m_rightBorderPen = util_toPen( pen );
-      m_featuresSet |= SRightBorder;
+        QDomElement pen = top.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            m_topBorderPen = util_toPen( pen );
+            m_featuresSet |= STopBorder;
+        }
     }
-  }
 
-  QDomElement bottom = format.namedItem( "bottom-border" ).toElement();
-  if ( !bottom.isNull() )
-  {
-    QDomElement pen = bottom.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    QDomElement right = format.namedItem( "right-border" ).toElement();
+    if ( !right.isNull() )
     {
-      m_bottomBorderPen = util_toPen( pen );
-      m_featuresSet |= SBottomBorder;
+        QDomElement pen = right.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            m_rightBorderPen = util_toPen( pen );
+            m_featuresSet |= SRightBorder;
+        }
     }
-  }
 
-  QDomElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
-  if ( !fallDiagonal.isNull() )
-  {
-    QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    QDomElement bottom = format.namedItem( "bottom-border" ).toElement();
+    if ( !bottom.isNull() )
     {
-      m_fallDiagonalPen = util_toPen( pen );
-      m_featuresSet |= SFallDiagonal;
+        QDomElement pen = bottom.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            m_bottomBorderPen = util_toPen( pen );
+            m_featuresSet |= SBottomBorder;
+        }
     }
-  }
 
-  QDomElement goUpDiagonal = format.namedItem( "up-diagonal" ).toElement();
-  if ( !goUpDiagonal.isNull() )
-  {
-    QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    QDomElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
+    if ( !fallDiagonal.isNull() )
     {
-      m_goUpDiagonalPen = util_toPen( pen );
-      m_featuresSet |= SGoUpDiagonal;
+        QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            m_fallDiagonalPen = util_toPen( pen );
+            m_featuresSet |= SFallDiagonal;
+        }
     }
-  }
 
-  if ( format.hasAttribute( "prefix" ) )
-  {
-    m_prefix = format.attribute( "prefix" );
-    m_featuresSet |= SPrefix;
-  }
-  if ( format.hasAttribute( "postfix" ) )
-  {
-    m_postfix = format.attribute( "postfix" );
-    m_featuresSet |= SPostfix;
-  }
+    QDomElement goUpDiagonal = format.namedItem( "up-diagonal" ).toElement();
+    if ( !goUpDiagonal.isNull() )
+    {
+        QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            m_goUpDiagonalPen = util_toPen( pen );
+            m_featuresSet |= SGoUpDiagonal;
+        }
+    }
 
-  return true;
+    if ( format.hasAttribute( "prefix" ) )
+    {
+        m_prefix = format.attribute( "prefix" );
+        m_featuresSet |= SPrefix;
+    }
+    if ( format.hasAttribute( "postfix" ) )
+    {
+        m_postfix = format.attribute( "postfix" );
+        m_featuresSet |= SPostfix;
+    }
+
+    return true;
 
 #endif
 }
