@@ -8,7 +8,7 @@ Standards-Version: 3.5.2
 Package: koffice
 Architecture: all
 Section: x11
-Depends: koffice-libs, kchart, killustrator, kivio, koshell, krayon, kpresenter, kspread, kugar, kword
+Depends: koffice-libs, kchart, kformula, killustrator, kivio, koshell, krayon, kpresenter, kspread, kugar, kword
 Suggests: koffice-dev
 Description: KDE Office Suite
  KOffice is an integrated office suite for KDE, the K Desktop
