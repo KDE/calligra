@@ -106,6 +106,7 @@ void FloatSpinBox::slotDecrease () {
 }
 
 void FloatSpinBox::slotValueChange () {
+debug("FloatSpinBox::slotValueChange");
   emit valueChanged (getValue ());
 }
 

@@ -59,7 +59,10 @@ void UnitBox::setFormatString (const char* fmt) {
 }
 
 float UnitBox::getValue () {
-  return cvtUnitToPt (unit, valueBox->getValue ());
+  if(isUnitEnabled)
+     return cvtUnitToPt (unit, valueBox->getValue ());
+  else
+     return valueBox->getValue ();
 }
 
 void UnitBox::setValue (float value) {
@@ -106,8 +109,12 @@ void UnitBox::setDefaultMeasurementUnit (MeasurementUnit unit) {
 
 void UnitBox::slotValueChange (float f) {
   // convert the value according current unit
-  float val = cvtUnitToPt (unit, f);
-  emit valueChanged (val);
+  if(isUnitEnabled){
+    float val = cvtUnitToPt (unit, f);
+    emit valueChanged (val);
+  }
+  else 
+    emit valueChanged (f);
 }
 
 void UnitBox::enableUnits (bool flag) {

@@ -1574,8 +1574,13 @@ void KIllustrator::readProperties (KConfig* config) {
 }
 
 void KIllustrator::restoreRulerStatus () {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
+
 
   config->setGroup ("Ruler");
   bool show_it = config->readBoolEntry ("showRuler", true);
@@ -1594,7 +1599,11 @@ void KIllustrator::restoreRulerStatus () {
 }
 
 void KIllustrator::saveRulerStatus (bool show_it) {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
 
   config->setGroup ("Ruler");
@@ -1605,7 +1614,11 @@ void KIllustrator::saveRulerStatus (bool show_it) {
 }
 
 void KIllustrator::restoreToolbarStatus () {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
 
   config->setGroup ("Toolbar Positions");
@@ -1650,7 +1663,11 @@ void KIllustrator::restoreToolbarStatus () {
 }
 
 void KIllustrator::saveToolbarStatus () {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
 
   config->setGroup ("Toolbar Positions");
@@ -1690,7 +1707,11 @@ void KIllustrator::saveToolbarStatus () {
 }
 
 void KIllustrator::restoreMenubarStatus () {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
 
   QString str = config->readEntry ("Menubar Position");
@@ -1705,7 +1726,11 @@ void KIllustrator::restoreMenubarStatus () {
 }
 
 void KIllustrator::saveMenubarStatus () {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
 
   QString str;

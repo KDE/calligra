@@ -131,6 +131,8 @@ QWidget* TransformationDialog::createPositionWidget (QWidget* parent) {
   relativePosition = new QCheckBox (w);
   relativePosition->setText (i18n ("Relative Position"));
   relativePosition->setGeometry (20, 80, 150, 30);
+  connect( relativePosition, SIGNAL(clicked()),
+           this, SLOT(relativePositionSlot()) );
 
   applyBttn[0] = new QPushButton (w);
   applyBttn[0]->setText (i18n ("Apply"));
@@ -272,7 +274,9 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
   relativeRotCenter->setText (i18n ("Relative Position"));
   relativeRotCenter->setGeometry (20, 80, 150, 20);
   box->adjustSize ();
-
+  connect( relativeRotCenter, SIGNAL(clicked()),
+           this, SLOT(relativeRotCenterSlot()) );
+  
   applyBttn[2] = new QPushButton (w);
   applyBttn[2]->setText (i18n ("Apply"));
   connect (applyBttn[2], SIGNAL(clicked()), this, SLOT(applyPressed()));
@@ -335,6 +339,32 @@ QWidget* TransformationDialog::createMirrorWidget (QWidget* parent) {
 
   w->adjustSize ();
   return w;
+}
+
+void TransformationDialog::relativePositionSlot(){
+  if( relativePosition->isChecked()){
+     horizPosition->setValue(0.0);
+     vertPosition-> setValue(0.0);
+  }
+  else
+  {
+     Rect r = document->boundingBoxForSelection ();
+     horizPosition->setValue (r.left ());
+     vertPosition->setValue (r.top ());
+  }
+}
+
+void TransformationDialog::relativeRotCenterSlot(){
+  if( relativeRotCenter->isChecked()){
+     horizRotCenter->setValue(0.0);
+     vertRotCenter-> setValue(0.0);
+  }
+  else
+  {
+     Rect r = document->boundingBoxForSelection ();
+     horizRotCenter->setValue (r.center ().x ());
+     vertRotCenter->setValue (r.center ().y ());
+  }
 }
 
 void TransformationDialog::applyToDuplicatePressed () {
@@ -593,6 +623,7 @@ void TransformationDialog::update () {
 }
 
 void TransformationDialog::updateProportionalDimension (float /*value*/) {
+  debug("updateProportionalDimension");
   if (proportional->isChecked ()) {
     if (sender () == horizDim) {
       if (percent->isChecked ())

@@ -60,6 +60,8 @@ private slots:
   void updateProportionalDimension (float value);
   void slotAbsScale ();
   void slotPercentScale ();
+  void relativePositionSlot();
+  void relativeRotCenterSlot();
 
 private:
   void translate (bool onDuplicate);

@@ -81,5 +81,9 @@ Bugs from above bug page:
 * Point editing doesn't always obey the Grid and/or auxilary line
   More bugs: You cannot select a point using a fine grid
 
-* Arrange|Transform: Choosing relative should reset the values to 0
-  Proportional doesn't seem to work
+* Arrange|Transform:
+  Proportional doesn't work: Reason: FloatSpinBox only emits an valueChanged,
+  if Return is hit, and UnitBox doesn't seem to re-broadcast it
+
+* FloatSpinbox: '-' always decreases the value; it should be used to type in a
+  negativ number!
