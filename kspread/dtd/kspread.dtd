@@ -1,0 +1,156 @@
+<!--	$Id$
+
+		This is an XML document type definition (DTD) for the KSpread
+		document format. 
+		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from 
+		KSpread's author Torben Weis <weis@kde.org>.
+
+		Please report all bugs to Kalle and Torben at the above addresses.
+-->
+		
+
+
+<!--	A KSpread document consists of a paper description and a map that 
+		contains the table data.
+
+		Attributes:
+
+		author:		The document's author
+		email:		The document's author's email address
+		editor:		The program this file was written with
+		mime:		The MIME type (must always have the value application/x-kspread
+-->
+<!ELEMENT DOC (PAPER, MAP)>
+<!ATTLIST DOC	author CDATA #IMPLIED
+				email CDATA #IMPLIED
+				editor CDATA #IMPLIED
+				mime CDATA "application/x-kword">
+
+<!--	Describes the page format. Can have no or one PAPERBORDERS child that 
+		describes the margins.
+
+		Attributes:
+
+		format:			integer value for the page format
+		width:			width in millimeters
+		height:			height in millimeters
+		orientation:	0 for landscape, 1 for portrait
+		columns:		the number of columns (only in wordprocessing mode)
+		columnspacing:	the gap between the columns (only in wordprocessing mode)
+-->
+<!ELEMENT PAPER (PAPERBORDERS|HEAD|FOOT)*>
+<!ATTLIST PAPER	format CDATA #REQUIRED
+				orientation CDATA #REQUIRED>
+
+
+
+<!--	Describes the margins of the page.
+
+		Attributes:
+		
+		left:			left margin in pixels
+		right:			right margin in pixels
+		top:			top margin in pixels
+		bottom:			bottom margin in pixels
+-->
+<!ELEMENT PAPERBORDERS EMPTY>
+<!ATTLIST PAPERBORDERS	left CDATA #REQUIRED
+						right CDATA #REQUIRED
+						top	CDATA #REQUIRED
+						bottom CDATA #REQUIRED>
+
+
+<!--	Describes the page header.
+
+		Attributes:
+
+		left:			the text to appear in the upper left
+		center:			the text to appear in the upper middle
+		right:			the text to appear in the upper right
+-->
+<!ELEMENT HEAD EMPTY>
+<!ATTLIST HEAD	left	CDATA #IMPLIED
+				center	CDATA #IMPLIED
+				right	CDATA #IMPLIED>
+
+
+<!--	Describes the page footer.
+
+		Attributes:
+
+		left:			the text to appear in the lower left
+		center:			the text to appear in the lower middle
+		right:			the text to appear in the lower right
+-->
+<!ELEMENT FOOT EMPTY>
+<!ATTLIST FOOT	left	CDATA #IMPLIED
+				center	CDATA #IMPLIED
+				right	CDATA #IMPLIED>
+
+
+
+
+
+<!--	Contains the table data for the various tables.
+-->
+<!ELEMENT MAP (TABLE)*>
+
+<!--	Contains the data in one table or embedded objects.
+
+		Attributes:
+
+		name	the name of the table
+-->
+<!ELEMENT TABLE (CELL|CHART)*>
+<!ATTLIST TABLE	name	CDATA #REQUIRED>
+
+
+<!--	Describes one cell including contents.
+
+		Attributes:
+
+		row		the row number of the cell
+		column	the column number of thecell
+-->
+<!ELEMENT CELL (#PCDATA|FORMAT)*>
+<!ATTLIST CELL	row		CDATA #REQUIRED
+				column	CDATA #REQUIRED>
+
+
+<!--	Describes the format of one cell.
+
+		Attributes:
+
+		align:			alignment (???fill in meaning of numerical values here???)
+		precision:		precision (???)
+		float:			???
+		floatcolor:		???
+		faktor:			???
+-->
+<!ELEMENT FORMAT EMPTY>
+<!ATTLIST FORMAT		align			CDATA #REQUIRED
+						precision		CDATA #REQUIRED
+						float			CDATA #REQUIRED
+						floatcolor		CDATA #REQUIRED
+						faktor			CDATA #REQUIRED>
+
+
+<!--	Describes an embedded chart.
+
+		Attributes:
+		
+		url		the URL of the embedded chart
+				(example: "store:/Table 1/0")
+		mime	the MIME type of the application that has generated
+				the chart
+-->
+<!ELEMENT CHART (RECT|BINDING)*>
+<!ATTLIST CHART			url		CDATA #REQUIRED
+						mime	CDATA #REQUIRED>
+
+<!ELEMENT RECT EMPTY>
+<!ATTLIST RECT	x		CDATA #REQUIRED
+				y		CDATA #REQUIRED
+				w		CDATA #REQUIRED
+				h		CDATA #REQUIRED>
+<!ELEMENT BINDING (RECT)>
