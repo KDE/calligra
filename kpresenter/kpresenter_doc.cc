@@ -389,15 +389,18 @@ void KPresenterDoc::initConfig()
         m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));
 
     }
-
+    int undo=30;
     if(config->hasGroup("Misc" ) )
     {
         config->setGroup( "Misc" );
-        int undo=config->readNumEntry("UndoRedo",-1);
+        undo=config->readNumEntry("UndoRedo",-1);
         if(undo!=-1)
             setUndoRedoLimit(undo);
         setRefreshSideBar( config->readBoolEntry("RefreshSideBar",true));
     }
+    if(undo!=-1)
+        setUndoRedoLimit(undo);
+
     if(config->hasGroup("Kpresenter Path" ) )
     {
         config->setGroup( "Kpresenter Path" );

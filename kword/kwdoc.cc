@@ -440,14 +440,14 @@ void KWDocument::initConfig()
   }
   else
       m_zoom = 100;
-
+  int undo=30;
   if(config->hasGroup("Misc" ) )
   {
       config->setGroup( "Misc" );
-      int undo=config->readNumEntry("UndoRedo",-1);
-      if(undo!=-1)
-          setUndoRedoLimit(undo);
+      undo=config->readNumEntry("UndoRedo",-1);
   }
+  if(undo!=-1)
+      setUndoRedoLimit(undo);
 
   setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
 
