@@ -270,6 +270,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
     m_removeTable = new KAction( i18n("Preference..."), 0, this, SLOT( preference() ), actionCollection(), "preference" );
+    m_firstLetterUpper = new KAction( i18n("Convert first letter to upper case"),KSBarIcon("first_letter_upper") ,0, this, SLOT( firstLetterUpper() ), actionCollection(), "firstletterupper" );
     //m_hideGrid = new KToggleAction( i18n("Hide Grid"), 0, actionCollection(), "hideGrid");
     //connect( m_hideGrid, SIGNAL( toggled( bool ) ), this, SLOT( toggleGrid( bool ) ) );
     //m_showFormular = new KToggleAction( i18n("Show formular"), 0, actionCollection(), "showFormular");
@@ -541,7 +542,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 	    updateEditWidget();
 	break;
 
-    case Key_Up:	
+    case Key_Up:
 	(m_pCanvas->*hideMarker)();
 
 	if ( selection.left() == 0 && make_select )
@@ -814,7 +815,7 @@ void KSpreadView::formulaBrackets()
 void KSpreadView::formulaFraction()
 {
     activateFormulaEditor();
-	
+
     canvasWidget()->insertFormulaChar(Box::DIVIDE );
 }
 
@@ -1143,7 +1144,13 @@ void KSpreadView::upper()
     updateEditWidget();
 }
 
-
+void KSpreadView::firstLetterUpper()
+{
+    if( !m_pTable  )
+	return;
+    m_pTable->setSelectionfirstLetterUpper( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    updateEditWidget();
+}
 
 void KSpreadView::insertFormula()
 {
@@ -1594,7 +1601,6 @@ void KSpreadView::showTable()
     KSpreadshow* dlg = new KSpreadshow( this, "Table show");
     dlg->show();
 }
-
 
 void KSpreadView::copySelection()
 {

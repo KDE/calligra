@@ -258,6 +258,7 @@ public slots:
     void equalizeColumn();
     void equalizeRow();
     void preference();
+    void firstLetterUpper();
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
@@ -461,6 +462,7 @@ private:
     KAction* m_equalizeRow;
     KAction* m_equalizeColumn;
     KAction* m_preference;
+    KAction* m_firstLetterUpper;
 //    KToggleAction* m_showColumnNumber;
     /**
      * Pointer to the last popup menu.

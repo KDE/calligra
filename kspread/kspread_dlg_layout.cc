@@ -504,30 +504,36 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 {
     dlg = _dlg;
 
-    postfix = new QLineEdit( this, "LineEdit_1" );
-    precision = new QLineEdit ( this, "LineEdit_2" );
-    prefix = new QLineEdit( this, "LineEdit_3" );
-    // format = new QListBox( this, "ListBox_1" );
-    format = new QComboBox( this, "ListBox_1" );
+    QVBoxLayout* layout = new QVBoxLayout( this, 6,10 );
+    QGroupBox *box = new QGroupBox( this, "Box");
+    
+    QGridLayout *grid = new QGridLayout(box,3,4,15,7);
+  
 
+    postfix = new QLineEdit( box, "LineEdit_1" );
+    grid->addWidget(postfix,0,1);
+    precision = new QLineEdit ( box, "LineEdit_2" );
+    grid->addWidget(precision,1,1);
+    prefix = new QLineEdit( box, "LineEdit_3" );
+    grid->addWidget(prefix,2,1);
+    
+    format = new QComboBox( box, "ListBox_1" );
+    grid->addWidget(format,3,1);
+    
     QLabel* tmpQLabel;
-    tmpQLabel = new QLabel( this, "Label_1" );
-    tmpQLabel->setGeometry( 10, 30, 40, 30 );
+    tmpQLabel = new QLabel( box, "Label_1" );
+    grid->addWidget(tmpQLabel,0,0);
     tmpQLabel->setText( i18n("Prefix") );
 
-    postfix->raise();
-    postfix->setGeometry( 70, 70, 100, 30 );
     if ( dlg->postfix.isNull() )
 	postfix->setText( "########" );
     else
 	postfix->setText( dlg->postfix.data() );
 
-    tmpQLabel = new QLabel( this, "Label_2" );
-    tmpQLabel->setGeometry( 10, 70, 50, 30 );
+    tmpQLabel = new QLabel( box, "Label_2" );
+    grid->addWidget(tmpQLabel,1,0);
     tmpQLabel->setText( i18n("Postfix") );
 
-    precision->raise();
-    precision->setGeometry( 70, 110, 100, 30 );
     char buffer[ 100 ];
     if ( dlg->precision == -1 )
     {
@@ -541,19 +547,16 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     else
 	precision->setText( "########" );
 
-    tmpQLabel = new QLabel( this, "Label_3" );
-    tmpQLabel->setGeometry( 10, 110, 60, 30 );
+    tmpQLabel = new QLabel( box, "Label_3" );
+    grid->addWidget(tmpQLabel,2,0);
     tmpQLabel->setText( i18n("Precision") );
 
-    prefix->raise();
-    prefix->setGeometry( 70, 30, 100, 30 );
     if ( dlg->prefix.isNull() )
 	prefix->setText( "########" );
     else
 	prefix->setText( dlg->prefix.data() );
 
-    format->raise();
-    format->setGeometry( 190, 30, 170, 30 );
+    grid->addWidget(format,0,3);
 
     format->insertItem( *CellLayoutDlg::formatOnlyNegSignedPixmap, 0 );
     format->insertItem( *CellLayoutDlg::formatRedOnlyNegSignedPixmap, 1 );
@@ -563,8 +566,9 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     format->insertItem( *CellLayoutDlg::undefinedPixmap, 5 );
 
     tmpQLabel = new QLabel( this, "Label_4" );
-    tmpQLabel->setGeometry( 190, 0, 100, 30 );
+    grid->addWidget(tmpQLabel,0,2);
     tmpQLabel->setText( i18n("Format") );
+
 
     if ( !dlg->bFloatFormat || !dlg->bFloatColor )
 	format->setCurrentItem( 5 );
@@ -578,6 +582,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 	format->setCurrentItem( 3 );
     else if ( dlg->floatFormat == KSpreadCell::AlwaysSigned && dlg->floatColor == KSpreadCell::NegRed )
 	format->setCurrentItem( 4 );
+    layout->addWidget(box);
 
     this->resize( 400, 400 );
 }

@@ -119,7 +119,6 @@
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
- <Action name="strikeout"/>
  <Action name="selectFont"/>
  <Action name="selectFontSize"/>
 </ToolBar>

@@ -381,7 +381,9 @@ public:
     * or change string to lower if _type equals -1
     */
     void setSelectionUpperLower( const QPoint &_marker,int _type );
-    
+
+    void setSelectionfirstLetterUpper( const QPoint &_marker);
+
     void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
     void setSelectionBorderColor( const QPoint &_marker, QColor bd_Color );

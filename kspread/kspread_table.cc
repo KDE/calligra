@@ -825,7 +825,7 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker,int _type )
 	QRect r( m_rctSelection );
 	if ( !selected )
 	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-	
+
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
 	    {		
@@ -833,7 +833,7 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker,int _type )
        	      if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty()&&(cell->text().find('*')!=0)&&(cell->text().find('!')!=0))
 		{
 
-	      	cell->setDisplayDirtyFlag();		
+	      	cell->setDisplayDirtyFlag();
 	      	if(_type==-1)
 	  		cell->setText( (cell->text().lower()));
 	  	else if(_type==1)
@@ -846,6 +846,84 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker,int _type )
     }
 }
 
+void KSpreadTable::setSelectionfirstLetterUpper( const QPoint &_marker)
+{
+    m_pDoc->setModified( true );
+
+    bool selected = ( m_rctSelection.left() != 0 );
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  if(!it.current()->isValue() && !it.current()->isBool() &&!it.current()->isFormular() && !it.current()->isDefault()&& !it.current()->text().isEmpty()&&(it.current()->text().find('*')!=0)&&(it.current()->text().find('!')!=0))
+	  	{
+	  	it.current()->setDisplayDirtyFlag();
+                QString tmp=it.current()->text();
+                int len=tmp.length();
+                it.current()->setText( (tmp.at(0).upper()+tmp.right(len-1)));
+	  	it.current()->clearDisplayDirtyFlag();
+	  	}
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  if(!it.current()->isValue() && !it.current()->isBool() &&!it.current()->isFormular() &&!it.current()->isDefault()&&!it.current()->text().isEmpty()	  &&(it.current()->text().find('*')!=0)&&(it.current()->text().find('!')!=0))
+		{
+	  	it.current()->setDisplayDirtyFlag();
+                QString tmp=it.current()->text();
+                int len=tmp.length();
+                it.current()->setText( (tmp.at(0).upper()+tmp.right(len-1)));
+	  	it.current()->clearDisplayDirtyFlag();
+	  	}
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    else
+    {
+	QRect r( m_rctSelection );
+	if ( !selected )
+	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+	for ( int x = r.left(); x <= r.right(); x++ )
+	    for ( int y = r.top(); y <= r.bottom(); y++ )
+	    {
+	      KSpreadCell *cell = cellAt( x, y );
+       	      if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty()&&(cell->text().find('*')!=0)&&(cell->text().find('!')!=0))
+		{
+
+	      	cell->setDisplayDirtyFlag();
+                QString tmp=cell->text();
+                int len=tmp.length();
+                cell->setText( (tmp.at(0).upper()+tmp.right(len-1)));
+	      	cell->clearDisplayDirtyFlag();
+	       	}
+	    }
+
+	emit sig_updateView( this, r );
+    }
+}
 
 void KSpreadTable::setSelectionTextColor( const QPoint &_marker, QColor tb_Color )
 {
