@@ -1305,7 +1305,10 @@ void KPTextView::drawCursor( bool b )
 
 void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &_pos)
 {
-    handleMousePressEvent( e, _pos );
+    QPoint iPoint=e->pos() - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig());
+    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
+
+    handleMousePressEvent( e, iPoint );
 }
 
 void KPTextView::mouseDoubleClickEvent( QMouseEvent *e, const QPoint &pos)
