@@ -162,6 +162,7 @@ private:
     KColorButton *textColorButton;
     KLineEdit *searchFont;
     KCompletion listFont;
+    bool fontChanged;
 };
 
 class CellLayoutPageMisc : public QWidget

@@ -2053,7 +2053,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   grid->addWidget(box1);
   setCombos();
   display_example( selFont );
-
+  fontChanged=false;
   this->resize( 400, 400 );
 }
 
@@ -2081,10 +2081,16 @@ void CellLayoutPageFont::apply( ColumnLayout *_obj)
         if ( dlg->left <= col && dlg->right >= col
         &&!c->isObscuringForced())
         {
-           c->clearProperty(KSpreadCell::PTextPen);
-           c->clearNoFallBackProperties( KSpreadCell::PTextPen );
-           c->clearProperty(KSpreadCell::PFont);
-           c->clearNoFallBackProperties( KSpreadCell::PFont );
+            if ( !bTextColorUndefined )
+                {
+                c->clearProperty(KSpreadCell::PTextPen);
+                c->clearNoFallBackProperties( KSpreadCell::PTextPen );
+                }
+           if(fontChanged)
+                {
+                c->clearProperty(KSpreadCell::PFont);
+                c->clearNoFallBackProperties( KSpreadCell::PFont );
+                }
         }
       }
 
@@ -2119,10 +2125,16 @@ void CellLayoutPageFont::apply( RowLayout *_obj)
         if ( dlg->top <= row && dlg->bottom >= row
         &&!c->isObscuringForced())
         {
-           c->clearProperty(KSpreadCell::PTextPen);
-           c->clearNoFallBackProperties( KSpreadCell::PTextPen );
-           c->clearProperty(KSpreadCell::PFont);
-           c->clearNoFallBackProperties( KSpreadCell::PFont );
+           if ( !bTextColorUndefined )
+                {
+                c->clearProperty(KSpreadCell::PTextPen);
+                c->clearNoFallBackProperties( KSpreadCell::PTextPen );
+                }
+           if(fontChanged)
+                {
+                c->clearProperty(KSpreadCell::PFont);
+                c->clearNoFallBackProperties( KSpreadCell::PFont );
+                }
         }
       }
 applyLayout(_obj);
@@ -2138,16 +2150,19 @@ void CellLayoutPageFont::applyLayout( KSpreadLayout *_obj )
 {
     if ( !bTextColorUndefined )
         _obj->setTextColor( textColor );
-    if ( size_combo->currentItem() != 0 )
-        _obj->setTextFontSize( selFont.pointSize() );
-    if ( !family_combo->currentText().isEmpty() )
-        _obj->setTextFontFamily( selFont.family() );
-    if ( weight_combo->currentItem() != 0 )
-        _obj->setTextFontBold( selFont.bold() );
-    if ( style_combo->currentItem() != 0 )
-        _obj->setTextFontItalic( selFont.italic() );
-    _obj->setTextFontStrike( strike->isChecked() );
-    _obj->setTextFontUnderline(underline->isChecked() );
+    if(fontChanged)
+        {
+        if ( size_combo->currentItem() != 0 )
+                _obj->setTextFontSize( selFont.pointSize() );
+        if ( !family_combo->currentText().isEmpty() )
+                _obj->setTextFontFamily( selFont.family() );
+        if ( weight_combo->currentItem() != 0 )
+                _obj->setTextFontBold( selFont.bold() );
+        if ( style_combo->currentItem() != 0 )
+                _obj->setTextFontItalic( selFont.italic() );
+        _obj->setTextFontStrike( strike->isChecked() );
+        _obj->setTextFontUnderline(underline->isChecked() );
+        }
 }
 
 void CellLayoutPageFont::underline_chosen_slot()
@@ -2202,7 +2217,7 @@ void CellLayoutPageFont::style_chosen_slot(const QString & style)
 void CellLayoutPageFont::display_example(const QFont& font)
 {
   QString string;
-
+  fontChanged=true;
   example_label->setFont(font);
   example_label->repaint();
 

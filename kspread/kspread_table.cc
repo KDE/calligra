@@ -697,7 +697,25 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-
+    if(   selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PFont))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
             KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
@@ -843,6 +861,26 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker, int _size )
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PFont))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+     }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -1286,6 +1324,25 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PAngle))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -1473,6 +1530,26 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PTextPen))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
+
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
             KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
@@ -1576,6 +1653,28 @@ void KSpreadTable::setSelectionbgColor( const QPoint &_marker, const QColor &bg_
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    //create cell before to make undo
+    //=>undo works after
+    if(  selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PBackgroundColor))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+     }
+
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -1890,6 +1989,27 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PFormatNumber)
+        ||rw->hasProperty(KSpreadCell::PPrecision) || rw->hasProperty(KSpreadCell::PFaktor)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -2686,6 +2806,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
     if ( m_rctSelection.left() == 0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
+
     QPen pen( _color,2,SolidLine);
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
@@ -2696,6 +2817,24 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
+
+    RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
@@ -2716,7 +2855,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
       ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.right());
       cl->setRightBorderPen(pen);
 
-      RowLayout* rw =m_rows.first();
+      rw =m_rows.first();
       for( ; rw; rw = rw->next() )
         {
         if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)))
@@ -2789,6 +2928,23 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
+    RowLayout* rw =m_rows.first();
+    for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
@@ -2808,7 +2964,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
       ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
       cl->setLeftBorderPen(pen);
 
-      RowLayout* rw =m_rows.first();
+      rw =m_rows.first();
       for( ; rw; rw = rw->next() )
         {
         if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)))
@@ -3067,6 +3223,27 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)
+        ||rw->hasProperty(KSpreadCell::PLeftBorder)|| rw->hasProperty(KSpreadCell::PTopBorder)
+        || rw->hasProperty(KSpreadCell::PBottomBorder)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
@@ -3194,6 +3371,29 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)
+        ||rw->hasProperty(KSpreadCell::PLeftBorder)|| rw->hasProperty(KSpreadCell::PTopBorder)
+        || rw->hasProperty(KSpreadCell::PBottomBorder)
+        || rw->hasProperty(KSpreadCell::PFallDiagonal)
+        || rw->hasProperty(KSpreadCell::PGoUpDiagonal)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -3272,7 +3472,7 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
         cl->setFallDiagonalPen( pen );
         cl->setGoUpDiagonalPen(pen );
         }
-              RowLayout* rw =m_rows.first();
+        RowLayout* rw =m_rows.first();
         for( ; rw; rw = rw->next() )
         {
         if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)
@@ -3704,6 +3904,25 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PAlign))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -3812,6 +4031,25 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PAlignY))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -4008,6 +4246,26 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PFormatNumber)
+        ||rw->hasProperty(KSpreadCell::PPrecision) || rw->hasProperty(KSpreadCell::PFaktor)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -4109,7 +4367,6 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
                                 cell = new KSpreadCell( this, i,  rw->row() );
                                 m_cells.insert( cell, i,  rw->row() );
                                 }
-
                         if(b)
                                 {
                                 cell->setFormatNumber(KSpreadCell::Money);
@@ -4176,6 +4433,25 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PIndent)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -4288,6 +4564,25 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PIndent)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        }
+                }
+        }
+    }
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
