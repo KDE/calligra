@@ -1,0 +1,8 @@
+Sun Apr 19 18:03:26 1998  Torben Weis  <weis@localhost>
+
+	* kspread_view.cc (slotUpdateView): View does now connect to the
+	  documemts signals. If the document changes, every view is
+	  updated. Does not work in every situation right now.
+
+	* kspread_view.h (View_skel): Supports multiple views now
+
