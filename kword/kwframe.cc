@@ -323,13 +323,13 @@ QRect KWFrame::outerRect( KWViewMode* viewMode ) const
 {
     KWDocument *doc = m_frameSet->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
-    bool isFrameVisible = viewMode && viewMode->drawFrameBorders();
-    if ( isFrameVisible && !m_frameSet->getGroupManager() ) {
+    if ( viewMode && !m_frameSet->getGroupManager() ) {
+        int minBorder = viewMode->drawFrameBorders() ? 1 : 0;
         KWFrame* settingsFrame = m_frameSet->settingsFrame( this );
-        outerRect.rLeft() -= KoBorder::zoomWidthX( settingsFrame->leftBorder().width(), doc, 1 );
-        outerRect.rTop() -= KoBorder::zoomWidthY( settingsFrame->topBorder().width(), doc, 1 );
-        outerRect.rRight() += KoBorder::zoomWidthX( settingsFrame->rightBorder().width(), doc, 1 );
-        outerRect.rBottom() += KoBorder::zoomWidthY( settingsFrame->bottomBorder().width(), doc, 1 );
+        outerRect.rLeft() -= KoBorder::zoomWidthX( settingsFrame->leftBorder().width(), doc, minBorder );
+        outerRect.rTop() -= KoBorder::zoomWidthY( settingsFrame->topBorder().width(), doc, minBorder );
+        outerRect.rRight() += KoBorder::zoomWidthX( settingsFrame->rightBorder().width(), doc, minBorder );
+        outerRect.rBottom() += KoBorder::zoomWidthY( settingsFrame->bottomBorder().width(), doc, minBorder );
     }
     return outerRect;
 }
