@@ -279,7 +279,7 @@ KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,
 
 void KChartLineSubTypeChartPage::init()
 {
-    switch( _params->areaChartSubType() ) {
+    switch( _params->lineChartSubType() ) {
     case KDChartParams::LineNormal:
         normal->setChecked( true );
         break;
