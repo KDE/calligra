@@ -16,9 +16,9 @@
 #ifndef resizecmd_h
 #define resizecmd_h
 
-#include <qpoint.h>
-#include <qrect.h>
-#include <qsize.h>
+#include <kpoint.h>
+#include <krect.h>
+#include <ksize.h>
 
 #include "command.h"
 #include "kpobject.h"
@@ -34,7 +34,7 @@ class ResizeCmd : public Command
   Q_OBJECT
 
 public:
-  ResizeCmd(QString _name,QPoint _m_diff,QSize _r_diff,KPObject *_object,KPresenterDoc *_doc);
+  ResizeCmd(QString _name,KPoint _m_diff,KSize _r_diff,KPObject *_object,KPresenterDoc *_doc);
   ~ResizeCmd();
   
   virtual void execute();
@@ -45,8 +45,8 @@ protected:
   ResizeCmd()
     {;}
 
-  QPoint m_diff;
-  QSize r_diff;
+  KPoint m_diff;
+  KSize r_diff;
   KPObject *object;
   KPresenterDoc *doc;
 

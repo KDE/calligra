@@ -324,3 +324,9 @@ Reggie, 5.11.1998:
 - Some fixes with moving/resizing frames again
 - Implemented printing of freely placeable pictures too
 - Fixed a redraw-bug when scrolling the canvas
+
+Reggie, 6.11.1998:
+------------------
+- Replaced all QRect, QSize and QPoint with KRect, KSize, KPoint. This fixes
+  lots of calculation bugs with long documents.
+- Fixed another bug with resizing frames

@@ -30,7 +30,7 @@ class KWPaintWindow;
 
 #include <qpixmap.h>
 #include <qwidget.h>
-#include <qrect.h>
+#include <krect.h>
 #include <qlist.h>
 #include <qevent.h>
 #include <qscrollbar.h>

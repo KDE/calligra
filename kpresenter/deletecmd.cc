@@ -41,7 +41,7 @@ DeleteCmd::~DeleteCmd()
 /*======================== execute ===============================*/
 void DeleteCmd::execute()
 {
-  QRect oldRect;
+  KRect oldRect;
 
   for (unsigned int i = 0;i < objects.count();i++)
     {

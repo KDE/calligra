@@ -451,7 +451,7 @@ void KPresenterView::toolsLine()
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
 
-  QPoint pnt(QCursor::pos());
+  KPoint pnt(QCursor::pos());
 
   rb_line->popup(pnt);
 
@@ -468,7 +468,7 @@ void KPresenterView::toolsRectangle()
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
 
-  QPoint pnt(QCursor::pos());
+  KPoint pnt(QCursor::pos());
 
   rb_rect->popup(pnt);
 
@@ -654,7 +654,7 @@ void KPresenterView::extraAlignObj()
 {
   page->setToolEditMode(TEM_MOUSE);
 
-  QPoint pnt(QCursor::pos());
+  KPoint pnt(QCursor::pos());
 
   rb_oalign->popup(pnt);
 
@@ -858,7 +858,7 @@ void KPresenterView::screenStart()
 
       if (fullScreen)
 	{
-	  page->recreate((QWidget*)0L,WStyle_Customize | WStyle_NoBorder | WType_Popup,QPoint(0,0),true);
+	  page->recreate((QWidget*)0L,WStyle_Customize | WStyle_NoBorder | WType_Popup,KPoint(0,0),true);
 	  page->topLevelWidget()->move(0,0);
 	  page->topLevelWidget()->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
@@ -892,7 +892,7 @@ void KPresenterView::screenStop()
       if (true) //m_rToolBarScreen->isButtonOn(m_idButtonScreen_Full))
 	{
 	  page->close(false);
-	  page->recreate((QWidget*)this,0,QPoint(0,0),true);
+	  page->recreate((QWidget*)this,0,KPoint(0,0),true);
 	}
       xOffset = _xOffset;
       yOffset = _yOffset;
@@ -952,7 +952,7 @@ void KPresenterView::screenPrev()
 	  page->setFocus();
 	}
       QPainter p(page);
-      presentParts(page->presFakt(),&p,QRect(0,0,0,0),xOffset,yOffset);
+      presentParts(page->presFakt(),&p,KRect(0,0,0,0),xOffset,yOffset);
       p.end();
     }
   else
@@ -977,7 +977,7 @@ void KPresenterView::screenNext()
 	  page->setFocus();
 	}
       QPainter p(page);
-      presentParts(page->presFakt(),&p,QRect(0,0,0,0),xOffset,yOffset);
+      presentParts(page->presFakt(),&p,KRect(0,0,0,0),xOffset,yOffset);
       p.end();
     }
   else
@@ -1004,7 +1004,7 @@ void KPresenterView::screenFullScreen()
 /*========================== screen pen/marker =================*/
 void KPresenterView::screenPen()
 {
-  QPoint pnt(QCursor::pos());
+  KPoint pnt(QCursor::pos());
 
   rb_pen->popup(pnt);
 }
@@ -1332,14 +1332,14 @@ void KPresenterView::slotInsertObject(KPresenterChild *_child)
   catch (OpenParts::Document::MultipleViewsNotSupported &_ex)
   {
     // HACK
-    printf("void KPresenterView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n");
+    printf("void KPresenterView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n");
     printf("Could not create view\n");
     exit(1);
   }
   
   if (CORBA::is_nil(v))
   {
-    printf("void KPresenterView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n");
+    printf("void KPresenterView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n");
     printf("return value is 0L\n");
     exit(1);
   }
@@ -2239,7 +2239,7 @@ void KPresenterView::repaint(unsigned int x,unsigned int y,unsigned int w,
 }
 
 /*====================== paint event ============================*/
-void KPresenterView::repaint(QRect r,bool erase)
+void KPresenterView::repaint(KRect r,bool erase)
 {
   QWidget::repaint(r,erase);
   page->repaint(r,erase);
@@ -2337,10 +2337,10 @@ void KPresenterView::hideParts()
 }
 
 /*====================== present parts ==========================*/
-void KPresenterView::presentParts(float _presFakt,QPainter* _painter,QRect _rect,int _diffx,int _diffy)
+void KPresenterView::presentParts(float _presFakt,QPainter* _painter,KRect _rect,int _diffx,int _diffy)
 {
   QListIterator<KPresenterChild> chl = m_pKPresenterDoc->childIterator();
-  QRect child_geometry;
+  KRect child_geometry;
   float scale_w,scale_h;
 
   for(;chl.current();++chl)
@@ -3441,7 +3441,7 @@ void KPresenterView::skipToPage(int _num)
 }
 
 /*==============================================================*/
-void KPresenterView::makeRectVisible(QRect _rect)
+void KPresenterView::makeRectVisible(KRect _rect)
 {
   horz->setValue(_rect.x()); 
   vert->setValue(_rect.y()); 

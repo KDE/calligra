@@ -25,7 +25,7 @@ KCharSelect::KCharSelect(QWidget *parent,const char *name,QFont __font,QColor __
   _color = __color;
   _c = __c;
 
-  currentC = QPoint(_c - 33 - ((_c - 33) / 28) * 28,(_c - 33) / 28);
+  currentC = KPoint(_c - 33 - ((_c - 33) / 28) * 28,(_c - 33) / 28);
 
   setBackgroundColor(white);
 
@@ -37,7 +37,7 @@ KCharSelect::KCharSelect(QWidget *parent,const char *name,QFont __font,QColor __
 }
 
 /*======================= get size hint ==========================*/
-QSize KCharSelect::sizeHint()
+KSize KCharSelect::sizeHint()
 {
   int w = cellWidth();
   int h = cellHeight();
@@ -45,7 +45,7 @@ QSize KCharSelect::sizeHint()
   w *= numCols();
   h *= numRows();
 
-  return QSize(w,h);
+  return KSize(w,h);
 }
 
 /*====================== paint cell ==============================*/
@@ -91,7 +91,7 @@ void KCharSelect::mouseMoveEvent(QMouseEvent *e)
 {
   if (findRow(e->y()) != -1 && findCol(e->x()) != -1)
     {
-      QPoint oldC = currentC;
+      KPoint oldC = currentC;
       
       currentC.setX(findCol(e->x()));
       currentC.setY(findRow(e->y()));

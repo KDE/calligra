@@ -49,7 +49,7 @@ void KPBackGround::setBackPixFilename(QString _filename)
 
   switch (backView)
     {
-    case BV_ZOOM: pixSize = QSize(ext.width(),ext.height());
+    case BV_ZOOM: pixSize = KSize(ext.width(),ext.height());
       break;
     case BV_TILED: case BV_CENTER: pixSize = orig_size;
       break;
@@ -71,7 +71,7 @@ void KPBackGround::setBackPix(QString _filename,QString _data)
 
   switch (backView)
     {
-    case BV_ZOOM: pixSize = QSize(ext.width(),ext.height());
+    case BV_ZOOM: pixSize = KSize(ext.width(),ext.height());
       break;
     case BV_TILED: case BV_CENTER: pixSize = orig_size;
       break;
@@ -92,10 +92,10 @@ void KPBackGround::setBackClipFilename(QString _filename)
 }
 
 /*========================== draw ================================*/
-void KPBackGround::draw(QPainter *_painter,QPoint _offset,bool _drawBorders)
+void KPBackGround::draw(QPainter *_painter,KPoint _offset,bool _drawBorders)
 {
   _painter->save();
-  QRect r = _painter->viewport();
+  KRect r = _painter->viewport();
 
   switch (backType)
     {
@@ -145,7 +145,7 @@ void KPBackGround::restore()
 		{
 		  backPix = pixmapCollection->getPixmap(backPixFilename,data,pixSize,true,false);
 		  QString _data = data;
-		  QSize _pixSize = pixSize;
+		  KSize _pixSize = pixSize;
 		  pixSize = ext;
 		  backPix = pixmapCollection->getPixmap(backPixFilename,data,backPix,pixSize);
 		  pixmapCollection->removeRef(backPixFilename,_data,_pixSize);
@@ -164,7 +164,7 @@ void KPBackGround::restore()
 	      if (backPix)
 		{
 		  QString _data = data;
-		  QSize _pixSize = pixSize;
+		  KSize _pixSize = pixSize;
 		  pixSize = orig_size;
 		  backPix = pixmapCollection->getPixmap(backPixFilename,data,pixSize,true);
 		  pixSize = backPix->size();

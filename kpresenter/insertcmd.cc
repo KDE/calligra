@@ -47,7 +47,7 @@ void InsertCmd::execute()
 /*====================== unexecute ===============================*/
 void InsertCmd::unexecute()
 {
-  QRect oldRect = object->getBoundingRect(0,0);
+  KRect oldRect = object->getBoundingRect(0,0);
   if (doc->objectList()->findRef(object) != -1)
     {
       doc->objectList()->take(doc->objectList()->findRef(object));

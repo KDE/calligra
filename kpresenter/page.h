@@ -26,15 +26,15 @@
 #include <qcolor.h>
 #include <qpainter.h>
 #include <qlist.h>
-#include <qrect.h>
+#include <krect.h>
 #include <qscrbar.h>
-#include <qsize.h>
+#include <ksize.h>
 #include <qpaintd.h>
 #include <qwmatrix.h>
 #include <qpixmap.h>
 #include <qapp.h>
 #include <qpicture.h>
-#include <qpoint.h>
+#include <kpoint.h>
 #include <qpntarry.h>
 #include <qpopmenu.h>
 #include <qimage.h>
@@ -76,7 +76,7 @@ public:
   ~Page(); 
   
   // public functions
-  void draw(QRect,QPainter*);
+  void draw(KRect,QPainter*);
   void selectAllObj();
   void deSelectAllObj();
   void selectObj(int num);      
@@ -131,9 +131,9 @@ protected:
 
   // functions for displaying
   void paintEvent(QPaintEvent*);    
-  void paintBackground(QPainter*,QRect);
-  void drawBackground(QPainter*,QRect);
-  void drawObjects(QPainter*,QRect);
+  void paintBackground(QPainter*,KRect);
+  void drawBackground(QPainter*,KRect);
+  void drawObjects(QPainter*,KRect);
   void mousePressEvent(QMouseEvent *e); 
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
@@ -163,7 +163,7 @@ protected:
   QColor txtSelCol() {return view->kPresenterDoc()->txtSelCol();}
   bool spInfinitLoop() {return view->kPresenterDoc()->spInfinitLoop();}
   bool spManualSwitch() {return view->kPresenterDoc()->spManualSwitch();}
-  QRect getPageSize(unsigned int p,float fakt=1.0,bool decBorders = true) 
+  KRect getPageSize(unsigned int p,float fakt=1.0,bool decBorders = true) 
     {return view->kPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt,decBorders);}
   unsigned int pageNums() {return view->kPresenterDoc()->getPageNums();}
   int getPageOfObj(int i,float fakt = 1.0) {return view->kPresenterDoc()->getPageOfObj(i,diffx(),diffy(),fakt);}
@@ -171,25 +171,25 @@ protected:
   float pageSpeedFakt() {return PageSpeed[static_cast<int>(view->kPresenterDoc()->getPresSpeed())];}
 
   void _repaint(bool erase=true) {view->kPresenterDoc()->repaint(false);}
-  void _repaint(QRect r) {view->kPresenterDoc()->repaint(r);}
+  void _repaint(KRect r) {view->kPresenterDoc()->repaint(r);}
   void _repaint(KPObject *o) {view->kPresenterDoc()->repaint(o);}
 
   void drawPageInPix(QPixmap&,int);
-  void drawPageInPainter(QPainter*,int,QRect);
+  void drawPageInPainter(QPainter*,int,KRect);
   void changePages(QPixmap,QPixmap,PageEffect);
   void doObjEffects();
   void drawObject(KPObject*,QPixmap*,int,int,int,int,int,int);
 
-  void insertText(QRect);
-  void insertLineH(QRect);
-  void insertLineV(QRect);
-  void insertLineD1(QRect);
-  void insertLineD2(QRect);
-  void insertNRect(QRect);
-  void insertRRect(QRect);
-  void insertEllipse(QRect);
-  void insertPie(QRect);
-  void insertObject(QRect);
+  void insertText(KRect);
+  void insertLineH(KRect);
+  void insertLineV(KRect);
+  void insertLineD1(KRect);
+  void insertLineD2(KRect);
+  void insertNRect(KRect);
+  void insertRRect(KRect);
+  void insertEllipse(KRect);
+  void insertPie(KRect);
+  void insertObject(KRect);
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
@@ -209,9 +209,9 @@ protected:
   int PM_DM,PM_SM;
   int firstX,firstY;
   bool drawRubber;
-  QRect rubber,oldBoundingRect;
+  KRect rubber,oldBoundingRect;
   ToolEditMode toolEditMode;
-  QRect insRect;
+  KRect insRect;
   KoPartEntry* partEntry;
   QList <KPObject> tmpObjs;
   

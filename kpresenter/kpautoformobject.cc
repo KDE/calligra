@@ -48,7 +48,7 @@ KPAutoformObject::KPAutoformObject(QPen _pen,QBrush _brush,QString _filename,Lin
 
   if (fillType == FT_GRADIENT)
     {
-      gradient = new KPGradient(gColor1,gColor2,gType,QSize(1,1));
+      gradient = new KPGradient(gColor1,gColor2,gType,KSize(1,1));
       redrawPix = true;
       pix.resize(getSize());
     }
@@ -386,7 +386,7 @@ void KPAutoformObject::draw(QPainter *_painter,int _diffx,int _diffy)
   int oy = orig.y() - _diffy;
   int ow = ext.width();
   int oh = ext.height();
-  QRect r;
+  KRect r;
 
   _painter->save();
   
@@ -412,13 +412,13 @@ void KPAutoformObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	{
 	  _painter->setViewport(ox,oy,r.width(),r.height());
 
-	  QRect br = QRect(0,0,ow,oh);
+	  KRect br = QRect(0,0,ow,oh);
 	  int pw = br.width();
 	  int ph = br.height();
-	  QRect rr = br;
+	  KRect rr = br;
 	  int yPos = -rr.y();
 	  int xPos = -rr.x();
-	  rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+	  rr.moveTopLeft(KPoint(-rr.width() / 2,-rr.height() / 2));
 	  
 	  int sx = 0;
 	  int sy = 0;
@@ -451,13 +451,13 @@ void KPAutoformObject::draw(QPainter *_painter,int _diffx,int _diffy)
     paint(_painter);
   else
     {
-      QRect br = QRect(0,0,ow,oh);
+      KRect br = QRect(0,0,ow,oh);
       int pw = br.width();
       int ph = br.height();
-      QRect rr = br;
+      KRect rr = br;
       int yPos = -rr.y();
       int xPos = -rr.x();
-      rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+      rr.moveTopLeft(KPoint(-rr.width() / 2,-rr.height() / 2));
       
       QWMatrix m,mtx,m2;
       mtx.rotate(angle);
@@ -477,7 +477,7 @@ void KPAutoformObject::draw(QPainter *_painter,int _diffx,int _diffy)
 }
 
 /*===================== get angle ================================*/
-float KPAutoformObject::getAngle(QPoint p1,QPoint p2)
+float KPAutoformObject::getAngle(KPoint p1,QPoint p2)
 {
   float _angle = 0.0;
 
@@ -601,7 +601,7 @@ void KPAutoformObject::paint(QPainter* _painter)
 	}
       else
 	{
-	  QSize diff1(0,0),diff2(0,0);
+	  KSize diff1(0,0),diff2(0,0);
 	  int _w = pen.width();
 	      
 	  if (lineBegin != L_NORMAL)
@@ -614,7 +614,7 @@ void KPAutoformObject::paint(QPainter* _painter)
 	    {
 	      if (lineBegin != L_NORMAL)
 		{
-		  QPoint pnt1(pntArray2.at(0)),pnt2(pntArray2.at(1)),pnt3,pnt4(pntArray.at(0));
+		  KPoint pnt1(pntArray2.at(0)),pnt2(pntArray2.at(1)),pnt3,pnt4(pntArray.at(0));
 		  float _angle = getAngle(pnt1,pnt2);
 		      
 		  switch (static_cast<int>(_angle))
@@ -649,8 +649,8 @@ void KPAutoformObject::paint(QPainter* _painter)
 		  
 	      if (lineEnd != L_NORMAL)
 		{
-		  QPoint pnt1(pntArray2.at(pntArray2.size() - 1)),pnt2(pntArray2.at(pntArray2.size() - 2));
-		  QPoint  pnt3,pnt4(pntArray.at(pntArray.size() - 1));
+		  KPoint pnt1(pntArray2.at(pntArray2.size() - 1)),pnt2(pntArray2.at(pntArray2.size() - 2));
+		  KPoint  pnt3,pnt4(pntArray.at(pntArray.size() - 1));
 		  float _angle = getAngle(pnt1,pnt2);
 		      
 		  switch ((int)_angle)

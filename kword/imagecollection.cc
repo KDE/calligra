@@ -53,7 +53,7 @@ KWImage *KWImageCollection::getImage(KWImage &_image,QString &key)
 }
 
 /*================================================================*/
-KWImage *KWImageCollection::getImage(KWImage &_image,QString &key,QSize _imgSize)
+KWImage *KWImageCollection::getImage(KWImage &_image,QString &key,KSize _imgSize)
 {
   key = "";
 
@@ -94,7 +94,7 @@ QString KWImageCollection::generateKey(KWImage &_image)
 }
 
 /*================================================================*/
-QString KWImageCollection::generateKey(KWImage &_image,QSize _imgSize)
+QString KWImageCollection::generateKey(KWImage &_image,KSize _imgSize)
 {
   QString key;
 
@@ -124,7 +124,7 @@ KWImage *KWImageCollection::insertImage(QString _key,KWImage &_image)
 }
 
 /*================================================================*/
-KWImage *KWImageCollection::insertImage(QString _key,KWImage &_image,QSize _imgSize)
+KWImage *KWImageCollection::insertImage(QString _key,KWImage &_image,KSize _imgSize)
 {
   KWImage *image = new KWImage(doc,_image);
   if (image->size() != _imgSize)

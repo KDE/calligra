@@ -16,9 +16,9 @@
 #ifndef insertcmd_h
 #define insertcmd_h
 
-#include <qpoint.h>
-#include <qrect.h>
-#include <qsize.h>
+#include <kpoint.h>
+#include <krect.h>
+#include <ksize.h>
 
 #include "command.h"
 #include "kpobject.h"

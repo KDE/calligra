@@ -20,7 +20,7 @@
 /******************************************************************/
 
 /*======================= get Pixmap =============================*/
-QPixmap* KPPixmapCollection::getPixmap(QString _filename,QSize _size,QString &_data,bool orig = false,bool addref = true)
+QPixmap* KPPixmapCollection::getPixmap(QString _filename,KSize _size,QString &_data,bool orig = false,bool addref = true)
 {
   int num = inPixmapList(_filename,_size);
 
@@ -73,7 +73,7 @@ QPixmap* KPPixmapCollection::getPixmap(QString _filename,QSize _size,QString &_d
 }
 
 /*======================= get Pixmap =============================*/
-QPixmap* KPPixmapCollection::getPixmap(QString _filename,QString _data,QSize _size,bool orig = false,bool addref = true)
+QPixmap* KPPixmapCollection::getPixmap(QString _filename,QString _data,KSize _size,bool orig = false,bool addref = true)
 {
   int num = inPixmapList(_filename,_data,_size);
 
@@ -123,7 +123,7 @@ QPixmap* KPPixmapCollection::getPixmap(QString _filename,QString _data,QSize _si
 }
 
 /*======================= get Pixmap =============================*/
-QPixmap* KPPixmapCollection::getPixmap(QString _filename,QString _data,QPixmap *_pixmap,QSize _size,bool orig = false,bool addref = true)
+QPixmap* KPPixmapCollection::getPixmap(QString _filename,QString _data,QPixmap *_pixmap,KSize _size,bool orig = false,bool addref = true)
 {
   int num = inPixmapList(_filename,_data,_size);
 
@@ -173,7 +173,7 @@ QPixmap* KPPixmapCollection::getPixmap(QString _filename,QString _data,QPixmap *
 }
 
 /*====================== remove ref =============================*/
-void KPPixmapCollection::removeRef(QString _filename,QSize _size)
+void KPPixmapCollection::removeRef(QString _filename,KSize _size)
 {
   int num = inPixmapList(_filename,_size);
 
@@ -193,7 +193,7 @@ void KPPixmapCollection::removeRef(QString _filename,QSize _size)
 }
 
 /*====================== remove ref =============================*/
-void KPPixmapCollection::removeRef(QString _filename,QString _data,QSize _size)
+void KPPixmapCollection::removeRef(QString _filename,QString _data,KSize _size)
 {
   int num = inPixmapList(_filename,_data,_size);
 
@@ -213,7 +213,7 @@ void KPPixmapCollection::removeRef(QString _filename,QString _data,QSize _size)
 }
 
 /*========================== in pixmap list? ====================*/
-int KPPixmapCollection::inPixmapList(QString _filename,QSize _size)
+int KPPixmapCollection::inPixmapList(QString _filename,KSize _size)
 {
   if (!pixmapList.isEmpty())
     {
@@ -232,7 +232,7 @@ int KPPixmapCollection::inPixmapList(QString _filename,QSize _size)
 }
 
 /*========================== in pixmap list? ====================*/
-int KPPixmapCollection::inPixmapList(QString _filename,QString _data,QSize _size)
+int KPPixmapCollection::inPixmapList(QString _filename,QString _data,KSize _size)
 {
   if (!pixmapList.isEmpty())
     {

@@ -35,14 +35,14 @@ void RotatePreview::drawContents(QPainter* painter)
   font.setBold(true);
   QFontMetrics fm(font);
 
-  QRect br = fm.boundingRect("KOffice");
+  KRect br = fm.boundingRect("KOffice");
   int pw = br.width();
   int ph = br.height();
-  QRect r = br;
+  KRect r = br;
   int textYPos = -r.y();
   int textXPos = -r.x();
-  br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-  r.moveTopLeft(QPoint(-r.width() / 2,-r.height() / 2));
+  br.moveTopLeft(KPoint(-br.width() / 2,-br.height() / 2));
+  r.moveTopLeft(KPoint(-r.width() / 2,-r.height() / 2));
 
   painter->save();
   painter->setViewport((width() - pw) / 2,(height() - ph) / 2,width(),height());

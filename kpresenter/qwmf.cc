@@ -462,7 +462,7 @@ QColor QWinMetaFile::color(short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setWindowOrg(short num, short* parm)
 {
-  QRect r = mPainter.window();
+  KRect r = mPainter.window();
   mPainter.setWindow(parm[1],parm[0],r.width(),r.height());
 }
 
@@ -470,7 +470,7 @@ void QWinMetaFile::setWindowOrg(short num, short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setWindowExt(short num, short* parm)
 {
-  QRect r = mPainter.window();
+  KRect r = mPainter.window();
   mPainter.setWindow(r.left(),r.top(),parm[1],parm[0]);
 }
 

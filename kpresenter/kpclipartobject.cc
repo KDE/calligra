@@ -185,7 +185,7 @@ void KPClipartObject::draw(QPainter *_painter,int _diffx,int _diffy)
   int oy = orig.y() - _diffy;
   int ow = ext.width();
   int oh = ext.height();
-  QRect r;
+  KRect r;
 
   // ********* TODO: shadow for cliparts
   
@@ -197,12 +197,12 @@ void KPClipartObject::draw(QPainter *_painter,int _diffx,int _diffy)
     _painter->drawPicture(*clipart.getPic());
   else
     {
-      QRect br = QRect(0,0,ow,oh);
+      KRect br = QRect(0,0,ow,oh);
       int pw = br.width();
       int ph = br.height();
       int yPos = -br.y();
       int xPos = -br.x();
-      br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+      br.moveTopLeft(KPoint(-br.width() / 2,-br.height() / 2));
 
       QWMatrix m,mtx;
       mtx.rotate(angle);

@@ -34,7 +34,7 @@ public:
   KPPixmapObject(KPPixmapCollection *_pixmapCollection,QString _filename);
 
   virtual void setSize(int _width,int _height);
-  virtual void setSize(QSize _size)
+  virtual void setSize(KSize _size)
     { setSize(_size.width(),_size.height()); }
   virtual void resizeBy(int _dx,int _dy);
 
@@ -58,7 +58,7 @@ protected:
   QString filename;
   KPPixmapCollection *pixmapCollection;
   QPixmap *pixmap;
-  QSize pixSize;
+  KSize pixSize;
   QString data;
 
 };

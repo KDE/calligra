@@ -50,7 +50,7 @@ void KPPixmapObject::setSize(int _width,int _height)
 	{
 	  pixmap = pixmapCollection->getPixmap(filename,data,pixSize,true,false);
 	  QString _data = data;
-	  QSize _pixSize = pixSize;
+	  KSize _pixSize = pixSize;
 	  pixSize = ext;
 	  pixmap = pixmapCollection->getPixmap(filename,data,pixmap,pixSize);
 	  pixmapCollection->removeRef(filename,_data,_pixSize);
@@ -75,7 +75,7 @@ void KPPixmapObject::resizeBy(int _dx,int _dy)
 	{
 	  pixmap = pixmapCollection->getPixmap(filename,data,pixSize,true,false);
 	  QString _data = data;
-	  QSize _pixSize = pixSize;
+	  KSize _pixSize = pixSize;
 	  pixSize = ext;
 	  pixmap = pixmapCollection->getPixmap(filename,data,pixmap,pixSize);
 	  pixmapCollection->removeRef(filename,_data,_pixSize);
@@ -304,7 +304,7 @@ void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
 
   int ox = orig.x() - _diffx;
   int oy = orig.y() - _diffy;
-  QRect r;
+  KRect r;
 
   _painter->save();
   if (shadowDistance > 0)
@@ -318,7 +318,7 @@ void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  _painter->setPen(QPen(shadowColor));
 	  _painter->setBrush(shadowColor);
 
-	  QSize bs = pixmap->size();
+	  KSize bs = pixmap->size();
 	  
 	  _painter->drawRect(sx,sy,bs.width(),bs.height());
 	}
@@ -327,14 +327,14 @@ void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  r = _painter->viewport();
 	  _painter->setViewport(ox,oy,r.width(),r.height());
 			
-	  QRect br = pixmap->rect();
+	  KRect br = pixmap->rect();
 	  int pw = br.width();
 	  int ph = br.height();
-	  QRect rr = br;
+	  KRect rr = br;
 	  int pixYPos = -rr.y();
 	  int pixXPos = -rr.x();
-	  br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-	  rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+	  br.moveTopLeft(KPoint(-br.width() / 2,-br.height() / 2));
+	  rr.moveTopLeft(KPoint(-rr.width() / 2,-rr.height() / 2));
 			
 	  QWMatrix m,mtx;
 	  mtx.rotate(angle);
@@ -346,7 +346,7 @@ void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  _painter->setPen(QPen(shadowColor));
 	  _painter->setBrush(shadowColor);
 
-	  QSize bs = pixmap->size();
+	  KSize bs = pixmap->size();
 	  int dx = 0,dy = 0;
 	  getShadowCoords(dx,dy,shadowDirection,shadowDistance);
 	  _painter->drawRect(rr.left() + pixXPos + dx,rr.top() + pixYPos + dy,
@@ -365,14 +365,14 @@ void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
       r = _painter->viewport();
       _painter->setViewport(ox,oy,r.width(),r.height());
       
-      QRect br = pixmap->rect();
+      KRect br = pixmap->rect();
       int pw = br.width();
       int ph = br.height();
-      QRect rr = br;
+      KRect rr = br;
       int pixYPos = -rr.y();
       int pixXPos = -rr.x();
-      br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
-      rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+      br.moveTopLeft(KPoint(-br.width() / 2,-br.height() / 2));
+      rr.moveTopLeft(KPoint(-rr.width() / 2,-rr.height() / 2));
       
       QWMatrix m,mtx;
       mtx.rotate(angle);

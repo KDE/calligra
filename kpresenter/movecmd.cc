@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd::MoveByCmd(QString _name,QPoint _diff,QList<KPObject> &_objects,KPresenterDoc *_doc)
+MoveByCmd::MoveByCmd(QString _name,KPoint _diff,QList<KPObject> &_objects,KPresenterDoc *_doc)
   : Command(_name), diff(_diff), objects(_objects)
 {
   objects.setAutoDelete(false);
@@ -41,7 +41,7 @@ MoveByCmd::~MoveByCmd()
 /*====================== execute =================================*/
 void MoveByCmd::execute()
 {
-  QRect oldRect;
+  KRect oldRect;
 
   for (unsigned int i = 0;i < objects.count();i++)
     {
@@ -55,7 +55,7 @@ void MoveByCmd::execute()
 /*====================== unexecute ===============================*/
 void MoveByCmd::unexecute()
 {
-  QRect oldRect;
+  KRect oldRect;
 
   for (unsigned int i = 0;i < objects.count();i++)
     {
@@ -71,7 +71,7 @@ void MoveByCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd2::MoveByCmd2(QString _name,QList<QPoint> &_diffs,QList<KPObject> &_objects,KPresenterDoc *_doc)
+MoveByCmd2::MoveByCmd2(QString _name,QList<KPoint> &_diffs,QList<KPObject> &_objects,KPresenterDoc *_doc)
   : Command(_name), diffs(_diffs), objects(_objects)
 {
   objects.setAutoDelete(false);
@@ -93,7 +93,7 @@ MoveByCmd2::~MoveByCmd2()
 /*====================== execute =================================*/
 void MoveByCmd2::execute()
 {
-  QRect oldRect;
+  KRect oldRect;
 
   for (unsigned int i = 0;i < objects.count();i++)
     {
@@ -107,7 +107,7 @@ void MoveByCmd2::execute()
 /*====================== unexecute ===============================*/
 void MoveByCmd2::unexecute()
 {
-  QRect oldRect;
+  KRect oldRect;
 
   for (unsigned int i = 0;i < objects.count();i++)
     {

@@ -27,7 +27,7 @@ class KPresenterView;
 #include <qapp.h>
 #include <qlist.h>
 #include <qobject.h>
-#include <qrect.h>
+#include <krect.h>
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qevent.h>
@@ -97,12 +97,12 @@ class KPresenterChild : public KoDocumentChild
 public:
 
   // constructor - destructor
-  KPresenterChild( KPresenterDoc *_kpr,const QRect& _rect,KOffice::Document_ptr _doc,int,int);
+  KPresenterChild( KPresenterDoc *_kpr,const KRect& _rect,KOffice::Document_ptr _doc,int,int);
   KPresenterChild( KPresenterDoc *_kpr );
   ~KPresenterChild();
 
-  QRect _geometry() {return __geometry;}
-  void _setGeometry(QRect g) {__geometry = g;}
+  KRect _geometry() {return __geometry;}
+  void _setGeometry(KRect g) {__geometry = g;}
   
   // get parent
   KPresenterDoc* parent() {return m_pKPresenterDoc;}
@@ -111,7 +111,7 @@ protected:
 
   // parent, document and geometry
   KPresenterDoc *m_pKPresenterDoc;
-  QRect __geometry;
+  KRect __geometry;
 };
 
 /*****************************************************************/
@@ -175,11 +175,11 @@ public:
   virtual void removeView(KPresenterView *_view);
   
   // insert an object
-  virtual void insertObject(const QRect&,const char*,int,int);
+  virtual void insertObject(const KRect&,const char*,int,int);
   virtual void insertChild( KPresenterChild *_child );
   
   // change geomentry of a child
-  virtual void changeChildGeometry(KPresenterChild*,const QRect&,int,int);
+  virtual void changeChildGeometry(KPresenterChild*,const KRect&,int,int);
   
   // get iterator if a child
   virtual QListIterator<KPresenterChild> childIterator();
@@ -234,12 +234,12 @@ public:
   void insertClipart(QString,int,int);
   void changePicture(QString,int,int);
   void changeClipart(QString,int,int);
-  void insertLine(QRect,QPen,LineEnd,LineEnd,LineType,int,int);
-  void insertRectangle(QRect,QPen,QBrush,RectType,FillType,QColor,QColor,BCType,int,int);
-  void insertCircleOrEllipse(QRect,QPen,QBrush,FillType,QColor,QColor,BCType,int,int);
-  void insertPie(QRect,QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+  void insertLine(KRect,QPen,LineEnd,LineEnd,LineType,int,int);
+  void insertRectangle(KRect,QPen,QBrush,RectType,FillType,QColor,QColor,BCType,int,int);
+  void insertCircleOrEllipse(KRect,QPen,QBrush,FillType,QColor,QColor,BCType,int,int);
+  void insertPie(KRect,QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
 		 BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy);
-  void insertText(QRect,int,int);
+  void insertText(KRect,int,int);
   void insertAutoform(QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,QString,int,int);
   
   // get list of pages and objects
@@ -273,7 +273,7 @@ public:
   void setManualSwitch(bool ms) {_spManualSwitch = ms;}
 
   // size of page
-  QRect getPageSize(unsigned int,int,int,float fakt=1.0,bool decBorders = true);
+  KRect getPageSize(unsigned int,int,int,float fakt=1.0,bool decBorders = true);
 
   // delete/reorder obejcts
   void deleteObjs();
@@ -283,7 +283,7 @@ public:
   // repaint all views
   void repaint(bool);
 
-  void repaint(QRect);
+  void repaint(KRect);
   void repaint(KPObject*);
 
   // stuff for screen-presentations

@@ -31,7 +31,7 @@
 #include <qpixmap.h>
 #include <qclipboard.h>
 #include <qpopupmenu.h>
-#include <qpoint.h>
+#include <kpoint.h>
 #include <qcursor.h>
 
 #include <X11/Xlib.h>
@@ -140,11 +140,11 @@ public:
 
   void recalcText();
   void recalcWholeText();
-  void drawBorders(QPainter &_painter,QRect v_area);
+  void drawBorders(QPainter &_painter,KRect v_area);
   void drawFrameSelection(QPainter &_painter,KWFrame *_frame);
   void setRuler2Frame(unsigned int _frameset,unsigned int _frame);
   void setMouseMode(MouseMode _mm);
-  int getPageOfRect(QRect _rect);
+  int getPageOfRect(KRect _rect);
   void setHilitFrameSet(int _f)
     { hiliteFrameSet = _f; repaint(false); }
   
@@ -195,7 +195,7 @@ protected:
   void calcVisiblePages();
 
   void drawBuffer();
-  void drawBuffer(QRect _rect);
+  void drawBuffer(KRect _rect);
   void copyBuffer();
   void setupMenus();
   void mmUncheckAll();
@@ -246,7 +246,7 @@ protected:
   int hiliteFrameSet;
 
   KWFrameDia *frameDia;
-  QRect insRect;
+  KRect insRect;
 
 };
 

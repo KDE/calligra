@@ -44,16 +44,16 @@ KPObject::KPObject()
 }
 
 /*======================= get bounding rect ======================*/
-QRect KPObject::getBoundingRect(int _diffx,int _diffy)
+KRect KPObject::getBoundingRect(int _diffx,int _diffy)
 {
-  QRect r(orig.x() - _diffx,orig.y() - _diffy,
+  KRect r(orig.x() - _diffx,orig.y() - _diffy,
 	  ext.width(),ext.height());
 
   if (shadowDistance > 0)
     {
       int sx = r.x(),sy = r.y();
       getShadowCoords(sx,sy,shadowDirection,shadowDistance);
-      QRect r2(sx,sy,r.width(),r.height());
+      KRect r2(sx,sy,r.width(),r.height());
       r = r.unite(r2);
     }
 
@@ -63,12 +63,12 @@ QRect KPObject::getBoundingRect(int _diffx,int _diffy)
     {
       QWMatrix mtx;
       mtx.rotate(angle);
-      QRect rr = mtx.map(r);
+      KRect rr = mtx.map(r);
       
       int diffw = abs(rr.width() - r.width());
       int diffh = abs(rr.height() - r.height());
       
-      return QRect(r.x() - diffw,r.y() - diffh,
+      return KRect(r.x() - diffw,r.y() - diffh,
 		   r.width() + diffw * 2,r.height() + diffh * 2);
     }
 
@@ -76,16 +76,16 @@ QRect KPObject::getBoundingRect(int _diffx,int _diffy)
 }
 
 /*======================== contain point ? =======================*/
-bool KPObject::contains(QPoint _point,int _diffx,int _diffy)
+bool KPObject::contains(KPoint _point,int _diffx,int _diffy)
 {
-  QRect r(orig.x() - _diffx,orig.y() - _diffy,
+  KRect r(orig.x() - _diffx,orig.y() - _diffy,
 	  ext.width(),ext.height());
 
   return r.contains(_point);
 }
 
 /*======================== get cursor ============================*/
-QCursor KPObject::getCursor(QPoint _point,int _diffx,int _diffy,ModifyType &_modType)
+QCursor KPObject::getCursor(KPoint _point,int _diffx,int _diffy,ModifyType &_modType)
 {
   int px = _point.x();
   int py = _point.y();
@@ -95,7 +95,7 @@ QCursor KPObject::getCursor(QPoint _point,int _diffx,int _diffy,ModifyType &_mod
   int ow = ext.width();
   int oh = ext.height();
 
-  QRect r(ox,oy,ow,oh);
+  KRect r(ox,oy,ow,oh);
 
   if (!r.contains(_point))
     return arrowCursor;
@@ -188,7 +188,7 @@ void KPObject::draw(QPainter *_painter,int _diffx,int _diffy)
   if (dSelection && selected || dSelection && getType() == OT_TEXT)
     {
       _painter->save();
-      QRect r = _painter->viewport();
+      KRect r = _painter->viewport();
       
       _painter->setViewport(orig.x() - _diffx,orig.y() - _diffy,r.width(),r.height());
       paintSelection(_painter);

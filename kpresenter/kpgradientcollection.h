@@ -39,12 +39,12 @@ public:
   ~KPGradientCollection()
     { gradientList.clear(); }
 
-  virtual QPixmap* getGradient(QColor _color1,QColor _color2,BCType _bcType,QSize _size,bool addref = true);
+  virtual QPixmap* getGradient(QColor _color1,QColor _color2,BCType _bcType,KSize _size,bool addref = true);
 
-  virtual void removeRef(QColor _color1,QColor _color2,BCType _bcType,QSize _size);
+  virtual void removeRef(QColor _color1,QColor _color2,BCType _bcType,KSize _size);
 
 protected:
-  virtual int inGradientList(QColor _color1,QColor _color2,BCType _bcType,QSize _size);
+  virtual int inGradientList(QColor _color1,QColor _color2,BCType _bcType,KSize _size);
 
   QList<KPGradient> gradientList;
 

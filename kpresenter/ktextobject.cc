@@ -925,7 +925,7 @@ unsigned int TxtParagraph::height()
 }
 
 /*======================= break lines ============================*/
-QRect TxtParagraph::breakLines(unsigned int wid,bool regExpMode=false,bool composerMode=false)
+KRect TxtParagraph::breakLines(unsigned int wid,bool regExpMode=false,bool composerMode=false)
 {
   //debug("break lines begin");
   //debug(" concat lines begin");
@@ -992,7 +992,7 @@ QRect TxtParagraph::breakLines(unsigned int wid,bool regExpMode=false,bool compo
     }
   //debug("break lines end");
 
-  return QRect();
+  return KRect();
 }
 
 /*===================== break lines ==============================*/
@@ -4079,7 +4079,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
   int w = cellWidth(0);//,h = cellHeight(row);
   unsigned int i = 0,j = 0,chars = 0,len = 0;
   bool drawCursor = false,cursorDrawn = false;
-  QPoint c1,c2;
+  KPoint c1,c2;
   unsigned int scrBar = 0,wid = 0;
   char chr[11];
   int ry;
@@ -4630,7 +4630,7 @@ void KTextObject::mousePressEvent(QMouseEvent *e)
 	else
 	  rbMenu->setItemEnabled(CB_PASTE,false);
 
-	QPoint pnt;
+	KPoint pnt;
 	pnt = QCursor::pos();
 	rbMenu->popup(pnt);
       } break;

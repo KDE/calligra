@@ -16,9 +16,9 @@
 #ifndef deletecmd_h
 #define deletecmd_h
 
-#include <qrect.h>
-#include <qpoint.h>
-#include <qsize.h>
+#include <krect.h>
+#include <kpoint.h>
+#include <ksize.h>
 #include <qlist.h>
 
 #include "command.h"

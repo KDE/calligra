@@ -21,7 +21,7 @@
 #include <qstring.h>
 #include <qregexp.h>
 #include <qfileinf.h>
-#include <qsize.h>
+#include <ksize.h>
 #include <qwmatrix.h>
 
 #include <stdio.h>
@@ -38,9 +38,9 @@ class KPPixmap : public QObject
   Q_OBJECT
 
 public:
-  KPPixmap(QString _filename,QSize _size);
-  KPPixmap(QString _filename,QString _data,QSize _size);
-  KPPixmap(QString _filename,QString _data,QPixmap *_pixmap,QSize _size);
+  KPPixmap(QString _filename,KSize _size);
+  KPPixmap(QString _filename,QString _data,KSize _size);
+  KPPixmap(QString _filename,QString _data,QPixmap *_pixmap,KSize _size);
 
   virtual QString getFilename()
     { return filename;}
@@ -50,12 +50,12 @@ public:
     { return string_to_native_string(data); }
   virtual QPixmap* getPixmap()
     { return &pixmap; }
-  virtual QSize getSize()
+  virtual KSize getSize()
     { return pixmap.size(); }
 
   virtual QPixmap* getOrigPixmap()
     { return &orig_pixmap; }
-  virtual QSize getOrigSize()
+  virtual KSize getOrigSize()
     { return orig_pixmap.size(); }
 
   virtual void addRef();

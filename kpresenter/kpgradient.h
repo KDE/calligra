@@ -19,7 +19,7 @@
 #include <qobject.h>
 #include <qcolor.h>
 #include <qpixmap.h>
-#include <qsize.h>
+#include <ksize.h>
 #include <qpainter.h>
 #include <qimage.h>
 
@@ -27,6 +27,8 @@
 
 #include <dither.h>
 #include <math.h>
+
+#include <krect.h>
 
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -44,7 +46,7 @@ class KPGradient : public QObject
   Q_OBJECT
 
 public:
-  KPGradient(QColor _color1,QColor _color2,BCType _bcType,QSize _size);
+  KPGradient(QColor _color1,QColor _color2,BCType _bcType,KSize _size);
   ~KPGradient()
     {;}
 
@@ -64,10 +66,10 @@ public:
  
   virtual QPixmap* getGradient()
     { return &pixmap; }
-  virtual QSize getSize()
+  virtual KSize getSize()
     { return pixmap.size(); }
 
-  virtual void setSize(QSize _size)
+  virtual void setSize(KSize _size)
     { pixmap.resize(_size); paint(); }
 
   virtual void addRef();

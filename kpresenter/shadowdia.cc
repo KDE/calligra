@@ -35,7 +35,7 @@ void ShadowPreview::drawContents(QPainter* painter)
   font.setBold(true);
   QFontMetrics fm(font);
 
-  QRect br = fm.boundingRect("KOffice");
+  KRect br = fm.boundingRect("KOffice");
   int x = (width() - br.width()) / 2;
   int y = (height() - br.height()) / 2 + br.height();
   int sx = 0,sy = 0;

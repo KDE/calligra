@@ -1583,7 +1583,7 @@ void KWordView::slotInsertObject(KWordChild *_child)
   OpenParts::View_var v = _child->createView( m_vKoMainWindow );
   if (CORBA::is_nil( v ) )
   {
-    printf("void KWordView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n");
+    printf("void KWordView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n");
     printf("return value is 0L\n");
     exit(1);
   }

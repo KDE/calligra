@@ -39,7 +39,7 @@ class QPrinter;
 
 #include <qlist.h>
 #include <qobject.h>
-#include <qrect.h>
+#include <krect.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qregion.h>
@@ -63,7 +63,7 @@ class QPrinter;
 class KWordChild : public KoDocumentChild
 {
 public:
-  KWordChild( KWordDocument *_wdoc,const QRect& _rect,KOffice::Document_ptr _doc);
+  KWordChild( KWordDocument *_wdoc,const KRect& _rect,KOffice::Document_ptr _doc);
   KWordChild( KWordDocument *_wdoc);
   ~KWordChild();
   
@@ -134,8 +134,8 @@ public:
   virtual void addView(KWordView *_view);
   virtual void removeView(KWordView *_view);
 
-  virtual void insertObject(const QRect& _rect,const char *_part_name);
-  virtual void changeChildGeometry(KWordChild *_child,const QRect&);
+  virtual void insertObject(const KRect& _rect,const char *_part_name);
+  virtual void changeChildGeometry(KWordChild *_child,const KRect&);
   
   virtual QListIterator<KWordChild> childIterator();
 

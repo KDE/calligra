@@ -16,11 +16,11 @@
 #ifndef frame_h
 #define frame_h
 
-#include <qrect.h>
-#include <qpoint.h>
+#include <krect.h>
+#include <kpoint.h>
 #include <qlist.h>
 #include <qcursor.h>
-#include <qsize.h>
+#include <ksize.h>
 
 #include "image.h"
 
@@ -39,14 +39,15 @@ enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
 /* Class: KWFrame                                                 */
 /******************************************************************/
 
-class KWFrame : public QRect
+class KWFrame : public KRect
 {
 public:
   KWFrame();
-  KWFrame(const QPoint &topleft,const QPoint &bottomright);
-  KWFrame(const QPoint &topleft,const QSize &size);
+  KWFrame(const KPoint &topleft,const QPoint &bottomright);
+  KWFrame(const KPoint &topleft,const KSize &size);
   KWFrame(int left,int top,int width,int height);
   KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap);
+  KWFrame(const QRect &_rect);
 
   void setRunAround(RunAround _ra) { runAround = _ra; }
   RunAround getRunAround() { return runAround; }
@@ -56,7 +57,7 @@ public:
   bool isSelected()
     { return selected; }
 
-  void addIntersect(QRect _r);
+  void addIntersect(KRect _r);
   void clearIntersects()
     { intersections.clear(); }
   
@@ -78,7 +79,7 @@ protected:
   bool selected;
   int runAroundGap;
 
-  QList<QRect> intersections;
+  QList<KRect> intersections;
 
 private:
   KWFrame &operator=(KWFrame &_frame)
@@ -212,8 +213,8 @@ public:
   virtual void setImage(KWImage *_image)
     { image = _image; }
   void setFileName(QString _filename);
-  void setFileName(QString _filename,QSize _imgSize);
-  void setSize(QSize _imgSize);
+  void setFileName(QString _filename,KSize _imgSize);
+  void setSize(KSize _imgSize);
 
   virtual KWImage* getImage()
     { return image; }

@@ -17,9 +17,9 @@
 #define kpobject_h
 
 #include <qobject.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qpoint.h>
+#include <krect.h>
+#include <ksize.h>
+#include <kpoint.h>
 #include <qpen.h>
 #include <qbrush.h>
 #include <qpainter.h>
@@ -55,22 +55,22 @@ public:
     { selected = _selected; }
   virtual void rotate(float _angle)
     { angle = _angle; }
-  virtual void setSize(QSize _size)
+  virtual void setSize(KSize _size)
     { setSize(_size.width(),_size.height()); }
   virtual void setSize(int _width,int _height)
-    { ext = QSize(_width > 20 ? _width : 20,_height > 20 ? _height : 20); }
-  virtual void setOrig(QPoint _point)
+    { ext = KSize(_width > 20 ? _width : 20,_height > 20 ? _height : 20); }
+  virtual void setOrig(KPoint _point)
     { orig = _point; }
   virtual void setOrig(int _x,int _y)
-    { orig = QPoint(_x,_y); }
-  virtual void moveBy(QPoint _point)
+    { orig = KPoint(_x,_y); }
+  virtual void moveBy(KPoint _point)
     { orig = orig + _point; }
   virtual void moveBy(int _dx,int _dy)
-    { orig = orig + QPoint(_dx,_dy); }
-  virtual void resizeBy(QSize _size)
+    { orig = orig + KPoint(_dx,_dy); }
+  virtual void resizeBy(KSize _size)
     { resizeBy(_size.width(),_size.height()); }
   virtual void resizeBy(int _dx,int _dy)
-    { ext = ext + QSize(_dx + ext.width() > 20 ? _dx : 0,_dy + ext.height() > 20 ? _dy : 0); }
+    { ext = ext + KSize(_dx + ext.width() > 20 ? _dx : 0,_dy + ext.height() > 20 ? _dy : 0); }
   virtual void setShadowDistance(int _distance)
     { shadowDistance = _distance; }
   virtual void setShadowDirection(ShadowDirection _direction)
@@ -91,7 +91,7 @@ public:
 
   virtual ObjType getType()
     { return OT_UNDEFINED; }
-  virtual QRect getBoundingRect(int _diffx,int _diffy);
+  virtual KRect getBoundingRect(int _diffx,int _diffy);
   virtual bool isSelected()
     { return selected; }
   virtual float getAngle()
@@ -102,9 +102,9 @@ public:
     { return shadowDirection; }
   virtual QColor getShadowColor()
     { return shadowColor; }
-  virtual QSize getSize()
+  virtual KSize getSize()
     { return ext; }
-  virtual QPoint getOrig()
+  virtual KPoint getOrig()
     { return orig; }
   virtual Effect getEffect()
     { return effect; }
@@ -129,8 +129,8 @@ public:
 
   virtual void draw(QPainter *_painter,int _diffx,int _diffy);
 
-  virtual bool contains(QPoint _point,int _diffx,int _diffy);
-  virtual QCursor getCursor(QPoint _point,int _diffx,int _diffy,ModifyType &_modType);
+  virtual bool contains(KPoint _point,int _diffx,int _diffy);
+  virtual QCursor getCursor(KPoint _point,int _diffx,int _diffy,ModifyType &_modType);
 
   virtual void activate(QWidget *_widget,int diffx,int diffy)
     {;}
@@ -155,8 +155,8 @@ protected:
   virtual void doDelete();
 
   float angle;
-  QPoint orig;
-  QSize ext;
+  KPoint orig;
+  KSize ext;
   int shadowDistance;
   ShadowDirection shadowDirection;
   QColor shadowColor;
@@ -167,8 +167,8 @@ protected:
   bool selected,dSelection;
   bool zoomed;
   float presFakt;
-  QPoint oldOrig;
-  QSize oldExt;
+  KPoint oldOrig;
+  KSize oldExt;
   int subPresStep;
   bool specEffects;
   bool onlyCurrStep;

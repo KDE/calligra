@@ -40,7 +40,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KOffice::Document_ptr _doc )
+KWordChild::KWordChild( KWordDocument *_wdoc, const KRect& _rect, KOffice::Document_ptr _doc )
   : KoDocumentChild(_rect,_doc)
 {
   m_pKWordDoc = _wdoc;
@@ -593,7 +593,7 @@ OpenParts::View_ptr KWordDocument::createView()
 }
 
 /*================================================================*/
-void KWordDocument::insertObject(const QRect& _rect,const char *_server_name)
+void KWordDocument::insertObject(const KRect& _rect,const char *_server_name)
 {
   KOffice::Document_var doc = imr_createDocByServerName(_server_name);
   if (CORBA::is_nil(doc)) return;
@@ -618,7 +618,7 @@ void KWordDocument::insertChild(KWordChild *_child)
 }
 
 /*================================================================*/
-void KWordDocument::changeChildGeometry(KWordChild *_child,const QRect& _rect)
+void KWordDocument::changeChildGeometry(KWordChild *_child,const KRect& _rect)
 {
   _child->setGeometry(_rect);
 
@@ -871,7 +871,7 @@ void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 			     _fc.getParag()->getParagLayout()->getPTLineSpacing() - yOffset + plus, buffer );
 	  i = 0;
 
-	  _painter.drawImage(QPoint(tmpPTPos - xOffset, _fc.getPTY() - yOffset + 
+	  _painter.drawImage(KPoint(tmpPTPos - xOffset, _fc.getPTY() - yOffset + 
 				    ((_fc.getLineHeight() - _fc.getParag()->getParagLayout()->getPTLineSpacing()) 
 				     - ((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage()->height())),
 			     *((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage());
@@ -1431,7 +1431,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page)
 void KWordDocument::appendPage(unsigned int _page,QPainter &_painter)
 {
   pages++;
-  QRect pageRect(0,_page * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
+  KRect pageRect(0,_page * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
 
   QList<KWFrame> frameList;
   frameList.setAutoDelete(false);
@@ -1566,7 +1566,7 @@ KWFrame *KWordDocument::getFirstSelectedFrame(int &_frameset)
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
-      _frameset = i;
+      _frameset = getNumFrameSets() - 1 - i;
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{	
@@ -1599,7 +1599,7 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 
   for (i = 0;i < static_cast<unsigned int>(pages);i++)
     {
-      QRect pageRect(0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
+      KRect pageRect(0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
       unsigned int minus = 0;
       if (i + 1> static_cast<unsigned int>(printer->fromPage())) printer->newPage();
       for (j = 0;j < frames.count();j++)
@@ -1614,7 +1614,7 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 		KWFrame *frame = picFS->getFrame(0);
 		if (!frame->intersects(pageRect)) break;
 
-		QSize _size = QSize(frame->width(),frame->height());
+		KSize _size = QSize(frame->width(),frame->height());
 		if (_size != picFS->getImage()->size())
 		  picFS->setSize(_size);
 
@@ -1670,9 +1670,9 @@ void KWordDocument::updateAllFrames()
 	  if (i == j) continue;
 
 	  frame2 = _frames.at(j); 
-	  if (frame1->intersects(QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height())))
+	  if (frame1->intersects(KRect(frame2->x(),frame2->y(),frame2->width(),frame2->height())))
 	    {
-	      QRect r = QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height());
+	      KRect r = QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height());
 	      if (r.left() > frame1->left() || r.top() > frame1->top() || r.right() < frame1->right() || r.bottom() < frame1->bottom())
 		{
 		  if (r.left() < frame1->left()) r.setLeft(frame1->left());

@@ -30,7 +30,8 @@
 #include <qfont.h>
 #include <qfontmet.h>
 #include <qwmatrix.h>
-#include <qpoint.h>
+#include <kpoint.h>
+#include <krect.h>
 
 #include <krestrictedline.h>
 #include <kapp.h>

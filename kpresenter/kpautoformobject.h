@@ -90,7 +90,7 @@ public:
   virtual void draw(QPainter *_painter,int _diffx,int _diffy);
 
 protected:
-  float getAngle(QPoint p1,QPoint p2);
+  float getAngle(KPoint p1,QPoint p2);
   void paint(QPainter *_painter);
 
   QPen pen;

@@ -16,7 +16,7 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <qsize.h>
+#include <ksize.h>
 
 // factors
 #define MM_TO_POINT 2.83465
@@ -61,7 +61,7 @@ static const float PageSpeed[] = {8.0,16.0,32.0};
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 
-const QSize orig_size(-1,-1);
+const KSize orig_size(-1,-1);
 
 #undef SHOW_INFO
 

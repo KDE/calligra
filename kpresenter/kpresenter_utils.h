@@ -16,14 +16,14 @@
 #define _kpresenter_utils_h__
 
 #include <qpainter.h>
-#include <qpoint.h>
+#include <kpoint.h>
 #include <qpntarry.h>
 #include <qcolor.h>
-#include <qsize.h>
+#include <ksize.h>
 
 #include "global.h"
 
-void drawFigure(LineEnd figure,QPainter* painter,QPoint coord,QColor color,int _w,float angle);
-QSize getBoundingSize(LineEnd figure,int _w);
+void drawFigure(LineEnd figure,QPainter* painter,KPoint coord,QColor color,int _w,float angle);
+KSize getBoundingSize(LineEnd figure,int _w);
 
 #endif

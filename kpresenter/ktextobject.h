@@ -25,8 +25,8 @@
 #include <qwidget.h>
 #include <qstring.h>
 #include <qlist.h>
-#include <qrect.h>
-#include <qpoint.h>
+#include <krect.h>
+#include <kpoint.h>
 #include <qfontmet.h>
 #include <qevent.h>
 #include <qcursor.h>
@@ -752,7 +752,7 @@ public:
   /**
    * Breaks lines in a certain width (pixels). Returns the needed rect.<br>
    */
-  QRect breakLines(unsigned int,bool regexpMode=false,bool composerMode=false);
+  KRect breakLines(unsigned int,bool regexpMode=false,bool composerMode=false);
 
   /**
    * Breaks lines in a certain width (chars).<br>
@@ -1097,7 +1097,7 @@ public:
   /** 
    * Resize the KTextObject.
    */
-  void resize(QSize s)
+  void resize(KSize s)
     {resize(s.width(),s.height());}
 
   /**

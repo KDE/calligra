@@ -37,16 +37,16 @@ public:
   ~KPPixmapCollection()
     { pixmapList.clear(); }
 
-  virtual QPixmap* getPixmap(QString _filename,QSize _size,QString &_data,bool orig = false,bool addref = true);
-  virtual QPixmap* getPixmap(QString _filename,QString _data,QSize _size,bool orig = false,bool addref = true);
-  virtual QPixmap* getPixmap(QString _filename,QString _data,QPixmap *_pixmap,QSize _size,bool orig = false,bool addref = true);
+  virtual QPixmap* getPixmap(QString _filename,KSize _size,QString &_data,bool orig = false,bool addref = true);
+  virtual QPixmap* getPixmap(QString _filename,QString _data,KSize _size,bool orig = false,bool addref = true);
+  virtual QPixmap* getPixmap(QString _filename,QString _data,QPixmap *_pixmap,KSize _size,bool orig = false,bool addref = true);
 
-  virtual void removeRef(QString _filename,QSize _size);
-  virtual void removeRef(QString _filename,QString _data,QSize _size);
+  virtual void removeRef(QString _filename,KSize _size);
+  virtual void removeRef(QString _filename,QString _data,KSize _size);
 
 protected:
-  virtual int inPixmapList(QString _filename,QSize _size);
-  virtual int inPixmapList(QString _filename,QString _data,QSize _size);
+  virtual int inPixmapList(QString _filename,KSize _size);
+  virtual int inPixmapList(QString _filename,QString _data,KSize _size);
 
   QList<KPPixmap> pixmapList;
 

@@ -16,13 +16,13 @@
 #include <stdio.h>
 
 #include <qwidget.h>
-#include <qrect.h>
+#include <krect.h>
 #include <qcolor.h>
 #include <qfont.h>
-#include <qsize.h>
+#include <ksize.h>
 #include <qtablevw.h>
 #include <qpainter.h>
-#include <qpoint.h>
+#include <kpoint.h>
 #include <qevent.h>
 
 #include <kapp.h>
@@ -41,7 +41,7 @@ public:
   KCharSelect(QWidget*,const char*,QFont,QColor,int);
   ~KCharSelect() {}
 
-  QSize sizeHint();
+  KSize sizeHint();
 
   void setFont(QFont __font)
     { _font = __font; repaint(true); }
@@ -62,7 +62,7 @@ protected:
   QFont _font;
   QColor _color;
   int _c;
-  QPoint currentC; 
+  KPoint currentC; 
   bool mousePressed;
 
 signals:

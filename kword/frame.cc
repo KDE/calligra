@@ -32,7 +32,7 @@
 
 /*================================================================*/
 KWFrame::KWFrame() 
-  : QRect(), intersections()
+  : KRect(), intersections()
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
@@ -41,8 +41,8 @@ KWFrame::KWFrame()
 }
 
 /*================================================================*/
-KWFrame::KWFrame(const QPoint &topleft,const QPoint &bottomright) 
-  : QRect(topleft,bottomright), intersections() 
+KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright) 
+  : KRect(topleft,bottomright), intersections() 
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
@@ -51,8 +51,8 @@ KWFrame::KWFrame(const QPoint &topleft,const QPoint &bottomright)
 } 
 
 /*================================================================*/
-KWFrame::KWFrame(const QPoint &topleft,const QSize &size) 
-  : QRect(topleft,size), intersections()
+KWFrame::KWFrame(const KPoint &topleft,const KSize &size) 
+  : KRect(topleft,size), intersections()
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
@@ -62,7 +62,7 @@ KWFrame::KWFrame(const QPoint &topleft,const QSize &size)
 
 /*================================================================*/
 KWFrame::KWFrame(int left,int top,int width,int height) 
-  : QRect(left,top,width,height), intersections() 
+  : KRect(left,top,width,height), intersections() 
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
@@ -72,7 +72,7 @@ KWFrame::KWFrame(int left,int top,int width,int height)
 
 /*================================================================*/
 KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap) 
-  : QRect(left,top,width,height), intersections() 
+  : KRect(left,top,width,height), intersections() 
 { 
   runAround = _ra; 
   intersections.setAutoDelete(true); 
@@ -81,9 +81,19 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap)
 }
 
 /*================================================================*/
-void KWFrame::addIntersect(QRect _r)
+KWFrame::KWFrame(const QRect &_rect)
+  : KRect(_rect)
+{
+  runAround = RA_NO; 
+  intersections.setAutoDelete(true); 
+  selected = false;
+  runAroundGap = 1;
+}
+
+/*================================================================*/
+void KWFrame::addIntersect(KRect _r)
 { 
-  intersections.append(new QRect(_r)); 
+  intersections.append(new KRect(_r)); 
 }
 
 /*================================================================*/
@@ -92,13 +102,13 @@ int KWFrame::getLeftIndent(int _y,int _h)
   if (runAround == RA_NO || intersections.isEmpty()) return 0;
 
   int _left = 0;
-  QRect rect;
+  KRect rect;
 
   for (unsigned int i = 0;i < intersections.count();i++)
     {
       rect = *intersections.at(i);
 
-      if (rect.intersects(QRect(left(),_y,width(),_h)))
+      if (rect.intersects(KRect(left(),_y,width(),_h)))
 	{
 	  if (rect.left() == left())
 	    _left = max(_left,rect.width() + MM_TO_POINT(runAroundGap));
@@ -114,13 +124,13 @@ int KWFrame::getRightIndent(int _y,int _h)
   if (runAround == RA_NO|| intersections.isEmpty()) return 0;
 
   int _right = 0;
-  QRect rect;
+  KRect rect;
 
   for (unsigned int i = 0;i < intersections.count();i++)
     {
       rect = *intersections.at(i);
 
-      if (rect.intersects(QRect(left(),_y,width(),_h)))
+      if (rect.intersects(KRect(left(),_y,width(),_h)))
 	{
 	  if (rect.right() == right())
 	    _right = max(_right,rect.width() + MM_TO_POINT(runAroundGap));
@@ -196,7 +206,7 @@ int KWFrameSet::getFrame(int _x,int _y)
 {
   for (unsigned int i = 0;i < getNumFrames();i++)
     {
-      if (getFrame(i)->contains(QPoint(_x,_y))) return i;
+      if (getFrame(i)->contains(KPoint(_x,_y))) return i;
     }
   return -1;
 }
@@ -212,7 +222,7 @@ bool KWFrameSet::contains(unsigned int mx,unsigned int my)
 {
   for (unsigned int i = 0;i < frames.count();i++)
     {
-      if (frames.at(i)->contains(QPoint(mx,my))) return true;
+      if (frames.at(i)->contains(KPoint(mx,my))) return true;
     }
 
   return false;
@@ -223,7 +233,7 @@ int KWFrameSet::selectFrame(unsigned int mx,unsigned int my)
 {
   for (unsigned int i = 0;i < frames.count();i++)
     {
-      if (frames.at(i)->contains(QPoint(mx,my)))
+      if (frames.at(i)->contains(KPoint(mx,my)))
 	{
 	  int r = 1;
 	  if (frames.at(i)->isSelected()) r = 2;
@@ -239,7 +249,7 @@ void KWFrameSet::deSelectFrame(unsigned int mx,unsigned int my)
 {
   for (unsigned int i = 0;i < frames.count();i++)
     {
-      if (frames.at(i)->contains(QPoint(mx,my)))
+      if (frames.at(i)->contains(KPoint(mx,my)))
 	frames.at(i)->setSelected(false);
     }
 }
@@ -293,7 +303,7 @@ void KWTextFrameSet::init()
   format->setDefaults(doc);
   parags->setFormat(0,1,*format);
 
-//   for (int i = 0;i < 100;i++)
+//   for (int i = 0;i < 500;i++)
 //     {
 //       p = new KWParag( this,doc, p, 0L, defaultParagLayout );
 //       p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen.");
@@ -310,10 +320,10 @@ void KWTextFrameSet::update()
   QList<FrameList> frameList;
   frameList.setAutoDelete(true);
 
-  QRect pageRect;
+  KRect pageRect;
   for (unsigned int i = 0;i < static_cast<unsigned int>(doc->getPages() + 1);i++)
     {
-      pageRect = QRect(0,i * doc->getPTPaperHeight(),doc->getPTPaperWidth(),doc->getPTPaperHeight());
+      pageRect = KRect(0,i * doc->getPTPaperHeight(),doc->getPTPaperWidth(),doc->getPTPaperHeight());
 
       //debug("%d %d %d %d",pageRect.x(),pageRect.y(),pageRect.width(),pageRect.height());
 
@@ -573,7 +583,7 @@ void KWPictureFrameSet::setFileName(QString _filename)
 }
 
 /*================================================================*/
-void KWPictureFrameSet::setFileName(QString _filename,QSize _imgSize)
+void KWPictureFrameSet::setFileName(QString _filename,KSize _imgSize)
 {
   if (image) 
     {
@@ -590,7 +600,7 @@ void KWPictureFrameSet::setFileName(QString _filename,QSize _imgSize)
 }
 
 /*================================================================*/
-void KWPictureFrameSet::setSize(QSize _imgSize)
+void KWPictureFrameSet::setSize(KSize _imgSize)
 {
   if (image && _imgSize == image->size()) return;
 

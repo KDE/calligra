@@ -23,8 +23,8 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qbrush.h>
-#include <qrect.h>
-#include <qsize.h>
+#include <krect.h>
+#include <ksize.h>
 #include <qpixmap.h>
 
 #include "qwmf.h"
@@ -72,10 +72,10 @@ public:
   virtual void setPageEffect(PageEffect _pageEffect)
     { pageEffect = _pageEffect; }
 
-  virtual void setSize(QSize _size)
+  virtual void setSize(KSize _size)
     { removeGradient(); ext = _size; }
   virtual void setSize(int _width,int _height)
-    { removeGradient(); ext = QSize(_width,_height); }
+    { removeGradient(); ext = KSize(_width,_height); }
 
   virtual BackType getBackType()
     { return backType; }
@@ -94,10 +94,10 @@ public:
   virtual PageEffect getPageEffect()
     { return pageEffect; }
 
-  virtual QSize getSize()
+  virtual KSize getSize()
     { return ext; }
 
-  virtual void draw(QPainter *_painter,QPoint _offset,bool _drawBorders);
+  virtual void draw(QPainter *_painter,KPoint _offset,bool _drawBorders);
 
   virtual void restore();
 
@@ -126,8 +126,8 @@ protected:
   QPixmap *gradient;
   KPClipart backClip;
 
-  QSize ext;
-  QSize pixSize;
+  KSize ext;
+  KSize pixSize;
   QString data;
 
 };

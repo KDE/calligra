@@ -33,6 +33,7 @@
 #include <kspinbox.h>
 #include <kapp.h>
 #include <kcolorbtn.h>
+#include <krect.h>
 
 #include "global.h"
 

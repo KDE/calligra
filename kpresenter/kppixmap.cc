@@ -21,7 +21,7 @@
 /******************************************************************/
 
 /*===================== constructor ==============================*/
-KPPixmap::KPPixmap(QString _filename,QSize _size)
+KPPixmap::KPPixmap(QString _filename,KSize _size)
   : filename(_filename), pixmap(filename), orig_pixmap(pixmap), refCount(0)
 {
   QFileInfo fileInfo(filename);
@@ -44,7 +44,7 @@ KPPixmap::KPPixmap(QString _filename,QSize _size)
 }
 
 /*==================== constructor ==============================*/
-KPPixmap::KPPixmap(QString _filename,QString _data,QSize _size)
+KPPixmap::KPPixmap(QString _filename,QString _data,KSize _size)
   : filename(_filename), data(_data), refCount(0)
 {
   pixmap = native_string_to_pixmap(data);
@@ -60,7 +60,7 @@ KPPixmap::KPPixmap(QString _filename,QString _data,QSize _size)
 }
 
 /*==================== constructor ==============================*/
-KPPixmap::KPPixmap(QString _filename,QString _data,QPixmap *_pixmap,QSize _size)
+KPPixmap::KPPixmap(QString _filename,QString _data,QPixmap *_pixmap,KSize _size)
   : filename(_filename), data(_data), refCount(0)
 {
   pixmap = QPixmap(*_pixmap);

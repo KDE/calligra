@@ -32,7 +32,7 @@ class Page;
 #include <koPartSelectDia.h>
 
 #include <qwidget.h>
-#include <qrect.h>
+#include <krect.h>
 #include <qlist.h>
 #include <qpainter.h>
 #include <qstring.h>
@@ -48,7 +48,7 @@ class Page;
 #include <qpopmenu.h>
 #include <qcursor.h>
 #include <qfileinf.h>
-#include <qpoint.h>
+#include <kpoint.h>
 
 #include <kcolordlg.h>
 #include <koAboutDia.h>
@@ -259,13 +259,13 @@ public:
   // repaint page
   void repaint(bool);
   void repaint(unsigned int,unsigned int,unsigned int,unsigned int,bool);
-  void repaint(QRect,bool);
+  void repaint(KRect,bool);
 
   // properties
   void changePicture(unsigned int,const char*);
   void changeClipart(unsigned int,QString);
 
-  void presentParts(float,QPainter*,QRect,int,int);
+  void presentParts(float,QPainter*,KRect,int,int);
   void hideParts();
   void showParts();
 
@@ -288,7 +288,7 @@ public:
   KoRuler *getVRuler() { return v_ruler; }
 
   void skipToPage(int _num);
-  void makeRectVisible(QRect _rect);
+  void makeRectVisible(KRect _rect);
 
   void restartPresStructView();
 
@@ -645,12 +645,12 @@ protected:
   QStrList fontList;
 
   bool m_bRectSelection;
-  QRect m_rctRectSelection;
+  KRect m_rctRectSelection;
   QString m_strNewPart;
   bool m_bShowGUI;
   bool presStarted;
 
-  QSize oldSize;
+  KSize oldSize;
 
   int screensaver_pid;
 

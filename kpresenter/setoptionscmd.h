@@ -16,9 +16,9 @@
 #ifndef setoptionscmd_h
 #define setoptionscmd_h
 
-#include <qpoint.h>
-#include <qrect.h>
-#include <qsize.h>
+#include <kpoint.h>
+#include <krect.h>
+#include <ksize.h>
 #include <qcolor.h>
 
 #include "command.h"
@@ -35,7 +35,7 @@ class SetOptionsCmd : public Command
   Q_OBJECT
 
 public:
-  SetOptionsCmd(QString _name,QList<QPoint> &_diffs,QList<KPObject> &_objects,int _xRnd,int _yRnd,
+  SetOptionsCmd(QString _name,QList<KPoint> &_diffs,QList<KPObject> &_objects,int _xRnd,int _yRnd,
 		int _rastX,int _rastY,int _oxRnd,int _oyRnd,int _orastX,int _orastY,
 		QColor _txtBackCol,QColor _txtSelCol,QColor _otxtBackCol,QColor _otxtSelCol,KPresenterDoc *_doc);
   ~SetOptionsCmd();
@@ -47,7 +47,7 @@ protected:
   SetOptionsCmd()
     {;}
 
-  QList<QPoint> diffs;
+  QList<KPoint> diffs;
   QList<KPObject> objects;
   int xRnd,yRnd,rastX,rastY;
   int oxRnd,oyRnd,orastX,orastY;
