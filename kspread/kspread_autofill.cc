@@ -359,7 +359,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
     // Special handling for formulas
     if ( sequence.first() != 0L && sequence.first()->getType() == AutoFillSequenceItem::FORMULAR )
     {
-        QString f = dest->decodeFormular( sequence.first()->getString().latin1() );
+        QString f = dest->decodeFormular( sequence.first()->getString() );
         dest->setCellText( f, true );
         dest->copyLayout( src );
         return;
@@ -530,7 +530,7 @@ void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell
             if ( _srcList.at( s )->isFormular() )
             {
                 QString d = _srcList.at( s )->encodeFormular();
-                cell->setCellText( cell->decodeFormular( d.latin1() ), true );
+                cell->setCellText( cell->decodeFormular( d ), true );
             }
             else if(_srcList.at( s )->isValue() && _srcList.count()==1)
                 {

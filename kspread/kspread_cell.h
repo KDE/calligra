@@ -556,7 +556,7 @@ public:
     bool isFormular() const { return m_content == Formula; }
 
     QString encodeFormular( int _col = -1, int _row = -1 );
-    QString decodeFormular( const char *_text, int _col = -1, int _row = -1 );
+    QString decodeFormular( const QString &_text, int _col = -1, int _row = -1 );
 
     /**
      * Merges the @p new_text with @p old_text during a paste operation.

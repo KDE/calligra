@@ -444,73 +444,73 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
     if(m_strText.isEmpty())
         return m_strText;
 
-    char buf[ 2 ];
-    buf[ 1 ] = 0;
-
     bool fix1 = FALSE;
     bool fix2 = FALSE;
+    unsigned int pos = 0;
+    const unsigned int length = m_strText.length();
 
-    // FIXME (Werner)
-    const char *p=m_strText.latin1();
-    while ( *p != 0 )
+    // All this can surely be made 10 times faster, but I just "ported" it to QString
+    // without any attempt to optimize things -- this is really brittle (Werner)
+    while ( pos < length )
     {
-        /*if ( *p == '\"' )
+        if ( m_strText[pos] == '"' )
         {
-            while ( *p && *p != '\"' )
+            erg += m_strText[pos++];
+            while ( pos < length && m_strText[pos] != '"' )  // till the end of the world^H^H^H "string"
             {
-                buf[ 0 ] = *p++;
-                erg += buf;
-                if ( *p == '\\' )
+                erg += m_strText[pos++];
+                // Allow escaped double quotes (\")
+                if ( pos < length && m_strText[pos] == '\\' && m_strText[pos+1] == '"' )
                 {
-                    buf[ 0 ] = *p++;
-                    erg += buf;
+                    erg += m_strText[pos++];
+                    erg += m_strText[pos++];
                 }
             }
-            p++;
-        }*/
-        /*else*/ if ( *p != '$' && !isalpha( *p ) )
+            if ( pos < length )  // also copy the trailing double quote
+                erg += m_strText[pos++];
+        }
+        else if ( m_strText[pos] != '$' && !m_strText[pos].isLetter() )
         {
-            buf[0] = *p++;
-            erg += buf;
+            erg += m_strText[pos++];
             fix1 = fix2 = FALSE;
         }
         else
         {
             QString tmp = "";
-            if ( *p == '$' )
+            if ( m_strText[pos] == '$' )
             {
                 tmp = "$";
-                p++;
+                pos++;
                 fix1 = TRUE;
             }
-            if ( isalpha( *p ) )
+            if ( m_strText[pos].isLetter() )
             {
-                char buffer[ 1024 ];
-                char *p2 = buffer;
-                while ( *p && isalpha( *p ) )
+                QString buffer;
+                unsigned int pos2 = 0;
+                while ( pos < length && m_strText[pos].isLetter() )
                 {
-                    buf[ 0 ] = *p;
-                    tmp += buf;
-                    *p2++ = *p++;
+                    tmp += m_strText[pos];
+                    buffer[pos2++] = m_strText[pos++];
                 }
-                *p2 = 0;
-                if ( *p == '$' )
+                if ( m_strText[pos] == '$' )
                 {
                     tmp += "$";
-                    p++;
+                    pos++;
                     fix2 = TRUE;
                 }
-                if ( isdigit( *p ) )
+                if ( m_strText[pos].isDigit() )
                 {
-                    const char *p3 = p;
-                    int row = atoi( p );
-                    while ( *p != 0 && isdigit( *p ) ) p++;
+                    const unsigned int oldPos = pos;
+                    while ( pos < length && m_strText[pos].isDigit() ) ++pos;
+                    int row = 0;
+                    if ( pos != oldPos )
+                        row = m_strText.mid(oldPos, pos-oldPos).toInt();
                     // Is it a table
-                    if ( *p == '!' )
+                    if ( m_strText[pos] == '!' )
                     {
                         erg += tmp;
                         fix1 = fix2 = FALSE;
-                        p = p3;
+                        pos = oldPos;
                     }
                     else // It must be a cell identifier
                     {
@@ -518,33 +518,31 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
                         //used when there is a lower reference cell
                         //example =a1
                         int offset='a'-'A';
-                        if ( strlen( buffer ) >= 2 )
+                        if ( buffer.length() >= 2 )
                         {
                             if(buffer[0] >= 'A' && buffer[0] <= 'Z')
-                                col += 26 * ( buffer[0] - 'A' + 1 );
+                                col += 26 * ( buffer[0].latin1() - 'A' + 1 );  // okay here (Werner)
                             else if( buffer[0]>= 'a' && buffer[0] <= 'z' )
-                                 col += 26 * ( buffer[0] - 'A' + 1 -offset );
+                                 col += 26 * ( buffer[0].latin1() - 'A' + 1 -offset );
                             if(buffer[1] >= 'A' && buffer[1] <= 'Z')
-                                col += buffer[1] - 'A' + 1;
+                                col += buffer[1].latin1() - 'A' + 1;
                             else if( buffer[1]>= 'a' && buffer[1] <= 'z' )
-                                 col +=  buffer[1] - 'A' + 1 -offset ;
+                                 col +=  buffer[1].latin1() - 'A' + 1 -offset ;
                         }
                         else {
                             if(buffer[0] >= 'A' && buffer[0] <= 'Z')
-                                col += buffer[0] - 'A' + 1;
+                                col += buffer[0].latin1() - 'A' + 1;
                             else if( buffer[0]>= 'a' && buffer[0] <= 'z' )
-                                col += buffer[0] - 'A' + 1 -offset ;
+                                col += buffer[0].latin1() - 'A' + 1 -offset ;
                         }
                         if ( fix1 )
-                            sprintf( buffer, "$%i", col );
+                            erg += QString( "$%1" ).arg( col );
                         else
-                            sprintf( buffer, "#%i", col - _col );
-                        erg += buffer;
+                            erg += QString( "#%1" ).arg( col - _col );
                         if ( fix2 )
-                            sprintf( buffer, "$%i#", row );
+                            erg += QString( "$%1#").arg( row );
                         else
-                            sprintf( buffer, "#%i#", row - _row );
-                        erg += buffer;
+                            erg += QString( "#%1#" ).arg( row - _row );
                     }
                 }
                 else
@@ -560,11 +558,10 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
             }
         }
     }
-
     return erg;
 }
 
-QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
+QString KSpreadCell::decodeFormular( const QString &_text, int _col, int _row )
 {
     if ( _col == -1 )
         _col = m_iColumn;
@@ -572,80 +569,75 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
         _row = m_iRow;
 
     QString erg = "";
-    const char *p = _text;
+    unsigned int pos = 0;
+    const unsigned int length = _text.length();
 
-    if ( p == 0L )
+    if ( _text.isEmpty() )
         return QString();
 
-    char buf[ 2 ];
-    buf[ 1 ] = 0;
-
-    while ( *p != 0 )
+    while ( pos < length )
     {
-        /*if ( *p == '\"' )
+        if ( _text[pos] == '"' )
         {
-            while ( *p && *p != '\"' )
+            erg += _text[pos++];
+            while ( pos < length && _text[pos] != '"' )
             {
-                buf[ 0 ] = *p++;
-                erg += buf;
-                if ( *p == '\\' )
+                erg += _text[pos++];
+                // Allow escaped double quotes (\")
+                if ( pos < length && _text[pos] == '\\' && _text[pos+1] == '"' )
                 {
-                    buf[ 0 ] = *p++;
-                    erg += buf;
+                    erg += _text[pos++];
+                    erg += _text[pos++];
                 }
             }
-            p++;
-        }*/
-        if ( *p == '#' || *p == '$' )
+            if ( pos < length )
+                erg += _text[pos++];
+        }
+        else if ( _text[pos] == '#' || _text[pos] == '$' )
         {
             bool fix1 = FALSE;
             bool fix2 = FALSE;
-            if ( *p++ == '$' )
+            if ( _text[pos++] == '$' )
                 fix1 = TRUE;
-            int col = atoi( p );
+            int col = 0;
+            unsigned int oldPos = pos;
+            while ( pos < length && ( _text[pos].isDigit() || _text[pos] == '-' ) ) ++pos;
+            if ( pos != oldPos )
+                col = _text.mid(oldPos, pos-oldPos).toInt();
             if ( !fix1 )
                 col += _col;
-            if ( *p == '-' ) p++;
-            while ( *p != 0 && isdigit( *p ) ) p++;
             // Skip '#' or '$'
-            if ( *p++ == '$' )
+            if ( _text[pos++] == '$' )
                 fix2 = TRUE;
-            int row = atoi( p );
+            int row = 0;
+            oldPos = pos;
+            while ( pos < length && ( _text[pos].isDigit() || _text[pos] == '-' ) ) ++pos;
+            if ( pos != oldPos )
+                row = _text.mid(oldPos, pos-oldPos).toInt();
             if ( !fix2 )
                 row += _row;
-            if ( *p == '-' ) p++;
-            while ( *p != 0 && isdigit( *p ) ) p++;
             // Skip '#' or '$'
-            p++;
+            ++pos;
             if ( row <= 0 || col <= 0 )
             {
                 kdError(36001) << "ERROR: out of range" << endl;
-                return QString( _text );
+                return _text;
             }
             if ( fix1 )
                 erg += "$";
-            char buffer[ 20 ];
-            char *p2 = buffer;
             if ( col > 26 )
-                *p2++ = 'A' + ( (col-1) / 26 ) - 1;
-            if( col % 26)
-                *p2++ = 'A' + ( col % 26 ) - 1;
+                erg += (char)('A' + ( (col-1) / 26 ) - 1);
+            if( col % 26 )
+                erg += (char)('A' + ( col % 26 ) - 1);
             else
-                *p2++ = 'Z';
-            *p2 = 0;
-            erg += buffer;
+                erg += 'Z';
             if ( fix2 )
                 erg += "$";
-            sprintf( buffer, "%i", row );
-            erg += buffer;
+            erg += QString::number( row );
         }
         else
-        {
-            buf[ 0 ] = *p++;
-            erg += buf;
-        }
+            erg += _text[pos++];
     }
-
     return erg;
 }
 
@@ -1565,7 +1557,7 @@ bool KSpreadCell::makeFormular()
     sDelocalizedText.replace( pos++, 1, "." );
   // At least,  =2,5+3,2  is turned into =2.5+3.2, which can get parsed...
   */
-  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/m_strText.local8Bit(), m_lstDepends );
+  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/m_strText.utf8(), m_lstDepends );
   // Did a syntax error occur ?
   if ( context.exception() )
   {
@@ -4007,7 +3999,7 @@ return format;
 
 
 
-QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, bool fallBack )
+QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, bool /*fallBack*/ )
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement( "cell" );
@@ -4457,7 +4449,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         // A formula like =A1+A2 ?
         if( t[0] == '=' )
         {
-            t = decodeFormular( t.latin1(), m_iColumn, m_iRow );
+            t = decodeFormular( t, m_iColumn, m_iRow );
 
             // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
             setCellText( pasteOperation( t, m_strText, op ), false );

@@ -4541,7 +4541,7 @@ KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table,
     // Create the parse tree.
     KSParser parser;
     // Tell the parser the locale so that it can parse localized numbers.
-    if ( !parser.parse( formula.local8Bit(), KSCRIPT_EXTENSION_KSPREAD, table->doc()->locale() ) )
+    if ( !parser.parse( formula.utf8(), KSCRIPT_EXTENSION_KSPREAD, table->doc()->locale() ) )
     {
 	context.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
 	return 0;
