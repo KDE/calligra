@@ -3,7 +3,7 @@ INCLUDES  = -I$(srcdir)/../../../kspread $(KOFFICE_INCLUDES) $(all_includes) \
 
 libkspreadcalc_la_LDFLAGS = -avoid-version -module -no-undefined
 
-libkspreadcalc_la_LIBADD = $(all_libraries) ../../libkspread.la
+libkspreadcalc_la_LIBADD = $(all_libraries) ../../libkspreadpart.la
 
 ####### Files
 
