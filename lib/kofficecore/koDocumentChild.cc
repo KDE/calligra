@@ -324,7 +324,7 @@ void KoDocumentChild::saveOasis(  KoXmlWriter &xmlWriter, KoStore *_store, int i
     xmlWriter.addAttributePt( "svg:height",  geometry().height() );
     xmlWriter.addAttributePt( "svg:x",  geometry().left() );
     xmlWriter.addAttributePt( "svg:y",  geometry().top() );
-    xmlWriter.addAttribute( "xlink:href", "#"+ document()->saveOasisToStore( _store, QString::number( index ) ) );
+    xmlWriter.addAttribute( "xlink:href", "#./"+ document()->saveOasisToStore( _store, QString( "Object %1" ).arg( index ) ) );
 
 }
 
