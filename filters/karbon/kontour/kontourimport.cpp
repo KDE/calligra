@@ -128,12 +128,8 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 void
 KontourImport::convert()
 {	
-	QDomElement docElem = inpdoc.documentElement();
-	QDomElement page = docElem.namedItem( "page" ).toElement();
-    QDomElement paper = page.namedItem( "layout" ).toElement();
-	
-	
-	QDomElement lay = page.namedItem( "layer" ).toElement();
+	QDomElement docElem = inpdoc.documentElement();    	
+	QDomElement lay = docElem.namedItem( "page" ).namedItem( "layer" ).toElement();
 	
 	QDomElement b = lay.firstChild().toElement();
 	for( ; !b.isNull(); b = b.nextSibling().toElement() )
