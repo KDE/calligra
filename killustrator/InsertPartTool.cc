@@ -153,5 +153,3 @@ void InsertPartTool::processButtonReleaseEvent (QMouseEvent* /*e*/)
     return;
    }
  }
-
-#include <InsertPartTool.moc>
