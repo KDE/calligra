@@ -156,7 +156,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
                                                   i18n("Warning") ) == KMessageBox::Yes;
             }
         } while ( !bOk );
-	    KMimeType *t = KMimeType::findByURL( KURL( file ), 0, TRUE );
+	    KMimeType::Ptr t = KMimeType::findByURL( KURL( file ), 0, TRUE );
         outputMimeType = t->mimeType();
 
         url = file;
