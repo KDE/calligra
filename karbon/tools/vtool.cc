@@ -170,7 +170,7 @@ VTool::keyEvent( QEvent* event )
 	{
 		QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
 
-		Qt::Key key = keyEvent->key();
+		Qt::Key key = (Qt::Key)keyEvent->key();
 		if( key == Qt::Key_Shift && m_isDragging )
 		{
 			mouseDragShiftReleased();
