@@ -856,13 +856,16 @@ void KoTextObject::emitNewCommand(KCommand *cmd)
 KCommand *KoTextObject::setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter, int selectionId  )
 {
     QTextDocument * textdoc = textDocument();
-    const KoParagCounter * curCounter = static_cast<KoTextParag*>(cursor->parag())->counter();
+    const KoParagCounter * curCounter = 0L;
+    if(cursor)
+        curCounter=static_cast<KoTextParag*>(cursor->parag())->counter();
     if ( !textdoc->hasSelection( selectionId ) &&
          curCounter && counter == *curCounter )
         return 0L;
     emit hideCursor();
-    storeParagUndoRedoInfo( cursor );
-    if ( !textdoc->hasSelection( selectionId ) ) {
+    if(cursor)
+        storeParagUndoRedoInfo( cursor );
+    if ( !textdoc->hasSelection( selectionId ) && cursor) {
         static_cast<KoTextParag*>(cursor->parag())->setCounter( counter );
         setLastFormattedParag( cursor->parag() );
     } else {
@@ -1622,6 +1625,9 @@ void KoTextObject::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int 
     textdoc->selectAll( QTextDocument::Temp );
     QTextCursor *cursor = new QTextCursor( textDocument() );
     KCommand *cmd =0L;
+    KoParagCounter c;
+    if(newLayout->counter)
+        c=*newLayout->counter;
     switch(flags)
     {
     case KoParagLayout::Alignment:
@@ -1630,10 +1636,13 @@ void KoTextObject::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int 
         break;
     }
     case KoParagLayout::Margins:
-        cmd= setMarginCommand( 0L, (Qt3::QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex] ,QTextDocument::Temp );
+        cmd= setMarginCommand( cursor, (Qt3::QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex] ,QTextDocument::Temp );
         break;
     case KoParagLayout::Tabulator:
         cmd= setTabListCommand( cursor, newLayout->tabList(),QTextDocument::Temp  );
+        break;
+    case KoParagLayout::BulletNumber:
+        cmd= setCounterCommand( cursor, c,QTextDocument::Temp   );
         break;
     default:
         break;
@@ -1795,6 +1804,13 @@ void KoTextFormatInterface::setTabList(const KoTabulatorList & tabList )
     setParagLayoutFormat(&format,KoParagLayout::Tabulator);
 }
 
-
+void KoTextFormatInterface::setCounter(const KoParagCounter & counter )
+{
+    KoParagLayout format( *currentParagLayoutFormat() );
+    if(!format.counter)
+        format.counter = new KoParagCounter;
+    *format.counter= counter;
+    setParagLayoutFormat(&format,KoParagLayout::BulletNumber);
+}
 
 #include "kotextobject.moc"

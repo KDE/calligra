@@ -925,6 +925,9 @@ const KoParagLayout * KoTextView::currentParagLayoutFormat() const
 void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex)
 {
     KCommand *cmd =0L;
+    KoParagCounter c;
+    if(newLayout->counter)
+        c=*newLayout->counter;
     switch(flags)
     {
     case KoParagLayout::Alignment:
@@ -937,6 +940,9 @@ void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int ma
         break;
     case KoParagLayout::Margins:
         cmd= textObject()->setMarginCommand(m_cursor,(Qt3::QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex] );
+        break;
+    case KoParagLayout::BulletNumber:
+        cmd= textObject()->setCounterCommand( m_cursor, c  );
         break;
     default:
         break;

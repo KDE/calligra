@@ -74,6 +74,8 @@ public:
 
     void setTabList(const KoTabulatorList & tabList );
 
+    void setCounter(const KoParagCounter & counter );
+
     QColor textColor() const;
     QFont textFont() const;
     QString textFontFamily()const;
