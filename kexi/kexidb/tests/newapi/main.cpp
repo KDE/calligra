@@ -7,6 +7,7 @@
 #include <kexidb/driver.h>
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
+#include <kexidb/field.h>
 
 QCString prgname;
 

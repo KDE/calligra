@@ -47,7 +47,7 @@ class KEXI_DB_EXPORT FieldList
 		 these are also deleted. */
 		virtual ~FieldList();
 		
-		/*! \return nomber of fields in the list. */
+		/*! \return number of fields in the list. */
 		unsigned int fieldCount() const;
 		
 		/*! Adds field at the and of field list. */
@@ -56,7 +56,9 @@ class KEXI_DB_EXPORT FieldList
 		/*! \return field #id or NULL if there is no such a field. */
 		KexiDB::Field* field(unsigned int id);
 
-		Field::ListIterator fieldsIterator() { return Field::ListIterator(m_fields); }
+		Field::ListIterator const fieldsIterator() { return Field::ListIterator(m_fields); }
+
+		Field::List* const fields() { return &m_fields; }
 
 		/*! \return true if fields in the list are owned by this list. */
 		bool isOwner() const;
