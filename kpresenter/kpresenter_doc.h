@@ -500,6 +500,9 @@ class KPresenterDoc : public KoDocument
     CustomListMap customListSlideShow();
     void updateCustomListSlideShow( CustomListMap & map );
 
+    QString presentationName() const { return m_presentationName; }
+    void setPresentationName( const QString &_name ) { m_presentationName = _name; }
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from );
@@ -690,6 +693,7 @@ private:
     QString m_picturePath;
     bool  m_bInsertDirectCursor;
     QString m_globalLanguage;
+    QString m_presentationName;
     bool m_bGlobalHyphenation;
     KPRLoadingInfo *m_loadingInfo;
 };

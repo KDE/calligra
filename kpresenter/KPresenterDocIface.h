@@ -203,6 +203,9 @@ k_dcop:
     bool configCapitalizeNameOfDays() const;
     void setConfigCapitalizeNameOfDays( bool b);
 
+    QString presentationName() const;
+    void setPresentationName( const QString &_name );
+
 private:
     KPresenterDoc *doc;
 

@@ -674,3 +674,14 @@ void KPresenterDocIface::setConfigCapitalizeNameOfDays( bool b)
 {
     doc->getAutoFormat()->configCapitalizeNameOfDays( b );
 }
+
+QString KPresenterDocIface::presentationName() const
+{
+    return doc->presentationName();
+}
+
+void KPresenterDocIface::setPresentationName( const QString &_name )
+{
+    doc->setPresentationName( _name );
+}
+

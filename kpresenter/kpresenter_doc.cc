@@ -1282,7 +1282,8 @@ void KPresenterDoc::loadOasisPresentationSettings( QDomNode &settingsDoc )
         _spManualSwitch = true;
     if ( settings.hasAttribute( "presentation:show" ) )
     {
-        kdDebug()<<"default presentation settings.attribute( presentation:show ) :"<<settings.attribute( "presentation:show" )<<endl;
+        m_presentationName = settings.attribute( "presentation:show" );
+        kdDebug()<<" default presentation name :"<<m_presentationName<<endl;
     }
     loadOasisPresentationCustomSlideShow( settingsDoc );
 }
@@ -1310,7 +1311,8 @@ void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter
     contentTmpWriter.addAttribute( "presentation:endless",  ( _spInfiniteLoop ? "true" : "false" ) );
     contentTmpWriter.addAttribute( "presentation:force-manual",  ( _spManualSwitch ? "true" : "false" ) );
     //add for default presentation
-    //contentTmpWriter.addAttribute( "presentation:show",  "" );
+    if ( !m_presentationName.isEmpty() )
+        contentTmpWriter.addAttribute( "presentation:show",  m_presentationName );
 
     saveOasisPresentationCustomSlideShow( contentTmpWriter );
     contentTmpWriter.endElement();
