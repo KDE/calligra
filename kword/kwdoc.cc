@@ -1326,11 +1326,8 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWStyle *sty = new KWStyle( styleElem, this, m_defaultFont );
-        QString styleName = sty->name();
-        //kdDebug() << "KWDocument::loadStyleTemplates " << styleName << endl;
 
-        addStyleTemplate( sty );
-        // Warning, sty may be deleted (by addStyleTemplate) at this point.
+        sty = addStyleTemplate( sty );
 
         if(m_styleList.count() > followingStyles.count() )
         {
@@ -1338,7 +1335,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
             followingStyles.append( following );
         }
         else
-            kdWarning () << "Found duplicate style declaration, overwriting former " << styleName << endl;
+            kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
 
     ASSERT( followingStyles.count() == m_styleList.count() );
@@ -1351,25 +1348,20 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 
 }
 
-void KWDocument::addStyleTemplate( KWStyle * sty )
+KWStyle* KWDocument::addStyleTemplate( KWStyle * sty )
 {
     // First check for duplicates.
-    // We could use a QMap to make that kind of lookup faster but
-    // then the name would be duplicated, or not stored in the KWStyle,
-    // and we wouldn't control the order.
     for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
-        if ( p->name() == sty->name() )
-        {
-            //kdDebug() << "KWDocument::addStyleTemplate replacing style " << p->name() << endl;
+        if ( p->name() == sty->name() ) {
             // Replace existing style
             *p = *sty;
-            //if ( p->name() == "Standard" ) defaultParagLayout = p;
             delete sty;
-            return;
+            return p;
         }
     }
     m_styleList.append( sty );
+    return sty;
 }
 
 void KWDocument::removeStyleTemplate ( KWStyle *style ) {

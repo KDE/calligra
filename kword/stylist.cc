@@ -331,7 +331,8 @@ void KWStyleManager::apply() {
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         if(m_origStyles.at(i) == 0) {           // newly added style
             kdDebug() << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
-            m_doc->addStyleTemplate(m_changedStyles.at(i));
+            KWStyle *tmp = m_doc->addStyleTemplate(m_changedStyles.take(i));
+            m_changedStyles.insert(i, tmp);
         } else if(m_changedStyles.at(i) == 0) { // deleted style
             kdDebug() << "deleting orig " << m_origStyles.at(i)->name() << " (" << i << ")" << endl;
 

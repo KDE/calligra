@@ -216,7 +216,7 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
             tabList.append( tab );
             style->paragLayout().setTabList( tabList );
         }
-        fs->kWordDocument()->addStyleTemplate( style );             // register the new style
+        style = fs->kWordDocument()->addStyleTemplate( style );     // register the new style
         fs->kWordDocument()->updateAllStyleLists();                 // show it in the UI
     }
     return style;

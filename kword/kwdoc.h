@@ -400,7 +400,7 @@ public:
     void setKSpellConfig(KSpellConfig _kspell);
     KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
 
-    void addStyleTemplate( KWStyle *style );
+    KWStyle* addStyleTemplate( KWStyle *style );
 
     void removeStyleTemplate ( KWStyle *style );
 
