@@ -701,6 +701,36 @@ bool kspreadfunc_hex2oct( KSContext& context )
   return true;
 }
 
+static bool kspread_convert_mass( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> massMap;
+
+  // first-time initialization
+  if( massMap.isEmpty() )
+  {
+    massMap[ "g" ]       = 1.0; // Gram (the reference )
+    massMap[ "sg" ]       = 6.8522050005347800E-05; // Pieces
+    massMap[ "lbm" ]      = 2.2046229146913400E-03; // Pound
+    massMap[ "u" ]        = 6.0221370000000000E23; // U (atomic mass)
+    massMap[ "ozm" ]      = 3.5273971800362700E-02; // Ounce
+    massMap[ "stone" ]    = 1.574730e-04; // Stone
+    massMap[ "ton" ]      = 1.102311e-06; // Ton
+    massMap[ "grain" ]    = 1.543236E01;  // Grain
+    massMap[ "pweight" ]  = 7.054792E-01; // Pennyweight
+    massMap[ "hweight" ]  = 1.968413E-05; // Hundredweight
+    massMap[ "shweight" ] = 2.204623E-05; // Shorthundredweight
+    massMap[ "brton" ]    = 9.842065E-07; // Gross Registered Ton
+  }
+
+  if( !massMap.contains( fromUnit ) ) return false;
+  if( !massMap.contains( toUnit ) ) return false;
+
+  result = value * massMap[ toUnit ] / massMap[ fromUnit ];
+
+  return true;
+}
+
 
 static bool kspread_convert_distance( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
@@ -822,11 +852,12 @@ bool kspreadfunc_convert( KSContext& context )
 
   double result = value;
 
-  if( !kspread_convert_distance( fromUnit, toUnit, value, result ) )
-    if( !kspread_convert_temperature( fromUnit, toUnit, value, result ) )
-      if( !kspread_convert_pressure( fromUnit, toUnit, value, result ) )
-        if( !kspread_convert_energy( fromUnit, toUnit, value, result ) )
-          return false;
+  if( !kspread_convert_mass( fromUnit, toUnit, value, result ) )
+    if( !kspread_convert_distance( fromUnit, toUnit, value, result ) )
+      if( !kspread_convert_temperature( fromUnit, toUnit, value, result ) )
+        if( !kspread_convert_pressure( fromUnit, toUnit, value, result ) )
+          if( !kspread_convert_energy( fromUnit, toUnit, value, result ) )
+            return false;
 
   context.setValue( new KSValue( result ) );
 
