@@ -82,7 +82,6 @@ Bugs for after 1.4.0 (if time permits can be fixed before 1.4 as well, of course
 
 Others bugs not in BT system (Report by - taken by):
 
-
 Other things: (please add the things you are working on!)
 
 - Speed up selecting many cells!
@@ -122,7 +121,6 @@ Other things: (please add the things you are working on!)
 - Scrollbar that supports jumping one row/column forward or back
 - formula result: fit the precision to the width of the cell
 - other bug fixes                               (everybody, every time)
-- Handling of empty cells: empty cells are != 0.0 
 - interface for mail merge
 
 *********
@@ -132,9 +130,6 @@ Other things: (please add the things you are working on!)
 John
 =======
 
-- Formula arguments into the Context structure
-- Pulling the cell 'result' into it's own class for future enhancements to 
-  calculation precision, new datatypes (matrix?), and cleaner code 
 - code cleanups to layout processing (KSpreadCell::makeLayout/setCellText are nightmares!)
 - evaluation of how best to increase floating point precision (GnuMP?)
 
@@ -155,7 +150,7 @@ Philipp
 Norbert
 =======
 
-- solver (see gnumeric)
+- solver (see gnumeric)  [isn't this done already?]
 + option: ignore duplicate deliminers in CSV import and Insert data from file/clipboard
 + CSV export dialog: define deliminers, Table(s), cell content in '"'
 + more than one currency 
@@ -191,7 +186,6 @@ OpenCalc - filter
 - conditional cell attribute support is just poor in KSpread: 
   we should be able to assign complete styles (KSpreadLayout objects)
 - support for format strings (dd/mm/yyyy)       - Norbert
-- cells with links have the wrong size (due to QML)
 - more font attributes (outline, shadow,...) + attributes for parts of the text
 - double borders
 - multiline header/footer support
@@ -285,7 +279,6 @@ MDETERM
 MINVERSE
 MMULT
 SERIESSUM
-SUMIF (not XL compatible)
 SUMXMY2
 
 
@@ -420,43 +413,3 @@ After koffice-1.3
 -----------------
 -Improve validation (add list) In progress
 
-Oasis File Format:
-==================
-
-Todo:
------
--> save/load formula
--> save/load repeate header print
--> save/load links
-
-In Progress:
-------------
--> save/load font format
--> Save/load numeric-style
-	-> scientific format
-	-> Time/Date format
-Done:
------
--> save/load page name
--> save/load column/row attribute (without font)
--> save/load note
--> save/load protect doc/sheet
--> save/load validation (all + list)
--> save/load page master layout
--> save/load header/footer
--> save/load print range
--> save/load conditional cell attribute (save in style:map)
--> save/load style
--> save/load cell border attribute
--> save/load settings (cursor position, active table, view options)
--> save/load print setup
--> save numeric style for cell
-
-Fixe todo:
-----------
--> after loading cursor position me must update view
--> fix default value (for printing)
--> Save/load spell checking ignore word into settings.xml
--> Save/load col-width/row-height into settings.xml
--> Save/load numeric-style
--> Fix load conditional attribute, for the moment it load just one style

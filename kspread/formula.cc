@@ -26,9 +26,7 @@
 #include "valuecalc.h"
 #include "valueconverter.h"
 
-#if 0
 #include "functions.h"
-#endif 
 
 #include <limits.h>
 
@@ -55,18 +53,19 @@
 
 
  /*
-TODO:
- - handle initial formula marker = (and +)
- - reuse constant already in the pool
- - reuse references already in the pool
+TODO - features:
  - array/list for function arguments
  - conversion using KLocale
  - handle Intersection
  - cell reference is made relative (absolute now)
- - expression optimization (e.g. 1+2+A1 becomes 3+A1)
  - shared formula (different owner, same data)
  - relative internal representation (independent of owner)
  - OASIS support
+TODO - optimizations:
+ - handle initial formula marker = (and +)
+ - reuse constant already in the pool
+ - reuse references already in the pool
+ - expression optimization (e.g. 1+2+A1 becomes 3+A1)
  */
 
 namespace KSpread
@@ -1156,9 +1155,8 @@ KSpreadValue Formula::eval() const
     sheet = d->cell->sheet();
   QValueVector<KSpreadValue> args;
 
-#if 0    
   Function* function;
-#endif
+  
   if( d->dirty )
   {
     Tokens tokens = scan( d->expression );
@@ -1330,20 +1328,23 @@ KSpreadValue Formula::eval() const
       // calling function
       case Opcode::Function:
         return KSpreadValue::errorVALUE();
-#if 0        
+        
         if( stack.count() < index )
+          // (Tomas) umm, how could that be ? I mean, the index value
+          //  is computed from the stack *confused*
           return KSpreadValue::errorVALUE(); // not enough arguments
         args.clear();
         for( ; index; index-- )
           args.insert( args.begin(), stack.pop() );
-        val1 = convertToString( stack.pop() ); // function name as string value
+        // function name as string value
+        val1 = ValueConverter::self()->asString (stack.pop(), d->locale);
         if( val1.isError() )
           return KSpreadValue::errorVALUE();
-        function = FunctionRepository::self()->function( val1.asString() );
+        function = FunctionRepository::self()->function ( val1.asString() );
         if( !function )
           return KSpreadValue::errorVALUE(); // no such function
         stack.push( function->exec( this, args ) );
-#endif        
+        
         break;
 
       default:

@@ -19,6 +19,7 @@
 
 #include "formula.h"
 #include "functions.h"
+#include "valueconverter.h"
 
 #include <qdict.h>
 #include <qvaluevector.h>
@@ -84,15 +85,22 @@ FunctionRepository* FunctionRepository::self()
 
 KSpreadValue function_sin( const Formula* formula, QValueVector<KSpreadValue> args )
 {
+/*
+  (Tomas:)
+  Commented out as we have no locale available. The way used to handle
+  locale pointers needs to be changed, we now have three zillions pointers
+  all pointing to the same object...
+  
   KSpreadValue result;
   if( args.count() != 1 )
     return KSpreadValue::errorVALUE();
     
-  KSpreadValue angle = formula->convertToNumber( args[0] );
+  KSpreadValue angle = ValueConverter::self()->asFloat( args[0] );
   if( angle.isError() )
     return KSpreadValue::errorVALUE();
   
   return KSpreadValue( sin( angle.asFloat() ) );
+*/
 }
 
 FunctionRepository::FunctionRepository()
