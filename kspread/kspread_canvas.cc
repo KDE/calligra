@@ -1745,16 +1745,14 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
 
       case Key_Down:
-
-	  if ( !m_bChoose && markerRow() == 0xFFFF )
+	  if ( !m_bChoose && markerRow() == 0x7FFF )
 	      return;
-	  if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
+	  if ( m_bChoose && chooseMarkerRow() == 0x7FFF )
 	      return;
 	  
 	  if ( m_bChoose )
 	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select);
 	  else{
-
 	      x = x0 =  markerColumn();
 	      y = y0 =  markerRow();
 	      
@@ -1791,6 +1789,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 				  {
 				      y ++;		
 				  }
+			      
 			      gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
 			      
 			      }
@@ -1826,7 +1825,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      {
               // HELP! This is by far to slow and inefficent!
 
-		      while (( activeTable()->cellAt( x +1 ,y ))->isEmpty() && x <=26*26  )
+		      while (( activeTable()->cellAt( x +1 ,y ))->isEmpty() && x <26*26  )
 			  {
 			  x ++;		  
 			  }
@@ -1836,7 +1835,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      {
 			  if(!(activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x + 1,y)->isEmpty()))
 			      {
-				  while ( !(activeTable()->cellAt( x + 1 ,y ))->isEmpty() && x <= 26*26)
+				  while ( !(activeTable()->cellAt( x + 1 ,y ))->isEmpty() && x < 26*26)
 				      {
 					  x ++;		  
 				      }
@@ -1847,7 +1846,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 				  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y)->isEmpty()))
 				      {
 					  
-					  while (( activeTable()->cellAt( x +1,y ))->isEmpty() && x <= 26*26 )
+					  while (( activeTable()->cellAt( x +1,y ))->isEmpty() && x < 26*26 )
 					      {
 						  
 						  x ++;
