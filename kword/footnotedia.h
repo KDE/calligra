@@ -46,7 +46,6 @@ protected slots:
     void footLineChanged( const QString & );
 
 private:
-    QWidget *tab1;
 
     QRadioButton *m_rbAuto;
     QRadioButton *m_rbManual;

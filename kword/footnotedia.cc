@@ -34,7 +34,7 @@
 /******************************************************************/
 
 KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name )
-    : KDialogBase(Plain /*Tabbed*/, QString::null, Ok | Cancel, Ok, parent, name, true)
+    : KDialogBase( parent, name, true, QString::null, Ok|Cancel, Ok, true )
 {
     setupTab1();
 
@@ -47,12 +47,10 @@ KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name )
 
 void KWFootNoteDia::setupTab1()
 {
-    tab1 = plainPage();
+    QVBox *page = makeVBoxMainWidget();
 
-    QVBoxLayout* vbox = new QVBoxLayout( tab1 );
-
-    QButtonGroup *grp = new QButtonGroup( 2, Qt::Vertical, tab1 );
-    QGridLayout *grid = new QGridLayout( grp, 2, 2);
+    QButtonGroup *grp = new QButtonGroup(  page );
+    QGridLayout *grid = new QGridLayout( grp, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
     m_rbAuto = new QRadioButton( i18n("Automatic"), grp );
     m_rbManual= new QRadioButton( i18n("Manual"), grp );
 
@@ -64,17 +62,14 @@ void KWFootNoteDia::setupTab1()
     connect( m_footLine, SIGNAL( textChanged ( const QString & )), this, SLOT(footLineChanged( const QString & )));
     grid->addWidget( m_footLine, 1, 1);
 
-    vbox->addWidget( grp );
 
-
-    grp = new QButtonGroup( 2, Qt::Vertical, tab1 );
+    grp = new QButtonGroup( 2, Qt::Vertical, page );
     m_rbFootNote = new QRadioButton( i18n("Footnote"), grp );
     m_rbEndNote = new QRadioButton( i18n("Endnote"), grp );
     grp->setExclusive( true );
     grp->insert( m_rbFootNote );
     grp->insert( m_rbEndNote );
 
-    vbox->addWidget( grp );
 
     m_rbFootNote->setChecked( true );
 }
