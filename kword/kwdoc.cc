@@ -2017,7 +2017,7 @@ void KWDocument::refreshAllFrames()
 void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage*/ )
 {
     int thisPageNum = pages-1;
-    kdDebug() << "KWDocument::appendPage pages=" << pages << " so thisPageNum=" << thisPageNum << endl;
+    //kdDebug() << "KWDocument::appendPage pages=" << pages << " so thisPageNum=" << thisPageNum << endl;
     pages++;
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2027,6 +2027,10 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
         // don't add tables! A table cell ( frameset ) _must_ not have more than one frame!
         if ( frameSet->getGroupManager()) continue;
 
+        // KWFrameSet::addFrame triggers a reshuffle in the frames list (KWTextFrameSet::updateFrames)
+        // which destroys the iterators -> append the new frames at the end.
+        QList<KWFrame> newFrames;
+
         QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
@@ -2035,7 +2039,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
                                   - it is on the former page and the frame is set to double sided.
                                   - AND the frame is set to be reconnected or copied
                                   -  */
-            //kdDebug() << "KWDocument::appendPage thisPageNum=" << thisPageNum << " frame->getPageNum()=" << frame->getPageNum() << endl;
+            //kdDebug() << "KWDocument::appendPage frame=" << frame << " frame->getPageNum()=" << frame->getPageNum() << endl;
             //kdDebug() << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
             if ( (frame->getPageNum() == thisPageNum ||
                   (frame->getPageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide)) &&
@@ -2052,7 +2056,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
                         frm->setPageNum( frame->getPageNum()+1 );
                         frm->setFrameBehaviour(frame->getFrameBehaviour());
                         frm->setSheetSide(frame->getSheetSide());
-                        frame->getFrameSet()->addFrame( frm );
+                        newFrames.append( frm );
                         } break;
                     case FT_PICTURE:  { // can not be copied at the moment.
                         } break;
@@ -2064,6 +2068,9 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
                 }
             }
         }
+        QListIterator<KWFrame> newFrameIt( newFrames );
+        for ( ; newFrameIt.current() ; ++newFrameIt )
+            frameSet->addFrame( newFrameIt.current() );
     }
 /*
     if ( redrawBackgroundWhenAppendPage )
