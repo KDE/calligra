@@ -150,8 +150,10 @@ void GOval::writeToPS (ostream& os) {
        << sPoint.x () << ' ' << sPoint.y () << ' ';
   switch (outlineInfo.shape) {
   case GObject::OutlineInfo::PieShape:
-    os << (fillInfo.style == NoBrush  ? " false" : " true")
-       << sAngle << ' ' << eAngle << " DrawPie\n";
+    os << sAngle << ' ' << eAngle
+       << (fillInfo.style == NoBrush  ? " false" : " true")
+       << " DrawPie\n";
+    break;
   case GObject::OutlineInfo::ArcShape:
     os << sAngle << ' ' << eAngle << " DrawArc\n";
     break;
