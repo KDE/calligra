@@ -85,17 +85,65 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
     return true;
 }
 
+bool OOWriterWorker::zipPrepareWriting(const QString& name)
+{
+    if (!m_zip)
+        return false;
+    m_size=0;
+    return m_zip->prepareWriting(name, QString::null, QString::null, 0);
+}
+
+bool OOWriterWorker::zipDoneWriting(void)
+{
+    if (!m_zip)
+        return false;
+    return m_zip->doneWriting(m_size);
+}
+
+bool OOWriterWorker::zipWriteData(const char* str)
+{
+    if (!m_zip)
+        return false;
+    const uint size=strlen(str);
+    m_size+=size;
+    return m_zip->writeData(str,size);
+}
+
+bool OOWriterWorker::zipWriteData(const QByteArray& array)
+{
+    if (!m_zip)
+        return false;
+    const uint size=array.size();
+    m_size+=size;
+    return m_zip->writeData(array.data(),size);
+}
+
+bool OOWriterWorker::zipWriteData(const QCString& cstr)
+{
+    if (!m_zip)
+        return false;
+    const uint size=cstr.length();
+    m_size+=size;
+    return m_zip->writeData(cstr.data(),size);
+}
+
+bool OOWriterWorker::zipWriteData(const QString& str)
+{
+    return zipWriteData(str.utf8());
+}
+
 void OOWriterWorker::writeContentXml(void)
 {
     if (!m_zip)
         return;
 
+    zipPrepareWriting("content.xml");    
+        
     QCString head( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
     head += "<!DOCTYPE office:document-content>\n";
     head += "<office:document-content>\n";
-
-    QCString tail( "</office:document-content>\n" );
-
+    zipWriteData(head);
+    
     QByteArray fontArray;
     QTextStream stream(fontArray, IO_WriteOnly);
     stream.setEncoding( QTextStream::UnicodeUTF8 );    
@@ -107,18 +155,15 @@ void OOWriterWorker::writeContentXml(void)
         // ### TODO: pitch
     }
     stream << " </office:fonts-decls>\n";
-
-    uint size=0;
-    m_zip->writeData(head.data(), head.length());
-    size += head.length();
-    m_zip->writeData(fontArray.data(), fontArray.size());
-    size += fontArray.size();
+    zipWriteData(fontArray);
+    
     // TODO: styles
-    m_zip->writeData(m_contentBody.data(), m_contentBody.size());
-    size += m_contentBody.size();
-    m_zip->writeData(tail.data(), tail.length());
-    size += tail.length();
-    m_zip->doneWriting(size);
+
+    zipWriteData(m_contentBody);
+    
+    zipWriteData( "</office:document-content>\n" );
+    
+    zipDoneWriting();
 }
 
 bool OOWriterWorker::doCloseFile(void)

@@ -93,6 +93,13 @@ private:
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void declareFont(const QString& fontName);
     void writeContentXml(void);
+private: // ZIP methids
+    bool zipPrepareWriting(const QString& name);
+    bool zipDoneWriting(void);
+    bool zipWriteData(const char* str);
+    bool zipWriteData(const QByteArray& array);
+    bool zipWriteData(const QCString& cstr);
+    bool zipWriteData(const QString& str); // Assumes UTF-8
 private:
     QTextStream* m_streamOut;
     QString m_pagesize; // Buffer for the <pagesize> tag
@@ -104,6 +111,7 @@ private:
     QStringList m_fontNames; // List of used font names
     ulong m_pictureNumber; // Number of picture (increment *before* use)
     QString m_styles;
+    uint m_size; // Size of ZIP entry
 };
 
 #endif // _EXPORTFILTER_H
