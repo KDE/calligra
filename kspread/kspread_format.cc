@@ -469,7 +469,7 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste 
     {
       KSpreadStyle * s = m_pTable->doc()->styleManager()->style( f.attribute( "style-name" ) );
 
-      kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
+      //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
       if ( s )
       {
         setKSpreadStyle( s );
@@ -483,7 +483,7 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste 
     if ( f.hasAttribute( "parent" ) )
     {
       KSpreadCustomStyle * s = (KSpreadCustomStyle *) m_pTable->doc()->styleManager()->style( f.attribute( "parent" ) );
-      kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
+      //kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
 
       if ( s )
       {
