@@ -162,9 +162,8 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
     myWordFilter=0L;
 }
 
-
 /*================================================================*/
-int main(int argc,char **argv) {
+void main(int argc,char **argv) {
 
     MyApplication app(argc,argv);
     MyAutoLoader loader("IDL:KOffice/FilterFactory:1.0","KWordWinword97");
