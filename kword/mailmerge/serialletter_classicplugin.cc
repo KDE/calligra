@@ -413,6 +413,42 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
         records->setEnabled(true);
     }
     setInitialSize( QSize( 600, 400 ) );
+    updateButton();
+}
+
+void KWClassicMailMergeEditor::firstRecord()
+{
+    records->setValue(1);
+    updateButton();
+}
+
+void KWClassicMailMergeEditor::prevRecord()
+{
+    records->setValue(records->value()-1);
+    updateButton();
+}
+
+void KWClassicMailMergeEditor::nextRecord()
+{
+    records->setValue(records->value()+1);
+    updateButton();
+}
+
+void KWClassicMailMergeEditor::lastRecord()
+{
+    records->setValue(records->maxValue());
+    updateButton();
+}
+
+
+void KWClassicMailMergeEditor::updateButton()
+{
+    int val = records->value();
+    first->setEnabled( val > 1);
+    back_->setEnabled( val> 1 );
+    forward->setEnabled( val < records->maxValue() );
+    finish->setEnabled( val < records->maxValue());
+
 }
 
 void KWClassicMailMergeEditor::resizeEvent( QResizeEvent *e )
@@ -451,6 +487,7 @@ void KWClassicMailMergeEditor::addEntry()
         changeRecord( records->value() );
         dbList->updateItems();
     }
+    updateButton();
 //    delete dia;
 }
 
@@ -459,6 +496,8 @@ void KWClassicMailMergeEditor::addRecord()
     db->appendRecord();
     records->setRange( records->minValue(), records->maxValue() + 1 );
     records->setValue( db->getNumRecords() );
+    updateButton();
+
 }
 
 void KWClassicMailMergeEditor::removeEntry()
@@ -494,6 +533,7 @@ void KWClassicMailMergeEditor::removeRecord()
         dbList->updateItems();
     } else
         records->setEnabled( FALSE );
+    updateButton();
 }
 
 extern "C" {
@@ -501,4 +541,5 @@ extern "C" {
 	{
 		return new KWClassicSerialDataSource(inst,parent);
 	}
+
 }

@@ -141,6 +141,7 @@ public:
 
 protected:
     void resizeEvent( QResizeEvent *e );
+    void updateButton();
 
     QSpinBox *records;
     KWClassicMailMergeEditorList *dbList;
@@ -162,10 +163,10 @@ protected slots:
     void addRecord();
     void removeEntry();
     void removeRecord();
-    void firstRecord() { records->setValue(1); }
-    void prevRecord() { records->setValue(records->value()-1); }
-    void nextRecord() { records->setValue(records->value()+1); }
-    void lastRecord() { records->setValue(records->maxValue()); }
+    void firstRecord();
+    void prevRecord();
+    void nextRecord();
+    void lastRecord();
 };
 
 #endif
