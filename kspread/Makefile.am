@@ -46,7 +46,7 @@ kdemimedir = $(kde_mimedir)/application
 // py_DATA = KSpread.py KOffice.py KOStore.py OpenPartsUI.py OpenParts.py KOM.py
 // pydir = $(kde_includes)/python
 
-SUBDIRS =  pics scripts dtd filters toolbar
+SUBDIRS =  . pics scripts dtd filters toolbar
 
 chart.idl: $(interfacedir)/chart.idl
 	-rm -f chart.idl
