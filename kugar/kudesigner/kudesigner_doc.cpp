@@ -74,10 +74,12 @@ void KudesignerDoc::addCommand(KCommand *cmd)
     history->addCommand(cmd);
 }
 
-bool KudesignerDoc::initDoc()
+bool KudesignerDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
     // If nothing is loaded, do initialize here
     bool ok = FALSE;
+
+//todo use flags
 
     QString _template;
     KoTemplateChooseDia::DialogType dlgtype;
