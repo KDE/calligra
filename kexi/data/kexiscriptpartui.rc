@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexiscriptpart" version="1">
+
+<MenuBar>
+	<Menu name="widgets">
+		<text>&amp;Create</text>
+		<Action name="scriptpart_create"/>
+	</Menu>
+</MenuBar>
+
+</kpartgui>
