@@ -62,7 +62,7 @@ void Cursor::init()
 	m_at = 0;
 //js:todo:	if (m_query)
 //		m_fieldCount = m_query->fieldsCount();
-	m_fieldCount = 0; //do not know
+	m_fieldCount = m_query ? m_query->fieldCount() : 0; //do not know
 	//<members related to buffering>
 	m_cols_pointers_mem_size = 0;
 	m_records_in_buf = 0;
