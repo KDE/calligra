@@ -39,7 +39,7 @@
 
 #include "vcolordocker.h"
 
-#include "vpatternchooser.h"
+#include <koIconChooser.h>
 
 VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
