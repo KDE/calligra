@@ -66,7 +66,7 @@ VEditNodeTool::drawTemporaryObject()
 	{
 		if( m_state == normal )
 		{
-			view()->part()->document().selection()->selectNode( lp );
+			view()->part()->document().selection()->appendNode( lp );
 			m_state = moving;
 		}
 
@@ -217,7 +217,7 @@ VEditNodeTool::eventFilter( QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		//m_activeNode = view()->part()->document().selection()->node( lp );
-		view()->part()->document().selection()->deselectNodes();
+		view()->part()->document().selection()->clearNodes();
 
 		// draw initial object:
 		drawTemporaryObject();

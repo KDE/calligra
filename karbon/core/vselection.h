@@ -66,7 +66,7 @@ public:
 	void take( VObject& object );
 
 	/**
-	 * Adds all object to the selection.
+	 * Adds all objects to the selection.
 	 */
 	void append();
 
@@ -92,14 +92,20 @@ public:
 
 
 	/**
+	 * Read only access to the segments with selected nodes.
+	 */
+	const QPtrList<VSegment>& segments() const { return m_segments; }
+
+	bool appendNode( const KoPoint& p );
+	bool checkNode( const KoPoint& p );
+	void appendNodes();
+	void clearNodes();
+
+
+	/**
 	 * Returns the handle node id, the QPoint is inside.
 	 */
 	VHandleNode handleNode( const QPoint& point ) const;
-
-	bool selectNode( const KoPoint &p );
-	bool checkNode( const KoPoint &p );
-	void selectNodes();
-	void deselectNodes();
 
 private:
 	/**
@@ -107,17 +113,20 @@ private:
 	 */
 	VObjectList m_objects;
 
+	/**
+	 * A list of segments with selected nodes.
+	 */
 	QPtrList<VSegment> m_segments;
 
 	/**
-	 * Handle and handle nodes paint coordinates.
+	 * Handle and handlenodes paint coordinates.
 	 */
 	QRect* m_qrect;
 
 	/**
 	 * Paint size of nodes.
 	 */
-	static const uint m_nodeSize = 3;
+	static const uint m_handleNodeSize = 3;
 };
 
 #endif

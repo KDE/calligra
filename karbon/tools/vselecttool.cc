@@ -301,7 +301,7 @@ VSelectTool::eventFilter( QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		m_activeNode = view()->part()->document().selection()->handleNode( lp );
-		view()->part()->document().selection()->selectNodes();
+		view()->part()->document().selection()->appendNodes();
 		view()->part()->document().selection()->setState( VObject::edit );
 		view()->part()->repaintAllViews();
 
