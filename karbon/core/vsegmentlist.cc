@@ -355,26 +355,22 @@ VSegmentList::close()
 
 		m_isClosed = true;
 	}
-
-	// Make sure we are counter clockwise:
-	if( !counterClockwise() )
-		revert();
 }
 
 bool
 VSegmentList::counterClockwise() const
 {
-	// The idea for this algorithm is taken from the faq of comp.graphics.algorithms:
+	// The idea for this algorithm is taken from the FAQ of comp.graphics.algorithms:
 	// "Find the lowest vertex (or, if there is more than one vertex with the
 	// same lowest coordinate, the rightmost of those vertices) and then take
 	// the cross product of the edges fore and aft of it."
 
-	if( !m_isClosed )
+	if( !m_isClosed || m_number <= 1 )
 		return false;
 
 	VSegment* segment = m_first;
 
-	// We save the segment not the knot itself. Intialize it with the
+	// We save the segment not the knot itself. Initialize it with the
 	// first segment:
 	const VSegment* bottomRight = m_first;
 
@@ -516,7 +512,13 @@ VSegmentList::load( const QDomElement& element )
 	}
 
 	if( element.attribute( "isClosed" ) == 0 ? false : true )
+	{
 		close();
+
+		// Make sure we are counter clockwise:
+		if( !counterClockwise() )
+			revert();
+	}
 }
 
 void

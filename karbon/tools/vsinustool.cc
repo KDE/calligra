@@ -42,9 +42,9 @@ VSinusTool::activate()
 }
 
 VPath*
-VSinusTool::shape( bool decide ) const
+VSinusTool::shape( bool interactive ) const
 {
-	if( decide && m_d1 <= 1.0 && m_d2 <= 1.0 )
+	if( interactive && m_d1 <= 1.0 && m_d2 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return

@@ -36,9 +36,9 @@ VPolygonTool::activate()
 }
 
 VPath*
-VPolygonTool::shape( bool decide ) const
+VPolygonTool::shape( bool interactive ) const
 {
-	if( decide && m_d1 <= 1.0 )
+	if( interactive && m_d1 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return

@@ -20,7 +20,7 @@ public:
 
 	virtual void activate();
 
-	virtual VPath* shape( bool decide = false ) const;
+	virtual VPath* shape( bool interactive = false ) const;
 
 	virtual void showDialog() const;
     void refreshUnit();

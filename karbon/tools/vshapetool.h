@@ -40,7 +40,7 @@ protected:
 	// Make it "abstract":
 	virtual ~VShapeTool() {}
 
-	virtual VPath* shape( bool decide = false ) const = 0;
+	virtual VPath* shape( bool interactive = false ) const = 0;
 
 	/// Output coordinates.
 	KoPoint m_p;

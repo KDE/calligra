@@ -7,8 +7,6 @@ REAL BUGS:
 -	revert() in vpath::combine() doesnt work
 
 TODO:
--	unify vselecttool and vselectnodestool
--	get tools right (unfiy this nasty code duplication)
 -	scratch your head about how to do undo/redo of path operations best like
 	removing nodes, inserting nodes...
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
