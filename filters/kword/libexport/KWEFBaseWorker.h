@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,10 +38,11 @@ class KWEFBaseWorker
     public:
         void registerKWordLeader(KWEFKWordLeader* leader);
     public: // callbacks to Leader
-        bool loadSubFile(const QString& fileName, QByteArray& array);
-        QIODevice* getSubFileDevice(const QString& fileName);
+        bool loadSubFile(const QString& fileName, QByteArray& array) const;
+        QIODevice* getSubFileDevice(const QString& fileName) const;
     public: // indirect callbacks to Leader:
-        bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image);
+        QImage loadAndConvertToImage(const QString& strName, const QString& inExtension) const;
+        bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const;
     public: // leader/worker functions
         virtual bool doOpenFile (const QString& filenameOut, const QString& to);
         virtual bool doCloseFile (void); // Close file in normal conditions

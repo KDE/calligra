@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -69,7 +69,7 @@ bool KWEFBaseWorker::doFullAllParagraphs (const QValueList<ParaData>& paraList)
     return true;
 }
 
-bool KWEFBaseWorker::loadSubFile(const QString& fileName, QByteArray& array)
+bool KWEFBaseWorker::loadSubFile(const QString& fileName, QByteArray& array) const
 // return value:
 //   true if the file is not empty
 //   false if the file is empty or if an error occured
@@ -86,7 +86,7 @@ bool KWEFBaseWorker::loadSubFile(const QString& fileName, QByteArray& array)
     return flag;
 }
 
-QIODevice* KWEFBaseWorker::getSubFileDevice(const QString& fileName)
+QIODevice* KWEFBaseWorker::getSubFileDevice(const QString& fileName) const
 {
     if (!m_kwordLeader)
     {
@@ -96,14 +96,13 @@ QIODevice* KWEFBaseWorker::getSubFileDevice(const QString& fileName)
     return m_kwordLeader->getSubFileDevice(fileName);
 }
 
-
-bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image)
+QImage KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString& inExtension) const
 {
     QIODevice* io=getSubFileDevice(strName);
     if (!io)
     {
         // NO message error, as there must be already one
-        return false;
+        return QImage();
     }
 
     kdDebug(30508) << "Picture " << strName << " has size: " << io->size() << endl;
@@ -112,11 +111,24 @@ bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString
     if (!picture.load(io, inExtension)) // we do not care about KoPictureKey
     {
         kdWarning(30508) << "Could not read picture: " << strName << " (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        return QImage();
+    }
+    
+    return picture.generateImage(picture.getOriginalSize()); // ### TODO: KoPicture::getOriginalSize is bad for cliparts
+}
+
+bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const
+{
+    QImage qimage(loadAndConvertToImage(strName,inExtension));
+    
+    if (qimage.isNull())
+    {
+        kdWarning(30508) << "Could not load image (KWEFBaseWorker::loadAndConvertToImage)" <<endl;
         return false;
     }
     
     QImageIO imageIO;
-    imageIO.setImage(picture.generateImage(picture.getOriginalSize())); // ### TODO: KoPicture::getOriginalSize is bad for cliparts
+    imageIO.setImage(qimage);
 
     QBuffer buffer(image); // A QBuffer is a QIODevice
     if (!buffer.open(IO_WriteOnly))
