@@ -3195,6 +3195,7 @@ void KPresenterView::objectSelectedChanged()
     //actionExtraPenStyle->setEnabled(state);
     //actionExtraPenWidth->setEnabled(state);
 
+    actionApplyAutoFormat->setEnabled( m_canvas->oneObjectTextExist());
     slotObjectEditChanged();
 }
 
