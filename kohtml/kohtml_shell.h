@@ -53,10 +53,13 @@ public:
   virtual bool saveDocument(const char *filename, const char *format);
   virtual bool closeDocument();
   virtual bool closeAllDocuments();
-  
+
+  virtual void createFileMenu( OPMenuBar * );
+    
 protected slots:
   void slotFileNew();
   void slotFileOpen();
+  void slotFileOpenURL();
   void slotFileSave();
   void slotFileSaveAs();
   void slotFilePrint();

@@ -21,35 +21,28 @@
 //
 // $Id$
 //
+#ifndef __openurldlg_h__
+#define __openurldlg_h__
 
-#ifndef __settingsdlg_h__
-#define __settingsdlg_h__
-
-#include <qframe.h>
-#include "kpropdlg.h"
-
+#include <qdialog.h>
+#include <klined.h>
 #include <kurlcompletion.h>
 
-class SettingsDlg : public KPropDlg
+class OpenURLDlg : public QDialog
 {
   Q_OBJECT
 public:
-  SettingsDlg();
-  ~SettingsDlg();
-    
-protected:
-  void setupMiscTab();
-  void setupFontsTab();
-  void setupColorsTab();
-  void setupCacheTab();
+  OpenURLDlg();
+  ~OpenURLDlg();
 
+  QString url() { return urlEdit->text(); }
+
+protected slots:
+  void chooseFile();  
+    
 private:
-  QFrame *miscFrame;
-  QFrame *fontsFrame;
-  QFrame *colorsFrame;
-  QFrame *cacheFrame;
-  
-  KURLCompletion *completion;
+   KLined *urlEdit;
+   KURLCompletion *completion;
 };
 
 #endif

@@ -32,6 +32,7 @@
 #include <qpaintdevice.h>
 
 #include <khtmlsavedpage.h>
+//#include <khtmlcache.h>
 
 #include "khtmlwidget_patched.h"
 #include "kfileio.h"
@@ -64,6 +65,7 @@ KoHTMLDoc::KoHTMLDoc()
   SIGNAL_IMPL( "documentDone" );
 
   KIOJob::initStatic();
+  KoHTMLJob::initStatic();
 
   m_lstViews.setAutoDelete(false);
   m_lstChildren.setAutoDelete(true);
@@ -192,6 +194,8 @@ void KoHTMLDoc::openURL(const char *_url)
      
        m_strHTMLData = "";
        
+       m_htmlDocumentCounter = 1;
+       
        KoHTMLJob *job = new KoHTMLJob(0L, 0L, u.url(), KoHTMLJob::HTML);
        
        QObject::connect(job, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *, int)),
@@ -267,7 +271,7 @@ void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLVi
   m_strHTMLData = QString(data, len);
 
   m_lstJobs.removeRef(job);
-  
+
   emit contentChanged();    
 
   m_bRepaintDocument = true;
@@ -729,11 +733,11 @@ void KoHTMLDoc::slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLVi
        return;
      }
 
-  QString m_strHTMLData = kFileToString(filename);
+  QString m_strData = kFileToString(filename);
   
   parent->begin(url);
   parent->parse();
-  parent->write(m_strHTMLData);
+  parent->write(m_strData);
   parent->end();
   
   m_lstJobs.removeRef(job);

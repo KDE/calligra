@@ -54,6 +54,20 @@ QLineEdit *KPropText::getLineEdit()
 	return lineEdit;
 }
 
+void KPropText::setLineEdit( QLineEdit *lineEditWidget )
+{
+  if (!lineEditWidget) return;
+  
+  QString text = lineEdit->text();
+  
+  if (lineEdit) delete lineEdit;
+  
+  lineEdit = lineEditWidget;
+  lineEdit->setText( text );
+  
+  sizeUpdate();
+}
+
 void KPropText::sizeUpdate()
 {
 	QFontMetrics fm( font() );

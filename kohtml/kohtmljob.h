@@ -25,6 +25,7 @@
 #ifndef __kohtmljob_h__
 #define __kohtmljob_h__
 
+#include <qcache.h>
 #include <kio_job.h>
 #include <khtmlview.h>
 
@@ -44,6 +45,12 @@ public:
   KHTMLView *parent() { return m_pParent; }
   KHTMLView *topParent() { return m_pTopParent; }
   
+  static bool isCacheEnabled() { return m_sbEnableCache; }
+  static void enableCache( bool flag ) { m_sbEnableCache = flag; }
+  static QCache<QString> *cache() { return s_jobCache; }
+  
+  static void initStatic();
+  
 signals:  
   void jobDone(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename);
   void jobDone(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len);
@@ -54,6 +61,7 @@ protected slots:
   void slotJobRedirection(int id, const char *_url);
   void slotJobData(int id, const char *data, int len);
   void slotError(int id, int errid, const char *txt);
+  void slotJobSize(int id, unsigned long bytes);
   
 private:
   KHTMLView *m_pTopParent, *m_pParent;
@@ -63,6 +71,11 @@ private:
   QString m_strHTML;
   int m_htmlLen;
   bool m_bIsHTTP;
+  bool m_bIsCached;
+  unsigned int m_sizeInKBytes;
+
+  static bool m_sbEnableCache;  
+  static QCache<QString> *s_jobCache;
 };
 
 #endif

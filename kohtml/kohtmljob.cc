@@ -35,6 +35,9 @@
 
 #include "kfileio.h"
 
+bool KoHTMLJob::m_sbEnableCache = true;
+QCache<QString> *KoHTMLJob::s_jobCache;
+
 KoHTMLJob::KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url, JobType _jType)
 :KIOJob()
 {
@@ -53,7 +56,7 @@ KoHTMLJob::KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url
   K2URL u(m_strURL);
   
   m_bIsHTTP = (strcmp("http", u.protocol()) == 0);
-  
+
   enableGUI(false);
   
   connect(this, SIGNAL(sigFinished(int)),
@@ -64,20 +67,36 @@ KoHTMLJob::KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url
           this, SLOT(slotJobData(int, const char *, int)));
   connect(this, SIGNAL(sigRedirection(int, const char *)),
           this, SLOT(slotJobRedirection(int, const char *)));
+  connect(this, SIGNAL(sigTotalSize(int, unsigned long)),
+          this, SLOT(slotJobSize(int, unsigned long)));	  
+	  
+  m_sizeInKBytes = 0L; //...uh...	  
 }
 
 KoHTMLJob::~KoHTMLJob()
 {
-  cout << "KoHTMLJob::~KoHTMLJob()" << endl;
+  cout << "KoHTMLJob::~KoHTMLJob() ( " << m_strURL << " ) " << endl;
   if (!m_strTmpFile.isEmpty())
      unlink(m_strTmpFile.data());
 }
   
 void KoHTMLJob::start()
 {
+  if (m_sbEnableCache) m_bIsCached = (s_jobCache->find( m_strURL, false ));
+  else m_bIsCached = false;
+
   if (m_eJType == Image) copy(m_strURL.data(), m_strTmpFile.data());
   else 
     {
+      if (m_bIsCached)
+         {
+	   cerr << "CACHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+	   m_strHTML = s_jobCache->find( m_strURL )->data();
+	   m_htmlLen = m_strHTML.length();
+           emit jobDone(this, m_pTopParent, m_pParent, m_strURL.data(), m_strHTML.data(), m_htmlLen);
+	   return;
+	 }
+	 
       if (m_bIsHTTP)
          get(m_strURL.data());
       else	 
@@ -86,6 +105,12 @@ void KoHTMLJob::start()
 	   copy(m_strURL.data(), m_strTmpFile.data());
 	 }
     }  
+}
+
+void KoHTMLJob::initStatic()
+{
+  if (!s_jobCache)
+    s_jobCache = new QCache<QString>(2048); // note: 2048 is the default cache size
 }
 
 void KoHTMLJob::slotJobFinished()
@@ -109,6 +134,9 @@ void KoHTMLJob::slotJobFinished()
 		m_htmlLen = 0;
 	      }      
 	 }
+	
+       if (m_sbEnableCache) s_jobCache->insert( m_strURL, new QString( m_strHTML ), m_sizeInKBytes);
+	 
        emit jobDone(this, m_pTopParent, m_pParent, m_strURL.data(), m_strHTML.data(), m_htmlLen);
      }      
 }
@@ -141,4 +169,9 @@ void KoHTMLJob::slotError(int id, int errid, const char *txt)
 
   if (m_eJType == Image) emit jobDone(this, m_pTopParent, m_pParent, m_strURL.data(), 0L);
   else emit jobDone(this, m_pTopParent, m_pParent, m_strURL.data(), m_strHTML.data(), m_htmlLen);
+}
+
+void KoHTMLJob::slotJobSize(int id, unsigned long bytes)
+{
+  m_sizeInKBytes = (bytes + 1023) / 1024;
 }

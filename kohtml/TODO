@@ -1,3 +1,4 @@
 - saving/loading of the complete html code, including frames and
   images
 - improve settings dialog
+- disable image caching in khtml and "move" this to kohtmljob :-)

@@ -26,11 +26,13 @@
 #include "kohtml_shell.moc"
 #include "kohtml_doc.h"
 #include "kohtml_view.h"
+#include "openurldlg.h"
 
 #include <koAboutDia.h>
 #include <kfiledialog.h>
 #include <opMainWindowIf.h>
 #include <kapp.h>
+#include <kiconloader.h>
 #include <qmsgbox.h>
 
 QList <KoHTMLShell> *KoHTMLShell::s_lstShells = 0L;
@@ -261,6 +263,33 @@ bool KoHTMLShell::closeAllDocuments()
   return true;
 }
 
+void KoHTMLShell::createFileMenu( OPMenuBar *menuBar)
+{
+
+  if ( menuBar == 0L )
+     {
+       m_pFileMenu = 0L;
+       return;
+     }
+
+  m_pFileMenu = new OPMenu( menuBar );
+  
+  m_idMenuFile_New = m_pFileMenu->insertItem( Icon( "filenew.xpm" ), i18n("&New Window"), this, SLOT( slotFileNew() ), CTRL + Key_N );
+  m_idMenuFile_Open = m_pFileMenu->insertItem( Icon( "fileopen.xpm" ), i18n("&Open File..."), this, SLOT( slotFileOpen() ), CTRL + Key_O );
+  m_pFileMenu->insertItem( i18n("Open &URL..."), this, SLOT( slotFileOpenURL() ), CTRL + Key_U );
+  m_pFileMenu->insertSeparator( -1 );
+  m_idMenuFile_Save = m_pFileMenu->insertItem( Icon( "filefloppy.xpm" ), i18n( "&Save" ), this, SLOT( slotFileSave() ), CTRL + Key_S );
+  m_idMenuFile_SaveAs = m_pFileMenu->insertItem( i18n( "&Save as..." ), this, SLOT( slotFileSaveAs() ) );
+
+  m_pFileMenu->insertSeparator(-1);
+  m_idMenuFile_Close = m_pFileMenu->insertItem( i18n( "&Close" ), this, SLOT( slotFileClose() ), CTRL + Key_W );
+  m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
+
+  m_idMenuFile_Quit = m_pFileMenu->insertItem( i18n( "&Quit" ), this, SLOT( slotFileQuit() ), CTRL + Key_Q );
+
+  menuBar->insertItem( i18n( "&File" ), m_pFileMenu );
+}
+
 int KoHTMLShell::documentCount()
 {
   return s_lstShells->count();
@@ -309,6 +338,55 @@ void KoHTMLShell::slotFileOpen()
     msg.sprintf(i18n("Could not open\n%s"), file.data());
     QMessageBox::critical(this, i18n("IO Error"), msg, i18n("Ok"));
   }
+}
+
+void KoHTMLShell::slotFileOpenURL()
+{
+  OpenURLDlg openURLDlg;
+  
+  if (openURLDlg.exec() == QDialog::Accepted )
+     {
+       K2URL url( openURLDlg.url() );
+       
+       if (!url.isMalformed())
+          {
+            releaseDocument();
+     
+            m_pDoc = new KoHTMLDoc;
+
+            if (!m_pDoc->init())
+	       {
+	         cerr << "ERROR: Could not initialize document" << endl;
+		 return;
+	       }
+
+            m_pView = m_pDoc->createKoHTMLView();
+            m_pView->incRef();
+            m_pView->setMode(KOffice::View::RootMode);
+            m_pView->setMainWindow(interface());
+  
+            setRootPart(m_pView->id());
+            interface()->setActivePart(m_pView->id());
+
+	    m_pDoc->openURL( url.url().c_str() );
+  
+            if (m_pFileMenu)
+               {
+                 m_pFileMenu->setItemEnabled(m_idMenuFile_Save, true);
+                 m_pFileMenu->setItemEnabled(m_idMenuFile_SaveAs, true);
+                 m_pFileMenu->setItemEnabled(m_idMenuFile_Close, true);
+                 m_pFileMenu->setItemEnabled(m_idMenuFile_Quit, true);
+               }
+     
+            opToolBar()->setItemEnabled(TOOLBAR_PRINT, true);     
+            opToolBar()->setItemEnabled(TOOLBAR_SAVE, true);
+
+	  }
+       else
+         {
+  
+	 }	  
+     }
 }
 
 void KoHTMLShell::slotFileSave()

@@ -437,6 +437,23 @@ void KoHTMLView::updateHistory(bool enableBack, bool enableForward)
      }
 }
 
+void KoHTMLView::removeHTMLDocumentFromCache( SavedPage *p )
+{
+  QCache<QString> *cache = KoHTMLJob::cache();  
+  
+  cerr << "removing " << p->url << " from cache : " <<
+  cache->remove( p->url )
+  << endl;
+  
+  if (p->frames)
+     {
+       QListIterator<SavedPage> it( *(p->frames) );
+       for (; it.current(); ++it)
+           removeHTMLDocumentFromCache( it.current() );
+     }
+     
+}
+
 void KoHTMLView::slotInsertObject(KoHTMLChild *child)
 {
   OpenParts::View_var v;
@@ -744,6 +761,18 @@ void KoHTMLView::slotHome()
 
 void KoHTMLView::slotReload()
 {
+  cerr << "void KoHTMLView::slotReload()" << endl;
+
+  m_pDoc->stopLoading();
+
+  //FIXME: remove images from cache, too
+
+  SavedPage *p = m_pHTMLView->saveYourself();
+  
+  removeHTMLDocumentFromCache( p );
+  
+  delete p;
+  
   m_pDoc->openURL(m_pDoc->htmlURL());
 }
 
@@ -964,11 +993,11 @@ void KoHTMLView::slotOpenURLInNewWindow()
 
   if (!doc->init()) return;
 	    
-  doc->openURL(m_strCurrentURL);
-	    
   KoHTMLShell *shell = new KoHTMLShell();
   shell->show();
   shell->setDocument(doc);
+  
+  doc->openURL(m_strCurrentURL);
 }
 
 void KoHTMLView::slotURLPopup(KHTMLView *view, const char *url, const QPoint &coord)
@@ -1008,14 +1037,8 @@ void KoHTMLView::slotUpdateConfig()
   m_browserStart = config->readNumEntry("BrowserStart", 0);
   m_strHomePage = config->readEntry("HomePage", "http://www.kde.org/");
 
-  //KConfig doesn't create a proper default entry for m_strHomePage, 
-  //so we do this manually here :-(  
-  if (m_strHomePage.isEmpty())
-     {
-       m_strHomePage = "http://www.kde.org/"; 
-       config->writeEntry("HomePage", m_strHomePage);
-       config->sync(); 
-     }  
+  config->writeEntry("BrowserStart", m_browserStart);
+  config->writeEntry("HomePage", m_strHomePage);
   
   config->setGroup("Fonts");
   
@@ -1025,7 +1048,11 @@ void KoHTMLView::slotUpdateConfig()
   m_fontSize = config->readNumEntry("FontSize", 0);
   m_standardFont = config->readFontEntry("StandardFont", &helvetica);
   m_fixedFont = config->readFontEntry("FixedFont", &courier);
-    
+
+  config->writeEntry("FontSize", m_fontSize);
+  config->writeEntry("StandardFont", m_standardFont);
+  config->writeEntry("FixedFont", m_fixedFont);    
+  
   config->setGroup("Colors");
   
   m_bgColor = config->readColorEntry("BackgroundColor", &white);
@@ -1033,8 +1060,23 @@ void KoHTMLView::slotUpdateConfig()
   m_txtColor = config->readColorEntry("TextColor", &black);
   m_vlnkColor = config->readColorEntry("VLinkColor", &magenta);
 
+  config->writeEntry("BackgroundColor", m_bgColor);
+  config->writeEntry("LinkColor", m_lnkColor);
+  config->writeEntry("TextColor", m_txtColor);
+  config->writeEntry("VLinkColor", m_vlnkColor);
+  
   m_pHTMLView->getKHTMLWidget()->setDefaultBGColor(m_bgColor);
   m_pHTMLView->getKHTMLWidget()->setDefaultTextColors(m_txtColor, m_lnkColor, m_vlnkColor);
   m_pHTMLView->getKHTMLWidget()->setStandardFont(m_standardFont.family());
   m_pHTMLView->getKHTMLWidget()->setFixedFont(m_fixedFont.family());
+  
+  config->setGroup("Cache Settings");
+  
+  m_cacheSizeInKBytes = config->readUnsignedNumEntry("MemoryCacheSize", 2048);
+
+  KoHTMLJob::cache()->setMaxCost( m_cacheSizeInKBytes );
+    
+  config->writeEntry("MemoryCacheSize", (unsigned int)2048);
+  
+  config->sync();
 }

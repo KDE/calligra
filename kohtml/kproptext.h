@@ -25,7 +25,11 @@
 
 ***************************************************************/
 
-
+/*
+ I added the possibility to specify the line edit widget, in order to
+ use KPropText with KIntegerLine widgets for example.
+ Simon Hausmann <tronical@gmx.net>
+*/
 
 
 #if !defined KPROPTEXT_H
@@ -54,6 +58,13 @@ public:
 	/** Return the line edit widget */
 	QLineEdit *getLineEdit();
 
+	/** Set a specified line edit widget
+	  * (this is useful for using a KIntegerLine as line edit widget for example)
+	  * The old line edit widget is deleted btw, so you don't have to care about
+	  * it :)
+	  */
+	void setLineEdit( QLineEdit *lineEditWidget );
+	
 	/** Set the contents of the line edit widget.
 	  * If no arguments are given, defaults to empty text.
 	  */

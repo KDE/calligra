@@ -39,6 +39,7 @@ module KoHTML
 		
 		slot void viewToolBar();
 		slot void viewStatusBar();
+//		slot void toggleCache();
 	
 		slot void newView();
 		slot void insertObject();

@@ -36,7 +36,6 @@ class KoHTMLDoc;
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
 #include <qlist.h>
-#include <qcache.h>
 #include <krect.h>
 
 #include <kurl.h>
@@ -208,7 +207,6 @@ private:
   QList<KoHTMLChild> m_lstChildren;
   QList<KHTMLView> m_lstHTMLViews;
   QList<KoHTMLJob> m_lstJobs;
-  QCache<QString> m_DocumentCache;
 };
 
 #endif		 

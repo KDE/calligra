@@ -50,6 +50,7 @@ class KHTMLView_Patched;
 #include <khtml.h>
 #include <khtmlview.h>
 #include "khtmlview_patched.h"
+#include "kohtmljob.h"
 
 class KoHTMLFrame : public KoFrame
 {
@@ -83,6 +84,7 @@ public:
   
   virtual void viewToolBar();
   virtual void viewStatusBar();
+//  virtual void toggleCache();
 
   virtual void newView();
   virtual void insertObject();
@@ -140,6 +142,8 @@ protected:
   virtual void pushURLToHistory();
   virtual void updateHistory(bool enableBack, bool enableForward);
 
+  void removeHTMLDocumentFromCache( SavedPage *p );
+  
   OpenPartsUI::MenuBar_var m_vMenuBar;
   OpenPartsUI::Menu_var m_vMenuEdit;
   OpenPartsUI::Menu_var m_vMenuEdit_Insert;
@@ -219,6 +223,7 @@ protected:
   QColor m_lnkColor;
   QColor m_txtColor;
   QColor m_vlnkColor;
+  unsigned int m_cacheSizeInKBytes;
 };	
 
 #endif

@@ -29,7 +29,8 @@
 
 #include <qlayout.h>
 
-#include <khtml.h>
+#include <kintegerline.h>
+#include <klined.h>
 
 #include "kproptext.h"
 #include "kpropradio.h"
@@ -50,6 +51,9 @@ SettingsDlg::SettingsDlg()
   colorsFrame = addPage(-1, i18n("Colors"));
   setupColorsTab();
 
+  cacheFrame = addPage(-1, i18n("Cache"));
+  setupCacheTab();
+  
   emit getConfig();
 
   setMinimumSize(600, 250);
@@ -60,6 +64,7 @@ SettingsDlg::SettingsDlg()
 
 SettingsDlg::~SettingsDlg()
 {
+  if (completion) delete completion;
 }
 
 void SettingsDlg::setupMiscTab()
@@ -80,6 +85,25 @@ void SettingsDlg::setupMiscTab()
   groupHomePage->addWidget(l);
   
   KPropText *homePage = new KPropText(groupHomePage, i18n("Location:"), 70, "HomePage", "Personal Settings");
+  
+  if (QString(homePage->getContents()).isEmpty())
+     homePage->setContents("http://www.kde.org/");
+
+  completion = new KURLCompletion;
+  
+  KLined *lineEdit = new KLined( homePage ); 
+  
+  connect(lineEdit, SIGNAL(completion()),
+          completion, SLOT(make_completion()));
+  connect(lineEdit, SIGNAL(rotation()),
+          completion, SLOT(make_rotation()));
+  connect(lineEdit, SIGNAL(textChanged(const char *)),
+          completion, SLOT(edited(const char *)));
+  connect(completion, SIGNAL(setText(const char *)),
+          lineEdit, SLOT(setText(const char *)));	  	  	  
+  
+  homePage->setLineEdit( lineEdit );
+       
   connectConfig(homePage);
   groupHomePage->addWidget(homePage);
   
@@ -124,4 +148,27 @@ void SettingsDlg::setupColorsTab()
   KPropColor *vlnkColor = new KPropColor(colorsFrame, i18n("Followed Link Color"), 50, magenta, "VLinkColor", "Colors");
   connectConfig(vlnkColor);
   layout->addWidget(vlnkColor);  
+}
+
+void SettingsDlg::setupCacheTab()
+{
+  QVBoxLayout *layout = new QVBoxLayout(cacheFrame, 4);
+  
+  QLabel *l = new QLabel(i18n(""
+  "The cache is used to keep local copies of frequently used documents\n"
+  "and thus reduce time connected to the network. To load documents from\n"
+  "the network instead of the cache, click the reload button."
+  ""), cacheFrame);
+  layout->addWidget( l );  
+  
+  KPropText *memoryCache = new KPropText(cacheFrame, i18n("Memory Cache (kBytes) :"), 30, "MemoryCacheSize", "Cache Settings");
+  connectConfig(memoryCache);
+
+  if (QString(memoryCache->getContents()).isEmpty())
+     memoryCache->setContents("2048");
+
+  KIntegerLine *integerLine = new KIntegerLine( memoryCache );
+  memoryCache->setLineEdit( integerLine );
+  
+  layout->addWidget( memoryCache );
 }

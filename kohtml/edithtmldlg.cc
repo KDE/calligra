@@ -44,13 +44,13 @@ HTMLEditDlg::HTMLEditDlg(QString data)
   QHBoxLayout *buttonLayout = new QHBoxLayout();
   layout->addLayout(buttonLayout);
   
-  QPushButton *ok = new QPushButton("Ok", this);
+  QPushButton *ok = new QPushButton(i18n("Ok"), this);
   ok->setMinimumSize( ok->sizeHint() );
   ok->adjustSize();
   connect(ok, SIGNAL(clicked()), SLOT(accept()));
   buttonLayout->addWidget(ok);
   
-  QPushButton *cancel = new QPushButton("Cancel", this);
+  QPushButton *cancel = new QPushButton(i18n("Cancel"), this);
   cancel->setMinimumSize( cancel->sizeHint() );
   cancel->adjustSize();
   connect(cancel, SIGNAL(clicked()), SLOT(reject()));
