@@ -125,6 +125,10 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
+    /**
+     * @returns the char that is used to draw with the given font.
+     */
+    QChar getRealCharacter();
 
     /**
      * @returns the font to be used for the element.
@@ -154,11 +158,6 @@ private:
      * Our content.
      */
     QChar character;
-
-    /**
-     * The position of our baseline.
-     */
-    int baseline;
 
     /**
      * Whether this character is a symbol.

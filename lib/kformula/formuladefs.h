@@ -76,8 +76,7 @@ enum CharClass {
     ORDINARY = 0,
     BINOP = 1,
     RELATION = 2,
-    PUNCTUATION = 3,
-    UNKNOWN = 4
+    PUNCTUATION = 3
 };
 
 

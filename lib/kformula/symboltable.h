@@ -47,7 +47,7 @@ public:
      * @param ch the char pos inside that font.
      * @param cl the chars class. That is its type.
      */
-    CharTableEntry( char font = 0, unsigned char ch = '?', CharClass cl = UNKNOWN );
+    CharTableEntry( char font = 0, unsigned char ch = 0, CharClass cl = ORDINARY );
 
     char font() const { return static_cast<char>( value >> 16 ); }
     uchar character() const { return static_cast<unsigned char>( value ); }

@@ -52,8 +52,6 @@ TokenType TextElement::getTokenType() const
             return ASSIGN;
         case PUNCTUATION:
             return COMMA;
-        case UNKNOWN:
-            return ERROR;
         }
     }
 
@@ -107,20 +105,21 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
     double spaceAfter = getSpaceAfter( context, tstyle );
 
     QFontMetrics fm(font);
-    //QRect bound = fm.boundingRect(character);
-    QChar ch;
-    if ( !isSymbol() ) {
-        ch = character;
+    QChar ch = getRealCharacter();
+    if ( ch != QChar::null ) {
+        QRect bound = fm.boundingRect(ch);
+
+        setWidth(fm.width(ch) + spaceBefore + spaceAfter);
+        setHeight(bound.height());
+        setBaseline(-bound.top());
+        setMidline(getBaseline() - fm.strikeOutPos());
     }
     else {
-        ch = getSymbolTable().character(character);
+        setWidth( context.getEmptyRectWidth() * 2./3. );
+        setHeight( context.getEmptyRectHeight() * 2./3. );
+        setBaseline( getHeight() );
+        setMidline( getBaseline() / 2 );
     }
-    QRect bound = fm.boundingRect(QString(ch));
-
-    setWidth(fm.width(ch) + spaceBefore + spaceAfter);
-    setHeight(bound.height());
-    setBaseline(-bound.top());
-    setMidline(getBaseline() - fm.strikeOutPos());
 
     //kdDebug() << "bound.height(): " << bound.height() << endl;
     //kdDebug() << "bound.top(): " << bound.top() << endl;
@@ -150,15 +149,15 @@ void TextElement::draw(QPainter& painter, const QRect& r,
 
     painter.setFont(font);
 
-    QChar ch;
-    if ( !isSymbol() ) {
-        ch = character;
+    QChar ch = getRealCharacter();
+    if ( ch != QChar::null ) {
+        painter.drawText(myPos.x()+spaceBefore,
+                         myPos.y()+getBaseline(), ch);
     }
     else {
-        ch = getSymbolTable().character(character);
+        painter.setPen( QPen( context.getErrorColor(), context.getLineWidth() ) );
+        painter.drawRect( myPos.x(), myPos.y(), getWidth(), getHeight() );
     }
-    painter.drawText(myPos.x()+spaceBefore,
-                     myPos.y()+getBaseline(), ch);
 
     // Debug
     //painter.setBrush(Qt::NoBrush);
@@ -167,6 +166,17 @@ void TextElement::draw(QPainter& painter, const QRect& r,
     //painter.setPen(Qt::green);
     //painter.drawLine(myPos.x(), myPos.y()+getMidline(),
     //                 myPos.x()+getWidth(), myPos.y()+getMidline());
+}
+
+
+QChar TextElement::getRealCharacter()
+{
+    if ( !isSymbol() ) {
+        return character;
+    }
+    else {
+        return getSymbolTable().character(character);
+    }
 }
 
 

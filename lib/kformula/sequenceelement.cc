@@ -230,7 +230,7 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
             //                 getWidth(), getHeight());
         }
     }
-    else {
+    else if ( painter.device()->devType() != QInternal::Printer ) {
         painter.setBrush(Qt::NoBrush);
         painter.setPen(QPen(context.getEmptyColor(), context.getLineWidth()));
         painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
