@@ -39,9 +39,13 @@
 #include <qlayout.h>
 
 #include <kbuttonbox.h>
-#include <kstdguiitem.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kdeversion.h>
+
+#if KDE_IS_VERSION( 3, 2, 90 )
+  #include <kstdguiitem.h>
+#endif
 
 KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   : QDialog( parent, name,TRUE )
@@ -64,9 +68,14 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   KButtonBox *bb = new KButtonBox( this );
   //  bb->addStretch();
   m_pEdit = bb->addButton( i18n("&Edit") );
+#if KDE_IS_VERSION( 3, 2, 90 )
   m_pOk = bb->addButton( KStdGuiItem::ok() );
-  m_pOk->setDefault( TRUE );
   m_pCancel = bb->addButton( KStdGuiItem::cancel() );
+#else
+  m_pOk = bb->addButton( i18n("&OK") );
+  m_pCancel = bb->addButton( i18n( "&Cancel" ) );
+#endif
+  m_pOk->setDefault( TRUE );
   bb->layout();
   lay1->addWidget( bb );
 
