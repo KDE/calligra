@@ -18,7 +18,7 @@
 
 #include <stdlib.h>
 
-#include <qdialog.h>
+#include <qtabdialog.h>
 #include <qlabel.h>
 #include <qpushbt.h>
 #include <qframe.h>
@@ -84,7 +84,7 @@ private:
 /* class StyleDia                                                 */
 /******************************************************************/
 
-class StyleDia : public QDialog
+class StyleDia : public QTabDialog
 {
   Q_OBJECT
 
@@ -115,7 +115,7 @@ public:
 private:
 
   // dialog objects
-  QButtonGroup *penFrame,*brushFrame;  
+  QWidget *penFrame,*brushFrame;  
   QPushButton *choosePCol,*chooseBCol;
   QLabel *penStyle,*brushStyle,*penWidth,*llineBegin,*llineEnd;
   QComboBox *choosePStyle,*chooseBStyle,*choosePWidth,*clineBegin,*clineEnd;

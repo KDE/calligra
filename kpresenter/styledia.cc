@@ -58,7 +58,10 @@ void PBPreview::paintEvent(QPaintEvent*)
       painter.drawLine(diff1.width() / 2,height()/2,width() - diff2.width() / 2,height()/2);
    }
   else if (paintType == 1)
-    painter.fillRect(0,0,width(),height(),brush);
+    {
+      painter.fillRect(0,0,width(),height(),white);
+      painter.fillRect(2,2,width() - 4,height() - 4,brush);
+    }
   else if (paintType == 2 && gradient)
     {
       gradient->setSize(size());
@@ -74,14 +77,9 @@ void PBPreview::paintEvent(QPaintEvent*)
 
 /*==================== constructor ===============================*/
 StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
-  : QDialog(parent,name,true)
+  : QTabDialog(parent,name,true)
 {
-  int butW,butH;
-
-  penFrame = new QButtonGroup(this,"penGrp");
-  penFrame->setFrameStyle(QFrame::Box|QFrame::Sunken);
-  penFrame->move(20,20);
-  penFrame->setTitle(i18n("Pen"));
+  penFrame = new QWidget(this,"penGrp");
 
   choosePCol = new QPushButton(penFrame,"PCol");
   choosePCol->setText(i18n("Choose color..."));
@@ -130,11 +128,11 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   
   llineBegin = new QLabel(penFrame);
   llineBegin->setText(i18n("Choose line begin:"));
-  llineBegin->move(choosePCol->x(),choosePWidth->y()+choosePWidth->height()+20);
+  llineBegin->move(choosePCol->x() + choosePCol->width() + 10,penStyle->y());
   llineBegin->resize(llineBegin->sizeHint());
 
   clineBegin = new QComboBox(false,penFrame,"lineBegin");
-  clineBegin->move(choosePCol->x(),llineBegin->y()+llineBegin->height()+10);
+  clineBegin->move(llineBegin->x(),llineBegin->y() + llineBegin->height() + 10);
   clineBegin->resize(choosePStyle->width(),clineBegin->sizeHint().height());
   clineBegin->insertItem("Normal");
   clineBegin->insertItem("Arrow");
@@ -144,11 +142,11 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
 
   llineEnd = new QLabel(penFrame);
   llineEnd->setText(i18n("Choose line end:"));
-  llineEnd->move(choosePCol->x(),clineBegin->y()+clineBegin->height()+20);
+  llineEnd->move(llineBegin->x(),clineBegin->y() + clineBegin->height() + 20);
   llineEnd->resize(llineEnd->sizeHint());
 
   clineEnd = new QComboBox(false,penFrame,"lineEnd");
-  clineEnd->move(choosePCol->x(),llineEnd->y()+llineEnd->height()+10);
+  clineEnd->move(llineBegin->x(),llineEnd->y()+llineEnd->height()+10);
   clineEnd->resize(choosePStyle->width(),clineEnd->sizeHint().height());
   clineEnd->insertItem("Normal");
   clineEnd->insertItem("Arrow");
@@ -158,19 +156,22 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
 
   penPrev = new PBPreview(penFrame,"penPrev",0);
   penPrev->move(choosePCol->x(),clineEnd->y()+clineEnd->height()+20);
-  penPrev->resize(choosePCol->width(),25);
+  penPrev->resize(choosePCol->width() + clineEnd->width() + 10,25);
   penPrev->setPen(pen);
 
-  penFrame->resize(choosePCol->x()*2+choosePCol->width(),penPrev->y()+penPrev->height()+10);
+  choosePCol->resize(penPrev->width(),choosePCol->height());
 
-  brushFrame = new QButtonGroup(this,"brushGrp");
-  brushFrame->setFrameStyle(QFrame::Box|QFrame::Sunken);
-  brushFrame->move(penFrame->x()+penFrame->width()+20,20);
-  brushFrame->setTitle(i18n("Brush"));
+  addTab(penFrame,i18n("Pen"));
+
+  brushFrame = new QWidget(this,"brushGrp");
+  QButtonGroup *tmp = new QButtonGroup(brushFrame);
+  tmp->hide();
+  tmp->setExclusive(true);
 
   fillStyle = new QRadioButton(i18n("Fill with brush:"),brushFrame,"");
   fillStyle->resize(fillStyle->sizeHint());
   fillStyle->move(10,20);
+  tmp->insert(fillStyle);
   connect(fillStyle,SIGNAL(clicked()),this,SLOT(rBrush()));
 
   chooseBCol = new QPushButton(brushFrame,"BCol");
@@ -212,14 +213,13 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   brushPrev->resize(chooseBStyle->width(),25);
   brushPrev->setBrush(brush);
 
-  line = new QFrame(brushFrame);
-  line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-  line->move(brushPrev->x(),brushPrev->y() + brushPrev->height() + 15);
-  line->resize(chooseBStyle->width(),5);
+  gradient1 = new KColorButton(red,brushFrame);
+  gradient1->resize(chooseBCol->size());
 
   fillGradient = new QRadioButton(i18n("Fill with gradient:"),brushFrame,"");
   fillGradient->resize(fillGradient->sizeHint());
-  fillGradient->move(line->x(),line->y() + line->height() + 15);
+  fillGradient->move(penPrev->x() + penPrev->width() - gradient1->width(),fillStyle->y());
+  tmp->insert(fillGradient);
   connect(fillGradient,SIGNAL(clicked()),this,SLOT(rGradient()));
 
   gColors = new QLabel(brushFrame);
@@ -227,8 +227,6 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   gColors->move(fillGradient->x(),fillGradient->y() + fillGradient->height() + 20);
   gColors->resize(gColors->sizeHint());
 
-  gradient1 = new KColorButton(red,brushFrame);
-  gradient1->resize(chooseBCol->size());
   gradient1->move(gColors->x(),gColors->y() + gColors->height() + 10);
   connect(gradient1,SIGNAL(changed(const QColor &)),this,SLOT(gColor1(const QColor &)));
   
@@ -260,44 +258,28 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   gPrev->resize(chooseBCol->width(),25);
   gPrev->setGradient(gradient);
 
-  brushFrame->resize(2*chooseBStyle->x()+chooseBStyle->width(),gPrev->y() + gPrev->height() + 10);
-  penFrame->resize(penFrame->width(),brushFrame->height());
+  chooseBCol->move(chooseBCol->x(),gradient1->y());
+  brushStyle->move(brushStyle->x(),gStyle->y());
+  chooseBStyle->move(chooseBStyle->x(),gradients->y());
+  brushPrev->move(brushPrev->x(),gPrev->y());
 
-  cancelBut = new QPushButton(this,"BCancel");
-  cancelBut->setText(i18n("Cancel"));
-  cancelBut->move(brushFrame->x()+brushFrame->width(),brushFrame->y()+brushFrame->height()+20);
- 
-  applyBut = new QPushButton(this,"BApply");
-  applyBut->setText(i18n("Apply"));
+  addTab(brushFrame,i18n("Brush"));
 
-  okBut = new QPushButton(this,"BOK");
-  okBut->setText(i18n("OK"));
-  okBut->setAutoRepeat(false);
-  okBut->setAutoResize(false);
-  okBut->setAutoDefault(true);
-  okBut->setDefault(true);
+  penFrame->setMinimumSize(penPrev->x() + penPrev->width() + 20,penPrev->y() + penPrev->height() + 20);
+  penFrame->setMaximumSize(penPrev->minimumSize());
 
-  butW = max(cancelBut->sizeHint().width(),
-	     max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
-  butH = cancelBut->sizeHint().height();
+  brushFrame->setMinimumSize(gPrev->x() + gPrev->width() + 20,gPrev->y() + gPrev->height() + 20);
+  brushFrame->setMaximumSize(gPrev->minimumSize());
 
-  cancelBut->resize(butW,butH);
-  applyBut->resize(butW,butH);
-  okBut->resize(butW,butH);
+  resize(max(penPrev->minimumSize().width(),brushPrev->minimumSize().width()),
+	 max(penPrev->minimumSize().height(),brushPrev->minimumSize().height()));
 
-  cancelBut->move(brushFrame->x()+brushFrame->width()-cancelBut->width(),
-		  brushFrame->y()+brushFrame->height()+20);
-  applyBut->move(brushFrame->x()+brushFrame->width()-cancelBut->width()-5-applyBut->width(),
-		  brushFrame->y()+brushFrame->height()+20);
-  okBut->move(brushFrame->x()+brushFrame->width()-cancelBut->width()-5-applyBut->width()-10-okBut->width(),
-		  brushFrame->y()+brushFrame->height()+20);
+  setCancelButton(i18n("Cancel"));
+  setOKButton(i18n("OK"));
+  setApplyButton(i18n("Apply"));
 
-  resize(brushFrame->x()+brushFrame->width()+20,okBut->y()+okBut->height()+10);
-
-  connect(okBut,SIGNAL(clicked()),this,SLOT(styleDone()));
-  connect(applyBut,SIGNAL(clicked()),this,SLOT(styleDone()));
-  connect(cancelBut,SIGNAL(clicked()),this,SLOT(reject()));
-  connect(okBut,SIGNAL(clicked()),this,SLOT(accept()));
+  connect(this,SIGNAL(applyButtonPressed()),this,SLOT(styleDone()));
+  connect(this,SIGNAL(cancelButtonPressed()),this,SLOT(reject()));
 }
 
 /*===================== destructor ===============================*/
