@@ -556,7 +556,7 @@ KoTextFormat *KPTextObject::loadFormat( QDomElement &n )
         bold = (bool)n.attribute( attrBold ).toInt();
     bool italic = false;
     if(n.hasAttribute(attrItalic))
-        bold=(bool)n.attribute( attrItalic ).toInt();
+        italic=(bool)n.attribute( attrItalic ).toInt();
     bool underline=false;
     if(n.hasAttribute( attrUnderline ))
         underline = (bool)n.attribute( attrUnderline ).toInt();
