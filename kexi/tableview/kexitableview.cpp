@@ -334,7 +334,7 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 				it.current(); ++it) {
 				int wid = it.current()->field->width();
 				if (wid==0)
-					wid=100;//default col width in pixels
+					wid=KEXITV_DEFAULT_COLUMN_WIDTH;//default col width in pixels
 //js: TODO - add col width configuration and storage
 				d->pTopHeader->addLabel(it.current()->field->captionOrName(), wid);
 			}
@@ -765,9 +765,9 @@ QSize KexiTableView::sizeHint() const
 QSize KexiTableView::minimumSizeHint() const
 {
 	return QSize(
-		leftMargin() + columnWidth(0) + 2*2, 
+		leftMargin() + ((cols()>0)?columnWidth(0):KEXITV_DEFAULT_COLUMN_WIDTH) + 2*2, 
 		d->rowHeight*5/2 + topMargin() + (d->navPanel ? d->navPanel->height() : 0)
-	);//d->pTopHeader->height());
+	);
 }
 
 void KexiTableView::createBuffer(int width, int height)

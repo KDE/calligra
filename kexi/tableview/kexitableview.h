@@ -51,6 +51,9 @@ class KexiTableEdit;
 class KexiTableViewPrivate;
 class KActionCollection;
 
+//!default column width in pixels
+#define KEXITV_DEFAULT_COLUMN_WIDTH 100
+
 /*
 	This class provides a table view widget.
 */
