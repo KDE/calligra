@@ -157,6 +157,10 @@ KoDocument::~KoDocument()
   delete d;
 }
 
+void KoDocument::delayedDestruction()
+{
+}
+
 bool KoDocument::isSingleViewMode() const
 {
   return d->m_bSingleViewMode;
@@ -297,6 +301,11 @@ void KoDocument::slotChildChanged( KoChild *c )
 {
   assert( c->inherits( "KoDocumentChild" ) );
   emit childChanged( static_cast<KoDocumentChild *>( c ) );
+}
+
+void KoDocument::slotDestruct()
+{
+    delete this;
 }
 
 QList<KoDocumentChild> &KoDocument::children() const

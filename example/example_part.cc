@@ -31,7 +31,8 @@ KoMainWindow* ExamplePart::createShell()
     shell->setRootDocument( this );
     shell->show();
 
-    return shell;}
+    return shell;
+}
 
 void ExamplePart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/ )
 {

@@ -88,6 +88,8 @@ KoView::~KoView()
   if ( d->m_manager && !koDocument()->isSingleViewMode() )
     d->m_manager->removePart( koDocument() );
 
+  d->m_doc->removeView(this);
+
   delete d;
 }
 
