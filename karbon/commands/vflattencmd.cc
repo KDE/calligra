@@ -55,45 +55,9 @@
 
 
 VFlattenCmd::VFlattenCmd( VDocument *doc, double flatness )
-		: VCommand( doc, i18n( "Flatten" ) )
+	: VReplacingCmd( doc, i18n( "Flatten Curves" ) )
 {
-	m_selection = document()->selection()->clone();
-
 	m_flatness = flatness > 0.0 ? flatness : 1.0;
-}
-
-VFlattenCmd::~VFlattenCmd()
-{
-	delete( m_selection );
-}
-
-void
-VFlattenCmd::execute()
-{
-	VObject* newObject;
-
-	VObjectListIterator itr( m_selection->objects() );
-	for ( ; itr.current() ; ++itr )
-	{
-/*		if( VGroup* group = dynamic_cast<VGroup*>( itr.current()->parent() ) )
-		{
-			newObject = itr.current()->clone();
-
-			group->insertNewDeleteOld( newObject, itr.current() );
-		}
-		else
-		{
-*/
-			newObject = itr.current();
-//		}
-
-		visit( *newObject );
-	}
-}
-
-void
-VFlattenCmd::unexecute()
-{
 }
 
 void

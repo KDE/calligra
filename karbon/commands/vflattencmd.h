@@ -20,27 +20,21 @@
 #ifndef __VFLATTENCMD_H__
 #define __VFLATTENCMD_H__
 
-#include "vcommand.h"
 
+#include "vreplacingcmd.h"
 
 class VPath;
-class VSelection;
 
 
-class VFlattenCmd : public VCommand
+class VFlattenCmd : public VReplacingCmd
 {
 public:
 	VFlattenCmd( VDocument *doc, double flatness );
-	virtual ~VFlattenCmd();
-
-	virtual void execute();
-	virtual void unexecute();
+	virtual ~VFlattenCmd() {}
 
 	virtual void visitVPath( VPath& path );
 
 protected:
-	VSelection* m_selection;
-
 	double m_flatness;
 };
 
