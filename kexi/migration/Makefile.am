@@ -2,7 +2,8 @@ include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkeximigrate.la
 
-INCLUDES = -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi $(all_includes) -I$(PG_INCDIR) -I$(PQXX_INCDIR)
+INCLUDES = -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/main/startup \
+$(all_includes) -I$(PG_INCDIR) -I$(PQXX_INCDIR)
 
 if compile_pgsql_plugin
 pgsql_dir=pqxx
