@@ -29,9 +29,11 @@ class KColor
   enum colorModel { RGB, HSV, LAB, CMYK };
 
   KColor();
-  KColor(int a, int b, int c, int d = 0, colorModel m = RGB);
   ~KColor();
-  
+  KColor(int a, int b, int c,  colorModel m = RGB);
+  KColor(int c, int m, int y,  int k);
+  KColor &operator=( const KColor & );
+
   void setRGB (uchar R, uchar G, uchar B);
   void setHSV (int H, uchar S, uchar V);
   void setLAB (int L, int a, int b);
@@ -81,17 +83,14 @@ class KColor
   void calcHSV();
   void calcLAB();
   void calcCMYK();
-   
+
  private:
   uchar m_R, m_G, m_B;      // RGB
   uchar m_C, m_M, m_Y, m_K; // CMYK
   int m_H; uchar m_S, m_V;  // HSV
   int m_L, m_a, m_b;        // LAB
 
-  bool RGBdirty;
-  bool HSVdirty;
-  bool LABdirty;
-  bool CMYKdirty;
+  colorModel m_nativeModel;
 };
 
 inline const KColor KColor::white()

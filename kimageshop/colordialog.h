@@ -22,6 +22,8 @@
 #define __colordialog_h__
 
 #include "kcolor.h"
+#include "kpixmap.h"
+#include "kpixmapeffect.h"
 #include "kfloatingdialog.h"
 
 class KDualColorButton;
@@ -84,6 +86,10 @@ class GradientFrame : public QFrame
 
  protected:
   virtual void drawContents (QPainter *);
+
+ protected:
+  KColor m_c1, m_c2;
+  KPixmap *m_pPm;
 };
 
 #endif

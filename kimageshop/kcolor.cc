@@ -24,11 +24,10 @@
 KColor::KColor()
 {
   m_R = m_G = m_B = 0;
-  RGBdirty = false;
-  HSVdirty = LABdirty = CMYKdirty = true;
+  m_nativeModel = RGB;
 }
 
-KColor::KColor(int a, int b, int c, int d, colorModel m)
+KColor::KColor(int a, int b, int c, colorModel m)
 {
   switch (m)
 	{
@@ -36,47 +35,74 @@ KColor::KColor(int a, int b, int c, int d, colorModel m)
 	  m_R = static_cast<unsigned char>(a);
 	  m_G = static_cast<unsigned char>(b);
 	  m_B = static_cast<unsigned char>(c);
-	  RGBdirty = false;
-	  HSVdirty = LABdirty = CMYKdirty = true;
+	  m_nativeModel = RGB;
 	  break;
 	case HSV:
 	  m_H = a;
 	  m_S = static_cast<unsigned char>(b);
 	  m_V = static_cast<unsigned char>(c);
-	  HSVdirty = false;
-	  RGBdirty = LABdirty = CMYKdirty = true;
+	  m_nativeModel = HSV;
 	  break;
 	case LAB:
 	  m_L = a;
 	  m_a = b;
 	  m_b = c;
-	  LABdirty = false;
-	  RGBdirty = HSVdirty = CMYKdirty = true;
-	  break;
-	case CMYK:
-	  m_C = static_cast<unsigned char>(a);
-	  m_M = static_cast<unsigned char>(b);
-	  m_Y = static_cast<unsigned char>(c);
-	  m_K = static_cast<unsigned char>(d);
-	  CMYKdirty = false;
-	  RGBdirty = HSVdirty = LABdirty = true;
+	  m_nativeModel = LAB;
 	  break;
 	default:
 	  m_R = m_G = m_B = 0;
-	  RGBdirty = false;
-	  HSVdirty = LABdirty = CMYKdirty = true;
+	  m_nativeModel = RGB;
 	}
 }
 
+KColor::KColor(int c, int m, int y, int k)
+{
+  m_C = static_cast<unsigned char>(c);
+  m_M = static_cast<unsigned char>(m);
+  m_Y = static_cast<unsigned char>(y);
+  m_K = static_cast<unsigned char>(k);
+  m_nativeModel = CMYK;
+}
+
 KColor::~KColor() {}
+
+KColor &KColor::operator=(const KColor &c)
+{
+  m_nativeModel = c.m_nativeModel;
+  
+  switch (c.m_nativeModel)
+	{
+	case RGB:
+	  m_R = c.m_R;
+	  m_G = c.m_G;
+	  m_B = c.m_B;
+	  break;
+	case CMYK:
+	  m_C = c.m_C;
+	  m_M = c.m_M;
+	  m_Y = c.m_Y;
+	  m_K = c.m_K;
+	  break;
+	case HSV:
+	  m_H = c.m_H;
+	  m_S = c.m_S;
+	  m_V = c.m_V;
+	  break;
+	case LAB:
+	  m_L = c.m_L;
+	  m_a = c.m_a;
+	  m_b = c.m_b;
+	  break;
+	}
+  return *this;
+}
 
 void KColor::setRGB (uchar R, uchar G, uchar B)
 {
   m_R = R;
   m_G = G;
   m_B = B;
-  RGBdirty = false;
-  HSVdirty = LABdirty = CMYKdirty = true;
+  m_nativeModel = RGB;
 }
 
 void KColor::setHSV (int H, uchar S, uchar V)
@@ -84,8 +110,7 @@ void KColor::setHSV (int H, uchar S, uchar V)
   m_H = H;
   m_S = S;
   m_V = V;
-  HSVdirty = false;
-  RGBdirty = LABdirty = CMYKdirty = true;
+  m_nativeModel = HSV;
 }
 
 void KColor::setLAB (int L, int a, int b)
@@ -93,8 +118,7 @@ void KColor::setLAB (int L, int a, int b)
   m_L = L;
   m_a = a;
   m_b = b;
-  LABdirty = false;
-  RGBdirty = HSVdirty = CMYKdirty = true;
+  m_nativeModel = LAB;
 }
 
 void KColor::setCMYK (uchar C, uchar M, uchar Y, uchar K)
@@ -103,15 +127,14 @@ void KColor::setCMYK (uchar C, uchar M, uchar Y, uchar K)
   m_M = M;
   m_Y = Y;
   m_K = K;
-  CMYKdirty = false;
-  RGBdirty = HSVdirty = LABdirty = true;
+  m_nativeModel = CMYK;
 }
 
 void KColor::rgb (uchar *R, uchar *G, uchar *B)
 {
-  if (RGBdirty)
+  if (!m_nativeModel == RGB)
 	calcRGB();
-
+  
   *R = m_R;
   *G = m_G;
   *B = m_B;
@@ -119,9 +142,9 @@ void KColor::rgb (uchar *R, uchar *G, uchar *B)
 
 void KColor::hsv (int *H, uchar *S, uchar *V)
 {
-  if (HSVdirty)
+  if (!m_nativeModel == HSV)
   	calcHSV();
-
+  
   *H = m_H;
   *S = m_S;
   *V = m_V;
@@ -129,7 +152,7 @@ void KColor::hsv (int *H, uchar *S, uchar *V)
 
 void KColor::lab (int *L, int *a, int *b)
 {
-  if (LABdirty)
+  if (!m_nativeModel == LAB)
   	calcLAB();
   
   *L = m_L;
@@ -139,7 +162,7 @@ void KColor::lab (int *L, int *a, int *b)
 
 void KColor::cmyk (uchar *C, uchar *M, uchar *Y, uchar *K)
 {
-  if (CMYKdirty)
+  if (!m_nativeModel == CMYK)
   	calcCMYK();
   
   *C = m_C;
@@ -150,62 +173,94 @@ void KColor::cmyk (uchar *C, uchar *M, uchar *Y, uchar *K)
 
 void KColor::calcRGB()
 {
-  if(!RGBdirty)
+  if(m_nativeModel == RGB)
 	return;
   
-  if (!HSVdirty)
-	HSVtoRGB(m_H, m_S, m_V, &m_R, &m_G, &m_B);
-  else if (!LABdirty)
-	LABtoRGB(m_L, m_a, m_b, &m_R, &m_G, &m_B);
-  else if (!CMYKdirty)
-	CMYKtoRGB(m_C, m_M, m_Y, m_K, &m_R, &m_G, &m_B);
-  else // should never happen!
-	m_R = m_B = m_G = 0;
+  switch (m_nativeModel)
+	{
+	case HSV:
+	  HSVtoRGB(m_H, m_S, m_V, &m_R, &m_G, &m_B);
+	  break;
+	case LAB:
+	  LABtoRGB(m_L, m_a, m_b, &m_R, &m_G, &m_B);
+	  break;
+	case CMYK:
+	  CMYKtoRGB(m_C, m_M, m_Y, m_K, &m_R, &m_G, &m_B);
+	  break;
+	default:
+	  // should never happen!
+	  m_R = m_B = m_G = 0;
+	  break;
+	}
 }
 
 void KColor::calcHSV()
 {
-  if(!HSVdirty)
+  if(m_nativeModel == HSV)
 	return;
   
-  if(!RGBdirty)
-  	RGBtoHSV(m_R, m_G, m_B, &m_H, &m_S, &m_V);
-  else if (!LABdirty)
-	LABtoHSV(m_L, m_a, m_b, &m_H, &m_S, &m_V);
-  else if (!CMYKdirty)
-	CMYKtoHSV(m_C, m_M, m_Y, m_K, &m_H, &m_S, &m_V);
-  else // should never happen!
-	m_H = m_S = m_V = 0;
+  switch (m_nativeModel)
+	{
+	case RGB:
+	  RGBtoHSV(m_R, m_G, m_B, &m_H, &m_S, &m_V);
+	  break;
+	case LAB:
+	  LABtoHSV(m_L, m_a, m_b, &m_H, &m_S, &m_V);
+	  break;
+	case CMYK:
+	  CMYKtoHSV(m_C, m_M, m_Y, m_K, &m_H, &m_S, &m_V);
+	  break;
+	default:
+	  // should never happen!
+	  m_H = -1; m_S = m_V = 0;
+	  break;
+	}
 }
 
 void KColor::calcLAB()
 {
-  if(!LABdirty)
+  if(m_nativeModel == LAB)
 	return;
   
-  if(!RGBdirty)
-  	RGBtoLAB(m_R, m_G, m_B, &m_L, &m_a, &m_b);
-  else if(!HSVdirty)
-  	HSVtoLAB(m_H, m_S, m_V, &m_L, &m_a, &m_b);
-  else if(!CMYKdirty)
-  	CMYKtoLAB(m_C, m_M, m_Y, m_K, &m_L, &m_a, &m_b);
-  else // should never happen!
-	m_L = m_a = m_b = 0;
+  switch (m_nativeModel)
+	{
+	case RGB:
+	  RGBtoLAB(m_R, m_G, m_B, &m_L, &m_a, &m_b);
+	  break;
+	case HSV:
+	  HSVtoLAB(m_H, m_S, m_V, &m_L, &m_a, &m_b);
+	  break;
+	case CMYK:
+	  CMYKtoLAB(m_C, m_M, m_Y, m_K, &m_L, &m_a, &m_b);
+	  break;
+	default:
+	  // should never happen!
+	  m_L = m_a = m_b = 0;
+	  break;
+	}
 }
 
 void KColor::calcCMYK()
 {
-  if(!CMYKdirty)
+  if(m_nativeModel == CMYK)
 	return;
   
-  if(!RGBdirty)
-  	RGBtoCMYK(m_R, m_G, m_B, &m_C, &m_M, &m_Y, &m_K);
-  else if(!LABdirty)
-	LABtoCMYK(m_L, m_a, m_b, &m_C, &m_M, &m_Y, &m_K);
-  else if(!HSVdirty)
-	HSVtoCMYK(m_H, m_S, m_V, &m_C, &m_M, &m_Y, &m_K);
-  else // should never happen!
-	m_C = m_M = m_Y = m_K = 0;
+  switch (m_nativeModel)
+	{
+	case RGB:
+	  RGBtoCMYK(m_R, m_G, m_B, &m_C, &m_M, &m_Y, &m_K);
+	  break;
+	case LAB:
+	  LABtoCMYK(m_L, m_a, m_b, &m_C, &m_M, &m_Y, &m_K);
+	  break;
+	case HSV:
+	  HSVtoCMYK(m_H, m_S, m_V, &m_C, &m_M, &m_Y, &m_K);
+	  break;
+	default:
+	  // should never happen!
+	  m_C = m_M = m_Y = m_K = 0;
+	  break;
+	}
 }
 
 void KColor::RGBtoHSV(uchar R, uchar G, uchar B, int *H, uchar *S, uchar *V)

@@ -178,7 +178,10 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   CORBA::WString_var text;
   OpenPartsUI::Pixmap_var pix;
 
-  // edit toolbar
+  /*
+  * edit toolbar
+  */
+
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarEdit->enable( OpenPartsUI::Show );
   m_vToolBarEdit->setFullWidth( false );
@@ -218,7 +221,47 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarEdit->insertButton2( pix, TBEDIT_PASTE, SIGNAL( clicked() ), this, "slotEditPaste", true, text, -1 );
   m_vToolBarEdit->setItemEnabled( TBEDIT_PASTE, false );
 
-  // tools toolbar
+  /*
+  * dialog toolbar
+  */
+  m_vToolBarDialogs = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarDialogs->enable( OpenPartsUI::Show );
+  m_vToolBarDialogs->setFullWidth( false );
+
+  // layer dialog
+  text = Q2C( i18n( "Show/hide layer dialog." ) );
+  pix = OPICON( "layer_dialog" );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_LAYER, SIGNAL( clicked() ), this, "slotLayerDialog", true, text, -1 );
+  m_vToolBarDialogs->setToggle( TBDIALOGS_LAYER, true );
+  m_vToolBarDialogs->toggleButton( TBDIALOGS_LAYER );
+
+  // color dialog
+  text = Q2C( i18n( "Show/hide color dialog." ) );
+  pix = OPICON( "color_dialog" );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_COLOR, SIGNAL( clicked() ), this, "slotColorDialog", true, text, -1 );
+  m_vToolBarDialogs->setToggle( TBDIALOGS_COLOR, true );
+
+  // brush dialog
+  text = Q2C( i18n( "Show/hide brush dialog." ) );
+  pix = OPICON( "brush_dialog" );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_BRUSH, SIGNAL( clicked() ), this, "slotBrushDialog", true, text, -1 );
+  m_vToolBarDialogs->setToggle( TBDIALOGS_BRUSH, true );
+
+  // gradient dialog
+  text = Q2C( i18n( "Show/hide gradient dialog." ) );
+  pix = OPICON( "gradient_dialog" );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_GRADIENT, SIGNAL( clicked() ), this, "slotGradientDialog", true, text, -1 );
+  m_vToolBarDialogs->setToggle( TBDIALOGS_GRADIENT, true );
+
+  // gradient editor dialog
+  text = Q2C( i18n( "Show/hide gradient editor dialog." ) );
+  pix = OPICON( "gradienteditor_dialog" );
+  m_vToolBarDialogs->insertButton2( pix, TBDIALOGS_GRADIENTEDITOR, SIGNAL( clicked() ), this, "slotGradientEditorDialog", true, text, -1 );
+  m_vToolBarDialogs->setToggle( TBDIALOGS_GRADIENTEDITOR, true );
+
+  /*
+  * tools toolbar
+  */
   m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarTools->enable( OpenPartsUI::Show );
   m_vToolBarTools->setFullWidth( false );
@@ -943,7 +986,7 @@ void KImageShopView::slotEditPaste()
 {
 }
 
-void KImageShopView::viewLayerDialog()
+void KImageShopView::slotLayerDialog()
 {
   if( m_pLayerDialog )
   {
@@ -957,7 +1000,7 @@ void KImageShopView::viewLayerDialog()
   }
 }
 
-void KImageShopView::viewBrushDialog()
+void KImageShopView::slotBrushDialog()
 {
   if ( m_pBrushDialog ) {
     if ( m_pBrushDialog->isVisible() )
@@ -970,7 +1013,7 @@ void KImageShopView::viewBrushDialog()
   }
 }
 
-void KImageShopView::viewGradientDialog()
+void KImageShopView::slotGradientDialog()
 {
   if( m_pGradientDialog )
   {
@@ -984,7 +1027,7 @@ void KImageShopView::viewGradientDialog()
   }
 }
 
-void KImageShopView::viewGradientEditorDialog()
+void KImageShopView::slotGradientEditorDialog()
 {
   if( m_pGradientEditorDialog )
   {
@@ -998,7 +1041,7 @@ void KImageShopView::viewGradientEditorDialog()
   }
 }
 
-void KImageShopView::viewColorDialog()
+void KImageShopView::slotColorDialog()
 {
   if( m_pColorDialog )
 	{
@@ -1012,7 +1055,7 @@ void KImageShopView::viewColorDialog()
   }
 }
 
-void KImageShopView::viewPreferences()
+void KImageShopView::slotPreferences()
 {
 }
 

@@ -31,8 +31,8 @@ ColorDialog::ColorDialog(QWidget *parent) : KFloatingDialog(parent)
 {
   setCaption(i18n("Color chooser"));
   resize(280, 190);
-  setFixedWidth(280);
-  setFixedHeight(190);
+  setMinimumWidth(280);
+  setMinimumHeight(190);
   m_pBase = new ColorChooserWidget(this);
   setBaseWidget(m_pBase);
 }
@@ -56,6 +56,9 @@ ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
   m_pHSBButton = new QPushButton("HSB", this);
   m_pCMYKButton = new QPushButton("CMYK", this);
   m_pLABButton = new QPushButton("LAB", this);
+
+  m_fg = KColor(255,255,255);;
+  m_bg = KColor(0,0,0);
 }
 
 ColorChooserWidget::~ColorChooserWidget() {}
@@ -80,11 +83,16 @@ GradientFrame::GradientFrame(QWidget *parent) : QFrame(parent)
 {
   setFrameStyle(Panel | Sunken);
   setBackgroundColor(white);
+  m_c1.setRGB(255,255,255);
+  m_c2.setRGB(0,0,0);
+  m_pPm = new KPixmap;
 }
 GradientFrame::~GradientFrame() {}
 
 void GradientFrame::drawContents(QPainter *p)
-{
+{ 
+  //KPixmapEffect::gradient(*m_pPm, m_c1, m_c2, KPixmapEffect::HorizontalGradient);
+  //p->drawPixmap(0, 0, m_pPm);
 }
 
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent) {}

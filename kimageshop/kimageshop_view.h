@@ -127,12 +127,12 @@ public slots:
   virtual void slotEditCopy();
   virtual void slotEditPaste();
 
-  virtual void viewLayerDialog();
-  virtual void viewColorDialog();
-  virtual void viewBrushDialog();
-  virtual void viewGradientDialog();
-  virtual void viewGradientEditorDialog();
-  virtual void viewPreferences();
+  virtual void slotLayerDialog();
+  virtual void slotColorDialog();
+  virtual void slotBrushDialog();
+  virtual void slotGradientDialog();
+  virtual void slotGradientEditorDialog();
+  virtual void slotPreferences();
 
   virtual void slotActivateMoveTool();
   virtual void slotActivateBrushTool();
@@ -164,6 +164,7 @@ protected:
 
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
   OpenPartsUI::ToolBar_var m_vToolBarTools;
+  OpenPartsUI::ToolBar_var m_vToolBarDialogs;
 
 public:
   OpenPartsUI::Menu_var m_vTBUndoMenu;
@@ -192,7 +193,8 @@ protected:
 private:
 
   enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL, TBTOOLS_ZOOMTOOL, TBEDIT_UNDO, TBEDIT_REDO,
-	 TBEDIT_COPY, TBEDIT_CUT, TBEDIT_PASTE };
+		 TBEDIT_COPY, TBEDIT_CUT, TBEDIT_PASTE, TBDIALOGS_LAYER, TBDIALOGS_COLOR, TBDIALOGS_BRUSH,
+		 TBDIALOGS_GRADIENT, TBDIALOGS_GRADIENTEDITOR };
 
   KImageShopDoc        *m_pDoc;
   LayerDialog          *m_pLayerDialog;

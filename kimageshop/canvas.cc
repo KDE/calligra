@@ -106,7 +106,6 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffs
     return;
 
  int startX, startY, pixX, pixY = 0;
-// int pixW, pixH = -1;
 
  QPainter p;
  p.begin(w);
@@ -146,20 +145,10 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffs
 		      pixY = 0;
 		    }
 
-		  /*if (x*TILE_SIZE > (offset.x() + area.width()))
-		    pixW = x*TILE_SIZE - offset.x() - area.width();
-		  else
-		    pixW = -1;
-
-		  if (y*TILE_SIZE > (offset.y() + area.height()))
-		    pixH = y*TILE_SIZE - offset.y() - area.height();
-		  else
-		    pixH = -1;
-		  */
 		  startX += static_cast<int>(paintOffset.x()/zoomFactor);
 		  startY += static_cast<int>(paintOffset.y()/zoomFactor);
 
-		  p.drawPixmap(startX, startY, *tiles[y*xTiles+x], pixX, pixY);//, pixW, pixH);
+		  p.drawPixmap(startX, startY, *tiles[y*xTiles+x], pixX, pixY);
 		}
 	      else
 		puts("Null: not rendering");
