@@ -26,10 +26,11 @@
 
 #include "kivio_stencil.h"
 #include "kivio_dia_stencil_spawner.h"
+#include "diapathparser.h"
 
 KivioDiaStencilSpawner::KivioDiaStencilSpawner(KivioStencilSpawnerSet *p) : KivioStencilSpawner(p)
 {
-m_smlStencilSpawner = new KivioSMLStencilSpawner(p);
+	m_smlStencilSpawner = new KivioSMLStencilSpawner(p);
 }
 
 KivioDiaStencilSpawner::~KivioDiaStencilSpawner()
@@ -38,32 +39,32 @@ KivioDiaStencilSpawner::~KivioDiaStencilSpawner()
 
 QDomElement KivioDiaStencilSpawner::saveXML(QDomDocument &d)
 {
-return m_smlStencilSpawner->saveXML(d);
+	return m_smlStencilSpawner->saveXML(d);
 }
 
 void KivioDiaStencilSpawner::calculateDimensions(float x, float y)
 {
-m_xlist.append(x);
-m_ylist.append(y);
+	m_xlist.append(x);
+	m_ylist.append(y);
 }
 
 float KivioDiaStencilSpawner::diaPointToKivio(float point, bool xpoint)
 {
 	float returnPoint = 0.0;
-if(xpoint)
-{
-	//if(m_lowestx < 0)
-		returnPoint = point - m_lowestx;
-	//else
-	//	returnPoint =  (fabs(m_highestx) - fabs(m_lowestx)) - (fabs(m_highestx) + fabs(point));
-}
-else
-{
-	//if(m_lowesty <  0)
-		returnPoint =point - m_lowesty;
-	//else
-	//	returnPoint =  (fabs(m_highesty) + fabs(m_lowesty)) - (fabs(m_highesty) + fabs(point));
-}
+	if(xpoint)
+	{
+		//if(m_lowestx < 0)
+			returnPoint = point - m_lowestx;
+		//else
+		//	returnPoint =  (fabs(m_highestx) - fabs(m_lowestx)) - (fabs(m_highestx) + fabs(point));
+	}
+	else
+	{
+		//if(m_lowesty <  0)
+			returnPoint =point - m_lowesty;
+		//else
+		//	returnPoint =  (fabs(m_highesty) + fabs(m_lowesty)) - (fabs(m_highesty) + fabs(point));
+	}
 	//kdDebug () << "Point " << point << " Return point " << returnPoint << endl;
 	return returnPoint;
 }
@@ -212,136 +213,9 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 			{
 				if(svgChild.hasAttribute("d"))
 				{
-					QStringList points = QStringList::split(" ", svgChild.attribute("d"));
-					float lastX= 0.0;
-					float lastY = 0.0;
-					bool absolute = true;
-
-					for(QStringList::Iterator it = points.begin(); it != points.end(); ++it)
-					{
-						// remove the trailing Z
-						if ( (*it).contains('z') || (*it).contains('Z'))
-						{
-							(*it).replace("z", "");
-							(*it).replace("Z", "");
-						}
-
-						if (((*it).contains('s') !=0) || ((*it).contains('c') !=0) || ( (*it).contains('l')!=0))
-							absolute = false;
-						else
-							absolute = true;
-						if((*it).contains(',') != 0 && absolute)  // Only do this if it is a coordinate.
-						{
-							QString x, y;
-
-							QStringList parsed = QStringList::split(",", (*it));
-							QStringList::Iterator itp = parsed.begin();
-							x = (*itp);
-							++itp;
-							y = (*itp);
-
-							calculateDimensions(x.toFloat(), y.toFloat());
-							lastX = x.toFloat();
-							lastY = y.toFloat();
-						}
-						else if((*it).contains(',') != 0 && !absolute)  // Only do this if it is a coordinate.
-						{
-							QString x, y;
-
-							QStringList parsed = QStringList::split(",", (*it));
-							QStringList::Iterator itp = parsed.begin();
-							x = (*itp);
-							++itp;
-							y = (*itp);
-
-							calculateDimensions(x.toFloat()+lastX, y.toFloat()+lastY);
-							lastY += y.toFloat();
-							lastX += x.toFloat();
-						}
-						else if ((*it).contains('v'))
-						{
-							QString  y;
-							it++;
-							y = (*it);
-							m_ylist.append(y.toFloat()+lastY);
-							lastY += y.toFloat();
-						}
-						else if((*it).contains('V'))
-						{
-							QString  y;
-							it++;
-							y = (*it);
-							m_ylist.append(y.toFloat());
-
-							lastY = y.toFloat();
-							//kdDebug() << "v " << y << endl;
-						}
-						else if ((*it).contains('h'))
-						{
-							QString x;
-							it++;
-							x = (*it);
-							m_xlist.append( x.toFloat()+lastX);
-							lastX += x.toFloat();
-						}
-						else if((*it).contains('H'))
-						{
-
-							QString x;
-							it++;
-							x = (*it);
-							m_xlist.append( x.toFloat());
-							lastX = x.toFloat();
-
-							//kdDebug() << "h " << x<< endl;
-						}
-
-						else if((*it).contains('m'))
-						{
-							QString x, y;
-							++it;
-							if((*it).contains(','))
-							{
-								QStringList parsed = QStringList::split(",", (*it));
-								QStringList::Iterator itp = parsed.begin();
-								x = (*itp);
-								++itp;
-								y = (*itp);
-							}
-							else
-							{
-								x = (*it);
-								++it;
-								y = (*it);
-							}
-							calculateDimensions(x.toFloat()+lastX, y.toFloat()+lastY);
-							lastX += x.toFloat();
-							lastY += y.toFloat();
-						}
-						else if((*it).contains('M'))
-						{
-							QString x, y;
-							++it;
-							if((*it).contains(','))
-							{
-								QStringList parsed = QStringList::split(",", (*it));
-								QStringList::Iterator itp = parsed.begin();
-								x = (*itp);
-								++itp;
-								y = (*itp);
-							}
-							else
-							{
-								x = (*it);
-								++it;
-								y = (*it);
-							}
-							calculateDimensions(x.toFloat(), y.toFloat());
-							lastX = x.toFloat();
-							lastY = y.toFloat();
-						}
-
-					}
+					DiaPointFinder *dpf = new DiaPointFinder(&m_xlist, &m_ylist);
+					dpf->parseSVG(svgChild.attribute("d"));
+					delete dpf;
 				}
 			}
 		}
@@ -369,16 +243,16 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		m_lowesty = QMIN(m_lowesty, *ity);
 	}
 
-// 	if( svgElement.hasAttribute("width") && svgElement.hasAttribute("height"))
-// 	{
-// 		m_yscale = svgElement.attribute("height").toFloat()/(m_highesty - m_lowesty);
-// 		m_xscale = svgElement.attribute("width").toFloat()/(m_highestx - m_lowestx);
-// 	}
-// 	else
+	//if( svgElement.hasAttribute("width") && svgElement.hasAttribute("height"))
+	//{
+	//	m_yscale = svgElement.attribute("height").toFloat()/(m_highesty - m_lowesty);
+	//	m_xscale = svgElement.attribute("width").toFloat()/(m_highestx - m_lowestx);
+	//}
+	//else
 	{
 		// scale the shape to be close to 30 by 30
 		m_yscale = 30.0/(m_highesty - m_lowesty);
-		m_xscale = 40.0/(m_highestx - m_lowestx);
+		m_xscale = 30.0/(m_highestx - m_lowestx);
 	}
 
 	// Add KivioConnectorTarget's
@@ -552,348 +426,12 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 
 					kivioShape.setAttribute("name", QString::fromLatin1("Element") + QString::number(runs));
 
-					QStringList points = QStringList::split(" ", svgChild.attribute("d"));
-					float lastPointX, lastControlX, currentControlX, currentPointX = 0.0;
-					float lastPointY, lastControlY, currentControlY, currentPointY = 0.0;
-					QStringList::Iterator it = points.begin();
-					QStringList l;
-					bool isDone = false;
-					while( it != points.end() && !isDone)
-					{
-						// remove the trailing Z
-						if ( (*it).contains('z') || (*it).contains('Z'))
-						{
-							(*it).replace("z", "");
-							(*it).replace("Z", "");
-							//isDone = true;
-						}
-						if( (*it).contains('m'))
-						{
-							// set last point
-							it++;
-							if ( (*it).contains(','))
-							{
-								l = QStringList::split(",",(*it));
-								currentPointX = (*(l.at(0))).toFloat()+lastPointX;
-								currentPointY = (*(l.at(1))).toFloat()+lastPointY;
-							}
-							else
-							{
-								currentPointX = (*(it)).toFloat()+lastPointX;
-								it++;
-								currentPointY = (*(it)).toFloat()+lastPointY;
-							}
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if( (*it).contains('M'))
-						{
-							// set last point
-							it++;
-							if ( (*it).contains(','))
-							{
-								l = QStringList::split(",",(*it));
-								currentPointX = (*(l.at(0))).toFloat();
-								currentPointY = (*(l.at(1))).toFloat();
-							}
-							else
-							{
-								currentPointX = (*(it)).toFloat();
-								it++;
-								currentPointY = (*(it)).toFloat();
-							}
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if ((*it).contains('l') )
-						{
-							// Line
-							it++;
-							l = QStringList::split(",",(*it));
-							currentPointX = (*(l.at(0))).toFloat()+lastPointX;
-							currentPointY = (*(l.at(1))).toFloat()+lastPointY;
-							// Create the line
-							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
+					DiaPathParser *dpp = new DiaPathParser(&kivio,
+						&kivioShape, m_xscale, m_yscale,
+						m_lowestx, m_lowesty);
+					dpp->parseSVG(svgChild.attribute("d"));
+					delete dpp;
 
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if ( (*it).contains( 'L'))
-						{
-							// Line
-							it++;
-							l = QStringList::split(",",(*it));
-							currentPointX = (*(l.at(0))).toFloat();
-							currentPointY = (*(l.at(1))).toFloat();
-							// Create the line
-							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if ((*it).contains('h'))
-						{
-							// Line
-							it++;
-
-							currentPointX = (*(it)).toFloat()+lastPointX;
-
-							// Create the line
-							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-
-						}
-						else if ((*it).contains( 'H'))
-						{
-							// Line
-							it++;
-
-							currentPointX = (*(it)).toFloat();
-
-							// Create the line
-							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if ( (*it).contains('v') )
-						{
-							// Line
-							it++;
-							currentPointY = (*(it)).toFloat()+lastPointY;
-
-							// Create the line
-							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if ( (*it).contains( 'V'))
-						{
-							// Line
-							it++;
-							currentPointY = (*(it)).toFloat();
-
-							// Create the line
-							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioShape.appendChild(kivioPointElement);
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if ( (*it).contains('c'))
-						{
-							// Spline
-							it++;
-							l = QStringList::split(",",(*it));
-							lastControlX = (*(l.at(0))).toFloat()+lastPointX;
-							lastControlY = (*(l.at(1))).toFloat()+lastPointY;
-							it++;
-							l = QStringList::split(",",(*it));
-							currentControlX = (*(l.at(0))).toFloat()+lastPointX;
-							currentControlY = (*(l.at(1))).toFloat()+lastPointY;
-							it++;
-							l = QStringList::split(",",(*it));
-							currentPointX = (*(l.at(0))).toFloat()+lastPointX;
-							currentPointY = (*(l.at(1))).toFloat()+lastPointY;
-							// Create the bezier
-							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastControlX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastControlY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentControlX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentControlY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-							lastControlX = currentControlX;
-							lastControlY = currentControlY;
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if ( (*it).contains('C'))
-						{
-							// Spline
-							it++;
-							l = QStringList::split(",",(*it));
-							lastControlX = (*(l.at(0))).toFloat();
-							lastControlY = (*(l.at(1))).toFloat();
-							it++;
-							l = QStringList::split(",",(*it));
-							currentControlX = (*(l.at(0))).toFloat();
-							currentControlY = (*(l.at(1))).toFloat();
-							it++;
-							l = QStringList::split(",",(*it));
-							currentPointX = (*(l.at(0))).toFloat();
-							currentPointY = (*(l.at(1))).toFloat();
-							// Create the bezier
-							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastControlX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastControlY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentControlX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentControlY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-							lastControlX = currentControlX;
-							lastControlY = currentControlY;
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if ( (*it).contains('s'))
-						{
-							// Spline
-							it++;
-							l = QStringList::split(",",(*it));
-							currentControlX = (*(l.at(0))).toFloat()+lastPointX;
-							currentControlY = (*(l.at(1))).toFloat()+lastPointY;
-							it++;
-							l = QStringList::split(",",(*it));
-							currentPointX = (*(l.at(0))).toFloat()+lastPointX;
-							currentPointY = (*(l.at(1))).toFloat()+lastPointY;
-							// Create the bezier
- 							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio((2.0 * lastPointX-lastControlX),true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio((2.0 * lastPointY-lastControlY), false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentControlX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentControlY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-							lastControlX = currentControlX;
-							lastControlY = currentControlY;
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						else if ( (*it).contains('S'))
-						{
-							// Spline
-							it++;
-							l = QStringList::split(",",(*it));
-							currentControlX = (*(l.at(0))).toFloat();
-							currentControlY = (*(l.at(1))).toFloat();
-							it++;
-							l = QStringList::split(",",(*it));
-							currentPointX = (*(l.at(0))).toFloat();
-							currentPointY = (*(l.at(1))).toFloat();
-							// Create the bezier
- 							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio((2.0 * lastPointX-lastControlX),true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio((2.0 * lastPointY-lastControlY), false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentControlX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentControlY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-
-							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(currentPointX,true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
-							kivioPointElement.setAttribute("type", "bezier");
-							kivioShape.appendChild(kivioPointElement);
-							lastControlX = currentControlX;
-							lastControlY = currentControlY;
-							lastPointX = currentPointX;
-							lastPointY = currentPointY;
-						}
-						it++;
-					}
 					kivio.documentElement().appendChild(kivioShape);
 				}
 			}
@@ -914,21 +452,21 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 
 bool KivioDiaStencilSpawner::loadXML(const QString &file, QDomDocument &d)
 {
-bool ret = m_smlStencilSpawner->loadXML(file, d);
+	bool ret = m_smlStencilSpawner->loadXML(file, d);
 
-m_icon = *m_smlStencilSpawner->icon();
-m_pSet = m_smlStencilSpawner->set();
-m_pInfo = m_smlStencilSpawner->info();
-m_defWidth = m_smlStencilSpawner->defWidth();
-m_defHeight = m_smlStencilSpawner->defHeight();
+	m_icon = *m_smlStencilSpawner->icon();
+	m_pSet = m_smlStencilSpawner->set();
+	m_pInfo = m_smlStencilSpawner->info();
+	m_defWidth = m_smlStencilSpawner->defWidth();
+	m_defHeight = m_smlStencilSpawner->defHeight();
 
-return ret;
+	return ret;
 }
 
 KivioStencil *KivioDiaStencilSpawner::newStencil()
 {
-KivioStencil *newStencil = m_smlStencilSpawner->newStencil();
-newStencil->setSpawner(this);
+	KivioStencil *newStencil = m_smlStencilSpawner->newStencil();
+	newStencil->setSpawner(this);
 
-return newStencil;
+	return newStencil;
 }
