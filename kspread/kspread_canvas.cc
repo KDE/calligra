@@ -856,17 +856,17 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   double rx = table->dblColumnPos( rct.right() + 1 );
   double ty = table->dblRowPos( rct.top() );
   double by = table->dblRowPos( rct.bottom() + 1 );
-  
+
   r1.setLeft( lx - 1 );
   r1.setTop( ty - 1 );
   r1.setRight( rx + 1 );
   r1.setBottom( by + 1 );
-  
+
   r2.setLeft( lx + 1 );
   r2.setTop( ty + 1 );
   r2.setRight( rx - 1 );
   r2.setBottom( by - 1 );
-  
+
   QRect selectionHandle = m_pView->selectionInfo()->selectionHandleArea();
 
   // Test whether the mouse is over some anchor
@@ -1120,12 +1120,12 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
       double rx = table->dblColumnPos( rct.right() + 1 );
       double ty = table->dblRowPos( rct.top() );
       double by = table->dblRowPos( rct.bottom() + 1 );
-      
+
       r1.setLeft( lx - 1 );
       r1.setTop( ty - 1 );
       r1.setRight( rx + 1 );
       r1.setBottom( by + 1 );
-      
+
       r2.setLeft( lx + 1 );
       r2.setTop( ty + 1 );
       r2.setRight( rx - 1 );
@@ -3356,7 +3356,7 @@ void KSpreadCanvas::paintUpdates()
 {
   if (activeTable() == NULL)
     return;
- 
+
   QPainter painter(this);
 
   //Save clip region
@@ -3446,7 +3446,7 @@ void KSpreadCanvas::paintUpdates()
           }
         else
         {
-          paintBordersBottom = true;          
+          paintBordersBottom = true;
 
           if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
@@ -3464,7 +3464,7 @@ void KSpreadCanvas::paintUpdates()
           }
         else
         {
-          paintBordersLeft = true;          
+          paintBordersLeft = true;
           if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
@@ -4976,9 +4976,10 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
 
     QString tmpSize;
     if ( m_iResizePos != x )
-        tmpSize = i18n("Width: %1 %2").arg( KoUnit::ptToUnit( m_pCanvas->doc()->unzoomItX( m_iResizePos - x ),
-                                                              m_pView->doc()->getUnit() ) )
-                                      .arg( m_pView->doc()->getUnitName() );
+        tmpSize = i18n("Width: %1 %2")
+                  .arg( KGlobal::locale()->formatNumber( KoUnit::ptToUnit( m_pCanvas->doc()->unzoomItX( m_iResizePos - x ),
+                                                                           m_pView->doc()->getUnit() )))
+                  .arg( m_pView->doc()->getUnitName() );
     else
         tmpSize = i18n( "Hide Column" );
 
