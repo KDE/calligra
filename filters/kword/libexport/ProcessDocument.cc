@@ -510,7 +510,7 @@ static void ProcessShadowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "distance", "double", &layout->shadowDistance );
-    attrProcessingList << AttrProcessing ( "position", "int",    &layout->shadowDirection );
+    attrProcessingList << AttrProcessing ( "direction", "int",    &layout->shadowDirection );
     attrProcessingList << AttrProcessing ( "red",      "int",    &red   );
     attrProcessingList << AttrProcessing ( "green",    "int",    &green );
     attrProcessingList << AttrProcessing ( "blue",     "int",    &blue  );
@@ -521,7 +521,7 @@ static void ProcessShadowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *
     AllowNoSubtags (myNode);
 }
 
-void ProcessAnyBorderTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+static void ProcessAnyBorderTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 {
     BorderData *border =  static_cast <BorderData*> (tagData);
 
@@ -542,6 +542,11 @@ void ProcessAnyBorderTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *lead
     AllowNoSubtags (myNode);
 }
 
+static void ProcessFollowingTag ( QDomNode myNode, void *tagData, KWEFKWordLeader * )
+{
+    ProcessOneAttrTag (myNode, "name", "QString", tagData);
+}
+
 void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 // Processes <LAYOUT> and <STYLE>
 {
@@ -554,7 +559,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     QString lineSpacing;
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "NAME",         ProcessStringValueTag,       &layout->styleName           );
-    tagProcessingList << TagProcessing ( "FOLLOWING",    ProcessStringValueTag,       &layout->styleFollowing      );
+    tagProcessingList << TagProcessing ( "FOLLOWING",    ProcessFollowingTag,         &layout->styleFollowing      );
     tagProcessingList << TagProcessing ( "FLOW",         ProcessStringAlignTag,       &layout->alignment           );
     tagProcessingList << TagProcessing ( "INDENTS",      ProcessIndentsTag,           (void *) layout              );
     tagProcessingList << TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,      (void *) layout              );
