@@ -108,6 +108,42 @@ QString StyleStack::attribute( const QString& name ) const
     return QString::null;
 }
 
+bool StyleStack::hasAttribute( const QString& name, const QString& detail ) const
+{
+    QString fullName( name );
+    fullName += '-';
+    fullName += detail;
+    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    while ( it != m_stack.begin() )
+    {
+        --it;
+        QDomElement properties = (*it).namedItem( "style:properties" ).toElement();
+        if ( properties.hasAttribute( name ) || properties.hasAttribute( fullName ) )
+            return true;
+    }
+
+    return false;
+}
+
+QString StyleStack::attribute( const QString& name, const QString& detail ) const
+{
+    QString fullName( name );
+    fullName += '-';
+    fullName += detail;
+    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    while ( it != m_stack.begin() )
+    {
+        --it;
+        QDomElement properties = (*it).namedItem( "style:properties" ).toElement();
+        if ( properties.hasAttribute( fullName ) )
+            return properties.attribute( fullName );
+        if ( properties.hasAttribute( name ) )
+            return properties.attribute( name );
+    }
+
+    return QString::null;
+}
+
 // Font size is a bit special. "115%" applies to "the fontsize of the parent style".
 // This can be generalized though (hasAttributeThatCanBePercentOfParent() ? :)
 // Although, if we also add support for fo:font-size-rel here then it's not general anymore.
