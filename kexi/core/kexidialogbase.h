@@ -99,6 +99,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
+		/*! Internal reimplementation. */
+		virtual bool eventFilter(QObject *obj, QEvent *e);
 	public slots:
 //		virtual void detach();
 		virtual void setFocus();
@@ -122,6 +124,9 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 Default implementation always return false. Reimplement this if you e.g. want reuse "dirty" 
 		 flag from internal structures that may be changed. */
 		virtual bool dirty();
+
+		//! Internal.
+		void addView(KexiViewBase *view, int mode);
 
 		int m_supportedViewModes;
 		int m_currentViewMode;

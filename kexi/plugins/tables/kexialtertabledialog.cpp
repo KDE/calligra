@@ -131,7 +131,7 @@ void KexiAlterTableDialog::init()
 	m_view->adjustColumnWidthToContents(0); //adjust column width
 	m_view->adjustColumnWidthToContents(1); //adjust column width
 	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
-	setFocusProxy(m_view);
+//	setFocusProxy(m_view);
 
 	connect(m_view, SIGNAL(cellSelected(int,int)), 
 		this, SLOT(slotCellSelected(int,int)));

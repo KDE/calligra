@@ -26,6 +26,7 @@
 #include "kexipart.h"
 #include "kexipartinfo.h"
 #include "kexipropertybuffer.h"
+#include "kexi_utils.h"
 
 #include <qwidgetstack.h>
 #include <qobjectlist.h>
@@ -61,8 +62,18 @@ KexiDialogBase::~KexiDialogBase()
 
 void KexiDialogBase::addView(KexiViewBase *view)
 {
-	m_stack->addWidget(view, 0);
+	addView(view,0);
+}
+
+void KexiDialogBase::addView(KexiViewBase *view, int mode)
+{
+	m_stack->addWidget(view, mode);
 	addActionProxyChild( view );
+
+	//set focus proxy inside this view
+	QWidget *ch = static_cast<QWidget*>(view->child( 0, "QWidget", false ));
+	if (ch)
+		view->setFocusProxy(ch);
 }
 
 QSize KexiDialogBase::minimumSizeHint() const
@@ -193,7 +204,8 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 			//js TODO error?
 			return false;
 		}
-		m_stack->addWidget(view, viewMode);
+		addView(view, viewMode);
+//		m_stack->addWidget(view, viewMode);
 	}
 //	if (!view->inherits("KexiViewBase"))
 //		return false;
@@ -214,6 +226,7 @@ void KexiDialogBase::setFocus()
 	else {
 		KMdiChildView::setFocus();
 	}
+	activate();
 }
 
 KexiPropertyBuffer *KexiDialogBase::propertyBuffer()
@@ -223,6 +236,20 @@ KexiPropertyBuffer *KexiDialogBase::propertyBuffer()
 		return v->propertyBuffer();
 	}
 	return 0;
+}
+
+bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
+{
+	if (KMdiChildView::eventFilter(obj, e))
+		return true;
+	if (m_stack->visibleWidget() && Kexi::hasParent(m_stack->visibleWidget(), obj)) {
+		if (e->type()==QEvent::FocusIn) {
+			//pass this focus
+			setFocus();
+			return true;
+		}
+	}
+	return false;
 }
 
 #include "kexidialogbase.moc"

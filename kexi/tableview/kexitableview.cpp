@@ -1237,12 +1237,16 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 {
 //	kdDebug(44021) << "KexiTableView::contentsMousePressEvent() ??" << endl;
-	if(m_data->count()==0 && !isInsertingEnabled())
+	setFocus();
+	if(m_data->count()==0 && !isInsertingEnabled()) {
+		QScrollView::contentsMousePressEvent( e );
 		return;
+	}
 
-	if (columnAt(e->pos().x())==-1) //outside a colums
+	if (columnAt(e->pos().x())==-1) { //outside a colums
+		QScrollView::contentsMousePressEvent( e );
 		return;
-	
+	}
 //	d->contentsMousePressEvent_ev = *e;
 //	d->contentsMousePressEvent_enabled = true;
 //	QTimer::singleShot(2000, this, SLOT( contentsMousePressEvent_Internal() ));
@@ -1263,8 +1267,10 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	if (isInsertingEnabled()) {
 		if (rowAt(e->pos().y())==-1) {
 			newrow = rowAt(e->pos().y() - d->rowHeight);
-			if (newrow==-1 && m_data->count()>0)
+			if (newrow==-1 && m_data->count()>0) {
+				QScrollView::contentsMousePressEvent( e );
 				return;
+			}
 			newrow++;
 			kdDebug(44021) << "Clicked just on 'insert' row." << endl;
 			onInsertItem=true;
@@ -1275,8 +1281,10 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		}
 	}
 	else {
-		if (rowAt(e->pos().y())==-1 || columnAt(e->pos().x())==-1)
+		if (rowAt(e->pos().y())==-1 || columnAt(e->pos().x())==-1) {
+			QScrollView::contentsMousePressEvent( e );
 			return; //clicked outside a grid
+		}
 		// get new focus cell
 		newrow = rowAt(e->pos().y());
 	}
@@ -1305,7 +1313,6 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		}
 #endif
 	}
-
 	QScrollView::contentsMousePressEvent( e );
 }
 
