@@ -23,6 +23,7 @@
 #include "keximainwindow.h"
 
 #include <kdockwidget.h>
+#include <kiconloader.h>
 #include <netwm_def.h>
 #include <qtimer.h>
 #include <kdebug.h>
@@ -45,9 +46,11 @@ KexiDialogBase::KexiDialogBase(QWidget *parent, const char *name) : QWidget(pare
 //	myDock->undock();
 }
 
+
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 {
-	myDock=m_mainWindow->createDockWidget( "Widget", 0, 0, caption());
+	myDock=m_mainWindow->createDockWidget( "Widget", 
+		(icon()?(*(icon())):SmallIcon("kexi")), 0, caption());
 	myDock->setWidget(this);
 	myDock->setEnableDocking(KDockWidget::DockFullDocking);
 	myDock->setDockSite(KDockWidget::DockFullDocking);

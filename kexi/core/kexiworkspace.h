@@ -4,10 +4,13 @@
 #include <qworkspace.h>
 #include <qguardedptr.h>
 
+#include <kstatusbar.h>
+
+
 class KexiDialogBase;
 class KexiMainWindow;
 
-class KexiWorkspace : public QWidget
+class KexiWorkspace : public KStatusBar
 {
 	Q_OBJECT
 	
