@@ -26,6 +26,7 @@
 class QResizeEvent;
 class QMouseEvent;
 class KoRuler;
+class KSelectAction;
 class GraphitePart;
 
 
@@ -44,7 +45,7 @@ public:
     virtual int topBorder() const { return 20; }
 
 protected slots:
-    void slotViewZoom(int item);
+    void slotViewZoom(const QString &text);
 
     void recalcRulers(int x, int y);
     void rulerUnitChanged(QString unit);
@@ -61,5 +62,6 @@ private:
     GCanvas *m_canvas;
     KoRuler *m_vert, *m_horiz;
     int m_oldX, m_oldY;
+    KSelectAction *m_zoomAction;
 };
 #endif

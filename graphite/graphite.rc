@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="graphite" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="graphite" version="3">
 <MenuBar>
  <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -17,5 +17,8 @@
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Action name="edit_cut"/>
+</ToolBar>
+<ToolBar name="zoom_bar" fullWidth="false"><Text>Zoom</Text>
+  <Action name="view_zoom"/>
 </ToolBar>
 </kpartgui>

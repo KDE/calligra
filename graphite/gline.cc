@@ -189,7 +189,8 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
 }
 
 void GLine::recalculate() {
-    // TODO
+    m_a.recalculate();
+    m_b.recalculate();
 }
 
 const GLine *GLine::hit(const QPoint &p) const {

@@ -136,8 +136,8 @@ protected:
     virtual void createPropertyDialog();
 
     bool created() const { return m_created; }
-    bool firstCall() const { return m_firstCall; }
-    void setFirstCall(bool firstCall) { m_firstCall=firstCall; }
+    //bool firstCall() const { return m_firstCall; }
+    //void setFirstCall(bool firstCall) { m_firstCall=firstCall; }
     QList<QRect> *handles() const { return m_handles; }
 
 private:
@@ -145,7 +145,7 @@ private:
     Mode m_mode;
     GraphitePart *m_part;     // we need that for the history
     QList<QRect> *m_handles;  // contains all the handle rects
-    bool m_firstCall : 1; // Whether this is the first call for this M9r (no hit test!)
+    //bool m_firstCall : 1; // Whether this is the first call for this M9r (no hit test!)
     bool m_pressed : 1;           // mouse button pressed?
     bool m_changed : 1;           // true, if the Apply button is "active"
     bool m_created : 1;           // dia created?
