@@ -54,6 +54,7 @@
   <item find="Pyrennées" replace="Pyrénées" />
   <item find="Quand à" replace="Quant à" />
   <item find="Quelque soit" replace="Quel que soit" />
+  <item find="Qui peux" replace="Qui peut" />
   <item find="Septembre" replace="septembre" />
   <item find="Sera t'il" replace="Sera-t-il" />
   <item find="Sera-t'il" replace="Sera-t-il" />
@@ -64,6 +65,7 @@
   <item find="a conçut" replace="a conçu" />
   <item find="a définit" replace="a défini" />
   <item find="a investit" replace="a investi" />
+  <item find="a la fois" replace="à la fois" />
   <item find="a peu près" replace="à peu près" />
   <item find="a propos" replace="à propos" />
   <item find="a reçut" replace="a reçu" />
@@ -590,6 +592,8 @@
   <item find="il suis" replace="il suit" />
   <item find="il survie" replace="il survit" />
   <item find="il transfert" replace="il transfère" />
+  <item find="il travail" replace="il travaille" />
+  <item find="il vous permets" replace="il vous permet" />
   <item find="ils son" replace="ils sont" />
   <item find="ils sons" replace="ils sont" />
   <item find="imge" replace="image" />
@@ -628,6 +632,7 @@
   <item find="je ne sais quoi" replace="je-ne-sais-quoi" />
   <item find="je suie" replace="je suis" />
   <item find="je suit" replace="je suis" />
+  <item find="je travail" replace="je travaille" />
   <item find="jetéé" replace="jetée" />
   <item find="joailler" replace="joaillier" />
   <item find="joaillers" replace="joailliers" />
@@ -642,7 +647,10 @@
   <item find="l'en train" replace="l'entrain" />
   <item find="l'équivalant" replace="l'équivalent" />
   <item find="la boite" replace="la boîte" />
+  <item find="la foie" replace="la fois" />
   <item find="la notre" replace="la nôtre" />
+  <item find="la plais" replace="la plaie" />
+  <item find="la plait" replace="la plaie" />
   <item find="la planisphère" replace="le planisphère" />
   <item find="la sourie" replace="la souris" />
   <item find="la suis" replace="la suie" />
@@ -655,6 +663,8 @@
   <item find="languages" replace="langages" />
   <item find="laors" replace="alors" />
   <item find="le champs" replace="le champ" />
+  <item find="le foi" replace="le foie" />
+  <item find="le fois" replace="le foie" />
   <item find="le notre" replace="le nôtre" />
   <item find="le publique" replace="le public" />
   <item find="le résidant" replace="le résident" />
@@ -671,6 +681,7 @@
   <item find="les votres" replace="les vôtres" />
   <item find="lesson" replace="leçon" />
   <item find="leur équivalant" replace="leur équivalent" />
+  <item find="leurs cotés" replace="leurs côtés" />
   <item find="libre échange" replace="libre-échange" />
   <item find="libre échangiste" replace="libre-échangiste" />
   <item find="license" replace="licence" />
@@ -715,6 +726,7 @@
   <item find="melé" replace="mêlé" />
   <item find="melée" replace="mêlée" />
   <item find="meme" replace="même" />
+  <item find="mes cotés" replace="mes côtés" />
   <item find="mian" replace="main" />
   <item find="microporcesseur" replace="microprocesseur" />
   <item find="microproceseur" replace="microprocesseur" />
@@ -753,6 +765,7 @@
   <item find="niger" replace="Niger" />
   <item find="normallement" replace="normalement" />
   <item find="norvège" replace="Norvège" />
+  <item find="nos cotés" replace="nos côtés" />
   <item find="nosu" replace="nous" />
   <item find="notres" replace="nôtres" />
   <item find="nourir" replace="nourrir" />
@@ -984,6 +997,7 @@
   <item find="sauf conduit" replace="sauf-conduit" />
   <item find="sauf conduits" replace="sauf-conduits" />
   <item find="saurait il" replace="saurait-il" />
+  <item find="se vente" replace="se vante" />
   <item find="sensé être" replace="censé être" />
   <item find="sera t'il" replace="sera-t-il" />
   <item find="serat-il" replace="sera-t-il" />
@@ -1055,6 +1069,7 @@
   <item find="tepms" replace="temps" />
   <item find="terre neuve" replace="terre-neuve" />
   <item find="terre plein" replace="terre-plein" />
+  <item find="tes cotés" replace="tes côtés" />
   <item find="théillère" replace="théière" />
   <item find="tio" replace="toi" />
   <item find="tobogan" replace="toboggan" />
@@ -1097,6 +1112,7 @@
   <item find="un pronostique" replace="un pronostic" />
   <item find="un précédant" replace="un précédent" />
   <item find="un transfère" replace="un transfert" />
+  <item find="un travaille" replace="un travail" />
   <item find="un travestit" replace="un travesti" />
   <item find="un épistaxis" replace="une épistaxis" />
   <item find="un équivalant" replace="un équivalent" />
@@ -1116,9 +1132,12 @@
   <item find="une boite" replace="une boîte" />
   <item find="une denticule" replace="un denticule" />
   <item find="une effluve" replace="un effluve" />
+  <item find="une foie" replace="une fois" />
   <item find="une fébricule" replace="un fébricule" />
   <item find="une haltère" replace="un haltère" />
   <item find="une hémisphère" replace="un hémisphère" />
+  <item find="une plais" replace="une plaie" />
+  <item find="une plait" replace="une plaie" />
   <item find="une planisphère" replace="un planisphère" />
   <item find="une sourie" replace="une souris" />
   <item find="une sourit" replace="une souris" />
@@ -1139,10 +1158,11 @@
   <item find="virsu" replace="virus" />
   <item find="vis a vis" replace="vis-à-vis" />
   <item find="vis à vis" replace="vis-à-vis" />
+  <item find="vos cotés" replace="vos côtés" />
   <item find="vosu" replace="vous" />
   <item find="votres" replace="vôtres" />
   <item find="vous faîtes" replace="vous faites" />
-  <item find="vous permets" replace="vous permet" />
+  <item find="vous plaie" replace="vous plaît" />
   <item find="voute" replace="voûte" />
   <item find="voutes" replace="voûtes" />
   <item find="vénus" replace="Vénus" />
