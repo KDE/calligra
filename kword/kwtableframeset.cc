@@ -1768,8 +1768,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
      *  inside the boundary of the table!
      */
     painter.save();
-    QPen previewLinePen( lightGray ); // TODO use qcolorgroup
-    QPen minsizeLinePen( red ); // TODO use qcolorgroup
+    QPen previewLinePen( QApplication::palette().color(  QPalette::Active, QColorGroup::Mid ) );
     QColor defaultBorderColor = KoTextFormat::defaultTextColor( &painter );
     const int minborder = 1;
     bool drawPreviewLines = viewMode && viewMode->drawFrameBorders();
@@ -1983,6 +1982,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
 
 #if 0
     if(drawPreviewLines) {
+        QPen minsizeLinePen( red );
         painter.setPen( minsizeLinePen );
         for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
             Cell *cell = m_cells.at( i );
