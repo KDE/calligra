@@ -145,8 +145,8 @@ class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
 		\brief Set the filename used by the connection
 		
 		For file-based database engines, like SQLite, you should use this 
-		function to set the file name of the database to use. \a fn should be an
-		absolute path to the file
+		function to set the file name of the database to use. 
+		\a fn can be either absolute or relative path to the file.
 		*/
 		void setFileName( const QString& fn );
 

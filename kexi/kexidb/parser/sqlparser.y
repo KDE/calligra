@@ -435,6 +435,10 @@
 #include <assert.h>
 #include <limits.h>
 //TODO OK?
+#ifdef Q_WS_WIN
+//workaround for bug on msvc
+# undef LLONG_MIN
+#endif
 #ifndef LLONG_MAX
 # define LLONG_MAX     0x7fffffffffffffffLL
 #endif
@@ -953,12 +957,13 @@ aExpr9:
 | INTEGER_CONST
 {
 	QVariant val;
-	if ($1 < INT_MAX && $1 > INT_MIN)
+	if ($1 <= INT_MAX && $1 >= INT_MIN)
 		val = (int)$1;
-	if ($1 < UINT_MAX && $1 >= 0)
+	else if ($1 <= UINT_MAX && $1 >= 0)
 		val = (uint)$1;
-	if ($1 < LLONG_MAX && $1 > LLONG_MIN)
+	else if ($1 <= LLONG_MAX && $1 >= LLONG_MIN)
 		val = (Q_LLONG)$1;
+
 //	if ($1 < ULLONG_MAX)
 //		val = (Q_ULLONG)$1;
 //TODO ok?
