@@ -405,8 +405,17 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
 
             kdDebug()<<" point element  :"<< str <<endl;
             QStringList listVal = QStringList::split( ",", str );
-            point.setAttribute("posX", listVal[0]);
-            point.setAttribute("posY", listVal[1]);
+            int posX = ( listVal[0].toInt()/100 );
+            int posY = ( listVal[1].toInt()/100 );
+            QString pt_x;
+            QString pt_y;
+            pt_x.setNum(posX);
+            pt_x+="mm";
+            pt_y.setNum(posY);
+            pt_y+="mm";
+            point.setAttribute("posX", KoUnit::parseValue(pt_x));
+            point.setAttribute("posY", KoUnit::parseValue(pt_y));
+
             helpLineElement.appendChild( point );
             newPos = pos-1;
         }
@@ -416,9 +425,14 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             //vertical element
             str = text.mid( pos+1, ( newPos-pos ) );
             kdDebug()<<" vertical  :"<< str <<endl;
-            lines.setAttribute( "value",  str  );
+            int posX = ( str.toInt()/100 );
+            QString pt_x;
+            pt_x.setNum(posX);
+            pt_x+="mm";
+            lines.setAttribute( "value",  KoUnit::parseValue(pt_x) );
             helpLineElement.appendChild( lines );
-            newPos = pos-1;
+
+            newPos = ( pos-1 );
 
         }
         else if ( text[pos]=='H' )
@@ -427,7 +441,13 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             QDomElement lines=doc.createElement("Horizontal");
             str = text.mid( pos+1, ( newPos-pos ) );
             kdDebug()<<" horizontal  :"<< str <<endl;
-            lines.setAttribute( "value", str  );
+
+            int posY = ( str.toInt()/100 );
+            QString pt_y;
+            pt_y.setNum(posY);
+            pt_y+="mm";
+
+            lines.setAttribute( "value", KoUnit::parseValue(pt_y)  );
             helpLineElement.appendChild( lines );
             newPos = pos-1;
         }
