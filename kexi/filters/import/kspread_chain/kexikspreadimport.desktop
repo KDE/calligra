@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=Kexi/FileImportFilter
+
+Name=KexiKSpreadImport
+Comment=Import KSpread readable file...
+
+X-KDE-Library=kexikspreadimport
+X-KEXI-Import=application/x-kspread
+X-KEXI-ImportTypes=kexi/table
+X-KEXI-OfficeChainImport=true

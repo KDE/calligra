@@ -1,0 +1,147 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>KexiKSpreadSourceBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KexiKSpreadSourceBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>486</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_3_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Data end:</string>
+                    </property>
+                </widget>
+                <widget class="KPushButton" row="1" column="3">
+                    <property name="name">
+                        <cstring>syncDataArea</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use current selection</string>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="0" column="2">
+                    <property name="name">
+                        <cstring>headerRowColumnRange</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Data area</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="3" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>End of selection</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>First empty row/column within selection</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Expand selection till first empty row/column</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>dateEndType</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="1" column="2">
+                    <property name="name">
+                        <cstring>dataRange</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Data record is a</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="2" column="2">
+                    <item>
+                        <property name="text">
+                            <string>Row</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Column</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>dataRowType</cstring>
+                    </property>
+                </widget>
+                <widget class="KPushButton" row="0" column="3">
+                    <property name="name">
+                        <cstring>syncHeader</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use current selection</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>useHeader</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Header row/column</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>kspreadFrame</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>3</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
