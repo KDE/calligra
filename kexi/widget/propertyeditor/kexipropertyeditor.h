@@ -132,9 +132,11 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		    if property is modified (ie KexiPropertyEditorItem::modified() == true).
 		    The editor type depends on KexiProperty::type() of the item's property.
 		*/
-		void	createEditor(KexiPropertyEditorItem *i, const QRect &geometry);
+		void	createEditor(KexiPropertyEditorItem *i);//, const QRect &geometry);
 		/*! Reimplemented from KListView to update editor and revert button position. */
 		void 	resizeEvent(QResizeEvent *ev);
+
+		void showDefaultsButton( bool show );
 
 	private:
 		QGuardedPtr<KexiPropertySubEditor> m_currentEditor;

@@ -74,18 +74,21 @@ KexiPropertyEditor::slotClicked(QListViewItem *item)
 {
 	if(item)
 	{
-		int y = viewportToContents(QPoint(0, itemRect(item).y())).y();
-		kdDebug() << "KexiPropertyEditor::slotClicked() y: " << y << endl;
-		QRect g(columnWidth(0), y, columnWidth(1), item->height());
+//		int y = viewportToContents(QPoint(0, itemRect(item).y())).y();
+//		kdDebug() << "KexiPropertyEditor::slotClicked() y: " << y << endl;
+//		QRect g(columnWidth(0), y, columnWidth(1), item->height());
 		KexiPropertyEditorItem *i = static_cast<KexiPropertyEditorItem *>(item);
-		createEditor(i, g);
+		createEditor(i);//, g);
 	}
 }
 
 void
-KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometry)
+KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geometry)
 {
 	kdDebug() << "KexiPropertyEditor::createEditor: Create editor for type " << i->type() << endl;
+	int y = viewportToContents(QPoint(0, itemRect(i).y())).y();
+	QRect geometry(columnWidth(0), y, columnWidth(1), i->height());
+
 	if(m_currentEditor)
 	{
 		slotEditorAccept(m_currentEditor);
@@ -168,19 +171,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 
 	connect(editor, SIGNAL(changed(KexiPropertySubEditor *)), this,
 		SLOT(slotValueChanged(KexiPropertySubEditor *)));
-	if(!i->property()->changed())
-	{
-		editor->setGeometry(geometry);
-		editor->resize(geometry.width(), geometry.height());
-	}
-	else
-	{
-		m_defaults->resize(geometry.height(), geometry.height());
-		QPoint p = contentsToViewport(QPoint(0, geometry.y()));
-		m_defaults->move(geometry.x() + geometry.width() - m_defaults->width(), p.y());
-		editor->resize(geometry.width()-m_defaults->width(), geometry.height());
-		m_defaults->show();
-	}
+
 	editor->show();
 	addChild(editor);
 	moveChild(editor, geometry.x(), geometry.y());
@@ -189,6 +180,27 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 
 	m_currentEditor = editor;
 	m_editItem = i;
+	showDefaultsButton( i->property()->changed() );
+}
+
+void
+KexiPropertyEditor::showDefaultsButton( bool show )
+{
+	int y = viewportToContents(QPoint(0, itemRect(m_editItem).y())).y();
+	QRect geometry(columnWidth(0), y, columnWidth(1), m_editItem->height());
+
+	if (!show) {
+		m_currentEditor->setGeometry(geometry);
+		m_currentEditor->resize(geometry.width(), geometry.height());
+		m_defaults->hide();
+		return;
+	}
+
+	m_defaults->resize(geometry.height(), geometry.height());
+	QPoint p = contentsToViewport(QPoint(0, geometry.y()));
+	m_defaults->move(geometry.x() + geometry.width() - m_defaults->width(), p.y());
+	m_currentEditor->resize(geometry.width()-m_defaults->width(), geometry.height());
+	m_defaults->show();
 }
 
 void
@@ -227,6 +239,7 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 			}
 		}
 		m_editItem->updateValue();
+		showDefaultsButton( m_editItem->property()->changed() );
 		emit valueChanged(m_editItem->name(), value);
 	}
 }
@@ -388,6 +401,7 @@ KexiPropertyEditor::resetItem()
 		}
 
 		m_editItem->property()->setValue( m_editItem->property()->oldValue(), false );
+		showDefaultsButton( false );
 //js: not needed		else
 //js: not needed			m_editItem->setValue(m_editItem->property()->oldValue());
 	}
