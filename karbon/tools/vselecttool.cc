@@ -253,7 +253,7 @@ VSelectTool::updateStatusBar() const
 	{
 		KoRect rect = view()->part()->document().selection()->boundingBox();
 
-		QString selectMessage = QString( "Selection [(%1, %2), (%3, %4)] (%5)" ).arg( rect.x() ).arg( rect.y() ).arg( rect.right() ).arg( rect.bottom() ).arg( view()->part()->unitName() );
+		QString selectMessage = QString( "Selection [(%1, %2), (%3, %4)] (%5)" ).arg( KoUnit::ptToUnit( rect.x(), view()->part()->unit() ) ).arg( KoUnit::ptToUnit( rect.y(), view()->part()->unit() ) ).arg( KoUnit::ptToUnit( rect.right(), view()->part()->unit() ) ).arg( KoUnit::ptToUnit( rect.bottom(), view()->part()->unit() ) ).arg( view()->part()->unitName() );
 		view()->statusMessage()->setText( selectMessage );
 	}
 	else
