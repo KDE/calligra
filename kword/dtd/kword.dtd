@@ -558,19 +558,21 @@ don't put a </?xml...> at the end of the file!).
         bullet  The character code (in UTF-8) that is the custom bullet (for type=6)
         bulletfont
                 The font to use for the custom bullet can be found in (use "symbol" if in doubt)
-
+        customdef
+                Definition of a custom counter - not supported yet
 -->
 <!ELEMENT COUNTER
     EMPTY>
 <!ATTLIST COUNTER
     type CDATA #REQUIRED
     depth CDATA #REQUIRED
-    bullet CDATA #REQUIRED
-    start CDATA #REQUIRED
+    bullet CDATA #IMPLIED
+    start CDATA #IMPLIED
     numberingtype CDATA #REQUIRED
     lefttext CDATA #IMPLIED
     righttext CDATA #IMPLIED
-    bulletfont CDATA #REQUIRED>
+    bulletfont CDATA #IMPLIED
+    customdef CDATA #IMPLIED>
 
 <!-- 
         The space to be added between two consecutive lines in a given paragraph.
