@@ -131,6 +131,7 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
     grid->setColStretch( 1, 10 );
     m_cbKeepRatio->setChecked(true);
     enableButtonOK( false );
+    setFocus();
 }
 
 bool KWInsertPicDia::makeInline() const
