@@ -45,6 +45,7 @@
 #include <kprinter.h>
 #include <koDocumentInfo.h>
 #include <koOasisStyles.h>
+#include <koUnit.h>
 
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
@@ -6436,35 +6437,8 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle
             {
                 kdDebug()<<" properties style:row-height!!!!!!!!!!!!!!!!!!\n";
                 QString sHeight = property.attribute( "style:row-height" );
-                int p = sHeight.find( "cm" );
-                if ( p != -1 )
-                {
-                    sHeight = sHeight.left( p );
-
-                    kdDebug(30518) << "Parsing height (cm): " << sHeight << endl;
-
-                    bool ok = true;
-                    double d = sHeight.toDouble( &ok );
-                    if ( ok )
-                        height = d * 10; // we work with mm
-                }
-                else
-                {
-                    p = sHeight.find( "mm" );
-
-                    if ( p != -1 )
-                    {
-                        sHeight = sHeight.left( p );
-
-                        kdDebug(30518) << "Parsing height (mm): " << sHeight << endl;
-
-                        bool ok = true;
-                        double d = sHeight.toDouble( &ok );
-                        if ( ok )
-                            height = d;
-                    }
-                }
-
+                height = KoUnit::parseValue( property.attribute( "style:row-height" ) , -1 );
+                kdDebug()<<"sHeight :"<<sHeight<<" height :"<<height<<endl;
             }
         }
         rowNode = rowNode.nextSibling();
@@ -6493,9 +6467,10 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle
 #endif
     for ( int i = 0; i < number; ++i )
     {
+        kdDebug()<<" create non defaultrow format :"<<rowIndex<<endl;
         RowFormat * rowL = nonDefaultRowFormat( rowIndex );
         rowL->copy( *m_defaultFormat );
-
+        kdDebug()<<"height :"<<height<<endl;
         if ( height != -1 )
         {
             kdDebug() << "Setting row height to " << height << endl;
