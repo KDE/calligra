@@ -20,11 +20,9 @@ VFill::draw( QPainter& painter, const double zoomFactor, const VSegmentList& lis
 	m_pa.resize( 0 );
 	VSegment::traverse( list, *this );
 
-	painter.save();
 	painter.setPen( Qt::NoPen );
 	painter.setBrush( QColor( 210, 210, 210 ) );
-	painter.drawPolygon( m_pa );
-	painter.restore();
+	painter.drawPolygon( m_pa, true );
 }
 
 void

@@ -42,7 +42,7 @@ VCToolEllipse::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
-	
+
 	VCCmdEllipse* cmd =
 		new VCCmdEllipse( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 

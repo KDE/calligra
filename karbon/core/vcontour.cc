@@ -8,25 +8,49 @@
 #include "vcontour.h"
 
 VContour::VContour()
-	: VSegmentListTraverser()
+	: VSegmentListTraverser(), m_lineWidth( 3.0 ), m_lineCap( cap_butt ), m_lineJoin( join_miter )
+{
+}
+
+VContour::VContour( const double width, const VLineCap cap, const VLineJoin join )
+	: VSegmentListTraverser(), m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join )
 {
 }
 
 void
-VContour::draw( QPainter& painter, const double zoomFactor, const VSegmentList& list )
+VContour::draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,
+	bool pure )
 {
-	m_painter = &painter;
 	m_zoomFactor = zoomFactor;
 
-	m_painter->save();
+	m_pa.resize( 0 );
 	VSegment::traverse( list, *this );
-	m_painter->restore();
+
+	if( !pure )
+	{
+		QPen pen(
+			Qt::black,
+			qRound( zoomFactor * m_lineWidth ) );
+
+		if( m_lineCap == cap_butt )
+			pen.setCapStyle( Qt::FlatCap );
+		else if( m_lineCap == cap_round )
+			pen.setCapStyle( Qt::RoundCap );
+		else if( m_lineCap == cap_square )
+			pen.setCapStyle( Qt::SquareCap );
+
+		painter.setPen( pen );
+	}
+
+	painter.setBrush( Qt::NoBrush );
+	painter.drawPolyline( m_pa );
 }
 
 void
 VContour::begin( const KoPoint& p )
 {
-	m_painter->moveTo(
+	m_pa.resize( m_pa.size() + 1 );
+	m_pa.setPoint( m_pa.size() - 1,
 		qRound( m_zoomFactor * p.x() ),
 		qRound( m_zoomFactor * p.y() ) );
 
@@ -49,11 +73,11 @@ VContour::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 	pa.setPoint( 3,
 		qRound( m_zoomFactor * p3.x() ),
 		qRound( m_zoomFactor * p3.y() ) );
-	m_painter->drawPolyline( pa.cubicBezier() );
 
-	m_painter->moveTo(
-		qRound( m_zoomFactor * p3.x() ),
-		qRound( m_zoomFactor * p3.y() ) );
+	QPointArray pa2( pa.cubicBezier() );
+
+	m_pa.resize( m_pa.size() + pa2.size() );
+	m_pa.putPoints( m_pa.size() - pa2.size(), pa2.size(), pa2 );
 
 	setPreviousPoint( p3 );
 }
@@ -61,7 +85,8 @@ VContour::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 void
 VContour::lineTo( const KoPoint& p )
 {
-	m_painter->lineTo(
+	m_pa.resize( m_pa.size() + 1 );
+	m_pa.setPoint( m_pa.size() - 1,
 		qRound( m_zoomFactor * p.x() ),
 		qRound( m_zoomFactor * p.y() ) );
 

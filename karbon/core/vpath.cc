@@ -50,17 +50,26 @@ VPath::draw( QPainter& painter, const QRect& rect,
 
 	painter.save();
 
-	if( state() == edit )
-	{
-		painter.setPen( Qt::yellow );
-		painter.setRasterOp( Qt::XorROP );
-	}
-	else
+	// paint fill:
+	if( state() != edit )
 	{
 		m_fill.draw( painter, zoomFactor, m_segments );
 	}
 
-	m_contour.draw( painter, zoomFactor, m_segments );
+	// paint contour:
+	if( state() == edit )
+	{
+		painter.setPen( Qt::yellow );
+		painter.setRasterOp( Qt::XorROP );
+
+		// draw just a simplistic outline:
+		m_contour.draw( painter, zoomFactor, m_segments, true );
+	}
+	else
+	{
+		m_contour.draw( painter, zoomFactor, m_segments );
+	}
+
 
 // TODO: convert the following to Traversers:
 	VSegmentListIterator itr( m_segments );
