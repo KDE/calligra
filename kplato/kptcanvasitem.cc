@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "defs.h"
 #include "kptcanvasitem.h"
 #include "kptrelation.h"
 #include "kptpertcanvas.h"
@@ -93,7 +92,7 @@ void KPTPertNodeItem::move(KPTPertCanvas *view, int row, int col)
     QPtrListIterator<Relation> it(m_childRelations);
     for (; it.current(); ++it)
     {
-        view->mapChildNode(this, it.current()->childItem, it.current()->relation->timingRelation());
+        view->mapChildNode(this, it.current()->childItem, it.current()->relation->type());
     }
 
     // now move the item on the canvas
@@ -123,34 +122,34 @@ void KPTPertNodeItem::drawShape(QPainter &p)
 	//setPen(pen);
 }
 
-QPoint KPTPertNodeItem::exitPoint(TimingRelation type) const
+QPoint KPTPertNodeItem::exitPoint(KPTRelation::Type type) const
 {
     QPoint ret;
     switch(type)
 	{
-	    case FINISH_START:
-		case FINISH_FINISH:
+	    case KPTRelation::FinishStart:
+		case KPTRelation::FinishFinish:
 		    ret = m_right + QPoint(pen().width(), 0);
 			break;
-		case START_START:
+		case KPTRelation::StartStart:
 		    ret = m_left + QPoint(0, 4);
 			break;
 	}
 	return ret;
 }
 
-QPoint KPTPertNodeItem::entryPoint(TimingRelation type) const
+QPoint KPTPertNodeItem::entryPoint(KPTRelation::Type type) const
 {
     QPoint ret;
     switch(type)
 	{
-	    case FINISH_START:
+	    case KPTRelation::FinishStart:
 		    ret = m_left - QPoint(pen().width(), 0);
 			break;
-		case FINISH_FINISH:
+		case KPTRelation::FinishFinish:
 		    ret = m_right - QPoint(pen().width(), 4);
 			break;
-		case START_START:
+		case KPTRelation::StartStart:
 		    ret = m_left  - QPoint(pen().width(), 0);
 			break;
 	}
@@ -290,9 +289,9 @@ void KPTPertRelationItem::draw()
 {
     //kdDebug()<<k_funcinfo<<endl;
 	// Some "rules":
-	//  a) FINISH_START: child column > parent column
-	//  b) FINISH_FINISH: child column >= parent column
-	//  c) START_START: child column >= parent column
+	//  a) KPTRelation::FinishStart: child column > parent column
+	//  b) KPTRelation::FinishFinish: child column >= parent column
+	//  c) KPTRelation::StartStart: child column >= parent column
 	//  d) Child row can be >= parent row
 
 	wgap = m_view->verticalGap();
@@ -309,15 +308,15 @@ void KPTPertRelationItem::draw()
 	parentCol =  m_parentItem->column();
     //kdDebug()<<k_funcinfo<<"Parent="<<m_parentItem->node().name()<<" ("<<parentRow<<","<<parentCol<<") Child="<<m_childItem->node().name()<<" ("<<childRow<<","<<childCol<<")"<<endl;
 
-	switch (timingRelation())
+	switch (type())
 	{
-	    case FINISH_START:
+	    case KPTRelation::FinishStart:
 		    setFinishStartPoints();
 		    break;
-	    case FINISH_FINISH:
+	    case KPTRelation::FinishFinish:
 		    setFinishFinishPoints();
 		    break;
-	    case START_START:
+	    case KPTRelation::StartStart:
 		    setStartStartPoints();
 		    break;
 	}
@@ -348,8 +347,8 @@ void KPTPertRelationItem::draw()
 
 void KPTPertRelationItem::setFinishStartPoints()
 {
-	QPoint parentPoint = m_parentItem->exitPoint(FINISH_START);
-	QPoint childPoint = m_childItem->entryPoint(FINISH_START);
+	QPoint parentPoint = m_parentItem->exitPoint(KPTRelation::FinishStart);
+	QPoint childPoint = m_childItem->entryPoint(KPTRelation::FinishStart);
 
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
@@ -431,8 +430,8 @@ void KPTPertRelationItem::setFinishStartPoints()
 void KPTPertRelationItem::setFinishFinishPoints()
 {
     //kdDebug()<<k_funcinfo<<endl;
-	QPoint parentPoint = m_parentItem->exitPoint(FINISH_FINISH);
-	QPoint childPoint = m_childItem->entryPoint(FINISH_FINISH);
+	QPoint parentPoint = m_parentItem->exitPoint(KPTRelation::FinishFinish);
+	QPoint childPoint = m_childItem->entryPoint(KPTRelation::FinishFinish);
 
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
@@ -515,8 +514,8 @@ void KPTPertRelationItem::setFinishFinishPoints()
 void KPTPertRelationItem::setStartStartPoints()
 {
     //kdDebug()<<k_funcinfo<<endl;
-	QPoint parentPoint = m_parentItem->exitPoint(START_START);
-	QPoint childPoint = m_childItem->entryPoint(START_START);
+	QPoint parentPoint = m_parentItem->exitPoint(KPTRelation::StartStart);
+	QPoint childPoint = m_childItem->entryPoint(KPTRelation::StartStart);
 
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
@@ -657,13 +656,13 @@ void KPTPertRelationItem::printDebug( int /*info*/ )
 ////////////////////   KPTItemBase   //////////////////////////
 KDGanttViewTaskLink::LinkType KPTItemBase::kdLinkType(int relationType) {
     switch (relationType) {
-        case FINISH_START:
+        case KPTRelation::FinishStart:
             return KDGanttViewTaskLink::FinishStart;
             break;
-        case FINISH_FINISH:
+        case KPTRelation::FinishFinish:
             return KDGanttViewTaskLink::FinishFinish;
             break;
-        case START_START:
+        case KPTRelation::StartStart:
             return KDGanttViewTaskLink::StartStart;
             break;
         default:
@@ -705,7 +704,7 @@ void KPTGanttViewSummaryItem::insertRelations(KPTGanttView *view)
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->timingRelation()));
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
             //TODO i18n
             QString t = QString("From: %1").arg(this->listViewText(0));
             t += QString("\nTo: %1").arg(child->listViewText(0));
@@ -786,7 +785,7 @@ void KPTGanttViewTaskItem::insertRelations(KPTGanttView *view)
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->timingRelation()));
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
             //TODO i18n
             QString t = QString("From: %1").arg(this->listViewText(0));
             t += QString("\nTo: %1").arg(child->listViewText(0));
@@ -868,7 +867,7 @@ void KPTGanttViewEventItem::insertRelations(KPTGanttView *view)
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->timingRelation()));
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
             //TODO i18n
             QString t = QString("From: %1").arg(this->listViewText(0));
             t += QString("\nTo: %1").arg(child->listViewText(0));

@@ -64,8 +64,8 @@ public:
 	void setVisible(bool yes);
     void move(KPTPertCanvas *view, int row, int col);
 
-    QPoint exitPoint(TimingRelation type) const;
-	QPoint entryPoint(TimingRelation type) const;
+    QPoint exitPoint(KPTRelation::Type type) const;
+	QPoint entryPoint(KPTRelation::Type type) const;
 
 	KPTNode &node() const { return m_node; }
 
@@ -171,7 +171,7 @@ public:
     virtual int rtti() const;
     static int RTTI;
 
-    TimingRelation timingRelation() { return m_rel->timingRelation(); }
+    KPTRelation::Type type() { return m_rel->type(); }
     void draw();
 
 	void setFinishStartPoints();

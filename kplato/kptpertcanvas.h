@@ -58,7 +58,7 @@ public:
     void setColumn(int row, int col) { m_rows.at(row)[col] = true; }
 
     void mapNode(KPTPertNodeItem *item);
-    void mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *childItem, TimingRelation type);
+    void mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *childItem, KPTRelation::Type type);
     
     KPTNode *selectedNode();
 

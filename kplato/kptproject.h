@@ -25,7 +25,6 @@
 
 #include "kptduration.h"
 #include "kptresource.h"
-#include "defs.h"
 
 #include <qmap.h>
 #include <qptrlist.h>

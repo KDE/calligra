@@ -18,7 +18,6 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kptrelation.h"
-#include "defs.h"
 
 #include "kptnode.h"
 #include "kptproject.h"
@@ -32,27 +31,24 @@
 namespace KPlato
 {
 
-KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag) {
+KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, Type type, KPTDuration lag) {
     m_parent=parent;
     m_child=child;
-    m_timingType=tt;
-    m_timingRelation=tr;
+    m_type=type;
     m_lag=lag;
 }
 
-KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr) {
+KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, Type type) {
     m_parent=parent;
     m_child=child;
-    m_timingType=tt;
-    m_timingRelation=tr;
+    m_type=type;
     m_lag=KPTDuration();
 }
 
 KPTRelation::KPTRelation(KPTRelation *rel) {
     m_parent=rel->parent();
     m_child=rel->child();
-    m_timingType=rel->timingType();
-    m_timingRelation=rel->timingRelation();
+    m_type=rel->type();
     m_lag=rel->lag();
 }
 
@@ -64,11 +60,8 @@ KPTRelation::~KPTRelation() {
         m_child->takeDependParentNode(this);
 }
 
-void KPTRelation::setTimingType(TimingType tt) {
-    m_timingType=tt;
-}
-void KPTRelation::setTimingRelation(TimingRelation tr) {
-    m_timingRelation=tr;
+void KPTRelation::setType(Type type) {
+    m_type=type;
 }
 
 
@@ -85,16 +78,15 @@ bool KPTRelation::load(QDomElement &element, KPTProject &project) {
     if (!m_parent->legalToLink(m_child))
         return false;
         
-    //m_timingType = element.attribute("timingtype");
-    QString tr = element.attribute("timingrelation");
+    QString tr = element.attribute("type");
     if ( tr == "Finish-Start" )
-        m_timingRelation = FINISH_START;
+        m_type = FinishStart;
     else if ( tr == "Finish-Finish" )
-        m_timingRelation = FINISH_FINISH;
+        m_type = FinishFinish;
     else if ( tr == "Start-Start" )
-        m_timingRelation = START_START;
+        m_type = StartStart;
     else
-        m_timingRelation = FINISH_START;
+        m_type = FinishStart;
 
     m_lag = KPTDuration(); //m_lag.set( KPTDuration(QDateTime::fromString(element.attribute("lag"))) );
 
@@ -119,20 +111,19 @@ void KPTRelation::save(QDomElement &element) const {
 
     me.setAttribute("parent-id", m_parent->id());
     me.setAttribute("child-id", m_child->id());
-    //me.setAttribute("timingtype", m_timingType);
-    QString tr = "Finish-Start";
-    switch (m_timingRelation) {
-        case FINISH_START:
-            tr = "Finish-Start";
+    QString type = "Finish-Start";
+    switch (m_type) {
+        case FinishStart:
+            type = "Finish-Start";
             break;
-        case FINISH_FINISH:
-            tr = "Finish-Finish";
+        case FinishFinish:
+            type = "Finish-Finish";
             break;
-        case START_START:
-            tr = "Start-Start";
+        case StartStart:
+            type = "Start-Start";
             break;
     }
-    me.setAttribute("timingrelation", tr);
+    me.setAttribute("type", type);
     //me.setAttribute("lag", m_lag.toString());
 }
 
@@ -141,8 +132,7 @@ void KPTRelation::printDebug(QCString indent) {
     indent += "  ";
     kdDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
     kdDebug()<<indent<<"  Child: "<<m_child->name()<<endl;
-    kdDebug()<<indent<<"  Timing type: "<<m_timingType<<endl;
-    kdDebug()<<indent<<"  Relation type: "<<m_timingRelation<<endl;
+    kdDebug()<<indent<<"  Type: "<<m_type<<endl;
 }
 #endif
 

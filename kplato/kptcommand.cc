@@ -422,21 +422,21 @@ void KPTDeleteRelationCmd::unexecute() {
         m_part->setCommandType(1);
 }
 
-KPTModifyTimingRelationCmd::KPTModifyTimingRelationCmd(KPTPart *part, KPTRelation *rel, TimingRelation type, QString name)
+KPTModifyRelationTypeCmd::KPTModifyRelationTypeCmd(KPTPart *part, KPTRelation *rel, KPTRelation::Type type, QString name)
     : KNamedCommand(name),
       m_part(part),
       m_rel(rel),
       m_newtype(type) {
     
-    m_oldtype = rel->timingRelation();
+    m_oldtype = rel->type();
 }
-void KPTModifyTimingRelationCmd::execute() {
-    m_rel->setTimingRelation(m_newtype);
+void KPTModifyRelationTypeCmd::execute() {
+    m_rel->setType(m_newtype);
     if (m_part)
         m_part->setCommandType(1);
 }
-void KPTModifyTimingRelationCmd::unexecute() {
-    m_rel->setTimingRelation(m_oldtype);
+void KPTModifyRelationTypeCmd::unexecute() {
+    m_rel->setType(m_oldtype);
     if (m_part)
         m_part->setCommandType(1);
 }

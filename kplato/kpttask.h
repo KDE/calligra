@@ -24,7 +24,6 @@
 #include "kptduration.h"
 #include "kptnode.h"
 #include "kptresource.h"
-#include "defs.h"
 
 #include <qptrlist.h>
 

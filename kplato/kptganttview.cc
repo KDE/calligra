@@ -752,13 +752,13 @@ void KPTGanttView::slotLinkItems(KDGanttViewItem* from, KDGanttViewItem* to, int
 int KPTGanttView::linkTypeToRelation(int linkType) {
     switch (linkType) {
         case KDGanttViewTaskLink::FinishStart: 
-            return FINISH_START;
+            return KPTRelation::FinishStart;
             break;
         case KDGanttViewTaskLink::StartStart: 
-            return START_START;
+            return KPTRelation::StartStart;
             break;
         case KDGanttViewTaskLink::FinishFinish: 
-            return FINISH_FINISH;
+            return KPTRelation::FinishFinish;
             break;
         case KDGanttViewTaskLink::StartFinish:
         default: 

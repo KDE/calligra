@@ -27,7 +27,6 @@
 #include <qdom.h>
 #include <qstring.h>
 #include <qptrlist.h>
-#include "defs.h"
 
 class QTime;
 

@@ -22,7 +22,6 @@
 
 #include <kcommand.h>
 #include "kptnode.h"
-#include "defs.h"
 #include "kptduration.h"
 
 class QString;
@@ -265,18 +264,18 @@ private:
     bool m_taken;
 };
 
-class KPTModifyTimingRelationCmd : public KNamedCommand
+class KPTModifyRelationTypeCmd : public KNamedCommand
 {
 public:
-    KPTModifyTimingRelationCmd(KPTPart *part, KPTRelation *rel, TimingRelation type, QString name=0);
+    KPTModifyRelationTypeCmd(KPTPart *part, KPTRelation *rel, KPTRelation::Type type, QString name=0);
     void execute();
     void unexecute();
 
 private:
     KPTPart *m_part;
     KPTRelation *m_rel;
-    TimingRelation m_newtype;
-    TimingRelation m_oldtype;
+    KPTRelation::Type m_newtype;
+    KPTRelation::Type m_oldtype;
 };
 
 class KPTAddResourceRequestCmd : public KNamedCommand

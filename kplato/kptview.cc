@@ -614,11 +614,11 @@ void KPTView::slotAddRelation(KPTNode *par, KPTNode *child) {
 
 void KPTView::slotAddRelation(KPTNode *par, KPTNode *child, int linkType) {
     kdDebug()<<k_funcinfo<<endl;
-    if (linkType == FINISH_START ||
-        linkType == START_START ||
-        linkType == FINISH_FINISH) 
+    if (linkType == KPTRelation::FinishStart ||
+        linkType == KPTRelation::StartStart ||
+        linkType == KPTRelation::FinishFinish) 
     {
-        KPTRelation *rel = new KPTRelation(par, child, START_ON_DATE, static_cast<TimingRelation>(linkType));
+        KPTRelation *rel = new KPTRelation(par, child,  static_cast<KPTRelation::Type>(linkType));
         getPart()->addCommand(new KPTAddRelationCmd(getPart(), rel, i18n("Add Relation")));
     } else {
         slotAddRelation(par, child);
@@ -633,7 +633,7 @@ void KPTView::slotModifyRelation(KPTRelation *rel) {
         if (dia->relationIsDeleted()) {
             getPart()->addCommand(new KPTDeleteRelationCmd(getPart(), rel, i18n("Delete Relation")));
         } else {
-            KPTModifyTimingRelationCmd *cmd = dia->buildCommand(getPart(), rel);
+            KPTModifyRelationTypeCmd *cmd = dia->buildCommand(getPart(), rel);
             if (cmd) {
                 getPart()->addCommand(cmd);
             }
@@ -645,11 +645,11 @@ void KPTView::slotModifyRelation(KPTRelation *rel) {
 
 void KPTView::slotModifyRelation(KPTRelation *rel, int linkType) {
     kdDebug()<<k_funcinfo<<endl;
-    if (linkType == FINISH_START ||
-        linkType == START_START ||
-        linkType == FINISH_FINISH) 
+    if (linkType == KPTRelation::FinishStart ||
+        linkType == KPTRelation::StartStart ||
+        linkType == KPTRelation::FinishFinish) 
     {
-        getPart()->addCommand(new KPTModifyTimingRelationCmd(getPart(), rel, static_cast<TimingRelation>(linkType)));
+        getPart()->addCommand(new KPTModifyRelationTypeCmd(getPart(), rel, static_cast<KPTRelation::Type>(linkType)));
     } else {
         slotModifyRelation(rel);
     }

@@ -137,20 +137,20 @@ KPTDuration *KPTNode::getDelay() {
     return 0L;
 }
 
-void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p) {
-    addDependChildNode(node,t,p,KPTDuration());
+void KPTNode::addDependChildNode( KPTNode *node, KPTRelation::Type p) {
+    addDependChildNode(node,p,KPTDuration());
 }
 
-void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag) {
-    KPTRelation *relation = new KPTRelation(this, node, t, p, lag);
+void KPTNode::addDependChildNode( KPTNode *node, KPTRelation::Type p, KPTDuration lag) {
+    KPTRelation *relation = new KPTRelation(this, node, p, lag);
     if (node->addDependParentNode(relation))
         m_dependChildNodes.append(relation);
     else
         delete relation;
 }
 
-void KPTNode::insertDependChildNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
-    KPTRelation *relation = new KPTRelation(this, node, t, p, KPTDuration());
+void KPTNode::insertDependChildNode( unsigned int index, KPTNode *node, KPTRelation::Type p) {
+    KPTRelation *relation = new KPTRelation(this, node, p, KPTDuration());
     if (node->addDependParentNode(relation))
         m_dependChildNodes.insert(index, relation);
     else
@@ -196,20 +196,20 @@ void KPTNode::takeDependChildNode(KPTRelation *rel) {
     }
 }
 
-void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p) {
-    addDependParentNode(node,t,p,KPTDuration());
+void KPTNode::addDependParentNode( KPTNode *node, KPTRelation::Type p) {
+    addDependParentNode(node,p,KPTDuration());
 }
 
-void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag) {
-    KPTRelation *relation = new KPTRelation(node, this, t, p, lag);
+void KPTNode::addDependParentNode( KPTNode *node, KPTRelation::Type p, KPTDuration lag) {
+    KPTRelation *relation = new KPTRelation(node, this, p, lag);
     if (node->addDependChildNode(relation))
         m_dependParentNodes.append(relation);
     else
         delete relation;
 }
 
-void KPTNode::insertDependParentNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
-    KPTRelation *relation = new KPTRelation(this, node, t, p, KPTDuration());
+void KPTNode::insertDependParentNode( unsigned int index, KPTNode *node, KPTRelation::Type p) {
+    KPTRelation *relation = new KPTRelation(this, node, p, KPTDuration());
     if (node->addDependChildNode(relation))
         m_dependParentNodes.insert(index,relation);
     else

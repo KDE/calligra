@@ -20,7 +20,6 @@
 #include "kptrelationdialog.h"
 #include "kptrelation.h"
 #include "kptnode.h"
-#include "defs.h"
 #include "kptpart.h"
 #include "kptcommand.h"
 
@@ -72,7 +71,7 @@ void KPTAddRelationDialog::init()
     relationTypeLayout->addWidget(b, 1, 0);
     b = new QRadioButton(QString("Start-Start"), relationType);
     relationTypeLayout->addWidget(b, 2, 0);
-    relationType->setButton(m_relation->timingRelation());    
+    relationType->setButton(m_relation->type());    
 }
 
 
@@ -83,7 +82,7 @@ void KPTAddRelationDialog::slotOk()
         KMessageBox::sorry(this, i18n("You must select a relationship type"));
 	    return;
     }
-    m_relation->setTimingRelation((TimingRelation)relationType->id(r));
+    m_relation->setType((KPTRelation::Type)relationType->id(r));
     accept();
 }
 
@@ -112,7 +111,6 @@ void KPTModifyRelationDialog::init()
     l = new QLabel(s2,page);
     layout->addWidget(l, 1, 0);
 
-    //layout->addMultiCellWidget(relationType = new QButtonGroup(box), 0, 5, 0, 1);
     relationType = new QButtonGroup(0, Qt::Vertical, i18n("Relationship Type"),page);
     relationType->layout()->setSpacing(KDialog::spacingHint());
     relationType->layout()->setMargin(KDialog::marginHint());
@@ -126,7 +124,7 @@ void KPTModifyRelationDialog::init()
     relationTypeLayout->addWidget(b, 1, 0);
     b = new QRadioButton(QString("Start-Start"), relationType);
     relationTypeLayout->addWidget(b, 2, 0);
-    relationType->setButton(m_relation->timingRelation());    
+    relationType->setButton(m_relation->type());    
 }
 
 
@@ -137,7 +135,7 @@ void KPTModifyRelationDialog::slotOk()
         KMessageBox::sorry(this, i18n("You must select a relationship type"));
         return;
     }
-    m_relation->setTimingRelation((TimingRelation)relationType->id(r));
+    m_relation->setType((KPTRelation::Type)relationType->id(r));
     accept();
 }
 
@@ -148,12 +146,12 @@ void KPTModifyRelationDialog::slotUser1()
     accept();
 }
 
-KPTModifyTimingRelationCmd *KPTModifyRelationDialog::buildCommand(KPTPart *part, KPTRelation *rel) {
-    if (rel->timingRelation() == m_relation->timingRelation())
+KPTModifyRelationTypeCmd *KPTModifyRelationDialog::buildCommand(KPTPart *part, KPTRelation *rel) {
+    if (rel->type() == m_relation->type())
         return 0;
         
     kdDebug()<<k_funcinfo<<endl;
-    return new KPTModifyTimingRelationCmd(part, rel, m_relation->timingRelation(), i18n("Modify Timing Relation"));
+    return new KPTModifyRelationTypeCmd(part, rel, m_relation->type(), i18n("Modify Relation Type"));
 }
 
 }  //KPlato namespace

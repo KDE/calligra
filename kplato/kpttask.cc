@@ -375,11 +375,11 @@ KPTDateTime KPTTask::calculatePredeccessors(const QPtrList<KPTRelation> &list, i
             continue; // skip summarytasks
         }
         KPTDateTime t = it.current()->parent()->calculateForward(use);
-        switch (it.current()->timingRelation()) {
-            case START_START:
+        switch (it.current()->type()) {
+            case KPTRelation::StartStart:
                 t = it.current()->parent()->getEarliestStart() + it.current()->lag();
                 break;
-            case FINISH_FINISH:
+            case KPTRelation::FinishFinish:
                 // I can't finisg later than my predeccessor, so
                 // I can't start later than it's latestfinish - my duration
                 t -= duration(t + it.current()->lag(), use, true);
@@ -449,13 +449,13 @@ KPTDateTime KPTTask::calculateSuccessors(const QPtrList<KPTRelation> &list, int 
             continue; // skip summarytasks
         }
         KPTDateTime t = it.current()->child()->calculateBackward(use);
-        switch (it.current()->timingRelation()) {
-            case START_START:
+        switch (it.current()->type()) {
+            case KPTRelation::StartStart:
                 // I can't start before my successor, so
                 // I can't finish later than it's starttime + my duration
                 t += duration(t -  it.current()->lag(), use, false);
                 break;
-            case FINISH_FINISH:
+            case KPTRelation::FinishFinish:
                 t = it.current()->parent()->getLatestFinish() -  it.current()->lag();
                 break;
             default:
@@ -525,11 +525,11 @@ KPTDateTime KPTTask::schedulePredeccessors(const QPtrList<KPTRelation> &list, in
         // schedule the predecessors
         KPTDateTime earliest = it.current()->parent()->getEarliestStart();
         KPTDateTime t = it.current()->parent()->scheduleForward(earliest, use);
-        switch (it.current()->timingRelation()) {
-            case START_START:
+        switch (it.current()->type()) {
+            case KPTRelation::StartStart:
                 t = it.current()->parent()->startTime() + it.current()->lag();
                 break;
-            case FINISH_FINISH:
+            case KPTRelation::FinishFinish:
                 // I can't end before my predecessor, so
                 // I can't start before it's endtime - my duration
                 t -= duration(t + it.current()->lag(), use, true);
@@ -630,13 +630,13 @@ KPTDateTime KPTTask::scheduleSuccessors(const QPtrList<KPTRelation> &list, int u
         // get the successors starttime
         KPTDateTime latest = it.current()->child()->getLatestFinish();
         KPTDateTime t = it.current()->child()->scheduleBackward(latest, use);
-        switch (it.current()->timingRelation()) {
-            case START_START:
+        switch (it.current()->type()) {
+            case KPTRelation::StartStart:
                 // I can't start before my successor, so
                 // I can't finish later than it's starttime + my duration
                 t += duration(t - it.current()->lag(), use, false);
                 break;
-            case FINISH_FINISH:
+            case KPTRelation::FinishFinish:
                 t = it.current()->child()->endTime() - it.current()->lag();
                 break;
             default:
@@ -862,26 +862,26 @@ void KPTTask::addChildProxyRelations(QPtrList<KPTRelation> &list) {
 void KPTTask::addParentProxyRelation(KPTNode *node, const KPTRelation *rel) {
     if (node->type() != Type_Summarytask) {
         //kdDebug()<<"Add parent proxy from "<<node->name()<<" to (me) "<<m_name<<endl;
-        m_parentProxyRelations.append(new KPTProxyRelation(node, this, rel->timingType(), rel->timingRelation(), rel->lag()));
+        m_parentProxyRelations.append(new KPTProxyRelation(node, this, rel->type(), rel->lag()));
     }
 }
 
 void KPTTask::addChildProxyRelation(KPTNode *node, const KPTRelation *rel) {
     if (node->type() != Type_Summarytask) {
         //kdDebug()<<"Add child proxy from (me) "<<m_name<<" to "<<node->name()<<endl;
-        m_childProxyRelations.append(new KPTProxyRelation(this, node, rel->timingType(), rel->timingRelation(), rel->lag()));
+        m_childProxyRelations.append(new KPTProxyRelation(this, node, rel->type(), rel->lag()));
     }
 }
 
 bool KPTTask::isEndNode() const {
     QPtrListIterator<KPTRelation> it = m_dependChildNodes;
     for (; it.current(); ++it) {
-        if (it.current()->timingRelation() == FINISH_START)
+        if (it.current()->type() == KPTRelation::FinishStart)
             return false;
     }
     QPtrListIterator<KPTRelation> pit = m_childProxyRelations;
     for (; pit.current(); ++pit) {
-        if (pit.current()->timingRelation() == FINISH_START)
+        if (pit.current()->type() == KPTRelation::FinishStart)
             return false;
     }
     return true;
@@ -889,14 +889,14 @@ bool KPTTask::isEndNode() const {
 bool KPTTask::isStartNode() const {
     QPtrListIterator<KPTRelation> it = m_dependParentNodes;
     for (; it.current(); ++it) {
-        if (it.current()->timingRelation() == FINISH_START ||
-            it.current()->timingRelation() == START_START)
+        if (it.current()->type() == KPTRelation::FinishStart ||
+            it.current()->type() == KPTRelation::StartStart)
             return false;
     }
     QPtrListIterator<KPTRelation> pit = m_parentProxyRelations;
     for (; pit.current(); ++pit) {
-        if (pit.current()->timingRelation() == FINISH_START ||
-            pit.current()->timingRelation() == START_START)
+        if (pit.current()->type() == KPTRelation::FinishStart ||
+            pit.current()->type() == KPTRelation::StartStart)
             return false;
     }
     return true;

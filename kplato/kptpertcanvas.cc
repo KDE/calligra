@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "defs.h"
-
 #include "kptpertcanvas.h"
 #include "kptnode.h"
 #include "kptrelation.h"
@@ -179,7 +177,7 @@ void KPTPertCanvas::mapNode(KPTPertNodeItem *item)
     m_rows.at(item->row())->at(item->column()) = true;
 }
 
-void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *childItem, TimingRelation type)
+void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *childItem, KPTRelation::Type type)
 {
 	//kdDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" to child: "<<(childItem ? childItem->node().name() : "None")<<endl;
     if (!childItem)
@@ -194,8 +192,8 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
     bool chMapped = (chRow > -1 && chCol > -1);
 	//kdDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" at ("<<row<<","<<col<<"): Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
 
-    if (type == START_START ||
-        type == FINISH_FINISH)
+    if (type == KPTRelation::StartStart ||
+        type == KPTRelation::FinishFinish)
     {
         // node goes into row below parent, at least same col
         if (chMapped)
@@ -235,7 +233,7 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
             chCol = col;
         }
     }
-    else if (type == FINISH_START)
+    else if (type == KPTRelation::FinishStart)
     {
         // node goes into same row, next col if col free
         if (chMapped)
@@ -264,7 +262,7 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
     }
     else
     {
-        kdError()<<k_funcinfo<<"Unknow TimingRelation"<<endl;
+        kdError()<<k_funcinfo<<"Unknow relation type"<<endl;
         return;
     }
     childItem->move(this, chRow, chCol);

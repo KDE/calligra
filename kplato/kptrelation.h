@@ -22,7 +22,6 @@
 #define kptrelation_h
 
 #include "kptduration.h"
-#include "defs.h"
 
 #include <qstring.h>
 
@@ -41,13 +40,14 @@ class KPTPertCanvas;
   * If for example you have a project to build a house, the node that represents the 
   * adding of the roof is dependent on the node that represents the building of the walls.
   * The roof can't be put up if the walls are not there yet.
-  * We actually have a number of TimingRelations so this relation can be used in different manners.
+  * We actually have a number of relationtypes so this relation can be used in different manners.
   */
 class KPTRelation {
 public:
+    enum Type { FinishStart, FinishFinish, StartStart };
 
-    KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag);
-    KPTRelation(KPTNode *parent=0, KPTNode *child=0, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
+    KPTRelation(KPTNode *parent, KPTNode *child, Type type, KPTDuration lag);
+    KPTRelation(KPTNode *parent=0, KPTNode *child=0, Type type=FinishStart);
     KPTRelation(KPTRelation *rel);
     
     /** 
@@ -56,10 +56,8 @@ public:
     */
     virtual ~KPTRelation();
 
-    void setTimingType(TimingType );
-    TimingType timingType() const { return m_timingType; }
-    void setTimingRelation(TimingRelation );
-    TimingRelation timingRelation() const { return m_timingRelation; }
+    void setType(Type );
+    Type type() const { return m_type; }
 
     /** returns the lag.
     *  The lag of a relation is the time it takes between the parent starting/stopping
@@ -88,8 +86,7 @@ public:
 protected: // variables
     KPTNode *m_parent;
     KPTNode *m_child;
-    TimingType m_timingType;
-    TimingRelation m_timingRelation;
+    Type m_type;
     KPTDuration m_lag;
 
 private:
@@ -105,8 +102,8 @@ public:
 class KPTProxyRelation : public KPTRelation
 {
 public:
-    KPTProxyRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag) 
-    : KPTRelation(parent, child, tt, tr, lag) 
+    KPTProxyRelation(KPTNode *parent, KPTNode *child, KPTRelation::Type type, KPTDuration lag) 
+    : KPTRelation(parent, child, type, lag) 
     {}
 
     ~KPTProxyRelation() { m_parent = 0; m_child = 0;}

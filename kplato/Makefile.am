@@ -26,7 +26,7 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kptintervaleditbase.ui kptintervaledit.cc
 
 # (this is not used)
-noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
+noinst_HEADERS = kptaboutdata.h kptduration.h kptfactory.h \
     kptnode.h kptpart.h kptproject.h kptrelation.h \
     kptresource.h kpttask.h kptview.h \
     kptprojectdialog.h kptmainprojectdialog.h kpttaskdialog.h  \

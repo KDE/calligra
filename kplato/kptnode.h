@@ -21,7 +21,6 @@
 #ifndef kptnode_h
 #define kptnode_h
 
-#include "defs.h"
 #include "kptrelation.h"
 #include "kptduration.h"
 #include "kptdatetime.h"
@@ -118,17 +117,13 @@ public:
 
     int numDependChildNodes() const { return m_dependChildNodes.count(); }
     /// Adds relation to both this node and @node
-    virtual void addDependChildNode( KPTNode *node, TimingType t=START_ON_DATE,
-				     TimingRelation p=FINISH_START);
+    virtual void addDependChildNode( KPTNode *node, KPTRelation::Type p=KPTRelation::FinishStart);
     /// Adds relation to both this node and @node
-    virtual void addDependChildNode( KPTNode *node, TimingType t,
-				     TimingRelation p, KPTDuration lag);
+    virtual void addDependChildNode( KPTNode *node, KPTRelation::Type p, KPTDuration lag);
     /// Adds relation only to this node
     virtual bool addDependChildNode( KPTRelation *relation);
     /// Inserts relation to this node at index @index and appends relation to @node
-    virtual void insertDependChildNode( unsigned int index, KPTNode *node,
-					TimingType t=START_ON_DATE,
-					TimingRelation p=FINISH_START);
+    virtual void insertDependChildNode( unsigned int index, KPTNode *node, KPTRelation::Type p=KPTRelation::FinishStart);
     void delDependChildNode( KPTNode *node, bool remove=false);
     void delDependChildNode( KPTRelation *rel, bool remove=false);
     void delDependChildNode( int number, bool remove=false);
@@ -145,17 +140,13 @@ public:
     
     int numDependParentNodes() const { return m_dependParentNodes.count(); }
     /// Adds relation to both this node and @node
-    virtual void addDependParentNode(KPTNode *node, TimingType t=START_ON_DATE,
-				     TimingRelation p=FINISH_START);
+    virtual void addDependParentNode(KPTNode *node, KPTRelation::Type p=KPTRelation::FinishStart);
     /// Adds relation to both this node and @node
-    virtual void addDependParentNode( KPTNode *node, TimingType t,
-				      TimingRelation p, KPTDuration lag);
+    virtual void addDependParentNode( KPTNode *node, KPTRelation::Type p, KPTDuration lag);
     /// Adds relation only to this node
     virtual bool addDependParentNode( KPTRelation *relation);
     /// Inserts relation to this node at index @index and appends relation to @node
-    virtual void insertDependParentNode( unsigned int index, KPTNode *node,
-					 TimingType t=START_ON_DATE,
-					 TimingRelation p=FINISH_START);
+    virtual void insertDependParentNode( unsigned int index, KPTNode *node, KPTRelation::Type p=KPTRelation::FinishStart);
     void delDependParentNode( KPTNode *node, bool remove=false);
     void delDependParentNode( KPTRelation *rel, bool remove=false);
     void delDependParentNode( int number, bool remove=false);

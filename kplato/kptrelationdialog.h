@@ -31,7 +31,7 @@ namespace KPlato
 class KPTNode;
 class KPTRelation;
 class KPTPart;
-class KPTModifyTimingRelationCmd;
+class KPTModifyRelationTypeCmd;
 
 
 class KPTAddRelationDialog : public KDialogBase 
@@ -48,7 +48,6 @@ protected:
     
 private:
     QButtonGroup *relationType;
-//    QButtonGroup *timingType;
     KPTRelation *m_relation;
 };
 
@@ -59,7 +58,7 @@ class KPTModifyRelationDialog : public KDialogBase
 public:
     KPTModifyRelationDialog(KPTRelation *rel, QWidget *p=0, const char *n=0);
 
-    KPTModifyTimingRelationCmd *buildCommand(KPTPart *part, KPTRelation *rel);
+    KPTModifyRelationTypeCmd *buildCommand(KPTPart *part, KPTRelation *rel);
     bool relationIsDeleted() { return m_deleted; }
     
 protected slots:
@@ -71,7 +70,6 @@ protected:
     
 private:
     QButtonGroup *relationType;
-//    QButtonGroup *timingType;
     KPTRelation *m_relation;
     bool m_deleted;
 };
