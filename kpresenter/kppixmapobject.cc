@@ -298,16 +298,15 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
 	// Draw pixmap
         if ( !drawContour ) {
-            QSize _pixSize =  QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
-            QPixmap _pixmap = image.generatePixmap( _pixSize );
+            QRect rect( (int)( _zoomHandler->zoomItX( ox ) + penw ),
+                        (int)( _zoomHandler->zoomItY( oy ) + penw ),
+                        (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
+                        (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+            QPixmap _pixmap = image.generatePixmap( rect.size() );
 
-	    QPixmap tmpPix = changePictureSettings( _pixmap );
+	    QPixmap tmpPix = changePictureSettings( _pixmap ); // hmm, what about caching that pixmap?
 
-            _painter->drawPixmap( QRect( (int)( _zoomHandler->zoomItX( ox ) + penw ),
-                                         (int)( _zoomHandler->zoomItY( oy ) + penw ),
-                                         (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                                         (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) ),
-                                  tmpPix );
+            _painter->drawPixmap( rect, tmpPix );
 	}
 
         // Draw border - TODO port to KoBorder::drawBorders() (after writing a simplified version of it, that takes the same border on each size)
@@ -352,15 +351,15 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
         // Draw pixmap
         if ( !drawContour ) {
-            QSize _pixSize =  QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
-            QPixmap _pixmap = image.generatePixmap( _pixSize );
+            QRect rect( (int)penw,
+                        (int)penw,
+                        (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
+                        (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+            QPixmap _pixmap = image.generatePixmap( rect.size() );
 
 	    QPixmap tmpPix = changePictureSettings( _pixmap );
 
-            _painter->drawPixmap( QRect( (int)penw, (int)penw,
-                                         (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                                         (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) ),
-                                  tmpPix );
+            _painter->drawPixmap( rect, tmpPix );
 	}
 
         _painter->setPen( pen2 );
