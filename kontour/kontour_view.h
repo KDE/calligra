@@ -52,7 +52,6 @@ class RectTool;
 class OvalTool;
 class ZoomTool;
 class QDockArea;
-class QDockWindow;
 class QButton;
 class QScrollBar;
 class LayerPanel;
@@ -62,6 +61,7 @@ class TransformPanel;
 class Command;
 class KoColor;
 class GStyle;
+
 class KontourView : public KoView
 {
 Q_OBJECT
@@ -183,10 +183,7 @@ private:
   /* Panels */
   LayerPanel      *mLayerPanel;
   PaintPanel      *mPaintPanel;
-  QDockWindow     *mLayerWin;
-  QDockWindow     *mPaintDock;
   OutlinePanel    *mOutlinePanel;
-  QDockWindow     *mOutlineDock;
   TransformPanel  *mTransformPanel;
 
   // Actions

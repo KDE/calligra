@@ -23,6 +23,7 @@
 
 #include "StylePanel.h"
 
+#include <qtabwidget.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
@@ -48,12 +49,14 @@
 #include "BrushCells.h"
 
 OutlinePanel::OutlinePanel(KontourView *aView, QWidget *parent, const char *name):
-QTabWidget(parent, name)
+QDockWindow(QDockWindow::InDock, parent, name)
 {
   mView = aView;
-  setTabShape(Triangular);
 
-  QWidget *mOutline = new QWidget(this);
+  mTab = new QTabWidget(this);
+  mTab->setTabShape(QTabWidget::Triangular);
+
+  QWidget *mOutline = new QWidget(mTab);
   QGridLayout *mOutlineLayout = new QGridLayout(mOutline, 4, 2);
 
   mStroked = new QCheckBox(i18n("stroked"), mOutline);
@@ -88,16 +91,15 @@ QTabWidget(parent, name)
   mOutlineLayout->addWidget(mOpacityText, 3, 0);
   mOutlineLayout->addWidget(mOpacityBox, 3, 1);
 
-  insertTab(mOutline, i18n("Stroking"));
+  mTab->insertTab(mOutline, i18n("Stroking"));
 
   /* Color tab */
-  mOutlinePanel = new KoColorChooser(this);
-  connect(mOutlinePanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changeOutlineColor(const KoColor &)));
-  connect(this, SIGNAL(colorChanged(const KoColor &)), mOutlinePanel, SLOT(slotChangeColor(const KoColor &)));
-  insertTab(mOutlinePanel, i18n("Color"));
+  mOutlinePanel = new KoColorChooser(mTab);
+  connect(mOutlinePanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(slotChangeColor(const KoColor &)));
+  mTab->insertTab(mOutlinePanel, i18n("Color"));
 
   /* Style tab */
-  QWidget *mOutlineStyle = new QWidget(this);
+  QWidget *mOutlineStyle = new QWidget(mTab);
   QGridLayout *mOutlineStyleLayout = new QGridLayout(mOutlineStyle, 4, 2);
 
   /* Outline width */
@@ -170,7 +172,10 @@ QTabWidget(parent, name)
   mOutlineStyleLayout->addWidget(mCapText, 3, 0);
   mOutlineStyleLayout->addWidget(mCapBox, 3, 1);
 
-  insertTab(mOutlineStyle, i18n("Style"));
+  mTab->insertTab(mOutlineStyle, i18n("Style"));
+
+  setWidget(mTab);
+  setCaption(i18n("Outline"));  
 }
 
 void OutlinePanel::slotUpdate()
@@ -245,6 +250,10 @@ void OutlinePanel::slotChangeOpacity(int o)
   slotUpdate();
 }
 
+void OutlinePanel::slotChangeColor(const KoColor &c)
+{
+}
+
 void OutlinePanel::slotChangeLineWidth(int l)
 {
   if(mView->activeDocument()->activePage()->selectionIsEmpty())
@@ -309,12 +318,14 @@ void OutlinePanel::slotCapPressed(int w)
 /*=============================================================*/
 
 PaintPanel::PaintPanel(KontourView *aView, QWidget *parent, const char *name):
-QTabWidget(parent, name)
+QDockWindow(QDockWindow::InDock, parent, name)
 {
   mView = aView;
-  setTabShape(Triangular);
 
-  QWidget *mPainting = new QWidget(this);
+  mTab = new QTabWidget(this);
+  mTab->setTabShape(QTabWidget::Triangular);
+
+  QWidget *mPainting = new QWidget(mTab);
   QGridLayout *mPaintingLayout = new QGridLayout(mPainting, 2, 2);
 
   QLabel *mPaintingText = new QLabel(i18n("Painting"), mPainting);
@@ -334,12 +345,12 @@ QTabWidget(parent, name)
   mPaintingLayout->addWidget(mOpacityText, 1, 0);
   mPaintingLayout->addWidget(mOpacityBox, 1, 1);
 
-  insertTab(mPainting, i18n("Painting"));
+  mTab->insertTab(mPainting, i18n("Painting"));
 
-  KoColorChooser *mPaintPanel = new KoColorChooser(this);
+  KoColorChooser *mPaintPanel = new KoColorChooser(mTab);
 //  connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changePaintColor(const KoColor &)));
 //  connect(this, SIGNAL(colorChanged(const KoColor &)), mPaintPanel, SLOT(slotChangeColor(const KoColor &)));
-  insertTab(mPaintPanel, i18n("Color"));
+  mTab->insertTab(mPaintPanel, i18n("Color"));
 
 /*  QGroupBox *pattern = new QGroupBox(1, Qt::Vertical, this);
   QBoxLayout *box2 = new QBoxLayout(pattern, QBoxLayout::Down);
@@ -348,6 +359,9 @@ QTabWidget(parent, name)
   box2->addWidget(brushCells);
   insertTab(pattern, i18n("Pattern"));*/
   connect(mPaintingBox, SIGNAL(activated(int)), this, SLOT(slotChangeFilled(int)));
+
+  setWidget(mTab);
+  setCaption(i18n("Painting"));
 }
 
 void PaintPanel::slotUpdate()

@@ -24,10 +24,10 @@
 #ifndef __StylePanel_h__
 #define __StylePanel_h__
 
-#include <qtabwidget.h>
-#include <qpen.h>
+#include <qdockwindow.h>
 
 class KontourView;
+class QTabWidget;
 class GStyle;
 class QComboBox;
 class KoColor;
@@ -36,7 +36,7 @@ class QCheckBox;
 class QSpinBox;
 class QButtonGroup;
 
-class OutlinePanel : public QTabWidget
+class OutlinePanel : public QDockWindow
 {
   Q_OBJECT
 public:
@@ -50,6 +50,7 @@ private slots:
   void slotChangeStartArrow(int w);
   void slotChangeEndArrow(int w);
   void slotChangeOpacity(int o);
+  void slotChangeColor(const KoColor &c);
   void slotChangeLineWidth(int l);
   void slotChangeLineStyle(int w);
   void slotJoinPressed(int w);
@@ -57,6 +58,8 @@ private slots:
 
 private:
   KontourView     *mView;
+
+  QTabWidget      *mTab;
   QCheckBox       *mStroked;
   QComboBox       *mStartArrowBox;
   QComboBox       *mEndArrowBox;
@@ -68,7 +71,7 @@ private:
   KoColorChooser  *mOutlinePanel;
 };
 
-class PaintPanel : public QTabWidget
+class PaintPanel : public QDockWindow
 {
   Q_OBJECT
 public:
@@ -82,6 +85,8 @@ private slots:
 
 private:
   KontourView     *mView;
+
+  QTabWidget      *mTab;
   QComboBox       *mPaintingBox;
   QSpinBox        *mOpacityBox;
   KoColorChooser  *mPaintPanel;

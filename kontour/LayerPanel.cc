@@ -159,22 +159,25 @@ void LayerView::slotDoubleClicked(QListViewItem *item)
   titem->select();
 }
 
+/* LayerPanel */
+
 LayerPanel::LayerPanel(GDocument *aGDoc, QWidget *parent, const char *name):
-QWidget(parent, name)
+QDockWindow(QDockWindow::InDock, parent, name)
 {
   mGDoc = aGDoc;
 
-  mLayerView = new LayerView(mGDoc, this);
-  mRaiseButton = new QPushButton(this);
+  QWidget *mLayerPanel = new QWidget(this);
+  mLayerView = new LayerView(mGDoc, mLayerPanel);
+  mRaiseButton = new QPushButton(mLayerPanel);
   mRaiseButton->setFixedSize(20, 20);
   mRaiseButton->setPixmap(SmallIcon("raiselayer", KontourFactory::global()));
-  mLowerButton = new QPushButton(this);
+  mLowerButton = new QPushButton(mLayerPanel);
   mLowerButton->setFixedSize(20, 20);
   mLowerButton->setPixmap(SmallIcon("lowerlayer", KontourFactory::global()));
-  mNewButton = new QPushButton(this);
+  mNewButton = new QPushButton(mLayerPanel);
   mNewButton->setFixedSize(20, 20);
   mNewButton->setPixmap(SmallIcon("newlayer", KontourFactory::global()));
-  mDeleteButton = new QPushButton(this);
+  mDeleteButton = new QPushButton(mLayerPanel);
   mDeleteButton->setFixedSize(20, 20);
   mDeleteButton->setPixmap(SmallIcon("deletelayer", KontourFactory::global()));
 
@@ -184,7 +187,7 @@ QWidget(parent, name)
   mButtonsLayout->addWidget(mNewButton);
   mButtonsLayout->addWidget(mDeleteButton);
 
-  mGrid = new QGridLayout(this);
+  mGrid = new QGridLayout(mLayerPanel);
   mGrid->addLayout(mButtonsLayout, 0, 0);
   mGrid->addMultiCellWidget(mLayerView, 1, 1, 0, 1);
 
@@ -194,6 +197,8 @@ QWidget(parent, name)
   connect(mNewButton, SIGNAL(clicked()), SLOT(newPressed()));
   connect(mDeleteButton, SIGNAL(clicked()), SLOT(deletePressed()));
 
+  setWidget(mLayerPanel);
+  setCaption(i18n("Layers"));
   stateOfButton();
 }
 

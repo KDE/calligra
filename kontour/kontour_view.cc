@@ -30,7 +30,6 @@
 #include <qlayout.h>
 #include <qsplitter.h>
 #include <qregexp.h>
-#include <qdockwindow.h>
 #include <qdockarea.h>
 
 #include <kaction.h>
@@ -111,12 +110,12 @@ KontourView::~KontourView()
   // Delete dockers when not in dock area
   if(mTransformPanel && !mTransformPanel->area())
     delete mTransformPanel;
-  if(mPaintDock && !mPaintDock->area())
-    delete mPaintDock;
-  if(mOutlineDock && !mOutlineDock->area())
-    delete mOutlineDock;
-  //if(mLayerPanel && !mLayerPanel->area())
-  //  delete mLayerPanel;
+  if(mPaintPanel && !mPaintPanel->area())
+    delete mPaintPanel;
+  if(mOutlinePanel && !mOutlinePanel->area())
+    delete mOutlinePanel;
+  if(mLayerPanel && !mLayerPanel->area())
+    delete mLayerPanel;
 }
 
 void KontourView::unit(MeasurementUnit u)
@@ -209,10 +208,6 @@ void KontourView::setupActions()
 
   m_distribute = new KAction( i18n("&Align/Distribute..."), 0, this, SLOT(slotDistribute()), actionCollection(), "distribute");
   m_convertToPath = new KAction(i18n("&Convert to Path"), 0, this, SLOT(slotConvertToPath()), actionCollection(), "convertToPath");
-
-  /* Effects menu */
-
-  new KAction(i18n("&Blend..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
 
   /* Settings menu */
 
@@ -339,38 +334,29 @@ void KontourView::setupCanvas()
 
 void KontourView::setupPanels()
 {
+  mLayerPanel = 0L;
+  mOutlinePanel = 0L;
+  mPaintPanel = 0L;
+  mTransformPanel = 0L;
+
+  if(!mDoc->isReadWrite())
+    return;
+
   /* Layer panel */
-  mLayerWin = new QDockWindow();
-  mLayerWin->setResizeEnabled(true);
-  mLayerPanel = new LayerPanel(activeDocument(), mLayerWin);
-  mLayerWin->setWidget(mLayerPanel);
+  mLayerPanel = new LayerPanel(activeDocument(), this);
   connect(activeDocument(), SIGNAL(updateLayerView()), mLayerPanel, SLOT(updatePanel()));
-  mRightDock->moveDockWindow(mLayerWin);
+  mRightDock->moveDockWindow(mLayerPanel);
 
   /* Outline properties panel */
-  mOutlineDock = new QDockWindow();
-  mOutlineDock->setResizeEnabled(true);
-  mOutlinePanel = new OutlinePanel(this, mOutlineDock);
+  mOutlinePanel = new OutlinePanel(this, this);
   mOutlinePanel->slotUpdate();
-  mOutlineDock->setWidget(mOutlinePanel);
-  mOutlineDock->setResizeEnabled(false);
-  mOutlineDock->setCaption(i18n("Outline"));
-  mRightDock->moveDockWindow(mOutlineDock);
+  mRightDock->moveDockWindow(mOutlinePanel);
 
   /* Paint properties panel */
-  mPaintDock = new QDockWindow();
-  mPaintDock->setResizeEnabled(true);
-  mPaintPanel = new PaintPanel(this, mPaintDock);
-/*  connect(mPaintPanel, SIGNAL(changeFilled(bool)), this, SLOT(changeFilled(bool)));
-  connect(mPaintPanel, SIGNAL(changePaintColor(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
-  connect(mPaintPanel, SIGNAL(changeBrushStyle(Qt::BrushStyle)), this, SLOT(changeBrushStyle(Qt::BrushStyle)));
-  connect(this, SIGNAL(changedStyle(const GStyle &)), mPaintPanel, SLOT(slotStyleChanged(const GStyle &)));*/
-  mPaintDock->setWidget(mPaintPanel);
-  mPaintDock->setResizeEnabled(false);
-  mPaintDock->setCaption(i18n("Painting"));
-  mRightDock->moveDockWindow(mPaintDock);
+  mPaintPanel = new PaintPanel(this, this);
+  mRightDock->moveDockWindow(mPaintPanel);
 
-  /* Transform properties panel */
+  /* Transform panel */
   mTransformPanel = new TransformPanel(this);
   mRightDock->moveDockWindow(mTransformPanel);
 }
@@ -443,12 +429,15 @@ void KontourView::readConfigAfter()
   s << config->readNumEntry("RightSide", 200);
   mSplitView->setSizes(s);
 
-  config->setGroup("Panels");
-  int w;
-  int h;
-  w = config->readNumEntry("LayerPanelWidth", 210);
-  h = config->readNumEntry("LayerPanelHeight", 140);
-  mLayerWin->resize(w, h);
+  if(mLayerPanel)
+  {
+    config->setGroup("Panels");
+    int w;
+    int h;
+    w = config->readNumEntry("LayerPanelWidth", 210);
+    h = config->readNumEntry("LayerPanelHeight", 140);
+    mLayerPanel->resize(w, h);
+  }
 }
 
 void KontourView::writeConfig()
@@ -487,8 +476,8 @@ void KontourView::writeConfig()
   config->writeEntry("RightSide", s[1]);
 
   config->setGroup("Panels");
-  config->writeEntry("LayerPanelWidth", mLayerWin->width());
-  config->writeEntry("LayerPanelHeight", mLayerWin->height());
+  config->writeEntry("LayerPanelWidth", mLayerPanel->width());
+  config->writeEntry("LayerPanelHeight", mLayerPanel->height());
 
 /* config->setGroup("Panels");
    config->writeEntry("Enabled",m_showLayers->isChecked());
@@ -780,15 +769,17 @@ void KontourView::slotShowHelplines(bool b)
 
 void KontourView::slotShowPaintPanel(bool b)
 {
-	if(!mPaintDock) return;
-	b ? mPaintDock->dock() : mPaintDock->undock();
+  if(!mPaintPanel)
+    return;
+  b ? mPaintPanel->dock() : mPaintPanel->undock();
 }
 
 void KontourView::slotShowOutlinePanel(bool b)
 {
-	if(!mOutlineDock) return;
-	b ? mOutlineDock->dock() : mOutlineDock->undock();
-	mOutlineDock->clearFocus();
+  if(!mOutlinePanel)
+    return;
+  b ? mOutlinePanel->dock() : mOutlinePanel->undock();
+  mOutlinePanel->clearFocus();
 }
 
 void KontourView::slotAlignToGrid(bool b)
@@ -868,29 +859,12 @@ void KontourView::slotConvertToPath()
 
 void KontourView::slotBlend()
 {
-/*    if ( m_pDoc->gdoc()->activePage()->selectionCount () == 2)
-    {
-        int steps = BlendDialog::getNumOfSteps ();
-        if (steps > 0)
-            cmdHistory.addCommand (new BlendCmd (m_pDoc->gdoc(), steps), true);
-    }
-    else
-        KMessageBox::information(this,
-                                 i18n("You have to select exactly two objects."),
-                                 i18n("Blending"), "blending");*/
 }
 
 void KontourView::slotOptions()
 {
   OptionsDialog dialog(this, activeDocument(), 0L, "Options");
   dialog.exec();
-
-/*   if (OptionDialog::setup(activeDocument())==QDialog::Accepted)
-   {
-      hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
-      vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
-      PStateManager::instance()->saveDefaultSettings();
-   }*/
 }
 
 /*

@@ -27,7 +27,7 @@
 #define __LayerPanel_h__
 
 #include <qlistview.h>
-#include <qwidget.h>
+#include <qdockwindow.h>
 
 class GDocument;
 class GPage;
@@ -93,7 +93,7 @@ private:
   GDocument *mGDoc;
 };
 
-class LayerPanel : public QWidget
+class LayerPanel : public QDockWindow
 {
   Q_OBJECT
 public:
