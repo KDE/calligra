@@ -169,7 +169,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bDontCheckUpperWord=false;
     m_bDontCheckTitleCase=false;
     m_bShowRuler=true;
-    //todo add zoom
+
     m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     newZoomAndResolution(false,false);
 
@@ -2401,18 +2401,6 @@ void KPresenterDoc::updateZoomRuler()
 
 void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
 {
-#if 0
-    if ( updateViews )
-    {
-        emit newContentsSize();
-        repaintAllViews( true );
-    }
-#endif
-#if 0
-    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
-        m_pageList.at(i)->background()->reload();
-    }
-#endif
     if ( updateViews )
     {
         QPtrListIterator<KoView> it( views() );
@@ -2459,15 +2447,14 @@ void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterV
 
 void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
 {
-#if 0
     QValueList<QString> followingStyles;
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
-        KWStyle *sty = new KWStyle( QString::null );
+        KoStyle *sty = new KoStyle( QString::null );
         // Load the paraglayout from the <STYLE> element
-        KoParagLayout lay = KoStyle::loadStyle( styleElem,syntaxVersion() );
+        KoParagLayout lay = KoStyle::loadStyle( styleElem );
         // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
         lay.style = sty;
         sty->paragLayout() = lay;
@@ -2483,12 +2470,13 @@ void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
         // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
         sty->setFollowingStyle( sty );
 
+#if 0 //FIXME
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
             sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont() );
         else
             kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
-
+#endif
         // Style created, now let's try to add it
 
         sty = addStyleTemplate( sty );
@@ -2506,10 +2494,9 @@ void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
 
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
-        KWStyle * style = findStyle(*it);
+        KoStyle * style = findStyle(*it);
         m_styleList.at(i++)->setFollowingStyle( style );
     }
-#endif
 }
 
 
@@ -2570,10 +2557,13 @@ void KPresenterDoc::updateAllStyleLists()
 
 void KPresenterDoc::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
 {
-    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it )
     {
-        m_pageList.at(i)->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+        it.current()->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
     }
+    //styckypage
+    m_stickyPage->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
 }
 
 void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )
