@@ -3687,7 +3687,7 @@ KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 }
 
 /*================================================================*/
-void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, bool /*zoomX*/, bool /*zoomY*/ )
+void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
     unsigned int i = 0;
     QListIterator<KPBackGround> bIt( _backgroundList );
