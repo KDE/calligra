@@ -3403,6 +3403,10 @@ public:
 ExcelReader::ExcelReader()
 {
   d = new ExcelReader::Private();
+  
+  d->workbook    = 0;
+  d->activeSheet = 0;
+  d->formulaCell = 0;
 }
 
 ExcelReader::~ExcelReader()
