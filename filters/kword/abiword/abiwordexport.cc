@@ -398,6 +398,7 @@ static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, K
     tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    NULL ) );
     tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,NULL ) );
     tagProcessingList.append ( TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessTextBackGroundColorTag,NULL ) );
+    tagProcessingList.append ( TagProcessing ( "LINK", NULL, NULL));
     //Now let's the sub tags fill in the AbiWord's "props" attribute
     ProcessSubtags (myNode, tagProcessingList, formatData->abiprops,exportFilter);
 

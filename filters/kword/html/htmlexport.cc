@@ -286,7 +286,8 @@ static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, K
     tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag,     (void*) formatData ) );
     tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    (void*) formatData ) );
     tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,(void*) formatData ) );
-
+    tagProcessingList.append ( TagProcessing ( "TEXTBACKGROUNDCOLOR", NULL, NULL));
+    tagProcessingList.append ( TagProcessing ( "LINK", NULL, NULL));
     QString strDummy;
 
     ProcessSubtags (myNode, tagProcessingList, strDummy, exportFilter);
@@ -321,6 +322,10 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "OFFSETS",     NULL,                     NULL            ) );
     tagProcessingList.append ( TagProcessing ( "LINESPACING", NULL,                     NULL            ) );
     tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",NULL,                     NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "LEFTBORDER",    NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "RIGHTBORDER",   NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "TOPBORDER",     NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "BOTTOMBORDER",  NULL, NULL ) );
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
