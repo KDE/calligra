@@ -278,10 +278,10 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 /*==================== handle mouse pressed ======================*/
 void Page::mousePressEvent( QMouseEvent *e )
 {
-  if(!view->koDocument()->isReadWrite())
-    return;
+    if(!view->koDocument()->isReadWrite())
+        return;
 
-  if ( e->state() & ControlButton )
+    if ( e->state() & ControlButton )
         keepRatio = true;
 
     KPObject *kpobject = 0;
@@ -298,53 +298,53 @@ void Page::mousePressEvent( QMouseEvent *e )
             mousePressed = true;
 
             switch ( toolEditMode ) {
-            case TEM_MOUSE: {
-                bool overObject = false;
-                bool deSelAll = true;
-                KPObject *kpobject = 0;
+                case TEM_MOUSE: {
+                    bool overObject = false;
+                    bool deSelAll = true;
+                    KPObject *kpobject = 0;
 
-                firstX = e->x();
-                firstY = e->y();
+                    firstX = e->x();
+                    firstY = e->y();
 
-                if ( (int)objectList()->count() - 1 >= 0 ) {
-                    for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- ) {
-                        kpobject = objectList()->at( i );
-                        QSize s = kpobject->getSize();
-                        QPoint pnt = kpobject->getOrig();
-                        if ( QRect( pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() ).
-                             contains( QPoint( e->x(), e->y() ) ) ) {
-                            overObject = true;
-                            if ( kpobject->isSelected() && modType == MT_MOVE ) deSelAll = false;
-                            if ( kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE ) {
-                                oldBoundingRect = kpobject->getBoundingRect( 0, 0 );
-                                resizeObjNum = i;
+                    if ( (int)objectList()->count() - 1 >= 0 ) {
+                        for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- ) {
+                            kpobject = objectList()->at( i );
+                            QSize s = kpobject->getSize();
+                            QPoint pnt = kpobject->getOrig();
+                            if ( QRect( pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() ).
+                                 contains( QPoint( e->x(), e->y() ) ) ) {
+                                overObject = true;
+                                if ( kpobject->isSelected() && modType == MT_MOVE ) deSelAll = false;
+                                if ( kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE ) {
+                                    oldBoundingRect = kpobject->getBoundingRect( 0, 0 );
+                                    resizeObjNum = i;
+                                }
+                                break;
                             }
-                            break;
                         }
                     }
-                }
 
-                if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
-                    deSelectAllObj();
-
-                if ( overObject ) {
-                    selectObj( kpobject );
-                    modType = MT_NONE;
-                } else {
-                    modType = MT_NONE;
-                    if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
+                    if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                         deSelectAllObj();
-                    drawRubber = true;
-                    rubber = QRect( e->x(), e->y(), 0, 0 );
-                }
 
-            } break;
-            default: {
-                deSelectAllObj();
-                mousePressed = true;
-                insRect = QRect( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
-                                 ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy(), 0, 0 );
-            } break;
+                    if ( overObject ) {
+                        selectObj( kpobject );
+                        modType = MT_NONE;
+                    } else {
+                        modType = MT_NONE;
+                        if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
+                            deSelectAllObj();
+                        drawRubber = true;
+                        rubber = QRect( e->x(), e->y(), 0, 0 );
+                    }
+
+                } break;
+                default: {
+                    deSelectAllObj();
+                    mousePressed = true;
+                    insRect = QRect( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                     ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy(), 0, 0 );
+                } break;
             }
         }
 
@@ -414,6 +414,10 @@ void Page::mousePressEvent( QMouseEvent *e )
                 mousePressed = false;
                 modType = MT_NONE;
             }
+        }
+        else if( e->button() == RightButton && toolEditMode != TEM_MOUSE ) {
+            //desactivate tools when you click on right button
+            setToolEditMode( TEM_MOUSE );
         }
     } else {
         oldMx = e->x();
