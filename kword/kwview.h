@@ -318,7 +318,7 @@ public slots:
     void configure();
     void configureCompletion();
 
-    void newPageLayout( KoPageLayout _layout );
+    void newPageLayout( const KoPageLayout &_layout );
     void newLeftIndent( double _leftIndent);
     void newFirstIndent( double _firstIndent);
     void newRightIndent( double _rightIndent);

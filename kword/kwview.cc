@@ -5103,7 +5103,7 @@ void KWView::tabListChanged( const KoTabulatorList & tabList )
         m_doc->addCommand(macroCmd);
 }
 
-void KWView::newPageLayout( KoPageLayout _layout )
+void KWView::newPageLayout( const KoPageLayout &_layout )
 {
     QString mode = m_gui->canvasWidget()->viewMode()->type();
     bool state = (mode!="ModeText");
@@ -7344,7 +7344,7 @@ KWGUI::KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *_view )
                           KoRuler::F_INDENTS | KoRuler::F_TABS, doc->getUnit(), tabChooser );
     r_horz->setReadWrite(doc->isReadWrite());
     r_vert = new KoRuler( left, canvas->viewport(), Qt::Vertical, layout, 0, doc->getUnit() );
-    connect( r_horz, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
+    connect( r_horz, SIGNAL( newPageLayout( const KoPageLayout & ) ), view, SLOT( newPageLayout( const KoPageLayout & ) ) );
     r_vert->setReadWrite(doc->isReadWrite());
 
     r_horz->setZoom( doc->zoomedResolutionX() );
@@ -7359,7 +7359,7 @@ KWGUI::KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *_view )
     connect( r_horz, SIGNAL( doubleClicked() ), view, SLOT( slotHRulerDoubleClicked() ) );
     connect( r_horz, SIGNAL( doubleClicked(double) ), view, SLOT( slotHRulerDoubleClicked(double) ) );
     connect( r_horz, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
-    connect( r_vert, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
+    connect( r_vert, SIGNAL( newPageLayout( const KoPageLayout & ) ), view, SLOT( newPageLayout( const KoPageLayout & ) ) );
     connect( r_vert, SIGNAL( doubleClicked() ), view, SLOT( formatPage() ) );
     connect( r_vert, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
 
