@@ -414,6 +414,10 @@ void Page::mousePressEvent(QMouseEvent *e)
     }
   else
     {
+      if (e->button() == LeftButton)
+	view->screenNext();
+      if (e->button() == MidButton)
+	  view->screenPrev();
     }
   mouseMoveEvent(e);
 }
