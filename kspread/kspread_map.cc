@@ -39,6 +39,8 @@ KSpreadMap::KSpreadMap( KSpreadDoc *_doc, const char* name )
   m_pDoc = _doc;
   m_dcop = 0;
   m_initialActiveTable = 0L;
+  m_initialMarkerColumn = 0;
+  m_initialMarkerRow = 0;
 
   m_lstTables.setAutoDelete( true );
 }
