@@ -1575,10 +1575,10 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
             if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->next())
             {
                 KWTableFrameSet* tableFrame=tableFrameSet();
-                if ( cell->m_col < tableFrame->getCols() - 1 )
-                    fs = tableFrame->getCell( cell->m_row, cell->m_col + 1 );
-                else if ( cell->m_row < tableFrame->getRows() - 1 )
-                    fs = tableFrame->getCell( cell->m_row + 1, 0 );
+                if ( cell->m_col+cell->m_cols < tableFrame->getCols()  )
+                    fs = tableFrame->getCell( cell->m_row+cell->m_rows-1, cell->m_col + cell->m_cols );
+                else if ( cell->m_row+cell->m_rows < tableFrame->getRows() )
+                    fs = tableFrame->getCell( cell->m_row + cell->m_rows, 0 );
                 else
                     fs = tableFrame->getCell( 0, 0 );
             }
