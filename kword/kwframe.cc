@@ -50,6 +50,7 @@
 #include <qpopupmenu.h>
 #include <qdrawutil.h>
 
+#include <assert.h>
 #include <float.h>
 
 //#define DEBUG_DRAW
