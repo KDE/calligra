@@ -465,7 +465,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             if ( m_drawPolyline && toolEditMode == INS_POLYLINE ) {
                 m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
                                            ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
-                m_pointArray.putPoints( m_indexPointArray, 1,m_view->zoomHandler()->zoomItX( m_dragStartPoint.x()), m_view->zoomHandler()->zoomItY(m_dragStartPoint.y()) );
+                m_pointArray.putPoints( m_indexPointArray, 1,m_view->zoomHandler()->unzoomItX( m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
                 ++m_indexPointArray;
                 return;
             }
@@ -485,7 +485,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     p.drawLine( oldStartPoint, m_dragStartPoint );  // erase old line
                     p.end();
 
-                    m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
+                    m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX( m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY( m_dragStartPoint.y()) );
                     ++m_indexPointArray;
                     m_drawLineWithCubicBezierCurve = false;
                 }
@@ -3804,8 +3804,8 @@ void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
 {
     KoRect rect = getDrawRect( _pointArray );
 
-    int ox = rect.x() + diffx();
-    int oy = rect.y() + diffy();
+    double ox = rect.x() + diffx();
+    double oy = rect.y() + diffy();
 
     unsigned int index = 0;
 
@@ -3957,8 +3957,7 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
 void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
 {
     KoPointArray points( _pointArray );
-    KoRect rect = points.boundingRect();
-    //KoRect rect=m_view->zoomHandler()->unzoomRect(rect1);
+    KoRect rect= points.boundingRect();
     double ox = rect.x() + diffx();
     double oy = rect.y() + diffy();
     unsigned int index = 0;
@@ -4881,7 +4880,6 @@ KoRect KPrCanvas::getDrawRect( const KoPointArray &_points )
     KoPoint topLeft = KoPoint( minX, minY );
     KoPoint bottomRight = KoPoint( maxX, maxY );
     KoRect rect = KoRect( topLeft, bottomRight );
-    //KoRect rect1=m_view->zoomHandler()->unzoomRect(rect);
     return rect;
 }
 
@@ -4953,8 +4951,8 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
         p.setBrush( Qt::NoBrush );
         p.setRasterOp( Qt::NotROP );
 
-        QPoint startPoint( m_pointArray.at( m_indexPointArray - 1 ).x(),
-                           m_pointArray.at( m_indexPointArray - 1 ).y() );
+        QPoint startPoint( m_view->zoomHandler()->zoomItX( m_pointArray.at( m_indexPointArray - 1 ).x()),
+                           m_view->zoomHandler()->zoomItY(m_pointArray.at( m_indexPointArray - 1 ).y() ));
 
         p.drawLine( startPoint, oldEndPoint );  // erase old line
 
