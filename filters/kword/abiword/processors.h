@@ -39,6 +39,9 @@
 // necessary error handling.
 
 
+#ifndef PROCESSORS_H
+#define PROCESSORS_H
+
 class TagProcessing
 {
     public:
@@ -91,3 +94,5 @@ void ProcessAttributes ( QDomNode                     myNode,
                          QValueList<AttrProcessing>  &attrProcessingList );
 
 void AllowNoAttributes ( QDomNode  myNode );
+
+#endif // PROCESSORS_H
