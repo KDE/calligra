@@ -35,7 +35,7 @@ K_EXPORT_COMPONENT_FACTORY( karbon_roundcornersplugin, VRoundCornersPluginFactor
 VRoundCornersPlugin::VRoundCornersPlugin( KarbonViewBase *parent, const char* name, const QStringList & ) : Plugin( parent, name )
 {
 	new KAction(
-		i18n( "&Round Corners..." ), 0, 0, this,
+		i18n( "&Round Corners..." ), "14_roundcorners", 0, this,
 		SLOT( slotRoundCorners() ), actionCollection(), "path_round_corners" );
 
 	m_roundCornersDlg = new VRoundCornersDlg();

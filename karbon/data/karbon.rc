@@ -50,8 +50,8 @@
 		<Action name="selection_group"/>
 		<Action name="selection_ungroup"/>
 	</Menu>
-	<Menu name="path">
-		<text>&amp;Path</text>
+	<Menu name="plugins">
+		<text>&amp;Plugins</text>
 	</Menu>
 	<Menu name="view">
 		<text>&amp;View</text>

@@ -1,8 +1,11 @@
 <!DOCTYPE kpartgui>
 <kpartplugin name="roundcornersplugin" library="karbon_roundcornersplugin">
 <MenuBar>
-	<Menu name="path">
+	<Menu name="plugins">
 		<Action name="path_round_corners"/>
 	</Menu>
 </MenuBar>
+<ToolBar name="Plugins" fullWidth="false">
+	<Action name="path_round_corners"/>
+</ToolBar>
 </kpartplugin>

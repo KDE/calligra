@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY( karbon_insertknotsplugin, InsertKnotsPluginFactory( 
 InsertKnotsPlugin::InsertKnotsPlugin( KarbonViewBase *parent, const char* name, const QStringList & ) : Plugin( parent, name )
 {
 	new KAction(
-		i18n( "&Insert Knots..." ), 0, 0, this,
+		i18n( "&Insert Knots..." ), "14_insertknots", 0, this,
 		SLOT( slotInsertKnots() ), actionCollection(), "path_insert_knots" );
 
 	m_insertKnotsDlg = new VInsertKnotsDlg();
