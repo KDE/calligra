@@ -395,14 +395,19 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     {
         element = doc.createElement( "LINESPACING" );
         parentElem.appendChild( element );
-        if ( layout.lineSpacingType == KoParagLayout::LS_ONEANDHALF )
+        if ( layout.lineSpacingType == KoParagLayout::LS_ONEANDHALF )  {
             element.setAttribute( "type", "oneandhalf" );
-        else if ( layout.lineSpacingType == KoParagLayout::LS_DOUBLE )
+            element.setAttribute( "value", "oneandhalf" ); //compatibility with koffice 1.2
+        }
+        else if ( layout.lineSpacingType == KoParagLayout::LS_DOUBLE ) {
             element.setAttribute( "type", "double" );
+            element.setAttribute( "value", "double" ); //compatibility with koffice 1.2
+        }
         else if ( layout.lineSpacingType == KoParagLayout::LS_CUSTOM )
         {
             element.setAttribute( "type", "custom" );
             element.setAttribute( "spacingvalue", layout.lineSpacing);
+            element.setAttribute( "value", layout.lineSpacing ); //compatibility with koffice 1.2
         }
         else if ( layout.lineSpacingType == KoParagLayout::LS_AT_LEAST )
         {
