@@ -93,7 +93,7 @@ int main( int argc, char **argv )
 
   KIOCache::initStatic();
   KRegistry * registry = new KRegistry;
-  registry->addFactory( new KMimeTypeFactory );
+  registry->addFactory( new KServiceTypeFactory );
   registry->load();
 
   int i = 1;
