@@ -21,7 +21,9 @@
 
 #include <koQueryTypes.h>
 #include <koApplication.h>
-
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <klocale.h>
 #include "kimage_doc.h"
 #include "kimage_shell.h"
 
@@ -30,10 +32,26 @@ extern "C"
   void* init_libkimage();
 }
 
+static const char* description=I18N_NOOP("KOffice Image Viewer");
+static const char* version="0.1";
+
+static const KCmdLineOptions options[]=
+{
+	{"+[file]", I18N_NOOP("File To Open"),0},
+	{0,0,0}
+};
+
 int main( int argc, char **argv )
 {
-  KoApplication app( argc, argv, "kimage" );
+  KoApplication app;
 
+  KAboutData aboutData( "kimage", I18N_NOOP("KImage"),
+    version, description, KAboutData::License_GPL,
+    "(c) 1998-2000, Michael Koch");
+  aboutData.addAuthor("Michael Koch",0, "koch@kde.org");
+  KCmdLineArgs::init( argc, argv, &aboutData );
+  KCmdLineArgs::addCmdLineOptions( options );
+  
   app.dcopClient()->attach();
   app.dcopClient()->registerAs( "kimage" );
 
