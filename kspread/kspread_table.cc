@@ -4428,7 +4428,11 @@ bool KSpreadTable::testListChoose(const QPoint &_marker)
    if(selection.left()==0)
      selection.setCoords(_marker.x(),_marker.y(),_marker.x(),_marker.y());
 
+   KSpreadCell *cell = cellAt( _marker.x(), _marker.y() );
+   QString tmp=cell->text();
+
    KSpreadCell* c = firstCell();
+   bool different=false;
    for( ;c  ; c = c->nextCell() )
      {
        int col = c->column();
@@ -4439,12 +4443,13 @@ bool KSpreadTable::testListChoose(const QPoint &_marker)
 	      && !c->isTime() &&!c->isDate()
 	      && c->content() != KSpreadCell::VisualFormula)
 	     {
-	       return true;
+                 if(c->text()!=tmp)
+                     different=true;
 	     }
 
 	 }
      }
-   return false;
+   return different;
 }
 
 

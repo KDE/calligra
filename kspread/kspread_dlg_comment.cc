@@ -27,6 +27,8 @@
 #include <qlayout.h>
 #include <kapp.h>
 #include <kbuttonbox.h>
+#include <qpushbutton.h>
+#include <qmultilineedit.h>
 
 KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( parent, name,TRUE )
@@ -59,6 +61,14 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
 
     connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+    connect(multiLine, SIGNAL(textChanged ()),this, SLOT(slotTextChanged()));
+
+    slotTextChanged();
+}
+
+void KSpreadComment::slotTextChanged()
+{
+    m_pOk->setEnabled( !multiLine->text().isEmpty());
 }
 
 void KSpreadComment::slotOk()

@@ -22,14 +22,12 @@
 #define __kspread_dlg_comment__
 
 #include <qdialog.h>
-#include <qpushbutton.h>
-#include <qmultilineedit.h>
-#include <qrect.h>
-
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
+class QPushButton;
+class QMultiLineEdit;
 
 class KSpreadComment : public QDialog
 {
@@ -40,7 +38,7 @@ public:
 public slots:
   void slotOk();
   void slotClose();
-
+  void slotTextChanged();
 protected:
 
   KSpreadView* m_pView;
