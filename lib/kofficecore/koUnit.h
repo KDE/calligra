@@ -23,6 +23,9 @@
 
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
+// 1 pt = 1/12 pi
+// 1 pt ^= 0.0077880997 cc
+// 1 cc = 12 dd
 // Note: I don't use division but multiplication with the inverse value
 // because it's faster ;p (Werner)
 #define POINT_TO_MM(px) ((px)*0.352777167)
@@ -36,7 +39,7 @@
 #define MM_TO_INCH(mm) ((mm)*0.039370147)
 #define INCH_TO_MM(inch) ((inch)*25.399956)
 #define POINT_TO_PI(px)((px)*0.083333333)
-#define POINT_TO_DD(px)((px)*0.93457196)
+#define POINT_TO_DD(px)((px)*0.006490083)
 #define POINT_TO_CC(px)((px)*0.077880997)
 #define PI_TO_POINT(pi)((pi)*12)
 #define DD_TO_POINT(dd)((dd)*154.08124)
