@@ -49,7 +49,7 @@ bool KWFormatContext::operator<( const KWFormatContext &fc )
 {
     if ( fc.parag == parag )
         return fc.textPos > textPos;
-    
+
     // Reggie: That's unefficient, but I have no better idea :-(
     KWParag *p = parag->getNext();
     while ( p )
@@ -58,7 +58,7 @@ bool KWFormatContext::operator<( const KWFormatContext &fc )
             return true;
         p = p->getNext();
     }
-    
+
     return false;
 }
 
@@ -67,7 +67,7 @@ bool KWFormatContext::operator>( const KWFormatContext &fc )
 {
     if ( fc.parag == parag )
         return fc.textPos < textPos;
-    
+
     // Reggie: That's unefficient, but I have no better idea :-(
     KWParag *p = parag->getPrev();
     while ( p )
@@ -76,7 +76,7 @@ bool KWFormatContext::operator>( const KWFormatContext &fc )
             return true;
         p = p->getPrev();
     }
-    
+
     return false;
 }
 
@@ -727,6 +727,7 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
     init( _p, false );
 
     bool found = false;
+    unsigned int pg = page;
     while ( makeNextLineLayout() )
     {
         if ( ptY <= my && ptY + getLineHeight() >= my &&
@@ -735,6 +736,8 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
             found = true;
             break;
         }
+        if ( page > pg )
+            break;
     }
 
     if ( !found ) ptY -= getLineHeight();

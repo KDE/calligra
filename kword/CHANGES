@@ -1307,3 +1307,11 @@ Reggie, 14.6.1999:
 Reggie, 15.6.1999:
 ------------------
 - Reimplemented autoscrolling when setting the cursor with the mouse
+
+Reggie, 17.6.1999:
+------------------
+- Cleanups
+- Fix in autoscrolling with the mouse (doesn't hang anymore)
+- Started reimplementing selecting text with the mouse
+  (don't try it yet, it's make lots of drawing errors :-)
+

@@ -212,9 +212,6 @@ void KWPage::init()
 /*================================================================*/
 void KWPage::vmmEdit( unsigned int mx, unsigned int my )
 {
-    QPainter _painter;
-//     _painter.begin( viewport() );
-
     int frameset = doc->getFrameSet( mx, my );
 
     // only if we are in the _same_ frameset as before!!
@@ -222,56 +219,9 @@ void KWPage::vmmEdit( unsigned int mx, unsigned int my )
     {
         if ( scrollTimer.isActive() )
             return;
-//         doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
 
-//         fc->setFrameSet( frameset + 1 );
-
-//         fc->cursorGotoPixelLine( mx, my );
-//         fc->cursorGotoPixelInLine( mx, my );
-
-//         _painter.end();
-
-//         if ( fc->getPTPos() != doc->getSelStart()->getPTPos() ||
-//              fc->getPTY() != doc->getSelStart()->getPTY() )
-//         {
-//             _painter.begin( viewport() );
-//             if ( doc->has_selection() )
-//                 doc->drawSelection( _painter, contentsX(), contentsY() );
-//             doc->setSelEnd( *fc );
-//             doc->setSelection( false );
-//             _painter.end();
-
-            if ( !scrollTimer.isActive() )
-            {
-                scrollTimer.start( 100, false );
-                doAutoScroll();
-            }
-
-//             doc->setSelection( true );
-//             _painter.begin( viewport() );
-//             doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
-// //             doc->drawSelection( _painter, contentsX(), contentsY() );
-//             _painter.end();
-
-//             if ( doc->getProcessingType() == KWordDocument::DTP )
-//                 setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
-
-//             gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
-
-//             if ( fc->getParag() )
-//             {
-//                 setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
-//                 setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
-//             }
-//         }
-//         else
-//         {
-//             if ( scrollTimer.isActive() )
-//                 scrollTimer.stop();
-//             _painter.begin( viewport() );
-//             doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
-//             _painter.end();
-//         }
+        scrollTimer.start( 100, false );
+        doAutoScroll();
     }
 }
 
@@ -756,10 +706,8 @@ bool KWPage::vmpEdit( unsigned int mx, unsigned int my )
             }
         }
 
-        doc->setSelStart( *fc );
-        doc->setSelEnd( *fc );
-        doc->setSelection( false );
-
+        startKeySelection();
+        
         if ( doc->getProcessingType() == KWordDocument::DTP )
         {
             int frame = doc->getFrameSet( frameset )->getFrame( mx, my );
@@ -1800,13 +1748,13 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
     drawBorders( painter, e->rect(), _erase && !_resizing );
 
     int cf = currFrameSet == -1 ? fc->getFrameSet() - 1 : currFrameSet;
-    
+
     KWFormatContext *paintfc = new KWFormatContext( doc, 1 );
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ )
     {
         if ( redrawOnlyCurrFrameset && (int)i != cf )
             continue;
-        
+
         switch ( doc->getFrameSet( i )->getFrameType() )
         {
         case FT_PICTURE:
@@ -2170,7 +2118,7 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
 bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet )
 {
     redrawOnlyCurrFrameset = true;
-    
+
     QString pln = fc->getParag()->getParagLayout()->getName();
     KWFormat _format( doc );
     _format = *( ( KWFormat* )fc );
@@ -2266,7 +2214,7 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
     }
 
     redrawOnlyCurrFrameset = false;
-    
+
     return false;
 }
 
@@ -4478,7 +4426,7 @@ void KWPage::repaintScreen( int currFS, bool erase )
     currFrameSet = -1;
     redrawOnlyCurrFrameset = false;
 }
-    
+
 /*================================================================*/
 void KWPage::contentsWillMove( int, int )
 {
@@ -4556,12 +4504,13 @@ void KWPage::doAutoScroll()
 
     if ( pos.y() < 0 || pos.y() > viewport()->height() )
         ensureVisible( contentsX(), my, 0, 5 );
-    
+
     int frameset = doc->getFrameSet( mx, my );
 
     if ( frameset != -1 && frameset == static_cast<int>( fc->getFrameSet() ) - 1 &&
          doc->getFrameSet( frameset )->getFrameType() == FT_TEXT )
     {
+        *oldFc = *fc;
         QPainter _painter;
         _painter.begin( viewport() );
         doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
@@ -4572,12 +4521,14 @@ void KWPage::doAutoScroll()
         fc->cursorGotoPixelLine( mx, my );
         fc->cursorGotoPixelInLine( mx, my );
 
-        //scrollToCursor( *fc );
+        continueSelection = true;
+        continueKeySelection();
+        continueSelection = false;
 
         _painter.begin( viewport() );
         doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
         _painter.end();
-
+       
         if ( doc->getProcessingType() == KWordDocument::DTP )
             setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
 
