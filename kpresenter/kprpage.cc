@@ -2947,10 +2947,10 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
     return objects;
 }
 
-bool KPrPage::oneObjectTextExist()
+bool KPrPage::oneObjectTextExist(bool forceAllTextObject)
 {
     QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst,true );
+    getAllObjectSelectedList(lst,forceAllTextObject );
     QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it )
     {
@@ -2961,6 +2961,12 @@ bool KPrPage::oneObjectTextExist()
     }
     return false;
 }
+
+bool KPrPage::oneObjectTextSelected()
+{
+    return oneObjectTextExist(false);
+}
+
 
 bool KPrPage::isOneObjectSelected()
 {

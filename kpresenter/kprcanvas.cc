@@ -73,6 +73,7 @@
 #include <kmessagebox.h>
 #include <math.h>
 #include <kprvariable.h>
+#include <kpgroupobject.h>
 
 /******************************************************************/
 /* class KPrCanvas - KPrCanvas                                    */
@@ -1039,6 +1040,16 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     KPClosedLineObject *tmpObj=dynamic_cast<KPClosedLineObject *>(kpobject);
                     if ( tmpObj )
                         m_view->openPopupMenuObject( "flip_popup", pnt );
+                } else if ( kpobject->getType() == OT_GROUP ) {
+                    KPGroupObject *obj=dynamic_cast<KPGroupObject *>(kpobject);
+                    if ( state )
+                        deSelectAllObj();
+                    selectObj( kpobject );
+                    if ( obj && oneObjectTextSelected())
+                        m_view->openPopupMenuObject( "textobject_popup", pnt );
+                    else
+                        m_view->openPopupMenuObject( "graphmenu_popup", pnt );
+
                 } else {
                     if ( state )
                         deSelectAllObj();
@@ -5732,6 +5743,12 @@ void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint 
     m_pointArray = points;
 }
 
+
+bool KPrCanvas::oneObjectTextSelected() const
+{
+    return m_activePage->oneObjectTextSelected() ||
+	stickyPage()->oneObjectTextSelected();
+}
 
 bool KPrCanvas::oneObjectTextExist() const
 {

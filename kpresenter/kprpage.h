@@ -230,7 +230,8 @@ public:
     void deSelectObj( KPObject *kpobject );
     QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage ) const;
 
-    bool oneObjectTextExist() ;
+    bool oneObjectTextExist(bool forceAllTextObject = true) ;
+    bool oneObjectTextSelected();
     bool isOneObjectSelected();
     bool haveASelectedPartObj();
     bool haveASelectedGroupObj();

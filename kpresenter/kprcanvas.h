@@ -155,7 +155,7 @@ public:
     void setActivePage( KPrPage* _active);
 
     bool oneObjectTextExist() const;
-
+    bool oneObjectTextSelected() const;
     bool isOneObjectSelected() const;
     /** Returns the list of selected text objects */
     QPtrList<KPTextObject> selectedTextObjs() const;
