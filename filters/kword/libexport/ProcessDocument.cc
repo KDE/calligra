@@ -236,45 +236,46 @@ void ProcessAnchorTag ( QDomNode       myNode,
 }
 
 
-struct LinkData
-{
-   QString name;
-   QString href;
-};
-
-
 static void ProcessLinkTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
-    LinkData *linkData = (LinkData *) tagData;
+    VariableData *variable = (VariableData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("linkName", "QString", (void *) &linkData->name) );
-    attrProcessingList.append ( AttrProcessing ("hrefName", "QString", (void *) &linkData->href) );
+    attrProcessingList.append ( AttrProcessing ("linkName", "QString", &variable->m_linkName) );
+    attrProcessingList.append ( AttrProcessing ("hrefName", "QString", &variable->m_hrefName) );
     ProcessAttributes (myNode, attrProcessingList);
-
-#if 0
-    kdDebug(30508) << "ProcessLinkTag: " << linkData->name << " references to " << linkData->href << endl;
-#endif
 }
 
-struct TypeData
-{
-    QString m_key;
-    QString m_text;
-    int m_type;
-};
 
 static void ProcessTypeTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
-    TypeData *typeData = (TypeData *) tagData;
+    VariableData *variable = (VariableData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("key",  "QString", &typeData->m_key ) );
-    attrProcessingList.append ( AttrProcessing ("text", "QString", &typeData->m_text) );
-    attrProcessingList.append ( AttrProcessing ("type", "int",     &typeData->m_type) );
+    attrProcessingList.append ( AttrProcessing ("key",  "QString", &variable->m_key ) );
+    attrProcessingList.append ( AttrProcessing ("text", "QString", &variable->m_text) );
+    attrProcessingList.append ( AttrProcessing ("type", "int",     &variable->m_type) );
     ProcessAttributes (myNode, attrProcessingList);
 }
 
+static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader* leader)
+{
+    VariableData *variable = (VariableData *) tagData;
+
+    QValueList<TagProcessing> tagProcessingList;
+    // "TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK"
+    tagProcessingList
+        << TagProcessing ( "TYPE",          ProcessTypeTag,         variable )
+        << TagProcessing ( "PGNUM",         NULL,                   NULL      )
+        << TagProcessing ( "DATE",          NULL,                   NULL      )
+        << TagProcessing ( "TIME",          NULL,                   NULL      )
+        << TagProcessing ( "CUSTOM",        NULL,                   NULL      )
+        << TagProcessing ( "SERIALLETTER",  NULL,                   NULL      )
+        << TagProcessing ( "FIELD",         NULL,                   NULL      )
+        << TagProcessing ( "LINK",          ProcessLinkTag,         variable )
+        ;
+    ProcessSubtags (myNode, tagProcessingList, leader);
+}
 
 static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessingList, FormatData& formatData)
 {
@@ -327,29 +328,11 @@ static void SubProcessFormatFourTag(QDomNode myNode,
         return;
     }
     FormatData formatData(4, formatPos, formatLen);
-    TypeData typeData;
-    LinkData linkData;
     QValueList<TagProcessing> tagProcessingList;
-    // "TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK"
-    tagProcessingList
-        << TagProcessing ( "TYPE",          ProcessTypeTag,         &typeData )
-        << TagProcessing ( "PGNUM",         NULL,                   NULL      )
-        << TagProcessing ( "DATE",          NULL,                   NULL      )
-        << TagProcessing ( "TIME",          NULL,                   NULL      )
-        << TagProcessing ( "CUSTOM",        NULL,                   NULL      )
-        << TagProcessing ( "SERIALLETTER",  NULL,                   NULL      )
-        << TagProcessing ( "FIELD",         NULL,                   NULL      )
-        << TagProcessing ( "LINK",          ProcessLinkTag,         &linkData )
-        ;
+    tagProcessingList.append(TagProcessing("VARIABLE",   ProcessVariableTag, &formatData.variable));
     // As variables can have a formating too, we have to process formating
     AppendTagProcessingFormatOne(tagProcessingList,formatData);
     ProcessSubtags (myNode, tagProcessingList, leader);
-
-    formatData.variable.m_key=typeData.m_key;
-    formatData.variable.m_text=typeData.m_text;
-    formatData.variable.m_type=typeData.m_type;
-    formatData.variable.m_linkName=linkData.name;
-    formatData.variable.m_hrefName=linkData.href;
 
     (*formatDataList) << formatData;
 }
