@@ -1581,6 +1581,12 @@ void KWCanvas::selectFrame( KWFrame * frame, bool select )
         frame->setSelected( select );
 }
 
+void KWCanvas::cutSelectedFrames()
+{
+    copySelectedFrames();
+    m_gui->getView()->editDeleteFrame();
+}
+
 void KWCanvas::copySelectedFrames()
 {
     QDomDocument domDoc( "SELECTION" );

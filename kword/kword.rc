@@ -30,9 +30,9 @@
   <Separator/>
   <Action name="view_header"/>
   <Action name="view_footer"/>
-  <Separator/>
+  <!--<Separator/>
   <Action name="view_footnotes"/>
-  <Action name="view_endnotes"/>
+  <Action name="view_endnotes"/>-->
   <Separator/>
   <Action name="view_zoom"/>
  </Menu>
@@ -40,7 +40,7 @@
   <!-- Inside the text -->
   <Action name="insert_specialchar"/>
   <Action name="insert_framebreak"/>
-  <Action name="insert_footendnote"/>
+  <!--<Action name="insert_footendnote"/>-->
   <Action name="insert_contents"/>
   <Action name="insert_variable"/> <!-- menu -->
   <Action name="insert_expression"/> <!-- menu -->
