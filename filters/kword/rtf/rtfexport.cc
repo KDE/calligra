@@ -35,6 +35,52 @@ QString bookMarkup;  // markup bor document info file
 
 /***************************************************************************/
 
+static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &paraFormatDataList)
+// Creates back the behaviour of KWord 0.8 (the data of <TEXT> is fully discribed by the FormatData array)
+// Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+{
+    QValueList<FormatData>::Iterator  paraFormatDataIt;
+    int lastPos=0; // last position
+
+    paraFormatDataIt = paraFormatDataList.begin ();
+    while (paraFormatDataIt != paraFormatDataList.end ())
+    {
+		int pos;
+		int len;
+		if (1==(*paraFormatDataIt).id)
+		{
+			pos=(*paraFormatDataIt).text.pos;
+			len=(*paraFormatDataIt).text.len;
+		}
+		else if (2==(*paraFormatDataIt).id)
+		{
+			pos=(*paraFormatDataIt).pictureAnchor.pos;
+			len=1; // TODO: verify that this value is right
+		}
+		else if (6==(*paraFormatDataIt).id)
+		{
+			pos=(*paraFormatDataIt).tableAnchor.pos;
+			len=1;
+		}
+        if (pos>lastPos)
+        {
+            //We must add a FormatData
+			TextFormatting format(lastPos,pos-lastPos,11,50,"times",false,false,0);
+            FormatData formatData(format);
+            paraFormatDataList.insert(paraFormatDataIt,formatData);
+        }
+        lastPos=pos+len;
+        paraFormatDataIt++; // To the next one, please!
+    }
+    // Add the last one if needed
+    if (paraText.length()>lastPos)
+    {
+		TextFormatting format(lastPos,paraText.length()-lastPos,11,50,"times",false,false,0);
+        FormatData formatData(format);
+        paraFormatDataList.append(formatData);
+    }
+}
+
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
@@ -48,9 +94,10 @@ void ProcessParagraphData ( QString                     &paraText,
     QValueList<AnchoredInsert> tmpAnchoredInsertList;
 #endif
 
-
     if ( paraText.length () > 0 )
     {
+		CreateMissingFormatData(paraText,paraFormatDataList);
+		
         QValueList<FormatData>::Iterator  paraFormatDataIt;
 
         for ( paraFormatDataIt = paraFormatDataList.begin ();
