@@ -8,3 +8,5 @@ things/bugs/issues that need to be fixed for 2.0 (1.0), IMHO
   as they are stored in the view, which gets destroyed when being deactivated
   (fix: store the data in the document; problem: how to identify views?)
 
+- make all KOffice components allocate a KAboutData instance
+  (and free it correctly upon destruction of the factory)
