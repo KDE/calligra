@@ -20,11 +20,11 @@
 #ifndef PQXXIMPORT_H
 #define PQXXIMPORT_H
 
-#include "keximigrate.h"
+#include <migration/keximigrate.h>
 
 //Kexi Includes
-#include "./kexidb/field.h"
-#include "./kexidb/connection.h"
+#include <kexidb/field.h>
+#include <kexidb/connection.h>
 
 #include <pqxx/pqxx>
 
