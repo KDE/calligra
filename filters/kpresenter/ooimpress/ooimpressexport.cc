@@ -36,11 +36,11 @@ K_EXPORT_COMPONENT_FACTORY( libooimpressexport, OoImpressExportFactory( "koffice
 OoImpressExport::OoImpressExport( KoFilter *, const char *, const QStringList & )
     : KoFilter()
     , m_currentPage( 0 )
+    , m_objectIndex( 0 )
     , m_pageHeight( 0 )
     , m_pictureIndex( 0 )
     , m_storeinp( 0L )
     , m_storeout( 0L )
-
 {
 }
 
@@ -510,6 +510,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
                 appendPolyline( doccontent, o, drawPage, true /*polygon*/ );
                 break;
             }
+            ++m_objectIndex;
         }
 
         body.appendChild( drawPage );
@@ -741,7 +742,7 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
             target.setAttribute("draw:transform",returnAngle );
     }
 
-
+    target.setAttribute( "draw:id",  QString::number( m_objectIndex ) );
     target.setAttribute( "svg:x", StyleFactory::toCM( orig.attribute( "x" ) ) );
     target.setAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCM( y ) ) );
     target.setAttribute( "svg:width", StyleFactory::toCM( size.attribute( "width" ) ) );
@@ -866,6 +867,7 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
     x2 += x1;
     y2 += y1;
 
+    target.setAttribute( "draw:id",  QString::number( m_objectIndex ) );
     target.setAttribute( "svg:x1", StyleFactory::toCM( orig.attribute( "x" ) ) );
     target.setAttribute( "svg:x2", QString( "%1cm" ).arg( KoUnit::toCM( x2 ) ) );
     if ( type == 3 ) // from left bottom to right top

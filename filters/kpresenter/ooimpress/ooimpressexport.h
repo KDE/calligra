@@ -63,6 +63,7 @@ private:
     QString pictureKey( QDomElement &element );
 
     int m_currentPage;
+    int m_objectIndex;
     float m_pageHeight;
     StyleFactory m_styleFactory;
     QString m_masterPageStyle;
