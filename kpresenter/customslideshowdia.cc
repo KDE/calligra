@@ -71,10 +71,10 @@ CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, co
   connect( list, SIGNAL(clicked ( QListBoxItem * )),this,SLOT(slotTextClicked(QListBoxItem * )));
 
   init();
-  m_pModify->setEnabled(false);
-  if(list->count()<=0)
-    m_pRemove->setEnabled(false);
+  updateButton();
+
   resize( 600, 250 );
+
   m_bChanged=false;
 }
 
@@ -86,15 +86,20 @@ void CustomSlideShowDia::init()
 
 void CustomSlideShowDia::updateButton()
 {
+    bool state = ( list->currentItem() >= 0 );
+    m_pRemove->setEnabled( state );
+    m_pModify->setEnabled( state );
+    m_pCopy->setEnabled( state );
 }
 
 void CustomSlideShowDia::slotTextClicked(QListBoxItem*)
 {
-    //todo update button
+    updateButton();
 }
 
 void CustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
 {
+    updateButton();
     slotModify();
 }
 
@@ -107,6 +112,8 @@ void CustomSlideShowDia::slotAdd()
     {
         //insert new element
         m_customListMap.insert( dlg->customSlideShowName(), dlg->customListSlideShow() );
+        list->insertItem( dlg->customSlideShowName() );
+        updateButton();
     }
     delete dlg;
 
@@ -118,6 +125,7 @@ void CustomSlideShowDia::slotRemove()
     {
         m_customListMap.remove( list->selectedItem()->text() );
         list->removeItem( list->currentItem() );
+        updateButton();
     }
 }
 
@@ -148,7 +156,33 @@ void CustomSlideShowDia::slotModify()
 
 void CustomSlideShowDia::slotCopy()
 {
-    //todo
+    QListBoxItem *item = list->selectedItem();
+    if ( item )
+    {
+        QString str( list->selectedItem()->text() );
+        str+=i18n( "(Copy %1)" );
+        for ( int i =1;; ++i )
+        {
+            if ( !uniqueName( i, str ) )
+            {
+                str = str.arg( i );
+                m_customListMap.insert( str, m_customListMap[item->text()] );
+                list->insertItem( str );
+                break;
+            }
+        }
+    }
+}
+
+bool CustomSlideShowDia::uniqueName( int val, const QString & name ) const
+{
+    QString str = name.arg( val );
+    for ( int i= 0; i < ( int )list->count(); ++i )
+    {
+        if ( list->text ( i ) == str )
+            return true;
+    }
+    return false;
 }
 
 
@@ -240,7 +274,7 @@ void DefineCustomSlideShow::updateButton()
 {
     int pos = listSlideShow->currentItem();
     m_moveUpSlide->setEnabled( pos>0 );
-    m_moveDownSlide->setEnabled( pos< ( listSlideShow->count()-1 ) );
+    m_moveDownSlide->setEnabled( pos< (( int ) listSlideShow->count()-1 ) );
     m_removeSlide->setEnabled( listSlideShow->count()>0 );
 }
 

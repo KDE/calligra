@@ -49,6 +49,7 @@ public slots:
 protected:
     void init();
     void updateButton();
+    bool uniqueName( int val, const QString & name ) const;
 
     QListBox * list;
     QPushButton* m_pRemove;
