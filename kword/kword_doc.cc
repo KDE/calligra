@@ -143,7 +143,7 @@ KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewM
     spellCheck = FALSE;
     contents = new KWContents( this );
     tmpShell = 0;
-    
+
     connect( this, SIGNAL( completed() ),
 	     this, SLOT( slotDocumentLoaded() ) );
 }
@@ -2410,6 +2410,9 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
 /*================================================================*/
 void KWordDocument::drawMarker( KWFormatContext &_fc, QPainter *_painter, int xOffset, int yOffset )
 {
+    if ( !isReadWrite() )
+      return;
+ 
     RasterOp rop = _painter->rasterOp();
 
     _painter->setRasterOp( NotROP );
@@ -3908,7 +3911,7 @@ void KWordDocument::slotUndoRedoChanged( QString undo, QString redo )
 void KWordDocument::slotDocumentLoaded()
 {
   updateAllViews( 0L, true );
-} 
+}
 
 /*================================================================*/
 void KWordDocument::updateTableHeaders( QList<KWGroupManager> &grpMgrs )

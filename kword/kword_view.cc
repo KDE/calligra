@@ -926,8 +926,13 @@ void KWordView::setParagBorders( KWParagLayout::Border _left, KWParagLayout::Bor
 
 void KWordView::updateReadWrite( bool readwrite )
 {
-#warning TODO 
-} 
+#warning TODO
+  QValueList<QAction*> actions = actionCollection()->actions();
+  QValueList<QAction*>::ConstIterator aIt = actions.begin();
+  QValueList<QAction*>::ConstIterator aEnd = actions.end();
+  for (; aIt != aEnd; ++aIt )
+    (*aIt)->setEnabled( readwrite );
+}
 
 /*===============================================================*/
 void KWordView::setTool( MouseMode _mouseMode )
