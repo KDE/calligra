@@ -43,11 +43,11 @@ public:
     bool abortFormatting;
 };
 
-KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, KoStyle* defaultStyle, int _tabStopWidth,
+KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, bool hyphen, KoStyle* defaultStyle, int _tabStopWidth,
                             QObject* parent, const char *name )
     : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
-    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor(),defaultLanguage ) );
+    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor(),defaultLanguage, hyphen ) );
     if ( _tabStopWidth != -1 )
         textdoc->setTabStops( _tabStopWidth );
     init();
@@ -1283,6 +1283,56 @@ KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabul
     return new KoTextCommand( this, /*cmd, */i18n("Change Tabulator") );
 }
 
+KCommand * KoTextObject::setHyphenCommand(  KoTextCursor * cursor, bool _hyph )
+{
+    if ( protectContent() )
+        return 0L;
+#if 0
+    KoTextDocument * textdoc = textDocument();
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
+         cursor->parag()->hyphen() == _hyph )
+        return 0L; // No change needed.
+
+    emit hideCursor();
+    storeParagUndoRedoInfo( cursor, selectionId );
+
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor ) {
+        cursor->parag()->setHyphen( _hyph );
+        setLastFormattedParag( cursor->parag() );
+    }
+    else
+    {
+        KoTextParag *start = textDocument()->selectionStart( selectionId );
+        KoTextParag *end = textDocument()->selectionEnd( selectionId );
+        setLastFormattedParag( start );
+        for ( ; start && start != end->next() ; start = start->next() )
+            start->setHyphen( _hyph );
+    }
+
+    formatMore( 2 );
+    emit repaintChanged( this );
+    undoRedoInfo.newParagLayout.shadowDistance=dist;
+    undoRedoInfo.newParagLayout.shadowColor=col;
+    undoRedoInfo.newParagLayout.shadowDirection=direction;
+    KoTextParagCommand *cmd = new KoTextParagCommand(
+        textdoc, undoRedoInfo.id, undoRedoInfo.eid,
+        undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
+        KoParagLayout::Shadow);
+    textdoc->addCommand( cmd );
+    undoRedoInfo.clear();
+    emit showCursor();
+    emit updateUI( true );
+    KMacroCommand *macro = new KMacroCommand(i18n("Change Hyphen"));
+    macro->addCommand( new KoTextCommand( this, /*cmd, */i18n("Change Hyphen") ));
+
+    KCommand *cmd2= setShadowTextCommand( true );
+    if ( cmd2 )
+        macro->addCommand( cmd2 );
+    return macro;
+#endif
+    return 0L;
+}
+
 KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId )
 {
     if ( protectContent() )
@@ -2341,6 +2391,14 @@ KCommand *KoTextFormatInterface::setAlignCommand(int align)
     format.alignment=align;
     return setParagLayoutFormatCommand(&format,KoParagLayout::Alignment);
 }
+
+KCommand *KoTextFormatInterface::setHyphenCommand( bool _b )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setHyphen( _b );
+    return setFormatCommand( &format, KoTextFormat::Hyphen );
+}
+
 
 KCommand *KoTextFormatInterface::setShadowTextCommand( bool _b )
 {

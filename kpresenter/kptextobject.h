@@ -119,7 +119,7 @@ public:
 			int to /* default length()-2 */ );
     KoParagLayout loadParagLayout( QDomElement & parentElem, KPresenterDoc *doc, bool useRefStyle);
 
-    static KoTextFormat loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont, const QString & defaultLanguage );
+    static KoTextFormat loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont, const QString & defaultLanguage, bool hyphen );
 
     void setEditingTextObj( bool _edit ) { editingTextObj = _edit; }
 

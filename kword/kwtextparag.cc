@@ -511,9 +511,11 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
 }
 
 //static
-KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * refFormat, const QFont & defaultFont, const QString & defaultLanguage )
+KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * refFormat, const QFont & defaultFont, const QString & defaultLanguage, bool hyphanation )
 {
     KoTextFormat format;
+    //todo fixme !!!!!!!!!!!!
+    format.setHyphen( hyphanation );
     QFont font;
     if ( refFormat )
     {
@@ -664,7 +666,7 @@ void KWTextParag::loadLayout( QDomElement & attributes )
         if ( !formatElem.isNull() )
         {
             // Load paragraph format
-            KoTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont(), doc->globalLanguage() );
+            KoTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont(), doc->globalLanguage(), doc->globalHyphen() );
             setFormat( document()->formatCollection()->format( &f ) );
         }
         else // No paragraph format
@@ -722,7 +724,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                 switch( id ) {
                 case 1: // Normal text
                 {
-                    KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage() );
+                    KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphen() );
                     //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
                     setFormat( index, len, document()->formatCollection()->format( &f ) );
                     break;
@@ -778,7 +780,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                         if ( var )
                         {
                             var->load( varElem );
-                            KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage() );
+                            KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphen() );
                             setCustomItem( index, var, document()->formatCollection()->format( &f ) );
 
                             var->recalc();

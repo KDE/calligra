@@ -103,6 +103,7 @@ public:
     KCommand * setMarginCommand( QStyleSheetItem::Margin m, double margin );
     KCommand * setTabListCommand( const KoTabulatorList & tabList );
     KCommand * setShadowCommand( double dist, short int direction, const QColor &col );
+    KCommand * setHyphenCommand( bool _h );
 
     void applyStyle( const KoStyle * style );
 

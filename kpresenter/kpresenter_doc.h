@@ -473,6 +473,9 @@ public:
     QString globalLanguage()const { return m_globalLanguage; }
     void setGlobalLanguage( const QString & _lang ){m_globalLanguage = _lang;}
 
+    bool globalHyphen() const { return m_bGlobalHyphen; }
+    void setGlobalHyphen ( bool _hyphen ) { m_bGlobalHyphen = _hyphen; }
+
     void addWordToDictionary( const QString & word);
 
     void loadImagesFromStore( KoStore *_store );
@@ -646,6 +649,7 @@ private:
     QString m_picturePath;
     bool  m_bInsertDirectCursor;
     QString m_globalLanguage;
+    bool m_bGlobalHyphen;
 };
 
 #endif

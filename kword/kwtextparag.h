@@ -56,7 +56,7 @@ public:
     bool hardFrameBreakAfter() const { return m_layout.pageBreaking & KoParagLayout::HardFrameBreakAfter; }
 
     /** Public for loading a style */
-    static KoTextFormat loadFormat( QDomElement &formatElem, KoTextFormat *refFormat, const QFont &defaultFont, const QString & defaultLanguage );
+    static KoTextFormat loadFormat( QDomElement &formatElem, KoTextFormat *refFormat, const QFont &defaultFont, const QString & defaultLanguage, bool hyphanation );
     /** Public for saving a style */
     static QDomElement saveFormat( QDomDocument &doc, KoTextFormat *curFormat, KoTextFormat *refFormat, int pos, int len );
 

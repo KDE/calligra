@@ -266,7 +266,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_bInsertDirectCursor=false;
     m_globalLanguage = KGlobal::locale()->language();
-
+    m_bGlobalHyphen = false;
     m_lastViewMode="ModeNormal";
     m_viewMode = 0;
 
@@ -463,6 +463,7 @@ void KWDocument::initConfig()
       m_pgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
       m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
       m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
+      m_bGlobalHyphen=config->readBoolEntry("hyphen", false);
   }
   else
       m_zoom = 100;
@@ -1573,7 +1574,7 @@ void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
 
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
-            sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont(), globalLanguage() );
+            sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont(), globalLanguage(), globalHyphen() );
         else
             kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 

@@ -607,12 +607,13 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     oldAutoSaveValue =  doc->defaultAutoSave()/60;
     m_oldBackupFile = true;
     m_oldLanguage = doc->globalLanguage();
+
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
         m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
         m_oldLanguage = config->readEntry( "language", m_oldLanguage );
-
+        m_oldHyphen = config->readBoolEntry( "hyphen", m_oldHyphen);
     }
 
     QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
@@ -659,6 +660,8 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     languageLayout->addWidget(languageTitle, 0, 0);
     languageLayout->addWidget(m_globalLanguage, 0, 1);
 
+    m_autoHyphen = new QCheckBox( i18n("Automatic hyphen"), gbDocumentDefaults);
+    m_autoHyphen->setChecked( m_oldHyphen );
 
     QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
     gbDocumentSettings->setMargin( 10 );
@@ -748,6 +751,10 @@ KCommand *ConfigureDefaultDocPage::apply()
     //doc->setGlobalLanguage( lang );
 
 
+    state = m_autoHyphen->isChecked();
+    config->writeEntry( "hyphen", state  );
+    m_oldHyphen = state;
+
     KMacroCommand *macro = 0L;
     int newStartingPage=m_variableNumberOffset->value();
     if(newStartingPage!=m_oldStartingPage)
@@ -780,7 +787,7 @@ void ConfigureDefaultDocPage::slotDefault()
     m_createBackupFile->setChecked( true );
     m_directInsertCursor->setChecked( false );
     m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(KGlobal::locale()->language()));
-
+   m_autoHyphen->setChecked( false );
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

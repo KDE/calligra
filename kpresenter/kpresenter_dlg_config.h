@@ -124,6 +124,8 @@ private:
     QCheckBox *m_createBackupFile;
     QCheckBox *m_directInsertCursor;
     QComboBox *m_globalLanguage;
+    QCheckBox *m_autoHyphen;
+    bool m_oldHyphen;
 };
 
 class ConfigureToolsPage : public QObject

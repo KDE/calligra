@@ -825,6 +825,9 @@ public:
     void setGlobalLanguage( const QString & _lang ){m_globalLanguage = _lang;}
     void addWordToDictionary( const QString & );
 
+    bool globalHyphen() const { return m_bGlobalHyphen; }
+    void setGlobalHyphen ( bool _hyphen ) { m_bGlobalHyphen = _hyphen; }
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -1025,6 +1028,7 @@ private:
     QString m_picturePath;
     QString m_globalLanguage;
     QStringList m_horizontalLinePath;
+    bool m_bGlobalHyphen;
 };
 
 

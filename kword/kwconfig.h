@@ -119,8 +119,10 @@ private:
     QCheckBox *m_cursorInProtectedArea;
     QCheckBox *m_createBackupFile;
     QCheckBox *m_directInsertCursor;
+    QCheckBox *m_autoHyphen;
     QComboBox *m_globalLanguage;
     QString m_oldLanguage;
+    bool m_oldHyphen;
 };
 
 class ConfigurePathPage : public QObject

@@ -112,6 +112,9 @@ public:
 
     KCommand *setShadowTextCommand( bool _b );
 
+    KCommand *setHyphenCommand( bool _b );
+
+
     KCommand *setFontAttributeCommand( KoTextFormat::AttributeStyle _att);
 
     KCommand *setRelativeTextSizeCommand( double _size );
@@ -166,7 +169,7 @@ public:
      * @param defaultStyle the style to use by default (initial pararaph, and when deleting a used style)
      * This constructor creates the contained KoTextDocument automatically.
      */
-    KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, KoStyle* defaultStyle,int _tabStopWidth = -1,
+    KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, bool hyphen, KoStyle* defaultStyle,int _tabStopWidth = -1,
                   QObject* parent = 0, const char *name = 0 );
 
     /** Alternative constructor.
@@ -278,6 +281,7 @@ public:
 
     KCommand * setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
     KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId = KoTextDocument::Standard );
+    KCommand * setHyphenCommand(  KoTextCursor * cursor, bool _hyph );
 
     KCommand* applyStyle( KoTextCursor * cursor, const KoStyle * style,
                      int selectionId = KoTextDocument::Standard,

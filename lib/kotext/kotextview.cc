@@ -950,6 +950,11 @@ KCommand * KoTextView::setShadowCommand( double dist, short int direction, const
     return textObject()->setShadowCommand( m_cursor,dist, direction, col);
 }
 
+KCommand * KoTextView::setHyphenCommand( bool _h )
+{
+    return textObject()->setHyphenCommand( m_cursor, _h );
+}
+
 KoTextDocument * KoTextView::textDocument() const
 {
     return textObject()->textDocument();

@@ -1445,10 +1445,10 @@ void BrushCmd::unexecute()
 /*================================================================*/
 PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                       bool _showPresentationDuration, QPen _pen,
-                      QValueList<bool> _selectedSlides, 
+                      QValueList<bool> _selectedSlides,
                       bool _oldManualSwitch, bool _oldInfiniteLoop,
                       bool _oldShowPresentationDuration, QPen _oldPen,
-                      QValueList<bool> _oldSelectedSlides, 
+                      QValueList<bool> _oldSelectedSlides,
                       KPresenterDoc *_doc )
     : KNamedCommand( _name )
 {
@@ -1472,12 +1472,12 @@ void PgConfCmd::execute()
     doc->setInfiniteLoop( infiniteLoop );
     doc->setPresentationDuration( showPresentationDuration );
     doc->setPresPen( pen );
-    
+
     QPtrList<KPrPage> pages = doc->pageList();
     unsigned count = selectedSlides.count();
     if( count > pages.count() ) count = pages.count();
     for( unsigned i = 0; i < selectedSlides.count(); i++ )
-      pages.at( i )->slideSelected( selectedSlides[ i ] );    
+      pages.at( i )->slideSelected( selectedSlides[ i ] );
 }
 
 /*================================================================*/
@@ -1487,12 +1487,12 @@ void PgConfCmd::unexecute()
     doc->setInfiniteLoop( oldInfiniteLoop );
     doc->setPresentationDuration( oldShowPresentationDuration );
     doc->setPresPen( oldPen );
-    
+
     QPtrList<KPrPage> pages = doc->pageList();
     unsigned count = oldSelectedSlides.count();
     if( count > pages.count() ) count = pages.count();
     for( unsigned i = 0; i < oldSelectedSlides.count(); i++ )
-      pages.at( i )->slideSelected( oldSelectedSlides[ i ] );    
+      pages.at( i )->slideSelected( oldSelectedSlides[ i ] );
 }
 
 /******************************************************************/
@@ -1500,12 +1500,12 @@ void PgConfCmd::unexecute()
 /******************************************************************/
 
 /*================================================================*/
-TransEffectCmd::TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _presSpeed, 
-                      bool _soundEffect, const QString& _soundFileName, 
-                      bool _autoAdvance, int _slideTime, 
-                      PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, 
-                      bool _oldSoundEffect, const QString& _oldSoundFileName, 
-                      bool _oldAutoAdvance, int _oldSlideTime, 
+TransEffectCmd::TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _presSpeed,
+                      bool _soundEffect, const QString& _soundFileName,
+                      bool _autoAdvance, int _slideTime,
+                      PageEffect _oldPageEffect, PresSpeed _oldPresSpeed,
+                      bool _oldSoundEffect, const QString& _oldSoundFileName,
+                      bool _oldAutoAdvance, int _oldSlideTime,
                       KPresenterDoc *_doc, KPrPage *_page )
     : KNamedCommand( _name )
 {
@@ -2077,10 +2077,11 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
         int i = 0;
         if ( item == 0 && m_idx > 0 )
             i = m_idx;
+        KPresenterDoc *doc = textdoc->textObject()->kPresenterDocument();
         while ( !n.isNull() ) {
             if ( n.tagName() == "TEXT" ) {
                 QString txt = n.firstChild().toText().data();
-                KoTextFormat fm = textdoc->textObject()->loadFormat( n, parag->paragraphFormat(), textdoc->textObject()->kPresenterDocument()->defaultFont(),textdoc->textObject()->kPresenterDocument()->globalLanguage() );
+                KoTextFormat fm = textdoc->textObject()->loadFormat( n, parag->paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphen() );
                 parag->setFormat( i, txt.length(), textdoc->formatCollection()->format( &fm ) );
                 i += txt.length();
             }

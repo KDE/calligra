@@ -4062,7 +4062,8 @@ void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollec
                f->offsetFromBaseLine() != of->offsetFromBaseLine() ||
                f->wordByWord() != of->wordByWord()  ||
                f->attributeFont() != of->attributeFont() ||
-               f->language() != of->language())) {
+               f->language() != of->language()) ||
+               f->hyphen() != of->hyphen()) {
 	    invalidate( 0 );
 	}
 	if ( flags == -1 || flags == KoTextFormat::Format || !fc ) {
@@ -5536,20 +5537,20 @@ KoTextFormatCollection::KoTextFormatCollection()
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
 #endif
-    defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language() ); //// kotext: need to use default QColor here
+    defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language(), false ); //// kotext: need to use default QColor here
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
     cachedFormat = 0;
 }
 
-KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage  )
+KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen  )
     : cKey( 307 ), sheet( 0 )
 {
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
 #endif
-    defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage );
+    defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage, hyphen );
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
@@ -5660,7 +5661,7 @@ KoTextFormat *KoTextFormatCollection::format( KoTextFormat *of, KoTextFormat *nf
     return cres;
 }
 
-KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, const QString & language )
+KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, const QString & language, bool hyphen )
 {
     if ( cachedFormat && cfont == f && ccol == c ) {
 #ifdef DEBUG_COLLECTION
@@ -5686,7 +5687,7 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, c
     if ( key == defFormat->key() )
 	return defFormat;
 
-    cachedFormat = createFormat( f, c,language );
+    cachedFormat = createFormat( f, c,language, hyphen );
     cachedFormat->collection = this;
     cKey.insert( cachedFormat->key(), cachedFormat );
     if ( cachedFormat->key() != key )

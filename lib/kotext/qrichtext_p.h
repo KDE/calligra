@@ -1494,17 +1494,17 @@ class Q_EXPORT KoTextFormatCollection
 
 public:
     KoTextFormatCollection();
-    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage ); //// kotext addition
+    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen ); //// kotext addition
     virtual ~KoTextFormatCollection();
 
     void setDefaultFormat( KoTextFormat *f );
     KoTextFormat *defaultFormat() const;
     virtual KoTextFormat *format( const KoTextFormat *f );
     virtual KoTextFormat *format( KoTextFormat *of, KoTextFormat *nf, int flags );
-    virtual KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language );
+    virtual KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language, bool hyphen );
     virtual void remove( KoTextFormat *f );
     virtual KoTextFormat *createFormat( const KoTextFormat &f ) { return new KoTextFormat( f ); }
-    virtual KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language ) { return new KoTextFormat( f, c, _language, this ); }
+    virtual KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language, bool hyphen) { return new KoTextFormat( f, c, _language, hyphen, this ); }
     void debug();
 
     //void setPainter( QPainter *p );

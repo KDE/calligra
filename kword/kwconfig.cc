@@ -734,11 +734,13 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     oldAutoSaveValue=KoDocument::defaultAutoSave() / 60;
     m_oldLanguage = doc->globalLanguage();
+    m_oldHyphen = doc->globalHyphen();
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
         oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
         m_oldLanguage = config->readEntry( "language", m_oldLanguage);
+        m_oldHyphen = config->readBoolEntry( "hyphen", m_oldHyphen);
     }
 
 
@@ -758,6 +760,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     languageLayout->addWidget(languageTitle, 0, 0);
     languageLayout->addWidget(m_globalLanguage, 0, 1);
+
+    m_autoHyphen = new QCheckBox( i18n("Automatic hyphen"), gbDocumentDefaults);
+    m_autoHyphen->setChecked( m_oldHyphen );
 
     QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
     gbDocumentSettings->setMargin( 10 );
@@ -855,6 +860,10 @@ KCommand *ConfigureDefaultDocPage::apply()
     // a default language and other textobject with other default language.
     //doc->setGlobalLanguage( lang );
 
+    state = m_autoHyphen->isChecked();
+    config->writeEntry( "hyphen", state  );
+    m_oldHyphen = state;
+
     KMacroCommand * macroCmd=0L;
     int newStartingPage=m_variableNumberOffset->value();
     if(newStartingPage!=m_oldStartingPage)
@@ -891,6 +900,7 @@ void ConfigureDefaultDocPage::slotDefault()
    m_createBackupFile->setChecked( true );
    m_directInsertCursor->setChecked( false );
    m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(KGlobal::locale()->language()));
+   m_autoHyphen->setChecked( false );
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

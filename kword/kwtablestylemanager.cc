@@ -50,7 +50,7 @@ KWTableStylePreview::KWTableStylePreview( const QString& title, const QString& t
 {
     m_zoomHandler = new KoZoomHandler;
     QFont font = KoGlobal::defaultFont();
-    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font, QColor(),KGlobal::locale()->language() ));
+    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font, QColor(),KGlobal::locale()->language(), false ));
     KoTextParag * parag = m_textdoc->firstParag();
     parag->insert( 0, text );
 }
