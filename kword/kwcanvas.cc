@@ -307,13 +307,13 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
         if ( fs && ( e->state() & ShiftButton ) && table ) { // is table and we hold shift
             table->selectUntil( x,y );
         }
-        else if ( !frame->isSelected() ) // clicked on a frame that wasn't selected
+        else if ( frame && !frame->isSelected() ) // clicked on a frame that wasn't selected
         {
             if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
                 selectAllFrames( FALSE );
             selectFrame( frame, TRUE );
         }
-        else  // clicked on a frame that was already selected
+        else if(frame)  // clicked on a frame that was already selected
         {
             if ( e->state() & ControlButton || e->state() & ShiftButton ) {
                 selectFrame( frame, FALSE );
