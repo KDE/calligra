@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/*
+   This file is part of the KDE project
    Copyright (C) 1998, 1999 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or

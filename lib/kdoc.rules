@@ -13,7 +13,7 @@ kofficecore_FILES = *.h
 kofficecore_LIBS = -lkparts -lkdecore -lqt
 
 kofficeui_FILES = *.h
-kofficeui_LIBS = -lqt
+kofficeui_LIBS = -lkofficecore -lkparts -lkdecore -lqt
 
 kscript_FILES = *.h
 kscript_LIBS = -lqt

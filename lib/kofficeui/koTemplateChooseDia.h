@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/*
+   This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -16,10 +17,6 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
-// Description: Template Choose Dialog (header)
-
-/******************************************************************/
 
 #ifndef koTemplateChooseDia_h
 #define koTemplateChooseDia_h
@@ -73,9 +70,9 @@ class QGridLayout;
 
 class KInstance;
 
-/******************************************************************/
-/* Class: KoTemplateChooseDia					  */
-/******************************************************************/
+/**
+ *  class KoTemplateChooseDia
+ */
 
 class KoTemplateChooseDia : public QDialog
 {
@@ -113,11 +110,15 @@ private:
     QList<Group> groupList;
     Group *grpPtr;
     QString template_type;
-    QString templateName, fullTemplateName;
+    QString templateName;
+    QString fullTemplateName;
     bool onlyTemplates;
-    QRadioButton *rbTemplates, *rbFile, *rbEmpty;
+    QRadioButton *rbTemplates;
+    QRadioButton *rbFile;
+    QRadioButton *rbEmpty;
     QLabel *lFile;
-    QPushButton *bFile, *ok;
+    QPushButton *bFile;
+    QPushButton *ok;
     QTabWidget *tabs;
     ReturnType returnType;
     QGridLayout *grid;
@@ -143,4 +144,3 @@ signals:
 };
 
 #endif
-

@@ -23,12 +23,14 @@
 #include <qstring.h>
 
 /**
- * This class manages all filters for a KOffice application.
- * This class follows the singleton pattern. You don't create objects of this
- * class directly, but rather use the static method @ref #self.
- * @author Kalle Dalheimer <kalle@kde.org>
- * @author Torben Weis <weis@kde.org>
- * @version $Id$
+ *  This class manages all filters for a KOffice application.
+ *
+ *  This class follows the singleton pattern. You don't create objects of this
+ *  class directly, but rather use the static method @ref #self.
+ *
+ *  @author Kalle Dalheimer <kalle@kde.org>
+ *  @author Torben Weis <weis@kde.org>
+ *  @version $Id$
  */
 class KoFilterManager
 {
@@ -88,7 +90,9 @@ protected:
 
 private:
     static KoFilterManager* s_pSelf;
-    QString tmpFile, exportFile, native_format;
+    QString tmpFile;
+    QString exportFile;
+    QString native_format;
     bool prepare;
 };
 #endif
