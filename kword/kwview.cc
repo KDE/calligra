@@ -5769,14 +5769,19 @@ void KWView::addBookmark()
     {
         KWCreateBookmarkDia dia( m_doc->listOfBookmarkName(), this, 0 );
         if ( dia.exec() ) {
-            //todo
+            QString bookName = dia.bookmarkName();
         }
     }
 }
 
 void KWView::selectBookmark()
 {
-    //todo
+
+    KWSelectBookmarkDia dia( m_doc->listOfBookmarkName(), this, 0 );
+    if ( dia.exec() ) {
+        QString bookName = dia.bookmarkSelected();
+    }
+
 }
 
 /******************************************************************/

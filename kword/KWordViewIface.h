@@ -96,6 +96,9 @@ k_dcop:
     void insertFile();
     void tableStylist();
 
+    void addBookmark();
+    void selectBookmark();
+
 private:
     KWView *view;
 

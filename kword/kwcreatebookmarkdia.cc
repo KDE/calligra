@@ -21,6 +21,7 @@
 
 #include <qvbox.h>
 #include <qlineedit.h>
+#include <qlistbox.h>
 #include <kmessagebox.h>
 #include "kwcreatebookmarkdia.h"
 
@@ -48,6 +49,8 @@ void KWCreateBookmarkDia::init()
     connect( m_bookmarkName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
     m_bookmarkName->setFocus();
     enableButtonOK( false );
+    resize( 300, 80);
+
 }
 
 void KWCreateBookmarkDia::slotOk()
@@ -68,6 +71,28 @@ QString KWCreateBookmarkDia::bookmarkName()const
 void KWCreateBookmarkDia::nameChanged( const QString &text)
 {
     enableButtonOK( !text.isEmpty() );
+}
+
+KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, QWidget *parent, const char *name )
+    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+{
+    setCaption( i18n("Select Bookmark") );
+    QVBox *page = makeVBoxMainWidget();
+    m_bookmarkList = new QListBox( page );
+    m_bookmarkList->insertStringList(_list);
+    connect(m_bookmarkList,  SIGNAL( selectionChanged ()), this, SLOT(slotSelectionChanged()));
+    setFocus();
+    enableButtonOK( false );
+    resize( 300, 200);
+}
+
+QString KWSelectBookmarkDia::bookmarkSelected()const
+{
+    return m_bookmarkList->currentText();
+}
+
+void KWSelectBookmarkDia::slotSelectionChanged()
+{
 }
 
 #include "kwcreatebookmarkdia.moc"

@@ -296,3 +296,14 @@ void KWordViewIface::tableStylist()
 {
     view->tableStylist();
 }
+
+void KWordViewIface::addBookmark()
+{
+    view->addBookmark();
+}
+
+void KWordViewIface::selectBookmark()
+{
+    view->selectBookmark();
+}
+

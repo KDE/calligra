@@ -23,6 +23,8 @@
 #include <kdialogbase.h>
 #include <qstringlist.h>
 class QLineEdit;
+class QListBox;
+
 class KWCreateBookmarkDia : public KDialogBase
 {
     Q_OBJECT
@@ -39,6 +41,18 @@ protected:
     void init();
     QStringList listBookMark;
     QLineEdit *m_bookmarkName;
+};
+
+class KWSelectBookmarkDia : public KDialogBase
+{
+    Q_OBJECT
+public:
+    KWSelectBookmarkDia( const QStringList & _list, QWidget *parent, const char *name );
+    QString bookmarkSelected()const;
+protected slots:
+    void slotSelectionChanged();
+private:
+    QListBox *m_bookmarkList;
 };
 
 #endif
