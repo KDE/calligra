@@ -117,7 +117,7 @@ QRect KWViewMode::rulerFrameRect( KWCanvas* canvas )
     }
     if ( frame )
     {
-        QRect r = m_doc->zoomRect( *frame );
+        QRect r = m_doc->zoomRect( frame->innerRect() );
         r = canvas->viewMode()->normalToView( r );
 
         // Calculate page corner (see pageCorner above)
