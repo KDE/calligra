@@ -27,7 +27,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	path->arcTo( 100.0, 300.0, 100.0, 200.0, 100.0 );
 	path->arcTo( 100.0, 100.0, 200.0, 100.0 ,100.0);
 	path->close();
-	path->scale( 2.0, 1.0 );
 	m_layers.last()->objects().append( path );
 
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -14,12 +14,27 @@
 // TODO: make sure that lastpoint==currenpoint doesnt get removed
 
 VSegment::VSegment( const double lp_x, const double lp_y )
-	: m_lastPoint( lp_x, lp_y )
+	: m_lastPoint( lp_x, lp_y ), m_isDirty( true )
 {
 }
 
-VSegment::~VSegment()
+const QPointArray&
+VSegment::getQPointArray( const VSegment& prevSeg,
+	const double& zoomFactor ) const
 {
+	if ( m_isDirty )
+	{
+// xxxxxx
+		m_isDirty = false;
+	}
+
+	return m_QPointArray;
+}
+
+void
+VSegment::transform( const VAffineMap& affmap )
+{
+	m_lastPoint = affmap.map( m_lastPoint );
 }
 
 // -----------------------------------
@@ -29,44 +44,60 @@ VLine::VLine( const double lp_x, const double lp_y )
 {
 }
 
-VLine::~VLine()
-{
-}
-
 // -----------------------------------
 
 VCurve::VCurve(
 		const double fcp_x, const double fcp_y,
 		const double lcp_x, const double lcp_y,
-		const double lp_x, const double lp_y,
-		const CtrlPointsConstraint cpc )
+		const double lp_x, const double lp_y )
 	: VSegment( lp_x, lp_y ),
 	  m_firstCtrlPoint( fcp_x, fcp_y ),
-	  m_lastCtrlPoint( lcp_x, lcp_y ),
-	  m_ctrlPointConstraint( cpc )
+	  m_lastCtrlPoint( lcp_x, lcp_y )
 {
 }
 
-VCurve::~VCurve()
+void
+VCurve::transform( const VAffineMap& affmap )
+{
+	m_firstCtrlPoint	= affmap.map( m_firstCtrlPoint );
+	m_lastCtrlPoint		= affmap.map( m_lastCtrlPoint );
+	m_lastPoint			= affmap.map( m_lastPoint );
+}
+
+// -----------------------------------
+
+
+VCurve1::VCurve1(
+		const double lcp_x, const double lcp_y,
+		const double lp_x, const double lp_y )
+	: VSegment( lp_x, lp_y ),
+	  m_lastCtrlPoint( lcp_x, lcp_y )
 {
 }
 
-const VPoint*
-VCurve::firstCtrlPoint( const VSegment& prevSeg )
+void
+VCurve1::transform( const VAffineMap& affmap )
 {
-	if ( m_ctrlPointConstraint == firstFixed )
-		return prevSeg.lastPoint();
-	else
-		return &m_firstCtrlPoint;
+	m_lastCtrlPoint		= affmap.map( m_lastCtrlPoint );
+	m_lastPoint			= affmap.map( m_lastPoint );
 }
 
-const VPoint*
-VCurve::lastCtrlPoint( const VSegment& prevSeg )
+// -----------------------------------
+
+
+VCurve2::VCurve2(
+		const double fcp_x, const double fcp_y,
+		const double lp_x, const double lp_y )
+	: VSegment( lp_x, lp_y ),
+	  m_firstCtrlPoint( fcp_x, fcp_y )
 {
-	if ( m_ctrlPointConstraint == lastFixed )
-		return &m_lastPoint;
-	else
-		return &m_lastCtrlPoint;
+}
+
+void
+VCurve2::transform( const VAffineMap& affmap )
+{
+	m_firstCtrlPoint	= affmap.map( m_firstCtrlPoint );
+	m_lastPoint			= affmap.map( m_lastPoint );
 }
 
 // -----------------------------------
@@ -74,15 +105,19 @@ VCurve::lastCtrlPoint( const VSegment& prevSeg )
 VPath::VPath()
 	: VObject(), m_isClosed( false )
 {
-	// create a current point( 0.0, 0.0 ):
-//
+	// create a current point [0.0,0.0], we abuse a line for this:
+	m_segments.append( new VLine );
+}
+
+VPath::VPath( const VPath& path )
+	: VObject()
+{
+// TODO: implement copy-ctor
 }
 
 VPath::~VPath()
 {
 // TODO: should we be polite and destruct the QLists as well ?
-	// delete segments. they then delete their points.
-
 	QListIterator<VSegment> i( m_segments );
 	for ( ; i.current() ; ++i )
 		delete( i.current() );
@@ -92,7 +127,6 @@ void
 VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 {
 // TODO:
-// - think about QPoint-Caching
 // - have a deep look at Qt's quadBezier()
 /*
 	painter.save();
@@ -200,19 +234,10 @@ VPath::currentPoint() const
 VPath&
 VPath::moveTo( const double x, const double y )
 {
-// TODO: what is the postscript-beaviour?
+// TODO: what is the exact postscript-beaviour?
 	if ( isClosed() ) return *this;
 /*
 	m_segments.getLast()->lastPoint()->moveTo( x, y ); */
-	return *this;
-}
-
-VPath&
-VPath::rmoveTo( const double dx, const double dy )
-{
-	if ( isClosed() ) return *this;
-
-//	m_segments.getLast()->lastPoint()->rmoveTo( dx, dy );
 	return *this;
 }
 
@@ -370,79 +395,11 @@ VPath::close()
 }
 
 VObject&
-VPath::translate( const double dx, const double dy )
+VPath::transform( const VAffineMap& affmap )
 {
-	VAffineMap affmap;
-	affmap.translate( dx, dy );
-	apply( affmap );
-	return *this;
-}
-
-VObject&
-VPath::rotate( const double ang )
-{
-	VAffineMap affmap;
-	affmap.rotate( ang );
-	apply( affmap );
-	return *this;
-}
-
-VObject&
-VPath::mirror( const bool horiz, const bool verti )
-{
-	VAffineMap affmap;
-	affmap.mirror( horiz, verti );
-	apply( affmap );
-	return *this;
-}
-
-VObject&
-VPath::scale( const double sx, const double sy )
-{
-	VAffineMap affmap;
-	affmap.scale( sx, sy );
-	apply( affmap );
-	return *this;
-}
-
-VObject&
-VPath::shear( const double sh, const double sv )
-{
-	VAffineMap affmap;
-	affmap.shear( sh, sv );
-	apply( affmap );
-	return *this;
-}
-
-VObject&
-VPath::skew( const double ang )
-{
-	VAffineMap affmap;
-	affmap.skew( ang );
-	apply( affmap );
-	return *this;
-}
-
-VObject&
-VPath::apply( const VAffineMap& affmap )
-{
-/*
-	QListIterator<Segment> i( m_segments );
-
-	// only apply map to first point if path isnt closed:
-	if ( !isClosed() && segment->p3 )
-		*(i.current()->p3) = affmap.map( *(i.current()->p3) );
-
-	++i;
-
+	QListIterator<VSegment> i( m_segments );
 	for ( ; i.current() ; ++i )
-	{
-		if ( i.current()->p1 )
-			*(i.current()->p1) = affmap.map( *(i.current()->p1) );
-		if ( i.current()->p2 )
-			*(i.current()->p2) = affmap.map( *(i.current()->p2) );
-		if ( i.current()->p3 )
-			*(i.current()->p3) = affmap.map( *(i.current()->p3) );
-	} */
+		i.current()->transform( affmap );
+
 	return *this;
 }
