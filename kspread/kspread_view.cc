@@ -411,10 +411,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeRowColumnActions();
     initializeBorderActions();
 
-    KSpreadSheet *tbl;
-    for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-      addTable( tbl );
-    tbl = 0L;
+    QPtrListIterator<KSpreadSheet> it( m_pDoc->map()->tableList() );
+    for( ; it.current(); ++it )
+      addTable( it.current() );
+
+    KSpreadSheet *tbl = 0L;
     if ( m_pDoc->isEmbedded() )
     {
         tbl = m_pDoc->displayTable();
