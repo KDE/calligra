@@ -22,7 +22,7 @@
 #include <qcursor.h>
 #include <ksize.h>
 #include <qpicture.h>
-#include <qpointarray.h>
+#include <qregion.h>
 
 #include "image.h"
 
@@ -123,7 +123,7 @@ public:
   void setTopBorder(KWParagLayout::Border _brd) { brd_top = _brd; }
   void setBottomBorder(KWParagLayout::Border _brd) { brd_bottom = _brd; }
 
-  QPointArray getEmptyPolygon();
+  QRegion getEmptyRegion();
 
 protected:
   RunAround runAround;
@@ -245,6 +245,11 @@ public:
    */
   void setFirstParag(KWParag *_parag);
   KWParag* getFirstParag();
+
+  /**
+   * WARNING: This methode is _NOT_ efficient! It iterates through all parags!
+   */
+  KWParag *getLastParag();
 
   virtual bool isPTYInFrame(unsigned int _frame,unsigned int _ypos);
 

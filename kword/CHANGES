@@ -604,3 +604,11 @@ Reggie, 5.1.1999:
 -----------------
 - Fixes
 - Searching for whole words only works now
+
+Reggie, 6.1.1998:
+-----------------
+- Fixed this annoying redraw bug when deleting text. If you delete text in a frame the overlapping frames are not
+  deleted (on the screen) anymore
+- Fixed some more redraw bugs
+- Last imput in the search dia is remembered
+- Implemented searching backwards (also with formats)

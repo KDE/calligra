@@ -1,5 +1,5 @@
 This is a list of known bugs:
 
-- When deleting text there are sometimes redraw errors
+- FIXED: When deleting text there are sometimes redraw errors
 - Tabulators don't work correctly in "Blocksatz"
 - When selecting text and scrolling there are redraw problems

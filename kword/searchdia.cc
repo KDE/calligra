@@ -86,7 +86,7 @@ void KWSearchDia::setupTab1()
   sGrid->addWidget(cWholeWords,5,0);
   cWholeWords->setChecked(searchEntry->wholeWords);
 
-  cRev = new QCheckBox(i18n("Find Reverse"),gSearch);
+  cRev = new QCheckBox(i18n("Find Backwards"),gSearch);
   cRev->resize(cRev->sizeHint());
   sGrid->addWidget(cRev,6,0);
   cRev->setChecked(searchEntry->reverse);
@@ -293,7 +293,7 @@ void KWSearchDia::setupTab1()
 
   grid1->activate();
 
-  addTab(tab1,i18n("Search && Replace"));
+  addTab(tab1,i18n("Find && Replace"));
 
   resize(minimumSize());
 
@@ -304,6 +304,8 @@ void KWSearchDia::setupTab1()
   slotCheckItalic();
   slotCheckUnderline();
   slotCheckVertAlign();
+
+  connect(this,SIGNAL(cancelButtonPressed()),this,SLOT(saveSettings()));
 }
 
 /*================================================================*/
@@ -485,3 +487,14 @@ void KWSearchDia::slotVertAlign(int num)
   view->setSearchEntry(searchEntry);
 }
 
+/*================================================================*/
+void KWSearchDia::saveSettings()
+{
+  searchEntry->expr = eSearch->text();
+  searchEntry->regexp = cRegExp->isChecked();
+  searchEntry->caseSensitive = cCase->isChecked();
+  searchEntry->wholeWords = cWholeWords->isChecked();
+  searchEntry->reverse = cRev->isChecked();
+
+  view->setSearchEntry(searchEntry);
+}

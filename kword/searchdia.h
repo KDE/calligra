@@ -118,6 +118,7 @@ protected slots:
   void slotItalic();
   void slotUnderline();
   void slotVertAlign(int);
+  void saveSettings();
 
 };
 

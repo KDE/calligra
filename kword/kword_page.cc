@@ -1696,6 +1696,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() < frameSet->getFrame(paintfc.getFrame() - 1)->bottom() && 
 	    !paintfc.getParag()->getNext())
 	  {
+	    painter.save();
+	    QRegion rg = frameSet->getFrame(paintfc.getFrame() - 1)->getEmptyRegion();
+	    rg.translate(-xOffset,-yOffset);
+	    painter.setClipRegion(rg);
 	    unsigned int _y = (int)paintfc.getParag()->getPTYEnd() - (int)yOffset;
 	    unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset ;
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
@@ -1703,6 +1707,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      (_y - frameSet->getFrame(paintfc.getFrame() - 1)->y());
 	    painter.fillRect(_x,_y,_wid,_hei,QBrush(white));
 	    drawBuffer(KRect(_x,_y,_wid,_hei));
+	    painter.restore();
 	  }
 
 	if (goNext)
@@ -1843,6 +1848,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() < frameSet->getFrame(paintfc.getFrame() - 1)->bottom() && 
 	    !paintfc.getParag()->getNext())
 	  {
+	    painter.save();
+	    QRegion rg = frameSet->getFrame(paintfc.getFrame() - 1)->getEmptyRegion();
+	    rg.translate(-xOffset,-yOffset);
+	    painter.setClipRegion(rg);
 	    unsigned int _y = (int)paintfc.getParag()->getPTYEnd() - (int)yOffset;
 	    unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset;
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
@@ -1850,6 +1859,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      (_y - frameSet->getFrame(paintfc.getFrame() - 1)->y());
 	    painter.fillRect(_x,_y,_wid,_hei,QBrush(white));
 	    drawBuffer(KRect(_x,_y,_wid,_hei));
+	    painter.restore();
 	  }
 
 	if (goNext)
@@ -2942,17 +2952,15 @@ void KWPage::tabListChanged(QList<KoTabulator> *_tablist)
 /*================================================================*/
 bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false)
 {
-  debug("find start %d",_format->checkBold);
   if (_first || !currFindParag)
     {
       for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
 	{
-	  if (doc->getFrameSet(i)->getFrameType() == FT_TEXT)
+	  if (doc->getFrameSet(i)->getFrameType() == FT_TEXT && doc->getFrameSet(i)->getFrameInfo() == FI_BODY)
 	    {
 	      currFindParag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getFirstParag();
 	      currFindPos = 0;
 	      currFindFS = i;
-	      debug("  => frameset: %d, parag: %p, pos: %d",currFindFS,currFindParag,currFindPos);
 	      break;
 	    }
 	}
@@ -2964,56 +2972,37 @@ bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first 
       currFindPos = currFindParag->find(_expr,_format,currFindPos,_cs,_whole);
       if (currFindPos >= 0)
 	{
-	  debug("  => `%s' found at %d",_expr.data(),currFindPos);
-	  debug("  => select text - pos: %d, len: %d, frameset: %d",currFindPos,_expr.length(),currFindFS);
 	  selectText(currFindPos,_expr.length(),currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
 	  currFindPos += _expr.length();
-	  debug("find end (true)");
 	  return true;
 	}
       else
 	{
-	  debug("  => `%s' not found",_expr.data());
 	  if (currFindPos == -2 && tmpFindPos + _expr.length() < currFindParag->getTextLen())
-	    {
-	      currFindPos = tmpFindPos + _expr.length();
-	      debug(" => going forward (res was -2, this means only format was wrong or not whole word found)"
-		    " => currFindPos = tmpFindPos + _expr.length() = %d",currFindPos);
-	    }
+	    currFindPos = tmpFindPos + _expr.length();
 	  else if (currFindParag->getNext())
 	    {
 	      currFindParag = currFindParag->getNext();
 	      currFindPos = 0;
-	      debug("  => goto next parag %p, pos: %d",currFindParag,currFindPos);
 	    }
 	  else if (!currFindParag->getNext() && currFindFS <= static_cast<int>(doc->getNumFrameSets()))
 	    {
-	      debug("  => trying to find next textframe set");
 	      currFindPos = -1;
 	      for (unsigned int i = currFindFS + 1;i < doc->getNumFrameSets();i++)
 		{
-		  if (doc->getFrameSet(i)->getFrameType() == FT_TEXT)
+		  if (doc->getFrameSet(i)->getFrameType() == FT_TEXT && doc->getFrameSet(i)->getFrameInfo() == FI_BODY)
 		    {
 		      currFindParag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getFirstParag();
 		      currFindPos = 0;
 		      currFindFS = i;
-		      debug("  => found next textframeset: frameset: %d, parag: %p, pos: %d",currFindFS,currFindParag,currFindPos);
 		      break;
 		    }
 		}
 	      if (currFindPos == -1) 
-		{
-		  debug("  => couldn't find a new textframeset");
-		  debug("find end (false)");
-		  return false;
-		}
+		return false;
 	    }
 	  else 
-	    {
-	      debug("  => no hope to find anything... giving up");
-	      debug("find end (false)");
-	      return false;
-	    }
+	    return false;
 	}
     }
 }
@@ -3021,6 +3010,62 @@ bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first 
 /*================================================================*/
 bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false)
 {
+  if (_first || !currFindParag)
+    {
+      for (unsigned int i = doc->getNumFrameSets() - 1;i >= 0;i--)
+	{
+	  if (doc->getFrameSet(i)->getFrameType() == FT_TEXT && doc->getFrameSet(i)->getFrameInfo() == FI_BODY)
+	    {
+	      currFindParag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getLastParag();
+	      currFindPos = currFindParag->getTextLen() - 1;
+	      currFindFS = i;
+	      break;
+	    }
+	}
+    }
+
+  while (true)
+    {
+      int tmpFindPos = currFindPos;
+      currFindPos = currFindParag->findRev(_expr,_format,currFindPos,_cs,_whole);
+      if (currFindPos >= 0)
+	{
+	  selectText(currFindPos,_expr.length(),currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
+	  if (currFindPos > 0) currFindPos--;
+	  return true;
+	}
+      else
+	{
+	  if (currFindPos == -2 && tmpFindPos - _expr.length() > 0)
+	    currFindPos = tmpFindPos - _expr.length();
+	  else if (currFindParag->getPrev())
+	    {
+	      currFindParag = currFindParag->getPrev();
+	      currFindPos = currFindParag->getTextLen() - 1;
+	    }
+	  else if (!currFindParag->getPrev() && currFindFS <= static_cast<int>(doc->getNumFrameSets()))
+	    {
+	      currFindPos = -1;
+	      if (currFindFS > 0)
+		{
+		  for (unsigned int i = currFindFS - 1;i >= 0;i--)
+		    {
+		      if (doc->getFrameSet(i)->getFrameType() == FT_TEXT && doc->getFrameSet(i)->getFrameInfo() == FI_BODY)
+			{
+			  currFindParag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getLastParag();
+			  currFindPos = currFindParag->getTextLen() - 1;
+			  currFindFS = i;
+			  break;
+			}
+		    }
+		}
+	      if (currFindPos == -1) 
+		return false;
+	    }
+	  else 
+	    return false;
+	}
+    }
 }
 
 /*================================================================*/

@@ -34,6 +34,8 @@
 #include <qpopupmenu.h>
 #include <kpoint.h>
 #include <qcursor.h>
+#include <qregion.h>
+#include <qpaintdevice.h>
 
 #include <koRuler.h>
 #include <koPartSelectDia.h>

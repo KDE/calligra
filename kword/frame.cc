@@ -253,9 +253,18 @@ int KWFrame::getRightIndent(int _y,int _h)
 }
 
 /*================================================================*/
-QPointArray KWFrame::getEmptyPolygon()
+QRegion KWFrame::getEmptyRegion()
 {
-  return QPointArray();
+  QRegion region(x(),y(),width(),height());
+  QRect rect;
+
+  for (unsigned int i = 0;i < intersections.count();i++)
+    {
+      rect = *intersections.at(i);
+      region = region.subtract(QRect(rect.x() - 1,rect.y() - 1,rect.width() + 2,rect.height() + 2));
+    }
+
+  return QRegion(region);
 }
 
 /*================================================================*/
@@ -925,6 +934,21 @@ void KWTextFrameSet::updateAllStyles()
     }
 
   updateCounters();
+}
+
+/*================================================================*/
+KWParag *KWTextFrameSet::getLastParag()
+{
+  KWParag *p = getFirstParag();
+  KWParag *last = p;
+
+  while (p)
+    {
+      last = p;
+      p = p->getNext();
+    }
+
+  return last;
 }
 
 /******************************************************************/
