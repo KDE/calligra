@@ -256,6 +256,7 @@ void Document::lazyInit()
 
                 fonts.append( st.font( ch ) );
                 chars[ i ] = st.character( ch );
+                //kdDebug( DEBUGID ) << "Document::lazyInit: " << name << " " << st.font( ch ).family() << " " << QString( ch ) << endl;
             }
             impl->symbolNamesAction->setSymbols( names, fonts, chars );
             // impl->symbolNamesAction->setItems(names);

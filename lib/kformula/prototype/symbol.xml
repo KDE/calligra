@@ -51,7 +51,7 @@
     <entry key="119" number="0x03D1" name="vartheta" class="ORDINARY"/>
     <entry key="120" number="0x03BE" name="xi" class="ORDINARY"/>
     <entry key="121" number="0x03C5" name="upsilon" class="ORDINARY"/>
-    <entry key="122" number="0x03C2" name="varsigma" class="ORDINARY"/>
+    <entry key="122" number="0x03B6" name="zeta" class="ORDINARY"/>
   </unicodetable>
   <unicodetable font="esstixsixteen">
   </unicodetable>
@@ -393,31 +393,41 @@
     <entry key="254" number="0xF8FE" name="" class="ORDINARY"/>
     <entry key="255" number="" name="" class="ORDINARY"/>
   </unicodetable>
-  <unicodetable font="esstixeight">
-    <entry key="33" number="0xE201" name="longleftarrow" class="RELATION"/>
-    <entry key="37" number="0xE205" name="longrightarrow" class="RELATION"/>
-    <entry key="73" number="0xF8EE" name="" class="ORDINARY"/>
-    <entry key="74" number="0xF8EF" name="" class="ORDINARY"/>
-    <entry key="75" number="0xF8F0" name="" class="ORDINARY"/>
-    <entry key="76" number="0xF8F9" name="" class="ORDINARY"/>
-    <entry key="77" number="0xF8FA" name="" class="ORDINARY"/>
-    <entry key="78" number="0xF8FB" name="" class="ORDINARY"/>
-    <entry key="79" number="0xF8F1" name="" class="ORDINARY"/>
-    <entry key="80" number="0xF8F4" name="" class="ORDINARY"/>
-    <entry key="81" number="0xF8F2" name="" class="ORDINARY"/>
-    <entry key="82" number="0xF8F3" name="" class="ORDINARY"/>
-    <entry key="83" number="0xF8FC" name="" class="ORDINARY"/>
-    <entry key="84" number="0xF8FD" name="" class="ORDINARY"/>
-    <entry key="85" number="0xF8FE" name="" class="ORDINARY"/>
-    <entry key="90" number="0xF8EB" name="" class="ORDINARY"/>
-    <entry key="91" number="0xF8EC" name="" class="ORDINARY"/>
-    <entry key="92" number="0xF8ED" name="" class="ORDINARY"/>
-    <entry key="93" number="0xF8F6" name="" class="ORDINARY"/>
-    <entry key="94" number="0xF8F7" name="" class="ORDINARY"/>
-    <entry key="95" number="0xF8F8" name="" class="ORDINARY"/>
-    <entry key="97" number="0x2320" name="" class="ORDINARY"/>
-    <entry key="98" number="0xF8F5" name="" class="ORDINARY"/>
-    <entry key="99" number="0x2321" name="" class="ORDINARY"/>
+  <unicodetable font="esstixfour">
+    <entry key="46" number="" name="ldots" class="ORDINARY"/>
+    <entry key="47" number="0x22EF" name="cdots" class="ORDINARY"/>
+    <entry key="49" number="0x22F1" name="ddots" class="ORDINARY"/>
+    <entry key="50" number="0x220A" name="in" class="RELATION"/>
+    <entry key="51" number="0x2282" name="subset" class="RELATION"/>
+    <entry key="52" number="0x2286" name="subseteq" class="RELATION"/>
+    <entry key="53" number="0xE304" name="subseteqq" class="RELATION"/>
+    <entry key="54" number="0x22D0" name="Subset" class="RELATION"/>
+    <entry key="55" number="0x228F" name="sqsubset" class="RELATION"/>
+    <entry key="56" number="0x2291" name="sqsubseteq" class="RELATION"/>
+    <entry key="61" number="0x228A" name="subsetneq" class="RELATION"/>
+    <entry key="62" number="0xE2B9" name="varsubsetneq" class="RELATION"/>
+    <entry key="63" number="0x2288" name="nsubseteq" class="RELATION"/>
+    <entry key="64" number="0xE2B6" name="subsetneqq" class="RELATION"/>
+    <entry key="65" number="0xE2B8" name="varsubsetneqq" class="RELATION"/>
+    <entry key="72" number="0x220B" name="ni" class="RELATION"/>
+    <entry key="73" number="0x2283" name="supset" class="RELATION"/>
+    <entry key="74" number="0x2287" name="supseteq" class="RELATION"/>
+    <entry key="75" number="0xE305" name="supseteqq" class="RELATION"/>
+    <entry key="76" number="0x22D1" name="Supset" class="RELATION"/>
+    <entry key="77" number="0x2290" name="sqsupset" class="RELATION"/>
+    <entry key="81" number="0x228B" name="supsetneq" class="RELATION"/>
+    <entry key="82" number="0xE2BA" name="varsupsetneq" class="RELATION"/>
+    <entry key="83" number="0x2289" name="nsupseteq" class="RELATION"/>
+    <entry key="84" number="0xE2B7" name="supsetneqq" class="RELATION"/>
+    <entry key="85" number="0xE2BB" name="varsupsetneqq" class="RELATION"/>
+    <entry key="86" number="0xE2B0" name="nsupseteqq" class="RELATION"/>
+    <entry key="94" number="0x2250" name="doteq" class="RELATION"/>
+    <entry key="95" number="" name="doteqdot" class="RELATION"/>
+    <entry key="105" number="0x2253" name="risingdotseq" class="RELATION"/>
+    <entry key="106" number="0x2252" name="fallingdotseq" class="RELATION"/>
+    <entry key="115" number="" name="neq" class="RELATION"/>
+    <entry key="121" number="0x2245" name="cong" class="RELATION"/>
+    <entry key="162" number="0x223C" name="sim" class="RELATION"/>
   </unicodetable>
   <unicodetable font="esstixsix">
     <entry key="33" number="0x222B" name="int" class="ORDINARY"/>
@@ -458,41 +468,31 @@
   </unicodetable>
   <unicodetable font="esstixseventeen">
   </unicodetable>
-  <unicodetable font="esstixfour">
-    <entry key="46" number="" name="ldots" class="ORDINARY"/>
-    <entry key="47" number="0x22EF" name="cdots" class="ORDINARY"/>
-    <entry key="49" number="0x22F1" name="ddots" class="ORDINARY"/>
-    <entry key="50" number="0x220A" name="in" class="RELATION"/>
-    <entry key="51" number="0x2282" name="subset" class="RELATION"/>
-    <entry key="52" number="0x2286" name="subseteq" class="RELATION"/>
-    <entry key="53" number="0xE304" name="subseteqq" class="RELATION"/>
-    <entry key="54" number="0x22D0" name="Subset" class="RELATION"/>
-    <entry key="55" number="0x228F" name="sqsubset" class="RELATION"/>
-    <entry key="56" number="0x2291" name="sqsubseteq" class="RELATION"/>
-    <entry key="61" number="0x228A" name="subsetneq" class="RELATION"/>
-    <entry key="62" number="0xE2B9" name="varsubsetneq" class="RELATION"/>
-    <entry key="63" number="0x2288" name="nsubseteq" class="RELATION"/>
-    <entry key="64" number="0xE2B6" name="subsetneqq" class="RELATION"/>
-    <entry key="65" number="0xE2B8" name="varsubsetneqq" class="RELATION"/>
-    <entry key="72" number="0x220B" name="ni" class="RELATION"/>
-    <entry key="73" number="0x2283" name="supset" class="RELATION"/>
-    <entry key="74" number="0x2287" name="supseteq" class="RELATION"/>
-    <entry key="75" number="0xE305" name="supseteqq" class="RELATION"/>
-    <entry key="76" number="0x22D1" name="Supset" class="RELATION"/>
-    <entry key="77" number="0x2290" name="sqsupset" class="RELATION"/>
-    <entry key="81" number="0x228B" name="supsetneq" class="RELATION"/>
-    <entry key="82" number="0xE2BA" name="varsupsetneq" class="RELATION"/>
-    <entry key="83" number="0x2289" name="nsupseteq" class="RELATION"/>
-    <entry key="84" number="0xE2B7" name="supsetneqq" class="RELATION"/>
-    <entry key="85" number="0xE2BB" name="varsupsetneqq" class="RELATION"/>
-    <entry key="86" number="0xE2B0" name="nsupseteqq" class="RELATION"/>
-    <entry key="94" number="0x2250" name="doteq" class="RELATION"/>
-    <entry key="95" number="" name="doteqdot" class="RELATION"/>
-    <entry key="105" number="0x2253" name="risingdotseq" class="RELATION"/>
-    <entry key="106" number="0x2252" name="fallingdotseq" class="RELATION"/>
-    <entry key="115" number="" name="neq" class="RELATION"/>
-    <entry key="121" number="0x2245" name="cong" class="RELATION"/>
-    <entry key="162" number="0x223C" name="sim" class="RELATION"/>
+  <unicodetable font="esstixeight">
+    <entry key="33" number="0xE201" name="longleftarrow" class="RELATION"/>
+    <entry key="37" number="0xE205" name="longrightarrow" class="RELATION"/>
+    <entry key="73" number="0xF8EE" name="" class="ORDINARY"/>
+    <entry key="74" number="0xF8EF" name="" class="ORDINARY"/>
+    <entry key="75" number="0xF8F0" name="" class="ORDINARY"/>
+    <entry key="76" number="0xF8F9" name="" class="ORDINARY"/>
+    <entry key="77" number="0xF8FA" name="" class="ORDINARY"/>
+    <entry key="78" number="0xF8FB" name="" class="ORDINARY"/>
+    <entry key="79" number="0xF8F1" name="" class="ORDINARY"/>
+    <entry key="80" number="0xF8F4" name="" class="ORDINARY"/>
+    <entry key="81" number="0xF8F2" name="" class="ORDINARY"/>
+    <entry key="82" number="0xF8F3" name="" class="ORDINARY"/>
+    <entry key="83" number="0xF8FC" name="" class="ORDINARY"/>
+    <entry key="84" number="0xF8FD" name="" class="ORDINARY"/>
+    <entry key="85" number="0xF8FE" name="" class="ORDINARY"/>
+    <entry key="90" number="0xF8EB" name="" class="ORDINARY"/>
+    <entry key="91" number="0xF8EC" name="" class="ORDINARY"/>
+    <entry key="92" number="0xF8ED" name="" class="ORDINARY"/>
+    <entry key="93" number="0xF8F6" name="" class="ORDINARY"/>
+    <entry key="94" number="0xF8F7" name="" class="ORDINARY"/>
+    <entry key="95" number="0xF8F8" name="" class="ORDINARY"/>
+    <entry key="97" number="0x2320" name="" class="ORDINARY"/>
+    <entry key="98" number="0xF8F5" name="" class="ORDINARY"/>
+    <entry key="99" number="0x2321" name="" class="ORDINARY"/>
   </unicodetable>
   <unicodetable font="esstixthree">
     <entry key="33" number="" name="" class="RELATION"/>
