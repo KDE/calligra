@@ -669,7 +669,7 @@ void KWPage::vmpEditFrame( QMouseEvent *e, int mx, int my )
 
         KWFrameSet *fs = doc->getFrameSet( doc->getFrameSet( mx, my ) );
         if ( currentSelection != 0 && ( e->state() & ShiftButton ) && fs->getGroupManager() ) { // is table and we hold shift
-            fs->getGroupManager()->selectUntil( fs, this );
+            fs->getGroupManager()->selectUntil( fs );
             curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
         } else if ( currentSelection == 0 ) { // none selected
             selectAllFrames( FALSE );
@@ -775,11 +775,6 @@ void KWPage::vmpMidButton()
     if(emptyMessage)
     {
         maybeDrag = FALSE;
-
-/* This message is not really needed, and I dont want to introduce any messages, since we
- * are in a message freeze (TZ)*/
-        //KMessageBox::sorry(0,  
-        //   i18n("KWord is unable to paste. The clipboard is empty."));
 
         if ( doc->has_selection())
         { 
@@ -5220,7 +5215,7 @@ void KWPage::selectAllFrames( bool select )
                 bool s = frame->isSelected();
                 frame->setSelected( select );
                 if ( select )
-                    frame->createResizeHandlesForPage(this);
+                    frame->createResizeHandles();
                 else if ( s )
                     frame->removeResizeHandles();
             }
@@ -5241,7 +5236,7 @@ void KWPage::selectFrame( int mx, int my, bool select )
                 bool s = frame->isSelected();
                 frame->setSelected( select );
                 if ( select )
-                    frame->createResizeHandlesForPage(this);
+                    frame->createResizeHandles();
                 else if ( s )
                     frame->removeResizeHandles();
             }

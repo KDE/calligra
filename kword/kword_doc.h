@@ -244,8 +244,8 @@ public:
     void setSelection( bool _has )
     { hasSelection = _has; }
 
-    bool has_selection()
-    { return hasSelection; }
+    bool has_selection() { return hasSelection; }
+    QList <KWordView> getAllViews();
 
     void deleteSelectedText( KWFormatContext *_fc );
     void copySelectedText();

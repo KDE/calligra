@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 1998, 1999, 2000 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -255,7 +255,7 @@ void KWFrame::addIntersect( QRect &_r )
 }
 
 /*================================================================*/
-int KWFrame::getLeftIndent( int _y, int _h )
+int KWFrame::getLeftIndent( int y, int h )
 {
     if ( runAround == RA_NO || intersections.isEmpty() )
         return 0;
@@ -263,18 +263,18 @@ int KWFrame::getLeftIndent( int _y, int _h )
     if ( emptyRegionDirty )
         getEmptyRegion();
 
-    int _left = 0;
-    QRect line( x(), _y, width(), _h );
+    int left = 0;
+    QRect line( x(), y, width(), h );
     QRegion reg = emptyRegion.intersect( line );
-    _left = reg.boundingRect().left() - x();
+    left = reg.boundingRect().left() - x();
     for ( unsigned int i = 0; i < reg.rects().size(); ++i )
-        _left = QMAX( _left, reg.rects()[ i ].left() - x() );
-    if ( _left > 0 )
-        _left += static_cast<int>(runAroundGap.pt());
-    if ( _left > 0 && runAround == RA_SKIP )
-        _left = width();
+        left = QMAX( left, reg.rects()[ i ].left() - x() );
+    if ( left > 0 )
+        left += static_cast<int>(runAroundGap.pt());
+    if ( left > 0 && runAround == RA_SKIP )
+        left = width();
 
-    return QMAX( 0, _left );
+    return QMAX( 0, left );
 }
 
 /*================================================================*/
@@ -405,6 +405,16 @@ KWFrame *KWFrame::getCopy() {
     frm->setPageNum(getPageNum());
 
     return frm;
+}
+
+/*================================================================*/
+/* Insert all resize handles                                      */
+/*================================================================*/
+void KWFrame::createResizeHandles() {
+    removeResizeHandles();
+    QList <KWordView> pages = getFrameSet()->getDocument()->getAllViews();
+    for (int i=pages.count() -1; i >= 0; i--)
+        createResizeHandlesForPage(pages.at(i)->getGUI()->getPaperWidget());
 }
 
 /*================================================================*/
@@ -2271,8 +2281,8 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
             frame->setBTop( oneMm );
             frame->setBBottom( oneMm );
             frame->setNewFrameBehaviour( NoFollowup );
-            frame->setRect( x + j * frameWidth + j * tableCellSpacing, 
-                y + i * frameHeight + i * tableCellSpacing, baseWidth, baseHeight );
+            frame->setRect( x + j * (frameWidth + tableCellSpacing), 
+                y + i * (frameHeight + tableCellSpacing), baseWidth, baseHeight );
         }
     }
 
@@ -2615,7 +2625,6 @@ void KWGroupManager::moveBy( int dx, int dy )
 {
     dx = 0; // Ignore the x-offset.
     if(dy==0) return;
-    int tmp = getCell(0,0)->frameSet->getFrame(0)->top();
     for ( unsigned int i = 0; i < cells.count(); i++ )
         cells.at( i )->frameSet->getFrame( 0 )->moveBy( dx, dy );
 
@@ -2649,11 +2658,11 @@ void KWGroupManager::deselectAll()
    The page argument is the page where the resize handles will be
     drawn/erased.
 */
-void KWGroupManager::selectUntil( KWFrameSet *fs, KWPage *page ) {
+void KWGroupManager::selectUntil( KWFrameSet *fs) {
     unsigned int toRow = 0, toCol = 0;
     Cell *cell = getCell(fs);
-    toRow=cell->row;
-    toCol=cell->col;
+    toRow=cell->row + cell->rows -1;
+    toCol=cell->col + cell->cols -1;
 
     unsigned int fromRow = 0, fromCol = 0;
     getFirstSelected( fromRow, fromCol );
@@ -2678,7 +2687,7 @@ void KWGroupManager::selectUntil( KWFrameSet *fs, KWPage *page ) {
         unsigned int col = cell->col + cell->cols -1;
         if(row >= fromRow && row <= toRow && col >= fromCol && col <= toCol) {
             cell->frameSet->getFrame( 0 )->setSelected( true );
-            cell->frameSet->getFrame(0)->createResizeHandlesForPage(page);
+            cell->frameSet->getFrame(0)->createResizeHandles();
             cell->frameSet->getFrame(0)->updateResizeHandles();
         } else {
             cell->frameSet->getFrame( 0 )->setSelected( false );
@@ -3047,7 +3056,7 @@ bool KWGroupManager::joinCells() {
         }
     }
 
-    // update  firstcell properties te reflect the merge
+    // update firstcell properties te reflect the merge
     firstCell->cols=colEnd-colBegin+1;
     firstCell->rows=rowEnd-rowBegin+1;
     firstCell->frameSet->getFrame(0)->setRight(right);
@@ -3064,10 +3073,6 @@ bool KWGroupManager::joinCells() {
 bool KWGroupManager::splitCell(unsigned int intoRows, unsigned int intoCols)
 {
 
-/* This is not finished. Joining vertically merged cells crashes..
-   Thomas
-*/
-    return false;
     if(intoRows < 1 || intoCols < 1) return false; // assertion.
 
     unsigned int col, row;
@@ -3075,11 +3080,13 @@ bool KWGroupManager::splitCell(unsigned int intoRows, unsigned int intoCols)
 
     Cell *cell=getCell(row,col);
     KWFrame *firstFrame = cell->frameSet->getFrame(0);
-    unsigned int height = firstFrame->height() / intoRows -  tableCellSpacing;
-    unsigned int width = firstFrame->width() / intoCols -  tableCellSpacing;
-kdDebug() << "width: " << firstFrame->width() << ", " << intoCols << " = " << width << endl;
 
-kdDebug() << "splitting cell: " << row << ", " << col << " into " << intoRows << ", " << intoCols << endl;
+    // unselect frame.
+    firstFrame->setSelected(false);
+    firstFrame->removeResizeHandles();
+
+    double height = (firstFrame->height() -  tableCellSpacing * (intoRows-1)) / intoRows ;
+    double width = (firstFrame->width() -  tableCellSpacing * (intoCols-1))/ intoCols  ;
 
     // will it fit?
     if(height < minFrameHeight) return false;
@@ -3093,7 +3100,6 @@ kdDebug() << "splitting cell: " << row << ", " << col << " into " << intoRows <<
         Cell *theCell = cells.at(i);
         if(cell == theCell) continue;
 
-kdDebug() << "1: cell: " << theCell->row << ", " << theCell->col << "  size: " << theCell->rows << ", " << theCell->cols << endl;
         if(newRows>0) {
             if(row >= theCell->row && row < theCell->row + theCell->rows)
                 theCell->rows+=newRows;
@@ -3104,17 +3110,14 @@ kdDebug() << "1: cell: " << theCell->row << ", " << theCell->col << "  size: " <
                 theCell->cols+=newCols;
             if(theCell->col > col) theCell->col+=newCols;
         }
-kdDebug() << "2: cell: " << theCell->row << ", " << theCell->col << "  size: " << theCell->rows << ", " << theCell->cols << endl;
     }
-   
-    firstFrame->setWidth(width);
-    firstFrame->setHeight(height); 
+
+    firstFrame->setWidth(static_cast<int>(width));
+    firstFrame->setHeight(static_cast<int>(height)); 
     cell->rows = cell->rows - intoRows +1;
     if(cell->rows < 1)  cell->rows=1;
     cell->cols = cell->cols - intoCols +1;
     if(cell->cols < 1)  cell->cols=1;
-
-kdDebug() << "orig cell is now at: (" << cell->row << "," << cell->col << " size " << cell->rows << "," << cell->cols << endl;
 
     // create new cells
     for (unsigned int y = 0; y < intoRows; y++) {
@@ -3123,52 +3126,52 @@ kdDebug() << "orig cell is now at: (" << cell->row << "," << cell->col << " size
 
             Cell *newCell = new Cell;
 
-            KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-            _frameSet->setName(QString("split cell"));
-            _frameSet->setGroupManager( this );
-kdDebug() << "y: " << y << " x: " << x << endl;
-kdDebug() << "x: " << firstFrame->left() + width * x << " y: " << firstFrame->top() + height * y << 
-            ", width: "<< width << ", height: " << height << endl;
+            KWTextFrameSet *lastFrameSet= new KWTextFrameSet( doc );
+            lastFrameSet->setName(QString("split cell"));
+            lastFrameSet->setGroupManager( this );
 
-            KWFrame *frame = new KWFrame(_frameSet, 
-                    firstFrame->left() + (width+tableCellSpacing) * x, 
-                    firstFrame->top() + (height+tableCellSpacing) * y, 
+            KWFrame *frame = new KWFrame(lastFrameSet, 
+                    firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x), 
+                    firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y), 
                     width, height);
             frame->setFrameBehaviour(AutoExtendFrame);
             frame->setNewFrameBehaviour(NoFollowup);
-            _frameSet->addFrame( frame );
+            lastFrameSet->addFrame( frame );
             if ( anchored ) { // is this needed?
-                KWFrame *topLeftFrame = _frameSet->getFrame( 0 );
+                KWFrame *topLeftFrame = lastFrameSet->getFrame( 0 );
      
                 if (topLeftFrame)
                     topLeftFrame->moveBy( -origin.x(), -origin.y() );
             } 
-            doc->addFrameSet(_frameSet);
+            doc->addFrameSet(lastFrameSet);
 
-            newCell->frameSet = _frameSet;
+            newCell->frameSet = lastFrameSet;
             newCell->row = y + row;
             newCell->col = x + col;
             newCell->rows = 1;
             newCell->cols = 1;
 
             // if the orig cell spans more rows/cols than it is split into, make first col/row wider.
-            if(newRows <0 && x==0)
+            if(newRows <0 && y==0)
                 newCell->rows -=newRows;
-            if(newCols <0 && y==0)
+            if(newCols <0 && x==0)
                 newCell->cols -=newCols;
 
-kdDebug() << "creating cell: " << newCell->row << ", " << newCell->col << " width: " << newCell->rows << ", " << newCell->cols << endl;
-
             unsigned int i;
-            for (i = 0; i < cells.count() && (cells.at(i)->row < row || 
-                cells.at(i)->row == row  && cells.at(i)->col < col) ; i++ ); 
+            for (i = 0; i < cells.count() && ((cells.at(i)->row < newCell->row || 
+                cells.at(i)->row == newCell->row) && cells.at(i)->col < newCell->col) ; i++ ); 
             cells.insert(i, newCell );
         }
     } 
-    rows+= newRows;
-    cols+= newCols;
+
+    // If we created extra rows/cols, adjust the groupmanager counters.
+    if(newRows>0) rows+= newRows;
+    if(newCols>0) cols+= newCols;
     recalcCols();
 
+    // select all frames.
+    firstFrame->setSelected(true);
+    selectUntil(getCell(row+intoRows-1, col+intoCols-1)->frameSet);
     return true;
 }
 

@@ -1141,7 +1141,7 @@ void KWordView::editPaste()
                 gui->getPaperWidget()->editPaste( cb->data()->encodedData( MIME_TYPE ), MIME_TYPE );
         } else if ( cb->data()->provides( "text/plain" ) ) {
             if ( cb->data()->encodedData( "text/plain" ).size() )
-                gui->getPaperWidget()->editPaste( cb->data()->encodedData( "text/plain" ) );
+                gui->getPaperWidget()->editPaste( QString::fromLocal8Bit(cb->data()->encodedData( "text/plain" )) );
         } else if ( !cb->text().isEmpty() )
             gui->getPaperWidget()->editPaste( cb->text() );
     }
@@ -1870,29 +1870,34 @@ void KWordView::tableSplitCells()
 {
     gui->getPaperWidget()->mmEditFrame();
 
+    QList <KWFrame> selectedFrames = m_pKWordDoc->getSelectedFrames();
     KWGroupManager *grpMgr = gui->getPaperWidget()->getCurrentTable();
-    if ( !grpMgr )
-    {
+    if ( !grpMgr && selectedFrames.count() > 0) {
+        grpMgr=selectedFrames.at(0)->getFrameSet()->getGroupManager();
+    }
+
+    if(selectedFrames.count() >1 || grpMgr == 0) {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before splitting cells." ),
                             i18n( "Split Cells" ) );
-    } else {
-        QPainter painter;
-        painter.begin( gui->getPaperWidget() );
-        if ( !grpMgr->splitCell(1,2) )
-        {
-            KMessageBox::sorry( this,
-                                i18n("You have to select a joined cell."),
-                                i18n("Split Cells") );
-        }
-        painter.end();
-        QRect r = grpMgr->getBoundingRect();
-        r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
-                   r.y() - gui->getPaperWidget()->contentsY(),
-                   r.width(), r.height() );
-        gui->getPaperWidget()->repaintScreen( r, TRUE );
+        return;
     }
+
+    QPainter painter;
+    painter.begin( gui->getPaperWidget() );
+    int rows=1, cols=2;
+    if ( !grpMgr->splitCell(rows,cols) ) {
+        KMessageBox::sorry( this,
+                            i18n("You have to select a joined cell."),
+                            i18n("Split Cells") );
+    }
+    painter.end();
+    QRect r = grpMgr->getBoundingRect();
+    r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
+               r.y() - gui->getPaperWidget()->contentsY(),
+               r.width(), r.height() );
+    gui->getPaperWidget()->repaintScreen( r, TRUE );
 }
 
 /*===============================================================*/

@@ -5,7 +5,7 @@ TODO-List:
 Bugs; in order or importance:
 
 - Implement correct printing of floating tables.
-
+- Need a routine which renders the table per row in a way that any cellsize is adjusted to fit.
 - Frame Run around is the wrong way around.. Framedia does it correct now. 
   still needs to be done correctly in kword_doc
 - deleting pictures-frames should also delete the picture (from the tar) (imageCollection)
@@ -136,7 +136,7 @@ MILESTONES
 
 Since KWord has been unmaintained for quite some time it is best to patch it up before we start
 adding features. In this document I want to set a number of milestones which give the direction
-I want KWord to take in the to to far future.
+I want KWord to take in the not to far future.
 I have no problem with people starting to implement features, but I myself will try to keep to 
 this file. 
 The reason that this file is in CVS is therefor 2-fold. First I want everyone to know the 

@@ -1359,12 +1359,12 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
             delFrameSet(getFrameSet(i));
         } else if (getFrameSet(i)->getFrameType() == FT_TEXT) {
             for (int f=getFrameSet(i)->getNumFrames()-1; f>=0; f--) {
-                if(getFrameSet(i)->getFrame(f)->height() < minFrameHeight) {
+                if(getFrameSet(i)->getFrame(f)->height() < static_cast <int>(minFrameHeight)) {
                     kdDebug() << "frame height is so small no text will fit, adjusting (was: "
                       << getFrameSet(i)->getFrame(f)->height() << " is: " << minFrameHeight << ")" << endl;
                     getFrameSet(i)->getFrame(f)->setHeight(minFrameHeight);
                 }
-                if(getFrameSet(i)->getFrame(f)->width() < minFrameWidth) {
+                if(getFrameSet(i)->getFrame(f)->width() < static_cast <int>(minFrameWidth)) {
                     kdDebug() << "frame width is so small no text will fit, adjusting (was: "  
                      << getFrameSet(i)->getFrame(f)->width() << " is: " << minFrameWidth  << ")" << endl;
                     getFrameSet(i)->getFrame(f)->setWidth(minFrameWidth);
@@ -1802,7 +1802,6 @@ QStrList KWordDocument::inputFormats()
 /*================================================================*/
 void KWordDocument::addView( KoView *_view )
 {
-    qDebug( "addView" );
     m_lstViews.append( (KWordView*)_view );
     KoDocument::addView( _view );
 }
@@ -3026,31 +3025,30 @@ void KWordDocument::setFormat( KWFormat &_format, int flags )
 }
 
 /*================================================================*/
-void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
-                           KWFormat *_format, const QString &_mime )
+void KWordDocument::paste( KWFormatContext *_fc, QString pasteString, KWPage *_page,
+                           KWFormat *_format, const QString &mimetype )
 {
     QStringList strList;
     KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L, *calcParag = 0L;
     int index;
 
-    if ( _string.isEmpty() ) return;
-
-    if ( _mime == "text/plain" ) {     // ----------------- MIME type text/plain
-        while ( TRUE ) {
-            index = _string.find( '\n', 0 );
+    if ( pasteString.isEmpty() ) return;
+    if ( mimetype == "text/plain" ) {     // ----------------- MIME type text/plain
+        while ( TRUE ) { // copy input to strList per line, omitting \n
+            index = pasteString.find( '\n', 0 );
             if ( index == -1 ) break;
 
-            if ( index > 0 && !_string.left( index ).simplifyWhiteSpace().isEmpty() )
-                strList.append( _string.left( index ) );
-            _string.remove( 0, index + 1 );
+            if ( index > 0)
+                strList.append( pasteString.left( index ).simplifyWhiteSpace() );
+            pasteString.remove( 0, index + 1 );
         }
 
-        if ( !_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty() )
-            strList.append( _string );
-    } else if ( _mime == MIME_TYPE ) {     // -------------- MIME type application/x-kword
+        if ( !pasteString.isEmpty() && !pasteString.simplifyWhiteSpace().isEmpty() )
+            strList.append( pasteString.simplifyWhiteSpace() );
+    } else if ( mimetype == MIME_TYPE ) {     // -------------- MIME type application/x-kword
 
         QDomDocument doc;
-        doc.setContent( _string );
+        doc.setContent( pasteString );
 
         KOMLParser parser( doc );
 
@@ -3091,10 +3089,10 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
         }
     }
 
-    if ( ( _mime == "text/plain" && !strList.isEmpty() ) || ( _mime == MIME_TYPE && firstParag ) ) {
-        if ( ( _mime == "text/plain" && strList.count() == 1 ) || ( _mime == MIME_TYPE && !firstParag->getNext() ) ) {
+    if ( ( mimetype == "text/plain" && !strList.isEmpty() ) || ( mimetype == MIME_TYPE && firstParag ) ) {
+        if ( ( mimetype == "text/plain" && strList.count() == 1 ) || ( mimetype == MIME_TYPE && !firstParag->getNext() ) ) { // just one line
             // --------------- MIME: text/plain
-            if ( _mime == "text/plain" ) {
+            if ( mimetype == "text/plain" ) {
                 QString str;
                 unsigned int len;
                 KWFormat *format = _format;
@@ -3107,7 +3105,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-                for ( unsigned int j = 0; j < len; j++ )
+                for ( unsigned int j = 0; j <= len; j++ )
                     _fc->cursorGotoRight();
                 delete format;
             } else  { // ---------------- MIME: application/x-kword
@@ -3115,14 +3113,14 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 *str = *firstParag->getKWString();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
 
-                for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+                for ( unsigned int j = 0; j <= firstParag->getTextLen(); j++ )
                     _fc->cursorGotoRight();
 
                 delete firstParag;
             }
-        } else if ( ( _mime == "text/plain" && strList.count() == 2 ) ||
-                    ( _mime == "application/x-kword" && !firstParag->getNext()->getNext() ) ) {
-            if ( _mime == "text/plain" ) {
+        } else if ( ( mimetype == "text/plain" && strList.count() == 2 ) ||
+                    ( mimetype == "application/x-kword" && !firstParag->getNext()->getNext() ) ) { // 2 lines
+            if ( mimetype == "text/plain" ) { // plaintext 2 lines
                 QString str;
                 unsigned int len;
                 KWFormat *format = _format;
@@ -3146,10 +3144,10 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-                for ( unsigned int j = 0; j < len; j++ )
+                for ( unsigned int j = 0; j <= len; j++ )
                     _fc->cursorGotoRight();
                 delete format;
-            } else {
+            } else { //Kword 2 lines
                 KWString *str = new KWString( this );
                 *str = *firstParag->getKWString();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
@@ -3164,14 +3162,14 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 *str2 = *firstParag->getNext()->getKWString();
                 _fc->getParag()->insertText( _fc->getTextPos(), str2 );
 
-                for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+                for ( unsigned int j = 0; j <= firstParag->getTextLen(); j++ )
                     _fc->cursorGotoRight();
 
                 delete firstParag->getNext();
                 delete firstParag;
             }
-        } else {
-            if ( _mime == "text/plain" ) {
+        } else { // plain text more than 2 lines
+            if ( mimetype == "text/plain" ) {
                 QString str;
                 unsigned int len;
                 KWFormat *format = _format;
@@ -3184,13 +3182,12 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-                for ( unsigned int j = 0; j < len; j++ )
+                for ( unsigned int j = 0; j <= len; j++ )
                     _fc->cursorGotoRight();
 
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,13,0);
                 _page->keyPressEvent( &ev );
 
-                _fc->cursorGotoLeft();
                 _fc->cursorGotoLeft();
                 KWParag *p = _fc->getParag(), *next = _fc->getParag()->getNext();
 
@@ -3204,11 +3201,13 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                         calcParag = p;
                     p->insertText( 0, str );
                     p->setFormat( 0, len, *format );
+                    for ( unsigned int j = 0; j <= len; j++ )
+                        _fc->cursorGotoRight();
                 }
                 p->setNext( next );
                 if ( next ) next->setPrev( p );
                 delete format;
-            } else {
+            } else { // kword more then 2 lines
                 KWString *str = new KWString( this );
                 *str = *firstParag->getKWString();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
@@ -4044,6 +4043,11 @@ void KWordDocument::slotUndoRedoChanged( QString undo, QString redo )
             viewPtr->changeRedo( redo, !redo.isEmpty() );
         }
     }
+}
+
+/*================================================================*/
+QList <KWordView> KWordDocument::getAllViews() {
+    return m_lstViews;
 }
 
 /*================================================================*/
