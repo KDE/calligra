@@ -481,10 +481,40 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         cbProtectContent->setChecked( false );
         cbProtectContent->hide();
     }
-    else if ( frameType == FT_TEXT && frame!=0 && frame->frameSet() )
+    else if ( frameType == FT_TEXT /*&& frame!=0 && frame->frameSet()*/ )
     {
-        KWTextFrameSet *tmp = static_cast<KWTextFrameSet *>(frame->frameSet() );
-        cbProtectContent->setChecked( tmp->textObject()->protectContent());
+        bool show=true;
+        bool on=true;
+        if(frame)
+        {
+            if ( frame->frameSet() )
+                on= static_cast<KWTextFrameSet *>(frame->frameSet() )->textObject()->protectContent();
+        }
+        else
+        {
+            KWFrame *f=allFrames.first();
+            KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *> (f->frameSet());
+            if(fs)
+                on=fs->textObject()->protectContent();
+            f=allFrames.next();
+            while(f) {
+                KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *> (f->frameSet());
+                if(fs)
+                {
+                    if(on != fs->textObject()->protectContent())
+                    {
+                        show=false;
+                        break;
+                    }
+                }
+                f=allFrames.next();
+            }
+        }
+        cbProtectContent->setChecked( on );
+        if(! show) {
+            cbProtectContent->setTristate();
+            cbProtectContent->setNoChange();
+        }
     }
 
     for(int i=0;i < row;i++)
@@ -1553,21 +1583,24 @@ bool KWFrameDia::applyChanges()
             }
             else
             {
-                for(KWFrame *f=allFrames.first();f; f=allFrames.next())
+                if ( cbProtectContent->state() != QButton::NoChange)
                 {
-                    KWTextFrameSet * frm=dynamic_cast<KWTextFrameSet *>( f->frameSet() );
-                    if ( frm )
+                    for(KWFrame *f=allFrames.first();f; f=allFrames.next())
                     {
-                        if(frm->textObject()->protectContent()!=cbProtectContent->isChecked())
+                        KWTextFrameSet * frm=dynamic_cast<KWTextFrameSet *>( f->frameSet() );
+                        if ( frm )
                         {
-                            if(!macroCmd)
-                                macroCmd = new KMacroCommand( i18n("Protect Content") );
-                            KWProtectContentCommand * cmd = new KWProtectContentCommand( i18n("Protect Content"), frm,cbProtectContent->isChecked() );
-                            cmd->execute();
-                            macroCmd->addCommand(cmd);
+                            if(frm->textObject()->protectContent()!=cbProtectContent->isChecked())
+                            {
+                                if(!macroCmd)
+                                    macroCmd = new KMacroCommand( i18n("Protect Content") );
+                                KWProtectContentCommand * cmd = new KWProtectContentCommand( i18n("Protect Content"), frm,cbProtectContent->isChecked() );
+                                cmd->execute();
+                                macroCmd->addCommand(cmd);
+                            }
                         }
-                    }
 
+                    }
                 }
             }
 
