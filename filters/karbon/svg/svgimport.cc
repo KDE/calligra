@@ -272,6 +272,14 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 	{
 		if( params == "none" )
 			gc->stroke.setType( VStroke::none );
+		else if( params.startsWith( "url(" ) )
+		{
+			unsigned int start = params.find("#") + 1;
+			unsigned int end = params.findRev(")");
+			QString key = params.mid( start, end - start );
+			gc->stroke.gradient() = m_gradients[ key ];
+			gc->stroke.setType( VStroke::grad );
+		}
 		else
 		{
 			strokecolor = parseColor( params );
