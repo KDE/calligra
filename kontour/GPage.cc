@@ -274,11 +274,10 @@ void GPage::deleteObject(GObject *obj)
       selection.removeRef(obj);
     layer->deleteObject(obj);
     obj->unref();
-    mGDoc->emitChanged(obj->boundingBox());
     if(selected)
-    {
-      updateHandle();
-    }
+      updateSelection();
+    else
+      mGDoc->emitChanged(obj->boundingBox());
   }
 }
 

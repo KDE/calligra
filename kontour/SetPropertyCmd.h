@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,30 +23,27 @@
 
 */
 
-#ifndef SetPropertyCmd_h_
-#define SetPropertyCmd_h_
+#ifndef __SetPropertyCmd_h__
+#define __SetPropertyCmd_h__
 
-#include <Command.h>
-#include <GObject.h>
-#include <GText.h>
+#include "Command.h"
+#include "GStyle.h"
+#include <qptrvector.h>
+#include <qmemarray.h>
 
-class SetPropertyCmd : public ObjectManipCmd {
+class SetPropertyCmd : public Command
+{
 public:
-  SetPropertyCmd (GDocument* doc, const GObject::OutlineInfo& oinfo,
-                  const GObject::FillInfo& finfo);
-  SetPropertyCmd (GObject* obj, const GObject::OutlineInfo& oinfo,
-                  const GObject::FillInfo& finfo);
-  SetPropertyCmd (GDocument* doc, const GObject::OutlineInfo& oinfo,
-                  const GObject::FillInfo& finfo,
-                  const GText::TextInfo& tinfo);
+  SetPropertyCmd(GDocument *aGDoc, const GStyle &s);
+  ~SetPropertyCmd();
 
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-  GObject::OutlineInfo outline;
-  GObject::FillInfo fill;
-  GText::TextInfo tprops;
+  GStyle st;
+  QPtrVector<GObject> objects;
+  QMemArray<GStyle> states;
 };
 
 #endif

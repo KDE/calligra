@@ -69,6 +69,7 @@ libkontourpart_la_SOURCES = \
 	RotateCmd.cc \
 	ScaleCmd.cc \
 	ShearCmd.cc \
+	SetPropertyCmd.cc \
 	CreateOvalCmd.cc \
 	CreateRectCmd.cc \
 	OptionsDialog.cc \

@@ -54,15 +54,12 @@ DeleteCmd::~DeleteCmd()
 
 void DeleteCmd::execute()
 {
-//  document()->setAutoUpdate(false);
   for(MyPair *p = objects.first(); p != 0L; p = objects.next())
     document()->activePage()->deleteObject(p->o);
-//  document()->setAutoUpdate(true);
 }
 
 void DeleteCmd::unexecute()
 {
-//  document()->setAutoUpdate(false);
   document()->activePage()->unselectAllObjects();
   for(MyPair *p = objects.first(); p != 0L; p = objects.next())
   {
@@ -70,5 +67,4 @@ void DeleteCmd::unexecute()
     document()->activePage()->insertObjectAtIndex(p->o, p->pos);
     document()->activePage()->selectObject(p->o);
   }
-//  document()->setAutoUpdate(true);
 }

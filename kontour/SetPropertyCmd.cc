@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,63 +23,48 @@
 
 */
 
-#include <SetPropertyCmd.h>
+#include "SetPropertyCmd.h"
+
 #include <klocale.h>
-#include <kdebug.h>
 
-SetPropertyCmd::SetPropertyCmd (GDocument* doc,
-                                const GObject::OutlineInfo& oinfo,
-                                const GObject::FillInfo& finfo) :
-  ObjectManipCmd (doc, i18n("Set property"))
+#include "GDocument.h"
+#include "GPage.h"
+#include "GObject.h"
+
+SetPropertyCmd::SetPropertyCmd(GDocument *aGDoc, const GStyle &s):
+Command(aGDoc, i18n("Set property"))
 {
-  outline = oinfo;
-  fill = finfo;
-  tprops.mask = 0;
-  kdDebug() << "COLOR=" << fill.color.name() << endl;
-  kdDebug() << "MASK=" << fill.mask << endl;
-}
-
-SetPropertyCmd::SetPropertyCmd (GObject* obj,
-                                const GObject::OutlineInfo& oinfo,
-                                const GObject::FillInfo& finfo) :
-  ObjectManipCmd (obj, i18n("Set property"))
-{
-  outline = oinfo;
-  fill = finfo;
-  tprops.mask = 0;
-}
-
-SetPropertyCmd::SetPropertyCmd (GDocument* doc,
-                                const GObject::OutlineInfo& oinfo,
-                                const GObject::FillInfo& finfo,
-                                const GText::TextInfo& tinfo) :
-  ObjectManipCmd (doc, i18n("Set property"))
-{
-  outline = oinfo;
-  fill = finfo;
-  tprops = tinfo;
-}
-
-void SetPropertyCmd::execute ()
-{
-  kdDebug() << "execute" << endl;
-  // save the states
-  ObjectManipCmd::execute ();
-
-  for (unsigned int i = 0; i < objects.count (); i++)
+  st = s;
+  objects.resize(document()->activePage()->selectionCount());
+  states.resize(document()->activePage()->selectionCount());
+  QPtrListIterator<GObject> it(document()->activePage()->getSelection());
+  for(unsigned int i = 0; it.current(); ++it, ++i)
   {
-    objects[i]->setOutlineInfo (outline);
-    objects[i]->setFillInfo (fill);
-    if (tprops.mask && objects[i]->isA ("GText"))
-    {
-      GText* tobj = (GText *) objects[i];
-      tobj->setTextInfo (tprops);
-    }
+    (*it)->ref();
+    objects.insert(i, (*it));
+    states[i] = (*it)->style();
   }
 }
 
-void SetPropertyCmd::unexecute ()
+SetPropertyCmd::~SetPropertyCmd()
 {
-  kdDebug() << "unexecute" << endl;
-  ObjectManipCmd::unexecute();
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->unref();
+}
+
+void SetPropertyCmd::execute()
+{
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->style(st);
+}
+
+void SetPropertyCmd::unexecute()
+{
+  document()->activePage()->unselectAllObjects();
+  for(unsigned int i = 0; i < objects.count(); i++)
+  {
+    objects[i]->style(states[i]);
+    document()->activePage()->selectObject(objects[i]);
+  }
+  document()->activePage()->updateSelection();
 }
