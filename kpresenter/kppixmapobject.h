@@ -59,9 +59,9 @@ public:
     { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
     virtual void setGType( BCType _gType )
     { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
-    virtual QString getFileName()
+    virtual QString getFileName() const
     { return key.dataKey.filename; }
-    virtual KPPixmapDataCollection::Key getKey()
+    virtual KPPixmapDataCollection::Key getKey() const
     { return key.dataKey; }
     virtual void setGUnbalanced( bool b )
     { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
@@ -76,25 +76,25 @@ public:
     void reload()
     { setPixmap( key.dataKey.filename, key.dataKey.lastModified, key.size ); }
 
-    virtual ObjType getType()
+    virtual ObjType getType() const
     { return OT_PICTURE; }
-    virtual QPen getPen()
+    virtual QPen getPen() const
     { return pen; }
-    virtual QBrush getBrush()
+    virtual QBrush getBrush() const
     { return brush; }
-    virtual FillType getFillType()
+    virtual FillType getFillType() const
     { return fillType; }
-    virtual QColor getGColor1()
+    virtual QColor getGColor1() const
     { return gColor1; }
-    virtual QColor getGColor2()
+    virtual QColor getGColor2() const
     { return gColor2; }
-    virtual BCType getGType()
+    virtual BCType getGType() const
     { return gType; }
-    virtual bool getGUnbalanced()
+    virtual bool getGUnbalanced() const
     { return unbalanced; }
-    virtual int getGXFactor( )
+    virtual int getGXFactor() const
     { return xfactor; }
-    virtual int getGYFactor()
+    virtual int getGYFactor() const
     { return yfactor; }
 
     virtual void save( QTextStream& out );

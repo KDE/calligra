@@ -64,27 +64,27 @@ public:
     void reload()
     { setFileName( key.filename, key.lastModified ); }
 
-    virtual ObjType getType()
+    virtual ObjType getType() const
     { return OT_CLIPART; }
-    virtual QString getFileName()
+    virtual QString getFileName() const
     { return key.filename; }
-    virtual QPen getPen()
+    virtual QPen getPen() const
     { return pen; }
-    virtual QBrush getBrush()
+    virtual QBrush getBrush() const
     { return brush; }
-    virtual FillType getFillType()
+    virtual FillType getFillType() const
     { return fillType; }
-    virtual QColor getGColor1()
+    virtual QColor getGColor1() const
     { return gColor1; }
-    virtual QColor getGColor2()
+    virtual QColor getGColor2() const
     { return gColor2; }
-    virtual BCType getGType()
+    virtual BCType getGType() const
     { return gType; }
-    virtual bool getGUnbalanced()
+    virtual bool getGUnbalanced() const
     { return unbalanced; }
-    virtual int getGXFactor( )
+    virtual int getGXFactor() const
     { return xfactor; }
-    virtual int getGYFactor()
+    virtual int getGYFactor() const
     { return yfactor; }
 
     virtual void save( QTextStream& out );
@@ -95,7 +95,7 @@ public:
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 
-    KPClipartCollection::Key getKey()
+    KPClipartCollection::Key getKey() const
     { return key; }
 
 protected:

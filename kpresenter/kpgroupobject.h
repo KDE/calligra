@@ -56,7 +56,7 @@ public:
     virtual void setDisappearNum( int num );
     virtual void setEffect3( Effect3 _effect3);
 
-    virtual ObjType getType()
+    virtual ObjType getType() const
     { return OT_GROUP; }
 
     virtual void save( QTextStream& out );

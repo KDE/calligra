@@ -80,7 +80,7 @@ KPObject &KPObject::operator=( const KPObject & )
 }
 
 /*======================= get bounding rect ======================*/
-QRect KPObject::getBoundingRect( int _diffx, int _diffy )
+QRect KPObject::getBoundingRect( int _diffx, int _diffy ) const
 {
     QRect r( orig.x() - _diffx, orig.y() - _diffy,
              ext.width(), ext.height() );
@@ -290,7 +290,7 @@ void KPObject::draw( QPainter *_painter, int _diffx, int _diffy )
 }
 
 /*====================== get shadow coordinates ==================*/
-void KPObject::getShadowCoords( int& _x, int& _y, ShadowDirection /*_direction*/, int /*_distance*/ )
+void KPObject::getShadowCoords( int& _x, int& _y, ShadowDirection /*_direction*/, int /*_distance*/ ) const
 {
     int sx = 0, sy = 0;
 

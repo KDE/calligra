@@ -75,7 +75,7 @@ public:
     void setBackClipFilename(  const QString &_filename, QDateTime _lastModified );
     void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
-    KPPixmapDataCollection::Key getKey()
+    KPPixmapDataCollection::Key getKey() const
     { return key.dataKey; }
 
 

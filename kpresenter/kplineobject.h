@@ -55,15 +55,15 @@ public:
     virtual void setLineType( LineType _lineType )
     { lineType = _lineType; }
 
-    virtual ObjType getType()
+    virtual ObjType getType() const
     { return OT_LINE; }
-    virtual QPen getPen()
+    virtual QPen getPen() const
     { return pen; }
-    virtual LineEnd getLineBegin()
+    virtual LineEnd getLineBegin() const
     { return lineBegin; }
-    virtual LineEnd getLineEnd()
+    virtual LineEnd getLineEnd() const
     { return lineEnd; }
-    virtual LineType getLineType()
+    virtual LineType getLineType() const
     { return lineType; }
 
     virtual void save( QTextStream& out );

@@ -96,18 +96,18 @@ public:
     virtual void load( KOMLParser& /*parser*/, QValueList<KOMLAttrib>& /*lst*/ )
     {; }
 
-    virtual ObjType getType()
+    virtual ObjType getType() const
     { return OT_UNDEFINED; }
-    virtual QRect getBoundingRect( int _diffx, int _diffy );
-    virtual bool isSelected()
+    virtual QRect getBoundingRect( int _diffx, int _diffy ) const;
+    virtual bool isSelected() const
     { return selected; }
-    virtual float getAngle()
+    virtual float getAngle() const
     { return angle; }
-    virtual int getShadowDistance()
+    virtual int getShadowDistance() const
     { return shadowDistance; }
-    virtual ShadowDirection getShadowDirection()
+    virtual ShadowDirection getShadowDirection() const
     { return shadowDirection; }
-    virtual QColor getShadowColor()
+    virtual QColor getShadowColor() const
     { return shadowColor; }
     virtual QSize getSize() const
     { return ext; }
@@ -170,7 +170,7 @@ public:
     static void setupClipRegion( QPainter *painter, const QRegion &clipRegion );
 
 protected:
-    virtual void getShadowCoords( int& _x, int& _y, ShadowDirection _direction, int _distance );
+    void getShadowCoords( int& _x, int& _y, ShadowDirection _direction, int _distance ) const;
     virtual void paintSelection( QPainter *_painter );
     virtual void doDelete();
 

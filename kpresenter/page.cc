@@ -155,7 +155,7 @@ Page::~Page()
 /*============================ draw contents ====================*/
 void Page::draw( QRect _rect, QPainter *p )
 {
-    kdDebug() << "Page::draw" << endl;
+    //kdDebug() << "Page::draw" << endl;
     p->save();
     editMode = false;
     fillBlack = false;
@@ -166,7 +166,6 @@ void Page::draw( QRect _rect, QPainter *p )
 
     drawPageInPainter( p, view->getDiffY(), _rect );
 
-    kdDebug() << "Page::draw *** setting currPresPage to 1" << endl;
     currPresPage = 1;
     currPresStep = 0;
     subPresStep = 0;
@@ -274,7 +273,7 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 		kpobject->setOrig( op.x(), op.y() - pg * getPageRect( 0, _presFakt ).height() + pgNum * getPageRect( 0, _presFakt ).height() );
 	    }
 
-            //kdDebug() << "                 drawing object at " << diffx() << "," << diffy() << endl;
+            //kdDebug() << "                 drawing object at " << diffx() << "," << diffy() << "  and setting subpresstep to 0 !" << endl;
 	    kpobject->draw( painter, diffx(), diffy() );
 	    kpobject->setSubPresStep( 0 );
 	    kpobject->doSpecificEffects( false );
@@ -1896,38 +1895,45 @@ bool Page::pNext( bool )
     bool clearSubPres = false;
 
     goingBack = false;
-    KPObject *kpobject = 0;
 
-    if ( (int)currPresStep < *( --presStepList.end() ) )
+    kdDebug() << "\n-------\nPage::pNext currPresStep=" << currPresStep << " subPresStep=" << subPresStep << endl;
+
+    // First try to go one sub-step further, if any object requires it
+    QListIterator<KPObject> oit(*objectList());
+    for ( int i = 0 ; oit.current(); ++oit, ++i )
     {
-        QListIterator<KPObject> oit(*objectList());
-        for ( int i = 0 ; oit.current(); ++oit, ++i )
+        KPObject *kpobject = oit.current();
+        if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
+             && kpobject->getPresNum() == static_cast<int>( currPresStep )
+             && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
         {
-            kpobject = oit.current();
-            if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
-                 && kpobject->getPresNum() == static_cast<int>( currPresStep )
-                 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
+            if ( static_cast<int>( subPresStep ) < kpobject->getSubPresSteps() )
             {
-                if ( static_cast<int>( subPresStep ) < kpobject->getSubPresSteps() )
-                    addSubPres = true;
-                else
-                    clearSubPres = true;
+                addSubPres = true;
+                kdDebug() << "Page::pNext adding subpres" << endl;
             }
+            else
+                clearSubPres = true;
         }
 
         if ( addSubPres )
         {
-            kdDebug() << "Page::pNext addSubPres" << endl;
+            kdDebug() << "Page::pNext addSubPres subPresStep is now " << subPresStep+1 << endl;
             subPresStep++;
             doObjEffects();
             return false;
         }
-        else if ( clearSubPres )
-            subPresStep = 0;
 
+        if ( clearSubPres )           // not sure what that's for (the bool)
+            subPresStep = 0;
+    }
+
+    // Then try to see if there is still one step to do in the current page
+    if ( (int)currPresStep < *( --presStepList.end() ) )
+    {
         QValueList<int>::Iterator it = presStepList.find( currPresStep );
         currPresStep = *( ++it );
-        kdDebug() << "Page::pNext setting currPresStep to " << currPresStep << endl;
+        //kdDebug() << "Page::pNext setting currPresStep to " << currPresStep << endl;
 
         if ( currPresStep == 0 )
         {
@@ -1938,65 +1944,13 @@ bool Page::pNext( bool )
         }
 
         doObjEffects();
+        return false;
     }
-    else
+
+    // No more steps in this page, try to go to the next page
+    QValueList<int>::Iterator test(  slideListIterator );
+    if ( ++test != slideList.end() )
     {
-        QValueList<int>::Iterator test(  slideListIterator );
-        if ( ++test == slideList.end() )
-        {
-            kdDebug() << "Page::pNext last slide -> again" << endl;
-            QListIterator<KPObject> it(*objectList());
-            for ( int i = 0 ; it.current(); ++it, ++i )
-            {
-                kpobject = it.current();
-                if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
-                     && kpobject->getPresNum() == static_cast<int>( currPresStep )
-                     && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
-                {
-                    if ( static_cast<int>( subPresStep ) < kpobject->getSubPresSteps() )
-                        addSubPres = true;
-                }
-            }
-
-            if ( addSubPres )
-            {
-                subPresStep++;
-                doObjEffects();
-                return false;
-            }
-
-            emit stopPres();
-
-            presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
-            currPresStep = *presStepList.begin();
-            doObjEffects();
-            return false;
-        }
-
-        QListIterator<KPObject> oit(*objectList());
-        for ( int i = 0 ; oit.current(); ++oit, ++i )
-        {
-            kpobject = oit.current();
-            if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
-                 && kpobject->getPresNum() == static_cast<int>( currPresStep )
-                 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
-            {
-                if ( static_cast<int>( subPresStep ) < kpobject->getSubPresSteps() )
-                    addSubPres = true;
-                else
-                    clearSubPres = true;
-            }
-        }
-
-        if ( addSubPres )
-        {
-            subPresStep++;
-            doObjEffects();
-            return false;
-        }
-        else if ( clearSubPres )
-            subPresStep = 0;
-
         QPixmap _pix1( QApplication::desktop()->width(), QApplication::desktop()->height() );
         drawPageInPix( _pix1, view->getDiffY() );
 
@@ -2026,6 +1980,13 @@ bool Page::pNext( bool )
 
         return true;
     }
+
+    // No more slides. Redisplay last one, then
+    kdDebug() << "Page::pNext last slide -> again" << endl;
+    emit stopPres();
+    presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
+    currPresStep = *presStepList.begin();
+    doObjEffects();
     return false;
 }
 
@@ -2077,7 +2038,7 @@ bool Page::canAssignEffect( QList<KPObject> &objs ) const
 /*================================================================*/
 void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*/ )
 {
-    kdDebug() << "Page::drawPageInPix2" << endl;
+    //kdDebug() << "Page::drawPageInPix2" << endl;
     ignoreSkip = TRUE;
     currPresPage = pgnum + 1;
     int _yOffset = view->getDiffY();
@@ -2111,7 +2072,7 @@ void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*
 /*==================== draw a page in a pixmap ===================*/
 void Page::drawPageInPix( QPixmap &_pix, int __diffy )
 {
-    kdDebug() << "Page::drawPageInPix" << endl;
+    //kdDebug() << "Page::drawPageInPix" << endl;
     ignoreSkip = TRUE;
     int _yOffset = view->getDiffY();
     view->setDiffY( __diffy );
@@ -2131,7 +2092,7 @@ void Page::drawPageInPix( QPixmap &_pix, int __diffy )
 /*==================== draw a page in a painter ===================*/
 void Page::drawPageInPainter( QPainter* painter, int __diffy, QRect _rect )
 {
-    kdDebug() << "Page::drawPageInPainter" << endl;
+    //kdDebug() << "Page::drawPageInPainter" << endl;
     ignoreSkip = TRUE;
     int _yOffset = view->getDiffY();
     view->setDiffY( __diffy );
@@ -2587,7 +2548,7 @@ void Page::doObjEffects()
     // YABADABADOOOOOOO.... That's a hack :-)
     if ( subPresStep == 0 && currPresPage > 0 )
     {
-        kdDebug() << "Page::doObjEffects - in the strange hack" << endl;
+        //kdDebug() << "Page::doObjEffects - in the strange hack" << endl;
         inEffect = true;
         QPainter p;
         p.begin( &screen_orig );
@@ -3150,7 +3111,7 @@ void Page::doObjEffects()
 
     if ( !effects )
     {
-        kdDebug() << "Page::doObjEffects no effects" << endl;
+        //kdDebug() << "Page::doObjEffects no effects" << endl;
         QPainter p;
         p.begin( this );
         p.drawPixmap( 0, 0, screen_orig );
@@ -3159,7 +3120,7 @@ void Page::doObjEffects()
     }
     else
     {
-        kdDebug() << "Page::doObjEffects effects" << endl;
+        //kdDebug() << "Page::doObjEffects effects" << endl;
         QPainter p;
         p.begin( screen );
         drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ) );

@@ -400,6 +400,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             if ( specEffects ) {
                 switch ( effect2 ) {
                 case EF2T_PARA:
+                    kdDebug() << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
                     drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
                     break;
                 default:
@@ -437,6 +438,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             if ( specEffects ) {
                 switch ( effect2 ) {
                 case EF2T_PARA:
+                    kdDebug() << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
                     drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
                     break;
                 default:
@@ -467,6 +469,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         if ( specEffects ) {
             switch ( effect2 ) {
             case EF2T_PARA:
+                kdDebug() << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
                 drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
                 break;
             default:
@@ -509,6 +512,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         if ( specEffects ) {
             switch ( effect2 ) {
             case EF2T_PARA:
+                kdDebug() << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
                 drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
                 break;
             default:

@@ -72,35 +72,35 @@ public:
     virtual void setGYFactor( int f )
     { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
 
-    virtual ObjType getType()
+    virtual ObjType getType() const
     { return OT_PIE; }
-    virtual QPen getPen()
+    virtual QPen getPen() const
     { return pen; }
-    virtual QBrush getBrush()
+    virtual QBrush getBrush() const
     { return brush; }
-    virtual FillType getFillType()
+    virtual FillType getFillType() const
     { return fillType; }
-    virtual QColor getGColor1()
+    virtual QColor getGColor1() const
     { return gColor1; }
-    virtual QColor getGColor2()
+    virtual QColor getGColor2() const
     { return gColor2; }
-    virtual BCType getGType()
+    virtual BCType getGType() const
     { return gType; }
-    virtual PieType getPieType()
+    virtual PieType getPieType() const
     { return pieType; }
-    virtual int getPieAngle()
+    virtual int getPieAngle() const
     { return p_angle; }
-    virtual int getPieLength()
+    virtual int getPieLength() const
     { return p_len; }
-    virtual LineEnd getLineBegin()
+    virtual LineEnd getLineBegin() const
     { return lineBegin; }
-    virtual LineEnd getLineEnd()
+    virtual LineEnd getLineEnd() const
     { return lineEnd; }
-    virtual bool getGUnbalanced()
+    virtual bool getGUnbalanced() const
     { return unbalanced; }
-    virtual int getGXFactor( )
+    virtual int getGXFactor( ) const
     { return xfactor; }
-    virtual int getGYFactor()
+    virtual int getGYFactor() const
     { return yfactor; }
 
     virtual void save( QTextStream& out );

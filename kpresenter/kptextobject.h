@@ -66,34 +66,35 @@ public:
     virtual void setGYFactor( int f )
     { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
 
-    virtual ObjType getType()
+    virtual ObjType getType() const
     { return OT_TEXT; }
-    virtual int getSubPresSteps()
+    virtual int getSubPresSteps() const
     { return ktextobject.paragraphs() - 1; }
+    virtual QPen getPen() const
+    { return pen; }
+    virtual QBrush getBrush() const
+    { return brush; }
+    virtual FillType getFillType() const
+    { return fillType; }
+    virtual QColor getGColor1() const
+    { return gColor1; }
+    virtual QColor getGColor2() const
+    { return gColor2; }
+    virtual BCType getGType() const
+    { return gType; }
+    virtual bool getDrawEditRect() const
+    { return drawEditRect; }
+    virtual bool getDrawEmpty() const
+    { return drawEmpty; }
+    virtual bool getGUnbalanced() const
+    { return unbalanced; }
+    virtual int getGXFactor( ) const
+    { return xfactor; }
+    virtual int getGYFactor() const
+    { return yfactor; }
+
     virtual KTextEdit* getKTextObject()
     { return &ktextobject; }
-    virtual QPen getPen()
-    { return pen; }
-    virtual QBrush getBrush()
-    { return brush; }
-    virtual FillType getFillType()
-    { return fillType; }
-    virtual QColor getGColor1()
-    { return gColor1; }
-    virtual QColor getGColor2()
-    { return gColor2; }
-    virtual BCType getGType()
-    { return gType; }
-    virtual bool getDrawEditRect()
-    { return drawEditRect; }
-    virtual bool getDrawEmpty()
-    { return drawEmpty; }
-    virtual bool getGUnbalanced()
-    { return unbalanced; }
-    virtual int getGXFactor( )
-    { return xfactor; }
-    virtual int getGYFactor()
-    { return yfactor; }
 
     virtual void save( QTextStream& out );
     virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
