@@ -959,6 +959,15 @@ QString KoCustomVariable::fieldCode()
     return i18n("Custom Variable");
 }
 
+QString KoCustomVariable::text()
+{
+    if (m_varColl->variableSetting()->displayFiedCode())
+        return fieldCode();
+    else
+        return value();
+} // use a format when they are customizable
+
+
 
 void KoCustomVariable::saveVariable( QDomElement& parentElem )
 {
@@ -1123,6 +1132,14 @@ QString KoFieldVariable::fieldCode()
 {
     return i18n("Field");
 }
+
+QString KoFieldVariable::text()
+{
+    if (m_varColl->variableSetting()->displayFiedCode())
+        return fieldCode();
+    else
+        return value();
+} // use a format when they are customizable
 
 
 void KoFieldVariable::saveVariable( QDomElement& parentElem )
@@ -1333,6 +1350,13 @@ QString KoLinkVariable::fieldCode()
     return i18n("Link");
 }
 
+QString KoLinkVariable::text()
+{
+    if (m_varColl->variableSetting()->displayFiedCode())
+        return fieldCode();
+    else
+        return value();
+}
 
 void KoLinkVariable::saveVariable( QDomElement& parentElem )
 {

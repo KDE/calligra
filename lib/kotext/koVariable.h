@@ -443,7 +443,8 @@ public:
     virtual void recalc();
     virtual QString fieldCode();
 
-    virtual QString text() { return value(); } // use a format when they are customizable
+    virtual QString text();
+
     QString value() const;
     void setValue( const QString &v );
 
@@ -480,7 +481,8 @@ public:
     virtual QString fieldCode();
 
     virtual void recalc();
-    virtual QString text() { return value(); } // use a format when they are customizable
+    virtual QString text();
+
     QString value() const { return m_varValue.toString(); }
 
     static QStringList actionTexts();
@@ -575,7 +577,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    virtual QString text() { return value(); }
+    virtual QString text();
     QString value() const { return m_varValue.toString(); }
     QString url() const { return m_url;}
 
