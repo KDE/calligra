@@ -121,7 +121,7 @@
         <title xml:lang="en_us">None</title>
         <description xml:lang="en_us">The filter does not currently exist, and nobody is working on it.</description>
     </status>
-    <status id="" symbol="?">
+    <status id="abandoned" symbol="?">
         <title xml:lang="en_us">Abandoned</title>
         <description xml:lang="en_us">The status of this filter is unknown, as its development has been abandoned.</description>
     </status>
