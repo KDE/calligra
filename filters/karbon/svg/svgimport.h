@@ -80,6 +80,8 @@ protected:
 	QWMatrix parseTransform( const QString & );
 	void parseColor( VColor &, const QString & );
 	double toPercentage( const QString & );
+	void setupTransform( const QDomElement & );
+	void addGraphicContext();
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();

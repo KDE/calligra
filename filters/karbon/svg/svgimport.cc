@@ -186,18 +186,18 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 				value = ( value / 100.0 ) * bbox.height();
 		}
 	}
-	else
+	/*else
 	{
 		if( m_gc.current() )
 		{
 			if( horiz && vert )
 				value *= sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 );
 			else if( horiz )
-				value *= m_gc.current()->matrix.m11();
+				value /= m_gc.current()->matrix.m11();
 			else if( vert )
-				value *= m_gc.current()->matrix.m22();
+				value /= m_gc.current()->matrix.m22();
 		}
-	}
+	}*/
 	return value;
 }
 
@@ -473,17 +473,29 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 }
 
 void
-SvgImport::parseStyle( VObject *obj, const QDomElement &e )
+SvgImport::addGraphicContext()
 {
 	GraphicsContext *gc = new GraphicsContext;
 	// set as default
 	if( m_gc.current() )
 		*gc = *( m_gc.current() );
+	m_gc.push( gc );
+}
+
+void
+SvgImport::setupTransform( const QDomElement &e )
+{
+	GraphicsContext *gc = m_gc.current();
 
 	QWMatrix mat = parseTransform( e.attribute( "transform" ) );
 	gc->matrix = mat * gc->matrix;
-	VTransformCmd trafo( 0L, gc->matrix );
-	trafo.visit( *obj );
+}
+
+void
+SvgImport::parseStyle( VObject *obj, const QDomElement &e )
+{
+	GraphicsContext *gc = m_gc.current();
+	if( !gc ) return;
 
 	// try normal PA
 	if( !e.attribute( "fill" ).isEmpty() )
@@ -523,8 +535,9 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	}
 
 	obj->setFill( gc->fill );
+	// stroke scaling
+	gc->stroke.setLineWidth( gc->stroke.lineWidth() * sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 ) );
 	obj->setStroke( gc->stroke );
-	m_gc.push( gc );
 }
 
 void
@@ -543,6 +556,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			else
 				group = new VGroup( &m_document );
 
+			addGraphicContext();
+			setupTransform( b );
 			parseStyle( group, b );
 			parseGroup( group, b );
 			if( grp )
@@ -564,14 +579,18 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "rect" )
 		{
+			addGraphicContext();
 			double x		= parseUnit( b.attribute( "x" ) );
 			double y		= parseUnit( b.attribute( "y" ) );
 			double width	= parseUnit( b.attribute( "width" ), true, false );
 			double height	= parseUnit( b.attribute( "height" ), false, true );
+			setupTransform( b );
 			obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
 		}
 		else if( b.tagName() == "ellipse" )
 		{
+			addGraphicContext();
+			setupTransform( b );
 			double rx		= parseUnit( b.attribute( "rx" ) );
 			double ry		= parseUnit( b.attribute( "ry" ) );
 			double left		= parseUnit( b.attribute( "cx" ) ) - ( rx / 2.0 );
@@ -581,6 +600,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "circle" )
 		{
+			addGraphicContext();
+			setupTransform( b );
 			double r		= parseUnit( b.attribute( "r" ) );
 			double left		= parseUnit( b.attribute( "cx" ) ) - ( r / 2.0 );
 			double top		= parseUnit( b.attribute( "cy" ) ) + ( r / 2.0 );
@@ -589,6 +610,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "line" )
 		{
+			addGraphicContext();
+			setupTransform( b );
 			VComposite *path = new VComposite( &m_document );
 			double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
 			double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
@@ -600,6 +623,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
 		{
+			addGraphicContext();
+			setupTransform( b );
 			VComposite *path = new VComposite( &m_document );
 			bool bFirst = true;
 
@@ -623,6 +648,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "path" )
 		{
+			addGraphicContext();
+			setupTransform( b );
 			VComposite *path = new VComposite( &m_document );
 			path->loadSvgPath( b.attribute( "d" ) );
 			obj = path;
@@ -637,6 +664,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			base.moveTo( KoPoint( x, y ) );
 			base.lineTo( KoPoint( x + 10, y ) );
 			text->setBasePath( base );
+			addGraphicContext();
+			setupTransform( b );
 			parseStyle( text, b );
 			text->setFont( m_gc.current()->font );
 			if( text )
@@ -647,6 +676,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			continue;
 		}
 		if( !obj ) continue;
+		VTransformCmd trafo( 0L, m_gc.current()->matrix );
+		trafo.visit( *obj );
 		parseStyle( obj, b );
 		if( grp )
 			grp->append( obj );
