@@ -321,6 +321,9 @@ SQL Parser highly improved
 - expressions are now parsed quite well: e.g. identifier checking is recursive
 - better debugging
 - ParseInfo introduced: Data used on parsing
+- invalid use of reserver keywords are now detected: 
+  '"KEYWORD" is reserved keyword: identifier was expected' message is now returned
+  instead of dumb "syntax error"
 KexiDB
 - Field: expressions are better supported
 - Connection: expressions are visible in selectStatement()

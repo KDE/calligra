@@ -21,7 +21,31 @@
 
 using namespace KexiDB;
 
-ParseInfo::ParseInfo(QuerySchema *query)
+ParserPrivate::ParserPrivate()
+ : reservedKeywords(997, 997, false)
+ , initialized(false)
+{
+	clear();
+	table = 0;
+	select = 0;
+	db = 0;
+}
+
+ParserPrivate::~ParserPrivate()
+{
+	delete select;
+	delete table;
+}
+
+void ParserPrivate::clear()
+{
+	operation = Parser::OP_None;
+	error = ParserError();
+}
+
+//-------------------------------------
+
+ParseInfo::ParseInfo(KexiDB::QuerySchema *query)
  : repeatedTablesAndAliases(997, false)
  , querySchema(query)
 {

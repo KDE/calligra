@@ -7,7 +7,7 @@ DEFINES += MAKE_KEXI_DB_LIB
 
 TARGET		= kexidb$$KDEBUG
 
-DEFINES += YYERROR_VERBOSE
+DEFINES += YYERROR_VERBOSE=1
 
 system( moc connection.h -o moc/connection.moc )
 system( moc drivermanager_p.h -o moc/drivermanager_p.moc )

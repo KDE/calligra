@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,7 +48,6 @@ class KEXI_DB_EXPORT ParserError
 		QString	type() { return m_type; }
 		QString	error() { return m_error; }
 		int	at() { return m_at; }
-//		bool	isNull() { return m_isNull; }
 
 	private:
 		QString m_type;
@@ -57,9 +57,10 @@ class KEXI_DB_EXPORT ParserError
 //		bool	m_isNull;
 };
 
+class ParserPrivate;
 
 /**
- * parser for sql statements
+ * Parser for sql statements.
  */
 class KEXI_DB_EXPORT Parser
 {
@@ -91,12 +92,12 @@ class KEXI_DB_EXPORT Parser
 		/**
 		 * rests results
 		 */
-		void		clear();
+		void clear();
 
 		/**
 		 * \return the resulting operation or OP_Error if failed
 		 */
-		OPCode		operation() { return m_operation; }
+		OPCode operation() const;
 
 		/**
 		 * \return a pointer to a KexiDBTable on CREATE TABLE 
@@ -104,7 +105,7 @@ class KEXI_DB_EXPORT Parser
 		 * You can call this method only once every time after doing parse().
 		 * Next time, the call will return 0.
 		 */
-		TableSchema	*table() { TableSchema *t = m_table; m_table=0; return t; }
+		TableSchema *table();
 
 		/**
 		 * \return a pointer to KexiDBSelect if 'SELECT ...' was called 
@@ -112,33 +113,35 @@ class KEXI_DB_EXPORT Parser
 		 * You can call this method only once every time after doing parse().
 		 * Next time, the call will return 0.
 		 */
-		QuerySchema	*query() { QuerySchema *s = m_select; m_select=0; return s; }
+		QuerySchema *query();
 
 		/**
 		 * \return a pointer to the used database connection or 0 if not set
 		 * You can call this method only once every time after doing parse().
 		 * Next time, the call will return 0.
 		 */
-		Connection	*db() { return m_db; }
+		Connection	*db() const;
 
 		/**
 		 * returns detailed information about last error.
 		 * If no error occured ParserError isNull()
 		 */
-		ParserError	error() const { return m_error; }
+		ParserError error() const;
 
-		QString		statement() { return m_statement; }
+		QString statement() const;
 
 
 		/**
+		 * @internal
 		 * sets the operation (only parser will need to call this)
 		 */
-		void		setOperation(OPCode op) { m_operation = op; }
+		void setOperation(OPCode op);
 
 		/**
+		 * @internal
 		 * creates a new table (only parser will need to call this)
 		 */
-		void		createTable(const char *t);
+		void createTable(const char *t);
 
 		/**
 		 * @internal
@@ -149,33 +152,24 @@ class KEXI_DB_EXPORT Parser
 
 		/**
 		 * @internal
-		 * \return a INTERNAL list of fields
-		 */
-//		Field::List *fieldList() { return m_fieldList; }
-
-		/**
-		 * @internal
 		 * \return query schema
 		 */
-		QuerySchema	*select() { return m_select; }
+		QuerySchema *select() const;
 
 		/**
 		 * @internal
 		 * INTERNAL use only: sets a error
 		 */
-		void		setError(const ParserError &err) { m_error = err; }
+		void setError(const ParserError &err);
 
-	private:
-		OPCode		m_operation;
-//		KexiDBTable	*m_table;
-		TableSchema	*m_table;
-		QuerySchema	*m_select;
-		Connection	*m_db;
-//		Field::List	*m_fieldList;
-		QString		m_statement;
-		ParserError	m_error;
+		bool isReservedKeyword(const char *str);
+
+	protected:
+		void init();
+
+		ParserError m_error;
+		ParserPrivate *d;
 };
-
 
 }
 

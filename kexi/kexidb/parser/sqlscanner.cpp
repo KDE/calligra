@@ -485,90 +485,7 @@ extern void setError(const QString& errName, const QString& errDesc);
 #define YY_NEVER_INTERACTIVE 1
 /*identifier	[a-zA-Z_][a-zA-Z_0-9]* */
 /* todo: support for real numbers */
-/*
-"@" return AT;
-";" return SEMICOLON;
-"*" {
-	ECOUNT;
-	return ASTERISK;
-}
-
-"+" {
-	ECOUNT;
-	return ARITHMETIC_PLUS;
-}
-
-"-" {
-	ECOUNT;
-	return ARITHMETIC_MINUS;
-}
-
-"/" {
-	ECOUNT;
-	return SLASH;
-}
-
-"(" {
-	ECOUNT;
-	return LEFTPAREN;
-}
-
-")" {
-	ECOUNT;
-	return RIGHTPAREN;
-}
-
-"." {
-	ECOUNT;
-	return DOT;
-}
-
-"$" {
-	ECOUNT;
-	return DOLLAR_SIGN;
-}
-
-"%" {
-	ECOUNT;
-	return PERCENT;
-}
-
-"=" {
-	ECOUNT;
-	return EQUAL;
-}
-
-"<" {
-	ECOUNT;
-	return LESS_THAN;
-}
-
-">" {
-	ECOUNT;
-	return GREATER_THAN;
-}
-
-"'" {
-	ECOUNT;
-	return SINGLE_QUOTE;
-}
-
-"?" {
-	ECOUNT;
-	return QUESTION_MARK;
-}
-
-":" {
-	ECOUNT;
-	return COLON;
-}
-
-"," {
-	ECOUNT;
-	return COMMA;
-}
-*/
-#line 572 "sqlscanner.cpp"
+#line 489 "sqlscanner.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -719,10 +636,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 137 "sqlscanner.l"
+#line 52 "sqlscanner.l"
 
 
-#line 726 "sqlscanner.cpp"
+#line 643 "sqlscanner.cpp"
 
 	if ( yy_init )
 		{
@@ -807,7 +724,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 139 "sqlscanner.l"
+#line 54 "sqlscanner.l"
 {
 	ECOUNT;
 	return NOT_EQUAL;
@@ -815,7 +732,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 144 "sqlscanner.l"
+#line 59 "sqlscanner.l"
 {
 	ECOUNT;
 	return '=';
@@ -823,7 +740,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 149 "sqlscanner.l"
+#line 64 "sqlscanner.l"
 {
 	ECOUNT;
 	return LESS_OR_EQUAL;
@@ -831,7 +748,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 154 "sqlscanner.l"
+#line 69 "sqlscanner.l"
 {
 	ECOUNT;
 	return GREATER_OR_EQUAL;
@@ -839,7 +756,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 159 "sqlscanner.l"
+#line 74 "sqlscanner.l"
 {
 	ECOUNT;
 	return SQL_IN;
@@ -847,7 +764,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 164 "sqlscanner.l"
+#line 79 "sqlscanner.l"
 {
 	yylval.integerValue = atoi(yytext);
 	ECOUNT;
@@ -856,7 +773,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 170 "sqlscanner.l"
+#line 85 "sqlscanner.l"
 {
 	char *p = yytext;
 	if (yytext[0]=='.') { /* no integer part */
@@ -882,7 +799,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 193 "sqlscanner.l"
+#line 108 "sqlscanner.l"
 {
 	ECOUNT;
 	return AND;
@@ -890,7 +807,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 198 "sqlscanner.l"
+#line 113 "sqlscanner.l"
 {
 	ECOUNT;
 	return AS;
@@ -898,7 +815,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 203 "sqlscanner.l"
+#line 118 "sqlscanner.l"
 {
 	ECOUNT;
 	return CREATE;
@@ -906,7 +823,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 208 "sqlscanner.l"
+#line 123 "sqlscanner.l"
 {
 	ECOUNT;
 	return FROM;
@@ -914,7 +831,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 213 "sqlscanner.l"
+#line 128 "sqlscanner.l"
 {
 	ECOUNT;
 	return SQL_TYPE;
@@ -922,7 +839,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 218 "sqlscanner.l"
+#line 133 "sqlscanner.l"
 {
 	ECOUNT;
 	return JOIN;
@@ -930,7 +847,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 223 "sqlscanner.l"
+#line 138 "sqlscanner.l"
 {
 	ECOUNT;
 	return LEFT;
@@ -938,7 +855,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 228 "sqlscanner.l"
+#line 143 "sqlscanner.l"
 {
 	ECOUNT;
 	return LIKE;
@@ -946,7 +863,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 233 "sqlscanner.l"
+#line 148 "sqlscanner.l"
 {
 	ECOUNT;
 	return NOT;
@@ -954,7 +871,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 238 "sqlscanner.l"
+#line 153 "sqlscanner.l"
 {
 	ECOUNT;
 	return SQL_IS;
@@ -962,7 +879,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 243 "sqlscanner.l"
+#line 158 "sqlscanner.l"
 {
 	ECOUNT;
 	return SQL_NULL;
@@ -970,7 +887,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 248 "sqlscanner.l"
+#line 163 "sqlscanner.l"
 {
 	ECOUNT;
 	return SQL_ON;
@@ -978,7 +895,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 253 "sqlscanner.l"
+#line 168 "sqlscanner.l"
 {
 	ECOUNT;
 	return OR;
@@ -986,7 +903,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 258 "sqlscanner.l"
+#line 173 "sqlscanner.l"
 { /* also means OR for numbers (mysql) */
 	ECOUNT;
 	return CONCATENATION;
@@ -994,7 +911,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 263 "sqlscanner.l"
+#line 178 "sqlscanner.l"
 {
 	ECOUNT;
 	return BITWISE_SHIFT_LEFT;
@@ -1002,7 +919,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 268 "sqlscanner.l"
+#line 183 "sqlscanner.l"
 {
 	ECOUNT;
 	return BITWISE_SHIFT_RIGHT;
@@ -1010,7 +927,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 273 "sqlscanner.l"
+#line 188 "sqlscanner.l"
 {
 	ECOUNT;
 	return XOR;
@@ -1018,7 +935,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 278 "sqlscanner.l"
+#line 193 "sqlscanner.l"
 {
 	ECOUNT;
 	return RIGHT;
@@ -1026,7 +943,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 283 "sqlscanner.l"
+#line 198 "sqlscanner.l"
 {
 	ECOUNT;
 	return SELECT;
@@ -1034,7 +951,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 288 "sqlscanner.l"
+#line 203 "sqlscanner.l"
 {
 	ECOUNT;
 	return SIMILAR;
@@ -1042,7 +959,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 293 "sqlscanner.l"
+#line 208 "sqlscanner.l"
 {
 	ECOUNT;
 	return TABLE;
@@ -1050,7 +967,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 298 "sqlscanner.l"
+#line 213 "sqlscanner.l"
 {
 	ECOUNT;
 	return WHERE;
@@ -1058,27 +975,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 304 "sqlscanner.l"
+#line 219 "sqlscanner.l"
 {
 	ECOUNT;
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	return CHARACTER_STRING_LITERAL;
 
-/*{identifier}"\.\*" {
-	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
-	ECOUNT;
-	strncpy(yylval.stringValue, yytext, yyleng + 1);
-	if (yytext[0]>='0' && yytext[0]<='9') {
-		setError(i18n("Invalid identifier"));
-		return ERROR_DIGIT_BEFORE_IDENTIFIER;
-	}
-	return IDENTIFIER_DOT_ASTERISK;
-}*/
+/* "ZZZ" sentinel for script */
 }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 321 "sqlscanner.l"
+#line 227 "sqlscanner.l"
 {
 	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	ECOUNT;
@@ -1092,14 +1000,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 332 "sqlscanner.l"
+#line 238 "sqlscanner.l"
 {
 	ECOUNT;
 }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 336 "sqlscanner.l"
+#line 242 "sqlscanner.l"
 {
 	kdDebug() << "char: '" << yytext[0] << "'" << endl;
 	ECOUNT;
@@ -1108,10 +1016,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 342 "sqlscanner.l"
+#line 248 "sqlscanner.l"
 ECHO;
 	YY_BREAK
-#line 1115 "sqlscanner.cpp"
+#line 1023 "sqlscanner.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1997,7 +1905,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 342 "sqlscanner.l"
+#line 248 "sqlscanner.l"
 
 
 void tokenize(const char *data)

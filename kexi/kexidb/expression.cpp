@@ -79,7 +79,8 @@ bool BaseExpr::validate(ParseInfo& /*parseInfo*/)
 	return true;
 }
 
-extern const char * const tname(int type);
+extern const char * const tname(int offset);
+#define safe_tname(type) ((type>=254 && type<=__LAST_TOKEN) ? tname(type-254) : "")
 
 QString BaseExpr::typeToString()
 {
@@ -89,7 +90,7 @@ QString BaseExpr::typeToString()
 		else
 			return QString::number(m_type);
 	}
-	return QString(tname(m_type));
+	return QString(safe_tname(m_type));
 }
 
 //=========================================

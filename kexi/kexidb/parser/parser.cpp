@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,65 +20,91 @@
 
 #include <connection.h>
 #include <tableschema.h>
-//#include "kexidbselect.h"
 #include "parser.h"
+#include "parser_p.h"
 #include "sqlparser.h"
 
-namespace KexiDB
-{
+extern const char * reserved_keywords[];
+
+using namespace KexiDB;
 
 Parser::Parser(Connection *db)
+ : d(new ParserPrivate)
 {
-	m_db = db;
-
-	m_operation = OP_None;
-	m_table = 0;
-	m_select = 0;
+	d->db = db;
 }
+
+Parser::~Parser()
+{
+	delete d;
+}
+
+Parser::OPCode Parser::operation() const { return (OPCode)d->operation; }
+
+TableSchema *Parser::table() { TableSchema *t = d->table; d->table=0; return t; }
+
+QuerySchema *Parser::query() { QuerySchema *s = d->select; d->select=0; return s; }
+
+Connection *Parser::db() const { return d->db; }
+
+ParserError Parser::error() const { return d->error; }
+
+QString Parser::statement() const { return d->statement; }
+
+void Parser::setOperation(OPCode op) { d->operation = op; }
+
+QuerySchema *Parser::select() const { return d->select; }
+
+void Parser::setError(const ParserError &err) { d->error = err; }
 
 void
 Parser::createTable(const char *t)
 {
-	if(m_table)
+	if (d->table)
 		return;
 
-	m_table = new KexiDB::TableSchema(t);
+	d->table = new KexiDB::TableSchema(t);
 }
 
 void
 Parser::setQuerySchema(QuerySchema *query)
 {
-	if(m_select)
-		delete m_select;
+	if (d->select)
+		delete d->select;
 	
-	m_select = query;
-//	m_select = new QuerySchema();
-//	m_select->setStatement(m_statement);
-//	m_fieldList = new Field::List();
+	d->select = query;
+}
+
+void Parser::init()
+{
+	if (d->initialized)
+		return;
+#define INS(p) d->reservedKeywords.insert(p, (char*)1, 0)
+#include "tokens.cpp"
+	d->initialized = true;
+}
+
+bool Parser::isReservedKeyword(const char *str)
+{
+	return d->reservedKeywords.find(str);
 }
 
 bool
 Parser::parse(const QString &statement)
 {
+	init();
 	clear();
-	m_statement = statement;
+	d->statement = statement;
 	return parseData(this, statement.latin1());
 }
 
 void
 Parser::clear()
 {
-//	delete m_table;
-//	m_table = 0;
-	setOperation(OP_None);
-	m_error = ParserError();
+	d->clear();
 }
 
-Parser::~Parser()
-{
-	delete m_select;
-	delete m_table;
-}
+//-------------------------------------
 
 ParserError::ParserError()
 : m_at(-1)
@@ -95,7 +122,5 @@ ParserError::ParserError(const QString &type, const QString &error, const QStrin
 
 ParserError::~ParserError()
 {
-}
-
 }
 

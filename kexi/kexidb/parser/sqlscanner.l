@@ -49,91 +49,6 @@ decimal			(({digit}*\.{digit}+)|({digit}+\.{digit}*))
 real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}+))
 /* todo: support for real numbers */
 
-
-/*
-"@" return AT;
-";" return SEMICOLON;
-"*" {
-	ECOUNT;
-	return ASTERISK;
-}
-
-"+" {
-	ECOUNT;
-	return ARITHMETIC_PLUS;
-}
-
-"-" {
-	ECOUNT;
-	return ARITHMETIC_MINUS;
-}
-
-"/" {
-	ECOUNT;
-	return SLASH;
-}
-
-"(" {
-	ECOUNT;
-	return LEFTPAREN;
-}
-
-")" {
-	ECOUNT;
-	return RIGHTPAREN;
-}
-
-"." {
-	ECOUNT;
-	return DOT;
-}
-
-"$" {
-	ECOUNT;
-	return DOLLAR_SIGN;
-}
-
-"%" {
-	ECOUNT;
-	return PERCENT;
-}
-
-"=" {
-	ECOUNT;
-	return EQUAL;
-}
-
-"<" {
-	ECOUNT;
-	return LESS_THAN;
-}
-
-">" {
-	ECOUNT;
-	return GREATER_THAN;
-}
-
-"'" {
-	ECOUNT;
-	return SINGLE_QUOTE;
-}
-
-"?" {
-	ECOUNT;
-	return QUESTION_MARK;
-}
-
-":" {
-	ECOUNT;
-	return COLON;
-}
-
-"," {
-	ECOUNT;
-	return COMMA;
-}
-*/
-
 %%
 
 ("<>"|"!=") {
@@ -306,16 +221,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	return CHARACTER_STRING_LITERAL;
 
-/*{identifier}"\.\*" {
-	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
-	ECOUNT;
-	strncpy(yylval.stringValue, yytext, yyleng + 1);
-	if (yytext[0]>='0' && yytext[0]<='9') {
-		setError(i18n("Invalid identifier"));
-		return ERROR_DIGIT_BEFORE_IDENTIFIER;
-	}
-	return IDENTIFIER_DOT_ASTERISK;
-}*/
+/* "ZZZ" sentinel for script */
 }
 
 {identifier} {

@@ -475,7 +475,7 @@ void yyerror(const char *str)
 
 	if (parser->error().type().isEmpty() 
 		&& (strlen(str)==0 
-		|| qstricmp(str, "syntax error")==0 || qstricmp(str, "parse error")==0))
+		|| qstrnicmp(str, "syntax error", 12)==0 || qstrnicmp(str, "parse error", 11)==0))
 	{
 		kdDebug() << parser->statement() << endl;
 		QString ptrline = "";
@@ -488,11 +488,18 @@ void yyerror(const char *str)
 
 		//lexer may add error messages
 		QString lexerErr = parser->error().error();
+
+		if (lexerErr.isEmpty()) {
+			if (qstrnicmp(str, "parse error, expecting `IDENTIFIER'", 35)==0)
+				lexerErr = i18n("identifier was expected");
+		}
 		if (!lexerErr.isEmpty())
 			lexerErr.prepend(": ");
-			
-		ParserError err(i18n("Syntax Error"), i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current);
-		parser->setError(err);
+
+		if (parser->isReservedKeyword(ctoken))
+			parser->setError( ParserError(i18n("Syntax Error"), i18n("\"%1\" is reserved keyword").arg(ctoken)+lexerErr, ctoken, current) );
+		else
+			parser->setError( ParserError(i18n("Syntax Error"), i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current) );
 	}
 }
 

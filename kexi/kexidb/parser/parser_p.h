@@ -22,10 +22,34 @@
 
 #include <qvaluelist.h>
 #include <qdict.h>
+#include <qasciicache.h>
+#include <qstring.h>
 
 #include <kexidb/queryschema.h>
+#include <kexidb/tableschema.h>
+#include <kexidb/connection.h>
+#include "parser.h"
 
 namespace KexiDB {
+
+class ParserPrivate
+{
+	public:
+		ParserPrivate();
+		~ParserPrivate();
+
+		void clear();
+
+		int operation;
+		TableSchema *table;
+		QuerySchema *select;
+		Connection *db;
+		QString statement;
+		ParserError error;
+		QAsciiCache<char> reservedKeywords;
+		bool initialized : 1;
+};
+
 
 /*! Data used on parsing. @internal */
 class ParseInfo
