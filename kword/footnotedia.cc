@@ -50,8 +50,10 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     m_rbManual= new QRadioButton( i18n("&Manual"), grp );
 
     grp->setExclusive( true );
-    grid->addWidget( m_rbAuto, 0, 0);
-    grid->addWidget( m_rbManual, 1, 0);
+    int fHeight = grp->fontMetrics().height();
+    grid->addRowSpacing( 0, fHeight/2 ); // groupbox title
+    grid->addWidget( m_rbAuto, 1, 0);
+    grid->addWidget( m_rbManual, 2, 0);
     if ( _numberingType == KWFootNoteVariable::Auto )
         m_rbAuto->setChecked( true );
     else
@@ -60,7 +62,7 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     m_footLine->setText( _manualString );
     connect( m_footLine, SIGNAL( textChanged ( const QString & )), this, SLOT(footLineChanged( const QString & )));
     connect( grp, SIGNAL( clicked ( int ) ), this, SLOT(footNoteTypeChanged()));
-    grid->addWidget( m_footLine, 1, 1);
+    grid->addWidget( m_footLine, 2, 1);
 
 
     grp = new QButtonGroup( 4, Qt::Vertical, page );
