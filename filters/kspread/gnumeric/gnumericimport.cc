@@ -826,6 +826,25 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
   return result;
 }
 
+double GNUMERICFilter::parseAttribute( const QDomElement &_element )
+{
+    QString unit = _element.attribute( "PrefUnit" );
+    bool ok;
+    double value = _element.attribute("Points").toFloat( &ok );
+    if ( !ok )
+        value = 2.0;
+    if ( unit == "mm" )
+        return value;
+    else if ( unit == "cm" )
+        return ( value/10.0 );
+    else if ( unit == "in" )
+        return MM_TO_INCH( value );
+    else if ( unit == "Pt" || unit == "Px" || unit == "points" )
+        return MM_TO_POINT( value );
+    else
+        return value;
+}
+
 void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * table )
 {
   kdDebug(30521) << "Parsing print info " << endl;
@@ -846,27 +865,19 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
   {
     QDomElement top( margins.namedItem( "gmr:top" ).toElement() );
     if ( !top.isNull() )
-      ftop = POINT_TO_MM(top.attribute("Points").toFloat( &ok ) );
-    if ( !ok )
-      ftop = 2.0;
+        ftop = parseAttribute( top );
 
     QDomElement bottom( margins.namedItem( "gmr:bottom" ).toElement() );
     if ( !bottom.isNull() )
-      fbottom = POINT_TO_MM( bottom.attribute("Points").toFloat( &ok ) );
-    if ( !ok )
-      fbottom = 2.0;
+        fbottom= parseAttribute( bottom );
 
     QDomElement left( margins.namedItem( "gmr:left" ).toElement() );
     if ( !left.isNull() )
-      fleft = POINT_TO_MM( left.attribute("Points").toFloat( &ok ) );
-    if ( !ok )
-      fleft = 2.0;
+        fleft = parseAttribute( left );
 
     QDomElement right( margins.namedItem( "gmr:right" ).toElement() );
     if ( !right.isNull() )
-      fright = POINT_TO_MM( right.attribute( "Points" ).toFloat( &ok ) );
-    if ( !ok )
-      fright = 2.0;
+        fright = parseAttribute( right );
   }
 
   QDomElement foot( printInfo.namedItem("gmr:Footer").toElement() );

@@ -57,6 +57,7 @@ enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
   void convertFormula( QString & formula ) const;
     void importBorder( QDomElement  border, borderStyle _style,  KSpreadCell *cell);
     void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell );
+    double parseAttribute( const QDomElement &_element );
 
 };
 #endif // GNUMERICFILTER_H
