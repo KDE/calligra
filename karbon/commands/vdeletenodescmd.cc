@@ -50,6 +50,8 @@ VDeleteNodeCmd::visitVPath( VPath& path )
 		}
 		segment = segment->next();
 	}
+	if( m_segments.count() > 0 )
+		path.invalidateBoundingBox();
 }
 
 void

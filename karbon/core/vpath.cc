@@ -482,7 +482,8 @@ VPath::boundingBox() const
 
 		while( segment )
 		{
-			m_boundingBox |= segment->boundingBox();
+			if(	segment->state() != VSegment::deleted )
+				m_boundingBox |= segment->boundingBox();
 			segment = segment->m_next;
 		}
 
