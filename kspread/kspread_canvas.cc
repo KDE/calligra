@@ -525,7 +525,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
     if ( _ev->pos().x() >= xpos + w - 2 && _ev->pos().x() <= xpos + w + 3 &&
          _ev->pos().y() >= ypos + h - 1 && _ev->pos().y() <= ypos + h + 4 )
-      setCursor( sizeAllCursor );
+      setCursor( sizeFDiagCursor );
     else if ( !m_strAnchor.isEmpty() )
       setCursor( KCursor::handCursor() );
     else
