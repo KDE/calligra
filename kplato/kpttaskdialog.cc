@@ -33,6 +33,7 @@
 #include <kdatepicker.h>
 #include "kptdurationwidget.h"
 #include <kcommand.h>
+#include <kmessagebox.h>
 
 #include <qtextedit.h>
 #include <qdatetimeedit.h>
@@ -76,16 +77,20 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
     m_notesTab = new KPTTaskNotesPanelBase(page);
     topLayout->addWidget(m_notesTab);
 
+    resize( QSize(0, 0).expandedTo(minimumSizeHint()) );
+    
     // Create some shortcuts.
     m_name = m_generalTab->namefield;
     m_leader = m_generalTab->leaderfield;
     m_description = m_notesTab->descriptionfield;
+    m_id = m_generalTab->idfield;
 
     // Set the state of all the child widgets.
     enableButtonOK(false);
     m_name->setText(task.name());
     m_leader->setText(task.leader());
     m_description->setText(task.description());
+    m_id->setText(task.id());
     m_generalTab->setSchedulingType(task.constraint());
     if (task.constraintTime().isValid())
         m_generalTab->setDateTime(task.constraintTime());
@@ -126,6 +131,11 @@ KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
         cmd->addCommand(new KPTNodeModifyConstraintTimeCmd(part, m_task, m_generalTab->dateTime()));
         modified = true;
     }
+    if (m_id->text() != m_task.id()) {
+        
+        cmd->addCommand(new KPTNodeModifyIdCmd(part, m_task, m_id->text()));
+        modified = true;
+    }
     KCommand *m = m_resourcesTab->buildCommand(part);
     if (m) {
         //kdDebug()<<k_funcinfo<<"ResourceTab modified"<<endl;
@@ -140,6 +150,11 @@ KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
 }
 
 void KPTTaskDialog::slotOk() {
+    if (m_id->text() != m_task.id() && KPTNode::find(m_id->text())) {
+        KMessageBox::sorry(this, "Task id must be unique");
+        m_id->setFocus();
+        return;
+    }
     m_resourcesTab->slotOk();
     accept();
 }

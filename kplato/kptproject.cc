@@ -46,9 +46,6 @@ KPTProject::KPTProject(KPTNode *parent)
     m_startTime = KPTDateTime::currentDateTime();
     m_endTime = m_startTime;
 
-    m_id = 0;
-
-    m_maxNodeId = 0;
     m_maxGroupId = 0;
     m_maxResourceId = 0;
     
@@ -207,6 +204,7 @@ void KPTProject::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrLis
 bool KPTProject::load(QDomElement &element) {
     // Maybe TODO: Delete old stuff here
 
+    m_id = element.attribute("id");
     m_name = element.attribute("name");
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
@@ -438,7 +436,6 @@ bool KPTProject::addSubTask( KPTNode* task, KPTNode* position )
 	  return false;
 	}
 	position->addChildNode(task);
-    task->setId(mapNode(task));
     return true;
 }
 

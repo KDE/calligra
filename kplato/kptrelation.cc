@@ -66,15 +66,14 @@ void KPTRelation::setType(Type type) {
 
 
 bool KPTRelation::load(QDomElement &element, KPTProject &project) {
-    bool ok = false;
-    int id;
-    id = element.attribute("parent-id","-1").toInt(&ok);
-    if (id == -1 || !(m_parent = project.node(id)))
+    m_parent = KPTNode::find(element.attribute("parent-id"));
+    if (m_parent == 0) {
         return false;
-    id = element.attribute("child-id","-1").toInt(&ok);
-    if (id == -1 || !(m_child = project.node(id)))
+    }
+    m_child = KPTNode::find(element.attribute("child-id"));
+    if (m_child == 0) {
         return false;
-
+    }
     if (!m_parent->legalToLink(m_child))
         return false;
         

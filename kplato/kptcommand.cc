@@ -257,6 +257,25 @@ void KPTNodeModifyConstraintTimeCmd::unexecute() {
         m_part->setCommandType(1);
 }
 
+KPTNodeModifyIdCmd::KPTNodeModifyIdCmd(KPTPart *part, KPTNode &node, QString id, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_node(node),
+      newId(id),
+      oldId(node.id()) {
+
+}
+void KPTNodeModifyIdCmd::execute() {
+    m_node.setId(newId);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTNodeModifyIdCmd::unexecute() {
+    m_node.setId(oldId);
+    if (m_part)
+        m_part->setCommandType(0);
+}
+
 KPTNodeIndentCmd::KPTNodeIndentCmd(KPTPart *part, KPTNode &node, QString name)
     : KNamedCommand(name),
       m_part(part),

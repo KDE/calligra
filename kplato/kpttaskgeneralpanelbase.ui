@@ -8,237 +8,339 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>468</width>
-            <height>378</height>
+            <width>590</width>
+            <height>384</height>
         </rect>
     </property>
-    <hbox>
+    <property name="caption">
+        <string>KPTTaskGeneralPanelBase</string>
+    </property>
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>unnamed</cstring>
+            <cstring>layout12</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>11</y>
+                <width>570</width>
+                <height>364</height>
+            </rect>
+        </property>
+        <vbox>
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>unnamed</cstring>
             </property>
-            <vbox>
+            <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>layout10</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <hbox>
                     <property name="name">
-                        <cstring>layout2</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <grid>
+                    <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>layout8</cstring>
                         </property>
-                        <widget class="QPushButton" row="1" column="2">
+                        <vbox>
                             <property name="name">
-                                <cstring>chooseLeader</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="text">
-                                <string>&amp;Choose...</string>
-                            </property>
-                        </widget>
-                        <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="2">
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Task n&amp;ame</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>namefield</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Responsible</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>leaderfield</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Task id</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout9</cstring>
+                        </property>
+                        <vbox>
                             <property name="name">
-                                <cstring>namefield</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="toolTip" stdset="0">
-                                <string></string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Give a name to the task to identify it.</string>
-                            </property>
-                        </widget>
-                        <widget class="KLineEdit" row="1" column="1">
-                            <property name="name">
-                                <cstring>leaderfield</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Task n&amp;ame:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>namefield</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="0">
-                            <property name="name">
-                                <cstring>textLabel2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Responsible:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>leaderfield</cstring>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QButtonGroup">
+                            <widget class="KLineEdit">
+                                <property name="name">
+                                    <cstring>namefield</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string></string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Give a name to the task to identify it.</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout6</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KLineEdit">
+                                        <property name="name">
+                                            <cstring>leaderfield</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>chooseLeader</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Choose...</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+C</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout5</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KLineEdit">
+                                        <property name="name">
+                                            <cstring>idfield</cstring>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string></string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>Give a name to the task to identify it.</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer2_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </hbox>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>scheduleType</cstring>
+                </property>
+                <property name="title">
+                    <string>Scheduling</string>
+                </property>
+                <grid>
                     <property name="name">
-                        <cstring>scheduleType</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="title">
-                        <string>Scheduling</string>
-                    </property>
-                    <hbox>
+                    <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>layout3</cstring>
                         </property>
-                        <widget class="QLayoutWidget">
+                        <vbox>
                             <property name="name">
-                                <cstring>layout3</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <vbox>
+                            <widget class="QRadioButton">
                                 <property name="name">
-                                    <cstring>unnamed</cstring>
+                                    <cstring>scheduleTypeAsap</cstring>
                                 </property>
-                                <widget class="QRadioButton">
-                                    <property name="name">
-                                        <cstring>scheduleTypeAsap</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>ASAP</string>
-                                    </property>
-                                    <property name="checked">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Place all events at the earliest possible moment permitted in the schedule</string>
-                                    </property>
-                                </widget>
-                                <widget class="QRadioButton">
-                                    <property name="name">
-                                        <cstring>scheduleTypeAlap</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>ALAP</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Place all events at the last possible moment permitted in the schedule</string>
-                                    </property>
-                                </widget>
-                                <widget class="QRadioButton">
-                                    <property name="name">
-                                        <cstring>radioButton3</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Start not Earlier than</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>The task can not be scheduled to start earlier than this date.</string>
-                                    </property>
-                                </widget>
-                                <widget class="QRadioButton">
-                                    <property name="name">
-                                        <cstring>radioButton4</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Finish not Later than</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>The task can not be scheduled to finish later than this date.</string>
-                                    </property>
-                                </widget>
-                                <widget class="QRadioButton">
-                                    <property name="name">
-                                        <cstring>radioButton5</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Must Start on</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>The task must be scheduled to start on this date.</string>
-                                    </property>
-                                </widget>
-                            </vbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
+                                <property name="text">
+                                    <string>ASAP</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Place all events at the earliest possible moment permitted in the schedule</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>scheduleTypeAlap</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>ALAP</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Place all events at the last possible moment permitted in the schedule</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioButton3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Start not Earlier than</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>The task can not be scheduled to start earlier than this date.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioButton4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Finish not Later than</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>The task can not be scheduled to finish later than this date.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioButton5</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Must Start on</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>The task must be scheduled to start on this date.</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="1" rowspan="2" colspan="1">
+                        <property name="name">
+                            <cstring>date</cstring>
+                        </property>
+                        <grid>
                             <property name="name">
-                                <cstring>date</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <grid>
+                            <widget class="QTimeEdit" row="1" column="1">
                                 <property name="name">
-                                    <cstring>unnamed</cstring>
+                                    <cstring>schedulerTime</cstring>
                                 </property>
-                                <widget class="QTimeEdit" row="1" column="1">
-                                    <property name="name">
-                                        <cstring>schedulerTime</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>4</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="time">
-                                        <time>
-                                            <hour>12</hour>
-                                            <minute>0</minute>
-                                            <second>0</second>
-                                        </time>
-                                    </property>
-                                </widget>
-                                <spacer row="1" column="2">
-                                    <property name="name">
-                                        <cstring>spacer2</cstring>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="sizeType">
-                                        <enum>Expanding</enum>
-                                    </property>
-                                    <property name="sizeHint">
-                                        <size>
-                                            <width>111</width>
-                                            <height>21</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                                <widget class="QCheckBox" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>specifyTime</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="text">
-                                        <string>Specify time:</string>
-                                    </property>
-                                </widget>
-                                <widget class="KDatePicker" row="0" column="0" rowspan="1" colspan="3">
-                                    <property name="name">
-                                        <cstring>schedulerDate</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>0</width>
-                                            <height>200</height>
-                                        </size>
-                                    </property>
-                                </widget>
-                            </grid>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
-        </widget>
-    </hbox>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>4</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="time">
+                                    <time>
+                                        <hour>12</hour>
+                                        <minute>0</minute>
+                                        <second>0</second>
+                                    </time>
+                                </property>
+                            </widget>
+                            <spacer row="1" column="2">
+                                <property name="name">
+                                    <cstring>spacer2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>111</width>
+                                        <height>21</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>specifyTime</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Specify time:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDatePicker" row="0" column="0" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>schedulerDate</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>0</width>
+                                        <height>200</height>
+                                    </size>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer row="1" column="0">
+                        <property name="name">
+                            <cstring>spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>40</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+        </vbox>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -294,6 +396,7 @@
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kdatepicker.h</includehint>

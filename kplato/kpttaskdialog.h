@@ -61,6 +61,7 @@ private:
     KLineEdit *m_name;
     KLineEdit *m_leader;
     QTextEdit *m_description;
+    KLineEdit *m_id;
 
     KPTTaskGeneralPanelBase *m_generalTab;
     KPTRequestResourcesPanel *m_resourcesTab;

@@ -43,7 +43,7 @@ void KPTTaskGeneralPanelBase::init()
 
 void KPTTaskGeneralPanelBase::checkAllFieldsFilled()
 {
-    emit obligatedFieldsFilled( !(namefield->text().isEmpty() || leaderfield->text().isEmpty()));
+    emit obligatedFieldsFilled( !(namefield->text().isEmpty() || idfield->text().isEmpty()));
 }
 
 void KPTTaskGeneralPanelBase::changeLeader()

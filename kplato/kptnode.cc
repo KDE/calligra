@@ -27,10 +27,12 @@
 namespace KPlato
 {
 
+QDict<KPTNode> KPTNode::nodeIdDict;
+
 KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     m_parent = parent;
     init();
-    m_id = -1; // Not mapped
+    m_id = QString(); // Not mapped
 }
 
 KPTNode::~KPTNode() {
@@ -69,25 +71,10 @@ KPTNode *KPTNode::projectNode() {
     return 0;
 }
 
-int KPTNode::mapNode(KPTNode *node) {
-    int id = -1;
-    if (m_parent != 0) {
-        id = m_parent->mapNode(node);
-    }
-    return id;
-}
-
-int KPTNode::mapNode(int id, KPTNode *node) {
-    if (m_parent != 0) {
-        return m_parent->mapNode(id, node);
-    }
-    return -1;
-}
-
-
 void KPTNode::delChildNode( KPTNode *node, bool remove) {
     //kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
     if ( m_nodes.findRef(node) != -1 ) {
+        nodeIdDict.remove(node->id());
         if(remove)
             m_nodes.remove();
         else
@@ -96,6 +83,9 @@ void KPTNode::delChildNode( KPTNode *node, bool remove) {
 }
 
 void KPTNode::delChildNode( int number, bool remove) {
+    KPTNode *n = m_nodes.at(number);
+    if (n)
+        nodeIdDict.remove(n->id());
     if(remove)
         m_nodes.remove(number);
     else
@@ -103,6 +93,9 @@ void KPTNode::delChildNode( int number, bool remove) {
 }
 
 void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
+    if (!node->setId(node->id())) {
+        kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
+    }
     m_nodes.insert(index,node);
     node->setParent(this);
 }
@@ -110,6 +103,9 @@ void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
 void KPTNode::addChildNode( KPTNode *node, KPTNode *after) {
     int index = m_nodes.findRef(after);
     if (index == -1) {
+        if (!node->setId(node->id())) {
+            kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
+        }
         m_nodes.append(node);
         node->setParent(this);
         return;
@@ -518,6 +514,32 @@ bool KPTNode::isEndNode() const {
 }
 bool KPTNode::isStartNode() const {
     return m_dependParentNodes.isEmpty();
+}
+
+bool KPTNode::setId(QString id) {
+    //kdDebug()<<k_funcinfo<<id<<endl;
+    if (id.isEmpty()) {
+        kdError()<<k_funcinfo<<"id is empty"<<endl;
+        m_id = id;
+        return false;
+    }
+    KPTNode *n = nodeIdDict.find(m_id);
+    if (n == this) {
+        //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+        nodeIdDict.remove(m_id);
+    } else if (n) {
+        //Hmmm, shouldn't happen
+        kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<n->name()<<endl;
+    }
+    if (nodeIdDict.find(id)) {
+        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<nodeIdDict.find(id)->name()<<endl;
+        m_id = QString(); // hmmm
+        return false;
+    }
+    m_id = id;
+    nodeIdDict.insert(id, this);
+    //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
+    return true;
 }
 
 

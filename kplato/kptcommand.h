@@ -181,6 +181,19 @@ private:
     QDateTime newTime;
     QDateTime oldTime;
 };
+class KPTNodeModifyIdCmd : public KNamedCommand
+{
+public:
+    KPTNodeModifyIdCmd(KPTPart *part, KPTNode &node, QString id, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTNode &m_node;
+    QString newId;
+    QString oldId;
+};
 
 class KPTNodeIndentCmd : public KNamedCommand
 {

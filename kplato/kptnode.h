@@ -30,7 +30,7 @@
 #include <qptrlist.h>
 #include <qstring.h>
 #include <qcanvas.h>
-
+#include <qdict.h>
 #include <vector>
 
 class QDomElement;
@@ -72,8 +72,10 @@ public:
     // Declare the class abstract
     virtual ~KPTNode() = 0;
 
-    int id() { return m_id; } // unique identity
-
+    bool setId(QString id);
+    QString id() const { return m_id; } // unique identity
+    static KPTNode *find(const QString id) { return nodeIdDict.find(id); }
+    
     enum NodeTypes {
 	  Type_Node = 0,
 	  Type_Project = 1,
@@ -261,10 +263,6 @@ public:
     virtual void setResourceOverbooked(bool on) { m_resourceOverbooked = on; }
     virtual bool resourceOverbooked() { return m_resourceOverbooked; }
 
-    void setId(int id) { m_id = id; }
-    virtual int mapNode(KPTNode *node);
-    virtual int mapNode(int id, KPTNode *node);
-
     /**
      * Planned cost is the sum total of all resources and other costs
      * planned for this node.
@@ -397,7 +395,7 @@ protected:
     bool m_resourceError;
     bool m_resourceOverbooked;
 
-    int m_id; // unique id
+    QString m_id; // unique id
     
     bool m_visitedForward;
     bool m_visitedBackward;
@@ -405,6 +403,8 @@ protected:
  private:
     void init();
 
+    static QDict<KPTNode> nodeIdDict;
+    
 #ifndef NDEBUG
 public:
     virtual void printDebug(bool children, QCString indent);

@@ -150,10 +150,12 @@ void KPTTask::setConstraint(KPTNode::ConstraintType type) {
 bool KPTTask::load(QDomElement &element) {
     // Load attributes (TODO: Handle different types of tasks, milestone, summary...)
     bool ok = false;
-    m_id = mapNode(QString(element.attribute("id","-1")).toInt(&ok), this);
+    m_id = element.attribute("id");
+    
     m_name = element.attribute("name");
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
+    //kdDebug()<<k_funcinfo<<m_name<<": id="<<m_id<<endl;
 
     earliestStart = KPTDateTime::fromString(element.attribute("earlieststart"));
     latestFinish = KPTDateTime::fromString(element.attribute("latestfinish"));
@@ -221,8 +223,6 @@ void KPTTask::save(QDomElement &element)  {
     element.appendChild(me);
 
     //TODO: Handle different types of tasks, milestone, summary...
-    if (m_id < 0)
-        m_id = m_parent->mapNode(this);
     me.setAttribute("id", m_id);
     me.setAttribute("name", m_name);
     me.setAttribute("leader", m_leader);

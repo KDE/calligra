@@ -393,15 +393,16 @@ bool KPTAppointment::load(QDomElement &element, KPTProject &project) {
         kdError()<<k_funcinfo<<"The referenced resource does not exists: resource id="<<id<<endl;
         return false;
     }
-    id  = element.attribute("task-id").toInt();
-    if (!(m_task = dynamic_cast<KPTTask *>(project.node(id)))) {
-        kdError()<<k_funcinfo<<"The referenced task does not exists: task id="<<id<<endl;
+    m_task = dynamic_cast<KPTTask *>(KPTNode::find(element.attribute("task-id")));
+    if (m_task == 0) {
+        kdError()<<k_funcinfo<<"The referenced task does not exists: "<<element.attribute("task-id")<<endl;
         return false;
     }
     m_startTime = KPTDateTime::fromString(element.attribute("start"));
     m_duration = KPTDuration::fromString(element.attribute("duration"));
 
     m_resource->addAppointment(this);
+    //kdDebug()<<k_funcinfo<<m_resource->name()<<" to task: "<<m_task->name()<<endl;
     return true;
 }
 
