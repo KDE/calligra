@@ -2446,9 +2446,38 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
 }
 
+bool KWTextFrameSetEdit::enterCustomItem( KoTextCustomItem* customItem, bool fromRight )
+{
+    KWAnchor* anchor = dynamic_cast<KWAnchor*>( customItem );
+    if ( anchor ) {
+        KWFrameSet* frameSet = anchor->frameSet();
+        if ( frameSet->type() == FT_FORMULA ) {
+
+            // store the instance variable we need after "delete this"
+            KWCanvas* canvas = m_canvas;
+
+            // this will "delete this"!
+            m_canvas->editFrameSet( frameSet );
+
+            // We assume that `editFrameSet' succeeded.
+            if ( fromRight ) {
+                KWFrameSetEdit* edit = canvas->currentFrameSetEdit();
+                static_cast<KWFormulaFrameSetEdit*>( edit )->moveEnd();
+            }
+
+            // A FormulaFrameSetEdit looks a little different from
+            // a FormulaFrameSet. (Colors)
+            static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
+            canvas->repaintChanged( frameSet, true );
+            return true;
+        }
+    }
+    return false;
+}
+
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
 {
-    // Handle moving into formula frames.
+    // Handle moving into foreign frames (formula frames).
     if ( !( e->state() & ControlButton ) && !( e->state() & ShiftButton ) ) {
         switch ( e->key() ) {
         case Key_Left: {
@@ -2459,27 +2488,8 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                 KoTextStringChar* ch = parag->at( index-1 );
                 if ( ch->isCustom() ) {
                     KoTextCustomItem* customItem = ch->customItem();
-                    KWAnchor* anchor = dynamic_cast<KWAnchor*>( customItem );
-                    if ( anchor ) {
-                        KWFrameSet* frameSet = anchor->frameSet();
-                        if ( frameSet->type() == FT_FORMULA ) {
-
-                            // if `this' gets deleted it cannot be used any longer!
-                            KWCanvas* canvas = this->m_canvas;
-
-                            // this will "delete this"!
-                            m_canvas->editFrameSet( frameSet );
-
-                            // Is it okay to assume success here?
-                            KWFrameSetEdit* edit = canvas->currentFrameSetEdit();
-                            static_cast<KWFormulaFrameSetEdit*>( edit )->moveEnd();
-
-                            // A FormulaFrameSetEdit looks a little different from
-                            // a FormulaFrameSet. (Colors)
-                            static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
-                            canvas->repaintChanged( frameSet, true );
-                            return;
-                        }
+                    if ( enterCustomItem( customItem, true ) ) {
+                        return;
                     }
                 }
             }
@@ -2493,23 +2503,8 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                 KoTextStringChar* ch = parag->at( index );
                 if ( ch->isCustom() ) {
                     KoTextCustomItem* customItem = ch->customItem();
-                    KWAnchor* anchor = dynamic_cast<KWAnchor*>( customItem );
-                    if ( anchor ) {
-                        KWFrameSet* frameSet = anchor->frameSet();
-                        if ( frameSet->type() == FT_FORMULA ) {
-
-                            // if `this' gets deleted it cannot be used any longer!
-                            KWCanvas* canvas = this->m_canvas;
-
-                            // this will "delete this"!
-                            m_canvas->editFrameSet( frameSet );
-
-                            // A FormulaFrameSetEdit looks a little different from
-                            // a FormulaFrameSet. (Colors)
-                            static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
-                            canvas->repaintChanged( frameSet, true );
-                            return;
-                        }
+                    if ( enterCustomItem( customItem, false ) ) {
+                        return;
                     }
                 }
             }

@@ -363,6 +363,8 @@ private slots:
     void slotFrameDeleted(KWFrame *);
 
 private:
+    bool enterCustomItem( KoTextCustomItem* customItem, bool fromRight );
+
     KoParagLayout m_paragLayout;
 };
 
