@@ -897,12 +897,17 @@ don't put a </?xml...> at the end of the file!).
     align CDATA #IMPLIED>
 
 <!--
-        The space to be added between two consecutive lines in a given paragraph.
-        The "type" can be "oneandhalf" for 1.5 lines and "double" for 2 lines.
-        More generally it can also be "multiple", where spacingvalue=3 means 3 lines.
+        Linespacing defines the height of a line in a paragraph.
+        By default the line height is the height of the biggest character in the line.
+
+        The "type" can be "oneandhalf" for 1.5 * line_height and "double" for 2 * line_height.
+        More generally it can also be "multiple", where spacingvalue=3 means 3 * line_height.
         Other values for the type are
-        "custom": spacingvalue is the exact value of the linespacing in pt
-        "atleast": the linespacing is at least spacingvalue (in pt)
+        "custom": spacingvalue is the distance between the lines in pt (added to the line height)
+        "atleast": the total line height is at least spacingvalue (in pt)
+        "fixed": spacingvalue is equal to the total line height (in pt).
+
+        See koffice/lib/kotext/koparaglayout.h for more details.
 
         spacingvalue isn't used if type is "oneandhalf" or "double".
 
@@ -912,7 +917,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT LINESPACING
     EMPTY>
 <!ATTLIST LINESPACING
-    type (oneandhalf|double|custom|atleast|multiple) #IMPLIED
+    type (oneandhalf|double|custom|atleast|multiple|fixed) #IMPLIED
     spacingvalue CDATA #IMPLIED>
 
 <!--
