@@ -236,6 +236,8 @@ public:
 
     void tmpDrawMoveHelpPoint( const QPoint & newPos );
 
+    void ensureVisible( int x, int y, int xmargin, int ymargin );
+
 public slots:
     void exitEditMode();
 

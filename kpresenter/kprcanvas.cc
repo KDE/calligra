@@ -6338,7 +6338,7 @@ void KPrCanvas::scrollCanvas(const KoRect & oldPos)
 {
     QRect rect=m_view->zoomHandler()->zoomRect(oldPos);
     KoRect visiblePage=m_view->zoomHandler()->unzoomRect(visibleRect());
-    double tmpdiffx=m_view->zoomHandler()->unzoomItY(diffx());
+    double tmpdiffx=m_view->zoomHandler()->unzoomItX(diffx());
     double tmpdiffy=m_view->zoomHandler()->unzoomItY(diffy());
     if( m_boundingRect.bottom()>(visiblePage.bottom()+tmpdiffy))
     {
@@ -6559,4 +6559,27 @@ void KPrCanvas::moveHelpPoint( const QPoint & newPos )
     }
     m_tmpHelpPoint = -1;
     tmpHelpPointPos = KoPoint( -1, -1);
+}
+
+
+void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
+{
+/*
+    kdDebug()<<" x :"<<x << " y :"<<y<<" xmargin :"<<xmargin<<" ymargin :"<<ymargin<<endl;
+    kdDebug()<<" DEBUGRECT ( visibleRect ) :"<<DEBUGRECT(visibleRect())<<endl;
+    kdDebug()<<" diffx :"<<diffx() <<" diffy') :" <<diffy()<<endl;
+*/
+    int newy= (y+ymargin)-(visibleRect().bottom()+diffy());
+    //kdDebug()<<" newy "<<newy<<endl;
+
+    if( newy > 0)
+    {
+        m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()+newy);
+    }
+
+    int newx= (x+xmargin)-(visibleRect().right()+diffx());
+    if( newx > 0)
+    {
+        m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+newx);
+    }
 }

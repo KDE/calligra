@@ -1200,7 +1200,27 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
 
 void KPTextView::ensureCursorVisible()
 {
-    kdDebug()<<"KPTextView::ensureCursorVisible() : not implemented\n";
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() << endl;
+    KoTextParag * parag = cursor()->parag();
+    kpTextObject()->textObject()->ensureFormatted( parag );
+    KoTextStringChar *chr = parag->at( cursor()->index() );
+    int h = parag->lineHeightOfChar( cursor()->index() );
+    int x = parag->rect().x() + chr->x + cursor()->offsetX();
+    int y = 0; int dummy;
+
+    parag->lineHeightOfChar( cursor()->index(), &dummy, &y );
+    y += parag->rect().y() + cursor()->offsetY();
+    int w = 1;
+    KPresenterDoc *doc= m_kptextobj->kPresenterDocument();
+    KoPoint pt= kpTextObject()->getRect().topLeft();
+
+    pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelXToPt( x)+pt.x()));
+    pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelYToPt( y )+pt.y()) );
+
+    QPoint p = m_kptextobj->kPresenterDocument()->zoomHandler()->zoomPoint( pt );
+    w = m_kptextobj->kPresenterDocument()->zoomHandler()->layoutUnitToPixelX( w );
+    h = m_kptextobj->kPresenterDocument()->zoomHandler()->layoutUnitToPixelY( h );
+    m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
 }
 
 void KPTextView::doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
