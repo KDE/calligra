@@ -254,6 +254,10 @@ public:
     /**
      * Menu Data
      */
+      void createanchor();
+    /**
+     * Menu Data
+     */
     void consolidate();
 
     /**
@@ -552,6 +556,7 @@ protected:
     CORBA::Long m_idMenuData_replace;
     CORBA::Long m_idMenuData_sort;
     CORBA::Long m_idMenuData_goto;
+    CORBA::Long m_idMenuData_anchor;
     OpenPartsUI::Menu_var m_vMenuFolder;
     CORBA::Long m_idMenuFolder_NewTable;
     OpenPartsUI::Menu_var m_vMenuFormat;

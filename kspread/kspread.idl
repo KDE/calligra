@@ -98,6 +98,7 @@ module KSpread
 		slot void gotocell();
 		slot void replace();
 		slot void sort();
+		slot void createanchor();
 		slot void TextColor();
 		slot void BackgroundColor();
 		slot void sortincr();

@@ -116,7 +116,11 @@ void KSpreaddlgformula::slotOk()
     		}
     	else
     	{
-     	QString name_function;
+     	//don't work for the moment
+
+    	KSpreadcreate* dlg = new KSpreadcreate( m_pView, math,math );
+    	dlg->show();
+     	/*QString name_function;
      	QString string;
      	int pos;
      	string="";
@@ -148,13 +152,10 @@ void KSpreaddlgformula::slotOk()
 	    	m_pView->canvasWidget()->focusEditor();
 	    	m_pView->canvasWidget()->setPosEditor(pos);
 	    }
-	}
+	}*/
      	}
     }
-    //don't work for the moment
 
-    //KSpreadcreate* dlg = new KSpreadcreate( m_pView, math,math );
-    //dlg->show();
   accept();
 }
 

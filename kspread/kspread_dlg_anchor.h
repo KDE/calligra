@@ -18,58 +18,40 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kspread_dlg_create__
-#define __kspread_dlg_create__
+#ifndef __kspread_dlg_anchor__
+#define __kspread_dlg_anchor__
 
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <qlabel.h>
-#include <qlayout.h>
-
-
+#include <qrect.h>
+#include <qcheckbox.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadcreate : public QDialog
+class KSpreadanchor : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadcreate( KSpreadView* parent, const QString _name,QString _formula);
-  void init();
-  QString create_formula();
-  QString make_formula(QString _text,int nb_line);
-  int nb_param;
+  KSpreadanchor( KSpreadView* parent, const char* name,const QPoint &_marker );
+  QString create_anchor();
 public slots:
   void slotOk();
   void slotClose();
-  void slotSelect();
-  void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
 
 protected:
-  enum type_create {type_double,type_string,type_logic};
+
   KSpreadView* m_pView;
-  QString name;
-  QString old_formula;
-  QLineEdit* f_param;
-  QLineEdit* s_param;
-  QLineEdit* t_param;
-  QLineEdit* fo_param;
-  QLineEdit* fi_param;
+  
+  QLineEdit* text;
+  QLineEdit* l_cell;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
-  QPushButton* select;
-  type_create edit[5];
-  QLabel *f_text;
-  QLabel *s_text;
-  QLabel *t_text;
-  QLabel *fo_text;
-  QLabel *fi_text;
-  QLabel *exp_text;
-  QVBoxLayout *lay1;
-  QHBoxLayout *lay2;
+  QPoint  marker;
+  QCheckBox *bold;
+  QCheckBox *italic;
 
 };
 

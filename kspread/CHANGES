@@ -25,4 +25,14 @@ Add new functions :
 	-logic : IF , NO , TRUE,FALSE
 	-Math : INT
 	-Text : EXACT, RIGHT, LEFT,conc ,NBCAR,STXT
-		
+
+1999-09-15 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------		
+-Add new dialogBox kspread_dlg_anchor now you can create Anchor
+-Add currencySymbol so now when you click on Money button it adds
+symbol of your land but I test it on american language so I don't know
+if it works on others languages.
+-Add new dialogue box Now when you choose your function there is
+this dialogBox which arrived and show you what do you write.
+It give the number of parameters etc ...
+-fixbug

@@ -36,6 +36,7 @@
 #include <qclipbrd.h>
 #include <qpicture.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include "kspread_table.h"
 #include "kspread_view.h"
@@ -153,6 +154,7 @@ void ChartBinding::cellChanged( KSpreadCell* )
 
 int KSpreadTable::s_id = 0L;
 QIntDict<KSpreadTable>* KSpreadTable::s_mapTables;
+QString KSpreadTable::currency = 0L;
 
 KSpreadTable* KSpreadTable::find( int _id )
 {
@@ -1650,7 +1652,11 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 {
     m_pDoc->setModified( true );
-
+    if(!currency)
+    	{
+    	currency = KGlobal::locale()->currencySymbol();
+	cout <<"Monney:" <<currency.ascii()<<endl;
+    	}
     bool selected = ( m_rctSelection.left() != 0 );
 
     // Complete rows selected ?
@@ -1664,7 +1670,8 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  it.current()->setPostfix( " DM" );
+	  it.current()->setPostfix( " "+currency);
+	  //it.current()->setPostfix( " DM" );
 	  it.current()->setPrefix( "" );
 	  it.current()->setPrecision( 2 );
 	  it.current()->clearDisplayDirtyFlag();
@@ -1685,7 +1692,8 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  it.current()->setPostfix( " DM" );
+	  it.current()->setPostfix(" "+currency);
+	  //it.current()->setPostfix( " DM" );
 	  it.current()->setPrefix( "" );
 	  it.current()->setPrecision( 2 );
 	  it.current()->clearDisplayDirtyFlag();
@@ -1721,11 +1729,12 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 		}
 
 		cell->setDisplayDirtyFlag();
-		cell->setPostfix( " DM" );
+		//cell->setPostfix( " DM" );
+		cell->setPostfix( " "+currency);
 		cell->setPrefix( "" );
 		cell->setPrecision( 2 );
 		cell->clearDisplayDirtyFlag();
-	    }
+	    	}
 
 	emit sig_updateView( this, r );
     }

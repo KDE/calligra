@@ -26,7 +26,7 @@
 #include <stdlib.h>
 
 #include <klocale.h>
-
+#include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_view.h"
 #include "kspread_table.h"
@@ -229,6 +229,8 @@ void KSpreadTabBar::slotRename( )
 void KSpreadTabBar::slotAdd()
 {
 m_pView->insertNewTable();
+m_pView->editWidget()->setText("");
+
 }
 
 void KSpreadTabBar::paintEvent( QPaintEvent* )

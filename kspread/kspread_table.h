@@ -651,6 +651,7 @@ protected:
     static int s_id;
     static QIntDict<KSpreadTable>* s_mapTables;
     bool _sort;
+    static QString currency;
 };
 
 #endif

@@ -61,7 +61,7 @@
 #include "kspread_dlg_goto.h"
 #include "kspread_dlg_replace.h"
 #include "kspread_dlg_sort.h"
-
+#include "kspread_dlg_anchor.h"
 /*****************************************************************************
  *
  * KSpreadView
@@ -802,6 +802,8 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuData->insertSeparator( -1 );
   m_idMenuData_sort = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Sort" ) ) ), this, "sort", 0 );
 
+  m_vMenuData->insertSeparator( -1 );
+  m_idMenuData_anchor = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Create anchor" ) ) ), this, "createanchor", 0 );
 
   m_vMenuData->insertSeparator( -1 );
   m_idMenuData_Consolidate = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Consolidate" ) ) ), this, "consolidate", 0 );
@@ -1337,6 +1339,11 @@ void KSpreadView::sort()
   dlg->show();
 }
 
+void KSpreadView::createanchor()
+{
+  KSpreadanchor* dlg = new KSpreadanchor( this, "Create Anchor" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  dlg->show();
+}
 
 
 void KSpreadView::newView()
