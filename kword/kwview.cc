@@ -207,7 +207,6 @@ void KWView::initGui()
       tb->hide();
     */
 
-    statusBar()->removeItem(statusPage);
     statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
     // Workaround for bug in KDE-2.1[.1]'s KStatusBar (show() not called in insertItem)
     QObjectList *l = statusBar()->queryList( "QLabel" );
@@ -2492,7 +2491,11 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     {
         initGui();
     }
-
+    else
+    {
+        //remove item when you desactivate gui
+        statusBar()->removeItem(statusPage);
+    }
     KoView::guiActivateEvent( ev );
 }
 
