@@ -99,8 +99,8 @@ QPointArray KPRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd,
 {
     w--;
     h--;
-    int rxx = w*_xRnd/200;
-    int ryy = h*_yRnd/200;
+    int rxx = (_xRnd==0)?1: (w*_xRnd/200);
+    int ryy = (_yRnd==0)?1: (h*_yRnd/200);
     // were there overflows?
     if ( rxx < 0 )
         rxx = w/200*_xRnd;

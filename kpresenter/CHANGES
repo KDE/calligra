@@ -107,3 +107,4 @@ Bugfixes:
 - Fix availableHeight + vertical alignment
 - Fix save variable.
 - Fix recalc page number + sticky object
+- Fix draw gradient + rectangle object
