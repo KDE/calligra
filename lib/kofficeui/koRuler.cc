@@ -231,13 +231,29 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     // Draw the numbers
     double dist = lineDistance();
     int maxwidth = 0;
+    
+    for ( double i = 0.0;i <= (double)totalw;i += dist ) {
+        str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
+        int textwidth = fm.width( str );
+        maxwidth = QMAX( maxwidth, textwidth );
+    }
+    
+    // Make sure that the ruler stays readable at lower zoom levels
+    while( dist <= maxwidth ) {
+        dist += lineDistance();
+    }
+    
+    // Add precision when the zoom level gets higher..
+    while( dist > ( maxwidth * 4 ) ) {
+        dist *= 0.5;
+    }
+    
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
         int textwidth = fm.width( str );
         p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
                     qRound(( height() - fm.height() ) * 0.5),
                     textwidth, height(), AlignLeft | AlignTop, str );
-        maxwidth = QMAX( maxwidth, textwidth );
     }
 
     // Draw the medium-sized lines
@@ -386,6 +402,23 @@ void KoRuler::drawVertical( QPainter *_painter )
         // Draw the numbers
         double dist = lineDistance();
         int maxheight = 0;        
+        
+        for ( double i = 0.0;i <= (double)totalh;i += dist ) {
+            str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
+            int textwidth = fm.width( str );
+            maxheight = QMAX( maxheight, textwidth );
+        }
+        
+        // Make sure that the ruler stays readable at lower zoom levels
+        while( dist <= maxheight ) {
+            dist += lineDistance();
+        }
+        
+        // Add precision when the zoom level gets higher..
+        while( dist > ( maxheight * 4 ) ) {
+            dist *= 0.5;
+        }
+        
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
             str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
             int textheight = fm.height();
