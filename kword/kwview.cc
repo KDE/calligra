@@ -53,6 +53,7 @@
 #include "variabledlgs.h"
 #include "serialletter.h"
 #include "kwconfig.h"
+#include "kcharselectdia.h"
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -276,11 +277,11 @@ void KWView::setupActions()
     actionInsertPicture = new KAction( i18n( "&Picture..." ), "picture", Key_F2,
                                        this, SLOT( insertPicture() ),
                                        actionCollection(), "insert_picture" );
-#if 0
+
     actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), "char", ALT + SHIFT + Key_C,
                                            this, SLOT( insertSpecialChar() ),
                                            actionCollection(), "insert_specialchar" );
-#endif
+
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
@@ -1266,9 +1267,17 @@ void KWView::insertPicture()
 /*===============================================================*/
 void KWView::insertSpecialChar()
 {
-#ifdef __GNUC__
-
-#endif
+    KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    if ( !edit )
+        return;
+    QString f = font().family();
+    QChar c=' ';
+    if ( KCharSelectDia::selectChar( f, c, false ) )
+        {
+             KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (edit->textFrameSet()) ;
+             QTextFormat *f = (dynamic_cast<KWTextParag*> (tmpParag->textDocument()->lastParag()))->paragFormat();
+            edit->textFrameSet()->insert( edit->getCursor(), f, c );
+        }
 }
 
 /*===============================================================*/
