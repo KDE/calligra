@@ -864,6 +864,8 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         else
             setAlignY( KSpreadFormat::Top );
     }
+    else
+        setAlignY( KSpreadFormat::Bottom ); //default into ooimpress
 
     if ( styleStack.hasAttribute( "fo:wrap-option" ) )
     {
