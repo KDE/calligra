@@ -3001,7 +3001,14 @@ if( isValue())
                 if(fm.width(localizedNumber)<w)
                         return localizedNumber;
                 }
-        return QString("###");
+	QString str("####");
+	int i;
+	for(i=4;i!=0;i--)
+	  {
+	    if(fm.width(str.right(i))<w)
+	      break;
+	  }
+        return str.right(i);//QString("###");
         }
 else
         {
