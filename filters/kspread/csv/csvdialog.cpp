@@ -91,7 +91,7 @@ void CSVDialog::fillTable( )
            S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
 
     QChar x;
-    QString field = "";
+    QString field;
 
     kapp->setOverrideCursor(Qt::waitCursor);
 
@@ -104,12 +104,34 @@ void CSVDialog::fillTable( )
     QTextStream inputStream(m_fileArray, IO_ReadOnly);
     inputStream.setEncoding(QTextStream::Locale);
 
+    bool lastCharWasCr = false; // Last character was a Carraige Return
     while (!inputStream.atEnd()) 
     {
         inputStream >> x; // read one char
 
-        if (x == '\r') 
-            inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
+        // ### TODO: we should perhaps skip all other control characters
+        if ( x == '\r' )
+        {
+            // We have a Carriage Return, assume that its role is the one of a LineFeed
+            lastCharWasCr = true;
+            x = '\n'; // Replace by Line Feed
+        }
+        else if ( x == '\n' && lastCharWasCr )
+        {
+            // The end of line was already handled by the Carriage Return, so do nothing for this character
+            lastCharWasCr = false;
+            continue;
+        }
+        else if ( x == QChar( 0xc ) )
+        {
+            // We have a FormFeed, skip it
+            lastCharWasCr = false;
+            continue;
+        }
+        else
+        {
+            lastCharWasCr = false;
+        }
 
         if ( column > maxColumn )
           maxColumn = column;
@@ -148,7 +170,7 @@ void CSVDialog::fillTable( )
             else if (x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
-                field = "";
+                field = QString::null;
 
                 ++row;
                 column = 1;
@@ -171,7 +193,7 @@ void CSVDialog::fillTable( )
             else if (x == m_delimiter || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
-                field = "";
+                field = QString::null;
                 if (x == '\n')
                 {
                     ++row;
@@ -196,7 +218,7 @@ void CSVDialog::fillTable( )
             if (x == m_delimiter || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
-                field = "";
+                field = QString::null;
                 if (x == '\n')
                 {
                     ++row;
@@ -220,7 +242,7 @@ void CSVDialog::fillTable( )
          case S_MAYBE_NORMAL_FIELD :
             if (x == m_textquote)
             {
-                field = "";
+                field = QString::null;
                 state = S_QUOTED_FIELD;
                 break;
             }
@@ -228,7 +250,7 @@ void CSVDialog::fillTable( )
             if (x == m_delimiter || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
-                field = "";
+                field = QString::null;
                 if (x == '\n')
                 {
                     ++row;
@@ -258,7 +280,7 @@ void CSVDialog::fillTable( )
     {
       setText(row - m_startRow, column - m_startCol, field);
       ++row;
-      field = "";
+      field = QString::null;
     }
     
     m_adjustCols = true;
