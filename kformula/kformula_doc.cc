@@ -381,11 +381,11 @@ if(a->button()==RightButton){
     fontpopup->insertItem(i18n("All Font -"), this, SLOT(reduceAll()), ALT+Key_K);
 //    convert->insertItem(klocale("Simple Text"), parent->_part, SLOT(slotQuit()), ALT+Key_E);
 //    convert->insertItem("AAAARGGHHH", _part, SLOT(slotQuit()), ALT+Key_E);
-    mousepopup->insertItem(i18n("Proprieties"), this,SLOT(pro()), ALT+Key_E);
+    mousepopup->insertItem(i18n("Properties"), this,SLOT(pro()), ALT+Key_E);
     mousepopup->insertItem(i18n("Delete"), this,SLOT(dele()), ALT+Key_E);
     mousepopup->insertSeparator();
-    mousepopup->insertItem(i18n("Change font.."),fontpopup);    
-    mousepopup->insertItem(i18n("Convert to.."),convert);
+    mousepopup->insertItem(i18n("Change font"),fontpopup);    
+    mousepopup->insertItem(i18n("Export as"),convert);
 //    mousepopup->insertSeparator();
 //    mousepopup->insertItem(i18n("Quit"), _part, SLOT(slotQuit()), ALT+Key_Q);
     mousepopup->popup(wid->mapToGlobal(a->pos()));

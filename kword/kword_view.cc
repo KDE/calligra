@@ -660,7 +660,7 @@ void KWordView_impl::setupMenu()
   m_idMenuExtra = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Extra")));
   m_idMenuExtra_Spelling = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Spelling...")),m_idMenuExtra,
 						   this,CORBA::string_dup("extraSpelling"));
-  m_idMenuExtra_Stylist = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Stylist...")),m_idMenuExtra,
+  m_idMenuExtra_Stylist = m_rMenuBar->insertItem(CORBA::string_dup(i18n("S&tylist...")),m_idMenuExtra,
 						 this,CORBA::string_dup("extraStylist"));
   m_rMenuBar->insertSeparator(m_idMenuExtra);
   m_idMenuExtra_Options = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Options...")),m_idMenuExtra,
@@ -673,9 +673,9 @@ void KWordView_impl::setupMenu()
   m_rMenuBar->insertSeparator(m_idMenuHelp);
   m_idMenuHelp_About = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KWord...")),m_idMenuHelp,
 					      this,CORBA::string_dup("helpAbout"));
-  m_idMenuHelp_AboutKOffice = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KOffice...")),m_idMenuHelp,
+  m_idMenuHelp_AboutKOffice = m_rMenuBar->insertItem(CORBA::string_dup(i18n("About K&Office...")),m_idMenuHelp,
 						     this,CORBA::string_dup("helpAboutKOffice"));
-  m_idMenuHelp_AboutKDE = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KDE...")),m_idMenuHelp,
+  m_idMenuHelp_AboutKDE = m_rMenuBar->insertItem(CORBA::string_dup(i18n("About &KDE...")),m_idMenuHelp,
 						 this,CORBA::string_dup("helpAboutKDE"));
 }
 

@@ -2665,9 +2665,9 @@ void KPresenterView_impl::setupMenu()
       m_rMenuBar->insertSeparator(m_idMenuHelp);
       m_idMenuHelp_About = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KPresenter...")),m_idMenuHelp,
 						  this,CORBA::string_dup("helpAbout"));
-      m_idMenuHelp_AboutKOffice = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KOffice...")),m_idMenuHelp,
+      m_idMenuHelp_AboutKOffice = m_rMenuBar->insertItem(CORBA::string_dup(i18n("About K&Office...")),m_idMenuHelp,
 							 this,CORBA::string_dup("helpAboutKOffice"));
-      m_idMenuHelp_AboutKDE = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KDE...")),m_idMenuHelp,
+      m_idMenuHelp_AboutKDE = m_rMenuBar->insertItem(CORBA::string_dup(i18n("About &KDE...")),m_idMenuHelp,
 						     this,CORBA::string_dup("helpAboutKDE"));
 
      }
