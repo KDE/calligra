@@ -16,7 +16,7 @@ kexihandler_relation_la_SOURCES = kexirelationhandler.cpp kexirelationhandlerpro
 kexihandler_relation_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_relation_la_LIBADD = ../core/libkexicore.la
 
-SUBDIRS = . kugar
+SUBDIRS = . #kugar
 #SUBDIRS = . forms
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
