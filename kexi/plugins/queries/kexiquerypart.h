@@ -23,8 +23,9 @@
 class QPixmap;
 
 #include "kexiprojecthandler.h"
+#include "kexidataprovider.h"
 
-class KexiQueryPart : public KexiProjectHandler
+class KexiQueryPart : public KexiProjectHandler, KexiDataProvider
 {
 	Q_OBJECT
 
@@ -46,12 +47,15 @@ class KexiQueryPart : public KexiProjectHandler
 
 		virtual QPixmap				groupPixmap();
 		virtual QPixmap				itemPixmap();
-	
+
+		virtual QStringList KexiQueryPart::datasets();
+		virtual QStringList KexiQueryPart::datasetNames();
+
 	protected:
 		friend class KexiQueryPartProxy;
 
 	signals:
-		virtual	void				itemListChanged(KexiProjectHandler *);
+		virtual	void	itemListChanged(KexiProjectHandler *);
 
 };
 

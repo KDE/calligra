@@ -87,7 +87,7 @@ KexiQSAHost::scriptFiles() const
 bool
 KexiQSAHost::projectChanged()
 {
-	QPtrListIterator<QSEditor> it(*m_project->editors());
+	QPtrListIterator<QSEditor> it(m_project->editors());
 
 	for(; it.current(); ++it)
 	{
@@ -103,8 +103,8 @@ KexiQSAHost::projectChanged()
 QByteArray
 KexiQSAHost::getProjectData()
 {
-	kdDebug() << "KexiQSAHost::getProjectData() editors: " << m_project->editors()->count() << endl;
-	for(QSEditor *it = m_project->editors()->first(); it; it = m_project->editors()->next())
+	kdDebug() << "KexiQSAHost::getProjectData() editors: " << m_project->editors().count() << endl;
+	for(QSEditor *it = m_project->editors().first(); it; it = m_project->editors().next())
 	{
 		if(it)
 			it->save();

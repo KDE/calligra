@@ -24,15 +24,40 @@ AC_FIND_FILE(libqsa.so, $qsa_libdirs, qsa_libdir)
 if test ! -r $qsa_libdir/libqsa.so; then
   compile_qsa_plugin="no"
 else
-  QSA_LIBDIR=$qsa_libdir
-  AC_SUBST(QSA_LIBDIR)
+
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+ac_cxxflags_safe="$CXXFLAGS"
+CXXFLAGS="$CXXFLAGS -I$qsa_incdirs"
+
+AC_TRY_LINK([
+   #include <qsaglobal.h>
+ ],
+ [
+ #ifndef QSA_VERSION_BETA
+ #error "WRONG VERSION"
+ #endif
+ ],
+  compile_qsa_plugin="yes",
+  compile_qsa_plugin="no"
+ )
+
+  if test "$compile_qsa_plugin" = "yes"; then
+    QSA_LIBDIR=$qsa_libdir
+    AC_SUBST(QSA_LIBDIR)
+  fi
+
+CXXFLAGS="$ac_cxxflags_safe"
+AC_LANG_RESTORE
 fi
+
 
 if test "$compile_qsa_plugin" = "yes"; then
   AC_MSG_RESULT([libraries $qsa_libdir, headers $qsa_incdir])
 else
   AC_MSG_RESULT(not found)
-  AC_MSG_WARN([qsa > beta2 could not be found anywhere, kexi will compile without scripting support. check http://www.trolltech.com for qsa > beta2.])
+  AC_MSG_WARN([qsa >= 20030301 could not be found anywhere, kexi will compile without scripting support. check ftp.trolltech.com for qsa >=20030301])
 fi
 
 AM_CONDITIONAL(compile_qsa_plugin, test "$compile_qsa_plugin" = "yes")

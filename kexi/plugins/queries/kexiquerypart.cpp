@@ -33,7 +33,7 @@
 #include "kexiquerypartitem.h"
 
 KexiQueryPart::KexiQueryPart(QObject *project,const char *,const QStringList &)
- : KexiProjectHandler(KEXIPROJECT(project))
+ : KexiProjectHandler(KEXIPROJECT(project)),KexiDataProvider()
 {
 	kdDebug() << "KexiQueryPart::KexiQueryPart()" << endl;
 }
@@ -102,6 +102,35 @@ void KexiQueryPart::hookIntoView(KexiView *view)
 {
     KexiQueryPartProxy *prx=new KexiQueryPartProxy(this,view);
     insertIntoViewProxyMap(view,prx);
+}
+
+#if 0
+	virtual QStringList datasets() {return QStringList();}
+	virtual QStringList datasetNames() { return QStringList();}
+	virtual QStringList fields(const QString& identifier) {return QStringList();}
+	virtual KexiDBRecord *records(const QString& identifier,Parameters params) {return 0;}
+	virtual ParameterList parameters(const QString &identifier) { return ParameterList();}
+#endif
+
+QStringList KexiQueryPart::datasets() {
+	QStringList list;
+
+	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it) {
+		list <<it.current()->identifier();
+	}
+
+	return list;
+}
+
+QStringList KexiQueryPart::datasetNames() {
+	QStringList list;
+
+	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it) {
+		list <<it.current()->name();
+	}
+
+	return list;
+
 }
 
 

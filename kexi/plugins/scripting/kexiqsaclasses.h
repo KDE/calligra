@@ -42,7 +42,7 @@ class KexiQSAClasses : public QSObjectFactory
 		KexiQSAClasses(QSInterpreter *i);
 		virtual ~KexiQSAClasses();
 
-		virtual QObject* create(const QString & className, const QValueList<QSArgument> &arguments, QObject *context);
+		virtual QObject* create(const QString & className, const QSArgumentList  &arguments, QObject *context);
 		virtual QStringList classes() const;
 };
 

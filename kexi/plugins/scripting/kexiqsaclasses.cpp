@@ -29,7 +29,7 @@ KexiQSAClasses::KexiQSAClasses(QSInterpreter *i)
 }
 
 QObject*
-KexiQSAClasses::create(const QString &className, const QValueList<QSArgument> &arguments, QObject *context)
+KexiQSAClasses::create(const QString &className, const QSArgumentList &arguments, QObject *context)
 {
 	if(className == "Sys")
 	{

@@ -41,7 +41,7 @@ class KexiQueryPartProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
 
 
 	protected slots:
-		virtual void executeItem(const QString& identifier);	
+		virtual void executeItem(const QString& identifier);
 		void				slotCreateQuery();
 		void				slotOpen(const QString& identifier);
 		void				slotEdit(const QString &identifier);
