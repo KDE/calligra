@@ -59,12 +59,10 @@ K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory( "kwordabiwor
 class StructureParser : public QXmlDefaultHandler
 {
 public:
-    StructureParser(QDomDocument& doc, QDomDocument& info, KoFilterChain* chain)
-        : mainDocument("DOC"), m_info("document-info"), m_chain(chain), m_pictureNumber(0), m_pictureFrameNumber(0)
+    StructureParser(KoFilterChain* chain)
+        : m_pictureNumber(0), m_pictureFrameNumber(0)
     {
         createDocument();
-        doc=mainDocument;
-        info=m_info;
         structureStack.setAutoDelete(true);
         StackItem *stackItem=new(StackItem);
         stackItem->elementType=ElementTypeBottom;
@@ -81,6 +79,9 @@ public:
     virtual bool startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);
     virtual bool endElement( const QString&, const QString& , const QString& qName);
     virtual bool characters ( const QString & ch );
+public:
+    QDomDocument getDocInfo(void) const { return m_info; }
+    QDomDocument getDocument(void) const { return mainDocument; }
 protected:
     bool clearStackUntilParagraph(StackItemStack& auxilaryStack);
     bool complexForcedPageBreak(StackItem* stackItem);
@@ -1506,8 +1507,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
 
     kdDebug(30506)<<"AbiWord to KWord Import filter"<<endl;
 
-    QDomDocument documentOut, infoOut;
-    StructureParser handler(documentOut,infoOut,m_chain);
+    StructureParser handler(m_chain);
 
     //We arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;
@@ -1574,7 +1574,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     }
 
     //Write the document information!
-    strOut=infoOut.toCString(); // UTF-8
+    strOut=handler.getDocInfo().toCString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->writeBlock(strOut,strOut.length());
     
@@ -1586,7 +1586,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     }
 
     //Write the document!
-    strOut=documentOut.toCString(); // UTF-8
+    strOut=handler.getDocument().toCString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->writeBlock(strOut,strOut.length());
 
