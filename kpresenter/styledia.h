@@ -82,6 +82,7 @@ private:
     bool oldUnbalanced;
     bool m_bBrushColorChanged, m_bBrushStyleChanged, m_bFillTypeChanged;
     bool m_bGColor1Changed, m_bGColor2Changed, m_bGTypeChanged, m_bGUnbalancedChanged;
+    bool m_xFactorChanged, m_yFactorChanged;
     int m_flags, oldXfactor, oldYfactor;
     QCheckBox *unbalanced;
     QBrush oldBrush;

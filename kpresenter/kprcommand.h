@@ -447,7 +447,9 @@ public:
         GradientColor2 = 16,
         GradientType = 32,
         GradientBalanced = 64,
-        All = BrushColor | BrushStyle | BrushGradientSelect | GradientColor1 | GradientColor2 | GradientType | GradientBalanced
+        GradientXFactor = 128,
+        GradientYFactor = 256,
+        All = BrushColor | BrushStyle | BrushGradientSelect | GradientColor1 | GradientColor2 | GradientType | GradientBalanced | GradientXFactor | GradientYFactor
     };
 
     BrushCmd( const QString &_name, QPtrList<KPObject> &_objects, Brush _newBrush,

@@ -394,6 +394,10 @@ int ConfBrushDia::getBrushConfigChange() const
         flags = flags | BrushCmd::GradientType;
     if (m_bGUnbalancedChanged)
         flags = flags | BrushCmd::GradientBalanced;
+    if ( m_xFactorChanged )
+        flags |= BrushCmd::GradientXFactor;
+    if ( m_yFactorChanged )
+        flags |= BrushCmd::GradientYFactor;
 
     return flags;
 }
@@ -491,12 +495,14 @@ void ConfBrushDia::slotGUnbalancedChanged()
 
 void ConfBrushDia::slotGXFactorChanged()
 {
+    m_xFactorChanged = true;
     gradient->setXFactor(getGXFactor());
     brushPrev->repaint(false);
 }
 
 void ConfBrushDia::slotGYFactorChanged()
 {
+    m_yFactorChanged = true;
     gradient->setYFactor(getGYFactor());
     brushPrev->repaint(false);
 }

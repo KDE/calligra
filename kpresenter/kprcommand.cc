@@ -1075,11 +1075,13 @@ void BrushCmd::execute()
             tmpBrush.gType = newBrush.gType;
 
         if ( flags & GradientBalanced )
-        {
             tmpBrush.unbalanced = newBrush.unbalanced;
+
+        if ( flags & GradientXFactor )
             tmpBrush.xfactor = newBrush.xfactor;
+
+        if ( flags & GradientYFactor )
             tmpBrush.yfactor = newBrush.yfactor;
-        }
 
         applyBrush( objects.at( i ), &tmpBrush );
     }
