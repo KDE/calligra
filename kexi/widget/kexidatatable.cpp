@@ -19,6 +19,9 @@ KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption)
 	m_view->show();
 
 	setIcon(SmallIcon("table"));
+	
+	initActions();
+	registerDialog();
 }
 
 KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption, KexiDB::Cursor *cursor)
@@ -32,14 +35,17 @@ KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption, KexiDB
 	setIcon(SmallIcon("table"));
 
 	initActions();
+	registerDialog();
+
 }
 
 void
 KexiDataTable::initActions()
 {
+	kdDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
+	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
 	setXMLFile("kexitablepartui.rc");
 
-	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "filter");
 }
 
 void
@@ -48,9 +54,14 @@ KexiDataTable::setData(KexiDB::Cursor *c)
 	m_view->setData(c);
 }
 
+void KexiDataTable::filter()
+{
+}
+
 KexiDataTable::~KexiDataTable()
 {
 }
+
 
 #include "kexidatatable.moc"
 

@@ -88,7 +88,8 @@ class KexiMainWindow : public KMdiMainFrm
 		 \return true is database was created, false on error or when cancel pressed
 		*/
 		bool createBlankDatabase();
-	
+
+		friend class KexiDialogBase;	
 	protected slots:
 
 		/**
@@ -122,12 +123,15 @@ class KexiMainWindow : public KMdiMainFrm
 		void slotQuit();
 
 	private:
-
 		KexiProject	*m_project;
 		KexiBrowser	*m_browser;
 		
+
+		KXMLGUIClient   *m_currentDocumentGUIClient;
+
 		class Private;
 		Private *d;
+
 };
 
 #endif

@@ -74,6 +74,7 @@ class KexiMainWindow::Private
 
 KexiMainWindow::KexiMainWindow()
  : KMdiMainFrm(0L, "keximain")
+	,m_currentDocumentGUIClient(0)
  	,d(new KexiMainWindow::Private() )
 {
 	m_browser = 0;
@@ -83,7 +84,8 @@ KexiMainWindow::KexiMainWindow()
 	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
 
 	initActions();
-	createGUI(0);
+	createShellGUI(true);
+//	createGUI(0);
 
 //	initBrowser();
 	//TODO:new KexiProject();
@@ -423,8 +425,13 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 {
 	kdDebug() << "KexiMainWindow::activeWindowChanged()" << endl;
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
+	KXMLGUIClient *client=dynamic_cast<KXMLGUIClient*>(dlg);
 	kdDebug() << "KexiMainWindow::activeWindowChanged(): dlg = " << dlg << endl;
-	factory()->addClient(dlg);
+	if (client!=m_currentDocumentGUIClient) {
+		if (m_currentDocumentGUIClient) guiFactory()->removeClient(m_currentDocumentGUIClient);
+		if (client) guiFactory()->addClient(client);
+	}
+	m_currentDocumentGUIClient=client;
 }
 
 void

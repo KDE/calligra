@@ -27,6 +27,10 @@ class KexiDataTable : public KexiDialogBase
 	protected:
 		void			initActions();
 
+	protected slots:
+		void filter();
+
+
 	private:
 		KexiDataTableView	*m_view;
 };
