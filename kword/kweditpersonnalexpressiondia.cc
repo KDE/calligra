@@ -87,8 +87,8 @@ void KWEditPersonnalExpression::slotExpressionActivated(const QString &_text )
 
 void KWEditPersonnalExpression::loadFile()
 {
-    QString dir=KWFactory::global()->dirs()->saveLocation("expression");
-    init( dir+"/personal.xml" );
+    QString file=locateLocal("data","kword/expression/perso.xml");
+    init( file );
 }
 
 void KWEditPersonnalExpression::initCombobox()
@@ -234,8 +234,7 @@ void KWEditPersonnalExpression::saveFile()
         return;
     }
 
-    QString u(dir+"/personal.xml");
-    QFile file( u );
+    QFile file( locateLocal("data","kword/expression/perso.xml") );
     if ( !file.open( IO_ReadWrite ) )
     {
         kdDebug()<<"Error \n";

@@ -2004,11 +2004,13 @@ void KWView::tableJoinCells()
                             i18n( "You have to select some cells which are next to each other\n"
                                   "and are not already joined." ),
                             i18n( "Join Cells" ) );
+        return;
     }
     doc->layout();
     //KoRect r = doc->zoomRect( table->boundingRect() );
     //gui->canvasWidget()->repaintScreen( r, TRUE );
     gui->canvasWidget()->repaintAll();
+    gui->canvasWidget()->emitFrameSelectedChanged();
 }
 
 void KWView::tableSplitCellsVerticaly()

@@ -147,6 +147,8 @@ public:
 
     void refreshViewMode();
 
+    void emitFrameSelectedChanged();
+
 protected:
     /** Set format changes on selection on current cursor */
     void setFormat( QTextFormat *, int flags);

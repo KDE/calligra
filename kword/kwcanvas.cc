@@ -1863,6 +1863,12 @@ void KWCanvas::updateCurrentFormat()
         edit->updateUI( true, true );
 }
 
+
+void KWCanvas::emitFrameSelectedChanged()
+{
+    emit frameSelectedChanged();
+}
+
 #ifndef NDEBUG
 void KWCanvas::printRTDebug( int info )
 {
