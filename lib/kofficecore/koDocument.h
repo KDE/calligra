@@ -242,14 +242,11 @@ public:
   virtual bool isStoredExtern();
   
   /**
-   * @param _force may be set to true. In this case this function
-   *               always returns a valid QPicture even if the child does
-   *               not support the printing extension. This QPicture will only
-   *               paint a white rectangle instead of the childs content.
-   *               Otherwise 0L is returned if the child does not support the
-   *               printing Extension.
+   * @param _force_update may be set to true. In this case this function
+   *                      always requests a new picture from the child
+   *                      instead of returning the cached one.
    */
-  virtual QPicture* draw( float _scale = 1.0, bool _force = true );
+  virtual QPicture* draw( float _scale = 1.0, bool _force_update = false );
 
   virtual KOffice::View_ptr createView( KOffice::MainWindow_ptr _main );
   

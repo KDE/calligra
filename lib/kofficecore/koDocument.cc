@@ -218,14 +218,15 @@ bool KoDocumentChild::isStoredExtern()
   return true;
 }
 
-QPicture* KoDocumentChild::draw( float _scale, bool _force )
+QPicture* KoDocumentChild::draw( float _scale, bool _force_update )
 {
   cout << "QPicture* KoDocumentChild::draw( bool _force )" << endl;
   
-  if ( m_pPicture != 0L && !m_bHasPrintingExtension && !_force )
-    return 0L;
+  // No support for printing extension? => return white plane
+  if ( m_pPicture != 0L && !m_bHasPrintingExtension )
+    return m_pPicture;
 
-  if ( m_pPicture != 0L && m_pictureScale == _scale )
+  if ( m_pPicture != 0L && m_pictureScale == _scale && !_force_update )
     return m_pPicture;
   
   cout << "Trying to fetch the QPicture stuff" << endl;
@@ -233,9 +234,6 @@ QPicture* KoDocumentChild::draw( float _scale, bool _force )
   CORBA::Object_var obj = m_rDoc->getInterface( "IDL:KOffice/Print:1.0" );
   if ( CORBA::is_nil( obj ) )
   {
-    if ( !_force )
-      return 0L;
-  
     if ( m_pPicture == 0L )
       m_pPicture = new QPicture;
     m_pictureScale = _scale;
@@ -250,13 +248,9 @@ QPicture* KoDocumentChild::draw( float _scale, bool _force )
     return m_pPicture;
   }
 
-  // HACK: TODO: Use KOM here!!
   KOffice::Print_var print = KOffice::Print::_narrow( m_rDoc );
   if ( CORBA::is_nil( print ) )
   {
-    if ( !_force )
-      return 0L;
-  
     if ( m_pPicture == 0L )
       m_pPicture = new QPicture;
     m_pictureScale = _scale;
@@ -281,9 +275,6 @@ QPicture* KoDocumentChild::draw( float _scale, bool _force )
   if ( inlen % 4 != 0 )
   {
     cerr << "ERROR: len of BASE64 not devideable by 4" << endl;
-
-    if ( !_force )
-      return 0L;
 
     if ( m_pPicture == 0L )
       m_pPicture = new QPicture;

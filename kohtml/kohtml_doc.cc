@@ -104,7 +104,7 @@ void KoHTMLJob::slotJobFinished()
 
 KoHTMLDoc::KoHTMLDoc()
 {
-  ADD_INTERFACE("IDL:OPParts/Print:1.0");
+  ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
   KIOJob::initStatic();
 
