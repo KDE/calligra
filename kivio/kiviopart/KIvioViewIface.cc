@@ -195,7 +195,7 @@ void KIvioViewIface::unselectAllStencils()
     view->unselectAllStencils();
 }
 
-int KIvioViewIface::lineWidth() const
+double KIvioViewIface::lineWidth() const
 {
     return view->lineWidth();
 }

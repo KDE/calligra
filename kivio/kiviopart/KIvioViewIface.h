@@ -76,7 +76,7 @@ k_dcop:
     virtual void selectAllStencils();
     virtual void unselectAllStencils();
 
-    virtual int lineWidth()const;
+    virtual double lineWidth()const;
     QColor foreGroundColor()const;
     QColor backGroundColor()const;
 private:

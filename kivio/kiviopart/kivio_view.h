@@ -122,7 +122,7 @@ class KivioView : public KoView
     // Returns the current interface color/lineWidth settings
     QColor fgColor()const;
     QColor bgColor()const;
-    int lineWidth()const;
+    double lineWidth()const;
     void updateButton();
     void insertPage( KivioPage* page );
     void resetLayerPanel();

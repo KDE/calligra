@@ -996,10 +996,10 @@ void KivioView::setLineWidth()
       return;
     KMacroCommand * macro = new KMacroCommand( i18n("Change Line Width") );
     bool createMacro = false ;
+    double newValue = KoUnit::ptFromUnit(m_setLineWidth->value(), m_pDoc->units());
+
     while( pStencil )
     {
-        int newValue = KoUnit::ptFromUnit(m_setLineWidth->value(), m_pDoc->units());
-
         if ( newValue != pStencil->lineWidth() )
         {
             KivioChangeLineWidthCommand * cmd = new KivioChangeLineWidthCommand( i18n("Change Line Width"), m_pActivePage, pStencil, pStencil->lineWidth(), newValue );
@@ -1011,10 +1011,13 @@ void KivioView::setLineWidth()
 
         pStencil = m_pActivePage->selectedStencils()->next();
     }
-    if ( createMacro )
+
+    if ( createMacro ) {
         m_pDoc->addCommand( macro );
-    else
+    } else {
         delete macro;
+    }
+
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1054,9 +1057,9 @@ QColor KivioView::bgColor() const
     return m_setBGColor->color();
 }
 
-int KivioView::lineWidth() const
+double KivioView::lineWidth() const
 {
-    return (int)m_setLineWidth->value();
+    return KoUnit::ptFromUnit(m_setLineWidth->value(), m_pDoc->units());
 }
 
 
@@ -1222,7 +1225,7 @@ void KivioView::updateToolBars()
         m_setBold->setChecked( false );
         m_setItalics->setChecked( false );
         m_setUnderline->setChecked( false );
-        m_setLineWidth->setValue( 1.0 );
+        m_setLineWidth->setValue( KoUnit::ptToUnit(1.0, m_pDoc->units()) );
         showAlign(Qt::AlignHCenter);
         showVAlign(Qt::AlignVCenter);
 
@@ -1242,7 +1245,7 @@ void KivioView::updateToolBars()
         m_setItalics->setChecked( f.italic() );
         m_setUnderline->setChecked( f.underline() );
 
-        m_setLineWidth->setValue( pStencil->lineWidth() );
+        m_setLineWidth->setValue( KoUnit::ptToUnit(pStencil->lineWidth(), m_pDoc->units()) );
 
         m_setFGColor->setActiveColor(pStencil->fgColor());
         m_setBGColor->setActiveColor(pStencil->bgColor());
