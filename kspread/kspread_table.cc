@@ -47,7 +47,6 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_canvas.h"
-#include "kspread_dlg_paperlayout.h"
 
 #include "KSpreadTableIface.h"
 
@@ -7290,33 +7289,6 @@ void KSpreadTable::convertObscuringBorders()
  * Printout Functions *
  **********************/
 
-void KSpreadTable::paperLayoutDlg(KSpreadView *view)
-{
-    KoPageLayout pl;
-    pl.format = paperFormat();
-    pl.orientation = orientation();
-    pl.ptWidth = MM_TO_POINT( m_paperWidth );
-    pl.ptHeight = MM_TO_POINT( m_paperHeight );
-    pl.ptLeft = MM_TO_POINT( leftBorder() );
-    pl.ptRight = MM_TO_POINT(  rightBorder() );
-    pl.ptTop = MM_TO_POINT(  topBorder() );
-    pl.ptBottom = MM_TO_POINT(  bottomBorder() );
-
-    KoHeadFoot hf;
-    hf.headLeft  = localizeHeadFootLine( headLeft()  );
-    hf.headRight = localizeHeadFootLine( headRight() );
-    hf.headMid   = localizeHeadFootLine( headMid()   );
-    hf.footLeft  = localizeHeadFootLine( footLeft()  );
-    hf.footRight = localizeHeadFootLine( footRight() );
-    hf.footMid   = localizeHeadFootLine( footMid()   );
-
-    KoUnit::Unit unit = m_pDoc->getUnit();
-
-
-    KSpreadPaperLayout *dlg=new KSpreadPaperLayout( 0, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit, this, view);
-    dlg->show();
-    // dlg destroys itself
-}
 
 void KSpreadTable::definePrintRange (KSpreadSelection* selectionInfo)
 {

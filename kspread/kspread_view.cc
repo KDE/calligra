@@ -92,6 +92,8 @@
 #include <kdebug.h>
 #include <kstatusbar.h>
 #include <kapplication.h>
+#include "kspread_dlg_paperlayout.h"
+
 
 /*****************************************************************************
  *
@@ -4140,7 +4142,32 @@ void KSpreadView::paperLayoutDlg()
     {
         m_pCanvas->deleteEditor( true ); // save changes
     }
-    m_pTable->paperLayoutDlg(this);
+
+    KoPageLayout pl;
+    pl.format = m_pTable->paperFormat();
+    pl.orientation = m_pTable->orientation();
+
+    pl.ptWidth = MM_TO_POINT( m_pTable->paperWidth() );
+    pl.ptHeight = MM_TO_POINT( m_pTable->paperHeight() );
+    pl.ptLeft = MM_TO_POINT( m_pTable->leftBorder() );
+    pl.ptRight = MM_TO_POINT(  m_pTable->rightBorder() );
+    pl.ptTop = MM_TO_POINT(  m_pTable->topBorder() );
+    pl.ptBottom = MM_TO_POINT(  m_pTable->bottomBorder() );
+
+    KoHeadFoot hf;
+    hf.headLeft  = m_pTable->localizeHeadFootLine( m_pTable->headLeft()  );
+    hf.headRight = m_pTable->localizeHeadFootLine( m_pTable->headRight() );
+    hf.headMid   = m_pTable->localizeHeadFootLine( m_pTable->headMid()   );
+    hf.footLeft  = m_pTable->localizeHeadFootLine( m_pTable->footLeft()  );
+    hf.footRight = m_pTable->localizeHeadFootLine( m_pTable->footRight() );
+    hf.footMid   = m_pTable->localizeHeadFootLine( m_pTable->footMid()   );
+
+    KoUnit::Unit unit = doc()->getUnit();
+
+    KSpreadPaperLayout *dlg=new KSpreadPaperLayout( 0, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit, m_pTable, this);
+    dlg->show();
+    // dlg destroys itself
+
 }
 
 void KSpreadView::definePrintRange()

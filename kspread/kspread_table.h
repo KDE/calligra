@@ -1441,12 +1441,6 @@ public:
     void updatePrintRepeatRowsHeight();
 
     /**
-     * Open a dialog for the "Page Layout".
-     *
-     * @see KoPageLayoutDia
-     */
-    void paperLayoutDlg(KSpreadView *view);
-    /**
      * Define the print range with the current selection
      */
     void definePrintRange(KSpreadSelection* selectionInfo);
