@@ -42,7 +42,7 @@ KoFilter::ConversionStatus TEXGRAPHExport::convert(const QCString& from, const Q
     if(to != "text/x-tex" || from != "application/x-kontour")
         return KoFilter::NotImplemented;
 
-    KoStore in = KoStore(QString(m_chain->inputFile()), KoStore::Read);
+    KoStore in(QString(m_chain->inputFile()), KoStore::Read);
     if(!in.open("root")) {
         kdError(30503) << "Unable to open input file!" << endl;
         in.close();

@@ -54,7 +54,7 @@ class TEXGRAPHExportDia : public KDialogBase
 	QString _fileIn;
 	QString _fileOut;
 	QByteArray _arrayIn;
-	KoStore* _in;	/* the zipped file containing all pictures, part, ... */
+	const KoStore& _in;	/* the zipped file containing all pictures, part, ... */
 
 	public:
 		TEXGRAPHExportDia(QWidget *parent=0L, const char *name=0L);	/* deprecated */

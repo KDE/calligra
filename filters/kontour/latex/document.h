@@ -56,6 +56,7 @@ class Document: public XmlParser
 	QFile       _file;
 	QTextStream _out;
 	QString     _filename;
+	//const KoStore& _in;
 
 	/* CHILDREN */
 	//Layer  _layer;
@@ -74,21 +75,21 @@ class Document: public XmlParser
 		 *
 		 * Creates a new instance of Document.
 		 */
-		Document(QString, QString);
+		//Document(QString, QString);
 
 		/**
 		 * Constructor
 		 *
 		 * Creates a new instance of Document from an input file in a QByteArray.
 		 */
-		Document(QByteArray, QString);
+		//Document(QByteArray, QString);
 
 		/**
 		 * Constructor
 		 *
 		 * Creates a new instance of Document from an input file in a koStore.
 		 */
-		Document(KoStore&, QString, QString);
+		Document(const KoStore&, QString, QString);
 
 
 		/**

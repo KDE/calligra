@@ -37,20 +37,20 @@
 #include <texgraphexportdia.moc>
 #include "kdebug.h"
 
-TEXGRAPHExportDia::TEXGRAPHExportDia(QWidget *parent, const char *name) :
+/*TEXGRAPHExportDia::TEXGRAPHExportDia(QWidget *parent, const char *name) :
 			KDialogBase(parent, name, true,
 			i18n("Latex export filter parameters"), Ok|Cancel)
 {
 	kapp->restoreOverrideCursor();
 	createDialog();
-}
+}*/
 
 TEXGRAPHExportDia::TEXGRAPHExportDia(const KoStore& in, QWidget *parent, const char *name) :
 			KDialogBase(parent, name, true,
-			i18n("Latex export filter parameters"), Ok|Cancel)
+			i18n("Latex export filter parameters"), Ok|Cancel), _in(in)
 {
 	kapp->restoreOverrideCursor();
-	_in = new KoStore(in);
+	//_in = new KoStore(in);
 	createDialog();
 }
 
@@ -154,7 +154,7 @@ void TEXGRAPHExportDia::slotOk()
 	kdDebug() << "config : " << state() << endl;
 
 	kdDebug() << "TEXGRAPH FILTER --> BEGIN" << endl;
-	Document TEXGRAPHParser(*_in, _fileOut, state());
+	Document TEXGRAPHParser(_in, _fileOut, state());
 	TEXGRAPHParser.analyse();
 	kdDebug() << "---------- generate file -------------" << endl;
 	TEXGRAPHParser.generate();

@@ -27,30 +27,30 @@
 /*******************************************/
 /* Constructor                             */
 /*******************************************/
-Document::Document(QString fileIn, QString fileOut): XmlParser(fileIn), _file(fileOut)
+/*Document::Document(QString fileIn, QString fileOut): XmlParser(fileIn), _file(fileOut)
 {
 	kdDebug() << fileOut.latin1() << endl;
 	_filename = fileOut;
 	setLatexType(LT_PSTRICKS);
-}
+}*/
 
 /*******************************************/
 /* Constructor                             */
 /*******************************************/
-Document::Document(QByteArray in, QString fileOut): XmlParser(in), _file(fileOut)
+/*Document::Document(QByteArray in, QString fileOut): XmlParser(in), _file(fileOut)
 {
 	kdDebug() << fileOut.latin1() << endl;
 	_filename = fileOut;
 	setLatexType(LT_PSTRICKS);
-}
+}*/
 
 /*******************************************/
 /* Constructor                             */
 /*******************************************/
-Document::Document(KoStore& in, QString fileOut, QString config):
+Document::Document(const KoStore& in, QString fileOut, QString config):
 						XmlParser(in), _file(fileOut)
 {
-	_in = new KoStore(in);
+	//_in = new KoStore(in);
 	kdDebug() << fileOut.latin1() << endl;
 	_filename = fileOut;
 	setFileHeader(_fileHeader);
