@@ -6278,38 +6278,47 @@ void KPresenterView::updateStyleList()
     lstWithAccels = lst;
 #endif
     QMap<QString, KShortcut> shortCut;
-    // Delete previous style actions
-    for ( uint i = 0; ; ++i )
+
+    KActionPtrList lst2 = actionCollection()->actions("styleList");
+    QValueList<KAction *> actions = lst2;
+    QValueList<KAction *>::ConstIterator it = lst2.begin();
+    QValueList<KAction *>::ConstIterator end = lst2.end();
+    for (; it != end; ++it )
     {
-        KAction* act = actionCollection()->action( QString("style_%1").arg(i).latin1() );
-        if ( act )
+        if ( !(*it)->shortcut().toString().isEmpty())
         {
-            if ( !act->shortcut().toString().isEmpty())
-                shortCut.insert( act->name(), KShortcut( act->shortcut()));
-            actionFormatStyleMenu->remove( act );
-            delete act;
+            KoStyle* tmp = m_pKPresenterDoc->styleCollection()->findStyleShortCut( (*it)->name() );
+            if ( tmp )
+                shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
-        else
-            break; // no gaps. As soon as style_N doesn't exist, we're done
+        actionFormatStyleMenu->remove( *it );
+        delete *it;
     }
+
+
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act = 0L;
-        QCString name = QString("style_%1").arg(i).latin1();
-        if ( shortCut.contains(name))
+        KoStyle *tmp = m_pKPresenterDoc->styleCollection()->findStyle( lst[ i]);
+        if ( tmp )
         {
-            act = new KToggleAction( (*it),
-                                     (shortCut)[name], this, SLOT( slotStyleSelected() ),
-                                     actionCollection(), name );
+            QCString name = tmp->shortCutName().latin1();
+            if ( shortCut.contains(name))
+            {
+                act = new KToggleAction( (*it),
+                                         (shortCut)[name], this, SLOT( slotStyleSelected() ),
+                                         actionCollection(), name );
 
+            }
+            else
+                act = new KToggleAction( (*it),
+                                         0, this, SLOT( slotStyleSelected() ),
+                                         actionCollection(),name );
+            act->setGroup( "styleList" );
+            act->setExclusiveGroup( "styleListAction" );
+            actionFormatStyleMenu->insert( act );
         }
-        else
-            act = new KToggleAction( (*it),
-                                     0, this, SLOT( slotStyleSelected() ),
-                                     actionCollection(),name );
-        act->setExclusiveGroup( "styleList" );
-        actionFormatStyleMenu->insert( act );
     }
 }
 
@@ -6330,20 +6339,29 @@ void KPresenterView::extraStylist()
 void KPresenterView::slotStyleSelected()
 {
     QString actionName = QString::fromLatin1(sender()->name());
-    if ( actionName.startsWith( "style_" ) )
+    if ( actionName.startsWith( "shortcut_style_" ) )//see lib/kotext/kostyle.cc
     {
-        QString styleStr = actionName.mid(6);
-        kdDebug(33001) << "KPresenterView::slotStyleSelected " << styleStr << endl;
-        textStyleSelected( styleStr.toInt() );
+        kdDebug(33001) << "KPresenterView::slotStyleSelected " << actionName << endl;
+        textStyleSelected( m_pKPresenterDoc->styleCollection()->findStyleShortCut( actionName) );
     }
+
+
 }
 
 void KPresenterView::textStyleSelected( int index )
 {
+    textStyleSelected( m_pKPresenterDoc->styleCollection()->styleAt( index ) );
+}
+
+void KPresenterView::textStyleSelected( KoStyle *_sty )
+{
+    if ( !_sty )
+        return;
+
     KPTextView *edit=m_canvas->currentTextObjectView();
     if(edit)
     {
-        edit->applyStyle( m_pKPresenterDoc->styleCollection()->styleAt( index ) );
+        edit->applyStyle( _sty );
         m_canvas->setFocus();
     }
     else
@@ -6359,7 +6377,7 @@ void KPresenterView::textStyleSelected( int index )
         {
             KoTextObject *textObject = it.current()->textObject();
             textObject->textDocument()->selectAll( KoTextDocument::Temp );
-            KCommand *cmd = textObject->applyStyle( 0L, m_pKPresenterDoc->styleCollection()->styleAt( index ),
+            KCommand *cmd = textObject->applyStyle( 0L, _sty,
                                                     KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format,
                                                     true, true );
             textObject->textDocument()->removeSelection( KoTextDocument::Temp );
