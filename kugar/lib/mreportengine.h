@@ -55,6 +55,7 @@ public:
 	bool setReportData(const QDomDocument&);
 	bool setReportTemplate(const QString &);
 	bool setReportTemplate(QIODevice *);
+	bool setReportTemplate(const QDomDocument&);
 	int getRenderSteps() {return records.length() / 2;}
 	MPageCollection* renderReport();
 

@@ -168,6 +168,17 @@ void MReportEngine::initData()
 		}
 }
 
+//Set the eport's template from an existing QDomDocument
+bool MReportEngine::setReportTemplate(const QDomDocument &data)
+{
+	clearFormatting();
+
+	rt=data.cloneNode(true).toDocument();
+	initTemplate();
+
+	return true;
+}
+
 
 // Set the report's template from an inline string.  Return true if it was a
 // valid template.

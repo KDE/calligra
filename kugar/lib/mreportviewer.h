@@ -26,6 +26,7 @@
 #define M_PROGRESS_DELAY 500			// Number of ms to delay progress dialog display
 
 class QPrinter;
+class QDomDocument;
 
 /** Application reference, required for event processing */
 extern QApplication *mAppRef;
@@ -45,6 +46,7 @@ public:
 
 	bool setReportData(const QString &);
 	bool setReportData(QIODevice *);
+	bool setReportTemplate(const QDomDocument &);
 	bool setReportTemplate(const QString &);
 	bool setReportTemplate(QIODevice *);
 	bool renderReport();

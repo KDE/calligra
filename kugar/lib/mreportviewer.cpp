@@ -11,6 +11,7 @@
 #include <qapplication.h>
 #include <qmessagebox.h>
 #include <qprinter.h>
+#include <qdom.h>
 //#include <klocale.h>
 
 #include "mreportviewer.h"
@@ -92,6 +93,14 @@ bool MReportViewer::setReportData(const QString &data)
 bool MReportViewer::setReportData(QIODevice *dev)
 {
 	return rptEngine -> setReportData(dev);
+}
+
+
+// Set the report's template from an existing QDomDocument.
+
+bool MReportViewer::setReportTemplate(const QDomDocument &doc)
+{
+	return rptEngine -> setReportTemplate(doc);
 }
 
 
