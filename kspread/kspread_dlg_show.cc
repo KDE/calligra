@@ -66,17 +66,17 @@ void KSpreadshow::slotDoubleClicked(QListBoxItem *)
 
 void KSpreadshow::slotOk()
 {
-  QString text;
+    QStringList listTable;
 
-  for (int i=0; i < list->numRows(); i++)
-  {
-    if (list->isSelected(i))
+    for (int i=0; i < list->numRows(); i++)
     {
-      text=list->text(i);
-      m_pView->tabBar()->showTable(text);
+        if (list->isSelected(i))
+        {
+            listTable.append( list->text(i));
+        }
     }
-  }
-  accept();
+    m_pView->tabBar()->showTable(listTable);
+    accept();
 }
 
 #include "kspread_dlg_show.moc"

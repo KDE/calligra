@@ -618,6 +618,24 @@ void KSpreadTabBar::showTable(const QString& text)
     table->hideTable(false);
 }
 
+void KSpreadTabBar::showTable(QStringList list)
+{
+    KSpreadTable *table;
+    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( m_pView->doc(),i18n("Show Table"));
+    for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+    {
+        table=m_pView->doc()->map()->findTable( *it );
+        if ( !m_pView->doc()->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoShowTable* undo = new KSpreadUndoShowTable( m_pView->doc(), table );
+            macroUndo->addCommand( undo );
+        }
+        table->hideTable(false);
+    }
+    m_pView->doc()->undoBuffer()->appendUndo( macroUndo );
+}
+
+
 void KSpreadTabBar::displayTable(const QString& text)
 {
     tablehide.remove( text );

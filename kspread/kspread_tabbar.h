@@ -108,7 +108,7 @@ public:
      * The table does not become automatically the active one.
      */
     void showTable(const QString& _text);
-
+    void showTable(QStringList list);
     void displayTable(const QString& _text);
 
     /**
