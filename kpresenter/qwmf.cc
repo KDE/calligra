@@ -24,6 +24,9 @@
 #include <qcolor.h>
 #include <qapp.h>
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 bool qwmfDebug = FALSE;
 
@@ -345,7 +348,7 @@ bool QWinMetaFile::paint(const QPaintDevice* aTarget)
       if (mSingleStep)
       {
 	fflush(stderr);
-	gets(dummy);
+	fgets(dummy, 1, stdin);
       }
       else fprintf(stderr, "\n");
     }
@@ -423,12 +426,11 @@ QPointArray* QWinMetaFile::pointArray(short num, short* parm)
 unsigned int QWinMetaFile::toDWord(short* parm)
 {
   unsigned int l;
-  char *bytes;
-  char swap[4];
 
-#if LITTLE_ENDIAN
+#if !defined(WORDS_BIGENDIAN)
   l = *(unsigned int*)parm;
 #else
+  char *bytes;                                                                    char swap[4];  
   bytes = (char*)parm;
   swap[0] = bytes[2];
   swap[1] = bytes[3];
