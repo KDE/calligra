@@ -420,10 +420,10 @@ draw_3d_bar( QPainter* p,
 /* ------------------------------------------------------------------------- */
 struct BS { float y1; float y2; QColor clr; QColor shclr; };
 static int barcmpr( const void *a, const void *b )
-{ 
+{
   if( ((struct BS*)a)->y2 < ((struct BS*)b)->y2 ) return -1;
   if( ((struct BS*)a)->y2 > ((struct BS*)b)->y2 ) return 1;
-  return 0; 
+  return 0;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -435,7 +435,7 @@ typedef float* floatptr;
 
 int
 out_graph( short imagewidth,         // no check for an output device that's too small to fit
-	   short imageheight,        // needed info (labels, etc), could core dump 
+	   short imageheight,        // needed info (labels, etc), could core dump
 	   QPainter* p,	             // paint into this painter
 	   KChartParameters* params, // the parameters of the chart
 	   const KChartData& data
@@ -548,7 +548,7 @@ out_graph( short imagewidth,         // no check for an output device that's too
 	// PENDING(kalle) Get rid of this
     float		*uvol;
 
-    QColor BGColor, LineColor, PlotColor, GridColor, VolColor, 
+    QColor BGColor, LineColor, PlotColor, GridColor, VolColor,
 		ExtVolColor[num_points], ThumbDColor, ThumbLblColor, ThumbUColor,
 		//				ArrowDColor,	
 		//				ArrowUColor,
@@ -928,10 +928,10 @@ out_graph( short imagewidth,         // no check for an output device that's too
     qDebug("Color settings coming!");
     for( j=0; j<num_sets; ++j )
 		for( i=0; i<num_points; ++i )
-			if( params->ExtColor.count() ) {			  
+			if( params->ExtColor.count() ) {			
 			  cerr << "Ext color\n";
 			  // changed by me, BL
-			  //QColor ext_clr = params->ExtColor.color( num_points*j+i );			  
+			  //QColor ext_clr = params->ExtColor.color( num_points*j+i );			
 			  QColor ext_clr = params->ExtColor.color( (num_points*j+i) % params->ExtColor.count());
 			  ExtColor[j][i]            = ext_clr;
 			  if( threeD )

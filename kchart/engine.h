@@ -64,7 +64,7 @@ typedef enum { GDC_DESTROY_IMAGE = 0, /* default */
 /* }; */
 
 void	load_font_conversions();
-short	cnt_nl( char*, int* );
+short	cnt_nl( const char*, int* );
 
 
 
