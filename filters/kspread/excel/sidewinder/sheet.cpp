@@ -236,3 +236,67 @@ void Column::setVisible( bool b )
 {
   d->visible = b;
 }
+
+class Row::Private
+{
+public:
+  Sheet* sheet;
+  unsigned index;
+  double height;
+  Format format;
+  bool visible;
+};
+
+Row::Row( Sheet* sheet, unsigned index )
+{
+  d = new Row::Private;
+  d->sheet   = sheet;
+  d->index   = index;
+  d->height  = 10;
+  d->visible = true;
+}
+
+Row::~Row()
+{
+  delete d;
+}
+
+Sheet* Row::sheet() const
+{
+  return d->sheet;
+}
+
+unsigned Row::index() const
+{
+  return d->index;
+}
+
+double Row::height() const
+{
+  return d->height;
+}
+
+void Row::setHeight( double w )
+{
+  d->height = w;
+}
+
+const Format& Row::format() const
+{
+  return d->format;
+}
+
+void Row::setFormat( const Format& f )
+{
+  d->format = f;
+}
+
+bool Row::visible() const
+{
+  return d->visible;
+}
+
+void Row::setVisible( bool b )
+{
+  d->visible = b;
+}

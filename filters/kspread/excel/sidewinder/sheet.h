@@ -114,6 +114,42 @@ private:
   Private *d;  
 };
 
+class Row
+{
+public:
+
+  Row( Sheet* sheet, unsigned index );
+  
+  virtual ~Row();
+  
+  Sheet* sheet() const;
+  
+  unsigned index() const;
+  
+  // height of row, in mm
+  double height() const;
+  
+  // set the height of row, in mm
+  void setHeight( double w );
+  
+  const Format& format() const;
+  
+  void setFormat( const Format& f );
+  
+  bool visible() const;
+  
+  void setVisible( bool v );
+
+private:
+  // no copy or assign
+  Row( const Row& );
+  Row& operator=( const Row& );
+  
+  class Private;
+  Private *d;  
+};
+
+
 };
 
 #endif // SIDEWINDER_SHEET_H
