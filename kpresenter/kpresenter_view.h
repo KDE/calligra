@@ -332,6 +332,8 @@ public slots:
     void removeLink();
     void addToBookmark();
     void slotSoftHyphen();
+    void slotNonbreakingSpace();
+    void slotLineBreak();
 
     void extraAutoFormat();
     void extraSpelling();

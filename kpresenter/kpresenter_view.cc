@@ -2969,13 +2969,6 @@ void KPresenterView::setupActions()
                                     this, SLOT( insertLink() ),
                                     actionCollection(), "insert_link" );
 
-    // ------------------- Actions with a key binding and no GUI item
-    KAction* actSoftHyphen = new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
-                                          this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
-    // Necessary for the actions that are not plugged anywhere
-    KAccel * accel = new KAccel( this );
-    actSoftHyphen->plugAccel( accel );
-
 #if 0
     //code from page.cc
     //not implemented
@@ -3084,13 +3077,15 @@ void KPresenterView::setupActions()
                                                this, SLOT( slotAllowAutoFormat() ),
                                                actionCollection(), "enable_autocorrection" );
 
-
-    KAction* actComplete = new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
-                                        this, SLOT( slotCompletion() ), actionCollection(), "completion" );
-
-    // Necessary for the actions that are not plugged anywhere
-    actComplete->plugAccel( accel );
-
+    // ------------------- Actions with a key binding and no GUI item
+    new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Key_Space,
+                 this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
+    new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
+                 this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
+    new KAction( i18n( "Line Break" ), SHIFT+Key_Return,
+                 this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
+    new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
+                 this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
     actionInsertComment = new KAction( i18n( "Comment..." ), 0,
                                        this, SLOT( insertComment() ),
@@ -4853,6 +4848,20 @@ void KPresenterView::slotSoftHyphen()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
         edit->insertSoftHyphen();
+}
+
+void KPresenterView::slotNonbreakingSpace()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+        edit->insertNonbreakingSpace();
+}
+
+void KPresenterView::slotLineBreak()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+        edit->insertLineBreak();
 }
 
 void KPresenterView::extraAutoFormat()
