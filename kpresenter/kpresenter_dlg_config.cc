@@ -216,7 +216,14 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     double val = KoUnit::ptToUnit( ptIndent, unit );
     indent = new KDoubleNumInput( val, tmpQGroupBox );
     indent->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
+
+    //laurent kdoublenumvalidator changed !!!!
+    //setPrecision doen't work it return a value display * 10^precision !!!!
+    //perhaps it's normal in new API ....
+#if KDE_VERSION < 307
     indent->setPrecision(1);
+#endif
+
     indent->setSuffix( suffix );
     indent->setLabel(i18n("Paragraph indent by toolbar buttons:"));
 
