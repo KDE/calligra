@@ -607,6 +607,19 @@ void OoImpressImport::appendBackgroundPage( QDomDocument &doc, QDomElement &back
         }
     }
 
+    if ( m_styleStack.hasAttribute( "presentation:duration" ) )
+    {
+        QString str = m_styleStack.attribute("presentation:duration");
+        kdDebug()<<"styleStack.hasAttribute(presentation:duration ) :"<<str<<endl;
+        //convert date duration
+	    int hour( str.mid( 2, 2 ).toInt() );
+	    int minute( str.mid( 5, 2 ).toInt() );
+	    int second( str.mid( 8, 2 ).toInt() );
+        int pageTimer = second + minute*60 + hour*60*60;
+        QDomElement pgEffect = doc.createElement("PGTIMER");
+        pgEffect.setAttribute( "timer", pageTimer );
+        bgPage.appendChild(pgEffect);
+    }
     // slide transition
     if (m_styleStack.hasAttribute("presentation:transition-style"))
     {
