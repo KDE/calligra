@@ -8,7 +8,9 @@
 # Output is:
 # ;syn1;syn2;...;#hyper1;hyper2;...;
 
-# TODO: "close" and "closely" are synonym which can irritate people!
+# TODO:
+# -"close" and "closely" are synonym which can irritate people!?
+# -document this
 
 use strict;
 
@@ -138,17 +140,18 @@ __EOF
         }
 		my $ct = 0;
 		my $hyper = "";
-		#print "**$line\n";
-		while( $line =~ m!\@ (.*?) (.*?) (.*?)!ig ) {
-			#print $parts[4+$i].";";
-			#print "@ $1 \n";
-			if( $data{$1} ) {
-				$hyper .= $data{$1};
+		#print "**$line:\n";
+        # walk through the hypernyms (resp "similar" for adjectives):
+		while( $line =~ m!(\@|\&) (.*?) (.*?) (.*?)!ig ) {
+			#print "@ $1 $2\n";
+			if( $data{$2} ) {
+                #print "OK\n";
+				$hyper .= $data{$2};
 				$ct++;
 			}
 		}
+        #print "syns: $occurences, hypers: $ct\n";
 		if($ct > 0) {
-			#print STDERR "** $ct hypernyms\n";
             $hyper =~ s/_/ /g;
    			$line_result .= "#;$hyper\n";
 		} else {
