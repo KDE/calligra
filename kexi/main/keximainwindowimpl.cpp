@@ -100,10 +100,9 @@
 //! width changes will be removed in KMDI
 //#define PROPEDITOR_VISIBILITY_CHANGES
 
-//#undef KDOCKWIDGET_P
-#if defined(KDOCKWIDGET_P)
-#include <kdockwidget_private.h>
-#endif
+//temporary fix to manage layout
+#include "ksplitter.h"
+#define KDOCKWIDGET_P 1
 
 //#ifndef KEXI_NO_MIGRATION
 //#include "migration/importwizard.h"
@@ -242,6 +241,7 @@ class KexiMainWindowImpl::Private
 //		disableErrorMessages=false;
 //		last_checked_mode=0;
 		propEditorDockSeparatorPos=-1;
+		navDockSeparatorPos=-1;
 #ifndef KEXI_SHOW_UNIMPLEMENTED
 		dummy_action = new KActionMenu("", wnd);
 #endif
@@ -267,18 +267,25 @@ class KexiMainWindowImpl::Private
 //		last_checked_mode->setChecked(true);
 	}
 
-	int propEditorDockSeparatorPos;
-
-	void updatePropEditorDockWidthInfo() {
+	int propEditorDockSeparatorPos, navDockSeparatorPos;
+	
+/*
+void updatePropEditorDockWidthInfo() {
 		if (propEditor) {
 			KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
 #if defined(KDOCKWIDGET_P)
 			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-			if (ds)
-				propEditorDockSeparatorPos = ds->separatorPos();
+			if (ds) {
+				propEditorDockSeparatorPos = ds->separatorPosInPercent();*/
+/*				if (propEditorDockSeparatorPos<=0) {
+						config->setGroup("MainWindow");
+						propEditorDockSeparatorPos = config->readNumEntry("RightDockPosition", 80);
+						ds->setSeparatorPos(propEditorDockSeparatorPos, true);
+				}*/
+			/*}
 #endif
 		}
-	}
+	}*/
 
 	void showStartProcessMsg(const QStringList& args)
 	{
@@ -346,6 +353,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	}
 
 	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
+  manager()->setSplitterKeepSize(true);
 	setStandardMDIMenuEnabled(false);
 	setAsDefaultHost(); //this is default host now.
 	KGlobal::iconLoader()->addAppDir("kexi");
@@ -416,6 +424,8 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		invalidateActions();
 		d->timer.singleShot(0,this,SLOT(slotLastActions()));
 	}
+
+//	manager()->readConfig( d->config, "DockWindows" );
 }
 
 KexiMainWindowImpl::~KexiMainWindowImpl()
@@ -959,6 +969,22 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 
 tristate KexiMainWindowImpl::closeProject()
 {
+#if defined(KDOCKWIDGET_P)
+	//remember docks position - will be used on storeSettings()
+	if (d->propEditor) {
+		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+		if (ds)
+			d->propEditorDockSeparatorPos = ds->separatorPosInPercent();
+	}
+	if (d->nav) {
+		KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
+		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+		if (ds)
+			d->navDockSeparatorPos = ds->separatorPosInPercent();
+	}
+#endif
+
 	if (!d->prj)
 		return true;
 
@@ -1026,6 +1052,16 @@ KexiMainWindowImpl::initNavigator()
 			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
 				d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
 		}
+#if defined(KDOCKWIDGET_P)
+		if (mdiMode()==KMdi::ChildframeMode) {
+			KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
+			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+//			ds->setKeepSize(true);
+			
+			d->config->setGroup("MainWindow");
+			ds->setSeparatorPosInPercent(d->config->readNumEntry("LeftDockPosition", 15/* % */));
+		}
+#endif
 	}
 	if(d->prj->isConnected()) {
 		d->nav->clear();
@@ -1114,6 +1150,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 #if defined(KDOCKWIDGET_P)
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+//		ds->setKeepSize(true);
 		ds->show();
 	//	ds->resize(400, ds->height());
 //		ds->setSeparatorPos(400, true);
@@ -1122,8 +1159,9 @@ void KexiMainWindowImpl::initPropertyEditor()
 
 		
 		d->config->setGroup("MainWindow");
-		ds->setSeparatorPos(d->config->readNumEntry("RightDockPosition", 80/* % */), true);
-//1		ds->setForcedFixedWidth( dw, 600 );
+		ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
+
+//		ds->setForcedFixedWidth( dw, d->config->readNumEntry("RightDockPosition", 80) );
 	//	ds->resize(400, ds->height());
 	//	dw->resize(400, dw->height());
 #endif
@@ -1133,9 +1171,9 @@ void KexiMainWindowImpl::initPropertyEditor()
 //	ds->setSeparatorPos(d->propEditor->sizeHint().width(), true);
 
 		//heh, this is for IDEAl only, I suppose?
-		if (m_rightContainer) {
-			m_rightContainer->setForcedFixedWidth( 400 );
-		}
+//js		if (m_rightContainer) {
+//js			m_rightContainer->setForcedFixedWidth( 400 );
+//js		}
 	}
 #endif
 
@@ -1377,9 +1415,14 @@ KexiMainWindowImpl::storeSettings()
 	d->config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
 
 	if (mdiMode()==KMdi::ChildframeMode) {
-		if (d->propEditorDockSeparatorPos > 0 && d->propEditorDockSeparatorPos <= 100) {
+//		manager()->writeConfig( d->config, "DockWindows" );
+		if (d->propEditorDockSeparatorPos >= 0 && d->propEditorDockSeparatorPos <= 100) {
 			d->config->setGroup("MainWindow");
 			d->config->writeEntry("RightDockPosition", d->propEditorDockSeparatorPos);
+		}
+		if (d->navDockSeparatorPos >= 0 && d->navDockSeparatorPos <= 100) {
+			d->config->setGroup("MainWindow");
+			d->config->writeEntry("LeftDockPosition", d->navDockSeparatorPos);
 		}
 	}
 
@@ -2025,14 +2068,24 @@ void KexiMainWindowImpl::slotViewPropertyEditor()
 	if (!d->propEditor || !d->propEditorToolWindow)
 		return;
 
+//js		d->config->setGroup("MainWindow");
+//js		ds->setSeparatorPos(d->config->readNumEntry("RightDockPosition", 80/* % */), true);
+
 	if (!d->propEditor->isVisible())
 		makeWidgetDockVisible(d->propEditor);
+
 
 	d->propEditorToolWindow->wrapperWidget()->raise();
 
 	d->block_KMdiMainFrm_eventFilter=true;
 	d->propEditor->setFocus();
 	d->block_KMdiMainFrm_eventFilter=false;
+
+/*#if defined(KDOCKWIDGET_P)
+		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+		ds->setSeparatorPos(80,true);//d->config->readNumEntry("RightDockPosition", 80), true);
+#endif*/
 }
 
 bool KexiMainWindowImpl::switchToViewMode(int viewMode)
@@ -2457,11 +2510,11 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		KexiVDebug << "ShowMaximized EVENT" << endl;
 	}
 
-	if (obj==d->propEditor) {
+/*	if (obj==d->propEditor) {
 		if (e->type()==QEvent::Resize) {
 			d->updatePropEditorDockWidthInfo();
 		}
-	}
+	}*/
 
 	QWidget *focus_w = 0;
 	if (obj->inherits("QPopupMenu")) {

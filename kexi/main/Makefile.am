@@ -36,4 +36,6 @@ INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi/migration \
 	$(all_includes)
 
+noinst_HEADERS = ksplitter.h
+
 METASOURCES = AUTO
