@@ -29,7 +29,9 @@ class KColorPatch;
 class KoMainWindow;
 class KoView;
 class KarbonPart;
+class KHSSelector;
 class KIntNumInput;
+class KIntSpinBox;
 class VColor;
 class VColorSlider;
 
@@ -44,10 +46,13 @@ private:
 	QTabWidget *mTabWidget;
 	QWidget *mRGBWidget;
 	QWidget *mCMYKWidget;
+	QWidget *mHSBWidget;
 	KColorPatch *mRGBColorPreview;
 	KColorPatch *mCMYKColorPreview;
+	KColorPatch *mHSBColorPreview;
 	QHButtonGroup *mRGBButtonGroup;
 	QHButtonGroup *mCMYKButtonGroup;
+	QHButtonGroup *mHSBButtonGroup;
 	VColorSlider *mRedSlider;
 	VColorSlider *mGreenSlider;
 	VColorSlider *mBlueSlider;
@@ -55,14 +60,20 @@ private:
 	VColorSlider *mMagentaSlider;
 	VColorSlider *mYellowSlider;
 	VColorSlider *mBlackSlider;
+	KHSSelector *mHSSelector;
+	KIntSpinBox *mH;
+	KIntSpinBox *mS;
+	KIntSpinBox *mB;
 	KIntNumInput *mRGBOpacity;
 	KIntNumInput *mCMYKOpacity;
+	KIntNumInput *mHSBOpacity;
 	enum ButtonChoice { Outline, Fill };
 	KarbonPart *m_part;
 	
 private slots:
 	void updateRGBColorPreview();
 	void updateCMYKColorPreview();
+	void updateHSBColorPreview();
 	void buttonClicked( int button_ID );
 
 protected:
