@@ -101,7 +101,6 @@
  </Menu>
  <Menu name="Screen Presentations"><text>Screen Presentations</text>
   <Action name="screen_configpages"/>
-  <Action name="screen_presstruct"/>
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Action name="screen_start"/>
@@ -115,6 +114,8 @@
   <Separator/>
   <Action name="screen_pencolor"/>
   <Action name="screen_penwidth"/>
+  <Separator/>
+  <Action name="screen_presstruct"/>
  </Menu>
 </MenuBar>
 <ToolBars>
