@@ -41,7 +41,7 @@ public:
     KPRectObject &operator=( const KPRectObject & );
 
     virtual void setRnds( int _xRnd, int _yRnd )
-        { xRnd = _xRnd; yRnd = _yRnd; }
+        { xRnd = _xRnd; yRnd = _yRnd; m_redrawGradientPix = true; }
 
     virtual ObjType getType() const
         { return OT_RECT; }
