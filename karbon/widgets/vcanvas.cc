@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,8 +32,31 @@
 
 #include <kdebug.h>
 
-#define PAGE_OFFSETX	20
-#define PAGE_OFFSETY	20
+int
+VCanvas::pageOffsetX() const
+{
+	double zoomedWidth = m_part->document().width() * m_view->zoom();
+	if( zoomedWidth < viewport()->width() )
+	{
+		kdDebug() << "offsetx : " << int( ( viewport()->width() - zoomedWidth ) / 2.0 ) << endl;
+		return int( ( viewport()->width() - zoomedWidth ) / 2.0 );
+	}
+	else
+		return 20;
+}
+
+int
+VCanvas::pageOffsetY() const
+{
+	double zoomedHeight = m_part->document().height() * m_view->zoom();
+	if( zoomedHeight < viewport()->height() )
+	{
+		kdDebug() << "offsetx : " << int( ( viewport()->height() - zoomedHeight ) / 2.0 ) << endl;
+		return int( ( viewport()->height() - zoomedHeight ) / 2.0 );
+	}
+	else
+		return 20;
+}
 
 VCanvas::VCanvas( QWidget *parent, KarbonViewBase* view, KarbonPartBase* part )
     : QScrollView( parent, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
@@ -100,11 +122,11 @@ KoPoint
 VCanvas::toViewport( const KoPoint &p ) const
 {
 	KoPoint p2 = p;
-	p2.setX( ( p.x() * m_view->zoom() ) - contentsX() / m_view->zoom() + PAGE_OFFSETX );
+	p2.setX( ( p.x() * m_view->zoom() ) - contentsX() / m_view->zoom() + pageOffsetX() );
 	if( contentsHeight() > height() )
-		p2.setY( ( contentsHeight() - ( p.y() * m_view->zoom() + contentsY() + PAGE_OFFSETY ) ) );
+		p2.setY( ( contentsHeight() - ( p.y() * m_view->zoom() + contentsY() + pageOffsetY() ) ) );
 	else
-		p2.setY( ( height() - p.y() * m_view->zoom() + PAGE_OFFSETY ) );
+		p2.setY( ( height() - p.y() * m_view->zoom() + pageOffsetY() ) );
 	return p2;
 }
 
@@ -112,11 +134,11 @@ KoPoint
 VCanvas::toContents( const KoPoint &p ) const
 {
 	KoPoint p2 = p;
-	p2.setX( ( p.x() + contentsX() - PAGE_OFFSETX ) / m_view->zoom() );
+	p2.setX( ( p.x() + contentsX() - pageOffsetX() ) / m_view->zoom() );
 	if( contentsHeight() > height() )
-		p2.setY( ( contentsHeight() - ( p.y() + contentsY() + PAGE_OFFSETY) ) / m_view->zoom() );
+		p2.setY( ( contentsHeight() - ( p.y() + contentsY() + pageOffsetY()) ) / m_view->zoom() );
 	else
-		p2.setY( ( height() - p.y() - PAGE_OFFSETY ) / m_view->zoom() );
+		p2.setY( ( height() - p.y() - pageOffsetY() ) / m_view->zoom() );
 	return p2;
 }
 
@@ -136,7 +158,7 @@ VCanvas::setYMirroring( VPainter *p )
 	QWMatrix mat;
 
 	mat.scale( 1, -1 );
-	mat.translate( PAGE_OFFSETX, PAGE_OFFSETY );
+	mat.translate( pageOffsetX(), pageOffsetY() );
 
 	if( contentsHeight() > height() )
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
@@ -193,7 +215,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 
 	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect.toQRect() );
 	viewport()->setUpdatesEnabled( true );
-	//bitBlt( this, QPoint( rect.x(), rect.y() - PAGE_OFFSETY ), p->device(), rect );
+	//bitBlt( this, QPoint( rect.x(), rect.y() - pageOffsetY() ), p->device(), rect );
 }
 
 void
