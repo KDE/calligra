@@ -102,7 +102,7 @@ ProData::ProData
 	tmpQPushButton = new QPushButton( this, "PushButton_2" );
 	tmpQPushButton->setGeometry( 20, 290, 100, 30 );
 	connect( tmpQPushButton, SIGNAL(clicked()), SLOT(OkPressed()) );
-	tmpQPushButton->setText( "Ok" );
+	tmpQPushButton->setText( "OK" );
 	tmpQPushButton->setAutoRepeat( FALSE );
 	tmpQPushButton->setAutoResize( FALSE );
 	tmpQPushButton->setAutoDefault( TRUE );
