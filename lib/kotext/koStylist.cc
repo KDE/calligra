@@ -53,7 +53,7 @@
 
 KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrList<KoStyle> & style)
     : KDialogBase( _parent, "Stylist", true,
-                   i18n("Stylist"),
+                   i18n("Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
 {
     //setWFlags(getWFlags() || WDestructiveClose);
