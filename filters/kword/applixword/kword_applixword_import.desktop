@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=KWord Applixword Import Filter
+Export=application/x-kword
+ExportDescription=KWord
+Import=application/x-applix
+ImportDescription=Applixword
+Implemented=file
+X-KDE-Library=libapplixwordimport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter
