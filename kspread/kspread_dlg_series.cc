@@ -78,23 +78,14 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   params_layout->setAutoAdd( true );
 
   new QLabel( i18n( "Start value:" ), params );
-  start=new KDoubleNumInput(params);
-  start->setMinValue(-9999);
-  start->setMaxValue(9999);
-  start->setValue( 0.0);
+  start=new KDoubleNumInput(-999999.999, 999999.99, 0.0, 1.0, 3, params);
 
   new QLabel( i18n( "Stop value:" ), params );
-  end=new KDoubleNumInput(params);
-  end->setMinValue(-9999);
-  end->setMaxValue(9999);
-  end->setValue( 0.0 );
+  end=new KDoubleNumInput(-999999.999, 999999.99, 0.0, 1.0, 3, params);
 
   new QLabel( i18n( "Step value:" ), params );
-  step=new KDoubleNumInput(params);
-  step->setMinValue(-9999);
-  step->setMaxValue(9999);
-  step->setValue( 0.0 );
-
+  step=new KDoubleNumInput(-999999.999, 999999.99, 0.0, 1.0, 3, params);
+ 
   grid1->addWidget(gb);
 
   grid1->addWidget(gb1);
@@ -109,8 +100,8 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
 void KSpreadSeriesDlg::slotOk()
 {
 
-  Series mode=Column;
-  Series type=Linear;
+  Series mode=Column;  //same as Vertical
+  Series type=Linear;  // same as Horizontal
   QString tmp;
   double dstep, dend, dstart;
   KSpreadSheet * m_pTable;
@@ -139,6 +130,16 @@ void KSpreadSeriesDlg::slotOk()
       if ( dstart > dend && dstep >= 1)
       {
         KMessageBox::error( this, i18n("End value must be greater than the start value or the step must be less than '1'!") );
+        return;
+      }
+      if ( dstart == 0 || dend == 0 || dstep == 0)
+      {
+        KMessageBox::error( this, i18n("None of the Start, Stop or Step values may be equal to zero!") );
+        return;
+      }
+      if ( dstep == 1)
+      {
+        KMessageBox::error( this, i18n("Step value must be different from 1") );
         return;
       }
   }
