@@ -28,6 +28,7 @@
 #include <qpicture.h>
 #include <qpainter.h>
 #include "KPPolygonObjectIface.h"
+#include <koUnit.h>
 
 #include <math.h>
 
@@ -102,6 +103,32 @@ QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )
     }
 
     return fragment;
+}
+
+void KPPolygonObject::loadOasis( const QDomElement &element )
+{
+    kdDebug()<<"void KPPolygonObject::loadOasis( const QDomElement &element )***********\n";
+    KP2DObject::loadOasis( element );
+    //load point.
+    QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
+
+    QString pt_x, pt_y;
+    double tmp_x, tmp_y;
+    unsigned int index = 0;
+    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+    {
+        tmp_x = (*it).section(',',0,0).toInt() / 100;
+        tmp_y = (*it).section(',',1,1).toInt() / 100;
+
+        pt_x.setNum(tmp_x);
+        pt_x+="mm";
+
+        pt_y.setNum(tmp_y);
+        pt_y+="mm";
+
+        points.putPoints( index, 1, KoUnit::parseValue(pt_x),KoUnit::parseValue(pt_y) );
+        ++index;
+    }
 }
 
 double KPPolygonObject::load( const QDomElement &element )
@@ -314,7 +341,7 @@ void KPPolygonObject::drawPolygon()
         redrawPix = true;
 }
 
-void KPPolygonObject::flip( bool horizontal ) 
+void KPPolygonObject::flip( bool horizontal )
 {
     KP2DObject::flip( horizontal );
     // flip the points

@@ -21,7 +21,7 @@
 #include "kppointobject.h"
 #include "kpresenter_utils.h"
 #include <kozoomhandler.h>
-
+#include <koUnit.h>
 #include <qdom.h>
 #include <qpainter.h>
 
@@ -91,6 +91,32 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+
+void KPPointObject::loadOasis( const QDomElement &element )
+{
+    kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
+    KPShadowObject::loadOasis( element );
+    //load point.
+    QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
+
+    QString pt_x, pt_y;
+    double tmp_x, tmp_y;
+    unsigned int index = 0;
+    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+    {
+        tmp_x = (*it).section(',',0,0).toInt() / 100;
+        tmp_y = (*it).section(',',1,1).toInt() / 100;
+
+        pt_x.setNum(tmp_x);
+        pt_x+="mm";
+
+        pt_y.setNum(tmp_y);
+        pt_y+="mm";
+
+        points.putPoints( index, 1, KoUnit::parseValue(pt_x),KoUnit::parseValue(pt_y) );
+        ++index;
+    }
+}
 
 double KPPointObject::load( const QDomElement &element )
 {

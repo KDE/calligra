@@ -35,17 +35,18 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
+    virtual void loadOasis( const QDomElement &element );
 
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }
-    
+
     virtual LineEnd getLineBegin() const { return lineBegin; }
     virtual LineEnd getLineEnd() const { return lineEnd; }
-    
+
     virtual void setSize( double _width, double _height );
     virtual void setSize( const KoSize & _size )
         { setSize( _size.width(), _size.height() ); }
-    
+
     virtual void flip( bool horizontal );
 
     virtual void closeObject( bool close );

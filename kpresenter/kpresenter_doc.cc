@@ -1037,8 +1037,14 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                 newpage->appendObject(kplineobject);
             }
             else if (name=="draw:polyline") { // polyline
+                KPPolylineObject *kppolylineobject = new KPPolylineObject();
+                kppolylineobject->loadOasis(o);
+                newpage->appendObject(kppolylineobject);
             }
             else if (name=="draw:polygon") { // polygon
+                KPPolygonObject *kpPolygonObject = new KPPolygonObject();
+                kpPolygonObject->loadOasis( o );
+                newpage->appendObject(kpPolygonObject);
             }
             else if ( name == "draw:image" ) // image
             {
