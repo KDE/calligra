@@ -16,7 +16,8 @@ class Form1(QWidget):
         grid.setSpacing(6)
         grid.setMargin(11)
 
-        self.widgets = {}
+        self.chars = {}
+        self.fontName = None
 
         begin = 32
         end = 256
@@ -36,14 +37,38 @@ class Form1(QWidget):
             charClass = QLineEdit(self,'charClass' + chr(i))
             grid.addWidget(charClass, i-begin, 3)
             
-            self.widgets[i] = (number, latexName, charClass)
+            self.chars[i] = (charLabel, number, latexName, charClass)
 
+    def fontList(self):
+        list = []
+        for i in self.chars:
+            charLabel, number, latexName, charClass = self.chars[i]
+            if str(number.text()) != "" or str(latexName.text()) != "" or str(charClass.text()) != "":
+                list.append((i, str(number.text()), str(latexName.text()), str(charClass.text())))
+        return list
+    
+    def setFont(self, fontName, font):
+        self.fontName = fontName
+        for i in self.chars:
+            charLabel, number, latexName, charClass = self.chars[i]
+            charLabel.setFont(QFont(fontName, 16))
+            number.setText("")
+            latexName.setText("")
+            charClass.setText("")
+
+        for (key, number, latexName, charClass) in font:
+            i = int(key)
+            charLabel, numberWidget, latexNameWidget, charClassWidget = self.chars[i]
+            numberWidget.setText(number)
+            latexNameWidget.setText(latexName)
+            charClassWidget.setText(charClass)
+            
 
 class Widget(QWidget):
 
     def __init__(self):
         QWidget.__init__(self)
-        
+
         vbox = QVBoxLayout(self)
         vbox.setSpacing(6)
         vbox.setMargin(0)
@@ -63,52 +88,88 @@ class Widget(QWidget):
                 
         vbox.addLayout(hbox)
         
-        sv = QScrollView(self)
+        splitter = QSplitter(self)
+        splitter.setOrientation(Qt.Vertical)
+        
+        self.listbox = QListBox(splitter)
+        
+        sv = QScrollView(splitter)
         big_box = QVBox(sv.viewport())
         sv.addChild(big_box, 0, 0)
         self.child = Form1(big_box)
 
-        vbox.addWidget(sv)
+        vbox.addWidget(splitter)
 
-    def load(self):
-        parser = make_parser()
-        parser.setContentHandler(ContentGenerator(self.child.widgets))
-        parser.parse("symbol.xml")
-        
-    def save(self):
-        f = open("symbol.xml", "w")
-        f.write('<?xml version="1.0" encoding="iso-8859-1"?>\n')
-        f.write('<unicodetable>\n')
-        widgets = self.child.widgets
-        for key in widgets.keys():
-            number, latexName, charClass = widgets[key]
-            f.write('    <entry key="' + `key` +
-                    '" number="' + str(number.text()) +
-                    '" name="' + str(latexName.text()) +
-                    '" class="' + str(charClass.text()) +
-                    '"/>\n')
+        self.connect(self.listbox, SIGNAL('highlighted( const QString& )'),
+                     self.fontHighlighted)
+
+    def fontHighlighted(self, fontStr):
+        if self.child.fontName:
+            self.fonts[self.child.fontName] = self.child.fontList()
             
-        f.write('</unicodetable>\n')
+        font = str(fontStr)
+        self.child.setFont(font, self.fonts[font])
+        
+    def load(self):
+        self.fonts = {}
+        parser = make_parser()
+        parser.setContentHandler(ContentGenerator(self.fonts))
+        parser.parse("symbol.xml")
+
+        self.listbox.clear()
+        for font in self.fonts:
+            self.listbox.insertItem(font)
+        self.listbox.sort()
+            
+    def save(self):
+        if self.child.fontName:
+            self.fonts[self.child.fontName] = self.child.fontList()
+    
+        f = open("symbol.xml", "w")
+        print >> f, '<?xml version="1.0" encoding="iso-8859-1"?>'
+        print >> f, '<table>'
+        for font in self.fonts:
+            print >> f, '  <unicodetable font="' + font + '">'
+            for (key, number, latexName, charClass) in self.fonts[font]:
+                if not charClass or charClass == '':
+                    charClass = 'ORDINARY'
+                print >> f,  '    <entry key="' + str(key) + \
+                      '" number="' + str(number) + \
+                      '" name="' + str(latexName) + \
+                      '" class="' + str(charClass) + \
+                      '"/>'
+            
+            print >> f, '  </unicodetable>'
+        print >> f, '</table>'
         f.close()
 
 
 class ContentGenerator(handler.ContentHandler):  
-    def __init__(self, widgets):
+    def __init__(self, fonts):
         handler.ContentHandler.__init__(self)
-        self.widgets = widgets
+        self.fonts = fonts
+        self.currentFont = None
 
     def startElement(self, name, attrs):
-        if name == 'entry':
+        if name == 'unicodetable':
+            for (name, value) in attrs.items():
+                if name == "font":
+                    self.currentFont = value
+                    self.fonts[self.currentFont] = []
+        elif name == 'entry':
+            if not self.currentFont:
+                raise "entry must belong to a font"
             for (name, value) in attrs.items():
                 if name == "key": key = int(value)
                 elif name == "number": number = value
                 elif name == "name": latexName = value
                 elif name == "class": charClass = value
 
-            numberWidget, latexNameWidget, charClassWidget = self.widgets[key]
-            numberWidget.setText(number)
-            latexNameWidget.setText(latexName)
-            charClassWidget.setText(charClass)
+            self.fonts[self.currentFont].append((key, number, latexName, charClass))
+            #numberWidget, latexNameWidget, charClassWidget = self.widgets[key]
+            #numberWidget.setText(number)
+            #latexNameWidget.setText(latexName)
+            #charClassWidget.setText(charClass)
             
     
 def main():

@@ -3,12 +3,24 @@
 import time
 from xml.sax import saxutils, handler, make_parser
 
-table = {}
+unicodetable = {}
+fonttable = {}
 
 class ContentGenerator(handler.ContentHandler):  
 
+    def __init__(self):
+        handler.ContentHandler.__init__(self)
+        self.font = None
+        
     def startElement(self, name, attrs):
-        if name == 'entry':
+        if name == 'unicodetable':
+            self.font = None
+            for (name, value) in attrs.items():
+                if name == "font" and value:
+                    self.font = value
+                    if value not in fonttable:
+                        fonttable[value] = []
+        elif self.font and name == 'entry':
             number = ''
             for (name, value) in attrs.items():
                 if name == "key": key = int(value)
@@ -17,14 +29,16 @@ class ContentGenerator(handler.ContentHandler):
                 elif name == "class": charClass = value
 
             if number != '':
-                table[number] = (key, latexName, charClass)
+                unicodetable[number] = (latexName, charClass)
+                fonttable[self.font].append((key, number))
 
-
+def fontkey(font, number):
+    for mapping in fonttable[font]:
+        k, n = mapping
+        if n == number:
+            return k
+        
 def main():
-    parser = make_parser()
-    parser.setContentHandler(ContentGenerator())
-    parser.parse("symbol.xml")
-
     f = open('../symbolfontmapping.cc', 'w')
     f.write('''//
 // Created: ''' + time.ctime(time.time()) + '''
@@ -34,29 +48,29 @@ def main():
 // WARNING! All changes made in this file will be lost!
 
 ''')
-    for key in table.keys():
-        pos, latexName, charClass = table[key]
-        if len(latexName) > 0:
-            f.write('char symbolFontMap_' + latexName.replace('\\', '') + '[] = "' +
-                    latexName.replace('\\', '\\\\') + '";\n' )
+    for key in unicodetable:
+        latexName, charClass = unicodetable[key]
+        pos = fontkey('symbol', key)
+        if pos:
+            if len(latexName) > 0:
+                f.write('char symbolFontMap_' + latexName.replace('\\', '') + '[] = "' +
+                        latexName.replace('\\', '\\\\') + '";\n' )
     f.write('\nstruct { int unicode; uchar pos; CharClass cl; char* latexName; } symbolFontMap[] = {\n')
-    for key in table.keys():
-        pos, latexName, charClass = table[key]
-        if len(latexName) > 0:
-            latexName = 'symbolFontMap_' + latexName.replace('\\', '')
-        else:
-            latexName = '0'
-        f.write('    { ' + key + ', ' + `pos` + ', ' + charClass + ', ' +
-                latexName + ' },\n')
+    for key in unicodetable:
+        latexName, charClass = unicodetable[key]
+        pos = fontkey('symbol', key)
+        if pos:
+            if len(latexName) > 0:
+                latexName = 'symbolFontMap_' + latexName.replace('\\', '')
+            else:
+                latexName = '0'
+            f.write('    { ' + key + ', ' + `pos` + ', ' + charClass + ', ' +
+                    latexName + ' },\n')
     f.write('    { 0, 0, ORDINARY, 0 }\n};\n\n')
 
     f.close()
 
 def make_unicode_table():
-    parser = make_parser()
-    parser.setContentHandler(ContentGenerator())
-    parser.parse("symbol.xml")
-
     header = []
     codes = {}
     f = open('../config/unicode.tbl', 'r')
@@ -70,8 +84,8 @@ def make_unicode_table():
             codes[line.split(',')[0].strip()] = line
     f.close()
     
-    for key in table.keys():
-        pos, latexName, charClass = table[key]
+    for key in unicodetable:
+        latexName, charClass = unicodetable[key]
         if len(latexName) > 0:
             codes[key] = key + ', ' + charClass + ', ' + latexName.replace('\\', '')
         else:
@@ -84,30 +98,39 @@ def make_unicode_table():
         print >> f, codes[key]
     f.close()
 
-def make_symbol_table():
+def make_font_table(font):
+    header = []
+    try:
+        f = open('../config/' + font + '.font', 'r')
+        for line in f.xreadlines():
+            if line[0] == '#':
+                header.append(line.strip())
+            else:
+                break
+        f.close()
+    except IOError:
+        pass
+    
+    f = open('../config/' + font + '.font', 'w')
+    for line in header:
+        print >> f, line
+    print >> f, "name = " + font
+    for key in unicodetable:
+        latexName, charClass = unicodetable[key]
+        pos = fontkey(font, key)
+        if pos:
+            print >> f, str(pos) + ', ' + key
+    f.close()
+
+def make_all_font_tables():
+    for font in fonttable:
+        make_font_table(font)
+        
+if __name__ == '__main__':
     parser = make_parser()
     parser.setContentHandler(ContentGenerator())
     parser.parse("symbol.xml")
 
-    header = []
-    f = open('../config/symbol.font', 'r')
-    for line in f.xreadlines():
-        if line[0] == '#':
-            header.append(line.strip())
-        else:
-            break
-    f.close()
-    
-    f = open('../config/symbol.font', 'w')
-    for line in header:
-        print >> f, line
-    print >> f, "name = symbol"
-    for key in table.keys():
-        pos, latexName, charClass = table[key]
-        f.write(str(pos) + ', ' + key + '\n')
-    f.close()
-    
-if __name__ == '__main__':
     main()
     make_unicode_table()
-    make_symbol_table()
+    make_all_font_tables()
