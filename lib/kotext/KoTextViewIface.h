@@ -109,6 +109,16 @@ k_dcop:
     void setTopBorder( const QColor & c,double width );
     void setBottomBorder(const QColor & c,double width );
 
+    void setLeftBorderColor( const QColor & c );
+    void setRightBorderColor( const QColor & c );
+    void setTopBorderColor( const QColor & c);
+    void setBottomBorderColor(const QColor & c );
+    void setLeftBorderWidth( double _witdh );
+    void setRightBorderWidth( double _witdh );
+    void setTopBorderWidth( double _witdh );
+    void setBottomBorderWidth( double _witdh );
+
+
     //return border width in pt
     double leftBorderWidth() const ;
     double rightBorderWidth() const;

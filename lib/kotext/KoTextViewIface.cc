@@ -410,8 +410,56 @@ QColor KoTextViewIface::bottomBorderColor() const
 {
     KoTextParag *parag= m_textView->cursor()->parag();
     return parag->bottomBorder().color;
-
 }
+
+void KoTextViewIface::setLeftBorderColor( const QColor & c )
+{
+    KoTextParag *parag= m_textView->cursor()->parag();
+    parag->leftBorder().color = c ;
+}
+
+void KoTextViewIface::setRightBorderColor( const QColor & c )
+{
+    KoTextParag *parag= m_textView->cursor()->parag();
+    parag->rightBorder().color = c ;
+}
+
+void KoTextViewIface::setTopBorderColor( const QColor & c )
+{
+    KoTextParag *parag= m_textView->cursor()->parag();
+    parag->topBorder().color = c ;
+}
+
+void KoTextViewIface::setBottomBorderColor(const QColor & c )
+{
+    KoTextParag *parag= m_textView->cursor()->parag();
+    parag->bottomBorder().color = c ;
+}
+
+void KoTextViewIface::setLeftBorderWidth( double _witdh )
+{
+    KoTextParag *parag= m_textView->cursor()->parag();
+    parag->leftBorder().setPenWidth(_witdh) ;
+}
+
+void KoTextViewIface::setRightBorderWidth( double _witdh )
+{
+    KoTextParag *parag= m_textView->cursor()->parag();
+    parag->rightBorder().setPenWidth(_witdh) ;
+}
+
+void KoTextViewIface::setTopBorderWidth( double _witdh )
+{
+    KoTextParag *parag= m_textView->cursor()->parag();
+    parag->topBorder().setPenWidth(_witdh) ;
+}
+
+void KoTextViewIface::setBottomBorderWidth( double _witdh )
+{
+    KoTextParag *parag= m_textView->cursor()->parag();
+    parag->bottomBorder().setPenWidth(_witdh) ;
+}
+
 
 void KoTextViewIface::changeCaseOfText( const QString & caseType)
 {
