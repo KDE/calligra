@@ -39,14 +39,14 @@ public:
     virtual ~KPGradientCollection()
     { gradientList.clear(); }
 
-    virtual QPixmap* getGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size,
+    virtual QPixmap* getGradient( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
 				  bool _unbalanced, int _xfactor, int _yfactor, bool addref = true );
 
-    virtual void removeRef( QColor _color1, QColor _color2, BCType _bcType, QSize _size,
+    virtual void removeRef( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
 			    bool _unbalanced, int _xfactor, int _yfactor );
 
 protected:
-    virtual int inGradientList( QColor _color1, QColor _color2, BCType _bcType, QSize _size,
+    virtual int inGradientList( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
 				bool _unbalanced, int _xfactor, int _yfactor );
 
     QPtrList<KPGradient> gradientList;

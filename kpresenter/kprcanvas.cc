@@ -4448,7 +4448,7 @@ void KPrCanvas::_repaint( bool /*erase*/ )
 }
 
 /*================================================================*/
-void KPrCanvas::_repaint( QRect r )
+void KPrCanvas::_repaint( const QRect &r )
 {
     m_view->kPresenterDoc()->repaint( r );
 }
@@ -5034,7 +5034,7 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
 }
 
 /*===================== get angle ================================*/
-double KPrCanvas::getAngle( QPoint p1, QPoint p2 )
+double KPrCanvas::getAngle( const QPoint &p1, const QPoint &p2 )
 {
     double _angle = 0.0;
 

@@ -142,7 +142,7 @@ public:
     void setPartEntry( KoDocumentEntry& _e )
     { partEntry = _e; }
     void setToolEditMode( ToolEditMode _m, bool updateView = true );
-    void setAutoForm( QString _autoform )
+    void setAutoForm( const QString &_autoform )
     { autoform = _autoform; }
 
     void drawPageInPix( QPixmap&, int );
@@ -230,7 +230,7 @@ protected:
 
     // functions for displaying
     virtual void paintEvent( QPaintEvent* );
-    void paintBackground( QPainter*, QRect );
+    void paintBackground( QPainter*, const QRect& );
     void drawBackground( QPainter*, const QRect& );
     void drawObjects( QPainter*, const QRect&, bool drawCursor );
     virtual void mousePressEvent( QMouseEvent *e );
@@ -272,7 +272,7 @@ protected:
     bool calcRatio( double &dx, double &dy, KPObject *kpobject, double ratio ) const;
 
     void _repaint( bool erase=true );
-    void _repaint( QRect r );
+    void _repaint( const QRect &r );
     void _repaint( KPObject *o );
 
     void printPage( QPainter*, int pageNum );
@@ -309,7 +309,7 @@ protected:
 
     void drawCubicBezierCurve( int _dx, int _dy );
     void endDrawCubicBezierCurve();
-    double getAngle( QPoint p1, QPoint p2 );
+    double getAngle( const QPoint &p1, const QPoint &p2 );
 
 #ifndef NDEBUG
     void printRTDebug( int info );

@@ -44,8 +44,8 @@ KPPieObject::KPPieObject()
 }
 
 /*================== overloaded constructor ======================*/
-KPPieObject::KPPieObject( QPen _pen, QBrush _brush, FillType _fillType,
-                          QColor _gColor1, QColor _gColor2, BCType _gType,
+KPPieObject::KPPieObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+                          const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                           PieType _pieType, int _p_angle, int _p_len,
                           LineEnd _lineBegin, LineEnd _lineEnd,
                           bool _unbalanced, int _xfactor, int _yfactor )

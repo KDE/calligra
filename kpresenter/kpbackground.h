@@ -54,9 +54,9 @@ public:
     { backType = _backType; }
     void setBackView( BackView _backView )
     { backView = _backView; }
-    void setBackColor1( QColor _color )
+    void setBackColor1( const QColor &_color )
     { removeGradient(); backColor1 = _color; }
-    void setBackColor2( QColor _color )
+    void setBackColor2( const QColor &_color )
     { removeGradient(); backColor2 = _color; }
     void setBackColorType( BCType _bcType )
     { removeGradient(); bcType = _bcType; }
@@ -74,7 +74,7 @@ public:
     { pageTimer = _pageTimer; }
     void setPageSoundEffect( bool _soundEffect )
     { soundEffect = _soundEffect; }
-    void setPageSoundFileName( QString _soundFileName )
+    void setPageSoundFileName( const QString &_soundFileName )
     { soundFileName = _soundFileName; }
 
     void setBgSize( QSize _size, bool visible = true );
