@@ -635,7 +635,8 @@ void KWTableFrameSet::moveBy( double dx, double dy )
     if(dx==0 && dy==0) return;
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         m_cells.at( i )->getFrame( 0 )->moveBy( dx, dy );
-        m_cells.at( i )->setVisible(true);
+        if(!m_cells.at( i )->isVisible())
+            m_cells.at( i )->setVisible(true);
     }
     preRender();
     m_doc->updateAllFrames();
@@ -1313,9 +1314,9 @@ bool KWTableFrameSet::contains( double mx, double my ) {
     for (unsigned int i=1 ; i < m_pageBoundaries.count(); i++) {
 
         first = m_cells.at((m_pageBoundaries[i-1]))->getFrame( 0 );
-        if(m_pageBoundaries[i] != 0) 
+        if(m_pageBoundaries[i] != 0)
             last = m_cells.at(m_pageBoundaries[i] -1)->getFrame( 0 );
-        else 
+        else
             last = first;
 
         KoRect rect( KoPoint( first->x(), first->y() ), KoPoint( last->right(), last->bottom() ) );
