@@ -110,7 +110,7 @@ void RectTool::deactivate()
 void RectTool::processEvent(QEvent *e)
 {
   Canvas *canvas = toolController()->view()->canvas();
-  GPage *page = toolController()->view()->activeDocument()->activePage();
+  //GPage *page = toolController()->view()->activeDocument()->activePage();
   if(e->type() == QEvent::MouseButtonPress)
   {
     if(state == S_Init)

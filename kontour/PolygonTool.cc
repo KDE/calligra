@@ -79,8 +79,8 @@ void PolygonTool::deactivate()
 
 void PolygonTool::processEvent(QEvent *e)
 {
-  Canvas *canvas = toolController()->view()->canvas();  
-  GPage *page = toolController()->view()->activeDocument()->activePage();
+  Canvas *canvas = toolController()->view()->canvas();
+  //GPage *page = toolController()->view()->activeDocument()->activePage();
   double x = static_cast<QMouseEvent *>(e)->x() - canvas->xOffset();
   double y = static_cast<QMouseEvent *>(e)->y() - canvas->yOffset();
   if(e->type() == QEvent::MouseButtonPress)
@@ -98,7 +98,7 @@ void PolygonTool::processEvent(QEvent *e)
     if(state == S_Resize)
     {
       QRect rect = QRect(static_cast<int>(mCenter.x() - radius + canvas->xOffset()), static_cast<int>(mCenter.y() - radius + canvas->yOffset()), 2 * static_cast<int>(radius) + 2, 2 * static_cast<int>(radius) + 2);
-      canvas->repaint(rect);  
+      canvas->repaint(rect);
       radius = sqrt((x - mCenter.x()) * (x - mCenter.x()) + (y - mCenter.y()) * (y - mCenter.y()));
       double a = (x - mCenter.x()) / radius;
       a = acos(a);

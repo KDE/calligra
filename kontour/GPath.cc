@@ -41,7 +41,7 @@ GSegment::GSegment()
 {
 }
 
-GSegment::GSegment(const QDomElement &element)
+GSegment::GSegment(const QDomElement &/*element*/)
 {
 }
 
@@ -83,7 +83,7 @@ const char GMove::type() const
   return 'm';
 }
 
-bool GMove::contains(const KoPoint &p)
+bool GMove::contains(const KoPoint &/*p*/)
 {
   return false;
 }
@@ -108,7 +108,7 @@ GClose::GClose()
   points.resize(0);
 }
 
-GClose::GClose(const QDomElement &element)
+GClose::GClose(const QDomElement &/*element*/)
 {
   points.resize(0);
 }
@@ -118,7 +118,7 @@ const char GClose::type() const
   return 'z';
 }
 
-bool GClose::contains(const KoPoint &p)
+bool GClose::contains(const KoPoint &/*p*/)
 {
   return false;
 }
@@ -154,7 +154,7 @@ const char GLine::type() const
   return 'l';
 }
 
-bool GLine::contains(const KoPoint &p)
+bool GLine::contains(const KoPoint &/*p*/)
 {
   return false;
 }
@@ -195,7 +195,7 @@ const char GCubicBezier::type() const
   return 'c';
 }
 
-bool GCubicBezier::contains(const KoPoint &p)
+bool GCubicBezier::contains(const KoPoint &/*p*/)
 {
   return false;
 }
@@ -395,7 +395,7 @@ QDomElement GPath::writeToXml(QDomDocument &document)
   return path;
 }
 
-void GPath::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool withEditMarks)
+void GPath::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool /*outline*/, bool /*withEditMarks*/)
 {
   setPen(p);
   setBrush(p);
@@ -481,7 +481,7 @@ int GPath::getNeighbourPoint(const KoPoint &point, const double distance)
   return -1;
 }
 
-void GPath::movePoint(int idx, double dx, double dy, bool ctrlPressed)
+void GPath::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
 {
   int v = 0;
   KoPoint c;
@@ -543,7 +543,7 @@ void GPath::movePoint(int idx, double dx, double dy, bool ctrlPressed)
   calcBoundingBox();
 }
 
-void GPath::removePoint(int idx)
+void GPath::removePoint(int /*idx*/)
 {
 }
 

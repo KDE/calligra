@@ -82,7 +82,7 @@ void Handle::rotCenter(const KoPoint &p)
   mRotCenter = p;
 }
 
-void Handle::draw(KoPainter *p, int aXOffset, int aYOffset, double zoom)
+void Handle::draw(KoPainter *p, int aXOffset, int aYOffset, double /*zoom*/)
 {
   if(!mShow)
     return;
@@ -182,7 +182,7 @@ int Handle::contains(const KoPoint &p)
   return 0;
 }
 
-void Handle::drawArrow(KoPainter *p, int x, int y, ArrowDirection d)
+void Handle::drawArrow(KoPainter */*p*/, int x, int y, ArrowDirection d)
 {
   static QCOORD rpoints[] = { 0, -2, 6, 0, 0, 2};
   static QCOORD lpoints[] = { 0, -2, -6, 0, 0, 2};

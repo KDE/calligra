@@ -41,7 +41,7 @@ GStyleList::GStyleList()
   mNum = 1;
 }
 
-GStyleList::GStyleList(const QDomElement &sl)
+GStyleList::GStyleList(const QDomElement &/*sl*/)
 {
   list.clear();
   mStyle = 0L;

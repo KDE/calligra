@@ -84,7 +84,7 @@ void EditPointTool::processEvent(QEvent *e)
     processKeyPressEvent((QKeyEvent *)e, page, canvas);
 }
 
-void EditPointTool::processButtonPressEvent(QMouseEvent *me, GPage *page, Canvas *canvas)
+void EditPointTool::processButtonPressEvent(QMouseEvent *me, GPage */*page*/, Canvas *canvas)
 {
   double x = me->x() - canvas->xOffset();
   double y = me->y() - canvas->yOffset();
@@ -194,7 +194,7 @@ void EditPointTool::processMouseMoveEvent(QMouseEvent *me, GPage *page, Canvas *
   }
 }
 
-void EditPointTool::processButtonReleaseEvent(QMouseEvent *me, GPage *page, Canvas *canvas)
+void EditPointTool::processButtonReleaseEvent(QMouseEvent *me, GPage */*page*/, Canvas *canvas)
 {
   double x = me->x() - canvas->xOffset();
   double y = me->y() - canvas->yOffset();

@@ -31,7 +31,7 @@
 
 namespace Kontour
 {
-  static const char *mime = "application/x-kontour";
+  //static const char *mime = "application/x-kontour";
   const double nearDistance = 4.0;
   const double minZoomFactor = 0.06;
   const double maxZoomFactor = 100.0;
@@ -40,7 +40,7 @@ namespace Kontour
   const double snapDistance = 10.0;
 
   enum HandlePosition{ HPosTop = 1, HPosRight = 2, HPosBottom = 4, HPosLeft = 8, HPosTopR = 16, HPosRightR = 32, HPosBottomR = 64, HPosLeftR = 128, HPosCenter = 256 };
-  
+
   inline double segLength(const KoPoint &c1, const KoPoint &c2)
   {
     double dx = c2.x() - c1.x();

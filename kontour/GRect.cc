@@ -101,7 +101,7 @@ QDomElement GRect::writeToXml(QDomDocument &document)
   return rect;
 }
 
-void GRect::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool)
+void GRect::draw(KoPainter *p, const QWMatrix &m, bool /*withBasePoints*/, bool /*outline*/, bool)
 {
   setPen(p);
   setBrush(p);
@@ -122,7 +122,7 @@ void GRect::calcBoundingBox()
   adjustBBox(mBBox);
 }
 
-int GRect::getNeighbourPoint(const KoPoint &p, const double distance)
+int GRect::getNeighbourPoint(const KoPoint &/*p*/, const double /*distance*/)
 {
 /*  for(int i = 1; i >= 0; i--)
   {
@@ -133,11 +133,11 @@ int GRect::getNeighbourPoint(const KoPoint &p, const double distance)
   return -1;
 }
 
-void GRect::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
+void GRect::movePoint(int /*idx*/, double /*dx*/, double /*dy*/, bool /*ctrlPressed*/)
 {
 }
 
-void GRect::removePoint(int idx)
+void GRect::removePoint(int /*idx*/)
 {
 }
 

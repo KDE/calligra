@@ -592,7 +592,7 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
   }
 }
 
-void SelectTool::processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas)
+void SelectTool::processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas */*canvas*/)
 {
   if(!page->selectionIsEmpty())
   {

@@ -152,20 +152,20 @@ void Canvas::updateBuf(const QRect &rect)
   int right = rect.right();
   int top = rect.top();
   int bottom = rect.bottom();
-  int width = rect.width();
-  int height = rect.height();
+  //int width = rect.width();
+  //int height = rect.height();
 
   // TODO Optimize that
   int w = mGDoc->xCanvas();
   int h = mGDoc->yCanvas();
 
   bool hll = mXOffset >= left;
-  bool hlr = mXOffset <= right;
-  bool hrl = mXOffset + w >= left;
+  //bool hlr = mXOffset <= right;
+  //bool hrl = mXOffset + w >= left;
   bool hrr = mXOffset + w <= right;
   bool vtt = mYOffset >= top;
-  bool vtb = mYOffset <= bottom;
-  bool vbt = mYOffset + h >= top;
+  //bool vtb = mYOffset <= bottom;
+  //bool vbt = mYOffset + h >= top;
   bool vbb = mYOffset + h <= bottom;
 
 /*  if(vtt)
@@ -183,18 +183,18 @@ void Canvas::updateBuf(const QRect &rect)
 /*  QPainter p;
   p.begin(buffer);
   p.setClipRect(rect);
-  
+
   p.setBackgroundColor(mView->workSpaceColor());
   p.eraseRect(rect);
-  
+
   p.save();
   p.translate(mXOffset, mYOffset);
   p.fillRect(1, 1, w - 2, h - 2, QBrush(mGDoc->activePage()->bgColor()));
   p.restore();
-  
+
   if(mGDoc->showGrid())
     drawGrid(p, rect);
-  
+
   p.save();
   p.translate(mXOffset, mYOffset);
   p.setPen(Qt::black);

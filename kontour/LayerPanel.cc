@@ -62,7 +62,7 @@ void PageTreeItem::select()
   page()->document()->activePage(page());
 }
 
-void PageTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align)
+void PageTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int /*column*/, int width, int align)
 {
   if(!p)
     return;
@@ -102,7 +102,7 @@ void LayerTreeItem::select()
 {
 }
 
-void LayerTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align)
+void LayerTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int /*column*/, int width, int align)
 {
   if(!p)
     return;

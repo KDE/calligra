@@ -67,7 +67,7 @@ KontourDocument::~KontourDocument()
   delete mGDoc;
 }
 
-void KontourDocument::paintContent(QPainter &painter, const QRect &rect, bool transparent, double zoomX, double zoomY)
+void KontourDocument::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/)
 {
 //  painter.save();
 //  painter.scale(zoomX,zoomY);
@@ -115,7 +115,7 @@ bool KontourDocument::initDoc()
     return false;
 }
 
-void KontourDocument::addShell(KoMainWindow *shell)
+void KontourDocument::addShell(KoMainWindow */*shell*/)
 {
 }
 
@@ -157,7 +157,7 @@ bool KontourDocument::loadChildren(KoStore *store)
   return true;
 }
 
-bool KontourDocument::completeLoading(KoStore *store)
+bool KontourDocument::completeLoading(KoStore *)
 {
   return true;
 }
@@ -179,7 +179,7 @@ bool KontourDocument::saveChildren(KoStore *store)
   return true;
 }
 
-bool KontourDocument::completeSaving(KoStore *store)
+bool KontourDocument::completeSaving(KoStore *)
 {
   return true;
 }
@@ -195,7 +195,7 @@ void KontourDocument::insertChild(KoDocumentChild *child)
   setModified (true);
 }
 
-void KontourDocument::insertPart(const QRect &rect, KoDocumentEntry &e)
+void KontourDocument::insertPart(const QRect &/*rect*/, KoDocumentEntry &/*e*/)
 {
 /*  KoDocument *doc = e.createDoc(this);
 
@@ -213,7 +213,7 @@ void KontourDocument::insertPart(const QRect &rect, KoDocumentEntry &e)
   emit partInserted(child, part);*/
 }
 
-void KontourDocument::changeChildGeometry (KontourChild* child, const QRect& r)
+void KontourDocument::changeChildGeometry (KontourChild* /*child*/, const QRect& /*r*/)
 {
 /*  child->setGeometry (r);
   setModified (true);

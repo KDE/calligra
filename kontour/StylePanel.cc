@@ -236,11 +236,11 @@ void OutlinePanel::slotChangeStroked(bool b)
   slotUpdate();
 }
 
-void OutlinePanel::slotChangeStartArrow(int w)
+void OutlinePanel::slotChangeStartArrow(int /*w*/)
 {
 }
 
-void OutlinePanel::slotChangeEndArrow(int w)
+void OutlinePanel::slotChangeEndArrow(int /*w*/)
 {
 }
 
@@ -289,7 +289,7 @@ void OutlinePanel::slotChangeLineWidth(int l)
   slotUpdate();
 }
 
-void OutlinePanel::slotChangeLineStyle(int w)
+void OutlinePanel::slotChangeLineStyle(int /*w*/)
 {
 
 }

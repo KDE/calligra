@@ -40,7 +40,7 @@
 unsigned int GObject::mCurId = 0;
 
 GObject::GObject()
-{ 
+{
   mId = mCurId;
   mCurId++;
   rcount = 0;
@@ -112,7 +112,7 @@ void GObject::setWorkInProgress(bool flag)
 {
   inWork = flag;
 }
-  
+
 QDomElement GObject::writeToXml(QDomDocument &document)
 {
   QDomElement go = document.createElement("go");
@@ -122,7 +122,7 @@ QDomElement GObject::writeToXml(QDomDocument &document)
   return go;
 }
 
-void GObject::drawNode(KoPainter *p, int x, int y, bool active)
+void GObject::drawNode(KoPainter *p, int x, int y, bool /*active*/)
 {
 // TODO Fix!
   p->fillAreaRGB(QRect(x - 2, y - 3, 5, 7), KoColor::black());
@@ -130,7 +130,7 @@ void GObject::drawNode(KoPainter *p, int x, int y, bool active)
   p->fillAreaRGB(QRect(x - 2, y - 2, 5, 5), KoColor::magenta());
 }
 
-void GObject::setZoomFactor(double f, double pf)
+void GObject::setZoomFactor(double /*f*/, double /*pf*/)
 {
 
 }

@@ -103,7 +103,7 @@ QDomElement GPolygon::writeToXml(QDomDocument &document)
   return polygon;
 }
 
-void GPolygon::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool)
+void GPolygon::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool /*outline*/, bool)
 {
   setPen(p);
   setBrush(p);
@@ -149,21 +149,21 @@ void GPolygon::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool o
   }
 }
 
-int GPolygon::getNeighbourPoint(const KoPoint &p, const double distance)
+int GPolygon::getNeighbourPoint(const KoPoint &/*p*/, const double /*distance*/)
 {
   return -1;
 }
 
-void GPolygon::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
+void GPolygon::movePoint(int /*idx*/, double /*dx*/, double /*dy*/, bool /*ctrlPressed*/)
 {
-//  if(idx < mVertex)  
+//  if(idx < mVertex)
 }
 
-void GPolygon::removePoint(int idx)
+void GPolygon::removePoint(int /*idx*/)
 {
 }
 
-bool GPolygon::contains(const KoPoint &p)
+bool GPolygon::contains(const KoPoint &/*p*/)
 {
   // TODO Implement...
   return false;

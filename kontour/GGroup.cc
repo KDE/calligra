@@ -101,26 +101,26 @@ QDomElement GGroup::writeToXml(QDomDocument &document)
   return group;
 }
 
-void GGroup::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool withEditMarks)
+void GGroup::draw(KoPainter *p, const QWMatrix &m, bool /*withBasePoints*/, bool outline, bool /*withEditMarks*/)
 {
   for(GObject *o = members.first(); o != 0L; o = members.next())
     o->draw(p, tmpMatrix * m, false, outline);
 }
 
-int GGroup::getNeighbourPoint(const KoPoint &p, const double distance)
+int GGroup::getNeighbourPoint(const KoPoint &/*p*/, const double /*distance*/)
 {
   return -1;
 }
 
-void GGroup::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
+void GGroup::movePoint(int /*idx*/, double /*dx*/, double /*dy*/, bool /*ctrlPressed*/)
 {
 }
 
-void GGroup::removePoint(int idx)
+void GGroup::removePoint(int /*idx*/)
 {
 }
 
-bool GGroup::contains(const KoPoint &p)
+bool GGroup::contains(const KoPoint &/*p*/)
 {
 /*    if (box.contains (p)) {
         Coord np = p.transform (iMatrix);

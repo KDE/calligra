@@ -551,7 +551,7 @@ bool KontourView::eventFilter(QObject *o, QEvent *e)
   return false;
 }
 
-void KontourView::updateReadWrite(bool readwrite)
+void KontourView::updateReadWrite(bool /*readwrite*/)
 {
 }
 
@@ -847,7 +847,7 @@ void KontourView::slotConvertToPath()
     mDoc->history()->addCommand(new ToPathCmd(activeDocument()));
 }
 
-void KontourView::slotStyles(const QString &s)
+void KontourView::slotStyles(const QString &/*s*/)
 {
   activeDocument()->styles()->style(m_styles->currentText());
 }

@@ -67,10 +67,10 @@ void PathTool::deactivate()
 
 void PathTool::processEvent(QEvent *e)
 {
-  Canvas *canvas = toolController()->view()->canvas();  
-  GPage *page = toolController()->view()->activeDocument()->activePage();
-  double x = static_cast<QMouseEvent *>(e)->x() - canvas->xOffset();
-  double y = static_cast<QMouseEvent *>(e)->y() - canvas->yOffset();
+  Canvas *canvas = toolController()->view()->canvas();
+  //GPage *page = toolController()->view()->activeDocument()->activePage();
+  //double x = static_cast<QMouseEvent *>(e)->x() - canvas->xOffset();
+  //double y = static_cast<QMouseEvent *>(e)->y() - canvas->yOffset();
   if(e->type() == QEvent::MouseButtonPress)
   {
   }

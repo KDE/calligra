@@ -103,29 +103,29 @@ QDomElement GImage::writeToXml(QDomDocument &document)
   return image;
 }
 
-void GImage::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool withEditMarks)
+void GImage::draw(KoPainter *p, const QWMatrix &m, bool /*withBasePoints*/, bool /*outline*/, bool /*withEditMarks*/)
 {
   QWMatrix mm;
   mm = tmpMatrix * m;
   p->drawImage(mImage, style()->fillOpacity(), mm);
 }
 
-int GImage::getNeighbourPoint(const KoPoint &p, const double distance)
+int GImage::getNeighbourPoint(const KoPoint &/*p*/, const double /*distance*/)
 {
   return -1;
 }
 
-void GImage::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
+void GImage::movePoint(int /*idx*/, double /*dx*/, double /*dy*/, bool /*ctrlPressed*/)
 {
 }
 
-void GImage::removePoint(int idx)
+void GImage::removePoint(int /*idx*/)
 {
 }
 
 bool GImage::contains(const KoPoint &p)
 {
-  double x1, y1, x2, y2;
+  //double x1, y1, x2, y2;
   if(mBBox.contains(p))
   {
     QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
