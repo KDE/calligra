@@ -2558,23 +2558,11 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
   // We need to set the line-edit out of edit mode,
   // but only if we are using it (text editor)
   // A bit of a hack - perhaps we should store the editor mode ?
-  bool textEditor=true;
-  int newHeight = -1;
-  int row = -1;
+  bool textEditor = true;
   if ( m_pEditor->inherits("KSpreadTextEditor") )
-  {
-      if ( m_pEditor->cell()->height() < m_pEditor->height() )
-      {
-          if (((KSpreadTextEditor * ) m_pEditor)->sizeUpdate())
-          {
-              newHeight = m_pEditor->height();
-              row = m_pEditor->cell()->row();
-          }
-      }
       m_pEditWidget->setEditMode( false );
-  }
   else
-    textEditor = false;
+      textEditor = false;
 
   QString t = m_pEditor->text();
   // Delete the cell editor first and after that update the document.
@@ -2604,15 +2592,12 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
   else
     m_pView->updateEditWidget();
 
-  if ( newHeight != -1 )
-      m_pView->vBorderWidget()->resizeRow( newHeight, row, true );
-
   setFocus();
 }
 
 void KSpreadCanvas::createEditor()
 {
-  KSpreadCell* cell = activeTable()->cellAt( markerColumn(), markerRow() );
+  KSpreadCell* cell = activeTable()->nonDefaultCell( markerColumn(), markerRow(), false );
 
   createEditor( CellEditor );
   if ( cell )
@@ -2624,7 +2609,7 @@ void KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
   KSpreadSheet *table = activeTable();
   if ( !m_pEditor )
   {
-    KSpreadCell* cell = activeTable()->cellAt( marker() );
+    KSpreadCell* cell = activeTable()->nonDefaultCell( marker().x(), marker().x(), false );
     if ( ed == CellEditor )
     {
       m_pEditWidget->setEditMode( true );
