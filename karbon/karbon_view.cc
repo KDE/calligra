@@ -981,7 +981,7 @@ KarbonView::initActions()
 		i18n( "G&radient" ), "14_gradient", 0, this,
 		SLOT( gradTool() ), actionCollection(), "tool_grad" );
 	m_polylineToolAction = new KToggleAction(
-		i18n( "Poly&line" ), "pencil", 0, this,
+		i18n( "Poly&line" ), "14_polyline", 0, this,
 		SLOT( polylineTool() ), actionCollection(), "tool_polyline" );
 	/*m_textToolAction = new KToggleAction(
 		i18n( "Text" ), "14_text", 0, this,

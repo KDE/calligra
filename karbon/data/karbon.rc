@@ -92,8 +92,8 @@
 		<Action name="tool_star"/>
 		<Action name="tool_sinus"/>
 		<Action name="tool_spiral"/>
-		<Action name="tool_grad"/>
 		<Action name="tool_polyline"/>
+		<Action name="tool_grad"/>
 		<Action name="preview"/>
 	</ToolBar>
 </kpartgui>
