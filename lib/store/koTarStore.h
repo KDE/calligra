@@ -48,7 +48,7 @@ public:
 protected:
   /**
    * Conversion routine
-   * @param _internalNaming name used internally : "root", "store:/0", ...
+   * @param _internalNaming name used internally : "root", "tar:/0", ...
    * @return the name used in the file, more user-friendly ("maindoc.xml", "part0.xml", ...)
    */
   static QString toExternalNaming( const QString & _internalNaming );
