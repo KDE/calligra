@@ -5090,13 +5090,12 @@ void KPresenterView::openThePresentationDurationDialog()
         presDurationDia = 0;
     }
 
-    presDurationDia = new KPPresDurationDia( this, "presDurationDia", kPresenterDoc(), this,
+    presDurationDia = new KPPresDurationDia( this, "presDurationDia", kPresenterDoc(),
                                              presentationDurationStringList, presentationTotalDurationString );
     presDurationDia->setCaption( i18n( "KPresenter - Presentation Duration" ) );
     QObject::connect( presDurationDia, SIGNAL( presDurationDiaClosed() ), this, SLOT( pddClosed() ) );
     presDurationDia->exec();
 
-    QObject::disconnect( presDurationDia, SIGNAL( presDurationDiaClosed() ), this, SLOT( pddClosed() ) );
     delete presDurationDia;
     presDurationDia = 0;
 }
@@ -5104,7 +5103,6 @@ void KPresenterView::openThePresentationDurationDialog()
 /*================================================================*/
 void KPresenterView::pddClosed()
 {
-    QObject::disconnect( presDurationDia, SIGNAL( presDurationDiaClosed() ), this, SLOT( pddClosed() ) );
     presDurationDia = 0;
 }
 

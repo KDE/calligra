@@ -17,10 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <presdurationdia.h>
-#include <kpresenter_view.h>
-#include <kprcanvas.h>
-
+#include "presdurationdia.h"
+#include "kprcanvas.h"
+#include "kpresenter_doc.h"
 #include <qheader.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
@@ -36,9 +35,10 @@
 
 /*================================================================*/
 KPPresDurationDia::KPPresDurationDia( QWidget *parent, const char *name,
-                                      KPresenterDoc *_doc, KPresenterView *_view,
-                                      QStringList _durationListString, const QString _durationString )
-    : KDialogBase( parent, name, false, "", KDialogBase::Close ), doc( _doc ), view( _view )
+                                      KPresenterDoc *_doc,
+                                      QStringList _durationListString, const QString &_durationString )
+    : KDialogBase( parent, name, false, "", KDialogBase::Close ), 
+      doc( _doc )
 {
     m_durationListString = _durationListString;
     m_durationString = _durationString;

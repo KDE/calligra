@@ -25,7 +25,6 @@
 #include <qlabel.h>
 
 class KPresenterDoc;
-class KPresenterView;
 class QResizeEvent;
 
 /******************************************************************
@@ -40,15 +39,16 @@ class KPPresDurationDia : public KDialogBase
 
 public:
     KPPresDurationDia( QWidget *parent, const char *name,
-                       KPresenterDoc *_doc, KPresenterView *_view,
-                       QStringList _durationListString, const QString _durationString );
+                       KPresenterDoc *_doc,
+                       QStringList _durationListString, 
+		       const QString &_durationString );
 
 protected:
     void setupSlideList( QWidget *_page );
     void resizeEvent( QResizeEvent *e );
 
+ private:
     KPresenterDoc *doc;
-    KPresenterView *view;
     KListView *slides;
     QLabel *label;
 
