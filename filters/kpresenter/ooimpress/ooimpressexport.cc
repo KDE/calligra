@@ -430,7 +430,10 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
             case 8: // pie, chord, arc
                 appendEllipse( doccontent, o, drawPage, true );
                 break;
-            case 9:
+            case 9: //part
+                kdDebug()<<" part object not implemented \n";
+                break;
+            case 10:
                 kdDebug()<<" group not implemented \n";
                 break;
             case 11:

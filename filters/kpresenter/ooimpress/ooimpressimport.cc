@@ -439,6 +439,10 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
             appendImage( doc, e, pictureElement, o );
             appendObjectEffect(doc, e, o, soundElement);
         }
+        else if ( name == "draw:object" )
+        {
+            //todo add part object
+        }
         else if ( name == "draw:g" )
         {
             //todo add group object
