@@ -23,29 +23,51 @@
 #include <qdragobject.h>
 #include <qstring.h>
 
-/******************************************************************/
-/* Class: KWDrag                                               */
-/******************************************************************/
-class KWDrag : public QTextDrag
+/**
+ * Drag object for a text selection
+ * Contains the text as plain/text (without formatting) and as kword XML (with formatting)
+ */
+class KWTextDrag : public QTextDrag
 {
     Q_OBJECT
 
 public:
-    KWDrag( QWidget *dragSource = 0L, const char *name = 0L );
+    KWTextDrag( QWidget *dragSource = 0L, const char *name = 0L );
 
-    void setPlain( const QString &_plain );
+    void setPlain( const QString &_plain ) { setText( _plain ); }
     void setKWord( const QCString &_kword ) { kword = _kword; }
-    //void setHTML( const QString &_html );
 
     virtual QByteArray encodedData( const char *mime ) const;
     virtual const char* format( int i ) const;
 
     static bool canDecode( QMimeSource* e );
 
+    static const char * selectionMimeType();
 protected:
-    //QString plain, html;
     QCString kword;
 };
 
+/**
+ * More generic drag object, for anything else that can be represented as XML
+ * (e.g. frames) and that doesn't have a text representation.
+ */
+class KWDrag : public QDragObject
+{
+    Q_OBJECT
+
+public:
+    KWDrag( QWidget *dragSource = 0L, const char *name = 0L );
+
+    void setKWord( const QCString &_kword ) { kword = _kword; }
+
+    virtual QByteArray encodedData( const char *mime ) const;
+    virtual const char* format( int i ) const;
+
+    static bool canDecode( QMimeSource* e );
+
+    static const char * mimeType();
+protected:
+    QCString kword; // The data in XML
+};
 
 #endif

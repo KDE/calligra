@@ -23,55 +23,72 @@
 #include <kdebug.h>
 
 /******************************************************************/
-/* Class: KWDrag                                               */
+/* Class: KWTextDrag                                               */
 /******************************************************************/
 
-KWDrag::KWDrag( QWidget *dragSource, const char *name )
+KWTextDrag::KWTextDrag( QWidget *dragSource, const char *name )
     : QTextDrag( dragSource, name )
 {
 }
 
-void KWDrag::setPlain( const QString &_plain )
+QByteArray KWTextDrag::encodedData( const char *mime ) const
 {
-    setText(_plain);
-    //plain = _plain;
-}
-
-QByteArray KWDrag::encodedData( const char *mime ) const
-{
-    //kdDebug() << "KWDrag::encodedData " << mime << endl;
-    /*if ( strcmp(mime, "text/html") == 0 )
-    {
-        KWDrag *non_const_this = const_cast<KWDrag *>(this);
-        non_const_this->setText(html);
-    }
-    else */
-    if ( strcmp( mime, MIME_TYPE ) == 0 )
-    {
+    if ( strcmp( selectionMimeType(), mime ) == 0 )
         return kword;
-    }
-    /*else
-    {
-        KWDrag *non_const_this = const_cast<KWDrag *>(this);
-        non_const_this->setText(plain);
-    }*/
-
-    return QTextDrag::encodedData(mime);
+    else
+        return QTextDrag::encodedData(mime);
 }
 
-bool KWDrag::canDecode( QMimeSource* e )
+bool KWTextDrag::canDecode( QMimeSource* e )
 {
-    if ( e->provides( MIME_TYPE ) )
+    if ( e->provides( selectionMimeType() ) )
        return true;
     return QTextDrag::canDecode(e);
 }
 
-const char* KWDrag::format( int i ) const
+const char* KWTextDrag::format( int i ) const
 {
     if ( i < 4 ) // HACK, but how to do otherwise ??
         return QTextDrag::format(i);
     else if ( i == 4 )
-        return MIME_TYPE;
+        return selectionMimeType();
     else return 0;
 }
 
+const char * KWTextDrag::selectionMimeType()
+{
+    return "application/x-kword-textselection";
+}
+
+/******************************************************************/
+/* Class: KWDrag                                                  */
+/******************************************************************/
+KWDrag::KWDrag( QWidget *dragSource, const char *name )
+    : QDragObject( dragSource, name )
+{
+}
+
+QByteArray KWDrag::encodedData( const char *mime ) const
+{
+    if ( strcmp( mimeType(), mime ) == 0 )
+        return kword;
+    else
+        kdWarning() << "KWDrag: unsupported type " << mime << " requested" << endl;
+}
+
+bool KWDrag::canDecode( QMimeSource* e )
+{
+    return e->provides( mimeType() );
+}
+
+const char* KWDrag::format( int i ) const
+{
+    if ( i == 0 )
+        return mimeType();
+    else return 0;
+}
+
+const char * KWDrag::mimeType()
+{
+    return "application/x-kword-selection";
+}

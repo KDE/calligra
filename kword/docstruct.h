@@ -24,6 +24,9 @@
 #include <qwidget.h>
 
 class KWDocument;
+class KWFormulaFrameSet;
+class KWPictureFrameSet;
+class KWPartFrameSet;
 class KWGUI;
 class QWidget;
 class KWFrame;
@@ -166,7 +169,7 @@ protected:
 class KWDocStructRootItem : public QListViewItem
 {
 public:
- 
+
     KWDocStructRootItem( QListView *_parent, KWDocument *_doc, TypeStructDocItem _type, KWGUI*__parent );
 
     void setupArrangement();

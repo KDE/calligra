@@ -43,10 +43,10 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       // Initialize member vars here. This ensures they are all initialized, since it's
       // easier to compare this list with the member vars list (compiler ensures order).
       sheetSide( AnySide ),
-      runAround( _ra ),
+      m_runAround( _ra ),
       frameBehaviour( AutoCreateNewFrame ),
-      newFrameBehaviour( ( fs && fs->getFrameType() == FT_TEXT ) ? Reconnect : NoFollowup ),
-      runAroundGap( _gap ),
+      newFrameBehaviour( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
+      m_runAroundGap( _gap ),
       m_bCopy( false ),
       selected( false ),
       m_pageNum( 0 ),
@@ -120,7 +120,7 @@ QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor d
 
 KWFrame *KWFrame::getCopy() {
     /* returns a deep copy of self */
-    KWFrame *frm = new KWFrame(getFrameSet(), x(), y(), width(), height(), getRunAround(), getRunAroundGap() );
+    KWFrame *frm = new KWFrame(getFrameSet(), x(), y(), width(), height(), runAround(), runAroundGap() );
     frm->setBackgroundColor( getBackgroundColor() );
     frm->setFrameBehaviour(getFrameBehaviour());
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
@@ -216,11 +216,171 @@ KoRect KWFrame::outerKoRect() const
     return outerRect;
 }
 
+void KWFrame::save( QDomElement &frameElem )
+{
+    frameElem.setAttribute( "left", left() );
+    frameElem.setAttribute( "top", top() );
+    frameElem.setAttribute( "right", right() );
+    frameElem.setAttribute( "bottom", bottom() );
+
+    if(runAround()!=RA_NO)
+        frameElem.setAttribute( "runaround", static_cast<int>( runAround() ) );
+
+    if(runAroundGap()!=0)
+        frameElem.setAttribute( "runaroundGap", runAroundGap() );
+
+    if(getLeftBorder().ptWidth!=0)
+        frameElem.setAttribute( "lWidth", getLeftBorder().ptWidth );
+
+    if(getLeftBorder().color.isValid())
+    {
+        frameElem.setAttribute( "lRed", getLeftBorder().color.red() );
+        frameElem.setAttribute( "lGreen", getLeftBorder().color.green() );
+        frameElem.setAttribute( "lBlue", getLeftBorder().color.blue() );
+    }
+    if(getLeftBorder().style != Border::SOLID)
+        frameElem.setAttribute( "lStyle", static_cast<int>( getLeftBorder().style ) );
+
+    if(getRightBorder().ptWidth!=0)
+        frameElem.setAttribute( "rWidth", getRightBorder().ptWidth );
+
+    if(getRightBorder().color.isValid())
+    {
+        frameElem.setAttribute( "rRed", getRightBorder().color.red() );
+        frameElem.setAttribute( "rGreen", getRightBorder().color.green() );
+        frameElem.setAttribute( "rBlue", getRightBorder().color.blue() );
+    }
+    if(getRightBorder().style != Border::SOLID)
+        frameElem.setAttribute( "rStyle", static_cast<int>( getRightBorder().style ) );
+
+    if(getTopBorder().ptWidth!=0)
+        frameElem.setAttribute( "tWidth", getTopBorder().ptWidth );
+
+    if(getTopBorder().color.isValid())
+    {
+        frameElem.setAttribute( "tRed", getTopBorder().color.red() );
+        frameElem.setAttribute( "tGreen", getTopBorder().color.green() );
+        frameElem.setAttribute( "tBlue", getTopBorder().color.blue() );
+    }
+    if(getTopBorder().style != Border::SOLID)
+        frameElem.setAttribute( "tStyle", static_cast<int>( getTopBorder().style ) );
+
+    if(getBottomBorder().ptWidth!=0) {
+        frameElem.setAttribute( "bWidth", getBottomBorder().ptWidth );
+    }
+    if(getBottomBorder().color.isValid()) {
+        frameElem.setAttribute( "bRed", getBottomBorder().color.red() );
+        frameElem.setAttribute( "bGreen", getBottomBorder().color.green() );
+        frameElem.setAttribute( "bBlue", getBottomBorder().color.blue() );
+    }
+    if(getBottomBorder().style != Border::SOLID)
+        frameElem.setAttribute( "bStyle", static_cast<int>( getBottomBorder().style ) );
+
+    if(getBackgroundColor().color().isValid())
+    {
+        frameElem.setAttribute( "bkRed", getBackgroundColor().color().red() );
+        frameElem.setAttribute( "bkGreen", getBackgroundColor().color().green() );
+        frameElem.setAttribute( "bkBlue", getBackgroundColor().color().blue() );
+    }
+    if(getBLeft() != 0)
+        frameElem.setAttribute( "bleftpt", getBLeft() );
+
+    if(getBRight()!=0)
+        frameElem.setAttribute( "brightpt", getBRight() );
+
+    if(getBTop()!=0)
+        frameElem.setAttribute( "btoppt", getBTop() );
+
+    if(getBBottom()!=0)
+        frameElem.setAttribute( "bbottompt", getBBottom() );
+
+    if(getFrameBehaviour()!=AutoCreateNewFrame)
+        frameElem.setAttribute( "autoCreateNewFrame", static_cast<int>( getFrameBehaviour()) );
+
+    //if(getNewFrameBehaviour()!=Reconnect) // always save this one, since the default value depends on the type of frame, etc.
+    frameElem.setAttribute( "newFrameBehaviour", static_cast<int>( getNewFrameBehaviour()) );
+
+    if(getSheetSide()!= AnySide)
+        frameElem.setAttribute( "sheetSide", static_cast<int>( getSheetSide()) );
+}
+
+void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion )
+{
+    m_runAround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", RA_BOUNDINGRECT ) );
+    m_runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
+                          ? frameElem.attribute( "runaroundGap" ).toDouble()
+                          : frameElem.attribute( "runaGapPT" ).toDouble();
+    sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
+    frameBehaviour = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
+    // Old documents had no "NewFrameBehaviour" for footers/headers -> default to Copy.
+    NewFrameBehaviour defaultValue = headerOrFooter ? Copy : Reconnect;
+    newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", defaultValue ) );
+
+    Border l, r, t, b;
+    l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0.0 );
+    r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0.0 );
+    t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0.0 );
+    b.ptWidth = KWDocument::getAttribute( frameElem, "bWidth", 0.0 );
+    if ( frameElem.hasAttribute("lRed") )
+        l.color.setRgb(
+            KWDocument::getAttribute( frameElem, "lRed", 0 ),
+            KWDocument::getAttribute( frameElem, "lGreen", 0 ),
+            KWDocument::getAttribute( frameElem, "lBlue", 0 ) );
+    if ( frameElem.hasAttribute("rRed") )
+        r.color.setRgb(
+            KWDocument::getAttribute( frameElem, "rRed", 0 ),
+            KWDocument::getAttribute( frameElem, "rGreen", 0 ),
+            KWDocument::getAttribute( frameElem, "rBlue", 0 ) );
+    if ( frameElem.hasAttribute("tRed") )
+        t.color.setRgb(
+            KWDocument::getAttribute( frameElem, "tRed", 0 ),
+            KWDocument::getAttribute( frameElem, "tGreen", 0 ),
+            KWDocument::getAttribute( frameElem, "tBlue", 0 ) );
+    if ( frameElem.hasAttribute("bRed") )
+        b.color.setRgb(
+            KWDocument::getAttribute( frameElem, "bRed", 0 ),
+            KWDocument::getAttribute( frameElem, "bGreen", 0 ),
+            KWDocument::getAttribute( frameElem, "bBlue", 0 ) );
+    l.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", Border::SOLID ) );
+    r.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", Border::SOLID ) );
+    t.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", Border::SOLID ) );
+    b.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", Border::SOLID ) );
+    QColor c;
+    if ( frameElem.hasAttribute("bkRed") )
+        c.setRgb(
+            KWDocument::getAttribute( frameElem, "bkRed", 0 ),
+            KWDocument::getAttribute( frameElem, "bkGreen", 0 ),
+            KWDocument::getAttribute( frameElem, "bkBlue", 0 ) );
+
+    if ( syntaxVersion < 2 ) // Activate old "white border == no border" conversion
+    {
+        if(c==l.color && l.ptWidth==1 && l.style==0 )
+            l.ptWidth=0;
+        if(c==r.color  && r.ptWidth==1 && r.style==0)
+            r.ptWidth=0;
+        if(c==t.color && t.ptWidth==1 && t.style==0 )
+            t.ptWidth=0;
+        if(c==b.color && b.ptWidth==1 && b.style==0 )
+            b.ptWidth=0;
+    }
+    brd_left = l;
+    brd_right = r;
+    brd_top = t;
+    brd_bottom = b;
+    backgroundColor = QBrush( c );
+    bleft = frameElem.attribute( "bleftpt" ).toDouble();
+    bright = frameElem.attribute( "brightpt" ).toDouble();
+    btop = frameElem.attribute( "btoppt" ).toDouble();
+    bbottom = frameElem.attribute( "bbottompt" ).toDouble();
+    if ( headerOrFooter )
+        m_bCopy = true;
+}
+
 /******************************************************************/
 /* Class: KWFrameSet                                              */
 /******************************************************************/
 KWFrameSet::KWFrameSet( KWDocument *doc )
-    : m_doc( doc ), frames(), m_framesOnTop(), frameInfo( FI_BODY ),
+    : m_doc( doc ), frames(), m_framesOnTop(), m_info( FI_BODY ),
       m_current( 0 ), grpMgr( 0L ), removeableHeader( false ), visible( true ),
       m_anchorTextFs( 0L )
 {
@@ -346,7 +506,7 @@ void KWFrameSet::setFloating()
     for ( ; fit.current() ; ++fit )
     {
         KWTextFrameSet * frameSet = dynamic_cast<KWTextFrameSet *>( fit.current() );
-        if ( !frameSet || frameSet->getFrameInfo() != FI_BODY )
+        if ( !frameSet || frameSet->frameSetInfo() != FI_BODY )
             continue;
 
         QTextParag* parag = 0L;
@@ -771,125 +931,45 @@ bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCur
     return true;
 }
 
-void KWFrameSet::save( QDomElement &parentElem )
+void KWFrameSet::save( QDomElement &parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
 
     // Save all the common attributes for framesets.
-    parentElem.setAttribute( "frameType", static_cast<int>( getFrameType() ) );
-    parentElem.setAttribute( "frameInfo", static_cast<int>( frameInfo ) );
+    parentElem.setAttribute( "frameType", static_cast<int>( type() ) );
+    parentElem.setAttribute( "frameInfo", static_cast<int>( m_info ) );
     parentElem.setAttribute( "name", correctQString( m_name ) );
     parentElem.setAttribute( "visible", static_cast<int>( visible ) );
 
-    QListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
+    if ( saveFrames )
     {
-        KWFrame *frame = frameIt.current();
-        QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
-        parentElem.appendChild( frameElem );
-
-        frameElem.setAttribute( "left", frame->left() );
-        frameElem.setAttribute( "top", frame->top() );
-        frameElem.setAttribute( "right", frame->right() );
-        frameElem.setAttribute( "bottom", frame->bottom() );
-
-        if(frame->getRunAround()!=RA_NO)
-            frameElem.setAttribute( "runaround", static_cast<int>( frame->getRunAround() ) );
-
-        if(frame->getRunAroundGap()!=0)
-            frameElem.setAttribute( "runaroundGap", frame->getRunAroundGap() );
-
-        if(frame->getLeftBorder().ptWidth!=0)
-            frameElem.setAttribute( "lWidth", frame->getLeftBorder().ptWidth );
-
-        if(frame->getLeftBorder().color.isValid())
+        QListIterator<KWFrame> frameIt = frameIterator();
+        for ( ; frameIt.current(); ++frameIt )
         {
-            frameElem.setAttribute( "lRed", frame->getLeftBorder().color.red() );
-            frameElem.setAttribute( "lGreen", frame->getLeftBorder().color.green() );
-            frameElem.setAttribute( "lBlue", frame->getLeftBorder().color.blue() );
-        }
-        if(frame->getLeftBorder().style != Border::SOLID)
-            frameElem.setAttribute( "lStyle", static_cast<int>( frame->getLeftBorder().style ) );
+            KWFrame *frame = frameIt.current();
+            QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
+            parentElem.appendChild( frameElem );
 
-        if(frame->getRightBorder().ptWidth!=0)
-            frameElem.setAttribute( "rWidth", frame->getRightBorder().ptWidth );
+            frame->save( frameElem );
 
-        if(frame->getRightBorder().color.isValid())
-        {
-            frameElem.setAttribute( "rRed", frame->getRightBorder().color.red() );
-            frameElem.setAttribute( "rGreen", frame->getRightBorder().color.green() );
-            frameElem.setAttribute( "rBlue", frame->getRightBorder().color.blue() );
-        }
-        if(frame->getRightBorder().style != Border::SOLID)
-            frameElem.setAttribute( "rStyle", static_cast<int>( frame->getRightBorder().style ) );
-
-        if(frame->getTopBorder().ptWidth!=0)
-            frameElem.setAttribute( "tWidth", frame->getTopBorder().ptWidth );
-
-        if(frame->getTopBorder().color.isValid())
-        {
-            frameElem.setAttribute( "tRed", frame->getTopBorder().color.red() );
-            frameElem.setAttribute( "tGreen", frame->getTopBorder().color.green() );
-            frameElem.setAttribute( "tBlue", frame->getTopBorder().color.blue() );
-        }
-        if(frame->getTopBorder().style != Border::SOLID)
-            frameElem.setAttribute( "tStyle", static_cast<int>( frame->getTopBorder().style ) );
-
-        if(frame->getBottomBorder().ptWidth!=0) {
-            frameElem.setAttribute( "bWidth", frame->getBottomBorder().ptWidth );
-        }
-        if(frame->getBottomBorder().color.isValid()) {
-            frameElem.setAttribute( "bRed", frame->getBottomBorder().color.red() );
-            frameElem.setAttribute( "bGreen", frame->getBottomBorder().color.green() );
-            frameElem.setAttribute( "bBlue", frame->getBottomBorder().color.blue() );
-        }
-        if(frame->getBottomBorder().style != Border::SOLID)
-            frameElem.setAttribute( "bStyle", static_cast<int>( frame->getBottomBorder().style ) );
-
-        if(frame->getBackgroundColor().color().isValid())
-        {
-            frameElem.setAttribute( "bkRed", frame->getBackgroundColor().color().red() );
-            frameElem.setAttribute( "bkGreen", frame->getBackgroundColor().color().green() );
-            frameElem.setAttribute( "bkBlue", frame->getBackgroundColor().color().blue() );
-        }
-        if(frame->getBLeft() != 0)
-            frameElem.setAttribute( "bleftpt", frame->getBLeft() );
-
-        if(frame->getBRight()!=0)
-            frameElem.setAttribute( "brightpt", frame->getBRight() );
-
-        if(frame->getBTop()!=0)
-            frameElem.setAttribute( "btoppt", frame->getBTop() );
-
-        if(frame->getBBottom()!=0)
-            frameElem.setAttribute( "bbottompt", frame->getBBottom() );
-
-        if(frame->getFrameBehaviour()!=AutoCreateNewFrame)
-            frameElem.setAttribute( "autoCreateNewFrame", static_cast<int>( frame->getFrameBehaviour()) );
-
-        //if(frame->getNewFrameBehaviour()!=Reconnect) // always save this one, since the default value depends on the type of frame, etc.
-        frameElem.setAttribute( "newFrameBehaviour", static_cast<int>( frame->getNewFrameBehaviour()) );
-
-        if(frame->getSheetSide()!= AnySide)
-            frameElem.setAttribute( "sheetSide", static_cast<int>( frame->getSheetSide()) );
-
-        if(m_doc->processingType() == KWDocument::WP) {
-            if(m_doc->getFrameSet(0) == this) break;
-            if(getFrameInfo() == FI_FIRST_HEADER ||
-               getFrameInfo() == FI_ODD_HEADER ||
-               getFrameInfo() == FI_EVEN_HEADER ||
-               getFrameInfo() == FI_FIRST_FOOTER ||
-               getFrameInfo() == FI_ODD_FOOTER ||
-               getFrameInfo() == FI_EVEN_FOOTER ||
-               getFrameInfo() == FI_FOOTNOTE) break;
+            if(m_doc->processingType() == KWDocument::WP) {
+                if(m_doc->getFrameSet(0) == this) break;
+                if(frameSetInfo() == FI_FIRST_HEADER ||
+                   frameSetInfo() == FI_ODD_HEADER ||
+                   frameSetInfo() == FI_EVEN_HEADER ||
+                   frameSetInfo() == FI_FIRST_FOOTER ||
+                   frameSetInfo() == FI_ODD_FOOTER ||
+                   frameSetInfo() == FI_EVEN_FOOTER ||
+                   frameSetInfo() == FI_FOOTNOTE) break;
+            }
         }
     }
 }
 
 //
-// This function is intended as a helper for all the derived classes. It reads
-// in all the attributes common to all framesets and loads all frames.
+// This function is intended as a helper for all the derived classes. It /*reads
+// in all the attributes common to all framesets and*/ loads all frames.
 //
 void KWFrameSet::load( QDomElement &attributes )
 {
@@ -899,93 +979,13 @@ void KWFrameSet::load( QDomElement &attributes )
     {
         if ( frameElem.tagName() == "FRAME" )
         {
-            SheetSide sheetSide = AnySide;
-            Border l, r, t, b;
-            l.ptWidth = 0;
-            r.ptWidth = 0;
-            t.ptWidth = 0;
-            b.ptWidth = 0;
-
             KoRect rect;
             rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0.0 ) );
             rect.setTop( KWDocument::getAttribute( frameElem, "top", 0.0 ) );
             rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) );
             rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) );
-            RunAround runaround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", RA_BOUNDINGRECT ) );
-            double runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
-                                  ? frameElem.attribute( "runaroundGap" ).toDouble()
-                                  : frameElem.attribute( "runaGapPT" ).toDouble();
-            l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0.0 );
-            r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0.0 );
-            t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0.0 );
-            b.ptWidth = KWDocument::getAttribute( frameElem, "bWidth", 0.0 );
-	    if ( frameElem.hasAttribute("lRed") )
-                l.color.setRgb(
-                    KWDocument::getAttribute( frameElem, "lRed", 0 ),
-                    KWDocument::getAttribute( frameElem, "lGreen", 0 ),
-                    KWDocument::getAttribute( frameElem, "lBlue", 0 ) );
-	    if ( frameElem.hasAttribute("rRed") )
-                r.color.setRgb(
-                    KWDocument::getAttribute( frameElem, "rRed", 0 ),
-                    KWDocument::getAttribute( frameElem, "rGreen", 0 ),
-                    KWDocument::getAttribute( frameElem, "rBlue", 0 ) );
-	    if ( frameElem.hasAttribute("tRed") )
-                t.color.setRgb(
-                    KWDocument::getAttribute( frameElem, "tRed", 0 ),
-                    KWDocument::getAttribute( frameElem, "tGreen", 0 ),
-                    KWDocument::getAttribute( frameElem, "tBlue", 0 ) );
-	    if ( frameElem.hasAttribute("bRed") )
-                b.color.setRgb(
-                    KWDocument::getAttribute( frameElem, "bRed", 0 ),
-                    KWDocument::getAttribute( frameElem, "bGreen", 0 ),
-                    KWDocument::getAttribute( frameElem, "bBlue", 0 ) );
-            l.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", Border::SOLID ) );
-            r.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", Border::SOLID ) );
-            t.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", Border::SOLID ) );
-            b.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", Border::SOLID ) );
-            QColor c;
-	    if ( frameElem.hasAttribute("bkRed") )
-                c.setRgb(
-                    KWDocument::getAttribute( frameElem, "bkRed", 0 ),
-                    KWDocument::getAttribute( frameElem, "bkGreen", 0 ),
-                    KWDocument::getAttribute( frameElem, "bkBlue", 0 ) );
-
-            double lpt = frameElem.attribute( "bleftpt" ).toDouble();
-            double rpt = frameElem.attribute( "brightpt" ).toDouble();
-            double tpt = frameElem.attribute( "btoppt" ).toDouble();
-            double bpt = frameElem.attribute( "bbottompt" ).toDouble();
-            FrameBehaviour autoCreateNewValue = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
-            // Old documents had no "NewFrameBehaviour" for footers/headers -> default to Copy.
-            NewFrameBehaviour defaultValue = ( isAHeader() || isAFooter() ) ? Copy : Reconnect;
-            NewFrameBehaviour newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", defaultValue ) );
-            sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
-
-            KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height(), runaround, runAroundGap );
-            if ( m_doc->syntaxVersion() < 2 ) // Activate old "white border == no border" conversion
-            {
-                if(c==l.color && l.ptWidth==1 && l.style==0 )
-                    l.ptWidth=0;
-                if(c==r.color  && r.ptWidth==1 && r.style==0)
-                    r.ptWidth=0;
-                if(c==t.color && t.ptWidth==1 && t.style==0 )
-                    t.ptWidth=0;
-                if(c==b.color && b.ptWidth==1 && b.style==0 )
-                    b.ptWidth=0;
-            }
-            frame->setLeftBorder( l );
-            frame->setRightBorder( r );
-            frame->setTopBorder( t );
-            frame->setBottomBorder( b );
-            frame->setBackgroundColor( QBrush( c ) );
-            frame->setBLeft( lpt );
-            frame->setBRight( rpt );
-            frame->setBTop( tpt );
-            frame->setBBottom( bpt );
-            frame->setFrameBehaviour( autoCreateNewValue );
-            frame->setSheetSide( sheetSide );
-            frame->setNewFrameBehaviour( newFrameBehaviour);
-            if ( isAHeader() || isAFooter() )
-                frame->setCopy( true );
+            KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height() );
+            frame->load( frameElem, isHeaderOrFooter(), m_doc->syntaxVersion() );
             addFrame( frame );
             m_doc->progressItemLoaded();
         }
@@ -1022,17 +1022,17 @@ bool KWFrameSet::isVisible() const
 
 bool KWFrameSet::isAHeader() const
 {
-    return ( frameInfo == FI_FIRST_HEADER || frameInfo == FI_EVEN_HEADER || frameInfo == FI_ODD_HEADER );
+    return ( m_info == FI_FIRST_HEADER || m_info == FI_EVEN_HEADER || m_info == FI_ODD_HEADER );
 }
 
 bool KWFrameSet::isAFooter() const
 {
-    return ( frameInfo == FI_FIRST_FOOTER || frameInfo == FI_EVEN_FOOTER || frameInfo == FI_ODD_FOOTER );
+    return ( m_info == FI_FIRST_FOOTER || m_info == FI_EVEN_FOOTER || m_info == FI_ODD_FOOTER );
 }
 
 bool KWFrameSet::isAWrongHeader( KoHFType t ) const
 {
-    switch ( frameInfo ) {
+    switch ( m_info ) {
     case FI_FIRST_HEADER: {
         if ( t == HF_FIRST_DIFF ) return false;
         return true;
@@ -1050,7 +1050,7 @@ bool KWFrameSet::isAWrongHeader( KoHFType t ) const
 
 bool KWFrameSet::isAWrongFooter( KoHFType t ) const
 {
-    switch ( frameInfo ) {
+    switch ( m_info ) {
     case FI_FIRST_FOOTER: {
         if ( t == HF_FIRST_DIFF ) return false;
         return true;
@@ -1133,8 +1133,8 @@ void KWFrameSet::printDebug()
     static const char * runaround[] = { "No Runaround", "Bounding Rect", "Horizontal Space", "ERROR" };
 
     kdDebug() << " |  Visible: " << isVisible() << endl;
-    kdDebug() << " |  Type: " << typeFrameset[ getFrameType() ] << endl;
-    kdDebug() << " |  Info: " << infoFrameset[ getFrameInfo() ] << endl;
+    kdDebug() << " |  Type: " << typeFrameset[ type() ] << endl;
+    kdDebug() << " |  Info: " << infoFrameset[ frameSetInfo() ] << endl;
     kdDebug() << " |  Floating: " << isFloating() << endl;
     kdDebug() << " |  Number of frames on top: " << m_framesOnTop.count() << endl;
 
@@ -1144,7 +1144,7 @@ void KWFrameSet::printDebug()
         kdDebug() << " +-- Frame " << j << " of "<< getNumFrames() << "    (" << frame << ")" << endl;
         printDebug( frame );
         kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
-        kdDebug() << "     RunAround: "<< runaround[ frame->getRunAround() ] << endl;
+        kdDebug() << "     RunAround: "<< runaround[ frame->runAround() ] << endl;
         kdDebug() << "     FrameBehaviour: "<< frameBh[ frame->getFrameBehaviour() ] << endl;
         kdDebug() << "     NewFrameBehaviour: "<< newFrameBh[ frame->getNewFrameBehaviour() ] << endl;
         QColor col = frame->getBackgroundColor().color();
@@ -1204,14 +1204,14 @@ void KWPictureFrameSet::setSize( QSize _imgSize )
     m_image = m_image.scale( _imgSize );
 }
 
-void KWPictureFrameSet::save( QDomElement & parentElem )
+void KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
 
-    KWFrameSet::save( framesetElem ); // Save all frames
+    KWFrameSet::save( framesetElem, saveFrames );
 
     QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
     framesetElem.appendChild( imageElem );
@@ -1314,11 +1314,11 @@ void KWPartFrameSet::updateFrames()
     KWFrameSet::updateFrames();
 }
 
-void KWPartFrameSet::save( QDomElement &parentElem )
+void KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
-    KWFrameSet::save( parentElem );
+    KWFrameSet::save( parentElem, saveFrames );
     QDomElement nameElem = parentElem.ownerDocument().createElement( "NAME" );
     parentElem.appendChild( nameElem );
     nameElem.setAttribute( "value", m_name );
@@ -1462,14 +1462,14 @@ void KWFormulaFrameSet::updateFrames()
     KWFrameSet::updateFrames();
 }
 
-void KWFormulaFrameSet::save(QDomElement& parentElem)
+void KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     QDomElement framesetElem = parentElem.ownerDocument().createElement("FRAMESET");
     parentElem.appendChild(framesetElem);
 
-    KWFrameSet::save(framesetElem); // Save all frames
+    KWFrameSet::save(framesetElem, saveFrames);
 
     QDomElement formulaElem = parentElem.ownerDocument().createElement("FORMULA");
     framesetElem.appendChild(formulaElem);

@@ -72,7 +72,7 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 /******************************************************************/
 
 KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KWDocument *_doc,
-			int rows, int cols, KWTblCellSize wid, KWTblCellSize hei, bool floating )
+			int rows, int cols, CellSize wid, CellSize hei, bool floating )
     : KDialogBase( Tabbed, i18n("Table Settings"), Ok | Cancel, Ok, parent, name, true)
 {
     canvas = _canvas;
@@ -84,7 +84,7 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KW
     setInitialSize( QSize(500, 400) );
 }
 
-void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei, bool floating )
+void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool floating )
 {
     tab1 = addPage( i18n( "Geometry" ) );
 
@@ -238,8 +238,8 @@ void KWTableDia::readTableStyles()
 void KWTableDia::slotOk()
 {
     canvas->createTable( nRows->value(), nCols->value(),
-                         (KWTblCellSize)cWid->currentItem(),
-                         (KWTblCellSize)cHei->currentItem(),
+                         cWid->currentItem(),
+                         cHei->currentItem(),
                          cbIsFloating->isChecked() );
     KDialogBase::slotOk();
 }

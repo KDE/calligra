@@ -26,7 +26,7 @@
 #include "kwtextparag.h" // for KWParagLayout
 #include "kwtextdocument.h"
 class KWStyle;
-class KWDrag;
+class KWTextDrag;
 class KWDocument;
 class KWTextFormat;
 class KWViewMode;
@@ -50,7 +50,7 @@ public:
     // destructor
     ~KWTextFrameSet();
 
-    virtual FrameType getFrameType() { return FT_TEXT; }
+    virtual FrameSetType type() { return FT_TEXT; }
 
     KWTextDocument *textDocument() const { return textdoc; }
 
@@ -88,7 +88,7 @@ public:
     // @param nPointBottom the max the view looks at, in normal coordinates
     void updateViewArea( QWidget * w, const QPoint & nPointBottom );
 
-    virtual void save( QDomElement &parentElem );
+    virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes );
 
     virtual void zoom();
@@ -416,7 +416,7 @@ protected:
     void placeCursor( const QPoint &pos /* in internal coordinates */ );
     QTextCursor selectWordUnderCursor();
     void selectAll( bool select ) { textFrameSet()->selectAll( select ); }
-    KWDrag * newDrag( QWidget * parent ) const;
+    KWTextDrag * newDrag( QWidget * parent ) const;
 
 private slots:
     void blinkCursor();

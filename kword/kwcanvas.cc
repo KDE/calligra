@@ -27,12 +27,12 @@
 #include "kwviewmode.h"
 #include "kwtextdocument.h"
 #include "kwanchor.h"
+#include "kwdrag.h"
 #include "framedia.h"
 #include "kwcommand.h"
 
 #include <qtimer.h>
 #include <qclipboard.h>
-#include <qdragobject.h>
 #include <qprogressdialog.h>
 #include <qobjectlist.h>
 
@@ -54,8 +54,8 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     // Default table parameters.
     m_table.rows = 3;
     m_table.cols = 2;
-    m_table.width = TblAuto;
-    m_table.height = TblAuto;
+    m_table.width = KWTableFrameSet::TblAuto;
+    m_table.height = KWTableFrameSet::TblAuto;
     m_table.floating = true;
 
     curTable = 0L;
@@ -495,7 +495,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 {
                     KWFrame *frame = m_doc->getFirstSelectedFrame();
                     // if a header/footer etc. Dont show the popup.
-                    if((frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY))
+                    if((frame->getFrameSet() && frame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY))
                     {
                         m_mousePressed = false;
                         return;
@@ -525,7 +525,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 
 // Called by KWTableDia
 void KWCanvas::createTable( unsigned int rows, unsigned int cols,
-                            KWTblCellSize wid, KWTblCellSize hei,
+                            int wid, int hei,
                             bool isFloating )
 {
     // Remember for next time in any case
@@ -757,7 +757,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         KWFrameSet *frameset = framesetIt.current();
         // Can't move main frameset of a WP document
         if ( m_doc->processingType() == KWDocument::WP && bFirst ||
-             frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() != FI_BODY )
+             frameset->type() == FT_TEXT && frameset->frameSetInfo() != KWFrameSet::FI_BODY )
             continue;
         // Can't move frame of floating frameset
         if ( frameset->isFloating() ) continue;
@@ -768,7 +768,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         {
             KWFrame *frame = frameIt.current();
             if ( frame->isSelected() ) {
-                if ( frameset->getFrameType() == FT_TABLE ) {
+                if ( frameset->type() == FT_TABLE ) {
                     if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
                         tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
                 } else {
@@ -1098,14 +1098,14 @@ KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to creat
     for ( unsigned int i = 0; i < m_table.rows; i++ ) {
         for ( unsigned int j = 0; j < m_table.cols; j++ ) {
             KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j, QString::null /*automatic name*/ );
-            KWFrame *frame = new KWFrame(cell, 0, 0, 0, 0, RA_NO ); // pos and size will be set in setBoundingRect
+            KWFrame *frame = new KWFrame(cell, 0, 0, 0, 0, KWFrame::RA_NO ); // pos and size will be set in setBoundingRect
             cell->addFrame( frame, false );
-            frame->setFrameBehaviour(AutoExtendFrame);
-            frame->setNewFrameBehaviour(NoFollowup);
+            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            frame->setNewFrameBehaviour(KWFrame::NoFollowup);
         }
     }
-    table->setHeightMode( m_table.height );
-    table->setWidthMode( m_table.width );
+    table->setHeightMode( static_cast<KWTableFrameSet::CellSize>( m_table.height ) );
+    table->setWidthMode( static_cast<KWTableFrameSet::CellSize>( m_table.width ) );
     table->setBoundingRect( m_insRect );
     return table;
 }
@@ -1561,12 +1561,63 @@ void KWCanvas::selectFrame( KWFrame * frame, bool select )
         frame->setSelected( select );
 }
 
+void KWCanvas::copySelectedFrames()
+{
+    QDomDocument domDoc( "SELECTION" );
+    QDomElement topElem = domDoc.createElement( "SELECTION" );
+    domDoc.appendChild( topElem );
+    bool foundOne = false;
+
+    // We really need a selected-frames-list !
+    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet * fs = fit.current();
+        QListIterator<KWFrame> frameIt = fs->frameIterator();
+        KWFrame * firstFrame = frameIt.current();
+        for ( ; frameIt.current(); ++frameIt )
+        {
+            KWFrame * frame = frameIt.current();
+            if ( frame->isSelected() )
+            {
+                // Two cases to be distinguished here
+                // If it's the first frame of a frameset, then copy the frameset (with that frame)
+                // Otherwise copy only the frame information
+                QDomElement parentElem = topElem;
+                if ( frame == firstFrame )
+                {
+                    fs->save( parentElem, false );
+                    parentElem = parentElem.namedItem( "FRAMESET" ).toElement(); // Save the frame inside the frameset
+                }
+                // Save the frame information
+                QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
+                parentElem.appendChild( frameElem );
+                frame->save( frameElem );
+                if ( frame != firstFrame )
+                {
+                    // Frame saved alone -> remember which frameset it's part of
+                    frameElem.setAttribute( "parentFrameset", fs->getName() );
+                }
+                foundOne = true;
+            }
+        }
+    }
+
+    if ( !foundOne )
+        return;
+
+    KWDrag *kd = new KWDrag( 0L );
+    kd->setKWord( domDoc.toCString() );
+    kdDebug(32001) << "KWCanvas::copySelectedFrames: " << domDoc.toCString() << endl;
+    QApplication::clipboard()->setData( kd );
+}
+
 KWTableFrameSet *KWCanvas::getTable()
 {
     if( !m_currentFrameSetEdit)
         return 0L;
 
-    if(m_currentFrameSetEdit->frameSet()->getFrameType() == FT_TABLE)
+    if(m_currentFrameSetEdit->frameSet()->type() == FT_TABLE)
         return static_cast<KWTableFrameSet *> (m_currentFrameSetEdit->frameSet());
 
     return 0L;

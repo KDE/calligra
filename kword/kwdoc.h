@@ -483,7 +483,7 @@ public:
 
     void clearUndoRedoInfos();
 
-    void refreshDocStructure(FrameType);
+    void refreshDocStructure(FrameSetType);
     void refreshDocStructure(int);
 
     void renameButtonTOC(const QString & _name);

@@ -64,6 +64,13 @@ class QSize;
 class KWFrame : public KoRect
 {
 public:
+    /** Runaround types
+     * RA_NO = No run around, all text is just printed.
+     * RA_BOUNDINGRECT = run around the square of this frame.
+     * RA_SKIP = stop running text on the whole horizontal space this frame occupies.
+     */
+    enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
+
     /**
      * Constructor
      * @param fs parent frameset
@@ -87,25 +94,34 @@ public:
 
     QCursor getMouseCursor( const KoPoint& docPoint, bool table, QCursor defaultCursor );
 
-    double getRunAroundGap() { return runAroundGap; }
-    void setRunAroundGap( double gap ) { runAroundGap = gap; }
+    double runAroundGap() { return m_runAroundGap; }
+    void setRunAroundGap( double gap ) { m_runAroundGap = gap; }
 
-    void setRunAround( RunAround _ra ) { runAround = _ra; }
-    RunAround getRunAround() { return runAround; }
+    RunAround runAround() { return m_runAround; }
+    void setRunAround( RunAround _ra ) { m_runAround = _ra; }
 
-    /* What happens when the [text] frame is full (autoextend, create new frame, ignore) */
+
+    /** what should happen when the frame is full */
+    enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
+
     FrameBehaviour getFrameBehaviour() { return frameBehaviour; }
     void setFrameBehaviour( FrameBehaviour fb ) { frameBehaviour = fb; }
 
     /* Frame duplication properties */
+
+    /** This frame will only be copied to:
+     *   AnySide, OddSide or EvenSide
+     */
+    enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
     SheetSide getSheetSide() { return sheetSide; }
     void setSheetSide( SheetSide ss ) { sheetSide = ss; }
 
-    /* What happens on new page (reconnect, nofollowup, copy) */
+    /** What happens on new page (create a new frame and reconnect, no followup, make copy) */
+    enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
     NewFrameBehaviour getNewFrameBehaviour() { return newFrameBehaviour; }
     void setNewFrameBehaviour( NewFrameBehaviour nfb ) { newFrameBehaviour = nfb; }
 
-    /* Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset */
+    /** Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset */
     bool isCopy() { return m_bCopy; }
     void setCopy( bool copy ) { m_bCopy = copy; }
 
@@ -171,12 +187,17 @@ public:
     /** returns a copy of self */
     KWFrame *getCopy();
 
+    /** create XML to describe yourself */
+    void save( QDomElement &frameElem );
+    /** read attributes from XML. @p headerOrFooter if true some defaults are different */
+    void load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion );
+
 private:
     SheetSide sheetSide;
-    RunAround runAround;
+    RunAround m_runAround;
     FrameBehaviour frameBehaviour;
     NewFrameBehaviour newFrameBehaviour;
-    double runAroundGap;
+    double m_runAroundGap;
     double bleft, bright, btop, bbottom; // margins
 
     bool m_bCopy;
@@ -276,9 +297,23 @@ public:
     // destructor
     virtual ~KWFrameSet();
 
-    virtual FrameType getFrameType() { return FT_BASE; }
-    FrameInfo getFrameInfo() { return frameInfo; }
-    void setFrameInfo( FrameInfo fi ) { frameInfo = fi; }
+    virtual FrameSetType type() { return FT_BASE; }
+
+    /** The different types of textFramesets (that TEXT is important here!)
+     * FI_BODY = normal text frames.<br>
+     * FI_FIRST_HEADER = Header on page 1<br>
+     * FI_ODD_HEADER = header on any odd page (can be including page 1)<br>
+     * FI_EVEN_HEADER = header on any even page<br>
+     * FI_FIRST_FOOTER = footer on page 1<br>
+     * FI_ODD_FOOTER = footer on any odd page (can be including page 1)<br>
+     * FI_EVEN_FOOTER = footer on any even page<br>
+     * FI_FOOTNOTE = a footnote frame.
+     */
+    enum Info { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3,
+                FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
+                FI_FOOTNOTE = 7 };
+    Info frameSetInfo() { return m_info; }
+    void setFrameSetInfo( Info fi ) { m_info = fi; }
 
     bool isAHeader() const;
     bool isAFooter() const;
@@ -381,7 +416,7 @@ public:
     virtual bool getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor, bool canMove );
 
     /** create XML to describe yourself */
-    virtual void save( QDomElement &parentElem );
+    virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes );
 
     /** returns page number of the numbered frame */
@@ -501,7 +536,7 @@ protected:
     };
     QValueList<FrameOnTop> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
 
-    FrameInfo frameInfo;
+    Info m_info;
     int m_current; // used for headers and footers, not too sure what it means
     KWTableFrameSet *grpMgr;
     bool removeableHeader, visible;
@@ -519,7 +554,7 @@ public:
     KWPictureFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWPictureFrameSet();
 
-    virtual FrameType getFrameType() { return FT_PICTURE; }
+    virtual FrameSetType type() { return FT_PICTURE; }
 
     void setImage( const KWImage &image ) { m_image = image; }
     KWImage image() const { return m_image; }
@@ -529,7 +564,7 @@ public:
     void setFileName( const QString &_filename, const QSize &_imgSize );
     void setSize( QSize _imgSize );
 
-    virtual void save( QDomElement &parentElem );
+    virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes );
 
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect & crect,
@@ -551,7 +586,7 @@ public:
     KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name );
     virtual ~KWPartFrameSet();
 
-    virtual FrameType getFrameType() { return FT_PART; }
+    virtual FrameSetType type() { return FT_PART; }
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
 
@@ -563,7 +598,7 @@ public:
                             QColorGroup &, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit = 0L );
 
-    virtual void save( QDomElement &parentElem );
+    virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes );
 
 protected slots:
@@ -602,7 +637,7 @@ public:
     KWFormulaFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWFormulaFrameSet();
 
-    virtual FrameType getFrameType() { return FT_FORMULA; }
+    virtual FrameSetType type() { return FT_FORMULA; }
 
     virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);
 
@@ -615,7 +650,7 @@ public:
 
     virtual void updateFrames();
 
-    virtual void save( QDomElement &parentElem );
+    virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes );
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */

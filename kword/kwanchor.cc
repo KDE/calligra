@@ -148,5 +148,5 @@ bool KWAnchor::ownLine() const
 {
     return false;
     //commented out, since it prevents multiple tables on the same line, alignment etc.
-    //return m_frameset->getFrameType() == FT_TABLE;
+    //return m_frameset->type() == FT_TABLE;
 }

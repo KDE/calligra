@@ -34,35 +34,36 @@
 #include <qtl.h>
 
 
-#include "kwview.h"
-#include "kwviewmode.h"
-#include "kwtextframeset.h"
-#include "kwtableframeset.h"
-#include "kwdoc.h"
-#include "kwframe.h"
-#include "kwstyle.h"
-#include "kwformat.h"
+#include "autoformatdia.h"
+#include "counter.h"
 #include "defs.h"
-#include "paragdia.h"
-#include "searchdia.h"
-#include "stylist.h"
-#include "tabledia.h"
-#include "insdia.h"
 #include "deldia.h"
 #include "docstruct.h"
-#include "variable.h"
-#include "footnotedia.h"
-#include "autoformatdia.h"
-#include "variabledlgs.h"
-#include "serialletter.h"
-#include "kwconfig.h"
-#include "kcharselectdia.h"
-#include "kwcommand.h"
 #include "fontdia.h"
-#include "counter.h"
+#include "footnotedia.h"
+#include "insdia.h"
+#include "kcharselectdia.h"
 #include "kwchangecasedia.h"
+#include "kwcommand.h"
+#include "kwconfig.h"
+#include "kwdoc.h"
+#include "kwdrag.h"
 #include "kweditpersonnalexpressiondia.h"
+#include "kwformat.h"
+#include "kwframe.h"
+#include "kwstyle.h"
+#include "kwtableframeset.h"
+#include "kwtextframeset.h"
+#include "kwview.h"
+#include "kwviewmode.h"
+#include "paragdia.h"
+#include "searchdia.h"
+#include "serialletter.h"
 #include "splitcellsdia.h"
+#include "stylist.h"
+#include "tabledia.h"
+#include "variable.h"
+#include "variabledlgs.h"
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -716,7 +717,7 @@ void KWView::fileStatistics()
     {
         KWFrameSet *frameSet = framesetIt.current();
         // Exclude headers and footers
-        if ( frameSet->getFrameInfo() == FI_BODY && frameSet->isVisible() )
+        if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() )
         {
             frameSet->statistics( charsWithSpace, charsWithoutSpace, words, sentences );
         }
@@ -848,7 +849,8 @@ void KWView::clipboardDataChanged()
     }
     // Is there kword XML in the clipboard ?
     QMimeSource *data = QApplication::clipboard()->data();
-    actionEditPaste->setEnabled( data->provides( MIME_TYPE ) );
+    actionEditPaste->setEnabled( KWTextDrag::canDecode( data )
+                                 || KWDrag::canDecode( data ) );
 
 }
 
@@ -884,7 +886,7 @@ void KWView::print( KPrinter &prt )
     bool doZoom = true;
     QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() && doZoom ; ++fit )
-        if ( fit.current()->getFrameType() == FT_PART )
+        if ( fit.current()->type() == FT_PART )
             doZoom = false;
 
     int oldZoom = m_doc->zoom();
@@ -1092,7 +1094,7 @@ void KWView::updateReadWrite( bool readwrite )
         for (; aIt != aEnd; ++aIt )
             (*aIt)->setEnabled( readwrite );
         // A few harmless actions
-        actionEditCopy->setEnabled( true );
+        //actionEditCopy->setEnabled( true ); // depends on selection
         actionViewFormattingChars->setEnabled( true );
         actionViewFrameBorders->setEnabled( true );
         actionViewHeader->setEnabled( true );
@@ -1167,6 +1169,10 @@ void KWView::editCopy()
     KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         edit->copy();
+    else
+    {
+        m_gui->canvasWidget()->copySelectedFrames();
+    }
 }
 
 void KWView::editPaste()
@@ -1237,7 +1243,7 @@ void KWView::editDeleteFrame()
         return;
     }
 
-    if ( fs->getNumFrames() == 1 && fs->getFrameType() == FT_TEXT) {
+    if ( fs->getNumFrames() == 1 && fs->type() == FT_TEXT) {
         if ( m_doc->processingType() == KWDocument::WP && m_doc->getFrameSetNum( fs ) == 0 )
             return;
 
@@ -2591,14 +2597,14 @@ void KWView::updatePopupMenuChangeAction()
     // Warning, frame can be 0L !
 
     // if a header/footer etc. Dont show the popup.
-    if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY)
+    if(frame && frame->getFrameSet() && frame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY)
         return;
     int nbFrame=m_doc->getSelectedFrames().count();
     // enable delete
     actionEditDelFrame->setEnabled(true && nbFrame==1);
 
     // if text frame,
-    if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
+    if(frame && frame->getFrameSet() && frame->getFrameSet()->type() == FT_TEXT)
         {
             // if frameset 0 disable delete
             if(m_doc->processingType()  == KWDocument::WP && frame->getFrameSet() == m_doc->getFrameSet(0))
@@ -2639,7 +2645,7 @@ void KWView::spellCheckerReady()
 {
     for ( unsigned int i = m_spellCurrFrameSetNum + 1; i < m_doc->getNumFrameSets(); i++ ) {
         KWFrameSet *frameset = m_doc->getFrameSet( i );
-        if ( !frameset->isVisible() || frameset->getFrameType() != FT_TEXT )
+        if ( !frameset->isVisible() || frameset->type() != FT_TEXT )
             continue;
         m_spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
         //kdDebug() << "KWView::spellCheckerReady spell-checking frameset " << m_spellCurrFrameSetNum << endl;
@@ -2834,6 +2840,10 @@ void KWView::frameSelectedChanged()
         actionEditDelFrame->setEnabled( false );
 
     actionBackgroundColor->setEnabled( nbFrame >= 1 );
+    bool rw = koDocument()->isReadWrite();
+    // TODO actionEditCut->setEnabled( rw && nbFrame >= 1 );
+    actionEditCopy->setEnabled( nbFrame >= 1 );
+
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     actionTableJoinCells->setEnabled( table && (nbFrame>1));

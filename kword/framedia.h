@@ -44,7 +44,7 @@ class KWFrameDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KWFrameDia( QWidget *parent, KWFrame *_frame,KWDocument *_doc,FrameType _ft);
+    KWFrameDia( QWidget *parent, KWFrame *_frame,KWDocument *_doc,FrameSetType _ft);
     KWFrameDia( QWidget *parent, KWFrame *_frame);
     //KWFrameDia( QWidget *parent, KWCanvas *_canvas);
 
@@ -95,12 +95,12 @@ protected:
 
     KWFrame *frame;
     KWDocument *doc;
-    FrameType frameType;
+    FrameSetType frameType;
     bool frameSetFloating;
 
     double oldX, oldY, oldW, oldH;
 
-    FrameBehaviour frameBehaviour;
+    int /*FrameBehaviour*/ frameBehaviour;
     KWUnit::Unit frameUnits;
     QString oldFrameSetName;
 

@@ -615,7 +615,7 @@ void KWFrameMoveCommand::execute()
         if(frame->isSelected())
             frame->updateResizeHandles();
 
-        needRelayout = needRelayout || ( frame->getRunAround() != RA_NO );
+        needRelayout = needRelayout || ( frame->runAround() != KWFrame::RA_NO );
     }
     if ( doc )
     {
@@ -647,7 +647,7 @@ void KWFrameMoveCommand::unexecute()
 
         if(frame->isSelected())
             frame->updateResizeHandles();
-        needRelayout = needRelayout || ( frame->getRunAround() != RA_NO );
+        needRelayout = needRelayout || ( frame->runAround() != KWFrame::RA_NO );
     }
 
     if ( doc )
@@ -748,7 +748,7 @@ void KWDeleteFrameCommand::execute()
     //when you delete a frame frame pointer is deleted
     //so used frameChanged with a null pointer.
     frameSet->kWordDocument()->frameChanged( 0L );
-    frameSet->kWordDocument()->refreshDocStructure( frameSet->getFrameType() );
+    frameSet->kWordDocument()->refreshDocStructure( frameSet->type() );
 }
 
 void KWDeleteFrameCommand::unexecute()
@@ -763,7 +763,7 @@ void KWDeleteFrameCommand::unexecute()
         textfs->formatMore();
 
     frameSet->kWordDocument()->frameChanged( frame );
-    frameSet->kWordDocument()->refreshDocStructure(frameSet->getFrameType());
+    frameSet->kWordDocument()->refreshDocStructure(frameSet->type());
 }
 
 KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWFrame * frame ) :

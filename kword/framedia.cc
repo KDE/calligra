@@ -78,9 +78,9 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     KWFrameSet * fs = frame->getFrameSet();
     KWTableFrameSet *table = fs->getGroupManager();
     if(table)
-        frameType = table->getFrameType();
+        frameType = table->type();
     else
-        frameType = frame->getFrameSet() ? frame->getFrameSet()->getFrameType() : (FrameType) -1;
+        frameType = frame->getFrameSet() ? frame->getFrameSet()->type() : (FrameSetType) -1;
     // parentFs is the table in case of a table, fs otherwise
     KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
     frameSetFloating = parentFs->isFloating();
@@ -89,7 +89,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
 }
 
 /* Contructor when the dialog is used on creation of frame */
-KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, FrameType _ft )
+KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, FrameSetType _ft )
     : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frameType=_ft;
@@ -217,9 +217,9 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
         eofGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
 
-        if(frame->getFrameBehaviour() == AutoExtendFrame) {
+        if(frame->getFrameBehaviour() == KWFrame::AutoExtendFrame) {
             rResizeFrame->setChecked(true);
-        } else if (frame->getFrameBehaviour() == AutoCreateNewFrame) {
+        } else if (frame->getFrameBehaviour() == KWFrame::AutoCreateNewFrame) {
             rAppendFrame->setChecked(true);
         } else {
             rNoShow->setChecked(true);
@@ -263,9 +263,9 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     grp2->insert( noFollowup );
     grp2->insert( copyRadio );
     grid1->addRowSpacing( row, onNewPage->height());
-    if(frame->getNewFrameBehaviour() == Reconnect) {
+    if(frame->getNewFrameBehaviour() == KWFrame::Reconnect) {
         reconnect->setChecked(true);
-    } else if(frame->getNewFrameBehaviour() == NoFollowup) {
+    } else if(frame->getNewFrameBehaviour() == KWFrame::NoFollowup) {
         noFollowup->setChecked(true);
     } else {
         copyRadio->setChecked(true);
@@ -383,33 +383,33 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
 
     eRGap->setEnabled( false ); // ### not implemented currently
 
-    RunAround ra = RA_NO;
+    KWFrame::RunAround ra = KWFrame::RA_NO;
     if ( frame )
-        ra = frame->getRunAround();
+        ra = frame->runAround();
     else
     {
         KWFrame *firstFrame = doc->getFirstSelectedFrame();
         if ( firstFrame )
-            ra = firstFrame->getRunAround();
+            ra = firstFrame->runAround();
     }
 
     switch ( ra ) {
-    case RA_NO: rRunNo->setChecked( true );
+    case KWFrame::RA_NO: rRunNo->setChecked( true );
         break;
-    case RA_BOUNDINGRECT: rRunBounding->setChecked( true );
+    case KWFrame::RA_BOUNDINGRECT: rRunBounding->setChecked( true );
         break;
-    case RA_SKIP: rRunContur->setChecked( true );
+    case KWFrame::RA_SKIP: rRunContur->setChecked( true );
         break;
     }
 
     double ragap = 0;
     if ( frame )
-        ragap = frame->getRunAroundGap();
+        ragap = frame->runAroundGap();
     else
     {
         KWFrame *firstFrame = doc->getFirstSelectedFrame();
         if ( firstFrame )
-            ragap = firstFrame->getRunAroundGap();
+            ragap = firstFrame->runAroundGap();
     }
 
     QString str;
@@ -449,8 +449,8 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
         KWFrameSet * fs = doc->getFrameSet( i );
         if ( i == 0 && doc->processingType() == KWDocument::WP )
             continue;
-        if ( fs->getFrameType() != FT_TEXT ||
-             static_cast<KWTextFrameSet*>( fs )->getFrameInfo() != FI_BODY )
+        if ( fs->type() != FT_TEXT ||
+             static_cast<KWTextFrameSet*>( fs )->frameSetInfo() != KWFrameSet::FI_BODY )
             continue;
         if ( fs->getGroupManager() )
             continue;
@@ -745,9 +745,9 @@ void KWFrameDia::runConturClicked()
 
 void KWFrameDia::setFrameBehaviourInputOn() {
     if(rResizeFrame && !rResizeFrame->isEnabled()) {
-        if(frameBehaviour== AutoExtendFrame) {
+        if(frameBehaviour== KWFrame::AutoExtendFrame) {
             rResizeFrame->setChecked(true);
-        } else if (frameBehaviour== AutoCreateNewFrame) {
+        } else if (frameBehaviour== KWFrame::AutoCreateNewFrame) {
             rAppendFrame->setChecked(true);
         } else {
             rNoShow->setChecked(true);
@@ -761,11 +761,11 @@ void KWFrameDia::setFrameBehaviourInputOn() {
 void KWFrameDia::setFrameBehaviourInputOff() {
     if(rResizeFrame && rResizeFrame->isEnabled()) {
         if(rResizeFrame->isChecked()) {
-            frameBehaviour=AutoExtendFrame;
+            frameBehaviour=KWFrame::AutoExtendFrame;
         } else if ( rAppendFrame->isChecked()) {
-            frameBehaviour=AutoCreateNewFrame;
+            frameBehaviour=KWFrame::AutoCreateNewFrame;
         } else {
-            frameBehaviour=Ignore;
+            frameBehaviour=KWFrame::Ignore;
         }
         rNoShow->setChecked(true);
         rResizeFrame->setEnabled(false);
@@ -801,20 +801,20 @@ bool KWFrameDia::applyChanges()
         if ( frameType == FT_TEXT )
         {
             if(rResizeFrame->isChecked())
-                frame->setFrameBehaviour(AutoExtendFrame);
+                frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
             else if ( rAppendFrame->isChecked())
-                frame->setFrameBehaviour(AutoCreateNewFrame);
+                frame->setFrameBehaviour(KWFrame::AutoCreateNewFrame);
             else
-                frame->setFrameBehaviour(Ignore);
+                frame->setFrameBehaviour(KWFrame::Ignore);
         }
 
         // NewFrameBehaviour
         if( reconnect && reconnect->isChecked() )
-            frame->setNewFrameBehaviour(Reconnect);
+            frame->setNewFrameBehaviour(KWFrame::Reconnect);
         else if ( noFollowup->isChecked() )
-            frame->setNewFrameBehaviour(NoFollowup);
+            frame->setNewFrameBehaviour(KWFrame::NoFollowup);
         else
-            frame->setNewFrameBehaviour(Copy);
+            frame->setNewFrameBehaviour(KWFrame::Copy);
     }
 
     if ( tab3 )
@@ -868,7 +868,7 @@ bool KWFrameDia::applyChanges()
             if ( fs->getNumFrames() == 1 )
             {
                 kdDebug() << "KWFrameDia::applyChanges " << fs->getName() << " has only one frame" << endl;
-                ASSERT( fs->getFrameType() == FT_TEXT );
+                ASSERT( fs->type() == FT_TEXT );
                 KWTextFrameSet * textfs = static_cast<KWTextFrameSet*>( fs );
                 QTextParag * parag = textfs->textDocument()->firstParag();
                 bool isEmpty = parag->next() == 0L && parag->length() == 1;
@@ -924,11 +924,11 @@ bool KWFrameDia::applyChanges()
     {
         // Run around
         if ( rRunNo->isChecked() )
-            frame->setRunAround( RA_NO );
+            frame->setRunAround( KWFrame::RA_NO );
         else if ( rRunBounding->isChecked() )
-            frame->setRunAround( RA_BOUNDINGRECT );
+            frame->setRunAround( KWFrame::RA_BOUNDINGRECT );
         else if ( rRunContur->isChecked() )
-            frame->setRunAround( RA_SKIP );
+            frame->setRunAround( KWFrame::RA_SKIP );
 
         frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
     }

@@ -389,43 +389,43 @@ void KWDocument::recalcFrames()
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * fs = fit.current();
-        switch ( fs->getFrameInfo() ) {
-            case FI_FIRST_HEADER:
+        switch ( fs->frameSetInfo() ) {
+            case KWFrameSet::FI_FIRST_HEADER:
                 if ( isHeaderVisible() ) {
                     firstHeader = dynamic_cast<KWTextFrameSet*>( fs );
                     firstHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                        fs->getFrame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
-            case FI_EVEN_HEADER:
+            case KWFrameSet::FI_EVEN_HEADER:
                 if ( isHeaderVisible() ) {
                     evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
                     evenHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                       fs->getFrame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
-            case FI_ODD_HEADER:
+            case KWFrameSet::FI_ODD_HEADER:
                 if ( isHeaderVisible() ) {
                     oddHeader = dynamic_cast<KWTextFrameSet*>( fs );
                     oddHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                      fs->getFrame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
-            case FI_FIRST_FOOTER:
+            case KWFrameSet::FI_FIRST_FOOTER:
                 if ( isFooterVisible() ) {
                     firstFooter = dynamic_cast<KWTextFrameSet*>( fs );
                     firstFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                        fs->getFrame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
-            case FI_EVEN_FOOTER:
+            case KWFrameSet::FI_EVEN_FOOTER:
                 if ( isFooterVisible() ) {
                     evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
                     evenFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                       fs->getFrame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
-            case FI_ODD_FOOTER:
+            case KWFrameSet::FI_ODD_FOOTER:
                 if ( isFooterVisible() ) {
                     oddFooter = dynamic_cast<KWTextFrameSet*>( fs );
                     oddFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
@@ -593,8 +593,8 @@ void KWDocument::recalcFrames()
                     KWFrame *frame = new KWFrame( evenHeader,ptLeftBorder(), l * ptPaperHeight() + ptTopBorder(),
                                                   ptPaperWidth() - ptLeftBorder() -
                                                   ptRightBorder(), h );
-                    frame->setFrameBehaviour( AutoExtendFrame );
-                    frame->setNewFrameBehaviour( Copy );
+                    frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                    frame->setNewFrameBehaviour( KWFrame::Copy );
                     frame->setCopy( true );
                     evenHeader->addFrame( frame );
                 }
@@ -630,8 +630,8 @@ void KWDocument::recalcFrames()
                                                       ptTopBorder(),
                                                       ptPaperWidth() - ptLeftBorder() -
                                                       ptRightBorder(), h2 );
-                        frame->setFrameBehaviour( AutoExtendFrame );
-                        frame->setNewFrameBehaviour( Copy );
+                        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                        frame->setNewFrameBehaviour( KWFrame::Copy );
                         frame->setCopy( true );
                         oddHeader->addFrame( frame );
                     }
@@ -653,8 +653,8 @@ void KWDocument::recalcFrames()
                                                       ptTopBorder(),
                                                       ptPaperWidth() - ptLeftBorder() -
                                                       ptRightBorder(), h1 );
-                        frame->setFrameBehaviour( AutoExtendFrame );
-                        frame->setNewFrameBehaviour( Copy );
+                        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                        frame->setNewFrameBehaviour( KWFrame::Copy );
                         frame->setCopy( true );
                         evenHeader->addFrame( frame );
                     }
@@ -702,8 +702,8 @@ void KWDocument::recalcFrames()
                     KWFrame *frame = new KWFrame( evenHeader, ptLeftBorder(), l * ptPaperHeight() + ptTopBorder(),
                                                   ptPaperWidth() - ptLeftBorder() -
                                                   ptRightBorder(), h );
-                    frame->setFrameBehaviour( AutoExtendFrame );
-                    frame->setNewFrameBehaviour( Copy );
+                    frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                    frame->setNewFrameBehaviour( KWFrame::Copy );
                     frame->setCopy( true );
                     evenHeader->addFrame( frame );
                 }
@@ -738,8 +738,8 @@ void KWDocument::recalcFrames()
                                                   ptBottomBorder() - h,
                                                   ptPaperWidth() - ptLeftBorder() -
                                                   ptRightBorder(), h );
-                    frame->setFrameBehaviour( AutoExtendFrame );
-                    frame->setNewFrameBehaviour( Copy );
+                    frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                    frame->setNewFrameBehaviour( KWFrame::Copy );
                     frame->setCopy( true );
                     evenFooter->addFrame( frame );
                 }
@@ -774,8 +774,8 @@ void KWDocument::recalcFrames()
                                                       ptBottomBorder() - h2,
                                                       ptPaperWidth() - ptLeftBorder() -
                                                       ptRightBorder(), h2 );
-                        frame->setFrameBehaviour( AutoExtendFrame );
-                        frame->setNewFrameBehaviour( Copy );
+                        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                        frame->setNewFrameBehaviour( KWFrame::Copy );
                         frame->setCopy( true );
                         oddFooter->addFrame( frame );
                     }
@@ -797,8 +797,8 @@ void KWDocument::recalcFrames()
                                                       ptBottomBorder() - h1,
                                                       ptPaperWidth() - ptLeftBorder() -
                                                       ptRightBorder(), h1 );
-                        frame->setFrameBehaviour( AutoExtendFrame );
-                        frame->setNewFrameBehaviour( Copy );
+                        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                        frame->setNewFrameBehaviour( KWFrame::Copy );
                         frame->setCopy( true );
                         evenFooter->addFrame( frame );
                     }
@@ -842,8 +842,8 @@ void KWDocument::recalcFrames()
                                                   ptBottomBorder() - h,
                                                   ptPaperWidth() - ptLeftBorder() -
                                                   ptRightBorder(), h );
-                    frame->setFrameBehaviour( AutoExtendFrame );
-                    frame->setNewFrameBehaviour( Copy );
+                    frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+                    frame->setNewFrameBehaviour( KWFrame::Copy );
                     frame->setCopy( true );
                     evenFooter->addFrame( frame );
                 }
@@ -1141,14 +1141,14 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
-        switch( fit.current()->getFrameInfo() ) {
-        case FI_FIRST_HEADER: _first_header = TRUE; break;
-        case FI_EVEN_HEADER: _odd_header = TRUE; break;
-        case FI_ODD_HEADER: _even_header = TRUE; break;
-        case FI_FIRST_FOOTER: _first_footer = TRUE; break;
-        case FI_EVEN_FOOTER: _odd_footer = TRUE; break;
-        case FI_ODD_FOOTER: _even_footer = TRUE; break;
-        case FI_FOOTNOTE: _footnotes = TRUE; break;
+        switch( fit.current()->frameSetInfo() ) {
+        case KWFrameSet::FI_FIRST_HEADER: _first_header = TRUE; break;
+        case KWFrameSet::FI_EVEN_HEADER: _odd_header = TRUE; break;
+        case KWFrameSet::FI_ODD_HEADER: _even_header = TRUE; break;
+        case KWFrameSet::FI_FIRST_FOOTER: _first_footer = TRUE; break;
+        case KWFrameSet::FI_EVEN_FOOTER: _odd_footer = TRUE; break;
+        case KWFrameSet::FI_ODD_FOOTER: _even_footer = TRUE; break;
+        case KWFrameSet::FI_FOOTNOTE: _footnotes = TRUE; break;
         default: break;
         }
     }
@@ -1158,83 +1158,83 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     if ( !_first_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Header" ) );
         kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
-        fs->setFrameInfo( FI_FIRST_HEADER );
+        fs->setFrameSetInfo( KWFrameSet::FI_FIRST_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
         kdDebug(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
-        frame->setFrameBehaviour( AutoExtendFrame );
-        frame->setNewFrameBehaviour( Copy );
+        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setNewFrameBehaviour( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
 
     if ( !_even_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Header" ) );
-        fs->setFrameInfo( FI_EVEN_HEADER );
+        fs->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-        frame->setFrameBehaviour( AutoExtendFrame );
-        frame->setNewFrameBehaviour( Copy );
+        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setNewFrameBehaviour( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
 
     if ( !_odd_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Header" ) );
-        fs->setFrameInfo( FI_ODD_HEADER );
+        fs->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-        frame->setFrameBehaviour( AutoExtendFrame );
-        frame->setNewFrameBehaviour( Copy );
+        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setNewFrameBehaviour( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
 
     if ( !_first_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Footer" ) );
-        fs->setFrameInfo( FI_FIRST_FOOTER );
+        fs->setFrameSetInfo( KWFrameSet::FI_FIRST_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour( AutoExtendFrame );
-        frame->setNewFrameBehaviour( Copy );
+        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setNewFrameBehaviour( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
 
     if ( !_even_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Footer" ) );
-        fs->setFrameInfo( FI_EVEN_FOOTER );
+        fs->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour( AutoExtendFrame );
-        frame->setNewFrameBehaviour( Copy );
+        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setNewFrameBehaviour( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
 
     if ( !_odd_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Footer" ) );
-        fs->setFrameInfo( FI_ODD_FOOTER );
+        fs->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour( AutoExtendFrame );
-        frame->setNewFrameBehaviour( Copy );
+        frame->setFrameBehaviour( KWFrame::AutoExtendFrame );
+        frame->setNewFrameBehaviour( KWFrame::Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
 
     if ( !_footnotes ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Footnotes" ) );
-        fs->setFrameInfo( FI_FOOTNOTE );
+        fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
 
         for ( int i = 0; i < m_pages; i++ ) {
             KWFrame *frame = new KWFrame(fs, ptLeftBorder(),
                 i * ptPaperHeight() + ptPaperHeight() - ptTopBorder() - 20,
                 ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-            frame->setFrameBehaviour(AutoExtendFrame);
+            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
             fs->addFrame( frame );
         }
         frames.append( fs );
@@ -1258,14 +1258,14 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         if(! getFrameSet(i)) {
             kdWarning() << "frameset " << i << " is NULL!!" << endl;
             frames.remove(i);
-        } else if( getFrameSet(i)->getFrameType()==FT_TABLE) {
+        } else if( getFrameSet(i)->type()==FT_TABLE) {
             static_cast<KWTableFrameSet *>( getFrameSet(i))->validate();
         } else if(! getFrameSet(i)->getFrame(0)) {
             kdWarning () << "frameset " << i << " has no frames" << endl;
             KWFrameSet * fs = getFrameSet(i);
             removeFrameSet(fs);
             delete fs;
-        } else if (getFrameSet(i)->getFrameType() == FT_TEXT) {
+        } else if (getFrameSet(i)->type() == FT_TEXT) {
             for (int f=getFrameSet(i)->getNumFrames()-1; f>=0; f--) {
                 if(getFrameSet(i)->getFrame(f)->height() < static_cast <int>(minFrameHeight)) {
                     kdWarning() << "frame height is so small no text will fit, adjusting (was: "
@@ -1420,16 +1420,16 @@ void KWDocument::loadFrameSets( QDomElement framesets )
     for (unsigned int item = 0; item < listFramesets.count(); item++)
     {
         QDomElement framesetElem = listFramesets.item( item ).toElement();
-        FrameType frameType;
-        FrameInfo frameInfo;
+        FrameSetType frameType;
+        KWFrameSet::Info frameInfo;
         QString tableName;
         int _row, _col, _rows, _cols;
         bool removeable;
         bool _visible;
         QString fsname;
 
-        frameType = static_cast<FrameType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
-        frameInfo = static_cast<FrameInfo>( KWDocument::getAttribute( framesetElem, "frameInfo", FI_BODY ) );
+        frameType = static_cast<FrameSetType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
+        frameInfo = static_cast<KWFrameSet::Info>( KWDocument::getAttribute( framesetElem, "frameInfo", KWFrameSet::FI_BODY ) );
         tableName = correctQString( KWDocument::getAttribute( framesetElem, "grpMgr", "" ) );
         _row = KWDocument::getAttribute( framesetElem, "row", 0 );
         _col = KWDocument::getAttribute( framesetElem, "col", 0 );
@@ -1449,7 +1449,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     for ( unsigned int i = 0; i < frames.count(); i++ ) {
                         KWFrameSet *f = frames.at(i);
                         if(! f->isVisible()) continue;
-                        if(! f->getFrameType() == FT_TABLE) continue;
+                        if(! f->type() == FT_TABLE) continue;
                         if(f->getName() == tableName) {
                             table = static_cast<KWTableFrameSet *> (f);
                             break;
@@ -1461,7 +1461,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     }
                     KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, _row, _col, fsname );
                     cell->setVisible( _visible );
-                    cell->setFrameInfo( frameInfo );
+                    cell->setFrameSetInfo( frameInfo );
                     cell->setIsRemoveableHeader( removeable );
                     cell->load( framesetElem );
                     cell->m_rows = _rows;
@@ -1471,7 +1471,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                 {
                     KWTextFrameSet *fs = new KWTextFrameSet( this, fsname );
                     fs->setVisible( _visible );
-                    fs->setFrameInfo( frameInfo );
+                    fs->setFrameSetInfo( frameInfo );
                     fs->setIsRemoveableHeader( removeable );
                     fs->load( framesetElem );
                     frames.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
@@ -1479,7 +1479,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     // Old file format had autoCreateNewFrame as a frameset attribute
                     if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
                     {
-                        FrameBehaviour behav = static_cast<FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
+                        KWFrame::FrameBehaviour behav = static_cast<KWFrame::FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
                         QListIterator<KWFrame> frameIt( fs->frameIterator() );
                         for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
                             frameIt.current()->setFrameBehaviour( behav );
@@ -1488,13 +1488,13 @@ void KWDocument::loadFrameSets( QDomElement framesets )
             } break;
             case FT_PICTURE: {
                 KWPictureFrameSet *fs = new KWPictureFrameSet( this, fsname );
-                fs->setFrameInfo( frameInfo );
+                fs->setFrameSetInfo( frameInfo );
                 fs->load( framesetElem );
                 frames.append( fs );
             } break;
             case FT_FORMULA: {
                 KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
-                fs->setFrameInfo( frameInfo );
+                fs->setFrameSetInfo( frameInfo );
                 fs->load( framesetElem );
                 frames.append( fs );
             } break;
@@ -1641,11 +1641,11 @@ QDomDocument KWDocument::saveXML()
     {
         KWFrameSet *frameSet = fit.current();
         // Save non-part framesets ( part are saved further down )
-        if ( frameSet->getFrameType() != FT_PART )
+        if ( frameSet->type() != FT_PART )
             frameSet->save( framesets );
 
         // If picture frameset, make a note of the image it needs.
-        if ( !frameSet->isDeleted() && frameSet->getFrameType() == FT_PICTURE )
+        if ( !frameSet->isDeleted() && frameSet->type() == FT_PICTURE )
         {
             QString key = static_cast<KWPictureFrameSet *>( frameSet )->key();
             if ( !saveImages.contains( key ) )
@@ -1728,7 +1728,7 @@ QDomDocument KWDocument::saveXML()
         for ( ; fit.current() ; ++fit )
         {
             KWFrameSet * fs = fit.current();
-            if ( fs->getFrameType() == FT_PART &&
+            if ( fs->type() == FT_PART &&
                  dynamic_cast<KWPartFrameSet*>( fs )->getChild() == curr )
                 fs->save( settingsElem );
         }
@@ -1752,7 +1752,7 @@ bool KWDocument::completeSaving( KoStore *_store )
     {
         KWFrameSet *frameSet = fit.current();
         // If picture frameset, make a note of the image it needs.
-        if ( !frameSet->isDeleted() && frameSet->getFrameType() == FT_PICTURE )
+        if ( !frameSet->isDeleted() && frameSet->type() == FT_PICTURE )
         {
             QString key = static_cast<KWPictureFrameSet *>( frameSet )->key();
             if ( !saveImages.contains( key ) )
@@ -2033,7 +2033,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
     {
         KWFrameSet * frameSet = fit.current();
         // don't add tables! A table cell ( frameset ) _must_ not have cells auto-added to them!
-        if ( frameSet->getFrameType() == FT_TABLE ) continue;
+        if ( frameSet->type() == FT_TABLE ) continue;
 
         //kdDebug(32002) << "KWDocument::appendPage looking at frameset " << frameSet->getName() << endl;
 
@@ -2053,10 +2053,10 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
             static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
             kdDebug(32002) << "   frame->getNewFrameBehaviour()==" << newFrameBh[frame->getNewFrameBehaviour()] << endl;*/
             if ( (frame->pageNum() == thisPageNum ||
-                  (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide) )
+                  (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != KWFrame::AnySide) )
                  &&
-                 ( ( frame->getNewFrameBehaviour()==Reconnect && frameSet->getFrameType() == FT_TEXT ) ||  // (*)
-                   ( frame->getNewFrameBehaviour()==Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) ) // (**)
+                 ( ( frame->getNewFrameBehaviour()==KWFrame::Reconnect && frameSet->type() == FT_TEXT ) ||  // (*)
+                   ( frame->getNewFrameBehaviour()==KWFrame::Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) ) // (**)
                 )
             {
                 // (*) : Reconnect only makes sense for text frames
@@ -2068,7 +2068,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
                 frm->setPageNum( frame->pageNum()+1 );
                 newFrames.append( frm );
 
-                if ( frame->getNewFrameBehaviour()==Copy )
+                if ( frame->getNewFrameBehaviour()==KWFrame::Copy )
                     frm->setCopy( true );
                 //kdDebug(32002) << "   => created frame " << frm << endl;
             }
@@ -2093,7 +2093,7 @@ bool KWDocument::canRemovePage( int num )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
-        if ( frameSet->getFrameInfo() != FI_BODY ) // if header/footer/footnote
+        if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY ) // if header/footer/footnote
             continue;
         if ( frameSet->isVisible() && !frameSet->canRemovePage( num ) )
             return false;
@@ -2109,7 +2109,7 @@ void KWDocument::removePage( int num )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
-        if ( frameSet->getFrameInfo() != FI_BODY )
+        if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY )
             continue;
         QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         QList<KWFrame> toDelete;
@@ -2261,7 +2261,7 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 {
     updateAllFrames();
     // If frame with text flowing around it -> re-layout all frames
-    if ( !frame || frame->getRunAround() != RA_NO )
+    if ( !frame || frame->runAround() != KWFrame::RA_NO )
     {
         layout();
     }
@@ -2277,7 +2277,7 @@ void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
     updateAllFrames();
     QListIterator<KWFrame> it( frames );
     for ( ; it.current() ; ++it )
-        if ( it.current()->getRunAround() != RA_NO )
+        if ( it.current()->runAround() != KWFrame::RA_NO )
         {
             layout();
             repaintAllViewsExcept( view );
@@ -2635,7 +2635,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
     frame->setSelected(false);
     QString cmdName;
     TypeStructDocItem docItem;
-    switch (fs->getFrameType() ) {
+    switch (fs->type() ) {
     case FT_TEXT:
         cmdName=i18n("Delete text frame");
         docItem=TextFrames;
@@ -2689,7 +2689,7 @@ void KWDocument::refreshDocStructure(int type)
      emit docStructureChanged(type);
 }
 
-void KWDocument::refreshDocStructure(FrameType _type)
+void KWDocument::refreshDocStructure(FrameSetType _type)
 {
     int typeItem;
     switch(_type)

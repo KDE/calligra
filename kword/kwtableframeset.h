@@ -79,7 +79,7 @@ public:
     };
     friend class Cell;
 
-    virtual FrameType getFrameType() { return FT_TABLE; }
+    virtual FrameSetType type() { return FT_TABLE; }
 
     // constructors
     KWTableFrameSet( KWDocument *_doc, const QString & name );
@@ -112,6 +112,11 @@ public:
     */
     bool isTableHeader( Cell *cell );
 
+    enum CellSize {
+        TblAuto = 0,
+        TblManual
+    };
+
     /**
      * Layout all cells:
      *
@@ -119,10 +124,10 @@ public:
      *  setBoundingRect() causes the layout to recalculated.
      *  boundingRect() returns a KoRect which outlines the whole of the table.
      */
-    KWTblCellSize heightMode() { return m_heightMode; }
-    void setHeightMode( KWTblCellSize mode );
-    KWTblCellSize widthMode() { return m_widthMode; }
-    void setWidthMode( KWTblCellSize mode );
+    CellSize heightMode() { return m_heightMode; }
+    void setHeightMode( CellSize mode );
+    CellSize widthMode() { return m_widthMode; }
+    void setWidthMode( CellSize mode );
     KoRect boundingRect();
     void setBoundingRect( KoRect rect );
 
@@ -210,7 +215,7 @@ public:
     bool contains( double mx, double my );
 
     /** override save so we save in table style.. */
-    virtual void save( QDomElement &parentElem );
+    virtual void save( QDomElement &parentElem, bool saveFrames = true );
 
     virtual void zoom();
 
@@ -243,15 +248,14 @@ protected:
 
 private:
     unsigned int m_rows, m_cols;
-    KWTblCellSize m_widthMode;
-    KWTblCellSize m_heightMode;
+    CellSize m_widthMode;
+    CellSize m_heightMode;
     bool m_showHeaderOnAllPages;
     bool m_hasTmpHeaders;
     bool m_active;
     bool m_isRendered;
     QList<Cell> m_cells;
     QValueList<int> m_pageBoundaries;
-    //KWAnchor* m_anchor;
 };
 
 /**

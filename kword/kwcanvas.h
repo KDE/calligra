@@ -92,6 +92,7 @@ public:
     void setFrameBackgroundColor( const QBrush &backColor );
 
     void editFrameProperties();
+    void copySelectedFrames();
 
     // Mouse press
     void mpEditFrame( QMouseEvent *e, const QPoint& nPoint );
@@ -123,12 +124,12 @@ public:
     // Table creation support - methods used by KWView to reuse the last settings
     unsigned int tableRows() { return m_table.rows; }
     unsigned int tableCols() { return m_table.cols; }
-    KWTblCellSize tableWidthMode() { return m_table.width; }
-    KWTblCellSize tableHeightMode() { return m_table.height; }
+    int tableWidthMode() { return m_table.width; }
+    int tableHeightMode() { return m_table.height; }
     bool tableIsFloating() { return m_table.floating; }
 
     void createTable( unsigned int rows, unsigned int cols,
-                      KWTblCellSize wid, KWTblCellSize hei,
+                      int /*KWTableFrameSet::CellSize*/ wid, int /*KWTableFrameSet::CellSize*/ hei,
                       bool isFloating );
     KWTableFrameSet * getTable();
 
@@ -246,8 +247,8 @@ private:
     {
         unsigned int cols;
         unsigned int rows;
-        KWTblCellSize width;
-        KWTblCellSize height;
+        int /*KWTableFrameSet::CellSize*/ width;
+        int /*KWTableFrameSet::CellSize*/ height;
         bool floating;
     } m_table;
     KWTableFrameSet *curTable;

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="16">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="17">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -60,7 +60,9 @@
   <Action name="format_font"/>
   <!--<Action name="format_color"/> part of format_font now-->
   <Action name="format_paragraph"/>
+  <Separator/>
   <Action name="format_page"/>
+  <Separator/>
   <Action name="format_stylist"/>
   <Action name="format_style"/>
   <Menu name="Formula"><text>Formula</text>
@@ -199,11 +201,10 @@
 </ToolBar>
 <StatusBar/>
 <Menu name="text_popup">
- <Action name="format_paragraph"/>
- <Separator/>
  <Action name="text_default"/>
  <Action name="format_font"/>
   <!--<Action name="format_color"/> part of format_font now-->
+ <Action name="format_paragraph"/>
  <Separator/>
  <Action name="edit_cut"/>
  <Action name="edit_copy"/>

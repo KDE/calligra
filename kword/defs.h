@@ -25,24 +25,17 @@
 #include <koGlobal.h>
 #include "kwfactory.h"
 
-#define MIME_TYPE "application/x-kword"
+// Try to add new defines and enums in the most appropriate class
+// instead of in this file. Only very global things should be here.
 
 enum MouseMode {
     MM_EDIT = 0,
-    //MM_EDIT_FRAME = 1,
     MM_CREATE_TEXT = 2,
     MM_CREATE_PIX = 3,
     MM_CREATE_TABLE = 5,
     MM_CREATE_FORMULA = 6,
     MM_CREATE_PART = 7
 };
-
-enum KWTblCellSize {
-    TblAuto = 0,
-    TblManual
-};
-
-enum TypeStructDocItem {Arrangement=1, Tables=2, Pictures=4, Cliparts=8, TextFrames=16, Embedded=32, FormulaFrames=64};
 
 #define KWBarIcon( x ) BarIcon( x, KWFactory::global() )
 
@@ -54,47 +47,19 @@ const unsigned int minFrameWidth=18;
 const unsigned int minFrameHeight=20;
 const unsigned int tableCellSpacing=3;
 
-/** Runaround types
-* RA_NO = No run around, all text is just printed.
-* RA_BOUNDINGRECT = run around the square of this frame.
-* RA_SKIP = stop running text on the whole horizontal space this frame occupies.
-*/
-enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
-
-/** what should happen when the frame is full */
-enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
-
-/** types of behaviours for creating a followup frame on new page */
-enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
-
-/** This frame will only be copied to:
-*   AnySide, OddSide or EvenSide
-*/
-enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
-
 /** The different types of framesets
-* FT_BASE = unused <br>
-* FT_TEXT = text only, this is the only frameset that can have multiple frames. <br>
-* FT_PICTURE = One frame with a picture<br>
-* FT_PART = one frame with an embedded part, can be a spreadsheet to a kword doc.<br>
-* FT_FORMULA = one frame with an embedded formula frame. This is semi-native
-* FT_TABLE = Frameset which contains table cells.
-*/
-enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4, FT_TABLE };
+ * FT_BASE = unused <br>
+ * FT_TEXT = text only, this is the only frameset that can have multiple frames. <br>
+ * FT_PICTURE = One frame with a picture<br>
+ * FT_PART = one frame with an embedded part, can be a spreadsheet to a kword doc.<br>
+ * FT_FORMULA = one frame with an embedded formula frame. This is semi-native
+ * FT_TABLE = Frameset which contains table cells.
+ */
+enum FrameSetType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4, FT_TABLE };
+// This has to remain here because of KWDocument::refreshDocStructure()
 
-/** The different types of textFramesets (that TEXT is important here!)
-* FI_BODY = normal text frames.<br>
-* FI_FIRST_HEADER = Header on page 1<br>
-* FI_ODD_HEADER = header on any odd page (can be including page 1)<br>
-* FI_EVEN_HEADER = header on any even page<br>
-* FI_FIRST_FOOTER = footer on page 1<br>
-* FI_ODD_FOOTER = footer on any odd page (can be including page 1)<br>
-* FI_EVEN_FOOTER = footer on any even page<br>
-* FI_FOOTNOTE = a footnote frame.
-*/
-enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3,
-                 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
-                 FI_FOOTNOTE = 7 };
+// This one has better remain here, otherwise kwdoc.cc needs docstruct.h
+enum TypeStructDocItem {Arrangement=1, Tables=2, Pictures=4, Cliparts=8, TextFrames=16, Embedded=32, FormulaFrames=64};
 
 
 enum TypeOfCase { UpperCase =0, LowerCase=1, TitleCase=2, ToggleCase=3};

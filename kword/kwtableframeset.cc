@@ -589,7 +589,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect )
             frame->setBRight( oneMm );
             frame->setBTop( oneMm );
             frame->setBBottom( oneMm );
-            frame->setNewFrameBehaviour( NoFollowup );
+            frame->setNewFrameBehaviour( KWFrame::NoFollowup );
             frame->setRect( rect.x() + j * (baseWidth + tableCellSpacing),
                 rect.y() + i * (baseHeight + tableCellSpacing), baseWidth, baseHeight );
             frame->setPageNum(m_doc->getPageOfRect( *frame ));
@@ -597,12 +597,12 @@ void KWTableFrameSet::setBoundingRect( KoRect rect )
     }
 }
 
-void KWTableFrameSet::setHeightMode( KWTblCellSize mode )
+void KWTableFrameSet::setHeightMode( CellSize mode )
 {
     m_heightMode = mode;
 }
 
-void KWTableFrameSet::setWidthMode( KWTblCellSize mode )
+void KWTableFrameSet::setWidthMode( CellSize mode )
 {
     m_widthMode = mode;
 }
@@ -815,10 +815,10 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
             tmpWidth-=tableCellSpacing;
         /*else
           tmpWidth+=1;*/
-        KWFrame *frame = new KWFrame(0L, colStart[i], br.y(), tmpWidth, height, RA_NO);
+        KWFrame *frame = new KWFrame(0L, colStart[i], br.y(), tmpWidth, height, KWFrame::RA_NO);
 
-        frame->setFrameBehaviour(AutoExtendFrame);
-        frame->setNewFrameBehaviour(NoFollowup);
+        frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+        frame->setNewFrameBehaviour(KWFrame::NoFollowup);
 
         Cell *newCell = new Cell( this, _idx, i, QString::null );
         newCell->m_cols=colSpan;
@@ -890,8 +890,8 @@ void KWTableFrameSet::insertCol( unsigned int col )
             height = cell->getFrame(0)->height();
         }
         Cell *newCell = new Cell( this, i, col, QString::null );
-        KWFrame *frame = new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height, RA_NO );
-        frame->setFrameBehaviour(AutoExtendFrame);
+        KWFrame *frame = new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height, KWFrame::RA_NO );
+        frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
         newCell->addFrame( frame );
         if(cell->m_rows >1) {
             newCell->m_rows = cell->m_rows;
@@ -1165,15 +1165,15 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
             /*Frame *frame = new KWFrame(lastFrameSet,
                     firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
                     firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
-                    width, height, RA_NO);
+                    width, height, KWFrame::RA_NO);
             */
             KWFrame *frame=firstFrame->getCopy();
             frame->setRect(firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
                            firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
                            width, height);
-            frame->setRunAround( RA_NO );
-            frame->setFrameBehaviour(AutoExtendFrame);
-            frame->setNewFrameBehaviour(NoFollowup);
+            frame->setRunAround( KWFrame::RA_NO );
+            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            frame->setNewFrameBehaviour(KWFrame::NoFollowup);
             lastFrameSet->addFrame( frame );
 
             lastFrameSet->m_rows = 1;
@@ -1222,13 +1222,13 @@ void KWTableFrameSet::validate()
 {
     for (unsigned int j=0; j < getNumCells() ; j++) {
         KWFrame *frame = getCell(j)->getFrame(0);
-        if(frame->getFrameBehaviour()==AutoCreateNewFrame) {
-            frame->setFrameBehaviour(AutoExtendFrame);
+        if(frame->getFrameBehaviour()==KWFrame::AutoCreateNewFrame) {
+            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
             kdWarning() << "Table cell property frameBehaviour was incorrect; fixed" << endl;
         }
-        if(frame->getNewFrameBehaviour()!=NoFollowup) {
+        if(frame->getNewFrameBehaviour()!=KWFrame::NoFollowup) {
             kdWarning() << "Table cell property newFrameBehaviour was incorrect; fixed" << endl;
-            frame->setNewFrameBehaviour(NoFollowup);
+            frame->setNewFrameBehaviour(KWFrame::NoFollowup);
         }
     }
 
@@ -1275,9 +1275,9 @@ void KWTableFrameSet::validate()
                 if(width== -1) width=minFrameWidth;
                 if(height== -1) height=minFrameHeight;
                 kdWarning() << " x: " << x << ", y:" << y << ", width: " << width << ", height: " << height << endl;
-                KWFrame *frame = new KWFrame(_frameSet, x, y, width, height, RA_NO );
-                frame->setFrameBehaviour(AutoExtendFrame);
-                frame->setNewFrameBehaviour(NoFollowup);
+                KWFrame *frame = new KWFrame(_frameSet, x, y, width, height, KWFrame::RA_NO );
+                frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+                frame->setNewFrameBehaviour(KWFrame::NoFollowup);
                 _frameSet->addFrame( frame );
                 _frameSet->m_rows = 1;
                 _frameSet->m_cols = 1;
@@ -1501,9 +1501,9 @@ void KWTableFrameSet::zoom() {
     }
 }
 
-void KWTableFrameSet::save( QDomElement &parentElem ) {
+void KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
     for (unsigned int i =0; i < m_cells.count(); i++) {
-        m_cells.at(i)->save(parentElem);
+        m_cells.at(i)->save(parentElem, saveFrames);
     }
 }
 

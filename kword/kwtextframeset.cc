@@ -452,7 +452,7 @@ void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpa
 }
 
 // Only interested in the body textframeset, not in header/footer
-#define kdDebugBody(area) if ( getFrameInfo() == FI_BODY ) kdDebug(area)
+#define kdDebugBody(area) if ( frameSetInfo() == FI_BODY ) kdDebug(area)
 
 // Helper for adjust*. Returns marginLeft/marginRight/breakEnd, each for an adjust* method.
 void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd )
@@ -489,7 +489,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
     for ( ; fIt != m_framesOnTop.end() && from < to ; ++fIt )
     {
-        if ( (*fIt).frame->getRunAround() == RA_BOUNDINGRECT )
+        if ( (*fIt).frame->runAround() == KWFrame::RA_BOUNDINGRECT )
         {
             QRect frameRect = (*fIt).frame->outerRect();
 #ifdef DEBUG_FLOW
@@ -669,7 +669,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
         int bottom = totalHeight + frameHeight;
         // Only skip bottom of frame if there is a next one or if there'll be another one created.
         // ( Not for header/footer, for instance. )
-        if ( !frameIt.atLast() || frameIt.current()->getFrameBehaviour() == AutoCreateNewFrame )
+        if ( !frameIt.atLast() || frameIt.current()->getFrameBehaviour() == KWFrame::AutoCreateNewFrame )
         {
             //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 
@@ -700,7 +700,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
     for ( ; fIt != m_framesOnTop.end() ; ++fIt )
     {
-        if ( (*fIt).frame->getRunAround() == RA_SKIP )
+        if ( (*fIt).frame->runAround() == KWFrame::RA_SKIP )
         {
             QRect rectOnTop = (*fIt).frame->outerRect();
             QPoint iTop, iBottom; // top and bottom in internal coordinates
@@ -966,7 +966,7 @@ void KWTextFrameSet::printDebug()
 }
 #endif
 
-void KWTextFrameSet::save( QDomElement &parentElem )
+void KWTextFrameSet::save( QDomElement &parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
@@ -986,7 +986,7 @@ void KWTextFrameSet::save( QDomElement &parentElem )
         framesetElem.setAttribute( "removable", static_cast<int>( removeableHeader ) );
     }
 
-    KWFrameSet::save( framesetElem ); // Save all frames
+    KWFrameSet::save( framesetElem, saveFrames );
 
     // Save paragraphs
     KWTextParag *start = static_cast<KWTextParag *>( textDocument()->firstParag() );
@@ -1257,7 +1257,7 @@ void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutCh
 KWTextFrameSet *KWTextFrameSet::getCopy() {
     /* returns a deep copy of self */
     KWTextFrameSet *newFS = new KWTextFrameSet(m_doc, getName());
-    newFS->setFrameInfo(getFrameInfo());
+    newFS->setFrameSetInfo(frameSetInfo());
     newFS->setVisible(visible);
     newFS->setIsRemoveableHeader(isRemoveableHeader());
     QListIterator<KWFrame> frameIt = frameIterator();
@@ -1445,7 +1445,7 @@ void KWTextFrameSet::formatMore()
                    << " availableHeight=" << m_availableHeight << endl;
 #endif
 #ifdef TIMING_FORMAT
-    if ( lastFormatted->prev() == 0 && getFrameInfo() == FI_BODY )
+    if ( lastFormatted->prev() == 0 && frameSetInfo() == FI_BODY )
     {
         kdDebug(32002) << "KWTextFrameSet::formatMore " << getName() << ". First parag -> starting timer" << endl;
         m_time.start();
@@ -1498,7 +1498,7 @@ void KWTextFrameSet::formatMore()
             double wantedPosition = 0;
             switch ( frames.last()->getFrameBehaviour() )
             {
-                case AutoExtendFrame:
+                case KWFrame::AutoExtendFrame:
                 {
                     double difference = bottom - m_availableHeight;
                     if(lastFormatted) difference += lastFormatted->rect().height();
@@ -1525,7 +1525,7 @@ void KWTextFrameSet::formatMore()
                         pageBottom -= m_doc->ptBottomBorder();
                         double newPosition = QMIN(wantedPosition, pageBottom );
                         theFrame->setBottom(newPosition);
-                        if(theFrame->getFrameSet()->getFrameInfo() != FI_BODY)
+                        if(theFrame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY)
                         {
                             m_doc->recalcFrames();
                         }
@@ -1538,7 +1538,7 @@ void KWTextFrameSet::formatMore()
                             table->recalcRows(cell->m_col,cell->m_row);
                             table->updateTempHeaders();
                         }
-                        if(newPosition < wantedPosition && theFrame->getNewFrameBehaviour() == Reconnect) {
+                        if(newPosition < wantedPosition && theFrame->getNewFrameBehaviour() == KWFrame::Reconnect) {
                             wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
                             // fall through to AutoCreateNewFrame
                         } else {
@@ -1552,7 +1552,7 @@ void KWTextFrameSet::formatMore()
                         }
                     }
                 }
-                case AutoCreateNewFrame:
+                case KWFrame::AutoCreateNewFrame:
                 {
                     // We need a new frame in this frameset.
 
@@ -1580,7 +1580,7 @@ void KWTextFrameSet::formatMore()
                     updateFrames();
                 }
                 break;
-                case Ignore:
+                case KWFrame::Ignore:
                     break;
             }
 
@@ -1620,7 +1620,7 @@ void KWTextFrameSet::formatMore()
         kdDebug(32002) << "KWTextFrameSet::formatMore all formatted" << endl;
 #endif
 #ifdef TIMING_FORMAT
-        if ( getFrameInfo() == FI_BODY )
+        if ( frameSetInfo() == FI_BODY )
         {
             kdDebug(32002) << "KWTextFrameSet::formatMore " << getName() << " all formatted. Took "
                            << (double)(m_time.elapsed()) / 1000 << " seconds." << endl;
@@ -3089,9 +3089,9 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action )
 void KWTextFrameSetEdit::paste()
 {
     QMimeSource *data = QApplication::clipboard()->data();
-    if ( data->provides( MIME_TYPE ) )
+    if ( data->provides( KWTextDrag::selectionMimeType() ) )
     {
-        QByteArray arr = data->encodedData( MIME_TYPE );
+        QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
         if ( arr.size() )
             textFrameSet()->pasteKWord( cursor, QCString(arr), true );
     }
@@ -3116,7 +3116,7 @@ void KWTextFrameSetEdit::cut()
 void KWTextFrameSetEdit::copy()
 {
     if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
-        KWDrag *kd = newDrag( 0L );
+        KWTextDrag *kd = newDrag( 0L );
         QApplication::clipboard()->setData( kd );
     }
 }
@@ -3126,7 +3126,7 @@ void KWTextFrameSetEdit::startDrag()
     mightStartDrag = FALSE;
     inDoubleClick = FALSE;
     m_canvas->dragStarted();
-    KWDrag *drag = newDrag( m_canvas->viewport() );
+    KWTextDrag *drag = newDrag( m_canvas->viewport() );
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         drag->dragCopy();
     else {
@@ -3141,7 +3141,7 @@ void KWTextFrameSetEdit::startDrag()
     }
 }
 
-KWDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
+KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 {
     textFrameSet()->unzoom();
     QTextCursor c1 = textDocument()->selectionStartCursor( QTextDocument::Standard );
@@ -3171,7 +3171,7 @@ KWDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
     }
     textFrameSet()->zoom();
 
-    KWDrag *kd = new KWDrag( parent );
+    KWTextDrag *kd = new KWTextDrag( parent );
     kd->setPlain( text );
     kd->setKWord( domDoc.toCString() );
     //kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
@@ -3330,7 +3330,7 @@ QTextCursor KWTextFrameSetEdit::selectWordUnderCursor()
 
 void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
 {
-    if ( !frameSet()->kWordDocument()->isReadWrite() || !KWDrag::canDecode( e ) )
+    if ( !frameSet()->kWordDocument()->isReadWrite() || !KWTextDrag::canDecode( e ) )
     {
         e->ignore();
         return;
@@ -3340,7 +3340,7 @@ void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
 
 void KWTextFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &nPoint, const KoPoint & )
 {
-    if ( !frameSet()->kWordDocument()->isReadWrite() || !KWDrag::canDecode( e ) )
+    if ( !frameSet()->kWordDocument()->isReadWrite() || !KWTextDrag::canDecode( e ) )
     {
         e->ignore();
         return;
@@ -3361,7 +3361,7 @@ void KWTextFrameSetEdit::dragLeaveEvent( QDragLeaveEvent * )
 
 void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const KoPoint & )
 {
-    if ( frameSet()->kWordDocument()->isReadWrite() && KWDrag::canDecode( e ) )
+    if ( frameSet()->kWordDocument()->isReadWrite() && KWTextDrag::canDecode( e ) )
     {
         e->acceptAction();
 
@@ -3425,9 +3425,9 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             textFrameSet()->selectionChangedNotify();
         }
 
-        if ( e->provides( MIME_TYPE ) )
+        if ( e->provides( KWTextDrag::selectionMimeType() ) )
         {
-            QByteArray arr = e->encodedData( MIME_TYPE );
+            QByteArray arr = e->encodedData( KWTextDrag::selectionMimeType() );
             if ( arr.size() )
                 textFrameSet()->pasteKWord( cursor, QCString(arr), false );
         }
