@@ -214,6 +214,7 @@ public slots:
     void textContentsToHeight();
     void textObjectToContents();
     void textInsertPageNum();
+    void textDefaultFormat();
 
     // color bar
     void penChosen();
@@ -637,6 +638,8 @@ private:
     KAction *actionPic1600x1200;
     KAction *actionChangePic;
     KAction *actionExtraSpellCheck;
+    KAction *actionFormatDefault;
+
 
     DCOPObject *dcop;
 

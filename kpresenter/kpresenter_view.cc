@@ -2470,6 +2470,11 @@ void KPresenterView::setupActions()
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
+
+    actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
+                                          this, SLOT( textDefaultFormat() ),
+                                          actionCollection(), "text_default" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -2516,7 +2521,7 @@ void KPresenterView::objectSelectedChanged()
     actionTextAlignBlock->setEnabled(isText);
     actionTextTypeUnsortList->setEnabled(isText);
     actionTextDepthPlus->setEnabled(isText);
-
+    actionFormatDefault->setEnabled(isText);
     actionTextDepthMinus->setEnabled(isText);
 
     actionTextSettings->setEnabled(isText);
@@ -2530,10 +2535,11 @@ void KPresenterView::objectSelectedChanged()
     actionFormatSub->setEnabled(isText);
 
     KPTextView *edit=page->currentTextObjectView();
-    actionInsertSpecialChar->setEnabled(edit && isText);
-    actionInsertLink->setEnabled(edit && isText);
-    actionEditFind->setEnabled(isText && edit);
-    actionFormatParag->setEnabled(isText && edit);
+    bool val=edit && isText;
+    actionInsertSpecialChar->setEnabled(val);
+    actionInsertLink->setEnabled(val);
+    actionEditFind->setEnabled(val);
+    actionFormatParag->setEnabled(val);
 
     state=state || isText;
     actionEditCopy->setEnabled(state);
@@ -4022,6 +4028,11 @@ void KPresenterView::formatParagraph()
         delete paragDia;
     }
 
+}
+
+void KPresenterView::textDefaultFormat()
+{
+    page->setTextDefaultFormat( );
 }
 
 #include <kpresenter_view.moc>

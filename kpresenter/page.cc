@@ -1470,6 +1470,14 @@ void Page::setTextSuperScript( bool b )
 }
 
 
+void Page::setTextDefaultFormat( )
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setDefaultFormat( );
+}
+
 /*===================== set text alignment =======================*/
 void Page::setTextAlign( int align )
 {
