@@ -53,7 +53,7 @@ public:
     /**
      * Default constructor. Creates a null key
      */
-    KoPictureKey()  { m_lastModified.setTime_t(0); }
+    KoPictureKey();
 
     /**
      * Constructs a key, from a filename and a modification date
@@ -61,39 +61,32 @@ public:
      * to update the file and import it into the application again, without
      * the application reusing the old copy from the collection.
      */
-    KoPictureKey( const QString &fn, const QDateTime &mod )
-        : m_filename( fn ), m_lastModified( mod )
-        {}
+    KoPictureKey( const QString &fn, const QDateTime &mod );
+
+    /**
+     * Constructs a key, from a filename (whitout modification date)
+     */
+    KoPictureKey( const QString &fn );
+
     /**
      * Copy constructor
      */
-    KoPictureKey( const KoPictureKey &key )
-        : m_filename( key.m_filename ), m_lastModified( key.m_lastModified )
-        {}
+    KoPictureKey( const KoPictureKey &key );
 
     /**
      * Assignment operator
      */
-    KoPictureKey &operator=( const KoPictureKey &key ) {
-        m_filename = key.m_filename;
-        m_lastModified = key.m_lastModified;
-        return *this;
-    }
+    KoPictureKey &operator=( const KoPictureKey &key );
 
     /**
      * Comparison operator
      */
-    bool operator==( const KoPictureKey &key ) const {
-        return ( key.m_filename == m_filename &&
-                 key.m_lastModified == m_lastModified );
-    }
+    bool operator==( const KoPictureKey &key ) const;
 
     /**
      * Comparison operator - used for sorting in the collection's map
      */
-    bool operator<( const KoPictureKey &key ) const {
-        return key.toString() < toString();
-    }
+    bool operator<( const KoPictureKey &key ) const;
 
     /**
      * Convert this key into a string representation of it

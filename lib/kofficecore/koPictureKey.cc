@@ -20,8 +20,73 @@
 #include <qdatetime.h>
 #include <qdom.h>
 
+#include <kdebug.h>
+
 #include "koPictureKey.h"
 
+// NOTE: we use the *nix epoch (1970-01-01) as a time base because it is a valid date.
+// That way we do not depend on a behaviour of the current QDateTime that might change in future versions of QT
+// and we are also nice to non-QT programs wanting to read KOffice's files.
+//
+// NOTE 2: this behaviour is also needed for re-saving KWord files having <FORMAT id="2">. When saving again,
+// these files get a <KEY> element as child of <PIXMAPS> but not one as child of <FORMAT> and <IMAGE>.
+// Therefore we need to be careful that the key remains compatible to default values (another good reason for the first note)
+//
+// Notes added by Nicolas GOUTTE <nicog@snafu.de>
+
+
+
+static void resetDateTimeToEpoch(QDateTime& dt)
+{
+    // set the time point to 1970-01-01
+    dt.setDate(QDate(1970,1,1));
+    dt.setTime(QTime(0,0));
+    // Note: we cannot use QDateTime;;setTime_t as it makes a local time correction!
+}
+
+KoPictureKey::KoPictureKey()
+{
+    resetDateTimeToEpoch(m_lastModified);
+}
+
+KoPictureKey::KoPictureKey( const QString &fn, const QDateTime &mod )
+    : m_filename( fn ), m_lastModified( mod )
+{
+    if (!m_lastModified.isValid())
+    {
+        // As we have an invalid date, set the time point to 1970-01-01
+        resetDateTimeToEpoch(m_lastModified);
+    }
+}
+
+KoPictureKey::KoPictureKey( const QString &fn )
+    : m_filename( fn )
+{
+    resetDateTimeToEpoch(m_lastModified);
+}
+
+KoPictureKey::KoPictureKey( const KoPictureKey &key )
+    : m_filename( key.m_filename ), m_lastModified( key.m_lastModified )
+{
+}
+
+KoPictureKey& KoPictureKey::operator=( const KoPictureKey &key )
+{
+    m_filename = key.m_filename;
+    m_lastModified = key.m_lastModified;
+    return *this;
+}
+
+bool KoPictureKey::operator==( const KoPictureKey &key ) const
+{
+    return ( key.m_filename == m_filename &&
+             key.m_lastModified == m_lastModified );
+}
+
+bool KoPictureKey::operator<( const KoPictureKey &key ) const
+{
+    return key.toString() < toString();
+}
 
 void KoPictureKey::saveAttributes( QDomElement &elem ) const
 {
@@ -60,17 +125,21 @@ void KoPictureKey::loadAttributes( const QDomElement &elem, const QDate &dDate, 
         second=elem.attribute( "second" ).toInt();
     if( elem.hasAttribute( "msec" ) )
         msec=elem.attribute( "msec" ).toInt();
-    
+
     m_lastModified.setDate( QDate( year, month, day ) );
     m_lastModified.setTime( QTime( hour, minute, second, msec ) );
+
+    if (!m_lastModified.isValid())
+    {
+        // If the date/time is not valid, make it valid by force!
+        kdWarning(30003) << "Correcting invalid date/time: " << m_lastModified.toString()  << " (in KoPictureKey::loadAttributes)" << endl;
+        resetDateTimeToEpoch(m_lastModified);
+    }
 }
 
 QString KoPictureKey::toString() const
 {
-    if ( m_lastModified.isValid() )
-        // m_filename must be the last argument as it can contain a sequence starting with %
-        return QString::fromLatin1("%2_%1").arg(m_lastModified.toString()).arg(m_filename);
-    else
-        return m_filename; // for kword-1.0's KWTextImage, which only has the filename in the key
+    // m_filename must be the last argument as it can contain a sequence starting with %
+    return QString::fromLatin1("%2_%1").arg(m_lastModified.toString()).arg(m_filename);
 }
 
