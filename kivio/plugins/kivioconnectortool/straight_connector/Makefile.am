@@ -25,11 +25,11 @@ EXTRA_DIST = \
 ## This is a very bad hack..... why is this needed ? (David)
 
 #install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	#@$(NORMAL_INSTALL)
-	#$(mkinstalldirs) $(DESTDIR)$(libdir)
-	#$(LIBTOOL)  --mode=install $(INSTALL) ./.libs/libstraight_connector.so $(DESTDIR)$(libdir)/straight_connector.ksp;
+#	@$(NORMAL_INSTALL)
+#	$(mkinstalldirs) $(DESTDIR)$(libdir)
+#	$(LIBTOOL)  --mode=install $(INSTALL) ./.libs/libstraight_connector.so $(DESTDIR)$(libdir)/straight_connector.ksp;
 #
 #uninstall-libLTLIBRARIES:
-	#@$(NORMAL_UNINSTALL)
-	#$(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/straight_connector.ksp;
+#	@$(NORMAL_UNINSTALL)
+#	$(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/straight_connector.ksp;
 
