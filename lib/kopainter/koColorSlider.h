@@ -25,10 +25,10 @@
 #include <qimage.h>
 #include <qwidget.h>
 #include <kpixmap.h>
-
+#include <koffice_export.h>
 class SliderWidget;
 
-class KoColorFrame : public QFrame
+class KOPAINTER_EXPORT KoColorFrame : public QFrame
 {
   Q_OBJECT
 public:
@@ -60,7 +60,7 @@ protected:
   bool mDragging;
 };
 
-class KoSliderWidget : public QWidget
+class KOPAINTER_EXPORT KoSliderWidget : public QWidget
 {
   Q_OBJECT
 public:
@@ -80,7 +80,7 @@ protected:
   QPoint mPos;
 };
 
-class KoColorSlider : public QWidget
+class KOPAINTER_EXPORT KoColorSlider : public QWidget
 {
   Q_OBJECT
 public:

@@ -22,8 +22,8 @@
 #define __ko_color_h__
 
 #include <qcolor.h>
-
-class KoColor
+#include <koffice_export.h>
+class KOPAINTER_EXPORT KoColor
 {
 public:
   enum cSpace{ csIndexed, csRGB, csHSV, csCMYK, csLab };
