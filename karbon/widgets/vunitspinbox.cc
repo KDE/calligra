@@ -18,7 +18,8 @@
 */
 
 #include "vunitspinbox.h"
-#include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 VUnitDoubleSpinBox::VUnitDoubleValidator::VUnitDoubleValidator( VUnitDoubleSpinBox *spin, QObject *parent, const char *name )
 : QValidator( parent, name ), m_spin( spin )
@@ -48,7 +49,7 @@ VUnitDoubleSpinBox::VUnitDoubleValidator::validate( QString &s, int &pos ) const
 	if( newVal >= 0.0 )
 	{
 		m_spin->setValue( newVal );
-		s = QString( "%1%2").arg( newVal, 0, 'f', m_spin->precision() ).arg( KoUnit::unitName( m_unit ) );
+		s = QString( "%1%2").arg( KGlobal::locale()->formatNumber( newVal, m_spin->precision() ) ).arg( KoUnit::unitName( m_unit ) );
 	}
 	return result;
 }
@@ -59,7 +60,7 @@ VUnitDoubleSpinBox::VUnitDoubleSpinBox( double lower, double upper, double step,
 {
 	m_validator = new VUnitDoubleValidator( this, this );
 	setValidator( m_validator );
-	setAcceptLocalizedNumbers( false );
+	setAcceptLocalizedNumbers( true );
 }
 
 void
