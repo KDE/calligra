@@ -114,14 +114,14 @@ public:
 private:
 	VSegment* locate( uint index );
 
-	bool m_isClosed;
 
 	VSegment* m_first;
 	VSegment* m_last;
 	VSegment* m_current;
 
 	int m_currentIndex;
-	uint m_number;
+	uint m_number	: 31;
+	bool m_isClosed	: 1;
 
 	VPathIteratorList* m_iteratorList;
 };
