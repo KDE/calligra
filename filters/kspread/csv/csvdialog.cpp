@@ -33,6 +33,7 @@
 
 CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*seperator*/)
     : KDialogBase(parent, 0, true, QString::null, Ok|Cancel, No, true),
+      m_adjustRows(0),
       m_startline(0),
       m_textquote('"'),
       m_delimiter(","),
@@ -78,6 +79,8 @@ void CSVDialog::fillTable()
 
     QChar x;
     QString field = "";
+
+    kapp->setOverrideCursor(Qt::waitCursor);
 
     for (row = 0; row < m_dialog->m_table->numRows(); ++row)
         for (column = 0; column < m_dialog->m_table->numCols(); ++column)
@@ -216,6 +219,8 @@ void CSVDialog::fillTable()
         }
     }
 
+    adjustRows( row - m_startline );
+
     for (column = 0; column < m_dialog->m_table->numCols(); ++column)
     {
         QString header = m_dialog->m_table->horizontalHeader()->label(column);
@@ -225,6 +230,8 @@ void CSVDialog::fillTable()
 
         m_dialog->m_table->adjustColumn(column);
     }
+
+    kapp->restoreOverrideCursor();
 }
 
 void CSVDialog::fillComboBox()
@@ -268,13 +275,26 @@ void CSVDialog::setText(int row, int col, const QString& text)
     if (row < 1) // skipped by the user
         return;
 
-    if (m_dialog->m_table->numRows() < row)
-        m_dialog->m_table->setNumRows(row);
+    if (m_dialog->m_table->numRows() < row) {
+        m_dialog->m_table->setNumRows(row+5000); /* We add 5000 at a time to limit recalculations */
+        m_adjustRows=1;
+    }
 
     if (m_dialog->m_table->numCols() < col)
         m_dialog->m_table->setNumCols(col);
 
     m_dialog->m_table->setText(row - 1, col - 1, text);
+}
+
+/*
+ * Called after the first fillTable() when number of rows are unknown.
+ */
+void CSVDialog::adjustRows(int iRows)
+{
+    if (m_adjustRows) {
+        m_dialog->m_table->setNumRows( iRows );
+        m_adjustRows=0;
+    }
 }
 
 void CSVDialog::returnPressed()

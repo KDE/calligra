@@ -42,7 +42,9 @@ private:
     void fillTable();
     void fillComboBox();
     void setText(int row, int col, const QString& text);
+    void adjustRows(int iRows);
 
+    int m_adjustRows;
     int m_startline;
     QChar m_textquote;
     QString m_delimiter;

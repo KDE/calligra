@@ -20,6 +20,8 @@
 #include <csvimport.h>
 
 #include <qfile.h>
+
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -108,6 +110,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     int value = 0;
 
     emit sigProgress(value);
+    kapp->setOverrideCursor(Qt::waitCursor);
 
     for (int row = 0; row < numRows; ++row)
         for (int col = 0; col < numCols; ++col)
@@ -135,7 +138,9 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
         }
 
     emit sigProgress(100);
+    kapp->restoreOverrideCursor();
     delete dialog;
+
     return KoFilter::OK;
 }
 
