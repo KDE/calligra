@@ -48,6 +48,7 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const
     lab=new QLabel(i18n("Rotation angle:"), page);
 
     m_rotation = new KDoubleNumInput( page, "customInput" );
+    m_rotation->setRange(0.0, 360, 1, false);
 
     tmp=new KSeparator(page);
 
