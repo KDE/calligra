@@ -259,7 +259,7 @@ QString PalmDoc::uncompress( QByteArray rec )
     {
       i++;
       if( i < rec.size() )
-         for( unsigned char v = rec[i]; i>0; i-- )
+         for( unsigned char v = rec[i]; c>0; c-- )
             result.append( v );
     }
 
