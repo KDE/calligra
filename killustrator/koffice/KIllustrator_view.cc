@@ -30,6 +30,7 @@
 #include <KIllustrator_factory.h>
 #include <koMainWindow.h>
 
+#include "TabBar.h"
 #include "LayerPanel.h"
 #include "tooldockbase.h"
 #include "tooldockmanager.h"
@@ -330,6 +331,8 @@ void KIllustratorView::createMyGUI()
 void KIllustratorView::setupCanvas()
 {
     MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
+
+    QGridLayout* layout = new QGridLayout(this,3,3);
     hRuler = new Ruler (Ruler::Horizontal, mu, this);
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     hRuler->setCursor(Qt::pointingHandCursor);
@@ -338,21 +341,41 @@ void KIllustratorView::setupCanvas()
     vRuler->setCursor(Qt::pointingHandCursor);
     connect(hRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
     connect(vRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
+    
+    TabBar *tabBar = new TabBar(this, this);
+    tabBar->addTab("Page1");
+    tabBar->setActiveTab("Page1");
 
     QScrollBar* vBar = new QScrollBar(QScrollBar::Vertical, this);
     QScrollBar* hBar = new QScrollBar(QScrollBar::Horizontal, this);
 
     canvas = new Canvas (m_pDoc->gdoc(), 72.0, hBar, vBar, this);
     canvas->center();
-    canvas->setCursor(Qt::arrowCursor);
+    canvas->setCursor(Qt::crossCursor);
 
-    QGridLayout* layout = new QGridLayout(this,3,3);
+    m_pTabBarFirst = newIconButton("arrow_first", false, this);
+//    connect( m_pTabBarFirst,SIGNAL(clicked()), m_pTabBar, SLOT(scrollFirst()));
+    m_pTabBarLeft = newIconButton("arrow_back", false, this);
+//    connect( m_pTabBarLeft, SIGNAL(clicked()), m_pTabBar, SLOT(scrollLeft()));
+    m_pTabBarRight = newIconButton("arrow_forward", false, this);
+//    connect( m_pTabBarRight, SIGNAL(clicked()), m_pTabBar, SLOT(scrollRight()));
+    m_pTabBarLast = newIconButton("arrow_last", false, this);
+//    connect( m_pTabBarLast, SIGNAL(clicked()), m_pTabBar, SLOT(scrollLast()));
+
+    QHBoxLayout* tabLayout = new QHBoxLayout(this);
+    tabLayout->addWidget(m_pTabBarLast);
+    tabLayout->addWidget(m_pTabBarLeft);
+    tabLayout->addWidget(m_pTabBarRight);
+    tabLayout->addWidget(m_pTabBarFirst);
+    tabLayout->addWidget(tabBar);
+    tabLayout->addWidget(hBar);
+
     layout->addWidget(canvas,1,1);
     layout->addWidget(hRuler,0,1);
     layout->addWidget(vRuler,1,0);
     layout->addMultiCellWidget(vBar,0,1,2,2);
-    layout->addMultiCellWidget(hBar,2,2,0,1);
-    
+    layout->addMultiCellLayout(tabLayout,2,2,0,1);
+
     mToolDockManager = new ToolDockManager(canvas);
 
     //Layer Panel
@@ -1298,5 +1321,25 @@ void KIllustratorView::slotViewResize()
    y = 0;
   canvas->move(x/2,y/2);*/
  }
+
+QButton* KIllustratorView::newIconButton( const char* file, bool kbutton, QWidget* parent )
+{
+  if (!parent)
+    parent = this;
+
+  QPixmap *pixmap = new QPixmap(BarIcon(file));
+
+  QButton *pb;
+  if (!kbutton)
+    pb = new QPushButton(parent);
+//  else
+//    pb = new QToolButton(parent);
+
+  if (pixmap)
+    pb->setPixmap(*pixmap);
+
+  pb->setFixedSize(16,16);
+  return pb;
+}
 
 #include <KIllustrator_view.moc>

@@ -44,6 +44,10 @@ joinNodes.png \
 moveNode.png \
 newNode.png \
 split.png \
+arrow_back.xpm \
+arrow_first.xpm \
+arrow_forward.xpm \
+arrow_last.xpm \
 killustrator-intro.gif
 
 EXTRA_DIST = $(data_DATA) 

@@ -68,6 +68,7 @@ class ZoomTool;
 class ToolDockManager;
 class ToolDockBase;
 class LayerPanel;
+class QButton;
 
 class KIllustratorView : public KoView, public MainView
 {
@@ -103,6 +104,8 @@ public:
 */
 
 protected:
+    QButton* newIconButton( const char* file, bool kbutton = false, QWidget* parent = 0 );
+
     void readConfig();
     void writeConfig();
 
@@ -232,6 +235,11 @@ protected:
     KAction* m_setupGrid;
     KAction* m_setupHelplines;
     KAction* m_backOne;
+
+    QButton *m_pTabBarFirst;
+    QButton *m_pTabBarLeft;
+    QButton *m_pTabBarRight;
+    QButton *m_pTabBarLast;
 
     KToggleAction *m_alignToGrid;
     KToggleAction *m_showGrid;

@@ -1,4 +1,4 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) -I$(top_srcdir)/killustrator/share -I$(top_srcdir)/killustrator/filter -I$(top_srcdir)/killustrator $(all_includes)
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) -I$(top_srcdir)/killustrator/share -I$(top_srcdir)/killustrator/ui -I$(top_srcdir)/killustrator/filter -I$(top_srcdir)/killustrator $(all_includes)
 
 ####### Files
 
@@ -10,7 +10,7 @@ libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
 	InsertPartTool.cc GPart.cc KIllustrator_factory.cc \
 	tooldockmanager.cc tooldockbase.cc stencilbarmovemanager.cc
 libkillustratorpart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkillustratorpart_la_LIBADD = $(all_libraries) $(top_builddir)/killustrator/share/libkillu.la $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
+libkillustratorpart_la_LIBADD = $(all_libraries) $(top_builddir)/killustrator/ui/libkillu_ui.la $(top_builddir)/killustrator/share/libkillu.la $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
 
 killustrator_la_SOURCES = main.cc
 killustrator_la_LDFLAGS = $(all_libraries) -avoid-version -module

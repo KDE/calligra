@@ -1,5 +1,5 @@
 # This file you have to edit. Change the name here
-SUBDIRS = share filter pics koffice
+SUBDIRS = ui share filter pics koffice
 
 # not a GNU package. You can remove this line, if
 # have all needed files, that a GNU package needs
