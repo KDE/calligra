@@ -36,7 +36,7 @@
 #include <kmessagebox.h>
 
 KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , const QRect &_marker )
-        :KDialogBase(KDialogBase::Tabbed, i18n("Validity"), User1|Cancel, User1, parent, name,true,false,i18n("Ok"))
+        :KDialogBase(KDialogBase::Tabbed, i18n("Validity"), User1|Cancel, User1, parent, name,true,false,i18n("OK"))
 
 {
     m_pView=parent;
