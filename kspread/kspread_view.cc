@@ -510,10 +510,16 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                actionCollection(), "hideRow" );
     m_showRow = new KAction( i18n("Show Row(s)"), "show_table_row", 0, this, SLOT( showRow() ),
                                actionCollection(), "showRow" );
+    m_showSelRows = new KAction( i18n("Show Row(s)"), "show_table_row", 0, this, SLOT( showSelRows() ),
+                               actionCollection(), "showSelRows" );
+    m_showSelRows->setEnabled(false);
     m_hideColumn = new KAction( i18n("Hide Column(s)"), "hide_table_column", 0, this, SLOT( hideColumn() ),
                                actionCollection(), "hideColumn" );
     m_showColumn = new KAction( i18n("Show Column(s)"), "show_table_column", 0, this, SLOT( showColumn() ),
                                actionCollection(), "showColumn" );
+    m_showSelColumns = new KAction( i18n("Show Column(s)"), "show_table_column", 0, this, SLOT( showSelColumns() ),
+                                 actionCollection(), "showSelColumns" );
+    m_showSelColumns->setEnabled(false);
     m_insertCell = new KAction( i18n("Insert Cell(s)..."), "insertcell", 0, this, SLOT( slotInsert() ),
                                actionCollection(), "insertCell" );
     m_removeCell = new KAction( i18n("Remove Cell(s)..."), "removecell", 0, this, SLOT( slotRemove() ),
@@ -1436,7 +1442,29 @@ void KSpreadView::showColumn()
         return;
     KSpreadShowColRow dlg( this,"showCol",KSpreadShowColRow::Column);
     dlg.exec();
+}
 
+void KSpreadView::showSelColumns()
+{
+    if ( !m_pTable )
+        return;
+
+    int i;
+    QRect rect = activeTable()->selectionRect();
+    ColumnLayout * col;
+    QValueList<int>hiddenCols;
+
+    for ( i = rect.left(); i <= rect.right(); ++i )
+    {
+      col = m_pTable->columnLayout( i );
+      if ( col->isHide() )
+      {
+	hiddenCols.append(i);
+      }
+    }
+
+    if (hiddenCols.count() > 0)
+      m_pTable->showColumn(0, -1, hiddenCols);
 }
 
 void KSpreadView::insertRow()
@@ -1469,7 +1497,29 @@ void KSpreadView::showRow()
         return;
     KSpreadShowColRow dlg( this,"showRow",KSpreadShowColRow::Row);
     dlg.exec();
+}
 
+void KSpreadView::showSelRows()
+{
+    if ( !m_pTable )
+        return;
+
+    int i;
+    QRect rect = activeTable()->selectionRect();
+    RowLayout * row;
+    QValueList<int>hiddenRows;
+
+    for ( i = rect.top(); i <= rect.bottom(); ++i )
+    {
+      row = m_pTable->rowLayout( i );
+      if ( row->isHide() )
+      {
+	hiddenRows.append(i);
+      }
+    }
+
+    if (hiddenRows.count() > 0)
+      m_pTable->showRow(0, -1, hiddenRows);
 }
 
 void KSpreadView::fontSelected( const QString &_font )
@@ -2654,6 +2704,21 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_deleteColumn->plug( m_pPopupColumn );
     m_hideColumn->plug( m_pPopupColumn );
 
+    m_showSelColumns->setEnabled(false);
+
+    int i;
+    QRect rect = activeTable()->selectionRect();
+    for ( i = rect.left(); i <= rect.right(); ++i )
+    {
+      ColumnLayout * col = activeTable()->columnLayout( i );
+      if ( col->isHide() )
+      {
+        m_showSelColumns->setEnabled(true);
+        m_showSelColumns->plug( m_pPopupColumn );
+        break;
+      }
+    }
+
     QObject::connect( m_pPopupColumn, SIGNAL(activated( int ) ), this, SLOT(slotActivateTool( int ) ) );
 
     m_pPopupColumn->popup( _point );
@@ -2699,6 +2764,21 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_insertRow->plug( m_pPopupRow );
     m_deleteRow->plug( m_pPopupRow );
     m_hideRow->plug( m_pPopupRow );
+
+    m_showSelColumns->setEnabled(false);
+
+    int i;
+    QRect rect = activeTable()->selectionRect();
+    for ( i = rect.top(); i <= rect.bottom(); ++i )
+    {
+      RowLayout * row = activeTable()->rowLayout( i );
+      if ( row->isHide() )
+      {
+        m_showSelRows->setEnabled(true);
+        m_showSelRows->plug( m_pPopupRow );
+        break;
+      }
+    }
 
     QObject::connect( m_pPopupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupRow->popup( _point );

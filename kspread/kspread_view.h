@@ -245,8 +245,10 @@ public slots:
     void insertRow();
     void hideRow();
     void showRow();
+    void showSelRows();
     void hideColumn();
     void showColumn();
+    void showSelColumns();
     void insertMathExpr();
     void formulaSelection( const QString &_math );
     void changeTextColor();
@@ -478,11 +480,13 @@ private:
     KAction* m_deleteColumn;
     KAction* m_hideColumn;
     KAction* m_showColumn;
+    KAction* m_showSelColumns;
     KAction* m_insertColumn;
     KAction* m_deleteRow;
     KAction* m_insertRow;
     KAction* m_hideRow;
     KAction* m_showRow;
+    KAction* m_showSelRows;
     KSelectAction* m_formulaSelection;
     KAction* m_sortDec;
     KAction* m_sortInc;

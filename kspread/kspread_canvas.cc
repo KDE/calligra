@@ -3114,6 +3114,34 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         delete m_lSize;
         m_lSize = 0;
     }
+    else if (m_bSelection)
+    {
+        QRect rect = table->selectionRect();
+        
+        // TODO: please don't remove. Right now it's useless, but it's for a future feature
+        // Norbert
+        bool m_frozen = false;
+        if ( m_frozen )
+        {
+            kdDebug() << "selected: T " << rect.top() << " B " << rect.bottom() << endl;
+
+            int i;
+            RowLayout * row;
+            QValueList<int>hiddenRows;
+            
+            for ( i = rect.top(); i <= rect.bottom(); ++i )
+            {
+                row = m_pView->activeTable()->rowLayout( i );
+                if ( row->isHide() )
+                {
+                    hiddenRows.append(i);
+                }
+            }
+            
+            if (hiddenRows.count() > 0)
+                m_pView->activeTable()->showRow(0, -1, hiddenRows);
+        }
+    }
 
     m_bSelection = FALSE;
     m_bResize = FALSE;
@@ -3270,10 +3298,20 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   // No button is pressed and the mouse is just moved
   else
   {
-    int y = 0;
-    int row = table->topRow( 0, y, m_pCanvas );
     int tmp;
-    int tmpRow=table->topRow( _ev->pos().y() - 1, tmp, m_pCanvas );
+    int tmpRow = table->topRow( _ev->pos().y() - 1, tmp, m_pCanvas );
+    int ypos   = _ev->pos().y();
+
+    if ( ( (table->topRow( ( ypos - 1), tmp, m_pCanvas ) != tmpRow)
+           || (table->topRow( ( ypos - 1) + 3, tmp, m_pCanvas ) != tmpRow) )
+         && !(table->rowLayout(tmpRow)->isHide() && tmpRow == 1) )
+    {
+        setCursor(splitVCursor);
+        return;
+    }
+
+    /* Doesn't work correctly, gets removed if it turns out that the new
+       version really works, Norbert
     while ( y < height() )
     {
       int h = table->rowLayout( row )->height( m_pCanvas );
@@ -3286,6 +3324,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
       }
       y += h;
     }
+    */
 
     setCursor( arrowCursor );
   }
@@ -3465,13 +3504,15 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
+
   if(!m_pView->koDocument()->isReadWrite())
     return;
+
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pCanvas->editor() )
-        {
-                m_pCanvas->deleteEditor( true ); // save changes
-        }
+  {
+      m_pCanvas->deleteEditor( true ); // save changes
+  }
   m_bResize = FALSE;
   m_bSelection = FALSE;
 
@@ -3489,12 +3530,16 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
       m_bResize = TRUE;
     x += w;
   }
+
   //if col is hide and it's the first column
   //you mustn't resize it.
   int tmp2;
   int tmpCol=table->leftColumn( _ev->pos().x() - 1, tmp2, m_pCanvas );
-  if(table->columnLayout(tmpCol  )->isHide()&&tmpCol==1)
+
+  if ( table->columnLayout(tmpCol  )->isHide() && tmpCol == 1)
       m_bResize = false;
+
+  QRect rect = table->selectionRect();
 
   if ( m_bResize )
   {
@@ -3502,6 +3547,16 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     int tmp;
     m_iResizedColumn = table->leftColumn( _ev->pos().x() - /*3*/1, tmp, m_pCanvas );
     paintSizeIndicator( _ev->pos().x(), true );
+  }
+  else if ( ( rect.left() != rect.right() ) 
+            && ( tmpCol >= rect.left() )
+            && ( tmpCol <= rect.right() ) )
+  {
+      if (_ev->button() == RightButton )
+      {
+          QPoint p = mapToGlobal( _ev->pos() );
+          m_pView->popupColumnMenu( p );
+      }
   }
   else
   {
@@ -3513,14 +3568,13 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 	return;
     m_iSelectionAnchor = hit_col;
 
-    QRect rect = table->selectionRect();
     QRect r;
     if(!rect.contains( QPoint(hit_col,1)) || !(_ev->button() == RightButton)
                                           || !(table->isRowSelected()) )
-        {
+    {
         r.setCoords( hit_col, 1, hit_col, KS_rowMax );
         table->setSelection( r, m_pCanvas );
-        }
+    }
 
     if ( _ev->button() == RightButton )
     {
@@ -3602,6 +3656,34 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
         delete m_lSize;
         m_lSize=0;
+    }
+    else if (m_bSelection)
+    {
+        QRect rect = table->selectionRect();
+        
+        // TODO: please don't remove. Right now it's useless, but it's for a future feature
+        // Norbert
+        bool m_frozen = false;
+        if ( m_frozen )
+        {
+            kdDebug() << "selected: L " << rect.left() << " R " << rect.right() << endl;
+
+            int i;
+            ColumnLayout * col;
+            QValueList<int>hiddenCols;
+            
+            for ( i = rect.left(); i <= rect.right(); ++i )
+            {
+                col = m_pView->activeTable()->columnLayout( i );
+                if ( col->isHide() )
+                {
+                    hiddenCols.append(i);
+                }
+            }
+            
+            if (hiddenCols.count() > 0)
+                m_pView->activeTable()->showColumn(0, -1, hiddenCols);
+        }
     }
 
     m_bSelection = FALSE;
@@ -3776,25 +3858,37 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   // Perhaps we have to modify the cursor
   else
   {
-    int x = 0;
-    int col = table->leftColumn( 0, x, m_pCanvas );
     //if col is hide and it's the first column
     //you mustn't resize it.
     int tmp2;
     int tmpCol=table->leftColumn( _ev->pos().x() - 1, tmp2, m_pCanvas );
 
+    /* Doesn't work correctly, gets removed if it turns out that the new
+       version really works, Norbert
     while ( x < width() )
     {
-      int w = table->columnLayout( col )->width( m_pCanvas );
+    int w = table->columnLayout( col )->width( m_pCanvas );
+    
+    if ( _ev->pos().x() >= x + w - 1 
+    && _ev->pos().x() <= x + w + 1
+    &&!(table->columnLayout(tmpCol)->isHide() && tmpCol == 1) )
+    {
+    setCursor(splitHCursor);
+    return;
+    }
+    x += w;
+    }
+    */
 
-      if ( _ev->pos().x() >= x + w - 1 && _ev->pos().x() <= x + w + 1
-	   &&!(table->columnLayout(tmpCol)->isHide()&&tmpCol==1))
-      {
+    int xpos = _ev->pos().x();
+    if ( ( (table->leftColumn( ( xpos - 1), tmp2, m_pCanvas ) != tmpCol)
+           || (table->leftColumn( ( xpos - 1) + 3, tmp2, m_pCanvas ) != tmpCol) )
+         && !(table->columnLayout(tmpCol)->isHide() && tmpCol == 1) )
+    {
         setCursor(splitHCursor);
         return;
-      }
-      x += w;
     }
+
     setCursor( arrowCursor );
   }
 }
