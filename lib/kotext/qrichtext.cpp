@@ -3863,8 +3863,9 @@ void KoTextParag::move( int &dy )
     changed = TRUE;
     r.moveBy( 0, dy );
     if ( mFloatingItems ) {
-	for ( KoTextCustomItem *i = mFloatingItems->first(); i; i = mFloatingItems->next() )
-	i->move( i->x(), i->y() + dy );
+	for ( KoTextCustomItem *i = mFloatingItems->first(); i; i = mFloatingItems->next() ) {
+		i->finalize();
+	}
     }
     if ( p )
 	p->lastInFrame = FALSE;
