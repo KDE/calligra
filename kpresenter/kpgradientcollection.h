@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -38,10 +39,10 @@ class KPGradientCollection
 {
 public:
     KPGradientCollection()
-    { gradientList.setAutoDelete( true ); }
+        { gradientList.setAutoDelete( true ); }
 
     ~KPGradientCollection()
-    { gradientList.clear(); }
+        { gradientList.clear(); }
 
     /** Retrieve or create gradient for the given parameters */
     const QPixmap& getGradient( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -50,14 +51,15 @@ KPresenterFactory::~KPresenterFactory()
     s_global=0;
 }
 
-KParts::Part* KPresenterFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KPresenterFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent,
+                                                   const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KPresenterDoc *doc = new KPresenterDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
-      doc->setReadWrite( false );
+        doc->setReadWrite( false );
 
     return doc;
 }
@@ -73,18 +75,18 @@ KInstance* KPresenterFactory::global()
 {
     if ( !s_global )
     {
-      s_global = new KInstance(aboutData());
+        s_global = new KInstance(aboutData());
 
-      s_global->dirs()->addResourceType("kpresenter_template",
-                                        KStandardDirs::kde_default("data") + "kpresenter/templates/");
-      s_global->dirs()->addResourceType("autoforms",
-                                        KStandardDirs::kde_default("data") + "kpresenter/autoforms/");
-      s_global->dirs()->addResourceType("slideshow",
-                                        KStandardDirs::kde_default("data") + "kpresenter/slideshow/");
-      // Tell the iconloader about share/apps/koffice/icons
-      s_global->iconLoader()->addAppDir("koffice");
+        s_global->dirs()->addResourceType("kpresenter_template",
+                                          KStandardDirs::kde_default("data") + "kpresenter/templates/");
+        s_global->dirs()->addResourceType("autoforms",
+                                          KStandardDirs::kde_default("data") + "kpresenter/autoforms/");
+        s_global->dirs()->addResourceType("slideshow",
+                                          KStandardDirs::kde_default("data") + "kpresenter/slideshow/");
+        // Tell the iconloader about share/apps/koffice/icons
+        s_global->iconLoader()->addAppDir("koffice");
     }
     return s_global;
 }
 
-#include <kpresenter_factory.moc>
+#include "kpresenter_factory.moc"

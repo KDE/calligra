@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -31,7 +32,7 @@
 KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
     : KoDocumentIface( doc_ )
 {
-   doc = doc_;
+    doc = doc_;
 }
 
 int KPresenterDocIface::numPages() const
@@ -42,17 +43,16 @@ int KPresenterDocIface::numPages() const
 DCOPRef KPresenterDocIface::page( int num )
 {
     if( num>= (int )doc->getPageNums())
-      return DCOPRef();
+        return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
-		    doc->pageList().at( num )->dcopObject()->objId() );
+                    doc->pageList().at( num )->dcopObject()->objId() );
 }
 
 DCOPRef KPresenterDocIface::stickyPage()
 {
     return DCOPRef( kapp->dcopClient()->appId(),
-		    doc->stickyPage()->dcopObject()->objId() );
+                    doc->stickyPage()->dcopObject()->objId() );
 }
-
 
 void KPresenterDocIface::setShowRuler(bool b)
 {
@@ -64,7 +64,6 @@ bool KPresenterDocIface::showRuler() const
 {
     return doc->showRuler();
 }
-
 
 void KPresenterDocIface::recalcAllVariables()
 {
@@ -143,11 +142,11 @@ QString KPresenterDocIface::customVariableValue(const QString & varname)const
 
 bool KPresenterDocIface::insertNewPage(int pos )
 {
-  if( pos < 0 || pos > (int)(doc->getPageNums())-1 )
-    pos=doc->getPageNums()-1;
-  int ret= doc->insertNewPage( i18n("Insert New Slide"), pos, IP_AFTER, false, QString::null );
-  bool state = (ret !=-1);
-  return state;
+    if( pos < 0 || pos > (int)(doc->getPageNums())-1 )
+        pos=doc->getPageNums()-1;
+    int ret= doc->insertNewPage( i18n("Insert New Slide"), pos, IP_AFTER, false, QString::null );
+    bool state = (ret !=-1);
+    return state;
 }
 
 //return false if page number doesn't exist
@@ -162,10 +161,10 @@ bool KPresenterDocIface::selectPage( int page,bool select)
 // return false when we can't remove page
 bool KPresenterDocIface::deletePage( int _page )
 {
-  if( _page < 0 || _page > (int)(doc->getPageNums())-1 )
-      return false;
-  doc->deletePage(_page);
-  return true;
+    if( _page < 0 || _page > (int)(doc->getPageNums())-1 )
+        return false;
+    doc->deletePage(_page);
+    return true;
 }
 
 void KPresenterDocIface::deSelectAllObj()
@@ -177,7 +176,6 @@ void KPresenterDocIface::recalcPageNum()
 {
     doc->recalcPageNum();
 }
-
 
 void KPresenterDocIface::setHeader( bool b )
 {
@@ -225,10 +223,8 @@ bool KPresenterDocIface::hasHeader() const
 DCOPRef KPresenterDocIface::header()
 {
     if(doc->header())
-    {
         return DCOPRef( kapp->dcopClient()->appId(),
-                       doc->header()->dcopObject()->objId() );
-    }
+                        doc->header()->dcopObject()->objId() );
     else
         return DCOPRef();
 }
@@ -237,10 +233,8 @@ DCOPRef KPresenterDocIface::header()
 DCOPRef KPresenterDocIface::footer()
 {
     if(doc->footer())
-    {
         return DCOPRef( kapp->dcopClient()->appId(),
-                       doc->footer()->dcopObject()->objId() );
-    }
+                        doc->footer()->dcopObject()->objId() );
     else
         return DCOPRef();
 }
@@ -475,18 +469,14 @@ void KPresenterDocIface::addHoriHelpLine( double val)
 double KPresenterDocIface::horizHelpLineValue(int index) const
 {
     if ( index >= (int)doc->horizHelplines().count())
-    {
         return -1.0;
-    }
     return doc->horizHelplines()[index];
 }
 
 double KPresenterDocIface::vertHelpLineValue(int index) const
 {
     if ( index >= (int)doc->vertHelplines().count())
-    {
         return -1.0;
-    }
     return doc->vertHelplines()[index];
 }
 
@@ -647,7 +637,6 @@ void KPresenterDocIface::setConfigAutoSuperScript( bool b)
 {
     doc->getAutoFormat()->configAutoSuperScript( b );
 }
-
 
 double KPresenterDocIface::helpPointPosX( int index ) const
 {

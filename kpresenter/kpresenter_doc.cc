@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -371,7 +372,7 @@ void KPresenterDoc::initConfig()
 
     KSpellConfig ksconfig;
 #ifdef HAVE_LIBASPELL
-  KOSpellConfig kosconfig;
+    KOSpellConfig kosconfig;
 #endif
 
     if( config->hasGroup("KSpell kpresenter" ) )
@@ -902,8 +903,8 @@ void KPresenterDoc::saveUsedSoundFileToStore( KoStore *_store, QStringList _list
             KoStoreDevice dev( _store );
             QFile _file( soundFileName );
             if ( _file.open( IO_ReadOnly ) ) {
-               dev.writeBlock( ( _file.readAll() ).data(), _file.size() );
-               _file.close();
+                dev.writeBlock( ( _file.readAll() ).data(), _file.size() );
+                _file.close();
             }
             _store->close();
         }
@@ -973,7 +974,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
             setErrorMessage( i18n( "parsing error in the main document (converted from an old KPresenter format) at line %1, column %2\nError message: %3" )
-                .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) ) );
+                             .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) ) );
             return false;
         }
         b = loadXML( newdoc );
@@ -1373,17 +1374,17 @@ void KPresenterDoc::loadPictureMap ( const QDomElement& domElement )
     // <PICTURES>
     QDomElement picturesElem = domElement.namedItem( "PICTURES" ).toElement();
     if ( !picturesElem.isNull() )
-       m_pictureCollection.readXML( picturesElem, m_pictureMap );
+        m_pictureCollection.readXML( picturesElem, m_pictureMap );
 
     // <PIXMAPS>
     QDomElement pixmapsElem = domElement.namedItem( "PIXMAPS" ).toElement();
     if ( !pixmapsElem.isNull() )
-       m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
+        m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
 
     // <CLIPARTS>
     QDomElement clipartsElem = domElement.namedItem( "CLIPARTS" ).toElement();
     if ( !clipartsElem.isNull() )
-       m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
+        m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
 }
 
 void KPresenterDoc::loadBackground( const QDomElement &element )
@@ -1960,7 +1961,7 @@ void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _li
 void KPresenterDoc::setPageLayout( const KoPageLayout &pgLayout )
 {
     //     if ( _pageLayout == pgLayout )
-    //	return;
+    //  return;
 
     m_pageLayout = pgLayout;
 
@@ -1994,7 +1995,7 @@ bool KPresenterDoc::insertNewTemplate( bool clean )
     QString _template;
     KoTemplateChooseDia::ReturnType ret;
 
-    ret = KoTemplateChooseDia::choose(	KPresenterFactory::global(), _template,
+    ret = KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
                                         "application/x-kpresenter", "*.kpr",
                                         i18n("KPresenter"), KoTemplateChooseDia::Everything,
                                         "kpresenter_template" );
@@ -2050,7 +2051,6 @@ void KPresenterDoc::setGridValue( double _x, double _y, bool _replace )
         replaceObjs();
 }
 
-/*=================== repaint all views =========================*/
 void KPresenterDoc::repaint( bool erase )
 {
     QPtrListIterator<KoView> it( views() );
@@ -2060,7 +2060,6 @@ void KPresenterDoc::repaint( bool erase )
     }
 }
 
-/*===================== repaint =================================*/
 void KPresenterDoc::repaint( const QRect& rect )
 {
     QRect r;
@@ -2100,7 +2099,6 @@ QValueList<int> KPresenterDoc::reorderPage( unsigned int num )
     return m_pageList.at(num)->reorderPage();
 }
 
-/*================== get size of page ===========================*/
 QRect KPresenterDoc::getPageRect( bool decBorders ) const
 {
     int pw, ph, bl = static_cast<int>(m_pageLayout.ptLeft);
@@ -2244,8 +2242,8 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
         src.setPath( fileName );
         dest.setPath( locateLocal( "appdata", "default.kpr" ) );
         kdDebug(33001) << "Copying template  (in KPresenterDoc::templateFileName)" << endl
-            << "  from: " << src.prettyURL() << endl
-            << "  to: " << dest.prettyURL() << endl;
+                       << "  from: " << src.prettyURL() << endl
+                       << "  to: " << dest.prettyURL() << endl;
         KIO::NetAccess::del( dest ); // copy does *not* delete, so have to do it explicitely!
         KIO::NetAccess::copy( src, dest );
     }
@@ -2405,9 +2403,9 @@ void KPresenterDoc::makeUsedPixmapList()
     usedPictures.clear();
 
     for ( uint i = 0; i < m_pageList.count(); i++ ) {
-	if ( saveOnlyPage != -1 &&
-	     static_cast<int>(i) != saveOnlyPage )
-	    continue;
+        if ( saveOnlyPage != -1 &&
+             static_cast<int>(i) != saveOnlyPage )
+            continue;
         m_pageList.at(i)->makeUsedPixmapList();
     }
 }
@@ -3167,7 +3165,7 @@ void KPresenterDoc::updateGridButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KPresenterView*)it.current())->updateGridButton();
+        ((KPresenterView*)it.current())->updateGridButton();
 
 }
 
@@ -3408,16 +3406,16 @@ void KPresenterDoc::addWordToDictionary( const QString & word)
 #ifdef HAVE_LIBASPELL
 void KPresenterDoc::setKOSpellConfig(KOSpellConfig _kspell)
 {
-  if(m_pKOSpellConfig==0)
-    m_pKOSpellConfig=new KOSpellConfig();
+    if(m_pKOSpellConfig==0)
+        m_pKOSpellConfig=new KOSpellConfig();
 
-  m_pKOSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
-  m_pKOSpellConfig->setRunTogether(_kspell.runTogether ());
-  m_pKOSpellConfig->setDictionary(_kspell.dictionary ());
-  m_pKOSpellConfig->setDictFromList(_kspell.dictFromList());
-  m_pKOSpellConfig->setEncoding(_kspell.encoding());
-  //FIXME
-  //m_bgSpellCheck->setKSpellConfig(_kspell);
+    m_pKOSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
+    m_pKOSpellConfig->setRunTogether(_kspell.runTogether ());
+    m_pKOSpellConfig->setDictionary(_kspell.dictionary ());
+    m_pKOSpellConfig->setDictFromList(_kspell.dictFromList());
+    m_pKOSpellConfig->setEncoding(_kspell.encoding());
+    //FIXME
+    //m_bgSpellCheck->setKSpellConfig(_kspell);
 }
 #endif
 

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -21,46 +22,42 @@
 #include <kpgradient.h>
 #include <qstring.h>
 
-/******************************************************************/
-/* Class: KPGradientCollection					  */
-/******************************************************************/
-
-/*======================= get gradient ===========================*/
-const QPixmap& KPGradientCollection::getGradient( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
-					    bool _unbalanced, int _xfactor, int _yfactor, bool addref )
+const QPixmap& KPGradientCollection::getGradient( const QColor &_color1, const QColor &_color2,
+                                                  BCType _bcType, const QSize &_size,
+                                                  bool _unbalanced, int _xfactor, int _yfactor, bool addref )
 {
     KPGradient *cachedGradient = inGradientList( _color1, _color2, _bcType, _size, _unbalanced, _xfactor, _yfactor );
 
     if ( !cachedGradient ) {
-	KPGradient *kpgradient = new KPGradient( _color1, _color2, _bcType, _unbalanced, _xfactor, _yfactor );
+        KPGradient *kpgradient = new KPGradient( _color1, _color2, _bcType, _unbalanced, _xfactor, _yfactor );
         kpgradient->setSize( _size );
-	gradientList.append( kpgradient );
+        gradientList.append( kpgradient );
 
-	if ( addref )
-	    kpgradient->addRef();
+        if ( addref )
+            kpgradient->addRef();
 
-	return kpgradient->pixmap();
+        return kpgradient->pixmap();
     } else {
-	if ( addref )
-	    cachedGradient->addRef();
+        if ( addref )
+            cachedGradient->addRef();
 
-	return cachedGradient->pixmap();
+        return cachedGradient->pixmap();
     }
 }
 
-/*====================== remove ref =============================*/
-void KPGradientCollection::removeRef( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
-				      bool _unbalanced, int _xfactor, int _yfactor)
+void KPGradientCollection::removeRef( const QColor &_color1, const QColor &_color2,
+                                      BCType _bcType, const QSize &_size,
+                                      bool _unbalanced, int _xfactor, int _yfactor)
 {
     KPGradient* cachedGradient = inGradientList( _color1, _color2, _bcType, _size, _unbalanced, _xfactor, _yfactor );
     if ( cachedGradient ) {
-	if ( cachedGradient->removeRef() ) // does deref say it was the last use?
-	    gradientList.removeRef( cachedGradient ); // yes -> remove from list
+        if ( cachedGradient->removeRef() ) // does deref say it was the last use?
+            gradientList.removeRef( cachedGradient ); // yes -> remove from list
     }
 }
 
-/*========================== in gradient list? ====================*/
-KPGradient* KPGradientCollection::inGradientList( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
+KPGradient* KPGradientCollection::inGradientList( const QColor &_color1, const QColor &_color2,
+                                                  BCType _bcType, const QSize &_size,
                                                   bool _unbalanced, int _xfactor, int _yfactor ) const
 {
     QPtrListIterator<KPGradient> it( gradientList );

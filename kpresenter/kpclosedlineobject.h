@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Toshitaka Fujioka <fujioka@kde.org>
 
@@ -27,10 +28,6 @@
 class KPGradient;
 class QPainter;
 class DCOPObject;
-
-/******************************************************************/
-/* Class: KPClosedLineObject                                      */
-/******************************************************************/
 
 class KPClosedLineObject : public KP2DObject
 {
@@ -69,7 +66,7 @@ public:
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
-			bool drawingShadow, bool drawContour );
+                        bool drawingShadow, bool drawContour );
 
     void updatePoints( double _fx, double _fy );
 

@@ -26,11 +26,6 @@
 
 class KPresenterChild;
 
-
-/******************************************************************/
-/* Class: KPPartObject                                            */
-/******************************************************************/
-
 class KPPartObject : public QObject, public KP2DObject
 {
     Q_OBJECT
@@ -45,7 +40,7 @@ public:
     virtual QString getTypeString() const { return i18n("Embedded Object"); }
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
-		       SelectionMode selectionMode, bool drawContour = FALSE );
+                       SelectionMode selectionMode, bool drawContour = FALSE );
 
     void activate( QWidget *_widget );
     void deactivate();
@@ -59,7 +54,7 @@ public slots:
 protected:
     void updateChildGeometry();
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
-			bool drawingShadow, bool drawContour = FALSE );
+                        bool drawingShadow, bool drawContour = FALSE );
 
     bool _enableDrawing;
     KPresenterChild *child;

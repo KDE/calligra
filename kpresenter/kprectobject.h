@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -25,16 +26,13 @@
 class KPGradient;
 class DCOPObject;
 
-/******************************************************************/
-/* Class: KPRectObject                                            */
-/******************************************************************/
-
 class KPRectObject : public KP2DObject
 {
 public:
     KPRectObject();
     KPRectObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
-                  const QColor &_gColor1, const QColor &_gColor2, BCType _gType, int _xRnd, int _yRnd,
+                  const QColor &_gColor1, const QColor &_gColor2,
+                  BCType _gType, int _xRnd, int _yRnd,
                   bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPRectObject() {}
     virtual DCOPObject* dcopObject();
@@ -42,28 +40,28 @@ public:
     KPRectObject &operator=( const KPRectObject & );
 
     virtual void setRnds( int _xRnd, int _yRnd )
-    { xRnd = _xRnd; yRnd = _yRnd; }
+        { xRnd = _xRnd; yRnd = _yRnd; }
 
     virtual ObjType getType() const
-    { return OT_RECT; }
+        { return OT_RECT; }
     virtual QString getTypeString() const
-    { return i18n("Rectangle"); }
+        { return i18n("Rectangle"); }
     virtual void getRnds( int &_xRnd, int &_yRnd ) const
-    { _xRnd = xRnd; _yRnd = yRnd; }
+        { _xRnd = xRnd; _yRnd = yRnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
-			bool drawingShadow, bool drawContour );
+                        bool drawingShadow, bool drawContour );
 
     int xRnd, yRnd;
 private:
     /**
        Returns a bounding region for a rounded-corners rectangle. Useful for setting
        further clipping (e.g. to draw a pixmap on such a rectangle).
-     */
+    */
     QPointArray boundingRegion( int x, int y, int w, int h, int _xRnd, int _yRnd) const;
 };
 

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -27,11 +28,6 @@
 #include <kdebug.h>
 using namespace std;
 
-/******************************************************************/
-/* Class: KPPartObject                                            */
-/******************************************************************/
-
-/*======================== constructor ===========================*/
 KPPartObject::KPPartObject( KPresenterChild *_child )
     : KP2DObject()
 {
@@ -41,7 +37,6 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     _enableDrawing = true;
 }
 
-/*================================================================*/
 KPPartObject &KPPartObject::operator=( const KPPartObject & )
 {
     return *this;
@@ -62,12 +57,11 @@ void KPPartObject::rotate( float _angle )
     child->setRotation( _angle );
     KoZoomHandler* zh = child->parent()->zoomHandler();
     child->setRotationPoint( QPoint( zh->zoomItX( getOrig().x() + getSize().width() / 2 ),
-                             zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
+                                     zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
-/*======================== draw ==================================*/
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
-			 SelectionMode selectionMode, bool drawContour )
+                         SelectionMode selectionMode, bool drawContour )
 {
     updateChildGeometry();
     double ow = ext.width();
@@ -114,7 +108,8 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
 
         if ( fillType == FT_BRUSH || !gradient )
             _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
-                                _zoomhandler->zoomItX( ext.width() - 2 * penw ), _zoomhandler->zoomItY( ext.height() - 2 * penw ) );
+                                _zoomhandler->zoomItX( ext.width() - 2 * penw ),
+                                _zoomhandler->zoomItY( ext.height() - 2 * penw ) );
         else {
             gradient->setSize( size );
             _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0,
@@ -134,7 +129,6 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
     KPObject::draw( _painter, _zoomhandler, selectionMode, drawContour );
 }
 
-/*================================================================*/
 void KPPartObject::slot_changed( KoChild *_koChild )
 {
     KoZoomHandler* zh = child->parent()->zoomHandler();
@@ -143,7 +137,6 @@ void KPPartObject::slot_changed( KoChild *_koChild )
     KPObject::setSize( zh->unzoomItX( g.width() ), zh->unzoomItY( g.height() ) );
 }
 
-/*================================================================*/
 void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
                           bool /*drawingShadow*/, bool drawContour )
 {
@@ -168,7 +161,6 @@ void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
                                         _zoomHandler->zoomedResolutionY() );
 }
 
-/*================================================================*/
 void KPPartObject::activate( QWidget *_widget )
 {
     KPresenterView *view = dynamic_cast<KPresenterView*>( _widget );
@@ -179,9 +171,8 @@ void KPPartObject::activate( QWidget *_widget )
     view->partManager()->setActivePart( part, view );
 }
 
-/*================================================================*/
 void KPPartObject::deactivate()
 {
 }
 
-#include <kppartobject.moc>
+#include "kppartobject.moc"

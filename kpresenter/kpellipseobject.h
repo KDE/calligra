@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -27,10 +28,6 @@ class KPGradient;
 class QPainter;
 class DCOPObject;
 
-/******************************************************************/
-/* Class: KPEllipseObject                                         */
-/******************************************************************/
-
 class KPEllipseObject : public KP2DObject
 {
 public:
@@ -47,20 +44,20 @@ public:
 
     virtual void setFillType( FillType _fillType );
     virtual void setGColor1( const QColor &_gColor1 )
-    { KP2DObject::setGColor1(_gColor1); redrawPix = true; }
+        { KP2DObject::setGColor1(_gColor1); redrawPix = true; }
     virtual void setGColor2( const QColor &_gColor2 )
-    { KP2DObject::setGColor2(_gColor2); redrawPix = true; }
+        { KP2DObject::setGColor2(_gColor2); redrawPix = true; }
     virtual void setGType( BCType _gType )
-    { KP2DObject::setGType(_gType); redrawPix = true; }
+        { KP2DObject::setGType(_gType); redrawPix = true; }
 
     virtual ObjType getType() const
-    { return OT_ELLIPSE; }
+        { return OT_ELLIPSE; }
     virtual QString getTypeString() const
-    { return i18n("Ellipse"); }
+        { return i18n("Ellipse"); }
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler *_zoomHandler,
-			bool drawingShadow, bool drawContour = FALSE );
+                        bool drawingShadow, bool drawContour = FALSE );
 
     QPixmap pix;
     bool redrawPix;

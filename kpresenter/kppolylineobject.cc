@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
 
@@ -30,11 +31,6 @@
 #include <math.h>
 using namespace std;
 
-/******************************************************************/
-/* Class: KPPolylineObject                                        */
-/******************************************************************/
-
-/*================ default constructor ===========================*/
 KPPolylineObject::KPPolylineObject()
     : KPShadowObject()
 {
@@ -45,14 +41,12 @@ KPPolylineObject::KPPolylineObject()
 DCOPObject* KPPolylineObject::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPPolyLineObjectIface( this );
+        dcop = new KPPolyLineObjectIface( this );
     return dcop;
 }
 
-
-/*================== overloaded constructor ======================*/
 KPPolylineObject::KPPolylineObject(  const KoPointArray &_points, const KoSize &_size,
-				     const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+                                     const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
     : KPShadowObject( _pen )
 {
     points = KoPointArray( _points );
@@ -67,13 +61,12 @@ KPPolylineObject &KPPolylineObject::operator=( const KPPolylineObject & )
     return *this;
 }
 
-/*========================= save =================================*/
 QDomDocumentFragment KPPolylineObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment = KPShadowObject::save( doc, offset );
     if ( !points.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
-	KoPointArray::ConstIterator it;
+        KoPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
             KoPoint point = (*it);
@@ -86,15 +79,16 @@ QDomDocumentFragment KPPolylineObject::save( QDomDocument& doc, double offset )
     }
 
     if ( lineBegin != L_NORMAL )
-        fragment.appendChild( KPObject::createValueElement( "LINEBEGIN", static_cast<int>( lineBegin ), doc ) );
+        fragment.appendChild( KPObject::createValueElement( "LINEBEGIN",
+                                                            static_cast<int>( lineBegin ), doc ) );
 
     if ( lineEnd != L_NORMAL )
-        fragment.appendChild( KPObject::createValueElement( "LINEEND", static_cast<int>( lineEnd ), doc ) );
+        fragment.appendChild( KPObject::createValueElement( "LINEEND",
+                                                            static_cast<int>( lineEnd ), doc ) );
 
     return fragment;
 }
 
-/*========================== load ================================*/
 double KPPolylineObject::load(const QDomElement &element)
 {
     double offset=KPShadowObject::load( element );
@@ -139,21 +133,20 @@ double KPPolylineObject::load(const QDomElement &element)
     return offset;
 }
 
-/*======================== paint =================================*/
 void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
-			      bool /*drawingShadow*/, bool drawContour )
+                              bool /*drawingShadow*/, bool drawContour )
 {
     int _w = pen.width();
 
     QPen pen2;
     if ( drawContour ) {
-	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+        pen2 = QPen( Qt::black, 1, Qt::DotLine );
         _painter->setRasterOp( Qt::NotXorROP );
     }
     else {
-	pen2 = pen;
-	pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
-   }
+        pen2 = pen;
+        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+    }
     _painter->setPen( pen2 );
 
     QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
@@ -234,7 +227,7 @@ void KPPolylineObject::flip(bool horizontal )
     int index = 0;
     if ( horizontal )
     {
-	KoPointArray::ConstIterator it;
+        KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
         for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
             KoPoint point = (*it);

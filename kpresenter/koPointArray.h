@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent MONTEL <lmontel@mandrakesoft.com>
 
@@ -33,10 +34,10 @@ public:
     KoPointArray( const KoPointArray &a ) : QMemArray<KoPoint>( a ) {}
 
     KoPointArray &operator=( const KoPointArray &a )
-	{ return (KoPointArray&)assign( a ); }
+        { return (KoPointArray&)assign( a ); }
 
     KoPointArray copy() const
-	{ KoPointArray tmp; return *((KoPointArray*)&tmp.duplicate(*this)); }
+        { KoPointArray tmp; return *((KoPointArray*)&tmp.duplicate(*this)); }
 
     void    translate( double dx, double dy );
     KoRect   boundingRect() const;

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
 
@@ -28,7 +29,7 @@
 KPresenterObject2DIface::KPresenterObject2DIface(KP2DObject *obj_)
     : KPresenterObjectIface(obj_)
 {
-   obj = obj_;
+    obj = obj_;
 }
 
 QColor KPresenterObject2DIface::gradientColor1() const

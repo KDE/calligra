@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Toshitaka Fujioka <fujioka@kde.org>
 
@@ -31,18 +32,12 @@
 
 using namespace std;
 
-/******************************************************************/
-/* Class: KPClosedLineObject                                      */
-/******************************************************************/
-
-/*================ default constructor ===========================*/
 KPClosedLineObject::KPClosedLineObject()
     : KP2DObject()
 {
     redrawPix = false;
 }
 
-/*================== overloaded constructor ======================*/
 KPClosedLineObject::KPClosedLineObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, const QBrush &_brush,
                                         FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                         bool _unbalanced, int _xfactor, int _yfactor, const QString _typeString )
@@ -63,7 +58,6 @@ KPClosedLineObject::KPClosedLineObject( const KoPointArray &_points, const KoSiz
         gradient = 0;
 }
 
-/*================================================================*/
 KPClosedLineObject &KPClosedLineObject::operator=( const KPClosedLineObject & )
 {
     return *this;
@@ -72,13 +66,12 @@ KPClosedLineObject &KPClosedLineObject::operator=( const KPClosedLineObject & )
 #if 0
 DCOPObject* KPClosedLineObject::dcopObject()
 {
-   if ( !dcop )
-	dcop = new KPClosedLineObjectIface( this );
+    if ( !dcop )
+        dcop = new KPClosedLineObjectIface( this );
     return dcop;
 }
 #endif
 
-/*========================= save =================================*/
 QDomDocumentFragment KPClosedLineObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment = KP2DObject::save( doc, offset );
@@ -91,7 +84,7 @@ QDomDocumentFragment KPClosedLineObject::save( QDomDocument& doc, double offset 
 
     if ( !points.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
-	KoPointArray::ConstIterator it;
+        KoPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
             KoPoint point = (*it);
@@ -106,7 +99,6 @@ QDomDocumentFragment KPClosedLineObject::save( QDomDocument& doc, double offset 
     return fragment;
 }
 
-/*========================== load ================================*/
 double KPClosedLineObject::load( const QDomElement &element )
 {
     double offset = KP2DObject::load( element );
@@ -141,7 +133,6 @@ double KPClosedLineObject::load( const QDomElement &element )
     return offset;
 }
 
-/*================================================================*/
 void KPClosedLineObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
@@ -168,7 +159,6 @@ void KPClosedLineObject::updatePoints( double _fx, double _fy )
     points = tmpPoints;
 }
 
-/*================================================================*/
 void KPClosedLineObject::setFillType( FillType _fillType )
 {
     fillType = _fillType;
@@ -184,7 +174,6 @@ void KPClosedLineObject::setFillType( FillType _fillType )
     }
 }
 
-/*======================== paint =================================*/
 void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
                                 bool drawingShadow, bool drawContour )
 {
@@ -192,11 +181,11 @@ void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 
     if ( drawContour ) {
         QPointArray pointArray2 = points.zoomPointArray( _zoomHandler );
-	QPen pen3( Qt::black, 1, Qt::DotLine );
-	_painter->setPen( pen3 );
+        QPen pen3( Qt::black, 1, Qt::DotLine );
+        _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
-	_painter->drawPolygon( pointArray2 );
-	return;
+        _painter->drawPolygon( pointArray2 );
+        return;
     }
 
     QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
@@ -233,7 +222,6 @@ void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
         _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawPolygon( pointArray );
-
     }
 }
 
@@ -243,7 +231,7 @@ void KPClosedLineObject::flip(bool horizontal )
     int index = 0;
     if ( horizontal )
     {
-	KoPointArray::ConstIterator it;
+        KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
         for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
             KoPoint point = (*it);
@@ -253,7 +241,6 @@ void KPClosedLineObject::flip(bool horizontal )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
             ++index;
         }
-
     }
     else
     {
@@ -267,10 +254,8 @@ void KPClosedLineObject::flip(bool horizontal )
                 tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
             ++index;
         }
-
     }
     origPoints = tmpPoints;
     updatePoints( 1.0, 1.0 );
-
 }
 

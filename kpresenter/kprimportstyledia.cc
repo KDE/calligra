@@ -1,4 +1,5 @@
-	 /* This file is part of the KDE project
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
+/* This file is part of the KDE project
    Copyright (C)  2002 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
@@ -33,17 +34,16 @@
 #include <qlabel.h>
 #include "kptextobject.h"
 
-KPrImportStyleDia::KPrImportStyleDia( KPresenterDoc *_doc, const QStringList &_list, QWidget *parent, const char *name )
+KPrImportStyleDia::KPrImportStyleDia( KPresenterDoc *_doc, const QStringList &_list,
+                                      QWidget *parent, const char *name )
     :KoImportStyleDia( _list, parent, name ),
      m_doc(_doc)
 {
-
 }
 
 KPrImportStyleDia::~KPrImportStyleDia()
 {
 }
-
 
 void KPrImportStyleDia::loadFile()
 {
@@ -100,7 +100,7 @@ void KPrImportStyleDia::loadFile()
                         sty->setName( nameElem.attribute("value") );
                         //kdDebug(33001) << "KWStyle created  name=" << sty->name() << endl;
                     } else
-                        kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
+                        kdWarning(33001) << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
                     QString name =sty->name();
                     if ( m_list.findIndex( name )!=-1 )
@@ -112,7 +112,8 @@ void KPrImportStyleDia::loadFile()
 
                     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
                     if ( !formatElem.isNull() )
-                        sty->format() = KPTextObject::loadFormat( formatElem, 0L, m_doc->defaultFont(),m_doc->globalLanguage(), m_doc->globalHyphenation() );
+                        sty->format() = KPTextObject::loadFormat( formatElem, 0L, m_doc->defaultFont(),
+                                                                  m_doc->globalLanguage(), m_doc->globalHyphenation() );
                     else
                         kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
@@ -126,7 +127,7 @@ void KPrImportStyleDia::loadFile()
                         followingStyles.append( following );
                     }
                     else
-                        kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+                        kdWarning(33001) << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
                 }
 
                 Q_ASSERT( followingStyles.count() == m_styleList.count() );

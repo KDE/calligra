@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -35,11 +36,6 @@ using namespace std;
 #include <kdebug.h>
 #include <kglobalsettings.h>
 
-/******************************************************************/
-/* Class: KPBackGround                                            */
-/******************************************************************/
-
-/*================================================================*/
 KPBackGround::KPBackGround( KPrPage *_page )
     // : footerHeight( 0 )
 {
@@ -119,7 +115,6 @@ void KPBackGround::reload()
         backPicture.clear();
 }
 
-/*================================================================*/
 QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
 {
     QDomElement page=doc.createElement("PAGE");
@@ -201,7 +196,6 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     return page;
 }
 
-/*================================================================*/
 void KPBackGround::load( const QDomElement &element )
 {
     QDomElement e=element.namedItem("BACKTYPE").toElement();
@@ -326,7 +320,7 @@ void KPBackGround::load( const QDomElement &element )
                 rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
                 QBuffer buffer(rawData);
                 backPicture.loadXpm(&buffer);
-           }
+            }
 
 #if 0
             if ( ext == orig_size.toQSize() )
@@ -391,7 +385,6 @@ void KPBackGround::load( const QDomElement &element )
     }
 }
 
-/*================================================================*/
 void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect )
 {
     if ( (backType == BT_COLOR && bcType == BCT_PLAIN) || backColor1 == backColor2 ) //plain color
@@ -406,15 +399,14 @@ void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QR
     }
     else /*if ( backType == BT_CLIPART || backType == BT_PICTURE )*/ //no gradient or bg color
         _painter->fillRect( crect, QBrush( Qt::white ) );
-        return;
+    return;
 }
 
-/*================================================================*/
 void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRect& /*crect*/ )
 {
     /*kdDebug(33001) << "KPBackGround::drawBackPix ext=" << ext.width() << "," << ext.height() << endl;
-    kdDebug(33001) << "mode=" << (backView==BV_ZOOM?"ZOOM":backView==BV_TILED?"TILED":backView==BV_CENTER?"CENTER":"OTHER")
-              << " crect=" << DEBUGRECT(crect) << endl;*/
+      kdDebug(33001) << "mode=" << (backView==BV_ZOOM?"ZOOM":backView==BV_TILED?"TILED":backView==BV_CENTER?"CENTER":"OTHER")
+      << " crect=" << DEBUGRECT(crect) << endl;*/
     if ( !backPicture.isNull() )
     {
         // depend on page size and desktop size
@@ -486,8 +478,6 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
     }
 }
 
-/*================================================================*/
-
 void KPBackGround::drawBorders( QPainter *_painter, const QSize& ext, const QRect& /*crect*/ )
 {
     _painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
@@ -500,7 +490,8 @@ void KPBackGround::generateGradient( const QSize& size )
     if ( backType == BT_COLOR || backType == BT_CLIPART ||
          backType == BT_PICTURE && backView == BV_CENTER ) {
         removeGradient();
-        gradientPixmap = &gradientCollection()->getGradient( backColor1, backColor2, bcType, size, unbalanced, xfactor, yfactor );
+        gradientPixmap = &gradientCollection()->getGradient( backColor1, backColor2, bcType, size,
+                                                             unbalanced, xfactor, yfactor );
     }
 
     // Avoid keeping an unused gradient around
@@ -526,4 +517,3 @@ KPGradientCollection * KPBackGround::gradientCollection() const
 {
     return m_page->kPresenterDoc()->gradientCollection();
 }
-

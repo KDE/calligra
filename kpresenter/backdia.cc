@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -42,13 +43,6 @@
 
 #include <koPicture.h>
 
-/*******************************************************************
- *
- * Class: BackPreview
- *
- *******************************************************************/
-
-/*=============================================================*/
 BackPreview::BackPreview( QWidget *parent, KPrPage *page )
     : QFrame( parent )
 {
@@ -62,7 +56,6 @@ BackPreview::~BackPreview()
     delete back;
 }
 
-/*=============================================================*/
 void BackPreview::drawContents( QPainter *p )
 {
     QFrame::drawContents( p );
@@ -72,19 +65,15 @@ void BackPreview::drawContents( QPainter *p )
     p->restore();
 }
 
-/******************************************************************/
-/* class BackDia                                                  */
-/******************************************************************/
-
-/*=============================================================*/
 BackDia::BackDia( QWidget* parent, const char* name,
                   BackType backType, const QColor &backColor1,
                   const QColor &backColor2, BCType _bcType,
                   const KoPicture &backPic,
                   BackView backPicView, bool _unbalanced,
                   int _xfactor, int _yfactor, KPrPage *m_page )
-    : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2 ),
-    m_picture(backPic),m_oldpicture(backPic)
+    : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|
+                   KDialogBase::User1|KDialogBase::User2 ),
+      m_picture(backPic),m_oldpicture(backPic)
 {
     lockUpdate = true;
 
@@ -257,7 +246,6 @@ void BackDia::changeComboText(int _p)
     updateConfiguration();
 }
 
-/*=============================================================*/
 void BackDia::showEvent( QShowEvent *e )
 {
     QDialog::showEvent( e );
@@ -265,7 +253,6 @@ void BackDia::showEvent( QShowEvent *e )
     updateConfiguration();
 }
 
-/*=============================================================*/
 void BackDia::updateConfiguration()
 {
     if ( lockUpdate )
@@ -320,55 +307,46 @@ void BackDia::updateConfiguration()
     picChanged  = false;
 }
 
-/*=============================================================*/
 BackType BackDia::getBackType() const
 {
     return (BackType)backCombo->currentItem();
 }
 
-/*=============================================================*/
 BackView BackDia::getBackView() const
 {
     return (BackView)picView->currentItem();
 }
 
-/*=============================================================*/
 QColor BackDia::getBackColor1() const
 {
     return color1Choose->color();
 }
 
-/*=============================================================*/
 QColor BackDia::getBackColor2() const
 {
     return color2Choose->color();
 }
 
-/*=============================================================*/
 BCType BackDia::getBackColorType() const
 {
     return (BCType)cType->currentItem();
 }
 
-/*=============================================================*/
 bool BackDia::getBackUnbalanced() const
 {
     return unbalanced->isChecked();
 }
 
-/*=============================================================*/
 int BackDia::getBackXFactor() const
 {
     return xfactor->value();
 }
 
-/*=============================================================*/
 int BackDia::getBackYFactor() const
 {
     return yfactor->value();
 }
 
-/*=============================================================*/
 void BackDia::selectPic()
 {
     QStringList mimetypes;
@@ -387,7 +365,7 @@ void BackDia::selectPic()
         url = fd.selectedURL();
         picture.setKeyAndDownloadPicture(url);
     }
-    
+
     // Dialog canceled or download unsuccessful
     if ( picture.isNull() )
         return;
@@ -399,4 +377,4 @@ void BackDia::selectPic()
     updateConfiguration();
 }
 
-#include <backdia.moc>
+#include "backdia.moc"

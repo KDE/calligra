@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -32,11 +33,6 @@
 
 #include <kpresenter_factory.h>
 
-/******************************************************************/
-/* class AFChoose                                                 */
-/******************************************************************/
-
-/*==================== constructor ===============================*/
 AFChoose::AFChoose(QWidget *parent, const QString &caption, const char *name)
     : QTabDialog(parent,name,true)
 {
@@ -50,12 +46,10 @@ AFChoose::AFChoose(QWidget *parent, const QString &caption, const char *name)
     connect(this,SIGNAL(cancelButtonPressed()),this,SLOT(cancelClicked()));
 }
 
-/*===================== destrcutor ===============================*/
 AFChoose::~AFChoose()
 {
 }
 
-/*======================= get Groups =============================*/
 void AFChoose::getGroups()
 {
     // global autoforms (as we don't have an editor we don't have local ones)
@@ -84,7 +78,6 @@ void AFChoose::getGroups()
     }
 }
 
-/*======================= setup Tabs =============================*/
 void AFChoose::setupTabs()
 {
     if (!groupList.isEmpty())
@@ -116,7 +109,7 @@ void AFChoose::setupTabs()
                         }
                         grpPtr->entries.insert(text, filename);
                         // now load the icon and create the item
-                         // This code is shamelessly borrowed from KIconCanvas::slotLoadFiles
+                        // This code is shamelessly borrowed from KIconCanvas::slotLoadFiles
                         QImage img;
                         img.load(icon);
                         if (img.isNull()) {
@@ -150,7 +143,7 @@ void AFChoose::setupTabs()
             connect(this, SIGNAL(currentChanged(QWidget *)), this,
                     SLOT(tabChanged(QWidget*)));
             connect(grpPtr->loadWid,SIGNAL( doubleClicked ( QIconViewItem *)),this,
-                   SLOT(slotDoubleClick()));
+                    SLOT(slotDoubleClick()));
             grpPtr->label = new QLabel(grpPtr->tab);
             grpPtr->label->setText(" ");
             grpPtr->label->setMaximumHeight(grpPtr->label->sizeHint().height());
@@ -165,7 +158,6 @@ void AFChoose::slotDoubleClick()
     accept();
 }
 
-/*====================== name changed ===========================*/
 void AFChoose::nameChanged(QString name)
 {
     for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
@@ -180,7 +172,6 @@ void AFChoose::tabChanged(QWidget *w) {
     }
 }
 
-/*======================= form chosen ==========================*/
 void AFChoose::chosen()
 {
     if (!groupList.isEmpty())
@@ -206,4 +197,4 @@ void AFChoose::closeEvent ( QCloseEvent *e )
     QTabDialog::closeEvent ( e );
 }
 
-#include <afchoose.moc>
+#include "afchoose.moc"

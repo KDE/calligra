@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -24,155 +25,151 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 
-/******************************************************************/
-/* class ATFInterpreter                                           */
-/******************************************************************/
-
 class ATFInterpreter {
 
 public:
 
-  // structure of an attribute list
-  struct AttribList
-  {
-    bool isVariable;
-    int pwDiv;
-  };
+    // structure of an attribute list
+    struct AttribList
+    {
+        bool isVariable;
+        int pwDiv;
+    };
 
-  // coordinate structure
-  struct CoordStruct
-  {
-    QString a;
-    QString b;
-    QString c;
-    QString d;
-    QString e;
-    QString f;
-    QString result;
-  };
+    // coordinate structure
+    struct CoordStruct
+    {
+        QString a;
+        QString b;
+        QString c;
+        QString d;
+        QString e;
+        QString f;
+        QString result;
+    };
 
-  // attribute structure
-  struct AttribStruct
-  {
-    QString isVariable;
-    QString pwDiv;
-  };
+    // attribute structure
+    struct AttribStruct
+    {
+        QString isVariable;
+        QString pwDiv;
+    };
 
-  // structure of signs
-  struct Sign
-  {
-    char op;
-    int num;
-    char var;
-    int type;
-  };
+    // structure of signs
+    struct Sign
+    {
+        char op;
+        int num;
+        char var;
+        int type;
+    };
 
-  // structure of values
-  struct Value
-  {
-    QPtrList<Sign> var1;
-    QPtrList<Sign> var2;
-    QPtrList<Sign> var3;
-    QPtrList<Sign> var4;
-    QPtrList<Sign> var5;
-    QPtrList<Sign> var6;
-    QPtrList<Sign> result;
-  };
+    // structure of values
+    struct Value
+    {
+        QPtrList<Sign> var1;
+        QPtrList<Sign> var2;
+        QPtrList<Sign> var3;
+        QPtrList<Sign> var4;
+        QPtrList<Sign> var5;
+        QPtrList<Sign> var6;
+        QPtrList<Sign> result;
+    };
 
-  // constructure - destructure
-  ATFInterpreter();
-  ~ATFInterpreter();
+    // constructure - destructure
+    ATFInterpreter();
+    ~ATFInterpreter();
 
-  // load autoform
-  void load(const QString &);
+    // load autoform
+    void load(const QString &);
 
-  // get pointarray/attribute list/points
-  QPointArray getPointArray(int,int);
-  QPtrList<AttribList> getAttribList();
+    // get pointarray/attribute list/points
+    QPointArray getPointArray(int,int);
+    QPtrList<AttribList> getAttribList();
 
 protected:
 
-  // fields
-  static const int ST_WIDTH;
-  static const int ST_HEIGHT;
-  static const int ST_VARIABLE;
-  static const int ST_NUMBER;
-  static const int ST_OPERATOR;
+    // fields
+    static const int ST_WIDTH;
+    static const int ST_HEIGHT;
+    static const int ST_VARIABLE;
+    static const int ST_NUMBER;
+    static const int ST_OPERATOR;
 
-  // operators
-  static const char OP_EQUAL;
-  static const char OP_PLUS;
-  static const char OP_MINUS;
-  static const char OP_MULT;
-  static const char OP_DIV;
-  static const char COMMENT;
+    // operators
+    static const char OP_EQUAL;
+    static const char OP_PLUS;
+    static const char OP_MINUS;
+    static const char OP_MULT;
+    static const char OP_DIV;
+    static const char COMMENT;
 
-  // block (structure) beginnings - ends
-  static const char PNT_BG[];
-  static const char X_BG[];
-  static const char Y_BG[];
-  static const char ATTR_BG[];
-  static const char END[];
+    // block (structure) beginnings - ends
+    static const char PNT_BG[];
+    static const char X_BG[];
+    static const char Y_BG[];
+    static const char ATTR_BG[];
+    static const char END[];
 
-  // allowed variables
-  static const char VAR_1;
-  static const char VAR_2;
-  static const char VAR_3;
-  static const char VAR_4;
-  static const char VAR_5;
-  static const char VAR_6;
-  static const char VAR_X;
-  static const char VAR_Y;
-  static const char VAR_VARIA;
-  static const char VAR_PW;
-  static const char VAR_W;
-  static const char VAR_H;
+    // allowed variables
+    static const char VAR_1;
+    static const char VAR_2;
+    static const char VAR_3;
+    static const char VAR_4;
+    static const char VAR_5;
+    static const char VAR_6;
+    static const char VAR_X;
+    static const char VAR_Y;
+    static const char VAR_VARIA;
+    static const char VAR_PW;
+    static const char VAR_W;
+    static const char VAR_H;
 
-  // level (depth) of the syntax
-  static const int LEVEL_NULL;
-  static const int LEVEL_POINT;
-  static const int LEVEL_X;
-  static const int LEVEL_Y;
-  static const int LEVEL_ATTR;
+    // level (depth) of the syntax
+    static const int LEVEL_NULL;
+    static const int LEVEL_POINT;
+    static const int LEVEL_X;
+    static const int LEVEL_Y;
+    static const int LEVEL_ATTR;
 
-  // numbers
-  static const char NUM_0;
-  static const char NUM_1;
-  static const char NUM_2;
-  static const char NUM_3;
-  static const char NUM_4;
-  static const char NUM_5;
-  static const char NUM_6;
-  static const char NUM_7;
-  static const char NUM_8;
-  static const char NUM_9;
+    // numbers
+    static const char NUM_0;
+    static const char NUM_1;
+    static const char NUM_2;
+    static const char NUM_3;
+    static const char NUM_4;
+    static const char NUM_5;
+    static const char NUM_6;
+    static const char NUM_7;
+    static const char NUM_8;
+    static const char NUM_9;
 
-  // structure of coordinates
-  struct Coord
-  {
-    Value pntX;
-    Value pntY;
-    bool isVariable;
-    int pwDiv;
-  };
+    // structure of coordinates
+    struct Coord
+    {
+        Value pntX;
+        Value pntY;
+        bool isVariable;
+        int pwDiv;
+    };
 
-  // interpret the code
-  void interpret();
+    // interpret the code
+    void interpret();
 
-  // get varaible of a line
-  QPtrList<Sign> getVar(const QString&);
+    // get varaible of a line
+    QPtrList<Sign> getVar(const QString&);
 
-  // ********** variables **********
+    // ********** variables **********
 
-  // list of coordinates and pointers to coordinate/sign/value
-  QPtrList<Coord> coordList;
-  QPtrList<AttribList> attrLs;
-  Coord *coordPtr;
-  Sign *signPtr;
-  Value *valuePtr;
+    // list of coordinates and pointers to coordinate/sign/value
+    QPtrList<Coord> coordList;
+    QPtrList<AttribList> attrLs;
+    Coord *coordPtr;
+    Sign *signPtr;
+    Value *valuePtr;
 
-  // list of lines
-  QStringList lines;
+    // list of lines
+    QStringList lines;
 };
 
 #endif //ATFINTERP_H

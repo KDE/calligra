@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
 
@@ -28,9 +29,8 @@
 KPCubicBezierCurveObjectIface::KPCubicBezierCurveObjectIface( KPCubicBezierCurveObject *_obj )
     : KPresenterObjectIface(_obj)
 {
-   obj = _obj;
+    obj = _obj;
 }
-
 
 void KPCubicBezierCurveObjectIface::setLineBegin( const QString & type)
 {

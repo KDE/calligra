@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
 
@@ -32,19 +33,14 @@
 
 using namespace std;
 
-/******************************************************************/
-/* Class: KPPolygonObject                                         */
-/******************************************************************/
-
-/*================ default constructor ===========================*/
 KPPolygonObject::KPPolygonObject()
     : KP2DObject()
 {
     redrawPix = false;
 }
 
-/*================== overloaded constructor ======================*/
-KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, const QBrush &_brush,
+KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_size,
+                                  const QPen &_pen, const QBrush &_brush,
                                   FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor,
                                   bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
@@ -68,7 +64,6 @@ KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_si
         gradient = 0;
 }
 
-/*================================================================*/
 KPPolygonObject &KPPolygonObject::operator=( const KPPolygonObject & )
 {
     return *this;
@@ -77,12 +72,10 @@ KPPolygonObject &KPPolygonObject::operator=( const KPPolygonObject & )
 DCOPObject* KPPolygonObject::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPPolygonObjectIface( this );
+        dcop = new KPPolygonObjectIface( this );
     return dcop;
 }
 
-
-/*========================= save =================================*/
 QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment = KP2DObject::save( doc, offset );
@@ -112,7 +105,6 @@ QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-/*========================== load ================================*/
 double KPPolygonObject::load( const QDomElement &element )
 {
     double offset=KP2DObject::load( element );
@@ -159,7 +151,6 @@ double KPPolygonObject::load( const QDomElement &element )
     return offset;
 }
 
-/*================================================================*/
 void KPPolygonObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
@@ -186,7 +177,6 @@ void KPPolygonObject::updatePoints( double _fx, double _fy )
     points = tmpPoints;
 }
 
-/*================================================================*/
 void KPPolygonObject::setFillType( FillType _fillType )
 {
     fillType = _fillType;
@@ -202,19 +192,18 @@ void KPPolygonObject::setFillType( FillType _fillType )
     }
 }
 
-/*======================== paint =================================*/
 void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
-			     bool drawingShadow, bool drawContour )
+                             bool drawingShadow, bool drawContour )
 {
     int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.width();//pen.width();
 
     if ( drawContour ) {
         QPointArray pointArray2 = points.zoomPointArray( _zoomHandler );
-	QPen pen3( Qt::black, 1, Qt::DotLine );
-	_painter->setPen( pen3 );
+        QPen pen3( Qt::black, 1, Qt::DotLine );
+        _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
-	_painter->drawPolygon( pointArray2 );
-	return;
+        _painter->drawPolygon( pointArray2 );
+        return;
     }
 
     QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
@@ -285,9 +274,9 @@ void KPPolygonObject::drawPolygon()
             a += angle;
             _points.setPoint( i, xp, yp );
             if (xp < xmin)
-               xmin = xp;
+                xmin = xp;
             if (yp < ymin)
-               ymin = yp;
+                ymin = yp;
         }
     }
     else {
@@ -298,9 +287,9 @@ void KPPolygonObject::drawPolygon()
             a += angle;
             _points.setPoint( i, xp, yp );
             if (xp < xmin)
-               xmin = xp;
+                xmin = xp;
             if (yp < ymin)
-               ymin = yp;
+                ymin = yp;
         }
     }
 
@@ -325,7 +314,6 @@ void KPPolygonObject::drawPolygon()
     origPoints = points;
     origSize = ext;
 
-    if ( fillType == FT_GRADIENT && gradient ) {
+    if ( fillType == FT_GRADIENT && gradient )
         redrawPix = true;
-    }
 }

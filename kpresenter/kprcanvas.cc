@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -2341,8 +2342,8 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
         QWidget::resizeEvent( new QResizeEvent( KGlobalSettings::desktopGeometry(this).size(),
                                                 e->oldSize() ) );
 #else
-        QWidget::resizeEvent( new QResizeEvent( QApplication::desktop()->screenGeometry(this).size(),
-                                                e->oldSize() ) );
+    QWidget::resizeEvent( new QResizeEvent( QApplication::desktop()->screenGeometry(this).size(),
+                                            e->oldSize() ) );
 #endif
     if ( editMode ) // ### what happens in fullscreen mode ? No double-buffering !?!?
         buffer.resize( size() );

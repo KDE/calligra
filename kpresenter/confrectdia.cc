@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -31,11 +32,6 @@
 
 #include <stdlib.h>
 
-/******************************************************************/
-/* class RectPreview                                              */
-/******************************************************************/
-
-/*==================== constructor ===============================*/
 RectPreview::RectPreview( QWidget* parent, const char* name )
     : QFrame( parent, name )
 {
@@ -47,7 +43,6 @@ RectPreview::RectPreview( QWidget* parent, const char* name )
     setMinimumSize( 200, 100 );
 }
 
-/*====================== draw contents ===========================*/
 void RectPreview::drawContents( QPainter* painter )
 {
     int ow = width();
@@ -61,11 +56,7 @@ void RectPreview::drawContents( QPainter* painter )
     painter->restore();
 }
 
-/******************************************************************/
-/* class ConfRectDia                                              */
-/******************************************************************/
 
-/*==================== constructor ===============================*/
 ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     : QWidget( parent, name ), m_bRndXChanged(false), m_bRndYChanged(false)
 {
@@ -111,13 +102,11 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     slotReset();
 }
 
-/*===================== destructor ===============================*/
 ConfRectDia::~ConfRectDia()
 {
     delete rectPreview;
 }
 
-/*================================================================*/
 void ConfRectDia::rndXChanged( int _rx )
 {
     xRnd = _rx;
@@ -125,7 +114,6 @@ void ConfRectDia::rndXChanged( int _rx )
     rectPreview->setRnds( xRnd, yRnd );
 }
 
-/*================================================================*/
 void ConfRectDia::rndYChanged( int _ry )
 {
     yRnd = _ry;
@@ -133,7 +121,6 @@ void ConfRectDia::rndYChanged( int _ry )
     rectPreview->setRnds( xRnd, yRnd );
 }
 
-/*================================================================*/
 void ConfRectDia::setRnds( int _rx, int _ry )
 {
     xRnd = _rx;
@@ -177,4 +164,5 @@ int ConfRectDia::getRectangleConfigChange() const
 
     return flags;
 }
-#include <confrectdia.moc>
+
+#include "confrectdia.moc"

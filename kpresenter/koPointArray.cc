@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent MONTEL <lmontel@mandrakesoft.com>
 
@@ -28,8 +29,8 @@ void KoPointArray::translate( double dx, double dy )
     register int i = size();
     KoPoint pt( dx, dy );
     while ( i-- ) {
-	*p += pt;
-	p++;
+        *p += pt;
+        p++;
     }
 }
 
@@ -37,11 +38,10 @@ void KoPointArray::point( uint index, double *x, double *y ) const
 {
     KoPoint p = QMemArray<KoPoint>::at( index );
     if ( x )
-	*x = (double)p.x();
+        *x = (double)p.x();
     if ( y )
-	*y = (double)p.y();
+        *y = (double)p.y();
 }
-
 
 KoPoint KoPointArray::point( uint index ) const
 { // #### index out of bounds
@@ -56,24 +56,24 @@ void KoPointArray::setPoint( uint index, double x, double y )
 
 
 bool KoPointArray::putPoints( int index, int nPoints, double firstx, double firsty,
-			     ... )
+                              ... )
 {
     va_list ap;
-    if ( index + nPoints > (int)size() ) {	// extend array
-	if ( !resize(index + nPoints) )
-	    return FALSE;
+    if ( index + nPoints > (int)size() ) {  // extend array
+        if ( !resize(index + nPoints) )
+            return FALSE;
     }
     if ( nPoints <= 0 )
-	return TRUE;
-    setPoint( index, firstx, firsty );		// set first point
+        return TRUE;
+    setPoint( index, firstx, firsty );      // set first point
     int i = index + 1;
     double x, y;
     nPoints--;
     va_start( ap, firsty );
     while ( nPoints-- ) {
-	x = va_arg( ap, double );
-	y = va_arg( ap, double );
-	setPoint( i++, x, y );
+        x = va_arg( ap, double );
+        y = va_arg( ap, double );
+        setPoint( i++, x, y );
     }
     va_end( ap );
     return TRUE;
@@ -147,42 +147,42 @@ int pnt_on_line( const int* p, const int* q, const int* t )
  * into a larger, spanning vectors within the Lemming editor.
  */
 
-	// if all points are coincident, return condition 2 (on line)
-	if(q[0]==p[0] && q[1]==p[1] && q[0]==t[0] && q[1]==t[1]) {
-		return 2;
-	}
+    // if all points are coincident, return condition 2 (on line)
+    if(q[0]==p[0] && q[1]==p[1] && q[0]==t[0] && q[1]==t[1]) {
+        return 2;
+    }
 
     if ( QABS((q[1]-p[1])*(t[0]-p[0])-(t[1]-p[1])*(q[0]-p[0])) >=
-	(QMAX(QABS(q[0]-p[0]), QABS(q[1]-p[1])))) return 0;
+         (QMAX(QABS(q[0]-p[0]), QABS(q[1]-p[1])))) return 0;
 
     if (((q[0]<p[0])&&(p[0]<t[0])) || ((q[1]<p[1])&&(p[1]<t[1])))
-	return 1 ;
+        return 1 ;
     if (((t[0]<p[0])&&(p[0]<q[0])) || ((t[1]<p[1])&&(p[1]<q[1])))
-	return 1 ;
+        return 1 ;
     if (((p[0]<q[0])&&(q[0]<t[0])) || ((p[1]<q[1])&&(q[1]<t[1])))
-	return 3 ;
+        return 3 ;
     if (((t[0]<q[0])&&(q[0]<p[0])) || ((t[1]<q[1])&&(q[1]<p[1])))
-	return 3 ;
+        return 3 ;
 
     return 2 ;
 }
 
 static
 void polygonizeQBezier( double* acc, int& accsize, const double ctrl[],
-			int maxsize )
+                        int maxsize )
 {
     if ( accsize > maxsize / 2 )
     {
-	// This never happens in practice.
+        // This never happens in practice.
 
-	if ( accsize >= maxsize-4 )
-	    return;
-	// Running out of space - approximate by a line.
-	acc[accsize++] = ctrl[0];
-	acc[accsize++] = ctrl[1];
-	acc[accsize++] = ctrl[6];
-	acc[accsize++] = ctrl[7];
-	return;
+        if ( accsize >= maxsize-4 )
+            return;
+        // Running out of space - approximate by a line.
+        acc[accsize++] = ctrl[0];
+        acc[accsize++] = ctrl[1];
+        acc[accsize++] = ctrl[6];
+        acc[accsize++] = ctrl[7];
+        return;
     }
 
     //intersects:
@@ -198,28 +198,28 @@ void polygonizeQBezier( double* acc, int& accsize, const double ctrl[],
 
     // #### Duplication needed?
     if ( QABS(c1[0]-c0[0]) <= 1 && QABS(c1[1]-c0[1]) <= 1
-      && QABS(c2[0]-c0[0]) <= 1 && QABS(c2[1]-c0[1]) <= 1
-      && QABS(c3[0]-c1[0]) <= 1 && QABS(c3[1]-c0[1]) <= 1 )
+         && QABS(c2[0]-c0[0]) <= 1 && QABS(c2[1]-c0[1]) <= 1
+         && QABS(c3[0]-c1[0]) <= 1 && QABS(c3[1]-c0[1]) <= 1 )
     {
-	// Approximate by one line.
-	// Dont need to write last pt as it is the same as first pt
-	// on the next segment
-	acc[accsize++] = l[0];
-	acc[accsize++] = l[1];
-	return;
+        // Approximate by one line.
+        // Dont need to write last pt as it is the same as first pt
+        // on the next segment
+        acc[accsize++] = l[0];
+        acc[accsize++] = l[1];
+        return;
     }
 
     if ( ( pnt_on_line( c0, c3, c1 ) == 2 && pnt_on_line( c0, c3, c2 ) == 2 )
-      || ( QABS(c1[0]-c0[0]) <= 1 && QABS(c1[1]-c0[1]) <= 1
-	&& QABS(c2[0]-c0[0]) <= 1 && QABS(c2[1]-c0[1]) <= 1
-	&& QABS(c3[0]-c1[0]) <= 1 && QABS(c3[1]-c0[1]) <= 1 ) )
+         || ( QABS(c1[0]-c0[0]) <= 1 && QABS(c1[1]-c0[1]) <= 1
+              && QABS(c2[0]-c0[0]) <= 1 && QABS(c2[1]-c0[1]) <= 1
+              && QABS(c3[0]-c1[0]) <= 1 && QABS(c3[1]-c0[1]) <= 1 ) )
     {
-	// Approximate by one line.
-	// Dont need to write last pt as it is the same as first pt
-	// on the next segment
-	acc[accsize++] = l[0];
-	acc[accsize++] = l[1];
-	return;
+        // Approximate by one line.
+        // Dont need to write last pt as it is the same as first pt
+        // on the next segment
+        acc[accsize++] = l[0];
+        acc[accsize++] = l[1];
+        return;
     }
 
     // Too big and too curved - recusively subdivide.
@@ -231,22 +231,22 @@ void polygonizeQBezier( double* acc, int& accsize, const double ctrl[],
 KoRect KoPointArray::boundingRect() const
 {
     if ( isEmpty() )
-	return KoRect( 0, 0, 0, 0 );		// null rectangle
+        return KoRect( 0, 0, 0, 0 );        // null rectangle
     register KoPoint *pd = data();
     double minx, maxx, miny, maxy;
     minx = maxx = pd->x();
     miny = maxy = pd->y();
     pd++;
-    for ( int i=1; i<(int)size(); i++ ) {	// find min+max x and y
-	if ( pd->x() < minx )
-	    minx = pd->x();
-	else if ( pd->x() > maxx )
-	    maxx = pd->x();
-	if ( pd->y() < miny )
-	    miny = pd->y();
-	else if ( pd->y() > maxy )
-	    maxy = pd->y();
-	pd++;
+    for ( int i=1; i<(int)size(); i++ ) {   // find min+max x and y
+        if ( pd->x() < minx )
+            minx = pd->x();
+        else if ( pd->x() > maxx )
+            maxx = pd->x();
+        if ( pd->y() < miny )
+            miny = pd->y();
+        else if ( pd->y() > maxy )
+            maxy = pd->y();
+        pd++;
     }
     return KoRect( KoPoint(minx,miny), KoPoint(maxx,maxy) );
 }
@@ -256,34 +256,34 @@ KoPointArray KoPointArray::cubicBezier() const
 {
     if ( size() != 4 ) {
 #if defined(QT_CHECK_RANGE)
-	qWarning( "QPointArray::bezier: The array must have 4 control points" );
+        qWarning( "QPointArray::bezier: The array must have 4 control points" );
 #endif
-	KoPointArray pa;
-	return pa;
+        KoPointArray pa;
+        return pa;
     } else {
-	KoRect r = boundingRect();
-	int m = (int)(4+2*QMAX(r.width(),r.height()));
-	double *p = new double[m];
-	double ctrl[8];
-	int i;
-	for (i=0; i<4; i++) {
-	    ctrl[i*2] = at(i).x();
-	    ctrl[i*2+1] = at(i).y();
-	}
-	int len=0;
-	polygonizeQBezier( p, len, ctrl, m );
-	KoPointArray pa((len/2)+1); // one extra point for last point on line
-	int j=0;
-	for (i=0; j<len; i++) {
-	    double x = qRound(p[j++]);
-	    double y = qRound(p[j++]);
-	    pa[i] = KoPoint(x,y);
-	}
-	// add last pt on the line, which will be at the last control pt
-	pa[(int)pa.size()-1] = at(3);
-	delete[] p;
+        KoRect r = boundingRect();
+        int m = (int)(4+2*QMAX(r.width(),r.height()));
+        double *p = new double[m];
+        double ctrl[8];
+        int i;
+        for (i=0; i<4; i++) {
+            ctrl[i*2] = at(i).x();
+            ctrl[i*2+1] = at(i).y();
+        }
+        int len=0;
+        polygonizeQBezier( p, len, ctrl, m );
+        KoPointArray pa((len/2)+1); // one extra point for last point on line
+        int j=0;
+        for (i=0; j<len; i++) {
+            double x = qRound(p[j++]);
+            double y = qRound(p[j++]);
+            pa[i] = KoPoint(x,y);
+        }
+        // add last pt on the line, which will be at the last control pt
+        pa[(int)pa.size()-1] = at(3);
+        delete[] p;
 
-	return pa;
+        return pa;
     }
 }
 

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -36,12 +37,6 @@ class QDomElement;
 class KoZoomHandler;
 class KPrPage;
 
-
-/******************************************************************/
-/* Class: KPBackGround                                            */
-/* The background for a given page.                               */
-/******************************************************************/
-
 class KPBackGround
 {
 public:
@@ -49,68 +44,68 @@ public:
     ~KPBackGround() {}
 
     void setBackType( BackType _backType )
-    {
-        backType = _backType;
-        if (backType==BT_PICTURE || backType==BT_CLIPART)
-            removeGradient();
-    }
+        {
+            backType = _backType;
+            if (backType==BT_PICTURE || backType==BT_CLIPART)
+                removeGradient();
+        }
     void setBackView( BackView _backView )
-    { backView = _backView; }
+        { backView = _backView; }
     void setBackColor1( const QColor &_color )
-    { removeGradient(); backColor1 = _color; }
+        { removeGradient(); backColor1 = _color; }
     void setBackColor2( const QColor &_color )
-    { removeGradient(); backColor2 = _color; }
+        { removeGradient(); backColor2 = _color; }
     void setBackColorType( BCType _bcType )
-    { removeGradient(); bcType = _bcType; }
+        { removeGradient(); bcType = _bcType; }
     void setBackUnbalanced( bool _unbalanced )
-    { removeGradient(); unbalanced = _unbalanced; }
+        { removeGradient(); unbalanced = _unbalanced; }
     void setBackXFactor( int _xfactor )
-    { removeGradient(); xfactor = _xfactor; }
+        { removeGradient(); xfactor = _xfactor; }
     void setBackYFactor( int _yfactor )
-    { removeGradient(); yfactor = _yfactor; }
+        { removeGradient(); yfactor = _yfactor; }
     /// set the back picture to a new KoPicture
     void setBackPicture( const KoPicture& picture );
     void setBackPicture ( const KoPictureKey& key );
     void setPageEffect( PageEffect _pageEffect )
-    { pageEffect = _pageEffect; }
+        { pageEffect = _pageEffect; }
     void setPageTimer( int _pageTimer )
-    { pageTimer = _pageTimer; }
+        { pageTimer = _pageTimer; }
     void setPageSoundEffect( bool _soundEffect )
-    { soundEffect = _soundEffect; }
+        { soundEffect = _soundEffect; }
     void setPageSoundFileName( const QString &_soundFileName )
-    { soundFileName = _soundFileName; }
+        { soundFileName = _soundFileName; }
 
     KoPicture picture()const { return backPicture;}
 
     BackType getBackType() const
-    { return backType; }
+        { return backType; }
     BackView getBackView() const
-    { return backView; }
+        { return backView; }
     QColor getBackColor1() const
-    { return backColor1; }
+        { return backColor1; }
     QColor getBackColor2() const
-    { return backColor2; }
+        { return backColor2; }
     BCType getBackColorType() const
-    { return bcType; }
+        { return bcType; }
     KoPictureKey getBackPictureKey() const
-    { return backPicture.getKey(); }
+        { return backPicture.getKey(); }
     KoPicture getBackPicture() const
-    { return backPicture;}
+        { return backPicture;}
 
     PageEffect getPageEffect() const
-    { return pageEffect; }
+        { return pageEffect; }
     bool getBackUnbalanced() const
-    { return unbalanced; }
+        { return unbalanced; }
     int getBackXFactor() const
-    { return xfactor; }
+        { return xfactor; }
     int getBackYFactor() const
-    { return yfactor; }
+        { return yfactor; }
     int getPageTimer() const
-    { return pageTimer; }
+        { return pageTimer; }
     bool getPageSoundEffect() const
-    { return soundEffect; }
+        { return soundEffect; }
     QString getPageSoundFileName() const
-    { return soundFileName; }
+        { return soundFileName; }
 
     // Draw the background.
     // Uses the @p zoomHandler to determine the size of the background

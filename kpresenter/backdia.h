@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -39,12 +40,6 @@ class QTabWidget;
 class KPrPage;
 class KSqueezedTextLabel;
 
-/*******************************************************************
- *
- * Class: BackPreview
- *
- *******************************************************************/
-
 class BackPreview : public QFrame
 {
     Q_OBJECT
@@ -65,20 +60,17 @@ private:
 
 };
 
-/******************************************************************/
-/* class BackDia						  */
-/******************************************************************/
 class BackDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
     BackDia( QWidget* parent, const char* name,
-	     BackType backType, const QColor &backColor1,
-	     const QColor &backColor2, BCType _bcType,
-	     const KoPicture &backPic,
-	     BackView backPicView, bool _unbalanced,
-	     int _xfactor, int _yfactor, KPrPage *m_page  );
+             BackType backType, const QColor &backColor1,
+             const QColor &backColor2, BCType _bcType,
+             const KoPicture &backPic,
+             BackView backPicView, bool _unbalanced,
+             int _xfactor, int _yfactor, KPrPage *m_page  );
 
     QColor getBackColor1() const;
     QColor getBackColor2() const;

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -40,10 +41,6 @@
 #include <kdebug.h>
 #include "kpresenter_doc.h"
 
-/******************************************************************/
-/* Class: KPObject                                                */
-/******************************************************************/
-
 const QString &KPObject::tagORIG=KGlobal::staticQString("ORIG");
 const QString &KPObject::attrX=KGlobal::staticQString("x");
 const QString &KPObject::attrY=KGlobal::staticQString("y");
@@ -75,7 +72,6 @@ const QString &KPObject::attrXFactor=KGlobal::staticQString("xfactor");
 const QString &KPObject::attrYFactor=KGlobal::staticQString("yfactor");
 const QString &KPObject::attrStyle=KGlobal::staticQString("style");
 
-/*======================== constructor ===========================*/
 KPObject::KPObject()
     : orig(), ext(), shadowColor( Qt::gray ), sticky( FALSE )
 {
@@ -179,7 +175,6 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
         elem.setAttribute("ratio" , keepRatio);
         fragment.appendChild(elem);
     }
-
 
     return fragment;
 }
@@ -309,7 +304,6 @@ double KPObject::load(const QDomElement &element) {
     return offset;
 }
 
-/*======================= get bounding rect ======================*/
 KoRect KPObject::getBoundingRect() const
 {
     KoRect r( orig, ext );
@@ -325,7 +319,7 @@ KoRect KPObject::getBoundingRect() const
     if ( angle == 0.0 )
         return r;
     else
-	return rotateRectObject();
+        return rotateRectObject();
 }
 
 KoRect KPObject::rotateRectObject() const
@@ -358,7 +352,6 @@ void KPObject::rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler)
     paint->setWorldMatrix( m, true );
 }
 
-
 void KPObject::rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandler)
 {
     KoRect rr = KoRect( 0, 0, ext.width(), ext.height() );
@@ -375,8 +368,6 @@ void KPObject::rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandle
     paint->setWorldMatrix( m, true );
 }
 
-
-/*======================== contain point ? =======================*/
 bool KPObject::contains( const KoPoint &_point ) const
 {
     if ( angle == 0.0 )
@@ -391,7 +382,6 @@ bool KPObject::contains( const KoPoint &_point ) const
     }
 }
 
-/*================================================================*/
 bool KPObject::intersects( const KoRect &_rect ) const
 {
     if ( angle == 0.0 )
@@ -406,8 +396,8 @@ bool KPObject::intersects( const KoRect &_rect ) const
     }
 }
 
-/*======================== get cursor ============================*/
-QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPresenterDoc *doc ) const
+QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
+                             KPresenterDoc *doc ) const
 {
     double px = _point.x();
     double py = _point.y();
@@ -428,7 +418,7 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
         oh = r.height();
     }
     if ( !r.contains( _point ) )
-      return Qt::arrowCursor;
+        return Qt::arrowCursor;
 
     int sz = 4;
     if ( px >= ox && py >= oy && px <= ox + QMIN( ow / 3, sz ) && py <= oy + QMIN( oh / 3, sz ) )
@@ -439,7 +429,9 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
         return Qt::sizeFDiagCursor;
     }
 
-    if ( px >= ox && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 ) && px <= ox + QMIN( ow / 3, sz) && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2 ) )
+    if ( px >= ox && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 )
+         && px <= ox + QMIN( ow / 3, sz)
+         && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2 ) )
     {
         _modType = MT_RESIZE_LF;
         if ( protect)
@@ -455,7 +447,9 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
         return Qt::sizeBDiagCursor;
     }
 
-    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 ) && py <= oy + QMIN( oh / 3, sz ) )
+    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy
+         && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 )
+         && py <= oy + QMIN( oh / 3, sz ) )
     {
         _modType = MT_RESIZE_UP;
         if ( protect)
@@ -463,7 +457,8 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
         return Qt::sizeVerCursor;
     }
 
-    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy + oh - QMIN( oh / 3, sz ) && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 ) && py <= oy + oh )
+    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy + oh - QMIN( oh / 3, sz )
+         && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 ) && py <= oy + oh )
     {
         _modType = MT_RESIZE_DN;
         if ( protect)
@@ -479,7 +474,8 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
         return Qt::sizeBDiagCursor;
     }
 
-    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 ) && px <= ox + ow && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2) )
+    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 )
+         && px <= ox + ow && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2) )
     {
         _modType = MT_RESIZE_RT;
         if ( protect)
@@ -487,7 +483,8 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
         return Qt::sizeHorCursor;
     }
 
-    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh - QMIN( oh / 3, sz)  && px <= ox + ow && py <= oy + oh )
+    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh - QMIN( oh / 3, sz)
+         && px <= ox + ow && py <= oy + oh )
     {
         _modType = MT_RESIZE_RD;
         if ( protect)
@@ -502,59 +499,57 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
     return Qt::sizeAllCursor;
 }
 
-/*====================== get shadow coordinates ==================*/
 void KPObject::getShadowCoords( double& _x, double& _y ) const
 {
     double sx = 0, sy = 0;
 
     switch ( shadowDirection )
     {
-        case SD_LEFT_UP:
-        {
-            sx = _x - shadowDistance;
-            sy = _y - shadowDistance;
-        } break;
-        case SD_UP:
-        {
-            sx = _x;
-            sy = _y - shadowDistance;
-        } break;
-        case SD_RIGHT_UP:
-        {
-            sx = _x + shadowDistance;
-            sy = _y - shadowDistance;
-        } break;
-        case SD_RIGHT:
-        {
-            sx = _x + shadowDistance;
-            sy = _y;
-        } break;
-        case SD_RIGHT_BOTTOM:
-        {
-            sx = _x + shadowDistance;
-            sy = _y + shadowDistance;
-        } break;
-        case SD_BOTTOM:
-        {
-            sx = _x;
-            sy = _y + shadowDistance;
-        } break;
-        case SD_LEFT_BOTTOM:
-        {
-            sx = _x - shadowDistance;
-            sy = _y + shadowDistance;
-        } break;
-        case SD_LEFT:
-        {
-            sx = _x - shadowDistance;
-            sy = _y;
-        } break;
+    case SD_LEFT_UP:
+    {
+        sx = _x - shadowDistance;
+        sy = _y - shadowDistance;
+    } break;
+    case SD_UP:
+    {
+        sx = _x;
+        sy = _y - shadowDistance;
+    } break;
+    case SD_RIGHT_UP:
+    {
+        sx = _x + shadowDistance;
+        sy = _y - shadowDistance;
+    } break;
+    case SD_RIGHT:
+    {
+        sx = _x + shadowDistance;
+        sy = _y;
+    } break;
+    case SD_RIGHT_BOTTOM:
+    {
+        sx = _x + shadowDistance;
+        sy = _y + shadowDistance;
+    } break;
+    case SD_BOTTOM:
+    {
+        sx = _x;
+        sy = _y + shadowDistance;
+    } break;
+    case SD_LEFT_BOTTOM:
+    {
+        sx = _x - shadowDistance;
+        sy = _y + shadowDistance;
+    } break;
+    case SD_LEFT:
+    {
+        sx = _x - shadowDistance;
+        sy = _y;
+    } break;
     }
 
     _x = sx; _y = sy;
 }
 
-/*======================== paint selection =======================*/
 void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, SelectionMode mode )
 {
     if ( !selected || mode == SM_NONE )
@@ -618,13 +613,12 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
     _painter->restore();
 }
 
-/*======================== do delete =============================*/
 void KPObject::doDelete()
 {
-    if ( cmds == 0 && !inObjList )delete this;
+    if ( cmds == 0 && !inObjList )
+        delete this;
 }
 
-/*=============================================================*/
 DCOPObject* KPObject::dcopObject()
 {
     if ( !dcop )
@@ -651,7 +645,8 @@ QDomElement KPObject::createValueElement(const QString &tag, int value, QDomDocu
 }
 
 QDomElement KPObject::createGradientElement(const QString &tag, const QColor &c1, const QColor &c2,
-                                            int type, bool unbalanced, int xfactor, int yfactor, QDomDocument &doc) {
+                                            int type, bool unbalanced, int xfactor,
+                                            int yfactor, QDomDocument &doc) {
     QDomElement elem=doc.createElement(tag);
     elem.setAttribute(attrC1, c1.name());
     elem.setAttribute(attrC2, c2.name());
@@ -732,7 +727,7 @@ QColor KPObject::retrieveColor(const QDomElement &element, const QString &cattr,
 }
 
 void KPObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		     SelectionMode selectionMode, bool drawContour )
+                     SelectionMode selectionMode, bool drawContour )
 {
     if ( selectionMode != SM_NONE &&  !drawContour )
         paintSelection( _painter, _zoomHandler, selectionMode );
@@ -793,9 +788,8 @@ double KPShadowObject::load(const QDomElement &element)
     return offset;
 }
 
-
 void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			   SelectionMode selectionMode, bool drawContour )
+                           SelectionMode selectionMode, bool drawContour )
 {
     double ox = orig.x();
     double oy = orig.y();

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -38,25 +39,18 @@
 #include <qpainter.h>
 using namespace std;
 
-/******************************************************************/
-/* Class: KPGroupObject                                           */
-/******************************************************************/
-
-/*================================================================*/
 KPGroupObject::KPGroupObject()
     : KPObject(), objects( QPtrList<KPObject>() ), updateObjs( false )
 {
     objects.setAutoDelete( false );
 }
 
-/*================================================================*/
 KPGroupObject::KPGroupObject( const QPtrList<KPObject> &objs )
     : KPObject(), objects( objs ), updateObjs( false )
 {
     objects.setAutoDelete( false );
 }
 
-/*================================================================*/
 KPGroupObject &KPGroupObject::operator=( const KPGroupObject & )
 {
     return *this;
@@ -66,22 +60,16 @@ void KPGroupObject::selectAllObj()
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
-    {
         it.current()->setSelected(true);
-    }
 }
 
 void KPGroupObject::deSelectAllObj()
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
-    {
         it.current()->setSelected(false);
-    }
-
 }
 
-/*================================================================*/
 void KPGroupObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
@@ -92,13 +80,11 @@ void KPGroupObject::setSize( double _width, double _height )
     updateSizes( fx, fy );
 }
 
-/*================================================================*/
 void KPGroupObject::setOrig( const KoPoint &_point )
 {
     setOrig( _point.x(), _point.y() );
 }
 
-/*================================================================*/
 void KPGroupObject::setOrig( double _x, double _y )
 {
     double dx = 0;
@@ -114,20 +100,17 @@ void KPGroupObject::setOrig( double _x, double _y )
         updateCoords( dx, dy );
 }
 
-/*================================================================*/
 void KPGroupObject::moveBy( const KoPoint &_point )
 {
     moveBy( _point.x(), _point.y() );
 }
 
-/*================================================================*/
 void KPGroupObject::moveBy( double _dx, double _dy )
 {
     KPObject::moveBy( _dx, _dy );
     updateCoords( _dx, _dy );
 }
 
-/*================================================================*/
 QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPObject::save(doc, offset);
@@ -146,7 +129,6 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-/*================================================================*/
 double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
 {
     //FIXME
@@ -258,9 +240,8 @@ double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
     return offset;
 }
 
-/*================================================================*/
 void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler,
-			  SelectionMode selectionMode, bool drawContour )
+                          SelectionMode selectionMode, bool drawContour )
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
@@ -269,7 +250,6 @@ void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler,
     KPObject::draw( _painter, _zoomhandler, selectionMode, drawContour );
 }
 
-/*================================================================*/
 void KPGroupObject::updateSizes( double fx, double fy )
 {
     if ( !updateObjs )
@@ -299,7 +279,6 @@ void KPGroupObject::updateSizes( double fx, double fy )
     }
 }
 
-/*================================================================*/
 void KPGroupObject::updateCoords( double dx, double dy )
 {
     if ( !updateObjs )
@@ -309,7 +288,6 @@ void KPGroupObject::updateCoords( double dx, double dy )
         it.current()->moveBy( dx, dy );
 }
 
-/*================================================================*/
 void KPGroupObject::rotate( float _angle )
 {
     float oldAngle = angle;
@@ -335,11 +313,10 @@ void KPGroupObject::rotate( float _angle )
         double objAngle = it.current()->getAngle();
         // If part of group was already rotated the difference has to be added
         // to the angle
-        if ( objAngle != oldAngle ) {
+        if ( objAngle != oldAngle )
             it.current()->rotate( objAngle + diffAngle );
-        } else {
+        else
             it.current()->rotate( _angle );
-        }
         it.current()->moveBy( mx, my );
     }
 }
@@ -355,8 +332,6 @@ void KPGroupObject::setShadowParameter( int _distance, ShadowDirection _directio
         it.current()->setShadowParameter( _distance, _direction, _color );
 }
 
-
-/*================================================================*/
 void KPGroupObject::setShadowDistance( int _distance )
 {
     KPObject::setShadowDistance( _distance );
@@ -368,7 +343,6 @@ void KPGroupObject::setShadowDistance( int _distance )
         it.current()->setShadowDistance( _distance );
 }
 
-/*================================================================*/
 void KPGroupObject::setShadowDirection( ShadowDirection _direction )
 {
     KPObject::setShadowDirection( _direction );
@@ -380,7 +354,6 @@ void KPGroupObject::setShadowDirection( ShadowDirection _direction )
         it.current()->setShadowDirection( _direction );
 }
 
-/*================================================================*/
 void KPGroupObject::setShadowColor( const QColor &_color )
 {
     KPObject::setShadowColor( _color );
@@ -392,7 +365,6 @@ void KPGroupObject::setShadowColor( const QColor &_color )
         it.current()->setShadowColor( _color );
 }
 
-/*================================================================*/
 void KPGroupObject::setEffect( Effect _effect )
 {
     KPObject::setEffect( _effect );
@@ -404,7 +376,6 @@ void KPGroupObject::setEffect( Effect _effect )
         it.current()->setEffect( _effect );
 }
 
-/*================================================================*/
 void KPGroupObject::setEffect2( Effect2 _effect2 )
 {
     KPObject::setEffect2( _effect2 );
@@ -416,7 +387,6 @@ void KPGroupObject::setEffect2( Effect2 _effect2 )
         it.current()->setEffect2( _effect2 );
 }
 
-/*================================================================*/
 void KPGroupObject::setPresNum( int _presNum )
 {
     KPObject::setPresNum( _presNum );
@@ -428,7 +398,6 @@ void KPGroupObject::setPresNum( int _presNum )
         it.current()->setPresNum( _presNum );
 }
 
-/*================================================================*/
 void KPGroupObject::setDisappear( bool b )
 {
     KPObject::setDisappear( b );
@@ -440,7 +409,6 @@ void KPGroupObject::setDisappear( bool b )
         it.current()->setDisappear( b );
 }
 
-/*================================================================*/
 void KPGroupObject::setDisappearNum( int num )
 {
     KPObject::setDisappearNum( num );
@@ -452,7 +420,6 @@ void KPGroupObject::setDisappearNum( int num )
         it.current()->setDisappearNum( num );
 }
 
-/*================================================================*/
 void KPGroupObject::setEffect3( Effect3 _effect3)
 {
     KPObject::setEffect3( _effect3 );
@@ -464,7 +431,6 @@ void KPGroupObject::setEffect3( Effect3 _effect3)
         it.current()->setEffect3( _effect3 );
 }
 
-/*================================================================*/
 void KPGroupObject::setAppearTimer( int _appearTimer )
 {
     KPObject::setAppearTimer( _appearTimer );
@@ -476,7 +442,6 @@ void KPGroupObject::setAppearTimer( int _appearTimer )
         it.current()->setAppearTimer( _appearTimer );
 }
 
-/*================================================================*/
 void KPGroupObject::setDisappearTimer( int _disappearTimer )
 {
     KPObject::setDisappearTimer( _disappearTimer );
@@ -488,8 +453,6 @@ void KPGroupObject::setDisappearTimer( int _disappearTimer )
         it.current()->setDisappearTimer( _disappearTimer );
 }
 
-
-/*================================================================*/
 void KPGroupObject::setOwnClipping( bool _ownClipping )
 {
     KPObject::setOwnClipping( _ownClipping );
@@ -501,7 +464,6 @@ void KPGroupObject::setOwnClipping( bool _ownClipping )
         it.current()->setOwnClipping( _ownClipping );
 }
 
-/*================================================================*/
 void KPGroupObject::setSubPresStep( int _subPresStep )
 {
     KPObject::setSubPresStep( _subPresStep );
@@ -513,7 +475,6 @@ void KPGroupObject::setSubPresStep( int _subPresStep )
         it.current()->setSubPresStep( _subPresStep );
 }
 
-/*================================================================*/
 void KPGroupObject::doSpecificEffects( bool _specEffects, bool _onlyCurrStep )
 {
     KPObject::doSpecificEffects( _specEffects, _onlyCurrStep );
@@ -525,7 +486,6 @@ void KPGroupObject::doSpecificEffects( bool _specEffects, bool _onlyCurrStep )
         it.current()->doSpecificEffects( _specEffects, _onlyCurrStep );
 }
 
-/*================================================================*/
 void KPGroupObject::setAppearSoundEffect( bool b )
 {
     KPObject::setAppearSoundEffect( b );
@@ -537,7 +497,6 @@ void KPGroupObject::setAppearSoundEffect( bool b )
         it.current()->setAppearSoundEffect( b );
 }
 
-/*================================================================*/
 void KPGroupObject::setDisappearSoundEffect( bool b )
 {
     KPObject::setDisappearSoundEffect( b );
@@ -549,7 +508,6 @@ void KPGroupObject::setDisappearSoundEffect( bool b )
         it.current()->setDisappearSoundEffect( b );
 }
 
-/*================================================================*/
 void KPGroupObject::setAppearSoundEffectFileName( const QString &_a_fileName )
 {
     KPObject::setAppearSoundEffectFileName( _a_fileName );
@@ -561,7 +519,6 @@ void KPGroupObject::setAppearSoundEffectFileName( const QString &_a_fileName )
         it.current()->setAppearSoundEffectFileName( _a_fileName );
 }
 
-/*================================================================*/
 void KPGroupObject::setDisappearSoundEffectFileName( const QString &_d_fileName )
 {
     KPObject::setDisappearSoundEffectFileName( _d_fileName );

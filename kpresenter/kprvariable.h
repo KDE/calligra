@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent MONTEL <lmontel@mandrakesoft.com>
 
@@ -33,9 +34,11 @@ class KoVariableSettings;
 
 class KPrVariableCollection : public KoVariableCollection
 {
- public:
+public:
     KPrVariableCollection(KoVariableSettings *_setting);
-    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc,   int _correct, bool _forceDefaultFormat=false );
+    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll,
+                                        KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc,
+                                        int _correct, bool _forceDefaultFormat=false );
     QPtrList<KAction> variableActionList();
 };
 
@@ -46,7 +49,8 @@ class KPrPgNumVariable : public QObject,public KoPgNumVariable
 {
     Q_OBJECT
 public:
-    KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc );
+    KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
+                      KoVariableCollection *_varColl, KPresenterDoc *doc );
 
     virtual void recalc();
     virtual void setVariableSubType( short int type);
@@ -55,7 +59,7 @@ public:
 protected slots:
     void slotChangeSubType();
 
- private:
+private:
     KPresenterDoc *m_doc;
 };
 
@@ -64,7 +68,8 @@ class KPrFieldVariable : public QObject, public KoFieldVariable
 {
     Q_OBJECT
 public:
-    KPrFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *_doc );
+    KPrFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
+                      KoVariableCollection *_varColl, KPresenterDoc *_doc );
 
     QPtrList<KAction> actionList();
 
@@ -83,7 +88,8 @@ class KPrDateVariable : public QObject, public KoDateVariable
 {
     Q_OBJECT
 public:
-    KPrDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KPresenterDoc *_doc,int _correct );
+    KPrDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
+                     KoVariableCollection *_varColl, KPresenterDoc *_doc,int _correct );
 
     QPtrList<KAction> actionList();
 
@@ -104,7 +110,8 @@ class KPrTimeVariable : public QObject, public KoTimeVariable
 
     Q_OBJECT
 public:
-    KPrTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KPresenterDoc *_doc, int _correct );
+    KPrTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
+                     KoVariableCollection *_varColl, KPresenterDoc *_doc, int _correct );
 
     QPtrList<KAction> actionList();
 
@@ -116,6 +123,5 @@ private:
     KPresenterDoc *m_doc;
 
 };
-
 
 #endif

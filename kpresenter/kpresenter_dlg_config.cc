@@ -1,6 +1,6 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,14 +65,14 @@
 #include <koeditpath.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
-  : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
-		KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
-		KDialogBase::Ok)
+    : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
+                  KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
+                  KDialogBase::Ok)
 
 {
     m_doc = parent->kPresenterDoc();
     QVBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
-                        BarIcon("misc", KIcon::SizeMedium) );
+                               BarIcon("misc", KIcon::SizeMedium) );
     _interfacePage=new configureInterfacePage( parent, page );
     page = addVBoxPage( i18n("Color"), i18n("Color"),
                         BarIcon("colorize", KIcon::SizeMedium) );
@@ -153,34 +153,34 @@ void KPConfig::slotApply()
 void KPConfig::slotDefault()
 {
     switch( activePageIndex() ) {
-        case 0:
-            _interfacePage->slotDefault();
-            break;
-        case 1:
-            _colorBackground->slotDefault();
-            break;
-        case 2:
-            _spellPage->slotDefault();
-            break;
-        case 3:
-           _miscPage->slotDefault();
-            break;
-        case 4:
-            _defaultDocPage->slotDefault();
-            break;
-        case 5:
-            _toolsPage->slotDefault();
-            break;
-        case 6:
-            m_pathPage->slotDefault();
-            break;
-        default:
-            break;
+    case 0:
+        _interfacePage->slotDefault();
+        break;
+    case 1:
+        _colorBackground->slotDefault();
+        break;
+    case 2:
+        _spellPage->slotDefault();
+        break;
+    case 3:
+        _miscPage->slotDefault();
+        break;
+    case 4:
+        _defaultDocPage->slotDefault();
+        break;
+    case 5:
+        _toolsPage->slotDefault();
+        break;
+    case 6:
+        m_pathPage->slotDefault();
+        break;
+    default:
+        break;
     }
 }
 
 configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *parent , char *name )
- :QWidget ( parent,name )
+    :QWidget ( parent,name )
 {
     m_pView=_view;
     config = KPresenterFactory::global()->config();
@@ -296,7 +296,7 @@ void configureInterfacePage::slotDefault()
 }
 
 configureColorBackground::configureColorBackground( KPresenterView* _view, QWidget *parent , char *name )
- :QWidget ( parent,name )
+    :QWidget ( parent,name )
 {
     m_pView = _view;
     config = KPresenterFactory::global()->config();
@@ -370,14 +370,14 @@ void configureColorBackground::slotDefault()
 ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char *name )
     : QObject( box->parent(), name )
 {
-  m_pView=_view;
-  config = KPresenterFactory::global()->config();
+    m_pView=_view;
+    config = KPresenterFactory::global()->config();
 
-  m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->kPresenterDoc()->getKSpellConfig(), true);
+    m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->kPresenterDoc()->getKSpellConfig(), true);
 
-  if( config->hasGroup("KSpell kpresenter") )
-  {
-      config->setGroup( "KSpell kpresenter" );
+    if( config->hasGroup("KSpell kpresenter") )
+    {
+        config->setGroup( "KSpell kpresenter" );
         m_spellConfigWidget->setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
         m_spellConfigWidget->setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
@@ -583,17 +583,17 @@ KCommand * ConfigureMiscPage::apply()
 
 void ConfigureMiscPage::slotDefault()
 {
-   m_undoRedoLimit->setValue(30);
-   m_displayLink->setChecked(true);
-   m_displayComment->setChecked(true);
-   m_underlineLink->setChecked(true);
-   m_displayFieldCode->setChecked( false );
-   KPresenterDoc* doc = m_pView->kPresenterDoc();
-   cbSideBarRefresh->setChecked(true);
+    m_undoRedoLimit->setValue(30);
+    m_displayLink->setChecked(true);
+    m_displayComment->setChecked(true);
+    m_underlineLink->setChecked(true);
+    m_displayFieldCode->setChecked( false );
+    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    cbSideBarRefresh->setChecked(true);
 
 
-   resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0), doc->getUnit() ) );
-   resolutionX->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
+    resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0), doc->getUnit() ) );
+    resolutionX->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
 
 }
 
@@ -787,7 +787,7 @@ void ConfigureDefaultDocPage::slotDefault()
     m_createBackupFile->setChecked( true );
     m_directInsertCursor->setChecked( false );
     m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(KGlobal::locale()->language()));
-   m_autoHyphenation->setChecked( false );
+    m_autoHyphenation->setChecked( false );
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {
@@ -903,7 +903,7 @@ void ConfigureToolsPage::slotDefault()
 }
 
 ConfigurePathPage::ConfigurePathPage( KPresenterView *_view, QVBox *box, char *name )
- : QObject( box->parent(), name )
+    : QObject( box->parent(), name )
 {
     m_pView=_view;
     KPresenterDoc* doc = m_pView->kPresenterDoc();
@@ -921,8 +921,10 @@ ConfigurePathPage::ConfigurePathPage( KPresenterView *_view, QVBox *box, char *n
 
     m_modifyPath = new QPushButton( i18n("Modify Path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
-    connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int  )), this, SLOT( slotModifyPath()));
-    connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )), this, SLOT( slotSelectionChanged(QListViewItem * )));
+    connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int )),
+             this, SLOT( slotModifyPath()));
+    connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )),
+             this, SLOT( slotSelectionChanged(QListViewItem * )));
     slotSelectionChanged(m_pPathView->currentItem());
 }
 
@@ -954,7 +956,6 @@ void ConfigurePathPage::slotModifyPath()
             delete dlg;
         }
     }
-
 }
 
 void ConfigurePathPage::slotDefault()
@@ -993,4 +994,4 @@ void ConfigurePathPage::apply()
     }
 }
 
-#include <kpresenter_dlg_config.moc>
+#include "kpresenter_dlg_config.moc"

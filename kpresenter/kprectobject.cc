@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -28,11 +29,6 @@
 #include <qpainter.h>
 #include <kozoomhandler.h>
 
-/******************************************************************/
-/* Class: KPRectObject                                            */
-/******************************************************************/
-
-/*================ default constructor ===========================*/
 KPRectObject::KPRectObject()
     : KP2DObject()
 {
@@ -43,13 +39,13 @@ KPRectObject::KPRectObject()
 DCOPObject* KPRectObject::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPRectObjectIface( this );
+        dcop = new KPRectObjectIface( this );
     return dcop;
 }
 
-/*================== overloaded constructor ======================*/
 KPRectObject::KPRectObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
-                            const QColor &_gColor1, const QColor &_gColor2, BCType _gType, int _xRnd, int _yRnd,
+                            const QColor &_gColor1, const QColor &_gColor2,
+                            BCType _gType, int _xRnd, int _yRnd,
                             bool _unbalanced, int _xfactor, int _yfactor)
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType,
                   _unbalanced, _xfactor, _yfactor )
@@ -58,13 +54,11 @@ KPRectObject::KPRectObject( const QPen &_pen, const QBrush &_brush, FillType _fi
     yRnd = _yRnd;
 }
 
-/*================================================================*/
 KPRectObject &KPRectObject::operator=( const KPRectObject & )
 {
     return *this;
 }
 
-/*========================= save =================================*/
 QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
@@ -77,7 +71,6 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-/*========================== load ================================*/
 double KPRectObject::load(const QDomElement &element)
 {
     double offset=KP2DObject::load(element);
@@ -126,7 +119,7 @@ QPointArray KPRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd,
 }
 
 void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
-			  bool drawingShadow, bool drawContour )
+                          bool drawingShadow, bool drawContour )
 {
     int ow = _zoomHandler->zoomItX( ext.width() );
     int oh = _zoomHandler->zoomItY( ext.height() );

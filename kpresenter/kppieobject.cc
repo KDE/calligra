@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -29,11 +30,6 @@
 #include <kozoomhandler.h>
 using namespace std;
 
-/******************************************************************/
-/* Class: KPPieObject                                             */
-/******************************************************************/
-
-/*================ default constructor ===========================*/
 KPPieObject::KPPieObject()
     : KP2DObject()
 {
@@ -44,7 +40,6 @@ KPPieObject::KPPieObject()
     lineEnd = L_NORMAL;
 }
 
-/*================== overloaded constructor ======================*/
 KPPieObject::KPPieObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
                           const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                           PieType _pieType, int _p_angle, int _p_len,
@@ -66,31 +61,27 @@ DCOPObject* KPPieObject::dcopObject()
     return dcop;
 }
 
-
-/*================================================================*/
 KPPieObject &KPPieObject::operator=( const KPPieObject & )
 {
     return *this;
 }
 
-/*========================= save =================================*/
 QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
 {
-  QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
-  if (lineBegin!=L_NORMAL)
-    fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
-  if (lineEnd!=L_NORMAL)
-    fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
-  if (p_angle!=720)
-    fragment.appendChild(KPObject::createValueElement("PIEANGLE", p_angle, doc));
-  if (p_len!=1440)
-    fragment.appendChild(KPObject::createValueElement("PIELENGTH", p_len, doc));
-  if (pieType!=PT_PIE)
-    fragment.appendChild(KPObject::createValueElement("PIETYPE", static_cast<int>(pieType), doc));
-  return fragment;
+    QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
+    if (lineBegin!=L_NORMAL)
+        fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
+    if (lineEnd!=L_NORMAL)
+        fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+    if (p_angle!=720)
+        fragment.appendChild(KPObject::createValueElement("PIEANGLE", p_angle, doc));
+    if (p_len!=1440)
+        fragment.appendChild(KPObject::createValueElement("PIELENGTH", p_len, doc));
+    if (pieType!=PT_PIE)
+        fragment.appendChild(KPObject::createValueElement("PIETYPE", static_cast<int>(pieType), doc));
+    return fragment;
 }
 
-/*========================== load ================================*/
 double KPPieObject::load(const QDomElement &element)
 {
     double offset=KP2DObject::load(element);
@@ -132,9 +123,8 @@ double KPPieObject::load(const QDomElement &element)
     return offset;
 }
 
-/*======================== paint =================================*/
 void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
-			 bool /*drawingShadow*/, bool drawContour )
+                         bool /*drawingShadow*/, bool drawContour )
 {
     double ow = ext.width();
     double oh = ext.height();
@@ -172,44 +162,28 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
     }
 }
 
-void KPPieObject::flip(bool horizontal )
+void KPPieObject::flip( bool horizontal )
 {
     if ( horizontal )
     {
         if ( p_angle <= 90*16 )
-        {
             p_angle = (360*16 - p_angle -p_len);
-        }
         else if ( p_angle >90*16 && p_angle <180*16 )
-        {
             p_angle = (p_angle + 90*16 + p_len) ;
-        }
         else if ( p_angle >180*16 && p_angle <270*16 )
-        {
             p_angle = (360*16 - (p_angle + p_len))%(360*16);
-        }
         else if ( p_angle >270*16 && p_angle <360*16 )
-        {
             p_angle = (360*16-p_angle -p_len)%(360*16);
-        }
     }
     else
     {
         if ( p_angle <= 90*16 )
-        {
             p_angle = 180*16- p_angle - p_len;
-        }
         else if ( p_angle >90*16 && p_angle <180*16 )
-        {
             p_angle = 180*16 - p_angle - p_len  ;
-        }
         else if ( p_angle >180*16 && p_angle <270*16 )
-        {
             p_angle = 360*16 - (p_angle - 180*16) - p_len;
-        }
         else if ( p_angle >270*16 && p_angle <360*16 )
-        {
             p_angle = 180*16+ (360*16 - (p_angle+p_len));
-        }
     }
 }

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -38,19 +39,13 @@ class KURLRequester;
 class KPresenterSoundPlayer;
 class QSpinBox;
 
-/******************************************************************/
-/* class EffectDia                                                */
-/******************************************************************/
-
 class EffectDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-
-    // constructor - destructor
     EffectDia( QWidget* parent, const char*, const QPtrList<KPObject> &_objs,
-	       KPresenterView* );
+               KPresenterView* );
 
     ~EffectDia();
 

@@ -101,12 +101,12 @@ void NoteBar::slotCopyAvailable( bool yes )
     kdDebug(33001) << "slotCopyAvailable( " << yes << " )" << endl;
 }
 
-void NoteBar::slotUndoAvailable( bool yes )
+void NoteBar::slotUndoAvailable( bool /*yes*/ )
 {
     //kdDebug(33001) << "slotUndoAvailable( " << yes << " )" << endl;
 }
 
-void NoteBar::slotRedoAvailable( bool yes )
+void NoteBar::slotRedoAvailable( bool /*yes*/ )
 {
     //kdDebug(33001) << "slotRedoAvailable( " << yes << " )" << endl;
 }

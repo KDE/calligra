@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -45,12 +46,8 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 
-/******************************************************************/
-/* class EffectDia                                                */
-/******************************************************************/
-
-/*================================================================*/
-EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject>& _objs, KPresenterView *_view )
+EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject>& _objs,
+                      KPresenterView *_view )
     : KDialogBase( parent, name, true ), objs( _objs )
 {
     view = _view;
@@ -285,7 +282,6 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     disappearSoundEffectChanged();
 }
 
-/*================================================================*/
 EffectDia::~EffectDia()
 {
     stopSound1();
@@ -295,26 +291,25 @@ EffectDia::~EffectDia()
     delete soundPlayer2;
 }
 
-/*================================================================*/
 void EffectDia::slotEffectDiaOk()
 {
     QValueList<EffectCmd::EffectStruct> oldEffects;
     for ( unsigned int i = 0; i < objs.count(); ++i ) {
-	KPObject *o = objs.at( i );
-	EffectCmd::EffectStruct e;
-	e.presNum = o->getPresNum();
-	e.disappearNum = o->getDisappearNum();
-	e.effect = o->getEffect();
-	e.effect2 = o->getEffect2();
-	e.effect3 = o->getEffect3();
-	e.disappear = o->getDisappear();
-	e.appearTimer = o->getAppearTimer();
-	e.disappearTimer = o->getDisappearTimer();
+        KPObject *o = objs.at( i );
+        EffectCmd::EffectStruct e;
+        e.presNum = o->getPresNum();
+        e.disappearNum = o->getDisappearNum();
+        e.effect = o->getEffect();
+        e.effect2 = o->getEffect2();
+        e.effect3 = o->getEffect3();
+        e.disappear = o->getDisappear();
+        e.appearTimer = o->getAppearTimer();
+        e.disappearTimer = o->getDisappearTimer();
         e.appearSoundEffect = o->getAppearSoundEffect();
         e.disappearSoundEffect = o->getDisappearSoundEffect();
         e.a_fileName = o->getAppearSoundEffectFileName();
         e.d_fileName = o->getDisappearSoundEffectFileName();
-	oldEffects << e;
+        oldEffects << e;
     }
 
     EffectCmd::EffectStruct eff;
@@ -332,20 +327,18 @@ void EffectDia::slotEffectDiaOk()
     eff.d_fileName = requester2->url();
 
     EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), objs,
-					  oldEffects, eff );
+                                          oldEffects, eff );
     effectCmd->execute();
     view->kPresenterDoc()->addCommand( effectCmd );
     accept();
 }
 
-/*================================================================*/
 void EffectDia::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     //topLayout->resize( size() );
 }
 
-/*================================================================*/
 void EffectDia::disappearChanged()
 {
     cDisappear->setEnabled( disappear->isChecked() );
@@ -355,17 +348,14 @@ void EffectDia::disappearChanged()
         timerOfDisappear->setEnabled( disappear->isChecked() );
 }
 
-/*================================================================*/
 void EffectDia::num1Changed( int /*num*/ )
 {
 }
 
-/*================================================================*/
 void EffectDia::num2Changed( int /*num*/ )
 {
 }
 
-/*================================================================*/
 void EffectDia::appearEffectChanged( int num )
 {
     if ( num == 0 ) {
@@ -381,7 +371,6 @@ void EffectDia::appearEffectChanged( int num )
     }
 }
 
-/*================================================================*/
 void EffectDia::disappearEffectChanged( int num )
 {
     if ( num == 0 ) {
@@ -397,7 +386,6 @@ void EffectDia::disappearEffectChanged( int num )
     }
 }
 
-/*================================================================*/
 void EffectDia::appearSoundEffectChanged()
 {
     lSoundEffect1->setEnabled( appearSoundEffect->isChecked() );
@@ -413,7 +401,6 @@ void EffectDia::appearSoundEffectChanged()
     }
 }
 
-/*================================================================*/
 void EffectDia::disappearSoundEffectChanged()
 {
     lSoundEffect2->setEnabled( disappearSoundEffect->isChecked() );
@@ -429,7 +416,6 @@ void EffectDia::disappearSoundEffectChanged()
     }
 }
 
-/*================================================================*/
 void EffectDia::slotRequesterClicked( KURLRequester *requester )
 {
     QString filter = getSoundFileFilter();
@@ -438,37 +424,34 @@ void EffectDia::slotRequesterClicked( KURLRequester *requester )
     // find the first "sound"-resource that contains files
     QStringList soundDirs = KGlobal::dirs()->resourceDirs( "sound" );
     if ( !soundDirs.isEmpty() ) {
-	KURL soundURL;
-	QDir dir;
-	dir.setFilter( QDir::Files | QDir::Readable );
-	QStringList::ConstIterator it = soundDirs.begin();
-	while ( it != soundDirs.end() ) {
-	    dir = *it;
-	    if ( dir.isReadable() && dir.count() > 2 ) {
-		soundURL.setPath( *it );
-		requester->fileDialog()->setURL( soundURL );
-		break;
-	    }
-	    ++it;
-	}
+        KURL soundURL;
+        QDir dir;
+        dir.setFilter( QDir::Files | QDir::Readable );
+        QStringList::ConstIterator it = soundDirs.begin();
+        while ( it != soundDirs.end() ) {
+            dir = *it;
+            if ( dir.isReadable() && dir.count() > 2 ) {
+                soundURL.setPath( *it );
+                requester->fileDialog()->setURL( soundURL );
+                break;
+            }
+            ++it;
+        }
     }
 }
 
-/*================================================================*/
 void EffectDia::slotAppearFileChanged( const QString &text )
 {
     buttonTestPlaySoundEffect1->setEnabled( !text.isEmpty() );
     buttonTestStopSoundEffect1->setEnabled( !text.isEmpty() );
 }
 
-/*================================================================*/
 void EffectDia::slotDisappearFileChanged( const QString &text )
 {
     buttonTestPlaySoundEffect2->setEnabled( !text.isEmpty() );
     buttonTestStopSoundEffect2->setEnabled( !text.isEmpty() );
 }
 
-/*================================================================*/
 void EffectDia::playSound1()
 {
     delete soundPlayer1;
@@ -479,7 +462,6 @@ void EffectDia::playSound1()
     buttonTestStopSoundEffect1->setEnabled( true );
 }
 
-/*================================================================*/
 void EffectDia::playSound2()
 {
     delete soundPlayer2;
@@ -490,7 +472,6 @@ void EffectDia::playSound2()
     buttonTestStopSoundEffect2->setEnabled( true );
 }
 
-/*================================================================*/
 void EffectDia::stopSound1()
 {
     if ( soundPlayer1 ) {
@@ -503,7 +484,6 @@ void EffectDia::stopSound1()
     }
 }
 
-/*================================================================*/
 void EffectDia::stopSound2()
 {
     if ( soundPlayer2 ) {
@@ -516,7 +496,6 @@ void EffectDia::stopSound2()
     }
 }
 
-/*================================================================*/
 QString EffectDia::getSoundFileFilter() const
 {
     QStringList fileList;
@@ -541,4 +520,4 @@ QString EffectDia::getSoundFileFilter() const
     return str;
 }
 
-#include <effectdia.moc>
+#include "effectdia.moc"

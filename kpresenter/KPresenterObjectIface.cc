@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -27,7 +28,7 @@
 KPresenterObjectIface::KPresenterObjectIface( KPObject *obj_ )
     : DCOPObject()
 {
-   obj = obj_;
+    obj = obj_;
 }
 
 int KPresenterObjectIface::getType() const
@@ -94,7 +95,6 @@ int KPresenterObjectIface::effect3() const
 {
     return (int)obj->getEffect3();
 }
-
 
 void KPresenterObjectIface::setSelected( bool _selected )
 {
@@ -259,7 +259,6 @@ void KPresenterObjectIface::setEffect3(const QString & effect)
         obj->setEffect3(EF3_WIPE_TOP);
     else if(effect=="WIPE_BOTTOM")
         obj->setEffect3(EF3_WIPE_BOTTOM);
-
 }
 
 void KPresenterObjectIface::setProtected( bool b )

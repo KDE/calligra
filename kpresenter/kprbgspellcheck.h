@@ -1,6 +1,7 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 David Faure <david@mandrakesoft.com>
-                 2002 Laurent Montel <lmontel@mandrakesoft.com>
+   2002 Laurent Montel <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

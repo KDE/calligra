@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -37,11 +38,6 @@
 
 #include <stdlib.h>
 
-/******************************************************************/
-/* class PiePreview                                               */
-/******************************************************************/
-
-/*==================== constructor ===============================*/
 PiePreview::PiePreview( QWidget* parent, const char* name )
     : QFrame( parent, name )
 {
@@ -56,7 +52,6 @@ PiePreview::PiePreview( QWidget* parent, const char* name )
     setMinimumSize( 200, 100 );
 }
 
-/*====================== draw contents ===========================*/
 void PiePreview::drawContents( QPainter* painter )
 {
     int ow = width() - 8;
@@ -81,64 +76,57 @@ void PiePreview::drawContents( QPainter* painter )
     }
 }
 
-/******************************************************************/
-/* class ConfPieDia                                               */
-/******************************************************************/
-
-/*==================== constructor ===============================*/
 ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
     : QWidget( parent, name ), m_bTypeChanged(false), m_bAngleChanged(false), m_bLengthChanged(false)
 {
-  QGridLayout *grid = new QGridLayout( this, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( this, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-  lType = new QLabel( i18n( "Type:" ), this );
-  grid->addWidget(lType, 0, 0);
+    lType = new QLabel( i18n( "Type:" ), this );
+    grid->addWidget(lType, 0, 0);
 
-  cType = new QComboBox( false, this );
-  cType->insertItem( i18n( "Pie" ) );
-  cType->insertItem( i18n( "Arc" ) );
-  cType->insertItem( i18n( "Chord" ) );
-  grid->addWidget(cType, 1, 0);
+    cType = new QComboBox( false, this );
+    cType->insertItem( i18n( "Pie" ) );
+    cType->insertItem( i18n( "Arc" ) );
+    cType->insertItem( i18n( "Chord" ) );
+    grid->addWidget(cType, 1, 0);
 
-  connect( cType, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
+    connect( cType, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
-  lAngle = new QLabel( i18n( "Angle:" ), this );
-  grid->addWidget(lAngle, 2, 0);
+    lAngle = new QLabel( i18n( "Angle:" ), this );
+    grid->addWidget(lAngle, 2, 0);
 
-  eAngle = new KIntNumInput( this );
-  eAngle->setRange(0, 360);
-  eAngle->setSuffix(" °");
-  grid->addWidget(eAngle, 3, 0);
+    eAngle = new KIntNumInput( this );
+    eAngle->setRange(0, 360);
+    eAngle->setSuffix(" °");
+    grid->addWidget(eAngle, 3, 0);
 
-  connect( eAngle, SIGNAL( valueChanged( int ) ), this, SLOT( angleChanged( int ) ) );
+    connect( eAngle, SIGNAL( valueChanged( int ) ), this, SLOT( angleChanged( int ) ) );
 
-  lLen = new QLabel( i18n( "Length:" ), this );
-  grid->addWidget(lLen, 4, 0);
+    lLen = new QLabel( i18n( "Length:" ), this );
+    grid->addWidget(lLen, 4, 0);
 
-  eLen = new KIntNumInput( this );
-  eLen->setRange(0, 360);
-  eLen->setSuffix(" °");
-  grid->addWidget(eLen, 5, 0);
+    eLen = new KIntNumInput( this );
+    eLen->setRange(0, 360);
+    eLen->setSuffix(" °");
+    grid->addWidget(eLen, 5, 0);
 
-  connect( eLen, SIGNAL( valueChanged( int ) ), this, SLOT( lengthChanged( int ) ) );
+    connect( eLen, SIGNAL( valueChanged( int ) ), this, SLOT( lengthChanged( int ) ) );
 
-  QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-  grid->addItem( spacer, 6, 0 );
+    QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    grid->addItem( spacer, 6, 0 );
 
-  // ------------------------ preview
-  piePreview = new PiePreview( this, "preview" );
-  grid->addMultiCellWidget( piePreview, 0, 6, 1, 1 );
+    // ------------------------ preview
+    piePreview = new PiePreview( this, "preview" );
+    grid->addMultiCellWidget( piePreview, 0, 6, 1, 1 );
 
-  slotReset();
+    slotReset();
 }
 
-/*===================== destructor ===============================*/
 ConfPieDia::~ConfPieDia()
 {
     delete piePreview;
 }
 
-/*================================================================*/
 void ConfPieDia::lengthChanged( int _len )
 {
     m_bLengthChanged = true;
@@ -146,7 +134,6 @@ void ConfPieDia::lengthChanged( int _len )
     piePreview->setLength( len );
 }
 
-/*================================================================*/
 void ConfPieDia::angleChanged( int _angle )
 {
     m_bAngleChanged = true;
@@ -154,7 +141,6 @@ void ConfPieDia::angleChanged( int _angle )
     piePreview->setAngle( angle );
 }
 
-/*================================================================*/
 void ConfPieDia::typeChanged( int _type )
 {
     m_bTypeChanged = true;
@@ -224,4 +210,4 @@ int ConfPieDia::getPieConfigChange() const
     return flags;
 }
 
-#include <confpiedia.moc>
+#include "confpiedia.moc"

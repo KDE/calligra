@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
 
@@ -24,11 +25,9 @@
 #include <kdebug.h>
 #include <koStylist.h>
 #include <kostyle.h>
-/******************************************************************/
-/* Class: KWStyleManager                                          */
-/******************************************************************/
 
-KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPresenterDoc *_doc, const QPtrList<KoStyle> & style, const QString & activeStyleName)
+KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPresenterDoc *_doc,
+                                  const QPtrList<KoStyle> & style, const QString & activeStyleName)
     : KoStyleManager(_parent,unit,style, activeStyleName)
 {
     m_doc = _doc;

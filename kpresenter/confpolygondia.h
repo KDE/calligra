@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Base code from Kontour.
    Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
@@ -35,10 +36,6 @@ class QGroupBox;
 class QPushButton;
 class QRadioButton;
 
-/******************************************************************/
-/* class PolygonPreview                                           */
-/******************************************************************/
-
 class PolygonPreview : public QFrame
 {
     Q_OBJECT
@@ -48,7 +45,7 @@ public:
     ~PolygonPreview() {}
 
     void setPenBrush( const QPen &_pen, const QBrush &_brush )
-    { pen = _pen; brush = _brush; repaint( true ); }
+        { pen = _pen; brush = _brush; repaint( true ); }
 
 public slots:
     void slotConvexPolygon();
@@ -111,7 +108,6 @@ protected slots:
 
 signals:
     void confPolygonDiaOk();
-
 };
 
 #endif

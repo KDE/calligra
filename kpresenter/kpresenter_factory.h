@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -30,7 +31,9 @@ public:
     KPresenterFactory( QObject* parent = 0, const char* name = 0 );
     ~KPresenterFactory();
 
-    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
+    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0,
+                                            const char *name = 0, const char *classname = "KoDocument",
+                                            const QStringList &args = QStringList() );
 
     static KInstance* global();
 

@@ -973,7 +973,8 @@ void Outline::renamePageTitle()
     if ( ok ) { // User pushed an OK button.
         if ( newTitle != activeTitle ) { // Title changed.
             KPresenterDoc *doc=view->kPresenterDoc();
-            KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Slide"),doc, activeTitle, newTitle, page  );
+            KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Slide"),
+                                                                                  doc, activeTitle, newTitle, page  );
             cmd->execute();
             doc->addCommand(cmd);
         }

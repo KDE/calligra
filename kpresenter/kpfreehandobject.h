@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
 
@@ -27,15 +28,12 @@
 class QPainter;
 class DCOPObject;
 
-/******************************************************************/
-/* Class: KPFreehandObject                                        */
-/******************************************************************/
-
 class KPFreehandObject : public KPShadowObject
 {
 public:
     KPFreehandObject();
-    KPFreehandObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    KPFreehandObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen,
+                      LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPFreehandObject() {}
     virtual DCOPObject* dcopObject();
 
@@ -52,14 +50,14 @@ public:
     virtual double load( const QDomElement &element );
     virtual void setSize( double _width, double _height );
     virtual void setSize( const KoSize & _size )
-    { setSize( _size.width(), _size.height() ); }
+        { setSize( _size.width(), _size.height() ); }
     virtual void flip(bool horizontal );
     virtual void closeObject(bool close);
     bool isClosed()const;
 
 protected:
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			bool drawingShadow, bool drawContour = FALSE );
+                        bool drawingShadow, bool drawContour = FALSE );
 
     void updatePoints( double _fx, double _fy );
 

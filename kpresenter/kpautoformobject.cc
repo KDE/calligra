@@ -44,8 +44,10 @@ KPAutoformObject::KPAutoformObject()
     redrawPix = false;
 }
 
-KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, const QString & _filename, LineEnd _lineBegin, LineEnd _lineEnd,
-                                    FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
+KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, const QString & _filename,
+                                    LineEnd _lineBegin, LineEnd _lineEnd,
+                                    FillType _fillType, const QColor &_gColor1,
+                                    const QColor &_gColor2, BCType _gType,
                                     bool _unbalanced, int _xfactor, int _yfactor)
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor ),
       filename( _filename ), atfInterp()
@@ -76,7 +78,6 @@ DCOPObject* KPAutoformObject::dcopObject()
         dcop = new KPAutoFormObjectIface( this );
     return dcop;
 }
-
 
 void KPAutoformObject::setFileName( const QString & _filename )
 {
@@ -189,7 +190,8 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     if ( !drawContour )
         _painter->setBrush( brush );
 
-    QPointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),_zoomHandler->zoomItY( ext.height() ) );
+    QPointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),
+                                                    _zoomHandler->zoomItY( ext.height() ) );
     QPtrList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
     QPointArray pntArray2( pntArray.size() );
     int ex = _zoomHandler->zoomItX(ext.width());
@@ -254,7 +256,6 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
                         p.end();
 
                         pix.setMask( pix.createHeuristicMask() );
-
                     }
 
                     _painter->drawPixmap( 0, 0, pix );

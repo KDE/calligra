@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -44,10 +45,6 @@ class KoTextObject;
 
 #define RAD_FACTOR 180.0 / M_PI
 
-/******************************************************************/
-/* Class: KPObject                                                */
-/******************************************************************/
-
 class KPObject
 {
 public:
@@ -58,126 +55,126 @@ public:
     virtual DCOPObject* dcopObject();
 
     virtual void setSelected( bool _selected )
-    { selected = _selected; }
+        { selected = _selected; }
     virtual void rotate( float _angle )
-    { angle = _angle; }
+        { angle = _angle; }
     virtual void setSize( const KoSize & _size )
-    { setSize( _size.width(), _size.height() ); }
+        { setSize( _size.width(), _size.height() ); }
     virtual void setSize(double _width, double _height )
-    { ext = KoSize( QMAX( 10, _width ), QMAX( 10, _height ) ); } // no object is smaller than 10x10
+        { ext = KoSize( QMAX( 10, _width ), QMAX( 10, _height ) ); } // no object is smaller than 10x10
     virtual void setOrig( const KoPoint & _point )
-    { orig = _point; }
+        { orig = _point; }
     virtual void setOrig( double _x, double _y )
-    { orig = KoPoint( _x, _y ); }
+        { orig = KoPoint( _x, _y ); }
     virtual void moveBy( const KoPoint &_point )
-    { orig = orig + _point; }
+        { orig = orig + _point; }
     virtual void moveBy( double _dx, double _dy )
-    { orig = orig + KoPoint( _dx, _dy ); }
+        { orig = orig + KoPoint( _dx, _dy ); }
     virtual void resizeBy( const KoSize & _size )
-    { resizeBy( _size.width(), _size.height() ); }
-    virtual void resizeBy( double _dx,double _dy )
-    { setSize( ext.width() + _dx, ext.height() + _dy ); } // call (possibly reimplemented) setSize
+        { resizeBy( _size.width(), _size.height() ); }
+    virtual void resizeBy( double _dx, double _dy )
+        { setSize( ext.width() + _dx, ext.height() + _dy ); } // call (possibly reimplemented) setSize
 
     virtual void setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color)
-    {
-	    shadowDistance = _distance;
-	    shadowDirection = _direction;
-	    shadowColor = _color;
-    }
+        {
+            shadowDistance = _distance;
+            shadowDirection = _direction;
+            shadowColor = _color;
+        }
 
     virtual void setShadowDistance( int _distance )
-    { shadowDistance = _distance; }
+        { shadowDistance = _distance; }
     virtual void setShadowDirection( ShadowDirection _direction )
-    { shadowDirection = _direction; }
+        { shadowDirection = _direction; }
     virtual void setShadowColor( const QColor & _color )
-    { shadowColor = _color; }
+        { shadowColor = _color; }
     virtual void setEffect( Effect _effect )
-    { effect = _effect; }
+        { effect = _effect; }
     virtual void setEffect2( Effect2 _effect2 )
-    { effect2 = _effect2; }
+        { effect2 = _effect2; }
     virtual void setPresNum( int _presNum )
-    { presNum = _presNum; }
+        { presNum = _presNum; }
     virtual void setDisappear( bool b )
-    { disappear = b; }
+        { disappear = b; }
     virtual void setDisappearNum( int num )
-    { disappearNum = num; }
+        { disappearNum = num; }
     virtual void setEffect3( Effect3 _effect3)
-    { effect3 = _effect3; }
+        { effect3 = _effect3; }
     virtual void setAppearTimer( int _appearTimer )
-    { appearTimer = _appearTimer; }
+        { appearTimer = _appearTimer; }
     virtual void setDisappearTimer( int _disappearTimer )
-    { disappearTimer = _disappearTimer; }
+        { disappearTimer = _disappearTimer; }
     virtual void setAppearSoundEffect( bool b )
-    { appearSoundEffect = b; }
+        { appearSoundEffect = b; }
     virtual void setDisappearSoundEffect( bool b )
-    { disappearSoundEffect = b; }
+        { disappearSoundEffect = b; }
     virtual void setAppearSoundEffectFileName( const QString & _a_fileName )
-    { a_fileName = _a_fileName; }
+        { a_fileName = _a_fileName; }
     virtual void setDisappearSoundEffectFileName( const QString &_d_fileName )
-    { d_fileName = _d_fileName; }
+        { d_fileName = _d_fileName; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
     virtual ObjType getType() const
-    { return OT_UNDEFINED; }
+        { return OT_UNDEFINED; }
     virtual QString getTypeString() const
-    { return QString(); }
+        { return QString(); }
 
     KoRect getBoundingRect() const;
     virtual bool isSelected() const
-    { return selected; }
+        { return selected; }
     virtual float getAngle() const
-    { return angle; }
+        { return angle; }
     virtual int getShadowDistance() const
-    { return shadowDistance; }
+        { return shadowDistance; }
     virtual ShadowDirection getShadowDirection() const
-    { return shadowDirection; }
+        { return shadowDirection; }
     virtual QColor getShadowColor() const
-    { return shadowColor; }
+        { return shadowColor; }
     virtual KoSize getSize() const
-    { return ext; }
+        { return ext; }
     virtual KoPoint getOrig() const
-    { return orig; }
+        { return orig; }
     KoRect getRect() const
-    { return KoRect( getOrig(), getSize() ); }
+        { return KoRect( getOrig(), getSize() ); }
     virtual Effect getEffect() const
-    { return effect; }
+        { return effect; }
     virtual Effect2 getEffect2() const
-    { return effect2; }
+        { return effect2; }
     virtual Effect3 getEffect3() const
-    { return effect3; }
+        { return effect3; }
     virtual int getAppearTimer() const
-    { return appearTimer; }
+        { return appearTimer; }
     virtual int getDisappearTimer() const
-    { return disappearTimer; }
+        { return disappearTimer; }
     virtual bool getAppearSoundEffect() const
-    { return appearSoundEffect; }
+        { return appearSoundEffect; }
     virtual bool getDisappearSoundEffect() const
-    { return disappearSoundEffect; }
+        { return disappearSoundEffect; }
     virtual QString getAppearSoundEffectFileName() const
-    { return a_fileName; }
+        { return a_fileName; }
     virtual QString getDisappearSoundEffectFileName() const
-    { return d_fileName; }
+        { return d_fileName; }
     virtual int getPresNum() const
-    { return presNum; }
+        { return presNum; }
     virtual int getSubPresSteps() const
-    { return 0; }
+        { return 0; }
     virtual bool getDisappear() const
-    { return disappear; }
+        { return disappear; }
     virtual int getDisappearNum() const
-    { return disappearNum; }
+        { return disappearNum; }
 
     virtual void setOwnClipping( bool _ownClipping )
-    { ownClipping = _ownClipping; }
+        { ownClipping = _ownClipping; }
     virtual void setSubPresStep( int _subPresStep )
-    { subPresStep = _subPresStep; }
+        { subPresStep = _subPresStep; }
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true )
-    { specEffects = _specEffects; onlyCurrStep = _onlyCurrStep; }
+        { specEffects = _specEffects; onlyCurrStep = _onlyCurrStep; }
 
     // the main drawing method.
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       SelectionMode selectionMode, bool drawContour = FALSE );
+                       SelectionMode selectionMode, bool drawContour = FALSE );
 
     virtual bool contains( const KoPoint &_point ) const;
     virtual bool intersects( const KoRect & _rect ) const;
@@ -188,13 +185,13 @@ public:
     void rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandler);
 
     virtual void removeFromObjList()
-    { inObjList = false; doDelete(); }
+        { inObjList = false; doDelete(); }
     virtual void addToObjList()
-    { inObjList = true; }
+        { inObjList = true; }
     virtual void incCmdRef()
-    { cmds++; }
+        { cmds++; }
     virtual void decCmdRef()
-    { cmds--; doDelete(); }
+        { cmds--; doDelete(); }
 
     virtual void setSticky( bool b ) { sticky = b; }
     bool isSticky() const { return sticky; }
@@ -213,7 +210,7 @@ public:
     virtual void setOrigSizeInGroup( const KoSize &_size ) { origSizeInGroup = _size; }
     virtual KoSize getOrigSizeInGroup() const{ return origSizeInGroup; }
     void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler,
-			 SelectionMode selectionMode );
+                         SelectionMode selectionMode );
 
     /**
      * Collect all textobjects.
@@ -223,7 +220,8 @@ public:
     virtual void addTextObjects( QPtrList<KoTextObject> & ) const {}
 
     virtual KPTextObject *nextTextObject() { return 0L;} // deprecated
-    virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false ) { if (selected || force ) lst.append( this );}
+    virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst, bool force = false )
+        { if (selected || force ) lst.append( this );}
     virtual QPen getPen() const;
 
 protected:
@@ -312,20 +310,20 @@ public:
     KPShadowObject &operator=( const KPShadowObject & );
 
     virtual void setPen( const QPen &_pen )
-    { pen = _pen; }
+        { pen = _pen; }
     virtual void setBrush( const QBrush &_brush )
-    { brush = _brush; }
+        { brush = _brush; }
 
     virtual QPen getPen() const
-    { return pen; }
+        { return pen; }
     virtual QBrush getBrush() const
-    { return brush; }
+        { return brush; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       SelectionMode selectionMode, bool drawContour = FALSE );
+                       SelectionMode selectionMode, bool drawContour = FALSE );
 protected:
     /**
      * This method is to be implemented by all KShadowObjects, to draw themselves.
@@ -338,7 +336,7 @@ protected:
      * This method isn't pure virtual because some objects implement draw() directly.
      */
     virtual void paint( QPainter* /*painter*/, KoZoomHandler* /*zoomHandler*/,
-			bool /*drawingShadow*/, bool /*drawContour*/ =  FALSE ) {}
+                        bool /*drawingShadow*/, bool /*drawContour*/ =  FALSE ) {}
     QPen pen;
     QBrush brush;
 };
@@ -350,37 +348,37 @@ public:
     KP2DObject();
     KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
                 const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
-                  bool _unbalanced, int _xfactor, int _yfactor );
+                bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KP2DObject() { delete gradient; }
 
     virtual void setFillType( FillType _fillType );
     virtual void setGColor1( const QColor &_gColor1 )
-    { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
+        { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
     virtual void setGColor2( const QColor &_gColor2 )
-    { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
+        { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
     virtual void setGType( BCType _gType )
-    { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
+        { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
     virtual void setGUnbalanced( bool b )
-    { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
+        { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
     virtual void setGXFactor( int f )
-    { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
+        { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
     virtual void setGYFactor( int f )
-    { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
+        { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
 
     virtual FillType getFillType() const
-    { return fillType; }
+        { return fillType; }
     virtual QColor getGColor1() const
-    { return gColor1; }
+        { return gColor1; }
     virtual QColor getGColor2() const
-    { return gColor2; }
+        { return gColor2; }
     virtual BCType getGType() const
-    { return gType; }
+        { return gType; }
     virtual bool getGUnbalanced() const
-    { return unbalanced; }
+        { return unbalanced; }
     virtual int getGXFactor() const
-    { return xfactor; }
+        { return xfactor; }
     virtual int getGYFactor() const
-    { return yfactor; }
+        { return yfactor; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);

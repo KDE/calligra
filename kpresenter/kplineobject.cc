@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -29,11 +30,6 @@
 #include <math.h>
 using namespace std;
 
-/******************************************************************/
-/* Class: KPLineObject                                             */
-/******************************************************************/
-
-/*================ default constructor ===========================*/
 KPLineObject::KPLineObject()
     : KPShadowObject()
 {
@@ -42,8 +38,8 @@ KPLineObject::KPLineObject()
     lineType = LT_HORZ;
 }
 
-/*================== overloaded constructor ======================*/
-KPLineObject::KPLineObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd, LineType _lineType )
+KPLineObject::KPLineObject( const QPen &_pen, LineEnd _lineBegin,
+                            LineEnd _lineEnd, LineType _lineType )
     : KPShadowObject( _pen )
 {
     lineBegin = _lineBegin;
@@ -63,8 +59,6 @@ DCOPObject* KPLineObject::dcopObject()
     return dcop;
 }
 
-
-/*========================= save =================================*/
 QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPShadowObject::save(doc, offset);
@@ -77,7 +71,6 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-/*========================== load ================================*/
 double KPLineObject::load(const QDomElement &element)
 {
     double offset=KPShadowObject::load(element);
@@ -105,7 +98,6 @@ double KPLineObject::load(const QDomElement &element)
     return offset;
 }
 
-/*======================== paint =================================*/
 void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
                           bool /*drawingShadow*/, bool drawContour )
 {
@@ -151,7 +143,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         _angle = KoPoint::getAngle( pnt1, pnt2 ) - 180.0;
     } break;
     }
-    
+
     if ( lineBegin != L_NORMAL )
         diff1 = getOffset( lineBegin, _w, _angle + 180.0);
 

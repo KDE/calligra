@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -30,10 +31,6 @@ class KIntNumInput;
 class QGroupBox;
 class QPushButton;
 
-/******************************************************************/
-/* class RectPreview                                               */
-/******************************************************************/
-
 class RectPreview : public QFrame
 {
     Q_OBJECT
@@ -43,9 +40,9 @@ public:
     ~RectPreview() {}
 
     void setRnds( int _rx, int _ry )
-    { xRnd = _rx; yRnd = _ry; repaint( contentsRect(), true ); }
+        { xRnd = _rx; yRnd = _ry; repaint( contentsRect(), true ); }
     void setPenBrush( const QPen &_pen, const QBrush &_brush )
-    { pen = _pen; brush = _brush; repaint( true ); }
+        { pen = _pen; brush = _brush; repaint( true ); }
 
 protected:
     void drawContents( QPainter* );
@@ -55,10 +52,6 @@ protected:
     QBrush brush;
 
 };
-
-/******************************************************************/
-/* class ConfRectDia                                              */
-/******************************************************************/
 
 class ConfRectDia : public QWidget
 {

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
 
@@ -28,10 +29,6 @@ class KPGradient;
 class QPainter;
 class DCOPObject;
 
-/******************************************************************/
-/* Class: KPPolygonObject                                         */
-/******************************************************************/
-
 class KPPolygonObject : public KP2DObject
 {
 public:
@@ -48,7 +45,7 @@ public:
 
     virtual void setSize( double _width, double _height );
     virtual void setSize( const KoSize & _size )
-    { setSize( _size.width(), _size.height() ); }
+        { setSize( _size.width(), _size.height() ); }
 
     virtual void setFillType( FillType _fillType );
     virtual void setGColor1( const QColor &_gColor1 ) { KP2DObject::setGColor1( _gColor1 ); redrawPix = true; }
@@ -75,7 +72,7 @@ public:
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
-			bool drawingShadow, bool drawContour );
+                        bool drawingShadow, bool drawContour );
 
     void updatePoints( double _fx, double _fy );
 

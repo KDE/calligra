@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -32,10 +33,6 @@ class QPushButton;
 class QPainter;
 class QComboBox;
 
-/******************************************************************/
-/* class PiePreview                                               */
-/******************************************************************/
-
 class PiePreview : public QFrame
 {
     Q_OBJECT
@@ -45,13 +42,13 @@ public:
     ~PiePreview() {}
 
     void setAngle( int _angle )
-    { angle = _angle; repaint( true ); }
+        { angle = _angle; repaint( true ); }
     void setLength( int _len )
-    { len = _len; repaint( true ); }
+        { len = _len; repaint( true ); }
     void setType( PieType _type )
-    { type = _type; repaint( true ); }
+        { type = _type; repaint( true ); }
     void setPenBrush( const QPen &_pen, const QBrush &_brush )
-    { pen = _pen; brush = _brush; repaint( true ); }
+        { pen = _pen; brush = _brush; repaint( true ); }
 
 protected:
     void drawContents( QPainter* );
@@ -62,10 +59,6 @@ protected:
     QBrush brush;
 
 };
-
-/******************************************************************/
-/* class ConfPieDia                                               */
-/******************************************************************/
 
 class ConfPieDia : public QWidget
 {

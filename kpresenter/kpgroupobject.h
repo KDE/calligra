@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -23,10 +24,6 @@
 class KPresenterDoc;
 
 #include <kpobject.h>
-
-/******************************************************************/
-/* Class: KPGroupObject                                           */
-/******************************************************************/
 
 class KPGroupObject : public KPObject
 {
@@ -63,26 +60,23 @@ public:
     virtual void setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color);
 
     virtual ObjType getType() const
-    { return OT_GROUP; }
+        { return OT_GROUP; }
     virtual QString getTypeString() const
-    { return i18n("Group"); }
+        { return i18n("Group"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
-		       SelectionMode selectionMode, bool drawContour = FALSE );
+                       SelectionMode selectionMode, bool drawContour = FALSE );
 
-    void setUpdateObjects( bool b ) {
-        updateObjs = b;
-    }
+    void setUpdateObjects( bool b )
+        { updateObjs = b; }
 
-    QPtrList<KPObject> getObjects() {
-        return objects;
-    }
-    const QPtrList<KPObject> &objectList() const {
-        return objects;
-    }
+    QPtrList<KPObject> getObjects()
+        { return objects; }
+    const QPtrList<KPObject> &objectList() const
+        { return objects; }
     virtual void addTextObjects( QPtrList<KoTextObject> & ) const;
 
     void selectAllObj();

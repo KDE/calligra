@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent Montel <lmontel@mandrakesoft.com>
 
@@ -25,7 +26,7 @@
 
 /**
  * Drag object for a text selection
- * Contains the text as plain/text (without formatting) and as kword XML (with formatting)
+ * Contains the text as plain/text (without formatting) and as kpresenter XML (with formatting)
  */
 class KPrTextDrag : public QTextDrag
 {

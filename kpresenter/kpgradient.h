@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -56,13 +57,13 @@ public:
     void setXFactor( int i ) { xFactor = i; m_bDirty = true; }
     void setYFactor( int i ) { yFactor = i; m_bDirty = true; }
     void setSize( const QSize& _size )
-    {
-        if ( size() != _size ) {
-            m_pixmap.resize( _size );
-            m_bDirty = true;
+        {
+            if ( size() != _size ) {
+                m_pixmap.resize( _size );
+                m_bDirty = true;
+            }
         }
-    }
-    
+
     // Sets all of the above at once. Used when loading.
     void setParameters(const QColor &c1, const QColor &c2, BCType _type,
                        bool _unbalanced, int xf, int yf);

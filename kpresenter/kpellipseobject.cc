@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -29,18 +30,12 @@
 #include <kozoomhandler.h>
 using namespace std;
 
-/******************************************************************/
-/* Class: KPEllipseObject                                         */
-/******************************************************************/
-
-/*================ default constructor ===========================*/
 KPEllipseObject::KPEllipseObject()
     : KP2DObject()
 {
     redrawPix = false;
 }
 
-/*================== overloaded constructor ======================*/
 KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
                                   const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor)
@@ -58,7 +53,6 @@ KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillTy
         gradient = 0;
 }
 
-/*================================================================*/
 KPEllipseObject &KPEllipseObject::operator=( const KPEllipseObject & )
 {
     return *this;
@@ -67,12 +61,10 @@ KPEllipseObject &KPEllipseObject::operator=( const KPEllipseObject & )
 DCOPObject* KPEllipseObject::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPresenterObject2DIface( this );
+        dcop = new KPresenterObject2DIface( this );
     return dcop;
 }
 
-
-/*================================================================*/
 void KPEllipseObject::setFillType( FillType _fillType )
 {
     fillType = _fillType;
@@ -89,9 +81,8 @@ void KPEllipseObject::setFillType( FillType _fillType )
     }
 }
 
-/*======================== paint =================================*/
 void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
-			     bool drawingShadow, bool drawContour )
+                             bool drawingShadow, bool drawContour )
 {
     int ow = _zoomHandler->zoomItX( ext.width() );
     int oh = _zoomHandler->zoomItY( ext.height() );
@@ -110,9 +101,8 @@ void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     int pw = ( pen2.style() == Qt::NoPen ) ? 1 : pen2.width();;
     _painter->setPen( pen2 );
 
-    if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
+    if ( drawingShadow || fillType == FT_BRUSH || !gradient )
         _painter->setBrush( brush );
-    }
     else {
         if ( redrawPix || gradient->size() != size ) {
             redrawPix = false;

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -28,65 +29,61 @@
 class QLabel;
 class KIconCanvas;
 
-/******************************************************************/
-/* class AFChoose                                                 */
-/******************************************************************/
-
 class AFChoose : public QTabDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-  // constructor - destructor
-  AFChoose(QWidget *parent=0, const QString &caption=QString::null, const char *name=0);
-  ~AFChoose();
+    // constructor - destructor
+    AFChoose(QWidget *parent=0, const QString &caption=QString::null, const char *name=0);
+    ~AFChoose();
 
 private:
 
-  // structure of a group
-  struct Group
-  {
-    QFileInfo dir;
-    QString name;
-    QWidget *tab;
-    KIconCanvas *loadWid;
-    QLabel *label;
-    QMap<QString, QString> entries;
-  };
+    // structure of a group
+    struct Group
+    {
+        QFileInfo dir;
+        QString name;
+        QWidget *tab;
+        KIconCanvas *loadWid;
+        QLabel *label;
+        QMap<QString, QString> entries;
+    };
 
-  // set groups
-  void getGroups();
+    // set groups
+    void getGroups();
 
-  // setup tabs
-  void setupTabs();
+    // setup tabs
+    void setupTabs();
 
-  // ********** variables **********
+    // ********** variables **********
 
-  // list of groups and a pointer to a group
-  QPtrList<Group> groupList;
-  Group *grpPtr;
+    // list of groups and a pointer to a group
+    QPtrList<Group> groupList;
+    Group *grpPtr;
 
 private slots:
 
-  // name changed
-  void nameChanged(QString);
-  void tabChanged(QWidget *);
+    // name changed
+    void nameChanged(QString);
+    void tabChanged(QWidget *);
 
-  // autoform chosen
-  void chosen();
+    // autoform chosen
+    void chosen();
 
-  void cancelClicked();
+    void cancelClicked();
 
-  void slotDoubleClick();
+    void slotDoubleClick();
 protected:
-  void closeEvent ( QCloseEvent * );
+    void closeEvent ( QCloseEvent * );
 
 signals:
 
-  //autoform chosen
-  void formChosen(const QString &);
-  void afchooseCanceled();
+    //autoform chosen
+    void formChosen(const QString &);
+    void afchooseCanceled();
 };
 
 #endif //AFCHOOSE_H

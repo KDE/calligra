@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C)  2002 Montel Laurent <lmontel@mandrakesoft.com>
 
@@ -33,7 +34,8 @@ class KPrMoveHelpLineDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom , KPresenterDoc *_doc, const char *name=0L);
+    KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom,
+                        KPresenterDoc *_doc, const char *name=0L);
 
     double newPosition() const;
     bool removeLine() const { return m_bRemoveLine;}
@@ -73,7 +75,8 @@ class KPrInsertHelpPointDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KPrInsertHelpPointDia( QWidget *parent, const KoRect &r, KPresenterDoc *_doc, double poxX=0.0 , double posY=0.0, const char *name=0L);
+    KPrInsertHelpPointDia( QWidget *parent, const KoRect &r, KPresenterDoc *_doc, double poxX=0.0,
+                           double posY=0.0, const char *name=0L);
 
     KoPoint newPosition() const;
     bool removePoint() const { return m_bRemovePoint;}

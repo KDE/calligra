@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent MONTEL <lmontel@mandrakesoft.com>
 
@@ -31,7 +32,9 @@ KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting)
 {
 }
 
-KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc,  int _correct, bool _forceDefaultFormat )
+KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll,
+                                                   KoVariableFormat *varFormat,KoTextDocument *textdoc,
+                                                   KoDocument * doc,  int _correct, bool _forceDefaultFormat )
 {
     KPresenterDoc*m_doc=static_cast<KPresenterDoc*>(doc);
     switch(type) {
@@ -50,7 +53,10 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
     case VT_DATE:
         if ( !varFormat )
         {
-            if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING || subtype ==KoDateVariable::VST_DATE_CREATE_FILE || subtype ==KoDateVariable::VST_DATE_MODIFY_FILE)
+            if ( _forceDefaultFormat
+                 || subtype == KoDateVariable::VST_DATE_LAST_PRINTING
+                 || subtype ==KoDateVariable::VST_DATE_CREATE_FILE
+                 || subtype ==KoDateVariable::VST_DATE_MODIFY_FILE)
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
             {
@@ -76,7 +82,8 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
         }
         return new KPrTimeVariable( textdoc, subtype, varFormat, this, m_doc,_correct );
     default:
-        return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc, _correct, _forceDefaultFormat);
+        return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc,
+                                                     doc, _correct, _forceDefaultFormat);
     }
 }
 
@@ -86,10 +93,8 @@ QPtrList<KAction> KPrVariableCollection::variableActionList()
 }
 
 
-/******************************************************************/
-/* Class: KPrPgNumVariable                                         */
-/******************************************************************/
-KPrPgNumVariable::KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc  )
+KPrPgNumVariable::KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
+                                    KoVariableCollection *_varColl, KPresenterDoc *doc  )
     : KoPgNumVariable( textdoc, subtype, varFormat ,_varColl ),m_doc(doc)
 {
 }
@@ -106,7 +111,9 @@ void KPrPgNumVariable::recalc()
 void KPrPgNumVariable::setVariableSubType( short int type)
 {
     m_subtype=type;
-    setVariableFormat((m_subtype == KPrPgNumVariable::VST_CURRENT_SECTION) ? m_doc->variableFormatCollection()->format("STRING") : m_doc->variableFormatCollection()->format("NUMBER"));
+    setVariableFormat((m_subtype == KPrPgNumVariable::VST_CURRENT_SECTION)
+                      ? m_doc->variableFormatCollection()->format("STRING")
+                      : m_doc->variableFormatCollection()->format("NUMBER"));
 }
 
 QPtrList<KAction> KPrPgNumVariable::actionList()
@@ -136,7 +143,7 @@ void KPrPgNumVariable::slotChangeSubType()
     KAction * act = (KAction *)(sender());
     SubTextMap::Iterator it = m_subTextMap.find( act );
     if ( it == m_subTextMap.end() )
-        kdWarning() << "Action not found in m_subTextMap." << endl;
+        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
     else // if ( m_subtype != variableSubType(*it) )
     {
         short int oldvalue = m_subtype;
@@ -155,13 +162,10 @@ void KPrPgNumVariable::slotChangeSubType()
 }
 
 
-/******************************************************************/
-/* Class: KWFieldVariable                                         */
-/******************************************************************/
-KPrFieldVariable::KPrFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *_doc )
+KPrFieldVariable::KPrFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
+                                    KoVariableCollection *_varColl, KPresenterDoc *_doc )
     : KoFieldVariable( textdoc, subtype, varFormat, _varColl ,_doc ),
       m_doc(_doc)
-
 {
 }
 
@@ -192,7 +196,7 @@ void KPrFieldVariable::slotChangeSubType()
     KAction * act = (KAction *)(sender());
     SubTextMap::Iterator it = m_subTextMap.find( act );
     if ( it == m_subTextMap.end() )
-        kdWarning() << "Action not found in m_subTextMap." << endl;
+        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
     else // if ( m_subtype != variableSubType(*it) )
     {
         short int oldvalue = m_subtype;
@@ -210,7 +214,8 @@ void KPrFieldVariable::slotChangeSubType()
     }
 }
 
-KPrDateVariable::KPrDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *_doc, int _correct )
+KPrDateVariable::KPrDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
+                                  KoVariableCollection *_varColl, KPresenterDoc *_doc, int _correct )
     : KoDateVariable( textdoc, subtype, varFormat, _varColl,_correct ),
       m_doc(_doc)
 {
@@ -273,7 +278,7 @@ void KPrDateVariable::slotChangeSubType()
     KAction * act = (KAction *)(sender());
     SubTextMap::Iterator it = m_subTextMap.find( act );
     if ( it == m_subTextMap.end() )
-        kdWarning() << "Action not found in m_subTextMap." << endl;
+        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
     else // if ( m_subtype != variableSubType(*it) )
     {
         short int oldvalue = m_subtype;
@@ -296,7 +301,7 @@ void KPrDateVariable::slotChangeFormat()
     KAction * act = (KAction *)(sender());
     SubFormatMap::Iterator it = m_subFormatMap.find( act );
     if ( it == m_subFormatMap.end() )
-        kdWarning() << "Action not found in m_subTextMap." << endl;
+        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
     else
     {
         KoVariableDateFormat *frm = static_cast<KoVariableDateFormat *>(variableFormat());
@@ -315,7 +320,8 @@ void KPrDateVariable::slotChangeFormat()
     }
 }
 
-KPrTimeVariable::KPrTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *_doc,int _correct )
+KPrTimeVariable::KPrTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
+                                  KoVariableCollection *_varColl, KPresenterDoc *_doc,int _correct )
     : KoTimeVariable( textdoc, subtype, varFormat, _varColl,_correct ),
       m_doc(_doc)
 {
@@ -379,7 +385,7 @@ void KPrTimeVariable::slotChangeSubType()
     KAction * act = (KAction *)(sender());
     SubTextMap::Iterator it = m_subTextMap.find( act );
     if ( it == m_subTextMap.end() )
-        kdWarning() << "Action not found in m_subTextMap." << endl;
+        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
     else // if ( m_subtype != variableSubType(*it) )
     {
         short int oldvalue = m_subtype;
@@ -402,7 +408,7 @@ void KPrTimeVariable::slotChangeFormat()
     KAction * act = (KAction *)(sender());
     SubFormatMap::Iterator it = m_subFormatMap.find( act );
     if ( it == m_subFormatMap.end() )
-        kdWarning() << "Action not found in m_subTextMap." << endl;
+        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
     else
     {
         KoVariableTimeFormat *frm = static_cast<KoVariableTimeFormat *>(variableFormat());

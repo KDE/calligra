@@ -24,9 +24,6 @@
 
 class KPGradient;
 class DCOPObject;
-/******************************************************************/
-/* Class: KPPieObject                                             */
-/******************************************************************/
 
 class KPPieObject : public KP2DObject
 {
@@ -41,51 +38,51 @@ public:
     KPPieObject &operator=( const KPPieObject & );
 
     virtual void setPieType( PieType _pieType )
-    { pieType = _pieType; }
+        { pieType = _pieType; }
     virtual void setPieAngle( int _p_angle )
-    { p_angle = _p_angle; }
+        { p_angle = _p_angle; }
     virtual void setPieLength( int _p_len )
-    { p_len = _p_len; }
+        { p_len = _p_len; }
     virtual void setLineBegin( LineEnd _lineBegin )
-    { lineBegin = _lineBegin; }
+        { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd )
-    { lineEnd = _lineEnd; }
+        { lineEnd = _lineEnd; }
 
     virtual ObjType getType() const
-    { return OT_PIE; }
+        { return OT_PIE; }
     virtual QString getTypeString() const
-    {
-      switch ( pieType ) {
-      case PT_PIE:
-        return i18n("Pie");
-        break;
-      case PT_ARC:
-        return i18n("Arc");
-        break;
-      case PT_CHORD:
-        return i18n("Chord");
-        break;
-      }
-      return QString::null;
-    }
+        {
+            switch ( pieType ) {
+            case PT_PIE:
+                return i18n("Pie");
+                break;
+            case PT_ARC:
+                return i18n("Arc");
+                break;
+            case PT_CHORD:
+                return i18n("Chord");
+                break;
+            }
+            return QString::null;
+        }
 
     virtual PieType getPieType() const
-    { return pieType; }
+        { return pieType; }
     virtual int getPieAngle() const
-    { return p_angle; }
+        { return p_angle; }
     virtual int getPieLength() const
-    { return p_len; }
+        { return p_len; }
     virtual LineEnd getLineBegin() const
-    { return lineBegin; }
+        { return lineBegin; }
     virtual LineEnd getLineEnd() const
-    { return lineEnd; }
+        { return lineEnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void flip(bool horizontal );
 protected:
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			bool drawingShadow, bool drawContour );
+                        bool drawingShadow, bool drawContour );
 
     PieType pieType;
     int p_angle, p_len;

@@ -1,21 +1,22 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
 
-   Copyright (C) 2002 Toshitaka Fujioka <fujioka@kde.org>
+Copyright (C) 2002 Toshitaka Fujioka <fujioka@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+You should have received a copy of the GNU Library General Public License
+along with this library; see the file COPYING.LIB.  If not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
 */
 
 #include <confpicturedia.h>
@@ -37,11 +38,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-/******************************************************************/
-/* class PicturePreview                                           */
-/******************************************************************/
-
-/*==================== constructor ===============================*/
 PicturePreview::PicturePreview( QWidget* parent, const char* name)
     : QFrame( parent, name )
 {
@@ -49,7 +45,6 @@ PicturePreview::PicturePreview( QWidget* parent, const char* name)
     setMinimumSize( 300, 200 );
 }
 
-/*====================== draw contents ===========================*/
 void PicturePreview::drawContents( QPainter *painter )
 {
     QSize ext = contentsRect().size();
@@ -298,11 +293,6 @@ void PicturePreview::setPicturePixmap(const QPixmap &_pixmap)
     repaint();
 }
 
-/******************************************************************/
-/* class ConfPictureDia                                           */
-/******************************************************************/
-
-/*==================== constructor ===============================*/
 ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name)
     : QWidget( parent, name )
 {
@@ -374,7 +364,8 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name)
 
     connect( m_verticalMirrorPicture, SIGNAL( clicked() ), picturePreview, SLOT( slotVerticalMirrorPicture() ) );
 
-    connect( m_horizontalAndVerticalMirrorPicture, SIGNAL( clicked() ), picturePreview, SLOT( slotHorizontalAndVerticalMirrorPicture() ) );
+    connect( m_horizontalAndVerticalMirrorPicture, SIGNAL( clicked() ),
+             picturePreview, SLOT( slotHorizontalAndVerticalMirrorPicture() ) );
 
     connect( m_depth0, SIGNAL( clicked() ), picturePreview, SLOT( slotPictureDepth0() ) );
 
@@ -394,7 +385,6 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name)
     slotReset();
 }
 
-/*===================== destructor ===============================*/
 ConfPictureDia::~ConfPictureDia()
 {
     delete picturePreview;
@@ -528,4 +518,4 @@ void ConfPictureDia::setPicturePixmap(QPixmap _pixmap)
     picturePreview->setPicturePixmap(origPixmap);
 }
 
-#include <confpicturedia.moc>
+#include "confpicturedia.moc"

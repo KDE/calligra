@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Base code from Kontour.
    Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
@@ -37,11 +38,6 @@
 #include <math.h>
 #include <qradiobutton.h>
 
-/******************************************************************/
-/* class PolygonPreview                                           */
-/******************************************************************/
-
-/*==================== constructor ===============================*/
 PolygonPreview::PolygonPreview( QWidget* parent, const char* name)
     : QFrame( parent, name )
 {
@@ -51,7 +47,6 @@ PolygonPreview::PolygonPreview( QWidget* parent, const char* name)
     setMinimumSize( 200, 100 );
 }
 
-/*====================== draw contents ===========================*/
 void PolygonPreview::drawContents( QPainter *painter )
 {
     double angle = 2 * M_PI / nCorners;
@@ -120,13 +115,9 @@ void PolygonPreview::slotSharpnessValue( int value )
     repaint();
 }
 
-/******************************************************************/
-/* class ConfPolygonDia                                           */
-/******************************************************************/
-
-/*==================== constructor ===============================*/
 ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name )
-    : QWidget( parent, name ), m_bCheckConcaveChanged(false), m_bCornersChanged(false), m_bSharpnessChanged(false)
+    : QWidget( parent, name ), m_bCheckConcaveChanged(false), m_bCornersChanged(false),
+      m_bSharpnessChanged(false)
 {
     // ------------------------ layout
     QVBoxLayout *layout = new QVBoxLayout( this, 0 );
@@ -176,7 +167,6 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name )
     slotReset();
 }
 
-/*===================== destructor ===============================*/
 ConfPolygonDia::~ConfPolygonDia()
 {
     delete polygonPreview;
@@ -288,4 +278,4 @@ void ConfPolygonDia::resetConfigChangedValues()
     m_bSharpnessChanged = false;
 }
 
-#include <confpolygondia.moc>
+#include "confpolygondia.moc"

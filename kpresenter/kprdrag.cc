@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001, Laurent Montel <lmontel@mandrakesoft.com>
 
@@ -20,10 +21,6 @@
 #include "kprdrag.h"
 #include "kprdrag.moc"
 #include <kdebug.h>
-
-/******************************************************************/
-/* Class: KPrTextDrag                                               */
-/******************************************************************/
 
 KPrTextDrag::KPrTextDrag( QWidget *dragSource, const char *name )
     : QTextDrag( dragSource, name )
@@ -49,7 +46,7 @@ QByteArray KPrTextDrag::encodedData( const char *mime ) const
 bool KPrTextDrag::canDecode( QMimeSource* e )
 {
     if ( e->provides( selectionMimeType() ) )
-       return true;
+        return true;
     return QTextDrag::canDecode(e);
 }
 
@@ -82,6 +79,3 @@ int KPrTextDrag::decodeTextObjectNumber( QMimeSource *e )
     else
         return -1;
 }
-
-
-

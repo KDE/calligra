@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -28,14 +29,14 @@ const char ATFInterpreter::Y_BG[]     = "Y {";
 const char ATFInterpreter::ATTR_BG[]  = "ATTRIB {";
 const char ATFInterpreter::END[]       = "}";
 
-  // fields
+// fields
 const int ATFInterpreter::ST_WIDTH    = 1;
 const int ATFInterpreter::ST_HEIGHT   = 2;
 const int ATFInterpreter::ST_VARIABLE = 3;
 const int ATFInterpreter::ST_NUMBER   = 4;
 const int ATFInterpreter::ST_OPERATOR = 5;
 
-  // operators
+// operators
 const char ATFInterpreter::OP_EQUAL   = '=';
 const char ATFInterpreter::OP_PLUS    = '+';
 const char ATFInterpreter::OP_MINUS   = '-';
@@ -43,7 +44,7 @@ const char ATFInterpreter::OP_MULT    = '*';
 const char ATFInterpreter::OP_DIV     = '/';
 const char ATFInterpreter::COMMENT    = '#';
 
-  // allowed variables
+// allowed variables
 const char ATFInterpreter::VAR_1      = 'a';
 const char ATFInterpreter::VAR_2      = 'b';
 const char ATFInterpreter::VAR_3      = 'c';
@@ -57,14 +58,14 @@ const char ATFInterpreter::VAR_PW     = 'p';
 const char ATFInterpreter::VAR_W      = 'w';
 const char ATFInterpreter::VAR_H      = 'h';
 
-  // level (depth) of the syntax
+// level (depth) of the syntax
 const int ATFInterpreter::LEVEL_NULL  = 0;
 const int ATFInterpreter::LEVEL_POINT = 1;
 const int ATFInterpreter::LEVEL_X     = 2;
 const int ATFInterpreter::LEVEL_Y     = 3;
 const int ATFInterpreter::LEVEL_ATTR  = 4;
 
-  // numbers
+// numbers
 const char ATFInterpreter::NUM_0      = '0';
 const char ATFInterpreter::NUM_1      = '1';
 const char ATFInterpreter::NUM_2      = '2';
@@ -91,7 +92,6 @@ ATFInterpreter::~ATFInterpreter()
     attrLs.setAutoDelete( true );
 }
 
-/*====================== load autoform ===========================*/
 void ATFInterpreter::load(const QString & fileName)
 {
     QString line;
@@ -112,7 +112,6 @@ void ATFInterpreter::load(const QString & fileName)
     }
 }
 
-/*==================== get point array ===========================*/
 QPointArray ATFInterpreter::getPointArray(int wid,int heig)
 {
     unsigned int px = 0,py = 0,a = 0,b = 0,c = 0,d = 0,e = 0,f = 0;
@@ -206,7 +205,6 @@ QPointArray ATFInterpreter::getPointArray(int wid,int heig)
     return pntArray;
 }
 
-/*===================== get attrib list =========================*/
 QPtrList<ATFInterpreter::AttribList> ATFInterpreter::getAttribList()
 {
     if(!attrLs.isEmpty())
@@ -228,7 +226,6 @@ QPtrList<ATFInterpreter::AttribList> ATFInterpreter::getAttribList()
     return attrLs;
 }
 
-/*========================= interpret ============================*/
 void ATFInterpreter::interpret()
 {
     QValueStack<int> level;
@@ -360,7 +357,6 @@ void ATFInterpreter::interpret()
     }
 }
 
-/*====================== get variable ===========================*/
 QPtrList<ATFInterpreter::Sign> ATFInterpreter::getVar(const QString &s)
 {
     QPtrList<Sign> list;

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
 
@@ -216,7 +217,7 @@ public:
     void makeUsedPixmapList();
 
     void setBackColor( const QColor &backColor1, const QColor &backColor2, BCType bcType,
-			    bool unbalanced, int xfactor, int yfactor );
+                       bool unbalanced, int xfactor, int yfactor );
     void setBackPicture( const KoPictureKey & key );
     bool getBackUnbalanced(  )const;
     void setBackView( BackView backView );

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C)  2002 Montel Laurent <lmontel@mandrakesoft.com>
 
@@ -31,8 +32,8 @@
 #include "kpresenter_doc.h"
 #include <kseparator.h>
 
-KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const char *name)
-    : KDialogBase( parent, name , true, "", Ok | Cancel , Ok, true )
+KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPresenterDoc * _doc, const char *name)
+    : KDialogBase( parent, name, true, "", Ok | Cancel, Ok, true )
 {
     m_doc=_doc;
     KoUnit::Unit unit = m_doc->getUnit();
@@ -75,7 +76,6 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const
 
     resize( 200,100 );
 }
-
 
 int KPrDuplicatObjDia::nbCopy() const
 {

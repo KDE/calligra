@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Lukas Tinkl <lukas@kde.org>
 
@@ -307,7 +308,7 @@ void ImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVaria
         break;
     }
 
-    //no params
+        //no params
     case IE_NORMALIZE:
     case IE_EQUALIZE:
     case IE_EMBOSS:
