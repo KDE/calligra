@@ -23,6 +23,7 @@
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qsimplerichtext.h>
+#include <qlabel.h>
 
 #include <kglobalsettings.h>
 #include <kprinter.h>
@@ -41,6 +42,9 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterView *_view )
       initialize( true )
 {
     QBoxLayout *topLayout = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+
+    label = new QLabel(i18n("Note"), this);
+
     textEdit = new KTextEdit( this );
 
     QFont font = KoGlobal::defaultFont();
@@ -48,8 +52,8 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterView *_view )
 
     int currentPageNum = view->getCurrentPresPage(); // 1 base.
     QString text=QString::null;
-    if( currentPageNum!=-1)
-        text= view->kPresenterDoc()->pageList().at(currentPageNum - 1)->noteText( );
+    if (currentPageNum!=-1)
+        text = view->kPresenterDoc()->pageList().at(currentPageNum - 1)->noteText( );
     textEdit->setText( text );
 
     connect( textEdit, SIGNAL( textChanged() ),
@@ -67,6 +71,7 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterView *_view )
     connect( textEdit, SIGNAL( redoAvailable( bool ) ),
              this, SLOT( slotRedoAvailable( bool ) ) );
 
+    topLayout->addWidget( label );
     topLayout->addWidget( textEdit );
 }
 

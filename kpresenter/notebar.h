@@ -24,6 +24,7 @@
 #include <qwidget.h>
 
 class QPainter;
+class QLabel;
 
 class KPresenterDoc;
 class KPresenterView;
@@ -54,6 +55,7 @@ private slots:
 
 private:
     ::KTextEdit *textEdit;
+    QLabel *label;
 
     KPresenterView *view;
 
