@@ -957,7 +957,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:body" );
 
     int indexObj = 1;
-    int partIndexObj = 1;
+    int partIndexObj = 0;
 //save page
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
     {
@@ -1500,6 +1500,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                 groupObject->addObjects( kppartobject );
             else
                 newpage->appendObject(kppartobject);
+            insertChild( ch );
             kppartobject->setOrig( r.x(), r.y() );
             kppartobject->setSize( r.width(), r.height() );
 
