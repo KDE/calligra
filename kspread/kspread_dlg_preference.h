@@ -169,10 +169,13 @@ class KSpreadpreference : public KDialogBase
 {
   Q_OBJECT
 public:
+  enum { KS_PREFERENCES = 1, KS_LOCALE = 2, KS_INTERFACE = 4,
+         KS_MISC = 8, KS_COLOR = 16, KS_LAYOUT = 32, KS_SPELLING = 64 };
   KSpreadpreference( KSpreadView* parent, const char* name);
 public slots:
   void slotApply();
   void slotDefault();
+  void openPage(int flags);
 private :
   KSpreadView* m_pView;
   preference *_preferenceConfig;

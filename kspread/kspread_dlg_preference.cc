@@ -67,6 +67,24 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 
 }
 
+void KSpreadpreference::openPage(int flags)
+{
+    if(flags & KS_PREFERENCES)
+        showPage( 0 );
+    else if(flags & KS_LOCALE)
+        showPage( 1 );
+    else if(flags & KS_INTERFACE)
+        showPage( 2 );
+    else if(flags & KS_MISC)
+        showPage( 3 );
+    else if(flags & KS_COLOR)
+        showPage( 4 );
+    else if(flags & KS_LAYOUT)
+        showPage( 5 );
+    else if(flags & KS_SPELLING)
+        showPage( 6 );
+}
+
 void KSpreadpreference::slotApply()
 {
   _preferenceConfig->apply();

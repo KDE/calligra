@@ -3973,7 +3973,7 @@ void KSpreadTable::copyAsText( const QPoint &_marker )
         }
         else
         {
-            for ( int i = 0; i < max; ++i )
+            for ( unsigned int i = 0; i < max; ++i )
               result += " ";
         }
       }
