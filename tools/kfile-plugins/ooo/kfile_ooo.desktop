@@ -25,6 +25,7 @@ Name[sl]=Informacije o OpenOffice.org
 Name[sr]=Информације о OpenOffice.org-у
 Name[sv]=Information om OpenOffice.org
 Name[tg]=OpenOffice.org Ахборот
+Name[uz]=OpenOffice.org маълумот
 Name[zh_CN]=OpenOffice.org 信息
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_ooo

@@ -28,6 +28,7 @@ Name[sr]=KSpread-ов филтер за увоз из OpenCalc-а
 Name[sv]=OpenCalc-importfilter för Kspread
 Name[tg]=Филтри Воридоти OpenCalc барои KSpread
 Name[tr]=KSpread için OpenCalc Alma Filtresi
+Name[uz]=KSpread учун OpenCalc импорт филтери
 Name[zh_CN]=KSpread 的 OpenCalc 导入过滤器
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/vnd.sun.xml.calc,application/vnd.sun.xml.calc.template

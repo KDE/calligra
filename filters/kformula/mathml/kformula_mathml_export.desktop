@@ -35,6 +35,7 @@ Name[sr]=KFormula-ин филтер за извоз у MathML
 Name[sv]=Kformula MathML-exportfilter
 Name[tg]=KFormula MathML Филтри Содирот
 Name[tr]=KFormula MathML Aktarma Filtresi
+Name[uz]=KFormula MathML экспорт филтери
 Name[zh_CN]=KFormula MathML 导出过滤器
 ServiceTypes=KOfficeFilter
 Type=Service

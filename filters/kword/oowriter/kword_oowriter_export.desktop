@@ -28,6 +28,7 @@ Name[sr]=KWord-ов филтер за извоз у OpenOffice.org Writer
 Name[sv]=Kword-exportfilter för OpenOffice.org Writer
 Name[tg]=Филтри Содироти KWord's OpenOffice.org Writer
 Name[tr]=KWord için Microsoft Write Alma Filtresi
+Name[uz]=KWord OpenOffice.org Writer экспорт филтери
 Name[zh_CN]=KWord 的 OpenOffice.org Writer 导出过滤器
 X-KDE-Export=application/vnd.sun.xml.writer
 X-KDE-Import=application/x-kword

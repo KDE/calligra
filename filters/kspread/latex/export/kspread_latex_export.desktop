@@ -34,6 +34,7 @@ Name[sr]=KSpread-ов филтер за извоз у LaTeX
 Name[sv]=Kspread Latex-exportfilter
 Name[tg]=Филтри Содироти KSpread LATEX
 Name[tr]=KSpread LATEX Aktarma Filtresi
+Name[uz]=KSpread учун LaTeX экспорт филтери
 Name[zh_CN]=KSpread LATEX 导出过滤器
 ServiceTypes=KOfficeFilter
 Type=Service
