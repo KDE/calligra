@@ -97,10 +97,7 @@ SvgExport::visitVDocument( VDocument& document )
 
 	*m_stream <<
 		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <<
-		( rect.right() - rect.left() ) <<
-		"\" height=\"" <<
-		( rect.bottom() - rect.top() ) <<"\">"
-	<< endl;
+		rect.right() << "\" height=\"" << rect.bottom() << "\">" << endl;
 
 	// we dont need the selection anymore:
 	document.deselect();
