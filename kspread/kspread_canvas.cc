@@ -2197,13 +2197,30 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
     painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
     painter.end();
 
-    RowLayout *rl = table->nonDefaultRowLayout( m_iResizedRow );
+    int start=m_iResizedRow;
+    int end=m_iResizedRow;
+    QRect selection = m_pCanvas->activeTable()->selectionRect();
+    if(selection.left()!=0 && selection.right()==0x7FFF)
+    {
+        if(selection.contains(QPoint(1,m_iResizedRow)))
+                {
+                start=selection.top();
+                end=selection.bottom();
+                }
+    }
+    int height=0;
     int y = table->rowPos( m_iResizedRow, m_pCanvas );
     if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < (20.0* m_pCanvas->zoom()) )
-      //_ev->pos().y() < 20 )
-      rl->setHeight( 20* m_pCanvas->zoom(), m_pCanvas );
+        height=(int)(20.0* m_pCanvas->zoom());
     else
-      rl->setHeight( _ev->pos().y() - y, m_pCanvas );
+        height= _ev->pos().y() - y;
+
+    for(int i=start;i<=end;i++)
+        {
+        RowLayout *rl = table->nonDefaultRowLayout( i );
+        rl->setHeight( height, m_pCanvas );
+        }
+
     delete m_lSize;
     m_lSize = 0;
     m_pView->koDocument()->setModified(true);
@@ -2547,12 +2564,28 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
     painter.end();
 
-    ColumnLayout *cl = table->nonDefaultColumnLayout( m_iResizedColumn );
+    int start=m_iResizedColumn;
+    int end=m_iResizedColumn;
+    QRect selection = m_pCanvas->activeTable()->selectionRect();
+    if(selection.left()!=0 && selection.bottom()==0x7FFF)
+    {
+        if(selection.contains(QPoint(m_iResizedColumn,1)))
+                {
+                start=selection.left();
+                end=selection.right();
+                }
+    }
+    int width=0;
     int x = table->columnPos( m_iResizedColumn, m_pCanvas );
     if ( ( m_pCanvas->zoom() * (float)( _ev->pos().x() - x ) ) < (20.0* m_pCanvas->zoom()) )
-      cl->setWidth( 20.0* m_pCanvas->zoom(), m_pCanvas );
+        width= (int)(20.0* m_pCanvas->zoom());
     else
-      cl->setWidth( _ev->pos().x() - x, m_pCanvas );
+        width=_ev->pos().x() - x;
+    for(int i=start;i<=end;i++)
+        {
+        ColumnLayout *cl = table->nonDefaultColumnLayout( i );
+        cl->setWidth( width, m_pCanvas );
+        }
     delete m_lSize;
     m_lSize=0;
     m_pView->koDocument()->setModified(true);
