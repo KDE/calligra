@@ -265,8 +265,8 @@
 	<Text>The MID() function returns a substring that contains 'length' characters of the string, starting at 'position' index.</Text>
 	<Syntax>MID(text;position;length)</Syntax>
 	<Syntax>MID(text;position)</Syntax>
-	<Example>MID("KOffice";2;3) returns "ffi"</Example>
-	<Example>MID("KOffice";2) returns "ffice"</Example>
+	<Example>MID("KOffice";2;3) returns "Off"</Example>
+	<Example>MID("KOffice";2) returns "Office"</Example>
         <Related>LEFT</Related>
         <Related>RIGHT</Related>
       </Help>

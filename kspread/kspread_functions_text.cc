@@ -390,6 +390,9 @@ bool kspreadfunc_mid( KSContext& context )
     else
       return false;
 
+	// Excel compatible
+	pos--;
+
     QString tmp = args[0]->stringValue().mid( pos, len );
     context.setValue( new KSValue(tmp));
     return true;
