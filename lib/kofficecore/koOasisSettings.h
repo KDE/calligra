@@ -66,6 +66,9 @@ public:
     double parseConfigItemDouble( const QString & configName ) const;
     QString parseConfigItemString( const QString & configName ) const;
     bool parseConfigItemBool( const QString & configName ) const;
+    short parseConfigItemShort( const QString & configName ) const;
+    long parseConfigItemLong( const QString & configName ) const;
+
 
 private:
     //store it to change config item

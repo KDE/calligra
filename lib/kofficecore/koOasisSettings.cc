@@ -65,14 +65,10 @@ bool KoOasisSettings::mapItem( const QString &mapItemName)
 
 QString KoOasisSettings::parseConfigItemString( const QString & configName ) const
 {
-    kdDebug()<<"QString KoOasisSettings::parseConfigItemString( configName :"<<configName<<endl;
     QDomNode item = m_element.firstChild(); //<config:config-item-map-entry>
-    kdDebug()<<"item.isNull() :"<<item.isNull()<<endl;
     for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
     {
-        kdDebug()<<"*******************************************************************\n";
         QDomElement viewItem = item2.toElement();
-        kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
         if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
         {
             return viewItem.text();
@@ -140,3 +136,46 @@ bool KoOasisSettings::parseConfigItemBool( const QString & configName ) const
     return false;
 }
 
+
+
+short KoOasisSettings::parseConfigItemShort( const QString & configName ) const
+{
+    short value=0;
+    QDomNode item = m_element.firstChild(); //<config:config-item-map-entry>
+    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
+    {
+        QDomElement viewItem = item2.toElement();
+        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
+        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
+        {
+            bool ok;
+            QString str = viewItem.text();
+            value = str.toShort( &ok );
+            if ( ok )
+                return value;
+            return 0;
+        }
+    }
+    return 0;
+}
+
+long KoOasisSettings::parseConfigItemLong( const QString & configName ) const
+{
+    long value=0;
+    QDomNode item = m_element.firstChild(); //<config:config-item-map-entry>
+    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
+    {
+        QDomElement viewItem = item2.toElement();
+        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
+        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
+        {
+            bool ok;
+            QString str = viewItem.text();
+            value = str.toLong( &ok );
+            if ( ok )
+                return value;
+            return 0;
+        }
+    }
+    return 0;
+}
