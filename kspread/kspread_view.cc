@@ -4241,6 +4241,9 @@ void KSpreadView::filterChanges()
 {
   if ( !m_recordChanges->isChecked() )
     return;
+
+  KSpreadFilterDlg dlg( this, m_pTable->map()->changes() );
+  dlg.exec();
 }
 
 void KSpreadView::acceptRejectChanges()

@@ -294,7 +294,67 @@ void AcceptRejectWidget::applyFilterSettings()
   // TODO
 }
 
+FilterDlg::FilterDlg( FilterSettings * settings, QWidget * parent, 
+                      const char * name, WFlags fl )
+  : QWidget( parent, name, fl )
+{
+  setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, 
+                              sizePolicy().hasHeightForWidth() ) );
 
+  QGridLayout * layout = new QGridLayout( this, 1, 1, 11, 6, "Form1Layout"); 
+  QSpacerItem * spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  layout->addItem( spacer, 2, 0 );
+
+  QFrame * frame = new QFrame( this, "frame4" );
+  frame->setFrameShape( QFrame::NoFrame );
+  frame->setFrameShadow( QFrame::Plain );
+
+  QGridLayout * frameLayout = new QGridLayout( frame, 1, 1, 11, 6, "frame4Layout"); 
+
+  m_showChanges = new QCheckBox( frame, "m_showChanges" );
+  m_showChanges->setText( i18n( "&Show changes in document" ) );
+  frameLayout->addWidget( m_showChanges, 0, 0 );
+
+  m_showAccepted = new QCheckBox( frame, "m_showAccepted" );
+  m_showAccepted->setText( i18n( "Show &accepted changes" ) );
+  frameLayout->addWidget( m_showAccepted, 1, 0 );
+
+  m_showRejected = new QCheckBox( frame, "m_showRejected" );
+  m_showRejected->setText( i18n( "Show &rejected changes" ) );
+  frameLayout->addWidget( m_showRejected, 2, 0 );
+
+  layout->addWidget( frame, 0, 0 );
+
+  m_filterMain = new FilterMain( settings, this );
+  m_filterMain->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 
+                                            0, 0, m_filterMain->sizePolicy().hasHeightForWidth() ) );
+  layout->addWidget( m_filterMain, 1, 0 );
+
+  resize( QSize(539, 500).expandedTo(minimumSizeHint()) );
+}
+
+FilterDlg::~FilterDlg()
+{
+}
+
+
+KSpreadFilterDlg::KSpreadFilterDlg( KSpreadView * parent, KSpreadChanges * changes, 
+                                    const char * name )
+  : KDialogBase( parent, name, true, "",
+                 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, false ),
+    m_view( parent ),
+    m_changes( changes ),
+    m_dlg( new FilterDlg( &changes->m_filterSettings, this ) )
+{
+  setCaption( i18n( "Filter Changes" ) );
+  setButtonBoxOrientation( Vertical );
+  setMainWidget( m_dlg );
+}
+
+KSpreadFilterDlg::~KSpreadFilterDlg()
+{
+}
+  
 KSpreadAcceptDlg::KSpreadAcceptDlg( KSpreadView * parent, KSpreadChanges * changes,
                                     const char * name )
   : KDialogBase( parent, name, true, "",

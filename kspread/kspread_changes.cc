@@ -294,7 +294,15 @@ KSpreadChanges::ChangeRecord::ChangeRecord( int id, State state, ChangeType type
 
 KSpreadChanges::ChangeRecord::~ChangeRecord()
 {
-  delete m_change;
+  switch( m_type )
+  {
+   case CELL:
+    delete (CellChange * ) m_change;
+    break;
+
+   default:
+    delete m_change;
+  }
 }
 
 void KSpreadChanges::ChangeRecord::saveXml( QDomDocument & doc, QDomElement & changes ) const

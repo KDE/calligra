@@ -29,7 +29,9 @@
 
 class FilterMain;
 
+class KSpreadAcceptDlg;
 class KSpreadCell;
+class KSpreadFilterDlg;
 class KSpreadMap;
 class KSpreadSheet;
 
@@ -48,20 +50,20 @@ class FilterSettings
   void setShowAccepted( bool b );
   void setShowRejected( bool b );
  
-  bool dateSet() const      { return m_dateSet; }
-  bool authorSet() const    { return m_authorSet; }
-  bool commentSet() const   { return m_commentSet; }
-  bool rangeSet() const     { return m_rangeSet; }
-
-  bool showChanges() const  { return m_showChanges; }
-  bool showRejected() const { return m_showRejected; }
-  bool showAccepted() const { return m_showAccepted; }
-
-  int  dateUsage() const    { return m_dateUsage; }
-
-  QString author() const    { return m_author; }
-  QString comment() const   { return m_comment; }
-  QString range() const     { return m_range; }
+  bool dateSet() const         { return m_dateSet; }
+  bool authorSet() const       { return m_authorSet; }
+  bool commentSet() const      { return m_commentSet; }
+  bool rangeSet() const        { return m_rangeSet; }
+                               
+  bool showChanges() const     { return m_showChanges; }
+  bool showRejected() const    { return m_showRejected; }
+  bool showAccepted() const    { return m_showAccepted; }
+                               
+  int  dateUsage() const       { return m_dateUsage; }
+                               
+  QString author() const       { return m_author; }
+  QString comment() const      { return m_comment; }
+  QString range() const        { return m_range; }
 
   QDateTime firstTime() const  { return m_firstTime; }
   QDateTime secondTime() const { return m_secondTime; }
@@ -164,6 +166,7 @@ class KSpreadChanges : public QObject
     typedef enum E2 { CELL, INSERTCOLUMN, INSERTROW, INSERTTABLE, 
                       DELETECOLUMN, DELETEROW, DELETETABLE } ChangeType;
 
+
     ChangeRecord();
     ChangeRecord( int id, State state, ChangeType type, KSpreadSheet * table, 
                   QPoint const & cellRef, Change * change );
@@ -196,6 +199,7 @@ class KSpreadChanges : public QObject
   };
 
   friend class KSpreadAcceptDlg;
+  friend class KSpreadFilterDlg;
 
   QPtrList<ChangeRecord> m_dependancyList;
   QPtrList<ChangeRecord> m_changeRecords;

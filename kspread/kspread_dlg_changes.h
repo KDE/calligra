@@ -97,6 +97,38 @@ class AcceptRejectWidget : public QWidget
   void applyFilterSettings();
 };
 
+
+class FilterDlg : public QWidget
+{
+  Q_OBJECT
+
+ public:
+  FilterDlg( FilterSettings * settings, QWidget * parent = 0, 
+             const char * name = 0, WFlags fl = 0 );
+  ~FilterDlg();
+
+ private:
+  QCheckBox      * m_showChanges;
+  QCheckBox      * m_showAccepted;
+  QCheckBox      * m_showRejected;
+  FilterMain     * m_filterMain;
+};
+
+
+class KSpreadFilterDlg : public KDialogBase
+{
+  Q_OBJECT  
+ public:
+  KSpreadFilterDlg( KSpreadView * parent, KSpreadChanges * changes, 
+                    const char * name = "KSpreadFilterDlg" );
+  ~KSpreadFilterDlg();
+  
+ private:
+  KSpreadView    * m_view;
+  KSpreadChanges * m_changes;
+  FilterDlg      * m_dlg;
+};
+
 class KSpreadAcceptDlg : public KDialogBase
 {  
   Q_OBJECT
