@@ -202,7 +202,7 @@ TODO: for .kexis files' conenction data - if password attr. is not present - ask
 IDEA: integrate password information in .kexis files with KWallet
 
 TODO RELATED TO CELL EDITORS AND TABLEVIEWS:
-- signal on situaltion when user e.g. pressed alpha key when only numeric chars is allowed
+- signal on situation when user e.g. pressed alpha key when only numeric chars is allowed
 - signal when null/empty value forcell isn't permitted
 - signal when repeated value isn't permitted
 - add support for cut, copy & paste of cell's contents (get shortcuts from KStdAccel)
@@ -261,7 +261,6 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
  * fire selection dialog for filename editor, color editor, pixmap editor, etc.
  * expand children for cells of type like "Rect"
  * other types- by default: just move cursor to editor
--add subproperties for KexiProperty, (usable for eg. type of Rect), and a pointer to parent property
 
 Detailed TODO for Beta3:
 1. Finish Startup Framework (see above: MOST RECENT TODO)
@@ -319,6 +318,15 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 
 CC_MAIL: dkite@shaw.ca
+
+2004-03-17
+	-KexiProperty: fix for fix :) changes from null string to "" string (or vice-versa) are ignored
+	-Kexi Property editor receives signal KexiPropertyBuffer::propertyReset()
+	 (called from KexiProperty::resetValue()) so property is property visually reseted 
+	 even on calling resetValue() either by clicking "reset" button or by hand.
+
+2004-03-13
+	-KexiProperty: changes from null string to "" string (or vice-versa) are ignored
 
 2004-03-12
 Table View
