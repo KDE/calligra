@@ -119,6 +119,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 
     connect (m_pDoc,SIGNAL(partInserted(KIllustratorChild*,GPart*)),this,SLOT(insertPartSlot(KIllustratorChild*,GPart*)));
     connect (m_pDoc,SIGNAL(childGeometryChanged(KIllustratorChild*)),this,SLOT(changeChildGeometrySlot(KIllustratorChild*)));
+    connect (this,SIGNAL(embeddImage(const QString &)),this,SLOT(slotInsertBitmap(const QString &)));
     
     setupCanvas();
     kdDebug()<<"KIlluView after setupCanvas: "<<time.elapsed()<<endl;
@@ -806,6 +807,16 @@ void KIllustratorView::slotInsertBitmap()
         QFileInfo finfo (fname);
         lastBitmapDir = finfo.dirPath ();
         InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc->gdoc(), fname);
+        cmdHistory.addCommand (cmd, true);
+    }
+}
+
+void KIllustratorView::slotInsertBitmap(const QString &filename)
+{
+    if (! filename.isEmpty ()) {
+        QFileInfo finfo (filename);
+        lastBitmapDir = finfo.dirPath ();
+        InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc->gdoc(), filename);
         cmdHistory.addCommand (cmd, true);
     }
 }

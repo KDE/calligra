@@ -138,6 +138,7 @@ private slots:
     void slotImport();
     void slotExport();
     void slotInsertBitmap();
+    void slotInsertBitmap(const QString &filename);
     void slotInsertClipart();
     void slotCopy();
     void slotPaste();
