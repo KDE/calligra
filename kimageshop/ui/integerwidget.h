@@ -45,42 +45,38 @@ class IntegerWidget : public QWidget
   Q_OBJECT
 
 public:
-  IntegerWidget( int min, int max, QWidget *parent = 0, const char *name = 0 );
+
+  IntegerWidget( int min, int max, QWidget* parent = 0, const char* name = 0 );
   ~IntegerWidget();
 
-  int 		value();
-  void 		setRange( int min, int max );
+  int value();
+  void setRange( int min, int max );
 
-  void 		setTickmarks( QSlider::TickSetting );
-  void 		setTickInterval ( int );
-  int 		tickInterval() const;
-
-
-public slots:
-  void 		setValue( int value );
-  void 		setEditFocus( bool mark=true );
-
-
-protected:
-  void 		initGUI();
-
-  QSlider 	*slider;
-  KSpinBox 	*spinBox;
-
-
-private:
-  QHBoxLayout 	*layout;
-
-
-protected slots:
-  void 		setSliderValue( int );
-
+  void setTickmarks( QSlider::TickSetting );
+  void setTickInterval ( int );
+  int tickInterval() const;
 
 signals:
-  void 		valueChanged( int );
 
+  void valueChanged( int );
+
+public slots:
+
+  void setValue( int value );
+  void setEditFocus( bool mark = true );
+
+protected slots:
+
+  void setSliderValue( int );
+
+protected:
+
+  void initGUI();
+
+  QHBoxLayout* layout;
+  QSlider* slider;
+  KSpinBox* spinBox;
 };
-
 
 /**
  * A normal QSpinBox, but with the ability to set the focus to the lineedit
