@@ -3,20 +3,25 @@
 # Subdir relative project main directory: ./shell_qt
 # Target is an application:  kugar
 
-SOURCES=main.cpp kugarview.cpp
-HEADERS=kugarview.h form1.ui.h
-FORMS=form1.ui
-
+SOURCES += main.cpp \
+           kugarview.cpp 
+HEADERS += kugarview.h \
+           form1.ui.h 
+FORMS += form1.ui 
 TEMPLATE = app 
 CONFIG += release \
           warn_on \
           thread 
 TARGET = kugar 
-INCLUDEPATH = ../lib 
 QMAKE_LIBDIR = ../lib 
-win32::LIBS = libkugarqt.lib
-unix::LIBS = -lkugarqt
-MOC_DIR = moc
-OBJECTS_DIR = obj
-UI_DIR = ui
-MAKEFILE=Makefile.qt
+OBJECTS_DIR = .obj 
+UI_DIR = .ui 
+MOC_DIR = .moc 
+MAKEFILE = Makefile.qt 
+INCLUDEPATH = ../lib 
+win32{
+  LIBS = libkugarqt.lib
+}
+unix{
+  LIBS = -lkugarqt
+}
