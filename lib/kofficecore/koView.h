@@ -22,7 +22,7 @@
 #include <qwidget.h>
 #include <qguardedptr.h>
 
-#include <kparts/xmlgui.h>
+#include <kparts/part.h>
 #include <kparts/partmanager.h>
 
 class QAction;
@@ -42,7 +42,7 @@ namespace KParts
   class PartSelectEvent;
 };
 
-class KoView : public QWidget, public KParts::XMLGUIServant
+class KoView : public QWidget, public KParts::PartBase
 {
   friend class KoDocument;
   Q_OBJECT
@@ -54,13 +54,6 @@ public:
    *  Retrieves the document object of this view.
    */
   KoDocument *koDocument() const;
-
-  QAction *action( const char *name );
-  QActionCollection *actionCollection() const;
-
-  virtual QAction *action( const QDomElement &element );
-
-  virtual QDomDocument document() const;
 
   virtual void setPartManager( KParts::PartManager *manager );
   virtual KParts::PartManager *partManager() const;
@@ -121,8 +114,6 @@ public:
 
   bool hasDocumentInWindow( KoDocument *doc );
 
-  virtual KInstance *instance() const;
-
   QWMatrix matrix() const;
 
   KoViewChild *child( KoView *view );
@@ -135,34 +126,7 @@ protected:
   virtual void partSelectEvent( KParts::PartSelectEvent *event );
 
   /**
-   * Set the instance (@ref KInstance) for this view.
-   *
-   * Call this first in the inherited class constructor.
-   * (At least before @ref setXMLFile().)
-   */
-  virtual void setInstance( KInstance *instance, bool loadPlugins = true );
-
-  /**
-   * Set the name of the rc file containing the XML for the view.
-   *
-   * Call this in the KoView-inherited class constructor.
-   *
-   * @param file Either an absolute path for the file, or simply the filename,
-   *             which will then be assumed to be installed in the "data" resource,
-   *             under a directory named like the instance.
-   **/
-  virtual void setXMLFile( QString file );
-
-  /**
-   * Set the XML for the view.
-   *
-   * Call this in the KoView-inherited class constructor if you
-   *  don't call @ref setXMLFile().
-   **/
-  virtual void setXML( const QString &document );
-
-  /**
-   * You have to implement this method and disable/enable certain functionality (actions for example) in 
+   * You have to implement this method and disable/enable certain functionality (actions for example) in
    * your view to allow/disallow editing of the document.
    */
   virtual void updateReadWrite( bool readwrite ) = 0;

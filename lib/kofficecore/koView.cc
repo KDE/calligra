@@ -36,7 +36,6 @@ public:
   {
     m_scaleX = m_scaleY = 1.0;
     m_children.setAutoDelete( true );
-    m_instance = 0L;
     m_manager = 0L;
     m_tempActiveWidget = 0L;
   }
@@ -46,8 +45,6 @@ public:
 
   KoDocument *m_doc;
 
-  QActionCollection m_actionCollection;
-
   KParts::PartManager *m_manager;
 
   double m_scaleX;
@@ -55,14 +52,11 @@ public:
 
   QList<KoViewChild> m_children;
 
-  QDomDocument m_qdomDoc;
-  KInstance *m_instance;
-
   QWidget *m_tempActiveWidget;
 };
 
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
- : QWidget( parent, name )
+ : QWidget( parent, name ), PartBase( this )
 {
   d = new KoViewPrivate;
   d->m_doc = document;
@@ -88,63 +82,9 @@ KoDocument *KoView::koDocument() const
   return d->m_doc;
 }
 
-QAction *KoView::action( const char *name )
-{
-  return d->m_actionCollection.action( name );
-}
-
-QActionCollection *KoView::actionCollection() const
-{
-  return &d->m_actionCollection;
-}
-
-QAction *KoView::action( const QDomElement &element )
-{
-  static QString attrName = QString::fromLatin1( "name" );
-  return action( element.attribute( attrName ).ascii() );
-}
-
-QDomDocument KoView::document() const
-{
-  return d->m_qdomDoc;
-}
-
-void KoView::setInstance( KInstance *instance, bool loadPlugins )
-{
-  d->m_instance = instance;
-  if ( loadPlugins )
-    KParts::Plugin::loadPlugins( this, d->m_instance );
-}
-
 bool KoView::hasDocumentInWindow( KoDocument *doc )
 {
   return child( doc ) != 0L;
-}
-
-KInstance *KoView::instance() const
-{
-  return d->m_instance;
-}
-
-void KoView::setXMLFile( QString file )
-{
-  if ( file[0] != '/' )
-  {
-    file = locate( "data", QString(instance()->instanceName())+"/"+file );
-    if ( file.isEmpty() )
-    {
-      kDebugError( 1000, "File not found : %s", file.ascii() );
-      return;
-    }
-  }
-
-  QString xml = KParts::XMLGUIFactory::readConfigFile( file );
-  setXML( xml );
-}
-
-void KoView::setXML( const QString &document )
-{
-  d->m_qdomDoc.setContent( document );
 }
 
 void KoView::setPartManager( KParts::PartManager *manager )
