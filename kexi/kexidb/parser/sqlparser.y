@@ -496,7 +496,7 @@ void yyerror(const char *str)
 		if (!lexerErr.isEmpty())
 			lexerErr.prepend(": ");
 
-		if (parser->isReservedKeyword(ctoken))
+		if (parser->isReservedKeyword(ctoken.latin1()))
 			parser->setError( ParserError(i18n("Syntax Error"), i18n("\"%1\" is reserved keyword").arg(ctoken)+lexerErr, ctoken, current) );
 		else
 			parser->setError( ParserError(i18n("Syntax Error"), i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current) );

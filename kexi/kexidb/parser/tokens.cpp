@@ -1,3 +1,4 @@
+/* WARNING! All changes made in this file will be lost! Run 'make parser' instead. */
 INS("AND");
 INS("AS");
 INS("CREATE");

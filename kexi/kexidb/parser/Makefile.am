@@ -20,11 +20,8 @@ parser:
 	echo 'bool parseData(KexiDB::Parser *p, const char *data);' >> sqlparser.h; \
 	cat sqlparser.tab.h >> sqlparser.h; \
 	cat sqlparser.tab.c > sqlparser.cpp; \
-	echo "const char * const tname(int offset) { return yytname[offset]; }" >> sqlparser.cpp \
-	for t in $( grep  "\"[a-zA-Z_]*\"" sqlscanner.l | sed -e "s/\(^[^\"]*\)\"\([^\"]*\)\".*$/\2/g" | sort ) ; do \
-		if [ "$t" = "ZZZ" ] ; then break ; fi \
-		echo "INS(\"$t\");" \
-	done > tokens.cpp \
+	echo "const char * const tname(int offset) { return yytname[offset]; }" >> sqlparser.cpp; \
+	./extract_tokens.sh > tokens.cpp; \
 	rm -f sqlparser.tab.h sqlparser.tab.c
 
 coffie:

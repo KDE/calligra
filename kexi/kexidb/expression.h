@@ -26,6 +26,7 @@
 #include <kexidb/field.h>
 
 #include <kdebug.h>
+#include "global.h"
 
 namespace KexiDB {
 

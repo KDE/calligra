@@ -24,6 +24,8 @@
 #include "parser/sqlparser.h"
 #include "parser/parser_p.h"
 
+#include <ctype.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
