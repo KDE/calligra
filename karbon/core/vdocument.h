@@ -157,7 +157,8 @@ public:
 	const VLayerList& layers() const { return m_layers; }
 
 	QDomDocument saveXML() const;
-	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter );
+	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
+	enum { STYLE_GRAPHICAUTO = 20, STYLE_GRADIENT, STYLE_STROKE };
 	bool loadXML( const QDomElement& doc );
 	virtual bool loadOasis( const QDomElement& page, KoOasisStyles& oasisStyles );
 	virtual void save( QDomElement& me ) const;

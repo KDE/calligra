@@ -35,6 +35,7 @@ class DCOPObject;
 class KoStore;
 class KoXmlWriter;
 class KoOasisStyles;
+class KoGenStyles;
 
 /**
  * The base class for all karbon objects. Every object should
@@ -134,7 +135,7 @@ public:
 	 */
 	virtual void save( QDomElement& element ) const;
 
-	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter );
+	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
 
 	/**
 	 * Load this object's state from xml and initialize

@@ -148,7 +148,7 @@ VEllipse::save( QDomElement& element ) const
 }
 
 void
-VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
 {
 	docWriter->startElement( "draw:ellipse" );
 
@@ -173,7 +173,7 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 		docWriter->addAttribute( "draw:end-angle", m_endAngle );
 	}
 
-	VObject::saveOasis( store, docWriter );
+	VObject::saveOasis( store, docWriter, mainStyles );
 
 	docWriter->endElement();
 }

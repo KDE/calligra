@@ -49,7 +49,7 @@ public:
 	virtual void setState( const VState state );
 
 	virtual void save( QDomElement& element ) const;
-	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter );
+	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
 	virtual void load( const QDomElement& element );
 
 	virtual VGroup* clone() const;

@@ -45,7 +45,7 @@ public:
 	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
 	virtual void save( QDomElement& element ) const;
-	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter );
+	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
 	virtual void load( const QDomElement& element );
 
 	virtual VLayer* clone() const;

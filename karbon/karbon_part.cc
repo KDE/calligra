@@ -26,6 +26,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <ktempfile.h>
 #include <koTemplateChooseDia.h>
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
@@ -223,27 +224,46 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, KoStore *
 bool
 KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 {
-	KoStoreDevice storeDev( store );
-	KoGenStyles styles;
-
-	KoGenStyle pageLayout = m_pageLayout.saveOasis();
-	QString layoutName = styles.lookup( pageLayout, "PL" );
-	KoGenStyle masterPage( KoGenStyle::STYLE_MASTER );
-	masterPage.addAttribute( "style:page-layout-name", layoutName );
-	styles.lookup( masterPage, "Standard", false );
-
 	if( !store->open( "content.xml" ) )
 		return false;
 
+	KoStoreDevice storeDev( store );
 	KoXmlWriter docWriter( &storeDev, "office:document-content" );
+	KoGenStyles mainStyles;
 
-	docWriter.startElement( "office:body" );
-	docWriter.startElement( "office:drawing" );
+	KoGenStyle pageLayout = m_pageLayout.saveOasis();
+	QString layoutName = mainStyles.lookup( pageLayout, "PL" );
+	KoGenStyle masterPage( KoGenStyle::STYLE_MASTER );
+	masterPage.addAttribute( "style:page-layout-name", layoutName );
+	mainStyles.lookup( masterPage, "Standard", false );
 
-	m_doc.saveOasis(store, &docWriter); // Save contents
+	KTempFile contentTmpFile;
+	contentTmpFile.setAutoDelete( true );
+	QFile* tmpFile = contentTmpFile.file();
+	KoXmlWriter contentTmpWriter( tmpFile, 1 );
 
-	docWriter.endElement(); // office:drawing
-	docWriter.endElement(); // office:body
+	contentTmpWriter.startElement( "office:body" );
+	contentTmpWriter.startElement( "office:drawing" );
+
+	m_doc.saveOasis( store, &contentTmpWriter, mainStyles ); // Save contents
+
+	contentTmpWriter.endElement(); // office:drawing
+	contentTmpWriter.endElement(); // office:body
+
+	docWriter.startElement( "office:automatic-styles" );
+
+	QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( VDocument::STYLE_GRAPHICAUTO );
+	QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+	for( ; it != styles.end() ; ++it )
+		(*it).style->writeStyle( &docWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+
+	docWriter.endElement(); // office:automatic-styles
+
+	// And now we can copy over the contents from the tempfile to the real one
+	tmpFile->close();
+	docWriter.addCompleteElement( tmpFile );
+	contentTmpFile.close();
+
 	docWriter.endElement(); // Root element
 	docWriter.endDocument();
 
@@ -259,11 +279,11 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 
 	styleWriter.startElement( "office:automatic-styles" );
 
-	QValueList<KoGenStyles::NamedStyle> styleList = styles.styles( KoGenStyle::STYLE_PAGELAYOUT );
-	QValueList<KoGenStyles::NamedStyle>::const_iterator it = styleList.begin();
+	QValueList<KoGenStyles::NamedStyle> styleList = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+	it = styleList.begin();
 
 	for( ; it != styleList.end(); ++it )
-		(*it).style->writeStyle( &styleWriter, styles, "style:page-layout", (*it).name, "style:page-layout-properties" );
+		(*it).style->writeStyle( &styleWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
 
 	styleWriter.endElement(); // office:automatic-styles
 

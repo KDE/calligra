@@ -148,13 +148,13 @@ VLayer::save( QDomElement& element ) const
 }
 
 void
-VLayer::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+VLayer::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
 {
 	// save objects:
 	VObjectListIterator itr = m_objects;
 
 	for ( ; itr.current(); ++itr )
-		itr.current()->saveOasis( store, docWriter );
+		itr.current()->saveOasis( store, docWriter, mainStyles );
 }
 
 void

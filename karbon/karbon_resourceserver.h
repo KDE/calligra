@@ -30,7 +30,7 @@
 #include <qdict.h>
 #include <qstring.h>
 
-#include "vgradient.h"
+//#include "vgradient.h"
 #include "vpattern.h"
 
 class VGradient;

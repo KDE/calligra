@@ -172,7 +172,7 @@ VGroup::save( QDomElement& element ) const
 }
 
 void
-VGroup::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+VGroup::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
 {
 	docWriter->startElement( "draw:group" );
 
@@ -180,7 +180,7 @@ VGroup::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 	VObjectListIterator itr = m_objects;
 
 	for ( ; itr.current(); ++itr )
-		itr.current()->saveOasis( store, docWriter );
+		itr.current()->saveOasis( store, docWriter, mainStyles );
 
 	docWriter->endElement();
 }

@@ -31,6 +31,7 @@
 
 class QDomElement;
 class VObject;
+class KoGenStyle;
 
 
 /**
@@ -107,6 +108,7 @@ public:
 	const VDashPattern& dashPattern() const { return m_dashPattern; }
 
 	void save( QDomElement& element ) const;
+	void saveOasis( KoGenStyle &style ) const;
 	void load( const QDomElement& element );
 
 

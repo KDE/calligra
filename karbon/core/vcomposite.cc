@@ -351,7 +351,7 @@ VPath::save( QDomElement& element ) const
 }
 
 void
-VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
 {
 	docWriter->startElement( "draw:path" );
 
@@ -359,7 +359,7 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 	saveSvgPath( d );
 	docWriter->addAttribute( "svg:d", d );
 
-	VObject::saveOasis( store, docWriter );
+	VObject::saveOasis( store, docWriter, mainStyles );
 
 	docWriter->endElement();
 }

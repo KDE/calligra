@@ -27,6 +27,7 @@
 
 
 class QDomElement;
+class KoGenStyle;
 
 
 /**
@@ -67,6 +68,7 @@ public:
 	void setType( VFillType type ) { m_type = type; }
 
 	void save( QDomElement& element ) const;
+	void saveOasis( KoGenStyle &style ) const;
 	void load( const QDomElement& element );
 
 	VFill& operator=( const VFill& fill );

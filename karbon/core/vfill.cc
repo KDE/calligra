@@ -21,6 +21,8 @@
 #include <qdom.h>
 #include <kdebug.h>
 
+#include <koGenStyles.h>
+
 #include "vfill.h"
 
 VFill::VFill()
@@ -68,6 +70,19 @@ VFill::save( QDomElement& element ) const
 		// save pattern:
 		m_pattern.save( me );
 	}
+}
+
+void
+VFill::saveOasis( KoGenStyle &style ) const
+{
+	if( m_type == solid )
+		style.addProperty( "draw:fill", "solid" );
+	else if( m_type == grad )
+		style.addProperty( "draw:fill", "gradient" );
+	else if( m_type == patt )
+		style.addProperty( "draw:fill", "hatch" );
+	else
+		style.addProperty( "draw:fill", "none" );
 }
 
 void

@@ -106,13 +106,13 @@ VPolygon::save( QDomElement& element ) const
 }
 
 void
-VPolygon::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+VPolygon::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
 {
 	docWriter->startElement( "draw:polygon" );
 
 	docWriter->addAttribute( "draw:points", m_points );
 
-	VObject::saveOasis( store, docWriter );
+	VObject::saveOasis( store, docWriter, mainStyles );
 
 	docWriter->endElement();
 }

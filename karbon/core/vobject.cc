@@ -26,6 +26,7 @@
 #include "vstroke.h"
 
 #include <koStore.h>
+#include <koGenStyles.h>
 #include <koxmlwriter.h>
 
 VObject::VObject( VObject* parent, VState state ) : m_dcop( 0L )
@@ -103,10 +104,18 @@ VObject::save( QDomElement& element ) const
 }
 
 void
-VObject::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
 {
 	if( !name().isEmpty() )
 		docWriter->addAttribute( "draw:name", name() );
+
+	KoGenStyle styleobjectauto( VDocument::STYLE_GRAPHICAUTO, "graphics" );
+	if( m_fill )
+		m_fill->saveOasis( styleobjectauto );
+	if( m_stroke )
+		m_stroke->saveOasis( styleobjectauto );
+	QString st = mainStyles.lookup( styleobjectauto, "st" );
+	docWriter->addAttribute( "draw:style-name", st );
 }
 
 void
