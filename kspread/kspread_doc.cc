@@ -974,7 +974,7 @@ void KSpreadDoc::emitEndOperation()
    m_bDelayCalculation = false;
    for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
    {
-      t->calc(true);
+      t->calc();
       
       for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
       {

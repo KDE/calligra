@@ -561,7 +561,7 @@ void KSpreadView::RecalcWorkBook(){
 
     for ( tbl = m_pDoc->map()->firstTable();
 	  tbl != 0L; tbl = m_pDoc->map()->nextTable() ){
-      tbl->recalc(true);
+      tbl->recalc();
     }
 
     //    slotUpdateView( activeTable() );
@@ -581,7 +581,7 @@ void KSpreadView::slotRefreshLocale()
 void KSpreadView::RecalcWorkSheet(){
 
   if (m_pTable!= 0)
-    m_pTable->recalc(true);
+    m_pTable->recalc();
 
   //slotUpdateView( activeTable() );
 
@@ -606,7 +606,7 @@ void KSpreadView::initialPosition()
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
         {
         if(tbl->getAutoCalc())
-                tbl->recalc(true);
+                tbl->recalc();
         tbl->refreshMergedCell();
         }
 
@@ -1448,7 +1448,7 @@ void KSpreadView::paste()
                         m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
         m_pTable->paste( QPoint( r.left(),r.top() ) );
         if(m_pTable->getAutoCalc())
-            m_pTable->recalc(true);
+            m_pTable->recalc();
         resultOfCalc();
         updateEditWidget();
     }
@@ -1465,7 +1465,7 @@ void KSpreadView::specialPaste()
     if( dlg.exec() )
     {
     if(m_pTable->getAutoCalc())
-        m_pTable->recalc(true);
+        m_pTable->recalc();
     resultOfCalc();
     updateEditWidget();
     }
@@ -2496,7 +2496,7 @@ void KSpreadView::slotInsertCellCopy()
         dlg.exec();
         }
     if(m_pTable->getAutoCalc())
-        m_pTable->recalc(true);
+        m_pTable->recalc();
     updateEditWidget();
 }
 

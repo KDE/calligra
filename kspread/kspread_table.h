@@ -329,14 +329,14 @@ public:
      * Calculates all cells in the table with the CalcDirtyFlag.
      * @param m_depend set to false to disable updating the dependencies (why would you want to do that?)
      */
-    void calc(bool m_depend = true);
+    void calc();
    
     /**
      * Recalculates the current table. If you want to recalculate EVERYTHING, then
      * call @ref Table::setCalcDirtyFlag for all tables in the @ref #m_pMap to make
      * sure that no invalid values in other tables make you trouble.
      */
-    void recalc(bool mdepend=false);
+    void recalc();
 
     /**
      * Sets the contents of the cell at row,column to text

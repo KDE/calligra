@@ -23,7 +23,7 @@
 #include <qglobal.h>
 
 
-KSpreadDependancy::KSpreadDependancy(int col, int row, KSpreadTable* table)
+KSpreadDependency::KSpreadDependency(int col, int row, KSpreadTable* table)
 {
   Q_ASSERT(col > 0 && row > 0);
 
@@ -33,7 +33,7 @@ KSpreadDependancy::KSpreadDependancy(int col, int row, KSpreadTable* table)
   m_table = table;
 }
 
-KSpreadDependancy::KSpreadDependancy(int left, int top, int right, int bottom, KSpreadTable* table)
+KSpreadDependency::KSpreadDependency(int left, int top, int right, int bottom, KSpreadTable* table)
 {
   Q_ASSERT(left > 0 && top > 0 && right > 0 && bottom > 0);
 
@@ -45,27 +45,27 @@ KSpreadDependancy::KSpreadDependancy(int left, int top, int right, int bottom, K
   m_table = table;
 }
 
-int KSpreadDependancy::Left()
+int KSpreadDependency::Left()
 {
   return m_left;
 }
 
-int KSpreadDependancy::Right()
+int KSpreadDependency::Right()
 {
   return m_right;
 }
 
-int KSpreadDependancy::Top()
+int KSpreadDependency::Top()
 {
   return m_top;
 }
 
-int KSpreadDependancy::Bottom()
+int KSpreadDependency::Bottom()
 {
   return m_bottom;
 }
   
-KSpreadTable* KSpreadDependancy::Table()
+KSpreadTable* KSpreadDependency::Table()
 {
   return m_table;
 }

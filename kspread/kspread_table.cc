@@ -494,7 +494,7 @@ KSpreadCell* KSpreadTable::nonDefaultCell( int _column, int _row,
     return p;
 
   KSpreadCell *cell = new KSpreadCell( this, _column, _row );
-  m_cells.insert( cell, _column, _row );
+  insertCell( cell );
 
   return cell;
 }
@@ -533,20 +533,20 @@ void KSpreadTable::setCalcDirtyFlag()
         }
 }
 
-void KSpreadTable::recalc(bool m_depend)
+void KSpreadTable::recalc()
 {
    // First set all cells as dirty
    setCalcDirtyFlag();
 
-   this->calc(m_depend);
+   this->calc();
 }
 
-void KSpreadTable::calc(bool m_depend)
+void KSpreadTable::calc()
 {
   KSpreadCell* c = m_cells.firstCell();
   for( ; c; c = c->nextCell() )
   {
-     c->calc( m_depend );
+     c->calc();
   }
 }
 
@@ -791,7 +791,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 			// '&& worker.create_if_default' unneccessary as never used in type A
 		    {
 			cell = new KSpreadCell( this, i, rw->row() );
-			m_cells.insert( cell, i, rw->row() );
+			insertCell( cell );
 		    }
 		}
 	    }
@@ -874,7 +874,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 			if ( cell == m_pDefaultCell )
 			{
 			    cell = new KSpreadCell( this, i, rw->row() );
-			    m_cells.insert( cell, i, rw->row() );
+			    insertCell( cell );
 			}
 			worker.doWork( cell, false, i, rw->row() );
 		    }
@@ -897,7 +897,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 		    if ( worker.create_if_default && cell == m_pDefaultCell )
 		    {
 			cell = new KSpreadCell( this, x, y );
-			m_cells.insert( cell, x, y );
+			insertCell( cell );
 		    }
                     if ( cell != m_pDefaultCell )
 			worker.doWork( cell, true, x, y );
@@ -1381,7 +1381,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
         if ( cell == m_pDefaultCell )
         {
             cell = new KSpreadCell( this, x+posx, y+posy );
-            m_cells.insert( cell, x + posx, y + posy );
+	    insertCell( cell );
         }
 
         QString tmp;
@@ -1519,7 +1519,7 @@ bool KSpreadTable::shiftRow( const QRect &rect,bool makeUndo )
                 it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadTable::ColumnInsert, name() ,(rect.right()-rect.left()+1));
         }
     refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadTable::ColumnInsert);
-    recalc(true);
+    recalc();
     refreshMergedCell();
     emit sig_updateView( this );
 
@@ -1549,7 +1549,7 @@ bool KSpreadTable::shiftColumn( const QRect& rect,bool makeUndo )
         for(int i=rect.left();i<=rect.right();i++)
                 it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadTable::RowInsert, name() ,(rect.bottom()-rect.top()+1));
     refreshChart(/*marker*/QPoint(rect.left(),rect.top()), false, KSpreadTable::RowInsert);
-    recalc(true);
+    recalc();
     refreshMergedCell();
     emit sig_updateView( this );
 
@@ -1579,7 +1579,7 @@ void KSpreadTable::unshiftColumn( const QRect & rect,bool makeUndo )
 
     refreshChart( QPoint(rect.left(),rect.top()), false, KSpreadTable::RowRemove );
     refreshMergedCell();
-    recalc(true);
+    recalc();
     emit sig_updateView( this );
 }
 
@@ -1605,7 +1605,7 @@ void KSpreadTable::unshiftRow( const QRect & rect,bool makeUndo )
 
     refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadTable::ColumnRemove );
     refreshMergedCell();
-    recalc(true);
+    recalc();
     emit sig_updateView( this );
 }
 
@@ -1631,7 +1631,7 @@ bool KSpreadTable::insertColumn( int col, int nbCol,bool makeUndo )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name() ,nbCol+1);
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert );
     refreshMergedCell();
-    recalc(true);
+    recalc();
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 
@@ -1660,7 +1660,7 @@ bool KSpreadTable::insertRow( int row,int nbRow,bool makeUndo )
         it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name() ,nbRow+1);
     refreshChart( QPoint( 1, row ), true, KSpreadTable::RowInsert );
     refreshMergedCell();
-    recalc(true);
+    recalc();
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 
@@ -1685,7 +1685,7 @@ void KSpreadTable::removeColumn( int col,int nbCol,bool makeUndo )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name(),nbCol+1 );
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove );
-    recalc(true);
+    recalc();
     refreshMergedCell();
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
@@ -1708,7 +1708,7 @@ void KSpreadTable::removeRow( int row,int nbRow,bool makeUndo )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name(),nbRow+1 );
     refreshChart(QPoint( 1, row ), true, KSpreadTable::RowRemove);
-    recalc(true);
+    recalc();
     refreshMergedCell();
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
@@ -2283,7 +2283,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
                         if ( cell == m_pDefaultCell )
                                 {
                                 cell = new KSpreadCell( this, i,  rw->row() );
-                                m_cells.insert( cell, i,  rw->row() );
+				insertCell( cell );
                                 }
                         }
                 }
@@ -2321,7 +2321,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
                         if ( cell == m_pDefaultCell )
                                 {
                                 cell = new KSpreadCell( this, i,  rw->row() );
-                                m_cells.insert( cell, i,  rw->row() );
+				insertCell( cell );
                                 }
                         cell->setRightBorderPen(pen);
                         }
@@ -2396,7 +2396,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
                         if ( cell == m_pDefaultCell )
                                 {
                                 cell = new KSpreadCell( this, i,  rw->row() );
-                                m_cells.insert( cell, i,  rw->row() );
+				insertCell( cell );
                                 }
                         }
                 }
@@ -2431,8 +2431,8 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
                         KSpreadCell *cell = cellAt( i,  rw->row());
                         if ( cell == m_pDefaultCell )
                                 {
-                                cell = new KSpreadCell( this, i,  rw->row() );
-                                m_cells.insert( cell, i,  rw->row() );
+				cell = new KSpreadCell( this, i,  rw->row() );
+				insertCell( cell );
                                 }
                         cell->setLeftBorderPen(pen);
                         }
@@ -2619,7 +2619,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
          if ( cell == m_pDefaultCell )
          {
             cell = new KSpreadCell( this, x, y );
-            m_cells.insert( cell, x, y );
+	    insertCell( cell );
          }
          cell->setTopBorderPen(pen);
         }
@@ -2638,7 +2638,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
          if ( cell == m_pDefaultCell )
          {
             cell = new KSpreadCell( this, x, y );
-            m_cells.insert( cell, x, y );
+	    insertCell( cell );
          }
          cell->setTopBorderPen(pen);
         }
@@ -2666,7 +2666,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
         if ( cell == m_pDefaultCell )
             {
             cell = new KSpreadCell( this, x, y );
-            m_cells.insert( cell, x, y );
+	    insertCell( cell );
             }
         cell->setBottomBorderPen(pen);
         }
@@ -4351,7 +4351,7 @@ void KSpreadTable::mergeCell( const QPoint &_marker, bool makeUndo)
 
     setMarker(QPoint(x,y));
     if(getAutoCalc())
-        recalc(true);
+        recalc();
     emit sig_updateView( this, m_rctSelection );
 }
 
@@ -4780,7 +4780,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
                 if ( cell == m_pDefaultCell )
                {
                   cell = new KSpreadCell( this, i, j );
-                  m_cells.insert( cell, i, j );
+		  insertCell( cell );
                   insert=true;
                }
                 spread.appendChild( cell->save( doc, _rect.left() - 1, _rect.top() - 1  ,true));
@@ -5061,7 +5061,27 @@ KSpreadTable* KSpreadTable::findTable( const QString & _name )
 // ###### Torben: Use this one instead of m_cells.insert()
 void KSpreadTable::insertCell( KSpreadCell *_cell )
 {
-    m_cells.insert( _cell, _cell->column(), _cell->row() );
+  m_cells.insert( _cell, _cell->column(), _cell->row() );
+  
+  /* immediately check for cells that are depending on this one.  This can happen if a dependancy range
+   * is given which included cells that were the default cell, but are just now being inserted into the 
+   * cell list for real
+   */
+
+  /* a full scan of all the tables isn't fun, but that was already happening every time a cell is updated
+     anyway.  So this isn't any worse than what we've had */
+  QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    for( ; it.current(); ++it )
+    {
+        KSpreadCell* c = it.current()->firstCell();
+        for( ; c; c = c->nextCell() )
+	{
+	  if ( c->cellDependsOn(this, _cell->column(), _cell->row()) )
+	  {
+	    _cell->NotifyDepending( c->column(), c->row(), it.current(), true);
+	  }
+	}
+    }
 
   if ( m_bScrollbarUpdates )
   {
@@ -5350,7 +5370,7 @@ void KSpreadTable::updateLocale()
       QString _text = c->text();
       c->setDisplayText( _text, false/* no recalc deps for each, done independently */ );
   }
-  recalc(true);
+  recalc();
 }
 
 #ifndef NDEBUG

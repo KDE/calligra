@@ -60,7 +60,7 @@ private:
 /**
  * Creates dependencies from the parse tree of a formula.
  */
-void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadTable* t, QPtrList<KSpreadDependancy>& depends )
+void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadTable* t, QPtrList<KSpreadDependency>& depends )
 {
   KSParseNodeExtra* extra = node->extra();
   if ( !extra )
@@ -69,7 +69,7 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     {
       KSParseNodeExtraPoint* extra = new KSParseNodeExtraPoint( node->getStringLiteral(), m, t );
       kdDebug(36002) << "-------- Got dep " << util_cellName( extra->point()->pos.x(), extra->point()->pos.y() ) << endl;
-      KSpreadDependancy* d = new KSpreadDependancy(extra->point()->pos.x(), extra->point()->pos.y(),
+      KSpreadDependency* d = new KSpreadDependency(extra->point()->pos.x(), extra->point()->pos.y(),
 					       extra->point()->table);
       if (!d->Table())
       {
@@ -84,7 +84,7 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     else if ( node->getType() == t_range )
     {
       KSParseNodeExtraRange* extra = new KSParseNodeExtraRange( node->getStringLiteral(), m, t );
-      KSpreadDependancy* d = new KSpreadDependancy(extra->range()->range.left(), 
+      KSpreadDependency* d = new KSpreadDependency(extra->range()->range.left(), 
 						   extra->range()->range.top(),
 						   extra->range()->range.right(), 
 						   extra->range()->range.bottom(),
@@ -5412,7 +5412,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
   return false;
 }
 
-KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDependancy>& depends )
+KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDependency>& depends )
 {
     // Create the parse tree.
     KSParser parser;

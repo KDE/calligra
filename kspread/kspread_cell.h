@@ -466,27 +466,37 @@ public:
      *
      * @return TRUE on success and FALSE on error.
      */
-    bool calc( bool _makedepend = FALSE );
+    bool calc();
 
     /**
      * Set the calcDirtyFlag
      */
-    void setCalcDirtyFlag() { if ( m_content == Formula ) m_bCalcDirtyFlag = TRUE; }
+    void setCalcDirtyFlag();
+
     bool calcDirtyFlag() { if ( m_content == Formula ) return false; return m_bCalcDirtyFlag; }
 
     /**
-     * Sets the calcDirtyFlag if this cell depends on a given cell.
-     * If cell (_column|_row) in table '_table' changed and we depend on this cells value, the
-     * 'calcDirtyFlag' will be set, otherwise not.
-     * After this ALL cells will be called with:
-     * <TT>"cell->setCalcDirtyFlag( column, row)"</TT>.
+     * Test to see if this cell depends on the given cell
      *
-     * @param _table the table in which a cell changed its content
-     * @param _column the column of the cell that changed its content
-     * @param _row the row of the cell that changed its content
+     * @param table table of the cell we're curious about
+     * @param col column of the cell we're curious about
+     * @param row row of the cell we're curious about
+     *
+     * @return TRUE if this cell depends on the given cell
      */
-    void setCalcDirtyFlag( KSpreadTable* _table, int _column, int _row );
+    bool cellDependsOn(KSpreadTable *table, int col, int row);
 
+    /**
+     * Notify this cell that another cell is depending, or no longer depending on this cell's value
+     *
+     * @param col the column of the cell
+     * @param row the row of the cell
+     * @param table the table that the cell is on
+     * @param isDepending true if the cell is now depending on this one, false if it is not any longer
+     *                    depending on it.
+     */
+    void NotifyDepending( int col, int row, KSpreadTable* table, bool isDepending );
+    
     /**
      * Causes the layout to be recalculated when the cell is drawn next time.
      * This flag is for example set if the width of the column changes or if
@@ -773,6 +783,8 @@ protected:
      */
     void checkNumberFormat();
 
+    void NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isDepending);
+
 private:
     /**
      * This cell's row.
@@ -840,6 +852,12 @@ private:
      */
     bool m_bProgressFlag;
 
+    /**
+     * Tells whether we've already calculated the reverse dependancies for this cell.  Similar to
+     * @ref m_bProgressFlag but it's for when we are calculating in the reverse direction.
+     * @see updateDependancies()
+     */
+    bool m_bUpdatingDeps;
     /**
      * If this flag is set, then it is known that this cell has to be updated
      * on the display. This means that somewhere in the calling stack there is a
@@ -918,7 +936,16 @@ private:
     QString m_strAction;
 
 
-    QPtrList<KSpreadDependancy> m_lstDepends;
+    /**
+     * list of cells that must be calculated in order to calculate this cell
+     */
+    QPtrList<KSpreadDependency> m_lstDepends;
+
+    /**
+     * list of cells that require this cell's value to be calculated
+     */
+    QPtrList<KSpreadDependency> m_lstDependingOnMe;
+
 
     /**
      * The value we got from calculation.

@@ -19,7 +19,7 @@ public:
 
   KSpreadInterpreter( KSpreadDoc* );
 
-  KSParseNode* parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDependancy>& );
+  KSParseNode* parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDependency>& );
   bool evaluate( KSContext& context, KSParseNode*, KSpreadTable* );
 
   KSNamespace* globalNamespace() { return m_global; }

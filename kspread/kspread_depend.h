@@ -22,11 +22,11 @@
 
 class KSpreadTable;
 
-class KSpreadDependancy
+class KSpreadDependency
 {
  public:
-  KSpreadDependancy(int col, int row, KSpreadTable* table);
-  KSpreadDependancy(int left, int top, int right, int bottom, KSpreadTable* table);
+  KSpreadDependency(int col, int row, KSpreadTable* table);
+  KSpreadDependency(int left, int top, int right, int bottom, KSpreadTable* table);
 
   int Left();
   int Right();
