@@ -161,7 +161,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
 
     // We use the formatting of the first char as the formatting of the counter
     KoTextFormat *format = KoParagCounter::counterFormat( this );
-    double ulw=format->height()/(25*18);
+    double ulw=static_cast<double>(format->pointSize())/18.0;
     p->save();
 
     //QColor textColor( format->color() );
@@ -1441,7 +1441,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         // ### TODO scale the painter to do this, especially when printing, to gain more resolution
         //kdDebug(32500) << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
-        double dimd = KoBorder::zoomWidthY( 0.5*ulw, zh, 1 );
+        double dimd = KoBorder::zoomWidthY( 0.75*ulw, zh, 1 );
 	if((format->vAlign() == KoTextFormat::AlignSuperScript) ||
 	    (format->vAlign() == KoTextFormat::AlignSubScript ))
 	    dimd/=1.5;
@@ -1468,7 +1468,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         default:
             p->setPen( QPen( color, dim, Qt::SolidLine ) );
         }
-        int y = lastY + baseLine - format->offsetFromBaseLine() + KoBorder::zoomWidthY( 0.75*ulw, zh, 0 ); // slightly under the baseline if possible
+        int y = lastY + baseLine - format->offsetFromBaseLine() + KoBorder::zoomWidthY( 1.125*ulw, zh, 0 ); // slightly under the baseline if possible
         if (format->vAlign() == KoTextFormat::AlignSubScript )
             y += p->fontMetrics().height() / 6;
         if (format->vAlign() == KoTextFormat::AlignSuperScript )
@@ -1478,7 +1478,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         p->drawLine( startX, y, startX + bw, y );
         //kdDebug(32500) << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
 //        y = lastY + baseLine - format->offsetFromBaseLine() + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
-        y = lastY + baseLine - format->offsetFromBaseLine() + KoBorder::zoomWidthY( 1.75*ulw, zh, 0 );
+        y = lastY + baseLine - format->offsetFromBaseLine() + KoBorder::zoomWidthY( 2.625*ulw, zh, 0 );
         //kdDebug(32500) << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
         if (format->vAlign() == KoTextFormat::AlignSuperScript )
             y -= p->fontMetrics().height() / 2;
@@ -1492,7 +1492,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     else if ( format->underline() ||
                 format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)
     {
-        int y = lastY + baseLine- format->offsetFromBaseLine()+ KoBorder::zoomWidthY( 2*ulw, zh, 0 );
+        int y = lastY + baseLine- format->offsetFromBaseLine()+ KoBorder::zoomWidthY( 1.875*ulw, zh, 0 );
         if (format->vAlign() == KoTextFormat::AlignSubScript )
             y += p->fontMetrics().height() / 6;
         if (format->vAlign() == KoTextFormat::AlignSuperScript )
