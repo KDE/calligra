@@ -349,10 +349,10 @@ void KIllustratorView::setupCanvas()
     //Layer Panel
     mLayerPanel = new LayerPanel(this);
     mLayerDockBase = mToolDockManager->createToolDock(mLayerPanel, i18n("Layers"));
-    mLayerDockBase->move(0,0);
     KToggleAction* showLayers = new KToggleAction( i18n("Layers Panel"), "layers", CTRL+Key_L, actionCollection(), "layers" );
     connect( showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
-    connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(toggleStencilGeometry(bool)));
+    connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
+    slotLayersPanel(false);
     
     QObject::connect (canvas, SIGNAL(sizeChanged ()),
                       scrollview, SLOT(updateScrollBars()));
@@ -1244,12 +1244,12 @@ void KIllustratorView::slotSettingsChanged() {
 
 void KIllustratorView::slotZoomIn()
  {
-  mZoomTool->zoomIn();
+  mZoomTool->zoomIn(getCanvas());
  }
 
 void KIllustratorView::slotZoomOut()
  {
-  mZoomTool->zoomOut();
+  mZoomTool->zoomOut(getCanvas());
  }
 
 void KIllustratorView::slotViewResize()

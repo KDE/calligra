@@ -41,8 +41,8 @@ public:
   virtual void activate (GDocument* _doc, Canvas* _canvas);
   
   void zoomIn (int x, int y);
-  void zoomIn ();
-  void zoomOut ();
+  void zoomIn (Canvas* cnv);
+  void zoomOut (Canvas* cnv);
   void zoomRegion(int x1,int y1, int x2, int y2);
 
   const QValueList<float>& getZoomFactors () const { return zoomFactors; }

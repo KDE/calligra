@@ -129,7 +129,7 @@ void ZoomTool::processButtonReleaseEvent (QMouseEvent* e)
      zoomIn (e->x (), e->y ());
     else
      if (e->button () == RightButton)
-      zoomOut ();
+      zoomOut (canvas);
     return;
    }
  }
@@ -147,37 +147,29 @@ void ZoomTool::zoomIn (int x, int y) {
   }
 }
 
-void ZoomTool::zoomIn () {
-  
-  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
-    if (*i == canvas->getZoomFactor()) {
-        if(*i!=zoomFactors.last()) {
-             ++i;
-            canvas->setZoomFactor(*i);
-            break;
-        }
-    }
-  }
-}
-
-void ZoomTool::zoomOut ()
+void ZoomTool::zoomIn(Canvas* cnv)
  {
-  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
-    if (*i == canvas->getZoomFactor ()) {
-        if(*i!=zoomFactors.first()) {
-            --i;
-            canvas->setZoomFactor(*i);
-            break;
-        }
-    }
-  }
+  float z = cnv->getZoomFactor();
+  z *= 1.25;
+  if(z > 10.0)
+   z = 10.0;
+  cnv->setZoomFactor(z);
+ }
+
+void ZoomTool::zoomOut (Canvas* cnv)
+ {
+  float z = cnv->getZoomFactor();
+  z *= 0.8;
+  if(z < 0.1)
+   z = 0.1;
+  cnv->setZoomFactor(z);
  }
 
 void ZoomTool::zoomRegion(int x1, int y1, int x2, int y2)
  {
   if (x1 == x2 || y1 == y2)
    {
-    zoomIn();
+    zoomIn(canvas);
     return;
    }
   
