@@ -5587,9 +5587,23 @@ void KWView::switchModeView()
     actionFrameStyle->setEnabled( state );
     actionTableStyle->setEnabled ( state );
     if ( m_gui->getHorzRuler())
+    {
         m_gui->getHorzRuler()->setPageLayoutMenuItemEnabled( state );
+        if ( state )
+            m_gui->getHorzRuler()->changeFlags( m_gui->getHorzRuler()->flags() & ~(KoRuler::F_NORESIZE) );
+        else
+            m_gui->getHorzRuler()->changeFlags( m_gui->getHorzRuler()->flags() | KoRuler::F_NORESIZE );
+    }
     if ( m_gui->getVertRuler() )
+    {
         m_gui->getVertRuler()->setPageLayoutMenuItemEnabled( state );
+        if ( state )
+            m_gui->getVertRuler()->changeFlags( m_gui->getVertRuler()->flags() & ~(KoRuler::F_NORESIZE) );
+        else
+            m_gui->getVertRuler()->changeFlags( m_gui->getVertRuler()->flags() | KoRuler::F_NORESIZE );
+
+
+    }
 
     if ( !state )
     {
