@@ -611,8 +611,8 @@ void KImageShopView::slotCVMousePress(QMouseEvent *e)
 
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
-  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - xPaintOffset();
-  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - yPaintOffset();
+  mouseEvent.posX = static_cast<long>((e->x() - xPaintOffset() + m_pHorz->value()) / m_ZoomFactor);
+  mouseEvent.posY = static_cast<long>((e->y() - yPaintOffset() + m_pVert->value()) / m_ZoomFactor);
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -634,8 +634,8 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
 
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
-  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - xPaintOffset();
-  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - yPaintOffset();
+  mouseEvent.posX = static_cast<long>((e->x() - xPaintOffset() + m_pHorz->value()) / m_ZoomFactor);
+  mouseEvent.posY = static_cast<long>((e->y() - yPaintOffset() + m_pVert->value()) / m_ZoomFactor);
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -660,8 +660,8 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
 
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
-  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - xPaintOffset();
-  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - yPaintOffset();
+  mouseEvent.posX = static_cast<long>((e->x() - xPaintOffset() + m_pHorz->value()) / m_ZoomFactor);
+  mouseEvent.posY = static_cast<long>((e->y() - yPaintOffset() + m_pVert->value()) / m_ZoomFactor);
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
