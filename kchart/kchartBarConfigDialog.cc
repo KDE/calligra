@@ -14,8 +14,8 @@
 #include "kdchart/KDChartParams.h"
 
 KChartBarConfigDialog::KChartBarConfigDialog( KDChartParams* params,
-					      QWidget* parent, int flag ) :
-    KChartConfigDialog( params, parent, flag  )
+					      QWidget* parent, int flag, KoChart::Data *dat ) :
+    KChartConfigDialog( params, parent, flag,dat  )
 {
     // Bar page
     _barpage = new KChartBarConfigPage( this );

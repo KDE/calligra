@@ -27,7 +27,7 @@
 #include "kdchart/KDChartParams.h"
 
 KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
-					QWidget* parent, int flags ) :
+					QWidget* parent, int flags,KoChart::Data *dat ) :
     QTabDialog( parent, "Chart config dialog", true ),
     _params( params ),
     _subTypePage( 0 )
@@ -52,7 +52,7 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
         addTab( _piepage, i18n( "&Pie" ) );
     }
 
-    _parameterfontpage = new KChartFontConfigPage(_params,this );
+    _parameterfontpage = new KChartFontConfigPage(_params,this, dat );
     addTab( _parameterfontpage, i18n( "&Font" ) );
 
     _backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );

@@ -8,7 +8,7 @@
 #include <qwidget.h>
 
 #include "kchartcolorarray.h"
-
+#include "kchartDataEditor.h"
 class QLineEdit;
 class QListBox;
 class QPushButton;
@@ -21,7 +21,7 @@ class KChartFontConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    KChartFontConfigPage( KDChartParams* params,QWidget* parent );
+    KChartFontConfigPage( KDChartParams* params,QWidget* parent, KoChart::Data *dat);
     void init();
     void apply();
     void initList();
@@ -45,5 +45,6 @@ private:
     QFont legend;
     KChartColorArray extColor;
     int index;
+    KoChart::Data *data;
 };
 #endif

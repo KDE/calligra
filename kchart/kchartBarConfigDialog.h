@@ -7,6 +7,7 @@
 #define __KOCHARTBARCONFIGDIALOG_H__
 
 #include "kchartConfigDialog.h"
+#include "kchartDataEditor.h"
 
 class KDChartParams;
 class KChartBarConfigPage;
@@ -17,7 +18,7 @@ class KChartBarConfigDialog : public KChartConfigDialog
 
 public:
     KChartBarConfigDialog( KDChartParams* params, 
-                           QWidget* parent, int flag );
+                           QWidget* parent, int flag, KoChart::Data *dat );
 
 public slots:
     virtual void apply();

@@ -251,8 +251,8 @@ void KChartView::config(int flags)
 {
     // open a config dialog depending on the chart type
     KDChartParams* params = ((KChartPart*)koDocument())->params();
-
-    KChartConfigDialog* d = new KChartConfigDialog( params, this, flags );
+    KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
+    KChartConfigDialog* d = new KChartConfigDialog( params, this, flags, dat );
     connect( d, SIGNAL( dataChanged() ),
              this, SLOT( slotRepaint() ) );
     d->exec();

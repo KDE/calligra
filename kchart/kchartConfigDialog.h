@@ -6,7 +6,7 @@
 #define __KCHARTCONFIGDIALOG_H__
 
 #include <qtabdialog.h>
-
+#include "kchartDataEditor.h"
 class KDChartParams;
 class KChartColorConfigPage;
 class KChartParameterConfigPage;
@@ -26,7 +26,7 @@ class KChartConfigDialog : public QTabDialog
 public:
     enum { KC_FONT = 1, KC_COLORS = 2, KC_BACK = 4, KC_LEGEND=8 };
     KChartConfigDialog( KDChartParams* params,
-                        QWidget* parent, int flags );
+                        QWidget* parent, int flags,KoChart::Data *dat );
 
     void setCurrentPage( int page );
 signals:

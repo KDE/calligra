@@ -27,8 +27,8 @@ using namespace std;
 #include "kdchart/KDChartParams.h"
 
 KChartFontConfigPage::KChartFontConfigPage( KDChartParams* params,
-                                            QWidget* parent ) :
-  QWidget( parent ),_params( params )
+                                            QWidget* parent, KoChart::Data *dat) :
+    QWidget( parent ),_params( params ), data(dat)
 {
   QGridLayout *grid = new QGridLayout(this,5,4,15,7);
 
@@ -75,6 +75,16 @@ void KChartFontConfigPage::initList()
   //init index
   index=0;
   //num <12 because there are 12 colors
+
+
+  QStringList lst;
+  for(int i =0;i<data->rows();i++)
+  {
+      listColor->insertItem(_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i) :_params->legendText( i ) );
+      extColor.setColor(i,_params->dataColor(i));
+  }
+  listColor->setCurrentItem(0);
+  colorButton->setColor( extColor.color(index));
 
   // PENDING(kalle) Assign legend colors
   //   for( QStringList::Iterator it = _params->legend.begin();
@@ -199,4 +209,7 @@ void KChartFontConfigPage::apply()
   // PENDING(kalle) Adapt
   //   for(unsigned int i=0;i<extColor.count();i++)
 //     _params->ExtColor.setColor(i,extColor.color(i));
+
+  for(int i =0;i<data->rows();i++)
+      _params->setDataColor(i,extColor.color(i));
 }
