@@ -203,9 +203,10 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
 
   QDomNode node;
   if ( rowStyle )
-   node = rowStyle->firstChild();
-
-  kdDebug(30518) << "RowStyle: " << rowStyle << ", " << rowStyle->tagName() << endl;
+  {
+    node = rowStyle->firstChild();
+    kdDebug(30518) << "RowStyle: " << rowStyle << ", " << rowStyle->tagName() << endl;
+  }
 
   double height = -1.0;
   bool insertPageBreak = false;
