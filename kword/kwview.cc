@@ -750,13 +750,15 @@ void KWView::setupActions()
                                               actionCollection(), "format_sub" );
     actionFormatSub->setExclusiveGroup( "valign" );
 
-    actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ), "format_increaseindent", 0,
-                                      this, SLOT( textIncreaseIndent() ),
-                                      actionCollection(), "format_increaseindent" );
+    actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ),
+                                             QApplication::reverseLayout() ? "format_decreaseindent" : "format_increaseindent", 0,
+                                             this, SLOT( textIncreaseIndent() ),
+                                             actionCollection(), "format_increaseindent" );
 
-    actionFormatDecreaseIndent= new KAction( i18n( "Decrease Indent" ),"format_decreaseindent", 0,
-                                      this, SLOT( textDecreaseIndent() ),
-                                      actionCollection(), "format_decreaseindent" );
+    actionFormatDecreaseIndent= new KAction( i18n( "Decrease Indent" ),
+                                             QApplication::reverseLayout() ? "format_increaseindent" :"format_decreaseindent", 0,
+                                             this, SLOT( textDecreaseIndent() ),
+                                             actionCollection(), "format_decreaseindent" );
 
     actionFormatColor = new TKSelectColorAction( i18n( "Text Color..." ), TKSelectColorAction::TextColor,
                                      this, SLOT( textColor() ),
