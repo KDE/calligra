@@ -1091,24 +1091,46 @@ void Page::keyPressEvent( QKeyEvent *e )
 	objectPosX = ( objectPosX / rastX() ) * rastX();
 	objectPosY = ( objectPosY / rastY() ) * rastY();
 
-	switch ( e->key() ) {
-	case Key_Up:
-	    moveObject( 0, -1, true );
-	    objectPosY -= 1;
-	    break;
-	case Key_Down:
-	    moveObject( 0, 1, true );
-	    objectPosY += 1;
-	    break;
-	case Key_Right:
-	    moveObject( 1, 0, true );
-	    objectPosX += 1;
-	    break;
-	case Key_Left:
-	    moveObject( -1, 0, true );
-	    objectPosX -= 1;
-	    break;
-	default: break;
+	if ( e->state() & ControlButton ) {
+	    switch ( e->key() ) {
+	    case Key_Up:
+		moveObject( 0, -10, true );
+		objectPosY -= 10;
+		break;
+	    case Key_Down:
+		moveObject( 0, 10, true );
+		objectPosY += 10;
+		break;
+	    case Key_Right:
+		moveObject( 10, 0, true );
+		objectPosX += 10;
+		break;
+	    case Key_Left:
+		moveObject( -10, 0, true );
+		objectPosX -= 10;
+		break;
+	    default: break;
+	    }
+	} else {
+	    switch ( e->key() ) {
+	    case Key_Up:
+		moveObject( 0, -1, true );
+		objectPosY -= 1;
+		break;
+	    case Key_Down:
+		moveObject( 0, 1, true );
+		objectPosY += 1;
+		break;
+	    case Key_Right:
+		moveObject( 1, 0, true );
+		objectPosX += 1;
+		break;
+	    case Key_Left:
+		moveObject( -1, 0, true );
+		objectPosX -= 1;
+		break;
+	    default: break;
+	    }
 	}
     } else {
 	switch ( e->key() ) {
