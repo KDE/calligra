@@ -25,6 +25,7 @@ VImage::VImage( VObject *parent, const QString &fname ) : VObject( parent ), m_i
         *m_image = m_image->convertDepth( 32 );
 	m_image->setAlphaBuffer( true );
 	*m_image = m_image->swapRGB();
+	*m_image = m_image->mirror( false, true );
 }
 
 VImage::VImage( const VImage &other ) : VObject( other )
@@ -116,6 +117,7 @@ VImage::load( const QDomElement& element )
         *m_image = m_image->convertDepth( 32 );
 	m_image->setAlphaBuffer( true );
 	*m_image = m_image->swapRGB();
+	*m_image = m_image->mirror( false, true );
 	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
 }
 

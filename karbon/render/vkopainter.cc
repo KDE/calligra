@@ -898,7 +898,7 @@ VKoPainter::drawImage( const QImage &image, const QWMatrix &affine )
 	affineresult[2] = affine.m21();
 	affineresult[3] = ( m_matrix.m22() * affine.m22() ) * m_zoomFactor;
 	affineresult[4] = m_matrix.dx() + affine.dx() * m_zoomFactor;
-	affineresult[5] = m_matrix.dy() - ( affine.dy() + image.height() ) * m_zoomFactor;
+	affineresult[5] = m_matrix.dy() - ( affine.dy() ) * m_zoomFactor;
 	kdDebug() << "affineresult[0] : " << affineresult[0] << endl;
 	kdDebug() << "affineresult[1] : " << affineresult[1] << endl;
 	kdDebug() << "affineresult[2] : " << affineresult[2] << endl;
