@@ -166,14 +166,16 @@ signals:
     void tabChanged( const QString& _text );
 
 public slots:
-    void slotRename( );
-
-protected slots:
     /**
      * Opens a dialog to rename active tab.
      */
+    void slotRename( );
+
+protected slots:
     void slotAdd();
-    void slotAutoScroll();
+
+    void autoScrollLeft();
+    void autoScrollRight();
 
 protected:
     virtual void paintEvent ( QPaintEvent* ev );
