@@ -28,6 +28,7 @@ Until beta2:
   Min, Max, Product, Standard Deviation, Variance.
 - fixed some functions to be Excel-compatibel (FIND, REPLACE,LEFT,
   RIGHT,MID)
+- now it's "Sheet" everywhere, not more "Table" :-)
 
 new functions added:
  ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,
