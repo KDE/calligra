@@ -3761,15 +3761,11 @@ void KWDocument::reactivateBgSpellChecking()
     }
 
     KWTextFrameSet *frm;
-    kdDebug()<<" reactivateBgSpellChecking()********************\n";
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
         frm->textObject()->setNeedSpellCheck(true);
-        kdDebug()<< "frm :"<<frm<<endl;
     }
     repaintAllViews();
-    kdDebug()<<" **********************************\n";
     startBackgroundSpellCheck();
-    kdDebug()<<" sortie !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 }
 
 KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
