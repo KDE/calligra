@@ -3007,6 +3007,9 @@ public:
   
   // color table (from Palette record)
   std::vector<Color> colorTable;
+  
+  // mapping from XF index to Sidewinder::Format
+  std::map<unsigned,Format> formatCache;
 };
 
 ExcelReader::ExcelReader(): Reader()
@@ -3613,9 +3616,11 @@ static Pen convertBorderStyle( unsigned style )
 // big task: convert Excel XFormat into Sidewinder::Format
 Format ExcelReader::convertFormat( unsigned xfIndex )
 {
-  Format format;
-  
-  if( xfIndex >= d->xfTable.size() ) return format;
+  if( xfIndex >= d->xfTable.size() ) return Format();
+
+  // speed-up trick: check in the cache first  
+  Format format = d->formatCache[ xfIndex ];
+  if( !format.isNull() ) return format;
   
   XFRecord xf = d->xfTable[ xfIndex ];  
   unsigned fontIndex = xf.fontIndex();
@@ -3662,6 +3667,9 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   pen = convertBorderStyle( xf.bottomBorderStyle() );
   pen.color = convertColor( xf.bottomBorderColor() );
   format.borders().setBottomBorder( pen );
+  
+  // put in the cache for further use
+  d->formatCache[ xfIndex ] = format;
 
   return format;
 }
