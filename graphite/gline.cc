@@ -129,10 +129,8 @@ void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) const {
     if(!rect.intersects(boundingRect()))
         return;
 
-    p.save();
-    p.setPen(pen()); // adjust the pen if it's invisible (light grey)
+    p.setPen(pen()); // ### adjust the pen if it's invisible (light grey)
     p.drawLine(m_a.pxX(), m_a.pxY(), m_b.pxX(), m_b.pxY());
-    p.restore();
 }
 
 void GLine::drawHandles(QPainter &p, const QRect &/*rect*/, QList<QRect> *handles) const {
@@ -140,7 +138,6 @@ void GLine::drawHandles(QPainter &p, const QRect &/*rect*/, QList<QRect> *handle
     if(dirty())
         recalculate();
 
-    p.save();
     p.setPen(Qt::black);
     p.setBrush(Qt::black);
 
@@ -219,7 +216,7 @@ const GLine *GLine::hit(const QPoint &p) const {
         double dx=m_b.x()-m_a.x();
         double dy=m_b.y()-m_a.y();
         double r=std::sqrt( dx*dx + dy*dy );
-        int ir=Graphite::double2Int(r);
+        int ir=Graphite::double2Int(r*GraphiteGlobal::self()->GraphiteGlobal::zoomedResolution());
         double alpha1=std::asin( Graphite::abs(dy)/r );
         double alpha;
 
@@ -378,7 +375,6 @@ bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
 
 bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // ###
-    qDebug("FOOOOOOOOOOOOOOOOO");
     return false;
 }
 

@@ -54,10 +54,6 @@ protected:
     // ### don't forget to e->accept() key, dnd, and wheel events!!!
     virtual void keyPressEvent(QKeyEvent *e) { m_doc->keyPressEvent(e, m_view); }
     virtual void keyReleaseEvent(QKeyEvent *e) { m_doc->keyReleaseEvent(e, m_view); }
-    // ### Here we should tell the document not to draw the handles
-    // ### when we don't have focus...
-    virtual void focusInEvent(QFocusEvent */*e*/) {}
-    virtual void focusOutEvent(QFocusEvent */*e*/) {}
 
     virtual bool eventFilter(QObject *obj, QEvent *e);
 
@@ -69,6 +65,7 @@ private:
     GraphiteView *m_view;
     Ruler *m_vertical, *m_horizontal;
     int m_eraseWidth, m_eraseHeight;
+    bool m_haveFocus, m_gotFocus;
 };
 
 #endif // gcanvas_h

@@ -82,7 +82,7 @@ public:
     // (Normally we create a Manipulator (M9r) class for the
     // object which has been hit. This class is the first
     // one which gets the Events before testing the whole tree.)
-    void mouseMoveEvent(QMouseEvent *e, GraphiteView *view);
+    void mouseMoveEvent(QMouseEvent *e, GraphiteView *view, bool focusIn=false);
     void mousePressEvent(QMouseEvent *e, GraphiteView *view);
     void mouseReleaseEvent(QMouseEvent *e, GraphiteView *view);
     void mouseDoubleClickEvent(QMouseEvent *e, GraphiteView *view);
@@ -117,14 +117,12 @@ private:
 
     KCommandHistory m_history;
     QMap<GraphiteView*, GObjectM9r*> m_m9rMap; // map views to m9rs
-    // ### If an object is selected, store a pointer
-    //     to its M9r here and draw the handles after
-    //     drawing the whole tree.
     // ### Do we need isLoading() like in KSpread?
     Graphite::PageLayout m_pageLayout;
     Graphite::Unit m_unit;
     GBackground *m_nodeZero;
     double m_zoom;  // keep track of the zoom factor and setDirty appropriately
+    Graphite::MouseState m_mouse;
 };
 
 

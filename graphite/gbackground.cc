@@ -156,7 +156,7 @@ bool GBackgroundM9r::mousePressEvent(QMouseEvent *e, QRect &/*dirty*/) {
             }
             m_popup->insertItem(i18n("&Properties..."), this, SLOT(showPropertyDialog()));
         }
-        m_popup->popup(e->pos());
+        m_popup->popup(e->globalPos());
         return true;
     }
     else

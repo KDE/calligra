@@ -31,10 +31,14 @@
 
 #include <gline.h>
 
-GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
-    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode), m_history(actionCollection()), m_zoom(1.0) {
+// uncomment that to see some more colorls and a line by default
+#define GRAPHITE_TEST 1
 
-    setInstance(GraphiteFactory::global());
+GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
+    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
+      m_history(actionCollection()), m_zoom(1.0) {
+
+    setInstance(GraphiteFactory::global(), false);
 
     connect(&m_history, SIGNAL(documentRestored()), this, SLOT(documentRestored()));
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut");
@@ -45,11 +49,13 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
 
     m_nodeZero=new GBackground(QString::fromLatin1("Background"));
     m_nodeZero->resize(m_pageLayout.fxRect());
+#ifdef GRAPHITE_TEST
     m_nodeZero->setBrush(Qt::red);
     m_nodeZero->setPen(Qt::blue);
-    GLine *line=new GLine(FxPoint(10.0, 10.0), FxPoint(20.0, 20.0));
+    GLine *line=new GLine(FxPoint(QPoint(100, 100)), FxPoint(QPoint(200, 200)));
     line->setPen(Qt::green);
     m_nodeZero->plugChild(line);
+#endif
 }
 
 GraphitePart::~GraphitePart() {
@@ -204,15 +210,74 @@ void GraphitePart::showPageLayoutDia(QWidget *parent) {
         setPageLayout(layout);
 }
 
-void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
-    // kdDebug(37001) << "MM x=" << e->x() << " y=" << e->y() << endl;
-    // ### setGlobalZoom()
+// This method handles the "rubber band" selection and the "mouseover"
+// cursor effects
+void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view, bool focusIn) {
+
+    static int oldMX=e->x();
+    static int oldMY=e->y();
+    static bool haveToErase=false;
+
+    setGlobalZoom(view->zoom());  // ### really necessary?
+
+    GObjectM9r *manager=m_m9rMap[view];
+    if(manager) {
+        QRect dirty;
+        // ### doesn't matter whether it returns true or false?
+        manager->mouseMoveEvent(e, dirty);
+        // ### clean up
+        return;
+    }
+
+    if(!view)
+        return;
+    QWidget *canvas=view->canvas();
+    if(!canvas || !canvas->isA("GCanvas"))
+        return;
+    QScrollView *scrollview=static_cast<QScrollView*>(canvas);
+    QPainter p(scrollview->viewport());
+    p.setRasterOp(Qt::NotROP);
+
+    if(m_mouse.startSelectionX>oldMX) // right to left selection
+        p.setPen(QPen(Qt::black, 0, Qt::DashLine));
+    else
+        p.setPen(QPen(Qt::black, 0, Qt::DotLine));
+
+    kdDebug() << "GraphitePart::mouseMoveEvent -- focusIn: " << focusIn << endl;
+    if(haveToErase && !focusIn) {
+        kdDebug() << "GraphitePart::mouseMoveEvent -- have to erase" << endl;
+        p.drawRect(Graphite::min(m_mouse.startSelectionX, oldMX)-scrollview->contentsX(),
+                   Graphite::min(m_mouse.startSelectionY, oldMY)-scrollview->contentsY(),
+                   Graphite::abs(m_mouse.startSelectionX-oldMX),
+                   Graphite::abs(m_mouse.startSelectionY-oldMY));
+        haveToErase=false;
+    }
+
+    oldMX=e->x();
+    oldMY=e->y();
+    if(m_mouse.startSelectionX>oldMX) // right to left selection
+        p.setPen(QPen(Qt::black, 0, Qt::DashLine));
+    else
+        p.setPen(QPen(Qt::black, 0, Qt::DotLine));
+
+    if(m_mouse.pressed) {
+        kdDebug() << "GraphitePart::mouseMoveEvent -- painting" << endl;
+        p.drawRect(Graphite::min(m_mouse.startSelectionX, oldMX)-scrollview->contentsX(),
+                   Graphite::min(m_mouse.startSelectionY, oldMY)-scrollview->contentsY(),
+                   Graphite::abs(m_mouse.startSelectionX-oldMX),
+                   Graphite::abs(m_mouse.startSelectionY-oldMY));
+        haveToErase=true;
+    }
+    p.end();
 }
 
 void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
 
-    kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
     setGlobalZoom(view->zoom());
+    m_mouse.pressed=true;
+    // test
+    m_mouse.startSelectionX=e->x();
+    m_mouse.startSelectionY=e->y();
     GObjectM9r *manager=m_m9rMap[view];
 
     // ### different mouse modes (tool/normal)
@@ -221,9 +286,8 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
             const GObject *hit=m_nodeZero->hit(e->pos());
             if(hit==0)  // noone hit -> get outta here
                 break;
-            kdDebug() << "HIT" << endl;
             manager=hit->createM9r(this, view);
-            m_m9rMap.insert(view, manager);
+            //m_m9rMap.insert(view, manager);
         }
         QRect dirty;
         if(manager->mousePressEvent(e, dirty)) {
@@ -237,6 +301,7 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
 }
 
 void GraphitePart::mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
+    m_mouse.pressed=false;
     //kdDebug(37001) << "MR x=" << e->x() << " y=" << e->y() << endl;
     // ### setGlobalZoom()
 }

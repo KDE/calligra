@@ -155,6 +155,15 @@ QValueList<FxRect> diff(const PageBorders &oldBorders, const PageBorders &newBor
              const double &width, const double &height);
 QValueList<FxRect> diff(const PageLayout &oldLayout, const PageLayout &newLayout);
 
+// Small struct to keep track of the mouse state
+struct MouseState {
+    MouseState() : pressed(false), startSelectionX(0), startSelectionY(0) {}
+
+    bool pressed;
+    int startSelectionX;
+    int startSelectionY;
+};
+
 }; //namespace Graphite
 
 
@@ -212,7 +221,7 @@ public:
     QDomElement createElement(const QString &tagName, const FxRect &rect, QDomDocument &doc) const;
     FxRect toFxRect(const QDomElement &element) const;
 
-    // maybe I'll add a init(...) method which takes a KConfig file/pointer
+    // ### maybe I'll add a init(...) method which takes a KConfig file/pointer
     // and initializes all the "global" vars.
 
 private:

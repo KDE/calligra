@@ -21,6 +21,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include <ggroup.h>
 #include <gobjectfactory.h>
@@ -153,12 +154,13 @@ const GObject *GAbstractGroup::hit(const QPoint &p) const {
     QListIterator<GObject> it(m_members);
     it.toLast();
     for( ; it!=0L; --it) {
-        if(it.current()->hit(p))
+        if(it.current()->hit(p)) {
             return it.current();
+        }
     }
     if(boundingRect().contains(p))
         return this;
-    return 0L;
+    return 0;
 }
 
 bool GAbstractGroup::intersects(const QRect &r) const {

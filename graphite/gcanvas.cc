@@ -25,11 +25,12 @@
 #include <ruler.h>
 
 // Uncommenting the #define will result in some debug output and a green clipping rect
-//#define GRAPHITE_DEBUG_PAINTING 1
+#define GRAPHITE_DEBUG_PAINTING 1
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     : QScrollView(view, "GCanvas", Qt::WNorthWestGravity | Qt::WResizeNoErase | Qt::WRepaintNoErase),
-      m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L), m_eraseWidth(0), m_eraseHeight(0) {
+      m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L), m_eraseWidth(0), m_eraseHeight(0),
+      m_haveFocus(false), m_gotFocus(false) {
 
     viewport()->setFocusPolicy(QWidget::StrongFocus);
     viewport()->setMouseTracking(true);
@@ -62,7 +63,8 @@ void GCanvas::resizeContentsMM(const double &x, const double &y) {
 void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
     m_vertical->setMousePos(e->x()-contentsX(), e->y()-contentsY());
     m_horizontal->setMousePos(e->x()-contentsX(), e->y()-contentsY());
-    m_doc->mouseMoveEvent(e, m_view);
+    m_doc->mouseMoveEvent(e, m_view, m_gotFocus);
+    m_gotFocus=false;
 }
 
 void GCanvas::viewportPaintEvent(QPaintEvent *e) {
@@ -84,6 +86,7 @@ void GCanvas::viewportPaintEvent(QPaintEvent *e) {
     p.drawRect(e->rect());
     p.setPen(Qt::black);
 #endif // GRAPHITE_DEBUG_PAINTING
+    p.setBrushOrigin(-contentsX(), -contentsY());
     p.setClipRect(e->rect());
     p.setClipping(true);
     // ###   1 - define the region which has to be
@@ -114,14 +117,15 @@ void GCanvas::viewportPaintEvent(QPaintEvent *e) {
                    << " | visible: width=" << visibleWidth()
                    << " height=" << visibleHeight()
                    << " | x-offset=" << contentsX()
-                   << " y-offet=" << contentsY() << endl;
+                   << " y-offset=" << contentsY() << endl;
 #endif // GRAPHITE_DEBUG_PAINTING
     p.translate(-contentsX(), -contentsY());
     QRect r(e->rect().left()+contentsX(), e->rect().top()+contentsY(),
             e->rect().width(), e->rect().height());
     m_doc->paintPageBorders(p, r);
     m_doc->paintContent(p, r);
-    m_doc->paintSelection(p, r, m_view);
+    if(m_haveFocus)
+        m_doc->paintSelection(p, r, m_view);
     p.end();
 }
 
@@ -131,6 +135,10 @@ bool GCanvas::eventFilter(QObject *obj, QEvent *e) {
         showMousePos(true);
     else if(e->type()==QEvent::Leave)
         showMousePos(false);
+    else if(e->type()==QEvent::FocusIn)
+        m_haveFocus=m_gotFocus=true;
+    else if(e->type()==QEvent::FocusOut)
+        m_haveFocus=m_gotFocus=false;
     return QScrollView::eventFilter(obj, e);
 }
 
