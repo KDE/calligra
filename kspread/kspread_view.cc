@@ -303,12 +303,12 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_removeTable = new KAction( i18n("Remove Table"), "delete_table",0,this, SLOT( removeTable() ), actionCollection(), "removeTable" );
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
-    m_preference = new KAction( i18n("Configure Kspread ..."), 0, this, SLOT( preference() ), actionCollection(), "preference" );
+    m_preference = new KAction( i18n("Configure Kspread..."),BarIcon("configure"), 0, this, SLOT( preference() ), actionCollection(), "preference" );
     m_firstLetterUpper = new KAction( i18n("Convert first letter to upper case"),"first_letter_upper" ,0, this, SLOT( firstLetterUpper() ), actionCollection(), "firstletterupper" );
     m_verticalText = new KToggleAction( i18n("Vertical text"),"vertical_text" ,0 ,actionCollection(), "verticaltext" );
     connect( m_verticalText, SIGNAL( toggled( bool ) ), this, SLOT( verticalText( bool ) ) );
-    m_changeAngle = new KAction( i18n("Change Angle ..."), 0, this, SLOT( changeAngle() ), actionCollection(), "changeangle" );
-    m_addModifyComment = new KAction( i18n("&Add/modify comment ..."),"comment", 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
+    m_changeAngle = new KAction( i18n("Change Angle..."), 0, this, SLOT( changeAngle() ), actionCollection(), "changeangle" );
+    m_addModifyComment = new KAction( i18n("&Add/modify comment..."),"comment", 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
     m_removeComment = new KAction( i18n("&Remove comment"),"removecomment", 0, this, SLOT( removeComment() ), actionCollection(), "removecomment" );
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
                                        actionCollection(), "editGlobalScripts" );
@@ -317,9 +317,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
     m_replace = new KAction( i18n("Find and Replace..."), "find",CTRL + Key_F, this, SLOT( replace() ), actionCollection(), "replace" );
-    m_conditional = new KAction( i18n("Conditional cell attributes ..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
-    m_validity = new KAction( i18n("Validity ..."), 0, this, SLOT( validity() ), actionCollection(), "validity" );
-    m_sort = new KAction( i18n("Sort ..."), 0, this, SLOT( sort() ), actionCollection(), "sort" );
+    m_conditional = new KAction( i18n("Conditional cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
+    m_validity = new KAction( i18n("Validity..."), 0, this, SLOT( validity() ), actionCollection(), "validity" );
+    m_sort = new KAction( i18n("Sort..."), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
     m_mergeCell = new KAction( i18n("Merge cells"),"mergecell" ,0, this, SLOT( mergeCell() ), actionCollection(), "mergecell" );
     m_dissociateCell = new KAction( i18n("Dissociate cells"),"dissociatecell" ,0, this, SLOT( dissociateCell() ), actionCollection(), "dissociatecell" );
@@ -349,9 +349,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                actionCollection(), "hideColumn" );
     m_showColumn = new KAction( i18n("Show Column(s)"), "show_table_column", 0, this, SLOT( showColumn() ),
                                actionCollection(), "showColumn" );
-    m_insertCell = new KAction( i18n("Insert Cell(s) ..."), "insertcell", 0, this, SLOT( slotInsert() ),
+    m_insertCell = new KAction( i18n("Insert Cell(s)..."), "insertcell", 0, this, SLOT( slotInsert() ),
                                actionCollection(), "insertCell" );
-    m_removeCell = new KAction( i18n("Remove Cell(s) ..."), "removecell", 0, this, SLOT( slotRemove() ),
+    m_removeCell = new KAction( i18n("Remove Cell(s)..."), "removecell", 0, this, SLOT( slotRemove() ),
                                actionCollection(), "removeCell" );
     m_insertCellCopy = new KAction( i18n("Paste with insertion..."), "insertcellcopy", 0, this, SLOT( slotInsertCellCopy() ),
                                actionCollection(), "insertCellCopy" );
@@ -396,13 +396,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
              this, SLOT( formulaSelection( const QString& ) ) );
 
     // Insert menu
-    (void) new KAction( i18n("&Math expression ..."), "funct", 0, this, SLOT( insertMathExpr() ),
+    (void) new KAction( i18n("&Math expression..."), "funct", 0, this, SLOT( insertMathExpr() ),
                         actionCollection(), "insertMathExpr" );
     (void) new KAction( i18n("&Formula"), "formula", 0, this, SLOT( insertFormula() ),
                         actionCollection(), "insertFormula" );
-    (void) new KAction( i18n("&Series ..."),"series", 0, this, SLOT( insertSeries() ), actionCollection(), "series" );
-    (void) new KAction( i18n("&Hyperlink ..."), 0, this, SLOT( insertHyperlink() ), actionCollection(), "insertHyperlink" );
-    (void) new KAction( i18n("&Object ..."), "parts", 0, this, SLOT( insertObject() ),
+    (void) new KAction( i18n("&Series..."),"series", 0, this, SLOT( insertSeries() ), actionCollection(), "series" );
+    (void) new KAction( i18n("&Hyperlink..."), 0, this, SLOT( insertHyperlink() ), actionCollection(), "insertHyperlink" );
+    (void) new KAction( i18n("&Object..."), "parts", 0, this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");
     (void) new KAction( i18n("&Chart"), "chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
 
