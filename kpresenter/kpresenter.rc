@@ -234,7 +234,6 @@
   <Action name="text_bold"/>
   <Action name="text_italic"/>
   <Action name="text_underline"/>
-  <Action name="format_strike"/>
   <Separator/>
   <Action name="text_alignleft"/>
   <Action name="text_aligncenter"/>
@@ -244,12 +243,6 @@
   <Action name="format_number"/>
   <Action name="format_bullet"/>
   <Action name="text_normalText"/>
-  <Separator/>
-  <Action name="text_depthMinus"/>
-  <Action name="text_depthPlus"/>
-  <Separator/>
-  <Action name="format_super"/>
-  <Action name="format_sub"/>
   <Separator/>
   <Action name="increaseFontSize"/>
   <Action name="decreaseFontSize"/>
