@@ -60,6 +60,7 @@ void KWConfig::slotApply()
 void KWConfig::slotDefault()
 {
 
+    _spellPage->slotDefault();
     _interfacePage->slotDefault();
 }
 
@@ -89,6 +90,16 @@ void configureSpellPage::apply()
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
   m_pView->getGUI()->getDocument()->setKSpellConfig(*_spellConfig);
+}
+
+void configureSpellPage::slotDefault()
+{
+    _spellConfig->setNoRootAffix( 0);
+    _spellConfig->setRunTogether(0);
+    _spellConfig->setDictionary( "");
+    _spellConfig->setDictFromList( FALSE);
+    _spellConfig->setEncoding (KS_E_ASCII);
+    _spellConfig->setClient (KS_CLIENT_ISPELL);
 }
 
 configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent , char *name )

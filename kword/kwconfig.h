@@ -34,6 +34,7 @@ class configureSpellPage : public QWidget
 public:
     configureSpellPage( KWView *_view,QWidget *parent = 0, char *name = 0 );
     void apply();
+    void slotDefault();
 private:
     KWView* m_pView;
     KSpellConfig *_spellConfig;
