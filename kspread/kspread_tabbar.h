@@ -56,7 +56,7 @@ public:
     /**
      * Creates a new tabbar.
      */
-    TabBar( KSpreadView *view );
+    TabBar( KSpreadView *view, const char *name = 0 );
 
     /**
      * Destroy the tabbar.
