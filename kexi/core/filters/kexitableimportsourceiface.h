@@ -22,7 +22,7 @@
 
 #include <qstringlist.h>
 #include <qvariant.h>
-#include <kexidb/table.h>
+#include <kexidb/tableschema.h>
 #include <qwidget.h>
 #include <qptrlist.h>
 

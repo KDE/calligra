@@ -22,7 +22,7 @@
 
 #include "kexidialogbase.h"
 #include <kexidb/connection.h>
-#include <kexidb/table.h>
+#include <kexidb/tableschema.h>
 
 class KexiTableView;
 class KexiTableItem;
@@ -60,7 +60,7 @@ class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 //		QString m_table;
 		KexiTableView* m_fieldTable;
 		PropertyEditor* m_propList;
-		KexiDB::Table m_table;
+		KexiDB::TableSchema m_table;
 		bool m_create;
 		PropertyEditorItem* m_nameItem;
 		PropertyEditorItem* m_datatypeItem;
