@@ -42,10 +42,9 @@ VShearTool::instance( KarbonPart* part )
 }
 
 void
-VShearTool::setCursor( KarbonView* view ) const
+VShearTool::setCursor( KarbonView* view, const QPoint &p ) const
 {
-/*
-	switch( VHandleTool::instance( m_part )->activeNode() )
+	switch( m_part->document().selection()->node( p ) )
 	{
 		case node_lt:
 		case node_rb:
@@ -71,54 +70,54 @@ VShearTool::setCursor( KarbonView* view ) const
 			view->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::arrowCursor ) );
 	}
-*/
 }
 
 void
 VShearTool::drawTemporaryObject( KarbonView* view )
 {
+	kdDebug() << "VShearTool::drawTemporaryObject" << endl;
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
-/*
-	// already selected, so must be a handle operation (move, scale etc.)
-	if(
-		part()->document().selection()->objects().count() > 0 &&
-		VHandleTool::instance( m_part )->activeNode() != node_mm )
-	{
-		KoRect rect = part()->document().selection()->boundingBox();
 
-		if( VHandleTool::instance( m_part )->activeNode() == node_lt )
+	KoRect rect = part()->document().selection()->boundingBox();
+
+	// already selected, so must be a handle operation (move, scale etc.)
+	if( part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
+	{
+		if( m_activeNode == node_lt )
 		{
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_mt )
-		{
-			m_s1 = 0;
-			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoom() );
-		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_rt )
-		{
-		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_rm)
-		{
-			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoom() );
-			m_s2 = 0;
-		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_rb )
-		{
-		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_mb )
+		else if( m_activeNode == node_mt )
 		{
 			m_s1 = 0;
 			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoom() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_lb )
+		else if( m_activeNode == node_rt )
 		{
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_lm )
+		else if( m_activeNode == node_rm)
 		{
 			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoom() );
 			m_s2 = 0;
 		}
+		else if( m_activeNode == node_rb )
+		{
+		}
+		else if( m_activeNode == node_mb )
+		{
+			m_s1 = 0;
+			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoom() );
+		}
+		else if( m_activeNode == node_lb )
+		{
+		}
+		else if( m_activeNode == node_lm )
+		{
+			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoom() );
+			m_s2 = 0;
+		}
+	kdDebug() << " m_s1 : " << m_s1 << endl;
+	kdDebug() << " m_s2 : " << m_s2 << endl;
 		// shear operation
 		QWMatrix mat;
 		mat.translate( m_fp.x() / view->zoom(), m_fp.y() / view->zoom() );
@@ -144,13 +143,16 @@ VShearTool::drawTemporaryObject( KarbonView* view )
 		}
 		painter->setZoomFactor( 1.0 );
 	}
-	else*/
+	else
 		m_isDragging = false;
 }
 
 bool
 VShearTool::eventFilter( KarbonView* view, QEvent* event )
 {
+	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
+	setCursor( view, mouse_event->pos() );
+
 	if ( event->type() == QEvent::MouseMove )
 	{
 		if( m_isDragging )
@@ -158,7 +160,6 @@ VShearTool::eventFilter( KarbonView* view, QEvent* event )
 			// erase old object:
 			drawTemporaryObject( view );
 
-			QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 			m_lp.setX( mouse_event->pos().x() );
 			m_lp.setY( mouse_event->pos().y() );
 
@@ -171,7 +172,6 @@ VShearTool::eventFilter( KarbonView* view, QEvent* event )
 
 	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
 	{
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
@@ -208,11 +208,12 @@ VShearTool::eventFilter( KarbonView* view, QEvent* event )
 	{
 		view->painterFactory()->painter()->end();
 
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
+
+		m_activeNode = m_part->document().selection()->node( mouse_event->pos() );
 
 		// draw initial object:
 		drawTemporaryObject( view );

@@ -7,6 +7,7 @@
 #define __VSHEARTOOL_H__
 
 #include "vtool.h"
+#include "vselection.h"
 
 class KarbonPart;
 class KarbonView;
@@ -27,7 +28,7 @@ public:
 protected:
 	VShearTool( KarbonPart* part );
 
-	void setCursor( KarbonView* view ) const;
+	void setCursor( KarbonView* view, const QPoint & ) const;
 
 private:
 	static VShearTool* s_instance;
@@ -37,6 +38,8 @@ private:
 	KoPoint m_lp;
 
 	double m_s1, m_s2;
+
+	VHandleNode m_activeNode;
 
 	bool m_isDragging;
 };
