@@ -6,11 +6,9 @@
 #include "kchartConfigDialog.h"
 #include "kchartConfigDialog.moc"
 
-#include "kchartAreaSubTypeChartPage.h"
+
 #include "kchartBackgroundPixmapConfigPage.h"
-#include "kchartBarSubTypeChartPage.h"
-#include "kchartLineSubTypeChartPage.h"
-#include "kchartHiloSubTypeChartPage.h"
+#include "kchartSubTypeChartPage.h"
 #include "kchartColorConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
 #include "kchartFontConfigPage.h"

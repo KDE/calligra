@@ -9,9 +9,7 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	kchartColorConfigPage.cc \
 	kchartParameterConfigPage.cc \
 	kchartParameter3dConfigPage.cc \
-	kchartAreaSubTypeChartPage.cc	\
 	kchartBackgroundPixmapConfigPage.cc	\
-	kchartBarSubTypeChartPage.cc \
 	kchartSubTypeChartPage.cc	\
 	kchartComboConfigPage.cc \
 	kchartFontConfigPage.cc \
@@ -30,8 +28,7 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	parser.cc \
 	sheet.cc \
 	sheetdlg.cc \
-	table.cc qttableview.cpp KChartViewIface.skel KChartViewIface.cc \
-        kchartLineSubTypeChartPage.cc kchartHiloSubTypeChartPage.cc
+	table.cc qttableview.cpp KChartViewIface.skel KChartViewIface.cc 
 
 libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
@@ -60,9 +57,7 @@ noinst_HEADERS =  kchart_part.h \
 		kchartColorConfigPage.h \
 		kchartParameterConfigPage.h \
 		kchartParameter3dConfigPage.h \
-		kchartAreaSubTypeChartPage.h	\
 		kchartBackgroundPixmapConfigPage.h	\
-		kchartBarSubTypeChartPage.h \
 		kchartSubTypeChartPage.h	\
 		kchartComboConfigPage.h \
 		kchartParameterPieConfigPage.h \
@@ -83,8 +78,7 @@ noinst_HEADERS =  kchart_part.h \
 		sheetdlg.h \
 		table.h \
 		kchart_aboutdata.h	\
-		kchartcolorarray.h KChartViewIface.h \
-		kchartLineSubTypeChartPage.h kchartHiloSubTypeChartPage.h
+		kchartcolorarray.h KChartViewIface.h 
 
 METASOURCES = AUTO
 
