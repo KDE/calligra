@@ -78,7 +78,6 @@ Button</entry><entry align="center">Key Combo</entry></row>
 <row><entry align="right">Superscript</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
 <row><entry align="right">Subscript</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
 <row><entry align="right">Font Color</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chcolorbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
-<row><entry align="right">Background Color</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bdcolorbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
 
 </tbody></tgroup></informaltable>
 
@@ -127,8 +126,8 @@ menu.</para>
 </mediaobject>
 </screenshot>
 
-<para>Using this dialog box, you can select the font, size, character
-set, italics and boldface options from the top three list boxes.</para>
+<para>Using this dialog box, you can select the font, size, 
+italics and boldface options from the top three list boxes.</para>
 
 <para>The preview box along the middle of the dialog, will show you how your current
 settings will appear.</para>
@@ -158,9 +157,9 @@ will allow you to change the color of the background using the
 </mediaobject>
 </screenshot>
 
-<para>The subsection labeled <guilabel>Underlining</guilabel> has two combo boxes.  
+<para>The subsection labeled <guilabel>Underlining</guilabel> has three combo boxes.  
 In the left most combo box select between
-no underline (Without), Single, Simple Bold or Double underlining.  </para>
+no underline (Without), Single, Simple Bold, Double or Wave underlining.  </para>
 
 <screenshot>
 <mediaobject>
@@ -170,8 +169,8 @@ no underline (Without), Single, Simple Bold or Double underlining.  </para>
 </mediaobject>
 </screenshot>
 
-<para>Use the right combo box to select the style of underlining (Solid line, dashed line, etc).</para>
-<para>Use the <guibutton>Change Color</guibutton> button to select a color for the underline using the
+<para>Use the center combo box to select the style of underlining (Solid line, dashed line, etc).</para>
+<para>Use the <guibutton>Change Color...</guibutton> button to select a color for the underline using the
 <link linkend="select-colors">color selection dialog box</link>.  </para>
 
 <para>The subsection labeled <guilabel>Strikethrough</guilabel> has two combo boxes.
@@ -184,6 +183,48 @@ no strikethrough (Without), Single or Double strikethrough.  Use the right combo
 <imagedata fileref="exst.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
+
+<para>The checkbox labeled <guilabel>Word by Word</guilabel> determines how underlining and strikethrough are drawn.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="wbw.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The section labeled <guilabel>Position</guilabel> is used to create superscripted and subscripted characters.  Simply select 
+the checkbox labeled <guilabel>Superscript</guilabel> or <guilabel>Subscript</guilabel>.  You can adjust the size of the superscripted 
+or subscripted character by using the spin box labeled <guilabel>Relative Size</guilabel>.  You can move the superscripted or subscripted 
+character up or down relative to the normal characters by raising or lowering the value in the spin box labeled <guilabel>Offset from baseline</guilabel>.
+</para>
+
+<para>The section labeled <guilabel>Capitalization</guilabel> lets you select one of four special capitalization options.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chcase.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<tip><para>Uppercase and lower case can also be <link linkend="change-font-case">selected from the menubar</link>.</para></tip>
+
+<para>You can select the language to use with the drop down box.  If the checkbox labeled <guilabel>Auto hyphenation</guilabel> is 
+selected, &kword; will use general rules of spelling to automatically hyphenate the document.</para>
+
+<para>The third tab labeled <guilabel>Shadowing</guilabel> allows you to create artificial shadows for your characters.  Click on the tab:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>First, select the color you want your shadow by clicking the button labeled <guilabel>Color</guilabel>.  Then select the size of the shadow using 
+the spin box labeld <guilabel>Distance</guilabel>.  Finally, select the direction by 
+selecting one of the eight red squares.  A preview of your shadow appears in the pane on the right.</para>
 
 <para>Clicking <guibutton>OK</guibutton> will commit your changes to the
 document.</para>

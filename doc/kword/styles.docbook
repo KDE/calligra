@@ -224,7 +224,7 @@ For more information see the section entitled <link linkend="tab-stops">Tab Stop
 
 <para>Using the tab labeled <guilabel>Shadow</guilabel> it is possible to change the artificial shadowing of text within the text style.</para>
 
-<para>This tab functions identically to the same tab in the <link linkend="para-shadow">Format Paragraph</link> dialog.</para>
+<para>This tab functions identically to the same tab in the <link linkend="format-characters">Format Character</link> dialog.</para>
 </sect4>
 </sect3>
 <sect3 id="style-add-text">

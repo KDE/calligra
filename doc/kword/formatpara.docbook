@@ -37,7 +37,7 @@ will appear.  Select <guimenuitem>Paragraph...</guimenuitem>.</para>
 
 <para>The <guilabel>Paragraph Settings</guilabel> dialog consists of five tabbed sections
 labeled <link linkend="indents-and-spaces">Indent and Spacing</link>, <link
-linkend="para-aligns">Aligns</link>, <link linkend="para-borders">Borders</link>,
+linkend="para-aligns">General Layout</link>, <link linkend="para-borders">Borders</link>,
 <link linkend="para-bullets-and-numbers">Bullets/Numbering</link>, and
 <link linkend="tab-stops">Tabulators</link>.</para>
 
@@ -58,22 +58,22 @@ spacing between lines, and the spacing between paragraphs can be specified.</par
 </screenshot>
 
 <para>The first section of this dialog box is labeled
-<guilabel>Indent</guilabel>, and consists of three parts:</para>
+<guilabel>Indent</guilabel>, and consists of three spin boxes:</para>
 
 <variablelist>
 <varlistentry>
 <term><guilabel>Left</guilabel></term>
 <listitem>
 <para>Enter a value in this box to indent the lines of the selected paragraphs away from the left margin.  
-The first line is unaffected by this box.  To
-alter the first line, specify that value in the text box labeled <guilabel>First Line</guilabel>.</para>
+The first line is unaffected by this spin box.  To
+alter the first line, specify that value in the spin box labeled <guilabel>First Line</guilabel>.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Right</guilabel></term>
 <listitem>
-<para>Enter a value in this box to indent all lines of the selected paragraph
+<para>Enter a value in this spin box to indent all lines of the selected paragraph
 (including the first line) away from the right
 margin.</para>
 </listitem>
@@ -81,58 +81,56 @@ margin.</para>
 
 <varlistentry>
 <term><guilabel>First Line</guilabel></term>
-<listitem><para>Enter a number in this box to indent the first line of a paragraph away from the left
-margin.</para></listitem>
+<listitem><para>Enter a number in this spin box to indent the first line of a paragraph away from the left
+margin.</para>
+<tip><para>Entering a negative value in this spin box will create a <link linkend="defhangingindent">hanging indention</link>.</para></tip></listitem>
 </varlistentry>
 </variablelist>
 
-<para>The next section controls how &kword; divides paragraphs when a 
-paragraph will not fit entirely within the current frame or page.</para>
-
-<para>The first option is labeled <guilabel>Keep lines
-together</guilabel>.  If this option is selected, then all of the lines
-of the paragraph will remain on the same page.  If this is not selected,
-&kword; may choose to move part of a paragraph to a new page or frame.  
-For most work, this option is usually left
-unchecked.</para>
-
-<para>The next two options are labeled <guilabel>Insert Break Before Paragraph</guilabel>
- and <guilabel>Insert Break After Paragraph</guilabel>.
-When one of these options is checked, and the paragraph moves to the
-next frame in the frame set, a hard frame break will be inserted in front
-of the current paragraph or after the previous paragraph (depending on the option selected).
-This will serve to keep the paragraph in the
-next frame, even if text prior to that frame is deleted.  This option is
-often used in conjunction with <guilabel>Keep lines together</guilabel>,
-to ensure that the paragraph does not creep back onto the page during
-editing. </para>
 
 <para>The next section is labeled <guilabel>Line Spacing</guilabel>.  It
-consists of two elements:</para>
+consists of a combo box and a spin box.</para>
+
+<para>The combo box determines the method of calculating the spacing between lines.  It has several choices:</para>
 
 <variablelist>
 <varlistentry>
-<term>combo box</term>
+<term>Single and Double</term>
 <listitem>
-<para>The combo box determines the spacing between lines.  There are three predefined line spacing choices:
-<guilabel>Single</guilabel>, <guilabel>1.5 lines</guilabel> and <guilabel>Double</guilabel>.  You can
-also select <guilabel>Custom</guilabel> which will allow you to enter a specific line spacing.</para>
-<para>The values selected here will be applied to all lines within the selected paragraphs.</para>
+<para>If any of these options are selected, the paragraph will have single, 1 and 1/2 or double spacing respectively.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term>Text box</term>
+<term>Proportional</term>
 <listitem>
-<para>Enter a value in this text box to specify the spacing between paragraphs.  
-This value only changes the spacing when <guilabel>Custom</guilabel> is selected in the combo box to the left.</para>
-
-<note>
-<para>Changes to this entry do <emphasis>not</emphasis> affect the line
-spacing between lines of different paragraphs.</para>
-</note>
+<para>If this option is selected, the spin box is enabled.  When you enter a number in the spin box, KWord uses that number as a multiplier for line spacing.  To look at it another way, if you enter 1.00 in this box, &kword; will use single spacing.  If you enter 2.00 in this box, &kword; will use double spacing.  If you enter 3.00 in this box, &kword; will use triple spacing, etc.  You are not limited to whole numbers.  You could enter 1.87 in this box and &kword; would use 1.87 line spacing.</para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term>Line Distance</term>
+<listitem>
+<para>If this option is selected, the spin box is enabled.  When you enter a number in the spin box, KWord places a measured amount of space between each line.  As an example, if you enter 0.75 and the units used by &kword; are inches, then &kword; will place 0.75 inches between each line.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>At least</term>
+<listitem>
+<para>This sets the minimum line spacing value.  This can be useful if you have paragraphs with widely differing font sizes.  Typically, &kword; calculates the distance between lines by looking at the tallest character in the line.  You can use this feature to overide close linespacing in small font paragraphs to make them even with large font paragraphs.  &kword; will not cause any fonts to overlap using this spacing technique.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Fixed</term>
+<listitem>
+<para>This sets the distance between the tops of each line to a specific unit of measure.  If this option is set too small, &kword; will overlap characters, which will obscure the bottom parts of the characters.  </para>
+<para>This should not be confused with <guilabel>Line Distance</guilabel> which inserts a specific unit of space between lines.  <guilabel>Fixed</guilabel> specifies the distance between the top of one line and the top of the next line.</para>
+</listitem>
+</varlistentry>
+
+
 </variablelist>
 
 <para>The last section is labeled <guilabel>Paragraph Space</guilabel>.
@@ -161,7 +159,7 @@ document.</para>
 </sect2>
 
 <sect2 id="para-aligns">
-<title>Aligns</title>
+<title>General Layout</title>
 <indexterm><primary>paragraph</primary><secondary>justification</secondary></indexterm>
 <indexterm><primary>paragraph</primary><secondary>center paragraph</secondary></indexterm>
 <indexterm><primary>paragraph</primary><secondary>left/right aligns</secondary></indexterm>
@@ -169,7 +167,7 @@ document.</para>
 
 <para>This section determines how the text is placed <emphasis>within
 the line</emphasis>.  With other applications, you may have referred to
-this as <emphasis>alignment</emphasis>, or
+this simply as <emphasis>alignment</emphasis>, or
 <emphasis>justification</emphasis>.</para>
 
 <screenshot>
@@ -179,7 +177,9 @@ this as <emphasis>alignment</emphasis>, or
 </mediaobject>
 </screenshot>
 
-<para>There are only 4 choices.</para>
+<para>Once again, a preview pane is shown on the right side of the dialog box.</para>
+
+<para>In the upper left corner of the dialog box is a section labeled <guilabel>Alignment</guilabel>.</para>
 
 <para>If <guilabel>Left</guilabel>,
 <guilabel>Right</guilabel> or <guilabel>Center</guilabel> are selected, the text will
@@ -207,9 +207,27 @@ and right margins.</para>
 </informaltable>
 </tip>
 
-<para>On the right of the dialog box, is a preview box, which will
-<emphasis>approximate</emphasis> the final layout of your
-document.</para>
+
+<para>The lower section controls how &kword; divides paragraphs when a 
+paragraph will not fit entirely within the current frame or page.</para>
+
+<para>The first option is labeled <guilabel>Keep lines
+together</guilabel>.  If this option is selected, then all of the lines
+of the paragraph will remain on the same page.  If this is not selected,
+&kword; may choose to move part of a paragraph to a new page or frame.  
+For most work, this option is usually left
+unchecked.</para>
+
+<para>The next two options are labeled <guilabel>Insert Break Before Paragraph</guilabel>
+ and <guilabel>Insert Break After Paragraph</guilabel>.
+When one of these options is checked, and the paragraph moves to the
+next frame in the frame set, a hard frame break will be inserted in front
+of the current paragraph or after the previous paragraph (depending on the option selected).
+This will serve to keep the paragraph in the
+next frame, even if text prior to that frame is deleted.  This option is
+often used in conjunction with <guilabel>Keep lines together</guilabel>,
+to ensure that the paragraph does not creep back onto the page during
+editing. </para>
 
 </sect2>
 
@@ -364,28 +382,5 @@ number chapters and sections of a document.</para>
 see <link linkend="tab-stops">Using Tab Stops</link>.</para>
 
 </sect2>
-<sect2 id="para-shadow">
-<title>Shadows</title>
-<indexterm><primary>paragraph</primary><secondary>shadows</secondary></indexterm>
-<indexterm><primary>text</primary><secondary>shadowing</secondary></indexterm>
 
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="fpara6.png" format="PNG"/>
-</imageobject>
-</mediaobject>
-</screenshot>
-
-<para>This tab is used to create an artificial shadow of the text in the paragraph.</para>
-<para>On the right of the dialog is a preview box.  This box can be used to <emphasis>approximate</emphasis> the final look of 
-the text.</para>
-<para>The color of the shadow can be adjusted by clicking on the button labeled <guilabel>Color</guilabel>.  
-&kword; will use the
-<link linkend="select-colors">color selection dialog box</link> to change the color of the shadow.</para>
-<para>Use the spinbox labeled <guilabel>Distance</guilabel> to select the distance the shadow moves away from the text.  A
-distance of zero will hide the shadow behind the original text.</para>
-<para>Select one of the 8 direction buttons to determine which direction the shadow will move in.</para>
-<para>When you are happy with your selections, click <guibutton>OK</guibutton> to apply your changes.</para>
-</sect2>
 </sect1>

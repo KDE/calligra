@@ -112,7 +112,7 @@ stop at that position.</para>
 
 <para>The fastest way to get to the tab stop dialog panel, is to select
 <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
-from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  This will bring up a dialog box with 6 tabs. Click on the tab
+from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  This will bring up a dialog box with 5 tabs. Click on the tab
 labeled <guilabel>Tabulators</guilabel>. </para>
 
 <screenshot>
@@ -195,7 +195,7 @@ button.</para>
 <para>The fastest way to get to the tab stop dialog panel, is to select
 <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
 from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  
-This will bring up a dialog box with 6 tabs. </para>
+This will bring up a dialog box with 5 tabs. </para>
 
 <para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>
 
@@ -221,7 +221,7 @@ are listed below the text box.</para>
 list labeled <guilabel>Alignment</guilabel> or change the white space character under <guilabel>Tab Leader</guilabel>.</para>
 </listitem>
 <listitem>
-<para>Click <quote>OK</quote> when you are done moving all tab stops around.</para>
+<para>Click <guibutton>OK</guibutton> when you are done moving all tab stops around.</para>
 </listitem>
 </orderedlist>
 </sect3>
@@ -307,7 +307,7 @@ is in the box on the left side of the dialog panel</para>
 You can, however, have &kword; insert spaces or lines to fill the tab space.</para>
 <para>To change the way the tab fills work in &kword; you change the combo box labeled <guilabel>Filling</guilabel>.  This combo box
 gives you many different line styles to choose from.</para>
-<para>You can change the thickness of the lines by using the <guilabel>Width</guilabel> text box.</para>
+<para>You can change the thickness of the lines by using the <guilabel>Width</guilabel> spin box.</para>
 
 
 

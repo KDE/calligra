@@ -60,8 +60,8 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2004-10-21</date>
-<releaseinfo>1.4</releaseinfo>
+<date>2004-12-24</date>
+<releaseinfo>1.5</releaseinfo>
 
 <abstract>
 <para>
@@ -85,13 +85,8 @@ This manual describes &kword; 1.4.
 <!--
 TODO:
 
-- Write about "Autoinclude" in Autocorrection Tab
-- Correct screenshot "footend.png" - Footnotes/Endnotes.
 - Write Migrating section
 - Write Watermark procedure
-- MDI vs SDI
-- Update Filters
-- Update screenshots/toobar icons
 - Write Chapter Numbering
 - Personal expressions path
 - Word by word strikout and underline
@@ -1757,6 +1752,16 @@ probably use &FTP;.</para>
 text frame. By inserting a hard frame break you can force &kword; to
 always start the next frame in the frameset with the text that follows
 the break.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defhangingindent">
+<glossterm>Hanging indention</glossterm>
+<glossdef>
+<para>A paragraph where the first line of the paragraph extends outwards to 
+the left compared with other lines in the paragraph.</para>
+
+
 </glossdef>
 </glossentry>
 
