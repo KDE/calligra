@@ -3606,6 +3606,48 @@ if(m_Validity!=0)
                         }
 
                 }
+        if(m_Validity->m_allow==Allow_Integer)
+                {
+                if(isValue() && (m_dValue==ceil(m_dValue)) )
+                        {
+                        switch( m_Validity->m_cond)
+                                {
+                                case Equal:
+                                        if(m_dValue ==m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case Superior:
+                                        if(m_dValue >m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case Inferior:
+                                        if(m_dValue <m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case SuperiorEqual:
+                                        if(m_dValue >=m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case InferiorEqual:
+                                        if(m_dValue <=m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case Between:
+                                        if(m_dValue >=m_Validity->valMin && m_dValue <=m_Validity->valMax)
+                                                valid=true;
+                                        break;
+                                case Different:
+                                        if(m_dValue <m_Validity->valMin || m_dValue >m_Validity->valMax)
+                                                valid=true;
+                                        break;
+                                default :
+                                        break;
+
+                                }
+
+                        }
+
+                }
         else if(m_Validity->m_allow==Allow_Text)
                 {
                  if(!isValue() && !isBool() && !isDate() && !isTime())

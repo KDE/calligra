@@ -62,6 +62,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     QStringList listType;
     listType+=i18n("All");
     listType+=i18n("Number");
+    listType+=i18n("Integer");
     listType+=i18n("Text");
     listType+=i18n("Date");
     listType+=i18n("Time");
@@ -170,8 +171,6 @@ switch(_index)
                 break;
         case 1:
                 val_min->setEnabled(true);
-
-
                 edit1->setEnabled(true);
                 choose->setEnabled(true);
                 message->setEnabled(true);
@@ -195,6 +194,31 @@ switch(_index)
                         }
                 break;
         case 2:
+                val_min->setEnabled(true);
+                edit1->setEnabled(true);
+                choose->setEnabled(true);
+                message->setEnabled(true);
+                title->setEnabled(true);
+                chooseAction->setEnabled(true);
+                val_min->setValidator( new KIntValidator( val_min ) );
+                val_max->setValidator( new KIntValidator( val_max ) );
+                if( choose->currentItem()<=4)
+                        {
+                        edit1->setText(i18n("Number : "));
+                        edit2->setText("");
+                        edit2->setEnabled(false);
+                        val_max->setEnabled(false);
+                        }
+                else
+                        {
+                        edit1->setText(i18n("Minimum : " ));
+                        edit2->setText(i18n("Maximum : " ));
+                        edit2->setEnabled(true);
+                        val_max->setEnabled(true);
+                        }
+                break;
+
+        case 3:
                 edit1->setText("");
                 edit2->setText("");
                 val_max->setEnabled(false);
@@ -203,7 +227,7 @@ switch(_index)
                 edit1->setEnabled(false);
                 edit2->setEnabled(false);
                 break;
-        case 3:
+        case 4:
                 edit1->setText(i18n("Date : "));
                 edit2->setText("");
                 val_min->setEnabled(true);
@@ -229,7 +253,7 @@ switch(_index)
                         val_max->setEnabled(true);
                         }
                 break;
-        case 4:
+        case 5:
                 val_min->setEnabled(true);
                 edit1->setEnabled(true);
                 choose->setEnabled(true);
@@ -266,13 +290,13 @@ switch(_index)
         case 3:
         case 4:
                 val_max->setEnabled(false);
-                if(chooseType->currentItem()==1)
+                if(chooseType->currentItem()==1 ||chooseType->currentItem()==2)
                         edit1->setText(i18n("Number :"));
-                else if( chooseType->currentItem()==2)
-                        edit1->setText("");
                 else if( chooseType->currentItem()==3)
-                        edit1->setText(i18n("Date :"));
+                        edit1->setText("");
                 else if( chooseType->currentItem()==4)
+                        edit1->setText(i18n("Date :"));
+                else if( chooseType->currentItem()==5)
                         edit1->setText(i18n("Time :"));
                 edit2->setText("");
                 edit2->setEnabled(false);
@@ -282,22 +306,22 @@ switch(_index)
                 val_max->setEnabled(true);
                 edit2->setEnabled(true);
                 edit1->setEnabled(true);
-                if(chooseType->currentItem()==1)
+                if(chooseType->currentItem()==1 || chooseType->currentItem()==2)
                         {
                         edit1->setText(i18n("Minimum : " ));
                         edit2->setText(i18n("Maximum : " ));
                         }
-                else if(chooseType->currentItem()==2)
+                else if(chooseType->currentItem()==3)
                         {
                         edit1->setText("");
                         edit2->setText("");
                         }
-                else if(chooseType->currentItem()==3)
+                else if(chooseType->currentItem()==4)
                         {
                         edit1->setText(i18n("Date minimum"));
                         edit2->setText(i18n("Date maximum"));
                         }
-                else if(chooseType->currentItem()==4)
+                else if(chooseType->currentItem()==5)
                         {
                         edit1->setText(i18n("Time minimum"));
                         edit2->setText(i18n("Time maximum"));
@@ -326,17 +350,23 @@ void KSpreadDlgValidity::init()
                                 val_max->setText(tmp.setNum(tmpValidity->valMax));
                         val_min->setText(tmp.setNum(tmpValidity->valMin));
                         break;
-                case Allow_Text:
+                case Allow_Integer:
                         chooseType->setCurrentItem(2);
+                        if(tmpValidity->m_cond >=5 )
+                                val_max->setText(tmp.setNum(tmpValidity->valMax));
+                        val_min->setText(tmp.setNum(tmpValidity->valMin));
+                        break;
+                case Allow_Text:
+                        chooseType->setCurrentItem(3);
                         break;
                 case Allow_Date:
-                        chooseType->setCurrentItem(3);
+                        chooseType->setCurrentItem(4);
                         val_min->setText(m_pView->doc()->locale()->formatDate(tmpValidity->dateMin,true));
                         if(tmpValidity->m_cond >=5 )
                                 val_max->setText(m_pView->doc()->locale()->formatDate(tmpValidity->dateMax,true));
                         break;
                 case Allow_Time:
-                        chooseType->setCurrentItem(4);
+                        chooseType->setCurrentItem(5);
                         val_min->setText(m_pView->doc()->locale()->formatTime(tmpValidity->timeMin,true));
                         if(tmpValidity->m_cond >=5 )
                                 val_max->setText(m_pView->doc()->locale()->formatTime(tmpValidity->timeMax,true));
@@ -413,32 +443,51 @@ if( chooseType->currentItem()==1)
                 return;
                 }
         }
-else  if(  chooseType->currentItem()==4)
+else if( chooseType->currentItem()==2)
+        {
+        QString tmp;
+        bool ok;
+        tmp=val_min->text().toInt(&ok);
+        if(! ok)
+                {
+                KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
+                val_min->setText("");
+                return;
+                }
+        tmp=val_max->text().toInt(&ok);
+        if(! ok && choose->currentItem() >=5 )
+                {
+                KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
+                val_max->setText("");
+                return;
+                }
+        }
+else  if(  chooseType->currentItem()==5)
         {
         if(! m_pView->doc()->locale()->readTime(val_min->text()).isValid())
                 {
-                KMessageBox::error( this , i18n("This is not a valid date !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid time !"),i18n("Error"));
                 val_min->setText("");
                 return;
                 }
         if(! m_pView->doc()->locale()->readTime(val_max->text()).isValid() && choose->currentItem()  >=5)
                 {
-                KMessageBox::error( this , i18n("This is not a valid date !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid time !"),i18n("Error"));
                 val_max->setText("");
                 return;
                 }
         }
-else  if(  chooseType->currentItem()==3)
+else  if(  chooseType->currentItem()==4)
         {
         if(! m_pView->doc()->locale()->readDate(val_min->text()).isValid())
                 {
-                KMessageBox::error( this , i18n("This is not a valid time !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid date !"),i18n("Error"));
                 val_min->setText("");
                 return;
                 }
         if(! m_pView->doc()->locale()->readDate(val_max->text()).isValid() && choose->currentItem()  >=5 )
                 {
-                KMessageBox::error( this , i18n("This is not a valid time !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid date !"),i18n("Error"));
                 val_max->setText("");
                 return;
                 }
@@ -469,12 +518,15 @@ else
                         result.m_allow=Allow_Number;
                         break;
                 case 2:
-                        result.m_allow=Allow_Text;
+                        result.m_allow=Allow_Integer;
                         break;
                 case 3:
-                        result.m_allow=Allow_Date;
+                        result.m_allow=Allow_Text;
                         break;
                 case 4:
+                        result.m_allow=Allow_Date;
+                        break;
+                case 5:
                         result.m_allow=Allow_Time;
                         break;
                 default :
@@ -541,16 +593,59 @@ else
                         result.valMax=QMAX(val_max->text().toDouble(),val_min->text().toDouble());
                         }
                 }
+        else if( chooseType->currentItem()==2)
+                {
+                if(choose->currentItem()  <5)
+                        {
+                        result.valMin=val_min->text().toInt();
+                        }
+                else
+                        {
+                        result.valMin=QMIN(val_min->text().toInt(),val_max->text().toInt());
+                        result.valMax=QMAX(val_max->text().toInt(),val_min->text().toInt());
+                        }
+                }
         else  if(  chooseType->currentItem()==4)
                 {
-                result.timeMin=m_pView->doc()->locale()->readTime(val_min->text());
-                result.timeMax=m_pView->doc()->locale()->readTime(val_max->text());
+                if(choose->currentItem()  <5)
+                        {
+                        result.dateMin=m_pView->doc()->locale()->readDate(val_min->text());
+                        }
+                else
+                        {
+                        if(m_pView->doc()->locale()->readDate(val_min->text())<m_pView->doc()->locale()->readDate(val_max->text()))
+                                {
+                                result.dateMin=m_pView->doc()->locale()->readDate(val_min->text());
+                                result.dateMax=m_pView->doc()->locale()->readDate(val_max->text());
+                                }
+                        else
+                                {
+                                result.dateMin=m_pView->doc()->locale()->readDate(val_max->text());
+                                result.dateMax=m_pView->doc()->locale()->readDate(val_min->text());
+                                }
+                        }
                 }
-        else  if(  chooseType->currentItem()==3)
+        else  if(  chooseType->currentItem()==5)
                 {
-                result.dateMin=m_pView->doc()->locale()->readDate(val_min->text());
-                result.dateMax=m_pView->doc()->locale()->readDate(val_max->text());
+                if(choose->currentItem()  <5)
+                        {
+                        result.timeMin=m_pView->doc()->locale()->readTime(val_min->text());
+                        }
+                else
+                        {
+                        if(m_pView->doc()->locale()->readTime(val_min->text())<m_pView->doc()->locale()->readTime(val_max->text()))
+                                {
+                                result.timeMax=m_pView->doc()->locale()->readTime(val_max->text());
+                                result.timeMin=m_pView->doc()->locale()->readTime(val_min->text());
+                                }
+                        else
+                                {
+                                result.timeMax=m_pView->doc()->locale()->readTime(val_min->text());
+                                result.timeMin=m_pView->doc()->locale()->readTime(val_max->text());
+                                }
+                        }
                 }
+
         }
 
 m_pView->activeTable()->setValidity( QPoint(  m_pView->canvasWidget()->markerColumn(),
