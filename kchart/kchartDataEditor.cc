@@ -40,7 +40,11 @@ void kchartDataEditor::getData(KChartData* dat) {
 	// m_pData->setYValue( row, col, _widget->getCell(row,col) );
 	KChartValue t; 
 	double val =  _widget->getCell(row,col);
-	t.exists= true;
+	if( ( row >= _widget->usedRows() )  ||
+	    ( col >= _widget->usedCols() ) )
+	    t.exists = false;
+	else
+	    t.exists= true;
 	t.value.setValue(val);
 	cerr << "Set cell for " << row << "," << col << "\n";
 	dat->setCell(row,col,t);

@@ -140,7 +140,6 @@ void kchartEngine::computeSize() {
     
     /* find smallest interval-point > highest */
     tmp_highest = lowest;
-#warning "Kalle take a look at this, this is an infinite cycle for some reason"
     int maxcount = 0;
     do {	// while( (tmp_highest += ylbl_interval) <= highest )
       int		nmrtr, dmntr, whole;
@@ -159,7 +158,6 @@ void kchartEngine::computeSize() {
 	  strlen( foo );
 	longest_ylblen = MAX( longest_ylblen, lbl_len );
       }
-      cerr << "tmp_highest" <<  tmp_highest << " highest " << highest << "ylbl_interval" << ylbl_interval << "\n";
       
       tmp_highest += ylbl_interval;
       //break; // force it

@@ -3,6 +3,7 @@
  <Menu name="Edit"><text>Edit</text>
   <Action name="wizard"/>
   <Action name="edit"/>
+  <Action name="config"/>
  </Menu>
  <Menu name="Options"><text>Options</text>
   <Action name="loadconfig"/>
@@ -13,6 +14,7 @@
  <ToolBar>
   <Action name="wizard"/>
   <Action name="edit"/>
+  <Action name="config"/>
  </ToolBar>
 </ToolBars>
 </QConfig>

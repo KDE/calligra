@@ -16,14 +16,6 @@
 
 //#include "sheetdlg.h"
 
-QFont *theKChartTinyFont = NULL; 
-QFont *theKChartSmallFont = NULL; 
-QFont *theKChartMediumFont = NULL; 
-QFont *theKChartLargeFont = NULL; 
-QFont *theKChartGiantFont = NULL; 
-// i don't really understand this stuff, but I need it to start 
-// kchart. Probably some intermediate solution
-
 KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     : ContainerView( part, parent, name )
 {
@@ -34,6 +26,9 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_edit = new KAction( tr("&Edit data"), KChartBarIcon("pencil"), 0,
 			 this, SLOT( edit() ),
                          actionCollection(), "edit");
+    m_config = new KAction( tr( "&Config" ), KChartBarIcon( "config" ), 0,
+			    this, SLOT( config() ),
+			    actionCollection(), "config" );
     m_loadconfig = new KAction( tr("Load config"), KChartBarIcon("loadconfig"),
 				0,
 				this, SLOT( loadConfig() ),
@@ -44,6 +39,9 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 				actionCollection(), "saveconfig");
     // initialize the configuration
     //    loadConfig();
+
+    // make sure there is always some test data
+    createTempData();
 }
 
 void KChartView::paintEvent( QPaintEvent* ev )
@@ -55,10 +53,34 @@ void KChartView::paintEvent( QPaintEvent* ev )
 
     // Let the document do the drawing
     // PENDING(kalle) Do double-buffering if we are a widget
-	part()->paintEverything( painter, ev->rect(), FALSE, this );
+    part()->paintEverything( painter, ev->rect(), FALSE, this );
 
     painter.end();
 }
+
+
+void KChartView::createTempData()
+{
+    int row, col;
+    KChartData *dat = ((KChartPart*)part())->data();
+
+    // initialize some data, if there is none
+    if (dat->rows() == 0) {
+	cerr << "Initialize with some data!!!\n";
+	dat->expand(4,4);
+	for (row = 0;row < 4;row++)
+	    for (col = 0;col < 4;col++) {
+		//	  _widget->fillCell(row,col,row+col);
+		KChartValue t; 
+		t.exists= true;
+		t.value.setValue((double)row+col);
+		cerr << "Set cell for " << row << "," << col << "\n";
+		dat->setCell(row,col,t);
+	    }
+	//      _dlg->exec();
+    }
+}
+
 
 void KChartView::edit()
 {
@@ -146,6 +168,12 @@ void KChartView::wizard()
     wiz->exec();
     qDebug("Ok, executed...");
 }
+
+
+void KChartView::config()
+{
+}
+
 
 void KChartView::saveConfig() {
     qDebug("Save config...");

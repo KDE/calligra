@@ -15,10 +15,12 @@
 #ifndef SHEETDLG_H
 #define SHEETDLG_H
 
-#include <qpushbutton.h>
-#include <qdialog.h>
+#include <qwidget.h>
 
 class Sheet;
+class QSpinBox;
+class QLabel;
+class QPushButton;
 
 class SheetDlg : public QWidget
 {
@@ -32,6 +34,8 @@ public:
   
   int cols();
   int rows();
+  int usedCols();
+  int usedRows();
   
   QString getX(int);
   QString getY(int);
@@ -47,7 +51,8 @@ private:
   Sheet *t;
   QPushButton *cancel,*ok;
   void resizeHandle( QSize );
-  
+  QLabel *usedrowsLA, *usedcolsLA;
+  QSpinBox *usedrowsSB, *usedcolsSB;
 };
 
 

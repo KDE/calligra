@@ -22,9 +22,11 @@ public:
     
 protected slots:
       void edit();
+      void config(); 
       void wizard();
       void saveConfig();
       void loadConfig();
+      void createTempData();
     
 protected:
     void paintEvent( QPaintEvent* );
@@ -33,6 +35,7 @@ private:
     QAction* m_cut;
     QAction* m_wizard;
     QAction* m_edit;
+    QAction* m_config;
     QAction* m_saveconfig;
     QAction* m_loadconfig;
     

@@ -18,8 +18,12 @@
 #include <kapp.h>
 #include <klocale.h>
 
+#include <qpushbutton.h>
+#include <qlabel.h>
+#include <qspinbox.h>
+
 SheetDlg::SheetDlg( QWidget *parent, const char *name )
-    :QWidget( (QWidget*)parent, name )
+    :QWidget( parent, name )
 {
   t = new Sheet(this,"Sheet",TABLE_SIZE); 
   t->move(0,0);
@@ -30,6 +34,16 @@ SheetDlg::SheetDlg( QWidget *parent, const char *name )
   ok = new QPushButton(i18n("OK"),this);
   ok->resize(cancel->sizeHint());
   
+  usedrowsLA = new QLabel( i18n("# Rows: " ), this );
+  usedrowsLA->resize( usedrowsLA->sizeHint() );
+  usedrowsSB = new QSpinBox( this );
+  usedrowsSB->resize( usedrowsSB->sizeHint() );
+
+  usedcolsLA = new QLabel( i18n("# Cols: " ), this );
+  usedcolsLA->resize( usedcolsLA->sizeHint() );
+  usedcolsSB = new QSpinBox( this );
+  usedcolsSB->resize( usedcolsSB->sizeHint() );
+
   connect(ok,SIGNAL(clicked()),parent,SLOT(accept()));
   connect(ok,SIGNAL(clicked()),t,SLOT(ok()));
   connect(cancel,SIGNAL(clicked()),parent,SLOT(reject()));
@@ -42,16 +56,27 @@ void SheetDlg::fillCell(int row,int col,double value)
   QString _value;
   _value.sprintf("%g",value);
   t->importText(row,col,_value);
+
+  if( col+1 > usedCols() )
+      usedcolsSB->setValue( col+1 );
+  if( row+1 > usedRows() )
+      usedrowsSB->setValue( row+1 );
 }
 
 void SheetDlg::fillX(int col,QString str)
 {
   t->importTextHead(0,col,str);
+
+  if( col+1 > usedCols() )
+      usedcolsSB->setValue( col+1 );
 }
 
 void SheetDlg::fillY( int row, QString str )
 {
   t->importTextSide( row, 0, str );
+
+  if( row+1 > usedRows() )
+      usedrowsSB->setValue( row+1 );
 }
 
 int SheetDlg::cols()
@@ -63,6 +88,18 @@ int SheetDlg::rows()
 {
   return t->rows();
 }
+
+int SheetDlg::usedCols()
+{
+    return usedcolsSB->value();
+}
+
+
+int SheetDlg::usedRows()
+{
+    return usedrowsSB->value();
+}
+
 
 QString SheetDlg::getX(int col)
 {
@@ -88,8 +125,18 @@ void SheetDlg::resizeHandle( QSize s )
 {
   t->resize(s.width(), s.height() - (cancel->height()+10));
 
-  cancel->move(s.width() - 10 - cancel->width(),s.height() - cancel->height() - 5);
-  ok->move(cancel->x() - 5 - ok->width(),s.height() - cancel->height() - 5);
+  int height = s.height() - cancel->height() - 5;
+
+  usedrowsLA->move( 0, height );
+  usedrowsSB->move( usedrowsLA->width() + usedrowsLA->x() + 5,
+		    height );
+  usedcolsLA->move( usedrowsSB->width() + usedrowsSB->x() + 5,
+		    height );
+  usedcolsSB->move( usedcolsLA->width() + usedcolsLA->x() + 5,
+		    height );
+
+  cancel->move(s.width() - 10 - cancel->width(), height );
+  ok->move(cancel->x() - 5 - ok->width(), height );
 }
 
 
