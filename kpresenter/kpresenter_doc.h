@@ -65,6 +65,8 @@ class KPresenterView_impl;
 #include "kppixmapcollection.h"
 #include "kpgradientcollection.h"
 
+#include "commandhistory.h"
+
 #include <komlParser.h>
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
@@ -286,6 +288,9 @@ public:
   KPGradientCollection *getGradientCollection()
     { return &_gradientCollection; }
 
+  CommandHistory *commands()
+    { return &_commands; }
+
 signals:
 
   // document modified
@@ -297,6 +302,9 @@ signals:
 
   // update child geometry
   void sig_updateChildGeometry(KPresenterChild *_child);
+
+protected slots:
+  void slotUndoRedoChanged(QString,QString);
 
 protected:
 
@@ -369,6 +377,8 @@ protected:
 
   KPPixmapCollection _pixmapCollection;
   KPGradientCollection _gradientCollection;
+
+  CommandHistory _commands;
 
 };
 

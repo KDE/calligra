@@ -171,11 +171,13 @@ CORBA::Boolean KPresenterView_impl::printDlg()
 /*========================== edit undo ==========================*/
 void KPresenterView_impl::editUndo()
 {
+  m_pKPresenterDoc->commands()->undo();
 }
 
 /*========================== edit redo ==========================*/
 void KPresenterView_impl::editRedo()
 {
+  m_pKPresenterDoc->commands()->redo();
 }
 
 /*========================== edit cut ===========================*/
@@ -2101,11 +2103,35 @@ void KPresenterView_impl::showParts()
 /*========================= change undo =========================*/
 void KPresenterView_impl::changeUndo(QString _text,bool _enable)
 {
+  if (_enable)
+    {
+      m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo,true);
+      QString str;
+      str.sprintf(i18n("Undo: %s"),_text.data());
+      m_rMenuBar->changeItem(str,m_idMenuEdit_Undo);
+    }
+  else
+    {    
+      m_rMenuBar->changeItem(i18n("Undo"),m_idMenuEdit_Undo);
+      m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo,false);
+    }
 }
 
 /*========================= change redo =========================*/
 void KPresenterView_impl::changeRedo(QString _text,bool _enable)
 {
+  if (_enable)
+    {
+      m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo,true);
+      QString str;
+      str.sprintf(i18n("Redo: %s"),_text.data());
+      m_rMenuBar->changeItem(str,m_idMenuEdit_Redo);
+    }
+  else
+    {
+      m_rMenuBar->changeItem(i18n("Undo"),m_idMenuEdit_Redo);
+      m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo,false);
+    }
 }
 
 /*================ color of pres-pen changed ====================*/

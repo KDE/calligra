@@ -24,7 +24,9 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
 	kppixmapobject.cc \
 	kpbackground.cc kppixmap.cc kpclipart.cc kpgradient.cc\
-	kppixmapcollection.cc kpgradientcollection.cc
+	kppixmapcollection.cc kpgradientcollection.cc \
+	command.cc movecmd.cc \
+	commandhistory.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h \
@@ -38,7 +40,9 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h \
 		kpbackground.h kppixmap.h kpclipart.h kpgradient.h \
-		kppixmapcollection.h kpgradientcollection.h
+		kppixmapcollection.h kpgradientcollection.h \
+		command.h movecmd.h \
+		commandhistory.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc \
@@ -51,7 +55,9 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpautoformobject.moc kpclipartobject.moc kptextobject.moc \
 		kppixmapobject.moc
 		kpbackground.moc kppixmap.moc kpclipart.moc kpgradient.moc\
-		kppixmapcollection.moc kpgradientcollection.moc
+		kppixmapcollection.moc kpgradientcollection.moc \
+		command.moc movecmd.moc \
+		commandhistory.moc
 
 idl_DATA =	kpresenter.idl
 idl_HEADERS =    kpresenter.h
@@ -101,7 +107,6 @@ rotatedia.cc: rotatedia.moc
 ksearchdialogs.cc: ksearchdialogs.moc
 shadowdia.cc: shadowdia.moc
 
-
 kpobject.cc: kpobject.moc
 kplineobject.cc: kplineobject.moc
 kprectobject.cc: kprectobject.moc
@@ -116,3 +121,7 @@ kpclipart.cc: kpclipart.moc
 kpgradient.cc: kpgradient.moc
 kppixmapcollection.cc: kppixmapcollection.moc
 kpgradientcollection.cc: kpgradientcollection.moc
+
+command.cc: command.moc
+movecmd.cc: movecmd.moc
+commandhistory.cc: commandhistory.moc

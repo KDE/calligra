@@ -51,7 +51,7 @@ KPresenterChild::~KPresenterChild()
 
 /*====================== constructor =============================*/
 KPresenterDocument_impl::KPresenterDocument_impl()
-  : _pixmapCollection(), _gradientCollection()
+  : _pixmapCollection(), _gradientCollection(), _commands()
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0")
   // Use CORBA mechanism for deleting views
@@ -62,7 +62,7 @@ KPresenterDocument_impl::KPresenterDocument_impl()
 
   // init
   _clean = true;
-  _objectList.setAutoDelete(true);
+  _objectList.setAutoDelete(false);
   _backgroundList.setAutoDelete(true);
   _spInfinitLoop = false;
   _spManualSwitch = true;
@@ -84,11 +84,12 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   objStartY = 0;
   setPageLayout(_pageLayout,0,0);
   _presPen = QPen(red,3,SolidLine);
+  QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
 
 /*====================== constructor =============================*/
 KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData &_refdata)
-  : KPresenter::KPresenterDocument_skel(_refdata), _pixmapCollection(), _gradientCollection()
+  : KPresenter::KPresenterDocument_skel(_refdata), _pixmapCollection(), _gradientCollection(), _commands()
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0")
   // Use CORBA mechanism for deleting views
@@ -98,7 +99,7 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   m_bModified = false;
 
   // init
-  _objectList.setAutoDelete(true);
+  _objectList.setAutoDelete(false);
   _backgroundList.setAutoDelete(true);
   _spInfinitLoop = false;
   _spManualSwitch = true;
@@ -121,6 +122,7 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   objStartY = 0;
   insertNewTemplate(0,0,true);
   _presPen = QPen(red,3,SolidLine);
+  QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
 
 /*====================== destructor ==============================*/
@@ -1405,7 +1407,8 @@ void KPresenterDocument_impl::deleteObjs()
       kpobject = objectList()->at(i);
       if (kpobject->isSelected())
 	{
-	  _objectList.remove(i--);
+	  kpobject->removeFromObjList();
+	  _objectList.take(i--);
 	  changed = true;
 	}
     }
@@ -1528,5 +1531,18 @@ void KPresenterDocument_impl::deSelectAllObj()
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	viewPtr->getPage()->deSelectAllObj();
+    }
+}
+
+/*================= undo redo changed ===========================*/
+void KPresenterDocument_impl::slotUndoRedoChanged(QString _undo,QString _redo)
+{
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	{
+	  viewPtr->changeUndo(_undo,!_undo.isEmpty());
+	  viewPtr->changeRedo(_redo,!_redo.isEmpty());
+	}
     }
 }

@@ -139,9 +139,17 @@ public:
   virtual void deactivate()
     {;}
 
+  virtual void removeFromObjList()
+    { inObjList = false; }
+  virtual void incCmdRef()
+    { cmds--; doDelete(); }
+  virtual void decCmdRef()
+    { cmds--; doDelete(); }
+
 protected:
   virtual void getShadowCoords(int& _x,int& _y,ShadowDirection _direction,int _distance);
   virtual void paintSelection(QPainter *_painter);
+  virtual void doDelete();
 
   float angle;
   QPoint orig;
@@ -161,6 +169,9 @@ protected:
   int subPresStep;
   bool specEffects;
   bool ownClipping;
+
+  bool inObjList;
+  int cmds;
 
 };
 

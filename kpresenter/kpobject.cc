@@ -37,6 +37,8 @@ KPObject::KPObject()
   ownClipping = true;
   subPresStep = 0;
   specEffects = false;
+  inObjList = true;
+  cmds = 0;
 }
 
 /*======================= get bounding rect ======================*/
@@ -257,4 +259,10 @@ void KPObject::paintSelection(QPainter *_painter)
 
   _painter->setRasterOp(rop);
   _painter->restore();
+}
+
+/*======================== do delete =============================*/
+void KPObject::doDelete()
+{
+  if (cmds == 0 && !inObjList) delete this;
 }

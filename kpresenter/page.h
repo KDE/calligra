@@ -48,6 +48,8 @@
 #include "kpclipartobject.h"
 #include "kppixmapobject.h"
 
+#include "movecmd.h"
+
 class KPresenterView_impl;
 class KPresenterDocument_impl;
 
@@ -178,6 +180,7 @@ protected:
   float _presFakt;
   QList<int> presStepList;
   int PM_DM,PM_SM;
+  int firstX,firstY;
 
 private slots:
 

@@ -185,6 +185,9 @@ void Page::mousePressEvent(QMouseEvent *e)
 	  bool deSelAll = true;
 	  KPObject *kpobject = 0;
 
+	  firstX = e->x();
+	  firstY = e->y();
+
 	  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0 ;i--)
 	    {
 	      kpobject = objectList()->at(i);
@@ -288,6 +291,36 @@ void Page::mousePressEvent(QMouseEvent *e)
 /*=================== handle mouse released ======================*/
 void Page::mouseReleaseEvent(QMouseEvent *e)
 {
+  switch (modType)
+    {
+    case MT_MOVE:
+      {
+	if (firstX != e->x() || firstY != e->y())
+	  {
+	    int mx = e->x();
+	    int my = e->y();
+	    mx = (mx / rastX()) * rastX();
+	    my = (my / rastY()) * rastY();
+	    firstX = (firstX / rastX()) * rastX();
+	    firstY = (firstY / rastY()) * rastY();
+	    QList<KPObject> _objects;
+	    _objects.setAutoDelete(false);
+	    KPObject *kpobject = 0;
+	    
+	    for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+	      {
+		kpobject = objectList()->at(i);
+		if (kpobject->isSelected()) 
+		  _objects.append(kpobject);
+	      }
+	    MoveByCmd *moveByCmd = new MoveByCmd(i18n("Move object(s)"),QPoint(mx - firstX,my - firstY),
+						 _objects,view->KPresenterDoc());
+	    view->KPresenterDoc()->commands()->addCommand(moveByCmd);
+	  }
+      } break;
+    default: break;
+    }
+
   mousePressed = false;
   modType = MT_NONE;
   resizeObjNum = -1;
@@ -323,26 +356,25 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 	  my = (my / rastY()) * rastY();
 	  oldMx = (oldMx / rastX()) * rastX();
 	  oldMy = (oldMy / rastY()) * rastY();
-	  QRect oldRect;
 
 	  if (modType == MT_MOVE)
 	    {
+	      QList<KPObject> _objects;
+	      _objects.setAutoDelete(false);
 	      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 		{
 		  kpobject = objectList()->at(i);
-		  if (kpobject->isSelected())
-		    {
-		      oldRect = kpobject->getBoundingRect(0,0);
-		      
-		      kpobject->moveBy(mx - oldMx,my - oldMy);
-		      _repaint(oldRect);
-		      _repaint(kpobject);
-		      
-		    }
+		  if (kpobject->isSelected()) 
+		    _objects.append(kpobject);
 		}
+	      MoveByCmd *moveByCmd = new MoveByCmd(i18n("Move object"),QPoint(mx - oldMx,my - oldMy),
+						   _objects,view->KPresenterDoc());
+	      moveByCmd->execute();
+	      delete moveByCmd;
 	    }
 	  else if (modType != MT_NONE && resizeObjNum != -1)
 	    {
+	      QRect oldRect;
 	      kpobject = objectList()->at(resizeObjNum);
 	      oldRect = kpobject->getBoundingRect(0,0);
 
