@@ -1197,8 +1197,6 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     kdDebug (30508) << "Processing root..." << endl;
     if (!ProcessStoreFile (subFile, ProcessDocTag, this))
     {
-        // ###TODO: May be the file is only raw XML
-
         kdWarning(30520) << "Opening root has failed. Trying raw XML file!" << endl;
 
         const QString filename( chain->inputFile() );
