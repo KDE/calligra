@@ -3514,13 +3514,24 @@ void KWView::textDecreaseIndent()
 
 void KWView::textDefaultFormat()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    bool createmacro=false;
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Default Format") );
+    for ( ; it.current() ; ++it )
     {
-        KCommand *cmd=edit->setDefaultFormatCommand();
-        if(cmd)
-            m_doc->addCommand( cmd );
+        KCommand *cmd = it.current()->setDefaultFormatCommand();
+        if (cmd)
+        {
+            createmacro=true;
+            macroCmd->addCommand(cmd);
+        }
     }
+    if( createmacro)
+        m_doc->addCommand(macroCmd);
+    else
+        delete macroCmd;
 }
 
 
@@ -4081,7 +4092,7 @@ void KWView::slotFrameSetEditChanged()
 
     bool state = (edit != 0L) && rw;
     actionEditSelectAll->setEnabled(state);
-    actionFormatDefault->setEnabled( state);
+    actionFormatDefault->setEnabled( rw);
     actionFormatFont->setEnabled( rw );
     actionFormatFontSize->setEnabled( rw );
     actionFormatFontFamily->setEnabled( rw );
