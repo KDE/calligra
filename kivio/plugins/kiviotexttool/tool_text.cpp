@@ -70,7 +70,7 @@ TextTool::~TextTool()
  * @param e The event to be identified and processed
  *
  */
-bool TextTool::processEvent( QEvent* e )
+bool TextTool::processEvent(QEvent* e)
 {
   switch (e->type())
   {

@@ -45,7 +45,7 @@ namespace Kivio {
   {
   }
   
-  bool TargetTool::processEvent( QEvent* e )
+  bool TargetTool::processEvent(QEvent* e)
   {
     if(e->type() == QEvent::MouseButtonPress) {
       mousePress(static_cast<QMouseEvent*>(e));

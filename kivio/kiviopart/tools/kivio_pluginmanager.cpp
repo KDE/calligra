@@ -28,6 +28,7 @@ namespace Kivio {
   {
     m_activeTool = 0;
     m_defaultTool = 0;
+    m_delegateEvents = true;
   }
   
   PluginManager::~PluginManager()
@@ -36,7 +37,7 @@ namespace Kivio {
   
   bool PluginManager::delegateEvent(QEvent* e)
   {
-    if(activeTool()) {
+    if(activeTool() && m_delegateEvents) {
       return activeTool()->processEvent(e);
     }
     

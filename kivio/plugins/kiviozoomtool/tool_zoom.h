@@ -38,7 +38,7 @@ class ZoomTool : public Kivio::MouseTool
     ZoomTool(KivioView* parent);
     virtual ~ZoomTool();
   
-    virtual bool processEvent(QEvent*);
+    virtual bool processEvent(QEvent* e);
   
     void zoomRect(QRect);
   

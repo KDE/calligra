@@ -35,6 +35,9 @@ namespace Kivio {
       ~PluginManager();
 
       bool delegateEvent(QEvent* e);
+      
+      void setEventDelegationEnabled(bool enabled) { m_delegateEvents = enabled; }
+      bool eventDelegationEnabled() const { return m_delegateEvents; }
             
       /** Returns the tool that is in use. */
       Kivio::MouseTool* activeTool();
@@ -54,6 +57,8 @@ namespace Kivio {
     private:
       Kivio::MouseTool* m_activeTool;
       Kivio::MouseTool* m_defaultTool;
+
+      bool m_delegateEvents;
   };
 }
 

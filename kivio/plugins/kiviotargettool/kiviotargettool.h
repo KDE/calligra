@@ -40,7 +40,7 @@ namespace Kivio {
       TargetTool(KivioView* parent);
       ~TargetTool();
   
-      virtual bool processEvent( QEvent* e );
+      virtual bool processEvent(QEvent* e);
       
     public slots:
       virtual void setActivated(bool);

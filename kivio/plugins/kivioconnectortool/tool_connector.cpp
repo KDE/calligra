@@ -87,7 +87,7 @@ ConnectorTool::~ConnectorTool()
  * @param e The event to be identified and processed
  *
  */
-bool ConnectorTool::processEvent( QEvent* e )
+bool ConnectorTool::processEvent(QEvent* e)
 {
   switch (e->type())
   {

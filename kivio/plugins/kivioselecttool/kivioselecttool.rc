@@ -1,19 +1,15 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KivioSelectTool" library="libkivioselecttool" version="5">
-<MenuBar>
-  <Menu name="Tools">
+<kpartgui name="KivioSelectTool" library="libkivioselecttool" version="6">
+  <MenuBar>
+    <Menu name="Tools">
+      <Action name="select" />
+    </Menu>
+  </MenuBar>
+  <ToolBar name="ToolsToolBar">
     <Action name="select" />
+  </ToolBar>
+
+  <Menu name="StencilPopup">
+    <Action name="editText" append="topMerge" />
   </Menu>
-</MenuBar>
-<ToolBar name="ToolsToolBar">
-  <Action name="select" />
-</ToolBar>
-<Menu name="SelectPopup">
-  <ActionList name="textActionList"/>
-  <ActionList name="clipboardActionList"/>
-  <ActionList name="alignActionList"/>
-  <ActionList name="groupActionList"/>
-  <ActionList name="layerActionList"/>
-  <Action name="properties"/>
-</Menu>
 </kpartgui>

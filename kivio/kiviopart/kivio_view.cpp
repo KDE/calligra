@@ -939,17 +939,16 @@ void KivioView::addStencilSet( const QString& name )
 
 void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 {
-  if( !pSpawner )
-  {
+  if(!pSpawner) {
     kdDebug(43000) << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
     return;
   }
 
-  KivioIconView *pView = new KivioIconView(m_pDoc->isReadWrite()  );
-  QObject::connect( pView, SIGNAL(createNewStencil(KivioStencilSpawner*)), this, SLOT(addStencilFromSpawner(KivioStencilSpawner*)));
+  KivioIconView *pView = new KivioIconView(m_pDoc->isReadWrite());
+  QObject::connect(pView, SIGNAL(createNewStencil(KivioStencilSpawner*)), this,
+                   SLOT(addStencilFromSpawner(KivioStencilSpawner*)));
 
-  pView->setStencilSpawnerSet( pSpawner );
-
+  pView->setStencilSpawnerSet(pSpawner);
   m_pStencilBarDockManager->insertStencilSet(pView, pSpawner->name());
 }
 
@@ -2144,42 +2143,6 @@ Kivio::PluginManager* KivioView::pluginManager()
   return m_pluginManager;
 }
 
-QPtrList<KAction> KivioView::clipboardActionList()
-{
-  QPtrList<KAction> tmp;
-  tmp.append(m_editCut);
-  tmp.append(m_editCopy);
-  tmp.append(m_editPaste);
-
-  return tmp;
-}
-
-QPtrList<KAction> KivioView::alignActionList()
-{
-  QPtrList<KAction> tmp;
-  tmp.append(m_alignAndDistribute);
-
-  return tmp;
-}
-
-QPtrList<KAction> KivioView::groupActionList()
-{
-  QPtrList<KAction> tmp;
-  tmp.append(m_groupAction);
-  tmp.append(m_ungroupAction);
-
-  return tmp;
-}
-
-QPtrList<KAction> KivioView::layerActionList()
-{
-  QPtrList<KAction> tmp;
-  tmp.append(m_stencilToFront);
-  tmp.append(m_stencilToBack);
-
-  return tmp;
-}
-
 void KivioView::clipboardDataChanged()
 {
   QMimeSource* data = QApplication::clipboard()->data();
@@ -2193,6 +2156,10 @@ void KivioView::partActivateEvent(KParts::PartActivateEvent* event)
   if((event->widget() == this) && event->activated()) {
     updateToolBars();
     clipboardDataChanged();
+  }
+  
+  if(event->widget() == this) {
+    m_pluginManager->setEventDelegationEnabled(event->activated());
   }
 
   KoView::partActivateEvent(event);

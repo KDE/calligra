@@ -40,7 +40,7 @@ class KIVIO_EXPORT TextTool : public Kivio::MouseTool
     TextTool( KivioView* parent );
     ~TextTool();
   
-    virtual bool processEvent( QEvent* );
+    virtual bool processEvent(QEvent* e);
   
     void text(QRect);
   

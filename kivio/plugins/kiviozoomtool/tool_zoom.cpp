@@ -106,7 +106,7 @@ ZoomTool::~ZoomTool()
 bool ZoomTool::processEvent(QEvent* e)
 {
   KivioCanvas* canvas = view()->canvasWidget();
-  
+
   if(!m_bHandMode) {
     switch(e->type()) {
       case QEvent::KeyPress:

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="kivio" version="24">
+<kpartgui name="kivio" version="25">
   <MenuBar>
     <Menu name="file">
       <Action name="installStencilSet"/>
@@ -120,5 +120,31 @@
     <Action name="renamePage"/>
     <Action name="insertPage"/>
     <Action name="removePage"/>
+  </Menu>
+  
+  <Menu name="PagePopup">
+    <Action name="cutStencil"/>
+    <Action name="copyStencil"/>
+    <Action name="pasteStencil"/>
+    <Separator/>
+    <Action name="paperLayout"/>
+  </Menu>
+  
+  <Menu name="StencilPopup">
+    <MergeLocal name="topMerge"/>
+    <Separator/>
+    <Action name="cutStencil"/>
+    <Action name="copyStencil"/>
+    <Action name="pasteStencil"/>
+    <Separator/>
+    <Action name="alignStencils"/>
+    <Separator/>
+    <Action name="groupStencils"/>
+    <Action name="ungroupStencils"/>
+    <Separator/>
+    <Action name="sendStencilToBack"/>
+    <Action name="bringStencilToFront"/>
+    <Separator/>
+    <MergeLocal/>
   </Menu>
 </kpartgui>

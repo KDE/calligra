@@ -142,11 +142,6 @@ class KIVIO_EXPORT KivioView : public KoView
 
     Kivio::PluginManager* pluginManager();
 
-    QPtrList<KAction> clipboardActionList();
-    QPtrList<KAction> alignActionList();
-    QPtrList<KAction> groupActionList();
-    QPtrList<KAction> layerActionList();
-
     int hTextAlign();
     int vTextAlign();
 

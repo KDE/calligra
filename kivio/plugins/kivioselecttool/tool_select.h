@@ -35,7 +35,7 @@ class KivioStencil;
 
 class KivioSelectDragData
 {
-public:
+  public:
     KoRect rect;
 };
 
@@ -56,10 +56,10 @@ class SelectTool : public Kivio::MouseTool
     SelectTool( KivioView* parent );
     ~SelectTool();
 
-    virtual bool processEvent( QEvent* );
+    virtual bool processEvent(QEvent* e);
 
     void select(const QRect&);
-  
+
   public slots:
     void setActivated(bool a);
 
@@ -111,9 +111,9 @@ class SelectTool : public Kivio::MouseTool
       stmCustomDragging,
       stmResizing
     };
+
   private:
-    // Flag to indicate that we are drawing a rubber band
-    int m_mode;
+    int m_mode;     // Flag to indicate that we are drawing a rubber band
     KivioStencil *m_pResizingStencil;
     KivioStencil *m_pCustomDraggingStencil;
     int m_resizeHandle;
@@ -121,11 +121,9 @@ class SelectTool : public Kivio::MouseTool
     int m_customDragID;
     QPtrList <KivioSelectDragData> m_lstOldGeometry;
     KoRect m_selectedRect;
-    
+
     KRadioAction* m_selectAction;
-    KPopupMenu *m_pMenu;
-    QPtrList<KAction> textActionList;
-    
+
     bool m_firstTime;
 };
 

@@ -41,7 +41,7 @@ class ConnectorTool : public Kivio::MouseTool
     ConnectorTool( KivioView* parent );
     ~ConnectorTool();
   
-    virtual bool processEvent( QEvent* );
+    virtual bool processEvent(QEvent* e);
   
     void connector(QRect);
     

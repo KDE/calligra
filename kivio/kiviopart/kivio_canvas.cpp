@@ -389,8 +389,10 @@ QSize KivioCanvas::actualSize()
 bool KivioCanvas::event( QEvent* e )
 {
   bool f = QWidget::event(e);
-  if (m_pView->pluginManager() && delegateThisEvent)
+
+  if (m_pView->pluginManager() && delegateThisEvent) {
     f = m_pView->pluginManager()->delegateEvent(e);
+  }
 
   delegateThisEvent = true;
   return f;

@@ -36,7 +36,7 @@ namespace Kivio {
       MouseTool(KivioView* parent = 0, const char* name = 0);
       ~MouseTool();
     
-      virtual bool processEvent( QEvent* e ) = 0;
+      virtual bool processEvent(QEvent* e) = 0;
       
     public slots:
       virtual void setActivated(bool) = 0;
