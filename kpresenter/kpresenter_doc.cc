@@ -1378,8 +1378,11 @@ bool KPresenterDoc::setPenColor(QColor c,bool fill)
 	      } break;
 	    case OT_TEXT:
 	      {
-		if (fill)
-		  dynamic_cast<KPTextObject*>(kpobject)->getKTextObject()->setColorToAll(c);
+		QPen pen = dynamic_cast<KPTextObject*>(kpobject)->getPen();
+		if (pen.style() == NoPen) pen.setStyle(SolidLine);
+		pen.setColor(c);
+		if (!fill) pen = NoPen;
+		dynamic_cast<KPTextObject*>(kpobject)->setPen(pen);
 		ret = true;
 		repaint(kpobject);
 	      } break;
@@ -1484,8 +1487,12 @@ bool KPresenterDoc::setBrushColor(QColor c,bool fill)
 	      } break;
 	    case OT_TEXT:
 	      {
-		if (fill)
-		  dynamic_cast<KPTextObject*>(kpobject)->getKTextObject()->setColorToAll(c);
+		QBrush brush = dynamic_cast<KPTextObject*>(kpobject)->getBrush();
+		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
+		brush.setColor(c);
+		if (!fill) brush = NoBrush;
+		dynamic_cast<KPTextObject*>(kpobject)->setFillType(FT_BRUSH);
+		dynamic_cast<KPTextObject*>(kpobject)->setBrush(brush);
 		ret = true;
 		repaint(kpobject);
 	      } break;
