@@ -2115,7 +2115,8 @@ AC_DEFUN(KDE_CHECK_STL,
 ])
 
 AC_DEFUN(AC_FIND_QIMGIO,
-   [AC_MSG_CHECKING([for qimgio])
+   [AC_REQUIRE([AC_FIND_JPEG])
+AC_MSG_CHECKING([for qimgio])
 AC_CACHE_VAL(ac_cv_lib_qimgio,
 [ac_save_LIBS="$LIBS"
 LIBS="$all_libraries -lqimgio -lpng -lz -lqt $LIBJPEG -lX11 $LIBSOCKET"

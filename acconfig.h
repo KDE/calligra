@@ -12,3 +12,5 @@
 #undef ENABLE_NLS
 
 #undef HAVE_QIMGIO
+
+#undef HAVE_LIBJPEG
