@@ -92,6 +92,7 @@ QString KPPointObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
 {
     KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
     saveOasisMarkerElement( mainStyles, styleobjectauto );
+    saveOasisObjectProtectStyle( styleobjectauto );
     KPShadowObject::saveOasisStrokeElement( mainStyles, styleobjectauto );
     return mainStyles.lookup( styleobjectauto, "gr" );
 }

@@ -76,6 +76,8 @@ bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& conte
     //KPObject::saveOasis( xmlWriter );
     kdDebug()<<"bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter ) not finished to implemented\n";
     saveOasisPosObject(xmlWriter, indexObj );
+    xmlWriter.addAttribute( "draw:style-name", saveOasisStrokeElement( context.mainStyles() ) );
+
     KPPointObject::saveOasis( xmlWriter, context );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );

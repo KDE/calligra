@@ -45,7 +45,7 @@ Done:
         -> ellipse
         -> group objet
         -> polygone object
-        -> polyline object
+        -> polyline object (all attributes)
 -> save/load  page background
 -> save/load object background
 -> save/load page effect (hide/show effect)
@@ -79,6 +79,7 @@ Bugs:
 -> fix default value
 -> fix some arrow style  
 -> specific object : header/footer is not sticky object into oo
+-> fix polygone start/end line
 
 In Progress:
 -> save/load picture effect
