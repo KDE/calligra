@@ -31,7 +31,7 @@ idl_HEADERS =  koffice.h
 
 ####### Build rules
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(srcdir) -I$(srcdir)/../store -I$(interfacedir) -I$(idldir)
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
 
 koFrame.cc: koffice.h
 koMainWindow.cc: koffice.h
