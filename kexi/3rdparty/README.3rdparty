@@ -1,0 +1,6 @@
+Kexi 3rdparty directory contents
+--------------------------------
+
+Purpose: Any kexi-independent code goes here.
+
+kexisql/ - database engine implementation taken "as-is" from SQLite project (www.sqlite.org)
