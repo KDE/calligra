@@ -51,7 +51,7 @@ VPath::draw( QPainter& painter, const QRect& rect,
 	painter.save();
 
 	// paint fill:
-	if( state() != edit )
+	if( state() == normal || state() == selected )
 	{
 		m_fill.draw( painter, zoomFactor, m_segments );
 	}

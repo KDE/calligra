@@ -17,7 +17,7 @@ class VCommand;
 class VObject
 {
 public:
-	enum VState { normal=0, selected=1, edit=2, deleted=3, invisible=4 };
+	enum VState { normal, selected, edit, deleted };
 
 	VObject()
 		: m_state( normal ) {}
