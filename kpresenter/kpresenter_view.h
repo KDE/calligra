@@ -35,7 +35,6 @@ class KoRuler;
 class QScrollBar;
 class AFChoose;
 class StyleDia;
-class OptionDia;
 class PgConfDia;
 class EffectDia;
 class RotateDia;
@@ -142,7 +141,7 @@ public slots:
     //    void extraAlignObj();
     void extraBackground();
     void extraLayout();
-    void extraOptions();
+    void extraConfigure();
     void extraLineBegin();
     void extraLineEnd();
     void extraWebPres();
@@ -308,7 +307,6 @@ protected slots:
     void afChooseOk( const QString & );
     void slotAfchooseCanceled();
     void styleOk();
-    void optionOk();
     void pgConfOk();
     void effectOk();
     void rotateOk();
@@ -389,7 +387,6 @@ protected:
     BackDia *backDia;
     AFChoose *afChoose;
     StyleDia *styleDia;
-    OptionDia *optionDia;
     PgConfDia *pgConfDia;
     EffectDia *effectDia;
     RotateDia *rotateDia;
@@ -503,7 +500,7 @@ protected:
     KAction *actionExtraAlignObjBottom;
     KAction *actionExtraBackground;
     KAction *actionExtraLayout;
-    KAction *actionExtraOptions;
+    KAction *actionExtraConfigure;
     KAction *actionExtraWebPres;
     KAction *actionExtraCreateTemplate;
     KAction *actionExtraLineBegin;

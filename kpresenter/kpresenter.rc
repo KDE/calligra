@@ -123,7 +123,7 @@
   <Action name="tools_object"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
-  <Action name="extra_options" group="settings_configure"/>
+  <Action name="extra_configure" group="settings_configure"/>
  </Menu>
 </MenuBar>
 <ToolBar name="editToolBar" position="top" fullWidth="false"><Text>Edit</Text>

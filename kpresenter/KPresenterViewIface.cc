@@ -205,9 +205,9 @@ void KPresenterViewIface::extraLayout()
     view->extraLayout();
 }
 
-void KPresenterViewIface::extraOptions()
+void KPresenterViewIface::extraConfigure()
 {
-    view->extraOptions();
+    view->extraConfigure();
 }
 
 void KPresenterViewIface::extraLineBegin()

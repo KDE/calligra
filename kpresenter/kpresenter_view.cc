@@ -34,7 +34,6 @@
 #include <backdia.h>
 #include <autoformEdit/afchoose.h>
 #include <styledia.h>
-#include <optiondia.h>
 #include <pgconfdia.h>
 #include <effectdia.h>
 #include <rotatedia.h>
@@ -74,6 +73,7 @@
 #include <kparts/event.h>
 #include <kdebug.h>
 #include <ktempfile.h>
+#include <kcolorbutton.h>
 
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
@@ -91,6 +91,7 @@
 #include <kstddirs.h>
 
 #include <KPresenterViewIface.h>
+#include <kpresenter_dlg_config.h>
 
 #define DEBUG
 
@@ -167,7 +168,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     backDia = 0;
     afChoose = 0;
     styleDia = 0;
-    optionDia = 0;
     pgConfDia = 0;
     effectDia = 0;
     rotateDia = 0;
@@ -822,23 +822,11 @@ void KPresenterView::extraLayout()
 }
 
 /*===============================================================*/
-void KPresenterView::extraOptions()
+void KPresenterView::extraConfigure()
 {
-    if ( optionDia ) {
-	QObject::disconnect( optionDia, SIGNAL( applyButtonPressed() ), this, SLOT( optionOk() ) );
-	optionDia->close();
-	delete optionDia;
-	optionDia = 0;
-    }
-    optionDia = new OptionDia( this, "OptionDia" );
-    optionDia->setCaption( i18n( "KPresenter - Options" ) );
-    QObject::connect( optionDia, SIGNAL( applyButtonPressed() ), this, SLOT( optionOk() ) );
-    optionDia->setRastX( kPresenterDoc()->rastX() );
-    optionDia->setRastY( kPresenterDoc()->rastY() );
-    optionDia->setBackCol( kPresenterDoc()->txtBackCol() );
-    optionDia->show();
+    KPConfig configDia( this );
+    configDia.show();
 }
-
 /*===============================================================*/
 void KPresenterView::extraCreateTemplate()
 {
@@ -1936,9 +1924,10 @@ void KPresenterView::setupActions()
 				     this, SLOT( extraLayout() ),
 				     actionCollection(), "extra_layout" );
 
-    actionExtraOptions = new KAction( i18n( "Op&tions..." ), 0,
-				      this, SLOT( extraOptions() ),
-				      actionCollection(), "extra_options" );
+    actionExtraConfigure = new KAction( i18n( "Configure KPresenter..." ),
+					"configure", 0,
+					this, SLOT( extraConfigure() ),
+					actionCollection(), "extra_configure" );
 
     actionExtraWebPres = new KAction( i18n( "Create &HTML Slideshow..." ),
 				      "webpres", 0,
@@ -2121,21 +2110,6 @@ void KPresenterView::styleOk()
 	gYFactor = styleDia->getGYFactor();
 	sticky = styleDia->isSticky();
     }
-}
-
-/*=========== take changes for option dialog ====================*/
-void KPresenterView::optionOk()
-{
-    if ( optionDia->getRastX() < 1 )
-	optionDia->setRastX( 1 );
-    if ( optionDia->getRastY() < 1 )
-	optionDia->setRastY( 1 );
-    kPresenterDoc()->setRasters( optionDia->getRastX(), optionDia->getRastY(), false );
-
-    kPresenterDoc()->setTxtBackCol( optionDia->getBackCol() );
-
-    kPresenterDoc()->replaceObjs();
-    kPresenterDoc()->repaint( false );
 }
 
 /*=================== page configuration ok ======================*/

@@ -77,7 +77,7 @@ k_dcop:
     virtual void extraShadow();
     virtual void extraBackground();
     virtual void extraLayout();
-    virtual void extraOptions();
+    virtual void extraConfigure();
     virtual void extraLineBegin();
     virtual void extraLineEnd();
     virtual void extraWebPres();
