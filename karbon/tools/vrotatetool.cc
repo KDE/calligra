@@ -50,7 +50,7 @@ VRotateTool::~VRotateTool()
 }
 
 void
-VRotateTool::activate()
+VRotateTool::doActivate()
 {
 	view()->statusMessage()->setText( i18n( "Rotate" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );

@@ -22,10 +22,12 @@
 #define __VTOOL_H__
 
 #include <koPoint.h>
+#include <klocale.h>
 
 class KarbonView;
 class QEvent;
 class VPainter;
+class QWidget;
 
 
 class VTool
@@ -34,15 +36,35 @@ public:
 	VTool( KarbonView* view );
 
 	/**
-	 * Activate the tool. A tool is supposed to set a mouse cursor and/or
-	 * the statusbar properly here.
+	 * Activate the tool. You should not reimplement this method, use doActivate instead.
 	 */
-	virtual void activate() {}
+	virtual void activate();
 
 	/**
-	 * Deactivate the tool.
+	 * Called during the tool activation. A tool is supposed to set a mouse cursor and/or
+	 * the statusbar properly here.
+	 */
+	virtual void doActivate() {}
+
+	/**
+	 * DedoActivate the tool.
 	 */
 	virtual void deactivate() {}
+
+	/**
+	 * The options widget for this tool to show in a docker.
+	 */
+	virtual QWidget* optionsWidget() { return 0L; }
+
+	/**
+	 * The name of the tool.
+	 */
+	virtual QString name() { return i18n( "Karbon tool" ); }
+
+	/**
+	 * The context help of the tool.
+	 */
+	virtual QString contextHelp() { return i18n( "This is a Karbon tool" ); } 
 
 	/**
 	 * This function processes every important mouse or keyboard event.

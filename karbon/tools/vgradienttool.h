@@ -24,7 +24,7 @@
 #include "vtool.h"
 #include "vgradient.h"
 
-class VGradientDocker;
+class VGradientTabWidget;
 
 class VGradientTool : public VTool
 {
@@ -32,9 +32,11 @@ public:
 	VGradientTool( KarbonView* view );
 	virtual ~VGradientTool();
 
-	virtual void activate();
+	virtual void doActivate();
 
-	virtual void showDocker() const;
+	virtual QString name() { return i18n( "Gradient tool" ); }
+	virtual QString contextHelp();
+	virtual QWidget* optionsWidget();
 
 protected:
 	virtual void draw();
@@ -45,9 +47,9 @@ protected:
 	virtual void mouseDrag();
 
 private:
-	VGradientDocker* m_docker;
-	VGradient        m_gradient;
-	KoPoint          m_current;
+	VGradient            m_gradient;
+	KoPoint              m_current;
+	VGradientTabWidget*  m_optionsWidget;
 };
 
 #endif

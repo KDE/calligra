@@ -23,6 +23,8 @@
 
 #include "karbon_view.h"
 #include "karbon_part.h"
+#include "vtooloptionsdocker.h"
+#include "vcontexthelpdocker.h"
 #include "vtool.h"
 
 
@@ -32,6 +34,14 @@ VTool::VTool( KarbonView* view )
 	m_mouseButtonIsDown = false;
 	m_isDragging = false;
 }
+
+void VTool::activate()
+{
+	view()->toolOptionsDocker()->manageTool( this );
+	view()->contextHelpDocker()->manageTool( this );
+
+	doActivate();
+} 
 
 bool
 VTool::eventFilter( QEvent* event )
@@ -53,8 +63,6 @@ VTool::eventFilter( QEvent* event )
 	// Mouse events:
 	if ( event->type() == QEvent::MouseButtonDblClick )
 	{
-	kdDebug() << event->type() << " " << QEvent::MouseButtonDblClick << " - " << endl;
-
 		mouseButtonDblClick();
 		
 		return true;
@@ -108,8 +116,6 @@ VTool::eventFilter( QEvent* event )
 	if( event->type() == QEvent::KeyPress )
 	{
 		QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
-
-		kdDebug() << keyEvent->key() << " " << Qt::Key_Enter << " " << Qt::Key_Return << endl;
 
 		// Terminate the current drawing with the Enter-key:
 		if ( ( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return ) && !m_isDragging )

@@ -14,16 +14,16 @@ noinst_HEADERS = \
 	vdocker.h \
 	vtooldocker.h \
 	vcolordocker.h \
-	vgradientwidget.h \
-	vgradientdocker.h
+	vcontexthelpdocker.h \
+	vtooloptionsdocker.h
 
 libkarbondockers_la_SOURCES = \
 	dummy.cc \
 	vdocker.cc \
 	vtooldocker.cc \
 	vcolordocker.cc \
-	vgradientwidget.cc \
-	vgradientdocker.cc
+	vcontexthelpdocker.cc \
+	vtooloptionsdocker.cc
 
 libkarbondockers_la_METASOURCES = AUTO
 

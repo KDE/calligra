@@ -19,32 +19,76 @@
 */
 
 
+#include <qgroupbox.h>
+#include <qlabel.h>
+
 #include <klocale.h>
+#include <knuminput.h>
+#include <koUnit.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
 #include "vellipse.h"
-#include "vellipsedlg.h"
 #include "vellipsetool.h"
 
+
+VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
+	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
+{
+	// add width/height-input:
+	m_widthLabel = new QLabel( i18n( "Width(%1):" ).arg( m_part->getUnitName() ), this );
+	m_width = new KDoubleNumInput( 0, this );
+	m_heightLabel = new QLabel( i18n( "Height(%1):" ).arg( m_part->getUnitName() ), this );
+	m_height = new KDoubleNumInput( 0, this );
+	setInsideMargin( 4 );
+	setInsideSpacing( 2 );
+}
+
+double
+VEllipseOptionsWidget::width() const
+{
+	return KoUnit::ptFromUnit(m_width->value(),m_part->getUnit()) ;
+}
+
+double
+VEllipseOptionsWidget::height() const
+{
+	return KoUnit::ptFromUnit(m_height->value(),m_part->getUnit()) ;
+}
+
+void
+VEllipseOptionsWidget::setWidth( double value )
+{
+	m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
+}
+
+void
+VEllipseOptionsWidget::setHeight( double value )
+{
+	m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+}
+
+void VEllipseOptionsWidget::refreshUnit ()
+{
+	m_widthLabel->setText(i18n( "Width(%1):" ).arg(m_part->getUnitName()));
+	m_heightLabel->setText( i18n( "Height(%1):" ).arg(m_part->getUnitName()));
+}
 
 VEllipseTool::VEllipseTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Ellipse" ) )
 {
 	// create config dialog:
-	m_dialog = new VEllipseDlg(view->part());
-	m_dialog->setWidth( 100.0 );
-	m_dialog->setHeight( 100.0 );
+	m_optionsWidget = new VEllipseOptionsWidget(view->part());
 }
 
 VEllipseTool::~VEllipseTool()
 {
-	delete( m_dialog );
+	delete( m_optionsWidget );
 }
 
 void VEllipseTool::refreshUnit()
 {
-    m_dialog->refreshUnit();
+    m_optionsWidget->refreshUnit();
 }
 
 VComposite*
@@ -52,15 +96,12 @@ VEllipseTool::shape( bool interactive ) const
 {
 	if( interactive )
 	{
-		if( m_dialog->exec() )
-			return
-				new VEllipse(
-					0L,
-					m_p,
-					m_dialog->width(),
-					m_dialog->height() );
-		else
-			return 0L;
+		return
+			new VEllipse(
+				0L,
+				m_p,
+				m_optionsWidget->width(),
+				m_optionsWidget->height() );
 	}
 	else
 		return
@@ -70,3 +111,5 @@ VEllipseTool::shape( bool interactive ) const
 				m_d1,
 				m_d2 );
 }
+
+#include "vellipsetool.moc"

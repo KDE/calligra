@@ -20,11 +20,30 @@
 #ifndef __VPOLYGONTOOL_H__
 #define __VPOLYGONTOOL_H__
 
+#include <qgroupbox.h>
+
 #include "vshapetool.h"
 
 
-class VPolygonDlg;
+class KDoubleNumInput;
+class KIntSpinBox;
 
+class VPolygonOptionsWidget : public QGroupBox
+{
+	Q_OBJECT
+
+public:
+	VPolygonOptionsWidget( QWidget* parent = 0L, const char* name = 0L );
+
+	double radius() const;
+	uint edges() const;
+	void setRadius( double value );
+	void setEdges( uint value );
+
+private:
+	KDoubleNumInput* m_radius;
+	KIntSpinBox* m_edges;
+};
 
 class VPolygonTool : public VShapeTool
 {
@@ -32,12 +51,13 @@ public:
 	VPolygonTool( KarbonView* view );
 	virtual ~VPolygonTool();
 
+	virtual QString name() { return i18n( "Polygon tool" ); }
+	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	
 	virtual VComposite* shape( bool interactive = false ) const;
 
-	virtual void showDialog() const;
-
 private:
-	VPolygonDlg* m_dialog;
+	VPolygonOptionsWidget* m_optionsWidget;
 };
 
 #endif

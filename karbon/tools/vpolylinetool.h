@@ -22,14 +22,19 @@
 #ifndef _VPOLYLINETOOL_H_
 #define _VPOLYLINETOOL_H_
 
+#include <qstring.h>
+#include <qptrlist.h>
 #include "vtool.h"
+#include "koPoint.h"
 
 class VComposite;
+class QWidget;
+class QLabel;
 
 /**
  * The polyline tool.
  *
- * When the tool is activated, you draw your polyline until the tool is 
+ * When the tool is doActivated, you draw your polyline until the tool is 
  * deactivated.
  * When the mouse button is pressed, you add a Bezier node and sets the vector by 
  * dragging it.
@@ -41,10 +46,13 @@ class VPolylineTool : public VTool
 	public:
 		VPolylineTool( KarbonView* view );
 		~VPolylineTool(); 
-		
-		virtual void        activate();
+
+		virtual void        doActivate();
 		virtual void        deactivate();
-		
+
+		virtual QString     name() { return "Polyline tool"; }
+		virtual QString     contextHelp();
+
 	protected:
 			/** Helper method: draws the polyline. */
 		void                draw();
@@ -76,6 +84,8 @@ class VPolylineTool : public VTool
 		bool                shiftPressed;
 			/** Indicates if ctrl is pressed. */
 		bool                ctrlPressed;
+			/** Indicates if the polyline is to close. */
+		bool                m_close;
 }; // VPolylineTool
 
 #endif /* _VPOLYLINETOOL_H_ */

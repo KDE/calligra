@@ -34,6 +34,9 @@
 #include <kstdaction.h>
 #include <kiconloader.h>
 
+#include "vtooloptionsdocker.h"
+#include "vcontexthelpdocker.h"
+
 // tools:
 #include "vellipsetool.h"
 #include "vgradienttool.h"
@@ -127,6 +130,11 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_whirlPinchDlg->setPinch( 0.0 );
 	m_whirlPinchDlg->setRadius( 100.0 );
 
+	m_contextHelpDocker = new VContextHelpDocker( this );
+	m_contextHelpDocker->show();
+	m_toolOptionsDocker = new VToolOptionsDocker( this );
+	m_toolOptionsDocker->show();
+	
 	// tools:
 	m_ellipseTool = new VEllipseTool( this );
 	m_gradTool = new VGradientTool( this );
@@ -168,7 +176,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 		connect( _toolContainer, SIGNAL( rectangleToolActivated() ),	this, SLOT( rectangleTool() ) );
 		connect( _toolContainer, SIGNAL( roundRectToolActivated() ),	this, SLOT( roundRectTool() ) );
 		connect( _toolContainer, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
-   		connect( _toolContainer, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
+		connect( _toolContainer, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
 		connect( _toolContainer, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
 		connect( _toolContainer, SIGNAL( sinusToolActivated() ),		this, SLOT( sinusTool() ) );
 		connect( _toolContainer, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
@@ -218,6 +226,9 @@ KarbonView::~KarbonView()
 	delete( m_ColorManager );
 	delete( m_TransformDlg );
 
+	delete( m_contextHelpDocker );
+	delete( m_toolOptionsDocker );
+	
 	// tools:
 	delete( m_ellipseTool );
 	delete( m_gradTool );
@@ -511,16 +522,21 @@ KarbonView::objectTrafoShear()
 void
 KarbonView::ellipseTool()
 {
-	m_currentTool->deactivate();
-	m_currentTool = m_ellipseTool;
-	m_currentTool->activate();
+	if( m_currentTool == m_ellipseTool )
+		m_toolOptionsDocker->show();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_ellipseTool;
+		m_currentTool->activate();
+	}
 }
 
 void
 KarbonView::polygonTool()
 {
 	if( m_currentTool == m_polygonTool )
-		m_polygonTool->showDialog();
+		m_toolOptionsDocker->show();
 	else
 	{
 		m_currentTool->deactivate();
@@ -532,16 +548,21 @@ KarbonView::polygonTool()
 void
 KarbonView::rectangleTool()
 {
-	m_currentTool->deactivate();
-	m_currentTool = m_rectangleTool;
-	m_currentTool->activate();
+	if( m_currentTool == m_rectangleTool )
+		m_toolOptionsDocker->show();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_rectangleTool;
+		m_currentTool->activate();
+	}
 }
 
 void
 KarbonView::roundRectTool()
 {
 	if( m_currentTool == m_roundRectTool )
-		m_roundRectTool->showDialog();
+		m_toolOptionsDocker->show();
 	else
 	{
 		m_currentTool->deactivate();
@@ -553,6 +574,8 @@ KarbonView::roundRectTool()
 void
 KarbonView::selectTool()
 {
+	if( m_currentTool == m_selectTool )
+		m_toolOptionsDocker->show();
 	m_currentTool->deactivate();
 	m_currentTool = m_selectTool;
 	m_currentTool->activate();
@@ -562,6 +585,8 @@ KarbonView::selectTool()
 void
 KarbonView::selectNodesTool()
 {
+	if( m_currentTool == m_selectNodesTool )
+		m_toolOptionsDocker->show();
 	m_currentTool->deactivate();
 	m_currentTool = m_selectNodesTool;
 	m_currentTool->activate();
@@ -571,6 +596,8 @@ KarbonView::selectNodesTool()
 void
 KarbonView::rotateTool()
 {
+	if( m_currentTool == m_rotateTool )
+		m_toolOptionsDocker->show();
 	m_currentTool->deactivate();
 	m_currentTool = m_rotateTool;
 	m_currentTool->activate();
@@ -595,6 +622,8 @@ KarbonView::textTool()
 void
 KarbonView::shearTool()
 {
+	if( m_currentTool == m_shearTool )
+		m_toolOptionsDocker->show();
 	m_currentTool->deactivate();
 	m_currentTool = m_shearTool;
 	m_currentTool->activate();
@@ -605,7 +634,7 @@ void
 KarbonView::sinusTool()
 {
 	if( m_currentTool == m_sinusTool )
-		m_sinusTool->showDialog();
+		m_toolOptionsDocker->show();
 	else
 	{
 		m_currentTool->deactivate();
@@ -618,7 +647,7 @@ void
 KarbonView::spiralTool()
 {
 	if( m_currentTool == m_spiralTool )
-		m_spiralTool->showDialog();
+			m_toolOptionsDocker->show();
 	else
 	{
 		m_currentTool->deactivate();
@@ -631,7 +660,7 @@ void
 KarbonView::starTool()
 {
 	if( m_currentTool == m_starTool )
-		m_starTool->showDialog();
+		m_toolOptionsDocker->show();
 	else
 	{
 		m_currentTool->deactivate();
@@ -644,7 +673,7 @@ void
 KarbonView::gradTool()
 {
 	if( m_currentTool == m_gradTool )
-		m_gradTool->showDocker();
+		m_toolOptionsDocker->show();
 	else
 	{
 		m_currentTool->deactivate();
@@ -849,6 +878,16 @@ KarbonView::viewColorManager()
 	}
 }
 
+void 
+KarbonView::viewContextHelp()
+{
+	if( m_contextHelpDocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
+		m_contextHelpDocker->show();
+	}
+}
+
 void
 KarbonView::initActions()
 {
@@ -981,7 +1020,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
-
+	new KAction(
+		i18n( "Context &help" ), "help", 0, this,
+		SLOT( viewContextHelp() ), actionCollection(), "view_context_help" );
 	// view <-----
 
 	// line width

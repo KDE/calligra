@@ -18,37 +18,31 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VSTARDLG_H__
-#define __VSTARDLG_H__
+#ifndef _VCONTEXTHELPDOCKER_H_
+#define _VCONTEXTHELPDOCKER_H_
 
-#include <kdialogbase.h>
+#include <qwidget.h>
+#include <klocale.h>
 
-class KDoubleNumInput;
-class KIntSpinBox;
-class KarbonPart;
+#include "vdocker.h"
+#include "vgradient.h"
 
-class VStarDlg : public KDialogBase
+class QLabel;
+class VTool;
+class KarbonView;
+
+class VContextHelpDocker : public VDocker
 {
 	Q_OBJECT
+	
+	public:
+		VContextHelpDocker( KarbonView* view );
+		~VContextHelpDocker();
 
-public:
-	VStarDlg( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+		void manageTool( VTool* tool );
+		
+	private:
+		QLabel* helpLabel;
+}; // VContextHelpDocker
 
-	double innerR() const;
-	double outerR() const;
-	uint edges() const;
-	void setInnerR( double value );
-	void setOuterR( double value );
-	void setEdges( uint value );
-	void refreshUnit ();
-private:
-	KDoubleNumInput* m_innerR;
-	KDoubleNumInput* m_outerR;
-	KIntSpinBox* m_edges;
-	KarbonPart*m_part;
-	QLabel *m_innerRLabel;
-	QLabel *m_outerRLabel;
-};
-
-#endif
-
+#endif /* _VCONTEXTHELPDOCKER_H_ */

@@ -1,6 +1,7 @@
 INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
+	-I$(srcdir)/../commands \
 	-I$(srcdir)/../render \
 	-I$(srcdir)/../dialogs \
 	$(all_includes)
@@ -10,6 +11,9 @@ noinst_LTLIBRARIES = \
 
 noinst_HEADERS = \
 	vcolorslider.h \
+	vcolordlg.h \
+	vgradientwidget.h \
+	vgradienttabwidget.h \
 	vreference.h \
 	vstrokefillpreview.h \
 	vtranslate.h \
@@ -21,6 +25,9 @@ noinst_HEADERS = \
 libkarbonwidgets_la_SOURCES = \
 	dummy.cc \
 	vcolorslider.cc \
+	vcolordlg.cc \
+	vgradientwidget.cc \
+	vgradienttabwidget.cc \
 	vreference.cc \
 	vstrokefillpreview.cc \
 	vtranslate.cc \

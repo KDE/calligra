@@ -18,32 +18,74 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qlabel.h>
 
 #include <klocale.h>
+#include <knuminput.h>
 
 #include "karbon_view.h"
+#include "karbon_part.h"
 #include "vrectangle.h"
-#include "vrectangledlg.h"
 #include "vrectangletool.h"
 
+
+VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
+	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
+{
+	// add width/height-input:
+	m_widthLabel =new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), this );
+	m_width = new KDoubleNumInput( 0, this );
+	m_heightLabel =new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), this );
+	m_height = new KDoubleNumInput( 0, this );
+}
+
+double
+VRectangleOptionsWidget::width() const
+{
+	return KoUnit::ptFromUnit(m_width->value(),m_part->getUnit()) ;
+}
+
+double
+VRectangleOptionsWidget::height() const
+{
+	return KoUnit::ptFromUnit(m_height->value(),m_part->getUnit()) ;
+}
+
+void
+VRectangleOptionsWidget::setWidth( double value )
+{
+	m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
+}
+
+void
+VRectangleOptionsWidget::setHeight( double value )
+{
+	m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+}
+
+void VRectangleOptionsWidget::refreshUnit ()
+{
+	m_widthLabel->setText(i18n( "Width(%1):" ).arg(m_part->getUnitName()));
+	m_heightLabel->setText( i18n( "Height(%1):" ).arg(m_part->getUnitName()));
+}
 
 VRectangleTool::VRectangleTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Rectangle" ) )
 {
 	// Create config dialog:
-	m_dialog = new VRectangleDlg( view->part() );
-	m_dialog->setWidth( 100.0 );
-	m_dialog->setHeight( 100.0 );
+	m_optionsWidget = new VRectangleOptionsWidget( view->part() );
+	m_optionsWidget->setWidth( 100.0 );
+	m_optionsWidget->setHeight( 100.0 );
 }
 
 VRectangleTool::~VRectangleTool()
 {
-	delete( m_dialog );
+	delete( m_optionsWidget );
 }
 
 void VRectangleTool::refreshUnit()
 {
-    m_dialog->refreshUnit();
+    m_optionsWidget->refreshUnit();
 }
 
 VComposite*
@@ -51,15 +93,12 @@ VRectangleTool::shape( bool interactive ) const
 {
 	if( interactive )
 	{
-		if( m_dialog->exec() )
-			return
-				new VRectangle(
-					0L,
-					m_p,
-					m_dialog->width(),
-					m_dialog->height() );
-		else
-			return 0L;
+		return
+			new VRectangle(
+				0L,
+				m_p,
+				m_optionsWidget->width(),
+				m_optionsWidget->height() );
 	}
 	else
 		return
@@ -70,9 +109,4 @@ VRectangleTool::shape( bool interactive ) const
 				m_d2 );
 }
 
-void
-VRectangleTool::showDialog() const
-{
-	m_dialog->exec();
-}
-
+#include "vrectangletool.moc"

@@ -78,6 +78,7 @@ void VGradientWidget::paintColorStop( QPainter& p, int x, VColor& color )
 void VGradientWidget::paintMidPoint( QPainter& p, int x )
 {
 	QBitmap bitmap( 5, 8, midPoint_bits, true );
+	bitmap.setMask( bitmap );
 	p.setPen( Qt::black );
 	p.drawPixmap( x - 2, 1, bitmap );
 } // VGradientWidget::paintMidPoint

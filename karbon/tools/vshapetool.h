@@ -36,13 +36,12 @@ class VShapeTool : public VTool
 public:
 	VShapeTool( KarbonView* view, const QString& name, bool polar = false );
 
-	const QString& name() const { return m_name; }
-
-	virtual void activate();
+	virtual QString name() { return m_name; }
+	virtual QString contextHelp();
+	
+	virtual void doActivate();
 
 protected:
-	virtual void showDialog() const {}
-
 	virtual void draw();
 
 	virtual void mouseButtonPress();

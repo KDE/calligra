@@ -19,50 +19,107 @@
 */
 
 
+#include <qgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+
 #include <klocale.h>
+#include <knuminput.h>
 
 #include "karbon_view.h"
 #include "vsinus.h"
-#include "vsinusdlg.h"
 #include "vsinustool.h"
+#include "karbon_part.h"
 
+
+VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* parent, const char* name )
+	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
+{
+	// add width/height-input:
+	m_widthLabel =new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), this );
+	m_width = new KDoubleNumInput( 0, this );
+	m_heightLabel =new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), this );
+	m_height = new KDoubleNumInput( 0, this );
+	new QLabel( i18n( "Periods:" ), this );
+	m_periods = new KIntSpinBox( this );
+	m_periods->setMinValue( 1 );
+	setInsideMargin( 4 );
+	setInsideSpacing( 2 );
+}
+
+double
+VSinusOptionsWidget::width() const
+{
+	return KoUnit::ptFromUnit( m_width->value(), m_part->getUnit()) ;
+}
+
+double
+VSinusOptionsWidget::height() const
+{
+	return KoUnit::ptFromUnit( m_height->value(), m_part->getUnit()) ;
+}
+
+uint
+VSinusOptionsWidget::periods() const
+{
+	return m_periods->value();
+}
+
+void
+VSinusOptionsWidget::setWidth( double value )
+{
+	m_width->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+}
+
+void
+VSinusOptionsWidget::setHeight( double value )
+{
+	m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+}
+
+void
+VSinusOptionsWidget::setPeriods( uint value )
+{
+	m_periods->setValue( value );
+}
+
+void VSinusOptionsWidget::refreshUnit ()
+{
+	m_widthLabel->setText( i18n( "Width(%1):" ).arg( m_part->getUnitName() ) );
+	m_heightLabel->setText( i18n( "Height(%1):" ).arg( m_part->getUnitName() ) );
+}
 
 VSinusTool::VSinusTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Sinus" ) )
 {
-	// create config dialog:
-	m_dialog = new VSinusDlg(view->part());
-	m_dialog->setWidth( 100.0 );
-	m_dialog->setHeight( 100.0 );
-	m_dialog->setPeriods( 1 );
+	// create config widget:
+	m_optionsWidget = new VSinusOptionsWidget(view->part());
+	m_optionsWidget->setWidth( 100.0 );
+	m_optionsWidget->setHeight( 100.0 );
+	m_optionsWidget->setPeriods( 1 );
 }
 
 VSinusTool::~VSinusTool()
 {
-	delete( m_dialog );
+	delete( m_optionsWidget );
 }
 
 void VSinusTool::refreshUnit()
 {
-    m_dialog->refreshUnit();
+    m_optionsWidget->refreshUnit();
 }
 
 VComposite*
 VSinusTool::shape( bool interactive ) const
 {
 	if( interactive )
-	{
-		if( m_dialog->exec() )
-			return
-				new VSinus(
-					0L,
-					m_p,
-					m_dialog->width(),
-					m_dialog->height(),
-					m_dialog->periods() );
-		else
-			return 0L;
-	}
+		return
+			new VSinus(
+				0L,
+				m_p,
+				m_optionsWidget->width(),
+				m_optionsWidget->height(),
+				m_optionsWidget->periods() );
 	else
 		return
 			new VSinus(
@@ -70,12 +127,7 @@ VSinusTool::shape( bool interactive ) const
 				m_p,
 				m_d1,
 				m_d2,
-				m_dialog->periods() );
+				m_optionsWidget->periods() );
 }
 
-void
-VSinusTool::showDialog() const
-{
-	m_dialog->exec();
-}
-
+#include "vsinustool.moc"

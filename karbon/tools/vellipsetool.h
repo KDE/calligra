@@ -21,11 +21,34 @@
 #ifndef __VELLIPSETOOL_H__
 #define __VELLIPSETOOL_H__
 
+#include <qgroupbox.h>
+
 #include "vshapetool.h"
 
+class KDoubleNumInput;
+class KarbonPart;
+class QLabel;
+class QWidget;
 
-class VEllipseDlg;
+class VEllipseOptionsWidget : public QGroupBox
+{
+	Q_OBJECT
 
+public:
+	VEllipseOptionsWidget( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
+
+	double width() const;
+	double height() const;
+	void setWidth( double value );
+	void setHeight( double value );
+	void refreshUnit ();
+private:
+	KDoubleNumInput* m_width;
+	KDoubleNumInput* m_height;
+	KarbonPart* m_part;
+	QLabel* m_heightLabel;
+	QLabel* m_widthLabel;
+};
 
 class VEllipseTool : public VShapeTool
 {
@@ -33,11 +56,14 @@ public:
 	VEllipseTool( KarbonView* view );
 	virtual ~VEllipseTool();
 
+	virtual QString name() { return i18n( "Ellipse tool" ); }
+	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	
 	virtual VComposite* shape( bool interactive = false ) const;
     void refreshUnit();
 
 private:
-	VEllipseDlg* m_dialog;
+	VEllipseOptionsWidget* m_optionsWidget;
 };
 
 #endif

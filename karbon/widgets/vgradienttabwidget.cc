@@ -38,7 +38,7 @@
 #include <kiconloader.h>
 
 #include "vgradientwidget.h"
-#include "vgradientdocker.h"
+#include "vgradienttabwidget.h"
 #include "../render/vkopainter.h"
 #include "vfill.h"
 
@@ -105,11 +105,9 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
 } // VGradientPreview::paintEvent
 
-VGradientDocker::VGradientDocker( VGradient& gradient, QWidget* parent, const char* name )
-		: VDocker( parent, name ), m_gradient( &gradient )
+VGradientTabWidget::VGradientTabWidget( VGradient& gradient, QWidget* parent, const char* name )
+		: QTabWidget( parent, name ), m_gradient( &gradient )
 {
-	setOrientation( Vertical );
-	
 	m_predefGradients.setAutoDelete( true );
 	
 		// Load the predefined gradients.
@@ -153,9 +151,9 @@ VGradientDocker::VGradientDocker( VGradient& gradient, QWidget* parent, const ch
 	setupUI();
 	setupConnections();
 	initUI();
-} // VGradientDocker::VGradientDocker
+} // VGradientTabWidget::VGradientTabWidget
 
-VGradientDocker::~VGradientDocker()
+VGradientTabWidget::~VGradientTabWidget()
 {
 		// Save the predefined gradients.
 	QDomDocument doc( "PredefGradients" );
@@ -171,46 +169,41 @@ VGradientDocker::~VGradientDocker()
 	doc.save( ts, 2 );
 	f.flush();
 	f.close();
-} // VGradientDocker::~VGradientDocker
+} // VGradientTabWidget::~VGradientTabWidget
 
-void VGradientDocker::setupUI()
+void VGradientTabWidget::setupUI()
 {
-	setCaption( i18n( "Edit Gradient" ) );
-	m_tabWidget = new QTabWidget( this );
-	
 	m_editGroup    = new QGroupBox( i18n( "Edit gradient:" ) );
 	QGridLayout* editLayout = new QGridLayout( m_editGroup, 6, 3 );
 	editLayout->setSpacing( 3 );
 	editLayout->setMargin( 6 );
 	editLayout->addRowSpacing( 0, 12 );
-	editLayout->addMultiCellWidget( m_gradientWidget = new VGradientWidget( m_gradient, m_editGroup ), 1, 1, 0, 2 );
-	editLayout->addMultiCellWidget( m_gradientPreview = new VGradientPreview( m_gradient, m_editGroup ), 2, 4, 0, 0 );
-	editLayout->addWidget( new QLabel( i18n( "Type:" ), m_editGroup ), 2, 1 );
-	editLayout->addWidget( new QLabel( i18n( "Repeat:" ), m_editGroup ), 3, 1 );
-	editLayout->addWidget( new QLabel( i18n( "Target:" ), m_editGroup ), 4, 1 );
-	editLayout->addWidget( m_gradientType = new KComboBox( false, m_editGroup ), 2, 2 );
+	editLayout->addMultiCellWidget( m_gradientPreview = new VGradientPreview( m_gradient, m_editGroup ), 1, 3, 0, 0 );
+	editLayout->addWidget( new QLabel( i18n( "Type:" ), m_editGroup ), 1, 1 );
+	editLayout->addWidget( new QLabel( i18n( "Repeat:" ), m_editGroup ), 2, 1 );
+	editLayout->addWidget( new QLabel( i18n( "Target:" ), m_editGroup ), 3, 1 );
+	editLayout->addWidget( m_gradientType = new KComboBox( false, m_editGroup ), 1, 2 );
 	m_gradientType->insertItem( i18n( "Linear" ), 0 );
 	m_gradientType->insertItem( i18n( "Radial" ), 1 );
 	m_gradientType->insertItem( i18n( "Conical" ), 2 );
-	editLayout->addWidget( m_gradientRepeat = new KComboBox( false, m_editGroup ), 3, 2 );
+	editLayout->addWidget( m_gradientRepeat = new KComboBox( false, m_editGroup ), 2, 2 );
 	m_gradientRepeat->insertItem( i18n( "None" ), 0 );
 	m_gradientRepeat->insertItem( i18n( "Reflect" ), 1 );
 	m_gradientRepeat->insertItem( i18n( "Repeat" ), 2 );
-	editLayout->addWidget( m_gradientTarget = new KComboBox( false, m_editGroup ), 4, 2 );
+	editLayout->addWidget( m_gradientTarget = new KComboBox( false, m_editGroup ), 3, 2 );
 	m_gradientTarget->insertItem( i18n( "Stroke" ), 0 );
 	m_gradientTarget->insertItem( i18n( "Fill" ), 1 );
 	editLayout->addMultiCellWidget( m_addToPredefs = new QPushButton( i18n( "&Add to predefined gradients" ), m_editGroup ), 5, 5, 0, 2 );
-	m_tabWidget->addTab( m_editGroup, i18n( "Edit" ) );
+	editLayout->addMultiCellWidget( m_gradientWidget = new VGradientWidget( m_gradient, m_editGroup ), 4, 4, 0, 2 );
+	addTab( m_editGroup, i18n( "Edit" ) );
 
 	QGroupBox* predefGroup  = new QGroupBox( 1, Qt::Horizontal, i18n( "Predefined gradients:" ) );
 	m_predefGradientsView   = new KListBox( predefGroup );
 	m_predefDelete          = new QPushButton( i18n( "&Delete" ), predefGroup );
-	m_tabWidget->addTab( predefGroup, i18n( "Predefined" ) );
-	
-	setWidget( m_tabWidget );
-} // VGradientDocker::setupUI
+	addTab( predefGroup, i18n( "Predefined" ) );
+} // VGradientTabWidget::setupUI
 
-void VGradientDocker::setupConnections()
+void VGradientTabWidget::setupConnections()
 {
 	connect( m_gradientType, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
 	connect( m_gradientRepeat, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
@@ -218,9 +211,9 @@ void VGradientDocker::setupConnections()
 	connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
 	connect( m_predefGradientsView, SIGNAL( executed( QListBoxItem* ) ), this, SLOT( changeToPredef( QListBoxItem* ) ) );
 	connect( m_predefDelete, SIGNAL( clicked() ), this, SLOT( deletePredef() ) );
-} // VGradientDocker::setupConnection
+} // VGradientTabWidget::setupConnection
 
-void VGradientDocker::initUI()
+void VGradientTabWidget::initUI()
 {
 	m_gradientType->setCurrentItem( m_gradient->type() );
 	m_gradientRepeat->setCurrentItem( m_gradient->repeatMethod() );
@@ -255,39 +248,39 @@ void VGradientDocker::initUI()
 		gp.end();
 		m_predefGradientsView->insertItem( p );
 	}
-} // VGradientDocker::initUI
+} // VGradientTabWidget::initUI
 
-const VGradient* VGradientDocker::gradient()
+const VGradient* VGradientTabWidget::gradient()
 {
 	return m_gradient;
-} // VGradientDocker::gradient
+} // VGradientTabWidget::gradient
 
-void VGradientDocker::setGradient( VGradient& gradient )
+void VGradientTabWidget::setGradient( VGradient& gradient )
 {
 	m_gradient = &gradient;
 	
 	initUI();
-} // VGradientDocker::setGradient
+} // VGradientTabWidget::setGradient
 
-VGradientDocker::VGradientTarget VGradientDocker::target()
+VGradientTabWidget::VGradientTarget VGradientTabWidget::target()
 {
 	return (VGradientTarget)m_gradientTarget->currentItem();
-} // VGradientDocker::target
+} // VGradientTabWidget::target
 
-void VGradientDocker::setTarget( VGradientTarget target )
+void VGradientTabWidget::setTarget( VGradientTarget target )
 {
 	m_gradientTarget->setCurrentItem( target );
-} // VGradientDocker::setTarget
+} // VGradientTabWidget::setTarget
 
-void VGradientDocker::combosChange( int )
+void VGradientTabWidget::combosChange( int )
 {
 	m_gradient->setType( (VGradient::VGradientType)m_gradientType->currentItem() );
 	m_gradient->setRepeatMethod( (VGradient::VGradientRepeatMethod)m_gradientRepeat->currentItem() );
 	
 	m_gradientPreview->update();
-} // VGradientDocker::combosChange
+} // VGradientTabWidget::combosChange
 
-void VGradientDocker::addGradientToPredefs()
+void VGradientTabWidget::addGradientToPredefs()
 {
 	m_predefGradients.append( new VGradient( *m_gradient ) );
 		
@@ -312,23 +305,23 @@ void VGradientDocker::addGradientToPredefs()
 	gp.fillPath();
 	gp.end();
 	m_predefGradientsView->insertItem( p );
-} // VGradientDocker::addGradientToPredefs()
+} // VGradientTabWidget::addGradientToPredefs()
 
-void VGradientDocker::changeToPredef( QListBoxItem* ) 
+void VGradientTabWidget::changeToPredef( QListBoxItem* ) 
 {
 	*m_gradient = *( m_predefGradients.at( m_predefGradientsView->currentItem() ) );
 	m_gradientType->setCurrentItem( m_gradient->type() );
 	m_gradientRepeat->setCurrentItem( m_gradient->repeatMethod() );
 	m_gradientPreview->update();
 	m_gradientWidget->update();
-	m_tabWidget->showPage( m_editGroup );
-} // VGradientDocker::changeToPredef
+	showPage( m_editGroup );
+} // VGradientTabWidget::changeToPredef
 
-void VGradientDocker::deletePredef()
+void VGradientTabWidget::deletePredef()
 {
 	int i = m_predefGradientsView->currentItem();
 	m_predefGradientsView->removeItem( i );
 	m_predefGradients.remove( i );
-} // VGradientDocker::deletePredef
+} // VGradientTabWidget::deletePredef
 
-#include "vgradientdocker.moc"
+#include "vgradienttabwidget.moc"

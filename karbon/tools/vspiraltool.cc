@@ -18,29 +18,104 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qlabel.h>
 
 #include <klocale.h>
+#include <kcombobox.h>
+#include <knuminput.h>
 
 #include "karbon_view.h"
+#include "karbon_part.h"
 #include "vspiral.h"
-#include "vspiraldlg.h"
 #include "vspiraltool.h"
 
+
+VSpiralOptionsWidget::VSpiralOptionsWidget( QWidget* parent, const char* name )
+	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name )
+{
+	new QLabel( i18n( "Radius:" ), this );
+	m_radius = new KDoubleNumInput( 0, this );
+	new QLabel( i18n( "Segments:" ), this );
+	m_segments = new KIntSpinBox( this );
+	m_segments->setMinValue( 1 );
+	new QLabel( i18n( "Fade:" ), this );
+	m_fade = new KDoubleNumInput(0.0,this);
+	m_fade->setRange(0.0, 1.0 , 0.05);
+
+	new QLabel( i18n( "Orientation:" ), this );
+	m_clockwise = new KComboBox( false, this );
+	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );
+	m_clockwise->insertItem( i18n( "Counter Clockwise" ), 1 );
+}
+
+double
+VSpiralOptionsWidget::radius() const
+{
+	return m_radius->value();
+}
+
+uint
+VSpiralOptionsWidget::segments() const
+{
+	return m_segments->value();
+}
+
+double
+VSpiralOptionsWidget::fade() const
+{
+	return m_fade->value();
+}
+
+bool
+VSpiralOptionsWidget::clockwise() const
+{
+	if( m_clockwise->currentItem() == 0 )
+		return true;
+	else
+		return false;
+}
+
+void
+VSpiralOptionsWidget::setRadius( double value )
+{
+	m_radius->setValue( value );
+}
+
+void
+VSpiralOptionsWidget::setSegments( uint value )
+{
+	m_segments->setValue( value );
+}
+
+void
+VSpiralOptionsWidget::setFade( double value )
+{
+	m_fade->setValue( value );
+}
+
+void
+VSpiralOptionsWidget::setClockwise( bool value )
+{
+	if( value )
+		m_clockwise->setCurrentItem( 0 );
+	else
+		m_clockwise->setCurrentItem( 1 );
+}
 
 VSpiralTool::VSpiralTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Spiral" ), true )
 {
 	// create config dialog:
-	m_dialog = new VSpiralDlg();
-	m_dialog->setRadius( 100.0 );
-	m_dialog->setSegments( 8 );
-	m_dialog->setFade( 0.8 );
-	m_dialog->setClockwise( true );
+	m_optionsWidget = new VSpiralOptionsWidget();
+	m_optionsWidget->setRadius( 100.0 );
+	m_optionsWidget->setSegments( 8 );
+	m_optionsWidget->setFade( 0.8 );
+	m_optionsWidget->setClockwise( true );
 }
 
 VSpiralTool::~VSpiralTool()
 {
-	delete( m_dialog );
+	delete( m_optionsWidget );
 }
 
 VComposite*
@@ -48,18 +123,15 @@ VSpiralTool::shape( bool interactive ) const
 {
 	if( interactive )
 	{
-		if( m_dialog->exec() )
-			return
-				new VSpiral(
-					0L,
-					m_p,
-					m_dialog->radius(),
-					m_dialog->segments(),
-					m_dialog->fade(),
-					m_dialog->clockwise(),
-					m_d2 );
-		else
-			return 0L;
+		return
+			new VSpiral(
+				0L,
+				m_p,
+				m_optionsWidget->radius(),
+				m_optionsWidget->segments(),
+				m_optionsWidget->fade(),
+				m_optionsWidget->clockwise(),
+				m_d2 );
 	}
 	else
 		return
@@ -67,15 +139,10 @@ VSpiralTool::shape( bool interactive ) const
 				0L,
 				m_p,
 				m_d1,
-				m_dialog->segments(),
-				m_dialog->fade(),
-				m_dialog->clockwise(),
+				m_optionsWidget->segments(),
+				m_optionsWidget->fade(),
+				m_optionsWidget->clockwise(),
 				m_d2 );
 }
 
-void
-VSpiralTool::showDialog() const
-{
-	m_dialog->exec();
-}
-
+#include "vspiraltool.moc"

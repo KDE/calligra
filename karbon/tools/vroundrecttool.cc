@@ -18,33 +18,95 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qlabel.h>
 
 #include <klocale.h>
+#include <knuminput.h>
 
 #include "karbon_view.h"
+#include "karbon_part.h"
 #include "vroundrect.h"
-#include "vroundrectdlg.h"
 #include "vroundrecttool.h"
 
+
+VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* part, QWidget* parent, const char* name )
+	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part)
+{
+	// add width/height-input:
+	m_widthLabel=new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), this );
+
+	m_width = new KDoubleNumInput(0,this);
+	m_width->setRange(0, 1000, 0.1);
+
+	m_heightLabel = new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), this );
+	m_height = new KDoubleNumInput(0,this);
+	m_height->setRange(0, 1000, 0.1);
+
+	new QLabel( i18n( "Edge Radius:" ), this );
+	m_round = new KDoubleNumInput(0,this);
+	m_round->setRange(0, 1000, 0.1);
+}
+
+double
+VRoundRectOptionsWidget::width() const
+{
+	return KoUnit::ptFromUnit(m_width->value(),m_part->getUnit()) ;
+}
+
+double
+VRoundRectOptionsWidget::height() const
+{
+	return KoUnit::ptFromUnit(m_height->value(),m_part->getUnit()) ;
+}
+
+double
+VRoundRectOptionsWidget::round() const
+{
+	return m_round->value();
+}
+
+void
+VRoundRectOptionsWidget::setWidth( double value )
+{
+    m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
+}
+
+void
+VRoundRectOptionsWidget::setHeight( double value )
+{
+    m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+}
+
+void
+VRoundRectOptionsWidget::setRound( double value )
+{
+    m_round->setValue( value);
+}
+
+void VRoundRectOptionsWidget::refreshUnit ()
+{
+    m_widthLabel->setText(i18n( "Width(%1):" ).arg(m_part->getUnitName()));
+    m_heightLabel->setText( i18n( "Height(%1):" ).arg(m_part->getUnitName()));
+}
 
 VRoundRectTool::VRoundRectTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Round Rectangle" ) )
 {
 	// Create config dialog:
-	m_dialog = new VRoundRectDlg( view->part() );
-	m_dialog->setWidth( 100.0 );
-	m_dialog->setHeight( 100.0 );
-	m_dialog->setRound( 20.0 );
+	m_optionsWidget = new VRoundRectOptionsWidget( view->part() );
+	m_optionsWidget->setWidth( 100.0 );
+	m_optionsWidget->setHeight( 100.0 );
+	m_optionsWidget->setRound( 20.0 );
 }
 
 VRoundRectTool::~VRoundRectTool()
 {
-	delete( m_dialog );
+	delete( m_optionsWidget );
 }
 
 void VRoundRectTool::refreshUnit()
 {
-    m_dialog->refreshUnit();
+    m_optionsWidget->refreshUnit();
 }
 
 VComposite*
@@ -52,16 +114,13 @@ VRoundRectTool::shape( bool interactive ) const
 {
 	if( interactive )
 	{
-		if( m_dialog->exec() )
-			return
-				new VRoundRect(
-					0L,
-					m_p,
-					m_dialog->width(),
-					m_dialog->height(),
-					m_dialog->round() );
-		else
-			return 0L;
+		return
+			new VRoundRect(
+				0L,
+				m_p,
+				m_optionsWidget->width(),
+				m_optionsWidget->height(),
+				m_optionsWidget->round() );
 	}
 	else
 		return
@@ -70,12 +129,7 @@ VRoundRectTool::shape( bool interactive ) const
 				m_p,
 				m_d1,
 				m_d2,
-				m_dialog->round() );
+				m_optionsWidget->round() );
 }
 
-void
-VRoundRectTool::showDialog() const
-{
-	m_dialog->exec();
-}
-
+#include "vroundrecttool.moc"

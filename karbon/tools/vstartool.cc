@@ -18,34 +18,96 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qlabel.h>
 
 #include <klocale.h>
+#include <knuminput.h>
 
 #include "karbon_view.h"
+#include "karbon_part.h"
 #include "vstar.h"
-#include "vstardlg.h"
 #include "vstartool.h"
 
+
+VStarOptionsWidget::VStarOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
+	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
+{
+	// add width/height-input:
+	m_outerRLabel = new QLabel( i18n( "Outer Radius(%1):" ).arg(m_part->getUnitName()), this );
+	m_outerR = new KDoubleNumInput(0,this);
+	m_outerR->setRange(0, 1000, 0.1);
+
+	m_innerRLabel = new QLabel( i18n( "Inner Radius(%1):" ).arg(m_part->getUnitName()), this );
+	m_innerR = new KDoubleNumInput(0,this);
+	m_innerR->setRange(0, 1000, 0.1);
+
+	new QLabel( i18n( "Edges:" ), this );
+	m_edges = new KIntSpinBox( this );
+	m_edges->setMinValue( 3 );
+}
+
+double
+VStarOptionsWidget::innerR() const
+{
+	return KoUnit::ptFromUnit( m_innerR->value(),m_part->getUnit() ) ;
+
+}
+
+double
+VStarOptionsWidget::outerR() const
+{
+	return KoUnit::ptFromUnit( m_outerR->value(),m_part->getUnit() ) ;
+}
+
+uint
+VStarOptionsWidget::edges() const
+{
+	return m_edges->value();
+}
+
+void
+VStarOptionsWidget::setInnerR( double value )
+{
+	m_innerR->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+}
+
+void
+VStarOptionsWidget::setOuterR( double value )
+{
+	m_outerR->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+}
+
+void
+VStarOptionsWidget::setEdges( uint value )
+{
+	m_edges->setValue( value );
+}
+
+void VStarOptionsWidget::refreshUnit ()
+{
+	m_outerRLabel->setText( i18n( "Outer Radius(%1):" ).arg(m_part->getUnitName() ) );
+	m_innerRLabel->setText( i18n( "Inner Radius(%1):" ).arg(m_part->getUnitName() ) );
+}
 
 VStarTool::VStarTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Star" ), true )
 {
 	// create config dialog:
-	m_dialog = new VStarDlg(view->part());
-	m_dialog->setOuterR( 100.0 );
-	m_dialog->setInnerR( 50.0 );
-	m_dialog->setEdges( 5 );
+	m_optionsWidget = new VStarOptionsWidget(view->part());
+	m_optionsWidget->setOuterR( 100.0 );
+	m_optionsWidget->setInnerR( 50.0 );
+	m_optionsWidget->setEdges( 5 );
 }
 
 void VStarTool::refreshUnit()
 {
-    m_dialog->refreshUnit();
+    m_optionsWidget->refreshUnit();
 }
 
 
 VStarTool::~VStarTool()
 {
-	delete( m_dialog );
+	delete( m_optionsWidget );
 }
 
 VComposite*
@@ -53,16 +115,13 @@ VStarTool::shape( bool interactive ) const
 {
 	if( interactive )
 	{
-		if( m_dialog->exec() )
-			return
-				new VStar(
-					0L,
-					m_p,
-					m_dialog->outerR(),
-					m_dialog->innerR(),
-					m_dialog->edges() );
-		else
-			return 0L;
+		return
+			new VStar(
+				0L,
+				m_p,
+				m_optionsWidget->outerR(),
+				m_optionsWidget->innerR(),
+				m_optionsWidget->edges() );
 	}
 	else
 		return
@@ -70,14 +129,9 @@ VStarTool::shape( bool interactive ) const
 				0L,
 				m_p,
 				m_d1,
-				m_dialog->innerR() * m_d1 / m_dialog->outerR(),
-				m_dialog->edges(),
+				m_optionsWidget->innerR() * m_d1 / m_optionsWidget->outerR(),
+				m_optionsWidget->edges(),
 				m_d2 );
 }
 
-void
-VStarTool::showDialog() const
-{
-	m_dialog->exec();
-}
-
+#include "vstartool.moc"

@@ -40,8 +40,17 @@ VShapeTool::VShapeTool( KarbonView* view, const QString& name, bool polar )
 	m_isCentered = false;
 }
 
+QString
+VShapeTool::contextHelp()
+{
+	QString s = i18n( "<qt><b>Shape tool</b><br>" );
+	s += i18n( "<i>Click and drag</i> to place your own shape.<br>" );
+	s += i18n( "<i>Click</i> to place a shape using the tool properties values.</qt>" );
+	return s;
+} 
+
 void
-VShapeTool::activate()
+VShapeTool::doActivate()
 {
 	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );

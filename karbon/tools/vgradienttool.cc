@@ -28,7 +28,7 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vgradienttool.h"
-#include "vgradientdocker.h"
+#include "vgradienttabwidget.h"
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
 
@@ -37,20 +37,38 @@
 VGradientTool::VGradientTool( KarbonView* view )
 	: VTool( view )
 {
-	m_docker = new VGradientDocker( m_gradient, (QWidget*)view->shell() );
+	m_optionsWidget = new VGradientTabWidget( m_gradient, 0L );
 }
 
 VGradientTool::~VGradientTool()
 {
-	delete m_docker;
+	delete m_optionsWidget;
 }
 
 void
-VGradientTool::activate()
+VGradientTool::doActivate()
 {
 	view()->statusMessage()->setText( i18n( "Gradient" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
+
+QString 
+VGradientTool::contextHelp()
+{
+	QString s = i18n( "<qt><b>Gradient tool:</b><br>" );
+	s += i18n( "<i>Click and drag</i> to choose the gradient vector.<br>" );
+	s += i18n( "<br><b>Gradient editing:</b><br>" );
+	s += i18n( "<i>Click and drag</i> to move points.<br>" );
+	s += i18n( "<i>Double click</i> on a color point to edit it.<br>" );
+	s += i18n( "<i>Right click</i> on a color point to remove it.</qt>" );
+	return s;
+}
+
+QWidget*
+VGradientTool::optionsWidget()
+{
+	return m_optionsWidget;
+} // VGradientTool::optionsWidget
 
 void
 VGradientTool::draw()
@@ -93,7 +111,7 @@ VGradientTool::mouseButtonRelease()
 		p.setX( first().x() + 1 );
 	m_gradient.setVector( p );
 
-	if( m_docker->target() == VGradientDocker::FILL )
+	if( m_optionsWidget->target() == VGradientTabWidget::FILL )
 	{
 		VFill fill;
 		fill.gradient() = m_gradient;
@@ -124,7 +142,7 @@ VGradientTool::mouseDragRelease()
 	m_gradient.setOrigin( fp );
 	m_gradient.setVector( lp );
 
-	if( m_docker->target() == VGradientDocker::FILL )
+	if( m_optionsWidget->target() == VGradientTabWidget::FILL )
 	{
 		VFill fill;
 		fill.gradient() = m_gradient;
@@ -139,8 +157,3 @@ VGradientTool::mouseDragRelease()
 	view()->selectionChanged();
 }
 
-void
-VGradientTool::showDocker() const
-{
-	m_docker->show();
-}

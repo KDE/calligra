@@ -21,6 +21,8 @@
 #ifndef __VSELECTTOOL_H__
 #define __VSELECTTOOL_H__
 
+#include <klocale.h>
+
 #include "vtool.h"
 #include "vselection.h"
 
@@ -30,7 +32,9 @@ public:
 	VSelectTool( KarbonView* view );
 	virtual ~VSelectTool();
 
-	virtual void activate();
+	virtual void doActivate();
+	
+	virtual QString name() { return i18n( "Select tool" ); }
 
 protected:
 	virtual void draw();

@@ -49,13 +49,26 @@ VPolylineTool::~VPolylineTool()
 {
 } // VPolylineTool::~VPolylineTool
 
-void VPolylineTool::activate()
+QString VPolylineTool::contextHelp()
+{
+	QString s = i18n( "<qt><b>Polyline tool:</b><br>" );
+	s += i18n( "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>" );
+	s += i18n( "- Press <i>CTRL</i> while dragging to edit the previous bezier vector.<br>" );
+	s += i18n( "- Press <i>SHIFT</i> while dragging to change the curve in a strait line.<br>" );
+	s += i18n( "- Press <i>BACKSPACE</i> to cancel the last curve.<br>" );
+	s += i18n( "- Press <i>ESC</i> to cancel the whole polyline.<br>" );
+	s += i18n( "- Press <i>RETURN</i> or <i>double click</i> to end the polyline.</qt>" );
+	return s;
+} // VPolylineTool::contextHelp
+
+void VPolylineTool::doActivate()
 {
 	view()->statusMessage()->setText( i18n("Polyline") );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 
 	bezierPoints.clear();
-} // VPolylineTool::activate
+	m_close = false;
+} // VPolylineTool::doActivate
 
 void VPolylineTool::deactivate()
 {
@@ -74,6 +87,8 @@ void VPolylineTool::deactivate()
 		{
 			polyline->curveTo( *p2, *p3, *p4 );
 		}
+		if ( m_close )
+			polyline->close();
 	}
 
 	if( polyline )
@@ -235,6 +250,13 @@ void VPolylineTool::mouseButtonRelease()
 			lastVectorStart = *p;
 			lastVectorEnd = last();
 		}
+		if( bezierPoints.count() > 2 && p->isNear( *bezierPoints.first(), 3 ) )
+		{
+			bezierPoints.removeLast();
+			m_close = true;
+			accept();
+			return;
+		}
 	}
 
 	bezierPoints.append( new KoPoint( last() ) );
@@ -381,5 +403,5 @@ void VPolylineTool::cancelStep()
 void VPolylineTool::accept()
 {
 	deactivate();
-	activate();
+	doActivate();
 } // VPolylineTool::accept

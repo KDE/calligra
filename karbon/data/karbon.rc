@@ -57,6 +57,7 @@
         <Action name="view_mode"/>
 	<Separator/>
 	<Action name="view_color_manager"/>
+	<Action name="view_context_help"/>
 	<Action name="view_selection_properties"/>
 	</Menu>
 	 <Menu name="settings"><text>&amp;Settings</text>

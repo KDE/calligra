@@ -18,30 +18,31 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VPOLYGONDLG_H__
-#define __VPOLYGONDLG_H__
+#ifndef _VTOOLOPTIONSDOCKER_H_
+#define _VTOOLOPTIONSDOCKER_H_
 
-#include <kdialogbase.h>
+#include <qwidget.h>
+#include <klocale.h>
 
-class KDoubleNumInput;
-class KIntSpinBox;
+#include "vdocker.h"
+#include "vgradient.h"
 
-class VPolygonDlg : public KDialogBase
+class QLabel;
+class VTool;
+class KarbonView;
+
+class VToolOptionsDocker : public VDocker
 {
 	Q_OBJECT
+	
+	public:
+		VToolOptionsDocker( KarbonView* view );
+		~VToolOptionsDocker();
 
-public:
-	VPolygonDlg( QWidget* parent = 0L, const char* name = 0L );
+		void manageTool( VTool* tool );
+		
+	private:
+		QLabel*  noOptionLabel;
+}; // VToolOptionsDocker
 
-	double radius() const;
-	uint edges() const;
-	void setRadius( double value );
-	void setEdges( uint value );
-
-private:
-	KDoubleNumInput* m_radius;
-	KIntSpinBox* m_edges;
-};
-
-#endif
-
+#endif /* _VTOOLOPTIONSDOCKER_H_ */

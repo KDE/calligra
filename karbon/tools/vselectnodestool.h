@@ -29,7 +29,7 @@ public:
 	VSelectNodesTool( KarbonView* view );
 	virtual ~VSelectNodesTool();
 
-	virtual void activate();
+	virtual void doActivate();
 
 protected:
 	virtual void draw();

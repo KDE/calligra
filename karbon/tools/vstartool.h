@@ -21,10 +21,39 @@
 #ifndef __VSTARTOOL_H__
 #define __VSTARTOOL_H__
 
+#include <qgroupbox.h>
+
+#include <klocale.h>
 
 #include "vshapetool.h"
 
-class VStarDlg;
+
+class KDoubleNumInput;
+class KIntSpinBox;
+class KarbonPart;
+
+class VStarOptionsWidget : public QGroupBox
+{
+	Q_OBJECT
+
+public:
+	VStarOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+
+	double innerR() const;
+	double outerR() const;
+	uint edges() const;
+	void setInnerR( double value );
+	void setOuterR( double value );
+	void setEdges( uint value );
+	void refreshUnit ();
+private:
+	KDoubleNumInput* m_innerR;
+	KDoubleNumInput* m_outerR;
+	KIntSpinBox* m_edges;
+	KarbonPart*m_part;
+	QLabel *m_innerRLabel;
+	QLabel *m_outerRLabel;
+};
 
 
 class VStarTool : public VShapeTool
@@ -33,12 +62,15 @@ public:
 	VStarTool( KarbonView* view );
 	virtual ~VStarTool();
 
+	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QString name() { return i18n( "Star tool" ); }
+	
 	virtual VComposite* shape( bool interactive = false ) const;
 
-	virtual void showDialog() const;
-    void refreshUnit();
+	void refreshUnit();
+	
 private:
-	VStarDlg* m_dialog;
+	VStarOptionsWidget* m_optionsWidget;
 };
 
 #endif

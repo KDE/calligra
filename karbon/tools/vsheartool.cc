@@ -45,7 +45,7 @@ VShearTool::~VShearTool()
 }
 
 void
-VShearTool::activate()
+VShearTool::doActivate()
 {
 	view()->statusMessage()->setText( i18n( "Shear" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );

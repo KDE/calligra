@@ -41,6 +41,8 @@ class KToggleAction;
 
 class TKUFloatSpinBoxAction;
 class VColorDocker;
+class VContextHelpDocker;
+class VToolOptionsDocker;
 class VEllipseTool;
 class VFill;
 class VFlattenDlg;
@@ -93,6 +95,9 @@ public:
 
 	KarbonPart* part()const { return m_part; }
 
+	VContextHelpDocker* contextHelpDocker() const { return m_contextHelpDocker; }
+	VToolOptionsDocker* toolOptionsDocker() const { return m_toolOptionsDocker; }
+	
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( int number );
 	void setLineWidth( double val);
@@ -159,6 +164,7 @@ protected slots:
 	void viewModeChanged();
 	void zoomChanged();
 	void viewColorManager();
+	void viewContextHelp();
 
 	//toolbox dialogs - slots
 	void solidFillClicked();
@@ -232,6 +238,8 @@ private:
 
 	//dockers
 	VColorDocker* m_ColorManager;
+	VContextHelpDocker* m_contextHelpDocker;
+	VToolOptionsDocker* m_toolOptionsDocker;
 	
 	//toolbox
 	DCOPObject* m_dcop;

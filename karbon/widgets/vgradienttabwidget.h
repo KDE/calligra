@@ -18,11 +18,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _VGRADIENTDOCKER_H_
-#define _VGRADIENTDOCKER_H_
+#ifndef _VGRADIENTTABWIDGET_H_
+#define _VGRADIENTTABWIDGET_H_
 
 #include <qwidget.h>
-#include "vdocker.h"
+#include <qtabwidget.h>
+
 #include "vgradient.h"
 
 class KComboBox;
@@ -30,7 +31,6 @@ class VGradientWidget;
 class KListBox;
 class QListBoxItem;
 class QPushButton;
-class QTabWidget;
 class QGroupBox;
 
 class VGradientPreview : public QWidget
@@ -45,7 +45,7 @@ class VGradientPreview : public QWidget
 		VGradient**     m_lpgradient;
 }; // VGradientPreview
 
-class VGradientDocker : public VDocker
+class VGradientTabWidget : public QTabWidget
 {
 	Q_OBJECT
 
@@ -55,8 +55,8 @@ class VGradientDocker : public VDocker
 			FILL
 		};
 	
-		VGradientDocker( VGradient& gradient, QWidget* parent = 0L, const char* name = 0L );
-		~VGradientDocker();
+		VGradientTabWidget( VGradient& gradient, QWidget* parent = 0L, const char* name = 0L );
+		~VGradientTabWidget();
 
 		const VGradient* gradient();
 		void setGradient( VGradient& gradient );
@@ -90,6 +90,6 @@ class VGradientDocker : public VDocker
 		VGradient*        m_gradient;
 			/** The predefined gradients list. */
 		QPtrList<VGradient>     m_predefGradients;
-}; // VGradientDocker
+}; // VGradientTabWidget
 
-#endif /* _VGRADIENTDOCKER_H_ */
+#endif /* _VGRADIENTTABWIDGET_H_ */

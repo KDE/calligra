@@ -22,10 +22,35 @@
 #define __VSINUSTOOL_H__
 
 #include "vshapetool.h"
+#include <qwidget.h>
 
+class KDoubleNumInput;
+class KIntSpinBox;
+class KarbonPart;
+class QLabel;
 
-class VSinusDlg;
+class VSinusOptionsWidget : public QGroupBox
+{
+	Q_OBJECT
 
+public:
+	VSinusOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+
+	double width() const;
+	double height() const;
+	uint periods() const;
+	void setWidth( double value );
+	void setHeight( double value );
+	void setPeriods( uint value );
+	void refreshUnit ();
+private:
+	KDoubleNumInput* m_width;
+	KDoubleNumInput* m_height;
+	KIntSpinBox* m_periods;
+	KarbonPart*m_part;
+	QLabel *m_heightLabel;
+	QLabel *m_widthLabel;
+};
 
 class VSinusTool : public VShapeTool
 {
@@ -33,13 +58,15 @@ public:
 	VSinusTool( KarbonView* view );
 	virtual ~VSinusTool();
 
+	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QString name() { return "Sinus tool"; }
+
 	virtual VComposite* shape( bool interactive = false ) const;
 
-	virtual void showDialog() const;
     void refreshUnit();
 
 private:
-	VSinusDlg* m_dialog;
+	VSinusOptionsWidget* m_optionsWidget;
 };
 
 #endif

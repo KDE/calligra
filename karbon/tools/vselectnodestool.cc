@@ -47,7 +47,7 @@ VSelectNodesTool::~VSelectNodesTool()
 }
 
 void
-VSelectNodesTool::activate()
+VSelectNodesTool::doActivate()
 {
 	if( m_state == normal )
 		view()->statusMessage()->setText( i18n( "EditNode" ) );

@@ -21,10 +21,38 @@
 #ifndef __VSPIRALTOOL_H__
 #define __VSPIRALTOOL_H__
 
+#include <qgroupbox.h>
+
+#include <klocale.h>
 
 #include "vshapetool.h"
 
-class VSpiralDlg;
+class KComboBox;
+class KDoubleNumInput;
+class KIntSpinBox;
+
+class VSpiralOptionsWidget : public QGroupBox
+{
+	Q_OBJECT
+
+public:
+	VSpiralOptionsWidget( QWidget* parent = 0L, const char* name = 0L );
+
+	double radius() const;
+	uint segments() const;
+	double fade() const;
+	bool clockwise() const;
+	void setRadius( double value );
+	void setSegments( uint value );
+	void setFade( double value );
+	void setClockwise( bool value );
+
+private:
+	KDoubleNumInput* m_radius;
+	KIntSpinBox* m_segments;
+	KDoubleNumInput* m_fade;
+	QComboBox* m_clockwise;
+};
 
 
 class VSpiralTool : public VShapeTool
@@ -33,12 +61,13 @@ public:
 	VSpiralTool( KarbonView* view );
 	virtual ~VSpiralTool();
 
+	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QString name() { return i18n( "Spiral tool" ); }
+
 	virtual VComposite* shape( bool interactive = false ) const;
 
-	virtual void showDialog() const;
-
 private:
-	VSpiralDlg* m_dialog;
+	VSpiralOptionsWidget* m_optionsWidget;
 };
 
 #endif

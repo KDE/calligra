@@ -19,26 +19,63 @@
 */
 
 
+#include <qlabel.h>
+
 #include <klocale.h>
+#include <knuminput.h>
 
 #include "karbon_view.h"
 #include "vpolygon.h"
-#include "vpolygondlg.h"
 #include "vpolygontool.h"
 
+VPolygonOptionsWidget::VPolygonOptionsWidget( QWidget* parent, const char* name )
+	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name )
+{
+	new QLabel( i18n( "Radius:" ), this );
+	m_radius = new KDoubleNumInput( 0, this );
+	new QLabel( i18n( "Edges:" ), this );
+	m_edges = new KIntSpinBox( this );
+	m_edges->setMinValue( 3 );
+	setInsideMargin( 4 );
+	setInsideSpacing( 2 );
+}
+
+double
+VPolygonOptionsWidget::radius() const
+{
+	return m_radius->value();
+}
+
+uint
+VPolygonOptionsWidget::edges() const
+{
+	return m_edges->value();
+}
+
+void
+VPolygonOptionsWidget::setRadius( double value )
+{
+	m_radius->setValue( value );
+}
+
+void
+VPolygonOptionsWidget::setEdges( uint value )
+{
+	m_edges->setValue( value );
+}
 
 VPolygonTool::VPolygonTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Polygon" ), true )
 {
 	// create config dialog:
-	m_dialog = new VPolygonDlg();
-	m_dialog->setRadius( 100.0 );
-	m_dialog->setEdges( 5 );
+	m_optionsWidget = new VPolygonOptionsWidget();
+	m_optionsWidget->setRadius( 100.0 );
+	m_optionsWidget->setEdges( 5 );
 }
 
 VPolygonTool::~VPolygonTool()
 {
-	delete( m_dialog );
+	delete( m_optionsWidget );
 }
 
 VComposite*
@@ -46,15 +83,12 @@ VPolygonTool::shape( bool interactive ) const
 {
 	if( interactive )
 	{
-		if( m_dialog->exec() )
-			return
-				new VPolygon(
-					0L,
-					m_p,
-					m_dialog->radius(),
-					m_dialog->edges() );
-		else
-			return 0L;
+		return
+			new VPolygon(
+				0L,
+				m_p,
+				m_optionsWidget->radius(),
+				m_optionsWidget->edges() );
 	}
 	else
 		return
@@ -62,13 +96,8 @@ VPolygonTool::shape( bool interactive ) const
 				0L,
 				m_p,
 				m_d1,
-				m_dialog->edges(),
+				m_optionsWidget->edges(),
 				m_d2 );
 }
 
-void
-VPolygonTool::showDialog() const
-{
-	m_dialog->exec();
-}
-
+#include "vpolygontool.moc"

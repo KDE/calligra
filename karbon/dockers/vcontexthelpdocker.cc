@@ -18,35 +18,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VRECTANGLEDLG_H__
-#define __VRECTANGLEDLG_H__
+#include <qlabel.h>
+#include <qlayout.h>
 
-#include <kdialogbase.h>
+#include <koMainWindow.h>
 
-class KDoubleNumInput;
-class KarbonPart;
-class QLabel;
+#include "vcontexthelpdocker.h"
+#include "karbon_view.h"
+#include "vtool.h"
 
-class VRectangleDlg : public KDialogBase
+VContextHelpDocker::VContextHelpDocker( KarbonView* view )
+		: VDocker( view->shell() )
 {
-	Q_OBJECT
+	helpLabel = new QLabel( i18n( "Here will appear context help." ), this );
+	helpLabel->setMargin( 4 );
+	helpLabel->setFrameStyle( Sunken | Box );
+	helpLabel->setBackgroundMode( PaletteLight );
+	
+	setCaption( "Context Help" );
+	setWidget( helpLabel );
+} // VContextHelpDocker::VContextHelpDocker
 
-public:
-	VRectangleDlg( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+VContextHelpDocker::~VContextHelpDocker()
+{
+} // VContextHelpDocker::~VContextHelpDocker
 
-	double width() const;
-	double height() const;
-	void setWidth( double value );
-	void setHeight( double value );
-	void refreshUnit ();
-private:
-	KDoubleNumInput* m_width;
-	KDoubleNumInput* m_height;
-	KarbonPart*m_part;
-	QLabel *m_heightLabel;
-	QLabel *m_widthLabel;
+void VContextHelpDocker::manageTool( VTool* tool )
+{
+	helpLabel->setText( tool->contextHelp() );
+	helpLabel->updateGeometry();
+} // VContextHelpDocker::manageTool
 
-};
-
-#endif
-
+#include "vcontexthelpdocker.moc"
