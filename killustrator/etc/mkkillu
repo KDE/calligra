@@ -2,16 +2,16 @@
 
 make acinclude.m4
 rm -rf killustrator.dist
-cp -ra killustrator killustrator.dist
+cp -rp killustrator killustrator.dist
 rm -rf killustrator.dist/etc killustrator.dist/koffice
-cp -a ltmain.sh ltconfig missing mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL acconfig.h config.guess config.sub config.h.bot killustrator.dist
+cp -p install-sh ltmain.sh ltconfig missing mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL acconfig.h config.guess config.sub config.h.bot killustrator.dist
 mkdir killustrator.dist/po
-cp -a po/killustrator.pot killustrator.dist/po
-cp -a killustrator/etc/po_Makefile.am killustrator.dist/po/Makefile.am
+cp -p po/killustrator.pot killustrator.dist/po
+cp -p killustrator/etc/po_Makefile.am killustrator.dist/po/Makefile.am
 list=""
 for file in po/*/killustrator.po; do
    lang=`echo $file | sed -e "s#.*po/\(.*\)/.*#\1#"`
-   cp -a $file killustrator.dist/po/$lang.po
+   cp -p $file killustrator.dist/po/$lang.po
    msgfmt $file -o killustrator.dist/po/$lang.gmo
    list="$list $lang.gmo"
 done
