@@ -22,6 +22,7 @@
 
 #include <qpainter.h>
 #include <kparts/event.h>
+#include <kcursor.h>
 #include <kdebug.h>
 
 #define QMAX32767(a,b) QMAX(QMAX(32767,a),b)
@@ -347,10 +348,10 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
     else if ( r7.contains( ev->pos() ) || r8.contains( ev->pos() ) )
       setCursor( sizeHorCursor );
     else
-      setCursor( pointingHandCursor );
+      setCursor( KCursor::handCursor() );
   }
   else
-    setCursor( pointingHandCursor );
+    setCursor( KCursor::handCursor() );
 }
 
 void KoFrame::mouseReleaseEvent( QMouseEvent* )

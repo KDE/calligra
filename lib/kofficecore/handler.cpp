@@ -22,6 +22,7 @@
 #include <koFrame.h>
 #include <math.h>
 #include <qwmatrix.h>
+#include <kcursor.h>
 #include <kdebug.h>
 
 EventHandler::EventHandler( QObject* target )
@@ -331,7 +332,7 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
         else if ( gadget == KoChild::MidLeft || gadget == KoChild::MidRight )
             targetWidget->setCursor( sizeHorCursor );
         else if ( gadget == KoChild::Move )
-            targetWidget->setCursor( pointingHandCursor );
+            targetWidget->setCursor( KCursor::handCursor() );
         else
         {
             targetWidget->setCursor( arrowCursor );

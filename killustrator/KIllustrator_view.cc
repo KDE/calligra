@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <qwidget.h>
 #include <kapp.h>
+#include <kcursor.h>
 #include <KIllustrator_view.h>
 #include <KIllustrator_doc.h>
 #include <KIllustrator_factory.h>
@@ -355,10 +356,10 @@ void KIllustratorView::setupCanvas()
 
     hRuler = new Ruler (m_pDoc, Ruler::Horizontal, mu, this);
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
-    hRuler->setCursor(Qt::pointingHandCursor);
+    hRuler->setCursor(KCursor::handCursor());
     vRuler = new Ruler (m_pDoc, Ruler::Vertical, mu, this);
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
-    vRuler->setCursor(Qt::pointingHandCursor);
+    vRuler->setCursor(KCursor::handCursor());
 
     connect(hRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
     connect(vRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
