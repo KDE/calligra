@@ -1593,26 +1593,26 @@ void KPresenterView::screenFirst()
     }
 }
 
-void KPresenterView::screenPrev()
+void KPresenterView::screenPrev( bool gotoPreviousPage )
 {
     if ( m_canvas->currentTextObjectView() )
         return;
 
     if ( presStarted ) {
-        m_canvas->pPrev( true );
+        m_canvas->pPrev( gotoPreviousPage );
         m_canvas->setFocus();
     }
     else
         prevPage();
 }
 
-void KPresenterView::screenNext()
+void KPresenterView::screenNext( bool gotoNextPage )
 {
     if ( m_canvas->currentTextObjectView() )
         return;
     if ( presStarted )
     {
-        m_canvas->pNext( true );
+        m_canvas->pNext( gotoNextPage );
         m_canvas->setFocus();
     }
     else

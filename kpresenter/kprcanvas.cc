@@ -2098,15 +2098,25 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 {
     if ( !editMode ) {
         switch ( e->key() ) {
-        case Key_Space: case Key_Right: case Key_Down: case Key_Next:
+        case Key_Space: case Key_Right: case Key_Down: 
             setSwitchingMode( false );
             m_view->screenNext();
             break;
-        case Key_Backspace: case Key_Left: case Key_Up: case Key_Prior:
+        case Key_Next:
+            setSwitchingMode( false );
+            m_view->screenNext( true );
+            break;
+        case Key_Backspace: case Key_Left: case Key_Up:
             setSwitchingMode( false );
             finishObjectEffects();
             finishPageEffect( true );
             m_view->screenPrev();
+            break;
+        case Key_Prior:
+            setSwitchingMode( false );
+            finishObjectEffects();
+            finishPageEffect( true );
+            m_view->screenPrev( true );
             break;
         case Key_Escape: case Key_Q: case Key_X:
             setSwitchingMode( false );
@@ -3146,69 +3156,72 @@ void KPrCanvas::stopScreenPresentation()
     setWFlags( WResizeNoErase );
 }
 
-bool KPrCanvas::pNext( bool )
+bool KPrCanvas::pNext( bool gotoNextPage )
 {
     goingBack = false;
 
     bool objectEffectFinished = finishObjectEffects();
 
-    if ( finishPageEffect() )
-      return false;
-
-    // clear drawed lines
-    m_drawModeLines.clear();
-
-    //kdDebug(33001) << "\n-------\nKPrCanvas::pNext m_step =" << m_step.m_step << " m_subStep =" << m_step.m_subStep << endl;
-
-    // First try to go one sub-step further, if any object requires it
-    QPtrListIterator<KPObject> oit(getObjectList());
-    for ( int i = 0 ; oit.current(); ++oit, ++i )
-    {
-        KPObject *kpobject = oit.current();
-        if ( kpobject->getAppearStep() == static_cast<int>( m_step.m_step )
-             && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
-        {
-            if ( static_cast<int>( m_step.m_subStep + 1 ) < kpobject->getSubPresSteps() )
-            {
-                m_step.m_subStep++;
-                //kdDebug(33001) << "Page::pNext addSubPres m_subStep is now " << m_subStep << endl;
-                doObjEffects();
-                return false;
-            }
-        }
-    }
-
     KPresenterDoc * doc = m_view->kPresenterDoc();
 
-    // Then try to see if there is still one step to do in the current page
-    if ( m_step.m_step < *( --m_pageEffectSteps.end() ) )
+    if ( !gotoNextPage )
     {
-        QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
-        m_step.m_step = *( ++it );
-        m_step.m_subStep = 0;
-        //kdDebug(33001) << "Page::pNext setting currentEffectStep to " << currentEffectStep << endl;
+        if ( finishPageEffect() )
+          return false;
 
-        // if first step on page, draw background
-        if ( m_step.m_step == 0 )
+        // clear drawed lines
+        m_drawModeLines.clear();
+
+        //kdDebug(33001) << "\n-------\nKPrCanvas::pNext m_step =" << m_step.m_step << " m_subStep =" << m_step.m_subStep << endl;
+
+        // First try to go one sub-step further, if any object requires it
+        QPtrListIterator<KPObject> oit(getObjectList());
+        for ( int i = 0 ; oit.current(); ++oit, ++i )
         {
-            QPainter p;
-            p.begin( this );
-            drawBackground( &p,
-                            QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ),
-                            doc->pageList().at( m_step.m_pageNumber ) );
-            p.end();
+            KPObject *kpobject = oit.current();
+            if ( kpobject->getAppearStep() == static_cast<int>( m_step.m_step )
+                 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
+            {
+                if ( static_cast<int>( m_step.m_subStep + 1 ) < kpobject->getSubPresSteps() )
+                {
+                    m_step.m_subStep++;
+                    //kdDebug(33001) << "Page::pNext addSubPres m_subStep is now " << m_subStep << endl;
+                    doObjEffects();
+                    return false;
+                }
+            }
         }
 
-        doObjEffects();
-        return false;
-    }
+        // Then try to see if there is still one step to do in the current page
+        if ( m_step.m_step < *( --m_pageEffectSteps.end() ) )
+        {
+            QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
+            m_step.m_step = *( ++it );
+            m_step.m_subStep = 0;
+            //kdDebug(33001) << "Page::pNext setting currentEffectStep to " << currentEffectStep << endl;
 
-    /*
-     * don't go to next slide if we have finished an object effect
-     * so that we can see the hole slide before going to the next
-     */
-    if ( objectEffectFinished )
-        return false;
+            // if first step on page, draw background
+            if ( m_step.m_step == 0 )
+            {
+                QPainter p;
+                p.begin( this );
+                drawBackground( &p,
+                                QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ),
+                                doc->pageList().at( m_step.m_pageNumber ) );
+                p.end();
+            }
+
+            doObjEffects();
+            return false;
+        }
+
+        /*
+         * don't go to next slide if we have finished an object effect
+         * so that we can see the hole slide before going to the next
+         */
+        if ( objectEffectFinished )
+            return false;
+    }
 
     // No more steps in this page, try to go to the next page
     QValueList<int>::ConstIterator test(  m_presentationSlidesIterator );
@@ -3321,7 +3334,7 @@ bool KPrCanvas::pNext( bool )
     return false;
 }
 
-bool KPrCanvas::pPrev( bool /*manual*/ )
+bool KPrCanvas::pPrev( bool gotoPreviousPage )
 {
     goingBack = true;
     m_step.m_subStep = 0;
@@ -3329,7 +3342,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
     // clear drawed lines
     m_drawModeLines.clear();
 
-    if ( m_step.m_step > *m_pageEffectSteps.begin() ) {
+    if ( !gotoPreviousPage && m_step.m_step > *m_pageEffectSteps.begin() ) {
         QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
         m_step.m_step = *( --it );
         //hopefully there are never more than 1000 sub steps :-)
@@ -3355,8 +3368,18 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         //change active page.
         setActivePage(doc->pageList().at( m_step.m_pageNumber ) );
         m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
-        m_step.m_step = *( --m_pageEffectSteps.end() );
-        repaint( false );
+
+        if ( gotoPreviousPage )
+        {
+            m_step.m_step = *( m_pageEffectSteps.begin() );
+            goingBack = false;
+            doObjEffects();
+        }
+        else
+        {
+            m_step.m_step = *( --m_pageEffectSteps.end() );
+            repaint( false );
+        }
 
         return true;
     }

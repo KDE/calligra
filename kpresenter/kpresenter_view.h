@@ -282,8 +282,18 @@ public slots:
     void screenStop();
     void screenPause();
     void screenFirst();
-    void screenPrev();
-    void screenNext();
+    /**
+     * Go to previous step of the presentation.
+     * gotoPreviousPage: if is set to true go to beginning of the
+     *                   previous page.
+     */
+    void screenPrev( bool gotoPreviousPage = false );
+    /**
+     * Go to the next step of the presentation.
+     * gotoNextPage: if is set to true go to beginning of the
+     *               next page.
+     */
+    void screenNext( bool gotoNextPage = false );
     void screenLast();
     void screenSkip();
 

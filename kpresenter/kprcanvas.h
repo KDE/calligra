@@ -140,13 +140,17 @@ public:
 
     /**
      * Go to the next step in the presentation.
+     * gotoNextPage: if is set to true go to beginning of the
+     *               next page.
      */
-    bool pNext( bool );
+    bool pNext( bool gotoNextPage = false );
 
     /**
-     * Go back one step in the presentation.
+     * Go to previous step of the presentation.
+     * gotoPreviousPage: if is set to true go to beginning of the
+     *                   previous page.
      */
-    bool pPrev( bool );
+    bool pPrev( bool gotoPreviousPage = false );
 
     /// returns the current page of the presentation 1 based
     unsigned int presPage() const { return m_step.m_pageNumber + 1; }
