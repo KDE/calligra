@@ -150,7 +150,6 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 	_painter->setPen( pen2 );
 	_painter->setBrush( brush );
     }
-
     switch ( pieType )
     {
     case PT_PIE:

@@ -27,7 +27,7 @@ class KCommand;
 class KMacroCommand;
 class KCommandHistory;
 class KoZoomHandler;
-class KPrAutoFormat;
+class KoAutoFormat;
 class KoUnit;
 class KoVariable;
 class KoVariableFormatCollection;
@@ -200,7 +200,7 @@ public:
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
     KPClipartCollection *getClipartCollection() { return &_clipartCollection; }
 
-    KPrAutoFormat * getAutoFormat() { return m_autoFormat; }
+    KoAutoFormat * getAutoFormat() { return m_autoFormat; }
 
     void replaceObjs( bool createUndoRedo = true );
 
@@ -433,7 +433,7 @@ protected:
     KCommandHistory * m_commandHistory;
     KoZoomHandler* m_zoomHandler;
     QFont m_defaultFont;
-    KPrAutoFormat * m_autoFormat;
+    KoAutoFormat * m_autoFormat;
     KSpellConfig *m_pKSpellConfig;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;

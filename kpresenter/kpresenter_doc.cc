@@ -64,7 +64,6 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koQueryTrader.h>
-#include "kprautoformat.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -81,6 +80,7 @@
 #include <kspell.h>
 
 #include <koVariable.h>
+#include <koAutoFormat.h>
 #include <koDocumentInfo.h>
 #include "kprvariable.h"
 #include "kpbackground.h"
@@ -145,7 +145,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     dcop = 0;
     m_kpresenterView = 0;
     m_initialActivePage=0;
-    m_autoFormat = new KPrAutoFormat(this);
+    m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection);
     _clean = true;
     _spInfinitLoop = false;
     _spManualSwitch = true;
