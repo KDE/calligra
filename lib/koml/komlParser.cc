@@ -48,7 +48,7 @@ bool KOMLParser::close( string& )
 {
     m_node = m_stack.pop().nextSibling();
 
-    return ( !m_node.isNull() );
+    return TRUE;
 }
 
 bool KOMLParser::readText( string& text )
