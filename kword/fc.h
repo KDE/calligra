@@ -119,7 +119,7 @@ public:
     /**
      * @return the position that is needed to display the counter.
      */
-    unsigned int getPTCounterPos() { return ptCounterPos; }
+  //unsigned int getPTCounterPos() { return ptCounterPos; }
     /**
      * @return the current ascender. This is always <= ptMaxAscender.
      */
@@ -160,7 +160,7 @@ public:
     unsigned int getTextPos() { return textPos; }
     void setTextPos(unsigned int _pos) { textPos = _pos; }
 
-    unsigned short getCounter( unsigned int _counternr, unsigned int _depth );
+  //unsigned short getCounter( unsigned int _counternr, unsigned int _depth );
 
     unsigned int getLineHeight();
 
@@ -256,7 +256,7 @@ protected:
     /**
      * We store all paragraph counters in this array.
      */
-    unsigned short counters[8][8];
+    //unsigned short counters[8][8];
     bool compare_formats;
     bool outOfFrame;
 };

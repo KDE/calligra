@@ -1272,7 +1272,9 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
   // style combobox
   OpenPartsUI::StrList stylelist;
-  stylelist.length( 0 );
+  stylelist.length(m_pKWordDoc->paragLayoutList.count());
+  for (unsigned int i = 0;i < m_pKWordDoc->paragLayoutList.count();i++)
+    stylelist[i] = CORBA::string_dup(m_pKWordDoc->paragLayoutList.at(i)->getName());
   m_idComboText_Style = m_vToolBarText->insertCombo( stylelist, ID_STYLE_LIST, false, SIGNAL( activated( const char* ) ),
 						     this, "textStyleSelected", true, i18n("Style"),
 						     200, -1, OpenPartsUI::AtBottom );

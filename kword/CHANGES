@@ -359,3 +359,9 @@ Reggie, 18.11.1998:
 -------------------
 - Added tab to the paragraph layout dialog for configuration of paragraph borders
 - Use this border config tab in the stylist too
+
+Reggie, 19.11.1998:
+-------------------
+- Started adding tab to the paragraph layout dialog for configuration of numbering (different list types and chapter numbering)
+- Use this tab in stylist too
+- Started implementing of internal stuff for using style templates in the documents

@@ -15,15 +15,19 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add = true )
     mmParagHeadOffset = 0;
     mmFirstLineLeftIndent = 0;
     mmLeftIndent = 0;
-    counterFlow = C_LEFT;
+    //counterFlow = C_LEFT;
+    counterType = CT_NONE;
     counterDepth = 0;
     // counterNr = -1;
-    counterNr = 0;
+    //counterNr = 0;
+    counterBullet = '-';
     counterLeftText = "";
     counterRightText = "";
     followingParagLayout = this;
-    numberLikeParagLayout = 0L;
+    //numberLikeParagLayout = 0L;
     ptLineSpacing = 0;
+    startCounter = "";
+    numberingType = NT_LIST;
 
     left.color = white;
     left.style = SOLID;
@@ -58,14 +62,16 @@ KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
   mmParagHeadOffset = _layout.getMMParagHeadOffset();
   mmFirstLineLeftIndent = _layout.getMMFirstLineLeftIndent();
   mmLeftIndent = _layout.getMMLeftIndent();
-  counterFlow = static_cast<CounterFlow>(_layout.getCounterFlow());
+  counterType = static_cast<CounterType>(_layout.getCounterType());
   counterDepth = _layout.getCounterDepth();
-  counterNr = _layout.getCounterNr();
+  counterBullet = _layout.getCounterBullet();
   counterLeftText = qstrdup(_layout.getCounterLeftText());
   counterRightText = qstrdup(_layout.getCounterRightText());
   followingParagLayout = this;
-  numberLikeParagLayout = 0L;
+  //numberLikeParagLayout = 0L;
   ptLineSpacing = _layout.getPTLineSpacing();
+  startCounter = _layout.getStartCounter();
+  numberingType = _layout.getNumberingType();
 
   left = _layout.getLeftBorder();
   right = _layout.getRightBorder();
@@ -86,23 +92,24 @@ void KWParagLayout::setFollowingParagLayout( const char *_name )
 	followingParagLayout = p;
 }
 
-void KWParagLayout::setNumberLikeParagLayout( const char *_name )
-{
-    KWParagLayout* p = document->findParagLayout( _name );
-    if ( p == 0L )
-	numberLikeParagLayout = this;
-    else
-	numberLikeParagLayout = p;
-}
+// void KWParagLayout::setNumberLikeParagLayout( const char *_name )
+// {
+//     KWParagLayout* p = document->findParagLayout( _name );
+//     if ( p == 0L )
+// 	numberLikeParagLayout = this;
+//     else
+// 	numberLikeParagLayout = p;
+// }
 
 void KWParagLayout::save(ostream &out)
 {
+  out << indent << "<NAME value=\"" << name << "\"/>" << endl;
   out << indent << "<FLOW value=\"" << static_cast<int>(flow) << "\"/>" << endl;
   out << indent << "<OFFSETS head=\"" << mmParagHeadOffset << "\" foot=\"" << mmParagFootOffset << "\"/>" << endl;
   out << indent << "<INDENTS first=\"" << mmFirstLineLeftIndent << "\" left=\"" << mmLeftIndent << "\"/>" << endl;
-  out << indent << "<COUNTER flow=\"" << static_cast<int>(counterFlow) << "\" depth=\"" << counterDepth 
-      << "\" nr=\"" << counterNr << "\" lefttext=\"" << counterLeftText << "\" righttext=\"" << counterRightText
-      << "\"/>" << endl;
+  out << indent << "<COUNTER type=\"" << static_cast<int>(counterType) << "\" depth=\"" << counterDepth 
+      << "\" bullet=\"" << counterBullet << "\" start=\"" << startCounter << "\" numberingtype=\"" 
+      << static_cast<int>(numberingType) << "\" lefttext=\"" << counterLeftText << "\" righttext=\"" << counterRightText << "\"/>" << endl;
   out << indent << "<LINESPACING value=\"" << ptLineSpacing << "\"/>" << endl;
   out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
       << left.color.blue() << "\" style=\"" << static_cast<int>(left.style) << "\" width=\"" << left.ptWidth << "\"/>" << endl; 
@@ -117,16 +124,28 @@ void KWParagLayout::save(ostream &out)
 void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
-  string name;
+  string _name;
 
   while (parser.open(0L,tag))
     {
-      KOMLParser::parseTag(tag.c_str(),name,lst);
+      KOMLParser::parseTag(tag.c_str(),_name,lst);
 	      
       // text
-      if (name == "FLOW")
+      if (_name == "NAME")
 	{
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		name = (*it).m_strValue.c_str();
+	    }
+	}
+
+      // text
+      else if (_name == "FLOW")
+	{
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
@@ -136,9 +155,9 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       // offsets
-      else if (name == "OFFSETS")
+      else if (_name == "OFFSETS")
 	{
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
@@ -150,9 +169,9 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       // indents
-      else if (name == "INDENTS")
+      else if (_name == "INDENTS")
 	{
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
@@ -164,29 +183,33 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       // counter
-      else if (name == "COUNTER")
+      else if (_name == "COUNTER")
 	{
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
-	      if ((*it).m_strName == "flow")
-		counterFlow = static_cast<CounterFlow>(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "type")
+		counterType = static_cast<CounterType>(atoi((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "depth")
 		counterDepth = atoi((*it).m_strValue.c_str());
-	      else if ((*it).m_strName == "nr")
-		counterNr = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bullet")
+		counterBullet = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "lefttext")
 		counterLeftText = (*it).m_strValue.c_str();
 	      else if ((*it).m_strName == "righttext")
 		counterRightText = (*it).m_strValue.c_str();
+	      else if ((*it).m_strName == "start")
+		startCounter = (*it).m_strValue.c_str();
+	      else if ((*it).m_strName == "numberingtype")
+		numberingType = static_cast<NumType>(atoi((*it).m_strValue.c_str()));
 	    }
 	}
 
       // line spacing
-      else if (name == "LINESPACING")
+      else if (_name == "LINESPACING")
 	{
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
@@ -196,10 +219,10 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       // left border
-      else if (name == "LEFTBORDER")
+      else if (_name == "LEFTBORDER")
 	{
 	  unsigned int r = 0,g = 0,b = 0;
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
@@ -226,10 +249,10 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       // right border
-      else if (name == "RIGHTBORDER")
+      else if (_name == "RIGHTBORDER")
 	{
 	  unsigned int r = 0,g = 0,b = 0;
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
@@ -256,10 +279,10 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       // bottom border
-      else if (name == "BOTTOMBORDER")
+      else if (_name == "BOTTOMBORDER")
 	{
 	  unsigned int r = 0,g = 0,b = 0;
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
@@ -286,10 +309,10 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       // top border
-      else if (name == "TOPBORDER")
+      else if (_name == "TOPBORDER")
 	{
 	  unsigned int r = 0,g = 0,b = 0;
-	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {

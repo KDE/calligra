@@ -231,6 +231,21 @@ QPen KWBorderPreview::setBorderPen(KWParagLayout::Border _brd)
 }
 
 /******************************************************************/
+/* class KWNumPreview                                             */
+/******************************************************************/
+
+/*================================================================*/
+KWNumPreview::KWNumPreview(QWidget* parent,const char* name)
+  : QGroupBox(i18n("Preview"),parent,name)
+{
+}
+
+/*================================================================*/
+void KWNumPreview::drawContents(QPainter* painter)
+{
+}
+
+/******************************************************************/
 /* Class: KWParagDia                                              */
 /******************************************************************/
 
@@ -246,6 +261,8 @@ KWParagDia::KWParagDia(QWidget* parent,const char* name,int _flags = PD_SPACING 
     setupTab2();
   if (_flags & PD_BORDERS)
     setupTab3();
+  if (_flags & PD_NUMBERING)
+    setupTab4();
 
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
@@ -669,12 +686,128 @@ void KWParagDia::setupTab3()
   grid3->addColSpacing(0,lColor->width());
   grid3->addColSpacing(0,bColor->width());
   grid3->addColSpacing(0,bb->width());
+  grid3->addColSpacing(1,250);
   grid3->setColStretch(0,0);
   grid3->setColStretch(1,1);
 
   grid3->activate();
 
   addTab(tab3,i18n("Borders"));
+}
+
+/*================================================================*/
+void KWParagDia::setupTab4()
+{
+  tab4 = new QWidget(this);
+
+  grid4 = new QGridLayout(tab4,2,2,15,7);
+
+  gType = new QGroupBox("Configuration",tab4);
+  tgrid = new QGridLayout(gType,10,2,5,5);
+  
+  rANums = new QRadioButton(i18n("&Arabic Numbers (1, 2, 3, 4, ...)"),gType);
+  rANums->resize(rANums->sizeHint());
+  tgrid->addWidget(rANums,1,0);
+
+  rLRNums = new QRadioButton(i18n("&Lower Roman Numbers (i, ii, iii, iv, ...)"),gType);
+  rLRNums->resize(rLRNums->sizeHint());
+  tgrid->addWidget(rLRNums,2,0);
+
+  rURNums = new QRadioButton(i18n("&Upper Roman Numbers (I, II, III, IV, ...)"),gType);
+  rURNums->resize(rURNums->sizeHint());
+  tgrid->addWidget(rURNums,3,0);
+
+  rLAlph = new QRadioButton(i18n("L&ower Alphabetical (a, b, c, d, ...)"),gType);
+  rLAlph->resize(rLAlph->sizeHint());
+  tgrid->addWidget(rLAlph,4,0);
+
+  rUAlph = new QRadioButton(i18n("U&pper Alphabetical (A, B, C, D, ...)"),gType);
+  rUAlph->resize(rUAlph->sizeHint());
+  tgrid->addWidget(rUAlph,5,0);
+
+  rBullets = new QRadioButton(i18n("&Bullets"),gType);
+  rBullets->resize(rBullets->sizeHint());
+  tgrid->addWidget(rBullets,6,0);
+
+  bBullets = new QPushButton(gType);
+  bBullets->resize(30,30);
+  tgrid->addWidget(bBullets,6,1);
+
+  lDepth = new QLabel(i18n("Depth:"),gType);
+  lDepth->setAlignment(AlignRight | AlignVCenter);
+  lDepth->resize(lDepth->sizeHint());
+  tgrid->addWidget(lDepth,7,0);
+
+  sDepth = new KNumericSpinBox(gType);
+  sDepth->setRange(1,16);
+  sDepth->setEditable(false);
+  sDepth->resize(sDepth->sizeHint().width() / 2,sDepth->sizeHint().height());
+  tgrid->addWidget(sDepth,7,1);
+
+  rList = new QRadioButton(i18n("&List Numbering"),gType);
+  rList->resize(rList->sizeHint());
+  tgrid->addWidget(rList,8,0);
+
+  rChapter = new QRadioButton(i18n("&Chapter Numbering"),gType);
+  rChapter->resize(rChapter->sizeHint());
+  tgrid->addWidget(rChapter,8,1);
+
+  tgrid->addRowSpacing(0,7);
+  tgrid->addRowSpacing(1,rANums->height());
+  tgrid->addRowSpacing(2,rLRNums->height());
+  tgrid->addRowSpacing(3,rURNums->height());
+  tgrid->addRowSpacing(4,rLAlph->height());
+  tgrid->addRowSpacing(5,rUAlph->height());
+  tgrid->addRowSpacing(6,rBullets->height());
+  tgrid->addRowSpacing(6,bBullets->height());
+  tgrid->addRowSpacing(7,lDepth->height());
+  tgrid->addRowSpacing(7,sDepth->height());
+  tgrid->addRowSpacing(8,rList->height());
+  tgrid->addRowSpacing(8,rChapter->height());
+  tgrid->setRowStretch(0,0);
+  tgrid->setRowStretch(1,0);
+  tgrid->setRowStretch(2,0);
+  tgrid->setRowStretch(3,0);
+  tgrid->setRowStretch(4,0);
+  tgrid->setRowStretch(5,0);
+  tgrid->setRowStretch(6,0);
+  tgrid->setRowStretch(7,0);
+  tgrid->setRowStretch(8,0);
+  tgrid->setRowStretch(9,1);
+
+  tgrid->addColSpacing(0,rANums->width());
+  tgrid->addColSpacing(0,rLRNums->width());
+  tgrid->addColSpacing(0,rURNums->width());
+  tgrid->addColSpacing(0,rLAlph->width());
+  tgrid->addColSpacing(0,rUAlph->width());
+  tgrid->addColSpacing(0,rBullets->width());
+  tgrid->addColSpacing(0,lDepth->width());
+  tgrid->addColSpacing(0,rList->width());
+  tgrid->addColSpacing(1,bBullets->width());
+  tgrid->addColSpacing(1,sDepth->width());
+  tgrid->addColSpacing(1,rChapter->width());
+  tgrid->setColStretch(0,0);
+  tgrid->setColStretch(1,1);
+
+  tgrid->activate();
+
+  grid4->addWidget(gType,0,0);
+
+  prev4 = new KWNumPreview(tab4,"");
+  grid4->addMultiCellWidget(prev4,0,1,1,1);
+
+  grid4->addRowSpacing(0,gType->height());
+  grid4->setRowStretch(0,0);
+  grid4->setRowStretch(1,1);
+
+  grid4->addColSpacing(0,gType->width());
+  grid4->addColSpacing(1,250);
+  grid4->setColStretch(0,1);
+  grid4->setColStretch(1,1);
+
+  grid4->activate();
+
+  addTab(tab4,i18n("Numbering"));
 }
 
 /*================================================================*/

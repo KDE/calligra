@@ -309,6 +309,17 @@ void KWStyleEditor::changeBorders()
 /*================================================================*/
 void KWStyleEditor::changeNumbering()
 {
+  if (paragDia)
+    {
+      disconnect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
+      paragDia->close();
+      delete paragDia;
+      paragDia = 0;
+    }
+  paragDia = new KWParagDia(0,"",KWParagDia::PD_NUMBERING);
+  paragDia->setCaption(i18n("KWord - Numbering"));
+  connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
+  paragDia->show();
 }
 
 /*================================================================*/
@@ -334,6 +345,8 @@ void KWStyleEditor::paragDiaOk()
 	style->setTopBorder(paragDia->getTopBorder());
 	style->setBottomBorder(paragDia->getBottomBorder());
       } break;
+    case KWParagDia::PD_NUMBERING:
+      break;
     default: break;
     }
 

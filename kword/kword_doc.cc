@@ -287,7 +287,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   defaultUserFont = new KWUserFont(this,"times");
   defaultParagLayout = new KWParagLayout(this);
   defaultParagLayout->setName("Standard");
-  defaultParagLayout->setCounterNr(-1);
+  defaultParagLayout->setCounterType(KWParagLayout::CT_NONE);
     
   pages = 1;
 
@@ -859,15 +859,15 @@ void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
   int plus = 0;
 
   // First line ? Draw the counter ?
-  if ( pos == 0 && lay->getCounterNr() != -1 )
+  if ( pos == 0 && lay->getCounterType() != KWParagLayout::CT_NONE )
     {
       KWFormat counterfm(this, _fc );
       counterfm.apply( lay->getCounterFormat() );
       _painter.setFont( *( counterfm.loadFont( this ) ) );
       _painter.setPen( counterfm.getColor() );
       
-      _painter.drawText( _fc.getPTCounterPos() - xOffset, 
-			 _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, _fc.getCounterText() );
+      _painter.drawText(- xOffset, 
+			_fc.getPTY() + _fc.getPTMaxAscender() - yOffset, _fc.getCounterText() );
     }
     
   // paint it character for character. Provisionally! !!HACK!!

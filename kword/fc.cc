@@ -17,9 +17,9 @@ KWFormatContext::KWFormatContext(KWordDocument *_doc,unsigned int _frameSet)
   
   document = _doc;
 
-  for ( int i = 0; i < 8; i++ )
-    for ( int j = 0; j < 8; j++ )
-      counters[i][j] = 0;
+//   for ( int i = 0; i < 8; i++ )
+//     for ( int j = 0; j < 8; j++ )
+//       counters[i][j] = 0;
   
   during_vertical_cursor_movement = FALSE;
 
@@ -115,16 +115,16 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
       ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
     parag->setPTYStart( ptY );
 
-    if (_updateCounters)
-    {
-	// Initialize our paragraph counter stuff
-	int cnr = parag->getParagLayout()->getCounterNr();
-	int dep = parag->getParagLayout()->getCounterDepth();
+//     if (_updateCounters)
+//     {
+// 	// Initialize our paragraph counter stuff
+// 	int cnr = parag->getParagLayout()->getCounterNr();
+// 	int dep = parag->getParagLayout()->getCounterDepth();
 	
-	if ( cnr != -1 )
-	  counters[cnr][dep]++;
-	parag->updateCounters( this );
-    }
+// 	if ( cnr != -1 )
+// 	  counters[cnr][dep]++;
+// 	parag->updateCounters( this );
+//     }
 
     // We are at the beginning of our paragraph
     lineStartPos = 0;
@@ -318,12 +318,12 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 	
 	// decrease counter here, and don't let
 	// enterParagraph update the counter
-	int cnr = parag->getPrev()->getParagLayout()->getCounterNr();
-	int dep = parag->getPrev()->getParagLayout()->getCounterDepth();
+// 	int cnr = parag->getPrev()->getParagLayout()->getCounterNr();
+// 	int dep = parag->getPrev()->getParagLayout()->getCounterDepth();
 	
-	if ( cnr != -1 )
-	  counters[cnr][dep]--;
-	parag->getPrev()->updateCounters( this );
+// 	if ( cnr != -1 )
+// 	  counters[cnr][dep]--;
+// 	parag->getPrev()->updateCounters( this );
 	
 	init(parag->getPrev(),_painter,false,false);
 	int ret;
@@ -746,21 +746,21 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     ptWidth = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right;
 
     // First line ? Draw the couter ?
-    if ( lineStartPos == 0 && parag->getParagLayout()->getCounterNr() != -1 )
+    if ( lineStartPos == 0 && parag->getParagLayout()->getCounterType() != KWParagLayout::CT_NONE )
     {
 	KWFormat counterfm(doc, *this );
 	counterfm.apply( parag->getParagLayout()->getCounterFormat() );
 	_painter.setFont( *(counterfm.loadFont( document )) );
 	_painter.setPen( counterfm.getColor() );
 	
-	// Is the counter fixed to the left side ?
-	if ( parag->getParagLayout()->getCounterFlow() == KWParagLayout::C_LEFT ){
-	    left += ptCounterWidth;
-	}
-	else { // the counter is fixed to the right side
-	    right += ptCounterWidth;
-	}
-	
+// 	// Is the counter fixed to the left side ?
+// 	if ( parag->getParagLayout()->getCounterFlow() == KWParagLayout::C_LEFT ){
+// 	    left += ptCounterWidth;
+// 	}
+// 	else { // the counter is fixed to the right side
+// 	    right += ptCounterWidth;
+// 	}
+	left += ptCounterWidth; 
     }
 
 
@@ -770,7 +770,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 //     if ( parag->getParagLayout()->getFlow() == KWParagLayout::LEFT )
 //       ptPos = xShift + left;
 //     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK )
-      ptPos = xShift + left;
+    ptPos = xShift + left;
 
     //debug("%d %d %d",ptPos,ptTextLen,xShift + document->getPTColumnWidth());
 
@@ -782,14 +782,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 
     // Calculate the counter position
     // Is the counter fixed to the left side ?
-    if ( parag->getParagLayout()->getCounterFlow() == KWParagLayout::C_LEFT )
-    {
-	ptCounterPos = ptStartPos - ptCounterWidth;
-    }
-    else
-    { // the counter is fixed to the right side
-	ptCounterPos = xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - ptCounterWidth; // Attention!
-    }
+    ptCounterPos = ptStartPos - ptCounterWidth;
     
     // Get the correct font
     tmpFormat.apply( *this );
@@ -946,10 +939,10 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     return TRUE;
 }
 
-unsigned short KWFormatContext::getCounter( unsigned int _counternr, unsigned int _depth )
-{
-    return counters[ _counternr ][ _depth ];
-}
+// unsigned short KWFormatContext::getCounter( unsigned int _counternr, unsigned int _depth )
+// {
+//     return counters[ _counternr ][ _depth ];
+// }
 
 unsigned int KWFormatContext::getLineHeight()
 { 
@@ -965,9 +958,9 @@ void KWFormatContext::makeCounterLayout( QPainter &_painter )
     format.apply( parag->getParagLayout()->getCounterFormat() );
     KWDisplayFont *font = loadFont( document );    
 
-    parag->makeCounterText( counterText );
+    parag->makeCounterText(counterText);
     
-    ptCounterWidth = 30; //font->getPTWidth( counterText.data() );
+    ptCounterWidth = font->getPTWidth(counterText.data());
     ptCounterAscender = font->getPTAscender();
     ptCounterDescender = font->getPTDescender();
 }

@@ -21,7 +21,9 @@ class KWParagLayout
 {
 public:
     enum Flow { LEFT, RIGHT, CENTER, BLOCK };
-    enum CounterFlow { C_LEFT, C_RIGHT };
+  //enum CounterFlow { C_LEFT, C_RIGHT };
+    enum CounterType {CT_NONE,CT_NUM = 0,CT_ALPHAB = 1,CT_ROM_NUM = 2,CT_BULLET};
+    enum NumType {NT_LIST = 0,NT_CHAPTER = 1};
 
     enum BorderStyle {SOLID = 0,DASH = 1,DOT = 2,DASH_DOT = 3,DASH_DOT_DOT = 4};
     struct Border
@@ -59,9 +61,13 @@ public:
      */
     void setCounterRightText( const char *_t ) { counterRightText = _t; }
     /**
-     *  Set counters flow
+     *  Set counter type
      */
-    void setCounterFlow( CounterFlow _f ) { counterFlow = _f; }
+    void setCounterType(CounterType _t) { counterType = _t; }
+    /**
+     *  Set counter bullet.
+     */
+    void setCounterBullet(int _b) { counterBullet = _b; }
     /**
      *  Set Depth of Counter.
      */
@@ -69,7 +75,7 @@ public:
     /**
      * Set Number of Counter.
      */
-    void setCounterNr( int _nr ) { counterNr = _nr; }
+    //void setCounterNr( int _nr ) { counterNr = _nr; }
     /**
      * Set the format in which to print the counter.
      * This encloses font, color, point-size etc.
@@ -91,14 +97,20 @@ public:
      *
      * @param _paragname is the name of a valid KWParagLayout.
      */
-    void setNumberLikeParagLayout( const char *_paragname );
+    //void setNumberLikeParagLayout( const char *_paragname );
 
     void setLeftBorder(Border _brd) { left = _brd; }
     void setRightBorder(Border _brd) { right = _brd; }
     void setTopBorder(Border _brd) { top = _brd; }
     void setBottomBorder(Border _brd) { bottom = _brd; }
 
-    KWParagLayout* getNumberLikeParagLayout() {	return numberLikeParagLayout; }
+    void setStartCounter(QString _s) { startCounter = _s; }
+    QString getStartCounter() { return startCounter; }
+
+    void setNumberingType(NumType _t) { numberingType = _t; }
+    NumType getNumberingType() { return numberingType; }
+
+    //KWParagLayout* getNumberLikeParagLayout() {	return numberLikeParagLayout; }
     
     /**
      * @return a reference to the used format.
@@ -122,9 +134,13 @@ public:
     Border getTopBorder() { return top; }
     Border getBottomBorder() { return bottom; }
     /**
-     * @return the flow of the Counter.
+     * @return the type of the Counter.
      */
-    int getCounterFlow() { return counterFlow; }
+    CounterType getCounterType() { return counterType; }
+    /**
+     * @return the bullet of the Counter.
+     */
+    int getCounterBullet() { return counterBullet; }
     /**
      * @return depth of Counter.
      */
@@ -132,7 +148,7 @@ public:
     /**
      * @return number of Counter.
      */
-    int getCounterNr() { return counterNr; }
+    //int getCounterNr() { return counterNr; }
     /**
      * @return KWFormat for printing counter.
      *
@@ -171,7 +187,7 @@ protected:
      * @see KWFormat
      */
     KWFormat format;
-    CounterFlow counterFlow;  
+    //CounterFlow counterFlow;  
     /**
      * A value between 0 and 7.
      */
@@ -180,10 +196,14 @@ protected:
      * A value between 0 and 7 or -1.
      * -1 means that we dont use any counter.
      */
-    int counterNr;
+    int counterBullet;
+    //int counterNr;
     KWFormat counterFormat;
     QString counterLeftText;
     QString counterRightText;    
+    CounterType counterType;
+    QString startCounter;
+    NumType numberingType;
     /**
      * Parag that is used for numbering. For example a theorem
      * will be numbered like this: Theorem C.N .....    with C=Chapter Counter
@@ -192,7 +212,7 @@ protected:
      *
      * @see KWParagLayout
      */
-    KWParagLayout* numberLikeParagLayout;  
+    //KWParagLayout* numberLikeParagLayout;  
     /**
      * Name of the Parag that will be used when you press RETURN in this Parag
      * If this pointer is 0L the following parag layout is still the same.

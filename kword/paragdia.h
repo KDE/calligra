@@ -34,6 +34,7 @@
 #include <krestrictedline.h>
 #include <kbuttonbox.h>
 #include <kcolorbtn.h>
+#include <kspinbox.h>
 
 #include <stdlib.h>
 
@@ -124,6 +125,23 @@ protected:
 };
 
 /******************************************************************/
+/* class KWNumPreview                                             */
+/******************************************************************/
+
+class KWNumPreview : public QGroupBox
+{
+  Q_OBJECT
+
+public:
+  KWNumPreview(QWidget*,const char*);
+  ~KWNumPreview() {}
+  
+protected:
+  void drawContents(QPainter*);
+
+};
+
+/******************************************************************/
 /* Class: KWParagDia                                              */
 /******************************************************************/
 
@@ -176,22 +194,25 @@ protected:
   void setupTab1();
   void setupTab2();
   void setupTab3();
+  void setupTab4();
   void clearFlows();
   void updateBorders();
 
-  QWidget *tab1,*tab2,*tab3;
-  QGridLayout *grid1,*grid2,*grid3,*indentGrid,*spacingGrid,*pSpaceGrid;
+  QWidget *tab1,*tab2,*tab3,*tab4;
+  QGridLayout *grid1,*grid2,*grid3,*grid4,*indentGrid,*spacingGrid,*pSpaceGrid,*tgrid;
   KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing,*eBefore,*eAfter;
-  QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow,*lStyle,*lWidth,*lColor;
-  QGroupBox *indentFrame,*spacingFrame,*pSpaceFrame;
+  QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow,*lStyle,*lWidth,*lColor,*lDepth;
+  QGroupBox *indentFrame,*spacingFrame,*pSpaceFrame,*gType;
   QComboBox *cSpacing,*cStyle,*cWidth;
-  QRadioButton *rLeft,*rCenter,*rRight,*rBlock;
+  QRadioButton *rLeft,*rCenter,*rRight,*rBlock,*rANums,*rLRNums,*rURNums,*rLAlph,*rUAlph,*rBullets,*rList,*rChapter;
   KWPagePreview *prev1;
   KWPagePreview2 *prev2;
   KButtonBox *bb;
-  QPushButton *bLeft,*bRight,*bTop,*bBottom;
+  QPushButton *bLeft,*bRight,*bTop,*bBottom,*bBullets;
   KWBorderPreview *prev3;
   KColorButton *bColor;
+  KNumericSpinBox *sDepth;
+  KWNumPreview *prev4;
 
   KWParagLayout::Border leftBorder,rightBorder,topBorder,bottomBorder;
   int flags;

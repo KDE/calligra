@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <DOC author="Reginald Stadlbauer and Torben Weis" email="reggie@kde.org and weis@kde.org" editor="KWord" mime="application/x-kword">
  <PAPER format="1" width="210" height="297" orientation="0" columns="1" columnspacing="3">
   <PAPERBORDERS left="0" top="0" right="0" bottom="0"/>
@@ -12,10 +13,11 @@
     <FORMATS>
     </FORMATS>
     <LAYOUT>
+     <NAME value="Standard"/>
      <FLOW value="0"/>
      <OFFSETS head="0" foot="0"/>
      <INDENTS first="0" left="0"/>
-     <COUNTER flow="0" depth="0" nr="-1" lefttext="" righttext=""/>
+     <COUNTER type="0" depth="0" bullet="45" start="" numberingtype="0" lefttext="" righttext=""/>
      <LINESPACING value="0"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -25,17 +27,18 @@
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET frameType="1" autoCreateNewFrame="0">
-   <FRAME left="28" top="100" right="200" bottom="300" runaround="0"/>
-   <FRAME left="200" top="400" right="300" bottom="510" runaround="0"/>
+   <FRAME left="28" top="100" right="200" bottom="300" runaround="0" runaroundGap="1"/>
+   <FRAME left="200" top="400" right="300" bottom="510" runaround="0" runaroundGap="1"/>
    <PARAGRAPH>
     <TEXT value=""/>
     <FORMATS>
     </FORMATS>
     <LAYOUT>
+     <NAME value="Standard"/>
      <FLOW value="0"/>
      <OFFSETS head="0" foot="0"/>
      <INDENTS first="0" left="0"/>
-     <COUNTER flow="0" depth="0" nr="-1" lefttext="" righttext=""/>
+     <COUNTER type="0" depth="0" bullet="45" start="" numberingtype="0" lefttext="" righttext=""/>
      <LINESPACING value="0"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>

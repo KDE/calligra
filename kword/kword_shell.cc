@@ -94,6 +94,7 @@ void KWordShell::setDocument( KWordDocument *_doc )
   {
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
@@ -132,6 +133,7 @@ bool KWordShell::newDocument()
   {
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
@@ -176,6 +178,7 @@ bool KWordShell::openDocument( const char *_url, const char *_format )
   {    
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
