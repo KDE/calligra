@@ -1559,7 +1559,7 @@ void KSpreadView::initView()
     d->formulaBarLayout->addSpacing( 6 );
 
     // The widget on which we display the sheet
-    d->canvas = new KSpreadCanvas( this, di );
+    d->canvas = new KSpreadCanvas( this );
 
     // The line-editor that appears above the sheet and allows to
     // edit the cells content. It knows about the two buttons.

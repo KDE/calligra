@@ -40,7 +40,6 @@
 #include <koRect.h>
 
 #include "kspread_util.h"
-#include "docbase.h"
 
 #include <koffice_export.h>
 
@@ -78,7 +77,7 @@ class CanvasPrivate;
  * That means that this class knows what to do when a key is pressed
  * or if the mouse button was clicked.
  */
-class KSPREAD_EXPORT KSpreadCanvas : public QWidget, public KSpread::DocBase
+class KSPREAD_EXPORT KSpreadCanvas : public QWidget
 {
     friend class KSpreadHBorder;
     friend class KSpreadVBorder;
@@ -93,8 +92,11 @@ public:
     enum MouseActions { NoAction = 0, Mark = 1, ResizeCell = 2, AutoFill = 3 };
     enum EditorType { CellEditor, FormulaEditor, EditWidget };
 
-    KSpreadCanvas (KSpreadView *_view, KSpread::DocInfo *docinfo);
+    KSpreadCanvas (KSpreadView *_view);
     ~KSpreadCanvas( );
+    
+    KSpreadView* view();
+    KSpreadDoc* doc();
 
     /**
      * Called from @ref KSpreadView to complete the construction. Has to
@@ -245,8 +247,6 @@ public:
     // Created by the view since it's layout is managed there,
     // but is in fact a sibling of the canvas, which needs to know about it.
     void setEditWidget( KSpreadEditWidget * ew );
-
-    KSpreadView* view() const;
 
     virtual bool focusNextPrevChild( bool );
 
