@@ -38,7 +38,7 @@ class StyleProperty {
 public:
     StyleProperty();
     void styleCopy( const StyleProperty & );
-    ~StyleProperty();
+    virtual ~StyleProperty();
 
     GObject::OutlineInfo outlineInfo;
     GObject::FillInfo    fillInfo;

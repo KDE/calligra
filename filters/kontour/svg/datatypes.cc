@@ -118,7 +118,7 @@ void SVGLength::setValueAsString( const QString &valueAsString )
 }
 
 
-void SVGLength::newValueSpecifiedUnits( unsigned short unitType, float valueInSpecifiedUnits )
+void SVGLength::newValueSpecifiedUnits( unsigned short /*unitType*/, float valueInSpecifiedUnits )
 {
     _valueInSpecifiedUnits = valueInSpecifiedUnits;
     _valueAsString.setNum( _valueInSpecifiedUnits );
@@ -143,7 +143,7 @@ void SVGLength::newValueSpecifiedUnits( unsigned short unitType, float valueInSp
 }
 
 
-void SVGLength::convertToSpecifiedUnits( unsigned short unitType )
+void SVGLength::convertToSpecifiedUnits( unsigned short /*unitType*/ )
 {
 //    _unitType = unitType;
 //    _value = convertNumToPt( _valueAsString );

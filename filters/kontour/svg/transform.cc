@@ -59,10 +59,10 @@ void SVGTransformable::performTransformations( GObject *obj ) {
 	        t->setTranslate( params[0].toFloat() , 0 );
         }
 	else if( subtransform[0] == "scale" ) {
-            Rect boundingBox = obj->boundingBox();
+            //Rect boundingBox = obj->boundingBox();
 
-            float middleX = boundingBox.left() + ((boundingBox.right() - boundingBox.left()) / 2.0);
-            float middleY = boundingBox.top()  + ((boundingBox.bottom() - boundingBox.top()) / 2.0);
+            //float middleX = boundingBox.left() + ((boundingBox.right() - boundingBox.left()) / 2.0);
+            //float middleY = boundingBox.top()  + ((boundingBox.bottom() - boundingBox.top()) / 2.0);
 
 	    if(params.count() == 2)
                 t->setScale( params[0].toFloat(), params[1].toFloat() );

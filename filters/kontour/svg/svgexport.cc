@@ -292,7 +292,7 @@ void SVGExport::exportCurve( QDomElement &docNodeOut, const QDomElement &docNode
     QString s;
     bool bClosed = false;
     bool first = true;
-    float startx, starty;
+    float startx=0.0, starty=0.0;
     QList<Coord> coords;
     coords.setAutoDelete( true );
     QDomNodeList list = docNodeIn.childNodes();

@@ -37,6 +37,7 @@ class SVGComposite;
 class SVGSVGElement;
 class SVGElement {
 public:
+    virtual ~SVGElement() {}
     QString id() { return m_id; }
     void setId( const QString &id ) { m_id = id; }
     bool hasIdentifier() { return !m_id.isEmpty(); }
