@@ -510,6 +510,7 @@ void KWFieldVariable::recalc()
                     m_value = authorPage->company();
             }
         }
+        break;
         case VST_TITLE:
         case VST_ABSTRACT:
         {
@@ -525,6 +526,7 @@ void KWFieldVariable::recalc()
                     m_value = aboutPage->abstract();
             }
         }
+        break;
     }
 
     if ( m_value.isEmpty() )
