@@ -79,7 +79,7 @@ public:
   void extrasRunCommand();
 
   virtual void cleanUp();
-  CORBA::Boolean printDlg();
+  bool printDlg();
 
 public slots:
   // Document signals
@@ -103,56 +103,56 @@ protected:
 
   // edit toolbar
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
-  CORBA::Long m_idButtonEdit_Lines;
-  CORBA::Long m_idButtonEdit_Areas;
-  CORBA::Long m_idButtonEdit_Bars;
-  CORBA::Long m_idButtonEdit_Cakes;
+  long int m_idButtonEdit_Lines;
+  long int m_idButtonEdit_Areas;
+  long int m_idButtonEdit_Bars;
+  long int m_idButtonEdit_Cakes;
 
   // edit menu
   OpenPartsUI::Menu_var m_vMenuEdit;
-  CORBA::Long m_idMenuEdit_Undo;
-  CORBA::Long m_idMenuEdit_Redo;
-  CORBA::Long m_idMenuEdit_Edit;
-  CORBA::Long m_idMenuEdit_Import;
-  CORBA::Long m_idMenuEdit_Export;
-  CORBA::Long m_idMenuEdit_Page;
-  CORBA::Long m_idMenuEdit_Preferences;
+  long int m_idMenuEdit_Undo;
+  long int m_idMenuEdit_Redo;
+  long int m_idMenuEdit_Edit;
+  long int m_idMenuEdit_Import;
+  long int m_idMenuEdit_Export;
+  long int m_idMenuEdit_Page;
+  long int m_idMenuEdit_Preferences;
 
   // view menu
   OpenPartsUI::Menu_var m_vMenuView;
-  CORBA::Long m_idMenuView_ZoomFactor;
-  CORBA::Long m_idMenuView_FitToView;
-  CORBA::Long m_idMenuView_FitWithProps;
-  CORBA::Long m_idMenuView_Original;
-  CORBA::Long m_idMenuView_Center;
-  CORBA::Long m_idMenuView_Info;
-  CORBA::Long m_idMenuView_BackgroundColor;
+  long int m_idMenuView_ZoomFactor;
+  long int m_idMenuView_FitToView;
+  long int m_idMenuView_FitWithProps;
+  long int m_idMenuView_Original;
+  long int m_idMenuView_Center;
+  long int m_idMenuView_Info;
+  long int m_idMenuView_BackgroundColor;
 
   // transform menu
   OpenPartsUI::Menu_var m_vMenuTransform;
-  CORBA::Long m_idMenuTransform_RotateRight;
-  CORBA::Long m_idMenuTransform_RotateLeft;
-  CORBA::Long m_idMenuTransform_RotateAngle;
-  CORBA::Long m_idMenuTransform_FlipVertical;
-  CORBA::Long m_idMenuTransform_FlipHorizontal;
-  CORBA::Long m_idMenuTransform_ZoomFactor;
-  CORBA::Long m_idMenuTransform_ZoomIn10;
-  CORBA::Long m_idMenuTransform_ZoomOut10;
-  CORBA::Long m_idMenuTransform_ZoomDouble;
-  CORBA::Long m_idMenuTransform_ZoomHalf;
-  CORBA::Long m_idMenuTransform_ZoomMax;
-  CORBA::Long m_idMenuTransform_ZoomMaxAspect;
+  long int m_idMenuTransform_RotateRight;
+  long int m_idMenuTransform_RotateLeft;
+  long int m_idMenuTransform_RotateAngle;
+  long int m_idMenuTransform_FlipVertical;
+  long int m_idMenuTransform_FlipHorizontal;
+  long int m_idMenuTransform_ZoomFactor;
+  long int m_idMenuTransform_ZoomIn10;
+  long int m_idMenuTransform_ZoomOut10;
+  long int m_idMenuTransform_ZoomDouble;
+  long int m_idMenuTransform_ZoomHalf;
+  long int m_idMenuTransform_ZoomMax;
+  long int m_idMenuTransform_ZoomMaxAspect;
 
   // extras menu
   OpenPartsUI::Menu_var m_vMenuExtras;
-  CORBA::Long m_idMenuExtras_RunGimp;
-  CORBA::Long m_idMenuExtras_RunXV;
-  CORBA::Long m_idMenuExtras_RunCommand;
+  long int m_idMenuExtras_RunGimp;
+  long int m_idMenuExtras_RunXV;
+  long int m_idMenuExtras_RunCommand;
 
   // help menu
   OpenPartsUI::Menu_var m_vMenuHelp;
-  CORBA::Long m_idMenuHelp_About;
-  CORBA::Long m_idMenuHelp_Using;
+  long int m_idMenuHelp_About;
+  long int m_idMenuHelp_Using;
     
 private:
   QPoint m_zoomFactor;

@@ -57,21 +57,21 @@ public:
   // C++
   virtual KImageView* createImageView( QWidget* _parent = 0 );
 
-  virtual CORBA::Boolean initDoc();
+  virtual bool initDoc();
   virtual KOffice::MainWindow_ptr createMainWindow();
 
   /**
    * Wrapper for @ref #createImageView
    */
   virtual OpenParts::View_ptr createView();
-  virtual void viewList( OpenParts::Document::ViewList*& _list );
-  virtual char* mimeType();
-  virtual CORBA::Boolean isModified();
+  virtual void viewList( OpenParts::Document::ViewList & _list );
+  virtual QCString mimeType() { return MIME_TYPE; }
+  virtual bool isModified() { return m_bModified; }
   virtual int viewCount();
   virtual void setModified( bool _c );
   virtual bool isEmpty();
   virtual void print( QPaintDevice* _dev );
-  virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
+  virtual void draw( QPaintDevice* _dev, long int _width, long int _height, float _scale );
   void paperLayoutDlg();
 
   /**
@@ -138,8 +138,8 @@ public:
   void calcPaperSize();
   QString orientationString();
   QString paperFormatString();
-  bool openDocument( const char* _filename, const char* _format = 0L );
-  bool saveDocument( const char* _filename, const char* _format = 0L );
+  bool openDocument( const QString & _filename, const char* _format = 0L );
+  bool saveDocument( const QString & _filename, const char* _format = 0L );
 
   /**
    * Returns the image, that is stored in the document.

@@ -172,58 +172,58 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
     return true;
   }
 
-  CORBA::WString_var text;
+  QString text;
   OpenPartsUI::Pixmap_var pix;
 
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
-  text = Q2C( i18n( "Fit image to view" ) );
+  text =  i18n( "Fit image to view" ) ;
   pix = OPICON( "fittoview.xpm" );
   m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "viewFitToView", true, text, -1 );
 
-  text= Q2C( i18n( "Fit to view and keep proportions" ) );
+  text=  i18n( "Fit to view and keep proportions" ) ;
   pix = OPICON( "fitwithprops.xpm" );
   m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "viewFitWithProportions", true, text, -1 );
 
-  text= Q2C( i18n( "Keep original image size" ) );
+  text=  i18n( "Keep original image size" ) ;
   pix = OPICON( "originalsize.xpm" );
   m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix, 3, SIGNAL( clicked() ), this, "viewOriginalSize", true, text, -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
-  text= Q2C( i18n( "Edit image" ) );
+  text=  i18n( "Edit image" ) ;
   pix = OPICON( "undo.xpm" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 4, SIGNAL( clicked() ), this, "editEditImage", true, text, -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
-  text= Q2C( i18n( "Undo" ) );
+  text=  i18n( "Undo" ) ;
   pix = OPICON( "undo.xpm" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 5, SIGNAL( clicked() ), this, "editUndo", true, text, -1 );
 
-  text= Q2C( i18n( "Redo" ) );
+  text=  i18n( "Redo" ) ;
   pix = OPICON( "redo.xpm" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 6, SIGNAL( clicked() ), this, "editRedo", true, text, -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
-  text= Q2C( i18n( "Edit image" ) );
+  text=  i18n( "Edit image" ) ;
   pix = OPICON( "editpaste.xpm" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "editEditImage", true, text, -1 );
 
-  text= Q2C( i18n( "Select Area" ) );
+  text=  i18n( "Select Area" ) ;
   pix = OPICON( "areaselect.xpm" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 8, SIGNAL( clicked() ), this, "selectArea", true, text, -1 );
 
-  text= Q2C( i18n( "Airbrush" ) );
+  text=  i18n( "Airbrush" ) ;
   pix = OPICON( "airbrush.xpm" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 9, SIGNAL( clicked() ), this, "airbrush", true, text, -1 );
 
-  text= Q2C( i18n( "Circle" ) );
+  text=  i18n( "Circle" ) ;
   pix = OPICON( "circle.xpm" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 10, SIGNAL( clicked() ), this, "circle", true, text, -1 );
 
-  text= Q2C( i18n( "Eraser" ) );
+  text=  i18n( "Eraser" ) ;
   pix = OPICON( "eraser.xpm" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 11, SIGNAL( clicked() ), this, "eraser", true, text, -1 );
 
@@ -254,126 +254,126 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
-  CORBA::WString_var text;
+  QString text;
   OpenPartsUI::Pixmap_var pix;
 
   // Edit
-  text = Q2C( i18n( "&Edit" ) );
+  text =  i18n( "&Edit" ) ;
   _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
-  text = Q2C( i18n( "no Undo possible" ) );
+  text =  i18n( "no Undo possible" ) ;
   pix = OPICON( "undo.xpm" );
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, text, this, "editUndo", 0, -1, -1 );
 
-  text = Q2C( i18n( "no Redo possible" ) );
+  text =  i18n( "no Redo possible" ) ;
   pix = OPICON( "redo.xpm" );
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, text, this, "editRedo", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Import image" ) );
+  text =  i18n( "&Import image" ) ;
   m_vMenuEdit->insertItem4( text, this, "editImportImage", CTRL + Key_I, -1, -1 );
 
-  text = Q2C( i18n( "E&xport image" ) );
+  text =  i18n( "E&xport image" ) ;
   m_vMenuEdit->insertItem4( text, this, "editExportImage", CTRL + Key_X, -1, -1 );
 
-  text = Q2C( i18n( "E&mbed Part" ) );
+  text =  i18n( "E&mbed Part" ) ;
   m_vMenuEdit->insertItem( text, this, "editEmbedPart", 0 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Page Layout" ) );
+  text =  i18n( "&Page Layout" ) ;
   m_vMenuEdit->insertItem4( text, this, "editPageLayout", CTRL + Key_L, -1, -1 );
 
-  text = Q2C( i18n( "P&references..." ) );
+  text =  i18n( "P&references..." ) ;
   m_vMenuEdit->insertItem( text, this, "editPreferences", 0 );
 
   // View
-  text = Q2C( i18n( "&View" ) );
+  text =  i18n( "&View" ) ;
   _menubar->insertMenu( text, m_vMenuView, -1, -1 );
 
-  text = Q2C( i18n( "Zoom..." ) );
+  text =  i18n( "Zoom..." ) ;
   m_idMenuView_ZoomFactor = m_vMenuView->insertItem( text, this, "viewZoomFactor", 0 );
 
-  text = Q2C( i18n( "Fit to &view" ) );
+  text =  i18n( "Fit to &view" ) ;
   pix = OPICON( "fittoview.xpm" );
   m_idMenuView_FitToView = m_vMenuView->insertItem6( pix, text, this, "viewFitToView", CTRL + Key_V, -1, -1 );
 
-  text = Q2C( i18n( "Fit and keep &proportions" ) );
+  text =  i18n( "Fit and keep &proportions" ) ;
   pix = OPICON( "fitwithprops.xpm" );
   m_idMenuView_FitWithProps = m_vMenuView->insertItem6( pix, text, this, "viewFitWithProportions", CTRL + Key_P, -1, -1 );
 
-  text = Q2C( i18n( "&Original size" ) );
+  text =  i18n( "&Original size" ) ;
   pix = OPICON( "originalsize.xpm" );
   m_idMenuView_Original = m_vMenuView->insertItem6( pix, text, this, "viewOriginalSize", CTRL + Key_O, -1, -1 );
 
   m_vMenuView->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Centered" ) );
+  text =  i18n( "&Centered" ) ;
   m_idMenuView_Center = m_vMenuView->insertItem( text, this, "viewCentered", 0 );
 
-  text = Q2C( i18n( "&Scrollbars" ) );
+  text =  i18n( "&Scrollbars" ) ;
   m_idMenuView_Info = m_vMenuView->insertItem( text, this, "viewScrollbars", 0 );
 
-  text = Q2C( i18n( "I&nformations" ) );
+  text =  i18n( "I&nformations" ) ;
   m_idMenuView_Info = m_vMenuView->insertItem( text, this, "viewInfoImage", 0 );
 
-  text = Q2C( i18n( "Background color" ) );
+  text =  i18n( "Background color" ) ;
   m_idMenuView_BackgroundColor = m_vMenuView->insertItem( text, this, "viewBackgroundColor", 0 );
 
   // Transform
-  text = Q2C( i18n( "&Transform" ) );
+  text =  i18n( "&Transform" ) ;
   _menubar->insertMenu( text, m_vMenuTransform, -1, -1 );
 
-  text = Q2C( i18n( "Rotate clockwise" ) );
+  text =  i18n( "Rotate clockwise" ) ;
   m_idMenuTransform_RotateRight = m_vMenuTransform->insertItem( text, this, "transformRotateRight", 0 );
 
-  text = Q2C( i18n( "Rotate anti-clockwise" ) );
+  text =  i18n( "Rotate anti-clockwise" ) ;
   m_idMenuTransform_RotateLeft = m_vMenuTransform->insertItem( text, this, "transformRotateLeft", 0 );
 
-  text = Q2C( i18n( "Rotate with angle..." ) );
+  text =  i18n( "Rotate with angle..." ) ;
   m_idMenuTransform_RotateAngle = m_vMenuTransform->insertItem( text, this, "transformRotateAngle", 0 );
 
-  text = Q2C( i18n( "Flip vertical" ) );
+  text =  i18n( "Flip vertical" ) ;
   m_idMenuTransform_FlipVertical = m_vMenuTransform->insertItem( text, this, "transformFlipVertical", 0 );
 
-  text = Q2C( i18n( "Flip honrizontal" ) );
+  text =  i18n( "Flip honrizontal" ) ;
   m_idMenuTransform_FlipHorizontal = m_vMenuTransform->insertItem( text, this, "transformFlipHorizontal", 0 );
 
   m_vMenuTransform->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Zoom..." ) );
+  text =  i18n( "&Zoom..." ) ;
   m_idMenuTransform_ZoomFactor = m_vMenuTransform->insertItem( text, this, "transformZoomFactor", 0 );
 
-  text = Q2C( i18n( "zoom &in 10%" ) );
+  text =  i18n( "zoom &in 10%" ) ;
   m_idMenuTransform_ZoomIn10 = m_vMenuTransform->insertItem( text, this, "transformZoomIn10", 0 );
 
-  text = Q2C( i18n( "Zoom &out 10%" ) );
+  text =  i18n( "Zoom &out 10%" ) ;
   m_idMenuTransform_ZoomOut10 = m_vMenuTransform->insertItem( text, this, "transformZoomOut10", 0 );
 
-  text = Q2C( i18n( "&Double size" ) );
+  text =  i18n( "&Double size" ) ;
   m_idMenuTransform_ZoomDouble = m_vMenuTransform->insertItem( text, this, "transformZoomDouble", 0 );
 
-  text = Q2C( i18n( "&Half size" ) );
+  text =  i18n( "&Half size" ) ;
   m_idMenuTransform_ZoomHalf = m_vMenuTransform->insertItem( text, this, "transformZoomHalf", 0 );
 
-  text = Q2C( i18n( "&Max" ) );
+  text =  i18n( "&Max" ) ;
   m_idMenuTransform_ZoomMax = m_vMenuTransform->insertItem( text, this, "transformZoomMax", 0 );
 
-  text = Q2C( i18n( "Max/&aspect") );
+  text =  i18n( "Max/&aspect") ;
   m_idMenuTransform_ZoomMaxAspect = m_vMenuTransform->insertItem( text, this, "transformZoomMaxAspect", 0 );
 
   // Extras
-  text = Q2C( i18n( "&Extras" ) );
+  text =  i18n( "&Extras" ) ;
   _menubar->insertMenu( text, m_vMenuExtras, -1, -1 );
   
-  text = Q2C( i18n( "Run &Gimp" ) );
+  text =  i18n( "Run &Gimp" ) ;
   m_idMenuExtras_RunGimp = m_vMenuExtras->insertItem( text, this, "extrasRunGimp", 0 );
 
-  text = Q2C( i18n( "Run &xv" ) );
+  text =  i18n( "Run &xv" ) ;
   m_idMenuExtras_RunXV = m_vMenuExtras->insertItem( text, this, "extrasRunXV", 0 );
 
-  text = Q2C( i18n( "Run &Command..." ) );
+  text =  i18n( "Run &Command..." ) ;
   m_idMenuExtras_RunCommand = m_vMenuExtras->insertItem( text, this, "extrasRunCommand", 0 );
                             
   return true;
@@ -384,7 +384,7 @@ void KImageView::helpUsing()
   kapp->invokeHTMLHelp( "kimage/kimage.html", QString::null );
 }
 
-CORBA::Boolean KImageView::printDlg()
+bool KImageView::printDlg()
 {
   QPrinter prt;
 

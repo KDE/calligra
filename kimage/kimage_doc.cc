@@ -69,7 +69,7 @@ KImageDoc::KImageDoc()
   m_lstViews.setAutoDelete( false );
 }
 
-CORBA::Boolean KImageDoc::initDoc()
+bool KImageDoc::initDoc()
 {
   return true;
 }
@@ -113,15 +113,14 @@ OpenParts::View_ptr KImageDoc::createView()
   return OpenParts::View::_duplicate( createImageView() );
 }
 
-void KImageDoc::viewList( OpenParts::Document::ViewList*& _list )
+void KImageDoc::viewList( OpenParts::Document::ViewList & _list )
 {
-  _list->length( m_lstViews.count() );
+  _list.clear();
 
-  int i = 0;
   QListIterator<KImageView> it( m_lstViews );
   for( ; it.current(); ++it )
   {
-    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
+    _list.append( OpenParts::View::_duplicate( it.current() ) );
   }
 }
 
@@ -152,11 +151,10 @@ bool KImageDoc::save( ostream& out, const char* /* format */ )
 
 bool KImageDoc::completeSaving( KOStore::Store_ptr _store )
 {
-  CORBA::String_var u = url();
-  QString u2 = u.in();
-  u2 += "/image";
+  QString u = url();
+  u += "/image";
 
-  if ( _store->open( u2, "image/bmp" ) )
+  if ( _store->open( u, "image/bmp" ) )
   {
     ostorestream out( _store );
     out << m_image;
@@ -344,10 +342,9 @@ bool KImageDoc::completeLoading( KOStore::Store_ptr _store )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ COMPLETION DONE --------------------" );
 
-  CORBA::String_var str = url();
-  QString u = str.in();
+  QString u = url();
   u += "/image";
-  if ( _store->open( u, 0L ) )
+  if ( _store->open( u, "" ) )
   {
     istorestream in( _store );
     in >> m_image;
@@ -419,8 +416,8 @@ void KImageDoc::print( QPaintDevice* _dev )
   painter.end();
 }
 
-void KImageDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-		      CORBA::Float _scale )
+void KImageDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
+		      float _scale )
 {
   kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
 
@@ -707,7 +704,7 @@ QString KImageDoc::orientationString()
   return orientationStr;
 }
 
-bool KImageDoc::openDocument( const char *_filename, const char *_format )
+bool KImageDoc::openDocument( const QString & _filename, const char *_format )
 {
   if ( !m_image.load( _filename, _format ) )
     return false;
@@ -725,7 +722,7 @@ bool KImageDoc::openDocument( const char *_filename, const char *_format )
   return true;
 }
 
-bool KImageDoc::saveDocument( const char *_filename, const char */*_format*/ )
+bool KImageDoc::saveDocument( const QString & _filename, const char */*_format*/ )
 {
   assert( !isEmpty() );
 
@@ -744,16 +741,6 @@ void KImageDoc::transformImage( const QWMatrix& matrix )
   m_bEmpty = false;
 
   kdebug( KDEBUG_INFO, 0, "Image manipulated with matrix" );
-}
-
-char* KImageDoc::mimeType()
-{
-  return CORBA::string_dup( MIME_TYPE );
-}
-
-CORBA::Boolean KImageDoc::isModified()
-{
-  return m_bModified;
 }
 
 void KImageDoc::setModified( bool _c )
