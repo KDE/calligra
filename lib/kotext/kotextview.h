@@ -64,11 +64,11 @@ public:
 
     /** Call this before deleting */
     /** don't remove selection when we made dnd between different frame*/
-    void terminate(bool removeselection=true);
+    void terminate( bool removeselection=true );
 
     KoTextObject * textObject() const { return m_textobj; }
     KoTextCursor * cursor() const { return m_cursor; }
-    void setCursor(KoTextCursor cursor) { *m_cursor = cursor; };
+    void setCursor( const KoTextCursor& cursor ) { *m_cursor = cursor; };
     KoTextDocument * textDocument() const;
 
     /** Return true if the view is allowed to modify the text object.
@@ -87,14 +87,12 @@ public:
 
     virtual bool rtl() const;
 
-    virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type);
+    virtual KCommand *setChangeCaseOfTextCommand( KoChangeCaseDia::TypeOfCase _type );
 
-    //void setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex=-1);
-    virtual KCommand* setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1);
+    virtual KCommand* setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex = -1 );
 
     /** Implement the KoTextFormatInterface */
-    //void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont);
-    virtual KCommand* setFormatCommand( const KoTextFormat * newFormat, int flags, bool zoomFont = false);
+    virtual KCommand* setFormatCommand( const KoTextFormat * newFormat, int flags, bool zoomFont = false );
 
     // -- Paragraph settings --
     KCommand * setCounterCommand( const KoParagCounter & counter );
@@ -109,7 +107,7 @@ public:
     void dragStarted();
     void focusInEvent();
     void focusOutEvent();
-    void handleKeyPressEvent( QKeyEvent * e, QWidget *, const QPoint &);
+    void handleKeyPressEvent( QKeyEvent * e, QWidget *, const QPoint& );
     void handleKeyReleaseEvent( QKeyEvent * e );
     void handleImStartEvent( QIMEvent * e );
     void handleImComposeEvent( QIMEvent * e );
@@ -130,7 +128,7 @@ public:
     QString wordUnderCursor( const KoTextCursor& cursor );
 
     /** Return the list of actions from data-tools. Used to populate a RMB popupmenu usually. */
-    QPtrList<KAction> dataToolActionList(KInstance * instance, const QString& word, bool & _singleWord );
+    QPtrList<KAction> dataToolActionList( KInstance * instance, const QString& word, bool & _singleWord );
 
     void insertSoftHyphen();
     void insertLineBreak();
@@ -138,10 +136,10 @@ public:
     void insertNonbreakingHyphen();
     void increaseNumberingLevel( const KoStyleCollection* styleCollection );
     void decreaseNumberingLevel( const KoStyleCollection* styleCollection );
-    void insertSpecialChar(QChar _c, const QString& font);
-    void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
+    void insertSpecialChar( QChar _c, const QString& font );
+    void changeCaseOfText( KoChangeCaseDia::TypeOfCase _type );
 
-    void addBookmarks(const QString &);
+    void addBookmarks( const QString& );
 
     //return a pointer to the variable under the cursor, if any
     KoVariable *variable();
@@ -149,14 +147,14 @@ public:
     // (special case of variable())
     KoLinkVariable *linkVariable();
 
-    KCommand *dropEvent( KoTextObject *tmp,KoTextCursor dropCursor, bool dropInSameObj);
+    KCommand *dropEvent( KoTextObject *, KoTextCursor dropCursor, bool dropInSameObj );
 
     void removeComment();
     void copyTextOfComment();
 
     // This is in fact "from selection or cursor"
-    KoParagStyle * createStyleFromSelection(const QString & name);
-    void updateStyleFromSelection(KoParagStyle* style);
+    KoParagStyle * createStyleFromSelection( const QString & name );
+    void updateStyleFromSelection( KoParagStyle* style );
 
     QString currentWordOrSelection() const;
 
@@ -204,12 +202,12 @@ protected:
     virtual void doAutoFormat( KoTextCursor* /*cursor*/, KoTextParag * /*parag*/,
                                int /*index*/, QChar /*ch*/ ) { }
 
-    virtual bool doCompletion( KoTextCursor* , KoTextParag *, int  ) { return false;}
-    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int, int  ) { return false;}
-    virtual void showToolTipBox(KoTextParag *, int , QWidget *, const QPoint &){;};
+    virtual bool doCompletion( KoTextCursor* , KoTextParag *, int  ) { return false; }
+    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int, int  ) { return false; }
+    virtual void showToolTipBox( KoTextParag *, int , QWidget *, const QPoint& ) {}
 
-    virtual void textIncreaseIndent(){;};
-    virtual bool textDecreaseIndent(){return true;};
+    virtual void textIncreaseIndent() {}
+    virtual bool textDecreaseIndent() { return true; }
 
     //return true if we are a doubleSpace
     virtual bool doIgnoreDoubleSpace(KoTextParag * /*parag*/,
@@ -240,7 +238,7 @@ protected:
 
     void deleteWordLeft();
     void deleteWordRight();
-    bool insertParagraph(const QPoint &pos);
+    bool insertParagraph( const QPoint &pos );
 
 private slots:
     void blinkCursor();
