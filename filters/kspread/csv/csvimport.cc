@@ -151,7 +151,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
             {
              case CSVDialog::TEXT:
               cell = table->nonDefaultCell( col + 1, row + 1, false, s );
-              cell->setCellText( text, false, true );
+              cell->setCellText( text, true );
               break;
              // ### TODO: put the code for the different numbers together (at least partially)
              case CSVDialog::NUMBER:
@@ -164,7 +164,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     if ( !ok )
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );
-                        cell->setCellText( text, false, true );
+                        cell->setCellText( text, true );
                         cell->setFormatType( KSpreadCell::Number );
                     }
                     else
@@ -186,7 +186,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     if ( !ok )
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );
-                        cell->setCellText( text, false, true );
+                        cell->setCellText( text, true );
                         cell->setFormatType( KSpreadCell::Number );
                     }
                     else
@@ -208,7 +208,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     if ( !ok )
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );
-                        cell->setCellText( text, false, true );
+                        cell->setCellText( text,  true );
                         cell->setFormatType( KSpreadCell::Number );
                     }
                     else
@@ -226,7 +226,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
               break;
              case CSVDialog::CURRENCY:
               cell = table->nonDefaultCell( col + 1, row + 1, false, s );
-              cell->setCellText( text, false, false );
+              cell->setCellText( text, false );
               cell->setFormatType( KSpreadCell::Money );
               cell->setPrecision( 2 );
               break;
