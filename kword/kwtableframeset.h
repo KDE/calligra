@@ -142,6 +142,9 @@ public:
 
     /** select all frames from the first selected to the argument frameset. */
     void selectUntil( Cell *cell );
+    /** convenience method */
+    void selectUntil( int x, int y);
+
     bool getFirstSelected(unsigned int &row, unsigned int &col );
     /** Return true if exactly one frame is selected. The parameters row
     *  and col will receive the values of the active row and col.<br>
@@ -193,8 +196,6 @@ public:
 
     QString anchorType();
     QString anchorInstance();
-
-    virtual bool isVisible();
 
 protected:
     unsigned int m_rows, m_cols;

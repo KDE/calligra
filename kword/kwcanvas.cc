@@ -319,24 +319,27 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
         int currentSelection = doc->selectFrame( x, y, TRUE );
 
         KWFrameSet *fs = doc->getFrameSet( x, y );
-        if ( currentSelection != 0 && ( e->state() & ShiftButton ) && fs->getGroupManager() ) { // is table and we hold shift
-            fs->getGroupManager()->selectUntil( (KWTableFrameSet::Cell *)fs );
-            curTable = fs->getGroupManager();
+        if ( currentSelection != 0 && ( e->state() & ShiftButton ) && fs->getFrameType() == FT_TABLE ) { // is table and we hold shift
+            curTable = static_cast<KWTableFrameSet *> (fs);
+            curTable->selectUntil( x,y );
         } else if ( currentSelection == 0 ) { // none selected
             selectAllFrames( FALSE );
         } else if ( currentSelection == 1 ) { // 1 selected
             if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
                 selectAllFrames( FALSE );
             selectFrame( x, y, TRUE );
-            curTable = fs->getGroupManager();
+            if(fs->getFrameType() == FT_TABLE) curTable = static_cast<KWTableFrameSet *> (fs);
+            else curTable = 0L;
         } else if ( currentSelection == 2 ) { // was already selected
             if ( e->state() & ControlButton || e->state() & ShiftButton ) {
                 selectFrame( x, y, FALSE );
-                curTable = fs->getGroupManager();
+                if(fs->getFrameType() == FT_TABLE) curTable = static_cast<KWTableFrameSet *> (fs);
+                else curTable = 0L;
             } else if ( viewport()->cursor().shape() != SizeAllCursor ) {
                 selectAllFrames( FALSE );
                 selectFrame( x, y, TRUE );
-                curTable = fs->getGroupManager();
+                if(fs->getFrameType() == FT_TABLE) curTable = static_cast<KWTableFrameSet *> (fs);
+                else curTable = 0L;
             }
         }
     }
@@ -622,9 +625,9 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
             {
                 KWFrame *frame = frameIt.current();
                 if ( frame->isSelected() ) {
-                    if ( frameset->getGroupManager() ) {
-                        if ( updates.findRef( frameset->getGroupManager() ) == -1 )
-                            updates.append( frameset->getGroupManager() );
+                    if ( frameset->getFrameType() == FT_TABLE ) {
+                        if ( updates.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
+                            updates.append( static_cast<KWTableFrameSet *> (frameset));
                     } else {
                         QRect oldRect( *frame );
                         int page = doc->getPageOfRect( *frame );

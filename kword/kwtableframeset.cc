@@ -313,6 +313,7 @@ void KWTableFrameSet::recalcCols()
 /*================================================================*/
 void KWTableFrameSet::recalcRows()
 {
+kdDebug() << "KWTableFrameSet::recalcRows : " << m_cells.count() << endl;
     // remove automatically added headers
     for ( unsigned int j = 0; j < m_rows; j++ ) {
         if ( getCell( j, 0 )->isRemoveableHeader() ) {
@@ -468,7 +469,7 @@ void KWTableFrameSet::recalcRows()
                 Cell *cell = m_cells.at(i);
                 if(cell->m_row==j+1) cell->getFrame(0)->updateResizeHandles(); // reposition resize handles.
                 if(cell->m_row!=j) continue; //  wrong row
-                if(cell->m_col == 1) m_pageBoundaries.append(i); // new page boundary
+                if(cell->m_col != 1) m_pageBoundaries.append(i); // new page boundary
                 if ( m_showHeaderOnAllPages ) {
                     KWTextFrameSet *newFrameSet = dynamic_cast<KWTextFrameSet*>( cell );
                     KWTextFrameSet *baseFrameSet = dynamic_cast<KWTextFrameSet*>( getCell( 0, cell->m_col ) );
@@ -494,7 +495,7 @@ void KWTableFrameSet::recalcRows()
             }
         }
     }
-    if( m_pageBoundaries.count() == 1 )  m_pageBoundaries.append(m_cells.count()-1);
+    m_pageBoundaries.append(m_cells.count());
 }
 
 /*================================================================*/
@@ -554,6 +555,12 @@ void KWTableFrameSet::deselectAll()
 {
     for ( unsigned int i = 0; i < m_cells.count(); i++ )
         m_cells.at( i )->getFrame( 0 )->setSelected( false );
+}
+
+/*================================================================*/
+void KWTableFrameSet::selectUntil( int x, int y) {
+    KWFrame *f = getFrame(x,y);
+    if(f) selectUntil(static_cast<KWTableFrameSet::Cell *> (f->getFrameSet()));
 }
 
 /*================================================================*/
@@ -806,8 +813,8 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
         Cell *cell = m_cells.at(i);
         if ( row >= cell->m_row  && row < cell->m_row + cell->m_rows) { // cell is indeed in row
             if(cell->m_rows == 1) { // lets remove it
+                frames.remove(cell->getFrame(0));
                 m_cells.remove( i );
-                frames.remove(i);
                 i--;
             } else { // make cell span rowspan less rows
                 cell->m_rows -= rowspan;
@@ -1207,12 +1214,11 @@ void KWTableFrameSet::validate()
 }
 
 bool KWTableFrameSet::contains( unsigned int mx, unsigned int my ) {
-
     QRect rect;
     KWFrame *first, *last;
     for (unsigned int i=1 ; i < m_pageBoundaries.count(); i++) {
-        first = m_cells.at(m_pageBoundaries[i-1])->getFrame( 0 );
-        last = m_cells.at(m_pageBoundaries[i])->getFrame( 0 );
+        first = m_cells.at((m_pageBoundaries[i-1]))->getFrame( 0 );
+        last = m_cells.at(m_pageBoundaries[i] -1)->getFrame( 0 );
 
         rect.setCoords(first->x(), first->y(), last->right(), last->bottom());
 
@@ -1339,14 +1345,6 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
         m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged );
 
 }
-bool KWTableFrameSet::isVisible()
-{
-    for (unsigned int i=0; i < m_cells.count() ; i++)
-        if(m_cells.at(i)->isVisible()) return true;
-
-    return false;
-}
-
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col ) :
     KWTextFrameSet( table->m_doc )
