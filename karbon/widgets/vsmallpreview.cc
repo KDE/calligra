@@ -97,61 +97,59 @@ VSmallPreview::drawFill( const VFill &f )
 	m_painter->setBrush( fill );
 	m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
 	
-	if( f.type() != VFill::none )
+	switch ( f.type() )
 	{
-		if( f.type() != VFill::solid )
+		case VFill::solid:
 		{
-			if( f.type() == VFill::grad )
+			switch ( f.color().colorSpace() )
 			{
-				fill.gradient() = f.gradient();
-				fill.setType( VFill::grad );
-				m_fillLabel->setText( i18n( "Fill: Gradient") );
-			}
-			else
-			{
-				fill.pattern() = f.pattern();
-				fill.setType( VFill::patt );
-				m_fillLabel->setText( i18n( "Fill: Pattern") );
-			}
-		}
-		else
-		{
-			switch ( f.color().colorSpace() ) {
-			case VColor::rgb:
-				m_fillLabel->setText( i18n( "Fill: RGB") ); break;
-			case VColor::cmyk:
-				m_fillLabel->setText( i18n( "Fill: CMYK") ); break;
-			case VColor::hsb:
-				m_fillLabel->setText( i18n( "Fill: HSB") ); break;
-			case VColor::gray:
-				m_fillLabel->setText( i18n( "Fill: Grayscale") ); break;
-			default:
-				m_fillLabel->setText( i18n( "Fill: Color") );
+				case VColor::rgb:
+					m_fillLabel->setText( i18n( "Fill: RGB") ); break;
+				case VColor::cmyk:
+					m_fillLabel->setText( i18n( "Fill: CMYK") ); break;
+				case VColor::hsb:
+					m_fillLabel->setText( i18n( "Fill: HSB") ); break;
+				case VColor::gray:
+					m_fillLabel->setText( i18n( "Fill: Grayscale") ); break;
+				default:
+					m_fillLabel->setText( i18n( "Fill: Color") );
 			}
 			fill.setColor( f.color() );
 		}
-		//stroke.setColor( Qt::black );
-		//stroke.setLineWidth( 1.0 );
-		m_painter->setPen( stroke );
-		m_painter->setBrush( fill );
-		m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
+		case VFill::grad:
+		{
+			fill.gradient() = f.gradient();
+			fill.setType( VFill::grad );
+			m_fillLabel->setText( i18n( "Fill: Gradient") );
+
+		}
+		case VFill::patt:
+		{
+			fill.pattern() = f.pattern();
+			fill.setType( VFill::patt );
+			m_fillLabel->setText( i18n( "Fill: Pattern") );
+		}
+		default: //None or unknown
+		{
+			m_fillLabel->setText( i18n( "Fill: None") );
+			fill.setColor( Qt::white );
+			m_painter->setBrush( fill );
+			m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
+			stroke.setColor( Qt::red );
+			stroke.setLineWidth( 2.0 );
+			m_painter->setPen( stroke );
+			m_painter->newPath();
+			m_painter->moveTo( KoPoint( 4, m_fillFrame->height() - 4 ) );
+			m_painter->lineTo( KoPoint( m_fillFrame->width() - 4, 4 ) );
+			m_painter->strokePath();
+		}
 	}
-	
-	if( f.type() == VFill::none )
+
+	if( f.type() != VFill::none )
 	{
-		m_fillLabel->setText( i18n( "Fill: None") );
-
-		fill.setColor( Qt::white );
-		m_painter->setBrush( fill );
-		m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
-
-		stroke.setColor( Qt::red );
-		stroke.setLineWidth( 2.0 );
 		m_painter->setPen( stroke );
-		m_painter->newPath();
-		m_painter->moveTo( KoPoint( 4, m_fillFrame->height() - 4 ) );
-		m_painter->lineTo( KoPoint( m_fillFrame->width() - 4, 4 ) );
-		m_painter->strokePath();
+		m_painter->setBrush( fill );
+		m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );	
 	}
 
 	m_painter->end();
@@ -171,59 +169,59 @@ VSmallPreview::drawStroke( const VStroke &s )
 	m_painter->setBrush( fill );
 	m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
 	
-	if( s.type() != VStroke::none )
+	
+	switch ( s.type() )
 	{
-		if( s.type() != VStroke::solid )
+		case VStroke::solid:
 		{
-			if( s.type() == VStroke::grad )
+			switch ( s.color().colorSpace() )
 			{
-				fill.gradient() = s.gradient();
-				fill.setType( VFill::grad );
-				m_strokeLabel->setText( i18n( "Stroke: Gradient") );
-			}
-			else
-			{
-				fill.pattern() = s.pattern();
-				fill.setType( VFill::patt );
-				m_strokeLabel->setText( i18n( "Stroke: Pattern") );
-			}
-		}
-		else
-		{
-			switch ( s.color().colorSpace() ) {
-			case VColor::rgb:
-				m_strokeLabel->setText( i18n( "Stroke: RGB") ); break;
-			case VColor::cmyk:
-				m_strokeLabel->setText( i18n( "Stroke: CMYK") ); break;
-			case VColor::hsb:
-				m_strokeLabel->setText( i18n( "Stroke: HSB") ); break;
-			case VColor::gray:
-				m_strokeLabel->setText( i18n( "Stroke: Grayscale") ); break;
-			default:
-				m_strokeLabel->setText( i18n( "Stroke: Color") );
+				case VColor::rgb:
+					m_strokeLabel->setText( i18n( "Stroke: RGB") ); break;
+				case VColor::cmyk:
+					m_strokeLabel->setText( i18n( "Stroke: CMYK") ); break;
+				case VColor::hsb:
+					m_strokeLabel->setText( i18n( "Stroke: HSB") ); break;
+				case VColor::gray:
+					m_strokeLabel->setText( i18n( "Stroke: Grayscale") ); break;
+				default:
+					m_strokeLabel->setText( i18n( "Stroke: Color") );
 			}
 			fill.setColor( s.color() );
 		}
-		m_painter->setPen( stroke );
-		m_painter->setBrush( fill );
-		m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
+		case VStroke::grad:
+		{
+			fill.gradient() = s.gradient();
+			fill.setType( VFill::grad );
+			m_strokeLabel->setText( i18n( "Stroke: Gradient") );
+		}
+		case VStroke::patt:
+		{
+			fill.pattern() = s.pattern();
+			fill.setType( VFill::patt );
+			m_strokeLabel->setText( i18n( "Stroke: Pattern") );
+		}
+		default: //None or unknown
+		{
+			m_strokeLabel->setText( i18n( "Stroke: None") );
+			fill.setColor( Qt::white );
+			m_painter->setBrush( fill );
+			m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
+			stroke.setColor( Qt::red );
+			stroke.setLineWidth( 2.0 );
+			m_painter->setPen( stroke );
+			m_painter->newPath();
+			m_painter->moveTo( KoPoint( 4, m_strokeFrame->height() - 4 ) );
+			m_painter->lineTo( KoPoint( m_strokeFrame->width() - 4, 4 ) );
+			m_painter->strokePath();
+		}
 	}
-	
-	if( s.type() == VStroke::none )
-	{
-		m_strokeLabel->setText( i18n( "Stroke: None") );
 
-		fill.setColor( Qt::white );
+	if( s.type() != VStroke::none )
+	{
+		m_painter->setPen( stroke );
 		m_painter->setBrush( fill );
 		m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
-
-		stroke.setColor( Qt::red );
-		stroke.setLineWidth( 2.0 );
-		m_painter->setPen( stroke );
-		m_painter->newPath();
-		m_painter->moveTo( KoPoint( 4, m_strokeFrame->height() - 4 ) );
-		m_painter->lineTo( KoPoint( m_strokeFrame->width() - 4, 4 ) );
-		m_painter->strokePath();
 	}
 
 	m_painter->end();
