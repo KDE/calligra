@@ -2,7 +2,7 @@
 X-KDE-Export=application/x-kword,application/x-kontour,application/x-kpresenter,application/x-kivio,application/x-kchart 
 ExportDescription=KOffice
 Icon=
-X-KDE-Import=text/xml, text/x-xslfo
+X-KDE-Import=text/xml,text/x-xslfo
 X-KDE-Weight=1
 ImportDescription=XSLT
 Name=KOffice XSLT Import Filter
