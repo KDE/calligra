@@ -1694,12 +1694,17 @@ void KWTextFrameSet::formatMore()
                         addFrame( frm );
                     }
 
-                    if ( lastFormatted )
-                        interval = 0;
                     if (wantedPosition > 0)
                         frames.last()->setBottom( wantedPosition );
 
                     updateFrames();
+                    if ( lastFormatted )
+                    {
+                        //interval = 0;
+                        // not good enough, we need to keep formatting right now
+                        formatMore(); // that, or a goto ?
+                        return;
+                    }
                 }
                 break;
                 case KWFrame::Ignore:

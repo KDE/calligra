@@ -988,6 +988,8 @@ void KWTextParag::printRTDebug( int info )
         kdWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
     if ( !next() )
         kdDebug() << "  next is 0L" << endl;
+    if ( isLastInFrame() )
+        kdDebug() << "  Is last in frame" << endl;
     /*
       static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
       QVector<QStyleSheetItem> vec = styleSheetItems();
