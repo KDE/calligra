@@ -1010,6 +1010,14 @@ void KWView::setupActions()
                                             this, SLOT( goToFootEndNote() ),
                                             actionCollection(), "goto_footendnote" );
 
+    actionEditFrameSet = new KAction( i18n( "Edit Text FrameSet" ), 0,
+                                            this, SLOT( editFrameSet() ),
+                                            actionCollection(), "edit_frameset" );
+
+    actionSelectedFrameSet = new KAction( i18n( "Select FrameSet" ), 0,
+                                            this, SLOT( selectFrameSet() ),
+                                            actionCollection(), "select_frameset" );
+
 
 }
 
@@ -5279,6 +5287,32 @@ void KWView::goToFootEndNote()
             KWTextFrameSet *frameSet =textDoc->textFrameSet();
             m_gui->canvasWidget()->editTextFrameSet( frameSet, parag, index );
         }
+    }
+}
+
+void KWView::openDocStructurePopupMenu( const QPoint &_p, KWFrameSet *frameset)
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    QPopupMenu* popup = static_cast<QPopupMenu *>(factory()->container("docstruct_popup",this));
+    if ( popup )
+        popup->popup(_p);
+
+}
+
+void KWView::selectFrameSet()
+{
+    if ( m_gui->getDocStruct() )
+    {
+        m_gui->getDocStruct()->selectFrameSet();
+    }
+}
+
+void KWView::editFrameSet()
+{
+    if ( m_gui->getDocStruct() )
+    {
+        m_gui->getDocStruct()->editFrameSet();
     }
 }
 

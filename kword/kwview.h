@@ -169,6 +169,7 @@ public:
     void updateHeader();
     void switchModeView();
     void changeFootNoteMenuItem( bool b);
+
 public slots:
     void fileStatistics();
     void editCut();
@@ -343,6 +344,11 @@ public slots:
 
     void autoSpellCheck();
     void goToFootEndNote();
+
+    void selectFrameSet();
+    void editFrameSet();
+    void openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset);
+
 protected slots:
     void spellCheckerReady();
     void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
@@ -547,6 +553,11 @@ private:
     KAction *actionChangeFootNoteType;
 
     KAction *actionGoToFootEndNote;
+
+
+    KAction *actionEditFrameSet;
+    KAction *actionSelectedFrameSet;
+
 
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;
