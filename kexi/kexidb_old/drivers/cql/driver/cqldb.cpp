@@ -28,13 +28,16 @@ K_EXPORT_COMPONENT_FACTORY(kexicqlinterface, KGenericFactory<CqlDB>( "kexicqlint
 CqlDB::CqlDB(QObject *parent, const char *name, const QStringList &)
  : KexiDB(parent, name)
 {
+	kdDebug() << "CqlDB::CqlDB()" << endl;
+
 	try
 	{
 		m_db = new SqlHandle;
 	}
 	catch(CqlException& ex)
 	{
-//		return false;
+		cerr << ex << endl;
+		m_db = 0;
 	}
 }
 
@@ -47,6 +50,8 @@ CqlDB::driverName()
 bool
 CqlDB::load(QString file)
 {
+	kdDebug() << "CqlDB::load()" << endl;
+
 	if(!m_db)
 		return false;
 
@@ -67,3 +72,5 @@ CqlDB::query(QString)
 CqlDB::~CqlDB()
 {
 }
+
+#include "cqldb.moc"

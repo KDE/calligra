@@ -69,6 +69,12 @@ KexiCreateProject::addItem(KexiCreateProjectPage *page, QString title, int index
 	connect(page, SIGNAL(valueChanged(KexiCreateProjectPage*, QString &)), this,
 	   SLOT(slotValueChanged(KexiCreateProjectPage*, QString &)));
 	page->m_loaded = true;
+
+	if(page == m_pageFile)
+	{
+		kdDebug() << "KexiCreateProject::addItem(): finish" << endl;
+		setFinishEnabled(page, true);
+	}
 }
 
 void
@@ -97,6 +103,7 @@ KexiCreateProject::next()
 		else
 		{
 			requireSection("LocalDB");
+			removePage(m_pageAuth);
 			KWizard::next();
 		}
 	}
@@ -124,12 +131,16 @@ KexiCreateProject::next()
 void
 KexiCreateProject::accept()
 {
-	if(static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB())
+	if(m_pageEngine->data("location").toString() != "RemoteDB")
 	{
-		KWizard::accept();
-//		emit m_project->updateBrowsers();
-//		kexi->mainWindow()->browser()->generateView();
+		kdDebug() << "KexiCreateProject::accept(): local engine..." << endl;
+		project()->initFileConnection(m_pageEngine->data("engine").toString(), "/tmp/kexidb");
 	}
+	else
+	{
+		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB();
+	}
+	KWizard::accept();
 }
 
 void

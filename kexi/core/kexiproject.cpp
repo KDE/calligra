@@ -374,6 +374,8 @@ KexiProject::initHostConnection(const Credentials &cred)
 bool
 KexiProject::initFileConnection(const QString driver, const QString file)
 {
+	kdDebug() << "KexiProject::initFileConnection()" << endl;
+
 	KexiDB *addDB = m_db->add(driver);
 	if(addDB)
 		m_db = addDB;
@@ -381,9 +383,18 @@ KexiProject::initFileConnection(const QString driver, const QString file)
 		return false;
 
 	if(m_db->load(file))
+	{
+		setModified( false );
+		emit dbAvaible();
+//		emit updateBrowsers();
+		m_dbAvaible = true;
+		loadHandlers();
 		return true;
+	}
 	else
+	{
 		return false;
+	}
 }
 
 void
