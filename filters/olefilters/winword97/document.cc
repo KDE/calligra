@@ -319,17 +319,41 @@ QString Document::cleanText(
 
 // Return the name of a font. We have to convert the Microsoft font names to something that
 // might just be present under X11.
-
 QString Document::getFont(unsigned fc)
 {
-    QString msFont = MsWord::getFont(fc).xstzName;
+    QString font = MsWord::getFont(fc).xstzName;
+    static const unsigned ENTRIES = 6;
+    static QString fuzzyLookup[ENTRIES][2] =
+    {
+        // MS contains      X11 font family
+        // substring.       non-AA name.
+        { "times",          "times" },
+        { "courier",        "courier" },
+        { "andale",         "monotype" },
+        { "monotype.com",   "monotype" },
+        { "georgia",        "times" },
+        { "helvetica",      "helvetica" }
+    };
 
-    // Use Qt to look up our local equivalent of the MS font.
-    QFont xFont(msFont);
-    QFontInfo info(xFont);
-    kdDebug() << "FONT: Original: " << msFont << endl;
-    kdDebug() << "FONT: Requested: " << xFont.family() << endl;
-    kdDebug() << "FONT: Got: " << info.family() << endl;
+    // In an anti-aliased X environment, Qt will do a good job of looking up our local
+    // equivalent of the MS font. But, we want to work even on non-AA. So, first, we do
+    // a fuzzy match of some common MS font names.
+    unsigned i;
+
+    font = font.lower();
+    for (i = 0; i < ENTRIES; i++)
+    {
+        // The loop will leave unchanged any MS font name not fuzzy-matched.
+        if (font.find(fuzzyLookup[i][0], 0, FALSE) != -1)
+        {
+            font = fuzzyLookup[i][1];
+            break;
+        }
+    }
+
+    // Use Qt to look up our canonical equivalent of the font name.
+    QFont xFont( font );
+    QFontInfo info( xFont );
     return info.family();
 }
 
