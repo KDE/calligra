@@ -1648,7 +1648,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 } else if ( modType != MT_NONE && resizeObjNum ) {
                     int mx = e->x()+diffx();
                     int my = e->y()+diffy();
-                    
+
                     if ( m_view->kPresenterDoc()->snapToGrid() )
                     {
                         mx = applyGridOnPosX( mx );
@@ -3201,7 +3201,7 @@ bool KPrCanvas::pNext( bool )
         KPresenterDoc * doc = m_view->kPresenterDoc();
         if ( !spManualSwitch() && nextPageTimer ) {
             QValueList<int>::ConstIterator it( slideListIterator );
-            m_view->setCurrentTimer( doc->pageList().at((*it) - 1 )->getPageTimer() * doc->getPresSpeed() );
+            m_view->setCurrentTimer( doc->pageList().at((*it) - 1 )->getPageTimer() / doc->getPresSpeed() );
 
             nextPageTimer = false;
 
@@ -3464,13 +3464,13 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
     p.end();
 }
 
-void KPrCanvas::printPage( QPainter* painter, int pageNum ) 
+void KPrCanvas::printPage( QPainter* painter, int pageNum )
 {
     //kdDebug(33001) << "KPrCanvas::printPage" << endl;
     KPrPage* saveActivePage = m_activePage;
     KPresenterDoc *doc = m_view->kPresenterDoc();
     KPrPage* page = doc->pageList().at( pageNum );
-    QRect rect = page->getZoomPageRect();  
+    QRect rect = page->getZoomPageRect();
     doc->displayActivePage( page );
     setActivePage( page );
     drawBackground( painter, rect );
@@ -5480,8 +5480,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
                     (kpobject->isSelected()) && drawContour);
     switch ( _modType ) {
     case MT_RESIZE_LU: {
-        // let the edge of the page be on the grid, this makes it 
-        // also possible to resize a object which is close to the edge 
+        // let the edge of the page be on the grid, this makes it
+        // also possible to resize a object which is close to the edge
         if( (objRect.left() + dx) < (pageRect.left() - 1) )
             dx = pageRect.left() - objRect.left();
         if( (objRect.top() + dy) < (pageRect.top() - 1) )
@@ -5564,7 +5564,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         kpobject->resizeBy( -dx, -dy );
         if ( objSize != kpobject->getSize() )
             kpobject->moveBy( KoPoint( 0, dy ) );
-            
+
     } break;
     case MT_RESIZE_DN: {
         dx = 0;
@@ -6943,7 +6943,7 @@ QPoint KPrCanvas::applyGrid( const QPoint &pos,bool offset )
     QPoint point( m_view->kPresenterDoc()->zoomHandler()->zoomPoint( newPos ) );
     if ( offset )
       point -= QPoint( diffx(), diffy() );
-    return point;    
+    return point;
 }
 
 int KPrCanvas::applyGridOnPosX( int pos ) const
@@ -7027,7 +7027,7 @@ KoPoint KPrCanvas::applyGrid( const KoPoint &pos )
 {
     if (  !m_view->kPresenterDoc()->snapToGrid() )
         return pos;
-    
+
     KoPoint newPos;
     newPos.setX( applyGridX( pos.x() ) );
     newPos.setY( applyGridY( pos.y() ) );
