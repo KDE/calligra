@@ -26,6 +26,7 @@
 
 QString ClassExportFilterHtmlFullPower::escapeCssIdentifier(const QString& strText) const
 {
+    kdDebug(30503) << "Entering ClassExportFilterHtmlFullPower::escapeCssIdentifier" << endl;
     // Reference: section 4.1.3 of the CSS2 recommendation
     // NOTE: when we need to escape, we choose the numerical CSS escape as it is encoding neutral.
 
@@ -42,7 +43,7 @@ QString ClassExportFilterHtmlFullPower::escapeCssIdentifier(const QString& strTe
         else if (((ch>='0') && (ch<='9'))
             || (ch=='-'))
         {
-            if (i=0)
+            if (!i)
             {
                 // A digit or a hyphen is not allowed as first character of an identifier
                 //  therefore we must escape it
@@ -69,6 +70,7 @@ QString ClassExportFilterHtmlFullPower::escapeCssIdentifier(const QString& strTe
             strReturn+=' '; // end escape (the space is not part of the following text!)
         }
     }
+    kdDebug(30503) << "Exiting ClassExportFilterHtmlFullPower::escapeCssIdentifier" << endl;
     return strReturn;
 }
 
@@ -291,15 +293,9 @@ QString ClassExportFilterHtmlFullPower::getStartOfListOpeningTag(const CounterDa
     return strResult;
 }
 
-QString ClassExportFilterHtmlFullPower::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)
+QString ClassExportFilterHtmlFullPower::layoutToCss(LayoutData& layout) const
 {
-    QString strElement;
-    strElement+='<';
-    strElement+=strTag;
-
-    // Opening elements
-    strElement+=" style=\"";
-
+    QString strElement; // TODO: rename this variable
     // We do not set "left" explicitly, since KWord cannot do bi-di
     if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
     {
@@ -384,6 +380,24 @@ QString ClassExportFilterHtmlFullPower::getParagraphElement(const QString& strTa
     {
         strElement+="none";
     }
+    return strElement;
+}
+
+QString ClassExportFilterHtmlFullPower::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)
+{
+    QString strElement;
+    strElement+='<';
+    strElement+=strTag;
+
+    // Opening elements
+    strElement+=" class=\"";
+    strElement+=escapeCssIdentifier(layout.styleName);
+    strElement+="\"";
+
+    strElement+=" style=\"";
+
+    strElement+=layoutToCss(layout);
+
     //strElement+="; ";
     strElement+="\">"; // close opening tag
 
@@ -415,8 +429,55 @@ QString ClassExportFilterHtmlFullPower::getParagraphElement(const QString& strTa
     return strElement;
 }
 
+void ClassExportFilterHtmlFullPower::processStyleTag (QDomNode myNode, void *, QString   &strStyles)
+{
+    kdDebug(30503) << "Entering ClassExportFilterHtmlFullPower::processStyleTag" << endl;
+    AllowNoAttributes (myNode);
+
+    LayoutData *layout = new LayoutData (); // TODO: memory error recovery
+
+    helpStyleProcessing(myNode,layout);
+
+    kdDebug(30503) << "Style: " << layout->styleName << endl;
+
+    if ( layout->counter.numbering == CounterData::NUM_CHAPTER )
+    {
+        strStyles+="H";
+        strStyles+=QString::number(layout->counter.depth+1,10);
+    }
+
+    strStyles+=".";
+    strStyles+=escapeCssIdentifier(layout->styleName);
+    kdDebug(30503) << "Class: " << escapeCssIdentifier(layout->styleName) << endl;
+    strStyles+=" {\n";
+    strStyles+=layoutToCss(*layout);
+    strStyles+="}\n";
+
+    delete layout;
+    kdDebug(30503) << "Exiting ClassExportFilterHtmlFullPower::processStyleTag" << endl;
+}
+
+static void ProcessStyleTag (QDomNode myNode, void *, QString &strStyles, ClassExportFilterBase* exportFilter )
+{
+    kdDebug(30503) << "Entering ProcessStyleTag" << endl;
+    exportFilter->processStyleTag(myNode,NULL,strStyles);
+    kdDebug(30503) << "Exiting ProcessStyleTag" << endl;
+}
+
+static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, ClassExportFilterBase* exportFilter )
+{
+    kdDebug(30503) << "Entering ProcessStylesPluralTag" << endl;
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+    kdDebug(30503) << "Exiting ProcessStylesPluralTag" << endl;
+}
+
 QString ClassExportFilterHtmlFullPower::processDocTagStylesOnly(QDomElement myNode)
 {
+    kdDebug(30503) << "Entering ClassExportFilterHtmlFullPower::processDocTagStylesOnly" << endl;
     QString strReturn;
 
     QValueList<AttrProcessing> attrProcessingList;
@@ -434,9 +495,9 @@ QString ClassExportFilterHtmlFullPower::processDocTagStylesOnly(QDomElement myNo
     }
     strReturn+="BODY { background-color: #FFFFFF }\n";
 
-    // We are only interested in <STYLES> for now!
+    // We are only interested in <STYLES>
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "STYLES",      NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "STYLES",ProcessStylesPluralTag,NULL));
     ProcessSubtags (myNode, tagProcessingList, strReturn, this);
 
     if (!isXML())
@@ -445,6 +506,6 @@ QString ClassExportFilterHtmlFullPower::processDocTagStylesOnly(QDomElement myNo
     }
     strReturn+="</style>\n";
 
+    kdDebug(30503) << "Exiting ClassExportFilterHtmlFullPower::processDocTagStylesOnly" << endl;
     return strReturn;
 }
-

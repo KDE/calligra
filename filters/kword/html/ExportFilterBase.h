@@ -163,6 +163,9 @@ class ClassExportFilterBase
         virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)=0;
         virtual QString getAfterBodyOpeningTag(void) const;
         virtual QString getBeforeBodyClosingTag(void) const;
+        virtual void processStyleTag (QDomNode myNode, void * tagData, QString &strStyles);
+    protected:
+        void helpStyleProcessing(QDomNode myNode,LayoutData* layout);
     public: // Public variables
         bool inList; // Are we currently in a list?
         bool orderedList; // Is the current list ordered or not (undefined, if we are not in a list)

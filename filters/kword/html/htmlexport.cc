@@ -522,6 +522,27 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, ClassE
 }
 
 // ClassExportFilterBase
+
+void ClassExportFilterBase::helpStyleProcessing(QDomNode myNode,LayoutData* layout)
+{
+    QString strDummy;
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "NAME",          ProcessLayoutNameTag,   (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "FOLLOWING",     NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",          ProcessLayoutFlowTag,   (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "INDENTS",       ProcessIndentsTag,      (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",       ProcessCounterTag,      (void *) &layout->counter ) );
+    tagProcessingList.append ( TagProcessing ( "LINESPACING",   NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "LEFTBORDER",    NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "RIGHTBORDER",   NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "TOPBORDER",     NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "BOTTOMBORDER",  NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "FORMAT",        ProcessSingleFormatTag, (void *) &layout->formatData ) );
+    tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",  NULL, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, strDummy,this);
+}
+
 bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &filenameOut)
 // NOTE: this member function is still define here! (TODO: decide if it should be moved too!)
 {
@@ -640,6 +661,8 @@ bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &f
     streamOut << processDocTagStylesOnly(docNodeIn); // Includes an end of line at the end if it is not empty.
 
     streamOut << "</head>" << endl;
+
+    kdDebug(30503) << "<head> writen!" << endl;
 
     streamOut << "<body" << getBodyOpeningTagExtraAttributes() << ">" << endl;
 

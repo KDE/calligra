@@ -40,8 +40,10 @@ class ClassExportFilterHtmlFullPower : public ClassExportFilterBase
         virtual QString processDocTagStylesOnly(QDomElement myNode);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
         virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
+        virtual void processStyleTag (QDomNode myNode, void * tagData, QString &strStyles);
     protected:
         QString escapeCssIdentifier(const QString& strText) const;
+        QString layoutToCss(LayoutData& layout) const;
 };
 
 //

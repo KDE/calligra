@@ -142,3 +142,6 @@ QString ClassExportFilterBase::processDocTagStylesOnly(QDomElement myNode)
     return QString::null;
 }
 
+void ClassExportFilterBase::processStyleTag (QDomNode, void *, QString&)
+{
+}
