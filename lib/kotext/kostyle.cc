@@ -18,8 +18,6 @@
 */
 
 #include "kostyle.h"
-#include "kozoomhandler.h"
-#include <qdom.h>
 #include <kdebug.h>
 #include <klocale.h>
 

@@ -19,7 +19,6 @@
 
 #include "kotextdocument.h"
 #include "kozoomhandler.h"
-#include "kotextformat.h"
 #include "kotextparag.h"
 #include "kotextformatter.h"
 #include <kdebug.h>

@@ -35,7 +35,6 @@
 **
 **********************************************************************/
 
-#include "qcomplextext_p.h"
 
 #ifndef QT_NO_COMPLEXTEXT
 #include "qrichtext_p.h"

@@ -18,11 +18,7 @@
 */
 
 #include "koborder.h"
-#include <klocale.h>
 #include <qdom.h>
-#include <qapplication.h>
-#include <qpalette.h>
-#include <qpainter.h>
 #include <kdebug.h>
 #include "kozoomhandler.h"
 #include "kotextformat.h"

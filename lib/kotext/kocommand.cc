@@ -19,7 +19,6 @@
 
 #include "kocommand.h"
 #include "kotextobject.h"
-#include "kotextparag.h"
 #include <kdebug.h>
 
 // This is automatically called by KCommandHistory's redo action when redo is activated

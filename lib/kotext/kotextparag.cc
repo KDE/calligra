@@ -19,14 +19,12 @@
 
 #include "kotextparag.h"
 #include "kotextdocument.h"
-#include "kotextformat.h"
 #include "koparagcounter.h"
 #include "kozoomhandler.h"
 #include "kostyle.h"
 #include <kglobal.h>
 #include <klocale.h>
 #include <assert.h>
-#include <koGlobal.h>
 #include <kdebug.h>
 
 /////

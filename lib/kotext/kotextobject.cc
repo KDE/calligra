@@ -20,7 +20,6 @@
 #include <qtimer.h>
 #include <qregexp.h>
 #include "kotextobject.h"
-#include "kotextdocument.h"
 #include "koparagcounter.h"
 #include "kozoomhandler.h"
 #include "kocommand.h"
