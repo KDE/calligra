@@ -399,7 +399,7 @@ protected:
 class MoveByCmd2 : public KNamedCommand
 {
 public:
-    MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+    MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page );
     ~MoveByCmd2();
 
     virtual void execute();
@@ -410,7 +410,7 @@ protected:
     QPtrList<KoPoint> diffs;
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;
-
+    KPrPage *m_page;
 };
 
 /******************************************************************/

@@ -1366,7 +1366,7 @@ KCommand * KPrPage::alignObjsLeft(const KoRect &rect)
 
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Left" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Left" ), _diffs, _objects, m_doc, this );
         moveByCmd2->execute();
     }
     else
@@ -1413,7 +1413,7 @@ KCommand * KPrPage::alignObjsCenterH(const KoRect &rect)
     if(newPosition)
     {
         moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Centered (horizontal)" ),
-                                                 _diffs, _objects, m_doc );
+                                                 _diffs, _objects, m_doc, this );
         moveByCmd2->execute();
     }
     else
@@ -1455,7 +1455,7 @@ KCommand * KPrPage::alignObjsRight(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Right" ), _diffs, _objects, m_doc);
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Right" ), _diffs, _objects, m_doc, this);
         moveByCmd2->execute();
     }
     else
@@ -1500,7 +1500,7 @@ KCommand *KPrPage::alignObjsTop(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Top" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Top" ), _diffs, _objects, m_doc, this );
         moveByCmd2->execute();
     }
     else
@@ -1546,7 +1546,7 @@ KCommand * KPrPage::alignObjsCenterV(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Center/Vertical" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Center/Vertical" ), _diffs, _objects, m_doc, this );
         moveByCmd2->execute();
     }
     else
@@ -1588,7 +1588,7 @@ KCommand * KPrPage::alignObjsBottom(const KoRect &rect)
 
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Bottom" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Bottom" ), _diffs, _objects, m_doc, this );
         moveByCmd2->execute();
     }
     else

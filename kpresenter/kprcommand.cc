@@ -858,22 +858,23 @@ void MoveByCmd::unexecute()
 
 /*======================== constructor ===========================*/
 MoveByCmd2::MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs,
-			QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
+			QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage * _page)
     : KNamedCommand( _name ), diffs( _diffs ), objects( _objects )
 {
     objects.setAutoDelete( false );
     diffs.setAutoDelete( true );
     doc = _doc;
+    m_page = _page;
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-	if ( it.current()->getType() == OT_TEXT )
+        if ( it.current()->getType() == OT_TEXT )
         {
             if(it.current()->isSelected())
                 doc->updateRuler();
-	    doc->repaint( it.current() );
-	}
-	it.current()->incCmdRef();
+            doc->repaint( it.current() );
+        }
+        it.current()->incCmdRef();
     }
 }
 
@@ -882,7 +883,7 @@ MoveByCmd2::~MoveByCmd2()
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
-	it.current()->decCmdRef();
+        it.current()->decCmdRef();
 
     diffs.clear();
 }
@@ -893,16 +894,21 @@ void MoveByCmd2::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getBoundingRect( doc->zoomHandler() ));
-	objects.at( i )->moveBy( *diffs.at( i ) );
-	if ( objects.at( i )->getType() == OT_TEXT )
+        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getBoundingRect( doc->zoomHandler() ));
+        objects.at( i )->moveBy( *diffs.at( i ) );
+        if ( objects.at( i )->getType() == OT_TEXT )
         {
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
 
-	doc->repaint( oldRect );
-	doc->repaint( objects.at( i ) );
+        doc->repaint( oldRect );
+        doc->repaint( objects.at( i ) );
+    }
+    if ( doc->refreshSideBar()) //for redo
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
     }
 }
 
@@ -912,16 +918,21 @@ void MoveByCmd2::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect( doc->zoomHandler() ));
-	objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
-	if ( objects.at( i )->getType() == OT_TEXT )
+        oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect( doc->zoomHandler() ));
+        objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
+        if ( objects.at( i )->getType() == OT_TEXT )
         {
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
-	doc->repaint( oldRect );
-	doc->repaint( objects.at( i ) );
+        doc->repaint( oldRect );
+        doc->repaint( objects.at( i ) );
         doc->updateRuler();
+    }
+    if ( doc->refreshSideBar()) //for redo
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
     }
 }
 
