@@ -2,6 +2,7 @@ INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
 	-I$(srcdir)/../render \
+	-I$(srcdir)/../dialogs \
 	$(all_includes)
 
 noinst_LTLIBRARIES = \

@@ -25,13 +25,13 @@ VToolContainer *VToolContainer::instance( KarbonPart* part, KoView* parent,
 	const char* name )
 {
 	if( !m_containers.find( part ) )
-		m_containers.insert( part, new VToolContainer( parent, name ) );
+		m_containers.insert( part, new VToolContainer( part, parent, name ) );
 
 	return m_containers.find( part );
 }
 
-VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
-	: QToolBar( parent->shell() )
+VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*name*/ )
+	: QToolBar( parent->shell() ), m_part( part )
 {
 	setOrientation( Vertical );
 	setLabel( "" );
@@ -153,7 +153,7 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 
 	//dialog buttons
 	m_dualColorButton = new KDualColorButton( this );
-	m_strokeFillPreview = new VStrokeFillPreview( this );
+	m_strokeFillPreview = new VStrokeFillPreview( m_part, this );
 
 	connect(
 		m_dualColorButton, SIGNAL( fgChanged( const QColor& ) ),

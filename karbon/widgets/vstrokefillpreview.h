@@ -11,13 +11,14 @@
 class VKoPainter;
 class VFill;
 class VStroke;
+class KarbonPart;
 
 class VStrokeFillPreview : public QFrame
 {
 	Q_OBJECT
 
 public:
-	VStrokeFillPreview( QWidget* parent = 0L, const char* name = 0L );
+	VStrokeFillPreview( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
 	~VStrokeFillPreview();
 
 	virtual QSize sizeHint() const
@@ -29,12 +30,15 @@ public:
 
 	void update( const VStroke &, const VFill & );
 
+	virtual bool eventFilter( QObject* object, QEvent* event );
+
 protected:
 	virtual void paintEvent( QPaintEvent* event );
 
 private:
 	VKoPainter* m_painter;
 	QPixmap m_pixmap;
+	KarbonPart *m_part;
 };
 
 #endif

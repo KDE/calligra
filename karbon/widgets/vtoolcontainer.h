@@ -59,11 +59,13 @@ private:
 		Roundrect, Polygon, Star, Sinus, Spiral, Text, Grad
 	};
 
+	KarbonPart *m_part;
+
 	enum DlgChoice { Outline, SolidFill, Gradient };
 
 	static QPtrDict< VToolContainer > m_containers;
 
-	VToolContainer( KoView* parent = 0L, const char* name = 0L );
+	VToolContainer( KarbonPart *part, KoView* parent = 0L, const char* name = 0L );
 };
 
 #endif

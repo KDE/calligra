@@ -9,12 +9,17 @@
 #include <qcolor.h>
 #include "vstroke.h"
 #include "vfill.h"
+#include "vfilldlg.h"
+#include "vstrokedlg.h"
+#include "karbon_part.h"
+#include <kdebug.h>
 
-VStrokeFillPreview::VStrokeFillPreview( QWidget* parent = 0L, const char* name = 0L )
-	: QFrame( parent, name )
+VStrokeFillPreview::VStrokeFillPreview( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L )
+	: QFrame( parent, name ), m_part( part )
 {
 	setFocusPolicy( QWidget::NoFocus );
 	setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+	installEventFilter( this );
 
 	m_pixmap.resize( 50, 50 );
 	m_painter = new VKoPainter( &m_pixmap, 50, 50 );
@@ -31,14 +36,34 @@ VStrokeFillPreview::paintEvent( QPaintEvent* event )
 	bitBlt( this, 0, 0, &m_pixmap, 0, 0, 50, 50 );
 }
 
+bool
+VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
+{
+	if( event && event->type() == QEvent::MouseButtonPress )
+	{
+		QMouseEvent *e = static_cast<QMouseEvent *>( event );
+		if( e->x() >= 20 && e->x() <= 40 && e->y() >= 20 && e->y() <= 50 )
+		{
+			VFillDlg* dialog = new VFillDlg( m_part );
+			//connect(dialog, SIGNAL( fillChanged() ), this, SLOT( selectionChanged() ) );
+			dialog->exec();
+			delete dialog;
+			//disconnect(dialog, SIGNAL( fillChanged() ), this, SLOT( selectionChanged() ) );
+		}
+		else if( e->x() >= 10 && e->x() <= 30 && e->y() >= 10 && e->y() <= 40 )
+		{
+			VStrokeDlg* dialog = new VStrokeDlg( m_part );
+			dialog->exec();
+			delete dialog;
+		}
+	}
+	return false;
+}
+
+
 void
 VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 {
-	// Some dummy code to show lenny how to use your own vkopainter.
-	// Actually I think keeping the painter around as a member var
-	// may be better. (Rob)
-	kdDebug() << "VStrokeFillPreview::paintEvent" << endl;
-
 	m_painter->begin();
 	m_painter->clear( paletteBackgroundColor().rgb() );
 
