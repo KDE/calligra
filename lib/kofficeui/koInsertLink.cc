@@ -78,7 +78,7 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
 {
     if( _href.isEmpty())
         return;
-    if(_href.find("http://")!=-1)
+    if(_href.find("http://")!=-1 ||_href.find("ftp://")!=-1 )
     {
         internetLink->setHrefName(_href);
         internetLink->setLinkName(_link);
@@ -186,7 +186,7 @@ QString internetLinkPage::createInternetLink()
     if(result.isEmpty())
         return result;
 
-    if(result.find("http://")==-1)
+    if(result.find("http://")==-1 && result.find("ftp://")==-1)
         result = "http://"+result;
     return result;
 }
