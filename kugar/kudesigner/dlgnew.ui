@@ -39,7 +39,7 @@
                 </size>
             </property>
             <property name="title">
-                <string>Paper</string>
+                <string>Paper orientation</string>
             </property>
             <widget class="QRadioButton">
                 <property name="name">
