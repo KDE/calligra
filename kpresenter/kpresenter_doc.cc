@@ -82,7 +82,6 @@
 #include <koFilterManager.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
-#include <koStoreStream.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -817,9 +816,6 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 	    }
 	} else if ( name == "OBJECTS" ) {
 	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-	    }
 	    lastObj = _objectList->count() - 1;
 	    loadObjects( parser, lst );
 	} else if ( name == "INFINITLOOP" ) {
