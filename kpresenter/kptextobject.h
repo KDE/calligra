@@ -57,10 +57,6 @@ public:
 
     virtual ObjType getType() const
     { return OT_TEXT; }
-#if 0
-    virtual int getSubPresSteps() const
-    { return ktextobject.paragraphs() - 1; }
-#endif
     virtual bool getDrawEditRect() const
     { return drawEditRect; }
     virtual bool getDrawEmpty() const
@@ -95,7 +91,7 @@ protected:
     virtual QDomElement saveKTextObject( QDomDocument& doc );
     QDomElement saveHelper(const QString &tmpText, const QString &tmpFamily, const QString &tmpColor,
                            int tmpPointSize, unsigned int tmpBold, unsigned int tmpItalic,
-                           unsigned int tmpUnderline, QDomDocument &doc);
+                           unsigned int tmpUnderline, unsigned int tmpStrikeOut,QDomDocument &doc);
 
     virtual void loadKTextObject( const QDomElement &e, int type );
     void drawTextObject( QPainter* _painter );
@@ -117,7 +113,7 @@ private:
                            &attrBulletColor2, &attrBulletColor3, &attrBulletColor4,
                            &attrObjType, &tagP, &attrAlign, &attrType,
                            &attrDepth, &tagTEXT, &attrFamily, &attrPointSize,
-                           &attrBold, &attrItalic, & attrUnderline, &attrColor, &attrWhitespace;
+                           &attrBold, &attrItalic, & attrUnderline,& attrStrikeOut,&attrColor, &attrWhitespace;
 
     /** The contained text object */
     KoTextObject * m_textobj;

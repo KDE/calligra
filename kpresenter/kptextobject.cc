@@ -78,6 +78,7 @@ const QString &KPTextObject::attrPointSize=KGlobal::staticQString("pointSize");
 const QString &KPTextObject::attrBold=KGlobal::staticQString("bold");
 const QString &KPTextObject::attrItalic=KGlobal::staticQString("italic");
 const QString &KPTextObject::attrUnderline=KGlobal::staticQString("underline");
+const QString &KPTextObject::attrStrikeOut=KGlobal::staticQString("strikeOut");
 const QString &KPTextObject::attrColor=KGlobal::staticQString("color");
 const QString &KPTextObject::attrWhitespace=KGlobal::staticQString("whitespace");
 
@@ -367,7 +368,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         KTextEditFormat *lastFormat = 0;
         QString tmpText, tmpFamily, tmpColor;
         int tmpPointSize=10;
-        unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false;
+        unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false;
         for ( int i = 0; i < parag->length(); ++i ) {
             KTextEditString::Char *c = parag->at( i );
             if ( !lastFormat || c->format->key() != lastFormat->key() ) {
@@ -381,13 +382,14 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
                 tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
                 tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
                 tmpUnderline=static_cast<unsigned int>(lastFormat->font().underline());
+                tmpStrikeOut=static_cast<unsigned int>(lastFormat->font().strikeOut());
                 tmpColor=lastFormat->color().name();
             }
             tmpText+=c->c;
         }
         if ( lastFormat ) {
             paragraph.appendChild(saveHelper(tmpText, tmpFamily, tmpColor, tmpPointSize,
-                                             tmpBold, tmpItalic, tmpUnderline, doc));
+                                             tmpBold, tmpItalic, tmpUnderline, ,tmpStrikeOut,doc));
         }
         textobj.appendChild(paragraph);
         parag = parag->next();
@@ -398,13 +400,14 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 
 QDomElement KPTextObject::saveHelper(const QString &tmpText, const QString &tmpFamily, const QString &tmpColor,
                                      int tmpPointSize, unsigned int tmpBold, unsigned int tmpItalic,
-                                     unsigned int tmpUnderline, QDomDocument &doc) {
+                                     unsigned int tmpUnderline, unsigned int tmpStrikeOut, QDomDocument &doc) {
     QDomElement element=doc.createElement(tagTEXT);
     element.setAttribute(attrFamily, tmpFamily);
     element.setAttribute(attrPointSize, tmpPointSize);
     element.setAttribute(attrBold, tmpBold);
     element.setAttribute(attrItalic, tmpItalic);
     element.setAttribute(attrUnderline, tmpUnderline);
+    element.setAttribute(attrStrikeOut, tmpStrikeOut);
     element.setAttribute(attrColor, tmpColor);
     if(tmpText.stripWhiteSpace().isEmpty())
         // working around a bug in QDom
@@ -443,12 +446,14 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     bool bold = (bool)n.attribute( attrBold ).toInt();
                     bool italic = (bool)n.attribute( attrItalic ).toInt();
                     bool underline = (bool)n.attribute( attrUnderline ).toInt();
+                    bool strikeOut = (bool)n.attribute( attrStrikeOut ).toInt();
                     QString color = n.attribute( attrColor );
                     QFont fn( family );
                     fn.setPointSize( KoTextZoomHandler::ptToLayoutUnit( size ) );
                     fn.setBold( bold );
                     fn.setItalic( italic );
                     fn.setUnderline( underline );
+                    fn.setStrikeOut( strikeOut );
                     QColor col( color );
                     QTextFormat *fm = textDocument()->formatCollection()->format( fn, col );
                     QString txt = n.firstChild().toText().data();

@@ -1224,6 +1224,7 @@ void KPresenterView::sizeSelected()
 {
     tbFont.setPointSize( ( (KFontSizeAction*)actionTextFontSize )->fontSize() );
     page->setTextPointSize( tbFont.pointSize() );
+    page->setFocus();
     kdDebug(33001) << "sizeSelected() " << tbFont.pointSize() << endl;
 }
 
@@ -1232,6 +1233,7 @@ void KPresenterView::fontSelected()
 {
     tbFont.setFamily( ( (KFontAction*)actionTextFontFamily )->currentText() );
     page->setTextFamily( tbFont.family() );
+    page->setFocus();
     kdDebug(33001) << "fontSelected() " << tbFont.family() << endl;
 }
 
