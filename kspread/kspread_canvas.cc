@@ -2324,78 +2324,30 @@ void KSpreadCanvas::doAutoScroll()
     bool select = false;
     QPoint pos( mapFromGlobal( QCursor::pos() ) );
 
-    //The switch defines progressive scrolling. The farther you out, the more steps you scroll
+    //Provide progressive scrolling depending on the mouse position
     if ( pos.y() < 0 )
     {
-        int step;
-        switch( - pos.y() / 20 )
-        {
-            case 0: step = doc()->zoomItY( 5.0 );
-                    break;
-            case 1: step = doc()->zoomItY( 20.0 );
-                    break;
-            case 2: step = doc()->zoomItY( height() );
-                    break;
-            case 3: step = doc()->zoomItY( height() );
-                    break;
-            default: step = doc()->zoomItY( height() * 5.0 );
-        }
-        vertScrollBar()->setValue( vertScrollBar()->value() - step );
+        vertScrollBar()->setValue( vertScrollBar()->value() - 
+                                   autoScrollAccelerationY( - pos.y() ) );
         select = true;
     }
     else if ( pos.y() > height() )
     {
-        int step;
-        switch( ( pos.y() - height() ) / 20 )
-        {
-            case 0: step = doc()->zoomItY( 5.0 );
-                    break;
-            case 1: step = doc()->zoomItY( 20.0 );
-                    break;
-            case 2: step = doc()->zoomItY( height() );
-                    break;
-            case 3: step = doc()->zoomItY( height() );
-                    break;
-            default: step = doc()->zoomItY( height() * 5.0 );
-        }
-        vertScrollBar()->setValue( vertScrollBar()->value() + step );
+        vertScrollBar()->setValue( vertScrollBar()->value() + 
+                                   autoScrollAccelerationY( pos.y() - height() ) );
         select = true;
     }
 
     if ( pos.x() < 0 )
     {
-        int step;
-        switch( - pos.x() / 20 )
-        {
-            case 0: step = doc()->zoomItX( 5.0 );
-                    break;
-            case 1: step = doc()->zoomItX( 20.0 );
-                    break;
-            case 2: step = doc()->zoomItX( width() );
-                    break;
-            case 3: step = doc()->zoomItX( width() );
-                    break;
-            default: step = doc()->zoomItX( width() * 5.0 );
-        }
-        horzScrollBar()->setValue( horzScrollBar()->value() - step );
+        horzScrollBar()->setValue( horzScrollBar()->value() - 
+                                   autoScrollAccelerationX( - pos.x() ) );
         select = true;
     }
     else if ( pos.x() > width() )
     {
-        int step;
-        switch( ( pos.x() - width() ) / 20 )
-        {
-            case 0: step = doc()->zoomItX( 5.0 );
-                    break;
-            case 1: step = doc()->zoomItX( 20.0 );
-                    break;
-            case 2: step = doc()->zoomItX( width() );
-                    break;
-            case 3: step = doc()->zoomItX( width() );
-                    break;
-            default: step = doc()->zoomItX( width() * 5.0 );
-        }
-        horzScrollBar()->setValue( horzScrollBar()->value() + step );
+        horzScrollBar()->setValue( horzScrollBar()->value() + 
+                                   autoScrollAccelerationX( pos.x() - width() ) );
         select = true;
     }
 
@@ -2408,6 +2360,30 @@ void KSpreadCanvas::doAutoScroll()
 
     //Restart timer
     m_scrollTimer->start( 50 );
+}
+
+double KSpreadCanvas::autoScrollAccelerationX( int offset )
+{
+    switch( static_cast<int>( offset / 20 ) )
+    {
+        case 0: return 5.0;
+        case 1: return 20.0;
+        case 2: return doc()->unzoomItX( width() );
+        case 3: return doc()->unzoomItX( width() );
+        default: return doc()->unzoomItX( width() * 5.0 );
+    }
+}
+
+double KSpreadCanvas::autoScrollAccelerationY( int offset )
+{
+    switch( static_cast<int>( offset / 20 ) )
+    {
+        case 0: return 5.0;
+        case 1: return 20.0;
+        case 2: return doc()->unzoomItY( height() );
+        case 3: return doc()->unzoomItY( height() );
+        default: return doc()->unzoomItY( height() * 5.0 );
+    }
 }
 
 void KSpreadCanvas::deleteEditor( bool saveChanges )
@@ -3236,12 +3212,26 @@ KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSprea
   m_bResize = FALSE;
   m_bSelection = FALSE;
   m_iSelectionAnchor=1;
+  m_bMousePressed = FALSE;
+
+  m_scrollTimer = new QTimer( this );
+  connect (m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
 }
+
+
+KSpreadVBorder::~KSpreadVBorder()
+{
+    delete m_scrollTimer;
+}
+
 
 void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 {
   if( !m_pView->koDocument()->isReadWrite() )
     return;
+
+  if ( _ev->button() == LeftButton )
+    m_bMousePressed = true;
 
   const KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
@@ -3256,6 +3246,8 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   {
     m_pCanvas->deleteEditor( true ); // save changes
   }
+
+  m_scrollTimer->start( 50 );
 
   // Find the first visible row and the y position of this row.
   double y;
@@ -3324,6 +3316,11 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
 void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
+    if ( m_scrollTimer->isActive() )
+        m_scrollTimer->stop();
+
+    m_bMousePressed = false;
+
     if( !m_pView->koDocument()->isReadWrite() )
         return;
 
@@ -3626,6 +3623,27 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
+void KSpreadVBorder::doAutoScroll()
+{
+    if ( !m_bMousePressed )
+    {
+        m_scrollTimer->stop();
+        return;
+    }
+
+    QPoint pos( mapFromGlobal( QCursor::pos() ) );
+
+    if ( pos.y() < 0 || pos.y() > height() )
+    {
+        QMouseEvent * event = new QMouseEvent( QEvent::MouseMove, pos, 0, 0 );
+        mouseMoveEvent( event );
+        delete event;
+    }
+
+    //Restart timer
+    m_scrollTimer->start( 50 );
+}
+
 void KSpreadVBorder::wheelEvent( QWheelEvent* _ev )
 {
   if ( m_pCanvas->vertScrollBar() )
@@ -3790,6 +3808,15 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   }
 }
 
+
+void KSpreadVBorder::focusOutEvent( QFocusEvent* )
+{
+    if ( m_scrollTimer->isActive() )
+        m_scrollTimer->stop();
+    m_bMousePressed = false;
+}
+
+
 /****************************************************************
  *
  * KSpreadHBorder
@@ -3807,12 +3834,26 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
   m_bResize = FALSE;
   m_bSelection = FALSE;
   m_iSelectionAnchor=1;
+  m_bMousePressed = FALSE;
+
+  m_scrollTimer = new QTimer( this );
+  connect ( m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
 }
+
+
+KSpreadHBorder::~KSpreadHBorder()
+{
+    delete m_scrollTimer;
+}
+
 
 void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 {
   if(!m_pView->koDocument()->isReadWrite())
     return;
+
+  if ( _ev->button() == LeftButton )
+    m_bMousePressed = true;
 
   const KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
@@ -3822,6 +3863,8 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   {
       m_pCanvas->deleteEditor( true ); // save changes
   }
+
+  m_scrollTimer->start( 50 );
 
   double ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   double dWidth = m_pCanvas->doc()->unzoomItX( width() );
@@ -3895,6 +3938,11 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
 void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
+    if ( m_scrollTimer->isActive() )
+        m_scrollTimer->stop();
+
+    m_bMousePressed = false;
+
     if(!m_pView->koDocument()->isReadWrite())
         return;
 
@@ -4197,6 +4245,27 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
+void KSpreadHBorder::doAutoScroll()
+{
+    if ( !m_bMousePressed )
+    {
+        m_scrollTimer->stop();
+        return;
+    }
+
+    QPoint pos( mapFromGlobal( QCursor::pos() ) );
+
+    if ( pos.x() < 0 || pos.x() > width() )
+    {
+        QMouseEvent * event = new QMouseEvent( QEvent::MouseMove, pos, 0, 0 );
+        mouseMoveEvent( event );
+        delete event;
+    }
+
+    //Restart timer
+    m_scrollTimer->start( 50 );
+}
+
 void KSpreadHBorder::wheelEvent( QWheelEvent* _ev )
 {
   if ( m_pCanvas->horzScrollBar() )
@@ -4452,5 +4521,14 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
         tip( marker, comment );
     }
 }
+
+
+void KSpreadHBorder::focusOutEvent( QFocusEvent* )
+{
+    if ( m_scrollTimer->isActive() )
+        m_scrollTimer->stop();
+    m_bMousePressed = false;
+}
+
 
 #include "kspread_canvas.moc"

@@ -269,6 +269,21 @@ public:
 
     bool chooseFormulaArea() const { return m_bChoose;}
 
+    /**
+     * Depending on the offset in "zoomed" screen pixels
+     * for the horizontal direction,
+     * the function returns the steps in unzoomed points
+     * for the autoscroll acceleration
+     */
+    double autoScrollAccelerationX( int offset );
+    /**
+     * Depending on the offset in "zoomed" screen pixels
+     * for the vertical direction,
+     * the function returns the steps in unzoomed points
+     * for the autoscroll acceleration
+     */
+    double autoScrollAccelerationY( int offset );
+
 public slots:
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
@@ -516,6 +531,7 @@ class KSpreadHBorder : public QWidget
     Q_OBJECT
 public:
     KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view  );
+    ~KSpreadHBorder();
 
     int markerColumn() const { return  m_iSelectionAnchor; }
     void resizeColumn( double resize, int nb = -1, bool makeUndo = true );
@@ -524,6 +540,9 @@ public:
 
     void updateColumns( int from, int to );
 
+private slots:
+    void doAutoScroll();
+
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
@@ -531,11 +550,14 @@ protected:
     virtual void mouseDoubleClickEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
     virtual void wheelEvent( QWheelEvent* );
+    virtual void focusOutEvent( QFocusEvent* ev );
     void paintSizeIndicator( int mouseX, bool firstTime );
 
 private:
     KSpreadCanvas *m_pCanvas;
     KSpreadView *m_pView;
+    QTimer * m_scrollTimer;
+
     /**
      * Flag that inidicates whether the user wants to mark columns.
      * The user may mark columns by dragging the mouse around in th XBorder widget.
@@ -576,6 +598,11 @@ private:
      */
     QLabel *m_lSize;
 
+    /**
+     * True when the mouse button is pressed
+     */
+    bool m_bMousePressed;
+
 private:
 };
 
@@ -586,12 +613,16 @@ class KSpreadVBorder : public QWidget
     Q_OBJECT
 public:
     KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view );
+    ~KSpreadVBorder();
 
     int markerRow() const { return  m_iSelectionAnchor; }
     void resizeRow( double resize, int nb = -1, bool makeUndo = true );
     void adjustRow( int _row = -1, bool makeUndo = true );
     void equalizeRow( double resize );
     void updateRows( int from, int to );
+
+private slots:
+    void doAutoScroll();
 
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
@@ -600,11 +631,14 @@ protected:
     virtual void mouseMoveEvent( QMouseEvent* _ev );
     virtual void mouseDoubleClickEvent( QMouseEvent* _ev );
     virtual void wheelEvent( QWheelEvent* );
+    virtual void focusOutEvent( QFocusEvent* ev );
     void paintSizeIndicator( int mouseY, bool firstTime );
 
 private:
     KSpreadCanvas *m_pCanvas;
     KSpreadView *m_pView;
+    QTimer * m_scrollTimer;
+
     bool m_bSelection;
     int m_iSelectionAnchor;
     bool m_bResize;
@@ -614,6 +648,11 @@ private:
      * The label used for showing the current size, when resizing
      */
     QLabel *m_lSize;
+
+    /**
+     * True when the mouse button is pressed
+     */
+    bool m_bMousePressed;
 };
 
 class KSpreadToolTip : public QToolTip
