@@ -257,7 +257,6 @@ QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,KSpreadCell 
     }
     if (cell->textFontUnderline(currentcolumn,currentrow))
     {
-        kdDebug()<<" cell->textFontUnderline(currentcolumn,currentrow)*********************\n";
         font_style.setAttribute("Underline","1");
     }
     if (cell->textFontStrike(currentcolumn,currentrow))
@@ -429,11 +428,11 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
     // I'm not sure about the rotation values.
     // I never got it to work in GNumeric.
-    cell_style.setAttribute("Rotation", QString::number(cell->getAngle(currentcolumn,currentrow)));
+    cell_style.setAttribute("Rotation", QString::number(-1*cell->getAngle(currentcolumn,currentrow)));
 
     // The indentation in GNumeric is an integer value. In KSpread, it's a double.
     // Save the double anyway, makes it even better when importing the document back in KSpread.
-    cell_style.setAttribute("Indent", QString::number(-1*cell->getIndent(currentcolumn,currentrow)));
+    cell_style.setAttribute("Indent", QString::number(cell->getIndent(currentcolumn,currentrow)));
 
     cell_style.setAttribute("Locked", !cell->notProtected(currentcolumn,currentrow));
 
