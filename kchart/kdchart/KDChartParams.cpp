@@ -1915,10 +1915,10 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
     {
         for( QMap<uint,KDChartFrameSettings>::ConstIterator it = _areaMap.begin();
              it != _areaMap.end(); ++it ) {
-	    KDXML::createIntNode( doc, areaMapElement, "Number", it.key() );
 	    KDChartFrameSettings::createFrameSettingsNode( doc, areaMapElement,
                                                            "FrameSettings",
-                                                           &(it.data()) );
+                                                           &(it.data()),
+                                                           it.key() );
         }
     }
 
@@ -2921,25 +2921,24 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
 		}
 	    } else if( tagName == "AreaMap" ) {
 		QDomNode node = element.firstChild();
-		int curNumber = -1;
 		while( !node.isNull() ) {
 		    QDomElement element = node.toElement();
 		    if( !element.isNull() ) { // was really an element
 			QString tagName = element.tagName();
-			if( tagName == "Number" ) {
-			    KDXML::readIntNode( element, curNumber );
-			} else if( tagName == "FrameSettings" ) {
-			    ASSERT( curNumber != -1 ); // there was a Dataset tag before
-			    KDChartFrameSettings frameSettings;
-			    KDChartFrameSettings::readFrameSettingsNode( element, frameSettings );
-			    _areaMap.insert( curNumber, frameSettings );
-			} else {
-			    qDebug( "Unknown tag in area map" );
-			    return false;
+			if( tagName == "FrameSettings" ) {
+	                    KDChartFrameSettings frameSettings;
+                            uint areaId = KDChartEnums::AreaUNKNOWN;
+			    if( KDChartFrameSettings::readFrameSettingsNode(
+                                element, frameSettings, areaId ) ) {
+                                _areaMap.insert( areaId, frameSettings );
+                            }
 			}
+			else
+			    qDebug( "Unknown tag in area map" );
+                            // do _not_ return false here (to enable future extentions)
 		    }
 		    node = node.nextSibling();
-		}
+                }
 	    } else if( tagName == "CustomBoxMap" ) {
 		QDomNode node = element.firstChild();
 		int curNumber = -1;
@@ -3050,12 +3049,15 @@ void KDChartParams::createChartFontNode( QDomDocument& doc, QDomNode& parent,
 void KDChartParams::KDChartFrameSettings::createFrameSettingsNode( QDomDocument& document,
                                                                    QDomNode& parent,
                                                                    const QString& elementName,
-                                                                   const KDChartParams::KDChartFrameSettings* settings )
+                                                                   const KDChartParams::KDChartFrameSettings* settings,
+                                                                   uint areaId )
 {
     QDomElement frameSettingsElement = document.createElement( elementName );
     parent.appendChild( frameSettingsElement );
     KDFrame::createFrameNode( document, frameSettingsElement, "Frame",
 			      settings->_frame );
+    KDXML::createIntNode( document, frameSettingsElement, "AreaId",
+                          areaId );
     KDXML::createIntNode( document, frameSettingsElement, "OuterGapX",
                           settings->_outerGapX );
     KDXML::createIntNode( document, frameSettingsElement, "OuterGapY",
@@ -3192,10 +3194,12 @@ bool KDChartParams::readChartValueNode( const QDomElement& element,
 
 
 bool KDChartParams::KDChartFrameSettings::readFrameSettingsNode( const QDomElement& element,
-                                                                 KDChartFrameSettings& settings )
+                                                                 KDChartFrameSettings& settings,
+                                                                 uint& areaId )
 {
     bool ok = true;
     KDFrame tempFrame;
+    int tempId = KDChartEnums::AreaUNKNOWN;
     int tempOuterGapX, tempOuterGapY, tempInnerGapX, tempInnerGapY;
     bool tempAddFrameWidthToLayout, tempAddFrameHeightToLayout;
     QDomNode node = element.firstChild();
@@ -3205,6 +3209,8 @@ bool KDChartParams::KDChartFrameSettings::readFrameSettingsNode( const QDomEleme
             QString tagName = element.tagName();
             if( tagName == "Frame" ) {
                 ok = ok & KDFrame::readFrameNode( element, tempFrame );
+            } else if( tagName == "AreaId" ) {
+                ok = ok & KDXML::readIntNode( element, tempId );
             } else if( tagName == "OuterGapX" ) {
                 ok = ok & KDXML::readIntNode( element, tempOuterGapX );
             } else if( tagName == "OuterGapY" ) {
@@ -3232,6 +3238,7 @@ bool KDChartParams::KDChartFrameSettings::readFrameSettingsNode( const QDomEleme
 	settings._innerGapY = tempInnerGapY;
 	settings._addFrameWidthToLayout = tempAddFrameWidthToLayout;
 	settings._addFrameHeightToLayout = tempAddFrameHeightToLayout;
+        areaId = tempId;
     }
 
     return ok;

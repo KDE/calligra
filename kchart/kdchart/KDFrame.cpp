@@ -327,12 +327,14 @@ void KDFrame::createFrameNode( QDomDocument& document, QDomNode& parent,
                           frame._shadowWidth );
     KDXML::createStringNode( document, frameElement, "CornerName",
                              cornerNameToString( frame._sunPos ) );
+
     KDXML::createBrushNode( document, frameElement, "Background",
                             frame._background );
     KDXML::createPixmapNode( document, frameElement, "BackPixmap",
                              frame._backPixmap );
     KDXML::createStringNode( document, frameElement, "BackPixmapMode",
                              backPixmapModeToString( frame._backPixmapMode ) );
+
     KDXML::createRectNode( document, frameElement, "InnerRect",
                            frame._innerRect );
     createFrameProfileNode( document, frameElement, "TopProfile",

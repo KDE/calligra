@@ -391,7 +391,8 @@ public:
         static void createFrameSettingsNode( QDomDocument& document,
                                              QDomNode& parent,
                                              const QString& elementName,
-                                             const KDChartFrameSettings* settings );
+                                             const KDChartFrameSettings* settings,
+                                             uint areaId );
 
         /**
            Reads data from a DOM element node that represents a frame
@@ -402,7 +403,8 @@ public:
            \param settings the frame settings object to read the data into
         */
         static bool readFrameSettingsNode( const QDomElement& element,
-                                           KDChartFrameSettings& settings );
+                                           KDChartFrameSettings& settings,
+                                           uint& areaId );
 
     private:
         KDFrame _frame;

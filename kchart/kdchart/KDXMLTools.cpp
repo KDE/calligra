@@ -401,32 +401,39 @@ bool readPixmapNode( const QDomElement& element, QPixmap& pixmap )
     }
     
     if( ok ) {
-        // Decode the image file format in the same way Qt Designer does.
-        char *ba = new char[ tempData.length() / 2 ];
-        for ( int i = 0; i < (int)tempData.length() / 2; ++i ) {
-            char h = tempData[ 2 * i ].latin1();
-            char l = tempData[ 2 * i  + 1 ].latin1();
-            uchar r = 0;
-            if ( h <= '9' )
-                r += h - '0';
-            else
-                r += h - 'a' + 10;
-            r = r << 4;
-            if ( l <= '9' )
-                r += l - '0';
-            else
-                r += l - 'a' + 10;
-            ba[ i ] = r;
-        }
+	if( 0 < tempLength ) {
+            // Decode the image file format in the same way Qt Designer does.
+            char *ba = new char[ tempData.length() / 2 ];
+            for ( int i = 0; i < (int)tempData.length() / 2; ++i ) {
+                char h = tempData[ 2 * i ].latin1();
+                char l = tempData[ 2 * i  + 1 ].latin1();
+                uchar r = 0;
+                if ( h <= '9' )
+                    r += h - '0';
+                else
+                    r += h - 'a' + 10;
+                r = r << 4;
+                if ( l <= '9' )
+                    r += l - '0';
+                else
+                    r += l - 'a' + 10;
+                ba[ i ] = r;
+            }
 
-        if( tempLength < tempData.length() * 5 )
-            tempLength = tempData.length() * 5;
-        QByteArray baunzip( tempLength );
-        ::uncompress( (uchar*) baunzip.data(), (ulong*)&tempLength, 
-                      (uchar*) ba, tempData.length()/2 );
-        QImage image;
-        image.loadFromData( (const uchar*)baunzip.data(), tempLength, "XPM" );
-        ok = ok & pixmap.convertFromImage( image, 0 );
+            if( tempLength < tempData.length() * 5 )
+                tempLength = tempData.length() * 5;
+            QByteArray baunzip( tempLength );
+            ::uncompress( (uchar*) baunzip.data(), (ulong*)&tempLength, 
+                          (uchar*) ba, tempData.length()/2 );
+            QImage image;
+            image.loadFromData( (const uchar*)baunzip.data(), tempLength, "XPM" );
+
+            if( image.isNull() )
+                pixmap.resize( 0, 0 ); // This is _not_ an error, we just read a NULL pixmap!
+            else 
+                ok = ok & pixmap.convertFromImage( image, 0 );
+        } else
+            pixmap.resize( 0, 0 ); // This is _not_ an error, we just read a empty pixmap! 
     }
     
     return ok;
