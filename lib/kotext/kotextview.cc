@@ -339,7 +339,6 @@ void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
 
 void KoTextView::autoCompletion()
 {
-    kdDebug()<<" KoTextView::autoCompletion()************\n";
     doAutoCompletion(m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
                      m_cursor->index() - 1);
 }
