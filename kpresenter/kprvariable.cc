@@ -37,10 +37,10 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
     switch(type) {
     case VT_PGNUM:
     {
-        kdDebug(33001)<<" subtype == KoPgNumVariable::VST_CURRENT_SECTION :"<<(subtype == KoPgNumVariable::VST_CURRENT_SECTION)<<endl;
+        kdDebug(33001)<<" subtype == KoPgNumVariable::VST_CURRENT_SECTION :"<<(subtype == KPrPgNumVariable::VST_CURRENT_SECTION)<<endl;
         kdDebug(33001)<<" varFormat :"<<varFormat<<endl;
         if ( !varFormat )
-            varFormat = (subtype == KoPgNumVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
+            varFormat = (subtype == KPrPgNumVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
         return new KPrPgNumVariable( textdoc,subtype, varFormat,this,m_doc  );
     }
     case VT_FIELD:
@@ -88,7 +88,7 @@ void KPrPgNumVariable::recalc()
 {
     if ( m_subtype == VST_PGNUM_TOTAL )
     {
-        m_varValue = QVariant( m_doc->getPageNums()+m_varColl->variableSetting()->startingPage()-1);
+        m_varValue = QVariant( (int)(m_doc->getPageNums()+m_varColl->variableSetting()->startingPage()-1));
         resize();
     }
 }
