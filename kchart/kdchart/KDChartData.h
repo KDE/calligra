@@ -32,17 +32,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#ifdef unix
-#if defined(__FreeBSD__)
 #include <float.h>
-#else
-# include <values.h>
-#endif
-#else
-#include <float.h>
-#endif
-
-#define KDCHART_MINDOUBLE DBL_MIN
 
 #include "KDChartGlobal.h"
 
@@ -119,7 +109,7 @@ public:
     }
     double doubleValue() const
     {
-        return isDouble() ? dValue : KDCHART_MINDOUBLE;
+        return isDouble() ? dValue : DBL_MIN;
     }
     QDateTime dateTimeValue() const
     {
