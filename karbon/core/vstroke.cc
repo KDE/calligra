@@ -28,6 +28,8 @@ VStroke::VStroke( const VStroke& stroke )
 	m_lineCap = stroke.m_lineCap;
 	m_lineJoin = stroke.m_lineJoin;
 	m_miterLimit = stroke.m_miterLimit;
+	m_color = stroke.m_color;
+	m_dashPattern = stroke.m_dashPattern;
 }
 
 void
@@ -135,6 +137,8 @@ VStroke::operator=( const VStroke& stroke )
 		m_lineCap = stroke.m_lineCap;
 		m_lineJoin = stroke.m_lineJoin;
 		m_miterLimit = stroke.m_miterLimit;
+		m_color = stroke.m_color;
+		m_dashPattern = stroke.m_dashPattern;
 	}
 
 	return *this;
