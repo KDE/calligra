@@ -172,7 +172,10 @@ void KChartFontConfigPage::apply()
     KDChartAxisParams leftparms = _params->axisParams( KDChartAxisParams::AxisPosLeft );
     KDChartAxisParams rightparms = _params->axisParams( KDChartAxisParams::AxisPosRight );
     KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
-    bottomparms.setAxisLabelsFont( xaxis, true );
+    //laurent 2001-11-09 I don't know why when we apply true, chart is not
+    //redraw correctly
+    // bottomparms.setAxisLabelsFont( xaxis, true );
+    bottomparms.setAxisLabelsFont( xaxis, false );
     leftparms.setAxisLabelsFont( yaxis, true );
     _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparms );
