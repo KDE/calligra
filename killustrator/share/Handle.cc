@@ -142,8 +142,8 @@ int Handle::contains (const Coord& p) {
 
   // Check if one of the outer handles is selected
   for (int i = 0; i < 8; i++) {
-    Rect r (pos[i].x () - 3, pos[i].y () - 3, 6, 6);
-    if (r.contains (p))
+    Rect r (pos[i].x () - 4, pos[i].y () - 4, 8, 8);
+    if (r.contains (p)) 
       return mask[i];
   }
   // Maybe the rotation center ?

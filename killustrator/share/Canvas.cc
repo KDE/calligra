@@ -84,15 +84,15 @@ void Canvas::ensureVisibility (bool flag) {
 
 void Canvas::calculateSize () {
   width = (int) (document->getPaperWidth () * resolution * 
-		 zoomFactor / 72.0);
+		 zoomFactor / 72.0) + 4;
   height = (int) (document->getPaperHeight () * resolution * 
-		  zoomFactor / 72.0);
+		  zoomFactor / 72.0 + 4);
   resize (width, height);
 
   if (pixmap != 0L)
     delete pixmap;
   pixmap = new QPixmap (width, height);
-  pixmap->fill (white);
+  //  pixmap->fill (white);
   updateView ();
   emit sizeChanged ();
 }
@@ -129,7 +129,7 @@ void Canvas::snapToGrid (bool flag) {
   }    
 }
 
-void Canvas::setGridDistance (int hdist, int vdist) {
+void Canvas::setGridDistance (float hdist, float vdist) {
   hGridDistance = hdist;
   vGridDistance = vdist;
   saveGridProperties ();
@@ -138,19 +138,21 @@ void Canvas::setGridDistance (int hdist, int vdist) {
 void Canvas::snapPositionToGrid (int& x, int& y) {
   if (gridSnapIsOn) {
     int p, m, n;
+    int h = qRound (hGridDistance);
+    int v = qRound (vGridDistance);
 
-    p = x / hGridDistance;
-    m = x % hGridDistance;
-    n = p * hGridDistance;
-    if (m > hGridDistance / 2)
-      n += hGridDistance;
+    p = x / h;
+    m = x % h;
+    n = p * h;
+    if (m > h / 2)
+      n += h;
     x = n;
 
-    p = y / vGridDistance;
-    m = y % vGridDistance;
-    n = p * vGridDistance;
-    if (m > vGridDistance / 2)
-      n += hGridDistance;
+    p = y / v;
+    m = y % v;
+    n = p * v;
+    if (m > v / 2)
+      n += v;
     y = n;
   }
 }
@@ -162,8 +164,8 @@ void Canvas::setToolController (ToolController* tc) {
 void Canvas::propagateMouseEvent (QMouseEvent *e) {
   // transform position of the mouse pointer according to current
   // zoom factor
-  QPoint new_pos ((int) (e->x () * 72 / (resolution * zoomFactor)),
-		  (int) (e->y () * 72 / (resolution * zoomFactor)));
+  QPoint new_pos (qRound (e->x () * 72 / (resolution * zoomFactor)) - 1,
+		  qRound (e->y () * 72 / (resolution * zoomFactor)) - 1);
   QMouseEvent new_ev (e->type (), new_pos, e->button (), e->state ());
 
   emit mousePositionChanged (new_pos.x (), new_pos.y ());
@@ -272,8 +274,17 @@ void Canvas::updateView () {
   p.setBackgroundColor (white);
   pixmap->fill (backgroundColor ());
 
+  p.setPen (black);
+  p.drawRect (0, 0, width - 2, height - 2);
+  p.setPen (QPen (darkGray, 2));
+  p.moveTo (width - 1, 2);
+  p.lineTo (width - 1, height - 1);
+  p.lineTo (2, height - 1);
+  p.setPen (black);
+
   // clear the canvas
   p.scale (s, s);
+  p.translate (1, 1);
   p.eraseRect (0, 0, document->getPaperWidth (),
 	       document->getPaperHeight ());
 
@@ -306,10 +317,17 @@ void Canvas::updateRegion (const Rect& r) {
   p.begin (pixmap);
   p.setBackgroundColor (white);
   // setup the clip region
+  if (clip.x () <= 1) clip.setX (1);
+  if (clip.y () <= 1) clip.setY (1);
+  if (clip.right () >= document->getPaperWidth ()) 
+    clip.setRight (document->getPaperWidth ());
+  if (clip.bottom () >= document->getPaperHeight ()) 
+    clip.setBottom (document->getPaperHeight ());
   p.setClipRect (clip);
 
   // clear the canvas
   p.scale (s, s);
+  p.translate (1, 1);
   p.eraseRect (r.left (), r.top (), r.width (), r.height ());
 
   // draw the grid
@@ -330,16 +348,20 @@ void Canvas::updateRegion (const Rect& r) {
 void Canvas::drawGrid (Painter& p) {
   int pw = document->getPaperWidth ();
   int ph = document->getPaperHeight ();
-  int h, v;
+  float h, v;
 
   QPen pen1 (blue, 0, DotLine);
 
   p.save ();
   p.setPen (pen1);
-  for (h = hGridDistance; h < pw; h += hGridDistance)
-    p.drawLine (h, 0, h, ph);
-  for (v = vGridDistance; v < ph; v += vGridDistance)
-    p.drawLine (0, v, pw, v);
+  for (h = hGridDistance; h < pw; h += hGridDistance) {
+    int hi = qRound (h);
+    p.drawLine (hi, 0, hi, ph);
+  }
+  for (v = vGridDistance; v < ph; v += vGridDistance) {
+    int vi = qRound (v);
+    p.drawLine (0, vi, pw, vi);
+  }
   p.restore ();
 }
 
@@ -397,8 +419,8 @@ void Canvas::readGridProperties () {
 
   config->setGroup ("Grid");
 
-  vGridDistance = config->readNumEntry ("vGridDistance", 50);
-  hGridDistance = config->readNumEntry ("hGridDistance", 50);
+  vGridDistance = (float) config->readDoubleNumEntry ("vGridDistance", 50.0);
+  hGridDistance = (float) config->readDoubleNumEntry ("hGridDistance", 50.0);
   gridIsOn = config->readBoolEntry ("showGrid", false);
   gridSnapIsOn = config->readBoolEntry ("snapTopGrid", false);
 
@@ -411,8 +433,8 @@ void Canvas::saveGridProperties () {
 
   config->setGroup ("Grid");
 
-  config->writeEntry ("vGridDistance", vGridDistance);
-  config->writeEntry ("hGridDistance", hGridDistance);
+  config->writeEntry ("vGridDistance", (double) vGridDistance);
+  config->writeEntry ("hGridDistance", (double) hGridDistance);
   config->writeEntry ("showGrid", gridIsOn);
   config->writeEntry ("snapTopGrid", gridSnapIsOn);
 

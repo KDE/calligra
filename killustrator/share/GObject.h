@@ -340,7 +340,7 @@ public:
   virtual void printInfo ();
   virtual void calcBoundingBox () = 0;
 
-  virtual void getPath (QPointArray& path) {}
+  virtual void getPath (vector<Coord>& path) {}
 
   bool workInProgress () const { return inWork; }
   void setWorkInProgress (bool flag) { inWork = flag; }

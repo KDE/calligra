@@ -73,7 +73,7 @@ public:
   virtual bool findNearestPoint (const Coord& p, float max_dist, 
 				 float& dist, int& pidx);
 
-  virtual void getPath (QPointArray& path);
+  virtual void getPath (vector<Coord>& path);
 
 protected:
   void calcBoundingBox ();

@@ -66,7 +66,7 @@ public:
 		     bool outline = false);
 
   void setOrigin (const Coord& p);
-  const Coord& origin () const { return opos; }
+  //  const Coord& origin () const { return opos; }
 
   void setTextInfo (const TextInfo& tinfo);
   TextInfo getTextInfo () const;
@@ -81,8 +81,8 @@ public:
   int cursorX () const { return cursx; }
   int cursorY () const { return cursy; }
   
-  int lines () const { return text.count (); }
-  const QString& line (int n) { return *text.at (n); }
+  int lines () const { return text.size (); }
+  const QString& line (int n) { return text[n]; }
   void setText (const QString& s);
   QString getText () const;
   
@@ -108,13 +108,13 @@ protected:
 
   void initState (GOState* state);
 
-  void drawOnPath (Painter& p);
-  void drawStraight (Painter& p);
+  void drawPathText (Painter& p);
+  void drawSimpleText (Painter& p);
 
 private:
-  Coord opos;
+  //  Coord opos;
   int cursx, cursy;
-  QList<QString> text;
+  vector<QString> text;
   TextInfo textInfo;
   QFontMetrics *fm;
   bool cursorActive;

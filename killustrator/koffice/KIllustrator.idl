@@ -17,6 +17,9 @@ module KIllustrator {
     oneway void editInsertOject ();
     oneway void editProperties ();
 
+    oneway void viewOutline ();
+    oneway void viewNormal ();
+
     oneway void transformPosition ();
     oneway void transformDimension ();
     oneway void transformRotation ();
@@ -31,6 +34,7 @@ module KIllustrator {
     oneway void arrangeUngroup ();
 
     oneway void editLayers ();
+    oneway void setupPage ();
 
     oneway void toggleRuler ();
     oneway void toggleGrid ();

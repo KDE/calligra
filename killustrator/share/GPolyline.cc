@@ -311,8 +311,8 @@ void GPolyline::calcBoundingBox () {
     r.bottom (QMAX(p.y (), r.bottom ()));
   }
 
-  if (r.left () == r.right ()) r.right (r.left () + 1);
-  if (r.top () == r.bottom ()) r.bottom (r.top () + 1);
+  r.right (r.left () == r.right () ? r.left () + 1 : r.right () + 2);
+  r.bottom (r.top () == r.bottom () ? r.top () + 1 : r.bottom () + 2);
 
   if (num < 2)
     return;
@@ -415,11 +415,11 @@ Rect GPolyline::calcEnvelope () {
   return r;
 }
 
-void GPolyline::getPath (QPointArray& path) {
+void GPolyline::getPath (vector<Coord>& path) {
   unsigned int num = points.count ();
   path.resize (num);
   for (unsigned int i = 0; i < num; i++) {
     const Coord& pi = *points.at (i);
-    path.setPoint (i, tMatrix.map (QPoint (pi.x (), pi.y ())));
+    path[i] = pi.transform (tMatrix);
   }
 }

@@ -55,7 +55,7 @@ public:
   void snapToGrid (bool flag);
   bool snapToGrid () const { return gridSnapIsOn; }
 
-  void setGridDistance (int hdist, int vdist);
+  void setGridDistance (float hdist, float vdist);
   float getHorizGridDistance () const { return hGridDistance; }
   float getVertGridDistance () const { return vGridDistance; }
 
@@ -122,7 +122,7 @@ private:
   bool gridIsOn;
   bool gridSnapIsOn;
   bool dragging, ensureVisibilityFlag;
-  int hGridDistance, vGridDistance;
+  float hGridDistance, vGridDistance;
   bool drawBasePoints;
   bool outlineMode;
   static QArray<float> zoomFactors;

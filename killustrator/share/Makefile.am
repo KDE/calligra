@@ -9,7 +9,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 RectangleTool.h OvalTool.h TextTool.h FreeHandTool.h \
 		 SelectionTool.h PolygonTool.h ToolController.h \
 		 EditPointTool.h BezierTool.h ZoomTool.h \
-		 ToolGroup.h ToolPalette.h ColorField.h Canvas.h \
+		 ColorField.h Canvas.h \
 		 QwViewport.h GDocument.h \
 		 Coord.h PropertyEditor.h FloatSpinBox.h \
                  ColorComboBox.h FontSelector.h AlignmentDialog.h \
@@ -27,7 +27,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 FilterInfo.h ExportFilter.h ImportFilter.h \
 		 Ruler.h AboutDialog.h \
 		 qwmf.h wmfstruct.h metafuncs.h version.h \
-		 ToolButton.h Arrow.h Painter.h LineStyle.h \
+		 Arrow.h Painter.h LineStyle.h \
 		 TransformationDialog.h koPageLayoutDia.h \
 		 MainView.h PStateManager.h OptionDialog.h \
 		 Preview.h units.h UnitBox.h ScriptDialog.h \
@@ -42,7 +42,7 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  RectangleTool.cc OvalTool.cc TextTool.cc \
 			  SelectionTool.cc PolygonTool.cc ToolController.cc \
 			  EditPointTool.cc BezierTool.cc ZoomTool.cc \
-			  ToolGroup.cc ToolPalette.cc ColorField.cc Canvas.cc \
+			  ColorField.cc Canvas.cc \
                           QwViewport.cc GDocument.cc \
 			  Coord.cc PropertyEditor.cc FloatSpinBox.cc \
                           ColorComboBox.cc FontSelector.cc AlignmentDialog.cc \
@@ -61,7 +61,7 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  FilterInfo.cc ExportFilter.cc \
 			  ImportFilter.cc \
 			  Ruler.cc AboutDialog.cc qwmf.cc \
-			  ToolButton.cc Arrow.cc Painter.cc LineStyle.cc \
+			  Arrow.cc Painter.cc LineStyle.cc \
 			  TransformationDialog.cc koPageLayoutDia.cc \
 			  PStateManager.cc OptionDialog.cc \
 			  Preview.cc units.cc UnitBox.cc ScriptDialog.cc \
@@ -76,13 +76,13 @@ BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		RectangleTool.moc OvalTool.moc TextTool.moc \
 		SelectionTool.moc PolygonTool.moc ToolController.moc \
 		EditPointTool.moc BezierTool.moc ZoomTool.moc \
-		ToolGroup.moc ToolPalette.moc ColorField.moc Canvas.moc \
+		ColorField.moc Canvas.moc \
 		QwViewport.moc GDocument.moc KIllustrator.moc \
 		PropertyEditor.moc FloatSpinBox.moc ColorComboBox.moc \
 		FontSelector.moc AlignmentDialog.moc GridDialog.moc \
 		PolygonConfigDialog.moc KIllustratorApp.moc \
 		Ruler.moc AboutDialog.moc \
-		ToolButton.moc PolygonPreview.moc \
+		PolygonPreview.moc \
 		TransformationDialog.moc koPageLayoutDia.moc \
 		PStateManager.moc OptionDialog.moc UnitBox.moc \
 		ScriptDialog.moc GLayer.moc LayerDialog.moc \
@@ -120,8 +120,6 @@ ToolController.cc: ToolController.moc
 EditPointTool.cc: EditPointTool.moc
 BezierTool.cc: BezierTool.moc
 ZoomTool.cc: ZoomTool.moc
-ToolGroup.cc: ToolGroup.moc
-ToolPalette.cc: ToolPalette.moc
 ColorField.cc: ColorField.moc
 Canvas.cc: Canvas.moc
 QwViewport.cc: QwViewport.moc
@@ -137,7 +135,6 @@ GridDialog.cc: GridDialog.moc
 CommandHistory.cc: CommandHistory.moc
 Ruler.cc: Ruler.moc
 AboutDialog.cc: AboutDialog.moc
-ToolButton.cc: ToolButton.moc
 TransformationDialog.cc: TransformationDialog.moc
 koPageLayoutDia.cc: koPageLayoutDia.moc
 PStateManager.cc: PStateManager.moc

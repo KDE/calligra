@@ -87,16 +87,17 @@ void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
        * Abort the last operation
        */
       textObj = 0L;
+      emit operationDone ();
     }
   }
   else if (e->type () == Event_MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button () == LeftButton) {
       int xpos = me->x (), ypos = me->y ();
-      GObject *obj;
-      int dummy;
+      GObject *obj = 0L;
 
-      if ((obj = doc->findContainingObject (xpos, ypos)) != 0L) {
+      if (textObj && 
+	  (obj = doc->findContainingObject (xpos, ypos)) != 0L) {
 	textObj->setPathObject (obj);
       }
     }

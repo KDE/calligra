@@ -40,6 +40,8 @@ KIllustratorChild::~KIllustratorChild () {
 
 
 KIllustratorDocument::KIllustratorDocument () {
+  ADD_INTERFACE("IDL:OPParts/Print:1.0")
+  cout << "create new KIllustratorDocument ..." << endl;
   m_lstViews.setAutoDelete (true);
   m_lstChildren.setAutoDelete (true);
   m_bEmpty = true;

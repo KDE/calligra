@@ -106,6 +106,9 @@ public:
   void editInsertOject ();
   void editProperties ();
 
+  void viewOutline ();
+  void viewNormal ();
+
   void transformPosition ();
   void transformDimension ();
   void transformRotation ();
@@ -126,6 +129,7 @@ public:
   void alignToGrid ();
 
   void editLayers ();
+  void setupPage ();
 
   void setPenColor (CORBA::Long id);
   void setFillColor (CORBA::Long id);

@@ -37,7 +37,10 @@
 #define MARKER_HEIGHT 6
 
 Ruler::Ruler (Orientation o, MeasurementUnit mu, QWidget *parent,
-	      const char *name) : QWidget (parent, name) {
+	      const char *name) : QFrame (parent, name) {
+  setFrameStyle (Box | Raised);
+  setLineWidth (1);
+  setMidLineWidth (0);
   orientation = o;
   munit = mu;
   zoom = 1;
@@ -138,26 +141,26 @@ void Ruler::updatePointer (int x, int y) {
 
   if (orientation == Horizontal) {
     if (currentPosition != -1) {
-      pos = int (currentPosition * zoom - MARKER_WIDTH / 2);
-      r1 = QRect (pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
+      pos = qRound (currentPosition * zoom - MARKER_WIDTH / 2);
+      r1 = QRect (pos - firstVisible, 1, MARKER_WIDTH, MARKER_HEIGHT);
       bitBlt (buffer, pos, 1, bg, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
     }
     if (x != -1) {
-      pos = int (x * zoom - MARKER_WIDTH / 2);
-      r2 = QRect (pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
+      pos = qRound (x * zoom - MARKER_WIDTH / 2);
+      r2 = QRect (pos - firstVisible, 1, MARKER_WIDTH, MARKER_HEIGHT);
       bitBlt (buffer, pos, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
       currentPosition = x;
     }
   }
   else {
     if (currentPosition != -1) {
-      pos = int (currentPosition * zoom - MARKER_HEIGHT / 2);
-      r1 = QRect (1, pos, MARKER_HEIGHT, MARKER_WIDTH);
+      pos = qRound (currentPosition * zoom - MARKER_HEIGHT / 2);
+      r1 = QRect (1, pos - firstVisible, MARKER_HEIGHT, MARKER_WIDTH);
       bitBlt (buffer, 1, pos, bg, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
     }
     if (y != -1) {
-      pos = int (y * zoom - MARKER_HEIGHT / 2);
-      r2 = QRect (1, pos, MARKER_HEIGHT, MARKER_WIDTH);
+      pos = qRound (y * zoom - MARKER_HEIGHT / 2);
+      r2 = QRect (1, pos - firstVisible, MARKER_HEIGHT, MARKER_WIDTH);
       bitBlt (buffer, 1, pos, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
       currentPosition = y;
     }
@@ -187,6 +190,7 @@ void Ruler::paintEvent (QPaintEvent *e) {
     bitBlt (this, rect.x (), rect.y (), buffer, 
 	    rect.x (), rect.y () + firstVisible, 
 	    rect.width (), rect.height ());
+  QFrame::paintEvent (e);
 }
 
 void Ruler::drawRuler () {
@@ -246,7 +250,7 @@ void Ruler::drawRuler () {
     case UnitMillimeter:
       {
 	for (int i = 0; i < buffer->width (); i += step) {
-	  int pos = qRound (i * MM_FACTOR);
+	  int pos = qRound (i * MM_FACTOR) + 1;
 	  if (i % step1 == 0) {
 	    p.drawLine (pos, 10, pos, 30);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
@@ -299,7 +303,7 @@ void Ruler::drawRuler () {
     case UnitMillimeter:
       {
 	for (int i = 0; i < buffer->height (); i += step) {
-	  int pos = qRound (i * MM_FACTOR);
+	  int pos = qRound (i * MM_FACTOR) + 1;
 	  if (i % step1 == 0) {
 	    p.drawLine (10, pos, 30, pos);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));

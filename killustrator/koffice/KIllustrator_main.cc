@@ -39,21 +39,22 @@ KOFFICE_DOCUMENT_FACTORY(KIllustratorDocument, KIllustratorFactory)
 
 typedef OPAutoLoader<KIllustratorFactory> KIllustratorAutoLoader;
 
-KIllustratorOPApp::KIllustratorOPApp (int argc, char** argv) :
+KIllustratorApp::KIllustratorApp (int& argc, char** argv) :
     OPApplication (argc, argv, "killustrator") 
 {
     getLocale()->insertCatalogue("koffice");
 }
 
-KIllustratorOPApp::~KIllustratorOPApp () {
+KIllustratorApp::~KIllustratorApp () {
 }
 
-void KIllustratorOPApp::start () {
+void KIllustratorApp::start () {
   if (withGUI) {
     imr_init ();
     koScanParts ();
     KIllustratorShell* m_pShell;
 
+    cout << "create new KIllustratorShell" << endl;
     m_pShell = new KIllustratorShell;
     m_pShell->show ();
     m_pShell->newDocument ();
@@ -61,14 +62,16 @@ void KIllustratorOPApp::start () {
 }
 
 int main (int argc, char** argv) {
+  KIllustratorAutoLoader loader ("IDL:KOffice/DocumentFactory:1.0");
+  KIllustratorApp app (argc, argv);
+
   for (int i = 1; i < argc; i++) {
     if (::strcmp (argv[i], "-s") == 0 || 
 	::strcmp (argv[i], "--server") == 0)
       withGUI = false;
   }
 
-  KIllustratorAutoLoader loader ("IDL:KOffice/DocumentFactory:1.0");
-  KIllustratorOPApp app (argc, argv);
+  cout << "exec KIllustrator" << endl;
   app.exec ();
 
   return 0;

@@ -26,11 +26,12 @@
 #define Ruler_h_
 
 #include <qwidget.h>
+#include <qframe.h>
 #include <qpixmap.h>
 
 #include "PStateManager.h"
 
-class Ruler : public QWidget {
+class Ruler : public QFrame {
   Q_OBJECT
 public:
   //  enum MeasurementUnit { Point, Centimeter, Inch };

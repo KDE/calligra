@@ -26,6 +26,7 @@
 #include <qkeycode.h>
 #include <qstrlist.h>
 #include <qfileinfo.h>
+#include <qframe.h>
 #include <unistd.h>
 #include "KIllustrator.h"
 #include "KIllustrator.moc"
@@ -64,7 +65,6 @@
 #include "ReorderCmd.h"
 #include "SetPropertyCmd.h"
 #include "filter/FilterManager.h"
-#include "ToolButton.h"
 #include "Preview.h"
 #include "units.h"
 #include "ScriptDialog.h"

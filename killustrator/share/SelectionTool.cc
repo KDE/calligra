@@ -216,8 +216,8 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
      */
     else if (state == S_Intermediate1) {
       if (me->state () == LeftButton) {
-	hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
-	if (hmask)
+	//	hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
+	if (ctype == C_Size)
 	  state = S_Scale;
 	else
 	  state = S_Translate;

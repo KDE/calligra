@@ -148,6 +148,7 @@ unsigned int PolygonConfigDialog::numCorners () {
 
 void PolygonConfigDialog::setNumCorners (unsigned int num) {
   spinbox->setValue (num);
+  preview->setNumOfCorners (spinbox->getValue ());
 }
 
 unsigned int PolygonConfigDialog::sharpness () {

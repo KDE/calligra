@@ -27,15 +27,13 @@
 
 #include <opApplication.h>
 
-#include "KIllustrator_doc.h"
-
-class KIllustratorOPApp : public OPApplication {
+class KIllustratorApp : public OPApplication {
   Q_OBJECT
 public:
-  KIllustratorOPApp (int argc, char** argv);
-  ~KIllustratorOPApp ();
+  KIllustratorApp (int& argc, char** argv);
+  ~KIllustratorApp ();
 
-  void start ();
+  virtual void start ();
 
 protected:
 };

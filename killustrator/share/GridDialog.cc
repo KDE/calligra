@@ -159,10 +159,11 @@ void GridDialog::setupGrid (Canvas* canvas) {
 
   int result = dialog.exec ();
   if (result == Accepted) {
-    canvas->setGridDistance ((int) dialog.horizontalDistance (),
-			     (int) dialog.verticalDistance ());
+    canvas->setGridDistance (dialog.horizontalDistance (),
+			     dialog.verticalDistance ());
     canvas->showGrid (dialog.showGrid ());
     canvas->snapToGrid (dialog.snapToGrid ());
+    canvas->updateView ();
   }
 }
   

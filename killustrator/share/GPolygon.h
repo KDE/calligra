@@ -65,6 +65,8 @@ public:
   void setSymmetricPolygon (const Coord& sp, const Coord& ep, int nCorners, 
 			    bool concave, int sharpness);
   
+  virtual void getPath (vector<Coord>& path);
+
   virtual const char* typeName ();
 
   virtual GObject* copy ();

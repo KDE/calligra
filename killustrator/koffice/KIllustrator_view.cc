@@ -577,6 +577,7 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 }
 
 void KIllustratorView::resizeEvent (QResizeEvent* ) {
+  cout << "resizeEvent" << endl;
   if (mainWidget) {
     mainWidget->resize (width (), height ()); 
     if (m_bShowGUI) {
@@ -690,7 +691,7 @@ void KIllustratorView::editProperties () {
 
 void KIllustratorView::toggleRuler () {
   m_bShowRulers = !m_bShowRulers;
-  //  m_rMenuBar->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
+  m_vMenuView->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
   if (m_bShowRulers) {
     hRuler->show ();
     vRuler->show ();
@@ -751,7 +752,7 @@ void KIllustratorView::transformMirror () {
 void KIllustratorView::toggleGrid () {
   bool gridIsShown = ! canvas->showGrid ();
   canvas->showGrid (gridIsShown);
-  //  m_rMenuBar->setItemChecked (m_idMenuView_Grid, gridIsShown);
+  m_vMenuLayout->setItemChecked (m_idMenuView_Grid, gridIsShown);
 }
 
 void KIllustratorView::setupGrid () {
@@ -761,7 +762,7 @@ void KIllustratorView::setupGrid () {
 void KIllustratorView::alignToGrid () {
   bool snap = ! canvas->snapToGrid ();
   canvas->snapToGrid (snap);
-  //  m_rMenuBar->setItemChecked (m_idMenuLayout_AlignToGrid, snap);
+  m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToGrid, snap);
 }
 
 void KIllustratorView::setPenColor (CORBA::Long id) {
@@ -872,4 +873,25 @@ void KIllustratorView::toolZoom () {
 
 void KIllustratorView::configPolygonTool () {
   tcontroller->configureTool (ID_TOOL_POLYGON);
+}
+
+void KIllustratorView::viewOutline () {
+  canvas->setOutlineMode (true);
+  m_vMenuView->setItemChecked (m_idMenuView_Outline, true);
+  m_vMenuView->setItemChecked (m_idMenuView_Normal, false);
+}
+
+void KIllustratorView::viewNormal () {
+  canvas->setOutlineMode (true);
+  m_vMenuView->setItemChecked (m_idMenuView_Outline, false);
+  m_vMenuView->setItemChecked (m_idMenuView_Normal, true);
+}
+
+void KIllustratorView::setupPage () {
+  KoPageLayout pLayout = m_pDoc->pageLayout ();
+  KoHeadFoot header;
+  
+  if (KoPageLayoutDia::pageLayout (pLayout, header, 
+				   FORMAT_AND_BORDERS))
+    m_pDoc->setPageLayout (pLayout);
 }
