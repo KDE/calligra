@@ -42,7 +42,9 @@ protected:
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
+
 private:
+	void parseGObject( VObject *, const QDomElement & );
 	VDocument m_document;
 };
 

@@ -72,7 +72,31 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
                                      // was successfull
 }
 
-void KontourImport::convert()
+void
+KontourImport::parseGObject( VObject *object, const QDomElement &e )
+{
+	if( !e.attribute( "fillcolor" ).isEmpty() )
+	{
+		VFill fill;
+		QColor c;
+		c.setNamedColor( e.attribute( "fillcolor" ) );
+		VColor color( c );
+		fill.setColor( color );
+		object->setFill( fill );
+	}
+	if( !e.attribute( "strokecolor" ).isEmpty() )
+	{
+		VStroke stroke;
+		QColor c;
+		c.setNamedColor( e.attribute( "strokecolor" ) );
+		VColor color( c );
+		stroke.setColor( color );
+		object->setStroke( stroke );
+	}
+}
+
+void
+KontourImport::convert()
 {	
 	QDomElement docElem = inpdoc.documentElement();
 	QDomElement page = docElem.namedItem( "page" ).toElement();
@@ -92,24 +116,7 @@ void KontourImport::convert()
 			int height = b.attribute( "height" ).toInt();
 			VObject *rect = new VRectangle( 0L, KoPoint( x, y ) , width, height );
 			QDomElement object = b.namedItem( "polyline" ).namedItem( "gobject" ).toElement();
-			if( !object.attribute( "fillcolor" ).isEmpty() )
-			{
-				VFill fill;
-				QColor c;
-				c.setNamedColor( object.attribute( "fillcolor" ) );
-				VColor color( c );
-				fill.setColor( color );
-				rect->setFill( fill );
-			}
-			if( !object.attribute( "strokecolor" ).isEmpty() )
-			{
-				VStroke stroke;
-				QColor c;
-				c.setNamedColor( object.attribute( "strokecolor" ) );
-				VColor color( c );
-				stroke.setColor( color );
-				rect->setStroke( stroke );
-			}
+			parseGObject( rect, object );
 			m_document.append( rect );
 		}
 		else
@@ -129,15 +136,7 @@ void KontourImport::convert()
 			double width = right - left; 
 			// Append the ellipse to the document
 			VObject *ellipse = new VEllipse( 0L, KoPoint( left, top ),  width, height );
-			if( !object.attribute( "strokecolor" ).isEmpty() )
-			{
-				VStroke stroke;
-				QColor c;
-				c.setNamedColor( object.attribute( "strokecolor" ) );
-				VColor color( c );
-				stroke.setColor( color );
-				ellipse->setStroke( stroke );
-			}
+			parseGObject( ellipse, object );
 			m_document.append( ellipse );
 		}
 		else
@@ -161,6 +160,8 @@ void KontourImport::convert()
 				path->lineTo( KoPoint( x, y ) );
 			}
 			path->close();
+			QDomElement object = b.namedItem( "gobject" ).toElement();
+			parseGObject( path, object );
 			m_document.append( path );	
 		}
 	}
