@@ -60,6 +60,7 @@
 #include "serialletter.h"
 #include "contents.h"
 #include "kwview.h"
+#include "kwviewmode.h"
 #include "kwfactory.h"
 #include "kwcommand.h"
 #include "kwtextimage.h"
@@ -212,7 +213,7 @@ void KWDocument::newZoomAndResolution( bool updateViews )
     updateAllFrames();
     if ( updateViews )
     {
-        updateAllViewportSizes();
+        emit newContentsSize();
         repaintAllViews( true );
     }
 }
@@ -773,7 +774,7 @@ void KWDocument::recalcFrames()
         }
     }
 
-    updateAllViewportSizes();
+    emit newContentsSize();
 }
 
 /*================================================================*/
@@ -1740,7 +1741,13 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     /*painter.translate( -leftBorder(), -topBorder() );
     rect.moveBy( leftBorder(), topBorder() );*/
 
-    drawBorders( &painter, rect, !transparent );
+    KWViewModeNormal * viewMode = new KWViewModeNormal( 0L ); // m_canvas==0L could be dangerous,
+    // but we only use viewToNormal and normalToView.
+
+    QRegion emptyRegion( rect );
+    drawBorders( &painter, rect, emptyRegion, viewMode );
+    if (!transparent)
+        eraseEmptySpace( &painter, emptyRegion );
 
     QColorGroup gb = QApplication::palette().active();
 
@@ -1749,125 +1756,46 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     {
         KWFrameSet * frameset = fit.current();
         if ( frameset->isVisible() && !frameset->isFloating() )
-            frameset->drawContents( &painter, rect, gb, false /*onlyChanged*/, false /*resetChanged*/ );
+            frameset->drawContents( &painter, rect, gb, false /*onlyChanged*/, false /*resetChanged*/,
+                                    0L, viewMode );
     }
+    delete viewMode;
 }
 
-void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clearEmptySpace )
+void KWDocument::drawBorders( QPainter *painter, const QRect & crect, QRegion & emptyRegion,
+                              KWViewMode * viewMode )
 {
-    bool embedded = isEmbedded();
-    QRegion region( crect );
-
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameset = fit.current();
         if ( frameset->isVisible() )
         {
-            frameset->drawBorders( painter, crect, region );
+            frameset->drawBorders( painter, crect, emptyRegion, viewMode );
         }
     }
+}
 
-    // Draw page borders, except when printing.
-    if ( painter->device()->devType() != QInternal::Printer )
+void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion )
+{
+    painter->save();
+    // Translate emptySpaceRegion in device coordinates
+    // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
+    QRegion devReg;
+    QArray<QRect>rs = emptySpaceRegion.rects();
+    rs.detach();
+    for ( uint i = 0 ; i < rs.size() ; ++i )
     {
-        painter->save();
-        painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
-        painter->setBrush( Qt::NoBrush );
-        const int shadowOffset = 3;
-
-        for ( int k = 0; k < getPages(); k++ )
-        {
-            // using paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
-            int pagetop = pageTop( k );
-            int pagewidth = paperWidth();
-            int pageheight = pageTop( k+1 ) - pagetop;
-            QRect pageRect( 0, pagetop, pagewidth, pageheight );
-            if ( crect.intersects( pageRect ) )
-            {
-                //kdDebug() << "KWDocument::drawBorders drawing page rect " << DEBUGRECT( pageRect ) << endl;
-                if ( !embedded )
-                    painter->drawRect( pageRect );
-
-                if ( clearEmptySpace )
-                {
-                    // Clear empty space. This is also disabled when printing because
-                    // it is not needed (the blank space, well, remains blank )
-                    painter->save();
-
-                    if ( !embedded )
-                    {
-                        // Exclude page border line, to get the page contents rect
-                        pageRect.rLeft() += 1;
-                        pageRect.rTop() += 1;
-                        pageRect.rRight() -= 1;
-                        pageRect.rBottom() -= 1;
-                        //kdDebug() << "KWDocument::drawBorders page rect w/o borders : " << DEBUGRECT( pageRect ) << endl;
-                    }
-
-                    // The empty space to clear up inside this page
-                    QRegion emptySpaceRegion = region.intersect( pageRect ).intersect( crect );
-
-                    // Translate emptySpaceRegion in device coordinates
-                    // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
-                    QRegion devReg;
-                    QArray<QRect>rs = emptySpaceRegion.rects();
-                    rs.detach();
-                    for ( uint i = 0 ; i < rs.size() ; ++i )
-                    {
-                        //kdDebug() << "KWDocument::drawBorders emptySpaceRegion includes: " << DEBUGRECT( rs[i] ) << endl;
-                        rs[i] = painter->xForm( rs[i] );
-                    }
-                    devReg.setRects( rs.data(), rs.size() );
-                    painter->setClipRegion( devReg );
-                    painter->setPen( Qt::NoPen );
-
-                    //kdDebug() << "KWDocument::drawBorders clearEmptySpace in " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
-                    painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Base ) ); // Well, Midlight looks great but isn't WYSIWYG
-                    painter->restore();
-                }
-            }
-            if ( !embedded && crect.right() > pagewidth )
-            {
-                // Now take care of the area on the right of the page
-                QRect rightArea( pagewidth, pagetop, crect.right() - pagewidth + 1, pageheight );
-                QRect repaintRect = rightArea.intersect( crect );
-                if ( !repaintRect.isEmpty() )
-                {
-                    painter->fillRect( repaintRect,
-                                       QApplication::palette().active().brush( QColorGroup::Mid ) );
-                    // Draw a shadow
-                    int topOffset = ( k==0 ) ? shadowOffset : 0; // leave a few pixels on top, only for first page
-                    QRect shadowRect( rightArea.left(), rightArea.top() + topOffset, shadowOffset, pageheight - topOffset );
-                    shadowRect &= repaintRect; // intersect
-                    if ( !shadowRect.isEmpty() )
-                    {
-                        painter->fillRect( shadowRect,
-                                           QApplication::palette().active().brush( QColorGroup::Shadow ) );
-                    }
-                }
-            }
-        }
-        // Take care of the area at the bottom of the last page
-        int lastBottom = pageTop( getPages() );
-        if ( !embedded && crect.bottom() > lastBottom )
-        {
-            QRect bottomArea( 0, lastBottom, crect.width(), crect.bottom() - lastBottom + 1 );
-            QRect repaintRect = bottomArea.intersect( crect );
-            if ( !repaintRect.isEmpty() )
-            {
-                painter->fillRect( repaintRect,
-                                   QApplication::palette().active().brush( QColorGroup::Mid ) );
-                // Draw a shadow
-                int leftOffset = shadowOffset; // leave a few pixels on the left
-                QRect shadowRect( leftOffset, bottomArea.top(), paperWidth(), shadowOffset );
-                shadowRect &= repaintRect; // intersect
-                if ( !shadowRect.isEmpty() )
-                    painter->fillRect( shadowRect,
-                                       QApplication::palette().active().brush( QColorGroup::Shadow ) );
-            }
-        }
+        //kdDebug() << "KWDocument::drawBorders emptySpaceRegion includes: " << DEBUGRECT( rs[i] ) << endl;
+        rs[i] = painter->xForm( rs[i] );
     }
+    devReg.setRects( rs.data(), rs.size() );
+    painter->setClipRegion( devReg );
+    painter->setPen( Qt::NoPen );
+
+    //kdDebug() << "KWDocument::eraseEmptySpace emptySpaceRegion: " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
+    painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Base ) );
+    painter->restore();
 }
 
 void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
@@ -1928,14 +1856,6 @@ void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
     }
 }
 
-/*================================================================*/
-void KWDocument::updateAllViewportSizes()
-{
-    //kdDebug(32002) << "KWDocument::updateAllViewportSizespages=" << m_pages << " " << paperWidth() << "x" << pageTop( m_pages ) << endl;
-    emit sig_newContentsSize( paperWidth(), pageTop( m_pages ) /*i.e. bottom of last one*/ );
-}
-
-/*================================================================*/
 void KWDocument::setUnit( KWUnit::Unit _unit )
 {
     m_unit = _unit;
@@ -1984,13 +1904,11 @@ void KWDocument::repaintAllViews( bool erase )
 }
 
 /*================================================================*/
-void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage*/ )
+void KWDocument::appendPage( /*unsigned int _page*/ )
 {
     int thisPageNum = m_pages-1;
     kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
     m_pages++;
-
-
 
     recalcVariables( VT_PGNUM );
 
@@ -2018,48 +1936,31 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
             if ( (frame->pageNum() == thisPageNum ||
                   (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide) )
                  &&
-                 (frame->getNewFrameBehaviour()==Reconnect ||
-                  ( frame->getNewFrameBehaviour()==Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) )
+                 ( ( frame->getNewFrameBehaviour()==Reconnect && frameSet->getFrameType() == FT_TEXT ) ||  // (*)
+                   ( frame->getNewFrameBehaviour()==Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) ) // (**)
                 )
             {
-                // NewFrameBehaviour == Copy is handled here except for headers/footers, which
+                // (*) : Reconnect only makes sense for text frames
+                // (**) : NewFrameBehaviour == Copy is handled here except for headers/footers, which
                 // are created in recalcFrames() anyway.
 
-                switch(frameSet->getFrameType()) {
-                    case FT_TEXT:  {
-                        //kdDebug(32002) << "KWDocument::appendPage, copying text frame" << endl;
-                        // make a new frame.
-                        KWFrame *frm = frame->getCopy();
-                        frm->moveBy( 0, ptPaperHeight() );
-                        frm->setPageNum( frame->pageNum()+1 );
-                        newFrames.append( frm );
-                        } break;
-                    case FT_PICTURE:  { // can not be copied at the moment.
-                        } break;
-                    case FT_PART: {  // can never be copied ?
-                        } break;
-                    case FT_FORMULA: {  // can never be copied ?
-                        } break;
-                    default: {}
-                }
+                KWFrame *frm = frame->getCopy();
+                frm->moveBy( 0, ptPaperHeight() );
+                frm->setPageNum( frame->pageNum()+1 );
+                newFrames.append( frm );
             }
         }
         QListIterator<KWFrame> newFrameIt( newFrames );
         for ( ; newFrameIt.current() ; ++newFrameIt )
             frameSet->addFrame( newFrameIt.current() );
     }
-/*
-    if ( redrawBackgroundWhenAppendPage )
-        drawAllBorders();
-*/
-    updateAllViewportSizes();
+    emit newContentsSize();
 
     if ( isHeaderVisible() || isFooterVisible() )
         recalcFrames();  // Get headers and footers on the new page
     // setModified(TRUE); This is called by formatMore, possibly on loading -> don't set modified
 
      emit pageNumChanged();
-
 }
 
 bool KWDocument::canRemovePage( int num, KWFrame *f )
@@ -2215,8 +2116,6 @@ QCursor KWDocument::getMouseCursor( double mx, double my )
     return arrowCursor;
 }
 
-
-/*================================================================*/
 QList<KWFrame> KWDocument::getSelectedFrames() {
     QList<KWFrame> frames;
     frames.setAutoDelete( FALSE );
@@ -2237,7 +2136,6 @@ QList<KWFrame> KWDocument::getSelectedFrames() {
     return frames;
 }
 
-/*================================================================*/
 KWFrame *KWDocument::getFirstSelectedFrame()
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2256,12 +2154,10 @@ KWFrame *KWDocument::getFirstSelectedFrame()
     return 0L;
 }
 
-/*================================================================*/
 KWFrameSet *KWDocument::getFirstSelectedFrameSet() {
     return getFirstSelectedFrame()->getFrameSet();
 }
 
-/*================================================================*/
 void KWDocument::updateAllFrames()
 {
     //kdDebug(32002) << "KWDocument::updateAllFrames " << frames.count() << " framesets." << endl;
@@ -2428,7 +2324,7 @@ void KWDocument::unregisterVariable( KWVariable *var )
 
 void KWDocument::recalcVariables( int type )
 {
-    kdDebug() << "KWDocument::recalcVariables " << type << endl;
+    //kdDebug() << "KWDocument::recalcVariables " << type << endl;
     bool update = false;
     QListIterator<KWVariable> it( variables );
     for ( ; it.current() ; ++it )

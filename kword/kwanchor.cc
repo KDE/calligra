@@ -80,7 +80,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
     // Draw the frame
     QColorGroup cg2( cg );
-    m_frameset->drawContents( p, crect, cg2, false /*?*/, false /*?*/ );
+    m_frameset->drawContents( p, crect, cg2, false /*?*/, false /*?*/, 0L, fs->currentViewMode() );
     p->restore();
 }
 

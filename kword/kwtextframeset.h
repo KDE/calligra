@@ -29,6 +29,7 @@ class KWStyle;
 class KWDrag;
 class KWDocument;
 class KWTextFormat;
+class KWViewMode;
 
 /**
  * Class: KWTextFrameSet
@@ -97,16 +98,16 @@ public:
         return textdoc->hasSelection( QTextDocument::Standard );
     }
 
-    virtual void drawContents( QPainter *p, const QRect & crect,
-                               QColorGroup &cg, bool onlyChanged, bool resetChanged )
+    virtual void drawContents( QPainter *p, const QRect &r,
+                               QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                               KWFrameSetEdit* edit, KWViewMode *viewMode )
     {
-        // Called by KWCanvas when no focus (->no cursor)
-        drawContents( p, crect, cg, onlyChanged, false, 0L, resetChanged );
+        m_currentViewMode = viewMode;
+        KWFrameSet::drawContents( p, r, cg, onlyChanged, resetChanged, edit, viewMode );
     }
 
-    void drawContents( QPainter *p, const QRect & crect,
-                       QColorGroup &gb, bool onlyChanged,
-                       bool drawCursor, QTextCursor *cursor, bool resetChanged );
+    virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect & crect,
+                            QColorGroup &cg, bool onlyChanged, bool resetChanged, KWFrameSetEdit * edit );
 
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible );
 
@@ -177,6 +178,9 @@ public:
 
     // Make sure this paragraph is formatted
     void ensureFormatted( QTextParag * parag );
+
+    // The viewmode that was passed to drawContents. Special hook for KWAnchor. Don't use.
+    KWViewMode * currentViewMode() const { return m_currentViewMode; }
 
 public slots:
     void formatMore();
@@ -251,6 +255,7 @@ private:
     int m_availableHeight;                     // Sum of the height of all our frames
     QMap<QWidget *, int> m_mapViewAreas;       // Store the "needs" of each view
     QPtrDict<int> m_origFontSizes; // Format -> doc font size.    Maybe a key->fontsize dict would be better.
+    KWViewMode * m_currentViewMode;            // The one while drawing. For KWAnchor. Don't use.
 };
 
 /**
@@ -272,15 +277,6 @@ public:
     virtual QString getPopupName() { return "text_popup";}
 
     virtual void terminate();
-
-    /**
-     * Paint this frameset with a cursor
-     */
-    virtual void drawContents( QPainter *p, const QRect & crect,
-                               QColorGroup &gb, bool onlyChanged, bool resetChanged )
-    {
-        textFrameSet()->drawContents( p, crect, gb, onlyChanged, true, cursor, resetChanged );
-    }
 
     KWTextFrameSet * textFrameSet() const
     {

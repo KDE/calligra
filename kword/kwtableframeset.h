@@ -89,9 +89,13 @@ public:
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * canvas );
 
-    virtual void drawBorders( QPainter *painter, const QRect &crect, QRegion &region );
+    virtual void drawBorders( QPainter *painter, const QRect &crect, QRegion &region, KWViewMode *viewMode );
     virtual void drawContents( QPainter * painter, const QRect & crect,
-                               QColorGroup & cg, bool onlyChanged, bool resetChanged );
+                               QColorGroup & cg, bool onlyChanged, bool resetChanged,
+                               KWFrameSetEdit *, KWViewMode * );
+    // Dummy since we reimplement drawContents
+    virtual void drawFrame(KWFrame *, QPainter *, const QRect &, QColorGroup &,
+        bool, bool, KWFrameSetEdit *) {}
 
     // Frameset management
     Cell *getCell( int i ) { return m_cells.at( i ); }
@@ -257,13 +261,9 @@ public:
 
     virtual KWFrameSetEdit* currentTextEdit();
 
-    virtual QString getPopupName() { return "text_popup";}
+    KWFrameSetEdit* currentCell() const { return m_currentCell; }
 
-    virtual void drawContents( QPainter * painter, const QRect & crect,
-                               QColorGroup & cg, bool onlyChanged, bool resetChanged )
-    {
-        tableFrameSet()->drawContents( painter, crect, cg, onlyChanged, resetChanged );
-    }
+    virtual QString getPopupName() { return "text_popup";}
 
     // Forward all events to the current cell
     virtual void keyPressEvent( QKeyEvent * e );

@@ -362,10 +362,7 @@ private:
     int m_currentPage; // 0-based current page number
 
     // Statusbar items
-    enum StatusBarIds {
-        statusPage = 1
-        // More to be added
-    };
+    QLabel * m_sbPageLabel; // 'Current page number and page count' label
 };
 
 /******************************************************************/

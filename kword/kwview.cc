@@ -139,8 +139,12 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
              this, SLOT(setTool(MouseMode)));
 
     // Cut and copy are directly connected to the selectionChanged signal
-    connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
-             actionEditCut, SLOT(setEnabled(bool)) );
+    if ( doc->isReadWrite() )
+        connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+                 actionEditCut, SLOT(setEnabled(bool)) );
+    else
+        actionEditCut->setEnabled( false );
+
     connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
 
@@ -152,14 +156,17 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
+
+    KStatusBar * sb = statusBar();
+    ASSERT(sb);
+    m_sbPageLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
+    addStatusBarItem( m_sbPageLabel, 0 );
 }
 
 KWView::~KWView()
 {
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete gui;
-    if(statusBar())
-        statusBar()->removeItem(statusPage);
 }
 
 void KWView::initConfig()
@@ -228,19 +235,6 @@ void KWView::initGui()
 
 
     showFormulaToolbar( FALSE );
-
-    if(statusBar())
-    {
-        statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
-        // Workaround for bug in KDE-2.1[.1]'s KStatusBar (show() not called in insertItem)
-        QObjectList *l = statusBar()->queryList( "QLabel" );
-        QObjectListIt it( *l );
-        for ( ; it.current() ; ++it )
-            static_cast<QLabel *>(it.current())->show();
-        delete l;
-        statusBar()->show();
-        //kdDebug() << "KWView::setupActions statusbar is now " << statusBar() << endl;
-    }
 
     updatePageInfo();
     updateButtons();
@@ -434,20 +428,20 @@ void KWView::setupActions()
                                            this, SLOT( textStrikeOut() ),
                                            actionCollection(), "format_strike" );
 
-    actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
+    actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", CTRL + Key_L,
                                        this, SLOT( textAlignLeft() ),
                                        actionCollection(), "format_alignleft" );
     actionFormatAlignLeft->setExclusiveGroup( "align" );
     actionFormatAlignLeft->setChecked( TRUE );
-    actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", ALT + Key_C,
+    actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", CTRL + ALT + Key_C,
                                          this, SLOT( textAlignCenter() ),
                                          actionCollection(), "format_aligncenter" );
     actionFormatAlignCenter->setExclusiveGroup( "align" );
-    actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", ALT + Key_R,
+    actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", CTRL + ALT + Key_R,
                                         this, SLOT( textAlignRight() ),
                                         actionCollection(), "format_alignright" );
     actionFormatAlignRight->setExclusiveGroup( "align" );
-    actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", ALT + Key_B,
+    actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", CTRL + Key_J,
                                         this, SLOT( textAlignBlock() ),
                                         actionCollection(), "format_alignblock" );
     actionFormatAlignBlock->setExclusiveGroup( "align" );
@@ -471,6 +465,22 @@ void KWView::setupActions()
     actionFormatDecreaseIndent= new KAction( i18n( "Decrease Indent" ),"format_decreaseindent", 0,
                                       this, SLOT( textDecreaseIndent() ),
                                       actionCollection(), "format_decreaseindent" );
+
+
+#if KDE_VERSION < 220
+    // Necessary with kdelibs-2.1.x, because those actions are only in the toolbar
+    KAccel * accel = new KAccel( this );
+    actionFormatBold->plugAccel( accel );
+    actionFormatItalic->plugAccel( accel );
+    actionFormatUnderline->plugAccel( accel );
+    actionFormatStrikeOut->plugAccel( accel );
+
+    actionFormatAlignLeft->plugAccel( accel );
+    actionFormatAlignCenter->plugAccel( accel );
+    actionFormatAlignRight->plugAccel( accel );
+    actionFormatAlignBlock->plugAccel( accel );
+#endif
+
 
     // ---------------------------- frame toolbar actions
 
@@ -641,10 +651,13 @@ void KWView::showFormulaToolbar( bool show )
 void KWView::updatePageInfo()
 {
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
-    if ( edit && statusBar())
+    if ( edit && m_sbPageLabel )
     {
         m_currentPage = edit->currentFrame()->pageNum();
-        statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(doc->getPages())+' ', statusPage );
+        /*kdDebug() << this << " KWView::updatePageInfo m_currentPage=" << m_currentPage
+                  << " m_sbPageLabel=" << m_sbPageLabel
+                  << endl;*/
+        m_sbPageLabel->setText( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(doc->getPages())+' ' );
         gui->getVertRuler()->setOffset( 0, -gui->canvasWidget()->getVertRulerPos() );
     }
 }
@@ -659,7 +672,7 @@ void KWView::pageNumChanged()
 void KWView::clipboardDataChanged()
 {
     // Can we paste into something ?
-    if ( !gui || !gui->canvasWidget()->currentFrameSetEdit() )
+    if ( !gui || !gui->canvasWidget()->currentFrameSetEdit() || !doc->isReadWrite() )
     {
         actionEditPaste->setEnabled(false);
         return;
@@ -955,6 +968,7 @@ void KWView::updateReadWrite( bool readwrite )
         actionViewFootNotes->setEnabled( true );
         actionViewEndNotes->setEnabled( true );
         actionViewZoom->setEnabled( true );
+        // Well, the view menu doesn't appear in konq, so this is currently useless...
     }
 }
 
@@ -2342,14 +2356,6 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     {
         initGui();
     }
-    else
-    {
-        if(statusBar())
-        {
-            //remove item when GUI is deactivated
-            statusBar()->removeItem(statusPage);
-        }
-    }
     KoView::guiActivateEvent( ev );
 }
 
@@ -2416,9 +2422,6 @@ void KWView::newLeftIndent( double _leftIndent)
 
 void KWView::openPopupMenuEditText( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
-        return;
-
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
     QString menuName;
     if (edit)
@@ -2617,13 +2620,13 @@ KWTextFrameSetEdit *KWView::currentTextEdit()
 void KWView::updateButtons()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
-
+    bool rw = koDocument()->isReadWrite();
     bool hasSelection = edit && edit->textFrameSet()->hasSelection();
-    actionEditCut->setEnabled( hasSelection );
+    actionEditCut->setEnabled( hasSelection && rw );
     actionEditCopy->setEnabled( hasSelection );
     clipboardDataChanged(); // for paste
 
-    bool state = (edit != 0L);
+    bool state = (edit != 0L) && rw;
     actionEditSelectAll->setEnabled(state);
     actionFormatFont->setEnabled(state);
     actionFormatFontSize->setEnabled(state);
@@ -2656,10 +2659,9 @@ void KWView::updateButtons()
     actionInsertFormula->setEnabled(state);
     actionInsertContents->setEnabled(state);
     actionInsertVariable->setEnabled(state);
-    actionBackgroundColor->setEnabled(!state && gui->canvasWidget()->getMouseMode()==MM_EDIT_FRAME);
+    actionBackgroundColor->setEnabled( (edit == 0) && gui->canvasWidget()->getMouseMode()==MM_EDIT_FRAME);
 
-
-    KWTableFrameSet *table = gui->canvasWidget()->getTable();
+    bool table = ( gui->canvasWidget()->getTable() != 0 ) && rw;
     actionTableInsertRow->setEnabled( table );
     actionTableInsertCol->setEnabled( table );
     actionTableDelRow->setEnabled( table );

@@ -1056,12 +1056,15 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
             else
             {
                 kdError(32001) << "Cannot find style \"" << styleName << "\"" << endl;
+                style = doc->findStyle( "Standard" );
             }
         }
         else
         {
-            kdError(32001) << "Missing NAME tag in LAYOUT ( for a paragraph )" << endl;
+            kdError(32001) << "Missing NAME tag in LAYOUT ( for a paragraph ) -> no style !" << endl;
+            style = doc->findStyle( "Standard" );
         }
+        ASSERT(style);
     }
 
     // Load the paragraph tabs - forget about the ones from the style first.

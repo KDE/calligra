@@ -54,6 +54,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     else
         m_name = name;
     m_availableHeight = -1;
+    m_currentViewMode = 0;
     m_origFontSizes.setAutoDelete(true);
     textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc ) );
     QTextFormatter * formatter = new QTextFormatterBreakWords;
@@ -189,105 +190,57 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
     return 0L;
 }
 
-void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor, bool resetChanged )
+void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &r,
+                                QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                                KWFrameSetEdit *edit )
 {
-    //kdDebug(32002) << "KWTextFrameSet::drawContents " << this << " " << getName()
-                // << " drawCursor=" << drawCursor << " onlyChanged=" << onlyChanged
-                //   << " resetChanged=" << resetChanged
-    //               << endl;
-    if ( !textdoc->firstParag() )
-        return;
+    // Do we draw a cursor ?
+    bool drawCursor = edit!=0L;
+    QTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->getCursor() : 0;
 
-    QListIterator<KWFrame> frameIt( frameIterator() );
-    KWFrame * copyFrame = 0L;
-    int copyFrameTop = 0;
-    int totalHeight = 0;
-    for ( ; frameIt.current(); ++frameIt )
+    QTextParag * lastFormatted = textdoc->draw( painter, r.x(), r.y(), r.width(), r.height(),
+                                                cg, onlyChanged, drawCursor, cursor, resetChanged );
+
+    // The last paragraph of this frame might have a bit in the next frame too.
+    // In that case, and if we're only drawing changed paragraphs, (and resetting changed),
+    // we have to set changed to true again, to draw the bottom of the parag in the next frame.
+    if ( onlyChanged && resetChanged )
     {
-        KWFrame *frame = frameIt.current();
-        if ( !frame->isValid() )
+        // Finding the "last parag of the frame" is a bit tricky.
+        // It's usually the one before lastFormatted, except if it's actually lastParag :}  [see QTextDocument::draw]
+        QTextParag * lastDrawn = lastFormatted->prev();
+        if ( lastFormatted == textdoc->lastParag() && ( !lastDrawn || lastDrawn->rect().bottom() < r.bottom() ) )
+            lastDrawn = lastFormatted;
+
+        //kdDebug(32002) << "KWTextFrameSet::drawFrame drawn. onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged << " lastDrawn=" << lastDrawn->paragId() << " lastDrawn's bottom:" << lastDrawn->rect().bottom() << " r.bottom=" << r.bottom() << endl;
+        if ( lastDrawn && lastDrawn->rect().bottom() > r.bottom() )
         {
-            kdDebug(32002) << "KWTextFrameSet::drawContents invalid frame " << frame << endl;
-            continue;
+            //kdDebug(32002) << "KWTextFrameSet::drawFrame setting lastDrawn " << lastDrawn->paragId() << " to changed" << endl;
+            lastDrawn->setChanged( true );
         }
+    }
 
-        QRect r(crect);
-        QRect frameRect( m_doc->zoomRect( *frame ) );
-        //kdDebug(32002) << "KWTFS::drawContents frame=" << frame << " cr=" << DEBUGRECT(r) << endl;
-        r = r.intersect( frameRect );
-        //kdDebug(32002) << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
-        if ( !r.isEmpty() )
-        {
-            // This translates the coordinates in the document contents
-            // ( frame and r are up to here in this system )
-            // into the QTextDocument's coordinate system
-            // (which doesn't have frames, borders, etc.)
-            int offsetX = frameRect.left();
-            int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
+    // NOTE: QTextView sets m_lastFormatted to lastFormatted here
+    // But when scrolling up, this causes to reformat a lot of stuff for nothing.
+    // And updateViewArea takes care of formatting things before we even arrive here.
 
-            r.moveBy( -offsetX, -offsetY );   // portion of the frame to be drawn, in qrt coords
+    // Blank area under the very last paragraph
+    if ( lastFormatted == textdoc->lastParag() && !onlyChanged)
+    {
+        int docHeight = textdoc->height();
+        QRect frameRect = kWordDocument()->zoomRect( *frame );
+        // Hmm, we have to calculate the totalHeight here again.... pass from drawContents if slow
+        QListIterator<KWFrame> frameIt( frameIterator() );
+        int totalHeight = 0;
+        for ( ; frameIt.current() && frameIt.current() != frame; ++frameIt )
+            totalHeight += kWordDocument()->zoomItY( frameIt.current()->height() );
 
-            QRegion reg = frameClipRegion( p, frame, crect );
-            //kdDebug(32002) << "KWTextFrameSet::drawContents frameClipRegion is EMPTY " << endl;
-            if ( !reg.isEmpty() )
-            {
-                p->save();
-                p->setClipRegion( reg );
-
-                p->translate( offsetX, offsetY ); // translate to qrt coords - after setting the clip region !
-
-                QBrush bgBrush( frame->getBackgroundColor() );
-                bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
-                gb.setBrush( QColorGroup::Base, bgBrush );
-
-                QTextParag * lastFormatted = textdoc->draw( p, r.x(), r.y(), r.width(), r.height(),
-                                                            gb, onlyChanged, drawCursor, cursor, resetChanged );
-
-                // The last paragraph of this frame might have a bit in the next frame too.
-                // In that case, and if we're only drawing changed paragraphs, (and resetting changed),
-                // we have to set changed to true again, to draw the bottom of the parag in the next frame.
-                if ( onlyChanged && resetChanged )
-                {
-                    // Finding the "last parag of the frame" is a bit tricky.
-                    // It's usually the one before lastFormatted, except if it's actually lastParag :}  [see QTextDocument::draw]
-                    QTextParag * lastDrawn = lastFormatted->prev();
-                    if ( lastFormatted == textdoc->lastParag() && ( !lastDrawn || lastDrawn->rect().bottom() < r.bottom() ) )
-                        lastDrawn = lastFormatted;
-
-                    //kdDebug(32002) << "KWTextFrameSet::drawContents drawn. onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged << " lastDrawn=" << lastDrawn->paragId() << " lastDrawn's bottom:" << lastDrawn->rect().bottom() << " r.bottom=" << r.bottom() << endl;
-                    if ( lastDrawn && lastDrawn->rect().bottom() > r.bottom() )
-                    {
-                        //kdDebug(32002) << "KWTextFrameSet::drawContents setting lastDrawn " << lastDrawn->paragId() << " to changed" << endl;
-                        lastDrawn->setChanged( true );
-                    }
-                }
-
-                // NOTE: QTextView sets m_lastFormatted to lastFormatted here
-                // But when scrolling up, this causes to reformat a lot of stuff for nothing.
-                // And updateViewArea takes care of formatting things before we even arrive here.
-
-                // Blank area under the very last paragraph
-                if ( lastFormatted == textdoc->lastParag() && !onlyChanged)
-                {
-                    int docHeight = textdoc->height();
-                    QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
-                    //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
-                    bool printing = p->device()->devType() == QInternal::Printer;
-                    p->fillRect( blank, printing ? Qt::white : gb.brush( QColorGroup::Base ) );
-                    // for debugging :)
-                    //p->setPen( QPen(Qt::blue, 1, DashLine) );  p->drawRect( blank );
-                }
-                p->restore();
-            }
-        }
-        if ( frame->getNewFrameBehaviour() != Copy )
-            copyFrame = 0L;
-        else if ( !copyFrame )
-        {
-            copyFrame = frame;
-            copyFrameTop = totalHeight;
-        }
-        totalHeight += frameRect.height();
+        QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
+        //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
+        bool printing = painter->device()->devType() == QInternal::Printer;
+        painter->fillRect( blank, printing ? Qt::white : cg.brush( QColorGroup::Base ) );
+        // for debugging :)
+        //painter->setPen( QPen(Qt::blue, 1, DashLine) );  painter->drawRect( blank );
     }
 }
 
@@ -799,6 +752,7 @@ void KWTextFrameSet::updateFrames()
             ASSERT( !frames.contains(frame) );
             frames.append( frame );
             m_availableHeight += kWordDocument()->zoomItY( frame->height() );
+#if 0 // What was that setMostRight stuff for ?
             frames.at( frames.count() - 1 )->setMostRight( false );
             if ( frames.count() > 1 ) {
                 if ( frames.at( frames.count() - 2 )->right() > frames.at( frames.count() - 1 )->right() ) {
@@ -806,6 +760,7 @@ void KWTextFrameSet::updateFrames()
                     //rm++;
                 }
             }
+#endif
         }
     }
     //kdDebugBody(32002) << this << " KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
@@ -1133,29 +1088,29 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
                                   // (only in titles, but you don't want Backspace to move it up)
             Counter c;
             setCounter( cursor, c );
-	    emit repaintChanged( this );
-	    emit showCursor();
-	    return;
 	}
-	checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
-	if ( !undoRedoInfo.valid() ) {
-	    undoRedoInfo.id = cursor->parag()->paragId();
-	    undoRedoInfo.index = cursor->index();
-	    undoRedoInfo.text = QString::null;
-            undoRedoInfo.name = i18n("Delete text");
-	}
-	cursor->gotoLeft();
-        QTextStringChar * ch = cursor->parag()->at( cursor->index() );
-	undoRedoInfo.text.prepend( QString( ch->c ) );
-        copyCharFormatting( ch, 0, true );
-	undoRedoInfo.index = cursor->index();
-	if ( cursor->remove() ) {
-	    undoRedoInfo.text.remove( 0, 1 );
-	    undoRedoInfo.text.prepend( "\n" );
-	    undoRedoInfo.index = cursor->index();
-	    undoRedoInfo.id = cursor->parag()->paragId();
-	}
-        setLastFormattedParag( cursor->parag() );
+        else
+        {
+            checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
+            if ( !undoRedoInfo.valid() ) {
+                undoRedoInfo.id = cursor->parag()->paragId();
+                undoRedoInfo.index = cursor->index();
+                undoRedoInfo.text = QString::null;
+                undoRedoInfo.name = i18n("Delete text");
+            }
+            cursor->gotoLeft();
+            QTextStringChar * ch = cursor->parag()->at( cursor->index() );
+            undoRedoInfo.text.prepend( QString( ch->c ) );
+            copyCharFormatting( ch, 0, true );
+            undoRedoInfo.index = cursor->index();
+            if ( cursor->remove() ) {
+                undoRedoInfo.text.remove( 0, 1 );
+                undoRedoInfo.text.prepend( "\n" );
+                undoRedoInfo.index = cursor->index();
+                undoRedoInfo.id = cursor->parag()->paragId();
+            }
+            setLastFormattedParag( cursor->parag() );
+        }
     } break;
     case ActionReturn:
 	checkUndoRedoInfo( cursor, UndoRedoInfo::Return );
@@ -1721,7 +1676,6 @@ void KWTextFrameSet::setCounter( QTextCursor * cursor, const Counter & counter )
     undoRedoInfo.name = i18n("Change list type");
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
 	static_cast<KWTextParag*>(cursor->parag())->setCounter( counter );
-	emit repaintChanged( this );
     } else {
 	QTextParag *start = textdoc->selectionStart( QTextDocument::Standard );
 	QTextParag *end = textdoc->selectionEnd( QTextDocument::Standard );
@@ -1734,9 +1688,9 @@ void KWTextFrameSet::setCounter( QTextCursor * cursor, const Counter & counter )
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag*>(start)->setCounter( counter );
-	emit repaintChanged( this );
-	formatMore();
     }
+    emit repaintChanged( this );
+    formatMore();
     if ( !undoRedoInfo.newParagLayout.counter )
         undoRedoInfo.newParagLayout.counter = new Counter;
     *undoRedoInfo.newParagLayout.counter = counter;
@@ -1758,7 +1712,6 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
     undoRedoInfo.name = i18n("Change Alignment");
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
         static_cast<KWTextParag *>(cursor->parag())->setAlign(align);
-        emit repaintChanged( this );
     }
     else
     {
@@ -1767,9 +1720,9 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setAlign(align);
-	emit repaintChanged( this );
-	formatMore();
     }
+    emit repaintChanged( this );
+    formatMore();
     undoRedoInfo.newParagLayout.alignment = align;
     undoRedoInfo.clear();
     emit showCursor();
@@ -1830,7 +1783,6 @@ void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, double spacing )
     undoRedoInfo.name = i18n("Change Line Spacing");
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
         static_cast<KWTextParag *>(cursor->parag())->setLineSpacing(spacing);
-        emit repaintChanged( this );
     }
     else
     {
@@ -1839,9 +1791,9 @@ void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, double spacing )
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setLineSpacing(spacing);
-	emit repaintChanged( this );
-	formatMore();
     }
+    emit repaintChanged( this );
+    formatMore();
     undoRedoInfo.newParagLayout.lineSpacing = spacing;
     undoRedoInfo.clear();
     emit showCursor();
@@ -1886,8 +1838,8 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
 	static_cast<KWTextParag *>(end)->setBottomBorder(bottomBorder);
 	static_cast<KWTextParag *>(textDocument()->selectionStart( QTextDocument::Standard ))->setTopBorder(topBorder);
     }
-    formatMore();
     emit repaintChanged( this );
+    formatMore();
     undoRedoInfo.newParagLayout.leftBorder=leftBorder;
     undoRedoInfo.newParagLayout.rightBorder=rightBorder;
     undoRedoInfo.newParagLayout.topBorder=topBorder;
@@ -1912,7 +1864,6 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor, const KoTabulatorList &ta
 
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
         static_cast<KWTextParag *>(cursor->parag())->setTabList( tabList );
-        emit repaintChanged( this );
     }
     else
     {
@@ -1921,10 +1872,10 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor, const KoTabulatorList &ta
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setTabList( tabList );
-	emit repaintChanged( this );
-	formatMore();
     }
 
+    emit repaintChanged( this );
+    formatMore();
     undoRedoInfo.newParagLayout.setTabList( tabList );
     undoRedoInfo.clear();
     emit showCursor();
@@ -1946,7 +1897,6 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
 
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
         static_cast<KWTextParag *>(cursor->parag())->setLinesTogether( linesTogether );
-        emit repaintChanged( this );
     }
     else
     {
@@ -1955,9 +1905,9 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setLinesTogether( linesTogether );
-	emit repaintChanged( this );
     }
 
+    emit repaintChanged( this );
     formatMore();
     undoRedoInfo.newParagLayout.linesTogether = linesTogether;
     undoRedoInfo.clear();
@@ -1986,11 +1936,11 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId )
 
     textdoc->removeSelectedText( selectionId, cursor );
 
-    emit ensureCursorVisible();
     setLastFormattedParag( cursor->parag() );
-    formatMore();
     emit repaintChanged( this );
+    formatMore();
     emit ensureCursorVisible();
+    emit updateUI();
     emit showCursor();
     undoRedoInfo.clear();
 }
@@ -2137,6 +2087,7 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
+    emit updateUI();
     emit showCursor();
 }
 
@@ -2682,7 +2633,6 @@ void KWTextFrameSetEdit::startDrag()
         drag->dragCopy();
     else {
         if ( drag->drag() && QDragObject::target() != m_canvas && QDragObject::target() != m_canvas->viewport() ) {
-            //textDocument()->removeSelectedText( QTextDocument::Standard, cursor ); // Hmm, no undo ?
             textFrameSet()->removeSelectedText( cursor );
         }
     }
@@ -2721,7 +2671,7 @@ KWDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
     KWDrag *kd = new KWDrag( parent );
     kd->setPlain( text );
     kd->setKWord( domDoc.toCString() );
-    kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
+    //kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
     return kd;
 }
 
@@ -2829,8 +2779,9 @@ void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent * )
 
         textFrameSet()->selectionChangedNotify();
         // No auto-copy, will readd with Qt 3 using setSelectionMode(true/false)
-        //if ( !textDocument()->selectedText( QTextDocument::Standard ).isEmpty() )
-        //    textDocument()->copySelectedText( QTextDocument::Standard );
+        // But auto-copy in readonly mode, since there is no action available in that case.
+        if ( !frameSet()->kWordDocument()->isReadWrite() )
+            copy();
     }
 
     inDoubleClick = FALSE;
@@ -2848,6 +2799,10 @@ void KWTextFrameSetEdit::mouseDoubleClickEvent( QMouseEvent * )
     textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
     textDocument()->setSelectionEnd( QTextDocument::Standard, &c2 );
     textFrameSet()->selectionChangedNotify();
+    // No auto-copy, will readd with Qt 3 using setSelectionMode(true/false)
+    // But auto-copy in readonly mode, since there is no action available in that case.
+    if ( !frameSet()->kWordDocument()->isReadWrite() )
+        copy();
 
     *cursor = c2;
 }
@@ -2875,7 +2830,7 @@ void KWTextFrameSetEdit::dragLeaveEvent( QDragLeaveEvent * )
 
 void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
 {
-    if ( KWDrag::canDecode( e ) )
+    if ( frameSet()->kWordDocument()->isReadWrite() && KWDrag::canDecode( e ) )
     {
         e->acceptAction();
 
@@ -3035,6 +2990,8 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
     if ( !cursor->parag() ||
 	 !cursor->parag()->isValid() )
 	return;
+    if ( !frameSet()->kWordDocument()->isReadWrite() )
+        return;
 
     QPainter p( m_canvas->viewport() );
     p.translate( -m_canvas->contentsX(), -m_canvas->contentsY() );

@@ -624,6 +624,12 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     smb->resize( smb->sizeHint() );
     mGrid->addWidget( smb, 4, 1 );
 
+    //// ### frame margins are currently not implemented
+    sml->setEnabled( false );
+    smr->setEnabled( false );
+    smt->setEnabled( false );
+    smb->setEnabled( false );
+
     mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
     grid4->addWidget( grp2, ++row, 0 );
@@ -899,7 +905,6 @@ bool KWFrameDia::applyChanges()
 
             frame->setRect( px, py, pw, ph );
             // TODO apply page limits
-            // TODO undo-redo support
 
             tmpResize.sizeOfEnd = frame->normalize();
             index.m_pFrameSet=frame->getFrameSet();
@@ -908,7 +913,6 @@ bool KWFrameDia::applyChanges()
             KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), doc, index, tmpResize ) ;
             doc->addCommand(cmd);
             doc->frameChanged( frame );
-            doc->setModified( true );
         }
     }
 

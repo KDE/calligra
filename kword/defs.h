@@ -37,28 +37,12 @@ enum MouseMode {
     MM_CREATE_PART = 7
 };
 
-enum EditMode {
-    EM_INSERT,
-    EM_DELETE,
-    EM_BACKSPACE,
-    EM_CMOVE,
-    EM_NONE,
-    EM_RETURN
-};
-
-enum InsertPos {
-    I_BEFORE,
-    I_AFTER
-};
-
 enum KWTblCellSize {
     TblAuto = 0,
     TblManual
 };
 
 enum TypeStructDocItem {Arrangement, Tables, Pictures, Cliparts, TextFrames, Embedded, FormulaFrames};
-
-const QChar KWSpecialChar( static_cast<char>( 0 ) );
 
 #define KWBarIcon( x ) BarIcon( x, KWFactory::global() )
 

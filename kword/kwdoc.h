@@ -32,6 +32,7 @@ class KWPartFrameSet;
 class KWStyle;
 class KWFrame;
 class KWView;
+class KWViewMode;
 class KoDocumentEntry;
 class QPainter;
 class KSpellConfig;
@@ -130,9 +131,14 @@ public:
      * Draw the borders of the frames.
      * @param painter
      * @param crect the area to be repainted, in contents coordinates
-     * @param clearEmptySpace if true the space not occupied by any frame will be cleared
+     * @param emptyRegion returns the space not occupied by any frame
      */
-    void drawBorders( QPainter *painter, const QRect & crect, bool clearEmptySpace = true );
+    void drawBorders( QPainter *painter, const QRect & crect, QRegion & emptyRegion, KWViewMode * viewMode );
+    /**
+     * Erase the empty space defined by @p emptySpaceRegion.
+     * Usually used to clear the space where there is no frame (e.g. page margins).
+     */
+    void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion );
 
     virtual void addView( KoView *_view );
     virtual void removeView( KoView *_view );
@@ -172,11 +178,10 @@ public:
     unsigned int bottomBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptBottom )); }
     unsigned int leftBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptLeft )); }
     unsigned int rightBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptRight )); }
-    // WARNING: don't multiply this value by the number of the page, this leads to rounding problems. Use pageTop instead.
+    // WARNING: don't multiply this value by the number of the page, this leads to rounding problems.
     unsigned int paperHeight() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptHeight )); }
     unsigned int paperWidth() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptWidth )); }
     unsigned int columnSpacing() const { return static_cast<unsigned int>(zoomItX( m_pageColumns.ptColumnSpacing )); }
-    unsigned int pageTop( int pgNum /*0-based*/ ) const { return static_cast<unsigned int>( zoomItY( pgNum * m_pageLayout.ptHeight ) ); }
 
     // Those distances are in _pt_, i.e. the real distances, stored in m_pageLayout
     double ptTopBorder() const { return m_pageLayout.ptTop; }
@@ -198,8 +203,6 @@ public:
 
     // Return true if @p r (in real pt coordinates) is out of the page @p page
     bool isOutOfPage( KoRect & r, int page ) const;
-
-    void updateAllViewportSizes();
 
     //update koRuler in each view
     void updateRuler();
@@ -479,7 +482,7 @@ public:
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
-    void sig_newContentsSize( int width, int height );
+    void newContentsSize();
     void pageNumChanged();
 
     void docStructureChanged(TypeStructDocItem);

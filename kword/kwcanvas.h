@@ -35,6 +35,7 @@ class KWFrameSetEdit;
 class KWTextFrameSet;
 class KWTableFrameSet;
 class KWFrameMoveCommand;
+class KWViewMode;
 namespace Qt3 {
 class QTextCursor;
 class QTextParag;
@@ -63,7 +64,6 @@ public:
 
     KWDocument * kWordDocument() const { return doc; }
     KWGUI * gui() const { return m_gui; }
-    //KWFrameSet *currentFrameSet() const { return m_currentFrameSet; }
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
     void repaintAll( bool erase = false );
@@ -150,6 +150,9 @@ public:
     int getVertRulerPos(int y=-1);
     int getHorzRulerPos(int x=-1);
 
+    // temp hack. Should be moved to KWViewModeNormal probably
+    unsigned int pageTop( int pgNum /*0-based*/ ) const;
+
 protected:
     /** Set format changes on selection on current cursor */
     void setFormat( QTextFormat *, int flags);
@@ -164,6 +167,11 @@ protected:
      * @param crect the area to be repainted, in contents coordinates
      */
     void drawDocument( QPainter *painter, const QRect &crect );
+    /**
+     * Draw page borders, but also clear up the space between the frames and the page borders,
+     * draw the page shadow, and the gray area.
+     */
+    void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 
     virtual void keyPressEvent( QKeyEvent *e );
     virtual void contentsMousePressEvent( QMouseEvent *e );
@@ -195,6 +203,7 @@ signals:
 
 private slots:
     void slotContentsMoving( int, int );
+    void slotNewContentsSize();
     void doAutoScroll();
 
 private:
@@ -213,9 +222,10 @@ private:
 
     KWDocument *doc;
     KWFrameSetEdit *m_currentFrameSetEdit;
-    bool mousePressed;
     KWGUI *m_gui;
     QTimer *scrollTimer;
+    bool m_mousePressed;
+    KWViewMode *m_viewMode;
 
     // Frame stuff
     MouseMode m_mouseMode;

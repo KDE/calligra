@@ -45,6 +45,7 @@ class KWTextDocument;
 class KWTextFrameSet;
 class KWTextParag;
 class KWView;
+class KWViewMode;
 class QCursor;
 class QPainter;
 class QPoint;
@@ -82,47 +83,6 @@ public:
     void setSelected( bool _selected );
     bool isSelected() { return selected; }
 
-#if 0
-    /* Run around stuff */
-    /** add an intersection to the list of intersections of this frame.
-    * A frame can intersect another frame, since we don't want to print
-    * such comments on top of each other we keep a list of intersections and use that
-    * together with runaround setting to decide which of the 2 frames can use that space.
-    * @param QRect the intersecting rectangle (can be a frame)
-    */
-    void addIntersect( QRect &_r );
-
-    /** Returns if this frame has any intersections
-    * @return boolean true if we have intersections.
-    */
-    bool hasIntersections() { return !intersections.isEmpty(); }
-
-    /** Removes all intersections
-    */
-    void clearIntersects() { intersections.clear(); emptyRegionDirty = TRUE; }
-
-    QRegion getEmptyRegion( bool useCached = TRUE );
-
-    unsigned int getNextFreeYPos( unsigned int _y, unsigned int _h );
-
-    /** Calculate the left indent we have to make for a free spot to render in.
-    * The test will be limited to a square (mostly one line) inside the frame. The
-    * y provides the offset, the h the height of the line.
-    * @param y absolute y coordinate. The y coordinate from where we wil start to test.
-    * @param h height. The height in which we will test.
-    */
-    int getLeftIndent( int y, int h );
-
-    /** Calculate the right indent we have to make for a free spot to render in.
-    * The test will be limited to a square (mostly one line) inside the frame. The
-    * y provides the offset, the h the height of the line.
-    * @param y absolute y coordinate. The y coordinate from where we wil start to test.
-    * @param h height. The height in which we will test.
-    */
-    int getRightIndent( int y, int h );
-
-#endif
-
     QCursor getMouseCursor( double mx, double my, bool table );
 
     double getRunAroundGap() { return runAroundGap; }
@@ -150,9 +110,6 @@ public:
     void setAnchor( KWAnchor * anchor ) { m_anchor = anchor; }
     void deleteAnchor();
 
-    bool isMostRight() { return mostRight; }
-    void setMostRight( bool _mr ) { mostRight = _mr; }
-
     void setPageNum( int i ) { m_pageNum = i; }
     int pageNum() { return m_pageNum; }
 
@@ -171,14 +128,14 @@ public:
     QRect outerRect() const;
 
     /* Resize handles (in kwcanvas.h) are the dots that are drawn on selected
-       frames, this creates and deletes then */
+       frames, this creates and deletes them */
     void createResizeHandles();
     void createResizeHandlesForPage(KWCanvas *canvas);
     void removeResizeHandlesForPage(KWCanvas *canvas);
     void removeResizeHandles();
     void updateResizeHandles();
 
-    QBrush getBackgroundColor() { return backgroundColor; }
+    QBrush getBackgroundColor() const { return backgroundColor; }
     void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
 
     /** set left margin size */
@@ -209,12 +166,7 @@ private:
     NewFrameBehaviour newFrameBehaviour;
     double runAroundGap;
     bool selected;
-    bool mostRight;
     int m_pageNum;
-
-    //QList<QRect> intersections;
-    //QRegion emptyRegion;
-    //bool emptyRegionDirty;
 
     QBrush backgroundColor;
     Border brd_left, brd_right, brd_top, brd_bottom;
@@ -259,9 +211,11 @@ public:
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
      * See KWFrameSet for explanation about the arguments.
+     * Most framesets don't need to reimplement that (the KWFrameSetEdit gets passed to drawFrame)
      */
     virtual void drawContents( QPainter *, const QRect &,
-                               QColorGroup &, bool onlyChanged, bool resetChanged ) = 0;
+                               QColorGroup &, bool onlyChanged, bool resetChanged,
+                               KWViewMode *viewMode );
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent( QKeyEvent * ) {}
@@ -319,7 +273,6 @@ public:
     bool isAWrongFooter( KoHFType t ) const;
 
     // frame management
-    //virtual void addFrame( KWFrame _frame );
     virtual void addFrame( KWFrame *_frame, bool recalc = true );
     virtual void delFrame( unsigned int _num );
     virtual void delFrame( KWFrame *frm, bool remove = true );
@@ -329,7 +282,7 @@ public:
     KWFrame *getFrame( unsigned int _num );
 
     /* Iterator over the child frames */
-    virtual const QList<KWFrame> &frameIterator() const { return frames; }
+    const QList<KWFrame> &frameIterator() const { return frames; }
     /* Get frame number */
     int getFrameFromPtr( KWFrame *frame );
     /* Get number of child frames */
@@ -345,16 +298,16 @@ public:
      * @param region The region is modified to subtract the areas painted, thus
      *               allowing the caller to detrmine which areas remain to be painted.
      */
-    virtual void drawBorders( QPainter *painter, const QRect &crect, QRegion &region );
+    virtual void drawBorders( QPainter *painter, const QRect &crect, QRegion &region, KWViewMode *viewMode );
 
     /**
      * Paint this frameset
-     * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
      * @param painter The painter in which to draw the contents of the frameset
      * @param crect The rectangle (in "contents coordinates") to be painted
      * @param cg The colorgroup from which to get the colors
      * @param onlyChanged If true, only redraw what has changed (see KWCanvas::repaintChanged)
      * @param resetChanged If true, set the changed flag to false after drawing.
+     * @param edit If set, this frameset is being edited, so a cursor is needed.
      *
      * The way this "onlyChanged/resetChanged" works is: when something changes,
      * all views are asked to redraw themselves with onlyChanged=true.
@@ -362,9 +315,20 @@ public:
      * otherwise the other views wouldn't repaint anything.
      * So resetChanged is called with "false" for all views except the last one,
      * and with "true" for the last one, so that it resets the flag.
+     *
+     * Framesets shouldn't reimplement this one in theory [but KWTableFrameSet has to].
      */
     virtual void drawContents( QPainter *painter, const QRect &crect,
-                               QColorGroup &cg, bool onlyChanged, bool resetChanged ) = 0;
+                               QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                               KWFrameSetEdit *edit, KWViewMode *viewMode );
+
+    /**
+     * Draw a particular frame of this frameset.
+     * This is called by drawContents and is what framesets must reimplement.
+     */
+    virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
+                            QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                            KWFrameSetEdit *edit ) = 0;
 
     /**
      * Called when our frames change, or when another frameset's frames change.
@@ -455,7 +419,7 @@ public:
      * For an "even pages header" frameset, the corresponding headerType setting
      * must be selected (i.e. different headers for even and odd pages).
      */
-    virtual bool isVisible();
+    bool isVisible() const;
 
     /** get the visibility of the frameset. */
     void setVisible( bool v );
@@ -463,7 +427,6 @@ public:
     /** get/set frameset name. For tables in particular, this _must_ be unique */
     QString getName() const { return m_name; }
     void setName( const QString &_name ) { m_name = _name; }
-    static QString UniqueName( const QString & templateName, int startNum );
 
 #ifndef NDEBUG
     virtual void printDebug();
@@ -522,8 +485,9 @@ public:
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );
 
-    virtual void drawContents( QPainter *painter, const QRect & crect,
-                               QColorGroup &, bool onlyChanged, bool resetChanged );
+    virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect & crect,
+                            QColorGroup &, bool onlyChanged, bool resetChanged,
+                            KWFrameSetEdit *edit = 0L );
 
 protected:
     KWImage m_image;
@@ -548,8 +512,9 @@ public:
 
     virtual void updateFrames();
 
-    void drawContents( QPainter * p, const QRect & crect,
-                       QColorGroup &, bool onlyChanged, bool resetChanged );
+    virtual void drawFrame( KWFrame * frame, QPainter * p, const QRect & crect,
+                            QColorGroup &, bool onlyChanged, bool resetChanged,
+                            KWFrameSetEdit *edit = 0L );
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );
@@ -574,9 +539,6 @@ public:
         return static_cast<KWPartFrameSet*>(frameSet());
     }
 
-    void drawContents( QPainter *, const QRect &,
-                       QColorGroup &, bool, bool );
-
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void mousePressEvent( QMouseEvent * );
     virtual void mouseDoubleClickEvent( QMouseEvent * );
@@ -599,14 +561,10 @@ public:
 
     /**
      * Paint this frameset
-     * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
      */
-    virtual void drawContents(QPainter*, const QRect&,
-                              QColorGroup&, bool onlyChanged, bool resetChanged);
-
-    void drawContents(QPainter*, const QRect&,
-                      QColorGroup&, bool onlyChanged, bool resetChanged,
-                      KFormulaView* formulaView);
+    virtual void drawFrame(KWFrame *, QPainter*, const QRect&,
+                           QColorGroup&, bool onlyChanged, bool resetChanged,
+                           KWFrameSetEdit *edit = 0L);
 
     virtual void updateFrames();
 
@@ -642,13 +600,12 @@ public:
         return static_cast<KWFormulaFrameSet*>(frameSet());
     }
 
-    virtual QString getPopupName() { return "Formula";}
+    KFormulaView* getFormulaView() const
+    {
+        return formulaView;
+    }
 
-    /**
-     * Paint this frameset in "has focus" mode (e.g. with a cursor)
-     */
-    virtual void drawContents(QPainter*, const QRect&,
-                              QColorGroup&, bool onlyChanged, bool resetChanged);
+    virtual QString getPopupName() { return "Formula";}
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent(QKeyEvent*);

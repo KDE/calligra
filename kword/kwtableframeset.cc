@@ -1350,8 +1350,9 @@ bool KWTableFrameSet::contains( double mx, double my ) {
     return false;
 }
 
-void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &region )
+void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &region, KWViewMode *viewMode )
 {
+    // TODO use viewMode
     painter->save();
 
     QListIterator<KWFrame> frameIt = frameIterator();
@@ -1471,12 +1472,24 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
 }
 
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
-        QColorGroup & cg, bool onlyChanged, bool resetChanged )
+                                    QColorGroup & cg, bool onlyChanged, bool resetChanged,
+                                    KWFrameSetEdit * edit, KWViewMode * viewMode )
 {
     QRegion reg;
-    drawBorders( painter, crect, reg );
+    drawBorders( painter, crect, reg, viewMode );
     for (unsigned int i=0; i < m_cells.count() ; i++)
-        m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged );
+    {
+        if (edit)
+        {
+            KWTableFrameSetEdit * tableEdit = static_cast<KWTableFrameSetEdit *>(edit);
+            if ( tableEdit->currentCell() && m_cells.at(i) == tableEdit->currentCell()->frameSet() )
+            {
+                m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, tableEdit->currentCell(), viewMode );
+                continue;
+            }
+        }
+        m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, 0L, viewMode );
+    }
 
 }
 

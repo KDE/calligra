@@ -1,49 +1,55 @@
+TODO-List
+=========
 
-TODO-List (for KWord-0.8):
---------------------------
+Bugs:
+-----
 
-Bugs; in order or importance:
-
-- Implement correct printing of floating tables.
+- Fix drawing of table cell borders
+- Add code to ensure that adjacent cells have the same border setting for the borders they share
 - Need a routine which renders the table per row in a way that any cellsize is adjusted to fit.
-- Frame Run around is the wrong way around.. Framedia does it correct now. 
-  still needs to be done correctly in kword_doc
 - deleting pictures-frames should also delete the picture (from the tar) (imageCollection)
-  (we have a problem with reference counts in the creation of a new image)
-- reconnect dumps sometimes.
-- Anchor is not redrawn if page scrolls
-- numbering type list should only be reset when a non-numbering paragraph has been displayed.
-  We now reset the numbering everytime the style is changes.
+  (we have a problem with reference counts in the creation of a new image) [does this still happen?]
+- reconnect dumps sometimes [does it still?].
+- anything else that http://bugs.kde.org mentions ;)
 
 Missing or incomplete stuff:
-----------------------------------------
+----------------------------
 - Even/odd pages
  - Add SheetSide config in framedia 
- - implement copy of 'copy-frames' in appendPage method
-- split (table) cells needs to be implementated
-- Tab in the parag layout dialog for configuration of tabulators (adding/deleting/modifying them) (done?)
 - Preview widget for numbering
-- Preview widget for style templates editor
-- Tabulators don't work correctly in "Blocksatz"
-- Toolbars in the settings menu are not updated if they are not shown/reshown
-- The borders dialog doesn't work (settings are not used) (fixed?)
+- Improving preview widget for style templates editor (those 2 could use a KWTextDocument)
 - runAroundGap does nothing
+- Tables should get a title (with positioning posibility)
+  This will basicly be a new frame placed on top or at bottom of table.
+
+Other missing features:
+
+Sideheads (for text)
+Split frames needs to be implemented.
+Styles have to be saved external (do they??).
+Books (collection of documents) should be implemented
+Implement complete DCOP interface
+Make everything scriptable
+Add "TopOfFrame"-TopOfPage" etc to styles.
 
 cleanup:
 --------
 - All enums should belong to a class, making it safe for namespace clashes. Class::Enum-value 
   should be used everywhere
-- groupmanager variable active is used to 'Deactivate' a groupmanager. Deleting would be a better option ;)
-- Border has to be moved to the frame. 
 
+----------------- Things to keep in mind
+- All classes and methods should have proper documentation, in the proper format.
+- Try to put any code that relies on pages to be one under the other (as they are
+now) in KWCanvas. This will allow for inheriting KWCanvas later and changing
+that behaviour, to implement other view modes.
+
+External files:
+--------------
 Included files (pictures/parts/formula's)
 - It should be possible to keep files external. Kword should also notice a changed file
   (preferably at runtime) and reload it.
 
-... many more things due to the QRT rewrite ...
-
-Proposal
---------
+-> Proposal:
 
 On placing a picture or part we get an insert dialog. This dialog could be changed 
 to include a checkbox "keep file external". If changing the file-dia is a problem 
@@ -65,6 +71,7 @@ When another instance of the same picture/part is placed we should just use
 the same object we allready use. We could consider creating a newly
 scaled thumb if the sizes differ a lot. The raw file will stay untouched.
  
+[ TODO: evaluate how the API suggested below integrates with the (more recent) KoImage stuff ]
  
 kofficecore/ImageContainer.cc
  manages a picture. You can ask it for thumbs, location, the raw file
@@ -73,16 +80,16 @@ kofficecore/ImageContainer.cc
     constructor.
     if filename starts with tar or external is set: store filename.
     otherwise read raw file in mem.
- - int getRefCount()
+ - int refCount()
     keep internal usage count
- - koImage* getThumb(QSize);
+ - koImage* thumb(QSize);
     look in tar if there was a thumb. Otherwise create one of selected size.
     note that koImage also does referece checking.
  - void incCount();
     for usage count
  - void decCount();
     for usage count
- - koRawImage* getImage();
+ - koRawImage* image();
     Return the rawimage (in a stream??) either from mem or from disk.
  - save();
     well, it saves.
@@ -92,17 +99,17 @@ kofficecore/PartContainer.cc
  has a save function
  - PartContainer
     constructor
- - getRefCount
+ - refCount()
  - void incCount()
  - void decCount();
- - koSomething* getPart();
+ - koSomething* part();
  - save();
  
 kofficeCore/ImageCollection.cc
  - ImageCollection();
- - ImageConatainer* getImage(filename);
+ - ImageContainer* image(filename);
     return imageContainer, if one doesnt exist create it first.
- - int getCount();
+ - int count();
     return number of images in the collection
  - void removeImage(filename);
     remove image from collection
@@ -116,70 +123,6 @@ Note also that the 'key' is its filename. With full path that makes it http://
 or file:// or tar:// for remote, local, internal storage respectively.
  
 Last note: this proposal does not propose any gui/printing issues at all.
-
-
-
-MILESTONES
-
-Since KWord has been unmaintained for quite some time it is best to patch it up before we start
-adding features. In this document I want to set a number of milestones which give the direction
-I want KWord to take in the not to far future.
-I have no problem with people starting to implement features, but I myself will try to keep to 
-this file. 
-The reason that this file is in CVS is therefor 2-fold. First I want everyone to know the 
-current state of kword (since for some time not much will visibly change). Last this document will
-state where I want KWord to go. So people can see the purpose of stuff I created better..
-
-
-KWord from a development POV can be devided in a number of 'layers'. 
-- document and view
-  This layer is implemented in the koffice-libs and I will not be actively developing them
-
-- Frames
-  Most (but not all) of the frames code has been created, and will stay in its current form for 
-  quite some time (most notable exception being floating frames)
-
-- Text and paragraphs. 
-  This is code that is to be completely replaced with QT code. There is work in progress for this
-  on the Troll side and a full version will be release in QT3.0 (february 2001) However I have 
-  discussed this with the Trolls and we will find a solution to get this in well before that time.
-
-- GUI
-  The window and menu's need a big update. There is the inconsistency in the menus and lots of
-  options which are in code but not in the GUI.
-
------------------ Milestones
-
-All classes and methods should have proper documentation, in the proper format.
-
-Complete re-layout of the GUI with all future features as hooks implemented. These features will
-mostly be discussed in this file.
- - tables menu items should be accessible from the edit and the frameedit cursor modes.
- - Have an insert and a modify menu where all elements are represented.
-
-Tables should get a title (with positioning posibility) This will basicly be a new frame placed on top
-or at bottom of table.
-
-Make all frametypes have the posibility to float.
-
-Sideheads (for text)
-
-Split frames needs to be implemented.
-
-Styles have to be saved external (do they??).
-
-Books (collection of documents) should be implemented
-
-Implement complete DCOP interface
-
-Make everything scriptable
-
-Make variables work
-
-Make TOC and other auto-generates stuff work.
-
-Add "TopOfFrame"-TopOfPage" etc to styles.
-
 
 Thanx to: Reginald Stadlbauer <reggie@kde.org>
 Author: Thomas Zander <zander@earthling.net>
