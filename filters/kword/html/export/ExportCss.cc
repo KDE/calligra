@@ -172,7 +172,7 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
         if ( formatData.bgColor.isValid() )
         {
             // Give background colour
-            strElement+="bgcolor: ";
+            strElement+="background-color: ";
             strElement+=formatData.bgColor.name();
             strElement+="; ";
         }
