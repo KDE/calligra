@@ -466,7 +466,7 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
 
     if ( isFloating && edit )
     {
-        m_insRect = KoRect( 0, 0, rows * 30, doc->ptPaperWidth()-50 /*10*/ ); // ## check those values
+        m_insRect = KoRect( 0, 0, edit->frameSet()->getFrame(0)->width()-10, rows * 30 ); // mostly unused anyway
         KWTableFrameSet * table = createTable();
         edit->insertFloatingFrameSet( table, i18n("Insert Floating Table") );
         doc->addFrameSet( table ); // last since it triggers a redraw
@@ -936,7 +936,7 @@ KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to creat
     for ( unsigned int i = 0; i < m_table.rows; i++ ) {
         for ( unsigned int j = 0; j < m_table.cols; j++ ) {
             KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j, QString::null /*automatic name*/ );
-            KWFrame *frame = new KWFrame(cell, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height(), RA_NO );
+            KWFrame *frame = new KWFrame(cell, 0, 0, 0, 0, RA_NO ); // pos and size will be set in setBoundingRect
             cell->addFrame( frame, false );
             frame->setFrameBehaviour(AutoExtendFrame);
             frame->setNewFrameBehaviour(NoFollowup);
