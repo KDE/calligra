@@ -57,7 +57,7 @@ VRectangle::init()
 	if( m_edgeRadius == 0 )
 	{
 		moveTo( m_topLeft );
-		lineTo( KoPoint( m_topLeft.x(),         m_topLeft.y() - m_height ) );
+		lineTo( KoPoint( m_topLeft.x(), m_topLeft.y() - m_height ) );
 		lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() - m_height ) );
 		lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() ) );
 	}
