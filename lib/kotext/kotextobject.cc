@@ -1682,9 +1682,11 @@ void KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
         bottom = rect.top() + rect.height();
     }
 #ifdef DEBUG_FORMAT_MORE
+    QString id;
+    if ( m_lastFormatted ) id = QString(" (%1)").arg(m_lastFormatted->paragId());
     kdDebug(32500) << "formatMore finished formatting. "
                    << " bottom=" << bottom
-                   << " m_lastFormatted=" << m_lastFormatted
+                   << " m_lastFormatted=" << m_lastFormatted << id
                    << endl;
 #endif
 
