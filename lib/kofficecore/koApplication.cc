@@ -160,7 +160,8 @@ bool KoApplication::start()
 
         // Loop through arguments
 
-        short int n=0;
+        short int n=0; // number of documents open
+        short int nPrinted = 0;
         for(int i=0; i < argsCount; i++ )
         {
             // For now create an empty document
@@ -219,6 +220,7 @@ bool KoApplication::start()
                     if ( print ) {
                         shell->print(false /*we want to get the dialog*/);
                         // delete shell; done by ~KoDocument
+                        nPrinted++;
 		    } else {
                         // Normal case, success
                         n++;
@@ -230,8 +232,10 @@ bool KoApplication::start()
                 }
             }
         }
-        if (n == 0) // no doc, all URLs were malformed
-          return false;
+        if ( print )
+            return nPrinted > 0;
+        if (n == 0) // no doc, e.g. all URLs were malformed
+            return false;
     }
 
     args->clear();
