@@ -1319,12 +1319,24 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
 {
     view->unplugActionList( "datatools" );
     view->unplugActionList( "datatools_link" );
+    view->unplugActionList( "variable_action" );
+    QPtrList<KAction> &variableList = view->variableActionList();
+    variableList.clear();
     actionList.clear();
+
+    view->kPresenterDoc()->getVariableCollection()->setVariableSelected(variable());
+    if ( variable() )
+    {
+        variableList = view->kPresenterDoc()->getVariableCollection()->variableActionList();
+    }
+
+
     actionList = dataToolActionList(view->kPresenterDoc()->instance());
     //kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
     if(refLink().isNull())
     {
         view->plugActionList( "datatools", actionList );
+        view->plugActionList( "variable_action", variableList );
         QPopupMenu * popup = view->popupMenu("text_popup");
         Q_ASSERT(popup);
         if (popup)
@@ -1333,6 +1345,7 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
     else
     {
         view->plugActionList( "datatools_link", actionList );
+        view->plugActionList( "variable_action", variableList );
         QPopupMenu * popup = view->popupMenu("text_popup_link");
         Q_ASSERT(popup);
         if (popup)

@@ -452,6 +452,8 @@ public:
 
     // Used by Page to plug/unplug the datatool actions
     QPtrList<KAction>& actionList() { return m_actionList; }
+    // Used by Page to plug/unplug the variable actions
+    QPtrList<KAction> &variableActionList() { return m_variableActionList; }
 
     // for Polygon object
     bool getCheckConcavePolygon() { return checkConcavePolygon; }
@@ -585,6 +587,7 @@ private:
     // right button popup menus
     QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend, *rb_pstyle, *rb_pwidth;
     QPtrList<KAction> m_actionList; // for the kodatatools
+    QPtrList<KAction> m_variableActionList;
 
     // scrollbars
     QScrollBar *vert, *horz;
