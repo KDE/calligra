@@ -1025,7 +1025,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             kdDebug()<<" object offset :"<<offset<<endl;
 	    QDomElement * animation = 0L;
 	    if( o.hasAttribute("draw:id"))
-	      animation = m_loadingInfo->animationById(o.attribute("draw:id"));
+	      animation = m_loadingInfo->animationShowById(o.attribute("draw:id"));
             m_loadingInfo->saveStyleStack();
             if ( name == "draw:text-box" ) // textbox
             {
@@ -1105,7 +1105,8 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 	    m_loadingInfo->restoreStyleStack();
         }
         m_loadingInfo->restoreStyleStack();
-	m_loadingInfo->clearAnimationDict(); // clear all animations 
+	m_loadingInfo->clearAnimationShowDict(); // clear all show animations style
+	m_loadingInfo->clearAnimationHideDict(); // clear all hide animations style
     }
 
     setModified(false);
@@ -1137,9 +1138,17 @@ void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
         {
             Q_ASSERT( e.hasAttribute( "draw:shape-id" ) );
             QString name = e.attribute( "draw:shape-id" );
-	    kdDebug()<<" insert animation style : name :"<<name<<endl;
+	    kdDebug()<<" insert animation show style : name :"<<name<<endl;
             QDomElement* ep = new QDomElement( e );
-	    m_loadingInfo->storePresentationAnimation( ep, name );
+	    m_loadingInfo->storePresentationShowAnimation( ep, name );
+        }
+        else if ( tagName == "presentation:hide-shape")
+        {
+            Q_ASSERT( e.hasAttribute( "draw:shape-id" ) );
+            QString name = e.attribute( "draw:shape-id" );
+	    kdDebug()<<" insert animation hide style : name :"<<name<<endl;
+            QDomElement* ep = new QDomElement( e );
+	    m_loadingInfo->storePresentationHideAnimation( ep, name );
         }
     }
 }

@@ -27,15 +27,26 @@ public:
     KPRLoadingInfo() {}
     ~KPRLoadingInfo() {}
 
-    QDomElement* animationById( const QString& id ) const {
-        return m_animationsDict[id]; // returns 0 if not found
+    QDomElement* animationShowById( const QString& id ) const {
+        return m_animationsShowDict[id]; // returns 0 if not found
     }
-    void storePresentationAnimation( QDomElement * element, const QString& id ) {
-        m_animationsDict.insert( id , element );
+    void storePresentationShowAnimation( QDomElement * element, const QString& id ) {
+        m_animationsShowDict.insert( id , element );
     }
-    void clearAnimationDict() {
-      m_animationsDict.clear();
+    void clearAnimationShowDict() {
+      m_animationsShowDict.clear();
     }
+
+    QDomElement* animationHideById( const QString& id ) const {
+        return m_animationsHideDict[id]; // returns 0 if not found
+    }
+    void storePresentationHideAnimation( QDomElement * element, const QString& id ) {
+        m_animationsHideDict.insert( id , element );
+    }
+    void clearAnimationHideDict() {
+      m_animationsHideDict.clear();
+    }
+
     void clearStyleStack() {
       m_styleStack.clear();
     }
@@ -55,7 +66,8 @@ public:
       return m_styleStack;
     }
 private:
-    QDict<QDomElement> m_animationsDict; 
+    QDict<QDomElement> m_animationsShowDict;
+    QDict<QDomElement> m_animationsHideDict;
     KoStyleStack m_styleStack;
 };
 
