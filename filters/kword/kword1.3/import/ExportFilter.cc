@@ -1364,9 +1364,9 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 bool OOWriterWorker::doOpenStyles(void)
 {
     m_styles += " <office:styles>\n";
-    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">"; // ### TODO: what if Graphics is a normal style
-    m_styles += "   <style:properties/>";
-    m_styles += "  </style:style>";
+    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">\n"; // ### TODO: what if Graphics is a normal style
+    m_styles += "   <style:properties/>\n";
+    m_styles += "  </style:style>\n";
     return true;
 }
 
