@@ -62,7 +62,10 @@ void KexiAlterTableDialog::init()
 {
 	KexiTableViewData *data = new KexiTableViewData();
 	data->setInsertingEnabled( false );
-	data->addColumn( new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text) );
+	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text);
+	col->setValidator( new Kexi::IdentifierValidator() );
+
+	data->addColumn( col );
 //js TODO: COMBO
 	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
@@ -97,7 +100,11 @@ void KexiAlterTableDialog::init()
 		connect(buff,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
 			this, SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
 
-		KexiProperty *prop = new KexiProperty("type", QVariant(field->type()), i18n("Type"));
+		KexiProperty *prop = new KexiProperty("name", QVariant(field->type()), i18n("Type"));
+		prop->setVisible(false);
+		buff->add(prop);
+
+		prop = new KexiProperty("type", QVariant(field->name()), i18n("Name"));
 		prop->setVisible(false);
 		buff->add(prop);
 
@@ -108,6 +115,8 @@ void KexiAlterTableDialog::init()
 		if (slist.count()>1) {//there is more than 1 type name
 			buff->add(new KexiProperty("subType", field->typeString(), slist, nlist, i18n("Subtype")));
 		}
+
+		buff->add( new KexiProperty("caption", QVariant(field->caption()), i18n("Caption") ) );
 
 		int len = field->length();
 		if(len == 0)
