@@ -12,5 +12,8 @@ libmswordimport_la_LIBADD = $(KOFFICE_LIBS) $(LIBWV2_LIBS)
 
 METASOURCES = AUTO
 
+install-data-local: kword_msword_import.foo
+	$(INSTALL_DATA) $(srcdir)/kword_msword_import.foo $(kde_servicesdir)/kword_msword_import.desktop
+
 #service_DATA = kword_msword_import.desktop
 #servicedir = $(kde_servicesdir)
