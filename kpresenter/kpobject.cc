@@ -188,6 +188,8 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
 
 void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation)
 {
+    if(element.hasAttribute( "draw:name" ))
+       objectName = element.attribute("draw:name");
     orig.setX( KoUnit::parseValue( element.attribute( "svg:x" ) ) );
     orig.setY( KoUnit::parseValue( element.attribute( "svg:y" ) ) );
     ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
@@ -303,6 +305,7 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
     if ( !element.hasAttribute( "type" ) ||
          ( element.hasAttribute( "type" ) && element.attribute( "type" ) == "4" ) )
     {
+        kdDebug()<<" text document !!!!!\n";
         if ( styleStack.hasAttribute( "fo:text-shadow" ) &&
              styleStack.attribute( "fo:text-shadow" ) != "none" )
         {
