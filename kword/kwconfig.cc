@@ -183,8 +183,8 @@ void ConfigureSpellPage::apply()
   config->writeEntry( "SpellCheck", (int)state );
 
   //FIXME reactivate just if there is a changes.
-  doc->reactivateBgSpellChecking();
   doc->enableBackgroundSpellCheck( state );
+  doc->reactivateBgSpellChecking();
 }
 
 void ConfigureSpellPage::slotDefault()

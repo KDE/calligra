@@ -348,7 +348,7 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
 
     QLabel *l = new QLabel( i18n( "Datasource:" ),back );
 //    l->setMaximumHeight( l->sizeHint().height() );
-    layout->addWidget(l); 
+    layout->addWidget(l);
 
     QHBox *row1=new QHBox(back);
     layout->addWidget(row1);
@@ -403,7 +403,7 @@ void KWMailMergeConfigDialog::slotEditClicked()
 void KWMailMergeConfigDialog::slotCreateClicked()
 {
 	db_->action=KWSLCreate;
-	doNewActions();  
+	doNewActions();
 //done(QDialog::Accepted);
 }
 
@@ -473,6 +473,7 @@ KWMailMergeVariableInsertDia::KWMailMergeVariableInsertDia( QWidget *parent, KWM
 
     setInitialSize( QSize( 350, 400 ) );
     connect(names,SIGNAL(selectionChanged () ),this,SLOT(slotSelectionChanged()));
+    connect(names,SIGNAL(doubleClicked ( QListBoxItem * )),this,SLOT(slotOk()));
     setFocus();
     enableButtonOK(names->currentItem ()!=-1);
 }
