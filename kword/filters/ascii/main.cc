@@ -87,19 +87,13 @@ Filter::Filter()
 }
 
 /*================================================================*/
-void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_to)
+void Filter::filter(KOffice::Filter::Data& data,const QCString &from,const QCString &to)
 {
-    if ( QString( _to ) == "application/x-kword" &&
-         QString( _from ) == "text/plain" ) 
+    if ( to == "application/x-kword" &&
+         from == "text/plain" ) 
     {
-        CORBA::ULong len = data.length();
-        if (len == 0)
+        if (data.size() == 0)
             return;
-
-        char *buffer = new char[len + 1];
-        for(CORBA::ULong i = 0;i < len;++i)
-            buffer[i] = (char)data[i];
-        buffer[len] = 0;
 
         QString str;
 
@@ -118,7 +112,8 @@ void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_t
         str += "<PARAGRAPH>\n";
         str += "<TEXT>";
 
-        for ( CORBA::ULong i = 0 ;i < len ; ++i )
+        char * buffer = data.data();
+        for ( int i = 0 ;i < data.size() ; ++i )
         {
             QChar c = buffer[ i ];
             if ( c == QChar( '\n' ) )
@@ -143,28 +138,16 @@ void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_t
         str += "</FRAMESETS>\n";
         str += "</DOC>\n";
 
-        len = strlen(str);
+        QCString cstr=QCString(str.utf8());
+        char * ret = strdup( cstr.data() );
+        data.assign( ret, cstr.length() );
 
-        data.length(len);
-        for(CORBA::ULong i = 0;i < len;++i)
-            data[i] = QChar(str[i]);
-
-        delete[] buffer;
     }
-    else if ( QString( _from ) == "application/x-kword" &&
-              QString( _to ) == "text/plain") 
+    else if ( from == "application/x-kword" &&
+              to == "text/plain") 
     {
-        CORBA::ULong len = data.length();
-        if (len == 0)
-            return;
-
-        char *buffer = new char[len + 1];
-        for(CORBA::ULong i = 0;i < len;++i)
-            buffer[i] = (char)data[i];
-        buffer[len] = 0;
-
-        QString buf( buffer );
         QString str;
+        QCString buf ( data.data() );
 
         int i = buf.find( "<TEXT>" );
         while ( i != -1 )
@@ -178,21 +161,17 @@ void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_t
             i = buf.find( "<TEXT>", j );
         }
         
-        len = strlen(str);
-
-        data.length(len);
-        for(CORBA::ULong i = 0;i < len;++i)
-            data[i] = QChar(str[i]);
-
-        delete[] buffer;
+        QCString cstr=QCString(str.utf8());
+        char * ret = strdup( cstr.data() );
+        data.assign( ret, cstr.length() );
     }
     else
     {		
         KOffice::Filter::UnsupportedFormat exc;
-        exc.format = CORBA::string_dup(_to);
+        exc.format = to;
         mico_throw(exc);
         KOffice::Filter::UnsupportedFormat exc2;
-        exc2.format = CORBA::string_dup(_from);
+        exc2.format = from;
         mico_throw(exc2);
         return;
     }
