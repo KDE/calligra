@@ -1297,7 +1297,8 @@ void KWordView::insertPicture()
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else
-    KFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp) | Pictures | All files (*)" ), 0, 0, TRUE );
+    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
+    fd.setCaption(i18n("Insert Picture"));
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
@@ -1608,8 +1609,9 @@ void KWordView::toolsCreatePix()
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else
-    KFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
+    fd.setCaption(i18n("Create Picture"));     
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
