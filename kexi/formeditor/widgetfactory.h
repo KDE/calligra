@@ -302,10 +302,13 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 //		void  addValueDescription(Container *container, const char *value, const QString &desc);
 
 	protected slots:
-		/*! You have to implement this function for editing inside the Form to work. This slot is
-		called when the line edit text changes, and you have to make it really change the good
+		/*!
+		Default implementation will change property "text".
+		You have to reimplement this function for editing inside the Form to work if your widget's
+		property you want to change isn't named "text".
+		This slot is called when the line edit text changes, and you have to make it really change the good
 		property of the widget using changeProperty() (text, or title, etc.).
-		 */
+		*/
 		virtual void  changeText(const QString &newText);
 
 		void slotTextChanged();

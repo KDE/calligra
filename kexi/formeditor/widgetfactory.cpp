@@ -394,8 +394,10 @@ WidgetFactory::clearWidgetContent(const QString &, QWidget *)
 {}
 
 void
-WidgetFactory::changeText(const QString&)
-{}
+WidgetFactory::changeText(const QString& text)
+{
+	changeProperty( "text", text, m_container );
+}
 
 bool
 WidgetFactory::readSpecialProperty(const QString &, QDomElement &, QWidget *, ObjectTreeItem *)
