@@ -153,6 +153,30 @@ bool kspreadfunc_concatenate( KSContext& context )
   return b;
 }
 
+// Function: DOLLAR
+bool kspreadfunc_dollar( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "DOLLAR", true ) &&
+       !KSUtil::checkArgumentsCount( context, 2, "DOLLAR", true ) )
+         return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double value = args[0]->doubleValue();
+  int decimals = 2;
+
+  if( KSUtil::checkArgumentsCount( context, 2, "DOLLAR", false ) )
+    if ( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+      decimals = args[1]->intValue(); 
+
+  QString result = KGlobal::locale()->formatMoney( value, QString::null, decimals );
+  context.setValue( new KSValue( result ) );
+  return true;
+}
+
 // Function: EXACT
 bool kspreadfunc_exact( KSContext& context )
 {

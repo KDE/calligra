@@ -150,7 +150,7 @@ bool kspreadfunc_clean( KSContext& context );
 bool kspreadfunc_code( KSContext& context );
 bool kspreadfunc_compare( KSContext& context ); // KSpread specific
 bool kspreadfunc_concatenate( KSContext& context ); 
-bool kspreadfunc_dollar( KSContext& context ); // TODO
+bool kspreadfunc_dollar( KSContext& context ); 
 bool kspreadfunc_exact( KSContext& context );
 bool kspreadfunc_find( KSContext& context );
 bool kspreadfunc_fixed( KSContext& context ); //TODO
@@ -636,7 +636,7 @@ static const functionEntry funcTab[] = {
   { "CODE", kspreadfunc_code },
   { "COMPARE", kspreadfunc_compare }, // KSpread-specific
   { "CONCATENATE", kspreadfunc_concatenate },
-  //{ "DOLLAR", kspreadfunc_dollar },
+  { "DOLLAR", kspreadfunc_dollar },
   { "EXACT", kspreadfunc_exact },
   { "FIND", kspreadfunc_find },
   //{ "FIXED", kspreadfunc_fixed },
