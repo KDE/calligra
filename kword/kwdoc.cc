@@ -1185,31 +1185,34 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // TODO support for first-page
     bool hasEvenOddHeader = false;
     bool hasEvenOddFooter = false;
-    QDomElement headerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "header-style" );
-    QDomElement footerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "footer-style" );
-    QDomElement headerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header-left" );
-    if ( !headerLeftElem.isNull() ) {
-        kdDebug() << "Found header-left" << endl;
-        hasEvenOddHeader = true;
-        __hf.header = HF_EO_DIFF; // ###
-        oasisLoader.loadOasisHeaderFooter( headerLeftElem, hasEvenOddHeader, headerStyle, context );
-    }
-    QDomElement headerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header" );
-    if ( !headerElem.isNull() ) {
-        kdDebug() << "Found header" << endl;
-        oasisLoader.loadOasisHeaderFooter( headerElem, hasEvenOddHeader, headerStyle, context );
-    }
-    QDomElement footerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer-left" );
-    if ( !footerLeftElem.isNull() ) {
-        kdDebug() << "Found footer-left" << endl;
-        hasEvenOddFooter = true;
-        __hf.footer = HF_EO_DIFF; // ###
-        oasisLoader.loadOasisHeaderFooter( footerLeftElem, hasEvenOddFooter, footerStyle, context );
-    }
-    QDomElement footerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer" );
-    if ( !footerElem.isNull() ) {
-        kdDebug() << "Found footer" << endl;
-        oasisLoader.loadOasisHeaderFooter( footerElem, hasEvenOddFooter, footerStyle, context );
+    if ( masterPageStyle )
+    {
+        QDomElement headerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "header-style" );
+        QDomElement footerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "footer-style" );
+        QDomElement headerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header-left" );
+        if ( !headerLeftElem.isNull() ) {
+            kdDebug() << "Found header-left" << endl;
+            hasEvenOddHeader = true;
+            __hf.header = HF_EO_DIFF; // ###
+            oasisLoader.loadOasisHeaderFooter( headerLeftElem, hasEvenOddHeader, headerStyle, context );
+        }
+        QDomElement headerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header" );
+        if ( !headerElem.isNull() ) {
+            kdDebug() << "Found header" << endl;
+            oasisLoader.loadOasisHeaderFooter( headerElem, hasEvenOddHeader, headerStyle, context );
+        }
+        QDomElement footerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer-left" );
+        if ( !footerLeftElem.isNull() ) {
+            kdDebug() << "Found footer-left" << endl;
+            hasEvenOddFooter = true;
+            __hf.footer = HF_EO_DIFF; // ###
+            oasisLoader.loadOasisHeaderFooter( footerLeftElem, hasEvenOddFooter, footerStyle, context );
+        }
+        QDomElement footerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer" );
+        if ( !footerElem.isNull() ) {
+            kdDebug() << "Found footer" << endl;
+            oasisLoader.loadOasisHeaderFooter( footerElem, hasEvenOddFooter, footerStyle, context );
+        }
     }
 
     // TODO embedded objects
