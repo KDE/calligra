@@ -89,7 +89,6 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kimageio.h>
-#include <kcoloractions.h>
 #include <tkcoloractions.h>
 #include <kstddirs.h>
 #include <kparts/event.h>
@@ -265,7 +264,7 @@ void KWView::initGui()
     actionFormatDecreaseIndent->setEnabled(false);
     //setNoteType(m_doc->getNoteType(), false);
 
-    actionFormatColor->setColor( Qt::black );
+    actionFormatColor->setCurrentColor( Qt::black );
 
     //refresh zoom combobox
     changeZoomMenu( m_doc->zoom() );
@@ -533,7 +532,7 @@ void KWView::setupActions()
                                       this, SLOT( textDecreaseIndent() ),
                                       actionCollection(), "format_decreaseindent" );
 
-    actionFormatColor = new KColorAction( i18n( "Text Color..." ), KColorAction::TextColor, 0,
+    actionFormatColor = new TKSelectColorAction( i18n( "Text Color..." ), TKSelectColorAction::TextColor,
                                      this, SLOT( textColor() ),
                                      actionCollection(), "format_color" );
 
@@ -568,6 +567,7 @@ void KWView::setupActions()
                             0,  actionCollection(), "border_style" );
     connect( actionBorderStyle, SIGNAL( activated( const QString & ) ),
              this, SLOT( borderStyle( const QString & ) ) );
+    actionBorderStyle->setComboWidth( 30 );
 
     QStringList lst;
     lst << Border::getStyle( Border::SOLID );
@@ -1154,7 +1154,7 @@ void KWView::showFormat( const QTextFormat &currentFormat )
     actionFormatUnderline->setChecked( currentFormat.font().underline());
     actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
 
-    actionFormatColor->setColor( currentFormat.color() );
+    actionFormatColor->setCurrentColor( currentFormat.color() );
 
     switch(currentFormat.vAlign())
       {
@@ -2390,11 +2390,13 @@ void KWView::textColor()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
     {
-        QColor color = edit->textColor();
+/*        QColor color = edit->textColor();
         if ( KColorDialog::getColor( color ) ) {
             actionFormatColor->setColor( color );
             edit->setTextColor( color );
         }
+*/
+        edit->setTextColor( actionFormatColor->color() );
     }
 }
 
