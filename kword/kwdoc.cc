@@ -407,10 +407,6 @@ void KWDocument::initConfig()
       kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
       kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KOS_E_ASCII));
       kosconfig.setClient(config->readNumEntry ("KSpell_Client", KOS_CLIENT_ISPELL));
-      kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-      kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
-      kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-      kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
 
       kosconfig.setIgnoreCase( config->readNumEntry( "KSpell_IgnoreCase", 0));
       kosconfig.setIgnoreAccent( config->readNumEntry( "KSpell_IgnoreAccent", 0));
