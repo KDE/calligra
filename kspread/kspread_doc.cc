@@ -798,8 +798,10 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
         {
             ColumnLayout *col_lay = table->columnLayout( x );
 
-            KSpreadCell *cell = table->cellAt( x, y );
-            cell->paintCell( rect, painter, xpos, ypos, x, y, col_lay, row_lay, &r,false, drawCursor );
+            if ( ( x <= KS_colMax ) && ( y <= KS_rowMax ) ) {
+                KSpreadCell *cell = table->cellAt( x, y );
+                cell->paintCell( rect, painter, xpos, ypos, x, y, col_lay, row_lay, &r, false, drawCursor );
+            }
 
             xpos += col_lay->width();
         }

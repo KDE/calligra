@@ -1820,22 +1820,24 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     // First draw the default borders so that they don't
     // overwrite any other border.
     //
-    if ( left_pen.style() == Qt::NoPen &&
+    if ( ( left_pen.style() == Qt::NoPen ) &&
          ( !m_pObscuringCell || m_pObscuringCell->column() == _col ) )
     {
         if( table()->getShowGrid() && !_painter.device()->isExtDev())
         {
             left_offset = 1;
 
-            QPen t = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
-            QPen b = m_pTable->cellAt( _col, _row + 1 )->leftBorderPen( _col, _row + 1 );
-
             int dt = 0;
+            QPen t = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
             if ( t.style() != Qt::NoPen )
                 dt = 1;
+
             int db = 0;
-            if ( b.style() != Qt::NoPen )
-                db = 1;
+            if ( _row < KS_rowMax ) {
+                QPen b = m_pTable->cellAt( _col, _row + 1 )->leftBorderPen( _col, _row + 1 );
+                if ( b.style() != Qt::NoPen )
+                    db = 1;
+            }
 
             _painter.setPen( table()->doc()->defaultGridPen() );
             _painter.drawLine( _tx, _ty + dt, _tx, _ty + h - db );
@@ -1921,7 +1923,9 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     // to repaint these corners.
     //
     KSpreadCell* cell_t = m_pTable->cellAt( _col, _row - 1 );
-    KSpreadCell* cell_r = m_pTable->cellAt( _col + 1, _row );
+    KSpreadCell* cell_r = 0L;
+    if ( _col < KS_colMax )
+        cell_r = m_pTable->cellAt( _col + 1, _row );
     KSpreadCell* cell_l = m_pTable->cellAt( _col - 1, _row );
     // Not yet used .... KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
 
@@ -2749,7 +2753,7 @@ const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 
 void KSpreadCell::setLeftBorderPen( const QPen& p )
 {
-    KSpreadCell* cell = m_pTable->cellAt( column() - 1, row() );
+    KSpreadCell* cell = m_pTable->cellAt( column() - 1, row() ); //what happens on column=1
     if ( cell && cell->hasProperty( PRightBorder ) )
         cell->clearProperty( PRightBorder );
 
@@ -2758,7 +2762,7 @@ void KSpreadCell::setLeftBorderPen( const QPen& p )
 
 void KSpreadCell::setTopBorderPen( const QPen& p )
 {
-    KSpreadCell* cell = m_pTable->cellAt( column(), row() - 1 );
+    KSpreadCell* cell = m_pTable->cellAt( column(), row() - 1 ); //what happens on row=1
     if ( cell && cell->hasProperty( PBottomBorder ) )
         cell->clearProperty( PBottomBorder );
 
@@ -2767,7 +2771,10 @@ void KSpreadCell::setTopBorderPen( const QPen& p )
 
 void KSpreadCell::setRightBorderPen( const QPen& p )
 {
-    KSpreadCell* cell = m_pTable->cellAt( column() + 1, row() );
+    KSpreadCell* cell = 0L;
+    if ( column() < KS_colMax )
+        cell = m_pTable->cellAt( column() + 1, row() );
+
     if ( cell && cell->hasProperty( PLeftBorder ) )
         cell->clearProperty( PLeftBorder );
 
@@ -2776,7 +2783,10 @@ void KSpreadCell::setRightBorderPen( const QPen& p )
 
 void KSpreadCell::setBottomBorderPen( const QPen& p )
 {
-    KSpreadCell* cell = m_pTable->cellAt( column(), row() + 1 );
+    KSpreadCell* cell = 0L;
+    if ( row() < KS_rowMax )
+        cell = m_pTable->cellAt( column(), row() + 1 );
+
     if ( cell && cell->hasProperty( PTopBorder ) )
         cell->clearProperty( PTopBorder );
 
@@ -2797,14 +2807,16 @@ const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
             return m_pObscuringCell->rightBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
         // Ask the cell on the right
-        KSpreadCell * cell = m_pTable->cellAt( _col + 1, _row );
-        if ( cell->hasProperty( PLeftBorder ) )
-            return cell->leftBorderPen( _col + 1, _row );
+        if ( _col < KS_colMax ) {
+            KSpreadCell * cell = m_pTable->cellAt( _col + 1, _row );
+            if ( cell->hasProperty( PLeftBorder ) )
+                return cell->leftBorderPen( _col + 1, _row );
+        }
 
         return m_pTable->emptyPen();
     }
 
-    if ( !hasProperty( PRightBorder ) )
+    if ( !hasProperty( PRightBorder ) && ( _col < KS_colMax ) )
     {
         KSpreadCell * cell = m_pTable->cellAt( _col + 1, _row );
         if ( cell->hasProperty( PLeftBorder ) )
@@ -2859,14 +2871,16 @@ const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
             return m_pObscuringCell->bottomBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
         // Ask the cell below
-        KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
-        if ( cell->hasProperty( PTopBorder ) )
-            return cell->topBorderPen( _col, _row + 1 );
+        if ( _row < KS_rowMax ) {
+            KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
+            if ( cell->hasProperty( PTopBorder ) )
+                return cell->topBorderPen( _col, _row + 1 );
+        }
 
         return m_pTable->emptyPen();
     }
 
-    if ( !hasProperty( PBottomBorder ) )
+    if ( !hasProperty( PBottomBorder ) && ( _row < KS_rowMax ) )
     {
         KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
         if ( cell->hasProperty( PTopBorder ) )

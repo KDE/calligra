@@ -1822,7 +1822,7 @@ void RowLayout::setTopBorderPen( const QPen& p )
 const QPen& RowLayout::bottomBorderPen( int _col, int _row ) const
 {
     // First look at the row below of us
-    if ( !hasProperty( PBottomBorder ) )
+    if ( !hasProperty( PBottomBorder ) && ( _row < KS_rowMax ) )
     {
 	const RowLayout* rl = table()->rowLayout( _row + 1 );
 	if ( rl->hasProperty( PTopBorder ) )
@@ -1834,9 +1834,11 @@ const QPen& RowLayout::bottomBorderPen( int _col, int _row ) const
 
 void RowLayout::setBottomBorderPen( const QPen& p )
 {
-    RowLayout* cl = table()->nonDefaultRowLayout( row() + 1, FALSE );
-    if ( cl )
-	cl->clearProperty( PTopBorder );
+    if ( row() < KS_rowMax ) {
+        RowLayout* cl = table()->nonDefaultRowLayout( row() + 1, FALSE );
+        if ( cl )
+	    cl->clearProperty( PTopBorder );
+    }
 
     KSpreadLayout::setBottomBorderPen( p );
 }
@@ -2007,7 +2009,7 @@ void ColumnLayout::setLeftBorderPen( const QPen& p )
 const QPen& ColumnLayout::rightBorderPen( int _col, int _row ) const
 {
     // First look ar the right column at the right
-    if ( !hasProperty( PRightBorder ) )
+    if ( !hasProperty( PRightBorder ) && ( _col < KS_colMax ) )
     {
 	const ColumnLayout* cl = table()->columnLayout( _col + 1 );
 	if ( cl->hasProperty( PLeftBorder ) )
@@ -2019,9 +2021,11 @@ const QPen& ColumnLayout::rightBorderPen( int _col, int _row ) const
 
 void ColumnLayout::setRightBorderPen( const QPen& p )
 {
-    ColumnLayout* cl = table()->nonDefaultColumnLayout( column() + 1, FALSE );
-    if ( cl )
-	cl->clearProperty( PLeftBorder );
+    if ( column() < KS_colMax ) {
+        ColumnLayout* cl = table()->nonDefaultColumnLayout( column() + 1, FALSE );
+        if ( cl )
+            cl->clearProperty( PLeftBorder );
+    }
 
     KSpreadLayout::setRightBorderPen( p );
 }

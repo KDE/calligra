@@ -275,9 +275,9 @@ int KSpreadTable::leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas )
     while ( x < _xpos )
     {
         // Should never happen
-        if ( col > KS_colMax )
+        if ( col > KS_colMax - 1 )
 	{
-	    kdDebug(36001) << "KSpreadTable:leftColumn: invalid column (col: " << col << ")" << endl;
+	    kdDebug(36001) << "KSpreadTable:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
             return 1;
 	}
         _left += columnLayout( col )->width( _canvas );
@@ -307,7 +307,7 @@ int KSpreadTable::rightColumn( int _xpos, KSpreadCanvas *_canvas )
         col++;
     }
 
-    return col;
+    return col - 1;
 }
 
 int KSpreadTable::topRow( int _ypos, int & _top, KSpreadCanvas *_canvas )
@@ -325,11 +325,11 @@ int KSpreadTable::topRow( int _ypos, int & _top, KSpreadCanvas *_canvas )
     while ( y < _ypos )
     {
         // Should never happen
-        if ( row > KS_rowMax )
-	{
-	    kdDebug(36001) << "KSpreadTable:topRow: invalid row (row: " << row << ")" << endl;
+        if ( row > KS_rowMax - 1 )
+        {
+            kdDebug(36001) << "KSpreadTable:topRow: invalid row (row: " << row + 1 << ")" << endl;
             return 1;
-	}
+        }
         _top += rowLayout( row )->height( _canvas );
         row++;
         y += rowLayout( row )->height( _canvas);
@@ -357,7 +357,7 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
         row++;
     }
 
-    return row;
+    return row - 1;
 }
 
 int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
