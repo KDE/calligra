@@ -97,7 +97,7 @@ int Base64::decode( char *_dest, unsigned char c1, unsigned char c2, unsigned ch
 
 int Base64DecodeBuffer::underflow()
 {
-    // Leseposition vor Puffer-Ende ?
+    // Is the read position within the buffer?
     if (gptr() < egptr() )
     {
       return *gptr();
@@ -112,17 +112,17 @@ int Base64DecodeBuffer::underflow()
     if ( m_bEnd )
       return EOF;
 
-    /* Anzahl Putback-Bereich ermitteln
-     *  - Anzahl bereits gelesener Zeichen
-     *  - maximal 4
+    /* calculate the size of the putback-zone
+     *  - amount of the characters read
+     *  - max. 4
      */
     int anzPutback;
     anzPutback = gptr() - eback();
     if ( anzPutback > 4 )
       anzPutback = 4;
 
-    /* die bis zu vier vorher gelesenen Zeichen nach vorne
-     * in den Putback-Puffer (erste 4 Zeichen)
+    /* There can be 4 characters max. right now - put them
+     * in the putback-zone (first 4 characters)
      */
     memcpy( m_buffer + ( 4 - anzPutback ), gptr()-anzPutback, anzPutback );
 
@@ -136,41 +136,41 @@ int Base64DecodeBuffer::underflow()
       buf[ got ] = c;
       if ( c == '=' )
       {
-	kdDebug(30001) << "END OF BASE64" << endl;
-	
-	if ( got % 4 == 2 )
-	{
-	  if ( m_in.eof() )
-	  {
-	    kdError(30001) << "Unexpected EOF" << endl;
-	    delete [] buf;
-	    return EOF;
-	  }
-	  got++;
-	  c = m_in.get();
-	  if ( c != '=' )
-	  {
-	    kdError(30001) << "Not correct base64" << endl;
-	    delete [] buf;
-	    return EOF;
-	  }
-	  buf[ got++ ] = c;
-	  m_bEnd = true;
-	}
-	else if ( got % 4 == 3 )
-	{
-	  got++;
-	  m_bEnd = true;
-	}
-	else
-	{
-	  kdError(30001) << "Unexpected =" << endl;
-	  delete [] buf;
-	  return EOF;
-	}
+        kdDebug(30001) << "END OF BASE64" << endl;
+
+        if ( got % 4 == 2 )
+        {
+          if ( m_in.eof() )
+          {
+            kdError(30001) << "Unexpected EOF" << endl;
+            delete [] buf;
+            return EOF;
+          }
+          got++;
+          c = m_in.get();
+          if ( c != '=' )
+          {
+            kdError(30001) << "Not correct base64" << endl;
+            delete [] buf;
+            return EOF;
+          }
+          buf[ got++ ] = c;
+          m_bEnd = true;
+        }
+        else if ( got % 4 == 3 )
+        {
+          got++;
+          m_bEnd = true;
+        }
+        else
+        {
+          kdError(30001) << "Unexpected =" << endl;
+          delete [] buf;
+          return EOF;
+        }
       }
       else if ( !isspace( c ) )
-	got++;
+        got++;
     }
 
     if( got % 4 != 0 )
@@ -189,14 +189,14 @@ int Base64DecodeBuffer::underflow()
       anz += conv;
     }
 
-    /* Puffer-Zeiger neu setzen
+    /* Set the buffer-pointer
      */
-    setg ( m_buffer + ( 4 - anzPutback ),   // Putback-Anfang
-	   m_buffer + 4,                // Leseposition
-	   m_buffer + 4 + anz );           // Puffer-Ende
+    setg ( m_buffer + ( 4 - anzPutback ),   // start of the putback-zone
+           m_buffer + 4,                // read position
+           m_buffer + 4 + anz );           // end of the buffer
 
     delete [] buf;
 
-    // naechstes Zeichen zurueckliefern
+    // return the next character
     return *gptr();
 }
