@@ -51,6 +51,7 @@ void Counter::invalidate()
     m_cache.number = -1;
     m_cache.text = QString::null;
     m_cache.width = -1;
+    m_cache.parent = (KWTextParag *)-1;
 }
 
 int Counter::number( const KWTextParag *paragraph )
@@ -72,7 +73,6 @@ int Counter::number( const KWTextParag *paragraph )
     case NUM_CHAPTER:
         m_cache.number = m_startNumber;
         // Go upwards while...
-kdDebug() << "1111111111 paragraph number=" << m_cache.number << " other="<<otherParagraph<< endl;
         while ( otherParagraph )
         {
             otherCounter = otherParagraph->counter();
@@ -80,7 +80,6 @@ kdDebug() << "1111111111 paragraph number=" << m_cache.number << " other="<<othe
                 ( otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
                 ( otherCounter->counterDepth <= counterDepth ) )        // ...same or higher level.
             {
-kdDebug() << "222222222 paragraph number=" << m_cache.number << " other="<<otherParagraph<< endl;
                 if ( otherCounter->counterDepth == counterDepth )
                 {
                     // Found a preceeding paragraph of exactly our type!
@@ -130,17 +129,19 @@ kdDebug() << "222222222 paragraph number=" << m_cache.number << " other="<<other
         }
         break;
     }
-kdDebug() << "XXXXXX paragraph number=" << m_cache.number << endl;
     return m_cache.number;
 }
 
 // Go looking for another paragraph at a higher level.
 KWTextParag *Counter::parent( const KWTextParag *paragraph )
 {
+    // Return cached value if possible.
+    if ( m_cache.parent != (KWTextParag *)-1 )
+        return m_cache.parent;
+
     KWTextParag *otherParagraph = static_cast<KWTextParag *>( paragraph->prev() );
     Counter *otherCounter;
 
-    kdDebug() << "Looking for item with depth < " << counterDepth << endl;
     switch ( m_numbering )
     {
     case NUM_NONE:
@@ -184,7 +185,8 @@ KWTextParag *Counter::parent( const KWTextParag *paragraph )
         }
         break;
     }
-    return otherParagraph;
+    m_cache.parent = otherParagraph;
+    return m_cache.parent;
 }
 
 void Counter::load( QDomElement & element )
@@ -276,7 +278,24 @@ QString Counter::text( const KWTextParag *paragraph )
     }
     m_cache.text.prepend( counterLeftText );
     m_cache.text.append( counterRightText );
-kdDebug() << "XXXXXX paragraph text=" << m_cache.text << endl;
+
+    // Find the number of missing parents, and add dummy text for them.
+    int missingParents;
+    parent( paragraph );
+    if ( m_cache.parent )
+    {
+        missingParents = counterDepth - m_cache.parent->counter()->counterDepth - 1;
+    }
+    else
+    {
+        missingParents = counterDepth;
+    }
+    while ( missingParents )
+    {
+        // Each missing level adds a "0." prefix.
+        m_cache.text.prepend( "0." );
+        missingParents--;
+    }
     return m_cache.text;
 }
 
@@ -428,14 +447,17 @@ int KWTextParag::widthLabel() const
 {
     if ( !m_counter )
         return 0;
-    int width = 0;
+
+    int size = 0;
     KWTextParag *parent = m_counter->parent( this );
+
+    // Recurse to find the width of the preceeding bullet.
     if ( parent )
     {
-        width += parent->widthLabel();
+        size += parent->widthLabel();
     }
-    width += m_counter->width( this );
-    return width;
+    size += m_counter->width( this );
+    return size;
 }
 
 // Draw the counter/bullet for a paragraph
@@ -445,26 +467,18 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, 
         return;
 
     int size = m_counter->width( this );
-    // Recurse to draw the preceeding bullet.
     KWTextParag *parent = m_counter->parent( this );
+
+    // Recurse to draw the preceeding bullet.
     if ( parent )
     {
-        int missingLevels = parent->counter()->counterDepth + 1 - m_counter->counterDepth;
-                            parent->drawLabel( p, x - size - ( missingLevels * size ), y, w, h, base, cg );
-                            if ( missingLevels )
-                                kdDebug() << "KWTextParag::drawLabel: missing " << missingLevels << " levels"
-                                          << endl;
-                            // TODO: drawing of missing levels.
-                            // p->drawText( x - m_counter->width( this ), y - h + base, "0." );
-    }
-    else
-    {
-        kdDebug() << "KWTextParag::drawLabel: no parent for depth " << m_counter->counterDepth << endl;
+        parent->drawLabel( p, x - size, y, w, h, base, cg );
     }
 
     // Draw the prefix, number and suffix strings.
+    QTextFormat *format = paragFormat();
     QFont oldFont = p->font();
-    QFont newFont = paragFormat()->font();
+    QFont newFont = format->font();
     // ### Problem is, the paragFormat never changes. It should probably
     // change when we change the format of the whole paragraph ?
     p->setFont( newFont );
@@ -477,7 +491,6 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, 
          ( m_counter->m_style == Counter::STYLE_CUSTOMBULLET ) )
     {
         // Modify x offset.
-        QTextFormat *format = paragFormat();
         for ( unsigned int i = 0; i < m_counter->counterRightText.length(); i++ )
             x -= format->width( m_counter->counterRightText, i );
         int width = format->width( ' ' );

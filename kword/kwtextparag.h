@@ -110,14 +110,19 @@ public:
 
 private:
 
-    // The cached (calculated) number, text and width of the label for this paragraph.
-    // If either number is -1, or the text is null, the respective cached value is
-    // invalid.
+    // The cached, calculated values for this counter:
+    //
+    //  VALUE                       VALUE WHEN INVALID
+    //  number of this counter      -1
+    //  text of this counter        QString::null
+    //  width of the label          -1
+    //  parent                      (KWTextParag *)-1
     struct
     {
         int number;
         QString text;
         int width;
+        KWTextParag *parent;
     } m_cache;
 };
 
