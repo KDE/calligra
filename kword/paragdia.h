@@ -25,6 +25,7 @@
 #include <qlist.h>
 #include <koRuler.h>
 #include <kwunit.h>
+#include <qdict.h>
 
 #include "kwtextparag.h"
 #include "counter.h"
@@ -206,6 +207,24 @@ class KWParagCounterWidget : public KWParagLayoutWidget
 {
     Q_OBJECT
 public:
+
+    class StyleRepresenter {
+        public:
+            StyleRepresenter (const QString name, Counter::Style style, bool listStyle=false) { 
+                m_name=name; 
+                m_style=style; 
+                m_listStyle=listStyle; 
+            }
+            QString name() { return m_name; }
+            Counter::Style style() { return m_style; }
+            bool listStyle() { return m_listStyle; }
+
+        private:
+            QString m_name;
+            Counter::Style m_style;
+            bool m_listStyle;
+    };
+
     KWParagCounterWidget( QWidget * parent, const char * name = 0 );
     virtual ~KWParagCounterWidget() {}
 
@@ -217,30 +236,29 @@ public:
     const Counter & counter() const { return m_counter; }
 
 protected slots:
-    void numChangeBullet();
-    void numStyleChanged( int );
-    void numCounterDefChanged( const QString& );
-    void numTypeChanged( int );
-    void numLeftTextChanged( const QString & );
-    void numRightTextChanged( const QString & );
-    void numStartChanged( const QString & );
-    void numDepthChanged( int );
+    void selectCustomBullet();
+    void numStyleChanged( int ); // selected another style from the combobox
+    void numTypeChanged( int );  // selected another type radiobutton.
 
 protected slots:
     void changeKWSpinboxType();
 
 private:
-    QButtonGroup *gNumbering, *gStyle;
-    QGroupBox *gOther;
-    //QLineEdit *eCustomNum;
-    QLineEdit *ecLeft, *ecRight;
-    KWSpinBox* eStart;
+    QList <StyleRepresenter> stylesList;
+    void fillStyleCombo(Counter::Numbering type = Counter::NUM_LIST);
+
+    QGroupBox *gStyle, *gPreview;
+    QButtonGroup *gNumbering; 
+    QComboBox *cStyle;
+    Counter m_counter; 
+    QLineEdit *sSuffix, *sPrefix;
+    QPushButton *bCustom;
+    KWSpinBox *spnStart;
+    QSpinBox *spnDepth;
     QLabel *lStart;
-    QRadioButton *rDisc, *rSquare, *rCircle, *rCustom;
-    QPushButton *bBullets;
-    QSpinBox *sDepth;
-    KWNumPreview *prev4;
-    Counter m_counter;
+    KWNumPreview *preview;
+
+    int styleBuffer;
 };
 
 /**
