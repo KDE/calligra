@@ -395,7 +395,7 @@ void Document::initSymbolNamesAction()
 
             fonts.append( st.font( ch ) );
             chars[ i ] = st.character( ch );
-            //kdDebug( DEBUGID ) << "Document::lazyInit: " << *it << " " << st.font( ch ).family() << " " << QString( ch ) << endl;
+            //kdDebug( DEBUGID ) << "Document::initSymbolNamesAction: " << *it << " " << st.font( ch ).family() << " " << QString( ch ) << endl;
         }
         impl->symbolNamesAction->setSymbols( names, fonts, chars );
         impl->selectedName = names[0];
@@ -1191,6 +1191,7 @@ void Document::recalc()
 
 void Document::updateConfig()
 {
+    lazyInit();
     impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
     initSymbolNamesAction();
     recalc();
