@@ -92,17 +92,40 @@ public slots:
   void slotSetZoomFactor(float);
 
   virtual void slotEditUndo();
+  virtual void slotEditUndo2();
+  virtual void slotEditUndo3();
+  virtual void slotEditUndo4();
+  virtual void slotEditUndo5();
+  virtual void slotEditUndo6();
+  virtual void slotEditUndo7();
+  virtual void slotEditUndo8();
+  virtual void slotEditUndo9();
+  virtual void slotEditUndo10();
   virtual void slotEditRedo();
+  virtual void slotEditRedo2();
+  virtual void slotEditRedo3();
+  virtual void slotEditRedo4();
+  virtual void slotEditRedo5();
+  virtual void slotEditRedo6();
+  virtual void slotEditRedo7();
+  virtual void slotEditRedo8();
+  virtual void slotEditRedo9();
+  virtual void slotEditRedo10();
+
   virtual void slotEditCut();
   virtual void slotEditCopy();
   virtual void slotEditPaste();
+
+  virtual void viewLayerDialog();
+  virtual void viewColorDialog();
+  virtual void viewPreferences();
 
   virtual void slotActivateMoveTool();
   virtual void slotActivateBrushTool();
   virtual void slotActivateZoomTool();
 
-  void changeUndo(QString, bool);
-  void changeRedo(QString, bool);
+  void changeUndo( QString, bool);
+  void changeRedo( QString, bool);
 
 protected:
 
@@ -120,11 +143,11 @@ protected:
 
   virtual void resizeEvent(QResizeEvent* _ev);
 
-  void viewLayerDialog();
-  void viewColorDialog();
-
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
   OpenPartsUI::ToolBar_var m_vToolBarTools;
+
+  OpenPartsUI::Menu_var m_vTBUndoMenu;
+  OpenPartsUI::Menu_var m_vTBRedoMenu;
 
   OpenPartsUI::Menu_var m_vMenuEdit;
   CORBA::Long m_idMenuEdit_Undo;
@@ -136,6 +159,7 @@ protected:
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_LayerDialog;
   CORBA::Long m_idMenuView_ColorDialog;
+  CORBA::Long m_idMenuView_Preferences;
 
   OpenPartsUI::Menu_var m_vMenuImage;
   OpenPartsUI::Menu_var m_vMenuPlugIns;

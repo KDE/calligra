@@ -18,6 +18,7 @@
 
 #include "layerdlg.h"
 #include "layerview.h"
+#include "channelview.h"
 #include "kimageshop_doc.h"
 
 LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
@@ -64,6 +65,30 @@ LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , W
 ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
   : QWidget( _parent, _name, _flags )
 {
+  QVBoxLayout *layout = new QVBoxLayout( this );
+ 
+  ChannelView* channelview = new ChannelView( _doc, this, "channellist" );
+  layout->addWidget( channelview );
+ 
+  QHBoxLayout *buttonlayout = new QHBoxLayout( layout );
+ 
+  QPushButton* pbAddLayer = new QPushButton( this, "addchannel" );
+  pbAddLayer->setPixmap( ICON( "newlayer.xpm" ) );
+  buttonlayout->addWidget( pbAddLayer );
+ 
+  QPushButton* pbRemoveLayer = new QPushButton( this, "removechannel" );
+  pbRemoveLayer->setPixmap( ICON( "deletelayer.xpm" ) );
+  buttonlayout->addWidget( pbRemoveLayer );
+ 
+  QPushButton* pbUp = new QPushButton( this, "raise" );
+  pbUp->setPixmap( ICON( "raiselayer.xpm" ) );
+  buttonlayout->addWidget( pbUp );
+  connect( pbUp, SIGNAL( clicked() ), channelview, SLOT( slotRaiseChannel() ) );
+ 
+  QPushButton* pbDown = new QPushButton( this, "lower" );
+  pbDown->setPixmap( ICON( "lowerlayer.xpm" ) );
+  buttonlayout->addWidget( pbDown );
+  connect( pbDown, SIGNAL( clicked() ), channelview, SLOT( slotLowerChannel() ) );
 }
 
 LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name, WFlags _flags )

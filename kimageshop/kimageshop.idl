@@ -60,7 +60,26 @@ module KImageShop
 
                 // edit menu
                 slot void slotEditUndo();
+                slot void slotEditUndo2();
+                slot void slotEditUndo3();
+                slot void slotEditUndo4();
+                slot void slotEditUndo5();
+                slot void slotEditUndo6();
+                slot void slotEditUndo7();
+                slot void slotEditUndo8();
+                slot void slotEditUndo9();
+                slot void slotEditUndo10();
                 slot void slotEditRedo();
+                slot void slotEditRedo2();
+                slot void slotEditRedo3();
+                slot void slotEditRedo4();
+                slot void slotEditRedo5();
+                slot void slotEditRedo6();
+                slot void slotEditRedo7();
+                slot void slotEditRedo8();
+                slot void slotEditRedo9();
+                slot void slotEditRedo10();
+
 		slot void slotEditCopy();
 		slot void slotEditCut();
 		slot void slotEditPaste();
@@ -68,6 +87,7 @@ module KImageShop
                 // View menu
                 slot void viewLayerDialog();
 		slot void viewColorDialog();
+                slot void viewPreferences();
 	};
 
 	interface Document : KOffice::Document, KOffice::Print

@@ -7,8 +7,8 @@
 //
 //   For more information see at the file COPYING in this package
 
-#ifndef __layerlist_h__
-#define __layerlist_h__
+#ifndef __layerview_h__
+#define __layerview_h__
 
 #include <qdialog.h>
 #include <qtableview.h>
@@ -87,5 +87,5 @@ protected:
   KIntSpinBox *m_spin;
 };
 
-#endif // __layerlist_h__
+#endif // __layerview_h__
 
