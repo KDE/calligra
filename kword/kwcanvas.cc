@@ -1859,7 +1859,8 @@ bool KWCanvas::selectAllFrames( bool select )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * fs = fit.current();
-        if(! fs->isVisible()) continue;
+        if ( !fs->isVisible() ) continue;
+        if ( select && fs->isMainFrameset() ) continue; // "select all frames" shouldn't select the page
         QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
         for ( ; frameIt.current(); ++frameIt )
         {

@@ -437,6 +437,7 @@ void KWView::setupActions()
     actionEditFindPrevious = KStdAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
     actionEditReplace = KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+    new KAction( i18n( "Select All Frames" ), 0, this, SLOT( editSelectAllFrames() ), actionCollection(), "edit_selectallframes" );
     actionSpellCheck = KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
     actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
                                     this, SLOT( deletePage() ),
@@ -2321,6 +2322,10 @@ void KWView::editSelectAll()
         edit->selectAll();
 }
 
+void KWView::editSelectAllFrames()
+{
+    m_gui->canvasWidget()->selectAllFrames( true );
+}
 
 void KWView::editFind()
 {

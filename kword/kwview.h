@@ -223,6 +223,7 @@ public slots:
     void editCopy();
     void editPaste();
     void editSelectAll();
+    void editSelectAllFrames();
     void editFind();
     void editFindNext();
     void editFindPrevious();
