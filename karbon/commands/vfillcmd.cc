@@ -26,6 +26,7 @@
 #include "vdocument.h"
 #include "vcomposite.h"
 #include "vgroup.h"
+#include "vtext.h"
 
 VFillCmd::VFillCmd( VDocument *doc, const VFill &fill, const QString &icon )
 	: VCommand( doc, i18n( "Fill Objects" ), icon ), m_fill( fill )
@@ -62,6 +63,14 @@ VFillCmd::visitVComposite( VComposite& composite )
 	m_oldfills.push_back( VFill( *( composite.fill() ) ) );
 	composite.setFill( m_fill );
 	m_objects.append( &composite );
+}
+
+void
+VFillCmd::visitVText( VText& text )
+{
+	m_oldfills.push_back( VFill( *( text.fill() ) ) );
+	text.setFill( m_fill );
+	m_objects.append( &text );
 }
 
 void

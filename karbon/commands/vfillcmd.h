@@ -44,6 +44,7 @@ public:
 
 	virtual void visitVGroup( VGroup& group );
 	virtual void visitVComposite( VComposite& composite );
+	virtual void visitVText( VText& text );
 
 protected:
 	VObjectList m_objects;
