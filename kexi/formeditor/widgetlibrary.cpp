@@ -147,7 +147,7 @@ WidgetLibrary::loadFactories()
 		WidgetFactory *f = KParts::ComponentFactory::createInstanceFromService<WidgetFactory>(
 			*it.current(), this, (*it.current())->library().latin1(), QStringList());
 		if (!f) {
-			kdWarning() << "WidgetLibrary::scan(): creating factory failed!"
+			kdWarning() << "WidgetLibrary::scan(): creating factory failed! "
 				<< (*it.current())->library() << endl;
 			continue;
 		}
