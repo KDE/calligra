@@ -16,6 +16,7 @@ Comment[el]=Φίλτρο του KOffice
 Comment[eo]=KOficejo-filtrilo
 Comment[es]=Filtro de KOffice
 Comment[et]=KOffice filter
+Comment[eu]=KOffice Iragazkia
 Comment[fi]=KOffice-suodin
 Comment[fr]=Filtre kOffice
 Comment[gl]=Filtro de KOffice
@@ -57,7 +58,7 @@ Type=QStringList
 Type=QStringList
 
 [PropertyDef::X-KDE-Weight]
-Type=QStringList
+Type=QString
 
 [PropertyDef::Implemented]
 Type=QString
