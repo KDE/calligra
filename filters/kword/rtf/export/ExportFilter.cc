@@ -394,14 +394,14 @@ if (layout.counter.style)
         if (!layout.counter.lefttext.isEmpty() && layout.counter.lefttext != "{" && layout.counter.lefttext != "}")
         {
                 markup += layout.counter.lefttext;
-        }        
+        }
         switch (layout.counter.style)
         {
         case 6:
         {
                 //custom bullets (one char)
                 //TODO: use correct character/sign for bullet
-                
+
             markup += layout.counter.customCharacter;
             break;
         }
@@ -461,9 +461,9 @@ if (layout.counter.style)
         markup += "\\pnlvl";
         markup += QString::number(11 - layout.counter.style);
         }
-        
+
         switch (layout.counter.style)
-        {        
+        {
         case 1:
         {
         markup += "\\pndec";
@@ -493,11 +493,11 @@ if (layout.counter.style)
         markup += "\\pndec";
         }
         markup += "{\\pntxtb ";
-        markup += layout.counter.lefttext;  
+        markup += layout.counter.lefttext;
         markup += " }";
     }
         markup += "{\\pntxta ";
-        markup += layout.counter.righttext;  
+        markup += layout.counter.righttext;
         markup += " }";
 
         // ### FIXME: that is too late! And why at every list paragraph? (See bug #88241)
@@ -511,7 +511,7 @@ if (layout.counter.style)
         markup += "\\pnstart1";
         }
         markup += "\\pnindent0\\pnhang";
-        
+
         if( layout.formatData.text.fontSize > 0 )
         {
         markup += "\\pnfs";
@@ -524,7 +524,7 @@ if (layout.counter.style)
         }
 
         markup += "}";
-}    
+}
 
 
     LayoutData styleLayout;
@@ -604,9 +604,9 @@ if (layout.counter.style)
                             key += ' ';
                             key += KGlobal::locale()->timeFormat();
                         }
-                        
+
                         kdDebug(30515) << "Locale date in KLocale format:  " << key << endl;
-                        
+
                         // KLocale's key differ from KWord
 
                         // Date
@@ -630,7 +630,7 @@ if (layout.counter.style)
                         // Other times
                         key.replace( "%M", "mm" );      // minute 2 digits (KLocale knows it with 2 digits)
                         key.replace( "%S", "ss" );      // second 2 digits (KLocale knows it with 2 digits)
-                        
+
                         kdDebug(30515) << "Locale date in RTF format:  " << key << endl;
                     }
                     else if (!key.isEmpty())
@@ -748,7 +748,7 @@ if (layout.counter.style)
             {
                 kdDebug(30515) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
                 // We have an image, a clipart or a table
-               
+
 		if (6==(*paraFormatDataIt).frameAnchor.type)
                 {
 
@@ -766,13 +766,13 @@ if (layout.counter.style)
 			{
 			    m_prefix = "\\par";
 			}
-		    } 
+		    }
 		    str += makeTable((*paraFormatDataIt).frameAnchor);
 		}
                 else if ((2==(*paraFormatDataIt).frameAnchor.type) || (5==(*paraFormatDataIt).frameAnchor.type))
                 {
                     content += makeImage((*paraFormatDataIt).frameAnchor);
-                
+
                 }
 	    }
         }
@@ -793,7 +793,7 @@ if (layout.counter.style)
 	{
 	   m_prefix = "\\par";
         }
-    } 
+    }
     if (str.isEmpty())
     {
      str ="\\par\\pard\\plain";
@@ -842,7 +842,7 @@ bool RTFWorker::doHeader(const HeaderData& header)
     str += "}";
 
     str += "}";
-    
+
     m_textBody += str;
     }
     m_prefix=QString::null;
@@ -876,7 +876,7 @@ bool RTFWorker::doFooter(const FooterData& footer)
     str += "}";
 
     str += "}";
-    
+
     m_textBody += str;
     }
     m_prefix=QString::null;
@@ -1102,6 +1102,19 @@ bool RTFWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     {
         m_textDocInfo += "{\\author ";
         m_textDocInfo += escapeRtfText( docInfo.fullName );
+        m_textDocInfo += "}";
+    }
+
+    if ( !docInfo.keywords.isEmpty() )
+    {
+        m_textDocInfo += "{\\keywords ";
+        m_textDocInfo += escapeRtfText( docInfo.keywords );
+        m_textDocInfo += "}";
+    }
+    if ( !docInfo.subject.isEmpty() )
+    {
+        m_textDocInfo += "{\\subject ";
+        m_textDocInfo += escapeRtfText( docInfo.subject );
         m_textDocInfo += "}";
     }
 
