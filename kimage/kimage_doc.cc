@@ -284,6 +284,11 @@ bool KImageDocument::load( istream& in, KoStore* store )
 bool KImageDocument::loadXML( const QDomDocument& doc, KoStore* /* store */ )
 //bool KImageDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
+  QString format = "A4", orientation = "Portrait";
+  float left = 20.0, right = 20.0, bottom = 20.0, top = 20.0;
+  QString hl="", hm="", hr="";
+  QString fl="", fm="", fr="";
+
   kdebug( KDEBUG_INFO, 0, "KImageDocument::loadXML()" );
 
   if( doc.doctype().name() != "image" )
@@ -323,195 +328,25 @@ bool KImageDocument::loadXML( const QDomDocument& doc, KoStore* /* store */ )
   QDomNode n = data.firstChild();
 */
 
-  return true;
-
-/*
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
-
-  // DOC
-  if ( !parser.open( "DOC", tag ) )
-  {
-    kdebug( KDEBUG_INFO, 0, "Missing DOC" );
-    return false;
-  }
-
-  KOMLParser::parseTag( tag.c_str(), name, lst );
-  vector<KOMLAttrib>::const_iterator it = lst.begin();
-  for( ; it != lst.end(); it++ )
-  {
-    if ( it->m_strName == "mime" )
-    {
-      if ( it->m_strValue != "application/x-kimage" )
-      {
-		kdebug( KDEBUG_INFO, 0, "Unknown mime type %s", it->m_strValue.c_str() );
-		return false;
-      }
-    }
-  }
-
-  QString format = "A4", orientation = "Portrait";
-  float left = 20.0, right = 20.0, bottom = 20.0, top = 20.0;
-  QString hl="", hm="", hr="";
-  QString fl="", fm="", fr="";
-
-  // PAPER
-  while( parser.open( 0L, tag ) )
-  {
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-
-    if ( name == "PAPER" )
-    {
-      KOMLParser::parseTag( tag.c_str(), name, lst );
-      vector<KOMLAttrib>::const_iterator it = lst.begin();
-      for( ; it != lst.end(); it++ )
-      {
-		if ( it->m_strName == "format" )
-		{
-		  format = it->m_strValue.c_str();
-		}
-		else if ( it->m_strName == "orientation" )
-		{
-		  orientation = it->m_strValue.c_str();
-		}
-		else
-		  kdebug( KDEBUG_INFO, 0, "Unknown attrib PAPER:'%s'",it->m_strName.c_str() );
-      }
-
-      // PAPERBORDERS, HEAD, FOOT
-      while( parser.open( 0L, tag ) )
-      {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
-
-		if ( name == "PAPERBORDERS" )
-		{
-		  KOMLParser::parseTag( tag.c_str(), name, lst );
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for( ; it != lst.end(); it++ )
-		  {
-		    if ( it->m_strName == "left" )
-		    {
-		      left = atof( it->m_strValue.c_str() );
-		    }
-		    else if ( it->m_strName == "top" )
-		    {
-		      top = atof( it->m_strValue.c_str() );
-		    }
-		    else if ( it->m_strName == "right" )
-		    {
-		      right = atof( it->m_strValue.c_str() );
-		    }
-		    else if ( it->m_strName == "bottom" )
-		    {
-		      bottom = atof( it->m_strValue.c_str() );
-		    }
-		    else
-		      kdebug( KDEBUG_INFO, 0, "Unknown attrib 'PAPERBORDERS:%s'", it->m_strName.c_str() );
-		  }
-		}
-      	else if ( name == "HEAD" )
-		{
-		  KOMLParser::parseTag( tag.c_str(), name, lst );
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for( ; it != lst.end(); it++ )
-		  {
-		    if ( it->m_strName == "left" )
-		    {
-		      hl = it->m_strValue.c_str();
-		    }
-		    else if ( it->m_strName == "center" )
-		    {
-		      hm = it->m_strValue.c_str();
-		    }
-		    else if ( it->m_strName == "right" )
-		    {
-		      hr = it->m_strValue.c_str();
-		    }
-	        else
-	          kdebug( KDEBUG_INFO, 0, "Unknown attrib 'HEAD:%s'", it->m_strName.c_str() );
-	      }
-	    }
-        else if ( name == "FOOT" )
-	    {
-		  KOMLParser::parseTag( tag.c_str(), name, lst );
-		  vector<KOMLAttrib>::const_iterator it = lst.begin();
-		  for( ; it != lst.end(); it++ )
-		  {
-	 	    if ( it->m_strName == "left" )
-	        {
-	          fl = it->m_strValue.c_str();
-	        }
-	        else if ( it->m_strName == "center" )
-	        {
-	        	fm = it->m_strValue.c_str();
-	        }
-	        else if ( it->m_strName == "right" )
-	        {
-	          fr = it->m_strValue.c_str();
-	        }
-	        else
-	          kdebug( KDEBUG_INFO, 0, "Unknown attrib 'FOOT:%s'", it->m_strName.c_str() );
-	      }
-	    }
-	    else
-		  kdebug( KDEBUG_INFO, 0, "Unknown tag '%s' in PAPER", tag.c_str() );
-	
-	    if ( !parser.close( tag ) )
-        {
-	      kdebug( KDEBUG_INFO, 0, "ERROR: Closing PAPER" );
-	      return false;
-	    }
-      }
-    }
-    else
-      kdebug( KDEBUG_INFO, 0, "Unknown tag '%s' in DOC", tag.c_str() );
-
-    if ( !parser.close( tag ) )
-    {
-      kdebug( KDEBUG_INFO, 0, "ERROR: Closing DOC" );
-      return false;
-    }
-  }
-
-  parser.close( tag );
-
   setPaperLayout( left, top, right, bottom, format, orientation );
   setHeadFootLine( hl, hm, hr, fl, fm, fr );
 
-  kdebug( KDEBUG_INFO, 0, "------------------------ LOADING DONE --------------------" );
-
   return true;
-*/
 }
 
 bool KImageDocument::completeLoading( KoStore* _store )
 {
   kdebug( KDEBUG_INFO, 0, "KImageDocument::completeLoading()" );
 
-  QString file = "image.bmp";
-
-  if( _store->open( file, "" ) )
+  if( _store->open( "image.bmp", "" ) )
   {
     istorestream in( _store );
     in >> m_image;
     _store->close();
   }
-
-  if( m_image.isNull() )
-    cout << "Image is NULL, don't ask me why" << endl;
-  else
-    cout << "Image is not NULL, don't know why it does not do it right" << endl;
-
   setModified( false );
   m_bEmpty = false;
-
-  cout << "Michael : Laden fertig" << endl;
-
   emit sigUpdateView();
-
-  cout << "Michael : Signal gesendet" << endl;
-
   return true;
 }
 

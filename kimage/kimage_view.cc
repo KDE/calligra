@@ -100,28 +100,15 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
 
 void KImageView::paintEvent( QPaintEvent* /* _event */ )
 {
-  cout << "KImageView::paintEvent()" << endl;
-
   if( doc()->isEmpty() )
-  {
-    cout << "document empty" << endl;
     return;
-  }
   
   QPainter painter;
   painter.begin( this );
 
   doc()->paintContent( painter, rect() );
 
-/*
-  if( doc()->positionMode() == KImageDocument::Center )
-    painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
-  else
-    painter.drawPixmap( 0, 0, m_pixmap );
-*/
-
   painter.end();
-
 }
 
 KImageDocument* KImageView::doc()
@@ -190,8 +177,7 @@ void KImageView::editExportImage()
     return;
 
   // TODO: export image to a special format
-
-  //slotFileSaveAs();
+  // slotFileSaveAs();
 }
 
 void KImageView::editPreferences()
@@ -205,12 +191,10 @@ void KImageView::editPreferences()
 
 void KImageView::editPageLayout()
 {
-/*
   if( doc()->isEmpty() )
     return;
-*/
 
-  //doc()->paperLayoutDlg();
+  doc()->paperLayoutDlg();
 }
 
 void KImageView::viewFitToView()
@@ -457,41 +441,10 @@ void KImageView::helpAboutKImage()
 {
 }
 
-void KImageView::resizeEvent( QResizeEvent* )
-{
-  // TODO: only update new regions (ist this possible ?)
-  slotUpdateView();
-}
-
 void KImageView::slotUpdateView()
 {
   if( doc()->isEmpty() )
     return;
-
-  /*
-  double dh, dw, d;
-	
-  switch ( doc()->drawMode() )
-  {
-    case KImageDocument::OriginalSize:
-      m_pixmap.convertFromImage( doc()->image() );
-      break;
-    case KImageDocument::FitToView:
-      m_pixmap.convertFromImage( doc()->image().smoothScale( width(), height() ) );
-      break;
-    case KImageDocument::FitWithProps:
-      dh = (double) height() / (double) doc()->image().height();
-      dw = (double) width() / (double) doc()->image().width();
-      d = ( dh < dw ? dh : dw );
-      m_pixmap.convertFromImage( doc()->image().smoothScale( int( d * doc()->image().width() ), int ( d * doc()->image().height() ) ) );
-      break;
-    case KImageDocument::ZoomFactor:
-      dw = (double) m_zoomFactorValue.x() / (double) 100.0;
-      dh = (double) m_zoomFactorValue.y() / (double) 100.0;
-      m_pixmap.convertFromImage( doc()->image().smoothScale( int( dw * doc()->image().width() ), int ( dh * doc()->image().height() ) ) );
-      break;
-  }
-  */
 
   QWidget::update();
 }

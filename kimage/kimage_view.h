@@ -36,14 +36,6 @@ public:
 
   KImageDocument* doc();
 
-/*
-signals:
-
-  void mousePressed(QMouseEvent *);
-  void mouseMoved(QMouseEvent *);
-  void mouseReleased(QMouseEvent *);
-*/
-
 protected slots:
 
   // edit action slots
@@ -85,23 +77,12 @@ protected slots:
 
 public slots:
 
-/*
-  void slotDocUpdated();
-  void slotDocUpdated(const QRect&);
-*/
-
   // Document signals
   void slotUpdateView();
 
 protected:
 
   virtual void paintEvent( QPaintEvent* );
-  virtual void resizeEvent( QResizeEvent* );
-/*
-  virtual void mousePressEvent ( QMouseEvent * );
-  virtual void mouseReleaseEvent ( QMouseEvent * );
-  virtual void mouseMoveEvent ( QMouseEvent * );
-*/
 
 private:
 
