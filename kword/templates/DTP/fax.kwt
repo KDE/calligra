@@ -18,7 +18,7 @@
      <FLOW align="left" />
      <FORMAT id="1" pos="0" len="1" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="9" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -35,7 +35,7 @@
      <FLOW align="left" />
      <FORMAT id="1" pos="0" len="1" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="9" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -52,7 +52,7 @@
      <FLOW align="left" />
      <FORMAT id="1" pos="0" len="1" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="9" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -69,7 +69,7 @@
      <FLOW align="left" />
      <FORMAT id="1" pos="0" len="1" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="9" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -86,7 +86,7 @@
      <FLOW align="left" />
      <FORMAT id="1" pos="0" len="1" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="9" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -103,7 +103,7 @@
      <FLOW align="left" />
      <FORMAT id="1" pos="0" len="1" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="9" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -127,7 +127,7 @@
      <FLOW align="left" />
      <FORMAT id="1" pos="0" len="1" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="9" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -152,7 +152,7 @@
      <TABULATOR width="0.5" filling="0" ptpos="386.93" type="0" />
      <FORMAT id="1" pos="0" len="85" >
       <WEIGHT value="50" />
-      <FONT name="helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="11" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -175,7 +175,7 @@
      <FLOW align="center" />
      <FORMAT id="1" pos="0" len="3" >
       <WEIGHT value="50" />
-      <FONT name="helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="11" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -193,7 +193,7 @@
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
      <FORMAT id="1" pos="0" len="4" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="12" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -211,7 +211,7 @@
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
      <FORMAT id="1" pos="0" len="6" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="12" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -229,7 +229,7 @@
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
      <FORMAT id="1" pos="0" len="4" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="12" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -255,7 +255,7 @@
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
      <FORMAT id="1" pos="0" len="8" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="12" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -273,7 +273,7 @@
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
      <FORMAT id="1" pos="0" len="7" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="12" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -299,7 +299,7 @@
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
      <FORMAT id="1" pos="0" len="7" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="12" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -317,7 +317,7 @@
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
      <FORMAT id="1" pos="0" len="4" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="12" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -335,7 +335,7 @@
      <TABULATOR width="0.5" filling="0" ptpos="54.1418" type="0" />
      <FORMAT id="1" pos="0" len="4" >
       <WEIGHT value="50" />
-      <FONT name="adobe-helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="12" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -352,7 +352,7 @@
      <FLOW align="left" />
      <FORMAT id="1" pos="0" len="1" >
       <WEIGHT value="50" />
-      <FONT name="helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="11" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
@@ -383,7 +383,7 @@
      <FLOW align="right" />
      <FORMAT id="1" pos="0" len="11" >
       <WEIGHT value="50" />
-      <FONT name="helvetica" />
+      <!-- Use KWord's default font -->
       <SIZE value="11" />
       <ITALIC value="0" />
       <VERTALIGN value="0" />
