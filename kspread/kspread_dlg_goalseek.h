@@ -22,26 +22,25 @@
 
 #include <qdialog.h>
 #include <qpoint.h>
-#include <qvariant.h>
 
 class KSpreadCell;
 class KSpreadPoint;
 class KSpreadView;
 
 class QFrame;
-class QGridLayout; 
-class QHBoxLayout; 
+class QGridLayout;
+class QHBoxLayout;
 class QLabel;
 class QLineEdit;
 class QPushButton;
-class QVBoxLayout; 
+class QVBoxLayout;
 
 class KSpreadGoalSeekDlg : public QDialog
-{ 
+{
   Q_OBJECT
 
  public:
-  KSpreadGoalSeekDlg( KSpreadView * parent, QPoint const & marker, const char * name = 0, 
+  KSpreadGoalSeekDlg( KSpreadView * parent, QPoint const & marker, const char * name = 0,
                       bool modal = FALSE, WFlags fl = 0 );
   ~KSpreadGoalSeekDlg();
 
