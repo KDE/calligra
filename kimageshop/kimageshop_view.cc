@@ -41,7 +41,7 @@
 #include "gradienttool.h"
 
 #include <kruler.h>
-
+#include <klocale.h>
 #include <qpainter.h>
 #include <kaction.h>
 #include <qscrollbar.h>
@@ -60,75 +60,77 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
 
   // edit actions
 
-  m_undo = new KAction( tr("&Undo"), KImageShopBarIcon("undo"), 0, this, SLOT( undo() ),
+  m_undo = new KAction( i18n("&Undo"), KImageShopBarIcon("undo"), 0, this, SLOT( undo() ),
 			actionCollection(), "undo");
-  m_redo = new KAction( tr("&Redo"), KImageShopBarIcon("redo"), 0, this, SLOT( redo() ),
+  m_redo = new KAction( i18n("&Redo"), KImageShopBarIcon("redo"), 0, this, SLOT( redo() ),
 			actionCollection(), "redo");
-  m_cut = new KAction( tr("C&ut"), KImageShopBarIcon("editcut"), 0, this, SLOT( cut() ),
+  m_cut = new KAction( i18n("C&ut"), KImageShopBarIcon("editcut"), 0, this, SLOT( cut() ),
 		       actionCollection(), "cut");
-  m_copy = new KAction( tr("&Copy"), KImageShopBarIcon("editcopy"), 0, this, SLOT( copy() ),
+  m_copy = new KAction( i18n("&Copy"), KImageShopBarIcon("editcopy"), 0, this, SLOT( copy() ),
 			actionCollection(), "copy");
-  m_paste = new KAction( tr("&Paste"), KImageShopBarIcon("editpaste"), 0, this, SLOT( paste() ),
+  m_paste = new KAction( i18n("&Paste"), KImageShopBarIcon("editpaste"), 0, this, SLOT( paste() ),
 			 actionCollection(), "paste");
 
   // dialog actions
 
-  m_dialog_layer = new KToggleAction( tr("&Layer Dialog"), KImageShopBarIcon("layer_dialog"), 0, this,
+  m_dialog_layer = new KToggleAction( i18n("&Layer Dialog"), KImageShopBarIcon("layer_dialog"), 0, this,
 				SLOT( dialog_layer() ),actionCollection(), "dialog_layer");
-  m_dialog_color = new KToggleAction( tr("&Color Dialog"), KImageShopBarIcon("color_dialog"), 0, this,
+  m_dialog_color = new KToggleAction( i18n("&Color Dialog"), KImageShopBarIcon("color_dialog"), 0, this,
 				SLOT( dialog_color() ),actionCollection(), "dialog_color");
-  m_dialog_brush = new KToggleAction( tr("&Brush Dialog"), KImageShopBarIcon("brush_dialog"), 0, this,
+  m_dialog_brush = new KToggleAction( i18n("&Brush Dialog"), KImageShopBarIcon("brush_dialog"), 0, this,
 				SLOT( dialog_brush() ),actionCollection(), "dialog_brush");
-  m_dialog_gradient = new KToggleAction( tr("&Gradient Dialog"), KImageShopBarIcon("gradient_dialog"), 0, this,
+  m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"), KImageShopBarIcon("gradient_dialog"), 0, this,
 				   SLOT( dialog_gradient() ),actionCollection(), "dialog_gradient");
-  m_dialog_gradienteditor = new KToggleAction( tr("Gradient &Editor"), KImageShopBarIcon("gradienteditor_dialog"),
+  m_dialog_gradienteditor = new KToggleAction( i18n("Gradient &Editor"), KImageShopBarIcon("gradienteditor_dialog"),
 					 0, this, SLOT( dialog_gradienteditor() ),
 					 actionCollection(), "dialog_gradienteditor");
 
   // tool actions
 
-  m_tool_move = new KToggleAction( tr("&Move tool"), KImageShopBarIcon("move"), 0, this,
+  m_tool_move = new KToggleAction( i18n("&Move tool"), KImageShopBarIcon("move"), 0, this,
 			     SLOT( tool_move() ),actionCollection(), "tool_move");
-  ( (KToggleAction*) m_tool_move )->setExclusiveGroup( "tools" );
-  m_tool_zoom = new KToggleAction( tr("&Zoom tool"), KImageShopBarIcon("viewmag"), 0, this,
+  m_tool_move->setExclusiveGroup( "tools" );
+  m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), KImageShopBarIcon("viewmag"), 0, this,
 			     SLOT( tool_zoom() ),actionCollection(), "tool_zoom");
-  ( (KToggleAction*) m_tool_zoom )->setExclusiveGroup( "tools" );
-  m_tool_brush = new KToggleAction( tr("&Brush tool"), KImageShopBarIcon("paintbrush"), 0, this,
+  m_tool_zoom->setExclusiveGroup( "tools" );
+  m_tool_brush = new KToggleAction( i18n("&Brush tool"), KImageShopBarIcon("paintbrush"), 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
-  ( (KToggleAction*) m_tool_brush )->setExclusiveGroup( "tools" );
-  m_tool_gradient = new KToggleAction( tr("&Gradient tool"), KImageShopBarIcon("gradient"), 0, this,
+  m_tool_brush->setExclusiveGroup( "tools" );
+  m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), KImageShopBarIcon("gradient"), 0, this,
   				 SLOT( tool_gradient() ),actionCollection(), "tool_gradient");
-  ( (KToggleAction*) m_tool_gradient )->setExclusiveGroup( "tools" );
+  m_tool_gradient->setExclusiveGroup( "tools" );
+
+  m_tool_move->setChecked( true );
 
   // layer actions
 
-  m_layer_rotate180 = new KAction( tr("Rotate 1&80"), 0, this,
+  m_layer_rotate180 = new KAction( i18n("Rotate 1&80"), 0, this,
 				   SLOT( layer_rotate180() ),actionCollection(), "layer_rotate180");
 
-  m_layer_rotateleft90 = new KAction( tr("&Rotate &270"), 0, this,
+  m_layer_rotateleft90 = new KAction( i18n("&Rotate &270"), 0, this,
 				      SLOT( layer_rotateleft90() ),actionCollection(), "layer_rotateleft90");
 
-  m_layer_rotateright90 = new KAction( tr("&Rotate &90"), 0, this,
+  m_layer_rotateright90 = new KAction( i18n("&Rotate &90"), 0, this,
 				       SLOT( layer_rotateright90() ),actionCollection(), "layer_rotateright90");
 
-  m_layer_mirrorX = new KAction( tr("Mirror &X"), 0, this,
+  m_layer_mirrorX = new KAction( i18n("Mirror &X"), 0, this,
 				 SLOT( layer_mirrorX() ),actionCollection(), "layer_mirrorX");
 
-  m_layer_mirrorY = new KAction( tr("Mirror &Y"), 0, this,
+  m_layer_mirrorY = new KAction( i18n("Mirror &Y"), 0, this,
 				 SLOT( layer_mirrorY() ),actionCollection(), "layer_mirrorY");
 
   // image actions
-  m_merge_all_layers = new KAction( tr("Merge &all layers"), 0, this,
+  m_merge_all_layers = new KAction( i18n("Merge &all layers"), 0, this,
 				    SLOT( merge_all_layers() ),actionCollection(), "merge_all_layers");
 
-  m_merge_visible_layers = new KAction( tr("Merge &visible layers"), 0, this,
+  m_merge_visible_layers = new KAction( i18n("Merge &visible layers"), 0, this,
 				    SLOT( merge_visible_layers() ),actionCollection(), "merge_visible_layers");
 
-  m_merge_linked_layers = new KAction( tr("Merge &linked layers"), 0, this,
+  m_merge_linked_layers = new KAction( i18n("Merge &linked layers"), 0, this,
 				    SLOT( merge_linked_layers() ),actionCollection(), "merge_linked_layers");
 
   // misc actions
-  m_preferences = new KAction( tr("&Preferences"), 0, this,
+  m_preferences = new KAction( i18n("&Preferences"), 0, this,
 			       SLOT( preferences() ),actionCollection(), "preferences");
 
   // scrollbars

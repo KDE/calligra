@@ -5,8 +5,6 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 
-#include <kimgio.h>
-
 extern "C"
 {
     void* init_libkimageshop()
@@ -20,8 +18,6 @@ KInstance* KImageShopFactory::s_global = 0;
 KImageShopFactory::KImageShopFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-  KImageIO::registerFormats();
-
   s_global = new KInstance( "kimageshop" );
   
   s_global->dirs()->addResourceType("kis",
