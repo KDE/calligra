@@ -57,7 +57,7 @@ VSelectTool::draw()
 
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
-	if( m_state != normal || rect.contains( last() ) )
+	if( m_state != normal || rect.contains( first() ) )
 	{
 		if( m_state == normal )
 			m_state = moving;
