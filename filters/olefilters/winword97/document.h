@@ -29,6 +29,7 @@ DESCRIPTION
 #include <msword.h>
 #include <properties.h>
 #include <qlist.h>
+class myFile;
 
 class Document: private MsWord
 {
@@ -37,10 +38,10 @@ protected:
     // Construction. Invoke with the OLE streams that comprise the Word document.
 
     Document(
-        const U8 *mainStream,
-        const U8 *table0Stream,
-        const U8 *table1Stream,
-        const U8 *dataStream);
+        const myFile &mainStream,
+        const myFile &table0Stream,
+        const myFile &table1Stream,
+        const myFile &dataStream);
     virtual ~Document();
 
     // Metadata.
@@ -64,8 +65,8 @@ protected:
     class Run
     {
     public:
-        U32 start;
-        U32 end;
+        unsigned start;
+        unsigned end;
 
         // We need at least one virtual function to enable RTTI!
 
@@ -80,7 +81,7 @@ protected:
         Properties *values;
     };
 
-    // Specialisation for embedded images etc.
+    // Specialisations for embedded images and drawings.
 
     class Image: public Run
     {
@@ -89,6 +90,12 @@ protected:
         QString type;
         unsigned length;
         const char *data;
+    };
+
+    class VectorGraphic: public Image
+    {
+    public:
+        const char *delay;
     };
 
     // Specialisation for embedded objects etc.

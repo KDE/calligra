@@ -27,10 +27,6 @@ DESCRIPTION
 #include <kdebug.h>
 #include <msdrawing.h>
 #include <mswordgenerated.h>
-#include <koFilterManager.h>
-#include <qfile.h>
-#include <ktempfile.h>
-#include <unistd.h>
 
 void MsDrawing::getDrawing(
     const U8 *in,
@@ -52,17 +48,6 @@ void MsDrawing::getDrawing(
         pictureType,
         pictureLength,
         pictureData);
-
-        QString extension = "msod";
-        QString mimeType;
-        KTempFile tempFile(QString::null, "." + extension);
-        KoFilterManager *mgr = KoFilterManager::self();
-
-        tempFile.file()->writeBlock((const char *)in, count);
-        tempFile.close();
-            kdDebug(s_area) << "MsDrawing:walkFile: IMPORT MSOD: " << count << endl;
-        QString result = mgr->import(tempFile.name(), mimeType, "", "tar:" );
-        //unlink(tempFile.name().local8Bit());
 }
 
 unsigned MsDrawing::read(const U8 *in, FBSE *out, unsigned count)

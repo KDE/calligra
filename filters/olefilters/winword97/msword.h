@@ -34,6 +34,7 @@ DESCRIPTION
 #include <mswordgenerated.h>
 #include <qarray.h>
 
+class myFile;
 class Properties;
 
 class MsWord: public MsWordGenerated
@@ -44,10 +45,10 @@ public:
     // document.
 
     MsWord(
-        const U8 *mainStream,
-        const U8 *table0Stream,
-        const U8 *table1Stream,
-        const U8 *dataStream);
+        const myFile &mainStream,
+        const myFile &table0Stream,
+        const myFile &table1Stream,
+        const myFile &dataStream);
     virtual ~MsWord();
 
     // Metadata.
@@ -304,21 +305,20 @@ protected:
         U32 fc,
         QString &mimeType);
 
-    // Office art access by anchor location. If no picture is found,
-    // the the length will be set to zero. The returned pictureId is
-    // guaranteed to be the same for pictures which appear multiple
-    // times in the document.
+    // Office art access by anchor location. If not found,
+    // the return value will be false.
 
-    void getOfficeArt(
+    bool getOfficeArt(
         U32 anchorCp,
-        U32 *pictureId,
-        QString &pictureType,
-        U32 *pictureLength,
-        const U8 **pictureData);
+        FSPA &result,
+        unsigned *pictureLength,
+        const U8 **pictureData,
+        const U8 **delayData);
 
-    // Picture access.
+    // Picture access by picture id. If not found,
+    // the return value will be false.
 
-    void getPicture(
+    bool getPicture(
         U32 fc,
         QString &pictureType,
         U32 *pictureLength,

@@ -17,12 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <koFilterManager.h>
+#include <ktempfile.h>
 #include <properties.h>
 #include <qfile.h>
 #include <qregexp.h>
 #include <winworddoc.h>
 #include <typeinfo>
-#define DISABLE_FLOATING false
+#include <unistd.h>
+
 #define ROW_SIZE 20
 
 WinWordDoc::WinWordDoc(
@@ -32,10 +35,10 @@ WinWordDoc::WinWordDoc(
     const myFile &table1Stream,
     const myFile &dataStream) :
         Document(
-            mainStream.data,
-            table0Stream.data,
-            table1Stream.data,
-            dataStream.data),
+            mainStream,
+            table0Stream,
+            table1Stream,
+            dataStream),
         m_result(result)
 {
     m_phase = INIT;
@@ -296,43 +299,7 @@ void WinWordDoc::generateFormats(Attributes &attributes)
             QString ourKey;
             QString uid;
 
-            // Send the picture to the outside world and get back the UID.
-
             ourKey = "image" + QString::number(image->id) + "." + image->type;
-if (image->type == "wmf")
-{
-            QString mimeType;
-
-            emit signalSavePart(
-                    ourKey,
-                    uid,
-                    mimeType,
-                    image->type,
-                    "",
-                    image->length,
-                    image->data);
-
-            // Add an entry to the list of embedded objects too. TBD: fix
-            // RECT and FRAME settings.
-
-/*
-            m_embedded.append(
-                "  <EMBEDDED>\n");
-            m_embedded.append("<OBJECT url=\"");
-            m_embedded.append(uid);
-            m_embedded.append("\" mime=\"");
-            m_embedded.append(mimeType);
-            m_embedded.append("\">\n<RECT x=\"30\" y=\"190\" w=\"120\" h=\"80\"/>\n");
-            m_embedded.append("</OBJECT>\n");
-            m_embedded.append("<SETTINGS>\n");
-            m_embedded.append("<FRAME left=\"30\" top=\"190\" right=\"149\" bottom=\"269\" tRed=\"0\" tGreen=\"0\" tBlue=\"0\" bRed=\"0\" bGreen=\"0\" bBlue=\"0\"/>\n");
-            m_embedded.append("</SETTINGS>\n");
-            m_embedded.append(
-                "  </EMBEDDED>\n");
-*/
-}
-else
-{
             emit signalSavePic(
                     ourKey,
                     uid,
@@ -356,7 +323,56 @@ kdError() << "found picture:" << ourKey<< " as " << uid << endl;
             m_pixmaps.append("\" name=\"");
             m_pixmaps.append(uid);
             m_pixmaps.append("\"/>\n");
-}
+        }
+        else
+        if (typeid(VectorGraphic) == typeid(*run))
+        {
+            VectorGraphic *vectorGraphic = static_cast<VectorGraphic *>(run);
+            QString ourKey;
+            QString uid;
+            QString mimeType;
+
+            // Send the picture to the outside world and get back the UID.
+
+            ourKey = "vectorGraphic" + QString::number(vectorGraphic->id) + "." + vectorGraphic->type;
+    QString filterArgs;
+//    KTempFile delayFile(QString::null, "." + vectorGraphic->type);
+
+//    delayFile.file()->writeBlock((const char *)vectorGraphic->delay, vectorGraphic->delayLength);
+//    delayFile.close();
+    filterArgs = "shape-id=";
+    filterArgs += QString::number(vectorGraphic->id);
+    filterArgs += ";delay-stream=";
+    filterArgs += QString::number((unsigned long)vectorGraphic->delay);
+kdDebug() << "WinWordDoc: IMPORT MSOD: " << filterArgs << endl;
+
+            emit signalSavePart(
+                    ourKey,
+                    uid,
+                    mimeType,
+                    vectorGraphic->type,
+                    filterArgs,
+                    vectorGraphic->length,
+                    vectorGraphic->data);
+//    unlink(delayFile.name().local8Bit());
+kdDebug() << "WinWordDoc: **************saved:" <<mimeType<< endl;
+
+            // Add an entry to the list of embedded objects too. TBD: fix
+            // RECT and FRAME settings.
+
+            m_embedded.append(
+                "  <EMBEDDED>\n");
+            m_embedded.append("<OBJECT url=\"");
+            m_embedded.append(uid);
+            m_embedded.append("\" mime=\"");
+            m_embedded.append(mimeType);
+            m_embedded.append("\">\n<RECT x=\"30\" y=\"190\" w=\"120\" h=\"80\"/>\n");
+            m_embedded.append("</OBJECT>\n");
+            m_embedded.append("<SETTINGS>\n");
+            m_embedded.append("<FRAME left=\"30\" top=\"190\" right=\"149\" bottom=\"269\" tRed=\"0\" tGreen=\"0\" tBlue=\"0\" bRed=\"0\" bGreen=\"0\" bBlue=\"0\"/>\n");
+            m_embedded.append("</SETTINGS>\n");
+            m_embedded.append(
+                "  </EMBEDDED>\n");
         }
         else
         if (typeid(Object) == typeid(*run))
@@ -506,24 +522,11 @@ void WinWordDoc::gotTableBegin(
 
         // This '0' will be replaced with the anchor character.
 
-if (DISABLE_FLOATING)
-{
-        if (tableNumber == 1)
-            m_body.append("This filter is currently unable to position tables correctly."
-                " All the tables are at the end of this document. Other tables can be found by looking for strings like"
-                "\"Table 1 goes here\"");
-        m_body.append("Table ");
-        m_body.append(QString::number(tableNumber));
-        m_body.append(" goes here.</TEXT>\n</PARAGRAPH>\n");
-}
-else
-{
         m_body.append('0');
         m_body.append("</TEXT>\n<FORMATS>\n<FORMAT id=\"6\" pos=\"0\">\n");
         m_body.append("<ANCHOR type=\"grpMgr\" instance=\"grpmgr_");
         m_body.append(QString::number(tableNumber));
         m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n</PARAGRAPH>\n");
-}
     }
 }
 
@@ -593,14 +596,8 @@ void WinWordDoc::gotTableRow(
             cellEdge = m_cellEdges[tableNumber - 1]->at(right);
             cell.append(QString::number(cellEdge));
             cell.append("\" top=\"");
-if (DISABLE_FLOATING)
-            cell.append(QString::number(400 + tableNumber * 10 + rowNumber * ROW_SIZE));
-else
             cell.append(QString::number(ROW_SIZE + rowNumber * ROW_SIZE));
             cell.append("\" bottom=\"");
-if (DISABLE_FLOATING)
-            cell.append(QString::number(400 + ROW_SIZE + tableNumber * 10 + rowNumber * ROW_SIZE));
-else
             cell.append(QString::number(2 * ROW_SIZE + rowNumber * ROW_SIZE));
             cell.append(
                 "\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\" "

@@ -137,10 +137,6 @@ void Document::createAttributes(
         }
         else
         {
-            U32 pictureId;
-            QString pictureType;
-            U32 pictureLength;
-            const U8 *pictureData;
             U8 fieldType;
 
             // This is either a picture or an Office art object or...
@@ -165,49 +161,81 @@ void Document::createAttributes(
                 }
                 else
                 {
-                    pictureId = 0;
-                    pictureLength = 0;
+                    U32 drawingId;
+                    QString drawingType;
+                    U32 drawingLength;
+                    const U8 *drawingData;
+                    const U8 *delayData;
+                    bool found;
+
                     if (text[chpxs[i].startFc].unicode() == SPECIAL_PICTURE)
                     {
-                        // A picture.
+                        // A drawing.
 
-                        pictureId = chp->fcPic_fcObj_lTagObj;
-                        MsWord::getPicture(
-                            pictureId,
-                            pictureType,
-                            &pictureLength,
-                            &pictureData);
+                        drawingId = chp->fcPic_fcObj_lTagObj;
+                        found = MsWord::getPicture(
+                                    drawingId,
+                                    drawingType,
+                                    &drawingLength,
+                                    &drawingData);
+                        delayData = 0L;
                     }
                     else
                     {
                         // A drawn object, a.k.a. "Office Art".
 
-                        MsWord::getOfficeArt(
-                            m_characterPosition + chpxs[i].startFc,
-                            &pictureId,
-                            pictureType,
-                            &pictureLength,
-                            &pictureData);
-                    }
-                    if (pictureLength)
-                    {
-                        Image *image = new Image;
+    // the the length will be set to zero. The returned drawingId is
+    // guaranteed to be the same for drawings which appear multiple
+    // times in the document.
 
-                        kdDebug(s_area) << "Document::createAttributes: picture type: " << pictureType << endl;
-                        image->start = chpxs[i].startFc;
-                        image->end = chpxs[i].endFc;
-                        m_imageNumber++;
-                        image->id = (unsigned)pictureId;
-                        image->type = pictureType;
-                        image->length = (unsigned)pictureLength;
-                        image->data = (const char *)pictureData;
-    // TBD: Kword pictures are broken!
-                        run = image;
+                        FSPA shape;
+
+                        found = MsWord::getOfficeArt(
+                                    m_characterPosition + chpxs[i].startFc,
+                                    shape,
+                                    &drawingLength,
+                                    &drawingData,
+                                    &delayData);
+                        drawingId = shape.spid;
+                        drawingType = "msod";
+                    }
+                    if (found)
+                    {
+                        kdDebug(s_area) << "Document::createAttributes: drawing type: " <<
+                            drawingType << endl;
+                        if ((drawingType == "wmf") ||
+                            (drawingType == "msod"))
+                        {
+                            VectorGraphic *vectorGraphic = new VectorGraphic;
+
+                            vectorGraphic->start = chpxs[i].startFc;
+                            vectorGraphic->end = chpxs[i].endFc;
+                            vectorGraphic->id = drawingId;
+                            vectorGraphic->type = drawingType;
+                            vectorGraphic->length = drawingLength;
+                            vectorGraphic->data = (const char *)drawingData;
+                            vectorGraphic->delay = (const char *)delayData;
+                            run = vectorGraphic;
+                        }
+                        else
+                        {
+                            Image *image = new Image;
+
+                            image->start = chpxs[i].startFc;
+                            image->end = chpxs[i].endFc;
+                            m_imageNumber++;
+                            image->id = drawingId;
+                            image->type = drawingType;
+                            image->length = drawingLength;
+                            image->data = (const char *)drawingData;
+        // TBD: Kword drawings are broken!
+                            run = image;
+                        }
                     }
                     else
                     {
-                        kdError(s_area) << "Document::createAttributes: cannot find picture:" <<
-                            pictureId << endl;
+                        kdError(s_area) << "Document::createAttributes: cannot find drawing:" <<
+                            (m_characterPosition + chpxs[i].startFc) << endl;
                     }
                 }
                 break;
@@ -256,10 +284,10 @@ void Document::createAttributes(
 }
 
 Document::Document(
-    const U8 *mainStream,
-    const U8 *table0Stream,
-    const U8 *table1Stream,
-    const U8 *dataStream) :
+    const myFile &mainStream,
+    const myFile &table0Stream,
+    const myFile &table1Stream,
+    const myFile &dataStream) :
         MsWord(
             mainStream,
             table0Stream,

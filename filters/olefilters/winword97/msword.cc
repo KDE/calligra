@@ -24,8 +24,8 @@
 */
 
 #include <kdebug.h>
-#include <msdrawing.h>
 #include <msword.h>
+#include <myfile.h>
 #include <properties.h>
 #include <qtextcodec.h>
 
@@ -583,7 +583,7 @@ void MsWord::getField(
 
 void MsWord::getObject(
     U32 fc,
-    QString &mimeType)
+    QString &/*mimeType*/)
 {
     const U8 *in = m_dataStream + fc;
     OBJHEADER data;
@@ -592,76 +592,45 @@ void MsWord::getObject(
 
     MsWordGenerated::read(in, &data);
 
-    // Skip the complete OBJHEADER, even if it is longer than we exepct.
+    // Skip the complete OBJHEADER, even if it is longer than we expect.
 
     in += data.cbHeader;
 }
 
 // Get a piece of Office art by walking the FSPAs.
 
-void MsWord::getOfficeArt(
+bool MsWord::getOfficeArt(
     U32 anchorCp,
-    U32 *pictureId,
-    QString &pictureType,
-    U32 *pictureLength,
-    const U8 **pictureData)
+    FSPA &result,
+    unsigned *pictureLength,
+    const U8 **pictureData,
+    const U8 **delayData)
 {
     // A spa table is a plex of FSPAs.
 
     Plex<FSPA, sizeof(FSPA)> fspas = Plex<FSPA, sizeof(FSPA)>(this);
     U32 actualStartCp;
     U32 actualEndCp;
-    FSPA data;
 
     // Walk the FSPAs.
 
-    pictureType = "";
-    *pictureLength = 0;
     *pictureData = 0L;
+    *pictureLength = 0;
+    *delayData = 0L;
     fspas.startIteration(m_tableStream + m_fib.fcPlcspaMom, m_fib.lcbPlcspaMom);
-    while (fspas.getNext(&actualStartCp, &actualEndCp, &data))
+    while (fspas.getNext(&actualStartCp, &actualEndCp, &result))
     {
         if (actualStartCp == anchorCp)
         {
-            MsDrawing::MSOBLIPTYPE msType;
+            *pictureLength = (unsigned)m_fib.lcbDggInfo;
+            *pictureData = m_tableStream + m_fib.fcDggInfo;
 
-            MsDrawing::getDrawing(
-                m_tableStream + m_fib.fcDggInfo,
-                m_fib.lcbDggInfo,
-                data.spid,
-                m_dataStream,
-                &msType,
-                pictureLength,
-                pictureData);
-            *pictureId = data.spid;
-
-            // Convert the Microsoft picture type to a common file extension.
-
-            switch (msType)
-            {
-            case MsDrawing::msoblipEMF:
-            case MsDrawing::msoblipWMF:
-                pictureType = "wmf";
-                break;
-            case MsDrawing::msoblipPICT:
-                pictureType = "pict";
-                break;
-            case MsDrawing::msoblipJPEG:
-                pictureType = "jpg";
-                break;
-            case MsDrawing::msoblipPNG:
-                pictureType = "png";
-                break;
-            case MsDrawing::msoblipDIB:
-                pictureType = "dib";
-                break;
-            default:
-                pictureType = "img";
-                break;
-            };
-            break;
+            // TBD: somewhat surprisingly, the m_mainStream contains these!
+            *delayData = m_mainStream;
+            return true;
         }
     }
+    return false;
 }
 
 // Walk a FKP of BTEs outputting text.
@@ -896,7 +865,7 @@ void MsWord::getParagraphsFromPapxs(
 
 // Picture access.
 
-void MsWord::getPicture(
+bool MsWord::getPicture(
     U32 fc,
     QString &pictureType,
     U32 *pictureLength,
@@ -943,12 +912,13 @@ void MsWord::getPicture(
     //kdDebug(s_area) << "MsWord::getPicture: dyaOrigin: " << data.dyaOrigin << endl;
     //kdDebug(s_area) << "MsWord::getPicture: mm.x: " << data.mfp.xExt << endl;
     //kdDebug(s_area) << "MsWord::getPicture: mm.y: " << data.mfp.yExt << endl;
-    //U8 *t =m_dataStream + fc;    
+    //U8 *t =m_dataStream + fc;
     //if (0)
     //for (int i = 0; i < 67; i += 1)
     //{
-    //    kdDebug() << i <<" "<< QString::number(t[i], 16) << endl; 
+    //    kdDebug() << i <<" "<< QString::number(t[i], 16) << endl;
     //}
+    return (*pictureLength > 0);
 }
 
 // Create a cache of information about lists.
@@ -1105,14 +1075,14 @@ void MsWord::getStyles()
 }
 
 MsWord::MsWord(
-        const U8 *mainStream,
-        const U8 *table0Stream,
-        const U8 *table1Stream,
-        const U8 *dataStream)
+        const myFile &mainStream,
+        const myFile &table0Stream,
+        const myFile &table1Stream,
+        const myFile &dataStream)
 {
     m_constructionError = QString("");
     m_fib.nFib = s_minWordVersion;
-    read(mainStream, &m_fib);
+    read(mainStream.data, &m_fib);
     if (m_fib.nFib <= s_minWordVersion)
     {
         constructionError(__LINE__, "the document was created using an unsupported version of Word");
@@ -1137,24 +1107,24 @@ MsWord::MsWord(
     // copy the contents of the streams, and that we rely on the storage
     // being present until we are destroyed.
 
-    m_mainStream = mainStream;
-    if (table0Stream && table1Stream)
+    m_mainStream = mainStream.data;
+    if (table0Stream.data && table1Stream.data)
     {
         // If and only if both table streams are present, the FIB tells us which
         // we should use.
 
-        m_tableStream = m_fib.fWhichTblStm ? table1Stream : table0Stream;
+        m_tableStream = m_fib.fWhichTblStm ? table1Stream.data : table0Stream.data;
     }
     else
-    if (table0Stream)
+    if (table0Stream.data)
     {
-        m_tableStream = table0Stream;
+        m_tableStream = table0Stream.data;
     }
     else
     {
-        m_tableStream = table1Stream;
+        m_tableStream = table1Stream.data;
     }
-    m_dataStream = dataStream;
+    m_dataStream = dataStream.data;
     if (!m_tableStream)
     {
         // Older versions of Word had no separate table stream.
