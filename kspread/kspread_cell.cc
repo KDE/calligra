@@ -1305,6 +1305,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     case date_format14:
     case date_format15:
     case date_format16:
+    case date_format17:
         break;
     case fraction_half:
     case fraction_quarter:
@@ -1539,6 +1540,12 @@ QString KSpreadCell::createDateFormat( )
         tmp=tmp2.setNum(m_Date.year());
         tmp=tmp+"-"+QString().sprintf("%02d", m_Date.month())+"-";
         tmp=tmp+QString().sprintf("%02d", m_Date.day());
+    }
+    else if(tmpFormat==date_format17) /*2 february 2000*/
+    {
+      tmp=QString().sprintf("%d", m_Date.day());
+      tmp=tmp+" "+locale()->monthName(m_Date.month())+" ";
+      tmp=tmp+tmp2.setNum(m_Date.year());
     }
     else
         tmp = locale()->formatDate(m_Date,true);
@@ -2143,7 +2150,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_Date=context.value()->dateValue();
     formatNumber tmpFormat= getFormatNumber(column(),row());
     if( tmpFormat != TextDate
-    && !(tmpFormat>=200 &&tmpFormat<=215))
+    && !(tmpFormat>=200 &&tmpFormat<=216))
         {
         setFormatNumber(ShortDate);
         m_strFormularOut = locale()->formatDate(m_Date,true);
@@ -4236,7 +4243,7 @@ void KSpreadCell::checkValue()
         m_dValue = 0;
         formatNumber tmpFormat=getFormatNumber(column(),row());
         if(tmpFormat!=TextDate &&
-        !(tmpFormat>=200&&tmpFormat<=215))
+        !(tmpFormat>=200&&tmpFormat<=216))
                 {
                 //test if it's a short date or text date.
                 if( (locale()->formatDate(tmpDate,true)==m_strText))
@@ -4535,7 +4542,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
             cell.appendChild( text );
         }
         else if( (getFormatNumber(m_iColumn,m_iRow)==ShortDate || getFormatNumber(m_iColumn,m_iRow)==TextDate
-        || (getFormatNumber(m_iColumn,m_iRow)>=200 && getFormatNumber(m_iColumn,m_iRow)<=215))&& m_bDate )
+        || (getFormatNumber(m_iColumn,m_iRow)>=200 && getFormatNumber(m_iColumn,m_iRow)<=216))&& m_bDate )
         {
             QDomElement text = doc.createElement( "text" );
             QString tmp;
@@ -4834,7 +4841,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         }
         // A date
         else if( getFormatNumber(m_iColumn,m_iRow) == ShortDate || getFormatNumber(m_iColumn,m_iRow) == TextDate
-        || (getFormatNumber(m_iColumn,m_iRow)>=200 && getFormatNumber(m_iColumn,m_iRow)<=215))
+        || (getFormatNumber(m_iColumn,m_iRow)>=200 && getFormatNumber(m_iColumn,m_iRow)<=216))
         {
             int pos;
             int pos1;

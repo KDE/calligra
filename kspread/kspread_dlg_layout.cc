@@ -1194,7 +1194,7 @@ else if(time->isChecked())
         else
                 listFormat->setCurrentItem(0);
         }
-m_bFormatNumberChanged=true;
+ m_bFormatNumberChanged=true;
 if( date->isChecked() && dlg->m_bDate)
         makeDateFormat();
 else
@@ -1296,7 +1296,13 @@ else if(listFormat->currentItem()==17) /*2000-02-18*/
         tmp=tmp+"-"+QString().sprintf("%02d", dlg->m_date.month())+"-";
         tmp=tmp+QString().sprintf("%02d", dlg->m_date.day());
         }
-exampleLabel->setText(tmp);
+ else if( listFormat->currentItem()==18) /*2000-02-18*/
+        {
+	   tmp=QString().sprintf("%d", dlg->m_date.day());
+	   tmp=tmp+" "+KGlobal::locale()->monthName(dlg->m_date.month())+" ";
+	   tmp=tmp+tmp2.setNum(dlg->m_date.year());
+        }
+ exampleLabel->setText(tmp);
 }
 
 
@@ -1379,6 +1385,12 @@ tmp=tmp.setNum(2000);
 tmp=tmp+"-"+QString().sprintf("%02d", 2)+"-";
 tmp=tmp+tmp2.setNum(18);
 list+=tmp;
+/*2 february 2000*/
+ tmp=tmp2.setNum(18);
+ tmp=tmp+" "+KGlobal::locale()->monthName(2)+" ";
+ tmp=tmp+tmp2.setNum(2000);
+list+=tmp;
+
 listFormat->insertStringList(list);
 if( dlg->formatNumber==KSpreadCell::ShortDate )
         listFormat->setCurrentItem(0);
@@ -1416,6 +1428,8 @@ else if(dlg->formatNumber==KSpreadCell::date_format15)
         listFormat->setCurrentItem(16);
 else if(dlg->formatNumber==KSpreadCell::date_format16)
         listFormat->setCurrentItem(17);
+else if(dlg->formatNumber==KSpreadCell::date_format17)
+        listFormat->setCurrentItem(18);
 else
         listFormat->setCurrentItem(0);
 
@@ -1762,6 +1776,8 @@ void CellLayoutPageFloat::applyLayout( KSpreadLayout *_obj )
                 _obj->setFormatNumber(KSpreadCell::date_format15 );
         else if(listFormat->currentItem()==17)
                 _obj->setFormatNumber(KSpreadCell::date_format16 );
+        else if(listFormat->currentItem()==18)
+                _obj->setFormatNumber(KSpreadCell::date_format17 );
         }
     else if(time->isChecked())
         {
