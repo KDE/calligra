@@ -1549,6 +1549,8 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
   KSpreadCell* lastCell;
   QPoint destination;
   bool searchThroughEmpty = TRUE;
+  int row;
+  int col;
 
   QPoint marker = m_bChoose ?
     selectionInfo()->getChooseMarker() : selectionInfo()->marker();
@@ -1565,7 +1567,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.y() != 1))
     {
       lastCell = cell;
-      int row = marker.y()-1;
+      row = marker.y()-1;
       cell = table->cellAt(cell->column(), row);
       while((cell != NULL) && (row > 1) && (!cell->isEmpty()) )
       {
@@ -1589,8 +1591,19 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         cell = table->getNextCellUp(cell->column(), cell->row());
       }
     }
+
+    if (cell == NULL)
+      row = 1;
+    else
+      row = cell->row();
+
+    while ( table->rowLayout(row)->isHide() )
+    {
+      row++;
+    }
+
     destination.setX(marker.x());
-    destination.setY((cell == NULL) ? 1 : cell->row());
+    destination.setY(row);
     break;
 
   //Ctrl+Key_Down
@@ -1600,7 +1613,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.y() != KS_rowMax))
     {
       lastCell = cell;
-      int row = marker.y()+1;
+      row = marker.y()+1;
       cell = table->cellAt(cell->column(), row);
       while((cell != NULL) && (row < KS_rowMax) && (!cell->isEmpty()) )
       {
@@ -1624,8 +1637,19 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         cell = table->getNextCellDown(cell->column(), cell->row());
       }
     }
+
+    if (cell == NULL)
+      row = KS_rowMax;
+    else
+      row = cell->row();
+
+    while ( table->rowLayout(row)->isHide() )
+    {
+      row--;
+    }
+
     destination.setX(marker.x());
-    destination.setY((cell == NULL) ? KS_rowMax : cell->row());
+    destination.setY(row);
     break;
 
   //Ctrl+Key_Left
@@ -1635,7 +1659,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != 1))
     {
       lastCell = cell;
-      int col = marker.x()-1;
+      col = marker.x()-1;
       cell = table->cellAt(col, cell->row());
       while((cell != NULL) && (col > 1) && (!cell->isEmpty()) )
       {
@@ -1659,7 +1683,18 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         cell = table->getNextCellLeft(cell->column(), cell->row());
       }
     }
-    destination.setX((cell == NULL) ? 1 : cell->column());
+ 
+    if (cell == NULL)
+      col = 1;
+    else
+      col = cell->column();
+
+    while ( table->columnLayout(col)->isHide() )
+    {
+      col++;
+    }
+
+    destination.setX(col);
     destination.setY(marker.y());
     break;
 
@@ -1670,7 +1705,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != KS_colMax))
     {
       lastCell = cell;
-      int col = marker.x()+1;
+      col = marker.x()+1;
       cell = table->cellAt(col, cell->row());
       while((cell != NULL) && (col < KS_colMax) && (!cell->isEmpty()) )
       {
@@ -1694,7 +1729,18 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
         cell = table->getNextCellRight(cell->column(), cell->row());
       }
     }
-    destination.setX((cell == NULL) ? KS_colMax : cell->column());
+
+    if (cell == NULL)
+      col = KS_colMax;
+    else
+      col = cell->column();
+
+    while ( table->columnLayout(col)->isHide() )
+    {
+      col--;
+    }
+
+    destination.setX(col);
     destination.setY(marker.y());
     break;
 
