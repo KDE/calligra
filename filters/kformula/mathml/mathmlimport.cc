@@ -77,7 +77,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
-    if ( !mathML.setContent( &f, false, &errorMsg, &errorLine, &errorColumn ) ) {
+    if ( !mathML.setContent( &f, true, &errorMsg, &errorLine, &errorColumn ) ) {
         delete wrapper;
         QApplication::restoreOverrideCursor();
         kdError(KFormula::DEBUGID) << "Parsing error in " << filename << "! Aborting!" << endl
