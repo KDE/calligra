@@ -4246,6 +4246,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 		    chr->customItem()->draw( &painter, chr->x, cy, clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
 					     nSels && selectionStarts[ 0 ] <= i && selectionEnds[ 0 ] >= i );
 		    paintStart = i+1;
+		    qstr.replace(i,1," ");
 		    paintEnd = -1;
 		    lastFormat = chr->format();
 		    lastY = cy;
