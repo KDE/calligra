@@ -39,6 +39,7 @@
 #include <koPartSelectDia.h>
 
 KoShellWindow::KoShellWindow()
+ : KoMainWindow( KGlobal::instance() )
 {
   m_activePage = m_lstPages.end();
 
