@@ -78,8 +78,8 @@ KWDisplayFont::KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned i
 /*================================================================*/
 KWDisplayFont::~KWDisplayFont()
 {
-    document->displayFontList.setAutoDelete( true );
-    document->displayFontList.removeRef( this );
-    document->displayFontList.setAutoDelete( false );
+    int index = document->displayFontList.findRef(this);
+    if (index >= 0)
+        document->displayFontList.take( index );
 }
 
