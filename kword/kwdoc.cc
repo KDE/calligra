@@ -1174,6 +1174,40 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
+        QDomNode frameElement( body );
+        QDomElement fr;
+        for ( frameElement = frameElement.firstChild(); !frameElement.isNull(); frameElement = frameElement.nextSibling() )
+        {
+            fr = frameElement.toElement();
+            if ( fr.tagName()== "draw:frame"  )
+            {
+
+                kdDebug()<<" frame !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+                QDomNode tmp = fr.namedItem( "draw:text-box" );
+                if ( !tmp.isNull() )
+                {
+                    kdDebug()<<" text object  :"<<endl;
+                    KWTextFrameSet *fs = new KWTextFrameSet( this, fr.attribute( "draw:name" ) );
+                    m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
+
+                    kdDebug()<<"fr.attribute( svg:x )"<<fr.attribute( "svg:x" )<<" fr.attribute( svg:y ) "<<fr.attribute( "svg:y" )<<" fr.attribute( svg:width ) :"<<fr.attribute( "svg:width" )<<" fr.attribute( svg:height ) :"<< fr.attribute( "svg:height" )<<endl;
+//kdDebug()<<" fr.attribute( svg:x ) :"<<fr.attribute( "svg:x" )<<" fr.attribute( svg:y ) :"<<fr.attribute( "svg:y" )<<" fr.attribute( svg:width ) :"<<" fr.attribute( "svg:width" )<<endl;
+                    frame = new KWFrame( fs, KoUnit::parseValue(fr.attribute( "svg:x" ) ), KoUnit::parseValue(fr.attribute( "svg:y" ) ), KoUnit::parseValue(fr.attribute( "svg:width" ) ), KoUnit::parseValue(fr.attribute( "svg:height" ) ) );
+                    frame->loadCommonOasisProperties( context, fs );
+                    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
+                    frame->setNewFrameBehavior( KWFrame::Copy );
+                    fs->addFrame( frame );
+                    kdDebug()<<" tmp.firstChild().isNull() :"<<tmp.firstChild().isNull()<<endl;
+                    fs->loadOasisContent( tmp.firstChild().toElement(), context );
+
+                }
+                tmp = fr.namedItem( "draw:image" );
+                if ( !tmp.isNull() )
+                {
+                    kdDebug()<<" image object  :"<<endl;
+                }
+            }
+        }
     }
 
     // Header/Footer
