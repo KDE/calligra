@@ -79,11 +79,11 @@ KexiTableEdit::~KexiTableEdit()
 {
 }
 
-void KexiTableEdit::init(QVariant value, const QString& add)
+void KexiTableEdit::init(QVariant value, const QString& add, bool removeOld)
 {
 	clear();
 	m_origValue = value;
-	init(add);
+	init(add, removeOld);
 }
 
 void KexiTableEdit::setView(QWidget *v)

@@ -1850,12 +1850,12 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 		return;
 	}
 	
-	QVariant val;
+/*	QVariant val;
 	if (!removeOld) {
 		val = *bufferedValueAt(col);
 //		val = d->pCurrentItem->at(col);
 //		val = d->pCurrentItem->at(d->curCol);
-	}
+	}*/
 /*	switch(columnType(col))
 	{
 		case QVariant::Date:
@@ -1927,7 +1927,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 		d->editors.insert( tvcol, d->pEditor );
 	}*/
 
-	d->pEditor->init(val, addText);
+	d->pEditor->init(*bufferedValueAt(col), addText, removeOld);
 	moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
 
 /*

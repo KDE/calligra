@@ -55,7 +55,7 @@ class KexiBlobTableEdit : public KexiTableEdit
 
 	protected:
 		//! initializes this editor with \a add value
-		virtual void init(const QString& add);
+		virtual void init(const QString& add, bool removeOld);
 
 		QString openWithDlg(const QString& file);
 

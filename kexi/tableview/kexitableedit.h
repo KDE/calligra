@@ -39,8 +39,14 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 		virtual ~KexiTableEdit();
 
-		//! Just initializes \a value, and calls init(const QString& add). Called by KexiTableView
-		void init(QVariant value, const QString& add);
+		/*! Just initializes \a value, and calls init(const QString& add). 
+		 If \a removeOld is true, current value is set up as \a add.
+		 If \a removeOld if false, current value is set up as \a value + \add.
+		 \a value is stored as 'old value' -it'd be usable in the future
+		 (e.g. Combo Box editor can use old value if current vlause does not 
+		 match any item on the list).
+		 Called by KexiTableView. */
+		void init(QVariant value, const QString& add, bool removeOld = false);
 
 		//! @return true if editor's value is changed (compared to original value)
 		virtual bool valueChanged();
@@ -142,8 +148,11 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 	protected:
 		/*! Initializes this editor with \a add value, which should be somewhat added to the current
-		 value (already storted in m_origValue). Implement this. */
-		virtual void init(const QString& add) = 0;
+		 value (already storted in m_origValue). 
+		 If \a removeOld is true, a value should be set to \a add, otherwise 
+		 -it should be set to current \a m_origValue + \a add, if possible.
+		 Implement this. */
+		virtual void init(const QString& add, bool removeOld) = 0;
 
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 

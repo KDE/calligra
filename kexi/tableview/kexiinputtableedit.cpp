@@ -120,7 +120,7 @@ void KexiInputTableEdit::init()
 
 }
 	
-void KexiInputTableEdit::init(const QString& add)
+void KexiInputTableEdit::init(const QString& add, bool removeOld)
 {
 #if 0 //js
 	if(!ov.isEmpty())
@@ -155,9 +155,12 @@ void KexiInputTableEdit::init(const QString& add)
 	else
 #endif
 		QString tmp_val = m_origValue.toString();
+		QVariant origValue;
+		if (!removeOld)
+			origValue = m_origValue;
 
 		if (m_field->isFPNumericType()) {
-			if (m_origValue.toDouble() == 0.0) {
+			if (origValue.toDouble() == 0.0) {
 				tmp_val=add; //eat 0
 			}
 			else {
@@ -176,7 +179,7 @@ void KexiInputTableEdit::init(const QString& add)
 			m_lineedit->setValidator( validator );
 		}
 		else if (m_field->isIntegerType()) {
-			if (m_origValue.toInt() == 0) {
+			if (origValue.toInt() == 0) {
 				tmp_val=add; //eat 0
 			}
 			else {
@@ -193,7 +196,7 @@ void KexiInputTableEdit::init(const QString& add)
 		}
 
 		if (tmp_val.isEmpty()) {
-			if (m_origValue.isNull()) {
+			if (origValue.isNull()) {
 				//we have to set NULL initial value:
 				m_lineedit->setText(QString::null);
 			}

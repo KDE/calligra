@@ -67,7 +67,7 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 }
 
 //! initializes this editor with \a add value
-void KexiBlobTableEdit::init(const QString& add)
+void KexiBlobTableEdit::init(const QString& add, bool /*removeOld*/)
 {
 	QByteArray val = m_origValue.toByteArray();
 	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;

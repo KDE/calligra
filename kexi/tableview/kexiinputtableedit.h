@@ -63,7 +63,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 
 	protected:
 		//! initializes this editor with \a add value
-		virtual void init(const QString& add);
+		virtual void init(const QString& add, bool removeOld);
 
 		void showHintButton();
 		void init();

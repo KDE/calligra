@@ -77,7 +77,7 @@ KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QWidget *parent)
 	setFocusProxy(m_edit);
 }
 
-void KexiDateTableEdit::init(const QString& add)
+void KexiDateTableEdit::init(const QString& add, bool /*removeOld*/)
 {
 	bool ok;
 	QDate date = KGlobal::locale()->readDate(m_origValue.toString(), &ok);

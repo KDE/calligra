@@ -88,7 +88,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		//! internal
 		void updateFocus( const QRect& r );
 
-		virtual void init(const QString& /*add*/);
+		virtual void init(const QString& add, bool removeOld);
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
 

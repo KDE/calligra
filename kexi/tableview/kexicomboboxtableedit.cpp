@@ -99,7 +99,7 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field &f, QWidget *parent)
 //js	static_cast<KComboBox*>(m_view)->setCurrentItem(static_cast<int>(t));
 }
 
-void KexiComboBoxTableEdit::init(const QString& add)
+void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
 {
 //	m_combo->setCurrentItem(m_origValue.toInt() - 1);
 	if (add.isEmpty()) {
@@ -113,6 +113,9 @@ void KexiComboBoxTableEdit::init(const QString& add)
 		}
 	}
 	else {
+		//todo: autocompl.?
+		if (m_popup)
+			m_popup->tableView()->clearSelection();
 		m_lineedit->setText( add );
 	}
 	m_lineedit->end(false);
@@ -157,14 +160,14 @@ QVariant KexiComboBoxTableEdit::value(bool &ok)
 		const int row = m_popup->tableView()->currentRow();
 		if (row>=0)
 			return QVariant( row );
-		else
-			return QVariant();
+//		else
+//			return m_origValue; //QVariant();
 	}
-	else if (!m_lineedit->text().isEmpty()) {
+	if (m_lineedit->text().isEmpty())
+		return QVariant();
 /*js: TODO dont return just 1st row, but use autocompletion feature
       and: show message box if entered text does not match! */
-		return 0; //1st row
-	}
+//	return 0; //1st row
 	return m_origValue; //unchanged
 }
 

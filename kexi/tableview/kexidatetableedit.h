@@ -63,7 +63,7 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 		void slotShowDatePicker();
 
 	protected:
-		virtual void init(const QString& add);
+		virtual void init(const QString& add, bool removeOld);
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
 
