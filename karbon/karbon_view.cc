@@ -73,6 +73,7 @@ KarbonView::~KarbonView()
 	m_canvas = 0L;
 	delete m_dcop;
 	delete m_painterFactory;
+	delete m_toolbox;
 }
 
 DCOPObject* KarbonView::dcopObject()
