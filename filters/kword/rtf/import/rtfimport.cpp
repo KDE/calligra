@@ -217,7 +217,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"ulnone",	setFlagProperty,	state.format.underline, false ),
 	MEMBER(	0L,		"ulth",		setFlagProperty,	state.format.underlineThick, true ),
 	MEMBER(	0L,		"ulw",		setFlagProperty,	state.format.underlineWordByWord, true ),
-	MEMBER(	0L,		"ulw",		setFlagProperty,	state.format.underlineWave, true ),
+	MEMBER(	0L,		"ulwave",	setFlagProperty,	state.format.underlineWave, true ),
 	MEMBER(	0L,		"up",		setUpProperty,		state.format.baseline, 6 ),
 	MEMBER(	0L,		"v",		setToggleProperty,	state.format.hidden, 0 ),
 	MEMBER(	"@pict",	"wbitmap",	setEnumProperty,	picture.type, RTFPicture::BMP ),
