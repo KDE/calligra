@@ -200,8 +200,14 @@ QDomDocument KSpreadDoc::saveXML()
 {
   //Terminate current cell edition, if any
   QPtrListIterator<KoView> it( views() );
-  for (; it.current(); ++it )
+
+  /* don't pull focus away from the editor if this is just a background
+     autosave */
+  if (!IsAutosaving())
+  {
+    for (; it.current(); ++it )
       static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
+  }
 
   QDomDocument doc( "spreadsheet" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );

@@ -97,6 +97,7 @@ public:
     bool modifiedAfterAutosave;
     bool m_bSingleViewMode;
     int m_numOperations;
+    bool m_autosaving;
 };
 
 // Used in singleViewMode
@@ -167,6 +168,7 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
   d->m_bSingleViewMode = singleViewMode;
   d->filterManager = 0L;
   d->modifiedAfterAutosave=false;
+  d->m_autosaving = false;
 
   // the parent setting *always* overrides! (Simon)
   if ( parent )
@@ -320,10 +322,12 @@ void KoDocument::slotAutoSave()
     //kdDebug()<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;
     if ( !m_file.isEmpty() && isModified() && d->modifiedAfterAutosave )
     {
-        // TODO temporary message in statusbar ?
-        /*bool ret =*/ saveNativeFormat( autoSaveFile( m_file ) );
-        setModified( true );
-        d->modifiedAfterAutosave=false;
+      d->m_autosaving = true;
+      // TODO temporary message in statusbar ?
+      /*bool ret =*/ saveNativeFormat( autoSaveFile( m_file ) );
+      setModified( true );
+      d->modifiedAfterAutosave=false;
+      d->m_autosaving = false;
     }
 }
 
@@ -1261,6 +1265,11 @@ DCOPObject * KoDocument::dcopObject()
 void KoDocument::setErrorMessage( const QString& errMsg )
 {
     d->lastErrorMessage = errMsg;
+}
+
+bool KoDocument::IsAutosaving()
+{
+  return d->m_autosaving;
 }
 
 #include "koDocument.moc"

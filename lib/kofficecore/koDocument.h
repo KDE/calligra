@@ -372,6 +372,11 @@ public:
   void setAutoSave( int delay );
 
   /**
+   * Checks whether the document is currently in the process of autosaving
+   */
+  bool IsAutosaving();
+
+  /**
    * Retrieve the default value for autosave. Called by the applications
    * to use the correct default in their config
    */
