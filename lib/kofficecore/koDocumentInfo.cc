@@ -107,6 +107,15 @@ bool KoDocumentInfo::saveOasis( KoStore* store )
     KoXmlWriter xmlWriter( &dev, "office:document-meta" );
     xmlWriter.startElement( "office:meta" );
     // TODO implement
+    QStringList lst = pages();
+    QStringList::ConstIterator it = lst.begin();
+    for( ; it != lst.end(); ++it )
+    {
+        KoDocumentInfoPage* p = page( *it );
+        Q_ASSERT( p );
+        if ( !p->saveOasis( xmlWriter ) )
+            return false;
+    }
     xmlWriter.endElement();
     xmlWriter.endElement(); // root element
     xmlWriter.endDocument();
@@ -170,6 +179,11 @@ KoDocumentInfoPage::KoDocumentInfoPage( QObject* parent, const char* name )
 KoDocumentInfoLog::KoDocumentInfoLog( KoDocumentInfo* info )
     : KoDocumentInfoPage( info, "log" )
 {
+}
+
+bool KoDocumentInfoLog::saveOasis( KoXmlWriter &xmlWriter )
+{
+    return true;
 }
 
 bool KoDocumentInfoLog::loadOasis( const QDomNode& /*metaDoc*/ )
@@ -253,6 +267,23 @@ void KoDocumentInfoAuthor::initParameters()
         m_city=config->readEntry( "city" );
         m_street=config->readEntry( "street" );
     }
+}
+
+bool KoDocumentInfoAuthor::saveOasis( KoXmlWriter &xmlWriter )
+{
+    if ( !m_title.isEmpty() )
+    {
+     xmlWriter.startElement( "dc:title");
+     xmlWriter.addTextNode( m_title );
+     xmlWriter.endElement();
+    }
+    if ( !m_fullName.isEmpty() )
+    {
+     xmlWriter.startElement( "dc:creator");
+     xmlWriter.addTextNode( m_fullName );
+     xmlWriter.endElement();
+    }
+    return true;
 }
 
 bool KoDocumentInfoAuthor::loadOasis( const QDomNode& metaDoc )
@@ -473,6 +504,18 @@ void KoDocumentInfoAuthor::setStreet( const QString& n )
 KoDocumentInfoAbout::KoDocumentInfoAbout( KoDocumentInfo* info )
     : KoDocumentInfoPage( info, "about" )
 {
+}
+
+bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
+{
+    if ( !m_abstract.isEmpty() )
+    {
+     xmlWriter.startElement( "dc:description");
+     xmlWriter.addTextNode( m_abstract );
+     xmlWriter.endElement();
+    }
+
+    return true;
 }
 
 bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
