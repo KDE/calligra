@@ -99,3 +99,79 @@ VDocument::load( const QDomElement& doc )
 	}
 	return true;
 }
+
+void
+VDocument::selectObject( VObject& object, bool exclusive )
+{
+	if( exclusive )
+		deselectAllObjects();
+
+	object.setState( state_selected );
+	m_selection.append( &object );
+}
+
+void
+VDocument::deselectObject( VObject& object )
+{
+	object.setState( state_normal );
+	m_selection.removeRef( &object );
+}
+
+void
+VDocument::selectAllObjects()
+{
+	m_selection.clear();
+
+	VObjectList objects;
+	VLayerListIterator itr( m_layers );
+
+	for ( ; itr.current(); ++itr )
+	{
+		objects = itr.current()->objects();
+		VObjectListIterator itr2( objects );
+		for ( ; itr2.current(); ++itr2 )
+		{
+			if( itr2.current()->state() != state_deleted )
+			{
+				itr2.current()->setState( state_selected );
+				m_selection.append( itr2.current() );
+			}
+		}
+	}
+}
+
+void
+VDocument::selectObjectsWithinRect( const KoRect& rect,
+	const double zoomFactor, bool exclusive )
+{
+	if( exclusive )
+		deselectAllObjects();
+
+	VObjectList objects;
+	VLayerListIterator itr( m_layers );
+
+	for ( ; itr.current(); ++itr )
+	{
+		objects = itr.current()->objectsWithinRect( rect, zoomFactor );
+		VObjectListIterator itr2( objects );
+		for ( ; itr2.current(); ++itr2 )
+		{
+			itr2.current()->setState( state_selected );
+			m_selection.append( itr2.current() );
+		}
+	}
+}
+
+void
+VDocument::deselectAllObjects()
+{
+	// deselect objects:
+	VObjectListIterator itr( m_selection );
+	for ( ; itr.current() ; ++itr )
+	{
+		itr.current()->setState( state_normal );
+	}
+
+	m_selection.clear();
+}
+

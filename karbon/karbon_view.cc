@@ -168,7 +168,7 @@ KarbonView::editCopy()
 void
 KarbonView::editPaste()
 {
-	VObjectListIterator itr( m_part->selection() );
+	VObjectListIterator itr( m_part->document().selection() );
 	VObjectList selection;
 	for ( ; itr.current() ; ++itr )
 	{
@@ -176,13 +176,13 @@ KarbonView::editPaste()
 		temp->transform( QWMatrix().translate( Karbon::m_copyOffset, Karbon::m_copyOffset ) );
 		selection.append( temp );
 	}
-	m_part->deselectAllObjects();
+	m_part->document().deselectAllObjects();
 	// calc new selection
 	VObjectListIterator itr2( selection );
 	for ( ; itr2.current() ; ++itr2 )
 	{
 		m_part->insertObject( itr2.current() );
-		m_part->selectObject( *( itr2.current() ) );
+		m_part->document().selectObject( *( itr2.current() ) );
 	}
 	m_part->repaintAllViews();
 }
@@ -190,18 +190,18 @@ KarbonView::editPaste()
 void
 KarbonView::editSelectAll()
 {
-	m_part->selectAllObjects();
+	m_part->document().selectAllObjects();
 	//handleTool();
-	if( m_part->selection().count() > 0 )
+	if( m_part->document().selection().count() > 0 )
 		m_part->repaintAllViews();
 }
 
 void
 KarbonView::editDeselectAll()
 {
-	if( m_part->selection().count() > 0 )
+	if( m_part->document().selection().count() > 0 )
 	{
-		m_part->deselectAllObjects();
+		m_part->document().deselectAllObjects();
 		m_part->repaintAllViews();
 	}
 }
@@ -273,7 +273,7 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
 	VBoolean op;
 
-	VObjectListIterator itr( m_part->selection() );
+	VObjectListIterator itr( m_part->document().selection() );
 	VObject* one = itr.current();
 	VObject* two = 0L;
 	if( ++itr )
@@ -463,7 +463,7 @@ KarbonView::pathInsertKnots()
 
 	if( dialog->exec() )
 		m_part->addCommand( new VInsertKnotsCmd(
-			m_part, m_part->selection(), dialog->knots() ), true );
+			m_part, m_part->document().selection(), dialog->knots() ), true );
 
 	delete( dialog );
 }
@@ -476,7 +476,7 @@ KarbonView::pathPolygonize()
 
 	if( dialog->exec() )
 		m_part->addCommand( new VPolygonizeCmd(
-			m_part, m_part->selection(), dialog->flatness() ), true );
+			m_part, m_part->document().selection(), dialog->flatness() ), true );
 
 	delete( dialog );
 }

@@ -70,9 +70,9 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 
 	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
-	KoRect rect = part()->selection().boundingBox( 1 / view->zoom() );
+	KoRect rect = part()->document().selection().boundingBox( 1 / view->zoom() );
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
+	if( !part()->document().selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
 		setCursor( view );
 		// scale operation
@@ -132,7 +132,7 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->selection();
+		VObjectListIterator itr = part()->document().selection();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )
@@ -189,8 +189,8 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 
 		part()->addCommand(
 			new VScaleCmd(
-				part(),
-				part()->selection(), m_sp * ( 1.0 / view->zoom() ), m_s1, m_s2 ),
+				part(), part()->document().selection(),
+				m_sp * ( 1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );
 
 		m_isDragging = false;

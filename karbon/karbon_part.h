@@ -42,14 +42,8 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-	// manipulate selection:
-	const VObjectList& selection() const { return m_selection; }
-	void selectObject( VObject& object, bool exclusive = false );
-	void deselectObject( VObject& object );
-	void selectObjectsWithinRect( const KoRect& rect,
-		const double zoomFactor, bool exclusive = false );
-	void selectAllObjects();	// select all vobjects period.
-	void deselectAllObjects();	// unselect all vobjects from all vlayers.
+	// access document:
+	VDocument& document() { return m_doc; }
 
 	// inserting, deleting objects:
 	void insertObject( const VObject* object );	// insert a new vobject:
@@ -95,8 +89,6 @@ protected:
 private:
 	VDocument m_doc;
 	VLayer* m_activeLayer;				// the active/current layer.
-
-	VObjectList m_selection;		// a list of selected objects.
 
 	VCommandHistory* m_commandHistory;	// everybody loves undo/redo.
 

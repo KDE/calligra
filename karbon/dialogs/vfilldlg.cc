@@ -51,8 +51,8 @@ VFillDlg::VFillDlg( KarbonPart *part )
 	mOldColor = new KColorPatch(groupbox);
 	mColorPreview = new KColorPatch(groupbox);
 	QColor color( "black" );
-	if( part->selection().count() > 0 ) // there is a selection, so take the color of first selected object
-		color = part->selection().getFirst()->fill().color().toQColor();
+	if( part->document().selection().count() > 0 ) // there is a selection, so take the color of first selected object
+		color = part->document().selection().getFirst()->fill().color().toQColor();
 
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );
@@ -89,8 +89,8 @@ VFillDlg::VFillDlg( KarbonPart *part )
 	QGroupBox* ogroupBox = new QGroupBox(1, Vertical, i18n("Opacity"), mRGBWidget);
 	mOpacity = new KIntNumInput(100, ogroupBox);
 	mOpacity->setRange(0, 100, 1, true);
-	if( part->selection().count() > 0 ) // there is a selection, so take the opacity of first selected object
-		mOpacity->setValue( static_cast<int>(part->selection().getFirst()->fill().color().opacity() * 100.0) );
+	if( part->document().selection().count() > 0 ) // there is a selection, so take the opacity of first selected object
+		mOpacity->setValue( static_cast<int>(part->document().selection().getFirst()->fill().color().opacity() * 100.0) );
 	mainLayout->addWidget( ogroupBox, 2, 2);
 
 	mainLayout->setSpacing(2);

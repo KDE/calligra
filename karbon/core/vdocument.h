@@ -36,8 +36,18 @@ public:
 	void save( QDomDocument &doc ) const;
 	bool load( const QDomElement& element );
 
+	// manipulate selection:
+	const VObjectList& selection() const { return m_selection; }
+	void selectAllObjects();    // select all vobjects period.
+	void deselectAllObjects();  // unselect all vobjects from all vlayers.
+	void selectObject( VObject& object, bool exclusive = false );
+	void deselectObject( VObject& object );
+	void selectObjectsWithinRect( const KoRect& rect,
+								  const double zoomFactor, bool exclusive = false );
+
 private:
-	VLayerList m_layers;
+	VLayerList m_layers;			// all layers in this document
+	VObjectList m_selection;        // a list of selected objects.
 	QString m_mime;
 	QString m_version;
 	QString m_editor;

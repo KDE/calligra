@@ -19,7 +19,7 @@ VShapeCmd::execute()
 		m_part->applyDefaultColors( *m_object );
 		// add path:
 		m_part->insertObject( m_object );
-		m_part->selectObject( *m_object, true );
+		m_part->document().selectObject( *m_object, true );
 	}
 }
 
@@ -28,7 +28,7 @@ VShapeCmd::unexecute()
 {
 	if ( m_object )
 	{
-		m_part->deselectObject( *m_object );
+		m_part->document().deselectObject( *m_object );
 		m_object->setState( state_deleted );
 	}
 }

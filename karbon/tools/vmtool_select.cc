@@ -49,9 +49,9 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	KoRect rect = part()->selection().boundingBox( 1 / view->zoom() );
+	KoRect rect = part()->document().selection().boundingBox( 1 / view->zoom() );
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
-	if( !part()->selection().isEmpty()
+	if( !part()->document().selection().isEmpty()
 		&& ( m_state != normal || rect.contains( fp /* view->zoom() */ ) ) )
 	{
 		if( m_state != moving )
@@ -63,7 +63,7 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 						( m_lp.y() - fp.y() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->selection();
+		VObjectListIterator itr = part()->document().selection();
 		VObjectList list;
 		list.setAutoDelete( true );
 		for( ; itr.current() ; ++itr )
@@ -133,7 +133,7 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 			part()->addCommand(
 				new VTranslateCmd(
 					part(),
-					part()->selection(),
+					part()->document().selection(),
 					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view->zoom() ) ),
 					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view->zoom() ) ) ),
 				true );
@@ -152,9 +152,9 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 			// erase old object:
 			drawTemporaryObject( view );
 
-			part()->deselectAllObjects();
+			part()->document().deselectAllObjects();
 
-			part()->selectObjectsWithinRect(
+			part()->document().selectObjectsWithinRect(
 				KoRect(
 					qRound( fp.x() / view->zoom() ), qRound( fp.y() / view->zoom() ),
 					qRound( ( lp.x() - fp.x() ) / view->zoom() ),

@@ -69,9 +69,9 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
+	if( !part()->document().selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
-		KoRect rect = part()->selection().boundingBox( view->zoom() );
+		KoRect rect = part()->document().selection().boundingBox( view->zoom() );
 		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
 		{
 		}
@@ -112,7 +112,7 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 						- ( m_fp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->selection();
+		VObjectListIterator itr = part()->document().selection();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )
@@ -169,8 +169,8 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 
 		part()->addCommand(
 			new VShearCmd(
-				part(),
-				part()->selection(), fp * (1.0 / view->zoom() ), m_s1, m_s2 ),
+				part(), part()->document().selection(),
+				fp * (1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );
 
 		m_isDragging = false;

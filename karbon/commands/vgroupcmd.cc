@@ -12,7 +12,7 @@
 VGroupCmd::VGroupCmd( KarbonPart* part )
 	: VCommand( part, i18n( "Group Objects" ) )
 {
-	m_objects = m_part->selection();
+	m_objects = m_part->document().selection();
 	m_group = 0L;
 }
 
@@ -27,19 +27,19 @@ VGroupCmd::execute()
 	}
 	m_group = new VGroup( m_objects );
 	m_part->insertObject( m_group );
-	m_part->selectObject( *m_group, true );
+	m_part->document().selectObject( *m_group, true );
 }
 
 void
 VGroupCmd::unexecute()
 {
-	m_part->deselectAllObjects();
+	m_part->document().deselectAllObjects();
 	VObjectListIterator itr( m_group->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
 		m_part->insertObject( itr.current() );
-		m_part->selectObject( *( itr.current() ) );
+		m_part->document().selectObject( *( itr.current() ) );
 	}
 	// TODO : remove from corresponding VLayer
 	m_part->activeLayer()->removeRef( m_group );

@@ -11,8 +11,8 @@
 VDeleteCmd::VDeleteCmd( KarbonPart* part )
 	: VCommand( part, i18n( "Delete Objects" ) )
 {
-	m_objects = m_part->selection();
-	m_part->deselectAllObjects();
+	m_objects = m_part->document().selection();
+	m_part->document().deselectAllObjects();
 
 	if( m_objects.count() == 1 )
 		setName( i18n( "Delete Object" ) );

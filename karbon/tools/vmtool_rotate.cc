@@ -73,11 +73,11 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
+	if( !part()->document().selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
 		setCursor( view );
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
-		KoRect rect = part()->selection().boundingBox( 1 / view->zoom() );
+		KoRect rect = part()->document().selection().boundingBox( 1 / view->zoom() );
 		m_sp = KoPoint( int( rect.left() + rect.width() / 2 ), int( rect.top() + rect.height() / 2 ) );
 		KoPoint sp( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
@@ -107,7 +107,7 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->selection();
+		VObjectListIterator itr = part()->document().selection();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )
@@ -168,8 +168,8 @@ VMToolRotate::eventFilter( KarbonView* view, QEvent* event )
 
 		part()->addCommand(
 			new VRotateCmd(
-				part(),
-				part()->selection(), m_sp * (1.0 / view->zoom() ), m_angle / VGlobal::pi_180 ),
+				part(), part()->document().selection(),
+				m_sp * (1.0 / view->zoom() ), m_angle / VGlobal::pi_180 ),
 			true );
 
 		m_isDragging = false;

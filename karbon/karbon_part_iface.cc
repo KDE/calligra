@@ -31,12 +31,12 @@ KarbonPartIface::KarbonPartIface( KarbonPart *part_ )
 
 void KarbonPartIface::selectAllObjects()
 {
-    m_part->selectAllObjects();
+    m_part->document().selectAllObjects();
 }
 
 void KarbonPartIface::deselectAllObjects()
 {
-    m_part->deselectAllObjects();
+    m_part->document().deselectAllObjects();
 }
 
 bool KarbonPartIface::showStatusBar () const

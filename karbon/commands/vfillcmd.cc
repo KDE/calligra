@@ -12,7 +12,7 @@
 VFillCmd::VFillCmd( KarbonPart* part, const VColor& color, float opacity )
 	: VCommand( part, i18n( "Fill Objects" ) ), m_color( color ), m_opacity( opacity )
 {
-	m_objects = m_part->selection();
+	m_objects = m_part->document().selection();
 	//m_part->deselectAllObjects();
 
 	if( m_objects.count() == 1 )

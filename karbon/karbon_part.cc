@@ -91,50 +91,10 @@ KarbonPart::insertObject( const VObject* object )
 }
 
 void
-KarbonPart::selectObject( VObject& object, bool exclusive )
-{
-	if( exclusive )
-		deselectAllObjects();
-
-	object.setState( state_selected );
-	m_selection.append( &object );
-}
-
-void
-KarbonPart::deselectObject( VObject& object )
-{
-	object.setState( state_normal );
-	m_selection.removeRef( &object );
-}
-
-void
-KarbonPart::selectAllObjects()
-{
-	m_selection.clear();
-
-	VObjectList objects;
-	VLayerListIterator itr( m_doc.layers() );
-
-	for ( ; itr.current(); ++itr )
-	{
-		objects = itr.current()->objects();
-		VObjectListIterator itr2( objects );
-		for ( ; itr2.current(); ++itr2 )
-		{
-			if( itr2.current()->state() != state_deleted )
-			{
-				itr2.current()->setState( state_selected );
-				m_selection.append( itr2.current() );
-			}
-		}
-	}
-}
-
-void
 KarbonPart::moveSelectionUp()
 {
 	//kdDebug() << "KarbonPart::moveSelectionUp" << endl;
-	VObjectList selection = m_selection;
+	VObjectList selection = document().selection();
 
 	VObjectList objects;
 
@@ -173,7 +133,7 @@ void
 KarbonPart::moveSelectionDown()
 {
 	//kdDebug() << "KarbonPart::moveSelectionDown" << endl;
-	VObjectList selection = m_selection;
+	VObjectList selection = document().selection();
 
 	VObjectList objects;
 
@@ -213,7 +173,7 @@ KarbonPart::moveSelectionToTop()
 {
 	VLayer *topLayer = m_doc.layers().getLast();
 	//
-	VObjectListIterator itr( m_selection );
+	VObjectListIterator itr( document().selection() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// remove from old layer
@@ -244,7 +204,7 @@ KarbonPart::moveSelectionToBottom()
 {
 	VLayer *bottomLayer = m_doc.layers().getFirst();
 	//
-	VObjectListIterator itr( m_selection );
+	VObjectListIterator itr( document().selection() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// remove from old layer
@@ -268,41 +228,6 @@ KarbonPart::moveSelectionToBottom()
 
 	m_activeLayer = bottomLayer;
 	repaintAllViews();
-}
-
-void
-KarbonPart::selectObjectsWithinRect( const KoRect& rect,
-	const double zoomFactor, bool exclusive )
-{
-	if( exclusive )
-		deselectAllObjects();
-
-	VObjectList objects;
-	VLayerListIterator itr( m_doc.layers() );
-
-	for ( ; itr.current(); ++itr )
-	{
-		objects = itr.current()->objectsWithinRect( rect, zoomFactor );
-		VObjectListIterator itr2( objects );
-		for ( ; itr2.current(); ++itr2 )
-		{
-			itr2.current()->setState( state_selected );
-			m_selection.append( itr2.current() );
-		}
-	}
-}
-
-void
-KarbonPart::deselectAllObjects()
-{
-	// deselect objects:
-	VObjectListIterator itr( m_selection );
-	for ( ; itr.current() ; ++itr )
-	{
-		itr.current()->setState( state_normal );
-	}
-
-	m_selection.clear();
 }
 
 void
