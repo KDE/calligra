@@ -191,7 +191,12 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
   if ( m_tmpURL.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )
       res = document()->loadFromStore( _store, m_tmpURL );
   else
+  {
+      // Reference to an external document. Hmmm...
       res = document()->loadFromURL( m_tmpURL );
+      // Still waiting...
+      QApplication::setOverrideCursor( waitCursor );
+  }
 
   m_tmpURL = QString::null;
 
@@ -362,17 +367,20 @@ bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const Q
 
 bool KoDocument::loadFromURL( const QString & _url )
 {
+  QApplication::setOverrideCursor( waitCursor );
   kdebug( KDEBUG_INFO, 30003, "KoDocument::loadFromURL( %s )", _url.ascii() );
   KURL u( _url );
   if ( u.isMalformed() )
   {
     kdebug( KDEBUG_INFO, 30003, "Malformed URL %s", _url.ascii() );
+    QApplication::restoreOverrideCursor(); 
     return false;
   }
 
   if ( !u.isLocalFile() )
   {
     kdebug( KDEBUG_INFO, 30003, "Can not save to remote URL" );
+    QApplication::restoreOverrideCursor(); 
     return false;
   }
 
@@ -380,6 +388,7 @@ bool KoDocument::loadFromURL( const QString & _url )
   if ( !in )
   {
     kdebug( KDEBUG_INFO, 30003, "Could not open %s", u.path().ascii() );
+    QApplication::restoreOverrideCursor(); 
     return false;
   }
 
@@ -397,10 +406,11 @@ bool KoDocument::loadFromURL( const QString & _url )
   {
     bool res = load( in, 0L );
     in.close();
-    if ( !res )
-      return false;
+    if ( res )
+      res = completeLoading( 0L );
 
-    return completeLoading( 0L );
+    QApplication::restoreOverrideCursor(); 
+    return res;
   } else
   { // It's a koffice store (binary or tar.gz)
     in.close();
@@ -417,6 +427,7 @@ bool KoDocument::loadFromURL( const QString & _url )
     if ( store->bad() )
     {
       delete store;
+      QApplication::restoreOverrideCursor(); 
       return false;
     }
 
@@ -426,6 +437,7 @@ bool KoDocument::loadFromURL( const QString & _url )
       if ( !load( in, store ) )
       {
         delete store;
+        QApplication::restoreOverrideCursor(); 
         return false;
       }
       store->close();
@@ -434,10 +446,15 @@ bool KoDocument::loadFromURL( const QString & _url )
     if ( !loadChildren( store ) )
     {	
       kdebug( KDEBUG_INFO, 30003, "ERROR: Could not load children" );
+      delete store;
+      QApplication::restoreOverrideCursor(); 
       return false;
     }
 
-    return completeLoading( store );
+    bool res = completeLoading( store );
+    delete store;
+    QApplication::restoreOverrideCursor(); 
+    return res;
   }
 }
 
