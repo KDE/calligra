@@ -73,12 +73,7 @@ KoZipStore::~KoZipStore()
 {
     kdDebug(s_area) << "KoZipStore::~KoZipStore" << endl;
     m_pZip->close();
-    
-    Q_CHECK_PTR(m_pZip);
-
-    //TODO THIS is very likely a memory leak, but it causes a crash inside kdelibs (KIO)
-//     if (m_pZip)
-//       delete m_pZip;
+    delete m_pZip;
 
     // Now we have still some job to do for remote files.
     if ( m_fileMode == KoStoreBase::RemoteRead )
