@@ -528,12 +528,9 @@ QString PaperLayoutCommand::name() const
     return i18n("Set Page Layout");
 }
 
-LinkCommand::LinkCommand( KSpreadCell* c, const QString& text, 
- const QString& link, bool b, bool i )
+LinkCommand::LinkCommand( KSpreadCell* c, const QString& text, const QString& link )
 {
   cell = c;
-  bold = b;
-  italic = i;
   oldText = cell->text();
   oldLink = cell->link();
   newText = text;
@@ -548,7 +545,7 @@ void LinkCommand::execute()
   if( !cell ) return;
   
   cell->setCellText( newText );
-  cell->setLink( newLink, bold, italic );
+  cell->setLink( newLink  );
   
   doc->addDamage( new CellDamage( cell ) );
 }
