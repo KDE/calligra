@@ -68,7 +68,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 		// svgz loading from kdecore/svgicons
 		gzFile svgz = gzopen( path.latin1(), "ro" );
 		if( !svgz )
-			return false;
+			return KoFilter::FileNotFound;
 
 		QByteArray data;
 		bool done = false;
@@ -83,7 +83,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 			if( ret == 0 )
 				done = true;
 			else if( ret == -1 )
-				return false;
+				return KoFilter::FileNotFound;
 
 			QDataStream dataStream( data, IO_WriteOnly | IO_Append );
 	        dataStream.writeRawBytes( buffer, 1024 );
@@ -234,83 +234,82 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 	VColor fillcolor = gc->fill.color();
 	VColor strokecolor = gc->stroke.color();
 
-		if( command == "fill" )
+	if( command == "fill" )
+	{
+		if( params == "none" )
+			gc->fill.setType( VFill::none );
+		else if( params.startsWith( "url(" ) )
 		{
-			if( params == "none" )
-				gc->fill.setType( VFill::none );
-			else if( params.startsWith( "url(" ) )
-			{
-				unsigned int start = params.find("#") + 1;
-				unsigned int end = params.findRev(")");
-				QString key = params.mid( start, end - start );
-				gc->fill.gradient() = m_gradients[ key ];
-				gc->fill.setType( VFill::grad );
-			}
-			else
-			{
-				fillcolor = parseColor( params );
-				gc->fill.setType( VFill::solid );
-			}
+			unsigned int start = params.find("#") + 1;
+			unsigned int end = params.findRev(")");
+			QString key = params.mid( start, end - start );
+			gc->fill.gradient() = m_gradients[ key ];
+			gc->fill.setType( VFill::grad );
 		}
-		else if( command == "fill-rule" )
+		else
 		{
-			if( params == "nonzero" )
-				gc->fill.setFillRule( VFill::winding );
-			else if( params == "evenodd" )
-				gc->fill.setFillRule( VFill::evenOdd );
+			fillcolor = parseColor( params );
+			gc->fill.setType( VFill::solid );
 		}
-		else if( command == "stroke" )
+	}
+	else if( command == "fill-rule" )
+	{
+		if( params == "nonzero" )
+			gc->fill.setFillRule( VFill::winding );
+		else if( params == "evenodd" )
+			gc->fill.setFillRule( VFill::evenOdd );
+	}
+	else if( command == "stroke" )
+	{
+		if( params == "none" )
+			gc->stroke.setType( VStroke::none );
+		else
 		{
-			if( params == "none" )
-				gc->stroke.setType( VStroke::none );
-			else
-			{
-				strokecolor = parseColor( params );
-				gc->stroke.setType( VStroke::solid );
-			}
+			strokecolor = parseColor( params );
+			gc->stroke.setType( VStroke::solid );
 		}
-		else if( command == "stroke-width" )
-			gc->stroke.setLineWidth( params.toDouble() );
-		else if( command == "stroke-linestyle" )
-		{
-			if( params == "miter" )
-				gc->stroke.setLineJoin( VStroke::joinMiter );
-			else if( params == "round" )
-				gc->stroke.setLineJoin( VStroke::joinRound );
-			else if( params == "bevel" )
-				gc->stroke.setLineJoin( VStroke::joinBevel );
-		}
-		else if( command == "stroke-linecap" )
-		{
-			if( params == "butt" )
-				gc->stroke.setLineCap( VStroke::capButt );
-			else if( params == "round" )
-				gc->stroke.setLineCap( VStroke::capRound );
-			else if( params == "square" )
-				gc->stroke.setLineCap( VStroke::capSquare );
-		}
-		if( command == "stroke-dasharray" )
-		{
-			QStringList dashes = QStringList::split( ' ', params );
-			QValueList<float> array;
-		    for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
-				array.append( (*it).toFloat() );
+	}
+	else if( command == "stroke-width" )
+		gc->stroke.setLineWidth( params.toDouble() );
+	else if( command == "stroke-linestyle" )
+	{
+		if( params == "miter" )
+			gc->stroke.setLineJoin( VStroke::joinMiter );
+		else if( params == "round" )
+			gc->stroke.setLineJoin( VStroke::joinRound );
+		else if( params == "bevel" )
+			gc->stroke.setLineJoin( VStroke::joinBevel );
+	}
+	else if( command == "stroke-linecap" )
+	{
+		if( params == "butt" )
+			gc->stroke.setLineCap( VStroke::capButt );
+		else if( params == "round" )
+			gc->stroke.setLineCap( VStroke::capRound );
+		else if( params == "square" )
+			gc->stroke.setLineCap( VStroke::capSquare );
+	}
+	else if( command == "stroke-dasharray" )
+	{
+		QStringList dashes = QStringList::split( ' ', params );
+		QValueList<float> array;
+	    for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
+			array.append( (*it).toFloat() );
 
-			gc->stroke.dashPattern().setArray( array );
-		}
-		if( command == "stroke-dashoffset" )
-			gc->stroke.dashPattern().setOffset( params.toFloat() );
-
-		// handle opacity
-		if( command == "stroke-opacity" )
-			strokecolor.setOpacity( params.toFloat() );
-		if( command == "fill-opacity" )
-			fillcolor.setOpacity( params.toFloat() );
-		if( command == "opacity" )
-		{
-			fillcolor.setOpacity( params.toFloat() );
-			strokecolor.setOpacity( params.toFloat() );
-		}
+		gc->stroke.dashPattern().setArray( array );
+	}
+	else if( command == "stroke-dashoffset" )
+		gc->stroke.dashPattern().setOffset( params.toFloat() );
+	// handle opacity
+	else if( command == "stroke-opacity" )
+		strokecolor.setOpacity( params.toFloat() );
+	else if( command == "fill-opacity" )
+		fillcolor.setOpacity( params.toFloat() );
+	else if( command == "opacity" )
+	{
+		fillcolor.setOpacity( params.toFloat() );
+		strokecolor.setOpacity( params.toFloat() );
+	}
 
 	if( gc->fill.type() == VFill::solid )
 		gc->fill.setColor( fillcolor );
