@@ -1634,8 +1634,10 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
 
             if ( parag != m_lastFormatted )
                 kdWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId() << endl;
+#if 0 // This happens now that formatting can 'abort' (e.g. due to page not yet created)
             else if (!parag->isValid())
                 kdWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
+#endif
             m_lastFormatted = parag->next();
         }
     }
