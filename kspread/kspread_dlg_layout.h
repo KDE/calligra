@@ -354,6 +354,7 @@ public:
     void applyOutline();
     void invertState(KSpreadBorderButton *_button);
     QPixmap paintFormatPixmap(PenStyle _style);
+    void applyOutline(KSpreadLayout * layout);
 
 public slots:
     void changeState(KSpreadBorderButton *_this);
@@ -604,6 +605,7 @@ public:
 
 public slots:
     void slotApply();
+    void slotDefault();
 
 protected:
 

@@ -625,10 +625,12 @@ void CellLayoutDlg::init()
 
     tab->setCancelButton(i18n("&Cancel"));
     tab->setOkButton(i18n("&OK"));
+    tab->setDefaultButton(i18n("Set as &Default"));
 
     tab->setCaption(i18n("Cell Format"));
 
     connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
+    connect( tab, SIGNAL( defaultButtonPressed() ), this, SLOT( slotDefault() ) );
 
     tab->exec();
 }
@@ -653,6 +655,19 @@ QPixmap* CellLayoutDlg::paintFormatPixmap( const char *_string1, const QColor & 
 int CellLayoutDlg::exec()
 {
     return ( tab->exec() );
+}
+
+void CellLayoutDlg::slotDefault()
+{
+  KSpreadCell * obj = table->defaultCell();
+
+  floatPage->apply( obj );
+  fontPage->apply( obj );
+  positionPage->apply( obj );
+  patternPage->apply(obj);
+  borderPage->applyOutline(obj);
+
+  m_pView->slotUpdateView( table, m_pView->canvasWidget()->visibleCells() );
 }
 
 void CellLayoutDlg::slotApply()
@@ -3267,6 +3282,63 @@ QPixmap CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
 void CellLayoutPageBorder::loadIcon( QString _pix, KSpreadBorderButton *_button)
 {
   _button->setPixmap( QPixmap( KSBarIcon(_pix) ) );
+}
+
+
+void CellLayoutPageBorder::applyOutline(KSpreadLayout * layout)
+{
+  if (borderButtons[BorderType_Horizontal]->isChanged())
+  {
+    QPen tmpPen( borderButtons[BorderType_Horizontal]->getColor(),
+                 borderButtons[BorderType_Horizontal]->getPenWidth(),
+                 borderButtons[BorderType_Horizontal]->getPenStyle());
+    layout->setTopBorderPen(tmpPen);
+  }
+  if (borderButtons[BorderType_Vertical]->isChanged())
+  {
+    KSpreadBorderButton* vertical = borderButtons[BorderType_Vertical];
+    QPen tmpPen( vertical->getColor(), vertical->getPenWidth(),
+                 vertical->getPenStyle());
+    layout->setLeftBorderPen( tmpPen );
+  }
+  if ( borderButtons[BorderType_Left]->isChanged() )
+  {
+    KSpreadBorderButton * left = borderButtons[BorderType_Left];
+    QPen tmpPen( left->getColor(),left->getPenWidth(),left->getPenStyle());
+    layout->setLeftBorderPen( tmpPen );
+  }
+  if ( borderButtons[BorderType_Right]->isChanged() )
+  {
+    KSpreadBorderButton * right = borderButtons[BorderType_Right];
+    QPen tmpPen( right->getColor(),right->getPenWidth(),right->getPenStyle());
+    layout->setRightBorderPen( tmpPen );
+  }
+  if ( borderButtons[BorderType_Top]->isChanged() )
+  {
+    KSpreadBorderButton * top = borderButtons[BorderType_Top];
+    QPen tmpPen( top->getColor(),top->getPenWidth(),top->getPenStyle());
+    layout->setTopBorderPen( tmpPen );
+  }
+  if ( borderButtons[BorderType_Bottom]->isChanged() )
+  {
+    KSpreadBorderButton * bottom = borderButtons[BorderType_Bottom];
+    QPen tmpPen( bottom->getColor(),bottom->getPenWidth(),bottom->getPenStyle());
+    layout->setBottomBorderPen( tmpPen );
+  }
+  if ( borderButtons[BorderType_RisingDiagonal]->isChanged() ||
+       borderButtons[BorderType_FallingDiagonal]->isChanged() )
+  {
+    KSpreadBorderButton * fallDiagonal = borderButtons[BorderType_FallingDiagonal];
+    KSpreadBorderButton * goUpDiagonal = borderButtons[BorderType_RisingDiagonal];
+    QPen tmpPenFall( fallDiagonal->getColor(), fallDiagonal->getPenWidth(),
+                     fallDiagonal->getPenStyle());
+    QPen tmpPenGoUp( goUpDiagonal->getColor(), goUpDiagonal->getPenWidth(),
+                     goUpDiagonal->getPenStyle());
+    if ( fallDiagonal->isChanged() )
+      layout->setFallDiagonalPen( tmpPenFall );
+    if ( goUpDiagonal->isChanged() )
+      layout->setGoUpDiagonalPen( tmpPenGoUp );
+  }
 }
 
 void CellLayoutPageBorder::applyOutline()

@@ -610,6 +610,7 @@ KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
     return p;
 
   KSpreadCell *cell = new KSpreadCell( this, _column, _row );
+  cell->copy( *m_pDefaultCell );
   insertCell( cell );
 
   return cell;
