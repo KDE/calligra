@@ -1263,6 +1263,22 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kpgroupobject);
         }
+        else if ( name == "draw:object" )
+        {
+            //todo load part object
+#if 0
+            KPresenterChild *ch = new KPresenterChild( this );
+            QRect r;
+            KPPartObject *kppartobject = new KPPartObject( ch );
+            QDomElement object=elem.namedItem("OBJECT").toElement();
+            if(!object.isNull()) {
+                ch->load(object, true);  // true == uppercase
+                r = ch->geometry();
+                insertChild( ch );
+                kppartobject = new KPPartObject( ch );
+            }
+#endif
+        }
         else if ( name == "presentation:notes" ) // notes
         {
             //we must extend note attribute
