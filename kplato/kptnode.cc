@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas zander <zander@kde.org>
+   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,7 +52,8 @@ void KPTNode::init() {
     m_resourceOverbooked = false;
     m_resourceError = false;
     m_deleted = false;
-    m_calculated = 0;
+    m_visitedForward = false;
+    m_visitedBackward = false;
 }
 
 KPTNode *KPTNode::projectNode() {
@@ -247,17 +249,6 @@ void KPTNode::takeDependParentNode(KPTRelation *rel) {
     }      
 }
 
-void KPTNode::addPredesessorNode( KPTRelation *relation) {
-    //kdDebug()<<k_funcinfo<<"rel="<<relation<<endl;
-    m_predesessorNodes.append(relation);
-}
-
-void KPTNode::delPredesessorNode() {
-    KPTRelation *relation = m_predesessorNodes.take();
-    //kdDebug()<<k_funcinfo<<"rel="<<relation<<endl;
-    delete relation;
-}
-
 bool KPTNode::isParentOf(KPTNode *node) {
     if (m_nodes.findRef(node) != -1)
 	    return true;
@@ -307,155 +298,24 @@ bool KPTNode::isDependChildOf(KPTNode *node) {
 	return false;
 }
 
-void KPTNode::initialize_arcs() {
-  if (m_deleted)
-      return;
-  // Clear all lists of arcs and set unvisited to zero
-  start_node()->successors.list.clear();
-  start_node()->successors.unvisited = 0;
-  start_node()->successors.number = 0;
-  start_node()->predecessors.list.clear();
-  start_node()->predecessors.unvisited = 0;
-  start_node()->predecessors.number = 0;
-  if( end_node() != start_node() ) {
-    end_node()->successors.list.clear();
-    end_node()->successors.unvisited = 0;
-    end_node()->successors.number = 0;
-    end_node()->predecessors.list.clear();
-    end_node()->predecessors.unvisited = 0;
-    end_node()->predecessors.number = 0;
-  }
-  // Now do the same for each subnode
-  for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
-      i.current()->initialize_arcs();
-}
-
-void KPTNode::set_up_arcs() {
-  if (m_deleted)
-      return;
-  //kdDebug()<<k_funcinfo<<m_name<<endl;
-  // Call this function for all nodes by recursive descent
-  // and set up implicit arcs.
-  for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
-    {
-      i.current()->set_up_arcs();
-      // Now add implicit arcs:
-      // First, i.current() cannot start until this has started.
-      start_node()->successors.list.push_back( i.current()->start_node() );
-      // Now add the corresponding predecessor.
-      i.current()->start_node()->predecessors.list.push_back( start_node() );
-      // Second, this cannot finish until i.current() has finished.
-      i.current()->end_node()->successors.list.push_back( end_node() );
-      // Now add the corresponding predecessor.
-      end_node()->predecessors.list.push_back( i.current()->end_node() );
+KPTDuration KPTNode::duration(const KPTDateTime &time, int use, bool backward) {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration effort = m_effort ? m_effort->effort(use) : KPTDuration::zeroDuration;
+    if (effort == KPTDuration::zeroDuration) {
+        return KPTDuration::zeroDuration;
     }
-  // Now add extra arcs from start_node to end_node if these are different.
-  // This is necessary because if a subnode can act as a container then
-  // it can contain nothing and then the arcs guarantee that
-  // start_node has a successor and end_node a predecessor.
-  if( start_node() != end_node() ) {
-    start_node()->successors.list.push_back( end_node() );
-    end_node()->predecessors.list.push_back( start_node() );
-  }
-}
-
-void KPTNode::set_unvisited_values() {
-  if (m_deleted)
-      return;
-  //kdDebug()<<k_funcinfo<<m_name<<endl;
-  // Call this function for all nodes by recursive descent
-  for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
-    {
-      i.current()->set_unvisited_values();
+    KPTDuration dur = effort; // use effort as default duration
+    if (m_effort->type() == KPTEffort::Type_WorkBased) {
+        dur = workbasedDuration(time, effort, backward);
+    } else if (m_effort->type() == KPTEffort::Type_FixedDuration) {
+        // The amount of resources doesn't matter
+    } else {
+        // error
+        kdError()<<k_funcinfo<<"Unsupported effort type"<<endl;
     }
-  // set the actual values.
-  start_node()->successors.unvisited
-    = start_node()->successors.number
-    = start_node()->successors.list.size();
-  end_node()->predecessors.unvisited
-    = end_node()->predecessors.number
-    = end_node()->predecessors.list.size();
-  // Don't count implicit links for summarytasks
-  int implicit = type() == Type_Summarytask ? numChildren() : 0;
-  start_node()->predecessors.unvisited
-    = start_node()->predecessors.number
-    = start_node()->predecessors.list.size() + numDependParentNodes() - implicit;
-  end_node()->successors.unvisited
-    = end_node()->successors.number
-    = end_node()->successors.list.size() + numDependChildNodes() - implicit;
-}
+    // TODO: handle risc
 
-void KPTNode::set_pert_values( const KPTDateTime& time,
-                   start_type start ) {
-  if (m_deleted)
-      return;
-  //kdDebug()<<k_funcinfo<<m_name<<endl;
-  start_node()->*start = time;
-  if( start_node() != end_node() )
-    end_node()->*start = time;
-  for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
-    i.current()->set_pert_values( time, start );
-}
-
-const KPTDuration& KPTNode::optimisticDuration(const KPTDateTime &start)
-{
-    m_duration = KPTDuration::zeroDuration;
-    if (m_effort)
-        calcDuration(start, m_effort->optimistic());
-    return m_duration;
-}
-
-const KPTDuration& KPTNode::pessimisticDuration(const KPTDateTime &start)
-{
-    m_duration = KPTDuration::zeroDuration;
-    if (m_effort)
-        calcDuration(start, m_effort->pessimistic());
-    return m_duration;
-}
-
-const KPTDuration& KPTNode::expectedDurationForwards(const KPTDateTime &start)
-{
-    //kdDebug()<<k_funcinfo<<endl;
-    if (m_calculated == 2) {
-        m_calculated = 0;
-        return m_duration; //already calculated backwards
-    }
-    m_calculated = 1;
-    return expectedDuration(start);
-}
-
-const KPTDuration& KPTNode::expectedDurationBackwards(const KPTDateTime &start)
-{
-    //kdDebug()<<k_funcinfo<<endl;
-    if (m_calculated == 1) {
-        m_calculated = 0;
-        return m_duration; //already calculated forwards
-    }
-    //TODO
-    m_calculated = 2;
-    return m_duration;
-}
-
-const KPTDuration& KPTNode::expectedDuration(const KPTDateTime &start)
-{
-    //kdDebug()<<k_funcinfo<<endl;
-    m_duration = KPTDuration::zeroDuration;
-    if (m_effort)
-        calcDuration(start, m_effort->expected());
-    return m_duration;
-}
-
-const KPTDuration& KPTNode::expectedDuration() const
-{
-    //kdDebug()<<k_funcinfo<<endl;
-    return m_duration;
-}
-
-
-void KPTNode::calcDuration( const KPTDateTime &time, const KPTDuration &effort, bool forward)
-{
-    //kdDebug()<<k_funcinfo<<endl;
-    m_duration += effort;
+    return dur;
 }
 
 QPtrList<KPTAppointment> KPTNode::appointments(const KPTNode *node) {
@@ -525,6 +385,60 @@ bool KPTNode::allChildrenDeleted() const {
             return false;
     }
     return true;
+}
+
+void KPTNode::propagateEarliestStart(KPTDateTime &time) {
+    earliestStart = time;
+    QPtrListIterator<KPTNode> it = m_nodes;
+    for (; it.current(); ++it) {
+        it.current()->propagateEarliestStart(time);
+    }
+}
+
+void KPTNode::propagateLatestFinish(KPTDateTime &time) {
+    latestFinish = time;
+    QPtrListIterator<KPTNode> it = m_nodes;
+    for (; it.current(); ++it) {
+        it.current()->propagateLatestFinish(time);
+    }
+}
+
+void KPTNode::moveEarliestStart(KPTDateTime &time) {
+    if (earliestStart < time)
+        earliestStart = time;
+    QPtrListIterator<KPTNode> it = m_nodes;
+    for (; it.current(); ++it) {
+        it.current()->moveEarliestStart(time);
+    }
+}
+
+void KPTNode::moveLatestFinish(KPTDateTime &time) {
+    if (latestFinish > time)
+        latestFinish = time;
+    QPtrListIterator<KPTNode> it = m_nodes;
+    for (; it.current(); ++it) {
+        it.current()->moveLatestFinish(time);
+    }
+}
+
+void KPTNode::initiateCalculation() {
+    m_visitedForward = false;
+    m_visitedBackward = false;
+    m_resourceError = false;
+    m_resourceOverbooked = false;
+    QPtrListIterator<KPTNode> it = m_nodes;
+    for (; it.current(); ++it) {
+        it.current()->initiateCalculation();
+    }
+}
+
+void KPTNode::resetVisited() {
+    m_visitedForward = false;
+    m_visitedBackward = false;
+    QPtrListIterator<KPTNode> it = m_nodes;
+    for (; it.current(); ++it) {
+        it.current()->resetVisited();
+    }
 }
 
 ////////////////////////////////////   KPTEffort   ////////////////////////////////////////////
@@ -621,7 +535,7 @@ void KPTNode::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"  Earliest start: "<<earliestStart.toString()<<endl;
     kdDebug()<<indent<<"  Latest finish: " <<latestFinish.toString()<<endl;
     kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
-    kdDebug()<<indent<<"  Predecessors="<<start_node()->predecessors.number<<" unvisited="<<start_node()->predecessors.unvisited<<endl;
+//    kdDebug()<<indent<<"  Predecessors="<<start_node()->predecessors.number<<" unvisited="<<start_node()->predecessors.unvisited<<endl;
     //kdDebug()<<indent<<"  Successors="<<start_node()->successors.number<<" unvisited="<<start_node()->successors.unvisited<<endl;
 
 

@@ -93,12 +93,14 @@ public:
                     if (day) {
                         if (it.current()->state() != day->state()) {
                             day->setState(it.current()->state());
+                            //kdDebug()<<k_funcinfo<<calendar->name()<<": state="<<day->state()<<endl;
                         }
                         if (it.current()->workingIntervals() != day->workingIntervals()) {
                             day->setIntervals(it.current()->workingIntervals());
                         }
                     } else {
                         original->addDay(new KPTCalendarDay(it.current()));
+                        //kdDebug()<<k_funcinfo<<"Day added: "<<it.current()->date().toString()<<endl;
                     }
                 }
             }
@@ -162,7 +164,7 @@ KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, con
 }
 
 KMacroCommand *KPTCalendarListDialog::buildCommand() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify calendars"));
     bool modified = false;
     QPtrListIterator<CalendarListViewItem> it = dia->deletedItems();

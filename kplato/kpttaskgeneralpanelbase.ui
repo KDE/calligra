@@ -288,7 +288,7 @@
     <signal>schedulingTypeChanged(int scheduleType)</signal>
 </signals>
 <slots>
-    <slot>setSchedulingType( int scheduleType )</slot>
+    <slot>setSchedulingType( int type )</slot>
     <slot>checkAllFieldsFilled()</slot>
     <slot>changeLeader()</slot>
 </slots>

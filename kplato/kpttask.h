@@ -60,45 +60,10 @@ public:
     KPTDuration *getRandomDuration();
 
     /**
-      * setStartTime() calculates and sets @see m_startTime
-      * based on @see m_earliestStart and constraints.
-      * if this task is a summary task time is set also for all children.
-      */
-    void setStartTime();
-    /**
-      * setEndTime() calculates and sets @see m_endTime
-      * based on @see m_endTime and @see m_duration.
-      * if this task is a summary task time is set also for all children.
-      */
-    void setEndTime();
-
-    /**
-     * Retrive the time this node starts. This is either implied from the set
-     * time, or calculated by asking the parents.
-     */
-    KPTDateTime *getStartTime();
-    KPTDateTime *getEndTime();
-    /**
      * Retrieve the calculated float of this node
      */
     KPTDuration *getFloat();
 
-    const KPTDuration& expectedDuration(const KPTDateTime &start);
-
-    // resources management
-    /**
-     * The resources are provided as a list, each having an associated risk.
-     * we return the resource here which has a pointer to the risk
-     */
-/*    const QPtrList<KPTResourceGroup> &resourceIterator() const
-	{ return m_resource; }
-    virtual void addResource(KPTResourceGroup *resource);
-    virtual void insertResource(unsigned int index,
-				KPTResourceGroup *resource);
-    void removeResource(KPTResourceGroup *resource);
-    void removeResource(int number);
-
-    const QPtrList<KPTResourceGroupRequest> &resourceGroupRequests() const { return m_requests; }*/
     /**
      * Return the resource request made to @group
      * (There should be only one)
@@ -119,9 +84,6 @@ public:
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element);
 
-    void calculateStartEndTime();
-    void calculateStartEndTime(const KPTDateTime &start);
-
     /**
      * Returns the total planned cost for this task (or subtasks)
      */
@@ -139,16 +101,79 @@ public:
     int plannedWork(QDateTime &dt);
     int actualWork();
 
-    void calculateDuration(); 
+    void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones);
+    /**
+     * Calculate @ref m_durationForward from @ref earliestStart and
+     * return the resulting end time, 
+     * which will be used as the succesors @ref earliestStart.
+     *
+     * If this task is a summarytask, all children are calculated first
+     * and the summary tasks duration and earliestStart is calculated 
+     * from the children.
+     */
+    KPTDateTime calculateForward(int use);
+    /**
+     * Calculate @ref m_durationBackward from @ref latestFinish and
+     * return the resulting start time, 
+     * which will be used as the predecessors @ref latestFinish.
+     *
+     * If this task is a summarytask, all children are calculated first
+     * and  the summary tasks duration and latestFinish is calculated 
+     * from the children.
+     */
+    KPTDateTime calculateBackward(int use);
+    /**
+     * Calculate @m_startTime, @ref m_endTime and @ref m_duration,
+     * scheduling the task within the limits of earliestStart and latestFinish.
+     * Return @ref m_endTime which can be used for scheduling the successor.
+     * Assumes @ref calculateForward() and calculateBackward() has been run.
+     */
+    KPTDateTime &scheduleForward(KPTDateTime &earliest, int use);
+    /**
+     * Calculate @m_startTime, @ref m_endTime and @ref m_duration,
+     * scheduling the task within the limits of earliestStart and latestFinish.
+     * Return @ref m_startTime which can be used for scheduling the predecessor.
+     * Assumes @ref calculateForward() and calculateBackward() has been run.
+     */
+    KPTDateTime &scheduleBackward(KPTDateTime &latest, int use);
+    
+    /**
+     * Milestones need special treatment because the are 'glued'
+     * to their predecessors even when calculating backwards.
+     * (Other tasks are dependent on successors in that case.)
+     */
+    void scheduleMilestone();
+    
+    /**
+     * Returns the duration from latestFinish of the 'latest subtask' 
+     * to @param time.
+     * Used to calculate diration of summarytasks.
+     */
+    KPTDuration summarytaskDurationForward(const KPTDateTime &time);
+     /// Returns the earliestStart of the 'earliest subtask'
+    KPTDateTime summarytaskEarliestStart();
+    /**
+     * Returns the duration from earliestStart of the 'earliest subtask' 
+     * to @param time.
+     * Used to calculate diration of summarytasks.
+     */
+    KPTDuration summarytaskDurationBackward(const KPTDateTime &time);
+     /// Returns the latestFinish of the 'latest subtask'
+    KPTDateTime summarytaskLatestFinish();
 
+    /**
+     * Return the duration calculated on bases of the requested resources
+     */
+    virtual KPTDuration workbasedDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward);
+
+    
 private:
-
-    // Calculates duration and stores to m_duration
-    void calculateDuration(const KPTDateTime &start); 
-
     QPtrList<KPTResourceGroup> m_resource;
 
     KPTResourceRequestCollection *m_requests;
+ 
+    KPTDuration m_durationForward;
+    KPTDuration m_durationBackward;
 
 #ifndef NDEBUG
 public:

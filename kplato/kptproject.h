@@ -23,7 +23,6 @@
 #include "kptnode.h"
 
 #include "kptduration.h"
-#include "kptterminalnode.h"
 #include "kptresource.h"
 #include "defs.h"
 
@@ -52,7 +51,7 @@ public:
     /**
      * Calculate the whole project
      */
-    void calculate();
+    void calculate(KPTEffort::Use use=KPTEffort::Use_Expected);
     /**
      * The expected Duration is the expected time to complete a Task, Project,
      * etc. For an individual Task, this will calculate the expected duration
@@ -71,34 +70,16 @@ public:
      */
     KPTDuration *getRandomDuration();
 
-    void setStartTime(KPTDateTime startTime);
-
-    /**
-     * Retrive the time this node starts. This is either implied from the set
-     * time, or calculated by asking the parents.
-     */
-    KPTDateTime *getStartTime();
-
     /**
      * Retrieve the calculated float of this node
      */
     KPTDuration *getFloat();
 
-    /**
-     * Carry out PERT/CPM calculations on current project.
-     * Eventually, this will need to specify which type of duration
-     * the calculation will use.
-     */
-    void pert_cpm();
-
-    /**
-     * TODO: Finish the load and save methods
-     */
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) ;
 
-    KPTDateTime getEarliestStart() const { return startNode.earliestStart; }
-    KPTDateTime getLatestFinish() const { return endNode.latestFinish; }
+    KPTDateTime getEarliestStart() const { return earliestStart; }
+    KPTDateTime getLatestFinish() const { return latestFinish; }
 
     QPtrList<KPTResourceGroup> &resourceGroups();
     virtual void addResourceGroup(KPTResourceGroup *resource);
@@ -154,48 +135,6 @@ public:
     void addStandardWorktime(KPTStandardWorktime * worktime); //FIXME
 
 protected:
-    /**
-     * @return The start node.
-     */
-    virtual KPTNode* start_node(){ return &startNode; }
-
-    /**
-     * @return The end node.
-     */
-    virtual KPTNode* end_node(){ return &endNode; }
-
-    /**
-     * Class to handle find_if function. This really is necessary
-     * if we want to use find_if.
-     */
-    class no_unvisited {
-    private:
-	typedef const KPTNode::dependencies KPTNode::*dep_type;
-    public:
-	no_unvisited(dep_type deps) : deps(deps) {}
-      bool operator()(KPTNode* node) const
-	    { return (node->*deps).unvisited == 0; }
-    private:
-	dep_type deps;
-    };
-
-    /**
-     * Forward pass. This and backward_pass could be implemented as
-     * function objects with function pointer parameters, but the
-     * code would be less easy to read and debug.
-     * @param nodelist. A list of nodes to work on.
-     */
-    void forward_pass( std::list<KPTNode*> nodelist );
-
-    /**
-     * Backward pass.
-     * @param nodelist. A list of nodes to work on.
-     */
-    void backward_pass( std::list<KPTNode*> nodelist );
-
-    KPTTerminalNode startNode;
-    KPTTerminalNode endNode;
-
     QPtrList<KPTResourceGroup> m_resourceGroups;
 
     KPTCalendar *m_defaultCalendar;
@@ -203,6 +142,14 @@ protected:
 
     KPTStandardWorktime *m_standardWorktime;
     
+    KPTDateTime calculateForward(int use);
+    KPTDateTime calculateBackward(int use);
+    virtual KPTDateTime &scheduleForward(KPTDateTime &earliest, int use);
+    virtual KPTDateTime &scheduleBackward(KPTDateTime &latest, int use);
+
+    void initiateCalculation();
+    void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones);
+
 private:
     // we need unique id's for referencing objects when saving/loading
     QMap<int, KPTNode *>m_nodeMap;
@@ -212,6 +159,10 @@ private:
 
     int m_maxResourceId; // the highest id in map
 
+    QPtrList<KPTNode> m_startNodes;
+    QPtrList<KPTNode> m_endNodes;
+    QPtrList<KPTNode> m_milestones;
+    
 #ifndef NDEBUG
 #include <qcstring.h>
 public:

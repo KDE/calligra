@@ -7,6 +7,7 @@
 ** place of a destructor.
 *****************************************************************************/
 
+#include <kdebug.h>
 
 void KPTTaskAppointmentsView::clear()
 {

@@ -224,8 +224,9 @@ public:
     bool load(QDomElement &element);
     void save(QDomElement &element);
 
-    KPTCalendarDay *findDay(const QDate &date) const;
-    void addDay(KPTCalendarDay *day) { m_days.append(day); }
+    KPTCalendarDay *findDay(const QDate &date, bool skipNone=false) const;
+    bool addDay(KPTCalendarDay *day) { return m_days.insert(0, day); }
+    bool removeDay(KPTCalendarDay *day) { return m_days.removeRef(day); }
     const QPtrList<KPTCalendarDay> &days() const { return m_days; }
     
     void setWeek(int week, int year, int type) { m_weeks->setWeek(week, year, type); }
@@ -360,7 +361,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(QCString indent=""){}
+    void printDebug(QCString indent="");
 #endif
 };
 #endif

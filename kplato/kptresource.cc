@@ -302,6 +302,7 @@ void KPTResource::clearAppointments() {
 }
 
 void KPTResource::makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) {
+    //kdDebug()<<k_funcinfo<<task->name()<<": "<<start.toString()<<" dur "<<duration.toString()<<endl;
     //TODO: units and moderated by availability, and standard non-working days
     KPTDateTime time = start;
     KPTDateTime end = start+duration;
@@ -331,7 +332,7 @@ void KPTResource::saveAppointments(QDomElement &element) const {
 
 // the amount of effort we can do within the duration
 KPTDuration KPTResource::effort(const KPTDateTime &start, const KPTDuration &duration) const {
-    //kdDebug()<<k_funcinfo<<start.date().toString()<<" for duration "<<duration.toString(KPTDuration::Format_Day)<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<": "<<start.date().toString()<<" for duration "<<duration.toString(KPTDuration::Format_Day)<<endl;
     KPTDuration e;
     if (m_calendar)
         e = (m_calendar->effort(start, duration) * m_units)/100;
@@ -565,7 +566,7 @@ int KPTResourceGroupRequest::workUnits() const {
 }
 
 //TODO: handle nonspecific resources
-KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &start, const KPTDuration &effort) {
+KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPTDuration &effort, bool backward) {
     //kdDebug()<<k_funcinfo<<"effort: "<<effort.toString(KPTDuration::Format_Day)<<endl;
     KPTDuration dur = effort; // have to start somewhere
     KPTDuration down = dur/2;
@@ -577,7 +578,7 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &start, const KP
         e = KPTDuration::zeroDuration;
         QPtrListIterator<KPTResourceRequest> it = m_resourceRequests;
         for (; it.current(); ++it) {
-            e += it.current()->resource()->effort(start, dur);
+            e += it.current()->resource()->effort((backward ? (time - dur) : time), dur);
             
         }
         //kdDebug()<<k_funcinfo<<"now e["<<i<<"]: "<<e.toString()<<" match: "<<effort.toString()<<endl;
@@ -599,8 +600,6 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &start, const KP
     if (!match) {
         kdError()<<k_funcinfo<<"Could not match effort."<<" Want: "<<effort.toString(KPTDuration::Format_Day)<<" got: "<<e.toString(KPTDuration::Format_Day)<<endl;
     }
-    m_start = start;
-    m_duration = dur;
     return dur;   
 }
 
@@ -685,8 +684,8 @@ int KPTResourceRequestCollection::workUnits() const {
 // The effort is distributed on "work type" resourcegroups in proportion to
 // the amount of resources requested for each group.
 // "Material type" of resourcegroups does not (atm) affect the duration.
-KPTDuration KPTResourceRequestCollection::duration(const KPTDateTime &start, const KPTDuration &effort) {
-    //kdDebug()<<k_funcinfo<<"start="<<start.toString()<<" effort="<<effort.toString(KPTDuration::Format_Day)<<endl;
+KPTDuration KPTResourceRequestCollection::duration(const KPTDateTime &time, const KPTDuration &effort, bool backward) {
+    //kdDebug()<<k_funcinfo<<"time="<<time.toString()<<" effort="<<effort.toString(KPTDuration::Format_Day)<<" backward="<<backward<<endl;
     KPTDuration dur;
     int units = workUnits();
     if (units == 0)
@@ -694,10 +693,10 @@ KPTDuration KPTResourceRequestCollection::duration(const KPTDateTime &start, con
     QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         if (it.current()->group()->type() == KPTResourceGroup::Type_Work) {
-            KPTDuration d = it.current()->duration(start, effort*(it.current()->workUnits())/units);
+            KPTDuration d = it.current()->duration(time, effort*(it.current()->workUnits()/units), backward);
             if (d > dur)
                 dur = d;
-        } else {
+        } else if (it.current()->group()->type() == KPTResourceGroup::Type_Material) {
             //TODO
             if (dur == KPTDuration::zeroDuration)
                 dur = effort;

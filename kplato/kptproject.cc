@@ -19,7 +19,6 @@
 
 #include "kptproject.h"
 #include "kpttask.h"
-//#include "kptmilestone.h"
 #include "kptprojectdialog.h"
 #include "kptduration.h"
 #include "kptresource.h"
@@ -38,18 +37,9 @@
 
 
 KPTProject::KPTProject(KPTNode *parent)
-    : KPTNode(parent), startNode( this ), endNode( this )
+    : KPTNode(parent)
 
 {
-    // Set start and end nodes to have zero duration
-    startNode.setEffort( const_cast<KPTEffort*>( &KPTEffort::zeroEffort ) );
-    endNode.setEffort( const_cast<KPTEffort*>( &KPTEffort::zeroEffort ) );
-
-#ifndef NDEBUG
-    startNode.setName(QString("startNode"));
-    endNode.setName(QString("endNode"));
-#endif
-
     m_constraint = KPTNode::MustStartOn;
     m_startTime = KPTDateTime::currentDateTime();
     m_endTime = m_startTime;
@@ -75,209 +65,137 @@ KPTProject::~KPTProject() {
 
 int KPTProject::type() const { return KPTNode::Type_Project; }
 
-void KPTProject::calculate() {
+void KPTProject::calculate(KPTEffort::Use use) {
     //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.toString()<<endl;
     // clear all resource appointments
     QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
         git.current()->clearAppointments();
     }
-
-    initialize_arcs();
-    set_up_arcs();
-    set_unvisited_values();
-
-    pert_cpm();
-    if (m_constraint != KPTNode::MustStartOn) //hmmm. projects should maybe only have MustStartOn or MustFinishOn
-        setStartTime(startNode.getEarliestStart());
-    setEndTime(endNode.getLatestFinish());
-
-    QPtrListIterator<KPTNode> nit(m_nodes);
-    for ( ; nit.current(); ++nit ) {
-        nit.current()->setStartEndTime();
+    if (type() == Type_Project) {
+        initiateCalculation();
+        if (m_constraint == KPTNode::MustStartOn) {
+            // Calculate from start time
+            propagateEarliestStart(m_startTime);
+            m_endTime = calculateForward(use);
+            propagateLatestFinish(m_endTime);
+            calculateBackward(use);
+            scheduleForward(m_startTime, use);
+        } else {
+            // Calculate from end time
+            propagateLatestFinish(m_endTime);
+            m_startTime = calculateBackward(use);
+            propagateEarliestStart(m_startTime);
+            calculateForward(use);
+            scheduleBackward(m_endTime, use);
+        }
+        makeAppointments();
+    } else if (type() == Type_Subproject) {
+        kdWarning()<<k_funcinfo<<"Subprojects not implemented"<<endl;
+    } else {
+        kdError()<<k_funcinfo<<"Illegal project type: "<<type()<<endl;
     }
-    for ( nit.toFirst(); nit.current(); ++nit ) {
-        nit.current()->calculateDuration(); // For summarytasks
-    }
-
-    makeAppointments();
 }
 
 KPTDuration *KPTProject::getExpectedDuration() {
     //kdDebug()<<k_funcinfo<<endl;
-    return new KPTDuration(end_node()->getLatestFinish() - start_node()->getEarliestStart());
+    return new KPTDuration(getLatestFinish() - getEarliestStart());
 }
 
 KPTDuration *KPTProject::getRandomDuration() {
     return 0L;
 }
 
-
-KPTDateTime *KPTProject::getStartTime() {
-    if(!m_startTime.isValid()) {
-        switch (m_constraint)
-        {
-        case KPTNode::ASAP:
-            m_startTime = earliestStart;
-            break;
-        case KPTNode::ALAP:
-            m_startTime = latestFinish - m_duration;
-            break;
-        case KPTNode::StartNotEarlier:
-        case KPTNode::FinishNotLater:
-        {
-            if ( m_parent ) {
-                // TODO Calculate
-                return m_parent->getStartTime();
-            } else {
-                // hmmm, shouldn't happen to main project
-                if (!m_startTime.isValid())
-                    m_startTime = QDateTime::currentDateTime();
-            }
-        break;
-        }
-        case KPTNode::MustStartOn:
-            // m_startTime should have been set!
-            if (!m_startTime.isValid())
-                m_startTime = QDateTime::currentDateTime();
-        default:
-            break;
-        }
-    }
-    return new KPTDateTime(m_startTime);
-}
-
-
 KPTDuration *KPTProject::getFloat() {
     return 0L;
 }
 
-
-void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
-    //kdDebug()<<k_funcinfo<<endl;
-    /* Propagate (start) value of first node in list to all nodes in project */
-    /* First find the first node with no predecessors values */
-    std::list<KPTNode*>::iterator curNode;
-    curNode = find_if( nodelist.begin(), nodelist.end(),
-                      no_unvisited( &KPTNode::predecessors ) );
-
-    while(curNode != nodelist.end()) {
-        /* At this point curNode will contain the first node from
-         * which we can search: refer to node as currentNode and earliest
-         * finish (or latest start) time for currentNode as duration */
-        KPTNode &currentNode = **curNode;
-        KPTDateTime startTime = currentNode.earliestStart;
-        /* *** expected should be more general than this *** */
-        /* *** we could use (say) a member function pointer *** */
-        startTime += currentNode.expectedDurationForwards(startTime);
-        /* Go through arcs from currentNode, propagating values */
-        for( std::vector<KPTNode*>::iterator i = currentNode.successors.list.begin(); i != currentNode.successors.list.end(); ++i ) {
-            /* add new nodes if necessary */
-            if( (*i)->predecessors.unvisited == (*i)->predecessors.number ) {
-                nodelist.push_back( *i );
-            }
-            /* reduce unvisited to indicate that an arc/relation has been followed */
-            (*i)->predecessors.unvisited--;
-            /* act if duration is later than start of arc node */
-            if( startTime > (*i)->earliestStart ){
-                (*i)->earliestStart = startTime;
-            }
+KPTDateTime KPTProject::calculateForward(int use) {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (type() == KPTNode::Type_Project) {
+        // Follow *parent* relations back and
+        // calculate forwards following the child relations
+        KPTDateTime finish;
+        QPtrListIterator<KPTNode> endnodes = m_endNodes;
+        for (; endnodes.current(); ++endnodes) {
+            KPTDateTime time = endnodes.current()->calculateForward(use);
+            if (time > finish || !finish.isValid())
+                finish = time;
         }
-        /* Only act if node is an end node here - KPTRelations
-         * should not be followed for a start node */
-        if( (*curNode)->owner_node()->end_node() == *curNode )
-            /* Go through relations from currentNode, propagating values */
-            for( QPtrListIterator<KPTRelation> i( currentNode.owner_node()->m_dependChildNodes ); i.current(); ++i ) {
-                /* add new nodes if necessary */
-                if( i.current()->child()->start_node()->predecessors.unvisited == i.current()->child()->start_node()->predecessors.number )
-                    nodelist.push_back( i.current()->child()->start_node() );
-                    
-                /* reduce unvisited to indicate that a relation has been followed */
-                i.current()->child()->start_node()->predecessors.unvisited--;
-                /* calculate u = duration (plus) lag of relation */
-                KPTDateTime u = startTime;
-                u += i.current()->lag();
-                /* act if u is later than start of next node */
-                //kdDebug()<<"---"<<"Calc time="<<u.toString()<<" childs time="<<i.current()->child()->start_node()->getEarliestStart().toString()<<endl;
-                if( u > i.current()->child()->start_node()->earliestStart ) {
-                    i.current()->child()->start_node()->earliestStart = u;
-                }
-                //kdDebug()<<"--- Node="<<currentNode.owner_node()->name()<<" Child node="<<i.current()->child()->start_node()->name()<<" Move earliest start="<<u.toString()<<endl;
-            }
-        /* Remove currentNode from list so that we don't use it again */
-        nodelist.erase( curNode );
-        curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited(&KPTNode::predecessors) );
+        //kdDebug()<<k_funcinfo<<m_name<<" finish="<<finish.toString()<<endl;
+        return finish;
+    } else {
+        //TODO: subproject
     }
+    return KPTDateTime();
 }
 
-
-void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
-    /* Propagate (start) value of first node in list to all nodes in project */
-    /* First find the first node with no successor values */
-    std::list<KPTNode*>::iterator curNode;
-    curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::successors ) );
-    while(curNode != nodelist.end()) {
-        /* at this point curNode will contain the first node from
-        * which we can search: refer to node as currentNode and earliest
-        * finish (or latest start) time for currentNode as t */
-
-#ifdef DEBUGPERT
-        for( std::list<KPTNode*>::const_iterator k = nodelist.begin(); k != nodelist.end(); ++k ) {
-            kdDebug() << (*k)->name().latin1() << " (" << (*k)->successors.unvisited << ")" << endl;
+KPTDateTime KPTProject::calculateBackward(int use) {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (type() == KPTNode::Type_Project) {
+        // Follow *child* relations back and
+        // calculate backwards following parent relation
+        KPTDateTime start;
+        QPtrListIterator<KPTNode> startnodes = m_startNodes;
+        for (; startnodes.current(); ++startnodes) {
+            KPTDateTime time = startnodes.current()->calculateBackward(use);
+            if (time < start || !start.isValid())
+                start = time;
         }
-        kdDebug() << endl;
-#endif
-
-        KPTNode &currentNode = **curNode;
-        KPTDateTime t = currentNode.latestFinish;
-#ifdef DEBUGPERT
-        kdDebug() << "Node: " <<currentNode.name()<< " latestFinish="<< t.toString() << endl;
-#endif
-        /* *** expected should be more general than this *** */
-        /* *** we could use (say) a member function pointer *** */
-        t -= currentNode.expectedDurationBackwards(t);
-#ifdef DEBUGPERT
-        kdDebug() << "  New calculated latest finish=" << t.toString() << endl;
-#endif
-        /* Go through arcs from currentNode, propagating values */
-        for( std::vector<KPTNode*>::iterator i = currentNode.predecessors.list.begin(); i != currentNode.predecessors.list.end(); ++i ) {
-            /* add new nodes if necessary */
-            if( (*i)->successors.unvisited == (*i)->successors.number )
-                nodelist.push_back( *i );
-            /* reduce unvisited to indicate that an arc/relation has been followed */
-            (*i)->successors.unvisited--;
-            /* act if t is earlier than finish of arc node */
-            if( t < (*i)->latestFinish ) {
-                (*i)->latestFinish = t;
-                //kdDebug() << "Node: " <<(*i)->name()<< " reduce latestFinish="<< t.toString() << endl;
-            }
-        }
-        /* Only act if node is an start node here - KPTRelations
-        * should not be followed for a end node */
-        if( (*curNode)->owner_node()->start_node() == *curNode )
-            /* Go through relations from currentNode, propagating values */
-            for( QPtrListIterator<KPTRelation> i( currentNode.owner_node()->m_dependParentNodes ); i.current(); ++i ) {
-                //kdDebug()<<k_funcinfo<<"parent relations"<<endl;
-                /* add new nodes if necessary */
-                if( i.current()->parent()->end_node()->successors.unvisited == i.current()->parent()->end_node()->successors.number )
-                    nodelist.push_back( i.current()->parent()->end_node() );
-                /* reduce unvisited to indicate that a relation has been followed */
-                i.current()->parent()->end_node()->successors.unvisited--;
-                /* calculate u = t (minus) lag of relation */
-                KPTDateTime u = t;
-                u -= i.current()->lag();
-                /* act if u is earlier than end of next node */
-                if( u < i.current()->parent()->end_node()->latestFinish ) {
-                    i.current()->parent()->end_node()->latestFinish = u;
-                }
-                //kdDebug() << "Node: " <<i.current()->parent()->end_node()->name()<< " reduce latestFinish="<< u.toString() << endl;
-        }
-        /* Remove currentNode from list so that we don't use it again */
-        nodelist.erase( curNode );
-        curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::successors) );
+        //kdDebug()<<k_funcinfo<<m_name<<" start="<<start.toString()<<endl;
+        return start;
+    } else {
+        //TODO: subproject
     }
+    return KPTDateTime();
 }
 
+KPTDateTime &KPTProject::scheduleForward(KPTDateTime &earliest, int use) {
+    resetVisited();
+    QPtrListIterator<KPTNode> it(m_endNodes);
+    for (; it.current(); ++it) {
+        it.current()->scheduleForward(earliest, use);
+    }
+    QPtrListIterator<KPTNode> ms(m_milestones);
+    for (; ms.current(); ++ms) {
+        static_cast<KPTTask*>(ms.current())->scheduleMilestone();
+    }
+    return m_endTime;
+}
+
+KPTDateTime &KPTProject::scheduleBackward(KPTDateTime &latest, int use) {
+    resetVisited();
+    QPtrListIterator<KPTNode> it(m_startNodes);
+    for (; it.current(); ++it) {
+        it.current()->scheduleBackward(latest, use);
+    }
+    QPtrListIterator<KPTNode> ms(m_milestones);
+    for (; ms.current(); ++ms) {
+        static_cast<KPTTask*>(ms.current())->scheduleMilestone();
+    }
+    return m_startTime;
+}
+
+void KPTProject::initiateCalculation() {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    KPTNode::initiateCalculation();
+    m_startNodes.clear();
+    m_endNodes.clear();
+    m_milestones.clear();
+    initiateCalculationLists(m_startNodes, m_endNodes, m_milestones);
+}
+
+void KPTProject::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones) {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (type() == KPTNode::Type_Project) {
+        QPtrListIterator<KPTNode> it = childNodeIterator();
+        for (; it.current(); ++it) {
+            it.current()->initiateCalculationLists(startnodes, endnodes, milestones);
+        }
+    } else {
+        //TODO: subproject
+    }
+}
 
 bool KPTProject::load(QDomElement &element) {
     // Maybe TODO: Delete old stuff here
@@ -324,10 +242,6 @@ bool KPTProject::load(QDomElement &element) {
             else
                 // TODO: Complain about this
                 delete child;
-            } else if (e.tagName() == "startnode") {
-                start_node()->load(e);
-            } else if (e.tagName() == "endnode") {
-                end_node()->load(e);
             } else if (e.tagName() == "relation") {
                 // Load the relation
                 KPTRelation *child = new KPTRelation();
@@ -411,13 +325,6 @@ void KPTProject::save(QDomElement &element)  {
     me.setAttribute("project-end",endTime().toString());
     me.setAttribute("scheduling",constraintToString());
 
-    QDomElement e = me.ownerDocument().createElement("startnode");
-    me.appendChild(e);
-    startNode.save(e);
-    e = me.ownerDocument().createElement("endnode");
-    me.appendChild(e);
-    endNode.save(e);
-
     // save calendars
     QPtrListIterator<KPTCalendar> calit(m_calendars);
     for (int i=1; calit.current(); ++calit) {
@@ -461,34 +368,6 @@ void KPTProject::save(QDomElement &element)  {
     }
 
 }
-
-
-void KPTProject::pert_cpm() {
-    std::list<KPTNode*> nodelist;
-    /* Set initial time for nodes to project start */
-    KPTDateTime time( m_startTime );
-    set_pert_values( time, &KPTNode::earliestStart );
-    /* initialise list of nodes - start with start node of this */
-    nodelist.push_back( start_node() );
-    /* Now find earliest starts */
-    forward_pass( nodelist );
-    /* **Note that nodelist is now empty again** */
-    nodelist.clear();
-    /* Now set final project time to earlies start time of end node */
-    time = end_node()->earliestStart;
-    set_pert_values( time, &KPTNode::latestFinish );
-    /* reinitialise list of nodes - start with end node of this */
-    nodelist.push_back( end_node() );
-    /* Finally, find latest finishes */
-    backward_pass( nodelist );
-}
-
-void KPTProject::setStartTime(KPTDateTime startTime) {
-    m_startTime = startTime;
-    if ( m_constraint == KPTNode::MustStartOn )
-        earliestStart = startTime;
-}
-
 
 void KPTProject::addResourceGroup(KPTResourceGroup * group) {
     m_resourceGroups.append(group);
@@ -804,10 +683,6 @@ void KPTProject::printDebug(bool children, QCString indent) {
 
     kdDebug()<<indent<<"+ Project node: "<<name()<<endl;
     indent += "!";
-    kdDebug()<<indent<<" Start node: "<<endl;
-    startNode.printDebug(false, indent);
-    kdDebug()<<indent<<" End node: "<<endl;
-    endNode.printDebug(false, indent);
     QPtrListIterator<KPTResourceGroup> it(resourceGroups());
     for ( ; it.current(); ++it)
         it.current()->printDebug(indent);
@@ -821,5 +696,7 @@ void KPTProject::printCalendarDebug(QCString indent) {
         it.current()->printDebug(indent + "--");
         kdDebug()<<endl;
     }
+    if (m_standardWorktime)
+        m_standardWorktime->printDebug();
 }
 #endif

@@ -428,7 +428,7 @@ class KPTResourceGroupRequest {
          * Returns the duration needed to do the effort @param effort
          * starting at @param start.
          */
-        KPTDuration duration(const KPTDateTime &start, const KPTDuration &effort);
+        KPTDuration duration(const KPTDateTime &start, const KPTDuration &effort, bool backward=false);
         
         /**
          * Makes appointments for task @param task to the 
@@ -483,9 +483,9 @@ public:
     
     /**
     * Returns the duration needed to do the effort @param effort
-    * starting at @param start.
+    * starting at @param time.
     */
-    KPTDuration duration(const KPTDateTime &start, const KPTDuration &effort);
+    KPTDuration duration(const KPTDateTime &time, const KPTDuration &effort, bool backward=false);
         
     /**
     * Makes appointments for the task @param task to the requested resources.

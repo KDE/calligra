@@ -84,5 +84,6 @@ private:
     KDGanttViewItem *m_currentItem;
     KDGanttView *m_gantt;
     class KPTTaskAppointmentsView *m_taskView;
+    bool m_showSlack;
 };
  #endif

@@ -556,8 +556,10 @@ void KPTCalendarPanel::setCalendar(KPTCalendar *cal) {
         QPtrListIterator<KPTCalendarDay> it = cal->days();
         //kdDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;
         for (; it.current(); ++it) {
-            table->addMarkedDate(it.current()->date(), it.current()->state());
+            if (it.current()->state() != KPTMap::None) {
+                table->addMarkedDate(it.current()->date(), it.current()->state());
             //kdDebug()<<k_funcinfo<<"Added day: "<<it.current()->date().toString()<<"="<<it.current()->state()<<endl;
+            }
         }
         setEnabled(true);
         table->setFocus();

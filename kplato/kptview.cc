@@ -330,8 +330,8 @@ void KPTView::slotProjectCalculate() {
 
 void KPTView::projectCalculate() {
     getPart()->getProject().calculate();
-    KPTDateTime *t = getPart()->getProject().getStartTime();
-    delete t;
+//    KPTDateTime *t = getPart()->getProject().getStartTime();
+//    delete t;
 }
 
 void KPTView::slotReportDesign() {

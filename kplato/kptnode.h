@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
+   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,7 +34,6 @@
 
 #include <vector>
 
-class KPTEffort;
 class KPTProject;
 class KPTAppointment;
 class KPTResourceGroup;
@@ -41,6 +41,7 @@ class KPTResource;
 class KPTResourceGroupRequest;
 
 class QDomElement;
+
 
 
 /**
@@ -79,8 +80,7 @@ public:
 	  Type_Task = 3,
 	  Type_Milestone = 4,
 	  Type_Periodic = 5,
-	  Type_TerminalNode = 6, // what do we need this for?
-      Type_Summarytask = 7
+      Type_Summarytask = 6
     };
 
     virtual int type() const = 0;
@@ -152,6 +152,7 @@ public:
     KPTRelation *getDependParentNode( int number) {
 	return m_dependParentNodes.at(number);
     }
+    QPtrList<KPTRelation> &dependParentNodes() { return m_dependParentNodes; }
     
     /**
      * Takes the relation @rel.
@@ -167,16 +168,11 @@ public:
     KPTRelation *findRelation(KPTNode *node);
 
     void setStartTime(KPTDateTime startTime) { m_startTime=startTime; }
+    /// Return the (previously) calculated start time
     const KPTDateTime &startTime() const { return m_startTime; }
     void setEndTime(KPTDateTime endTime) { m_endTime=endTime; }
+    /// Return the (previously) calculated end time
     const KPTDateTime &endTime() const { return m_endTime; }
-
-    virtual void setStartTime() {}
-    virtual void setEndTime() {}
-    virtual void setStartEndTime() { setStartTime(); setEndTime(); }
-
-    const KPTDuration &getDuration() const { return m_duration; }
-    virtual KPTDateTime *getEndTime() { return 0L; }
 
     // These are entered by the project man. during the project
     void setActualStartTime(KPTDateTime startTime) { m_actualStartTime=startTime; }
@@ -210,11 +206,6 @@ public:
      * estimation of Project duration.
      */
     virtual KPTDuration *getRandomDuration() = 0;
-
-    /**
-     * Calculate the start time, use actualStartTime() for the actually started time.
-     */
-    virtual KPTDateTime *getStartTime() = 0;
 
     /**
      * Retrieve the calculated float of this node
@@ -253,31 +244,13 @@ public:
     int constraint() const { return m_constraint; }
     QString constraintToString() const;
 
-    const KPTDuration& optimisticDuration(const KPTDateTime &start);
-    const KPTDuration& pessimisticDuration(const KPTDateTime &start);
-
-    virtual const KPTDuration& expectedDurationForwards(const KPTDateTime &start);
-    virtual const KPTDuration& expectedDurationBackwards(const KPTDateTime &start);
-    /**
-     * Calculates and returns the duration.
-     */
-    virtual const KPTDuration& expectedDuration(const KPTDateTime &start);
-    /**
-     * Returns the (previously) calculated duration.
-     * @see m_duration
-     */
-    const KPTDuration& expectedDuration() const;
-
     virtual void setConstraintTime(QDateTime time) { m_constraintTime = time; }
 
     virtual KPTDateTime &constraintTime() { return m_constraintTime; }
     virtual KPTDateTime &startNotEarlier() { return m_constraintTime; }
     virtual KPTDateTime &finishNotLater() { return m_constraintTime; }
     virtual KPTDateTime &mustStartOn() { return m_constraintTime; }
-
-    virtual void calculateStartEndTime() {}
-    virtual void calculateStartEndTime(const KPTDateTime &start) {}
-    virtual void calculateDuration() {}
+    virtual KPTDateTime &mustFinishOn() { return m_constraintTime; }
 
     virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
     virtual void makeAppointments();
@@ -312,76 +285,53 @@ public:
 
     virtual QPtrList<KPTAppointment> appointments(const KPTNode *node);
 
-    virtual bool isDeleted() const { return m_deleted; }
+    virtual bool isDeleted() const 
+        { return (!m_deleted && m_parent) ? m_parent->isDeleted() : m_deleted; }
+    
     virtual void setDeleted(bool on) { m_deleted = on; }
     bool allChildrenDeleted() const;
     
+    virtual void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones) = 0;
+    virtual KPTDateTime calculateForward(int /*use*/) = 0;
+    virtual KPTDateTime calculateBackward(int /*use*/) = 0;
+    virtual KPTDateTime &scheduleForward(KPTDateTime &, int /*use*/) = 0;
+    virtual KPTDateTime &scheduleBackward(KPTDateTime &, int /*use*/) = 0;
+
+    virtual void initiateCalculation();
+    virtual void resetVisited();
+    void propagateEarliestStart(KPTDateTime &time);
+    void propagateLatestFinish(KPTDateTime &time);
+    void moveEarliestStart(KPTDateTime &time);
+    void moveLatestFinish(KPTDateTime &time);
+    // Reimplement this
+    virtual KPTDuration summarytaskDurationForward(const KPTDateTime &time) 
+        { return KPTDuration::zeroDuration; }
+    // Reimplement this
+    virtual KPTDateTime summarytaskEarliestStart() 
+        { return KPTDateTime(); }
+    // Reimplement this
+    virtual KPTDuration summarytaskDurationBackward(const KPTDateTime &time) 
+        { return KPTDuration::zeroDuration; }
+    // Reimplement this
+    virtual KPTDateTime summarytaskLatestFinish() 
+        { return KPTDateTime(); }
+    // Reimplement this
+    virtual KPTDuration workbasedDuration(const KPTDateTime &/*time*/, const KPTDuration &/*effort*/, bool /*backward*/) { return KPTDuration::zeroDuration;}
+    /**
+     * Calculates and returns the duration of the node.
+     * Uses the correct expected-, optimistic- or pessimistic effort
+     * dependent on @param use. If the effort type is Type_Workbased,
+     * the duration is calculated, else the effort is returned.
+     */
+    KPTDuration duration(const KPTDateTime &time, int use, bool backward);
+    // Returns the (previously) calculated duration
+    const KPTDuration &duration() { return m_duration; }
+
 protected:
-    /**
-     * For pert/cpm it is useful to have a hidden start node for each
-     * user-visible node. For KPTProject objects, this will be a
-     * separate KPTNode object. A KPTTask is its own start node.
-     * @return The start node.
-     */
-    virtual KPTNode* start_node(){ return this; }
-    /**
-     * For pert/cpm it is useful to have a hidden end node for each
-     * user-visible node. For KPTProject objects, this will be a
-     * separate KPTNode object. A KPTTask is its own end node.
-     * @return The end node.
-     */
-    virtual KPTNode* end_node(){ return this; }
-    /**
-     * Occasionally we may want to take a start node or end node and
-     * find which node it is the start or end node of.
-     * @return The KPTNode object that has this as a start node
-     * or end node.
-     */
-    KPTNode* owner_node() {
-	return this == this->end_node() ? this : m_parent;
-    }
-    /**
-     * Initialize the lists of nodes successors.list and
-     * predecessors.list so that they match the time-dependencies of this
-     * node. Although the lists contain nodes, refer to them as arcs
-     * because we are interested in the relation between the nodes.
-     */
-    void initialize_arcs();
-    /**
-     * Set up the arcs so that pert/cpm will work.
-     *
-     * Precondition: initialize_arcs() has been called.
-     */
-    void set_up_arcs();
-    /**
-     * Set up values for unvisited arcs. This is a helper function for
-     * pert/cpm. Inititially pert/cpm will not have looked at any
-     * relations or arcsand so we have to set initial values.
-     *
-     * Precondition: set_up_arcs() has been called.
-     */
-    void set_unvisited_values();
-
-    typedef KPTDateTime KPTNode::*start_type;
-
-    /**
-     * Set values of earliest start or latest finish for start and
-     * end node of this  node and all subnodes
-     * KPTProject object.
-     * @param time The time to set all values to.
-     * @param start Either KPTNode::earliestStart or KPTNode::latestFinish.
-     */
-    void set_pert_values( const KPTDateTime& time, start_type start );
-
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;
     QPtrList<KPTRelation> m_dependParentNodes;
     KPTNode *m_parent;
-
-    // Used by load()
-    virtual void addPredesessorNode( KPTRelation *relation );
-    void delPredesessorNode();
-    QPtrList<KPTRelation> m_predesessorNodes;
 
     QString m_name;        // Name of this node
     QString m_leader;      // Person or group responsible for this node
@@ -392,26 +342,7 @@ protected:
     KPTDateTime m_actualStartTime, m_actualEndTime;
 
     KPTEffort* m_effort;
-
-    struct dependencies {
-	/**
-	 * An efficiently reconstructable list of successor/predecessor
-	 * nodes. These are the implicit ones rather than the nodes
-	 * explicitly created as KPTRelation objects.
-	 */
-	std::vector<KPTNode*> list;
-	/**
-	 * The total number of successors/predecessors. Sum of sizes of
-	 * list and m_depend*Nodes.
-	 */
-	unsigned int number;
-	/**
-	 * The number of successors/predecessors not yet visited.
-	 * Used internally by pert/cpm algorithm.
-	 */
-	unsigned int unvisited;
-    } predecessors, successors;
-
+    
     /** earliestStart is calculated by PERT/CPM.
       * A task may be scheduled to start later because other tasks
       * scehduled in parallell takes more time to complete
@@ -424,8 +355,6 @@ protected:
     KPTDateTime latestFinish;
 
     ConstraintType m_constraint;
-
-    void calcDuration(const KPTDateTime &time, const KPTDuration &effort, bool forward=true);
 
     /**
       * @m_constraintTime is used if any of the constraints
@@ -449,18 +378,19 @@ protected:
       */
     KPTDuration m_duration;
 
+    //TODO: better error indications
     bool m_resourceError;
+    bool m_resourceOverbooked;
 
     int m_id; // unique id
     
     bool m_deleted;
- 
+
+    bool m_visitedForward;
+    bool m_visitedBackward;
+    
  private:
     void init();
-
-    bool m_resourceOverbooked;
-
-    int m_calculated; //HACK: 1=forward, 2 =backward
 
 #ifndef NDEBUG
 public:
@@ -469,7 +399,7 @@ public:
 
 };
 
-////////////////////////////////////////////   KPTEffort   //////////////////////////////////////////////////
+////////////////////////////////   KPTEffort   ////////////////////////////////
 /**
   * Any @ref KPTNode will store how much time it takes to complete the node
   * (typically a @ref KPTTask) in the traditional scheduling software the
@@ -487,11 +417,22 @@ public:
     enum Type { Type_WorkBased = 0,        // Changing amount of resources changes the task duration
                           Type_FixedDuration = 1     // Changing amount of resources will not change the tasks duration
      };
-     Type type() const { return m_type; }
-     void setType(Type type) { m_type = type; }
-     void setType(QString type);
-     QString typeToString() const;
+    Type type() const { return m_type; }
+    void setType(Type type) { m_type = type; }
+    void setType(QString type);
+    QString typeToString() const;
 
+    enum Use { Use_Expected=0, Use_Optimistic=1, Use_Pessimistic=2 };
+    const KPTDuration& effort(int use) {
+        if (use == KPTEffort::Use_Expected)
+            return m_expectedEffort;
+        else if (use == KPTEffort::Use_Optimistic)
+            return m_optimisticEffort;
+        else if (use == KPTEffort::Use_Pessimistic)
+            return m_pessimisticEffort;
+        
+        return m_expectedEffort; // default
+    }
     const KPTDuration& optimistic() const {return m_optimisticEffort;}
     const KPTDuration& pessimistic() const {return m_pessimisticEffort;}
     const KPTDuration& expected() const {return m_expectedEffort;}

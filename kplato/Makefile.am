@@ -28,7 +28,7 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
 # (this is not used)
 noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
     kptnode.h kptpart.h kptproject.h kptrelation.h \
-    kptresource.h kpttask.h kptterminalnode.h kptview.h \
+    kptresource.h kpttask.h kptview.h \
     kptprojectdialog.h kptmainprojectdialog.h kpttaskdialog.h  \
     kptganttview.h kptcanvasitem.h \
     kptpertview.h kptpertcanvas.h kptrelationdialog.h \

@@ -58,12 +58,17 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     : QSplitter(parent, name),
     m_mainview( view ),
 	m_currentItem(0),
-    m_taskView(0)
+    m_taskView(0),
+    m_showSlack(true)
 {
 
     setOrientation(QSplitter::Vertical);
 
     m_gantt = new KDGanttView(this, "Gantt view");
+    m_gantt->addColumn("Earliest start");
+    m_gantt->addColumn("Start");
+    m_gantt->addColumn("End");
+    m_gantt->addColumn("Latest finish");
     m_gantt->setScale(KDGanttView::Day);
     m_taskView = new KPTTaskAppointmentsView(this, "Task widget");
 	draw(view->getPart()->getProject());
@@ -137,130 +142,131 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node
 {
     if (node->isDeleted())
         return;
-	KPTDateTime *time = node->getStartTime();
-	KPTDuration *dur = node->getExpectedDuration();
-    if (*dur == KPTDuration::zeroDuration)
-        dur->addSeconds(1); // avoid bug in KDGannt
-	KPTGanttViewSummaryItem *item;
-	if ( parentItem) {
-	  item = new KPTGanttViewSummaryItem(parentItem, node);
-	}
-	else {
-		// we are on the top level
-		item = new KPTGanttViewSummaryItem(m_gantt, node);
-	}
+    KPTDateTime time = node->startTime();
+    KPTDuration dur = node->duration();
+    if (dur == KPTDuration::zeroDuration)
+        dur.addSeconds(1); // avoid bug in KDGannt
+    KPTGanttViewSummaryItem *item;
+    if ( parentItem) {
+      item = new KPTGanttViewSummaryItem(parentItem, node);
+    } else {
+        // we are on the top level
+        item = new KPTGanttViewSummaryItem(m_gantt, node);
+    }
 
-	item->setStartTime(*time);
-	item->setEndTime(*time + *dur);
-	item->setOpen(true);
+    item->setStartTime(time);
+    item->setEndTime(node->endTime());
+    item->setOpen(true);
 
-    delete time;
-	delete dur;
-
-	drawChildren(item, *node);
+    drawChildren(item, *node);
 }
 
 void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *node)
 {
     if (node->isDeleted())
         return;
-	KPTDateTime *time = node->getStartTime();
-	KPTDuration *dur = node->getExpectedDuration();
-    if (*dur == KPTDuration::zeroDuration)
-        dur->addSeconds(1); // avoid bug in KDGannt
-	// display summary item
-	KPTGanttViewSummaryItem *item;
-	if ( parentItem) {
-		item = new KPTGanttViewSummaryItem(parentItem, node);
-	}
-	else {
-		// we are on the top level
-		item = new KPTGanttViewSummaryItem(m_gantt, node);
-	}
-	item->setStartTime(*time);
-	item->setEndTime(*time + *dur);
-	item->setOpen(true);
+    KPTDateTime time = node->startTime();
+    KPTDuration dur = node->duration();
+    if (dur == KPTDuration::zeroDuration)
+        dur.addSeconds(1); // avoid bug in KDGannt
+    // display summary item
+    KPTGanttViewSummaryItem *item;
+    if ( parentItem) {
+        item = new KPTGanttViewSummaryItem(parentItem, node);
+    } else {
+        // we are on the top level
+        item = new KPTGanttViewSummaryItem(m_gantt, node);
+    }
+    item->setStartTime(time);
+    item->setEndTime(node->endTime());
+    item->setOpen(true);
 
-	drawChildren(item, *node);
-
-	delete time;
-	delete dur;
+    drawChildren(item, *node);
 }
 
 void KPTGanttView::drawSummaryTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
     if (task->isDeleted())
         return;
-	KPTDateTime *time = task->getStartTime();
-	KPTDuration *dur = task->getExpectedDuration();
-    if (*dur == KPTDuration::zeroDuration)
-        dur->addSeconds(1); // avoid bug in KDGannt
-	// display summary item
-	KPTGanttViewSummaryItem *item;
-	if ( parentItem) {
-		item = new KPTGanttViewSummaryItem(parentItem, task);
-	}
-	else {
-		// we are on the top level
-		item = new KPTGanttViewSummaryItem(m_gantt, task);
-	}
-	item->setStartTime(*time);
-	item->setEndTime(*time + *dur);
-	item->setOpen(true);
+    KPTDateTime time = task->startTime();
+    KPTDuration dur = task->duration();
+    if (dur == KPTDuration::zeroDuration)
+        dur.addSeconds(1); // avoid bug in KDGannt
+    // display summary item
+    KPTGanttViewSummaryItem *item;
+    if ( parentItem) {
+        item = new KPTGanttViewSummaryItem(parentItem, task);
+    } else {
+        // we are on the top level
+        item = new KPTGanttViewSummaryItem(m_gantt, task);
+    }
+    item->setStartTime(time);
+    item->setEndTime(task->endTime());
+    item->setOpen(true);
+    if (m_showSlack) { // Test
+        item->setListViewText(1, "  " +  item->getNode()->getEarliestStart().toString(Qt::ISODate));
+        item->setListViewText(2, "  " +  item->getNode()->startTime().toString(Qt::ISODate));
+        item->setListViewText(3,  "  " + item->getNode()->endTime().toString(Qt::ISODate));
+        item->setListViewText(4, "  " +  item->getNode()->getLatestFinish().toString(Qt::ISODate));
+    }
 
-	drawChildren(item, *task);
+    drawChildren(item, *task);
 
-	delete time;
-	delete dur;
 }
 
 void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
     if (task->isDeleted())
         return;
-	KPTDateTime *time = task->getStartTime();
-	KPTDuration *dur = task->getExpectedDuration();
-    if (*dur == KPTDuration::zeroDuration)
-        dur->addSeconds(1); // avoid bug in KDGannt
-	// display task item
-	KPTGanttViewTaskItem *item;
-	if ( parentItem ) {
-		item = new KPTGanttViewTaskItem(parentItem, task);
-	}
-	else {
-		// we are on the top level
-		item = new KPTGanttViewTaskItem(m_gantt, task);
-	}
-	item->setStartTime(*time);
-	item->setEndTime(*time + *dur);
-	item->setOpen(true);
+    KPTDateTime time = task->startTime();
+    KPTDuration dur = task->duration();
+    if (dur == KPTDuration::zeroDuration)
+        dur.addSeconds(1); // avoid bug in KDGannt
+    // display task item
+    KPTGanttViewTaskItem *item;
+    if ( parentItem ) {
+        item = new KPTGanttViewTaskItem(parentItem, task);
+    }
+    else {
+        // we are on the top level
+        item = new KPTGanttViewTaskItem(m_gantt, task);
+    }
+    item->setStartTime(time);
+    item->setEndTime(task->endTime());
+    item->setOpen(true);
     if (task->resourceOverbooked() || task->resourceError()) {
         QColor c(yellow);
         item->setColors(c,c,c);
         //kdDebug()<<k_funcinfo<<"Task: "<<task->name()<<" resourceError="<<task->resourceError()<<endl;
     }
-
-	delete time;
-	delete dur;
+    if (m_showSlack) { // Test
+        item->setListViewText(1, "  " +  item->getTask()->getEarliestStart().toString(Qt::ISODate));
+        item->setListViewText(2, "  " +  item->getTask()->startTime().toString(Qt::ISODate));
+        item->setListViewText(3, "  " +  item->getTask()->endTime().toString(Qt::ISODate));
+        item->setListViewText(4, "  " +  item->getTask()->getLatestFinish().toString(Qt::ISODate));
+    }
 }
 
 void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
     if (task->isDeleted())
         return;
-	KPTDateTime *time = task->getStartTime();
-	KPTGanttViewEventItem *item;
-	if ( parentItem ) {
-		item = new KPTGanttViewEventItem(parentItem, task);
-	}
-	else {
-		// we are on the top level
-		item = new KPTGanttViewEventItem(m_gantt, task);
-	}
-	item->setStartTime(*time);
-	item->setOpen(true);
-
-    delete time;
+    KPTDateTime time = task->startTime();
+    KPTGanttViewEventItem *item;
+    if ( parentItem ) {
+        item = new KPTGanttViewEventItem(parentItem, task);
+    } else {
+        // we are on the top level
+        item = new KPTGanttViewEventItem(m_gantt, task);
+    }
+    item->setStartTime(time);
+    item->setOpen(true);
+    if (m_showSlack) { // Test
+        item->setListViewText(1, "  " +  item->getTask()->getEarliestStart().toString(Qt::ISODate));
+        item->setListViewText(2, "  " +  item->getTask()->startTime().toString(Qt::ISODate));
+        item->setListViewText(3, "  " +  item->getTask()->endTime().toString(Qt::ISODate));
+        item->setListViewText(4, "  " +  item->getTask()->getLatestFinish().toString(Qt::ISODate));
+    }
 }
 
 void KPTGanttView::drawRelations()

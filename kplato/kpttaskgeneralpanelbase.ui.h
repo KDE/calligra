@@ -1,6 +1,6 @@
-void KPTTaskGeneralPanelBase::setSchedulingType(int scheduleType)
+void KPTTaskGeneralPanelBase::setSchedulingType(int type)
 {
-    switch (scheduleType)
+    switch (type)
     {
     case 0:
     case 1:
@@ -14,7 +14,8 @@ void KPTTaskGeneralPanelBase::setSchedulingType(int scheduleType)
 	specifyTime->setEnabled(true);
 	break;
     }
-    emit schedulingTypeChanged(scheduleType);
+    scheduleType->setButton(type);
+    emit schedulingTypeChanged(type);
     checkAllFieldsFilled();
 }
 
