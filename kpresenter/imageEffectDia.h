@@ -74,6 +74,7 @@ private:
     void updatePreview();
     void setupSignals();
     QPixmap m_pix;
+    QPixmap m_origpix;
     ImageEffect m_effect;
     QVariant m_param1, m_param2, m_param3;
     EffectBrowserBase * base;

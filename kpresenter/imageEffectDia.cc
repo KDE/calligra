@@ -62,7 +62,7 @@ ImageEffectDia::~ImageEffectDia()
 
 void ImageEffectDia::effectChanged(int eff)
 {
-    QImage _tmpImage = m_pix.convertToImage();
+    QImage _tmpImage = m_origpix.convertToImage();
 
     //clear the (unused) params
     m_param1 = QVariant();
@@ -209,7 +209,9 @@ void ImageEffectDia::okClicked()
 void ImageEffectDia::setPixmap(QPixmap pix)
 {
     m_pix = pix;
+    m_origpix = pix;
     m_pix.detach();
+    m_origpix.detach();
 }
 
 void ImageEffectDia::updatePreview()
