@@ -130,9 +130,11 @@ bool KoDocumentChild::load( const QDomElement& element, bool uppercase )
     }
 
     bool brect = FALSE;
-    QDomElement e = element.firstChild().toElement();
-    for( ; !e.isNull(); e = e.nextSibling().toElement() )
+    QDomNode n = element.firstChild();
+    for( ; !n.isNull(); n = n.nextSibling() )
     {
+        QDomElement e = n.toElement();
+        if ( e.isNull() ) continue;
         if ( e.tagName() == "rect" || ( uppercase && e.tagName() == "RECT" ) )
         {
             brect = true;

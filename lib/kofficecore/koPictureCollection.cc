@@ -261,12 +261,12 @@ void KoPictureCollection::saveXMLAsKOffice1Dot1(QDomDocument &doc, QDomElement& 
 
 void KoPictureCollection::readXML( QDomElement& pixmapsElem, QMap <KoPictureKey, QString>& map )
 {
-    for(
-        QDomElement keyElement = pixmapsElem.firstChild().toElement();
-        !keyElement.isNull();
-        keyElement = keyElement.nextSibling().toElement()
-        )
+    for( QDomNode n = pixmapsElem.firstChild();
+         !n.isNull();
+         n = n.nextSibling() )
     {
+        QDomElement keyElement = n.toElement();
+        if (keyElement.isNull()) continue;
         if (keyElement.tagName()=="KEY")
         {
             KoPictureKey key;

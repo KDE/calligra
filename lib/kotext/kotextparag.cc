@@ -1790,7 +1790,6 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 
 void KoTextParag::writeSpanText( KoXmlWriter& writer, const QString& text ) const
 {
-    kdDebug() << k_funcinfo << text << endl;
     uint len = text.length();
     int nrSpaces = 0; // number of consecutive spaces
     QString str;

@@ -232,33 +232,36 @@ bool KoDocumentInfoAuthor::loadOasis( const QDomNode& metaDoc )
     return true;
 }
 
+// KOffice-1.3 format
 bool KoDocumentInfoAuthor::load( const QDomElement& e )
 {
-    QDomElement n = e.namedItem( "author" ).firstChild().toElement();
-    for( ; !n.isNull(); n = n.nextSibling().toElement() )
+    QDomNode n = e.namedItem( "author" ).firstChild();
+    for( ; !n.isNull(); n = n.nextSibling() )
     {
-        if ( n.tagName() == "full-name" )
-            m_fullName = n.text();
-        else if ( n.tagName() == "initial" )
-            m_initial = n.text();
-        else if ( n.tagName() == "title" )
-            m_title = n.text();
-        else if ( n.tagName() == "company" )
-            m_company = n.text();
-        else if ( n.tagName() == "email" )
-            m_email = n.text();
-        else if ( n.tagName() == "telephone" )
-            m_telephone = n.text();
-        else if ( n.tagName() == "fax" )
-            m_fax = n.text();
-        else if ( n.tagName() == "country" )
-            m_country = n.text();
-        else if ( n.tagName() == "postal-code" )
-            m_postalCode = n.text();
-        else if ( n.tagName() == "city" )
-            m_city = n.text();
-        else if ( n.tagName() == "street" )
-            m_street = n.text();
+        QDomElement e = n.toElement();
+        if ( e.isNull() ) continue;
+        if ( e.tagName() == "full-name" )
+            m_fullName = e.text();
+        else if ( e.tagName() == "initial" )
+            m_initial = e.text();
+        else if ( e.tagName() == "title" )
+            m_title = e.text();
+        else if ( e.tagName() == "company" )
+            m_company = e.text();
+        else if ( e.tagName() == "email" )
+            m_email = e.text();
+        else if ( e.tagName() == "telephone" )
+            m_telephone = e.text();
+        else if ( e.tagName() == "fax" )
+            m_fax = e.text();
+        else if ( e.tagName() == "country" )
+            m_country = e.text();
+        else if ( e.tagName() == "postal-code" )
+            m_postalCode = e.text();
+        else if ( e.tagName() == "city" )
+            m_city = e.text();
+        else if ( e.tagName() == "street" )
+            m_street = e.text();
     }
     return true;
 }
@@ -464,13 +467,15 @@ bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
 // KOffice-1.3 format
 bool KoDocumentInfoAbout::load( const QDomElement& e )
 {
-    QDomElement n = e.namedItem( "about" ).firstChild().toElement();
-    for( ; !n.isNull(); n = n.nextSibling().toElement() )
+    QDomNode n = e.namedItem( "about" ).firstChild();
+    for( ; !n.isNull(); n = n.nextSibling()  )
     {
-        if ( n.tagName() == "abstract" )
-            m_abstract = n.text();
-        else if ( n.tagName() == "title" )
-            m_title = n.text();
+        QDomElement e = n.toElement();
+        if ( e.isNull() ) continue;
+        if ( e.tagName() == "abstract" )
+            m_abstract = e.text();
+        else if ( e.tagName() == "title" )
+            m_title = e.text();
     }
 
     return true;
