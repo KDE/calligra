@@ -2,7 +2,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file './qtsqldatasourceeditor.ui'
 **
-** Created: jeu nov 8 07:48:34 2001
+** Created: Mit Nov 7 20:07:32 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -12,6 +12,7 @@
 #include <qvariant.h>   // first for gcc 2.7.2
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qdatatable.h>
 #include <qframe.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
