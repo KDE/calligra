@@ -23,7 +23,7 @@
 #include <qkeycode.h>
 #include <qprndlg.h>
 #include <qwmatrix.h>
-#include <qimageio.h>
+#include <kimgio.h>
 
 #include <kfiledialog.h>
 #include <kcolordlg.h>
@@ -226,7 +226,7 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
 
 void KImageShopView::createGUI()
 {
-  qInitImageIO();
+  kimgioRegister();
 
   // setup canvas
   m_pCanvas = new canvas( 510, 515, this );

@@ -157,7 +157,7 @@ canvas::addRGBLayer(QString file)
 // Constructs the composite image in the tile at x,y and updates the relevant
 // pixmap
 void
-canvas::compositeTile(int x, int y, layer *dstLay=0, int dstTile=-1)
+canvas::compositeTile(int x, int y, layer *dstLay, int dstTile)
 {
 	// work out which tile to render into unless directed to a specific tile
 	if (dstTile==-1)
@@ -458,7 +458,7 @@ canvas::setCurrentLayer(int l)
 
 
 void
-canvas::setLayerOpacity(uchar o, layer *lay=0)
+canvas::setLayerOpacity(uchar o, layer *lay)
 {
 	lay=layerPtr(lay);
 	lay->setOpacity(o);
@@ -503,7 +503,7 @@ canvas::mouseMoveEvent ( QMouseEvent *e )
 }
 
 void
-canvas::mouseReleaseEvent ( QMouseEvent *e )
+canvas::mouseReleaseEvent ( QMouseEvent * )
 {
 	if (dragging)
 		dragging=false;

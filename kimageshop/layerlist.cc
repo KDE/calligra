@@ -18,13 +18,13 @@
 QPixmap *layerList::eyeIcon, *layerList::linkIcon;
 QRect layerList::eyeRect, layerList::linkRect;
 
-layerList::layerList(QWidget * parent=0, const char * name=0, WFlags f=0)
+layerList::layerList(QWidget * parent, const char * name, WFlags f)
 	: QTableView(parent, name, f)
 {
 	init(0);
 }
 
-layerList::layerList(canvas *c, QWidget *parent=0, const char *name=0,
+layerList::layerList(canvas *c, QWidget *parent, const char *name,
 										 WFlags f=0)
 	: QTableView(parent, name, f)
 {
@@ -58,7 +58,7 @@ layerList::init(canvas *c)
 }
 
 void
-layerList::paintCell(QPainter *p, int row, int col)
+layerList::paintCell(QPainter *p, int row, int )
 {
 	if (row==selected) {
 		p->fillRect(0,0, cellWidth()-1, cellHeight()-1, QColor(15,175,50));
