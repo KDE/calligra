@@ -1139,7 +1139,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     if ( format->strikeOutLineType() == KoTextFormat::S_SIMPLE
         || format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)
     {
-        unsigned int dim = (format->strikeOutLineType() == KoTextFormat::U_SIMPLE_BOLD)? KoBorder::zoomWidthY( 2, zh, 1 ) : KoBorder::zoomWidthY( 1, zh, 1 );
+        unsigned int dim = (format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)? KoBorder::zoomWidthY( 2, zh, 1 ) : KoBorder::zoomWidthY( 1, zh, 1 );
 
         p->save();
         switch( format->strikeOutLineStyle() )
@@ -1164,7 +1164,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             p->setPen( QPen( color, dim, Qt::SolidLine ) );
         }
         int y = 0;
-        if (format->strikeOutLineType() == KoTextFormat::U_SIMPLE_BOLD )
+        if (format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD )
             y = lastY + baseLine + KoBorder::zoomWidthY( 2, zh, 0 );
         else
             y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
