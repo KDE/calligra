@@ -106,7 +106,7 @@ binary-arch: build install binary-indep
 	done
 	dh_undocumented
 	list=`cd debian/tmp && find ./ -type l -name "lib*.so" | sed -e 's#^./##'` ;\
-	dh_movefiles -pkoffice-dev $$list usr/lib/*.a usr/include
+	dh_movefiles -pkoffice-dev $$list usr/lib/*.a usr/include/kde
 	dh_movefiles -pkchart usr/bin/kchart usr/share/apps/kchart/* \
 		usr/share/applnk/Office/kchart.desktop \
 		usr/share/mimelnk/application/x-kchart.desktop \
