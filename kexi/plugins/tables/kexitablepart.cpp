@@ -113,7 +113,7 @@ KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params
 	KexiDBRecord *m_record=0;
         try
         {
-                m_record = kexiProject()->db()->queryRecord("select * from " + items()->find(identifier)->name(), false);
+                m_record = kexiProject()->db()->queryRecord("select * from " + items()->find(localIdentifier(identifier))->name(), false);
         }
         catch(KexiDBError &err)
         {
@@ -127,7 +127,7 @@ KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params
 
 QStringList KexiTablePart::fields(const QString& identifier)
 {
-	return kexiProject()->db()->getColumns(identifier);
+	return kexiProject()->db()->getColumns(localIdentifier(identifier));
 }
 
 QStringList KexiTablePart::datasets()
