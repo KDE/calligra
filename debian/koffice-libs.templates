@@ -5,4 +5,9 @@ Description: KOffice is Pre-Beta!!!
  things like filters are incomplete and will (note will, not can) cause
  crashes.  The main reason for me including this version of KOffice at
  this time is to work out packaging problems and non-filter related bugs.
- 
+Description-sv: KOffice har inte ens nått Beta stadiet!!!
+ KOffice är inte komplett. De flesta vardagliga funktioner fungerar, men
+ saker som filter är ofullständiga och kommer (notera kommer, inte kan)
+ orsaka krascher. Den huvudsakliga anledningen till att jag inkluderar
+ denna version av KOffice i detta skede är för att reda ut problem med
+ packeteringen  och icke-filter relaterade buggar.

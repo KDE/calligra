@@ -1,5 +1,5 @@
 Source: koffice
-Build-Depends: autoconf, automake, libtool, debhelper, kdelibs3-dev (>= 4:2.1-beta2-2), libtiff3g-dev
+Build-Depends: autoconf, automake, libtool, debhelper, gettext, kdelibs3-dev (>= 4:2.1-beta2-2), libtiff3g-dev
 Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
