@@ -467,6 +467,9 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         if ( progress->wasCancelled() )
             return false;
 
+        if ( parag->at(0)->isCustom() )     // start of a table
+            continue;
+
         QString s = parag->string()->toString();
 
         // Character count
