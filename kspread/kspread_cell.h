@@ -25,8 +25,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kspread_cell_h__
-#define __kspread_cell_h__
+#ifndef KSPREAD_CELL
+#define KSPREAD_CELL
 
 class KSpreadCell;
 class KSpreadSheet;
@@ -1042,4 +1042,4 @@ private:
   void offsetAlign( int _col, int _row );
 };
 
-#endif
+#endif  // KSPREAD_CELL
