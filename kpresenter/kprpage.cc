@@ -3057,16 +3057,16 @@ void KPrPage::makeUsedPixmapList()
        if( it.current()->getType()==OT_PICTURE || it.current()->getType()==OT_CLIPART)
        {
            if( it.current()->getType()==OT_PICTURE)
-               m_doc->appendPixmapKey(dynamic_cast<KPPixmapObject*>( it.current() )->getKey() );
+               m_doc->insertPixmapKey(dynamic_cast<KPPixmapObject*>( it.current() )->getKey() );
            else
-               m_doc->appendClipartKey(dynamic_cast<KPClipartObject*>( it.current())->getKey());
+               m_doc->insertClipartKey(dynamic_cast<KPClipartObject*>( it.current())->getKey());
        }
    }
 
    if( kpbackground->getBackType()==BT_PICTURE)
-       m_doc->appendPixmapKey(kpbackground->getBackPixKey());
+       m_doc->insertPixmapKey(kpbackground->getBackPixKey());
    else if( kpbackground->getBackType()==BT_CLIPART)
-       m_doc->appendClipartKey(kpbackground->getBackClipKey());
+       m_doc->insertClipartKey(kpbackground->getBackClipKey());
 }
 
 

@@ -1828,9 +1828,9 @@ void KPresenterDoc::makeUsedPixmapList()
     usedPixmaps.clear();
     usedCliparts.clear();
 
-    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+    for ( uint i = 0; i < m_pageList.count(); i++ ) {
 	if ( saveOnlyPage != -1 &&
-	     i != saveOnlyPage )
+	     static_cast<int>(i) != saveOnlyPage )
 	    continue;
         m_pageList.at(i)->makeUsedPixmapList();
     }
@@ -2104,14 +2104,16 @@ void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
     m_pageList.at(page)->appendObject(_obj);
 }
 
-void KPresenterDoc::appendPixmapKey( KPImageKey key)
+void KPresenterDoc::insertPixmapKey( KPImageKey key )
 {
-    usedPixmaps.append(key);
+    if ( !usedPixmaps.contains( key ) )
+        usedPixmaps.append( key );
 }
 
-void KPresenterDoc::appendClipartKey(KPClipartKey key)
+void KPresenterDoc::insertClipartKey( KPClipartKey key )
 {
-    usedCliparts.append(key);
+    if ( !usedCliparts.contains( key ) )
+        usedCliparts.append( key );
 }
 
 KPrPage * KPresenterDoc::initialActivePage()

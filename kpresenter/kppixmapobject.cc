@@ -30,7 +30,6 @@
 #include <kozoomhandler.h>
 // for getenv ()
 #include <stdlib.h>
-using namespace std;
 
 /******************************************************************/
 /* Class: KPPixmapObject                                          */

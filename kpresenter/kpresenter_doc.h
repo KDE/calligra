@@ -124,8 +124,8 @@ public:
     // We need one that's not const, due to QPtrList::at() not being const
     QPtrList<KPrPage>& pageList() { return m_pageList;}
 
-    void appendPixmapKey( KPImageKey key);
-    void appendClipartKey(KPClipartKey key);
+    void insertPixmapKey( KPImageKey key );
+    void insertClipartKey( KPClipartKey key );
 
     void insertObjectInPage(double offset, KPObject *_obj);
 
