@@ -77,10 +77,12 @@ KWChild::~KWChild()
 {
 }
 
-KoDocument *KWChild::hitTest( const QPoint &, const QWMatrix & )
+KoDocument *KWChild::hitTest( const QPoint &p, const QWMatrix &m )
 {
-  // Disable part-manager magic for part activation, KWord does it itself.
-  return 0L;
+  // This was meant to disable part activation on RMB ... but it breaks
+  // part activation with LMB
+  //return 0L;
+  return KoDocumentChild::hitTest( p, m );
 }
 
 /******************************************************************/
@@ -340,8 +342,7 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 
 KoDocument *KWDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
 {
-    // Disable part-manager magic for part activation, KWord does it itself.
-    return 0L;
+    return KoDocument::hitTest( pos, matrix );
 }
 
 KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num ) const
