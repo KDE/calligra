@@ -311,7 +311,7 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
 
   //grmpfl... there's already a stop icon in koffice/pics/toolbar, but I
   //don't want to use it, I want the original kfm icon
-  pix = OPUIUtils::convertPixmap(ICON( kapp->kde_toolbardir() + "/stop.xpm" ));
+  pix = OPUIUtils::convertPixmap(ICON( "stop.xpm" ));
   toolTip = Q2C( i18n("Stop") );
   m_idStop = m_vMainToolBar->insertButton2(pix, ID_STOP, SIGNAL(clicked()), this, "slotStop", m_pDoc->documentLoading(), toolTip, -1);
 
@@ -908,9 +908,7 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
       if ( S_ISDIR( buff.st_mode ) )
       {
 	OpenPartsUI::Pixmap_var pix;
-	QString f = kapp->kde_icondir().data();
-	f += "/mini/folder.xpm";
-	pix = OPUIUtils::loadPixmap(f);
+	pix = OPUIUtils::convertPixmap( ICON( "/mini/folder.xpm" ) );
 
         OpenPartsUI::Menu_var pop;
 	CORBA::WString_var text = Q2C( QString( ep->d_name ) );
@@ -960,16 +958,11 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
 	      pix = OPUIUtils::loadPixmap(f);
 	    else
 	    {
-	      f = kapp->kde_icondir().data();
-	      f += "/mini/";
-	      f += miniicon;
 	      if ( access( f, R_OK ) >= 0 )
-		pix = OPUIUtils::loadPixmap(f);
+		pix = OPUIUtils::convertPixmap( ICON( "/mini/" + miniicon ) );
 	      else
 	      {
-		f = kapp->kde_icondir().data();
-		f += "/mini/unknown.xpm";
-		pix = OPUIUtils::loadPixmap(f);
+		pix = OPUIUtils::convertPixmap( ICON( "/mini/unknown.xpm" ) );
 	      }
 	    }
 	    text = Q2C( name );
