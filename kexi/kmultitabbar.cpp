@@ -235,7 +235,9 @@ void KMultiTabBarTab::showActiveTabText(bool show)
 
 void KMultiTabBarTab::drawButton(QPainter *paint)
 {
-        QPixmap pixmap = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal );
+        QPixmap pixmap;
+	if ( iconSet()) 
+        	pixmap = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal );
     paint->fillRect(0, 0, 24, 24, colorGroup().background());
 	if (!isOn())
 	{
