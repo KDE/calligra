@@ -321,6 +321,7 @@ bool KPresenterDoc::load_template(const char *_url)
     return false;
  
   m_bModified = true;
+  in.close();
   return true;
 }
 
