@@ -154,7 +154,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
 
       for ( currentrow = 1 ; currentrow < iMaxRow ; ++currentrow)
       {
-        KSpreadCell * cell;
+        KSpreadCell * cell = 0L;
         iUsedColumn=0;
         for ( currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
         {
@@ -165,7 +165,8 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
                 iUsedColumn = currentcolumn;
             }
         }
-        iUsedColumn += cell->extraXCells();
+        if (cell)
+          iUsedColumn += cell->extraXCells();
 	if (iUsedColumn > iMaxUsedColumn)
 	  iMaxUsedColumn = iUsedColumn;
 	if ( iUsedColumn > 0 )
