@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003,2004 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -240,6 +240,16 @@ class KSpreadValue
      * Returns the date/time representation of this value.
      */
     QDateTime asDateTime() const;
+
+    /**
+     * Returns the date representation of this value.
+     */
+    QDate asDate() const;
+
+    /**
+     * Returns the time representation of this value.
+     */
+    QTime asTime() const;
 
     /**
      * Returns error message associated with this value.

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003,2004 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -319,6 +319,28 @@ QDateTime KSpreadValue::asDateTime() const
   double f = asFloat();
   dt = dt.addSecs( (f-(int)f) * 86400 );
   if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
+  
+  return dt;
+}
+
+// get the value as date
+QDate KSpreadValue::asDate() const
+{
+  QDate dt( 1899, 12, 31 );
+
+  double f = asFloat();
+  if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
+  
+  return dt;
+}
+
+// get the value as time
+QTime KSpreadValue::asTime() const
+{
+  QTime dt;
+  
+  double f = asFloat();
+  dt = dt.addSecs( (f-(int)f) * 86400 );
   
   return dt;
 }
