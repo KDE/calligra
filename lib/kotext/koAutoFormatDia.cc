@@ -39,7 +39,7 @@
 #include <knuminput.h>
 #include <kcompletion.h>
 #include <kconfig.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <qcombobox.h>
 #include <qdir.h>
 #include <koSearchDia.h>
@@ -1234,7 +1234,7 @@ void KoCompletionDia::slotSaveCompletionEntry()
 void KoCompletionDia::slotAddCompletionEntry()
 {
     bool ok;
-    QString newWord = KLineEditDlg::getText( i18n("Add Completion Entry"),i18n("Enter entry:"),QString::null, &ok, this );
+    QString newWord = KInputDialog::getText( i18n("Add Completion Entry"), i18n("Enter entry:"), QString::null, &ok, this );
     if ( ok )
     {
         if ( !m_listCompletion.contains( newWord ))
