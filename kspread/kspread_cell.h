@@ -391,7 +391,7 @@ public:
      * Possible choices for link are URL (web, ftp), e-mail address, local file, 
      * or another cell.
      */
-    void setLink( const QString& link );
+    void setLink( const QString& link, bool bold = false, bool italic = false );
     
     /**
      * Returns the link associated with cell. It is empty if this cell

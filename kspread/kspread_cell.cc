@@ -4077,7 +4077,7 @@ void KSpreadCell::setDisplayText( const QString& _text )
   m_pTable->doc()->emitEndOperation( QRect( d->column, d->row, 1, 1 ) );
 }
 
-void KSpreadCell::setLink( const QString& link )
+void KSpreadCell::setLink( const QString& link, bool bold, bool italic )
 {
   if( link.isEmpty() ) return;
 
@@ -4089,7 +4089,13 @@ void KSpreadCell::setLink( const QString& link )
 
   // TODO what if strText is already rich-text?
 
-  t = "!<a href=\"" + link + "\">" + t + +"</a>";;
+  
+  t = "<a href=\"" + link + "\">" + t + "</a>";
+  if( italic ) 
+    t.prepend( "<i>" ).append( "</i>" );  
+  if( bold ) 
+    t.prepend( "<b>" ).append( "</b>" );  
+  t.prepend( '!' );
   setCellText( t );
 }
 
