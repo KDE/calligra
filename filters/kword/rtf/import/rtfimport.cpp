@@ -469,7 +469,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
       mainDoc.addNode( "ATTRIBUTES" );
 	mainDoc.setAttribute( "standardpage", 1 );
 	mainDoc.setAttribute( "processing", 0 );
-	mainDoc.setAttribute( "unit", "pt" );
+	//mainDoc.setAttribute( "unit", "pt" ); // use KWord default instead
 	mainDoc.setAttribute( "hasHeader", hasHeader );
 	mainDoc.setAttribute( "hasFooter", hasFooter );
       mainDoc.closeNode( "ATTRIBUTES" );

@@ -376,7 +376,7 @@ KWordFilter::parse (const QString & filename)
                "\" bottom=\"" + QString::number(BottomMargin) + "\" />\n" );
   root.append( "</PAPER>\n" );
 
-  root.append( "<ATTRIBUTES standardpage=\"1\" unit=\"mm\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n" );
+  root.append( "<ATTRIBUTES standardpage=\"1\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n" );
 
   root.append( "<FRAMESETS>\n" );
   root.append( "<FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" autoCreateNewFrame=\"1\">\n" );

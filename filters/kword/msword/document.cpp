@@ -81,7 +81,7 @@ void Document::finishDocument()
                         wvWare::HeaderData::FooterOdd |
                         wvWare::HeaderData::FooterFirst );
     element.setAttribute("hasFooter", m_headerFooters & allFooters ? 1 : 0 );
-    element.setAttribute("unit","mm"); // How to figure out the unit to use?
+    //element.setAttribute("unit","mm"); // How to figure out the unit to use?
 
     element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
     elementDoc.appendChild(element);

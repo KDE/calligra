@@ -200,7 +200,7 @@ void WMLConverter::parse( const char* filename )
   prolog += "<PAPER width=\"595\" spHeadBody=\"9\" format=\"1\" height=\"841\" fType=\"0\" orientation=\"0\" hType=\"0\" columnspacing=\"2\" spFootBody=\"9\" columns=\"1\" >\n";
   prolog += "<PAPERBORDERS right=\"28\" left=\"28\" bottom=\"42\" top=\"42\" />\n";
   prolog += "</PAPER>\n";
-  prolog += "<ATTRIBUTES hasTOC=\"0\" standardpage=\"1\" hasFooter=\"0\" unit=\"mm\" hasHeader=\"0\" processing=\"0\" />\n";
+  prolog += "<ATTRIBUTES hasTOC=\"0\" standardpage=\"1\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n";
   prolog += "<FRAMESETS>\n";
   prolog += "<FRAMESET frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" visible=\"1\" >\n";
    prolog += "<FRAME runaround=\"1\" copy=\"0\" right=\"567\" newFrameBehavior=\"0\" left=\"28\" bottom=\"799\" runaroundGap=\"2\" top=\"42\" />\n";

@@ -173,7 +173,7 @@ QString PalmDocImport::processPlainDocument( QString plaindoc )
   prolog.append( " <PAPERBORDERS left=\"36\" right=\"36\" top=\"36\" bottom=\"36\" />\n" );
   prolog.append( "</PAPER>\n" );
 
-  prolog.append( "<ATTRIBUTES standardpage=\"1\" unit=\"mm\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n" );
+  prolog.append( "<ATTRIBUTES standardpage=\"1\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n" );
 
   prolog.append( "<FRAMESETS>\n" );
   prolog.append( "<FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" autoCreateNewFrame=\"1\">\n" );

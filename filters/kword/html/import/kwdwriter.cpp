@@ -66,7 +66,7 @@ KWDWriter::KWDWriter(KoStore *store){
     docattrs.setAttribute( "standardpage", 1 );
     docattrs.setAttribute( "hasHeader", 0 );
     docattrs.setAttribute( "hasFooter", 0 );
-    docattrs.setAttribute( "unit", "mm" );
+    //docattrs.setAttribute( "unit", "mm" ); // use KWord default instead
 
     QDomElement framesets = _doc->createElement("FRAMESETS");
     kwdoc.appendChild(framesets);

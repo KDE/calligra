@@ -227,7 +227,7 @@ int MSWRITEImport::documentStartWrite (const int firstPageNumber)
 
 	tagWrite ("</PAPER>");
 
-	tagWrite ("<ATTRIBUTES processing=\"0\" standardpage=\"1\" unit=\"mm\" hasHeader=\"%i\" hasFooter=\"%i\"/>",
+	tagWrite ("<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"%i\" hasFooter=\"%i\"/>",
 					hasHeader () ? 1 : 0, hasFooter () ? 1 : 0);
 
 	// handle page numbering not starting from 1

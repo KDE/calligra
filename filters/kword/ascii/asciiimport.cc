@@ -90,7 +90,7 @@ void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainF
     element.setAttribute("standardpage",1);
     element.setAttribute("hasHeader",0);
     element.setAttribute("hasFooter",0);
-    element.setAttribute("unit","mm");
+    //element.setAttribute("unit","mm"); // use KWord default instead
     elementDoc.appendChild(element);
 
     QDomElement elementPaper=mainDocument.createElement("PAPER");
