@@ -33,6 +33,10 @@ KoDocumentIface::~KoDocumentIface()
 
 QString KoDocumentIface::url()
 {
-    return m_pDoc->url().url();
+  return m_pDoc->url().url();
 }
 
+bool KoDocumentIface::isModified()
+{
+  return m_pDoc->isModified();
+}

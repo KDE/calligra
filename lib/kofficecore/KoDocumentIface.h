@@ -49,6 +49,8 @@ k_dcop:
    */
   QString url();
 
+  bool isModified();
+
 protected:
   KoDocument * m_pDoc;
 };
