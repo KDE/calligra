@@ -975,14 +975,15 @@ bool KoDocument::saveNativeFormat( const QString & _file )
 
 bool KoDocument::saveToStream( QIODevice * dev )
 {
-    const QDomDocument doc( saveXML() );
+    QDomDocument doc = saveXML();
     // Save to buffer
-    const QCString s ( doc.toCString() ); // utf8 already
-    const int len = s.length();
-    int nwritten = dev->writeBlock( s.data(), len );
-    if ( nwritten != len )
+    QCString s = doc.toCString(); // utf8 already
+    // Important: don't use s.length() here. It's slow, and dangerous (in case of a '\0' somewhere)
+    // The -1 is because we don't want to write the final \0.
+    int nwritten = dev->writeBlock( s.data(), s.size()-1 );
+    if ( nwritten != (int)s.size()-1 )
         kdWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size()-1 << endl;
-    return nwritten == len;
+    return nwritten == (int)s.size()-1;
 }
 
 bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
