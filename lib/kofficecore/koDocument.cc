@@ -196,7 +196,7 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_form
   assert( !m_strURL.isEmpty() );
 
   kdebug( KDEBUG_INFO, 30003, "Trying to load %s", m_strURL.ascii() );
-  KURL u( m_strURL );
+  //KURL u( m_strURL );
 
   KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_strMimeType );
   if ( e.isEmpty() )
@@ -212,7 +212,8 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_form
     return false;
   }
 
-  if ( strcmp( u.protocol(), "store" ) == 0 )
+  QString u( m_strURL );
+  if ( u.left( 5 ) == "store" )
     return m_rDoc->loadFromStore( _store, m_strURL );
 
   return m_rDoc->loadFromURL( m_strURL, _format );
@@ -472,7 +473,7 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
 
     if ( store.bad() )
 	return FALSE;
-    
+
     kdebug( KDEBUG_INFO, 30003, "Saving children" );
 
     // Lets write all direct and indirect children

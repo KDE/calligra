@@ -57,7 +57,7 @@ KoComponentEntry::KoComponentEntry( const KoComponentEntry& e )
   miniIcon = e.miniIcon;
   icon = e.icon;
 
-  if ( e.reference ) 
+  if ( e.reference )
     reference = CORBA::Object::_duplicate( e.reference );
   else
   reference = 0; */
@@ -73,7 +73,7 @@ const KoComponentEntry& KoComponentEntry::operator=( const KoComponentEntry& e )
   miniIcon = e.miniIcon;
   icon = e.icon;
 
-  if ( e.reference ) 
+  if ( e.reference )
     reference = CORBA::Object::_duplicate( e.reference );
   else
     reference = 0;
@@ -172,7 +172,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const char *mimetype )
   QValueList<KoDocumentEntry> vec = query( constr );
   if ( vec.isEmpty() )
     return KoDocumentEntry();
-
+  
   return vec[0];
 }
 
