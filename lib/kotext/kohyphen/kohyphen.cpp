@@ -58,7 +58,7 @@ KoHyphenator::KoHyphenator()
     if (!path.isNull())
         f = new QFile(path);
     else
-        throw KoHyphenatorException(i18n("Could not create KoHyphenator instance."));
+        throw KoHyphenatorException( "Could not create KoHyphenator instance." );
 
     QDomDocument config;
     QDomNodeList records;
@@ -177,10 +177,10 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
         if ( underscore > -1 ) {
             lang.truncate( underscore );
             if (encodings.find(lang) == encodings.end())
-                throw KoHyphenatorException(i18n("No dictionary for %1").arg(lang));
+                throw KoHyphenatorException( QString("No dictionary for %1").arg(lang) );
         }
         else
-            throw KoHyphenatorException(i18n("No dictionary for %1").arg(lang));
+            throw KoHyphenatorException( QString("No dictionary for %1").arg(lang) );
     }
     if (dicts.find(lang) == dicts.end())
     {
@@ -199,11 +199,11 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
 #ifdef DEBUG_HYPHENATOR
                 kdDebug() << "No dictionary loaded" << endl;
 #endif
-                throw(KoHyphenatorException(i18n("Could not load dictionary for the language: %1").arg(lang)));
+                throw(KoHyphenatorException( QString("Could not load dictionary for the language: %1").arg(lang) ));
             }
         }
         else
-            throw(KoHyphenatorException(i18n("Could not load dictionary for the language: %1").arg(lang)));
+            throw(KoHyphenatorException( QString("Could not load dictionary for the language: %1").arg(lang) ));
     }
     return dicts[lang];
 }
