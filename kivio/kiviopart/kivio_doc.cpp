@@ -122,7 +122,6 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   }
 
   m_iPageId = 1;
-  m_pMap = 0L;
   m_bLoading = false;
   m_pMap = new KivioMap( this, "Map" );
 
@@ -173,13 +172,13 @@ QPtrList<KivioDoc>& KivioDoc::documents()
 
 bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
- if (flags==KoDocument::InitDocEmpty)
- {
-        KivioPage *t = createPage();
-        m_pMap->addPage( t );
-        setEmpty();
-        return true;
- }
+  if (flags==KoDocument::InitDocEmpty)
+  {
+    KivioPage *t = createPage();
+    m_pMap->addPage( t );
+    setEmpty();
+    return true;
+  }
 
   QString f;
   KoTemplateChooseDia::ReturnType ret;
@@ -200,7 +199,7 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     return openURL(url);
   } else if ( ret == KoTemplateChooseDia::Template ) {
     QFileInfo fileInfo( f );
-    QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kft" );
+    QString fileName( fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kft" );
     resetURL();
     bool ok = loadNativeFormat( fileName );
     KivioPage *t = createPage();
@@ -264,14 +263,6 @@ QDomDocument KivioDoc::saveXML()
 
   QDomElement e = m_pMap->save(doc);
   kivio.appendChild(e);
-
-  // Write it out to a tmp file
-     QFile f("filedump.xml");
-    if ( f.open(IO_WriteOnly) ) {    // file opened successfully
-        QTextStream t( &f );        // use a text stream
-        t << doc.toString();
-        f.close();
-    }
 
   setModified(false);
   return doc;
@@ -845,24 +836,27 @@ void KivioDoc::addSpawnerSetDuringLoad( const QString &dirName )
 
 KivioDoc::~KivioDoc()
 {
+  if(m_iPageId > 1) {
     saveConfig();
-    // ***MUST*** Delete the pages first because they may
-    // contain plugins which will be unloaded soon.  The stencils which are
-    // spawned by plugins NEED the plugins still loaded when their destructor
-    // is called or the program will slit it's throat.
-    delete m_pMap;
-    delete dcop;
-    delete m_commandHistory;
+  }
 
-    delete m_pLstSpawnerSets;
-    m_pLstSpawnerSets = NULL;
+  // ***MUST*** Delete the pages first because they may
+  // contain plugins which will be unloaded soon.  The stencils which are
+  // spawned by plugins NEED the plugins still loaded when their destructor
+  // is called or the program will slit it's throat.
+  delete m_pMap;
+  delete dcop;
+  delete m_commandHistory;
 
-    s_docs->removeRef(this);
+  delete m_pLstSpawnerSets;
+  m_pLstSpawnerSets = 0;
+
+  s_docs->removeRef(this);
 }
 
 void KivioDoc::saveConfig()
 {
-  Kivio::Config::writeConfig();
+  Kivio::Config::self()->writeConfig();
 }
 
 void KivioDoc::initConfig()
