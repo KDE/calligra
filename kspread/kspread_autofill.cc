@@ -22,8 +22,8 @@
 #include "kspread_table.h"
 
 #include <kapp.h>
-#include <math.h>
 #include <klocale.h>
+#include <math.h>
 
 QStrList *AutoFillSequenceItem::month = 0L;
 QStrList *AutoFillSequenceItem::day = 0L;

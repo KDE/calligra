@@ -19,7 +19,6 @@
 
 #include "kspread_util.h"
 #include "kspread_map.h"
-#include "kspread_table.h"
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -71,163 +70,123 @@ QString util_rangeName( KSpreadTable *_table, QRect _area )
   return result;
 }
 
-KSpread::Cell util_parseCell( const char *_str )
+KSpreadPoint::KSpreadPoint( const QString& _str )
 {
-  KSpread::Cell c;
-
-  char *p = new char[ strlen( _str ) + 1 ];
-  char *orig = p;
-  strcpy( p, _str );
-
-  if ( *p == '$' )
-    p++;
-
-  if ( *p < 'A' || *p > 'Z' )
-  {
-    KSpread::MalformedExpression exc;
-    exc.expr = CORBA::string_dup( _str );
-    mico_throw( exc );
-  }
-  
-  int x = *p++ - 'A';
-  int y = 0;
-  while( *p >= 'A' && *p <= 'Z' )
-    x = (x+1)*26 + *p++ - 'A';
-
-  if ( *p == '$' )
-    p++;
-
-  char *p3 = p;
-  while( *p3 )
-  {
-    if ( !isdigit( *p3++ ) )
-    {
-      KSpread::MalformedExpression exc;
-      exc.expr = CORBA::string_dup( _str );
-      mico_throw( exc );
-    }
-  }
-  
-  y = atoi( p );
-  
-  delete[] orig;
-
-  c.x = x + 1;
-  c.y = y;
-  
-  return c;  
+  init( _str );
 }
 
-KSpread::Cell util_parseCell( const char *_str, KSpreadMap* _map )
+void KSpreadPoint::init( const QString& _str )
 {
-  KSpread::Cell c;
+  pos.setX( -1 );
+  table = 0;
   
-  char *orig = new char[ strlen( _str ) + 1 ];
-  strcpy( orig, _str );
-  char *p = orig;
-  char *p2 = strchr( p, '!' );
-  if ( p2 )
-  {    
-    
-    *p2++ = 0;
+  if ( _str.isEmpty() )
+    return;
   
-    KSpreadTable* table = _map->findTable( p );
-    if ( !table )
-    {
-      KSpread::UnknownTable exc;
-      exc.table = CORBA::string_dup( p );
-      delete []orig;
-      mico_throw( exc );
-    }
+  uint p = 0;
+  uint len = _str.length();
+  
+  // Fixed ?
+  if ( _str[p] == '$' )
+  {
+    columnFixed = true;
+    p++;
+  }
+  // Malformed ?
+  if ( p == len || _str[p] < 'A' || _str[p] > 'Z' )
+    return;
+  
+  int x = _str[p++] - 'A' + 1;
+  // Malformed ?
+  if ( p == len  )
+    return;
 
-    c.table = CORBA::string_dup( table->name() );
+  while( p < len && _str[p] >= 'A' && _str[p] <= 'Z' )
+    x = x*26 + (char)_str[p++] - 'A' + 1;
+
+  // Malformed ?
+  if ( p == len  )
+    return;
+
+  if ( _str[p] == '$' )
+  {
+    rowFixed = true;
+    p++;
+    // Malformed ?
+    if ( p == len  )
+      return;
+  }
+
+  uint p2 = p;
+  while( p < len )
+  {
+    if ( !isdigit( _str[p++] ) )
+      return;
+  }
+  
+  int y = atoi( _str.ascii() + p2 );
+
+  pos = QPoint( x, y );
+}
+
+KSpreadPoint::KSpreadPoint( const QString& _str, KSpreadMap* _map )
+{
+  uint p = 0;
+  int p2 = _str.find( "!" );
+  if ( p2 != -1 )
+  {    
+    tableName = _str.left( p2++ );
     p = p2;
   }
-  else
-    c.table = CORBA::string_dup( "" );
 
-  c = util_parseCell( p );
-
-  delete []orig;
+  init( _str.mid( p ) );
   
-  return c;
+  table = _map->findTable( tableName );
 }
 
-KSpread::Range util_parseRange( const char *_str )
+KSpreadRange::KSpreadRange( const QString& _str )
 {
-  KSpread::Range r;
+  range.setLeft( -1 );
+  table = 0;
   
-  char *p = new char[ strlen( _str ) + 1 ];
-  strcpy( p, _str );
-  char *p2 = strchr( p, ':' );
-  if ( !p2 )
-  {
-    KSpread::MalformedExpression exc;
-    exc.expr = CORBA::string_dup( _str );
-    mico_throw( exc );
-  }
-  *p2++ = 0;
+  int p = _str.find( ":" );
+  if ( p == -1 )
+    return;
 
-  KSpread::Cell c1 = util_parseCell( p );
-  KSpread::Cell c2 = util_parseCell( p2 );
+  KSpreadPoint ul( _str.left( p ) );
+  KSpreadPoint lr( _str.mid( p + 1 ) );
+  range = QRect( ul.pos, lr.pos );
   
-  delete []p;
-
-  r.left = c1.x;
-  r.top = c1.y;
-  r.right = c2.x;
-  r.bottom = c2.y;
-  
-  return r;
+  leftFixed = ul.columnFixed;
+  rightFixed = lr.columnFixed;
+  topFixed = ul.rowFixed;
+  bottomFixed = lr.rowFixed;
 }
 
-KSpread::Range util_parseRange2( const char *_str, KSpreadMap* _map )
+KSpreadRange::KSpreadRange( const QString& _str, KSpreadMap* _map )
 {
-  KSpread::Range r;
+  range.setLeft( -1 );
+  table = 0;
 
-  char *p = new char[ strlen( _str ) + 1 ];
-  strcpy( p, _str );
-  char *p2 = strchr( p, '!' );
-
-  if ( p2 )
+  int p = 0;
+  int p2 = _str.find( "!" );
+  if ( p2 != -1 )
   {    
-    *p2++ = 0;
-
-    KSpreadTable* table = _map->findTable( p );
-    if ( !table )
-    {
-      KSpread::UnknownTable exc;
-      exc.table = CORBA::string_dup( p );
-      delete []p;
-      mico_throw( exc );
-    }
-    r.table = CORBA::string_dup( p );
-  }
-  else
-  {
-    p2 = p;
-    r.table = CORBA::string_dup( "" );
+    tableName = _str.left( p2++ );
+    table = _map->findTable( tableName );
+    p = p2;
   }
   
-  char *p3 = strchr( p2, ':' );
-  if ( !p3 )
-  {
-    KSpread::MalformedExpression exc;
-    exc.expr = CORBA::string_dup( _str );
-    mico_throw( exc );
-  }
-  *p3++ = 0;
+  int p3 = _str.find( ":", p );
+  if ( p3 == -1 )
+    return;
 
-  KSpread::Cell c1 = util_parseCell( p2 );
-  KSpread::Cell c2 = util_parseCell( p3 );
+  KSpreadPoint ul( _str.mid( p, p3 - p ) );
+  KSpreadPoint lr( _str.mid( p3 + 1 ) );
+  range = QRect( ul.pos, lr.pos );
 
-  delete []p;
-
-  r.left = c1.x;
-  r.top = c1.y;
-  r.right = c2.x;
-  r.bottom = c2.y;
-
-  return r;
+  leftFixed = ul.columnFixed;
+  rightFixed = lr.columnFixed;
+  topFixed = ul.rowFixed;
+  bottomFixed = lr.rowFixed;
 }
-

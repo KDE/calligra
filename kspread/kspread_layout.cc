@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kspread_view.h"
+#include "kspread_canvas.h"
 #include "kspread_layout.h"
 #include "kspread_table.h"
 
@@ -106,18 +106,18 @@ const char* KSpreadLayout::postfix()
     return m_strPostfix.data();
 }
 
-int KSpreadLayout::leftBorderWidth( KSpreadView *_view )
+int KSpreadLayout::leftBorderWidth( KSpreadCanvas *_canvas )
 {
-    if ( _view )
-      return (int) ( m_iLeftBorderWidth * _view->zoom() );
+    if ( _canvas )
+      return (int) ( m_iLeftBorderWidth * _canvas->zoom() );
     else
 	return m_iLeftBorderWidth;
 }
 
-int KSpreadLayout::topBorderWidth( KSpreadView *_view )
+int KSpreadLayout::topBorderWidth( KSpreadCanvas *_canvas )
 {
-    if ( _view )
-	return (int) ( m_iTopBorderWidth * _view->zoom() );
+    if ( _canvas )
+	return (int) ( m_iTopBorderWidth * _canvas->zoom() );
     else
 	return m_iTopBorderWidth;
 }
@@ -147,22 +147,22 @@ void RowLayout::setMMHeight( float _h )
 
   UPDATE_END;
 }
-void RowLayout::setHeight( int _h, KSpreadView *_view )
+void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
 {
   UPDATE_BEGIN;
 
-  if ( _view )
-    m_fHeight = ( float)_h / _view->zoom() * POINT_TO_MM;
+  if ( _canvas )
+    m_fHeight = ( float)_h / _canvas->zoom() * POINT_TO_MM;
   else
     m_fHeight = ( float)_h / POINT_TO_MM;
 
   UPDATE_END;
 }
 
-int RowLayout::height( KSpreadView *_view )
+int RowLayout::height( KSpreadCanvas *_canvas )
 {
-  if ( _view )
-    return (int)( _view->zoom() * m_fHeight * MM_TO_POINT );
+  if ( _canvas )
+    return (int)( _canvas->zoom() * m_fHeight * MM_TO_POINT );
   else
     return (int)(m_fHeight * MM_TO_POINT);
 }
@@ -270,22 +270,22 @@ void ColumnLayout::setMMWidth( float _w )
   UPDATE_END;
 }
 
-void ColumnLayout::setWidth( int _w, KSpreadView *_view )
+void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
 {
   UPDATE_BEGIN;
 
-  if ( _view )
-    m_fWidth = ( float)_w / _view->zoom() * POINT_TO_MM;
+  if ( _canvas )
+    m_fWidth = ( float)_w / _canvas->zoom() * POINT_TO_MM;
   else
     m_fWidth = ( float)_w / POINT_TO_MM;
 
   UPDATE_END;
 }
 
-int ColumnLayout::width( KSpreadView *_view )
+int ColumnLayout::width( KSpreadCanvas *_canvas )
 {
-  if ( _view )
-    return (int)( _view->zoom() * m_fWidth * MM_TO_POINT );
+  if ( _canvas )
+    return (int)( _canvas->zoom() * m_fWidth * MM_TO_POINT );
   else
     return (int)( m_fWidth * MM_TO_POINT );
 }

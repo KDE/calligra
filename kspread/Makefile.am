@@ -1,19 +1,20 @@
 INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(KDE_RPATH) $(PYTHONLIB)
-LDADD = ../lib/kofficeui/libkofficeui.la $(LIBPYTHON)
+LDADD = ../lib/kofficeui/libkofficeui.la -lkformula $(LIBPYTHON)
 
 ####### Files
 
 bin_PROGRAMS = kspread.bin
 
-kspread_bin_SOURCES = kmetaedit.cc kspread_emacs.cc kspread_main.cc \
+kspread_bin_SOURCES = kspread_canvas.cc kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread_shell.cc kspread_doc.cc \
 	kspread.cc kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_python.cc kspread_autofill.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
 	chart.cc kspread_calc.cc y.tab.c lex.yy.c dep.tab.c lex.dep.c \
-	kspread_dlg_cons.cc datatools.cc kspread_util.cc
+	kspread_dlg_cons.cc datatools.cc kspread_util.cc \
+	kspread_corba_util.cc kspread_editors.cc
 
 noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
 	kspread_shell.h kspread_doc.h \
@@ -22,12 +23,14 @@ noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \
 	kspread_dlg_scripts.h kspread_table.h kspread_cell.h \
 	chart.h y.tab.h dep.tab.h kspread_calc.h kspread_dlg_cons.h \
-	datatools.h kspread_util.h
+	datatools.h kspread_util.h kspread_corba_util.h kspread_canvas.h \
+	kspread_editors.h
 
 METASOURCES = kspread_main.moc kspread_shell.moc kspread_doc.moc \
-	kspread_view.moc kspread_tabbar.moc \
+	kspread_view.moc kspread_tabbar.moc kspread_canvas.moc \
 	kspread_table.moc kspread_dlg_layout.moc kspread_cell.moc \
-	kspread_dlg_scripts.moc kspread_part.moc kspread_dlg_cons.moc
+	kspread_dlg_scripts.moc kspread_part.moc kspread_dlg_cons.moc \
+	kspread_editors.moc
 
 idl_DATA = kspread.idl
 idl_HEADERS = kspread.h chart.h
@@ -62,7 +65,7 @@ install-exec-local:
 
 uninstall-local:
 	-rm -f $(bindir)/kspread
-	
+
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kspread.pot
 

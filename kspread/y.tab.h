@@ -11,8 +11,8 @@
 #define AND 267
 typedef union
 {
-     double dbl;
      char b;
+     double dbl;
      char* name;
      void* range;
      void* param;

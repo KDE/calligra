@@ -32,6 +32,13 @@ class KSpreadPaperLayout;
 class KSpreadChildPicture;
 class KSpreadChildFrame;
 class KSpreadShell;
+class KSpreadTabBar;
+class KSpreadEditWidget;
+class KSpreadCanvas;
+class KSpreadHBorder;
+class KSpreadVBorder;
+class KSpreadChild;
+class KSpreadCell;
 
 class KoToolEntry;
 
@@ -51,12 +58,7 @@ class KoToolEntry;
 #include <qbutton.h>
 #include <qpoint.h>
 
-#include "kspread_tabbar.h"
-#include "kspread_table.h"
 #include "kspread.h"
-
-#define YBORDER_WIDTH 50
-#define XBORDER_HEIGHT 14
 
 #ifdef USE_PICTURES
 class KSpreadChildPicture : public KoDocumentChildPicture
@@ -87,201 +89,6 @@ protected:
   KSpreadView *m_pView;
 };
 
-/**
- */
-class KSpreadEditWidget : public QLineEdit
-{
-    Q_OBJECT
-public:
-    KSpreadEditWidget( QWidget *_parent, KSpreadView *_gui );
-
-    void publicKeyPressEvent ( QKeyEvent* _ev );
-
-public slots:
-    void slotAbortEdit();
-    void slotDoneEdit();            
-
-protected:    
-    virtual void keyPressEvent ( QKeyEvent* _ev );
-    
-    KSpreadView* m_pView;
-};
-
-/**
- */
-class KSpreadCanvas : public QWidget
-{
-    friend KSpreadHBorder;
-    friend KSpreadVBorder;
-    friend KSpreadView;
-  
-    Q_OBJECT
-public:
-    enum MouseActions { Mark = 1, ResizeCell = 2, NoAction = 0, AutoFill = 3, ChildGeometry = 4 };
-    /**
-     * The possible actions that we expect the user to do.
-     * Usually this is 'Default' and tells us that the user may edit
-     * the table. If @ref #action is 'InsertChild' then the user must draw
-     * a rectangle in order of telling us where to insert the new child.
-     */
-    enum Actions { DefaultAction, InsertChild, InsertChart };
-
-    KSpreadCanvas( QWidget *_parent, KSpreadView *_gui );
-
-    void setAction( Actions _act );
-    /**
-     * This is usually called with '_act' equal KSpreadCanvas::InsertChild.
-     */
-    void setAction( Actions _act, KoDocumentEntry& _entry );
-  
-    void updateCellRect( const QRect &_rect );
-
-    /**
-     * Used by @ref KSpreadView
-     */
-    void setEditDirtyFlag( bool _flag ) { m_bEditDirtyFlag = _flag; }
-    bool editDirtyFlag() { return m_bEditDirtyFlag; }
-  
-protected:
-    virtual void keyPressEvent ( QKeyEvent* _ev );    
-    virtual void paintEvent ( QPaintEvent* _ev );    
-    virtual void mousePressEvent( QMouseEvent* _ev );
-    virtual void mouseReleaseEvent( QMouseEvent* _ev );
-    virtual void mouseMoveEvent( QMouseEvent* _ev );
-
-    KSpreadView *m_pView;
-
-    bool m_bEditDirtyFlag;
-  
-    /**
-     * If the user is dragging around with the mouse then this tells us what he is doing.
-     * The user may want to mark cells or he started in the lower right corner
-     * of the marker which is something special. The values for the 2 above
-     * methods are called 'Mark' and 'ResizeCell' or 'AutoFill' depending
-     * on the mouse button used. By default this variable holds
-     * the value 'NoAction'.
-     */
-    MouseActions m_eMouseAction;
-
-    /**
-     * Tells us what we are doing right now.
-     * The default value is 'Default'.
-     */
-    Actions m_eAction;
-    /**
-     * If the @ref m_eAction is InsertChild or InsertChart, then this record
-     * holds informations about which component we should use here.
-     */
-    KoDocumentEntry m_actionArgument;
-  
-    /**
-     * Used to indicate wether the user started drawing a rubber band rectangle.
-     */
-    bool m_bGeometryStarted;
-    QPoint m_ptGeometryStart;
-    QPoint m_ptGeometryEnd;
-
-    /**
-     * The column in which a mouse drag started.
-     */
-    int m_iMouseStartColumn;
-    /**
-     * The row in which a mouse drag started.
-     */
-    int m_iMouseStartRow;
-
-    /**
-     * Tells wether the user selected more than one cell.
-     * If the user presses the left mouse button and if he marks more
-     * than one cell until he releases the button again, then this flag
-     * is set. If this flag is set, then one should repaint all visible
-     * cells once the button is released.
-     */
-    bool m_bMouseMadeSelection;
-
-    /**
-     * If we use the lower right corner of the marker to start autofilling, then this
-     * rectangle conatins all cells that were already marker when the user started
-     * to mark the rectangle which he wants to become autofilled.
-     *
-     * @see #mousePressEvent
-     * @see #mouseReleeaseEvent
-     */
-    QRect m_rctAutoFillSrc;
-};
-
-/**
- */
-class KSpreadHBorder : public QWidget
-{
-    Q_OBJECT
-public:
-    KSpreadHBorder( QWidget *_parent, KSpreadView *_gui );
-    
-protected:
-    virtual void paintEvent ( QPaintEvent* _ev ); 
-    virtual void mousePressEvent( QMouseEvent* _ev );
-    virtual void mouseReleaseEvent( QMouseEvent* _ev );
-    virtual void mouseMoveEvent( QMouseEvent* _ev );
-
-    KSpreadView *m_pView;
-
-    /**
-     * Flag that inidicates wether the user wants to mark columns.
-     * The user may mark columns by dragging the mouse around in th XBorder widget.
-     * If he is doing that right now, this flag is TRUE. Mention that the user may
-     * also resize columns by dragging the mouse. This case is not covered by this flag.
-     */
-    bool m_bSelection;
-    
-    /**
-     * The column over which the user pressed the mouse button.
-     * If the user marks columns in the XBorder widget, then this is the initial
-     * column on which he pressed the mouse button.
-     */
-    int m_iSelectionAnchor;
-    
-    /**
-     * Flag that indicates wether the user resizes a column
-     * The user may resize columns by dragging the mouse around in th XBorder widget.
-     * If he is doing that right now, this flag is TRUE. Mention that the user may
-     */
-    bool m_bResize;
-    /**
-     * The column over which the user pressed the mouse button.
-     * The user may resize columns by dragging the mouse around un the XBorder widget.
-     * This is the column over which he pressed the mouse button. This column is going
-     * to be resized.
-      */
-    int m_iResizeAnchor;
-    /**
-     * Last position of the mouse.
-     */
-    int m_iResizePos;
-};
-
-/**
- */
-class KSpreadVBorder : public QWidget
-{
-    Q_OBJECT
-public:
-    KSpreadVBorder( QWidget *_parent, KSpreadView *_gui );
-    
-protected:
-    virtual void paintEvent ( QPaintEvent* _ev ); 
-    virtual void mousePressEvent( QMouseEvent* _ev );
-    virtual void mouseReleaseEvent( QMouseEvent* _ev );
-    virtual void mouseMoveEvent( QMouseEvent* _ev );
-
-    KSpreadView *m_pView;
-
-    bool m_bSelection;
-    int m_iSelectionAnchor;
-    bool m_bResize;
-    int m_iResizeAnchor;
-    int m_iResizePos;
-};
 
 /**
  */
@@ -298,20 +105,15 @@ public:
     virtual KSpread::Book_ptr book();
   
     // C++
-    KSpreadCanvas* canvasWidget() { return m_pCanvasWidget; }
-    QWidget* hBorderWidget() { return m_pHBorderWidget; }    
-    QWidget* vBorderWidget() { return m_pVBorderWidget; }    
+    KSpreadCanvas* canvasWidget() { return m_pCanvas; }
+    KSpreadHBorder* hBorderWidget() { return m_pHBorderWidget; }    
+    KSpreadVBorder* vBorderWidget() { return m_pVBorderWidget; }    
     QScrollBar* horzScrollBar() { return m_pHorzScrollBar; }    
     QScrollBar* vertScrollBar() { return m_pVertScrollBar; }    
     KSpreadEditWidget* editWidget() { return m_pEditWidget; }
     QLabel* posWidget() { return m_pPosWidget; }  
 
     KSpreadDoc* doc() { return m_pDoc; }
-  
-    float zoom() { return m_fZoom; }
-
-    int xOffset() { return m_iXOffset; }
-    int yOffset() { return m_iYOffset; }
     
     void addTable( KSpreadTable *_t );
     void removeTable( KSpreadTable *_t );
@@ -319,52 +121,17 @@ public:
     
     void setActiveTable( KSpreadTable *_t );
 
-    KSpreadTable* findTable( const char *_name );
     KSpreadTable* activeTable() { return m_pTable; }   
 
     void openPopupMenu( const QPoint &_global );
   
-    QPoint marker();  
-    bool isMarkerVisible() { return ( m_iMarkerVisible == 1 ); }
-    int markerColumn() { return m_iMarkerColumn; }
-    int markerRow() { return m_iMarkerRow; }
-    void setMarkerColumn( int _c ) { m_iMarkerColumn = _c; }
-    void setMarkerRow( int _r ) { m_iMarkerRow = _r; }
-    void hideMarker() { if ( m_iMarkerVisible == 1 ) drawMarker(); m_iMarkerVisible--; }
-    void showMarker() { if ( m_iMarkerVisible == 1 ) return; m_iMarkerVisible++; if ( m_iMarkerVisible == 1 ) drawMarker(); }
-    void hideMarker( QPainter& );
-    void showMarker( QPainter& );
-  
-    const QPen& defaultGridPen() { return m_defaultGridPen; }
-
     /**
      * Used by @ref KSpreadEditWidget. Sets the text of the active cell.
      */
-    void setText( const char *_text );
+    void setText( const QString& _text );
 
     void enableUndo( bool _b );
     void enableRedo( bool _b );
-
-    // Drawing Engine
-    /**
-     * Redraws a single object.
-     * This is a convenience function that
-     * creates a new @ref QPainter for you. Dont use if another @ref QPainter is active!
-     *
-     * @param _cell is the @ref KSpreadCell to draw.
-     * @param _col is the column this object is assumed to reside in.
-     * @param _row is the row this object is assumed to reside in.
-     */
-    void drawCell( KSpreadCell *_cell, int _col, int _row );
-    /**
-     * Redraws a single object.
-     */
-    void drawCell( QPainter &_painter, KSpreadCell *_cell, int _col, int _row );
-    /**
-     * Draw all currently visible objects.
-     */
-    void drawVisibleCells();
-    void drawMarker( QPainter * _painter = 0L );
 
     /**
      * Called by @ref KSpreadCanvas if its action is @ref KSpreadCanvas::InsertChart.
@@ -387,8 +154,6 @@ public:
     void markChildPicture( KSpreadChildPicture *_pic );
 #endif
     // IDL
-    /* virtual void setMode( OPParts::Part::Mode _mode );
-    virtual void setFocus( CORBA::Boolean mode ); */
     virtual CORBA::Boolean printDlg();
 
     // IDL Slots
@@ -596,8 +361,6 @@ protected slots:
      */
     void slotLayoutDlg();
 
-    void slotMaxColumn( int _max_column );
-    void slotMaxRow( int _max_row );
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
@@ -620,9 +383,6 @@ protected slots:
      * Scroll @ref #tabBar.
      */
     void slotScrollToLastTable();
-
-    void slotScrollVert( int _value );
-    void slotScrollHorz( int _value );
 
 public slots:
     // Document signals
@@ -667,29 +427,12 @@ protected:
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
 
-    /**
-     * Used to draw the grey grid that is usually only visible on the
-     * screen, but not by printing on paper.
-     */
-    QPen m_defaultGridPen;
-
-    int m_iMarkerColumn;
-    int m_iMarkerRow;
-    /**
-     * A value of 1 means that it is visible, every lower value means it is
-     * made invisible multiple times.
-     *
-     * @see #hideMarker
-     * @see #showMarker
-     */
-    int m_iMarkerVisible;
-
     // GUI stuff
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
   
     QScrollBar *m_pHorzScrollBar;
     QScrollBar *m_pVertScrollBar;
-    KSpreadCanvas *m_pCanvasWidget;
+    KSpreadCanvas *m_pCanvas;
     KSpreadVBorder *m_pVBorderWidget;
     KSpreadHBorder *m_pHBorderWidget;
     KSpreadEditWidget *m_pEditWidget;
@@ -780,20 +523,8 @@ protected:
      */
     KSpreadTable* m_pTable;
     
-    float m_fZoom;
-    
     KSpreadDoc *m_pDoc;
   
-    QPopupMenu *viewMenu;
-    int m_pShowPageBordersID;
-
-  // AutoFillDialog *_autoFillDialog;             
-
-  // KFileSelect *openDlg;
-  // KFileSelect *saveDlg;
-
-    static KSpreadScripts *m_pGlobalScriptsDialog;
-
     /**
      * Tells wether undo is possible right now or not.
      *
@@ -814,10 +545,7 @@ protected:
      * @see #showGUI
      */
     bool m_bShowGUI;
-
-    int m_iXOffset;
-    int m_iYOffset;
-
+  
     QList<KSpreadChildFrame> m_lstFrames;
 #ifdef USE_PICTURES
     QList<KSpreadChildPicture> m_lstPictures;
@@ -836,8 +564,8 @@ protected:
    QList<ToolEntry> m_lstTools;
 
    KoPluginManager m_pluginManager;
+
+   static KSpreadScripts *m_pGlobalScriptsDialog;
 };
 
 #endif
-
-

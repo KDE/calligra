@@ -28,7 +28,7 @@ class KSpreadView;
 class AutoFillDeltaSequence;
 class KSpreadMap;
 class ChartCellBinding;
-class KSpreadView;
+class KSpreadCanvas;
 class KSpreadDoc;
 class KoDocumentEntry;
 
@@ -240,6 +240,8 @@ public:
      */
     virtual bool hasToWriteMultipart();
 
+    bool isLoading();
+  
     /**
      * This event handler is called if the table becomes the active table,
      * that means that the table becomes visible and may fill the GUIs 
@@ -268,16 +270,30 @@ public:
     /**
      * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
      *                             wether _column/_row are bigger than
-     *                             m_iMaxRow/m_iMaxColumn. May be overrules by
+     *                             m_iMaxRow/m_iMaxColumn. May be overruled by
      *                             @ref #m_bScrollbarUpdates.
      */
     KSpreadCell* cellAt( int _column, int _row, bool _no_scrollbar_update = false );
+    /**
+     * A convenience function.
+     */
+    KSpreadCell* cellAt( const QPoint& _point, bool _no_scrollbar_update = false ) { return cellAt( _point.x(), _point.y(), _no_scrollbar_update ); }
+    /**
+     * @returns the pointer to the cell that is visible at a certain position. That means If the cell
+     *          at this position is obscured then the obscuring cell is returned.
+     *
+     * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
+     *                             wether _column/_row are bigger than
+     *                             m_iMaxRow/m_iMaxColumn. May be overruled by
+     *                             @ref #m_bScrollbarUpdates.
+     */
+    KSpreadCell* visibleCellAt( int _column, int _row, bool _no_scrollbar_update = false );
     /**
      * If no special KSpreadCell exists for this position then a new one is created.
      *
      * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
      *                             wether _column/_row are bigger than
-     *                             m_iMaxRow/m_iMaxColumn. May be overrules by
+     *                             m_iMaxRow/m_iMaxColumn. May be overruled by
      *                             @ref #m_bScrollbarUpdates.
      *
      * @return a non default KSpreadCell for the position.
@@ -286,13 +302,20 @@ public:
 
     KSpreadCell* defaultCell() { return m_pDefaultCell; }
   
-    int topRow( int _ypos, int &_top, KSpreadView *_view = 0L );
-    int bottomRow( int _ypos, KSpreadView *_view = 0L );
-    int leftColumn( int _xpos, int &_left, KSpreadView *_view = 0L );
-    int rightColumn( int _xpos, KSpreadView *_view = 0L );
+    int topRow( int _ypos, int &_top, KSpreadCanvas *_canvas = 0L );
+    int bottomRow( int _ypos, KSpreadCanvas *_canvas = 0L );
+    int leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas = 0L );
+    int rightColumn( int _xpos, KSpreadCanvas *_canvas = 0L );
     
-    int columnPos( int _col, KSpreadView *_view = 0L );
-    int rowPos( int _row, KSpreadView *_view = 0L );
+    /**
+     * @retrun the left corner of the column.
+     *
+     * @param _canvas If not 0 then the returned position is in screen
+     *                coordinates. Otherwise the point (0|0) is in the upper
+     *               left corner of the table.
+     */
+    int columnPos( int _col, KSpreadCanvas *_canvas = 0L );
+    int rowPos( int _row, KSpreadCanvas *_canvas = 0L );
 
     /**
      * Sets the @ref KSpreadCell::layoutDirtyFlag in all cells.
@@ -315,15 +338,15 @@ public:
     /**
      * Sets the contents of the cell at row,column to text
      */
-    void setText( int row, int column, const char *text );
+    void setText( int row, int column, const QString& text );
 
     /**
      * @return the name of this table.
      */
-    const char *name() { return m_strName.data(); }
+    QString name() { return m_strName; }
   
     QRect& selectionRect() { return m_rctSelection; }
-    void setSelection( const QRect &_rect, KSpreadView *_view = 0L );
+    void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
       
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
 			   signed char _bold = -1, signed char _italic = -1 );

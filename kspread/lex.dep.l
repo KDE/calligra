@@ -15,11 +15,14 @@ DIGIT    [0-9]
 
 %%
 
-"<"|">"|"#"|"="|"^"|"/"|"+"|"-"|"*"|"("|")"|";"  { return (int)(*yytext); }
+"{"|"}"|"<"|">"|"#"|"="|"^"|"/"|"+"|"-"|"*"|"("|")"|";"  { return (int)(*yytext); }
 
 "TRUE" { return BOOL; }
 "FALSE" {return BOOL; }
+"true" { return BOOL; }
+"false" {return BOOL; }
 "IF" { return WENN; }
+"if" { return WENN; }
 "<=" { return LEQ; }
 ">=" { return GEQ; }
 "!=" { return NEQ; }

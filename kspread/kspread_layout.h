@@ -21,7 +21,7 @@
 #define __kspread_layout_h__
 
 class KSpreadTable;
-class KSpreadView;
+class KSpreadCanvas;
 
 #include <qpen.h>
 #include <qcolor.h>
@@ -42,7 +42,7 @@ public:
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
 
-    void copy( KSpreadLayout &_l );
+    void KSpreadLayout::copy( KSpreadLayout &_l );
 
     virtual void setAlign( Align _align ) { m_eAlign = _align; }
     virtual void setFaktor( double _d ) { m_dFaktor = _d; }
@@ -73,14 +73,14 @@ public:
     virtual void setMultiRow( bool _b ) { m_bMultiRow = _b; }
 
     /**
-     * Since the @ref KSpreadView  supports zooming, you can get the value zoomed
+     * Since the @ref KSpreadCanvas  supports zooming, you can get the value zoomed
      * or not scaled. The not scaled value may be of interest in a
      * layout dialog for example.
      *
      * @return the border width of the left border
      */
-    virtual int leftBorderWidth( KSpreadView *_view = 0L );
-    virtual int topBorderWidth( KSpreadView *view = 0L );
+    virtual int leftBorderWidth( KSpreadCanvas *_canvas = 0L );
+    virtual int topBorderWidth( KSpreadCanvas *canvas = 0L );
 
     /**
      * @return the style used to draw the left border.
@@ -235,11 +235,11 @@ public:
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
 
     /**
-     * @param _view is needed to get information about the zooming factor.
+     * @param _canvas is needed to get information about the zooming factor.
      *
      * @return the height in zoomed pixels.
      */
-    int height( KSpreadView *_view = 0L );
+    int height( KSpreadCanvas *_canvas = 0L );
     /**
      * @return the width in millimeters.
      */
@@ -248,9 +248,9 @@ public:
      * Sets the height to _h zoomed pixels.
      *
      * @param _h is calculated in display pixels. The function cares for zooming.
-     * @param _view is needed to get information about the zooming factor.
+     * @param _canvas is needed to get information about the zooming factor.
      */
-    void setHeight( int _h, KSpreadView *_view = 0L );
+    void setHeight( int _h, KSpreadCanvas *_canvas = 0L );
     /**
      * Sets the height.
      *
@@ -325,11 +325,11 @@ public:
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
 
     /**
-     * @param _view is needed to get information about the zooming factor.
+     * @param _canvas is needed to get information about the zooming factor.
      *
      * @return the width in zoomed pixels.
      */
-    int width( KSpreadView *_view = 0L );
+    int width( KSpreadCanvas *_canvas = 0L );
     /**
      * @return the width in millimeters.
      */
@@ -339,9 +339,9 @@ public:
      *
      * @param _w is calculated in display pixels. The function cares for
      *           zooming.
-     * @param _view is needed to get information about the zooming factor.
+     * @param _canvas is needed to get information about the zooming factor.
      */
-    void setWidth( int _w, KSpreadView *_view = 0L );
+    void setWidth( int _w, KSpreadCanvas *_canvas = 0L );
     /**
      * Sets the width.
      *

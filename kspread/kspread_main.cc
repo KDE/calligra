@@ -17,8 +17,9 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#include <qprinter.h>
-#include "kspread_main.h"
+// #include <qprinter.h>
+#include <qstringlist.h>
+
 #include <koScanTools.h>
 #include <koScanPlugins.h>
 #include <koQueryTypes.h>
@@ -27,16 +28,15 @@
 #include <koFactory.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
+
+#include "kspread_main.h"
 #include "kspread_shell.h"
 #include "kspread_doc.h"
 #include "kspread.h"
 
-// DEBUG
-#include <iostream>
-
 bool g_bWithGUI = true;
 
-list<string> g_openFiles;
+QStringList g_openFiles;
 
 KOFFICE_DOCUMENT_FACTORY( KSpreadDoc, KSpreadFactory, KSpread::DocumentFactory_skel )
 typedef OPAutoLoader<KSpreadFactory> KSpreadAutoLoader;
@@ -61,7 +61,7 @@ void KSpreadApp::start()
     koScanTools();
     koScanPlugins();
  
-    if ( g_openFiles.size() == 0 )
+    if ( g_openFiles.count() == 0 )
     {
       m_pShell = new KSpreadShell;
       m_pShell->show();
@@ -69,12 +69,12 @@ void KSpreadApp::start()
     }
     else
     {
-      list<string>::iterator it = g_openFiles.begin();
+      QStringList::Iterator it = g_openFiles.begin();
       for( ; it != g_openFiles.end(); ++it )
       {
 	m_pShell = new KSpreadShell;
 	m_pShell->show();
-	m_pShell->openDocument( it->c_str(), "" );
+	m_pShell->openDocument( *it, "" );
       }
     }
   }
@@ -99,7 +99,7 @@ int main( int argc, char **argv )
   }
 
   for( ; i < argc; i++ )
-    g_openFiles.push_back( (const char*)argv[i] );
+    g_openFiles.append( (const char*)argv[i] );
   
   app.exec();
 

@@ -21,12 +21,13 @@
 
 #include "kspread_dlg_cons.h"
 #include "kspread_view.h"
+#include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
 
 #include <kapp.h>
-#include <qmessagebox.h>
 #include <klocale.h>
+#include <qmessagebox.h>
 
 #include <list>
 
@@ -72,9 +73,9 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pRemove = new QPushButton( i18n("Remove"), this );
   m_pRemove->setGeometry( 180, 160, 100, 30 );
 
-  m_pRow = new QCheckBox( i18n("Description in Rows"), this );
+  m_pRow = new QCheckBox( i18n("Description in Row"), this );
   m_pRow->setGeometry( 10, 270, 300, 30 );
-  m_pCol = new QCheckBox( i18n("Description in Columns"), this );
+  m_pCol = new QCheckBox( i18n("Description in Column"), this );
   m_pCol->setGeometry( 10, 300, 300, 30 );
   m_pCopy = new QCheckBox( i18n("Copy data"), this );
   m_pCopy->setGeometry( 10, 330, 300, 30 );
@@ -107,22 +108,28 @@ void KSpreadConsolidate::slotOk()
   KSpreadMap *map = m_pView->doc()->map();
 
   KSpreadTable* table = m_pView->activeTable();
-  int dx = m_pView->markerColumn();
-  int dy = m_pView->markerRow();
+  int dx = m_pView->canvasWidget()->markerColumn();
+  int dy = m_pView->canvasWidget()->markerRow();
 
   Function f = F_SUM;
   if ( m_pFunction->currentItem() == m_idAverage )
     f = F_AVERAGE;
   
-  QStrList r = refs();
-  list<KSpread::Range> ranges;
-  const char *s = r.first();
-  for( ; s != 0L; s = r.next() )
+  QStringList r = refs();
+  QValueList<KSpreadRange> ranges;
+  QStringList::Iterator s = r.begin();
+  for( ; s != r.end(); ++s )
   {
-    // TODO: check for exceptions
-    ranges.push_back( util_parseRange2( s, map ) );
-    if ( strlen( ranges.back().table.in() ) == 0 )
-      ranges.back().table = CORBA::string_dup( table->name() );
+    KSpreadRange r( *s, map );
+    // TODO: Check for valid
+    ASSERT( r.isValid() );
+    
+    if ( r.table == 0 )
+    {
+      r.table = table;
+      r.tableName = table->name();
+    }
+    ranges.append( r  );
   }
 
   Description desc;
@@ -136,16 +143,14 @@ void KSpreadConsolidate::slotOk()
     desc = D_NONE;
   
   // Check wether all ranges have same size
-  assert( ranges.size() > 0 );
-  list<KSpread::Range>::iterator it = ranges.begin();
-  int w = it->right - it->left + 1;
-  int h = it->bottom - it->top + 1;
+  ASSERT( ranges.count() > 0 );
+  QValueList<KSpreadRange>::Iterator it = ranges.begin();
+  int w = it->range.right() - it->range.left() + 1;
+  int h = it->range.bottom() - it->range.top() + 1;
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
        h <= ( ( desc == D_BOTH || desc == D_ROW ) ? 1 : 0 ) )
   {
-    QString tmp;
-    tmp.sprintf( i18n( "The range\n%s\nis too small" ), r.first() );
-    QMessageBox::critical( 0L, i18n("Error"), tmp );
+    QMessageBox::critical( 0L, i18n("Error"), i18n( "The range\n%s\nis too small" ).arg( r.getFirst() ) );
     return;
   }
   
@@ -153,15 +158,13 @@ void KSpreadConsolidate::slotOk()
   int i = 1;
   for( ; it != ranges.end(); ++it, i++ )
   {
-    int w2 = it->right - it->left + 1;
-    int h2 = it->bottom - it->top + 1;
+    int w2 = it->range.right() - it->range.left() + 1;
+    int h2 = it->range.bottom() - it->range.top() + 1;
     if ( ( desc == D_NONE && ( w != w2 || h != h2 ) ) ||
 	 ( desc == D_ROW && h != h2 ) ||
 	 ( desc == D_COL && w != w2 ) )
     {
-      QString tmp;
-      tmp.sprintf( i18n( "The ranges\n%s\nand\n%s\nhave different size" ),
-		   r.first(), r.at( i ) );
+      QString tmp = i18n( "The ranges\n%1\nand\n%2\nhave different size").arg( r.getFirst() ).arg( r[i] );
       QMessageBox::critical( 0L, i18n("Error"), tmp );
       return;
     }
@@ -176,10 +179,10 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+      KSpreadTable *t = it->table;
       assert( t );
       QRect r;
-      r.setCoords( it->left, it->top, it->right, it->bottom );
+      r.setCoords( it->range.left(), it->range.top(), it->range.right(), it->range.bottom() );
       if ( t == table && r.intersects( dest ) )
       {
 	QString tmp( i18n("The source tables intersect with the destination table") );
@@ -205,9 +208,9 @@ void KSpreadConsolidate::slotOk()
 	for( ; it != ranges.end(); ++it )
         {
 	  // Calculate value directly
-	  KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+	  KSpreadTable *t = it->table;
 	  assert( t );
-	  KSpreadCell *c = t->cellAt( x + it->left, y + it->top );
+	  KSpreadCell *c = t->cellAt( x + it->range.left(), y + it->range.top() );
 	  if ( c && c->isValue() )
 	  {
 	    if ( f == F_SUM || f == F_AVERAGE )
@@ -217,14 +220,13 @@ void KSpreadConsolidate::slotOk()
 	  }
 	  
 	  // Built formular
-	  cerr << "RANGE: l=" << it->left << " r=" << it->right << endl;
 	  if ( f == F_SUM || f == F_AVERAGE )
 	  {    
 	    if ( formel.length() > 2 )
 	      formel += "+";
-	    formel += it->table.in();
+	    formel += it->tableName;
 	    formel += "!";
-	    formel += util_cellName( x + it->left, y + it->top );
+	    formel += util_cellName( x + it->range.left(), y + it->range.top() );
 	  }
 	  else
 	    assert( 0 );
@@ -241,7 +243,6 @@ void KSpreadConsolidate::slotOk()
 	
 	if ( m_pCopy->isChecked() )
 	  formel.sprintf( "%f", dbl );
-	cerr << "Setting (" << dx + x << "|" << dy + y << ") = " << formel << endl;
 	table->setText( dy + y, dx + x, formel );
       }
     }
@@ -249,34 +250,36 @@ void KSpreadConsolidate::slotOk()
   else if ( desc == D_ROW )
   {
     // Get list of all descriptions in the rows
-    QStrList lst;
+    QStringList lst;
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+      KSpreadTable *t = it->table;
       assert( t );
-      for( unsigned int x = it->left; x <= it->right ; ++x )
+      debug("FROM %i to %i",it->range.left(),it->range.right());
+      for( int x = it->range.left(); x <= it->range.right() ; ++x )
       {
-	KSpreadCell *c = t->cellAt( x, it->top );
+	KSpreadCell *c = t->cellAt( x, it->range.top() );
 	if ( c )
 	{
-	  const char *s = c->valueString();
-	  if ( s != 0L && lst.find( s ) == -1 )
-	    lst.inSort( s );
+	  QString s = c->valueString();
+	  if ( !lst.contains( s ) )
+	    lst.append( s );
 	}
       }
     }
-
+    lst.sort();
+    
     // Check wether the destination is part of the source ...
     QRect dest;
     dest.setCoords( dx, dy, dx + lst.count() - 1, dy + h - 1 );
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+      KSpreadTable *t = it->table;
       assert( t );
       QRect r;
-      r.setCoords( it->left, it->top, it->right, it->bottom );
+      r.setCoords( it->range.left(), it->range.top(), it->range.right(), it->range.bottom() );
       if ( t == table && r.intersects( dest ) )
       {
 	QString tmp( i18n("The source tables intersect with the destination table") );
@@ -287,10 +290,10 @@ void KSpreadConsolidate::slotOk()
 
     // Now create the consolidation table
     int x = 0;
-    const char *s;
-    for( s = lst.first(); s != 0L; s = lst.next(), x++ )
+    QStringList::Iterator s = lst.begin();
+    for( ; s != lst.end(); ++s, ++x )
     {
-      table->setText( dy, dx + x, s );
+      table->setText( dy, dx + x, *s );
 
       for( int y = 1; y < h; ++y )
       {
@@ -307,17 +310,16 @@ void KSpreadConsolidate::slotOk()
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
-	  for( unsigned int i = it->left; i <= it->right; i++ )
+	  for( int i = it->range.left(); i <= it->range.right(); ++i )
 	  {    
-	    KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+	    KSpreadTable *t = it->table;
 	    assert( t );
-	    KSpreadCell *c = t->cellAt( i, it->top );
+	    KSpreadCell *c = t->cellAt( i, it->range.top() );
 	    if ( c )
 	    {
-	      const char *v = c->valueString();
-	      if ( v != 0L && strcmp( s, v ) == 0L )
+	      if ( c->valueString() == *s )
 	      {
-		KSpreadCell *c2 = t->cellAt( i, y + it->top );
+		KSpreadCell *c2 = t->cellAt( i, y + it->range.top() );
 		count++;
 		// Calculate value
 		if ( c2 && c2->isValue() )
@@ -332,9 +334,9 @@ void KSpreadConsolidate::slotOk()
 		{    
 		  if ( formel != "=" )
 		    formel += "+";
-		  formel += it->table.in();
+		  formel += it->tableName;
 		  formel += "!";
-		  formel += util_cellName( i, y + it->top );
+		  formel += util_cellName( i, y + it->range.top() );
 		}
 		else
 		  assert( 0 );
@@ -361,34 +363,35 @@ void KSpreadConsolidate::slotOk()
   else if ( desc == D_COL )
   {
     // Get list of all descriptions in the columns
-    QStrList lst;
+    QStringList lst;
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+      KSpreadTable *t = it->table;
       assert( t );
-      for( unsigned int y = it->top; y <= it->bottom ; ++y )
+      for( int y = it->range.top(); y <= it->range.bottom() ; ++y )
       {
-	KSpreadCell *c = t->cellAt( it->left, y );
+	KSpreadCell *c = t->cellAt( it->range.left(), y );
 	if ( c )
 	{
-	  const char *s = c->valueString();
-	  if ( s != 0L && lst.find( s ) == -1 )
-	    lst.inSort( s );
+	  QString s = c->valueString();
+	  if ( !s.isEmpty() && lst.find( s ) == lst.end() )
+	    lst.append( s );
 	}
       }
     }
-
+    lst.sort();
+    
     // Check wether the destination is part of the source ...
     QRect dest;
     dest.setCoords( dx, dy, dx + w - 1, dy + lst.count() - 1 );
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+      KSpreadTable *t = it->table;
       assert( t );
       QRect r;
-      r.setCoords( it->left, it->top, it->right, it->bottom );
+      r.setCoords( it->range.left(), it->range.top(), it->range.right(), it->range.bottom() );
       if ( t == table && r.intersects( dest ) )
       {
 	QString tmp( i18n("The source tables intersect with the destination table") );
@@ -399,10 +402,10 @@ void KSpreadConsolidate::slotOk()
 
     // Now create the consolidation table
     int y = 0;
-    const char *s;
-    for( s = lst.first(); s != 0L; s = lst.next(), y++ )
+    QStringList::Iterator s = lst.begin();
+    for( ; s != lst.end(); ++s, ++y )
     {
-      table->setText( dy + y, dx, s );
+      table->setText( dy + y, dx, *s );
 
       for( int x = 1; x < w; ++x )
       {
@@ -419,17 +422,17 @@ void KSpreadConsolidate::slotOk()
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
-	  for( unsigned int i = it->top; i <= it->bottom; i++ )
+	  for( int i = it->range.top(); i <= it->range.bottom(); i++ )
 	  {    
-	    KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+	    KSpreadTable *t = it->table;
 	    assert( t );
-	    KSpreadCell *c = t->cellAt( it->left, i );
+	    KSpreadCell *c = t->cellAt( it->range.left(), i );
 	    if ( c )
 	    {
-	      const char *v = c->valueString();
-	      if ( v != 0L && strcmp( s, v ) == 0L )
+	      QString v = c->valueString();
+	      if ( !v.isEmpty() && *s == v )
 	      {
-		KSpreadCell *c2 = t->cellAt( x + it->left, i );
+		KSpreadCell *c2 = t->cellAt( x + it->range.left(), i );
 		count++;
 		// Calculate value
 		if ( c2 && c2->isValue() )
@@ -444,9 +447,9 @@ void KSpreadConsolidate::slotOk()
 		{    
 		  if ( formel != "=" )
 		    formel += "+";
-		  formel += it->table.in();
+		  formel += it->tableName;
 		  formel += "!";
-		  formel += util_cellName( x + it->left, i );
+		  formel += util_cellName( x + it->range.left(), i );
 		}
 		else
 		  assert( 0 );
@@ -473,53 +476,55 @@ void KSpreadConsolidate::slotOk()
   else if ( desc == D_BOTH )
   {
     // Get list of all descriptions in the columns
-    QStrList cols;
+    QStringList cols;
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+      KSpreadTable *t = it->table;
       assert( t );
-      for( unsigned int y = it->top + 1; y <= it->bottom ; ++y )
+      for( int y = it->range.top() + 1; y <= it->range.bottom() ; ++y )
       {
-	KSpreadCell *c = t->cellAt( it->left, y );
+	KSpreadCell *c = t->cellAt( it->range.left(), y );
 	if ( c )
 	{
-	  const char *s = c->valueString();
-	  if ( s != 0L && cols.find( s ) == -1 )
-	    cols.inSort( s );
+	  QString s = c->valueString();
+	  if ( !s.isEmpty() && cols.find( s ) == cols.end() )
+	    cols.append( s );
 	}
       }
     }
-
+    cols.sort();
+    
     // Get list of all descriptions in the rows
-    QStrList rows;
+    QStringList rows;
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+      KSpreadTable *t = it->table;
       assert( t );
-      for( unsigned int x = it->left + 1; x <= it->right ; ++x )
+      for( int x = it->range.left() + 1; x <= it->range.right() ; ++x )
       {
-	KSpreadCell *c = t->cellAt( x, it->top );
+	KSpreadCell *c = t->cellAt( x, it->range.top() );
 	if ( c )
 	{
-	  const char *s = c->valueString();
-	  if ( s != 0L && rows.find( s ) == -1 )
-	    rows.inSort( s );
+	  QString s = c->valueString();
+	  if ( !s.isEmpty() && rows.find( s ) == rows.end() )
+	    rows.append( s );
 	}
       }
     }
-
+    rows.sort();
+    
     // Check wether the destination is part of the source ...
     QRect dest;
     dest.setCoords( dx, dy, dx + cols.count(), dy + rows.count() );
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+      KSpreadTable *t = it->table;
       assert( t );
       QRect r;
-      r.setCoords( it->left, it->top, it->right, it->bottom );
+      r.setCoords( it->range.left(), it->range.top(), it->range.right(), it->range.bottom() );
       if ( t == table && r.intersects( dest ) )
       {
 	QString tmp( i18n("The source tables intersect with the destination table") );
@@ -529,24 +534,24 @@ void KSpreadConsolidate::slotOk()
     }
   
     // Fill the list with all interesting cells
-    list<st_cell> lst;
+    QValueList<st_cell> lst;
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = m_pView->doc()->map()->findTable( it->table.in() );
+      KSpreadTable *t = it->table;
       assert( t );
-      for( unsigned int x = it->left + 1; x <= it->right ; ++x )
+      for( int x = it->range.left() + 1; x <= it->range.right() ; ++x )
       {
-	KSpreadCell *c = t->cellAt( x, it->top );
+	KSpreadCell *c = t->cellAt( x, it->range.top() );
 	if ( c )
 	{
-	  const char *ydesc = c->valueString();
-	  for( unsigned int y = it->top + 1; y <= it->bottom ; ++y )
+	  QString ydesc = c->valueString();
+	  for( int y = it->range.top() + 1; y <= it->range.bottom() ; ++y )
 	  {
-	    KSpreadCell *c2 = t->cellAt( it->left, y );
+	    KSpreadCell *c2 = t->cellAt( it->range.left(), y );
 	    if ( c2 )
 	    {
-	      const char *xdesc = c2->valueString();
+	      QString xdesc = c2->valueString();
 	      KSpreadCell *c3 = t->cellAt( x, y );
 	      if ( c3 && c3->isValue() )
 	      {  
@@ -554,10 +559,10 @@ void KSpreadConsolidate::slotOk()
 		k.xdesc = xdesc;
 		k.ydesc = ydesc;
 		k.cell = c3;
-		k.table = it->table.in();
+		k.table = it->tableName;
 		k.x = x;
 		k.y = y;
-		lst.push_back( k );
+		lst.append( k );
 	      }
 	    }
 	  }
@@ -567,24 +572,24 @@ void KSpreadConsolidate::slotOk()
     
     // Draw the row description
     int i = 1;
-    const char* s = rows.first();
-    for( ; s != 0L; s = rows.next(), i++ )
-      table->setText( dy, dx + i, s );
+    QStringList::Iterator s = rows.begin();
+    for( ; s != rows.end(); ++s )
+      table->setText( dy, dx + i, *s );
 
     // Draw the column description
     i = 1;
-    s = cols.first();
-    for( ; s != 0L; s = cols.next(), i++ )
-      table->setText( dy + i, dx, s );
+    s = cols.begin();
+    for( ; s != rows.end(); ++s )
+      table->setText( dy + i, dx, *s );
     
     // Draw the data
     int x = 1;
-    const char* ydesc = rows.first();
-    for( ; ydesc != 0L; ydesc = rows.next(), x++ )
+    QStringList::Iterator ydesc = rows.begin();
+    for( ; ydesc != rows.end(); ++ydesc, x++ )
     {
       int y = 1;
-      const char *xdesc = cols.first();
-      for( ; xdesc != 0L; xdesc = cols.next(), y++ )
+      QStringList::Iterator xdesc = cols.begin();
+      for( ; xdesc != cols.end(); ++xdesc, y++ )
       {
 	int count = 0;
 	double dbl = 0.0;
@@ -596,12 +601,10 @@ void KSpreadConsolidate::slotOk()
 	else
 	  assert( 0 );
 	
-	list<st_cell>::iterator lit = lst.begin();
+	QValueList<st_cell>::Iterator lit = lst.begin();
 	for( ; lit != lst.end(); ++lit )
 	{
-	  cerr << "Comparing " << xdesc << " with " << lit->xdesc << endl;
-	  cerr << "      and " << ydesc << " with " << lit->ydesc << endl;
-	  if ( lit->xdesc == xdesc && lit->ydesc == ydesc )
+	  if ( lit->xdesc == *xdesc && lit->ydesc == *ydesc )
 	  {
 	    count++;
 	    // Calculate value
@@ -664,9 +667,9 @@ void KSpreadConsolidate::slotRemove()
     m_pOk->setEnabled( false );
 }
 
-QStrList KSpreadConsolidate::refs()
+QStringList KSpreadConsolidate::refs()
 {
-  QStrList list;
+  QStringList list;
   int c = m_pRefs->count();
   
   for( int i = 0; i < c; i++ )
@@ -693,15 +696,10 @@ void KSpreadConsolidate::slotReturnPressed()
 {
   QString txt = m_pRef->text();
 
-  try
-  {    
-    KSpread::Range r = util_parseRange2( txt, m_pView->doc()->map() );
-  }
-  catch( KSpread::MalformedExpression_var &_ex )
+  KSpreadRange r( txt, m_pView->doc()->map() );
+  if ( !r.isValid() )
   {
-    QString tmp;
-    tmp.sprintf( i18n("The range\n%s\n is malformed"), txt.data() );
-    QMessageBox::critical( 0L, i18n("Error"), tmp );
+    QMessageBox::critical( 0L, i18n("Error"), i18n("The range\n%1\n is malformed").arg( txt ) );
     return;
   }
   

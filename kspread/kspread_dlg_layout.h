@@ -50,6 +50,7 @@
 
 class CellLayoutDlg;
 class KSpreadTable;
+class KSpreadView;
 
 #include "kspread_cell.h"
 

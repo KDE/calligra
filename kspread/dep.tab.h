@@ -1,9 +1,10 @@
 typedef union
 {
-     double dbl;
      char b;
+     double dbl;
      char* name;
      void* range;
+     void* param;
 } YYSTYPE;
 #define	NUM	258
 #define	RANGE	259

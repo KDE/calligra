@@ -24,25 +24,22 @@
 
 #include <qpainter.h>
 #include <qdrawutl.h>
-#include <qkeycode.h>
-#include <qregexp.h>
 #include <qpoint.h>
-#include <qprinter.h>
-#include <qcursor.h>
 #include <qpointarray.h>
+#include <qsimpletextdocument.h>
+#include <qpopupmenu.h>
 
 #include "kspread_table.h"
-#include "kspread_view.h"
+#include "kspread_canvas.h"
 #include "kspread_python.h"
 #include "kspread_map.h"
-#include "kspread_doc.h"
 #include "kspread_cell.h"
+#include "kspread_calc.h"
 
 #include <koStream.h>
 #include <komlWriter.h>
 #include <torben.h>
-
-#include "kspread_calc.h"
+#include <kformula.h>
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
@@ -54,37 +51,41 @@
  *
  *****************************************************************************/
 
-KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text ) : KSpreadLayout( _table )
+KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text )
+  : KSpreadLayout( _table )
 {
-    m_pPrivate = 0L;
+  m_pPrivate = 0L;
+  m_pQML = 0;
+  m_pVisualFormula = 0;
 
-    m_lstDepends.setAutoDelete( TRUE );
+  m_lstDepends.setAutoDelete( TRUE );
+  
+  if ( _text != 0L )
+    m_strText = _text;
 
-    if ( _text != 0L )
-      m_strText = _text;
+  m_bLayoutDirtyFlag= FALSE;
+  
+  QFont font( "Times", 12 );
+  m_textFont = font;
 
-    m_bLayoutDirtyFlag= FALSE;
+  m_style = KSpreadCell::ST_Normal;
+  m_content = Text;
 
-    QFont font( "Times", 12 );
-    m_textFont = font;
-
-    m_style = KSpreadCell::ST_Normal;
-
-    m_iRow = _row;
-    m_iColumn = _column;
-
-    m_bFormular = FALSE;
-    m_bCalcDirtyFlag = FALSE;
-    m_bValue = FALSE;
-    m_bProgressFlag = FALSE;
-    m_bDisplayDirtyFlag = false;
-
-    m_bForceExtraCells = FALSE;
-    m_iExtraXCells = 0;
-    m_iExtraYCells = 0;
-    m_pObscuringCell = 0;
-
-    m_iPrecision = -1;
+  m_iRow = _row;
+  m_iColumn = _column;
+  
+  m_bCalcDirtyFlag = FALSE;
+  m_bValue = FALSE;
+  m_bBool = FALSE;
+  m_bProgressFlag = FALSE;
+  m_bDisplayDirtyFlag = false;
+  
+  m_bForceExtraCells = FALSE;
+  m_iExtraXCells = 0;
+  m_iExtraYCells = 0;
+  m_pObscuringCell = 0;
+  
+  m_iPrecision = -1;
 }
 
 void KSpreadCell::copyLayout( int _column, int _row )
@@ -170,16 +171,13 @@ void KSpreadCell::setLayoutDirtyFlag()
 
 bool KSpreadCell::isEmpty()
 {
-    if ( isDefault() )
+  if ( isDefault() )
 	return TRUE;
 
-    if ( m_strText.isNull() )
-	return TRUE;
+  if ( m_strText.isEmpty() )
+    return TRUE;
 
-    if ( m_strText.data()[0] == 0 )
-	return TRUE;
-
-    return FALSE;
+  return FALSE;
 }
 
 bool KSpreadCell::isObscuringForced()
@@ -203,7 +201,7 @@ void KSpreadCell::unobscure()
   m_bLayoutDirtyFlag= TRUE;
 }
 
-void KSpreadCell::clicked( KSpreadView *_view )
+void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 {
   cerr << "CELL CLICKED" << endl;
   if ( m_style == KSpreadCell::ST_Normal )
@@ -212,26 +210,27 @@ void KSpreadCell::clicked( KSpreadView *_view )
   {
     // We do only show a menu if the user himself clicked
     // on the cell.
-    if ( !_view )
+    if ( !_canvas )
       return;
 
     QPopupMenu *popup = new QPopupMenu;
     SelectPrivate *s = (SelectPrivate*)m_pPrivate;
     QObject::connect( popup, SIGNAL( activated( int ) ),
 		      s, SLOT( slotItemSelected( int ) ) );
+    int id = 0;
     const char *t;
     for( t = s->m_lstItems.first(); t != 0L; t = s->m_lstItems.next() )
-      popup->insertItem( t );
+      popup->insertItem( t, id++ );
     RowLayout *rl = m_pTable->rowLayout( row() );
-    int tx = m_pTable->columnPos( column(), _view );
-    int ty = m_pTable->rowPos( row(), _view );
-    int h = rl->height( _view );
+    int tx = m_pTable->columnPos( column(), _canvas );
+    int ty = m_pTable->rowPos( row(), _canvas );
+    int h = rl->height( _canvas );
     if ( m_iExtraYCells )
-      h = (int)( (float)m_iExtraHeight * _view->zoom() );
+      h = (int)( (float)m_iExtraHeight * _canvas->zoom() );
     ty += h;
 
     QPoint p( tx, ty );
-    QPoint p2 = _view->mapToGlobal( p );
+    QPoint p2 = _canvas->mapToGlobal( p );
     popup->popup( p2 );
     return;
   }
@@ -239,20 +238,20 @@ void KSpreadCell::clicked( KSpreadView *_view )
   if ( m_strAction.isEmpty() )
     return;
 
-  if ( !m_pTable->doc()->pythonModule()->setContext( m_pTable ) )
-  {
-    cerr << "Could not set context" << endl;
-    return;
-  }
+  // TODO if ( !m_pTable->doc()->pythonModule()->setContext( m_pTable ) )
+  // {
+  // cerr << "Could not set context" << endl;
+  // return;
+  // }
 
-  PyObject *obj;
-  obj = m_pTable->doc()->pythonModule()->eval( m_strAction );
-  if ( !obj )
-  {
-    cerr << "ERROR in python stuff 3" << endl;
-    return;
-  }
-  Py_DECREF( obj );
+  // TODO PyObject *obj;
+  //  obj = m_pTable->doc()->pythonModule()->eval( m_strAction );
+  // if ( !obj )
+  // {
+  // cerr << "ERROR in python stuff 3" << endl;
+  // return;
+  // }
+  // Py_DECREF( obj );
 }
 
 QString KSpreadCell::encodeFormular( int _col, int _row )
@@ -330,7 +329,7 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
 		    // Is it a table
 		    if ( *p == '!' )
 		    {
-			erg += tmp.data();
+			erg += tmp;
 			fix1 = fix2 = FALSE;
 			p = p3;
 		    }
@@ -358,19 +357,19 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
 		}
 		else
 		{
-		    erg += tmp.data();
+		    erg += tmp;
 		    fix1 = fix2 = FALSE;
 		}
 	    }
 	    else
 	    {
-		erg += tmp.data();
+		erg += tmp;
 		fix1 = FALSE;
 	    }
 	}
     }
 
-    return QString( erg.data() );
+    return erg;
 }
 
 QString KSpreadCell::decodeFormular( const char *_text, int _col, int _row )
@@ -452,7 +451,7 @@ QString KSpreadCell::decodeFormular( const char *_text, int _col, int _row )
 	}
     }
 
-    return QString( erg.data() );
+    return erg;
 }
 
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
@@ -460,9 +459,184 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   m_leftBorderPen.setWidth( leftBorderWidth( _col, _row ) );
   m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
 
+  if ( m_pQML )
+  {
+    // Calculate how many cells we could use in addition right hand
+    // Never use more then 10 cells.
+    int right = 0;
+    int max_width = width( _col );
+    bool ende = false;
+    int c;
+    m_pQML->setWidth( &_painter, max_width );
+    for( c = _col + 1; !ende && c <= _col + 10; ++c )
+    {
+      KSpreadCell *cell = m_pTable->cellAt( c, _row );
+      if ( cell && !cell->isEmpty() )
+	ende = true;
+      else
+      {  
+	ColumnLayout *cl = m_pTable->columnLayout( c );
+	max_width += cl->width();
+
+	// Can we make use of extra cells ?
+	int h = m_pQML->height();
+	m_pQML->setWidth( &_painter, max_width );
+	if ( m_pQML->height() < h )
+	  ++right;
+	else
+	{
+	  max_width -= cl->width();
+	  m_pQML->setWidth( &_painter, max_width );
+	  ende = true;
+	}
+      }
+    }
+
+    // How may space do we need now ?
+    // m_pQML->setWidth( &_painter, max_width );
+    int h = m_pQML->height();
+    int w = m_pQML->width();
+    debug("QML w=%i max=%i",w,max_width);
+    
+    // Occupy the needed extra cells in horizontal direction
+    max_width = width( _col );
+    ende = ( max_width >= w );
+    for( c = _col + 1; !ende && c <= _col + right; ++c )
+    {
+      KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
+      cell->obscure( this, _col, _row );
+      ColumnLayout *cl = m_pTable->columnLayout( c );
+      max_width += cl->width();
+      if ( max_width >= w )
+	ende = true;
+    }
+    m_iExtraXCells = right;
+    m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
+
+    // Occupy the needed extra cells in vertical direction
+    int max_height = height( 0 );
+    int r = _row;
+    ende = ( max_height >= h );
+    for( int r = _row + 1; !ende && r < _row + 500; ++r )
+    {
+      bool empty = true;
+      for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
+      {
+	KSpreadCell *cell = m_pTable->cellAt( c, r );
+	if ( cell && !cell->isEmpty() )
+	  empty = false;
+      }
+      if ( !empty )
+	ende = true;
+      else
+      {
+	// Occupy this row
+	for( c = _col; c <= _col + m_iExtraXCells; ++c )
+	{
+	  KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
+	  cell->obscure( this, _col, _row );
+	}
+	RowLayout *rl = m_pTable->rowLayout( r );
+	max_height += rl->height();
+	if ( max_height >= h )
+	  ende = true;
+      }
+    }
+    m_iExtraYCells = r - _row - 1;
+    m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
+    
+    m_bLayoutDirtyFlag = false;
+    return;
+  }
+  else if ( m_pVisualFormula )
+  {
+    // Calculate how many cells we could use in addition right hand
+    // Never use more then 10 cells.
+    int right = 0;
+    int max_width = width( _col );
+    bool ende = false;
+    int c;
+
+    for( c = _col + 1; !ende && c <= _col + 10; ++c )
+    {
+      KSpreadCell *cell = m_pTable->cellAt( c, _row );
+      if ( cell && !cell->isEmpty() )
+	ende = true;
+      else
+      {  
+	ColumnLayout *cl = m_pTable->columnLayout( c );
+	max_width += cl->width();
+	++right;
+      }
+    }
+
+    // How may space do we need now ?
+    // TODO: We have to initialize sizes here ....
+    _painter.save();
+    _painter.setPen( m_textPen.color() );
+    _painter.setFont( m_textFont );
+    m_pVisualFormula->setPos( -1000, -1000 );
+    m_pVisualFormula->redraw( _painter );
+    _painter.restore();
+    QSize size = m_pVisualFormula->size();
+    int h = size.height();
+    int w = size.width();
+    printf("Formula w=%i h=%i\n",w,h);
+    
+    // Occupy the needed extra cells in horizontal direction
+    max_width = width( _col );
+    ende = ( max_width >= w );
+    for( c = _col + 1; !ende && c <= _col + right; ++c )
+    {
+      KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
+      cell->obscure( this, _col, _row );
+      ColumnLayout *cl = m_pTable->columnLayout( c );
+      max_width += cl->width();
+      if ( max_width >= w )
+	ende = true;
+    }
+    m_iExtraXCells = right;
+    m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
+
+    // Occupy the needed extra cells in vertical direction
+    int max_height = height( 0 );
+    int r = _row;
+    ende = ( max_height >= h );
+    for( int r = _row + 1; !ende && r < _row + 500; ++r )
+    {
+      bool empty = true;
+      for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
+      {
+	KSpreadCell *cell = m_pTable->cellAt( c, r );
+	if ( cell && !cell->isEmpty() )
+	  empty = false;
+      }
+      if ( !empty )
+	ende = true;
+      else
+      {
+	// Occupy this row
+	for( c = _col; c <= _col + m_iExtraXCells; ++c )
+	{
+	  KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
+	  cell->obscure( this, _col, _row );
+	}
+	RowLayout *rl = m_pTable->rowLayout( r );
+	max_height += rl->height();
+	if ( max_height >= h )
+	  ende = true;
+      }
+    }
+    m_iExtraYCells = r - _row - 1;
+    m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
+    
+    m_bLayoutDirtyFlag = false;
+    return;
+  }
+  
   const char *ptext;
-  if ( m_bFormular )
-    ptext = m_strFormularOut.data();
+  if ( isFormular() )
+    ptext = m_strFormularOut;
   // If this is a select box, find out about the selected item
   // in the KSpreadPrivate data struct
   else if ( m_style == ST_Select )
@@ -471,7 +645,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     ptext = s->text();
   }
   else
-    ptext = m_strText.data();
+    ptext = m_strText;
 
   if ( ptext == 0L )
   {
@@ -480,7 +654,15 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       return;
   }
 
-  if ( m_bValue )
+  if ( m_bBool )
+  {
+    m_textPen.setColor( m_textColor );
+    if ( m_dValue == 0 )
+      m_strOutText = "False";
+    else
+      m_strOutText = "True";
+  }
+  else if ( m_bValue )
   {
     QString f2;
 
@@ -543,7 +725,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   _painter.setPen( m_textPen );
   _painter.setFont( m_textFont );
   QFontMetrics fm = _painter.fontMetrics();
-  m_iOutTextWidth = fm.width( m_strOutText.data() );
+  m_iOutTextWidth = fm.width( m_strOutText );
   m_iOutTextHeight = fm.ascent() + fm.descent();
 
   RowLayout *rl = m_pTable->rowLayout( m_iRow );
@@ -616,14 +798,14 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   {
     int lines = 1;
     // copy of m_strOutText
-    QString o = m_strOutText.data();
+    QString o = m_strOutText;
     // The stop character
     o += "\n";
     // current word
     QString ws = "";
     m_strOutText = "";
-    const char *p = o.data();
-    const char *start = o.data();
+    const char *p = o;
+    const char *start = o;
     // Length of the current word
     int wl = 0;
     // Length of the current line
@@ -647,7 +829,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	{
 	  if ( start != o.data() )
 	    m_strOutText += " ";
-	  m_strOutText += ws.data();
+	  m_strOutText += ws;
 	  start = p + 1;
 	  l += t;
 	  wl = 0;
@@ -664,7 +846,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	  }
 	
 	  // Add the current word
-	  m_strOutText += ws.data();
+	  m_strOutText += ws;
 	  // Skip this word and the separator
 	  start = p + 1;
 	  l = wl;
@@ -702,7 +884,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	t = m_strOutText.mid( pos, i - pos );
 	pos = i + 1;
       }
-      int tw = fm.width( t.data() );
+      int tw = fm.width( t );
       if ( tw > m_iOutTextWidth )
 	m_iOutTextWidth = tw;
     }
@@ -743,7 +925,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       }
 
       // Dont occupy additional space for right aligned or centered text or values.
-      if ( end == 1 && !m_bFormular && ( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined ) )
+      if ( end == 1 && !isFormular() && ( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined ) )
       {
 	m_iExtraWidth = w;
 	for( int i = m_iColumn + 1; i <= c; i++ )
@@ -787,7 +969,7 @@ bool KSpreadCell::makeDepend( const char *_p, KSpreadDepend ** _dep, bool _secon
       n = n.left( pos );
 
       _p += pos + 1;
-      KSpreadTable *t = m_pTable->map()->findTable( n.data() );
+      KSpreadTable *t = m_pTable->map()->findTable( n );
       if ( t == 0L )
       {
 	printf("ERROR: Unknown table name '%s'\n",n.data() );
@@ -875,7 +1057,7 @@ bool KSpreadCell::makeDepend( const char *_p, KSpreadDepend ** _dep, bool _secon
 
 bool KSpreadCell::makeFormular()
 {
-  m_strFormular = m_strText.data();
+  m_strFormular = m_strText;
   ::makeDepend( m_strFormular.data() + 1, m_pTable, &m_lstDepends );
 
   /* char buffer[ 100 ];
@@ -957,7 +1139,7 @@ void KSpreadCell::clearFormular()
 
 bool KSpreadCell::calc( bool _makedepend )
 {
-  if ( !m_bFormular )
+  if ( !isFormular() )
     return true;
 
   if ( !m_bCalcDirtyFlag )
@@ -1019,26 +1201,29 @@ bool KSpreadCell::calc( bool _makedepend )
     }
   }
 
-  if ( !evalFormular( m_strFormular.data() + 1, m_pTable, m_dValue ) )
+  KSpreadValue v = evalFormular( m_strFormular.data() + 1, m_pTable );
+  if ( v.type == KSpreadValue::ErrorType )
   {
     m_strFormularOut = "##";
-    printf("ERROR in python stuff\n");
     checkValue();
   }
-  else
+  else if ( v.type == KSpreadValue::DoubleType )
   {
+    m_dValue = v.value.d;
     m_bValue = true;
+    m_bBool = false;
     m_strFormularOut.sprintf( "%f", m_dValue );
   }
-
-  /* if ( !m_pTable->doc()->pythonModule()->eval( m_strFormular.data() + 1, m_strFormularOut ) )
+  else if ( v.type == KSpreadValue::BoolType )
   {
-    m_strFormularOut = "##";
-    printf("ERROR in python stuff\n");
+    m_bValue = true;
+    m_bBool = true;
+    m_dValue = v.value.b ? 1.0 : 0.0;
+    m_strFormularOut = v.value.b ? "True" : "False";
   }
-
-  checkValue();
-  */
+  else
+    ASSERT( 0 );
+  
   m_bProgressFlag = false;
 
   DO_UPDATE;
@@ -1048,7 +1233,7 @@ bool KSpreadCell::calc( bool _makedepend )
 
 const char* KSpreadCell::valueString()
 {
-  if ( m_bFormular )
+  if ( isFormular() )
     return m_strFormularOut;
 
   if ( m_style == ST_Select )
@@ -1057,25 +1242,31 @@ const char* KSpreadCell::valueString()
   return m_strText;
 }
 
-void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &_painter,
+void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPainter &_painter,
 			      int _col, int _row, QRect *_prect )
 {
   RowLayout *rl = m_pTable->rowLayout( _row );
   ColumnLayout *cl = m_pTable->columnLayout( _col );
-  int tx = m_pTable->columnPos( _col, _view );
-  int ty = m_pTable->rowPos( _row, _view );
+  int tx = m_pTable->columnPos( _col, _canvas );
+  int ty = m_pTable->rowPos( _row, _canvas );
 
-  paintEvent( _view, _rect, _painter, tx, ty, _col, _row, cl, rl, _prect );
+  paintEvent( _canvas, _rect, _painter, tx, ty, _col, _row, cl, rl, _prect );
 }
 
-void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &_painter, int _tx, int _ty,
+void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPainter &_painter,
+			      int _tx, int _ty,
 			      int _col, int _row, ColumnLayout *cl, RowLayout *rl, QRect *_prect )
 {
   bool selected = m_pTable->selectionRect().contains( QPoint( _col, _row ) );
 
   if ( m_pObscuringCell )
   {
-    _view->drawCell( _painter, m_pObscuringCell, m_iObscuringCellsColumn, m_iObscuringCellsRow );
+    _painter.save();
+    QRect rect( 0, 0, _canvas->width(), _canvas->height() );
+    QRect r;
+    m_pObscuringCell->paintEvent( _canvas, rect, _painter,
+				  m_iObscuringCellsColumn, m_iObscuringCellsRow, &r );
+    _painter.restore();
     m_bLayoutDirtyFlag = FALSE;
     return;
   }
@@ -1083,15 +1274,16 @@ void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &
   if ( m_bCalcDirtyFlag )
     calc();
 
+  bool old_layoutflag = m_bLayoutDirtyFlag;
   if ( m_bLayoutDirtyFlag)
     makeLayout( _painter, _col, _row );
 
-  int w = cl->width( _view );
-  int h = rl->height( _view );
+  int w = cl->width( _canvas );
+  int h = rl->height( _canvas );
   if ( m_iExtraXCells )
-    w = (int)( (float)m_iExtraWidth * _view->zoom() );
+    w = (int)( (float)m_iExtraWidth * _canvas->zoom() );
   if ( m_iExtraYCells )
-    h = (int)( (float)m_iExtraHeight * _view->zoom() );
+    h = (int)( (float)m_iExtraHeight * _canvas->zoom() );
 
   // Do we really need to display this cell ?
   QRect r2( _tx, _ty, w, h );
@@ -1109,16 +1301,16 @@ void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &
 
   // Draw the border
   if ( m_leftBorderPen.style() == Qt::NoPen )
-    _painter.setPen( _view->defaultGridPen() );
+    _painter.setPen( _canvas->defaultGridPen() );
   else
     _painter.setPen( m_leftBorderPen );
   // Fix a 'bug' in the pens width setting. We still need the upper left corner
   // of the line but a width > 1 wont work for us.
-  int dx = (int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 * _view->zoom() );
-  int dy = (int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 * _view->zoom() );
+  int dx = (int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 * _canvas->zoom() );
+  int dy = (int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 * _canvas->zoom() );
   _painter.drawLine( _tx + dx, _ty, _tx + dx, _ty + h );
   if ( m_topBorderPen.style() == Qt::NoPen )
-    _painter.setPen( _view->defaultGridPen() );
+    _painter.setPen( _canvas->defaultGridPen() );
   else
     _painter.setPen( m_topBorderPen );
   _painter.drawLine( _tx, _ty + dy, _tx + w, _ty + dy );
@@ -1151,7 +1343,34 @@ void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &
     _painter.drawPoint( a[6] );
   }
 
-  if ( !m_strOutText.isNull() && m_strOutText.length() > 0 )
+  /**
+   * QML ?
+   */
+  if ( m_pQML )
+  {
+    _painter.save();
+    m_pQML->draw( &_painter, _tx, _ty, QRegion( QRect( _tx, _ty, w, h ) ), g, 0 );
+    _painter.restore();
+  }
+  /**
+   * Visual Formula ?
+   */
+  else if ( m_pVisualFormula )
+  {
+    _painter.save();
+    _painter.setPen( m_textPen.color() );
+    _painter.setFont( m_textFont );
+    // TODO: No better method to set new font ?
+    if ( old_layoutflag )
+      m_pVisualFormula->parse( m_strText.mid(1) );
+    m_pVisualFormula->setPos( _tx + w/2, _ty + h/2 );
+    m_pVisualFormula->redraw( _painter );
+    _painter.restore();
+  }
+  /**
+   * Usual Text
+   */
+  else if ( !m_strOutText.isEmpty() )
   {
     if ( selected )
     {
@@ -1163,7 +1382,7 @@ void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &
       _painter.setPen( m_textPen );
     _painter.setFont( m_textFont );
     if ( !m_bMultiRow )
-      _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText.data() );
+      _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
     else
     {
       QString t;
@@ -1198,14 +1417,14 @@ void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &
 	  m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
 	  break;
 	case KSpreadCell::Right:
-	  m_iTextX = w - BORDER_SPACE - fm.width( t.data() )
+	  m_iTextX = w - BORDER_SPACE - fm.width( t )
 	    - rightBorderWidth( _col, _row );
 	  break;
 	case KSpreadCell::Center:
-	  m_iTextX = ( w - fm.width( t.data() ) ) / 2;
+	  m_iTextX = ( w - fm.width( t ) ) / 2;
 	}
 
-	_painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t.data() );
+	_painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
 	dy += fm.descent() + fm.ascent();
       }
       while ( i != -1 );
@@ -1280,13 +1499,12 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
   }
 
   if ( !_only_top && !_only_left )
-    if ( !m_strOutText.isNull() )
-      if ( *(m_strOutText.data()) != 0 )
-      {
-	_painter.setPen( m_textPen );
-	_painter.setFont( m_textFont );
-	_painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText.data() );
-      }
+    if ( !m_strOutText.isEmpty() )
+    {
+      _painter.setPen( m_textPen );
+      _painter.setFont( m_textFont );
+      _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
+    }
 }
 
 void KSpreadCell::setRightBorderStyle( Qt::PenStyle s )
@@ -1325,15 +1543,18 @@ void KSpreadCell::setBottomBorderWidth( int _w )
     cell->setTopBorderWidth( _w );
 }
 
-int KSpreadCell::width( int _col, KSpreadView *_view )
+int KSpreadCell::width( int _col, KSpreadCanvas *_canvas )
 {
-  if ( _view )
+  if ( _col < 0 )
+    _col = m_iColumn;
+  
+  if ( _canvas )
   {
     if ( m_bForceExtraCells )
-      return (int)( m_iExtraWidth * _view->zoom() );
+      return (int)( m_iExtraWidth * _canvas->zoom() );
 
     ColumnLayout *cl = m_pTable->columnLayout( _col );
-    return cl->width( _view );
+    return cl->width( _canvas );
   }
 
   if ( m_bForceExtraCells )
@@ -1343,15 +1564,18 @@ int KSpreadCell::width( int _col, KSpreadView *_view )
   return cl->width();
 }
 
-int KSpreadCell::height( int _row, KSpreadView *_view )
+int KSpreadCell::height( int _row, KSpreadCanvas *_canvas )
 {
-  if ( _view )
+  if ( _row < 0 )
+    _row = m_iRow;
+  
+  if ( _canvas )
   {
     if ( m_bForceExtraCells )
-      return (int)( m_iExtraHeight * _view->zoom() );
+      return (int)( m_iExtraHeight * _canvas->zoom() );
 
     RowLayout *rl = m_pTable->rowLayout( _row );
-    return rl->height( _view );
+    return rl->height( _canvas );
   }
 
   if ( m_bForceExtraCells )
@@ -1377,7 +1601,7 @@ const QColor& KSpreadCell::bgColor( int _col, int _row )
     return m_bgColor;
 }
 
-int KSpreadCell::leftBorderWidth( int _col, int _row, KSpreadView *_view )
+int KSpreadCell::leftBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
 {
     if ( isDefault() )
     {
@@ -1385,18 +1609,18 @@ int KSpreadCell::leftBorderWidth( int _col, int _row, KSpreadView *_view )
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
 	
 	if ( rl->time() > cl->time() )
-	    return rl->leftBorderWidth( _view );
+	    return rl->leftBorderWidth( _canvas );
 	else
-	    return cl->leftBorderWidth( _view );
+	    return cl->leftBorderWidth( _canvas );
     }
 
-    if ( _view )
-	return (int) ( m_iLeftBorderWidth * _view->zoom() );
+    if ( _canvas )
+	return (int) ( m_iLeftBorderWidth * _canvas->zoom() );
     else
 	return m_iLeftBorderWidth;
 }
 
-int KSpreadCell::topBorderWidth( int _col, int _row, KSpreadView *_view )
+int KSpreadCell::topBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
 {
     if ( isDefault() )
     {
@@ -1404,18 +1628,18 @@ int KSpreadCell::topBorderWidth( int _col, int _row, KSpreadView *_view )
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
 	
 	if ( rl->time() > cl->time() )
-	    return rl->topBorderWidth( _view );
+	    return rl->topBorderWidth( _canvas );
 	else
-	    return cl->topBorderWidth( _view );
+	    return cl->topBorderWidth( _canvas );
     }
 
-    if ( _view )
-	return (int) ( m_iTopBorderWidth * _view->zoom() );
+    if ( _canvas )
+	return (int) ( m_iTopBorderWidth * _canvas->zoom() );
     else
 	return m_iTopBorderWidth;
 }
 
-int KSpreadCell::rightBorderWidth( int _col, int _row, KSpreadView *_view )
+int KSpreadCell::rightBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
 {
     if ( isDefault() )
     {
@@ -1423,16 +1647,16 @@ int KSpreadCell::rightBorderWidth( int _col, int _row, KSpreadView *_view )
 	ColumnLayout *cl = m_pTable->columnLayout( _col + 1 );
 	
 	if ( rl->time() > cl->time() )
-	    return rl->leftBorderWidth( _view );
+	    return rl->leftBorderWidth( _canvas );
 	else
-	    return cl->leftBorderWidth( _view );
+	    return cl->leftBorderWidth( _canvas );
     }
 
     KSpreadCell * cell = m_pTable->cellAt( column() + 1, row() );
-    return cell->leftBorderWidth( column() + 1, row(), _view );
+    return cell->leftBorderWidth( column() + 1, row(), _canvas );
 }
 
-int KSpreadCell::bottomBorderWidth( int _col, int _row, KSpreadView *_view )
+int KSpreadCell::bottomBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
 {
     if ( isDefault() )
     {
@@ -1440,13 +1664,13 @@ int KSpreadCell::bottomBorderWidth( int _col, int _row, KSpreadView *_view )
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
 	
 	if ( rl->time() > cl->time() )
-	    return rl->topBorderWidth( _view );
+	    return rl->topBorderWidth( _canvas );
 	else
-	    return cl->topBorderWidth( _view );
+	    return cl->topBorderWidth( _canvas );
     }
 
     KSpreadCell * cell = m_pTable->cellAt( column(), row() + 1 );
-    return cell->topBorderWidth( column() + 1, row(), _view );
+    return cell->topBorderWidth( column() + 1, row(), _canvas );
 }
 
 Qt::PenStyle KSpreadCell::leftBorderStyle( int _col, int _row )
@@ -1653,61 +1877,94 @@ void KSpreadCell::initAfterLoading()
 }
 */
 
-void KSpreadCell::setText( const char *_text )
+void KSpreadCell::setText( const QString& _text )
 {
   m_strText = _text;
 
   m_lstDepends.clear();
+
+  if ( m_pQML )
+    delete m_pQML;
+  m_pQML = 0;
+  if ( m_pVisualFormula )
+    delete m_pVisualFormula;
+  m_pVisualFormula = 0;
 
   /**
    *  Special handling for selection boxes
    */
   if ( m_style == ST_Select )
   {
-    if ( m_bFormular )
+    if ( isFormular() )
       clearFormular();
 
     SelectPrivate *s = (SelectPrivate*)m_pPrivate;
     s->parse( m_strText );
     checkValue();
     m_bLayoutDirtyFlag = true;
-    m_bFormular = false;
+    m_content = Text;
   }
 
   if ( !m_strText.isEmpty() && m_strText[0] == '=' )
   {
     m_bCalcDirtyFlag = true;
     m_bLayoutDirtyFlag= true;
-    m_bFormular = true;
-
+    m_content = Formula;
+    
     if ( !makeFormular() )
       printf("ERROR: Syntax ERROR\n");
     // A Hack!!!! For testing only
     // QString ret = encodeFormular( column, row );
     // decodeFormular( ret, column, row );
   }
+  else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
+  {
+    if ( isFormular() )
+      clearFormular();
+
+    m_pQML = new QSimpleTextDocument( m_strText.mid(1), m_pTable->widget() );
+    
+    m_bValue = false;
+    m_bBool = false;
+    m_bLayoutDirtyFlag = true;
+    m_content = RichText;
+  }
+  else if ( !m_strText.isEmpty() && m_strText[0] == '*' )
+  {
+    if ( isFormular() )
+      clearFormular();
+
+    m_pVisualFormula = new KFormula();
+    m_pVisualFormula->parse( m_strText.mid( 1 ) );
+
+    m_bValue = false;
+    m_bBool = false;
+    m_bLayoutDirtyFlag = true;
+    m_content = RichText;
+  }
   else
   {
-    if ( m_bFormular )
+    if ( isFormular() )
       clearFormular();
 
     checkValue();
 		
     m_bLayoutDirtyFlag = true;
-    m_bFormular = false;
+    m_content = RichText;
   }
 
   // Do not update formulars and stuff here
-  if ( !m_pTable->doc()->isLoading() )
+  if ( !m_pTable->isLoading() )
     update();
 }
 
 void KSpreadCell::setValue( double _d )
 {
   m_bValue = true;
+  m_bBool = false;
   m_dValue = _d;
   m_bLayoutDirtyFlag = true;
-  m_bFormular = FALSE;
+  m_content = Text;
 
   m_lstDepends.clear();
 
@@ -1783,14 +2040,15 @@ void KSpreadCell::update()
 void KSpreadCell::checkValue()
 {
     // If the input is empty, we dont have a value
-    if ( m_strText.data() == 0 || m_strText.data()[0] == 0 )
+    if ( m_strText.isEmpty() )
     {
       m_bValue = FALSE;
+      m_bBool = false;
       return;
     }
 
     const char *p = m_strText.data();	
-    if ( m_bFormular )
+    if ( isFormular() )
       p = m_strFormularOut.data();
     else if ( m_style == ST_Select )
       p = ((SelectPrivate*)m_pPrivate)->text();
@@ -1799,6 +2057,7 @@ void KSpreadCell::checkValue()
     if ( p == 0L )
     {
       m_bValue = FALSE;
+      m_bBool = false;
       return;
     }
 
@@ -1903,8 +2162,8 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
   {
     if ( isFormular() )
     {
-      string f = encodeFormular().data();
-      out << indent << f << endl;
+      // TODO: Not unicode here!
+      out << indent << encodeFormular().ascii() << endl;
     }
     else
       out << indent << m_strText.ascii() << endl;
@@ -2162,7 +2421,7 @@ void KSpreadCell::setStyle( Style _s )
   if ( _s == ST_Select )
     m_pPrivate = new SelectPrivate( this );
 
-  if ( m_bFormular )
+  if ( isFormular() )
     clearFormular();
 
   SelectPrivate *s = (SelectPrivate*)m_pPrivate;
@@ -2172,10 +2431,31 @@ void KSpreadCell::setStyle( Style _s )
   update();
 }
 
+QString KSpreadCell::testAnchor( int _x, int _y, QWidget* _w )
+{
+  if ( !m_pQML )
+    return QString();
+
+  QPainter p( _w );
+  return m_pQML->anchor( &p, QPoint( _x, _y ) );
+}
+
 KSpreadCell::~KSpreadCell()
 {
   if ( m_pPrivate )
     delete m_pPrivate;
+  if ( m_pQML )
+    delete m_pQML;
+  if ( m_pVisualFormula )
+    delete m_pVisualFormula;
+
+  for( int x = 0; x <= m_iExtraXCells; ++x )
+    for( int y = 0; y <= m_iExtraYCells; ++y )
+    {
+      KSpreadCell* cell = m_pTable->cellAt( m_iColumn + x, m_iRow + y );
+      if ( cell && cell != this )
+	cell->unobscure();
+    }
 }
 
 /***************************************************
@@ -2196,7 +2476,7 @@ void SelectPrivate::parse( const char* _text )
   char *str = p;
 
   char *s;
-  while ( ( s = strchr( str, '/' ) ) != 0L )
+  while ( ( s = strchr( str, '\\' ) ) != 0L )
   {
     *s++ = 0;
     if ( strlen( str ) > 0 )
@@ -2218,6 +2498,7 @@ void SelectPrivate::parse( const char* _text )
 void SelectPrivate::slotItemSelected( int _id )
 {
   m_iIndex = _id;
+
   m_pCell->setLayoutDirtyFlag();
   m_pCell->checkValue();
   m_pCell->update();

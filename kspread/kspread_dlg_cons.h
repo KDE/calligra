@@ -25,7 +25,7 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qlistbox.h>
 #include <qrect.h>
 #include <qcheckbox.h>
@@ -39,7 +39,7 @@ class KSpreadConsolidate : public QDialog
 public:
   KSpreadConsolidate( KSpreadView* parent, const char* name );
   
-  QStrList refs();
+  QStringList refs();
   
 public slots:
   void slotOk();
@@ -49,7 +49,7 @@ public slots:
 
   void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
   void slotReturnPressed();
-  
+
 protected:
   KSpreadView* m_pView;
   

@@ -26,11 +26,14 @@ DIGIT    [0-9]
 
 %%
 
-"<"|">"|"#"|"="|"^"|"/"|"+"|"-"|"*"|"("|")"|";"  { return (int)(*yytext); }
+"{"|"}"|"<"|">"|"#"|"="|"^"|"/"|"+"|"-"|"*"|"("|")"|";"  { return (int)(*yytext); }
 
 "TRUE" { yylval.b = 1; return BOOL; }
 "FALSE" { yylval.b = 0; return BOOL; }
+"true" { yylval.b = 1; return BOOL; }
+"false" { yylval.b = 0; return BOOL; }
 "IF" { return WENN; }
+"if" { return WENN; }
 "<=" { return LEQ; }
 ">=" { return GEQ; }
 "!=" { return NEQ; }

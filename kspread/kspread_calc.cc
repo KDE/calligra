@@ -18,7 +18,7 @@
 */     
 
 // We have to include this because Qt is shit
-#include <qprinter.h>
+//#include <qprinter.h>
 #include "kspread_doc.h"
 
 #include <iostream>
@@ -28,7 +28,6 @@
 #include <qlist.h>
 #include <qstring.h>
 #include <stdlib.h>
-#include <vector>
 #include <assert.h>
 
 #include "kspread_table.h"
@@ -36,24 +35,7 @@
 #include "kspread_cell.h"
 #include "kspread_calc.h"
 
-struct range
-{
-  KSpreadTable *table;
-  int fromX;
-  int fromY;
-  int toX;
-  int toY;
-};
-
-enum MyArgType { AT_Double, AT_Range };
-struct myarg
-{
-  MyArgType type;
-  range* r;
-  double d;
-};
-
-typedef vector<myarg> myarglist;
+typedef QValueList<KSpreadValue> valuelist;
 
 extern "C" 
 {
@@ -65,6 +47,7 @@ extern "C"
   extern void mainParse( const char *_code );
   extern void dependMainParse( const char *_code );
   extern void setResult( double _res );
+  extern void setResultBool( char _res );
   extern void setError( int _errno, const char *_txt );
   extern void clearRanges();
   extern void makeCellDepend( const char *_str );
@@ -72,14 +55,17 @@ extern "C"
   extern void makeRangeDepend( const char *_str );
   extern void makeRangeDepend2( const char *_str );
   extern int funcDbl( const char *_name, void* _args, double* _res );
+  extern int funcBool( const char *_name, void* _args, char* _res );
   extern void* newArgList();
   extern void addDbl( void* _args, double _v );
+  extern void addBool( void* _args, char _v );
   extern void addRange( void* _args, void* _range );
 }
 
-double result;
-QList<range>* g_lstRanges = 0L;
-QList<myarglist>* g_lstArgs = 0L;
+KSpreadValue g_result;
+
+QList<KSpreadRange>* g_lstRanges = 0L;
+QList<valuelist>* g_lstArgs = 0L;
 QList<KSpreadDepend>* g_pDepends = 0L;
 KSpreadTable* g_pTable = 0L;
 QString g_errorText;
@@ -87,16 +73,25 @@ int g_errno;
 
 void setResult( double _res )
 {
-  result = _res;
+  g_result.value.d = _res;
+  g_result.type = KSpreadValue::DoubleType;
+}
+
+void setResultBool( char _res )
+{
+  debug("Setting Result Bool %i", (int)_res);
+  
+  g_result.value.b = (bool)_res;
+  g_result.type = KSpreadValue::BoolType;
 }
 
 void* newArgList()
 {
-  myarglist* a = new myarglist;
+  valuelist* a = new valuelist;
 
   if ( g_lstArgs == 0 )
   {
-    g_lstArgs = new QList<myarglist>;
+    g_lstArgs = new QList<valuelist>;
     g_lstArgs->setAutoDelete( true );
   }
   g_lstArgs->append( a );
@@ -106,36 +101,51 @@ void* newArgList()
 
 void addDbl( void* _args, double _v )
 {
-  myarglist* a = (myarglist*)_args;
-  myarg x;
-  x.type = AT_Double;
-  x.d = _v;
-  a->push_back( x );
+  valuelist* a = (valuelist*)_args;
+  KSpreadValue x;
+  x.type = KSpreadValue::DoubleType;
+  x.value.d = _v;
+  a->append( x );
+}
+
+void addBool( void* _args, char _v )
+{
+  valuelist* a = (valuelist*)_args;
+  KSpreadValue x;
+  x.type = KSpreadValue::BoolType;
+  x.value.b = (bool)_v;
+  a->append( x );
 }
 
 void addRange( void* _args, void* _range )
 {
-  myarglist* a = (myarglist*)_args;
-  myarg x;
-  x.type = AT_Range;
-  x.r = (range*)_range;
-  a->push_back( x );
+  valuelist* a = (valuelist*)_args;
+  KSpreadValue x;
+  x.type = KSpreadValue::RangeType;
+  x.value.r = (KSpreadRange*)_range;
+  a->append( x );
 }
 
-int rfunc1( const char *_name, range* _arg, double* _res );
+int rfunc1( const char *_name, KSpreadRange* _arg, double* _res );
 int func1( const char *_name, double _arg, double* _res );
+
+int funcBool( const char* _name, void* _args, char* _res )
+{
+  return -1;
+}
 
 int funcDbl( const char* _name, void* _args, double* _res )
 {
-  myarglist* a = (myarglist*)_args;
+  valuelist* a = (valuelist*)_args;
   int ret = -1;
 
-  if ( a->size() == 1 )
+  // Test for KSpreads hardcoded functions
+  if ( a->count() == 1 )
   {   
-    if ( (*a)[0].type == AT_Double )
-      ret = func1( _name, (*a)[0].d, _res );
-    else if ( (*a)[0].type == AT_Range )
-      ret = rfunc1( _name, (*a)[0].r, _res );
+    if ( (*a)[0].type == KSpreadValue::DoubleType )
+      ret = func1( _name, (*a)[0].value.d, _res );
+    else if ( (*a)[0].type == KSpreadValue::RangeType )
+      ret = rfunc1( _name, (*a)[0].value.r, _res );
   }
 
   if ( ret != -1 )
@@ -145,20 +155,28 @@ int funcDbl( const char* _name, void* _args, double* _res )
   {
     QString cmd = _name;
     cmd += "( ";
-    int s = a->size();
+    int s = a->count();
     for( int i = 0; i < s; i++ )
     {
-      if ( (*a)[i].type == AT_Double )
+      if ( (*a)[i].type == KSpreadValue::DoubleType )
       {  
 	char buffer[ 100 ];
-	sprintf( buffer, "%f", (*a)[i].d );
+	sprintf( buffer, "%f", (*a)[i].value.d );
 	cmd += buffer;
       }
-      else if ( (*a)[i].type == AT_Range )
+      else if ( (*a)[i].type == KSpreadValue::RangeType )
       {  
 	char buffer[ 100 ];
-	sprintf( buffer, "(%i,%i,%i,%i)", (*a)[i].r->fromX, (*a)[i].r->fromY, (*a)[i].r->toX, (*a)[i].r->toY );
+	sprintf( buffer, "(%i,%i,%i,%i)", (*a)[i].value.r->range.left(), (*a)[i].value.r->range.top(),
+		 (*a)[i].value.r->range.right(), (*a)[i].value.r->range.bottom() );
 	cmd += buffer;
+      }
+      if ( (*a)[i].type == KSpreadValue::BoolType )
+      {  
+	if ( (*a)[i].value.b )
+	  cmd += "1";
+	else
+	  cmd += "0";
       }
       else
 	assert(0);
@@ -200,14 +218,14 @@ int funcDbl( const char* _name, void* _args, double* _res )
   return -1;
 }
 
-extern int rfunc1( const char *_name, range* r, double* _res )
+extern int rfunc1( const char *_name, KSpreadRange* r, double* _res )
 {
   if ( strcasecmp( _name, "sum" ) == 0 )
   {
     double res = 0.0;
-    cerr << "Calculating range from " << r->fromX << "/" << r->fromY << " " << r->toX << "/" << r->toY << endl;
-    for( int x = r->fromX; x <= r->toX; x++ )
-      for( int y = r->fromY; y <= r->toY; y++ )
+
+    for( int x = r->range.left(); x <= r->range.right(); x++ )
+      for( int y = r->range.top(); y <= r->range.bottom(); y++ )
       {  
 	KSpreadCell *obj = r->table->cellAt( x, y );
 	if ( obj->isValue() )
@@ -293,6 +311,7 @@ void setError( int _errno, const char *_txt )
 {
   g_errno = _errno;
   g_errorText = _txt;
+  g_result.type = KSpreadValue::ErrorType;
   
   cerr << "MyError "  << _errno << " " << _txt << endl;
 }
@@ -319,123 +338,44 @@ KSpreadTable* findTable( const char *_name )
 
 void parseCell( const char *_str, int* _x, int* _y, void** _table )
 {
-  if ( *_str == '$' )
-    _str++;
-  
-  int x = *_str++ - 'A';
-  int y = 0;
-  while( *_str >= 'A' && *_str <= 'Z' )
-    x = (x+1)*26 + *_str++ - 'A';
+  KSpreadPoint p( _str );
 
-  if ( *_str == '$' )
-    _str++;
-
-  y = atoi( _str );
+  ASSERT( p.isValid() );
   
-  *_x = x + 1;
-  *_y = y;
+  *_x = p.pos.x();
+  *_y = p.pos.y();
   *_table = g_pTable;
 }
 
 void parseCell2( const char *_str, int* _x, int* _y, void** _table )
 {
-  char *p = new char[ strlen( _str ) + 1 ];
-  char *orig = p;
-  strcpy( p, _str );
-  char *p2 = strchr( p, '!' );
-  *p2++ = 0;
+  KSpreadPoint p( _str, g_pTable->map() );
 
-  *_table = findTable( p );
-  // TODO: check wether this table really exists
-  assert( _table );
-  p = p2;
+  ASSERT( p.isValid() && p.isTableKnown() );
   
-  if ( *p == '$' )
-    p++;
-  
-  int x = *p++ - 'A';
-  int y = 0;
-  while( *p >= 'A' && *p <= 'Z' )
-    x = (x+1)*26 + *p++ - 'A';
-
-  if ( *p == '$' )
-    p++;
-
-  y = atoi( p );
-  
-  delete[] orig;
-
-  *_x = x + 1;
-  *_y = y;
+  *_x = p.pos.x();
+  *_y = p.pos.y();
+  *_table = p.table;
 }
 
 void* parseRange( const char *_str )
 {
-  char *p = new char[ strlen( _str ) + 1 ];
-  strcpy( p, _str );
-  char *p2 = strchr( p, ':' );
-  *p2++ = 0;
-
-  struct range* r = new range;
-
-  void* dummy;
-  parseCell( p, &(r->fromX), &(r->fromY), &dummy );
-  parseCell( p2, &(r->toX), &(r->toY), &dummy );
-  r->table = g_pTable;
-  
-  delete []p;
-
-  if ( g_lstRanges == 0L )
-  {       
-    g_lstRanges = new QList<range>;
-    g_lstRanges->setAutoDelete( true );
-  }
-  
-  g_lstRanges->append( r );
-  return r;
+  return new KSpreadRange( _str );
 }
 
 void* parseRange2( const char *_str )
 {
-  char *p = new char[ strlen( _str ) + 1 ];
-  strcpy( p, _str );
-  char *p2 = strchr( p, '!' );
-  *p2++ = 0;
-  char *p3 = strchr( p2, ':' );
-  *p3++ = 0;
-
-  struct range* r = new range;
-
-  void* dummy;
-  parseCell( p2, &(r->fromX), &(r->fromY), &dummy );
-  parseCell( p3, &(r->toX), &(r->toY), &dummy );
-
-  if ( g_lstRanges == 0L )
-  {       
-    g_lstRanges = new QList<range>;
-    g_lstRanges->setAutoDelete( true );
-  }
-
-  r->table = findTable( p );
-  delete []p;
-
-  // Did an error occur during parsing ?
-  if ( g_errno != 0L )
-  {
-    delete r;
-    return 0L;
-  }
-  
-  g_lstRanges->append( r );
-
-  return r;
+  return new KSpreadRange( _str, g_pTable->map() );
 }
 
 double cellValue( void *_table, int _x, int _y )
 {
   if ( _table == 0L )
+  {
+    debug("cellValue: Dont have table");
     return 1.0;
-
+  }
+  
   KSpreadTable *t = (KSpreadTable*)_table;
   KSpreadCell *obj = t->cellAt( _x, _y );
 
@@ -555,7 +495,7 @@ void makeRangeDepend2( const char *_str )
   cerr << "Depends on " << p << " " << x1 << "/" << y1 << " " << x2 << "/" << y2 << endl;
 }
 
-bool evalFormular( const char *_formular, KSpreadTable* _table, double& _result )
+KSpreadValue evalFormular( const char *_formular, KSpreadTable* _table )
 {
   cerr << "Scanning" << _formular << endl;
   
@@ -565,11 +505,7 @@ bool evalFormular( const char *_formular, KSpreadTable* _table, double& _result 
   mainParse( _formular );
   clearParser();
 
-  if ( g_errno != 0 )
-    return false;
-
-  _result = result;
-  return true;
+  return g_result;
 }
 
 bool makeDepend( const char* _formular, KSpreadTable* _table, QList<KSpreadDepend>* _list )

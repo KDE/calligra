@@ -22,7 +22,11 @@
 
 class KSpreadCell;
 class KSpreadTable;
-class KSpreadView;
+class KSpreadCanvas;
+
+class KFormula;
+
+class QSimpleTextDocument;
 
 #include <iostream.h>
 #include <komlParser.h>
@@ -90,6 +94,7 @@ class KSpreadCell : public KSpreadLayout
 
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
+    enum Content { Text, RichText, Formula, VisualFormula };
 
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
@@ -110,13 +115,13 @@ public:
     /**
      * Paints the cell.
      */
-    virtual void paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &_painter, int _tx, int _ty,
+    virtual void paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPainter &_painter, int _tx, int _ty,
 			     int _col, int _row, ColumnLayout *cl, RowLayout *rl, QRect *_prect = 0L );
 
     /**
      * A convenience function
      */
-    virtual void paintEvent( KSpreadView *_view, const QRect & _ev, QPainter &_painter, int _col, int _row,
+    virtual void paintEvent( KSpreadCanvas *_canvas, const QRect & _ev, QPainter &_painter, int _col, int _row,
 			     QRect *_prect = 0L );
 
     /**
@@ -130,17 +135,18 @@ public:
 
     /**
      * @param _col the column this cell is assumed to be in.
+     *             This parameter defaults to the return value of @ref #column.
      *
      * @return the width of this cell
      */
-    int width( int _col, KSpreadView *_view = 0L );
+    int width( int _col = -1, KSpreadCanvas *_canvas = 0L );
 
     /**
      * @param _row the row this cell is assumed to be in.
      *
      * @return the height of this cell
      */
-    int height( int _row, KSpreadView *_view = 0L );
+    int height( int _row = -1, KSpreadCanvas *_canvas = 0L );
 
     /**
      * @return TRUE if this cell is the default cell.
@@ -154,8 +160,13 @@ public:
      * @return TRUE if there is no content.
      */
     virtual bool isEmpty();
-	
-    const char *text() { return m_strText.data(); }
+
+    /**
+     * Tells wether the cell contains, text, a formula, richtext or a visual formula.
+     */
+    Content content() { return m_content; }
+
+    QString text() { return m_strText; }
 
     void incPrecision();
     void decPrecision();
@@ -175,7 +186,7 @@ public:
      * This function does only store '_text', if we are in the progress of loading.
      * If this is the case, call @ref #initAfterLoading to complete this functions job.
      */
-    void setText( const char *_text );
+    void setText( const QString& _text );
     void setAlign( Align _align ) { m_eAlign = _align; m_bLayoutDirtyFlag = TRUE; }
     void setFaktor( double _d ) { m_dFaktor = _d; m_bLayoutDirtyFlag = TRUE; }
 
@@ -227,10 +238,10 @@ public:
      *
      * @return the border width of the left border
      */
-    int leftBorderWidth( int _col, int _row, KSpreadView *_view = 0L );
-    int topBorderWidth( int _col, int _row, KSpreadView *_view = 0L );
-    int rightBorderWidth( int _col, int _row, KSpreadView *_view = 0L );
-    int bottomBorderWidth( int _col, int _row, KSpreadView *_view = 0L );
+    int leftBorderWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
+    int topBorderWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
+    int rightBorderWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
+    int bottomBorderWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
 
     /**
      * @param _col the column this cell is assumed to be in
@@ -266,17 +277,21 @@ public:
     const QColor& bottomBorderColor( int _col, int _row );
 
     bool isValue() { return m_bValue; }
+    bool isBool() {  return m_bValue; }
+    bool valueBool() { return ( m_dValue != 0.0 ); }
     double valueDouble() { return m_dValue; }
     const char* valueString();
     void setValue( double _d );
 
     void update();
 
+    QString testAnchor( int _x, int _y, QWidget* _canvas );
+  
     /**
      * Called if the user clicks on a cell. If the cell is for example a button, then
      * @ref #m_strAction is executed.
      */
-    void clicked( KSpreadView *_view );
+    void clicked( KSpreadCanvas *_canvas );
 
     /**
      * Starts calculating.
@@ -296,8 +311,8 @@ public:
     /**
      * Set the calcDirtyFlag
      */
-    void setCalcDirtyFlag() { if ( m_bFormular ) m_bCalcDirtyFlag = TRUE; }
-    bool calcDirtyFlag() { if ( !m_bFormular ) return false; return m_bCalcDirtyFlag; }
+    void setCalcDirtyFlag() { if ( m_content == Formula ) m_bCalcDirtyFlag = TRUE; }
+    bool calcDirtyFlag() { if ( m_content == Formula ) return false; return m_bCalcDirtyFlag; }
 
     /**
      * Sets the calcDirtyFlag if this cell depends on a given cell.
@@ -398,7 +413,7 @@ public:
      */
     int extraYCells() { return m_iExtraYCells; }
 
-    bool isFormular() { return m_bFormular; }
+    bool isFormular() { return m_content == Formula; }
 
     QString encodeFormular( int _col = -1, int _row = -1 );
     QString decodeFormular( const char *_text, int _col = -1, int _row = -1 );
@@ -470,7 +485,8 @@ protected:
 
     double m_dValue;
     bool m_bValue;
-
+    bool m_bBool;
+  
     /**
      * Flag showing wether the current layout is OK.
      * If you change for example the fonts point size, set this flag. When the cell
@@ -486,7 +502,6 @@ protected:
      */
     bool m_bCalcDirtyFlag;
 
-    bool m_bFormular;
     QList<KSpreadDepend> m_lstDepends;
     /**
      * Holds the string we have to execute to do the calculation.
@@ -567,6 +582,17 @@ protected:
     QString m_strAction;
 
     KSpreadCellPrivate *m_pPrivate;
+
+    Content m_content;
+
+    /**
+     * Perhaps this cell contains QML ?
+     */
+    QSimpleTextDocument* m_pQML;
+    /**
+     * Perhaps this cell contains a visual formula ?
+     */
+    KFormula* m_pVisualFormula;
 };
 
 #endif

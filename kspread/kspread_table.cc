@@ -35,6 +35,7 @@
 #include <qmsgbox.h>
 #include <qclipbrd.h>
 #include <qpicture.h>
+#include <klocale.h>
 
 #include "kspread_table.h"
 #include "kspread_view.h"
@@ -42,6 +43,8 @@
 #include "kspread_undo.h"
 #include "kspread_map.h"
 #include "kspread_util.h"
+#include "kspread_corba_util.h"
+#include "kspread_canvas.h"
 
 #include <koIMR.h>
 #include <koStream.h>
@@ -52,7 +55,6 @@
 #include <torben.h>
 
 #include <strstream.h>
-#include <klocale.h>
 
 /*****************************************************************************
  *
@@ -418,29 +420,29 @@ RowLayout* KSpreadTable::rowLayout( int _row )
     return m_pDefaultRowLayout;
 }
 
-int KSpreadTable::leftColumn( int _xpos, int &_left, KSpreadView *_view )
+int KSpreadTable::leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas )
 {
-    _xpos += _view->xOffset();
-    _left = -_view->xOffset();
+    _xpos += _canvas->xOffset();
+    _left = -_canvas->xOffset();
 
     int col = 1;
-    int x = columnLayout( col )->width( _view );
+    int x = columnLayout( col )->width( _canvas );
     while ( x < _xpos )
     {
 	// Should never happen
 	if ( col == 0x10000 )
 	    return 1;
-	_left += columnLayout( col )->width( _view );
+	_left += columnLayout( col )->width( _canvas );
 	col++;
-	x += columnLayout( col )->width( _view );
+	x += columnLayout( col )->width( _canvas );
     }
 
     return col;
 }
 
-int KSpreadTable::rightColumn( int _xpos, KSpreadView *_view )
+int KSpreadTable::rightColumn( int _xpos, KSpreadCanvas *_canvas )
 {
-    _xpos += _view->xOffset();
+    _xpos += _canvas->xOffset();
 
     int col = 1;
     int x = 0;
@@ -449,36 +451,36 @@ int KSpreadTable::rightColumn( int _xpos, KSpreadView *_view )
 	// Should never happen
 	if ( col == 0x10000 )
 	    return 0x10000;
-	x += columnLayout( col )->width( _view );
+	x += columnLayout( col )->width( _canvas );
 	col++;
     }
 
     return col;
 }
 
-int KSpreadTable::topRow( int _ypos, int & _top, KSpreadView *_view )
+int KSpreadTable::topRow( int _ypos, int & _top, KSpreadCanvas *_canvas )
 {
-    _ypos += _view->yOffset();
-    _top = -_view->yOffset();
+    _ypos += _canvas->yOffset();
+    _top = -_canvas->yOffset();
 
     int row = 1;
-    int y = rowLayout( row )->height( _view );
+    int y = rowLayout( row )->height( _canvas );
     while ( y < _ypos )
     {
 	// Should never happen
 	if ( row == 0x10000 )
 	    return 1;
-	_top += rowLayout( row )->height( _view );
+	_top += rowLayout( row )->height( _canvas );
 	row++;
-	y += rowLayout( row )->height( _view);
+	y += rowLayout( row )->height( _canvas);
     }
 
     return row;
 }
 
-int KSpreadTable::bottomRow( int _ypos, KSpreadView *_view )
+int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
 {
-    _ypos += _view->yOffset();
+    _ypos += _canvas->yOffset();
 
     int row = 1;
     int y = 0;
@@ -487,45 +489,58 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadView *_view )
 	// Should never happen
 	if ( row == 0x10000 )
 	    return 0x10000;
-	y += rowLayout( row )->height( _view );
+	y += rowLayout( row )->height( _canvas );
 	row++;
     }
 
     return row;
 }
 
-int KSpreadTable::columnPos( int _col, KSpreadView *_view )
+int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
 {
     int col = 1;
-    int x = -_view->xOffset();
+    int x = 0;
+    if ( _canvas )
+      x -= _canvas->xOffset();
     while ( col < _col )
     {
 	// Should never happen
 	if ( col == 0x10000 )
 	    return x;
 	
-	x += columnLayout( col )->width( _view );
+	x += columnLayout( col )->width( _canvas );
 	col++;
     }
 
     return x;
 }
 
-int KSpreadTable::rowPos( int _row, KSpreadView *_view )
+int KSpreadTable::rowPos( int _row, KSpreadCanvas *_canvas )
 {
     int row = 1;
-    int y = -_view->yOffset();
+    int y = 0;
+    if ( _canvas )
+      y -= _canvas->yOffset();
     while ( row < _row )
     {
 	// Should never happen
 	if ( row == 0x10000 )
 	    return y;
 	
-	y += rowLayout( row )->height( _view );
+	y += rowLayout( row )->height( _canvas );
 	row++;
     }
 
     return y;
+}
+
+KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _no_scrollbar_update )
+{
+  KSpreadCell* cell = cellAt( _column, _row, _no_scrollbar_update );
+  if ( cell->isObscured() )
+    return cellAt( cell->obscuringCellsColumn(), cell->obscuringCellsRow(), _no_scrollbar_update );
+
+  return cell;
 }
 
 KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _no_scrollbar_update )
@@ -609,7 +624,7 @@ KSpreadCell* KSpreadTable::nonDefaultCell( int _column, int _row,
   return cell;
 }
 
-void KSpreadTable::setText( int _row, int _column, const char *_text )
+void KSpreadTable::setText( int _row, int _column, const QString& _text )
 {
     m_pDoc->setModified( true );
 
@@ -624,10 +639,6 @@ void KSpreadTable::setText( int _row, int _column, const char *_text )
 
     // The cell will force a display refresh itself, so we dont have to care here.
     cell->setText( _text );
-
-    // drawCellList();
-    // QRect r( _column, _row, _column, _row );
-    // emit sig_updateView( this, r );
 }
 
 void KSpreadTable::setLayoutDirtyFlag()
@@ -663,7 +674,7 @@ void KSpreadTable::unselect()
     emit sig_unselect( this, r );
 }
 
-void KSpreadTable::setSelection( const QRect &_sel, KSpreadView *_view )
+void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
 {
   if ( _sel == m_rctSelection )
     return;
@@ -678,7 +689,7 @@ void KSpreadTable::setSelection( const QRect &_sel, KSpreadView *_view )
     // Take care: One cell may obscure other cells ( extra size! ).
     if ( m_rctSelection.left() + cell->extraXCells() == m_rctSelection.right() &&
 	 m_rctSelection.top() + cell->extraYCells() == m_rctSelection.bottom() )
-      cell->clicked( _view );
+      cell->clicked( _canvas );
   }
 
   QRect old( m_rctSelection );
@@ -2083,6 +2094,11 @@ bool KSpreadTable::save( ostream &out )
   out << etag << "</TABLE>" << endl;
 
   return true;
+}
+
+bool KSpreadTable::isLoading()
+{
+  return m_pDoc->isLoading();
 }
 
 bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )

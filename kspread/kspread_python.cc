@@ -44,23 +44,21 @@ KPythonModule::KPythonModule( const char *_name )
   PyDict_SetItemString( m_pDict, "__builtins__", PyEval_GetBuiltins() );
 
   QString tmp = "import sys\n";
-  runCodeStr( PY_STATEMENT, tmp.data() );
+  runCodeStr( PY_STATEMENT, (char*)tmp.data() );
   tmp += "sys.path = [ \"";
   tmp += kapp->kde_bindir().data();
   tmp += "/../include/python\", \"";
   tmp += kapp->kde_bindir().data();
   tmp += "/../lib\", ] + sys.path\n";
-  runCodeStr( PY_STATEMENT, tmp.data() );
+  runCodeStr( PY_STATEMENT, (char*)tmp.data() );
   tmp = "from KSpread import *\n";
-  runCodeStr( PY_STATEMENT, tmp.data() );
+  runCodeStr( PY_STATEMENT, (char*)tmp.data() );
 }
 
-int KPythonModule::runCodeStr( StringModes mode, const char *code, char *resfmt, void *cresult )
+int KPythonModule::runCodeStr( StringModes mode, char *code, char *resfmt, void *cresult )
 {
-    char *buffer = qstrdup(code);
-    PyObject *presult = PyRun_String( buffer, ( mode == PY_EXPRESSION ? eval_input : file_input ),
+    PyObject *presult = PyRun_String( code, ( mode == PY_EXPRESSION ? eval_input : file_input ),
 				      m_pDict, m_pDict );
-    delete [] buffer;
     if ( presult == 0L )
 	  PyErr_Print();
    
@@ -73,7 +71,7 @@ int KPythonModule::runCodeStr( StringModes mode, const char *code, char *resfmt,
     return convertResult( presult, resfmt, cresult );
 }
 
-int KPythonModule::convertResult( PyObject *presult, const char *resFormat, void *resTarget )
+int KPythonModule::convertResult( PyObject *presult, char *resFormat, void *resTarget )
 {
     if ( presult == NULL )
 	return -1;
@@ -82,13 +80,12 @@ int KPythonModule::convertResult( PyObject *presult, const char *resFormat, void
 	Py_DECREF( presult );
 	return 0;
     }
-    char *buffer = qstrdup(resFormat);
-    if ( !PyArg_Parse( presult, buffer, resTarget ) )
+    if ( !PyArg_Parse( presult, resFormat, resTarget ) )
     {
 	Py_DECREF( presult );
 	return -1;
     }
-    if ( strcmp( buffer, "0" ) != 0 )
+    if ( strcmp( resFormat, "0" ) != 0 )
 	Py_DECREF( presult );
     return 0;
 }
@@ -112,7 +109,7 @@ int KPythonModule::runFile( const char *_filename )
     }
     fclose( f );
 
-    return runCodeStr( PY_STATEMENT, script.data() );
+    return runCodeStr( PY_STATEMENT, (char*)script.data() );
 }
 
 void KPythonModule::registerMethods( struct PyMethodDef* _methods )
