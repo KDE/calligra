@@ -1580,7 +1580,7 @@ bool Connection::resultExists(const QString& sql, bool &success)
 		deleteCursor(cursor);
 		return false;
 	}
-	return true;
+	return deleteCursor(cursor);
 }
 
 KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RowData &data )//KexiDB::Cursor *table_cur )
