@@ -18,7 +18,7 @@ VSelection::VSelection( VObject* parent, VState /*state*/ )
 }
 
 VSelection::VSelection( const VSelection& selection )
-	: VGroup( selection )
+	: VGroup( selection, false )
 {
 	m_qrect = new QRect();
 }

@@ -26,7 +26,7 @@ class VGroup : public VObject
 {
 public:
 	VGroup( VObject* parent = 0L, VState state = state_normal );
-	VGroup( const VGroup& group );
+	VGroup( const VGroup& group, bool copy = true );
 
 	virtual ~VGroup();
 

@@ -19,13 +19,21 @@ VGroup::VGroup( VObject* parent, VState state )
 {
 }
 
-VGroup::VGroup( const VGroup& group)
+VGroup::VGroup( const VGroup& group, bool copy )
 	: VObject( group )
 {
 	VObjectListIterator itr = group.m_objects;
 
-	for ( ; itr.current() ; ++itr )
-		append( itr.current()->clone() );
+	if( copy )
+	{
+		for ( ; itr.current() ; ++itr )
+			append( itr.current()->clone() );
+	}
+	else
+	{
+		for ( ; itr.current() ; ++itr )
+			append( itr.current() );
+	}
 }
 
 VGroup::~VGroup()
