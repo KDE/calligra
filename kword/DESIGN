@@ -167,7 +167,13 @@ but also direct conversions between LU pixels and view pixels.
 
 Font sizes
 ==========
-A 12pt font will lead to a layout font of ptToLayoutUnit(12)=20*12=240pt.
+A 12pt font will lead to a layout font of ptToLayoutUnit(12)=20*12=240pt -
+that's the value stored in the QTextFormat.
+
+However font metrics are calculated from the 100%-zoom-level font (e.g. 12pt for a 12pt font)
+and _then_ multiplied by 20, instead of loading a 240pt font for that as we did before.
+This is implemented by KoTextFormat::charWidth().
+
 On screen, at 100%, a layoutUnitToFontSize(240,false)=(240/20)*1.0=20.0pt font size will be used.
 This does NOT depend on the DPI settings. Qt takes care of pt->pixel conversion for fonts.
 
