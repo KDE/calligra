@@ -45,6 +45,8 @@ KFormulaContainer::KFormulaContainer()
 {
     dirty = true;
     testDirty();
+    undoStack.setAutoDelete(true);
+    redoStack.setAutoDelete(true);
 }
 
 KFormulaContainer::~KFormulaContainer()
@@ -94,24 +96,23 @@ void KFormulaContainer::draw(QPainter& painter)
 }
 
 
+void KFormulaContainer::execute(KFormulaCommand *command)
+{
+    pushUndoStack(command);
+    cleanRedoStack();
+}
+
 void KFormulaContainer::addText(FormulaCursor* cursor, QChar ch)
 {
 
-KFCAddText *command=new KFCAddText(this,cursor,ch);
-
-pushUndoStack(command);
-cleanRedoStack();
-
-/*
     if (cursor->isSelection()) {
-        removeSelection(cursor, BasicElement::beforeCursor);
+	KFCRemoveSelection *command=new KFCRemoveSelection(this,cursor,BasicElement::beforeCursor);
+	execute(command);
     }
-    QList<BasicElement> list;
-    list.setAutoDelete(true);
-    list.append(new TextElement(ch));
-    cursor->insert(list);
-    cursor->setSelection(false);
-*/
+
+    KFCAddText *command=new KFCAddText(this,cursor,ch);
+    execute(command);
+
 }
 
 void KFormulaContainer::addNumber(FormulaCursor* cursor, QChar ch)
@@ -167,23 +168,9 @@ void KFormulaContainer::addFraction(FormulaCursor* cursor)
 void KFormulaContainer::addRoot(FormulaCursor* cursor)
 {
 
-KFCAddRoot *command=new KFCAddRoot(this,cursor);
+    KFCAddRoot *command=new KFCAddRoot(this,cursor);
+    execute(command);
 
-pushUndoStack(command);
-cleanRedoStack();
-
-
-/*
-    RootElement* root = new RootElement();
-    if (cursor->isSelection()) {
-        cursor->replaceSelectionWith(root);
-    }
-    else {
-        cursor->insert(root);
-        //cursor->setSelection(false);
-    }
-    cursor->goInsideElement(root);
-*/
 }
 
 
@@ -203,13 +190,12 @@ void KFormulaContainer::addSymbol(FormulaCursor* cursor,
 
 void KFormulaContainer::addMatrix(FormulaCursor* cursor, int rows, int columns)
 {
-    if (cursor->isSelection()) {
-        removeSelection(cursor, BasicElement::beforeCursor);
-    }
-    MatrixElement* matrix = new MatrixElement(rows, columns);
-    cursor->insert(matrix);
-    cursor->goInsideElement(matrix);
+
+    KFCAddMatrix *command=new KFCAddMatrix(this,cursor,rows,columns);
+    execute(command);
+
 }
+
 
 void KFormulaContainer::addLowerLeftIndex(FormulaCursor* cursor)
 {
@@ -329,11 +315,13 @@ void KFormulaContainer::addIndex(FormulaCursor* cursor, ElementIndexPtr index)
 }
 
 
+
 void KFormulaContainer::removeSelection(FormulaCursor* cursor,
                                         BasicElement::Direction direction)
 {
     QList<BasicElement> list;
     list.setAutoDelete(true);
+    
     cursor->remove(list, direction);
     if (cursor->elementIsSenseless()) {
         BasicElement* element = cursor->replaceByMainChildContent();
@@ -427,7 +415,7 @@ void KFormulaContainer::save(QString file)
     if(!f.open(IO_ReadWrite))
     cerr << "Error" << endl;   
    QCString data=domData().toCString();
-   fprintf(stderr,"%s\n",(const char *)data);    
+    cerr << (const char *)data << endl;    
   
     QTextStream str(&f);
     domData().save(str,4);

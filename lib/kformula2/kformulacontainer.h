@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 #include <qstack.h>
+#include <qlist.h>
 
 #include "artwork.h"
 #include "basicelement.h"
@@ -102,6 +103,10 @@ signals:
 
     
 public slots:    
+
+
+    void execute(KFormulaCommand *command);
+
 
     // There are a lot of thing we can do with the formula.
     

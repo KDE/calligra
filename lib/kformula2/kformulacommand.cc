@@ -17,8 +17,12 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+
+#include <qlist.h>
+
 #include "kformulacommand.h"
 #include "formulacursor.h"
+#include "matrixelement.h"
 #include "basicelement.h"
 #include "textelement.h"
 #include "rootelement.h"
@@ -39,91 +43,116 @@ KFormulaCommand::~KFormulaCommand()
         delete cursordata;
 }
 
-// ******  Add text command 
+// ******  Generic Add command 
 
-KFCAddText::KFCAddText(KFormulaContainer *document,FormulaCursor *cursor,
-		       QChar ch) : KFormulaCommand(document,cursor)
+KFCAdd::KFCAdd(KFormulaContainer *document,FormulaCursor *cursor) : KFormulaCommand(document,cursor)
+{
+    removedList.setAutoDelete(true); 
+    removedList.clear();
+}
+
+bool KFCAdd::undo(FormulaCursor *cursor)
+{
+
+    cursor->setCursorData(cursordata);
+    cursor->remove(removedList,BasicElement::afterCursor);
+
+    return true;
+}
+
+
+bool KFCAdd::redo(FormulaCursor *cursor)
+{
+
+    cursor->setCursorData(cursordata);
+    cursor->insert(removedList);
+    return true;
+}
+
+
+
+// ******  Remove selection command 
+
+KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,FormulaCursor *cursor,
+		    BasicElement::Direction direction) : KFormulaCommand(document,cursor)
+{
+    dir=direction;
+    removedList.setAutoDelete(true); 
+    cursor->remove(removedList, direction);
+    if (cursor->elementIsSenseless()) {
+        BasicElement* element = cursor->replaceByMainChildContent();
+        delete element;
+    }
+    cursor->normalize();
+
+}
+
+bool KFCRemoveSelection::redo(FormulaCursor *cursor)
+{
+
+    cursor->setCursorData(cursordata);
+    cursor->remove(removedList,dir);
+    if (cursor->elementIsSenseless()) {
+        BasicElement* element = cursor->replaceByMainChildContent();
+        delete element;
+    }
+    cursor->normalize();
+    return true;
+}
+
+
+bool KFCRemoveSelection::undo(FormulaCursor *cursor)
+{
+
+    cursor->setCursorData(cursordata);
+    cursor->insert(removedList);
+    return true;
+}
+
+
+
+//  **** Add text command
+KFCAddText::KFCAddText(KFormulaContainer *document,FormulaCursor *cursor,QChar ch) 
+: KFCAdd(document,cursor)
 {
     
-    if (cursor->isSelection()) {
-        doc->removeSelection(cursor, BasicElement::beforeCursor);
-#warning TODO: get the removed selection !! 
- 
-    }
 
     QList<BasicElement> list;
     list.setAutoDelete(true);
     list.append(new TextElement(ch));
     cursor->insert(list);
     cursor->setSelection(false);
-}
-
-bool KFCAddText::undo(FormulaCursor *cursor)
-{
-
-  cursor->setCursorData(cursordata);
-  cursor->remove(removedList,BasicElement::afterCursor);
-
-}
-
-
-bool KFCAddText::redo(FormulaCursor *cursor)
-{
-
-  cursor->setCursorData(cursordata);
-  cursor->insert(removedList);
-
-
+    
 }
 
 
 // ******  Add root command 
 
 KFCAddRoot::KFCAddRoot(KFormulaContainer *document,FormulaCursor *cursor)
-		        : KFormulaCommand(document,cursor)
+		        : KFCAdd(document,cursor)
 {
 
     RootElement* root = new RootElement();
-    if (cursor->isSelection()) {
-        cursor->replaceSelectionWith(root);
-    }
-    else {
-        cursor->insert(root);
+    cursor->insert(root);
         //cursor->setSelection(false);
-    }
+
     cursor->goInsideElement(root);
     
-/*
-
-    if (cursor->isSelection()) {
-        doc->removeSelection(cursor, BasicElement::beforeCursor);
-#warning TODO: get the removed selection !! 
- 
-    }
-
-    QList<BasicElement> list;
-    list.setAutoDelete(true);
-    list.append(new RootElement(ch));
-    cursor->insert(list);
-    cursor->setSelection(false);
-*/
-
-}
-
-bool KFCAddRoot::undo(FormulaCursor *cursor)
-{
-
-  cursor->setCursorData(cursordata);
-  cursor->remove(removedList,BasicElement::afterCursor);
 
 }
 
 
-bool KFCAddRoot::redo(FormulaCursor *cursor)
+// ******  Add matrix command 
+
+KFCAddMatrix::KFCAddMatrix(KFormulaContainer *document,FormulaCursor *cursor,int r,int c)
+		        : KFCAdd(document,cursor)
 {
 
-  cursor->setCursorData(cursordata);
-  cursor->insert(removedList);
-
+    MatrixElement* matrix = new MatrixElement(r,c);
+    cursor->insert(matrix);
+        //cursor->setSelection(false);
+    
+    cursor->goInsideElement(matrix);
+    
 
 }

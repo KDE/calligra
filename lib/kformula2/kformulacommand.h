@@ -61,8 +61,41 @@ protected:
 
 };
 
+class KFCAdd : public KFormulaCommand
+{
+public:
+   /**
+    * generic add command, default implementation do nothing
+    */
+    KFCAdd(KFormulaContainer *document,FormulaCursor* cursor);
+ 
+    virtual bool undo(FormulaCursor *cursor);
+    virtual bool redo(FormulaCursor *cursor);
 
-class KFCAddText : public KFormulaCommand
+protected:
+
+     QList<BasicElement> removedList;
+   
+};
+
+class KFCRemoveSelection : public KFormulaCommand
+{
+public:
+   /**
+    * generic add command, default implementation do nothing
+    */
+    KFCRemoveSelection(KFormulaContainer *document,FormulaCursor* cursor,BasicElement::Direction dir);
+ 
+    virtual bool undo(FormulaCursor *cursor);
+    virtual bool redo(FormulaCursor *cursor);
+
+protected:
+
+     QList<BasicElement> removedList;
+     BasicElement::Direction dir;   
+};
+
+class KFCAddText : public KFCAdd
 {
 public:
    /**
@@ -70,16 +103,10 @@ public:
     * at cursor a textelement with content ch
     */
     KFCAddText(KFormulaContainer *document,FormulaCursor* cursor, QChar ch);
- 
-    virtual bool undo(FormulaCursor *cursor);
-    virtual bool redo(FormulaCursor *cursor);
-private:
-
-     QList<BasicElement> removedList;
    
 };
 
-class KFCAddRoot : public KFormulaCommand
+class KFCAddRoot : public KFCAdd
 {
 public:
    /**
@@ -87,13 +114,18 @@ public:
     * at cursor a root element
     */
     KFCAddRoot(KFormulaContainer *document,FormulaCursor* cursor);
- 
-    virtual bool undo(FormulaCursor *cursor);
-    virtual bool redo(FormulaCursor *cursor);
-private:
+  
+};
 
-     QList<BasicElement> removedList;
-   
+class KFCAddMatrix : public KFCAdd
+{
+public:
+   /**
+    * Build a addRootElement command and add
+    * at cursor a root element
+    */
+    KFCAddMatrix(KFormulaContainer *document,FormulaCursor* cursor,int r,int c);
+  
 };
 
 

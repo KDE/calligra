@@ -92,11 +92,9 @@ void BasicElement::goInside(FormulaCursor* cursor)
 QDomElement BasicElement::getElementDom(QDomDocument *doc)
 {
     QDomElement de=doc->createElement("BASIC");
-    cerr << "Element" << endl;
-//    de.setTagName("BASIC");
-    if(relativeSize!=0) {
+   /* if(relativeSize!=0) {
         de.setAttribute("SIZE",relativeSize);
-    }	    
+    }*/	    
     return de;
 }
 
