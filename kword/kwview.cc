@@ -388,6 +388,10 @@ void KWView::setupActions()
     addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
     addVariableActions( VT_SERIALLETTER, KWSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
 
+    actionInsertExpression = new KActionMenu( i18n( "&Expression" ),
+                                            actionCollection(), "insert_expression" );
+    loadexpressionActions( actionInsertExpression);
+
     // ------------------------- Format menu
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
                                     this, SLOT( formatFont() ),
@@ -571,6 +575,75 @@ void KWView::setupActions()
     //------------------------ Settings menu
     KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
 }
+
+
+void KWView::loadexpressionActions( KActionMenu * parentMenu)
+{
+    QStringList files = KWFactory::global()->dirs()->findAllResources( "expression", "*.xml", TRUE );
+    for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
+    {
+	createExpressionActions( parentMenu,*it );
+    }
+}
+
+void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename )
+{
+    QFile file( filename );
+    if ( !file.open( IO_ReadOnly ) )
+	return;
+
+    QDomDocument doc;
+    doc.setContent( &file );
+    file.close();
+
+    QString group = "";
+
+    QDomNode n = doc.documentElement().firstChild();
+    for( ; !n.isNull(); n = n.nextSibling() )
+        {
+            if ( n.isElement() )
+                {
+                    QDomElement e = n.toElement();
+                    if ( e.tagName() == "Type" )
+                        {
+                            group = i18n( e.namedItem( "TypeName" ).toElement().text().latin1() );
+                            KActionMenu * subMenu = new KActionMenu( group, actionCollection() );
+                            parentMenu->insert( subMenu );
+
+                            QDomNode n2 = e.firstChild();
+                            for( ; !n2.isNull(); n2 = n2.nextSibling() )
+                                {
+
+                                    if ( n2.isElement() )
+                                        {
+                                            QDomElement e2 = n2.toElement();
+                                            if ( e2.tagName() == "Expression" )
+                                                {
+                                                    QString text = i18n( e2.namedItem( "Text" ).toElement().text().latin1() );
+                                                    KAction * act = new KAction( text, 0, this, SLOT( insertExpression() ),
+                                                                                 actionCollection(), "expression-action" );
+                                                    subMenu->insert( act );
+                                                }
+                                        }
+                                }
+
+                            group = "";
+                        }
+                }
+        }
+}
+
+void KWView::insertExpression()
+{
+ KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KAction * act = (KAction *)(sender());
+        kdDebug()<<"text :"<<act->text()<<endl;
+        edit->insertExpression(act->text());
+    }
+}
+
 
 void KWView::addVariableActions( int type, const QStringList & texts,
                                  KActionMenu * parentMenu, const QString & menuText )
@@ -2749,6 +2822,7 @@ void KWView::updateButtons()
     actionInsertFormula->setEnabled(state);
     actionInsertContents->setEnabled(state);
     actionInsertVariable->setEnabled(state);
+    actionInsertExpression->setEnabled(state);
     actionInsertFrameBreak->setEnabled(state);
     actionBackgroundColor->setEnabled( (edit == 0) && gui->canvasWidget()->getMouseMode()==MM_EDIT_FRAME);
 

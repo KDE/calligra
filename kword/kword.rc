@@ -46,6 +46,7 @@
   <Action name="insert_footendnote"/>
   <Action name="insert_contents"/>
   <Action name="insert_variable"/> <!-- menu -->
+  <Action name="insert_expression"/> <!-- menu -->
   <Separator/>
   <!-- frames -->
   <Action name="insert_table"/>

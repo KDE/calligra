@@ -334,6 +334,7 @@ public:
     void insertPicture( const QString & file );
     void insertVariable( int type, int subtype = 0 );
     void insertSpecialChar(QChar _c);
+    void insertExpression(const QString &_c);
     void insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName );
 
     void setBold(bool on);

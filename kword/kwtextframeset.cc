@@ -3357,6 +3357,11 @@ void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
     textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Special Char") );
 }
 
+void  KWTextFrameSetEdit::insertExpression(const QString &_c)
+{
+    textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Expression") );
+}
+
 void KWTextFrameSetEdit::insertPicture( const QString & file )
 {
     KWTextImage * custom = new KWTextImage( textDocument(), file );

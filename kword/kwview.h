@@ -246,9 +246,17 @@ public slots:
 
     void pageNumChanged();
 
+    void insertExpression();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
+
+    void loadexpressionActions( KActionMenu * parentMenu);
+
+    void createExpressionActions( KActionMenu * parentMenu,const QString& filename );
+   
+
     KWTextFrameSetEdit *currentTextEdit();
 
     void setupActions();
@@ -293,6 +301,8 @@ private:
         int subtype;
     };
     typedef QMap<KAction *, VariableDef> VariableDefMap;
+    KActionMenu *actionInsertExpression;
+
     VariableDefMap m_variableDefMap;
     KAction *actionInsertFormula;
 

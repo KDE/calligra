@@ -1,0 +1,30 @@
+<!DOCTYPE KWordExpression>
+<KWordExpression>
+	<Type>
+    		<TypeName>Personnal</TypeName>
+			<Expression>
+				<Text>hi !</Text>
+			</Expression>
+			<Expression>
+				<Text>Hello !</Text>
+			</Expression>	
+			<Expression>
+				<Text>Bye !</Text>
+			</Expression>
+			<Expression>
+				<Text>Good bye</Text>
+			</Expression>
+	</Type>
+	<Type>
+    		<TypeName>Proffessional</TypeName>	
+			<Expression>
+				<Text>Good Morning</Text>
+			</Expression>
+			<Expression>
+				<Text>Good Afternoon</Text>
+			</Expression>
+			<Expression>
+				<Text>Good night</Text>
+			</Expression>
+	</Type>
+</KWordExpression>
