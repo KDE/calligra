@@ -297,16 +297,16 @@ QDomElement KWParag::save( QDomDocument& doc )
     e.setAttribute( "info", (int)info );
     if ( hardBreak )
 	e.setAttribute( "hard-break", "1" );
-    
+
     QDomElement l = paragLayout->save( doc );
     if ( l.isNull() )
 	return l;
     e.appendChild( l );
-    
+
     QDomElement t = text.save( doc );
     if ( t.isNull() )
 	return t;
-    
+
     return e;
 }
 
@@ -316,13 +316,13 @@ bool KWParag::load( const QDomElement& element )
     if ( element.hasAttribute( "hard-break" ) )
 	hardBreak = (bool)element.attribute( "hard-break" ).toInt();
     info = (Info)element.attribute( "info" ).toInt();
-    
-    if ( !paragLayout->load( element.namedItem( "PARAGLAYOUT" ) ) )
+
+    if ( !paragLayout->load( element.namedItem( "PARAGLAYOUT" ).toElement() ) )
 	return FALSE;
-    
+
     if ( !text.load( element.namedItem( "TEXT" ).toElement() ) )
 	return FALSE;
-    
+
     return TRUE;
 }
 

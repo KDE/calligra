@@ -218,7 +218,8 @@ public:
     QDomElement save( QDomDocument& doc );
     // #### todo
     //void loadFormat( KOMLParser &parser, vector<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
-
+    bool load( const QDomElement& element );
+    
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
     int find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false );
     int findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );

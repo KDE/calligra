@@ -332,6 +332,12 @@ QDomElement KWString::save( QDomDocument& d )
 }
 
 /*================================================================*/
+bool KWString::load( const QDomElement &e )
+{
+    return FALSE;
+}
+
+/*================================================================*/
 bool KWString::formatChanged( KWCharAttribute *a1, KWCharAttribute *a2 )
 {
     if ( !a1 || !a2 )
