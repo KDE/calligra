@@ -2,19 +2,20 @@
 INCLUDES = -I$(srcdir) -I$(srcdir)/lib -I$(srcdir)/winword97 \
 -I$(srcdir)/excel97 $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) \
 $(all_includes)
-LDFLAGS	= $(all_libraries) $(KDE_RPATH)
-LDADD = ./lib/libfilterbase.la ./lib/libklaola.la \
+
+libolefilter_la_LDFLAGS = -module -avoid-version
+libolefilter_la_LIBADD = ./lib/libfilterbase.la ./lib/libklaola.la \
 ./winword97/libwinword97.la ./excel97/libexcel97.la $(LIB_KOFFICECORE)
 
 ####### Files
 
-SUBDIRS = excel97 powerpoint97 winword97
+SUBDIRS = lib excel97 powerpoint97 winword97
 
-bin_PROGRAMS = ole_filter
+lib_LTLIBRARIES = libolefilter.la
 
-ole_filter_SOURCES = main.cc olefilter.cc
+libolefilter_la_SOURCES = olefilter_factory.cc olefilter.cc
 
-noinst_HEADERS = main.h olefilter.h
+noinst_HEADERS = olefilter_factory.h olefilter.h
 
-ole_filter_METASOURCES = AUTO
+libolefilter_la_METASOURCES = AUTO
 

@@ -3,7 +3,7 @@
 
 OLEFilter::OLEFilter(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
-    olefile=0L;
+    olefile.data=0L;
     docfile=0L;
     store=0L;
     success=true;
@@ -11,8 +11,8 @@ OLEFilter::OLEFilter(KoFilter *parent, QString name) :
 
 OLEFilter::~OLEFilter() {
 
-    delete [] olefile;
-    olefile=0L;
+    delete [] olefile.data;
+    olefile.data=0L;
     delete docfile;
     docfile=0L;
     delete store;
@@ -40,22 +40,22 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     olefile.length=in.size();
     olefile.data=new unsigned char[olefile.length];
-    in.readBlock(olefile.data, olefile.length);
+    in.readBlock((char*)olefile.data, olefile.length);
     in.close();
 
     docfile=new KLaola(olefile);
     if(!docfile->isOk()) {
         kdebug(KDEBUG_ERROR, 31000, "OLEFilter::filter(): Unable to read input file correctly!");
-        delete [] olefile;
-        olefile=0L;
+        delete [] olefile.data;
+        olefile.data=0L;
         return false;
     }
 
     store=new KoTarStore(fileOut, KoStore::Write);
     if(store->bad()) {
         kdebug(KDEBUG_ERROR, 31000, "OLEFilter::filter(): Unable to open output file!");
-        delete [] olefile;
-        olefile=0L;
+        delete [] olefile.data;
+        olefile.data=0L;
         delete store;
         store=0L;
         return false;
@@ -77,6 +77,7 @@ void OLEFilter::slotSavePic(const char *data, const char *type,
 
 void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {
 
+    /*
     if(nameIN!=0) {
         QMap<QString, QString>::Iterator it=partMap.find(nameIN);
         QString value;
@@ -96,6 +97,7 @@ void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {
         strncpy(*nameOUT, (const char*)value, value.length());
         *nameOUT[value.length()]='\0';
     }
+    */
 }
 
 void OLEFilter::slotGetStream(const long &handle, myFile &stream) {
@@ -205,7 +207,7 @@ void OLEFilter::convert(const QString &dirname) {
         success=myFilter->filter();
         QString file=myFilter->part();
         char *tmp=0L;
-        slotPart(dirname, myFilter->extension(), &tmp);
+        //slotPart(dirname, myFilter->extension(), &tmp);
         //fileOut->writeFile(tmp, "", "", file.length(), (const char*)file.utf8());
         // KoTarStore!
         delete [] tmp;
