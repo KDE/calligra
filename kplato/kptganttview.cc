@@ -202,17 +202,12 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
 
 }
 
-void KPTGanttView::zoom(double zoom)
+void KPTGanttView::zoom(double /*zoom*/)
 {
 }
 
 void KPTGanttView::clear()
 {
-	QPtrListIterator<KPTNode> nit(m_mainview->getPart()->getProject().childNodeIterator());
-	for ( ; nit.current(); ++nit )
-	{
-		nit.current()->setGanttItem(0);
-	}
 	m_gantt->clear();
     m_taskView->clear();
 }
@@ -222,10 +217,10 @@ void KPTGanttView::draw(KPTProject &project)
     //kdDebug()<<k_funcinfo<<endl;
 	m_gantt->setUpdateEnabled(false);
 	clear();
-	KPTDuration *time;
+	/*KPTDuration *time;
 	KPTDuration *dur;
 
-	/* The root node is supposed to be hidden.
+	 //The root node is supposed to be hidden.
 	KDGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(m_gantt, project);
 	time = project.getStartTime();
 	dur = project.getExpectedDuration();
@@ -240,7 +235,8 @@ void KPTGanttView::draw(KPTProject &project)
 	drawChildren(NULL, project);
 
 	// Relations
-	drawRelations(project);
+	//drawRelations(project);
+	drawRelations();
 
 	m_gantt->setUpdateEnabled(true);
 }
@@ -253,9 +249,9 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 	{
 		KPTNode *n = nit.current();
 		if (n->type() == KPTNode::Type_Project)
-	        drawProject(parentItem, *n);
+	        drawProject(parentItem, n);
 		else if (n->type() == KPTNode::Type_Subproject)
-		    drawSubProject(parentItem, *n);
+		    drawSubProject(parentItem, n);
 		else if (n->type() == KPTNode::Type_Task) {
             KPTTask *t = dynamic_cast<KPTTask *>(n);
 		    drawTask(parentItem, t);
@@ -269,10 +265,10 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 	}
 }
 
-void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node)
+void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node)
 {
-	KPTDuration *time = node.getStartTime();
-	KPTDuration *dur = node.getExpectedDuration();
+	KPTDuration *time = node->getStartTime();
+	KPTDuration *dur = node->getExpectedDuration();
 	KPTGanttViewSummaryItem *item;
 	if ( parentItem) {
 	  item = new KPTGanttViewSummaryItem(parentItem, node);
@@ -286,17 +282,17 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node
 	time->add(dur);
 	item->setEndTime(time->dateTime());
 	item->setOpen(true);
-	node.setGanttItem(item);
-	delete time;
+
+    delete time;
 	delete dur;
 
-	drawChildren(item, node);
+	drawChildren(item, *node);
 }
 
-void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode &node)
+void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *node)
 {
-	KPTDuration *time = node.getStartTime();
-	KPTDuration *dur = node.getExpectedDuration();
+	KPTDuration *time = node->getStartTime();
+	KPTDuration *dur = node->getExpectedDuration();
 	// display summary item
 	KPTGanttViewSummaryItem *item;
 	if ( parentItem) {
@@ -310,9 +306,8 @@ void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode &n
 	time->add(dur);
 	item->setEndTime(time->dateTime());
 	item->setOpen(true);
-	node.setGanttItem(item);
 
-	drawChildren(item, node);
+	drawChildren(item, *node);
 
 	delete time;
 	delete dur;
@@ -340,7 +335,6 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
         item->setColors(c,c,c);
         //kdDebug()<<k_funcinfo<<"Task: "<<task->name()<<" resourceError="<<task->resourceError()<<endl;
     }
-	task->setGanttItem(item);
 
 	delete time;
 	delete dur;
@@ -360,30 +354,57 @@ void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *ta
 	item->setStartTime(time->dateTime());
 	item->setLeadTime(time->dateTime().addDays(1));
 	item->setOpen(true);
-	task->setGanttItem(item);
-	delete time;
+
+    delete time;
 }
 
-
-void KPTGanttView::drawRelations(KPTNode &node)
+void KPTGanttView::drawRelations()
 {
-	for (int i = 0; i < node.numDependChildNodes(); ++i)
-	{
-		KPTRelation *rel = node.getDependChildNode(i);
-		if (node.ganttItem() && rel->child()->ganttItem())
-		{
-			//kdDebug()<<k_funcinfo<<"Relations for node="<<node.name()<<" to "<<rel->child()->name()<<endl;
-			//FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
-            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(rel->child()->ganttItem(), node.ganttItem());
-		}
-	}
-    // Then my children
-	QPtrListIterator<KPTNode> nit(node.childNodeIterator());
-	for ( ; nit.current(); ++nit )
-	{
-		drawRelations(*(nit.current()));
-	}
-	m_gantt->setShowTaskLinks(true);
+    KDGanttViewItem *item = m_gantt->firstChild();
+    //kdDebug()<<k_funcinfo<<"First: "<<(item ? item->listViewText() : "nil")<<endl;
+    for (; item; item = item->nextSibling())
+    {
+        drawRelations(item);
+        drawChildRelations(item->firstChild());
+    }
+}
+
+void KPTGanttView::drawChildRelations(KDGanttViewItem *item)
+{
+    //kdDebug()<<k_funcinfo<<"item: "<<(item ? item->listViewText() : "nil")<<endl;
+    for (; item; item = item->nextSibling())
+    {
+        drawRelations(item);
+        drawChildRelations(item->firstChild());
+    }
+}
+
+void KPTGanttView::drawRelations(KDGanttViewItem *item)
+{
+    if (!item) return;
+
+    KPTGanttViewSummaryItem *summaryItem = dynamic_cast<KPTGanttViewSummaryItem *>(item);
+    if (summaryItem)
+    {
+        //kdDebug()<<k_funcinfo<<"Summary item: "<<summaryItem->listViewText()<<endl;
+        summaryItem->insertRelations();
+        return;
+    }
+    KPTGanttViewTaskItem *taskItem = dynamic_cast<KPTGanttViewTaskItem *>(item);
+    if (taskItem)
+    {
+        //kdDebug()<<k_funcinfo<<"Task item: "<<taskItem->listViewText()<<endl;
+        taskItem->insertRelations();
+        return;
+    }
+    KPTGanttViewEventItem *milestoneItem = dynamic_cast<KPTGanttViewEventItem *>(item);
+    if (milestoneItem)
+    {
+        //kdDebug()<<k_funcinfo<<"Milestone item: "<<milestoneItem->listViewText()<<endl;
+        milestoneItem->insertRelations();
+        return;
+    }
+    kdDebug()<<k_funcinfo<<"Unknown item type: "<<item->listViewText()<<endl;
 }
 
 void KPTGanttView::currentItemChanged(KDGanttViewItem* item)
@@ -403,7 +424,8 @@ void KPTGanttView::currentItemChanged(KDGanttViewItem* item)
 KPTNode *KPTGanttView::currentNode()
 {
     KDGanttViewItem *curr = m_currentItem;
-	if (!curr) {
+	if (!curr)
+    {
 		// if we do not have a current item here we return 0.
 		// The caller may then decide to use the KPTProject
 		// root node, but that decision is up to the caller
@@ -413,7 +435,7 @@ KPTNode *KPTGanttView::currentNode()
 	{
 	    KPTGanttViewSummaryItem *item = (KPTGanttViewSummaryItem *)curr;
 		//kdDebug()<<k_funcinfo<<"Summary item="<<item<<endl;
-		return &(item->getNode());
+		return item->getNode();
 	}
 	else if (curr->type() == KDGanttViewItem::Task)
 	{
@@ -431,19 +453,19 @@ KPTNode *KPTGanttView::currentNode()
 	return 0;
 }
 
-void KPTGanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int)
+void KPTGanttView::popupMenuRequested(KDGanttViewItem * /*item*/, const QPoint & pos, int)
 {
 	QPopupMenu *menu = m_mainview->popupMenu("node_popup");
 	if (menu)
 	{
-		int id = menu->exec(pos);
+		/*int id =*/ menu->exec(pos);
 		//kdDebug()<<k_funcinfo<<"id="<<id<<endl;
 	}
 	else
 		kdDebug()<<k_funcinfo<<"No menu!"<<endl;
 }
 
-void KPTGanttView::slotItemDoubleClicked(KDGanttViewItem* item)
+void KPTGanttView::slotItemDoubleClicked(KDGanttViewItem* /*item*/)
 {
 }
 

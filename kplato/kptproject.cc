@@ -22,8 +22,6 @@
 //#include "kptmilestone.h"
 #include "kptprojectdialog.h"
 #include "kptduration.h"
-#include "kptpertcanvas.h"
-#include "kptcanvasitem.h"
 #include "kptresource.h"
 
 #include <qdom.h>

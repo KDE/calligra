@@ -32,8 +32,6 @@
 #include <list>
 #include <algorithm>
 
-class KPTPertCanvas;
-class QCanvas;
 
 //#define DEBUGPERT
 /**
@@ -95,8 +93,6 @@ public:
      */
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) ;
-
-//    virtual void drawPert(KPTPertCanvas *view, KPTNode *parent=0);
 
     KPTDuration getEarliestStart() const { return startNode.earliestStart; }
     KPTDuration getLatestFinish() const { return endNode.latestFinish; }

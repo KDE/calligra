@@ -74,8 +74,6 @@ public:
     bool load(QDomElement &element, KPTProject &project);
     void save(QDomElement &element) const;
     
-    void draw(KPTPertCanvas* view);
-    
 protected: // variables
     KPTNode *m_parent;
     KPTNode *m_child;

@@ -27,9 +27,6 @@
 
 #include <qptrlist.h>
 
-class KPTPertCanvas;
-class QCanvas;
-
 /**
   * A task in the scheduling software is represented by this class. A task
   * can be anything from 'build house' to 'drill hole' It will always mean
@@ -120,8 +117,6 @@ public:
      */
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element);
-
-//    virtual void drawPert(KPTPertCanvas *view, KPTNode *parent = 0);
 
     void calculateStartEndTime();
     void calculateStartEndTime(const KPTDuration &start);

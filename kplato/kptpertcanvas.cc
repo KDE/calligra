@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "defs.h"
+
 #include "kptpertcanvas.h"
 #include "kptnode.h"
 #include "kptrelation.h"
@@ -33,6 +35,7 @@
 #include <qcursor.h>
 #include <qrect.h>
 #include <qsize.h>
+#include <qptrlist.h>
 
 #include <koStore.h>
 #include <koStoreDrag.h>
@@ -49,7 +52,6 @@
 
 KPTPertCanvas::KPTPertCanvas( QWidget *parent )
     : QCanvasView( parent, "Pert canvas" /*WNorthWestGravity WStaticContents| WResizeNoErase | WRepaintNoErase */),
-	m_summaryColumn(0),
 	m_verticalGap(20),
 	m_horizontalGap(10),
 	m_itemSize(100,30)
@@ -68,170 +70,195 @@ void KPTPertCanvas::draw(KPTProject& project)
 {
     //kdDebug()<<k_funcinfo<<endl;
     clear();
-	m_summaryColumn = 0;
     updateContents();
-	project.setDrawn(false, true);
 	//project.drawPert(this);
 
+    // First make node items
 	QPtrListIterator<KPTNode> nit(project.childNodeIterator());
     for ( ; nit.current(); ++nit ) {
-        drawChildren(nit.current());
+        createChildItems(createNodeItem(nit.current()));
 	}
 
-	QPtrListIterator<KPTNode> it(project.childNodeIterator());
-    for ( ; it.current(); ++it ) {
-        drawChildren(it.current());
-	}
-
-	drawRelations(); // done _after_ all nodes are drawn
-	QSize s = canvasSize();
-	m_canvas->resize(s.width(), s.height());
+    // First all items with relations
+    QPtrDictIterator<KPTPertNodeItem> it(m_nodes);
+    for(; it.current(); ++it)
+    {
+        if (!(it.current()->hasParent()) && it.current()->hasChild())
+        {
+            m_rows.append(new QMemArray<bool>(1)); // New node always goes into new row, first column
+            it.current()->move(this, m_rows.count()-1, 0); // item also moves it's children
+        }
+    }
+    // now items without relations
+    for(it.toFirst(); it.current(); ++it)
+    {
+        if (!(it.current()->hasParent() || it.current()->hasChild()))
+        {
+            m_rows.append(new QMemArray<bool>(1)); // New node always goes into new row, first column
+            it.current()->move(this, m_rows.count()-1, 0);
+        }
+    }
+    drawRelations(); // done _after_ all nodes are drawn
+    QSize s = canvasSize();
+    m_canvas->resize(s.width(), s.height());
     update();
 }
 
-void KPTPertCanvas::drawChildren(KPTNode* node)
+KPTPertNodeItem *KPTPertCanvas::createNodeItem(KPTNode *node)
 {
-    //kdDebug()<<k_funcinfo<<"node="<<node->name()<<endl;
+    KPTPertNodeItem *item = m_nodes.find(node);
+    if (!item)
+    {
+        if ( node->type() == KPTNode::Type_Project)
+            kdDebug()<<k_funcinfo<<"Project nodes should not have relations"<<endl;
+        else if (node->type() == KPTNode::Type_Subproject)
+            item  = new KPTPertProjectItem(this, *node);
+        else if (node->type()== KPTNode::Type_Task)
+            item  = new KPTPertTaskItem(this, *node);
+        else if (node->type() == KPTNode::Type_Milestone)
+            item  = new KPTPertMilestoneItem(this, *node);
+        else
+            kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
 
-	if ( node->type() == KPTNode::Type_Project)
-		drawProject( node );
-	else if (node->type() == KPTNode::Type_Subproject)
-		drawSubproject( node );
-	else if (node->type() == KPTNode::Type_Task)
-		drawTask( node );
-	else if (node->type() == KPTNode::Type_Milestone)
-		drawMilestone( node );
-	else
-		kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
-
-	QPtrListIterator<KPTNode> nit(node->childNodeIterator());
-	for ( ; nit.current(); ++nit ) {
-		drawChildren(nit.current());
-	}
+        if (item)
+            m_nodes.insert(node, item);
+    }
+    return item;
 }
 
-void KPTPertCanvas::drawProject( KPTNode *node)
+void KPTPertCanvas::createChildItems(KPTPertNodeItem *parentItem)
 {
+    //kdDebug()<<k_funcinfo<<"parentItem="<<(parentItem ? parentItem->node().name() : "nil")<<endl;
+    if (!parentItem)
+        return;
 
-}
+    QPtrListIterator<KPTRelation> it(parentItem->node().dependChildNodes());
+    for (; it.current(); ++it)
+    {
+        KPTPertNodeItem *childItem = createNodeItem(it.current()->child());
+        if (childItem)
+            parentItem->addChildRelation(it.current(), childItem);
+            m_relations.append(it.current());
+    }
 
-void KPTPertCanvas::drawSubproject( KPTNode *node)
-{
-    //kdDebug()<<k_funcinfo<<endl;
-	if ( !node->isDrawn()) {
-	    if (node->numDependChildNodes() == 0 &&
-		    node->numDependParentNodes() == 0)
-		{
-			int col = summaryColumn();
-			KPTPertProjectItem* pertItem = new KPTPertProjectItem(this, *node, 0, col);
-			pertItem->show();
-			node->setPertItem( pertItem );
-			node->setDrawn( true, false);
-			//kdDebug()<<k_funcinfo<<" draw project("<<0<<","<<col<<"): "<<node->name()<<endl;
-			return;
-		}
-		if (!node->allParentsDrawn()) {
-			return;
-		}
-		int col = node->getColumn(node);
-		int rowx = row(node->getRow(node), col);
-		KPTPertTaskItem* pertItem = new KPTPertTaskItem(this,*node, rowx, col);
-		node->setPertItem( pertItem );
-		pertItem->show();
-		node->setDrawn( true,false);
-		//kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
+    // Now my children
+	QPtrListIterator<KPTNode> nit(parentItem->node().childNodeIterator());
+    for ( ; nit.current(); ++nit ) {
+        createChildItems(createNodeItem(nit.current()));
 	}
-}
-
-
-void KPTPertCanvas::drawMilestone( KPTNode *node)
-{
-	//kdDebug()<< "draw task " << node->name()<<endl;
-	if ( !node->isDrawn()) {
-		if ( node->numChildren() > 0 ) {
-			int col = summaryColumn();
-			KPTPertMilestoneItem* pertItem = new KPTPertMilestoneItem(this, *node, 0, col);
-			node->setPertItem( pertItem );
-			pertItem->show();
-			node->setDrawn( true, false ); // drawn, but not recursive
-			//kdDebug()<<k_funcinfo<<" drawn milestone(?)("<<0<<","<<col<<"): "<<node->name()<<endl;
-			return;
-		}
-		if (!node->allParentsDrawn()) {
-			return;
-		}
-		int col = node->getColumn();
-		int rowx = row(node->getRow(), col);
-		KPTPertMilestoneItem* pertItem = new KPTPertMilestoneItem(this, *node, rowx, col);
-		pertItem->show();
-		node->setPertItem( pertItem );
-		node->setDrawn( true, false ); // drawn, but not recursive
-	}
-}
-
-
-void KPTPertCanvas::drawTask( KPTNode *node)
-{
-	//kdDebug()<< "draw task " << node->name()<<endl;
-	if ( !node->isDrawn()) {
-		if ( node->numChildren() > 0  &&
-	         node->numDependChildNodes() == 0 &&
-		     node->numDependParentNodes() == 0)
-		{
-			int col = summaryColumn();
-			KPTPertTaskItem* pertItem = new KPTPertTaskItem(this, *node, 0, col);
-			node->setPertItem( pertItem );
-			pertItem->show();
-			node->setDrawn( true, false );
-			//kdDebug()<<k_funcinfo<<" drawn summary task("<<0<<","<<col<<"): "<< node->name() <<endl;
-			return;
-		}
-		if (!node->allParentsDrawn()) {
-			return;
-		}
-		int col = node->getColumn(node);
-		int xrow = row(node->getRow(node), col);
-
-		KPTPertTaskItem* pertItem = new KPTPertTaskItem(this, *node, xrow, col);
-		node->setPertItem( pertItem );
-		pertItem->show();
-		node->setDrawn( true,false );
-		//kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
-	}
-
 }
 
 void KPTPertCanvas::drawRelations()
 {
 	//kdDebug()<<k_funcinfo<<endl;
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
-    for (; it != list.end(); ++it)
+    QPtrListIterator<KPTRelation> it(m_relations);
+    for (; it.current(); ++it)
     {
-	    if ( (*it)->rtti() == KPTPertTaskItem::RTTI ||
-			 (*it)->rtti() == KPTPertMilestoneItem::RTTI )
-		{
-			KPTPertNodeItem *item = dynamic_cast<KPTPertNodeItem *>(*it);
-			int numRelations = item->node().numDependChildNodes();
-			for (int i=0; i < numRelations; ++i)
-			{
-				drawRelation(item->node().getDependChildNode(i));
-			}
-		}
-	}
+        KPTPertNodeItem *parentItem = m_nodes.find(it.current()->parent());
+        KPTPertNodeItem *childItem = m_nodes.find(it.current()->child());
+        if (parentItem && childItem)
+        {
+            KPTPertRelationItem *item = new KPTPertRelationItem(this, parentItem, childItem, it.current());
+            item->show();
+        }
+    }
 }
 
-void KPTPertCanvas::drawRelation( KPTRelation* relation)
+void KPTPertCanvas::mapNode(KPTPertNodeItem *item)
 {
 	//kdDebug()<<k_funcinfo<<endl;
-	//Only draw if both nodes are shown on canvas
-	if (relation->parent()->isDrawn() && relation->child()->isDrawn())
-	{
-		KPTRelationCanvasItem *item = new KPTRelationCanvasItem(this, relation);
-		item->show();
-	}
+    if (! m_rows.at(item->row()) || m_rows.at(item->row())->count() <= item->column())
+    {
+        kdError()<<k_funcinfo<<"Non existing map for: ("<<item->row()<<","<<item->column()<<")"<<endl;
+        return;
+    }
+    m_rows.at(item->row())->at(item->column()) = true;
 }
 
+void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *childItem, TimingRelation type)
+{
+	//kdDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" to child: "<<(childItem ? childItem->node().name() : "None")<<endl;
+    if (!childItem)
+    {   // shouldn't happen...
+        kdError()<<k_funcinfo<<"No childItem"<<endl;
+        return;
+    }
+    int row = parentItem->row();
+    int col = parentItem->column();
+    int chRow = childItem->row();
+    int chCol = childItem->column();
+    bool chMapped = (chRow > -1 && chCol > -1);
+	//kdDebug()<<k_funcinfo<<"Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
+
+    if (type == START_START ||
+        type == FINISH_FINISH)
+    {
+        // node goes into row below parent, at least same col
+        if (chMapped)
+        {
+            m_rows.at(chRow)->at(chCol) = false;
+            if (chRow <= row)
+            {
+                chRow = row+1;
+                if (!m_rows.count() <= chRow)
+                    m_rows.append(new QMemArray<bool>(1)); // make a new row
+            }
+            if (chCol < col)
+            {
+                chCol = col;
+                if (m_rows.at(chRow)->count() <= chCol)  // col does not exist
+                    m_rows.at(chRow)->resize(chCol+1);
+            }
+
+        }
+        else
+        {
+            if (!(m_rows.at(row+1)) ||                        // next row does not exists
+                m_rows.at(row+1)->at(col) == true)  // col is not free
+            {
+                m_rows.append(new QMemArray<bool>(col+1)); // make a new row
+            }
+            else if (m_rows.at(row+1)->count() <= col)  // col does not exist
+                m_rows.at(row)->resize(col+1);
+
+            chRow = m_rows.count() -1;
+            chCol = col;
+        }
+    }
+    else if (type == FINISH_START)
+    {
+        // node goes into same row, next col if col free
+        if (chMapped)
+        {
+            m_rows.at(chRow)->at(chCol) = false;
+            if (chRow < row)
+                chRow = row;
+            if (chCol <= col)
+            {
+                chCol = col+1;
+                if (m_rows.at(chRow)->count() <= chCol)  // col does not exist
+                    m_rows.at(chRow)->resize(chCol+1);
+            }
+        }
+        else
+        {
+            ++col;
+            if (m_rows.at(row)->count() <= col)
+                m_rows.at(row)->resize(col+1); // make new column
+            else if (m_rows.at(row)->at(col) = true)
+                m_rows.append(new QMemArray<bool>(col+1)); // col not free, so make a new row
+
+            chRow = m_rows.count() -1;
+            chCol = col;
+        }
+    }
+    else
+    {
+        kdError()<<k_funcinfo<<"Unknow TimingRelation"<<endl;
+        return;
+    }
+    childItem->move(this, chRow, chCol);
+}
 
 QSize KPTPertCanvas::canvasSize()
 {
@@ -252,6 +279,9 @@ QSize KPTPertCanvas::canvasSize()
 
 void KPTPertCanvas::clear()
 {
+    m_nodes.clear();
+    m_relations.clear();
+    m_rows.clear();
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
@@ -402,47 +432,6 @@ bool KPTPertCanvas::legalChildren(KPTNode *par, KPTNode *child)
 	return legal;
 }
 
-int KPTPertCanvas::row(int minrow, int col)
-{
-	QValueList<int> rows;
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
-    for (; it != list.end(); ++it)
-    {
-		if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
-			(*it)->rtti() == KPTPertTaskItem::RTTI  ||
-			(*it)->rtti() == KPTPertMilestoneItem::RTTI )
-		{
-		    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
-            if ( item->column() == col )
-			{
-    		    rows.append(item->row());
-			}
-		}
-    }
-	int row = minrow;
-	if (!rows.empty())
-	{
-    	qHeapSort(rows);
-    	bool found = false;
-		for (uint i=0; i < rows.size(); ++i)
-		{
-			if ( rows[i] < minrow)
-			    continue;
-			if ( rows[i] == minrow)
-			    found = true;
-            if (found)
-			{
-			    if (row !=rows[i])
-				    break;          // free row
-			    ++row;
-			}
-		}
-	}
-    //kdDebug()<<k_funcinfo<<" col="<<col<<" free row="<<row<<endl;
-	return row;
-}
-
 KPTPertNodeItem *KPTPertCanvas::selectedItem()
 {
     QCanvasItemList list = canvas()->allItems();
@@ -459,6 +448,7 @@ KPTPertNodeItem *KPTPertCanvas::selectedItem()
     }
 	return 0;
 }
+
 
 #ifndef NDEBUG
 void KPTPertCanvas::printDebug( int /*info*/ )

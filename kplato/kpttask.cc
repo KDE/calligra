@@ -21,9 +21,7 @@
 #include "kptproject.h"
 #include "kpttaskdialog.h"
 #include "kptduration.h"
-#include "kptpertcanvas.h"
 #include "kptrelation.h"
-#include "kptcanvasitem.h"
 
 #include <qdom.h>
 #include <qbrush.h>

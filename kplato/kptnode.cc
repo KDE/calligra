@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kptnode.h"
-#include "kptcanvasitem.h"
 #include "kptresource.h"
 
 #include <qptrlist.h>
@@ -42,9 +41,6 @@ void KPTNode::init() {
     earliestStart.set(KPTDuration());
     latestFinish.set(KPTDuration());
     m_constraint = KPTNode::ASAP;
-	m_ganttItem = 0;
-    m_pertItem = 0;
-	m_drawn = false;
     m_effort = 0;
     m_resourceOverbooked = false;
     m_resourceError = false;
@@ -274,45 +270,6 @@ bool KPTNode::isDependChildOf(KPTNode *node) {
 	return false;
 }
 
-int KPTNode::getColumn(KPTNode *parent) {
-    //kdDebug()<<k_funcinfo<<endl;
-	int col = 0;
-    for (int i=0; i<numDependParentNodes(); i++) {
-        KPTRelation *rel = getDependParentNode(i);
-        KPTPertNodeItem *dp = rel->parent()->pertItem();
-        if (dp) {
-		    if (rel->timingRelation() == FINISH_START)
-		        col = QMAX(col,dp->column()+1);
-			else
-			    col = QMAX(col, dp->column());
-	    }
-	}
-	if (parent && parent->isDrawn())
-	{
-        //kdDebug()<<k_funcinfo<<"Col="<<col<<" parent col="<<parent->pertItem()->column()<<endl;
-	    col = QMAX(col+1, parent->pertItem()->column());
-	}
-	return col;
-}
-
-int KPTNode::getRow(KPTNode *parent) {
-    //kdDebug()<<k_funcinfo<<endl;
-	int row = 0;
-    for (int i=0; i<numDependParentNodes(); i++) {
-        KPTRelation *rel = getDependParentNode(i);
-        KPTPertNodeItem *dp = rel->parent()->pertItem();
-        if (dp) {
-		    row = QMAX(row,dp->row());
-	    }
-	}
-	if (parent && parent->isDrawn())
-	{
-        //kdDebug()<<k_funcinfo<<"Row="<<row<<" parent row="<<parent->pertItem()->row()<<endl;
-	    row = QMAX(row, parent->pertItem()->row());
-    }
-	return row;
-}
-
 void KPTNode::initialize_arcs() {
   // Clear all lists of arcs and set unvisited to zero
   start_node()->successors.list.clear();
@@ -434,37 +391,6 @@ QPtrList<KPTAppointment> KPTNode::appointments(const KPTNode *node) {
         a = m_parent->appointments(node);
     }
     return a;
-}
-
-void KPTNode::showPopup() {
-    //kdDebug()<<k_funcinfo<<endl;
-}
-
-void KPTNode::setDrawn(bool drawn, bool children) {
-    m_drawn = drawn;
-	if (children) {
-		QPtrListIterator<KPTNode> nit(m_nodes);
-		for ( ; nit.current(); ++nit ) {
-			nit.current()->setDrawn(drawn, children);
-		}
-	}
-}
-
- int KPTNode::x() {
-    return m_pertItem->rect().left();
-}
-
-int KPTNode::width() {
-    return m_pertItem->rect().width();
-}
-
-bool KPTNode::allParentsDrawn() {
-    QPtrListIterator<KPTRelation> it(m_dependParentNodes);
-	for ( ; it.current(); ++it ) {
-		if (!it.current()->parent()->isDrawn())
-		    return false;
-	}
-	return true;
 }
 
 void KPTNode::saveRelations(QDomElement &element) {

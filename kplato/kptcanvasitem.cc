@@ -25,6 +25,8 @@
 
 #include <qpainter.h>
 #include <qpointarray.h>
+#include <qptrlist.h>
+#include <qpoint.h>
 
 #include <kdebug.h>
 #include <koRect.h> //DEBUGRECT
@@ -35,45 +37,29 @@ KPTPertNodeItem::KPTPertNodeItem( KPTPertCanvas *view, KPTNode &node, int row, i
 	m_row(row),
 	m_col(col)
 {
-    //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
-	
-	m_wgap = view->verticalGap();
-	m_hgap = view->horizontalGap();
-	m_width = view->itemSize().width();
-	m_height = view->itemSize().height();
-	
-	m_x = 12 + col * (m_width + m_wgap);
-	m_y = 6 + row * (m_height + m_hgap);
-    m_left = QPoint(m_x, m_y + m_height/2);
-	m_right = QPoint(m_x+m_width, m_left.y());
-	
-	setPen(Qt::black);
-	setZ(50);
-	
-	m_name = new QCanvasText(node.name(), view->canvas());
-	m_name->setX(m_x + 6);
-	m_name->setY(m_y + 3);
-	m_name->setZ(60);
-	
-	m_leader = new QCanvasText(node.leader(), view->canvas());
-	m_leader->setX(m_x + 6);
-	m_leader->setY(m_y + 15);
-	m_leader->setZ(60);
+    m_x = m_y = 0;
+    m_wgap = view->verticalGap();
+    m_hgap = view->horizontalGap();
+    m_width = view->itemSize().width();
+    m_height = view->itemSize().height();
+
+    m_name = new QCanvasText(node.name(), view->canvas());
+    m_childRelations.setAutoDelete(true);
 }
 
 KPTPertNodeItem::~KPTPertNodeItem()
 {
-    hide();
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
-    for (; it != list.end(); ++it) 
+    for (; it != list.end(); ++it)
     {
         if ( *it == m_name )
 		    m_name->hide();
         if ( *it == m_leader )
 		    m_leader->hide();
     }
-}
+   hide();
+ }
 
 int KPTPertNodeItem::rtti() const { return RTTI; }
 int KPTPertNodeItem::RTTI = 2000;
@@ -84,13 +70,38 @@ void KPTPertNodeItem::setVisible(bool yes)
 	QCanvasPolygon::setVisible(yes);
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
-    for (; it != list.end(); ++it) 
+    for (; it != list.end(); ++it)
     {
         if ( *it == m_name )
             m_name->setVisible(yes);
         if ( *it == m_leader )
 	        m_leader->setVisible(yes);
     }
+}
+
+void KPTPertNodeItem::move(KPTPertCanvas *view, int row, int col)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    m_row = row; m_col = col;
+    view->mapNode(this);
+
+    // Now map my children
+    QPtrListIterator<Relation> it(m_childRelations);
+    for (; it.current(); ++it)
+    {
+        view->mapChildNode(this, it.current()->childItem, it.current()->relation->timingRelation());
+    }
+
+    // now move the item on the canvas
+    m_x = x(col); m_y = y(row);
+    m_left = QPoint(m_x, m_y + m_height/2);
+    m_right = QPoint(m_x + m_width, m_y + m_height/2);
+    QCanvasPolygon::move(m_x, m_y);
+    if (m_name)
+        m_name->move(m_x+5, m_y+2);
+
+    setVisible(true);
+    //kdDebug()<<k_funcinfo<<m_node.name()<<" moved to row,col=("<<m_row<<","<<m_col<<")"<<endl;
 }
 
 void KPTPertNodeItem::drawShape(QPainter &p)
@@ -108,7 +119,7 @@ void KPTPertNodeItem::drawShape(QPainter &p)
 	//setPen(pen);
 }
 
-QPoint KPTPertNodeItem::exitPoint(TimingRelation type)
+QPoint KPTPertNodeItem::exitPoint(TimingRelation type) const
 {
     QPoint ret;
     switch(type)
@@ -124,7 +135,7 @@ QPoint KPTPertNodeItem::exitPoint(TimingRelation type)
 	return ret;
 }
 
-QPoint KPTPertNodeItem::entryPoint(TimingRelation type)
+QPoint KPTPertNodeItem::entryPoint(TimingRelation type) const
 {
     QPoint ret;
     switch(type)
@@ -150,16 +161,16 @@ void KPTPertNodeItem::printDebug( int /*info*/ )
 
 ////////////////////   KPTPertProjectItem   //////////////////////////
 
-KPTPertProjectItem::KPTPertProjectItem( KPTPertCanvas *view, KPTNode &node, int row, int col )
+KPTPertProjectItem::KPTPertProjectItem(KPTPertCanvas *view, KPTNode &node, int row, int col)
     : KPTPertNodeItem(view, node, row, col)
 {
     //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
-	
+
 	QPointArray a;
-	a.putPoints(0, 5, 
+	a.putPoints(0, 5,
 	    m_x+6, m_y, m_x+m_width, m_y, m_x+m_width-6, m_y+m_height, m_x, m_y+m_height, m_x+6, m_y);
 	setPoints(a);
-	
+
 	setPen(QPen(Qt::cyan, 2));
 }
 
@@ -170,7 +181,6 @@ KPTPertProjectItem::~KPTPertProjectItem()
 int KPTPertProjectItem::rtti() const { return RTTI; }
 int KPTPertProjectItem::RTTI = 2001;
 
-
 #ifndef NDEBUG
 void KPTPertProjectItem::printDebug( int /*info*/ )
 {
@@ -180,13 +190,12 @@ void KPTPertProjectItem::printDebug( int /*info*/ )
 
 ////////////////////   KPTPertTaskItem   //////////////////////////
 
-KPTPertTaskItem::KPTPertTaskItem( KPTPertCanvas *view, KPTNode &node, int row, int col )
+KPTPertTaskItem::KPTPertTaskItem(KPTPertCanvas *view, KPTNode &node, int row, int col)
     : KPTPertNodeItem(view, node, row, col)
 {
     //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
-	
 	QPointArray a;
-	if (node.numChildren() > 0)
+	if (node.type() == KPTNode::Type_Summarytask)
 	{
 	    a.putPoints(0, 5, m_x+6, m_y, m_x+m_width, m_y, m_x+m_width-6, m_y+m_height, m_x, m_y+m_height, m_x+6, m_y);
     	setPen(QPen(Qt::cyan, 2));
@@ -197,6 +206,7 @@ KPTPertTaskItem::KPTPertTaskItem( KPTPertCanvas *view, KPTNode &node, int row, i
     	setPen(QPen(Qt::green, 2));
 	}
 	setPoints(a);
+
 }
 
 KPTPertTaskItem::~KPTPertTaskItem()
@@ -216,23 +226,23 @@ void KPTPertTaskItem::printDebug( int /*info*/ )
 
 ////////////////////   KPTPertMilestoneItem   //////////////////////////
 
-KPTPertMilestoneItem::KPTPertMilestoneItem( KPTPertCanvas *view, KPTNode &node, int row, int col )
+KPTPertMilestoneItem::KPTPertMilestoneItem(KPTPertCanvas *view, KPTNode &node, int row, int col)
     : KPTPertNodeItem(view, node, row, col)
 {
     //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
-	
+
 	QPointArray a;
-	a.putPoints(0, 7, 
+	a.putPoints(0, 7,
 	    m_x, m_y+m_height/2,
-	    m_x+6, m_y, 
-		m_x+m_width-6, m_y, 
+	    m_x+6, m_y,
+		m_x+m_width-6, m_y,
 		m_x+m_width, m_y+m_height/2,
-		m_x+m_width-6, m_y+m_height, 
-	    m_x+6, m_y+m_height, 
+		m_x+m_width-6, m_y+m_height,
+	    m_x+6, m_y+m_height,
 	    m_x, m_y+m_height/2);
-	
+
 	setPoints(a);
-	
+
 	setPen(QPen(Qt::blue, 2));
 }
 
@@ -243,7 +253,6 @@ KPTPertMilestoneItem::~KPTPertMilestoneItem()
 int KPTPertMilestoneItem::rtti() const { return RTTI; }
 int KPTPertMilestoneItem::RTTI = 2003;
 
-
 #ifndef NDEBUG
 void KPTPertMilestoneItem::printDebug( int /*info*/ )
 {
@@ -251,34 +260,52 @@ void KPTPertMilestoneItem::printDebug( int /*info*/ )
 #endif
 
 
-////////////////////   KPTRelationCanvasItem   //////////////////////////
+////////////////////   KPTPertRelationItem   //////////////////////////
 
-KPTRelationCanvasItem::KPTRelationCanvasItem( KPTPertCanvas *view, KPTRelation *rel)
+KPTPertRelationItem::KPTPertRelationItem( KPTPertCanvas *view, KPTPertNodeItem *parent, KPTPertNodeItem *child, KPTRelation *rel)
     : QCanvasPolygon(view->canvas()),
-	m_rel(rel)
+    m_view(view),
+    m_rel(rel),
+    m_parentItem(parent),
+    m_childItem(child)
+{
+    //kdDebug()<<k_funcinfo<<"Parent="<<parent->node().name()<<" Child="<<child->node().name()<<endl;
+    draw();
+    setVisible(true);
+}
+
+KPTPertRelationItem::~KPTPertRelationItem()
+{
+    hide();
+}
+
+int KPTPertRelationItem::rtti() const { return RTTI; }
+int KPTPertRelationItem::RTTI = 2020;
+
+void KPTPertRelationItem::draw()
 {
     //kdDebug()<<k_funcinfo<<endl;
 	// Some "rules":
 	//  a) FINISH_START: child column > parent column
 	//  b) FINISH_FINISH: child column >= parent column
 	//  c) START_START: child column >= parent column
-	//  d) Child row can be >= than parent row
+	//  d) Child row can be >= parent row
 
-	wgap = view->verticalGap();
-	hgap = view->horizontalGap();
+	wgap = m_view->verticalGap();
+	hgap = m_view->horizontalGap();
 
 	// could not use ...rect() here, don't know why
-	parentTop = (int)(rel->parent()->pertItem()->y());
-	parentBottom = parentTop + (int)(rel->parent()->pertItem()->height());
-	childTop = (int)(rel->child()->pertItem()->y());
-	
-	childRow = rel->child()->pertItem()->row();
-	childCol =  rel->child()->pertItem()->column();
-	parentRow = rel->parent()->pertItem()->row();
-	parentCol =  rel->parent()->pertItem()->column();
-    //kdDebug()<<k_funcinfo<<"Parent="<<rel->parent()->name()<<" ("<<parentRow<<","<<parentCol<<") Child="<<rel->child()->name()<<" ("<<childRow<<","<<childCol<<")"<<endl;
+	parentTop = (int)(m_parentItem->y());
+	parentBottom = parentTop + (int)(m_parentItem->height());
+	childTop = (int)(m_childItem->y());
 
-	switch (rel->timingRelation())
+	childRow = m_childItem->row();
+	childCol =  m_childItem->column();
+	parentRow = m_parentItem->row();
+	parentCol =  m_parentItem->column();
+    //kdDebug()<<k_funcinfo<<"Parent="<<m_parentItem->node().name()<<" ("<<parentRow<<","<<parentCol<<") Child="<<m_childItem->node().name()<<" ("<<childRow<<","<<childCol<<")"<<endl;
+
+	switch (timingRelation())
 	{
 	    case FINISH_START:
 		    setFinishStartPoints();
@@ -312,24 +339,17 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( KPTPertCanvas *view, KPTRelation *
     for (int i = 0; i < pa.size(); ++i)
         kdDebug()<<"            pa["<<i<<"]="<<pa[i].x()<<","<<pa[i].y()<<endl;
 #endif*/
+
 }
 
-KPTRelationCanvasItem::~KPTRelationCanvasItem()
+void KPTPertRelationItem::setFinishStartPoints()
 {
-    hide();
-}
+	QPoint parentPoint = m_parentItem->exitPoint(FINISH_START);
+	QPoint childPoint = m_childItem->entryPoint(FINISH_START);
 
-int KPTRelationCanvasItem::rtti() const { return RTTI; }
-int KPTRelationCanvasItem::RTTI = 2020;
-	
-void KPTRelationCanvasItem::setFinishStartPoints()
-{
-	QPoint parentPoint = m_rel->parent()->pertItem()->exitPoint(FINISH_START);
-	QPoint childPoint = m_rel->child()->pertItem()->entryPoint(FINISH_START);
-	
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
-    
+
 	if ( parentRow == childRow )
 	{
 	    if (parentCol == childCol - 1 || rowFree(parentRow, parentCol+1, childCol-1))
@@ -338,7 +358,7 @@ void KPTRelationCanvasItem::setFinishStartPoints()
 		}
 		else // go around below
 		{
-    	    a.putPoints(1, 9, 
+    	    a.putPoints(1, 9,
 			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),                // stop short
 			        parentPoint.x()+(wgap/2), parentPoint.y()+3,                // right/down
 					parentPoint.x()+(wgap/2), parentBottom+(hgap/2)-3,  // stop short
@@ -349,16 +369,16 @@ void KPTRelationCanvasItem::setFinishStartPoints()
     	            childPoint.x()-(wgap/2)+3, childPoint.y(),                      // right/up
     	            childPoint.x(), childPoint.y());
 		}
-	} 
+	}
 	else if ( parentRow > childRow )
 	{
 	    if (parentCol == childCol - 1)
 		{
-            a.putPoints(1, 5, 
+            a.putPoints(1, 5,
 			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
-			        parentPoint.x()+(wgap/2), parentPoint.y()-3, 
+			        parentPoint.x()+(wgap/2), parentPoint.y()-3,
                     parentPoint.x()+wgap/2, childPoint.y()+3,
-    	            parentPoint.x()+(wgap/2)+3, childPoint.y(), 
+    	            parentPoint.x()+(wgap/2)+3, childPoint.y(),
                     childPoint.x(), childPoint.y());
 		}
 		else // go around above
@@ -379,17 +399,17 @@ void KPTRelationCanvasItem::setFinishStartPoints()
 	{
 	    if (parentCol == childCol - 1)
 		{
-		    a.putPoints(1, 5, 
+		    a.putPoints(1, 5,
 			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
-			        parentPoint.x()+(wgap/2), parentPoint.y()+3, 
+			        parentPoint.x()+(wgap/2), parentPoint.y()+3,
 		            parentPoint.x()+wgap/2, childPoint.y()-3,
     	            parentPoint.x()+(wgap/2)+3, childPoint.y(),
     	            childPoint.x(), childPoint.y());
-		
+
 	    }
 		else
 		{
-	        a.putPoints(1, 9, 
+	        a.putPoints(1, 9,
 			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
 			        parentPoint.x()+(wgap/2), parentPoint.y()+3,
 					parentPoint.x()+wgap/2, childTop-(hgap/2)-3,
@@ -404,11 +424,11 @@ void KPTRelationCanvasItem::setFinishStartPoints()
 	setPoints(a);
 }
 
-void KPTRelationCanvasItem::setFinishFinishPoints()
+void KPTPertRelationItem::setFinishFinishPoints()
 {
     //kdDebug()<<k_funcinfo<<endl;
-	QPoint parentPoint = m_rel->parent()->pertItem()->exitPoint(FINISH_FINISH);
-	QPoint childPoint = m_rel->child()->pertItem()->entryPoint(FINISH_FINISH);
+	QPoint parentPoint = m_parentItem->exitPoint(FINISH_FINISH);
+	QPoint childPoint = m_childItem->entryPoint(FINISH_FINISH);
 	
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
@@ -488,11 +508,11 @@ void KPTRelationCanvasItem::setFinishFinishPoints()
 	setPoints(a);
 }
 
-void KPTRelationCanvasItem::setStartStartPoints()
+void KPTPertRelationItem::setStartStartPoints()
 {
     //kdDebug()<<k_funcinfo<<endl;
-	QPoint parentPoint = m_rel->parent()->pertItem()->exitPoint(START_START);
-	QPoint childPoint = m_rel->child()->pertItem()->entryPoint(START_START);
+	QPoint parentPoint = m_parentItem->exitPoint(START_START);
+	QPoint childPoint = m_childItem->entryPoint(START_START);
 	
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
@@ -560,7 +580,7 @@ void KPTRelationCanvasItem::setStartStartPoints()
 	setPoints(a);
 }
 
-void KPTRelationCanvasItem::drawShape(QPainter &p)
+void KPTPertRelationItem::drawShape(QPainter &p)
 {
     //kdDebug()<<k_funcinfo<<" "<<m_rel->parent()->name()<<" to "<<m_rel->child()->name()<<endl;
     // cannot use polygon's drawShape() as it doesn't use the pen
@@ -583,7 +603,7 @@ void KPTRelationCanvasItem::drawShape(QPainter &p)
 	p.drawLine(a[pos], pnt);
 }
 
-QPointArray KPTRelationCanvasItem::areaPoints () const
+QPointArray KPTPertRelationItem::areaPoints () const
 {
     QPointArray pa(4);
     int pw = (pen().width()+1)/2;
@@ -599,7 +619,7 @@ QPointArray KPTRelationCanvasItem::areaPoints () const
     return pa;
 }
 
-bool KPTRelationCanvasItem::rowFree(int row, int startCol, int endCol)
+bool KPTPertRelationItem::rowFree(int row, int startCol, int endCol)
 {
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
@@ -625,7 +645,7 @@ bool KPTRelationCanvasItem::rowFree(int row, int startCol, int endCol)
 }
 
 #ifndef NDEBUG
-void KPTRelationCanvasItem::printDebug( int /*info*/ )
+void KPTPertRelationItem::printDebug( int /*info*/ )
 {
 }
 #endif
@@ -634,15 +654,68 @@ void KPTRelationCanvasItem::printDebug( int /*info*/ )
 ////////////////////   KPTGanttViewSummaryItem   //////////////////////////
 
 
-KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode &node)
-    : KDGanttViewSummaryItem(parent, node.name()),
+KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode *node)
+    : KDGanttViewSummaryItem(parent, node->name()),
 	m_node(node)
 {}
 
-KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode &node)
-    : KDGanttViewSummaryItem(parent, node.name()),
+KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode *node)
+    : KDGanttViewSummaryItem(parent, node->name()),
 	m_node(node)
 {}
+
+void KPTGanttViewSummaryItem::insertRelations()
+{
+    //kdDebug()<<k_funcinfo<<endl;
+
+    QPtrListIterator<KPTRelation> it(m_node->dependChildNodes());
+    for (; it.current(); ++it)
+    {
+        KDGanttViewItem *child = find(myGantView->firstChild(), it.current()->child());
+        if (child)
+        {
+            //FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
+            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+        }
+    }
+}
+
+KDGanttViewItem *KPTGanttViewSummaryItem::find(KPTNode *node)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (m_node == node)
+        return this;
+
+    KDGanttViewItem *item = find(firstChild(), node);
+    if (item)
+        return item;
+
+    return find(nextSibling(), node);
+}
+
+
+KDGanttViewItem *KPTGanttViewSummaryItem::find(KDGanttViewItem *item, KPTNode *node)
+{
+    if (!item)
+        return 0;
+
+    if (item->type() == Event)
+    {
+        KPTGanttViewEventItem *i = static_cast<KPTGanttViewEventItem *>(item);
+        return i->find(node);
+    }
+    else if (item->type() == Task)
+    {
+        KPTGanttViewTaskItem *i = static_cast<KPTGanttViewTaskItem *>(item);
+        return i->find(node);
+    }
+    else if (item->type() == Summary)
+    {
+        KPTGanttViewSummaryItem *i = static_cast<KPTGanttViewSummaryItem *>(item);
+        return i->find(node);
+    }
+    return 0;
+}
 
 ////////////////////   KPTGanttViewTaskItem   //////////////////////////
 
@@ -657,6 +730,59 @@ KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *tas
 	m_task(task)
 {}
 
+void KPTGanttViewTaskItem::insertRelations()
+{
+    //kdDebug()<<k_funcinfo<<endl;
+
+    QPtrListIterator<KPTRelation> it(m_task->dependChildNodes());
+    for (; it.current(); ++it)
+    {
+        KDGanttViewItem *child = find(myGantView->firstChild(), it.current()->child());
+        if (child)
+        {
+            //FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
+            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+        }
+    }
+}
+
+KDGanttViewItem *KPTGanttViewTaskItem::find(KPTNode *node)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (m_task == node)
+        return this;
+
+    KDGanttViewItem *item = find(firstChild(), node);
+    if (item)
+        return item;
+
+    return find(nextSibling(), node);
+}
+
+
+KDGanttViewItem *KPTGanttViewTaskItem::find(KDGanttViewItem *item, KPTNode *node)
+{
+    if (!item)
+        return 0;
+
+    if (item->type() == Event)
+    {
+        KPTGanttViewEventItem *i = static_cast<KPTGanttViewEventItem *>(item);
+        return i->find(node);
+    }
+    else if (item->type() == Task)
+    {
+        KPTGanttViewTaskItem *i= static_cast<KPTGanttViewTaskItem *>(item);
+        return i->find(node);
+    }
+    else if (item->type() == Summary)
+    {
+        KPTGanttViewSummaryItem *i = static_cast<KPTGanttViewSummaryItem *>(item);
+        return i->find(node);
+    }
+    return 0; // avoid warning
+}
+
 ////////////////////   KPTGanttViewEventItem   //////////////////////////
 
 
@@ -670,3 +796,55 @@ KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *t
 	m_task(task)
 {}
 
+
+void KPTGanttViewEventItem::insertRelations()
+{
+    //kdDebug()<<k_funcinfo<<endl;
+
+    QPtrListIterator<KPTRelation> it(m_task->dependChildNodes());
+    for (; it.current(); ++it)
+    {
+        KDGanttViewItem *child = find(myGantView->firstChild(), it.current()->child());
+        if (child)
+        {
+            //FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
+            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+        }
+    }
+}
+
+KDGanttViewItem *KPTGanttViewEventItem::find(KPTNode *node)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (m_task == node)
+        return this;
+
+    KDGanttViewItem *item = find(firstChild(), node);
+    if (item)
+        return item;
+
+    return find(nextSibling(), node);
+}
+
+
+KDGanttViewItem *KPTGanttViewEventItem::find(KDGanttViewItem *item, KPTNode *node)
+{
+    if (!item)
+        return 0;
+
+    if (item->type() == Event)
+    {
+        KPTGanttViewEventItem *i = static_cast<KPTGanttViewEventItem *>(item);
+        return i->find(node);
+    }
+    else if (item->type() == Task)
+    {
+        KPTGanttViewTaskItem *i = static_cast<KPTGanttViewTaskItem *>(item);
+        return i->find(node);
+    }
+    else if (item->type() == Summary)
+    {
+        KPTGanttViewSummaryItem *i = static_cast<KPTGanttViewSummaryItem *>(item);
+        return i->find(node);
+    }
+}

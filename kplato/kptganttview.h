@@ -89,11 +89,14 @@ private slots:
 
 private:
     void drawChildren(KDGanttViewSummaryItem *item, KPTNode &node);
-    void drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node);
-    void drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode &node);
+    void drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node);
+    void drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *node);
     void drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task);
 	void drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task);
-    void drawRelations(KPTNode &node);
+
+    void drawRelations();
+    void drawRelations(KDGanttViewItem *item);
+    void drawChildRelations(KDGanttViewItem *item);
 
 private:
 	KPTView *m_mainview;

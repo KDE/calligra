@@ -25,6 +25,7 @@
 
 #include <qcanvas.h>
 #include <qmemarray.h>
+#include <qptrdict.h>
 
 class KPTPertNodeItem;
 class QTimer;
@@ -44,8 +45,6 @@ public:
     void clear();
     QSize canvasSize();
 
-	int row(int minrow, int col);
-	int summaryColumn() { return m_summaryColumn++; }
 	KPTPertNodeItem *selectedItem();
 
 	int verticalGap() { return m_verticalGap; }
@@ -56,16 +55,18 @@ public:
 	bool legalParents(KPTNode *par, KPTNode *child);
 	bool legalChildren(KPTNode *par, KPTNode *child);
 
-protected:
-    void contentsMouseReleaseEvent ( QMouseEvent * e );
-    void drawChildren(KPTNode *node);
+    void setColumn(int row, int col) { m_rows.at(row)[col] = true; }
 
-	void drawProject( KPTNode *node);
-	void drawSubproject( KPTNode *node);
-	void drawMilestone( KPTNode *node);
-	void drawTask( KPTNode *node);
+    void mapNode(KPTPertNodeItem *item);
+    void mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *childItem, TimingRelation type);
+
+protected:
 	void drawRelations();
-	void drawRelation( KPTRelation* relation);
+
+    void createChildItems(KPTPertNodeItem *node);
+    KPTPertNodeItem *createNodeItem(KPTNode *node);
+
+    void contentsMouseReleaseEvent ( QMouseEvent * e );
 
 signals:
     void rightButtonPressed(KPTNode *node, const QPoint & point);
@@ -77,11 +78,15 @@ private:
     QTimer *m_scrollTimer;
     bool m_mousePressed;
     bool m_printing;
-	int m_summaryColumn;
 
 	int m_verticalGap;
 	int m_horizontalGap;
 	QSize m_itemSize;
+
+    QPtrDict<KPTPertNodeItem> m_nodes;
+    QPtrList<KPTRelation> m_relations;
+
+    QPtrList<QMemArray<bool> > m_rows;
 
 #ifndef NDEBUG
     void printDebug( int );

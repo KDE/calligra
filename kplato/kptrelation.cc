@@ -116,13 +116,6 @@ void KPTRelation::save(QDomElement &element) const {
     //me.setAttribute("lag", m_lag.dateTime().toString());
 }
 
-void KPTRelation::draw(KPTPertCanvas* view) {
-    kdDebug()<<k_funcinfo<<endl;
-
-	KPTRelationCanvasItem *item = new KPTRelationCanvasItem(view, this);
-	item->show();
-}
-
 #ifndef NDEBUG
 void KPTRelation::printDebug(QCString indent) {
     indent += "  ";

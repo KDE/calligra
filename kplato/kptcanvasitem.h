@@ -33,32 +33,55 @@
 class KPTTask;
 class KPTRelation;
 class KPTPertCanvas;
+class KPTPertRelationItem;
+class KPTPertNodeItem;
 class QPainter;
 
 class KPTPertNodeItem : public QCanvasPolygon
 {
+private:
+    class Relation
+    {
+    public:
+        Relation(KPTRelation *r, KPTPertNodeItem *n) { relation = r; childItem = n; }
+        ~Relation() {}
+        KPTRelation *relation;
+        KPTPertNodeItem * childItem;
+    };
+
 public:
     KPTPertNodeItem( KPTPertCanvas *view, KPTNode &node, int row, int col );
     virtual ~KPTPertNodeItem();
 
     virtual int rtti() const;
     static int RTTI;
-	
+
 	void setVisible(bool yes);
-	
-	QPoint exitPoint(TimingRelation type);
-	QPoint entryPoint(TimingRelation type);
-	
-	KPTNode &node() { return m_node; }
-	
-	QRect rect() { return QRect(m_left, m_right); }
-	int row() { return m_row; }
-	int column() { return m_col; }
-	int x() { return m_x; }
-	int y() { return m_y; }
-	int width() { return m_width; }
-	int height() { return m_height; }
-	
+    void move(KPTPertCanvas *view, int row, int col);
+
+    QPoint exitPoint(TimingRelation type) const;
+	QPoint entryPoint(TimingRelation type) const;
+
+	KPTNode &node() const { return m_node; }
+
+	QRect rect() const { return QRect(m_left, m_right); }
+    void setRow(int row) { m_row = row; }
+	int row() const { return m_row; }
+    void setColumn(int col) { m_col = col; }
+	int column() const { return m_col; }
+	int x() const { return m_x; }
+	int x(int col) const { return m_wgap + col*(m_width+m_wgap); }
+	int y() const { return m_y; }
+	int y(int row) const { return m_hgap + row*(m_height+m_hgap); }
+	int width() const { return m_width; }
+	int height() const { return m_height; }
+
+    void addChildRelation(KPTRelation *relation, KPTPertNodeItem *node)
+        { m_childRelations.append(new Relation(relation, node)); }
+
+    bool hasParent() { return m_node.numDependParentNodes(); }
+    bool hasChild() { return m_node.numDependChildNodes(); }
+
 protected:
     void drawShape(QPainter & p);
 
@@ -69,6 +92,8 @@ protected:
 	int m_x;
 	int m_y;
 
+    QPtrList<Relation> m_childRelations;
+
 private:
     KPTNode &m_node;
     int m_row, m_col;
@@ -76,8 +101,7 @@ private:
 	QPoint m_left;  // Entry/exit point
 	QCanvasText *m_name;
 	QCanvasText *m_leader;
-	
-	
+
 #ifndef NDEBUG
     void printDebug( int );
 #endif
@@ -87,13 +111,12 @@ private:
 class KPTPertProjectItem : public KPTPertNodeItem
 {
 public:
-    KPTPertProjectItem( KPTPertCanvas *view, KPTNode &node, int row, int col );
+    KPTPertProjectItem( KPTPertCanvas *view, KPTNode &node, int row=-1, int col=-1 );
     virtual ~KPTPertProjectItem();
 
     virtual int rtti() const;
     static int RTTI;
-	
-	
+
 #ifndef NDEBUG
     void printDebug( int );
 #endif
@@ -103,13 +126,12 @@ public:
 class KPTPertTaskItem : public KPTPertNodeItem
 {
 public:
-    KPTPertTaskItem( KPTPertCanvas *view, KPTNode &node, int row, int col );
+    KPTPertTaskItem( KPTPertCanvas *view, KPTNode &node, int row=-1, int col=-1 );
     virtual ~KPTPertTaskItem();
 
     virtual int rtti() const;
     static int RTTI;
-	
-	
+
 #ifndef NDEBUG
     void printDebug( int );
 #endif
@@ -119,48 +141,55 @@ public:
 class KPTPertMilestoneItem : public KPTPertNodeItem
 {
 public:
-    KPTPertMilestoneItem( KPTPertCanvas *view, KPTNode &node, int row, int col );
+    KPTPertMilestoneItem( KPTPertCanvas *view, KPTNode &node, int row=-1, int col=-1 );
     virtual ~KPTPertMilestoneItem();
 
     virtual int rtti() const;
     static int RTTI;
-	
-	
+
+	void draw();
+
 #ifndef NDEBUG
     void printDebug( int );
 #endif
 
 };
 
-/////////////////   KPTRelationCanvasItem   ////////////////////
+/////////////////   KPTPertRelationItem   ////////////////////
 
-class KPTRelationCanvasItem : public QCanvasPolygon
+class KPTPertRelationItem : public QCanvasPolygon
 {
 public:
-    KPTRelationCanvasItem( KPTPertCanvas *view, KPTRelation *rel );
-    virtual ~KPTRelationCanvasItem();
+    KPTPertRelationItem(KPTPertCanvas *view, KPTPertNodeItem *parent, KPTPertNodeItem *child, KPTRelation *rel);
+    virtual ~KPTPertRelationItem();
 
     virtual int rtti() const;
     static int RTTI;
-	
+
+    TimingRelation timingRelation() { return m_rel->timingRelation(); }
+    void draw();
+
 	void setFinishStartPoints();
 	void setFinishFinishPoints();
 	void setStartStartPoints();
 	QPointArray areaPoints() const;
-	
+
 	bool rowFree(int row, int startCol, int endCol);
-	
+
 protected:
     void drawShape(QPainter &p);
 
 private:
+    KPTPertCanvas *m_view;
     KPTRelation *m_rel;
+    KPTPertNodeItem *m_parentItem;
+    KPTPertNodeItem *m_childItem;
 	int left, top, right, bottom;
 
 	int parentTop;
 	int parentBottom;
 	int childTop;
-	
+
 	int childRow;
 	int childCol;
 	int parentRow;
@@ -169,7 +198,7 @@ private:
 	int wgap;
 	int hgap;
 
-	
+
 #ifndef NDEBUG
     void printDebug( int );
 #endif
@@ -181,13 +210,16 @@ private:
 class KPTGanttViewSummaryItem : public KDGanttViewSummaryItem
 {
 public:
-    KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode &node);
-    KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode &node);
-	
-	KPTNode &getNode() { return m_node; }
-	
+    KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode *node);
+    KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode *node);
+
+	KPTNode *getNode() { return m_node; }
+    void insertRelations();
+    KDGanttViewItem *find(KPTNode *node);
+    KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
+
 protected:
-    KPTNode & m_node;
+    KPTNode *m_node;  // can be KPTProject or KPTTask
 };
 
 /////////////////   KPTGanttViewTaskItem   ////////////////////
@@ -197,9 +229,12 @@ class KPTGanttViewTaskItem : public KDGanttViewTaskItem
 public:
     KPTGanttViewTaskItem(KDGanttView *parent, KPTTask *task);
     KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *task);
-	
-	KPTTask *getTask() { return m_task; }
-	
+
+	KPTTask *getTask() const { return m_task; }
+    void insertRelations();
+    KDGanttViewItem *find(KPTNode *node);
+    KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
+
 protected:
     KPTTask *m_task;
 };
@@ -211,8 +246,11 @@ class KPTGanttViewEventItem : public KDGanttViewEventItem
 public:
     KPTGanttViewEventItem(KDGanttView *parent, KPTTask *task);
     KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *task);
-	
+
 	KPTTask *getTask() { return m_task; }
+    void insertRelations();
+    KDGanttViewItem *find(KPTNode *node);
+    KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
 
 protected:
     KPTTask *m_task;

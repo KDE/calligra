@@ -34,16 +34,11 @@
 
 class KPTEffort;
 class KPTProject;
-class KPTTimeScale;
-class KPTPertCanvas;
-class KPTPertNodeItem;
 class KPTAppointment;
 
 class KPTResourceGroup;
 class KPTResource;
 class KPTResourceGroupRequest;
-
-class KDGanttViewItem;
 
 class QDomElement;
 
@@ -134,6 +129,7 @@ public:
     KPTRelation *getDependChildNode( int number) {
 	return m_dependChildNodes.at(number);
     }
+    QPtrList<KPTRelation> &dependChildNodes() { return m_dependChildNodes; }
 
     int numDependParentNodes() const { return m_dependParentNodes.count(); }
     virtual void addDependParentNode(KPTNode *node, TimingType t=START_ON_DATE,
@@ -155,8 +151,6 @@ public:
     bool isDependChildOf(KPTNode *node);
 
     KPTRelation *findRelation(KPTNode *node);
-	int getRow(KPTNode *parent = 0);
-	int getColumn(KPTNode *parent = 0);
 
     void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
     const KPTDuration &startTime() const { return m_startTime; }
@@ -257,9 +251,6 @@ public:
      */
     const KPTDuration& expectedDuration() const;
 
-//    virtual void drawPert(KPTPertCanvas * /*view */, KPTNode * /*parent*/ = 0) {;}
-//    virtual void drawPertRelations(KPTPertCanvas* view);
-
     virtual void setConstraintTime(KPTDuration time) { m_constraintTime = time; }
     virtual void setConstraintTime(QDateTime time) { m_constraintTime = KPTDuration(time); }
 
@@ -274,21 +265,6 @@ public:
     virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
     virtual void makeAppointments() {}
     virtual void requestResources() const {}
-
-    virtual void showPopup();
-
-	void setDrawn(bool drawn, bool children = false);
-	bool isDrawn() { return m_drawn; }
-
-	// For Gantt
-    KDGanttViewItem *ganttItem() { return m_ganttItem; }
-    void setGanttItem(KDGanttViewItem *item) { m_ganttItem = item; }
-	// For pert
-	KPTPertNodeItem *pertItem() { return m_pertItem; }
-	void setPertItem(KPTPertNodeItem *item) { m_pertItem = item; }
-    int x();
-    int width();
-	bool allParentsDrawn();
 
     bool resourceError() { return m_resourceError; }
 
@@ -452,14 +428,6 @@ protected:
       *  e.g. estimated effort, allocated resources and risk
       */
     KPTDuration m_duration;
-
-
-    // If possible I would like to get rid of these gantt/pert things
-	// For Gantt
-	KDGanttViewItem *m_ganttItem;
-	// For Pert
-	bool m_drawn;
-	KPTPertNodeItem *m_pertItem;
 
     bool m_resourceError;
 
