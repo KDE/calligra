@@ -72,7 +72,7 @@ void KoTextParag::setAlign( int align )
 
 int KoTextParag::resolveAlignment() const
 {
-    if ( m_layout.alignment == Qt::AlignAuto )
+    if ( (int)m_layout.alignment == Qt::AlignAuto )
         return string()->isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
     return m_layout.alignment;
 }

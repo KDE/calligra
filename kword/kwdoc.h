@@ -42,7 +42,6 @@ class KWTableStyle;
 class KWTableTemplate;
 #define KWStyle KoParagStyle
 class KWFrame;
-class KWView;
 class KWViewMode;
 class KMacroCommand;
 class KoDocumentEntry;
@@ -81,6 +80,7 @@ class KoOasisContext;
 class KoOasisSettings;
 
 #include "kwanchorpos.h" // legacy loading stuff
+#include "kwview.h"
 //#include "kwbookmark.h"
 class KWBookMark;
 #include "defs.h" // for MouseMeaning

@@ -1175,4 +1175,5 @@ void KPWebPresentationCreateDialog::saveConfig()
     }
 }
 
+#include "kpgradient.h"
 #include "webpresentation.moc"

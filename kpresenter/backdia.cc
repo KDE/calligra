@@ -412,4 +412,5 @@ void BackDia::selectPic()
     updateConfiguration();
 }
 
+#include "kpgradient.h"
 #include "backdia.moc"

@@ -295,4 +295,5 @@ QString PgConfDia::presentationName() const
         return QString::null;
 }
 
+#include "kpgradient.h"
 #include "pgconfdia.moc"

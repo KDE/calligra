@@ -28,6 +28,7 @@
 #include "kwcommand.h"
 #include "kwcreatebookmarkdia.h"
 #include "kwcreatebookmarkdiabase.h"
+#include "kwframe.h"
 
 KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )

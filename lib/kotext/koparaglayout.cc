@@ -779,8 +779,8 @@ void KoParagLayout::saveOasis( KoGenStyle& gs, bool savingStyle ) const
     gs.addProperty( "fo:text-align", saveOasisAlignment( (Qt::AlignmentFlags)alignment ).data() );
     // Don't save the direction for a style, if "auto", so that the
     // auto-determination of direction based on first char, works.
-    if ( !savingStyle || direction != QChar::DirON )
-        gs.addProperty( "style:writing-mode", direction == QChar::DirR ? "rl-tb" : "lr-tb" );
+    if ( !savingStyle || (QChar::Direction) direction != QChar::DirON )
+        gs.addProperty( "style:writing-mode", (QChar::Direction)direction == QChar::DirR ? "rl-tb" : "lr-tb" );
     gs.addPropertyPt( "fo:margin-left", margins[QStyleSheetItem::MarginLeft] );
     gs.addPropertyPt( "fo:margin-right", margins[QStyleSheetItem::MarginRight] );
     gs.addPropertyPt( "fo:text-indent", margins[QStyleSheetItem::MarginFirstLine] );

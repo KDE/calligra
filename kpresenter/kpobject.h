@@ -298,7 +298,7 @@ protected:
 
     void saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto ) const;
     void saveOasisShadowElement( KoGenStyle &styleobjectauto ) const;
-    virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) const {};
+    virtual void saveOasisPictureElement( KoGenStyle& /*styleobjectauto*/ ) const {};
 
     float angle;
     KoPoint orig;
@@ -456,7 +456,7 @@ protected:
     QString saveOasisGradientStyle( KoGenStyles& mainStyles ) const;
     QString saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj ) const;
 
-    virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto ) const { /* nothing just used into kptextobject*/};
+    virtual void saveOasisMarginElement( KoGenStyle& /*styleobjectauto*/ ) const { /* nothing just used into kptextobject*/};
 
     QColor gColor1, gColor2;
     BCType gType;

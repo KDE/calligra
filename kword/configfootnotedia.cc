@@ -22,6 +22,7 @@
 #include "configfootnotedia.moc"
 #include "kwvariable.h"
 #include "kwcommand.h"
+#include "kwframe.h"
 
 #include <klocale.h>
 #include <qradiobutton.h>

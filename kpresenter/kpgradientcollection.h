@@ -23,9 +23,9 @@
 
 #include <qptrlist.h>
 #include "global.h"
+#include "kpgradient.h"
 
 class QPixmap;
-class KPGradient;
 
 /**
  * Class: KPGradientCollection

@@ -615,4 +615,5 @@ void KPMSPresentationCreateDialog::resizeEvent( QResizeEvent *e )
     back->resize( size() );
 }
 
+#include "kpgradient.h"
 #include "mspresentation.moc"
