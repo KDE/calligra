@@ -543,7 +543,7 @@ QDomDocument KPresenterDoc::saveXML()
 
     element=doc.createElement("HELPLINES");
     element.setAttribute("show", static_cast<int>( showHelplines() ));
-    element.appendChild( saveHelpLines( doc ));
+    saveHelpLines( doc, element );
     presenter.appendChild(element);
 
     if ( saveOnlyPage == -1 )
@@ -3029,7 +3029,11 @@ void KPresenterDoc::updateHelpLineButton()
 
 void KPresenterDoc::loadHelpLines( const QDomElement &element )
 {
+    // In early versions of KPresenter 1.2 (up to Beta 2), there is child also naed <HELPLINES>
     QDomElement helplines=element.namedItem("HELPLINES").toElement();
+    if (helplines.isNull())
+        helplines=element;
+
     helplines=helplines.firstChild().toElement();
     while ( !helplines.isNull() ) {
         if ( helplines.tagName()=="Vertical" )
@@ -3049,32 +3053,29 @@ void KPresenterDoc::loadHelpLines( const QDomElement &element )
 
 }
 
-QDomElement KPresenterDoc::saveHelpLines( QDomDocument &doc )
+void KPresenterDoc::saveHelpLines( QDomDocument &doc, QDomElement& element )
 {
-    QDomElement helplines=doc.createElement("HELPLINES");
-
     for(QValueList<double>::Iterator it = m_vertHelplines.begin(); it != m_vertHelplines.end(); ++it)
     {
         QDomElement lines=doc.createElement("Vertical");
         lines.setAttribute("value", (double)*it);
-        helplines.appendChild( lines );
+        element.appendChild( lines );
     }
 
     for(QValueList<double>::Iterator it = m_horizHelplines.begin(); it != m_horizHelplines.end(); ++it)
     {
         QDomElement lines=doc.createElement("Horizontal");
         lines.setAttribute("value", *it);
-        helplines.appendChild( lines );
+        element.appendChild( lines );
     }
+    
     for(QValueList<KoPoint>::Iterator it = m_helpPoints.begin(); it != m_helpPoints.end(); ++it)
     {
         QDomElement point=doc.createElement("HelpPoint");
         point.setAttribute("posX", (*it).x());
         point.setAttribute("posY", (*it).y());
-        helplines.appendChild( point );
+        element.appendChild( point );
     }
-
-    return helplines;
 }
 
 

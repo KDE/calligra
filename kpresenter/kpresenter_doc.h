@@ -458,7 +458,7 @@ protected:
     QDomElement saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list );
     void loadTextStyle( const QDomElement& domElement );
     void saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomDocument &doc,QDomElement &presenter, double offset );
-    QDomElement saveHelpLines( QDomDocument &doc );
+    void saveHelpLines( QDomDocument &doc, QDomElement& element );
 
     void loadBackground( const QDomElement &element );
     void loadHelpLines( const QDomElement &element );
