@@ -106,6 +106,10 @@ public:
     /** Does this counter have a bullet style?
      */
     bool isBullet() const;
+    /**
+     * Helper function for finding out if a style is a bullet
+     */
+    static bool isBullet( Style style );
 
     /** The level of the numbering.
      * Depth of 0 means the major numbering. (1, 2, 3...)

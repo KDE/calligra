@@ -87,9 +87,9 @@ void KoParagCounter::invalidate()
     m_cache.counterFormat = 0;
 }
 
-bool KoParagCounter::isBullet() const
+bool KoParagCounter::isBullet( Style style ) // static
 {
-    switch ( style() )
+    switch ( style )
     {
     case STYLE_DISCBULLET:
     case STYLE_SQUAREBULLET:
@@ -100,6 +100,11 @@ bool KoParagCounter::isBullet() const
     default:
         return false;
     }
+}
+
+bool KoParagCounter::isBullet() const
+{
+    return isBullet( static_cast<Style>(m_style) );
 }
 
 void KoParagCounter::load( QDomElement & element )
@@ -150,6 +155,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
     }
 
     // Go looking for another paragraph at the same level or higher level.
+    // (This code shares logic with parent())
     KoTextParag *otherParagraph = paragraph->prev();
     KoParagCounter *otherCounter;
 
@@ -162,12 +168,12 @@ int KoParagCounter::number( const KoTextParag *paragraph )
         break;
     case NUM_CHAPTER:
         m_cache.number = m_startNumber;
-        // Go upwards while...
+        // Go upwards...
         while ( otherParagraph )
         {
             otherCounter = otherParagraph->counter();
-            if ( otherCounter &&                                        // ...numbered paragraphs.
-                ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
+            if ( otherCounter &&               // ...look at numbered paragraphs only
+                ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER ) &&     // ...same number type.
                 ( otherCounter->m_depth <= m_depth ) )        // ...same or higher level.
             {
                 if ( ( otherCounter->m_depth == m_depth ) &&
@@ -188,13 +194,14 @@ int KoParagCounter::number( const KoTextParag *paragraph )
         break;
     case NUM_LIST:
         m_cache.number = m_startNumber;
-        // Go upwards while...
+        // Go upwards...
         while ( otherParagraph )
         {
             otherCounter = otherParagraph->counter();
-            if ( otherCounter )                                         // ...numbered paragraphs.
+            if ( otherCounter )                                         // look at numbered paragraphs only
             {
                 if ( ( (Numbering)otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
+                     !isBullet( static_cast<Style>(otherCounter->m_style) ) &&    // ...not a bullet
                     ( otherCounter->m_depth <= m_depth ) )    // ...same or higher level.
                 {
                     if ( ( otherCounter->m_depth == m_depth ) &&
@@ -245,6 +252,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
     KoTextParag *otherParagraph = paragraph->prev();
     KoParagCounter *otherCounter;
 
+    // (This code shares logic with number())
     switch ( (Numbering)m_numbering )
     {
     case NUM_NONE:
@@ -274,6 +282,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
             if ( otherCounter )                                         // ...numbered paragraphs.
             {
                 if ( ( (Numbering)otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
+                     !isBullet( static_cast<Style>(otherCounter->m_style) ) &&    // ...not a bullet
                     ( otherCounter->m_depth < m_depth ) )     // ...higher level.
                 {
                     break;
@@ -410,24 +419,6 @@ int KoParagCounter::alignment() const
 
 KoParagCounter::Style KoParagCounter::style() const
 {
-    // Note: we can't use isBullet() here since it uses style() and not m_style
-    // (to benefit from this adjustment). This would lead to an infinite loop.
-    switch ( m_style )
-    {
-    case STYLE_DISCBULLET:
-    case STYLE_SQUAREBULLET:
-    case STYLE_BOXBULLET:
-    case STYLE_CIRCLEBULLET:
-    case STYLE_CUSTOMBULLET:
-        if ( (Numbering)m_numbering == NUM_CHAPTER )
-        {
-            // Shome mishtake surely!
-            return STYLE_NUM;
-        }
-        break;
-    default:
-        break;
-    }
     return static_cast<Style>(m_style);
 }
 
@@ -450,52 +441,71 @@ void KoParagCounter::setRestartCounter( bool restart )
 // Return the text for that level only
 QString KoParagCounter::levelText( const KoTextParag *paragraph )
 {
-    // Ensure paragraph number is valid.
-    number( paragraph );
+    bool bullet = isBullet( static_cast<Style>(m_style) );
+
+    if ( bullet && (Numbering)m_numbering == NUM_CHAPTER ) {
+        // Shome mishtake surely! (not sure how it can happen though)
+        m_style = STYLE_NUM;
+        bullet = false;
+    }
 
     QString text;
-    switch ( style() )
+    if ( !bullet )
     {
-    case STYLE_NONE:
+        // Ensure paragraph number is valid.
+        number( paragraph );
+
+        switch ( m_style )
+        {
+        case STYLE_NONE:
         if ( (Numbering)m_numbering == NUM_LIST )
             text = ' ';
         break;
-    case STYLE_NUM:
-        text.setNum( m_cache.number );
-        break;
-    case STYLE_ALPHAB_L:
-        text = makeAlphaLowerNumber( m_cache.number );
-        break;
-    case STYLE_ALPHAB_U:
-        text = makeAlphaUpperNumber( m_cache.number );
-        break;
-    case STYLE_ROM_NUM_L:
-        text = makeRomanNumber( m_cache.number ).lower();
-        break;
-    case STYLE_ROM_NUM_U:
-        text = makeRomanNumber( m_cache.number ).upper();
-        break;
-    case STYLE_CUSTOM:
-        ////// TODO
-        text.setNum( m_cache.number );
-        break;
-
-    // --- these are used in export filters but are ignored by KoTextParag::drawLabel (for bulleted lists - which they are :))  ---
-    case KoParagCounter::STYLE_DISCBULLET:
-        text = '*';
-        break;
-    case KoParagCounter::STYLE_SQUAREBULLET:
-        text = '#';
-        break;
-    case KoParagCounter::STYLE_BOXBULLET:
-        text = '=';  // think up a better character
-        break;
-    case KoParagCounter::STYLE_CIRCLEBULLET:
-        text = 'o';
-        break;
-    case KoParagCounter::STYLE_CUSTOMBULLET:
-        text = m_customBulletChar;
-        break;
+        case STYLE_NUM:
+            text.setNum( m_cache.number );
+            break;
+        case STYLE_ALPHAB_L:
+            text = makeAlphaLowerNumber( m_cache.number );
+            break;
+        case STYLE_ALPHAB_U:
+            text = makeAlphaUpperNumber( m_cache.number );
+            break;
+        case STYLE_ROM_NUM_L:
+            text = makeRomanNumber( m_cache.number ).lower();
+            break;
+        case STYLE_ROM_NUM_U:
+            text = makeRomanNumber( m_cache.number ).upper();
+            break;
+        case STYLE_CUSTOM:
+        default: // shut up compiler
+            ////// TODO
+            text.setNum( m_cache.number );
+            break;
+        }
+    }
+    else
+    {
+        switch ( m_style )
+        {
+            // --- these are used in export filters but are ignored by KoTextParag::drawLabel (for bulleted lists - which they are :))  ---
+        case KoParagCounter::STYLE_DISCBULLET:
+            text = '*';
+            break;
+        case KoParagCounter::STYLE_SQUAREBULLET:
+            text = '#';
+            break;
+        case KoParagCounter::STYLE_BOXBULLET:
+            text = '=';  // think up a better character
+            break;
+        case KoParagCounter::STYLE_CIRCLEBULLET:
+            text = 'o';
+            break;
+        case KoParagCounter::STYLE_CUSTOMBULLET:
+            text = m_customBulletChar;
+            break;
+        default: // shut up compiler
+            break;
+        }
     }
     return text;
 }
