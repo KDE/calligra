@@ -1365,12 +1365,18 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	setModified(true);
 	setURL( QString::null );
 	return true;
-    } else if ( ret == KoTemplateChooseDia::File ) {
+    } else if ( ret == KoTemplateChooseDia::File ||
+                ret == KoTemplateChooseDia::TempFile ) {
 	objStartY = 0;
 	_clean = true;
 	setModified(true);
 	load_template( _template );
-	setURL( _template );
+        if ( ret == KoTemplateChooseDia::TempFile )
+	{
+	    setURL(KURL());
+	    unlink( _template.ascii() );
+        } else
+	    setURL( _template );
 	return true;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate("kpresenter_template", "Screenpresentations/Plain.kpt",
