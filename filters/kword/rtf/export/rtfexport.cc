@@ -23,6 +23,8 @@
 #include <qtextcodec.h>
 #include <rtfexport.moc>
 #include <qdatetime.h>
+#include <kiExport.h>
+#include <kiRTFExport.h>
 
 
 // global variables
@@ -31,12 +33,24 @@ QString fontHeader;  // Font header string (markup)
 paraNumberingType type[10];  // type of paragraph numbering for 10 levels
 // paragraph numbers for ten levels
 char paraNumber[10] = {0,0,0,0,0,0,0,0,0,0};
-QString pageMarkup;  // global to store page size markup
+QString pageMarkup = "";  // global to store page size markup
 QString bookMarkup;  // markup for document info file
 QString colorHeader; // color table markup
 QValueList<ColorTable> colorTable; // used to create color table markup
 int GhType; // defines header type
 int GfType;
+enum FilterType { kword, killustrator };
+FilterType filterType;
+
+#define CODE_PAGE_SIZE 6
+// global declaration
+const CodeTable codeTable[CODE_PAGE_SIZE] =
+                                     {"ISO-8859-1", "1252",   // Latin1
+                                      "ISO-8859-5", "1251",   // Cryllic
+                                      "ISO-8859-6", "1256",   // Arabic
+                                      "ISO-8859-7", "1253",   // Greek
+                                      "ISO-8859-8", "1255",   // Hebrew
+                                      "ISO-10646",  "1200"};   // Unicode
 
 /***************************************************************************/
 
@@ -85,6 +99,9 @@ QValueList<Variable>::Iterator varListIt; // iterator for variables list
                                                       (*paraFormatDataIt).text.green,
                                                       colorTable, colorHeader  );
                      }  // end if
+
+                  else outputText += "{\\cf1";  // black is default
+
 
                   // create rtf markup for font sizes
                   if((*paraFormatDataIt).text.fontSize >= 0)
@@ -162,13 +179,9 @@ QValueList<Variable>::Iterator varListIt; // iterator for variables list
                      {
                      outputText += "}";  // delimit font size command
                      }
-                  // end the text color markup
-                  if( (*paraFormatDataIt).text.red   >= 0 &&
-                      (*paraFormatDataIt).text.blue  >= 0 &&
-                      (*paraFormatDataIt).text.green >= 0   )
-                     {
-                     outputText += "}";
-                     }
+
+                  outputText += "}";  // delimit color command
+
                   break;
                   }  // end case 1:
 
@@ -508,27 +521,43 @@ bool RTFExport::filter ( const QString  &filenameIn,
     colorHeader += "\\red255\\green255\\blue0;\\red255\\green255\\blue255;\\red0\\green0\\blue128;\\red0\\green128\\blue128;\\red0\\green128\\blue0;\\red128\\green0\\blue128;\\red128\\green0\\blue0;\\red128\\green128\\blue0;\\red128\\green128\\blue128;\\red192\\green192\\blue192;";
 
 
-    if ( to != "text/rtf" || from != "application/x-kword" )
-    {
-        return false;
-    }
+    if( to == "text/rtf" && from == "application/x-kword" )
+       {
+       filterType = kword;
+       }
+    else if( to == "text/rtf" && from == "application/x-killustrator" )
+       {
+       filterType = killustrator;
+       }
+    else
+       {
+       return false;
+       }
 
     QString stringBufOut;
     QString mainDoc;
+    QString kiDoc;
     QString docInf;
 
     pageMarkup = "";
 
     ProcessStoreFile ( filenameIn, "documentinfo.xml", &ProcessDocumentInfoTag, filenameOut, docInf );
-    ProcessStoreFile ( filenameIn, "root",             ProcessDocTag,          filenameOut, mainDoc );
+    if(filterType == kword )
+       {
+       ProcessStoreFile ( filenameIn, "root", ProcessDocTag, filenameOut, mainDoc );
+       }
+    else
+       {
+       ProcessStoreFile ( filenameIn, "root", ProcessKillustratorTag, filenameOut, kiDoc );
+       }
 
     // Compose the RTF file
     // Begin rtf document
-    stringBufOut += "{\\rtf1\\ansi \\deff5\\deflang1033\n";
+    stringBufOut += "{\\rtf1\\ansi \\deff1\n";
 
     stringBufOut += "{\\fonttbl";
     stringBufOut += fontHeader; // insert the font table into the header
-    stringBufOut += "}";
+    stringBufOut += "}\n";
 
     // insert the color table
     stringBufOut += colorHeader;
@@ -539,10 +568,17 @@ bool RTFExport::filter ( const QString  &filenameIn,
     stringBufOut += pageMarkup;  // add page size, margins, etc.
 
     stringBufOut += "\\widowctrl\\ftnbj\\aenddoc\\formshade \\fet0\\sectd\n";
-    stringBufOut += "\\linex0\\endnhere";
+    stringBufOut += "\\linex0\\endnhere\\plain";
 
     // Markup from main parse
-    stringBufOut += mainDoc;
+    if( filterType == kword )
+       {
+       stringBufOut += mainDoc;
+       }
+    else if( filterType == killustrator )
+       {
+       stringBufOut += kiDoc;
+       }
 
     stringBufOut += " }}";   // file terminator
 
