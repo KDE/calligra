@@ -186,7 +186,7 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
   kdDebug() << "Trying to open content.xml" << endl;
   if ( !store->open( "content.xml" ) )
   {
-    kdWarning() << "This file doesn't seem to be a valid OpenCalc file" << endl;
+    kdWarning() << "This file doesn't seem to be a valid OpenWrite file" << endl;
     delete store;
     return KoFilter::WrongFormat;
   }
@@ -484,5 +484,5 @@ void OoWriterImport::insertStyles( const QDomElement& element )
 }
 
 
-#include <oowriterimport.moc>
+#include "oowriterimport.moc"
 
