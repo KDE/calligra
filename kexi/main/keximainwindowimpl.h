@@ -174,11 +174,6 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		 Application state (e.g. actions) is updated. */
 		bool openProject(KexiProjectData *projectData);
 		
-		/*! Allows user to select a project with KexiProjectSelectorDialog.
-			\return selected project's data or NULL if dialog was cancelled.
-		*/
-//		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata);
-		
 		/*! Closes current project, \return true on success.
 		 Application state (e.g. actions) is updated. 
 		 \return true on success. 
@@ -224,12 +219,6 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		void updateDialogViewGUIClient(KXMLGUIClient *viewClient);
 
 	protected slots:
-
-		/**
-		 * parsers command line options and checks if we should open the startupdlg
-		 * or a file direclty
-		 */
-//js		void		parseCmdLineOptions();
 
 		/*! This slot is called if a window changes */
 		void activeWindowChanged(KMdiChildView *dlg);

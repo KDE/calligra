@@ -651,100 +651,6 @@ bool KexiMainWindowImpl::startup()
 	return true;
 }
 
-#if 0
-void KexiMainWindowImpl::startup(KexiProjectData *projectData)
-{
-	if (d->final) {
-		//TODO: maybe also auto allow to open objects...
-		return KexiMainWindowImpl::initFinalMode(projectData);
-	}
-
-	kdDebug() << "KexiMainWindowImpl::startup()..." << endl;
-	if (!projectData) {
-		importantInfo(true);
-//<TEMP>
-		//some connection data
-		KexiDB::ConnectionData *conndata;
-		conndata = new KexiDB::ConnectionData();
-			conndata->connName = "My connection";
-			conndata->driverName = "mysql";
-			conndata->hostName = "myhost.org";
-			conndata->userName = "otheruser";
-			conndata->port = 53121;
-		Kexi::connset().addConnectionData(conndata);
-		conndata = new KexiDB::ConnectionData();
-			conndata->connName = "Local pgsql connection";
-			conndata->driverName = "postgresql";
-			conndata->hostName = "localhost"; // -- default //"host.net";
-#if defined(Q_WS_WIN) || !KDE_IS_VERSION(3,1,9)
-			conndata->userName = getlogin(); //-- temporary e.g."jarek"
-#else
-			conndata->userName = KUser().loginName(); //-- temporary e.g."jarek"
-#endif
-		Kexi::connset().addConnectionData(conndata);
-
-		//some recent projects data
-		projectData = new KexiProjectData( *conndata, "bigdb", "Big DB" );
-		projectData->setCaption("My Big Project");
-		projectData->setDescription("This is my first biger project started yesterday. Have fun!");
-		Kexi::recentProjects().addProjectData(projectData);
-	//</TEMP>
-
-		if (!KexiStartupDialog::shouldBeShown())
-			return true;
-
-		KexiStartupDialog dlg(KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
-			Kexi::connset(), Kexi::recentProjects(), 0, "dlg");
-		if (dlg.exec()!=QDialog::Accepted)
-			return true;
-
-		projectData = 0;
-		int r = dlg.result();
-		if (r==KexiStartupDialog::TemplateResult) {
-			kdDebug() << "Template key == " << dlg.selectedTemplateKey() << endl;
-			if (dlg.selectedTemplateKey()=="blank") {
-				createBlankDatabase();
-				return;
-			}
-			return true;//todo - templates
-		}
-		else if (r==KexiStartupDialog::OpenExistingResult) {
-			kdDebug() << "Existing project --------" << endl;
-			QString selFile = dlg.selectedExistingFile();
-			if (!selFile.isEmpty()) {
-				//file-based project
-				kdDebug() << "Project File: " << selFile << endl;
-				projectData = KexiStartupHandler::detectProjectData( selFile, this );
-			}
-			else if (dlg.selectedExistingConnection()) {
-				kdDebug() << "Existing connection: " << dlg.selectedExistingConnection()->serverInfoString() << endl;
-				KexiDB::ConnectionData *cdata = dlg.selectedExistingConnection();
-				//ok, now we will try to show projects for this connection to the user
-				projectData = selectProject( cdata );
-			}
-		}
-		else if (r==KexiStartupDialog::OpenRecentResult) {
-			kdDebug() << "Recent project --------" << endl;
-			const KexiProjectData *data = dlg.selectedProjectData();
-			if (data) {
-				kdDebug() << "Selected project: database=" << data->databaseName()
-					<< " connection=" << data->constConnectionData()->serverInfoString() << endl;
-			}
-			//js: TODO
-			return true;
-		}
-
-		if (!projectData)
-			return false;
-	}
-	bool ret = openProject(projectData);
-
-	//show if wasn't show yet
-	importantInfo(true);
-	return ret;
-}
-#endif
-
 static QString internalReason(KexiDB::Object *obj)
 {
 	const QString &s = obj->errorMsg();
@@ -842,30 +748,6 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 	}
 	return true;
 }
-
-#if 0
-KexiProjectData*
-KexiMainWindowImpl::selectProject(KexiDB::ConnectionData *cdata)
-{
-	if (!cdata)
-		return 0;
-	KexiProjectData* projectData = 0;
-	//dialog for selecting a project
-	KexiProjectSelectorDialog prjdlg( this, "prjdlg", cdata, true, false );
-	if (!prjdlg.projectSet() || prjdlg.projectSet()->error()) {
-		showErrorMessage(i18n("Could not load list of available projects for connection \"%1\"")
-		.arg(cdata->serverInfoString()), prjdlg.projectSet());
-		return 0;
-	}
-	if (prjdlg.exec()!=QDialog::Accepted)
-		return 0;
-	if (prjdlg.selectedProjectData()) {
-		//deep copy
-		projectData = new KexiProjectData(*prjdlg.selectedProjectData());
-	}
-	return projectData;
-}
-#endif
 
 bool KexiMainWindowImpl::closeProject(bool &cancelled)
 {
