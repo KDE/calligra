@@ -38,7 +38,6 @@
 #include <kcommand.h>
 //#include <kotextformat.h>
 #include <kcompletion.h>
-#include <kcommand.h>
 #include <koSearchDia.h>
 #include <kozoomhandler.h>
 

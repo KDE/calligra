@@ -22,7 +22,6 @@
 #define koautoformat_h
 
 #include <qstring.h>
-#include <qcolor.h>
 #include <qmap.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
