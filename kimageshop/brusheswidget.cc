@@ -33,9 +33,6 @@
 #include "iconchooser.h"
 #include "integerwidget.h"
 
-#ifdef Below
-#undef Below
-#endif
 
 BrushesWidget::BrushesWidget( QWidget *parent, const char *name )
   : QWidget( parent, name )
@@ -110,7 +107,7 @@ const Brush * BrushesWidget::loadBrush( const QString& filename ) const
     delete brush;
     brush = 0L;
   }
-  
+
   return brush;
 }
 

@@ -1,3 +1,17 @@
+Tue Aug 24 23:23:25 1999  Carsten Pfeiffer  <pfeiffer@kde.org>
+
+	* integerwidget.h: 
+	#undef Below and Above to fix compiler errors when calling
+	IntegerWidget::setTickMarks( QSlider::Below ) (or Above )
+
+	* integerwidget.cc,h:
+	added class KSpinBox with the ability to set the focus directly to the
+	QLineEedit of the spinbox. Call setEditFocus() to use this feature.
+	
+	Allows fast editing of values via keyboard. Photoshop gives focus to
+	a lineedit when pressing Enter, so you can quickly use the numeric 
+	keypad to change some value.
+	
 Thu Aug 19 16:15:08 1999  Matthias Elter  <me@kde.org>
 
 	* tiny fixes

@@ -22,6 +22,7 @@
  */
 
 #include <qlayout.h>
+#include <qlineedit.h>
 #include <qspinbox.h>
 
 #include "integerwidget.h"
@@ -31,7 +32,7 @@ IntegerWidget::IntegerWidget( int min, int max, QWidget *parent,
 			    const char *name )
   : QWidget( parent, name )
 {
-  spinBox = new QSpinBox( min, max, 1, this, "spinbox" );
+  spinBox = new KSpinBox( min, max, 1, this, "spinbox" );
   slider = new QSlider( min, max, 1, min, QSlider::Horizontal, this, "sld" );
 
   connect( slider, SIGNAL( valueChanged(int) ), spinBox, SLOT( setValue(int)));
@@ -51,14 +52,14 @@ IntegerWidget::~IntegerWidget()
 }
 
 
-// the current set value
+// the currently set value
 int IntegerWidget::value()
 {
   return spinBox->value();
 }
 
 
-// set the value
+// set the value, both widgets will be updated
 void IntegerWidget::setValue( int value )
 {
   slider->setValue( value );
@@ -73,12 +74,11 @@ void IntegerWidget::setRange( int min, int max )
 }
 
 
-// important - there must be an easy way the get straight focus to the 
+// important - there must be an easy way the get straight focus to the
 // editwidget, to quickly set the value via keyboard
-void IntegerWidget::setEditFocus()
+void IntegerWidget::setEditFocus( bool mark )
 {
-  spinBox->setFocus();
-  //  spinBox->selectAll(); // does not work, yet, need to subclass QSpinBox
+  spinBox->setEditFocus( mark );
 }
 
 
@@ -121,6 +121,28 @@ void IntegerWidget::setSliderValue( int value )
 
 
 
+//////////////////////
+//// a quick wrapper around QSpinBox to be able to set focus to the LineEdit
+//
+
+KSpinBox::KSpinBox( QWidget *parent, const char *name )
+  : QSpinBox( parent, name )
+{
+}
+
+KSpinBox::KSpinBox( int minValue, int maxValue, int step, QWidget *parent,
+		    const char *name )
+  : QSpinBox( minValue, maxValue, step, parent, name )
+{
+}
+
+void KSpinBox::setEditFocus( bool mark )
+{
+  QLineEdit *edit = editor();
+  edit->setFocus();
+  if ( mark )
+    edit->selectAll();
+}
+
+
 #include "integerwidget.moc"
-
-

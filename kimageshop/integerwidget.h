@@ -25,10 +25,20 @@
 #define INTEGERWIDGET_H
 
 #include <qslider.h>
+#include <qspinbox.h>
 #include <qwidget.h>
 
 class QHBoxLayout;
-class QSpinBox;
+class KSpinBox;
+
+// really strange thing... you can't compile when you call 
+// IntegerWidget::setTickSettings( QSlider::Below ) without this...
+#ifdef Below
+#undef Below
+#endif
+#ifdef Above
+#undef Above
+#endif
 
 class IntegerWidget : public QWidget
 {
@@ -40,22 +50,22 @@ public:
 
   int 		value();
   void 		setRange( int min, int max );
-  void 		setEditFocus();
 
   void 		setTickmarks( QSlider::TickSetting );
   void 		setTickInterval ( int );
   int 		tickInterval() const;
 
-  
+
 public slots:
   void 		setValue( int value );
+  void 		setEditFocus( bool mark=true );
 
-  
+
 protected:
   void 		initGUI();
 
   QSlider 	*slider;
-  QSpinBox 	*spinBox;
+  KSpinBox 	*spinBox;
 
 
 private:
@@ -72,10 +82,25 @@ signals:
 };
 
 
+/**
+ * A normal QSpinBox, but with the ability to set the focus to the lineedit
+ * and mark text in the spinbox. Does not attempt to be generic, it only does
+ * what I need now :o)
+ */
+class KSpinBox : public QSpinBox
+{
+  Q_OBJECT
+
+public:
+  KSpinBox( QWidget *parent=0, const char *name=0 );
+  KSpinBox ( int minValue, int maxValue, int step=1, QWidget*parent=0,
+	     const char *name=0 );
+  ~KSpinBox() {}
+
+
+public slots:
+  void 	setEditFocus( bool mark=true );
+
+};
 
 #endif // INTEGERWIDGET_H
-
-
-
-
-

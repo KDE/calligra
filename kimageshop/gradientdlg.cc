@@ -24,9 +24,7 @@ GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const cha
 
   IntegerWidget *opacity = new IntegerWidget( 0, 100, this );
   opacity->setBackgroundColor( red );
-#warning "TODO: Can someone make setTickmarks working."
-#warning "      It doesn't compile for me. I don't know why. (Michael)"
-//opacity_aaa->setTickmarks( QSlider::Below );
+  opacity->setTickmarks( QSlider::Below );
   opacity->setTickInterval( 10 );
   layout->addWidget( opacity, 0, 1 );
 
@@ -36,7 +34,7 @@ GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const cha
 
   IntegerWidget *offset = new IntegerWidget( 0, 100, this, "offset" );
   offset->setBackgroundColor( green );
-//offset->setTickmarks( QSlider::Below );
+  offset->setTickmarks( QSlider::Below );
   offset->setTickInterval( 10 );
   layout->addWidget( offset, 1, 1 );
 
@@ -112,28 +110,3 @@ GradientDialog::~GradientDialog()
 }
 
 #include "gradientdlg.moc"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
