@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="118">
-<MenuBar noMerge="0">
-  <Menu name="file" noMerge="1">
+<kpartgui name="kexi" version="119">
+<MenuBar>
+  <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
     <Action name="project_new" />
     <Separator />
@@ -36,13 +36,17 @@
 
   <Menu name="edit" noMerge="1">
     <text>&amp;Edit</text>
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
+    <MergeLocal name="edit_undo_merge"/>
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="edit_paste"/>
+    <MergeLocal name="edit_paste_merge"/>
     <Separator/>
     <Action name="edit_delete"/>
     <Action name="edit_delete_row"/>
-    <ActionList name="edit_insert_empty_row" />
+    <ActionList name="edit_insert_empty_row"/>
     <!-- Action name="edit_insert_empty_row"/ -->
     <DefineGroup name="edit_find"/>
     <Merge/>
@@ -59,7 +63,7 @@
     <Separator/>
     <MergeLocal/>
   </Menu>
-  
+
   <Menu name="create" noMerge="1">
     <text>&amp;Create</text>
   </Menu>
@@ -69,14 +73,16 @@
     <Action name="data_save_row"/>
   </Menu>
 
-  <!-- (todo) Menu name="tools">
-    <text>&amp;Tools</text>
-  </Menu -->
+  <Merge/>
 
-  <Menu name="window" noMerge="1">
+  <Menu name="tools" noMerge="1">
+    <text>&amp;Tools</text>
+    <MergeLocal/>
+  </Menu>
+
+  <Menu name="window" noMerge="0">
     <text>&amp;Window</text>
-    <DefineGroup name="window_operations"/>
-    <Merge/>
+    <MergeLocal/>
   </Menu>
   
   <Menu name="settings" noMerge="1">
@@ -101,7 +107,7 @@
     <Action name="options_configure"/>
   </Menu>
   
-  <Menu name="help" noMerge="0">
+  <Menu name="help">
     <text>&amp;Help</text>
     <Action name="help_show_important_info" noMerge="0"/>
     <!-- not yet needed: Menu name="help_licenses" noMerge="0">
@@ -111,15 +117,20 @@
   </Menu>
 </MenuBar>
 
-<ToolBar name="mainToolBar" fullWidth="false" noMerge="1">
-  <text>Project</text>
+<ToolBar name="mainToolBar" noMerge="1" fullWidth="false">
+  <text>Main Toolbar</text>
   <Action name="project_new"/>
   <Action name="project_open"/>
   <Action name="project_save"/>
   <Separator/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="edit_find"/>
+  <Action name="view_zoom"/>
   <Separator/>
   <Action name="project_relations"/>
 </ToolBar>
