@@ -925,7 +925,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx,QList<KWFrameSet> listFrameSe
             frame->setNewFrameBehaviour(KWFrame::NoFollowup);
         }
         else
-            frame=listFrame.at(i);
+            frame=listFrame.at(i)->getCopy();
 
         Cell *newCell=0L;
         if(listFrameSet.isEmpty())
@@ -1021,7 +1021,7 @@ void KWTableFrameSet::insertCol( unsigned int col,QList<KWFrameSet> listFrameSet
         }
         else
         {
-            frame=listFrame.at(i);
+            frame=listFrame.at(i)->getCopy();
         }
         newCell->addFrame( frame,false );
         if(cell->m_rows >1) {

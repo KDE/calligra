@@ -1238,7 +1238,8 @@ void KWSplitCellCommand::unexecute()
             }
         }
     }
-    m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd+m_colBegin-1,m_rowBegin+m_rowEnd-1);
+    KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( m_rowBegin,m_colBegin ));
+    m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd+m_colBegin-1+cell->m_cols-1,m_rowBegin+m_rowEnd-1+cell->m_rows-1);
 
     doc->frameSelectedChanged();
     doc->updateAllFrames();
