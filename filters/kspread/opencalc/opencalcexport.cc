@@ -552,8 +552,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       kdDebug() << "Type: Number" << endl;
       KSpreadFormat::FormatType type = cell->getFormatType( i, row );
 
-      if ( ( type == KSpreadFormat::Percentage ) 
-           || ( type == KSpreadFormat::CustomPercentage ) )
+      if ( type == KSpreadFormat::Percentage ) 
         cellElem.setAttribute( "table:value-type", "percentage" );
       else
         cellElem.setAttribute( "table:value-type", "float" );
