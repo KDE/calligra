@@ -200,7 +200,7 @@ public:
 	 * Returns the point on this segment at parameter 0 <= t <= 1.
 	 * This is a convenience wrapper for pointDerivatives().
 	 */
-	KoPoint at( double t ) const;
+	KoPoint pointAt( double t ) const;
 
 	/**
 	 * Returns the normalized tangent vector (length=1) at the point
@@ -209,13 +209,13 @@ public:
 	 * need to calculate the point and normal vector or tangent vector
 	 * at once.
 	 */
-	KoPoint tangent( double t ) const;
+	KoPoint tangentAt( double t ) const;
 
 	/**
 	 * Calculates the point and the derivatives of first and second order
 	 * for 0 <= t <= 1.
 	 */
-	void pointDerivatives( double t, KoPoint* p = 0L,
+	void pointDerivativesAt( double t, KoPoint* p = 0L,
 		KoPoint* d1 = 0L, KoPoint* d2 = 0L ) const;
 
 	/**
@@ -223,7 +223,7 @@ public:
 	 * 0 <= t <= 1. The tangent vector and the normal vector are
 	 * normalized (length=1).
 	 */
-	void pointTangentNormal( double t, KoPoint* p = 0L,
+	void pointTangentNormalAt( double t, KoPoint* p = 0L,
 		KoPoint* tn = 0L, KoPoint* n = 0L ) const;
 
 

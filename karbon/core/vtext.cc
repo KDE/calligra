@@ -524,7 +524,7 @@ VText::traceText()
 		if ( x < 0 )
 		{
 			if( !ext )
-				seg->pointTangentNormal( 0, &extPoint, &tangent, &normal );
+				seg->pointTangentNormalAt( 0, &extPoint, &tangent, &normal );
 			point = extPoint + x * tangent;
 			ext = true;
 		}
@@ -540,12 +540,12 @@ VText::traceText()
 			{
 				ext = false;
 				sp = ( x - fsx ) / seg->length();
-				seg->pointTangentNormal( sp, &point, &tangent, &normal );
+				seg->pointTangentNormalAt( sp, &point, &tangent, &normal );
 			}
 			else
 			{
 				if( !ext )
-					oldSeg->pointTangentNormal( 1, &extPoint, &tangent, &normal );
+					oldSeg->pointTangentNormalAt( 1, &extPoint, &tangent, &normal );
 				point = extPoint + ( x - fsx ) * tangent;
 				ext = true;
 			}

@@ -183,17 +183,17 @@ VSegment::isFlat( double flatness ) const
 }
 
 KoPoint
-VSegment::at( double t ) const
+VSegment::pointAt( double t ) const
 {
 	KoPoint p;
 
-	pointDerivatives( t, &p );
+	pointDerivativesAt( t, &p );
 
 	return p;
 }
 
 void
-VSegment::pointDerivatives( double t, KoPoint* p,
+VSegment::pointDerivativesAt( double t, KoPoint* p,
 	KoPoint* d1, KoPoint* d2 ) const
 {
 	if(
@@ -234,24 +234,25 @@ VSegment::pointDerivatives( double t, KoPoint* p,
 
 
 	// The De Casteljau algorithm.
-	for( uint j = 1; j <= degree(); ++j )
+	for( unsigned j = 1; j <= degree(); ++j )
 	{
-		for( uint i = 0; i <= degree() - j; ++i )
+		for( unsigned i = 0; i <= degree() - j; ++i )
 		{
-			q[i] = ( 1.0 - t ) * q[i] + t * q[i+1];
+			q[ i ] = ( 1.0 - t ) * q[ i ] + t * q[ i + 1 ];
 		}
 
-		// Save first derivative now we have it.
-		if( j == 1 )
+		// Save second derivative now that we have it.
+		if( j == degree() - 2 )
 		{
 			if( d2 )
-				*d2 = 6 * ( q[2] - 2 * q[1] + q[0] );
+				*d2 = degree() * ( degree() - 1 )
+						* ( q[ 2 ] - 2 * q[ 1 ] + q[ 0 ] );
 		}
-		// Save second derivative now we have it.
-		else if( j == 2 )
+		// Save first derivative now that we have it.
+		else if( j == degree() - 1 )
 		{
 			if( d1 )
-				*d1 = 3 * ( q[1] - q[0] );
+				*d1 = degree() * ( q[ 1 ] - q[ 0 ] );
 		}
 	}
 
@@ -259,21 +260,30 @@ VSegment::pointDerivatives( double t, KoPoint* p,
 	if( p )
 		*p = q[0];
 
-
 	delete[]( q );
 
 
 	return;
 }
 
+KoPoint
+VSegment::tangentAt( double t ) const
+{
+	KoPoint tangent;
+
+	pointTangentNormalAt( t, 0L, &tangent );
+
+	return tangent;
+}
+
 void
-VSegment::pointTangentNormal( double t, KoPoint* p,
+VSegment::pointTangentNormalAt( double t, KoPoint* p,
 	KoPoint* tn, KoPoint* n ) const
 {
 	// Calculate derivative if necessary.
 	KoPoint d;
 
-	pointDerivatives( t, p, tn || n ? &d : 0L );
+	pointDerivativesAt( t, p, tn || n ? &d : 0L );
 
 
 	// Normalize derivative.
@@ -297,14 +307,6 @@ VSegment::pointTangentNormal( double t, KoPoint* p,
 		n->setX(  d.y() );
 		n->setY( -d.x() );
 	}
-}
-
-KoPoint
-VSegment::tangent( double t ) const
-{
-	KoPoint tn;
-	pointTangentNormal( t, 0L, &tn );
-	return tn;
 }
 
 double
@@ -392,12 +394,10 @@ VSegment::chordLength() const
 		return 0.0;
 	}
 
-	return
-		sqrt(
-				( knot().x() - m_prev->knot().x() ) *
-				( knot().x() - m_prev->knot().x() ) +
-				( knot().y() - m_prev->knot().y() ) *
-				( knot().y() - m_prev->knot().y() ) );
+
+	KoPoint d = knot() - m_prev->knot();
+
+	return sqrt( d * d );
 }
 
 double
@@ -411,9 +411,11 @@ VSegment::polyLength() const
 	}
 
 
+	// Start with distance |first point - previous knot|.
 	KoPoint d = point( 0 ) - m_prev->knot();
 	double length = sqrt( d * d );
 
+	// Iterate over remaining points.
 	for( unsigned i = 1; i < degree(); ++i )
 	{
 		d = point( i ) - point( i - 1 );
@@ -434,6 +436,7 @@ VSegment::param( double len ) const
 	{
 		return 0.0;
 	}
+
 
 	// Line.
 	if( m_type == line )
@@ -522,8 +525,9 @@ VSegment::isSmooth( const VSegment& next ) const
 	KoPoint t1;
 	KoPoint t2;
 
-	pointTangentNormal( 1.0, 0L, &t1 );
-	next.pointTangentNormal( 0.0, 0L, &t2 );
+	pointTangentNormalAt( 1.0, 0L, &t1 );
+
+	next.pointTangentNormalAt( 0.0, 0L, &t2 );
 
 
 	// Scalar product.
@@ -587,7 +591,12 @@ VSegment::splitAt( double t )
 	}
 
 
+	// Create new segment.
 	VSegment* segment = new VSegment( m_degree );
+
+	// Set segment type.
+	segment->m_state = m_state;
+
 
 	// Lines are easy: no need to modify the current segment.
 	if( m_type == line )
@@ -597,35 +606,49 @@ VSegment::splitAt( double t )
 			( knot() - m_prev->knot() ) * t );
 
 		segment->m_type = line;
-		segment->m_state = m_state;
 
 		return segment;
 	}
 
-/*
-// TODO
-	// These references make the folowing code nicer to look at.
-	KoPoint& p0 = m_prev->knot();
-	KoPoint& p1 = m_node[0];
-	KoPoint& p2 = m_node[1];
-	KoPoint& p3 = knot();
 
-	// Calculate the 2 new beziers.
-	segment->m_node[0] = p0 + ( p1 - p0 ) * t;
-	segment->m_node[1] = p1 + ( p2 - p1 ) * t;
+	// Beziers.
 
-	p2 = p2 + ( p3 - p2 ) * t;
-	p1 = segment->m_node[1] + ( p2 - segment->m_node[1] ) * t;
-
-	segment->m_node[1] =
-		segment->m_node[0] + ( segment->m_node[1] - segment->m_node[0] ) * t;
-	segment->knot() =
-		segment->m_node[1] + ( p1 - segment->m_node[1] ) * t;
-
-	// Set the new segment type and state.
+	// Set segment type.
 	segment->m_type = curve;
-	segment->m_state = m_state;
-*/
+
+
+	// Copy points.
+	KoPoint* q = new KoPoint[ degree() + 1 ];
+
+	q[ 0 ] = m_prev->knot();
+
+	for( unsigned i = 0; i < degree(); ++i )
+	{
+		q[ i + 1 ] = point( i );
+	}
+
+
+	// The De Casteljau algorithm.
+	for( unsigned j = 1; j <= degree(); ++j )
+	{
+		for( unsigned i = 0; i <= degree() - j; ++i )
+		{
+			q[ i ] = ( 1.0 - t ) * q[ i ] + t * q[ i + 1 ];
+		}
+
+		// Modify the new segment.
+		segment->setPoint( j - 1, q[ 0 ] );
+	}
+
+	// Modify the current segment (no need to modify the knot though).
+	for( unsigned i = 1; i < degree(); ++i )
+	{
+		setPoint( i - 1, q[ i ] );
+	}
+
+
+	delete[]( q );
+
 
 	return segment;
 }
@@ -686,6 +709,8 @@ VSegment::revert() const
 		return 0L;
 	}
 
+
+	// Create new segment.
 	VSegment* segment = new VSegment( m_degree );
 
 	segment->m_type = m_type;
@@ -756,6 +781,7 @@ VSegment::save( QDomElement& element ) const
 {
 	if( state() == deleted )
 		return;
+
 
 	QDomElement me;
 

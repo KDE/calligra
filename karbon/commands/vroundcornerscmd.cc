@@ -264,8 +264,8 @@ VRoundCornersCmd::visitVPath( VPath& path )
 
 		// Round corner.
 		newPath.curveTo(
-			path.current()->prev()->at( 0.5 ),
-			path.current()->at( 0.5 ),
+			path.current()->prev()->pointAt( 0.5 ),
+			path.current()->pointAt( 0.5 ),
 			path.current()->knot() );
 
 
@@ -313,8 +313,8 @@ VRoundCornersCmd::visitVPath( VPath& path )
 
 			// Round corner.
 			newPath.curveTo(
-				path.getLast()->at( 0.5 ),
-				path.current()->at( 0.5 ),
+				path.getLast()->pointAt( 0.5 ),
+				path.current()->pointAt( 0.5 ),
 				path.current()->knot() );
 
 
