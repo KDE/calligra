@@ -20,17 +20,6 @@
  kchart_la_LIBADD = $(LIB_KOFFICECORE)
  
  ## The executable
---- koffice/kexi/Makefile.am	24 Apr 2003 17:17:49 -0000	1.67
-+++ koffice/kexi/Makefile.am	8 May 2003 06:06:10 -0000
-@@ -7,7 +7,7 @@ libkexipart_la_LIBADD = $(LIB_KOFFICEUI)
- ## The kdeinit loadable module
- lib_LTLIBRARIES = kexi.la
- kexi_la_SOURCES = main.cpp
--kexi_la_LDFLAGS = $(all_libraries) -module -avoid-version
-+kexi_la_LDFLAGS = $(all_libraries) -module
- kexi_la_LIBADD = $(LIB_KOFFICECORE)
- 
- ## The executable
 --- koffice/kformula/Makefile.am	2002/07/14 12:25:12	1.70
 +++ koffice/kformula/Makefile.am	2002/09/08 00:33:30
 @@ -14,7 +14,7 @@ libkformulapart_la_METASOURCES = AUTO
