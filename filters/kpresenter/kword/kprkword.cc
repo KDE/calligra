@@ -257,6 +257,16 @@ void KprKword::convert()
                     aFont = textElem.attribute( "family" );
 
                 // Family, colour and point size are voluntarily NOT passed over.
+                if ( !textElem.attribute( "color" ).isEmpty())
+                {
+                    QColor col;
+                    col.setNamedColor(textElem.attribute( "color" ));
+                    QDomElement e = outdoc.createElement("COLOR");
+                    e.setAttribute( "red", col.red() );
+                    e.setAttribute( "green", col.green() );
+                    e.setAttribute( "blue", col.blue() );
+                    outFormatElem.appendChild( e );
+                }
 
                 if ( !outFormatElem.firstChild().isNull() )
                 {
