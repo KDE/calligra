@@ -3086,6 +3086,12 @@ void KWDocument::setUndoRedoLimit(int val)
     m_commandHistory->setRedoLimit(val);
 }
 
+void KWDocument::setGridX(double _gridx) { 
+    m_gridX = _gridx; 
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->getGUI()->getHorzRuler()->setGridSize(_gridx);
+}
+
 QList<KoTextObject> KWDocument::frameTextObject() const
 {
     QPtrList<KoTextObject>lst;

@@ -279,7 +279,7 @@ public:
     // The grid is in _pt_ now
     double gridX() { return m_gridX; }
     double gridY() { return m_gridY; }
-    void setGridX(double _gridx) { m_gridX = _gridx; }
+    void setGridX(double _gridx);
     void setGridY(double _gridy) { m_gridY = _gridy; }
 
     // Currently unused. Not sure we want to go that way, now that we have
