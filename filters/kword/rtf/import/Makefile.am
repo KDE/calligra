@@ -1,21 +1,16 @@
 ####### General stuff
 
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
-librtfimport_la_LDFLAGS	= -module $(KDE_PLUGIN)
+INCLUDES= $(KOFFICE_INCLUDES) $(all_includes)
+librtfimport_la_LDFLAGS	= -module -avoid-version -no-undefined
 librtfimport_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files
 
 kde_module_LTLIBRARIES = librtfimport.la
 
-librtfimport_la_SOURCES = KRTFTokenizer.cpp KRTFParser.cpp KRTFFileParser.cpp \
-	KRTFHeaderParser.cpp KRTFDocumentParser.cpp rtfimport.cpp \
-	rtfimport_factory.cpp
-
-check_PROGRAMS = rtfimport
-rtfimport_SOURCES = main.cpp
-rtfimport_LDADD = librtfimport.la
-rtfimport_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+librtfimport_la_SOURCES = rtfimport.cpp rtfimport_factory.cpp rtfimport_dom.cpp rtfimport_tokenizer.cpp
+    
+noinst_HEADERS = rtfimport.h rtfimport_factory.h rtfimport_dom.h rtfimport_tokenizer.h
 
 METASOURCES = AUTO
 
