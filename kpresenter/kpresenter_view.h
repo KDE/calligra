@@ -381,6 +381,7 @@ public slots:
 
 
     void duplicateObj();
+    void applyAutoFormat();
 public:
     // create GUI
     virtual void createGUI();
@@ -944,7 +945,7 @@ private:
     KAction *actionFlipVertical;
 
     KAction *actionDuplicateObj;
-
+    KAction *actionApplyAutoFormat;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;

@@ -591,3 +591,9 @@ void KPresenterViewIface::extraBringForward()
 {
     view->extraBringForward();
 }
+
+void KPresenterViewIface::applyAutoFormat()
+{
+    view->applyAutoFormat();
+}
+

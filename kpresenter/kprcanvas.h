@@ -265,7 +265,7 @@ public:
     void alignObjBottom();
 
     bool canMoveOneObject()const;
-
+    QPtrList<KPTextObject> listOfTextObjs() const;
 public slots:
     void exitEditMode();
 
@@ -447,7 +447,6 @@ private:
     KPTextObject* textUnderMouse( const QPoint & point );
     bool checkCurrentTextEdit( KPTextObject * textObj );
 
-    QPtrList<KPTextObject> listOfTextObjs() const;
 
     void rectSymetricalObjet();
 private slots:

@@ -3102,6 +3102,11 @@ void KPresenterView::setupActions()
     actionDuplicateObj = new KAction( i18n( "Duplicate Object" ), 0,
                                        this, SLOT( duplicateObj() ),
                                        actionCollection(), "duplicate_obj" );
+
+    actionApplyAutoFormat= new KAction( i18n( "Apply autoFormat" ), 0,
+                                        this, SLOT( applyAutoFormat() ),
+                                        actionCollection(), "apply_autoformat" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -6397,4 +6402,31 @@ void KPresenterView::extraBringForward()
     m_canvas->setToolEditMode( TEM_MOUSE );
     m_canvas->activePage()->lowerObjs(true);
 }
+
+void KPresenterView::applyAutoFormat()
+{
+    m_pKPresenterDoc->getAutoFormat()->readConfig();
+    KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    bool createcmd=false;
+    //todo switch page !!!!!!!!!
+    QPtrList<KPTextObject> list(m_canvas->listOfTextObjs());
+    QPtrListIterator<KPTextObject> fit(list);
+    for ( ; fit.current() ; ++fit )
+    {
+        KCommand *cmd = m_pKPresenterDoc->getAutoFormat()->applyAutoFormat( fit.current()->textObject() );
+        if ( cmd )
+        {
+            createcmd= true;
+            macro->addCommand( cmd );
+        }
+    }
+    if ( createcmd )
+    {
+        m_pKPresenterDoc->addCommand( macro );
+    }
+    else
+        delete macro;
+}
+
+
 #include <kpresenter_view.moc>

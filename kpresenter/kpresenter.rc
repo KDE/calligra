@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="69">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="70">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -134,6 +134,8 @@
   <Action name="change_case"/>
   <Separator/>
   <Action name="extra_spellcheck"/>
+  <Separator/>
+  <Action name="apply_autoformat"/>
  </Menu>
  <Menu name="Screen Presentations"><text>Screen &amp;Presentations</text>
   <Action name="screen_configpages"/>
