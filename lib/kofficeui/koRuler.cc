@@ -930,7 +930,7 @@ void KoRuler::setupMenu()
 
 void KoRuler::uncheckMenu()
 {
-    for ( uint i = 0 ; i < KoUnit::U_LASTUNIT ; ++i )
+    for ( uint i = 0 ; i <= KoUnit::U_LASTUNIT ; ++i )
         d->rb_menu->setItemChecked( i, false );
 }
 
@@ -1061,7 +1061,7 @@ double KoRuler::unZoomItRtl( int pixValue ) const
 
 void KoRuler::slotMenuActivated( int i )
 {
-    if ( i >= 0 && i < KoUnit::U_LASTUNIT )
+    if ( i >= 0 && i <= KoUnit::U_LASTUNIT )
     {
         KoUnit::Unit unit = static_cast<KoUnit::Unit>(i);
         setUnit( unit );
