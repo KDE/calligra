@@ -8,6 +8,7 @@ noinst_PROGRAMS = kexidbtest
 
 INCLUDES = -I$(top_srcdir)/kexi \
   -I$(top_srcdir)/kexi/widget \
+  -I$(top_srcdir)/kexi/core \
   $(all_includes)
 
 SUBDIRS = .
