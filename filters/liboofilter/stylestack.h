@@ -75,7 +75,7 @@ public:
     void pop();
 
     /**
-     * Pushs the new style onto the stack.
+     * Pushes the new style onto the stack.
      */
     void push( const QDomElement& style );
 
