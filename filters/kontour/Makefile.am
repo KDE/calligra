@@ -1,4 +1,4 @@
-SUBDIRS = msod applixgraphics latex rtf
+SUBDIRS = latex rtf
 
 #SUBDIRS = xfig msod wmf applixgraphics
 
