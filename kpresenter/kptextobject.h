@@ -36,6 +36,7 @@ class KoTextObject;
 class KPTextView;
 class KCommand;
 class Page;
+class KoPoint;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -139,7 +140,7 @@ public:
     KPTextObject * kpTextObject() { return m_kptextobj; }
 
     void keyPressEvent( QKeyEvent * );
-    void mousePressEvent( QMouseEvent *);
+    void mousePressEvent( QMouseEvent *, const QPoint &);
 
     void mouseMoveEvent( QMouseEvent *, const QPoint & );
     void mouseReleaseEvent( QMouseEvent *, const QPoint & );

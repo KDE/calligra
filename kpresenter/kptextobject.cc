@@ -910,9 +910,9 @@ void KPTextView::drawCursor( bool b )
     kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
 }
 
-void KPTextView::mousePressEvent( QMouseEvent *e)
+void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &_pos)
 {
-    handleMousePressEvent( e, QPoint() );
+    handleMousePressEvent( e, _pos );
 }
 
 void KPTextView::mouseDoubleClickEvent( QMouseEvent *e, const QPoint &pos)

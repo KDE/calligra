@@ -54,7 +54,8 @@
 #include <kdebug.h>
 #include <kprcommand.h>
 #include <kcursor.h>
-
+#include <koPoint.h>
+#include <kozoomhandler.h>
 #include <stdlib.h>
 
 /******************************************************************/
@@ -321,7 +322,9 @@ void Page::mousePressEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( e->pos(), diffx(), diffy() ))
         {
-            m_currentTextObjectView->mousePressEvent(e);
+            QPoint pos;
+            pos=view->kPresenterDoc()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            m_currentTextObjectView->mousePressEvent(e, pos);
             return;
         }
     }
@@ -1097,7 +1100,9 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( e->pos(), diffx(), diffy() ))
         {
-            m_currentTextObjectView->mouseDoubleClickEvent( e, QPoint());
+            QPoint pos;
+            pos=view->kPresenterDoc()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            m_currentTextObjectView->mouseDoubleClickEvent( e, pos);
             return;
         }
     }

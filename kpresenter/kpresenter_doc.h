@@ -49,6 +49,7 @@ class KoUnit;
 #include <kpgradientcollection.h>
 #include <kpclipartcollection.h>
 #include <koUnit.h>
+#include <kozoomhandler.h>
 class KoDocumentEntry;
 class KPFooterHeaderEditor;
 class KPTextObject;
@@ -79,7 +80,7 @@ public:
 /*****************************************************************/
 /* class KPresenterDoc                                           */
 /*****************************************************************/
-class KPresenterDoc : public KoDocument
+class KPresenterDoc : public KoDocument, public KoZoomHandler
 {
     Q_OBJECT
 
