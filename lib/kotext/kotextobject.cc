@@ -689,7 +689,8 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
     KoTextDocument * textdoc = textDocument();
     if ( interactive )
         emit hideCursor();
-
+    if ( !textdoc->hasSelection( selectionId, true ) )
+        return 0L;
     /// Applying a style is three distinct operations :
     /// 1 - Changing the paragraph settings (setParagLayout)
     /// 2 - Changing the character formatting for each char in the paragraph (setFormat(indices))
