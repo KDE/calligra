@@ -20,7 +20,6 @@
 
 #include "canvasview.h"
 
-
 CanvasView::CanvasView(QWidget *parent) : QWidget(parent)
 {
   setMouseTracking(true);
@@ -36,7 +35,7 @@ void CanvasView::mousePressEvent(QMouseEvent *e)
 {
   emit sigMousePress(e);
 }
-	
+
 void CanvasView::mouseMoveEvent(QMouseEvent *e)
 {
   emit sigMouseMove(e);

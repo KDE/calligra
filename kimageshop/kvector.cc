@@ -23,7 +23,7 @@
 KVector& KVector::normalize()
 {
   double length, ilength;
-
+  
   length = m_x*m_x + m_y*m_y + m_z*m_z;
   length = sqrt (length);
   
@@ -40,12 +40,12 @@ KVector& KVector::normalize()
 KVector& KVector::crossProduct(const KVector &v)
 {
   double x,y,z;
-
+  
   x = m_y*v.m_z - m_z*v.m_y;
   y = m_z*v.m_x - m_x*v.m_z;
   z = m_x*v.m_y - m_y*v.m_x;
   m_x=x; m_y=y; m_z=z;
-
+  
   return *this;
 }
 

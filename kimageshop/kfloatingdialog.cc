@@ -104,7 +104,7 @@ void KFloatingDialog::readSettings()
   config->setGroup("General");
   
   QString key = config->readEntry("TitlebarLook");
-	
+  
   m_titleLook = gradient;
   m_gradientType = KPixmapEffect::HorizontalGradient;
   
@@ -140,10 +140,10 @@ void KFloatingDialog::readSettings()
       *(m_pInactivePm) = iconLoader->reloadIcon("inactivetitlebar.xpm");
       
       if (m_pInactivePm->size() == QSize(0,0))
-	*m_pInactivePm = *m_pActivePm;
+		*m_pInactivePm = *m_pActivePm;
       
       if (m_pActivePm->size() == QSize(0,0))
-	m_titleLook = plain;
+		m_titleLook = plain;
     }
 
   // restore position if saved
@@ -227,16 +227,16 @@ void KFloatingDialog::setDocked(bool value)
 {
   if (m_docked == value)
     return;
-	
+  
   m_docked = value;
-	
+  
   if (m_docked) // dock
     {
       if (!m_pParent)
-	{
-	  m_docked = false;
-	  return;
-	}
+		{
+		  m_docked = false;
+		  return;
+		}
       reparent(m_pParent, 0, m_dockedPos, true);
     }
   else // undock
@@ -279,7 +279,7 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
       QPixmap *pm = hasFocus() ? m_pActivePm : m_pInactivePm;
       
       for (int x = r.x(); x < r.x() + r.width(); x+=pm->width())
-	p.drawPixmap(x, r.y(), *pm);
+		p.drawPixmap(x, r.y(), *pm);
     }
   // gradient
   else if (m_titleLook == gradient)
@@ -287,32 +287,32 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
       QPixmap* pm = 0;
       
       if (hasFocus())
-	{
-	  if (m_activeShadePm.size() != r.size())
-	    {
-	      m_activeShadePm.resize(r.width(), r.height());
-	      KPixmapEffect::gradient(m_activeShadePm, kapp->activeTitleColor(),
-				      m_activeBlend, m_gradientType);
-	    }
-	  pm = &m_activeShadePm;
-	}
+		{
+		  if (m_activeShadePm.size() != r.size())
+			{
+			  m_activeShadePm.resize(r.width(), r.height());
+			  KPixmapEffect::gradient(m_activeShadePm, kapp->activeTitleColor(),
+									  m_activeBlend, m_gradientType);
+			}
+		  pm = &m_activeShadePm;
+		}
       else
-	{
-	  if (m_inactiveShadePm.size() != r.size())
-	    {
-	      m_inactiveShadePm.resize(r.width(), r.height());
-	      KPixmapEffect::gradient(m_inactiveShadePm, kapp->inactiveTitleColor(), 
-				      m_inactiveBlend, m_gradientType);
-	    }
-	  pm = &m_inactiveShadePm;
-	}
+		{
+		  if (m_inactiveShadePm.size() != r.size())
+			{
+			  m_inactiveShadePm.resize(r.width(), r.height());
+			  KPixmapEffect::gradient(m_inactiveShadePm, kapp->inactiveTitleColor(), 
+									  m_inactiveBlend, m_gradientType);
+			}
+		  pm = &m_inactiveShadePm;
+		}
       p.drawPixmap(r.x(), r.y(), *pm);
     }
   // plain
   else
     {
       p.setBackgroundColor(hasFocus() ? kapp->activeTitleColor() 
-			   : kapp->inactiveTitleColor());
+						   : kapp->inactiveTitleColor());
       p.eraseRect(r);
     }
   
@@ -326,7 +326,7 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
   r.setRight(r.width() - 41);
   p.setClipRect(r);
   p.drawText(r.x(), r.y() + (r.height()-p.fontMetrics().height())/2+p.fontMetrics().ascent(),
-	     QString(" ")+caption()+" ");
+			 QString(" ")+caption()+" ");
   
   // TODO: Should we add title animation? ;-)
   
@@ -341,12 +341,12 @@ void KFloatingDialog::mouseDoubleClickEvent (QMouseEvent *e)
     {
       QRect title(0,0, width(), TITLE_HEIGHT);
       if(!title.contains(e->pos()))
-	return;
+		return;
       
       if (m_shaded)
-	setShaded(false);
+		setShaded(false);
       else
-	setShaded(true);
+		setShaded(true);
     }
   else
     QFrame::mouseDoubleClickEvent (e);
@@ -365,28 +365,28 @@ void KFloatingDialog::mousePressEvent(QMouseEvent *e)
       QRect title(0, 0, width(), TITLE_HEIGHT);
       
       if(bottomRect().contains(pos))
-	{
-	  m_resizing = true;
-	  m_resizeMode = vertical;
-	}
+		{
+		  m_resizing = true;
+		  m_resizeMode = vertical;
+		}
       else if(rightRect().contains(pos))
-	{
-	  m_resizing = true;
-	  m_resizeMode = horizontal;
-	}
+		{
+		  m_resizing = true;
+		  m_resizeMode = horizontal;
+		}
       else if(lowerRightRect().contains(pos))
-	{
-	  m_resizing = true;
-	  m_resizeMode = diagonal;
-	}
+		{
+		  m_resizing = true;
+		  m_resizeMode = diagonal;
+		}
       else if(title.contains(pos))
-	m_dragging = true;
+		m_dragging = true;
       
       if(m_dragging)
-	m_pos = e->pos();
+		m_pos = e->pos();
       
       if(m_resizing)
-	m_oldSize = QPoint(width(), height());
+		m_oldSize = QPoint(width(), height());
     }
   else
     QFrame::mousePressEvent(e);
@@ -397,31 +397,31 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
   if (bottomRect().contains(e->pos()) && !m_shaded)
     {
       if (!QApplication::overrideCursor() || QApplication::overrideCursor()->shape() != SizeVerCursor)
-	{
-	  if (m_cursor)
-	    QApplication::restoreOverrideCursor();
-	  QApplication::setOverrideCursor(sizeVerCursor);
-	}
+		{
+		  if (m_cursor)
+			QApplication::restoreOverrideCursor();
+		  QApplication::setOverrideCursor(sizeVerCursor);
+		}
       m_cursor = true;
     }
   else if (rightRect().contains(e->pos()))
     {
       if (!QApplication::overrideCursor() || QApplication::overrideCursor()->shape() != SizeHorCursor)
-	{
-	  if (m_cursor)
-	    QApplication::restoreOverrideCursor();
-	  QApplication::setOverrideCursor(sizeHorCursor);
-	}
+		{
+		  if (m_cursor)
+			QApplication::restoreOverrideCursor();
+		  QApplication::setOverrideCursor(sizeHorCursor);
+		}
       m_cursor = true;
     }
   else if (lowerRightRect().contains(e->pos()) && !m_shaded)
     {
       if (!QApplication::overrideCursor() || QApplication::overrideCursor()->shape() != SizeFDiagCursor)
-	{
-	  if (m_cursor)
-	    QApplication::restoreOverrideCursor();
-	  QApplication::setOverrideCursor(sizeFDiagCursor);
-	}
+		{
+		  if (m_cursor)
+			QApplication::restoreOverrideCursor();
+		  QApplication::setOverrideCursor(sizeFDiagCursor);
+		}
       m_cursor = true;
     }
   else if (m_cursor)
@@ -433,50 +433,50 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
   if (m_dragging)
     {
       if(m_pParent && m_docked)
-	{
-	  QPoint newPos = m_pParent->mapFromGlobal(QCursor::pos()) - m_pos;
-	  if (newPos.x() < 0)
-	    newPos.setX(0);
-	  if (newPos.y() < 0)
-	    newPos.setY(0);
-	  move(newPos);
-	}
+		{
+		  QPoint newPos = m_pParent->mapFromGlobal(QCursor::pos()) - m_pos;
+		  if (newPos.x() < 0)
+			newPos.setX(0);
+		  if (newPos.y() < 0)
+			newPos.setY(0);
+		  move(newPos);
+		}
       else
-	{
-	  QPoint newPos = (QCursor::pos() - m_pos);
-	  KWM::move(winId(), newPos);
-	}
+		{
+		  QPoint newPos = (QCursor::pos() - m_pos);
+		  KWM::move(winId(), newPos);
+		}
     }
   else if (m_resizing)
     {
       QPoint cursorPos;
       
       if(m_pParent && m_docked)
-	cursorPos = m_pParent->mapFromGlobal(QCursor::pos());
+		cursorPos = m_pParent->mapFromGlobal(QCursor::pos());
       else
-	cursorPos = (QCursor::pos());
+		cursorPos = (QCursor::pos());
       
       // pos() does not work here
       QPoint newSize = cursorPos - QPoint(geometry().left(), geometry().top());
       
       if (m_resizeMode == vertical)
-	newSize.setX(m_oldSize.x());
+		newSize.setX(m_oldSize.x());
       else if (m_resizeMode == horizontal)
-	newSize.setY(m_oldSize.y());
-		
+		newSize.setY(m_oldSize.y());
+	  
       if (newSize.x() < MIN_WIDTH)
-	newSize.setX(MIN_WIDTH);
-		
+		newSize.setX(MIN_WIDTH);
+	  
       if (newSize.y() < MIN_HEIGHT)
-	newSize.setY(MIN_HEIGHT);
+		newSize.setY(MIN_HEIGHT);
       
       if(m_shaded)
-	newSize.setY(height());
+		newSize.setY(height());
       
       if (m_pParent && m_docked)
-	resize(newSize.x(), newSize.y());
+		resize(newSize.x(), newSize.y());
       else
-	KWM::setGeometry(winId(), QRect(geometry().left(), geometry().top(), newSize.x(), newSize.y()));
+		KWM::setGeometry(winId(), QRect(geometry().left(), geometry().top(), newSize.x(), newSize.y()));
       m_oldSize = QPoint(width(), height());
     }
   else

@@ -30,25 +30,25 @@
 KFloatingTabDialog::KFloatingTabDialog(QWidget *parent, const char *name)
   : KFloatingDialog(parent, name)
 {
-    tabs = new QTabBar(this, "_tabbar");
-    connect(tabs, SIGNAL(selected(int)), this, SLOT(showTab(int)));
-    tabs->move(_left(), _top());
+  tabs = new QTabBar(this, "_tabbar");
+  connect(tabs, SIGNAL(selected(int)), this, SLOT(showTab(int)));
+  tabs->move(_left(), _top());
 }
 
 KFloatingTabDialog::~KFloatingTabDialog()
 {
-	delete tabs;
+  delete tabs;
 }
 
 void KFloatingTabDialog::resizeEvent(QResizeEvent *e)
 {
   KFloatingDialog::resizeEvent(e);
-
+  
   if (tabs)
 	{
 	  for (int i=0; i < (int)pages.size(); i++)
 		pages[i]->setGeometry(getChildRect());
-
+	  
 	  if((tabs->shape() == QTabBar::RoundedBelow) ||
 		 (tabs->shape() == QTabBar::TriangularBelow))
 		tabs->move(_left(), _height()-tabs->height());
@@ -80,13 +80,13 @@ void KFloatingTabDialog::show()
 	return;
   
   setSizes();
-
+  
   for(i = 0; i < pages.size(); i++)
 	pages[i]->hide();
-
+  
   QResizeEvent r(size(), size());
   resizeEvent(&r);
-
+  
   KFloatingDialog::show();
 }
 
@@ -97,7 +97,7 @@ bool KFloatingTabDialog::isTabEnabled(const QString& name)
   for(i = 0; i < pages.size(); i++)
     if (pages[i]->name() == name)
       return tabs->isTabEnabled(i);
-    return false;
+  return false;
 }
 
 void KFloatingTabDialog::setTabEnabled(const QString& name, bool state)
@@ -129,7 +129,7 @@ QSize KFloatingTabDialog::sizeHint(void) const
 {
   /* desired size of the tabbar */
   QSize hint(tabs->sizeHint());
-
+  
   /* overall desired size of all pages */
   QSize pageHint;
   for (unsigned int i = 0; i < pages.size(); i++)
@@ -147,23 +147,23 @@ QSize KFloatingTabDialog::sizeHint(void) const
 		}
 	}
   
-	if (pageHint.isValid())
-	  {
-		/* use maximum of width of tabbar and pages */
-		if (pageHint.width() > hint.width())
-		  hint.setWidth(pageHint.width());
-		
-		/* heights must just be added */
-		hint.setHeight(hint.height() + pageHint.height());
-		
-		return (hint);
-	  }
-	
-	/*
-	 * If not at least a one page has a valid sizeHint we have to return
-	 * an invalid size as well.
-	 */
-	return (pageHint);
+  if (pageHint.isValid())
+	{
+	  /* use maximum of width of tabbar and pages */
+	  if (pageHint.width() > hint.width())
+		hint.setWidth(pageHint.width());
+	  
+	  /* heights must just be added */
+	  hint.setHeight(hint.height() + pageHint.height());
+	  
+	  return (hint);
+	}
+  
+  /*
+   * If not at least a one page has a valid sizeHint we have to return
+   * an invalid size as well.
+   */
+  return (pageHint);
 }
 
 QRect KFloatingTabDialog::getChildRect()

@@ -271,17 +271,17 @@ void KColor::RGBtoHSV(uchar R, uchar G, uchar B, int *H, uchar *S, uchar *V)
   // find maximum and minimum RGB values
   if (static_cast<unsigned int>(G) > max) { max = G; maxValue = 1; }
   if (static_cast<unsigned int>(B) > max) { max = B; maxValue = 2; }
-
+  
   if (static_cast<unsigned int>(G) < min) min = G;
   if (static_cast<unsigned int>(B) < min ) min = B;
-
+  
   int delta = max - min;
   *V = static_cast<unsigned char>(max); // value
   *S = static_cast<unsigned char>(max ? (510*delta+max)/(2*max) : 0); // saturation
   
   // calc hue
   if (*S == 0)
-	  *H = -1; // undefined hue
+	*H = -1; // undefined hue
   else 
 	{
 	  switch (maxValue)
@@ -313,7 +313,7 @@ void KColor::RGBtoLAB(uchar R, uchar G, uchar B, int *L, int *a, int *b)
   // Convert between RGB and CIE-Lab color spaces
   // Uses ITU-R recommendation BT.709 with D65 as reference white.
   // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
-
+  
   double X, Y, Z, fX, fY, fZ;
   
   X = 0.412453*R + 0.357580*G + 0.180423*B;
@@ -323,7 +323,7 @@ void KColor::RGBtoLAB(uchar R, uchar G, uchar B, int *L, int *a, int *b)
   X /= (255 * 0.950456);
   Y /=  255;
   Z /= (255 * 1.088754);
-
+  
   if (Y > 0.008856)
 	{
 	  fY = pow(Y, 1.0/3.0);
@@ -353,7 +353,7 @@ void KColor::RGBtoCMYK(uchar R, uchar G, uchar B, uchar *C, uchar *M, uchar *Y, 
 {
   uchar min = (R < G) ? R : G;
   *K = (min < B) ? min : B;
-
+  
   *C = 255-(R - *K);
   *M = 255-(G - *K);
   *Y = 255-(B - *K);
@@ -362,37 +362,37 @@ void KColor::RGBtoCMYK(uchar R, uchar G, uchar B, uchar *C, uchar *M, uchar *Y, 
 void KColor::HSVtoRGB(int H, uchar S, uchar V, uchar *R, uchar *G, uchar *B)
 {
   *R = *G = *B = V;
-
+  
   if (S != 0 && H != -1) // chromatic
 	{
 	  if (H >= 360) // angle > 360
 		H %= 360;
 	  
-	unsigned int f = H % 60;
-	H /= 60;
-	unsigned int p = static_cast<unsigned int>(2*V*(255-S)+255)/510;
-	unsigned int q, t;
-	
-	if (H&1)
-	  {
-	    q = static_cast<unsigned int>(2*V*(15300-S*f)+15300)/30600;
-	    switch(H)
-		  {
-		  case 1: *R=static_cast<int>(q); *G=static_cast<int>(V), *B=static_cast<int>(p); break;
-		  case 3: *R=static_cast<int>(p); *G=static_cast<int>(q), *B=static_cast<int>(V); break;
-		  case 5: *R=static_cast<int>(V); *G=static_cast<int>(p), *B=static_cast<int>(q); break;
-		  }
-	  }
-	else
-	  {
-	    t = static_cast<unsigned int>(2*V*(15300-(S*(60-f)))+15300)/30600;
-	    switch(H)
-		  {
-		  case 0: *R=static_cast<int>(V); *G=static_cast<int>(t), *B=static_cast<int>(p); break;
-		  case 2: *R=static_cast<int>(p); *G=static_cast<int>(V), *B=static_cast<int>(t); break;
-		  case 4: *R=static_cast<int>(t); *G=static_cast<int>(p), *B=static_cast<int>(V); break;
-		  }
-	  }
+	  unsigned int f = H % 60;
+	  H /= 60;
+	  unsigned int p = static_cast<unsigned int>(2*V*(255-S)+255)/510;
+	  unsigned int q, t;
+	  
+	  if (H&1)
+		{
+		  q = static_cast<unsigned int>(2*V*(15300-S*f)+15300)/30600;
+		  switch(H)
+			{
+			case 1: *R=static_cast<int>(q); *G=static_cast<int>(V), *B=static_cast<int>(p); break;
+			case 3: *R=static_cast<int>(p); *G=static_cast<int>(q), *B=static_cast<int>(V); break;
+			case 5: *R=static_cast<int>(V); *G=static_cast<int>(p), *B=static_cast<int>(q); break;
+			}
+		}
+	  else
+		{
+		  t = static_cast<unsigned int>(2*V*(15300-(S*(60-f)))+15300)/30600;
+		  switch(H)
+			{
+			case 0: *R=static_cast<int>(V); *G=static_cast<int>(t), *B=static_cast<int>(p); break;
+			case 2: *R=static_cast<int>(p); *G=static_cast<int>(V), *B=static_cast<int>(t); break;
+			case 4: *R=static_cast<int>(t); *G=static_cast<int>(p), *B=static_cast<int>(V); break;
+			}
+		}
 	}
 }
 
@@ -415,10 +415,10 @@ void KColor::LABtoRGB(int L, int a, int b, uchar *R, uchar *G, uchar *B)
   // Convert between RGB and CIE-Lab color spaces
   // Uses ITU-R recommendation BT.709 with D65 as reference white.
   // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
-
+  
   double X, Y, Z, fX, fY, fZ;
   int RR, GG, BB;
-
+  
   fY = pow((L + 16.0) / 116.0, 3.0);
   if (fY < 0.008856)
 	fY = L / 903.3;
@@ -444,7 +444,7 @@ void KColor::LABtoRGB(int L, int a, int b, uchar *R, uchar *G, uchar *B)
   X *= (0.950456 * 255);
   Y *= 255;
   Z *= (1.088754 * 255);
-
+  
   RR = static_cast<int>(3.240479*X - 1.537150*Y - 0.498535*Z + 0.5);
   GG = static_cast<int>(-0.969256*X + 1.875992*Y + 0.041556*Z + 0.5);
   BB = static_cast<int>(0.055648*X - 0.204043*Y + 1.057311*Z + 0.5);

@@ -91,7 +91,7 @@ GradientFrame::~GradientFrame() {}
 
 void GradientFrame::drawContents(QPainter *p)
 { 
-  //KPixmapEffect::gradient(*m_pPm, m_c1, m_c2, KPixmapEffect::HorizontalGradient);
+  //KPixmapEffect::gradient(*m_pPm, QColor(0,0,0), QColor(255,255,255), KPixmapEffect::HorizontalGradient);
   //p->drawPixmap(0, 0, m_pPm);
 }
 
