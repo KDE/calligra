@@ -26,8 +26,8 @@
 /******************************************************************/
 
 /*================================================================*/
-KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
-  : QWidget(parent,"")/*, QDropSite(this)*/, buffer(width(),height()), format(_doc)
+KWPage::KWPage(QWidget *parent,KWordDocument *_doc,KWordGUI *_gui)
+  : QWidget(parent,""), buffer(width(),height()), format(_doc)
 {
   setFocusPolicy(QWidget::StrongFocus);
 
@@ -605,11 +605,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
   if (editNum != -1)
     {
       if (doc->getFrameSet(editNum)->getFrameType() == FT_PART)
-	{
-	  dynamic_cast<KWPartFrameSet*>(doc->getFrameSet(editNum))->deactivate();
-	  //setFocusProxy(0);
-	  //setFocusPolicy(QWidget::NoFocus);
-	}
+	dynamic_cast<KWPartFrameSet*>(doc->getFrameSet(editNum))->deactivate();
     }
 
   oldMx = e->x() + xOffset;
@@ -871,7 +867,6 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 {
   if (maybeDrag && doc->has_selection() && mouseMode == MM_EDIT)
     {
-      debug("here");
       doc->setSelection(false);
       buffer.fill(white);
       repaint(false);
@@ -1111,10 +1106,6 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 	  doc->hideAllFrames();
 	  gui->getView()->setFramesToParts();
 	  fs->activate(this,xOffset,yOffset,gui->getVertRuler()->width() + gui->getDocStruct()->width());
-	  //setFocusProxy(fs->getView());
-	  //setFocusPolicy(QWidget::StrongFocus);
-	  //fs->getView()->setFocusPolicy(QWidget::StrongFocus);
-	  //fs->getView()->setFocus();
 	  editNum = frameset;
 	}
     }

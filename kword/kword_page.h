@@ -58,7 +58,7 @@ enum EditMode {EM_INSERT,EM_DELETE,EM_BACKSPACE,EM_CMOVE,EM_NONE,EM_RETURN};
 /* Class: KWPage                                                  */
 /******************************************************************/
 
-class KWPage : public QWidget/*, QDropSite*/
+class KWPage : public QWidget
 {
   Q_OBJECT
 

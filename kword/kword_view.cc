@@ -151,7 +151,6 @@ void KWordView::init()
   gui->show();
 
   gui->getPaperWidget()->formatChanged(format);
-  //widget()->setFocusProxy(gui);
 
   setFormat(format,false);
 
@@ -278,16 +277,12 @@ CORBA::Boolean KWordView::printDlg()
 
   switch (pgLayout.format)
     {
-#if QT_VERSION >= 141
     case PG_DIN_A3: prt.setPageSize(QPrinter::A3);
       break;
-#endif
     case PG_DIN_A4: prt.setPageSize(QPrinter::A4);
       break;
-#if QT_VERSION >= 141
     case PG_DIN_A5: prt.setPageSize(QPrinter::A5);
       break;
-#endif
     case PG_US_LETTER: prt.setPageSize(QPrinter::Letter);
       break;
     case PG_US_LEGAL: prt.setPageSize(QPrinter::Legal);
