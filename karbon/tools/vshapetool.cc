@@ -32,7 +32,7 @@
 #include "vselection.h"
 
 VShapeTool::VShapeTool( KarbonPart *part, const QString& name, bool polar )
-	: VTool( part, name.latin1() ), m_name( name )
+	: VTool( part, name.latin1() )
 {
 	m_isPolar = polar;
 	m_isSquare   = false;

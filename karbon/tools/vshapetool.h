@@ -35,7 +35,6 @@ class VShapeTool : public VTool
 public:
 	VShapeTool( KarbonPart *part, const QString& name, bool polar = false );
 
-	virtual QString name() { return m_name; }
 	virtual QString icon() { return "14_polygon"; }
 	virtual QString category() { return "shapecreation"; }
 	virtual QString statusText();
@@ -72,9 +71,7 @@ protected:
 private:
 	void recalc();
 
-	QString m_name;
-	
-	/// Calculate wiidth/height or radius/angle?
+	/// Calculate width/height or radius/angle?
 	bool m_isPolar;
 
 	/// States:
