@@ -2402,7 +2402,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 
     if ( o == this || o == viewport() ) {
 
-        if(m_currentFrameSetEdit)
+        if(m_currentFrameSetEdit && o == this )
         {
             // Pass event to auto-hide-cursor code (see kcursor.h for details)
             KCursor::autoHideEventFilter( o, e );
