@@ -31,7 +31,7 @@
 class GPixmap : public GObject {
   Q_OBJECT
 public:
-  GPixmap (const char* filename);
+  GPixmap (const QString &filename);
   GPixmap (const QDomElement &element);
 
   GPixmap ();

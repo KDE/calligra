@@ -25,20 +25,12 @@
 #ifndef GPart_h_
 #define GPart_h_
 
-#include <qobject.h>
-#include <qcolor.h>
-#include <qwmatrix.h>
-#include <qpainter.h>
-#include <qdatastream.h>
-#include <qpicture.h>
-
-#include <koMainWindow.h>
-
-#include "Coord.h"
-#include "GObject.h"
+#include <Coord.h>
+#include <GObject.h>
 
 class KIllustratorFrame;
 class KIllustratorChild;
+class Painter;
 
 class GPart : public GObject {
   Q_OBJECT
@@ -51,7 +43,7 @@ public:
   ~GPart ();
 
   virtual void draw (Painter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
 
   virtual QString typeName () const;
 
@@ -71,4 +63,3 @@ private:
 };
 
 #endif
-

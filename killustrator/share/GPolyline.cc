@@ -29,6 +29,8 @@
 
 #include <GCurve.h>
 #include <Arrow.h>
+#include <Painter.h>
+#include <stdlib.h>
 
 GPolyline::GPolyline () {
   connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
@@ -135,6 +137,7 @@ void GPolyline::draw (QPainter& p, bool withBasePoints, bool /*outline*/) {
 
   float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
 
+  // highly inefficient - FIXME (Werner)
   unsigned int num = points.count ();
   for (i = 1; i < num; i++) {
     Painter::drawLine (p, points.at (i - 1)->x () + ((i==1) ? sdx : 0),
@@ -155,7 +158,7 @@ void GPolyline::draw (QPainter& p, bool withBasePoints, bool /*outline*/) {
   p.save ();
   if (withBasePoints) {
     p.setPen (black);
-    // p.setBrush (white);
+    // here too
     for (i = 0; i < num; i++) {
       Coord c = points.at (i)->transform (tmpMatrix);
       int x = (int) c.x ();
@@ -201,7 +204,6 @@ void GPolyline::addPoint (int idx, const Coord& p, bool update) {
 
 void GPolyline::_addPoint (int idx, const Coord& p) {
   points.insert (idx, new Coord (p));
-
   updateRegion ();
 }
 
@@ -411,12 +413,11 @@ Rect GPolyline::calcEnvelope () {
   return r;
 }
 
-void GPolyline::getPath (vector<Coord>& path) {
+void GPolyline::getPath (QValueList<Coord>& path) {
   unsigned int num = points.count ();
-  path.resize (num);
   for (unsigned int i = 0; i < num; i++) {
     const Coord& pi = *points.at (i);
-    path[i] = pi.transform (tMatrix);
+    path.append(pi.transform (tMatrix));
   }
 }
 

@@ -26,20 +26,16 @@
 #define GObject_h_
 
 #include <qobject.h>
+#include <qlist.h>
+#include <qvaluelist.h>
+#include <qdict.h>
 #include <qwmatrix.h>
 
 #include <Gradient.h>
 #include <Coord.h>
 #include <GradientShape.h>
-#include <Painter.h>
 
-#include <map>
-#include <string>
-#include <vector>
 #include <math.h>
-
-using std::string;
-using std::vector;
 
 #ifndef M_PI // not ANSI C++, so it maybe...
 #define M_PI            3.14159265358979323846  /* pi */
@@ -49,7 +45,6 @@ using std::vector;
 
 class GOState;
 class GLayer;
-class SWrapper;
 class GCurve;
 class QDomDocument;
 class QDomElement;
@@ -63,398 +58,382 @@ class QDomElement;
  * @version $Revision$
  */
 class GObject : public QObject {
-  Q_OBJECT
+    Q_OBJECT
 protected:
-  GObject ();
-  GObject (const QDomElement &element);
-  GObject (const GObject& obj);
+    GObject ();
+    GObject (const QDomElement &element);
+    GObject (const GObject& obj);
 
-  virtual void initState (GOState* state);
+    virtual void initState (GOState* state);
 
-  void updateRegion (bool recalcBBox = true);
+    void updateRegion (bool recalcBBox = true);
 
 public:
     enum Property { Prop_Outline, Prop_Fill };
 
-  struct OutlineInfo {
-    enum {
-      Color = 1, Style = 2, Width = 4, Custom = 8, All = 15
+    struct OutlineInfo {
+        enum {
+            Color = 1, Style = 2, Width = 4, Custom = 8, All = 15
+        };
+        unsigned int mask;   // indicates the valid fields of the structure
+        QColor color;        // outline color
+        Qt::PenStyle style;      // outline style
+        float width;         // outline width
+        // custom properties (depend on object type)
+        float roundness;     // roundness for rectangles
+        enum Shape
+        {
+            DefaultShape, ArcShape, PieShape
+        };
+        Shape shape;         // shape of ellipse
+        int startArrowId,    // arrow heads (for lines and bezier curves)
+            endArrowId;
     };
-    unsigned int mask;   // indicates the valid fields of the structure
-    QColor color;        // outline color
-    Qt::PenStyle style;      // outline style
-    float width;         // outline width
-    // custom properties (depend on object type)
-    float roundness;     // roundness for rectangles
-    enum Shape
-    {
-      DefaultShape, ArcShape, PieShape
+
+    struct FillInfo {
+        enum { Color = 1, FillStyle = 2, Pattern = 4, GradientInfo = 8, All = 15 };
+        enum Style {
+            NoFill, SolidFill, PatternFill, TileFill, GradientFill
+        };
+        unsigned int mask;  // indicates the valid fields of the structure
+        QColor color;       // fill color
+        Qt::BrushStyle pattern; // pattern
+        Style fstyle;       // fill style
+        Gradient gradient;  // gradient info
     };
-    Shape shape;         // shape of ellipse
-    int startArrowId,    // arrow heads (for lines and bezier curves)
-      endArrowId;
-  };
 
-  struct FillInfo {
-    enum { Color = 1, FillStyle = 2, Pattern = 4, GradientInfo = 8, All = 15 };
-    enum Style {
-      NoFill, SolidFill, PatternFill, TileFill, GradientFill
-    };
-    unsigned int mask;  // indicates the valid fields of the structure
-    QColor color;       // fill color
-    Qt::BrushStyle pattern; // pattern
-    Style fstyle;       // fill style
-    Gradient gradient;  // gradient info
-  };
+    static void setDefaultOutlineInfo (const OutlineInfo& oi);
+    static void setDefaultFillInfo (const FillInfo& fi);
+    static OutlineInfo getDefaultOutlineInfo ();
+    static FillInfo getDefaultFillInfo ();
 
-  static void setDefaultOutlineInfo (const OutlineInfo& oi);
-  static void setDefaultFillInfo (const FillInfo& fi);
-  static OutlineInfo getDefaultOutlineInfo ();
-  static FillInfo getDefaultFillInfo ();
+    /**
+     * The destructor.
+     */
+    virtual ~GObject ();
 
-  /**
-   * The destructor.
-   */
-  virtual ~GObject ();
+    /**
+     * Set the outline properties for the object.
+     *
+     * @param info The outline info structure.
+     */
+    void setOutlineInfo (const OutlineInfo& info);
 
-  /**
-   * Set the outline properties for the object.
-   *
-   * @param info The outline info structure.
-   */
-  void setOutlineInfo (const OutlineInfo& info);
+    /**
+     * Retrieve the outline properties of the object.
+     *
+     * @return A structure with all outline properties.
+     */
+    OutlineInfo getOutlineInfo () const;
 
-  /**
-   * Retrieve the outline properties of the object.
-   *
-   * @return A structure with all outline properties.
-   */
-  OutlineInfo getOutlineInfo () const;
+    /**
+     * Set the ouline color of the object.
+     *
+     * @param c The outline color.
+     */
+    void setOutlineColor (const QColor& c);
 
-  /**
-   * Set the ouline color of the object.
-   *
-   * @param c The outline color.
-   */
-  void setOutlineColor (const QColor& c);
+    /**
+     * Set the style of the ouline.
+     *
+     * @param p The outline pen style.
+     */
+    void setOutlineStyle (Qt::PenStyle p);
 
-  /**
-   * Set the style of the ouline.
-   *
-   * @param p The outline pen style.
-   */
-  void setOutlineStyle (Qt::PenStyle p);
+    /**
+     * Set the ouline width.
+     *
+     * @param width The width of the outline.
+     */
+    void setOutlineWidth (float width);
 
-  /**
-   * Set the ouline width.
-   *
-   * @param width The width of the outline.
-   */
-  void setOutlineWidth (float width);
+    void setOutlineShape (OutlineInfo::Shape s);
 
-  void setOutlineShape (OutlineInfo::Shape s);
+    /**
+     * Retrieve the color of the object outline.
+     *
+     * @return The ouline color.
+     */
+    const QColor& getOutlineColor () const;
 
-  /**
-   * Retrieve the color of the object outline.
-   *
-   * @return The ouline color.
-   */
-  const QColor& getOutlineColor () const;
+    /**
+     * Retrieve the style of the ouline pen.
+     *
+     * @return The pen style.
+     */
+    Qt::PenStyle getOutlineStyle () const;
 
-  /**
-   * Retrieve the style of the ouline pen.
-   *
-   * @return The pen style.
-   */
-  Qt::PenStyle getOutlineStyle () const;
+    /**
+     * Retireve the width of the ouline pen.
+     *
+     * @return The outline width.
+     */
+    float getOutlineWidth () const;
 
-  /**
-   * Retireve the width of the ouline pen.
-   *
-   * @return The outline width.
-   */
-  float getOutlineWidth () const;
+    /**
+     * Set the fill properties for the object.
+     *
+     * @param info The FillInfo structure with all properties.
+     */
+    void setFillInfo (const FillInfo& info);
 
-  /**
-   * Set the fill properties for the object.
-   *
-   * @param info The FillInfo structure with all properties.
-   */
-  void setFillInfo (const FillInfo& info);
+    /**
+     * Retrieve the fill properties of the object.
+     *
+     * @return The FillInfo properties.
+     */
+    FillInfo getFillInfo () const;
 
-  /**
-   * Retrieve the fill properties of the object.
-   *
-   * @return The FillInfo properties.
-   */
-  FillInfo getFillInfo () const;
+    /**
+     * Set the fill color.
+     *
+     * @param c The color for filling the object.
+     */
+    void setFillColor (const QColor& c);
 
-  /**
-   * Set the fill color.
-   *
-   * @param c The color for filling the object.
-   */
-  void setFillColor (const QColor& c);
+    /**
+     * Set the fill style of the object.
+     *
+     * @param b the brush style for fillig the object.
+     */
+    void setFillStyle (FillInfo::Style s);
 
-  /**
-   * Set the fill style of the object.
-   *
-   * @param b the brush style for fillig the object.
-   */
-  void setFillStyle (FillInfo::Style s);
+    void setFillGradient (const Gradient& g);
 
-  void setFillGradient (const Gradient& g);
+    void setFillPattern (Qt::BrushStyle b);
 
-  void setFillPattern (Qt::BrushStyle b);
+    /**
+     * Retrieve the fill color.
+     *
+     * @return The color.
+     */
+    const QColor& getFillColor () const;
 
-  /**
-   * Retrieve the fill color.
-   *
-   * @return The color.
-   */
-  const QColor& getFillColor () const;
+    /**
+     * Retrieve the brush style of object filling.
+     *
+     * @return The brush style.
+     */
+    FillInfo::Style getFillStyle () const;
 
-  /**
-   * Retrieve the brush style of object filling.
-   *
-   * @return The brush style.
-   */
-  FillInfo::Style getFillStyle () const;
+    const Gradient& getFillGradient () const;
 
-  const Gradient& getFillGradient () const;
+    Qt::BrushStyle getFillPattern () const;
 
-  Qt::BrushStyle getFillPattern () const;
+    /**
+     * Retrieve the transformation matrix associated with the object.
+     *
+     * @return The current matrix.
+     */
+    const QWMatrix& matrix () const { return tMatrix; }
 
-  /**
-   * Retrieve the transformation matrix associated with the object.
-   *
-   * @return The current matrix.
-   */
-  const QWMatrix& matrix () const { return tMatrix; }
+    /**
+     * Initialize a temporary matrix for transformation from the values of
+     * the transformation matrix. The temporary matrix is used by interactive
+     * tools like the SelectionTool.
+     */
+    void initTmpMatrix ();
 
-  /**
-   * Initialize a temporary matrix for transformation from the values of
-   * the transformation matrix. The temporary matrix is used by interactive
-   * tools like the SelectionTool.
-   */
-  void initTmpMatrix ();
+    /**
+     * Transform the object according to the given matrix.
+     *
+     * @param m      The matrix for combining with the current transformation
+     *               matrix.
+     * @param update if true, the bounding box of the object is immediatly
+     *               updated, otherwise not. This is usefull for a sequence of
+     *               transformations in order to avoid flickering.
+     */
+    void transform (const QWMatrix& m, bool update = false);
 
-  /**
-   * Transform the object according to the given matrix.
-   *
-   * @param m      The matrix for combining with the current transformation
-   *               matrix.
-   * @param update if true, the bounding box of the object is immediatly
-   *               updated, otherwise not. This is usefull for a sequence of
-   *               transformations in order to avoid flickering.
-   */
-  void transform (const QWMatrix& m, bool update = false);
+    /**
+     * Transform the object temporary according to the given matrix. The
+     * transformation matrix is not modified.
+     *
+     * @param m      The matrix for combining with the current transformation
+     *               matrix.
+     * @param update if true, the bounding box of the object is immediatly
+     *               updated, otherwise not.
+     * @see
+     */
+    void ttransform (const QWMatrix& m, bool update = false);
 
-  /**
-   * Transform the object temporary according to the given matrix. The
-   * transformation matrix is not modified.
-   *
-   * @param m      The matrix for combining with the current transformation
-   *               matrix.
-   * @param update if true, the bounding box of the object is immediatly
-   *               updated, otherwise not.
-   * @see
-   */
-  void ttransform (const QWMatrix& m, bool update = false);
+    /**
+     * Mark the object as selected or not selected.
+     *
+     * @param flag if true, the object is selected, otherwise the object will
+     *             be unselected.
+     */
+    virtual void select (bool flag = true);
 
-  /**
-   * Mark the object as selected or not selected.
-   *
-   * @param flag if true, the object is selected, otherwise the object will
-   *             be unselected.
-   */
-  virtual void select (bool flag = true);
+    /**
+     * Retrieve the selection status of the object.
+     *
+     * @return true, if the object is selected, otherwise false.
+     */
+    bool isSelected () const { return sflag; }
 
-  /**
-   * Retrieve the selection status of the object.
-   *
-   * @return true, if the object is selected, otherwise false.
-   */
-  bool isSelected () const { return sflag; }
+    virtual bool isValid () { return true; }
 
-  virtual bool isValid () { return true; }
+    bool gradientFill () const {
+        return fillInfo.fstyle == GObject::FillInfo::GradientFill;
+    }
 
-  bool gradientFill () const {
-    return fillInfo.fstyle == GObject::FillInfo::GradientFill;
-  }
+    /**
+     * Retrieve the bounding box for the object.
+     *
+     * @return The rectangle with the bounding box parameters.
+     */
+    const Rect& boundingBox () const { return box; }
+    virtual const Rect& redrawBox () const { return box; }
 
-  /**
-   * Retrieve the bounding box for the object.
-   *
-   * @return The rectangle with the bounding box parameters.
-   */
-  const Rect& boundingBox () const { return box; }
-  virtual const Rect& redrawBox () const { return box; }
+    void setLayer (GLayer* l);
+    GLayer* getLayer () { return layer; }
 
-  void setLayer (GLayer* l);
-  GLayer* getLayer () { return layer; }
+    void writePropertiesToXml (QDomElement &element, QDomDocument &document);
 
-  void writePropertiesToXml (QDomElement &element, QDomDocument &document);
+    void ref ();
+    void unref ();
+    unsigned int ref_count () const { return rcount; }
 
-  void ref ();
-  void unref ();
-  unsigned int ref_count () const { return rcount; }
+    virtual QString typeName () const = 0;
 
-  virtual QString typeName () const = 0;
+    virtual GOState* saveState ();
+    virtual void restoreState (GOState* state);
 
-  virtual GOState* saveState ();
-  virtual void restoreState (GOState* state);
+    virtual int getNeighbourPoint (const Coord& ) { return -1; }
+    virtual void movePoint (int /*idx*/, float /*dx*/, float /*dy*/) {}
+    virtual void removePoint (int , bool) {}
 
-  virtual int getNeighbourPoint (const Coord& ) { return -1; }
-  virtual void movePoint (int /*idx*/, float /*dx*/, float /*dy*/) {}
-  virtual void removePoint (int , bool) {}
+    /**
+     * Draw the object with the given painter.
+     * NOTE: This method has to be implemented in every subclass.
+     *
+     * @param p The Painter for drawing the object.
+     * @param withBasePoints If true, draw the base points of the
+     *                       object.
+     */
+    virtual void draw (QPainter& /*p*/, bool /*withBasePoints*/ = false,
+                       bool /*outline*/ = false) {}
 
-  /**
-   * Draw the object with the given painter.
-   * NOTE: This method has to be implemented in every subclass.
-   *
-   * @param p The Painter for drawing the object.
-   * @param withBasePoints If true, draw the base points of the
-   *                       object.
-   */
-  virtual void draw (QPainter& /*p*/, bool /*withBasePoints*/ = false,
-                     bool /*outline*/ = false) {}
+    /**
+     * Test, if the object contains the given point.
+     * NOTE: This method has to be implemented in every subclass.
+     *
+     * @param p  The coodinates of a point.
+     * @return   true, if the object contains the point, otherwise false.
+     */
+    virtual bool contains (const Coord& p);
 
-  /**
-   * Test, if the object contains the given point.
-   * NOTE: This method has to be implemented in every subclass.
-   *
-   * @param p  The coodinates of a point.
-   * @return   true, if the object contains the point, otherwise false.
-   */
-  virtual bool contains (const Coord& p);
+    virtual bool intersects (const Rect& r);
 
-  virtual bool intersects (const Rect& r);
+    /**
+     * Create a new object with identical properties.
+     * NOTE: This method has to be implemented in every subclass.
+     *
+     * @return A copy of this object.
+     */
+    virtual GObject* copy () = 0;
+    virtual GObject* clone (const QDomElement &element) = 0;
 
-  /**
-   * Create a new object with identical properties.
-   * NOTE: This method has to be implemented in every subclass.
-   *
-   * @return A copy of this object.
-   */
-  virtual GObject* copy () = 0;
-  virtual GObject* clone (const QDomElement &element) = 0;
+    virtual QDomElement writeToXml (QDomDocument &document);
 
-  virtual QDomElement writeToXml (QDomDocument &document);
+    /**
+     * At the moment only valid for lines and bezier curves.
+     */
+    virtual bool findNearestPoint (const Coord& , float /*max_dist*/,
+                                   float& /*dist*/, int& /*pidx*/, bool /*all*/ = false) {
+        return false;
+    }
 
-  /**
-   * At the moment only valid for lines and bezier curves.
-   */
-  virtual bool findNearestPoint (const Coord& , float /*max_dist*/,
-                                 float& /*dist*/, int& /*pidx*/, bool /*all*/ = false) {
-    return false;
-  }
+    virtual void calcBoundingBox () = 0;
 
-  virtual void printInfo ();
-  virtual void calcBoundingBox () = 0;
+    virtual void getPath(QValueList<Coord>& /*path*/) {}
 
-  virtual void getPath (std::vector<Coord>& /*path*/) {}
+    virtual GCurve* convertToCurve () const { return 0L; }
 
-  virtual GCurve* convertToCurve () const { return 0L; }
+    bool workInProgress () const { return inWork; }
+    void setWorkInProgress (bool flag) { inWork = flag; }
 
-  bool workInProgress () const { return inWork; }
-  void setWorkInProgress (bool flag) { inWork = flag; }
+    void invalidateClipRegion  ();
 
-  void invalidateClipRegion  ();
+    // used for saving/restoring of object connections (like text on path)
+    QString getId ();
+    bool hasId () const { return ! id.isEmpty (); }
 
-  // used for saving/restoring of object connections (like text on path)
-  const char* getId ();
-  bool hasId () const { return ! id.isEmpty (); }
+    QString getRefId () { return refid; }
+    bool hasRefId () const { return !refid.isEmpty(); }
 
-  const char* getRefId () { return (const char *) refid; }
-  bool hasRefId () const { return ! refid.isEmpty (); }
-
-  void setWrapper (SWrapper *wobj);
-  SWrapper* getWrapper () { return wrapper; }
-
-  static void registerPrototype (const char* className, GObject *proto);
-  static GObject* lookupPrototype (const char *className);
+    static void registerPrototype (const QString &className, GObject *proto);
+    static GObject* lookupPrototype (const QString &className);
 
 signals:
-  void deleted ();
-  void changed ();
-  void changed (const Rect& r);
-  void propertiesChanged (GObject::Property p, int mask);
+    void deleted ();
+    void changed ();
+    void changed (const Rect& r);
+    void propertiesChanged (GObject::Property p, int mask);
 
 protected:
-  void initBrush (QBrush& b);
-  void initPen (QPen& p);
+    void initBrush (QBrush& b);
+    void initPen (QPen& p);
 
-  void updateBoundingBox (const Rect& r);
-  void updateBoundingBox (const Coord& p1, const Coord& p2);
+    void updateBoundingBox (const Rect& r);
+    void updateBoundingBox (const Coord& p1, const Coord& p2);
 
-  void calcUntransformedBoundingBox (const Coord& tleft, const Coord& tright,
-                                     const Coord& bright, const Coord& bleft);
+    void calcUntransformedBoundingBox (const Coord& tleft, const Coord& tright,
+                                       const Coord& bright, const Coord& bleft);
 
-  bool sflag;              // object is selected
-  Rect box;                // the bounding box
-  QWMatrix tMatrix;        // transformation matrix
-  QWMatrix tmpMatrix;      // temporary transformation matrix
-  QWMatrix iMatrix;        // inverted transformation matrix
-  OutlineInfo outlineInfo; // outline attributes
-  FillInfo fillInfo;       // fill attributes
-  unsigned int rcount;     // the reference counter
-  GLayer *layer;           // the layer containing this object
-  GradientShape gShape;    // the shape (clipped pixmap) for gradient fill
-  bool inWork;             // the object is currently manipulated,
-                           // so don't fill it now
+    bool sflag;              // object is selected
+    Rect box;                // the bounding box
+    QWMatrix tMatrix;        // transformation matrix
+    QWMatrix tmpMatrix;      // temporary transformation matrix
+    QWMatrix iMatrix;        // inverted transformation matrix
+    OutlineInfo outlineInfo; // outline attributes
+    FillInfo fillInfo;       // fill attributes
+    unsigned int rcount;     // the reference counter
+    GLayer *layer;           // the layer containing this object
+    GradientShape gShape;    // the shape (clipped pixmap) for gradient fill
+    bool inWork;             // the object is currently manipulated,
+    // so don't fill it now
 
-  QString id, refid;
-  SWrapper* wrapper;       // Wrapper object for scripting purposes
+    QString id, refid;
 
-  // default value
-  static OutlineInfo defaultOutlineInfo;
-  static FillInfo defaultFillInfo;
+    // default value
+    static OutlineInfo defaultOutlineInfo;
+    static FillInfo defaultFillInfo;
 
-  static std::map<std::string, GObject*> *prototypes;
+    static QDict<GObject> *prototypes;
 };
 
 class GOState {
-  friend class GObject;
+    friend class GObject;
 protected:
-  GOState () : rcount (1) {}
+    GOState () : rcount (1) {}
 
 public:
-  // should be protected, but ...
-  virtual ~GOState () {}
+    // should be protected, but ...
+    virtual ~GOState () {}
 
-  void ref () { rcount++; }
-  void unref () { if (--rcount == 0) delete this; }
+    void ref () { rcount++; }
+    void unref () { if (--rcount == 0) delete this; }
 
 private:
-  QWMatrix matrix;
-  GObject::OutlineInfo oInfo;
-  GObject::FillInfo fInfo;
-  unsigned int rcount;
-};
-
-class SWrapper {
-protected:
-  SWrapper () : obj (0L) {}
-
-public:
-  void setObject (GObject* o) { obj = o; }
-
-protected:
-  GObject* obj;
+    QWMatrix matrix;
+    GObject::OutlineInfo oInfo;
+    GObject::FillInfo fInfo;
+    unsigned int rcount;
 };
 
 // Fixes an --enable-final problem (Werner)
 inline float seg_length (const Coord& c1, const Coord& c2) {
-  float dx = c2.x () - c1.x ();
-  float dy = c2.y () - c1.y ();
-  return std::sqrt (dx * dx + dy * dy);
+    float dx = c2.x () - c1.x ();
+    float dy = c2.y () - c1.y ();
+    return std::sqrt (dx * dx + dy * dy);
 }
 
 namespace KIllustrator {
-QDomElement createMatrixElement(const QString &tag, const QWMatrix &matrix, QDomDocument &document);
-QWMatrix toMatrix(const QDomElement &matrix);
-GObject *objectFactory(const QDomElement &element);
+    QDomElement createMatrixElement(const QString &tag, const QWMatrix &matrix, QDomDocument &document);
+    QWMatrix toMatrix(const QDomElement &matrix);
+    GObject *objectFactory(const QDomElement &element);
 };
 
 #endif

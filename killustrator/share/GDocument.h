@@ -149,8 +149,6 @@ public:
   KoPageLayout pageLayout ();
   void setPageLayout (const KoPageLayout& layout);
 
-  void printInfo (QString& s);
-
   void setGrid (float dx, float dy, bool snap);
   void getGrid (float& dx, float& dy, bool& snap);
 

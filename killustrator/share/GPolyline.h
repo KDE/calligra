@@ -70,7 +70,7 @@ public:
   virtual bool findNearestPoint (const Coord& p, float max_dist,
                                  float& dist, int& pidx, bool all = false);
 
-  virtual void getPath (std::vector<Coord>& path);
+  virtual void getPath (QValueList<Coord>& path);
   virtual GCurve* convertToCurve () const;
 
   virtual bool splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2);

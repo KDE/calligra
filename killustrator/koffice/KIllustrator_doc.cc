@@ -75,9 +75,8 @@ bool KIllustratorDocument::loadXML (QIODevice *, const QDomDocument &doc)
     vector<GLayer*>::iterator i = layers.begin ();
     for (; i != layers.end (); i++) {
       GLayer* layer = *i;
-      list<GObject*>& contents = layer->objects ();
-      for (list<GObject*>::iterator oi = contents.begin ();
-           oi != contents.end (); oi++) {
+      const QList<GObject>& contents = layer->objects ();
+      for (QListIterator<GObject> oi(contents); oi.current(); ++oi) {
         if ((*oi)->isA ("GPart")) {
           GPart *part = (GPart *) *oi;
           insertChild (part->getChild ());

@@ -28,8 +28,6 @@
 #include <qdrawutil.h>
 #include <qpixmap.h>
 
-using namespace std;
-
 #define CELL_WIDTH  50
 #define CELL_HEIGHT 30
 
@@ -39,19 +37,8 @@ BrushCells::BrushCells (QWidget *parent, const QColor &color, const char *name)
   setFrameStyle (QFrame::Panel | QFrame::Sunken);
   setNumRows(4);
   setNumCols(4);
-  //setMinimumSize (4 * CELL_WIDTH, 4 * CELL_HEIGHT);
-  for (int i = 0; i < 14; i++) {
-    QPixmap pix (CELL_WIDTH, CELL_HEIGHT);
-    pix.fill (white);
-    QPainter p;
-    p.begin (&pix);
-    p.setPen (Qt::black);
-    QBrush brush (color, (Qt::BrushStyle) (i + 1));
-    qDrawShadeRect (&p, 0, 0, CELL_WIDTH, CELL_HEIGHT,
-                    colorGroup (), true, 1, 1, &brush);
-    p.end ();
-    brushPixmaps.push_back (pix);
-  }
+  brushPixmaps.setAutoDelete(true);
+  setColor(color);
   currentBrush = 0;
 }
 
@@ -62,16 +49,16 @@ void BrushCells::setColor(const QColor &color)
 {
  brushPixmaps.clear();
  for (int i = 0; i < 14; i++) {
-    QPixmap pix (CELL_WIDTH, CELL_HEIGHT);
-    pix.fill (white);
+    QPixmap *pix=new QPixmap(CELL_WIDTH, CELL_HEIGHT);
+    pix->fill(Qt::white);
     QPainter p;
-    p.begin (&pix);
-    p.setPen (Qt::black);
-    QBrush brush (color, (Qt::BrushStyle) (i + 1));
+    p.begin (pix);
+    p.setPen(Qt::black);
+    QBrush brush(color, (Qt::BrushStyle) (i + 1));
     qDrawShadeRect (&p, 0, 0, CELL_WIDTH, CELL_HEIGHT,
-                    colorGroup (), true, 1, 1, &brush);
-    p.end ();
-    brushPixmaps.push_back (pix);
+                    colorGroup(), true, 1, 1, &brush);
+    p.end();
+    brushPixmaps.append(pix);
  }
 }
 
@@ -86,7 +73,7 @@ int BrushCells::cellHeight (int) {
 void BrushCells::paintCell (QPainter *p, int row, int col) {
   int pos = row * 4 + col;
   if (pos < 14) {
-    p->drawPixmap (0, 0, brushPixmaps[pos]);
+    p->drawPixmap (0, 0, *brushPixmaps.at(pos));
     if (currentBrush == pos) {
       qDrawShadeRect (p, 0, 0, CELL_WIDTH - 1, CELL_HEIGHT - 1,
                       colorGroup (), false, 1, 1, 0L);

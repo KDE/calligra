@@ -21,14 +21,11 @@
 
 */
 
-#include <algorithm>
 #include <cassert>
 #include <GText.h>
 #include <GDocument.h>
 
 #include <klocale.h>
-
-using namespace std;
 
 float seg_angle (const Coord& c1, const Coord& c2) {
   float dx = c2.x () - c1.x ();
@@ -58,7 +55,7 @@ GText::GText () {
   cursx = cursy = 0;
   max_width = 0;
   cursorActive = false;
-  text.push_back (QString (""));
+  text.append(QString (""));
   pathObj = 0L;
 }
 
@@ -69,7 +66,7 @@ GText::GText (const QDomElement &element) : GObject (element.namedItem("gobject"
     cursx = cursy = 0;
     max_width = 0;
     cursorActive = false;
-    text.push_back (QString (""));
+    text.append(QString (""));
     pathObj = 0L;
     float x = 0, y = 0;
 
@@ -99,11 +96,7 @@ GText::GText (const GText& obj) : GObject (obj) {
   fm = new QFontMetrics (textInfo.font);
   cursx = cursy = 0;
   cursorActive = false;
-  vector<QString>::const_iterator it = obj.text.begin ();
-  while (it != obj.text.end ()) {
-    text.push_back (*it);
-    it++;
-  }
+  setText(obj.getText());
   pathObj = 0L;
   if (obj.pathObj)
     setPathObject (obj.pathObj);
@@ -151,25 +144,24 @@ void GText::draw (QPainter& p, bool, bool) {
 
 
 void GText::drawSimpleText (QPainter& p) {
-  vector<QString>::iterator it = text.begin ();
+  QStringList::Iterator it = text.begin ();
   float y = fm->ascent ();
-  for (; it != text.end (); it++) {
-    const char* s = (const char *) *it;
-    int ws = fm->width (s);
+  for (; it != text.end (); ++it) {
+    int ws = fm->width(*it);
     int xoff = 0;
     if (textInfo.align == TextInfo::AlignCenter)
       xoff = -ws / 2;
     else if (textInfo.align == TextInfo::AlignRight)
       xoff = -ws;
     QPoint pos (xoff, (int) y);
-    p.drawText (pos, s);
+    p.drawText (pos, *it);
     y += fm->height ();
   }
   if (cursorActive) {
     float x1, y1, y2;
     y1 = cursy * fm->height () - 1;
     y2 = y1 + fm->height () + 2;
-    const char* s = text[cursy];
+    QString s = *(text.at(cursy));
     int ws = fm->width (s);
     x1 = 0;
     for (int i = 0; i < cursx; i++)
@@ -185,48 +177,48 @@ void GText::drawSimpleText (QPainter& p) {
 }
 
 void GText::drawPathText (QPainter& p) {
-  vector<QString>::iterator it = text.begin ();
+  QStringList::Iterator it = text.begin ();
   int idx = 0;
 
   QWMatrix m = p.worldMatrix ();
   for (; it != text.end (); it++) {
-    const char* s = (const char *) *it;
-    int slen = strlen (s);
+    QString s = *it;
+    int slen = s.length();
 
     for (int i = 0; i < slen; i++) {
       p.setWorldMatrix (m);
-      p.setWorldMatrix (cmatrices[idx++], true);
-      p.drawText (0, 0, &s[i], 1);
+      p.setWorldMatrix (*(cmatrices[idx++]), true);
+      p.drawText (0, 0, (QChar)s[i], 1);
     }
   }
   if (cursorActive) {
     idx = 0;
     int line = 0;
-    vector<QString>::iterator it = text.begin ();
+    QStringList::Iterator it = text.begin ();
     while (line < cursy) {
-      idx += it->length ();
+      idx += (*it).length ();
       it++;
       line++;
     }
     idx += cursx;
 
     p.setWorldMatrix (m);
-    p.setWorldMatrix (cmatrices[idx], true);
+    p.setWorldMatrix (*(cmatrices[idx]), true);
     p.setPen (black);
     p.drawLine (0, 2, 0, -fm->height () - 1);
   }
 }
 
 void GText::setCursor (int x, int y) {
-  if (y >= 0 && y < (int) text.size ())
+  if (y >= 0 && y < (int) text.count())
     cursy = y;
   else
-    cursy = text.size () - 1;
+    cursy = text.count() - 1;
 
-  if (x >= 0 && x <= (int) text[y].length ())
+  if (x >= 0 && x <= (int) (*text.at(y)).length ())
     cursx = x;
   else
-    cursx = text[y].length () - 1;
+    cursx = (*text.at(y)).length () - 1;
   updateRegion ();
 }
 
@@ -246,7 +238,7 @@ void GText::setText (const QString& s) {
     pos2 = s.find ('\n', pos1);
     if (pos2 != -1) {
       QString sub = s.mid (pos1, pos2 - pos1);
-      text.push_back (sub);
+      text.append(sub);
       pos1 = pos2 + 1;
     }
     else {
@@ -254,7 +246,7 @@ void GText::setText (const QString& s) {
         break;
 
       QString sub = s.mid (pos1, s.length () - pos1);
-      text.push_back (sub);
+      text.append(sub);
     }
   } while (pos2 != -1);
   updateMatricesForPath ();
@@ -264,7 +256,7 @@ void GText::setText (const QString& s) {
 QString GText::getText () const {
   QString s;
   int line = 1;
-  for (vector<QString>::const_iterator it = text.begin (); it != text.end ();
+  for (QStringList::ConstIterator it = text.begin (); it != text.end ();
        it++, line++) {
     s += *it;
     if (line < lines ())
@@ -277,11 +269,9 @@ void GText::deleteChar () {
   QString& s = text[cursy];
   if (cursx == (int) s.length ()) {
     // end of line
-    if (cursy < (int) text.size () - 1) {
+    if (cursy < (int) text.count() - 1) {
       s.append (text[cursy + 1]);
-      vector<QString>::iterator it = text.begin ();
-      advance (it, cursy + 1);
-      text.erase (it);
+      text.remove(text.at(cursy + 1));
     }
   }
   else
@@ -305,9 +295,7 @@ void GText::deleteBackward () {
     QString& prev = text[cursy - 1];
     int oldpos = prev.length ();
     prev.append (s);
-    vector<QString>::iterator it = text.begin ();
-    advance (it, cursy);
-    text.erase (it);
+    text.remove(text.at(cursy));
     cursy--;
     cursx = oldpos;
   }
@@ -321,9 +309,7 @@ void GText::insertChar (char c) {
     // newline
     QString rest (s.right (s.length () - cursx));
     s.truncate (cursx);
-    vector<QString>::iterator it = text.begin ();
-    advance (it, ++cursy);
-    text.insert (it, rest);
+    text.insert (text.at(++cursy), rest);
     cursx = 0;
   }
   else {
@@ -349,8 +335,8 @@ void GText::updateCursor (const Coord& p) {
 
       cursy = (int) (pp.y () / fm->height ());
       int x = (int) pp.x ();
-      const char *s = (const char *)line (cursy);
-      int n = ::strlen (s);
+      QString s = line (cursy);
+      int n = s.length();
       int width = 0;
       for (int i = 0; i < n; i++) {
         width += fm->width (s[i]);
@@ -371,18 +357,18 @@ void GText::setFont (const QFont& f) {
 }
 
 void GText::calcBoundingBox () {
-  vector<QString>::iterator it;
+  QStringList::Iterator it;
   if (pathObj) {
     // compute bounding box for path text -> union of character boxes
     int idx = 0;
     QRect rect;
 
     for (it = text.begin (); it != text.end (); it++) {
-      const char *s = *it;
-      int slen = strlen (s);
+      QString s = *it;
+      int slen = s.length();
       for (int i = 0; i < slen; i++) {
-        QRect r = fm->boundingRect (QChar (s[i]));
-        r = cmatrices[idx].map (r);
+        QRect r = fm->boundingRect (s[i]);
+        r = (*cmatrices[idx]).map (r);
         r = tmpMatrix.map (r);
         if (idx == 0)
           rect = r;
@@ -398,7 +384,7 @@ void GText::calcBoundingBox () {
     int width = 0, height = 0;
     int xp = 0;
     for (it = text.begin (); it != text.end (); it++) {
-      const char* s = *it;
+      QString s = *it;
       int ws = fm->width (s);
       width = width > ws ? width : ws;
       height += fm->height ();
@@ -479,7 +465,7 @@ QDomElement GText::writeToXml (QDomDocument &document) {
     int i = 0;
     // temporary solution to make it work before we get rid of the STL
     QString t;
-    for (vector<QString>::iterator it = text.begin (); it != text.end ();
+    for (QStringList::Iterator it = text.begin (); it != text.end ();
          it++, i++)
         t+=(*it) + '\n';
     element.appendChild(document.createCDATASection(t));
@@ -489,30 +475,30 @@ QDomElement GText::writeToXml (QDomDocument &document) {
 
 void GText::updateMatricesForPath () {
   if (pathObj) {
-    vector<QString>::iterator it;
+    QStringList::Iterator it;
     int i;
     int num_chars = 0;
 
     // initialize transformation matrices for characters
     for (it = text.begin (); it != text.end (); it++)
-      num_chars += it->length ();
+      num_chars += (*it).length ();
     cmatrices.clear ();
     cmatrices.resize (num_chars);
 
     if (pathObj->inherits ("GPolyline") || pathObj->isA ("GOval")) {
       // get path for aligning
-      vector<Coord> path;
+      QValueList<Coord> path;
       pathObj->getPath (path);
 
       // map path from world coordinates to object coordinates
-      for (i = 0; i < (int) path.size (); i++)
+      for (i = 0; i < (int) path.count(); i++)
         path[i] = path[i].transform (iMatrix);
 
       // now compute character matrices according the path
       float len, angle;
       float lpos = 0; // width of string at current segment
 
-      int max_pos = path.size () - 1;
+      int max_pos = path.count() - 1;
       int s_pos = 0, e_pos = 1;
       len = seg_length (path[s_pos], path[e_pos]);
       angle = seg_angle (path[s_pos], path[e_pos]);
@@ -520,8 +506,8 @@ void GText::updateMatricesForPath () {
         angle += 180;
 
       for (it = text.begin (); it != text.end (); it++) {
-        const char *s = (const char *) *it;
-        int slen = strlen (s);
+        QString s = *it;
+        int slen = s.length();
         i = 0;
         while (i < slen) {
           int cwidth = fm->width (s[i]);
@@ -537,9 +523,9 @@ void GText::updateMatricesForPath () {
             if (e_pos - s_pos > 1) {
               lpos = 0;
               int pidx = (e_pos + s_pos) / 2;
-              cmatrices[i].translate (path[pidx].x (), path[pidx].y ());
-              cmatrices[i].rotate (angle);
-              cmatrices[i].translate (-cwidth/2, 0);
+              cmatrices[i]->translate (path[pidx].x (), path[pidx].y ());
+              cmatrices[i]->rotate (angle);
+              cmatrices[i]->translate (-cwidth/2, 0);
               s_pos = e_pos - 1;
               len = seg_length (path[s_pos], path[e_pos]);
               angle = seg_angle (path[s_pos], path[e_pos]);
@@ -547,9 +533,9 @@ void GText::updateMatricesForPath () {
                 angle += 180;
             }
             else {
-              cmatrices[i].translate (path[s_pos].x (), path[s_pos].y ());
-              cmatrices[i].rotate (angle);
-              cmatrices[i].translate (lpos, 0);
+              cmatrices[i]->translate (path[s_pos].x (), path[s_pos].y ());
+              cmatrices[i]->rotate (angle);
+              cmatrices[i]->translate (lpos, 0);
               lpos += cwidth;
             }
             i++;
@@ -591,7 +577,7 @@ void GText::setPathObject (GObject* obj) {
 }
 
 bool GText::isEmpty () const {
-  return (text.empty () || (lines () == 1 && text[0] == ""));
+  return (text.isEmpty () || (lines () == 1 && text[0] == ""));
 }
 
 #include <GText.moc>

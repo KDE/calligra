@@ -60,19 +60,18 @@ void UngroupCmd::execute () {
         if (pos != -1) {
             document->setAutoUpdate (false);
             // extract the members of the group
-            const list<GObject*> members = group->getMembers ();
-            list<GObject*>::const_iterator mi = members.begin ();
-            for (int offs = 0; mi != members.end (); mi++, offs++) {
-                GObject* obj = *mi;
+            QList <GObject> members = group->getMembers ();
+            GObject *mo=members.first();
+            for (int offs = 0; mo!=0L; mo=members.next(), offs++) {
                 // transform it according to the group transformation matrix
-                obj->transform (group->matrix (), true);
+                mo->transform (group->matrix (), true);
 
                 // and insert it into the object list at the former position
                 // of the group object
-                document->insertObjectAtIndex (obj, pos + offs);
-                document->selectObject (obj);
-                p->members.append(obj);
-                obj->ref ();
+                document->insertObjectAtIndex(mo, pos + offs);
+                document->selectObject (mo);
+                p->members.append(mo);
+                mo->ref ();
             }
             // remove the group object
             document->deleteObject (group);

@@ -24,10 +24,12 @@
 
 #include <GCurve.h>
 #include <GBezier.h>
+#include <Painter.h>
 #include <cassert>
 #include <klocale.h>
 #include <qdom.h>
 #include <qpainter.h>
+#include <stdlib.h>
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
   // s1 == Line, s2 == Bezier
@@ -201,7 +203,6 @@ void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/,
   if (withBasePoints) {
     p.save ();
     p.setPen (Qt::black);
-//    p.setBrush (Qt::white);
     if (drawFirst)
       Painter::drawRect (p, points[0].x () - 2, points[0].y () - 2, 4, 4);
     if (skind == sk_Line)
@@ -315,9 +316,9 @@ void GCurve::draw (QPainter& p, bool withBasePoints, bool outline) {
 
   }
   else {
-    list<GSegment>::iterator i;
-    for (i = segments.begin (); i != segments.end (); i++) {
-      i->draw (p, withBasePoints, outline, drawFirst);
+    QValueList<GSegment>::Iterator i;
+    for (i = segments.begin (); i != segments.end (); ++i) {
+      (*i).draw (p, withBasePoints, outline, drawFirst);
       drawFirst = false;
     }
   }
@@ -335,29 +336,29 @@ bool GCurve::contains (const Coord& p) {
 
 void GCurve::movePoint (int idx, float dx, float dy) {
   int pidx = 0;
-  list<GSegment>::iterator i;
+  QValueList<GSegment>::Iterator i;
   float ndx = dx * iMatrix.m11 () + dy * iMatrix.m21 ();
   float ndy = dy * iMatrix.m22 () + dx * iMatrix.m12 ();
 
-  for (i = segments.begin (); i != segments.end (); i++) {
-    int num = (i->kind () == GSegment::sk_Line ? 2 : 4);
+  for (i = segments.begin (); i != segments.end (); ++i) {
+    int num = ((*i).kind () == GSegment::sk_Line ? 2 : 4);
     pidx += num;
     if (pidx > idx) {
       // move point of segment[i]
       int sidx = idx - (pidx - num);
-      i->movePoint (sidx, ndx, ndy);
+      (*i).movePoint (sidx, ndx, ndy);
       if (sidx == num - 1) {
         // it's a endpoint, so move the first point of segment[i+1]
-        i++;
+        ++i;
         if (i != segments.end ()) {
-          i->movePoint (0, ndx, ndy);
+          (*i).movePoint (0, ndx, ndy);
         }
       }
       else if (sidx == 0) {
         // it's a startpoint, so move the first point of segment[i-1]
         if (i == segments.begin () && closed) {
-          GSegment& seg = segments.back ();
-          seg.movePoint (seg.kind () == GSegment::sk_Line ? 1 : 3, ndx, ndy);
+            GSegment& seg = segments.last();
+            seg.movePoint (seg.kind () == GSegment::sk_Line ? 1 : 3, ndx, ndy);
         }
       }
       updatePath ();
@@ -371,11 +372,11 @@ int GCurve::getNeighbourPoint (const Coord& p) {
   Coord c;
   int idx = 0;
 
-  list<GSegment>::iterator i;
-  for (i = segments.begin (); i != segments.end (); i++) {
-    int num  = (i->kind () == GSegment::sk_Line ? 2 : 4);
+  QValueList<GSegment>::Iterator i;
+  for (i = segments.begin (); i != segments.end (); ++i) {
+    int num  = ((*i).kind () == GSegment::sk_Line ? 2 : 4);
     for (int n = 0; n < num; n++) {
-      c = i->pointAt (n).transform (tMatrix);
+      c = (*i).pointAt (n).transform (tMatrix);
       if (c.isNear (p, NEAR_DISTANCE)) {
         return idx;
       }
@@ -405,27 +406,29 @@ QDomElement GCurve::writeToXml (QDomDocument &document) {
     QDomElement element=document.createElement("curve");
     element.setAttribute ("closed", (int) closed);
 
-    list<GSegment>::iterator i;
-    for (i = segments.begin (); i != segments.end (); i++)
-        element.appendChild(i->writeToXml (document));
+    QValueList<GSegment>::Iterator i;
+    for (i = segments.begin (); i != segments.end (); ++i)
+        element.appendChild((*i).writeToXml (document));
     element.appendChild(GObject::writeToXml(document));
     return element;
 }
 
-void GCurve::getPath (vector<Coord>& ) {
+void GCurve::getPath (QValueList<Coord>& ) {
 }
 
 void GCurve::calcBoundingBox () {
-  list<GSegment>::iterator i = segments.begin ();
-  if (i == segments.end ())
+  QValueList<GSegment>::Iterator i = segments.begin ();
+  if (i == segments.end ()) {
     box = Rect ();
+    return;
+  }
 
-  Rect r = i->boundingBox ();
-  i++;
+  Rect r = (*i).boundingBox ();
+  ++i;
   while (i != segments.end ()) {
-    Rect r2 = i->boundingBox ();
+    Rect r2 = (*i).boundingBox ();
     r = r.unite (r2);
-    i++;
+    ++i;
   }
   box = r.transform (tmpMatrix);
 }
@@ -447,7 +450,7 @@ void GCurve::addLineSegment (const Coord& p1, const Coord& p2) {
   GSegment seg (GSegment::sk_Line);
   seg.setPoint (0, p1);
   seg.setPoint (1, p2);
-  segments.push_back (seg);
+  segments.append(seg);
   updatePath ();
   updateRegion (true);
 }
@@ -459,28 +462,26 @@ void GCurve::addBezierSegment (const Coord& p1, const Coord& p2,
   seg.setPoint (1, p2);
   seg.setPoint (2, p3);
   seg.setPoint (3, p4);
-  segments.push_back (seg);
+  segments.append(seg);
   updatePath ();
   updateRegion (true);
 }
 
 void GCurve::addSegment (const GSegment& s) {
-  segments.push_back (s);
+  segments.append(s);
   updatePath ();
   updateRegion (true);
 }
 
 const GSegment& GCurve::getSegment (int idx) {
-  list<GSegment>::iterator i = segments.begin ();
-  advance (i, idx);
-  return *i;
+    return (*segments.at(idx));
 }
 
 void GCurve::removePoint (int /*idx*/, bool update) {
     //int pidx = 0;
-    //list<GSegment>::iterator i;
+    //QValueList<GSegment>::Iterator i;
 
-  if (segments.size () > 1) {
+  if (segments.count() > 1) {
 #if 0
     if (idx == 0) {
       // remove the first segment
@@ -488,7 +489,7 @@ void GCurve::removePoint (int /*idx*/, bool update) {
     }
     else {
       for (i = segments.begin (); i != segments.end (); i++) {
-        int num = (i->kind () == GSegment::sk_Line ? 2 : 4);
+        int num = ((*i).kind () == GSegment::sk_Line ? 2 : 4);
         pidx += num;
         if (pidx > idx) {
           // remove this segment and set the first point
@@ -509,7 +510,7 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
   res->outlineInfo = start->outlineInfo;
   res->fillInfo = start->fillInfo;
 
-  list<GSegment>::iterator si, ei;
+  QValueList<GSegment>::Iterator si, ei;
   si = start->segments.begin ();
   ei = end->segments.begin ();
 
@@ -517,13 +518,13 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
   if (start->numOfSegments () <= end->numOfSegments ()) {
     while (si != start->segments.end ()) {
       GSegment seg = blendSegments (*si, *ei, step, num);
-      res->segments.push_back (seg);
-      si++; ei++;
+      res->segments.append(seg);
+      ++si; ++ei;
     }
     if (start->numOfSegments () < end->numOfSegments ()) {
       // create a pseudo segment with the last point
       GSegment lseg (GSegment::sk_Line);
-      const GSegment& last = start->segments.back ();
+      const GSegment& last = start->segments.last();
       Coord p = (last.kind () == GSegment::sk_Line ? last.pointAt (1) :
                  last.pointAt (3));
       lseg.setPoint (0, p);
@@ -531,19 +532,19 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
 
       while (ei != end->segments.end ()) {
         GSegment seg = blendSegments (lseg, *ei, step, num);
-        res->segments.push_back (seg);
-        ei++;
+        res->segments.append(seg);
+        ++ei;
       }
     }
   }
   else {
     while (ei != end->segments.end ()) {
       GSegment seg = blendSegments (*si, *ei, step, num);
-      res->segments.push_back (seg);
-      si++; ei++;
+      res->segments.append(seg);
+      ++si; ++ei;
     }
     GSegment lseg (GSegment::sk_Line);
-    const GSegment& last = end->segments.back ();
+    const GSegment& last = end->segments.last();
     Coord p = (last.kind () == GSegment::sk_Line ? last.pointAt (1) :
                last.pointAt (3));
     lseg.setPoint (0, p);
@@ -551,8 +552,8 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
 
     while (si != start->segments.end ()) {
       GSegment seg = blendSegments (*si, lseg, step, num);
-      res->segments.push_back (seg);
-      si++;
+      res->segments.append(seg);
+      ++si;
     }
   }
   res->setOutlineColor (blendColors (start->getOutlineColor (),
@@ -584,10 +585,10 @@ QColor GCurve::blendColors (const QColor& c1, const QColor& c2, int step,
   }
 }
 
-list<GSegment>::iterator GCurve::containingSegment (const Coord& p) {
-  list<GSegment>::iterator i;
-  for (i = segments.begin (); i != segments.end (); i++)
-    if (i->contains (p))
+QValueList<GSegment>::Iterator GCurve::containingSegment (const Coord& p) {
+  QValueList<GSegment>::Iterator i;
+  for (i = segments.begin (); i != segments.end (); ++i)
+    if ((*i).contains (p))
       return i;
   return segments.end ();
 }
@@ -598,9 +599,9 @@ void GCurve::updatePath () {
 
   points.resize (0);
   unsigned int last = 0;
-  list<GSegment>::iterator i;
-  for (i = segments.begin (); i != segments.end (); i++) {
-    QPointArray parray = i->getPoints ();
+  QValueList<GSegment>::Iterator i;
+  for (i = segments.begin (); i != segments.end (); ++i) {
+    QPointArray parray = (*i).getPoints ();
     points.resize (last + parray.size ());
     for (unsigned int i = 0; i < parray.size (); i++)
       points.setPoint (last + i, parray.point (i));

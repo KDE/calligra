@@ -25,6 +25,7 @@
 #include <GOval.h>
 #include <GPolyline.h>
 #include <GCurve.h>
+#include <Painter.h>
 
 #include <qdom.h>
 #include <qstring.h>
@@ -220,8 +221,8 @@ int GOval::getNeighbourPoint (const Coord& p) {
 }
 
 void GOval::movePoint (int idx, float dx, float dy) {
-  float adx = fabs (dx);
-  float ady = fabs (dy);
+  float adx = std::fabs (dx);
+  float ady = std::fabs (dy);
   float angle = 0;
 
   if (idx == 0 && segPoint[0] == segPoint[1])
@@ -241,7 +242,7 @@ void GOval::movePoint (int idx, float dx, float dy) {
       x = r.right ();
 
     x -= (r.left () + a);
-    angle = acos (x / a) * RAD_FACTOR;
+    angle = std::acos (x / a) * RAD_FACTOR;
     if (segPoint[idx].y () < r.center ().y ())
       angle = 360 - angle;
   }
@@ -253,7 +254,7 @@ void GOval::movePoint (int idx, float dx, float dy) {
       y = r.bottom ();
 
     y -= (r.top () + b);
-    angle = asin (y / b) * RAD_FACTOR;
+    angle = std::asin (y / b) * RAD_FACTOR;
     if (segPoint[idx].y () < r.center ().y ()) {
       if (segPoint[idx].x () > r.center ().x ())
         angle += 360;
@@ -292,15 +293,15 @@ void GOval::update_segments () {
   float b = r.height () / 2.0;
 
   float angle = sAngle * M_PI / 180.0;
-  x = a * cos (angle) + r.left () + a;
-  y = b * sin (angle) + r.top () + b;
+  x = a * std::cos (angle) + r.left () + a;
+  y = b * std::sin (angle) + r.top () + b;
 
   segPoint[0].x (x);
   segPoint[0].y (y);
 
   angle = eAngle * M_PI / 180.0;
-  x = a * cos (angle) + r.left () + a;
-  y = b * sin (angle) + r.top () + b;
+  x = a * std::cos (angle) + r.left () + a;
+  y = b * std::sin (angle) + r.top () + b;
 
   segPoint[1].x (x);
   segPoint[1].y (y);
@@ -393,8 +394,8 @@ void GOval::updateGradientShape (QPainter& p) {
         x1 = m.x () - segPoint[1].x ();
         y1 = m.y () - segPoint[1].y ();
 
-        x = x1 * cos (WINKEL) - y1 * sin (WINKEL);
-        y = x1 * sin (WINKEL) + y1 * cos (WINKEL);
+        x = x1 * std::cos (WINKEL) - y1 * std::sin (WINKEL);
+        y = x1 * std::sin (WINKEL) + y1 * std::cos (WINKEL);
 
         x *= 1.5; y *= 1.5;
 
@@ -426,8 +427,8 @@ void GOval::updateGradientShape (QPainter& p) {
         x1 = m.x () - segPoint[1].x ();
         y1 = m.y () - segPoint[1].y ();
 
-        x = x1 * cos (-WINKEL) - y1 * sin (-WINKEL);
-        y = x1 * sin (-WINKEL) + y1 * cos (-WINKEL);
+        x = x1 * std::cos (-WINKEL) - y1 * std::sin (-WINKEL);
+        y = x1 * std::sin (-WINKEL) + y1 * std::cos (-WINKEL);
 
         x *= 1.5; y *= 1.5;
 
@@ -452,7 +453,7 @@ void GOval::updateGradientShape (QPainter& p) {
   gShape.updatePixmap ();
 }
 
-void GOval::getPath (vector<Coord>& path) {
+void GOval::getPath (QValueList<Coord>& path) {
   // this is not the right way.
   // we should reimplement this !!
   QPointArray parray;
@@ -469,11 +470,10 @@ void GOval::getPath (vector<Coord>& path) {
                     -alen * 16);
   }
   unsigned int num = parray.size ();
-  path.resize (num);
   for (unsigned int i = 0; i < num; i++) {
     const QPoint& p = parray[i];
     Coord pi (p.x (), p.y ());
-    path[i] = pi.transform (tMatrix);
+    path.append(pi.transform (tMatrix));
   }
 }
 

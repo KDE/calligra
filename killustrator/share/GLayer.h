@@ -25,24 +25,24 @@
 #ifndef GLayer_h_
 #define GLayer_h_
 
-#include <list>
-
 #include <qobject.h>
+#include <qlist.h>
 
 class GDocument;
 class GObject;
+class QString;
 
 class GLayer : public QObject {
   Q_OBJECT
 public:
-  GLayer (GDocument* doc, const char* text = 0L);
+  GLayer (GDocument* doc, const QString &text=QString::null);
   ~GLayer ();
 
   /*
    * Layer properties
    */
-  const char* name () const;
-  void setName (const char* text);
+  QString name () const;
+  void setName(const QString &text);
 
   bool isVisible () const { return visibleFlag; }
   bool isPrintable () const { return printableFlag; }
@@ -57,8 +57,8 @@ public:
   /*
    * Content management
    */
-  std::list<GObject*>& objects () { return contents; }
-  unsigned int objectCount () const { return contents.size (); }
+  const QList<GObject> &objects () { return contents; }
+  unsigned int objectCount () const { return contents.count(); }
   void insertObject (GObject* obj);
   void deleteObject (GObject* obj);
   GObject* findContainingObject (int x, int y);
@@ -80,7 +80,7 @@ private:
     wasEditable,    // layer was editable before the change to unvisible
     internalFlag;   // layer used for helplines
 
-  std::list<GObject*> contents; // the list of objects
+  QList<GObject> contents; // the list of objects
   GDocument* document;
 
   static int lastID;

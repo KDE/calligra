@@ -25,17 +25,13 @@
 #ifndef GCurve_h_
 #define GCurve_h_
 
-#include <qobject.h>
-#include <list>
-
-#include <Coord.h>
 #include <GObject.h>
 
 class GSegment {
 public:
   enum Kind { sk_Line, sk_Bezier };
 
-  GSegment(Kind skind);
+  GSegment(Kind skind=sk_Line);
   GSegment(const QDomElement &element);
 
   const Coord& pointAt (int i) const;
@@ -81,7 +77,7 @@ public:
   virtual void removePoint (int idx, bool update = true);
   virtual int getNeighbourPoint (const Coord& p);
 
-  virtual void getPath (vector<Coord>& path);
+  virtual void getPath(QValueList<Coord>& path);
 
   virtual GCurve* convertToCurve () const { return new GCurve (*this); }
 
@@ -90,7 +86,7 @@ public:
                          const Coord& p3, const Coord& p4);
   void addSegment (const GSegment& s);
   const GSegment& getSegment (int idx);
-  int numOfSegments () const { return segments.size (); }
+  int numOfSegments () const { return segments.count(); }
 
   void setClosed (bool flag);
   bool isClosed () const { return closed; }
@@ -104,11 +100,11 @@ protected:
   void calcBoundingBox ();
   void updateGradientShape (QPainter& p);
   void updatePath ();
-  std::list<GSegment>::iterator containingSegment (const Coord& p);
+  QValueList<GSegment>::Iterator containingSegment (const Coord& p);
 
 private:
   QPointArray points; // Points for the computed polygon
-  std::list<GSegment> segments;
+  QValueList<GSegment> segments;
   bool closed;
 };
 

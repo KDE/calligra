@@ -45,6 +45,7 @@
 #include <stdio.h>
 #include <math.h>
 
+/*
 using namespace std;
 
 struct is_a : public binary_function<GObject*, const char*, bool> {
@@ -52,6 +53,7 @@ struct is_a : public binary_function<GObject*, const char*, bool> {
     return obj->isA (tname);
   }
 };
+*/
 
 struct finalize_obj {
   void operator () (GObject* obj) {

@@ -169,9 +169,9 @@ void GDocument::drawContents (QPainter& p, bool withBasePoints, bool outline) {
     for (; i != layers.end (); i++) {
         GLayer* layer = *i;
         if (! layer->isInternal () && layer->isVisible ()) {
-            const list<GObject*>& contents = layer->objects ();
-            for (list<GObject*>::const_iterator oi = contents.begin ();
-                 oi != contents.end (); oi++)
+            const QList<GObject> &contents = layer->objects ();
+            QListIterator<GObject> oi(contents);
+            for ( ; oi.current() ; ++oi)
                 (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
         }
     }
@@ -183,16 +183,16 @@ void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
   for (; i != layers.end (); i++) {
     GLayer* layer = *i;
     if (! layer->isInternal () && layer->isVisible ()) {
-      const list<GObject*>& contents = layer->objects ();
-      for (list<GObject*>::const_iterator oi = contents.begin ();
-           oi != contents.end (); oi++) {
-        // draw the object only if its bounding box
-        // intersects the active region
-        //      const Rect& bbox = (*oi)->boundingBox ();
-        //      if (r.intersects (bbox))
-        if ((*oi)->intersects (r))
-          (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
-      }
+        const QList<GObject> &contents = layer->objects ();
+        QListIterator<GObject> oi(contents);
+        for ( ; oi.current() ; ++oi) {
+            // draw the object only if its bounding box
+            // intersects the active region
+            //      const Rect& bbox = (*oi)->boundingBox ();
+            //      if (r.intersects (bbox))
+            if ((*oi)->intersects (r))
+                (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
+        }
     }
   }
 }
@@ -268,12 +268,12 @@ void GDocument::selectAllObjects () {
   for (; i != layers.end (); i++) {
     GLayer* layer = *i;
     if (layer->isEditable ()) {
-      list<GObject*>& contents = layer->objects ();
-      for (list<GObject*>::iterator oi = contents.begin ();
-           oi != contents.end (); oi++) {
-        GObject* obj = *oi;
-        obj->select (true);
-        selection.push_back (obj);
+        const QList<GObject> &contents = layer->objects ();
+        QListIterator<GObject> oi(contents);
+        for ( ; oi.current() ; ++oi) {
+            GObject* obj = *oi;
+            obj->select (true);
+            selection.push_back (obj);
       }
     }
   }
@@ -323,14 +323,15 @@ Rect GDocument::boundingBoxForAllObjects () {
        li != layers.end (); li++) {
     GLayer* layer = *li;
     if (! layer->isInternal () && layer->isEditable ()) {
-      list<GObject*>& contents = layer->objects ();
-      list<GObject*>::iterator oi = contents.begin ();
-      if (! init) {
-        box = (*oi++)->boundingBox ();
-        init = true;
-      }
-      for (; oi != contents.end (); oi++)
-        box = box.unite ((*oi)->boundingBox ());
+        const QList<GObject> &contents = layer->objects ();
+        QListIterator<GObject> oi(contents);
+        if (! init) {
+            box = (*oi)->boundingBox ();
+            ++oi;
+            init = true;
+        }
+        for (; oi.current(); ++oi)
+            box = box.unite ((*oi)->boundingBox ());
     }
   }
   return box;
@@ -401,9 +402,9 @@ bool GDocument::findNearestObject (const char* otype, int x, int y,
        li != layers.rend (); li++) {
     GLayer* layer = *li;
     if (layer->isEditable ()) {
-      list<GObject*>& contents = layer->objects ();
-      for (list<GObject*>::iterator oi = contents.begin ();
-           oi != contents.end (); oi++) {
+      const QList<GObject>& contents = layer->objects ();
+      QListIterator<GObject> oi(contents);
+      for ( ; oi.current(); ++oi) {
         if (otype == 0L || (*oi)->isA (otype)) {
           if ((*oi)->findNearestPoint (p, max_dist, d, pidx, all) &&
               d < distance) {
@@ -440,9 +441,9 @@ bool GDocument::findContainingObjects (int x, int y, QList<GObject>& olist) {
   for (vector<GLayer*>::iterator li = layers.begin ();
        li != layers.end (); li++) {
     if ((*li)->isEditable ()) {
-      list<GObject*>& contents = (*li)->objects ();
-      for (list<GObject*>::iterator oi = contents.begin ();
-           oi != contents.end (); oi++)
+      const QList<GObject>& contents = (*li)->objects ();
+      QListIterator<GObject> oi(contents);
+      for ( ; oi.current(); ++oi)
         if ((*oi)->contains (coord))
           olist.append (*oi);
     }
@@ -454,9 +455,9 @@ bool GDocument::findObjectsContainedIn (const Rect& r, QList<GObject>& olist) {
   for (vector<GLayer*>::iterator li = layers.begin ();
        li != layers.end (); li++) {
     if ((*li)->isEditable ()) {
-      list<GObject*>& contents = (*li)->objects ();
-      for (list<GObject*>::iterator oi = contents.begin ();
-           oi != contents.end (); oi++)
+      const QList<GObject>& contents = (*li)->objects ();
+      QListIterator<GObject> oi(contents);
+      for ( ; oi.current(); ++oi)
         if (r.contains ((*oi)->boundingBox ()))
           olist.append (*oi);
     }
@@ -573,9 +574,9 @@ QDomDocument GDocument::saveToXml () {
             layer.setAttribute ("id", (*li)->name ());
             layer.setAttribute ("flags", QString::number(flags));
         }
-        list<GObject*>& contents = (*li)->objects ();
-        for (list<GObject*>::iterator oi = contents.begin ();
-             oi != contents.end (); oi++)
+        const QList<GObject>& contents = (*li)->objects ();
+        for (QListIterator<GObject> oi(contents);
+             oi.current(); ++oi)
             layer.appendChild((*oi)->writeToXml (document));
         killustrator.appendChild(layer);
     }
@@ -640,9 +641,9 @@ bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& /*ne
     vector<GLayer*>::iterator i = layers.begin ();
     for (; i != layers.end (); i++) {
         GLayer* layer = *i;
-        list<GObject*>& contents = layer->objects ();
-        for (list<GObject*>::iterator oi = contents.begin ();
-             oi != contents.end (); oi++) {
+        const QList<GObject>& contents = layer->objects ();
+        for (QListIterator<GObject> oi(contents);
+             oi.current(); ++oi) {
             // this should be more general !!
             if ((*oi)->hasRefId () && (*oi)->isA ("GText")) {
                 GObject *o = refDict[(*oi)->getRefId ()];
@@ -919,30 +920,14 @@ bool GDocument::helplineLayerIsActive () {
   return (active_layer->isInternal ());
 }
 
-void GDocument::printInfo (QString& s) {
-    ostrstream os;
-    int n = 0;
-
-    for (vector<GLayer*>::iterator li = layers.begin ();
-         li != layers.end (); li++) {
-        GLayer* layer = *li;
-        list<GObject*>& contents = layer->objects ();
-        n += contents.size ();
-    }
-    os << i18n ("Document") << ": "<< (const char *) filename << '\n'
-       << i18n ("Layers") << ": " << layers.size () << '\n'
-       << i18n ("Objects") << ": " << n << ends;
-    s += os.str ();
-}
-
 void GDocument::invalidateClipRegions () {
   for (vector<GLayer*>::iterator li = layers.begin ();
        li != layers.end (); li++) {
     GLayer* layer = *li;
     if (layer->isVisible ()) {
-      list<GObject*>& contents = layer->objects ();
-      list<GObject*>::iterator oi = contents.begin ();
-      for (; oi != contents.end (); oi++)
+      const QList<GObject>& contents = layer->objects ();
+      QListIterator<GObject> oi(contents);
+      for (; oi.current(); ++oi)
         (*oi)->invalidateClipRegion ();
     }
   }
@@ -984,13 +969,13 @@ void GDocument::selectNextObject () {
   GObject *newSel = 0L;
 
   if (selectionIsEmpty ()) {
-    newSel = active_layer->objects ().front ();
+    newSel = const_cast< QList<GObject>& >(active_layer->objects()).first();
 
   }
   else {
-    GObject *oldSel = selection.front ();
+    GObject *oldSel = selection.front();
     unsigned int idx = findIndexOfObject (oldSel);
-    if (++idx >= active_layer->objects ().size ())
+    if (++idx >= active_layer->objects ().count())
       idx = 0;
     newSel = active_layer->objectAtIndex (idx);
   }

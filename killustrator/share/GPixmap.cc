@@ -34,7 +34,7 @@ GPixmap::GPixmap () {
   pix = 0L;
 }
 
-GPixmap::GPixmap (const char* filename) : url (filename) {
+GPixmap::GPixmap (const QString &filename) : url (filename) {
   if (url.isLocalFile ()) {
     pix = new QPixmap (url.path ());
     if (pix->isNull ()) {

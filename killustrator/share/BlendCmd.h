@@ -26,7 +26,6 @@
 #define BlendCmd_h_
 
 #include <Command.h>
-#include <qlist.h>
 
 class GDocument;
 class GObject;

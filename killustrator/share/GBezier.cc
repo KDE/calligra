@@ -26,6 +26,8 @@
 #include <GBezier.h>
 #include <GCurve.h>
 #include <Arrow.h>
+#include <Painter.h>
+#include <stdlib.h>
 
 #include <qdom.h>
 #include <qpointarray.h>
@@ -646,13 +648,12 @@ void GBezier::updateGradientShape (QPainter& p) {
   gShape.updatePixmap ();
 }
 
-void GBezier::getPath (vector<Coord>& path) {
+void GBezier::getPath (QValueList<Coord>& path) {
   unsigned int num = ppoints.size ();
-  path.resize (num);
   for (unsigned int i = 0; i < num; i++) {
     const QPoint& p = ppoints.point (i);
     Coord pi (p.x (), p.y ());
-    path[i] = pi.transform (tMatrix);
+    path.append(pi.transform (tMatrix));
   }
 }
 

@@ -25,8 +25,6 @@
 #include <GPart.h>
 
 #include <qdom.h>
-//#include <klocale.h>
-//#include <kapp.h>
 
 #include <KIllustrator_view.h>
 #include <KIllustrator_doc.h>
@@ -74,7 +72,7 @@ QString GPart::typeName () const {
   return i18n ("Embedded Part");
 }
 
-void GPart::draw (Painter& p, bool /*withBasePoints*/, bool outline) {
+void GPart::draw (Painter&/*p*/, bool /*withBasePoints*/, bool /*outline*/) {
     // ####### Torben
     /**
   p.save ();
@@ -101,14 +99,14 @@ void GPart::calcBoundingBox () {
 
     QRect r = tmpMatrix.map (initialGeom);
     if (r != oldGeom) {
-	cout << "UPDATE CHILD GEOMETRY !!!!!!!!!!!!" << endl;
-	oldGeom = r;
-	child->setGeometry (r);
-	cout << "new part geometry: " << r.x () << ", " << r.y ()
-	     << " - " << r.width () << ", " << r.height () << endl;
+        //cout << "UPDATE CHILD GEOMETRY !!!!!!!!!!!!" << endl;
+        oldGeom = r;
+        child->setGeometry (r);
+        //cout << "new part geometry: " << r.x () << ", " << r.y ()
+        //     << " - " << r.width () << ", " << r.height () << endl;
     }
     updateBoundingBox (Coord (r.x (), r.y ()),
-		       Coord (r.right (), r.bottom ()));
+                       Coord (r.right (), r.bottom ()));
 }
 
 GObject* GPart::copy () {

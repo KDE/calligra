@@ -62,7 +62,7 @@ public:
   void setClosed (bool flag);
   bool isClosed () const { return closed; }
 
-  virtual void getPath (vector<Coord>& path);
+  virtual void getPath (QValueList<Coord>& path);
 
   virtual bool intersects (const Rect& r);
   virtual const Rect& redrawBox () const { return rbox; }

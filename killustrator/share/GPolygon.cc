@@ -30,6 +30,8 @@
 
 #include <GradientShape.h>
 #include <GCurve.h>
+#include <Painter.h>
+#include <assert.h>
 
 #define Roundness outlineInfo.roundness
 
@@ -548,14 +550,13 @@ void GPolygon::updateGradientShape (QPainter& p) {
   gShape.updatePixmap ();
 }
 
-void GPolygon::getPath (vector<Coord>& path) {
+void GPolygon::getPath (QValueList<Coord>& path) {
   unsigned int num = points.count ();
-  path.resize (num + 1);
   for (unsigned int i = 0; i < num; i++) {
     const Coord& pi = *points.at (i);
-    path[i] = pi.transform (tMatrix);
+    path.append(pi.transform (tMatrix));
   }
-  path[num] = points.at (0)->transform (tMatrix);
+  path.append(points.at (0)->transform (tMatrix));
 }
 
 // Check for a valid polygon

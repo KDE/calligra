@@ -49,31 +49,30 @@ bool KilluImport::importFromFile (GDocument *doc) {
     QDomDocument document;
     document.setContent(&file);
     if (flag = tmpDoc->readFromXml (document)) {
-	GGroup* group = new GGroup ();
-	group->ref ();
-	// now copy all objects to the group
+        GGroup* group = new GGroup ();
+        group->ref ();
+        // now copy all objects to the group
 #ifdef NO_LAYERS
-	QListIterator<GObject> iter = tmpDoc->getObjects ();
-	for (; iter.current (); ++iter) {
-	    GObject* obj = iter.current ();
-	    obj->ref ();
-	    group->addObject (obj);
-	}
+        QListIterator<GObject> iter = tmpDoc->getObjects ();
+        for (; iter.current (); ++iter) {
+            GObject* obj = iter.current ();
+            obj->ref ();
+            group->addObject (obj);
+        }
 #else
-	for (vector<GLayer*>::const_iterator li = tmpDoc->getLayers ().begin ();
-	     li != tmpDoc->getLayers ().end (); li++) {
-	    if ((*li)->isVisible ()) {
-		list<GObject*>& contents = (*li)->objects ();
-		for (list<GObject*>::iterator oi = contents.begin ();
-		     oi != contents.end (); oi++) {
-		    GObject* obj = *oi;
-		    obj->ref ();
-		    group->addObject (obj);
-		}
-	    }
-	}
+        for (vector<GLayer*>::const_iterator li = tmpDoc->getLayers ().begin ();
+             li != tmpDoc->getLayers ().end (); li++) {
+            if ((*li)->isVisible ()) {
+                QList<GObject>& contents = (*li)->objects ();
+                for (QListIterator<GObject> oi(contents); oi.current(); ++oi) {
+                    GObject* obj = *oi;
+                    obj->ref ();
+                    group->addObject (obj);
+                }
+            }
+        }
 #endif
-	doc->insertObject (group);
+        doc->insertObject (group);
     }
 
     // and delete it

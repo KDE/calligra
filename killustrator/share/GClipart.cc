@@ -27,7 +27,6 @@
 
 #include <klocale.h>
 
-
 GClipart::GClipart () {
     pic = 0L;
 }

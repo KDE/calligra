@@ -457,7 +457,6 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 void KIllustratorView::resizeEvent (QResizeEvent* )
 {
     // ######## Torben
-    kdDebug() << "resizeEvent++++++++++++++++++++++" << endl;
     if ( mainWidget )
     {
         mainWidget->resize( width(), height() );

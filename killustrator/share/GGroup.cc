@@ -22,21 +22,10 @@
 */
 
 #include <GGroup.h>
-
-#include <algorithm>
-
 #include <qdom.h>
 #include <qpainter.h>
 #include <klocale.h>
 #include <kdebug.h>
-
-using namespace std;
-
-struct release_obj {
-  void operator () (GObject* obj) {
-    obj->unref ();
-  }
-};
 
 GGroup::GGroup () {
   connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
@@ -63,15 +52,15 @@ GGroup::GGroup (const QDomElement &element) : GObject (element.namedItem("gobjec
 }
 
 GGroup::GGroup (const GGroup& obj) : GObject (obj) {
-    list<GObject*>::const_iterator i = obj.members.begin ();
-    for (; i != obj.members.end (); i++)
-        members.push_back ((*i)->copy ());
+    QList<GObject> tmp=obj.getMembers();
+    for (GObject *o=tmp.first(); o!=0L; o=tmp.next())
+        members.append(o->copy());
     calcBoundingBox ();
 }
 
 GGroup::~GGroup () {
-  for_each (members.begin (), members.end (), release_obj ());
-  members.clear ();
+    for (GObject *o=members.first(); o!=0L; o=members.next())
+        o->unref();
 }
 
 QString GGroup::typeName () const {
@@ -81,9 +70,8 @@ QString GGroup::typeName () const {
 bool GGroup::contains (const Coord& p) {
     if (box.contains (p)) {
         Coord np = p.transform (iMatrix);
-        list<GObject*>::iterator i = members.begin ();
-        for (; i != members.end (); i++)
-            if ((*i)->contains (np))
+        for (GObject *o=members.first(); o!=0L; o=members.next())
+            if (o->contains (np))
                 return true;
     }
     return false;
@@ -91,19 +79,16 @@ bool GGroup::contains (const Coord& p) {
 
 void GGroup::addObject (GObject* obj) {
   obj->ref ();
-  members.push_back (obj);
+  members.append(obj);
   updateRegion ();
 }
 
 void GGroup::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
-  p.save ();
-  p.setWorldMatrix (tmpMatrix, true);
-
-    list<GObject*>::iterator i = members.begin ();
-    for (; i != members.end (); i++)
-        (*i)->draw (p, false, outline);
-
-  p.restore ();
+    p.save ();
+    p.setWorldMatrix (tmpMatrix, true);
+    for (GObject *o=members.first(); o!=0L; o=members.next())
+        o->draw (p, false, outline);
+    p.restore ();
 }
 
 GObject* GGroup::copy () {
@@ -115,18 +100,17 @@ GObject* GGroup::clone (const QDomElement &element) {
 }
 
 void GGroup::calcBoundingBox () {
-  if (members.empty ())
+  if (members.isEmpty ())
     return;
 
-  list<GObject*>::iterator it = members.begin ();
-  for (; it != members.end (); it++)
-      (*it)->calcBoundingBox ();
+  GObject *o=members.first();
+  for (; o!=0; o=members.next())
+      o->calcBoundingBox ();
 
-  it = members.begin ();
-  Rect r = members.front ()->boundingBox ();
-  for (it++; it != members.end (); it++) {
-    r = r.unite ((*it)->boundingBox ());
-  }
+  o = members.first();
+  Rect r = o->boundingBox ();
+  for (o=members.next(); o!=0L; o=members.next())
+    r = r.unite (o->boundingBox ());
 
   Coord p[4];
   p[0] = r.topLeft ().transform (tmpMatrix);
@@ -147,18 +131,18 @@ void GGroup::calcBoundingBox () {
 }
 
 void GGroup::propagateProperties (GObject::Property prop, int mask) {
-    list<GObject*>::iterator i = members.begin ();
-    for (; i != members.end (); i++) {
+    GObject *o=members.first();
+    for (; o!=0L; o=members.next()) {
       if (prop == GObject::Prop_Outline) {
           // don't update the custom info (shape etc.)
           outlineInfo.mask = mask & (GObject::OutlineInfo::Color |
                                      GObject::OutlineInfo::Style |
                                      GObject::OutlineInfo::Width);
-          (*i)->setOutlineInfo (outlineInfo);
+          o->setOutlineInfo (outlineInfo);
       }
       if (prop == GObject::Prop_Fill) {
           fillInfo.mask = mask;
-          (*i)->setFillInfo (fillInfo);
+          o->setFillInfo (fillInfo);
       }
     }
 }
@@ -167,22 +151,9 @@ QDomElement GGroup::writeToXml (QDomDocument &document) {
 
     QDomElement element=document.createElement("group");
     element.appendChild(GObject::writeToXml(document));
-
-    list<GObject*>::iterator i = members.begin ();
-    for (; i != members.end (); i++)
-        element.appendChild((*i)->writeToXml (document));
+    for (GObject *o=members.first(); o!=0L; o=members.next())
+        element.appendChild(o->writeToXml (document));
     return element;
-}
-
-void GGroup::printInfo () {
-    cout << ">>>>>>>>>>>>>>>>>>>>>\n";
-    // operator<< has been removed for Rect (Werner)
-    //cout << className () << " bbox = [" << boundingBox () << "]" << endl;
-    list<GObject*>::iterator i = members.begin ();
-    for (; i != members.end (); i++) {
-        (*i)->printInfo ();
-    }
-    cout << "<<<<<<<<<<<<<<<<<<<<<\n";
 }
 
 #include <GGroup.moc>

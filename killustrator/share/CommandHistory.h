@@ -26,7 +26,6 @@
 #define CommandHistory_h_
 
 #include <Command.h>
-#include <qlist.h>
 
 class CommandHistory : public QObject {
 

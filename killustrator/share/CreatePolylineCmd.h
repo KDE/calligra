@@ -26,7 +26,6 @@
 #define CreatePolylineCmd_h_
 
 #include <Command.h>
-#include <qlist.h>
 
 class GDocument;
 class GPolyline;

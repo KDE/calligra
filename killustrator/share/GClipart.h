@@ -25,14 +25,12 @@
 #ifndef GClipart_h_
 #define GClipart_h_
 
-#include <qobject.h>
 #include <kurl.h>
 #include <GObject.h>
 
 class QWinMetaFile;
 class QPicture;
 class QPainter;
-
 
 class GClipart : public GObject {
   Q_OBJECT
@@ -45,7 +43,7 @@ public:
   ~GClipart () {}
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
 
   virtual QString typeName () const;
 

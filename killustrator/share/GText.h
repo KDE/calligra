@@ -27,6 +27,7 @@
 
 #include <GObject.h>
 #include <qfont.h>
+#include <qvector.h>
 
 class GTextState;
 class QFontMetrics;
@@ -72,8 +73,8 @@ public:
   int cursorX () const { return cursx; }
   int cursorY () const { return cursy; }
 
-  int lines () const { return text.size (); }
-  const QString& line (int n) { return text[n]; }
+  int lines () const { return text.count(); }
+  QString line (int n) { return (*text.at(n)); }
   void setText (const QString& s);
   QString getText () const;
 
@@ -110,13 +111,13 @@ protected:
 private:
   //  Coord opos;
   int cursx, cursy;
-  vector<QString> text;
+  QStringList text;
   TextInfo textInfo;
   QFontMetrics *fm;
   bool cursorActive;
   int max_width;
   GObject* pathObj;
-  vector<QWMatrix> cmatrices;
+  QVector<QWMatrix> cmatrices;
 
   static TextInfo defaultTextInfo;
 };

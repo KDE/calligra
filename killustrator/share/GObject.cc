@@ -21,12 +21,14 @@
 
 */
 
+#include <GObject.h>
+
 #include <qdom.h>
 #include <qbrush.h>
-#include <math.h>
-#include <time.h>
-#include <utility>
-#include <GObject.h>
+
+#include <kapp.h>
+#include <kdebug.h>
+#include <kstaticdeleter.h>
 
 #include <GPolyline.h>
 #include <GPolygon.h>
@@ -39,17 +41,12 @@
 #include <GPixmap.h>
 #include <GCurve.h>
 
-#include <kdebug.h>
-#include <kstaticdeleter.h>
-
-using namespace std;
-
 GObject::OutlineInfo GObject::defaultOutlineInfo;
 GObject::FillInfo GObject::defaultFillInfo;
 
-map<string, GObject*> *GObject::prototypes=0L;
+QDict<GObject> *GObject::prototypes=0L;
 namespace KIlluFooDeleter {
-static KStaticDeleter< map<string, GObject*> > sd;
+static KStaticDeleter< QDict<GObject> > sd;
 };
 
 void GObject::setDefaultOutlineInfo (const OutlineInfo& oi) {
@@ -84,7 +81,6 @@ GObject::GObject () {
   sflag = false;
   layer = 0L;
   inWork = false;
-  wrapper = 0L;
 
   outlineInfo = defaultOutlineInfo;
   outlineInfo.mask = OutlineInfo::Color | OutlineInfo::Style |
@@ -103,12 +99,11 @@ GObject::GObject (const QDomElement &element) {
 
     layer = 0L;
     inWork = false;
-    wrapper = 0L;
 
     outlineInfo.mask = 0;
     fillInfo.mask = 0;
-    id = (const char*)element.attribute("id");
-    refid = (const char*)element.attribute("ref");  // Done by the child itself!
+    id = element.attribute("id");
+    refid = element.attribute("ref");  // Done by the child itself! I'll have to check/fix this (Werner)
 
     outlineInfo.color = QColor(element.attribute("strokecolor"));
     outlineInfo.mask |= OutlineInfo::Color;
@@ -152,7 +147,6 @@ GObject::GObject (const GObject& obj) : QObject()
   iMatrix = obj.iMatrix;
   layer = obj.layer;
   inWork = false;
-  wrapper = 0L;
 
   rcount = 1;
 }
@@ -428,7 +422,7 @@ QDomElement GObject::writeToXml (QDomDocument &document) {
 
     QDomElement element=document.createElement("gobject");
     if(hasId())
-        element.setAttribute ("id", (const char *) id);
+        element.setAttribute ("id", id);
     // This is strange, because it's done by the child class itself... I'll clean up later (Werner)
     if(hasRefId())
         element.setAttribute("ref", getRefId());
@@ -458,40 +452,28 @@ QDomElement GObject::writeToXml (QDomDocument &document) {
     return element;
 }
 
-void GObject::printInfo () {
-    //cout << className () << " bbox = [" << boundingBox () << "]" << endl;
-}
-
 void GObject::invalidateClipRegion  () {
   if (gradientFill ())
     gShape.setInvalid ();
 }
 
-const char* GObject::getId () {
+QString GObject::getId () {
   if (! hasId ())
-    id.sprintf ("id%ld", (long) time ((time_t) 0L));
-  return (const char *) id;
+    id="id"+kapp->randomString(10);
+  return id;
 }
 
-void GObject::registerPrototype (const char *className, GObject* proto) {
+void GObject::registerPrototype (const QString &className, GObject* proto) {
     if(prototypes==0L)
-        prototypes=KIlluFooDeleter::sd.setObject(new map<string, GObject*>);
-    (*prototypes)[className] = proto;
+        prototypes=KIlluFooDeleter::sd.setObject(new QDict<GObject>);
+    prototypes->insert(className, proto);
 }
 
-GObject* GObject::lookupPrototype (const char *className) {
+GObject* GObject::lookupPrototype (const QString &className) {
 
     if(prototypes==0L)
-        prototypes=KIlluFooDeleter::sd.setObject(new map<string, GObject*>);
-    GObject* result = 0L;
-    map<string, GObject*>::iterator it = prototypes->find (className);
-    if (it != prototypes->end ())
-        result = it->second;
-    return result;
-}
-
-void GObject::setWrapper (SWrapper *wobj) {
-  wobj->setObject (this);
+        return 0L;
+    return prototypes->find (className);
 }
 
 QDomElement KIllustrator::createMatrixElement(const QString &tag, const QWMatrix &matrix, QDomDocument &document) {

@@ -25,11 +25,6 @@
 #ifndef GGroup_h_
 #define GGroup_h_
 
-#include <list>
-
-using std::list;
-
-#include <Coord.h>
 #include <GObject.h>
 
 class GGroup : public GObject {
@@ -43,7 +38,7 @@ public:
   void addObject (GObject* obj);
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
   virtual bool contains (const Coord& p);
 
   virtual QString typeName () const;
@@ -53,17 +48,15 @@ public:
 
   virtual QDomElement writeToXml(QDomDocument &document);
 
-  const list<GObject*>& getMembers() { return members; }
+  const QList<GObject> &getMembers() const { return members; }
 
   void calcBoundingBox ();
-
-  void printInfo ();
 
 protected slots:
   void propagateProperties (GObject::Property prop, int mask);
 
 private:
-  list<GObject*> members;
+  QList<GObject> members;
 };
 
 #endif

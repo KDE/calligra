@@ -56,7 +56,7 @@ public:
   void setSymmetricPolygon (const Coord& sp, const Coord& ep, int nCorners,
                             bool concave, int sharpness);
 
-  virtual void getPath (vector<Coord>& path);
+  virtual void getPath (QValueList<Coord>& path);
 
   virtual QString typeName () const;
 
