@@ -337,9 +337,9 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
         height = KoUnit::parseValue(properties.attribute("fo:page-height"));
         // guessFormat takes millimeters
         if ( orientation == PG_LANDSCAPE )
-            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(height), MM_TO_POINT(width) );
+            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );
         else
-            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(width), MM_TO_POINT(height) );
+            paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(width), POINT_TO_MM(height) );
 
         marginLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
         marginTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
@@ -969,6 +969,7 @@ void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDom
         m_restartNumbering = -1;
         if ( listItem.hasAttribute( "text:start-value" ) )
             m_restartNumbering = listItem.attribute( "text:start-value" ).toInt();
+        // ### Oasis: can be p h or list only.
         parseBodyOrSimilar( doc, listItem, currentFramesetElement );
         m_restartNumbering = -1;
     }
