@@ -43,6 +43,7 @@ APPLIXWORDImportFactory::APPLIXWORDImportFactory( QObject* parent, const char* n
 APPLIXWORDImportFactory::~APPLIXWORDImportFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject* APPLIXWORDImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )

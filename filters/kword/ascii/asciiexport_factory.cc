@@ -43,6 +43,7 @@ ASCIIExportFactory::ASCIIExportFactory( QObject* parent, const char* name )
 ASCIIExportFactory::~ASCIIExportFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )

@@ -48,6 +48,7 @@ MSODImportFactory::MSODImportFactory(
 MSODImportFactory::~MSODImportFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject *MSODImportFactory::create(

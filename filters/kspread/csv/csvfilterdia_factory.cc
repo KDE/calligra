@@ -45,6 +45,7 @@ CSVFilterDiaFactory::CSVFilterDiaFactory( QObject* parent, const char* name )
 CSVFilterDiaFactory::~CSVFilterDiaFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject* CSVFilterDiaFactory::create( QObject* parent, const char* name, const char*, const QStringList & )

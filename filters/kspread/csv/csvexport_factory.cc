@@ -42,6 +42,7 @@ CSVExportFactory::CSVExportFactory( QObject* parent, const char* name )
 CSVExportFactory::~CSVExportFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject* CSVExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )

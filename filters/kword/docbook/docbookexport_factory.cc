@@ -43,6 +43,7 @@ DocBookExportFactory::DocBookExportFactory( QObject* parent, const char* name )
 DocBookExportFactory::~DocBookExportFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject* DocBookExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )

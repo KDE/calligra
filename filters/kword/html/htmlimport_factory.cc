@@ -43,6 +43,7 @@ HTMLImportFactory::HTMLImportFactory( QObject* parent, const char* name )
 HTMLImportFactory::~HTMLImportFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject* HTMLImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )

@@ -43,6 +43,7 @@ OLEFilterFactory::OLEFilterFactory( QObject* parent, const char* name )
 OLEFilterFactory::~OLEFilterFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject* OLEFilterFactory::create( QObject* parent, const char* name, const char*, const QStringList & )

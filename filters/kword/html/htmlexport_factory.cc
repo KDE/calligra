@@ -43,6 +43,7 @@ HTMLExportFactory::HTMLExportFactory( QObject* parent, const char* name )
 HTMLExportFactory::~HTMLExportFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject* HTMLExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )

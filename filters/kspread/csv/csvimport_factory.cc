@@ -42,6 +42,7 @@ CSVFilterFactory::CSVFilterFactory( QObject* parent, const char* name )
 CSVFilterFactory::~CSVFilterFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char*, const QStringList & )

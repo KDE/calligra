@@ -48,6 +48,7 @@ WMFImportFactory::WMFImportFactory(
 WMFImportFactory::~WMFImportFactory()
 {
     delete s_global;
+    s_global = 0L;
 }
 
 QObject *WMFImportFactory::create(
