@@ -2,6 +2,7 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+   Copyright (C) 2001 Nicolas GOUTTE
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -334,11 +335,12 @@ class FormatData
         FormatData ( int     p,
                      int     l,
                      QString f,
-                     bool    i  ) : pos (p), len (l), fontName (f), italic (i)
+                     bool    i  ) : pos (p), len (l), realLen(l), fontName (f), italic (i)
         {}
 
         int     pos;
         int     len;
+        int     realLen; //Real length of text (in case "len" is not the truth!)
         QString fontName;
         bool    italic;
 };
@@ -370,6 +372,16 @@ void ProcessFormatTag ( QDomNode   myNode,
         formatData.len = 0;
 
         kdError(30502) << "Missing formatting!" << endl;
+    }
+
+    if ( 6 == formatId )
+    {// <FORMAT id=6> have no length but has one character in <TEXT>
+        //TODO: verifiy that KWord 0.9 still does it!
+        formatData.realLen=1;
+    }
+    else
+    {
+        formatData.realLen=formatData.len;
     }
 
     QValueList<TagProcessing> tagProcessingList;
@@ -433,6 +445,30 @@ struct DocData
     bool alphabeticalList;
 };
 
+static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &paraFormatDataList)
+{
+    QValueList<FormatData>::Iterator  paraFormatDataIt;
+    int lastPos=0; // last position
+
+    paraFormatDataIt = paraFormatDataList.begin ();
+    while (paraFormatDataIt != paraFormatDataList.end ())
+    {
+        if ((*paraFormatDataIt).pos>lastPos)
+        {
+            //We must add a FormatData
+            FormatData formatData(lastPos,(*paraFormatDataIt).pos-lastPos,QString::null,false);
+            paraFormatDataList.insert(paraFormatDataIt,formatData);
+        }
+        lastPos=(*paraFormatDataIt).pos+(*paraFormatDataIt).realLen;
+        paraFormatDataIt++; // To the next one, please!
+    }
+    // Add the last one if needed
+    if (paraText.length()>lastPos)
+    {
+        FormatData formatData(lastPos,paraText.length()-lastPos,QString::null,false);
+        paraFormatDataList.append(formatData);
+    }
+}
 
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
@@ -447,6 +483,8 @@ void ProcessParagraphData ( QString                 &paraText,
 
     if ( paraText.length () > 0 )
     {
+        CreateMissingFormatData(paraText,paraFormatDataList);
+
         QValueList<FormatData>::Iterator  paraFormatDataIt;
 
         for ( paraFormatDataIt = paraFormatDataList.begin ();
