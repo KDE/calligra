@@ -1832,7 +1832,7 @@ void KoShadowPreview::drawContents( QPainter* painter )
 
 
 KoParagShadowWidget::KoParagShadowWidget( QWidget * parent, const char * name )
-    : KoParagLayoutWidget( KoParagDia::PD_SHADOW, parent, name )
+  : KoParagLayoutWidget( KoParagDia::PD_SHADOW, parent, name )
 {
 
     QGridLayout *grid = new QGridLayout( this, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
@@ -1966,7 +1966,7 @@ void KoParagShadowWidget::setShadowColor( const QColor &sc )
 {
     shadowColor = sc;
     m_shadowPreview->setShadowColor( shadowColor );
-    color->setColor( shadowColor.isValid() ? shadowColor: black  );
+    color->setColor( shadowColor.isValid() ? shadowColor: gray  );
 }
 
 void KoParagShadowWidget::luChanged()
