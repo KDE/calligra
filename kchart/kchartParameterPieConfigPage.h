@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright 2000 by Laurent Montel, released under Artistic License.
  */
 
