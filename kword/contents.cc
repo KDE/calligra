@@ -206,6 +206,10 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
         {
             style->paragLayout().topBorder = Border( Qt::black, Border::SOLID, 1 );
             style->paragLayout().bottomBorder = Border( Qt::black, Border::SOLID, 1 );
+            // Old kword had only top and bottom. But borders are drawn differently now
+            // (not the whole line anymore), so we need the 4 borders.
+            style->paragLayout().leftBorder = Border( Qt::black, Border::SOLID, 1 );
+            style->paragLayout().rightBorder = Border( Qt::black, Border::SOLID, 1 );
             style->paragLayout().alignment = Qt::AlignCenter;
         }
         else
