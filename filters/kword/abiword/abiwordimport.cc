@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,10 +29,12 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <kmdcodec.h>
 #include <kfilterdev.h>
 #include <kgenericfactory.h>
 
 #include <koGlobal.h>
+#include <koStore.h>
 #include <koFilterChain.h>
 
 #include "ImportHelpers.h"
@@ -53,7 +55,8 @@ K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory( "kwordabiwor
 class StructureParser : public QXmlDefaultHandler
 {
 public:
-    StructureParser(QDomDocument doc) : mainDocument(doc)
+    StructureParser(QDomDocument doc, KoFilterChain* chain)
+        : mainDocument(doc), m_chain(chain), pictureNumber(0), pictureFrameNumber(0)
     {
         createMainFramesetElement();
         structureStack.setAutoDelete(true);
@@ -80,8 +83,13 @@ private:
     QString indent; //DEBUG
     StackItemStack structureStack;
     QDomDocument mainDocument;
-    QDomElement mainFramesetElement;     // The main <FRAMESET> where the body text will be under.
+    QDomElement framesetsPluralElement; // <FRAMESETS>
+    QDomElement mainFramesetElement;    // The main <FRAMESET> where the body text will be under.
+    QDomElement pixmapsElement;         // <PIXMAPS>
     StyleDataMap styleDataMap;
+    KoFilterChain* m_chain;
+    uint pictureNumber;
+    uint pictureFrameNumber;
 };
 
 // Element <c>
@@ -104,7 +112,7 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
     }
     else
     {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "parse error <c> tag not nested neither in <p> nor in <c> but in "
+        kdError(30506) << "parse error <c> tag nested neither in <p> nor in <c> but in "
             << stackCurrent->itemName << endl;
         return false;
     }
@@ -290,6 +298,202 @@ static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
 
     return true;
 }
+
+// <image>
+static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
+    QDomDocument& mainDocument, QDomElement& framesetsPluralElement,
+    const QXmlAttributes& attributes, uint& pictureFrameNumber)
+{
+    // <image> elements can be nested in <p> or <c> elements
+    if ((stackCurrent->elementType!=ElementTypeParagraph) && (stackCurrent->elementType!=ElementTypeContent))
+    {//we are not nested correctly, so consider it a parse error!
+        kdError(30506) << "parse error <image> tag nested neither in <p> nor in <c> but in "
+            << stackCurrent->itemName << endl;
+        return false;
+    }
+    stackItem->elementType=ElementTypeEmpty;
+
+    QString strDataId=attributes.value("dataid").stripWhiteSpace();
+
+    // TODO: image properties
+
+    if (strDataId.isEmpty())
+    {
+        kdWarning(30506) << "Image has no data id!" << endl;
+    }
+    else
+    {
+        kdDebug(30506) << "Image: " << strDataId << endl;
+    }
+
+    QString strPictureFrameName("Picture ");
+    strPictureFrameName+=QString::number(++pictureFrameNumber);
+
+    // Create the frame set of the image
+
+    QDomElement framesetElement=mainDocument.createElement("FRAMESET");
+    framesetElement.setAttribute("frameType",2);
+    framesetElement.setAttribute("frameInfo",0);
+    framesetElement.setAttribute("visible",1);
+    framesetElement.setAttribute("name",strPictureFrameName);
+    framesetsPluralElement.appendChild(framesetElement);
+
+    QDomElement frameElementOut=mainDocument.createElement("FRAME");
+    frameElementOut.setAttribute("left",0);
+    frameElementOut.setAttribute("top",0);
+    frameElementOut.setAttribute("bottom",0);
+    frameElementOut.setAttribute("right",0);
+    frameElementOut.setAttribute("runaround",1);
+    // TODO: a few attributes are missing
+    framesetElement.appendChild(frameElementOut);
+
+    QDomElement imageElement=mainDocument.createElement("IMAGE");
+    imageElement.setAttribute("keepAspectRatio","true");
+    framesetElement.appendChild(imageElement);
+
+    QDomElement key=mainDocument.createElement("KEY");
+    // No name attribute!
+    key.setAttribute("filename",strDataId); // AbiWord's data id
+    //As we have no date to set, set to the unix epoch
+    key.setAttribute("year",1980);
+    key.setAttribute("month",1);
+    key.setAttribute("day",1);
+    key.setAttribute("hour",0);
+    key.setAttribute("minute",0);
+    key.setAttribute("second",0);
+    key.setAttribute("msec",0);
+    imageElement.appendChild(key);
+
+    // Now use the image's frame set
+    QDomElement elementText=stackItem->stackElementText;
+    QDomElement elementFormatsPlural=stackItem->stackElementFormatsPlural;
+    elementText.appendChild(mainDocument.createTextNode("#"));
+
+    QDomElement formatElementOut=mainDocument.createElement("FORMAT");
+    formatElementOut.setAttribute("id",6); // Normal text!
+    formatElementOut.setAttribute("pos",stackItem->pos); // Start position
+    formatElementOut.setAttribute("len",1); // Start position
+    elementFormatsPlural.appendChild(formatElementOut); //Append to <FORMATS>
+
+    // WARNING: we must change the position in stack current!
+    stackCurrent->pos++; // Adapt new starting position
+
+    QDomElement anchor=mainDocument.createElement("ANCHOR");
+    // No name attribute!
+    anchor.setAttribute("type","frameset");
+    anchor.setAttribute("instance",strPictureFrameName);
+    formatElementOut.appendChild(anchor);
+
+    return true;
+}
+
+// <d>
+static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
+    const QXmlAttributes& attributes)
+{
+    // We do not assume when we are called or if we are or not a child of <data>
+    stackItem->elementType=ElementTypeRealData;
+
+    QString strName=attributes.value("name").stripWhiteSpace();
+    QString strBase64=attributes.value("base64").stripWhiteSpace();
+    QString strMime=attributes.value("mime").stripWhiteSpace();
+
+    if (strName.isEmpty())
+    {
+        kdWarning(30506) << "Data has no name!" << endl;
+        stackItem->elementType=ElementTypeEmpty;
+        return true;
+    }
+
+    kdDebug(30506) << "Data: " << strName << endl;
+
+    stackItem->fontName=strName;    // Store the data name as font name.
+    stackItem->bold=((strBase64=="yes") || strBase64.isEmpty());// Store base64-coded as bold
+    stackItem->strMimeType=strMime;
+    stackItem->strTemp=QString::null;
+
+    return true;
+}
+
+static bool CharactersElementD (StackItem* stackItem, QDomDocument& /*mainDocument*/, const QString & ch)
+{
+    // As we have no guarantee to have the whole stream in one call, we must store the data.
+    stackItem->strTemp+=ch;
+    return true;
+}
+
+static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
+     uint& pictureNumber, QDomDocument& mainDocument, QDomElement& pixmapsElement)
+{
+    if (!stackItem->elementType==ElementTypeRealData)
+    {
+        kdError(30506) << "Wrong element type!! Aborting! (in endElementD)" << endl;
+        return false;
+    }
+    if (!chain)
+    {
+        kdError(30506) << "No filter chain! Aborting! (in endElementD)" << endl;
+        return false;
+    }
+
+    QString strStoreName="picture/picture";
+    strStoreName+=QString::number(++pictureNumber);
+
+    if (stackItem->strMimeType=="image/png")
+    {
+        strStoreName+=".png";
+    }
+    else if (stackItem->strMimeType=="image/jpeg")
+    {
+        strStoreName+=".jpeg";
+    }
+    else
+    {
+        kdWarning(30506) << "Unknown or unsupported mime type: "
+            << stackItem->strMimeType << endl;
+        return true;
+    }
+
+    QDomElement key=mainDocument.createElement("KEY");
+    key.setAttribute("name",strStoreName);
+    key.setAttribute("filename",stackItem->fontName); // AbiWord's data id
+    //As we have no date to set, set to the unix epoch
+    key.setAttribute("year",1980);
+    key.setAttribute("month",1);
+    key.setAttribute("day",1);
+    key.setAttribute("hour",0);
+    key.setAttribute("minute",0);
+    key.setAttribute("second",0);
+    key.setAttribute("msec",0);
+    pixmapsElement.appendChild(key);
+
+    KoStoreDevice* out=chain->storageFile(strStoreName, KoStore::Write);
+    if(!out)
+    {
+        kdError(30506) << "Unable to open output file for: " << stackItem->fontName << endl;
+        return false;
+    }
+
+    if (stackItem->bold) // Is base64-coded?
+    {
+        kdDebug(30506) << "Decode and write base64 stream: " << stackItem->fontName << endl;
+        // We need to decode the base64 stream
+        // However KCodecs has no QString to QByteArray decoder!
+        QByteArray base64Stream=stackItem->strTemp.utf8(); // Use utf8 to avoid corruption of data
+        QByteArray binaryStream;
+        KCodecs::base64Decode(base64Stream, binaryStream);
+        out->writeBlock(binaryStream, binaryStream.count());
+    }
+    else
+    {
+        kdDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
+        QCString strOut=stackItem->strTemp.utf8();
+        out->writeBlock(strOut,strOut.length());
+    }
+
+    return true;
+}
+
 
 // <br> (forced line break)
 // <cbr> (forced column break, not supported)
@@ -617,7 +821,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         }
     }
     else if (name=="pagesize")
-        // Does only exists as lower case tag!
+        // Does only exist as lower case tag!
     {
         stackItem->elementType=ElementTypeEmpty;
         stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
@@ -631,6 +835,15 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     else if (name=="s") // Seems only to exist as lower case
     {
         success=StartElementS(stackItem,structureStack.current(),attributes,styleDataMap);
+    }
+    else if (name=="image") // TODO: upper-case? old name?
+    {
+        success=StartElementImage(stackItem,structureStack.current(),
+            mainDocument,framesetsPluralElement,attributes,pictureFrameNumber);
+    }
+    else if (name=="d") // TODO: upper-case? old name?
+    {
+        success=StartElementD(stackItem,structureStack.current(),attributes);
     }
     else
     {
@@ -674,6 +887,10 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     else if (name=="field")
     {
         success=EndElementField(stackItem,structureStack.current());
+    }
+    else if (name=="d")
+    {
+        success=EndElementD(stackItem, m_chain, pictureNumber, mainDocument, pixmapsElement);
     }
     else
     {
@@ -732,6 +949,10 @@ bool StructureParser :: characters ( const QString & ch )
             kdError(30506) << "Empty element "<< stackItem->itemName
                 <<" is not empty! Aborting! (in StructureParser::characters)" << endl;
         }
+    }
+    else if (stackItem->elementType==ElementTypeRealData)
+    {
+        success=CharactersElementD(stackItem,mainDocument,ch);
     }
     else
     {
@@ -806,16 +1027,15 @@ bool StructureParser::endDocument(void)
 
 void StructureParser :: createMainFramesetElement(void)
 {
-    QDomElement framesetsPluralElementOut=mainDocument.createElement("FRAMESETS");
-    mainDocument.documentElement().appendChild(framesetsPluralElementOut);
+    framesetsPluralElement=mainDocument.createElement("FRAMESETS");
+    mainDocument.documentElement().appendChild(framesetsPluralElement);
 
     mainFramesetElement=mainDocument.createElement("FRAMESET");
     mainFramesetElement.setAttribute("frameType",1);
     mainFramesetElement.setAttribute("frameInfo",0);
-    mainFramesetElement.setAttribute("autoCreateNewFrame",1);
-    mainFramesetElement.setAttribute("removable",0);
+    mainFramesetElement.setAttribute("visible",1);
     // TODO: "name" attribute (needs I18N)
-    framesetsPluralElementOut.appendChild(mainFramesetElement);
+    framesetsPluralElement.appendChild(mainFramesetElement);
 
     QDomElement frameElementOut=mainDocument.createElement("FRAME");
     frameElementOut.setAttribute("left",28);
@@ -823,8 +1043,12 @@ void StructureParser :: createMainFramesetElement(void)
     frameElementOut.setAttribute("bottom",566);
     frameElementOut.setAttribute("right",798);
     frameElementOut.setAttribute("runaround",1);
+    // TODO: a few attributes are missing
     mainFramesetElement.appendChild(frameElementOut);
 
+    // As we are manipulating the document, create the PIXMAPS element
+    pixmapsElement=mainDocument.createElement("PIXMAPS");
+    mainDocument.documentElement().appendChild(pixmapsElement);
 }
 
 bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
@@ -915,7 +1139,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
 
     kdDebug(30506) << "Header " << endl << qDomDocumentOut.toString() << endl;
 
-    StructureParser handler(qDomDocumentOut);
+    StructureParser handler(qDomDocumentOut, m_chain);
 
     //We arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;

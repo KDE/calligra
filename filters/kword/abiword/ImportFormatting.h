@@ -40,12 +40,13 @@ enum StackItemElementType{
     ElementTypeUnknown  = 0,
     ElementTypeBottom,      // Bottom of the stack
     ElementTypeIgnore,      // Element is known but ignored
-    ElementTypeEmpty,       // Element is empty ( <pagesize>, <s>)
+    ElementTypeEmpty,       // Element is empty ( <pagesize>, <s>, <image>)
     ElementTypeAbiWord,     // <abiword>
     ElementTypeSection,     // <section>
     ElementTypeParagraph,   // <p>
     ElementTypeContent,     // <c>
-    ElementTypeField        // <field>
+    ElementTypeField,       // <field>
+    ElementTypeRealData     // <d>
 };
 
 class StackItem
@@ -59,16 +60,18 @@ public:
     QDomElement stackElementParagraph; // <PARAGRAPH>
     QDomElement stackElementText; // <TEXT>
     QDomElement stackElementFormatsPlural; // <FORMATS>
-    QString     fontName;
+    QString     fontName; // font name but for <d>: name
     int         fontSize;
     int         pos; //Position
     bool        italic;
-    bool        bold;
+    bool        bold;   // bold but for <d>: is base64 coded?
     bool        underline;
     bool        strikeout;
     QColor      fgColor;
     QColor      bgColor;
     int         textPosition; //Normal (0), subscript(1), superscript (2)
+    QString     strMimeType; // for <d>
+    QString     strTemp; // for <d>: collecting the data
 };
 
 class StackItemStack : public QPtrStack<StackItem>
