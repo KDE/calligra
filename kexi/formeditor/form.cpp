@@ -22,6 +22,7 @@
 #include <qwidget.h>
 #include <qobjectlist.h>
 #include <qtabwidget.h>
+#include <qpainter.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -432,6 +433,65 @@ Form::~Form()
 FormWidget::FormWidget( QWidget * parent, const char * name, WFlags f )
  : QWidget(parent, name, f)
 {
+}
+
+void FormWidget::drawSelectionRect(const QRect& r)
+{
+	QPainter p;
+	p.begin(this, true);
+	bool unclipped = testWFlags( WPaintUnclipped );
+	setWFlags( WPaintUnclipped );
+
+	if (prev_rect.isValid()) {
+		//redraw prev. selection's rectangle
+		p.drawPixmap( prev_rect.topLeft(), buffer, prev_rect );
+	}
+	p.setBrush(QBrush::NoBrush);
+	p.setPen(QPen(white, 1, Qt::DotLine));
+	p.setRasterOp(XorROP);
+	p.drawRect(r);
+	prev_rect = r;
+
+	if (!unclipped)
+		clearWFlags( WPaintUnclipped );
+	p.end();
+}
+
+//repaint all children widgets
+static void repaintAll(QObject *o)
+{
+	QObjectList *list = o->queryList("QWidget");
+	QObjectListIt it(*list);
+	for (QObject *obj; (obj=it.current()); ++it ) {
+		static_cast<QWidget*>(obj)->repaint();
+	}
+	delete list;
+}
+
+void FormWidget::initSelectionRect()
+{
+	repaintAll(this);
+//repaint(); // TODO: find a less cpu consuming solution
+	buffer.resize( width(), height() );
+	buffer = QPixmap::grabWindow( winId() );
+	prev_rect = QRect();
+}
+
+void FormWidget::clearSelectionRect()
+{
+	QPainter p;
+	p.begin(this, true);
+	bool unclipped = testWFlags( WPaintUnclipped );
+	setWFlags( WPaintUnclipped );
+
+	//redraw entire form surface
+	p.drawPixmap( QPoint(0,0), buffer, QRect(0,0,buffer.width(), buffer.height()) );
+
+	if (!unclipped)
+		clearWFlags( WPaintUnclipped );
+	p.end();
+
+	repaintAll(this);
 }
 
 #include "form.moc"

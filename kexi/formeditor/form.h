@@ -25,6 +25,7 @@
 
 #include <qobject.h>
 #include <qptrlist.h>
+#include <qpixmap.h>
 
 #include "resizehandle.h"
 
@@ -238,6 +239,13 @@ class KFORMEDITOR_EXPORT FormWidget : public QWidget
 
 	public:
 		FormWidget( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
+		void drawSelectionRect(const QRect& r);
+		void initSelectionRect();
+		void clearSelectionRect();
+	
+	protected:
+		QPixmap buffer; //!< stores grabbed entire form's area for redraw
+		QRect prev_rect; //!< previously selected rectangle
 };
 
 }

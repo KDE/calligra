@@ -40,7 +40,7 @@
 #include "formmanager.h"
 #include "commands.h"
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 //// Helper class for event filtering on composed widgets
 
@@ -210,6 +210,13 @@ Container::eventFilter(QObject *s, QEvent *e)
 				tmpy*=gridX;
 
 				m_insertBegin = QPoint(tmpx, tmpy);
+				if (!m_form->manager()->inserting()) {
+					//init drawing unclipped selection rectangle
+					if (m_container->inherits("KFormDesigner::FormWidget")) {
+						QWidget *cw = static_cast<QWidget*>(m_container);
+						static_cast<KFormDesigner::FormWidget*>(cw)->initSelectionRect();
+					}
+				}
 				return true;
 			}
 
@@ -228,6 +235,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 			else if(s == m_container && !m_toplevel) // we are drawing a rect to select widgets
 			{
 				m_container->repaint();
+				if (m_container->inherits("KFormDesigner::FormWidget")) {
+					//finish drawing unclipped selection rectangle: clear the surface
+					QWidget *cw = static_cast<QWidget*>(m_container);
+					static_cast<KFormDesigner::FormWidget*>(cw)->clearSelectionRect();
+				}
 				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
 				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
 				int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
@@ -329,12 +341,12 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
 				QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
 
-				QPainter p(m_container);
-				m_container->repaint(); // TODO: find a less cpu consuming solution
-				p.setBrush(QBrush::NoBrush);
-				p.setPen(QPen(white, 1, Qt::DotLine));
-				p.setRasterOp(XorROP);
-				p.drawRect(r);
+				if (m_container->inherits("KFormDesigner::FormWidget")) {
+					//draw unclipped selection rectangle
+					QWidget *cw = static_cast<QWidget*>(m_container);
+					static_cast<KFormDesigner::FormWidget*>(cw)->drawSelectionRect(r);
+				}
+//				m_container->drawSelectionRect(r);
 				return true;
 			}
 			if(mev->state() == (Qt::LeftButton|Qt::ControlButton)) // draw the insert rect for the copied widget
@@ -815,6 +827,21 @@ Container::~Container()
 	kdDebug() << " Container being deleted this == " << name() << endl;
 }
 
-}
+//--------------
+
+/*
+void ContainerWidget::drawSelectionRect(const QRect& r)
+{
+	QPainter p(m_container);
+	bool unclipped = testWFlags( WPaintUnclipped );
+	setWFlags( WPaintUnclipped );
+	m_container->repaint(); // TODO: find a less cpu consuming solution
+	p.setBrush(QBrush::NoBrush);
+	p.setPen(QPen(white, 1, Qt::DotLine));
+	p.setRasterOp(XorROP);
+	p.drawRect(r);
+	if (!unclipped)
+		clearWFlags( WPaintUnclipped );
+}*/
 
 #include "container.moc"

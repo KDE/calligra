@@ -310,12 +310,14 @@ HOT TODO:
 CC_MAIL: dkite@shaw.ca
 
 2004-06-10
+2004-06-12
 KFormDesigner
 - rectangle on widget inserting, resize handles and grid's dots:
    are now painted in white XORed color on top of all other widgets
 - fixed widget raising to top on clicking: also container members 
    are raised (eg. for tab widget)
 - more guarded ptrs added; fixed crash on ObjectTree destruction
+- selection rectangle is drawn unclipped now, on top of all widgets
 
 2004-06-09
 KexiTableViewPropertyBuffer:
