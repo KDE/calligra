@@ -21,10 +21,12 @@
 */
 
 #include <qstring.h>
+#include <qtextcodec.h>
 
 #include "KWEFUtil.h"
 
-QString EscapeXmlText(const QString& strIn,
+QString KWEFUtil::EscapeSgmlText(const QTextCodec* codec,
+                      const QString& strIn,
                       const bool quot /* = false */ ,
                       const bool apos /* = false */ )
 {
@@ -70,8 +72,16 @@ QString EscapeXmlText(const QString& strIn,
             }
         default:
             {
-                // TODO: verify that the character ch can be expressed in the
-                // TODO:  encoding in which we will write the HTML file.
+                // verify that the character ch can be expressed in the
+                //   encoding in which we will write the HTML file.
+                if (codec)
+                {
+                    if (!codec->canEncode(ch))
+                    {
+                        strReturn+=QString("&#%1;").arg(ch.unicode());
+                        break;
+                    }
+                }
                 strReturn+=ch;
                 break;
             }

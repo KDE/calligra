@@ -23,9 +23,20 @@
 #ifndef KWEF_UTIL_H
 #define KWEF_UTIL_H
 
-QString EscapeXmlText(const QString& strIn,
-                      const bool quot = false ,
-                      const bool apos = false );
+namespace KWEFUtil
+{
 
+QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
+    const bool quot = false, const bool apos = false );
+
+
+};
+
+// Depreciated! Use KWEFUtil::EscapeSgmlText
+static inline QString EscapeXmlText(const QString& strIn,
+    const bool quot = false, const bool apos = false )
+{
+    return KWEFUtil::EscapeSgmlText(NULL,strIn,quot,apos);
+}
 
 #endif /* KWEF_UTIL_H */
