@@ -1,3 +1,7 @@
+% Attention : this files is not up to date anymore.
+% See the status.html file in this directory or at www.koffice.org (I/O filters->status->latex)
+% http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/latex/status.html#export?content-type=text/html
+
 <PAPER>
 	- format			SUPORTED
 	- ptWidth			SUPORTED

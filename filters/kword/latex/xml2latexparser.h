@@ -26,6 +26,7 @@
 #include <qfile.h>		/* for QFile classe */
 #include <qtextstream.h>	/* for QTextStream classe */
 #include <qstring.h>		/* for QString classe */
+#include "fileheader.h"
 #include "document.h"
 
 class Xml2LatexParser : public XmlParser

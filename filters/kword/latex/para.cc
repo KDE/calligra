@@ -38,8 +38,8 @@ Para::Para(Texte* texte)
 {
 	_element   = texte;
 	_lines     = 0;
-	_next      = 0;
-	_previous  = 0;
+	//_next      = 0;
+	//_previous  = 0;
 	_name      = 0;
 	_info      = EP_NONE;	/* the parag is not a footnote */
 	_hardbrk   = EP_FLOW;	/* and it's not a new page */
@@ -55,54 +55,6 @@ Para::~Para()
 	if(_lines != 0)
 		delete _lines;
 }
-
-/*******************************************/
-/* IsColored                               */
-/*******************************************/
-/* Return TRUE if there is at least one    */
-/* text zone which use color.              */
-/*******************************************/
-/* DEPRECATED.                             */
-/*******************************************/
-/*bool Para::isColored() const
-{
-	bool color;
-	FormatIter iter;
-
-	color = false;
-	iter.setList(_lines);
-	while(!iter.isTerminate() && !color)
-	{
-		if(iter.getCourant()->getFormatType()== EF_TEXTZONE)
-			color = ((TextZone*) iter.getCourant())->isColor();
-		iter.next();
-	}
-	return color;
-}*/
-
-/*******************************************/
-/* isUlined                                */
-/*******************************************/
-/* Return TRUE if there is at least one    */
-/* text zone which use uline.              */
-/*******************************************/
-/* DEPRECATED.                             */
-/*******************************************/
-/*bool Para::isUlined() const
-{
-	bool uline;
-	FormatIter iter;
-
-	uline = false;
-	iter.setList(_lines);
-	while(!iter.isTerminate() && !uline)
-	{
-		if(iter.getCourant()->getFormatType()== EF_TEXTZONE)
-			uline = ((TextZone*) iter.getCourant())->isUnderlined();
-		iter.next();
-	}
-	return uline;
-}*/
 
 /*******************************************/
 /* GetFrameType                            */
@@ -145,15 +97,14 @@ EFormat Para::getTypeFormat(const Markup* balise) const
 int Para::getNbCharPara() const
 {
 	int nb = 0;
-	FormatIter iter;
+	Format* zone = 0;
 
 	if(_lines != 0)
 	{
-		kdDebug() << "  NB ZONE : " << _lines->getSize() << endl;
-		iter.setList(_lines);
-		while(!iter.isTerminate())
+		kdDebug() << "  NB ZONE : " << _lines->count() << endl;
+
+		for(zone = _lines->first(); zone != 0; zone = _lines->next())
 		{
-			Format* zone = iter.getCourant();
 			switch(zone->getId())
 			{
 				case EF_TEXTZONE:
@@ -170,7 +121,6 @@ int Para::getNbCharPara() const
 				case EF_ANCHOR:
 					break;
 			}
-			iter.next();
 		}
 	}
 	return nb;
@@ -326,9 +276,9 @@ void Para::analyseLayoutPara(const Markup *balise_initiale)
 				((TextZone*) zone)->setLength(_currentPos - _texte.length());
 				zone->analyse(0);
 				if(_lines == 0)
-					_lines = new ListeFormat;
+					_lines = new QList<Format>;
 				/* add the text */
-				_lines->addLast(zone);
+				_lines->append(zone);
 				_currentPos = _currentPos + ((TextZone*) zone)->getLength();
 			
 			}
@@ -395,14 +345,15 @@ void Para::analyseFormat(const Markup *balise)
 					if(((TextZone*) zone)->getPos() != _currentPos)
 					{
 						if(_lines == 0)
-							_lines = new ListeFormat;
-						/* Create first a default format */
+							_lines = new QList<Format>;
+							/* Create first a default format */
 						zoneFirst = new TextZone(_texte, this);
 						((TextZone*) zoneFirst)->setPos(_currentPos);
 						((TextZone*) zoneFirst)->setLength(((TextZone*) zone)->getPos() - _currentPos);
 						zoneFirst->analyse(0);
+
 						/* Add the text without format */
-						_lines->addLast(zoneFirst);
+						_lines->append(zoneFirst);
 						_currentPos = _currentPos + ((TextZone*) zoneFirst)->getLength();
 					}
 				}
@@ -429,9 +380,10 @@ void Para::analyseFormat(const Markup *balise)
 	if(zone != 0)
 	{
 		if(_lines == 0)
-			_lines = new ListeFormat;
+			_lines = new QList<Format>;
+
 		/* add the text */
-		_lines->addLast(zone);
+		_lines->append(zone);
 		_currentPos = _currentPos + ((TextZone*) zone)->getLength();
 	}
 }
@@ -458,21 +410,18 @@ void Para::generate(QTextStream &out)
 			out << "\\newpage" << endl;
 		generateDebut(out);
 	}
-	/*setLastName();
-	setLastCounter();*/
+
 	/* If a parag. have text :))) */
 	if(_lines != 0)
 	{
-		FormatIter iter;
-		kdDebug() << "  NB ZONE : " << _lines->getSize() << endl;
-		iter.setList(_lines);
-		while(!iter.isTerminate())
+		Format* zone = 0;
+		kdDebug() << "  NB ZONE : " << _lines->count() << endl;
+
+		for(zone = _lines->first(); zone != 0; zone = _lines->next())
 		{
-			iter.getCourant()->generate(out);
-			iter.next();
+			zone->generate(out);
 		}
-		/* To separate the text zones */
-		out << endl;
+		/* To separate the text zones. */
 	}
 
 	if(getInfo() != EP_FOOTNOTE && getFrameType() != SS_HEADERS &&
@@ -498,63 +447,47 @@ void Para::generateDebut(QTextStream &out)
 	 */
 	if(getFrameType() == SS_TABLE)
 	{
-		int sizeCell = 5;
+		//int sizeCell = 5;
 		/* first number depends with the cell size (next number}
 		 * and with the number of characters in the para. 
 		 * It can be 20 char. / 5 cm  = 4 char / cm so */
 		/* nbLines = nb_char_para / (4 * cell size) + 1 */
-		sizeCell = (_element->getRight() - _element->getLeft()) / 27;
-		kdDebug() << "SIZE OF CELL : " << sizeCell << endl;
-		// TODO : arrondir au superieur 
-		_nbLines = ((_element->getBottom() - _element->getTop()) / 27) + 1;
-		kdDebug() << "NB OF LINES : " << _nbLines << endl;
+		//sizeCell = (_element->getRight() - _element->getLeft()) / 27;
+		//kdDebug() << "SIZE OF CELL : " << sizeCell << endl;
+		// TODO : arrondir au superieur avec tgmath.h ??
+		//_nbLines = ((_element->getBottom() - _element->getTop()) / 27) + 1;
+		//kdDebug() << "NB OF LINES : " << _nbLines << endl;
 		/* 2 at least, 1 for the line, 1 for the space line */
-		if(_nbLines < 2)
+		/*if(_nbLines < 2)
 			_nbLines = 2;
-		out << "\\multirow{" << _nbLines << "}{"<< sizeCell << "cm}{" << endl;
+		out << "\\multirow{" << _nbLines << "}{"<< sizeCell << "cm}{" << endl;*/
 	}
 	/* if it's a chapter */
 	if(isChapter())
 	{
-		/* switch the type, the depth do*/
+		/* switch the type, the depth do */
 		generateTitle(out);
 	}
-	else if(_lines != 0)
+	else if(isEnum())
 	{
-		/* If the paragraph had text */
-		if(_previous == 0 || _previous->getEnv() != getEnv() || getInfo() == EP_FOOTNOTE)
-		{
-			/* It's a parag. */
-			switch(getEnv())
-			{
-				case ENV_LEFT: out << "\\begin{flushleft}" << endl;
-					break;
-				case ENV_RIGHT: out << "\\begin{flushright}" << endl;
-					break;
-				case ENV_CENTER: out << "\\begin{center}" << endl;
-					break;
-				case ENV_NONE: if(getFrameType() == SS_TABLE)
-							out << "\\begin{flushleft}";
-						out << endl;
-					break;
-			}
-		}
-		if(isEnum())
-		{
-			/* If it's a list : */
-			/* - go in a new list */
-			/* - change depth (a list in a list) */
-			/* - or two lists nearby */
-			if(_previous == 0 || !_previous->isList() ||
-			  (_previous->isList() && (
-				(_previous->getCounterDepth() < getCounterDepth()) ||
-				(_previous->getCounterType() != getCounterType()))
-			  ))
-			{
-				openList(getCounterType(), out);
-			}
-			out << "\\item ";
-		}
+		out << "\\item ";
+	}
+
+}
+
+void Para::generateBeginEnv(QTextStream &out)
+{
+	kdDebug() << "Begin new Env : " << getEnv() << endl;
+	switch(getEnv())
+	{
+		case ENV_LEFT: out << "\\begin{flushleft}" << endl;
+			break;
+		case ENV_RIGHT: out << "\\begin{flushright}" << endl;
+			break;
+		case ENV_CENTER: out << "\\begin{center}" << endl;
+			break;
+		case ENV_JUSTIFY: out << endl;
+			break;
 	}
 }
 
@@ -564,11 +497,11 @@ void Para::generateDebut(QTextStream &out)
 /* Generate the markup to begin a list and */
 /* push the type in the historic stack.    */
 /*******************************************/
-void Para::openList(EType type, QTextStream &out)
+void Para::openList(QTextStream &out)
 {
 	EType *type_temp = 0;
 
-	switch(type)
+	switch(getCounterType())
 	{
 		case TL_NONE:
 			break;
@@ -584,14 +517,14 @@ void Para::openList(EType type, QTextStream &out)
 		case TL_LLNUMBER:	/* i, ii, ... */
 			out << "\\begin{enumerate}[i]" << endl;
 			break;
-		case TL_CLNUMBER: /* I, II, ... */
+		case TL_CLNUMBER: 	/* I, II, ... */
 			out << "\\begin{enumerate}[I]" << endl;
 			break;
 		case TL_CUSTOM_SIMPLE: /* - */
-			out << "\\begin{enumerate}[" << getCounterBullet() << "]" << endl;
+			out << "\\begin{enumerate}[" << convertSpecialChar(getCounterBullet()) << "]" << endl;
 			break;
 		case TL_CUSTOM_COMPLEX: /* - */
-			out << "\\begin{enumerate}[" << getCounterBullet() << "]" << endl;
+			out << "\\begin{enumerate}[" << convertSpecialChar(getCounterBullet()) << "]" << endl;
 			break;
 		case TL_CIRCLE_BULLET:
 			out << "\\begin{itemize}" << endl;
@@ -607,7 +540,7 @@ void Para::openList(EType type, QTextStream &out)
 	}
 
 	/* Keep the list type */
-	type_temp = new EType(type);
+	type_temp = new EType(getCounterType());
 	kdDebug() << " type list to open : " << *type_temp << endl;
 	_historicList.push(type_temp);
 }
@@ -622,68 +555,53 @@ void Para::generateFin(QTextStream &out)
 	/* Close a title of chapter */
 	if(isChapter())
 		out << "}" << endl;
-	else if(isList())
-	{
-		/* It's a list : */
-		/* - end of a list */
-		/* - change the deph (end of a list in a list) */
-		/* - end of a first list with two lists nearby */
-		/* - always in a cell of a table */
-		if(_next == 0 || !_next->isEnum() ||
-		  (_next->isList() && _next->getCounterDepth() < getCounterDepth()) ||
-		  (_next->isList() && _next->getCounterType() != getCounterType() && _next->getCounterDepth() == getCounterDepth()) ||
-		  getFrameType() == SS_TABLE)
-		{
-			closeList(getCounterType(), out);
+}
 
-			if(((getCounterDepth() - 1) >= 0) && ((_next!= 0 && !_next->isEnum()) || _next == 0))
-			{
-				/* We must close all the lists since
-				 * after this paragraph it's a normal paragraph.
-				 */
-				kdDebug() << "lists to close" << endl;
-				while(!_historicList.isEmpty())
-				{
-					EType *type_temp = 0;
-					type_temp = _historicList.pop();
-					if(type_temp != 0)
-						closeList(*type_temp, out);
-				}
-			}
-		}
-	}
-	if(((_previous && !_previous->isChapter()) || !_previous) && _lines != 0)
+/*******************************************/
+/* GenerateEndEnv                          */
+/*******************************************/
+/* Generate the closing environment markup.*/
+/*******************************************/
+void Para::generateEndEnv(QTextStream &out)
+{
+	kdDebug() << "end of an environment : " << getEnv() << endl;
+	switch(getEnv())
 	{
-		if((_next == 0 || _next->getEnv() != getEnv()) && !isChapter())
+		case ENV_LEFT: out << "\\end{flushleft}" << endl;
+			break;
+		case ENV_RIGHT: out << "\\end{flushright}" << endl;
+			break;
+		case ENV_CENTER: out << "\\end{center}" << endl;
+			break;
+		case ENV_JUSTIFY: out << endl;
+			break;
+	}
+}
+
+/*******************************************/
+/* closeList                               */
+/*******************************************/
+/* Generate the closing list markup for a  */
+/* list type (letter, custom, ...) and     */
+/* remove the last list saved.             */
+/*******************************************/
+void Para::closeList(QTextStream &out, Para* next)
+{
+	closeList(getCounterType(), out);
+
+	if(((getCounterDepth() - 1) >= 0) && ((next!= 0 && !next->isEnum()) || next == 0))
+	{
+		/* We must close all the lists since
+		 * after this paragraph it's a normal paragraph.
+		 */
+		kdDebug() << "lists to close" << endl;
+		while(!_historicList.isEmpty())
 		{
-			switch(getEnv())
-			{
-				case ENV_LEFT: out << "\\end{flushleft}" << endl;
-					break;
-				case ENV_RIGHT: out << "\\end{flushright}" << endl;
-					break;
-				case ENV_CENTER: out << "\\end{center}" << endl;
-					break;
-				case ENV_NONE: if(getFrameType() == SS_TABLE)
-							out << "\\end{flushleft}" << endl;
-					break;
-			}
+			EType *type_temp = 0;
+			type_temp = _historicList.pop();
+			if(type_temp != 0)
+				closeList(*type_temp, out);
 		}
-		/* Be carefull : for table the CR are dangerous */
-		/*if((_next == 0 || _next->getEnv() == getEnv()) &&
-		   getFrameType() != SS_TABLE)
-			out << endl;*/
-	}
-	/* Be careful we are in a table ! 
-	 * You can't use directly environment, ...
-	 */
-	if(getFrameType() == SS_TABLE)
-	{
-		out << "} \\\\" << endl;
-		/* Create all the lines used by this paragraph */
-		for(int i = 0; i< _nbLines; i++)
-			out << "\\\\ ";
-		out << endl;
 	}
 }
 
@@ -698,6 +616,10 @@ void Para::closeList(EType type, QTextStream &out)
 {
 	//out << endl;
 	kdDebug() << " type list to close : " << type << endl;
+
+	/* Because of a new markup, we need a new line. */
+	out << endl;
+
 	/* but the next parag is not a same list */
 	switch(type)
 	{
@@ -750,7 +672,8 @@ void Para::generateTitle(QTextStream &out)
 		case 4:
 			out << "\\subparagraph{";
 			break;
-		default:
+		case 5:
 			out << "% section too deep" << endl;
+			out << "\\textbf{";
 	}
 }

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   modified by Robert JACOLIN 2000
+   Copyright (C) 2001 Robert JACOLIN <rjacolin@ifrance.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,19 +17,36 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __LATEXEXPORT_FACTORY_H__
-#define __LATEXEXPORT_FACTORY_H__
+/*
+ This file is based on the file :
+    koffice/filters/kword/html/htmlexportdia_factory.h
+	Copyright (C) 2001 Nicolas Goutte <nicog@snafu.de>
+
+   which was based on the old file:
+    /home/kde/koffice/filters/kspread/csv/csvfilterdia_factory.h
+
+   The old file was copyrighted by
+    Copyright (C) 1999 David Faure <faure@kde.org>
+
+   The old file was licensed under the terms of the GNU Library General Public
+   License version 2.
+*/
+
+#ifndef __LATEXEXPORTDIA_FACTORY_H__
+#define __LATEXEXPORTDIA_FACTORY_H__
+
+#ifndef USE_QFD
 
 #include <klibloader.h>
 
 class KInstance;
 
-class LATEXExportFactory : public KLibFactory
+class LATEXExportDiaFactory : public KLibFactory
 {
     Q_OBJECT
 public:
-    LATEXExportFactory( QObject* parent = 0, const char* name = 0 );
-    virtual ~LATEXExportFactory();
+    LATEXExportDiaFactory( QObject* parent = 0, const char* name = 0 );
+    virtual ~LATEXExportDiaFactory();
 
     virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
 
@@ -39,4 +55,6 @@ public:
 private:
     static KInstance* s_global;
 };
-#endif /* __LATEXEXPORT_FACTORY_H__ */
+#endif
+#endif /* __LATEXEXPORTDIA_FACTORY_H__ */
+

@@ -37,76 +37,31 @@ Texte::Texte()
 	_autoCreate        = TC_EXTEND;
 	_newFrameBehaviour = TF_RECONNECT;
 	_sheetSide         = TS_ANYSIDE;
-	_footnotes         = 0;
+	//_footnotes         = 0;
 
 	setType(ST_TEXT);
-	//setSection(SS_BODY);
 }
-
-/*******************************************/
-/* hasColor                                */
-/*******************************************/
-/* Return TRUE if there is at least one    */
-/* parag. which use color.                 */
-/*******************************************/
-/*bool Texte::hasColor() const
-{
-	bool color;
-	ParaIter iter;
-
-	color = false;
-	iter.setList(_parags);
-	kdDebug() << "TEST COLOR USE" << endl;
-	while(!iter.isTerminate() && !color)
-	{
-		color = iter.getCourant()->isColored();
-		kdDebug() << "coul" << color << endl;
-		iter.next();
-	}
-	return color;
-}*/
-
-/*******************************************/
-/* hasUline                                */
-/*******************************************/
-/* Return TRUE if there is at least one    */
-/* parag. which use underline.             */
-/*******************************************/
-/*bool Texte::hasUline() const
-{
-	bool uline;
-	ParaIter iter;
-
-	uline = false;
-	iter.setList(_parags);
-	kdDebug() << "TEST ULINE USE" << endl;
-	while(!iter.isTerminate() && !uline)
-	{
-		uline = iter.getCourant()->isUlined();
-		iter.next();
-	}
-	return uline;
-}*/
 
 /*******************************************/
 /* searchFootnote                          */
 /*******************************************/
 Para* Texte::searchFootnote(const QString name)
 {
-	ParaIter iter;
+	/*ParaIter iter;
 
 	if(_footnotes != 0)
 	{
 		iter.setList(*_footnotes);
-		while(!iter.isTerminate())
+		while(!iter.isTerminate())*/
+		for(Para* current = _footnotes.first(); current!= 0; current = _footnotes.next())
 		{
-			QString* string = iter.getCourant()->getName();
+			QString* string = current->getName();
 			kdDebug() << *string << endl;
 			if(*string == name)
-				return iter.getCourant();
-			iter.next();
+				return current;
+			//iter.next();
 		}
-	}
+	//}
 	return 0;
 }
 
@@ -142,14 +97,14 @@ void Texte::analyse(const Markup * balise_initiale)
 			if(prg->getInfo() == EP_FOOTNOTE)
 			{
 				// 3. add this parag. in the footnote list
-				if(_footnotes == 0)
-					_footnotes = new ListPara;
-				_footnotes->add(prg);
+				//if(_footnotes == 0)
+				//	_footnotes = new ListPara;
+				_footnotes.append(prg);
 			}
 			else
 			{
 				// 3. add this parag. in the text list
-				_parags.add(prg);
+				_parags.append(prg);
 			}
 			kdDebug() << "PARA ADDED" << endl;
 		}
@@ -205,6 +160,118 @@ void Texte::analyseParamFrame(const Markup *balise)
 		{
 			setSheetSide(atoi(arg->zValue));
 		}
+		else if(strcmp(arg->zName, "LWIDTH")== 0)
+		{
+			setLeftWidth(atoi(arg->zValue));
+			useLeftBorder();
+		}
+		else if(strcmp(arg->zName, "RWIDTH")== 0)
+		{
+			setRightWidth(atoi(arg->zValue));
+			useRightBorder();
+		}
+		else if(strcmp(arg->zName, "TWIDTH")== 0)
+		{
+			setTopWidth(atoi(arg->zValue));
+			useTopBorder();
+		}
+		else if(strcmp(arg->zName, "BWIDTH")== 0)
+		{
+			setBottomWidth(atoi(arg->zValue));
+			useBottomBorder();
+		}
+		else if(strcmp(arg->zName, "LRED")== 0)
+		{
+			setLeftRed(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "LGREEN")== 0)
+		{
+			setLeftGreen(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "LBLUE")== 0)
+		{
+			setLeftBlue(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "RRED")== 0)
+		{
+			setRightRed(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "RGREEN")== 0)
+		{
+			setRightGreen(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "RBLUE")== 0)
+		{
+			setRightBlue(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "TRED")== 0)
+		{
+			setTopRed(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "TGREEN")== 0)
+		{
+			setTopGreen(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "TBLUE")== 0)
+		{
+			setTopBlue(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BRED")== 0)
+		{
+			setBottomRed(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BGREEN")== 0)
+		{
+			setBottomGreen(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BBLUE")== 0)
+		{
+			setBottomBlue(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "LSTYLE")== 0)
+		{
+			setLeftStyle(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "RSTYLE")== 0)
+		{
+			setRightStyle(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "TSTYLE")== 0)
+		{
+			setTopStyle(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BSTYLE")== 0)
+		{
+			setBottomStyle(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BKRED")== 0)
+		{
+			setBkRed(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BKGREEN")== 0)
+		{
+			setBkGreen(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BKBLUE")== 0)
+		{
+			setBkBlue(atoi(arg->zValue));
+		}
+		/*else if(strcmp(arg->zName, "BLEFTPT")== 0)
+		{
+			setLeftWidth(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BRIGHTPT")== 0)
+		{
+			setLeftWidth(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BTOPPT")== 0)
+		{
+			setLeftWidth(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "BBOTTOMPT")== 0)
+		{
+			setLeftWidth(atoi(arg->zValue));
+		}*/
 	}
 }
 
@@ -213,30 +280,117 @@ void Texte::analyseParamFrame(const Markup *balise)
 /*******************************************/
 void Texte::generate(QTextStream &out)
 {
-	ParaIter iter;
+	//ParaIter iter;
+	Para * lastPara = 0;
+
 	kdDebug() << "TEXT GENERATION" << endl;
-	kdDebug() << "NB PARA " << _parags.getSize() << endl;
-	iter.setList(_parags);
+	kdDebug() << "NB PARA " << _parags.count() << endl;
+	//iter.setList(_parags);
 
 	if(getSection() == SS_TABLE)
 	{
-		out << "\\begin{tabular}{l}" << endl;
+		/* If the element has a border display it here */
+		if(hasTopBorder())
+		{
+			out << "\\cline{" << getCol() << "-" << getCol() << "}" << endl;
+		}
+		out << "\\begin{minipage}{";
+		out << (getRight() - getLeft()) << "pt}" << endl;
 	}
-
-	while(!iter.isTerminate())
+	_lastEnv = ENV_NONE;
+	_lastTypeEnum = TL_NONE;
+	//while(!iter.isTerminate())
+	Para* currentPara = _parags.first();
+	while( currentPara != 0)
 	{
-		//iter.getCourant()->setFrameType(getSection());
-		iter.getCourant()->generate(out);
-		/* Between each cell of a table, do : */
-		iter.next();
-		if(!iter.isTerminate() && getSection() == SS_TABLE)
-			out << "\\\\" << endl;
-		kdDebug() << iter.getCourant() << endl;
+		//Para* currentPara = iter.getCourant();
+		/* layout managment */
+		if(!currentPara->isChapter() && _lastEnv != getNextEnv(_parags, _parags.at()) &&
+			_lastTypeEnum == TL_NONE)
+		{
+			currentPara->generateBeginEnv(out);
+			_lastEnv = currentPara->getEnv();
+		}
+		/* List managment */
+		if(isBeginEnum(lastPara, currentPara))
+		{
+			currentPara->openList(out);
+			_lastTypeEnum = currentPara->getCounterType();
+		}
+		/* paragraph generation */
+		currentPara->generate(out);
+
+		lastPara = currentPara;
+		currentPara = _parags.next();
+
+		/* list managment */
+		if(isCloseEnum(lastPara, currentPara))
+		{
+			lastPara->closeList(out, currentPara);
+			_lastTypeEnum = TL_NONE;
+		}
+		/* layout managment */
+		if(!lastPara->isChapter() && _lastEnv != getNextEnv(_parags, _parags.at()))
+			lastPara->generateEndEnv(out);
+		out << endl;
 	}
 
 	if(getSection() == SS_TABLE)
 	{
-		out << "\\end{tabular}" << endl;
+		out << "\\end{minipage}" << endl;
+
+		/* If the element has a border display it here */
+		/* doesn't work */
+		if(hasBottomBorder())
+		{
+			out << "\\cline{" << getCol() << "-" << getCol() << "}" << endl;
+		}
 	}
 }
 
+EEnv Texte::getNextEnv(QList<Para> liste, const int pos)
+{
+	Para* index = 0;
+
+	for(index = liste.at(pos); index != 0 && index->isChapter(); index = liste.next())
+	{}
+
+	if(index != 0)
+	{
+		return index->getEnv();
+	}
+	else
+		return ENV_NONE;
+}
+
+/* next is the paragraph which will be generated, just after */
+
+bool Texte::isBeginEnum(Para* previous, Para* next)
+{
+	/* If it's a list : */
+	/* - go in a new list */
+	/* - change depth (a list in a list) */
+	/* - or two lists nearby (but with the same depth) */
+	if(previous == 0 || !previous->isList() ||
+		  (previous->isList() && (
+			(previous->getCounterDepth() < next->getCounterDepth()) ||
+			(previous->getCounterType() != next->getCounterType() &&
+			previous->getCounterDepth() == next->getCounterDepth()))
+		  ))
+		return true;
+	
+	return false;
+}
+
+/* next is the paragraph which will be generated in the next loop */
+bool Texte::isCloseEnum(Para* previous, Para* next)
+{
+	if(next == 0 || !next->isEnum() ||
+		  (next->isList() && next->getCounterDepth() < previous->getCounterDepth()) ||
+		  (next->isList() && next->getCounterType() != previous->getCounterType() &&
+		  	next->getCounterDepth() == previous->getCounterDepth()) ||
+		  previous->getFrameType() == SS_TABLE)
+		return true;
+
+	return false;
+}

@@ -28,6 +28,14 @@
 #include <qstring.h>
 #include "format.h"
 
+/***********************************************************************/
+/* Class: Footnote                                                     */
+/***********************************************************************/
+
+/**
+ * This class hold a footnote. This class will be a lot modified because
+ * it doesn't correspond whith the dtd 1.0.
+ */
 class Footnote: public Format
 {
 	int     _from,   _to;
@@ -36,12 +44,30 @@ class Footnote: public Format
 	QString _ref;
 
 	public:
+		/**
+		 * Constructors
+		 *
+		 * Creates a new instances of Footnote.
+		 *
+		 * @param Para is the parent class
+		 */
 		Footnote(Para* para = 0);
 		//Footnote(TextZone);
 
+		/* 
+		 * Destructor
+		 *
+		 * Nothing to do
+		 */
 		virtual ~Footnote();
 
-		/* Modifiers */
+		/**
+		 * Accessors
+		 */
+
+		/**
+		 * Modifiers
+		 */
 		void setFrom  (int   f) { _from   = f; }
 		void setTo    (int   t) { _to     = t; }
 		void setSpace (char*);
@@ -51,6 +77,9 @@ class Footnote: public Format
 		void setAfter (char*);
 		void setRef   (char*);
 
+		/**
+		 * Helpfull functions
+		 */
 		void analyse (const Markup*);
 		void analyseInternal(const Markup*);
 		void analyseRange(const Markup*);

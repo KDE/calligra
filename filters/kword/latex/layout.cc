@@ -146,7 +146,7 @@ void Layout::analyseEnv(const Markup *balise)
 		if(strcmp(arg->zName, "ALIGN")== 0)
 		{
 			if(strcmp(arg->zValue, "justify")== 0)
-				setEnv(ENV_NONE);
+				setEnv(ENV_JUSTIFY);
 			else if(strcmp(arg->zValue, "left")== 0)
 				setEnv(ENV_LEFT);
 			else if(strcmp(arg->zValue, "right")== 0)

@@ -35,7 +35,7 @@ XmlParser::XmlParser(const char *data)
 	// Get the tree
 	_arbreXml     = ParseXml(_document, &_index);
 	_tokenCurrent = _arbreXml;
-	PrintXml(_arbreXml, 3);
+	//PrintXml(_arbreXml, 3);
 }
 
 XmlParser::XmlParser()

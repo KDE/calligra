@@ -1,4 +1,3 @@
-
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
@@ -23,21 +22,44 @@
 #ifndef __KWORD_LISTTABLE_H__
 #define __KWORD_LISTTABLE_H__
 
-//#include <qlist.h>
 #include "table.h"
 
+/***********************************************************************/
+/* Class: ListTable                                                    */
+/***********************************************************************/
+
+/**
+ * This class hold a list of tables. It just a wrapper for QList<Table> to
+ * add a frame in a table if the table exists else to create a new table.
+ */
 class ListTable: public QList<Table>
 {
 	public:
+		/**
+		 * Constructors
+		 *
+		 * Creates a new instance of ListTable.
+		 */
 		ListTable();
+
+		/* 
+		 * Destructor
+		 */
 		virtual ~ListTable();
 
+		/**
+		 * Accessors
+		 */
+
 		Table* isNewTable(QString);
-	
+
+		/**
+		 * Modifiers
+		 */
+
 		void add(Element*);
 
 	private:
-		//void updateTable(Element*);
 };
 
 #endif /* __KWORD_LISTTABLE_H__ */

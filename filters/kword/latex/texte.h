@@ -23,10 +23,21 @@
 #ifndef __KWORD_LATEXTEXT_H__
 #define __KWORD_LATEXTEXT_H__
 
+#include <qlist.h>
 #include "element.h"
-#include "listepara.h"
+#include "border.h"
+//#include "listepara.h"
+#include "para.h"
 
-class Texte: public Element
+/***********************************************************************/
+/* Class: Texte                                                        */
+/***********************************************************************/
+
+/**
+ * This class hold 2 lists of paragraphs for the text and for the footnotes.
+ * NOTE : The frame analyse can be (must be) in a Element class.
+ */
+class Texte: public Element, Border
 {
 	/* DATA MARKUP */
 	int      _left,
@@ -40,14 +51,33 @@ class Texte: public Element
 	TSide   _sheetSide;
 
 	/* CHILD MARKUP */
-	ListPara  _parags;
-	ListPara* _footnotes;
+	QList<Para> _parags;
+	QList<Para> _footnotes;
+
+	/* USEFULL DATA */
+	EEnv      _lastEnv;
+	EType     _lastTypeEnum;
 
 	public:
+		/**
+		 * Constructors
+		 *
+		 * Creates a new instances of Texte.
+		 *
+		 */
 		Texte();
+
+		/* 
+		 * Destructor
+		 *
+		 * The destructor must remove the list of parag and footnotes.
+		 */
 		virtual ~Texte() {
+			//delete _footnotes;
 			kdDebug() << "Destruction of a txt" << endl; }
-		
+		/**
+		 * Accessors
+		 */
 		/*bool    hasColor      () const;
 		bool    hasUline      () const;*/
 		int     getLeft       () const { return _left;              }
@@ -60,7 +90,13 @@ class Texte: public Element
 		TNFrame getNewFrame   () const { return _newFrameBehaviour; }
 		TSide   getSheetSide  () const { return _sheetSide;         }
 		Para*   getFirstPara  () const { return _parags.getFirst(); }
+		EEnv    getNextEnv    (QList<Para>, const int);
+		bool    isBeginEnum   (Para*, Para*);
+		bool    isCloseEnum   (Para*, Para*);
 
+		/**
+		 * Modifiors
+		 */
 		void setLeft      (const int l)    { _left   = l;               }
 		void setRight     (const int r)    { _right  = r;               }
 		void setTop       (const int t)    { _top    = t;               }
@@ -73,11 +109,22 @@ class Texte: public Element
 		void setSheetSide (const int s)    { _sheetSide = (TSide) s;    }
 
 		Para* searchFootnote(const QString);
-	
+
+		/**
+		 * Get informations from a markup tree.
+		 */
 		void analyse(const Markup*);
+
+		/**
+		 * Write the text in a file.
+		 */
 		void generate(QTextStream&);
 
 	private:
+		/**
+		 * Get informations from a markup tree (only parameters
+		 * in a frame.
+		 */
 		void analyseParamFrame(const Markup*);
 
 };

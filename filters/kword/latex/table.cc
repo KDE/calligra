@@ -48,7 +48,7 @@ Table::Table(QString grpMgr)
 Table::~Table()
 {
 	//Element *elt = 0;
-	kdDebug() << "Destruction of a list of tables" << endl;
+	kdDebug() << "Destruction of a list of frames" << endl;
 	/*while(_start != 0)
 	{
 		elt    = _start;
@@ -63,8 +63,6 @@ Table::~Table()
 /*******************************************/
 EEnv Table::getCellFlow(int col)
 {
-	EEnv env = ENV_NONE;
-
 	for(int row = 0; row<= getMaxRow(); row++)
 	{
 		Element* elt = at(row * getMaxRow() + col);
@@ -75,7 +73,26 @@ EEnv Table::getCellFlow(int col)
 		}
 	}
 	kdDebug() << "Default flow for cell" << endl;
-	return env;
+	return ENV_JUSTIFY;
+}
+
+/*******************************************/
+/* getCellFlow                             */
+/*******************************************/
+int Table::getCellSize(int col)
+{
+
+	for(int row = 0; row<= getMaxRow(); row++)
+	{
+		Element* elt = at(row * getMaxRow() + col);
+		if(elt->getType() == ST_TEXT)
+		{
+			kdDebug() << ((Texte*) elt)->getLeft() << endl;
+			return ((Texte*) elt)->getRight() - ((Texte*) elt)->getLeft();
+		}
+	}
+	kdDebug() << "Default size for cell" << endl;
+	return 3;
 }
 
 /*******************************************/
@@ -159,10 +176,10 @@ void Table::generateTableHeader(QTextStream& out)
 
 	for(int col = 0; col <= getMaxCol(); col++)
 	{
-		out << "m{5cm}";
+		out << "m{" << getCellSize(col) << "pt}";
 		/*switch(getCellFlow(col))
 		{
-			case ENV_NONE:
+			case ENV_JUSTIFY:
 					out << "m{5cm}";
 				break;
 			case ENV_CENTER:

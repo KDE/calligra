@@ -108,30 +108,29 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>28 april 2001</td>
+     <td>12 may 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
-     <td>- Can export to LaTeX documents, documents with some text only. Formulas are analysed,
+     <td>Can export to LaTeX documents, documents with some text only. Formulas are analysed,
 	picture are not translated (the name is not write in the tex markup with new extension),
-	<b>simple</b>table are supported now (just a little pb with the size of cell) but part
-	is still not supported yet.</td>
+	<b>simple</b> table are supported now (just a little pb with the size of cells and the
+	location is not yet supported) but part	is still not supported yet.</td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
      <td>
-<PRE>
 <B>VERSION 1:</B>
 <table BORDER="0" WIDTH="100%">
 <tr><td>text with accent</td>			<td>DONE</td></tr>
-<tr><td>text with special characters</td>	<td></td></tr>
+<tr><td>text with special characters</td>	<td>A LOT OF SPECIAL CHARS SUPPORTED !</td></tr>
 <tr><td>layout</td>				<td>DONE</td></tr>
 <tr><td>title</td>			<td>DONE</td></tr>
 <tr><td>list</td>			<td>DONE</td></tr>
 <tr><td>paper</td>			<td>DONE</td></tr>
-<tr><td>footnote, head</td>		<td>DONE (still a little bug for first foot/header)</td></tr>
+<tr><td>footnote, head</td>		<td>DONE (still a little bug for first foot/header and a line is added)</td></tr>
 <tr><td>comments with kdoc</td>		<td>STARTED</td></tr>
 <tr><td>unicode support</td>		<td>STUDY (SEE omega package)</td></tr>
 <tr><td>break (line, page)</td>		<td>STARTED</td></tr>
@@ -149,7 +148,7 @@
 <tr><td>figure</td>			<td></td></tr>
 <tr><td>frame</td>			<td></td></tr>
 </table>
-</ul>
+<!--</ul>-->
       </PRE>
      </td>
     </tr>
@@ -213,14 +212,14 @@
 <tr><td>columns</td>		<td></td>			<td>SUPPORTED</td></tr>
 <tr><td>Columnspcacing</td>	<td></td>			<td>ANALIZED</td></tr>
 <tr><td>hType</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td></td><td>0...On all pages (even/odd) the same headers	\chead</td></tr>
-<tr><td></td><td>1...Different header only on first page</td></tr>
-<tr><td></td><td>2...Different headers for even/odd pages	\fancyhead</td></tr>
+<tr><td></td><td>0...On all pages (even/odd) the same headers<i>\chead</i></td></tr>
+<tr><td></td><td>2...Different header only on first page</td></tr>
+<tr><td></td><td>3...Different headers for even/odd pages<i>\fancyhead</i></td></tr>
 <tr><td>fType</td>		<td></td>			<td>SUPPORTED</td></tr>
 <tr><td>spHeadBody</td>		<td></td>			<td>SUPPORTED</td></tr>
 <tr><td>spFootBody</td>		<td></td>			<td>SUPPORTED</td></tr>
 <tr><td>zoom</td>		<td></td>			<td>UNUSEFULL</td></tr>
-<tr><td><PAPERBORDERS></td>	<td></td>			<td>SUPPORTED</td><td>Except for bottom (don't exist)
+<tr><td><b><i>PAPERBORDERS</i></b></td>	<td></td>			<td>SUPPORTED</td><td>Except for bottom (don't exist)
 				special use for Right and Left.</td></tr>
 <tr><td>Left</td>		<td></td>			<td>ANALYSED</td></tr>
 <tr><td>Top</td>		<td></td>			<td>ANALYSED</td></tr>
@@ -324,7 +323,7 @@
 <tr><td>info</td>		<td></td>			<td>SUPPORTED</td></tr>
 <tr><td></td>			<td>0...No &quot;special&quot; information</td></tr>
 <tr><td></td>			<td>1...Footnote (see NAME)</td></tr>
-<tr><td colspan="2"><b><i>HARDBRK</i></b></td></tr>
+<tr><td colspan="2"><b><i>HARDBRK</i></b></td>			<tD>SUPPORTED</td><td>To verify</td></tr>
 <tr><td>frame</td>		<td></td></tr>
 <tr><td></td>			<td>0...let it flow</td></tr>
 <tr><td></td>			<td>1...hard brake -&gt; next frame</td></tr>
@@ -377,7 +376,7 @@
 <tr><td></td>			<td>from</td></tr>
 <tr><td></td>			<td>to</td></tr>
 <tr><td></td>			<td>space</td></tr>
-<tr><td>/INTERNAL</td>		<td></td></tr>
+<tr><td>INTERNAL</td>		<td></td></tr>
 <tr><td>RANGE</td>		<td></td></tr>
 <tr><td>TEXT</td>		<td></td></tr>
 <tr><td>DESCRIPT</td>		<td></td></tr>
@@ -416,7 +415,7 @@
 <tr><td></td>			<td>3...alpha. uppercase (e.g. &quot;A&quot;)</td><td>SUPPORTED</td></tr>
 <tr><td></td>			<td>4...roman numbering (e.g. &quot;ii&quot;)</td><td>SUPPORTED</td></tr>
 <tr><td></td>			<td>5...roman numbering uppercase (e.g. &quot;IX&quot;)</td><td>SUPPORTED</td></tr>
-<tr><td></td>			<td>6...custom bullet (e.g. &quot;-&quot;)</td><td>ANALYSED</td></tr>
+<tr><td></td>			<td>6...custom bullet (e.g. &quot;-&quot;)</td><td>SUPPORTED</td><td>To verify the special characters convertion</td></tr>
 <tr><td></td>			<td>7...custom (complex string)</td></tr>
 <tr><td></td>			<td>8...circle bullet (e.g. &quot;o&quot;)</td><td>SUPPORTED</td></tr>
 <tr><td></td>			<td>9...square bullet</td></tr>

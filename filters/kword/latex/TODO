@@ -4,7 +4,7 @@ VERSION 1
 		* big parag must be truncated.
 		* ...
 	- layout					DONE
-	- titre						DONE
+	- title						DONE
 	- list						DONE
 	- paper						DONE
 	- footer, header				DONE
@@ -18,13 +18,13 @@ VERSION 1
 		  it's center, ...
 		  to do that --> isCenter method for
 		  Texte class
-	- clean codes :)))	
+	- clean codes :)))				DONE
 	- kdoc						DONE
-	- footnote					DONE AT 80 %
+	- footnote
 	- Get all default informations			DONE
-	- Use QList for all list
-	- Use QStack for env (flow).
-
+	- Use QList for all list			DONE
+	- indent lists
+	- break lines
 
 VERSION 2
 	- unicode
@@ -35,6 +35,6 @@ VERSION 2
 
 VERSION 3
 	- parts
-	- formula					DONE AT 50 % (only for my part:)) )
+	- formula					DONE AT 50 %
 	- figure
 	- frame

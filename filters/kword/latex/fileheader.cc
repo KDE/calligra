@@ -35,6 +35,8 @@ FileHeader::FileHeader()
 	_hasColor     = false;
 	_hasUnderline = false;
 	_hasEnumerate = false;
+	_hasGraphics  = false;
+	_hasTable     = false;
 	_standardPage = 0;
 	_processing   = TP_NORMAL;
 	setFileHeader(this);		/* for xmlParser class. */
@@ -299,6 +301,7 @@ void FileHeader::generatePackage(QTextStream &out)
 		out << "\\usepackage{array}" << endl;
 		out << "\\usepackage{multirow}" << endl;
 	}
+	out << "\\usepackage{textcomp}" << endl;
 	out << endl;
 			
 }

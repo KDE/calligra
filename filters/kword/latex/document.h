@@ -22,12 +22,10 @@
 #ifndef __KWORD_DOCUMENT_H__
 #define __KWORD_DOCUMENT_H__
 
+#include <qlist.h>
 #include <qtextstream.h>
 
-#include "fileheader.h"		/* class header file.      */
-#include "listelement.h"	/* list of children frame. */
-//#include "listformula.h"	/* list of formulas (just a list of QString). */
-//#include "listpart.h"		/* list of parts (don't know how it will be). */
+//#include "fileheader.h"		/* class header file.      */
 #include "listtable.h"		/* list of tables (another kind of list of elements). */
 
 enum EGenerate
@@ -47,14 +45,15 @@ enum EGenerate
  */
 class Document: public XmlParser
 {
-	ListElement _header;
-	ListElement _footer;
-	ListElement _corps;
-	ListElement _footnotes;
-	ListElement _formulas;
-	ListTable   _tables;
-	ListElement _parts;
-	EGenerate   _generation;
+	QList<Element> _headers;
+	QList<Element> _footers;
+	QList<Element> _footnotes;
+	QList<Element> _formulas;
+	QList<Element> _corps;
+
+	ListTable      _tables;
+	//QList<Element> _parts;
+	EGenerate     _generation;
 
 	public:
 		/**
@@ -74,6 +73,7 @@ class Document: public XmlParser
 		/**
 		 * Accessors
 		 */
+
 		/**
 		 * @return the next frame type (header, footer, body, footnote).
 		 */
@@ -86,7 +86,13 @@ class Document: public XmlParser
 		void  generate(QTextStream&);
 
 	private:
+		/**
+		 * @return generate the header
+		 */
 		void  generateTypeHeader(QTextStream&, Element*);
+		/**
+		 * @return generate the footer
+		 */
 		void  generateTypeFooter(QTextStream&, Element*);
 };
 

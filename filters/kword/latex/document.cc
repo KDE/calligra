@@ -23,9 +23,11 @@
 
 #include <kdebug.h>
 
+#include "fileheader.h"
 #include "document.h"
 #include "texte.h"
 #include "formula.h"
+
 //#include "part.h"
 
 /*******************************************/
@@ -100,10 +102,10 @@ void Document::analyse(const Markup * balise_initiale)
 				switch(elt->getSection())
 				{
 					case SS_FOOTERS: kdDebug() << " FOOTER" <<endl;
-						       _footer.add(elt);
+						       _footers.append(elt);
 						       break;
 					case SS_HEADERS: kdDebug() << " HEADER" << endl;
-							_header.add(elt);
+							_headers.append(elt);
 						break;
 					case SS_BODY:
 						if(!elt->isTable())
@@ -112,16 +114,16 @@ void Document::analyse(const Markup * balise_initiale)
 							{
 								case ST_TEXT:
 								case ST_PICTURE:
-										_corps.add(elt);
+										_corps.append(elt);
 										kdDebug() << " BODY" << endl;
 									break;
 								case ST_PART:
 										kdDebug() << " PART" <<endl;
-										//_parts.add(elt);
+										//_parts.append(elt);
 									break;
 								case ST_FORMULA:
 										kdDebug() << " FORMULA" <<endl;
-										_formulas.add(elt);
+										_formulas.append(elt);
 									break;
 							}
 						}
@@ -137,7 +139,7 @@ void Document::analyse(const Markup * balise_initiale)
 							_fileHeader->useTable();
 						break;
 					case SS_FOOTNOTES: /* Just for the new kwd file version */
-							_footnotes.add(elt);
+							_footnotes.append(elt);
 					break;
 					default: kdDebug() << "UNKNOWN" << endl;
 						break;
@@ -188,35 +190,34 @@ SType Document::getTypeFrameset(const Markup *balise)
 /*******************************************/
 void Document::generate(QTextStream &out)
 {
-	ElementIter iter1;
-	ElementIter iter2;
-	ElementIter iter3;
+	Element* header;
+	Element* footer;
 
 	kdDebug() << "DOC. GENERATION." << endl;
 	
 	/* For each header */
 	if(getFileHeader()->hasHeader())
 	{
-		kdDebug() << "header : " << _header.getSize() << endl;
-		iter1.setList(&_header);
+		kdDebug() << "header : " << _headers.count() << endl;
 
-		while(!iter1.isTerminate())
+		/* default : no rule */
+		out << "\\renewcommand{\\headrulewidth}{0pt}" << endl;
+		for(header = _headers.first(); header != 0; header = _headers.next())
 		{
-			generateTypeHeader(out, iter1.getCourant());
-			iter1.next();
+			generateTypeHeader(out, header);
 		}
 	}
 	
 	/* For each footer */
 	if(getFileHeader()->hasFooter())
 	{
-		kdDebug() << "footer : " << _header.getSize() << endl;
-		iter2.setList(&_footer);
+		kdDebug() << "footer : " << _footers.count() << endl;
 
-		while(!iter2.isTerminate())
+		/* default : no rule */
+		out << "\\renewcommand{\\footrulewidth}{0pt}" << endl;
+		for(footer = _footers.first(); footer != 0; footer = _footers.next())
 		{
-			generateTypeFooter(out, iter2.getCourant());
-			iter2.next();
+			generateTypeFooter(out, footer);
 		}
 	}
 	/* Specify what header/footer style to use */
@@ -228,11 +229,12 @@ void Document::generate(QTextStream &out)
 	}
 
 	/* Body */
-	kdDebug() << endl << "body : " << _corps.getSize() << endl;
+	kdDebug() << endl << "body : " << _corps.count() << endl;
 
 	out << "\\begin{document}" << endl;
 	if(_corps.getFirst() != 0)
 		_corps.getFirst()->generate(out);
+
 	/* Just for test */
 	if(_tables.getFirst() != 0)
 		_tables.getFirst()->generate(out);

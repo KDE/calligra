@@ -30,22 +30,68 @@
 #include <qstring.h>
 #include "textformat.h"
 
+/***********************************************************************/
+/* Class: TextZone                                                     */
+/***********************************************************************/
+
+/**
+ * This class hold a zone of text with only one formating.
+ */
 class TextZone: public TextFormat
 {
 	/* TEXT MARKUP */
 	QString _texte;
 
 	public:
+		/**
+		 * Constructors
+		 *
+		 */
+
+		/**
+		 *  Creates a new instance of TextZone.
+		 *
+		 * @param Para which is the parent class.
+		 */
 		TextZone(Para *para = 0);
+		/**
+		 *
+		 * Creates a new instance of TextZOne.
+		 *
+		 * @param QStrign the text in this zone.
+		 * @param Para which is the parent class.
+		 */
 		TextZone(QString, Para *para = 0);
+
+		/* 
+		 * Destructor
+		 *
+		 */
 		virtual ~TextZone();
 
-		/* Specify if the text must be formated */
-		bool useFormat() const;
-		QString getTexte() const { return _texte; }
+		/**
+		 * Accessors
+		 */
+
+		/**
+		 * @return Specify if the text must be formated.
+		 *
+		 */
+		bool    useFormat() const;
+		QString getTexte()  const { return _texte; }
+
+		/**
+		 * Modifiers
+		 */
 
 		void setTexte(QString texte) { _texte = texte; }
-		//void setPara(Para* para) { _para = para; }
+
+		/**
+		 * Helpfull functions
+		 */
+		/**
+		 * convert a unicode text in latin1 enconding ala latex.
+		 */
 		QString escapeLatin1(QString);
 		
 		void analyse(const Markup*);
@@ -54,8 +100,14 @@ class TextZone: public TextFormat
 		void generate_format_end(QTextStream &);
 
 	private:
-		void convert(QString&, char, const char*);
+		/**
+		 * convert a special character in a markup latex.
+		 */
+		void convert(QString&, int, const char*);
 		void display(QString, QTextStream&);
 };
+
+
+QString convertSpecialChar(int);
 
 #endif /* __KWORD_TEXTZONE_H__ */

@@ -27,10 +27,17 @@
 #include <qstring.h>
 #include <qtextstream.h>
 
+/***********************************************************************/
+/* Class: Formula                                                      */
+/***********************************************************************/
+
+/**
+ * This class hold a formula. The formula must be generated not for this
+ * filter but from the kformula lib. So I keep only a string of the formula. 
+ */
 class Formula: public Element
 {
 	/* DATA MARKUP */
-
 	int      _left,
 		 _top,
 		 _right,
@@ -45,10 +52,24 @@ class Formula: public Element
 	QString  _formula;
 
 	public:
+		/**
+		 * Constructors
+		 *
+		 * Creates a new instance of Formula.
+		 */
 		Formula();
+
+		/* 
+		 * Destructor
+		 *
+		 * Nothing to do.
+		 */
 		virtual ~Formula() {
 			kdDebug() << "Destruction of a formula" << endl; }
-		
+
+		/**
+		 * Accessors
+		 */
 		/*bool    hasColor      () const;
 		bool    hasUline      () const;*/
 		TAround getRunAround  () const { return _runaround;         }
@@ -59,13 +80,28 @@ class Formula: public Element
 
 		void getFormula(Token*, int);
 
+		/**
+		 * Modifiers
+		 */
 		void setRunAround (const int a)    { _runaround = (TAround) a;  }
 		void setAroundGap (const double r) { _runaroundGap = r;         }
 		void setAutoCreate(const int a)    { _autoCreate = (TCreate) a; }
 		void setNewFrame  (const int n)    { _newFrameBehaviour = (TNFrame) n; }
 		void setSheetSide (const int s)    { _sheetSide = (TSide) s;    }
 
+		/**
+		 * Helpfull functions
+		 */
+
+		/**
+		 * Get informations from a markup tree and put the formula
+		 * in a QString.
+		 */
 		void analyse(const Markup*);
+
+		/**
+		 * Write the formula in a file.
+		 */
 		void generate(QTextStream&);
 
 	private:

@@ -32,7 +32,6 @@ Element::Element()
 	_hinfo     = SI_NONE;
 	_section   = SS_NONE;
 	_name      = 0;
-	_suivant   = 0;
 	_removable = false;
 	_visible   = true;
 	_row       = 0;

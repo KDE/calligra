@@ -62,9 +62,10 @@ enum TColonne
 
 enum THeadfoot
 {
-	TH_ALL,
-	TH_FIRST,
-	TH_EVODD
+	TH_ALL   = 0,		/* 0 */
+	TH_XXX   = 1,		/* 1 */
+	TH_FIRST = 2,	/* 2 */
+	TH_EVODD = 3	/* 3 */
 };
 
 enum TProcType

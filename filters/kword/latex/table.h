@@ -25,34 +25,76 @@
 
 #include <qstring.h>
 #include <qlist.h>
-#include "element.h"		/* child class */
-#include "layout.h"		/* Cell flow */
+#include "element.h"		/* Child class */
+#include "layout.h"		/* Cell flow   */
 
+/***********************************************************************/
+/* Class: Table                                                        */
+/***********************************************************************/
+
+/**
+ * This class hold a table. That is a table of frame (text frame, picture
+ * frame, ...). It use a special latex package.
+ * The color table and the border of the tables is not yet supported.
+ */
 class Table: public QList<Element>
 {
-	int _maxRow, _maxCol;
+	/* MARKUP DATA */
 	QString _name;
 	QString _grpMgr;
 
+	/* USEFULL DATA */
+	int     _maxRow, _maxCol;	/* Size of the table (nb of cell) */
+
 	public:
+		/**
+		 * Constructors
+		 *
+		 */
+
+		/**
+		 * Creates a new instance of Table.
+		 */
 		Table();
+		/**
+		 * Creates a new instance of Table.
+		 *
+		 * @param The group manager.
+		 */
 		Table(QString);
 
+		/* 
+		 * Destructor
+		 *
+		 * The destructor must remove the list of frames.
+		 */
+
 		virtual ~Table();
+
+		/**
+		 * Accessors
+		 */
 
 		QString getName  () const { return _name;   }
 		QString getGrpMgr() const { return _grpMgr; }
 		int     getMaxRow() const { return _maxRow; }
 		int     getMaxCol() const { return _maxCol; }
-		EEnv    getCellFlow(int);
 
+		EEnv    getCellFlow (int);
+		int     getCellSize (int);
+
+		/**
+		 * Modifiers
+		 */
 		void setMaxRow(int r) { _maxRow = r; }
 		void setMaxCol(int c) { _maxCol = c; }
 
+		/**
+		 * Helpfull functions
+		 */
 		Element* searchCell(int, int);
-		void append(Element*);
-
-		void generate(QTextStream&);
+		void     append    (Element*);
+		void     generate  (QTextStream&);
 
 	private:
 		void generateCell(QTextStream&, int, int);

@@ -24,11 +24,13 @@
 
 #include <qstring.h>
 #include <qstack.h>		/* historic list */
+#include <qlist.h>		/* for list of format */
 
-#include "listeformat.h"	/* children class contents the zone (italic, footnote,
+/*#include "listeformat.h"*/	/* children class contents the zone (italic, footnote,
 				   variable. */
 #include "layout.h"		/* set of informations about the paragraph style. */
 #include "element.h"		/* to use the father class. */
+#include "format.h"		/* child class */
 
 enum EP_INFO
 {
@@ -51,7 +53,7 @@ class Texte;
 /**
  * This class hold a real paragraph. It tells about the text in this
  * paragraph, its format, etc. The complete text is a list of Para instances.
- * A footnote is a list of paragprah instances.
+ * A footnote is a list of paragraph instances (now but not in the "futur").
  */
 class Para: public Layout
 {
@@ -60,15 +62,15 @@ class Para: public Layout
 	QString*       _name;
 	EP_INFO        _info;
 	EP_HARDBRK     _hardbrk;
-	ListeFormat*   _lines;
+	QList<Format>* _lines;
 
 	/* TO MANAGE THE LIST */
-	Para*          _next;
-	Para*          _previous;
+	/*Para*          _next;
+	Para*          _previous;*/
 
 	/* USEFULL DATA */
 	Texte*                _element;		/* Father frame */
-	unsigned int          _currentPos;	/* Begining of the text for use the good format */
+	unsigned int          _currentPos;	/* Begining of the text to use the good format */
 	static QStack<EType>  _historicList;	/* opened lists but not closed */
 	int                   _nbLines;		/* Nb of lines in a cell (table) */
 
@@ -76,7 +78,7 @@ class Para: public Layout
 		/**
 		 * Constructors
 		 *
-		 * Creates a new instances of Para.
+		 * Creates a new instance of Para.
 		 *
 		 * @param Texte the text this paragraph is belonging to.
 		 */
@@ -92,6 +94,7 @@ class Para: public Layout
 		/**
 		 * Accessors
 		 */
+
 		/**
 		 * @return true if the paragraph has a colored word.
 		 */
@@ -100,8 +103,8 @@ class Para: public Layout
 		 * @return true if the paragraph has a underlined word.
 		 */
 		//bool     isUlined     () const;
-		Para*    getNext      () const { return _next;      }
-		Para*    getPrevious  () const { return _previous;  }
+		//Para*    getNext      () const { return _next;      }
+		//Para*    getPrevious  () const { return _previous;  }
 		/**
 		 *  @return the paragraph's name.
 		 */
@@ -128,19 +131,49 @@ class Para: public Layout
 		int getNbCharPara() const;
 
 		/**
-		 * Modifiors
+		 * Modifiers
 		 */
-		void setNext    (Para *p)  { _next      = p;    }
-		void setPrevious(Para *p)  { _previous  = p;    }
+		//void setNext    (Para *p)  { _next      = p;    }
+		//void setPrevious(Para *p)  { _previous  = p;    }
 
 		/**
-		 * Catch informations from a markup tree.
+		 * Helpfull functions
+		 */
+
+		/**
+		 * Get informations from a markup tree.
 		 */
 		void analyse         (const Markup*);
+
 		/**
 		 * Write the paragraph in a file.
 		 */
 		void generate        (QTextStream&);
+
+		/**
+		 * If the paragraph has a different environment, change it
+		 */
+		void generateBeginEnv(QTextStream&);
+
+		/**
+		 * If the next paragraph has a different environment, close it
+		 */
+		void generateEndEnv(QTextStream&);
+
+		/**
+		 * If the paragraph is a title, generate the command.
+		 */
+		void generateTitle    (QTextStream&);
+
+		/**
+		 * Write the markup to begin a list
+		 */
+		void openList         (QTextStream&);
+
+		/**
+		 * Write the markup to close a list
+		 */
+		void closeList        (QTextStream&, Para*);
 
 	private:
 		void analyseParam     (const Markup*);
@@ -152,20 +185,10 @@ class Para: public Layout
 		void analyseFormats   (const Markup*);
 
 		/**
-		 * If the paragraph is a title, generate the command.
-		 */
-		void generateTitle    (QTextStream&);
-
-		/**
 		 * Write the paragraph style, format.
 		 */
 		void generateDebut    (QTextStream&);
 		void generateFin      (QTextStream&);
-
-		/**
-		 * Write the markup to begin a list
-		 */
-		void openList         (EType, QTextStream&);
 
 		/**
 		 * Write the markup to close a list

@@ -32,8 +32,8 @@ enum SType
 	ST_NONE,
 	ST_TEXT,
 	ST_PICTURE,
-	ST_PART,		/* This last Type mustn't    */
-	ST_FORMULA		/* be display where they     */
+	ST_PART,		/* This last Type mustn't be */
+	ST_FORMULA		/* displayed where they are. */
 };
 
 enum SSect
@@ -83,6 +83,14 @@ enum TSide
 	TS_EVENPAGE
 };
 
+/***********************************************************************/
+/* Class: Element                                                      */
+/***********************************************************************/
+
+/**
+ * This class is a element. An element is a component of a frame (text, picture,
+ * formula, ...). 
+ */
 class Element: public XmlParser
 {
 	/* FRAMESET PARAM */
@@ -93,22 +101,36 @@ class Element: public XmlParser
 	bool    _removable;
 	bool    _visible;
 	QString _grpMgr;
-	int     _row, _col, _rows, _cols;
+	int     _row,
+		_col,
+		_rows,
+		_cols;
 
-	Element* _suivant;
+	/* USEFULL DATA */
 
 	public:
+		/**
+		 * Constructors
+		 *
+		 * Creates a new instance of Element.
+		 *
+		 */
 		Element();
 
+		/* 
+		 * Destructor
+		 *
+		 */
 		virtual ~Element();
 
 		/*virtual bool  hasColor() const = 0;
 		virtual bool  hasUline() const = 0;*/
-		
+		/**
+		 * Accessors
+		 */
 		SSect    getSection () const { return _section;        }
 		SType    getType    () const { return _type;           }
 		SInfo    getInfo    () const { return _hinfo;          }
-		Element* getNext    () const { return _suivant;        }
 		bool     isVisible  () const { return _visible;        }
 		bool     isRemovable() const { return _removable;      }
 		QString  getGrpMgr  () const { return _grpMgr;         }
@@ -118,17 +140,27 @@ class Element: public XmlParser
 		int      getCols    () const { return _cols;           }
 		bool     isTable    () const { return (_section == SS_TABLE); }
 
-		void setType(SType t)       { _type      = t;   }
-		void setSection(SSect s)    { _section   = s;   }
-		void setNext(Element *elt)  { _suivant   = elt; }
-		void setVisible(bool v)     { _visible   = v;   }
-		void setRemovable(bool r)   { _removable = r;   }
-		void setGrpMgr(const char*g){ _grpMgr    = g;   }
-		void setRow   (int r)       { _row       = r;   }
-		void setCol   (int c)       { _col       = c;   }
-		void setRows  (int r)       { _rows      = r;   }
-		void setCols  (int c)       { _cols      = c;   }
+		/**
+		 * Modifiors
+		 */
+		void setType     (SType       t)   { _type      = t;   }
+		void setSection  (SSect       s)   { _section   = s;   }
+		void setVisible  (bool        v)   { _visible   = v;   }
+		void setRemovable(bool        r)   { _removable = r;   }
+		void setGrpMgr   (const char* g)   { _grpMgr    = g;   }
+		void setRow      (int         r)   { _row       = r;   }
+		void setCol      (int         c)   { _col       = c;   }
+		void setRows     (int         r)   { _rows      = r;   }
+		void setCols     (int         c)   { _cols      = c;   }
 
+		 /**
+		 * Helpfull functions
+		 */
+
+		/**
+		 * Get informations about frameset markupt only from a
+		 * markup tree.
+		 */
 		virtual void analyse(const Markup*);
 		virtual void generate(QTextStream&) = 0;
 

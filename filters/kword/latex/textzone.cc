@@ -29,7 +29,7 @@
 #include "textzone.h"
 #include "para.h"
 
-#define CSTART 0xC0
+#define CSTART 0x00C0
 
 /*******************************************/
 /* TextZone                                */
@@ -81,20 +81,20 @@ QString TextZone::escapeLatin1(QString text)
 		"\\`{E}", "\\'{E}", "\\^{E}", "\\\"{E}",
 		"\\`{I}", "\\'{I}", "\\^{I}", "\\\"{I}",
 
-		"", "\\~{N}", "\\`{O}", "\\'{O}",
-		"\\^{O}", "\\~{O}", "\\\"{O}", "",
+		"\\DH", "\\~{N}", "\\`{O}", "\\'{O}",
+		"\\^{O}", "\\~{O}", "\\\"{O}", "\\texttimes",
 		"\\O", "\\`{U}", "\\'{U}", "\\^{U}",
-		"\\\"{U}", "\\'{Y}", "", "\\ss",
+		"\\\"{U}", "\\'{Y}", "\\TH", "\\ss",
 
 		"\\`{a}", "\\'{a}", "\\^{a}", "\\~{a}",
 		"\\\"{a}", "\\aa", "\\ae", "\\c{c}",
 		"\\`{e}", "\\'{e}", "\\^{e}", "\\\"{e}",
 		"\\`{\\i}", "\\'{\\i}", "\\^{\\i}", "\\\"{\\i}",
 
-		"", "\\~{n}", "\\`{o}", "\\'{o}",
-		"\\^{o}", "\\~{o}", "\\\"{o}", "",
+		"\\dh", "\\~{n}", "\\`{o}", "\\'{o}",
+		"\\^{o}", "\\~{o}", "\\\"{o}", "\\textdiv",
 		"\\o", "\\`{u}", "\\'{u}", "\\^{u}",
-		"\\\"{u}", "\\'{y}", "", "\\\"{y}"
+		"\\\"{u}", "\\'{y}", "\\th", "\\\"{y}"
 	};
 
 	QString escapedText;
@@ -105,30 +105,62 @@ QString TextZone::escapeLatin1(QString text)
 	/***************************************************************************
 	 * Escape the special punctuation and other symbols in the Latin1 supplement
 	****************************************************************************/
-	convert(escapedText, 0X23, "\\#");
-	//convert(escapedText, 0X24, "\\$");
-	convert(escapedText, 0X25, "\\%");
-	convert(escapedText, 0X26, "\\&");
-	
-	convert(escapedText, 0X3C, "\\textless");
-	convert(escapedText, 0X3E, "\\textgreater");
+	/* We must begin by this char because else, all special char will
+	 * be backslahed !
+	 */
+	convert(escapedText, 0X005C, "\\textbackslash");
 
-	//convert(escapedText, 0X5C, "\\textbackslash");
-	//convert(escapedText, 0X5E, "\\^");
-	convert(escapedText, 0X5F, "\\_");
+	//convert(escapedText, 0X22, "\\textquotestraightdblbase");/* textcomp */
+	convert(escapedText, 0X0023, "\\#");
+	convert(escapedText, 0X0024, "\\$");	/* add a \$ at the end of the paragraphes ! */
+	convert(escapedText, 0X0025, "\\%");
+	convert(escapedText, 0X0026, "\\&");
+	//convert(escapedText, 0X0027, "\\textquotestraightbase");	/* textcomp */
+//	convert(escapedText, 0X002A, "\\textasteriskcentered");	/* textcomp */
+
+	convert(escapedText, 0X003C, "\\textless");
+	convert(escapedText, 0X003E, "\\textgreater");
+
+	convert(escapedText, 0X005E, "\\^");
+	convert(escapedText, 0X005F, "\\_");		/* not good */
 	
-	convert(escapedText, 0X7B, "\\{");
-	convert(escapedText, 0X7D, "\\}");
-	convert(escapedText, 0X7E, "\\~");
+	convert(escapedText, 0X007B, "\\{");
+	convert(escapedText, 0X007C, "\\textbar");
+	convert(escapedText, 0X007D, "\\}");
+	convert(escapedText, 0X007E, "\\textasciitilde");
 	
-	convert(escapedText, 0XA1, "!`");
-	convert(escapedText, 0XA3, "\\pounds");
-	convert(escapedText, 0XA6, "\\textbar");
-	convert(escapedText, 0XA7, "\\S");
-	convert(escapedText, 0XA9, "\\copyright");
-	convert(escapedText, 0XAE, "\\textregistered");
-	convert(escapedText, 0XB6, "\\P");
-	convert(escapedText, 0XBF, "?`");
+	convert(escapedText, 0X00A1, "!`");
+	convert(escapedText, 0X00A2, "\\textcent");		/* textcomp */
+	convert(escapedText, 0X00A3, "\\pounds");
+	convert(escapedText, 0X00A4, "\\textcurrency");		/* textcomp */
+	convert(escapedText, 0X00A5, "\\textyen");		/* textcomp */
+	convert(escapedText, 0X00A6, "\\textbrokenbar");
+	convert(escapedText, 0X00A7, "\\S");
+	convert(escapedText, 0X00A8, "\\textasciidieresis");	/*? not good */
+	convert(escapedText, 0X00A9, "\\copyright");
+	convert(escapedText, 0X00AA, "\\textordfeminine");	/* textcomp */
+	convert(escapedText, 0X00AB, "\\guillemotleft");	/* textcomp */
+	convert(escapedText, 0X00AC, "\\textlnot");		/* textcomp */
+
+	convert(escapedText, 0X00AE, "\\textregistered");
+	convert(escapedText, 0X00AF, "\\textmacron");		/* textcomp */
+	convert(escapedText, 0X00B0, "\\textdegree");		/* textcomp */
+	convert(escapedText, 0X00B1, "\\textpm");		/* textcomp */
+	convert(escapedText, 0X00B2, "\\texttwosuperior");	/* textcomp */
+	convert(escapedText, 0X00B3, "\\textthreesuperior");	/* textcomp */
+	convert(escapedText, 0X00B4, "'");			/* textcomp */
+	convert(escapedText, 0X00B5, "\\textmu");		/* textcomp */
+	convert(escapedText, 0X00B6, "\\P");
+	convert(escapedText, 0X00B7, "\\textperiodcentered");	/* not good textcomp */
+//	convert(escapedText, 0X00B8, "\\textthreesuperior");	/* textcomp */
+	convert(escapedText, 0X00B9, "\\textonesuperior");	/* textcomp */
+	convert(escapedText, 0X00BA, "\\textordmasculine");	/* textcomp */
+	convert(escapedText, 0X00BB, "\\guillemotright");	/* textcomp */
+	convert(escapedText, 0X00BC, "\\textonequarter");	/* textcomp */
+	convert(escapedText, 0X00BD, "\\textonehalf");		/* textcomp */
+	convert(escapedText, 0X00BE, "\\textthreequarters");	/* textcomp */
+	convert(escapedText, 0X00BF, "?`");
+	
 	
 	/* begin making escape sequences for the 64 consecutive letters starting at C0
 	 * LaTeX has a different escape code when a char is followed by a space so
@@ -141,6 +173,67 @@ QString TextZone::escapeLatin1(QString text)
 		convert(escapedText, unicode, escapes[index]);
 	}
 
+	convert(escapedText, 0X2020, "\\textdied");		/* textcomp */
+	convert(escapedText, 0X2021, "\\textdaggerdbl");	/* textcomp */
+	convert(escapedText, 0X2022, "''");		/* textcomp */
+	convert(escapedText, 0X2023, "\\textdaggerdbl");	/* textcomp */
+	convert(escapedText, 0X2024, "\\textdaggerdbl");	/* textcomp */
+	convert(escapedText, 0X2025, "\\textdaggerdbl");	/* textcomp */
+	convert(escapedText, 0X2026, "\\&");			/* textcomp */
+	convert(escapedText, 0X2027, "\\textperiodcentered");	/* textcomp */
+	convert(escapedText, 0X2030, "\\textperthousand");	/* textcomp */
+	convert(escapedText, 0X2031, "\\textpertenthousand");	/* textcomp */
+	convert(escapedText, 0X2032, "\\textasciiacute");	/* textcomp */
+	convert(escapedText, 0X2033, "\\textgravedbl");		/* textcomp */
+	convert(escapedText, 0X2034, "\\textdaggerdbl");	/* textcomp */
+	convert(escapedText, 0X2035, "\\textasciigrave");	/* textcomp */
+	convert(escapedText, 0X2036, "\\textacutedbl");		/* textcomp */
+	convert(escapedText, 0X2037, "\\textdaggerdbl");	/* textcomp */
+	convert(escapedText, 0X2038, "\\textdaggerdbl");	/* textcomp */
+	convert(escapedText, 0X2039, "\\textdaggerdbl");	/* textcomp */
+	convert(escapedText, 0X203A, "\\textdaggerdbl");	/* textcomp */
+	convert(escapedText, 0X203B, "\\textreferencemark");	/* textcomp */
+	convert(escapedText, 0X203D, "\\textinterrobang");	/* textcomp */
+
+	convert(escapedText, 0X2045, "\\textlquill");		/* textcomp */
+	convert(escapedText, 0X2046, "\\textrquill");		/* textcomp */
+
+
+	convert(escapedText, 0X2080, "\\textzerooldstyle");	/* textcomp */
+	convert(escapedText, 0X2081, "\\textoneoldstyle");	/* textcomp */
+	convert(escapedText, 0X2082, "\\texttwooldstyle");	/* textcomp */
+	convert(escapedText, 0X2083, "\\textthreeoldstyle");	/* textcomp */
+	convert(escapedText, 0X2084, "\\textfouroldstyle");	/* textcomp */
+	convert(escapedText, 0X2085, "\\textfiveoldstyle");	/* textcomp */
+	convert(escapedText, 0X2086, "\\textsixoldstyle");	/* textcomp */
+	convert(escapedText, 0X2087, "\\textsevenoldstyle");	/* textcomp */
+	convert(escapedText, 0X2088, "\\texteightoldstyle");	/* textcomp */
+	convert(escapedText, 0X2089, "\\textnineoldstyle");	/* textcomp */
+	convert(escapedText, 0X208C, "\\textdblhyphen");	/* textcomp */
+
+	convert(escapedText, 0X20A4, "\\textsterling");		/* textcomp */
+	convert(escapedText, 0X20A6, "\\textnaria");		/* textcomp */
+	convert(escapedText, 0X20AA, "\\textwon");		/* textcomp */
+	convert(escapedText, 0X20AB, "\\textdong");		/* textcomp */
+	convert(escapedText, 0X20AC, "\\texteuro");		/* textcomp */
+
+	convert(escapedText, 0X2103, "\\textcelsius");		/* textcomp */
+	convert(escapedText, 0X2116, "\\textnumero");		/* textcomp */
+	convert(escapedText, 0X2117, "\\textcircledP");		/* textcomp */
+	convert(escapedText, 0X2120, "\\textservicemark");	/* textcomp */
+	convert(escapedText, 0X2122, "\\texttrademark");	/* textcomp */
+	convert(escapedText, 0X2126, "\\textohm");		/* textcomp */
+	convert(escapedText, 0X2127, "\\textmho");		/* textcomp */
+	convert(escapedText, 0X212E, "\\textestimated");	/* textcomp */
+
+	convert(escapedText, 0X2190, "\\textleftarrow");	/* textcomp */
+	convert(escapedText, 0X2191, "\\textuparrow");		/* textcomp */
+	convert(escapedText, 0X2192, "\\textrightarrow");	/* textcomp */
+	convert(escapedText, 0X2193, "\\textdownarrow");	/* textcomp */
+//	convert(escapedText, 0X2194, "\\texteuro");		/* textcomp */
+//	convert(escapedText, 0X2195, "\\texteuro");		/* textcomp */
+//	convert(escapedText, 0X2196, "\\texteuro");		/* textcomp */
+
 	return escapedText;
 }
 
@@ -150,13 +243,14 @@ QString TextZone::escapeLatin1(QString text)
 /* Convert all the instance of one         */
 /* character in latex usable caracter.     */
 /*******************************************/
-void TextZone::convert(QString& texte, char unicode, const char* escape)
+void TextZone::convert(QString& texte, int unicode, const char* escape)
 {
 	QString expression;
 	QString texte_temp;
+	QString value;
 
-	expression = QChar(unicode);
-	
+	expression = QString("\\x") + value.setNum(unicode, 16);
+
 	if(QString(escape) != "")
 	{
 		/*1. translate special characters with a space after. */
@@ -242,26 +336,31 @@ void TextZone::generate_format_begin(QTextStream & out)
 	kdDebug() << "GENERATE FORMAT BEGIN" << endl;
 	/* Bold, Italic or underlined */
 	if(getWeight() > 0)
-		out << " \\textbf{";
+		out << "\\textbf{";
 	if(isItalic())
-		out << " \\textit{";
+		out << "\\textit{";
 	if(isUnderlined())
-		out << " \\uline{";
+		out << "\\uline{";
 	if (isStrikeout())
-		out << " \\sout{";
+		out << "\\sout{";
 	/* Size */
 	if(getSize() != 11)
 	{
-		out << "\\fontsize{" << getLength() << "}{1}%" << endl;
+		out << "\\fontsize{" << getSize() << "}{1}%" << endl;
 		out << "\\selectfont" << endl;
 	}
 
 	/* Color */
 	if(isColor())
 	{
-		out << "\\textcolor{rgb}{";
-		out << getColorRed() << ", " << getColorGreen() << ", ";
-		out << getColorBlue() << "}{";
+		double red, green, blue;
+
+		red   = getColorRed()  / 255;
+		green = getColorGreen()/ 255;
+		blue  = getColorBlue() / 255;
+
+		out << "\\textcolor[rgb]{";
+		out << red << ", " << green << ", " << blue << "}{";
 	}
 
 	/* Alignement */
@@ -314,3 +413,14 @@ void TextZone::generate_format_end(QTextStream & out)
 		out << "}";
 }
 
+QString convertSpecialChar(int c)
+{
+	QString output;
+
+	switch(c)
+	{
+		case 183: return output = "\\textminus";
+			break;
+		default: return output.setNum(c);
+	}
+}

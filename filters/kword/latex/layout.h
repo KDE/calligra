@@ -41,20 +41,28 @@ enum _EType
 	TL_CIRCLE_BULLET,	/* o */
 	TL_SQUARE_BULLET,	/* * */
 	TL_DISC_BULLET		/* o */
-	
 };
 
 enum _EEnv
 {
+	ENV_NONE,
 	ENV_LEFT,
 	ENV_RIGHT,
 	ENV_CENTER,
-	ENV_NONE	/* default in latex */
+	ENV_JUSTIFY	/* default in latex */
 };
 
 typedef enum _EType EType;
 typedef enum _EEnv EEnv;
 
+/***********************************************************************/
+/* Class: Layout                                                       */
+/***********************************************************************/
+
+/**
+ * This class tells about a paragraph and its contents. For example,
+ * a list, a title and the format for the paragraph.
+ */
 class Layout: public TextFormat
 {
 	QString      _name;
@@ -69,12 +77,25 @@ class Layout: public TextFormat
 	static EType   _last_counter;
 
 	public:
+		/**
+		 * Constructors
+		 *
+		 * Creates a new instance of Layout.
+		 */
 		Layout();
 
+		/* 
+		 * Destructor
+		 *
+		 * Nothing to do.
+		 */
 		virtual ~Layout() {
 			kdDebug() << "Destruction of a layout." << endl;
 		}
 
+		/**
+		 * Accessors
+		 */
 		bool    isChapter        () const { return (_numberingType == 1); }
 		bool    isList           () const { return (_numberingType == 0); }
 		bool    isEnum           () const { return (_counterType != TL_NONE); }
@@ -91,7 +112,9 @@ class Layout: public TextFormat
 		int     getNumberingType () const { return _numberingType; }
 		EEnv    getEnv           () const { return _env;           }
 
-
+		/**
+		 * Modifiers
+		 */
 		void setName         (const char * name) { _name = strdup(name); }
 		//void setType         (EType type)        { _type = type;         }
 		//void setTypeFollow   (EType type)        { _follow_type = type;  }
@@ -104,6 +127,10 @@ class Layout: public TextFormat
 		void setCounterStart (int cs) { _counterStart  = cs; }
 		void setNumberingType(int nt) { _numberingType = nt; }
 		void setEnv          (int env){ _env = (EEnv) env;   }
+
+		/**
+		 * Helpfull functions
+		 */
 
 		void analyseLayout  (const Markup *);
 

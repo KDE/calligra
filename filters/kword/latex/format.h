@@ -43,25 +43,64 @@ typedef enum _EFormat EFormat;
 
 class Para;
 
+/***********************************************************************/
+/* Class: Format                                                       */
+/***********************************************************************/
+
+/**
+ * This class describe a format or a part of an element (text zone, picture
+ * zone, footnote, ...).
+ * An element has a lot of format. For example, a Text has a lot of text zone
+ * but can have a picture too.
+ */
 class Format: public XmlParser
 {
 	EFormat _id;
 	
 	/* USEFULL DATA */
-	Para*   _para;
+	Para*   _para;		/* Parent class */
 
 	public:
+		/**
+		 * Constructors
+		 *
+		 * Creates a new instance of Format.
+		 *
+		 * @param Para the parent class of the format.
+		 */
 		Format(Para *para= 0): _id((EFormat) 0), _para(para) {}
+
+		/* 
+		 * Destructor
+		 *
+		 * Nothing to do
+		 */
 		virtual ~Format() {}
 
+		/**
+		 * Accessors
+		 */
 		EFormat getId        () const { return _id;   }
 		Para*   getPara      () const { return _para; }
 		EFormat getFormatType() const { return _id;   }
 		//int getPos()
 		//int get	
-		void setId(int id) { _id = (EFormat) id; }
-		void setPara(Para* para) { _para = para; }
+
+		/**
+		 * Modifiers
+		 */
+		void setId   (int   id)   { _id   = (EFormat) id; }
+		void setPara (Para* para) { _para = para;         }
+
+		/**
+		 * Helpfull functions
+		 */
+
+		/**
+		 * Get informations from a markup tree (only param of a format).
+		 */
 		virtual void analyse(const Markup*);
+
 		virtual void generate(QTextStream&) = 0;
 };
 
