@@ -1,0 +1,1154 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-02-12 02:01+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: deldia.cc:49
+msgid "Delete Row:"
+msgstr "Obri¹i red:"
+
+#: deldia.cc:49
+msgid "Delete Column:"
+msgstr "Obri¹i stupac:"
+
+#: deldia.cc:70 kword_view.cc:1051 kword_view.cc:1724
+msgid "Delete Row"
+msgstr "Obri¹i Red"
+
+#: deldia.cc:70 kword_view.cc:1072 kword_view.cc:1728
+msgid "Delete Column"
+msgstr "Obri¹i Stupac"
+
+#: docstruct.cc:151
+msgid "Arrangement"
+msgstr "Raspored"
+
+#: docstruct.cc:156
+msgid "Text Frames/Frame Sets"
+msgstr ""
+
+#: docstruct.cc:161
+msgid "Tables"
+msgstr "Tabele"
+
+#: docstruct.cc:166
+msgid "Pictures"
+msgstr "Slike"
+
+#: docstruct.cc:171
+msgid "Cliparts"
+msgstr "Slike za izrezivanje (clipart)"
+
+#: docstruct.cc:176
+msgid "Embedded Objects"
+msgstr "Ugraðeni objekti"
+
+#: docstruct.cc:242 docstruct.cc:315
+#, c-format
+msgid "Frameset %d"
+msgstr "Skup okvira %d"
+
+#: docstruct.cc:286 docstruct.cc:336 docstruct.cc:365 docstruct.cc:400
+#: docstruct.cc:440 docstruct.cc:482
+msgid "Empty"
+msgstr "Prazan"
+
+#: docstruct.cc:323
+#, c-format
+msgid "Page %d"
+msgstr "Stranica %d"
+
+#: docstruct.cc:325
+#, c-format
+msgid "Column %d"
+msgstr "Stupac %d"
+
+#: docstruct.cc:328
+#, c-format
+msgid "Text Frame %d"
+msgstr "Tekstualni okvir %d"
+
+#: docstruct.cc:359
+#, c-format
+msgid "Table %d"
+msgstr "Tablica %d"
+
+#: docstruct.cc:393
+#, c-format
+msgid "Picture (%s) %d"
+msgstr "Slika (%s) %d"
+
+#: docstruct.cc:433
+#, c-format
+msgid "Embedded Object %d"
+msgstr "Ugraðeni objekt %d"
+
+#: docstruct.cc:454
+msgid "Document Structure"
+msgstr "Struktura Dokumenta"
+
+#: framedia.cc:68
+msgid ""
+"If the text of the frameset doesn't fit into the the frames of the frameset "
+"anymore:"
+msgstr ""
+
+#: framedia.cc:72
+msgid "Create automatically a new frame"
+msgstr ""
+
+#: framedia.cc:76
+msgid "Resize automatically last frame"
+msgstr ""
+
+#: framedia.cc:101
+msgid "Frameset"
+msgstr ""
+
+#: framedia.cc:114
+msgid "Text Run Around"
+msgstr ""
+
+#: framedia.cc:137
+msgid "&Don't run around other frames"
+msgstr ""
+
+#: framedia.cc:142
+msgid "Run around the &Bounding Rectangle of other frames"
+msgstr ""
+
+#: framedia.cc:147
+msgid "Run around the &Contur of other frames"
+msgstr ""
+
+#: framedia.cc:195
+msgid "Text Frame"
+msgstr "Tekstualni okvir"
+
+#: framedia.cc:229
+msgid "Choose a frameset to which the current frame should be connected:"
+msgstr ""
+
+#: framedia.cc:244
+msgid "Create a new Frameset with this frame"
+msgstr ""
+
+#: framedia.cc:258
+msgid "Connect Text Frames"
+msgstr "Spoji tekstualne okvire"
+
+#: framedia.cc:272 framedia.cc:353
+msgid "Left:"
+msgstr "Lijevo:"
+
+#: framedia.cc:284 framedia.cc:377
+msgid "Top:"
+msgstr "Gore:"
+
+#: framedia.cc:296 paragdia.cc:659
+msgid "Width:"
+msgstr "©irina:"
+
+#: framedia.cc:308
+msgid "Height:"
+msgstr "Visina:"
+
+#: framedia.cc:365
+msgid "Right:"
+msgstr "Desno:"
+
+#: framedia.cc:389
+msgid "Bottom:"
+msgstr "Dolje:"
+
+#: framedia.cc:442 tabledia.cc:111
+msgid "Geometry"
+msgstr "Geometrija"
+
+#: insdia.cc:49
+msgid "Insert new Row"
+msgstr "Umetni novi red"
+
+#: insdia.cc:49
+msgid "Insert New Column"
+msgstr "Umetni novi stupac"
+
+#: insdia.cc:54
+msgid "Before"
+msgstr "Prije"
+
+#: insdia.cc:59
+msgid "After"
+msgstr "Poslije"
+
+#: insdia.cc:80
+msgid "Row:"
+msgstr "Red"
+
+#: insdia.cc:80
+msgid "Column:"
+msgstr "Stupac:"
+
+#: insdia.cc:104 kword_view.cc:1010 kword_view.cc:1716
+msgid "Insert Row"
+msgstr "Umetni red"
+
+#: insdia.cc:104 kword_view.cc:1030 kword_view.cc:1720
+msgid "Insert Column"
+msgstr "Umetni stupac"
+
+#: kword_doc.cc:1414 kword_shell.cc:334
+msgid "KWord Error"
+msgstr "KWord gre¹ka"
+
+#: kword_doc.cc:1414
+msgid "Could not init"
+msgstr ""
+
+#: kword_page.cc:880 kword_page.cc:2958
+msgid "KWord - Frame settings"
+msgstr "KWord - postavke okvira"
+
+#: kword_page.cc:922
+msgid "There is not enough space to insert this table!"
+msgstr ""
+
+#: kword_page.cc:2897
+msgid "Edit Frames"
+msgstr ""
+
+#: kword_page.cc:2898
+msgid "Create Text-Frame"
+msgstr ""
+
+#: kword_page.cc:2899
+msgid "Create Pixmap-Frame"
+msgstr ""
+
+#: kword_page.cc:2900
+msgid "Create Clipart-Frame"
+msgstr ""
+
+#: kword_page.cc:2901
+msgid "Create Table-Frame"
+msgstr ""
+
+#: kword_page.cc:2902
+msgid "Create KSpread Table-Frame"
+msgstr ""
+
+#: kword_page.cc:2903
+msgid "Create Formula-Frame"
+msgstr ""
+
+#: kword_page.cc:2904
+msgid "Create Part-Frame"
+msgstr ""
+
+#: kword_page.cc:2909
+msgid "Properties..."
+msgstr "Postavke..."
+
+#: kword_shell.cc:83
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+"Datoteka je promijenjena.\n"
+"®elite li je spremiti ?"      
+
+#: kword_shell.cc:334
+msgid "Could not create new document"
+msgstr "Ne mogu napraviti novi dokument"
+
+#: kword_shell.cc:334
+msgid "Ok"
+msgstr "U redu"
+
+#: kword_shell.cc:350
+#, c-format
+msgid ""
+"Could not open\n"
+"%s"
+msgstr ""
+
+#: kword_shell.cc:351 kword_shell.cc:374 kword_shell.cc:396
+msgid "IO Error"
+msgstr ""
+
+#: kword_shell.cc:373
+#, c-format
+msgid ""
+"Could not save\n"
+"%s"
+msgstr ""
+"Ne mogu spremiti\n"
+"%s"
+
+#: kword_shell.cc:395
+msgid "Could not save file"
+msgstr "Nisam mogao spremiti datoteku"
+
+#: kword_view.cc:258
+msgid "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!"
+msgstr ""
+
+#: kword_view.cc:264
+msgid "The used page layout is not supported by QPrinter. I set it to DIN A4."
+msgstr ""
+
+#: kword_view.cc:683
+msgid "KWord - Search & Replace"
+msgstr ""
+
+#: kword_view.cc:747 kword_view.cc:914
+msgid ""
+"*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM *.PBM *.PGM *.PPM "
+"*.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG*.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+"*.gif *.GIF|GIF-Pictures\n"
+"*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+"*.bmp *.BMP|Windows Bitmaps\n"
+"*.xbm *.XBM|XWindow Pitmaps\n"
+"*.xpm *.XPM|Pixmaps\n"
+"*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"
+msgstr ""
+"*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM *.PBM *.PGM *.PPM "
+"*.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG*.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+"*.gif *.GIF|GIF-Pictures\n"
+"*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+"*.bmp *.BMP|Windows Bitmaps\n"
+"*.xbm *.XBM|XWindow Pitmaps\n"
+"*.xpm *.XPM|Pixmaps\n"
+"*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"
+
+#: kword_view.cc:802
+msgid "KWord - Paragraph settings"
+msgstr "KWord - postavke odlomka"
+
+#: kword_view.cc:859
+msgid "You have to select at least one frame!"
+msgstr "Morate izabrati barem jedan okvir!"
+
+#: kword_view.cc:867 kword_view.cc:1678
+msgid "Spell Checking"
+msgstr "Provjera pisanja"
+
+#: kword_view.cc:882 stylist.cc:203
+msgid "KWord - Stylist"
+msgstr ""
+
+#: kword_view.cc:950
+msgid "KWord - Insert Table"
+msgstr "KWord - umetni tablicu"
+
+#: kword_view.cc:963
+msgid "Sorry, no table component registered"
+msgstr ""
+
+#: kword_view.cc:980
+msgid "Sorry, no formula component registered"
+msgstr ""
+
+#: kword_view.cc:1006 kword_view.cc:1022 kword_view.cc:1043 kword_view.cc:1064
+#: kword_view.cc:1090
+msgid "You have to put the cursor into a table to edit it!"
+msgstr ""
+
+#: kword_view.cc:1026
+msgid ""
+"There is not enough space at the right of the table\n"
+"to insert a new column."
+msgstr ""
+
+#: kword_view.cc:1047
+msgid "The table has only one row. You can't delete the last one!"
+msgstr ""
+
+#: kword_view.cc:1068
+msgid "The table has only one column. You can't delete the last one!"
+msgstr ""
+
+#: kword_view.cc:1105
+msgid ""
+"KWord 0.0.1 alpha\n"
+"\n"
+"(c) by Torben Weis <weis@kde.org> and \n"
+"Reginald Stadlbauer <reggie@kde.org> 1998\n"
+"\n"
+"KWord is under GNU GPL"
+msgstr ""
+
+#: kword_view.cc:1346 kword_view.cc:1404 kword_view.cc:1994 paragdia.cc:650
+#: paragdia.cc:1196 paragdia.cc:1221 paragdia.cc:1246 paragdia.cc:1271
+msgid "solid line"
+msgstr ""
+
+#: kword_view.cc:1348 kword_view.cc:1406 kword_view.cc:1995 paragdia.cc:651
+#: paragdia.cc:1198 paragdia.cc:1223 paragdia.cc:1248 paragdia.cc:1273
+msgid "dash line (----)"
+msgstr ""
+
+#: kword_view.cc:1350 kword_view.cc:1408 kword_view.cc:1996 paragdia.cc:652
+#: paragdia.cc:1200 paragdia.cc:1225 paragdia.cc:1250 paragdia.cc:1275
+msgid "dot line (****)"
+msgstr ""
+
+#: kword_view.cc:1352 kword_view.cc:1410 kword_view.cc:1997 paragdia.cc:653
+#: paragdia.cc:1202 paragdia.cc:1227 paragdia.cc:1252 paragdia.cc:1277
+msgid "dash dot line (-*-*)"
+msgstr ""
+
+#: kword_view.cc:1354 kword_view.cc:1412 kword_view.cc:1998 paragdia.cc:654
+#: paragdia.cc:1204 paragdia.cc:1229 paragdia.cc:1254 paragdia.cc:1279
+msgid "dash dot dot line (-**-)"
+msgstr ""
+
+#: kword_view.cc:1477
+msgid "No Undo possible"
+msgstr "Povrat nije moguæ"
+
+#: kword_view.cc:1481
+msgid "No Redo possible"
+msgstr "Ponavljanje nije moguæe"
+
+#: kword_view.cc:1496
+msgid "&Find and Replace..."
+msgstr ""&Naði i zamijeni
+
+#: kword_view.cc:1503
+msgid "&Formatting Chars"
+msgstr ""
+
+#: kword_view.cc:1504
+msgid "Frame &Borders"
+msgstr "&Rub okvira"
+
+#: kword_view.cc:1505
+msgid "Table &Grid"
+msgstr "Re¹e&tka tablice"
+
+#: kword_view.cc:1507
+msgid "&Header"
+msgstr "&Zaglavlje"
+
+#: kword_view.cc:1508
+msgid "F&ooter"
+msgstr "P&odno¾je"
+
+#: kword_view.cc:1510
+msgid "&Document Structure"
+msgstr "Struktura &dokumenta"
+
+#: kword_view.cc:1523
+msgid "&Picture..."
+msgstr "&Slika..."
+
+#: kword_view.cc:1526
+msgid "&Clipart..."
+msgstr "Slike za &izrezivanje..."
+
+#: kword_view.cc:1531
+msgid "&Special Character..."
+msgstr "&Posebni znak..."
+
+#: kword_view.cc:1534
+msgid "&Hard frame break"
+msgstr ""
+
+#: kword_view.cc:1537
+msgid "&Tools"
+msgstr "&Alati"
+
+#: kword_view.cc:1540
+msgid "&Edit Text"
+msgstr "&Promijeni tekst"
+
+#: kword_view.cc:1543
+msgid "&Edit Frames"
+msgstr "Promijeni &okvire"
+
+#: kword_view.cc:1548
+msgid "&Create Text Frame"
+msgstr "&Napravi tekstualni okvir"
+
+#: kword_view.cc:1551
+msgid "&Create Picture Frame"
+msgstr "Napravi &slikovni okvir"
+
+#: kword_view.cc:1554
+msgid "&Create Clipart Frame"
+msgstr ""
+
+#: kword_view.cc:1557
+msgid "&Create Table Frame"
+msgstr "Napravi &tablièni okvir"
+
+#: kword_view.cc:1560
+msgid "&Create KSpread Table Frame"
+msgstr ""
+
+#: kword_view.cc:1563
+msgid "&Create Formula Frame"
+msgstr ""
+
+#: kword_view.cc:1566
+msgid "&Create Part Frame"
+msgstr ""
+
+#: kword_view.cc:1572
+msgid "&Format"
+msgstr ""
+
+#: kword_view.cc:1574 stylist.cc:401
+msgid "&Font..."
+msgstr "&Pismo..."
+
+#: kword_view.cc:1575 stylist.cc:404
+msgid "&Color..."
+msgstr "&Boja..."
+
+#: kword_view.cc:1576
+msgid "Paragraph..."
+msgstr "Odlomak..."
+
+#: kword_view.cc:1577
+msgid "Frame/Frameset..."
+msgstr "Okvir/Skup okvira..."
+
+#: kword_view.cc:1578
+msgid "Page..."
+msgstr "Stranica..."
+
+#: kword_view.cc:1582
+msgid "&Style..."
+msgstr ""
+
+#: kword_view.cc:1585
+msgid "&Table"
+msgstr "&Tablica"
+
+#: kword_view.cc:1588
+msgid "&Insert Row..."
+msgstr "&Umetni red..."
+
+#: kword_view.cc:1590
+msgid "I&nsert Column..."
+msgstr "U&metni stupac..."
+
+#: kword_view.cc:1592
+msgid "&Delete Row..."
+msgstr ""
+
+#: kword_view.cc:1594
+msgid "&Delete Column..."
+msgstr ""
+
+#: kword_view.cc:1598
+msgid "&Join Cells..."
+msgstr ""
+
+#: kword_view.cc:1599
+msgid "&Ungroup Table"
+msgstr ""
+
+#: kword_view.cc:1602
+msgid "&Extra"
+msgstr "&Dodatno"
+
+#: kword_view.cc:1605
+msgid "&Spell Cheking..."
+msgstr "&Provjera pisanja..."
+
+#: kword_view.cc:1606
+msgid "&Stylist..."
+msgstr ""
+
+#: kword_view.cc:1610
+msgid "&Options..."
+msgstr "&Postavke..."
+
+#: kword_view.cc:1685
+msgid "Find & Replace"
+msgstr "Naði & Zamijeni"
+
+#: kword_view.cc:1695
+msgid "Insert Picture"
+msgstr "Umetni sliku"
+
+#: kword_view.cc:1699
+msgid "Insert Clipart"
+msgstr ""
+
+#: kword_view.cc:1706
+msgid "Insert Special Character"
+msgstr "Umetni posebni znak"
+
+#: kword_view.cc:1739
+msgid "Edit Text Tool"
+msgstr ""
+
+#: kword_view.cc:1746
+msgid "Edit Frames Tool"
+msgstr ""
+
+#: kword_view.cc:1752
+msgid "Create Text Frame"
+msgstr "Napravi novi tekstualni okvir"
+
+#: kword_view.cc:1758
+msgid "Create Picture Frame"
+msgstr ""
+
+#: kword_view.cc:1764
+msgid "Create Clipart Frame"
+msgstr ""
+
+#: kword_view.cc:1770
+msgid "Create Table Frame"
+msgstr ""
+
+#: kword_view.cc:1776
+msgid "Create KSPread Table Frame"
+msgstr ""
+
+#: kword_view.cc:1782
+msgid "Create Formula Frame"
+msgstr ""
+
+#: kword_view.cc:1788
+msgid "Create Part Frame"
+msgstr ""
+
+#: kword_view.cc:1806
+msgid "Style"
+msgstr "Stil"
+
+#: kword_view.cc:1831
+msgid "Font List"
+msgstr "Popis pisama"
+
+#: kword_view.cc:1840 searchdia.cc:130 searchdia.cc:187 searchdia.cc:372
+#: searchdia.cc:429
+msgid "Bold"
+msgstr "Zadebljano"
+
+#: kword_view.cc:1854 searchdia.cc:142 searchdia.cc:199 searchdia.cc:384
+#: searchdia.cc:441
+msgid "Underline"
+msgstr ""
+
+#: kword_view.cc:1864
+msgid "Text Color"
+msgstr "Boja teksta"
+
+#: kword_view.cc:1871
+msgid "Align Left"
+msgstr ""
+
+#: kword_view.cc:1878
+msgid "Align Center"
+msgstr ""
+
+#: kword_view.cc:1885
+msgid "Align Right"
+msgstr ""
+
+#: kword_view.cc:1893
+msgid "Align Block"
+msgstr ""
+
+#: kword_view.cc:1907
+msgid "Line Spacing (in pt)"
+msgstr ""
+
+#: kword_view.cc:1915
+msgid "Enumerated List"
+msgstr ""
+
+#: kword_view.cc:1922
+msgid "Unsorted List"
+msgstr ""
+
+#: kword_view.cc:1931 searchdia.cc:208 searchdia.cc:450
+msgid "Superscript"
+msgstr ""
+
+#: kword_view.cc:1938 searchdia.cc:207 searchdia.cc:449
+msgid "Subscript"
+msgstr ""
+
+#: kword_view.cc:1947
+msgid "Paragraph Border Left"
+msgstr ""
+
+#: kword_view.cc:1954
+msgid "Paragraph Border Right"
+msgstr ""
+
+#: kword_view.cc:1961
+msgid "Paragraph Border Top"
+msgstr ""
+
+#: kword_view.cc:1968
+msgid "Paragraph Border Bottom"
+msgstr ""
+
+#: kword_view.cc:1976
+msgid "Paragraph Border Color"
+msgstr ""
+
+#: kword_view.cc:1989
+msgid "Paragraph Border Width"
+msgstr ""
+
+#: kword_view.cc:2000
+msgid "Paragraph Border Style"
+msgstr ""
+
+#: kword_view.cc:2013
+msgid "Frame Border Left"
+msgstr ""
+
+#: kword_view.cc:2020
+msgid "Frame Border Right"
+msgstr ""
+
+#: kword_view.cc:2027
+msgid "Frame Border Top"
+msgstr ""
+
+#: kword_view.cc:2034
+msgid "Frame Border Bottom"
+msgstr ""
+
+#: kword_view.cc:2042
+msgid "Frame Border Color"
+msgstr ""
+
+#: kword_view.cc:2045
+msgid "Frame Border Width"
+msgstr ""
+
+#: kword_view.cc:2049
+msgid "Frame Border Style"
+msgstr ""
+
+#: kword_view.cc:2056
+msgid "Frame Background Color"
+msgstr ""
+
+#: paragdia.cc:27 paragdia.cc:87 paragdia.cc:167 paragdia.cc:241
+#: stylist.cc:397
+msgid "Preview"
+msgstr "Pregled"
+
+#: paragdia.cc:405
+msgid "Indent"
+msgstr "Uvuci"
+
+#: paragdia.cc:469
+msgid "Line Spacing"
+msgstr ""
+
+#: paragdia.cc:473
+msgid "0.5 lines"
+msgstr ""
+
+#: paragdia.cc:474
+msgid "1.0 line"
+msgstr ""
+
+#: paragdia.cc:475
+msgid "1.5 lines"
+msgstr ""
+
+#: paragdia.cc:476
+msgid "2.0 lines"
+msgstr ""
+
+#: paragdia.cc:477
+msgid "Space (pt)"
+msgstr ""
+
+#: paragdia.cc:510
+msgid "Paragraph Space"
+msgstr ""
+
+#: paragdia.cc:575
+msgid "Indent and Spacing"
+msgstr ""
+
+#: paragdia.cc:585
+msgid "Flow:"
+msgstr ""
+
+#: paragdia.cc:589 paragdia.cc:835 paragdia.cc:989
+msgid "Left"
+msgstr "Lijevo"
+
+#: paragdia.cc:594 paragdia.cc:994
+msgid "Center"
+msgstr ""
+
+#: paragdia.cc:599 paragdia.cc:839 paragdia.cc:999
+msgid "Right"
+msgstr "Desno"
+
+#: paragdia.cc:604
+msgid "Block"
+msgstr ""
+
+#: paragdia.cc:635
+msgid "Flows"
+msgstr ""
+
+#: paragdia.cc:645
+msgid "Style:"
+msgstr "Stil:"
+
+#: paragdia.cc:674
+msgid "Color:"
+msgstr "Boja:"
+
+#: paragdia.cc:738
+msgid "Borders"
+msgstr ""
+
+#: paragdia.cc:755
+msgid "&No numbering"
+msgstr ""
+
+#: paragdia.cc:760
+msgid "&Arabic Numbers (1, 2, 3, 4, ...)"
+msgstr ""
+
+#: paragdia.cc:765
+msgid "&Lower Roman Numbers (i, ii, iii, iv, ...)"
+msgstr ""
+
+#: paragdia.cc:770
+msgid "&Upper Roman Numbers (I, II, III, IV, ...)"
+msgstr ""
+
+#: paragdia.cc:775
+msgid "L&ower Alphabetical (a, b, c, d, ...)"
+msgstr ""
+
+#: paragdia.cc:780
+msgid "U&pper Alphabetical (A, B, C, D, ...)"
+msgstr ""
+
+#: paragdia.cc:785
+msgid "&Bullets"
+msgstr ""
+
+#: paragdia.cc:879
+msgid "Depth:"
+msgstr "Dubina"
+
+#: paragdia.cc:889
+msgid "Start at:"
+msgstr ""
+
+#: paragdia.cc:899
+msgid "&List Numbering"
+msgstr ""
+
+#: paragdia.cc:904
+msgid "&Chapter Numbering"
+msgstr ""
+
+#: paragdia.cc:956
+msgid "Numbering"
+msgstr ""
+
+#: paragdia.cc:965
+msgid "Tabulator positions are given in points (pt)"
+msgstr ""
+
+#: paragdia.cc:976
+msgid "Modify"
+msgstr ""
+
+#: paragdia.cc:1004
+msgid "Decimal"
+msgstr ""
+
+#: paragdia.cc:1049
+msgid "Tabulators"
+msgstr ""
+
+#: searchdia.cc:73
+msgid "Search"
+msgstr ""
+
+#: searchdia.cc:76
+msgid "Search String:"
+msgstr ""
+
+#: searchdia.cc:86
+msgid "Find Whole Words only"
+msgstr ""
+
+#: searchdia.cc:91
+msgid "Case Sensitive"
+msgstr "Razlikuj velika i mala slova"
+
+#: searchdia.cc:96
+msgid "Regular Expression"
+msgstr ""
+
+#: searchdia.cc:102
+msgid "Use Wildcards"
+msgstr ""
+
+#: searchdia.cc:107
+msgid "Find Backwards"
+msgstr "Tra¾i unazad"
+
+#: searchdia.cc:112 searchdia.cc:354
+msgid "Family"
+msgstr "Obitelj"
+
+#: searchdia.cc:118 searchdia.cc:360
+msgid "Size"
+msgstr "Velièina"
+
+#: searchdia.cc:124 searchdia.cc:366
+msgid "Color"
+msgstr "Boja"
+
+#: searchdia.cc:148 searchdia.cc:390
+msgid "Vertical Alignment"
+msgstr ""
+
+#: searchdia.cc:206 searchdia.cc:448
+msgid "Normal"
+msgstr "Normalno"
+
+#: searchdia.cc:289
+msgid "Find &First"
+msgstr ""
+
+#: searchdia.cc:291
+msgid "Find &Next"
+msgstr ""
+
+#: searchdia.cc:316
+msgid "Find"
+msgstr "Naði"
+
+#: searchdia.cc:344
+msgid "Replace String:"
+msgstr ""
+
+#: searchdia.cc:525
+msgid "Replace &First"
+msgstr ""
+
+#: searchdia.cc:527
+msgid "Replace &Next"
+msgstr ""
+
+#: searchdia.cc:529
+msgid "Replace &All"
+msgstr ""
+
+#: searchdia.cc:535
+msgid "Ask before replacing"
+msgstr ""
+
+#: searchdia.cc:849
+msgid "Replace selected text?"
+msgstr ""
+
+#: searchdia.cc:849
+msgid "&Yes"
+msgstr "&Da"
+
+#: searchdia.cc:849
+msgid "&No"
+msgstr "&Ne"
+
+#: searchdia.cc:849
+msgid "&Skip"
+msgstr ""
+
+#: stylist.cc:58
+msgid "&Add.."
+msgstr "&Dodaj.."
+
+#: stylist.cc:63
+msgid "&Edit..."
+msgstr "&Promijeni..."
+
+#: stylist.cc:65
+msgid "&Copy..."
+msgstr "&Kopiraj..."
+
+#: stylist.cc:67
+msgid "Up"
+msgstr "Gore"
+
+#: stylist.cc:68
+msgid "D&own"
+msgstr ""
+
+#: stylist.cc:82
+msgid "Style Manager"
+msgstr ""
+
+#: stylist.cc:96
+msgid "Don't update Fonts"
+msgstr ""
+
+#: stylist.cc:97
+msgid "Update Font Families of same sized Fonts"
+msgstr ""
+
+#: stylist.cc:98
+msgid "Update Font Families of all sized Fonts"
+msgstr ""
+
+#: stylist.cc:99
+msgid "Update Font Families and Attributes of same sized Fonts"
+msgstr ""
+
+#: stylist.cc:100
+msgid "Update Font Families and Attributes of all sized Fonts"
+msgstr ""
+
+#: stylist.cc:105
+msgid "Don't update Colors"
+msgstr ""
+
+#: stylist.cc:106
+msgid "Update Colors"
+msgstr ""
+
+#: stylist.cc:111
+msgid "Don't update Indents and Spacing"
+msgstr ""
+
+#: stylist.cc:112
+msgid "Update Indents and Spacing"
+msgstr ""
+
+#: stylist.cc:117
+msgid "Don't update Aligns/Flows"
+msgstr ""
+
+#: stylist.cc:118
+msgid "Update Aligns/Flows"
+msgstr ""
+
+#: stylist.cc:123
+msgid "Don't update Numbering"
+msgstr ""
+
+#: stylist.cc:124
+msgid "Update Numbering"
+msgstr ""
+
+#: stylist.cc:129
+msgid "Don't update Borders"
+msgstr ""
+
+#: stylist.cc:130
+msgid "Update Borders"
+msgstr ""
+
+#: stylist.cc:135
+msgid "Don't update Tabulators"
+msgstr ""
+
+#: stylist.cc:136
+msgid "Update Tabulators"
+msgstr ""
+
+#: stylist.cc:167
+msgid "Update Configuration"
+msgstr ""
+
+#: stylist.cc:211
+msgid "New Style Template"
+msgstr ""
+
+#: stylist.cc:308
+msgid "KWord, KOffice's Wordprocessor"
+msgstr ""
+
+#: stylist.cc:343
+msgid "Name:"
+msgstr "Ime:"
+
+#: stylist.cc:362
+msgid "Following Style Template:"
+msgstr ""
+
+#: stylist.cc:407
+msgid "&Spacing and Indents..."
+msgstr ""
+
+#: stylist.cc:410
+msgid "&Alignment..."
+msgstr ""
+
+#: stylist.cc:413
+msgid "&Borders..."
+msgstr "&Rubovi..."
+
+#: stylist.cc:416
+msgid "&Numbering..."
+msgstr ""
+
+#: stylist.cc:419
+msgid "&Tabulators..."
+msgstr ""
+
+#: stylist.cc:438
+msgid "Style Editor"
+msgstr ""
+
+#: stylist.cc:482
+msgid "KWord - Paragraph Spacing"
+msgstr ""
+
+#: stylist.cc:503
+msgid "KWord - Paragraph Flow (Alignment)"
+msgstr ""
+
+#: stylist.cc:520
+msgid "KWord - Paragraph Borders"
+msgstr ""
+
+#: stylist.cc:540
+msgid "KWord - Numbering"
+msgstr ""
+
+#: stylist.cc:557
+msgid "KWord - Tabulators"
+msgstr ""
+
+#: tabledia.cc:68
+msgid "Number of Rows:"
+msgstr "Broj redova:"
+
+#: tabledia.cc:77
+msgid "Number of Columns:"
+msgstr "Broj stupaca:"
