@@ -47,9 +47,9 @@ class KWBrushStylePreview : public QFrame
 {
     Q_OBJECT
 public:
-    KWBrushStylePreview( QWidget*, const char* = 0L );
+    KWBrushStylePreview( QWidget* );
     ~KWBrushStylePreview() {}
-    void setBrush(QBrush _brush){ brush=_brush;}
+    void setBrush( const QBrush& _brush ) { brush = _brush; }
 protected:
     void drawContents( QPainter* );
 private:
@@ -112,11 +112,11 @@ protected:
     void setupTab5();
     void updateFrames();
     void enableOnNewPageOptions();
-    void initComboStyleBrush();
+    void initBrush();
     bool mayDeleteFrameSet(KWTextFrameSet *fs);
     void enableSizeAndPosition();
 
-    QBrush frameBrushStyle();
+    QBrush frameBrushStyle() const;
     void calcRatio();
 
 protected slots:
@@ -127,7 +127,7 @@ protected slots:
     void slotFloatingToggled(bool);
     void slotProtectSizeToggled(bool);
     void textNameFrameChanged ( const QString & );
-    void updateBrushConfiguration();
+    //void updateBrushPreview();
     void slotProtectContentChanged( bool );
     void enableRunAround();
     void selectExistingFrameset();
@@ -173,10 +173,10 @@ private:
 
     // TAB 5:
     QWidget *tab5;
-    QGridLayout *grid5;
-    QComboBox *brushStyle;
+    //QComboBox *brushStyle;
+    QCheckBox* transparentCB;
     KColorButton *brushColor;
-    KWBrushStylePreview *brushPreview;
+    //KWBrushStylePreview *brushPreview;
     QCheckBox *overwriteColor;
 
     KWFrame *frame;

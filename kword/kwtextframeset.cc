@@ -1692,7 +1692,7 @@ KWFrame* KWTextFrameSet::loadOasisTextBox( const QDomElement& frameTag, const QD
     } else { // Adding frame to existing frameset
         context.styleStack().save();
         context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
-        frame = fs->loadOasisFrame( frameTag, context );
+        frame = fs->loadOasisTextFrame( frameTag, tag, context );
         context.styleStack().restore();
     }
 
@@ -1704,6 +1704,39 @@ KWFrame* KWTextFrameSet::loadOasisTextBox( const QDomElement& frameTag, const QD
     return frame;
 }
 
+KWFrame* KWTextFrameSet::loadOasisTextFrame( const QDomElement& frameTag, const QDomElement &tag, KoOasisContext& context )
+{
+    context.styleStack().save();
+    context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
+
+    KWFrame* frame = loadOasisFrame( frameTag, context );
+
+    // Load minimum height - only available for text-box
+    bool hasMinHeight = tag.hasAttributeNS( KoXmlNS::fo, "min-height" );
+    if ( hasMinHeight ) {
+        double height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::fo, "min-height", QString::null ) );
+        frame->setMinFrameHeight( height );
+    }
+
+    // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.
+    const QString overflowBehavior = context.styleStack().attributeNS( KoXmlNS::style, "overflow-behavior" );
+    if ( frame->minFrameHeight() > 0 )
+        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
+    else if ( overflowBehavior == "auto-create-new-frame" )
+    {
+        frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
+        frame->setNewFrameBehavior( KWFrame::Reconnect ); // anything else doesn't make sense
+    }
+    else if ( overflowBehavior.isEmpty() || overflowBehavior == "clip" )
+        frame->setFrameBehavior( KWFrame::Ignore );
+    else
+        kdWarning(32001) << "Unknown value for style:overflow-behavior: " << overflowBehavior << endl;
+
+    context.styleStack().restore();
+
+    return frame;
+}
+
 void KWTextFrameSet::loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context )
 {
     return m_textobj->loadOasisContent( bodyElem, context, m_doc->styleCollection() );
@@ -1711,32 +1744,7 @@ void KWTextFrameSet::loadOasisContent( const QDomElement &bodyElem, KoOasisConte
 
 KWFrame* KWTextFrameSet::loadOasis( const QDomElement& frameTag, const QDomElement &tag, KoOasisContext& context )
 {
-    context.styleStack().save();
-    context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
-    KWFrame* frame = loadOasisFrame( frameTag, context );
-
-    // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.
-    const QString overflowBehavior = context.styleStack().attributeNS( KoXmlNS::style, "overflow-behavior" );
-    if ( overflowBehavior == "clip" )
-        frame->setFrameBehavior( KWFrame::Ignore );
-    else if ( overflowBehavior == "auto-create-new-frame" )
-    {
-        if ( frame->minFrameHeight() > 0 )
-            frame->setFrameBehavior( KWFrame::AutoExtendFrame );
-        else {
-            frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
-            frame->setNewFrameBehavior( KWFrame::Reconnect ); // anything else doesn't make sense
-        }
-    }
-    else if ( overflowBehavior.isEmpty() ) // OO-1.1 documents
-    {
-        frame->setFrameBehavior( frame->minFrameHeight() > 0 ? KWFrame::AutoExtendFrame : KWFrame::Ignore );
-    }
-    else
-        kdWarning(32001) << "Unknown value for style:overflow-behavior: " << overflowBehavior << endl;
-
-    context.styleStack().restore();
-
+    KWFrame* frame = loadOasisTextFrame( frameTag, tag, context );
     loadOasisContent( tag, context );
     return frame;
 }
@@ -1759,6 +1767,9 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
     frame->startOasisFrame( writer, context.mainStyles() );
 
     writer.startElement( "draw:text-box" );
+    if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
+        writer.addAttributePt( "fo:min-height", frame->minFrameHeight() );
+
     saveOasisContent( writer, context );
     writer.endElement();
 

@@ -25,10 +25,11 @@
 class KWCanvas;
 class KWFrame;
 
-/******************************************************************/
-/* Class: KWResizeHandle                                          */
-/******************************************************************/
-
+/**
+ * Class: KWResizeHandle
+ * Each of the 8 visible resize corners for a selected frame is an instance of KWResizeHandle.
+ * TODO: why is this a widget? Might be easier with it being part of the frame painting and mouse handling.
+ */
 class KWResizeHandle : public QWidget
 {
     Q_OBJECT

@@ -123,6 +123,11 @@ void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
 
 void KWResizeHandle::mousePressEvent( QMouseEvent *e )
 {
+    if ( e->button() != LeftButton )
+    {
+        e->ignore(); // let KWCanvas handle it
+        return;
+    }
     KWFrameSet *fs = 0;
     KWFrame *frm = 0;
 
@@ -145,12 +150,19 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
 
     MouseMeaning meaning = doc->getMouseMeaning( nPoint, e->state() );
     Q_ASSERT( meaning >= MEANING_TOPLEFT ); // had be better be about resizing...
+    if ( meaning < MEANING_TOPLEFT )
+        kdDebug(32001) << "KWResizeHandle: got unexpected meaning " << meaning << endl;
 
     m_canvas->mpEditFrame( 0, nPoint, meaning );
 }
 
 void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )
 {
+    if ( e->button() != LeftButton )
+    {
+        e->ignore(); // let KWCanvas handle it
+        return;
+    }
     mousePressed = false;
     QPoint vPoint( x() + e->x(), y() + e->y() );
     QPoint nPoint = m_canvas->viewMode()->viewToNormal( vPoint );

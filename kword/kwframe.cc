@@ -167,8 +167,7 @@ MouseMeaning KWFrame::getMouseMeaning( const KoPoint & docPoint, MouseMeaning de
         hs = width() / 3; // frame is not wide enough -> leave some room to click inside it
     if ( height() < 18 )
         vs = height() / 3; // same thing if frame is not high enough
-    // Note that this makes a big zone when zooming in .... one that doesn't match
-    // the resize handles. Maybe we should calculate the area a bit differently
+    // Maybe we should calculate the area a bit differently
     // (on both sides of the line), and allow resizing without selecting.
 
     double mx = docPoint.x();
@@ -579,7 +578,6 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     m_paddingTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "top" ) );
     m_paddingBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "bottom" ) );
 
-    // margins, i.e. runAroundGap. fo:margin-left/right/top/bottom
 #if 0 // not allowed in the current OASIS spec
     // margins, i.e. runAroundGap. fo:margin for 4 values or padding-left/right/top/bottom
     m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "left" ) );
@@ -587,6 +585,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "top" ) );
     m_runAroundBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "bottom" ) );
 #endif
+    // margins, i.e. runAroundGap. fo:margin-left/right/top/bottom
     m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ) );
     m_runAroundRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-right" ) );
     m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-top" ) );
@@ -600,10 +599,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
             m_backgroundColor = QBrush( QColor(), Qt::NoBrush );
         else
         {
-            // OOwriter doesn't support fill patterns (bkStyle).
-            // But the file support is more generic, and supports: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color
-            // TODO - see OoImpressImport::appendBrush
-            m_backgroundColor = QBrush( QColor( color ) /*, TODO */ );
+            m_backgroundColor = QBrush( QColor( color ) /*, brush style is a dead feature, ignored */ );
         }
     }
 
@@ -617,6 +613,8 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     }
     // TODO more refined border spec for double borders (3.11.28)
 
+    // This attribute isn't part of the OASIS spec. Doesn't matter since it doesn't affect rendering
+    // of existing documents, only editing (and only KWord has this kind of option until now).
     const QCString frameBehaviorOnNewPage = styleStack.attributeNS( KoXmlNS::style, "frame-behavior-on-new-page" ).latin1();
     if ( frameBehaviorOnNewPage == "followup" )
         m_newFrameBehavior = Reconnect;
@@ -676,7 +674,7 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles ) co
 
 QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
 {
-    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" /*correct?*/ );
+    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" );
     QString protect;
     if ( frameSet()->protectContent() )
         protect = "content";
@@ -687,8 +685,16 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
         protect+="size";
     }
     if ( !protect.isEmpty() )
-        frameStyle.addProperty("style:protect", protect );
+        frameStyle.addProperty( "style:protect", protect );
 
+    // Background: color and transparency
+    // OOo seems to use style:background-transparency="100%", but the schema allows background-color=transparent
+    if ( m_backgroundColor.style() == Qt::NoBrush )
+        frameStyle.addProperty( "fo:background-color", "transparent" );
+    else if ( m_backgroundColor.color().isValid() )
+        frameStyle.addProperty( "fo:background-color", m_backgroundColor.color().name() );
+
+    // Borders
     if (  ( m_borderLeft == m_borderRight )
           && ( m_borderLeft == m_borderTop )
           && ( m_borderLeft == m_borderBottom ) )
@@ -739,7 +745,6 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
     }
 #endif
 
-    //todo add other element !!!!
     if ( runAround() == KWFrame::RA_SKIP )
         frameStyle.addProperty( "style:wrap", "none" );
     else if ( runAround() == KWFrame::RA_NO )
@@ -753,6 +758,30 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
         else if ( runAroundSide() == KWFrame::RA_BIGGEST )
             frameStyle.addProperty( "style:wrap", "biggest" );
     }
+
+    // This attribute isn't part of the OASIS spec. Doesn't matter since it doesn't affect rendering
+    // of existing documents, only editing (and only KWord has this kind of option until now).
+    NewFrameBehavior defaultNfb = frameSet()->isHeaderOrFooter() ? Copy : NoFollowup;
+    if ( m_newFrameBehavior != defaultNfb ) {
+        const char* value;
+        if ( m_newFrameBehavior == Reconnect )
+            value = "followup";
+        else if ( m_newFrameBehavior == Copy )
+            value = "copy";
+        else if ( m_newFrameBehavior == NoFollowup )
+            value = "none";
+        frameStyle.addProperty( "style:frame-behavior-on-new-page", value );
+    }
+
+    // The loading code for this one is in kwtextframeset, maybe this should be moved there too
+    const char* frameBehav = 0;
+    if ( m_frameBehavior == KWFrame::Ignore )
+        frameBehav = "clip";
+    else if ( m_frameBehavior == KWFrame::AutoCreateNewFrame )
+        frameBehav = "auto-create-new-frame";
+    // the third case, AutoExtendFrame is handled by min-height
+    if ( frameBehav )
+        frameStyle.addProperty( "style:overflow-behavior", frameBehav );
 
     return mainStyles.lookup( frameStyle, "fr" );
 }
@@ -1606,6 +1635,9 @@ MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
     {
         return frame->getMouseMeaning( docPoint, defaultCursor );
     }
+    // TODO there's a case where we're over a frame resize-handle
+    // but not over the frame border, we miss to see that here.
+    // Proper fix: hmm, why are resize handles widgets anyway?
 
     frame = frameAtPos( docPoint.x(), docPoint.y() );
     if ( frame == 0L ) {
@@ -1722,15 +1754,9 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
         kdWarning(32001) << "Error in frame " << tag.tagName() << " " << tag.attributeNS( KoXmlNS::draw, "name", QString::null ) << " : neither width nor min-width specified!" << endl;
     }
     double height = 100;
-    bool hasMinHeight = false;
     if ( tag.hasAttributeNS( KoXmlNS::svg, "height" ) ) { // fixed height
         // TODO handle percentage (of enclosing table/frame/page)
         height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "height", QString::null ) );
-    } else if ( tag.hasAttributeNS( KoXmlNS::fo, "min-height" ) ) {
-        height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::fo, "min-height", QString::null ) );
-        hasMinHeight = true;
-    } else {
-        kdWarning(32001) << "Error in frame " << tag.tagName() << " " << tag.attributeNS( KoXmlNS::draw, "name", QString::null ) << " : neither height nor min-height specified!" << endl;
     }
     //kdDebug(32001) << k_funcinfo << "width=" << width << " height=" << height << " pt" << endl;
 
@@ -1738,8 +1764,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
                                   KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "x", QString::null ) ),
                                   KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "y", QString::null ) ),
                                   width, height );
-    if ( hasMinHeight )
-        frame->setMinFrameHeight( height );
+
     frame->setZOrder( tag.attributeNS( KoXmlNS::draw, "z-index", QString::null ).toInt() );
     // Copy-frames. OASIS extension requested on 29/03/2004.
     // We currently ignore the value of the copy-of attribute. It probably needs to

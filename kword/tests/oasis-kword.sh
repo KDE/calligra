@@ -74,6 +74,8 @@ if test "$checkoasis" = "1"; then
       echo "Checking $f..." ; oasislint $f 
     done
   fi
+  # Hide warning about non-standard oasis attribute being used for a kword-specific feature
+  perl -pi -e 's/style:frame-behavior-on-new-page="[^\"]*"//' content.xml
   if type -p oasislint-strict >/dev/null 2>&1; then
     for f in content.xml styles.xml meta.xml settings.xml; do
       echo "Checking $f strict..." && oasislint-strict $f

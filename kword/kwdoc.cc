@@ -1666,7 +1666,10 @@ void KWDocument::endOfLoading()
         }
     }
 
-    // create defaults if they were not in the input file.
+    // Create defaults if they were not in the input file.
+
+    // Where to insert the new frames: not at the end, since that breaks oasis-kword.sh
+    uint newFramesetsIndex = m_lstFrameSet.isEmpty() ? 0 : 1;
 
     if ( !_first_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Header" ) );
@@ -1678,7 +1681,7 @@ void KWDocument::endOfLoading()
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        m_lstFrameSet.append( fs );
+        m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
     if ( !_odd_header ) {
@@ -1689,7 +1692,7 @@ void KWDocument::endOfLoading()
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        m_lstFrameSet.append( fs );
+        m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
     if ( !_even_header ) {
@@ -1700,7 +1703,7 @@ void KWDocument::endOfLoading()
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        m_lstFrameSet.append( fs );
+        m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
     if ( !_first_footer ) {
@@ -1712,7 +1715,7 @@ void KWDocument::endOfLoading()
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        m_lstFrameSet.append( fs );
+        m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
     if ( !_odd_footer ) {
@@ -1724,7 +1727,7 @@ void KWDocument::endOfLoading()
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        m_lstFrameSet.append( fs );
+        m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
     if ( !_even_footer ) {
@@ -1736,7 +1739,7 @@ void KWDocument::endOfLoading()
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
-        m_lstFrameSet.append( fs );
+        m_lstFrameSet.insert( newFramesetsIndex++, fs );
     }
 
     // do some sanity checking on document.

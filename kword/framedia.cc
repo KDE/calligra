@@ -51,10 +51,10 @@
 #include <kdebug.h>
 
 /******************************************************************/
-/* Class KWBrushStylePreview                                      */
+/* Class KWBrushStylePreview - only used by kwframestylemanager   */
 /******************************************************************/
-KWBrushStylePreview::KWBrushStylePreview( QWidget*parent, const char* name )
-    :QFrame(parent,name)
+KWBrushStylePreview::KWBrushStylePreview( QWidget* parent )
+    : QFrame(parent)
 {
 }
 
@@ -62,9 +62,8 @@ void KWBrushStylePreview::drawContents( QPainter* painter )
 {
     painter->save();
     painter->translate( contentsRect().x(), contentsRect().y() );
-    painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
-                       colorGroup().base() );
-    painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(), brush );
+    painter->fillRect( contentsRect(), colorGroup().base() ); // in case of a transparent brush
+    painter->fillRect( contentsRect(), brush );
     painter->restore();
 }
 
@@ -1111,36 +1110,40 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
 void KWFrameDia::setupTab5() { // Tab Background fill/color
     tab5 = addPage( i18n("Background") );
-    grid5 = new QGridLayout( tab5, (frame?6:7), 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout* grid5 = new QGridLayout( tab5, 0 /*auto*/, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    int row=0;
-    if(! frame) {
+    int row = 0;
+    if (!frame ) {
         overwriteColor = new QCheckBox (i18n("Set new color on all selected frames"), tab5);
         grid5->addMultiCellWidget(overwriteColor,row,row,0,1);
         row++;
     }
-    brushPreview=new KWBrushStylePreview(tab5);
-    grid5->addMultiCellWidget(brushPreview,row,5,1,1);
+    //brushPreview=new KWBrushStylePreview(tab5);
+    //grid5->addMultiCellWidget(brushPreview,row,5,1,1);
 
-    QLabel *l = new QLabel( i18n( "Background color:" ), tab5 );
+    transparentCB = new QCheckBox( i18n( "Transparent background" ), tab5 );
+    grid5->addWidget(transparentCB,row++,0);
 
-    grid5->addWidget(l,row++,0);
+    QLabel *labelBgColor = new QLabel( i18n( "Background color:" ), tab5 );
+
+    grid5->addWidget(labelBgColor,row++,0);
 
     brushColor = new KColorButton( Qt::white, tab5 );
     grid5->addWidget(brushColor,row++,0);
 
-    connect( brushColor, SIGNAL( changed( const QColor & ) ),
-        this, SLOT( updateBrushConfiguration() ) );
+//    connect( brushColor, SIGNAL( changed( const QColor & ) ),
+//        this, SLOT( updateBrushPreview() ) );
 
 
+    // ###########################
+    // Fill styles are ugly and not WYSIWYG (due to being pixel-based)
+    // Feature not in OOo either (they have a configurable level of transparency instead, much nicer)
+#if 0
     l = new QLabel( i18n( "Background style:" ), tab5 );
     grid5->addWidget(l,row++,0);
 
     brushStyle = new QComboBox( false,tab5, "BStyle" );
     grid5->addWidget(brushStyle,row++,0);
-
-    QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    grid5->addItem( spacer,row,0 );
 
     brushStyle->insertItem( i18n( "No Background Fill" ) );
     // xgettext:no-c-format
@@ -1166,10 +1169,17 @@ void KWFrameDia::setupTab5() { // Tab Background fill/color
     brushStyle->insertItem( i18n( "Diagonal Lines ( \\ )" ) );
     brushStyle->insertItem( i18n( "Diagonal Crossing Lines" ) );
     connect(  brushStyle, SIGNAL( activated( int ) ),
-        this, SLOT( updateBrushConfiguration() ) );
+        this, SLOT( updateBrushPreview() ) );
 
-    initComboStyleBrush();
-    updateBrushConfiguration();
+    updateBrushPreview();
+#endif
+
+    connect( transparentCB, SIGNAL( toggled( bool ) ), labelBgColor, SLOT( setDisabled( bool ) ) );
+    connect( transparentCB, SIGNAL( toggled( bool ) ), brushColor, SLOT( setDisabled( bool ) ) );
+    initBrush();
+
+    QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    grid5->addItem( spacer,row,0 );
 }
 
 void KWFrameDia::slotProtectContentChanged( bool b )
@@ -1214,7 +1224,7 @@ void KWFrameDia::calcRatio()
         heightByWidthRatio = sh->value() / sw->value();
 }
 
-void KWFrameDia::initComboStyleBrush()
+void KWFrameDia::initBrush()
 {
     bool allFramesSame=true;
     if ( frame )
@@ -1233,7 +1243,9 @@ void KWFrameDia::initComboStyleBrush()
         overwriteColor->setChecked(allFramesSame);
     }
 
+    transparentCB->setChecked( newBrushStyle.style() == NoBrush );
 
+#if 0
     switch ( newBrushStyle.style() )
     {
         case NoBrush:
@@ -1284,16 +1296,21 @@ void KWFrameDia::initComboStyleBrush()
         case CustomPattern:
             break;
     }
-    QColor col=newBrushStyle.color();
-    col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+#endif
+
+    QColor col = newBrushStyle.color();
+    col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 
     brushColor->setColor( col );
 }
 
-QBrush KWFrameDia::frameBrushStyle()
+QBrush KWFrameDia::frameBrushStyle() const
 {
     QBrush brush;
 
+    brush.setStyle( transparentCB->isChecked() ? NoBrush : SolidPattern );
+
+#if 0
     switch ( brushStyle->currentItem() )
     {
         case 0:
@@ -1342,13 +1359,15 @@ QBrush KWFrameDia::frameBrushStyle()
             brush.setStyle( DiagCrossPattern );
             break;
     }
+#endif
 
     brush.setColor( brushColor->color() );
 
     return brush;
 }
 
-void KWFrameDia::updateBrushConfiguration()
+#if 0
+void KWFrameDia::updateBrushPreview()
 {
     if(brushStyle->currentItem()==0) {
         brushPreview->hide();
@@ -1358,6 +1377,7 @@ void KWFrameDia::updateBrushConfiguration()
         brushPreview->repaint(true);
     }
 }
+#endif
 
 // Called when "reconnect" or "no followup" is checked
 void KWFrameDia::setFrameBehaviorInputOn() {
