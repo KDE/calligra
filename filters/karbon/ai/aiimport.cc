@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 #include "aiimport.h"
-
+#include "karbonaiparserbase.h"
 
 class AiImportFactory : KGenericFactory<AiImport, KoFilter>
 {
@@ -48,7 +48,7 @@ protected:
 K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() );
 
 AiImport::AiImport( KoFilter*, const char*, const QStringList& )
-	: KoFilter(), m_result ()
+	: KoFilter()
 {
 }
 
@@ -71,15 +71,16 @@ AiImport::convert( const QCString& from, const QCString& to )
 	}
 
         QDomDocument doc ("DOC");
+	KarbonAIParserBase parser;
 
-        if (!parse (fileIn, doc))
+        if (!parser.parse (fileIn, doc))
         {
 		fileIn.close();
 		return KoFilter::CreationError;
         }
-	m_result = doc.toString().latin1();
+	QString &result = doc.toString();
 
-        kdDebug() << m_result << endl;
+        kdDebug() << result << endl;
 	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
 	if( !storeOut )
 	{
@@ -87,60 +88,12 @@ AiImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::StorageCreationError;
 	}
 
-	QCString cStr = m_result.latin1();
+	QCString cStr = result.latin1();
 	storeOut->writeBlock( cStr, cStr.size() - 1 );
 
 	return KoFilter::OK;
 }
 
-
-void AiImport::gotStartTag (const char *tagName, Parameters& params) {
-  QString data;
-  data += "<";
-  data += tagName;
-  data += " ";
-  data += getParamList (params);
-  data += ">\n";
-
-  m_result += data;
-}
-
-void AiImport::gotEndTag (const char *tagName){
-  QString data;
-  data += "</";
-  data += tagName;
-  data += ">\n";
-
-  m_result += data;
-}
-
-void AiImport::gotSimpleTag (const char *tagName, Parameters& params) {
-  QString data;
-  data += "<";
-  data += tagName;
-  data += " ";
-  data += getParamList (params);
-  data += "/>\n";
-
-  m_result += data;
-}
-
-
-void AiImport::parsingStarted(){
-//  QString str = getHeader();
-//  m_buffer += str;
-//  qDebug ("buffer is\n %s", m_buffer.latin1());
-
-}
-
-void AiImport::parsingFinished(){
-//  m_buffer += getFooter();
-}
-
-void AiImport::parsingAborted(){
-//  qDebug ("parsing aborted called");
-  m_result = "";
-}
 
 #include "aiimport.moc"
 

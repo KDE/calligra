@@ -23,19 +23,22 @@
 #include <core/vlayer.h>
 #include <core/vgroup.h>
 #include <core/vclipgroup.h>
+#include <core/vvisitor.h>
 #include "aicolor.h"
+#include <qwmatrix.h>
+#include <commands/vtransformcmd.h>
 
 const void pottoa (PathOutputType &data);
 
 // generic
-KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output), m_emptyFill(), m_emptyStroke()
+KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output), m_bbox(0,0,612,792), m_emptyFill(), m_emptyStroke()
 /* , m_strokeColor(), m_fillColor() */ {
 
   // A4, 70 dpi
-  m_bbox.llx = 0;
+/*  m_bbox.llx = 0;
   m_bbox.lly = 0;
   m_bbox.urx = 612;
-  m_bbox.ury = 792;
+  m_bbox.ury = 792; */
 
 /*  m_lineWidth = 0;
   m_flatness = 0;
@@ -74,6 +77,23 @@ void KarbonAIParserBase::parsingStarted(){
 // generic
 void KarbonAIParserBase::parsingFinished(){
 //  qDebug ( getFooter().latin1() );
+
+  // handle bounding box
+  if (m_document)
+  {
+    kdDebug() << "bbox 1 is " << m_bbox << endl;
+
+    m_document->setWidth (m_bbox.width());
+    m_document->setHeight (m_bbox.height());
+
+/*    QWMatrix matrix;
+    matrix.translate (-m_bbox.x(),-m_bbox.y());
+
+    VTransformNodes translator (matrix);
+    m_document->accept (translator); */
+    VTranslateCmd cmd (0L, -m_bbox.x(), -m_bbox.y());
+    m_document->accept (cmd);
+  }
 }
 
 // generic
@@ -212,10 +232,11 @@ void KarbonAIParserBase::gotStrokeColor (AIColor &color){
 
 // generic
 void KarbonAIParserBase::gotBoundingBox (int llx, int lly, int urx, int ury){
-  m_bbox.llx = llx;
+/*  m_bbox.llx = llx;
   m_bbox.lly = lly;
   m_bbox.urx = urx;
-  m_bbox.ury = ury;
+  m_bbox.ury = ury; */
+  m_bbox.setCoords(llx,lly,urx,ury);
 }
 
 void KarbonAIParserBase::gotLineWidth (double val){

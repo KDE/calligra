@@ -27,7 +27,7 @@
 class QDomElement;
 class QTextStream;
 
-class AiImport : public KoFilter, KarbonAIParserBase
+class AiImport : public KoFilter
 {
 	Q_OBJECT
 
@@ -36,17 +36,9 @@ public:
 	virtual ~AiImport();
 
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
-private:
-   QString m_result;
+/* private:
+   QString m_result; */
 
-protected:
-  void gotStartTag (const char *tagName, Parameters& params);
-  void gotEndTag (const char *tagName);
-  void gotSimpleTag (const char *tagName, Parameters& params);
-
-  void parsingStarted();
-  void parsingFinished();
-  void parsingAborted();
 
 };
 

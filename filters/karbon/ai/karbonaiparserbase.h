@@ -48,7 +48,7 @@ typedef QPtrList<PathElement> PathElements;
 typedef enum { POT_Filled = 1, POT_Stroked = 2, POT_FilledStroked = 3, POT_Clip = 4, POT_Ignore = 8, POT_Leave = -1, POT_Other = 0 } PathOutputType;
 typedef enum { PTT_Output = 1, PTT_Combine = 2 } PathTransferType;
 
-typedef struct { int llx, lly, urx, ury; } BoundingBox;
+// typedef struct { int llx, lly, urx, ury; } BoundingBox;
 
 class KarbonAIParserBase;
 class KarbonGStateHandler;
@@ -144,7 +144,8 @@ private:
   PathOutputType m_pot;
   PathTransferType m_ptt;
 
-  BoundingBox  m_bbox;
+//  BoundingBox  m_bbox;
+  KoRect m_bbox;
   VFill m_fill;
   VStroke m_stroke;
 /**  AIColor m_strokeColor;

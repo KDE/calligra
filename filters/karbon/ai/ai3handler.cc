@@ -54,6 +54,14 @@ bool AI3Handler::handleAIOperation (AIOperation op) {
       if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotEndCombination ();
       return true;
       break;
+    case AIO_BeginGroupClip :
+      if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotBeginGroup (true);
+      return true;
+      break;
+    case AIO_EndGroupClip :
+      if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotEndGroup (true);
+      return true;
+      break;
     case AIO_SetFillMode :
       if (m_delegate->m_pathHandler) m_delegate->m_pathHandler->gotFillMode((FillMode) m_delegate->getIntValue());
       return true;
