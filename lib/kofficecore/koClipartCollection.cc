@@ -119,18 +119,9 @@ void KoClipartCollection::saveToStore( KoStore *store, QValueList<KoClipartKey> 
                 QPicture * pic = c.picture();
 
 #ifdef SAVE_IN_SVG_FORMAT
-                KTempFile tmpFile;
-                tmpFile.setAutoDelete( true );
-                if ( pic->save( tmpFile.name(), "svg" ) )
-                {
-                    // Argl, it would be so much simpler if QPicture::save would take a QIODevice * !
-                    QByteArray array( 1024 );
-                    int n;
-                    while ( ( n = tmpFile.file()->readBlock( array.data(), array.size() ) ) )
-                        dev.writeBlock( array.data(), n );
-                }
+                pic->save( &dev, "svg");
 #else
-                dev.writeBlock( pic->data(), pic->size() );
+                pic->save( &dev, NULL);
 #endif
 		store->close();
             }
@@ -220,19 +211,8 @@ void KoClipartCollection::readFromStore( KoStore * store, const StoreMap & store
 void KoClipartCollection::readFromStore( KoStore * store, const QString &u, QPicture * pic )
 {
     KoStoreDevice dev( store );
-    int size = store->size();
-    char * data = new char[size];
-    dev.readBlock( data, size );
     if ( u.endsWith( "svg" ) )
-    {
-        // Argl, why doesn't QPicture::load take a QIODevice * ?
-        KTempFile tmpFile;
-        tmpFile.setAutoDelete( true );
-        tmpFile.file()->writeBlock( data, size );
-        tmpFile.close();
-        (void)pic->load( tmpFile.name(), "svg" );
-    }
+        pic->load( &dev, "svg" );
     else // raw QPicture data (compat for KOffice <= 1.1)
-        pic->setData( data, size );
-    delete data;
+        pic->load( &dev, NULL );
 }
