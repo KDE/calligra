@@ -22,6 +22,7 @@
 
 #include <container.h>
 #include <part.h>
+#include <kurl.h>
 
 #include <komlParser.h>
 
@@ -81,27 +82,28 @@ public:
   /**
    *  Sets the URL where the document is located and should be saved.
    */
-  virtual void setURL( const QString& url );
+  virtual void setURL( const KURL& url );
 
   /**
    *  Retrieves the URL of the document where the file is located.
    */
-  virtual QString url() const;
+  virtual const KURL & url() const;
 
   /**
    *  Loads a document from a given URL.
    */
-  virtual bool loadFromURL( const QString& url );
+  virtual bool loadFromURL( const KURL& url );
 
   /**
    *  Loads a document from a store.
+   * @param url An internal url, like tar:/1/2
    */
-  virtual bool loadFromStore( KoStore* store, const QString& url );
+  virtual bool loadFromStore( KoStore* store, const KURL& url );
 
   /**
    *  Saves the document to a given URL.
    */
-  virtual bool saveToURL( const QString& url, const QCString& format );
+  virtual bool saveToURL( const KURL& url, const QCString& format );
 
   /**
    *  Saves a document to a store.
@@ -122,7 +124,7 @@ protected:
 
   /**
    *  This function is called from @ref #loadFromURL and @ref #loadFromStore.
-   *  It decides wether XML or binary data has to be read and calls
+   *  It decides whether XML or binary data has to be read and calls
    *  @ref #loadBinary or @ref #loadXML depending on this result.
    *
    *  Usually you dont want to overload this function.
@@ -205,7 +207,7 @@ protected:
    *  If you want to write additional files to a store,
    *  the you must do it here.
    *  In the implementation, you should prepend the document
-   *  url before the filename, so that everything is kept relative
+   *  url (using url().url()) before the filename, so that everything is kept relative
    *  to this document. For instance it will produce urls such as
    *  tar:/1/pictures/picture0.png, if the doc url is tar:/1
    *  But do this ONLY if the document is stored extern (see @ref #isStoredExtern)
@@ -242,7 +244,7 @@ protected:
    *  </PRE>
    *
    * By default the function returns FALSE. That is ok if your document
-   * wont embed other documents, otherwise you have to overload the function.
+   * won't embed other documents, otherwise you have to overload the function.
    */
   virtual bool hasToWriteMultipart();
 
@@ -254,7 +256,7 @@ protected:
 
 private:
 
-    QString m_strURL;
+    KURL m_strURL;
     bool m_bModified;
     bool m_bEmpty;
 };
@@ -272,7 +274,10 @@ public:
   virtual ~KoDocumentChild();
 
   virtual KoDocument* document() { return (KoDocument*) part(); }
-  virtual QString url();
+  /**
+   * Can be empty (which is why it doesn't return a const KURL &)
+   */
+  virtual KURL url();
 
   /**
    *  Writes the OBJECT tag, but does NOT write the content of the

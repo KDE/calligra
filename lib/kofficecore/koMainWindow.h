@@ -21,6 +21,7 @@
 #define __ko_main_window_h__
 
 #include <shell.h>
+#include <kurl.h>
 
 class KoDocument;
 class KToolBar;
@@ -160,10 +161,11 @@ protected:
 
     /**
      * Load the desired document and show it.
+     * @param url the URL to open
      *
      * @return TRUE on success.
      */
-    virtual bool openDocument( const char* _url );
+    virtual bool openDocument( const KURL & url );
 
     /**
      * Saves the document, asking for a filename if necessary.

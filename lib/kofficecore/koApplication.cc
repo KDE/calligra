@@ -26,6 +26,7 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <qstringlist.h>
+#include <qdir.h>
 
 KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName, const QCString& rNativeMimeType)
     : KApplication(argc, argv, rAppName)
@@ -51,6 +52,7 @@ void KoApplication::start()
         if( m_params.get( i ).left( 1 ) != "-" )
             open.append( m_params.get( i ) ); 
         
+    // No argument
     if ( open.isEmpty() ) {
         KoDocument* doc = entry.createDoc( 0, "Document" );
         doc->initDoc();
@@ -59,12 +61,14 @@ void KoApplication::start()
         shell->show();
         // setMainWidget( shell ); // probably bad idea, says Torben...
     } else {
+        // Loop through arguments
         QStringList::Iterator it = open.begin();
         int n = 0;
         for( ; it != open.end(); ++it )
         {
             KoDocument* doc = entry.createDoc( 0 );
-            if ( doc->loadFromURL( *it ) )
+            KURL url( QDir::currentDirPath()+"/", *it ); // allow URLs relative to current dir
+            if ( doc->loadFromURL( url ) )
             {
               Shell* shell = doc->createShell();
               shell->show();

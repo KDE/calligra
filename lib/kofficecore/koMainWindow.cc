@@ -63,15 +63,15 @@ KoMainWindow::KoMainWindow( QWidget* parent, const char* name )
 			  actionCollection(), "fileopen" );
     KAction* save = new KAction( i18n("Save"), KofficeBarIcon( "filefloppy" ), CTRL + Key_S, this, SLOT( slotFileSave() ),
 			  actionCollection(), "filesave" );
-    KAction* saveAs = new KAction( i18n("Save as..."), 0, this, SLOT( slotFileSaveAs() ),
+    /*KAction* saveAs =*/ new KAction( i18n("Save as..."), 0, this, SLOT( slotFileSaveAs() ),
 			    actionCollection(), "filesaveas" );
     KAction* print = new KAction( i18n("Print..."), KofficeBarIcon( "fileprint" ), CTRL + Key_P, this, SLOT( slotFilePrint() ),
 			  actionCollection(), "fileprint" );
-    KAction* close = new KAction( i18n("Close"), 0, this, SLOT( slotFileClose() ),
+    /*KAction* close =*/ new KAction( i18n("Close"), 0, this, SLOT( slotFileClose() ),
 			  actionCollection(), "fileclose" );
-    KAction* quit = new KAction( i18n("Quit"), 0, this, SLOT( slotFileQuit() ),
+    /*KAction* quit =*/ new KAction( i18n("Quit"), 0, this, SLOT( slotFileQuit() ),
 			  actionCollection(), "quit" );
-    KAction* helpAbout = new KAction( i18n("About..."), 0, this, SLOT( slotHelpAbout() ),
+    /*KAction* helpAbout =*/ new KAction( i18n("About..."), 0, this, SLOT( slotHelpAbout() ),
 			  actionCollection(), "about" );
 
     fileTools = new KToolBar( this, "file operations" );
@@ -106,12 +106,12 @@ KoMainWindow* KoMainWindow::nextMainWindow()
     return s_lstMainWindows->next();
 }
 
-bool KoMainWindow::openDocument( const char* _url )
+bool KoMainWindow::openDocument( const KURL & url )
 {
     KoDocument* doc = document();
 	
     KoDocument* newdoc = createDoc();
-    if ( !newdoc->loadFromURL( _url ) )
+    if ( !newdoc->loadFromURL( url ) )
     {
 	delete newdoc;
 	return FALSE;
@@ -139,10 +139,10 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 {
     KoDocument* pDoc = document();
 
-    QString url = pDoc->url();
+    KURL url = pDoc->url();
     QString outputMimeType ( _native_format );
 
-    if ( url.isEmpty() || saveas )
+    if ( !url.hasPath() || saveas )
     {
 	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
 								    _native_format, _native_pattern, 
@@ -169,28 +169,27 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 						  i18n("Warning") ) == KMessageBox::Yes;
 	    }
 	} while ( !bOk );
-	KMimeType::Ptr t = KMimeType::findByURL( KURL( file ), 0, TRUE );
-	outputMimeType = t->mimeType();
-
 	url = file;
 	pDoc->setURL( url );
+	KMimeType::Ptr t = KMimeType::findByURL( url, 0, TRUE );
+	outputMimeType = t->mimeType();
     }
+
+    if ( !url.isLocalFile() ) return false; // only local files
 
     QApplication::setOverrideCursor( waitCursor );
 
-    KURL u( url );
-    if ( !u.isLocalFile() ) return false; // only local files
-    if ( QFile::exists( u.path() ) ) { // this file exists => backup
+    if ( QFile::exists( url.path() ) ) { // this file exists => backup
 	// TODO : make this configurable ?
-	system( QString( "rm -rf %1~" ).arg( u.path() ).latin1() );
-	QString cmd = "cp %1 %2~";
-	cmd = cmd.arg( u.path() ).arg( u.path() );
-	system( cmd.latin1() );
+        QString cmd = QString( "rm -rf %1~" ).arg( url.path() );
+	system( cmd.local8Bit() );
+	cmd = QString("cp %1 %2~").arg( url.path() ).arg( url.path() );
+	system( cmd.local8Bit() );
     }
 
     // Not native format : save using export filter
     if ( outputMimeType != _native_format ) {
-	QString nativeFile=KoFilterManager::self()->prepareExport(url, _native_format);
+	QString nativeFile=KoFilterManager::self()->prepareExport(url.path(), _native_format);
 	bool ret;
 	ret = pDoc->saveToURL( nativeFile, _native_format ) && KoFilterManager::self()->export_();
 	QApplication::restoreOverrideCursor();
@@ -200,9 +199,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
     bool ret = true;
     // Native format => normal save
     if ( !pDoc->saveToURL( url, _native_format ) ) {
-	QString tmp;
-	tmp.sprintf( i18n( "Could not save\n%s" ), url.ascii() );
-	KMessageBox::error( this, i18n( "IO Error" ) );
+	KMessageBox::error( this, i18n( "Could not save\n%1" ).arg(url.url()) );
 	ret = false;
     }
     QApplication::restoreOverrideCursor();

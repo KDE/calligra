@@ -33,8 +33,6 @@
 #include <komlMime.h>
 #include <komlStreamFeed.h>
 
-#include <kurl.h>
-#include <qdir.h>
 #include <klocale.h>
 #include <kapp.h>
 #include <kdebug.h>
@@ -180,7 +178,7 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
 {
   assert( !m_tmpURL.isEmpty() );
 
-  kdebug( KDEBUG_INFO, 30003, "Trying to load %s", m_tmpURL.ascii() );
+  kdebug( KDEBUG_INFO, 30003, QString("Trying to load %1").arg(m_tmpURL) );
 
   KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
   if ( e.isEmpty() )
@@ -211,7 +209,7 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
 QDomElement KoDocumentChild::save( QDomDocument& doc )
 {
     QDomElement e = doc.createElement( "object" );
-    e.setAttribute( "url", document()->url() );
+    e.setAttribute( "url", document()->url().url() );
     e.setAttribute( "mime", document()->mimeType() );
     QDomElement rect = doc.createElement( "rect" );
     rect.setAttribute( "x", geometry().left() );
@@ -224,7 +222,7 @@ QDomElement KoDocumentChild::save( QDomDocument& doc )
 
 bool KoDocumentChild::save( ostream& out )
 {
-  QString u = document()->url();
+  QString u = document()->url().url();
   QString mime = document()->mimeType();
 
   out << indent << "<OBJECT url=\"" << u.ascii() << "\" mime=\"" << mime.ascii() << "\">"
@@ -235,18 +233,18 @@ bool KoDocumentChild::save( ostream& out )
 
 bool KoDocumentChild::isStoredExtern()
 {
-  QString url = document()->url();
-  if ( url.isEmpty() )
+  const KURL & url = document()->url();
+  if ( !url.hasPath() )
     return false;
-  if ( url.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )
+  if ( url.protocol() == STORE_PROTOCOL )
     return false;
 
   return true;
 }
 
-QString KoDocumentChild::url()
+KURL KoDocumentChild::url()
 {
-    return ( document() ? document()->url() : QString::null );
+    return ( document() ? document()->url() : KURL() );
 }
 
 KoDocumentChild::~KoDocumentChild()
@@ -274,16 +272,15 @@ bool KoDocument::saveChildren( KoStore* /*_store*/, const char */*_path*/ )
   return true;
 }
 
-bool KoDocument::saveToURL( const QString &_url, const QCString &_format )
+bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
 {
-  KURL u( _url );
-  if ( u.isMalformed() )
+  if ( url.isMalformed() )
   {
     kdebug( KDEBUG_INFO, 30003, "malformed URL" );
     return false;
   }
 
-  if ( !u.isLocalFile() )
+  if ( !url.isLocalFile() )
   {
     QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), i18n( "Can not save to remote URL\n" ), i18n( "OK" ) );
     return false;
@@ -294,9 +291,9 @@ bool KoDocument::saveToURL( const QString &_url, const QCString &_format )
     kdebug( KDEBUG_INFO, 30003, "Saving to store" );
 
     //Use this to save to a binary store (deprecated)
-    //KoStore * store = new KoBinaryStore ( u.path(), KOStore::Write );
+    //KoStore * store = new KoBinaryStore ( url.path(), KOStore::Write );
 
-    KoStore* store = new KoTarStore( u.path(), KoStore::Write );
+    KoStore* store = new KoTarStore( url.path(), KoStore::Write );
 
     // Save childen first since they might get a new url
     if ( store->bad() || !saveChildren( store, STORE_PROTOCOL ) )
@@ -327,11 +324,11 @@ bool KoDocument::saveToURL( const QString &_url, const QCString &_format )
   }
   else
   {
-    ofstream out( u.path() );
+    ofstream out( url.path() );
     if ( !out )
     {
       QString tmp = i18n("Could not write to\n" );
-      tmp += u.path();
+      tmp += url.path();
       kdebug( KDEBUG_INFO, 30003, tmp );
       QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "OK" ) );
       return false;
@@ -352,7 +349,7 @@ bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const Q
   if ( !saveChildren( _store, _path ) )
     return false;
 
-  QString u = url();
+  QString u = url().url();
   if ( _store->open( u, _format ) )
   {
     ostorestream out( _store );
@@ -370,30 +367,29 @@ bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const Q
   return true;
 }
 
-bool KoDocument::loadFromURL( const QString & _url )
+bool KoDocument::loadFromURL( const KURL & url )
 {
   QApplication::setOverrideCursor( waitCursor );
-  kdebug( KDEBUG_INFO, 30003, "KoDocument::loadFromURL( %s )", _url.ascii() );
+  kdebug( KDEBUG_INFO, 30003, QString("KoDocument::loadFromURL( %1 )").arg(url.url()) );
 
-  KURL u( QDir::currentDirPath()+"/", _url ); // allow URLs relative to current dir
-  if ( u.isMalformed() )
+  if ( url.isMalformed() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Malformed URL %s", _url.ascii() );
+    kdebug( KDEBUG_WARN, 30003, QString("Malformed URL %1").arg(url.url()) );
     QApplication::restoreOverrideCursor();
     return false;
   }
 
-  if ( !u.isLocalFile() )
+  if ( !url.isLocalFile() )
   {
     kdebug( KDEBUG_INFO, 30003, "Can not load remote URL (not implemented yet)" );
     QApplication::restoreOverrideCursor();
     return false;
   }
 
-  ifstream in( u.path() );
+  ifstream in( url.path() );
   if ( !in )
   {
-    kdebug( KDEBUG_INFO, 30003, "Could not open %s", u.path().ascii() );
+    kdebug( KDEBUG_WARN, 30003, QString("Could not open %1").arg(url.path()) );
     QApplication::restoreOverrideCursor();
     return false;
   }
@@ -403,9 +399,10 @@ bool KoDocument::loadFromURL( const QString & _url )
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();
 
-  kdebug( KDEBUG_INFO, 30003, "PATTERN=%s", buf );
+  //kdebug( KDEBUG_INFO, 30003, "PATTERN=%s", buf );
 
-  setURL( u.url() );
+  // Store the URL as the Document URL
+  setURL( url );
 
   // Is it plain XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
@@ -423,11 +420,11 @@ bool KoDocument::loadFromURL( const QString & _url )
     KoStore * store;
     if ( strncasecmp( buf, "KS01", 4 ) == 0 )
     {
-      store = new KoBinaryStore( u.path(), KoStore::Read );
+      store = new KoBinaryStore( url.path(), KoStore::Read );
     }
     else // new (tar.gz)
     {
-      store = new KoTarStore( u.path(), KoStore::Read );
+      store = new KoTarStore( url.path(), KoStore::Read );
     }
 
     if ( store->bad() )
@@ -464,16 +461,17 @@ bool KoDocument::loadFromURL( const QString & _url )
   }
 }
 
-bool KoDocument::loadFromStore( KoStore* _store, const QString & _url )
+bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 {
-  if ( _store->open( _url, "" ) )
+  if ( _store->open( url.url(), "" ) )
   {
     istorestream in( _store );
     if ( !load( in, _store ) )
       return false;
     _store->close();
   }
-  setURL( _url );
+  // Store as document URL
+  setURL( url );
 
   if ( !loadChildren( _store ) )
   {	
@@ -515,7 +513,7 @@ bool KoDocument::load( istream& in, KoStore* _store )
 
 bool KoDocument::isStoredExtern()
 {
-  return ( m_strURL.left( STORE_PROTOCOL_LENGTH ) != STORE_PROTOCOL );
+  return ( m_strURL.protocol() != STORE_PROTOCOL );
 }
 
 bool KoDocument::isModified() const
@@ -536,12 +534,12 @@ bool KoDocument::isEmpty() const
     return m_bEmpty;
 }
 
-void KoDocument::setURL( const QString& url )
+void KoDocument::setURL( const KURL& url )
 {
     m_strURL = url;
 }
 
-QString KoDocument::url() const
+const KURL & KoDocument::url() const
 {
     return m_strURL;
 }
