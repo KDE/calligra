@@ -1290,7 +1290,8 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 	QStringList slist, nlist;
 	slist << "nosorting" << "ascending" << "descending";
 	nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
-	buff->add(prop = new KexiProperty("sorting", slist[0], slist, nlist, i18n("Sorting")));
+	buff->add(prop = new KexiProperty("sorting", slist[0], 
+		new KexiProperty::ListData(slist, nlist), i18n("Sorting")));
 
 	buff->add(prop = new KexiProperty("criteria", QVariant(QString::null)) );
 	prop->setVisible(false);

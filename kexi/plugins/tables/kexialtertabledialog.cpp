@@ -211,7 +211,8 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiProper
 	bool visible;
 	//if there is no more than 1 subType name or it's a PK: hide the property
 	prop = &buf["subType"];
-	visible = prop->keys() && prop->keys()->count()>1 && buf["primaryKey"].value().toBool()==false;
+	visible = prop->listData() && prop->listData()->keys.count()>1 
+		&& buf["primaryKey"].value().toBool()==false;
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
 		changed = true;
@@ -273,7 +274,8 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 	const QStringList nlist = KexiDB::typeNamesForGroup(field->typeGroup());
 	kdDebug() << "KexiAlterTableDialog::init(): subType strings: " << 
 		slist.join("|") << "\nnames: " << nlist.join("|") << endl;
-	buff->add(prop = new KexiProperty("subType", field->typeString(), slist, nlist, i18n("Subtype")));
+	buff->add(prop = new KexiProperty("subType", field->typeString(), 
+		new KexiProperty::ListData(slist, nlist), i18n("Subtype")));
 
 	buff->add( prop = new KexiProperty("caption", QVariant(field->caption()), i18n("Caption") ) );
 #ifdef KEXI_NO_UNFINISHED
@@ -558,7 +560,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		KexiProperty *subTypeProperty = &buf["subType"];
 
 		//update subtype list and value
-		subTypeProperty->setList(slist, nlist);
+		subTypeProperty->setListData( new KexiProperty::ListData(slist, nlist) );
 		if (buf["primaryKey"].value().toBool()==true) //primary keys require big int
 			fieldType = KexiDB::Field::BigInteger;
 		subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );
