@@ -240,6 +240,8 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
   string tag;
   string name;
 
+  KWParag *last = 0L;
+
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -247,8 +249,6 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
       // paragraph
       if (name == "PARAGRAPH")
 	{    
-	  KWParag *last = 0L;
-
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)

@@ -256,3 +256,5 @@ Reggie, 16.10.1998 - 19.10.1998
 Reggie, 20.10.1998:
 -------------------
 - Some cursor navigation and calculation fixes in KWFormatContext
+- Some small fixes in KWPage
+- Bugfix when loading files

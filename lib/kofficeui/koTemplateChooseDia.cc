@@ -24,7 +24,7 @@
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,QString _templatePath)
   : QTabDialog(parent,name,true), templatePath(_templatePath)
 {
-  setCancelButton(i18n("Cancel"));
+  setOKButton(i18n("OK"));
   groupList.setAutoDelete(true);
   getGroups();
   setupTabs();

@@ -213,7 +213,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
   if (doc->has_selection())
     doc->copySelectedText();
 	
-  gui->getView()->setFormat(*((KWFormat*)fc),true,false);
+  gui->getView()->setFormat(*((KWFormat*)fc));
   gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
   gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				  fc->getParag()->getParagLayout()->getRightBorder(),
@@ -1026,6 +1026,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	    if (isPrev)
 	      fc->cursorGotoNextLine(painter);
+
+	    fc->makeLineLayout(painter);
 
 	    if (tmpTextPos + 1 <= fc->getLineEndPos())
 	      fc->cursorGotoPos(tmpTextPos + 1,painter);
