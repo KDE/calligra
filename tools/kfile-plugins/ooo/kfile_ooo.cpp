@@ -19,6 +19,10 @@
 
 /**
  * CHANGES
+ * v1.5 to 1.6
+ * Correction for bug 68112: http://bugs.kde.org/show_bug.cgi?id=68112
+ * OOo 1.1 does not support garbages in zip files. We now recreate the zip
+ * file from scratch. It is slower, but we don't have the choice :(
  * v1.1 to v1.2
  * Added support for  KFileMimeTypeInfo::Hints (Name, Author, Description)
  * Added some Advanced Attributes and Statistics according to DTD of OOo
@@ -33,12 +37,15 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <kzip.h>
+#include <ktempfile.h>
+#include <qptrstack.h>
 
 #include <qdom.h>
 #include <qfile.h>
 #include <qdatetime.h>
 #include <qvalidator.h>
 #include <kdebug.h>
+#include <kio/netaccess.h>
 
 typedef KGenericFactory<KOfficePlugin> KOfficeFactory;
 
@@ -309,17 +316,79 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
   return true;
 }
 
+/**
+ * This function recreate a zip in dest with all files from src
+ * except meta.xml
+ */
+bool copyZipToZip( const KZip * src, KZip * dest)
+{
+  KArchiveDirectory * src_dir;
+  KArchiveFile * input_file;
+  QPtrStack<KArchiveDirectory> src_dirStack ;
+  QStringList dirEntries;
+  QStringList curDirName;
+  QStringList::Iterator it;
+  KArchiveEntry* curEntry;
+  QString filename = QString::null;
+
+  src_dirStack.push ( src->directory()  );
+
+  do {
+    src_dir = src_dirStack.pop();
+    curDirName.append(src_dir->name());
+    dirEntries = src_dir->entries();
+      
+    /* We now iterate over all entries and create entries in dest */
+    for ( it = dirEntries.begin(); it != dirEntries.end(); ++it ) {
+      if ( *it == metafile )
+	continue;
+      curEntry = src_dir->entry( *it );
+      
+      if (curEntry->isFile()) {
+        input_file = dynamic_cast<KArchiveFile*>( curEntry );
+	QByteArray b = input_file->data();
+	if (curDirName.isEmpty() || src_dir->name()=="/"){
+		filename = *it;
+	} else {
+		filename = curDirName.join("/") + "/" + *it;
+	}
+	dest->writeFile(filename , QString::null, QString::null, b.count(), b.data() );
+      } else
+        if (curEntry->isDirectory()) {
+          src_dirStack.push( dynamic_cast<KArchiveDirectory*>( curEntry ) );
+        }
+        else {
+		kdDebug(7034) << *it << " is a unknown type. Aborting." << endl;
+		return false;
+	}
+      }
+    curDirName.pop_back();
+  } while ( ! src_dirStack.isEmpty() );
+  return true;
+}
+
 bool KOfficePlugin::writeMetaData(const QString & path,
 				  const QDomDocument &doc) const
 {
-    KZip m_zip(path);
-    // Fixme : open WriteOnly to avoid garbages in Zip file ?
-    if (!m_zip.open(IO_ReadWrite))
+    KTempFile tmp_file;
+    tmp_file.setAutoDelete(true);
+    KZip * m_zip = new KZip(tmp_file.name());
+    KZip * current= new KZip(path);
+    /* To correct problem with OOo 1.1, we have to recreate the file from scratch */
+    if (!m_zip->open(IO_WriteOnly) || !current->open(IO_ReadOnly) )
 	    return false;
     QCString text = doc.toCString();
-    m_zip.setCompression(KZip::DeflateCompression);
-    m_zip.writeFile(metafile, QString::null, QString::null,text.length(),
-		    text);
+    m_zip->setCompression(KZip::DeflateCompression);
+    if (!copyZipToZip(current, m_zip))
+	    return false;
+    m_zip->writeFile(metafile, QString::null, QString::null,text.length(),
+		     text);
+    delete current;
+    delete m_zip;
+    if (!KIO::NetAccess::upload( tmp_file.name(), KURL(path))){
+	    kdDebug(7034) << "Error while saving " << tmp_file.name() << " as " << path << endl;
+	    return false;
+    }
     return true;
 }
 
