@@ -18,11 +18,12 @@
 */
 
 #include "koIMR.h"
+#include "koMediator.h"
 
 #include <klocale.h>
 #include <kapp.h>
 
-#include <op_app.h>
+#include <opApplication.h>
 #include "koScanParts.h"
 #include <qmsgbox.h>
 
@@ -34,6 +35,13 @@
  * Modifications and extensions done by Torben Weis
  * (c) 1998 Torben Weis <weis@kde.org>
  */
+
+CORBA::OAMediator_ptr med;
+
+void imr_init()
+{
+  med = new MediatorImpl;
+}
 
 bool imr_create( const char* _name, const char* _mode, const char *_exec, QStrList &_repoids, CORBA::ImplRepository_ptr _imr )
 {
@@ -78,6 +86,47 @@ bool imr_create( const char* _name, const char* _mode, const char *_exec, QStrLi
 
 CORBA::Object_ptr imr_activate( const char *_server, CORBA::ImplRepository_ptr _imr, const char *_addr )
 {
+  /* CORBA::ImplRepository::ImplDefSeq_var impls = _imr->find_by_name( _server );
+  if ( impls->length() == 0 )
+  {
+    cout << "no such server: " << args[0] << endl;
+    return 0L;
+  }
+  assert (impls->length() == 1);
+
+  CORBA::ORB_var orb = CORBA::ORB_instance ("mico-local-orb");
+  CORBA::Object_var obj;
+  if (args.size() > 1)
+  {
+    // try given address
+    obj = orb->bind ("IDL:omg.org/CORBA/OAMediator:1.0", _addr );
+  }
+  if (CORBA::is_nil (obj))
+  {
+    // try address of the impl repo
+    const CORBA::Address *addr = imr->_ior()->addr();
+    obj = orb->bind ("IDL:omg.org/CORBA/OAMediator:1.0", addr->stringify().c_str());
+  }
+  if (CORBA::is_nil( obj ) )
+  {
+    // try default addresses 
+    obj = orb->bind ("IDL:omg.org/CORBA/OAMediator:1.0");
+  }
+  if ( CORBA::is_nil(obj) )
+  {
+    cout << "error: cannot connect to micod" << endl;
+    return 0L;
+  }
+  CORBA::OAMediator_var oamed = CORBA::OAMediator::_narrow( obj );
+  if ( !oamed->force_activation (impls[(CORBA::ULong)0]) )
+  {
+    cout << "error: cannot activate server " << args[0] << endl;
+    return 0L;
+  }
+    return 0;
+    */
+
+
     CORBA::ImplRepository_var imr;
     if ( _imr == 0L )
     {    
@@ -138,35 +187,26 @@ CORBA::Object_ptr imr_activate( const char *_server, CORBA::ImplRepository_ptr _
     return CORBA::Object::_duplicate( obj );
 }
 
-OPParts::Document_ptr imr_createDocByServerName( const char *_server_name )
+KOffice::Document_ptr imr_createDocByServerName( const char *_server_name )
 {
   CORBA::Object_var obj = imr_activate( _server_name );
   if ( CORBA::is_nil( obj ) )
   {
     QString tmp;
     tmp.sprintf( i18n("Could not start server %s" ), _server_name );
-    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "OK" ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
     return 0L;
   }
   
-  // Narrow by hand
-  CORBA::Object_ptr p2 = obj;
-  OPParts::Factory_ptr factory_stub = new OPParts::Factory_stub;
-  factory_stub->CORBA::Object::operator=( *p2 );
-  OPParts::Factory_var factory = factory_stub;
+  KOffice::DocumentFactory_var factory = KOffice::DocumentFactory::_narrow( obj );
   assert( !CORBA::is_nil( factory ) );
-  CORBA::Object_var v = factory->create();
+  KOffice::Document_ptr doc = factory->create();
+  assert( !CORBA::is_nil( doc ) );
   
-  // Narrow by hand
-  CORBA::Object_ptr p = v;
-  OPParts::Document_ptr doc_stub = new OPParts::Document_stub;
-  doc_stub->CORBA::Object::operator=( *p );
-  OPParts::Document_ptr doc = doc_stub;
-
   return doc;
 }
 
-OPParts::Document_ptr imr_createDocByMimeType( const char *_mime_type )
+KOffice::Document_ptr imr_createDocByMimeType( const char *_mime_type )
 {
   QListIterator<KoPartEntry> it( *g_plstPartEntries );
   for( ; it.current(); ++it )
@@ -177,5 +217,3 @@ OPParts::Document_ptr imr_createDocByMimeType( const char *_mime_type )
 
   return 0L;
 }
-
-

@@ -9,7 +9,7 @@
 #include <komlMime.h>
 #include <komlStreamFeed.h>
 
-#include <kurl.h>
+#include <k2url.h>
 #include <klocale.h>
 #include <kapp.h>
 
@@ -39,14 +39,14 @@ KoDocumentChildPicture::~KoDocumentChildPicture()
  *
  **********************************************************/
 
-KoDocumentChild::KoDocumentChild( const QRect& _rect, OPParts::Document_ptr _doc )
+KoDocumentChild::KoDocumentChild( const QRect& _rect, KOffice::Document_ptr _doc )
 {
-  m_rDoc = OPParts::Document::_duplicate( _doc );
+  m_rDoc = KOffice::Document::_duplicate( _doc );
   CORBA::String_var m = m_rDoc->mimeType();
-  m_strMimeType = m;
+  m_strMimeType = m.in();
   m_geometry = _rect;
   m_pPicture = 0L;
-  m_bHasPrintingExtension = 0L;
+  m_bHasPrintingExtension = false;
 }
 
 KoDocumentChild::KoDocumentChild()
@@ -63,20 +63,24 @@ void KoDocumentChild::setGeometry( const QRect& _rect )
   }
 }
 
-OPParts::View_ptr KoDocumentChild::createView( OPParts::PartShell_ptr _shell )
+KOffice::View_ptr KoDocumentChild::createView( KOffice::MainWindow_ptr _main )
 {
-  OPParts::View_var v;
+  KOffice::View_var v;
 
   try
   { 
-    v = m_rDoc->createView();
+    // We make an upcast here. This will ALWAYS succeed
+    OpenParts::View_var d = m_rDoc->createView();
+    if ( CORBA::is_nil( d ) )
+      return 0L;
+    v = KOffice::View::_narrow( d );
     if( CORBA::is_nil( v ) )
     {
       cerr << "Shit! We did not get a view!!!" << endl;
       exit(1);
     }
   }
-  catch ( OPParts::Document::MultipleViewsNotSupported &_ex )
+  catch ( OpenParts::Document::MultipleViewsNotSupported &_ex )
   {
     // HACK
     cerr << "void KSpreadView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )" << endl;
@@ -91,10 +95,10 @@ OPParts::View_ptr KoDocumentChild::createView( OPParts::PartShell_ptr _shell )
     return 0L;
   }
 
-  v->setMode( OPParts::Part::ChildMode );
-  v->setPartShell( _shell );
+  v->setMode( KOffice::View::ChildMode );
+  v->setMainWindow( _main );
 
-  return OPParts::View::_duplicate( v );
+  return KOffice::View::_duplicate( v );
 } 
 
 bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
@@ -102,24 +106,24 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end(); it++ )
   {
-    if ( (*it).m_strName == "src" )
+    if ( (*it).m_strName == "url" )
     {
-      m_strSource = (*it).m_strValue;
+      m_strURL = (*it).m_strValue.c_str();
     }
     else if ( (*it).m_strName == "mime" )
     {
-      m_strMimeType = (*it).m_strValue;
+      m_strMimeType = (*it).m_strValue.c_str();
     }
     else
       cerr << "Unknown attrib 'OBJECT:" << (*it).m_strName << "'" << endl;
   }
 
-  if ( m_strSource.empty() )
+  if ( m_strURL.isEmpty() )
   {
-    cerr << "Empty src attribute in OBJECT" << endl;
+    cerr << "Empty 'id' attribute in OBJECT" << endl;
     return false;
   }
-  else if ( m_strMimeType.empty() )
+  else if ( m_strMimeType.isEmpty() )
   {
     cerr << "Empty mime attribute in OBJECT" << endl;
     return false;
@@ -160,91 +164,51 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
   return true;
 }
 
-bool KoDocumentChild::loadDocument( OPParts::MimeMultipartDict_ptr _dict )
+bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_format )
 {
-  assert( !m_strSource.empty() );
+  assert( !m_strURL.isEmpty() );
 
-  cout << "Trying to load " << m_strSource << endl;
-  KURL u( m_strSource.c_str() );
-  if ( strcmp( u.protocol(), "mime" ) != 0 )
+  cout << "Trying to load " << m_strURL << endl;
+  K2URL u( m_strURL.data() );
+  if ( strcmp( u.protocol(), "store" ) != 0 )
   {
-    if ( !loadDocument() )
+    m_rDoc = imr_createDocByMimeType( m_strMimeType );
+    if ( CORBA::is_nil( m_rDoc ) )
     {
-      cerr << "Could not load " << m_strSource << endl;
+      cerr << "ERROR: Could not create child document" << endl;
       return false;
     }
-  }
-  else
-  {
-    OPParts::MimeMultipartEntity_var e = _dict->find( m_strSource.c_str() );
-    if ( CORBA::is_nil( e ) )
-    {
-      cerr << "Could not find id '" << m_strSource << "'" << endl;
-      return false;
-    }
-    cerr << "Trying embedded" << endl;
-    if ( !loadDocumentAsMimePart( _dict, e ) )
-    {
-      cerr << "Could not load embedded " << m_strSource << endl;
-      return false;
-    }
+    return m_rDoc->loadFromURL( m_strURL, _format );
   }
 
-  return true;
-}
- 
-bool KoDocumentChild::loadDocument()
-{
-  m_rDoc = imr_createDocByMimeType( m_strMimeType.c_str() );
-  if ( CORBA::is_nil( m_rDoc ) )
-  {
-    cerr << "ERROR: Could not create child document" << endl;
-    return false;
-  }
-  m_rDoc->open( m_strSource.c_str() );
-  
-  return true;
-}
-
-bool KoDocumentChild::loadDocumentAsMimePart( OPParts::MimeMultipartDict_ptr _dict, OPParts::MimeMultipartEntity_ptr _e )
-{
-  cerr << "bool KoDocumentChild::loadDocumentAsMimePart( OPParts::MimeMultipartDict_ptr _dict, OPParts::MimeMultipartEntity_ptr _e )" << endl;
-  
-  cerr << "mime =\"" << m_strMimeType << endl;
-  
-  m_rDoc = imr_createDocByMimeType( m_strMimeType.c_str() );
-  cerr << "Created Document" << endl;
+  m_rDoc = imr_createDocByMimeType( m_strMimeType );
   if ( CORBA::is_nil( m_rDoc ) )
   {
     cerr << "ERROR: Could not create child document with mime type " << m_strMimeType << endl;
     return false;
   }
-  cerr << "1" << endl;
-  CORBA::String_var id = _e->id();
-  cerr << "2" << endl;
-  m_rDoc->openMimePart( _dict, id );
-  cerr << "3" << endl;
-  return true;
-}
 
+  return m_rDoc->loadFromStore( _store, m_strURL );
+}
+ 
 bool KoDocumentChild::save( ostream& out )
 {
-  CORBA::String_var n = m_rDoc->id();
+  CORBA::String_var u = m_rDoc->url();
   CORBA::String_var mime = m_rDoc->mimeType();
   
-  out << indent << "<OBJECT src=\"" << n << "\" mime=\"" << mime << "\">" << m_geometry << "</OBJECT>" << endl;
+  out << indent << "<OBJECT url=\"" << u << "\" mime=\"" << mime << "\">" << m_geometry << "</OBJECT>" << endl;
 
   return true;
 }
 
 bool KoDocumentChild::isStoredExtern()
 {
-  CORBA::String_var n = m_rDoc->id();
-  string s = static_cast<const char*>(n);
+  CORBA::String_var url = m_rDoc->url();
+  string s = url.in();
   if ( s.empty() )
     return false;
-  KURL u( s.c_str() );
-  if ( strcmp( u.protocol(), "mime" ) == 0 )
+  K2URL u( s.c_str() );
+  if ( strcmp( u.protocol(), "store" ) == 0 )
     return false;
 
   return true;
@@ -281,7 +245,8 @@ QPicture* KoDocumentChild::draw( bool _force )
     return m_pPicture;
   }
 
-  OPParts::Print_var print = OPParts::Print::_narrow( m_rDoc );
+  // HACK: TODO: Use KOM here!!
+  KOffice::Print_var print = KOffice::Print::_narrow( m_rDoc );
   if ( CORBA::is_nil( print ) )
   {
     if ( !_force )
@@ -362,9 +327,90 @@ KoDocumentChild::~KoDocumentChild()
  *
  **********************************************************/
 
-CORBA::Boolean KoDocument::saveAs( const char *_url, const char *)
+KoDocument::KoDocument()
 {
-  KURL u( _url );
+}
+
+void KoDocument::cleanUp()
+{
+  if ( m_bIsClean )
+    return;
+  
+  m_lstAllChildren.clear();
+  
+  OPDocumentIf::cleanUp();
+}
+
+void KoDocument::makeChildList( KOffice::Document_ptr _root, const char *_url )
+{
+  bool is_embedded = true;
+  // Is this document stored extern ?
+  if ( !m_strURL.isEmpty() )
+  {
+    K2URL u( m_strURL );
+    // Do we already use the "store" protocol ?
+    if ( !u.isMalformed() && strcmp( u.protocol(), "store" ) != 0L )
+      // No "store" protocol, so we are saved externally
+      is_embedded = false;
+  }
+  
+  // If not stored extern, we want to embed it and take the suggested name.
+  if ( is_embedded )
+    setURL( _url );
+
+  // Tell our parent about us and our decision regarding the URL
+  _root->addToChildList( this, _url );
+  // Proceed with our children
+  makeChildListIntern( _root, _url );
+}
+
+void KoDocument::makeChildListIntern( KOffice::Document_ptr /* root */, const char * /* _id */)
+{
+  // Lets assume that we do not have children
+  cerr << "void Document_impl::makeChildListIntern( OPParts::Document_ptr _root, const char *_id )" << endl;
+  cerr << "Not implemented ( not really an error )" << endl;
+}
+
+void KoDocument::makeChildListIntern()
+{
+  m_lstAllChildren.clear();
+  
+  makeChildListIntern( this, "store:" );
+}
+
+void KoDocument::addToChildList( KOffice::Document_ptr _child, const char *_url )
+{
+  m_lstAllChildren.push_back( KoDocument::SimpleDocumentChild( _child, _url ) );
+}
+
+bool KoDocument::saveChildren( KOStore::Store_ptr _store )
+{
+  list<KoDocument::SimpleDocumentChild>::iterator it;
+  for( it = m_lstAllChildren.begin(); it != m_lstAllChildren.end(); ++it )
+  {
+    cerr << "Saving child " << it->url() << endl;
+    
+    K2URL u( it->url() );
+    // Do we have to save this child embedded ?
+    if ( strcmp( u.protocol(), "store" ) != 0 )
+      continue;
+    
+    // Save it as child in the document store
+    KOffice::Document_var doc = it->document();
+    if ( !doc->saveToStore( _store, 0L ) )
+      return false;
+
+    cerr << "Saved child " << it->url() << endl;
+  }
+
+  m_lstAllChildren.clear();
+
+  return true;
+}
+
+CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
+{
+  K2URL u( _url );
   if ( u.isMalformed() )
   {
     cerr << "malformed URL" << endl;
@@ -373,101 +419,110 @@ CORBA::Boolean KoDocument::saveAs( const char *_url, const char *)
   
   if ( !u.isLocalFile() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), i18n( "Can not save to remote URL\n" ), i18n( "OK" ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), i18n( "Can not save to remote URL\n" ), i18n( "Ok" ) );
     return false;
-  }
-
-  ofstream out( u.path() );
-  if ( !out )
-  {
-    string tmp = i18n("Could not write to\n" );
-    tmp += u.path();
-    cerr << tmp << endl;
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp.c_str(), i18n( "OK" ) );
-    return false;
-  }
-
-  string boundary = createBoundary();
-
-  if ( hasToWriteMultipart() )
-  {
-    CORBA::String_var mime = mimeType();
-    writeMagic( out, mime );
-    writeMimeHeader( out, boundary.c_str() );
-    
-    out << "Das sollte jetzt das dict sein!" << endl;
-    out << "--" << boundary << endl;
-    
-    writeBodyHeader( out, mime, 0L, "mime:/", 0L, copyright() );
-    makeChildListIntern();
   }
   
-  if ( !save( out ) )
-    return false;
-
   if ( hasToWriteMultipart() )
   {
-    out << "--" << boundary << endl;
-    
-    out.close();
+    cerr << "Saving to store" << endl;
+
+    CORBA::String_var mime = mimeType();
+    KoStore store( u.path(), KOStore::Write );
+    // TODO: Check for error
+
+    makeChildListIntern();
+   
+    store.open( "root", mime.in() ); 
+    {
+      ostorestream out( &store );
+      if ( !save( out, _format ) )
+      {
+	store.close();  
+	return false;
+      }
+      out.flush();
+    }
+    store.close();
+
+    cerr << "Saving children" << endl;
     
     // Lets write all direct and indirect children
-    if ( !saveChildren( u.path(), boundary.c_str() ) )
+    if ( !saveChildren( &store ) )
+      return false;
+
+    if ( !completeSaving( &store ) )
       return false;
     
-    // Write the comment. This is a trick, since we need
-    // "--[boundary]--" at the end
-    ofstream o2( u.path(), ios::app | ios::out );
-    writeBodyHeader( o2, "text/plain", 0L, "mime:/Comment", 0L, 0L );
-    o2 << comment() << endl;
-    o2 << "--" << boundary << "--" << endl;
+    cerr << "Saving done" << endl;
+  }
+  else
+  {    
+    ofstream out( u.path() );
+    if ( !out )
+    {
+      string tmp = i18n("Could not write to\n" );
+      tmp += u.path();
+      cerr << tmp << endl;
+      QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp.c_str(), i18n( "Ok" ) );
+      return false;
+    }
+    
+    if ( !save( out, _format ) )
+
+      return false;
+    // Lets write all direct and indirect children
+    if ( !saveChildren( 0L ) )
+      return false;
+
+    if ( !completeSaving( 0L ) )
+      return false;
   }
 
   return true;
 }
 
-CORBA::Boolean KoDocument::saveAsMimePart( const char *_url, const char *, const char *_boundary )
+CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_format )
 {
-  KURL u( _url );
-  if ( u.isMalformed() )
-  {
-    cerr << "malformed URL" << endl;
-    return false;
-  }
+  cerr << "Saving document to store" << endl;
   
-  if ( !u.isLocalFile() )
-  {
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), i18n( "Can not save to remote URL\n" ), i18n( "OK" ) );
-    return false;
-  }
+  CORBA::String_var mime = mimeType();
+  CORBA::String_var u = url();
 
-  ofstream out( u.path(), ios::out | ios::app );
-  if ( !out )
+  // TODO: Check for error
+  /* if ( !out )
   {
     QString tmp;
     tmp.sprintf( i18n("Could not write to\n%s" ), u.path() );
     cerr << tmp << endl;
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "OK" ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "Ok" ) );
     return false;
+  } */
+ 
+  _store->open( u, mime );
+  {
+    ostorestream out( _store );
+    if ( !save( out, _format ) )
+      return false;
+    out.flush();
   }
+  _store->close();
 
-  CORBA::String_var mime = mimeType();
-  CORBA::String_var i = id();
-  writeBodyHeader( out, mime, 0L, i, 0L, copyright() );
-
-  if ( !save( out ) )
+  // Lets write all direct and indirect children
+  if ( !saveChildren( _store ) )
     return false;
 
-  out << "--" << _boundary << endl;
-
-  out.close();
+  if ( !completeSaving( _store ) )
+    return false;
   
+  cerr << "Saved document to store" << endl;
+
   return true;
 }
 
-CORBA::Boolean KoDocument::open( const char *_url )
+CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char *_format )
 {
-  KURL u( _url );
+  K2URL u( _url );
   if ( u.isMalformed() )
   {
     cerr << "Malformed URL " << _url << endl;
@@ -487,229 +542,105 @@ CORBA::Boolean KoDocument::open( const char *_url )
     return false;
   }
 
-  // Find out about the expected mime type
-  CORBA::String_var mime = mimeType();  
+  // Try to find out wether it is a mime multi part file
+  char buf[5];
+  in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
+  in.unget(); in.unget(); in.unget(); in.unget();
+  
+  cout << "PATTERN=" << buf << endl;
+  
+  // Is it a koffice store ?
+  if ( strncasecmp( buf, "KS01", 4 ) == 0 )
+  {
+    in.close();
 
+    KoStore store( u.path(), KOStore::Read );
+    // TODO: Check for errors
+    store.open( "root", 0L );
+    {
+      istorestream in( &store );
+      if ( !load( in, &store ) )
+	return false;
+    }
+    store.close();
+
+    if ( !loadChildren( &store ) )
+    {	  
+      cerr << "ERROR: Could not load children" << endl;
+      return false;
+    }
+
+    return completeLoading( 0L );
+  }
+  // Standalone XML or some binary data
+  else 
+  {    
+    bool res = load( in, 0L );
+    in.close();
+    if ( !res )
+      return false;
+    
+    return completeLoading( 0L );
+  }
+}
+
+CORBA::Boolean KoDocument::loadFromStore( KOStore::Store_ptr _store, const char *_url )
+{
+  // TODO: Check for error
+  _store->open( _url, 0L );
+  {
+    istorestream in( _store );
+    load( in, _store );
+  }
+  _store->close();
+  setURL( _url );
+
+  if ( !loadChildren( _store ) )
+  {	  
+    cerr << "ERROR: Could not load children" << endl;
+    return false;
+  }
+
+  return completeLoading( _store );
+}
+
+bool KoDocument::load( istream& in, KOStore::Store_ptr _store )
+{
   // Try to find out wether it is a mime multi part file
   char buf[5];
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();
 
-  cout << "PATTERN=" << buf << endl;
-  
-  // Standalone XML or some binary data ?  
-  if ( strncasecmp( buf, "MIME", 4 ) != 0 &&
-       strncasecmp( buf, "Magi", 4 ) != 0 )
-  {
-#if not_more
-  /*
-   * I've removed this code in order to use my own XML parser in 
-   * my document class. But it shouldn't break the other implementations
-   * because koDocument::load (istream&, bool) does (nearly) the same.
-   * (kus)
-   */
-    // Load XML ?
-    if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
-    {
-      KOMLStreamFeed feed( in );
-      KOMLParser parser( &feed );
-  
-      if ( !load( parser ) )
-	return false;
-    }
-    // Load binary data
-    else
-#endif
-      if ( !load( in, true ) )
-	return false;
-    
-    cout << "!!!!!!!!!!!!!!!!!!!! CHILDREN !!!!!!!!!!!!!!!!!!!!" << endl;
-    
-    OPParts::MimeMultipartDict_var dict = new KOMLDict;
-    
-    if ( !loadChildren( dict ) )
-    {	  
-      cerr << "ERROR: Could not load children" << endl;
-      return false;
-    }
-    
-    return true;
-  }
-  // Mime Multipart ?
-  else 
-  {
-    string magic;
-    getline( in, magic );
-    string pattern = "Magic-Line: ";
-    pattern += mime;
-
-    if ( strncasecmp( magic.c_str(), "MIME-Version: 1.0", 17 ) != 0 &&
-	 strncasecmp( magic.c_str(), pattern.c_str(), pattern.length() ) != 0 )
-    {
-      cerr << "Unknown document format" << endl;
-      return false;
-    }
-  }
-  
-  // Read Mime-Header
-  KOMLHeaderParser hp( in );
-  if ( !hp.parse() )
-  {
-    cerr << "Parse Error in MimeType Header" << endl;
-    return false;
-  }
-  cout << "Type=" << hp.mimeType() << endl;
-  cout << "Boundary=" << hp.boundary() << endl;
-  cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
-  
-  // HACK
-  // Skip the dict right now
-  KOMLBodyIStream d( in, hp.boundary() );
-  pump p( d, cout );
-  p.run();
-  
-  cout << "!!!!!!!!!!!!!!!!!!!!! DICT !!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-  
-  // Read in the dict of all bodies
-  int pos = in.tellg();
-  OPParts::MimeMultipartDict_var dict = new KOMLDict( in, u.path(), hp.boundary() );
-  in.seekg( pos );
-  
-  cout << "!!!!!!!!!!!!!!!!!!!!! PARSE !!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-  
-  // HACK
-  // Assume the root doc follows as next part
-  KOMLHeaderParser h( in );
-  if ( !h.parse() )
-  {
-    cerr << "Parse Error in Body Part" << endl;
-    return false;
-  }
-  cout << "Type=" << h.mimeType() << endl;
-  cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
-  if ( strcasecmp( h.mimeType(), mime.operator const char*() ) != 0L )
-  {
-    cerr << "Unknown MimeType " << h.mimeType() << endl;
-    cerr << "Not supported" << endl;
-    return false;
-  }
-  
-  KOMLBodyIStream bs( in, hp.boundary() );
-
-  bs.get( buf[0] ); bs.get( buf[1] ); bs.get( buf[2] ); bs.get( buf[3] ); buf[4] = 0;
-  bs.unget(); bs.unget(); bs.unget(); bs.unget();
+  cerr << "PATTERN2=" << buf << endl;
   
   // Load XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
   {
-    KOMLStreamFeed feed( bs );
+    KOMLStreamFeed feed( in );
     KOMLParser parser( &feed );
-  
-    if ( !load( parser ) )
+    
+    if ( !loadXML( parser, _store ) )
       return false;
   }
   // Load binary data
   else
-    if ( !load( bs, false ) )
+  {    
+    if ( !loadBinary( in, false, _store ) )
       return false;
-  
-  cout << "!!!!!!!!!!!!!!!!!!!! CHILDREN !!!!!!!!!!!!!!!!!!!!" << endl;
-  
-  if ( !loadChildren( dict ) )
-  {
-    cerr << "ERROR: Could not load children" << endl;
-    return false;
   }
-
+    
   return true;
 }
 
-CORBA::Boolean KoDocument::openMimePart( OPParts::MimeMultipartDict_ptr _dict, const char *_id )
+void KoDocument::setURL( const char *_url )
 {
-  CORBA::String_var mime = mimeType();
-
-  OPParts::MimeMultipartEntity_var e = _dict->find( _id );
-  if ( CORBA::is_nil( e ) )
-  {
-    cerr << "Unknown ID " << _id << endl;
-    return false;
-  }
-  
-  CORBA::String_var filename = _dict->filename();
-
-  ifstream in( filename );
-  if ( !in )
-  {
-    cerr << "Could not open" << filename << endl;
-    return false;
-  }
-
-  CORBA::String_var bound = _dict->boundary();
-  CORBA::Long start = e->start();
-
-  in.seekg( start );
-
-  // HACK
-  // Assume the root doc follows as next part
-  KOMLHeaderParser h( in );
-  if ( !h.parse() )
-  {
-    cerr << "Parse Error in Body Part" << endl;
-    return false;
-  }
-  cout << "Type=" << h.mimeType() << endl;
-  cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
-  if ( strcasecmp( h.mimeType(), mime.operator const char*() ) != 0L )
-  {
-    cerr << "Unknown MimeType " << h.mimeType() << endl;
-    cerr << "Not supported" << endl;
-    return false;
-  }
-
-  KOMLBodyIStream bs( in, bound );
-
-  char buf[5];
-  bs.get( buf[0] ); bs.get( buf[1] ); bs.get( buf[2] ); bs.get( buf[3] ); buf[4] = 0;
-  bs.unget(); bs.unget(); bs.unget(); bs.unget();
-  
-#if not_more
-  /*
-   * I've removed this code in order to use my own XML parser in 
-   * my document class. But it shouldn't break the other implementations
-   * because koDocument::load (istream&, bool) does (nearly) the same.
-   * (kus)
-   */
-  // Load XML ?
-  if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
-  {
-    KOMLStreamFeed feed( bs );
-    KOMLParser parser( &feed );
-  
-    if ( !load( parser ) )
-      return false;
-  }
-  // Load binary data
-  else
-#endif
-    if ( !load( bs, false ) )
-      return false;
-  
-  if ( !loadChildren( _dict ) )
-  {
-    cerr << "ERROR: Could not load children" << endl;
-    return false;
-  }
-  
-  return true;
+  m_strURL = _url;
 }
 
-bool KoDocument::load( istream &in, bool )
+char* KoDocument::url()
 {
-  KOMLStreamFeed feed( in );
-  KOMLParser parser( &feed );
+  if ( m_strURL.isEmpty() )
+    return CORBA::string_dup( "" );
   
-  if ( !load( parser ) )
-    return false;
-
-  return true;
+  return CORBA::string_dup( m_strURL );
 }

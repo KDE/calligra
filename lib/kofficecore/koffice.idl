@@ -1,0 +1,103 @@
+#ifndef __koffice_idl__
+#define __koffice_idl__
+
+#include <openparts.idl>
+#include <koStore.idl>
+
+module KOffice
+{
+	interface Document : OpenParts::Document
+	{
+		void setURL( in string url );
+		string url();
+
+		string mimeType();
+
+		boolean loadFromURL( in string url, in string format );
+		boolean saveToURL( in string url, in string format );
+
+		/**
+		 * This function must load all children, too, in contrast to
+		 * @ref #saveAsMimePart.
+		 */
+		boolean loadFromStore( in KOStore::Store store, in string id );
+
+		/**
+		 * This function does NOT save the children. This would lead
+		 * to children being saved multiple times if they appear as child of different parents.
+		 * For example one image may appear in many places in the document, but it
+		 * should be saved only once.
+		 */
+		boolean saveToStore( in KOStore::Store store, in string format );
+		
+		/**
+		 * After creating a document you must either use one of the load functions
+		 * or you must initialize the docuemnt using this function. Do NEVER
+		 * call this function afterwards and no NEVER call it after you used some of the load functions.
+		 * If the function returns false, you have to destroy the document. It can not be reused.
+		 */
+		boolean init();
+
+		boolean isModified();
+
+		/**
+		 * HACK: Does not prevent duplicate children. If one document
+		 * is subdocument of two different documents, then it will be
+		 * registered twice and saved twice :-(
+		 */
+		void makeChildList( in KOffice::Document root, in string name );
+		void addToChildList( in KOffice::Document child, in string name );
+	};
+
+	/**
+	 * An enhancement for the @ref Document class.
+	 */
+	interface Print
+	{
+		string encodedMetaFile( in long width, in long height );
+	};
+
+	interface View : OpenParts::View
+	{
+		boolean isMarked();
+		void setMarked( in boolean marked );
+
+		enum Mode { ChildMode, RootMode };
+		/**
+		 * Internal Function. Do not call.
+		 * This function is called by @ref MainWindow if
+		 * this part is the root part of the window or
+		 * embedded as child.
+		 */
+		void setMode( in Mode mode );
+		Mode mode();
+
+		unsigned long leftGUISize();
+		unsigned long rightGUISize();
+		unsigned long topGUISize();
+		unsigned long bottomGUISize();
+
+		boolean printDlg();
+	};
+
+	interface DocumentFactory
+	{
+		KOffice::Document create();
+	};
+
+	interface Frame : KOM::Base
+	{
+		View view();
+		slot void viewChangedState( in boolean is_marked, in boolean has_focus );
+	};
+
+	interface MainWindow : OpenParts::MainWindow
+	{
+		void setMarkedPart( in OpenParts::Id id );
+		
+		Document document();
+		View view();
+	};
+};
+
+#endif

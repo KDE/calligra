@@ -24,7 +24,7 @@
 #include <qstrlist.h>
 #include <qlist.h>
 
-#include <op_app.h>
+#include <opApplication.h>
 
 class KoPartEntry
 {

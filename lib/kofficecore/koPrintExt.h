@@ -1,12 +1,12 @@
 #ifndef __ko_print_ext_h__
 #define __ko_print_ext_h__
 
-#include "parts.h"
+#include "koffice.h"
 
 #include <qpicture.h>
 #include <qpainter.h>
 
-class KoPrintExt : virtual public OPParts::Print_skel
+class KoPrintExt : virtual public KOffice::Print_skel
 {
 public:
   // C++
@@ -24,7 +24,7 @@ protected:
    * Your document class must derive from this class in addition.
    * Dont forget to call 
    * <pre>
-   * ADD_INTERFACE( "IDL:OPParts/Print:1.0" );
+   * ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
    * </pre>
    * in the constructor of your document to register the new interface.
    * Lets have an example taken from KImage:

@@ -70,12 +70,12 @@ KDE_LDFLAGS = -L/opt/kde/lib
 KDE_RPATH = -rpath $(kde_libraries) -rpath $(x_libraries)
 KOFFICE_INCLUDES = -I /home/weis/kde/koffice2/lib/kofficeui -I /home/weis/kde/koffice2/lib/kofficecore -I /home/weis/kde/koffice2/lib/koml
 KOFFICE_LIBS = /home/weis/kde/koffice2/lib/kofficeui/libkofficeui.la /home/weis/kde/koffice2/lib/kofficecore/libkofficecore.la /home/weis/kde/koffice2/lib/koml/libkoml.la
-LD = /usr/local/lib/gcc-lib/i686-pc-linux-gnulibc1/egcs-2.90.27/ld
+LD = /usr/bin/ld
 LIBCOMPAT = 
 LIBCRYPT = 
 LIBDL = -ldl
-LIBJPEG = @LIBJPEG@
-LIBMICO = -lmico2.0.7 -ldl
+LIBJPEG = -ljpeg
+LIBMICO = -lmico2.2.1 -ldl
 LIBOBJS = @LIBOBJS@
 LIBPTHREAD = -lpthread
 LIBPYTHON = -lpython1.5
@@ -107,8 +107,8 @@ XPMLIB = @XPMLIB@
 X_EXTRA_LIBS = 
 X_INCLUDES = -I/usr/X11R6/include
 X_LDFLAGS = -L/usr/X11R6/lib
-all_includes = -I/opt/kde/include -I/usr/lib/qt/include -I/usr/X11R6/include
-all_libraries = -L/opt/kde/lib -L/usr/X11R6/lib
+all_includes = -I/opt/kde/include -I/usr/lib/qt/include 
+all_libraries = -L/opt/kde/lib  -L/usr/X11R6/lib
 idldir = $(includedir)/idl
 install_root = 
 kde_appsdir = /opt/kde/share/applnk
@@ -132,7 +132,7 @@ qt_libraries =
 x_includes = /usr/X11R6/include
 x_libraries = /usr/X11R6/lib
 
-INCLUDES= -I../koml -I$(idldir) $(all_includes) $(MICO_INCLUDES)
+INCLUDES= -I../koml -I../store -I$(idldir) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
 LIBADD  = -lkom -lkfile -lkdeui -lkdecore -lqt -lkdecore \
 	$(LIBMICO) -lXext -lX11
@@ -140,8 +140,14 @@ LIBADD  = -lkom -lkfile -lkdeui -lkdecore -lqt -lkdecore \
 ####### Files
 
 lib_LTLIBRARIES = libkofficecore.la
-libkofficecore_la_SOURCES = koIMR.cc koScanParts.cc koStream.cc koDocument.cc koPrintExt.cc
-include_HEADERS = koIMR.h koScanParts.h koStream.h koDocument.h koPrintExt.h
+BUILT_SOURCES =  moc_koFrame.cc moc_koMainWindow.cc
+libkofficecore_la_SOURCES = koffice.cc koView.cc koFrame.cc koIMR.cc koScanParts.cc koStream.cc \
+			    koMediator.cc koDocument.cc koPrintExt.cc koMainWindow.cc $(BUILT_SOURCES)
+include_HEADERS = koffice.h koView.h koFrame.h koIMR.h koScanParts.h koStream.h koDocument.h koPrintExt.h koFactory.h \
+		  koMainWindow.h koMediator.h
+
+idl_DATA = koffice.idl
+idl_HEADERS =  koffice.h
 
 SUFFICES = .h .moc
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -155,13 +161,16 @@ CPPFLAGS =
 LIBS = 
 libkofficecore_la_LDFLAGS = 
 libkofficecore_la_LIBADD = 
-libkofficecore_la_OBJECTS =  koIMR.lo koScanParts.lo koStream.lo \
-koDocument.lo koPrintExt.lo
-CXXFLAGS = -O2 -Wall
+libkofficecore_la_OBJECTS =  koffice.lo koView.lo koFrame.lo koIMR.lo \
+koScanParts.lo koStream.lo koMediator.lo koDocument.lo koPrintExt.lo \
+koMainWindow.lo moc_koFrame.lo moc_koMainWindow.lo
+CXXFLAGS = -g -Wall
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 CXXLINK = $(LIBTOOL) --mode=link $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@
-HEADERS =  $(include_HEADERS)
+DATA =  $(idl_DATA)
+
+HEADERS =  $(idl_HEADERS) $(include_HEADERS)
 
 DIST_COMMON =  Makefile.am Makefile.in
 
@@ -170,8 +179,10 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP = --best
-DEP_FILES =  .deps/koDocument.P .deps/koIMR.P .deps/koPrintExt.P \
-.deps/koScanParts.P .deps/koStream.P
+DEP_FILES =  .deps/koDocument.P .deps/koFrame.P .deps/koIMR.P \
+.deps/koMainWindow.P .deps/koMediator.P .deps/koPrintExt.P \
+.deps/koScanParts.P .deps/koStream.P .deps/koView.P .deps/koffice.P \
+.deps/moc_koFrame.P .deps/moc_koMainWindow.P
 CXXMKDEP = $(CXX) -M $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 SOURCES = $(libkofficecore_la_SOURCES)
 OBJECTS = $(libkofficecore_la_OBJECTS)
@@ -245,6 +256,39 @@ libkofficecore.la: $(libkofficecore_la_OBJECTS) $(libkofficecore_la_DEPENDENCIES
 	$(CXXCOMPILE) -c $<
 .cc.lo:
 	$(LTCXXCOMPILE) -c $<
+
+install-idlDATA: $(idl_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(idldir)
+	@list='$(idl_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(idldir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(idldir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(idldir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(idldir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-idlDATA:
+	$(NORMAL_UNINSTALL)
+	list='$(idl_DATA)'; for p in $$list; do \
+	  rm -f $(idldir)/$$p; \
+	done
+
+install-idlHEADERS: $(idl_HEADERS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(idldir)
+	@list='$(idl_HEADERS)'; for p in $$list; do \
+	  echo " $(INSTALL_DATA) $(srcdir)/$$p $(idldir)/$$p"; \
+	  $(INSTALL_DATA) $(srcdir)/$$p $(idldir)/$$p; \
+	done
+
+uninstall-idlHEADERS:
+	$(NORMAL_UNINSTALL)
+	list='$(idl_HEADERS)'; for p in $$list; do \
+	  rm -f $(idldir)/$$p; \
+	done
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
@@ -336,20 +380,20 @@ installcheck:
 install-exec: install-libLTLIBRARIES
 	@$(NORMAL_INSTALL)
 
-install-data: install-includeHEADERS
+install-data: install-idlDATA install-idlHEADERS install-includeHEADERS
 	@$(NORMAL_INSTALL)
 
 install: install-exec install-data all
 	@:
 
-uninstall: uninstall-libLTLIBRARIES uninstall-includeHEADERS
+uninstall: uninstall-libLTLIBRARIES uninstall-idlDATA uninstall-idlHEADERS uninstall-includeHEADERS
 
-all: Makefile $(LTLIBRARIES) $(HEADERS)
+all: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 
 install-strip:
 	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
 installdirs:
-	$(mkinstalldirs)  $(libdir) $(includedir)
+	$(mkinstalldirs)  $(libdir) $(idldir) $(idldir) $(includedir)
 
 
 mostlyclean-generic:
@@ -390,7 +434,8 @@ clean-libLTLIBRARIES maintainer-clean-libLTLIBRARIES \
 uninstall-libLTLIBRARIES install-libLTLIBRARIES mostlyclean-compile \
 distclean-compile clean-compile maintainer-clean-compile \
 mostlyclean-libtool distclean-libtool clean-libtool \
-maintainer-clean-libtool uninstall-includeHEADERS \
+maintainer-clean-libtool uninstall-idlDATA install-idlDATA \
+uninstall-idlHEADERS install-idlHEADERS uninstall-includeHEADERS \
 install-includeHEADERS tags mostlyclean-tags distclean-tags clean-tags \
 maintainer-clean-tags distdir mostlyclean-depend distclean-depend \
 clean-depend maintainer-clean-depend info dvi installcheck install-exec \
@@ -402,7 +447,15 @@ mostlyclean distclean maintainer-clean
 .h.moc:
 	$(MOC) $< -o $@      
 
-idl:
+moc_koFrame.cc: koFrame.h
+	$(MOC) koFrame.h -o moc_koFrame.cc
+
+moc_koMainWindow.cc: koMainWindow.h
+	$(MOC) koMainWindow.h -o moc_koMainWindow.cc
+
+koDocument.h: koffice.h
+koffice.h: koffice.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) koffice.idl
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
