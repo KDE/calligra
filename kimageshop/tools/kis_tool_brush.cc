@@ -51,7 +51,7 @@ void BrushTool::mousePress(QMouseEvent *e)
   if(!m_pDoc->current())
     return;
 
-  if(!m_pDoc->current()->getCurrentLayer()->isVisible() )
+  if(!m_pDoc->current()->getCurrentLayer()->visible() )
     return;
 
   m_dragging = true;
@@ -69,6 +69,10 @@ bool BrushTool::paint(QPoint pos)
   KisImage * img = m_pDoc->current();
   if (!img)
 	return false;
+
+  if (!img->colorMode() == cm_RGB
+	  && !img->colorMode() == cm_RGBA)
+	return false;	  
 
   if (!m_pBrush)
     return false;
@@ -91,16 +95,17 @@ bool BrushTool::paint(QPoint pos)
 
   KisLayer *lay = img->getCurrentLayer();
  
-  uint srcPix, dstPix;
-  uchar *sl, *ptr;
+  uchar *sl;
   uchar bv, invbv;
-  uchar r, g, b;
-  uchar srcA, dstA;
+  uchar r, g, b, a;
   int v;
 
   int red = m_pView->fgColor().R();
   int green = m_pView->fgColor().G();
   int blue = m_pView->fgColor().B();
+
+  bool alpha = (img->colorMode() == cm_RGBA);
+
 
   for (int y = sy; y <= ey; y++)
     {
@@ -108,36 +113,35 @@ bool BrushTool::paint(QPoint pos)
 
       for (int x = sx; x <= ex; x++)
 	{
-	  srcPix = lay->getPixel(startx + x, starty + y);
-
+	  r = lay->pixel(0, startx + x, starty + y);
+	  g = lay->pixel(1, startx + x, starty + y);
+	  b = lay->pixel(2, startx + x, starty + y);
+	  
 	  bv = *(sl + x);
 	  if (bv == 0) continue;
 
 	  invbv = 255 - bv;
 
-	  ptr = (uchar*)&srcPix;
-	  b = *ptr++;
-	  g = *ptr++;
-	  r = *ptr++;
+	  b = ((blue * bv) + (b * invbv))/255;
+	  g = ((green * bv) + (g * invbv))/255;
+	  r = ((red * bv) + (r * invbv))/255;
 
-	  ptr = (uchar*)&dstPix;
-	  *ptr++ = ((blue * bv) + (b * invbv))/255;
-	  *ptr++ = ((green * bv) + (g * invbv))/255;
-	  *ptr++ = ((red * bv) + (r * invbv))/255;
+	  lay->setPixel(0, startx + x, starty + y, r);
+	  lay->setPixel(1, startx + x, starty + y, g);
+	  lay->setPixel(2, startx + x, starty + y, b);
 
-	  lay->setPixel(startx + x, starty + y, dstPix);
-
-	  if (lay->hasAlphaChannel())
+	  if (alpha)
 	    {
-	      srcA = (uchar) lay->getAlpha(startx + x, starty + y);
-	      v = srcA + bv;
+	      a= lay->pixel(3, startx + x, starty + y);
+	      v = a + bv;
 	      if (v < 0 ) v = 0;
 	      if (v > 255 ) v = 255;
-	      dstA = (uchar) v;
+	      a = (uchar) v;
 
-	      lay->setAlpha(startx + x, starty + y, (uint)dstA);
+	      lay->setPixel(3, startx + x, starty + y, a);
 	    }
 	}
+
     }
   return true;
 }
@@ -157,7 +161,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 
   if(m_dragging)
     {
-      if( !img->getCurrentLayer()->isVisible() )
+      if( !img->getCurrentLayer()->visible() )
 	return;
 
       KisVector end(e->x(), e->y());

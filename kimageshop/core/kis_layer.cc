@@ -2,6 +2,7 @@
  *  kis_layer.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
+ *                1999-2000 Matthias Elter <elter@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,59 +22,197 @@
 #include "kis_layer.h"
 #include "kis_global.h"
 
-KisLayer::KisLayer(int ch)
-	: QObject()
+KisLayer::KisLayer(const QString& name, cMode cm)
+  : QObject()
+  , m_name(name)
+  , m_cMode(cm)
 {
-  channels=ch;
-  opacityVal=255;
-  visible=true;
-  linked=false;
+  m_visible = true;
+  m_linked = false;
+
+  calcNumChannels();
   
-  dataChannels=new KisChannelData(ch, KisChannelData::RGB);
-  alphaChannel=new KisChannelData( 1, KisChannelData::ALPHA);
+  // FIXME: Implement non-RGB modes.
+  if (cm == cm_RGB
+	  || cm == cm_RGBA)
+	{
+	  m_ch[0] = new KisChannel(ci_Red);
+	  m_ch[1] = new KisChannel(ci_Green);
+	  m_ch[2] = new KisChannel(ci_Blue);
+
+	  if (cm == cm_RGBA)
+		m_ch[3] = new KisChannel(ci_Alpha);
+	}
 }
 
 KisLayer::~KisLayer()
 {
-  delete dataChannels;
-  delete alphaChannel;
+  for (uchar i = 0; i < m_channels; i++)
+	delete m_ch[i];
 }
 
-void KisLayer::clear(const QColor& c)
+void KisLayer::calcNumChannels()
 {
-  uchar r = static_cast<uchar>(c.red());
-  uchar g = static_cast<uchar>(c.green());
-  uchar b = static_cast<uchar>(c.blue());
+  switch (m_cMode)
+	{
+	case cm_Indexed:
+	case cm_Greyscale:
+	  m_channels = 1;
+	  return;
+	case cm_RGB:
+	case cm_Lab:
+	  m_channels = 3;
+	  return;
+	case cm_RGBA:
+	case cm_CMYK:
+	case cm_LabA:
+	  m_channels = 4;
+	  return;
+	case cm_CMYKA:
+	  m_channels = 5;
+	  return;
+	default:
+	  m_channels = 0;
+	  return;
+	}
+}
+
+QRect KisLayer::tileRect(int tileNo)
+{
+  return(m_ch[0]->tileRect(tileNo));
+}
+
+uchar* KisLayer::channelMem(uchar channel, uint tileNo, int ox, int oy) const
+{
+  return m_ch[channel]->tiles()[tileNo] + (oy * TILE_SIZE + ox);
+}
+
+QRect KisLayer::imageExtents() const
+{
+  return m_ch[0]->imageExtents();
+}
+
+QRect KisLayer::tileExtents() const
+{
+  return m_ch[0]->tileExtents();
+}
+
+QPoint KisLayer::channelOffset() const 
+{
+  return m_ch[0]->offset();
+}
+
+int KisLayer::xTiles() const
+{
+  return m_ch[0]->xTiles();
+}
+
+int KisLayer::yTiles() const
+{
+  return m_ch[0]->yTiles();
+}
+
+void KisLayer::moveBy(int dx, int dy)
+{
+  for (uchar i = 0; i < m_channels; i++)
+	m_ch[i]->moveBy(dx, dy);
+}
+
+void KisLayer::moveTo(int x, int y) const
+{
+  for (uchar i = 0; i < m_channels; i++)
+	m_ch[i]->moveTo(x, y);
+}
+
+int KisLayer::channelLastTileOffsetX() const
+{
+  return m_ch[0]->lastTileOffsetX();
+}
+
+int KisLayer::channelLastTileOffsetY() const
+{
+  return m_ch[0]->lastTileOffsetY();
+}
+
+bool KisLayer::boundryTileX(int tile) const
+{
+  return (((tile % xTiles()) + 1) == xTiles());
+}
+
+bool KisLayer::boundryTileY(int tile) const
+{
+  return (((tile/xTiles()) + 1) == yTiles());
+}
+
+void KisLayer::allocateRect(QRect r)
+{
+  for (uchar i = 0; i < m_channels; i++)
+	m_ch[i]->allocateRect(r);
+}
+
+void KisLayer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
+{
+  pt = pt - m_ch[0]->tileExtents().topLeft();
+  *tileNo = (pt.y() / TILE_SIZE) * xTiles() + pt.x() / TILE_SIZE;
+  *offset = (pt.y() % TILE_SIZE) * TILE_SIZE + pt.x() % TILE_SIZE;
+}
+
+void KisLayer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
+{
+  pt = pt - m_ch[0]->tileExtents().topLeft();
+  *tileNo = (pt.y() / TILE_SIZE) * xTiles() + pt.x() / TILE_SIZE;
+  *y = pt.y() % TILE_SIZE;
+  *x = pt.x() % TILE_SIZE;
+}
+
+void KisLayer::setPixel(uchar channel, uint x, uint y, uchar pixel)
+{
+  m_ch[channel]->setPixel(x,y, pixel);
+}
+
+uchar KisLayer::pixel(uchar channel, uint x, uint y)
+{
+  return m_ch[channel]->pixel(x,y);
+}
+
+void KisLayer::clear(const KisColor& c )
+{
+  if (!m_cMode == cm_RGB
+	  && !m_cMode == cm_RGBA)
+	return;
+
+  uchar r = static_cast<uchar>(c.R());
+  uchar g = static_cast<uchar>(c.G());
+  uchar b = static_cast<uchar>(c.B());
+
+  bool alpha = (m_cMode == cm_RGBA);
 
   for(int y = 0; y < yTiles(); y++)
-    for(int x = 0; x < xTiles(); x++)
+	for(int x = 0; x < xTiles(); x++)
       {
-	// set the alpha channel to opaque
-	memset(channelMem(y * xTiles() + x, 0,0, true),255, TILE_SIZE*TILE_SIZE);
+		// set the alpha channel to opaque
+		if (alpha)
+		  memset(channelMem(3, y * xTiles() + x, 0, 0),255 , TILE_SIZE*TILE_SIZE);
 	
-	uchar* data = channelMem(y * xTiles() + x, 0,0, false);
+		uchar* ptr0 = channelMem(0, y * xTiles() + x, 0, 0);
+		uchar* ptr1 = channelMem(1, y * xTiles() + x, 0, 0);
+		uchar* ptr2 = channelMem(2, y * xTiles() + x, 0, 0);
 	
-	// set data channels to color
-	for(int y = 0; y < TILE_SIZE; y++)
-	  for(int x = 0; x < TILE_SIZE; x++)
-	    {
-	      *(data + 3 * (y*TILE_SIZE+x)) = b;
-	      *(data + 3 * (y*TILE_SIZE+x)+1) = g;
-	      *(data + 3 * (y*TILE_SIZE+x)+2) = r;
-	    }
-	
+		// set data channels to color
+		for(int y = 0; y < TILE_SIZE; y++)
+		  for(int x = 0; x < TILE_SIZE; x++)
+			{
+			  *(ptr0 + (y * TILE_SIZE + x)) = r;
+			  *(ptr1 + (y * TILE_SIZE + x)) = g;
+			  *(ptr2 + (y * TILE_SIZE + x)) = b;
+			}
+		
       }
 }
 
-void KisLayer::setOpacity(uchar o)
+void KisLayer::loadRGBImage(QImage , QImage )
 {
-  opacityVal=o;
-  //	emit layerPropertiesChanged();
-}
-
-
-void KisLayer::loadRGBImage(QImage img, QImage alpha)
-{
+  /*
   qDebug("loadRGBImage img=(%d,%d) alpha=(%d,%d)\n",img.width(),img.height(),
 	 alpha.width(),alpha.height());
   if (img.depth()!=32)
@@ -90,11 +229,13 @@ void KisLayer::loadRGBImage(QImage img, QImage alpha)
 	alphaChannel->setPixel(x,y,255);
   }
   dataChannels->loadViaQImage(img);
+  */
 }
 
 
-void KisLayer::loadGrayImage(QImage img, QImage alpha)
+void KisLayer::loadGrayImage(QImage , QImage )
 {
+  /*
   if (img.depth()!=32)
     img=img.convertDepth(32);
   
@@ -104,176 +245,7 @@ void KisLayer::loadGrayImage(QImage img, QImage alpha)
     alphaChannel->loadViaQImage(alpha);  // ie assume R=B=G as above
   }
   dataChannels->loadViaQImage(img);
+  */
 }
-
-
-void KisLayer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
-{
-  pt=pt-dataChannels->tileExtents().topLeft();
-  *tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
-  *offset=(pt.y()%TILE_SIZE)*TILE_SIZE + pt.x()%TILE_SIZE;
-}
-
-void KisLayer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
-{
-  pt=pt-dataChannels->tileExtents().topLeft();
-  *tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
-  *y=pt.y()%TILE_SIZE;
-  *x=pt.x()%TILE_SIZE;
-}
-
-QRect KisLayer::tileRect(int tileNo)
-{
-  return(dataChannels->tileRect(tileNo));
-}
-
-uchar* KisLayer::channelMem(int tileNo, int ox, int oy, bool alpha) const
-{
-  if (alpha)
-    return alphaChannel->tileBlock()[tileNo]+(oy*TILE_SIZE+ox);
-  
-  return dataChannels->tileBlock()[tileNo]+(oy*TILE_SIZE+ox)*channels;
-}
-
-
-QRect KisLayer::imageExtents() const // Extents of the image in canvas coords
-{
-  return dataChannels->imageExtents();
-}
-
-QRect KisLayer::tileExtents() const// Extents of the image in canvas coords
-{
-  return dataChannels->tileExtents();
-}
-
-// TopLeft of the image in the channel (not always 0,0)
-QPoint KisLayer::channelOffset() const 
-{
-  return dataChannels->offset();
-}
-
-int KisLayer::xTiles() const
-{
-  return dataChannels->xTiles();
-}
-
-int KisLayer::yTiles() const
-{
-  return dataChannels->yTiles();
-}
-
-
-void KisLayer::moveBy(int dx, int dy)
-{
-  alphaChannel->moveBy(dx, dy);	
-  dataChannels->moveBy(dx, dy);	
-}
-
-void KisLayer::moveTo(int x, int y) const
-{
-  alphaChannel->moveTo(x, y);	
-  dataChannels->moveTo(x, y);	
-}
-
-int KisLayer::channelLastTileOffsetX() const
-{
-  return dataChannels->lastTileOffsetX();
-}
-
-int KisLayer::channelLastTileOffsetY() const
-{
-  return dataChannels->lastTileOffsetY();
-}
-
-bool KisLayer::boundryTileX(int tile) const
-{
-  return(((tile % xTiles())+1)==xTiles());
-}
-
-bool KisLayer::boundryTileY(int tile) const
-{
-  return(((tile/xTiles())+1)==yTiles());
-}
-
-void KisLayer::allocateRect(QRect _r)
-{
-  alphaChannel->allocateRect(_r);
-  dataChannels->allocateRect(_r);
-}
-
-void KisLayer::setPixel(int x, int y, uint pixel)
-{
-  dataChannels->setPixel(x,y, pixel);
-}
-
-uint KisLayer::getPixel(int x, int y)
-{
-  return dataChannels->getPixel(x,y);
-}
-
-void KisLayer::setAlpha(int x, int y, uint pixel)
-{
-  alphaChannel->setPixel(x,y, pixel);
-}
-
-uint KisLayer::getAlpha(int x, int y)
-{
-  return alphaChannel->getPixel(x,y);
-}
-
-void KisLayer::rotate180()
-{
-  alphaChannel->rotate180();
-  dataChannels->rotate180();
-}
-
-void KisLayer::rotateLeft90()
-{
-  alphaChannel->rotateLeft90();
-  dataChannels->rotateLeft90();
-}
-
-void KisLayer::rotateRight90()
-{
-  alphaChannel->rotateRight90();
-  dataChannels->rotateRight90();
-}
-
-void KisLayer::mirrorX()
-{
-  alphaChannel->mirrorX();
-  dataChannels->mirrorX();
-}
-
-void KisLayer::mirrorY()
-{
-  alphaChannel->mirrorY();
-  dataChannels->mirrorY();
-}
-
-void KisLayer::renderOpacityToAlpha()
-{
-  uchar *alpha;
-  int xt = xTiles();
-  int yt = yTiles();
-  
-  for(int y = 0; y < yt; y++)
-    {
-      for(int x = 0; x < xt; x++)
-	{
-	  alpha = channelMem(y * xt + x, 0, 0, true);
-	  
-	  for(int y = TILE_SIZE; y; y--)
-	    {
-	      for(int x = TILE_SIZE; x; x--)
-		{
-		  *alpha++ = static_cast<uchar>(*alpha - (255 - opacityVal));
-		}
-	    }
-	}
-    }
-  opacityVal = 255;
-}
-
 
 #include "kis_layer.moc"

@@ -99,7 +99,7 @@ void MoveTool::mousePress( QMouseEvent *e )
   if( e->button() != LeftButton )
     return;
 
-  if( !img->getCurrentLayer()->isVisible() )
+  if( !img->getCurrentLayer()->visible() )
     return;
 
   if( !img->getCurrentLayer()->imageExtents().contains( e->pos() ))

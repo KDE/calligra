@@ -168,7 +168,7 @@ void LayerTable::paintCell( QPainter* _painter, int _row, int )
 		     m_eyeRect.width(), 
 		     m_eyeRect.height(), colorGroup(),
 		      true );
-  if( m_doc->current()->layerList().at( _row )->isVisible() )
+  if( m_doc->current()->layerList().at( _row )->visible() )
   {
     _painter->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
   }
@@ -178,7 +178,7 @@ void LayerTable::paintCell( QPainter* _painter, int _row, int )
 		     m_linkRect.width() , 
 		     m_linkRect.height(), colorGroup(),
 		     true );
-  if( m_doc->current()->layerList().at( _row )->isLinked() )
+  if( m_doc->current()->layerList().at( _row )->linked() )
   {
     _painter->drawPixmap( m_linkRect.topLeft(), *m_linkIcon );
   }
@@ -208,8 +208,8 @@ void LayerTable::updateTable()
 
 void LayerTable::update_contextmenu( int _index )
 {
-  m_contextmenu->setItemChecked( VISIBLE, m_doc->current()->layerList().at( _index )->isVisible() );
-  m_contextmenu->setItemChecked( LINKING, m_doc->current()->layerList().at( _index )->isLinked() );
+  m_contextmenu->setItemChecked( VISIBLE, m_doc->current()->layerList().at( _index )->visible() );
+  m_contextmenu->setItemChecked( LINKING, m_doc->current()->layerList().at( _index )->linked() );
 }
 
 void LayerTable::selectLayer( int _index )
@@ -224,14 +224,14 @@ void LayerTable::selectLayer( int _index )
 
 void LayerTable::slotInverseVisibility( int _index )
 {
-  m_doc->current()->layerList().at( _index )->setVisible( !m_doc->current()->layerList().at( _index )->isVisible() );
+  m_doc->current()->layerList().at( _index )->setVisible( !m_doc->current()->layerList().at( _index )->visible() );
   updateCell( _index, 0 );
   m_doc->current()->compositeImage( m_doc->current()->layerList().at( _index )->imageExtents() );
 }
 
 void LayerTable::slotInverseLinking( int _index )
 {
-  m_doc->current()->layerList().at( _index )->setLinked( !m_doc->current()->layerList().at( _index )->isLinked() );
+  m_doc->current()->layerList().at( _index )->setLinked( !m_doc->current()->layerList().at( _index )->linked() );
   updateCell( _index, 0 );
 }
 
@@ -351,8 +351,8 @@ void LayerTable::slotRemoveLayer()
 
 void LayerTable::swapLayers( int a, int b )
 {
-  if( ( m_doc->current()->layerList().at( a )->isVisible() ) &&
-      ( m_doc->current()->layerList().at( b )->isVisible() ) )
+  if( ( m_doc->current()->layerList().at( a )->visible() ) &&
+      ( m_doc->current()->layerList().at( b )->visible() ) )
   {
     QRect l1 = m_doc->current()->layerList().at( a )->imageExtents();
     QRect l2 = m_doc->current()->layerList().at( b )->imageExtents();

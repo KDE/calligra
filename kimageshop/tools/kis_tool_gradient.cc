@@ -91,6 +91,7 @@ void GradientTool::drawLine( const QPoint& start, const QPoint& end )
 
 void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
 {
+  /*
   KisImage * img = m_pDoc->current();
   if (!img)
 	return;
@@ -163,4 +164,5 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
     QRect updateRect( x1, y1, x2, y2 );
     img->compositeImage(updateRect);
   }
+  */
 }

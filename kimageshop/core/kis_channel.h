@@ -34,14 +34,14 @@ class KisChannel
   KisChannel(cId id);
   virtual ~KisChannel();
 
-  cId    channelId()    { return m_id; }
-  uint   xTiles()       { return m_xTiles; }
-  uint   yTiles()       { return m_xTiles; }
-  int    width()        { return m_imgRect.width(); }
-  int    height()       { return m_imgRect.height(); }
-  QRect  tileExtents()  { return m_tileRect; };
-  QRect  imageExtents() { return m_imgRect; };
-  QPoint offset()       { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
+  cId    channelId()    const { return m_id; }
+  uint   xTiles()       const { return m_xTiles; }
+  uint   yTiles()       const { return m_xTiles; }
+  int    width()        const { return m_imgRect.width(); }
+  int    height()       const { return m_imgRect.height(); }
+  QRect  tileExtents()  const { return m_tileRect; };
+  QRect  imageExtents() const { return m_imgRect; };
+  QPoint offset()       const { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
 
   uchar** tiles()       { return m_tiles; } // FIXME: get rid of this
 

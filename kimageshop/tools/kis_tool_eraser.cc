@@ -50,7 +50,7 @@ void EraserTool::mousePress(QMouseEvent *e)
   if (e->button() != QMouseEvent::LeftButton)
     return;
 
-   if( !img->getCurrentLayer()->isVisible() )
+   if( !img->getCurrentLayer()->visible() )
     return;
 
   m_dragging = true;
@@ -65,6 +65,7 @@ void EraserTool::mousePress(QMouseEvent *e)
 
 bool EraserTool::paint(QPoint pos)
 {
+  /*
   KisImage * img = m_pDoc->current();
   if (!img)	return false;
 
@@ -150,7 +151,7 @@ bool EraserTool::paint(QPoint pos)
 	  lay->setPixel(startx + x, starty + y, dstPix);
 	}
     }
-    
+  */
   return true;
 }
 
@@ -165,7 +166,7 @@ void EraserTool::mouseMove(QMouseEvent *e)
 
   if(m_dragging)
     {
-      if( !img->getCurrentLayer()->isVisible() )
+      if( !img->getCurrentLayer()->visible() )
 	return;
 
       KisVector end(e->x(), e->y());

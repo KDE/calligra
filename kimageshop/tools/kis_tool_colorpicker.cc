@@ -33,6 +33,7 @@ ColorPicker::~ColorPicker() {}
 
 KisColor ColorPicker::pick(int x, int y)
 {
+  /*
   KisImage * img = m_pDoc->current();
   if (!img)	return KisColor::white();
 
@@ -45,6 +46,8 @@ KisColor ColorPicker::pick(int x, int y)
   uchar r = *ptr++;
   
   return KisColor((int)r, (int)g, (int)b, cs_RGB);
+  */
+  return KisColor::white();
 }
 
 void ColorPicker::mousePress(QMouseEvent *e)
@@ -57,7 +60,7 @@ void ColorPicker::mousePress(QMouseEvent *e)
       && e->button() != QMouseEvent::RightButton)
     return;
 
-  if( !img->getCurrentLayer()->isVisible() )
+  if( !img->getCurrentLayer()->visible() )
     return;
   
   if( !img->getCurrentLayer()->imageExtents().contains( e->pos() ))

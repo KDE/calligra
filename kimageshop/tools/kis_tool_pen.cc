@@ -49,7 +49,7 @@ void PenTool::mousePress(QMouseEvent *e)
    if (e->button() != QMouseEvent::LeftButton)
     return;
 
-  if( !img->getCurrentLayer()->isVisible() )
+  if( !img->getCurrentLayer()->visible() )
     return;
   
   m_dragging = true;
@@ -63,6 +63,7 @@ void PenTool::mousePress(QMouseEvent *e)
 
 bool PenTool::paint(QPoint pos)
 {
+  /*
   KisImage * img = m_pDoc->current();
   if (!img)	return false;
 
@@ -127,6 +128,7 @@ bool PenTool::paint(QPoint pos)
 	    }
 	}
     }
+*/
   return true;
 }
 
@@ -142,7 +144,7 @@ void PenTool::mouseMove(QMouseEvent *e)
 
   if(m_dragging)
     {
-      if( !img->getCurrentLayer()->isVisible() )
+      if( !img->getCurrentLayer()->visible() )
 	return;
       
       KisVector end(e->x(), e->y());

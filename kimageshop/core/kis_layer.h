@@ -18,79 +18,78 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __layer_h__
-#define __layer_h__
+#ifndef __kis_layer_h__
+#define __kis_layer_h__
 
 #include <qimage.h>
 #include <qobject.h>
 #include <qlist.h>
 
-#include "kis_channeldata.h"
+#include "kis_global.h"
+#include "kis_channel.h"
+#include "kis_color.h"
 
-class KisLayer;
-
-typedef QList<KisLayer> LayerList;
-
-class KisLayer : public QObject {
+class KisLayer : public QObject
+{
 	Q_OBJECT
 
  public:
-	KisLayer(int ch);
-	~KisLayer();
-	
-	void    loadRGBImage(QImage img, QImage alpha);
-	void    loadGrayImage(QImage img, QImage alpha);
+	KisLayer(const QString& name, cMode cm);
+	virtual ~KisLayer();
 
-	uchar   opacity() const { return(opacityVal); };
-	void    setOpacity(uchar o);
-	QString name() const { return nameVal; };
-	void    setName(QString name) { nameVal=name; };
-	void    findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
-	void    findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
-	QRect   tileRect(int tileNo);
-	uchar   *channelMem(int tileNo, int ox, int oy, bool alpha=false) const;
+	QString name()    const { return m_name; }
+	uchar   opacity() const { return m_opacity; }
+	bool    visible() const { return m_visible; }
+	bool    linked()  const { return m_linked; }
+	uchar   numChannels() const { return m_channels; }
+
+	void    setName(const QString& name) { m_name = name; };
+	void    setOpacity(uchar o) { m_opacity = o; }
+	void    setVisible(bool v) { m_visible = v; }
+	void    setLinked(bool l)  { m_linked = l; }
+
 	void    moveBy(int dx, int dy);
 	void    moveTo(int x, int y) const;
-	bool    hasAlphaChannel() const { return alphaChannel; }
-	bool    isVisible() const { return visible; }
-	void    setVisible(bool vis) { visible=vis; }
-	bool    isLinked() const { return linked; }
-	void    setLinked(bool l) { linked=l; }
 
-	QRect   imageExtents() const;  // Extents of the image in canvas coords
-	QRect   tileExtents() const;   // Extents of the layers tiles in canv coords
-	QPoint  channelOffset() const; // TopLeft of the image in the channel
 	int     xTiles() const;
 	int     yTiles() const;
 	int     channelLastTileOffsetX() const;
 	int     channelLastTileOffsetY() const;
+	QRect   tileRect(int tileNo);
+	QRect   imageExtents() const;  // Extents of the image in canvas coords
+	QRect   tileExtents() const;   // Extents of the layers tiles in canv coords
+	QPoint  channelOffset() const; // TopLeft of the image in the channel
+	
+	void    loadRGBImage(QImage img, QImage alpha);
+	void    loadGrayImage(QImage img, QImage alpha);
+
+	void    findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
+	void    findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
+
+	uchar*  channelMem(uchar channel, uint tileNo, int ox, int oy) const;
+
 	bool    boundryTileX(int tile) const;
 	bool    boundryTileY(int tile) const;
 	void    allocateRect(QRect _r);
-	void    setPixel(int x, int y, uint val);
-	uint    getPixel(int x, int y);
-	void    setAlpha(int x, int y, uint val);
-	uint    getAlpha(int x, int y);
+	void    setPixel(uchar channel, uint x, uint y, uchar val);
+	uchar   pixel(uchar channel, uint x, uint y);
 
-	void    clear(const QColor& c);
-
-	void    rotate180();
-	void    rotateLeft90();
-	void    rotateRight90();
-	void    mirrorX();
-	void    mirrorY();
-	void    renderOpacityToAlpha();
+	void    clear(const KisColor& c);
 
  signals:
 	void layerPropertiesChanged();
 
- private:
-	uchar opacityVal;
-	KisChannelData *alphaChannel, *dataChannels;
-	int channels;
-	QString nameVal;
-	bool visible, linked;
-	bool alpha;
+ protected:
+	void calcNumChannels();
+
+ protected:
+	uchar    m_opacity;
+	uchar    m_channels;
+	QString  m_name;
+	bool     m_visible, m_linked;
+	cMode    m_cMode;
+	
+	KisChannel* m_ch[MAX_CHANNELS];;
 };
 
-#endif
+#endif // __kis_layer_h__

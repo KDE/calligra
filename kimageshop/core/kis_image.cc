@@ -74,19 +74,31 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
   channels=3;
   currentLayer=0;
   
-  compose = new KisLayer( channels );
+  compose = new KisLayer( "compose", m_cMode );
   compose->allocateRect( QRect( 0, 0, TILE_SIZE, TILE_SIZE ) );
   
-  // XXX make this like the compose layer
-  // make it work with other colour spaces
-  background = new uchar[channels * TILE_SIZE * TILE_SIZE];
+  background = new KisLayer( "background1", m_cMode );
+  background->allocateRect( QRect( 0, 0, TILE_SIZE, TILE_SIZE ) );
+
+  // FIXME: make it work with non-RGB color spaces
+  uchar* ptr0 = background->channelMem(0, 0, 0, 0);
+  uchar* ptr1 = background->channelMem(1, 0, 0, 0);
+  uchar* ptr2 = background->channelMem(2, 0, 0, 0);
+  uchar* ptr3 =0;
+
+  if (m_cMode == cm_RGBA)
+	ptr3 = background->channelMem(3, 0, 0, 0);
 
   for( int y = 0; y < TILE_SIZE; y++)
-    for(int x = 0; x < TILE_SIZE; x++) {
-      *(background+channels*(y*TILE_SIZE+x))  =128+63*((x/16+y/16)%2);
-      *(background+channels*(y*TILE_SIZE+x)+1)=128+63*((x/16+y/16)%2);
-      *(background+channels*(y*TILE_SIZE+x)+2)=128+63*((x/16+y/16)%2);
-    }
+    for(int x = 0; x < TILE_SIZE; x++)
+	  {
+		uchar v = 128+63*((x/16+y/16)%2);
+		*(ptr0 + (y * TILE_SIZE + x)) = v;
+		*(ptr1 + (y * TILE_SIZE + x)) = v;
+		*(ptr2 + (y * TILE_SIZE + x)) = v;
+		if (m_cMode == cm_RGBA)
+		  *(ptr3 + (y * TILE_SIZE + x)) = v;
+	  }
 
   compositeImage(QRect());
 }
@@ -243,17 +255,15 @@ void KisImage::addRGBLayer(QImage& img, QImage &alpha, const QString name)
       alpha = QImage();
     }
 
-  KisLayer *lay = new KisLayer(3);
-  lay->setName(name);
+  KisLayer *lay = new KisLayer(name, m_cMode);
   lay->loadRGBImage(img, alpha);
   layers.append(lay);
   currentLayer=lay;
 }
 
-void KisImage::addRGBLayer(const QRect& rect, const QColor& c, const QString& name)
+void KisImage::addLayer(const QRect& rect, const KisColor& c, const QString& name)
 {
-  KisLayer *lay = new KisLayer(3);
-  lay->setName(name);
+  KisLayer *lay = new KisLayer(name, m_cMode);
 
   lay->allocateRect(rect);
   lay->clear(c);
@@ -296,8 +306,9 @@ void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
   //printf("compositeTile: dstLay=%p dstTile=%d\n",dstLay, dstTile);
 
   // Set the background
-	memcpy(dstLay->channelMem(dstTile,0,0), background,
-				 channels*TILE_SIZE*TILE_SIZE);
+  for (uchar i = 0; i < dstLay->numChannels(); i++)
+  	memcpy(dstLay->channelMem(i, dstTile, 0, 0), background->channelMem(i, dstTile, 0, 0)
+		   , TILE_SIZE * TILE_SIZE);
 
   // Find the tiles boundary in KisImage coordinates
   QRect tileBoundary(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -307,7 +318,7 @@ void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
   while(lay) { // Go through each layer and find its contribution to this tile
     l++;
     //printf("layer: %s opacity=%d\n",lay->name().data(), lay->opacity());
-    if ((lay->isVisible()) &&
+    if ((lay->visible()) &&
 				(tileBoundary.intersects(lay->imageExtents()))) {
       // The layer is part of the tile. Find out the 1-4 tiles of the channel
       // which are in it and render the appropriate proportions of each
@@ -327,12 +338,11 @@ void KisImage::compositeImage(QRect r)
     for(int x=0;x<xTiles;x++)
       if (r.isNull() ||
 	  r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE))) {
-				// set the alpha channel to opaque
-	memset(compose->channelMem(0, 0,0, true),255, 
-	       TILE_SIZE*TILE_SIZE);
-	compositeTile(x,y, compose, 0);
+		// set the alpha channel to opaque
+		memset(compose->channelMem(3, 0, 0, 0),255, TILE_SIZE*TILE_SIZE);
+		compositeTile(x,y, compose, 0);
 	
-	convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
+		convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
       }
   //KisTimer::stop("compositeImage");
 
@@ -479,7 +489,8 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 				int srcX, int srcY,
 				int dstX, int dstY, int w, int h)
 {
-  if (srcLay->channelMem(srcTile,0,0)==0) return;
+  for (uchar i = 0; i < srcLay->numChannels(); i++)
+	if (srcLay->channelMem(i, srcTile, 0, 0) == 0) return;
 
   uchar opacity=srcLay->opacity();
 	
@@ -493,54 +504,56 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
     h = min(h, srcLay->channelLastTileOffsetY()-srcY);
   // XXX now constrain for the boundry of the Canvas
 
-  //printf("renderTileQuadrant: srcTile=%d src=(%d,%d) dstTile=%d dst=(%d,%d) size=(%d,%d)\n", srcTile, srcX, srcY, dstTile, dstX, dstY, w,h);
 
-
-  uchar one=255;
   int leadIn=(TILE_SIZE-w);
 
-	uchar *composeD=dstLay->channelMem(dstTile, dstX, dstY);
-	uchar *composeA=dstLay->channelMem(dstTile, dstX, dstY, true);
-	uchar *channelD=srcLay->channelMem(srcTile, srcX, srcY);
-	uchar *alpha   =srcLay->channelMem(srcTile, srcX, srcY, true);
+  // FIXME:: Make it work for non-RGB modes
+  
+  uchar *dptr0 = dstLay->channelMem(0, dstTile, dstX, dstY);
+  uchar *dptr1 = dstLay->channelMem(1, dstTile, dstX, dstY);
+  uchar *dptr2 = dstLay->channelMem(2, dstTile, dstX, dstY);
+  uchar *dptr3 = 0;
+  if (m_cMode == cm_RGBA)
+	dptr3 = dstLay->channelMem(3, dstTile, dstX, dstY);
 
-	int alphaInc, alphaLeadIn;
+  uchar *sptr0 = srcLay->channelMem(0, srcTile, srcX, srcY);
+  uchar *sptr1 = srcLay->channelMem(1, srcTile, srcX, srcY);
+  uchar *sptr2 = srcLay->channelMem(2, srcTile, srcX, srcY);
+  uchar *sptr3 = 0;
+  if (m_cMode == cm_RGBA)
+	sptr3 = srcLay->channelMem(3, srcTile, srcX, srcY);
 
-	if (alpha) {
-		alphaInc=1;
-		alphaLeadIn=leadIn;
-	} else {
-		puts("************* no alpha");
-		alpha=&one;
-		alphaInc=0;
-		alphaLeadIn=0;
-	}
-
-	leadIn*=3;
 
 	uchar opac,invOpac;
-	for(int y=h; y; y--) {
-		for(int x=w; x; x--) {
+	for(int y = h; y; y--)
+	  {
+		for(int x = w; x; x--)
+		  {
 			// for prepultiply => invOpac=255-(*alpha*opacity)/255;
-			opac=(*alpha*opacity)/255;
-			invOpac=255-opac;
-			// fix this (in a fast way for colour spaces
+			
+			if (m_cMode == cm_RGBA)
+			  {
+				opac = (*sptr3*opacity)/255;
+				invOpac=255-opac;
+			  }
+			else
+			  invOpac=255-opac;
 
-			*composeD++ = (((*composeD * *composeA)/255) * invOpac + 
-										 *channelD++ * opac)/255;
-			*composeD++ = (((*composeD * *composeA)/255) * invOpac + 
-										 *channelD++ * opac)/255;
-			*composeD++ = (((*composeD * *composeA)/255) * invOpac + 
-										 *channelD++ * opac)/255;
-			*composeA=*alpha + *composeA - (*alpha * *composeA)/255;
-			composeA+=alphaInc;
-			alpha+=alphaInc;
+			*dptr0++ = (((*dptr0 * *dptr3)/255) * invOpac + *sptr0++ * opac)/255;
+			*dptr1++ = (((*dptr1 * *dptr3)/255) * invOpac + *sptr1++ * opac)/255;
+			*dptr2++ = (((*dptr2 * *dptr3)/255) * invOpac + *sptr2++ * opac)/255;
+			*dptr3++ = *sptr3 + *dptr3 - (*sptr3 * *dptr3)/255;
+
 		}
-		composeD+=leadIn;
-		composeA+=alphaLeadIn;
-		channelD+=leadIn;
-		alpha+=alphaLeadIn;
-	}
+		dptr0 += leadIn;
+		dptr1 += leadIn;
+		dptr2 += leadIn;
+		dptr3 += leadIn;
+		sptr0 += leadIn;
+		sptr1 += leadIn;
+		sptr2 += leadIn;
+		sptr3 += leadIn;
+	  }
 }
 
 KisLayer* KisImage::layerPtr( KisLayer *_layer )
@@ -619,15 +632,21 @@ void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
   // probably due to the CPU cache, it's also useless wrt to other colour
   // spaces
 
-  // For RGB images XXX
-	uchar *comp=lay->channelMem(tileNo, 0,0);
-	for(int yy=0;yy<TILE_SIZE;yy++) {
-		uchar *ptr=img.scanLine(yy);
-		for(int xx=TILE_SIZE;xx;xx--) {
-			*ptr++=*comp++;
-			*ptr++=*comp++;
-			*ptr++=*comp++;
-			ptr++;
+  // FIXME: Make it work for non-RGB images
+
+  uchar *ptr0 = lay->channelMem(2, tileNo, 0, 0);
+  uchar *ptr1 = lay->channelMem(1, tileNo, 0, 0);
+  uchar *ptr2 = lay->channelMem(0, tileNo, 0, 0);
+
+  for(int y = 0; y < TILE_SIZE; y++)
+	{
+	  uchar *ptr = img.scanLine(y);
+	  for(int x = TILE_SIZE; x; x--)
+		{
+		  *ptr++ = *ptr0++;
+		  *ptr++ = *ptr1++;
+		  *ptr++ = *ptr2++;
+		  ptr++;
 		}
 	}
 
@@ -657,7 +676,7 @@ void KisImage::mergeVisibleLayers()
 
   while(lay)
     {
-      if(lay->isVisible())
+      if(lay->visible())
 	l.append(lay);
       lay = layers.next();
     }
@@ -672,7 +691,7 @@ void KisImage::mergeLinkedLayers()
 
   while(lay)
     {
-      if (lay->isLinked())
+      if (lay->linked())
 	l.append(lay);
       lay = layers.next();
     }
@@ -690,7 +709,7 @@ void KisImage::mergeLayers(QList<KisLayer> list)
   while(a)
     {
       newRect.unite(a->imageExtents());
-      a->renderOpacityToAlpha();
+      //a->renderOpacityToAlpha();
       a = list.next();
     }
 
@@ -791,35 +810,35 @@ void KisImage::setBackgroundLayer( unsigned int _layer )
 void KisImage::rotateLayer180(KisLayer *_layer)
 {
   _layer = layerPtr( _layer );
-  _layer->rotate180();
+  //_layer->rotate180();
   compositeImage(_layer->imageExtents());
 }
 
 void KisImage::rotateLayerLeft90(KisLayer *_layer)
 {
   _layer = layerPtr( _layer );
-  _layer->rotateLeft90();
+  //_layer->rotateLeft90();
   compositeImage(_layer->imageExtents());
 }
 
 void KisImage::rotateLayerRight90(KisLayer *_layer)
 {
   _layer = layerPtr( _layer );
-  _layer->rotateRight90();
+  //_layer->rotateRight90();
   compositeImage(_layer->imageExtents());
 }
 
 void KisImage::mirrorLayerX(KisLayer *_layer)
 {
   _layer = layerPtr( _layer );
-  _layer->mirrorX();
+  //_layer->mirrorX();
   compositeImage(_layer->imageExtents());
 }
 
 void KisImage::mirrorLayerY(KisLayer *_layer)
 {
   _layer = layerPtr( _layer );
-  _layer->mirrorY();
+  // _layer->mirrorY();
   compositeImage(_layer->imageExtents());
 }
 

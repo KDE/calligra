@@ -51,7 +51,7 @@ void AirBrushTool::mousePress(QMouseEvent *e)
   if (e->button() != QMouseEvent::LeftButton)
     return;
 
-   if( !img->getCurrentLayer()->isVisible() )
+   if( !img->getCurrentLayer()->visible() )
     return;
 
   m_dragging = true;
@@ -66,6 +66,7 @@ void AirBrushTool::mousePress(QMouseEvent *e)
 
 bool AirBrushTool::paint(QPoint pos)
 {
+  /*
   KisImage * img = m_pDoc->current();
   if (!img)	return false;
 
@@ -137,6 +138,7 @@ bool AirBrushTool::paint(QPoint pos)
 	    }
 	}
     }
+  */
   return true;
 }
 
@@ -151,7 +153,7 @@ void AirBrushTool::mouseMove(QMouseEvent *e)
 
   if(m_dragging)
     {
-      if( !img->getCurrentLayer()->isVisible() )
+      if( !img->getCurrentLayer()->visible() )
 	return;
 
       KisVector end(e->x(), e->y());

@@ -31,6 +31,7 @@
 
 #include "kis_layer.h"
 #include "kis_global.h"
+#include "kis_color.h"
 
 class KisBrush;
 
@@ -44,7 +45,7 @@ class KisImage : public QObject
     Q_OBJECT
 
  public:
-	KisImage( const QString& name, int width = 400, int height = 400,
+	KisImage( const QString& name, int width = 512, int height = 512,
 			  cMode cm = cm_RGBA, uchar bitDepth = 8 );
     virtual ~KisImage();
 
@@ -79,7 +80,7 @@ class KisImage : public QObject
 
     void addRGBLayer( QString _file );
     void addRGBLayer(QImage& img, QImage& alpha, const QString name);
-    void addRGBLayer(const QRect& r, const QColor& c, const QString& name);
+    void addLayer(const QRect& r, const KisColor& c, const QString& name);
     void removeLayer( unsigned int _layer );
 
     KisLayer* layerPtr( KisLayer *_layer );
@@ -119,13 +120,12 @@ class KisImage : public QObject
     int         xTiles;
     int         yTiles;
     QList<KisLayer>   layers;
-    KisLayer    *compose;
+    KisLayer    *compose, *background;
     QImage      img;
     KisLayer    *currentLayer;
     QPixmap     **tiles;
     bool        dragging;
     QPoint      dragStart;
-    uchar       *background;
     char        *imageData;
     XImage      *xi;
 

@@ -60,12 +60,12 @@ bool KisDoc::initDoc()
 {
   QString name;
   name.sprintf("image %d", m_Images.count()+1);
-  KisImage *img = newImage(name, 400, 400, cm_RGBA, 8);
+  KisImage *img = newImage(name, 512, 512, cm_RGBA, 8);
   if (!img)
     return false;
 
   // add background layer
-  img->addRGBLayer(QRect(0, 0, 512, 512), QColor(255, 255, 255), "background");
+  img->addLayer(QRect(0, 0, 512, 512), KisColor::white(), "background");
   img->setLayerOpacity(255);
   img->compositeImage(QRect(0, 0, 512, 512));
   setCurrentImage(img);
@@ -113,12 +113,12 @@ bool KisDoc::save( ostream& out, const char* )
 	  layer.setAttribute( "height", lay->imageExtents().height() );
 	  layer.setAttribute( "opacity", static_cast<int>(lay->opacity()) );
 
-	  if (lay->isVisible())
+	  if (lay->visible())
 		layer.setAttribute( "isVisible", "true" );
 	  else
 		layer.setAttribute( "isVisible", "false" );
 
-	  if (lay->isLinked())
+	  if (lay->linked())
 		layer.setAttribute( "isLinked", "true" );
 	  else
 		layer.setAttribute( "isLinked", "false" );
@@ -368,7 +368,7 @@ void KisDoc::slotNewImage()
     return;
   
   // add background layer
-  img->addRGBLayer(QRect(0, 0, w, h), QColor(255, 255, 255), "background");
+  img->addLayer(QRect(0, 0, w, h), KisColor::white(), "background");
   img->setLayerOpacity(255);
   img->compositeImage(QRect(0, 0, w, h));
   setCurrentImage(img);
