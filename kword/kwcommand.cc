@@ -778,6 +778,7 @@ void KWDeleteFrameCommand::execute()
     //so used frameChanged with a null pointer.
     frameSet->kWordDocument()->frameChanged( 0L );
     frameSet->kWordDocument()->refreshDocStructure( frameSet->type() );
+    frameSet->kWordDocument()->updateRulerFrameStartEnd();
 }
 
 void KWDeleteFrameCommand::unexecute()
@@ -792,6 +793,7 @@ void KWDeleteFrameCommand::unexecute()
         textfs->textObject()->formatMore();
     frameSet->kWordDocument()->frameChanged( frame );
     frameSet->kWordDocument()->refreshDocStructure(frameSet->type());
+    frameSet->kWordDocument()->updateRulerFrameStartEnd();
 }
 
 KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWFrame * frame ) :
