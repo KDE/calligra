@@ -1160,8 +1160,8 @@ else if(time->isChecked())
         format->setEnabled(false);
         listFormat->setEnabled(true);
 
-        list+=i18n("System : ")+KGlobal::locale()->formatTime(QTime::currentTime(),false);
-        list+=i18n("System : ")+KGlobal::locale()->formatTime(QTime::currentTime(),true);
+        list+=i18n("System: ")+KGlobal::locale()->formatTime(QTime::currentTime(),false);
+        list+=i18n("System: ")+KGlobal::locale()->formatTime(QTime::currentTime(),true);
         QString tmp;
         list+=tmp.setNum(10)+":"+tmp.setNum(35) +" " + i18n("PM");
         list+=tmp.setNum(10)+":"+tmp.setNum(35)+":"+tmp.setNum(25)+" " + i18n("PM");
@@ -1292,8 +1292,8 @@ void CellLayoutPageFloat::init()
 QStringList list;
 QString tmp;
 QString tmp2;
-list+=i18n("System : ")+KGlobal::locale()->formatDate(QDate::currentDate(),true);
-list+=i18n("System : ")+KGlobal::locale()->formatDate(QDate::currentDate(),false);
+list+=i18n("System: ")+KGlobal::locale()->formatDate(QDate::currentDate(),true);
+list+=i18n("System: ")+KGlobal::locale()->formatDate(QDate::currentDate(),false);
 /*18-Feb-00*/
 tmp=tmp2.setNum(18);
 tmp+="-"+KGlobal::locale()->monthName(2, true)+"-";
@@ -2531,7 +2531,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
 
     grid2 = new QGridLayout(grp,1,1,15,7);
     angleRotation=new KIntNumInput((-dlg->textRotation), grp, 10);
-    angleRotation->setLabel(i18n("Angle :"));
+    angleRotation->setLabel(i18n("Angle:"));
     angleRotation->setRange(-90, 90, 1);
     angleRotation->setSuffix(" °");
 
@@ -2560,7 +2560,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2 = new QGridLayout(grp,2,4,15,7);
 
     QLabel *tmpLabel=new QLabel(grp,"label");
-    tmpLabel->setText(i18n("Width :"));
+    tmpLabel->setText(i18n("Width:"));
     grid2->addWidget(tmpLabel,0,0);
 
     width=new KIntNumInput(dlg->widthSize, grp, 10);
@@ -2576,7 +2576,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2->addMultiCellWidget(defaultWidth,1,1,0,1);
 
     tmpLabel=new QLabel(grp,"label1");
-    tmpLabel->setText(i18n("Height  :"));
+    tmpLabel->setText(i18n("Height:"));
     grid2->addWidget(tmpLabel,0,2);
 
     height=new KIntNumInput(dlg->heigthSize, grp, 10);

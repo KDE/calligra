@@ -3441,7 +3441,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
     painter.end();
 
-    QString tmpSize=i18n("Width : %1").arg((int)((m_iResizePos-x)/m_pCanvas->zoom()));
+    QString tmpSize=i18n("Width: %1").arg((int)((m_iResizePos-x)/m_pCanvas->zoom()));
     painter.begin(this);
     int len = painter.fontMetrics().width(tmpSize );
     int hei = painter.fontMetrics().height( );

@@ -43,16 +43,16 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 
 {
   m_pView=parent;
-  QVBox *page=addVBoxPage(i18n("Preference"), QString::null);
+  QVBox *page=addVBoxPage(i18n("Preference"), QString::null,BarIcon("looknfeel",KIcon::SizeMedium));
 
   _preferenceConfig = new  preference(parent,page );
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
-  page=addVBoxPage(i18n("Local Parameters"), QString::null);
+  page=addVBoxPage(i18n("Local Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
   parameterLocale *_ParamLocal = new  parameterLocale(parent,page );
-  page=addVBoxPage(i18n("Interface"), QString::null);
+  page=addVBoxPage(i18n("Interface"), QString::null,BarIcon("colorize", KIcon::SizeMedium) );
   _configure = new  configure(parent,page );
-  page=addVBoxPage(i18n("Misc"), QString::null);
+  page=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
   _miscParameter = new  miscParameters(parent,page );
 
 }
