@@ -75,7 +75,7 @@ public:
 	{
 	}
 
-	~WRIDevice ()
+	virtual ~WRIDevice ()
 	{
 		closeFile ();
 	}
@@ -309,7 +309,7 @@ public:
 		m_generator->setDevice (m_device);
 	}
 
-	~KWordMSWriteWorker ()
+	virtual ~KWordMSWriteWorker ()
 	{
 		delete m_generator;
 		delete m_device;

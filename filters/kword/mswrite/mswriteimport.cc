@@ -76,7 +76,7 @@ public:
 	{
 	}
 
-	~WRIDevice ()
+	virtual ~WRIDevice ()
 	{
 		closeFile ();
 	}
