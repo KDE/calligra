@@ -1776,11 +1776,13 @@ KWTextParag* KWTextFrameSet::loadList( const QDomElement& list, KoOasisContext& 
     //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
     bool orderedList = list.tagName() == "text:ordered-list";
-    const QString listStyleName = list.attribute( "text:style-name" );
-    bool listOK = !listStyleName.isEmpty();
+    QString oldListStyleName = context.currentListStyleName();
+    if ( list.hasAttribute( "text:style-name" ) )
+        context.setCurrentListStyleName( list.attribute( "text:style-name" ) );
+    bool listOK = !context.currentListStyleName().isEmpty();
     const int level = context.listStyleStack().level() + 1;
     if ( listOK )
-        listOK = context.pushListLevelStyle( listStyleName, level );
+        listOK = context.pushListLevelStyle( context.currentListStyleName(), level );
 
     // Iterate over list items
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -1800,6 +1802,7 @@ KWTextParag* KWTextFrameSet::loadList( const QDomElement& list, KoOasisContext& 
     }
     if ( listOK )
         context.listStyleStack().pop();
+    context.setCurrentListStyleName( oldListStyleName );
     return lastParagraph;
 }
 
