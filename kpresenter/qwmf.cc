@@ -55,15 +55,17 @@ public:
 class WinObjBrushHandle: public WinObjHandle
 {
 public:
-  virtual void apply(QPainter& p);
-  QBrush brush;
+    virtual void apply(QPainter& p);
+    QBrush brush;
+    virtual ~WinObjBrushHandle() {};
 };
 
 class WinObjPenHandle: public WinObjHandle
 {
 public:
-  virtual void apply(QPainter& p);
-  QPen pen;
+    virtual void apply(QPainter& p);
+    QPen pen;
+    virtual ~WinObjPenHandle() {};
 };
 
 void WinObjBrushHandle::apply(QPainter& p)
@@ -119,9 +121,9 @@ bool QWinMetaFile::load(const QString aFileName)
   WmfEnhMetaHeader eheader;
   WmfMetaHeader header;
   WmfPlaceableHeader pheader;
-  WmfMetaRecord rec;
+  // WmfMetaRecord rec;
   WORD checksum;
-  int filePos, idx, i, readLen, len;
+  int filePos, idx, i;
   WmfCmd *cmd, *last;
   DWORD rdSize;
   WORD rdFunc;
@@ -144,7 +146,7 @@ bool QWinMetaFile::load(const QString aFileName)
 
   //----- Read placeable metafile header
   st >> pheader.key;
-  mIsPlaceable = (pheader.key==APMHEADER_KEY);
+  mIsPlaceable = (pheader.key==(DWORD)APMHEADER_KEY);
   if (mIsPlaceable)
   {
     st >> pheader.hmf;
@@ -209,10 +211,10 @@ bool QWinMetaFile::load(const QString aFileName)
       debug("WMF Extended Header:");
       debug("  iType=%d", eheader.iType);
       debug("  nSize=%d", eheader.nSize);
-      debug("  rclBounds=(%ld;%ld;%ld;%ld)",
+      debug("  rclBounds=(%d;%d;%d;%d)",
 	    eheader.rclBounds.left, eheader.rclBounds.top,
 	    eheader.rclBounds.right, eheader.rclBounds.bottom);
-      debug("  rclFrame=(%ld;%ld;%ld;%ld)",
+      debug("  rclFrame=(%d;%d;%d;%d)",
 	    eheader.rclFrame.left, eheader.rclFrame.top,
 	    eheader.rclFrame.right, eheader.rclFrame.bottom);
       debug("  dSignature=%d", eheader.dSignature);
@@ -238,7 +240,7 @@ bool QWinMetaFile::load(const QString aFileName)
       debug("  mtType=%u", header.mtType);
       debug("  mtHeaderSize=%u", header.mtHeaderSize);
       debug("  mtVersion=%u", header.mtVersion);
-      debug("  mtSize=%ld", header.mtSize);
+      debug("  mtSize=%d", header.mtSize);
     }
   }
 
@@ -309,7 +311,7 @@ int QWinMetaFile::findFunc(unsigned short aFunc) const
 //-----------------------------------------------------------------------------
 bool QWinMetaFile::paint(const QPaintDevice* aTarget)
 {
-  int idx, size, i;
+  int idx, i;
   WmfCmd* cmd;
   char dummy[16];
 
@@ -603,7 +605,7 @@ void QWinMetaFile::createBrushIndirect(short num, short* parm)
     Dense3Pattern   /* should be device-independend BS_DIBPATTERN8x8 */
   };
   BrushStyle style;
-  short arg, idx;
+  short arg;
   WinObjBrushHandle* handle = createBrush();
   
   arg = parm[0];
@@ -636,7 +638,6 @@ void QWinMetaFile::createPenIndirect(short num, short* parm)
   { SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine,
     NoPen, SolidLine };
   PenStyle style;
-  short arg, idx;
   WinObjPenHandle* handle = createPen();
 
   if (parm[0]>=0 && parm[0]<6) style=styleTab[parm[0]];
