@@ -28,6 +28,7 @@
 #include <qpainter.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qstyle.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qvaluevector.h>
@@ -676,6 +677,11 @@ void KoTabBar::resizeEvent( QResizeEvent* )
     d->layoutButtons();
     d->updateButtons();
     update();
+}
+
+QSize KoTabBar::sizeHint() const
+{
+    return QSize( 40, style().pixelMetric( QStyle::PM_ScrollBarExtent, this ) );
 }
 
 void KoTabBar::renameTab( const QString& old_name, const QString& new_name )

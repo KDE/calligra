@@ -212,6 +212,8 @@ public slots:
      * Removes all tabs.
      */
     void clear();
+    
+    QSize sizeHint() const;
 
 signals:
 
