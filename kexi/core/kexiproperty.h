@@ -119,6 +119,11 @@ class KEXICORE_EXPORT KexiProperty
 		*/
 		void setValue(const QVariant &v, bool saveOldValue = true);
 
+		/*! Resets this property value to its old value. 
+		 The property becames unchanged after that and old value becames null.
+		 This method is equal to setValue( oldValue(), false ); */
+		void resetValue();
+
 		/*! \return old property value. This makes only sense when changed() is true. 
 		 The old value is saved on first change.
 		*/

@@ -373,6 +373,11 @@ void KexiProperty::setValue(const QString& childName, const QVariant &v, bool sa
 	prop->setValue(v, saveOldValue);
 }
 
+void KexiProperty::resetValue()
+{
+	setValue( oldValue(), false );
+}
+
 bool KexiProperty::changed() const
 {
 	return m_changed;

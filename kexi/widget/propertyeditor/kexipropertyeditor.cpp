@@ -408,7 +408,8 @@ KexiPropertyEditor::resetItem()
 			m_currentEditor->setValue(m_editItem->property()->oldValue());
 		}
 
-		m_editItem->property()->setValue( m_editItem->property()->oldValue(), false );
+//		m_editItem->property()->setValue( m_editItem->property()->oldValue(), false );
+		m_editItem->property()->resetValue();
 		showDefaultsButton( false );
 //js: not needed		else
 //js: not needed			m_editItem->setValue(m_editItem->property()->oldValue());
