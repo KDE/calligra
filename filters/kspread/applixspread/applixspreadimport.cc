@@ -114,7 +114,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
         // Read one line
         mystr = nextLine( stream );
 
-        printf ("INPUT <%s>\n", mystr.latin1() );
+        kdDebug()<<"INPUT : "<<mystr<<endl;
 
 
         /**********************************************************************
@@ -159,7 +159,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
           alllenght = mystr.length ();
           if (alllenght >= 80-1)
           {
-            printf (" Line >= 80 chars \n");
+              kdDebug()<< " Line >= 80 chars \n";
             int ok = true;
             do
 	    {
@@ -217,7 +217,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
 
 
           pos = cellnostr.find (QRegExp ("[0-9]"));
-	  printf (" findpos:%d\n",pos);
+          kdDebug()<<" findpos :"<<pos<<endl;
 
 
 
@@ -227,7 +227,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
           rowstr = cellnostr.mid (pos, cellnostr.length()-pos);
           irow   = rowstr.toInt(&ok);
 
-	  printf (" findpos: %s %d\n",rowstr.latin1(), irow );
+          kdDebug()<<" findpos :"<< rowstr<<" "<<irow<<endl;
           sscanf (cellnostr.latin1(), "%299s%d",tmp, &bla);
           sprintf (tmp1, "%d", irow);
           leni = strlen (tmp1);
@@ -235,9 +235,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
           cellcolstr = cellnostr;
           cellcolstr.remove (cellcolstr.length()-leni, leni);
 
-	  printf ("  INFO: length:%d  cellnostr:<%s> tmp:<%s> irow:%d  cellcolstr:<%s>\n",
-                  len,  cellnostr.latin1(),
-                  tmp, irow, cellcolstr.latin1());
+          kdDebug()<<" Info: length :"<<len<<" cellnostr :"<<cellnostr<<" tmp :"<<tmp<<" irow :"<<irow<<" cellcolstr :"<<cellcolstr<<endl;
 
           // Transformat ascii column to int column
           icol = translateColumnNumber (cellcolstr);
@@ -320,13 +318,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
              if (pos > -1) str += my_rc.rc[pos];
           }
 
-          printf (" -DATA: Text:<%s>  Tab:<%s> <%s> %c  %d    <%s> <%s> <%s>\n",
-                  mystr.latin1(),
-                  tabnostr.latin1(),
-                  cellnostr.latin1(), ccol, irow,
-                  typeFormStr.latin1(),
-                  typeCharStr.latin1(),
-                  typeCellStr.latin1());
+          kdDebug()<<" Data : Text :"<<mystr<<" tab :"<<tabnostr<<" "<< cellnostr <<" " <<ccol<<" " << irow<<" "<< typeFormStr<<" " <<typeCharStr<<" " <<typeCellStr<<endl;
 
 
           /********************************************************************
@@ -341,47 +333,47 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
                it != typeCharList.end(); ++it )
 	  {
 	    // Output
-            printf ("   Char (%2d)   >%s< ",
-                    nn, (*it).latin1() );
+              kdDebug()<<" Char ("<<nn<<" )  >"<<*it<<"< "<<endl;
             nn++;
 
             if      ((*it) == "B")
             {
-              printf ("   = bold\n");
+                kdDebug()<<" bold\n";
               bold  = 1;
 	    }
             else if ((*it) == "I")
             {
-              printf ("   = italic\n");
+
+                kdDebug()<<"   = italic\n";
               italic = 1;
 	    }
             else if ((*it) == "U")
             {
-              printf ("   = underline\n");
+                kdDebug()<<"   = underline\n";
               underline = 1;
 	    }
             else if ((*it).startsWith("FG") )
 	    {
               sscanf ((*it).latin1(), "FG%d", &fg);
-              printf ("  = Colornr %d\n", fg);
+              kdDebug()<<"  = Colornr "<< fg<<endl;
 	    }
             else if ((*it).startsWith("TF") )
 	    {
               sscanf ((*it).latin1(), "TF%d", &fontnr);
-              printf ("  = Font (%d) %s\n",
-                      fontnr, (const char *) typefacetab[fontnr].latin1());
+              kdDebug()<<" = Font :"<<fontnr<<" "<<typefacetab[fontnr]<<endl;
 	    }
             else if ((*it).startsWith("P") )
 	    {
               sscanf ((*it).latin1(), "P%d", &fontsize);
-              printf ("   = Fontsize %d\n", fontsize);
+              kdDebug()<<"   = Fontsize "<<fontsize<<endl;
 	    }
             else
 	    {
-              printf ("   = ???\n");
+
+                kdDebug()<<"   = ???\n";
 	    }
 	  }
-          printf ("\n");
+          kdDebug()<<""<<endl;
 
 
 
@@ -396,45 +388,45 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
           for (QStringList::Iterator it = typeFormList.begin(); it != typeFormList.end(); ++it )
           {
 	    // Output
-            printf ("   Type (%2d)   >%s< ",
-                    nn, (*it).latin1() );
+              //kdDebug()<< "   Type (%2d)   >%s< ",
+              //    nn, (*it).latin1() );
             nn++;
             // Grep horizontal alignment
             if      ( (*it) == "1")
             {
-              printf (" = left align\n");
+                kdDebug()<< " = left align\n";
               align = 1; // left
 	    }
             else if ( (*it) == "2")
             {
-              printf (" = right align\n");
+                kdDebug()<< " = right align\n";
               align = 3; // right
 	    }
             else if ( (*it) == "3")
             {
-              printf (" = center align\n");
+                kdDebug()<< " = center align\n";
               align = 2; // center
 	    }
 
             // Grep verticale alignment
             else if ( (*it) == "VT")
             {
-              printf (" = top valign\n");
+                kdDebug()<<" = top valign\n";
               valign =  1; // top
 	    }
             else if ( (*it) == "VC")
             {
-              printf (" = center valign\n");
+                kdDebug()<<" = center valign\n";
               valign =  0; // center - default (2)
 	    }
             else if ( (*it) == "VB")
             {
-              printf (" = bottom valign\n");
+                kdDebug()<<" = bottom valign\n";
               valign =  3; // bottom
 	    }
             else
 	    {
-              printf ("   = ???\n");
+                kdDebug()<<"   = ???\n";
 	    }
 	  }
 
@@ -462,7 +454,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
 
 	    if ((*it)[0] == 'T')
 	    {
-	      printf (" = top    ");
+                kdDebug()<<" = top    \n";
               transPenFormat ((*it), &topPenWidth, &topPenStyle);
 
               if ((*it).length() > 2)
@@ -475,7 +467,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
 
 	    else if ( (*it)[0] == 'B')
 	    {
-	      printf (" = bottom ");
+                kdDebug()<<" = bottom \n";
               transPenFormat ((*it), &bottomPenWidth, &bottomPenStyle);
 
               if ((*it).length() > 2)
@@ -487,7 +479,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
 
 	    else if ( (*it)[0] == 'L')
 	    {
-              printf (" = left   ");
+                kdDebug()<<" = left   \n";
               transPenFormat ((*it), &leftPenWidth, &leftPenStyle);
 
               if ((*it).length() > 2)
@@ -499,7 +491,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
 
 	    else if ( (*it)[0] == 'R')
 	    {
-              printf (" = right  ");
+                kdDebug()<<" = right  \n";
               transPenFormat ((*it), &rightPenWidth, &rightPenStyle);
 
               if ((*it).length() > 2)
@@ -507,19 +499,18 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
 		(*it).remove (0, 2);
                 filterSHFGBG ((*it), &rightbrushstyle, &rightbrushcolor, &rightfg_bg);
     	      }
-              printf ("\n");
 	    }
 
             else if ( ((*it).startsWith ("SH")) || ((*it).startsWith ("FG")) ||
                       ((*it).startsWith ("BG")) )
 	    {
-              printf (" = ");
+                kdDebug()<<" = \n";
               filterSHFGBG ((*it), &brushstyle, &fg_bg, &brushcolor);
 	    }
 
             else
 	    {
-              printf ("   = ???\n");
+                kdDebug()<<"   = ???\n";
 	    }
 
           }
@@ -642,7 +633,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
     str += "</spreadsheet>\n";
 //  str += "</DOC>\n";
 
-    printf ("Text %s\n", (const char *) str.utf8());
+    kdDebug ()<<"Text "<< str<<endl;
 
     KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
 
@@ -900,7 +891,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
    QString mystr;
 
    // Read the colormap
-   printf ("Reading typeface table: \n");
+   kdDebug()<<"Reading typeface table: \n";
 
    ok = true;
    do
@@ -909,14 +900,14 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
      if (mystr == "END TYPEFACE TABLE" ) ok = false;
      else
      {
-       printf ("  %2d: <%s>\n", tftabCounter, mystr.latin1());
+         //printf ("  %2d: <%s>\n", tftabCounter, mystr.latin1());
        typefacetab.append(mystr);
        tftabCounter++;
      }
     }
     while (ok == true );
 
-    printf ("... done \n\n");
+   kdDebug()<<"... done \n";
 }
 
 
@@ -930,7 +921,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QPtrList<t_mycolor> &mco
   int contcount, ok, pos;
 
   QString colstr, mystr;
-  printf ("Reading colormap: \n");
+  kdDebug ()<<"Reading colormap: \n";
 
   ok = true;
 
@@ -943,11 +934,11 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QPtrList<t_mycolor> &mco
      if (mystr == "END COLORMAP") ok = false;
      else
      {
-       printf ("  -> <%-32s> ", mystr.latin1());
+         kdDebug()<<"  ->  "<< mystr<<endl;
 
        // Count the number of  whitespaces
        contcount = mystr.contains (' ');
-       printf ("contcount:%d ", contcount);
+       kdDebug()<< "contcount: "<< contcount<<endl;
        contcount -= 5;
 
        // Begin off interest
@@ -985,7 +976,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QPtrList<t_mycolor> &mco
    }
    while (ok == true );
 
-   printf ("... done <%d>\n\n", mcol.count());
+  kdDebug()<< "... done "<< mcol.count()<<endl;
 
 
    t_mycolor *emp;
@@ -1009,29 +1000,29 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
   QString mystr, tabname;
   int ok;
 
-   printf ("Reading View\n");
+  kdDebug()<<"Reading View\n";
 
    tabname = instr;
 
    tabname.remove (0, 19);
    tabname.remove (tabname.length()-2, 2);
-   printf ("  - Table name: %s\n", tabname.latin1());
+   kdDebug()<< "  - Table name: "<< tabname<<endl;
 
    ok = true;
    do
    {
      mystr = nextLine( stream );
 
-     printf ("  %s\n", mystr.latin1());
+     kdDebug()<<"  "<< mystr<<endl;
      if (mystr.startsWith ("View End, Name:")) ok = false;
      else
      {
        // COLUMN Widths
        if  (mystr.startsWith ("View Column Widths"))
        {
-          printf ("   - Column Widths\n");
+           kdDebug()<< "   - Column Widths\n";
 	  mystr.remove (0, 20);
-          printf ("      <%s>\n", mystr.latin1());
+          kdDebug()<< "      "<<mystr<<endl;
 
           int  colwidth, icolumn;
           char ccolumn;
@@ -1071,9 +1062,9 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
        // ROW Heights
        else if  (mystr.startsWith ("View Row Heights"))
        {
-         printf ("   - Row Heights\n");
+           kdDebug()<< "   - Row Heights\n";
 	 mystr.remove (0, 17);
-         printf ("      <%s>\n", mystr.latin1());
+         kdDebug()<<"      "<< mystr<<endl;
 
          int irow, rowheight;
 
@@ -1313,19 +1304,19 @@ APPLIXSPREADImport::translateColumnNumber (QString colstr)
      // Upper chars
      if      ((colstr[p] >= 'A') && (colstr[p] <= 'Z'))
      {
-       printf (" UPPER\n");
+         kdDebug ()<<" UPPER\n";
        icol = icol + ((int)pow ((double)x, 26) * (colstr[p].latin1() - 'A' + 1)  );
        x++;
      }
      // lower chars
      else if ((colstr[p] >= 'a') && (colstr[p] <= 'z'))
      {
-       printf (" lower\n");
+         kdDebug()<<" lower\n";
        icol = icol + ((int)pow ((double)x, 26) * (colstr[p].latin1() - 'a' + 1)  );
        x++;
      }
      p--;
-     printf ("HI 2\n");
+     kdDebug ()<< "HI 2\n";
 
    }
 
