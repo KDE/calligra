@@ -34,6 +34,8 @@ public:
     bool operator==(const KoPoint &rhs) const { return m_x==rhs.x() && m_y==rhs.y(); }
     bool operator!=(const KoPoint &rhs) const { return m_x!=rhs.x() || m_y!=rhs.y(); }
 
+    bool isNull() const { return m_x == 0 && m_y == 0; }
+
     double x() const { return m_x; }
     double y() const { return m_y; }
     void setX(const double &x) { m_x = x; }
