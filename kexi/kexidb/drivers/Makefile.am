@@ -3,9 +3,9 @@ mysql_dir=mySQL
 endif
 
 
-#if compile_pgsql_plugin
-#pgsql_dir=pgsql
-#endif
+if compile_pgsql_plugin
+pgsql_dir=pqxx
+endif
 
-SUBDIRS =  sqlite  #$(mysql_dir) # $(pgsql_dir)
+SUBDIRS =  sqlite $(mysql_dir) $(pgsql_dir)
 
