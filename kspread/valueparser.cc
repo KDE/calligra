@@ -50,55 +50,25 @@ void ValueParser::parse (const QString& str, KSpreadCell *cell)
   if ( str.isEmpty() || format == Text_format || str.at(0)=='\'' )
   {
     cell->setValue (str);
-    //cell->setFormatType(Text_format); // shouldn't be necessary. Won't apply with StringData anyway.
+    //we must NOT call this, or the cell shall be switched to text format
+    //for everything we put to it
+    //cell->setFormatType (Text_format);
     return;
   }
 
+  QString strStripped = str.stripWhiteSpace();
   // Try parsing as various datatypes, to find the type of the cell
   // First as bool
-  if (tryParseBool (str, cell))
+  if (tryParseBool (strStripped, cell))
     return;
 
   // Then as a number
-  QString strStripped = str.stripWhiteSpace();
   if (tryParseNumber (strStripped, cell))
-  {
-    if ( strStripped.contains('E') || strStripped.contains('e') )
-      cell->setFormatType (Scientific_format);
-    else
-    {
-      //cell->checkNumberFormat();
-      //can't call checkNumberFormat because it's protected
-      if ( cell->value().asFloat() > 1e+10 )
-        cell->setFormatType( Scientific_format );
-
-    }
     return;
-  }
-
-  // Test if text is a percent value, ending with a '%'
-  // It's a bit dirty to do this here, but we have to because the % gets
-  // saved into the XML file. It would be cleaner to save only the numerical value
-  // and treat the trailing % as pure formatting.
-  if( str.at(str.length()-1)=='%')
-  {
-    QString strTrimmed = str.left(str.length()-1);
-    if (tryParseNumber (strTrimmed, cell))
-    {
-      cell->setValue (KSpreadValue (cell->value().asFloat() / 100.0));
-      if (cell->formatType() != Percentage_format)
-      {
-        cell->setFormatType (Percentage_format);
-        cell->setPrecision (0); // Only set the precision if the format wasn't percentage.
-      }
-      cell->setFactor (100.0);
-      return;
-    }
-  }
 
   // Test for money number
   bool ok;
-  double money = cell->locale()->readMoney (str, &ok);
+  double money = cell->locale()->readMoney (strStripped, &ok);
   if (ok)
   {
     cell->setFormatType(Money_format);
@@ -108,23 +78,10 @@ void ValueParser::parse (const QString& str, KSpreadCell *cell)
     return;
   }
 
-  if (tryParseDate (str, cell))
-  {
-    //TODO: (Tomas) can't we simply use if (!isDate()) ?
-    if ( format != TextDate_format &&
-        !(format >= 200 && format <= 216))
-    {
-      //test if it's a short date or text date.
-      if ((cell->locale()->formatDate( cell->value().asDateTime().date(), false) == str))
-        cell->setFormatType(TextDate_format);
-      else
-        cell->setFormatType(ShortDate_format);
-    }
-
+  if (tryParseDate (strStripped, cell))
     return;
-  }
 
-  if (tryParseTime (str, cell))
+  if (tryParseTime (strStripped, cell))
   {
     // Force default time format if format isn't time
     if (!cell->isTime())
@@ -139,45 +96,141 @@ void ValueParser::parse (const QString& str, KSpreadCell *cell)
 
 bool ValueParser::tryParseBool (const QString& str, KSpreadCell *cell)
 {
-  if ((str.lower() == "true") ||
-      (str.lower() == cell->locale()->translate("True").lower()))
+  bool ok;
+  KSpreadValue val = tryParseBool (str, cell->locale(), &ok);
+  if (ok)
   {
-    cell->setValue (KSpreadValue (true));
-    return true;
+    cell->setValue (val);
+    cell->setFormatType (fmtType);
   }
-  if ((str.lower() == "false") ||
-      (str.lower() == cell->locale()->translate("false").lower()))
-  {
-    cell->setValue (KSpreadValue (false));
-    return true;
-  }
-  return false;
+  return ok;
 }
 
 bool ValueParser::tryParseNumber (const QString& str, KSpreadCell *cell)
 {
-  // First try to understand the number using the locale
-  bool ok = false;
-  double val = cell->locale()->readNumber (str, &ok);
-  // If not, try with the '.' as decimal separator
-  if ( !ok )
-    val = str.toDouble(&ok);
-
-  if ( ok )
+  bool ok;
+  KSpreadValue val = tryParseNumber (str, cell->locale(), &ok);
+  if (ok)
   {
-    kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
-        "' successfully parsed as number: " << val << endl;
-    cell->setValue (KSpreadValue (val));
-    return true;
+    cell->setValue (val);
+    if (fmtType == Percentage_format)
+    {
+      if (cell->formatType() != Percentage_format)
+        //Only set the precision if the format wasn't percentage.
+        cell->setPrecision (0);
+      cell->setFactor (100.0);
+    }
+    cell->setFormatType (fmtType);
   }
-
-  return false;
+  return ok;
 }
 
 bool ValueParser::tryParseDate (const QString& str, KSpreadCell *cell)
 {
+  bool ok;
+  KSpreadValue value = tryParseDate (str, cell->locale(), &ok);
+  if (ok)
+  {
+    cell->setValue (value);
+    if (!cell->isDate())
+      //set formatting, but only if we didn't have a date before
+      cell->setFormatType (fmtType);
+  }
+  return ok;
+}
+
+bool ValueParser::tryParseTime (const QString& str, KSpreadCell *cell)
+{
+  bool ok;
+  KSpreadValue value = tryParseTime (str, cell->locale(), &ok);
+  if (ok)
+  {
+    cell->setValue (value);
+    if (!cell->isTime())
+      //set formatting, but only if we didn't have a time before
+      cell->setFormatType (fmtType);
+  }
+  return ok;
+}
+
+
+KSpreadValue ValueParser::tryParseBool (const QString& str, KLocale *locale, bool *ok)
+{
+  KSpreadValue val;
+  if (ok) *ok = false;
+  if ((str.lower() == "true") ||
+      (str.lower() == locale->translate("True").lower()))
+  {
+    val.setValue (true);
+    if (ok) *ok = true;
+  }
+  else if ((str.lower() == "false") ||
+      (str.lower() == locale->translate("false").lower()))
+  {
+    val.setValue (false);
+    if (ok) *ok = true;
+    fmtType = Number_format;    //TODO: really?
+  }
+  return val;
+}
+
+KSpreadValue ValueParser::tryParseNumber (const QString& str, KLocale *locale,
+    bool *ok)
+{
+  KSpreadValue value;
+
+  bool percent = false;
+  QString str2;
+  if( str.at(str.length()-1)=='%')
+  {
+    QString str2 = str.left (str.length()-1);
+    percent = true;
+  }
+  else
+    str2 = str;
+
+  
+  // First try to understand the number using the locale
+  double val = locale->readNumber (str2, ok);
+  // If not, try with the '.' as decimal separator
+  if (!(*ok))
+    val = str2.toDouble(ok);
+
+  if (*ok)
+  {
+    if (percent)
+    {
+      kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
+          "' successfully parsed as percentage: " << val << "%" << endl;
+      value.setValue (val / 100.0);
+      fmtType = Percentage_format;
+    }
+    else
+    {
+      kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
+          "' successfully parsed as number: " << val << endl;
+      value.setValue (val);
+      
+      if ( str2.contains('E') || str2.contains('e') )
+        fmtType = Scientific_format;
+      else
+      {
+        if (val > 1e+10)
+          fmtType = Scientific_format;
+        else
+          fmtType = Number_format;
+      }
+    }
+  }
+
+  return value;
+}
+
+KSpreadValue ValueParser::tryParseDate (const QString& str, KLocale *locale,
+    bool *ok)
+{
   bool valid = false;
-  QDate tmpDate = cell->locale()->readDate (str, &valid);
+  QDate tmpDate = locale->readDate (str, &valid);
   if (!valid)
   {
     // Try without the year
@@ -185,7 +238,7 @@ bool ValueParser::tryParseDate (const QString& str, KSpreadCell *cell)
     // For instance %Y-%m-%d becomes %m-%d and %d/%m/%Y becomes %d/%m
     // If the year is in the middle, say %m-%Y/%d, we'll remove the sep.
     // before it (%m/%d).
-    QString fmt = cell->locale()->dateFormatShort();
+    QString fmt = locale->dateFormatShort();
     int yearPos = fmt.find ("%Y", 0, false);
     if ( yearPos > -1 )
     {
@@ -201,7 +254,7 @@ bool ValueParser::tryParseDate (const QString& str, KSpreadCell *cell)
           fmt.remove( yearPos, 1 );
       }
       //kdDebug(36001) << "KSpreadCell::tryParseDate short format w/o date: " << fmt << endl;
-      tmpDate = cell->locale()->readDate( str, fmt, &valid );
+      tmpDate = locale->readDate( str, fmt, &valid );
     }
   }
   if (valid)
@@ -213,7 +266,7 @@ bool ValueParser::tryParseDate (const QString& str, KSpreadCell *cell)
   
     // The following fixes the problem, 3/4/1955 will always be 1955
 
-    QString fmt = cell->locale()->dateFormatShort();
+    QString fmt = locale->dateFormatShort();
     if( ( fmt.contains( "%y" ) == 1 ) && ( tmpDate.year() > 2999 ) )
       tmpDate = tmpDate.addYears( -1900 );
 
@@ -236,78 +289,76 @@ bool ValueParser::tryParseDate (const QString& str, KSpreadCell *cell)
           ( str.contains( yearFourDigits ) == 0 ) )
         tmpDate = tmpDate.addYears( -100 );
     }
+    
+    //test if it's a short date or text date.
+    if (locale->formatDate (tmpDate, false) == str)
+      fmtType = TextDate_format;
+    else
+      fmtType = ShortDate_format;
   }
-  if (valid)
-  {
-    Q_ASSERT( tmpDate.isValid() );
-
-    //KLocale::readDate( QString ) doesn't support long dates...
-    // (David: it does now...)
-    // _If_ the input is a long date, check if the first character isn't
-    // a number...
-    // (David: why? this looks specific to some countries)
-
-    // Deactivating for now. If you reactivate, please explain better (David).
-    //if ( str.contains( ' ' ) == 0 )  //No spaces " " in short dates...
-    {
-      cell->setValue (KSpreadValue (tmpDate));
-      return true;
-    }
-  }
-  return false;
+  if (ok)
+    *ok = valid;
+    
+  return KSpreadValue (tmpDate);
 }
 
-bool ValueParser::tryParseTime (const QString& str, KSpreadCell *cell)
+KSpreadValue ValueParser::tryParseTime (const QString& str, KLocale *locale,
+    bool *ok)
 {
+  if (ok)
+    *ok = false;
+
   bool valid    = false;
   bool duration = false;
+  KSpreadValue val;
 
-  QDateTime tmpTime = readTime(str, cell->locale(), true, &valid, duration);
+  QDateTime tmpTime = readTime(str, locale, true, &valid, duration);
   if (!tmpTime.isValid())
-    tmpTime = readTime (str, cell->locale(), false, &valid, duration);
+    tmpTime = readTime (str, locale, false, &valid, duration);
 
   if (!valid)
   {
     QTime tm;
-    if (cell->locale()->use12Clock())
+    if (locale->use12Clock())
     {
-      QString stringPm = cell->locale()->translate("pm");
-      QString stringAm = cell->locale()->translate("am");
+      QString stringPm = locale->translate("pm");
+      QString stringAm = locale->translate("am");
       int pos=0;
       if((pos=str.find(stringPm))!=-1)
       {
           QString tmp=str.mid(0,str.length()-stringPm.length());
           tmp=tmp.simplifyWhiteSpace();
-          tm = cell->locale()->readTime(tmp+" "+stringPm, &valid);
+          tm = locale->readTime(tmp+" "+stringPm, &valid);
           if (!valid)
-              tm = cell->locale()->readTime(tmp+":00 "+stringPm, &valid);
+              tm = locale->readTime(tmp+":00 "+stringPm, &valid);
       }
       else if((pos=str.find(stringAm))!=-1)
       {
           QString tmp = str.mid(0,str.length()-stringAm.length());
           tmp = tmp.simplifyWhiteSpace();
-          tm = cell->locale()->readTime (tmp + " " + stringAm, &valid);
+          tm = locale->readTime (tmp + " " + stringAm, &valid);
           if (!valid)
-              tm = cell->locale()->readTime (tmp + ":00 " + stringAm, &valid);
+              tm = locale->readTime (tmp + ":00 " + stringAm, &valid);
       }
     }
-    if ( valid )
-      cell->setValue (KSpreadValue (tm));
-    return valid;
   }
   if (valid)
   {
+    fmtType = Time_format;
     if ( duration )
     {
-      cell->setValue (KSpreadValue (tmpTime));
-      cell->setFormatType( Time_format7 );
+      val.setValue (tmpTime);
+      fmtType = Time_format7;
     }
     else
-      cell->setValue (KSpreadValue (tmpTime.time()));
+      val.setValue (tmpTime.time());
   }
-  return valid;
+  
+  if (ok)
+    *ok = valid;
+    
+  return val;
 }
-
 
 QDateTime ValueParser::readTime (const QString & intstr, KLocale * locale,
     bool withSeconds, bool * ok, bool & duration)

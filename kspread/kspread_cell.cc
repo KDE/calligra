@@ -5864,7 +5864,6 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
     else // old docs: do the ugly solution of calling checkTextInput to parse the text
     {
       // ...except for date/time
-      FormatType cellFormatType = formatType();
       if (isDate() && ( t.contains('/') == 2 ))
         dataType = "Date";
       else if (isTime() && ( t.contains(':') == 2 ) )
