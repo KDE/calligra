@@ -1028,20 +1028,27 @@ void KWTextParag::loadLayout( QDomElement & attributes )
     QDomElement layout = attributes.namedItem( "LAYOUT" ).toElement();
     if ( !layout.isNull() )
     {
-        //KWTextParag * parag = static_cast<KWTextParag *>(_parag);
         KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
         KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
         KWParagLayout paragLayout( layout, doc );
         setParagLayout( paragLayout );
 
+        // Load default format from style.
+        KWStyle *existingStyle = doc->findStyle( m_styleName );
+        ASSERT( existingStyle );
+        QTextFormat *defaultFormat = &existingStyle->format();
         QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
         {
-            // Load default format and insert/find it in the collection
-            QTextFormat f = loadFormat( formatElem, 0L );
-            QTextFormat * defaultFormat = document()->formatCollection()->format( &f );
-            setFormat( defaultFormat );
+            // Modify default format and insert/find it in the collection
+            QTextFormat f = loadFormat( formatElem, defaultFormat );
+            defaultFormat = document()->formatCollection()->format( &f );
         }
+        setFormat( defaultFormat );
+    }
+    else
+    {
+        kdError(32001) << "Missing LAYOUT tag" << endl;
     }
 }
 
@@ -1198,6 +1205,10 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
                 kdError(32001) << "Cannot find style \"" << m_styleName << "\"" << endl;
             }
         }
+    }
+    else
+    {
+        kdError(32001) << "Missing NAME tag in LAYOUT" << endl;
     }
 
     element = parentElem.namedItem( "TABULATOR" ).toElement();
