@@ -64,8 +64,11 @@ case "$1" in
 	    newextension=wpd
 	    newmimetype=application/wordperfect
 	    ;;
+            ascii)
+            newextension=txt
+            newmimetype=text/plain
 	    *)
-	    printf "Usage: %s {kspread|kword|kpresenter} <file name> {rtf|amipro|oowriter|latex|paldoc|abiword|wml|wordperfect}\n" "$0"
+	    printf "Usage: %s {kspread|kword|kpresenter} <file name> {rtf|amipro|oowriter|latex|paldoc|abiword|wml|wordperfect|ascii}\n" "$0"
 	    exit 1;
 	esac
 	;;
