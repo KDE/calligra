@@ -21,7 +21,7 @@
 #ifndef KOREPLACE_H
 #define KOREPLACE_H
 
-#include <koFind.h>
+#include "koFind.h"
 
 class KHistoryCombo;
 class QCheckBox;
@@ -182,7 +182,7 @@ private:
  * </pre>
  */
 class KoReplace :
-    public KDialogBase
+    public KoFind
 {
     Q_OBJECT
 
@@ -190,26 +190,22 @@ public:
 
     /** Will create a prompt dialog and use it as needed. */
     KoReplace(const QString &pattern, const QString &replacement, long options, QWidget *parent = 0);
-    ~KoReplace();
-
-    /**
-     * Return the current options.
-     *
-     * Warning: this is usually the same value as the one passed to the constructor,
-     * but options might change _during_ the replace operation:
-     * e.g. the "All" button resets the PromptOnReplace flag.
-     *
-     */
-    long options() const { return m_options; }
+    virtual ~KoReplace();
 
     /**
      * Return the number of replacements made (i.e. the number of times
      * the @ref replace signal was emitted).
      * Can be used in a dialog box to tell the user how many replacements were made.
-     * You might want to combine this with a "want to restart search?" question,
-     * so the actual dialog box isn't provided by this class.
+     * The final dialog does so already, unless you used setDisplayFinalDialog(false).
      */
     int numReplacements() const { return m_replacements; }
+
+    /**
+     * Call this to reset the numMatches & numReplacements counts.
+     * Can be useful if reusing the same KoReplace for different operations,
+     * or when restarting from the beginning of the document.
+     */
+    virtual void resetCounts();
 
     /**
      * Walk the text fragment (e.g. kwrite line, kspread cell) looking for matches.
@@ -221,19 +217,6 @@ public:
      * @return False if the user elected to discontinue the replace.
      */
     bool replace(QString &text, const QRect &expose);
-
-    /**
-     * Virtual method, which allows applications to add extra checks for
-     * validating a candidate match. It's only necessary to reimplement this
-     * if the find dialog extension has been used to provide additional
-     * criterias.
-     *
-     * @param text  The current text fragment
-     * @param index The starting index where the candidate match was found
-     * @param matchedlength The length of the candidate match
-     */
-    virtual bool validateMatch( const QString &/*text*/, int /*index*/, int /*matchedlength*/ ) { return true; }
-
 
     /**
      * Search the given string, replaces with the given replacement string,
@@ -256,18 +239,16 @@ public:
     static int replace( QString &text, const QRegExp &pattern, const QString &replacement, int index, long options, int *replacedLength );
 
     /**
-     * Abort the current find/replace process. Call this when the parent widget
-     * is getting destroyed.
+     * Returns true if we should restart the search from scratch.
+     * Can ask the user, or return false (if we already searched/replaced the
+     * whole document without the PromptOnReplace option).
+     *
+     * @param forceAsking set to true if the user modified the document during the
+     * search. In that case it makes sense to restart the search again.
      */
-    void abort();
+    virtual bool shouldRestart( bool forceAsking = false ) const;
 
 signals:
-
-    /**
-     * Connect to this slot to implement highlighting of found text during the replace
-     * operation.
-     */
-    void highlight(const QString &text, int matchingIndex, int matchedLength, const QRect &expose);
 
     /**
      * Connect to this slot to implement updating of replaced text during the replace
@@ -289,17 +270,8 @@ signals:
 private:
     void doReplace();
 
-    QString m_pattern;
-    QRegExp *m_regExp;
     QString m_replacement;
-    long m_options;
-    QWidget *m_parent;
     unsigned m_replacements;
-    QString m_text;
-    int m_index;
-    QRect m_expose;
-    int m_matchedLength;
-    bool m_cancelled;
 
     static int replace( QString &text, const QString &replacement, int index, int length );
 
@@ -309,9 +281,8 @@ private:
 
 private slots:
 
-    void slotUser1();   // All
-    void slotUser2();   // Skip
-    void slotUser3();   // Yes
-    void slotClose();
+    virtual void slotUser1();   // All
+    virtual void slotUser2();   // Skip
+    virtual void slotUser3();   // Yes
 };
 #endif

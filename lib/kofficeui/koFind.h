@@ -60,7 +60,6 @@ class QGridLayout;
  * <pre>
  * </pre>
  */
-
 class KoFindDialog:
     public KDialogBase
 {
@@ -254,7 +253,6 @@ private:
  *
  * </pre>
  */
-
 class KoFind :
     public KDialogBase
 {
@@ -264,7 +262,7 @@ public:
 
     /** Will create a prompt dialog and use it as needed. */
     KoFind(const QString &pattern, long options, QWidget *parent = 0);
-    ~KoFind();
+    virtual ~KoFind();
 
     /**
      * Walk the text fragment (e.g. kwrite line, kspread cell) looking for matches.
@@ -288,6 +286,22 @@ public:
     long options() const { return m_options; }
 
     /**
+     * Return the number of matches found (i.e. the number of times
+     * the @ref highlight signal was emitted).
+     * If 0, can be used in a dialog box to tell the user "no match was found".
+     * The final dialog does so already, unless you used setDisplayFinalDialog(false).
+     */
+    int numMatches() const { return m_matches; }
+
+    /**
+     * Call this to reset the numMatches count
+     * (and the numReplacements count for a KoReplace).
+     * Can be useful if reusing the same KoReplace for different operations,
+     * or when restarting from the beginning of the document.
+     */
+    virtual void resetCounts() { m_matches = 0; }
+
+    /**
      * Virtual method, which allows applications to add extra checks for
      * validating a candidate match. It's only necessary to reimplement this
      * if the find dialog extension has been used to provide additional
@@ -298,6 +312,15 @@ public:
      * @param matchedlength The length of the candidate match
      */
     virtual bool validateMatch( const QString &/*text*/, int /*index*/, int /*matchedlength*/ ) { return true; }
+
+    /**
+     * Returns true if we should restart the search from scratch.
+     * Can ask the user, or return false (if we already searched the whole document).
+     *
+     * @param forceAsking set to true if the user modified the document during the
+     * search. In that case it makes sense to restart the search again.
+     */
+    virtual bool shouldRestart( bool forceAsking = false ) const;
 
     /**
      * Search the given string, and returns whether a match was found. If one is,
@@ -321,6 +344,24 @@ public:
      */
     void abort();
 
+    /**
+     * Sets whether the final dialog saying "no match was found"
+     * or "N replacements were made" should be displayed.
+     * This is true by default, but some apps might want to deactivate this
+     * to display a dialog that includes "do you want to start again"?
+     *
+     * The final dialog is displayed by the destructor (when abort() wasn't called
+     * and the user didn't press Cancel).
+     */
+    void setDisplayFinalDialog( bool b ) { m_displayFinalDialog = b; }
+    bool displayFinalDialog() const { return m_displayFinalDialog; }
+
+protected:
+    /**
+     * @internal Constructor for KoReplace
+     */
+    KoFind(const QString &pattern, const QString &replacement, long options, QWidget *parent);
+
 signals:
 
     /**
@@ -330,20 +371,24 @@ signals:
     void highlight(const QString &text, int matchingIndex, int matchedLength, const QRect &expose);
 
 private:
+    void init( const QString& pattern );
+
 
     QString m_pattern;
     QRegExp *m_regExp;
     long m_options;
-    QWidget *m_parent;
     unsigned m_matches;
     QString m_text;
-    int m_index;
     QRect m_expose;
+    int m_index;
     int m_matchedLength;
     bool m_cancelled;
+    bool m_displayFinalDialog;
 
     static bool isInWord( QChar ch );
     static bool isWholeWords( const QString &text, int starts, int matchedLength );
+
+    friend class KoReplace;
 
     // Binary compatible extensibility.
     class KoFindPrivate;

@@ -371,11 +371,29 @@ KoFind::KoFind(const QString &pattern, long options, QWidget *parent) :
         false,
         i18n("&Yes"))
 {
-    setMainWidget( new QLabel( i18n("Find next '%1'").arg(pattern), this ) );
-
-    m_cancelled = false;
     m_options = options;
-    m_parent = parent;
+    setMainWidget( new QLabel( i18n("Find next '%1'").arg(pattern), this ) );
+    init( pattern );
+}
+
+// Constructor for KoReplace
+KoFind::KoFind(const QString &pattern, const QString &, long options, QWidget *parent) :
+    KDialogBase(parent, __FILE__, false,  // non-modal!
+        i18n("Replace"),
+        User3 | User2 | User1 | Close,
+        User3,
+        false,
+        i18n("&All"), i18n("&Skip"), i18n("&Yes"))
+{
+    m_options = options;
+    // setMainWidget done by KoReplace
+    init( pattern );
+}
+
+void KoFind::init( const QString& pattern )
+{
+    m_cancelled = false;
+    m_displayFinalDialog = true;
     m_matches = 0;
     if (m_options & KoFindDialog::RegularExpression)
         m_regExp = new QRegExp(pattern, m_options & KoFindDialog::CaseSensitive);
@@ -386,12 +404,13 @@ KoFind::KoFind(const QString &pattern, long options, QWidget *parent) :
 
 KoFind::~KoFind()
 {
-    if (!m_matches && !m_cancelled)
-        KMessageBox::information(m_parent, i18n("No match was found."));
+    if (m_displayFinalDialog && !m_matches && !m_cancelled)
+        KMessageBox::information(parentWidget(), i18n("No match was found."));
 }
 
 void KoFind::slotClose()
 {
+    m_matches++;
     m_cancelled = true;
     kapp->exit_loop();
 }
@@ -602,6 +621,25 @@ void KoFind::slotUser1()
     else
         m_index++;
     kapp->exit_loop();
+}
+
+bool KoFind::shouldRestart( bool forceAsking ) const
+{
+    // Only ask if we did a "find from cursor", otherwise it's pointless.
+    // Well, unless the user can modify the document during a search operation,
+    // hence the force boolean.
+    if ( !forceAsking && (m_options & KoFindDialog::FromCursor) == 0 )
+        return false;
+    QString message;
+    if ( numMatches() )
+        message = i18n("1 match found.\n", "%1 matches found.\n").arg( numMatches() );
+    else
+        message = i18n("No matches found.\n");
+    // Hope this word puzzle is ok, it's a different sentence
+    message += i18n("Do you want to restart search at the beginning?");
+
+    int ret = KMessageBox::questionYesNo( parentWidget(), message );
+    return( ret == KMessageBox::Yes );
 }
 
 #include "koFind.moc"

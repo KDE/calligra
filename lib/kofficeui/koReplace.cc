@@ -25,8 +25,8 @@
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <klocale.h>
-#include <koReplace.h>
 #include <kmessagebox.h>
+#include "koReplace.h"
 
 KoReplaceDialog::KoReplaceDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection) :
     KoFindDialog(parent, name, true)
@@ -98,45 +98,29 @@ struct KoReplace::KoReplacePrivate
 
 // Create the dialog.
 KoReplace::KoReplace(const QString &pattern, const QString &replacement, long options, QWidget *parent) :
-    KDialogBase(parent, __FILE__, false,  // non-modal!
-        i18n("Replace"),
-        User3 | User2 | User1 | Close,
-        User3,
-        false,
-        i18n("&All"), i18n("&Skip"), i18n("&Yes"))
+    KoFind( pattern, replacement, options, parent )
 {
     d = new KoReplacePrivate;
     d->m_mainLabel = new QLabel( this );
     d->setLabel( pattern, replacement );
     setMainWidget( d->m_mainLabel );
-    m_cancelled = false;
-    m_options = options;
-    m_parent = parent;
+
     m_replacements = 0;
-    if (m_options & KoReplaceDialog::RegularExpression)
-        m_regExp = new QRegExp(pattern, m_options & KoReplaceDialog::CaseSensitive);
-    else
-        m_pattern = pattern;
     m_replacement = replacement;
-    resize(minimumSize());
 }
 
 KoReplace::~KoReplace()
 {
-    if (!m_replacements && !m_cancelled)
-        KMessageBox::information(m_parent, i18n("No text was replaced."));
+    if (displayFinalDialog() && !m_cancelled)
+    {
+        if ( !m_replacements )
+            KMessageBox::information(parentWidget(), i18n("No text was replaced."));
+        else
+            KMessageBox::information(parentWidget(), i18n("1 replacement done.\n", "%n replacements done.\n", m_replacements ) );
+
+    }
+    setDisplayFinalDialog( false ); // don't display the KoFind dialog :)
     delete d;
-}
-
-void KoReplace::slotClose()
-{
-    m_cancelled = true;
-    kapp->exit_loop();
-}
-
-void KoReplace::abort()
-{
-    slotClose();
 }
 
 bool KoReplace::replace(QString &text, const QRect &expose)
@@ -269,6 +253,34 @@ void KoReplace::doReplace()
         m_index--;
     else
         m_index += replacedLength;
+}
+
+void KoReplace::resetCounts()
+{
+    KoFind::resetCounts();
+    m_replacements = 0;
+}
+
+bool KoReplace::shouldRestart( bool forceAsking ) const
+{
+    // Only ask if we did a "find from cursor", otherwise it's pointless.
+    // ... Or if the prompt-on-replace option was set.
+    // Well, unless the user can modify the document during a search operation,
+    // hence the force boolean.
+    if ( !forceAsking && (m_options & KoFindDialog::FromCursor) == 0
+         && (m_options & KoReplaceDialog::PromptOnReplace) == 0 )
+        return false;
+    QString message;
+    if ( m_replacements )
+        message = i18n("1 replacement done.\n", "%n replacements done.\n", m_replacements );
+    else
+        message = i18n("No replacement done.\n");
+
+    // Hope this word puzzle is ok, it's a different sentence
+    message += i18n("Do you want to restart search at the beginning?");
+
+    int ret = KMessageBox::questionYesNo( parentWidget(), message );
+    return( ret == KMessageBox::Yes );
 }
 
 #include "koReplace.moc"
