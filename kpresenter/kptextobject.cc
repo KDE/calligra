@@ -716,7 +716,6 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
             KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc, true/* force default format for date/time*/ );
             var->load( varElem );
             KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont() );
-
             lastParag->setCustomItem( index, var, lastParag->document()->formatCollection()->format( &format ));
             var->recalc();
         }
@@ -2108,7 +2107,7 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
         if ( c.isCustom() )
         {
             QDomElement variable = doc.createElement("CUSTOM");
-            variable.setAttribute("pos", i);
+            variable.setAttribute("pos", (i-from));
             saveFormat( variable, c.format() );
             paragraph.appendChild( variable );
             static_cast<KoTextCustomItem *>( c.customItem() )->save(variable );
