@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# This script helps finding out problems in filter of kspread
-# by converting .ksp -> filter extension -> .ksp and comparing the initial and final .ksp files.
-# We use the ksp format as a "dump" of the KSpread data, to check if everything is correct
+# This script helps finding out problems in filter of kspread/kword/kpresenter
+# by converting .ksp/.kpr/.kwd -> filter extension -> .ksp/.kpr/.kwd and comparing the initial and final .ksp/.kpr/.kwd files.
+# We use the ksp/kpr/kwd format as a "dump" of the KSpread data, to check if everything is correct
 # in memory, but the point is of course to ensure that the filter extension has all the information.
 
 # To use this script, you need to pass the full path to an existing ksp file as argument.
