@@ -118,11 +118,15 @@ public:
 
     /**
      * Returns true if it is possible to scroll one tab left.
+     *
+     * \sa scrollLeft
      */
     bool canScrollLeft() const;
 
     /**
      * Returns true if it is possible to scroll one tab right.
+     *
+     * \sa scrollRight
      */
     bool canScrollRight() const;
 
@@ -140,9 +144,36 @@ public:
 
 public slots:
 
+    /**
+     * Scrolls one tab left. Does nothing if the leftmost tab is already the
+     * first tab.
+     *
+     * \sa canScrollLeft
+     */
     void scrollLeft();
+
+    /**
+     * Scrolls one tab right. Does nothing if the rightmost tab is already the
+     * last tab.
+     *
+     * \sa canScrollRight
+     */
     void scrollRight();
+
+    /**
+     * Scrolls to the first tab. Does nothing if the leftmost tab is already the
+     * first tab.
+     *
+     * \sa canScrollLeft
+     */
     void scrollFirst();
+
+    /**
+     * Scrolls to the last tab. Does nothing if the rightmost tab is already the
+     * last tab.
+     *
+     * \sa canScrollRight
+     */
     void scrollLast();
 
     /**
