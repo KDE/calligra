@@ -201,7 +201,11 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
       dcopObject();
 
   // default document properties
-  d->unit = KoUnit::U_MM;
+  if ( KGlobal::locale()->measureSystem() == KLocale::Imperial ) {
+    d->unit = KoUnit::U_INCH;
+  } else {
+    d->unit = KoUnit::U_MM;
+  }
   d->syntaxVersion = CURRENT_SYNTAX_VERSION;
   d->verticalScrollBar = true;
   d->horizontalScrollBar = true;
