@@ -76,7 +76,8 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
     // Initialize the parameter set for this chart document
     kdDebug(35001) << "InitDOC" << endl;
 
-    // Create the chart parameters.
+    // Create the chart parameters and let the default be a bar chart
+    // with 3D looks.
     m_params = new KChartParams();
     m_params->setThreeDBars( true );
 
@@ -138,6 +139,11 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     Q_ASSERT( m_params != 0 );
 
     // Handle data in rows or columns.
+    //
+    // This means getting row or column headers from the document and
+    // set them as X axis labels or legend according to the current
+    // setting.
+    //
     // FIXME: It seems as if the short labels are not generated properly.
     KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
     QStringList  longLabels;
@@ -148,14 +154,16 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
 	// Data is handled in rows.  This is the default.
 
-	// These are efficient so it doesn't matter if we always copy.
+	// This is efficient so it doesn't matter if we always copy.
 	m_displayData = m_currentData;
 
+	// Set X axis labels from column headers.
 	for ( uint col = 0; col < m_currentData.cols(); col++ ) {
 	    longLabels  << m_colLabels[col];
 	    shortLabels << m_colLabels[col].left( 3 );
 	}
 
+	// Set legend from row headers.
 	for ( uint row = 0; row < m_currentData.rows(); row++ )
 	    m_params->setLegendText( row, m_rowLabels[row] );
     }
@@ -164,6 +172,9 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	// everything since KDChart wants its data in rows.
 
 	// FIXME: Rewrite so that we only copy data when necessary.
+	// On the other hand, the next version of KDChart is able to
+	// get data directly without storing it into a KDChartData
+	// class first, so we might never need to.
 	
 	// Resize displayData so that the transposed data has room.
 	m_displayData.expand(m_currentData.usedCols(),
@@ -176,12 +187,13 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	    }
 	}
 
-	// Transpose labels.
+	// Set X axis labels from row headers.
 	for ( uint row = 0; row < m_currentData.rows(); row++ ) {
 	    longLabels  << m_rowLabels[row];
 	    shortLabels << m_rowLabels[row].left( 3 );
 	}
 
+	// Set legend from column headers.
 	for ( uint col = 0; col < m_currentData.cols(); col++ )
 	    m_params->setLegendText( col, m_colLabels[col] );
     }
@@ -202,6 +214,10 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 }
 
 
+// This function sets the data from an external source.  It is called,
+// for instance, when the chart is initialized from a spreadsheet in
+// KSpread.
+//
 void KChartPart::setData( const KoChart::Data& data )
 {
     // FIXME(khz): replace this when automatic string detection works in KDChart
@@ -209,7 +225,7 @@ void KChartPart::setData( const KoChart::Data& data )
 
     uint col, row;
 
-    //Does the top/left cell contain a srting?
+    //Does the top/left cell contain a string?
     bool isStringTopLeft = data.cell( 0, 0 ).isString();
 
     //Does the first row (without first cell) contain only strings
@@ -289,13 +305,12 @@ void KChartPart::setData( const KoChart::Data& data )
 	    m_colLabels << data.cell( 0, col ).stringValue();
 #endif
     }
-    else
-    {
 #if 0
+    else {
         m_longLabels.clear();
         m_shortLabels.clear();
-#endif
     }
+#endif
 
     // If there is a row header and/or a column header, then generate
     // the data that will be used for the chart by translating the
@@ -529,7 +544,13 @@ void KChartPart::saveConfig( KConfig *conf )
 QDomDocument KChartPart::saveXML()
 {
     kdDebug(35001) << "kchart saveXML called" << endl;
+
+    // The biggest part of the saving is done by KDChart itself, so we
+    // don't have to do it.
     QDomDocument doc = m_params->saveXML( false );
+
+    // ----------------------------------------------------------------
+    // The rest of the saving has to be done by us.
 
     QDomElement docRoot = doc.documentElement();
 
@@ -539,8 +560,8 @@ QDomDocument KChartPart::saveXML()
 
     // Only one auxiliary element so far: the data direction (rows/columns).
     QDomElement e = doc.createElement( "direction" );
-    aux.appendChild( e );
     e.setAttribute( "value", (int) m_auxiliary.m_dataDirection );
+    aux.appendChild( e );
 
     // Save the data values.
     QDomElement data = doc.createElement( "data" );
@@ -586,7 +607,8 @@ QDomDocument KChartPart::saveXML()
                 default: {
                     e.setAttribute( "value", "" );
                     if( KoChart::Value::NoValue != cell.valueType() )
-                        kdDebug(35001) << "ERROR: cell " << i << "," << j << " has unknown type." << endl;
+                        kdDebug(35001) << "ERROR: cell " << i << "," << j 
+				       << " has unknown type." << endl;
                 }
             }
         }
@@ -616,28 +638,48 @@ bool KChartPart::saveOasis(KoStore*, KoXmlWriter*)
 bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 {
     kdDebug(35001) << "kchart loadXML called" << endl;
-    bool result=m_params->loadXML( doc );
 
+    // First try to load the KDChart parameters.
+    bool  result = m_params->loadXML( doc );
     
-    kdDebug(35001) << "LabelTexts: " << endl;
-
-
+    // If that didn't go well, try to load old file format...
     if (!result)
-    {
-        //try to load old file format
-        result=loadOldXML( doc );
-    }
-
-    if ( result )
-    {
+        result = loadOldXML( doc );
+    else {
+	// ...but if it did, try to load the auxiliary data and the data.
         result = loadAuxiliary(doc)
 	    && loadData( doc, m_currentData );
+    }
+
+    // If everything is OK, then get the headers from the KDChart parameters.
+    if (result) {
+	QStringList        legendLabels;
+	KDChartAxisParams  params
+	    = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+
+	// Get the legend.
+	QString  str;
+	uint     index = 0;
+	while ((str = m_params->legendText(index++)) != QString::null)
+	    legendLabels << str;
+
+	if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
+	    m_colLabels = params.axisLabelStringList();
+	    m_rowLabels = legendLabels;
+	}
+	else {
+	    m_colLabels = legendLabels;
+	    m_rowLabels = params.axisLabelStringList();
+	}
     }
 
     return result;
 }
 
 
+// Load the auxiliary data.
+// Currently, that means the data direction.
+//
 bool KChartPart::loadAuxiliary( const QDomDocument& doc )
 {
     QDomElement  chart = doc.documentElement();
@@ -664,6 +706,8 @@ bool KChartPart::loadAuxiliary( const QDomDocument& doc )
 	if ( e.tagName() == "direction" ) {
 	    if ( e.hasAttribute("value") ) {
 		bool  ok;
+
+		// Read the direction. On failure, use the default.
 		int   dir = e.attribute("value").toInt(&ok);
 		if ( !ok )
 		    dir = (int) KChartAuxiliary::DataRows;

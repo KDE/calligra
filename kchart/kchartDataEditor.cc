@@ -355,8 +355,7 @@ void kchartDataEditor::getXLabel( KChartParams* params )
     int  numCols = m_colsSB->value();
 
     bool filled = FALSE;
-    for ( int col = 0; col < numCols; col++ )
-    {
+    for ( int col = 0; col < numCols; col++ ) {
 	QString tmp = m_table->text(0, col + 1);
         if( !tmp.isEmpty() )
             filled = TRUE;

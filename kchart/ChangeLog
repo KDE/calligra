@@ -1,5 +1,14 @@
 2005-03-12  Inge Wallin  <inge@lysator.liu.se>
 
+	Load row and column headers from XML file.
+	* kchart_part.cc (loadXML): Get the legend and axis label strings
+	from the KDChart parameters and store in the column and row
+	headers.
+
+	Lots of code cleaning and added comments.
+
+	----------------------------------------------------------------
+
 	Clean up the data editor and remove old cruft.
 	* kchartDataEditor.{h,cc}: Remove all #if 0:ed code.
 	* Makefile.am (libkchartpart_la_SOURCES): Removed parser.cc,
