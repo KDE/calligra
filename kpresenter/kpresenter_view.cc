@@ -75,6 +75,8 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   m_bRectSelection = false;
   presStarted = false;
   searchFirst = true;
+  continuePres = false;
+  exitPres = false;
 }
 
 /*======================= destructor ============================*/
@@ -657,6 +659,13 @@ void KPresenterView_impl::screenStart()
 	  page->setFocusPolicy(QWidget::StrongFocus);
 	  page->setFocus();
 	}
+
+      if (!KPresenterDoc()->spManualSwitch())
+	{
+	  continuePres = true;
+	  exitPres = false;
+	  doAutomaticScreenPres();
+	}
     }
 }
 
@@ -665,6 +674,8 @@ void KPresenterView_impl::screenStop()
 {
   if (presStarted)
     {
+      continuePres = false;
+      exitPres = true;
       if (true) //m_rToolBarScreen->isButtonOn(m_idButtonScreen_Full))
 	{
 	  page->close(false);
@@ -1052,7 +1063,8 @@ void KPresenterView_impl::createGUI()
       QObject::connect(m_pKPresenterDoc,SIGNAL(restoreBackColor(unsigned int)),page,SLOT(restoreBackColor(unsigned int)));
       for (unsigned int i = 0;i < KPresenterDoc()->pageList()->count();i++)
 	page->restoreBackColor(i);
-    }
+      QObject::connect(page,SIGNAL(stopPres()),this,SLOT(stopPres()));
+   }
 
   resizeEvent(0L);
 
@@ -2017,6 +2029,23 @@ void KPresenterView_impl::resizeEvent(QResizeEvent *e)
 void KPresenterView_impl::keyPressEvent(QKeyEvent *e)
 {
   page->keyPressEvent(e);
+}
+
+/*====================== do automatic screenpresentation ========*/
+void KPresenterView_impl::doAutomaticScreenPres()
+{
+  page->repaint(false);
+
+  while (continuePres && !exitPres)
+    screenNext();
+
+  if (!exitPres && KPresenterDoc()->spInfinitLoop())
+    {
+      screenStop();
+      screenStart();
+    }
+
+  screenStop();
 }
 
 /*======================= hide parts ============================*/

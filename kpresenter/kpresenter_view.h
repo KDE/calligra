@@ -320,6 +320,8 @@ protected slots:
   void replace(QString,QString,bool,bool);
   void replaceAll(QString,QString,bool);
 
+  void stopPres() {continuePres = false;}
+
 protected:
 
   // ********* functions ***********
@@ -353,6 +355,8 @@ protected:
   void mouseReleaseEvent(QMouseEvent*);
   void mouseMoveEvent(QMouseEvent*);
   void keyPressEvent(QKeyEvent*);
+
+  void doAutomaticScreenPres();
   
   // ********** variables **********
 
@@ -362,7 +366,7 @@ protected:
   // flags
   bool m_bKPresenterModified;
   bool m_bUnderConstruction;
-  bool searchFirst;
+  bool searchFirst,continuePres,exitPres;
   
   // menubar
   OPParts::MenuBarFactory_var m_vMenuBarFactory;

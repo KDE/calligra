@@ -223,6 +223,7 @@ signals:
   void fontChanged(QFont*);
   void colorChanged(QColor*);
   void alignChanged(TxtParagraph::HorzAlign);
+  void stopPres();
 
 };
 #endif //PAGE_H

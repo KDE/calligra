@@ -64,6 +64,10 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   effectCombo->insertItem(i18n("Open horizontal"));
   effectCombo->insertItem(i18n("Open vertical"));
   effectCombo->insertItem(i18n("Open from all directions"));
+  effectCombo->insertItem(i18n("Interlocking horizontal 1"));
+  effectCombo->insertItem(i18n("Interlocking horizontal 2"));
+  effectCombo->insertItem(i18n("Interlocking vertical 1"));
+  effectCombo->insertItem(i18n("Interlocking vertical 2"));
   effectCombo->resize(effectCombo->sizeHint());
   effectCombo->setCurrentItem((int)pageEffect);
   

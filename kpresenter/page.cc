@@ -1742,6 +1742,8 @@ bool Page::pNext(bool)
 	      return false;
 	    }
 
+	  emit stopPres();
+
 	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
 	  currPresStep = (int)presStepList.last();
 	  doObjEffects();
@@ -2228,6 +2230,104 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 		_time.restart();
 	      }
 	    if ((_pix2.width() / _steps) * _step >= _pix2.width()) break;
+	  }
+      } break;
+    case PEF_INTERLOCKING_HORZ_1:
+      {
+	_steps = (int)(50000.0 / (float)kapp->desktop()->width());
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+		_w = (_pix2.width() / _steps) * _step;
+		_w = _w > _pix2.width() ? _pix2.width() : _w;
+
+		bitBlt(this,0,0,&_pix2,0,0,_w,height() / 4);
+		bitBlt(this,0,height() / 2,&_pix2,0,height() / 2,_w,height() / 4);
+		bitBlt(this,width() - _w,height() / 4,&_pix2,width() - _w,height() / 4,_w,height() / 4);
+		bitBlt(this,width() - _w,height() / 2 + height() / 4,&_pix2,width() - _w,
+		       height() / 2 + height() / 4,_w,height() / 4);
+
+		_time.restart();
+	      }
+	    if ((_pix2.width() / _steps) * _step >= _pix2.width()) break;
+	  }
+      } break;
+    case PEF_INTERLOCKING_HORZ_2:
+      {
+	_steps = (int)(50000.0 / (float)kapp->desktop()->width());
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+		_w = (_pix2.width() / _steps) * _step;
+		_w = _w > _pix2.width() ? _pix2.width() : _w;
+
+		bitBlt(this,0,height() / 4,&_pix2,0,height() / 4,_w,height() / 4);
+		bitBlt(this,0,height() / 2 + height() / 4,&_pix2,0,height() / 2 + height() / 4,_w,height() / 4);
+		bitBlt(this,width() - _w,0,&_pix2,width() - _w,0,_w,height() / 4);
+		bitBlt(this,width() - _w,height() / 2,&_pix2,width() - _w,height() / 2,_w,height() / 4);
+
+		_time.restart();
+	      }
+	    if ((_pix2.width() / _steps) * _step >= _pix2.width()) break;
+	  }
+      } break;
+    case PEF_INTERLOCKING_VERT_1:
+      {
+	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+		_h = (_pix2.height() / _steps) * _step;
+		_h = _h > _pix2.height() ? _pix2.height() : _h;
+
+		bitBlt(this,0,0,&_pix2,0,0,width() / 4,_h);
+		bitBlt(this,width() / 2,0,&_pix2,width() / 2,0,width() / 4,_h);
+		bitBlt(this,width() / 4,height() - _h,&_pix2,width() / 4,height() - _h,width() / 4,_h);
+		bitBlt(this,width() / 2 + width() / 4,height() - _h,&_pix2,width() / 2 + width() / 4,height() - _h,
+		       width() / 4,_h);
+
+		_time.restart();
+	      }
+	    if ((_pix2.height() / _steps) * _step >= _pix2.height()) break;
+	  }
+      } break;
+    case PEF_INTERLOCKING_VERT_2:
+      {
+	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+		_h = (_pix2.height() / _steps) * _step;
+		_h = _h > _pix2.height() ? _pix2.height() : _h;
+
+		bitBlt(this,width() / 4,0,&_pix2,width() / 4,0,width() / 4,_h);
+		bitBlt(this,width() / 2 + width() / 4,0,&_pix2,width() / 2 + width() / 4,0,width() / 4,_h);
+		bitBlt(this,0,height() - _h,&_pix2,0,height() - _h,width() / 4,_h);
+		bitBlt(this,width() / 2,height() - _h,&_pix2,width() / 2,height() - _h,width() / 4,_h);
+
+		_time.restart();
+	      }
+	    if ((_pix2.height() / _steps) * _step >= _pix2.height()) break;
 	  }
       } break;
     }
