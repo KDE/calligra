@@ -635,6 +635,7 @@ void ConfigureMiscPage::slotDefault()
    m_cbViewFormattingSpace->setChecked(true);
    m_cbViewFormattingTabs->setChecked(true);
    m_cbViewFormattingBreak->setChecked(true);
+   m_displayFieldCode->setChecked( false );
    m_unit->setCurrentItem(0);
 }
 
@@ -798,6 +799,7 @@ void ConfigureDefaultDocPage::slotDefault()
    autoSave->setValue(KoDocument::defaultAutoSave()/60);
    m_variableNumberOffset->setValue(1);
    m_cursorInProtectedArea->setChecked(true);
+   m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kWordDocument()->getUnit()));
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {
