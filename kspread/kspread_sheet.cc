@@ -5015,7 +5015,7 @@ void KSpreadSheet::setConditional( KSpreadSelection* selectionInfo,
     for (int y = t; y <= b; ++y)
     {
       cell = nonDefaultCell( x, y, false, s );
-      cell->setConditionList(newConditions);
+      cell->setConditionList( newConditions );
       cell->setDisplayDirtyFlag();
     }
   }

@@ -510,7 +510,6 @@ bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
                                   bool extendSelection)
 {
-  ElapsedTime et( "KSpreadCanvas::gotoLocation" );
   kdDebug() << "GotoLocation: " << location.x() << ", " << location.x() << endl;
 
   if ( table && (table != activeTable() ))
@@ -520,12 +519,10 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
 
   if (extendSelection)
   {
-    ElapsedTime es( "extendSelection" );
     extendCurrentSelection(location);
   }
   else
   {
-    ElapsedTime es( "!extendSelection" );
     QPoint topLeft(location);
     KSpreadCell* cell = table->cellAt(location);
     if ( cell->isObscured() && cell->isObscuringForced() )
@@ -540,14 +537,12 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
     }
     else
     {
-      ElapsedTime si( "setSelection" );
       /* anchor and marker should be on the same cell here */
       selectionInfo()->setSelection(topLeft, topLeft, table);
     }
   }
   scrollToCell(location);
 
-  ElapsedTime up( "Updating view parts" );
   // Perhaps the user is entering a value in the cell.
   // In this case we may not touch the EditWidget
   if ( !m_pEditor && !m_bChoose )
@@ -559,7 +554,6 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
 
 void KSpreadCanvas::scrollToCell(QPoint location)
 {
-  ElapsedTime et( "KSpreadCanvas::scrollToCell" );
   KSpreadSheet* table = activeTable();
   if (table == NULL)
     return;
@@ -921,8 +915,6 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 {
-  ElapsedTime et( "KSpreadCanvas::mouseReleaseEvent" );
-
   if ( m_scrollTimer->isActive() )
     m_scrollTimer->stop();
 
@@ -1066,8 +1058,6 @@ void KSpreadCanvas::processLeftClickAnchor()
 
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
-  ElapsedTime et( "KSpreadCanvas::mousePressEvent" );
-
   if ( _ev->button() == LeftButton )
     m_bMousePressed = true;
 
@@ -1120,8 +1110,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   int row  = table->topRow( ev_PosY, ypos );
 
   {
-    ElapsedTime st( "Start the drag part" );
-
     // start drag ?
     QRect rct( selectionInfo()->selection() );
 
@@ -1169,7 +1157,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( m_pView->koDocument()->isReadWrite() && selection.right() != KS_colMax &&
        selection.bottom() != KS_rowMax && _ev->state() & ShiftButton )
   {
-    ElapsedTime gl( "gotoLocation1" );
     gotoLocation( QPoint( col, row ), activeTable(), true );
     return;
   }
@@ -1187,20 +1174,17 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   // Start a marking action ?
   if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
   {
-    ElapsedTime gl( "Start a marking action" );
     processLeftClickAnchor();
     updatePosWidget();
   }
   else if ( _ev->button() == LeftButton )
   {
-    ElapsedTime gl( "LeftButtonMarkClick" );
     m_eMouseAction = Mark;
     gotoLocation( QPoint( col, row ), activeTable(), false );
   }
   else if ( _ev->button() == RightButton &&
             !selection.contains( QPoint( col, row ) ) )
   {
-    ElapsedTime gl( "RightButtonClick" );
     // No selection or the mouse press was outside of an existing selection ?
     gotoLocation( QPoint( col, row ), activeTable(), false );
   }
@@ -1208,7 +1192,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   // Paste operation with the middle button ?
   if ( _ev->button() == MidButton )
   {
-    ElapsedTime gl( "MiddelButtonClick" );
     if ( m_pView->koDocument()->isReadWrite() && !table->isProtected() )
     {
       selectionInfo()->setMarker( QPoint( col, row ), table );
@@ -1218,7 +1201,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     updatePosWidget();
   }
 
-  ElapsedTime el2( "update view parts" );
   // Update the edit box
   m_pView->updateEditWidgetOnPress();
 
@@ -1573,7 +1555,6 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
 
 QRect KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 {
-  ElapsedTime et( "moveDirection" );
   QPoint destination;
   QPoint cursor;
 
@@ -1669,7 +1650,6 @@ QRect KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelect
   }
 
   gotoLocation(destination, activeTable(), extendSelection);
-  ElapsedTime et1( "updateEditWidget" );
   m_pView->updateEditWidget();
 
   return QRect( cursor, destination );
@@ -1720,7 +1700,6 @@ void KSpreadCanvas::processEnterKey(QKeyEvent* event)
 
 void KSpreadCanvas::processArrowKey( QKeyEvent *event)
 {
-  ElapsedTime et( "KSpreadCanvas::processArrowKey" );
   /* NOTE:  hitting the tab key also calls this function.  Don't forget
      to account for it
   */
@@ -2275,7 +2254,6 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     QWidget::keyPressEvent( _ev );
     return;
   }
-  ElapsedTime et( "KSpreadCanvas::keyPressEvent" );
 
   // Always accept so that events are not
   // passed to the parent.

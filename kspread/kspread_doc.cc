@@ -1380,10 +1380,7 @@ void KSpreadDoc::emitEndOperation()
      }
    }
 
-   {
-     ElapsedTime et2( "*KoDocument::emitEndOperation*" );
-     KoDocument::emitEndOperation();
-   }
+   KoDocument::emitEndOperation();
    QApplication::restoreOverrideCursor();
 
    if (m_numOperations == 0)
@@ -1422,10 +1419,8 @@ void KSpreadDoc::emitEndOperation( QRect const & rect )
     b->cellChanged( 0 );
   }
 
-  {
-    ElapsedTime et2( "*KoDocument::emitEndOperation*" );
-    KoDocument::emitEndOperation();
-  }
+  KoDocument::emitEndOperation();
+
   QApplication::restoreOverrideCursor();
   
   if ( m_numOperations == 0 )

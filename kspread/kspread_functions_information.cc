@@ -64,7 +64,6 @@ void KSpreadRegisterInformationFunctions()
 {
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
 
-  //  repo->registerFunction( "COUNTBLANK", kspreadfunc_countblank );
   repo->registerFunction( "FILENAME",   kspreadfunc_filename );
   repo->registerFunction( "INFO",       kspreadfunc_info );
   repo->registerFunction( "ISBLANK",    kspreadfunc_isblank );

@@ -55,7 +55,7 @@ KSpreadConditions::~KSpreadConditions()
   m_condList.clear();
 }
 
-KSpreadStyle * KSpreadConditions::matchedStyle() const
+inline KSpreadStyle * KSpreadConditions::matchedStyle() const
 {
   return m_matchedStyle;
 }
@@ -76,7 +76,7 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
 
   QValueList<KSpreadConditional>::const_iterator it;
   double value   = m_cell->value().asFloat() * m_cell->factor( m_cell->column(), m_cell->row() );
-  QString strVal = m_cell->strOutText();
+  QString strVal = m_cell->text();
 
   //  if ( m_cell->value().isNumber() && !m_cell->table()->getShowFormula())
   //  {
@@ -86,11 +86,11 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
     condition = *it;
 
     if ( condition.strVal1 && m_cell->value().isNumber() )
-      continue;
+      continue;    
 
     switch ( condition.cond )
     {
-     case Equal :
+     case Equal:
       if ( condition.strVal1 )
       {
         if ( strVal == *condition.strVal1 )
@@ -104,7 +104,7 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
       }
       break;
 
-     case Superior :
+     case Superior:
       if ( condition.strVal1 )
       {
         if ( strVal > *condition.strVal1 )
@@ -117,7 +117,7 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
       }
       break;
 
-     case Inferior :
+     case Inferior:
       if ( condition.strVal1 )
       {
         if ( strVal < *condition.strVal1 )
@@ -198,7 +198,41 @@ QValueList<KSpreadConditional> KSpreadConditions::conditionList() const
 
 void KSpreadConditions::setConditionList( const QValueList<KSpreadConditional> & list )
 {
-  m_condList = list;
+  m_condList.clear();
+  KSpreadConditional newCondition;
+
+  QValueList<KSpreadConditional>::const_iterator it;
+  for ( it = list.begin(); it != list.end(); ++it )
+  {
+    KSpreadConditional d = *it;
+    if ( d.strVal1 )
+      newCondition.strVal1 = new QString( *d.strVal1 );
+    else
+      newCondition.strVal1   = 0;
+    if ( d.strVal2 )
+      newCondition.strVal2 = new QString( *d.strVal2 );
+    else
+      newCondition.strVal2   = 0;
+    if ( d.styleName )
+      newCondition.styleName = new QString( *d.styleName );
+    else
+      newCondition.styleName = 0;
+    if ( d.fontcond )
+      newCondition.fontcond = new QFont( *d.fontcond );
+    else
+      newCondition.fontcond  = 0;
+    if ( d.colorcond )
+      newCondition.colorcond = new QColor( *d.colorcond );
+    else
+      newCondition.colorcond = 0;
+
+    newCondition.val1  = d.val1;
+    newCondition.val2  = d.val2;
+    newCondition.style = d.style;
+    newCondition.cond  = d.cond;
+
+    m_condList.append( newCondition );
+  }
 }
 
 QDomElement KSpreadConditions::saveConditions( QDomDocument & doc ) const

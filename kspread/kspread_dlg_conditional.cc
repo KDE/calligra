@@ -184,7 +184,6 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
   textLabel2_2->setText( i18n( "Cell style" ) );
   textLabel2_3->setText( i18n( "Cell style" ) );
 
-  kdDebug() << "Creating connections" << endl;
   connect( m_condition_1, SIGNAL( highlighted( const QString & ) ), this, SLOT( slotTextChanged1( const QString & ) ) );
   connect( m_condition_2, SIGNAL( highlighted( const QString & ) ), this, SLOT( slotTextChanged2( const QString & ) ) );
   connect( m_condition_3, SIGNAL( highlighted( const QString & ) ), this, SLOT( slotTextChanged3( const QString & ) ) );
@@ -196,7 +195,6 @@ KSpreadConditionalWidget::~KSpreadConditionalWidget()
 
 void KSpreadConditionalWidget::slotTextChanged1( const QString & text )
 {
-  kdDebug() << "Text1: " << text << endl;
   if ( text == i18n( "<none>" ) )
   {
     m_firstValue_1->setEnabled( false );
@@ -222,7 +220,6 @@ void KSpreadConditionalWidget::slotTextChanged1( const QString & text )
 
 void KSpreadConditionalWidget::slotTextChanged2( const QString & text )
 {
-  kdDebug() << "Text2: " << text << endl;
   if ( text == i18n( "<none>" ) )
   {
     m_firstValue_2->setEnabled( false );
@@ -248,7 +245,6 @@ void KSpreadConditionalWidget::slotTextChanged2( const QString & text )
 
 void KSpreadConditionalWidget::slotTextChanged3( const QString & text )
 {
-  kdDebug() << "Text3: " << text << endl;
   if ( text == i18n( "<none>" ) )
   {
     m_firstValue_3->setEnabled( false );
@@ -324,17 +320,62 @@ void KSpreadConditionalDlg::init()
       it1 = conditionList.begin();
       while ( it1 != conditionList.end() )
       {
+        kdDebug() << "Here" << endl;
 	found = false;
 	for ( it2 = otherList.begin(); !found && it2 != otherList.end(); ++it2 )
 	{
+          kdDebug() << "Found: " << found << endl;
 	  found = ( (*it1).val1 == (*it2).val1 &&
                     (*it1).val2 == (*it2).val2 &&
-                    *(*it1).strVal1 == *(*it2).strVal1 &&
-                    *(*it1).strVal2 == *(*it2).strVal2 &&
-                    *(*it1).colorcond == *(*it2).colorcond &&
-                    *(*it1).fontcond == *(*it2).fontcond &&
-                    *(*it1).styleName == *(*it2).styleName &&
                     (*it1).cond == (*it2).cond );
+
+          if ( (*it1).strVal1 && !(*it2).strVal1 )
+            found = false;
+          if ( !(*it1).strVal1 && (*it2).strVal1 )
+            found = false;
+          if ( (*it1).strVal1 && (*it2).strVal1 
+               && ( *(*it1).strVal1 != *(*it2).strVal1 ) )
+            found = false;
+          if ( !found )
+            continue;
+
+          if ( (*it1).strVal2 && !(*it2).strVal2 )
+            found = false;
+          if ( !(*it1).strVal2 && (*it2).strVal2 )
+            found = false;
+          if ( (*it1).strVal2 && (*it2).strVal2 
+               && ( *(*it1).strVal2 != *(*it2).strVal2 ) )
+            found = false;
+          if ( !found )
+            continue;
+
+          if ( (*it1).colorcond && !(*it2).colorcond )
+            found = false;
+          if ( !(*it1).colorcond && (*it2).colorcond )
+            found = false;
+          if ( (*it1).colorcond && (*it2).colorcond 
+               && ( *(*it1).colorcond != *(*it2).colorcond ) )
+            found = false;
+          if ( !found )
+            continue;
+
+          if ( (*it1).fontcond && !(*it2).fontcond )
+            found = false;
+          if ( !(*it1).fontcond && (*it2).fontcond )
+            found = false;
+          if ( (*it1).fontcond && (*it2).fontcond 
+               && ( *(*it1).fontcond != *(*it2).fontcond ) )
+            found = false;
+          if ( !found )
+            continue;
+
+          if ( (*it1).styleName && !(*it2).styleName )
+            found = false;
+          if ( !(*it1).styleName && (*it2).styleName )
+            found = false;
+          if ( (*it1).styleName && (*it2).styleName 
+               && ( *(*it1).styleName != *(*it2).styleName ) )
+            found = false;
 	}
 
 	if ( !found )  /* if it's not here, don't display this condition */
@@ -349,6 +390,8 @@ void KSpreadConditionalDlg::init()
     }
   }
 
+  kdDebug() << "Conditions: " << conditionList.size() << endl;
+
   m_dlg->m_condition_2->setEnabled( false );
   m_dlg->m_condition_3->setEnabled( false );
 
@@ -357,9 +400,7 @@ void KSpreadConditionalDlg::init()
   m_dlg->m_style_3->setEnabled( false );
 
   numCondition = 0;
-  for ( it1 = conditionList.begin();
-        numCondition < 3 && it1 != conditionList.end();
-        ++it1 )
+  for ( it1 = conditionList.begin(); numCondition < 3 && it1 != conditionList.end(); ++it1 )
   {
     init( *it1, numCondition );
 
@@ -369,6 +410,7 @@ void KSpreadConditionalDlg::init()
 
 void KSpreadConditionalDlg::init( KSpreadConditional const & tmp, int numCondition )
 {
+  kdDebug() << "Adding " << numCondition << endl;
   QComboBox * cb  = 0;
   QComboBox * sb  = 0;
   KLineEdit * kl1 = 0;
@@ -382,16 +424,19 @@ void KSpreadConditionalDlg::init( KSpreadConditional const & tmp, int numConditi
     sb  = m_dlg->m_style_1;
     kl1 = m_dlg->m_firstValue_1;
     kl2 = m_dlg->m_secondValue_1;
+    break;
    case 1:
     cb  = m_dlg->m_condition_2;
     sb  = m_dlg->m_style_2;
     kl1 = m_dlg->m_firstValue_2;
     kl2 = m_dlg->m_secondValue_2;
-   case 3:
+    break;
+   case 2:
     cb  = m_dlg->m_condition_3;
     sb  = m_dlg->m_style_3;
     kl1 = m_dlg->m_firstValue_3;
     kl2 = m_dlg->m_secondValue_3;
+    break;
   }
 
   if ( tmp.styleName )
@@ -552,6 +597,7 @@ bool KSpreadConditionalDlg::getCondition( KSpreadConditional & newCondition, QCo
   double d2 = 0.0;
   QString * s1 = 0;
   QString * s2 = 0;
+  QString * sn = 0;
 
   if ( ok )
   {
@@ -567,6 +613,7 @@ bool KSpreadConditionalDlg::getCondition( KSpreadConditional & newCondition, QCo
     if ( edit2->isEnabled() )
       s2 = new QString( edit2->text() );
   }
+  sn = new QString( sb->currentText() );
 
   newCondition.val1      = d1;
   newCondition.val2      = d2;
@@ -574,7 +621,7 @@ bool KSpreadConditionalDlg::getCondition( KSpreadConditional & newCondition, QCo
   newCondition.strVal2   = s2;
   newCondition.fontcond  = 0;
   newCondition.colorcond = 0;
-  newCondition.styleName = new QString( sb->currentText() );
+  newCondition.styleName = sn;
   newCondition.style     = style;
 
   return true;

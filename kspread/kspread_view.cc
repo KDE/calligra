@@ -1628,7 +1628,6 @@ void KSpreadView::spellCheckerReady()
   {
     // if nothing is selected we have to check every cell
     // we use a different way to make it faster
-    ElapsedTime et( "Check spelling in table..." );
     while ( m_spell.currentCell )
     {
       // check text only
@@ -1907,8 +1906,6 @@ void KSpreadView::spellCheckerFinished()
 
 void KSpreadView::initialPosition()
 {
-  ElapsedTime et( "KSpreadView::initialPosition" );
-
     // Set the initial position for the marker as store in the XML file,
     // (1,1) otherwise
     int col = m_pDoc->map()->initialMarkerColumn();
@@ -5978,7 +5975,6 @@ void KSpreadView::slotRefreshView()
 
 void KSpreadView::slotUpdateView( KSpreadSheet *_table )
 {
-  ElapsedTime et( "KSpreadView::slotUpdateView" );
   // Do we display this table ?
   if ( _table != m_pTable )
     return;
@@ -6389,7 +6385,6 @@ int KSpreadView::canvasYOffset() const
 
 void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-  ElapsedTime et( "***guiActivateEvent***" );
   m_pDoc->increaseNumOperation();
   m_pDoc->emitBeginOperation( false );
 

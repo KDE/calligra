@@ -337,6 +337,14 @@ public:
     //
     ////////////////////////////////
 
+    const QPen & effLeftBorderPen( int col, int row ) const; 
+    const QPen & effTopBorderPen( int col, int row ) const;
+    const QPen & effRightBorderPen( int col, int row ) const;
+    const QPen & effBottomBorderPen( int col, int row ) const;
+    const QPen & effGoUpDiagonalPen( int col, int row ) const; 
+    const QPen & effFallDiagonalPen( int col, int row ) const;
+    const QColor & effTextColor( int col, int row ) const;
+
     /**
      * @reimp
      */
@@ -796,13 +804,6 @@ protected:
     void applyZoomedFont( QPainter &painter, int _col, int _row );
 
     /**
-     * When you insert a cell at bottom or right
-     * and the size is not the same so text offset
-     * will not good => recalc offset
-     */
-    void offsetAlign( int _col, int _row );
-
-    /**
      * Called from @ref #makeFormat to determine the space
      * needed for the text.
      */
@@ -1038,6 +1039,14 @@ private:
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
                        QString str );
   void update();
+  int effAlignX();
+
+  /**
+   * When you insert a cell at bottom or right
+   * and the size is not the same so text offset
+   * will not good => recalc offset
+   */
+  void offsetAlign( int _col, int _row );
 };
 
 #endif
