@@ -811,13 +811,13 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
 
     if ((layout.marginBottom>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && ( force || ( layoutOrigin.marginBottom != layout.marginBottom ) ) )
     {
        props += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
     }
 
     if ((layout.marginTop>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && ( force || ( layoutOrigin.marginTop != layout.marginTop ) ) )
     {
        props += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }
