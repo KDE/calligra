@@ -32,6 +32,8 @@ ApplicationWindowSpell::ApplicationWindowSpell()
 
     file->insertItem( "Config", this, SLOT(slotConfigSpellText()));
 
+    file->insertItem( "Quit", this, SLOT(close()));
+
     multi = new QMultiLineEdit( this, "editor" );
     multi->setFocus();
     setCentralWidget( multi );
