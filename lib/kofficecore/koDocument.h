@@ -219,7 +219,7 @@ public:
      *
      *  @param matrix transforms points from the documents coordinate system
      *         to the coordinate system of the questionable point.
-     *  @param p is in some unknown coordinate system, but the matrix can
+     *  @param pos is in some unknown coordinate system, but the matrix can
      *         be used to transform a point of this parts coordinate system
      *         to the coordinate system of p.
      *
