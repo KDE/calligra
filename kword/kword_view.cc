@@ -1150,7 +1150,7 @@ void KWordView::toolsFormula()
 
     QValueList<KoDocumentEntry>
 	vec = KoDocumentEntry::query( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
-    if ( vec.isEmpty() == 0 )
+    if ( vec.isEmpty() )
     {
 	cout << "Got no results" << endl;
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "OK" ) );

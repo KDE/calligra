@@ -883,8 +883,13 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
     maybeDrag = FALSE;
 
     if ( editNum != -1 ) {
-	if ( doc->getFrameSet( editNum )->getFrameType() == FT_PART )
+	if ( doc->getFrameSet( editNum )->getFrameType() == FT_PART ) {
 	    dynamic_cast<KWPartFrameSet*>( doc->getFrameSet( editNum ) )->deactivate();
+	    viewport()->setFocus();
+	    recalcCursor( FALSE );
+	    setMouseMode( MM_EDIT );
+	    return;
+	}
     }
 
     oldMx = e->x() + contentsX();
@@ -3181,10 +3186,12 @@ void KWPage::setRuler2Frame( unsigned int _frameset, unsigned int _frame )
 /*================================================================*/
 void KWPage::setMouseMode( MouseMode _mm )
 {
-    if ( editNum != -1 )
-    {
-	if ( doc->getFrameSet( editNum )->getFrameType() == FT_PART )
+    if ( editNum != -1 ) {
+	if ( doc->getFrameSet( editNum )->getFrameType() == FT_PART ) {
 	    dynamic_cast<KWPartFrameSet*>( doc->getFrameSet( editNum ) )->deactivate();
+	    viewport()->setFocus();
+	    recalcCursor( FALSE );
+	}
     }
 
     if ( mouseMode != _mm )
@@ -3195,14 +3202,11 @@ void KWPage::setMouseMode( MouseMode _mm )
     gui->getView()->uncheckAllTools();
     gui->getView()->setTool( mouseMode );
 
-    switch ( mouseMode )
-    {
-    case MM_EDIT:
-    {
+    switch ( mouseMode ) {
+    case MM_EDIT: {
 	viewport()->setCursor( ibeamCursor );
 	mm_menu->setItemChecked( mm_edit, TRUE );
-	if ( !inKeyEvent )
-	{
+	if ( !inKeyEvent ) {
 	    setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
 	    setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
 	    gui->getHorzRuler()->setFrameStart( doc->getFrameSet( fc->getFrameSet() - 1 )->
@@ -3212,43 +3216,35 @@ void KWPage::setMouseMode( MouseMode _mm )
 		setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
 	}
     } break;
-    case MM_EDIT_FRAME:
-    {
+    case MM_EDIT_FRAME: {
 	viewport()->setCursor( arrowCursor );
 	mm_menu->setItemChecked( mm_edit_frame, TRUE );
     } break;
-    case MM_CREATE_TEXT:
-    {
+    case MM_CREATE_TEXT: {
 	viewport()->setCursor( crossCursor );
 	mm_menu->setItemChecked( mm_create_text, TRUE );
     } break;
-    case MM_CREATE_PIX:
-    {
+    case MM_CREATE_PIX: {
 	viewport()->setCursor( crossCursor );
 	mm_menu->setItemChecked( mm_create_pix, TRUE );
     } break;
-    case MM_CREATE_CLIPART:
-    {
+    case MM_CREATE_CLIPART: {
 	viewport()->setCursor( crossCursor );
 	mm_menu->setItemChecked( mm_create_clipart, TRUE );
     } break;
-    case MM_CREATE_TABLE:
-    {
+    case MM_CREATE_TABLE: {
 	viewport()->setCursor( crossCursor );
 	mm_menu->setItemChecked( mm_create_table, TRUE );
     } break;
-    case MM_CREATE_KSPREAD_TABLE:
-    {
+    case MM_CREATE_KSPREAD_TABLE: {
 	viewport()->setCursor( crossCursor );
 	mm_menu->setItemChecked( mm_create_kspread_table, TRUE );
     } break;
-    case MM_CREATE_FORMULA:
-    {
+    case MM_CREATE_FORMULA: {
 	viewport()->setCursor( crossCursor );
 	mm_menu->setItemChecked( mm_create_formula, TRUE );
     } break;
-    case MM_CREATE_PART:
-    {
+    case MM_CREATE_PART: {
 	viewport()->setCursor( crossCursor );
 	mm_menu->setItemChecked( mm_create_part, TRUE );
     } break;
@@ -4324,7 +4320,7 @@ void KWPage::insertVariable( VariableType type )
 	delete dia;
     } break;
     case VT_SERIALLETTER: {
-	KWSerialLetterVariableInsertDia 
+	KWSerialLetterVariableInsertDia
 	    *dia = new KWSerialLetterVariableInsertDia( this, doc->getSerialLetterDataBase() );
 	if ( dia->exec() == QDialog::Accepted ) {
 	    KWSerialLetterVariable *var = new KWSerialLetterVariable( doc, dia->getName() );

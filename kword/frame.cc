@@ -1509,8 +1509,7 @@ QPicture *KWPartFrameSet::getPicture()
 /*================================================================*/
 void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffxx )
 {
-    if ( !frame )
-    {
+    if ( !frame ) {
         frame = new KWordFrame( dynamic_cast<KWordView*>( _widget ), child );
         frame->attachView( view );
         frame->show();
@@ -1518,15 +1517,15 @@ void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffx
     frame->setGeometry( frames.at( 0 )->x() - diffx + diffxx, frames.at( 0 )->y() - diffy + 20,
                         frames.at( 0 )->width(), frames.at( 0 )->height() );
     frame->view()->mainWindow()->setActivePart( frame->view()->id() );
-
+    frame->setFocus();
+    
     parentID = dynamic_cast<KWordView*>( _widget )->getID();
 }
 
 /*================================================================*/
 void KWPartFrameSet::deactivate()
 {
-    if ( frame )
-    {
+    if ( frame ) {
         frame->view()->mainWindow()->setActivePart( parentID );
         // HACK!
         frame->setGeometry( -10, -10, 1, 1 );
@@ -1536,7 +1535,8 @@ void KWPartFrameSet::deactivate()
 /*================================================================*/
 void KWPartFrameSet::update()
 {
-    child->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(), frames.at( 0 )->width(), frames.at( 0 )->height() ) );
+    child->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(),
+			       frames.at( 0 )->width(), frames.at( 0 )->height() ) );
 }
 
 /******************************************************************/
