@@ -6,8 +6,6 @@
 #define __VTOOLCONTAINER_H__
 
 #include <qtoolbar.h>
-//#include <koMainWindow.h>
-//#include <koView.h>
 
 class KoMainWindow;
 class KoView;
@@ -39,6 +37,7 @@ signals:
 	void sinusToolActivated();
 	void spiralToolActivated();
 	void starToolActivated();
+	void solidFillActivated();
 };
 
 #endif

@@ -114,6 +114,7 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	button = new QToolButton(dlggroup);
 	pixmap = QPixmap(locate("appdata", "icons/hicolor/22x22/actions/solidfilldlg.png"));
 	button->setPixmap(pixmap);
+	connect( button, SIGNAL( clicked() ), this, SIGNAL( solidFillActivated() ) );
 	dlggroup->insert( button, SolidFill);
 	button = new QToolButton(dlggroup);
 	pixmap = QPixmap(locate("appdata", "icons/hicolor/22x22/actions/gradientdlg.png"));

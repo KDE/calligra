@@ -32,6 +32,7 @@
 #include "vtoolcontainer.h"
 #include "vpainterfactory.h"
 #include "vpainter.h"
+#include "vmdlg_solidfill.h"
 
 #include <kdebug.h>
 #include <koMainWindow.h>
@@ -294,6 +295,13 @@ KarbonView::zoomChanged()
 }
 
 void
+KarbonView::solidFillClicked()
+{
+	VMDlgSolidFill* m_solidFillDialog = new VMDlgSolidFill();
+	m_solidFillDialog->show();
+}
+
+void
 KarbonView::initActions()
 {
 	// edit ----->
@@ -433,6 +441,7 @@ KarbonView::initActions()
 	connect( m_toolbox, SIGNAL(starToolActivated()),		this, SLOT(starTool()) );
 	connect( m_toolbox, SIGNAL(sinusToolActivated()),		this, SLOT(sinusTool()) );
 	connect( m_toolbox, SIGNAL(spiralToolActivated()),		this, SLOT(spiralTool()) );
+	connect( m_toolbox, SIGNAL(solidFillActivated()), this, SLOT(solidFillClicked()) );
 	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
 	m_toolbox->show();
 }

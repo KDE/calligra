@@ -78,6 +78,9 @@ protected slots:
 	// view:
 	void viewModeChanged();
 	void zoomChanged();
+	
+	//toolbox dialogs - slots
+	void solidFillClicked();
 
 protected:
 	virtual void updateReadWrite( bool rw );
