@@ -1644,34 +1644,24 @@ void KPresenterDoc::savePage( const QString &file, int pgnum )
 /*====================== replace objects =========================*/
 void KPresenterDoc::replaceObjs( bool createUndoRedo )
 {
-#if 0
-    KPObject *kpobject = 0;
-    int ox, oy;
-    QPtrList<KPObject> _objects;
-    QPtrList<QPoint> _diffs;
-    _objects.setAutoDelete( false );
-    _diffs.setAutoDelete( false );
-
-    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	kpobject = objectList()->at( i );
-	ox = kpobject->getOrig().x();
-	oy = kpobject->getOrig().y();
-
-	ox = ( ox / _rastX ) * _rastX;
-	oy = ( oy / _rastY ) * _rastY;
-
-	_diffs.append( new QPoint( ox - kpobject->getOrig().x(), oy - kpobject->getOrig().y() ) );
-	_objects.append( kpobject );
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Set new options") );
+    bool addMacroCommand=false;
+    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+    {
+        KCommand *cmd=m_pageList.at(i)->replaceObjs( createUndoRedo, _orastX,_orastY,_txtBackCol, _otxtBackCol);
+        if(cmd && createUndoRedo)
+        {
+            macroCmd->addCommand(cmd);
+            addMacroCommand=true;
+        }
     }
-
-    SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set new options" ), _diffs, _objects, _rastX, _rastY,
-						      _orastX, _orastY, _txtBackCol, _otxtBackCol, this );
-    setOptionsCmd->execute();
-    if ( createUndoRedo )
-        addCommand( setOptionsCmd );
+    if(addMacroCommand)
+    {
+        macroCmd->execute();
+        addCommand(macroCmd);
+    }
     else
-       delete setOptionsCmd;
-#endif
+        delete macroCmd;
 }
 
 /*========================= restore background ==================*/

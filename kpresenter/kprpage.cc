@@ -46,6 +46,7 @@
 #include <kurldrag.h>
 #include <qclipboard.h>
 #include <kozoomhandler.h>
+#include <kprcommand.h>
 
 #include <koRect.h>
 #include <qapplication.h>
@@ -2486,5 +2487,39 @@ void KPRPage::completeLoading( bool _clean, int lastObj )
             dynamic_cast<KPClipartObject*>( kpobject )->reload();
         else if ( kpobject->getType() == OT_TEXT )
             dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( m_doc );
+    }
+}
+
+
+/*====================== replace objects =========================*/
+KCommand * KPRPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol )
+{
+    KPObject *kpobject = 0;
+    int ox, oy;
+    QPtrList<KPObject> _objects;
+    QPtrList<QPoint> _diffs;
+    _objects.setAutoDelete( false );
+    _diffs.setAutoDelete( false );
+
+    for ( int i = 0; i < static_cast<int>( m_objectList.count() ); i++ ) {
+	kpobject = m_objectList.at( i );
+	ox = kpobject->getOrig().x();
+	oy = kpobject->getOrig().y();
+	ox = ( ox / m_doc->rastX() ) * m_doc->rastX();
+	oy = ( oy / m_doc->rastY() ) * m_doc->rastY();
+
+	_diffs.append( new QPoint( ox - kpobject->getOrig().x(), oy - kpobject->getOrig().y() ) );
+	_objects.append( kpobject );
+    }
+
+    SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set new options" ), _diffs, _objects, m_doc->rastX(), m_doc->rastY(),
+						      _orastX, _orastY, _txtBackCol, _otxtBackCol, m_doc );
+    //setOptionsCmd->execute();
+    if ( createUndoRedo )
+        return setOptionsCmd;
+    else
+    {
+       delete setOptionsCmd;
+       return 0L;
     }
 }

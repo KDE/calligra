@@ -130,6 +130,7 @@ public:
     // get - set raster
     unsigned int rastX() const { return _rastX; }
     unsigned int rastY() const { return _rastY; }
+
     void setRasters( unsigned int rx, unsigned int ry, bool _replace = true );
 
     // get - set options for editmodi

@@ -32,6 +32,7 @@ class KPresenterView;
 class KoDocumentEntry;
 class KoRect;
 class KoPageLayout;
+class KCommand;
 
 class KPRPage 
 {
@@ -67,6 +68,8 @@ public:
     void deleteObjs( bool _add=true );
     int numSelected() const;
     void pasteObjs( const QByteArray & data, int diffx, int diffy, int currPage );
+    KCommand * replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);
+
     void copyObjs( int diffx, int diffy );
     KPObject* getSelectedObj();
     void groupObjects();
