@@ -4,6 +4,7 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -32,20 +33,21 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
     // Create the main table.
     m_table = new QTable(page);
+    m_table->setSelectionMode(QTable::NoSelection);
 
     // Create the Rows setting
     m_rowsLA = new QLabel( i18n("# Rows:" ), page );
     m_rowsLA->resize( m_rowsLA->sizeHint() );
     m_rowsSB = new QSpinBox( page );
     m_rowsSB->resize( m_rowsSB->sizeHint() );
-    m_rowsSB->setMinValue(1);
+    m_rowsSB->setMinValue(0);
 
     // Create the columns setting
     m_colsLA = new QLabel( i18n("# Columns:" ), page );
     m_colsLA->resize( m_colsLA->sizeHint() );
     m_colsSB = new QSpinBox( page );
     m_colsSB->resize( m_colsSB->sizeHint() );
-    m_colsSB->setMinValue(1);
+    m_colsSB->setMinValue(0);
 
     // Start the layout.  The table is at the top.
     QVBoxLayout  *topLayout = new QVBoxLayout( page );
@@ -69,6 +71,9 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     connect(m_colsSB, SIGNAL(valueChanged(int)), 
 	    this,     SLOT(setCols(int)));
 
+    connect(m_table->horizontalHeader(), SIGNAL(clicked(int)), this, SLOT(column_clicked(int)) );
+    connect(m_table->verticalHeader(), SIGNAL(clicked(int)), this, SLOT(row_clicked(int)) );
+
     // At first, assume that any shrinking of the table is a mistake.
     // A confirmation dialog will make sure that the user knows what
     // (s)he is doing.
@@ -78,6 +83,19 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     addDocs();
 }
 
+void kchartDataEditor::column_clicked(int column)
+{
+  QString name = KInputDialog::getText(i18n("Column name"), i18n("Type a new column name:"), m_table->horizontalHeader()->label(column), 0, this);
+  if ( !name.isEmpty() )
+    m_table->horizontalHeader()->setLabel(column, name);
+}
+
+void kchartDataEditor::row_clicked(int row)
+{
+  QString name = KInputDialog::getText(i18n("Row name"), i18n("Type a new row name:"), m_table->verticalHeader()->label(row), 0, this);
+  if ( !name.isEmpty() )
+    m_table->verticalHeader()->setLabel(row, name);
+}
 
 // Add Tooltips and WhatsThis help to various parts of the Data Editor.
 //
@@ -135,8 +153,8 @@ void kchartDataEditor::setData( KoChart::Data* dat )
     // Initiate widgets with the correct rows and columns.
     m_rowsSB->setValue(rowsCount);
     m_colsSB->setValue(colsCount);
-    m_table->setNumRows(rowsCount + 1);
-    m_table->setNumCols(colsCount + 1);
+    m_table->setNumRows(rowsCount);
+    m_table->setNumCols(colsCount);
 
     // Fill the data from the chart into the editor.
     for (unsigned int row = 0; row < rowsCount; row++) {
@@ -146,7 +164,7 @@ void kchartDataEditor::setData( KoChart::Data* dat )
             // Fill it in from the part.
             if (t.hasValue()) {
                 if ( t.isDouble() ) {
-		    m_table->setText(row + 1, col + 1, 
+		    m_table->setText(row, col, 
 				     QString("%1").arg(t.doubleValue()));
 		}
                 else if ( t.isString() )
@@ -189,7 +207,7 @@ void kchartDataEditor::getData( KoChart::Data* dat )
             KoChart::Value t;
 
 	    // Get the text and convert to double.
-	    QString tmp = m_table->text(row + 1, col + 1);
+	    QString tmp = m_table->text(row, col);
 	    bool    ok;
 	    double  val = tmp.toDouble(&ok);
 	    if (!ok)
@@ -213,12 +231,7 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 
     rowHeader->setLabel(0, "");
     for (row = 0; row < numRows; row++) {
-	rowHeader->setLabel(row + 1, QString("%1").arg(row + 1));
-
-        if ( rowLabels[row].isNull() )
-	    m_table->setText(row + 1, 0, "");
-	else
-	    m_table->setText(row + 1, 0, rowLabels[row]);
+      rowHeader->setLabel(row, rowLabels[row]);
     }
 }
 
@@ -227,12 +240,13 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 //
 void kchartDataEditor::getRowLabels(QStringList &rowLabels)
 {
+    QHeader  *rowHeader = m_table->verticalHeader();
     int  numRows = m_rowsSB->value();
     int  row;
 
     rowLabels.clear();
     for (row = 0; row < numRows; row++) {
-	rowLabels << m_table->text(row + 1, 0);
+      rowLabels << rowHeader->label(row);
     }
 }
 
@@ -248,13 +262,8 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 
     colHeader->setLabel(0, "");
     for (col = 0; col < numCols; col++) {
-	colHeader->setLabel(col + 1, QString("%1").arg(col + 1));
-
-        if( colLabels[col].isNull() )
-	    m_table->setText(0, col + 1, "");
-	else
-	    m_table->setText(0, col + 1, colLabels[col]);
-    }
+      colHeader->setLabel(col, colLabels[col]);
+     }
 }
 
 
@@ -262,12 +271,13 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 //
 void kchartDataEditor::getColLabels(QStringList &colLabels)
 {
+    QHeader  *colHeader = m_table->horizontalHeader();
     int  numCols = m_colsSB->value();
     int  col;
 
     colLabels.clear();
     for (col = 0; col < numCols; col++) {
-	colLabels << m_table->text(0, col + 1);
+      colLabels << colHeader->label(col);
     }
 }
 
@@ -296,22 +306,9 @@ void kchartDataEditor::setRows(int rows)
 {
     kdDebug(35001) << "setRows called: rows = " << rows << endl;;
 
-    // Sanity check.  This should never happen since the spinbox has a
-    // minvalue of 1, but just to be sure...
-    if (rows < 1) {
-	m_rowsSB->setValue(1);
-	return;
-    }
-
-    int  oldNumRows = m_table->numRows();
-    if (rows + 1 > m_table->numRows()) {
-	m_table->setNumRows(rows + 1);
-
-	    // Set the numerical label for the new rows.
-	for (int row = oldNumRows; row < rows + 1; row++)
-	    m_table->verticalHeader()->setLabel(row, QString("%1").arg(row));
-    }
-    else if (rows + 1 < m_table->numRows()) {
+    if (rows > m_table->numRows())
+	m_table->setNumRows(rows);
+    else if (rows < m_table->numRows()) {
 	// Check that the user really wants to shrink the table.
 	if (!m_userWantsToShrink
 	    && askUserForConfirmation() == KMessageBox::Cancel) {
@@ -325,7 +322,7 @@ void kchartDataEditor::setRows(int rows)
 	m_userWantsToShrink = true;
 
 	// Do the actual shrinking.
-	m_table->setNumRows(rows + 1);
+	m_table->setNumRows(rows);
     }
 }
 
@@ -336,28 +333,9 @@ void kchartDataEditor::setCols(int cols)
 {
     kdDebug(35001) << "setCols called: cols = " << cols << endl;;
 
-    // Sanity check.  This should never happen since the spinbox has a
-    // minvalue of 1, but just to be sure...
-    if (cols < 1) {
-	m_colsSB->setValue(1);
-	return;
-    }
-
-    if (cols + 1 > m_table->numCols()) {
-	int  oldNumCols = m_table->numCols();
-
-	m_table->setNumCols(cols + 1);
-
-	// Set the width and numerical label for the new columns.
-	// Note that this need not be an increase of just one, but can
-	// be any number of new columns.
-	for (int col = oldNumCols; col < cols + 1; col++) {
-	    m_table->setColumnWidth(col, COLUMNWIDTH);
-	    m_table->horizontalHeader()->setLabel(col, 
-						  QString("%1").arg(col));
-	}
-    }
-    else if (cols + 1 < m_table->numCols()) {
+    if (cols > m_table->numCols())
+	m_table->setNumCols(cols);
+    else if (cols < m_table->numCols()) {
 	// Check that the user really wants to shrink the table.
 	if (!m_userWantsToShrink
 	    && askUserForConfirmation() == KMessageBox::Cancel) {
@@ -371,7 +349,7 @@ void kchartDataEditor::setCols(int cols)
 	m_userWantsToShrink = true;
 
 	// Do the actual shrinking.
-	m_table->setNumCols(cols + 1);
+	m_table->setNumCols(cols);
     }
 }
 

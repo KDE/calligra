@@ -35,6 +35,8 @@ private slots:
     void  slotApply();
     void  setRows(int rows);
     void  setCols(int cols);
+    void  column_clicked(int);
+    void  row_clicked(int);
 
 private:
     // Widgets in the editor
