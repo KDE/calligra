@@ -68,7 +68,7 @@ KexiCreateProject::next()
 		QString engine = m_pageEngine->data("engine").toString();
 		QString host = m_pageConnection->data("host").toString();
 		QString user = m_pageConnection->data("user").toString();
-		QString pass = m_pageConnection->data("pass").toString();
+		QString pass = m_pageConnection->data("password").toString();
 		
 		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass);
 	}
