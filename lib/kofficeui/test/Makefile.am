@@ -1,6 +1,6 @@
 
 INCLUDES	=	-I../kofficeui -I../kofficecore $(all_includes)
-LDFLAGS		=	$(all_libraries)
+LDFLAGS		=	$(all_libraries) $(KDE_RPATH)
 LDADD 		=  	-lkofficecore -lkofficeui -lkoml -lkom -lop -lkfile -lkfm -lkdecore -lkdeui $(LIBMICO) -lqt -lXext -lX11
 
 bin_PROGRAMS = test

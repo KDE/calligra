@@ -46,5 +46,6 @@ test7_SOURCES = main7.cpp
 test10_SOURCES = main10.cpp
 test11_SOURCES = main11.cpp
 
+LDFLAGS = $(all_libraries) $(KDE_RPATH)
 LDADD = libkchartcore.la -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 
