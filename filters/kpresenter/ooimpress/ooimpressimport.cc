@@ -223,6 +223,25 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     if ( body.isNull() )
         return;
 
+    // presentation settings
+    QDomElement settings = body.namedItem("presentation:settings").toElement();
+    if (!settings.isNull())
+    {
+        if (settings.attribute("presentation:endless")=="true")
+        {
+            QDomElement infElem = doc.createElement("INFINITLOOP");
+            infElem.setAttribute("value", 1);
+            docElement.appendChild(infElem);
+        }
+
+        if (settings.attribute("presentation:force-manual")=="true")
+        {
+            QDomElement manualElem = doc.createElement("MANUALSWITCH");
+            manualElem.setAttribute("value", 1);
+            docElement.appendChild(manualElem);
+        }
+    }
+
     // it seems that ooimpress has different paper-settings for every slide.
     // we take the settings of the first slide for the whole document.
     QDomNode drawPage = body.namedItem( "draw:page" );
@@ -1230,7 +1249,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 if( marginRight != 0 )
                     indent.setAttribute( "right", marginRight );
                 if( first != 0 )
-                    indent.setAttribute( "first", first);
+                    indent.setAttribute( "first", first );
                 p.appendChild( indent );
             }
         }
