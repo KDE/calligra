@@ -44,6 +44,7 @@
 #include <shapes/vpolygon.h>
 
 #include <core/vfill.h>
+#include <core/vgroup.h>
 
 typedef KGenericFactory<OoDrawImport, KoFilter> OoDrawImportFactory;
 K_EXPORT_COMPONENT_FACTORY( liboodrawimport, OoDrawImportFactory( "oodrawimport" ) );
@@ -221,110 +222,114 @@ OoDrawImport::convert()
         //titleElement.setAttribute( "title", dp.attribute( "draw:name" ) );
         //pageTitleElement.appendChild( titleElement );
 
+	parseGroup( 0L, dp );
+    }
+}
+
+void
+OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
+{
 	// parse all objects
-	for( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
+	for( QDomNode object = parentobject.firstChild(); !object.isNull(); object = object.nextSibling() )
 	{
 		QDomElement o = object.toElement();
 		QString name = o.tagName();
 		QString drawID = o.attribute("draw:id");
 		VObject *obj = 0L;
 
-		if( name == "draw:rect" ) // rectangle
+		if( name == "draw:g" ) // polyline
 		{
-				storeObjectStyles( o );
-				double x = KoUnit::parseValue( o.attribute( "svg:x" ) );
-				double y = ymirror( KoUnit::parseValue( o.attribute( "svg:y" ) ) );
-				double w = KoUnit::parseValue( o.attribute( "svg:width" ) );
-				double h = KoUnit::parseValue( o.attribute( "svg:height" ) );
-				VComposite *rect;
-				//if( o.hasAttribute( "draw:corner-radius" ) )
-				//{
-					// kpresenter uses percent, oodraw uses cm ... hmm?
-					int corner = static_cast<int>( KoUnit::parseValue( o.attribute( "draw:corner-radius" ) ) );
-					//rect = new VRoundRect( &m_document, KoPoint( x, y ), w, h, corner );
-				//}
-				//else
-					rect = new VRectangle( &m_document, KoPoint( x, y ), w, h, corner );
-
-				appendPen( *rect );
-				appendBrush( *rect );
-				obj = rect;
+			storeObjectStyles( o );
+			VGroup *group = new VGroup( parent );
+			appendPen( *group );
+			appendBrush( *group );
+			obj = group;
+			parseGroup( group, o );
+		}
+		else if( name == "draw:rect" ) // rectangle
+		{
+			storeObjectStyles( o );
+			double x = KoUnit::parseValue( o.attribute( "svg:x" ) );
+			double y = ymirror( KoUnit::parseValue( o.attribute( "svg:y" ) ) );
+			double w = KoUnit::parseValue( o.attribute( "svg:width" ) );
+			double h = KoUnit::parseValue( o.attribute( "svg:height" ) );
+			int corner = static_cast<int>( KoUnit::parseValue( o.attribute( "draw:corner-radius" ) ) );
+			VRectangle *rect = new VRectangle( parent, KoPoint( x, y ), w, h, corner );
+			appendPen( *rect );
+			appendBrush( *rect );
+			obj = rect;
 		}
 		else if( name == "draw:circle" || name == "draw:ellipse" )
 		{
-				storeObjectStyles( o );
-				double w = KoUnit::parseValue( o.attribute( "svg:width" ) );
-				double h = KoUnit::parseValue( o.attribute( "svg:height" ) );
-				double x = KoUnit::parseValue( o.attribute( "svg:x" ) );
-				double y = ymirror( KoUnit::parseValue( o.attribute( "svg:y" ) ) ) - h;
-				double start = o.attribute( "draw:start-angle" ).toDouble();
-				double end = o.attribute( "draw:end-angle" ).toDouble();
-				QString kind = o.attribute( "draw:kind" );
-				VEllipse::VEllipseType type = VEllipse::full;
-				if( !kind.isEmpty() )
-				{
-					if( kind == "section" )
-						type = VEllipse::cut;
-					else if( kind == "cut" )
-						type = VEllipse::section;
-					else if( kind == "arc" )
-						type = VEllipse::arc;
-				}
-				kdDebug() << "x : " << x << endl;
-				kdDebug() << "y : " << y << endl;
-				kdDebug() << "w: " << w<< endl;
-				kdDebug() << "h: " << h<< endl;
-				VEllipse *ellipse = new VEllipse( &m_document, KoPoint( x, y ), w, h, type, start, end );
-				appendPen( *ellipse );
-				// arc has no brush
-				if( kind != "arc" )
-					appendBrush( *ellipse );
-				obj = ellipse;
-            }
-			else if( name == "draw:line" ) // line
+			storeObjectStyles( o );
+			double w = KoUnit::parseValue( o.attribute( "svg:width" ) );
+			double h = KoUnit::parseValue( o.attribute( "svg:height" ) );
+			double x = KoUnit::parseValue( o.attribute( "svg:x" ) );
+			double y = ymirror( KoUnit::parseValue( o.attribute( "svg:y" ) ) ) - h;
+			double start = o.attribute( "draw:start-angle" ).toDouble();
+			double end = o.attribute( "draw:end-angle" ).toDouble();
+			QString kind = o.attribute( "draw:kind" );
+			VEllipse::VEllipseType type = VEllipse::full;
+			if( !kind.isEmpty() )
 			{
-				storeObjectStyles( o );
-				VComposite *line = new VComposite( &m_document );
-				double x1 = KoUnit::parseValue( o.attribute( "svg:x1" ) );
-				double y1 = ymirror( KoUnit::parseValue( o.attribute( "svg:y1" ) ) );
-				double x2 = KoUnit::parseValue( o.attribute( "svg:x2" ) );
-				double y2 = ymirror( KoUnit::parseValue( o.attribute( "svg:y2" ) ) );
-				line->moveTo( KoPoint( x1, y1 ) );
-				line->lineTo( KoPoint( x2, y2 ) );
-				appendPen( *line );
-				appendBrush( *line );
-				obj = line;
+				if( kind == "section" )
+					type = VEllipse::cut;
+				else if( kind == "cut" )
+					type = VEllipse::section;
+				else if( kind == "arc" )
+					type = VEllipse::arc;
 			}
-			else if( name == "draw:polyline" ) // polyline
-			{
-				storeObjectStyles( o );
-				VComposite *polyline = new VComposite( &m_document );
-				appendPoints( *polyline, o);
-				appendPen( *polyline );
-				appendBrush( *polyline );
-				obj = polyline;
-			}
-			else if( name == "draw:polygon" ) // polygon
-			{
-				storeObjectStyles( o );
-				//VPolygon *polygon = new VPolygon( &m_document );
-				//polygon->load( o );
-				VComposite *polygon = new VComposite( &m_document );
-				appendPoints( *polygon, o );
-				appendPen( *polygon );
-				appendBrush( *polygon );
-				obj = polygon;
-			}
-			else if( name == "draw:path" ) // path
-			{
-				storeObjectStyles( o );
-				VComposite *path = new VComposite( &m_document );
-				path->loadSvgPath( o.attribute( "svg:d" ) );
-				appendPoints( *path, o );
-				appendPen( *path );
-				appendBrush( *path );
-				obj = path;
-			}
+			VEllipse *ellipse = new VEllipse( parent, KoPoint( x, y ), w, h, type, start, end );
+			appendPen( *ellipse );
+			// arc has no brush
+			if( kind != "arc" )
+				appendBrush( *ellipse );
+			obj = ellipse;
+		}
+		else if( name == "draw:line" ) // line
+		{
+			storeObjectStyles( o );
+			VComposite *line = new VComposite( parent );
+			double x1 = KoUnit::parseValue( o.attribute( "svg:x1" ) );
+			double y1 = ymirror( KoUnit::parseValue( o.attribute( "svg:y1" ) ) );
+			double x2 = KoUnit::parseValue( o.attribute( "svg:x2" ) );
+			double y2 = ymirror( KoUnit::parseValue( o.attribute( "svg:y2" ) ) );
+			line->moveTo( KoPoint( x1, y1 ) );
+			line->lineTo( KoPoint( x2, y2 ) );
+			appendPen( *line );
+			appendBrush( *line );
+			obj = line;
+		}
+		else if( name == "draw:polyline" ) // polyline
+		{
+			storeObjectStyles( o );
+			VComposite *polyline = new VComposite( parent );
+			appendPoints( *polyline, o);
+			appendPen( *polyline );
+			appendBrush( *polyline );
+			obj = polyline;
+		}
+		else if( name == "draw:polygon" ) // polygon
+		{
+			storeObjectStyles( o );
+			//VPolygon *polygon = new VPolygon( parent );
+			//polygon->load( o );
+			VComposite *polygon = new VComposite( parent );
+			appendPoints( *polygon, o );
+			appendPen( *polygon );
+			appendBrush( *polygon );
+			obj = polygon;
+		}
+		else if( name == "draw:path" ) // path
+		{
+			storeObjectStyles( o );
+			VComposite *path = new VComposite( parent );
+			path->loadSvgPath( o.attribute( "svg:d" ) );
+			appendPoints( *path, o );
+			appendPen( *path );
+			appendBrush( *path );
+			obj = path;
+		}
 /*else if( name == "draw:image" ) // image
 {
 storeObjectStyles( o );
@@ -332,15 +337,16 @@ e = doc.createElement( "OBJECT" );
 e.setAttribute( "type", 0 );
 appendImage( doc, e, pictureElement, o );
 }*/
-			else
-			{
-				kdDebug() << "Unsupported object '" << name << "'" << endl;
-				continue;
-			}
-			if( obj )
-				m_document.append( obj );
-        }
-    }
+		else
+		{
+			kdDebug() << "Unsupported object '" << name << "'" << endl;
+			continue;
+		}
+		if( parent && obj )
+			parent->append( obj );
+		else if( obj )
+			m_document.append( obj );
+	}
 }
 
 void

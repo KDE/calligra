@@ -32,6 +32,8 @@
 #include <core/vcomposite.h>
 #include <core/vstroke.h>
 
+class VGroup;
+
 class OoDrawImport : public KoFilter
 {
     Q_OBJECT
@@ -51,6 +53,7 @@ private:
 	void appendBrush( VObject &obj );
 	void appendPoints(VComposite &path, const QDomElement& object);
 	void convert();
+	void parseGroup( VGroup *parent, const QDomElement& object );
 	void parseColor( VColor &color, const QString &s );
 	double ymirror( double y );
 
