@@ -716,7 +716,7 @@ void CellLayoutPageFloat::slotChangeState()
 {
 QStringList list;
 listFormat->clear();
-if(dlg->m_bValue)
+if(dlg->cellText.isEmpty() || dlg->m_bValue)
         {
         precision->setEnabled(true);
         prefix->setEnabled(true);

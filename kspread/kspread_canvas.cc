@@ -150,6 +150,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
         m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
       }
   KSpreadTextEditor* cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
+
   switch ( _ev->key() )
   {
     case Key_Down:
@@ -157,6 +158,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     case Key_Return:
     case Key_Enter:
       // Send to the canvas, which will handle it.
+      cellEditor->setText( text());
       QApplication::sendEvent( m_pCanvas, _ev );
 
       _ev->accept();
@@ -170,13 +172,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 
       QLineEdit::keyPressEvent( _ev );
 
-      /*if ( !m_pCanvas->editor() )
-      {
-        // Start editing the current cell
-        m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
-      } */
       setFocus();
-      //KSpreadTextEditor* cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
       cellEditor->blockCheckChoose( TRUE );
       cellEditor->setText( text() );
       cellEditor->blockCheckChoose( FALSE );
@@ -1905,7 +1901,7 @@ void KSpreadCanvas::updatePosWidget()
     QRect selection = m_pView->activeTable()->selectionRect();
     QString buffer;
     QString tmp;
-    if ( selection.left() == 0 )
+    if ( selection.left() == 0 || (selection.width()==1 && selection.height()==1))
     {
         if(activeTable()->getLcMode())
         {
@@ -2437,7 +2433,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   for ( int y = top_row; y <= bottom_row; y++ )
   {
     bool highlighted = ( selection.left() != 0 && y >= selection.top() &&
-                      y <= selection.bottom() );
+                      y <= selection.bottom() && (selection.width()!=1  ||selection.height()!=1));
     bool selected = ( highlighted && selection.right() == 0x7FFF );
 
     RowLayout *row_lay = table->rowLayout( y );
@@ -2834,7 +2830,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   for ( int x = left_col; x <= right_col; x++ )
   {
     bool highlighted = ( selection.left() != 0 && x >= selection.left() &&
-                      x <= selection.right() );
+                      x <= selection.right() && (selection.width()!=1 || selection.height()!=1));
     bool selected = ( highlighted && selection.bottom() == 0x7FFF );
 
     ColumnLayout *col_lay = table->columnLayout( x );

@@ -900,3 +900,12 @@ into this area
 * Layout fixes
 * Fixes for undo/redo
 * Fixes for copy and paste of cells with extra width
+
+2000-08-18-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+* Appearance fix when clicking a single cell: doesn't
+  look like a selection in the row/column headers anymore.
+* Allow to change the number format for an empty cell.
+* Pressing Enter in the edit widget without changing the
+  value doesn't clear the cell anymore.
+
