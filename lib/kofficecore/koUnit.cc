@@ -58,7 +58,7 @@ double KoUnit::ptToUnit( double ptValue, Unit unit )
         return toDM( ptValue );
     case U_INCH:
         return toInch( ptValue );
-    case U_PICA:
+    case U_PI:
         return toPI( ptValue );
     case U_DD:
         return toDD( ptValue );
