@@ -1,3 +1,23 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998-2002 The KSpread Team
+                           www.koffice.org/kspread
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "kspread_util.h"
 #include "kspread_doc.h"
 #include "kspread_table.h"
@@ -314,15 +334,6 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     makeDepends( context, node->branch5(), m, t, depends );
 }
 
-/*********************************************************************
- *
- * Module with global functions like "sin", "cos", "sum" etc.
- *
- * Note: These modules must be registered in kspread_interpreter::kspreadCreateModule_KSpread
- *       They should also be documented in KSPREAD/extensions/builtin.xml
- *
- *********************************************************************/
-
 
 static bool kspreadfunc_cell( KSContext& context )
 {
@@ -433,15 +444,21 @@ static const functionEntry funcTab[] = {
   { "acosh", kspreadfunc_acosh },
   { "asinh", kspreadfunc_asinh },
   { "atanh", kspreadfunc_atanh },
+  { "atan2", kspreadfunc_atan2 },
 
   // math
+  { "sum", kspreadfunc_sum },
+  { "sumsq", kspreadfunc_sumsq },
   { "DIV", kspreadfunc_div },
   { "PRODUCT", kspreadfunc_product },
   { "sqrt", kspreadfunc_sqrt },
   { "fabs", kspreadfunc_fabs },
   { "abs", kspreadfunc_fabs },
+  { "max", kspreadfunc_max },
+  { "min", kspreadfunc_min },
   { "floor", kspreadfunc_floor },
   { "ceil", kspreadfunc_ceil },
+  { "INT", kspreadfunc_INT },
   { "exp", kspreadfunc_exp },
   { "ln", kspreadfunc_ln },
   { "log", kspreadfunc_log },
@@ -454,6 +471,35 @@ static const functionEntry funcTab[] = {
   { "pow", kspreadfunc_pow },
   { "MOD", kspreadfunc_mod },
   { "fact", kspreadfunc_fact },
+  { "sign", kspreadfunc_sign },
+  { "INV", kspreadfunc_inv },
+  { "RANDBETWEEN", kspreadfunc_randbetween },
+  { "LOGn", kspreadfunc_logn },
+  { "SQRTn", kspreadfunc_sqrtn },
+  { "count", kspreadfunc_count },
+  { "CUR", kspreadfunc_cur },
+  { "ROUND", kspreadfunc_round },
+  { "ROUNDDOWN", kspreadfunc_rounddown },
+  { "ROUNDUP", kspreadfunc_roundup },
+  { "DELTA", kspreadfunc_delta },
+  { "EVEN", kspreadfunc_even },
+  { "ODD", kspreadfunc_odd },
+  { "COMPLEX", kspreadfunc_complex },
+  { "IMAGINARY", kspreadfunc_complex_imag },
+  { "IMREAL", kspreadfunc_complex_real },
+  { "IMSUM", kspreadfunc_imsum },
+  { "IMSUB", kspreadfunc_imsub },
+  { "IMPRODUCT", kspreadfunc_improduct },
+  { "IMCONJUGATE", kspreadfunc_imconjugate },
+  { "IMARGUMENT", kspreadfunc_imargument },
+  { "IMABS", kspreadfunc_imabs },
+  { "IMDIV", kspreadfunc_imdiv },
+  { "IMCOS", kspreadfunc_imcos },
+  { "IMSIN", kspreadfunc_imsin },
+  { "IMEXP", kspreadfunc_imexp },
+  { "IMLN", kspreadfunc_imln },
+  { "IMSQRT", kspreadfunc_imsqrt },
+  { "IMPOWER", kspreadfunc_impower },
 
   // date & time
   { "date", kspreadfunc_date },
@@ -464,6 +510,18 @@ static const functionEntry funcTab[] = {
   { "currentDate", kspreadfunc_currentDate },
   { "currentDateTime", kspreadfunc_currentDateTime },
   { "dayOfYear", kspreadfunc_dayOfYear },
+  { "hours", kspreadfunc_hours },
+  { "minutes", kspreadfunc_minutes },
+  { "DAYS", kspreadfunc_days },
+  { "WEEKS", kspreadfunc_weeks },
+  { "MONTHS", kspreadfunc_months },
+  { "YEARS", kspreadfunc_years },
+  { "isLeapYear", kspreadfunc_isLeapYear },
+  { "daysInMonth", kspreadfunc_daysInMonth },
+  { "daysInYear", kspreadfunc_daysInYear },
+  { "weeksInYear", kspreadfunc_weeksInYear },
+  { "seconds", kspreadfunc_seconds },
+  { "shortcurrentdate", kspreadfunc_shortcurrentDate },
 
   // conversion
   { "degree", kspreadfunc_degree },
@@ -471,14 +529,31 @@ static const functionEntry funcTab[] = {
   { "DEC2HEX", kspreadfunc_dec2hex },
   { "DEC2BIN", kspreadfunc_dec2bin },
   { "DEC2OCT", kspreadfunc_dec2oct },
+  { "BIN2DEC", kspreadfunc_bin2dec },
+  { "BIN2OCT", kspreadfunc_bin2oct },
+  { "BIN2HEX", kspreadfunc_bin2hex },
+  { "OCT2BIN", kspreadfunc_oct2bin },
+  { "OCT2DEC", kspreadfunc_oct2dec },
+  { "OCT2HEX", kspreadfunc_oct2hex },
+  { "HEX2BIN", kspreadfunc_hex2bin },
+  { "HEX2DEC", kspreadfunc_hex2dec },
+  { "HEX2OCT", kspreadfunc_hex2oct },
   { "CharToAscii", kspreadfunc_CharToAscii },
   { "AsciiToChar", kspreadfunc_AsciiToChar },
   { "BOOL2STRING", kspreadfunc_BoolToString },
   { "NUM2STRING", kspreadfunc_NumberToString },
   { "BOOL2INT", kspreadfunc_booltoint },
   { "INT2BOOL", kspreadfunc_inttobool },
+  { "DECSEX", kspreadfunc_decsex },
+  { "SEXDEC", kspreadfunc_sexdec },
+  { "ROMAN", kspreadfunc_roman },
+  { "POLR", kspreadfunc_polr },
+  { "POLA", kspreadfunc_pola },
+  { "CARX", kspreadfunc_carx },
+  { "CARY", kspreadfunc_cary },
 
   // logical
+  { "IF", kspreadfunc_if },
   { "OR", kspreadfunc_or },
   { "AND", kspreadfunc_and },
   { "NOR", kspreadfunc_nor },
@@ -491,6 +566,8 @@ static const functionEntry funcTab[] = {
   { "ISNOTTEXT", kspreadfunc_isnottext },
   { "ISODD", kspreadfunc_isodd },
   { "ISEVEN", kspreadfunc_iseven },
+  { "ISDATE", kspreadfunc_isdate },
+  { "ISTIME", kspreadfunc_istime },
 
   // statistical
   { "average", kspreadfunc_average },
@@ -501,6 +578,10 @@ static const functionEntry funcTab[] = {
   { "PERMUT", kspreadfunc_arrang },
   { "BINO", kspreadfunc_bino },
   { "INVBINO", kspreadfunc_bino_inv },
+  { "SUMPRODUCT", kspreadfunc_sumproduct },
+  { "SUMX2PY2", kspreadfunc_sumx2py2 },
+  { "SUMX2MY2", kspreadfunc_sumx2my2 },
+  { "SUM2XMY", kspreadfunc_sumxmy2 },
   { "GAUSS", kspreadfunc_gauss },
   { "PHI", kspreadfunc_phi },
   { "GAMMADIST", kspreadfunc_gammadist },
@@ -521,6 +602,8 @@ static const functionEntry funcTab[] = {
   { "CHIDIST", kspreadfunc_chidist },
 
   // financial
+  { "compound", kspreadfunc_compound },
+  { "continuous", kspreadfunc_continuous },
   { "effective", kspreadfunc_effective },
   { "nominal", kspreadfunc_nominal },
   { "FV", kspreadfunc_fv },
@@ -549,21 +632,15 @@ static const functionEntry funcTab[] = {
   { "TOGGLE", kspreadfunc_toggle },
   { "find", kspreadfunc_find },
   { "CLEAN", kspreadfunc_clean },
+  { "join", kspreadfunc_join },
   { "SLEEK", kspreadfunc_sleek },
 
-  // FIXME uncategorized yet
-  { "sumsq", kspreadfunc_sumsq },
-  { "max", kspreadfunc_max },
-  { "min", kspreadfunc_min },
-  { "join", kspreadfunc_join },
-  { "IF", kspreadfunc_if },
-  { "INT", kspreadfunc_INT },
+  // misc
   { "cell", kspreadfunc_cell },
   { "select", kspreadfunc_select },
-  { "compound", kspreadfunc_compound },
-  { "continuous", kspreadfunc_continuous },
 
   // compatibility with KSpread 1.0
+  // somehow should marked "obsolete" in the manual
   { "not", kspreadfunc_not },
   { "if", kspreadfunc_if },
   { "ENT", kspreadfunc_INT },
@@ -587,77 +664,6 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
     if( function ) module->addObject( name, new KSValue(
       new KSBuiltinFunction( module, name, function ) ) );
   }
-
-  module->addObject( "sign", new KSValue( new KSBuiltinFunction( module,"sign",kspreadfunc_sign) ) );
-  module->addObject( "atan2", new KSValue( new KSBuiltinFunction( module,"atan2",kspreadfunc_atan2) ) );
-  module->addObject( "INV", new KSValue( new KSBuiltinFunction( module,"INV",kspreadfunc_inv) ) );
-
-  module->addObject( "ROUNDDOWN", new KSValue( new KSBuiltinFunction( module,"ROUNDDOWN",kspreadfunc_rounddown) ) );
-  module->addObject( "ROUNDUP", new KSValue( new KSBuiltinFunction( module,"ROUNDUP",kspreadfunc_roundup) ) );
-  module->addObject( "ROUND", new KSValue( new KSBuiltinFunction( module,"ROUND",kspreadfunc_round) ) );
-  module->addObject( "BIN2DEC", new KSValue( new KSBuiltinFunction( module,"BIN2DEC",kspreadfunc_bin2dec) ) );
-  module->addObject( "BIN2OCT", new KSValue( new KSBuiltinFunction( module,"BIN2OCT",kspreadfunc_bin2oct) ) );
-  module->addObject( "BIN2HEX", new KSValue( new KSBuiltinFunction( module,"BIN2HEX",kspreadfunc_bin2hex) ) );
-  module->addObject( "OCT2BIN", new KSValue( new KSBuiltinFunction( module,"OCT2BIN",kspreadfunc_oct2bin) ) );
-  module->addObject( "OCT2DEC", new KSValue( new KSBuiltinFunction( module,"OCT2DEC",kspreadfunc_oct2dec) ) );
-  module->addObject( "OCT2HEX", new KSValue( new KSBuiltinFunction( module,"OCT2HEX",kspreadfunc_oct2hex) ) );
-  module->addObject( "HEX2BIN", new KSValue( new KSBuiltinFunction( module,"HEX2BIN",kspreadfunc_hex2bin) ) );
-  module->addObject( "HEX2DEC", new KSValue( new KSBuiltinFunction( module,"HEX2DEC",kspreadfunc_hex2dec) ) );
-  module->addObject( "HEX2OCT", new KSValue( new KSBuiltinFunction( module,"HEX2OCT",kspreadfunc_hex2oct) ) );
-  module->addObject( "POLR", new KSValue( new KSBuiltinFunction( module,"POLR",kspreadfunc_polr) ) );
-  module->addObject( "POLA", new KSValue( new KSBuiltinFunction( module,"POLA",kspreadfunc_pola) ) );
-  module->addObject( "CARX", new KSValue( new KSBuiltinFunction( module,"CARX",kspreadfunc_carx) ) );
-  module->addObject( "CARY", new KSValue( new KSBuiltinFunction( module,"CARY",kspreadfunc_cary) ) );
-  //complex
-  module->addObject( "COMPLEX", new KSValue( new KSBuiltinFunction( module,"COMPLEX",kspreadfunc_complex) ) );
-  module->addObject( "IMAGINARY", new KSValue( new KSBuiltinFunction( module,"IMAGINARY",kspreadfunc_complex_imag) ) );
-  module->addObject( "IMREAL", new KSValue( new KSBuiltinFunction( module,"IMREAL",kspreadfunc_complex_real) ) );
-  module->addObject( "IMSUM", new KSValue( new KSBuiltinFunction( module, "IMSUM", kspreadfunc_imsum ) ) );
-  module->addObject( "IMSUB", new KSValue( new KSBuiltinFunction( module, "IMSUB", kspreadfunc_imsub ) ) );
-  module->addObject( "IMPRODUCT", new KSValue( new KSBuiltinFunction( module, "IMPRODUCT", kspreadfunc_improduct ) ) );
-  module->addObject( "IMCONJUGATE", new KSValue( new KSBuiltinFunction( module, "IMCONJUGATE", kspreadfunc_imconjugate ) ) );
-  module->addObject( "IMARGUMENT", new KSValue( new KSBuiltinFunction( module, "IMARGUMENT", kspreadfunc_imargument ) ) );
-  module->addObject( "IMABS", new KSValue( new KSBuiltinFunction( module, "IMABS", kspreadfunc_imabs ) ) );
-  module->addObject( "IMDIV", new KSValue( new KSBuiltinFunction( module, "IMDIV", kspreadfunc_imdiv ) ) );
-  module->addObject( "IMCOS", new KSValue( new KSBuiltinFunction( module, "IMCOS", kspreadfunc_imcos ) ) );
-  module->addObject( "IMSIN", new KSValue( new KSBuiltinFunction( module, "IMSIN", kspreadfunc_imsin ) ) );
-  module->addObject( "IMEXP", new KSValue( new KSBuiltinFunction( module, "IMEXP", kspreadfunc_imexp ) ) );
-  module->addObject( "IMLN", new KSValue( new KSBuiltinFunction( module, "IMLN", kspreadfunc_imln ) ) );
-  module->addObject( "IMSQRT", new KSValue( new KSBuiltinFunction( module, "IMSQRT", kspreadfunc_imsqrt ) ) );
-  module->addObject( "IMPOWER", new KSValue( new KSBuiltinFunction( module, "IMPOWER", kspreadfunc_impower ) ) );
-
-  module->addObject( "SUMPRODUCT", new KSValue( new KSBuiltinFunction( module, "SUMPRODUCT", kspreadfunc_sumproduct ) ) );
-  module->addObject( "SUMX2PY2", new KSValue( new KSBuiltinFunction( module, "SUMX2PY2", kspreadfunc_sumx2py2 ) ) );
-  module->addObject( "SUMX2MY2", new KSValue( new KSBuiltinFunction( module, "SUMX2MY2", kspreadfunc_sumx2my2 ) ) );
-  module->addObject( "SUM2XMY", new KSValue( new KSBuiltinFunction( module, "SUM2XMY", kspreadfunc_sumxmy2 ) ) );
-  module->addObject( "DELTA", new KSValue( new KSBuiltinFunction( module, "DELTA", kspreadfunc_delta ) ) );
-  module->addObject( "EVEN", new KSValue( new KSBuiltinFunction( module, "EVEN", kspreadfunc_even ) ) );
-  module->addObject( "ODD", new KSValue( new KSBuiltinFunction( module, "ODD", kspreadfunc_odd ) ) );
-  module->addObject( "RANDBETWEEN", new KSValue( new KSBuiltinFunction( module, "RANDBETWEEN", kspreadfunc_randbetween ) ) );
-  module->addObject( "LOGn", new KSValue( new KSBuiltinFunction( module, "LOGn", kspreadfunc_logn ) ) );
-  module->addObject( "SQRTn", new KSValue( new KSBuiltinFunction( module, "SQRTn", kspreadfunc_sqrtn ) ) );
-  module->addObject( "count", new KSValue( new KSBuiltinFunction( module, "count", kspreadfunc_count ) ) );
-  module->addObject( "CUR", new KSValue( new KSBuiltinFunction( module, "CUR", kspreadfunc_cur ) ) );
-  module->addObject( "DECSEX", new KSValue( new KSBuiltinFunction( module, "DECSEX", kspreadfunc_decsex) ) );
-  module->addObject( "SEXDEC", new KSValue( new KSBuiltinFunction( module, "SEXDEC", kspreadfunc_sexdec) ) );
-  module->addObject( "ISTIME", new KSValue( new KSBuiltinFunction( module, "ISTIME", kspreadfunc_istime) ) );
-  module->addObject( "ISDATE", new KSValue( new KSBuiltinFunction( module, "ISDATE", kspreadfunc_isdate) ) );
-  module->addObject( "hours", new KSValue( new KSBuiltinFunction( module, "hours", kspreadfunc_hours) ) );
-  module->addObject( "minutes", new KSValue( new KSBuiltinFunction( module, "minutes", kspreadfunc_minutes) ) );
-  module->addObject( "DAYS", new KSValue( new KSBuiltinFunction( module, "DAYS", kspreadfunc_days) ) );
-  module->addObject( "WEEKS", new KSValue( new KSBuiltinFunction( module, "WEEKS", kspreadfunc_weeks) ) );
-  module->addObject( "MONTHS", new KSValue( new KSBuiltinFunction( module, "MONTHS", kspreadfunc_months) ) );
-  module->addObject( "YEARS", new KSValue( new KSBuiltinFunction( module, "YEARS", kspreadfunc_years) ) );
-  module->addObject( "isLeapYear", new KSValue( new KSBuiltinFunction( module, "isLeapYear", kspreadfunc_isLeapYear) ) );
-  module->addObject( "daysInMonth", new KSValue( new KSBuiltinFunction( module, "daysInMonth", kspreadfunc_daysInMonth) ) );
-  module->addObject( "daysInYear", new KSValue( new KSBuiltinFunction( module, "daysInYear", kspreadfunc_daysInYear) ) );
-  module->addObject( "weeksInYear", new KSValue( new KSBuiltinFunction( module, "weeksInYear", kspreadfunc_weeksInYear) ) );
-  module->addObject( "seconds", new KSValue( new KSBuiltinFunction( module, "seconds", kspreadfunc_seconds) ) );
-  module->addObject( "ROMAN", new KSValue( new KSBuiltinFunction( module, "ROMAN", kspreadfunc_roman) ) );
-  module->addObject( "shortcurrentDate", new KSValue( new KSBuiltinFunction( module, "shortcurrentDate", kspreadfunc_shortcurrentDate) ) );
-  module->addObject( "trim", new KSValue( new KSBuiltinFunction( module, "trim", kspreadfunc_trim) ) );
-
-
 
   return module;
 }
