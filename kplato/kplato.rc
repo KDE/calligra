@@ -1,3 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
 <kpartgui name="KPlato" version="1">
+    <MenuBar>
+	<Menu name="project"><text>&amp;Project</text>
+	    <Action name="edit_project"/>
+	    <Action name="add_sub_project"/>
+	    <Action name="add_task"/>
+	    <Action name="add_milestone"/>
+	</Menu>
+    </MenuBar>
 </kpartgui>
