@@ -103,6 +103,10 @@ KexiDBField::typeName(ColumnType sqltype)
 		case SQLBit:
 		case SQLBoolean:
 			return "Bool";
+		case SQLInterval:
+			return "Interval";
+		case SQLInvalid:
+			return QString::null;
 	}
 	
 	return QString::null;
@@ -145,7 +149,7 @@ KexiDBField::length()
 }
 
 QString
-KexiDBField::sql2string(KexiDBField::ColumnType sqltype)
+KexiDBField::sql2string(KexiDBField::ColumnType /*sqltype*/)
 {
 	return QString::null;
 }
