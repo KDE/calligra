@@ -197,21 +197,10 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     connect(m_pertview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
 
 #endif
-    // Necessary for the actions that are not plugged anywhere
-    // Deprecated with KDE-3.1.
-    // Not entirely sure it's necessary for 3.0, please test and report.
-#if KDE_VERSION < 305
-    KAccel * accel = new KAccel( this );
-#ifndef NDEBUG
-    actPrintDebug->plugAccel( accel );
-    actPrintCalendarDebug->plugAccel( accel );
-#endif
-#else
     // Stupid compilers ;)
 #ifndef NDEBUG
     Q_UNUSED( actPrintDebug );
     Q_UNUSED( actPrintCalendarDebug );
-#endif
 #endif
 
 }
