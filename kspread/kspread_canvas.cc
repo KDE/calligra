@@ -2878,6 +2878,11 @@ void KSpreadCanvas::ExtendRectBorder(QRect& area)
   int top = area.top();
   int bottom = area.bottom();
 
+  //Maybe the case for ridiculous settings, see setSelectionChangePaintDirty
+  //No need to extend then, avoids warnings
+  if( left < 1 && right < 1 )
+      return;
+
   if ( right < KS_colMax )
   {
     do
