@@ -17,7 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
+#include <qtextbrowser.h>
+#include <qlayout.h>
+#include <qtabwidget.h>
 
 #include "kspread_dlg_formula.h"
 #include "kspread_view.h"
@@ -28,23 +30,26 @@
 #include "kspread_editors.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
-#include <qlayout.h>
+
 #include <kapp.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-//#include <iostream.h>
 #include <knumvalidator.h>
+#include <kdialog.h>
 
 KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
     : QDialog( parent, name )
 {
     m_pView = parent;
+    m_focus = 0;
+
     setCaption( name );
-    QString tmp_oldText;
+
     KSpreadCell* cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),
-        m_pView->canvasWidget()->markerRow() );
-    m_oldText=cell->text();
+							m_pView->canvasWidget()->markerRow() );
+    QString m_oldText=cell->text();
+    // Make shure that there is a cell editor running.
     if ( !m_pView->canvasWidget()->editor() )
     {
         m_pView->canvasWidget()->createEditor( KSpreadCanvas::CellEditor );
@@ -58,15 +63,13 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     }
 
     ASSERT( m_pView->canvasWidget()->editor() );
-    m_focus = 0;
 
     QGridLayout *grid1 = new QGridLayout(this,11,2,15,7);
-    searchFunct=new KLineEdit(this);
 
-    grid1->addWidget(searchFunct,0,0);
+    searchFunct = new KLineEdit(this);
+    grid1->addWidget( searchFunct, 0, 0 );
 
-    typeFunction=new QComboBox(this);
-    grid1->addWidget(typeFunction,1,0);
+    typeFunction = new QComboBox(this);
     typeFunction->insertItem(i18n("All"));
     typeFunction->insertItem(i18n("Statistic"));
     typeFunction->insertItem(i18n("Trigonometric"));
@@ -75,147 +78,169 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     typeFunction->insertItem(i18n("Text"));
     typeFunction->insertItem(i18n("Time and Date"));
     typeFunction->insertItem(i18n("Financial"));
+    grid1->addWidget( typeFunction, 1, 0 );
 
-    functions=new QListBox(this);
-    grid1->addMultiCellWidget( functions,2,7,0,0 );
+    functions = new QListBox(this);
+    grid1->addWidget( functions, 2, 0 );
 
-    selectFunction = new QPushButton(QString::null, this);
-    selectFunction->setPixmap(BarIcon("down", KIcon::SizeSmall));
-    grid1->addWidget(selectFunction,8,0);
+    selectFunction = new QPushButton( this );
+    selectFunction->setPixmap( BarIcon( "down", KIcon::SizeSmall ) );
+    grid1->addWidget( selectFunction, 3, 0 );
 
-    result= new QLineEdit(this);
-    grid1->addMultiCellWidget(result,9,9,0,1);
+    result = new QLineEdit( this );
+    grid1->addMultiCellWidget( result, 4, 4, 0, 1 );
 
+    m_tabwidget = new QTabWidget( this );
+    grid1->addMultiCellWidget( m_tabwidget, 0, 2, 1, 1 );
 
-    QGridLayout *grid2 = new QGridLayout(this,11,2,15,7);
-    grid1->addMultiCell(grid2,0,8,1,1);
+    m_browser = new QTextBrowser( m_tabwidget );
+    m_browser->setMinimumWidth( 300 );
+    
+    m_tabwidget->addTab( m_browser, i18n("&Help") );
+    int index = m_tabwidget->currentPageIndex();
+    
+    m_input = new QWidget( m_tabwidget );
+    QVBoxLayout *grid2 = new QVBoxLayout( m_input, KDialog::marginHint(), KDialog::spacingHint() );
 
-    grid2->setResizeMode (QLayout::Minimum);
-    label1=new QLabel(this);
-    grid2->addWidget(label1,0,1);
+    // grid2->setResizeMode (QLayout::Minimum);
+    
+    label1 = new QLabel(m_input);
+    grid2->addWidget( label1 );
 
-    firstElement=new QLineEdit(this);
-    grid2->addWidget(firstElement,1,1);
+    firstElement=new QLineEdit(m_input);
+    grid2->addWidget( firstElement );
 
-    label2=new QLabel(this);
-    grid2->addWidget(label2,2,1);
+    label2=new QLabel(m_input);
+    grid2->addWidget( label2 );
 
-    secondElement=new QLineEdit(this);
-    grid2->addWidget(secondElement,3,1);
+    secondElement=new QLineEdit(m_input);
+    grid2->addWidget( secondElement );
 
-    label3=new QLabel(this);
-    grid2->addWidget(label3,4,1);
+    label3=new QLabel(m_input);
+    grid2->addWidget( label3 );
 
-    thirdElement=new QLineEdit(this);
-    grid2->addWidget(thirdElement,5,1);
+    thirdElement=new QLineEdit(m_input);
+    grid2->addWidget( thirdElement );
 
-    label4=new QLabel(this);
-    grid2->addWidget(label4,6,1);
+    label4=new QLabel(m_input);
+    grid2->addWidget( label4 );
 
-    fourElement=new QLineEdit(this);
-    grid2->addWidget(fourElement,7,1);
+    fourElement=new QLineEdit(m_input);
+    grid2->addWidget( fourElement );
 
-    label5=new QLabel(this);
-    grid2->addWidget(label5,8,1);
+    label5=new QLabel(m_input);
+    grid2->addWidget( label5 );
 
-    fiveElement=new QLineEdit(this);
-    grid2->addWidget(fiveElement,9,1);
+    fiveElement=new QLineEdit(m_input);
+    grid2->addWidget( fiveElement );
 
-    help=new QLabel(this);
-    grid2->addWidget(help,10,1);
-
-    grid2->setColStretch(1,1);
+    grid2->addStretch( 10 );
+    
+    m_tabwidget->addTab( m_input, i18n("&Edit") );
+    m_tabwidget->setTabEnabled( m_input, FALSE );
+    
+    m_tabwidget->setCurrentPage( index );
+    
+    // Create the Ok and Cancel buttons
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
     m_pOk = bb->addButton( i18n("OK") );
     m_pOk->setDefault( TRUE );
     m_pClose = bb->addButton( i18n( "Close" ) );
     bb->layout();
-    grid1->addWidget(bb,10,1);
+    grid1->addMultiCellWidget( bb, 5, 5, 0, 1 );
 
+    refresh_result = true;
 
-    refresh_result=true;
     connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
     connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( typeFunction, SIGNAL( activated(const QString &) ),
              this, SLOT( slotActivated(const QString &) ) );
     connect( functions, SIGNAL( highlighted(const QString &) ),
-             this, SLOT( slotselected(const QString &) ) );
+             this, SLOT( slotSelected(const QString &) ) );
     connect( functions, SIGNAL( selected(const QString &) ),
-             this, SLOT( slotselected(const QString &) ) );
-    connect( functions, SIGNAL( doubleClicked(QListBoxItem *)),
+             this, SLOT( slotSelected(const QString &) ) );
+    connect( functions, SIGNAL( doubleClicked(QListBoxItem * ) ),
              this ,SLOT( slotDoubleClicked(QListBoxItem *) ) );
+
     slotActivated(i18n("All"));
-    connect(selectFunction, SIGNAL(clicked()),
-          this,SLOT(slotSelectButton()));
-    connect(firstElement,SIGNAL(textChanged ( const QString & )),
-            this,SLOT(slotChangeText(const QString &)));
-    connect(secondElement,SIGNAL(textChanged ( const QString & )),
-            this,SLOT(slotChangeText(const QString &)));
-    connect(thirdElement,SIGNAL(textChanged ( const QString & )),
-            this,SLOT(slotChangeText(const QString &)));
-    connect(fourElement,SIGNAL(textChanged ( const QString & )),
-            this,SLOT(slotChangeText(const QString &)));
-    connect(fiveElement,SIGNAL(textChanged ( const QString & )),
-            this,SLOT(slotChangeText(const QString &)));
+
+    connect( selectFunction, SIGNAL(clicked()),
+	     this,SLOT(slotSelectButton()));
+
+    connect( firstElement,SIGNAL(textChanged ( const QString & )),
+	     this,SLOT(slotChangeText(const QString &)));
+    connect( secondElement,SIGNAL(textChanged ( const QString & )),
+	     this,SLOT(slotChangeText(const QString &)));
+    connect( thirdElement,SIGNAL(textChanged ( const QString & )),
+	     this,SLOT(slotChangeText(const QString &)));
+    connect( fourElement,SIGNAL(textChanged ( const QString & )),
+	     this,SLOT(slotChangeText(const QString &)));
+    connect( fiveElement,SIGNAL(textChanged ( const QString & )),
+	     this,SLOT(slotChangeText(const QString &)));
+
     connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadTable*, const QRect& ) ),
              this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
 
-    firstElement->hide();
-    secondElement->hide();
-    thirdElement->hide();
-    fourElement->hide();
-    fiveElement->hide();
-    m_oldLength=0;
     // Save the name of the active table.
     m_tableName = m_pView->activeTable()->tableName();
-    /*m_oldText*/
-    tmp_oldText = m_pView->canvasWidget()->editor()->text();
-
+    // Save the cells current text.
+    QString tmp_oldText = m_pView->canvasWidget()->editor()->text();
+    // Position of the cell.
     m_column = m_pView->canvasWidget()->markerColumn();
     m_row = m_pView->canvasWidget()->markerRow();
 
-    if(tmp_oldText.isEmpty())
+    if( tmp_oldText.isEmpty() )
         result->setText("=");
     else
+    {
         if( tmp_oldText.at(0)!='=')
-                result->setText("="+tmp_oldText);
+	    result->setText( "=" + tmp_oldText );
         else
-                result->setText(tmp_oldText);
+	    result->setText( tmp_oldText );
+    }
 
+    // Allow the user to select cells on the spreadsheet.
     m_pView->canvasWidget()->startChoose();
 
     qApp->installEventFilter( this );
-    if(!formulaName.isEmpty())
-        {
-        functions->setCurrentItem(functions->index(functions->findItem(formulaName)));
-        slotDoubleClicked(functions->findItem(formulaName));
-        }
+
+    // Was a function name passed along with the constructor ? Then activate it.
+    if( !formulaName.isEmpty() )
+    {
+        functions->setCurrentItem( functions->index( functions->findItem( formulaName ) ) );
+        slotDoubleClicked( functions->findItem( formulaName ) );
+    }
     else
-        {
+    {
+	// Set keyboard focus to allow selection of a formula.
         searchFunct->setFocus();
-        }
-    searchFunct->setCompletionMode(KGlobalSettings::CompletionAuto  );
-    searchFunct->setCompletionObject( &listFunct,true );
-    if(functions->currentItem()==-1)
-        selectFunction->setEnabled(false);
-    connect(searchFunct, SIGNAL( textChanged( const QString & )),
-          this,SLOT(slotSearchText(const QString &)));
-    connect(searchFunct, SIGNAL( returnPressed()),
-          this,SLOT(slotPressReturn()));
+    }
+
+    // Add auto completion.
+    searchFunct->setCompletionMode( KGlobalSettings::CompletionAuto );
+    searchFunct->setCompletionObject( &listFunct, true );
+
+    if( functions->currentItem() == -1 )
+        selectFunction->setEnabled( false );
+
+    connect( searchFunct, SIGNAL( textChanged( const QString & ) ),
+	     this, SLOT( slotSearchText(const QString &) ) );
+    connect( searchFunct, SIGNAL( returnPressed() ),
+	     this, SLOT( slotPressReturn() ) );
 }
 
 void KSpreadDlgFormula::slotPressReturn()
 {
-if(!functions->currentText().isEmpty())
-        slotDoubleClicked(functions->findItem(functions->currentText()));
+    if( !functions->currentText().isEmpty() )
+        slotDoubleClicked( functions->findItem( functions->currentText() ) );
 }
+
 void KSpreadDlgFormula::slotSearchText(const QString &_text)
 {
-QString result;
-result=listFunct.makeCompletion( _text );
-if(!result.isNull())
-        functions->setCurrentItem(functions->index(functions->findItem(result)));
+    QString result = listFunct.makeCompletion( _text );
+    if( !result.isNull() )
+        functions->setCurrentItem( functions->index( functions->findItem( result ) ) );
 }
 
 bool KSpreadDlgFormula::eventFilter( QObject* obj, QEvent* ev )
@@ -243,28 +268,30 @@ void KSpreadDlgFormula::slotOk()
 {
     m_pView->canvasWidget()->endChoose();
     // Switch back to the old table
-    if(m_pView->activeTable()->tableName() !=  m_tableName )
-        {
+    if( m_pView->activeTable()->tableName() !=  m_tableName )
+    {
         KSpreadTable *table=m_pView->doc()->map()->findTable(m_tableName);
         if( table)
-                table->setActiveTable();
-        }
+	    table->setActiveTable();
+    }
 
     // Revert the marker to its original position
     m_pView->canvasWidget()->activeTable()->setMarker( QPoint( m_column, m_row ) );
 
-    if( m_pView->canvasWidget()->editor()!=0)
-        {
+    // If there is still an editor then set the text.
+    // Usually the editor is always in place.
+    if( m_pView->canvasWidget()->editor() != 0 )
+    {
         ASSERT( m_pView->canvasWidget()->editor() );
-        QString tmp;
-        tmp=result->text();
-        if(tmp.at(0)!='=')
-                tmp="="+tmp;
-        int pos=m_pView->canvasWidget()->editor()->cursorPosition()+ tmp.length();
+        QString tmp = result->text();
+        if( tmp.at(0) != '=')
+	    tmp = "=" + tmp;
+        int pos = m_pView->canvasWidget()->editor()->cursorPosition()+ tmp.length();
         m_pView->canvasWidget()->editor()->setText( tmp );
         m_pView->canvasWidget()->editor()->setFocus();
         m_pView->canvasWidget()->editor()->setCursorPosition( pos );
-        }
+    }
+    
     accept();
 }
 
@@ -274,296 +301,182 @@ void KSpreadDlgFormula::slotClose()
 
     // Switch back to the old table
     if(m_pView->activeTable()->tableName() !=  m_tableName )
-        {
+    {
         KSpreadTable *table=m_pView->doc()->map()->findTable(m_tableName);
-        if(table)
-                table->setActiveTable();
-        }
+        if( !table )
+	    return;
+	table->setActiveTable();
+    }
 
 
     // Revert the marker to its original position
     m_pView->canvasWidget()->activeTable()->setMarker( QPoint( m_column, m_row ) );
-    if( m_pView->canvasWidget()->editor()!=0)
-        {
+    // If there is still an editor then reset the text.
+    // Usually the editor is always in place.
+    if( m_pView->canvasWidget()->editor() != 0 )
+    {
         ASSERT( m_pView->canvasWidget()->editor() );
         m_pView->canvasWidget()->editor()->setText( m_oldText );
         m_pView->canvasWidget()->editor()->setFocus();
-        }
+    }
 
     reject();
 }
 
 void KSpreadDlgFormula::slotSelectButton()
 {
-if(functions->currentItem()!=-1)
-        {
+    if( functions->currentItem() != -1 )
+    {
         slotDoubleClicked(functions->findItem(functions->text(functions->currentItem())));
-        }
-}
-
-void KSpreadDlgFormula::slotChangeText(const QString &string)
-{
-    if(refresh_result)
-    {
-
-        QString tmp;
-        if(firstElement->hasFocus()||m_focus==firstElement)
-        {
-
-            tmp=m_leftText+m_funcName+"(";
-
-            if(funct.multiple)
-            {
-                tmp=create_formula(tmp);
-            }
-            else
-            {
-                if(!firstElement->text().isEmpty())
-                        tmp=tmp+make_formula(firstElement->text(),funct.firstElementType);
-
-                if(funct.nb_param>1)
-                {
-                        if( !secondElement->text().isEmpty())
-                                tmp=tmp+","+make_formula(secondElement->text(),funct.secondElementType);
-                        else if( !thirdElement->text().isEmpty()
-                                || !fourElement->text().isEmpty()|| !fiveElement->text().isEmpty())
-                                tmp=tmp+",";
-
-                }
-                if(funct.nb_param>2)
-                {
-                        if( !thirdElement->text().isEmpty())
-                                tmp=tmp+","+make_formula(thirdElement->text(),funct.thirdElementType);
-                        else if(!fourElement->text().isEmpty() || !fiveElement->text().isEmpty())
-                                tmp=tmp+",";
-                }
-                if(funct.nb_param>3)
-                {
-                        if(!fourElement->text().isEmpty())
-                                tmp=tmp+","+make_formula(fourElement->text(),funct.fourElementType);
-                        else if( !fiveElement->text().isEmpty())
-                                tmp=tmp+",";
-                }
-                if(funct.nb_param>4)
-                {
-                        if( !fiveElement->text().isEmpty())
-                                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
-                }
-            }
-        }
-        else if(secondElement->hasFocus()||m_focus==secondElement)
-        {
-            tmp=m_leftText+m_funcName+"(";
-            if(funct.multiple)
-            {
-                tmp=create_formula(tmp);
-            }
-            else
-            {
-
-                tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)+","+
-                        make_formula(string,funct.secondElementType);
-                if(funct.nb_param>2)
-                {
-                        if( !thirdElement->text().isEmpty())
-                                tmp=tmp+","+make_formula(thirdElement->text(),funct.thirdElementType);
-                        else if(!fourElement->text().isEmpty() || !fiveElement->text().isEmpty())
-                                tmp=tmp+",";
-                }
-                if(funct.nb_param>3)
-                {
-                        if(!fourElement->text().isEmpty())
-                                tmp=tmp+","+make_formula(fourElement->text(),funct.fourElementType);
-                        else if( !fiveElement->text().isEmpty())
-                                tmp=tmp+",";
-                }
-                if(funct.nb_param>4)
-                {
-                        if( !fiveElement->text().isEmpty())
-                                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
-                }
-            }
-        }
-        else if(thirdElement->hasFocus()||m_focus==thirdElement)
-        {
-
-            tmp=m_leftText+m_funcName+"(";
-
-            if(funct.multiple)
-            {
-                 tmp=create_formula(tmp);
-            }
-            else
-            {
-                tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)
-                +","+make_formula(secondElement->text(),funct.secondElementType)+","+
-                make_formula(string,funct.thirdElementType);
-
-                if(funct.nb_param>3)
-                {
-                        if( !fourElement->text().isEmpty())
-                                tmp=tmp+","+ make_formula(fourElement->text(),funct.fourElementType);
-                        else if(!fiveElement->text().isEmpty())
-                                tmp=tmp+",";
-                }
-                if(funct.nb_param>4)
-                {
-                        if( !fiveElement->text().isEmpty())
-                                tmp=tmp+","+ make_formula(fiveElement->text(),funct.fiveElementType);
-                }
-            }
-        }
-        else if(fourElement->hasFocus()||m_focus==fourElement)
-        {
-            tmp=m_leftText+m_funcName+"(";
-
-            if(funct.multiple)
-            {
-                tmp=create_formula(tmp);
-            }
-            else
-            {
-                tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)+","+
-                        make_formula(secondElement->text(),funct.secondElementType)+",";
-                tmp=tmp+make_formula(thirdElement->text(),funct.thirdElementType)+","+
-                        make_formula(string,funct.fourElementType);
-                if(funct.nb_param>4)
-                {
-                        if( !fiveElement->text().isEmpty())
-                                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
-                }
-            }
-        }
-        else if(fiveElement->hasFocus()||m_focus==fiveElement)
-        {
-            tmp=m_leftText+m_funcName+"(";
-            if(funct.multiple)
-            {
-                tmp=create_formula(tmp);
-            }
-            else
-            {
-
-                tmp=tmp+make_formula(firstElement->text(),funct.firstElementType)+","+
-                        make_formula(secondElement->text(),funct.secondElementType)+",";
-                tmp=tmp+make_formula(thirdElement->text(),funct.thirdElementType)+","+
-                        make_formula(fourElement->text(),funct.fourElementType)+","+
-                        make_formula(string,funct.fiveElementType);
-            }
-        }
-        tmp=tmp+")"+m_rightText;
-        result->setText(tmp);
     }
 }
 
-QString KSpreadDlgFormula::create_formula(QString tmp)
+void KSpreadDlgFormula::slotChangeText( const QString& )
 {
-if(!firstElement->text().isEmpty())
-        tmp=tmp+make_formula(firstElement->text(),funct.firstElementType);
-if(!secondElement->text().isEmpty())
-        if(!firstElement->text().isEmpty())
-                tmp=tmp+","+make_formula(secondElement->text(),funct.secondElementType);
-        else
-                tmp=tmp+make_formula(secondElement->text(),funct.secondElementType);
-if(!thirdElement->text().isEmpty())
-        if(!secondElement->text().isEmpty()||!firstElement->text().isEmpty())
-                tmp=tmp+","+make_formula(thirdElement->text(),funct.thirdElementType);
-        else
-                tmp=tmp+make_formula(thirdElement->text(),funct.thirdElementType);
-if(!fourElement->text().isEmpty())
-        if(!secondElement->text().isEmpty()||!firstElement->text().isEmpty()
-        ||!thirdElement->text().isEmpty())
-                tmp=tmp+","+make_formula(fourElement->text(),funct.fourElementType);
-        else
-                tmp=tmp+make_formula(fourElement->text(),funct.fourElementType);
-if(!fiveElement->text().isEmpty())
-        if(!secondElement->text().isEmpty()||!firstElement->text().isEmpty()
-        ||!thirdElement->text().isEmpty()||!fourElement->text().isEmpty())
-                tmp=tmp+","+make_formula(fiveElement->text(),funct.fiveElementType);
-        else
-                tmp=tmp+make_formula(fiveElement->text(),funct.fiveElementType);
-return(tmp);
-}
-QString KSpreadDlgFormula::make_formula( const QString& _text,type_create elementType)
-{
-    QString text=_text;
-    bool ok1=false;
-    bool ok2=false;
-    if(elementType==type_string)
-    {
-        text.toDouble(&ok1);
-        text.toInt(&ok2);
-        if(ok1||ok2)
-        {
-            text="\""+text+"\"";
-        }
-        else if(text.left(1)=="\"")
-        {
-            //find other "
-            int pos_car=text.find("\"",1);
-            // kdDebug(36001) << "Index : " << pos_car << endl;
-            if(pos_car==-1)
-            {
-                //so don't find "
-                text+="\"";
-            }
-            else if(pos_car < (int)text.length())
-            {
-                //todo
-            }
-            else
-            {
-            }
-        }
-        else if( text.toDouble()!=0||text.isEmpty()||text.find(":",0)!=-1)
-        {
-        }
-        else if(text.find(",",0)!=-1)
-        {
-            if(funct.nb_param==5)
-                //When nb_param =4 =>function multi parameter
-                // join(string,string,.....)
-            {
-                text="\""+text+"\"";
-            }
-        }
-        else
-        {
-            QString tmp;
-            int p = text.find( "!" );
-            if ( p != -1 )
-            {
-                tmp = text;
-            }
-            else
-            {
-                tmp=m_pView->activeTable()->tableName();
-                tmp+= "!" +text;
-            }
+    // Test the lock
+    if( !refresh_result )
+	return;
+    
+    if ( m_focus == 0 )
+	return;
 
-            KSpreadPoint _cell=KSpreadPoint( tmp, m_pView->doc()->map() );
-            if(!_cell.isValid())
-            {
-                text="\""+text+"\"";
+    QString tmp = m_leftText+m_funcName+"(";
+    tmp += createFormula();
+    tmp = tmp+ ")" + m_rightText;
+    
+    result->setText( tmp );
+}
+
+QString KSpreadDlgFormula::createFormula()
+{
+    QString tmp( "" );
+    
+    bool first = TRUE;
+    
+    int count = funct.nb_param;
+    if ( funct.multiple )
+	count = 5;
+    
+    if(!firstElement->text().isEmpty() && count >= 1 )
+    {
+        tmp=tmp+createParameter(firstElement->text(),funct.firstElementType);
+	first = FALSE;
+    }
+    
+    if(!secondElement->text().isEmpty() && count >= 2 )
+    {
+	first = FALSE;
+	if ( !first )
+	    tmp=tmp+","+createParameter(secondElement->text(),funct.secondElementType);
+	else
+	    tmp=tmp+createParameter(secondElement->text(),funct.secondElementType);
+    }
+    if(!thirdElement->text().isEmpty() && count >= 3 )
+    {
+	first = FALSE;
+	if ( !first )
+	    tmp=tmp+","+createParameter(thirdElement->text(),funct.thirdElementType);
+        else
+	    tmp=tmp+createParameter(thirdElement->text(),funct.thirdElementType);
+    }
+    if(!fourElement->text().isEmpty() && count >= 4 )
+    {
+	first = FALSE;
+	if ( !first )
+	    tmp=tmp+","+createParameter(fourElement->text(),funct.fourElementType);
+        else
+	    tmp=tmp+createParameter(fourElement->text(),funct.fourElementType);
+    }
+    if(!fiveElement->text().isEmpty() && count >= 5 )
+    {
+	first = FALSE;
+	if ( !first )
+	    tmp=tmp+","+createParameter(fiveElement->text(),funct.fiveElementType);
+        else
+	    tmp=tmp+createParameter(fiveElement->text(),funct.fiveElementType);
+    }
+    
+    return(tmp);
+}
+
+QString KSpreadDlgFormula::createParameter( const QString& _text, KSpreadParameterType elementType )
+{
+    if ( _text.isEmpty() )
+	return QString( "" );
+    
+    QString text;
+    
+    switch( elementType )
+    {
+    case type_string:
+	{			
+	    // Does the text start with quotes?
+	    if ( _text[0] == '"' )
+	    {
+		text = "\"";
+	    
+		// Escape quotes
+		QString tmp = _text;
+		int pos;
+		while( ( pos = tmp.find( '"', 1 ) ) != -1 )
+		    tmp.replace( pos, 1, "\\\"" );
+	    
+		text += tmp;
+		text += "\"";
+	    }
+	    else
+	    {
+		KSpreadPoint p = KSpreadPoint( _text, m_pView->doc()->map() );
+		KSpreadRange r = KSpreadRange( _text, m_pView->doc()->map() );
+		if( !p.isValid() && !r.isValid() )
+		{
+		    text = "\"";
+	    
+		    // Escape quotes
+		    QString tmp = _text;
+		    int pos;
+		    while( ( pos = tmp.find( '"', 1 ) ) != -1 )
+			tmp.replace( pos, 1, "\\\"" );
+	    
+		    text += tmp;
+		    text += "\"";
+		}
+		else
+		    text = _text;
             }
         }
+	return text;
+    case type_double:
+	return _text;
+    case type_int:
+	return _text;
+    case type_logic:
+	return _text;
     }
+    
+    // Never reached
     return text;
 }
 
-
-void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
+void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 {
-    m_focus=0;
-    m_oldLength=result->text().length();
+    if ( !item )
+	return;
+    
+    m_focus = 0;
+    int old_length = result->text().length();
 
-    if(funct.nb_param==0)
+    // Show help
+    m_browser->setText( funct.help );
+    m_tabwidget->setTabEnabled( m_input, TRUE );
+    m_tabwidget->setCurrentPage( 1 );
+	
+    //
+    // Show as many QLineEdits as needed.
+    //
+    if( funct.nb_param > 0 )
     {
-        help->setText(funct.help);
-    }
-    if(funct.nb_param>0)
-    {
-        m_focus=firstElement;
+        m_focus = firstElement;
         firstElement->setFocus();
         firstElement->show();
         if(funct.firstElementType==type_double)
@@ -575,9 +488,14 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
 
         label1->setText(funct.firstElementLabel);
         label1->show();
-        help->setText(funct.help);
     }
-    if(funct.nb_param>1)
+    else
+    {
+	label1->hide();
+	firstElement->hide();
+    }
+    
+    if( funct.nb_param > 1 )
     {
         secondElement->show();
         if(funct.secondElementType==type_double)
@@ -589,7 +507,13 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
         label2->setText(funct.secondElementLabel);
         label2->show();
     }
-    if(funct.nb_param>2)
+    else
+    {
+	label2->hide();
+	secondElement->hide();
+    }
+	
+    if( funct.nb_param > 2 )
     {
         thirdElement->show();
         if(funct.thirdElementType==type_double)
@@ -601,7 +525,13 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
         label3->setText(funct.thirdElementLabel);
         label3->show();
     }
-    if(funct.nb_param>3)
+    else
+    {
+	label3->hide();
+	thirdElement->hide();
+    }
+    
+    if( funct.nb_param > 3 )
     {
         fourElement->show();
         if(funct.fourElementType==type_double)
@@ -613,7 +543,13 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
         label4->setText(funct.fourElementLabel);
         label4->show();
     }
-    if(funct.nb_param>4)
+    else
+    {
+	label4->hide();
+	fourElement->hide();
+    }
+
+    if( funct.nb_param > 4 )
     {
         fiveElement->show();
         if(funct.fiveElementType==type_double)
@@ -625,14 +561,23 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
         label5->setText(funct.fiveElementLabel);
         label5->show();
     }
-    if(funct.nb_param>5)
+    else
+    {
+	label5->hide();
+	fiveElement->hide();
+    }
+    
+    if( funct.nb_param > 5 )
     {
         kdDebug(36001) << "Error in param->nb_param" << endl;
     }
 
-    if(result->cursorPosition()<m_oldLength)
+    //
+    // Put the new function call in the result.
+    //
+    if( result->cursorPosition() < old_length )
     {
-        m_rightText=result->text().right(m_oldLength-result->cursorPosition());
+        m_rightText=result->text().right(old_length-result->cursorPosition());
         m_leftText=result->text().left(result->cursorPosition());
     }
     else
@@ -640,42 +585,40 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
         m_rightText="";
         m_leftText=result->text();
     }
-    int pos=result->cursorPosition();
-    result->setText(m_leftText+functions->text(functions->currentItem())
-                    +"()"+m_rightText);
-    if(funct.nb_param==0)
+    int pos = result->cursorPosition();
+    result->setText( m_leftText+functions->text( functions->currentItem() ) + "()" + m_rightText);
+    
+    //
+    // Put focus somewhere is there are no QLineEdits visible
+    //
+    if( funct.nb_param == 0 )
     {
         result->setFocus();
         result->setCursorPosition(pos+functions->text(functions->currentItem()).length()+2);
     }
 }
 
-void KSpreadDlgFormula::slotselected(const QString &string)
+void KSpreadDlgFormula::slotSelected( const QString& function )
 {
-
-    if(functions->currentItem()!=-1)
-        selectFunction->setEnabled(true);
-    refresh_result=false;
-    m_funcName=string;
+    if( functions->currentItem() !=- 1 )
+        selectFunction->setEnabled( TRUE );
+    
+    // Lock
+    refresh_result = false;
+    
+    m_funcName = function;
     changeFunction();
-    //hide all element
-    firstElement->hide();
-    secondElement->hide();
-    thirdElement->hide();
-    fourElement->hide();
-    fiveElement->hide();
-    firstElement->clear();
-    secondElement->clear();
-    thirdElement->clear();
-    fourElement->clear();
-    fiveElement->clear();
-    label1->hide();
-    label2->hide();
-    label3->hide();
-    label4->hide();
-    label5->hide();
-    help->setText(funct.help);
+
+    // Set the help text
+    m_browser->setText( funct.help );
+    
     m_focus=0;
+
+    printf("FUUUUUUUUUUUUUUUUUUUCCCCCCCCCKKKKKKKK\n");
+    m_tabwidget->setCurrentPage( 0 );
+    m_tabwidget->setTabEnabled( m_input, FALSE );
+	
+    // Unlock
     refresh_result=true;
 }
 
@@ -689,7 +632,6 @@ void KSpreadDlgFormula::slotSelectionChanged( KSpreadTable* _table, const QRect&
 
     if ( _selection.left() >= _selection.right() && _selection.top() >= _selection.bottom() )
     {
-
         int dx = _selection.right();
         int dy = _selection.bottom();
         QString tmp;
@@ -704,7 +646,7 @@ void KSpreadDlgFormula::slotSelectionChanged( KSpreadTable* _table, const QRect&
     }
 }
 
-void KSpreadDlgFormula::slotActivated(const QString & string)
+void KSpreadDlgFormula::slotActivated( const QString& category )
 {
     QStringList list_stat;
     list_stat+="average";
@@ -806,49 +748,49 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
     list_financial+="PV";
     list_financial+="PV_annuity";
     list_financial.sort();
-    if(string== i18n("Statistic") )
+    if( category == i18n("Statistic") )
     {
         functions->clear();
         functions->insertStringList(list_stat);
         listFunct.setItems(list_stat);
     }
-    else if (string ==i18n("Trigonometric"))
+    else if (category == i18n("Trigonometric"))
     {
         functions->clear();
         functions->insertStringList(list_trig);
         listFunct.setItems(list_trig);
     }
-    else if (string ==i18n("Analytic"))
+    else if (category == i18n("Analytic"))
     {
         functions->clear();
         functions->insertStringList(list_anal);
         listFunct.setItems(list_anal);
     }
-    else if(string== i18n("Logic") )
+    else if( category == i18n("Logic") )
     {
         functions->clear();
         functions->insertStringList(list_logic);
         listFunct.setItems(list_logic);
     }
-    else if(string== i18n("Text") )
+    else if( category == i18n("Text") )
     {
         functions->clear();
         functions->insertStringList(list_text);
         listFunct.setItems(list_text);
     }
-    else if(string== i18n("Time and Date") )
+    else if( category == i18n("Time and Date") )
     {
         functions->clear();
         functions->insertStringList(list_date_time);
         listFunct.setItems(list_date_time);
     }
-    else if(string== i18n("Financial") )
+    else if( category == i18n("Financial") )
     {
         functions->clear();
         functions->insertStringList(list_financial);
         listFunct.setItems(list_financial);
     }
-    else if(string == i18n("All"))
+    else if(category == i18n("All"))
     {
         QStringList tmp;
         tmp+=list_stat;
@@ -863,13 +805,15 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
         functions->insertStringList(tmp);
         listFunct.setItems(tmp);
     }
+    
+    // Go to the first function in the list.
     functions->setCurrentItem(0);
-    slotselected(functions->text(0));
+    slotSelected( functions->text(0) );
 }
 
 void KSpreadDlgFormula::changeFunction()
 {
-    param tmp;
+    KSpreadFunctionDescription tmp;
     tmp.nb_param=0;
     tmp.multiple=false;
     QString tmp1;
@@ -1639,7 +1583,7 @@ void KSpreadDlgFormula::changeFunction()
     else if(m_funcName=="BINO" || m_funcName=="INVBINO")
     {
         tmp.nb_param=3;
-        tmp.firstElementLabel=i18n("Number of trials\n");
+        tmp.firstElementLabel=i18n("Number of trials");
         if(m_funcName=="BINO")
             tmp.secondElementLabel=i18n("Number of success");
         else if(m_funcName=="INVBINO")

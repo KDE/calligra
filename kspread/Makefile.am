@@ -7,7 +7,8 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
 bin_PROGRAMS = kspread
 lib_LTLIBRARIES = kspread.la libkspreadpart.la
 
-libkspreadpart_la_SOURCES = kspread_canvas.cc \
+libkspreadpart_la_SOURCES = kspread_dlg_formula.cc \
+	kspread_canvas.cc \
 	kspread_shell.cc kspread_doc.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_autofill.cc kspread_interpreter.cc \
@@ -15,7 +16,7 @@ libkspreadpart_la_SOURCES = kspread_canvas.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
 	kspread_dlg_cons.cc kspread_util.cc \
 	kspread_editors.cc kspread_dlg_tabname.cc \
-	kspread_dlg_formula.cc kspread_dlg_reference.cc\
+	kspread_dlg_reference.cc\
         kspread_dlg_comment.cc kspread_dlg_angle.cc kspread_dlg_goto.cc\
 	kspread_dlg_area.cc kspread_dlg_resize2.cc kspread_dlg_preference.cc\
 	kspread_dlg_special.cc kspread_dlg_replace.cc \

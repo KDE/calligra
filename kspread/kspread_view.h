@@ -20,6 +20,10 @@
 #ifndef __kspread_gui_h__
 #define __kspread_gui_h__
 
+class QFrame;
+class QScrollBar;
+class QButton;
+
 class KSpreadView;
 class KSpreadEditWidget;
 class KSpreadCanvas;
@@ -55,15 +59,12 @@ class KActionMenu;
 class DCOPObject;
 
 #include <qlist.h>
-#include <qscrollbar.h>
-//#include <qlabel.h>
-#include <qframe.h>
-#include <qbutton.h>
 #include <qpoint.h>
+#include <qguardedptr.h>
 
 #include <koView.h>
 #include <koDocument.h>
-
+#include <koToolBox.h>
 #include <koDataTool.h>
 
 /**
@@ -543,6 +544,11 @@ private:
    //otherwise kspread crash when I try to refresh menubar
    //when I start kspread
    bool m_bLoading;
+    
+    /**
+     * Holds a guarded pointer to the transformation toolbox.
+     */
+    QGuardedPtr<KoTransformToolBox> m_transformToolBox;
 };
 
 #endif

@@ -19,7 +19,7 @@
 
 #include <qprinter.h> // has to be first
 
-#include <iostream>
+// #include <iostream>
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
@@ -31,6 +31,9 @@
 #include <qmime.h>
 #include <qtoolbutton.h>
 #include <qtimer.h>
+#include <qframe.h>
+#include <qscrollbar.h>
+#include <qbutton.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -85,7 +88,6 @@
 #include "kspread_undo.h"
 
 #include "handler.h"
-#include "toolbox.h"
 
 #include "KSpreadViewIface.h"
 #include <kdebug.h>
@@ -401,6 +403,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
 KSpreadView::~KSpreadView()
 {
+    if ( !m_transformToolBox.isNull() )
+	delete (&*m_transformToolBox);
+
     m_pTable = 0; // set the active table to 0L so that when during destruction
     // of embedded child documents possible repaints in KSpreadTable are not
     // performed. The repains can happen if you delete an embedded document,
@@ -421,7 +426,7 @@ void KSpreadView::initialPosition()
     int row = m_pDoc->map()->initialMarkerRow();
     if ( row <= 0 ) row = 1;
     m_pCanvas->gotoLocation( col, row );
-    
+
     //init toggle button
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     m_tableFormat->setEnabled(false);
@@ -2444,20 +2449,17 @@ void KSpreadView::transformPart()
 {
     ASSERT( selectedChild() );
 
-    KoTransformToolBox* box = 0;
-    QObject* obj = topLevelWidget()->child( 0, "KoTransformToolBox" );
-    if ( !obj )
+    if ( m_transformToolBox.isNull() )
     {
-        box = new KoTransformToolBox( selectedChild(), topLevelWidget() );
-        box->show();
+        m_transformToolBox = new KoTransformToolBox( selectedChild(), topLevelWidget() );
+        m_transformToolBox->show();
 
-        box->setDocumentChild( selectedChild() );
+        m_transformToolBox->setDocumentChild( selectedChild() );
     }
     else
     {
-        box = (KoTransformToolBox*)obj;
-        box->show();
-        box->raise();
+        m_transformToolBox->show();
+        m_transformToolBox->raise();
     }
 }
 
@@ -2465,12 +2467,10 @@ void KSpreadView::slotChildSelected( KoDocumentChild* ch )
 {
     m_transform->setEnabled( TRUE );
 
-    QObject* obj = topLevelWidget()->child( 0, "KoTransformToolBox" );
-    if ( obj )
+    if ( !m_transformToolBox.isNull() )
     {
-        KoTransformToolBox* box = (KoTransformToolBox*)obj;
-        box->setEnabled( TRUE );
-        box->setDocumentChild( ch );
+        m_transformToolBox->setEnabled( TRUE );
+        m_transformToolBox->setDocumentChild( ch );
     }
 }
 
@@ -2478,11 +2478,9 @@ void KSpreadView::slotChildUnselected( KoDocumentChild* )
 {
     m_transform->setEnabled( FALSE );
 
-    QObject* obj = topLevelWidget()->child( 0, "KoTransformToolBox" );
-    if ( obj )
+    if ( !m_transformToolBox.isNull() )
     {
-        KoTransformToolBox* box = (KoTransformToolBox*)obj;
-        box->setEnabled( FALSE );
+        m_transformToolBox->setEnabled( FALSE );
     }
 }
 

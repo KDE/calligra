@@ -33,86 +33,154 @@
 #include <klineedit.h>
 #include <kcompletion.h>
 
+class QTextBrowser;
+class QTabWidget;
+
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-enum type_create {type_double,type_string,type_logic,type_int};
+enum KSpreadParameterType { type_double, type_string, type_logic, type_int };
 
-struct param
+struct KSpreadFunctionDescription
 {
   int nb_param;
   QString firstElementLabel;
-  type_create firstElementType;
+  KSpreadParameterType firstElementType;
 
   QString secondElementLabel;
-  type_create secondElementType;
+  KSpreadParameterType secondElementType;
 
   QString thirdElementLabel;
-  type_create thirdElementType;
+  KSpreadParameterType thirdElementType;
 
   QString fourElementLabel;
-  type_create fourElementType;
+  KSpreadParameterType fourElementType;
 
   QString fiveElementLabel;
-  type_create fiveElementType;
+  KSpreadParameterType fiveElementType;
   bool multiple;
   QString help;
 };
 
 class KSpreadDlgFormula : public QDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName=0);
-  void changeFunction();
-  QString make_formula( const QString& _text,type_create elementType);
-  QString create_formula(QString _text);
-public slots:
-  void slotOk();
-  void slotClose();
-  void slotselected(const QString &);
-  void slotDoubleClicked(QListBoxItem *);
-  void slotActivated(const QString &);
-  void slotChangeText(const QString &);
-  void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
-  void slotSelectButton();
-  void slotSearchText(const QString &);
-  void slotPressReturn();
+    KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName=0);
+    
 private:
-  bool eventFilter( QObject* obj, QEvent* ev );
-protected:
-  KSpreadView* m_pView;
-  QPushButton* m_pOk;
-  QPushButton* m_pClose;
+    void changeFunction();
+    
+    /**
+     * Turns the @p text into a parameter of the desired type. The returned string is
+     * of a form that can be understood by kscript.
+     */
+    QString createParameter( const QString& _text,KSpreadParameterType elementType );
+    /**
+     * Reads the text out of @ref #firstElement and friends and creates a parameter
+     * list for the function.
+     */
+    QString createFormula();
+    
+private slots:
+    /**
+     * Called by the Ok button.
+     */
+    void slotOk();
+    /**
+     * Called by the Close button.
+     */
+    void slotClose();
+    /**
+     * Called if a function name was selected but not double clicked.
+     * This will just show the help page for the function.
+     */
+    void slotSelected( const QString& function );
+    /**
+     * Called if the user double clicked on some method name.
+     * That will switch into editing mode, allowing the user
+     * to enter the parameters for the function.
+     */
+    void slotDoubleClicked( QListBoxItem* item );
+    /**
+     * Called if a category of methods has been selected.
+     */
+    void slotActivated(const QString& category );
+    /**
+     * Called if the text of @ref #firstElement, @ref #secondElement etc. changes.
+     */
+    void slotChangeText(const QString& text );
+    /**
+     * Connected to @ref KSpreadView to get notified if the selection in the
+     * table changes.
+     */
+    void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
+    /**
+     * Called if the button @ref #selectFunction was clicked. That
+     * insertes a new function call to the result.
+     */
+    void slotSelectButton();
+    /**
+     * Called if the user changes some character in @ref #searchFunct.
+     */
+    void slotSearchText(const QString& text );
+    /**
+     * Called if the user pressed return in @ref #searchFunct.
+     */
+    void slotPressReturn();
+    
+public:
+    /**
+     * Find out which widget got focus.
+     */
+    bool eventFilter( QObject* obj, QEvent* ev );
+    
+private:
+    KSpreadView* m_pView;
+    QPushButton* m_pOk;
+    QPushButton* m_pClose;
+    
+    QTabWidget* m_tabwidget;
+    QTextBrowser* m_browser;
+    QWidget* m_input;
+    
+    QPushButton *selectFunction;
+    QComboBox *typeFunction;
+    QListBox *functions;
+    QLineEdit *result;
 
-  QLabel *label1;
-  QLabel *label2;
-  QLabel *label3;
-  QLabel *label4;
-  QLabel *label5;
-  QLabel *help;
-  QComboBox *typeFunction;
-  QListBox *functions;
-  QLineEdit *result;
-  QLineEdit *firstElement;
-  QLineEdit *secondElement;
-  QLineEdit *thirdElement;
-  QLineEdit *fourElement;
-  QLineEdit *fiveElement;
-  QLineEdit* m_focus;
-  int m_column;
-  int m_row;
-  QString m_oldText;
+    QLabel* label1;
+    QLabel* label2;
+    QLabel* label3;
+    QLabel* label4;
+    QLabel* label5;
+    QLineEdit *firstElement;
+    QLineEdit *secondElement;
+    QLineEdit *thirdElement;
+    QLineEdit *fourElement;
+    QLineEdit *fiveElement;
+    /**
+     * Tells which of the lineedits has the logical focus currently.
+     * It may happen that a lineedit does not have qt focus but
+     * logical focus but not the other way round.
+     */
+    QLineEdit* m_focus;
+    
+    int m_column;
+    int m_row;
+    QString m_oldText;
+    
   QString m_funcName;
   QString m_tableName;
-  param funct;
-  QPushButton *selectFunction;
+  KSpreadFunctionDescription funct;
 
-  int m_oldLength;
   QString m_rightText;
   QString m_leftText;
-  bool refresh_result;
+    /**
+     * A lock for @ref #slotChangeText.
+     */
+    bool refresh_result;
 
   KLineEdit *searchFunct;
   KCompletion listFunct;
