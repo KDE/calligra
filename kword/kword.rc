@@ -179,19 +179,24 @@
   <Action name="frame_backcolor"/>
 </ToolBar>
 <ToolBar hidden="true" fullWidth="false" name="formula_toolbar" position="bottom"><Text>Formula</Text>
-  <Action name="formula_power"/>
-  <Action name="formula_subscript"/>
-  <Action name="formula_parentheses"/>
-  <Action name="formula_abs"/>
-  <Action name="formula_brackets"/>
-  <Action name="formula_fraction"/>
-  <Action name="formula_root"/>
-  <Action name="formula_integral"/>
-  <Action name="formula_matrix"/>
-  <Action name="formula_leftsup"/>
-  <Action name="formula_leftsub"/>
-  <Action name="formula_product"/>
-  <Action name="formula_sum"/>
+  <Action name="addtext"/>
+  <Action name="addroot"/>
+  <Action name="addfrac"/>
+  <Action name="addvspace"/>
+  <Action name="addbra"/>
+  <Action name="addsqrbra"/>
+  <Action name="addcurbra"/>
+  <Action name="addabsbra"/>
+  <Action name="addintegral"/>
+  <Action name="addsum"/>
+  <Action name="addproduct"/>
+  <Action name="addmatrix"/>
+  <Action name="addupperleft"/>
+  <Action name="addlowerleft"/>
+  <Action name="addupperright"/>
+  <Action name="addlowerright"/>
+  <Action name="typeleft"/>
+  <Action name="typeright"/>
 </ToolBar>
 <Menu name="text_popup">
  <Action name="format_paragraph"/>

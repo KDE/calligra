@@ -35,7 +35,8 @@ class KWFrame;
 class KWDocument;
 class KWChild;
 class KWGroupManager;
-class KFormulaEdit;
+class KFormulaContainer;
+class KFormulaView;
 class KWResizeHandle;
 class KWCanvas;
 class QPoint;
@@ -506,6 +507,7 @@ public:
 
 class KWFormulaFrameSet : public KWFrameSet
 {
+    Q_OBJECT
 public:
     KWFormulaFrameSet( KWDocument *_doc );
     KWFormulaFrameSet( KWDocument *_doc, QWidget *parent );
@@ -515,7 +517,16 @@ public:
 
     virtual FrameType getFrameType() { return FT_FORMULA; }
 
+    virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);
+
     //virtual QPicture *getPicture();
+
+    /**
+     * Paint this frameset
+     * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
+     */
+    virtual void drawContents(QPainter*, const QRect&,
+                              QColorGroup&, bool /*onlyChanged*/);
 
     virtual void activate( QWidget *_widget );
     virtual void deactivate();
@@ -525,17 +536,65 @@ public:
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );
 
-    void insertChar( int c );
-    void setFormat( const QFont &f, const QColor &c );
+    KFormulaContainer* getFormula() const { return formula; }
 
-protected:
-    KFormulaEdit *formulaEdit;
-    QPicture *pic;
-    QString text;
-    QFont font;
-    QColor color;
+signals:
 
+    void repaintChanged();
+    
+protected slots:
+
+    void slotFormulaChanged(int width, int height);
+
+private:
+    KFormulaContainer* formula;
 };
+
+
+class KWFormulaFrameSetEdit : public QObject, public KWFrameSetEdit
+{
+    Q_OBJECT
+public:
+    KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* canvas);
+    virtual ~KWFormulaFrameSetEdit();
+
+    KWFormulaFrameSet* formulaFrameSet() const
+    {
+        return static_cast<KWFormulaFrameSet*>(frameSet());
+    }
+
+    /**
+     * Paint this frameset in "has focus" mode (e.g. with a cursor)
+     */
+    virtual void drawContents(QPainter*, const QRect&,
+                              QColorGroup&, bool /*onlyChanged*/);
+
+    // Events forwarded by the canvas (when being in "edit" mode)
+    virtual void keyPressEvent(QKeyEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*); // only called if button is pressed
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    //virtual void mouseDoubleClickEvent( QMouseEvent * ) {}
+    //virtual void dragEnterEvent( QDragEnterEvent * ) {}
+    //virtual void dragMoveEvent( QDragMoveEvent * ) {}
+    //virtual void dragLeaveEvent( QDragLeaveEvent * ) {}
+    //virtual void dropEvent( QDropEvent * ) {}
+    virtual void focusInEvent();
+    virtual void focusOutEvent();
+    virtual void doAutoScroll(QPoint);
+    virtual void copy();
+    virtual void cut();
+    virtual void paste();
+    virtual void selectAll();
+
+protected slots:
+
+    void repaintChanged();
+    
+private:
+    KFormulaView* formulaView;
+};
+
 
 bool isAHeader( FrameInfo fi );
 bool isAFooter( FrameInfo fi );

@@ -27,6 +27,9 @@
 #include "kwutils.h"
 #include "resizehandles.h"
 
+#include <kformulacontainer.h>
+#include <kformuladocument.h>
+#include <kformulaview.h>
 #include <koPageLayoutDia.h>
 
 #include <fstream>
@@ -1001,46 +1004,46 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent * )
     partFrameSet()->activate( m_canvas->gui()->getView() );
 }
 
-#include <kformulaedit.h>
-
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
 /******************************************************************/
 
 /*================================================================*/
-KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, QWidget *parent )
-    : KWFrameSet( _doc ), pic( 0 ), font( "times", 12 ), color( Qt::black )
+KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, QWidget */*parent*/ )
+    : KWFrameSet( _doc )
 
 {
-    formulaEdit = new KFormulaEdit( ( (QScrollView*)parent )->viewport() );
-    ( (QScrollView*)parent )->addChild( formulaEdit );
-    formulaEdit->setFont( font );
+    formula = doc->getFormulaDocument()->createFormula();
+    connect(formula, SIGNAL(formulaChanged(int, int)),
+            this, SLOT(slotFormulaChanged(int, int)));
+    //formulaEdit = new KFormulaEdit( ( (QScrollView*)parent )->viewport() );
+    //( (QScrollView*)parent )->addChild( formulaEdit );
+#if 0
     if ( pic )
         delete pic;
     pic = new QPicture;
     QPainter p;
     p.begin( pic );
-    formulaEdit->getFormula()->setFont( font );
-    formulaEdit->getFormula()->setBackColor( Qt::white );
-    formulaEdit->getFormula()->setForeColor( color );
     formulaEdit->getFormula()->redraw( p );
     p.end();
-    formulaEdit->hide();
+#endif
 }
 
 /*================================================================*/
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc )
-    : KWFrameSet( _doc ), formulaEdit( 0 ), pic( 0 )
+        : KWFrameSet( _doc ), formula(0)
 {
 }
 
 /*================================================================*/
 KWFormulaFrameSet::~KWFormulaFrameSet()
 {
-    if ( pic )
-        delete pic;
-    if ( formulaEdit )
-        delete formulaEdit;
+    delete formula;
+}
+
+KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas)
+{
+    return new KWFormulaFrameSetEdit(this, canvas);
 }
 
 #if 0
@@ -1050,7 +1053,14 @@ QPicture *KWFormulaFrameSet::getPicture()
 }
 #endif
 
+void KWFormulaFrameSet::drawContents(QPainter* painter, const QRect&,
+                                     QColorGroup&, bool /*onlyChanged*/)
+{
+    formula->draw(*painter);
+}
+
 /*================================================================*/
+#if 0
 void KWFormulaFrameSet::setFormat( const QFont &f, const QColor &c )
 {
     font = f;
@@ -1064,10 +1074,12 @@ void KWFormulaFrameSet::setFormat( const QFont &f, const QColor &c )
     }
     updateFrames();
 }
+#endif
 
 /*================================================================*/
-void KWFormulaFrameSet::activate( QWidget *_widget )
+void KWFormulaFrameSet::activate( QWidget */*_widget*/ )
 {
+#if 0
     if ( formulaEdit->parent() != ( (QScrollView*)_widget )->viewport() )
         formulaEdit->reparent( ( (QScrollView*)_widget )->viewport(), 0, QPoint( 0, 0 ), FALSE );
 
@@ -1080,11 +1092,13 @@ void KWFormulaFrameSet::activate( QWidget *_widget )
     ( (QScrollView*)_widget )->viewport()->setFocusProxy( formulaEdit );
     _widget->setFocusProxy( formulaEdit );
     formulaEdit->setFocus();
+#endif
 }
 
 /*================================================================*/
 void KWFormulaFrameSet::deactivate()
 {
+#if 0
     formulaEdit->hide();
 
     if ( pic )
@@ -1094,42 +1108,46 @@ void KWFormulaFrameSet::deactivate()
     p.begin( pic );
     formulaEdit->getFormula()->redraw( p );
     p.end();
+#endif
 }
 
 /*================================================================*/
-void KWFormulaFrameSet::insertChar( int c )
+void KWFormulaFrameSet::create( QWidget */*parent*/ )
 {
-    if ( formulaEdit )
-        formulaEdit->insertChar( c );
-}
-
-/*================================================================*/
-void KWFormulaFrameSet::create( QWidget *parent )
-{
-    if ( formulaEdit ) {
+    if ( formula ) {
         updateFrames();
         return;
     }
 
-    formulaEdit = new KFormulaEdit( ( (QScrollView*)parent )->viewport() );
+    formula = doc->getFormulaDocument()->createFormula();
+    connect(formula, SIGNAL(formulaChanged(int, int)),
+            this, SLOT(slotFormulaChanged(int, int)));
+#if 0
     ( (QScrollView*)parent )->addChild( formulaEdit );
     formulaEdit->getFormula()->setFont( font );
     formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
     formulaEdit->getFormula()->setForeColor( color );
     formulaEdit->hide();
     formulaEdit->setText( text );
+#endif
     updateFrames();
+}
+
+void KWFormulaFrameSet::slotFormulaChanged(int /*width*/, int /*height*/)
+{
+    //kdDebug(32001) << "KWFormulaFrameSet::slotFormulaChanged" << endl;
+    updateFrames();
+    emit repaintChanged();
 }
 
 /*================================================================*/
 void KWFormulaFrameSet::updateFrames()
 {
     KWFrameSet::updateFrames();
-    if ( !formulaEdit )
+    if ( !formula )
         return;
-    formulaEdit->setFont( font );
-    formulaEdit->resize( frames.at( 0 )->width(), frames.at( 0 )->height() );
-    formulaEdit->getFormula()->setPos( formulaEdit->width() / 2, formulaEdit->height() / 2 );
+    formula->moveTo(frames.at(0)->x(), frames.at(0)->y());
+#if 0
     if ( pic )
         delete pic;
     pic = new QPicture;
@@ -1137,6 +1155,7 @@ void KWFormulaFrameSet::updateFrames()
     p.begin( pic );
     formulaEdit->getFormula()->redraw( p );
     p.end();
+#endif
 }
 
 /*================================================================*/
@@ -1196,6 +1215,111 @@ void KWFormulaFrameSet::load( QDomElement &/*attributes*/ )
         }
     }
 #endif
+}
+
+
+/*================================================================*/
+KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* canvas)
+        : KWFrameSetEdit(fs, canvas)
+{
+    kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
+    connect(fs, SIGNAL(repaintChanged()), this, SLOT(repaintChanged()));
+    //formulaView = new KFormulaView(fs->getFormula(), canvas->gui()->getView());
+    formulaView = new KFormulaView(fs->getFormula(), canvas->viewport());
+
+    focusInEvent();
+}
+
+/*================================================================*/
+KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
+{
+    kdDebug(32001) << "KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit" << endl;
+    focusOutEvent();
+    delete formulaView;
+    formulaFrameSet()->deactivate();
+}
+
+void KWFormulaFrameSetEdit::repaintChanged()
+{
+    m_canvas->repaintChanged(frameSet());
+}
+
+/**
+ * Paint this frameset in "has focus" mode (e.g. with a cursor)
+ */
+void KWFormulaFrameSetEdit::drawContents(QPainter* painter, const QRect& rect,
+                                         QColorGroup&, bool /*onlyChanged*/)
+{
+    //kdDebug(32001) << "KWFormulaFrameSetEdit::drawContents" << endl;
+    formulaView->draw(*painter, rect);
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::keyPressEvent(QKeyEvent* event)
+{
+    //kdDebug(32001) << "KWFormulaFrameSetEdit::keyPressEvent" << endl;
+    formulaView->keyPressEvent(event);
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event)
+{
+    formulaView->mousePressEvent(event);
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::mouseMoveEvent(QMouseEvent* event)
+{
+    formulaView->mouseMoveEvent(event);
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::mouseReleaseEvent(QMouseEvent* event)
+{
+    formulaView->mouseReleaseEvent(event);
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::focusInEvent()
+{
+    //kdDebug(32001) << "KWFormulaFrameSetEdit::focusInEvent" << endl;
+    formulaView->focusInEvent(0);
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::focusOutEvent()
+{
+    //kdDebug(32001) << "KWFormulaFrameSetEdit::focusOutEvent" << endl;
+    formulaView->focusOutEvent(0);
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::doAutoScroll(QPoint)
+{
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::copy()
+{
+    formulaView->getDocument()->copy();
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::cut()
+{
+    formulaView->getDocument()->cut();
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::paste()
+{
+    formulaView->getDocument()->paste();
+}
+
+/*================================================================*/
+void KWFormulaFrameSetEdit::selectAll()
+{
+    formulaView->slotSelectAll();
 }
 
 

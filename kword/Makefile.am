@@ -1,6 +1,6 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula -I$(top_srcdir)/qt3stuff $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula2 -I$(top_srcdir)/qt3stuff $(all_includes)
 
 lib_LTLIBRARIES = libkwordpart.la kword.la
 
@@ -19,7 +19,7 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
 		autoformat.cc autoformatdia.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la ../qt3stuff/libqt3stuff.la -lkspell
+libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula2/libkformula2.la ../qt3stuff/libqt3stuff.la -lkspell
 libkwordpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module

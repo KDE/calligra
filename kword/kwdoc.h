@@ -32,6 +32,7 @@ class KWPartFrameSet;
 
 class KSpellConfig;
 
+#include <kformuladocument.h>
 #include <koDocument.h>
 #include <koGlobal.h>
 #include <koDocumentChild.h>
@@ -415,6 +416,11 @@ public:
     void setViewTableGrid(bool _b) { _viewTableGrid=_b;}
 
 
+    /**
+     * @returns the document for the formulas
+     */
+    KFormulaDocument* getFormulaDocument();
+    
 signals:
     void sig_imageModified();
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
@@ -512,6 +518,9 @@ private:
     KSpellConfig *m_pKSpellConfig;
 
     bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
+
+    // The document that is used by all formulas
+    KFormulaDocument formulaDocument;
 };
 
 

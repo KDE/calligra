@@ -157,7 +157,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
       unit( "mm" ), // footNoteManager( this ),
       history( actionCollection(), false ),
       autoFormat(this),
-      urlIntern()
+      urlIntern(),
+      formulaDocument(actionCollection(), &history)
 {
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
@@ -2899,5 +2900,11 @@ void KWDocument::layout()
     for (; it.current(); ++it )
         it.current()->layout();
 }
+
+KFormulaDocument* KWDocument::getFormulaDocument()
+{
+    return &formulaDocument;
+}
+
 
 #include "kwdoc.moc"
