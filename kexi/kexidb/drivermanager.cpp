@@ -107,13 +107,11 @@ bool DriverManagerInternal::lookupDrivers()
 			KexiDBWarn << "DriverManagerInternal::lookupDrivers():"
 				" X-Kexi-DriverName must be set for KexiDB driver \"" 
 				<< ptr->property("Name").toString() << "\" service!\n -- skipped!" << endl;
-			delete ptr;
 			continue;
 		}
 		if (m_services_lcase.contains(srv_name.lower())) {
 			KexiDBWarn << "DriverManagerInternal::lookupDrivers(): more than one driver named '" 
 				<< srv_name.lower() << "'\n -- skipping this one!" << endl;
-			delete ptr;
 			continue;
 		}
 
@@ -128,7 +126,6 @@ bool DriverManagerInternal::lookupDrivers()
 		if (!ok) {
 			KexiDBWarn << "DriverManagerInternal::lookupDrivers(): problem with detecting '"
 			<< srv_name.lower() << "' driver's version -- skipping it!" << endl;
-			delete ptr;
 			continue;
 		}
 		if (major_ver != KexiDB::versionMajor() || minor_ver != KexiDB::versionMinor()) {
@@ -140,7 +137,6 @@ bool DriverManagerInternal::lookupDrivers()
 				"but required driver version is \"%3.%4\"")
 				.arg(srv_name.lower()).arg(srv_ver_str)
 				.arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor());
-			delete ptr;
 			continue;
 		}
 

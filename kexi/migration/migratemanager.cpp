@@ -101,11 +101,9 @@ bool MigrateManagerInternal::lookupDrivers()
 		QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
 		if (srv_name.isEmpty()) {
 			KexiDBWarn << "MigrateManagerInternal::lookupDrivers(): X-Kexi-MigrationDriverName must be set for KexiDB driver \"" << ptr->property("Name").toString() << "\" service!\n -- skipped!" << endl;
-			delete ptr;
 			continue;
 		}
 		if (m_services_lcase.contains(srv_name.lower())) {
-			delete ptr;
 			continue;
 		}
 		
