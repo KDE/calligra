@@ -618,7 +618,6 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
     // numbering type: 0==list 1==chapter. First we determine it for word6 docs.
     // But we can also activate it if the text() looks that way
     int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
-    counterElement.setAttribute( "start", listInfo->startAt() );
     wvWare::UString text = listInfo->text().text;
     int nfc = listInfo->numberFormat();
     if ( nfc == 23 ) // bullet
@@ -649,6 +648,9 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
     }
     else
     {
+        counterElement.setAttribute( "start", listInfo->startAt() );
+        if ( listInfo->startAtOverridden() )
+            counterElement.setAttribute( "restart", "true" );
         const wvWare::Word97::PAP& pap = paragraphProperties.pap();
         int depth = pap.ilvl; /*both are 0 based*/
         // Heading styles don't set the ilvl, but must have a depth coming
