@@ -125,6 +125,7 @@ public:
     QTextCustomItem *customItem() const;
     void setFormat( QTextFormat *f );
     void setCustomItem( QTextCustomItem *i );
+    void loseCustomItem();
     QTextStringChar *clone() const;
 	    struct CustomData
     {
@@ -374,10 +375,9 @@ private:
 class Q_EXPORT QTextCustomItem
 {
 public:
-    QTextCustomItem( QTextDocument *p )
-	:  xpos(0), ypos(-1), width(-1), height(0), parent( p )
-    {}
-    virtual ~QTextCustomItem() {}
+    QTextCustomItem( QTextDocument *p );
+    virtual ~QTextCustomItem();
+
     virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg ) = 0;
 
     virtual void adjustToPainter( QPainter* ) { width = 0; }
@@ -2521,6 +2521,7 @@ inline QTextStringChar::~QTextStringChar()
 	format()->removeRef();
     switch ( type ) {
 	case Custom:
+            qDebug("Deleting QTextStringChar's custom item %p", d.custom);
 	    delete d.custom; break;
 	case Mark:
 	    delete d.mark; break;

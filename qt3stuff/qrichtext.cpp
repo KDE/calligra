@@ -1111,14 +1111,18 @@ void QTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
             {
 		QTextCustomItem * item = string->at( idx + i )->customItem();
 		s->at( i )->setCustomItem( item );
+		string->at( idx + i )->loseCustomItem();
+#if 0
                 s->addCustomItem();
-		string->at( idx + i )->setCustomItem( 0 );
                 string->removeCustomItem();
                 doc->unregisterCustomItem( item, string );
                 doc->registerCustomItem( item, s );
+#endif
             }
 	}
+qDebug("Calling truncate");
 	string->truncate( idx );
+qDebug("truncate called");
 	if ( ind ) {
 	    int oi, ni;
 	    s->indent( &oi, &ni );
@@ -2853,6 +2857,12 @@ void QTextStringChar::setCustomItem( QTextCustomItem *i )
 	delete d.custom->custom;
     }
     d.custom->custom = i;
+}
+
+void QTextStringChar::loseCustomItem()
+{
+    if ( isCustom() )
+        d.custom->custom = 0;
 }
 
 int QTextString::width(int idx) const
@@ -5216,6 +5226,17 @@ QTextFormat QTextFormat::makeTextFormat( const QStyleSheetItem *style, const QMa
     return format;
 }
 
+QTextCustomItem::QTextCustomItem( QTextDocument *p )
+      :  xpos(0), ypos(-1), width(-1), height(0), parent( p )
+{
+    qDebug("QTextCustomItem::QTextCustomItem %p", this );
+}
+
+QTextCustomItem::~QTextCustomItem()
+{
+    qDebug("QTextCustomItem::~QTextCustomItem %p", this );
+}
+
 struct QPixmapInt
 {
     QPixmapInt() : ref( 0 ) {}
@@ -5229,6 +5250,7 @@ QTextImage::QTextImage( QTextDocument *p, const QMap<QString, QString> &attr, co
 			QMimeSourceFactory &factory )
     : QTextCustomItem( p )
 {
+    qDebug( "QTextImage::QTextImage %p", this );
 #if defined(PARSER_DEBUG)
     qDebug( debug_indent + "new QTextImage (pappi: %p)", p );
 #endif
@@ -5323,6 +5345,7 @@ QTextImage::QTextImage( QTextDocument *p, const QMap<QString, QString> &attr, co
 
 QTextImage::~QTextImage()
 {
+    qDebug( "QTextImage::~QTextImage %p", this );
     if ( pixmap_map && pixmap_map->contains( imgId ) ) {
 	QPixmapInt& pmi = pixmap_map->operator[](imgId);
 	pmi.ref--;
