@@ -80,6 +80,20 @@ void KoPageLayout::loadOasis(const QDomElement &style)
     }
 }
 
+KoPageLayout KoPageLayout::standardLayout()
+{
+    KoPageLayout layout;
+    layout.format = KoPageFormat::defaultFormat();
+    layout.orientation = PG_PORTRAIT;
+    layout.ptWidth = MM_TO_POINT( KoPageFormat::width( layout.format, layout.orientation ) );
+    layout.ptHeight = MM_TO_POINT( KoPageFormat::height( layout.format, layout.orientation ) );
+    layout.ptLeft = MM_TO_POINT( 20.0 );
+    layout.ptRight = MM_TO_POINT( 20.0 );
+    layout.ptTop = MM_TO_POINT( 20.0 );
+    layout.ptBottom = MM_TO_POINT( 20.0 ); 
+    return layout;
+}
+
 struct PageFormatInfo
 {
     KoFormat format;

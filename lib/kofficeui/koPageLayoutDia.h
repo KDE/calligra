@@ -145,10 +145,10 @@ public:
     static bool pageLayout( KoPageLayout&, KoHeadFoot&, KoColumns&, KoKWHeaderFooter&, int tabs, KoUnit::Unit& unit, QWidget* parent = 0 );
     /**
      *  Retrieves a standard page layout.
+     *  Deprecated: better use KoPageLayout::standardLayout()
      */
-    static KoPageLayout standardLayout();
+    KDE_DEPRECATED static KoPageLayout standardLayout();
 
-    //KDE_DEPRECATED KoPageLayout getLayout() const { return m_layout; }
     /**
      *  Returns the layout
      */

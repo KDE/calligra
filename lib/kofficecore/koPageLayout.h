@@ -189,9 +189,22 @@ struct KoPageLayout
         return !( (*this) == l );
     }
 
+    /**
+     * Save this page layout to OASIS.
+     */
     KOFFICECORE_EXPORT KoGenStyle saveOasis() const;
 
+    /**
+     * Load this page layout from OASIS
+     */
     KOFFICECORE_EXPORT void loadOasis(const QDomElement &style);
+
+    /**
+     * @return a page layout with the default page size depending on the locale settings,
+     * default margins (2 cm), and portrait orientation.
+     * @since 1.4
+     */
+    static KOFFICECORE_EXPORT KoPageLayout standardLayout();
 };
 
 /** structure for header-footer */
