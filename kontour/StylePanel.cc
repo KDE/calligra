@@ -46,7 +46,7 @@
 #include "GStyle.h"
 #include "GStyleList.h"
 #include "SetPropertyCmd.h"
-#include "BrushCells.h"
+//#include "BrushCells.h"
 
 OutlinePanel::OutlinePanel(KontourView *aView, QWidget *parent, const char *name):
 QDockWindow(QDockWindow::InDock, parent, name)
