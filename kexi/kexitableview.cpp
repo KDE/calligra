@@ -118,12 +118,18 @@ void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, 
 
 	m_pColumnTypes->at(m_numCols-1)		= type;
 
-	if(editable)
-		m_pColumnModes->at(m_numCols-1) = ColumnEditable;
-	else if(editable && autoinc)
+	if(editable && autoinc)
+	{
 		m_pColumnModes->at(m_numCols-1) = ColumnEditable | ColumnAutoIncrement;
+	}
+	else if(editable)
+	{
+		m_pColumnModes->at(m_numCols-1) = ColumnEditable;
+	}
 	else
+	{
 		m_pColumnModes->at(m_numCols-1) = ColumnReadOnly;
+	}
 
 	m_pTopHeader->addLabel(name, width);
 
@@ -481,14 +487,16 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 //	int iOffset = 0;
 	QPen fg(colorGroup().text());
+	p->setPen(fg);
 	if(item->isInsertItem())
 	{
-		QFont f = p->font();
-		f.setItalic(true);
-		p->setFont(f);
+//		QFont f = p->font();
+//		f.setBold(true);
+//		p->setFont(f);
+//		p->setPen(QPen(colorGroup().mid()));
+		p->setPen(QColor(190,190,190));
 //		iOffset = 3;
 	}
-	p->setPen(fg);
 	switch(columnType(col))
 	{
 		case QVariant::Int:
@@ -497,7 +505,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //			if(num < 0)
 //				p->setPen(red);
 //			p->drawText(x - (x+x) - 2, 2, w, h, AlignRight, QString::number(num));
-			if(item->isInsertItem() && m_pColumnModes->at(col) & ColumnAutoIncrement)
+//			qDebug("KexiTableView::paintCell(): mode: %i", m_pColumnModes->at(col));
+			if(item->isInsertItem() && m_pColumnModes->at(col) == 3)  //yes that isn't beautiful
 			{
 				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, "[Auto]");
 			}
@@ -546,7 +555,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	if(item->isInsertItem())
 	{
 		QFont f = p->font();
-		f.setItalic(false);
+		f.setBold(false);
 		p->setFont(f);
 //		iOffset = 3;
 	}
@@ -685,6 +694,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		m_curCol = QMAX(0, m_curCol - 1);
 		break;
     case Key_Right:
+    case Key_Tab:
 		m_curCol = QMIN(cols() - 1, m_curCol + 1);
 		break;
     case Key_Up:
@@ -709,6 +719,11 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		break;
 
 	#warning this needs work!
+	case Key_Return:
+		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
+			createEditor(m_curRow, m_curCol, "", false);
+		break;
+
 	case Key_Backspace:
 		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
 			createEditor(m_curRow, m_curCol, QString::null, true);

@@ -160,7 +160,8 @@ class KexiDBRecord
 		 *  returns true if there is "yet another record"
 		 */
 		virtual bool next() = 0;
-		
+
+		virtual unsigned long last_id() = 0;
 };
 
 #endif

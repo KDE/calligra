@@ -96,6 +96,8 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 
 		bool next();
 
+		unsigned long last_id();
+
 		//needed members
 		void takeInsertBuffer(MySqlRecord *buffer);
 
@@ -119,6 +121,8 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		ContentBuffer	m_contentBuffer; /* interesting if buffer was enabled */
 
 		int		m_lastItem;
+
+		unsigned long	m_lastID;
 };
 
 #endif

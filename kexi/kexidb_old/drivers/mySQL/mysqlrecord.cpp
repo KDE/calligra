@@ -108,6 +108,8 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 						m_keyBuffer.insert(record, QVariant((unsigned int)m_db->lastAuto()));
 					}
 					// else, maybe we should wait, and don't insert it by now...
+					
+					m_lastID = (unsigned int)m_db->lastAuto();
 				}
 			}
 		}
@@ -247,6 +249,12 @@ MySqlRecord::next()
 		return true;
 	}
 	return false;
+}
+
+unsigned long
+MySqlRecord::last_id()
+{
+	return m_lastID;
 }
 
 MySqlRecord::~MySqlRecord()

@@ -72,8 +72,8 @@ public:
 	enum ColumnModes
 	{
 		ColumnReadOnly = 1,
-		ColumnEditable = 2,
-		ColumnAutoIncrement = 4
+		ColumnEditable,
+		ColumnAutoIncrement
 	};
 
 	virtual void addColumn(QString name, QVariant::Type type, bool editable, int width=100, bool autoinc=false);
@@ -260,7 +260,11 @@ inline QVariant::Type KexiTableView::columnType(int col)
 	
 inline bool	KexiTableView::columnEditable(int col)
 {
-	return m_pColumnModes->at(col);
+//	return m_pColumnModes->at(col);
+	if(m_pColumnModes->at(col) & ColumnEditable)
+		return true;
+	
+	return false;
 }
 
 #endif
