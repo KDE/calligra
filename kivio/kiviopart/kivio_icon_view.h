@@ -30,43 +30,23 @@
 class KivioStencilSpawnerSet;
 class KivioStencilSpawner;
 
-
-class KivioIconViewVisual
-{
-public:
-  KivioIconViewVisual();
-  ~KivioIconViewVisual();
-
-  QPixmap* pixmap;
-  QColor color;
-  bool usePixmap;
-
-  void init();
-  void setDefault();
-  void save(QDomElement&);
-  void load(QDomElement&);
-
-  // only for save/load config data
-  QString pixmapFileName;
-};
-
 class KivioIconView : public QIconView
-{ Q_OBJECT
-
-protected:
+{
+  Q_OBJECT
+  protected:
     KivioStencilSpawnerSet *m_pSpawnerSet;
     static KivioStencilSpawner *m_pCurDrag;
 
     void drawBackground( QPainter *, const QRect & );
     QDragObject *dragObject();
 
-protected slots:    
+  protected slots:
     void slotDoubleClicked( QIconViewItem * );
-    
-signals:
+
+  signals:
     void createNewStencil( KivioStencilSpawner * );
 
-public:
+  public:
     KivioIconView( bool _readWrite,QWidget *parent=0, const char *name=0 );
     virtual ~KivioIconView();
 
@@ -76,24 +56,19 @@ public:
     void setStencilSpawnerSet( KivioStencilSpawnerSet * );
     KivioStencilSpawnerSet *spawnerSet() { return m_pSpawnerSet; }
 
-public:
-  static void setVisualData(KivioIconViewVisual);
-
-private:
-  static QPtrList<KivioIconView> objList;
-  static KivioIconViewVisual visual;
-  bool isReadWrite;
+  private:
+    static QPtrList<KivioIconView> objList;
+    bool isReadWrite;
 };
 
 class KivioIconViewItem : public QIconViewItem
 {
-    friend class KivioIconView;
+  friend class KivioIconView;
 
-protected:
+  protected:
     KivioStencilSpawner *m_pSpawner;
 
-
-public:
+  public:
     KivioIconViewItem( QIconView *parent );
     virtual ~KivioIconViewItem();
 

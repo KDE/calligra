@@ -61,17 +61,14 @@ class KivioOptionsDialog : public KDialogBase
 
   protected:
     void initPage();
-    void initStencil();
     void initGrid();
     void initGuides();
 
     void applyPage();
-    void applyStencil();
     void applyGrid();
     void applyGuides();
 
     void defaultPage();
-    void defaultStencil();
     void defaultGrid();
     void defaultGuides();
 
@@ -97,7 +94,6 @@ class KivioOptionsDialog : public KDialogBase
   private:
     // Page indecies
     int m_pageIndex;
-    int m_stencilIndex;
     int m_gridIndex;
     int m_guidesIndex;
 
@@ -109,10 +105,6 @@ class KivioOptionsDialog : public KDialogBase
     KoPageLayout m_layout;
     QLabel* m_fontTxtLbl;
     QFont m_font;
-    QRadioButton* m_bgColorRBtn;
-    QRadioButton* m_bgPicRBtn;
-    KColorButton* m_bgColorBtn;
-    KURLRequester* m_bgPicURLReq;
     KoUnitDoubleSpinBox* m_spaceHorizUSpin;
     KoUnitDoubleSpinBox* m_spaceVertUSpin;
     KoUnitDoubleSpinBox* m_snapHorizUSpin;

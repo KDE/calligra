@@ -55,17 +55,12 @@ void KivioOptions::initGlobalConfig()
   QFile f(path);
   if ( !f.open(IO_ReadOnly) ) {
     globalDefPageLayout = KoPageLayoutDia::standardLayout();
-    globalDefStencilBarVisual.setDefault();
   } else {
     doc->setContent(&f);
     root = doc->documentElement();
 
     QDomElement ple = root.namedItem("PaperLayout").toElement();
     globalDefPageLayout = Kivio::loadPageLayout(ple);
-
-    QDomElement sbe = root.namedItem("StencilsBar").toElement();
-    globalDefStencilBarVisual.load(sbe);
-    setGlobalStencilsBarVisual(globalDefStencilBarVisual);
   }
 
   delete doc;
@@ -83,7 +78,7 @@ void KivioOptions::paperLayoutSetup(KivioView* view)
   KoHeadFoot headfoot;
   int tabs = FORMAT_AND_BORDERS | DISABLE_UNIT;
   KoUnit::Unit unit = view->doc()->units();
-  
+
   if(KoPageLayoutDia::pageLayout(l, headfoot, tabs, unit))
   {
     KivioDoc* doc = page->doc();
@@ -110,10 +105,6 @@ void KivioOptions::saveGlobalConfig()
   root.appendChild(ple);
   Kivio::savePageLayout(ple, globalDefPageLayout);
 
-  QDomElement sbe = doc->createElement("StencilsBar");
-  root.appendChild(sbe);
-  globalDefStencilBarVisual.save(sbe);
-
   QString path = locateLocal("appdata", "globalconfig");
   QFile f(path);
   QTextStream ts(&f);
@@ -122,14 +113,6 @@ void KivioOptions::saveGlobalConfig()
     f.close();
   }
   delete doc;
-}
-
-void KivioOptions::setGlobalStencilsBarVisual(KivioIconViewVisual v)
-{
-  globalDefStencilBarVisual = v;
-  globalDefStencilBarVisual.init();
-  KivioIconView::setVisualData(globalDefStencilBarVisual);
-  saveGlobalConfig();
 }
 
 void KivioOptions::setDefaultPageLayout(const KoPageLayout &pl)

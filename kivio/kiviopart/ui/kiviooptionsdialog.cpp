@@ -23,7 +23,6 @@
 #include "kivio_page.h"
 #include "kivioglobal.h"
 #include "kivio_config.h"
-#include "kivio_icon_view.h"
 #include "kivio_grid_data.h"
 #include "kivio_guidelines.h"
 #include "kivio_canvas.h"
@@ -92,7 +91,6 @@ KivioOptionsDialog::KivioOptionsDialog(KivioView* parent, const char* name)
   : KDialogBase(IconList, i18n("Settings"), Ok|Cancel|Apply|Default, Ok, parent, name)
 {
   initPage();
-  initStencil();
   initGrid();
   initGuides();
 }
@@ -158,37 +156,6 @@ void KivioOptionsDialog::initPage()
   connect(m_unitCombo, SIGNAL(activated(int)), SLOT(unitChanged(int)));
 }
 
-void KivioOptionsDialog::initStencil()
-{
-  QFrame* page = addPage(i18n("Stencils Bar"), i18n("Stencils Bar Settings"),
-    kapp->iconLoader()->loadIcon("stencils", KIcon::Toolbar, 32));
-  m_stencilIndex = pageIndex(page);
-
-  KivioIconViewVisual v = static_cast<KivioView*>(parent())->doc()->
-    config()->stencilsBarVisual();
-
-  m_bgColorRBtn = new QRadioButton(i18n("Background &color:"), page);
-  m_bgColorRBtn->setChecked(!v.usePixmap);
-  m_bgColorBtn = new KColorButton(v.color, page);
-  m_bgPicRBtn = new QRadioButton(i18n("Background &picture:"), page);
-  m_bgPicRBtn->setChecked(v.usePixmap);
-  m_bgPicURLReq = new KURLRequester(v.pixmapFileName, page);
-
-  QButtonGroup* grp = new QButtonGroup(page);
-  grp->hide();
-  grp->insert(m_bgColorRBtn);
-  grp->insert(m_bgPicRBtn);
-
-  QGridLayout* gl = new QGridLayout(page);
-  gl->setSpacing(KDialog::spacingHint());
-  gl->addWidget(m_bgColorRBtn, 0, 0);
-  gl->addWidget(m_bgColorBtn, 0, 1);
-  gl->addItem(new QSpacerItem(0, 0), 0, 2);
-  gl->addWidget(m_bgPicRBtn, 1, 0);
-  gl->addMultiCellWidget(m_bgPicURLReq, 1, 1, 1, 2);
-  gl->addMultiCell(new QSpacerItem(0, 0), 2, 2, 0, 1);
-}
-
 void KivioOptionsDialog::initGrid()
 {
   QFrame* page = addPage(i18n("Grid"), i18n("Grid Settings"),
@@ -248,7 +215,7 @@ void KivioOptionsDialog::initGrid()
 void KivioOptionsDialog::initGuides()
 {
   QFrame* page = addPage(i18n("Guide Lines"), i18n("Guide Line Settings"),
-    kapp->iconLoader()->loadIcon("guides", KIcon::Toolbar, 32));
+    kapp->iconLoader()->loadIcon("guides_horizontal", KIcon::Toolbar, 32));
   m_guidesIndex = pageIndex(page);
 
   KivioView* view = static_cast<KivioView*>(parent());
@@ -351,16 +318,6 @@ void KivioOptionsDialog::applyPage()
   view->toggleShowRulers(m_rulersChBox->isChecked());
 }
 
-void KivioOptionsDialog::applyStencil()
-{
-  KivioIconViewVisual v;
-  v.usePixmap = m_bgPicRBtn->isChecked();
-  v.color = m_bgColorBtn->color();
-  v.pixmapFileName = m_bgPicURLReq->url();
-  static_cast<KivioView*>(parent())->doc()->config()->
-    setGlobalStencilsBarVisual(v);
-}
-
 void KivioOptionsDialog::applyGrid()
 {
   KivioGridData d;
@@ -408,14 +365,6 @@ void KivioOptionsDialog::defaultPage()
   m_bordersChBox->setChecked(true);
   m_marginsChBox->setChecked(true);
   m_rulersChBox->setChecked(true);
-}
-
-void KivioOptionsDialog::defaultStencil()
-{
-  m_bgColorRBtn->setChecked(true);
-  m_bgColorBtn->setColor(QColor(0x4BD2FF));
-  m_bgPicRBtn->setChecked(false);
-  m_bgPicURLReq->clear();
 }
 
 void KivioOptionsDialog::defaultGrid()
@@ -480,7 +429,6 @@ void KivioOptionsDialog::unitChanged(int u)
 void KivioOptionsDialog::slotOk()
 {
   applyPage();
-  applyStencil();
   applyGrid();
   applyGuides();
   accept();
@@ -490,9 +438,6 @@ void KivioOptionsDialog::slotApply()
 {
   if(activePageIndex() == m_pageIndex) {
     applyPage();
-  }
-  if(activePageIndex() == m_stencilIndex) {
-    applyStencil();
   }
   if(activePageIndex() == m_gridIndex) {
     applyGrid();
@@ -506,9 +451,6 @@ void KivioOptionsDialog::slotDefault()
 {
   if(activePageIndex() == m_pageIndex) {
     defaultPage();
-  }
-  if(activePageIndex() == m_stencilIndex) {
-    defaultStencil();
   }
   if(activePageIndex() == m_gridIndex) {
     defaultGrid();

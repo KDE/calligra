@@ -52,13 +52,9 @@ public:
   void setup(KivioView*);
   void paperLayoutSetup(KivioView*);
 
-  void setGlobalStencilsBarVisual(KivioIconViewVisual);
-  KivioIconViewVisual stencilsBarVisual()const { return globalDefStencilBarVisual; }
-
 private:
   KoPageLayout defPageLayout;
   KoPageLayout globalDefPageLayout;
-  KivioIconViewVisual globalDefStencilBarVisual;
 };
 
 class KivioConfig : public KSimpleConfig

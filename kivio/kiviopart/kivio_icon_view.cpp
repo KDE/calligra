@@ -30,55 +30,11 @@
 #include <qpalette.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 
 KivioStencilSpawner* KivioIconView::m_pCurDrag = 0L;
 QPtrList<KivioIconView> KivioIconView::objList;
-KivioIconViewVisual  KivioIconView::visual;
 
-
-KivioIconViewVisual::KivioIconViewVisual()
-{
-  pixmap = 0;
-  setDefault();
-}
-
-KivioIconViewVisual::~KivioIconViewVisual()
-{
-}
-
-void KivioIconViewVisual::init()
-{
-  if (!pixmap)
-    pixmap = new QPixmap();
-
-  pixmap->load(pixmapFileName);
-}
-
-void KivioIconViewVisual::setDefault()
-{
-  usePixmap = false;
-  color = QColor(0x4BD2FF);
-  pixmapFileName = QString::null;
-}
-
-void KivioIconViewVisual::save(QDomElement& e)
-{
-  XmlWriteInt(e, "usePixmap", (int)usePixmap);
-  XmlWriteColor(e, "color", color);
-  XmlWriteString(e, "pixmapPath", pixmapFileName);
-}
-
-void KivioIconViewVisual::load(QDomElement& e)
-{
-  QColor defColor(0x4BD2FF);
-  QString defPath = QString::null;
-
-  usePixmap = XmlReadInt(e, "usePixmap", (int)false);
-  color = XmlReadColor(e, "color", defColor);
-  pixmapFileName = XmlReadString(e, "pixmapPath", defPath);
-
-  init();
-}
 /**********************************************************************
  *
  * KivioIconViewItem
@@ -178,28 +134,12 @@ void KivioIconView::setStencilSpawnerSet( KivioStencilSpawnerSet *pSet )
     }
 }
 
-void KivioIconView::setVisualData(KivioIconViewVisual v)
-{
-  visual = v;
-  for (KivioIconView* i = objList.first(); i; i = objList.next()) {
-    i->viewport()->repaint();
-  }
-}
-
 void KivioIconView::drawBackground( QPainter *p, const QRect &r )
 {
     QBrush b;
     p->setBrushOrigin(-contentsX(),-contentsY());
-
-    if(visual.usePixmap)
-    {
-        b.setPixmap(*visual.pixmap);
-    }
-    else
-    {
-        b.setColor(visual.color);
-        b.setStyle(QBrush::SolidPattern);
-    }
+    b.setColor(KGlobalSettings::alternateBackgroundColor());
+    b.setStyle(QBrush::SolidPattern);
     p->fillRect(r, b);
 }
 
