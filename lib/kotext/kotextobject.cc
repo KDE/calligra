@@ -55,7 +55,7 @@ public:
 
 const char * KoTextObject::acceptSelectionMimeType()
 {
-    return "application/vnd.oasis.openoffice.";
+    return "application/vnd.oasis.opendocument.";
 }
 
 KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont,
