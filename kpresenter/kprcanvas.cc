@@ -1044,18 +1044,12 @@ KoRect KPrCanvas::objectSelectedBoundingRect() const
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
-        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
-        Q_ASSERT(txtObj);
-        if(txtObj->contains( docPoint,m_view->zoomHandler() ))
-        {
-            m_currentTextObjectView->mouseReleaseEvent( e, contentsPoint );
-            mousePressed=false;
-            emit objectSelectedChanged();
-            return;
-        }
+        m_currentTextObjectView->mouseReleaseEvent( e, contentsPoint );
+        emit objectSelectedChanged();
+        mousePressed=false;
+        return;
     }
 
     if ( e->button() != LeftButton ) {
