@@ -8,23 +8,23 @@ BUGS :
   - selecting several lines : first line gets unselected
 - Placing of objects is not precise 
 
-MISSING FEATURES, todo :
+TO FINISH:
+===========
+- Presentation structure editor/viewer
+- Group objects (resizing is fucked up, set properties doesn´t work)
+
+MISSING FEATURES / TODO:
 ==============================
 - Restart with last presentation (suggesting it in initial "open" dialog)
   (using kapp->getConfig)
-- Window title : kpresenter - filename
 - Current "align objects" aligns in relation with the page, is there a
   way to align the h or v centers of several objects ?
 - use libkformula
 - seperate the general configuration and page/slide specific config dialog
   and make 2 out of them (currently it's one, which is confusing)
 - use GM in all dialogs
-- Presentation structure editor/viewer (finish it)
 - Rewrite autoforms (using XML)
-- Group objects (finish: resizing is fucked up, set properties doesn´t work)
 - Possibility to print 1, 2 or 4 slides / page
-- When creating a template from current slide, make it working also if current slide
-  is not the first one
 
 
 Reginald Stadlbauer <reggie@kde.org>
