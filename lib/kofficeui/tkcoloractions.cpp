@@ -7,6 +7,7 @@
 #include <qiconset.h>
 #include <qtooltip.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 TKColorPopupMenu::TKColorPopupMenu( QWidget* parent, const char* name )
 : KPopupMenu(parent,name)
@@ -154,10 +155,12 @@ void TKSelectColorAction::selectColorDialog()
   }
 }
 
-// Called when activating the menu item
+// Called when activating the menu item, or when clicking the main toolbar button
 void TKSelectColorAction::slotActivated()
 {
-  activate();
+  //kdDebug() << "TKSelectColorAction::slotActivated" << endl;
+  // The goal is to select a color !
+  selectColorDialog();
 }
 
 void TKSelectColorAction::activate()
