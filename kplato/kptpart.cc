@@ -57,14 +57,14 @@ bool KPTPart::initDoc() {
     KoTemplateChooseDia::ReturnType ret;
 
     ret = KoTemplateChooseDia::choose(KPTFactory::global(), templateDoc,
-				      "application/x-kplato", "*.kpt",
+				      "application/x-kplato", "*.kplato",
 				      i18n("KPlato"),
 				      KoTemplateChooseDia::Everything,
 				      "kplato_template");
     if (ret == KoTemplateChooseDia::Template) {
         QFileInfo fileInfo(templateDoc);
         QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName()
-			 + ".kptt" );
+			 + ".kplatot" );
         resetURL();
         result = loadNativeFormat(fileName);
     } else if (ret == KoTemplateChooseDia::File) {

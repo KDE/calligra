@@ -1,10 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KPlato
+Name[eo]=Prokektplanilo
+Name[lt]=KPlanto
+Name[sv]=Kplato
+Name[zh_TW]=KDE 繪圖
 Exec=kplato
 X-KDE-Library=libkplatopart
-MimeType=application/x-kplato
+MimeType=application/x-vnd.kde.kplato
 Type=Application
 Icon=kword
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
-X-KDE-NativeMimeType=application/x-kplato
+X-KDE-NativeMimeType=application/x-vnd.kde.kplato
