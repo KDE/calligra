@@ -27,7 +27,7 @@ public:
 
     QCString appId() const;
     QCString objId() const;
-    
+
 protected:
     bool call( KSContext& context, const QString& name );
     QString pack( KSContext&, QDataStream& str, KSValue::Ptr& v );
@@ -36,6 +36,8 @@ protected:
 private:
     QCString m_app;
     QCString m_obj;
+    bool m_propertyProxyCheckDone;
+    bool m_supportsPropertyProxy;
 };
 
 #endif

@@ -16,5 +16,6 @@ main
   println( konq.functions() );
   println( locationbartoggle.functions() );
   println( locationbartoggle.propertyNames( TRUE ) );
+  win.action( "reload" ).setProperty( "text", "heyho" );
 }
 

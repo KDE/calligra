@@ -97,7 +97,7 @@ bool KSQObject::pack( KSContext& context, QVariant& var, const KSValue::Ptr& v )
 	var = QVariant( (int)v->intValue() );
 	return TRUE;
     case KSValue::BoolType:
-	var = QVariant( v->boolValue() );
+	var = QVariant( v->boolValue(), 1 );
 	return TRUE;
     case KSValue::DoubleType:
 	var = QVariant( v->doubleValue() );

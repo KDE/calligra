@@ -22,6 +22,8 @@
 KSProxy::KSProxy( const QCString& app, const QCString& obj )
     : QShared(), m_app( app ), m_obj( obj )
 {
+  m_propertyProxyCheckDone = false;
+  m_supportsPropertyProxy = false;
 }
 
 KSProxy::~KSProxy()
@@ -49,6 +51,31 @@ bool KSProxy::call( KSContext& context, const QString& name )
 {
     qDebug("Call %s\n",name.latin1() );
 
+    static QString setPropMethod = QString::fromLatin1( "setProperty" );
+    static QString getPropMethod = QString::fromLatin1( "property" );
+
+    if ( ( name == setPropMethod ||
+	 name == getPropMethod ) && !m_propertyProxyCheckDone )
+    {
+      m_supportsPropertyProxy = false;
+      QByteArray data;
+      QByteArray reply;
+      QCString replyType;
+      if ( kapp->dcopClient()->call( m_app, m_obj, QCString( "functions()" ), data, replyType, reply ) &&
+	   replyType == "QCString" )
+      {
+        QCString functions;
+	QDataStream stream( reply, IO_ReadOnly );
+	stream >> functions;
+	
+	m_supportsPropertyProxy = functions.contains( "property(QCString);" ) &&
+				  functions.contains( "setProperty(QCString,QVariant);" ) &&
+				  functions.contains( "propertyNames(bool);" );
+      }
+      
+      m_propertyProxyCheckDone = true;
+    }
+    
     QByteArray data;
     QByteArray reply;
     QString func( name );
@@ -62,7 +89,22 @@ bool KSProxy::call( KSContext& context, const QString& name )
         {
 	    if ( !first )
 		func += ",";
-	    func += pack( context, str, *it );
+	    
+	    if ( m_supportsPropertyProxy && first && ( name == getPropMethod || name == setPropMethod ) )
+	    {
+	      func += "QCString";
+	      str << QCString( (*it)->stringValue().latin1() );
+	    }
+	    else if ( m_supportsPropertyProxy && !first && name == setPropMethod )
+	    {
+	      func += "QVariant";
+	      QVariant var;
+	      KSQObject::pack( context, var, *it );
+	      str << var;
+	    }
+	    else
+  	      func += pack( context, str, *it );
+	    
 	    if ( context.exception() )
 		return FALSE;
 	    first = FALSE;
