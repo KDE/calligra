@@ -5409,10 +5409,16 @@ void KWView::editComment()
                 kdWarning() << "Author information not found in documentInfo !" << endl;
             else
                 authorName = authorPage->fullName();
-            KoCommentDia *commentDia = new KoCommentDia( this, var->note(), authorName);
+            QString oldValue = var->note();
+            KoCommentDia *commentDia = new KoCommentDia( this, oldValue, authorName);
             if( commentDia->exec() )
             {
-                var->setNote( commentDia->commentText());
+                if ( oldValue != commentDia->commentText())
+                {
+                    KWChangeVariableNoteText *cmd = new KWChangeVariableNoteText( i18n("Change Note Text"), m_doc, oldValue,commentDia->commentText(), var);
+                    m_doc->addCommand( cmd );
+                    cmd->execute();
+                }
             }
             delete commentDia;
         }

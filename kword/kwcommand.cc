@@ -1497,6 +1497,35 @@ void KWChangeFieldVariableSubType::unexecute()
     m_doc->recalcVariables( VT_FIELD );
 }
 
+
+KWChangeVariableNoteText::KWChangeVariableNoteText( const QString &name, KWDocument *_doc,
+                        const QString &_oldValue,const QString &_newValue,
+                        KoNoteVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KWChangeVariableNoteText::~KWChangeVariableNoteText()
+{
+}
+
+void KWChangeVariableNoteText::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setNote(newValue);
+}
+
+void KWChangeVariableNoteText::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setNote(oldValue);
+}
+
+
 KWChangeDateVariableSubType::KWChangeDateVariableSubType( const QString &name, KWDocument *_doc,
                         short int _oldValue, short int _newValue,
                         KWDateVariable *var):

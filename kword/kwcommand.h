@@ -589,6 +589,21 @@ class KWChangeFieldVariableSubType : public KNamedCommand
     KWFieldVariable *m_var;
 };
 
+
+class KWChangeVariableNoteText : public KNamedCommand
+{
+ public:
+    KWChangeVariableNoteText( const QString &name, KWDocument *_doc, const QString &_oldValue,const QString &_newValue, KoNoteVariable *var);
+    ~KWChangeVariableNoteText();
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    QString newValue;
+    QString oldValue;
+     KoNoteVariable *m_var;
+};
+
 class KWChangeTimeVariableSubType : public KNamedCommand
 {
  public:
