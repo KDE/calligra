@@ -238,6 +238,8 @@ void VGradientTabWidget::changeToPredef( QListBoxItem* item )
 void VGradientTabWidget::deletePredef()
 {
 	int i = m_predefGradientsView->currentItem();
+	if( !m_predefGradientsView->item( i ) )
+		return;
 	m_resourceServer->removeGradient( (VGradientListItem*)m_predefGradientsView->item( i ) );
 	m_predefGradientsView->removeItem( i );
 } // VGradientTabWidget::deletePredef
