@@ -78,15 +78,15 @@ public:
 
   void formatChanged(KWFormat &_format);
   void setFlow(KWParagLayout::Flow _flow)
-    { fc->getParag()->getParagLayout()->setFlow(_flow); repaint(false); }
+    { fc->getParag()->getParagLayout()->setFlow(_flow); recalcCursor(); }
   void setLeftIndent(float _left)
-    { fc->getParag()->getParagLayout()->setptLeftIndent(static_cast<unsigned int>(MM_TO_POINT(_left))); repaint(false); }
+    { fc->getParag()->getParagLayout()->setptLeftIndent(static_cast<unsigned int>(MM_TO_POINT(_left))); recalcCursor(); }
   void setFirstLineIndent(float _first)
-    { fc->getParag()->getParagLayout()->setPTFirstLineLeftIndent(static_cast<unsigned int>(MM_TO_POINT(_first))); repaint(false); }
+    { fc->getParag()->getParagLayout()->setPTFirstLineLeftIndent(static_cast<unsigned int>(MM_TO_POINT(_first))); recalcCursor(); }
   void setSpaceBeforeParag(float _before)
-    { fc->getParag()->getParagLayout()->setptParagHeadOffset(static_cast<unsigned int>(MM_TO_POINT(_before))); repaint(false); }
+    { fc->getParag()->getParagLayout()->setptParagHeadOffset(static_cast<unsigned int>(MM_TO_POINT(_before))); recalcCursor(); }
   void setSpaceAfterParag(float _after)
-    { fc->getParag()->getParagLayout()->setptParagFootOffset(static_cast<unsigned int>(MM_TO_POINT(_after))); repaint(false); }
+    { fc->getParag()->getParagLayout()->setptParagFootOffset(static_cast<unsigned int>(MM_TO_POINT(_after))); recalcCursor(); }
 
   float getLeftIndent()
     { return POINT_TO_MM(static_cast<float>(fc->getParag()->getParagLayout()->getPTLeftIndent())); }
@@ -96,6 +96,9 @@ public:
     { return POINT_TO_MM(static_cast<float>(fc->getParag()->getParagLayout()->getPTParagHeadOffset())); }
   float getSpaceAfterParag()
     { return POINT_TO_MM(static_cast<float>(fc->getParag()->getParagLayout()->getPTParagFootOffset())); }
+
+
+  void recalcCursor();
 
 protected:
   unsigned int ptLeftBorder();

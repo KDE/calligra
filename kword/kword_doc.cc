@@ -521,6 +521,18 @@ void KWordDocument_impl::updateAllRanges()
 }
 
 /*================================================================*/
+void KWordDocument_impl::updateAllCursors()
+{
+  KWordView_impl *viewPtr;
+
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	viewPtr->getGUI()->getPaperWidget()->recalcCursor();
+    }
+}
+
+/*================================================================*/
 void KWordDocument_impl::deleteParag(KWParag *_parag)
 {
   KWParag *p,*p2;

@@ -131,7 +131,7 @@ public:
    * Sets the paper size and recalculates the papers width and height.
    */
   void setPageLayout(KoPageLayout _layout,KoColumns _cl)
-    { pageLayout = _layout; pageColumns = _cl; calcColumnWidth(); updateAllViews(0L); }
+    { pageLayout = _layout; pageColumns = _cl; calcColumnWidth(); updateAllViews(0L); updateAllCursors(); }
 
   void getPageLayout(KoPageLayout& _layout,KoColumns& _cl)
     { _layout = pageLayout; _cl = pageColumns; }
@@ -216,6 +216,7 @@ public:
 
   void updateAllViews(KWordView_impl *_view);
   void updateAllRanges();
+  void updateAllCursors();
 
   int getPages() { return pages; }
 

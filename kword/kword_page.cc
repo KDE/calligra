@@ -62,6 +62,27 @@ unsigned int KWPage::ptColumnWidth() { return doc->getPTColumnWidth(); }
 unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
 
 /*================================================================*/
+void KWPage::recalcCursor()
+{
+  QPainter _painter;
+  _painter.begin(this);
+
+  unsigned int pos = fc->getTextPos();
+  fc->init(fc->getParag(),_painter,false);
+
+  fc->gotoStartOfParag(_painter);
+  fc->cursorGotoLineStart(_painter);
+  for (unsigned int i = 0;i < pos;i++)
+    fc->cursorGotoRight(_painter);
+
+  _painter.end();
+
+  paint_directly = false;
+  buffer.fill(white);
+  repaint(false);
+}
+
+/*================================================================*/
 void KWPage::paintEvent(QPaintEvent* e)
 {
   QPainter painter;
