@@ -22,9 +22,8 @@
 #include "../api/variant.h"
 #include "../api/exception.h"
 
-//#include <qvaluelist.h>
-//#include <klocale.h>
-//#include <kdebug.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 using namespace Kross::KexiDB;
 
@@ -134,8 +133,7 @@ Kross::Api::Object* KexiDBFieldList::addField(Kross::Api::List* args)
     m_fieldlist->addField(
         Kross::Api::Object::fromObject<KexiDBField>(args->item(0))->field()
     );
-    return Kross::Api::Variant::create(true,
-           "Kross::KexiDB::KexiDBFieldList::addField::Bool");
+    return 0;
 }
 
 Kross::Api::Object* KexiDBFieldList::insertField(Kross::Api::List* args)
@@ -144,8 +142,7 @@ Kross::Api::Object* KexiDBFieldList::insertField(Kross::Api::List* args)
         Kross::Api::Variant::toUInt(args->item(0)),
         Kross::Api::Object::fromObject<KexiDBField>(args->item(1))->field()
     );
-    return Kross::Api::Variant::create(true,
-           "Kross::KexiDB::KexiDBFieldList::insertField::Bool");
+    return 0;
 }
 
 Kross::Api::Object* KexiDBFieldList::removeField(Kross::Api::List* args)
@@ -153,14 +150,12 @@ Kross::Api::Object* KexiDBFieldList::removeField(Kross::Api::List* args)
     m_fieldlist->removeField(
         Kross::Api::Object::fromObject<KexiDBField>(args->item(0))->field()
     );
-    return Kross::Api::Variant::create(true,
-           "Kross::KexiDB::KexiDBFieldList::removeField::Bool");
+    return 0;
 }
 
 Kross::Api::Object* KexiDBFieldList::clear(Kross::Api::List*)
 {
     m_fieldlist->clear();
-    return Kross::Api::Variant::create(true,
-           "Kross::KexiDB::KexiDBFieldList::clear::Bool");
+    return 0;
 }
 

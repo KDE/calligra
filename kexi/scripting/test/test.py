@@ -56,7 +56,7 @@ class KexiDBClass:
     # Open a connection to a filebased driver.
     def connectWithFile(self, driver, filename):
         # First we need a new connectiondata object.
-        connectiondata = self.drivermanager.createConnectionData()
+        connectiondata = self.drivermanager.connectionData()
         # Fill the new connectiondata object with what we need to connect.
         connectiondata.setConnName("myFileConnection")
         connectiondata.setFileName(filename)
@@ -132,6 +132,22 @@ class KexiDBClass:
             # Move to the next item
             cursor.moveNext()
 
+    def getTableSchema(self, tablename):
+        tableschema = self.drivermanager.tableSchema(tablename)
+        #print "tableschema.fieldlist().fieldCount() = %s" % tableschema.fieldlist().fieldCount()
+        return tableschema
+
+    def addField(self, tableschema, name):
+        field = self.drivermanager.field()
+        field.setType("Text")
+        field.setName(name)
+
+        #TODO why tableschema.addField(field) doesn't throw an exception ???
+        tableschema.fieldlist().addField(field)
+
+        print "tableschema.fieldlist().fieldCount() = %s" % tableschema.fieldlist().fieldCount()
+        return field
+
 if __name__ == '__main__':
 
     print "BEGIN KROSS::KEXIDB TEST ###############################################"
@@ -150,8 +166,11 @@ if __name__ == '__main__':
     mykexidbclass.printQueryStringList(myfileconnection, "SELECT * FROM table1")
     mykexidbclass.printQueryCursor(myfileconnection, "SELECT * FROM table1")
 
-    #myfileconnection.createTable(KexiDBTableSchema)
-    #myfileconnection.dropTable(KexiDBTableSchema)
+    mytableschema = mykexidbclass.getTableSchema("mytable")
+    mykexidbclass.addField(mytableschema, "myfield")
+    #myfileconnection.createTable(mytableschema)
+    #myfileconnection.dropTable(mytableschema)
+
     #myfileconnection.alterTable(KexiDBTableSchema, NewKexiDBTableSchema)
     #myfileconnection.alterTableName(KexiDBTableSchema, "MyNewTableName")
     #myfileconnection.tableSchema()

@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 noinst_LTLIBRARIES = libkrossmain.la
 
 libkrossmain_la_SOURCES = \
@@ -13,7 +15,6 @@ libkrossmain_la_LIBADD = \
     ../kjs/libkrosskjs.la \
     ../python/libkrosspython.la
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 libkrossmain_la_METASOURCES = AUTO
 SUBDIRS = .
-INCLUDES = $(PYTHON_INCLUDE) $(all_includes)
+INCLUDES = -I$(top_srcdir)/kexi $(PYTHON_INCLUDE) $(all_includes)

@@ -19,6 +19,9 @@
 #include "kexidbdrivermanager.h"
 #include "kexidbdriver.h"
 #include "kexidbconnectiondata.h"
+#include "kexidbfield.h"
+#include "kexidbschema.h"
+
 #include "../api/exception.h"
 
 #include <qguardedptr.h>
@@ -27,6 +30,9 @@
 
 #include <kexidb/driver.h>
 #include <kexidb/connectiondata.h>
+#include <kexidb/field.h>
+#include <kexidb/tableschema.h>
+#include <kexidb/queryschema.h>
 
 using namespace Kross::KexiDB;
 
@@ -48,9 +54,21 @@ KexiDBDriverManager::KexiDBDriverManager()
              "The lookup is case insensitive.")
     );
 
-    addFunction("createConnectionData", &KexiDBDriverManager::createConnectionData,
+    addFunction("connectionData", &KexiDBDriverManager::connectionData,
         Kross::Api::ArgumentList(),
         i18n("Return a new KexiDBConnectionData object.")
+    );
+    addFunction("field", &KexiDBDriverManager::field,
+        Kross::Api::ArgumentList(),
+        i18n("Return a new KexiDBField object.")
+    );
+    addFunction("tableSchema", &KexiDBDriverManager::tableSchema,
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"),
+        i18n("Return a new KexiDBTableSchema object.")
+    );
+    addFunction("querySchema", &KexiDBDriverManager::querySchema,
+        Kross::Api::ArgumentList(),
+        i18n("Return a new KexiDBQuerySchema object.")
     );
 }
 
@@ -99,8 +117,25 @@ Kross::Api::Object* KexiDBDriverManager::lookupByMime(Kross::Api::List* args)
         "Kross::KexiDB::DriverManager::lookupByMime::String");
 }
 
-Kross::Api::Object* KexiDBDriverManager::createConnectionData(Kross::Api::List*)
+Kross::Api::Object* KexiDBDriverManager::connectionData(Kross::Api::List*)
 {
     return new KexiDBConnectionData( new ::KexiDB::ConnectionData() );
+}
+
+Kross::Api::Object* KexiDBDriverManager::field(Kross::Api::List*)
+{
+    return new KexiDBField( new ::KexiDB::Field() );
+}
+
+Kross::Api::Object* KexiDBDriverManager::tableSchema(Kross::Api::List* args)
+{
+    return new KexiDBTableSchema(
+               new ::KexiDB::TableSchema(Kross::Api::Variant::toString(args->item(0)))
+           );
+}
+
+Kross::Api::Object* KexiDBDriverManager::querySchema(Kross::Api::List*)
+{
+    return new KexiDBQuerySchema( new ::KexiDB::QuerySchema() );
 }
 

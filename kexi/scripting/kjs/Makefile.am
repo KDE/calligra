@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 noinst_LTLIBRARIES = libkrosskjs.la
 
 libkrosskjs_la_SOURCES = \
@@ -17,12 +19,6 @@ libkrosskjs_la_LIBADD = \
 #$(LIB_KPARTS)
 #$(LIB_KIO)
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
-
 libkrosskjs_la_METASOURCES = AUTO
-
 SUBDIRS = .
-
-INCLUDES = $(all_includes)
-#-I$(top_srcdir)/kexi
-#$(KOFFICE_INCLUDES)
+INCLUDES = -I$(top_srcdir)/kexi $(all_includes)

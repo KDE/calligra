@@ -98,7 +98,22 @@ namespace Kross { namespace KexiDB {
             /**
              * Return a new \a KexiDBConnectionData object.
              */
-            Kross::Api::Object* createConnectionData(Kross::Api::List*);
+            Kross::Api::Object* connectionData(Kross::Api::List*);
+
+            /**
+             * Return a new \a KexiDBField object.
+             */
+            Kross::Api::Object* field(Kross::Api::List*);
+
+            /**
+             * Return a new \a KexiDBTableSchema object.
+             */
+            Kross::Api::Object* tableSchema(Kross::Api::List*);
+
+            /**
+             * Return a new \a KexiDBQuerySchema object.
+             */
+            Kross::Api::Object* querySchema(Kross::Api::List*);
     };
 
 }}

@@ -25,10 +25,6 @@
 #include <qvariant.h>
 #include <kdebug.h>
 
-#ifndef KROSS_MAIN_EXPORT
-    #define KROSS_MAIN_EXPORT
-#endif
-
 namespace Kross { namespace Api {
 
     class Interpreter;

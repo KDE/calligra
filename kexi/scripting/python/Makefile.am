@@ -1,6 +1,6 @@
-noinst_LTLIBRARIES = libkrosspython.la
+include $(top_srcdir)/kexi/Makefile.global
 
-SUBDIRS = CXX .
+noinst_LTLIBRARIES = libkrosspython.la
 
 libkrosspython_la_SOURCES = \
     pythonextension.cpp \
@@ -16,8 +16,6 @@ libkrosspython_la_LIBADD = \
     CXX/libkrosspythoncxx.la \
     ../api/libkrossapi.la
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
-
 libkrosspython_la_METASOURCES = AUTO
-
+SUBDIRS = CXX .
 INCLUDES = -I$(top_srcdir)/kexi $(PYTHON_INCLUDE) $(all_includes)

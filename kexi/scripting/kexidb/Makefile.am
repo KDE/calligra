@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 noinst_LTLIBRARIES = libkrosskexidb.la
 
 libkrosskexidb_la_SOURCES = \
@@ -21,7 +23,6 @@ libkrosskexidb_la_LIBADD = \
     $(top_builddir)/kexi/kexidb/libkexidb.la \
     $(top_builddir)/kexi/kexidb/parser/libkexidbparser.la
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 libkrosskexidb_la_METASOURCES = AUTO
 SUBDIRS = .
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)

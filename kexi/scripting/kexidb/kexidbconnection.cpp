@@ -392,9 +392,13 @@ Kross::Api::Object* KexiDBConnection::dropDatabase(Kross::Api::List* args)
 
 Kross::Api::Object* KexiDBConnection::createTable(Kross::Api::List* args)
 {
+    ::KexiDB::TableSchema* tableschema = Kross::Api::Object::fromObject<KexiDBTableSchema>(args->item(0))->tableschema();
+    if(! tableschema)
+        kdDebug()<<"KexiDBConnection::createTable tableschema==NULL !!!"<<endl;
+
     return Kross::Api::Variant::create(
            connection()->createTable(
-               Kross::Api::Object::fromObject<KexiDBTableSchema>(args->item(0))->tableschema(),
+               tableschema,
                false // replace existing tables
            ),
            "Kross::KexiDB::Connection::createTable::Bool");
