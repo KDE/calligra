@@ -668,7 +668,9 @@ void KWDeleteFrameCommand::execute()
     KWFrame *frame = frameSet->getFrame( frameIndex.m_iFrameIndex );
     ASSERT( frame );
     frameSet->delFrame( frameIndex.m_iFrameIndex );
-    m_pDoc->frameChanged( frame );
+    //when you delete a frame frame pointor is deleted
+    //so used frameChanged with a null pointor.
+    m_pDoc->frameChanged( 0L );
 }
 
 void KWDeleteFrameCommand::unexecute()
@@ -721,6 +723,6 @@ void KWCreateFrameCommand::unexecute()
     kdDebug() << "KWCreateFrameCommand::unexecute delFrame " << frameIndex.m_iFrameIndex << endl;
     frameSet->delFrame( frameIndex.m_iFrameIndex );
 
-    m_pDoc->frameChanged( frame );
+    m_pDoc->frameChanged( 0L );
 }
 
