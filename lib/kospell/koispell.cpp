@@ -1057,7 +1057,6 @@ void KOISpell::dialog2 (int result)
 KOISpell:: ~KOISpell ()
 {
     delete proc;
-    delete  ksdlg;
 }
 
 

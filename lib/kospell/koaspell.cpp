@@ -552,7 +552,6 @@ void KOASpell::deleteSpellChecker()
 KOASpell::~KOASpell ()
 {
     deleteSpellChecker();
-    delete ksdlg;
 }
 
 // This is always called from the event loop to make

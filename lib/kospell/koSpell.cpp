@@ -117,6 +117,7 @@ KOSpell::KOSpell( KOSpellConfig *_ksc )
 KOSpell::~KOSpell()
 {
     delete ksconfig;
+    delete ksdlg;
 }
 
 void KOSpell::initSpell( KOSpellConfig *_ksc )
