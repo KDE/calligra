@@ -175,6 +175,7 @@ public:
     virtual void setContentsPos( int x, int y );
     void repaintScreen( bool erase );
     void repaintScreen( const QRect &r, bool erase );
+    void repaintScreen( int currFS, bool erase );
     
 public slots:
     void newLeftIndent( int _left );
@@ -208,7 +209,7 @@ protected slots:
     void stopBlinkCursor();
     void contentsWillMove( int, int );
     void doAutoScroll();
-    
+
 protected:
     unsigned int ptLeftBorder();
     unsigned int ptRightBorder();
@@ -295,7 +296,7 @@ protected:
 
     void startKeySelection();
     void continueKeySelection();
-    
+
     KWordDocument *doc;
     bool markerIsVisible;
 
@@ -355,9 +356,8 @@ protected:
     QStringList cachedLines;
     KWFormatContext *oldFc;
     QPoint cachedContentsPos;
-    bool _erase;
-    bool _setErase;
-    bool _resizing;
+    bool _erase, _setErase, _resizing, redrawOnlyCurrFrameset;
+    int currFrameSet;
     
 };
 

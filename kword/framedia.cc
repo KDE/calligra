@@ -624,20 +624,25 @@ void KWFrameDia::applyChanges()
         }
     }
 
+    int currFS = -1;
+    
     if ( flags & FD_FRAME_CONNECT && doc )
     {
         unsigned int _num = static_cast<unsigned int>( lFrameSList->currentItem() );
         if ( doc->getProcessingType() == KWordDocument::WP ) _num++;
 
         if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() )
+        {
             doc->getFrameSet( _num )->addFrame( frame );
+            currFS = _num;
+        }
         else
         {
             KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
             _frameSet->addFrame( frame );
             _frameSet->setAutoCreateNewFrame( false );
             doc->addFrameSet( _frameSet );
-            page->repaintScreen( true );
+            page->repaintScreen( _num, true );
             _frameSet->setAutoCreateNewFrame( true );
             return;
         }
@@ -709,7 +714,10 @@ void KWFrameDia::applyChanges()
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
-    page->repaintScreen( true );
+    if ( currFS != -1 )
+        page->repaintScreen( currFS, true );
+    else
+        page->repaintScreen( false );
 }
 
 /*================================================================*/

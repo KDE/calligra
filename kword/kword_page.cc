@@ -58,7 +58,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     : QScrollView( parent, "" ), format( _doc ),
       blinkTimer( this ), scrollTimer( this ), cachedParag( 0L ),
       cachedContentsPos( QPoint( -1, -1 ) ), _setErase( true ),
-      _resizing( false )
+      _resizing( false ), redrawOnlyCurrFrameset( false ), currFrameSet( -1 )
 {
     setKeyCompression( true );
     setFocusPolicy( QWidget::StrongFocus );
@@ -137,7 +137,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
 
     viewport()->setBackgroundColor( white );
     viewport()->setBackgroundMode( NoBackground );
-    repaintScreen( true ); 
+    repaintScreen( true );
 }
 
 /*================================================================*/
@@ -1090,7 +1090,7 @@ void KWPage::vmrCreateText()
             frameDia = 0;
         }
 
-        frameDia = new KWFrameDia( 0, "", frame, doc, this, FD_FRAME_CONNECT | FD_FRAME | FD_PLUS_NEW_FRAME | FD_BORDERS );
+        frameDia = new KWFrameDia( this, "", frame, doc, this, FD_FRAME_CONNECT | FD_FRAME | FD_PLUS_NEW_FRAME | FD_BORDERS );
         connect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
         connect( frameDia, SIGNAL( applyButtonPressed() ), this, SLOT( frameDiaClosed() ) );
         connect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
@@ -1175,7 +1175,7 @@ void KWPage::viewportMouseReleaseEvent( QMouseEvent *e )
 {
     if ( scrollTimer.isActive() )
         scrollTimer.stop();
-    
+
     if ( maybeDrag && doc->has_selection() && mouseMode == MM_EDIT )
     {
         doc->setSelection( false );
@@ -1327,7 +1327,7 @@ void KWPage::recalcCursor( bool _repaint, int _pos, KWFormatContext *_fc )
     _fc->cursorGotoRight( pos );
 
     if ( _repaint )
-        repaintScreen( true );
+        repaintScreen( false );
 
     if ( blinking )
         startBlinkCursor();
@@ -1670,7 +1670,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
                 {
                     KWFrame *oldFrame = frame;
                     frame = doc->getFrameSet( i )->getFrame( paintfc->getFrame() - 1 );
-                
+
                     if ( oldFrame && frame && oldFrame != frame && _y >= 0 && _hei > 0 )
                     {
                         int li = oldFrame->getLeftIndent( _y, _hei );
@@ -1678,7 +1678,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
                                           _y, oldFrame->width() - li - oldFrame->getRightIndent( _y, _hei ),
                                           _hei, QBrush( oldFrame->getBackgroundColor() ) );
                     }
-                        
+
                     unsigned int _x = frame->x() - contentsX();
                     unsigned int _wid = frame->width();
                     unsigned int li = frame->getLeftIndent( paintfc->getPTY(), paintfc->getLineHeight() );
@@ -1723,7 +1723,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
             {
                 if ( allowBreak1( paintfc, i ) )
                     break;
-                
+
                 if ( !_resizing )
                 {
                     KWFrame *frame = fs->getFrame( paintfc->getFrame() - 1 );
@@ -1792,16 +1792,21 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
     if ( !_setErase )
         _erase = e->erased();
     _setErase = false;
-    
+
     if ( _erase && !_resizing )
         painter.eraseRect( e->rect().x(), e->rect().y(),
                            e->rect().width(), e->rect().height() );
 
     drawBorders( painter, e->rect(), _erase && !_resizing );
 
+    int cf = currFrameSet == -1 ? fc->getFrameSet() - 1 : currFrameSet;
+    
     KWFormatContext *paintfc = new KWFormatContext( doc, 1 );
-    for ( unsigned i = 0; i < doc->getNumFrameSets(); i++ )
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ )
     {
+        if ( redrawOnlyCurrFrameset && (int)i != cf )
+            continue;
+        
         switch ( doc->getFrameSet( i )->getFrameType() )
         {
         case FT_PICTURE:
@@ -1824,7 +1829,7 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
 
     cachedContentsPos = QPoint( contentsX(), contentsY() );
     doc->setPageLayoutChanged( false );
-    
+
     startBlinkCursor();
 }
 
@@ -1845,7 +1850,7 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 
     QStringList tmpCachedLines;
     QStringList::Iterator it = cachedLines.begin();
-    
+
     while ( !bend )
     {
         bool forceDraw = false;
@@ -2093,7 +2098,7 @@ bool KWPage::kLeft( QKeyEvent *e, int , int , KWParag *, KWTextFrameSet * )
         startKeySelection();
     else
         *oldFc = *fc;
-    
+
     fc->cursorGotoLeft();
     gui->getView()->setFormat( *( ( KWFormat* )fc ) );
     gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
@@ -2164,6 +2169,8 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
 /*================================================================*/
 bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet )
 {
+    redrawOnlyCurrFrameset = true;
+    
     QString pln = fc->getParag()->getParagLayout()->getName();
     KWFormat _format( doc );
     _format = *( ( KWFormat* )fc );
@@ -2211,7 +2218,7 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
     scrollToCursor( *fc );
     redrawAllWhileScrolling = false;
     bool scrolled = yp != contentsY();
-    
+
     QPainter painter;
     painter.begin( viewport() );
     doc->drawMarker( *fc, &painter, contentsX(), contentsY() );
@@ -2251,12 +2258,15 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
         KWParag *rp = fc->getParag();
         if ( rp->getPrev() )
             rp = rp->getPrev();
-        
+
         KWFrame *frame = frameSet->getFrame( fc->getFrame() - 1 );
         if ( frame )
             repaintScreen( QRect( frame->x() - contentsX(), rp->getPTYStart() - contentsY(),
                                   frame->width(), frame->height() ), false );
     }
+
+    redrawOnlyCurrFrameset = false;
+    
     return false;
 }
 
@@ -2770,7 +2780,7 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack )
                 else
                     _painter.setPen( NoPen );
             }
-            if ( static_cast<int>( i ) == hiliteFrameSet )
+            if ( false )//static_cast<int>( i ) == hiliteFrameSet )
                 _painter.setPen( blue );
             else if ( !gui->getView()->getViewFrameBorders() ) should_draw = false;
             frame = QRect( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1, tmp->width() + 2, tmp->height() + 2 );
@@ -2876,7 +2886,7 @@ void KWPage::drawFrameSelection( QPainter &_painter, KWFrame *_frame )
 {
     _painter.save();
     //_painter.setRasterOp( NotROP );
-        
+
     _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY(), 6, 6, colorGroup().highlight() );
     _painter.fillRect( _frame->x() - contentsX() + _frame->width() / 2 - 3, _frame->y() - contentsY(), 6, 6, colorGroup().highlight() );
     _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY() + _frame->height() / 2 - 3, 6, 6, colorGroup().highlight() );
@@ -3079,7 +3089,7 @@ void KWPage::femProps()
     }
 
     repaintScreen( false );
-    frameDia = new KWFrameDia( 0, "", 0L, doc, this, FD_FRAME_SET | FD_FRAME | FD_GEOMETRY | FD_BORDERS );
+    frameDia = new KWFrameDia( this, "", 0L, doc, this, FD_FRAME_SET | FD_FRAME | FD_GEOMETRY | FD_BORDERS );
     connect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
     connect( frameDia, SIGNAL( applyButtonPressed() ), this, SLOT( frameDiaClosed() ) );
     connect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
@@ -4365,7 +4375,7 @@ void KWPage::startBlinkCursor()
 void KWPage::blinkCursor()
 {
     doc->emitSelectioOnOff();
-    
+
     cursorIsVisible = !cursorIsVisible;
 
     QPainter p;
@@ -4444,7 +4454,7 @@ void KWPage::setContentsPos( int x, int y )
 /*================================================================*/
 void KWPage::repaintScreen( bool erase )
 {
-    _erase = erase; 
+    _erase = erase;
     _setErase = true;
     viewport()->repaint( false );
 }
@@ -4457,6 +4467,18 @@ void KWPage::repaintScreen( const QRect &r, bool erase )
     viewport()->repaint( r, false );
 }
 
+/*================================================================*/
+void KWPage::repaintScreen( int currFS, bool erase )
+{
+    _erase = erase;
+    _setErase = true;
+    currFrameSet = currFS;
+    redrawOnlyCurrFrameset = true;
+    viewport()->repaint( false );
+    currFrameSet = -1;
+    redrawOnlyCurrFrameset = false;
+}
+    
 /*================================================================*/
 void KWPage::contentsWillMove( int, int )
 {
@@ -4477,8 +4499,8 @@ void KWPage::startKeySelection()
 void KWPage::continueKeySelection()
 {
     bool flickerAndSlow = false;
-    
-    int cy = isCursorYVisible( *fc ); 
+
+    int cy = isCursorYVisible( *fc );
     if ( cy != 0 )
     {
         if ( cy < 0 )
@@ -4488,7 +4510,7 @@ void KWPage::continueKeySelection()
             if ( *doc->getSelStart() > *fc )
                 flickerAndSlow = true;
     }
-    
+
     if ( !continueSelection || flickerAndSlow )
     {
         QPainter painter;
@@ -4531,17 +4553,17 @@ void KWPage::doAutoScroll()
     pos = viewport()->mapFromGlobal( pos );
     int mx = pos.x() + contentsX();
     int my = pos.y() + contentsY();
-    
+
     int frameset = doc->getFrameSet( mx, my );
 
-    if ( frameset != -1 && frameset == static_cast<int>( fc->getFrameSet() ) - 1 && 
+    if ( frameset != -1 && frameset == static_cast<int>( fc->getFrameSet() ) - 1 &&
          doc->getFrameSet( frameset )->getFrameType() == FT_TEXT )
     {
         QPainter _painter;
         _painter.begin( viewport() );
         doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
         _painter.end();
-        
+
         fc->setFrameSet( frameset + 1 );
 
         fc->cursorGotoPixelLine( mx, my );
