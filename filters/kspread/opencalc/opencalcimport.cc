@@ -1025,7 +1025,7 @@ void OpenCalcImport::loadTableMasterStyle( KSpreadSheet * table,
   QString hleft, hmiddle, hright;
   QString fleft, fmiddle, fright;
 
-  if ( !header.isNull() );
+  if ( !header.isNull() )
   {
     kdDebug(30518) << "Header exists" << endl;
     QDomNode part = header.namedItem( "style:region-left" );
@@ -1052,7 +1052,7 @@ void OpenCalcImport::loadTableMasterStyle( KSpreadSheet * table,
 
   QDomNode footer = style->namedItem( "style:footer" );
 
-  if ( !footer.isNull() );
+  if ( !footer.isNull() )
   {
     QDomNode part = footer.namedItem( "style:region-left" );
     if ( !part.isNull() )
