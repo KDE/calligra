@@ -694,6 +694,36 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
     if ( m_rctSelection.left() + cell->extraXCells() == m_rctSelection.right() &&
          m_rctSelection.top() + cell->extraYCells() == m_rctSelection.bottom() )
       cell->clicked( _canvas );
+
+/***************************temporary code for testing.  REMOVE ME!!*/
+    int c = m_rctSelection.left();
+    int r = m_rctSelection.top();
+    if (c > 0 && r > 0)
+    {
+      kdDebug() << "testing cell " <<
+        util_cellName(c,r) << endl;
+
+      KSpreadCell* up = getNextCellUp(c,r);
+      KSpreadCell* down = getNextCellDown(c,r);
+      KSpreadCell* left = getNextCellLeft(c,r);
+      KSpreadCell* right = getNextCellRight(c,r);
+
+      QString str;
+
+      str = (up == NULL) ? "NULL" : util_cellName(up->column(), up->row());
+      kdDebug() << "next used cell up is " << str << endl;
+
+      str = (down == NULL) ? "NULL" : util_cellName(down->column(), down->row());
+      kdDebug() << "next used cell down is " << str << endl;
+
+      str = (left == NULL) ? "NULL" : util_cellName(left->column(), left->row());
+      kdDebug() << "next used cell left is " << str << endl;
+
+      str = (right == NULL) ? "NULL" :
+            util_cellName(right->column(), right->row());
+      kdDebug() << "next used cell right is " << str << endl;
+    }
+/***********end of temporary code */
   }
 
   QRect old_marker = m_marker;
@@ -3981,7 +4011,7 @@ void KSpreadTable::copyAsText( const QPoint &_marker )
         KSpreadCell * cell = cellAt( _marker.x(), _marker.y() );
         if( !cell->isDefault() )
             QApplication::clipboard()->setText( cell->text() );
-        
+
         return;
     }
 
@@ -5575,6 +5605,30 @@ void KSpreadTable::updateLocale()
   }
   recalc();
 }
+
+KSpreadCell* KSpreadTable::getFirstCellColumn(int col)
+{ return m_cells.getFirstCellColumn(col); }
+
+KSpreadCell* KSpreadTable::getLastCellColumn(int col)
+{ return m_cells.getLastCellColumn(col); }
+
+KSpreadCell* KSpreadTable::getFirstCellRow(int row)
+{ return m_cells.getFirstCellRow(row); }
+
+KSpreadCell* KSpreadTable::getLastCellRow(int row)
+{ return m_cells.getLastCellRow(row); }
+
+KSpreadCell* KSpreadTable::getNextCellUp(int col, int row)
+{ return m_cells.getNextCellUp(col, row); }
+
+KSpreadCell* KSpreadTable::getNextCellDown(int col, int row)
+{ return m_cells.getNextCellDown(col, row); }
+
+KSpreadCell* KSpreadTable::getNextCellLeft(int col, int row)
+{ return m_cells.getNextCellLeft(col, row); }
+
+KSpreadCell* KSpreadTable::getNextCellRight(int col, int row)
+{ return m_cells.getNextCellRight(col, row); }
 
 #ifndef NDEBUG
 void KSpreadTable::printDebug()

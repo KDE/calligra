@@ -901,6 +901,96 @@ public:
 
     void updateLocale();
 
+  /**
+   * Retrieve the first used cell in a given column.  Can be used in conjunction
+   * with getNextCellDown to loop through a column.
+   *
+   * @param col The column to get the first cell from
+   *
+   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   *         in this column
+   */
+  KSpreadCell* getFirstCellColumn(int col);
+
+  /**
+   * Retrieve the last used cell in a given column.  Can be used in conjunction
+   * with getNextCellUp to loop through a column.
+   *
+   * @param col The column to get the cell from
+   *
+   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   *         in this column
+   */
+  KSpreadCell* getLastCellColumn(int col);
+
+  /**
+   * Retrieve the first used cell in a given row.  Can be used in conjunction
+   * with getNextCellRight to loop through a row.
+   *
+   * @param row The row to get the first cell from
+   *
+   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   *         in this row
+   */
+  KSpreadCell* getFirstCellRow(int row);
+
+  /**
+   * Retrieve the last used cell in a given row.  Can be used in conjunction
+   * with getNextCellLeft to loop through a row.
+   *
+   * @param row The row to get the last cell from
+   *
+   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   *         in this row
+   */
+  KSpreadCell* getLastCellRow(int row);
+
+  /**
+   * Retrieves the next used cell above the given col/row pair.  The given
+   * col/row pair does not need to reference a used cell.
+   *
+   * @param col column to start looking through
+   * @param row the row above which to start looking.
+   *
+   * @return Returns the next used cell above this one, or NULL if there are none
+   */
+  KSpreadCell* getNextCellUp(int col, int row);
+
+  /**
+   * Retrieves the next used cell below the given col/row pair.  The given
+   * col/row pair does not need to reference a used cell.
+   *
+   * @param col column to start looking through
+   * @param row the row below which to start looking.
+   *
+   * @return Returns the next used cell below this one, or NULL if there are none
+   */
+  KSpreadCell* getNextCellDown(int col, int row);
+
+  /**
+   * Retrieves the next used cell to the right of the given col/row pair.
+   * The given col/row pair does not need to reference a used cell.
+   *
+   * @param col the column after which should be searched
+   * @param row the row to search through
+   *
+   * @return Returns the next used cell to the right of this one, or NULL if
+   * there are none
+   */
+  KSpreadCell* getNextCellLeft(int col, int row);
+
+  /**
+   * Retrieves the next used cell to the left of the given col/row pair.
+   * The given col/row pair does not need to reference a used cell.
+   *
+   * @param col the column before which should be searched
+   * @param row the row to search through
+   *
+   * @return Returns the next used cell to the left of this one, or NULL if
+   * there are none
+   */
+  KSpreadCell* getNextCellRight(int col, int row);
+
 signals:
     void sig_updateView( KSpreadTable *_table );
     void sig_updateView( KSpreadTable *_table, const QRect& );

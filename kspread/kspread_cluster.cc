@@ -637,6 +637,175 @@ void KSpreadCluster::clearRow( int row )
     }
 }
 
+
+KSpreadCell* KSpreadCluster::getFirstCellColumn(int col)
+{
+  KSpreadCell* cell = NULL;
+
+  cell = lookup(col, 1);
+
+  if (cell == NULL)
+  {
+    cell = getNextCellDown(col, 1);
+  }
+  return cell;
+}
+
+KSpreadCell* KSpreadCluster::getLastCellColumn(int col)
+{
+  KSpreadCell* cell = NULL;
+
+  cell = lookup(col, KS_rowMax);
+
+  if (cell == NULL)
+  {
+    cell = getNextCellUp(col, KS_rowMax);
+  }
+  return cell;
+}
+
+KSpreadCell* KSpreadCluster::getFirstCellRow(int row)
+{
+  KSpreadCell* cell = NULL;
+
+  cell = lookup(1, row);
+
+  if (cell == NULL)
+  {
+    cell = getNextCellRight(1, row);
+  }
+  return cell;
+}
+
+KSpreadCell* KSpreadCluster::getLastCellRow(int row)
+{
+  KSpreadCell* cell = NULL;
+
+  cell = lookup(KS_colMax, row);
+
+  if (cell == NULL)
+  {
+    cell = getNextCellLeft(KS_colMax, row);
+  }
+  return cell;
+}
+
+KSpreadCell* KSpreadCluster::getNextCellUp(int col, int row)
+{
+  int cx = col / KSPREAD_CLUSTER_LEVEL2;
+  int cy = (row - 1) / KSPREAD_CLUSTER_LEVEL2;
+  int dx = col % KSPREAD_CLUSTER_LEVEL2;
+  int dy = (row - 1) % KSPREAD_CLUSTER_LEVEL2;
+
+  while (cy >= 0)
+  {
+    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != NULL )
+    {
+      while (dy >= 0)
+      {
+
+        if ( m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx]
+             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != NULL )
+        {
+          return m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx ]
+            [ dy*KSPREAD_CLUSTER_LEVEL2 + dx];
+        }
+        dy--;
+      }
+    }
+    cy--;
+    dy = KSPREAD_CLUSTER_LEVEL2 - 1;
+  }
+  return NULL;
+}
+
+KSpreadCell* KSpreadCluster::getNextCellDown(int col, int row)
+{
+  int cx = col / KSPREAD_CLUSTER_LEVEL2;
+  int cy = (row + 1) / KSPREAD_CLUSTER_LEVEL2;
+  int dx = col % KSPREAD_CLUSTER_LEVEL2;
+  int dy = (row + 1) % KSPREAD_CLUSTER_LEVEL2;
+
+  while (cy < KSPREAD_CLUSTER_LEVEL1)
+  {
+    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != NULL )
+    {
+      while (dy < KSPREAD_CLUSTER_LEVEL2)
+      {
+
+        if ( m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx]
+             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != NULL )
+        {
+          return m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx ]
+            [ dy*KSPREAD_CLUSTER_LEVEL2 + dx];
+        }
+        dy++;
+      }
+    }
+    cy++;
+    dy = 0;
+  }
+  return NULL;
+}
+
+KSpreadCell* KSpreadCluster::getNextCellLeft(int col, int row)
+{
+  int cx = (col - 1) / KSPREAD_CLUSTER_LEVEL2;
+  int cy = row / KSPREAD_CLUSTER_LEVEL2;
+  int dx = (col - 1) % KSPREAD_CLUSTER_LEVEL2;
+  int dy = row % KSPREAD_CLUSTER_LEVEL2;
+
+  while (cx >= 0)
+  {
+    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != NULL )
+    {
+      while (dx >= 0)
+      {
+
+        if ( m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx]
+             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != NULL )
+        {
+          return m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx ]
+            [ dy*KSPREAD_CLUSTER_LEVEL2 + dx];
+        }
+        dx--;
+      }
+    }
+    cx--;
+    dx = KSPREAD_CLUSTER_LEVEL2 - 1;
+  }
+  return NULL;
+}
+
+KSpreadCell* KSpreadCluster::getNextCellRight(int col, int row)
+{
+  int cx = (col + 1) / KSPREAD_CLUSTER_LEVEL2;
+  int cy = row / KSPREAD_CLUSTER_LEVEL2;
+  int dx = (col + 1) % KSPREAD_CLUSTER_LEVEL2;
+  int dy = row % KSPREAD_CLUSTER_LEVEL2;
+
+  while (cx < KSPREAD_CLUSTER_LEVEL1)
+  {
+    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != NULL )
+    {
+      while (dx < KSPREAD_CLUSTER_LEVEL2)
+      {
+
+        if ( m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx]
+             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != NULL )
+        {
+          return m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx ]
+            [ dy*KSPREAD_CLUSTER_LEVEL2 + dx];
+        }
+        dx++;
+      }
+    }
+    cx++;
+    dx = 0;
+  }
+  return NULL;
+}
+
 /****************************************************
  *
  * KSpreadColumnCluster
