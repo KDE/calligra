@@ -18,7 +18,6 @@
 
 #include <qpoint.h>
 #include <qrect.h>
-#include <qpoint.h>
 #include <qsize.h>
 
 #include "command.h"

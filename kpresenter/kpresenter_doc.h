@@ -67,6 +67,7 @@ class KPresenterView_impl;
 
 #include "movecmd.h"
 #include "insertcmd.h"
+#include "deletecmd.h"
 #include "commandhistory.h"
 
 #include <komlParser.h>

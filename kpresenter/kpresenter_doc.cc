@@ -1404,7 +1404,6 @@ KPObject* KPresenterDocument_impl::getSelectedObj()
 /*======================= delete objects =========================*/
 void KPresenterDocument_impl::deleteObjs()
 {
-  bool changed = false;
   KPObject *kpobject = 0;
   
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
@@ -1412,14 +1411,14 @@ void KPresenterDocument_impl::deleteObjs()
       kpobject = objectList()->at(i);
       if (kpobject->isSelected())
 	{
-	  kpobject->removeFromObjList();
-	  _objectList.take(i--);
-	  changed = true;
+	  DeleteCmd *deleteCmd = new DeleteCmd(i18n("Delete object(s)"),kpobject,this);
+	  deleteCmd->execute();
+	  _commands.addCommand(deleteCmd);
+	  i--;
 	}
     }
  
   m_bModified = true;
-  if (changed) repaint(false);
 }
 
 /*========================== copy objects ========================*/

@@ -10,14 +10,14 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Insert Command (header)                                */
+/* Module: Delete Command (header)                                */
 /******************************************************************/
 
-#ifndef insertcmd_h
-#define insertcmd_h
+#ifndef deletecmd_h
+#define deletecmd_h
 
-#include <qpoint.h>
 #include <qrect.h>
+#include <qpoint.h>
 #include <qsize.h>
 
 #include "command.h"
@@ -26,22 +26,22 @@
 class KPresenterDocument_impl;
 
 /******************************************************************/
-/* Class: InsertCmd                                               */
+/* Class: DeleteCmd                                               */
 /******************************************************************/
 
-class InsertCmd : public Command
+class DeleteCmd : public Command
 {
   Q_OBJECT
 
 public:
-  InsertCmd(QString _name,KPObject *_object,KPresenterDocument_impl *_doc);
-  ~InsertCmd();
+  DeleteCmd(QString _name,KPObject *_object,KPresenterDocument_impl *_doc);
+  ~DeleteCmd();
   
   virtual void execute();
   virtual void unexecute();
 
 protected:
-  InsertCmd()
+  DeleteCmd()
     {;}
 
   KPObject *object;
