@@ -168,8 +168,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 
 		m_bScrolling = false;
 
-		p->blit( rect );
 	}
+	p->blit( rect );
 
 	// draw handle:
 	QPainter qpainter( p->device() );
@@ -181,6 +181,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
 	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
+	//bitBlt( this, QPoint( rect.x(), rect.y() - 20 ), p->device(), rect );
 }
 
 void

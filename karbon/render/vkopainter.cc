@@ -161,12 +161,12 @@ VKoPainter::blit( const QRect &r )
 	int x		= QMAX( 0, r.x() );
 	int y		= QMAX( 0, r.y() );
 	int width	= QMIN( m_width, r.x() + r.width() );
-	int height	= QMIN( m_height, r.x() + r.height() );
+	int height	= QMIN( m_height, r.y() + r.height() );
 	/*kdDebug() << "!!!x : " << x << endl;
 	kdDebug() << "!!!y : " << y << endl;
 	kdDebug() << "!!!width : " << width << endl;
 	kdDebug() << "!!!height : " << height << endl;*/
-	xlib_draw_rgb_32_image( m_target->handle(), gc, x, y, width - x, height,
+	xlib_draw_rgb_32_image( m_target->handle(), gc, x, y, width - x, height - y,
 							XLIB_RGB_DITHER_NONE, m_buffer + (x * 4) + (y * m_width * 4), m_width * 4 );
 }
 
