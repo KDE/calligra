@@ -662,7 +662,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
           else
             cell->setValue( false );
           ok = true;
-          cell->setFormatType( KSpreadFormat::CustomBoolean );
+          cell->setFormatType( KSpreadFormat::Custom );
         }
         else if ( type == "date" )
         {
@@ -742,7 +742,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
             // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
             // cell->setValue( kval );
             cell->setValue( QTime( hours % 24, minutes, seconds ) );
-            cell->setFormatType( KSpreadFormat::CustomTime );
+            cell->setFormatType( KSpreadFormat::Custom );
           }
         }
 
@@ -1421,17 +1421,17 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
   bool negRed = false;
 
   if ( element->tagName() == "number:time-style" )
-    formatType = KSpreadFormat::CustomTime;
+    formatType = KSpreadFormat::Custom;
   else if ( element->tagName() == "number:date-style" )
-    formatType = KSpreadFormat::CustomDate;
+    formatType = KSpreadFormat::Custom;
   else if ( element->tagName() == "number:percentage-style" )
-    formatType = KSpreadFormat::CustomPercentage;
+    formatType = KSpreadFormat::Custom;
   else if ( element->tagName() == "number:number-style" )
-    formatType = KSpreadFormat::CustomNumber;
+    formatType = KSpreadFormat::Custom;
   else if ( element->tagName() == "number:currency-style" )
-    formatType = KSpreadFormat::CustomCurrency;
+    formatType = KSpreadFormat::Custom;
   else if ( element->tagName() == "number:boolean-style" )
-    formatType = KSpreadFormat::CustomBoolean;
+    formatType = KSpreadFormat::Custom;
 
   if ( !e.isNull() )
     format = new QString();
@@ -1653,7 +1653,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       for ( i = 0; i < exp; ++i )
         format->append( '0' );
 
-      formatType = KSpreadFormat::CustomScientific;
+      formatType = KSpreadFormat::Custom;
     }
     else
     if ( e.tagName() == "number:fraction" )
