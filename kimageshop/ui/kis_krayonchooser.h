@@ -23,7 +23,7 @@
  */
 
 #ifndef __kis_krayonchooser_h__
-#define __kis_krayonnchooser_h__
+#define __kis_krayonchooser_h__
 
 #include <qlist.h>
 #include <qwidget.h>
