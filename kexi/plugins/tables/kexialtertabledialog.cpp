@@ -63,7 +63,8 @@ void KexiAlterTableDialog::init()
 {
 	KexiTableViewData *data = new KexiTableViewData();
 	data->setInsertingEnabled( false );
-	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text);
+	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text, 
+		KexiDB::Field::PrimaryKey);
 	col->setValidator( new Kexi::IdentifierValidator() );
 
 	data->addColumn( col );
