@@ -534,7 +534,9 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
     _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
     _painter->setPen( QPen::NoPen );
     _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
-    _painter->setRasterOp( Qt::NotXorROP );
+    //Laurent remove this line otherwise mode == SM_HEADERFOOTER is not
+    //drawed correctly
+    /*_painter->setRasterOp( Qt::NotXorROP );*/
 
     KoRect r = rotateRectObject(_zoomHandler );
     int x = _zoomHandler->zoomItX( r.left() - orig.x());
@@ -568,6 +570,7 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
         y= y + 1;
         zX6=zX6-2;
         zY6=zY6-2;
+
         QBrush brush=kapp->palette().color( QPalette::Active,QColorGroup::Base );
         _painter->fillRect( x, y,  zX6, zY6, brush );
         _painter->fillRect( x, y + h / 2, zX6, zY6, brush);
