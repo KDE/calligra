@@ -54,6 +54,12 @@ DCOPObject* KPFreehandObject::dcopObject()
     return dcop;
 }
 
+bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    kdDebug()<<"bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
+    return true;
+}
+
 QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )
 {
     return KPPointObject::save( doc, offset );

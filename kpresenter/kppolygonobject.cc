@@ -79,6 +79,7 @@ DCOPObject* KPPolygonObject::dcopObject()
 bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter )
 {
     xmlWriter.startElement( "draw:polygon" );
+    kdDebug()<<"bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter ) not finished to implemented\n";
     //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
     //save object name and other generic attribute
     //KPObject::saveOasis( xmlWriter );

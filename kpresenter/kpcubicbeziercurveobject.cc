@@ -60,6 +60,14 @@ DCOPObject* KPCubicBezierCurveObject::dcopObject()
     return dcop;
 }
 
+bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    kdDebug()<<"bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
+    //todo
+    return true;
+}
+
+
 QDomDocumentFragment KPCubicBezierCurveObject::save( QDomDocument& doc, double offset )
 {
     return KPPointObject::save( doc,offset );
@@ -68,7 +76,7 @@ QDomDocumentFragment KPCubicBezierCurveObject::save( QDomDocument& doc, double o
 double KPCubicBezierCurveObject::load(const QDomElement &element)
 {
     double offset = KPPointObject::load( element );
-    
+
     allPoints = getCubicBezierPointsFrom( points );
 
     return offset;

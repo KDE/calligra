@@ -101,6 +101,12 @@ void KPAutoformObject::setFillType( FillType _fillType )
     }
 }
 
+bool KPAutoformObject::saveOasis( KoXmlWriter & xmlWriter )
+{
+    kdDebug()<<"bool KPAutoformObject::saveOasis( KoXmlWriter & xmlWriter ) not implemented\n";
+    return true;
+}
+
 QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);

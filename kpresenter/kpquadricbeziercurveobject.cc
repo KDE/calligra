@@ -60,6 +60,13 @@ KPQuadricBezierCurveObject &KPQuadricBezierCurveObject::operator=( const KPQuadr
     return *this;
 }
 
+bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    kdDebug()<<"bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
+    //todo
+    return true;
+}
+
 QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, double offset )
 {
     return KPPointObject::save( doc, offset );
@@ -156,7 +163,7 @@ KoPointArray KPQuadricBezierCurveObject::getQuadricBezierPointsFrom( const KoPoi
 void KPQuadricBezierCurveObject::flip( bool horizontal )
 {
     KPPointObject::flip( horizontal );
-    
+
     KoPointArray tmpPoints;
     int index = 0;
     if ( horizontal )

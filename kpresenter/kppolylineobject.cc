@@ -72,6 +72,7 @@ bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter )
     //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
     //save object name and other generic attribute
     //KPObject::saveOasis( xmlWriter );
+    kdDebug()<<"bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter ) not finished to implemented\n";
     saveOasisPosObject(xmlWriter );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );

@@ -25,6 +25,7 @@
 
 class QPainter;
 class DCOPObject;
+class KoXmlWriter;
 
 class KPFreehandObject : public KPPointObject
 {
@@ -42,6 +43,8 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
     virtual double load( const QDomElement &element );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter );
+
 };
 
 #endif
