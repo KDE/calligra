@@ -4607,14 +4607,25 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
     if ( !m_lSize )
     {
           m_lSize = new QLabel( m_pCanvas );
-          m_lSize->setGeometry( 3, y + 3, len + 2, hei + 2 );
+
+          if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+            m_lSize->setGeometry( m_pCanvas->width() - len - 5,
+                                                  y + 3, len + 2, hei + 2 );
+          else
+            m_lSize->setGeometry( 3, y + 3, len + 2,hei + 2 );
+
           m_lSize->setAlignment( Qt::AlignVCenter );
           m_lSize->setText( tmpSize );
           m_lSize->show();
     }
     else
     {
-          m_lSize->setGeometry( 3, y + 3, len + 2, hei + 2 );
+          if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+            m_lSize->setGeometry( m_pCanvas->width() - len - 5,
+                                                  y + 3, len + 2, hei + 2 );
+          else
+            m_lSize->setGeometry( 3, y + 3, len + 2,hei + 2 );
+
           m_lSize->setText( tmpSize );
     }
 }
@@ -4962,25 +4973,16 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         double x;
 
         if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-        {
-          ev_PosX = dWidth - m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) - m_pCanvas->xOffset();
-          x = table->dblColumnPos( m_iResizedColumn );
-
-          if ( dWidth - ev_PosX - x <= 0.0 )
-            width = 0.0;
-          else
-            width = ev_PosX - x;
-        }
+          ev_PosX = dWidth - m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
         else
-        {
           ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
-          x = table->dblColumnPos( m_iResizedColumn );
 
-          if ( ev_PosX - x <= 0.0 )
-            width = 0.0;
-          else
-            width = ev_PosX - x;
-        }
+        x = table->dblColumnPos( m_iResizedColumn );
+
+        if ( ev_PosX - x <= 0.0 )
+          width = 0.0;
+        else
+          width = ev_PosX - x;
 
         if ( !table->isProtected() )
         {
@@ -5186,7 +5188,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   double dWidth = m_pCanvas->doc()->unzoomItX( width() );
   double ev_PosX;
   if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-    ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) - m_pCanvas->xOffset();
+    ev_PosX = dWidth - m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   else
     ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
 
@@ -5200,12 +5202,8 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   else if ( m_bSelection )
   {
     double x;
-    int col;
+    int col = table->leftColumn( ev_PosX, x );
 
-    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-      col = table->leftColumn( dWidth - ev_PosX, x );
-    else
-      col = table->leftColumn( ev_PosX, x );
     if ( col > KS_colMax )
       return;
 
@@ -5243,22 +5241,21 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     {
       int tmpCol = table->leftColumn( m_pCanvas->xOffset(), x );
 
-      x = dWidth - x;
-      while ( ev_PosX < x )
+      while ( ev_PosX > x )
       {
         double w = table->columnFormat( tmpCol )->dblWidth();
+        ++tmpCol;
 
         //if col is hide and it's the first column
         //you mustn't resize it.
-        if ( ev_PosX >= x - w - unzoomedPixel &&
-             ev_PosX <= x - w + unzoomedPixel &&
+        if ( ev_PosX >= x + w - unzoomedPixel &&
+             ev_PosX <= x + w + unzoomedPixel &&
              !( table->columnFormat( tmpCol )->isHide() && tmpCol == 0 ) )
         {
           setCursor( splitHCursor );
           return;
         }
-        x -= w;
-        tmpCol++;
+        x += w;
       }
       setCursor( arrowCursor );
     }
@@ -5326,12 +5323,26 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     if ( !firstTime )
       painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
 
-    m_iResizePos = mouseX;
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+      m_iResizePos = mouseX + m_pCanvas->width() - width();
+    else
+      m_iResizePos = mouseX;
 
     // Dont make the column have a width < 2 pixels.
     int x = m_pCanvas->doc()->zoomItX( table->dblColumnPos( m_iResizedColumn ) - m_pCanvas->xOffset() );
-    if ( m_iResizePos < x + 2 )
-        m_iResizePos = x;
+
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+    {
+      x = m_pCanvas->width() - x;
+
+      if ( m_iResizePos > x - 2 )
+          m_iResizePos = x;
+    }
+    else
+    {
+      if ( m_iResizePos < x + 2 )
+          m_iResizePos = x;
+    }
 
     painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
 
@@ -5340,7 +5351,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     QString tmpSize;
     if ( m_iResizePos != x )
         tmpSize = i18n("Width: %1 %2")
-                  .arg( KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItX( m_iResizePos - x ),
+                  .arg( KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItX( (table->layoutDirection()==KSpreadSheet::RightToLeft) ? x - m_iResizePos : m_iResizePos - x ),
                                                                            m_pView->doc()->getUnit() )))
                   .arg( m_pView->doc()->getUnitName() );
     else
@@ -5354,14 +5365,23 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     if ( !m_lSize )
     {
         m_lSize = new QLabel( m_pCanvas );
-        m_lSize->setGeometry( x + 3, 3, len + 2, hei + 2 );
+
+        if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+          m_lSize->setGeometry( x - len - 5, 3, len + 2, hei + 2 );
+        else
+          m_lSize->setGeometry( x + 3, 3, len + 2, hei + 2 );
+
         m_lSize->setAlignment( Qt::AlignVCenter );
         m_lSize->setText( tmpSize );
         m_lSize->show();
     }
     else
     {
-        m_lSize->setGeometry( x + 3, 3, len + 2, hei + 2 );
+        if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+          m_lSize->setGeometry( x - len - 5, 3, len + 2, hei + 2 );
+        else
+          m_lSize->setGeometry( x + 3, 3, len + 2, hei + 2 );
+
         m_lSize->setText( tmpSize );
     }
 }
