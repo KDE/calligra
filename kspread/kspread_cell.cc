@@ -1720,7 +1720,7 @@ bool KSpreadCell::calc(bool delay)
   if ( m_strFormulaOut != m_strOutText )
   {
     setFlag(Flag_UpdatingDeps);
-    
+
     KSpreadDependency * d = 0;
     // Every cell that references us must calculate with this new value
     for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
@@ -4301,17 +4301,28 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
         bool ok = false;
         m_dValue = t.toDouble(&ok); // We save in non-localized format
         if ( !ok )
+	{
           kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
-        if ( formatType() == Percentage )
+	}
+	/* We will need to localize the text version of the number */
+	KLocale* locale = m_pTable->doc()->locale();
+
+        /* KLocale::formatNumber requires the precision we want to return.
+        */
+        int precision = t.length() - t.find('.') - 1;
+
+	if ( formatType() == Percentage )
         {
           setFactor(100.0); // should have been already done by loadLayout
-          if (ok)
-            t = QString::number(m_dValue * m_dFactor, 'g', DBL_DIG);
-          m_strText = pasteOperation( t, m_strText, op );
+          t = locale->formatNumber(m_dValue * m_dFactor, precision);
+	  m_strText = pasteOperation( t, m_strText, op );
           m_strText += '%';
         }
         else
-          m_strText = pasteOperation( t, m_strText, op );
+	{
+          t = locale->formatNumber(m_dValue, precision);
+	  m_strText = pasteOperation( t, m_strText, op );
+	}
 
         break;
       }
