@@ -90,7 +90,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 
     m_tmpHelpPoint = -1;
     tmpHelpPointPos = KoPoint( -1, -1);
-
+    m_keyPressEvent = false;
     if ( parent ) {
         mousePressed = false;
 	drawContour = false;
@@ -1966,34 +1966,52 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             int offsetx=QMAX(1,m_view->zoomHandler()->zoomItX(10));
             int offsety=QMAX(1,m_view->zoomHandler()->zoomItY(10));
             m_hotSpot = KoPoint(0,0);
+            if ( !m_keyPressEvent )
+            {
+                firstX = m_view->zoomHandler()->zoomItX(m_boundingRect.x());
+                firstY = m_view->zoomHandler()->zoomItY(m_boundingRect.y());
+            }
 	    switch ( e->key() ) {
 	    case Key_Up:
-		moveObject( 0, -offsety, true );
+                m_keyPressEvent = true;
+		moveObject( 0, -offsety, false );
 		break;
 	    case Key_Down:
-		moveObject( 0, offsety, true );
+                m_keyPressEvent = true;
+		moveObject( 0, offsety, false );
 		break;
 	    case Key_Right:
-		moveObject( offsetx, 0, true );
+                m_keyPressEvent = true;
+		moveObject( offsetx, 0, false );
 		break;
 	    case Key_Left:
-		moveObject( -offsetx, 0, true );
+                m_keyPressEvent = true;
+		moveObject( -offsetx, 0, false );
 		break;
 	    default: break;
 	    }
 	} else {
+            if ( !m_keyPressEvent )
+            {
+                firstX = m_view->zoomHandler()->zoomItX(m_boundingRect.x());
+                firstY = m_view->zoomHandler()->zoomItY(m_boundingRect.y());
+            }
 	    switch ( e->key() ) {
 	    case Key_Up:
-		moveObject( 0, -1, true );
+                m_keyPressEvent = true;
+		moveObject( 0, -1, false );
 		break;
 	    case Key_Down:
-		moveObject( 0, 1, true );
+                m_keyPressEvent = true;
+		moveObject( 0, 1, false );
 		break;
 	    case Key_Right:
-		moveObject( 1, 0, true );
+                m_keyPressEvent = true;
+		moveObject( 1, 0, false );
 		break;
 	    case Key_Left:
-		moveObject( -1, 0, true );
+                m_keyPressEvent = true;
+		moveObject( -1, 0, false );
 		break;
 	    case Key_Delete: case Key_Backspace:
 		m_view->editDelete();
@@ -2056,7 +2074,33 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
         if ( mouseSelectedObject )
         {
             if(e->key()==Key_Up || e->key()==Key_Down || e->key()==Key_Right || e->key()==Key_Left)
+            {
+                if ( !e->isAutoRepeat() )
+                {
+                    KMacroCommand *macro=new KMacroCommand(i18n("Move object(s)"));
+                    bool cmdCreate=false;
+                    int x=(m_view->zoomHandler()->zoomItX(m_boundingRect.x()) - firstX);
+                    int y=(m_view->zoomHandler()->zoomItY(m_boundingRect.y()) - firstY);
+                    KCommand *cmd=m_activePage->moveObject(m_view,x,y);
+                    if(cmd)
+                    {
+                        macro->addCommand(cmd);
+                        cmdCreate=true;
+                    }
+                    cmd=stickyPage()->moveObject(m_view,x,y);
+                    if(cmd)
+                    {
+                        macro->addCommand(cmd);
+                        cmdCreate=true;
+                    }
+                    if(cmdCreate)
+                        m_view->kPresenterDoc()->addCommand(macro );
+                    else
+                        delete macro;
+                    m_keyPressEvent = false;
+                }
                 emit objectSelectedChanged();
+            }
         }
     }
 }

@@ -506,6 +506,8 @@ private:
     int m_tmpVertHelpline;
     double tmpHelpLinePosX;
     double tmpHelpLinePosY;
+
+    bool m_keyPressEvent;
 };
 
 #endif //PAGE_H
