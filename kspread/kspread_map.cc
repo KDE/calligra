@@ -94,10 +94,14 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   QDomElement mymap = doc.createElement( "map" );
   // Save visual info for the first view, such as active table and active cell
   // It looks like a hack, but reopening a document creates only one view anyway (David)
-  KSpreadCanvas * canvas = static_cast<KSpreadView*>(this->doc()->firstView())->canvasWidget();
-  mymap.setAttribute( "activeTable", canvas->activeTable()->name() );
-  mymap.setAttribute( "markerColumn", canvas->markerColumn() );
-  mymap.setAttribute( "markerRow", canvas->markerRow() );
+  KSpreadView * view = static_cast<KSpreadView*>(this->doc()->firstView());
+  if ( view ) // no view if embedded document
+  {
+    KSpreadCanvas * canvas = view->canvasWidget();
+    mymap.setAttribute( "activeTable", canvas->activeTable()->name() );
+    mymap.setAttribute( "markerColumn", canvas->markerColumn() );
+    mymap.setAttribute( "markerRow", canvas->markerRow() );
+  }
 
   QListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
