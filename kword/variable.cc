@@ -27,10 +27,6 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-#include <strstream>
-#include <fstream>
-#include <unistd.h>
-
 /******************************************************************/
 /* Class: KWVariablePgNumFormat                                   */
 /******************************************************************/
@@ -167,27 +163,27 @@ KWVariable::~KWVariable()
 }
 
 /*================================================================*/
-void KWVariable::save( QTextStream&out )
+void KWVariable::save( QDomElement &parentElem )
 {
-    out << indent << "<TYPE type=\"" << static_cast<int>( getType() ) << "\"/>" << endl;
-    out << indent << "<POS frameSet=\"" << frameSetNum << "\" frame=\"" << frameNum
-        << "\" pageNum=\"" << pageNum << "\"/>" << endl;
+    QDomElement typeElem = parentElem.ownerDocument().createElement( "TYPE" );
+    parentElem.appendChild( typeElem );
+    typeElem.setAttribute( "type", static_cast<int>( getType() ) );
+    QDomElement posElem = parentElem.ownerDocument().createElement( "POS" );
+    parentElem.appendChild( typeElem );
+    typeElem.setAttribute( "frameSet", frameSetNum );
+    typeElem.setAttribute( "frame", frameNum );
+    typeElem.setAttribute( "pageNum", pageNum );
 }
 
 /*================================================================*/
-void KWVariable::load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst )
+void KWVariable::load( QDomElement & elem )
 {
-    if ( name == "POS" ) {
-        parser.parseTag( tag, name, lst );
-        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-        for ( ; it != lst.end(); ++it ) {
-            if ( ( *it ).m_strName == "frameSet" )
-                frameSetNum = ( *it ).m_strValue.toInt();
-            else if ( ( *it ).m_strName == "frame" )
-                frameNum = ( *it ).m_strValue.toInt();
-            else if ( ( *it ).m_strName == "pgNum" )
-                pageNum = ( *it ).m_strValue.toInt();
-        }
+    QDomElement posElem = elem.namedItem("POS").toElement();
+    if (!posElem.isNull())
+    {
+        frameSetNum = posElem.attribute( "frameSet" ).toInt();
+        frameNum = posElem.attribute( "frame" ).toInt();
+        pageNum = posElem.attribute( "pgNum" ).toInt();
     }
 }
 
@@ -196,24 +192,22 @@ void KWVariable::load( KOMLParser& parser, QString name, const QString &tag, QVa
 /******************************************************************/
 
 /*================================================================*/
-void KWPgNumVariable::save( QTextStream&out )
+void KWPgNumVariable::save( QDomElement& parentElem )
 {
-    KWVariable::save( out );
-    out << indent << "<PGNUM value=\"" << pgNum << "\"/>" << endl;
+    KWVariable::save( parentElem );
+    QDomElement pgNumElem = parentElem.ownerDocument().createElement( "PGNUM" );
+    parentElem.appendChild( pgNumElem );
+    pgNumElem.setAttribute( "value", pgNum );
 }
 
 /*================================================================*/
-void KWPgNumVariable::load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst )
+void KWPgNumVariable::load( QDomElement& elem )
 {
-    KWVariable::load( parser, name, tag, lst );
-
-    if ( name == "PGNUM" ) {
-        parser.parseTag( tag, name, lst );
-        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-        for ( ; it != lst.end(); ++it ) {
-            if ( ( *it ).m_strName == "value" )
-                pgNum = ( *it ).m_strValue.toInt();
-        }
+    KWVariable::load( elem );
+    QDomElement pgNumElem = elem.namedItem( "PGNUM" );
+    if (!pgNumElem.isNull())
+    {
+        pgNum = pgNumElem.attribute("value").toInt();
     }
 }
 
@@ -239,33 +233,32 @@ void KWDateVariable::recalc()
 }
 
 /*================================================================*/
-void KWDateVariable::save( QTextStream&out )
+void KWDateVariable::save( QDomElement& parentElem )
 {
-    KWVariable::save( out );
-    out << indent << "<DATE year=\"" << date.year() << "\" month=\"" << date.month()
-        << "\" day=\"" << date.day() << "\" fix=\"" << static_cast<int>( fix ) << "\"/>" << endl;
+    KWVariable::save( parentElem );
+    
+    QDomElement elem = parentElem.ownerDocument().createElement( "DATE" );
+    parentElem.appendChild( elem );
+    elem.setAttribute( "year", date.year() );
+    elem.setAttribute( "month", date.month() );
+    elem.setAttribute( "day", date.day() );
+    elem.setAttribute( "fix", static_cast<int>( fix ) );
 }
 
 /*================================================================*/
-void KWDateVariable::load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst )
+void KWDateVariable::load( QDomElement& elem )
 {
-    KWVariable::load( parser, name, tag, lst );
+    KWVariable::load( elem );
 
     int y, m, d;
 
-    if ( name == "DATE" ) {
-        parser.parseTag( tag, name, lst );
-        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-        for ( ; it != lst.end(); ++it ) {
-            if ( ( *it ).m_strName == "year" )
-                y = ( *it ).m_strValue.toInt();
-            else if ( ( *it ).m_strName == "month" )
-                m = ( *it ).m_strValue.toInt();
-            else if ( ( *it ).m_strName == "day" )
-                d = ( *it ).m_strValue.toInt();
-            else if ( ( *it ).m_strName == "fix" )
-                fix = static_cast<bool>( ( *it ).m_strValue.toInt() );
-        }
+    QDomElement e = elem.namedItem( "DATE" );
+    if (!e.isNull())
+    {
+        y = e.attribute("year").toInt();
+        m = e.attribute("month").toInt();
+        d = e.attribute("day").toInt();
+        fix = static_cast<bool>( e.attribute("fix").toInt() );
     }
 
     if ( fix )
@@ -296,36 +289,33 @@ void KWTimeVariable::recalc()
 }
 
 /*================================================================*/
-void KWTimeVariable::save( QTextStream&out )
+void KWTimeVariable::save( QDomElement& parentElem )
 {
-    KWVariable::save( out );
-    out << indent << "<TIME hour=\"" << time.hour() << "\" minute=\"" << time.minute()
-        << "\" second=\"" << time.second() << "\" msecond=\"" << time.msec()
-        << "\" fix=\"" << static_cast<int>( fix ) << "\"/>" << endl;
+    KWVariable::save( parentElem );
+    
+    QDomElement elem = parentElem.ownerDocument().createElement( "TIME" );
+    parentElem.appendChild( elem );
+    elem.setAttribute( "hour", time.hour() );
+    elem.setAttribute( "minute", time.minute() );
+    elem.setAttribute( "second", time.second() );
+    elem.setAttribute( "msecond", time.msec() );
+    elem.setAttribute( "fix", static_cast<int>( fix ) );
 }
 
 /*================================================================*/
-void KWTimeVariable::load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst )
+void KWTimeVariable::load( QDomElement& elem )
 {
-    KWVariable::load( parser, name, tag, lst );
+    KWVariable::load( elem );
 
     int h, m, s, ms;
-
-    if ( name == "TIME" ) {
-        parser.parseTag( tag, name, lst );
-        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-        for( ; it != lst.end(); ++it ) {
-            if ( ( *it ).m_strName == "hour" )
-                h = ( *it ).m_strValue.toInt();
-            else if ((*it).m_strName == "minute")
-                m = ( *it ).m_strValue.toInt();
-            else if ( ( *it ).m_strName == "second" )
-                s = ( *it ).m_strValue.toInt();
-            else if ( ( *it ).m_strName == "msecond" )
-                ms = ( *it ).m_strValue.toInt();
-            else if ( ( *it ).m_strName == "fix" )
-                fix = static_cast<bool>( ( *it ).m_strValue.toInt() );
-        }
+    QDomElement e = elem.namedItem( "TIME" );
+    if (!e.isNull())
+    {
+        h = e.attribute("hour").toInt();
+        m = e.attribute("minute").toInt();
+        s = e.attribute("second").toInt();
+        ms = e.attribute("msecond").toInt();
+        fix = static_cast<bool>( e.attribute("fix").toInt() );
     }
 
     if ( fix )
@@ -353,29 +343,27 @@ void KWCustomVariable::recalc()
 }
 
 /*================================================================*/
-void KWCustomVariable::save( QTextStream&out )
+void KWCustomVariable::save( QDomElement& parentElem )
 {
-    KWVariable::save( out );
-    out << indent << "<CUSTOM name=\"" << correctQString( name ) << "\" value=\""
-        << correctQString( getValue() ) << "\"/>" << endl;
+    KWVariable::save( parentElem );
+    QDomElement elem = parentElem.ownerDocument().createElement( "CUSTOM" );
+    parentElem.appendChild( elem );
+    elem.setAttribute( "name", correctQString( name ) );
+    elem.setAttribute( "value", correctQString( getValue() ) );
 }
 
 /*================================================================*/
-void KWCustomVariable::load( KOMLParser& parser, QString name_, const QString &tag, QValueList<KOMLAttrib>& lst )
+void KWCustomVariable::load( QDomElement& elem )
 {
     doc->unregisterVariable( this );
     doc->registerVariable( this );
     recalc();
-    KWVariable::load( parser, name_, tag, lst );
-    if ( name_ == "CUSTOM" ) {
-        parser.parseTag( tag, name_, lst );
-        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-        for(  ; it != lst.end(); ++it ) {
-            if ( ( *it ).m_strName == "name" )
-                name = ( *it ).m_strValue;
-            else if ( (*it).m_strName == "value" )
-                setValue( ( *it ).m_strValue );
-        }
+    KWVariable::load( elem );
+    QDomElement e = elem.namedItem( "CUSTOM" ).toElement();
+    if (!e.isNull())
+    {
+        name = e.attribute( "name" );
+        setValue( e.attribute( "value" ) );
     }
 }
 
@@ -414,26 +402,22 @@ void KWSerialLetterVariable::recalc()
 }
 
 /*================================================================*/
-void KWSerialLetterVariable::save( QTextStream&out )
+void KWSerialLetterVariable::save( QDomElement& parentElem )
 {
-    KWVariable::save( out );
-    out << indent << "<SERIALLETTER name=\"" << correctQString( name )
-        << "\"/>" << endl;
+    KWVariable::save( parentElem );
+    QDomElement elem = parentElem.ownerDocument().createElement( "SERIALLETTER" );
+    parentElem.appendChild( elem );
+    elem.setAttribute( "name", correctQString( name ) );
 }
 
 /*================================================================*/
-void KWSerialLetterVariable::load( KOMLParser& parser, QString name_, const QString &tag, QValueList<KOMLAttrib>& lst )
+void KWSerialLetterVariable::load( QDomElement& elem )
 {
     recalc();
-    KWVariable::load( parser, name_, tag, lst );
-    if ( name_ == "SERIALLETTER" ) {
-        parser.parseTag( tag, name_, lst );
-        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-        for (  ; it != lst.end(); ++it ) {
-            if ( ( *it ).m_strName == "name" )
-                name = ( *it ).m_strValue;
-        }
-    }
+    KWVariable::load( elem );
+    QDomElement e = elem.namedItem( "SERIALLETTER" ).toElement();
+    if (!e.isNull())
+        name = e.attribute( "name" );
 }
 
 /*================================================================*/

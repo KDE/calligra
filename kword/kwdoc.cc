@@ -840,10 +840,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     m_pages = 1;
 
-    //QString tag;
-    //QValueList<KOMLAttrib> lst;
-    //QString name;
-
     KoPageLayout __pgLayout;
     __pgLayout.unit = PG_MM;
     KoColumns __columns;
@@ -965,18 +961,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 #if 0
         else if ( name == "FOOTNOTEMGR" ) {
             parser.parseTag( tag, name, lst );
-            //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            //for( ; it != lst.end(); ++it ) {
-            //}
             footNoteManager.load( parser, lst );
         }
 #endif
 /*
         else if ( name == "SERIALL" ) {
             parser.parseTag( tag, name, lst );
-            //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            //for( ; it != lst.end(); ++it ) {
-            //}
             slDataBase->load( parser, lst );
         } */
 

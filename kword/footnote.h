@@ -59,8 +59,8 @@ public:
     NoteType getNoteType() const { return noteType; }
     void setNoteType( NoteType nt ) { noteType = nt; }
 
-    void save( QTextStream&out );
-    void load( KOMLParser&, QValueList<KOMLAttrib>& );
+    void save( QDomElement& parentElem );
+    void load( QDomElement& elem );
 
 protected:
     void addFootNoteText( KWFootNote *fn );
@@ -116,8 +116,8 @@ public:
 
     void destroy();
 
-    void save( QTextStream&out );
-    void load( QString name, QString tag, KOMLParser &parser, QValueList<KOMLAttrib>& lst );
+    void save( QDomElement& parentElem );
+    void load( QDomElement& elem );
 
 protected:
     void makeText();

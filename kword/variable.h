@@ -192,8 +192,8 @@ public:
 
     virtual void recalc() {}
 
-    virtual void save( QTextStream&out );
-    virtual void load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
 
 protected:
     KWDocument *doc;
@@ -226,8 +226,8 @@ public:
     virtual void recalc() { pgNum = pageNum; }
     long unsigned int getPgNum() const { return pgNum; }
 
-    virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
 
 protected:
     long unsigned int pgNum;
@@ -259,8 +259,8 @@ public:
     QDate getDate() const { return date; }
     void setDate( QDate _date ) { date = _date; }
 
-    virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
 
 protected:
     QDate date;
@@ -293,8 +293,8 @@ public:
     QTime getTime() const { return time; }
     void setTime( QTime _time ) { time = _time; }
 
-    virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&,  QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
 
 protected:
     QTime time;
@@ -324,8 +324,8 @@ public:
 
     virtual void recalc();
 
-    virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
 
     virtual QString getName() const;
     virtual QString getValue() const;
@@ -359,8 +359,8 @@ public:
 
     virtual void recalc();
 
-    virtual void save( QTextStream&out );
-    virtual void load( KOMLParser&, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
 
     virtual QString getName() const;
     virtual QString getValue() const;

@@ -621,9 +621,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     frameResized = TRUE;
 }
 
-void KWCanvas::mmEditFrameMove( int mx, int my )
+void KWCanvas::mmEditFrameMove( int & mx, int & my )
 {
-    if ( mx != oldMx || my != oldMy ) {
         QList<KWTableFrameSet> undos, updates;
         undos.setAutoDelete( FALSE );
         updates.setAutoDelete( FALSE );
@@ -648,13 +647,14 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                         QRect oldRect( *frame );
                         int page = doc->getPageOfRect( *frame );
                         // Move the frame
-                        frame->moveBy( static_cast<int>((mx - oldMx) / doc->zoomedResolutionX()),
-                                       static_cast<int>((my - oldMy) / doc->zoomedResolutionY()) );
+                        frame->setX( static_cast<int>((double)mx / doc->zoomedResolutionX()) );
+                        frame->setY( static_cast<int>((double)my / doc->zoomedResolutionY()) );
                         // But not out of the page it was on initially
                         if ( doc->isOutOfPage( *frame, page ) )
                         {
                             frame->setRect( oldRect.x(), oldRect.y(), oldRect.width(), oldRect.height() );
-                            QCursor::setPos( oldMx, oldMy );
+                            mx = oldMx; my = oldMy;
+                            QCursor::setPos( viewport()->mapToGlobal( QPoint( oldMx, oldMy ) ) );
                         }
                         // Calculate new rectangle for this frame
                         QRect newRect( *frame );
@@ -722,7 +722,6 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         }
 #endif
 
-    }
 }
 
 void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
@@ -752,7 +751,7 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
     {
         m_insRect.setWidth( m_insRect.width() - (mx - oldMx) / doc->zoomedResolutionX() );
         m_insRect.setHeight( m_insRect.height() - (my - oldMy) / doc->zoomedResolutionY() );
-        QCursor::setPos( oldMx, oldMy );
+        QCursor::setPos( viewport()->mapToGlobal( QPoint( oldMx, oldMy ) ) );
     }
 
     drawMovingRect( p );
@@ -789,7 +788,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                 mx = ( mx / doc->gridX() ) * doc->gridX();
                 my = ( my / doc->gridY() ) * doc->gridY();
 
-                if ( viewport()->cursor().shape() == SizeAllCursor )
+                if ( viewport()->cursor().shape() == SizeAllCursor && ( mx != oldMx || my != oldMy ) )
                     mmEditFrameMove( mx, my );
                 deleteMovingRect = TRUE;
                 oldMx = mx; oldMy = my;

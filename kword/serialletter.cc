@@ -38,13 +38,6 @@
 #include "variabledlgs.h"
 #include "kwutils.h"
 
-#include <strstream>
-#include <fstream>
-
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
-
 /******************************************************************
  *
  * Class: KWSerialLetterDataBase
@@ -119,8 +112,9 @@ void KWSerialLetterDataBase::removeRecord( int i )
 }
 
 /*================================================================*/
-void KWSerialLetterDataBase::save( QTextStream&out )
+void KWSerialLetterDataBase::save( QDomElement& /*parentElem*/ )
 {
+#if 0
     out << otag << "<SAMPLE>" << endl;
 
     DbRecord::Iterator it = sampleRecord.begin();
@@ -142,14 +136,16 @@ void KWSerialLetterDataBase::save( QTextStream&out )
         out << etag << "</RECORD>" << endl;
     }
     out << etag << "</DB>" << endl;
+#endif
 }
 
 /*================================================================*/
-void KWSerialLetterDataBase::load( KOMLParser &parser, QValueList<KOMLAttrib> &lst )
+void KWSerialLetterDataBase::load( QDomElement& /*elem*/ )
 {
     db.clear();
     sampleRecord.clear();
 
+#if 0
     QString tag;
     QString name;
 
@@ -218,7 +214,7 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, QValueList<KOMLAttrib> &l
             return;
         }
     }
-
+#endif
 }
 
 /******************************************************************

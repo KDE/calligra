@@ -203,17 +203,20 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
 }
 
 /*================================================================*/
-void KWFootNoteManager::save( QTextStream&out )
+void KWFootNoteManager::save( QDomElement& /*parentElem*/ )
 {
+#if 0
     out << indent << "<START value=\"" << start << "\"/>" << endl;
     out << indent << "<FORMAT superscript=\"" << superscript
         << "\" type=\"" << static_cast<int>( noteType ) << "\"/>" << endl;
     out << indent << "<FIRSTPARAG ref=\"" << correctQString( firstParag ) << "\"/>" << endl;
+#endif
 }
 
 /*================================================================*/
-void KWFootNoteManager::load( KOMLParser &parser, QValueList<KOMLAttrib> &lst )
+void KWFootNoteManager::load( QDomElement& /*elem*/ )
 {
+#if 0
     QString tag;
     QString name;
 
@@ -253,6 +256,7 @@ void KWFootNoteManager::load( KOMLParser &parser, QValueList<KOMLAttrib> &lst )
             return;
         }
     }
+#endif
 }
 
 /******************************************************************/
@@ -434,8 +438,9 @@ void KWFootNote::destroy()
 }
 
 /*================================================================*/
-void KWFootNote::save( QTextStream&out )
+void KWFootNote::save( QDomElement& /*parentElem*/ )
 {
+#if 0
     out << otag << "<INTERNAL>" << endl;
     KWFootNoteInternal *fi = 0L;
     for ( fi = parts.first(); fi; fi = parts.next() )
@@ -445,11 +450,13 @@ void KWFootNote::save( QTextStream&out )
     out << indent << "<RANGE start=\"" << start << "\" end=\"" << end << "\"/>" << endl;
     out << indent << "<TEXT before=\"" << correctQString( before ) << "\" after=\"" << correctQString( after ) << "\"/>" << endl;
     out << indent << "<DESCRIPT ref=\"" << correctQString( parag ) << "\"/>" << endl;
+#endif
 }
 
 /*================================================================*/
-void KWFootNote::load( QString name, QString tag, KOMLParser &parser, QValueList<KOMLAttrib>& lst )
+void KWFootNote::load( QDomElement& /*elem*/ )
 {
+#if 0
     if ( name == "INTERNAL" ) {
         parser.parseTag( tag, name, lst );
         //QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
@@ -510,6 +517,7 @@ void KWFootNote::load( QString name, QString tag, KOMLParser &parser, QValueList
                 parag = correctQString( ( *it ).m_strValue );
         }
     }
+#endif
 
     makeText();
 }

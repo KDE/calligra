@@ -61,8 +61,8 @@ public:
         return (int)db.count();
     }
 
-    void save( QTextStream&out );
-    void load( KOMLParser&, QValueList<KOMLAttrib>& );
+    void save( QDomElement& parentElem );
+    void load( QDomElement& elem );
 
 protected:
     typedef QMap< QString, QString > DbRecord;
