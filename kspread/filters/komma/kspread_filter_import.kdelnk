@@ -27,4 +27,5 @@ ActivationMode=shared
 Type=OpenPart
 Icon=unknown.xpm
 MiniIcon=unknown.xpm
-ServiceType=KOfficeFilte
+ServiceType=KOfficeFilter
+
