@@ -6,6 +6,7 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib
 libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kptrelation.cc kptresource.cc kpttask.cc \
     kptduration.cc kptfactory.cc kptpart.cc kptview.cc \
+    kptdurationwidget.ui \
     kptprojectdialog.cc kptmainprojectdialog.cc kpttaskdialog.cc  \
     kptganttview.cc kptresourcespanel.cc \
     kptpertview.cc kptpertcanvas.cc kptrelationdialog.cc \
