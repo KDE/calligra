@@ -395,7 +395,7 @@ QDomDocument KChartPart::saveXML() {
   return doc;
 };
 
-bool KChartPart::loadXML( const QDomDocument& doc ) {
+bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc ) {
   kdDebug(35001) << "kchart loadXML called" << endl;
   // <spreadsheet>
   //  m_bLoading = true;
@@ -889,6 +889,9 @@ QFont KChartPart::toFont(QDomElement &element) const {
 
 /**
  * $Log$
+ * Revision 1.40  2000/07/14 12:31:01  faure
+ * Ported to new loadXML stuff
+ *
  * Revision 1.39  2000/07/13 11:48:08  faure
  * Don't do setRootDocument twice
  *

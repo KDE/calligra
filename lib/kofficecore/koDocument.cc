@@ -461,7 +461,7 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
         {
 	    // painter.setClipRegion( rgn );
 	  painter.setClipping( FALSE );
-	    
+	
 	  painter.setPen( black );
 	  painter.fillRect( -5, -5, w + 10, 5, white );
 	  painter.fillRect( -5, h, w + 10, 5, white );
@@ -489,7 +489,7 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
 	    painter.fillRect( -5, h / 2 - 3, 5, 5, color );
 	    painter.fillRect( w, h / 2 - 3, 5, 5, color );
 	  }
-	  
+	
 	  painter.setClipping( TRUE );
       }
   }
@@ -683,7 +683,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     in.at(0);
     QDomDocument doc;
     doc.setContent( &in );
-    bool res = loadXML( doc );
+    bool res = loadXML( &in, doc );
     if ( res )
       res = completeLoading( 0L );
 
@@ -707,7 +707,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
       KoStoreDevice dev( store );
       QDomDocument doc;
       doc.setContent( &dev );
-      if ( !loadXML( doc ) )
+      if ( !loadXML( &dev, doc ) )
       {
         delete store;
         QApplication::restoreOverrideCursor();
@@ -752,7 +752,7 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
     KoStoreDevice dev( _store );
     QDomDocument doc;
     doc.setContent( &dev );
-    if ( !loadXML( doc ) )
+    if ( !loadXML( &dev, doc ) )
       return false;
     _store->close();
   }

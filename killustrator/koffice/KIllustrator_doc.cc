@@ -67,7 +67,7 @@ KIllustratorDocument::~KIllustratorDocument()
     delete m_gdocument;
 }
 
-bool KIllustratorDocument::loadXML (const QDomDocument &doc)
+bool KIllustratorDocument::loadXML (QIODevice *, const QDomDocument &doc)
 {
   cout << "load KIllu from stream !!!!!!!!!" << endl;
   if ( m_gdocument->readFromXml (doc)) {

@@ -237,7 +237,7 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
     return m_pMap->loadChildren( _store );
 }
 
-bool KSpreadDoc::loadXML( const QDomDocument& doc )
+bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
   kdDebug() << " loadXML" << endl;
   m_bLoading = TRUE;

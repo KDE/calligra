@@ -312,8 +312,12 @@ public:
   /**
    *  Reimplement this method to load the contents of your KOffice document,
    *  from the XML document.
+   *
+   *  You are supposed to use the QDomDocument. The QIODevice is provided only
+   *  for the cases where some pre-processing is needed, like kpresenter's kprconverter.
+   *  Note that the QIODevice could be 0L, when called from an import filter.
    */
-  virtual bool loadXML( const QDomDocument & ) = 0;
+  virtual bool loadXML( QIODevice *, const QDomDocument & doc ) = 0;
 
   /**
    *  Reimplement this to save the contents of the KOffice document into

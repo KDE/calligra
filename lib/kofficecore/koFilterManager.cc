@@ -307,16 +307,12 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
 	    tempfname = QFile::encodeName(tempFile.name());
 	    ok=filter->filter( file, tempfname, mimeType, _native_format, d->config );
 	}
-	else if(vec[i].implemented.lower()=="qdom" &&                // As long as some parts use KOML we have to make
-		(strcmp(document->className(), "KSpreadDoc")==0 ||   // sure that we only allow parts which implement
-		 strcmp(document->className(), "KChartPart")==0 ||   // the right loadXML :)
-		 strcmp(document->className(), "KisDoc")==0 ||
-		 strcmp(document->className(), "KImageDocument")==0)) {
+	else if(vec[i].implemented.lower()=="qdom") {
 	    //kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
 	    QDomDocument qdoc;
 	    ok=filter->I_filter( file, mimeType, qdoc, _native_format, d->config);
 	    if(ok) {
-		ok=document->loadXML(qdoc);
+		ok=document->loadXML(0L,qdoc);
                 if (!ok)
                   kdWarning(30003) << "loadXML FAILED !" << endl;
 		document->changedByFilter();

@@ -73,7 +73,7 @@ public:
   virtual QDomDocument saveXML();
 
   virtual bool loadChildren( KoStore* _store );
-  virtual bool loadXML( const QDomDocument& doc );
+  virtual bool loadXML( QIODevice *, const QDomDocument& doc );
 
   virtual bool initDoc();
 

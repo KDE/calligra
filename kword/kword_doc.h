@@ -111,7 +111,7 @@ public:
     virtual bool initDoc();
     void initEmpty();
 
-    virtual bool loadXML( const QDomDocument & dom );
+    virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *_store );
     virtual bool saveToStream( QIODevice * dev );
     virtual bool completeSaving( KoStore *_store );

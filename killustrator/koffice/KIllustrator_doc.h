@@ -64,7 +64,7 @@ public:
 
     //bool completeSaving (KoStore* store); // not needed? - what about embedded wmf files?
 
-    virtual bool loadXML (const QDomDocument &document);
+    virtual bool loadXML (QIODevice *, const QDomDocument &document);
     bool loadChildren (KoStore* store);
 
     /**

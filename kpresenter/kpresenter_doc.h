@@ -108,7 +108,7 @@ public:
 
     // load
     virtual bool loadXML( KOMLParser & parser );
-    virtual bool loadXML( const QDomDocument & doc );
+    virtual bool loadXML( QIODevice *, const QDomDocument & doc );
     virtual bool loadChildren( KoStore* _store );
 
     virtual bool initDoc() { return insertNewTemplate( 0, 0, true ); }

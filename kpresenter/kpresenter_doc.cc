@@ -96,6 +96,8 @@
 #define QT_NO_CAST_ASCII
 #endif
 
+static const int CURRENT_SYNTAX_VERSION = 1; // Reggie: make this 2 when committing the new text object
+
 /******************************************************************/
 /* class KPresenterChild					  */
 /******************************************************************/
@@ -327,7 +329,9 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\""
 	<< "KPresenter"
-	<< "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
+	<< "\" mime=\"" << "application/x-kpresenter"
+	<< "\" syntaxVersion=\"" << CURRENT_SYNTAX_VERSION << "\">"
+        << endl;
 
     out << otag << "<PAPER format=\"" << static_cast<int>( _pageLayout.format ) << "\" ptWidth=\""
 	<< _pageLayout.ptWidth
@@ -565,10 +569,48 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
     return true;
 }
 
-bool KPresenterDoc::loadXML( const QDomDocument& doc )
+bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 {
-    KOMLParser parser( doc );
-    return loadXML( parser );
+    QDomElement docelem = doc.documentElement();
+    int syntaxVersion = docelem.attribute( "syntaxVersion" ).toInt();
+    if ( (syntaxVersion == 0 || syntaxVersion == 1) && CURRENT_SYNTAX_VERSION > 1 )
+    {
+        // This is an old style document, before the current TextObject
+        // We have kprconverter.pl for it
+        kdWarning() << "KPresenter document version 1. Launching perl script to convert it." << endl;
+
+        // Read the full XML and write it to a temp file
+        KTempFile tmpFileIn;
+        {
+            QByteArray array = dev->readAll();
+            *tmpFileIn.dataStream() << array;
+        }
+
+        // Launch the perl script on it
+        KTempFile tmpFileOut;
+        QCString cmd = KGlobal::dirs()->findExe("perl").local8Bit();
+        if (cmd.isEmpty())
+        {
+            KMessageBox::error(0L,"You don't appear to have perl installed.\nIt is needed to convert this document.\nInstall perl and try again.");
+            return false;
+        }
+        cmd += " ";
+        cmd += locate( "exe", "kprconverter.pl" ) + " ";
+        cmd += QFile::encodeName( tmpFileIn.name() ) + " ";
+        cmd += QFile::encodeName( tmpFileOut.name() );
+        system( cmd );
+
+        // Build a new QDomDocument from the result
+        QDomDocument newdoc;
+        newdoc.setContent( tmpFileOut.file() );
+        KOMLParser parser( newdoc );
+        return loadXML( parser );
+    }
+    else
+    {
+        KOMLParser parser( doc );
+        return loadXML( parser );
+    }
 }
 
 /*========================== load ===============================*/

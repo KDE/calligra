@@ -48,7 +48,7 @@ public:
     KChartParameters* params() const { return _params; };
     // save and load
     virtual QDomDocument saveXML();
-    virtual bool loadXML( const QDomDocument& doc );
+    virtual bool loadXML( QIODevice *, const QDomDocument& doc );
     bool m_bLoading; // Kalle: get rid of that one :)
     bool isLoading() {
       return m_bLoading;

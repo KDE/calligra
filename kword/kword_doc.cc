@@ -731,7 +731,7 @@ bool KWordDocument::loadChildren( KoStore *_store )
 }
 
 /*================================================================*/
-bool KWordDocument::loadXML( const QDomDocument & doc )
+bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
 {
     pixmapKeys.clear();
     pixmapNames.clear();
