@@ -386,6 +386,7 @@ void KoPageLayoutDia::setupTab1()
   grid1->addColSpacing(0,formatFrame->width());
   grid1->addColSpacing(0,borderFrame->width());
   grid1->addColSpacing(1,280);
+  //grid1->setColStretch(1,1);
 
   grid1->addRowSpacing(0,lpgUnit->height());
   grid1->addRowSpacing(1,cpgUnit->height());
@@ -393,6 +394,7 @@ void KoPageLayoutDia::setupTab1()
   grid1->addRowSpacing(2,120);
   grid1->addRowSpacing(3,borderFrame->height());
   grid1->addRowSpacing(3,120);
+  //grid1->setRowStretch(1,1);
 
   grid1->activate();
   tab1->resize(0,0);
@@ -530,36 +532,36 @@ void KoPageLayoutDia::setupTab2()
   // --------------- main grid ------------------
   grid2->addColSpacing(0,lHead->width());
   grid2->addColSpacing(0,lHeadLeft->width());
-  grid2->addColSpacing(0,eHeadLeft->width());
+  grid2->addColSpacing(0,2*eHeadLeft->width());
   grid2->addColSpacing(1,lHeadMid->width());
-  grid2->addColSpacing(1,eHeadMid->width());
+  grid2->addColSpacing(1,2*eHeadMid->width());
   grid2->addColSpacing(2,lHeadRight->width());
-  grid2->addColSpacing(2,eHeadRight->width());
+  grid2->addColSpacing(2,2*eHeadRight->width());
   grid2->addColSpacing(0,lFoot->width());
   grid2->addColSpacing(0,lFootLeft->width());
-  grid2->addColSpacing(0,eFootLeft->width());
+  grid2->addColSpacing(0,2*eFootLeft->width());
   grid2->addColSpacing(1,lFootMid->width());
-  grid2->addColSpacing(1,eFootMid->width());
+  grid2->addColSpacing(1,2*eFootMid->width());
   grid2->addColSpacing(2,lFootRight->width());
-  grid2->addColSpacing(2,eFootRight->width());
+  grid2->addColSpacing(2,2*eFootRight->width());
   grid2->addColSpacing(0,lMacros1->width());
 
-  grid2->addRowSpacing(0,lHead->height());
-  grid2->addRowSpacing(1,lHeadLeft->height());
-  grid2->addRowSpacing(1,lHeadMid->height());
-  grid2->addRowSpacing(1,lHeadRight->height());
+  grid2->addRowSpacing(0,2*lHead->height());
+  grid2->addRowSpacing(1,2*lHeadLeft->height());
+  grid2->addRowSpacing(1,2*lHeadMid->height());
+  grid2->addRowSpacing(1,2*lHeadRight->height());
   grid2->addRowSpacing(2,eHeadLeft->height());
   grid2->addRowSpacing(2,eHeadMid->height());
   grid2->addRowSpacing(2,eHeadRight->height());
-  grid2->addRowSpacing(3,lFoot->height());
-  grid2->addRowSpacing(4,lFootLeft->height());
-  grid2->addRowSpacing(4,lFootMid->height());
-  grid2->addRowSpacing(4,lFootRight->height());
+  grid2->addRowSpacing(3,2*lFoot->height());
+  grid2->addRowSpacing(4,2*lFootLeft->height());
+  grid2->addRowSpacing(4,2*lFootMid->height());
+  grid2->addRowSpacing(4,2*lFootRight->height());
   grid2->addRowSpacing(5,eFootLeft->height());
   grid2->addRowSpacing(5,eFootMid->height());
   grid2->addRowSpacing(5,eFootRight->height());
-  grid2->addRowSpacing(6,lMacros1->height());
-  grid2->addRowSpacing(7,lMacros2->height());
+  grid2->addRowSpacing(6,2*lMacros1->height());
+  grid2->addRowSpacing(7,2*lMacros2->height());
 
   grid2->activate();
   tab2->resize(0,0);
