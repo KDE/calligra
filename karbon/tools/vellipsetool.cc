@@ -238,5 +238,17 @@ VEllipseTool::mouseButtonRelease()
 	}
 }
 
+void
+VEllipseTool::cancel()
+{
+	if( isDragging() )
+		VShapeTool::cancel();
+	else
+		draw();
+
+	m_startAngle = m_endAngle = 0;
+	m_state = normal;
+}
+
 #include "vellipsetool.moc"
 
