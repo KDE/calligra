@@ -31,11 +31,6 @@ KWordTableHandler::KWordTableHandler()
 {
 }
 
-void KWordTableHandler::tableRowFound( const wvWare::TableRowFunctor& tableRowFunctor )
-{
-    // This one has moved to the text handler
-}
-
 void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> /*tap*/ )
 {
     kdDebug() << k_funcinfo << endl;

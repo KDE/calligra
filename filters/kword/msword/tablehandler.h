@@ -51,8 +51,6 @@ public:
     KWordTableHandler();
 
     //////// TableHandler interface
-    virtual void tableRowFound( const wvWare::TableRowFunctor& tableRowFunctor );
-
     virtual void tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> tap );
     virtual void tableRowEnd();
     virtual void tableCellStart();
