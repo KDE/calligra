@@ -479,7 +479,7 @@ void KPresenterView::insertPicture()
     page->deSelectAllObj();
 
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							KImageIO::pattern(KImageIO::Reading), 0);
+							KImageIO::pattern( KImageIO::Reading ), 0);
 
     QCursor c = page->cursor();
     page->setCursor( waitCursor );

@@ -1028,7 +1028,7 @@ QRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode , bool compose
 
 	    // if the object fits into the line or is a separator
 	    // ( separators have always to be appended, never insert a separator as first char in a line -> looks ugly! )
-	    if ( w + widthToNextSep( i ) <= wid ) { // || obj->type() == TxtObj::SEPARATOR ) 
+	    if ( w + widthToNextSep( i ) <= wid ) { // || obj->type() == TxtObj::SEPARATOR )
 		line->append( obj );
 		w += obj->width();
 	    } else { // if the object doesn't fit
@@ -1654,8 +1654,7 @@ QPicture* KTextObject::getPic( int _x, int _y, int _w, int _h, bool presMode, in
 
     drawPic = true;
     p.begin( &pic );
-    if ( _clip )
-    {
+    if ( _clip ) {
 	p.setClipping( true );
 	p.setClipRect( _x, _y, _w, _h );
     }
@@ -1665,18 +1664,15 @@ QPicture* KTextObject::getPic( int _x, int _y, int _w, int _h, bool presMode, in
     to = max(from,to);
 
     if ( paragraphList.count() == 1 && paragraphAt( 0 )->lines() == 1 &&
-	 paragraphAt( 0 )->lineAt( 0 )->items() == 1 && !presMode )
-    {
+	 paragraphAt( 0 )->lineAt( 0 )->items() == 1 && 
+	 !presMode ) {
 	QFont _font( "helvetica", 12 );
 	_font.setBold( true );
 	p.setFont( _font );
 	p.setPen( Qt::red );
 	p.drawText( 0, 10, _w, _h, AlignLeft, i18n( "Doubleclick to edit" ) );
-    }
-    else
-    {
-	for ( int i = 0; i < static_cast<int>( paragraphs() ); i++ )
-	{
+    } else {
+	for ( int i = 0; i < static_cast<int>( paragraphs() ); i++ ) {
 	    if ( from == -1 && to == -1 || from <= i && to >= i )
 		paintCell( &p, i, 0 );
 	    ystart += cellHeights.at( i )->wh;
@@ -1696,8 +1692,7 @@ void KTextObject::draw( QPainter &p, int _x, int _y, int _w, int _h, bool presMo
 
     drawPic = true;
 
-    if ( _clip )
-    {
+    if ( _clip ) {
 	p.setClipping( true );
 	p.setClipRect( _x, _y, _w, _h );
     }
@@ -1706,17 +1701,15 @@ void KTextObject::draw( QPainter &p, int _x, int _y, int _w, int _h, bool presMo
     from = min(from,to);
     to = max(from,to);
 
-    if ( paragraphList.count() == 1 && paragraphAt( 0 )->lines() == 1 &&
-	 paragraphAt( 0 )->lineAt( 0 )->items() == 1 && !presMode && _drawempty )
-    {
+     if ( paragraphList.count() == 1 && paragraphAt( 0 )->lines() == 1 &&
+	  paragraphAt( 0 )->lineAt( 0 )->items() == 1 && 
+	 !presMode && _drawempty ) {
 	QFont _font( "helvetica", 12 );
 	_font.setBold( true );
 	p.setFont( _font );
 	p.setPen( Qt::red );
 	p.drawText( 0, 10, _w, _h, AlignLeft, i18n( "Doubleclick to edit" ) );
-    }
-    else
-    {
+    } else {
 	for ( int i = 0; i < static_cast<int>( paragraphs() ); i++ )
 	{
 	    if ( from == -1 && to == -1 || from <= i && to >= i )
@@ -3855,7 +3848,7 @@ void KTextObject::changeRegionAttribs( TxtCursor *_startCursor, TxtCursor *_stop
     }
 
     redrawSelection( *_startCursor, *_stopCursor );
-    
+
     recalc( TRUE );
 
     int pos = txtCursor->positionAbs();
@@ -3864,7 +3857,7 @@ void KTextObject::changeRegionAttribs( TxtCursor *_startCursor, TxtCursor *_stop
     _startCursor->setPositionAbs( pos );
     pos = _stopCursor->positionAbs();
     _stopCursor->setPositionAbs( pos );
-    
+
     repaint( FALSE );
 }
 
@@ -4870,7 +4863,7 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 	    updateCell( i, 0, false );
 	}
 
-	if ( tableFlags() & Tbl_vScrollBar || tableFlags() & Tbl_hScrollBar ) 
+	if ( tableFlags() & Tbl_vScrollBar || tableFlags() & Tbl_hScrollBar )
 	    makeCursorVisible();
 
 	changedParagraphs.clear();
@@ -5068,7 +5061,7 @@ void KTextObject::recalc( bool breakAllLines )
     // calculate the new cursorposition
     txtCursor->calcPos();
     changedParagraphs.clear();
-    
+
     _modified = TRUE;
 }
 
@@ -6356,10 +6349,10 @@ void KTextObject::extendContents2Height()
 	    int dh = height() - h;
 	    int ah = dh / 2;
 	    if ( ah < 0 ) ah = 0;
-	    
+	
 	    paragraphList.at( 0 )->setDistBefore( ah );
 	    paragraphList.at( 0 )->setDistAfter( ah );
-	  
+	
 	    recalc();
 	    return;
 	}

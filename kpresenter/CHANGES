@@ -364,3 +364,9 @@ Reggie, 14.7.1999:
 - Implemented gap for text objects
 - Improved extending contents of a textobj to the object height
 - Dont't forget current URL (filename) when inserting a new page
+
+Reggie, 15.7.1999:
+------------------
+- When inserting a new page (template), don't change the page layout
+- Fixes in textobject
+

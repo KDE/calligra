@@ -112,7 +112,7 @@ public:
     virtual KPresenterView* createPresenterView( QWidget* _parent = 0 );
 
     // ------ IDL ------
-    virtual CORBA::Boolean initDoc() { return insertNewTemplate( 0, 0 ); }
+    virtual CORBA::Boolean initDoc() { return insertNewTemplate( 0, 0, TRUE ); }
 
     KOffice::MainWindow_ptr createMainWindow();
 

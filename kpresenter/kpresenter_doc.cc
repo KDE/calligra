@@ -518,12 +518,12 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     pixmapCollectionKeys.clear();
     clipartCollectionKeys.clear();
 
-    //KoPageLayout __pgLayout;
-    __pgLayout.unit = PG_MM;
-
     // clean
     if ( _clean )
     {
+	//KoPageLayout __pgLayout;
+	__pgLayout.unit = PG_MM;
+
 	if ( !_backgroundList.isEmpty() )
 	    _backgroundList.clear();
 	delete _objectList;
@@ -1005,7 +1005,10 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 
     if ( !_store )
     {
-	setPageLayout( __pgLayout, 0, 0 );
+	if ( _clean )
+	    setPageLayout( __pgLayout, 0, 0 );
+	else
+	    setPageLayout( _pageLayout, 0, 0 );
 
 	KPObject *kpobject = 0L;
 	for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
@@ -1267,8 +1270,12 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	}
 
     }
-    setPageLayout( __pgLayout, 0, 0 );
 
+    if ( _clean )
+	setPageLayout( __pgLayout, 0, 0 );
+    else
+	setPageLayout( _pageLayout, 0, 0 );
+	
     _pixmapCollection.setAllowChangeRef( true );
     _pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
 
@@ -1573,7 +1580,7 @@ void KPresenterDoc::setPageEffect( unsigned int pageNum, PageEffect pageEffect )
 }
 
 /*===================== set pen and brush ========================*/
-bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2, 
+bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2,
 				 BCType gt, bool unbalanced, int xfactor, int yfactor )
 {
     KPObject *kpobject = 0;
@@ -1597,7 +1604,7 @@ bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le,
     _newBrush.unbalanced = unbalanced;
     _newBrush.xfactor = xfactor;
     _newBrush.yfactor = yfactor;
-    
+
     _objects.setAutoDelete( false );
     _oldPen.setAutoDelete( false );
     _oldBrush.setAutoDelete( false );
@@ -1723,7 +1730,7 @@ bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le,
     }
 
     if ( !_objects.isEmpty() ) {
-	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Apply Styles" ), _oldPen, _oldBrush, 
+	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Apply Styles" ), _oldPen, _oldBrush,
 						    _newPen, _newBrush, _objects, this );
 	commands()->addCommand( penBrushCmd );
 	penBrushCmd->execute();
@@ -3145,7 +3152,7 @@ void KPresenterDoc::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, Fill
 
 /*================================================================*/
 void KPresenterDoc::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
-			       BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le, 
+			       BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le,
 			       bool unbalanced, int xfactor, int yfactor, int diffx, int diffy )
 {
     KPPieObject *kppieobject = new KPPieObject( pen, brush, ft, g1, g2, gt, pt, _angle, _len, lb, le, unbalanced, xfactor, yfactor );

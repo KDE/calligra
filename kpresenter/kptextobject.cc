@@ -61,7 +61,7 @@ void KPTextObject::setSize( int _width, int _height )
 {
 //     if ( QSize( _width, _height ) == ext )
 // 	return;
-    
+
     ktextobject.toggleModified( TRUE );
     KPObject::setSize( _width, _height );
     if ( move ) return;
@@ -599,9 +599,8 @@ void KPTextObject::saveKTextObject( ostream& out )
     TxtParagraph *txtParagraph;
     unsigned int i, j, k;
     QFont font;
-    bool lastWasSpace = false;
 
-    out << otag << "<TEXTOBJ objType=\"" << static_cast<int>( ktextobject.objType() ) 
+    out << otag << "<TEXTOBJ objType=\"" << static_cast<int>( ktextobject.objType() )
 	<< "\" gap=\"" << ktextobject.getGap() << "\">" << endl;
     out << indent << "<ENUMLISTTYPE type=\"" << ktextobject.enumListType().type << "\" before=\""
 	<< ktextobject.enumListType().before.utf8().data() << "\" after=\""
@@ -612,8 +611,7 @@ void KPTextObject::saveKTextObject( ostream& out )
 	<< "\" underline=\"" << ktextobject.enumListType().font.underline() << "\" red=\""
 	<< ktextobject.enumListType().color.red() << "\" green=\"" << ktextobject.enumListType().color.green()
 	<< "\" blue=\"" << ktextobject.enumListType().color.blue() << "\"/>" << endl;
-    for ( i = 0; i < 16; i++ )
-    {
+    for ( i = 0; i < 16; i++ ) {
 	out << indent << "<UNSORTEDLISTTYPE family=\"" << ktextobject.unsortListType().font->at( i )->family().ascii() << "\" pointSize=\""
 	    << ktextobject.unsortListType().font->at( i )->pointSize()
 	    << "\" bold=\"" << ktextobject.unsortListType().font->at( i )->bold() << "\" italic=\""
@@ -625,28 +623,20 @@ void KPTextObject::saveKTextObject( ostream& out )
 	    << "\"/>" << endl;
     }
 
-    for ( i = 0; i < ktextobject.paragraphs(); i++ )
-    {
+    for ( i = 0; i < ktextobject.paragraphs(); i++ ) {
 	txtParagraph = ktextobject.paragraphAt( i );
 
 	out << otag << "<PARAGRAPH horzAlign=\"" << static_cast<int>( txtParagraph->horzAlign() ) << "\" depth=\""
 	    << txtParagraph->getDepth() << "\" lineSpacing=\"" << txtParagraph->getLineSpacing() << "\" distBefore=\""
 	    << txtParagraph->getDistBefore() << "\" distAfter=\"" << txtParagraph->getDistAfter() << "\">" << endl;
 
-	lastWasSpace = false;
-
-	for ( j = 0; j < txtParagraph->lines(); j++ )
-	{
+	for ( j = 0; j < txtParagraph->lines(); j++ ) {
 	    txtLine = txtParagraph->lineAt( j );
 
 	    out << otag << "<LINE>" << endl;
 
-	    for ( k = 0; k < txtLine->items(); k++ )
-	    {
+	    for ( k = 0; k < txtLine->items(); k++ ) {
 		txtObj = txtLine->itemAt( k );
-		if ( lastWasSpace && txtObj->type() == TxtObj::SEPARATOR ) continue;
-		if ( txtObj->type() == TxtObj::SEPARATOR ) lastWasSpace = true;
-		else lastWasSpace = false;
 		font = txtObj->font();
 
 		out << otag << "<OBJ>" << endl;
@@ -694,28 +684,24 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
     TxtParagraph *txtParagraph;
     TxtObj *objPtr;
 
-    while ( parser.open( 0L, tag ) )
-    {
+    while ( parser.open( 0L, tag ) ) {
 	KOMLParser::parseTag( tag.c_str(), name, lst );
 
 	// enumListType
-	if ( name == "ENUMLISTTYPE" )
-	{
+	if ( name == "ENUMLISTTYPE" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
 		if ( ( *it ).m_strName == "type" )
 		    elt.type = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "before" )
-		{
+		if ( ( *it ).m_strName == "before" ) {
 		    if ( strlen( ( *it ).m_strValue.c_str() ) > 0 )
 			elt.before = QString::fromUtf8( ( *it ).m_strValue.c_str() );
 		    else
 			elt.before = "";
 		}
-		if ( ( *it ).m_strName == "after" )
-		{
+		if ( ( *it ).m_strName == "after" ) {
 		    if ( strlen( ( *it ).m_strValue.c_str() ) > 0 )
 			elt.after = QString::fromUtf8( ( *it ).m_strValue.c_str() );
 		    else
@@ -747,12 +733,10 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 	}
 
 	// unsortListType
-	else if ( name == "UNSORTEDLISTTYPE" )
-	{
+	else if ( name == "UNSORTEDLISTTYPE" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
+	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "chr" )
 		    c = QChar( static_cast<unsigned short>( atoi( ( *it ).m_strValue.c_str() ) ) );
 		if ( ( *it ).m_strName == "family" )
@@ -780,13 +764,11 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 	}
 
 	// paragraph
-	else if ( name == "PARAGRAPH" )
-	{
+	else if ( name == "PARAGRAPH" ) {
 	    txtParagraph = ktextobject.addParagraph();
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
+	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "horzAlign" )
 		    txtParagraph->setHorzAlign( ( TxtParagraph::HorzAlign )atoi( ( *it ).m_strValue.c_str() ) );
 		if ( ( *it ).m_strName == "depth" )
@@ -799,45 +781,36 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 		    txtParagraph->setDistAfter( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
 
-	    while ( parser.open( 0L, tag ) )
-	    {
+	    while ( parser.open( 0L, tag ) ) {
 		KOMLParser::parseTag( tag.c_str(), name, lst );
 
 		// line
-		if ( name == "LINE" )
-		{
-		    while ( parser.open( 0L, tag ) )
-		    {
+		if ( name == "LINE" ) {
+		    while ( parser.open( 0L, tag ) ) {
 			KOMLParser::parseTag( tag.c_str(), name, lst );
 
 			// object
-			if ( name == "OBJ" )
-			{
+			if ( name == "OBJ" ) {
 			    objPtr = new TxtObj();
 
-			    while ( parser.open( 0L, tag ) )
-			    {
+			    while ( parser.open( 0L, tag ) ) {
 				KOMLParser::parseTag( tag.c_str(), name, lst );
 
 				// type
-				if ( name == "TYPE" )
-				{
+				if ( name == "TYPE" ) {
 				    KOMLParser::parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
-				    for( ; it != lst.end(); it++ )
-				    {
+				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "value" )
 					    objPtr->setType( ( TxtObj::ObjType )atoi( ( *it ).m_strValue.c_str() ) );
 				    }
 				}
 
 				// font
-				else if ( name == "FONT" )
-				{
+				else if ( name == "FONT" ) {
 				    KOMLParser::parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
-				    for( ; it != lst.end(); it++ )
-				    {
+				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "family" )
 					    font.setFamily( ( *it ).m_strValue.c_str() );
 					if ( ( *it ).m_strName == "pointSize" )
@@ -853,12 +826,10 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 				}
 
 				// color
-				else if ( name == "COLOR" )
-				{
+				else if ( name == "COLOR" ) {
 				    KOMLParser::parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
-				    for( ; it != lst.end(); it++ )
-				    {
+				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "red" )
 					    r = atoi( ( *it ).m_strValue.c_str() );
 					if ( ( *it ).m_strName == "green" )
@@ -871,37 +842,36 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 				}
 
 				// vertical align
-				else if ( name == "VERTALIGN" )
-				{
+				else if ( name == "VERTALIGN" ) {
 				    KOMLParser::parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
-				    for( ; it != lst.end(); it++ )
-				    {
+				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "value" )
 					    objPtr->setVertAlign( ( TxtObj::VertAlign )atoi( ( *it ).m_strValue.c_str() ) );
 				    }
 				}
 
 				// text
-				else if ( name == "TEXT" )
-				{
+				else if ( name == "TEXT" ) {
 				    QString tmp2;
 				    string tmp;
 
 				    KOMLParser::parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
-				    for( ; it != lst.end(); it++ )
-				    {
-					if ( ( *it ).m_strName == "value" )
+				    QString v = QString::null;
+				    for( ; it != lst.end(); it++ ) {
+					if ( ( *it ).m_strName == "value" ) {
 					    tmp2 = ( *it ).m_strValue.c_str();
+					    v = tmp2;
+					}
 				    }
 
-				    if ( parser.readText( tmp ) )
-				    {
+				    if ( parser.readText( tmp ) ) {
 					QString s = tmp.c_str();
-					if ( s.simplifyWhiteSpace().length() > 0 || utf8 )
-					{
+					if ( s.simplifyWhiteSpace().length() > 0 || utf8 || v.isEmpty() ) {
 					    tmp2 = tmp.c_str();
+					    if ( tmp2.isEmpty() && objPtr->type() == TxtObj::SEPARATOR )
+						tmp2 = " ";
 					    utf8 = true;
 					}
 				    }
@@ -913,8 +883,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 				else
 				    cerr << "Unknown tag '" << tag << "' in OBJ" << endl;
 
-				if ( !parser.close( tag ) )
-				{
+				if ( !parser.close( tag ) ) {
 				    cerr << "ERR: Closing Child" << endl;
 				    return;
 				}
@@ -926,8 +895,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 			else
 			    cerr << "Unknown tag '" << tag << "' in LINE" << endl;
 
-			if ( !parser.close( tag ) )
-			{
+			if ( !parser.close( tag ) ) {
 			    cerr << "ERR: Closing Child" << endl;
 			    return;
 			}
@@ -937,36 +905,26 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 		else
 		    cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;
 
-		if ( !parser.close( tag ) )
-		{
+		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
 		    return;
 		}
 	    }
-	    
-	    if ( txtParagraph->items() == 1 ) {
-		TxtObj *item = txtParagraph->itemAt( 0 );
-		txtParagraph->append( new TxtObj( " ", item->font(), item->color(),
-						  TxtObj::NORMAL, TxtObj::SEPARATOR ) );
-	    }
-	    
+	
 	    txtParagraph->setDepth( txtParagraph->getDepth() );
 	}
 
 	else
 	    cerr << "Unknown tag '" << tag << "' in TEXTOBJ" << endl;
 
-	if ( !parser.close( tag ) )
-	{
+	if ( !parser.close( tag ) ) {
 	    cerr << "ERR: Closing Child" << endl;
 	    return;
 	}
     }
 
-    if ( ult.font->count() < 16 )
-    {
-	while ( ult.font->count() < 16 )
-	{
+    if ( ult.font->count() < 16 ) {
+	while ( ult.font->count() < 16 ) {
 	    ult.font->append( new QFont( "times", 20 ) );
 	    ult.color->append( new QColor( Qt::red ) );
 	    ult.chr->append( new QChar( '-' ) );
