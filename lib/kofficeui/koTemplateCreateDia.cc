@@ -258,7 +258,7 @@ void KoTemplateCreateDia::slotOk() {
     QStringList tmp=group->dirs();
     for(QStringList::ConstIterator it=tmp.begin(); it!=tmp.end() && !ready; ++it) {
 	if((*it).contains(dir)==0) {
-	    QString file=(*it)+".directory ";
+	    QString file=(*it)+".directory";
 	    QFileInfo info(file);
 	    if(info.exists()) {
 		command="cp ";

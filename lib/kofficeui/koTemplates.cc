@@ -125,7 +125,7 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const {
 
 KoTemplateTree::KoTemplateTree(const QString &templateType,
 			       KInstance *instance, const bool &readTree) :
-    m_templateType(templateType), m_instance(instance) {
+    m_templateType(templateType), m_instance(instance), m_defaultGroup(0L) {
 
     m_groups.setAutoDelete(true);
     if(readTree)
@@ -219,14 +219,18 @@ void KoTemplateTree::readGroups() {
 		continue;
 	    QDir templateDir(*it+*tdirIt);
 	    QString name=*tdirIt;
+	    QString defaultTab;
 	    if(templateDir.exists(".directory")) {
 		KSimpleConfig config(templateDir.absPath()+"/.directory", true);
 		config.setDesktopGroup();
 		name=config.readEntry("Name");
+		defaultTab=config.readEntry("X-KDE-DefaultTab");
 		//kdDebug() << "name: " << name <<endl;
 	    }
 	    KoTemplateGroup *g=new KoTemplateGroup(name, *it+*tdirIt+QChar('/'));
 	    add(g);
+	    if(defaultTab=="true")
+		m_defaultGroup=g;
 	}
     }
 }

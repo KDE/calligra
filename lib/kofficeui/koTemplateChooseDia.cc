@@ -202,6 +202,10 @@ void KoTemplateChooseDia::setupDialog()
 	tabNames.sort();
 	for(QStringList::ConstIterator it=tabNames.begin(); it!=tabNames.end(); ++it)
 	    d->m_tabs->addTab( tabDict[(*it)], (*it) );
+	
+	KoTemplateGroup *defaultGroup=d->tree->defaultGroup();
+	if(defaultGroup)
+	    d->m_tabs->showPage(tabDict[defaultGroup->name()]);
 
         connect( d->m_tabs, SIGNAL( selected( const QString & ) ), this, SLOT( tabsChanged( const QString & ) ) );
         grid->addWidget( d->m_tabs, 2, 0 );
