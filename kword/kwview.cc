@@ -5774,8 +5774,13 @@ void KWView::insertFile()
                             i18n("Insert File"));
         return;
     }
+    insertFile( url.path() );
+}
+
+void KWView::insertFile(const QString & path)
+{
     // ### TODO network transparency
-    KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
+    KoStore* store=KoStore::createStore( path, KoStore::Read );
     QMap<KoPictureKey, QString> *pixmapMap =0L;
     QMap<KoPictureKey, QString> *clipartMap = 0L;
     if ( store )

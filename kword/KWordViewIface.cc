@@ -326,3 +326,8 @@ void KWordViewIface::importStyle()
 {
     view->importStyle();
 }
+
+void KWordViewIface::insertFile(const QString & path)
+{
+    view->insertFile( path );
+}

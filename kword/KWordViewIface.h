@@ -105,6 +105,8 @@ k_dcop:
     void tableProperties();
     void importStyle();
 
+    void insertFile(const QString & path);
+
 private:
     KWView *view;
 
