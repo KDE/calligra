@@ -111,13 +111,13 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
   lAngle = new QLabel( i18n( "Angle:" ), gSettings );
 
   eAngle = new KIntNumInput( gSettings );
-  eAngle->setRange(0, 5760);
+  eAngle->setRange(0, 360);
   connect( eAngle, SIGNAL( valueChanged( int ) ), this, SLOT( angleChanged( int ) ) );
 
   lLen = new QLabel( i18n( "Length:" ), gSettings );
 
   eLen = new KIntNumInput( gSettings );
-  eLen->setRange(0, 5760);
+  eLen->setRange(0, 360);
   connect( eLen, SIGNAL( valueChanged( int ) ), this, SLOT( lengthChanged( int ) ) );
 
   hbox->addWidget( gSettings );
@@ -146,14 +146,14 @@ ConfPieDia::~ConfPieDia()
 /*================================================================*/
 void ConfPieDia::lengthChanged( int _len )
 {
-    len = _len;
+    len = _len*16;
     piePreview->setLength( len );
 }
 
 /*================================================================*/
 void ConfPieDia::angleChanged( int _angle )
 {
-    angle = _angle;
+    angle = _angle*16;
     piePreview->setAngle( angle );
 }
 
@@ -166,8 +166,8 @@ void ConfPieDia::typeChanged( int _type )
 
 void ConfPieDia::slotReset()
 {
-    eAngle->setValue( oldAngle );
-    eLen->setValue( oldLen );
+    eAngle->setValue( oldAngle/16 );
+    eLen->setValue( oldLen/16 );
     cType->setCurrentItem( oldType );
     type = static_cast<PieType>( oldType );
     piePreview->setLength( oldLen );
@@ -181,7 +181,7 @@ void ConfPieDia::setAngle( int _angle )
 {
     angle = _angle;
     oldAngle = _angle;
-    eAngle->setValue( angle );
+    eAngle->setValue( angle/16 );
     piePreview->setAngle( angle );
 }
 
@@ -189,7 +189,7 @@ void ConfPieDia::setLength( int _len )
 {
     len = _len;
     oldLen= _len;
-    eLen->setValue( len );
+    eLen->setValue( len/16 );
     piePreview->setLength( len );
 }
 
