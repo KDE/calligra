@@ -100,7 +100,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_bCopy( false ),
       m_selected( false ),
       m_drawFootNoteLine( false ),
-      m_backgroundColor( (fs && fs->type() == FT_PICTURE) ? QBrush( QColor(), Qt::NoBrush) : QBrush( QColor() ) ), // valid brush with invalid color ( default )
+      m_backgroundColor( (fs && (fs->type() == FT_PICTURE || fs->type() == FT_PART)) ? QBrush( QColor(), Qt::NoBrush) : QBrush( QColor() ) ), // valid brush with invalid color ( default )
       brd_left( QColor(), KoBorder::SOLID, 0 ),
       brd_right( QColor(), KoBorder::SOLID, 0 ),
       brd_top( QColor(), KoBorder::SOLID, 0 ),
@@ -2129,8 +2129,8 @@ void KWPartFrameSet::setDeleted( bool on)
 void KWPartFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
 {
     KWFrameSet::delFrame( _num, remove, recalc );
-    if ( frames.isEmpty() )         // then the whole frameset and thus the child is deleted 
-        m_child->setDeleted(); 
+    if ( frames.isEmpty() )         // then the whole frameset and thus the child is deleted
+        m_child->setDeleted();
 }
 
 

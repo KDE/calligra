@@ -426,7 +426,7 @@ void KWFrameBackGroundColorCommand::execute()
     for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
         KWFrameSet *frameSet =tmp->m_pFrameSet;
-        if ( frameSet && (frameSet->type() != FT_PICTURE) )
+        if ( frameSet && (frameSet->type() != FT_PICTURE) && (frameSet->type() != FT_PART))
         {
             doc = frameSet->kWordDocument();
             KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
@@ -445,7 +445,7 @@ void KWFrameBackGroundColorCommand::unexecute()
     for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
         KWFrameSet *frameSet =tmp->m_pFrameSet;
-        if ( frameSet && (frameSet->type() != FT_PICTURE) )
+        if ( frameSet && (frameSet->type() != FT_PICTURE) && (frameSet->type() != FT_PART) )
         {
             doc = frameSet->kWordDocument();
             KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
@@ -481,7 +481,7 @@ void KWFrameStyleCommand::unexecute()
 
 void KWFrameStyleCommand::applyFrameStyle( KWFrameStyle * _sty )
 {
-    if ( m_frame->frameSet() && (m_frame->frameSet()->type() != FT_PICTURE))
+    if ( m_frame->frameSet() && (m_frame->frameSet()->type() != FT_PICTURE)&& (m_frame->frameSet()->type() != FT_PART))
         m_frame->setBackgroundColor( _sty->backgroundColor() );
     m_frame->setLeftBorder( _sty->leftBorder() );
     m_frame->setRightBorder( _sty->rightBorder() );
@@ -1040,7 +1040,7 @@ void KWDeleteFrameCommand::unexecute()
     KWPartFrameSet * partfs = dynamic_cast<KWPartFrameSet *>( frameSet );
     if ( partfs )
         partfs->setDeleted( false );
-        
+
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )
         textfs->textObject()->formatMore( 2 );
