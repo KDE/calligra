@@ -436,7 +436,7 @@ void KoTemplateCreateDia::fillGroupTree() {
 
 KoNewGroupDia::KoNewGroupDia(QWidget *parent) :
     KDialogBase(parent, "KoNewGroupDia", true, i18n("Enter a name"),
-		KDialogBase::Ok | KDialogBase::Cancel) {
+		KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok) {
 
     QFrame *mainwidget=makeMainWidget();
     QGridLayout *grid=new QGridLayout(mainwidget, 4, 2, KDialogBase::marginHint(),
