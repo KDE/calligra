@@ -135,6 +135,11 @@ KoDocument::~KoDocument()
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
 
+  QListIterator<KoView> it( d->m_views );
+  for (; it.current(); ++it )
+    disconnect( it.current(), SIGNAL( destroyed() ),
+		this, SLOT( slotViewDestroyed() ) );
+  
   delete d;
 }
 
@@ -729,7 +734,7 @@ void KoDocument::setModified( bool mod )
 {
     if ( mod == isModified() )
 	return;
-    
+
     kdDebug(30003) << "KoDocument::setModified( " << (mod ? "true" : "false") << ")" << endl;
     KParts::ReadWritePart::setModified( mod );
 
