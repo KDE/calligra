@@ -127,8 +127,12 @@ QDOM::Element KWParagLayout::save( const QDOM::Document& doc )
     layout.setAttribute( "name", name );
     layout.setAttribute( "following-parag-layout", followingParagLayout );
     layout.setAttribute( "flow", (int)flow );
-    layout.setAttribute( "head-offset", paragHeadOffset );
-    layout.setAttribute( "foot-offset", paragFootOffset );
+    layout.setAttribute( "head-offset-mm", paragHeadOffset.mm() );
+    layout.setAttribute( "foot-offset-mm", paragFootOffset.mm() );
+    layout.setAttribute( "head-offset-pt", paragHeadOffset.pt() );
+    layout.setAttribute( "foot-offset-pt", paragFootOffset.pt() );
+    layout.setAttribute( "head-offset-inch", paragHeadOffset.inch() );
+    layout.setAttribute( "foot-offset-inch", paragFootOffset.inch() );
     layout.setAttribute( "first-line-left-indent", firstLineLeftIndent );
     layout.setAttribute( "left-indent", leftIndent );
     layout.setAttribute( "line-spacing", lineSpacing );
@@ -136,7 +140,7 @@ QDOM::Element KWParagLayout::save( const QDOM::Document& doc )
     QDOM::Element c = doc.createElement( "COUNTER" );
     layout.appendChild( c );
     c.setAttribute( "type", (int)counter.counterType );
-    c.setAttribute( "depth", (counter.counterDepth ) );
+    c.setAttribute( "depth", counter.counterDepth );
     c.setAttribute( "bullet", (int)counter.counterBullet.unicode() );
     c.setAttribute( "start", counter.startCounter );
     c.setAttribute( "numbering-type", (int)counter.numberingType );
@@ -182,12 +186,241 @@ QDOM::Element KWParagLayout::save( const QDOM::Document& doc )
 	tab.setAttribute( "type", (int)tabList.at( i )->type );
     }
 
-    return layout;
+return layout;
 }
 
 /*================================================================*/
 bool KWParagLayout::load( QDOM::Element& layout )
 {
+    name = layout.attribute( "name" );
+    followingParagLayout = layout.attribute( "following-parag-layout" );
+    flow = (Flow)layout.attribute( "flow" ).toInt();
+    firstLineLeftIndent = layout.attribute( "first-line-left-indent" );
+    leftIndent = layout.attribute( "left-indent" );
+    lineSpacing = layout.attribute( "line-spacing" );
+
+    paragHeadOffset.setPT_MM_INCH( layout.attribute( "head-offset-pt" ).toInt(),
+				   layout.attribute( "head-offset-mm" ).toInt(),
+				   layout.attribute( "head-offset-inch" ).toInt() )
+    paragFootOffset.setPT_MM_INCH( layout.attribute( "foot-offset-pt" ).toInt(),
+				   layout.attribute( "foot-offset-mm" ).toInt(),
+				   layout.attribute( "foot-offset-inch" ).toInt() )
+
+    
+    QDOM::Element c = layout.namedItem( "COUNTER" );
+    if ( c.isNull() )
+      return false;
+    counter.counterType = (CounterType)c.attribute( "type" ).toInt();
+    counter.counterDepth = c.attribute( "depth" ).toInt();
+    counter.counterBullet = QChar( c.attribute( "bullet" ).toInt() );
+    counter.startCounter = c.attribute( "start" );
+    counter.numberingType = c.attribute( "numbering-type" ).toInt();
+    counter.counterLeftText = c.attribute( "left-text" );
+    counter.counterRightText = c.attribute( "right-text" );
+    counter.bulletFont = c.attribute( "bullet-font" );
+
+    QDOM::Element b = layout.namedItem( "LEFTBORDER" );
+    if ( b.isNull() )
+      return false;
+    left.color = b.toColor();
+    left.width = b.attribute( "width" );
+    left.style = (BorderStyle)b.attribute( "style" );
+
+    b = layout.namedItem( "TOPBORDER" );
+    if ( b.isNull() )
+      return false;
+    top.color = b.toColor();
+    top.width = b.attribute( "width" );
+    top.style = (BorderStyle)b.attribute( "style" );
+
+    b = layout.namedItem( "RIGHTBORDER" );
+    if ( b.isNull() )
+      return false;
+    right.color = b.toColor();
+    right.width = b.attribute( "width" );
+    right.style = (BorderStyle)b.attribute( "style" );
+
+    b = layout.namedItem( "BOTTOMBORDER" );
+    if ( b.isNull() )
+      return false;
+    bottom.color = b.toColor();
+    bottom.width = b.attribute( "width" );
+    bottom.style = (BorderStyle)b.attribute( "style" );
+
+    KWFormat form( document );
+    QDOM::Element f = layout.namedItem( "FORMAT" ).toElement();
+    if ( f.isNull() )
+      return false;
+    if ( !form.load( f ) )
+      return false;
+    setFormat( form );
+
+	// following parag layout
+	else if ( _name == "TABULATOR" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    KoTabulator *tab = new KoTabulator;
+	    bool noinch = true;
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "mmpos" )
+		    tab->mmPos = atof( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "ptpos" )
+		    tab->ptPos = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "inchpos" )
+		{
+		    noinch = false;
+		    tab->inchPos = atof( ( *it ).m_strValue.c_str() );
+		}
+		if ( ( *it ).m_strName == "type" )
+		    tab->type = static_cast<KoTabulators>( atoi( ( *it ).m_strValue.c_str() ) );
+	    }
+	    if ( noinch ) tab->inchPos = MM_TO_INCH( tab->mmPos );
+	    tabList.append( tab );
+	}
+
+
+	// head offset
+
+	else if ( _name == "RIGHTBORDER" )
+	{
+	    unsigned int r = 0, g = 0, b = 0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "red" )
+		{
+		    r = atoi( ( *it ).m_strValue.c_str() );
+		    left.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "green" )
+		{
+		    g = atoi( ( *it ).m_strValue.c_str() );
+		    left.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "blue" )
+		{
+		    b = atoi( ( *it ).m_strValue.c_str() );
+		    left.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "style" )
+		    left.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "width" )
+		    left.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// right border
+	else if ( _name == "RIGHTBORDER" )
+	{
+	    unsigned int r = 0, g = 0, b = 0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "red" )
+		{
+		    r = atoi( ( *it ).m_strValue.c_str() );
+		    right.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "green" )
+		{
+		    g = atoi( ( *it ).m_strValue.c_str() );
+		    right.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "blue" )
+		{
+		    b = atoi( ( *it ).m_strValue.c_str() );
+		    right.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "style" )
+		    right.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "width" )
+		    right.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// bottom border
+	else if ( _name == "BOTTOMBORDER" )
+	{
+	    unsigned int r = 0, g = 0, b = 0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "red" )
+		{
+		    r = atoi( ( *it ).m_strValue.c_str() );
+		    bottom.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "green" )
+		{
+		    g = atoi( ( *it ).m_strValue.c_str() );
+		    bottom.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "blue" )
+		{
+		    b = atoi( ( *it ).m_strValue.c_str() );
+		    bottom.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "style" )
+		    bottom.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "width" )
+		    bottom.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// top border
+	else if ( _name == "TOPBORDER" )
+	{
+	    unsigned int r = 0, g = 0, b = 0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "red" )
+		{
+		    r = atoi( ( *it ).m_strValue.c_str() );
+		    top.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "green" )
+		{
+		    g = atoi( ( *it ).m_strValue.c_str() );
+		    top.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "blue" )
+		{
+		    b = atoi( ( *it ).m_strValue.c_str() );
+		    top.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "style" )
+		    top.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "width" )
+		    top.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	else if ( _name == "FORMAT" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+	    }
+	    format.load( parser, lst, document );
+	}
+
+	else
+	    cerr << "Unknown tag '" << tag << "' in PARAGRAPHLAYOUT" << endl;
+
+	if ( !parser.close( tag ) )
+	{
+	    cerr << "ERR: Closing Child" << endl;
+	    return;
+	}
+    }
 }
 
 /*================================================================*/
