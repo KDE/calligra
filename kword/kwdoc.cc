@@ -315,11 +315,11 @@ void KWDocument::initConfig()
       m_viewFrameBorders = config->readBoolEntry( "ViewFrameBorders", true );
 
       m_zoom = config->readNumEntry( "Zoom", 100 );
-      m_bShowDocStruct = config->readBoolEntry("showDocStruct",true);
-      m_lastViewMode= config->readEntry( "viewmode","ModeNormal");
-      setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
-      setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
-      setShowScrollBar( config->readBoolEntry( "ShowScrollBar", true ));
+      m_bShowDocStruct = config->readBoolEntry( "showDocStruct", true );
+      m_lastViewMode = config->readEntry( "viewmode", "ModeNormal" );
+      setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
+      setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ) );
+      setShowScrollBar( config->readBoolEntry( "ShowScrollBar", true ) );
 
   }
   else
@@ -335,6 +335,8 @@ void KWDocument::initConfig()
 
   setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
   newZoomAndResolution( false, false );
+
+  m_viewMode = KWViewMode::create( m_lastViewMode, this );
 }
 
 void KWDocument::saveConfig()
@@ -346,10 +348,10 @@ void KWDocument::saveConfig()
     config->writeEntry( "ViewFormattingChars", m_viewFormattingChars );
     config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
     config->writeEntry( "Zoom", m_zoom );
-    config->writeEntry( "showDocStruct",m_bShowDocStruct);
+    config->writeEntry( "showDocStruct", m_bShowDocStruct);
     config->writeEntry( "Rulers", m_bShowRuler);
-    config->writeEntry( "viewmode",m_lastViewMode);
-    config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
+    config->writeEntry( "viewmode", m_lastViewMode);
+    config->writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
 }
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
@@ -497,6 +499,7 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
         updateContentsSize();
     }
 }
+
 
 double KWDocument::ptColumnWidth() const
 {
@@ -1027,24 +1030,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         QDomElement embedded = listEmbedded.item( item ).toElement();
         loadEmbedded( embedded );
     }
-
-    emit sigProgress(95);
-
-#if 0 // Not needed anymore
-    // <CPARAGS>  (Ids of the parags that form the Table of Contents)
-    QDomNodeList listCparags = word.elementsByTagName( "CPARAGS" );
-    for (item = 0; item < listCparags.count(); item++)
-    {
-        QDomElement cparag = listCparags.item( item ).toElement();
-        QDomElement parag = cparag.namedItem( "PARAG" ).toElement();
-        if ( !parag.isNull() )
-        {
-            value = parag.attribute( "name", QString::null );
-            if ( value != QString::null )
-                contents->addParagId( value.toInt() );
-        }
-    }
-#endif
 
     emit sigProgress(100); // the rest is only processing, not loading
 
@@ -1933,7 +1918,7 @@ void KWDocument::addShell( KoMainWindow *shell )
 
 KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 {
-    return new KWView( parent, name, this );
+    return new KWView( m_viewMode, parent, name, this );
 }
 
 void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool transparent, double zoomX, double zoomY )
@@ -3418,12 +3403,6 @@ void KWDocument::updateTextFrameSetEdit()
         viewPtr->slotFrameSetEditChanged();
 
 }
-void KWDocument::switchModeView()
-{
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->switchModeView();
-
-}
 
 void KWDocument::changeFootNoteConfig()
 {
@@ -3475,6 +3454,16 @@ void KWDocument::setTabStopValue ( double _tabStop )
     repaintAllViews();
 }
 
-
+void KWDocument::switchViewMode( KWViewMode * newViewMode )
+{
+    // Don't compare m_viewMode and newViewMode here, it would break
+    // changing the number of pages per row for the preview mode, in kwconfig.
+    delete m_viewMode;
+    m_viewMode = newViewMode;
+    m_lastViewMode = m_viewMode->type(); // remember for saving config
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->switchModeView();
+    updateResizeHandles();
+}
 
 #include "kwdoc.moc"

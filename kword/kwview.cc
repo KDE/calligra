@@ -94,7 +94,7 @@
 
 #include <stdlib.h>
 
-KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
+KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
 {
     m_doc = _doc;
@@ -139,7 +139,12 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
-    createKWGUI();
+
+    setupActions();
+
+    m_gui = new KWGUI( viewMode, this, this );
+    m_gui->setGeometry( 0, 0, width(), height() );
+    m_gui->show();
 
     connect( m_doc, SIGNAL( pageNumChanged() ),
              this, SLOT( pageNumChanged()) );
@@ -212,8 +217,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     }
     m_sbFramesLabel = 0L; // Only added when frames are selected
 
-    QString mode = m_doc->lastViewMode();
-    m_gui->canvasWidget()->switchViewMode( KWViewMode::create( mode, m_doc ) );
     //when kword is embedded into konqueror apply a zoom=100
     //in konqueror we can't change zoom -- ### TODO ?
     if(!m_doc->isReadWrite())
@@ -1090,17 +1093,6 @@ void KWView::insertNewCustomVariable()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertVariable( VT_CUSTOM, 0 );
-}
-
-/*======================== create GUI ==========================*/
-void KWView::createKWGUI()
-{
-    // setup GUI
-    setupActions();
-
-    m_gui = new KWGUI( this, this );
-    m_gui->setGeometry( 0, 0, width(), height() );
-    m_gui->show();
 }
 
 void KWView::showFormulaToolbar( bool show )
@@ -2170,9 +2162,7 @@ void KWView::viewTextMode()
             m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal ); // share the same zoom
         setZoom( m_zoomViewModeNormal, false );
-        m_gui->canvasWidget()->switchViewMode( new KWViewModeText( m_doc ) );
-        m_doc->setLastViewMode(m_gui->canvasWidget()->viewMode()->type());
-        m_doc->updateZoomRuler();
+        m_doc->switchViewMode( new KWViewModeText( m_doc ) );
     }
     else
         actionViewTextMode->setChecked( true ); // always one has to be checked !
@@ -2186,10 +2176,7 @@ void KWView::viewPageMode()
             m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal, false );
-        slotUpdateRuler();
-        m_gui->canvasWidget()->switchViewMode( new KWViewModeNormal( m_doc ) );
-        m_doc->setLastViewMode(m_gui->canvasWidget()->viewMode()->type());
-        m_doc->updateZoomRuler();
+        m_doc->switchViewMode( new KWViewModeNormal( m_doc ) );
     }
     else
         actionViewPageMode->setChecked( true ); // always one has to be checked !
@@ -2202,9 +2189,7 @@ void KWView::viewPreviewMode()
         m_zoomViewModeNormal = m_doc->zoom();
         showZoom( m_zoomViewModePreview );
         setZoom( m_zoomViewModePreview, false );
-        slotUpdateRuler();
-        m_gui->canvasWidget()->switchViewMode( new KWViewModePreview( m_doc, m_doc->nbPagePerRow() ) );
-        m_doc->setLastViewMode(m_gui->canvasWidget()->viewMode()->type());
+        m_doc->switchViewMode( new KWViewModePreview( m_doc, m_doc->nbPagePerRow() ) );
     }
     else
         actionViewPreviewMode->setChecked( true ); // always one has to be checked !
@@ -5014,7 +4999,13 @@ void KWView::createStyleFromSelection()
 
 void KWView::switchModeView()
 {
-    QString mode=m_gui->canvasWidget()->viewMode()->type();
+    // Apply the same viewmode to all views (due to limitations in the text formatter)
+    // So we get the viewmode to use from the document.
+    m_gui->canvasWidget()->switchViewMode( m_doc->viewMode() );
+    slotUpdateRuler();
+
+    // Now update the actions appropriately
+    QString mode = m_gui->canvasWidget()->viewMode()->type();
     bool state = (mode!="ModeText");
     actionToolsCreateText->setEnabled(state);
     actionToolsCreatePix->setEnabled(state);
@@ -5066,7 +5057,7 @@ void KWLayoutWidget::resizeEvent( QResizeEvent *e )
 /******************************************************************/
 /* Class: KWGUI                                                */
 /******************************************************************/
-KWGUI::KWGUI( QWidget *parent, KWView *_view )
+KWGUI::KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *_view )
     : QWidget( parent, "" )
 {
     view = _view;
@@ -5079,7 +5070,7 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
     docStruct->setMinimumWidth( 0 );
     left = new KWLayoutWidget( panner, this );
     left->show();
-    canvas = new KWCanvas( left, doc, this );
+    canvas = new KWCanvas( viewMode, left, doc, this );
 
     QValueList<int> l;
     l << 0;
@@ -5119,11 +5110,6 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
     canvas->show();
 
     reorganize();
-
-#if 0
-    if ( doc->processingType() == KWDocument::DTP )   // ???
-        canvas->setRuler2Frame( 0, 0 );
-#endif
 
     connect( r_horz, SIGNAL( tabListChanged( const KoTabulatorList & ) ), view,
              SLOT( tabListChanged( const KoTabulatorList & ) ) );

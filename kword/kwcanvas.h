@@ -57,7 +57,7 @@ class KWCanvas : public QScrollView
     Q_OBJECT
 
 public:
-    KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui);
+    KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui);
     virtual ~KWCanvas();
 
     KWDocument * kWordDocument() const { return m_doc; }
@@ -155,8 +155,6 @@ public:
 
     //for KWTextFrameSetEdit
     void dragStarted() { m_mousePressed = false; }
-
-    void refreshViewMode();
 
     void emitFrameSelectedChanged();
 
@@ -269,7 +267,8 @@ private:
     bool m_frameInline;
     FrameSetType m_frameInlineType;
 
-
+    // Warning: the viewmode is stored here for good design ;)
+    // but it's owned by the document, since we currently have one viewmode for all views.
     KWViewMode *m_viewMode;
 
     // Frame stuff

@@ -39,7 +39,7 @@
 #include <kmessagebox.h>
 #include <assert.h>
 
-KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
+KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui)
     : QScrollView( parent, "canvas", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase ), m_doc( d )
 {
     m_gui = lGui;
@@ -48,7 +48,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_imageDrag = false;
     m_frameInline = false;
     m_frameInlineType=FT_TABLE;
-    m_viewMode = new KWViewModeNormal( m_doc ); // maybe pass as parameter, for initial value ( loaded from doc ) ?
+    m_viewMode = viewMode;
     cmdMoveFrame=0L;
 
     // Default table parameters.
@@ -127,7 +127,6 @@ KWCanvas::~KWCanvas()
 
     delete m_currentFrameSetEdit;
     m_currentFrameSetEdit = 0L;
-    delete m_viewMode;
 }
 
 void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
@@ -293,18 +292,9 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
 
 void KWCanvas::switchViewMode( KWViewMode * newViewMode )
 {
-    delete m_viewMode;
     m_viewMode = newViewMode;
-    refreshViewMode();
-    m_doc->switchModeView();
-}
-
-void KWCanvas::refreshViewMode()
-{
     slotNewContentsSize();
-    m_doc->updateResizeHandles( );
     repaintAll( true );
-    emit updateRuler();
 }
 
 void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse press in edit-frame mode
@@ -2037,7 +2027,8 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
 
 void KWCanvas::slotMainTextHeightChanged()
 {
-    if ( dynamic_cast<KWViewModeText *>(m_viewMode) )
+    // Check that the viewmode is a KWViewModeText, and that the rulers have been built already
+    if ( dynamic_cast<KWViewModeText *>(m_viewMode) && m_gui->getHorzRuler() )
     {
         slotNewContentsSize();
         m_viewMode->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), KoPageLayout() /*unused*/ );

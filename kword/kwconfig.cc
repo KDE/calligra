@@ -392,7 +392,8 @@ void ConfigureInterfacePage::apply()
         config->writeEntry("nbPagePerRow",nbPageByRow);
         m_pView->getGUI()->canvasWidget()->viewMode()->setPagesPerRow(nbPageByRow);
         doc->setNbPagePerRow(nbPageByRow);
-        m_pView->getGUI()->canvasWidget()->refreshViewMode();
+        //m_pView->getGUI()->canvasWidget()->refreshViewMode();
+        doc->switchViewMode( doc->viewMode() ); // force a refresh
     }
 }
 

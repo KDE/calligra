@@ -88,6 +88,10 @@ public:
     // Should this frameset be visible in this viewmode? True by default, all are shown.
     virtual bool isFrameSetVisible( const KWFrameSet* /*frameset*/ ) { return true; }
 
+    // Should formatVertically() happen (to skip frame bottom, frames on top, etc.)
+    // TODO: maybe this should be more fine-grained.
+    virtual bool shouldFormatVertically() { return true; }
+
     // Return the name of the viewmode, used for loading/saving.
     virtual const QString type() = 0;
 
@@ -192,6 +196,7 @@ public:
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
     virtual const QString type() {return "ModeText";}
+    virtual bool shouldFormatVertically() { return false; }
 
     virtual bool isFrameSetVisible( const KWFrameSet* fs );
 };

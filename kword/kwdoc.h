@@ -380,6 +380,20 @@ public:
     virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY );
 
     void newZoomAndResolution( bool updateViews, bool forPrint );
+
+    /**
+     * Due to the way the text formatter works (it caches layout information in
+     * the paragraphs and characters), we currently can't have one viewmode per view.
+     * It has to be the same for all views.
+     */
+    KWViewMode *viewMode() const { return m_viewMode; }
+
+    /**
+     * Changes m_viewMode, and updates all views to this viewmode
+     */
+    void switchViewMode( KWViewMode * newViewMode );
+
+
     // useless method
     static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
       {
@@ -464,8 +478,8 @@ public:
     int maxRecentFiles() const { return m_maxRecentFiles; }
 
 
-    void setLastViewMode(const QString &_mode){ m_lastViewMode = _mode;}
-    QString lastViewMode() const { return m_lastViewMode; }
+    //void setLastViewMode(const QString &_mode){ m_lastViewMode = _mode;}
+    //QString lastViewMode() const { return m_lastViewMode; }
 
     // in pt
     double defaultColumnSpacing(){ return m_defaultColumnSpacing ;}
@@ -542,7 +556,6 @@ public:
     void addIgnoreWordAll( const QString & );
     void clearIgnoreWordAll( );
     void updateTextFrameSetEdit();
-    void switchModeView();
     void changeFootNoteConfig();
 
     double tabStopValue() const { return m_tabStop; }
@@ -599,8 +612,6 @@ protected:
     void loadStyleTemplates( QDomElement styles );
     void saveStyle( KWStyle *sty, QDomElement parentElem );
 
-    DCOPObject *dcop;
-
 private:
     //private helper functions for frameUnderMouse
     /** return the top-most frame under mouse, using nPoint, always returns the first found. */
@@ -614,6 +625,8 @@ private:
     */
     KWFrame *deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border);
 
+
+    // Variables:
     QPtrList<KWView> m_lstViews;
     QPtrList<KWChild> m_lstChildren;
 
@@ -633,8 +646,13 @@ private:
 
     KoUnit::Unit m_unit;
 
+    DCOPObject *dcop;
+
     KCommandHistory * m_commandHistory;
     KoAutoFormat * m_autoFormat;
+
+    // The viewmode used by all views.
+    KWViewMode *m_viewMode;
 
     // Shared between loadXML and loadComplete
     QString m_urlIntern;

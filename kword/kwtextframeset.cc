@@ -101,7 +101,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     textdoc->setFlow( this );
     textdoc->setPageBreakEnabled( true );              // get verticalBreak to be called
     if ( _doc->tabStopValue() != -1 )
-        textdoc->setTabStops( _doc->ptToLayoutUnitPt( _doc->tabStopValue() ));
+        textdoc->setTabStops( _doc->ptToLayoutUnitPixX( _doc->tabStopValue() ));
 
     m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ),
                                   this, (m_name+"-textobj").utf8() );
@@ -988,6 +988,9 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
 
 int KWTextFrameSet::formatVertically( KoTextParag * _parag )
 {
+    if ( !m_doc->viewMode()->shouldFormatVertically() )
+        return 0;
+
     QRect paragRect( _parag->rect() );
     int yp = paragRect.y();
     int hp = paragRect.height();

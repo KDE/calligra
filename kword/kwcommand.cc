@@ -920,7 +920,7 @@ void KWInsertColumnCommand::execute()
         // here we calculate the new table size for a table that would take the
         // entire width of the page, which what the user wants 99% of the time.
         double newTableWidth =m_maxRight - m_pTable->boundingRect().left();
-        uint newColSize = newTableWidth / (m_pTable->getCols()+1);
+        double newColSize = newTableWidth / (m_pTable->getCols()+1);
         double resizeTableWidth = m_maxRight - m_pTable->boundingRect().left();
         m_pTable->resizeWidth(resizeTableWidth - newColSize);
         m_pTable->insertCol(m_colPos, m_ListFrameSet, QPtrList<KWFrame>(), newColSize);

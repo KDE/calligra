@@ -67,6 +67,7 @@ class KoTextFormat;
 class KoTextParag;
 class KoFontDia;
 class KoParagDia;
+class KWViewMode;
 
 /******************************************************************/
 /* Class: KWView						  */
@@ -77,7 +78,7 @@ class KWView : public KoView
     Q_OBJECT
 
 public:
-    KWView( QWidget *_parent, const char *_name, KWDocument *_doc );
+    KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument *_doc );
     virtual ~KWView();
 
     virtual DCOPObject* dcopObject();
@@ -140,8 +141,6 @@ public:
     void openPopupMenuInsideFrame(KWFrame *, const QPoint &);
     void openPopupMenuEditFrame(const QPoint &);
     void openPopupMenuChangeAction( const QPoint & );
-
-    void initConfig();
 
     void changeNbOfRecentFiles(int _nb);
 
@@ -369,7 +368,6 @@ protected:
     QPtrList<KoTextFormatInterface> applicableTextInterfaces() const;
 
     void setupActions();
-    void createKWGUI();
     void doFindReplace();
 
     virtual void resizeEvent( QResizeEvent *e );
@@ -599,7 +597,7 @@ class KWGUI : public QWidget
     Q_OBJECT
 
 public:
-    KWGUI( QWidget *parent, KWView *_view );
+    KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *_view );
 
     void showGUI();
 
