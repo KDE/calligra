@@ -253,6 +253,8 @@ void KoTemplateChooseDia::setupDialog()
         int i=1;
         QString key=QString( "File%1" ).arg( i );
         QString value=KGlobal::config()->readEntry( key, QString::null );
+        if(value.startsWith("file:"))
+            value=value.mid(5);
         QString squeezed=KStringHandler::csqueeze(value);
         while( !squeezed.isNull() ) {
             lst.append( squeezed );
@@ -260,6 +262,8 @@ void KoTemplateChooseDia::setupDialog()
             ++i;
             key=QString( "File%1" ).arg( i );
             value=KGlobal::config()->readEntry( key, QString::null );
+            if(value.startsWith("file:"))
+                value=value.mid(5);
             squeezed=KStringHandler::csqueeze(value);
         }
 
@@ -328,11 +332,7 @@ void KoTemplateChooseDia::openRecent()
     d->m_rbFile->setChecked( false );
     d->m_rbRecent->setChecked( true );
     d->m_rbEmpty->setChecked( false );
-    QString current=d->recentFilesMap[d->m_recent->currentText()];
-    if(current.startsWith("file:"))
-        d->m_file=current.mid(5);
-    else
-        d->m_file=current;
+    d->m_file=d->recentFilesMap[d->m_recent->currentText()];
     enableButtonOK( false ); // because of that async stuff
     enableButtonOK( KIO::NetAccess::exists( KURL( d->m_file ) ) );
 }
