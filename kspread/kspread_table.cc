@@ -283,14 +283,13 @@ void KSpreadTable::setText( int _row, int _column, const char *_text )
 	undo = new KSpreadUndoSetText( m_pDoc, this, cell->text(), _column, _row );
 	m_pDoc->undoBuffer()->appendUndo( undo );
     }
-        
-    printf("1\n");
+       
+    // The cell will force a display refresh itself, so we dont have to care here.
     cell->setText( _text );
-    printf("2\n");
 
     // drawCellList();
-    QRect r( _column, _row, _column, _row );
-    emit sig_updateView( r );
+    // QRect r( _column, _row, _column, _row );
+    // emit sig_updateView( this, r );
 }
 
 void KSpreadTable::setLayoutDirtyFlag()
@@ -316,7 +315,7 @@ void KSpreadTable::unselect()
     // Discard the selection
     m_rctSelection.setCoords( 0, 0, 0, 0 );
     
-    emit sig_unselect( r );
+    emit sig_unselect( this, r );
 }
 
 void KSpreadTable::setSelection( const QRect &_sel )
@@ -324,7 +323,7 @@ void KSpreadTable::setSelection( const QRect &_sel )
   QRect old( m_rctSelection );
   m_rctSelection = _sel;
   
-  emit sig_changeSelection( old, m_rctSelection );
+  emit sig_changeSelection( this, old, m_rctSelection );
 }
 
 void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, int _size,
@@ -369,6 +368,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 		m_dctCells.insert( key, cell );
 	      }
 
+	      cell->setDisplayDirtyFlag();
+		
 	      if ( _font )
 		cell->setTextFontFamily( _font );
 	      if ( _size > 0 )
@@ -377,9 +378,11 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 		cell->setTextFontItalic( !cell->textFontItalic() );
 	      if ( _bold >= 0 )
 		cell->setTextFontBold( !cell->textFontBold() );
+
+		cell->clearDisplayDirtyFlag();
 	    }
 	
-	emit sig_updateView( r );
+	emit sig_updateView( this, r );
     }
 }
 
@@ -424,13 +427,15 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 		    m_dctCells.insert( key, cell );
 		}
 
+		cell->setDisplayDirtyFlag();
 		cell->setFaktor( 100.0 );
 		cell->setPrecision( 0 );
 		cell->setPostfix( "%" );
 		cell->setPrefix( "" );
+		cell->clearDisplayDirtyFlag();
 	    }
 	
-	emit sig_updateView( r );
+	emit sig_updateView( this, r );
     }
 }
 
@@ -475,10 +480,12 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker)
 		    m_dctCells.insert( key, cell );
 		}
 
+		cell->setDisplayDirtyFlag();
 		cell->setMultiRow( !cell->multiRow() );
+		cell->clearDisplayDirtyFlag();
 	    }
 
-	emit sig_updateView( r );
+	emit sig_updateView( this, r );
     }
 }
 
@@ -521,10 +528,12 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
 		    m_dctCells.insert( key, cell );
 		}
 
+		cell->setDisplayDirtyFlag();
 		cell->setAlign( _align );
+		cell->clearDisplayDirtyFlag();
 	    }
 
-	emit sig_updateView( r );
+	emit sig_updateView( this, r );
     }
 }
 
@@ -569,6 +578,8 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 		    m_dctCells.insert( key, cell );
 		}
 
+		cell->setDisplayDirtyFlag();
+
 		if ( _delta == 1 )
 		{
 		    if ( cell->precision() >= 0 )
@@ -578,9 +589,11 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 		}
 		else if ( cell->precision() >= 0 )
 		    cell->setPrecision( cell->precision() - 1 );
+
+		cell->clearDisplayDirtyFlag();
 	    }
 
-	emit sig_updateView( r );
+	emit sig_updateView( this, r );
     }
 }
 
@@ -625,12 +638,14 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 		    m_dctCells.insert( key, cell );
 		}
 
+		cell->setDisplayDirtyFlag();
 		cell->setPostfix( " DM" );
 		cell->setPrefix( "" );
 		cell->setPrecision( 2 );
+		cell->clearDisplayDirtyFlag();
 	    }
 
-	emit sig_updateView( r );
+	emit sig_updateView( this, r );
     }
 }
 
@@ -697,9 +712,9 @@ void KSpreadTable::insertRow( int _row )
     m_dctCells.setAutoDelete( TRUE );
     m_dctRows.setAutoDelete( TRUE );
 
-    emit sig_updateView();
-    emit sig_updateHBorder();
-    emit sig_updateVBorder();
+    emit sig_updateView( this );
+    emit sig_updateHBorder( this );
+    emit sig_updateVBorder( this );
     
     /*
     if ( pGui )
@@ -831,9 +846,9 @@ void KSpreadTable::deleteRow( int _row )
 	}
     } */
 
-    emit sig_updateView();
-    emit sig_updateHBorder();
-    emit sig_updateVBorder();
+    emit sig_updateView( this );
+    emit sig_updateHBorder( this );
+    emit sig_updateVBorder( this );
 
     /*
     if ( pGui )
@@ -906,9 +921,9 @@ void KSpreadTable::insertColumn( int _column )
     m_dctCells.setAutoDelete( TRUE );
     m_dctColumns.setAutoDelete( TRUE );
 
-    emit sig_updateView();
-    emit sig_updateHBorder();
-    emit sig_updateVBorder();
+    emit sig_updateView( this );
+    emit sig_updateHBorder( this );
+    emit sig_updateVBorder( this );
     /*
     if ( pGui )
     {
@@ -1039,9 +1054,9 @@ void KSpreadTable::deleteColumn( int _column )
 	}
     } */
 
-    emit sig_updateView();
-    emit sig_updateHBorder();
-    emit sig_updateVBorder();
+    emit sig_updateView( this );
+    emit sig_updateHBorder( this );
+    emit sig_updateVBorder( this );
     /*
     if ( pGui )
     {
@@ -1203,7 +1218,7 @@ void KSpreadTable::deleteSelection( const QPoint &_marker )
 	deleteCells( m_rctSelection.left(), m_rctSelection.top(), m_rctSelection.right(), m_rctSelection.bottom() );	
     }
     
-    emit sig_updateView();
+    emit sig_updateView( this );
     /* if ( pGui )
 	pGui->canvasWidget()->repaint(); */
 }
@@ -2095,7 +2110,7 @@ bool KSpreadTable::loadCells( KorbSession *korb, OBJECT o_cells, int _insert_x, 
 void KSpreadTable::setShowPageBorders( bool _b ) 
 {
   if ( _b != m_bShowPageBorders )
-    emit sig_updateView();
+    emit sig_updateView( this );
 }
 
 bool KSpreadTable::isOnNewPageX( int _column )
@@ -2208,6 +2223,26 @@ void KSpreadTable::insertColumnLayout( ColumnLayout *_l )
 void KSpreadTable::insertRowLayout( RowLayout *_l )
 {
   m_dctRows.replace( _l->row(), _l );
+}
+
+void KSpreadTable::emit_updateCell( KSpreadCell *_cell, int _col, int _row )
+{
+  emit sig_updateCell( this, _cell, _col, _row );
+  _cell->clearDisplayDirtyFlag();
+}
+
+void KSpreadTable::emit_updateRow( RowLayout *_layout, int )
+{
+  emit sig_updateVBorder( this );
+  emit sig_updateView( this );
+  _layout->clearDisplayDirtyFlag();
+}
+
+void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int )
+{
+  emit sig_updateHBorder( this );
+  emit sig_updateView( this );
+  _layout->clearDisplayDirtyFlag();
 }
 
 KSpreadTable::~KSpreadTable()

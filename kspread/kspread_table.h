@@ -292,14 +292,22 @@ public:
     void autofill( QRect &src, QRect &dest );
 
     void print( QPainter &painter, bool _asChild, QPrinter *_printer );
-  
+
+    /**
+     * Emits the signal @ref #sig_updateCell and sets the cells @ref KSpreadCell::m_bDisplayDirtyFlag to false.
+     */
+    void emit_updateCell( KSpreadCell* _cell, int _col, int _row );
+    void emit_updateRow( RowLayout *_layout, int _row );
+    void emit_updateColumn( ColumnLayout *_layout, int _column );
+
 signals:
-    void sig_updateView();
-    void sig_updateView( const QRect& );
-    void sig_unselect( const QRect& );
-    void sig_updateHBorder();
-    void sig_updateVBorder();
-    void sig_changeSelection( const QRect &_old, const QRect &_new );
+    void sig_updateView( KSpreadTable *_table );
+    void sig_updateView( KSpreadTable *_table, const QRect& );
+    void sig_updateCell( KSpreadTable *_table, KSpreadCell* _cell, int _col, int _row );
+    void sig_unselect( KSpreadTable *_table, const QRect& );
+    void sig_updateHBorder( KSpreadTable *_table );
+    void sig_updateVBorder( KSpreadTable *_table );
+    void sig_changeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
 
 protected:
     /**

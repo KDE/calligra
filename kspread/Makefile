@@ -21,9 +21,9 @@ MOC     =       /usr/bin/moc
 ####### Files
 
 SOURCES =	kmetaedit.cc kspread_emacs.cc kspread_main.cc kspread_shell.cc kspread_doc.cc kspread_dlg_paper.cc kspread_dlg_paper_headings.cc kspread_dlg_paper_border.cc kspread.cc kspread_undo.cc kspread_view.cc kspread_tabbar.cc kspread_python.cc kspread_dlg_print.cc kspread_autofill.cc kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc
-HEADERS =	kmetaedit.h kspread_emacs.h kspread_main.cc kspread_shell.h kspread_doc.h kspread_dlg_paper.h kspread_dlg_paper_headings.h kspread_dlg_paper_border.h kspread.h kspread_undo.h kspread_view.h kspread_tabbar.h kspread_python.h kxc_dlg_print.h kspread_autofill.h kspread_layout.h kspread_map.h kspread_dlg_layout.h kspread_dlg_scripts.h kspread_table.h kspread_cell.h
+HEADERS =	kmetaedit.h kspread_emacs.h kspread_main.cc kspread_shell.h kspread_doc.h kspread_dlg_paper.h kspread_dlg_paper_headings.h kspread_dlg_paper_border.h kspread.h kspread_undo.h kspread_view.h kspread_tabbar.h kspread_python.h kspread_dlg_print.h kspread_autofill.h kspread_layout.h kspread_map.h kspread_dlg_layout.h kspread_dlg_scripts.h kspread_table.h kspread_cell.h
 OBJECTS =	kmetaedit.o kspread_emacs.o kspread_main.o kspread_shell.o kspread_doc.o kspread_dlg_paper.o kspread_dlg_paper_headings.o kspread_dlg_paper_border.o kspread.o kspread_undo.o kspread_view.o kspread_tabbar.o kspread_python.o $(PYTHON)/Modules/config.o $(PYTHON)/Modules/getpath.o kspread_dlg_print.o kspread_autofill.o kspread_layout.o kspread_map.o kspread_dlg_layout.o kspread_dlg_scripts.o kspread_table.o kspread_cell.o
-SRCMETA =	kspread_main.moc kspread_shell.moc kspread_doc.moc kspread_dlg_paper.moc kspread_dlg_paper_headings.moc kspread_dlg_paper_border.moc kxcl.moc kspread_view.moc kspread_tabbar.moc kspread_dlg_print.moc kspread_table.moc kspread_dlg_layout.moc kspread_dlg_scripts.moc kspread_part.moc
+SRCMETA =	kspread_main.moc kspread_shell.moc kspread_doc.moc kspread_dlg_paper.moc kspread_dlg_paper_headings.moc kspread_dlg_paper_border.moc kspread_view.moc kspread_tabbar.moc kspread_dlg_print.moc kspread_table.moc kspread_dlg_layout.moc kspread_dlg_scripts.moc kspread_part.moc
 IDL	=	kspread.idl
 IDLH	=	kspread.h
 TARGET	=	kspread

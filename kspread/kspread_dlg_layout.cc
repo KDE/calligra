@@ -348,7 +348,10 @@ void CellLayoutDlg::slotApply()
     if ( left != right && top != bottom )
 	borderPage->applyOutline( left, top, right, bottom );
     
-    m_pView->drawVisibleCells();
+    // m_pView->drawVisibleCells();
+    QRect r;
+    r.setCoords( left, top, right, bottom );
+    m_pView->slotUpdateView( table, r );
 }
 
 

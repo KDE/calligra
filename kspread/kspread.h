@@ -63,6 +63,7 @@ class View :
     virtual void editCell() = 0;
     virtual void paperLayoutDlg() = 0;
     virtual void togglePageBorders() = 0;
+    virtual void newView() = 0;
     virtual void insertNewTable() = 0;
     virtual void autoFill() = 0;
     virtual void editGlobalScripts() = 0;
@@ -108,6 +109,7 @@ class View_stub : virtual public View,
     void editCell();
     void paperLayoutDlg();
     void togglePageBorders();
+    void newView();
     void insertNewTable();
     void autoFill();
     void editGlobalScripts();

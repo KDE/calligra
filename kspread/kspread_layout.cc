@@ -100,18 +100,40 @@ int KSpreadLayout::topBorderWidth( KSpreadView *_view )
 }
 
 
+/*****************************************************************************
+ *
+ * KRowLayout
+ *
+ *****************************************************************************/
+
+#define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
+#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateRow( this, m_iRow );
+
 RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
 {
+  m_bDisplayDirtyFlag = false;
   m_fHeight = 20 * POINT_TO_MM;
   m_iRow = _row;
 }
 
+void RowLayout::setMMHeight( float _h )
+{
+  UPDATE_BEGIN;
+  
+  m_fHeight = _h;
+
+  UPDATE_END;
+}
 void RowLayout::setHeight( int _h, KSpreadView *_view )
 {
+  UPDATE_BEGIN;
+
   if ( _view )
     m_fHeight = ( float)_h / _view->zoom() * POINT_TO_MM;
   else
     m_fHeight = ( float)_h / POINT_TO_MM;
+
+  UPDATE_END;
 }
 
 int RowLayout::height( KSpreadView *_view )
@@ -174,18 +196,44 @@ bool RowLayout::load( KorbSession *korb, OBJECT o_rl )
 }
 */
 
+/*****************************************************************************
+ *
+ * KColumnLayout
+ *
+ *****************************************************************************/
+
+#undef UPDATE_BEGIN
+#undef UPDATE_END
+
+#define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
+#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateColumn( this, m_iColumn );
+
 ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout( _table )
 {
+  m_bDisplayDirtyFlag = false;
   m_fWidth = 60.0 * POINT_TO_MM;
   m_iColumn = _column;
 }
 
+void ColumnLayout::setMMWidth( float _w )
+{
+  UPDATE_BEGIN;
+  
+  m_fWidth = _w;
+
+  UPDATE_END;
+}
+
 void ColumnLayout::setWidth( int _w, KSpreadView *_view )
 {
+  UPDATE_BEGIN;
+  
   if ( _view )
     m_fWidth = ( float)_w / _view->zoom() * POINT_TO_MM;
   else
     m_fWidth = ( float)_w / POINT_TO_MM;
+
+  UPDATE_END;
 }
 
 int ColumnLayout::width( KSpreadView *_view )

@@ -17,6 +17,9 @@
 #include "kspread_map.h"
 #include "kspread_doc.h"
 
+#define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
+#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
+
 /*****************************************************************************
  *
  * KSpreadCell
@@ -42,7 +45,8 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const cha
     m_bCalcDirtyFlag = FALSE;
     m_bValue = FALSE;
     m_bProgressFlag = FALSE;
-
+    m_bDisplayDirtyFlag = false;
+    
     m_bForceExtraCells = FALSE;
     m_iExtraXCells = 0;
     m_iExtraYCells = 0;
@@ -1451,6 +1455,8 @@ void KSpreadCell::setText( const char *_text )
     return;
   }
   
+  UPDATE_BEGIN;
+
   m_lstDepends.clear();
     
   if ( *_text == '=' )
@@ -1506,6 +1512,8 @@ void KSpreadCell::setText( const char *_text )
 	bind->cellChanged( this );
     }
   }
+
+  UPDATE_END;
 }
 
 void KSpreadCell::checkValue()

@@ -240,6 +240,9 @@ public:
      */
     virtual void setLayoutDirtyFlag();
     
+    void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
+    void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true ; }
+
     /**
      * Print the cell.
      *
@@ -424,6 +427,17 @@ protected:
      */
     bool m_bProgressFlag;
 
+    /**
+     * If this flag is set, then it is known that this cell has to be updated
+     * on the display. This means that somewhere in the calling stack there is a
+     * function which will call @ref KSpreadTable::emit_updateCell once it retaines
+     * the control. If a function changes the contents/layout of this cell and this
+     * flag is not set, then the function must set it at once. After the changes are
+     * done the function must call <tt>m_pTable->emit_updateCell(...).
+     * The flag is cleared by the function m_pTable->emit_updateCell.
+     */
+    bool m_bDisplayDirtyFlag;
+  
     /**
      * The amount of additional cells horizontal
      */

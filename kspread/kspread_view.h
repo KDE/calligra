@@ -272,11 +272,11 @@ public:
      * This is a convenience function that
      * creates a new @ref QPainter for you. Dont use if another @ref QPainter is active!
      *
-     * @param _obj is the @ref Object to draw.
+     * @param _cell is the @ref KSpreadCell to draw.
      * @param _col is the column this object is assumed to reside in.
      * @param _row is the row this object is assumed to reside in.
      */
-    void drawCell( KSpreadCell *_obj, int _col, int _row );
+    void drawCell( KSpreadCell *_cell, int _col, int _row );
     /**
      * Redraws a single object.
      */
@@ -330,6 +330,10 @@ public:
      */
     void reloadScripts();
     
+    /**
+     * Menu View->New View
+     */
+    void newView();
     /**
      * Menu View->Show Page Borders
      */
@@ -495,9 +499,17 @@ protected slots:
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
 
+public slots:
     // Document signals
-    void slotUnselect( const QRect& _old );
-
+    void slotUnselect( KSpreadTable *_table, const QRect& _old );
+    void slotUpdateView( KSpreadTable *_table );
+    void slotUpdateView( KSpreadTable *_table, const QRect& );
+    void slotUpdateCell( KSpreadTable *_table, KSpreadCell* _cell, int _col, int _row );
+    void slotUpdateHBorder( KSpreadTable *_table );
+    void slotUpdateVBorder( KSpreadTable *_table );
+    void slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
+    void slotAddTable( KSpreadTable *_table );
+  
 protected:
     // C++
     virtual void keyPressEvent ( QKeyEvent * _ev );
@@ -579,6 +591,7 @@ protected:
     CORBA::Long m_idMenuEdit_Cell;
     CORBA::Long m_idMenuEdit_Layout;
     CORBA::Long m_idMenuView;
+    CORBA::Long m_idMenuView_NewView;
     CORBA::Long m_idMenuView_ShowPageBorders;
     CORBA::Long m_idMenuFolder;
     CORBA::Long m_idMenuFolder_NewTable;

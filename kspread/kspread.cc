@@ -189,6 +189,21 @@ void KSpread::View_stub::togglePageBorders()
 }
 
 
+void KSpread::View_stub::newView()
+{
+  CORBA::Request_var _req = this->_request( "newView" );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
 void KSpread::View_stub::insertNewTable()
 {
   CORBA::Request_var _req = this->_request( "insertNewTable" );
@@ -756,6 +771,15 @@ bool KSpread::View_skel::dispatch( CORBA::ServerRequest_ptr _req, CORBA::Environ
     _req->params( _args );
 
     togglePageBorders();
+    return true;
+  }
+  if( strcmp( _req->op_name(), "newView" ) == 0 ) {
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 0, _args );
+
+    _req->params( _args );
+
+    newView();
     return true;
   }
   if( strcmp( _req->op_name(), "insertNewTable" ) == 0 ) {

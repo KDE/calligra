@@ -15,6 +15,7 @@ module KSpread
 		signal void editCell();
 		signal void paperLayoutDlg();
 		signal void togglePageBorders();
+		signal void newView();
 		signal void insertNewTable();
 		signal void autoFill();
 		signal void editGlobalScripts();

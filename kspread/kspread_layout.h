@@ -220,7 +220,7 @@ public:
      *
      * @param '_h' is assumed to be a unzoomed millimeter value.
      */
-    void setMMHeight( float _h ) { m_fHeight = _h; }
+    void setMMHeight( float _h );
 
     /**
      * Use this function to tell this layout that it is the default layout.
@@ -246,7 +246,10 @@ public:
     int row() { return m_iRow; }
 
     void setRow( int _r ) { m_iRow = _r; }
-    
+
+    void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
+    void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
+
 protected:
     /**
      * Width of the cell in unzoomed millimeters.
@@ -271,6 +274,8 @@ protected:
      * @see #row
      */
     int m_iRow;
+
+    bool m_bDisplayDirtyFlag;
 };
 
 /**
@@ -303,7 +308,7 @@ public:
      *
      * @param _w is assumed to be a unzoomed millimeter value.
      */
-    void setMMWidth( float _w ) { m_fWidth = _w; }
+    void setMMWidth( float _w );
     
     /**
      * Use this function to tell this layout that it is the default layout.
@@ -327,6 +332,9 @@ public:
     int column() { return m_iColumn; }
 
     void setColumn( int _c ) { m_iColumn = _c; }
+
+    void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
+    void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
     
 protected:
     /**
@@ -352,6 +360,8 @@ protected:
      * @see #column
      */
     int m_iColumn;
+
+    bool m_bDisplayDirtyFlag;
 };
 
 #endif

@@ -180,7 +180,10 @@ public:
     void enableUndo( bool _b ) {}
   // HACK
     void enableRedo( bool _b ) {}
-        
+
+signals:
+    void sig_addTable( KSpreadTable *_table );
+  
 protected:
     void initPython();
 

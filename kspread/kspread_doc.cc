@@ -308,6 +308,8 @@ void KSpreadDoc::addTable( KSpreadTable *_table )
     } */
     
   m_bModified = TRUE;
+
+  emit sig_addTable( _table );
 }
 
 void KSpreadDoc::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
