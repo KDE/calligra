@@ -428,10 +428,10 @@ void CSVDialog::formatClicked(int id)
     case 0: // number
         header = i18n("Number");
         break;
-    case 3: // date
+    case 2: // date
         header = i18n("Date");
         break;
-    case 2: // currency
+    case 3: // currency
         header = i18n("Currency");
         break;
     }

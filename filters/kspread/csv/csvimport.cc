@@ -133,8 +133,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
             value += step;
             emit sigProgress(value);
             QString text( dialog->getText( row, col ) );
-            table->setText( row + 1, col + 1, text, false, true );
-            cell = table->cellAt( col + 1, row + 1, false );
 
             double len = (double) text.length() * width;
             if ( len > widths[col] )
@@ -143,17 +141,26 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
             switch (dialog->getHeader(col))
             {
              case CSVDialog::TEXT:
-                break;
+              table->setText( row + 1, col + 1, text, false, true );
+              cell = table->cellAt( col + 1, row + 1, false );
+              break;
              case CSVDialog::NUMBER:
-                cell->setFormatType(KSpreadCell::Number);
-                cell->setPrecision(2);
-                break;
+              table->setText( row + 1, col + 1, text, false );
+              cell = table->cellAt( col + 1, row + 1, false );
+              cell->setFormatType(KSpreadCell::Number);
+              cell->setPrecision(2);
+              break;
              case CSVDialog::DATE:
-                cell->setFormatType(KSpreadCell::ShortDate);
-                break;
+              table->setText( row + 1, col + 1, text, false );
+              cell = table->cellAt( col + 1, row + 1, false );
+              cell->setFormatType(KSpreadCell::ShortDate);
+              break;
              case CSVDialog::CURRENCY:
-                cell->setFormatType(KSpreadCell::Money);
-                break;
+              table->setText( row + 1, col + 1, text, false );
+              cell = table->cellAt( col + 1, row + 1, false );
+              cell->setFormatType(KSpreadCell::Money);
+              cell->setPrecision(2);
+              break;
             }
         }        
     }
