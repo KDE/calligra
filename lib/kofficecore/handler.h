@@ -29,6 +29,17 @@ class KoView;
 class PartResizeHandlerPrivate;
 class PartMoveHandlerPrivate;
 
+/**
+ * An abstract base class for event handlers.
+ *
+ * The idea of an event handler is that it is created for a
+ * certain purpose, for example moving or resizing of a part.
+ * Once that action is finished, the handler will destroy
+ * itself.
+ *
+ * This design pattern helps you to keep your event filters
+ * and your mousePressEvent, mouseMoveEvent etc. methods clean.
+ */
 class EventHandler : public QObject
 {
     Q_OBJECT
@@ -42,6 +53,10 @@ private:
     QObject* m_target;
 };
 
+/**
+ * Used by @ref ContainerHandler internally to handle resizing of
+ * embedded documents.
+ */
 class PartResizeHandler : public EventHandler
 {
     Q_OBJECT
@@ -57,6 +72,10 @@ private:
     PartResizeHandlerPrivate *d;
 };
 
+/**
+ * Used by @ref ContainerHandler internally to handle moving of
+ * embedded documents.
+ */
 class PartMoveHandler : public EventHandler
 {
     Q_OBJECT
@@ -72,6 +91,20 @@ private:
     PartMoveHandlerPrivate *d;
 };
 
+/**
+ * This class can handle moving and resizing of embedded
+ * documents in your class derived from @ref KoView.
+ *
+ * Just create one instance per view of this class and parts
+ * will megically be moved around on your document.
+ *
+ * This class acts like an event filter on your view, so the
+ * mouse events which are used for parts moving and resizing
+ * will never show up in your view.
+ *
+ * @see PartMoveHandlerPrivate
+ * @see PartResizeHandlerPrivate
+ */
 class ContainerHandler : public EventHandler
 {
     Q_OBJECT
