@@ -107,12 +107,7 @@ public:
 
   virtual bool isStoredExtern();
 
-protected:
-  // #### Torben: Is that still needed ?
-  // David: No, but it's virtual so we can't remove it :}
-  virtual bool loadTag( KOMLParser&, const QString&, QValueList<KOMLAttrib>&);
-
-protected: // Should be protected, but KWord needs access to the variables
+protected: // Should be private, but KWord needs access to the variables
     // because it reimplements load/save (for uppercase tags)
 
   /**

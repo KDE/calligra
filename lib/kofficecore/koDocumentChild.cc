@@ -152,11 +152,6 @@ bool KoDocumentChild::load( const QDomElement& element )
     return true;
 }
 
-bool KoDocumentChild::loadTag( KOMLParser&, const QString&, QValueList<KOMLAttrib>& )
-{
-    return FALSE;
-}
-
 bool KoDocumentChild::loadDocument( KoStore* _store )
 {
   assert( !m_tmpURL.isEmpty() );
