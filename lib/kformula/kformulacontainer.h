@@ -181,7 +181,7 @@ public:
     /**
      * Saves the data into the document.
      */
-    void save( QDomElement root );
+    void save( QDomElement &root );
 
     /**
      * Save formula as MathML.

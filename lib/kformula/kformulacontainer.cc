@@ -482,7 +482,7 @@ void Container::setFontSizeDirect( int pointSize )
 }
 
 
-void Container::save( QDomElement root )
+void Container::save( QDomElement &root )
 {
     QDomDocument ownerDoc = root.ownerDocument();
     root.appendChild(rootElement()->getElementDom(ownerDoc));
