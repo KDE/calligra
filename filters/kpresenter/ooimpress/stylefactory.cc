@@ -531,10 +531,10 @@ void MarkerStyle::toXML( QDomDocument & doc, QDomElement & e ) const
 {
     QDomElement marker = doc.createElement( "draw:marker" );
     marker.setAttribute( "draw:name", m_name );
-    if ( m_d != QString::null )
-        marker.setAttribute( "svg:d", m_d );
     if ( m_viewBox != QString::null )
         marker.setAttribute( "svg:viewBox", m_viewBox );
+    if ( m_d != QString::null )
+        marker.setAttribute( "svg:d", m_d );
 
     e.appendChild( marker );
 }

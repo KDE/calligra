@@ -427,7 +427,13 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
             case 12: // polyline
                 appendPolyline( doccontent, o, drawPage );
                 break;
+            case 13: //OT_QUADRICBEZIERCURVE = 13
+            case 14: //OT_CUBICBEZIERCURVE = 14
+                //todo
+                // "draw:path"
+                break;
             case 15: // polygon
+            case 16: // close polygone
                 appendPolyline( doccontent, o, drawPage, true /*polygon*/ );
                 break;
             }
@@ -685,8 +691,6 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
                         listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
                     maxX = QMAX( maxX, tmpX );
                     maxY = QMAX( maxY, tmpY );
-
-                    //points.putPoints( index, 1, tmpX,tmpY );
                 }
                 elemPoint = elemPoint.nextSibling().toElement();
             }
