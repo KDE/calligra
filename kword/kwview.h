@@ -385,6 +385,7 @@ protected slots:
     void slotApplyFont();
     void slotApplyParag();
     void slotPageLayoutChanged( const KoPageLayout& layout );
+    void slotChangeCaseState(bool b);
     void slotChangeCutState(bool b);
 
 protected:

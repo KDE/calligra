@@ -210,7 +210,7 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
              actionEditCopy, SLOT(setEnabled(bool)) );
 
     connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
-             actionChangeCase, SLOT(setEnabled(bool)));
+             /*actionChangeCase*/this, SLOT(/*setEnabled(bool)*/slotChangeCaseState(bool )));
 
     connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionCreateStyleFromSelection, SLOT(setEnabled(bool)));
@@ -287,6 +287,15 @@ void KWView::slotChangeCutState(bool b)
         actionEditCut->setEnabled( false );
     else
         actionEditCut->setEnabled( b );
+}
+
+void KWView::slotChangeCaseState(bool b)
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit && edit->textFrameSet()->protectContent())
+        actionChangeCase->setEnabled( false );
+    else
+        actionChangeCase->setEnabled( b );
 }
 
 void KWView::slotSetInitialPosition()
@@ -5123,8 +5132,6 @@ void KWView::slotFrameSetEditChanged()
         }
     }
     actionEditCut->setEnabled( hasSelection && rw );
-    if ( edit && edit->textFrameSet()->protectContent())
-        actionEditCut->setEnabled( false );
 
     actionEditCopy->setEnabled( hasSelection );
     actionEditReplace->setEnabled( /*edit &&*/ rw );
@@ -5167,6 +5174,15 @@ void KWView::slotFrameSetEditChanged()
     actionInsertSpecialChar->setEnabled(state);
 
     actionChangeCase->setEnabled( (rw && !edit)|| (state && hasSelection) );
+
+    if ( edit && edit->textFrameSet()->protectContent())
+    {
+        actionChangeCase->setEnabled( false );
+        actionEditCut->setEnabled( false );
+    }
+    else
+        actionChangeCase->setEnabled( true );
+
 
 
     actionInsertFormula->setEnabled(state && (m_gui->canvasWidget()->viewMode()->type()!="ModeText"));
