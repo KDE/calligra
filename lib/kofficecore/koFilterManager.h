@@ -43,9 +43,6 @@ class PreviewStack;
  *  you won't have to use it, since KoMainWindow takes care of loading
  *  and saving documents.
  *
- *  This class follows the singleton pattern. You don't create objects of this
- *  class directly, but rather use the static method @ref #self.
- *
  *  @short The class managing all the filters.
  *  @ref KoFilter
  *  @ref KoFilterDialog

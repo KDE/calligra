@@ -529,17 +529,18 @@ QString KoFilterManager::prepareExport( const QString & file,
         }
         else
         {
-            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SIGNAL(sigProgress(int)));
             if(vec[i].implemented.lower()=="file")
                 tmpFileNeeded=true;
-            else if(vec[i].implemented.lower()=="kodocument") {
+            else if (document && vec[i].implemented.lower()=="kodocument" )
+            {
+                QObject::connect(filter, SIGNAL(sigProgress(int)), document, SIGNAL(sigProgress(int)));
                 ok=filter->filterExport(file, document, _native_format, outputFormat, d->config);
                 // if(ok)
                 //  document->changedByFilter();
                 document->emitProgress(-1);
+                QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SIGNAL(sigProgress(int)));
+                delete filter;
             }
-            QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SIGNAL(sigProgress(int)));
-            delete filter;
         }
         ++i;
     }
