@@ -26,6 +26,7 @@
 #include <shapes/vellipse.h>
 #include <shapes/vrectangle.h>
 #include <shapes/vpolygon.h>
+#include <core/vsegment.h>
 #include <qcolor.h>
 #include <qfile.h>
 #include <qregexp.h>
@@ -539,6 +540,9 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 				case 'z':
 				case 'Z':
 				{
+					// reset curx, cury for next path
+					curx = path->getFirst()->knot().x();
+					cury = path->getFirst()->knot().y();
 					path->close();
 					obj->combinePath( *path );
 					delete path;
