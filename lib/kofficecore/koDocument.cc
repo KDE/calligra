@@ -1387,9 +1387,10 @@ bool KoDocument::openFile()
     return ok;
 }
 
+// The caller must call store->close() if loadAndParse returns true.
 bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocument& doc)
 {
-    //kdDebug(30003) << "Trying to open " << filename << endl;
+    //kdDebug(30003) << "loadAndParse: Trying to open " << filename << endl;
 
     if (!store->open(filename))
     {
@@ -1411,8 +1412,7 @@ bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocum
         store->close();
         return false;
     }
-    store->close();
-    kdDebug(30003) << "File " << filename << " loaded and parsed!" << endl;
+    kdDebug(30003) << "File " << filename << " loaded and parsed" << endl;
     return true;
 }
 
@@ -1514,8 +1514,10 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
         QDomDocument contentDoc;
         bool ok = loadAndParse( store, "content.xml", contentDoc );
         if ( ok ) {
+            store->close();
             QDomDocument stylesDoc;
-            loadAndParse( store, "styles.xml", stylesDoc );
+            if ( loadAndParse( store, "styles.xml", stylesDoc ) )
+                store->close();
             // Load styles from style.xml
             oasisStyles.createStyleMap( stylesDoc );
             // Also load styles from content.xml
@@ -1561,14 +1563,17 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
 
     if ( oasis && store->hasFile( "meta.xml" ) ) {
         QDomDocument metaDoc;
-        loadAndParse( store, "meta.xml", metaDoc );
+        if ( loadAndParse( store, "meta.xml", metaDoc ) )
+            store->close();
         // ## TODO use it (implement loading of oasis metadata in KoDocumentInfo)
     }
     else if ( !oasis && store->hasFile( "documentinfo.xml" ) )
     {
         QDomDocument doc;
-        if ( loadAndParse( store, "documentinfo.xml", doc ) )
+        if ( loadAndParse( store, "documentinfo.xml", doc ) ) {
+            store->close();
             d->m_docInfo->load( doc );
+        }
     }
     else
     {
