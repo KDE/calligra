@@ -166,7 +166,7 @@ public:
      * @param defaultStyle the style to use by default (initial pararaph, and when deleting a used style)
      * This constructor creates the contained KoTextDocument automatically.
      */
-    KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, KoStyle* defaultStyle,int _tabStopWidth = -1,
+    KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, KoStyle* defaultStyle,int _tabStopWidth = -1,
                   QObject* parent = 0, const char *name = 0 );
 
     /** Alternative constructor.

@@ -1532,7 +1532,7 @@ public:
     ~KoTextFormat();
 
     //KoTextFormat( const QStyleSheetItem *s );
-    KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollection *parent = 0 );
+    KoTextFormat( const QFont &f, const QColor &c, const QString &_language, KoTextFormatCollection *parent = 0 );
     KoTextFormat( const KoTextFormat &fm );
     //KoTextFormat makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const;
     KoTextFormat& operator=( const KoTextFormat &fm );
@@ -1626,17 +1626,17 @@ class Q_EXPORT KoTextFormatCollection
 
 public:
     KoTextFormatCollection();
-    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor ); //// kotext addition
+    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage ); //// kotext addition
     virtual ~KoTextFormatCollection();
 
     void setDefaultFormat( KoTextFormat *f );
     KoTextFormat *defaultFormat() const;
     virtual KoTextFormat *format( const KoTextFormat *f );
     virtual KoTextFormat *format( KoTextFormat *of, KoTextFormat *nf, int flags );
-    virtual KoTextFormat *format( const QFont &f, const QColor &c );
+    virtual KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language );
     virtual void remove( KoTextFormat *f );
     virtual KoTextFormat *createFormat( const KoTextFormat &f ) { return new KoTextFormat( f ); }
-    virtual KoTextFormat *createFormat( const QFont &f, const QColor &c ) { return new KoTextFormat( f, c, this ); }
+    virtual KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language ) { return new KoTextFormat( f, c, _language, this ); }
     void debug();
 
     //void setPainter( QPainter *p );

@@ -42,6 +42,8 @@
 #include <stdlib.h>
 #include "koparagcounter.h" //// kotext
 #include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
 //#include <kdebugclasses.h>
 
 //#define PARSER_DEBUG
@@ -5717,20 +5719,20 @@ KoTextFormatCollection::KoTextFormatCollection()
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
 #endif
-    defFormat = new KoTextFormat( QApplication::font(), QColor() ); //// kotext: need to use default QColor here
+    defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language() ); //// kotext: need to use default QColor here
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
     cachedFormat = 0;
 }
 
-KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor )
+KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage  )
     : cKey( 307 ), sheet( 0 )
 {
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
 #endif
-    defFormat = new KoTextFormat( defaultFont, defaultColor );
+    defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage );
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
@@ -5841,7 +5843,7 @@ KoTextFormat *KoTextFormatCollection::format( KoTextFormat *of, KoTextFormat *nf
     return cres;
 }
 
-KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c )
+KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, const QString & language )
 {
     if ( cachedFormat && cfont == f && ccol == c ) {
 #ifdef DEBUG_COLLECTION
@@ -5867,7 +5869,7 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c )
     if ( key == defFormat->key() )
 	return defFormat;
 
-    cachedFormat = createFormat( f, c );
+    cachedFormat = createFormat( f, c,language );
     cachedFormat->collection = this;
     cKey.insert( cachedFormat->key(), cachedFormat );
     if ( cachedFormat->key() != key )
@@ -6137,7 +6139,7 @@ static KoTextFormat *defaultFormat = 0;
 QString KoTextFormat::makeFormatChangeTags( KoTextFormat *f, const QString& oldAnchorHref, const QString& anchorHref  ) const
 {
     if ( !defaultFormat ) // #### wrong, use the document's default format instead
-        defaultFormat = new KoTextFormat( QApplication::font(), QColor() );
+        defaultFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language() );
     QString tag;
     if ( f ) {
         if ( f->font() != defaultFormat->font() ) {
@@ -6188,7 +6190,7 @@ QString KoTextFormat::makeFormatChangeTags( KoTextFormat *f, const QString& oldA
 QString KoTextFormat::makeFormatEndTags( const QString& anchorHref ) const
 {
     if ( !defaultFormat )
-        defaultFormat = new KoTextFormat( QApplication::font(), QColor() );
+        defaultFormat = new KoTextFormat( QApplication::font(), QColor(),KGlobal::locale()->language() );
     QString tag;
     if ( font() != defaultFormat->font() ) {
         if ( font().family() != defaultFormat->font().family()

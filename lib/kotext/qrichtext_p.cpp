@@ -34,7 +34,8 @@
 ** not clear to you.
 **
 **********************************************************************/
-
+#include <klocale.h>
+#include <kglobal.h>
 #include "qrichtext_p.h"
 #include <assert.h>
 
@@ -136,7 +137,7 @@ KoTextFormat::KoTextFormat()
     m_strikeOutLine = S_NONE;
     m_underlineLineStyle = U_SOLID;
     m_strikeOutLineStyle = S_SOLID;
-    m_language = QString::null;
+    m_language = KGlobal::locale()->language();
     d->m_bShadowText = true;
     d->m_relativeTextSize = 0.66;
     d->m_offsetFromBaseLine= 0;
@@ -184,7 +185,7 @@ KoTextFormat::KoTextFormat( const QStyleSheetItem *style )
 }
 #endif
 
-KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollection *parent )
+KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_language, KoTextFormatCollection *parent )
     : fn( f ), col( c ), fm( QFontMetrics( f ) ), linkColor( TRUE ),
       logicalFontSize( 3 ), stdPointSize( f.pointSize() ) /*, painter( 0 ),
       different( NoFlags )*/
@@ -213,7 +214,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     m_strikeOutLine = S_NONE;
     m_underlineLineStyle = U_SOLID;
     m_strikeOutLineStyle = S_SOLID;
-    m_language = QString::null;
+    m_language = _language;
     d->m_bShadowText = true;
     d->m_relativeTextSize= 0.66;
     d->m_offsetFromBaseLine = 0;

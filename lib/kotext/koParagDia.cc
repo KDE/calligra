@@ -632,7 +632,7 @@ KoStylePreview::KoStylePreview( const QString& title, const QString& text, QWidg
     m_zoomHandler = new KoZoomHandler;
     QFont font = KoGlobal::defaultFont();
     font.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( font.pointSize() ) );
-    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font, QColor() ));
+    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font, QColor(), KGlobal::locale()->language() ));
     //m_textdoc->setWidth( KoTextZoomHandler::ptToLayoutUnitPt( 1000 ) );
     KoTextParag * parag = m_textdoc->firstParag();
     parag->insert( 0, text );
