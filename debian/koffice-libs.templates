@@ -1,0 +1,8 @@
+Template: koffice-libs/welcome
+Type: note
+Description: KOffice is Pre-Beta!!!
+ KOffice is not complete.  Most day to day functions will work however 
+ things like filters are incomplete and will (note will, not can) cause
+ crashes.  The main reason for me including this version of KOffice at
+ this time is to work out packaging problems and non-filter related bugs.
+ 

@@ -71,6 +71,7 @@ binary-arch: build install
 	done
 	dh_undocumented
 	dh_movefiles -a
+	dh_installdebconf -a
 	dh_installdocs -a
 	dh_installmenu -a
 	dh_installchangelogs -pkoffice-libs
