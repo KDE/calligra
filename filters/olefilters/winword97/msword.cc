@@ -28,6 +28,7 @@
 #include <myfile.h>
 #include <properties.h>
 #include <qtextcodec.h>
+#include <string.h>
 
 // We currently only take note of the document's main non-Far Eastern
 // language, and ignore character properties. TBD: remove these restrictions!
@@ -1273,7 +1274,6 @@ void MsWord::parse()
             const U8 *prmPtr;
             U8 sprm[3];
 
-            kdDebug(s_area) << "piece table: CPs: " << actualStartCp << ".." << actualEndCp << " at FC: " << data.fc << endl;
             unicode = ((data.fc & codepage1252mask) != codepage1252mask);
             //unicode = unicode || m_fib.fExtChar;
             if (!unicode)
@@ -1562,6 +1562,7 @@ unsigned MsWord::read(const U8 *in, FIB *out)
 
     // Bytes 0 to 31 are common.
 
+    memset(out, 0, sizeof(FIB));
     bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 5);
     bytes += MsWordGenerated::read(in + bytes, &shifterU16);
     out->fDot = shifterU16;
@@ -1621,25 +1622,10 @@ unsigned MsWord::read(const U8 *in, FIB *out)
         // We will convert the FIB into the same form as for Winword
 
         out->csw = 14;
-        out->wMagicCreated = 0;
-        out->wMagicRevised = 0;
-        out->wMagicCreatedPrivate = 0;
-        out->wMagicRevisedPrivate = 0;
-        out->pnFbpChpFirst_W6 = 0;
-        out->pnChpFirst_W6 = 0;
-        out->cpnBteChp_W6 = 0;
-        out->pnFbpPapFirst_W6 = 0;
-        out->pnPapFirst_W6 = 0;
-        out->cpnBtePap_W6 = 0;
-        out->pnFbpLvcFirst_W6 = 0;
-        out->pnLvcFirst_W6 = 0;
-        out->cpnBteLvc_W6 = 0;
         out->lidFE = out->lid;
         out->clw = 22;
         bytes += MsWordGenerated::read(in + bytes, &out->cbMac);
         bytes += 16;
-        out->lProductCreated = 0;
-        out->lProductRevised = 0;
 
         // ccpText through ccpHdrTxbx.
 
