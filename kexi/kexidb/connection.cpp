@@ -1826,8 +1826,8 @@ bool Connection::loadObjectSchemaData( int objectID, SchemaData &sdata )
 bool Connection::loadObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata )
 {
 	RowData data;
-	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_type=%1 and o_name=%2")
-		.arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName)), data))
+	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_type=%1 and lower(o_name)=%2")
+		.arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName.lower())), data))
 		return false;
 	return setupObjectSchemaData( data, sdata );
 }
@@ -2084,7 +2084,7 @@ TableSchema* Connection::tableSchema( const QString& tableName )
 		return t;
 	//not found: retrieve schema
 	RowData data;
-	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_name='%1' and o_type=%2")
+	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where lower(o_name)='%1' and o_type=%2")
 			.arg(m_tableName).arg(KexiDB::TableObjectType), data))
 		return 0;
 	
@@ -2181,7 +2181,7 @@ QuerySchema* Connection::querySchema( const QString& queryName )
 		return q;
 	//not found: retrieve schema
 	RowData data;
-	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_name='%1' and o_type=%2")
+	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where lower(o_name)='%1' and o_type=%2")
 			.arg(m_queryName).arg(KexiDB::QueryObjectType), data))
 		return 0;
 	

@@ -150,7 +150,7 @@ void KexiDB::getHTMLErrorMesage(Object* obj, ResultInfo *result)
 int KexiDB::idForObjectName( Connection &conn, const QString& objName, int objType )
 {
 	RowData data;
-	if (!conn.querySingleRecord(QString("select o_id from kexi__objects where o_name='%1' and o_type=%2")
+	if (!conn.querySingleRecord(QString("select o_id from kexi__objects where lower(o_name)='%1' and o_type=%2")
 		.arg(objName.lower()).arg(objType), data))
 		return 0;
 	bool ok;
