@@ -63,6 +63,7 @@ protected slots:
   void slotShowSidebar();
   void slotKSLoadCompleted();
   void slotKSLoadCanceled (const QString &);
+  void slotNewDocumentName();
 
 protected:
 

@@ -94,6 +94,9 @@ KoShellWindow::KoShellWindow()
   m_pKoolBar->setFixedWidth( 80 );
   m_pKoolBar->setMinimumHeight( 300 );
 
+  connect( this, SIGNAL( documentSaved() ),
+           this, SLOT( slotNewDocumentName() ) );
+
   // Not implemented yet
   actionCollection()->action("view_split")->setEnabled(false);
   actionCollection()->action("view_splitter_orientation")->setEnabled(false);
@@ -261,6 +264,11 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     m_activePage = m_lstPages.end();
     KoMainWindow::updateCaption();
   }
+}
+
+void KoShellWindow::slotNewDocumentName()
+{
+	updateCaption();
 }
 
 void KoShellWindow::updateCaption()
