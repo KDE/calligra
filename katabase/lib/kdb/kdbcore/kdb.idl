@@ -1,0 +1,200 @@
+#ifndef __kdb_idl__
+#define __kdb_idl__
+
+#include <kom.idl>
+
+module KDB
+{
+  enum PROPSTATUS { OK, UNKNOWN, ACCESS_DENIED };
+
+	struct PROP
+	{
+		wstring      wstrName;
+		any          aValue;
+		PROPSTATUS   status;
+	};
+
+	typedef sequence<PROP> PROPSEQ;
+
+	enum PROPMODE { READ, WRITE, READWRITE };
+
+	struct PROPINFO
+	{
+		wstring      wstrName;
+		string       strType;
+		wstring      wstrDescr;
+		PROPMODE     mode;
+		PROPSTATUS   status;
+	};
+
+	typedef sequence<PROPINFO> PROPINFOSEQ;
+
+	interface IDBProperties : KOM::Aggregate
+	{
+		boolean SetProperty( inout PROP prop );
+		boolean SetPropertySeq( inout PROPSEQ prop_seq );
+
+		boolean GetProperty( inout PROP prop );
+		boolean GetPropertySeq( inout PROPSEQ prop_seq );
+		void GetAllProperties( out PROPSEQ prop_seq );
+
+		boolean GetPropertyInfo( inout PROPINFO prop_info );
+		boolean GetPropertyInfoSeq( inout PROPINFOSEQ prop_info_seq );
+		void GetAllPropertyInfos( out PROPINFOSEQ prop_info_seq );
+	};
+
+  typedef sequence<octet> HANDLE;
+
+  exception KDBError {
+    long error;
+  };
+  
+  interface IErrorInfo : KOM::Base, KOM::Aggregate {
+    string GetErrorString( in long error );
+  };
+  
+  exception PropertyMissing {
+    wstring wstrName;
+  };
+  
+  interface ISession;
+  
+  exception NotInitialized {};
+  
+  interface IDataSource : KOM::Component,
+                          IDBProperties {
+    void Initialize()
+      raises ( PropertyMissing, KDBError );
+    void UnInitialize()
+      raises ( KDBError );
+    
+    ISession CreateSession()
+      raises ( NotInitialized, KDBError );
+  };
+
+  typedef string ColumnName;
+  typedef string TableName;
+  
+  // TO DO: should TableId's be string's or more generic any's ?
+  // SQL providers probably use strings ...
+
+  interface IRowset;
+  interface ICommand;
+  
+  interface ICommandFactory : IDBProperties {
+    ICommand CreateCommand()
+      raises ( PropertyMissing, KDBError );
+  };
+
+  interface ISession : KOM::Component, IDBProperties {
+    IDataSource GetDataSource()
+      raises ( KDBError );
+    IRowset OpenRowset( in TableName table_name,
+			in PROPSEQ property_seq )
+      raises ( KDBError );
+  };
+
+   
+  /*
+   * TO DO: add support for (optional) interfaces for accessing
+   * indexes, schema information, catalog information, ...
+   */
+
+
+  /*
+   * This is an optional interface that can be aggregated
+   */
+
+  // TO DO: work out the index id's, should they be plain strings or
+  // provider specific structures ? Currently we settle for 'any'. This
+  // is not as good as it sounds, it would be interesting if the 
+  // provider could return a list of existing indexes. If the provider
+  // would list 'any' with unknown contents .... not so generic.
+
+  // Possible solution: make IndexId octet sequences and make a seperate
+  // IndexInfo struct containing the IndexId, TableName and ColumnName
+  // the interface is currently done this way (with IndexId still being
+  // any)
+
+  typedef HANDLE IndexId;
+
+  struct IndexInfo {
+    IndexId id;
+    TableName table_name;
+    ColumnName column_name;
+  };
+
+  typedef sequence<IndexInfo> IndexInfoSeq;
+
+  interface IIndexAdmin : KOM::Base, KOM::Aggregate {
+    IndexId CreateIndex( in TableName table_name,
+			 in ColumnName column_name )
+      raises ( KDBError );
+    void DropIndex( in IndexId indexid )
+      raises ( KDBError );
+    IndexInfo GetIndexInfo( in IndexId index_id )
+      raises ( KDBError );
+    IndexInfoSeq GetAllIndexInfos()
+      raises ( KDBError );
+  };
+
+  typedef string CommandType;
+  typedef IRowset ICommandResult;
+
+  typedef string ParamName;
+  typedef any ParamValue;
+
+  typedef sequence<ParamName> ParamNameSeq;
+
+  struct Param {
+    ParamName  name;
+    ParamValue value;
+  };
+
+  typedef sequence<Param> ParamSeq;
+
+  struct ParamInfo {
+    unsigned short ordinal;
+    string         repo_id;
+    ParamName      name;
+  };
+
+  typedef sequence<ParamInfo> ParamInfoSeq;
+	typedef sequence<unsigned long> ULongSeq;
+
+  interface ICommand : KOM::Component,
+                       IDBProperties {
+    ISession GetSession()
+      raises ( KDBError );
+    void SetCommand( in CommandType command )
+      raises ( KDBError );
+    CommandType GetCommand()
+      raises ( KDBError );
+    ICommandResult Execute( in ParamSeq param_seq )
+      raises ( KDBError );
+  };
+
+  interface ICommandPrepare : KOM::Base, KOM::Aggregate {
+    void Prepare( in unsigned long cntRuns )
+      raises ( KDBError );
+    void Unprepare()
+      raises ( KDBError );
+  };
+
+  interface ICommandWithParameters : KOM::Base, KOM::Aggregate {
+    ParamInfoSeq GetParameterInfo()
+      raises ( KDBError );
+    ULongSeq GetParameterOrdinal( in ParamNameSeq param_name_seq )
+      raises ( KDBError );
+    void SetParameterInfo( in ParamInfoSeq param_info_seq )
+      raises ( KDBError );
+  };
+
+	
+  interface IRowset : KOM::Component,
+                      IDBProperties {
+  };
+};
+
+
+#endif
