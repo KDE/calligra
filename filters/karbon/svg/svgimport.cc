@@ -284,9 +284,10 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 void
 SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 {
-	QDomElement b = e.firstChild().toElement();
-	for( ; !b.isNull(); b = b.nextSibling().toElement() )
+	for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
 	{
+		QDomElement b = n.toElement();
+		if( b.isNull() ) continue;
 		VObject *obj = 0L;
 		if( b.tagName() == "g" )
 		{
