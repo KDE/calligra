@@ -1,0 +1,9 @@
+
+EXPORT FILTER :
+
+VERSION 1
+
+IMPORT FILTER :
+	- lexical parser 				DONE
+	- syntax. parser 				DONE
+	- import filter in kword

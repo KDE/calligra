@@ -1,0 +1,16 @@
+Send bugs to Robert Jacolin <rjacolin@ifrance.com>. Thank you.
+
+EXPORT FILTER :
+
+	- problems with headers/footers
+
+	- problems with footnotes
+
+	- problems with table :
+
+	- problem with code :
+		o latex code are not very well indented.
+		o latex code generated in minipage from header contains empty line don't accepted by latex.
+
+IMPORT FILTER :
+
