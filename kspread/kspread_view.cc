@@ -1876,16 +1876,15 @@ void KSpreadView::refreshView()
     // be changed, too.
     m_pToolWidget->setGeometry( 0, 0, width(), 30 );
     int top = 30;
-    //repaint to show/hide tabbar
-    m_pTabBar->repaint();
 
-    m_pTabBarFirst->setGeometry( 0, height() - 16, 16, 16 );
-    m_pTabBarLeft->setGeometry( 16, height() - 16, 16, 16 );
-    m_pTabBarRight->setGeometry( 32, height() - 16, 16, 16 );
-    m_pTabBarLast->setGeometry( 48, height() - 16, 16, 16 );
+    
 
     if(m_pDoc->getShowTabBar())
       {
+	m_pTabBarFirst->setGeometry( 0, height() - 16, 16, 16 );
+	m_pTabBarLeft->setGeometry( 16, height() - 16, 16, 16 );
+	m_pTabBarRight->setGeometry( 32, height() - 16, 16, 16 );
+	m_pTabBarLast->setGeometry( 48, height() - 16, 16, 16 );
 	m_pTabBarFirst->show();
 	m_pTabBarLeft->show();
 	m_pTabBarRight->show();
@@ -1916,8 +1915,10 @@ void KSpreadView::refreshView()
         m_pHorzScrollBar->show();
     else
         m_pHorzScrollBar->hide();
-
-    m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - 16 - top );
+    if(!m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar())
+      m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - top );
+    else
+      m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - 16 - top );
     m_pVertScrollBar->setSteps( 20 /*linestep*/, m_pVertScrollBar->height() /*pagestep*/);
     if(m_pDoc->getShowVerticalScrollBar())
         m_pVertScrollBar->show();
