@@ -695,14 +695,30 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                 brush.setAttribute( "style", 9 );
             else if ( style == "Black 90 Degrees" )
                 brush.setAttribute( "style", 10 );
-            else if ( style == "Red Crossed 0 Degrees" || style == "Blue Crossed 0 Degrees" )
-                brush.setAttribute( "style", 11 );
+            else if ( style == "Red Crossed 0 Degrees" )
+                {
+                    brush.setAttribute( "style", 11 );
+                    brush.setAttribute( "color", QColor(Qt::red).name() );
+                }
+            else if ( style == "Blue Crossed 0 Degrees" )
+                {
+                    brush.setAttribute( "style", 11 );
+                    brush.setAttribute( "color", QColor(Qt::blue).name() );
+                }
             else if ( style == "Black 45 Degrees" || style == "Black 45 Degrees Wide" )
                 brush.setAttribute( "style", 12 );
             else if ( style == "Black -45 Degrees" )
                 brush.setAttribute( "style", 13 );
-            else if ( style == "Red Crossed 45 Degrees" || style == "Blue Crossed 45 Degrees" )
-                brush.setAttribute( "style", 14 );
+            else if ( style == "Red Crossed 45 Degrees" )
+                {
+                    brush.setAttribute( "style", 14 );
+                    brush.setAttribute( "color", QColor(Qt::red).name() );
+                }
+            else if ( style == "Blue Crossed 45 Degrees" )
+                {
+                    brush.setAttribute( "style", 14 );
+                    brush.setAttribute( "color", QColor(Qt::blue).name() );
+                }
 
             QDomElement* draw = m_draws[style];
             if ( draw && draw->hasAttribute( "draw:color" ) )
