@@ -216,3 +216,13 @@ void KPTextObjectIface::changeCaseOfText( const QString & caseType)
         kdDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
     delete cmd;
 }
+
+void KPTextObjectIface::extendTextContentsToHeight()
+{
+    m_textobject->textContentsToHeight();
+}
+
+void KPTextObjectIface::extendTextObjectToContents()
+{
+    m_textobject->textObjectToContents();
+}

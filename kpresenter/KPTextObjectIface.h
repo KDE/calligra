@@ -69,6 +69,8 @@ k_dcop:
     bool textSubScript() const;
     bool textSuperScript() const;
 
+    void extendTextContentsToHeight();
+    void extendTextObjectToContents();
 
 private:
     KPTextObject *m_textobject;
