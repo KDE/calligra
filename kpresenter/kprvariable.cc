@@ -65,13 +65,3 @@ void KPrPgNumVariable::recalc()
     resize();
 }
 
-QString KPrPgNumVariable::text()
-{
-    KoVariableNumberFormat * format = dynamic_cast<KoVariableNumberFormat *>( m_varFormat );
-    Q_ASSERT( format );
-    if ( format )
-        return format->convert( m_pgNum );
-    // make gcc happy
-    return QString::null;
-}
-

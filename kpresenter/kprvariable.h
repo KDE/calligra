@@ -46,7 +46,6 @@ public:
     KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc );
 
     virtual void recalc();
-    virtual QString text();
  private:
     KPresenterDoc *m_doc;
 };
