@@ -61,7 +61,7 @@ void KPrPgNumVariable::recalc()
     }
     else
     {
-        m_varType = QVariant( m_doc->getPageNums()+m_varColl->variableSetting()->startingPage()-1);
+        m_varValue = QVariant( m_doc->getPageNums()+m_varColl->variableSetting()->startingPage()-1);
     }
     resize();
 }
