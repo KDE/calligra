@@ -877,6 +877,40 @@ void ViewPrivate::initActions()
   actions->calcCount->setExclusiveGroup( "Calc" );
   actions->calcCount->setToolTip(i18n("Calculate using the count."));
 
+  // -- running calculation actions --
+
+  actions->recordChanges = new KToggleAction( i18n( "&Record Changes" ),
+      0, ac, "recordChanges" );
+  actions->recordChanges->setToolTip( i18n( "Record changes made to this document." ) );
+  QObject::connect( actions->recordChanges, SIGNAL( toggled( bool ) ),
+      view, SLOT( toggleRecordChanges( bool ) ) );
+
+  actions->protectChanges = new KToggleAction( i18n( "&Protect Changes..." ),
+      0, ac, "protectRecords" );
+  actions->protectChanges->setToolTip( i18n( "Protect the change records from being accepted or rejected." ) );
+  actions->protectChanges->setEnabled( false );
+  QObject::connect( actions->protectChanges, SIGNAL( toggled( bool ) ),
+      view, SLOT( toggleProtectChanges( bool ) ) );
+
+  actions->filterChanges = new KAction( i18n( "&Filter Changes..." ),
+      0, view, SLOT( filterChanges() ), ac, "filterChanges" );
+  actions->filterChanges->setToolTip( i18n( "Change display settings for changes." ) );
+  actions->filterChanges->setEnabled( false );
+
+  actions->acceptRejectChanges = new KAction( i18n( "&Accept or Reject..." ),
+      0, view, SLOT( acceptRejectChanges() ), ac, "acceptRejectChanges" );
+  actions->acceptRejectChanges->setToolTip( i18n( "Accept or reject changes made to this document." ) );
+  actions->acceptRejectChanges->setEnabled( false );
+
+  actions->commentChanges = new KAction( i18n( "&Comment Changes..." ),
+      0, view, SLOT( commentChanges() ), ac, "commentChanges" );
+  actions->commentChanges->setToolTip( i18n( "Add comments to changes you made." ) );
+  actions->commentChanges->setEnabled( false );
+
+  actions->mergeDocument = new KAction( i18n( "&Merge Document..." ),
+      0, view, SLOT( mergeDocument() ), ac, "mergeDocument" );
+  actions->mergeDocument->setToolTip( i18n( "Merge this document with a document that recorded changes." ) );
+
 }
 
 
@@ -1287,43 +1321,6 @@ void KSpreadView::initializeGlobalOperationActions()
   d->actions->protectDoc->setToolTip( i18n( "Protect the document from being modified." ) );
   connect( d->actions->protectDoc, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectDoc( bool ) ) );
-
-  d->actions->recordChanges = new KToggleAction( i18n( "&Record Changes" ), 0,
-                                       actionCollection(), "recordChanges" );
-  d->actions->recordChanges->setToolTip( i18n( "Record changes made to this document." ) );
-  connect( d->actions->recordChanges, SIGNAL( toggled( bool ) ), this,
-           SLOT( toggleRecordChanges( bool ) ) );
-
-
-  d->actions->protectChanges = new KToggleAction( i18n( "&Protect Changes..." ), 0,
-                                        actionCollection(), "protectRecords" );
-  d->actions->protectChanges->setToolTip( i18n( "Protect the change records from being accepted or rejected." ) );
-  d->actions->protectChanges->setEnabled( false );
-  connect( d->actions->protectChanges, SIGNAL( toggled( bool ) ), this,
-           SLOT( toggleProtectChanges( bool ) ) );
-
-  d->actions->filterChanges = new KAction( i18n( "&Filter Changes..." ), 0, this,
-                                 SLOT( filterChanges() ), actionCollection(),
-                                 "filterChanges" );
-  d->actions->filterChanges->setToolTip( i18n( "Change display settings for changes." ) );
-  d->actions->filterChanges->setEnabled( false );
-
-  d->actions->acceptRejectChanges = new KAction( i18n( "&Accept or Reject..." ), 0, this,
-                                       SLOT( acceptRejectChanges() ), actionCollection(),
-                                       "acceptRejectChanges" );
-  d->actions->acceptRejectChanges->setToolTip( i18n( "Accept or reject changes made to this document." ) );
-  d->actions->acceptRejectChanges->setEnabled( false );
-
-  d->actions->commentChanges = new KAction( i18n( "&Comment Changes..." ), 0, this,
-                                  SLOT( commentChanges() ), actionCollection(),
-                                  "commentChanges" );
-  d->actions->commentChanges->setToolTip( i18n( "Add comments to changes you made." ) );
-  d->actions->commentChanges->setEnabled( false );
-
-  d->actions->mergeDocument = new KAction( i18n( "&Merge Document..." ), 0, this,
-                                 SLOT( mergeDocument() ), actionCollection(),
-                                 "mergeDocument" );
-  d->actions->mergeDocument->setToolTip( i18n( "Merge this document with a document that recorded changes." ) );
 
   d->actions->viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
                                   actionCollection(), "view_zoom" );
