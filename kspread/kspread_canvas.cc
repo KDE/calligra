@@ -11,6 +11,7 @@
 #include "kspread_doc.h"
 
 #include "kspread_tabbar.h"
+#include <qapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kcursor.h>
