@@ -42,6 +42,7 @@ k_dcop:
     virtual bool isMoveable() const;
     virtual bool isVisible() const;
     virtual bool isFloating() const;
+    //use frame(0)
     virtual double ptWidth() const;
     virtual double ptHeight() const;
     virtual double ptPosX() const;
@@ -49,6 +50,11 @@ k_dcop:
     virtual int zOrder() const;
     virtual int pageNum() const;
     virtual QBrush backgroundColor() const;
+    virtual double ptMarginLeft()const;
+    virtual double ptMarginRight()const;
+    virtual double ptMarginTop()const;
+    virtual double ptMarginBottom()const;
+    virtual bool isCopy()const;
 
 private:
     KWFrameSet *m_frame;

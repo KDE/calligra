@@ -463,6 +463,9 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     KWDocument* doc = m_pView->kWordDocument();
     m_displayLink=new QCheckBox(i18n("Display &links"),gbMiscGroup);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
+    m_underlineLink=new QCheckBox(i18n("Underline link by default"),gbMiscGroup);
+    m_underlineLink->setChecked(doc->getVariableCollection()->variableSetting()->underlineLink());
+
 
     m_displayComment=new QCheckBox(i18n("Display c&omments"),gbMiscGroup);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
@@ -512,10 +515,22 @@ void ConfigureMiscPage::apply()
             macroCmd=new KMacroCommand(i18n("Change display link command"));
         }
 
-        KWChangeDisplayLinkCommand *cmd=new KWChangeDisplayLinkCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b);
+        KWChangeDisplayLinkCommand *cmd=new KWChangeDisplayLinkCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b, KWChangeDisplayLinkCommand::PL_DISPLAY);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
+    b=m_underlineLink->isChecked();
+    if(doc->getVariableCollection()->variableSetting()->underlineLink()!=b)
+    {
+        if(!macroCmd)
+        {
+            macroCmd=new KMacroCommand(i18n("Change display link command"));
+        }
+        KWChangeDisplayLinkCommand *cmd=new KWChangeDisplayLinkCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b, KWChangeDisplayLinkCommand::PL_UNDERLINE);
+        cmd->execute();
+        macroCmd->addCommand(cmd);
+    }
+
     if(macroCmd)
         doc->addCommand(macroCmd);
 
@@ -532,6 +547,7 @@ void ConfigureMiscPage::slotDefault()
    m_undoRedoLimit->setValue(30);
    m_displayLink->setChecked(true);
    m_displayComment->setChecked(true);
+   m_underlineLink->setChecked(true);
 }
 
 ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name )

@@ -466,13 +466,15 @@ protected:
 class KWChangeDisplayLinkCommand : public KNamedCommand
 {
 public:
-    KWChangeDisplayLinkCommand( const QString &name, KWDocument *_doc, bool _oldDisplay, bool _newDisplay);
+    enum PropertiesLink { PL_DISPLAY, PL_UNDERLINE};
+    KWChangeDisplayLinkCommand( const QString &name, KWDocument *_doc, bool _oldDisplay, bool _newDisplay, PropertiesLink _type);
     ~KWChangeDisplayLinkCommand(){}
 
     void execute();
     void unexecute();
 protected:
     KWDocument *m_doc;
+    PropertiesLink type;
     bool m_bOldDisplay;
     bool m_bNewDisplay;
 };

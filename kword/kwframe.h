@@ -120,12 +120,12 @@ public:
      *   AnySide, OddSide or EvenSide
      */
     enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
-    SheetSide sheetSide() { return m_sheetSide; }
+    SheetSide sheetSide()const { return m_sheetSide; }
     void setSheetSide( SheetSide ss ) { m_sheetSide = ss; }
 
     /** What happens on new page (create a new frame and reconnect, no followup, make copy) */
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
-    NewFrameBehavior newFrameBehavior() { return m_newFrameBehavior; }
+    NewFrameBehavior newFrameBehavior()const { return m_newFrameBehavior; }
     void setNewFrameBehavior( NewFrameBehavior nfb ) { m_newFrameBehavior = nfb; }
 
     /** Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset */
@@ -528,7 +528,7 @@ public:
 
     // only used for headers and footers...
     void setCurrent( int i ) { m_current = i; }
-    int getCurrent() { return m_current; }
+    int getCurrent()const { return m_current; }
 
     //Note: none of those floating-frameset methods creates undo/redo
     //They are _called_ by the undo/redo commands.
@@ -570,12 +570,12 @@ public:
      */
     void setGroupManager( KWTableFrameSet *gm ) { grpMgr = gm; }
     /** returns the groupManager this frameset belongs to. A Groupmanager is better known as a table */
-    KWTableFrameSet *getGroupManager() { return grpMgr; }
+    KWTableFrameSet *getGroupManager()const { return grpMgr; }
 
     /** table headers can created by the groupmanager, we store the fact that
      this is one in here. */
     void setIsRemoveableHeader( bool h ) { m_removeableHeader = h; }
-    bool isRemoveableHeader() { return m_removeableHeader; }
+    bool isRemoveableHeader()const { return m_removeableHeader; }
 
     /** returns if one of our frames has been selected. */
     bool hasSelectedFrame();

@@ -85,7 +85,7 @@ private:
     int m_oldUnit;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
-    QCheckBox* m_displayLink, *m_displayComment;
+    QCheckBox* m_displayLink, *m_displayComment, *m_underlineLink;
 };
 
 class ConfigureDefaultDocPage : public QObject

@@ -100,3 +100,28 @@ QBrush KWordFrameSetIface::backgroundColor() const
 {
     return m_frame->frame(0)->backgroundColor();
 }
+
+double KWordFrameSetIface::ptMarginLeft()const
+{
+    return m_frame->frame(0)->bLeft();
+}
+
+double KWordFrameSetIface::ptMarginRight()const
+{
+    return m_frame->frame(0)->bRight();
+}
+
+double KWordFrameSetIface::ptMarginTop()const
+{
+    return m_frame->frame(0)->bTop();
+}
+
+double KWordFrameSetIface::ptMarginBottom()const
+{
+    return m_frame->frame(0)->bBottom();
+}
+
+bool KWordFrameSetIface::isCopy()const
+{
+    return m_frame->frame(0)->isCopy();
+}
