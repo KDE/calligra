@@ -149,10 +149,8 @@ bool KoTextDocCommandHistory::isRedoAvailable()
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-KoTextDocDeleteCommand::KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
-					const QValueList<QStyleSheetItem::ListStyle> &ols,
-					const QMemArray<int> &oas)
-    : KoTextDocCommand( d ), id( i ), index( idx ), parag( 0 ), text( str ), oldListStyles( ols ), oldAligns( oas )
+KoTextDocDeleteCommand::KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str )
+    : KoTextDocCommand( d ), id( i ), index( idx ), parag( 0 ), text( str )
 {
     for ( int j = 0; j < (int)text.size(); ++j ) {
 	if ( text[ j ].format() )
@@ -160,14 +158,14 @@ KoTextDocDeleteCommand::KoTextDocDeleteCommand( KoTextDocument *d, int i, int id
     }
 }
 
-KoTextDocDeleteCommand::KoTextDocDeleteCommand( KoTextParag *p, int idx, const QMemArray<KoTextStringChar> &str )
+/*KoTextDocDeleteCommand::KoTextDocDeleteCommand( KoTextParag *p, int idx, const QMemArray<KoTextStringChar> &str )
     : KoTextDocCommand( 0 ), id( -1 ), index( idx ), parag( p ), text( str )
 {
     for ( int i = 0; i < (int)text.size(); ++i ) {
 	if ( text[ i ].format() )
 	    text[ i ].format()->addRef();
     }
-}
+}*/
 
 KoTextDocDeleteCommand::~KoTextDocDeleteCommand()
 {
@@ -225,26 +223,6 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 	c->setIndex( index );
 	for ( int i = 0; i < (int)text.size(); ++i )
 	    c->gotoNextLetter();
-    }
-
-    QValueList<QStyleSheetItem::ListStyle>::Iterator lit = oldListStyles.begin();
-    int i = 0;
-    KoTextParag *p = s;
-    bool end = FALSE;
-    while ( p ) {
-	if ( lit != oldListStyles.end() )
-	    p->setListStyle( *lit );
-	else
-	    end = TRUE;
-	if ( i < (int)oldAligns.size() )
-	    p->setAlignment( oldAligns.at( i ) );
-	else
-	    end = TRUE;
-	if ( end )
-	    break;
-	p = p->next();
-	++lit;
-	++i;
     }
 
     s = cursor.parag();
@@ -523,7 +501,7 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTe
 	for ( ; it != lst.end(); ) {
 	    if ( it != lst.begin() ) {
 		splitAndInsertEmptyParag( FALSE, TRUE );
-		string->setEndState( -1 );
+		//string->setEndState( -1 );
 		string->prev()->format( -1, FALSE );
 		if ( lastFormat && formatting && string->prev() ) {
 		    lastFormat->addRef();
@@ -563,7 +541,7 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTe
 	    p->setParagId( p->prev()->paragId() + 1 );
 	    p->move( dy );
 	    p->invalidate( 0 );
-	    p->setEndState( -1 );
+	    //p->setEndState( -1 );
 	    p = p->next();
 	}
     }
@@ -1205,7 +1183,7 @@ bool KoTextCursor::remove()
 	    KoTextParag *s = string;
 	    while ( s ) {
 		s->id = s->p ? s->p->id + 1 : 0;
-		s->state = -1;
+		//s->state = -1;
 		//s->needPreProcess = TRUE;
 		s->changed = TRUE;
 		s = s->n;
@@ -1490,411 +1468,6 @@ void KoTextDocument::setPlainText( const QString &text )
     if ( !lParag )
 	lParag = fParag = createParag( this, 0, 0 );
 }
-
-struct Q_EXPORT KoTextDocumentTag {
-    KoTextDocumentTag(){}
-    KoTextDocumentTag( const QString&n, const QStyleSheetItem* s, const KoTextFormat& f )
-        :name(n),style(s), format(f), alignment(Qt::AlignAuto), direction(QChar::DirON),liststyle(QStyleSheetItem::ListDisc) {
-            wsm = QStyleSheetItem::WhiteSpaceNormal;
-    }
-    QString name;
-    const QStyleSheetItem* style;
-    QString anchorHref;
-    QStyleSheetItem::WhiteSpaceMode wsm;
-    KoTextFormat format;
-    int alignment : 16;
-    int direction : 5;
-    QStyleSheetItem::ListStyle liststyle;
-
-    KoTextDocumentTag(  const KoTextDocumentTag& t ) {
-        name = t.name;
-        style = t.style;
-        anchorHref = t.anchorHref;
-        wsm = t.wsm;
-        format = t.format;
-        alignment = t.alignment;
-        direction = t.direction;
-        liststyle = t.liststyle;
-    }
-    KoTextDocumentTag& operator=(const KoTextDocumentTag& t) {
-        name = t.name;
-        style = t.style;
-        anchorHref = t.anchorHref;
-        wsm = t.wsm;
-        format = t.format;
-        alignment = t.alignment;
-        direction = t.direction;
-        liststyle = t.liststyle;
-        return *this;
-    }
-
-#if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-    bool operator==( const KoTextDocumentTag& ) const { return FALSE; }
-#endif
-};
-
-#define NEWPAR       do{ if ( !hasNewPar ) curpar = createParag( this, curpar ); \
-		    hasNewPar = TRUE; \
-		    space = TRUE; \
-		    QPtrVector<QStyleSheetItem> vec( (uint)tags.count() + 1); \
-		    int i = 0; \
-		    for ( QValueStack<KoTextDocumentTag>::Iterator it = tags.begin(); it != tags.end(); ++it ) \
-			vec.insert( i++, (*it).style ); \
-		    vec.insert( i, curtag.style ); \
-		    curpar->setStyleSheetItems( vec ); }while(FALSE)
-
-
-#if 0
-void KoTextDocument::setRichText( const QString &text, const QString &context )
-{
-    setTextFormat( Qt::RichText );
-    if ( !context.isEmpty() )
-	setContext( context );
-    clear();
-    fParag = lParag = createParag( this );
-    setRichTextInternal( text );
-}
-
-static QStyleSheetItem::ListStyle chooseListStyle( const QStyleSheetItem *nstyle,
-						   const QMap<QString, QString> &attr,
-						   QStyleSheetItem::ListStyle curListStyle )
-{
-    if ( nstyle->name() == "ol" || nstyle->name() == "ul" ) {
-	curListStyle = nstyle->listStyle();
-	QMap<QString, QString>::ConstIterator it = attr.find( "type" );
-	if ( it != attr.end() ) {
-	    QString sl = *it;
-	    if ( sl == "1" ) {
-		curListStyle = QStyleSheetItem::ListDecimal;
-	    } else if ( sl == "a" ) {
-		curListStyle =  QStyleSheetItem::ListLowerAlpha;
-	    } else if ( sl == "A" ) {
-		curListStyle = QStyleSheetItem::ListUpperAlpha;
-	    } else {
-		sl = sl.lower();
-		if ( sl == "square" )
-		    curListStyle = QStyleSheetItem::ListSquare;
-		else if ( sl == "disc" )
-		    curListStyle = QStyleSheetItem::ListDisc;
-		else if ( sl == "circle" )
-		    curListStyle = QStyleSheetItem::ListCircle;
-	    }
-	}
-    }
-    return curListStyle;
-}
-
-void KoTextDocument::setRichTextInternal( const QString &text )
-{
-    //oTextValid = TRUE;
-    //oText = text;
-    KoTextParag* curpar = lParag;
-    int pos = 0;
-    QValueStack<KoTextDocumentTag> tags;
-    KoTextDocumentTag initag( "", sheet_->item(""), *formatCollection()->defaultFormat() );
-    KoTextDocumentTag curtag = initag;
-    bool space = TRUE;
-
-    QString doc = text;
-    bool hasNewPar = curpar->length() <= 1;
-    QString lastClose;
-    QString anchorName;
-    while ( pos < int( doc.length() ) ) {
-	if ( hasPrefix(doc, pos, '<' ) ){
-	    if ( !hasPrefix( doc, pos+1, QChar('/') ) ) {
-		// open tag
-		QMap<QString, QString> attr;
-		bool emptyTag = FALSE;
-		QString tagname = parseOpenTag(doc, pos, attr, emptyTag);
-		if ( tagname.isEmpty() )
-		    continue; // nothing we could do with this, probably parse error
-
-		if ( tagname == "title" ) {
-		    QString title;
-		    while ( TRUE ) {
-			if ( hasPrefix( doc, pos, '<' ) && hasPrefix( doc, pos+1, QChar('/') ) &&
-			     parseCloseTag( doc, pos ) == "title" )
-			    break;
-			title += doc[ pos ];
-			++pos;
-		    }
-		    attribs.replace( "title", title );
-		}
-
-		const QStyleSheetItem* nstyle = sheet_->item(tagname);
-		if ( nstyle ) {
-		    if ( curtag.style->displayMode() == QStyleSheetItem::DisplayListItem )
-			hasNewPar = FALSE; // we want empty paragraphs in this case
-
-		    // we might have to close some 'forgotten' tags
-		    while ( !nstyle->allowedInContext( curtag.style ) ) {
-			QString msg;
-			msg.sprintf( "QText Warning: Document not valid ( '%s' not allowed in '%s' #%d)",
-				     tagname.ascii(), curtag.style->name().ascii(), pos);
-			sheet_->error( msg );
-			if ( tags.isEmpty() )
-			    break;
-			curtag = tags.pop();
-		    }
-
-		    // special handling for p. We do not want to nest there for HTML compatibility
-		    if ( nstyle->displayMode() == QStyleSheetItem::DisplayBlock ) {
-			while ( curtag.style->name() == "p" ) {
-			    if ( tags.isEmpty() )
-				break;
-			    curtag = tags.pop();
-			}
-		    }
-
-		}
-
-		KoTextCustomItem* custom =  0;
-		// some well-known empty tags
-		if ( tagname == "br" ) {
-		    emptyTag = TRUE;
-		    hasNewPar = FALSE;
-		    NEWPAR;
-		    curpar->isBr = TRUE;
-		    curpar->setAlignment( curtag.alignment );
-#if 0 // unused, and tag() doesn't return libkotext items anyway
-		}  else if ( tagname == "hr" ) {
-		    emptyTag = TRUE;
-		    custom = sheet_->tag( tagname, attr, contxt, *factory_ , emptyTag, this );
-		    NEWPAR;
-#endif
-#ifdef QTEXTTABLE_AVAILABLE
-		} else if ( tagname == "table" ) {
-		    KoTextFormat format = curtag.format.makeTextFormat(  nstyle, attr );
-		    curpar->setAlignment( curtag.alignment );
-		    custom = parseTable( attr, format, doc, pos, curpar );
-		    (void)eatSpace( doc, pos );
-		    emptyTag = TRUE;
-#endif
-		} else if ( tagname == "qt" ) {
-		    for ( QMap<QString, QString>::Iterator it = attr.begin(); it != attr.end(); ++it ) {
-			if ( it.key() == "bgcolor" ) {
-			    QBrush *b = new QBrush( QColor( *it ) );
-			    setPaper( b );
-			} else if ( it.key() == "background" ) {
-			    QImage img;
-			    const QMimeSource* m = factory_->data( *it, contxt );
-			    if ( !m ) {
-				qWarning("QRichText: no mimesource for %s", (*it).latin1() );
-			    } else {
-				if ( !QImageDrag::decode( m, img ) ) {
-				    qWarning("KoTextImage: cannot decode %s", (*it).latin1() );
-				}
-			    }
-			    if ( !img.isNull() ) {
-				QBrush *b = new QBrush( QColor(), QPixmap( img ) );
-				setPaper( b );
-			    }
-			} else if ( it.key() == "text" ) {
-			    QColor c( *it );
-			    if ( formatCollection()->defaultFormat()->color() != c ) {
-				QDict<KoTextFormat> formats = formatCollection()->dict();
-				QDictIterator<KoTextFormat> it( formats );
-				while ( it.current() ) {
-				    if ( it.current() == formatCollection()->defaultFormat() ) {
-					++it;
-					continue;
-				    }
-				    it.current()->setColor( c );
-				    ++it;
-				}
-				formatCollection()->defaultFormat()->setColor( c );
-				curtag.format.setColor( c );
-			    }
-                    //  } else if ( it.key() == "link" ) {
-		    //      linkColor = QColor( *it );
-			} else if ( it.key() == "title" ) {
-			    attribs.replace( it.key(), *it );
-			}
-		    }
-		} else {
-#if 0 // unused, and tag() doesn't return libkotext items anyway
-		    custom = sheet_->tag( tagname, attr, contxt, *factory_ , emptyTag, this );
-#endif
-		}
-
-		if ( !nstyle && !custom ) // we have no clue what this tag could be, ignore it
-		    continue;
-
-		if ( custom ) {
-		    int index = curpar->length() - 1;
-		    if ( index < 0 )
-			index = 0;
-		    KoTextFormat format = curtag.format.makeTextFormat( nstyle, attr );
-		    curpar->append( QChar('b') );
-		    curpar->setFormat( index, 1, &format );
-		    curpar->at( index )->setCustomItem( custom );
-		    curpar->addCustomItem();
-		    registerCustomItem( custom, curpar );
-		    curpar->setAlignment( curtag.alignment );
-		    hasNewPar = FALSE;
-		} else if ( !emptyTag ) {
-		    // ignore whitespace for inline elements if there was already one
-		    if ( nstyle->whiteSpaceMode() == QStyleSheetItem::WhiteSpaceNormal
-			 && ( space || nstyle->displayMode() != QStyleSheetItem::DisplayInline ) )
-			eatSpace( doc, pos );
-
-		    // if we do nesting, push curtag on the stack,
-		    // otherwise reinint curag.
- 		    if ( nstyle != curtag.style || nstyle->selfNesting() ) {
-			tags.push( curtag );
-		    } else {
-			if ( !tags.isEmpty() )
-			    curtag = tags.top();
-			else
-			    curtag = initag;
-		    }
-
-		    const QStyleSheetItem* ostyle = curtag.style;
-
-		    curtag.name = tagname;
-		    curtag.style = nstyle;
-		    curtag.name = tagname;
-		    curtag.style = nstyle;
-		    if ( nstyle->whiteSpaceMode() != QStyleSheetItem::WhiteSpaceNormal )
-			curtag.wsm = nstyle->whiteSpaceMode();
-		    curtag.liststyle = chooseListStyle( nstyle, attr, curtag.liststyle );
-		    curtag.format = curtag.format.makeTextFormat( nstyle, attr );
-                    if ( nstyle->isAnchor() ) {
-                        if ( !anchorName.isEmpty() )
-                            anchorName += "#" + attr["name"];
-                        else
-                            anchorName = attr["name"];
-                        curtag.anchorHref = attr["href"];
-                    }
-
-		    if ( nstyle->alignment() != QStyleSheetItem::Undefined )
-			curtag.alignment = nstyle->alignment();
-
-		    if ( ostyle->displayMode() == QStyleSheetItem::DisplayListItem &&
-			 curpar->length() <= 1
-			 && nstyle->displayMode() == QStyleSheetItem::DisplayBlock  ) {
-			// do not do anything, we reuse the paragraph we have
-		    } else if ( nstyle->displayMode() != QStyleSheetItem::DisplayInline && nstyle->displayMode() != QStyleSheetItem::DisplayNone ) {
-			NEWPAR;
-		    }
-
-		    if ( curtag.style->displayMode() == QStyleSheetItem::DisplayListItem ) {
-			curpar->setListStyle( curtag.liststyle );
-			if ( attr.find( "value" ) != attr.end() )
-			    curpar->setListValue( (*attr.find( "value" )).toInt() );
-		    }
-
-		    if ( nstyle->displayMode() != QStyleSheetItem::DisplayInline )
-			curpar->setFormat( &curtag.format );
-
-		    if ( attr.contains( "align" ) &&
-			 ( curtag.name == "p" ||
-			   curtag.name == "div" ||
-			   curtag.name == "li" ||
-			   curtag.name[ 0 ] == 'h' ) ) {
-			QString align = attr["align"];
-			if ( align == "center" )
-			    curtag.alignment = Qt::AlignCenter;
-			else if ( align == "right" )
-			    curtag.alignment = Qt::AlignRight;
-			else if ( align == "justify" )
-			    curtag.alignment = Qt::AlignJustify;
-		    }
-		    curpar->setAlignment( curtag.alignment );
-		    if ( attr.contains( "dir" ) &&
-			 ( curtag.name == "p" ||
-			   curtag.name == "div" ||
-			   curtag.name == "li" ||
-			   curtag.name[ 0 ] == 'h' ) ) {
-			QString dir = attr["dir"];
-			if ( dir == "rtl" )
-			    curtag.direction = QChar::DirR;
-			else if ( dir == "ltr" )
-			    curtag.direction = QChar::DirL;
-		    }
-		    curpar->setDirection( (QChar::Direction)curtag.direction );
-		}
-	    } else {
-		QString tagname = parseCloseTag( doc, pos );
-		lastClose = tagname;
-		if ( tagname.isEmpty() )
-		    continue; // nothing we could do with this, probably parse error
-		if ( !sheet_->item( tagname ) ) // ignore unknown tags
-		    continue;
-
-
-		// we close a block item. Since the text may continue, we need to have a new paragraph
-		bool needNewPar = curtag.style->displayMode() == QStyleSheetItem::DisplayBlock;
-
-		if ( curtag.style->displayMode() == QStyleSheetItem::DisplayListItem ) {
- 		    needNewPar = TRUE;
-		    hasNewPar = FALSE; // we want empty paragraphs in this case
-		}
-
-		// html slopiness: handle unbalanched tag closing
-		while ( curtag.name != tagname ) {
-		    QString msg;
-		    msg.sprintf( "QText Warning: Document not valid ( '%s' not closed before '%s' #%d)",
-				 curtag.name.ascii(), tagname.ascii(), pos);
-		    sheet_->error( msg );
-		    if ( tags.isEmpty() )
-			break;
-		    curtag = tags.pop();
-		}
-
-
-		// close the tag
-		if ( !tags.isEmpty() )
-		    curtag = tags.pop();
-		else
-		    curtag = initag;
-
- 		if ( needNewPar ) {
-		    if ( curtag.style->displayMode() == QStyleSheetItem::DisplayListItem ) {
-			tags.push( curtag );
-			curtag.name = "p";
-			curtag.style = sheet_->item( curtag.name ); // a list item continues, use p for that
-		    }
-		    NEWPAR;
-		}
-	    }
-	} else {
-	    // normal contents
-	    QString s;
-	    QChar c;
-	    while ( pos < int( doc.length() ) && !hasPrefix(doc, pos, '<' ) ){
-		c = parseChar( doc, pos, curtag.wsm );
-
-		if ( c == '\n' ) // happens only in whitespacepre-mode.
-		    break;  // we want a new line in this case
-
-		bool c_isSpace = c.isSpace() && c.unicode() != 0x00a0U;
-
-		if ( curtag.wsm == QStyleSheetItem::WhiteSpaceNormal && c_isSpace && space )
-		    continue;
-		if ( c == '\r' )
-		    continue;
-		space = c_isSpace;
-		s += c;
-	    }
-	    if ( !s.isEmpty() && curtag.style->displayMode() != QStyleSheetItem::DisplayNone ) {
-		hasNewPar = FALSE;
-		int index = curpar->length() - 1;
-		if ( index < 0 )
-		    index = 0;
-		curpar->append( s );
-		curpar->setFormat( index, s.length(), &curtag.format );
-	    }
-	    if ( c == '\n' ) { // happens in WhiteSpacePre mode
-		hasNewPar = FALSE;
-		tags.push( curtag );
-		NEWPAR;
-		curtag = tags.pop();
-	    }
-	}
-    }
-}
-#endif
 
 void KoTextDocument::setText( const QString &text, const QString & /*context*/ )
 {
@@ -2486,7 +2059,7 @@ void KoTextDocument::removeSelectedText( int id, KoTextCursor *cursor )
             p->paragLayout().counter->invalidate();
         ////
 	p->invalidate( 0 );
-	p->setEndState( -1 );
+	//p->setEndState( -1 );
 	p = p->next();
     }
 
@@ -3503,27 +3076,28 @@ KoTextStringChar *KoTextStringChar::clone() const
 KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds )
     : invalid( 0 ), p( pr ), n( nx ), doc( d ), align( 0 ), mSelections( 0 ),
       mFloatingItems( 0 ),
-      lstyle( QStyleSheetItem::ListDisc ),
-      tm( -1 ), bm( -1 ), lm( -1 ), rm( -1 ), flm( -1 ),
+      //tm( -1 ), bm( -1 ), lm( -1 ), rm( -1 ), flm( -1 ),
 #ifdef QTEXTTABLE_AVAILABLE
       tc( 0 ),
 #endif
-      numCustomItems( 0 ), pFormatter( 0 ), tArray( 0 ), tabStopWidth( 0 ),
-      eData( 0 ), pntr( 0 ), commandHistory( 0 )
+      //pFormatter( 0 ),
+      tArray( 0 )
+      //tabStopWidth( 0 ),
+      //eData( 0 ), pntr( 0 ), commandHistory( 0 )
 {
-    bgcol = 0;
+    //bgcol = 0;
     breakable = TRUE;
     isBr = FALSE;
     movedDown = FALSE;
     visible = TRUE;
-    list_val = -1;
+    //list_val = -1;
     newLinesAllowed = FALSE;
     //lastInFrame = FALSE;
     defFormat = formatCollection()->defaultFormat();
-    if ( !doc ) {
+    /*if ( !doc ) {
 	tabStopWidth = defFormat->width( 'x' ) * 8;
 	commandHistory = new KoTextDocCommandHistory( 100 );
-    }
+    }*/
 #if defined(PARSER_DEBUG)
     qDebug( debug_indent + "new KoTextParag" );
 #endif
@@ -3557,7 +3131,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
     changed = FALSE;
     m_lineChanged = -1;
     //firstFormat = TRUE; //// unused
-    state = -1;
+    //state = -1;
     //needPreProcess = FALSE;
 
     if ( p )
@@ -3568,7 +3142,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 	KoTextParag *s = n;
 	while ( s ) {
 	    s->id = s->p->id + 1;
-	    s->lm = s->rm = s->tm = s->bm = -1, s->flm = -1;
+	    //s->lm = s->rm = s->tm = s->bm = -1, s->flm = -1;
 	    s = s->n;
 	}
     }
@@ -3590,11 +3164,11 @@ KoTextParag::~KoTextParag()
 //	doc->minw = 0;
 //    }
     if ( !doc ) {
-	delete pFormatter;
-	delete commandHistory;
+	//delete pFormatter;
+	//delete commandHistory;
     }
     delete [] tArray;
-    delete eData;
+    //delete eData;
     QMap<int, KoTextParagLineStart*>::Iterator it = lineStarts.begin();
     for ( ; it != lineStarts.end(); ++it )
 	delete *it;
@@ -3641,7 +3215,7 @@ void KoTextParag::invalidate( int chr )
 	    i->move( 0, -1 );
     }
 #endif
-    lm = rm = bm = tm = flm = -1;
+    //lm = rm = bm = tm = flm = -1;
 }
 
 void KoTextParag::setChanged( bool b, bool /*recursive*/ )
@@ -3694,7 +3268,7 @@ void KoTextParag::remove( int index, int len )
 	KoTextStringChar *c = at( i );
 	if ( doc && c->isCustom() ) {
 	    doc->unregisterCustomItem( c->customItem(), this );
-	    removeCustomItem();
+	    //removeCustomItem();
 	}
     }
     str->remove( index, len );
@@ -3734,12 +3308,12 @@ void KoTextParag::join( KoTextParag *s )
     }
     Q_ASSERT(str->at(str->length()-1).c == ' ');
 
-    if ( !extraData() && s->extraData() ) {
+    /*if ( !extraData() && s->extraData() ) {
 	setExtraData( s->extraData() );
 	s->setExtraData( 0 );
     } else if ( extraData() && s->extraData() ) {
 	extraData()->join( s->extraData() );
-    }
+        }*/
     delete s;
     invalidate( 0 );
     //// kotext
@@ -3751,14 +3325,14 @@ void KoTextParag::join( KoTextParag *s )
 	KoTextParag *s = n;
 	while ( s ) {
 	    s->id = s->p->id + 1;
-	    s->state = -1;
+	    //s->state = -1;
 	    //s->needPreProcess = TRUE;
 	    s->changed = TRUE;
 	    s = s->n;
 	}
     }
     format();
-    state = -1;
+    //state = -1;
 }
 
 void KoTextParag::move( int &dy )
@@ -4137,127 +3711,6 @@ void KoTextParag::drawCursorDefault( QPainter &painter, KoTextCursor *cursor, in
     painter.restore();
 }
 
-#if 0
-void KoTextParag::setList( bool b, int listStyle )
-{
-    if ( !doc )
-	return;
-
-    if ( !qstyle() ) {
-	styleSheetItemsVec().resize( 2 );
-	mStyleSheetItemsVec->insert( 0, doc->styleSheet()->item( "html" ) );
-	mStyleSheetItemsVec->insert( 1, doc->styleSheet()->item( "p" ) );
-    }
-
-    if ( b ) {
-	if ( qstyle()->displayMode() != QStyleSheetItem::DisplayListItem || this->listStyle() != listStyle ) {
-	    styleSheetItemsVec().remove( styleSheetItemsVec().size() - 1 );
-	    QStyleSheetItem *item = (*mStyleSheetItemsVec)[ mStyleSheetItemsVec->size() - 2 ];
-	    if ( item )
-		mStyleSheetItemsVec->remove( mStyleSheetItemsVec->size() - 2 );
-	    mStyleSheetItemsVec->insert( mStyleSheetItemsVec->size() - 2,
-				       listStyle == QStyleSheetItem::ListDisc || listStyle == QStyleSheetItem::ListCircle
-				       || listStyle == QStyleSheetItem::ListSquare ?
-				       doc->styleSheet()->item( "ul" ) : doc->styleSheet()->item( "ol" ) );
-	    mStyleSheetItemsVec->insert( mStyleSheetItemsVec->size() - 1, doc->styleSheet()->item( "li" ) );
-	    setListStyle( (QStyleSheetItem::ListStyle)listStyle );
-	} else {
-	    return;
-	}
-    } else {
-	if ( qstyle()->displayMode() != QStyleSheetItem::DisplayBlock ) {
-	    styleSheetItemsVec().remove( styleSheetItemsVec().size() - 1 );
-	    if ( mStyleSheetItemsVec->size() >= 2 ) {
-		mStyleSheetItemsVec->remove( mStyleSheetItemsVec->size() - 2 );
-		mStyleSheetItemsVec->resize( mStyleSheetItemsVec->size() - 2 );
-	    } else {
-		mStyleSheetItemsVec->resize( mStyleSheetItemsVec->size() - 1 );
-	    }
-	} else {
-	    return;
-	}
-    }
-    invalidate( 0 );
-    lm = rm = tm = bm = flm = -1;
-    numSubParag = -1;
-    if ( next() ) {
-	KoTextParag *s = next();
-	while ( s ) {
-	    s->numSubParag = -1;
-	    s->lm = s->rm = s->tm = s->bm = flm = -1;
-	    s->numSubParag = -1;
-	    s->invalidate( 0 );
-	    s = s->next();
-	}
-    }
-}
-
-void KoTextParag::incDepth()
-{
-    if ( !qstyle() || !doc )
-	return;
-    if ( qstyle()->displayMode() != QStyleSheetItem::DisplayListItem )
-	return;
-    styleSheetItemsVec().resize( styleSheetItemsVec().size() + 1 );
-    mStyleSheetItemsVec->insert( mStyleSheetItemsVec->size() - 1, (*mStyleSheetItemsVec)[ mStyleSheetItemsVec->size() - 2 ] );
-    mStyleSheetItemsVec->insert( mStyleSheetItemsVec->size() - 2,
-			       listStyle() == QStyleSheetItem::ListDisc || listStyle() == QStyleSheetItem::ListCircle ||
-			       listStyle() == QStyleSheetItem::ListSquare ?
-			       doc->styleSheet()->item( "ul" ) : doc->styleSheet()->item( "ol" ) );
-    invalidate( 0 );
-    lm = -1;
-    flm = -1;
-}
-
-void KoTextParag::decDepth()
-{
-    if ( !qstyle() || !doc )
-	return;
-    if ( qstyle()->displayMode() != QStyleSheetItem::DisplayListItem )
-	return;
-    int numLists = 0;
-    QStyleSheetItem *lastList = 0;
-    int lastIndex = 0;
-    int i;
-    if ( mStyleSheetItemsVec ) {
-	for ( i = 0; i < (int)mStyleSheetItemsVec->size(); ++i ) {
-	    QStyleSheetItem *item = (*mStyleSheetItemsVec)[ i ];
-	    if ( item->name() == "ol" || item->name() == "ul" ) {
-		lastList = item;
-		lastIndex = i;
-		numLists++;
-	    }
-	}
-    }
-
-    if ( !lastList )
-	return;
-    styleSheetItemsVec().remove( lastIndex );
-    for ( i = lastIndex; i < (int)mStyleSheetItemsVec->size() - 1; ++i )
-	mStyleSheetItemsVec->insert( i, (*mStyleSheetItemsVec)[ i + 1 ] );
-    mStyleSheetItemsVec->resize( mStyleSheetItemsVec->size() - 1 );
-    if ( numLists == 1 )
-	setList( FALSE, -1 );
-    invalidate( 0 );
-    lm = -1;
-    flm = -1;
-}
-
-int KoTextParag::listDepth() const
-{
-    int numLists = 0;
-    int i;
-    if ( mStyleSheetItemsVec ) {
-	for ( i = 0; i < (int)mStyleSheetItemsVec->size(); ++i ) {
-	    QStyleSheetItem *item = (*mStyleSheetItemsVec)[ i ];
-	    if ( item->name() == "ol" || item->name() == "ul" )
-		numLists++;
-	}
-    }
-    return numLists - 1;
-}
-#endif
-
 int *KoTextParag::tabArray() const
 {
     int *ta = tArray;
@@ -4269,25 +3722,25 @@ int *KoTextParag::tabArray() const
 int KoTextParag::nextTabDefault( int, int x )
 {
     int *ta = tArray;
-    if ( doc ) {
+    //if ( doc ) {
 	if ( !ta )
 	    ta = doc->tabArray();
-	tabStopWidth = doc->tabStopWidth();
-    }
+	int tabStopWidth = doc->tabStopWidth();
+    //}
     if ( tabStopWidth != 0 )
 	return tabStopWidth*(x/tabStopWidth+1);
     else
         return x;
 }
 
-void KoTextParag::setPainter( QPainter *p, bool adjust  )
+/*void KoTextParag::setPainter( QPainter *p, bool adjust  )
 {
     pntr = p;
     for ( int i = 0; i < length(); ++i ) {
 	if ( at( i )->isCustom() )
 	    at( i )->customItem()->setPainter( p, adjust  );
     }
-}
+}*/
 
 KoTextFormatCollection *KoTextParag::formatCollection() const
 {
@@ -4364,7 +3817,7 @@ QString KoTextParag::richText() const
     return s;
 }
 
-void KoTextParag::addCommand( KoTextDocCommand *cmd )
+/*void KoTextParag::addCommand( KoTextDocCommand *cmd )
 {
     if ( !doc )
 	commandHistory->addCommand( cmd );
@@ -4384,7 +3837,7 @@ KoTextCursor *KoTextParag::redo( KoTextCursor *c )
     if ( !doc )
 	return commandHistory->redo( c );
     return doc->commands()->redo( c );
-}
+}*/
 
 void KoTextParag::show()
 {
@@ -4577,18 +4030,18 @@ KoTextFormatterBase *KoTextParag::formatter() const
 {
     if ( doc )
 	return doc->formatter();
-    if ( pFormatter )
-	return pFormatter;
+    //if ( pFormatter )
+    //    return pFormatter;
     //return ( ( (KoTextParag*)this )->pFormatter = new KoTextFormatterBaseBreakWords );
     return 0L;
 }
 
-void KoTextParag::setFormatter( KoTextFormatterBase *f )
+/*void KoTextParag::setFormatter( KoTextFormatterBase *f )
 {
     if ( doc ) return;
     if ( pFormatter ) delete pFormatter;
     pFormatter = f;
-}
+}*/
 
 int KoTextParag::minimumWidth() const
 {
@@ -4605,8 +4058,8 @@ void KoTextParag::setTabStops( int tw )
 {
     if ( doc )
 	doc->setTabStops( tw );
-    else
-	tabStopWidth = tw;
+    //else
+    //    tabStopWidth = tw;
 }
 
 QMap<int, KoTextParagSelection> &KoTextParag::selections() const
@@ -5513,13 +4966,13 @@ QString KoTextImage::richText() const
     return s;
 }
 
-void KoTextImage::setPainter( QPainter* p, bool adjust  )
+/*void KoTextImage::setPainter( QPainter* p, bool adjust  )
 {
     if ( adjust ) {
 	width = scale( tmpwidth, p );
 	height = scale( tmpheight, p );
     }
-}
+}*/
 
 #if !defined(Q_WS_X11)
 #include <qbitmap.h>
@@ -5580,11 +5033,11 @@ void KoTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int c
     }
 }
 
-void KoTextHorizontalLine::setPainter( QPainter* p, bool adjust  )
+/*void KoTextHorizontalLine::setPainter( QPainter* p, bool adjust  )
 {
     if ( adjust )
 	height = scale( tmpheight, p );
-}
+}*/
 
 
 KoTextHorizontalLine::KoTextHorizontalLine( KoTextDocument *p, const QMap<QString, QString> &attr,
@@ -6341,6 +5794,10 @@ QRect KoTextFlow::boundingRect() const
     return br;
 }
 
+int KoTextFlow::availableHeight() const
+{
+    return -1; // no limit
+}
 
 void KoTextFlow::drawFloatingItems( QPainter* p, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {

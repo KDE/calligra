@@ -25,7 +25,7 @@
 
 
 //void KoTextCustomItem::setPainter( QPainter*, bool adjust ){ if ( adjust ) width = 0; }
-void KoTextCustomItem::setPainter( QPainter*, bool ){ resize(); } // changed for kotext
+//void KoTextCustomItem::setPainter( QPainter*, bool ){ resize(); } // changed for kotext
 
 bool KoTextCustomItem::enter( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd )
 {

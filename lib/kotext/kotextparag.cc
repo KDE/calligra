@@ -383,7 +383,7 @@ int KoTextParag::lineSpacing( int line ) const
             return (*it)->lineSpacing;
 
         int height = ( *it )->h;
-        //kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
+        //kdDebug(32500) << " line spacing type: " << m_layout.lineSpacingType << " value:" << m_layout.lineSpacingValue() << " line_height=" << height << endl;
         switch ( m_layout.lineSpacingType )
         {
         case KoParagLayout::LS_MULTIPLE:
@@ -1264,7 +1264,7 @@ void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, KoTextFor
     if ( currentFormat )
         setFormat( index, 1, currentFormat );
     at( index )->setCustomItem( custom );
-    addCustomItem();
+    //addCustomItem();
     document()->registerCustomItem( custom, this );
     custom->recalc(); // calc value (e.g. for variables) and set initial size
     invalidate( 0 );
@@ -1276,7 +1276,7 @@ void KoTextParag::removeCustomItem( int index )
     Q_ASSERT( at( index )->isCustom() );
     KoTextCustomItem * item = at( index )->customItem();
     at( index )->loseCustomItem();
-    KoTextParag::removeCustomItem();
+    //KoTextParag::removeCustomItem();
     document()->unregisterCustomItem( item, this );
 }
 
@@ -1311,7 +1311,7 @@ void KoTextParag::printRTDebug( int info )
     //if ( !next() )
     //    kdDebug(32500) << "  next is 0L" << endl;
     /*
-      static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
+      static const char * const dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
       QPtrVector<QStyleSheetItem> vec = styleSheetItems();
       for ( uint i = 0 ; i < vec.size() ; ++i )
       {
@@ -1332,6 +1332,7 @@ void KoTextParag::printRTDebug( int info )
                       << " text='" << m_layout.counter->text( this ) << "'"
                       << " width=" << m_layout.counter->width( this ) << endl;
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
+        static const char * const s_linespacing[] = { "Single", "1.5", "2", "custom", "atLeast", "Multiple", "Fixed" };
         static const char * const s_dir[] = { "DirL", "DirR", "DirEN", "DirES", "DirET", "DirAN", "DirCS", "DirB", "DirS", "DirWS", "DirON", "DirLRE", "DirLRO", "DirAL", "DirRLE", "DirRLO", "DirPDF", "DirNSM", "DirBN" };
         kdDebug(32500) << "  align: " << s_align[alignment()] << "  resolveAlignment: " << s_align[resolveAlignment()]
                   << "  isRTL:" << string()->isRightToLeft()
@@ -1342,8 +1343,9 @@ void KoTextParag::printRTDebug( int info )
         kdDebug(32500) << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
                   << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
                   << " rightMargin()=" << rightMargin() << endl;
-        //if ( kwLineSpacingType() != KoParagLayout::LS_SINGLE )
-        //    kdDebug(32500) << "  linespacing type=" << kwLineSpacingType() << " value=" << kwLineSpacing() << endl;
+        if ( kwLineSpacingType() != KoParagLayout::LS_SINGLE )
+            kdDebug(32500) << "  linespacing type=" << s_linespacing[ -kwLineSpacingType() ]
+                           << " value=" << kwLineSpacing() << endl;
 
         static const char * const tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();

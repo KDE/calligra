@@ -39,15 +39,11 @@ KoTextDeleteCommand::KoTextDeleteCommand(
     KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
     const CustomItemsMap & customItemsMap,
     const QValueList<KoParagLayout> &oldParagLayouts )
-    : KoTextDocDeleteCommand( d, i, idx, str,
-                          QValueList<QStyleSheetItem::ListStyle>(),
-                          QMemArray<int>() ),
+    : KoTextDocDeleteCommand( d, i, idx, str ),
       m_oldParagLayouts( oldParagLayouts ),
       m_customItemsMap( customItemsMap )
 {
     Q_ASSERT( id >= 0 );
-    // Note that we don't pass aligns and liststyles to KoTextDeleteCommand.
-    // We'll handle them here, as part of the rest, since they are in the paraglayouts
 }
 
 KoTextCursor * KoTextDeleteCommand::execute( KoTextCursor *c )

@@ -412,14 +412,15 @@ public:
     // Called when the format of the character is being changed, see KoTextStringChar::setFormat
     virtual void setFormat( KoTextFormat * ) { }
 
-    virtual void setPainter( QPainter*, bool adjust );
+    //virtual void setPainter( QPainter*, bool adjust );
 
     enum Placement { PlaceInline = 0, PlaceLeft, PlaceRight };
     virtual Placement placement() const { return PlaceInline; }
     bool placeInline() { return placement() == PlaceInline; }
 
     virtual bool ownLine() const { return FALSE; }
-    virtual void resize( QPainter*, int nwidth ){ width = nwidth; };
+    // Called for "ownline" items
+    virtual void resize( int nwidth ) { width = nwidth; }
     virtual void invalidate() {};
 
     virtual bool isNested() const { return FALSE; }
@@ -473,7 +474,7 @@ public:
     virtual ~KoTextImage();
 
     Placement placement() const { return place; }
-    void setPainter( QPainter*, bool );
+    //void setPainter( QPainter*, bool );
     int widthHint() const { return width; }
     int minimumWidth() const { return width; }
 
@@ -498,7 +499,7 @@ public:
 			 QMimeSourceFactory &factory );
     virtual ~KoTextHorizontalLine();
 
-    void setPainter( QPainter*, bool );
+    //void setPainter( QPainter*, bool );
     void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
     QString richText() const;
 
@@ -537,6 +538,8 @@ public:
     virtual void registerFloatingItem( KoTextCustomItem* item );
     virtual void unregisterFloatingItem( KoTextCustomItem* item );
     virtual QRect boundingRect() const;
+    /// kotext addition. Allows the textformatter to stop when it goes too far.
+    virtual int availableHeight() const;
     virtual void drawFloatingItems(QPainter* p, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
 
     virtual int adjustFlow( int  y, int w, int h ); // adjusts y according to the defined pagesize. Returns the shift.
@@ -647,7 +650,7 @@ public:
     bool ownLine() const { return TRUE; }
     Placement placement() const { return place; }
     bool isNested() const { return TRUE; }
-    void resize( QPainter*, int nwidth );
+    void resize( int nwidth );
     virtual void invalidate();
     /// ## QString anchorAt( QPainter* p, int x, int y );
 
@@ -709,10 +712,8 @@ struct Q_EXPORT KoTextDocumentSelection
 class Q_EXPORT KoTextDocDeleteCommand : public KoTextDocCommand
 {
 public:
-    KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
-			const QValueList<QStyleSheetItem::ListStyle> &ols,
-			const QMemArray<int> &oas );
-    KoTextDocDeleteCommand( KoTextParag *p, int idx, const QMemArray<KoTextStringChar> &str );
+    KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str );
+    //KoTextDocDeleteCommand( KoTextParag *p, int idx, const QMemArray<KoTextStringChar> &str );
     virtual ~KoTextDocDeleteCommand();
 
     Commands type() const { return Delete; }
@@ -723,18 +724,15 @@ protected:
     int id, index;
     KoTextParag *parag;
     QMemArray<KoTextStringChar> text;
-    QValueList<QStyleSheetItem::ListStyle> oldListStyles;
-    QMemArray<int> oldAligns;
 
 };
 
+#if 0
 class Q_EXPORT KoTextDocInsertCommand : public KoTextDocDeleteCommand
 {
 public:
-    KoTextDocInsertCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
-			const QValueList<QStyleSheetItem::ListStyle> &ols,
-			const QMemArray<int> &oas )
-	: KoTextDocDeleteCommand( d, i, idx, str, ols, oas ) {}
+    KoTextDocInsertCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str )
+	: KoTextDocDeleteCommand( d, i, idx, str ) {}
     KoTextDocInsertCommand( KoTextParag *p, int idx, const QMemArray<KoTextStringChar> &str )
 	: KoTextDocDeleteCommand( p, idx, str ) {}
     virtual ~KoTextDocInsertCommand() {}
@@ -744,6 +742,7 @@ public:
     KoTextCursor *unexecute( KoTextCursor *c ) { return KoTextDocDeleteCommand::execute( c ); }
 
 };
+#endif
 
 class Q_EXPORT KoTextDocFormatCommand : public KoTextDocCommand
 {
@@ -829,7 +828,8 @@ struct Q_EXPORT KoTextParagLineStart
 #endif
 
 public:
-    ushort y, baseLine, h, lineSpacing;
+    ushort y, baseLine, h;
+    short lineSpacing;
     bool hyphenated;
 #ifndef QT_NO_COMPLEXTEXT
     KoBidiStatus status;
@@ -849,13 +849,13 @@ template class Q_EXPORT QMap<int, KoTextParagLineStart*>;
 // MOC_SKIP_END
 #endif
 
-class Q_EXPORT KoTextParagData
+/*class Q_EXPORT KoTextParagData
 {
 public:
     KoTextParagData() {}
     virtual ~KoTextParagData() {}
     virtual void join( KoTextParagData * ) {}
-};
+};*/
 
 class KoTextFormat;
 
@@ -872,18 +872,6 @@ public:
     KoTextStringChar *at( int i ) const; // maybe remove later
     int leftGap() const;
     int length() const; // maybe remove later
-
-    void setListStyle( QStyleSheetItem::ListStyle ls );
-    QStyleSheetItem::ListStyle listStyle() const;
-    void setListValue( int v ) { list_val = v; }
-    int listValue() const { return list_val; }
-
-#if 0
-    void setList( bool b, int listStyle );
-    void incDepth();
-    void decDepth();
-    int listDepth() const;
-#endif
 
     void setFormat( KoTextFormat *fm );
     KoTextFormat *paragFormat() const;
@@ -939,8 +927,8 @@ public:
     bool hasAnySelection() const;
     bool fullSelected( int id ) const;
 
-    void setEndState( int s );
-    int endState() const;
+    //void setEndState( int s );
+    //int endState() const;
 
     void setParagId( int i );
     int paragId() const;
@@ -950,8 +938,8 @@ public:
 
     void indent( int *oldIndent = 0, int *newIndent = 0 );
 
-    void setExtraData( KoTextParagData *data );
-    KoTextParagData *extraData() const;
+    //void setExtraData( KoTextParagData *data );
+    //KoTextParagData *extraData() const;
 
     QMap<int, KoTextParagLineStart*> &lineStartList();
 
@@ -984,8 +972,8 @@ public:
     void setTableCell( KoTextTableCell *c ) { tc = c; }
 #endif
 
-    void addCustomItem();
-    void removeCustomItem();
+    //void addCustomItem();
+    //void removeCustomItem();
     int customItems() const;
 
     QBrush *background() const;
@@ -996,7 +984,7 @@ public:
     int documentX() const;
     int documentY() const;
     KoTextFormatCollection *formatCollection() const;
-    void setFormatter( KoTextFormatterBase *f );
+    //void setFormatter( KoTextFormatterBase *f );
     KoTextFormatterBase *formatter() const;
     int minimumWidth() const;
 
@@ -1006,18 +994,18 @@ public:
     void setTabArray( int *a );
     void setTabStops( int tw );
 
-    void setPainter( QPainter *p, bool adjust  );
-    QPainter *painter() const { return pntr; }
+    //void setPainter( QPainter *p, bool adjust  );
+    //QPainter *painter() const { return pntr; }
 
     void setNewLinesAllowed( bool b );
     bool isNewLinesAllowed() const;
 
     QString richText() const;
 
-    void addCommand( KoTextDocCommand *cmd );
-    KoTextCursor *undo( KoTextCursor *c = 0 );
-    KoTextCursor *redo( KoTextCursor *c  = 0 );
-    KoTextDocCommandHistory *commands() const { return commandHistory; }
+    //void addCommand( KoTextDocCommand *cmd );
+    //KoTextCursor *undo( KoTextCursor *c = 0 );
+    //KoTextCursor *redo( KoTextCursor *c  = 0 );
+    //KoTextDocCommandHistory *commands() const { return commandHistory; }
 
     virtual void join( KoTextParag *s );
     virtual void copyParagData( KoTextParag *parag );
@@ -1025,9 +1013,9 @@ public:
     void setBreakable( bool b ) { breakable = b; }
     bool isBreakable() const { return breakable; }
 
-    void setBackgroundColor( const QColor &c );
-    QColor *backgroundColor() const { return bgcol; }
-    void clearBackgroundColor();
+    //void setBackgroundColor( const QColor &c );
+    //QColor *backgroundColor() const { return bgcol; }
+    //void clearBackgroundColor();
 
     bool isLineBreak() const { return isBr; }
 
@@ -1067,26 +1055,29 @@ private:
     uint movedDown : 1;
     uint align : 4;
     short int m_lineChanged;
-    int state, id;
+    int id;
     KoTextString *str;
     QMap<int, KoTextParagSelection> *mSelections;
     QPtrList<KoTextCustomItem> *mFloatingItems;
-    QStyleSheetItem::ListStyle lstyle;
-    int tm, bm, lm, rm, flm;
-    KoTextFormat *defFormat;
+    //int tm, bm, lm, rm, flm; // margins
+    KoTextFormat *defFormat; // is this really used?
 #ifdef QTEXTTABLE_AVAILABLE
     KoTextTableCell *tc;
 #endif
-    int numCustomItems;
-    //QRect docRect;
-    KoTextFormatterBase *pFormatter;
+    //int numCustomItems;
     int *tArray;
-    int tabStopWidth;
-    KoTextParagData *eData;
-    int list_val;
-    QColor *bgcol;
-    QPainter *pntr;
-    KoTextDocCommandHistory *commandHistory;
+    //KoTextParagData *eData;
+    //QColor *bgcol;
+    //QPainter *pntr;
+
+    // Those things are used by QRT for the case of a paragraph without document
+    // We don't use this currently, and it's not worth making EVERY parag bigger
+    // just for a special case that's rarely used. Better have lightweight KoTextDocument
+    // replacement (with common base class), if we ever want efficient single-parag docs...
+    //int tabStopWidth;
+    //QRect docRect;
+    //KoTextFormatterBase *pFormatter;
+    //KoTextDocCommandHistory *commandHistory;
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1348,7 +1339,7 @@ inline short int KoTextParag::lineChanged()
     return m_lineChanged;
 }
 
-inline void KoTextParag::setBackgroundColor( const QColor & c )
+/*inline void KoTextParag::setBackgroundColor( const QColor & c )
 {
     delete bgcol;
     bgcol = new QColor( c );
@@ -1359,6 +1350,7 @@ inline void KoTextParag::clearBackgroundColor()
 {
     delete bgcol; bgcol = 0; setChanged( TRUE );
 }
+*/
 
 inline void KoTextParag::append( const QString &s, bool reallyAtEnd )
 {
@@ -1383,7 +1375,7 @@ inline bool KoTextParag::hasAnySelection() const
     return mSelections ? !selections().isEmpty() : FALSE;
 }
 
-inline void KoTextParag::setEndState( int s )
+/*inline void KoTextParag::setEndState( int s )
 {
     if ( s == state )
 	return;
@@ -1393,7 +1385,7 @@ inline void KoTextParag::setEndState( int s )
 inline int KoTextParag::endState() const
 {
     return state;
-}
+}*/
 
 inline void KoTextParag::setParagId( int i )
 {
@@ -1440,7 +1432,7 @@ inline void KoTextParag::setAlignment( uint a )
     invalidate( 0 );
 }
 
-inline void KoTextParag::setListStyle( QStyleSheetItem::ListStyle ls )
+/*inline void KoTextParag::setListStyle( QStyleSheetItem::ListStyle ls )
 {
     lstyle = ls;
     invalidate( 0 );
@@ -1449,7 +1441,7 @@ inline void KoTextParag::setListStyle( QStyleSheetItem::ListStyle ls )
 inline QStyleSheetItem::ListStyle KoTextParag::listStyle() const
 {
     return lstyle;
-}
+}*/
 
 inline KoTextFormat *KoTextParag::paragFormat() const
 {
@@ -1466,7 +1458,7 @@ inline void KoTextParag::unregisterFloatingItem( KoTextCustomItem *i )
     floatingItems().removeRef( i );
 }
 
-inline void KoTextParag::addCustomItem()
+/*inline void KoTextParag::addCustomItem()
 {
     numCustomItems++;
 }
@@ -1474,11 +1466,12 @@ inline void KoTextParag::addCustomItem()
 inline void KoTextParag::removeCustomItem()
 {
     numCustomItems--;
-}
+}*/
 
 inline int KoTextParag::customItems() const
 {
-    return numCustomItems;
+    return mFloatingItems ? mFloatingItems->count() : 0;
+    // was numCustomItems, but no need for a separate count
 }
 
 inline QBrush *KoTextParag::background() const
@@ -1495,7 +1488,7 @@ inline QBrush *KoTextParag::background() const
 //    docRect = r;
 //}
 
-inline void KoTextParag::setExtraData( KoTextParagData *data )
+/*inline void KoTextParag::setExtraData( KoTextParagData *data )
 {
     eData = data;
 }
@@ -1503,7 +1496,7 @@ inline void KoTextParag::setExtraData( KoTextParagData *data )
 inline KoTextParagData *KoTextParag::extraData() const
 {
     return eData;
-}
+}*/
 
 inline void KoTextParag::setNewLinesAllowed( bool b )
 {

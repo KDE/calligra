@@ -178,7 +178,8 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 	    continue;
 	}
 	p->translate( 0, pr.y() );
-        QBrush brush = parag->backgroundColor() ? *parag->backgroundColor() : cg.brush( QColorGroup::Base );
+        QBrush brush = /*parag->backgroundColor() ? *parag->backgroundColor() :*/
+            cg.brush( QColorGroup::Base );
         if ( brush != Qt::NoBrush )
 	    p->fillRect( QRect( 0, 0, pr.width(), pr.height() ), brush );
         //p->setBrushOrigin( p->brushOrigin() + QPoint( 0, pr.y() ) );
@@ -223,7 +224,8 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 
     QRect crect( cx, cy, cw, ch ); // the overall crect
     QRect ir( rect ); // will be the rect to be repainted
-    QBrush brush = parag->backgroundColor() ? *parag->backgroundColor() : cg.brush( QColorGroup::Base );
+    QBrush brush = /*parag->backgroundColor() ? *parag->backgroundColor() :*/
+        cg.brush( QColorGroup::Base );
     // No need to brush plain white on a printer. Brush all other cases (except "full transparent" case).
     bool needBrush = brush.style() != Qt::NoBrush &&
                      !(brush.style() == Qt::SolidPattern && brush.color() == Qt::white && p->device()->devType() == QInternal::Printer);

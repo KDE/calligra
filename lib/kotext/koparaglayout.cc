@@ -282,6 +282,8 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
                 layout.lineSpacingType = KoParagLayout::LS_FIXED;
                 layout.lineSpacing = element.attribute( "spacingvalue" ).toDouble();
             }
+            else if ( type == "single" ) // not used; just in case future versions use it.
+                layout.lineSpacingType = KoParagLayout::LS_SINGLE;
         }
     }
 
