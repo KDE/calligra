@@ -230,7 +230,7 @@
 <!ATTLIST TEXT  value CDATA #IMPLIED>
 <!ELEMENT FORMATS (FORMAT*)>
 <!ELEMENT FORMAT (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|VERTALIGN)*>
-<!-- A format tag describes the format of one ore more characters in the text
+<!-- A format tag describes the format of one or more characters in the text
 
                 Attributes:
 
@@ -243,7 +243,8 @@
                                     4...a variable
                                     5...a footnote
                                     6...an anchor for a floating frame.
-        pos:                    position where the format starts
+        pos:                    position where the format starts. This is a zero-based index
+                                into the paragraph.
         len:                    number of characters after pos for which the format is used
 -->
 <!ATTLIST FORMAT id CDATA #IMPLIED
