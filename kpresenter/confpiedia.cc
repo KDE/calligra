@@ -89,47 +89,46 @@ void PiePreview::drawContents( QPainter* painter )
 ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
     : QWidget( parent, name ), m_bTypeChanged(false), m_bAngleChanged(false), m_bLengthChanged(false)
 {
-  // ------------------------ layout
-  QVBoxLayout *layout = new QVBoxLayout( this, 0 );
-  layout->setMargin( 5 );
-  layout->setSpacing( 5 );
+  QGridLayout *grid = new QGridLayout( this, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-  QHBoxLayout *hbox = new QHBoxLayout( layout );
-  hbox->setSpacing( 5 );
+  lType = new QLabel( i18n( "Type:" ), this );
+  grid->addWidget(lType, 0, 0);
 
-  // ------------------------ settings
-  gSettings = new QGroupBox( 6, Qt::Vertical, i18n( "Settings" ), this );
-
-  lType = new QLabel( i18n( "Type:" ), gSettings );
-
-  cType = new QComboBox( false, gSettings );
+  cType = new QComboBox( false, this );
   cType->insertItem( i18n( "Pie" ) );
   cType->insertItem( i18n( "Arc" ) );
   cType->insertItem( i18n( "Chord" ) );
+  grid->addWidget(cType, 1, 0);
 
   connect( cType, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
-  lAngle = new QLabel( i18n( "Angle:" ), gSettings );
+  lAngle = new QLabel( i18n( "Angle:" ), this );
+  grid->addWidget(lAngle, 2, 0);
 
-  eAngle = new KIntNumInput( gSettings );
+  eAngle = new KIntNumInput( this );
   eAngle->setRange(0, 360);
   eAngle->setSuffix(" °");
+  grid->addWidget(eAngle, 3, 0);
+
   connect( eAngle, SIGNAL( valueChanged( int ) ), this, SLOT( angleChanged( int ) ) );
 
-  lLen = new QLabel( i18n( "Length:" ), gSettings );
+  lLen = new QLabel( i18n( "Length:" ), this );
+  grid->addWidget(lLen, 4, 0);
 
-  eLen = new KIntNumInput( gSettings );
+  eLen = new KIntNumInput( this );
   eLen->setRange(0, 360);
   eLen->setSuffix(" °");
+  grid->addWidget(eLen, 5, 0);
 
   connect( eLen, SIGNAL( valueChanged( int ) ), this, SLOT( lengthChanged( int ) ) );
 
-  hbox->addWidget( gSettings );
+  QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+  grid->addItem( spacer, 6, 0 );
 
   // ------------------------ preview
   piePreview = new PiePreview( this, "preview" );
+  grid->addMultiCellWidget( piePreview, 0, 6, 1, 1 );
 
-  hbox->addWidget( piePreview );
   slotReset();
 }
 

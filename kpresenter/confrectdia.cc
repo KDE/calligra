@@ -88,14 +88,14 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
 
     eRndX = new KIntNumInput( gSettings );
     eRndX->setRange(0, 100);
-    eRndX->setSuffix(" °");
+    eRndX->setSuffix(" %");
     connect( eRndX, SIGNAL( valueChanged( int ) ), this, SLOT( rndXChanged( int ) ) );
 
     lRndY = new QLabel( i18n( "Horizontal declination:" ), gSettings );
 
     eRndY = new KIntNumInput( gSettings );
     eRndY->setRange(0, 100);
-    eRndY->setSuffix(" °");
+    eRndY->setSuffix(" %");
 
     connect( eRndY, SIGNAL( valueChanged( int ) ), this, SLOT( rndYChanged( int ) ) );
 
