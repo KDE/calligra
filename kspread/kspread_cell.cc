@@ -3142,7 +3142,7 @@ void KSpreadCell::setBottomBorderPen( const QPen& p )
     if ( row() < KS_rowMax )
         cell = m_pTable->cellAt( column(), row() + 1 );
 
-    if ( cell && cell->hasProperty( PTopBorder ) 
+    if ( cell && cell->hasProperty( PTopBorder )
          && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PTopBorder );
 
@@ -4156,7 +4156,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     // Load formatting information.
     //
     QDomElement f = cell.namedItem( "format" ).toElement();
-    if ( !f.isNull() 
+    if ( !f.isNull()
          && ( (pm == Normal) || (pm == Format) || (pm == NoBorder) ) )
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
@@ -4587,25 +4587,24 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
         switch( op )
         {
         case  Add:
-            tmp_op = "="+QString::number(old.toDouble()+tmp.toDouble());
+            tmp_op = QString::number(old.toDouble()+tmp.toDouble());
             break;
         case Mul :
-            tmp_op = "="+QString::number(old.toDouble()*tmp.toDouble());
+            tmp_op = QString::number(old.toDouble()*tmp.toDouble());
             break;
         case Sub:
-            tmp_op = "="+QString::number(old.toDouble()-tmp.toDouble());
+            tmp_op = QString::number(old.toDouble()-tmp.toDouble());
             break;
         case Div:
-            tmp_op = "="+QString::number(old.toDouble()/tmp.toDouble());
+            tmp_op = QString::number(old.toDouble()/tmp.toDouble());
             break;
         default:
             Q_ASSERT( 0 );
         }
 
-        tmp_op = decodeFormula( tmp_op, m_iColumn, m_iRow );
         setFlag(Flag_LayoutDirty);
         clearAllErrors();
-        m_content = Formula;
+        m_content = Text;
 
         return tmp_op;
     }
