@@ -224,7 +224,7 @@ VSelection::boundingBox() const
 
 
 VHandleNode
-VSelection::node( const QPoint& point ) const
+VSelection::handleNode( const QPoint& point ) const
 {
 	for( uint i = node_lt; i <= node_rb; ++i )
 	{

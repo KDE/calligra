@@ -6,7 +6,7 @@ Object hierarchy:
 
         +- vdocument
         |
-        +- vpath
+        +- vpath--+- (shapes)
         |
 vobject-+- vtext
         |
@@ -16,31 +16,36 @@ vobject-+- vtext
 Files and directories:
 ----------------------
 commands/
-	undo/redo operations
+	Undo/redo operations.
 
 core/
-	essential data structures
+	Essential data structures.
 
 data/
-	kde data
+	KDE data.
 
 dialogs/
-	dialogs
+	Dialogs.
 
 pics/
-	icons and grafx
+	Icons and grafx.
 
 render/
-	everything related to painting
+	Everything related to painting
+
+shapes/
+	The basic shapes like ellipse and rectangle etc.
+	Shapes are nothing more than paths.
 
 tests/
-	demonstration data files
+	Demonstration karbon files.
 
 tools/
-	stuff you can do with the mouse
+	Stuff you can do with the mouse.
 
 visitors/
-	shape (mostly paths) manipulation stuff
+	Classes which need full access to vobjects.
+	Mostly path manipulation stuff.
 
 widgets/
-	widgets
+	Widgets.

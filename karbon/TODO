@@ -1,8 +1,12 @@
 TODO:
+-	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
+	similar to vshapecommand
 -	check/set winding in vpath::combine().
 -	vroundcorners needs to be imrpoved for beziers and big radii (lenny)
 -	check in other apps if this makes sense:
 	(make vselection a visitor and paint selected shapes instead of each shape)
+-	scratch your head about how to do undo/redo of path operations best like
+	removing nodes, inserting nodes...
 
 REAL BUGS:
 -	linewith adjustment via previewwidget doesnt update bbox

@@ -44,7 +44,7 @@ VRotateTool::activate()
 void
 VRotateTool::setCursor( const QPoint &p ) const
 {
-	switch( view()->part()->document().selection()->node( p ) )
+	switch( view()->part()->document().selection()->handleNode( p ) )
 	{
 		case node_lt:
 		case node_rb:
@@ -79,7 +79,7 @@ VRotateTool::drawTemporaryObject()
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	VHandleNode node = view()->part()->document().selection()->node( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
+	VHandleNode node = view()->part()->document().selection()->handleNode( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
 	if( view()->part()->document().selection()->objects().count() > 0 && node != node_mm )
 	{
 		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );

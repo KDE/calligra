@@ -6,6 +6,7 @@
 
 #include "vflatten.h"
 #include "vflattencmd.h"
+#include "vgroup.h"
 #include "vselection.h"
 
 
@@ -25,11 +26,27 @@ VFlattenCmd::~VFlattenCmd()
 void
 VFlattenCmd::execute()
 {
+	VObject* newObject;
+
 	VFlatten op( m_flatness );
 
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
-		op.visit( *itr.current() );
+	{
+/*		if( VGroup* group = dynamic_cast<VGroup*>( itr.current()->parent() ) )
+		{
+			newObject = itr.current()->clone();
+
+			group->insertNewDeleteOld( newObject, itr.current() );
+		}
+		else
+		{
+*/
+			newObject = itr.current();
+//		}
+
+		op.visit( *newObject );
+	}
 }
 
 void

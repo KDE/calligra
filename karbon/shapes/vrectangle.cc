@@ -11,6 +11,8 @@ VRectangle::VRectangle( VObject* parent,
 		const KoPoint& topLeft, double width, double height )
 	: VPath( parent )
 {
+	setDrawCenterNode();
+
 	moveTo( topLeft );
 	lineTo( KoPoint( topLeft.x(),         topLeft.y() - height ) );
 	lineTo( KoPoint( topLeft.x() + width, topLeft.y() - height ) );

@@ -115,8 +115,15 @@ public:
 
 	virtual void accept( VVisitor& visitor );
 
+	bool drawCenterNode() const { return m_drawCenterNode; }
+	void setDrawCenterNode( bool drawCenterNode = true )
+		{ m_drawCenterNode = drawCenterNode; }
+
 private:
 	VSegmentListList m_segmentLists;		// list of segmentList
+
+	/// Should a center node be drawn?
+	bool m_drawCenterNode;
 };
 
 #endif

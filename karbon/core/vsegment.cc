@@ -44,14 +44,14 @@ height(
 }
 
 
-VSegment::VSegment()
+VSegment::VSegment( VSegmentType type )
 {
 	m_prev = 0L;
 	m_next = 0L;
 
 	m_isSelected[ 0 ] = m_isSelected[ 1 ] = m_isSelected[ 2 ] = true;
 
-	m_type = begin;
+	m_type = type;
 	m_ctrlPointFixing = none;
 	m_smooth = false;
 }

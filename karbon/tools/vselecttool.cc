@@ -46,7 +46,7 @@ VSelectTool::activate()
 void
 VSelectTool::setCursor( const QPoint &p ) const
 {
-	switch( view()->part()->document().selection()->node( p ) )
+	switch( view()->part()->document().selection()->handleNode( p ) )
 	{
 		case node_lt:
 		case node_rb:
@@ -300,7 +300,7 @@ VSelectTool::eventFilter( QEvent* event )
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		m_activeNode = view()->part()->document().selection()->node( lp );
+		m_activeNode = view()->part()->document().selection()->handleNode( lp );
 		view()->part()->document().selection()->selectNodes();
 		view()->part()->document().selection()->setState( VObject::edit );
 		view()->part()->repaintAllViews();

@@ -204,8 +204,7 @@ VSegmentList::curveTo(
 {
 	if( isClosed() ) return false;
 
-	VSegment* s = new VSegment();
-	s->setType( VSegment::curve );
+	VSegment* s = new VSegment( VSegment::curve );
 	s->setCtrlPoint1( p1 );
 	s->setCtrlPoint2( p2 );
 	s->setKnot( p3 );
@@ -219,8 +218,7 @@ VSegmentList::curve1To( const KoPoint& p2, const KoPoint& p3 )
 {
 	if( isClosed() ) return false;
 
-	VSegment* s = new VSegment();
-	s->setType( VSegment::curve );
+	VSegment* s = new VSegment( VSegment::curve );
 	s->setCtrlPointFixing( VSegment::first );
 	s->setCtrlPoint2( p2 );
 	s->setKnot( p3 );
@@ -234,8 +232,7 @@ VSegmentList::curve2To( const KoPoint& p1, const KoPoint& p3 )
 {
 	if( isClosed() ) return false;
 
-	VSegment* s = new VSegment();
-	s->setType( VSegment::curve );
+	VSegment* s = new VSegment( VSegment::curve );
 	s->setCtrlPointFixing( VSegment::second );
 	s->setCtrlPoint1( p1 );
 	s->setKnot( p3 );

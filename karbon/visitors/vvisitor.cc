@@ -48,12 +48,12 @@ VVisitor::visitVPath( VPath& path )
 }
 
 void
-VVisitor::visitVSegmentList( VSegmentList& segmentList )
+VVisitor::visitVSegmentList( VSegmentList& /*segmentList*/ )
 {
 }
 
 void
-VVisitor::visitVText( VText& text )
+VVisitor::visitVText( VText& /*text*/ )
 {
 }
 

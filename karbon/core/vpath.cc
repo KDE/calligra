@@ -31,6 +31,8 @@ VPath::VPath( VObject* parent, VState state )
 	// we need a stroke for boundingBox() at anytime:
 	m_stroke = new VStroke( this );
 	m_fill = new VFill();
+
+	m_drawCenterNode = false;
 }
 
 VPath::VPath( const VPath& path )
@@ -53,6 +55,8 @@ VPath::VPath( const VPath& path )
 
 	if ( path.fill() )
 		setFill( *path.fill() );
+
+	m_drawCenterNode = false;
 }
 
 VPath::~VPath()
@@ -329,30 +333,33 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 		}
 
 		// draw a "knot" at the center:
-		const KoPoint center = boundingBox().center();
+		if( m_drawCenterNode )
+		{
+			const KoPoint center = boundingBox().center();
 
-		painter->newPath();
-		painter->setRasterOp( Qt::NotROP );
-		painter->setPen( Qt::NoPen );
-		painter->setBrush( Qt::blue.light() );
+			painter->newPath();
+			painter->setRasterOp( Qt::NotROP );
+			painter->setPen( Qt::NoPen );
+			painter->setBrush( Qt::blue.light() );
 
-		painter->moveTo(
-			KoPoint(
-				center.x() - 2 / zoomFactor,
-				center.y() - 2 / zoomFactor ) );
-		painter->lineTo(
-			KoPoint(
-				center.x() + 2 / zoomFactor,
-				center.y() - 2 / zoomFactor ) );
-		painter->lineTo(
-			KoPoint(
-				center.x() + 2 / zoomFactor,
-				center.y() + 2 / zoomFactor ) );
-		painter->lineTo(
-			KoPoint(
-				center.x() - 2 / zoomFactor,
-				center.y() + 2 / zoomFactor ) );
-		painter->fillPath();
+			painter->moveTo(
+				KoPoint(
+					center.x() - 2 / zoomFactor,
+					center.y() - 2 / zoomFactor ) );
+			painter->lineTo(
+				KoPoint(
+					center.x() + 2 / zoomFactor,
+					center.y() - 2 / zoomFactor ) );
+			painter->lineTo(
+				KoPoint(
+					center.x() + 2 / zoomFactor,
+					center.y() + 2 / zoomFactor ) );
+			painter->lineTo(
+				KoPoint(
+					center.x() - 2 / zoomFactor,
+					center.y() + 2 / zoomFactor ) );
+			painter->fillPath();
+		}
 	}
 
 	painter->restore();

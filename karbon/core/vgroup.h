@@ -49,15 +49,30 @@ public:
 	virtual void accept( VVisitor& visitor );
 
 
-	/// Removes the reference to the object, not the object itself
+	/**
+	 * Removes the reference to the object, not the object itself.
+	 */
 	void take( const VObject& object );
 
+	/**
+	 * Appends a new object.
+	 */
 	void append( VObject* object );
 
-	/// Clears the group, without destroying the grouped objects.
+	/**
+	 * This function is important for undo/redo. It insert newObject in front
+	 * of oldObject and hide oldObject.
+	 */
+	void insertNewDeleteOld( VObject* newObject, VObject* oldObject );
+
+	/**
+	 * Clears the group, without destroying the grouped objects.
+	 */
 	void clear();
 
-	/// Read only access to the grouped objects.
+	/**
+	 * Read only access to the grouped objects.
+	 */
 	const VObjectList& objects() const { return m_objects; }
 
 protected:

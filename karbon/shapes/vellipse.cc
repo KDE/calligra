@@ -11,6 +11,8 @@ VEllipse::VEllipse( VObject* parent,
 		const KoPoint& topLeft, double width, double height )
 	: VPath( parent )
 {
+	setDrawCenterNode();
+
 	// Create (half-)unity circle with topLeft at (0|0):
 	moveTo( KoPoint( 0.0, -0.5 ) );
 	arcTo( KoPoint( 0.0, -1.0 ), KoPoint( 0.5, -1.0 ), 0.5 );

@@ -52,7 +52,7 @@ public:
 	};
 
 
-	VSegment();
+	VSegment( VSegmentType type = begin );
 	VSegment( const VSegment& segment );
 
 	VSegmentType type() const

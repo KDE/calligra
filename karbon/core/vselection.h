@@ -92,9 +92,9 @@ public:
 
 
 	/**
-	 * Returns the node id, the QPoint is inside.
+	 * Returns the handle node id, the QPoint is inside.
 	 */
-	VHandleNode node( const QPoint& point ) const;
+	VHandleNode handleNode( const QPoint& point ) const;
 
 	bool selectNode( const KoPoint &p );
 	bool checkNode( const KoPoint &p );
@@ -110,7 +110,7 @@ private:
 	QPtrList<VSegment> m_segments;
 
 	/**
-	 * Handle and nodes paint coordinates.
+	 * Handle and handle nodes paint coordinates.
 	 */
 	QRect* m_qrect;
 
