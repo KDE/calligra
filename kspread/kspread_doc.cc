@@ -42,6 +42,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <ksconfig.h>
+#include <ktempfile.h>
 
 #include <koDocumentInfo.h>
 #include <kocommandhistory.h>
@@ -572,28 +573,55 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
 
     //Terminate current cell edition, if any
-    QPtrListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it2( views() );
 
     /* don't pull focus away from the editor if this is just a background
        autosave */
     if (!isAutosaving())
     {
-        for (; it.current(); ++it )
-            static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
+        for (; it2.current(); ++it2 )
+            static_cast<KSpreadView *>( it2.current() )->deleteEditor( true );
     }
     if ( !store->open( "content.xml" ) )
         return false;
 
     KoStoreDevice dev( store );
-    KoXmlWriter xmlWriter( &dev, "office:document-content" );
+    KoXmlWriter contentWriter( &dev, "office:document-content" );
+    KoGenStyles mainStyles;//for compile
+
+    KTempFile contentTmpFile;
+    contentTmpFile.setAutoDelete( true );
+    QFile* tmpFile = contentTmpFile.file();
+    KoXmlWriter contentTmpWriter( tmpFile, 1 );
+
+
 
     //todo fixme just add a element for testing saving content.xml
-    xmlWriter.startElement( "office:body" );
-    d->workbook->saveOasis( xmlWriter );
-    saveOasisAreaName( xmlWriter );
-    xmlWriter.endElement();
-    xmlWriter.endElement(); // root element
-    xmlWriter.endDocument();
+    contentTmpWriter.startElement( "office:body" );
+
+    d->workbook->saveOasis( contentTmpWriter );
+    saveOasisAreaName( contentTmpWriter );
+    contentTmpWriter.endElement(); ////office:body
+
+    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
+    contentWriter.startElement( "office:automatic-styles" );
+
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    contentWriter.endElement(); // office:automatic-styles
+
+
+   // And now we can copy over the contents from the tempfile to the real one
+    tmpFile->close();
+    contentWriter.addCompleteElement( tmpFile );
+contentTmpFile.close();
+
+
+    contentWriter.endElement(); // root element
+    contentWriter.endDocument();
     if ( !store->close() )
         return false;
 
@@ -601,14 +629,58 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     manifestWriter->addManifestEntry( "content.xml",  "text/xml" );
 
     //todo add manifest line for style.xml
-#if 0
+    if ( !store->open( "styles.xml" ) )
+        return false;
+
     manifestWriter->addManifestEntry( "style.xml",  "text/xml" );
-#endif
+    saveOasisDocumentStyles( store, mainStyles );
+    if ( !store->close() ) // done with styles.xml
+        return false;
+
 
     setModified( false );
 
-    kdError() << "KSpreadDoc::saveOasis not implemented (for the moment :) )" << endl;
     return true;
+}
+
+void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
+{
+    QString pageLayoutName;
+    KoStoreDevice stylesDev( store );
+    KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
+
+    stylesWriter.startElement( "office:styles" );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+#if 0
+    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+    Q_ASSERT( styles.count() == 1 );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+        //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
+        // which only works as long as we have only one page master
+        stylesWriter.endElement();
+        Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
+        pageLayoutName = (*it).name;
+    }
+#endif
+    stylesWriter.endElement(); // office:automatic-styles
+#if 0
+    //code from kword
+    stylesWriter.startElement( "office:master-styles" );
+    stylesWriter.startElement( "style:master-page" );
+    stylesWriter.addAttribute( "style:name", "Standard" );
+    stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
+    stylesWriter.endElement();
+    stylesWriter.endElement(); // office:master-style
+#endif
+
+    stylesWriter.endElement(); // root element (office:document-styles)
+    stylesWriter.endDocument();
 }
 
 bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )

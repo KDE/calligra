@@ -55,6 +55,7 @@ class KSpellConfig;
 #include <koDocument.h>
 #include <koPageLayoutDia.h>
 #include <kozoomhandler.h>
+#include <koGenStyles.h>
 
 #include <kcompletion.h>
 #include <qmap.h>
@@ -436,6 +437,7 @@ public:
   virtual QDomDocument saveXML();
 
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
 
 
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
