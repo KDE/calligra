@@ -619,7 +619,7 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
             char buffer[ 20 ];
             char *p2 = buffer;
             if ( col > 26 )
-                *p2++ = 'A' + ( col / 26 ) - 1;
+                *p2++ = 'A' + ( (col-1) / 26 ) - 1;
             if( col % 26)
                 *p2++ = 'A' + ( col % 26 ) - 1;
             else
