@@ -36,9 +36,6 @@ public slots:
 
   void slotCurrentChanged(QListViewItem*);
 
-signals:
-  void change(bool);
-
 private:
   KivioPage* m_pPage;
   KivioCanvas* m_pCanvas;

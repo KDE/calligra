@@ -29,7 +29,7 @@ GuidesOnePositionPage::GuidesOnePositionPage(Orientation o, KivioView* view, QWi
   listView->addColumn("",1);
   listView->header()->hide();
   listView->setColumnAlignment(1,AlignRight);
-  listView->installEventFilter(this);
+  listView->clipper()->installEventFilter(this);
 
   connect(addButton,SIGNAL(clicked()),SLOT(slotAddButton()));
   connect(moveButton,SIGNAL(clicked()),SLOT(slotMoveButton()));
@@ -96,7 +96,7 @@ void GuidesOnePositionPage::updateListView(bool rebuild)
 
 void GuidesOnePositionPage::updateListViewColumn()
 {
-  int s = listView->width() - 2*(listView->margin() + listView->lineWidth());
+  int s = listView->clipper()->width();
   s -= listView->header()->sectionSize(0);
   listView->setColumnWidth(1,s);
   listView->triggerUpdate();
@@ -199,7 +199,7 @@ void GuidesOnePositionPage::slotCurrentChanged(QListViewItem* i)
 
 bool GuidesOnePositionPage::eventFilter(QObject* o, QEvent* ev)
 {
-  if (o == listView && (ev->type() == QEvent::LayoutHint || ev->type() == QEvent::Resize)) {
+  if (o == listView->clipper() && (ev->type() == QEvent::LayoutHint || ev->type() == QEvent::Resize)) {
     updateListViewColumn();
   }
   return GuidesOnePositionPageBase::eventFilter(o,ev);

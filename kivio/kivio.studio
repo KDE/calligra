@@ -1,5 +1,5 @@
 [BookmarkGlobal]
-Data=<!DOCTYPE Bookmarks ><Bookmarks type="root" >\n <Item projectName="kiviopart" line="241" type="item" id="1" name="setupActions" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="1020" type="item" id="2" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="1053" type="item" id="3" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item line="437" projectName="kiviopart" type="item" id="4" name="kiviopart:kivio_doc.cpp:374" fileName="kivio_doc.cpp" />\n <Item line="85" projectName="kiviosdk" type="item" id="5" name="kiviosdk:kivio_layer.cpp:63" fileName="kivio_layer.cpp" />\n</Bookmarks>\n
+Data=<!DOCTYPE Bookmarks ><Bookmarks type="root" >\n <Item line="241" projectName="kiviopart" type="item" id="1" name="setupActions" fileName="kivio_view.cpp" />\n <Item line="1020" projectName="kiviopart" type="item" id="2" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item line="1053" projectName="kiviopart" type="item" id="3" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="437" type="item" id="4" name="kiviopart:kivio_doc.cpp:374" fileName="kivio_doc.cpp" />\n <Item projectName="kiviosdk" line="85" type="item" id="5" name="kiviosdk:kivio_layer.cpp:63" fileName="kivio_layer.cpp" />\n</Bookmarks>\n
 [Editor Options]
 ConfigFlags=1051
 TabWidth=4
@@ -9,7 +9,7 @@ DefaultLibrary=LIB_KDECORE = -lkdecore (LIB_QT),LIB_KDEUI = -lkdeui (LIB_KDECORE
 Name=kivio
 [kivio]
 DebugMode=false
-DefRunPrj=kiviopart
+DefRunPrj=kivio
 File=configure.in.in,res.cpp
 Group=po,kiviopart,plugins
 Memo=

@@ -173,22 +173,6 @@ void KivioLayerPanel::upItem()
 
   page->setCurLayer(layer);
   m_pView->doc()->updateView(page);
-/*
-*/
-{
-//  debug("---------------------------");
-  KivioPage* page = m_pView->activePage();
-  KivioLayer* layer = page->firstLayer();
-//  KivioLayerItem* ci = 0;
-
-  while (layer) {
-  //  debug(layer->name());
-    layer = page->nextLayer();
-  }
-}
-/*
-*/
-
 }
 
 void KivioLayerPanel::downItem()
@@ -225,22 +209,6 @@ void KivioLayerPanel::downItem()
 
   page->setCurLayer(layer);
   m_pView->doc()->updateView(page);
-
-/*
-*/
-{
-//  debug("---------------------------");
-  KivioPage* page = m_pView->activePage();
-  KivioLayer* layer = page->firstLayer();
-//  KivioLayerItem* ci = 0;
-
-  while (layer) {
-  //  debug(layer->name());
-    layer = page->nextLayer();
-  }
-}
-/*
-*/
 }
 
 void KivioLayerPanel::updateButtons(QListViewItem* i)

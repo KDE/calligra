@@ -11,6 +11,7 @@
 #include "kivio_guidelines.h"
 
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -20,6 +21,8 @@
 GuidesTwoPositionPage::GuidesTwoPositionPage(KivioView* view, QWidget* parent, const char* name)
 : GuidesTwoPositionPageBase(parent, name)
 {
+  installEventFilter(this);
+
   m_pCanvas = view->canvasWidget();
   m_pPage = view->activePage();
 
@@ -29,7 +32,7 @@ GuidesTwoPositionPage::GuidesTwoPositionPage(KivioView* view, QWidget* parent, c
   listView->header()->hide();
   listView->setColumnAlignment(1,AlignRight);
   listView->setColumnAlignment(2,AlignRight);
-  listView->installEventFilter(this);
+  listView->clipper()->installEventFilter(this);
 
   connect(moveButton,SIGNAL(clicked()),SLOT(slotMoveButton()));
   connect(moveByButton,SIGNAL(clicked()),SLOT(slotMoveByButton()));
@@ -93,7 +96,7 @@ void GuidesTwoPositionPage::updateListView(bool rebuild)
 
 void GuidesTwoPositionPage::updateListViewColumn()
 {
-  int s = listView->width() - 2*(listView->margin() + listView->lineWidth());
+  int s = listView->clipper()->width();
   s -= listView->header()->sectionSize(0);
   listView->setColumnWidth(1,s/2);
   listView->setColumnWidth(2,s/2);
@@ -195,7 +198,10 @@ void GuidesTwoPositionPage::setCurrent(KivioGuideLineData* data)
 
 bool GuidesTwoPositionPage::eventFilter(QObject* o, QEvent* ev)
 {
-  if (o == listView && (ev->type() == QEvent::LayoutHint || ev->type() == QEvent::Resize)) {
+  if (o == this) {
+   kdDebug() << ev->type() << endl;
+  }
+  if (o == listView->clipper() && (ev->type() == QEvent::LayoutHint || ev->type() == QEvent::Resize)) {
     updateListViewColumn();
   }
   return GuidesTwoPositionPageBase::eventFilter(o,ev);
