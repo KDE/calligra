@@ -90,6 +90,7 @@ VSegment::VSegment( const VSegment& segment )
 	for( int i = 0; i < degree(); ++i )
 	{
 		setPoint( i, segment.point( i ) );
+		selectPoint( i, segment.pointIsSelected( i ) );
 	}
 }
 
