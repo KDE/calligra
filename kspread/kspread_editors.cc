@@ -303,10 +303,9 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
         QKeyEvent* k = (QKeyEvent*)e;
         if ( !( k->state() & Qt::ShiftButton )|| canvas()->chooseFormulaArea())
         {
-            if ( k->key() == Key_Right  || k->key() == Key_Left || k->key() == Key_Up ||
-                 k->key() == Key_Down || k->key() == Key_Next ||
-                 k->key() == Key_Prior || k->key() == Key_Escape ||
-                 k->key() == Key_Tab )
+            if ( k->key() == Key_Up || k->key() == Key_Down || 
+                 k->key() == Key_Next || k->key() == Key_Prior || 
+                 k->key() == Key_Escape || k->key() == Key_Tab )
             {
                 // Send directly to canvas
                 QApplication::sendEvent( parent(), e );
