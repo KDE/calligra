@@ -44,6 +44,8 @@ public:
   QColor color() const { return m_pCurrentColor; }
 
   KPopupMenu* popupMenu() { return m_pMenu; }
+  void setDefaultColor(const QColor &_col);
+
 
 public slots:
   void setCurrentColor( const QColor& );
@@ -52,7 +54,6 @@ public slots:
 
 signals:
   void colorSelected( const QColor& );
-  void sig_defaultColor();
 
 protected slots:
   void selectColorDialog();

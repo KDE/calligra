@@ -26,10 +26,11 @@ void TKColorPopupMenu::updateItemSize()
 class TKSelectColorActionPrivate
 {
 public:
-  TKSelectColorActionPrivate()
-  {
-  }
-  bool defaultColorMenu;
+    TKSelectColorActionPrivate()
+    {
+    }
+    bool defaultColorMenu;
+    QColor defaultColor;
 };
 
 
@@ -38,9 +39,10 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObjec
 {
     d=new TKSelectColorActionPrivate();
     d->defaultColorMenu=menuDefaultColor;
-  setText(text);
-  m_type = type;
-  init();
+    d->defaultColor=QColor();
+    setText(text);
+    m_type = type;
+    init();
 }
 
 TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
@@ -50,10 +52,11 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
 {
     d=new TKSelectColorActionPrivate();
     d->defaultColorMenu=menuDefaultColor;
-  setText(text);
-  m_type = type;
-  connect( this, SIGNAL( activated() ), receiver, slot );
-  init();
+    d->defaultColor=QColor();
+    setText(text);
+    m_type = type;
+    connect( this, SIGNAL( activated() ), receiver, slot );
+    init();
 }
 
 void TKSelectColorAction::init()
@@ -118,7 +121,13 @@ void TKSelectColorAction::initToolBarButton(TKToolBarButton* b)
 
 void TKSelectColorAction::defaulColor()
 {
-    emit sig_defaultColor();
+   m_pCurrentColor = d->defaultColor;
+   emit activated();
+}
+
+void TKSelectColorAction::setDefaultColor(const QColor &_col)
+{
+    d->defaultColor=_col;
 }
 
 void TKSelectColorAction::updatePixmap()
