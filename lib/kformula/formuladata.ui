@@ -1,0 +1,293 @@
+<!DOCTYPE UI><UI>
+<class>FormulaDataDialog</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>FormulaDataDialog</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>323</width>
+            <height>325</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Formula data, file saving</string>
+    </property>
+    <widget>
+        <class>QTabWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TabWidget3</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>300</width>
+                <height>300</height>
+            </rect>
+        </property>
+        <widget>
+            <class>QWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tab</cstring>
+            </property>
+            <attribute>
+                <name>title</name>
+                <string>Data</string>
+            </attribute>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel5_2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>130</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Textual export mode:</string>
+                </property>
+            </widget>
+            <widget>
+                <class>KComboBox</class>
+                <item>
+                    <property>
+                        <name>text</name>
+                        <string>LaTex</string>
+                    </property>
+                </item>
+                <item>
+                    <property>
+                        <name>text</name>
+                        <string>MathML</string>
+                    </property>
+                </item>
+                <item>
+                    <property>
+                        <name>text</name>
+                        <string>C Style</string>
+                    </property>
+                </item>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>KComboBox9_2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>10</x>
+                        <y>50</y>
+                        <width>151</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget>
+                <class>QGroupBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>GroupBox8</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>8</x>
+                        <y>115</y>
+                        <width>271</width>
+                        <height>121</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string>File saving:</string>
+                </property>
+                <widget>
+                    <class>QCheckBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>CheckBox9</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>30</y>
+                            <width>210</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>End of matrix row comment</string>
+                    </property>
+                </widget>
+            </widget>
+        </widget>
+        <widget>
+            <class>QWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tab</cstring>
+            </property>
+            <attribute>
+                <name>title</name>
+                <string>MathML</string>
+            </attribute>
+            <grid>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget row="0"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel6</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Default markup:</string>
+                    </property>
+                </widget>
+                <widget row="0"  column="1" >
+                    <class>KComboBox</class>
+                    <item>
+                        <property>
+                            <name>text</name>
+                            <string>Presentation</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property>
+                            <name>text</name>
+                            <string>Content</string>
+                        </property>
+                    </item>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>KComboBox13</cstring>
+                    </property>
+                </widget>
+                <widget row="1"  column="0"  rowspan="1"  colspan="2" >
+                    <class>QGroupBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>GroupBox9</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>title</name>
+                        <string>Presentation markup:</string>
+                    </property>
+                </widget>
+                <widget row="2"  column="0"  rowspan="1"  colspan="2" >
+                    <class>QGroupBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>GroupBox10</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>title</name>
+                        <string>Content markup:</string>
+                    </property>
+                    <widget>
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel7</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>10</x>
+                                <y>19</y>
+                                <width>110</width>
+                                <height>20</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Upper right index is:</string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>KComboBox</class>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>Power</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>nth-component</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>like other index</string>
+                            </property>
+                        </item>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>KComboBox14</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>130</x>
+                                <y>20</y>
+                                <width>141</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                    </widget>
+                </widget>
+            </grid>
+        </widget>
+        <widget>
+            <class>QWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tab</cstring>
+            </property>
+            <attribute>
+                <name>title</name>
+                <string>LaTex</string>
+            </attribute>
+        </widget>
+        <widget>
+            <class>QWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tab</cstring>
+            </property>
+            <attribute>
+                <name>title</name>
+                <string>Plain C</string>
+            </attribute>
+        </widget>
+    </widget>
+</widget>
+</UI>

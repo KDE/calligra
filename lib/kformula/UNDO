@@ -1,0 +1,45 @@
+
+
+New UNDO/REDO idea:
+
+Each time an editing method is called it will put a new entry on the undo or redo stack.
+
+the new addText declaration is
+
+addText(FormulaCursor *,QString,isDo=true)
+
+addText(cursor,"x")
+will add to undo stack
+while
+addText(cursor,"x",false)
+will add to redo stack
+
+Each time a undo or redo is called it is removed from the stack.
+
+ 
+
+
+
+
+---OLD IDEA:-------------------
+add element (except matrix) and nothing is selected *************************
+Info to store:
+cursorData before and after insert, text added
+
+Undo:
+Delete previous element of tmpCursor created
+with saved data of after insert cursor.
+
+Redo:
+tmpCursor created with saved data of before insert
+cursor.
+addXXX(tmpCursor[,textadded],NOUNDO);
+where XXX is the type of element
+
+addMatrix*******************************************************************
+the delete action is perfromed on "before insert" cursor
+instead of "after insert" cursor and in right direction
+
+
+For selected text:
+This depends on some behaviour we not yet decide.

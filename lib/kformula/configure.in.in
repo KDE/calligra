@@ -1,0 +1,3 @@
+dnl See README
+dnl DO_NOT_COMPILE="$DO_NOT_COMPILE lib/kformula2"
+
