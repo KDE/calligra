@@ -1161,3 +1161,8 @@ now you can define "Default page layout parameters" (size and orientation)
 ----------------------------------------------------
 Now you can hide/show formula bar (editWidget and posWidget)
 Fix layout in kspread_dlg_preference
+
+2001-01-29-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now you can used "Area name" in formula
+example =sum('kspread')

@@ -20,6 +20,7 @@
 #include "kspread_util.h"
 #include "kspread_map.h"
 #include "kspread_table.h"
+#include "kspread_doc.h"
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -209,6 +210,30 @@ KSpreadRange::KSpreadRange( const QString& _str )
 
 KSpreadRange::KSpreadRange( const QString& _str, KSpreadMap* _map, KSpreadTable* _table )
 {
+  range.setLeft( -1 );
+  table = 0;
+  //used area Name as range
+  if(_str.at(0)=="'" && _str.at(_str.length()-1)=="'")
+    {
+      QString tmp=_str.right(_str.length()-1);
+      tmp=tmp.left(tmp.length()-1);
+      QValueList<Reference>::Iterator it;
+      QValueList<Reference> area=_map->doc()->listArea();
+      for ( it = area.begin(); it != area.end(); ++it )
+    	{
+	  if((*it).ref_name==tmp)
+                {
+		  range=(*it).rect;
+		  table = _map->findTable( (*it).table_name );
+		  break;
+		}
+    	}
+      leftFixed = false;
+      rightFixed = false;
+      topFixed = false;
+      bottomFixed = false;
+      return;
+    }
   range.setLeft( -1 );
   table = 0;
 
