@@ -2446,7 +2446,7 @@ void KWView::deleteFrame( bool _warning )
 
         Q_ASSERT( !fs->isAHeader() ); // the action is disabled for such cases
         Q_ASSERT( !fs->isAFooter() );
-        if ( fs->isAFooter() || fs->isAHeader() || fs->isFootEndNote() )
+        if ( fs->isMainFrameset() ||fs->isAFooter() || fs->isAHeader() || fs->isFootEndNote() )
             return;
 
         // frame is part of a table?
