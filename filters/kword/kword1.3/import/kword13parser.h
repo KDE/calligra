@@ -33,7 +33,6 @@ public:
     QString itemName;   ///< Name of the tag (only for error purposes)
     StackItemElementType elementType;
     KWordFrameset* m_currentFrameset;
-    KWordParagraph* m_paragraph;
 };
 
 class StackItemStack : public QPtrStack<StackItem>
@@ -69,4 +68,5 @@ protected:
     QString indent; //DEBUG
     StackItemStack parserStack;
     KWordDocument* m_kwordDocument;
+    KWordParagraph* m_currentParagraph; ///< Current paragraph
 };

@@ -1,5 +1,6 @@
 #include <qiodevice.h>
 
+#include "kwordutils.h"
 #include "kworddocument.h"
 
 KWordDocument::KWordDocument( void )
@@ -23,7 +24,7 @@ void KWordDocument::xmldump( QIODevice* io )
         it != m_documentProperties.end();
         ++it)
     {
-        iostream << " <param key=\"" << it.key() << "\" data=\"" << it.data() << "\"/>\n";
+        iostream << " <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump( it.data() ) << "\"/>\n";
     }
     
     for ( KWordNormalTextFrameset* item = m_normalTextFramesetList.first();

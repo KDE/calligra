@@ -4,7 +4,7 @@
 #include "kwordframeset.h"
 #include "kworddocument.h"
 
-StackItem::StackItem() : elementType( ElementTypeUnknown ), m_currentFrameset( 0 ), m_paragraph( 0 )
+StackItem::StackItem() : elementType( ElementTypeUnknown ), m_currentFrameset( 0 )
 {
 }
 
@@ -12,7 +12,7 @@ StackItem::~StackItem()
 {
 }
 
-KWordParser::KWordParser( KWordDocument* kwordDocument ) : m_kwordDocument(kwordDocument)
+KWordParser::KWordParser( KWordDocument* kwordDocument ) : m_kwordDocument(kwordDocument), m_currentParagraph( 0 )
 {
     parserStack.setAutoDelete( true );
     StackItem* bottom = new StackItem;
@@ -23,6 +23,7 @@ KWordParser::KWordParser( KWordDocument* kwordDocument ) : m_kwordDocument(kword
 KWordParser::~KWordParser( void )
 {
     parserStack.clear();
+    delete m_currentParagraph;
 }
 
 bool KWordParser::startElementParagraph( const QString&, const QXmlAttributes&, StackItem *stackItem )
@@ -35,14 +36,15 @@ bool KWordParser::startElementParagraph( const QString&, const QXmlAttributes&, 
 
     stackItem->elementType = ElementTypeParagraph;
     
-    if ( stackItem->m_currentFrameset )
+    if ( m_currentParagraph )
     {
-        stackItem->m_paragraph = new KWordParagraph;
+        // Delete an evenetually already existing paragraph (should not happen)
+        qDebug("Current paragraph already defined!");
+        delete m_currentParagraph;
     }
-    else
-    {
-        return false;
-    }    
+        
+    m_currentParagraph = new KWordParagraph;
+    
     return true;
 }
 
@@ -175,10 +177,10 @@ bool KWordParser::startElement( const QString&, const QString&, const QString& n
 
     if ( name == "TEXT" )
     {
-        if ( stackItem->elementType == ElementTypeParagraph )
+        if ( stackItem->elementType == ElementTypeParagraph && m_currentParagraph )
         {
             stackItem->elementType = ElementTypeText;
-            stackItem->m_paragraph->m_text = QString::null;
+            m_currentParagraph->setText( QString::null );
         }
         else
         {
@@ -248,25 +250,21 @@ bool KWordParser :: endElement( const QString&, const QString& , const QString& 
     
     StackItem *stackItem=parserStack.pop();
         
-    if ( stackItem->elementType == ElementTypeParagraph )
+    if ( name == "PARAGRAPH" )
     {
-        // We have a KWordParagraph defined only on our stack, so we delete it in all cases.
-        if ( name == "PARAGRAPH" )
+        if ( stackItem->m_currentFrameset && m_currentParagraph )
         {
-            if ( stackItem->m_currentFrameset && stackItem->m_paragraph )
+            if ( stackItem->m_currentFrameset->addParagraph( *m_currentParagraph ) )
             {
-               if ( stackItem->m_currentFrameset->addParagraph( *stackItem->m_paragraph ) )
-               {
-                   success = true;
-               }
+                success = true;
             }
         }
-        if ( !success)
+        else if ( stackItem->elementType == ElementTypeIgnore )
         {
-            qDebug("Something went wrong when closing paragraph. Probably mismatched tags!");
+            success = true;
         }
-        delete stackItem->m_paragraph;
-        stackItem->m_paragraph = 0;
+        delete m_currentParagraph;
+        m_currentParagraph = 0;
     }
     else if ( name == "DOC" )
     {
@@ -280,8 +278,8 @@ bool KWordParser :: endElement( const QString&, const QString& , const QString& 
     if (!success)
     {
         // If we have no success, then it was surely a tag mismatch. Help debugging!
-        //kdError(30506) << "Found tag name: " << name << " expected: " << stackItem->itemName << endl;
-        qDebug("Found tag name: %s expected: %s", name.latin1(), stackItem->itemName.latin1() );
+        //kdError(30506) << "Found closing tag name: " << name << " expected: " << stackItem->itemName << endl;
+        qDebug("Found closing tag name: %s expected: %s", name.latin1(), stackItem->itemName.latin1() );
     }
     
     delete stackItem;
@@ -322,13 +320,16 @@ bool KWordParser :: characters ( const QString & ch )
     if ( stackItem->elementType == ElementTypeText )
     { 
         // <TEXT>
-        if ( stackItem->m_paragraph )
+        if ( m_currentParagraph )
         {
-            stackItem->m_paragraph->m_text += ch;
+            m_currentParagraph->appendText( ch );
             success = true;
         }
         else
+        {
+            qDebug("No current paragraph defined! Tag mismatch?");
             success = false;
+        }
     }
     else if (stackItem->elementType==ElementTypeEmpty)
     {

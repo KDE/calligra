@@ -1,5 +1,5 @@
 
-
+#include "kwordutils.h"
 #include "kwordframeset.h"
 
 
@@ -22,7 +22,7 @@ void KWordFrameset::xmldump( QTextStream& iostream )
 {
     iostream << "  <frameset variant=\"None\" type=\"" << m_frameType
          << "\" info=\"" << m_frameType
-         << "\" name=\"" << m_name <<"\"/>\n";
+         << "\" name=\"" << EscapeXmlDump( m_name ) <<"\"/>\n";
 }
 
 
@@ -45,7 +45,7 @@ void KWordNormalTextFrameset::xmldump( QTextStream& iostream )
 {
     iostream << "  <frameset variant=\"Text\" type=\"" << m_frameType
          << "\" info=\"" << m_frameType
-         << "\" name=\"" << m_name <<"\">\n";
-    // ### TODO: text
+         << "\" name=\"" << EscapeXmlDump( m_name ) <<"\">\n";
+    m_paragraphGroup.xmldump( iostream );
     iostream << "  </frameset>\n";
 }
