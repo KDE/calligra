@@ -743,11 +743,6 @@ bool KFormulaDoc::initDoc()
     return TRUE;
 }
 
-QCString KFormulaDoc::mimeType() const
-{
-    return "application/x-kformula";
-}
-
 void KFormulaDoc::paintContent( QPainter& painter, const QRect& /*rect*/, bool /*transparent*/ )
 {
     // ####### handle transparency

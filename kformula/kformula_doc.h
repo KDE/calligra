@@ -14,9 +14,6 @@ class BasicElement;
 
 #include <koDocument.h>
 
-#define MIME_TYPE "application/x-kformula"
-
-
 
 class KFormulaDoc :    virtual public KoDocument,public KFormulaContainer
 
@@ -32,8 +29,6 @@ public:
 
     virtual bool loadXML( QIODevice *, const QDomDocument& doc );
     virtual QDomDocument saveXML();
-
-    virtual QCString mimeType() const;
 
 protected:
     virtual QString configFile() const;
