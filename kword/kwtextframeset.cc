@@ -2421,13 +2421,14 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                 QTextCursor endSel = textDocument()->selectionEndCursor( QTextDocument::Standard );
                 bool inSelection = false;
                 if ( startSel.parag() == endSel.parag() )
-                    inSelection = ( dropCursor.parag() == startSel.parag() )
-                                    && dropCursor.index() >= startSel.index()
-                                    && dropCursor.index() <= endSel.index();
+                    inSelection = (tmp ==textFrameSet())
+                                  && ( dropCursor.parag() == startSel.parag() )
+                                  && dropCursor.index() >= startSel.index()
+                                  && dropCursor.index() <= endSel.index();
                 else
                 {
                     // Looking at first line first:
-                    inSelection = dropCursor.parag() == startSel.parag() && dropCursor.index() >= startSel.index();
+                    inSelection = (tmp ==textFrameSet()) && dropCursor.parag() == startSel.parag() && dropCursor.index() >= startSel.index();
                     if ( !inSelection )
                     {
                         // Look at all other paragraphs except last one
@@ -2442,6 +2443,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                             inSelection = dropCursor.parag() == endSel.parag() && dropCursor.index() <= endSel.index();
                     }
                 }
+                kdDebug()<<"inSelection! "<<inSelection<<endl;
                 if ( inSelection )
                 {
                     delete macroCmd;
