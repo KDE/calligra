@@ -17,18 +17,24 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#include <qprinter.h>
+#include <qprinter.h> // has to be first
+
 #include "kspread_view.h"
-#include <kapp.h>
+#include <iostream.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include <qpushbt.h>
 #include <qmsgbox.h>
 #include <qprndlg.h>
-#include <iostream.h>
-#include <stdlib.h>
 #include <qobjcoll.h>
 #include <qkeycode.h>
+
 #include <kbutton.h>
 #include <klocale.h>
+#include <kapp.h>
+#include <kstdaccel.h>
+
 #include <opUIUtils.h>
 #include <opMainWindow.h>
 #include <opMainWindowIf.h>
@@ -39,8 +45,6 @@
 #include <koScanTools.h>
 #include <koQueryTypes.h>
 #include <koIMR.h>
-
-#include <time.h>
 
 #include "kspread_map.h"
 #include "kspread_table.h"
@@ -692,6 +696,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 
 bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 {
+  KStdAccel stdAccel;
   if ( CORBA::is_nil( _menubar ) )
   {
     cerr << "********************** DELETING Menu bar stuff ****************" << endl;
@@ -710,25 +715,31 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // Edit  
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem4( i18n("Un&do"), this, "undo", 0, -1, -1 );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem4( i18n("&Redo"), this, "redo", 0, -1, -1 );
+  QString path = kapp->kde_toolbardir().copy();
+  path += "/undo.xpm";
+  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( path );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("Un&do"), this, "undo", stdAccel.undo(), -1, -1 );
+  path = kapp->kde_toolbardir().copy();
+  path += "/redo.xpm";
+  pix = OPUIUtils::loadPixmap( path );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, i18n("&Redo"), this, "redo", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  QString path = kapp->kde_toolbardir().copy();
+  path = kapp->kde_toolbardir().copy();
   path += "/editcut.xpm";
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( path );
-  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n("C&ut"), this, "cutSelection", CTRL + Key_N, -1, -1 );
+  pix = OPUIUtils::loadPixmap( path );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n("C&ut"), this, "cutSelection", stdAccel.cut(), -1, -1 );
   
   path = kapp->kde_toolbardir().copy();
   path += "/editcopy.xpm";
   pix = OPUIUtils::loadPixmap( path );
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n("&Copy"), this, "copySelection", CTRL + Key_N, -1, -1 );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n("&Copy"), this, "copySelection", stdAccel.copy(), -1, -1 );
   
   path = kapp->kde_toolbardir().copy();
   path += "/editpaste.xpm";
   pix = OPUIUtils::loadPixmap( path );
-  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "paste", CTRL + Key_N, -1, -1 );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "paste", stdAccel.paste(), -1, -1 );
     
   m_vMenuEdit->insertSeparator( -1 );
 
