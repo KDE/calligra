@@ -3906,8 +3906,10 @@ kdDebug() << "======= KPresenterView::transEffectOK\n";
     TransEffectCmd *transEffectCmd = new TransEffectCmd( i18n( "Transition Effect" ),
                                           transEffectDia->getPageEffect(), transEffectDia->getPresSpeed(),
                                           transEffectDia->getSoundEffect(), transEffectDia->getSoundFileName(),
+                                          transEffectDia->getAutoAdvance(), transEffectDia->getSlideTime(),
                                           page->getPageEffect(), kPresenterDoc()->getPresSpeed(),
                                           page->getPageSoundEffect(), page->getPageSoundFileName(),
+                                          /* TODO page->getAutoAdvance() */ false, page->getPageTimer(),
                                           kPresenterDoc(), page );
     transEffectCmd->execute();
     kPresenterDoc()->addCommand( transEffectCmd );

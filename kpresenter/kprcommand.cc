@@ -1504,8 +1504,10 @@ void PgConfCmd::unexecute()
 /*================================================================*/
 TransEffectCmd::TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _presSpeed, 
                       bool _soundEffect, const QString& _soundFileName, 
+                      bool _autoAdvance, int _slideTime, 
                       PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, 
                       bool _oldSoundEffect, const QString& _oldSoundFileName, 
+                      bool _oldAutoAdvance, int _oldSlideTime, 
                       KPresenterDoc *_doc, KPrPage *_page )
     : KNamedCommand( _name )
 {
@@ -1513,10 +1515,14 @@ TransEffectCmd::TransEffectCmd( const QString &_name, PageEffect _pageEffect, Pr
     presSpeed = _presSpeed;
     soundEffect = _soundEffect;
     soundFileName = _soundFileName;
+    autoAdvance = _autoAdvance;
+    slideTime = _slideTime;
     oldPageEffect = _oldPageEffect;
     oldPresSpeed = _oldPresSpeed;
     oldSoundEffect = _oldSoundEffect;
     oldSoundFileName = _oldSoundFileName;
+    oldAutoAdvance = _oldAutoAdvance;
+    oldSlideTime = _oldSlideTime;
     doc = _doc;
     m_page=_page;
 }
@@ -1528,6 +1534,8 @@ void TransEffectCmd::execute()
     doc->setPresSpeed( presSpeed );
     m_page->setPageSoundEffect( soundEffect );
     m_page->setPageSoundFileName( soundFileName );
+    // TODO m_page->setAutoAdvance( autoAdvance );
+    m_page->setPageTimer(  slideTime );
 }
 
 /*================================================================*/
@@ -1537,6 +1545,8 @@ void TransEffectCmd::unexecute()
     doc->setPresSpeed( oldPresSpeed );
     m_page->setPageSoundEffect( oldSoundEffect );
     m_page->setPageSoundFileName( oldSoundFileName );
+    // TODO m_page->setAutoAdvance( oldAutoAdvance );
+    m_page->setPageTimer(  oldSlideTime );
 }
 
 /******************************************************************/

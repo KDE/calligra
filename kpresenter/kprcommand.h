@@ -562,8 +562,10 @@ class TransEffectCmd : public KNamedCommand
 public:
     TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _presSpeed, 
                bool _soundEffect, const QString& _soundFileName, 
+               bool _autoAdvance, int _slideTime, 
                PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, 
                bool _oldSoundEffect, const QString& _oldSoundFileName, 
+               bool _oldAutoAdvance, int _oldSlideTime, 
                KPresenterDoc *_doc, KPrPage *_page );
 
     virtual void execute();
@@ -574,6 +576,9 @@ protected:
     PresSpeed presSpeed, oldPresSpeed;
     bool soundEffect, oldSoundEffect;
     QString soundFileName, oldSoundFileName;
+    bool autoAdvance, oldAutoAdvance;
+    int slideTime, oldSlideTime;
+
     KPrPage *m_page;
     KPresenterDoc *doc;
 

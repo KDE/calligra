@@ -44,6 +44,7 @@
 #include <kdebug.h>
 #include <kurlrequester.h>
 #include <klocale.h>
+#include <knuminput.h>
 #include <kiconloader.h>
 #include <kurlrequester.h>
 #include <kurl.h>
@@ -118,10 +119,6 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     rightlayout->setAutoAdd( true );
 
     effectPreview = new KPEffectPreview( rightpart, doc, view );
-
-    QWidget* spacer = new QWidget( rightpart );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,
-        QSizePolicy::Expanding ) );
 
     int pgnum = view->getCurrPgNum() - 1;  // getCurrPgNum() is 1-based 
     KPrPage* pg = doc->pageList().at( pgnum );
@@ -225,7 +222,6 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     QFrame* line = new QFrame( leftpart );
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-    soundEffect = pg->getPageSoundEffect();
     soundFileName = pg->getPageSoundFileName();
 
     checkSoundEffect = new QCheckBox( i18n( "Sound effect" ), leftpart );
@@ -257,11 +253,24 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     connect( buttonTestStopSoundEffect, SIGNAL( clicked() ), this, SLOT( stopSound() ) );
 
+    soundEffect = pg->getPageSoundEffect();
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotTransEffectDiaOK() ) );
     //connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 
-    QWidget* vspacer = new QWidget( leftpart );
-    vspacer->setMinimumSize( 10, spacingHint() );
+    slideTime = pg->getPageTimer();
+
+    new QLabel( i18n("Automatically advance to the next slide after:"), rightpart );
+
+    timeSlider = new KIntNumInput( slideTime, rightpart );
+    timeSlider->setRange( 1, 600, 1 );
+    timeSlider->setSuffix( i18n( " seconds" ) );
+    connect( timeSlider, SIGNAL(valueChanged(int)), this, SLOT(timeChanged(int)) );
+
+    QWidget* rspacer = new QWidget( rightpart );
+    rspacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+
+    QWidget* lspacer = new QWidget( leftpart );
+    lspacer->setMinimumSize( 10, spacingHint() );
 
     soundEffectChanged();
 }
@@ -285,6 +294,12 @@ void KPTransEffectDia::speedChanged( int value )
 {
   if( value <= 0 ) value = 1; 
   speed = static_cast<PresSpeed>(value);
+}
+
+void KPTransEffectDia::timeChanged( int value )
+{
+  if( value <= 0 ) value = 1; 
+  slideTime = value;
 }
 
 void KPTransEffectDia::soundEffectChanged()

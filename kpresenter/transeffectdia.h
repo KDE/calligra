@@ -40,6 +40,7 @@ class KPBackGround;
 class KPObject;
 class KPPresStructObjectItem;
 class KURLRequester;
+class KIntNumInput;
 class KPresenterSoundPlayer;
  
 class KPEffectPreview : public QLabel
@@ -73,6 +74,8 @@ public:
     PresSpeed getPresSpeed(){ return speed; }
     bool getSoundEffect(){ return soundEffect; }
     QString getSoundFileName(){ return soundFileName; }
+    bool getAutoAdvance(){ return false; } // FIXME !
+    bool getSlideTime(){ return slideTime; }
 
 public slots:
 
@@ -101,8 +104,10 @@ protected:
     KURLRequester *requester;
     QPushButton *buttonTestPlaySoundEffect, *buttonTestStopSoundEffect;
 
-    KPresenterSoundPlayer *soundPlayer;
+    KIntNumInput* timeSlider;
+    int slideTime;
 
+    KPresenterSoundPlayer *soundPlayer;
 
 
 protected slots:
@@ -110,6 +115,7 @@ protected slots:
     void preview();
     void effectChanged( int );
     void speedChanged( int );
+    void timeChanged( int );
 
     void soundEffectChanged();
     void slotRequesterClicked( KURLRequester * );
