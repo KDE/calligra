@@ -10,11 +10,12 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License.        *
+ *   the Free Software Foundation; version 2 of the License.        *
  *                                                                         *
  ***************************************************************************/
 
 #include <qtabwidget.h>
+#include <qdom.h>
 #include <qlistview.h>
 #include "maindlg.h"
 #include "kdebug.h"
@@ -35,6 +36,9 @@ void MainDlg::slotTblItemClicked(QListViewItem *itemClicked){
 
 void MainDlg::slotViewItemClicked(QListViewItem *itemClicked){
      kdDebug() << "KDatabase:MainDlg view Item Clicked" << endl;
+
+     myQueryBuilder=new QBuildDlg();
+     myQueryBuilder->show();
 }
 
 void MainDlg::slotFormItemClicked(QListViewItem *itemClicked){
@@ -43,4 +47,41 @@ void MainDlg::slotFormItemClicked(QListViewItem *itemClicked){
 
 void MainDlg::slotAllItemClicked(QListViewItem *itemClicked){
      kdDebug() << "KDatabase:MainDlg all Item Clicked" << endl;
+}
+
+bool MainDlg::initStruct(QDomDocument *kdbFile){
+
+    myKDBFile = kdbFile;
+    refreshStructView();
+    return(true);
+}		
+
+bool MainDlg::refreshStructView(){
+
+    kdDebug() << "KDatabase:MainDlg refreshStructView" << endl;
+    QDomElement mainElement=myKDBFile->documentElement();
+    QDomNode structureSection=mainElement.namedItem("STRUCTURE");
+    refreshTableView(structureSection.namedItem("TABLES"));
+    refreshViewView(structureSection.namedItem("VIEWS"));
+    refreshFormView(structureSection.namedItem("FORMS"));
+
+return(true);
+}
+
+bool MainDlg::refreshTableView(QDomNode tableSection){
+
+    kdDebug() << "KDatabase:MainDlg refreshTableView" << endl;
+    return(true);
+}
+
+bool MainDlg::refreshViewView(QDomNode viewSection){
+
+    kdDebug() << "KDatabase:MainDlg refreshViewView" << endl;
+    return(true);
+}
+
+bool MainDlg::refreshFormView(QDomNode formSection){
+
+    kdDebug() << "KDatabase:MainDlg refreshFormView" << endl;
+    return(true);
 }

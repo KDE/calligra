@@ -17,8 +17,10 @@
 #ifndef MAINDLG_H
 #define MAINDLG_H
 
+#include <qdom.h>
 #include <tabdialog1.h>
 #include <clstbldesigner.h>
+#include <qbuilddlg.h>
 
 /**
   *@author root
@@ -28,14 +30,22 @@ class MainDlg : public MyDialog1  {
 public: 
 	MainDlg(QWidget *parentWidget=0, const char * widgetName=0);
 	~MainDlg(void);
+   bool initStruct(QDomDocument *kdbFile);
 public slots:
    virtual void slotTblItemClicked(QListViewItem *itemClicked);
    virtual void slotViewItemClicked(QListViewItem *itemClicked);
    virtual void slotFormItemClicked(QListViewItem *itemClicked);
    virtual void slotAllItemClicked(QListViewItem *itemClicked);
 private:
-    clsTblDesigner* myTblDesigner;
+   bool refreshStructView();
+   bool refreshTableView(QDomNode tableSection);
+   bool refreshViewView(QDomNode viewSection);
+   bool refreshFormView(QDomNode formSection);
 
+    clsTblDesigner* myTblDesigner;
+    QBuildDlg* myQueryBuilder;
+
+    QDomDocument* myKDBFile;
 };
 
 #endif
