@@ -3,7 +3,7 @@ kde_module_LTLIBRARIES = libkarbonxcfexport.la
 libkarbonxcfexport_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonxcfexport_la_LIBADD = \
 	$(LIB_KOFFICEUI) \
-	../../../karbon/libkarbonpart.la
+	../../../karbon/libkarboncommon.la
 
 INCLUDES = \
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \

@@ -11,7 +11,7 @@ kde_module_LTLIBRARIES = libkarbonkontourimport.la
 
 libkarbonkontourimport_la_SOURCES = kontourimport.cpp
 libkarbonkontourimport_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkarbonkontourimport_la_LIBADD = $(KOFFICE_LIBS) ../../../karbon/libkarbonpart.la
+libkarbonkontourimport_la_LIBADD = $(KOFFICE_LIBS) ../../../karbon/libkarboncommon.la
 
 METASOURCES = AUTO
 

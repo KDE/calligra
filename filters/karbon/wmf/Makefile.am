@@ -12,12 +12,11 @@ INCLUDES= \
 kde_module_LTLIBRARIES = libwmfimport.la libwmfexport.la
 
 libwmfimport_la_LDFLAGS = -module $(KDE_PLUGIN)
-libwmfimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KOWMF) ../../../karbon/libkarbonpart.la
-#libwmfimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KOWMF) ../../../karbon/libkarbonpart.la
+libwmfimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KOWMF) ../../../karbon/libkarboncommon.la
 libwmfimport_la_SOURCES = wmfimport.cc wmfimportparser.cc
 
 libwmfexport_la_LDFLAGS = -module $(KDE_PLUGIN)
-libwmfexport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KOWMF) ../../../karbon/libkarbonpart.la
+libwmfexport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KOWMF) ../../../karbon/libkarboncommon.la
 libwmfexport_la_SOURCES = wmfexport.cc
 
 noinst_HEADERS = wmfimport.h wmfimportparser.h wmfexport.h 

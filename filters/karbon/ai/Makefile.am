@@ -2,7 +2,7 @@ kde_module_LTLIBRARIES = libkarbonaiimport.la
 
 libkarbonaiimport_la_LIBADD = \
 	$(LIB_KOFFICEUI) \
-	../../../karbon/libkarbonpart.la
+	../../../karbon/libkarboncommon.la
 
 libkarbonaiimport_la_LDFLAGS = \
 	$(all_libraries) \

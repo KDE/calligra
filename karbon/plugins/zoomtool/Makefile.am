@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = karbon_zoomtoolplugin.la
 
 karbon_zoomtoolplugin_la_SOURCES = zoomtoolplugin.cc
 karbon_zoomtoolplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
-				../../libkarbonpart.la
+				../../libkarboncommon.la
 
 karbon_zoomtoolplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 

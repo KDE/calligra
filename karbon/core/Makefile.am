@@ -2,7 +2,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../render \
 	-I$(srcdir)/../visitors \
-	$(LIBFREETYPE_CFLAGS) $(all_includes)
+	$(LIBFREETYPE_CFLAGS) $(LIBFONTCONFIG_CFLAGS) $(all_includes)
 
 noinst_LTLIBRARIES = libkarboncore.la
 
@@ -64,6 +64,7 @@ libkarboncore_la_SOURCES = \
 	vtext_iface.cc \
 	vtext_iface.skel \
 	vclipgroup.cc
+libkarboncore_la_LIBADD = $(LIB_FONTCONFIG_LIBS)
 
 libkarboncore_la_METASOURCES = \
 	AUTO

@@ -3,12 +3,12 @@ kde_module_LTLIBRARIES = libkarbonsvgexport.la libkarbonsvgimport.la
 libkarbonsvgexport_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonsvgexport_la_LIBADD = \
 	$(LIB_KOFFICEUI) \
-	../../../karbon/libkarbonpart.la
+	../../../karbon/libkarboncommon.la
 
 libkarbonsvgimport_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonsvgimport_la_LIBADD = \
 	$(LIB_KOFFICEUI) \
-	../../../karbon/libkarbonpart.la
+	../../../karbon/libkarboncommon.la
 
 INCLUDES = \
 	$(KOFFICE_INCLUDES) \

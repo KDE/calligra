@@ -2,7 +2,7 @@
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
 libkarbonmsodimport_la_LDFLAGS	= -module -avoid-version -no-undefined $(all_libraries)
-libkarbonmsodimport_la_LIBADD = $(KOFFICE_LIBS)
+libkarbonmsodimport_la_LIBADD = $(KOFFICE_LIBS) $(LIBZ)
 
 ####### Files
 
