@@ -41,6 +41,8 @@ VDocument::VDocument()
 	m_layers.setAutoDelete( true );
 	m_layers.append( new VLayer( this ) );
 	m_activeLayer = m_layers.getLast();
+
+	m_saveAsPath = true;
 }
 
 VDocument::VDocument( const VDocument& document )

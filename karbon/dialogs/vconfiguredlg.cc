@@ -357,11 +357,14 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 
     m_oldBackupFile = true;
 
+    m_oldSaveAsPath = true;
+
     if( m_config->hasGroup( "Interface" ) )
     {
         m_config->setGroup( "Interface" );
         m_oldAutoSave = m_config->readNumEntry( "AutoSave", m_oldAutoSave );
         m_oldBackupFile = m_config->readBoolEntry( "BackupFile", m_oldBackupFile );
+        m_oldSaveAsPath = m_config->readBoolEntry( "SaveAsPath", m_oldSaveAsPath );
     }
 
     m_autoSave = new KIntNumInput( m_oldAutoSave, gbDocumentSettings );
@@ -372,6 +375,9 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 
     m_createBackupFile = new QCheckBox( i18n( "Create backup file" ), gbDocumentSettings );
     m_createBackupFile->setChecked( m_oldBackupFile );
+
+    m_saveAsPath = new QCheckBox( i18n( "Save as path" ), gbDocumentSettings );
+    m_saveAsPath->setChecked( m_oldSaveAsPath );
 }
 
 void VConfigDefaultPage::apply()
@@ -397,12 +403,22 @@ void VConfigDefaultPage::apply()
 		m_view->part()->setBackupFile( state );
 		m_oldBackupFile = state;
 	}
+
+	state = m_saveAsPath->isChecked();
+
+	//if( state != m_oldSaveAsPath )
+	//{
+		m_config->writeEntry( "SaveAsPath", state );
+		m_view->part()->document().saveAsPath( state );
+		m_oldSaveAsPath = state;
+	//}
 }
 
 void VConfigDefaultPage::slotDefault()
 {
 	m_autoSave->setValue( m_view->part()->defaultAutoSave() / 60 );
 	m_createBackupFile->setChecked( true );
+	m_saveAsPath->setChecked( true );
 }
 
 #include "vconfiguredlg.moc"

@@ -24,6 +24,7 @@
 #include <qdom.h>
 #include <kdebug.h>
 #include "vglobal.h"
+#include <vdocument.h>
 
 VRectangle::VRectangle( VObject* parent, VState state )
 	: VComposite( parent, state )
@@ -91,6 +92,9 @@ VRectangle::name() const
 void
 VRectangle::save( QDomElement& element ) const
 {
+	if( document()->saveAsPath() )
+		return VComposite::save( element );
+
 	if( state() != deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "RECT" );
@@ -113,6 +117,9 @@ VRectangle::save( QDomElement& element ) const
 void
 VRectangle::load( const QDomElement& element )
 {
+	if( document()->saveAsPath() )
+		return VComposite::load( element );
+
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();

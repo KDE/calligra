@@ -191,6 +191,9 @@ public:
 	QString objectName( const VObject *obj ) const;
 	void setObjectName( const VObject *obj, const QString name ) { m_objectNames.insert( obj, name ); }
 
+	bool saveAsPath() const { return m_saveAsPath; }
+	void saveAsPath( bool b ) { m_saveAsPath = b; }
+
 private:
 	/**
 	 * Document width.
@@ -223,7 +226,6 @@ private:
 	 */
 	QString m_mime;
 
-
 	/// The version.
 	QString m_version;
 	/// The editor name.
@@ -232,6 +234,8 @@ private:
 	QString m_syntaxVersion;
 
 	QMap<const VObject *, QString>	m_objectNames;
+
+	bool m_saveAsPath;
 };
 
 #endif
