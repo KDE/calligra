@@ -43,23 +43,49 @@ KWAutoFormatEntry::KWAutoFormatEntry()
 
 /*================================================================*/
 KWAutoFormat::KWAutoFormat(KWordDocument *_doc)
-  : typographicQuotes()
+  : typographicQuotes(), enabled(false)
 {
   doc = _doc;
+  tmpBuffer = 0L;
+}
+
+/*================================================================*/
+void KWAutoFormat::startAutoFormat(KWParag *parag,KWFormatContext *fc)
+{
+  if (!enabled)
+    return;
+
+  tmpBuffer = new KWString(doc);
 }
 
 /*================================================================*/
 bool KWAutoFormat::doAutoFormat(KWParag *parag,KWFormatContext *fc)
 {
+  if (!enabled)
+    return false;
+
+  tmpBuffer->append(parag->getKWString()->data()[fc->getTextPos()]);
+  
   return false;
+}
+
+/*================================================================*/
+void KWAutoFormat::endAutoFormat(KWParag *parag,KWFormatContext *fc)
+{
+  if (!enabled)
+    return;
+  
+  if (tmpBuffer)
+    delete tmpBuffer;
+  tmpBuffer = 0L;
 }
 
 /*================================================================*/
 bool KWAutoFormat::doTypographicQuotes(KWParag *parag,KWFormatContext *fc)
 {
-  if (!typographicQuotes.replace)
+  if (!typographicQuotes.replace || !enabled)
     return false;
-  
+
   if (parag->getKWString()->data()[fc->getTextPos()].c == QChar('\"') ||
       parag->getKWString()->data()[fc->getTextPos()].c == typographicQuotes.begin ||
       parag->getKWString()->data()[fc->getTextPos()].c == typographicQuotes.end)

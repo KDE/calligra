@@ -1165,11 +1165,13 @@ void KWPage::editCut()
       QPainter p;
       p.begin(this);
       doc->copySelectedText();
+      doc->getAutoFormat().setEnabled(true);
       doc->deleteSelectedText(fc,p);
       p.end();
       doc->setSelection(false);
       buffer.fill(white);
       recalcCursor();
+      doc->getAutoFormat().setEnabled(false);
     }
 }
 
@@ -1188,11 +1190,13 @@ void KWPage::editCopy()
 /*================================================================*/
 void KWPage::editPaste(QString _string,const QString &_mime = "text/plain")
 {
+  doc->getAutoFormat().setEnabled(true);
   doc->paste(fc,_string,this,0L,_mime);
   buffer.fill(white);
   doc->setSelection(false);
   recalcText();
   recalcCursor();
+  doc->getAutoFormat().setEnabled(false);
 }
 
 /*================================================================*/
@@ -1543,7 +1547,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
   if (mouseMode != MM_EDIT) return;
 
   editModeChanged(e);
-
+  doc->getAutoFormat().setEnabled(true);
+  
   // if we are in a table and CTRL-Return was pressed
   if ((e->key() == Key_Return || e->key() == Key_Return) && (e->state() & ControlButton) &&
       doc->getFrameSet(fc->getFrameSet() - 1)->getGroupManager())
@@ -1588,6 +1593,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
 
       doc->updateAllViews(0L);
+      doc->getAutoFormat().setEnabled(false);
       return;
     }
 
@@ -1634,6 +1640,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		  kbdc.auto_repeat_mode = repeat;
 		  XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 		  inKeyEvent = false;
+		  doc->getAutoFormat().setEnabled(false);
 		  return;
 		}
 	      else
@@ -1714,6 +1721,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 	    inKeyEvent = false;
+	    doc->getAutoFormat().setEnabled(false);
 	    return;
 	  }
       } break;
@@ -1756,6 +1764,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 	    inKeyEvent = false;
+	    doc->getAutoFormat().setEnabled(false);
 	    return;
 	  }
       } break;
@@ -1798,6 +1807,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 	    inKeyEvent = false;
+	    doc->getAutoFormat().setEnabled(false);
 	    return;
 	  }
       } break;
@@ -1840,6 +1850,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 	    inKeyEvent = false;
+	    doc->getAutoFormat().setEnabled(false);
 	    return;
 	  }
       } break;
@@ -1893,8 +1904,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	recalcCursor(false,0);
 
-	doc->getAutoFormat().doAutoFormat(fc->getParag(),fc);
-
 	buffer.fill(white);
 	redrawAllWhileScrolling = true;
 	scrollToCursor(*fc);
@@ -1938,6 +1947,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	gui->getView()->setFormat(*((KWFormat*)fc));
 
 	inKeyEvent = false;
+	doc->getAutoFormat().setEnabled(false);
 	return;
       } break;
     case Key_Delete:
@@ -1984,8 +1994,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	QPaintDevice *dev = painter.device();
 	painter.end();
-
-	doc->getAutoFormat().doAutoFormat(fc->getParag(),fc);
 
 	painter.begin(dev);
 
@@ -2098,6 +2106,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
 
 	    inKeyEvent = false;
+	    doc->getAutoFormat().setEnabled(false);
 	    return;
 	  }
 
@@ -2143,8 +2152,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	QPaintDevice *dev = painter.device();
 	painter.end();
-
-	doc->getAutoFormat().doAutoFormat(fc->getParag(),fc);
 
 	painter.begin(dev);
 
@@ -2335,8 +2342,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	    QPaintDevice *dev = painter.device();
 	    painter.end();
-
-	    doc->getAutoFormat().doAutoFormat(fc->getParag(),fc);
 
 	    painter.begin(dev);
 
@@ -3587,6 +3592,7 @@ void KWPage::replace(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _add
   if (_format->checkVertAlign && _format->vertAlign != format->getVertAlign())
     format->setVertAlign(_format->vertAlign);
 
+  doc->getAutoFormat().setEnabled(true);
   doc->deleteSelectedText(fc,p);
   p.end();
 
@@ -3599,6 +3605,7 @@ void KWPage::replace(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _add
   doc->setSelection(false);
   recalcText();
   recalcCursor();
+  doc->getAutoFormat().setEnabled(false);
 }
 
 /*================================================================*/
@@ -4257,8 +4264,10 @@ void KWPage::dropEvent(QDropEvent *e)
 		}
 	      f.close();
 	    }
+	  doc->getAutoFormat().setEnabled(true);
 	  doc->paste(fc,text,this);
 	  repaint(false);
+	  doc->getAutoFormat().setEnabled(false);
 	}
     }
 }

@@ -189,6 +189,7 @@ public:
   unsigned int max()
   { return _max_; }
   void append(KWChar *_text,unsigned int _len);
+  void append(KWChar _c);
   void insert(unsigned int _pos,QString _text);
   void insert(unsigned int _pos,KWString *_text);
   void insert(unsigned int _pos,const char _c);
@@ -220,6 +221,7 @@ protected:
   KWChar* alloc(unsigned int _size);
   void free(KWChar* _data,unsigned int _len);
   KWChar* copy(KWChar *_data,unsigned int _len);
+  KWChar& copy(KWChar _c);
 
   unsigned int _len_;
   unsigned int _max_;

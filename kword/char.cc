@@ -97,6 +97,17 @@ void KWString::append(KWChar *_text,unsigned int _len)
 }
 
 /*================================================================*/
+void KWString::append(KWChar _c)
+{
+  unsigned int oldlen = _len_;
+  resize(1 + _len_);
+  KWChar c = copy(_c);
+
+  _data_[oldlen].c = c.c;
+  _data_[oldlen].attrib = c.attrib;
+}
+
+/*================================================================*/
 void KWString::insert(unsigned int _pos,QString _text)
 {
   assert(_pos <= _len_);
@@ -517,7 +528,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 			    return;
 			  }	
 		      }
-		    
+		
 		    doc->getFootNoteManager().insertFootNoteInternal(fn);
 		  } break;
 		default: break;
@@ -623,6 +634,58 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
       else __data[i].attrib = 0L;
     }
   return __data;
+}
+
+/*================================================================*/
+KWChar& KWString::copy(KWChar _c)
+{
+  KWChar *c = new KWChar;
+
+  c->c = _c.c;
+  if (_c.attrib)
+    {
+      switch (_c.attrib->getClassId())
+	{
+	case ID_KWCharFormat:
+	  {
+	    KWCharFormat *attrib = (KWCharFormat*)_c.attrib;
+	    attrib->getFormat()->incRef();
+	    KWCharFormat *f = new KWCharFormat(attrib->getFormat());
+	    c->attrib = f;
+	  } break;
+	case ID_KWCharImage:
+	  {
+	    KWCharImage *attrib = (KWCharImage*)_c.attrib;
+	    attrib->getImage()->incRef();
+	    KWCharImage *f = new KWCharImage(attrib->getImage());
+	    c->attrib = f;
+	  } break;
+	case ID_KWCharTab:
+	  {
+	    KWCharTab *f = new KWCharTab();
+	    c->attrib = f;
+	  } break;
+	case ID_KWCharVariable:
+	  {
+	    KWCharFormat *attrib = dynamic_cast<KWCharVariable*>(_c.attrib);
+	    attrib->getFormat()->incRef();
+	    KWCharVariable *f = new KWCharVariable(dynamic_cast<KWCharVariable*>(_c.attrib)->getVar()->copy());
+	    f->setFormat(attrib->getFormat());
+	    c->attrib = f;
+	  } break;
+	case ID_KWCharFootNote:
+	  {
+	    KWCharFootNote *attrib = dynamic_cast<KWCharFootNote*>(_c.attrib);
+	    attrib->getFormat()->incRef();
+	    KWCharFootNote *f = new KWCharFootNote(dynamic_cast<KWCharFootNote*>(_c.attrib)->getFootNote()->copy());
+	    f->setFormat(attrib->getFormat());
+	    c->attrib = f;
+	  } break;
+	}
+    }
+  else c->attrib = 0L;
+
+  return *c;
 }
 
 /*================================================================*/

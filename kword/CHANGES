@@ -1101,3 +1101,8 @@ Reggie, 18.4.1999:
 ------------------
 - Fix with dropping images into a kword page
 - More work on autoformat (started with typographic quotes stuff)
+
+Reggie, 19.4.1999:
+------------------
+- Made typographic quotes autoformat stuff more efficient
+- Started working on more autoformat stuff

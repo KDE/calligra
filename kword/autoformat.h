@@ -20,6 +20,7 @@
 #include <qcolor.h>
 
 #include "format.h"
+#include "char.h"
 
 class KWordDocument;
 class KWFormatContext;
@@ -57,19 +58,26 @@ public:
   {
     TypographicQuotes() : begin('»'), end('«'), replace(true)
     {}
-    
+
     QChar begin,end;
     bool replace;
   };
-  
+
   KWAutoFormat(KWordDocument *_doc);
 
+  void startAutoFormat(KWParag *parag,KWFormatContext *fc);
   bool doAutoFormat(KWParag *parag,KWFormatContext *fc);
+  void endAutoFormat(KWParag *parag,KWFormatContext *fc);
   bool doTypographicQuotes(KWParag *parag,KWFormatContext *fc);
 
+  void setEnabled(bool e) { enabled = e; }
+  bool isEnabled() { return enabled; }
+  
 protected:
   KWordDocument *doc;
   TypographicQuotes typographicQuotes;
+  bool enabled;
+  KWString *tmpBuffer;
   
 };
 
