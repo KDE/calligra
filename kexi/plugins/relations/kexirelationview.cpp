@@ -56,6 +56,7 @@ KexiRelationView::KexiRelationView(KexiRelationDialog *parent, const char *name,
 
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 	setFocusPolicy(StrongFocus);
+	setResizePolicy(Manual);
 }
 
 void
@@ -95,7 +96,8 @@ KexiRelationView::addTable(const QString &table, const KexiDBTable *t)
 	}
 
 	y = 5;
-	recalculateSize(x + c->width(), y + c->height());
+	QPoint p = viewportToContents(QPoint(x, y));
+	recalculateSize(p.x() + c->width(), p.y() + c->height());
 	moveChild(c, x, y);
 
 	m_tables.insert(table, c);
@@ -188,7 +190,8 @@ KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
 //	QRect w(c->x() - 5, c->y() - 5, c->width() + 5, c->height() + 5);
 //	updateContents(w);
 
-	recalculateSize(c->x() + c->width(), c->y() + c->height());
+	QPoint p = viewportToContents(QPoint(c->x(), c->y()));
+	recalculateSize(p.x() + c->width(), p.y() + c->height());
 }
 
 void
@@ -267,7 +270,9 @@ KexiRelationView::keyPressEvent(QKeyEvent *ev)
 void
 KexiRelationView::recalculateSize(int width, int height)
 {
+	kdDebug() << "recalculateSize(" << width << ", " << height << ")" << endl;
 	int newW = contentsWidth(), newH = contentsHeight();
+	kdDebug() << "contentsSize(" << newW << ", " << newH << ")" << endl;
 
 	if(newW < width)
 		newW = width;
