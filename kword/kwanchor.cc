@@ -22,6 +22,7 @@
 #include "kwdoc.h"
 #include "kwviewmode.h"
 #include <kdebug.h>
+#include <kdebugclasses.h>
 
 
 KWAnchor::KWAnchor( KoTextDocument *textDocument, KWFrameSet * frameset, int frameNum )
@@ -86,14 +87,6 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 #ifdef DEBUG_DRAWING
     kdDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragy=" << paragy
                    << "  cliprect(LU)" << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
-#endif
-
-#if 0
-    QPoint topLeftLU( QMAX(cx > 0 ? cx : 0,x), QMAX(y+paragy,-cy) );
-    QPoint bottomRightLU( leftLU + QMIN(width,cw), paragy + QMIN(y + height, cy + ch) );
-#ifdef DEBUG_DRAWING
-    //kdDebug(32001) << "KWAnchor::draw x1: " << leftLU << ", y1: " << topLU << ", x2: " << rightLU << ", y2: " << bottomLU << endl;
-#endif
 #endif
 
     QRect crectLU;
@@ -181,17 +174,25 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     p->save();
     p->translate( -topLeftParag.x(), -topLeftParag.y() );
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw translating by " << -topLeft.x() << "," << -topLeft.y() << endl;
+    kdDebug() << "KWAnchor::draw translating by " << -topLeftParag.x() << "," << -topLeftParag.y() << endl;
 #endif
     QColorGroup cg2( cg );
     m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );
 
     if( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer )
     {
-        p->fillRect( crect, QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+        // The above rects are about the containing frame.
+        // To draw the inline frame as selected, we need to look at the inline frame's own size.
+        QRect frameRect = m_frameset->floatingFrameRect( m_frameNum );
+        frameRect &= crect; // intersect
+#ifdef DEBUG_DRAWING
+    kdDebug() << "KWAnchor::draw selected frame. (frameRect&crect) = " << frameRect << endl;
+#endif
+        if ( !frameRect.isEmpty() )
+            p->fillRect( frameRect, QBrush( cg.highlight(), QBrush::Dense4Pattern) );
     }
-
     p->restore();
+
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw done" << endl;
 #endif
@@ -199,7 +200,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
 QSize KWAnchor::size() const
 {
-    QSize sz = m_frameset->floatingFrameSize( m_frameNum );
+    QSize sz = m_frameset->floatingFrameRect( m_frameNum ).size();
     if ( sz.isNull() ) // for some reason, we don't know the size yet
         sz = QSize( width, height );
     // Convert to LU

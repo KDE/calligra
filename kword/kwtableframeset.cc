@@ -97,14 +97,13 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
     moveBy( dx, dy);
 }
 
-QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
+QRect KWTableFrameSet::floatingFrameRect( int /*frameNum TODO */ )
 {
     KoRect r = boundingRect();
     if ( r.isNull() )
-        return QSize();
+        return QRect();
     QRect outerRect( m_doc->zoomRect( r ) );
     //kdDebug(32004) << "floatingFrameSize outerRect initially " << DEBUGRECT( outerRect ) << endl;
-    QSize sz = outerRect.size();
     Q_ASSERT( m_anchorTextFs );
     // Need to convert back to internal coords (in case of page breaking)
 #if 0  // TODO
@@ -119,12 +118,11 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
             outerRect.setRight( brnPoint.x() );
             outerRect.setBottom( brnPoint.y() );
             //kdDebug(32004) << "floatingFrameSize outerRect now " << DEBUGRECT( outerRect ) << endl;
-            sz = outerRect.size();
         }
     }
 #endif
 
-    return sz;
+    return outerRect;
 }
 
 KCommand * KWTableFrameSet::anchoredObjectCreateCommand( int /*frameNum*/ )

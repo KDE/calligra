@@ -827,11 +827,11 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
     }
 }
 
-QSize KWFrameSet::floatingFrameSize( int frameNum )
+QRect KWFrameSet::floatingFrameRect( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
     Q_ASSERT( frame );
-    return frame->outerRect().size();
+    return frame->outerRect();
 }
 
 KCommand * KWFrameSet::anchoredObjectCreateCommand( int frameNum )

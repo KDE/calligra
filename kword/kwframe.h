@@ -572,9 +572,9 @@ public:
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
-    /** Get the [zoomed] size of the "floating frame" identified by frameNum.
+    /** Get the [zoomed, in view pixels] rect of the "floating frame" identified by frameNum.
         By default a real frame but not for tables. */
-    virtual QSize floatingFrameSize( int frameNum );
+    virtual QRect floatingFrameRect( int frameNum );
     /** Get the 'baseline' to use for the "floating frame" identified by frameNum.
         -1 means same as the height (usual case) */
     virtual int floatingFrameBaseline( int /*frameNum*/ ) { return -1; }
