@@ -4237,6 +4237,9 @@ void KPresenterView::updateReadWrite( bool readwrite )
         refreshPageButton();
         actionViewZoom->setEnabled( true );
         actionEditFind->setEnabled( true );
+        actionEditFindNext->setEnabled( true );
+        actionEditFindPrevious->setEnabled( true );
+        actionEditReplace->setEnabled( true );
         actionEditSelectAll->setEnabled( true );
         actionEditDeSelectAll->setEnabled( true );
     }
@@ -7037,6 +7040,8 @@ void KPresenterView::slotObjectEditChanged()
     actionFormatStyle->setEnabled(isText);
     state=m_canvas->oneObjectTextExist();
     actionEditFind->setEnabled(state);
+    actionEditFindNext->setEnabled( state );
+    actionEditFindPrevious->setEnabled( state );
     actionEditReplace->setEnabled(state);
 
     slotUpdateRuler();
