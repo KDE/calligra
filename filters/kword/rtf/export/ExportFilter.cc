@@ -375,12 +375,10 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     {
                         str += "\\chpgn ";
                     }
-#if 0
                     else if ((*paraFormatDataIt).variable.isPageCount())
                     {
-                        str += "page_count";
+                        str += "{\\field{\\*\\fldinst{NUMPAGES}}}";
                     }
-#endif
                     else
                     {
                         // Unknown subtype, therefore write out the result
@@ -812,11 +810,6 @@ QString RTFWorker::closeSpan(const FormatData& , const FormatData& )
     QString result;
     result += "}";
     return result;
-}
-
-QString RTFWorker::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
-{
-    return QString::null;
 }
 
 // The following function encodes the kword unicode characters into

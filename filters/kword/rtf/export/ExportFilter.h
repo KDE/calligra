@@ -61,7 +61,6 @@ public:
     virtual bool doFooter(const HeaderData& footer);
 
 private:
-    QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     QString openSpan(const FormatData& formatOrigin, const FormatData& format);
     QString closeSpan(const FormatData& formatOrigin, const FormatData& format);
     QString escapeRtfText ( const QString& text ) const;
