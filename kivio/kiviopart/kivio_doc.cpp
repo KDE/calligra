@@ -63,6 +63,7 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qfont.h>
+#include <qvaluelist.h>
 
 
 #include <kstandarddirs.h>
@@ -500,9 +501,7 @@ void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool tran
 void KivioDoc::printContent( KPrinter &prn )
 {
   KivioScreenPainter p;
-  int from = prn.fromPage();
-  int to = prn.toPage();
-  int i;
+  QValueList<int> pages = prn.pageList();
   KivioPage *pPage;
 
   // ### HACK: disable zooming-when-printing if embedded parts are used.
@@ -512,19 +511,19 @@ void KivioDoc::printContent( KPrinter &prn )
   int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
   int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
 
-  kdDebug() << "KivioDoc::printContent() - Printing from " << from << " to " << to << endl;
   p.start(&prn);
 
   QPaintDeviceMetrics metrics( &prn );
   p.painter()->scale( (double)metrics.logicalDpiX() / (double)dpiX,
     (double)metrics.logicalDpiY() / (double)dpiY );
 
-  for( i=from; i<=to; i++ )
-  {
-    pPage = m_pMap->pageList().at(i-1);
+  QValueList<int>::iterator it;
+
+  for(it = pages.begin(); it != pages.end(); ++it) {
+    pPage = m_pMap->pageList().at((*it)-1);
     pPage->printContent(p, dpiX, dpiY);
 
-    if( i < to ) {
+    if( it != (--pages.end()) ) {
       prn.newPage();
     }
   }
