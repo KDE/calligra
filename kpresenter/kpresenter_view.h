@@ -81,6 +81,7 @@ class Page;
 #include "inspagedia.h"
 #include "setbackcmd.h"
 #include "pgconfcmd.h"
+#include "confpiedia.h"
 #include "pglayoutcmd.h"
 
 #include <X11/Xlib.h>
@@ -157,6 +158,7 @@ public:
   virtual void insertLine();
   virtual void insertRectangle();
   virtual void insertCircleOrEllipse();
+  virtual void insertPie();
   virtual void insertText();
   virtual void insertAutoform();
 
@@ -170,6 +172,7 @@ public:
 
   // extra menu
   virtual void extraPenBrush();
+  virtual void extraConfigPie();
   virtual void extraRaise();
   virtual void extraLower();
   virtual void extraRotate();
@@ -321,6 +324,7 @@ protected slots:
   void psvClosed();
   void delPageOk(int,DelPageMode);
   void insPageOk(int,InsPageMode,InsertPos);
+  void confPieOk();
 
   // scrolling
   void scrollH(int);
@@ -453,6 +457,7 @@ protected:
   CORBA::Long m_idMenuInsert_RectangleNormal;
   CORBA::Long m_idMenuInsert_RectangleRound;
   CORBA::Long m_idMenuInsert_Circle;
+  CORBA::Long m_idMenuInsert_Pie;
   CORBA::Long m_idMenuInsert_Text;
   CORBA::Long m_idMenuInsert_Autoform;
   CORBA::Long m_idMenuInsert_Part;
@@ -470,6 +475,7 @@ protected:
   CORBA::Long m_idMenuExtra_TType_UnsortList;
   CORBA::Long m_idMenuExtra_TType_NormalText;
   CORBA::Long m_idMenuExtra_PenBrush;
+  CORBA::Long m_idMenuExtra_Pie;
   CORBA::Long m_idMenuExtra_Raise;
   CORBA::Long m_idMenuExtra_Lower;
   CORBA::Long m_idMenuExtra_Rotate;
@@ -544,6 +550,7 @@ protected:
   CORBA::Long m_idButtonInsert_Line;
   CORBA::Long m_idButtonInsert_Rectangle;
   CORBA::Long m_idButtonInsert_Circle;
+  CORBA::Long m_idButtonInsert_Pie;
   CORBA::Long m_idButtonInsert_Text;
   CORBA::Long m_idButtonInsert_Autoform;
   CORBA::Long m_idButtonInsert_Part;
@@ -566,6 +573,7 @@ protected:
   // extra toolbar
   ToolBar_ref m_rToolBarExtra;
   CORBA::Long m_idButtonExtra_Style;
+  CORBA::Long m_idButtonExtra_Pie;
   CORBA::Long m_idButtonExtra_Raise;
   CORBA::Long m_idButtonExtra_Lower;
   CORBA::Long m_idButtonExtra_Rotate;
@@ -607,6 +615,7 @@ protected:
   PresStructViewer *presStructView;
   DelPageDia *delPageDia;
   InsPageDia *insPageDia;
+  ConfPieDia *confPieDia;
 
   // default pen and brush
   QPen pen;
@@ -616,6 +625,8 @@ protected:
   QColor gColor1,gColor2;
   BCType gType;
   FillType fillType;
+  PieType pieType;
+  int pieLength,pieAngle;
 
   // the page
   Page *page;

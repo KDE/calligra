@@ -56,7 +56,7 @@ class KPresenterDocument_impl;
 class KPresenterView_impl;
 
 const QString ObjName[] = {"Picture","Line","Rectangle","Ellipse","Text","Autoform",
-			   "Clipart","Undefined"};
+			   "Clipart","Undefined","Pie/Arc/Chord"};
 const QString BackTypeName[] = {"Color","Picture","Clipart"};
 const QString BackViewName[] = {"Zoom","Center","Tiled"};
 const QString BackColorTypeName[] = {"Plain","Horizontal Gradient","Vertical Gradient","Diagonal Gradient 1","Diagonal Gradient 2",
@@ -129,6 +129,7 @@ protected slots:
   void slotRaise();
   void slotDelete();
   void slotEdit();
+  void slotEditPie();
   void slotBackground();
   void slotConfigPages();
   void slotChangeFilename();
@@ -140,18 +141,19 @@ protected:
     KTreeListItem *item;
   };
 
-  static const int B_STYLE  = 1;
-  static const int B_ROTATE = 2;
-  static const int B_SHADOW = 3;
-  static const int B_ALIGN  = 4;
-  static const int B_EFFECT = 5;
-  static const int B_LOWER  = 6;
-  static const int B_RAISE  = 7;
-  static const int B_DELETE = 8;
-  static const int B_EDIT   = 9;
-  static const int B_BACK   = 10;
-  static const int B_CPAGES = 11;
-  static const int B_CFILEN = 12;
+  static const int B_STYLE    = 1;
+  static const int B_ROTATE   = 2;
+  static const int B_SHADOW   = 3;
+  static const int B_ALIGN    = 4;
+  static const int B_EFFECT   = 5;
+  static const int B_LOWER    = 6;
+  static const int B_RAISE    = 7;
+  static const int B_DELETE   = 8;
+  static const int B_EDIT     = 9;
+  static const int B_EDIT_PIE = 10;
+  static const int B_BACK     = 11;
+  static const int B_CPAGES   = 12;
+  static const int B_CFILEN   = 13;
   
   void resizeEvent(QResizeEvent *e);
   void closeEvent(QCloseEvent *e);

@@ -282,6 +282,8 @@ void PresStructViewer::setupTreeView()
 	  break;
 	case OT_AUTOFORM: str = "mini_autoform.xpm";
 	  break;
+	case OT_PIE: str = "mini_pie.xpm";
+	  break;
 	default: str = "dot.xpm";
 	  break;
 	}
@@ -323,7 +325,8 @@ void PresStructViewer::setupToolBar()
   toolbar->insertSeparator();
 
   toolbar->insertButton(QPixmap(pixdir + "delete.xpm"),B_DELETE,SIGNAL(clicked()),this,SLOT(slotDelete()),false,i18n("Delete"));
-  toolbar->insertButton(QPixmap(pixdir + "text.xpm"),B_EDIT,SIGNAL(clicked()),this,SLOT(slotEdit()),false,i18n("Edit"));
+  toolbar->insertButton(QPixmap(pixdir + "edit_text.xpm"),B_EDIT,SIGNAL(clicked()),this,SLOT(slotEdit()),false,i18n("Edit Text"));
+  toolbar->insertButton(QPixmap(pixdir + "edit_pie.xpm"),B_EDIT_PIE,SIGNAL(clicked()),this,SLOT(slotEditPie()),false,i18n("Configure Pie"));
   toolbar->insertButton(QPixmap(KApplication::kde_toolbardir() + "/fileopen.xpm"),B_CFILEN,
 			SIGNAL(clicked()),this,SLOT(slotChangeFilename()),false,i18n("Change Filename"));
 
@@ -555,6 +558,9 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
 				 list->count() - 1,1);
 	  }
       } break;
+    case OT_PIE:
+      {
+      } break;
     case OT_LINE:
       {
 	list->appendItem(i18n("Direction"));
@@ -670,7 +676,9 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
     toolbar->setItemEnabled(B_CFILEN,true);
   else
     toolbar->setItemEnabled(B_STYLE,true);
-  
+  if (_obj->getType() == OT_PIE)
+    toolbar->setItemEnabled(B_EDIT_PIE,true);
+
   toolbar->setItemEnabled(B_ROTATE,true);
   toolbar->setItemEnabled(B_SHADOW,true);
   toolbar->setItemEnabled(B_ALIGN,true);
@@ -781,6 +789,12 @@ void PresStructViewer::slotEdit()
 }
 
 /*================================================================*/
+void PresStructViewer::slotEditPie()
+{
+  view->extraConfigPie();
+}
+
+/*================================================================*/
 void PresStructViewer::slotBackground()
 {
   view->extraBackground();
@@ -820,4 +834,5 @@ void PresStructViewer::disableAllFunctions()
   toolbar->setItemEnabled(B_BACK,false);
   toolbar->setItemEnabled(B_CPAGES,false);
   toolbar->setItemEnabled(B_CFILEN,false);
+  toolbar->setItemEnabled(B_EDIT_PIE,false);
 }

@@ -26,6 +26,7 @@ module KPresenter
       slot void insertLine();
       slot void insertRectangle();
       slot void insertCircleOrEllipse();
+      slot void insertPie();
       slot void insertText();
       slot void insertAutoform();
       slot void insertObject();
@@ -38,6 +39,7 @@ module KPresenter
       slot void insertRoundRectidl();
 
       slot void extraPenBrush();
+      slot void extraConfigPie();
       slot void extraRaise();
       slot void extraLower();
       slot void extraRotate();

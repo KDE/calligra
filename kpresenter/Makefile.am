@@ -19,9 +19,10 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
 	shadowdia.cc presstructview.cc delpagedia.cc inspagedia.cc \
+	confpiedia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
-	kppixmapobject.cc \
+	kppixmapobject.cc kppieobject.cc \
 	kpbackground.cc kppixmap.cc kpclipart.cc kpgradient.cc\
 	kppixmapcollection.cc kpgradientcollection.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
@@ -36,10 +37,10 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h ksearchdialogs.h shadowdia.h presstructview.h \
-		delpagedia.h inspagedia.h \
+		delpagedia.h inspagedia.h confpiedia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
-		kppixmapobject.h \
+		kppixmapobject.h kppieobject.h \
 		kpbackground.h kppixmap.h kpclipart.h kpgradient.h \
 		kppixmapcollection.h kpgradientcollection.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
@@ -53,10 +54,10 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
 		optiondia.moc pgconfdia.moc effectdia.moc \
 		rotatedia.moc ksearchdialogs.moc shadowdia.moc \
-		presstructview.moc delpagedia.moc inspagedia.moc \
+		presstructview.moc delpagedia.moc inspagedia.moc confpiedia.moc \
 		kpobject.moc kplineobject.moc kprectobject.moc kpellipseobject.moc \
 		kpautoformobject.moc kpclipartobject.moc kptextobject.moc \
-		kppixmapobject.moc \
+		kppixmapobject.moc kppieobject.moc \
 		kpbackground.moc kppixmap.moc kpclipart.moc kpgradient.moc\
 		kppixmapcollection.moc kpgradientcollection.moc \
 		command.moc movecmd.moc resizecmd.moc insertcmd.moc deletecmd.moc \
@@ -114,6 +115,7 @@ shadowdia.cc: shadowdia.moc
 presstructview.cc: presstructview.moc
 delpagedia.cc: delpagedia.moc
 inspagedia.cc: inspagedia.moc
+confpiedia.cc: confpiedia.moc
 
 kpobject.cc: kpobject.moc
 kplineobject.cc: kplineobject.moc
@@ -129,6 +131,7 @@ kpclipart.cc: kpclipart.moc
 kpgradient.cc: kpgradient.moc
 kppixmapcollection.cc: kppixmapcollection.moc
 kpgradientcollection.cc: kpgradientcollection.moc
+kppieobject.cc: kppieobject.moc
 
 command.cc: command.moc
 movecmd.cc: movecmd.moc

@@ -59,6 +59,7 @@ class KPresenterView_impl;
 #include "kpclipartobject.h"
 #include "kptextobject.h"
 #include "kppixmapobject.h"
+#include "kppieobject.h"
 #include "kpresenter_view.h"
 #include "global.h"
 #include "kpbackground.h"
@@ -199,7 +200,8 @@ public:
   void setBackClipFilename(unsigned int,QString);
   void setBackView(unsigned int,BackView);
   void setBackType(unsigned int,BackType);
-  bool setPenBrush(QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,int,int);
+  bool setPenBrush(QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType);
+  bool setPieSettings(PieType,int,int);
   void setPageEffect(unsigned int,PageEffect);
   BackType getBackType(unsigned int);
   BackView getBackView(unsigned int);
@@ -217,6 +219,9 @@ public:
   QColor getGColor1(QColor);
   QColor getGColor2(QColor);
   BCType getGType(BCType);
+  PieType getPieType(PieType);
+  int getPieLength(int);
+  int getPieAngle(int);
 
   // raise and lower objs
   void raiseObjs(int,int);
@@ -230,6 +235,8 @@ public:
   void insertLine(QPen,LineEnd,LineEnd,LineType,int,int);
   void insertRectangle(QPen,QBrush,RectType,FillType,QColor,QColor,BCType,int,int);
   void insertCircleOrEllipse(QPen,QBrush,FillType,QColor,QColor,BCType,int,int);
+  void insertPie(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+		 BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy);
   void insertText(int,int);
   void insertAutoform(QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,QString,int,int);
   

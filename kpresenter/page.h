@@ -179,8 +179,8 @@ protected:
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
-  QPopupMenu *alignMenu1,*alignMenu2,*alignMenu3,*alignMenu4;
-  QPopupMenu *pageMenu;
+  QPopupMenu *alignMenu1,*alignMenu2,*alignMenu3,*alignMenu4,*alignMenu5;
+  QPopupMenu *pageMenu,*pieMenu;
   bool mousePressed;              
   ModifyType modType;                    
   unsigned int oldMx,oldMy;                
@@ -207,6 +207,7 @@ private slots:
   void toColorChanged(QColor* color) { emit colorChanged(color); }
   void toAlignChanged(TxtParagraph::HorzAlign a) { emit alignChanged(a); } 
   void objProperties();
+  void objConfigPie() {view->extraConfigPie();}
   void assignEffect() {view->screenAssignEffect();}
   void drawingMode()
     {presMenu->setItemChecked(PM_DM,true);presMenu->setItemChecked(PM_SM,false);drawMode = true;setCursor(arrowCursor);}

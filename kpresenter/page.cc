@@ -269,6 +269,16 @@ void Page::mousePressEvent(QMouseEvent *e)
 		  mousePressed = false;
 		  modType = MT_NONE;
 		}
+	      else if (kpobject->getType() == OT_PIE)
+		{
+		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton) && !kpobject->isSelected())
+		    deSelectAllObj();
+		  selectObj(kpobject);
+		  QPoint pnt = QCursor::pos();
+		  pieMenu->popup(pnt);
+		  mousePressed = false;
+		  modType = MT_NONE;
+		}
 	      else
 		{
 		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton) && !kpobject->isSelected())
@@ -944,6 +954,29 @@ void Page::setupMenus()
   alignMenu4->setMouseTracking(true);
   alignMenu4->setCheckable(false);
 
+  pixdir = KApplication::kde_datadir();
+  alignMenu5 = new QPopupMenu();
+  CHECK_PTR(alignMenu5);
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoleft.xpm");
+  alignMenu5->insertItem(pixmap,this,SLOT(alignObjLeft()));
+  alignMenu5->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterh.xpm");
+  alignMenu5->insertItem(pixmap,this,SLOT(alignObjCenterH()));
+  alignMenu5->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aoright.xpm");
+  alignMenu5->insertItem(pixmap,this,SLOT(alignObjRight()));
+  alignMenu5->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aotop.xpm");
+  alignMenu5->insertItem(pixmap,this,SLOT(alignObjTop()));
+  alignMenu5->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aocenterv.xpm");
+  alignMenu5->insertItem(pixmap,this,SLOT(alignObjCenterV()));
+  alignMenu5->insertSeparator();
+  pixmap.load(pixdir + "/kpresenter/toolbar/aobottom.xpm");
+  alignMenu5->insertItem(pixmap,this,SLOT(alignObjBottom()));
+  alignMenu5->setMouseTracking(true);
+  alignMenu5->setCheckable(false);
+
   pixdir = KApplication::kde_toolbardir();
 
   // create right button graph menu 
@@ -973,6 +1006,36 @@ void Page::setupMenus()
   pixmap.load(pixdir+"/kpresenter/toolbar/alignobjs.xpm");
   graphMenu->insertItem(pixmap,i18n("&Align objects"),alignMenu1);
   graphMenu->setMouseTracking(true);
+
+  // create right button pie menu 
+  pieMenu = new QPopupMenu();
+  CHECK_PTR(pieMenu);
+  pixmap.load(pixdir+"/editcut.xpm");
+  pieMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
+  pixmap.load(pixdir+"/editcopy.xpm");
+  pieMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
+//   pixmap.load(pixdir+"/editpaste.xpm");
+//   pieMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
+  pixdir = KApplication::kde_datadir();
+  pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
+  pieMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
+  pieMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
+  pieMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
+  pixmap.load(pixdir+"/kpresenter/toolbar/shadow.xpm");
+  pieMenu->insertItem(pixmap,i18n("&Shadow..."),this,SLOT(shadowObjs()));
+  pieMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/style.xpm");
+  pieMenu->insertItem(pixmap,i18n("&Properties..."),this,SLOT(objProperties()));
+  pixmap.load(pixdir+"/kpresenter/toolbar/edit_pie.xpm");
+  pieMenu->insertItem(pixmap,i18n("&Configure pie/arc/chord..."),this,SLOT(objConfigPie()));
+  pieMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
+  pieMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
+  pieMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/alignobjs.xpm");
+  pieMenu->insertItem(pixmap,i18n("&Align objects"),alignMenu5);
+  pieMenu->setMouseTracking(true);
 
   // create right button picture menu
   pixdir = KApplication::kde_toolbardir();

@@ -639,6 +639,12 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 		kpellipseobject->load(parser,lst);
 		_objectList.append(kpellipseobject);
 	      } break;
+	    case OT_PIE:
+	      {
+		KPPieObject *kppieobject = new KPPieObject();
+		kppieobject->load(parser,lst);
+		_objectList.append(kppieobject);
+	      } break;
 	    case OT_AUTOFORM:
 	      {
 		KPAutoformObject *kpautoformobject = new KPAutoformObject();
@@ -886,7 +892,7 @@ void KPresenterDocument_impl::setPageEffect(unsigned int pageNum,PageEffect page
 
 /*===================== set pen and brush ========================*/
 bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
-					  BCType gt,int diffx,int diffy)
+					  BCType gt)
 {
   KPObject *kpobject = 0;
   bool ret = false;
@@ -941,8 +947,44 @@ bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineE
 		ret = true;
 		repaint(kpobject);
 	      } break;
+	    case OT_PIE:
+	      {
+		dynamic_cast<KPPieObject*>(kpobject)->setPen(pen);
+		dynamic_cast<KPPieObject*>(kpobject)->setBrush(brush);
+		dynamic_cast<KPPieObject*>(kpobject)->setLineBegin(lb);
+		dynamic_cast<KPPieObject*>(kpobject)->setLineEnd(le);
+		dynamic_cast<KPPieObject*>(kpobject)->setFillType(ft);
+		dynamic_cast<KPPieObject*>(kpobject)->setGColor1(g1);
+		dynamic_cast<KPPieObject*>(kpobject)->setGColor2(g2);
+		dynamic_cast<KPPieObject*>(kpobject)->setGType(gt);
+		ret = true;
+		repaint(kpobject);
+	      } break;
 	    default: break;
 	    }
+	}
+    }
+
+  m_bModified = true;
+  return ret;
+}
+
+/*================================================================*/
+bool KPresenterDocument_impl::setPieSettings(PieType pieType,int angle,int len)
+{
+  KPObject *kpobject = 0;
+  bool ret = false;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_PIE)
+	{
+	  dynamic_cast<KPPieObject*>(kpobject)->setPieType(pieType);
+	  dynamic_cast<KPPieObject*>(kpobject)->setPieAngle(angle);
+	  dynamic_cast<KPPieObject*>(kpobject)->setPieLength(len);
+	  ret = true;
+	  repaint(kpobject);
 	}
     }
 
@@ -1043,6 +1085,9 @@ QPen KPresenterDocument_impl::getPen(QPen pen)
 	    case OT_ELLIPSE:
 	      return dynamic_cast<KPEllipseObject*>(kpobject)->getPen();
 	      break;
+	    case OT_PIE:
+	      return dynamic_cast<KPPieObject*>(kpobject)->getPen();
+	      break;
 	    case OT_AUTOFORM:
 	      return dynamic_cast<KPAutoformObject*>(kpobject)->getPen();
 	      break;
@@ -1072,6 +1117,9 @@ LineEnd KPresenterDocument_impl::getLineBegin(LineEnd lb)
 	    case OT_AUTOFORM:
 	      return dynamic_cast<KPAutoformObject*>(kpobject)->getLineBegin();
 	      break;
+	    case OT_PIE:
+	      return dynamic_cast<KPPieObject*>(kpobject)->getLineBegin();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1097,6 +1145,9 @@ LineEnd KPresenterDocument_impl::getLineEnd(LineEnd le)
 	      break;
 	    case OT_AUTOFORM:
 	      return dynamic_cast<KPAutoformObject*>(kpobject)->getLineEnd();
+	      break;
+	    case OT_PIE:
+	      return dynamic_cast<KPPieObject*>(kpobject)->getLineEnd();
 	      break;
 	    default: break;
 	    }
@@ -1127,6 +1178,9 @@ QBrush KPresenterDocument_impl::getBrush(QBrush brush)
 	    case OT_AUTOFORM:
 	      return dynamic_cast<KPAutoformObject*>(kpobject)->getBrush();
 	      break;
+	    case OT_PIE:
+	      return dynamic_cast<KPPieObject*>(kpobject)->getBrush();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1155,6 +1209,9 @@ FillType KPresenterDocument_impl::getFillType(FillType ft)
 	      break;
 	    case OT_AUTOFORM:
 	      return dynamic_cast<KPAutoformObject*>(kpobject)->getFillType();
+	      break;
+	    case OT_PIE:
+	      return dynamic_cast<KPPieObject*>(kpobject)->getFillType();
 	      break;
 	    default: break;
 	    }
@@ -1185,6 +1242,9 @@ QColor KPresenterDocument_impl::getGColor1(QColor g1)
 	    case OT_AUTOFORM:
 	      return dynamic_cast<KPAutoformObject*>(kpobject)->getGColor1();
 	      break;
+	    case OT_PIE:
+	      return dynamic_cast<KPPieObject*>(kpobject)->getGColor1();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1213,6 +1273,9 @@ QColor KPresenterDocument_impl::getGColor2(QColor g2)
 	      break;
 	    case OT_AUTOFORM:
 	      return dynamic_cast<KPAutoformObject*>(kpobject)->getGColor2();
+	      break;
+	    case OT_PIE:
+	      return dynamic_cast<KPPieObject*>(kpobject)->getGColor2();
 	      break;
 	    default: break;
 	    }
@@ -1243,12 +1306,60 @@ BCType KPresenterDocument_impl::getGType(BCType gt)
 	    case OT_AUTOFORM:
 	      return dynamic_cast<KPAutoformObject*>(kpobject)->getGType();
 	      break;
+	    case OT_PIE:
+	      return dynamic_cast<KPPieObject*>(kpobject)->getGType();
+	      break;
 	    default: break;
 	    }
 	}      
     }
 
   return gt;
+}
+
+/*================================================================*/
+PieType KPresenterDocument_impl::getPieType(PieType pieType)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_PIE)
+	return dynamic_cast<KPPieObject*>(kpobject)->getPieType();
+    }
+
+  return pieType;
+}
+
+/*================================================================*/
+int KPresenterDocument_impl::getPieLength(int pieLength)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_PIE)
+	return dynamic_cast<KPPieObject*>(kpobject)->getPieLength();
+    }
+
+  return pieLength;
+}
+
+/*================================================================*/
+int KPresenterDocument_impl::getPieAngle(int pieAngle)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_PIE)
+	return dynamic_cast<KPPieObject*>(kpobject)->getPieAngle();
+    }
+
+  return pieAngle;
 }
 
 /*======================== lower objects =========================*/
@@ -1293,7 +1404,7 @@ void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
 void KPresenterDocument_impl::insertPicture(QString filename,int diffx,int diffy)
 {
   KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection,filename);
-  kppixmapobject->setOrig(diffx + 10,diffy + 10);
+  kppixmapobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
   kppixmapobject->setSelected(true);
 
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert picture"),kppixmapobject,this);
@@ -1307,7 +1418,7 @@ void KPresenterDocument_impl::insertPicture(QString filename,int diffx,int diffy
 void KPresenterDocument_impl::insertClipart(QString filename,int diffx,int diffy)
 {
   KPClipartObject *kpclipartobject = new KPClipartObject(filename);
-  kpclipartobject->setOrig(diffx + 10,diffy + 10);
+  kpclipartobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
   kpclipartobject->setSize(150,150);
   kpclipartobject->setSelected(true);
 
@@ -1366,7 +1477,7 @@ void KPresenterDocument_impl::changeClipart(QString filename,int diffx,int diffy
 void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType lt,int diffx,int diffy)
 {
   KPLineObject *kplineobject = new KPLineObject(pen,lb,le,lt);
-  kplineobject->setOrig(diffx + 10,diffy + 10);
+  kplineobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
   kplineobject->setSize(150,150);
   kplineobject->setSelected(true);
 
@@ -1382,7 +1493,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
 					      BCType gt,int diffx,int diffy)
 {
   KPRectObject *kprectobject = new KPRectObject(pen,brush,rt,ft,g1,g2,gt,getRndX(),getRndY());
-  kprectobject->setOrig(diffx + 10,diffy + 10);
+  kprectobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
   kprectobject->setSize(150,150);
   kprectobject->setSelected(true);
 
@@ -1398,7 +1509,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,FillTy
 						    BCType gt,int diffx,int diffy)
 {
   KPEllipseObject *kpellipseobject = new KPEllipseObject(pen,brush,ft,g1,g2,gt);
-  kpellipseobject->setOrig(diffx + 10,diffy + 10);
+  kpellipseobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
   kpellipseobject->setSize(150,150);
   kpellipseobject->setSelected(true);
 
@@ -1409,11 +1520,27 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,FillTy
   m_bModified = true;
 }
 
+/*================================================================*/
+void KPresenterDocument_impl::insertPie(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+					BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy)
+{
+  KPPieObject *kppieobject = new KPPieObject(pen,brush,ft,g1,g2,gt,pt,_angle,_len,lb,le);
+  kppieobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
+  kppieobject->setSize(150,150);
+  kppieobject->setSelected(true);
+
+  InsertCmd *insertCmd = new InsertCmd(i18n("Insert pie/arc/chord"),kppieobject,this);
+  insertCmd->execute();
+  _commands.addCommand(insertCmd);
+
+  m_bModified = true;
+}
+
 /*===================== insert a textobject =====================*/
 void KPresenterDocument_impl::insertText(int diffx,int diffy)
 {
   KPTextObject *kptextobject = new KPTextObject();
-  kptextobject->setOrig(diffx + 10,diffy + 10);
+  kptextobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
   kptextobject->setSize(170,150);
   kptextobject->setSelected(true);
 
@@ -1429,7 +1556,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
 					     BCType gt,QString fileName,int diffx,int diffy)
 {
   KPAutoformObject *kpautoformobject = new KPAutoformObject(pen,brush,fileName,lb,le,ft,g1,g2,gt);
-  kpautoformobject->setOrig(diffx + 10,diffy + 10);
+  kpautoformobject->setOrig(((diffx + 10) * _rastX) / _rastX,((diffy + 10) * _rastY) / _rastY);
   kpautoformobject->setSize(150,150);
   kpautoformobject->setSelected(true);
 

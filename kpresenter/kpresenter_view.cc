@@ -67,6 +67,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent,const char *_name)
   presStructView = 0;
   delPageDia = 0;
   insPageDia = 0;
+  confPieDia = 0;
   xOffset = 0;
   yOffset = 0;
   v_ruler = 0;
@@ -79,6 +80,9 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent,const char *_name)
   gColor2 = green;
   gType = BCT_GHORZ;
   fillType = FT_BRUSH;
+  pieType = PT_PIE;
+  pieLength = 90 * 16;
+  pieAngle = 45 * 16;
   setMouseTracking(true);
   m_bShowGUI = true;
   m_bRectSelection = false;
@@ -415,6 +419,13 @@ void KPresenterView_impl::insertCircleOrEllipse()
   m_pKPresenterDoc->insertCircleOrEllipse(pen,brush,fillType,gColor1,gColor2,gType,xOffset,yOffset);
 }
 
+/*==============================================================*/
+void KPresenterView_impl::insertPie()
+{
+  page->deSelectAllObj();
+  m_pKPresenterDoc->insertPie(pen,brush,fillType,gColor1,gColor2,gType,pieType,pieAngle,pieLength,lineBegin,lineEnd,xOffset,yOffset);
+}
+
 /*===================== insert a textobject =====================*/
 void KPresenterView_impl::insertText()
 {
@@ -474,6 +485,29 @@ void KPresenterView_impl::extraPenBrush()
   styleDia->setCaption(i18n("KPresenter - Pen and Brush"));
   QObject::connect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
   styleDia->show();
+}
+
+/*===============================================================*/
+void KPresenterView_impl::extraConfigPie()
+{
+  if (confPieDia)
+    {
+      QObject::disconnect(confPieDia,SIGNAL(confPieDiaOk()),this,SLOT(confPieOk()));
+      confPieDia->close();
+      delete confPieDia;
+      confPieDia = 0;
+    }
+
+  confPieDia = new ConfPieDia(0,"ConfPageDia");
+  confPieDia->setMaximumSize(confPieDia->width(),confPieDia->height());
+  confPieDia->setMinimumSize(confPieDia->width(),confPieDia->height());
+  confPieDia->setType(m_pKPresenterDoc->getPieType(pieType));
+  confPieDia->setAngle(m_pKPresenterDoc->getPieAngle(pieAngle));
+  confPieDia->setLength(m_pKPresenterDoc->getPieLength(pieLength));
+  confPieDia->setPenBrush(m_pKPresenterDoc->getPen(pen),m_pKPresenterDoc->getBrush(brush));
+  confPieDia->setCaption(i18n("KPresenter - Configure Pie/Arc/Chord"));
+  QObject::connect(confPieDia,SIGNAL(confPieDiaOk()),this,SLOT(confPieOk()));
+  confPieDia->show();
 }
 
 /*========================== extra raise ========================*/
@@ -1360,7 +1394,7 @@ void KPresenterView_impl::styleOk()
 {
   if (!m_pKPresenterDoc->setPenBrush(styleDia->getPen(),styleDia->getBrush(),styleDia->getLineBegin(),
 				     styleDia->getLineEnd(),styleDia->getFillType(),styleDia->getGColor1(),
-				     styleDia->getGColor2(),styleDia->getGType(),xOffset,yOffset))
+				     styleDia->getGColor2(),styleDia->getGType()))
     {
       pen = styleDia->getPen();
       brush = styleDia->getBrush();
@@ -1466,6 +1500,17 @@ void KPresenterView_impl::insPageOk(int _page,InsPageMode _insPageMode,InsertPos
 {
   m_pKPresenterDoc->insertPage(_page,_insPageMode,_insPos);
   setRanges();
+}
+
+/*===============================================================*/
+void KPresenterView_impl::confPieOk()
+{
+  if (!m_pKPresenterDoc->setPieSettings(confPieDia->getType(),confPieDia->getAngle(),confPieDia->getLength()))
+    {
+      pieType = confPieDia->getType();
+      pieAngle = confPieDia->getAngle();
+      pieLength = confPieDia->getLength();
+    }
 }
 
 /*================== scroll horizontal ===========================*/
@@ -2470,6 +2515,12 @@ void KPresenterView_impl::setupMenu()
 						      CORBA::string_dup(i18n("C&ircle or Ellipse")),m_idMenuInsert,
 						      this,CORBA::string_dup("insertCircleOrEllipse"));
       tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/pie.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuInsert_Pie = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+						   CORBA::string_dup(i18n("Pie/Arc/Chord")),m_idMenuInsert,
+						   this,CORBA::string_dup("insertPie"));
+      tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/text.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_Text = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
@@ -2553,6 +2604,12 @@ void KPresenterView_impl::setupMenu()
       m_idMenuExtra_PenBrush = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						       CORBA::string_dup(i18n("&Pen and Brush...")),m_idMenuExtra,
 						       this,CORBA::string_dup("extraPenBrush"));
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/edit_pie.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_Pie = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+						  CORBA::string_dup(i18n("&Configure Pie/Arc/Chord...")),m_idMenuExtra,
+						  this,CORBA::string_dup("extraConfigPie"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/raise.xpm";
       pix = loadPixmap(tmp);
@@ -2942,6 +2999,14 @@ void KPresenterView_impl::setupInsertToolbar()
 							       CORBA::string_dup(i18n("Insert Circle or Ellipse")),
 							       this,CORBA::string_dup("insertCircleOrEllipse"));
 
+      // pie
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/pie.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonInsert_Pie = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
+							    CORBA::string_dup(i18n("Insert Pie/Arc/Chord")),
+							    this,CORBA::string_dup("insertPie"));
+
       // text
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/text.xpm";
@@ -3110,6 +3175,12 @@ void KPresenterView_impl::setupExtraToolbar()
       QString pix = loadPixmap(tmp);
       m_idButtonExtra_Style = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Pen & Brush")),
 							   this,CORBA::string_dup("extraPenBrush"));
+      // pie
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/edit_pie.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonExtra_Pie = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Configure Pie/Arc/Chord")),
+							  this,CORBA::string_dup("extraConfigPie"));
       m_rToolBarExtra->insertSeparator();
 
       // raise
@@ -3274,18 +3345,19 @@ void KPresenterView_impl::setupAccelerators()
 
   // insert menu
   m_rMenuBar->setAccel(ALT + Key_N,m_idMenuInsert_Page);
-  m_rMenuBar->setAccel(Key_F1,m_idMenuInsert_Picture);
-  m_rMenuBar->setAccel(Key_F2,m_idMenuInsert_Clipart);
-  m_rMenuBar->setAccel(Key_F3,m_idMenuInsert_LineHorz);
-  m_rMenuBar->setAccel(Key_F4,m_idMenuInsert_LineVert);
-  m_rMenuBar->setAccel(Key_F5,m_idMenuInsert_LineD1);
-  m_rMenuBar->setAccel(Key_F6,m_idMenuInsert_LineD2);
-  m_rMenuBar->setAccel(Key_F7,m_idMenuInsert_RectangleNormal);
-  m_rMenuBar->setAccel(Key_F8,m_idMenuInsert_RectangleRound);
-  m_rMenuBar->setAccel(Key_F9,m_idMenuInsert_Circle);
-  m_rMenuBar->setAccel(Key_F10,m_idMenuInsert_Text);
-  m_rMenuBar->setAccel(Key_F11,m_idMenuInsert_Autoform);
-  m_rMenuBar->setAccel(Key_F12,m_idMenuInsert_Part);
+  m_rMenuBar->setAccel(CTRL + Key_F1,m_idMenuInsert_Picture);
+  m_rMenuBar->setAccel(CTRL + Key_F2,m_idMenuInsert_Clipart);
+  m_rMenuBar->setAccel(CTRL + Key_F3,m_idMenuInsert_LineHorz);
+  m_rMenuBar->setAccel(CTRL + Key_F4,m_idMenuInsert_LineVert);
+  m_rMenuBar->setAccel(CTRL + Key_F5,m_idMenuInsert_LineD1);
+  m_rMenuBar->setAccel(CTRL + Key_F6,m_idMenuInsert_LineD2);
+  m_rMenuBar->setAccel(CTRL + Key_F7,m_idMenuInsert_RectangleNormal);
+  m_rMenuBar->setAccel(CTRL + Key_F8,m_idMenuInsert_RectangleRound);
+  m_rMenuBar->setAccel(CTRL + Key_F9,m_idMenuInsert_Circle);
+  m_rMenuBar->setAccel(CTRL + Key_F10,m_idMenuInsert_Pie);
+  m_rMenuBar->setAccel(CTRL + Key_F11,m_idMenuInsert_Text);
+  m_rMenuBar->setAccel(CTRL + Key_F12,m_idMenuInsert_Autoform);
+  m_rMenuBar->setAccel(ALT + Key_F1,m_idMenuInsert_Part);
 
   // extra menu
   m_rMenuBar->setAccel(CTRL + Key_P,m_idMenuExtra_PenBrush);
