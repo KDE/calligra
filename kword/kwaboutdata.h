@@ -39,7 +39,7 @@ KAboutData * newKWordAboutData()
                                            I18N_NOOP("(c) 1998-2002, The KWord Team"), 0,
 					   "http://www.koffice.org/kword/" );
     aboutData->addAuthor("Reginald Stadlbauer", 0, "reggie@kde.org");
-    aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
+    aboutData->addAuthor("Thomas Zander");
     aboutData->addAuthor("David Faure", 0, "faure@kde.org");
     aboutData->addAuthor("Laurent Montel", 0, "montel@kde.org");
     aboutData->addAuthor("Sven Lüppken", 0, "sven@kde.org");
