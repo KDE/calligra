@@ -89,6 +89,7 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
 	backgroundAltering = true;
 	rowHighlightingEnabled = false;
 	navigatorEnabled = true;
+	fullRowSelection = false;
 }
 
 

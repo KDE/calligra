@@ -104,6 +104,10 @@ public:
 		*/
 		bool fullRowSelection : 1;
 
+		/*! \if the navigation panel is enabled (visible) for the view.
+		 True by default. */
+		bool navigatorEnabled : 1;
+
 		/*! true if "row highlight" behaviour is enabled. False by default. */
 		bool rowHighlightingEnabled : 1;
 
@@ -114,9 +118,6 @@ public:
 		/*! color for text under row highlight, default is the same as textColor. */
 		QColor rowHighlightingTextColor;
 
-		/*! \if the navigation panel is enabled (visible) for the view.
-		 True by default. */
-		bool navigatorEnabled;
 	};
 	
 	KexiTableView(KexiTableViewData* data=0, QWidget* parent=0, const char* name=0);
