@@ -25,6 +25,8 @@
 #include "vobject_iface.h"
 #include "vstroke.h"
 
+#include <koStore.h>
+#include <koxmlwriter.h>
 
 VObject::VObject( VObject* parent, VState state ) : m_dcop( 0L )
 {
@@ -41,7 +43,7 @@ VObject::VObject( const VObject& obj )
 {
 	m_stroke = 0L;
 	m_fill = 0L;
-	
+
 	m_parent = obj.m_parent;
 	m_state = obj.m_state;
 
@@ -103,6 +105,8 @@ VObject::save( QDomElement& element ) const
 void
 VObject::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 {
+	if( !name().isEmpty() )
+		docWriter->addAttribute( "draw:name", name() );
 }
 
 void

@@ -144,8 +144,8 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 
 	if( m_rx != 0. && m_ry != 0. && m_rx == m_ry )
 		docWriter->addAttributePt( "draw:corner-radius", m_rx );
-	if( !VObject::name().isEmpty() )
-		docWriter->addAttribute( "draw:name", VObject::name() );
+
+	VObject::saveOasis( store, docWriter );
 
 	docWriter->endElement();
 }

@@ -103,8 +103,7 @@ VPolyline::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 
 	docWriter->addAttribute( "svg:points", m_points );
 
-	if( !VObject::name().isEmpty() )
-		docWriter->addAttribute( "draw:name", VObject::name() );
+	VObject::saveOasis( store, docWriter );
 
 	docWriter->endElement();
 }

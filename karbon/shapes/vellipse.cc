@@ -173,8 +173,7 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 		docWriter->addAttribute( "draw:end-angle", m_endAngle );
 	}
 
-	if( !VObject::name().isEmpty() )
-		docWriter->addAttribute( "draw:name", VObject::name() );
+	VObject::saveOasis( store, docWriter );
 
 	docWriter->endElement();
 }

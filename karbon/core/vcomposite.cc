@@ -359,8 +359,7 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 	saveSvgPath( d );
 	docWriter->addAttribute( "svg:d", d );
 
-	if( !VObject::name().isEmpty() )
-		docWriter->addAttribute( "draw:name", VObject::name() );
+	VObject::saveOasis( store, docWriter );
 
 	docWriter->endElement();
 }
