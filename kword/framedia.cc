@@ -1077,9 +1077,9 @@ bool KWFrameDia::applyChanges()
                 FrameResizeStruct tmpResize;
                 tmpResize.sizeOfBegin = frame->normalize();
                 KoRect rect( px, py, pw, ph );
-                 if( !doc->isOutOfPage( rect , 0 ) )
-                        frame->setRect( px, py, pw, ph );
-                        // else TODO message box after 1.1
+                if( !doc->isOutOfPage( rect , frame->pageNum() ) )
+                    frame->setRect( px, py, pw, ph );
+                // else TODO message box after 1.1
 
                 // TODO apply page limits?
                 tmpResize.sizeOfEnd = frame->normalize();
