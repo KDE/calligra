@@ -23,7 +23,7 @@
 #include <property.h>
 #include <kdebug.h>
 #include <kexidatasourcecombobox.h>
-#include <propertywidgets.h>
+#include <propertywidget.h>
 
 class KexiDialogBase;
 class KexiProject;

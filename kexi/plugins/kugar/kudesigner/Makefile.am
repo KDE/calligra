@@ -35,7 +35,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKE
 # set the include path for X, qt and KDE - all_includes must remain last!
 INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 		-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/datatable \
-		-I$(top_srcdir)/kugar/kudesigner $(all_includes)
+		-I$(top_srcdir)/kugar/kudesigner -I$(top_srcdir)/kugar/kudesigner_lib $(all_includes)
 
 METASOURCES = AUTO
 

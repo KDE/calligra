@@ -17,7 +17,7 @@
 
 #include "kudesigner_kexiplugin.h"
 #include "kudesigner_kexiplugin.moc"
-#include <propertywidgets.h>
+#include <propertywidget.h>
 #include <propertyeditor.h>
 #include <kudesigner_doc.h>
 #include <kgenericfactory.h>
