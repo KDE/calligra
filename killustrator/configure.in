@@ -54,11 +54,11 @@ AC_FIND_JPEG dnl only needed, if you need jpeg, but doesn't hurt
 AC_FIND_QIMGIO dnl for Qt image extensions
 
 dnl Check for MICO. The argument is the minimal version required.
-dnl KDE_CHECK_MICO(2.0.7)
-dnl KDE_CHECK_MINI_STL
+KDE_CHECK_MICO(2.0.7)
+KDE_CHECK_MINI_STL
 
-dnl idldir="\$(includedir)/idl"
-dnl AC_SUBST(idldir)
+idldir="\$(includedir)/idl"
+AC_SUBST(idldir)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_TIME
@@ -89,6 +89,7 @@ AC_OUTPUT(Makefile \
 	src/xmlutils/Makefile \
 	src/share/Makefile \
 	src/standalone/Makefile \
+	src/koffice/Makefile \
 	src/pics/Makefile \
 	src/doc/Makefile \
 	po/Makefile)
