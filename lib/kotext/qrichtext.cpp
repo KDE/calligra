@@ -665,8 +665,10 @@ void QTextCursor::restoreState()
 	pop();
 }
 
-bool QTextCursor::place( const QPoint &p, QTextParag *s )
+bool QTextCursor::place( const QPoint &p, QTextParag *s, int *customItemIndex )
 {
+    if ( customItemIndex )
+        *customItemIndex = 0;
     QPoint pos( p );
     QRect r;
     if ( pos.y() < s->rect().y() )
@@ -716,12 +718,17 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s )
 	chr = s->at(i);
 	int cpos = x + chr->x;
 	cw = chr->width; //s->string()->width( i );
-	if ( chr->isCustom() && chr->customItem()->isNested() ) {
+	if ( chr->isCustom() ) {
 	    if ( pos.x() >= cpos && pos.x() <= cpos + cw &&
 		 pos.y() >= y + cy && pos.y() <= y + cy + chr->height() ) {
-		inCustom = TRUE;
-		curpos = i;
-		break;
+                if ( customItemIndex )
+                    *customItemIndex = i;
+                if ( chr->customItem()->isNested() )
+                {
+		    inCustom = TRUE;
+		    curpos = i;
+		    break;
+                }
 	    }
 	} else {
 	    if( chr->rightToLeft )

@@ -449,37 +449,14 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
                              h_pix, drawSelections, lastFormat, i, selectionStarts,
                              selectionEnds, cg, rightToLeft, zh );
 
-    if ( !textDocument()->drawingShadow())
+    if ( !textDocument()->drawingShadow() && textDocument()->drawFormattingChars() )
     {
-        // Draw "invisible chars"
-        int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
-        for ( int idx = start ; idx < end ; ++idx )
-        {
-            QTextStringChar &ch = string()->at(idx);
-            if ( ch.isCustom() || ch.c.isSpace() )
-                continue;
-            if ( !lastFormat->inFont( ch.c ) )
-            {
-                int w = ch.pixelwidth;
-                int height = zh->layoutUnitToPixelY( ch.ascent() ) / 2; // we use half ascent and 0 descent
-                int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
-                kdDebug(32001) << "KoTextParag::drawParagString char not in font"
-                               << " (code=" << ch.c.unicode() << ", x=" << x << " w=" << w << " h=" << height << endl;
-                painter.save();
-                QPen pen( cg.color( QColorGroup::Text ) );
-                painter.setPen( pen );
-                painter.drawRect( x, lastY_pix + baseLine_pix - height, w, height );
-                painter.restore();
-            }
-        }
-
-        if ( textDocument()->drawFormattingChars() )
-            drawFormattingChars( painter, s, start, len,
-                                 startX, lastY, baseLine, h,
-                                 startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
-                                 drawSelections,
-                                 lastFormat, i, selectionStarts,
-                                 selectionEnds, cg, rightToLeft );
+        drawFormattingChars( painter, s, start, len,
+                             startX, lastY, baseLine, h,
+                             startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
+                             drawSelections,
+                             lastFormat, i, selectionStarts,
+                             selectionEnds, cg, rightToLeft );
     }
 }
 

@@ -102,7 +102,7 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
 	else
 	    lastWasNonInlineCustom = FALSE;
 
-	if ( c->c.unicode() >= 32 || c->isCustom() ) {
+	if ( c->c != '\t' || c->isCustom() ) {
 	    ww = string->width( i );
 
             if ( c->isCustom() )
@@ -166,15 +166,12 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
                 pixelww = ww_topix;
             }
 #endif
-	} else if ( c->c == '\t' ) {
+	} else { // tab
 	    int nx = parag->nextTab( i, x );
 	    if ( nx < x )
 		ww = w - x;
 	    else
 		ww = nx - x + 1;
-            pixelww = zh->layoutUnitToPixelX( ww );
-	} else {
-	    ww = c->format()->width( ' ' );
             pixelww = zh->layoutUnitToPixelX( ww );
 	}
         c->width = ww;
