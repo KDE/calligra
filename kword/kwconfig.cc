@@ -332,6 +332,7 @@ void ConfigureInterfacePage::apply()
     double valX=KoUnit::ptFromUnit( gridX->value(), doc->getUnit() );
     double valY=KoUnit::ptFromUnit( gridY->value(), doc->getUnit() );
     int nbRecent=recentFiles->value();
+
     bool statusBar=showStatusBar->isChecked();
     bool scrollBar = showScrollBar->isChecked();
     config->setGroup( "Interface" );
@@ -345,7 +346,6 @@ void ConfigureInterfacePage::apply()
         config->writeEntry( "GridY", valY, true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setGridY(valY);
     }
-
     double newIndent = KoUnit::ptFromUnit( indent->value(), doc->getUnit() );
     if( newIndent != doc->indentValue() )
     {
@@ -357,7 +357,6 @@ void ConfigureInterfacePage::apply()
         config->writeEntry( "NbRecentFile", nbRecent);
         m_pView->changeNbOfRecentFiles(nbRecent);
     }
-
     bool refreshGUI= false;
 
     if( statusBar != doc->showStatusBar() )
@@ -392,7 +391,9 @@ void ConfigureInterfacePage::apply()
         m_pView->getGUI()->canvasWidget()->viewMode()->setPagesPerRow(nbPageByRow);
         doc->setNbPagePerRow(nbPageByRow);
         //m_pView->getGUI()->canvasWidget()->refreshViewMode();
-        doc->switchViewMode( doc->viewMode() ); // force a refresh
+        //necessary to recreate new view because in doc->switchViewMode
+        //we delete viewmode that we want to apply
+        doc->switchViewMode( KWViewMode::create( doc->viewMode()->type(), doc ) ); // force a refresh
     }
 }
 
