@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiquerypartinst" version="2">
+<kpartgui name="kexiquerypartinst" version="3">
 
 <MenuBar>
   <Menu name="view" noMerge="1">
@@ -14,8 +14,8 @@
   </Menu>
 </MenuBar>
 
-<ToolBar name="querypart" fullWidth="false" noMerge="1">
-  <text>Query</text>
+<ToolBar name="design" fullWidth="false" noMerge="0">
+  <text>Design</text>
   <Action name="querypart_check_query"/>
   <Action name="querypart_execute_query"/>
   <Action name="querypart_view_toggle_history"/>
