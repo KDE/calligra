@@ -210,6 +210,7 @@ bool KOSpell::initConfig()
     }
 
     aspell_config_replace(config, "ignore-case", ksconfig->ignoreCase()?"true" : "false" );
+    aspell_config_replace(config, "ignore-accents", ksconfig->ignoreAccent()?"true" : "false" );
 
     AspellCanHaveError * ret;
     ret = new_aspell_speller(config);

@@ -139,6 +139,7 @@ public:
     void setDictFromList (bool dfl);
 
     void setIgnoreCase ( bool b );
+    void setIgnoreAccent ( bool b );
 
     /**
      *
@@ -153,6 +154,7 @@ public:
     const QString dictionary () const;
     bool dictFromList () const;
     bool ignoreCase () const;
+    bool ignoreAccent () const;
     int encoding () const;
     QStringList ignoreList () const;
     QStringList replaceAllList () const;
@@ -209,7 +211,8 @@ protected slots:
     void sPathDictionary(bool);
     void sSetDictionary (int);
     void sChangeEncoding (int);
-    void slotIgnoreCase(bool b);
+    void slotIgnoreCase(bool );
+    void slotIgnoreAccent(bool);
 
 protected:
     // The options
@@ -219,6 +222,7 @@ protected:
     bool dictfromlist;
     bool nodialog;
     bool m_bIgnoreCase;
+    bool m_bIgnoreAccent;
     QString qsdict;		// -d [dict]
     QString qspdict;		// -p [dict]
     QStringList ignorelist;
@@ -229,6 +233,7 @@ protected:
     QLabel *dictlist;
     QComboBox *dictcombo, *encodingcombo, *clientcombo;
     QCheckBox *cbIgnoreCase;
+    QCheckBox *cbIgnoreAccent;
 signals:
     void configChanged();
 
