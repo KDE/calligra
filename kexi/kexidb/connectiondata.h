@@ -47,6 +47,9 @@ class KEXI_DB_EXPORT ConnectionData
 		/*! Password used for connection. Can be empty. */
 		QString password;
 
+		/*! Username used for connection. Can be empty. */
+		QString userName;
+
 		void setFileName( const QString& fn );
 
 		/*! For file-based database engines like SQLite, \a fileName is used
