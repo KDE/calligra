@@ -71,6 +71,8 @@ public:
     const QStringList& groups() const { return m_groups; }
     
 private:
+    void loadFile( const QString& filename );
+    
     QDict<KSpreadFunctionDescription> m_funcs;
     QStringList m_groups;
 };

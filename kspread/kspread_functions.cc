@@ -1,9 +1,12 @@
 #include "kspread_functions.h"
+#include "kspread_factory.h"
 
 #include <qdom.h>
 #include <qfile.h>
 
 #include <klocale.h>
+#include <kstddirs.h>
+#include <kinstance.h>
 
 static KSpreadParameterType toType( const QString& type )
 {
@@ -201,8 +204,17 @@ KSpreadFunctionRepository::KSpreadFunctionRepository()
 {
     m_funcs.setAutoDelete( TRUE );
     
+    // Find all scripts
+    QStringList files = KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.xml", TRUE );
+    for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
+    {
+	loadFile( *it );
+    }
+}
 
-    QFile file( "kspread_functions.xml" );
+void KSpreadFunctionRepository::loadFile( const QString& filename )
+{
+    QFile file( filename );
     if ( !file.open( IO_ReadOnly ) )
 	return;
 	
