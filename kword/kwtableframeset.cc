@@ -92,8 +92,7 @@ void KWTableFrameSet::updateFrames()
 void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
 {
     KoPoint currentPos = getCell( 0, 0 )->getFrame( 0 )->topLeft();
-    KoPoint tmpPos(position);
-    KoPoint offset = /*position*/ tmpPos - currentPos;
+    KoPoint offset = position - currentPos;
     moveBy( offset.x(), offset.y() );
     // ## TODO apply page breaking
 }
