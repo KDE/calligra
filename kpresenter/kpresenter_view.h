@@ -275,7 +275,9 @@ public slots:
     void insertCustomVariable();
     void insertNewCustomVariable();
     void refreshCustomMenu();
+
     void editCustomVars ();
+    void openLink();
 
 public:
     // create GUI
@@ -671,7 +673,7 @@ private:
     KAction* actionInsertSpecialChar;
     KAction *actionInsertLink;
     KAction *actionFormatParag;
-
+    KAction *actionOpenLink;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;

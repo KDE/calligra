@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="20">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="21">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -465,5 +465,19 @@
  <Action name="edit_copy"/>
  <Action name="edit_paste"/>
  <ActionList name="datatools"/>
+</Menu>
+<Menu name="text_popup_link">
+ <Action name="text_default"/>
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Action name="open_link"/>
+ <ActionList name="datatools_link"/>
 </Menu>
 </kpartgui>

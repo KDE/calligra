@@ -938,14 +938,28 @@ void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
 
 void KPTextView::showPopup( KPresenterView *view, const QPoint &point )
 {
+    // Removed previous stuff
+    view->unplugActionList( "datatools" );
+    view->unplugActionList( "datatools_link" );
     m_actionList.clear();
     m_actionList = dataToolActionList(view->kPresenterDoc()->instance());
-    kdDebug() << "KPTextView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
-    view->plugActionList( "datatools", m_actionList );
-    QPopupMenu * popup = view->popupMenu("text_popup");
-    Q_ASSERT(popup);
-    if (popup)
-        popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+    kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
+    if(refLink().isNull())
+    {
+        view->plugActionList( "datatools", m_actionList );
+        QPopupMenu * popup = view->popupMenu("text_popup");
+        Q_ASSERT(popup);
+        if (popup)
+            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+    }
+    else
+    {
+        view->plugActionList( "datatools_link", m_actionList );
+        QPopupMenu * popup = view->popupMenu("text_popup_link");
+        Q_ASSERT(popup);
+        if (popup)
+            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+    }
 }
 
 

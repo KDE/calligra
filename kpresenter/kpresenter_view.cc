@@ -2496,6 +2496,11 @@ void KPresenterView::setupActions()
     actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
                                           this, SLOT( textDefaultFormat() ),
                                           actionCollection(), "text_default" );
+
+    actionOpenLink = new KAction( i18n( "Open link" ), 0,
+                                     this, SLOT( openLink() ),
+                                     actionCollection(), "open_link" );
+
     m_variableDefMap.clear();
     actionInsertVariable = new KActionMenu( i18n( "&Variable" ),
                                             actionCollection(), "insert_variable" );
@@ -4200,5 +4205,11 @@ void KPresenterView::insertVariable()
     }
 }
 
+void KPresenterView::openLink()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( edit )
+        edit->openLink();
+}
 
 #include <kpresenter_view.moc>
