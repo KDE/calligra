@@ -117,7 +117,7 @@ void KWConfigFootNoteDia::setupTab3()
     // use this when the message freeze is lifted.
     //QLabel *lSize = new QLabel( i18n("arg is a unit such as pt", "&Width (%1)").arg("pt"), page );
     //lSize->setBuddy( spWidth );
-    QLabel *lSize = new QLabel( i18n("Separator Line Width")+QString(" (pt)"), page );
+    QLabel *lSize = new QLabel( i18n("Separator line width (%1):").arg(QString("pt")), page );
     layout->addWidget( lSize, 1, 0 );
 
     QSpacerItem* spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -126,7 +126,7 @@ void KWConfigFootNoteDia::setupTab3()
     // use this when the message freeze is lifted.
     //QLabel *lWidth = new QLabel( i18n("&Size on page:"), page, "lWidth" );
     //lWidth->setBuddy( spLength );
-    QLabel *lWidth = new QLabel( i18n("Separator Line Length"), page, "lWidth" );
+    QLabel *lWidth = new QLabel( i18n("Separator line length:"), page, "lWidth" );
     layout->addWidget( lWidth, 0, 0 );
     pageLayout->addLayout( layout );
 
@@ -134,7 +134,7 @@ void KWConfigFootNoteDia::setupTab3()
 
     // use this when the message freeze is lifted.
     //QLabel *styleLabel = new QLabel( i18n("Style:"), page );
-    QLabel *styleLabel = new QLabel( i18n("Separator Line Type"), page );
+    QLabel *styleLabel = new QLabel( i18n("Separator line type:"), page );
     styleLayout->addWidget( styleLabel );
 
     m_cbLineType = new QComboBox( page );

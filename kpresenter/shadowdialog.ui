@@ -61,7 +61,7 @@
                                 <cstring>colorgroup</cstring>
                             </property>
                             <property name="title">
-                                <string>Color and Distance</string>
+                                <string>Color &amp;&amp; Distance</string>
                             </property>
                             <vbox>
                                 <property name="name">

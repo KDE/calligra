@@ -988,7 +988,7 @@ void KSpreadView::initializeTextPropertyActions()
            SLOT( strikeOut( bool ) ) );
 
   /*******************************/
-  m_selectFont = new KFontAction( i18n("Select Font"), 0, actionCollection(),
+  m_selectFont = new KFontAction( i18n("Select Font..."), 0, actionCollection(),
                                   "selectFont" );
   connect( m_selectFont, SIGNAL( activated( const QString& ) ), this,
            SLOT( fontSelected( const QString& ) ) );
@@ -1088,7 +1088,7 @@ void KSpreadView::initializeSpellChecking()
 
 void KSpreadView::initializeRowColumnActions()
 {
-  m_adjust = new KAction( i18n("Adjust Row and Column"), 0, this,
+  m_adjust = new KAction( i18n("Adjust Row && Column"), 0, this,
                           SLOT( adjust() ), actionCollection(), "adjust" );
   m_adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
 

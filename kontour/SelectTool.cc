@@ -72,7 +72,7 @@ void SelectTool::activate()
 
   if(page->selectionIsEmpty())
   {
-    toolController()->view()->setStatus(i18n("Selection Mode"));
+    toolController()->view()->setStatus(i18n("Selection mode"));
     state = S_Init;
   }
   else

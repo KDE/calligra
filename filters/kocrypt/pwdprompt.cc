@@ -51,7 +51,7 @@ QGridLayout *grid = new QGridLayout(this, 3, 6, KDialog::marginHint(),
    else
      _prompt = new QLabel(i18n("Enter a passphrase for the document:"), this);
 
-   _ok = new QPushButton(i18n("&Ok"), this);
+   _ok = new QPushButton(i18n("&OK"), this);
    _cancel = new QPushButton(i18n("&Cancel"), this);
 
    _pwd->setMaxLength(56);

@@ -150,7 +150,7 @@ KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc, co
     noSignals=false;
     switchStyle();
     setInitialSize( QSize( 600, 370 ) );
-    setButtonText( KDialogBase::User1, i18n("Import From File") );
+    setButtonText( KDialogBase::User1, i18n("Import From File...") );
     connect(this, SIGNAL(user1Clicked()), this, SLOT(importFromFile()));
 }
 

@@ -41,8 +41,8 @@ AFChoose::AFChoose(QWidget *parent, const QString &caption, const char *name)
     : QTabDialog(parent,name,true)
 {
     setCaption(caption);
-    setCancelButton(i18n("Cancel"));
-    setOkButton(i18n("OK"));
+    setCancelButton(i18n("&Cancel"));
+    setOkButton(i18n("&OK"));
     groupList.setAutoDelete(true);
     getGroups();
     setupTabs();

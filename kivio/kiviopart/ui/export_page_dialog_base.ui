@@ -197,10 +197,10 @@ Abort the page export.</string>
                 <cstring>m_ok</cstring>
             </property>
             <property name="text">
-                <string>&amp;Ok</string>
+                <string>&amp;OK</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;b&gt;Ok&lt;/b&gt;&lt;br&gt;
+                <string>&lt;b&gt;OK&lt;/b&gt;&lt;br&gt;
 Export the page with the current settings.</string>
             </property>
         </widget>

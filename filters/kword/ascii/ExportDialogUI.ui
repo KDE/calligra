@@ -11,7 +11,7 @@
             <x>0</x>
             <y>0</y>
             <width>464</width>
-            <height>259</height>
+            <height>263</height>
         </rect>
     </property>
     <property name="caption">
@@ -67,7 +67,7 @@
                     </property>
                 </widget>
                 <spacer row="2" column="2">
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer3_2</cstring>
                     </property>
                     <property name="orientation">
@@ -75,12 +75,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
                 <widget class="QComboBox" row="2" column="1">
@@ -145,7 +139,7 @@
                         <cstring>radioEndOfLineCRLF</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Both: Line feed and carriage return</string>
+                        <string>&amp;Both: line feed and carriage return</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -165,7 +159,7 @@
             </vbox>
         </widget>
         <spacer>
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer3</cstring>
             </property>
             <property name="orientation">
@@ -173,12 +167,6 @@
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
     </vbox>

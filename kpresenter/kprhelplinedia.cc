@@ -68,7 +68,7 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
 {
     limitOfPage=_pageRect;
     m_doc=_doc;
-    setCaption( i18n("Add new Help Line") );
+    setCaption( i18n("Add New Help Line") );
     QVBox *page = makeVBoxMainWidget();
     QButtonGroup *group = new QButtonGroup( 1, QGroupBox::Horizontal,i18n("Orientation"), page );
     group->setRadioButtonExclusive( TRUE );
@@ -119,7 +119,7 @@ KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _p
     limitOfPage=_pageRect;
     m_doc=_doc;
     setButtonText( KDialogBase::User1, i18n("Remove") );
-    setCaption( i18n("Add new Help Point") );
+    setCaption( i18n("Add New Help Point") );
     QVBox *page = makeVBoxMainWidget();
     QLabel *lab=new QLabel(i18n("X position (%1):").arg(m_doc->getUnitName()), page);
     positionX= new KDoubleNumInput( page );

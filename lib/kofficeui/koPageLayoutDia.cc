@@ -284,7 +284,7 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
 /*================ setup format and borders tab ==================*/
 void KoPageLayoutDia::setupTab1()
 {
-    QWidget *tab1 = addPage(i18n( "Format and Borders" ));
+    QWidget *tab1 = addPage(i18n( "Format && Borders" ));
 
     QGridLayout *grid1 = new QGridLayout( tab1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 

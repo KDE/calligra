@@ -68,11 +68,11 @@
                         <cstring>editFilter</cstring>
                     </property>
                     <property name="text">
-                        <string>View or edit filter &amp;rules</string>
+                        <string>View or Edit Filter &amp;Rules</string>
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer1</cstring>
                     </property>
                     <property name="orientation">
@@ -81,12 +81,6 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
                 </spacer>
             </hbox>
         </widget>
@@ -94,7 +88,7 @@
             <property name="name">
                 <cstring>Line1</cstring>
             </property>
-            <property name="frameShape" stdset="0">
+            <property name="frameShape">
                 <enum>HLine</enum>
             </property>
             <property name="frameShadow">
@@ -130,7 +124,7 @@
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer2</cstring>
                     </property>
                     <property name="orientation">
@@ -138,12 +132,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
             </hbox>
@@ -167,7 +155,7 @@
     <include location="local" impldecl="in implementation">qtsqldatasourceeditor.ui.h</include>
 </includes>
 <slots>
-    <slot>filterCheckBox_toggled(bool fcb_state)</slot>
+    <slot>filterCheckBox_toggled( bool fcb_state )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

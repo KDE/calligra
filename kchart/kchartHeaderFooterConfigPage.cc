@@ -36,7 +36,7 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
     titleColorButton=new KColorButton(gb1);
     grid1->addWidget(titleColorButton,0,2);
 
-    titleFontButton=new QPushButton(i18n("Font"),gb1);
+    titleFontButton=new QPushButton(i18n("Font..."),gb1);
     grid1->addWidget(titleFontButton,0,3);
     connect( titleFontButton, SIGNAL(clicked()), this, SLOT(changeTitleFont()));
 
@@ -49,7 +49,7 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
     subtitleColorButton=new KColorButton(gb1);
     grid1->addWidget(subtitleColorButton,1,2);
 
-    subtitleFontButton=new QPushButton(i18n("Font"),gb1);
+    subtitleFontButton=new QPushButton(i18n("Font..."),gb1);
     grid1->addWidget(subtitleFontButton,1,3);
     connect( subtitleFontButton, SIGNAL(clicked()), this, SLOT(changeSubtitleFont()));
 
@@ -62,7 +62,7 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
     footerColorButton=new KColorButton(gb1);
     grid1->addWidget(footerColorButton,2,2);
 
-    footerFontButton=new QPushButton(i18n("Font"),gb1);
+    footerFontButton=new QPushButton(i18n("Font..."),gb1);
     connect( footerFontButton, SIGNAL(clicked()), this, SLOT(changeFooterFont()));
     grid1->addWidget(footerFontButton,2,3);
 

@@ -36,7 +36,7 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
   list->resize( list->sizeHint() );
   grid->addMultiCellWidget(list,0,4,0,0);
   fontButton = new QPushButton( this);
-  fontButton->setText(i18n("Font"));
+  fontButton->setText(i18n("Font..."));
 
   fontButton->resize( fontButton->sizeHint() );
   grid->addWidget( fontButton,2,1);

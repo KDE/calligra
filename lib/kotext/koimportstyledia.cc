@@ -38,7 +38,7 @@ KoImportStyleDia::KoImportStyleDia( const QStringList &_list, QWidget *parent, c
     m_listStyleName = new QListBox( page );
     m_listStyleName->setSelectionMode( QListBox::Multi );
     enableButtonOK( (m_listStyleName->count()!=0) );
-    setButtonText( KDialogBase::User1, i18n("Load") );
+    setButtonText( KDialogBase::User1, i18n("Load...") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotLoadFile()));
     resize (300, 400);
     setFocus();

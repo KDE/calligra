@@ -80,7 +80,7 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     grp->hide();
 
     footNoteTypeChanged();
-    setButtonText( KDialogBase::User1, i18n("C&onfigure") );
+    setButtonText( KDialogBase::User1, i18n("C&onfigure...") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotConfigurate()));
 }
 

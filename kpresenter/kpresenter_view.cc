@@ -3257,7 +3257,7 @@ void KPresenterView::setupActions()
                                     this, SLOT( changeHelpLinePosition() ),
                                                actionCollection(), "change_helplinepos" );
 
-    actionAddHelpLine = new KAction( i18n( "Add new Help Line..."), 0,
+    actionAddHelpLine = new KAction( i18n( "Add New Help Line..."), 0,
                                      this, SLOT(addHelpLine()),
                                      actionCollection(), "add_helpline");
 
@@ -3271,7 +3271,7 @@ void KPresenterView::setupActions()
                                     this, SLOT( changeHelpPointPosition() ),
                                                actionCollection(), "change_helppointpos" );
 
-    actionAddHelpLine = new KAction( i18n( "Add new Help Point..."), 0,
+    actionAddHelpLine = new KAction( i18n( "Add New Help Point..."), 0,
                                      this, SLOT(addHelpPoint()),
                                      actionCollection(), "add_helppoint");
 

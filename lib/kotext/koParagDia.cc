@@ -937,7 +937,7 @@ void KoIndentSpacingWidget::save( KoParagLayout & lay )
 
 QString KoIndentSpacingWidget::tabName()
 {
-    return i18n( "Indent and Spacing" );
+    return i18n( "Indent && Spacing" );
 }
 
 void KoIndentSpacingWidget::leftChanged( double _val )
@@ -2163,7 +2163,7 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
 
     if ( m_flags & PD_SPACING )
     {
-        QVBox * page = addVBoxPage( i18n( "Indent and Spacing" ) );
+        QVBox * page = addVBoxPage( i18n( "Indent && Spacing" ) );
         m_indentSpacingWidget = new KoIndentSpacingWidget( unit, breakLine,_frameWidth,page, "indent-spacing" );
     }
     if ( m_flags & PD_ALIGN )

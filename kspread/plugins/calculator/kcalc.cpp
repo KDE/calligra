@@ -1464,7 +1464,8 @@ void QtCalculator::configclicked(){
 
   tabdialog->setCaption( i18n("KCalc Configuraton") );
   tabdialog->resize( 360, 390 );
-  tabdialog->setCancelButton( i18n("Cancel") );
+  tabdialog->setCancelButton( i18n("&Cancel") );
+  tabdialog->setOKButton(i18n("&OK"));
 
   QWidget *about = new QWidget(tabdialog,"about");
   QVBoxLayout *lay1 = new QVBoxLayout( about );

@@ -245,7 +245,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   }
   else
   {
-    setCaption( i18n( "Text To Columns" ) );
+    setCaption( i18n( "Text to Columns" ) );
     m_data = "";
     KSpreadCell  * cell;
     KSpreadTable * table = m_pView->activeTable();
