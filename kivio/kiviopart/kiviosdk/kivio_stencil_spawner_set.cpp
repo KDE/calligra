@@ -36,7 +36,7 @@ KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
       m_pSelected(NULL)
 {
     m_dir = "";
-    m_name = name.isEmpty() ? QString("Untitled") : name;
+    m_name = name.isEmpty() ? QString("Undescriptiond") : name;
 
     m_pSpawners = new QPtrList<KivioStencilSpawner>;
     m_pSpawners->setAutoDelete(true);
@@ -162,7 +162,7 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
   QDomElement root, nodeElement;
   QDomNode node;
   QString nodeName;
-  QString title, origTitle;
+  QString description, origTitle;
   QFile f(dir+"/desc");
 
   if( f.open( IO_ReadOnly )==false )
@@ -185,7 +185,7 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
     if( nodeName.compare("Title")==0 && nodeElement.hasAttribute("lang"))
     {
       if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
-        title = XmlReadString( nodeElement, "data", dir );
+        description = XmlReadString( nodeElement, "data", dir );
       }
     }
     else if( nodeName.compare("Title")==0 && !nodeElement.hasAttribute("lang"))
@@ -196,59 +196,107 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
     node = node.nextSibling();
   }
 
-  if(title.isEmpty()) {
-    title = i18n( "Stencils", origTitle.utf8() );
+  if(description.isEmpty()) {
+    description = i18n( "Stencils", origTitle.utf8() );
   }
   
-  return title;
+  return description;
 }
 
 QString KivioStencilSpawnerSet::readId( const QString &dir )
 {
-   QDomDocument d("StencilSPawnerSet");
-   QDomElement root;
-   QDomNode node;
-   QString nodeName;
-   QString theid;
-   QFile f(dir+"/desc");
+  QDomDocument d("StencilSPawnerSet");
+  QDomElement root;
+  QDomNode node;
+  QString nodeName;
+  QString theid;
+  QFile f(dir+"/desc");
 
-   if( f.open( IO_ReadOnly )==false )
-   {
-      kdDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
-	 dir << "/desc" << endl;
-      return "";
-   }
+  if( f.open( IO_ReadOnly )==false )
+  {
+    kdDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
+        dir << "/desc" << endl;
+    return "";
+  }
 
-   d.setContent(&f);
+  d.setContent(&f);
 
-   root = d.documentElement();
-   node = root.firstChild();
+  root = d.documentElement();
+  node = root.firstChild();
 
-   while( !node.isNull() )
-   {
-      nodeName = node.nodeName();
+  while( !node.isNull() )
+  {
+    nodeName = node.nodeName();
 
-      if( nodeName.compare("Id")==0 )
-      {
-	 theid = XmlReadString( node.toElement(), "data", dir );
-	 return theid;
-      }
+    if( nodeName.compare("Id")==0 )
+    {
+      theid = XmlReadString( node.toElement(), "data", dir );
+      return theid;
+    }
 
-      node = node.nextSibling();
-   }
+    node = node.nextSibling();
+  }
 
-   kdDebug(43000) << "KivioStencilSpawnerSet::readId() - No id found in "
-	     << dir << "/desc" << endl;
+  kdDebug(43000) << "KivioStencilSpawnerSet::readId() - No id found in "
+  << dir << "/desc" << endl;
 
-   return "";
+  return "";
 }
+
+QString KivioStencilSpawnerSet::readDescription(const QString& dir)
+{
+  QDomDocument d("StencilSPawnerSet");
+  QDomElement root, nodeElement;
+  QDomNode node;
+  QString nodeName;
+  QFile f(dir + "/desc");
+
+  if( f.open( IO_ReadOnly )==false )
+  {
+    kdDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
+      dir << "/desc" << endl;
+    return "";
+  }
+
+  d.setContent(&f);
+
+  root = d.documentElement();
+  node = root.firstChild();
+  QString description, origDesc;
+
+  while( !node.isNull() )
+  {
+    nodeName = node.nodeName();
+    nodeElement = node.toElement();
+
+    if( nodeName.compare("Description")==0 && nodeElement.hasAttribute("lang"))
+    {
+      if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
+        description = nodeElement.text();
+      }
+    }
+    else if( nodeName.compare("Description")==0 && !nodeElement.hasAttribute("lang"))
+    {
+      origDesc = nodeElement.text();
+    }
+  
+    node = node.nextSibling();
+  }
+
+  if(description.isEmpty() && !origDesc.isEmpty()) {
+    description = i18n( "Stencils", origDesc.utf8() );
+  }
+  
+  return description;
+}
+
 
 KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& id)
 {
     KivioStencilSpawner *pSpawner = m_pSpawners->first();
     while( pSpawner )
     {
-        // If the title matches, this is it!
+        // If the description matches, this is it!
         if( pSpawner->info()->id() == id )
         {
             return pSpawner;

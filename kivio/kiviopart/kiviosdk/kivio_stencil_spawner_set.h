@@ -65,6 +65,7 @@ class KivioStencilSpawnerSet
 
     static QString readTitle( const QString & );
     static QString readId( const QString & );
+    static QString readDescription(const QString&);
     
     QStringList files() const { return m_files; }
 };

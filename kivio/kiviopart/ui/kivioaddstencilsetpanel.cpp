@@ -24,6 +24,7 @@
 #include <qiconview.h>
 #include <qgroupbox.h>
 #include <qpushbutton.h>
+#include <qtextbrowser.h>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -146,6 +147,8 @@ namespace Kivio {
     {
       (void) new QIconViewItem(m_stencilIView, "", QPixmap(m_currentDir + "/" + (*it)));
     }
+  
+    m_descriptionBrowser->setText(KivioStencilSpawnerSet::readDescription(m_currentDir));
   }
 
   void AddStencilSetPanel::addToDocument()
