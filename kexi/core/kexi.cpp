@@ -62,7 +62,7 @@ KEXICORE_EXPORT QString Kexi::string2Identifier(const QString &s)
 
 //--------------------------------------------------------------------------------
 
-IdentifierValidator::IdentifierValidator(QObject * parent, const char * name = 0)
+IdentifierValidator::IdentifierValidator(QObject * parent, const char * name)
 : QValidator(parent,name)
 {
 }
@@ -83,7 +83,7 @@ QValidator::State IdentifierValidator::validate( QString& input, int& pos) const
 	input = string2Identifier(input);
 	if (addspace)
 		input += "_";
-	if (pos>input.length())
+	if((uint)pos>input.length())
 		pos=input.length();
 	return input.isEmpty() ? Valid : Acceptable;
 }

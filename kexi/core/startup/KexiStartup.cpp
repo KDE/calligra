@@ -33,8 +33,7 @@
 
 using namespace Kexi;
 
-KEXICORE_EXPORT KexiProjectData* Kexi::detectProjectData( const QString &fname, 
-	QWidget *parent = 0 )
+KEXICORE_EXPORT KexiProjectData* Kexi::detectProjectData( const QString &fname, QWidget *parent)
 {
 	KexiProjectData *projectData = 0;
 	QFileInfo finfo(fname);
