@@ -59,7 +59,8 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     m_mainview( view ),
 	m_currentItem(0),
     m_taskView(0),
-    m_showSlack(true)
+    m_showSlack(true),
+    m_firstTime(true)
 {
 
     setOrientation(QSplitter::Vertical);
@@ -106,6 +107,10 @@ void KPTGanttView::draw(KPTProject &project)
     if (m_currentItem)
         m_gantt->setSelected(m_currentItem, true);
     
+    if (m_firstTime) {
+        m_gantt->centerTimelineAfterShow(project.startTime().addDays(-1));
+        m_firstTime = false;
+    }
     m_gantt->setUpdateEnabled(true);
 }
 
