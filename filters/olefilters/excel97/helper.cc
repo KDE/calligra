@@ -859,7 +859,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "ENT",              197,  0 },  /* EXCEL: TRUNC */
 	{ "ISLOGICAL",        198,  1 },
 	{ "DCOUNTA",          199,  3 },
-	{ "CEIL",             212,  2 },  /* EXCEL: ROUNDUP */
+	{ "ROUNDUP",          212,  2 }, 
 	{ "ROUNDDOWN",        213,  2 },
 	{ "RANK",             216,  0 },
 	{ "ADDRESS",          219,  0 },
