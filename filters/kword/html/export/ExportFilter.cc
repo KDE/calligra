@@ -92,8 +92,8 @@ QString HtmlWorker::escapeCssIdentifier(const QString& strText) const
 
 QString HtmlWorker::textFormatToCss(const TextFormatting& formatData) const
 {
-    // TODO: as this method comes form the AbiWord filter,
-    //  verify that it is
+    // TODO: as this method comes from the AbiWord filter,
+    // TODO:   verify that it is working for HTML
 
     // TODO: rename variable formatData
     QString strElement; // TODO: rename this variable
@@ -170,6 +170,8 @@ QString HtmlWorker::textFormatToCss(const TextFormatting& formatData) const
     // As this is the last property, do not put a semi-colon
     //strElement+="; ";
 
+    // TODO: KWord's <SHADOW>
+
     return strElement;
 }
 
@@ -199,7 +201,8 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
         QValueList<ParaData>::ConstIterator itPara;
         for (itPara=(*itCell).paraList->begin(); itPara!=(*itCell).paraList->end(); itPara++)
         {
-            // For now, just show the text. (Not sure if we can do anything else at all in HTML!)
+            // TODO: formatting/layout (take it from the first paragraph)
+            // For now, just show the text.
             *m_streamOut << escapeHtmlText((*itPara).text);
         }
 
@@ -216,6 +219,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
     *m_streamOut << "<img "; // This is an emüty element!
 
     QString strImageName=m_fileName;
+    strImageName+='.';
 
     const int result=anchor.picture.koStoreName.findRev("/");
     if (result>=0)
@@ -245,11 +249,10 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
     file.writeBlock(image);
     file.close();
 
-    // PROVISORY: just make a fake URL
     *m_streamOut << "src=\"" << strImageName << "\" ";
     *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key) << "\"";
     *m_streamOut << (isXML()?"/>":">") << "\n";
-    
+
 }
 
 QString HtmlWorker::getFormatTextParagraph(const QString& strText, const FormatData& format)
@@ -257,7 +260,7 @@ QString HtmlWorker::getFormatTextParagraph(const QString& strText, const FormatD
     QString outputText;
     if (format.text.missing)
     {
-        //Format is not issued from KWord. Therefore is only the layout
+        //Format is not issued from KWord. Therefore it is only the layout
         // So it is only the text
         if (strText==" ")
         {//Just a space as text. Therefore we must use a non-breaking space.
@@ -266,14 +269,13 @@ QString HtmlWorker::getFormatTextParagraph(const QString& strText, const FormatD
         }
         else
         {
-            //Code all possible predefined HTML entities
             outputText += escapeHtmlText(strText);
         }
     }
     else
     {
         // TODO: first and last characters of partialText should not be a space (white space problems!)
-        // TODO: replace multiples spaces in non-breaking spaces!
+        // TODO: replace multiples spaces by non-breaking spaces!
         // Opening elements
         outputText+="<span style=\"";
 
@@ -303,7 +305,6 @@ QString HtmlWorker::getFormatTextParagraph(const QString& strText, const FormatD
         }
         else
         {
-            //Code all possible predefined HTML entities
             outputText += escapeHtmlText(strText);
         }
 
@@ -538,7 +539,7 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
     if (strParaText.isEmpty())
     {
         //An empty paragraph is not allowed in HTML, so add a non-breaking space!
-        strParaText="&nbsp;";
+        strParaText=QChar(160);
     }
 
     // As KWord has only one depth of lists, we can process lists very simply.
