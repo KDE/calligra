@@ -397,3 +397,11 @@ Reggie, 21.8.1999:
   when editing it
 - A bit more work on the presentation structure viewer/editor
 - Another fix in the pixmap collection
+
+Reggie, 22.8.1999:
+------------------
+- Some speed improvements
+- Fixed some flicker
+- When zooming for a screenpresentation zoom spacing-values of
+  the textobject too
+

@@ -63,7 +63,7 @@
 
 /*====================== constructor =============================*/
 Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
-    : QWidget( parent, name )
+    : QWidget( parent, name ), buffer( size() )
 {
     setWFlags( WResizeNoErase );
 
@@ -135,9 +135,8 @@ void Page::draw( QRect _rect, QPainter *p )
 void Page::paintEvent( QPaintEvent* paintEvent )
 {
     QPainter painter;
-    QPixmap pix( width(), height() );
 
-    painter.begin( &pix );
+    painter.begin( &buffer );
 
     if ( editMode || !editMode && !fillBlack )
 	painter.fillRect( paintEvent->rect().x(), paintEvent->rect().y(),
@@ -154,7 +153,7 @@ void Page::paintEvent( QPaintEvent* paintEvent )
 
     painter.end();
 
-    bitBlt( this, paintEvent->rect().x(), paintEvent->rect().y(), &pix,
+    bitBlt( this, paintEvent->rect().x(), paintEvent->rect().y(), &buffer,
 	    paintEvent->rect().x(), paintEvent->rect().y(), paintEvent->rect().width(), paintEvent->rect().height() );
 }
 
@@ -1148,9 +1147,13 @@ void Page::keyPressEvent( QKeyEvent *e )
 /*========================= resize Event =========================*/
 void Page::resizeEvent( QResizeEvent *e )
 {
-    if ( editMode ) QWidget::resizeEvent( e );
-    else QWidget::resizeEvent( new QResizeEvent( QSize( QApplication::desktop()->width(), QApplication::desktop()->height() ),
-						 e->oldSize() ) );
+    if ( editMode ) 
+	QWidget::resizeEvent( e );
+    else 
+	QWidget::resizeEvent( new QResizeEvent( QSize( QApplication::desktop()->width(), QApplication::desktop()->height() ),
+						e->oldSize() ) );
+    if ( editMode )
+	buffer.resize( size() );
 }
 
 /*========================== get object ==========================*/
@@ -1761,7 +1764,7 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
     presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
     currPresStep = *presStepList.begin();
     subPresStep = 0;
-    repaint( true );
+    repaint( FALSE );
     setCursor( blankCursor );
 
     view->kPresenterDoc()->getHeaderFooterEdit()->updateSizes();
@@ -1799,7 +1802,7 @@ void Page::stopScreenPresentation()
     goingBack = false;
     currPresPage = 1;
     editMode = true;
-    repaint( true );
+    repaint( FALSE );
     setToolEditMode( toolEditMode );
     tmpObjs.clear();
     setWFlags( WResizeNoErase );
@@ -3287,7 +3290,7 @@ void Page::insertEllipse( QRect _r )
 {
     view->kPresenterDoc()->insertCircleOrEllipse( _r, view->getPen(), view->getBrush(), view->getFillType(),
 						  view->getGColor1(), view->getGColor2(),
-						  view->getGType(), view->getGUnbalanced(), view->getGXFactor(), view->getGYFactor(), 
+						  view->getGType(), view->getGUnbalanced(), view->getGXFactor(), view->getGYFactor(),
 						  diffx(), diffy() );
 }
 
@@ -3297,7 +3300,7 @@ void Page::insertPie( QRect _r )
     view->kPresenterDoc()->insertPie( _r, view->getPen(), view->getBrush(), view->getFillType(),
 				      view->getGColor1(), view->getGColor2(), view->getGType(),
 				      view->getPieType(), view->getPieAngle(), view->getPieLength(),
-				      view->getLineBegin(), view->getLineEnd(), view->getGUnbalanced(), view->getGXFactor(), view->getGYFactor(), 
+				      view->getLineBegin(), view->getLineEnd(), view->getGUnbalanced(), view->getGXFactor(), view->getGYFactor(),
 				      diffx(), diffy() );
 }
 
@@ -3308,7 +3311,7 @@ void Page::insertAutoform( QRect _r, bool rev )
     view->kPresenterDoc()->insertAutoform( _r, view->getPen(), view->getBrush(),
 					   !rev ? view->getLineBegin() : view->getLineEnd(), !rev ? view->getLineEnd() : view->getLineBegin(),
 					   view->getFillType(), view->getGColor1(), view->getGColor2(), view->getGType(),
-					   autoform, view->getGUnbalanced(), view->getGXFactor(), view->getGYFactor(), 
+					   autoform, view->getGUnbalanced(), view->getGXFactor(), view->getGYFactor(),
 					   diffx(), diffy() );
 }
 

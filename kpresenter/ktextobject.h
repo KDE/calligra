@@ -854,6 +854,9 @@ public:
      */
     int find( TxtLine *l ) { return lineList.findRef( l ); }
 
+    void setOrigSpacings( int ls, int db, int da );
+    void getOrigSpacings( int &ls, int &db, int &da );
+    
 protected:
 
     unsigned int widthToNextSep( unsigned int );
@@ -872,7 +875,8 @@ protected:
     QList<RegExpMode> *regExpList;
     int _depth, _leftIndent;
     int lineSpacing, distBefore, distAfter;
-
+    int oLineSpacing, oDistBefore, oDistAfter;
+    
 };
 
 /******************************************************************/

@@ -71,7 +71,7 @@ void SetBackCmd::execute()
 	    doc->restoreBackground( i );
     }
 
-    doc->repaint( true );
+    doc->repaint( false );
 }
 
 /*====================== unexecute ===============================*/
@@ -100,6 +100,6 @@ void SetBackCmd::unexecute()
 	    doc->restoreBackground( i );
     }
 
-    doc->repaint( true );
+    doc->repaint( false );
 }
 

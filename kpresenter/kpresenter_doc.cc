@@ -3432,10 +3432,8 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 
     if ( _insPos == IP_BEFORE ) _page--;
 
-    if ( _insPageMode == IPM_MOVE_OBJS )
-    {
-	for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
-	{
+    if ( _insPageMode == IPM_MOVE_OBJS ) {
+	for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	    kpobject = objectList()->at( i );
 	    if ( getPageOfObj( i, 0, 0 ) - 1 > _page )
 		kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() + _h );

@@ -1496,6 +1496,22 @@ void TxtParagraph::setDepth( int d )
     _leftIndent = fm.width( 'W' ) * _depth;
 }
 
+/*================================================================*/
+void TxtParagraph::setOrigSpacings( int ls, int db, int da )
+{
+    oLineSpacing = ls;
+    oDistBefore = db;
+    oDistAfter = da;
+}
+
+/*================================================================*/
+void TxtParagraph::getOrigSpacings( int &ls, int &db, int &da )
+{
+    ls = oLineSpacing;
+    db = oDistBefore;
+    da = oDistAfter;
+}
+
 /******************************************************************/
 /* class KTextObject - KTextObject				  */
 /******************************************************************/
@@ -1756,16 +1772,19 @@ void KTextObject::zoom( float _fakt )
     unsigned int i, j, k;
     QFont font;
 
-    for ( i = 0; i < paragraphs(); i++ )
-    {
+    for ( i = 0; i < paragraphs(); i++ ) {
 	txtParagraph = paragraphAt( i );
-
-	for ( j = 0; j < txtParagraph->lines(); j++ )
-	{
+	txtParagraph->setOrigSpacings( txtParagraph->getLineSpacing(),
+				       txtParagraph->getDistBefore(),
+				       txtParagraph->getDistAfter() );
+	txtParagraph->setLineSpacing( static_cast<int>( static_cast<float>( txtParagraph->getLineSpacing() ) * _fakt ) );
+	txtParagraph->setDistBefore( static_cast<int>( static_cast<float>( txtParagraph->getDistBefore() ) * _fakt ) );
+	txtParagraph->setDistAfter( static_cast<int>( static_cast<float>( txtParagraph->getDistAfter() ) * _fakt ) );
+	
+	for ( j = 0; j < txtParagraph->lines(); j++ ) {
 	    txtLine = txtParagraph->lineAt( j );
 
-	    for ( k = 0; k < txtLine->items(); k++ )
-	    {
+	    for ( k = 0; k < txtLine->items(); k++ ) {
 		txtObj = txtLine->itemAt( k );
 		font = txtObj->font();
 		txtObj->setOrigSize( txtObj->font().pointSize() );
@@ -1782,15 +1801,13 @@ void KTextObject::zoom( float _fakt )
     objEnumListType.font = font;
 
     objUnsortListType.ofont->clear();
-    for ( i = 0; i < 16; i++ )
-    {
+    for ( i = 0; i < 16; i++ ) {
 	font = *objUnsortListType.font->at( i );
 	objUnsortListType.ofont->append( new QFont( font ) );
     }
 
     objUnsortListType.font->clear();
-    for ( i = 0; i < 16; i++ )
-    {
+    for ( i = 0; i < 16; i++ ) {
 	font = *objUnsortListType.ofont->at( i );
 	font.setPointSize( static_cast<int>( static_cast<float>( font.pointSize() ) * _fakt ) );
 	objUnsortListType.font->append( new QFont( font ) );
@@ -1811,16 +1828,18 @@ void KTextObject::zoomOrig()
     unsigned int i, j, k;
     QFont font;
 
-    for ( i = 0; i < paragraphs(); i++ )
-    {
+    for ( i = 0; i < paragraphs(); i++ ) {
 	txtParagraph = paragraphAt( i );
-
-	for ( j = 0; j < txtParagraph->lines(); j++ )
-	{
+	int ls, db, da;
+	txtParagraph->getOrigSpacings( ls, db, da );
+	txtParagraph->setLineSpacing( ls );
+	txtParagraph->setDistBefore( db );
+	txtParagraph->setDistAfter( da );
+	
+	for ( j = 0; j < txtParagraph->lines(); j++ ) {
 	    txtLine = txtParagraph->lineAt( j );
 
-	    for ( k = 0; k < txtLine->items(); k++ )
-	    {
+	    for ( k = 0; k < txtLine->items(); k++ ) {
 		txtObj = txtLine->itemAt( k );
 		font = txtObj->font();
 		font.setPointSize( txtObj->origSize() );

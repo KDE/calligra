@@ -27,6 +27,7 @@
 
 #include <qrect.h>
 #include <qsize.h>
+#include <qpixmap.h>
 #include <qpoint.h>
 
 #include <koQueryTypes.h>
@@ -177,7 +178,7 @@ protected:
     float objSpeedFakt();
     float pageSpeedFakt();
     bool calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio );
-    
+
     void _repaint( bool erase=true );
     void _repaint( QRect r );
     void _repaint( KPObject *o );
@@ -231,6 +232,7 @@ protected:
     QString autoform;
     bool inEffect, keepRatio;
     double ratio;
+    QPixmap buffer;
     
 public slots:
     void chPic();

@@ -510,7 +510,7 @@ protected:
     CORBA::Long m_idMenuExtra_Options;
     CORBA::Long m_idMenuExtra_WepPres;
 
-// screenpresentation menu
+    // screenpresentation menu
     OpenPartsUI::Menu_var m_vMenuScreen;
     CORBA::Long m_idMenuScreen_ConfigPage;
     CORBA::Long m_idMenuScreen_PresStructView;
@@ -538,16 +538,16 @@ protected:
     CORBA::Long m_idMenuScreen_PenW9;
     CORBA::Long m_idMenuScreen_PenW10;
 
-// help menu
+    // help menu
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_Contents;
 
-// right button popup menus
+    // right button popup menus
     QPopupMenu *rb_pen, *rb_pen_width, *rb_oalign, *rb_lbegin, *rb_lend;
 
     int W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, P_COL;
 
-// edit toolbar
+    // edit toolbar
     OpenPartsUI::ToolBar_var m_vToolBarEdit;
     CORBA::Long m_idButtonEdit_Undo;
     CORBA::Long m_idButtonEdit_Redo;
@@ -556,13 +556,13 @@ protected:
     CORBA::Long m_idButtonEdit_Paste;
     CORBA::Long m_idButtonEdit_Delete;
 
-// insert toolbar
+    // insert toolbar
     OpenPartsUI::ToolBar_var m_vToolBarInsert;
     CORBA::Long m_idButtonInsert_Page;
     CORBA::Long m_idButtonInsert_Picture;
     CORBA::Long m_idButtonInsert_Clipart;
 
-// tools toolbar
+    // tools toolbar
     OpenPartsUI::ToolBar_var m_vToolBarTools;
     CORBA::Long m_idButtonTools_Mouse;
     CORBA::Long m_idButtonTools_Line;
@@ -576,7 +576,7 @@ protected:
     CORBA::Long m_idButtonTools_Formula;
     CORBA::Long m_idButtonTools_Part;
 
-// text toolbar
+    // text toolbar
     OpenPartsUI::ToolBar_var m_vToolBarText;
     CORBA::Long m_idComboText_FontSize;
     CORBA::Long m_idComboText_FontList;
@@ -594,7 +594,7 @@ protected:
     CORBA::Long m_idButtonText_DepthMinus;
     CORBA::Long m_idButtonText_Spacing;
 
-// extra toolbar
+    // extra toolbar
     OpenPartsUI::ToolBar_var m_vToolBarExtra;
     CORBA::Long m_idButtonExtra_Style;
     CORBA::Long m_idButtonExtra_Pie;
@@ -608,7 +608,7 @@ protected:
     CORBA::Long m_idButtonExtra_LineEnd;
     CORBA::Long m_idButtonExtra_WebPres;
 
-// screen toolbar
+    // screen toolbar
     OpenPartsUI::ToolBar_var m_vToolBarScreen;
     CORBA::Long m_idButtonScreen_Stop;
     CORBA::Long m_idButtonScreen_Pause;
@@ -621,15 +621,15 @@ protected:
     CORBA::Long m_idButtonScreen_Full;
     CORBA::Long m_idButtonScreen_Pen;
 
-// color bar
+    // color bar
     OpenPartsUI::ColorBar_var m_vColorBar;
 
-// scrollbars
+    // scrollbars
     QScrollBar *vert, *horz;
     int xOffset, yOffset;
     int _xOffset, _yOffset;
 
-// dialogs
+    // dialogs
     BackDia *backDia;
     AFChoose *afChoose;
     StyleDia *styleDia;
@@ -647,7 +647,7 @@ protected:
     ConfRectDia *confRectDia;
     SpacingDia *spacingDia;
 
-// default pen and brush
+    // default pen and brush
     QPen pen;
     QBrush brush;
     LineEnd lineBegin;
@@ -661,11 +661,11 @@ protected:
     int pieLength, pieAngle;
     int rndX, rndY;
 
-// the page
+    // the page
     Page *page;
     KoRuler *h_ruler, *v_ruler;
 
-// text toolbar values
+    // text toolbar values
     QFont tbFont;
     TxtParagraph::HorzAlign tbAlign;
     QColor tbColor;
@@ -684,7 +684,7 @@ protected:
 
     KPresenterShell *shell;
 
-// ids
+    // ids
     static const int ID_TOOL_MOUSE = 2;
     static const int ID_TOOL_LINE = 3;
     static const int ID_TOOL_RECT = 4;
