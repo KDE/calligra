@@ -358,7 +358,7 @@ void Document::Attributes::setRuns(
             m_field.separator = i; //chpxs[i].startFc;
             if (chp->fOle2)
             {
-                kdDebug(s_area) << "Document::createAttributes: OLE2 object" << endl;
+                kdDebug(s_area) << "Document::Attributes::setRuns: OLE2 object" << endl;
                 Object *object = new Object;
 
                 // All we know about the object is its storage id...
@@ -370,7 +370,7 @@ void Document::Attributes::setRuns(
             }
             else
             {
-                kdDebug(s_area) << "Document::createAttributes: embedded object" << endl;
+                kdDebug(s_area) << "Document::Attributes::setRuns: embedded object" << endl;
 
                 // TBD: verify object support!
 
@@ -447,7 +447,7 @@ void Document::Attributes::setRuns(
                     }
                     if (found)
                     {
-                        kdDebug(s_area) << "Document::createAttributes: drawing type: " <<
+                        kdDebug(s_area) << "Document::Attributes::setRuns: drawing type: " <<
                             drawingType << endl;
                         if ((drawingType == "wmf") ||
                             (drawingType == "msod"))
@@ -479,7 +479,7 @@ void Document::Attributes::setRuns(
                     }
                     else
                     {
-                        kdError(s_area) << "Document::createAttributes: cannot find drawing:" <<
+                        kdError(s_area) << "Document::Attributes::setRuns: cannot find drawing:" <<
                             (m_doc->m_characterPosition + chpxs[i].startFc) << endl;
                     }
                 }
@@ -490,7 +490,7 @@ void Document::Attributes::setRuns(
                     &fieldType);
                 m_field.fieldType = static_cast<fieldTypes>(fieldType);
                 m_field.start = i;
-                kdDebug(s_area) << "Document::createAttributes: set field type: " <<
+                kdDebug(s_area) << "Document::Attributes::setRuns: set field type: " <<
                     m_field.fieldType << endl;
                 break;
             case SPECIAL_FIELD_SEPARATOR:
@@ -501,7 +501,7 @@ void Document::Attributes::setRuns(
                 rewriteField(text, chpxs);
                 break;
             default:
-                kdError(s_area) << "Document::createAttributes: unsupported object type:" <<
+                kdError(s_area) << "Document::Attributes::setRuns: unsupported object type:" <<
                     text[chpxs[i].startFc].unicode() << endl;
                 break;
             }
