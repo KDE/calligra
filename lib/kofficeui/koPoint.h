@@ -31,6 +31,7 @@ class KoPoint {
 public:
     KoPoint() { m_x = 0; m_y = 0; }
     KoPoint(const double &x, const double &y) : m_x(x), m_y(y) {}
+    KoPoint(const QPoint & p) : m_x(p.x()), m_y(p.y()) {}
     ~KoPoint() {}
 
     bool operator==(const KoPoint &rhs) const { return m_x==rhs.x() && m_y==rhs.y(); }

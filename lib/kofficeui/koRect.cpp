@@ -71,6 +71,17 @@ void KoRect::setCoords(const double &x1, const double &y1, const double &x2, con
     m_br.setCoords( x2, y2 );
 }
 
+void KoRect::setSize(const KoSize &size)
+{
+    setWidth(size.width());
+    setHeight(size.height());
+}
+
+KoSize KoRect::size() const
+{
+    return KoSize(width(), height());
+}
+
 KoRect &KoRect::operator|=(const KoRect &rhs) {
 
     if(rhs.isEmpty())

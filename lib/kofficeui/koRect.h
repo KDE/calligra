@@ -21,6 +21,7 @@
 #define koRect_h
 
 #include "koPoint.h"
+#include "koSize.h"
 #include <qrect.h>
 
 /**
@@ -34,6 +35,8 @@ public:
         : m_tl(), m_br(-1, -1) {}
     KoRect(const KoPoint &topleft, const KoPoint &bottomright)
         : m_tl(topleft), m_br(bottomright) {}
+    KoRect(const KoPoint &topleft, const KoSize &size)
+        {m_tl = topleft; setSize(size);}
     KoRect(const double &left, const double &top, const double &width, const double &height)
         : m_tl(left,top), m_br(left+width,top+height) {}
     ~KoRect() {}
@@ -60,6 +63,9 @@ public:
     void setTop(const double &top) { m_tl.setY(top); }
     void setRight(const double &right) { m_br.setX(right); }
     void setBottom(const double &bottom) { m_br.setY(bottom); }
+    
+    void setX(const double &x) { m_tl.setX(x); } //same as setLeft()
+    void setY(const double &y) { m_tl.setY(y); } //same as setTop()
 
     KoPoint topLeft() const { return m_tl; }
     KoPoint bottomRight() const { return m_br; }
@@ -78,12 +84,12 @@ public:
     //void setRect(const QRect &rect);
     void setCoords(const double &x1, const double &y1, const double &x2, const double &y2);
 
-    //KoSize size() const;
+    KoSize size() const;
     double width() const { return m_br.x()-m_tl.x(); }
     double height() const { return m_br.y()-m_tl.y(); }
     void setWidth(const double &width) { m_br.setX(m_tl.x()+width); }
     void setHeight(const double &height) { m_br.setY(m_tl.y()+height); }
-    //void setSize(const KoSize &size);
+    void setSize(const KoSize &size);
 
     KoRect &operator|=(const KoRect &rhs);
     KoRect &operator&=(const KoRect &rhs);

@@ -26,7 +26,7 @@ include_HEADERS = koGlobal.h koFind.h koReplace.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koTemplateCreateDia.h \
 	kcoloractions.h koToolBox.h \
-	koRect.h koPictureFilePreview.h \
+	koRect.h koPoint.h koSize.h koPictureFilePreview.h \
 	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h
 
 METASOURCES = AUTO
