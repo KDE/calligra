@@ -108,11 +108,11 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
     // create angle button group
 
-
     QAccel *accel = new QAccel( this );
+#if 0
     accel->connectItem( accel->insertItem(Key_Q+ALT),this,SLOT(quitCalc()) );
     accel->connectItem( accel->insertItem(Key_X+ALT),this,SLOT(quitCalc()) );
-
+#endif
 
     QButtonGroup *angle_group = new QButtonGroup( 3, Horizontal,this, "AngleButtons" );
     angle_group->setTitle(i18n( "Angle") );
