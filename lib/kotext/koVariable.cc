@@ -343,9 +343,8 @@ void KoVariable::load( QDomElement & )
 KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
 {
     QCString string;
-    KDialogBase* dialog;
-    QWidget* widget;
     QStringList stringList;
+    // ###### Use KConfig("kofficerc"), it's much simpler
     KAboutData* kad=new KAboutData("koffice", "KOffice Library", "");
     KConfig * config;
     KInstance* instance;
@@ -357,8 +356,8 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_DATE:
         {
             //varFormat = coll->format( "DATE" );
-            dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
-            widget=new DateFormatWidget(dialog);
+            KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
+            DateFormatWidget* widget=new DateFormatWidget(dialog);
             dialog->setMainWidget(widget);
             instance=new KInstance(kad);
             config=instance->config();
@@ -390,20 +389,23 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             }
             if(!stringList.isEmpty())
 	      {
-                dynamic_cast<DateFormatWidget*>(widget)->combo1->insertItem("---");
-		dynamic_cast<DateFormatWidget*>(widget)->combo1->insertStringList(stringList);
+                widget->combo1->insertItem("---");
+		widget->combo1->insertStringList(stringList);
 	      }
 
 
             if(selectLast) {
-                QComboBox *combo= dynamic_cast<DateFormatWidget*>(widget)->combo1;
+                QComboBox *combo= widget->combo1;
                 combo->setCurrentItem(combo->count() -1);
-                dynamic_cast<DateFormatWidget*>(widget)->updateLabel();
+                widget->updateLabel();
             }
 
             if(dialog->exec()==QDialog::Accepted)
             {
-                string=dynamic_cast<DateFormatWidget*>(dialog->mainWidget())->resultString().utf8();
+                if ( widget->resultString() == i18n("Locale") )
+                    string = "locale"; // untranslated form
+                else
+                    string=widget->resultString().utf8();
             }
             else
             {
@@ -422,14 +424,14 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             delete dialog;
             delete kad;
             delete instance;
-            varFormat = coll->format( "DATE"
-                + QCString((subtype == KoDateVariable::VST_DATE_FIX) ? "1" : "0")
+            varFormat = coll->format( QCString("DATE")
+                + "0" // no support for short locale dates yet - TODO
                 + string );
             break;
         }
         case VT_TIME: {
-            dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
-            widget=new TimeFormatWidget(dialog);
+            KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
+            TimeFormatWidget* widget=new TimeFormatWidget(dialog);
             dialog->setMainWidget(widget);
             instance=new KInstance(kad);
             config=instance->config();
@@ -460,17 +462,20 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             }
             if(!stringList.isEmpty())
 	      {
-                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertItem("---");
-                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertStringList(stringList);
+                widget->combo1->insertItem("---");
+                widget->combo1->insertStringList(stringList);
 	      }
             if(selectLast) {
-                QComboBox *combo= dynamic_cast<TimeFormatWidget*>(widget)->combo1;
+                QComboBox *combo= widget->combo1;
                 combo->setCurrentItem(combo->count() -1);
             }
 
             if(dialog->exec()==QDialog::Accepted)
             {
-                string=dynamic_cast<TimeFormatWidget*>(dialog->mainWidget())->resultString().utf8();
+                if ( widget->resultString() == i18n("Locale") )
+                    string = "locale"; // untranslated form
+                else
+                    string=widget->resultString().utf8();
             }
             else
             {
