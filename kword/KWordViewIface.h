@@ -116,6 +116,8 @@ k_dcop:
     void deselectAllFrames();
     int currentPage();
     void convertTableToText();
+    void convertToTextBox();
+
 private:
     KWView *view;
 

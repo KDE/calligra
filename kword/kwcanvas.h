@@ -194,6 +194,8 @@ public:
     void setNumberingFootNoteType(KWFootNoteVariable::Numbering _type) { m_footEndNote.numberingType = _type; }
     bool selectAllFrames( bool select );
 
+    void createTextBox(const KoRect & rect );
+
 protected:
     void applyGrid( KoPoint &p );
     void applyAspectRatio( double ratio, KoRect& insRect );

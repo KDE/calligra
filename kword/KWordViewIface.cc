@@ -371,3 +371,8 @@ void KWordViewIface::convertTableToText()
 {
     view->convertTableToText();
 }
+
+void KWordViewIface::convertToTextBox()
+{
+    view->convertToTextBox();
+}

@@ -1242,6 +1242,16 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
     m_ctrlClickOnSelectedFrame = false;
 }
 
+void KWCanvas::createTextBox(const KoRect & rect )
+{
+    if ( rect.width() > m_doc->gridX() && rect.height() > m_doc->gridY() ) {
+        KWFrame *frame = new KWFrame(0L, rect.x(), rect.y(), rect.width(), rect.height() );
+        frame->setNewFrameBehavior(KWFrame::Reconnect);
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+	checkCurrentEdit(frame->frameSet(), true);
+    }
+}
+
 void KWCanvas::mrCreateText()
 {
     m_insRect = m_insRect.normalize();

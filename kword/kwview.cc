@@ -1155,6 +1155,9 @@ void KWView::setupActions()
                                                   this, SLOT( insertDirectCursor() ),
                                                   actionCollection(), "direct_cursor" );
 
+    actionConvertToTextBox = new KAction( i18n( "Convert to text box" ), 0,
+                                                  this, SLOT( convertToTextBox() ),
+                                                  actionCollection(), "convert_to_text_box" );
 
 
 }
@@ -2938,7 +2941,7 @@ void KWView::insertPicture()
             m_gui->canvasWidget()->setPictureKeepRatio( dia.keepRatio() );
         }
         else
-            showMouseMode( KWCanvas::MM_EDIT );
+            m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     }
     else
     {
@@ -6751,6 +6754,14 @@ void KWView::convertTableToText()
             m_doc->addCommand(macro);
             QApplication::clipboard()->clear();
         }
+    }
+}
+
+void KWView::convertToTextBox()
+{
+    KWTextFrameSetEdit* edit = currentTextEdit();
+    if ( edit && edit->textFrameSet()->protectContent()) {
+        //todo
     }
 }
 

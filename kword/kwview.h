@@ -386,6 +386,8 @@ public slots:
 
     void insertDirectCursor();
 
+    void convertToTextBox();
+
 protected slots:
     void slotSetInitialPosition();
 
@@ -635,6 +637,9 @@ private:
     KAction *actionImportStyle;
 
     KAction *actionCreateFrameStyle;
+
+    KAction *actionConvertToTextBox;
+
 
     KToggleAction *actionInsertDirectCursor;
 
