@@ -105,6 +105,8 @@ public:
 
 	void setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit );
 
+	bool mergeNativeFormat( const QString & file );
+
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool repaint = true );
@@ -121,6 +123,7 @@ private:
 	VCommandHistory* m_commandHistory;	/// maintain a command history for undo/redo
 
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
+	bool m_merge;
 	int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
 	DCOPObject *dcop;
 };

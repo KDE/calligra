@@ -712,7 +712,7 @@ VLayersTab::updateLayers()
 					else
 						m_objects[ itr.current() ]->setKey( objcount );
 
-					kdDebug() << "obj : " << itr.current() << ", key : " << m_objects[ itr.current() ]->key( 0, true ).latin1() << endl;
+					//kdDebug() << "obj : " << itr.current() << ", key : " << m_objects[ itr.current() ]->key( 0, true ).latin1() << endl;
 
 					if( dynamic_cast<VGroup *>( itr.current() ) )
 						updateObjects( itr.current(),  m_objects[ itr.current() ] );

@@ -61,6 +61,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 	initConfig();
 
+	m_merge = false;
+
 	if( name )
 		dcopObject();
 }
@@ -148,9 +150,29 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
 	bool success = false;
 
-	QDomElement root = document.documentElement();
+	QDomElement doc = document.documentElement();
 
-	success = m_doc.loadXML( root );
+	if( m_merge )
+	{
+		QDomNodeList list = doc.childNodes();
+		for( uint i = 0; i < list.count(); ++i )
+		{
+			if( list.item( i ).isElement() )
+			{
+				QDomElement e = list.item( i ).toElement();
+	
+				if( e.tagName() == "LAYER" )
+				{
+					VLayer* layer = new VLayer( &m_doc );
+					layer->load( e );
+					m_doc.insertLayer( layer );
+				}
+			}
+		}
+		return true;
+	}
+
+	success = m_doc.loadXML( doc );
 
 	m_pageLayout.ptWidth	= m_doc.width();
 	m_pageLayout.ptHeight	= m_doc.height();
@@ -336,6 +358,13 @@ KarbonPart::setUnit( KoUnit::Unit _unit )
 	{
 		static_cast<KarbonView*>( itr.current() )->setUnit( _unit );
 	}
+}
+bool
+KarbonPart::mergeNativeFormat( const QString &file )
+{
+	m_merge = true;
+	loadNativeFormat( file );
+	m_merge = false;
 }
 
 #include "karbon_part.moc"

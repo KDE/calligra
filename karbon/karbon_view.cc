@@ -30,7 +30,9 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <koMainWindow.h>
+#include <koFilterManager.h>
 #include <kstatusbar.h>
+#include <kfiledialog.h>
 #include <kstdaction.h>
 #include <kocontexthelp.h>
 #include <koUnitWidgets.h>
@@ -74,6 +76,8 @@
 #include "vstatebutton.h"
 #include "vcanvas.h"
 #include "vtoolbox.h"
+
+#include <unistd.h>
 
 // Only for debugging.
 #include <kdebug.h>
@@ -336,6 +340,36 @@ KarbonView::print( KPrinter &printer )
 	part()->document().draw( &p, &rect );
 
 	p.end();
+}
+
+void
+KarbonView::fileImportGraphic()
+{
+	KFileDialog *dialog = new KFileDialog( QString::null, QString::null, 0L, "Choose Graphic to Add", true);
+	QStringList filter;
+	filter << "image/svg+xml" << "application/x-karbon" << "image/x-wmf";
+	dialog->setMimeFilter( filter, "text/plain" );
+	if(dialog->exec()!=QDialog::Accepted) {
+		delete dialog;
+		return;
+	}
+	QString fname = dialog->selectedFile();
+	//kdDebug() << "in : " << fname.latin1() << endl;
+	//kdDebug() << "part()->document()->nativeFormatMimeType().latin1() : " << part()->nativeFormatMimeType() << endl;
+	//kdDebug() << "dialog->currentMimeFilter().latin1() : " << dialog->currentMimeFilter().latin1() << endl;
+	if( part()->nativeFormatMimeType() == dialog->currentMimeFilter().latin1() )
+		part()->mergeNativeFormat( fname );
+	else
+	{
+		KoFilterManager man( part() );
+		KoFilter::ConversionStatus status;
+		QString importedFile = man.import( fname, status );
+		part()->mergeNativeFormat( importedFile );
+		if( !importedFile.isEmpty() )
+			unlink( QFile::encodeName( importedFile ) );
+	}
+	delete dialog;
+	part()->repaintAllViews();
 }
 
 void
@@ -776,6 +810,11 @@ KarbonView::initActions()
 					   SLOT( editPaste() ), actionCollection(), "edit_paste" );
 	KStdAction::selectAll( this,
 						   SLOT( editSelectAll() ), actionCollection(), "edit_select_all" );
+
+	new KAction(
+		i18n( "&Import graphic" ), 0, 0, this,
+		SLOT( fileImportGraphic() ), actionCollection(), "file_import" );
+
 	new KAction(
 		i18n( "&Deselect All" ), QKeySequence( "Ctrl+D" ), this,
 		SLOT( editDeselectAll() ), actionCollection(), "edit_deselect_all" );

@@ -139,6 +139,8 @@ public slots:
 	void selectionAlignVerticalCenter();
 	void selectionAlignVerticalBottom();
 
+	void fileImportGraphic();
+
 	void groupSelection();
 	void ungroupSelection();
 
