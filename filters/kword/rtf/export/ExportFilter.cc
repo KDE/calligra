@@ -407,6 +407,8 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 else if (11==(*paraFormatDataIt).variable.m_type)
                 {
                     // Footnote
+                    QString value = (*paraFormatDataIt).variable.getFootnoteValue();
+                    bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
                     QValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
                     if( paraList )
                     {
@@ -414,9 +416,11 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         QValueList<ParaData>::ConstIterator it;
                         for (it=paraList->begin();it!=paraList->end();it++)
                             fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
-                        str += "{\\super \\chftn ";
+                        str += "{\\super ";
+                        str += automatic ? "\\chftn " : value;
                         str += "{\\footnote ";
-                        str += "{\\super \\chftn ";
+                        str += "{\\super ";
+                        str += automatic ? "\\chftn " : value;
                         str += fstr;
                         str += " }";
                         str += " }";
