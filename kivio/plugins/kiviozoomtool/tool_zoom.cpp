@@ -71,9 +71,11 @@ ZoomTool::ZoomTool(KivioView* view)
   connect(m_pZoomPage,SIGNAL(activated()),SLOT(zoomPage()));
 
   m_pZoomSelected = new KAction( i18n("Zoom Selected"), "kivio_zoom_selected", CTRL+Key_Y, actionCollection(), "zoomSelected" );
+  m_pZoomSelected->setWhatsThis(i18n("By pressing this button you zoom in on the document, so that all <b>selected</b> objects are visible."));
   connect(m_pZoomSelected,SIGNAL(activated()),SLOT(zoomSelected()));
 
   m_pZoomAllObjects = new KAction( i18n("Zoom All Objects"), "kivio_zoom_allobject", 0, actionCollection(), "zoomAllObjects" );
+  m_pZoomAllObjects->setWhatsThis(i18n("You are able to zoom in on the document, so that all objects are visible by pressing this button."));
   connect(m_pZoomAllObjects,SIGNAL(activated()),SLOT(zoomAllobjects()));
 
   QPixmap pix;
