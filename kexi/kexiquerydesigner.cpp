@@ -306,7 +306,6 @@ KexiQueryDesigner::slotTabActivated(int tab)
 	if(tab != m_activeTab)
 	{
 		m_tb->setTab(m_activeTab, false);
-		m_widgetStack->raiseWidget(m_parts[m_activeTab]);
 		
 		//please close your eyes and go some lines down (blind) 
 		if(m_parts[tab] == m_view && m_parts[m_activeTab] == m_editor)
@@ -315,6 +314,7 @@ KexiQueryDesigner::slotTabActivated(int tab)
 		}
 		
 		m_activeTab = tab;
+		m_widgetStack->raiseWidget(m_parts[m_activeTab]);
 	}
 	else
 	{

@@ -261,6 +261,13 @@ void KMultiTabBarTab::drawButton(QPainter *paint)
 			paint->setPen(colorGroup().background().dark(120));
 			paint->drawLine(1,0,1,23);
 
+			if (m_showAnyTabText)
+			{
+				paint->rotate(90);
+				paint->setPen(colorGroup().text());
+				paint->drawText(25,-width()/2+QFontMetrics(QFont()).height()/2,m_text);
+			}
+	
 		}
 		else
 		if ((position==KMultiTabBar::Bottom) || (position==KMultiTabBar::Top))

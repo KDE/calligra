@@ -50,6 +50,8 @@ class KexiDataTable : public KexiDialogBase
 
 		KexiDBRecord	*m_record;
 
+		bool		m_first;
+
 	protected slots:
 		void slotItemChanged(KexiTableItem *i, int col);
 

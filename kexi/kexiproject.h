@@ -54,6 +54,7 @@ public:
 	bool loadProject(const QString& url);
 
 	void addFileReference(QString path);
+	QStringList fileReferences() const;
 
 	bool initDbConnection(const Credentials& cred, const bool create = false);
 	bool initHostConnection(const Credentials &cred);
@@ -65,11 +66,13 @@ public:
 	KexiFormManager *formManager() {return m_formManager;}
 	QString url() { return m_url; }
 	bool modified() { return m_modified; }
+	bool dbIsAvaible() { return m_dbAvaible; }
 	QString boolToString(bool b);
 	bool stringToBool(const QString s);
 
 signals:
 	void docModified();
+	void dbAvaible();
 	void saving(KoStore *);
 
 protected:
@@ -82,6 +85,7 @@ private:
 	Credentials	m_cred;
 	QString		m_url;
 	bool		m_modified;
+	bool		m_dbAvaible;
 	QStringList	m_fileReferences;
 };
 

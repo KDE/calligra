@@ -79,6 +79,7 @@ void KexiBrowser::generateView()
 	m_reports = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Report, m_database, i18n("Reports"));
 
 	addTables(m_tables);
+	addQueries(m_queries);
 	
 	m_database->setPixmap(0, iconLoader->loadIcon("db", KIcon::Small));
 	m_tables->setPixmap(0, iconLoader->loadIcon("tables", KIcon::Small));
@@ -98,10 +99,29 @@ void KexiBrowser::addTables(KexiBrowserItem *parent)
 
 	QStringList tables = kexi->project()->db()->tables();
 
-	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
+	for(QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	{
 		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, parent, (*it) );
 		item->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
+	}
+}
+
+void KexiBrowser::addQueries(KexiBrowserItem *parent)
+{
+	kdDebug() << "KexiBrowser::addTables()" << endl;
+
+	QStringList fileRefs = kexi->project()->fileReferences();
+
+	for(QStringList::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
+	{
+		if((*it).contains(".query") != 0)
+		{
+			QStringList pList = QStringList::split("/", (*it), false);
+//			QString qName=(*pList.end()).left((*pList.end()).contains("."));
+			QString qName(*pList.end());
+			kdDebug() << "KexiProject::loadProject(): adding Q: " << qName << endl;
+			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, parent, qName);
+		}
 	}
 }
 

@@ -102,6 +102,7 @@ public:
 	void showActiveTabText(bool show);
 private:
 	bool m_showActiveTabText;
+	bool m_showAnyTabText;
 protected:
 	void updateState();
 	virtual void drawButton(QPainter *);

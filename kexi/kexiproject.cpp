@@ -189,8 +189,10 @@ KexiProject::loadProject(const QString& url)
 	QDomElement passElement = projectData.namedItem("password").toElement();
 	QDomElement savePassElement = projectData.namedItem("savePassword").toElement();
 
-	QDomElement fileRefs = projectData.namedItem("referenzes").toElement();
-	for(QDomNode n = fileRefs.firstChild(); !n.isNull(); n.nextSibling())
+	QDomElement fileRefs = projectData.namedItem("references").toElement();
+	QDomNodeList reflist = fileRefs.childNodes();
+	kdDebug() << "KexiProject::loadProject(): looking up references...: " << reflist.count() << endl;
+/*	for(QDomNode n = fileRefs.firstChild(); n != fileRefs.lastChild(); n.nextSibling())
 	{
 		QString reference = n.toText().data();
 		kdDebug() << "KexiProject::loadProject(): reference " << reference << endl;
@@ -200,6 +202,12 @@ KexiProject::loadProject(const QString& url)
 			QString qName=(*pList.end()).left((*pList.end()).contains("."));
 			kdDebug() << "KexiProject::loadProject(): adding Q: " << qName << endl;
 		}
+	}
+*/
+	for(int ci = 0; ci < reflist.count(); ci++)
+	{
+		QDomNode n = reflist.item(ci);
+		m_fileReferences.append(n.toElement().text());
 	}
 
 	Credentials parsedCred;
@@ -266,6 +274,8 @@ KexiProject::initDbConnection(const Credentials &cred, const bool create)
 		m_modified = true;
 //		kexi->mainWindow()->slotProjectModified();
 		emit docModified();
+		emit dbAvaible();
+		kdDebug() << "KexiProject::initDbConnection(): db is avaible now..." << endl;
 		return true;
 	}
 	else
@@ -349,6 +359,12 @@ KexiProject::stringToBool(const QString s)
 	{
 		return false;
 	}
+}
+
+QStringList
+KexiProject::fileReferences() const
+{
+	return m_fileReferences;
 }
 
 #include "kexiproject.moc"

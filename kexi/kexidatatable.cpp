@@ -66,6 +66,8 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name,
 
 	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
 
+	m_first = true;
+
 	if(!embedd)
 		registerAs(DocumentWindow);
 }
@@ -73,6 +75,10 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name,
 bool
 KexiDataTable::executeQuery(QString queryStatement)
 {
+
+	if(!m_first)
+		m_tableView->clearAll();
+
 	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
 	m_record = kexi->project()->db()->queryRecord(queryStatement, false);
 	
@@ -111,7 +117,8 @@ KexiDataTable::executeQuery(QString queryStatement)
 		insert->setHint(QVariant(record));
 		insert->setInsertItem(true);
 	}
-	
+
+	m_first = false;
 	return true;
 }
 

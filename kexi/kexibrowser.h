@@ -54,6 +54,8 @@ public:
 protected:
 	void			createForm();
 	void			addTables(KexiBrowserItem *parent);
+	void			addQueries(KexiBrowserItem *parent);
+
 	KexiBrowserItem*	m_tables;
 	KexiBrowserItem*	m_queries;
 	KexiBrowserItem*	m_forms;

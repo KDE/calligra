@@ -207,6 +207,11 @@ void KexiTableView::clear()
 	m_pVerticalHeader->setCurrentRow(-1);
 //	m_pUpdateTimer->start(1,true);
 	viewport()->repaint();
+
+	for(int i=0; i < m_pVerticalHeader->count(); i++)
+	{
+		m_pVerticalHeader->removeLabel(i);
+	}
 }
 
 void KexiTableView::clearAll()
@@ -234,6 +239,11 @@ void KexiTableView::clearAll()
 	m_pColumnTypes->resize(0);
 	m_pColumnModes->resize(0);
 	m_pColumnDefaults->clear();
+
+	for(int i=0; i < m_pVerticalHeader->count(); i++)
+	{
+		m_pVerticalHeader->removeLabel(i);
+	}
 }
 
 int KexiTableView::findString(const QString &string)
