@@ -31,11 +31,11 @@
 #include <qvaluelist.h>
 #include <qstring.h>
 
-#include <Handle.h>
+#include "Handle.h"
+#include "GDocument.h"
 
 #include <koPageLayoutDia.h>
 
-class GDocument;
 class GObject;
 class GLayer;
 class QDomDocument;
@@ -49,7 +49,7 @@ public:
   ~GPage ();
 
   void initialize ();
-  void setAutoUpdate (bool flag);
+  void setAutoUpdate (bool flag) { doc->setAutoUpdate(flag); };
 
   GDocument *document(void) const {return doc;};
 
@@ -145,10 +145,11 @@ public:
   KoPageLayout pageLayout ();
   void setPageLayout (const KoPageLayout& layout);
 
-   void emitHandleChanged();
+  void emitHandleChanged();
+
+  void updateHandle ();
 
 protected:
-  void updateHandle ();
   bool parseBody (const QDomElement &element, QList<GObject>& newObjs, bool markNew);
 
 public slots:

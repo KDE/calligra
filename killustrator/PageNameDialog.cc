@@ -73,7 +73,7 @@ void PageNameDialog::slotOk()
       KMessageBox::information( this, i18n("Page name cannot be empty."), i18n("Change page name"));
       return;
    }
-/*   if ( GPage *tbl = m_pView->activeDocument()->findPage( txt ) )
+   if ( GPage *tbl = m_pView->activeDocument()->findPage( txt ) )
    {
       if ( tbl != m_pView->activeDocument()->activePage() )
       {
@@ -82,7 +82,7 @@ void PageNameDialog::slotOk()
          m_pPageName->setText(m_PageName);
          return;
       }
-   }*/
+   }
 
    accept();
 }

@@ -63,6 +63,9 @@
 GPage::GPage (GDocument *adoc):
 doc(adoc),selHandle(adoc)
 {
+  connect(this, SIGNAL(changed(const Rect&)),doc, SLOT(emitChanged(const Rect&)));
+  connect(this, SIGNAL(changed()),doc, SLOT(emitChanged()));
+  connect(this, SIGNAL(handleChanged()),doc, SLOT(emitHandleChanged()));
   initialize ();
 }
 
@@ -70,17 +73,6 @@ GPage::~GPage ()
 {
   layers.clear();
   selection.clear();
-}
-
-void GPage::setAutoUpdate (bool flag)
-{
-  autoUpdate = flag;
-  if (autoUpdate)
-  {
-    selBoxIsValid = false;
-    updateHandle ();
-    emit changed ();
-  }
 }
 
 void GPage::initialize ()
@@ -543,6 +535,8 @@ QDomElement GPage::saveToXml (QDomDocument &document)
 
   QDomElement page = document.createElement("page");;
 
+  page.setAttribute ("id", name ());
+
   QDomElement layout = document.createElement("layout");
   layout.setAttribute ("format", formats[pLayout.format]);
   layout.setAttribute ("orientation", orientations[pLayout.orientation]);
@@ -666,8 +660,7 @@ bool GPage::readFromXml (const QDomElement &page)
 {
   setAutoUpdate (false);
 
-  kdDebug(0) << "Page reading...\n";
-
+  setName(page.attribute("id"));
   QDomElement layout=page.namedItem("layout").toElement();
   QString tmp=layout.attribute("format");
   if (tmp == "a3")

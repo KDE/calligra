@@ -768,8 +768,6 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
   m_toolController->emitModeSelected (m_id,msgbuf);
 }
 
-#include <iostream.h>
-
 void SelectionTool::rotate (GDocument* doc, float , float ,
                             float xp, float yp, bool permanent) {
   //  float adx = fabs (dx);
@@ -798,8 +796,8 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
   angle-=atan2 ((float)(rotCenter.y()-firstpos.y()),(float)(rotCenter.x()-firstpos.x()));
   kdDebug()<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
 
-  cout<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
-  cout<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
+  kdDebug()<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)rotCenter.y()-yp<<" b: "<<(float)rotCenter.x()-xp<<endl;
+  kdDebug()<<"SelectionTool:rotate() angle=="<<angle<<" a: "<<(float)(rotCenter.y()-firstpos.y())<<" b: "<<(float)(rotCenter.x()-firstpos.x())<<endl;
 
 
 
@@ -972,7 +970,7 @@ void SelectionTool::activate (GDocument* doc, Canvas *canvas)
         if (doc->activePage()->selectionIsEmpty ())
             doc->activePage()->selectObject (doc->activePage()->lastObject ());
         else
-            doc->activePage()->setAutoUpdate (true);
+            doc->setAutoUpdate (true);
         state = S_Pick;
     }
     else

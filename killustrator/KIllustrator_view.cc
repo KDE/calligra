@@ -120,7 +120,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     connect (m_pDoc,SIGNAL(partInserted(KIllustratorChild*,GPart*)),this,SLOT(insertPartSlot(KIllustratorChild*,GPart*)));
     connect (m_pDoc,SIGNAL(childGeometryChanged(KIllustratorChild*)),this,SLOT(changeChildGeometrySlot(KIllustratorChild*)));
     connect (this,SIGNAL(embeddImage(const QString &)),this,SLOT(slotInsertBitmap(const QString &)));
-    
+
     setupCanvas();
     kdDebug()<<"KIlluView after setupCanvas: "<<time.elapsed()<<endl;
     createMyGUI();
@@ -340,15 +340,17 @@ void KIllustratorView::setupCanvas()
     MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
 
     QGridLayout* layout = new QGridLayout(this,3,3);
+
     hRuler = new Ruler (Ruler::Horizontal, mu, this);
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     hRuler->setCursor(Qt::pointingHandCursor);
     vRuler = new Ruler (Ruler::Vertical, mu, this);
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     vRuler->setCursor(Qt::pointingHandCursor);
+
     connect(hRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
     connect(vRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
-    
+
     TabBar *tabBar = new TabBar(this, this);
     tabBar->setActiveTab(1);
 
@@ -392,7 +394,7 @@ void KIllustratorView::setupCanvas()
     connect( showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
     connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
     slotLayersPanel(false);
-    
+
     connect(canvas,SIGNAL(visibleAreaChanged(const QRect&)),hRuler,SLOT(updateVisibleArea(const QRect&)));
     connect(canvas,SIGNAL(visibleAreaChanged(const QRect&)),vRuler,SLOT(updateVisibleArea(const QRect&)));
 
@@ -403,7 +405,7 @@ void KIllustratorView::setupCanvas()
     connect(canvas,SIGNAL(mousePositionChanged(int,int)),vRuler,SLOT(updatePointer(int,int)));
 
     connect(canvas,SIGNAL(rightButtonAtSelectionClicked(int,int)),this,SLOT(popupForSelection()));
-    
+
     // helpline creation
     connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
              canvas, SLOT(drawTmpHelpline(int, int, bool)));

@@ -114,6 +114,21 @@ void GDocument::setActivePage (GPage *page)
   }
 }
 
+void GDocument::emitChanged()
+{
+  emit changed();
+}
+
+void GDocument::emitHandleChanged()
+{
+  emit handleChanged();
+}
+
+void GDocument::emitChanged(const Rect& r)
+{
+  emit changed(r);
+}
+
 void GDocument::setActivePage (int i)
 {
   active_page = pages.at(i);
@@ -147,13 +162,19 @@ void GDocument::deletePage (GPage *pg)
 
 GPage *GDocument::findPage(QString name)
 {
-
+  for(QListIterator<GPage> it(pages); it.current(); ++it)
+    if(((GPage *)it)->name() == name)
+      return (GPage *)it;
+  return 0;
 }
 
-void GDocument::setAutoUpdate (bool flag) {
+void GDocument::setAutoUpdate (bool flag)
+{
   autoUpdate = flag;
-  if (autoUpdate) {
+  if (autoUpdate)
+  {
     selBoxIsValid = false;
+    activePage()->updateHandle ();
     emit changed ();
   }
 }
@@ -166,49 +187,50 @@ void GDocument::setModified (bool flag)
 
 QDomDocument GDocument::saveToXml ()
 {
+  QDomDocument document("killustrator");
+  document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomElement killustrator=document.createElement("killustrator");
+  killustrator.setAttribute("editor", "KIllustrator");
+  killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+  killustrator.setAttribute("version", "3");
+  document.appendChild(killustrator);
 
-    QDomDocument document("killustrator");
-    document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement killustrator=document.createElement("killustrator");
-    killustrator.setAttribute("editor", "KIllustrator");
-    killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
-    killustrator.setAttribute("version", "3");
-    document.appendChild(killustrator);
+  QDomElement head=document.createElement("head");
+  head.setAttribute ("currentpagenum", curPageNum);
+  killustrator.appendChild(head);
 
-    QDomElement head=document.createElement("head");
-    killustrator.appendChild(head);
+  QDomElement grid=document.createElement("grid");
+  grid.setAttribute ("dx", gridx);
+  grid.setAttribute ("dy", gridy);
+  grid.setAttribute ("align", snapToGrid ? 1 : 0);
+  head.appendChild(grid);
 
-    QDomElement grid=document.createElement("grid");
-    grid.setAttribute ("dx", gridx);
-    grid.setAttribute ("dy", gridy);
-    grid.setAttribute ("align", snapToGrid ? 1 : 0);
-    head.appendChild(grid);
+  QDomElement helplines=document.createElement("helplines");
+  helplines.setAttribute ("align", snapToHelplines ? 1 : 0);
+  QValueList<float>::Iterator hi;
+  for(hi = hHelplines.begin(); hi!=hHelplines.end(); ++hi)
+  {
+    QDomElement hl=document.createElement("hl");
+    hl.setAttribute ("pos", (*hi));
+    helplines.appendChild(hl);
+  }
+  for(hi = vHelplines.begin(); hi!=vHelplines.end(); ++hi)
+  {
+    QDomElement vl=document.createElement("vl");
+    vl.setAttribute ("pos", (*hi));
+    helplines.appendChild(vl);
+  }
+  grid.appendChild(helplines);
 
-    QDomElement helplines=document.createElement("helplines");
-    helplines.setAttribute ("align", snapToHelplines ? 1 : 0);
-    QValueList<float>::Iterator hi;
-    for(hi = hHelplines.begin(); hi!=hHelplines.end(); ++hi) {
-        QDomElement hl=document.createElement("hl");
-        hl.setAttribute ("pos", (*hi));
-        helplines.appendChild(hl);
-    }
-    for(hi = vHelplines.begin(); hi!=vHelplines.end(); ++hi) {
-        QDomElement vl=document.createElement("vl");
-        vl.setAttribute ("pos", (*hi));
-        helplines.appendChild(vl);
-    }
-    grid.appendChild(helplines);
-
-    for (QListIterator<GPage> pi(pages); pi.current(); ++pi)
-    {
-      GPage *p = (*pi);
-
-      QDomElement page;
-      page = p->saveToXml(document);
-      killustrator.appendChild(page);
-    }
-    setModified (false);
-    return document;
+  for (QListIterator<GPage> pi(pages); pi.current(); ++pi)
+  {
+    GPage *p = (*pi);
+    QDomElement page;
+    page = p->saveToXml(document);
+    killustrator.appendChild(page);
+  }
+  setModified (false);
+  return document;
 }
 
 bool GDocument::readFromXml (const  QDomDocument &document)
@@ -227,6 +249,7 @@ bool GDocument::readFromXml (const  QDomDocument &document)
 
   QDomElement head=killustrator.namedItem("head").toElement();
   setAutoUpdate (false);
+  curPageNum = head.attribute("currentpagenum").toInt();
 
   QDomElement grid=head.namedItem("grid").toElement();
   gridx=grid.attribute("dx").toFloat();
@@ -246,6 +269,7 @@ bool GDocument::readFromXml (const  QDomDocument &document)
         vHelplines.append(l.attribute("pos").toFloat());
   }
 
+  pages.clear ();
   QDomNode n = killustrator.firstChild();
   while(!n.isNull())
   {

@@ -97,9 +97,13 @@ public:
 
 public slots:
   void helplineStatusChanged ();
+  void emitChanged();
+  void emitChanged(const Rect& r);
+  void emitHandleChanged();
 
 signals:
   void pageChanged();
+  void handleChanged();
   void changed ();
   void changed (const Rect& r);
   void selectionChanged ();
