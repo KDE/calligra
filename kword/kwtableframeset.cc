@@ -1758,6 +1758,8 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
     QString autoName = cell->getName();
     kdDebug() << "KWTableFrameSet::loadCell autoName=" << autoName << endl;
     cell->load( framesetElem, loadFrames );
+    if(cell->getFrame(0)) 
+        cell->getFrame(0)->setMinFrameHeight(cell->getFrame(0)->height());
     if ( !useNames )
         cell->setName( autoName );
     cell->m_rows = KWDocument::getAttribute( framesetElem, "rows", 1 );
