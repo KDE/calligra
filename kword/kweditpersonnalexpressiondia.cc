@@ -246,11 +246,14 @@ void KWEditPersonnalExpression::slotOk()
 void KWEditPersonnalExpression::slotAddExpression() {
     list::Iterator it= listExpression.find(m_groupList->currentText());
     QStringList lst(it.data());
-    lst<< i18n("empty");
+    QString newWord = i18n("empty");
+    if ( lst.contains( newWord ))
+        return;
+    lst<< newWord;
     listExpression.replace(m_groupList->currentText(),lst);
 
     m_ExpressionsList->blockSignals(true);
-    m_ExpressionsList->insertItem(i18n("empty"));
+    m_ExpressionsList->insertItem(newWord);
     m_ExpressionsList->clearSelection();
     m_ExpressionsList->setBottomItem (m_ExpressionsList->count() -1);
     m_ExpressionsList->blockSignals(false);
