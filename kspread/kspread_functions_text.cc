@@ -36,7 +36,7 @@ static bool kspreadfunc_join_helper( KSContext& context, QValueList<KSValue::Ptr
   return true;
 }
 
-// Function: join
+// Function: JOIN / CONCATENATE
 bool kspreadfunc_join( KSContext& context )
 {
   QString tmp;

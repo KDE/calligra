@@ -641,14 +641,14 @@ static const functionEntry funcTab[] = {
   { "UPPER", kspreadfunc_upper },
   { "TOGGLE", kspreadfunc_toggle },
   { "FIND", kspreadfunc_find },
-  { "JOIN", kspreadfunc_join },
+  { "CONCATENATE", kspreadfunc_join },
   { "SLEEK", kspreadfunc_sleek },
 
   // misc
   { "CELL", kspreadfunc_cell },
   { "SELECT", kspreadfunc_select },
 
-  // compatibility with KSpread 1.0
+  // compatibility with KSpread < 1.2
   // somehow should marked "obsolete" in the manual
   { "not", kspreadfunc_not },
   { "if", kspreadfunc_if },
@@ -656,6 +656,7 @@ static const functionEntry funcTab[] = {
   { "DECHEX", kspreadfunc_dec2hex },
   { "DECBIN", kspreadfunc_dec2bin },
   { "DECOCT", kspreadfunc_dec2oct },
+  { "JOIN", kspreadfunc_join },
 
   // end  marker
   { NULL, NULL }

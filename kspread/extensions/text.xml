@@ -166,6 +166,36 @@
     </Function>
 
     <Function>
+      <Name>CONCATENATE</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The CONCATENATE() function returns a string which is the concatenation of the strings passed as parameters.</Text>
+	<Syntax>CONCATENATE(value;value;...)</Syntax>
+	<Example>CONCATENATE("KSpread";"KOffice";"KDE") returns "KSpreadKOfficeKDE"</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>JOIN</Name>
       <Type>String</Type>
       <Parameter optional="true">
