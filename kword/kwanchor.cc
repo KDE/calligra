@@ -91,7 +91,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( cx == -1 && cy+paragy == -1 && cw == -1 && ch == -1 )
         crect_lu = QRect( x, y+paragy, width, height );
     else
-        crect_lu = QRect( cx > 0 ? cx : 0, cy-paragy, cw, ch );
+        crect_lu = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw crect ( in internal coords; LU ) = " << DEBUGRECT( crect_lu ) << endl;
 #endif
