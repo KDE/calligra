@@ -206,6 +206,13 @@ class KEXICORE_EXPORT KexiProperty
 		void  setPixmapName(const QString &name) { m_pixmapName = name; }
 		QString  pixmapName() { return m_pixmapName; }
 
+		/*! Sets icon by \a name for this property. Icons are optional and are used e.g. 
+		 in KexiPropertyEditor - displayed at the left hand. */
+		void setIcon(const QString &name) { m_icon = name; }
+
+		/*! \return property icon. Can be empty. */
+		QString icon() const { return m_icon; }
+
 		void execute(const QString &value); // TMP
 
 		void debug();
@@ -232,11 +239,12 @@ class KEXICORE_EXPORT KexiProperty
 //	private:
 		void init(QVariant value);
 
-		QCString		m_name;
-		QString		m_desc;
-		QVariant	m_value;
-		QString		m_pixmapName;
-		QVariant	m_oldValue;
+		QCString m_name;
+		QString m_desc;
+		QVariant m_value;
+		QString m_pixmapName;
+		QString m_icon;
+		QVariant m_oldValue;
 		class KexiPropertyListData;
 		KexiPropertyListData *m_list;
 		KexiProperty* m_parent;

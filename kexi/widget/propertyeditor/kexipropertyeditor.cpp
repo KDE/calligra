@@ -72,7 +72,8 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	setItemMargin(2);
 	header()->setMovingEnabled( false );
 
-	setTreeStepSize(KexiPropertyEditorItem_BranchBoxSize + 2/*left*/ + 1/*right*/);
+//	setTreeStepSize(KexiPropertyEditorItem_BranchBoxSize + 2/*left*/ + 1/*right*/);
+	setTreeStepSize(16 + 2/*left*/ + 1/*right*/);
 
 	m_baseRowHeight = QFontMetrics(font()).height() + itemMargin()*2;
 }

@@ -280,6 +280,13 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 //				p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
 		}
 
+		if (!static_cast<KexiPropertyEditorItem*>(item)->m_property->icon().isEmpty()) {
+			//draw icon
+			int margin = listView()->itemMargin();
+			QPixmap pix = SmallIcon(static_cast<KexiPropertyEditorItem*>(item)->m_property->icon());
+			p->drawPixmap(1,(item->height()-pix.height())/2,pix);
+		}
+
 		p->translate(0, item->totalHeight());
 		item = (KListViewItem*)item->nextSibling();
 	}
