@@ -169,6 +169,7 @@ KoMainWindow::~KoMainWindow()
 
     // Save list of recent files
     KConfig * config = instance() ? instance()->config() : KGlobal::config();
+    kdDebug() << "Saving recent files list into config. instance()=" << instance() << endl;
     m_recent->saveEntries( config );
     config->sync();
 
@@ -339,12 +340,16 @@ bool KoMainWindow::saveDocument( bool saveas )
             if(dialog->exec()==QDialog::Accepted)
                 newURL=dialog->selectedURL();
             else
-                return false;
+            {
+                bOk = false;
+                break;
+            }
 
-            KoFilterManager::self()->cleanUp();
-            delete dialog;
 	    if ( newURL.isEmpty() )
-		return false;
+            {
+                bOk = false;
+                break;
+            }
 
             // HACK - should we add extension() to KURL ?
 	    if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
@@ -361,10 +366,16 @@ bool KoMainWindow::saveDocument( bool saveas )
 						  i18n("Warning") ) == KMessageBox::Yes;
 	    }
         } while ( !bOk );
-        m_recent->addURL( newURL );
-        bool ret = pDoc->saveAs( newURL );
-        pDoc->setTitleModified();
-        return ret;
+        KoFilterManager::self()->cleanUp();
+        delete dialog;
+        if (bOk)
+        {
+            m_recent->addURL( newURL );
+            bool ret = pDoc->saveAs( newURL );
+            pDoc->setTitleModified();
+            return ret;
+        }
+        return false;
     }
     else
       return pDoc->save();
