@@ -101,11 +101,14 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	button = addButton( "14_spiral", i18n( "Create spiral" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( spiralToolActivated() ) );
 
-	button = addButton( "14_gradient", i18n( "Fill with gradient" ) );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( gradToolActivated() ) );
-
 	button = addButton( "14_polyline", i18n( "Create polyline" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( polylineToolActivated() ) );
+
+	button = addButton( "14_pattern", i18n( "Fill with pattern" ) );
+	connect( button, SIGNAL( clicked() ), this, SIGNAL( patternToolActivated() ) );
+
+	button = addButton( "14_gradient", i18n( "Fill with gradient" ) );
+	connect( button, SIGNAL( clicked() ), this, SIGNAL( gradToolActivated() ) );
 
 	button = addButton( "14_clipart", i18n( "Insert clipart" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( clipartToolActivated() ) );
@@ -114,9 +117,6 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	button = addButton( "14_text", i18n( "Insert text" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( textToolActivated() ) );
 #endif
-
-	// dummy
-	button = addButton( "", "" );
 
 	m_strokeFillPreview = new VStrokeFillPreview( part, this );
 }

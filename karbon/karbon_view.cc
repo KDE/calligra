@@ -42,6 +42,7 @@
 #include "vcliparttool.h"
 #include "vellipsetool.h"
 #include "vgradienttool.h"
+#include "vpatterntool.h"
 #include "vpolygontool.h"
 #include "vpolylinetool.h"
 #include "vrectangletool.h"
@@ -163,6 +164,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		m_starTool			= new VStarTool( this );
 		m_polylineTool		= new VPolylineTool( this );
 		m_clipartTool		= new VClipartTool( this );
+		m_patternTool		= new VPatternTool( this );
 	}
 #ifdef HAVE_KARBONTEXT
 	m_textTool = new VTextTool( this );
@@ -245,6 +247,7 @@ KarbonView::~KarbonView()
 		delete( m_starTool );
 		delete( m_polylineTool );
 		delete( m_clipartTool );
+		delete( m_patternTool );
 	}
 #ifdef HAVE_KARBONTEXT
 	delete( m_textTool );
@@ -277,6 +280,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 		connect( m_toolbox, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
 		connect( m_toolbox, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
 		connect( m_toolbox, SIGNAL( clipartToolActivated() ),		this, SLOT( clipartTool() ) );
+		connect( m_toolbox, SIGNAL( patternToolActivated() ),		this, SLOT( patternTool() ) );
 #ifdef HAVE_KARBONTEXT
 		connect( m_toolbox, SIGNAL( textToolActivated() ),			this, SLOT( textTool() ) );
 #endif
@@ -791,6 +795,19 @@ KarbonView::clipartTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_clipartTool;
+		m_currentTool->activateAll();
+	}
+}
+
+void
+KarbonView::patternTool()
+{
+	if( m_currentTool == m_patternTool )
+		m_toolOptionsDocker->show();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_patternTool;
 		m_currentTool->activateAll();
 	}
 }

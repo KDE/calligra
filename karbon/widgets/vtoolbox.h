@@ -52,6 +52,7 @@ signals:
 	void gradToolActivated();
 	void clipartToolActivated();
 	void textToolActivated();
+	void patternToolActivated();
 
 public slots:
 	virtual void setOrientation ( Orientation o );

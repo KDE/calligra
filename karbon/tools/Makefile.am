@@ -29,6 +29,7 @@ noinst_HEADERS = \
 	vpolylinetool.h \
 	vcliparttool.h \
 	vtexttool.h \
+	vpatterntool.h \
 	vtool.h
 
 libkarbontools_la_SOURCES = \
@@ -48,6 +49,7 @@ libkarbontools_la_SOURCES = \
 	vpolylinetool.cc \
 	vcliparttool.cc \
 	vtexttool.cc \
+	vpatterntool.cc \
 	vtool.cc
 
 libkarbontools_la_METASOURCES = \

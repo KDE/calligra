@@ -45,6 +45,8 @@ public:
 
 	int patternCount() { return m_patterns.count(); }
 	QPtrList<KoIconItem> patterns() { return m_patterns; }
+	VPattern* addPattern( const QString& tilename );
+	void removePattern( VPattern* pattern );
 
 	int gradientCount() { return m_gradients->count(); }
 	QPtrList<VGradientListItem>* gradients() { return m_gradients; }

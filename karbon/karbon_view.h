@@ -60,6 +60,7 @@ class VFlattenDlg;
 class VGradientTool;
 class VInsertKnotsDlg;
 class VPainterFactory;
+class VPatternTool;
 class VPolygonTool;
 class VPolylineTool;
 class VRectangleTool;
@@ -182,6 +183,7 @@ protected slots:
 	void gradTool();
 	void polylineTool();
 	void clipartTool();
+	void patternTool();
 
 	// View.
 	void viewModeChanged();
@@ -236,6 +238,7 @@ private:
 	VGradientTool* m_gradTool;
 	VPolylineTool* m_polylineTool;
 	VClipartTool* m_clipartTool;
+	VPatternTool* m_patternTool;
 #ifdef HAVE_KARBONTEXT
 	VTextTool* m_textTool;
 #endif
