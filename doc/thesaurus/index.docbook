@@ -19,12 +19,12 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
 
-<date>2001-12-26</date>
+<date>2002-01-19</date>
 <releaseinfo>0.90.00</releaseinfo>
 
 <abstract>
 <para>
-&kthesaurus; lists words related to a word and offers a user interface
+&kthesaurus; lists words related to a search term and offers a user interface
 to &wordnet;, an online lexical reference system. Only the English language 
 is supported.
 </para>
@@ -32,11 +32,13 @@ is supported.
 
 <keywordset>
 <keyword>KDE</keyword>
-<keyword>Thesaurus</keyword>
+<keyword>thesaurus</keyword>
 <keyword>WordNet</keyword>
 <keyword>synonyms</keyword>
 <keyword>dictionary</keyword>
 <keyword>lexicon</keyword>
+<keyword>English</keyword>
+<keyword>words</keyword>
 </keywordset>
 
 </bookinfo>
@@ -46,19 +48,20 @@ is supported.
 <title>The Thesaurus Tab</title>
 
 <para>The <guilabel>Thesaurus</guilabel> tab offers a small thesaurus,
-built from a subset of <link linkend="frontend">&wordnet;</link>. The results are listed in three
+built from a subset of <link linkend="frontend">&wordnet;</link>. 
+The results are listed in three
 categories: <guilabel>Synonyms</guilabel>, <guilabel>More general
 words</guilabel> (hypernyms), <guilabel>More specific
 words</guilabel> (hyponyms). Synonyms are supposed to be words with
 the same meaning, but only with respect to a certain context. So you
 cannot always replace a word with any synonym.</para>
 
-<para>You can doubleclick on a word to search for its synonyms etc.
+<para>You can double click on a word to search for its synonyms etc.
 You can also type a word directly into the <guilabel>Search for:</guilabel>
 box at the top and press
 <keycap>Return</keycap>. The word which is currently visible in the
-search box is the one that will be used if you click on
-<guibutton>Replace</guibutton>.</para>
+<guilabel>Replace with:</guilabel> box at the bottom is the one that will 
+be used if you click on <guibutton>Replace</guibutton>.</para>
 
 <note><para>&kthesaurus; can be used stand alone, but it can also be 
 used from other applications (like &kword;, typically by right clicking
