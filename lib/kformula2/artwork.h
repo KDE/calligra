@@ -40,17 +40,38 @@ class QPainter;
  */
 class Artwork {
 public:
-    enum SymbolType { integral, sum, product, arrow };
+    enum SymbolType {
+        LeftSquareBracket = '[',
+        RightSquareBracket = ']',
+        LeftCurlyBracket = '{',
+        RightCurlyBracket = '}',
+        LineBracket = '|',
+        LeftCornerBracket = '<',
+        RightCornerBracket = '>',
+        LeftRoundBracket = '(',
+        RightRoundBracket = ')',
 
-    Artwork(SymbolType type);
+        // symbols that have no ascii character
+        Empty = 1000,
+        Integral,
+        Sum,
+        Product,
+        Arrow
+    };
+
+    Artwork(SymbolType type = Empty);
+    ~Artwork() {}
     
-    virtual void calcSizes(ContextStyle& style, int parentSize);
-    virtual void draw(QPainter& painter, ContextStyle& style,
-                      int parentSize, const QPoint& origin);
+    void calcSizes(ContextStyle& style, int parentSize);
+    void draw(QPainter& painter, ContextStyle& style,
+              int parentSize, const QPoint& origin);
     
     int getWidth() const { return size.width(); }
     int getHeight() const { return size.height(); }
 
+    void setWidth(int width) { size.setWidth(width); }
+    void setHeight(int height) { size.setHeight(height); }
+    
     int getX() const { return point.x(); }
     int getY() const { return point.y(); }
     
@@ -61,16 +82,30 @@ public:
      * Multiplies width and height with the factor.
      */
     void scale(double factor);
+
+
+    SymbolType getType() const { return type; }
+    void setType(SymbolType t) { type = t; }
     
 protected:
 
-    void setWidth(int width) { size.setWidth(width); }
-    void setHeight(int height) { size.setHeight(height); }
-    
+    void drawLeftSquareBracket(QPainter& painter, ContextStyle& style, int x, int y, int size);
+    void drawRightSquareBracket(QPainter& painter, ContextStyle& style, int x, int y, int size);
+    void drawLeftCurlyBracket(QPainter& painter, ContextStyle& style, int x, int y, int size);
+    void drawRightCurlyBracket(QPainter& painter, ContextStyle& style, int x, int y, int size);
+    void drawLineBracket(QPainter& painter, ContextStyle& style, int x, int y, int size);
+    void drawLeftCornerBracket(QPainter& painter, ContextStyle& style, int x, int y, int size);
+    void drawRightCornerBracket(QPainter& painter, ContextStyle& style, int x, int y, int size);
+    void drawLeftRoundBracket(QPainter& painter, ContextStyle& style, int x, int y, int size);
+    void drawRightRoundBracket(QPainter& painter, ContextStyle& style, int x, int y, int size);
+
+    void drawEmpty(QPainter& painter, int x, int y, int size);
     void drawIntegral(QPainter& painter, int x, int y, int size);
     void drawSum(QPainter& painter, int x, int y, int size);
     void drawProduct(QPainter& painter, int x, int y, int size);
     void drawArrow(QPainter& painter, int x, int y, int size);
+
+private:
     
     QSize size;
     QPoint point;

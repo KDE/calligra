@@ -58,16 +58,28 @@ void Artwork::calcSizes(ContextStyle& style, int parentSize)
 {
     setHeight(1000);
     switch (type) {
-    case integral:
+    case LeftSquareBracket:
+    case RightSquareBracket:
+    case LeftCurlyBracket:
+    case RightCurlyBracket:
+    case LineBracket:
+    case LeftCornerBracket:
+    case RightCornerBracket:
+    case LeftRoundBracket:
+    case RightRoundBracket:
+    case Empty:
+        setWidth(8);
+        break;
+    case Integral:
         setWidth(7000.0/12/2);
         break;
-    case sum:
+    case Sum:
         setWidth(1000);
         break;
-    case product:
+    case Product:
         setWidth(1000);
         break;
-    case arrow:
+    case Arrow:
         setWidth(2000);
         break;
     }
@@ -83,16 +95,46 @@ void Artwork::draw(QPainter& painter, ContextStyle& style,
     painter.setPen(style.getDefaultColor());
     
     switch (type) {
-    case integral:
+    case LeftSquareBracket:
+        drawLeftSquareBracket(painter, style, myX, myY, getHeight());
+        break;
+    case RightSquareBracket:
+        drawRightSquareBracket(painter, style, myX, myY, getHeight());
+        break;
+    case LeftCurlyBracket:
+        drawLeftCurlyBracket(painter, style, myX, myY, getHeight());
+        break;
+    case RightCurlyBracket:
+        drawRightCurlyBracket(painter, style, myX, myY, getHeight());
+        break;
+    case LineBracket:
+        drawLineBracket(painter, style, myX, myY, getHeight());
+        break;
+    case LeftCornerBracket:
+        drawLeftCornerBracket(painter, style, myX, myY, getHeight());
+        break;
+    case RightCornerBracket:
+        drawRightCornerBracket(painter, style, myX, myY, getHeight());
+        break;
+    case LeftRoundBracket:
+        drawLeftRoundBracket(painter, style, myX, myY, getHeight());
+        break;
+    case RightRoundBracket:
+        drawRightRoundBracket(painter, style, myX, myY, getHeight());
+        break;
+    case Empty:
+        drawEmpty(painter, myX, myY, getHeight());
+        break;
+    case Integral:
         drawIntegral(painter, myX, myY+getHeight()/2, getHeight()/2);
         break;
-    case sum:
+    case Sum:
         drawSum(painter, myX, myY+getHeight()/2, getHeight());
         break;
-    case product:
+    case Product:
         drawProduct(painter, myX, myY+getHeight()/2, getHeight());
         break;
-    case arrow:
+    case Arrow:
         drawArrow(painter, myX, myY+getHeight()/2, getHeight());
         break;
     }
@@ -169,4 +211,135 @@ void Artwork::drawArrow(QPainter& painter, int x, int y, int size)
     painter.drawLine(x + size - size / 16, y,
                      x + size - size / 16 - size / 4, y + size / 4);
     painter.setPen(QPen(Qt::black, 1));
+}
+
+
+void Artwork::drawLeftSquareBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+{
+    int width = getWidth()-2;
+    int thickness = width/4+1;
+    int unit = width - thickness;
+        
+    painter.setBrush(style.getDefaultColor());
+    painter.setPen(Qt::NoPen);
+    QPointArray points(10);
+    
+    points.setPoint(1, x, y);
+    points.setPoint(2, x + width, y);
+    points.setPoint(3, x + width, y + thickness);
+    points.setPoint(4, x + thickness, y + thickness);
+    points.setPoint(5, x + thickness, y + getHeight() - thickness);
+    points.setPoint(6, x + width, y + getHeight() - thickness);
+    points.setPoint(7, x + width, y+getHeight());
+    points.setPoint(8, x, y+getHeight());
+
+    painter.drawPolygon(points, false, 1, 8);
+}
+
+void Artwork::drawRightSquareBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+{
+    int width = getWidth()-2;
+    int thickness = width/4+1;
+    int unit = width - thickness;
+        
+    painter.setBrush(style.getDefaultColor());
+    painter.setPen(Qt::NoPen);
+    QPointArray points(10);
+    
+    points.setPoint(1, x, y);
+    points.setPoint(2, x + width, y);
+    points.setPoint(3, x + width, y + getHeight());
+    points.setPoint(4, x, y + getHeight());
+    points.setPoint(5, x, y + getHeight() - thickness);
+    points.setPoint(6, x + unit, y + getHeight() - thickness);
+    points.setPoint(7, x + unit, y + thickness);
+    points.setPoint(8, x, y + thickness);
+
+    painter.drawPolygon(points, false, 1, 8);
+}
+    
+void Artwork::drawLeftCurlyBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+{
+}
+
+void Artwork::drawRightCurlyBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+{
+}
+
+void Artwork::drawLineBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+{
+    int width = getWidth()-2;
+    int thickness = width/4+1;
+    int unit = width - thickness;
+        
+    painter.setBrush(style.getDefaultColor());
+    painter.setPen(Qt::NoPen);
+    QPointArray points(5);
+    
+    points.setPoint(1, x+unit/2, y);
+    points.setPoint(2, x+unit/2+thickness, y);
+    points.setPoint(3, x+unit/2+thickness, y+getHeight());
+    points.setPoint(4, x+unit/2, y+getHeight());
+    
+    painter.drawPolygon(points, false, 1, 4);
+}
+
+void Artwork::drawLeftCornerBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+{
+    int width = getWidth()-2;
+    int thickness = width/4+1;
+    int unit = width - thickness;
+        
+    painter.setBrush(style.getDefaultColor());
+    painter.setPen(Qt::NoPen);
+    QPointArray points(5);
+    
+    points.setPoint(1, x, y);
+    points.setPoint(2, x+unit, y + getHeight()/2);
+    points.setPoint(3, x, y+getHeight());
+    //points.setPoint(4, x, y+getHeight());
+
+    painter.drawPolyline(points, 1, /*4*/3);
+}
+
+void Artwork::drawRightCornerBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+{
+    int width = getWidth()-2;
+    int thickness = width/4+1;
+    int unit = width - thickness;
+        
+    painter.setBrush(style.getDefaultColor());
+    painter.setPen(Qt::NoPen);
+    QPointArray points(5);
+    
+    points.setPoint(1, x+unit, y);
+    points.setPoint(2, x, y + getHeight()/2);
+    points.setPoint(3, x+unit, y+getHeight());
+    //points.setPoint(4, x, y+getHeight());
+
+    painter.drawPolyline(points, 1, /*4*/3);
+}
+
+void Artwork::drawLeftRoundBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+{
+    int thickness = getWidth()/4+1;
+    
+    //painter.setBrush(style.getDefaultColor());
+    painter.setPen(QPen(style.getDefaultColor(), 2));
+    
+    painter.drawArc(x+thickness, y, getWidth(), getHeight(), 90*16, 180*16);
+}
+
+void Artwork::drawRightRoundBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+{
+    int thickness = getWidth()/4+1;
+    
+    //painter.setBrush(style.getDefaultColor());
+    painter.setPen(QPen(style.getDefaultColor(), 2));
+    
+    painter.drawArc(x-thickness, y, getWidth(), getHeight(), 270*16, 180*16);
+}
+
+void Artwork::drawEmpty(QPainter&, int, int, int)
+{
 }

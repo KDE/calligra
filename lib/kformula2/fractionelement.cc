@@ -133,8 +133,14 @@ void FractionElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         getParent()->moveLeft(cursor, this);
     }
     else {
+        bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
-            denominator->moveLeft(cursor, this);
+            if (linear) {
+                denominator->moveLeft(cursor, this);
+            }
+            else {
+                numerator->moveLeft(cursor, this);
+            }
         }
         else if (from == denominator) {
             numerator->moveLeft(cursor, this);
@@ -157,11 +163,17 @@ void FractionElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         getParent()->moveRight(cursor, this);
     }
     else {
+        bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
             numerator->moveRight(cursor, this);
         }
         else if (from == numerator) {
-            denominator->moveRight(cursor, this);
+            if (linear) {
+                denominator->moveRight(cursor, this);
+            }
+            else {
+                getParent()->moveRight(cursor, this);
+            }
         }
         else {
             getParent()->moveRight(cursor, this);

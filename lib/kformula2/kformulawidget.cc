@@ -144,13 +144,13 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
             cursor->moveEnd(flag);
             break;
         case Qt::Key_F1:
-            document->addSymbol(cursor, Artwork::product);
+            document->addSymbol(cursor, Artwork::Product);
             break;
         case Qt::Key_F2:
-            document->addSymbol(cursor, Artwork::sum);
+            document->addSymbol(cursor, Artwork::Sum);
             break;
         case Qt::Key_F3:
-            document->addSymbol(cursor, Artwork::integral);
+            document->addSymbol(cursor, Artwork::Integral);
             break;
         case Qt::Key_F4:
             document->save("test");

@@ -23,6 +23,7 @@
 #include <qpen.h>
 #include <qpointarray.h>
 
+#include "artwork.h"
 #include "bracketelement.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -85,8 +86,13 @@ void BracketElement::calcSizes(ContextStyle& style, int parentSize)
     int contentHeight = 2 * QMAX(content->getMidline(),
                                  content->getHeight() - content->getMidline());
     
-    left->calcSizes(style, mySize, contentHeight, false);
-    right->calcSizes(style, mySize, contentHeight, true);
+    left->calcSizes(style, mySize);
+    //left->scale(((double)contentHeight+2)/left->getHeight());
+    left->setHeight(contentHeight+2);
+    
+    right->calcSizes(style, mySize);
+    //right->scale(((double)contentHeight+2)/right->getHeight());
+    right->setHeight(contentHeight+2);
 
     // width
     setWidth(left->getWidth() + content->getWidth() + right->getWidth());
@@ -116,9 +122,9 @@ void BracketElement::draw(QPainter& painter, ContextStyle& style,
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     int mySize = parentSize + getRelativeSize();
 
-    left->draw(painter, style, mySize, myPos, false);
+    left->draw(painter, style, mySize, myPos);
     content->draw(painter, style, mySize, myPos);
-    right->draw(painter, style, mySize, myPos, true);
+    right->draw(painter, style, mySize, myPos);
 }
 
 
@@ -233,189 +239,26 @@ void BracketElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 /**
  * Creates a new bracket object that matches the char.
  */
-BracketElement::Bracket* BracketElement::createBracket(char bracket)
+Artwork* BracketElement::createBracket(char bracket)
 {
+    Artwork* aw = new Artwork();
     switch (bracket) {
     case '[':
     case ']':
-        return new SquareBracket;
     case '{':
     case '}':
-        return new CurlyBracket;
     case '|':
-        return new LineBracket;
     case '<':
     case '>':
-        return new CornerBracket;
     case '(':
     case ')':
-        return new RoundBracket;
-    default:
-        return new EmptyBracket;
+        aw->setType(static_cast<Artwork::SymbolType>(bracket));
+        break;
     }
+    return aw;
 }
 
 
-// '(' and ')'
-void BracketElement::RoundBracket::calcSizes(ContextStyle& style, int parentSize,
-                                             int contentHeight, bool right)
-{
-    int height = contentHeight > 21 ? contentHeight+2 : 24;
-    size.setWidth(8);
-    size.setHeight(height);
-}
-
-void BracketElement::RoundBracket::draw(QPainter& painter, ContextStyle& style,
-                                        int parentSize, const QPoint& origin,
-                                        bool right)
-{
-    int x = origin.x() + point.x();
-    int y = origin.y() + point.y();
-    int thickness = size.width()/4+1;
-    
-    //painter.setBrush(style.getDefaultColor());
-    painter.setPen(QPen(style.getDefaultColor(), 2));
-    
-    if (right) {
-        painter.drawArc(x-thickness, y, size.width(), size.height(), 270*16, 180*16);
-    }
-    else {
-        painter.drawArc(x+thickness, y, size.width(), size.height(), 90*16, 180*16);
-    }
-}
-
-
-// '[' and ']'
-void BracketElement::SquareBracket::calcSizes(ContextStyle& style, int parentSize,
-                                              int contentHeight, bool right)
-{
-    int height = contentHeight > 21 ? contentHeight+2 : 24;
-    size.setWidth(8);
-    size.setHeight(height);
-}
-
-void BracketElement::SquareBracket::draw(QPainter& painter, ContextStyle& style,
-                                         int parentSize, const QPoint& origin,
-                                         bool right)
-{
-    int x = origin.x() + point.x() + 1;
-    int y = origin.y() + point.y();
-    int width = getWidth()-2;
-    int thickness = width/4+1;
-    int unit = width - thickness;
-        
-    painter.setBrush(style.getDefaultColor());
-    painter.setPen(Qt::NoPen);
-    QPointArray points(10);
-    
-    if (right) {
-        points.setPoint(1, x, y);
-        points.setPoint(2, x + width, y);
-        points.setPoint(3, x + width, y + getHeight());
-        points.setPoint(4, x, y + getHeight());
-        points.setPoint(5, x, y + getHeight() - thickness);
-        points.setPoint(6, x + unit, y + getHeight() - thickness);
-        points.setPoint(7, x + unit, y + thickness);
-        points.setPoint(8, x, y + thickness);
-    }
-    else {
-        points.setPoint(1, x, y);
-        points.setPoint(2, x + width, y);
-        points.setPoint(3, x + width, y + thickness);
-        points.setPoint(4, x + thickness, y + thickness);
-        points.setPoint(5, x + thickness, y + getHeight() - thickness);
-        points.setPoint(6, x + width, y + getHeight() - thickness);
-        points.setPoint(7, x + width, y+getHeight());
-        points.setPoint(8, x, y+getHeight());
-    }
-    painter.drawPolygon(points, false, 1, 8);
-}
-
-
-// '{' and '}'
-void BracketElement::CurlyBracket::calcSizes(ContextStyle& style, int parentSize,
-                                             int contentHeight, bool right)
-{
-    size.setWidth(contentHeight/4);
-    size.setHeight(contentHeight);
-}
-
-void BracketElement::CurlyBracket::draw(QPainter& painter, ContextStyle& style,
-                                        int parentSize, const QPoint& origin,
-                                        bool right)
-{
-    // todo
-}
-
-
-// '|'
-void BracketElement::LineBracket::calcSizes(ContextStyle& style, int parentSize,
-                                            int contentHeight, bool right)
-{
-    int height = contentHeight > 21 ? contentHeight+2 : 24;
-    size.setWidth(8);
-    size.setHeight(height);
-}
-
-void BracketElement::LineBracket::draw(QPainter& painter, ContextStyle& style,
-                                       int parentSize, const QPoint& origin,
-                                       bool right)
-{
-    int x = origin.x() + point.x() + 1;
-    int y = origin.y() + point.y();
-    int width = getWidth()-2;
-    int thickness = width/4+1;
-    int unit = width - thickness;
-        
-    painter.setBrush(style.getDefaultColor());
-    painter.setPen(Qt::NoPen);
-    QPointArray points(5);
-    
-    points.setPoint(1, x+unit/2, y);
-    points.setPoint(2, x+unit/2+thickness, y);
-    points.setPoint(3, x+unit/2+thickness, y+getHeight());
-    points.setPoint(4, x+unit/2, y+getHeight());
-    
-    painter.drawPolygon(points, false, 1, 4);
-}
-
-
-// '<' and '>'
-void BracketElement::CornerBracket::calcSizes(ContextStyle& style, int parentSize,
-                                              int contentHeight, bool right)
-{
-    int height = contentHeight > 21 ? contentHeight+2 : 24;
-    size.setWidth(8);
-    size.setHeight(height);
-}
-
-void BracketElement::CornerBracket::draw(QPainter& painter, ContextStyle& style,
-                                         int parentSize, const QPoint& origin, bool right)
-{
-    int x = origin.x() + point.x() + 1;
-    int y = origin.y() + point.y();
-    int width = getWidth()-2;
-    int thickness = width/4+1;
-    int unit = width - thickness;
-        
-    painter.setBrush(style.getDefaultColor());
-    painter.setPen(Qt::NoPen);
-    QPointArray points(5);
-    
-    if (right) {
-        points.setPoint(1, x+unit, y);
-        points.setPoint(2, x, y + getHeight()/2);
-        points.setPoint(3, x+unit, y+getHeight());
-        //points.setPoint(4, x, y+getHeight());
-    }
-    else {
-        points.setPoint(1, x, y);
-        points.setPoint(2, x+unit, y + getHeight()/2);
-        points.setPoint(3, x, y+getHeight());
-        //points.setPoint(4, x, y+getHeight());
-    }
-    painter.drawPolyline(points, 1, /*4*/3);
-}
 
 QDomElement BracketElement::getElementDom(QDomDocument *doc)
 {
@@ -428,10 +271,8 @@ QDomElement BracketElement::getElementDom(QDomDocument *doc)
     con.appendChild(content->getElementDom(doc));
     de.appendChild(con);
 
-#warning TODO bracket type attribute
-
-    de.setAttribute("LEFT","(");
-    de.setAttribute("RIGHT",")");
+    de.setAttribute("LEFT", left->getType());
+    de.setAttribute("RIGHT", right->getType());
     return de;
 }
 

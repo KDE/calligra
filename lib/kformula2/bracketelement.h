@@ -26,6 +26,7 @@
 
 #include "basicelement.h"
 
+class Artwork;
 class SequenceElement;
 
 
@@ -121,82 +122,17 @@ public:
     
 private:
 
-    class Bracket {
-    public:
-        virtual void calcSizes(ContextStyle& style, int parentSize,
-                               int contentHeight, bool right) = 0;
-        virtual void draw(QPainter& painter, ContextStyle& style,
-                          int parentSize, const QPoint& origin, bool right) = 0;
-
-        int getWidth() const { return size.width(); }
-        int getHeight() const { return size.height(); }
-
-        void setX(int x) { point.setX(x); }
-        void setY(int y) { point.setY(y); }
-        
-    protected:
-        QSize size;
-        QPoint point;
-    };
-
-    // '(' and ')'
-    class RoundBracket : public Bracket {
-        virtual void calcSizes(ContextStyle& style, int parentSize,
-                               int contentHeight, bool right);
-        virtual void draw(QPainter& painter, ContextStyle& style,
-                          int parentSize, const QPoint& origin, bool right);
-    };
-
-    // '[' and ']'
-    class SquareBracket : public Bracket {
-        virtual void calcSizes(ContextStyle& style, int parentSize,
-                               int contentHeight, bool right);
-        virtual void draw(QPainter& painter, ContextStyle& style,
-                          int parentSize, const QPoint& origin, bool right);
-    };
-
-    // '{' and '}'
-    class CurlyBracket : public Bracket {
-        virtual void calcSizes(ContextStyle& style, int parentSize,
-                               int contentHeight, bool right);
-        virtual void draw(QPainter& painter, ContextStyle& style,
-                          int parentSize, const QPoint& origin, bool right);
-    };
-
-    // '|'
-    class LineBracket : public Bracket {
-        virtual void calcSizes(ContextStyle& style, int parentSize,
-                               int contentHeight, bool right);
-        virtual void draw(QPainter& painter, ContextStyle& style,
-                          int parentSize, const QPoint& origin, bool right);
-    };
-
-    // '<' and '>'
-    class CornerBracket : public Bracket {
-        virtual void calcSizes(ContextStyle& style, int parentSize,
-                               int contentHeight, bool right);
-        virtual void draw(QPainter& painter, ContextStyle& style,
-                          int parentSize, const QPoint& origin, bool right);
-    };
-
-    // everything else
-    class EmptyBracket : public Bracket {
-        virtual void calcSizes(ContextStyle&, int, int, bool) {}
-        virtual void draw(QPainter&, ContextStyle&, int, const QPoint&, bool) {}
-    };
-
-    
     /**
      * Creates a new bracket object that matches the char.
      */
-    Bracket* createBracket(char bracket);
+    Artwork* createBracket(char bracket);
 
     
     /**
      * The brackets we are showing.
      */
-    Bracket* left;
-    Bracket* right;
+    Artwork* left;
+    Artwork* right;
 
     /**
      * Our main child.

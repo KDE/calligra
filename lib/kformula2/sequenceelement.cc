@@ -383,8 +383,14 @@ void SequenceElement::moveEnd(FormulaCursor* cursor)
         if (element != this) {
             while (element->getParent() != this) {
                 element = element->getParent();
+                if (element == 0) {
+                    cursor->setMark(children.count());
+                    break;
+                }
             }
-            cursor->setMark(children.find(element));
+            if (element != 0) {
+                cursor->setMark(children.find(element));
+            }
         }
     }
     cursor->setTo(this, children.count());
@@ -604,7 +610,7 @@ void SequenceElement::buildFromDom(QDomElement *elem)
 	         child=new NumberElement(e.attribute("CHAR").at(0),this);
 	     else
 	     if(tag=="OPERATOR")
-	         child=new OperatorElement(e.attribute("CHAR").at(0));
+	         child=new OperatorElement(e.attribute("CHAR").at(0),this);
 	     else
 	     if(tag=="ROOT")
 	         child=new RootElement(this);
