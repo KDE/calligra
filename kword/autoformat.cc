@@ -148,6 +148,7 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
          && !m_typographicQuotes.replace && m_entries.count()==0)
         return;
 
+    //kdDebug() << "KWAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
     //if ( !m_enabled )
     //    return;
     // Auto-correction happens when pressing space, tab, CR, punct etc.
@@ -156,7 +157,7 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
         if ( index > 0 )
         {
             QString lastWord=getLastWord(parag, index);
-            kdDebug() << "KWAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
+            //kdDebug() << "KWAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
             if ( !doAutoCorrect( textEditCursor, parag, index ) )
             {
                 if ( m_convertUpperUpper || m_convertUpperCase )
@@ -165,7 +166,7 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
             }
         }
     }
-    else if ( ch == '"' && m_typographicQuotes.replace )
+    if ( ch == '"' && m_typographicQuotes.replace )
     {
         doTypographicQuotes( textEditCursor, parag, index );
     }
@@ -231,6 +232,7 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
 
 void KWAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag *parag, int index )
 {
+    kdDebug() << "KWAutoFormat::doTypographicQuotes" << endl;
     KWTextDocument * textdoc = parag->kwTextDocument();
     QTextCursor cursor( parag->document() );
     cursor.setParag( parag );
