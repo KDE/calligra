@@ -227,6 +227,7 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiProper
 	}
 	prop = &buf["length"];
 	visible = (fieldType == KexiDB::Field::Text);
+	kdDebug() << buf["subType"].value() << endl;
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
 		prop->setValue( visible ? KexiDB::Field::defaultTextLength() : 0, false );
@@ -302,7 +303,7 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 	prop->setVisible(false);
 #endif
 
-	buff->add( prop = new KexiProperty("defaultValue", field->defaultValue()/*200?*/, i18n("Default value")));
+	buff->add( prop = new KexiProperty("defaultValue", field->defaultValue(), i18n("Default value")));
 //TODO: show this after we get properly working editor for QVariant:
 	prop->setVisible(false);
 
@@ -676,12 +677,19 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProp
 			buf["allowEmpty"] = QVariant(true,1);
 	}
 	else if (pname=="subType") {
-		if (buf["primaryKey"].value().toBool()==true && property.value()!=KexiDB::Field::typeString(KexiDB::Field::BigInteger)) {
+		if (buf["primaryKey"].value().toBool()==true && property.value().toString()!=KexiDB::Field::typeString(KexiDB::Field::BigInteger)) {
 			kdDebug() << "INVALID " << property.value().toString() << endl;
 //			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg, 
 //				i18n("This field has promary key assigned. Setting autonumber field"),
 //				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
 
+		}
+//		kdDebug() << property.value().toString() << endl;
+//		kdDebug() << buf["type"].value() << endl;
+		if (KexiDB::Field::typeGroup( buf["type"].value().toInt() ) == (int)KexiDB::Field::TextGroup) {
+			updatePropertiesVisibility(KexiDB::Field::typeForString(property.value().toString()), buf);
+			//properties' visiblility changed: refresh buffer
+			propertyBufferReloaded(true);
 		}
 	}
 	else {//prop==true:
