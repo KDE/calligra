@@ -54,23 +54,30 @@ void KSpreadMap::removeTable( KSpreadTable *_table )
   m_lstTables.setAutoDelete( true );
 }
 
-void KSpreadMap::moveTable( const char* _from, const char* _to )
+void KSpreadMap::moveTable( const char* _from, const char* _to, bool _before )
 {
   KSpreadTable* tablefrom = findTable( _from );
   KSpreadTable* tableto = findTable( _to );
 
-  int from = m_lstTables.find(tablefrom) ;
-  int to = m_lstTables.find(tableto) ;
+  int from = m_lstTables.find( tablefrom ) ;
+  int to = m_lstTables.find( tableto ) ;
+  if ( !_before )
+  ++to;
 
-  if ( m_lstTables.find(tablefrom) < m_lstTables.find(tableto)) 
+  if ( to > m_lstTables.count() )
+  {
+    m_lstTables.append( tablefrom );
+    m_lstTables.take( from );
+  }
+  else if ( from < to ) 
   {  
-    m_lstTables.insert(to, tablefrom);
-    m_lstTables.take(from); 
+    m_lstTables.insert( to, tablefrom );
+    m_lstTables.take( from ); 
   }
   else
   {
-    m_lstTables.take(from); 
-    m_lstTables.insert(to, tablefrom);
+    m_lstTables.take( from ); 
+    m_lstTables.insert( to, tablefrom );
   }
 }
 

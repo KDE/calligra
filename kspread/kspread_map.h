@@ -79,9 +79,10 @@ public:
   void removeTable( KSpreadTable *_table );
 
   /**
-   * @param _from is being moved to @param _to.
+   * The table named @param _from is being moved to the table @param _to.
+   * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
    */ 
-  void moveTable( const char* _from, const char* to );
+  void moveTable( const char* _from, const char* to, bool _before = true );
  
   KSpreadTable* findTable( const char *_name );
         

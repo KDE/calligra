@@ -38,9 +38,14 @@ KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent ) : QWidget( (QWidget *)_pare
     m_pView = _parent;
     m_pPopupMenu = 0L;
 
+	m_pAutoScrollTimer = new QTimer(this);
+	connect( m_pAutoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
+	
     leftTab = 1;
+	m_rightTab = 0;
     activeTab = 0;
 	m_moveTab = 0;
+	m_autoScroll = 0;
 }
 
 void KSpreadTabBar::addTab( const QString& _text )
@@ -81,16 +86,23 @@ void KSpreadTabBar::removeAllTabs()
     repaint();
 }
 
-void KSpreadTabBar::moveTab( int _from, int _to )
+void KSpreadTabBar::moveTab( int _from, int _to, bool _before )
 {
 
     QStringList::Iterator it;
 
 	it = tabsList.at( _from );
 	const QString tabname = *it;
-	cout << "From: " << tabname.ascii() << " To: " << (*(tabsList.at(_to))).ascii() << "\n";
+	
+	if ( !_before )
+		++_to;
 
-	if ( _from < _to )
+	if ( _to > tabsList.count() )
+	{
+		tabsList.append( tabname );
+		tabsList.remove( it );
+	}
+	else if ( _from < _to )
 	{
 		tabsList.insert( tabsList.at( _to ), tabname );
 		tabsList.remove( it );
@@ -100,6 +112,7 @@ void KSpreadTabBar::moveTab( int _from, int _to )
 		tabsList.remove( it );
 		tabsList.insert( tabsList.at( _to ), tabname );
 	}
+
 	repaint();	
 }
 
@@ -113,19 +126,22 @@ void KSpreadTabBar::scrollLeft()
 	return;
     
     leftTab--;
-    repaint();
+    repaint( false );
 }
 
 void KSpreadTabBar::scrollRight()
 {
     if ( tabsList.count() == 0 )
 	return;
+	
+	if ( m_rightTab == tabsList.count() )
+	return;
     
     if ( (unsigned int )leftTab == tabsList.count() )
 	return;
     
     leftTab++;
-    repaint();
+    repaint( false );
 }
 
 void KSpreadTabBar::scrollFirst()
@@ -137,19 +153,39 @@ void KSpreadTabBar::scrollFirst()
 	return;
     
     leftTab = 1;
-    repaint();
+    repaint( false );
 }
 
 void KSpreadTabBar::scrollLast()
 {
     if ( tabsList.count() == 0 )
 	return;
-    
-    if ( (unsigned int )leftTab == tabsList.count() )
+
+    QPainter painter;
+    painter.begin( this );
+
+    int i = tabsList.count();
+    int x = 0;
+
+	if ( m_rightTab == i )
 	return;
+	
+    QStringList::Iterator it;
+    for ( it = tabsList.end(); it != tabsList.begin(); it-- ) 
+    {
+		QFontMetrics fm = painter.fontMetrics();
+	
+	    x += 10 + fm.width( *it );
+		if ( x > width() )
+		{
+			leftTab = i + 2;
+			break;
+		}
+		--i;
+    }
+    painter.end();
     
-    leftTab = tabsList.count();
-    repaint();
+    repaint( false );
 }
 
 void KSpreadTabBar::setActiveTab( const QString& _text )
@@ -159,7 +195,7 @@ void KSpreadTabBar::setActiveTab( const QString& _text )
 	return;
     
     activeTab = i + 1;
-    repaint();
+    repaint( false );
 }
 
 void KSpreadTabBar::slotRemove( )
@@ -197,7 +233,9 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
     }
     
     QPainter painter;
-    painter.begin( this );
+    QPixmap pm(size());
+	pm.fill( backgroundColor() );
+	painter.begin( &pm, this );
 
     if ( leftTab > 1 )
 	paintTab( painter, -10, QString(""), 0, 0, FALSE );
@@ -214,35 +252,38 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
     for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     {
         text = *it;
-	QFontMetrics fm = painter.fontMetrics();
-	int text_width = fm.width( text );
-	int text_y = ( height() - fm.ascent() - fm.descent() ) / 2 + fm.ascent();
+		QFontMetrics fm = painter.fontMetrics();
+		int text_width = fm.width( text );
+		int text_y = ( height() - fm.ascent() - fm.descent() ) / 2 + fm.ascent();
 	
-	if ( i == activeTab )
-	{
-	    active_text = text;
-	    active_x = x;
-	    active_y = text_y;
-	    active_width = text_width;
-	    if ( i >= leftTab )
-		x += 10 + text_width;
-	}
-	else if ( i >= leftTab )
-	{
-		if ( m_moveTab == i )
-		    paintTab( painter, x, text, text_width, text_y, false, true );
-		else
-		    paintTab( painter, x, text, text_width, text_y, false );
-	    x += 10 + text_width;
-	}
-	
-	i++;
+		if ( i == activeTab )
+		{
+	    	active_text = text;
+		    active_x = x;
+		    active_y = text_y;
+	    	active_width = text_width;
+
+		    if ( i >= leftTab )
+				x += 10 + text_width;
+		}
+		else if ( i >= leftTab )
+		{
+			if ( m_moveTab == i )
+		    	paintTab( painter, x, text, text_width, text_y, false, true );
+			else
+			    paintTab( painter, x, text, text_width, text_y, false );
+		    x += 10 + text_width;
+		}
+		if ( x - 10 < width() )
+			m_rightTab = i;
+		i++;
     }
 
 //    if ( active_text != 0L )
 	paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
 	    
     painter.end();
+	bitBlt( this, 0, 0, &pm );
 }
 
 
@@ -267,12 +308,24 @@ void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, in
 	painter.drawLine( x, 0, x + 20 + text_width, 0 );
 	if ( ismovemarked ) 
 	{
-		QPointArray movmark;
-		movmark.setPoints(3, x, 0, x + 7, 0, x + 4, 6);
-		QBrush oldBrush = painter.brush();
-		painter.setBrush( QColor( 0, 0, 0 ) );
-		painter.drawPolygon(movmark);
-		painter.setBrush( oldBrush );
+		if ( m_moveTabFlag == moveTabBefore )
+		{
+			QPointArray movmark;
+			movmark.setPoints(3, x, 0, x + 7, 0, x + 4, 6);
+			QBrush oldBrush = painter.brush();
+			painter.setBrush( QColor( 0, 0, 0 ) );
+			painter.drawPolygon(movmark);
+			painter.setBrush( oldBrush );
+		}
+		else
+		{
+			QPointArray movmark;
+			movmark.setPoints(3, x + 20 + text_width, 0, x + 13 + text_width, 0, x + 16 + text_width, 6);
+			QBrush oldBrush = painter.brush();
+			painter.setBrush( QColor( 0, 0, 0 ) );
+			painter.drawPolygon(movmark);
+			painter.setBrush( oldBrush );
+		}
 	}
     painter.drawText( x + 10, text_y , text );
 }
@@ -354,13 +407,13 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 
     if ( activeTab != old_active )
     {
-	repaint();
+	repaint( false );
 	emit tabChanged( active_text );
     }
 
 	if ( _ev->button() == LeftButton )
 	{
-		m_bTabMoveFlag = true;
+		m_moveTabFlag = moveTabBefore;
 	}
 	else if ( _ev->button() == RightButton )
 	{
@@ -368,58 +421,131 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 	}
 }
 
+
 void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
 {
 	if ( _ev->button() == LeftButton && m_moveTab != 0 )
 	{
-		m_pView->doc()->map()->moveTable( (*tabsList.at( activeTab - 1 )).ascii(), (*tabsList.at( m_moveTab - 1 )).ascii());
-		moveTab( activeTab - 1, m_moveTab - 1 );
-		m_bTabMoveFlag = false;
+		if ( m_autoScroll != 0 )
+		{
+			m_pAutoScrollTimer->stop();
+			m_autoScroll = 0;
+		}
+		m_pView->doc()->map()->moveTable( (*tabsList.at( activeTab - 1 )).ascii(), (*tabsList.at( m_moveTab - 1 )).ascii(), m_moveTabFlag == moveTabBefore );
+		moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
+		
+		m_moveTabFlag = moveTabNo;
 		if ( activeTab < m_moveTab )
 			m_moveTab--;
 		activeTab = m_moveTab;
 	
 		m_moveTab = 0;
-		repaint();
+		repaint( false );
 	}
 }
 
+void KSpreadTabBar::slotAutoScroll( )
+{
+	if ( m_autoScroll == autoScrollLeft && leftTab > 1 )
+	{
+		m_moveTab = leftTab - 1;
+		scrollLeft();
+	}
+	else if ( m_autoScroll == autoScrollRight ) 
+	{
+		scrollRight();
+	}
+	if ( leftTab <= 1 )
+	{
+		m_pAutoScrollTimer->stop();
+		m_autoScroll = 0;
+	}
+}
+
+
 void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 {
-	if ( !m_bTabMoveFlag )
-		return;
+	if ( m_moveTabFlag == 0)
+	return;
 
     QPainter painter;
     painter.begin( this );
 
-    int i = 1;
-    int x = 0;
-   
-    QStringList::Iterator it;
-    for ( it = tabsList.begin(); it != tabsList.end(); ++it ) 
-    {
-		QFontMetrics fm = painter.fontMetrics();
-		int text_width = fm.width( *it );
-		
-		if ( i >= leftTab )
+	if ( _ev->pos().x() < 0 && leftTab > 1 && m_autoScroll == 0 )
+	{
+		m_autoScroll = autoScrollLeft;
+		m_moveTab = leftTab - 1;
+		scrollLeft();
+		m_pAutoScrollTimer->start( 400 );
+	}
+	else if ( _ev->pos().x() > size().width() ) 
+	{
+		int i = tabsList.count();
+		if ( activeTab != i && m_moveTab != i && activeTab != i - 1 )
 		{
-		    if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
-	    	{
-				if ( activeTab != i && m_moveTab != i )
-				{
-					m_moveTab = i;
-	   				repaint(); 
-				}
-				else if ( activeTab == i && m_moveTab != 0 )
-				{
-					m_moveTab = 0;
-					repaint();
-				}
-			}
-			x += 10 + text_width;
+			m_moveTabFlag = moveTabAfter;
+			m_moveTab = tabsList.count();
+			repaint( false );
 		}
-		i++;
-    }
+		if ( m_rightTab != tabsList.count() && m_autoScroll == 0 )
+		{
+			m_autoScroll = autoScrollRight;
+			m_moveTab = leftTab;
+			scrollRight();
+			m_pAutoScrollTimer->start( 400 );
+		}
+	}
+	else // ftf
+	{
+	    int i = 1;
+    	int x = 0;
+   
+	    QStringList::Iterator it;
+    	for ( it = tabsList.begin(); it != tabsList.end(); ++it ) 
+	    {
+			QFontMetrics fm = painter.fontMetrics();
+			int text_width = fm.width( *it );
+			
+			if ( i >= leftTab )
+			{
+
+		    	if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
+		    	{
+					if ( m_autoScroll != 0 )
+					{
+						m_pAutoScrollTimer->stop();
+						m_autoScroll = 0;
+					}
+
+					if ( ( activeTab != i && activeTab != i - 1 && m_moveTab != i ) || m_moveTabFlag == moveTabAfter )
+					{
+						m_moveTabFlag = moveTabBefore;
+						m_moveTab = i;
+	   					repaint( false ); 
+					}
+					else if ( (m_moveTab != i && m_moveTab != 0) || (activeTab == i - 1 && m_moveTab != 0) )
+					{
+						m_moveTab = 0;
+						repaint( false );
+					}
+				}
+				x += 10 + text_width;
+			}
+			i++;
+	    }
+		--i;
+		cout << "x: " << x << " pos: " << _ev->pos().x() << " i: " << i << "\n";
+		if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() ) 
+		{
+			if ( activeTab != i && m_moveTabFlag != moveTabAfter )
+			{
+				m_moveTabFlag = moveTabAfter;
+//				m_moveTab = tabsList.count();
+				m_moveTab = i;
+				repaint( false );
+			}
+		}
+	}
     painter.end();
 }
 

@@ -51,9 +51,9 @@ public:
     void removeTab( const QString& _text );
     
 	/**
-	 * Moves the tab with number _from befor tab number _to
-	*/
-	void moveTab( int _from, int _to );
+	 * Moves the tab with number _from befor tab number _to if @param _before is 	 * true _from is inserted before _to. If false it is inserted after.
+	 */
+	void moveTab( int _from, int _to, bool _before = true );
 
 	/**
      * Removes all tabs from the bar and repaints the widget.
@@ -86,7 +86,9 @@ signals:
 protected slots:
     void slotRename( );
 	void slotRemove( );
- 
+
+	void slotAutoScroll( ); 
+
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent ( QMouseEvent* _ev );
@@ -100,6 +102,8 @@ protected:
 
     KSpreadView* m_pView;
 
+	enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
+	enum { moveTabNo = 0, moveTabBefore, moveTabAfter };
     /**
      * Pointer to the last popup menu.
      * If this pointer is not 0L delete before usage.
@@ -112,10 +116,21 @@ protected:
      */
     QStringList tabsList;
 
+	/**
+	 * Timer that causes the tabbar to scroll when the user drag a tab.
+	 */
+	QTimer* m_pAutoScrollTimer;
+
     /**
      * This is the first visible tab on the left of the bar.
      */
     int leftTab;
+
+    /**
+     * This is the last fully visible tab on the right of the bar.
+     */
+    int m_rightTab;
+
     /**
      * The active tab in the range form 1..n.
      * If this value is 0, that means that no tab is active.
@@ -123,15 +138,27 @@ protected:
     int activeTab;
 
 	/**
-	 * Indicates wheter a tab is being moved using the mouse.
-	 */ 	
-	bool m_bTabMoveFlag;
+	 * Indicates wether a tab may be scrolled while moving a table.
+	 * Used to provide a timeout.
+	 */
+	bool m_mayScroll;
 
 	/**
 	 * The number of the tab being moved using the mouse.
-     * If this value is 0, that means that no tab is being moved.
+     * If no tab is being moved this value is 0.
 	 */
 	int m_moveTab;
+	
+	/**
+	 * Indicates wether a tab is being moved using the mouse and in which
+	 * direction.
+	 */ 	
+	int m_moveTabFlag;
+
+	/**
+	 * Indicates the direction the tabs are scrolled to.
+	 */
+	int m_autoScroll;
 };
 
 #endif
