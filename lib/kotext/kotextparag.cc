@@ -1029,6 +1029,7 @@ void KoTextParag::printRTDebug( int info )
                       << " \"" << ch.format()->key() << "\" "
                 //<< " fontsize:" << dynamic_cast<KoTextFormat *>(ch.format())->pointSize()
                       << endl;
+            Q_ASSERT( textDocument()->formatCollection()->dict()[ch.format()->key()] );
             if ( !string()->isBidi() && !ch.lineStart )
                 Q_ASSERT( lastX + lastW == pixelx );
             lastX = pixelx;

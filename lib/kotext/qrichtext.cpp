@@ -5761,8 +5761,7 @@ KoTextFormatCollection::KoTextFormatCollection()
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
 #endif
-    defFormat = new KoTextFormat( QApplication::font(),
-                                  QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
+    defFormat = new KoTextFormat( QApplication::font(), QColor() ); //// kotext: need to use default QColor here
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
@@ -5775,8 +5774,7 @@ KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont )
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormatCollection::KoTextFormatCollection %p", this);
 #endif
-    defFormat = new KoTextFormat( defaultFont,
-                                  QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
+    defFormat = new KoTextFormat( defaultFont, QColor() ); //// kotext: need to use default QColor here
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
@@ -5841,6 +5839,7 @@ KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *f )
     lastFormat = createFormat( *f );
     lastFormat->collection = this;
     cKey.insert( lastFormat->key(), lastFormat );
+    Q_ASSERT( f->key() == lastFormat->key() );
     return lastFormat;
 }
 
@@ -5952,8 +5951,10 @@ void KoTextFormatCollection::debug()
          Q_ASSERT(it.currentKey() == it.current()->key());
          if(it.currentKey() != it.current()->key())
              qDebug("**** MISMATCH key=%s (see line below for format)", it.currentKey().latin1());
-	qDebug( "format '%s' (%p): refcount: %d    realfont: %s", it.current()->key().latin1(),
-		(void*)it.current(), it.current()->ref, QFontInfo( it.current()->font() ).family().latin1() );
+         qDebug( "format '%s' (%p): refcount: %d    realfont: %s",
+                it.current()->key().latin1(),
+                (void*)it.current(), it.current()->ref,
+                QFontInfo( it.current()->font() ).family().latin1() );
     }
     qDebug( "------------ KoTextFormatCollection: debug --------------- END" );
 }
@@ -6152,8 +6153,7 @@ static KoTextFormat *defaultFormat = 0;
 QString KoTextFormat::makeFormatChangeTags( KoTextFormat *f, const QString& oldAnchorHref, const QString& anchorHref  ) const
 {
     if ( !defaultFormat ) // #### wrong, use the document's default format instead
-        defaultFormat = new KoTextFormat( QApplication::font(),
-                                             QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
+        defaultFormat = new KoTextFormat( QApplication::font(), QColor() );
     QString tag;
     if ( f ) {
         if ( f->font() != defaultFormat->font() ) {
@@ -6204,8 +6204,7 @@ QString KoTextFormat::makeFormatChangeTags( KoTextFormat *f, const QString& oldA
 QString KoTextFormat::makeFormatEndTags( const QString& anchorHref ) const
 {
     if ( !defaultFormat )
-        defaultFormat = new KoTextFormat( QApplication::font(),
-                                             QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
+        defaultFormat = new KoTextFormat( QApplication::font(), QColor() );
     QString tag;
     if ( font() != defaultFormat->font() ) {
         if ( font().family() != defaultFormat->font().family()

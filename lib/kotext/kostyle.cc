@@ -89,7 +89,6 @@ KoStyle::KoStyle( const QString & name )
 {
     m_name = name;
     m_followingStyle = this;
-    m_format.setColor( Qt::black ); // ### why ? what about other color schemes ?
 
     // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
     m_paragLayout.style = this;
