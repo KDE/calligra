@@ -3937,32 +3937,66 @@ void KSpreadCanvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
     painter.drawLine( doc()->zoomItX( left ) - l,      doc()->zoomItY( top ),
                       doc()->zoomItX( right ) + 2 * l, doc()->zoomItY( top ) );
   }
-  if ( paintLeft )
-  {
-    painter.drawLine( doc()->zoomItX( left ), doc()->zoomItY( top ),
-                      doc()->zoomItX( left ), doc()->zoomItY( bottom ) );
-  }
-  if ( paintRight && paintBottom )
-  {
-    /* then the 'handle' in the bottom right corner is visible. */
-    painter.drawLine( doc()->zoomItX( right ), doc()->zoomItY( top ),
-                      doc()->zoomItX( right ), doc()->zoomItY( bottom ) - 3 );
-    painter.drawLine( doc()->zoomItX( left ) - l,  doc()->zoomItY( bottom ),
-                      doc()->zoomItX( right ) - 3, doc()->zoomItY( bottom ) );
-    painter.fillRect( doc()->zoomItX( right ) - 2, doc()->zoomItY( bottom ) - 2, 5, 5,
-                      painter.pen().color() );
-  }
-  else
+  if ( activeTable()->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     if ( paintRight )
     {
       painter.drawLine( doc()->zoomItX( right ), doc()->zoomItY( top ),
                         doc()->zoomItX( right ), doc()->zoomItY( bottom ) );
     }
-    if ( paintBottom )
+    if ( paintLeft && paintBottom )
     {
+      /* then the 'handle' in the bottom left corner is visible. */
+      painter.drawLine( doc()->zoomItX( left ), doc()->zoomItY( top ),
+                        doc()->zoomItX( left ), doc()->zoomItY( bottom ) - 3 );
+      painter.drawLine( doc()->zoomItX( left ) + 4,  doc()->zoomItY( bottom ),
+                        doc()->zoomItX( right ) + l + 1, doc()->zoomItY( bottom ) );
+      painter.fillRect( doc()->zoomItX( left ) - 2, doc()->zoomItY( bottom ) -2, 5, 5,
+                        painter.pen().color() );
+    }
+    else
+    {
+      if ( paintLeft )
+      {
+        painter.drawLine( doc()->zoomItX( left ), doc()->zoomItY( top ),
+                          doc()->zoomItX( left ), doc()->zoomItY( bottom ) );
+      }
+      if ( paintBottom )
+      {
+        painter.drawLine( doc()->zoomItX( left ) - l,  doc()->zoomItY( bottom ),
+                          doc()->zoomItX( right ) + l + 1, doc()->zoomItY( bottom ));
+      }
+    }
+  }
+  else
+  {
+    if ( paintLeft )
+    {
+      painter.drawLine( doc()->zoomItX( left ), doc()->zoomItY( top ),
+                        doc()->zoomItX( left ), doc()->zoomItY( bottom ) );
+    }
+    if ( paintRight && paintBottom )
+    {
+      /* then the 'handle' in the bottom right corner is visible. */
+      painter.drawLine( doc()->zoomItX( right ), doc()->zoomItY( top ),
+                        doc()->zoomItX( right ), doc()->zoomItY( bottom ) - 3 );
       painter.drawLine( doc()->zoomItX( left ) - l,  doc()->zoomItY( bottom ),
-                        doc()->zoomItX( right ) + l, doc()->zoomItY( bottom ) );
+                        doc()->zoomItX( right ) - 3, doc()->zoomItY( bottom ) );
+      painter.fillRect( doc()->zoomItX( right ) - 2, doc()->zoomItY( bottom ) - 2, 5, 5,
+                        painter.pen().color() );
+    }
+    else
+    {
+      if ( paintRight )
+      {
+        painter.drawLine( doc()->zoomItX( right ), doc()->zoomItY( top ),
+                          doc()->zoomItX( right ), doc()->zoomItY( bottom ) );
+      }
+      if ( paintBottom )
+      {
+        painter.drawLine( doc()->zoomItX( left ) - l,  doc()->zoomItY( bottom ),
+                          doc()->zoomItX( right ) + l, doc()->zoomItY( bottom ) );
+      }
     }
   }
 }
