@@ -67,12 +67,12 @@ KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint
   l_cell = new QLineEdit( this );
   lay2->addWidget(l_cell,3,0);
   l_cell->setText( "A1" );
-		
+
   bold=new QCheckBox(i18n("Bold"),this);
   lay2->addWidget(bold,4,0);
   italic=new QCheckBox(i18n("Italic"),this);
   lay2->addWidget(italic,5,0);
-
+  text->setFocus();
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 
@@ -104,18 +104,18 @@ else if(!cell->isDefault())
  		 accept();
                 }
     	}
- 		
+
 else
 	{
 	//refresh editWidget
 	QString tmp;
 	tmp=create_anchor();
- 	
+
  	m_pView->canvasWidget()->setFocus();
   	m_pView->setText( tmp );
  	m_pView->editWidget()->setText( tmp );
 	accept();
-	
+
 	}
 }
 

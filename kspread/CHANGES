@@ -253,3 +253,10 @@ in a QPushButton (use color of theme).
 -Now you can put a pattern in a cell
 -bug fix in choose border
 -Now you can choose border directly with the mouse in the area.
+
+1999-12-29 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Bug fix in special paste (right border and bottom border are not
+installing in new cell when you choose Text or NoBorder parameter)
+-Clean up in code
+-Add setFocus in different dialog box

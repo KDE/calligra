@@ -72,78 +72,45 @@ KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
 void KSpreadsort::init()
 {
  r=QRect( m_pView->activeTable()-> selectionRect() );
- //cout <<"left : "<<r.left()<<"Right() : " <<r.right()<<"bottom : " <<r.bottom()<<"top: "<<r.top()<<endl;
- if ( r.left() == 0 || r.top() == 0 ||
-       r.right() == 0 || r.bottom() == 0 )
-  	{
-  	m_pOk->setEnabled(false);
-  	combo->setEnabled(false);
-  	rb_row->setEnabled(false);
-  	rb_column->setEnabled(false);
-  	QMessageBox::warning( 0L, i18n("Error"), i18n("One cell was selected!"),
-			   i18n("Ok") );
-	_sort=ONLY;
-	
-  	}
-  else if(r.right()==0x7FFF)
-  	{
-  	m_pOk->setEnabled(false);
-  	combo->setEnabled(false);
-  	rb_row->setEnabled(false);
-  	rb_column->setEnabled(false);
-  	QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
-	}
-  else if(r.bottom()==0x7FFF)
-  	{
-  	 m_pOk->setEnabled(false);
-  	combo->setEnabled(false);
-  	rb_row->setEnabled(false);
-  	rb_column->setEnabled(false);
-  	QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
-	}
-  else
-  	{
- 	if(r.top()==r.bottom())
+
+ if(r.top()==r.bottom())
+        {
+        for(int i=r.left();i<=r.right();i++)
+                {
+                list_column+=i18n("Column ")+util_columnLabel(i);
+                }
+        rb_row->setEnabled(false);
+        combo->insertStringList(list_column);
+        rb_column->setChecked(true);
+        _sort=ONLY_COLUMN;
+        }
+ else if(r.left()==r.right())
+        {
+        QString toto;
+        for(int i=r.top();i<=r.bottom();i++)
+                {
+                list_row+=i18n("Row ")+toto.setNum(i);
+                }
+        rb_column->setEnabled(false);
+        combo->insertStringList(list_row);
+        rb_row->setChecked(true);
+        _sort=ONLY_ROW;
+        }
+ else
+        {
+        for(int i=r.left();i<=r.right();i++)
  		{
- 		for(int i=r.left();i<=r.right();i++)
- 			{
- 			list_column+=i18n("Column ")+util_columnLabel(i);
- 			}
- 		rb_row->setEnabled(false);
-  		combo->insertStringList(list_column);
-  		rb_column->setChecked(true);
- 		_sort=ONLY_COLUMN;
- 		}
- 	else if(r.left()==r.right())
- 		{
- 		QString toto;
- 		for(int i=r.top();i<=r.bottom();i++)
- 			{
- 			list_row+=i18n("Row ")+toto.setNum(i);
- 			}
- 		rb_column->setEnabled(false);
-  		combo->insertStringList(list_row);
-  		rb_row->setChecked(true);
-  		_sort=ONLY_ROW;
- 		}
- 	else
- 		{
- 		for(int i=r.left();i<=r.right();i++)
- 			{
- 			list_column+=i18n("Column ")+util_columnLabel(i);
- 			}
- 		QString toto;
- 		for(int i=r.top();i<=r.bottom();i++)
- 			{
- 			list_row+=i18n("Row ")+toto.setNum(i);
- 			}
- 		combo->insertStringList(list_column);
-  		rb_column->setChecked(true);
-  		_sort=ALL;
- 		}
- 	}
+        	list_column+=i18n("Column ")+util_columnLabel(i);
+        	}
+        QString toto;
+        for(int i=r.top();i<=r.bottom();i++)
+        	{
+        	list_row+=i18n("Row ")+toto.setNum(i);
+        	}
+        combo->insertStringList(list_column);
+  	rb_column->setChecked(true);
+  	_sort=ALL;
+        }
 }
 
 void KSpreadsort::slotpress(int id)
@@ -162,7 +129,7 @@ switch(id)
 		cout <<"Error in signal : pressed(int id)\n";
 		break;
 	}
-				
+
 }
 
 void KSpreadsort::slotOk()
@@ -202,7 +169,7 @@ switch(_sort)
 				{
 				 m_pView->activeTable()->sortByRow(combo->currentItem()+r.top(),KSpreadTable::Decrease);
 				}
-			
+
 			}
 		else if(rb_column->isChecked())
 			{

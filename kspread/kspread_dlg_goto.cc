@@ -55,7 +55,7 @@ KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
   lay1->addWidget( bb );
-
+  name_cell->setFocus();
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );

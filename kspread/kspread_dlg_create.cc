@@ -27,7 +27,7 @@
 #include "kspread_doc.h"
 #include "kspread_table.h"
 #include "kspread_util.h"
-// #include "kspread_dlg_assistant2.h"
+
 #include "kspread_editors.h"
 #include "kspread_tabbar.h"
 
@@ -58,7 +58,7 @@ KSpreadcreate::KSpreadcreate( KSpreadView* parent, const QString& _name )
     }
 
     ASSERT( m_pView->canvasWidget()->editor() );
-	
+
     m_funcName = _name;
     first_element  = 0;
 
@@ -79,6 +79,8 @@ KSpreadcreate::KSpreadcreate( KSpreadView* parent, const QString& _name )
 	     this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
 
     m_pView->canvasWidget()->startChoose();
+    if(f_param!=0L)
+        f_param->setFocus();
 
     qApp->installEventFilter( this );
 }
@@ -517,7 +519,7 @@ void KSpreadcreate::init()
   	tmp_label->setText(i18n("Position of start"));
         s_param = new QLineEdit( this );
   	lay1->addWidget(s_param);
-  	
+
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Number of characters"));
@@ -566,47 +568,14 @@ void KSpreadcreate::init()
 
     lay1->addWidget( bb );
 
-    /* m_pOk = new QPushButton( i18n("OK"), this );
-    lay1->addWidget(m_pOk,11,0);
-    m_pClose = new QPushButton( i18n("Cancel"), this );
-    lay1->addWidget(m_pClose,11,1); */
-    /* if( nb_param>0)
-    {
-	f_select = new QPushButton( i18n("Select..."), this );
-	lay1->addWidget(f_select,1,1);
-	connect( f_select, SIGNAL( clicked() ), this, SLOT( slotFselect() ) );
-    }
-    if ( nb_param>1)
-    {
-	s_select = new QPushButton( i18n("Select..."), this );
-	lay1->addWidget(s_select,3,1);
-	connect( s_select, SIGNAL( clicked() ), this, SLOT( slotSselect() ) );
-    }
-    if  ( nb_param>2)
-    {
-	t_select = new QPushButton( i18n("Select..."), this );
-	lay1->addWidget(t_select,5,1);
-	connect( t_select, SIGNAL( clicked() ), this, SLOT( slotTselect() ) );
-    }
-    if( nb_param>3)
-    {
-	fo_select = new QPushButton( i18n("Select..."), this );
- 	lay1->addWidget(fo_select,7,1);
- 	connect( fo_select, SIGNAL( clicked() ), this, SLOT( slotFOselect() ) );
-    }
-    if( nb_param>4)
-    {
-	fi_select = new QPushButton( i18n("Select..."), this );
-	lay1->addWidget(fi_select,9,1);
- 	connect( fi_select, SIGNAL( clicked() ), this, SLOT( slotFIselect() ) );
-	} */
+
 }
 
 
 void KSpreadcreate::slotOk()
 {
     m_pView->canvasWidget()->endChoose();
-	
+
     // It was no formula ? Make it one
     if(m_oldText.find("=",0)==-1)
 	m_oldText="="+m_oldText;
@@ -623,7 +592,7 @@ void KSpreadcreate::slotOk()
     m_pView->canvasWidget()->setMarkerRow( m_row );
 
     ASSERT( m_pView->canvasWidget()->editor() );
-	
+
     QString formula = create_formula();
     int pos=m_pView->canvasWidget()->editor()->cursorPosition()+ formula.length();
     m_pView->canvasWidget()->editor()->setText( m_oldText + formula );
@@ -653,10 +622,10 @@ QString KSpreadcreate::create_formula()
 		formula+=","+make_formula(s_param->text(),1);
 	    else
 		formula+=make_formula(s_param->text(),1);
-	
+
 	    first_element=1;
 	}
-	
+
     }
     if  ( nb_param>2)
     {
@@ -757,73 +726,7 @@ QString KSpreadcreate::make_formula( const QString& _text,int nb_line)
     return text;
 }
 
-/*
-void KSpreadcreate::slotFselect()
-{
-    set_nbbutton(1);
-    KSpreadassistant2 *dlg=new KSpreadassistant2(this,"Assistant");
-    dlg->show();
-}
 
-void KSpreadcreate::slotSselect()
-{
-    set_nbbutton(2);
-    KSpreadassistant2 *dlg=new KSpreadassistant2(this,"Assistant");
-    dlg->show();
-}
-
-void KSpreadcreate::slotTselect()
-{
-    set_nbbutton(3);
-    KSpreadassistant2 *dlg=new KSpreadassistant2(this,"Assistant");
-    dlg->show();
-}
-
-void KSpreadcreate::slotFOselect()
-{
-    set_nbbutton(4);
-    KSpreadassistant2 *dlg=new KSpreadassistant2(this,"Assistant");
-    dlg->show();
-}
-
-void KSpreadcreate::slotFIselect()
-{
-    set_nbbutton(5);
-    KSpreadassistant2 *dlg=new KSpreadassistant2(this,"Assistant");
-    dlg->show();
-}
-
-
-void KSpreadcreate::setText(QString text)
-{
-    switch(nb_button())
-	{
-	case 1:
-		f_param->setText(text);
-		f_param->setFocus();
-		break;
-	case 2:
-		s_param->setText(text);
-		s_param->setFocus();
-		break;
-	case 3:
-		t_param->setText(text);
-		t_param->setFocus();
-		break;
-	case 4:
-		fo_param->setText(text);
-		fo_param->setFocus();
-		break;
-	case 5:
-		fi_param->setText(text);
-		fi_param->setFocus();
-		break;
-	default:
-		cout <<"Err in setText()\n";
-		break;
-	}
-}
-*/
 void KSpreadcreate::slotClose()
 {
     m_pView->canvasWidget()->endChoose();

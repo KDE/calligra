@@ -3136,7 +3136,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    if ( n )
 		insertCell( cell );
 	}
-	else if ( c.tagName() == "right-most-border" )
+ else if ( (c.tagName() == "right-most-border")&& ( (sp == Normal) || (sp == Format)) )
         {
 	    int row = c.attribute( "row" ).toInt() + _yshift;
 	    int col = c.attribute( "column" ).toInt() + _xshift;
@@ -3153,7 +3153,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    if ( n )
 		insertCell( cell );
 	}
-	else if ( c.tagName() == "bottom-most-border" )
+	else if ( (c.tagName() == "bottom-most-border")&& ((sp == Normal) || (sp == Format)))
         {
 	    int row = c.attribute( "row" ).toInt() + _yshift;
 	    int col = c.attribute( "column" ).toInt() + _xshift;
@@ -3165,7 +3165,8 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 		cell = new KSpreadCell( this, 0, 0 );
 		n = TRUE;
 	    }
-	    if ( !cell->loadBottomMostBorder( c, _xshift, _yshift ) )
+
+            if ( !cell->loadBottomMostBorder( c, _xshift, _yshift ) )
 		return FALSE;
 	    if ( n )
 		insertCell( cell );
@@ -3513,7 +3514,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 
     QRect rightMost( _rect.x(), _rect.y(), _rect.width() + 1, _rect.height() );
     QRect bottomMost( _rect.x(), _rect.y(), _rect.width(), _rect.height() + 1 );
-	
+
     // Save all cells.
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it )

@@ -73,7 +73,6 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   QObject::connect( type_formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected(const QString &) ) );
-  QObject::connect( formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected_formula(const QString &) ) );
   QObject::connect( formula, SIGNAL( doubleClicked(QListBoxItem *)),this ,SLOT( slotOk() ) );
   resize( 350, 300 );
 

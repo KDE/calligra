@@ -130,7 +130,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     QHBoxLayout* hbox = new QHBoxLayout( m_pToolWidget );
     hbox->addSpacing( 2 );
-	
+
     m_pPosWidget = new QLabel( m_pToolWidget );
     m_pPosWidget->setAlignment( AlignCenter );
     m_pPosWidget->setFrameStyle( QFrame::WinPanel|QFrame::Sunken );
@@ -1437,8 +1437,22 @@ void KSpreadView::replace()
 
 void KSpreadView::sort()
 {
-  KSpreadsort* dlg = new KSpreadsort( this, "Sort" );
-  dlg->show();
+  QRect selection( m_pTable->selectionRect() );
+  if(selection.left()==0)
+    {
+    QMessageBox::warning( 0L, i18n("Error"), i18n("One cell was selected!"),
+			   i18n("Ok") );
+    }
+  else if((selection.right()==0x7FFF) ||(selection.bottom()==0x7FFF))
+  	{
+  	QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+	}
+   else
+        {
+        KSpreadsort* dlg = new KSpreadsort( this, "Sort" );
+        dlg->show();
+        }
 }
 
 void KSpreadView::createAnchor()
