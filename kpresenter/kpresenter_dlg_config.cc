@@ -457,7 +457,7 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
     tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
     grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
 
-    KoRect rect = doc->stickyPage()->getPageRect();
+    KoRect rect = doc->masterPage()->getPageRect();
     QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->getUnitName()), tmpQGroupBox);
     grid->addWidget(lab,0,0);
     KoUnit::Unit unit = doc->getUnit();
@@ -664,7 +664,7 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), gbDocumentSettings);
     m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
     m_oldTabStopWidth = doc->tabStopValue();
-    KoRect rect = doc->stickyPage()->getPageRect();
+    KoRect rect = doc->masterPage()->getPageRect();
 
     m_tabStopWidth->setRange( KoUnit::toUserValue( MM_TO_POINT(2),doc->getUnit() ) , KoUnit::toUserValue( rect.width(), doc->getUnit() ) , 0.1, false);
     m_tabStopWidth->setValue( KoUnit::toUserValue( m_oldTabStopWidth, doc->getUnit() ));

@@ -39,7 +39,7 @@ k_dcop:
     virtual int numPages() const;
     virtual DCOPRef page( int num );
 
-    virtual DCOPRef stickyPage();
+    virtual DCOPRef masterPage();
 
     bool selectPage( int page,bool select);
 

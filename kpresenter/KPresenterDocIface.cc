@@ -49,10 +49,10 @@ DCOPRef KPresenterDocIface::page( int num )
                     doc->pageList().at( num )->dcopObject()->objId() );
 }
 
-DCOPRef KPresenterDocIface::stickyPage()
+DCOPRef KPresenterDocIface::masterPage()
 {
     return DCOPRef( kapp->dcopClient()->appId(),
-                    doc->stickyPage()->dcopObject()->objId() );
+                    doc->masterPage()->dcopObject()->objId() );
 }
 
 void KPresenterDocIface::setShowRuler(bool b)

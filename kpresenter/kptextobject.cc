@@ -1463,7 +1463,7 @@ void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length,
 
         // Is this object in the current active page?
         if ( canvas->activePage()->findTextObject( this ) ||
-             (isSticky() && doc->stickyPage()->findTextObject( this ) ) )
+             (isSticky() && doc->masterPage()->findTextObject( this ) ) )
         {
             kdDebug(33001) << k_funcinfo << "object in current page" << endl;
         }

@@ -39,7 +39,7 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPresenterDoc * _doc, con
     m_doc=_doc;
     KoUnit::Unit unit = m_doc->getUnit();
 
-    KoRect pageRect = m_doc->stickyPage()->getPageRect();
+    KoRect pageRect = m_doc->masterPage()->getPageRect();
 
     setCaption( i18n("Duplicate Object") );
 

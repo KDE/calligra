@@ -2356,7 +2356,7 @@ KCommand *KPrPage::moveObject(KPresenterView *_view, double diffx, double diffy)
                                    _objects, m_doc,this );
 
         int pos=m_doc->pageList().findRef(this);
-        m_doc->updateSideBarItem(pos, ( this == m_doc->stickyPage()) ? true: false );
+        m_doc->updateSideBarItem(pos, ( this == m_doc->masterPage()) ? true: false );
     }
     return moveByCmd;
 }

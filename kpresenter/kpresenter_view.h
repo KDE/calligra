@@ -641,8 +641,6 @@ public:
      */
     void setPageDuration( int _pgNum );
 
-    KPrPage * stickyPage() const;
-
     void updatePageParameter();
 
     void setZoomRect( const QRect & rect, bool drawRubber );

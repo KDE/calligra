@@ -175,7 +175,8 @@ class KPresenterDoc : public KoDocument
 
     const QPtrList<KPrPage> & getPageList() const {return m_pageList;}
 
-    KPrPage * stickyPage() const;
+    // @return the master page
+    KPrPage * masterPage() const { return m_masterPage; }
     KPrPage * activePage()const;
     // We need one that's not const, due to QPtrList::at() not being const
     QPtrList<KPrPage>& pageList() { return m_pageList;}
@@ -669,7 +670,7 @@ private:
     int m_insertFilePage;
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
-    KPrPage *m_stickyPage;
+    KPrPage *m_masterPage;
  #ifdef HAVE_LIBKSPELL2
     KPrBgSpellCheck *m_bgSpellCheck;
 #endif

@@ -586,7 +586,7 @@ void OutlineSlideItem::update()
 
     KPresenterDoc *doc = m_page->kPresenterDoc();
     // add sticky objects, exclude header and footer
-    it = doc->stickyPage()->objectList();
+    it = doc->masterPage()->objectList();
     for ( ; it.current() ; ++it )
     {
         KPObject* object = it.current();
