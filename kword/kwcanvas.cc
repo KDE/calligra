@@ -1557,7 +1557,7 @@ void KWCanvas::deleteFrame()
             if (result != KMessageBox::Continue)
                 return;
         }
-        #endif
+#endif
     }
 #if 0
     bool blinking = blinkTimer.isActive();
@@ -1566,7 +1566,17 @@ void KWCanvas::deleteFrame()
 #endif
     // do the actual delete.
     if ( theFrame->getFrameSet()->getNumFrames() > 1 )
+    {
+        if( theFrame->getFrameSet()->getFrameType() == FT_TEXT)
+        {
+            FrameIndex index;
+            index.m_iFrameIndex=theFrame->getFrameSet()->getFrameFromPtr(theFrame);
+            index.m_iFrameSetIndex=doc->getFrameSetNum(theFrame->getFrameSet());
+            KWTextFrameSetCommand *cmd = new KWTextFrameSetCommand(i18n("Delete text frame"),doc,index);
+            doc->addCommand(cmd);
+        }
         theFrame->getFrameSet()->delFrame( theFrame );
+    }
     else
         doc->delFrameSet( theFrame->getFrameSet() );
 

@@ -597,3 +597,31 @@ void KWPageLayoutCommand::unexecute()
     m_pGui->getHorzRuler()->setPageLayout( m_OldLayout._pgLayout );
     m_pDoc->repaintAllViews();
 }
+
+
+KWTextFrameSetCommand::KWTextFrameSetCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex):
+    KCommand(name),
+    m_pDoc(_doc),
+    frameIndex(_frameIndex)
+{
+    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
+    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
+    copyFrame=frame->getCopy();
+}
+
+void KWTextFrameSetCommand::execute()
+{
+    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
+    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
+    frame->getFrameSet()->delFrame( frameIndex.m_iFrameIndex );
+    m_pDoc->repaintAllViews();
+}
+
+void KWTextFrameSetCommand::unexecute()
+{
+    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
+    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
+    copyFrame->setFrameSet(frameSet);
+    frame->getFrameSet()->addFrame( copyFrame );
+    m_pDoc->repaintAllViews();
+}
