@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -26,7 +26,7 @@
 #include <qsize.h>
 
 /******************************************************************/
-/* Class: InsertCmd                                               */
+/* Class: InsertCmd						  */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
@@ -58,8 +58,8 @@ void InsertCmd::unexecute()
     QRect oldRect = object->getBoundingRect( 0, 0 );
     if ( doc->objectList()->findRef( object ) != -1 )
     {
-        doc->objectList()->take( doc->objectList()->findRef( object ) );
-        object->removeFromObjList();
+	doc->objectList()->take( doc->objectList()->findRef( object ) );
+	object->removeFromObjList();
     }
     doc->repaint( oldRect );
 }

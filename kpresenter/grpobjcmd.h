@@ -26,6 +26,7 @@
 #include "kpobject.h"
 
 class KPresenterDoc;
+class KPGroupObject;
 
 /******************************************************************/
 /* Class: GroupObjCmd						  */
@@ -48,7 +49,33 @@ protected:
 
     QList<KPObject> objects;
     KPresenterDoc *doc;
+    KPGroupObject *grpObj;
+    
+};
 
+/******************************************************************/
+/* Class: UnGroupObjCmd						  */
+/******************************************************************/
+
+class UnGroupObjCmd : public Command
+{
+public:
+    UnGroupObjCmd( const QString &_name, 
+		 KPGroupObject *grpObj_,
+		 KPresenterDoc *_doc );
+    ~UnGroupObjCmd();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    UnGroupObjCmd()
+    {; }
+
+    QList<KPObject> objects;
+    KPresenterDoc *doc;
+    KPGroupObject *grpObj;
+    
 };
 
 #endif

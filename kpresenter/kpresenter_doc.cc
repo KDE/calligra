@@ -3851,4 +3851,11 @@ void KPresenterDoc::groupObjects()
 /*================================================================*/
 void KPresenterDoc::ungroupObjects()
 {
+    KPObject *kpobject = getSelectedObj();
+    if ( kpobject && kpobject->getType() == OT_GROUP ) {
+	UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Object" ), 
+							  (KPGroupObject*)kpobject, this );
+	_commands.addCommand( unGroupObjCmd );
+	unGroupObjCmd->execute();
+    }
 }

@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -25,7 +25,7 @@
 #include <qsize.h>
 
 /******************************************************************/
-/* Class: DeleteCmd                                               */
+/* Class: DeleteCmd						  */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
@@ -35,14 +35,14 @@ DeleteCmd::DeleteCmd( QString _name, QList<KPObject> &_objects, KPresenterDoc *_
     objects.setAutoDelete( false );
     doc = _doc;
     for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->incCmdRef();
+	objects.at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 DeleteCmd::~DeleteCmd()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->decCmdRef();
+	objects.at( i )->decCmdRef();
 }
 
 /*======================== execute ===============================*/
@@ -52,14 +52,14 @@ void DeleteCmd::execute()
 
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-        oldRect = objects.at( i )->getBoundingRect( 0, 0 );
-        if ( doc->objectList()->findRef( objects.at( i ) ) != -1 )
-        {
-            doc->objectList()->take( doc->objectList()->findRef( objects.at( i ) ) );
-            objects.at( i )->removeFromObjList();
-        }
-        doc->repaint( oldRect );
-        doc->repaint( objects.at( i ) );
+	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+	if ( doc->objectList()->findRef( objects.at( i ) ) != -1 )
+	{
+	    doc->objectList()->take( doc->objectList()->findRef( objects.at( i ) ) );
+	    objects.at( i )->removeFromObjList();
+	}
+	doc->repaint( oldRect );
+	doc->repaint( objects.at( i ) );
     }
 }
 
@@ -68,9 +68,9 @@ void DeleteCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-        doc->objectList()->append( objects.at( i ) );
-        objects.at( i )->addToObjList();
-        doc->repaint( objects.at( i ) );
+	doc->objectList()->append( objects.at( i ) );
+	objects.at( i )->addToObjList();
+	doc->repaint( objects.at( i ) );
     }
 }
 

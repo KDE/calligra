@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -286,11 +286,14 @@ void KPRectObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    for( ; it != lst.end(); it++ )
 	    {
 		if ( ( *it ).m_strName == "red" )
-		    brush.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), brush.color().green(), brush.color().blue() ) );
+		    brush.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), brush.color().green(), 
+					    brush.color().blue() ) );
 		if ( ( *it ).m_strName == "green" )
-		    brush.setColor( QColor( brush.color().red(), atoi( ( *it ).m_strValue.c_str() ), brush.color().blue() ) );
+		    brush.setColor( QColor( brush.color().red(), atoi( ( *it ).m_strValue.c_str() ), 
+					    brush.color().blue() ) );
 		if ( ( *it ).m_strName == "blue" )
-		    brush.setColor( QColor( brush.color().red(), brush.color().green(), atoi( ( *it ).m_strValue.c_str() ) ) );
+		    brush.setColor( QColor( brush.color().red(), brush.color().green(), 
+					    atoi( ( *it ).m_strValue.c_str() ) ) );
 		if ( ( *it ).m_strName == "style" )
 		    brush.setStyle( ( Qt::BrushStyle )atoi( ( *it ).m_strValue.c_str() ) );
 	    }

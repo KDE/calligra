@@ -493,3 +493,10 @@ Reggie, 27.10.1999:
 Reggie, 2.11.1999:
 ------------------
 - More work on grouping objects - still doesn´t work
+
+Reggie, 3.11.1999:
+------------------
+- Grouping/Ungrouping objects works now. But don´t use it yet, because
+  - Resizing groupobjects doesn´t work correctly
+  - Saving/Loading them is not implemented
+  (but this will work soon :-)

@@ -32,11 +32,27 @@ public:
     KPGroupObject();
     KPGroupObject( const QList<KPObject> &objs );
     virtual ~KPGroupObject() {}
-    
+
     KPGroupObject &operator=( const KPGroupObject & );
 
     virtual void setSize( int _width, int _height );
+    virtual void setOrig( QPoint _point );
+    virtual void setOrig( int _x, int _y );
+    virtual void moveBy( QPoint _point );
+    virtual void moveBy( int _dx, int _dy );
+    virtual void resizeBy( QSize _size );
     virtual void resizeBy( int _dx, int _dy );
+
+    virtual void rotate( float _angle );
+    virtual void setShadowDistance( int _distance );
+    virtual void setShadowDirection( ShadowDirection _direction );
+    virtual void setShadowColor( QColor _color );
+    virtual void setEffect( Effect _effect );
+    virtual void setEffect2( Effect2 _effect2 );
+    virtual void setPresNum( int _presNum );
+    virtual void setDisappear( bool b );
+    virtual void setDisappearNum( int num );
+    virtual void setEffect3( Effect3 _effect3);
 
     virtual ObjType getType()
     { return OT_GROUP; }
@@ -46,10 +62,26 @@ public:
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
-protected:
-    void paint( QPainter *_painter );
+    void setUpdateObjects( bool b ) {
+	updateObjs = b;
+    }
+        
+    QList<KPObject> getObjects() {
+	return objects;
+    }
 
+    virtual void zoom( float _fakt );
+    virtual void zoomOrig();
+    virtual void setOwnClipping( bool _ownClipping );
+    virtual void setSubPresStep( int _subPresStep );
+    virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true );
+
+protected:
+    void updateSizes( float fx, float fy );
+    void updateCoords( int dx, int dy );
+    
     QList<KPObject> objects;
+    bool updateObjs;
     
 };
 
