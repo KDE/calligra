@@ -117,7 +117,6 @@ KoDocument *KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
 void KoDocumentChild::loadOasis( const QDomElement &element )
 {
     int x, y, w, h;
-    x=y=w=h=0;
     x = KoUnit::parseValue( element.attribute( "svg:x" ) );
     y = KoUnit::parseValue( element.attribute( "svg:y" ) );
     w = KoUnit::parseValue( element.attribute( "svg:with" ) );

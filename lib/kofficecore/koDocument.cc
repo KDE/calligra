@@ -363,13 +363,11 @@ bool KoDocument::saveFile()
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified ();
 
-
-    QCString _native_format = nativeFormatMimeType();
     // The output format is set by koMainWindow, and by openFile
     QCString outputMimeType = d->outputMimeType;
     Q_ASSERT( !outputMimeType.isEmpty() );
     if ( outputMimeType.isEmpty() )
-        outputMimeType = _native_format;
+        outputMimeType = nativeFormatMimeType();
 
     QApplication::setOverrideCursor( waitCursor );
 
@@ -404,7 +402,7 @@ bool KoDocument::saveFile()
     emit sigStatusBarMessage( i18n("Saving...") );
     bool ret = false;
     bool suppressErrorDialog = false;
-    if ( outputMimeType != _native_format ) {
+    if ( !isNativeFormat( outputMimeType ) ) {
         kdDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
         // Not native format : save using export filter
         if ( !d->filterManager )
@@ -936,9 +934,13 @@ bool KoDocument::saveNativeFormat( const QString & _file )
     }
 
     kdDebug(30003) << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType() << endl;
-    // TODO: create store on stack, to remove all the 'delete store' in all the branches
-    // TODO: fix nativeFormatMimeType() for OASIS
-    KoStore* store = KoStore::createStore( file, KoStore::Write, nativeFormatMimeType(), backend );
+    // OLD: bool oasis = d->m_specialOutputFlag == SaveAsOASIS;
+    // OLD: QCString mimeType = oasis ? nativeOasisMimeType() : nativeFormatMimeType();
+    QCString mimeType = d->outputMimeType;
+    bool oasis = mimeType == nativeOasisMimeType();
+    // TODO: use std::auto_ptr or create store on stack [needs API fixing],
+    // to remove all the 'delete store' in all the branches
+    KoStore* store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
     if ( store->bad() )
     {
         d->lastErrorMessage = i18n( "Couldn't open the file for saving" ); // more details needed?
@@ -947,7 +949,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
     }
 
     // Save internal children first since they might get a new url
-    if ( !saveChildren( store ) && d->m_specialOutputFlag != SaveAsOASIS)
+    if ( !saveChildren( store ) && !oasis )
     {
         if ( d->lastErrorMessage.isEmpty() )
             d->lastErrorMessage = i18n( "Error while saving embedded documents" ); // more details needed
@@ -955,7 +957,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         return false;
     }
 
-    if ( d->m_specialOutputFlag == SaveAsOASIS )
+    if ( oasis )
     {
         kdDebug(30003) << "Saving to OASIS format" << endl;
         // Tell KoStore not to touch the file names
@@ -968,7 +970,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         manifestWriter->startDocument( "manifest:manifest" );
         manifestWriter->startElement( "manifest:manifest" );
         manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
-        //TODO manifestWriter->addManifestEntry( "/", ...native oasis mimetype... );
+        manifestWriter->addManifestEntry( "/", mimeType );
 
         if ( !saveOasis( store, manifestWriter ) )
         {
@@ -1101,9 +1103,11 @@ QString KoDocument::saveOasisToStore( KoStore * _store, const QString & _path )
     _store->enterDirectory( _path );
 
     QString name = _store->currentDirectory();
-    // Save childen first since they might get a new url
-    if ( !saveChildren( _store ) && d->m_specialOutputFlag != SaveAsOASIS)
+#if 0
+    // Save children first since they might get a new url
+    if ( !saveChildren( _store ) && d->m_specialOutputFlag != SaveAsOASIS )
         return QString::null;
+#endif
 
     // In the current directory we're the king :-)
     if ( _store->open( "root" ) )
@@ -1453,7 +1457,7 @@ bool KoDocument::openFile()
         return false;
     }
 
-    if ( typeName.latin1() != _native_format ) {
+    if ( !isNativeFormat( typeName.latin1() ) ) {
         if ( !d->filterManager )
             d->filterManager = new KoFilterManager( this );
         KoFilter::ConversionStatus status;
@@ -1539,7 +1543,7 @@ bool KoDocument::openFile()
 
         d->outputMimeType = d->mimeType;
 
-        const bool needConfirm = (d->mimeType != _native_format);
+        const bool needConfirm = !isNativeFormat( d->mimeType );
         setConfirmNonNativeSave ( false, needConfirm  );
         setConfirmNonNativeSave ( true, needConfirm );
     }
@@ -1692,7 +1696,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
     // OASIS/OOo file format?
     if ( store->hasFile( "content.xml" ) )
     {
-        d->m_specialOutputFlag = SaveAsOASIS;
+        //d->m_specialOutputFlag = SaveAsOASIS;
         store->disallowNameExpansion();
 
         // TODO check mimetype file?
@@ -2061,6 +2065,16 @@ QCString KoDocument::nativeFormatMimeType() const
     return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
 }
 
+// Temporary, while nativeFormatMimeType != oasis. Will go away once oasis is the only native mimetype
+QCString KoDocument::nativeOasisMimeType() const
+{
+    KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
+    if ( !service )
+        return QCString();
+    return service->property( "X-KDE-NativeOasisMimeType" ).toString().latin1();
+}
+
+
 //static
 KService::Ptr KoDocument::readNativeService( KInstance *instance )
 {
@@ -2083,28 +2097,56 @@ KService::Ptr KoDocument::readNativeService( KInstance *instance )
     if ( !service )
         service = KService::serviceByDesktopName( instname );
 
-    if ( !service )
-        return service; // not found
+    return service;
+}
 
-    // found, check that it's good
+QCString KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
+{
+    KService::Ptr service = readNativeService( instance );
+    if ( !service )
+        return QCString();
+
     if ( service->property( "X-KDE-NativeMimeType" ).toString().isEmpty() )
     {
         // It may be that the servicetype "KOfficePart" is missing, which leads to this property not being known
         if ( KServiceType::serviceType( "KOfficePart" ) == 0L )
             kdError(30003) << "The serviceType KOfficePart is missing. Check that you have a kofficepart.desktop file in the share/servicetypes directory." << endl;
-        else if ( instname != "koshell" ) // hack for koshell
-            kdWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
+        else {
+            QString instname = instance ? instance->instanceName() : kapp->instanceName();
+            if ( instname != "koshell" ) // hack for koshell
+                kdWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
+        }
     }
 
-    return service;
+    return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
 }
 
-QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
+QStringList KoDocument::readExtraNativeMimeTypes( KInstance *instance ) //static
 {
     KService::Ptr service = readNativeService( instance );
     if ( !service )
-        return QCString();
-    return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
+        return QStringList();
+    return service->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
+}
+
+
+bool KoDocument::isNativeFormat( const QCString& mimetype ) const
+{
+    if ( mimetype == nativeFormatMimeType() )
+        return true;
+    return extraNativeMimeTypes().contains( mimetype );
+}
+
+QStringList KoDocument::extraNativeMimeTypes() const
+{
+    QStringList lst;
+    // This implementation is temporary while we treat both koffice-1.3 and OASIS formats as native.
+    // But it's good to have this virtual method, in case some app want to
+    // support more than one native format.
+    KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
+    if ( !service ) // can't happen
+        return lst;
+    return service->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
 }
 
 void KoDocument::addShell( KoMainWindow *shell )

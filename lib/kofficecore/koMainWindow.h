@@ -301,15 +301,6 @@ protected:
      */
     virtual bool saveDocument( bool saveas = false );
 
-    /**
-     * Asks the user if they really want to save the document if
-     * outputFormat != nativeFormat.  If outputFormat == nativeFormat, no dialog
-     * is shown and it is assumed that the user wishes to save.
-     *
-     * @return true if the document should be saved
-     */
-    bool exportConfirmation( const QCString &outputFormat, const QCString &nativeFormat );
-
     virtual void closeEvent( QCloseEvent * e );
     virtual void resizeEvent( QResizeEvent * e );
 
@@ -325,6 +316,9 @@ protected:
      */
     void saveRecentFiles();
 
+    KRecentFilesAction *recentAction() const { return m_recent; }
+
+private:
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
      * call is actually an export operation (like File --> Export).
@@ -345,8 +339,13 @@ protected:
      */
     bool isImporting() const;
 
-    KRecentFilesAction *recentAction() const { return m_recent; }
-private:
+    /**
+     * Asks the user if they really want to save the document.
+     * Called only if outputFormat != nativeFormat.
+     *
+     * @return true if the document should be saved
+     */
+    bool exportConfirmation( const QCString &outputFormat );
 
     void saveWindowSettings();
 
@@ -367,21 +366,23 @@ private:
 
 };
 
-// Extension to KFileDialog in order to add "save as koffice-1.1" and "save as dir"
+// Extension to KFileDialog in order to add special entries to the filter combo,
+// like "save as koffice-1.1", "save as dir" etc.
 // Used only when saving!
 class KoFileDialog : public KFileDialog
 {
     Q_OBJECT
 public:
-    KoFileDialog(const QString& startDir, const QString& filter,
-                 QWidget *parent, const char *name,
-                 bool modal);
+    KoFileDialog( const QString& startDir, const QString& filter,
+                  QWidget *parent, const char *name,
+                  bool modal );
     void setSpecialMimeFilter( QStringList& mimeFilter,
                                const QString& currentFormat, const int specialOutputFlag,
-                               const QString& nativeFormat );
+                               const QString& nativeFormat,
+                               const QStringList& extraNativeMimeTypes );
     int specialEntrySelected();
 private slots:
-void slotChangedfilter( int index );
+    void slotChangedfilter( int index );
 };
 
 #endif

@@ -169,7 +169,7 @@ public:
     virtual void setReadWrite( bool readwrite = true );
 
     /**
-     * Used by KoApplication, when no document exists yet.
+     * Used by KoApplication, and by KoMainWindow, when no document exists yet.
      *
      * With the help of @p instance or @ref KApplication::instance() this
      * method figures out which .desktop file matches this application. In this
@@ -178,9 +178,19 @@ public:
      * @see KService
      * @see KDesktopFile
      */
-    static QCString readNativeFormatMimeType( KInstance *instance = 0L );
+    static QCString readNativeFormatMimeType( KInstance *instance = 0 );
 
-    static KService::Ptr readNativeService( KInstance *instance = 0L );
+    /**
+     * Used by KoMainWindow, when no document exists yet.
+     *
+     * With the help of @p instance or @ref KApplication::instance() this
+     * method figures out which .desktop file matches this application. In this
+     * file it searches for the "X-KDE-ExtraNativeMimeTypes" entry and returns it.
+     *
+     * @see KService
+     * @see KDesktopFile
+     */
+    static QStringList readExtraNativeMimeTypes( KInstance *instance = 0 );
 
     /**
      * To be preferred when a document exists. It is fast when calling
@@ -190,11 +200,15 @@ public:
      */
     virtual QCString nativeFormatMimeType() const;
 
-    KService::Ptr nativeService();
+    /// Checks whether a given mimetype can be handled natively.
+    bool isNativeFormat( const QCString& mimetype ) const;
+    /// Returns a list of the mimetypes considered "native", i.e. which can
+    /// be saved by KoDocument without a filter, in *addition* to the main one
+    QStringList extraNativeMimeTypes() const;
 
     /// Enum values used by specialOutputFlag
     enum { SaveAsKOffice1dot1 = 1, SaveAsDirectoryStore = 2,
-           SaveAsKOffice1dot3 = 3, SaveAsOASIS = 4 };
+           SaveAsKOffice1dot3 = 3 };
 
     /**
      * Returns the actual mimetype of the document
@@ -874,6 +888,10 @@ private slots:
     void slotStarted( KIO::Job* );
 
 private:
+    static KService::Ptr readNativeService( KInstance *instance );
+    KService::Ptr nativeService();
+    QCString nativeOasisMimeType() const;
+
     bool loadAndParse( KoStore* store, const QString& filename, QDomDocument& doc, bool reportWhiteSpace );
     bool loadNativeFormatFromStore( const QString& file );
     bool savePreview( KoStore* store );

@@ -25,6 +25,7 @@
 #include "koDocumentInfoDlg.h"
 #include "koQueryTrader.h"
 #include "KoMainWindowIface.h"
+#include "koFrame.h"
 
 #include <kprinter.h>
 #include <kdeversion.h>
@@ -64,7 +65,7 @@ public:
     : KParts::PartManager( topLevel, parent, name ) {}
   virtual bool eventFilter( QObject *obj, QEvent *ev )
   {
-    if ( !obj->isWidgetType() || obj->inherits( "KoFrame" ) )
+    if ( !obj->isWidgetType() || ::qt_cast<KoFrame *>( obj ) )
       return false;
     return KParts::PartManager::eventFilter( obj, ev );
   }
@@ -89,16 +90,23 @@ KoFileDialog::KoFileDialog(const QString& startDir, const QString& filter,
 
 void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
                                          const QString& currentFormat, const int specialOutputFlag,
-                                         const QString& nativeFormat )
+                                         const QString& nativeFormat,
+                                         const QStringList& extraNativeMimeTypes )
 {
     Q_ASSERT( !mimeFilter.isEmpty() );
     Q_ASSERT( mimeFilter[0] == nativeFormat );
 
-    int numSpecialEntries = 4;
+    int numSpecialEntries = 3;
 
-    // Insert two entries with native mimetypes, for the special entries.
+    // Insert numSpecialEntries entries with native mimetypes, for the special entries.
     QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
     mimeFilter.insert( mimeFilterIt /* before 1 -> after 0 */, numSpecialEntries, nativeFormat );
+    // Now insert entries for the extra native mimetypes
+    mimeFilterIt = mimeFilter.at( 1 + numSpecialEntries );
+    for( QStringList::ConstIterator it = extraNativeMimeTypes.begin(); it != extraNativeMimeTypes.end(); ++it ) {
+        mimeFilterIt = mimeFilter.insert( mimeFilterIt, *it );
+        ++mimeFilterIt;
+    }
 
     // Fill in filter combo
     // Note: if currentFormat doesn't exist in mimeFilter, filterWidget
@@ -110,7 +118,7 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
     filterWidget->changeItem( i18n("%1 (KOffice-1.1 Format)").arg( type->comment() ), KoDocument::SaveAsKOffice1dot1 );
     filterWidget->changeItem( i18n("%1 (Uncompressed XML Files)").arg( type->comment() ), KoDocument::SaveAsDirectoryStore );
     filterWidget->changeItem( i18n("%1 (KOffice-1.3 Format)").arg( type->comment() ), KoDocument::SaveAsKOffice1dot3 );
-    filterWidget->changeItem( i18n("%1 (OASIS Format - experimental)").arg( type->comment() ), KoDocument::SaveAsOASIS );
+    //filterWidget->changeItem( i18n("%1 (OASIS Format - experimental)").arg( type->comment() ), KoDocument::SaveAsOASIS );
     // if you add an entry here, update numSpecialEntries above and specialEntrySelected() below
 
     // For native format...
@@ -138,7 +146,7 @@ int KoFileDialog::specialEntrySelected()
     if ( i == KoDocument::SaveAsKOffice1dot1
          || i == KoDocument::SaveAsDirectoryStore
          || i == KoDocument::SaveAsKOffice1dot3
-         || i == KoDocument::SaveAsOASIS )
+         /*|| i == KoDocument::SaveAsOASIS*/ )
         return i;
     return 0;
 }
@@ -510,8 +518,8 @@ void KoMainWindow::reloadRecentFileList()
 
 KoDocument* KoMainWindow::createDoc() const
 {
-    QCString mimetype=KoDocument::readNativeFormatMimeType();
-    KoDocumentEntry entry=KoDocumentEntry::queryByMimeType(mimetype);
+    const QCString mimetype = KoDocument::readNativeFormatMimeType();
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( mimetype );
     return entry.createDoc();
 }
 
@@ -661,52 +669,47 @@ void KoMainWindow::slotSaveCompleted()
 }
 
 // returns true if we should save, false otherwise.
-bool KoMainWindow::exportConfirmation( const QCString &outputFormat, const QCString &nativeFormat )
+bool KoMainWindow::exportConfirmation( const QCString &outputFormat )
 {
-    if ( outputFormat != nativeFormat )
+    KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
+
+    const bool neverHeardOfIt = ( mime->name() == KMimeType::defaultMimeType() );
+    QString comment = neverHeardOfIt ?
+                      i18n( "%1 (unknown file type)" ).arg( outputFormat )
+                      : mime->comment();
+
+    // Warn the user
+    int ret;
+    if (!isExporting ()) // File --> Save
     {
-        KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
-
-        const bool neverHeardOfIt = ( mime->name() == KMimeType::defaultMimeType() );
-        QString comment = neverHeardOfIt ?
-                            i18n( "%1 (unknown file type)" ).arg( outputFormat )
-                            : mime->comment();
-
-        // Warn the user
-        int ret;
-        if (!isExporting ()) // File --> Save
-        {
-            ret = KMessageBox::warningContinueCancel
-            (
-                this,
-                i18n( "<qt>Saving as a %1 may result in some loss of formatting."
-                      "<p>Do you still want to save in this format?</qt>" )
-                    .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
-                i18n( "Confirm Save" ),
-                KStdGuiItem::save (),
-                "NonNativeSaveConfirmation",
-                true
-            );
-        }
-        else // File --> Export
-        {
-            ret = KMessageBox::warningContinueCancel
-            (
-                this,
-                i18n( "<qt>Exporting as a %1 may result in some loss of formatting."
-                      "<p>Do you still want to export to this format?</qt>" )
-                    .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
-                i18n( "Confirm Export" ),
-                i18n ("Export"),
-                "NonNativeExportConfirmation", // different to the one used for Save (above)
-                true
-            );
-        }
-
-        return (ret == KMessageBox::Continue);
+        ret = KMessageBox::warningContinueCancel
+              (
+                  this,
+                  i18n( "<qt>Saving as a %1 may result in some loss of formatting."
+                        "<p>Do you still want to save in this format?</qt>" )
+                  .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
+                  i18n( "Confirm Save" ),
+                  KStdGuiItem::save (),
+                  "NonNativeSaveConfirmation",
+                  true
+                  );
     }
-    else
-        return true;
+    else // File --> Export
+    {
+        ret = KMessageBox::warningContinueCancel
+              (
+                  this,
+                  i18n( "<qt>Exporting as a %1 may result in some loss of formatting."
+                        "<p>Do you still want to export to this format?</qt>" )
+                  .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
+                  i18n( "Confirm Export" ),
+                  i18n ("Export"),
+                  "NonNativeExportConfirmation", // different to the one used for Save (above)
+                  true
+                  );
+    }
+
+    return (ret == KMessageBox::Continue);
 }
 
 bool KoMainWindow::saveDocument( bool saveas )
@@ -727,6 +730,7 @@ bool KoMainWindow::saveDocument( bool saveas )
     KURL suggestedURL = pDoc->url();
 
     QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export );
+    mimeFilter += pDoc->extraNativeMimeTypes();
     if (mimeFilter.findIndex (oldOutputFormat) < 0 && !isExporting())
     {
         kdDebug(30003) << "KoMainWindow::saveDocument no export filter for " << oldOutputFormat << endl;
@@ -791,7 +795,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         dialog->setSpecialMimeFilter( mimeFilter,
                                       isExporting() ? d->m_lastExportFormat : pDoc->mimeType(),
                                       isExporting() ? d->m_lastExportSpecialOutputFlag : oldSpecialOutputFlag,
-                                      _native_format );
+                                      _native_format, pDoc->extraNativeMimeTypes() );
 
         KURL newURL;
         QCString outputFormat = _native_format;
@@ -844,8 +848,10 @@ bool KoMainWindow::saveDocument( bool saveas )
             bool wantToSave = true;
 
             // don't change this line unless you know what you're doing :)
-            if (!justChangingFilterOptions || pDoc->confirmNonNativeSave (isExporting ()))
-                wantToSave = exportConfirmation (outputFormat, _native_format);
+            if (!justChangingFilterOptions || pDoc->confirmNonNativeSave (isExporting ())) {
+                if ( !pDoc->isNativeFormat( outputFormat ) )
+                    wantToSave = exportConfirmation( outputFormat );
+            }
 
             if (wantToSave)
             {
@@ -916,9 +922,10 @@ bool KoMainWindow::saveDocument( bool saveas )
             ret = false;
     }
     else {  // saving
-        bool needConfirm = pDoc->confirmNonNativeSave( false );
+        bool needConfirm = pDoc->confirmNonNativeSave( false ) &&
+                           !pDoc->isNativeFormat( oldOutputFormat );
         if (!needConfirm ||
-               (needConfirm && exportConfirmation ( oldOutputFormat /* not so old :) */, _native_format ))
+               (needConfirm && exportConfirmation( oldOutputFormat /* not so old :) */ ))
            )
         {
             // be sure pDoc has the correct outputMimeType!
@@ -1088,8 +1095,15 @@ void KoMainWindow::slotFileOpen()
     else
         dialog->setCaption( i18n("Import Document") );
 
-    dialog->setMimeFilter( KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
-                                                        KoFilterManager::Import ) );
+    QStringList mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
+                                                          KoFilterManager::Import );
+    QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
+    const QStringList extraNativeMimeTypes = KoDocument::readExtraNativeMimeTypes();
+    for( QStringList::ConstIterator it = extraNativeMimeTypes.begin(); it != extraNativeMimeTypes.end(); ++it ) {
+        mimeFilterIt = mimeFilter.insert( mimeFilterIt, *it );
+        ++mimeFilterIt;
+    }
+    dialog->setMimeFilter( mimeFilter );
     if(dialog->exec()!=QDialog::Accepted) {
         delete dialog;
         return;
