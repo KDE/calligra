@@ -277,8 +277,8 @@ MySqlDB::query(const QString& statement)
 bool
 MySqlDB::uhQuery(const QString& statement)
 {
-//(js)	const char *query = statement.latin1();
-	const char *query = encode(statement);
+	const char *query = statement.latin1();
+//??(js)	const char *query = encode(statement);
 	if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
 	{
 		if(mysql_errno(m_mysql) == 0)
