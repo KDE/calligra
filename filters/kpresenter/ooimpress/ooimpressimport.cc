@@ -22,7 +22,10 @@
 #include <math.h>
 
 #include <qregexp.h>
+#include <qdatetime.h>
 
+#include <kzip.h>
+#include <karchive.h>
 #include <kdebug.h>
 #include <koUnit.h>
 #include <koDocumentInfo.h>
@@ -306,6 +309,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     }
 
     QDomElement objectElement = doc.createElement( "OBJECTS" );
+    QDomElement pictureElement = doc.createElement( "PICTURES" );
     QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
 
     // parse all pages
@@ -373,6 +377,14 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendShadow( doc, e );
                 appendLineEnds( doc, e );
             }
+            else if ( name == "draw:image" ) // image
+            {
+                storeObjectStyles( o );
+                e = doc.createElement( "OBJECT" );
+                e.setAttribute( "type", 0 );
+                append2DGeometry( doc, e, o, offset );
+                appendImage( doc, e, pictureElement, o );
+            }
             else
             {
                 kdDebug() << "Unsupported object '" << name << "'" << endl;
@@ -386,6 +398,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     docElement.appendChild( paperElement );
     docElement.appendChild( pageTitleElement );
     docElement.appendChild( objectElement );
+    docElement.appendChild( pictureElement );
     doccontent.appendChild( doc );
 }
 
@@ -584,6 +597,52 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
     }
 }
 
+void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object )
+{
+    // store the picture
+    KZip inputFile = KZip( m_chain->inputFile() );
+    inputFile.open( IO_ReadOnly );
+
+    QString url = object.attribute( "xlink:href" ).remove( '#' );
+    QString fileName = url.mid( url.find( '/' ) + 1 );
+
+    KArchiveFile* file = (KArchiveFile*) inputFile.directory()->entry( url );
+    KoStoreDevice* out = m_chain->storageFile( "pictures/" + fileName, KoStore::Write );
+    if ( out )
+    {
+        QByteArray buffer = file->data();
+        out->writeBlock( buffer.data(), buffer.size() );
+    }
+    inputFile.close();
+
+    // create a key for the picture
+    QTime time = QTime::currentTime();
+    QDate date = QDate::currentDate();
+
+    QDomElement image = doc.createElement( "KEY" );
+    image.setAttribute( "msec", time.msec() );
+    image.setAttribute( "second", time.second() );
+    image.setAttribute( "minute", time.minute() );
+    image.setAttribute( "hour", time.hour() );
+    image.setAttribute( "day", date.day() );
+    image.setAttribute( "month", date.month() );
+    image.setAttribute( "year", date.year() );
+    image.setAttribute( "filename", fileName );
+    e.appendChild( image );
+
+    QDomElement settings = doc.createElement( "PICTURESETTINGS" );
+    settings.setAttribute( "grayscal", 0 );
+    settings.setAttribute( "bright", 0 );
+    settings.setAttribute( "mirrorType", 0 );
+    settings.setAttribute( "swapRGB", 0 );
+    settings.setAttribute( "depth", 0 );
+    e.appendChild( settings );
+
+    QDomElement key = image.cloneNode().toElement();
+    key.setAttribute( "name", "pictures/" + fileName );
+    p.appendChild( key );
+}
+
 void OoImpressImport::appendRounding( QDomDocument& doc, QDomElement& e, const QDomElement& object )
 {
     if ( object.hasAttribute( "draw:corner-radius" ) )
@@ -745,6 +804,24 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
     QDomElement textObjectElement = doc.createElement( "TEXTOBJ" );
     //lukas: TODO the text box can have a style as well (presentation:style-name)!
     //percy: this should be fixed with the new StyleStack
+
+    // KPresenter needs an attribute 'verticalValue' for vertical alignment to work
+    // correctly. It is somehow calculated like value = 'height of box' - 'height of text'.
+    // But we have no chance to calculate this value at this place... so needs to be fixed
+    // in kpresenter before we activate this...
+    #if 0
+    // vertical alignment
+    if ( m_styleStack.hasAttribute( "draw:textarea-vertical-align" ) )
+    {
+        QString alignment = m_styleStack.attribute( "draw:textarea-vertical-align" );
+        if ( alignment == "top" )
+            textObjectElement.setAttribute( "verticalAlign", "top" );
+        else if ( alignment == "middle" )
+            textObjectElement.setAttribute( "verticalAlign", "center" );
+        else if ( alignment == "bottom" )
+            textObjectElement.setAttribute( "verticalAlign", "bottom" );
+    }
+    #endif
 
     for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
     {
