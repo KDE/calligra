@@ -280,8 +280,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     }
     else
     {
-        paperElement.setAttribute( "ptWidth", OoUtils::toPoint(properties.attribute( "fo:page-width" ) ) );
-        paperElement.setAttribute( "ptHeight", OoUtils::toPoint(properties.attribute( "fo:page-height" ) ) );
+        paperElement.setAttribute( "ptWidth", KoUnit::parseValue(properties.attribute( "fo:page-width" ) ) );
+        paperElement.setAttribute( "ptHeight", KoUnit::parseValue(properties.attribute( "fo:page-height" ) ) );
 //         paperElement.setAttribute( "unit", 0 );
 //         paperElement.setAttribute( "format", 5 );
 //         paperElement.setAttribute( "tabStopValue", 42.5198 );
@@ -297,10 +297,10 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         pageHeight = properties.attribute( "fo:page-height" ).remove( "cm" ).toDouble();
 
         QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
-        paperBorderElement.setAttribute( "ptRight", OoUtils::toPoint( properties.attribute( "fo:margin-right" ) ) );
-        paperBorderElement.setAttribute( "ptBottom", OoUtils::toPoint( properties.attribute( "fo:margin-bottom" ) ) );
-        paperBorderElement.setAttribute( "ptLeft", OoUtils::toPoint( properties.attribute( "fo:margin-left" ) ) );
-        paperBorderElement.setAttribute( "ptTop", OoUtils::toPoint( properties.attribute( "fo:margin-top" ) ) );
+        paperBorderElement.setAttribute( "ptRight", KoUnit::parseValue( properties.attribute( "fo:margin-right" ) ) );
+        paperBorderElement.setAttribute( "ptBottom", KoUnit::parseValue( properties.attribute( "fo:margin-bottom" ) ) );
+        paperBorderElement.setAttribute( "ptLeft", KoUnit::parseValue( properties.attribute( "fo:margin-left" ) ) );
+        paperBorderElement.setAttribute( "ptTop", KoUnit::parseValue( properties.attribute( "fo:margin-top" ) ) );
         paperElement.appendChild( paperBorderElement );
     }
 
@@ -634,22 +634,22 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 void OoImpressImport::append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset )
 {
     QDomElement orig = doc.createElement( "ORIG" );
-    orig.setAttribute( "x", OoUtils::toPoint( object.attribute( "svg:x" ) ) );
-    orig.setAttribute( "y", OoUtils::toPoint( object.attribute( "svg:y" ) ) + offset );
+    orig.setAttribute( "x", KoUnit::parseValue( object.attribute( "svg:x" ) ) );
+    orig.setAttribute( "y", KoUnit::parseValue( object.attribute( "svg:y" ) ) + offset );
     e.appendChild( orig );
 
     QDomElement size = doc.createElement( "SIZE" );
-    size.setAttribute( "width", OoUtils::toPoint( object.attribute( "svg:width" ) ) );
-    size.setAttribute( "height", OoUtils::toPoint( object.attribute( "svg:height" ) ) );
+    size.setAttribute( "width", KoUnit::parseValue( object.attribute( "svg:width" ) ) );
+    size.setAttribute( "height", KoUnit::parseValue( object.attribute( "svg:height" ) ) );
     e.appendChild( size );
 }
 
 void OoImpressImport::appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset )
 {
-    double x1 = OoUtils::toPoint( object.attribute( "svg:x1" ) );
-    double y1 = OoUtils::toPoint( object.attribute( "svg:y1" ) );
-    double x2 = OoUtils::toPoint( object.attribute( "svg:x2" ) );
-    double y2 = OoUtils::toPoint( object.attribute( "svg:y2" ) );
+    double x1 = KoUnit::parseValue( object.attribute( "svg:x1" ) );
+    double y1 = KoUnit::parseValue( object.attribute( "svg:y1" ) );
+    double x2 = KoUnit::parseValue( object.attribute( "svg:x2" ) );
+    double y2 = KoUnit::parseValue( object.attribute( "svg:y2" ) );
 
     double x = QMIN( x1, x2 );
     double y = QMIN( y1, y2 );
@@ -698,7 +698,7 @@ void OoImpressImport::appendPen( QDomDocument& doc, QDomElement& e )
         }
 
         if ( m_styleStack.hasAttribute( "svg:stroke-width" ) )
-            pen.setAttribute( "width", (int) OoUtils::toPoint( m_styleStack.attribute( "svg:stroke-width" ) ) );
+            pen.setAttribute( "width", (int) KoUnit::parseValue( m_styleStack.attribute( "svg:stroke-width" ) ) );
         if ( m_styleStack.hasAttribute( "svg:stroke-color" ) )
             pen.setAttribute( "color", m_styleStack.attribute( "svg:stroke-color" ) );
         e.appendChild( pen );
@@ -999,7 +999,7 @@ void OoImpressImport::appendRounding( QDomDocument& doc, QDomElement& e, const Q
     {
         // kpresenter uses percent, ooimpress uses cm ... hmm?
         QDomElement rounding = doc.createElement( "RNDS" );
-        int corner = static_cast<int>(OoUtils::toPoint(object.attribute("draw:corner-radius")));
+        int corner = static_cast<int>(KoUnit::parseValue(object.attribute("draw:corner-radius")));
         rounding.setAttribute( "x", corner );
         rounding.setAttribute( "y", corner );
         e.appendChild( rounding );
@@ -1024,7 +1024,7 @@ void OoImpressImport::appendShadow( QDomDocument& doc, QDomElement& e )
             QDomElement shadow = doc.createElement( "SHADOW" );
             QString distance = m_styleStack.attribute( "fo:text-shadow" );
             distance.truncate( distance.find( ' ' ) );
-            shadow.setAttribute( "distance", OoUtils::toPoint( distance ) );
+            shadow.setAttribute( "distance", KoUnit::parseValue( distance ) );
             shadow.setAttribute( "direction", 5 );
             shadow.setAttribute( "color", "#a0a0a0" );
             e.appendChild( shadow );
@@ -1035,8 +1035,8 @@ void OoImpressImport::appendShadow( QDomDocument& doc, QDomElement& e )
     {
         // use the shadow attribute to indicate an object-shadow
         QDomElement shadow = doc.createElement( "SHADOW" );
-        double x = OoUtils::toPoint( m_styleStack.attribute( "draw:shadow-offset-x" ) );
-        double y = OoUtils::toPoint( m_styleStack.attribute( "draw:shadow-offset-y" ) );
+        double x = KoUnit::parseValue( m_styleStack.attribute( "draw:shadow-offset-x" ) );
+        double y = KoUnit::parseValue( m_styleStack.attribute( "draw:shadow-offset-y" ) );
 
         if ( x < 0 && y < 0 )
         {
@@ -1131,13 +1131,13 @@ void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e )
 void OoImpressImport::appendTextObjectMargin( QDomDocument& /*doc*/, QDomElement& e )
 {
     if( m_styleStack.hasAttribute( "fo:padding-top" ) )
-        e.setAttribute( "btoppt", OoUtils::toPoint( m_styleStack.attribute( "fo:padding-top" ) ) );
+        e.setAttribute( "btoppt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-top" ) ) );
     if( m_styleStack.hasAttribute( "fo:padding-bottom" ) )
-        e.setAttribute( "bbottompt", OoUtils::toPoint( m_styleStack.attribute( "fo:padding-bottom" ) ) );
+        e.setAttribute( "bbottompt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-bottom" ) ) );
     if( m_styleStack.hasAttribute( "fo:padding-left" ) )
-        e.setAttribute( "bleftpt", OoUtils::toPoint( m_styleStack.attribute( "fo:padding-left" ) ) );
+        e.setAttribute( "bleftpt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-left" ) ) );
     if( m_styleStack.hasAttribute( "fo:padding-right" ) )
-        e.setAttribute( "brightpt", OoUtils::toPoint( m_styleStack.attribute( "fo:padding-right" ) ) );
+        e.setAttribute( "brightpt", KoUnit::parseValue( m_styleStack.attribute( "fo:padding-right" ) ) );
 }
 
 
@@ -1256,6 +1256,22 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
     else
         p.setAttribute( "align", 0 ); // use left aligned as default
 
+
+    // Offset before and after paragraph
+    OoUtils::importTopBottomMargin( p, m_styleStack );
+
+    // Indentation (margins)
+    OoUtils::importIndents( p, m_styleStack );
+
+    // Line spacing
+    OoUtils::importLineSpacing( p, m_styleStack );
+
+    // Tabulators
+    OoUtils::importTabulators( p, m_styleStack );
+
+    // Borders
+    OoUtils::importBorders( p, m_styleStack );
+
     uint pos = 0;
 
     // parse every childnode of the paragraph
@@ -1263,25 +1279,26 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
     {
         QString textData;
         QDomText t = n.toText();
+        QDomElement ts = n.toElement();
+        QString tagName = ts.tagName();
 
-        if (n.toElement().tagName() == "text:s")
-            textData = expandWhitespace(n.toElement());
-        else if (n.toElement().tagName() == "text:date" // fields
-                 || n.toElement().tagName() == "text:time"
-                 || n.toElement().tagName() == "text:page-number"
-                 || n.toElement().tagName() == "text:file-name"
-                 || n.toElement().tagName() == "text:author-name"
-                 || n.toElement().tagName() == "text:author-initials")
+        if (tagName == "text:s")
+            textData = OoUtils::expandWhitespace(n.toElement());
+        else if (tagName == "text:date" // fields
+                 || tagName == "text:time"
+                 || tagName == "text:page-number"
+                 || tagName == "text:file-name"
+                 || tagName == "text:author-name"
+                 || tagName == "text:author-initials")
         {
             textData = "#";     // field placeholder
-            appendField(doc, p, n.toElement(), pos);
+            appendField(doc, p, ts, pos);
         }
         else if ( t.isNull() ) // no textnode, so maybe it's a text:span
         {
-            QDomElement ts = n.toElement();
-
-            if ( ts.tagName() != "text:span" ) // TODO: are there any other possible
+            if ( tagName != "text:span" ) // TODO: are there any other possible
                 continue;                      // elements or even nested test:spans?
+            // DF: yes. There is <tab>, and footnotes, for instance (and many other fields than those above).
 
             fillStyleStack( ts );
 
@@ -1306,80 +1323,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         else
             textData = t.data();
 
-        pos+=textData.length();
-
-        // offset before and after paragraph
-        if( m_styleStack.hasAttribute("fo:margin-top") ||
-            m_styleStack.hasAttribute("fo:margin-bottom"))
-        {
-            double mtop = OoUtils::toPoint( m_styleStack.attribute( "fo:margin-top" ) );
-            double mbottom = OoUtils::toPoint( m_styleStack.attribute("fo:margin-bottom" ) );
-            if( mtop != 0 || mbottom != 0 )
-            {
-                QDomElement offset = doc.createElement( "OFFSETS" );
-                if( mtop != 0 )
-                    offset.setAttribute( "before", mtop );
-                if( mbottom != 0 )
-                    offset.setAttribute( "after", mbottom );
-                p.appendChild( offset );
-            }
-        }
-
-        // indentation of paragraph
-        if ( m_styleStack.hasAttribute( "fo:margin-left" ) ||
-             m_styleStack.hasAttribute( "fo:margin-right" )) // *text-indent must always be bound to either margin-left or margin-right
-        {
-            double marginLeft = OoUtils::toPoint( m_styleStack.attribute( "fo:margin-left" ) );
-            double marginRight = OoUtils::toPoint( m_styleStack.attribute( "fo:margin-right" ) );
-
-            double first;
-            if (m_styleStack.hasAttribute("style:auto-text-indent")) // style:auto-text-indent takes precedence
-                first = OoUtils::toPoint( m_styleStack.attribute("style:auto-text-indent"));
-            else if (m_styleStack.hasAttribute("fo:text-indent"))
-                first = OoUtils::toPoint( m_styleStack.attribute("fo:text-indent"));
-            else
-                first = 0;
-
-            if ( marginLeft != 0 || marginRight != 0 || first != 0 )
-            {
-                QDomElement indent = doc.createElement( "INDENTS" );
-                if( marginLeft != 0 )
-                    indent.setAttribute( "left", marginLeft );
-                if( marginRight != 0 )
-                    indent.setAttribute( "right", marginRight );
-                if( first != 0 )
-                    indent.setAttribute( "first", first );
-                p.appendChild( indent );
-            }
-        }
-
-        // line spacing
-        if( m_styleStack.hasAttribute( "fo:line-height" ) )
-        {
-            QString value = m_styleStack.attribute( "fo:line-height" );
-            QDomElement lineSpacing = doc.createElement( "LINESPACING" );
-
-            if ( value=="150%")
-                lineSpacing.setAttribute("type","oneandhalf");
-            else if ( value=="200%")
-                lineSpacing.setAttribute("type","double");
-
-            p.appendChild(lineSpacing);
-        }
-
-        if (m_styleStack.hasAttribute("style:line-height-at-least"))
-        {
-            double value = OoUtils::toPoint(m_styleStack.attribute("style:line-height-at-least"));
-            QDomElement lineSpacing = doc.createElement("LINESPACING");
-
-            //kdDebug(30518) << "Line height:" << value << endl;
-
-            lineSpacing.setAttribute("type", "atleast");
-            lineSpacing.setAttribute("spacingvalue", value);
-
-            p.appendChild(lineSpacing);
-        }
-        //else if (m_styleStack.hasAttribute("style:line-spacing") //TODO
+        pos += textData.length();
 
         QDomElement text = saveHelper(textData, doc);
 
@@ -1408,7 +1352,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
         }
         if ( m_styleStack.hasAttribute( "fo:font-size" ) )
-            text.setAttribute( "pointSize", OoUtils::toPoint( m_styleStack.attribute( "fo:font-size" ) ) );
+            text.setAttribute( "pointSize", KoUnit::parseValue( m_styleStack.attribute( "fo:font-size" ) ) );
         if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
             if ( m_styleStack.attribute( "fo:font-weight" ) == "bold" )
                 text.setAttribute( "bold", 1 );
@@ -1527,7 +1471,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute("wordbyword", 1);
         }
 
-        //para bg color
+        // background color (property of the paragraph in OOo, of the text in kword/kpresenter)
         if (m_styleStack.hasAttribute( "fo:background-color" ))
         {
             QString bgColor = m_styleStack.attribute("fo:background-color");
@@ -1535,127 +1479,12 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute("textbackcolor", bgColor);
         }
 
-        //para border
-        if (m_styleStack.hasAttribute( "fo:border" )
-            || m_styleStack.hasAttribute( "fo:border-left" )
-            || m_styleStack.hasAttribute( "fo:border-right" )
-            || m_styleStack.hasAttribute( "fo:border-top" )
-            || m_styleStack.hasAttribute( "fo:border-bottom" ))
-        {
-            if (!m_styleStack.hasAttribute("fo:border")) // we set each border independently
-            {
-                if (m_styleStack.hasAttribute("fo:border-left"))
-                {
-                    double width;
-                    int style;
-                    QColor color;
-                    if (OoUtils::parseBorder(m_styleStack.attribute("fo:border-left"), &width, &style, &color))
-                    {
-                        QDomElement lbElem = doc.createElement("LEFTBORDER");
-                        lbElem.setAttribute("width", width);
-                        lbElem.setAttribute("style", style);
-                        if (color.isValid()) {
-                            lbElem.setAttribute("red", color.red());
-                            lbElem.setAttribute("green", color.green());
-                            lbElem.setAttribute("blue", color.blue());
-                        }
-                        p.appendChild(lbElem);
-                    }
-                }
-
-                if (m_styleStack.hasAttribute("fo:border-right"))
-                {
-                    double width;
-                    int style;
-                    QColor color;
-                    if (OoUtils::parseBorder(m_styleStack.attribute("fo:border-right"), &width, &style, &color))
-                    {
-                        QDomElement lbElem = doc.createElement("RIGHTBORDER");
-                        lbElem.setAttribute("width", width);
-                        lbElem.setAttribute("style", style);
-                        if (color.isValid()) {
-                            lbElem.setAttribute("red", color.red());
-                            lbElem.setAttribute("green", color.green());
-                            lbElem.setAttribute("blue", color.blue());
-                        }
-                        p.appendChild(lbElem);
-                    }
-                }
-
-                if (m_styleStack.hasAttribute("fo:border-top"))
-                {
-                    double width;
-                    int style;
-                    QColor color;
-                    if (OoUtils::parseBorder(m_styleStack.attribute("fo:border-top"), &width, &style, &color))
-                    {
-                        QDomElement lbElem = doc.createElement("TOPBORDER");
-                        lbElem.setAttribute("width", width);
-                        lbElem.setAttribute("style", style);
-                        if (color.isValid()) {
-                            lbElem.setAttribute("red", color.red());
-                            lbElem.setAttribute("green", color.green());
-                            lbElem.setAttribute("blue", color.blue());
-                        }
-                        p.appendChild(lbElem);
-                    }
-                }
-
-                if (m_styleStack.hasAttribute("fo:border-bottom"))
-                {
-                    double width;
-                    int style;
-                    QColor color;
-                    if (OoUtils::parseBorder(m_styleStack.attribute("fo:border-bottom"), &width, &style, &color))
-                    {
-                        QDomElement lbElem = doc.createElement("BOTTOMBORDER");
-                        lbElem.setAttribute("width", width);
-                        lbElem.setAttribute("style", style);
-                        if (color.isValid()) {
-                            lbElem.setAttribute("red", color.red());
-                            lbElem.setAttribute("green", color.green());
-                            lbElem.setAttribute("blue", color.blue());
-                        }
-                        p.appendChild(lbElem);
-                    }
-                }
-            }
-            else                // we set all the borders at once
-            {
-                double width;
-                int style;
-                QColor color;
-                if (OoUtils::parseBorder(m_styleStack.attribute("fo:border"), &width, &style, &color))
-                {
-                    QDomElement lbElem = doc.createElement("LEFTBORDER");
-                    lbElem.setAttribute("width", width);
-                    lbElem.setAttribute("style", style);
-                    if (color.isValid()) {
-                        lbElem.setAttribute("red", color.red());
-                        lbElem.setAttribute("green", color.green());
-                        lbElem.setAttribute("blue", color.blue());
-                    }
-                    p.appendChild(lbElem);
-
-                    QDomElement rbElem = doc.createElement("RIGHTBORDER");
-                    rbElem = lbElem.cloneNode(false).toElement();
-                    p.appendChild(rbElem);
-
-                    QDomElement tbElem = doc.createElement("TOPBORDER");
-                    tbElem = lbElem.cloneNode(false).toElement();
-                    p.appendChild(tbElem);
-
-                    QDomElement bbElem = doc.createElement("BOTTOMBORDER");
-                    bbElem = lbElem.cloneNode(false).toElement();
-                    p.appendChild(bbElem);
-                }
-            }
-        }
-
         appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
         p.appendChild( text );
-        m_styleStack.clearObjectMark(); // remove possible test:span styles from the stack
-    }
+        m_styleStack.clearObjectMark(); // remove possible text:span styles from the stack
+        // DF: this looks wrong to me. We're losing the text:p styles too!
+
+    } // for each text span
 
     return p;
 }
@@ -1811,18 +1640,6 @@ void OoImpressImport::storeObjectStyles( const QDomElement& object )
     m_styleStack.setObjectMark();
 }
 
-QString OoImpressImport::expandWhitespace(const QDomElement& tag)
-{
-    //tags like <text:s text:c="4">
-
-    int howmany=1;
-    if (tag.hasAttribute("text:c"))
-        howmany = tag.attribute("text:c").toInt();
-
-    QString result;
-    return result.fill(32, howmany);
-}
-
 QDomElement OoImpressImport::saveHelper(const QString &tmpText, QDomDocument &doc)
 {
     QDomElement element=doc.createElement("TEXT");
@@ -1855,8 +1672,8 @@ void OoImpressImport::appendPoints(QDomDocument& doc, QDomElement& e, const QDom
         pt_y.setNum(tmp_y);
         pt_y+="mm";
 
-        point.setAttribute("point_x", OoUtils::toPoint(pt_x));
-        point.setAttribute("point_y", OoUtils::toPoint(pt_y));
+        point.setAttribute("point_x", KoUnit::parseValue(pt_x));
+        point.setAttribute("point_y", KoUnit::parseValue(pt_y));
         ptsElem.appendChild(point);
     }
 

@@ -66,7 +66,6 @@ private:
     void appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object, QDomElement& sound);
 
     QDomElement saveHelper(const QString &tmpText, QDomDocument &doc);
-    QString expandWhitespace(const QDomElement& tag);
 
     QString storeImage( const QDomElement& object );
     QString storeSound(const QDomElement & object, QDomElement & p, QDomDocument & doc);
