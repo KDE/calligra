@@ -47,7 +47,7 @@ int tableViewTest()
 	KexiDataTableView *tv = new KexiDataTableView(0, "tv", cursor);
 
 	app->setMainWidget(tv);
-
+	tv->move((qApp->desktop()->width() - tv->width())/2, (qApp->desktop()->height() - tv->height())/2);
 	tv->show();
 	tv->setFocus();
 

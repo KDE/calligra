@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 	KexiProjectSet prj_set;
 	prj_set.addProjectData(prjdata);
 	
-	KexiStartupDialog startup(KexiStartupDialog::Everything, connset, prj_set, 0, "dlg");
+	KexiStartupDialog startup(KexiStartupDialog::Everything, 0, connset, prj_set, 0, "dlg");
 	int e=startup.exec();
 	kdDebug() << (e==QDialog::Accepted ? "Accepted" : "Rejected") << endl;
 	

@@ -22,6 +22,7 @@
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kapplication.h>
+#include <kiconloader.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
@@ -82,7 +83,8 @@ int main(int argc, char** argv)
 	if (test_name=="tableview") {
 		//GUI test
 		app = new KApplication(argc, argv, prgname);
-		instance = app;
+		KGlobal::iconLoader()->addAppDir("kexi");
+    		instance = app;
 	}
 	else {
 		//CLI test
