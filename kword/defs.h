@@ -1,7 +1,6 @@
 #ifndef defs_h
 #define defs_h
 
-#include <iostream.h>
 #include <qstring.h>
 
 #define MIME_TYPE "application/x-kword"
@@ -106,12 +105,6 @@ inline KWUnit &KWUnit::operator=( const KWUnit &unit )
     _mm = unit._mm;
     _inch = unit._inch;
     return *this;
-}
-
-inline ostream& operator<<( ostream &out, KWUnit &unit )
-{
-    out << "pt=\"" << unit.pt() << "\" mm=\"" << unit.mm() << "\" inch=\"" << unit.inch() << "\"";
-    return out;
 }
 
 inline const KWUnits KWUnit::unitType( const QString _unit )
