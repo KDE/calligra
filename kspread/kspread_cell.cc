@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2004 Tomas Mecir <mecirt@gmail.com>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
@@ -1391,7 +1392,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     // Do we have to occupy additional cells at the bottom ?
-    if ( ( d->extra()->QML || multiRow( _col, _row ) ) &&
+    if ( ( (d->hasExtra() && d->extra()->QML) || multiRow( _col, _row ) ) &&
          d->textHeight > h - 2 * BORDER_SPACE -
          topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
     {
@@ -1451,7 +1452,7 @@ void KSpreadCell::setOutputText()
   if ( isDefault() )
   {
     d->strOutText = QString::null;
-    if ( d->extra()->conditions )
+    if ( d->hasExtra() && d->extra()->conditions )
       d->extra()->conditions->checkMatches();
     return;
   }
@@ -1480,7 +1481,7 @@ void KSpreadCell::setOutputText()
       d->strOutText = "####";
       kdDebug(36001) << "Unhandled error type." << endl;
     }
-    if ( d->extra()->conditions )
+    if ( d->hasExtra() && d->extra()->conditions )
       d->extra()->conditions->checkMatches();
     return;
   }
@@ -1595,7 +1596,7 @@ void KSpreadCell::setOutputText()
 //    kdDebug(36001) << "Please report: final case of makeLayout ...  d->strText=" << d->strText << endl;
     d->strOutText = d->value.asString();
   }
-  if ( d->extra()->conditions )
+  if ( d->hasExtra() && d->extra()->conditions )
     d->extra()->conditions->checkMatches();
 }
 
