@@ -290,14 +290,20 @@ VCanvas::repaintAll( const KoRect & )
 void
 VCanvas::resizeEvent( QResizeEvent* event )
 {
+	double centerX = double( contentsX() + visibleWidth() / 2 ) / double( contentsWidth() );
+	double centerY = double( contentsY() + visibleHeight() / 2 ) / double( contentsHeight() );
+
 	QScrollView::resizeEvent( event );
 	if( !m_pixmap )
 		m_pixmap = new QPixmap( width(), height() );
 	else
 		m_pixmap->resize( width(), height() );
-	drawContents( 0, 0, 0, width(), height() );
-    //VPainter *p = m_view->painterFactory()->painter();
-    //p->end();
+
+	VPainter *p = m_view->painterFactory()->painter();
+	p->resize( width(), height() );
+	p->clear( QColor( 195, 194, 193 ) );
+	m_bScrolling = true;
+	setViewport( centerX, centerY );
 }
 
 void
