@@ -505,7 +505,7 @@ void KWView::setupActions()
 
     actionFormatColor = new TKSelectColorAction( i18n( "Text Color..." ), TKSelectColorAction::TextColor,
                                      this, SLOT( textColor() ),
-                                     actionCollection(), "format_color", false );
+                                     actionCollection(), "format_color" );
 
 #if KDE_VERSION < 220
     // Necessary with kdelibs-2.1.x, because those actions are only in the toolbar
@@ -557,15 +557,12 @@ void KWView::setupActions()
     actionBorderWidth->setItems( lst );
 
 
-    actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color", false );
+    actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color" );
     connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
 
 
-    actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor", false );
+    actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor");
     connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
-
-    actionTbBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_tb_backgroundcolor", false );
-    connect(actionTbBackgroundColor,SIGNAL(activated()),SLOT(tbBackgroundColor() ));
 
     // ---------------------- Table menu
 
@@ -3122,7 +3119,6 @@ void KWView::frameSelectedChanged()
         }
     }
     actionBackgroundColor->setEnabled( frameDifferentOfPart );
-    actionTbBackgroundColor->setEnabled( frameDifferentOfPart );
 
     actionEditCopy->setEnabled( nbFrame >= 1 );
 

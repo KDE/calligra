@@ -229,7 +229,6 @@ public slots:
     void borderWidth( const QString &width );
     void borderStyle( const QString &style );
     void backgroundColor();
-    void tbBackgroundColor();
 
     void showFormulaToolbar( bool show );
 
@@ -381,7 +380,6 @@ private:
     KSelectAction *actionBorderWidth;
     KSelectAction *actionBorderStyle;
     TKSelectColorAction *actionBackgroundColor;
-    TKSelectColorAction *actionTbBackgroundColor;
     struct
     {
         Border left;    // Values specific to left border.

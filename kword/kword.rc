@@ -171,7 +171,7 @@
   <Action name="border_width"/>
   <Action name="border_style"/>
   <Action name="border_color"/>
-  <Action name="border_tb_backgroundcolor"/>
+  <Action name="border_backgroundcolor"/>
 </ToolBar>
 <ToolBar hidden="true" name="formula_toolbar" position="bottom"><Text>Formula</Text>
   <Action name="formula_addtext"/>
