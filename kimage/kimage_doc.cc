@@ -168,6 +168,17 @@ bool KImageDoc::completeSaving( KOStore::Store_ptr _store )
   return true;
 }
 
+/*
+bool KImageDoc::loadBinary( istream& _stream, bool _randomaccess, KOStore::Store_ptr _store )
+{
+  kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
+
+  // implement binary loading here.  
+
+  kdebug( KDEBUG_INFO, 0, "--------------------- LOADING DONE ------------------" );
+}
+*/
+
 bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );

@@ -56,48 +56,57 @@ KImageApp::~KImageApp()
 }
 
 /*************************************************************************************************/
-// sollte in KoApplication.h definiert sein
+// sollte in KoApplication.h als pur virtuell definiert sein,
+// so daß jede Applikation sie überschreiben muß
 
-#define KOFFICE_APPLICATION_START( app_classname, shell_classname ) \
-void app_classname::start() \
-{ \
-  shell_classname* pShell; \
-  QStringList openFiles; \
-  \
-  if( m_bWithGUI ) \
-  { \
-    for( uint i = 0; i < m_params.countParams(); i++ ) \
-    { \
-      if( m_params.getParam( i ).left( 1 ) != "-" ) \
-      { \
-        openFiles.append( m_params.getParam( i ) ); \
-      } \
-    } \
-    imr_init(); \
-    koInitTrader(); \
-    if( openFiles.isEmpty() ) \
-    { \
-      pShell = new shell_classname; \
-      pShell->show(); \
-      pShell->newDocument(); \
-    } \
-    else \
-    { \
-      QStringList::Iterator it; \
-      \
-      for( it = openFiles.begin() ; it != openFiles.end() ; ++it ) \
-      { \
-        pShell = new shell_classname; \
-        pShell->show(); \
-        pShell->openDocument( *it, "" ); \
-      } \
-    } \
-  } \
+KoShell* KImageApp::createNewShell()
+{
+  return new KImageShell;
 }
 
 /*************************************************************************************************/
+// sollte in KoApplication.h definiert sein
+// 
+// Das mit KoShell hab ich nur gemacht, weil newDocument() und openDucoment() keine pur virtuellen
+// Prototypen in KoMainWindow besitzen. Vielleicht sollten sowas dort vorhanden sein.
 
-KOFFICE_APPLICATION_START( KImageApp, KImageShell )
+void KImageApp::start()
+{
+  KoShell* pShell;
+  QStringList openFiles;
+
+  if( m_bWithGUI )
+  {
+    for( uint i = 0; i < m_params.countParams(); i++ )
+    {
+      if( m_params.getParam( i ).left( 1 ) != "-" )
+      {
+        openFiles.append( m_params.getParam( i ) );
+      }
+    }
+    imr_init();
+    koInitTrader();
+    if( openFiles.isEmpty() )
+    {
+      pShell = createNewShell();
+      pShell->show();
+      pShell->newDocument();
+    }
+    else
+    {
+      QStringList::Iterator it;
+ 
+      for( it = openFiles.begin() ; it != openFiles.end() ; ++it )
+      {
+        pShell = createNewShell();
+        pShell->show();
+        pShell->openDocument( *it, "" );
+      }
+    }
+  }
+}
+
+/*************************************************************************************************/
 
 int main( int argc, char** argv )
 {

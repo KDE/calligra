@@ -38,7 +38,7 @@
 #include <koAboutDia.h>
 
 #include "kintegerinputdialog.h"
-#include "kzoomfactordialog.h"
+#include "zoomfactordlg.h"
 #include "preferencesdlg.h"
 
 #include "kimage_doc.h"

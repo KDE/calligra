@@ -17,30 +17,28 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kimage_main_h__
-#define __kimage_main_h__
+#ifndef __kzoomfactordlg_h__
+#define __kzoomfactordlg_h__
 
-#include <koApplication.h>
+#include <kintlineedit.h>
+#include <kwizard.h>
 
-#include "koShell.h"
-#include "kstartparams.h"
-
-class KImageShell;
-
-class KImageApp : public KoApplication
+/**
+ */
+class KZoomFactorDialog : public KDialog
 {
   Q_OBJECT
 
 public:
-  KImageApp( int& argc, char** argv );
-  ~KImageApp();
+  KZoomFactorDialog( QWidget* parent = 0, const char* name = 0, WFlags f = 0 );
+  ~KZoomFactorDialog();
 
-  virtual KoShell* createNewShell();
-  virtual void start();
-  
-protected:
-  KStartParams m_params;
-  bool m_bWithGUI;
+  void setValue( const QPoint& theValue ); 
+  int getValue( QPoint& theValue);
+
+private:
+  KIntLineEdit* m_pLineEditXFactor;
+  KIntLineEdit* m_pLineEditYFactor;
 };
 
 #endif
