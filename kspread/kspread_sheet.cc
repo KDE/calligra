@@ -266,6 +266,32 @@ public:
   // List of all cell bindings. For example charts use bindings to get
   // informed about changing cell contents.
   QPtrList<CellBinding> cellBindings;
+    
+  // Indicates whether the table should paint the page breaks.
+  // Doing so costs some time, so by default it should be turned off.
+  bool showPageBorders;
+    
+  // List of all embedded objects. FIXME unused ??
+  // QPtrList<KSpreadChild> m_lstChildren;
+
+  // The highest row and column ever accessed by the user.
+  int maxRow;
+  int maxColumn;
+
+  // Max range of canvas in x and ye direction.
+  //  Depends on KS_colMax/KS_rowMax and the width/height of all columns/rows
+  double sizeMaxX;
+  double sizeMaxY;
+
+
+  bool scrollBarUpdates;
+
+  QPen emptyPen;
+  QBrush emptyBrush;
+  QColor emptyColor;
+
+  int scrollPosX;
+  int scrollPosY;
 };
  
 int KSpreadSheet::s_id = 0L;
@@ -295,7 +321,7 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
 
   d->defaultFormat = new KSpreadFormat( this, d->doc->styleManager()->defaultStyle() );
 
-  m_emptyPen.setStyle( Qt::NoPen );
+  d->emptyPen.setStyle( Qt::NoPen );
 
   d->dcop = 0;
 
@@ -322,18 +348,18 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
   d->painter = new QPainter;
   d->painter->begin( d->widget );
 
-  m_iMaxColumn = 256;
-  m_iMaxRow = 256;
-  m_dSizeMaxX = KS_colMax * d->defaultColumnFormat->dblWidth(); // default is max cols * default width
-  m_dSizeMaxY = KS_rowMax * d->defaultRowFormat->dblHeight(); // default is max rows * default height
+  d->maxColumn = 256;
+  d->maxRow = 256;
+  d->sizeMaxX = KS_colMax * d->defaultColumnFormat->dblWidth(); // default is max cols * default width
+  d->sizeMaxY = KS_rowMax * d->defaultRowFormat->dblHeight(); // default is max rows * default height
 
-  m_bScrollbarUpdates = true;
+  d->scrollBarUpdates = true;
 
   setHidden( false );
   d->showGrid=true;
   d->showFormula=false;
   d->showFormulaIndicator=true;
-  m_bShowPageBorders = FALSE;
+  d->showPageBorders = FALSE;
 
   d->lcMode=false;
   d->showColumnNumber=false;
@@ -470,6 +496,11 @@ void KSpreadSheet::setFirstLetterUpper( bool _firstUpper )
     d->firstLetterUpper=_firstUpper;
 }
 
+bool KSpreadSheet::isShowPageBorders() const
+{ 
+    return d->showPageBorders; 
+}
+
 bool KSpreadSheet::isEmpty( unsigned long int x, unsigned long int y ) const
 {
   const KSpreadCell* c = cellAt( x, y );
@@ -589,6 +620,41 @@ void KSpreadSheet::setDefaultWidth( double width )
     NO_MODIFICATION_POSSIBLE;
 
   d->defaultColumnFormat->setDblWidth( width );
+}
+
+double KSpreadSheet::sizeMaxX() const 
+{ 
+  return d->sizeMaxX; 
+}
+
+double KSpreadSheet::sizeMaxY() const 
+{ 
+  return d->sizeMaxY; 
+}
+
+int KSpreadSheet::maxColumn() const
+{ 
+  return d->maxColumn;
+}
+
+int KSpreadSheet::maxRow() const
+{ 
+  return d->maxRow; 
+}
+
+const QPen& KSpreadSheet::emptyPen() const 
+{ 
+  return d->emptyPen; 
+}
+
+const QBrush& KSpreadSheet::emptyBrush() const 
+{ 
+  return d->emptyBrush; 
+}
+
+const QColor& KSpreadSheet::emptyColor() const 
+{ 
+  return d->emptyColor; 
 }
 
 int KSpreadSheet::leftColumn( double _xpos, double &_left,
@@ -814,12 +880,12 @@ int KSpreadSheet::rowPos( int _row, const KSpreadCanvas *_canvas ) const
 
 void KSpreadSheet::adjustSizeMaxX ( double _x )
 {
-    m_dSizeMaxX += _x;
+    d->sizeMaxX += _x;
 }
 
 void KSpreadSheet::adjustSizeMaxY ( double _y )
 {
-    m_dSizeMaxY += _y;
+    d->sizeMaxY += _y;
 }
 
 KSpreadCell* KSpreadSheet::visibleCellAt( int _column, int _row, bool _scrollbar_update )
@@ -866,7 +932,7 @@ KSpreadCell* KSpreadSheet::cellAt( int _column, int _row, bool _scrollbar_update
     _row = KS_rowMax;
   }
 
-  if ( _scrollbar_update && m_bScrollbarUpdates )
+  if ( _scrollbar_update && d->scrollBarUpdates )
   {
     checkRangeHBorder( _column );
     checkRangeVBorder( _row );
@@ -912,7 +978,7 @@ RowFormat* KSpreadSheet::nonDefaultRowFormat( int _row, bool force_creation )
 KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
                                            bool _scrollbar_update, KSpreadStyle * _style )
 {
-  if ( _scrollbar_update && m_bScrollbarUpdates )
+  if ( _scrollbar_update && d->scrollBarUpdates )
   {
     checkRangeHBorder( _column );
     checkRangeVBorder( _row );
@@ -2352,7 +2418,7 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
     for( int i=0; i<=nbCol; i++ )
     {
         // Recalculate range max (minus size of last column)
-        m_dSizeMaxX -= columnFormat( KS_colMax )->dblWidth();
+        d->sizeMaxX -= columnFormat( KS_colMax )->dblWidth();
 
         result = d->cells.insertColumn( col );
         d->columns.insertColumn( col );
@@ -2360,7 +2426,7 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
             res = false;
 
         //Recalculate range max (plus size of new column)
-        m_dSizeMaxX += columnFormat( col+i )->dblWidth();
+        d->sizeMaxX += columnFormat( col+i )->dblWidth();
     }
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
@@ -2395,7 +2461,7 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
     for( int i=0; i<=nbRow; i++ )
     {
         // Recalculate range max (minus size of last row)
-        m_dSizeMaxY -= rowFormat( KS_rowMax )->dblHeight();
+        d->sizeMaxY -= rowFormat( KS_rowMax )->dblHeight();
 
         result = d->cells.insertRow( row );
         d->rows.insertRow( row );
@@ -2403,7 +2469,7 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
             res = false;
 
         //Recalculate range max (plus size of new row)
-        m_dSizeMaxY += rowFormat( row )->dblHeight();
+        d->sizeMaxY += rowFormat( row )->dblHeight();
     }
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
@@ -2436,13 +2502,13 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
     for( int i = 0; i <= nbCol; ++i )
     {
         // Recalculate range max (minus size of removed column)
-        m_dSizeMaxX -= columnFormat( col )->dblWidth();
+        d->sizeMaxX -= columnFormat( col )->dblWidth();
 
         d->cells.removeColumn( col );
         d->columns.removeColumn( col );
 
         //Recalculate range max (plus size of new column)
-        m_dSizeMaxX += columnFormat( KS_colMax )->dblWidth();
+        d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
@@ -2473,13 +2539,13 @@ void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
     for( int i=0; i<=nbRow; i++ )
     {
         // Recalculate range max (minus size of removed row)
-        m_dSizeMaxY -= rowFormat( row )->dblHeight();
+        d->sizeMaxY -= rowFormat( row )->dblHeight();
 
         d->cells.removeRow( row );
         d->rows.removeRow( row );
 
         //Recalculate range max (plus size of new row)
-        m_dSizeMaxY += rowFormat( KS_rowMax )->dblHeight();
+        d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
@@ -2891,7 +2957,7 @@ void KSpreadSheet::replace( const QString &_find, const QString &_replace, long 
     else
     {
         // All cells.
-        region.setCoords( 1, 1, m_iMaxRow, m_iMaxColumn );
+        region.setCoords( 1, 1, d->maxRow, d->maxColumn );
     }
 
     // Create the class that handles all the actual replace stuff, and connect it to its
@@ -6341,7 +6407,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     QDomElement table = doc.createElement( "table" );
     table.setAttribute( "name", d->name );
     table.setAttribute( "columnnumber", (int)d->showColumnNumber);
-    table.setAttribute( "borders", (int)m_bShowPageBorders);
+    table.setAttribute( "borders", (int)d->showPageBorders);
     table.setAttribute( "hide", (int)d->hide);
     table.setAttribute( "hidezero", (int)d->hideZero);
     table.setAttribute( "firstletterupper", (int)d->firstLetterUpper);
@@ -7652,7 +7718,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     }
     if( table.hasAttribute( "borders" ) )
     {
-        m_bShowPageBorders = (int)table.attribute("borders").toInt( &ok );
+        d->showPageBorders = (int)table.attribute("borders").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "lcmode" ) )
@@ -7885,10 +7951,10 @@ bool KSpreadSheet::loadChildren( KoStore* _store )
 
 void KSpreadSheet::setShowPageBorders( bool b )
 {
-    if ( b == m_bShowPageBorders )
+    if ( b == d->showPageBorders )
         return;
 
-    m_bShowPageBorders = b;
+    d->showPageBorders = b;
     emit sig_updateView( this );
 }
 
@@ -7920,7 +7986,7 @@ void KSpreadSheet::insertCell( KSpreadCell *_cell )
 
   d->cells.insert( _cell, _cell->column(), _cell->row() );
 
-  if ( m_bScrollbarUpdates )
+  if ( d->scrollBarUpdates )
   {
     checkRangeHBorder ( _cell->column() );
     checkRangeVBorder ( _cell->row() );
@@ -8126,18 +8192,18 @@ KSpreadSheet::~KSpreadSheet()
 
 void KSpreadSheet::checkRangeHBorder ( int _column )
 {
-    if ( m_bScrollbarUpdates && _column > m_iMaxColumn )
+    if ( d->scrollBarUpdates && _column > d->maxColumn )
     {
-      m_iMaxColumn = _column;
+      d->maxColumn = _column;
       emit sig_maxColumn( _column );
     }
 }
 
 void KSpreadSheet::checkRangeVBorder ( int _row )
 {
-    if ( m_bScrollbarUpdates && _row > m_iMaxRow )
+    if ( d->scrollBarUpdates && _row > d->maxRow )
     {
-      m_iMaxRow = _row;
+      d->maxRow = _row;
       emit sig_maxRow( _row );
     }
 }
@@ -8145,7 +8211,7 @@ void KSpreadSheet::checkRangeVBorder ( int _row )
 
 void KSpreadSheet::enableScrollBarUpdates( bool _enable )
 {
-  m_bScrollbarUpdates = _enable;
+  d->scrollBarUpdates = _enable;
 }
 
 DCOPObject* KSpreadSheet::dcopObject()

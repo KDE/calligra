@@ -427,11 +427,11 @@ public:
     /**
      * @return the maximum size of the column range
      */
-    double sizeMaxX()const { return m_dSizeMaxX; }
+    double sizeMaxX() const ;
     /**
      * @return the maximum size of the row range
      */
-    double sizeMaxY()const { return m_dSizeMaxY; }
+    double sizeMaxY() const;
 
     /**
      * Adjusts the internal reference of the sum of the widths of all columns.
@@ -805,7 +805,7 @@ public:
      * @see #setShowPageBorders
      * @see #bShowPageBorders
      */
-    bool isShowPageBorders()const { return m_bShowPageBorders; }
+    bool isShowPageBorders() const;
 
     /**
      * Turns the page break lines on or off.
@@ -946,7 +946,7 @@ public:
      * It's always 10 times higher than the maximum access column.
      * In an empty table it starts with 256.
      */
-    int maxColumn()const { return m_iMaxColumn; }
+    int maxColumn() const ;
 
     /**
      * Checks if the argument _column is out of the current maximum range of the vertical border
@@ -961,7 +961,7 @@ public:
      * It's always 10 times higher than the maximum access row.
      * In an empty table it starts with 256.
      */
-    int maxRow()const { return m_iMaxRow; }
+    int maxRow() const ;
 
     /**
      * Checks if the argument _row is out of the current maximum range of the horizontal border
@@ -1025,9 +1025,9 @@ public:
      *
      * The returned pen has pen style NoPen set.
      */
-    const QPen& emptyPen() const { return m_emptyPen; }
-    const QBrush& emptyBrush() const { return m_emptyBrush; }
-    const QColor& emptyColor() const { return m_emptyColor; }
+    const QPen& emptyPen() const ;
+    const QBrush& emptyBrush() const;
+    const QColor& emptyColor() const;
 
     void updateLocale();
 
@@ -1199,55 +1199,8 @@ protected:
      */
     void fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
 
-    /**
-     * Indicates whether the table should paint the page breaks.
-     * Doing so costs some time, so by default it should be turned off.
-     */
-    bool m_bShowPageBorders;
-    
-    /**
-     * List of all embedded objects.
-     */
-    // QPtrList<KSpreadChild> m_lstChildren;
-
-
-    /**
-     * The highest row ever accessed by the user.
-     */
-    int m_iMaxRow;
-    /**
-     * The highest column ever accessed by the user.
-     */
-    int m_iMaxColumn;
-
-    /**
-     * Max range of canvas in x direction.
-     * Depends on KS_colMax and the width of all columns
-     */
-    double m_dSizeMaxX;
-
-    /**
-     * Max range of canvas in y direction.
-     * Depends on KS_rowMax and the height of all rows
-     */
-    double m_dSizeMaxY;
-
-
-    bool m_bScrollbarUpdates;
-
     static int s_id;
     static QIntDict<KSpreadSheet>* s_mapTables;
-
-    /**
-     * @see #emptyPen
-     */
-    QPen m_emptyPen;
-    QBrush m_emptyBrush;
-    QColor m_emptyColor;
-
-    int m_iScrollPosX;
-    int m_iScrollPosY;
-
 
 public:
     // see kspread_sheet.cc for an explanation of this
