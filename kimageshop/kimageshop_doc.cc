@@ -175,9 +175,9 @@ bool KImageShopDoc::save( ostream& out, const char* /* format */ )
   return true;
 }
 
+/*
 bool KImageShopDoc::completeSaving( KOStore::Store_ptr _store )
 {
-  /*
   CORBA::String_var u = url();
   QString u2 = u.in();
   u2 += "/image";
@@ -189,13 +189,13 @@ bool KImageShopDoc::completeSaving( KOStore::Store_ptr _store )
     out.flush();
   }
   _store->close();
-  */
   return true;
 }
+*/
 
+/*
 bool KImageShopDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr  )
 {
-  /*
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
   string tag;
@@ -352,13 +352,13 @@ bool KImageShopDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr  )
   setHeadFootLine( hl, hm, hr, fl, fm, fr );
 
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING DONE --------------------" );
-  */
   return true;
 }
+*/
 
+/*
 bool KImageShopDoc::completeLoading( KOStore::Store_ptr _store )
 {
-  /*
   kdebug( KDEBUG_INFO, 0, "------------------------ COMPLETION DONE --------------------" );
 
   CORBA::String_var str = url();
@@ -373,13 +373,13 @@ bool KImageShopDoc::completeLoading( KOStore::Store_ptr _store )
 
   m_bModified = false;
   m_bEmpty = false;
-  */
   return true;
 }
+*/
 
 void KImageShopDoc::print( QPaintDevice* _dev )
 {
-  /*
+/*
   QPainter painter;
   painter.begin( _dev );
 
@@ -481,9 +481,9 @@ void KImageShopDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _h
   */
 }
 
-bool KImageShopDoc::openDocument( const char */*_filename*/, const char */*_format*/ )
+/*
+bool KImageShopDoc::openDocument( const char *_filename, const char *_format )
 {
-  /*
   if ( !m_image.load( _filename, _format ) )
     return false;
 
@@ -495,17 +495,19 @@ bool KImageShopDoc::openDocument( const char */*_filename*/, const char */*_form
 
   m_bModified = true;
   m_bEmpty = false;
-  */
   return true;
 }
+*/
 
-bool KImageShopDoc::saveDocument( const char */*_filename*/, 
-				  const char */*_format*/ )
+/*
+bool KImageShopDoc::saveDocument( const char *_filename,
+				  const char *_format )
 {
   // ASSERT( !isEmpty() );
   // return m_image.save( _filename, m_strImageFormat );
   return true;
 }
+*/
 
 char* KImageShopDoc::mimeType()
 {
@@ -546,3 +548,5 @@ void KImageShopDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 }
 
 #include "kimageshop_doc.moc"
+
+

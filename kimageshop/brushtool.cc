@@ -61,7 +61,7 @@ void BrushTool::mouseMove(const KImageShop::MouseEvent& e)
     {
       if (!m_pBrush)
 		return;
-	
+
       QPoint pos(e.posX, e.posY);
 
       KVector end(e.posX, e.posY);
@@ -112,3 +112,5 @@ void BrushTool::mouseRelease(const KImageShop::MouseEvent& e)
     return;
   m_dragging = false;
 }
+
+

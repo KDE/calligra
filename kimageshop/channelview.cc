@@ -125,7 +125,7 @@ void ChannelView::update_contextmenu( int _index )
 
 void ChannelView::selectChannel( int _index )
 {
-  int currentSel = m_selected;
+  unsigned int currentSel = m_selected;
   m_selected = -1;
   updateCell( currentSel, 0 );
   m_selected = _index;
@@ -225,7 +225,7 @@ void ChannelView::swapChannels( int a, int b )
 
 void ChannelView::slotRaiseChannel()
 {
-  int newpos = m_selected > 0 ? m_selected - 1 : 0;
+  unsigned int newpos = m_selected > 0 ? m_selected - 1 : 0;
 
   if( m_selected != newpos )
   {
@@ -240,7 +240,7 @@ void ChannelView::slotRaiseChannel()
 
 void ChannelView::slotLowerChannel()
 {
-  int newpos = ( m_selected + 1 ) < m_doc->layerList().count() ? m_selected + 1 : m_selected;
+  unsigned int newpos = ( m_selected + 1 ) < m_doc->layerList().count() ? m_selected + 1 : m_selected;
 
   if( m_selected != newpos )
   {
@@ -255,7 +255,7 @@ void ChannelView::slotLowerChannel()
 
 void ChannelView::updateAllCells()
 {
-  for( int i = 0; i < m_doc->layerList().count(); i++ )
+  for( unsigned int i = 0; i < m_doc->layerList().count(); i++ )
     updateCell( i, 0 );
 }
 

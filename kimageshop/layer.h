@@ -41,30 +41,30 @@ class Layer : public QObject {
 	void    loadRGBImage(QImage img, QImage alpha);
 	void    loadGrayImage(QImage img, QImage alpha);
 
-	uchar   opacity() { return(opacityVal); };
+	uchar   opacity() const { return(opacityVal); };
 	void    setOpacity(uchar o);
-	QString name() { return nameVal; };
+	QString name() const { return nameVal; };
 	void    setName(QString name) { nameVal=name; };
-	void    findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset);
-	void    findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y);
-	uchar   *channelMem(int channel, int tileNo, int ox, int oy);
+	void    findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
+	void    findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
+	uchar   *channelMem(int channel, int tileNo, int ox, int oy) const;
 	void    moveBy(int dx, int dy);
-	void    moveTo(int x, int y);
-	bool    hasAlphaChannel() { return alphaChannel; }
-	bool    isVisible() { return visible; }
+	void    moveTo(int x, int y) const;
+	bool    hasAlphaChannel() const { return alphaChannel; }
+	bool    isVisible() const { return visible; }
 	void    setVisible(bool vis) { visible=vis; }
-	bool    isLinked() { return linked; }
+	bool    isLinked() const { return linked; }
 	void    setLinked(bool l) { linked=l; }
 
-	QRect   imageExtents();  // Extents of the image in canvas coords
-	QRect   tileExtents();   // Extents of the layers tiles in channel coords
-	QPoint  channelOffset(); // TopLeft of the image in the channel
-	int     xTiles();
-	int     yTiles();
-	int     channelLastTileOffsetX();
-	int     channelLastTileOffsetY();
-	bool    boundryTileX(int tile);
-	bool    boundryTileY(int tile);
+	QRect   imageExtents() const;  // Extents of the image in canvas coords
+	QRect   tileExtents() const;   // Extents of the layers tiles in channel coords
+	QPoint  channelOffset() const; // TopLeft of the image in the channel
+	int     xTiles() const;
+	int     yTiles() const;
+	int     channelLastTileOffsetX() const;
+	int     channelLastTileOffsetY() const;
+	bool    boundryTileX(int tile) const;
+	bool    boundryTileY(int tile) const;
 	void    resizeToIncludePoint(QPoint p);
 	void    setPixel(int x, int y, uchar val);
 
@@ -81,4 +81,8 @@ class Layer : public QObject {
 };
 
 #endif
+
+
+
+
 

@@ -91,16 +91,14 @@ Layer::loadGrayImage(QImage img, QImage alpha)
 }
 
 
-void
-Layer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset)
+void Layer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
 {
 	pt=pt-channelPtrs[1]->tileExtents().topLeft();
 	*tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
 	*offset=(pt.y()%TILE_SIZE)*TILE_SIZE + pt.x()%TILE_SIZE;
 }
 
-void
-Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y)
+void Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
 {
 	pt=pt-channelPtrs[1]->tileExtents().topLeft();
 	*tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
@@ -108,39 +106,33 @@ Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y)
 	*x=pt.x()%TILE_SIZE;
 }
 
-uchar*
-Layer::channelMem(int channel, int tileNo, int ox, int oy)
+uchar* Layer::channelMem(int channel, int tileNo, int ox, int oy) const
 {
 	return channelPtrs[channel]->tileBlock()[tileNo]+oy*TILE_SIZE+ox;
 }
 
 
-QRect
-Layer::imageExtents() // Extents of the image in canvas coords
+QRect Layer::imageExtents() const // Extents of the image in canvas coords
 {
 	return channelPtrs[1]->imageExtents();
 }
 
-QRect
-Layer::tileExtents() // Extents of the image in canvas coords
+QRect Layer::tileExtents() const// Extents of the image in canvas coords
 {
 	return channelPtrs[1]->tileExtents();
 }
 
-QPoint
-Layer::channelOffset() // TopLeft of the image in the channel (not always 0,0)
+QPoint Layer::channelOffset() const // TopLeft of the image in the channel (not always 0,0)
 {
 	return channelPtrs[1]->offset();
 }
 
-int
-Layer::xTiles()
+int Layer::xTiles() const
 {
 	return channelPtrs[1]->xTiles();
 }
 
-int
-Layer::yTiles()
+int Layer::yTiles() const
 {
 	return channelPtrs[1]->yTiles();
 }
@@ -153,33 +145,28 @@ Layer::moveBy(int dx, int dy)
 		channelPtrs[c]->moveBy(dx, dy);	
 }
 
-void
-Layer::moveTo(int x, int y)
+void Layer::moveTo(int x, int y) const
 {
 	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
 		channelPtrs[c]->moveTo(x, y);	
 }
 
-int
-Layer::channelLastTileOffsetX()
+int Layer::channelLastTileOffsetX() const
 {
 	return channelPtrs[1]->lastTileOffsetX();
 }
 
-int
-Layer::channelLastTileOffsetY()
+int Layer::channelLastTileOffsetY() const
 {
 	return channelPtrs[1]->lastTileOffsetY();
 }
 
-bool
-Layer::boundryTileX(int tile)
+bool Layer::boundryTileX(int tile) const
 {
 	return(((tile % xTiles())+1)==xTiles());
 }
 
-bool
-Layer::boundryTileY(int tile)
+bool Layer::boundryTileY(int tile) const
 {
 	return(((tile/xTiles())+1)==yTiles());
 }
@@ -201,3 +188,7 @@ Layer::setPixel(int x, int y, uchar val)
 
 
 #include "layer.moc"
+
+
+
+

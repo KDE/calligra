@@ -106,7 +106,7 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffs
     return;
 
  int startX, startY, pixX, pixY = 0;
- int pixW, pixH = -1;
+// int pixW, pixH = -1;
 
  QPainter p;
  p.begin(w);
@@ -207,11 +207,11 @@ void Canvas::setUpVisual()
 
 void Canvas::addRGBLayer(QString file)
 {
-  DEBUG("Canvas::addRGBLayer: %s\n",file.latin1());
+  KIS_DEBUG("Canvas::addRGBLayer: %s\n",file.latin1());
 
   QImage img(file);
   if (img.isNull()) {
-    DEBUG("Unable to load image: %s\n",file.latin1());
+    KIS_DEBUG("Unable to load image: %s\n",file.latin1());
     return;
   }
   img=img.convertDepth(32);
@@ -221,7 +221,7 @@ void Canvas::addRGBLayer(QString file)
   QString alphaName=file;
   alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
 
-  DEBUG("Canvas::addRGBLayerAlpha: %s\n",alphaName.latin1());
+  KIS_DEBUG("Canvas::addRGBLayerAlpha: %s\n",alphaName.latin1());
 
   QImage alpha(alphaName);
   if (!alpha.isNull() && (img.size()!=alpha.size())) {
@@ -237,7 +237,7 @@ void Canvas::addRGBLayer(QString file)
   currentLayer=lay;
 }
 
-void Canvas::removeLayer( int _layer )
+void Canvas::removeLayer( unsigned int _layer )
 {
   if( _layer >= layers.count() )
     return;
@@ -310,7 +310,7 @@ void Canvas::compositeImage(QRect r)
   TIME_END("compositeImage");
 }
 
-void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLay,
+void Canvas::renderLayerIntoTile(QRect tileBoundary, const Layer *srcLay, Layer *dstLay,
 				 int dstTile)
 {
   // calculate the position in the layer of the topLeft of the drawing tile
@@ -447,11 +447,13 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLa
   dbg=false;
 }
 
-void Canvas::renderTileQuadrant(Layer *srcLay, int srcTile,
+void Canvas::renderTileQuadrant(const Layer *srcLay, int srcTile,
 				Layer *dstLay, int dstTile,
 				int srcX, int srcY,
 				int dstX, int dstY, int w, int h)
 {
+  // TODO: Shouldn't this be a list of channels ? (Michael)
+
   uchar *channelData[channels+1];
   if (srcLay->hasAlphaChannel())
     channelData[0]=srcLay->channelMem(0,srcTile,0,0);
@@ -631,9 +633,9 @@ void Canvas::paintBrush(QPoint pt, const Brush *brsh)
     }
 }
 
-void Canvas::upperLayer( int _layer )
+void Canvas::upperLayer( unsigned int _layer )
 {
-  ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
+  ASSERT( _layer < layers.count() );
 
   if( _layer > 0 )
   {
@@ -642,9 +644,9 @@ void Canvas::upperLayer( int _layer )
   }
 }
 
-void Canvas::lowerLayer( int _layer )
+void Canvas::lowerLayer( unsigned int _layer )
 {
-  ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
+  ASSERT( _layer < layers.count() );
 
   if( _layer < ( layers.count() - 1 ) )
   {
@@ -653,9 +655,9 @@ void Canvas::lowerLayer( int _layer )
   }
 }
 
-void Canvas::setFrontLayer( int _layer )
+void Canvas::setFrontLayer( unsigned int _layer )
 {
-  ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
+  ASSERT( _layer < layers.count() );
 
   if( _layer < ( layers.count() - 1 ) )
   {
@@ -664,9 +666,9 @@ void Canvas::setFrontLayer( int _layer )
   }
 }
 
-void Canvas::setBackgroundLayer( int _layer )
+void Canvas::setBackgroundLayer( unsigned int _layer )
 {
-  ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
+  ASSERT( _layer < layers.count() );
 
   if( _layer > 0 )
   {
@@ -676,5 +678,8 @@ void Canvas::setBackgroundLayer( int _layer )
 }
 
 #include "canvas.moc"
+
+
+
 
 

@@ -107,7 +107,7 @@ ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name
   connect( pbDown, SIGNAL( clicked() ), channelview, SLOT( slotLowerChannel() ) );
 }
 
-LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name, WFlags _flags )
+LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name, WFlags )
   : KFloatingTabDialog(_parent, _name)
 {
   setCaption( i18n( "Layers&Channels" ) );

@@ -50,9 +50,9 @@ public:
   ~KImageShopDoc();
 
   virtual bool save( ostream&, const char* _format );
-  virtual bool completeSaving( KOStore::Store_ptr _store );
+//virtual bool completeSaving( KOStore::Store_ptr _store );
   virtual bool hasToWriteMultipart() { return true; }
-  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store );
+//virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store );
   virtual void cleanUp();
   virtual void removeView( KImageShopView* _view );
 
@@ -72,8 +72,8 @@ public:
   virtual void print( QPaintDevice* _dev );
   virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
 
-  bool openDocument( const char* _filename, const char* _format = 0L );
-  bool saveDocument( const char* _filename, const char* _format = 0L );
+//bool openDocument( const char* _filename, const char* _format = 0L );
+//bool saveDocument( const char* _filename, const char* _format = 0L );
 
   KoCommandHistory* commandHistory() { return &m_commands; };
 
@@ -88,7 +88,7 @@ signals:
   
 protected:
 
-  virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
+//virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
 
   // List of views, that are connectet to the document.
   QList<KImageShopView> m_lstViews;
@@ -100,3 +100,5 @@ protected:
 };
 
 #endif
+
+
