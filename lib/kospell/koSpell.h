@@ -454,6 +454,7 @@ protected:
     void testIgnoreWord( QString & word );
 
     void initSpell(KOSpellConfig *_ksc);
+    void correctWord( const QString & originalword, const QString & newword );
 
 private slots:
     void slotSpellCheckerCorrected( const QString &, const QString &, unsigned int );

@@ -394,12 +394,17 @@ void KOSpell::testIgnoreWord( QString & word )
             QString origWord = *it;
             ++it;
             word = *it;   // Replace it with the next entry
-            emit corrected (origWord ,  word, lastpos+offset-origWord.length());
-            offset+=word.length()-origWord.length();
-            newbuffer.replace (lastpos+offset, word.length(), word );
+            correctWord( origWord ,  word);
             word ="";
         }
     }
+}
+
+void KOSpell::correctWord( const QString & originalword, const QString & newword )
+{
+    emit corrected (originalword ,  newword, lastpos+offset-originalword.length());
+    offset+=newword.length()-originalword.length();
+    newbuffer.replace (lastpos+offset, newword.length(), newword );
 }
 
 void KOSpell::previousWord()
@@ -543,17 +548,13 @@ void KOSpell::dialog2 (int result)
         replacelist.append (_replacement);
 
         emit replaceall( dlgorigword ,  _replacement );
-        emit corrected (dlgorigword ,  _replacement, lastpos+offset-dlgorigword.length());
-        offset+=replacement().length()-dlgorigword.length();
-        newbuffer.replace (lastpos + offset, _replacement.length(), _replacement );
+        correctWord( dlgorigword ,  _replacement );
         break;
     case KS_ADDAUTOCORRECT:
         //todo add new word ????
         emit addAutoCorrect (dlgorigword , replacement());
     case KS_REPLACE:
-        emit corrected (dlgorigword ,  replacement(), lastpos+offset-dlgorigword.length());
-        offset+=replacement().length()-dlgorigword.length();
-        newbuffer.replace (lastpos+offset, replacement().length(), replacement() );
+        correctWord( dlgorigword ,  replacement() );
         break;
     case KS_CHECKAGAINWITHNEWLANGUAGE:
         changeSpellLanguage( ksdlg->languageIndex());
