@@ -2083,7 +2083,6 @@ void KPresenterView::objectSelectedChanged()
     bool state=page->isOneObjectSelected();
     actionScreenAssignEffect->setEnabled(state);
     actionExtraRotate->setEnabled(state);
-    actionExtraShadow->setEnabled(state);
     actionExtraAlignObjs->setEnabled(state);
     actionExtraGroup->setEnabled(state && m_pKPresenterDoc->numSelected()>1);
     actionExtraUnGroup->setEnabled(state);
@@ -2121,6 +2120,9 @@ void KPresenterView::objectSelectedChanged()
     actionEditCopy->setEnabled(state);
     actionEditCut->setEnabled(state);
     actionColorBar->setEnabled(state);
+
+    actionExtraShadow->setEnabled(!page->haveASelectedPictureObj());
+
 
 }
 

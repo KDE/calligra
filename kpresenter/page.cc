@@ -1845,6 +1845,21 @@ bool Page::isASelectedTextObj()
 
     return false;
 }
+/*================================================================*/
+bool Page::haveASelectedPictureObj()
+{
+    KPObject *kpobject = 0;
+    for ( unsigned int i = 0; i < objectList()->count(); i++ )
+    {
+        kpobject = objectList()->at( i );
+        if ( kpobject->isSelected() && (kpobject->getType() != OT_PICTURE
+                                        && kpobject->getType() != OT_CLIPART))
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 /*================================================================*/
 KTextEdit *Page::haveASelectedTextObj()

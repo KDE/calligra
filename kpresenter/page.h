@@ -130,6 +130,8 @@ public:
 
     void setMouseSelectedObject(bool b);
 
+    bool haveASelectedPictureObj();
+
 public slots:
     void exitEditMode();
 
