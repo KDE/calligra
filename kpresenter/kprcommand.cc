@@ -1910,6 +1910,7 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
         parag = static_cast<KoTextParag *>(parag->next());
         //kdDebug(33001) << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
+    textdoc->textObject()->textObject()->setNeedSpellCheck( true );
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();
     return c;
