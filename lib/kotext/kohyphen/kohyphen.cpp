@@ -28,7 +28,7 @@
 #include "kohyphen.h"
 
 
-#define DEBUG_HYPHENATOR 1
+//#define DEBUG_HYPHENATOR 1
 
 KoHyphenator* KoHyphenator::s_self;
 static KStaticDeleter<KoHyphenator> kohyphensd;
