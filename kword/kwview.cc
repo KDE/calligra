@@ -1079,33 +1079,7 @@ void KWView::createKWGUI()
 
 void KWView::showFormulaToolbar( bool show )
 {
-    // This might not be exactly the right place. But these actions
-    // must be enabled when a formula is active...
-    m_doc->getFormulaDocument()->getMakeGreekAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddGenericUpperAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddGenericLowerAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getRemoveEnclosingAction()->setEnabled( show );
-
-    m_doc->getFormulaDocument()->getInsertSymbolAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddThinSpaceAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddMediumSpaceAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddThickSpaceAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddQuadSpaceAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddBracketAction()->setEnabled( show);
-    m_doc->getFormulaDocument()->getAddSBracketAction()->setEnabled( show);
-    m_doc->getFormulaDocument()->getAddCBracketAction()->setEnabled( show);
-    m_doc->getFormulaDocument()->getAddAbsAction()->setEnabled(show);
-    m_doc->getFormulaDocument()->getAddFractionAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddRootAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddSumAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddProductAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddIntegralAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddMatrixAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddOneByTwoMatrixAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddUpperLeftAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddLowerLeftAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddUpperRightAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getAddLowerRightAction()->setEnabled(show );
+    m_doc->getFormulaDocument()->setEnabled( show );
     if(shell())
       shell()->showToolbar( "formula_toolbar", show );
 }
@@ -4586,7 +4560,7 @@ void KWView::frameSelectedChanged()
         }
         actionEditDelFrame->setEnabled( okForDelete );
         actionEditCut->setEnabled( okForDelete );
-        
+
         actionLowerFrame->setEnabled( okForLowerRaise );
         actionRaiseFrame->setEnabled( okForLowerRaise );
         actionSendBackward->setEnabled( okForLowerRaise );
