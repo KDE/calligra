@@ -4245,9 +4245,8 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-#if 0
-            m_gui->getHorzRuler()->setLeftIndent( KoUnit::userValue( paragDia->leftIndent(), m_doc->getUnit() ) );
-#endif
+
+            h_ruler->setLeftIndent( KoUnit::userValue( paragDia->leftIndent(), m_pKPresenterDoc->getUnit() ) );
         }
 
         if(paragDia->isRightMarginChanged())
@@ -4258,7 +4257,7 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-            //m_gui->getHorzRuler()->setRightIndent( KoUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
+            h_ruler->setRightIndent( KoUnit::userValue( paragDia->rightIndent(), m_pKPresenterDoc->getUnit() ) );
         }
         if(paragDia->isSpaceBeforeChanged())
         {
@@ -4286,8 +4285,7 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-            /*m_gui->getHorzRuler()->setFirstIndent(
-              KoUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );*/
+            h_ruler->setFirstIndent(KoUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
         }
 
         if(paragDia->isAlignChanged())
@@ -4336,17 +4334,6 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-        }
-        if ( paragDia->isPageBreakingChanged() )
-        {
-#if 0
-            cmd=edit->setPageBreakingCommand( paragDia->pageBreaking() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-#endif
         }
         if(changed)
             m_pKPresenterDoc->addCommand(macroCommand);
