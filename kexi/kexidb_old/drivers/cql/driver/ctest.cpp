@@ -5,7 +5,7 @@ int main()
 {
 	try
 	{
-		SqlHandle *h = new SqlHandle();
+		SqlHandle *h = new SqlHandle(0);
 	
 		try
 		{

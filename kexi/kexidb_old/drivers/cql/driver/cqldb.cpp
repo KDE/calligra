@@ -38,7 +38,7 @@ CqlDB::CqlDB(QObject *parent, const char *name, const QStringList &)
 
 	try
 	{
-		m_db = new SqlHandle();
+		m_db = new SqlHandle(0);
 	}
 	catch(CqlException& ex)
 	{
@@ -154,19 +154,19 @@ CqlDB::alterField(const QString& table, const QString& field, const QString& new
 
 // cql->kexi
 
-static QString
+QString
 CqlDB::cqlString(const CqlString &str)
 {
 	return QString(str.text());
 }
 
-static QString
+QString
 CqlDB::cqlFixedString(const CqlFixedLengthString &str)
 {
 	return QString(str.text());
 }
 
-static QString
+QString
 CqlDB::errorText(CqlException &ex)
 {
 	return cqlString(ex.errorText());
