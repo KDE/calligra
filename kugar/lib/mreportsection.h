@@ -9,7 +9,7 @@
 #ifndef MREPORTSECTION_H
 #define MREPORTSECTION_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qobject.h>
 
 #include "mlineobject.h"
@@ -47,13 +47,13 @@ protected:
   QDate reportDate;
 
 	/** Section's line collection */
-  QList<MLineObject> lines;
+  QPtrList<MLineObject> lines;
   /** Section's label collection */
-  QList<MLabelObject> labels;
+  QPtrList<MLabelObject> labels;
   /** Section's special field collection */
-  QList<MSpecialObject> specialFields;
+  QPtrList<MSpecialObject> specialFields;
   /** Section's calculated field collection */
-  QList<MCalcObject> calculatedFields;
+  QPtrList<MCalcObject> calculatedFields;
 
 public:
 	/** Adds a new line object to the section's line collection */
@@ -83,7 +83,7 @@ public:
   /** Sets the data for the specified calculated field */
   void setCalcFieldData(int idx, QString data);
   /** Sets the data for the all calculated fields - list size must match number of calculated fields */
-  void setCalcFieldData(QList<QArray<double> >* values);
+  void setCalcFieldData(QPtrList<QMemArray<double> >* values);
   /** Returns the number of calculated fields in the section */
   int getCalcFieldCount();
   /** Draws the section to the specified painter & x/y-offsets */

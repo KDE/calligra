@@ -30,7 +30,7 @@ public:
 
 protected:
   /** Section's field collection */
-  QList<MFieldObject> fields;
+  QPtrList<MFieldObject> fields;
 
 public:
   /** Draws the detail section to the specified painter & x/y-offsets */

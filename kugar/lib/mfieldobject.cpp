@@ -1,9 +1,9 @@
 /***************************************************************************
               mfieldobject.cpp  -  Kugar report field object
               -------------------
-    begin     : Mon Aug 23 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
+    begin     : Mon Aug 23 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
 #include "mfieldobject.h"
@@ -23,7 +23,7 @@ MFieldObject::MFieldObject() : MLabelObject() {
 
 /** Copy constructor */
 MFieldObject::MFieldObject(const MFieldObject& mFieldObject): MLabelObject((MLabelObject &) mFieldObject){
-  copy(&mFieldObject);	
+  copy(&mFieldObject);
 }
 
 /** Assignment operator */
@@ -57,6 +57,7 @@ void MFieldObject::setFieldName(const QString field){
 void MFieldObject::setText(const QString txt){
 	int ret;
 	QDate d;
+        int pos;
 	QString month, day, year;
 	QRegExp regexp("[0-9][0-9](-|//)[0-9][0-9](-|//)[0-9][0-9][0-9][0-9]");
 
@@ -80,7 +81,10 @@ void MFieldObject::setText(const QString txt){
       break;
     case MFieldObject::Date:
 			// Check if we can read the date and if so, reformat it ...
-			ret = regexp.match(txt);
+
+        pos = regexp.search( txt.mid(0) );
+        ret = regexp.matchedLength();
+        //ret = regexp.match(txt);
 
 			if (ret != 1){
       	year = txt.right(4);
@@ -89,7 +93,7 @@ void MFieldObject::setText(const QString txt){
 
         d.setYMD(year.toInt(), month.toInt(), day.toInt());
       	text = MUtil::formatDate(d, format);
-			}      	
+			}
 			else
 				text = txt;
       break;
@@ -107,7 +111,7 @@ void MFieldObject::setDataType(int t){
 	dataType = t;
 	if (dataType == MFieldObject::Integer ||
 			dataType == MFieldObject::Float ||
-			dataType == MFieldObject::Currency)	
+			dataType == MFieldObject::Currency)
 		saveColor = foregroundColor;
 }
 
@@ -144,7 +148,7 @@ void MFieldObject::formatNegValue(){
 	if (text.toDouble() < 0)
 		foregroundColor = negativeValueColor;
 	else
-		foregroundColor = saveColor;	
+		foregroundColor = saveColor;
 }
 
 /** Formats the string representation of a number with comma separators */
@@ -174,7 +178,7 @@ void MFieldObject::formatCommas(){
 		if ((j == 3) && (i - 1 >= offset)) {
     	tmp = tr(",") + tmp;
 			j = 0;
-		}			
+		}
 	}
 
 	// If neg value, add back the sign

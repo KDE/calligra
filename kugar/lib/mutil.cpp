@@ -1,9 +1,9 @@
 /***************************************************************************
               mutil.cpp  -  Kugar utlity class
               -------------------
-    begin     : Tue Aug 17 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
+    begin     : Tue Aug 17 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
 #include <math.h>
@@ -67,12 +67,12 @@ QString MUtil::formatDate(const QDate& value, int format){
 }
 
 /** Returns the count for an array of doubles */
-int MUtil::count(QArray<double>* values){
+int MUtil::count(QMemArray<double>* values){
   return values->size();
 }
 
 /** Returns the sum for an array of doubles */
-double MUtil::sum(QArray<double>* values){
+double MUtil::sum(QMemArray<double>* values){
   double tmpSum = 0.0;
   int size = count(values);
 
@@ -83,12 +83,12 @@ double MUtil::sum(QArray<double>* values){
 }
 
 /** Returns the average value for an array of doubles */
-double MUtil::average(QArray<double>* values){
+double MUtil::average(QMemArray<double>* values){
   return sum(values)/count(values);
 }
 
 /** Returns the variance for an array of doubles */
-double MUtil::variance(QArray<double>* values){
+double MUtil::variance(QMemArray<double>* values){
   double tmpVar = 0.0;
   double tmpAvg = average(values);
   int size = count(values);
@@ -100,6 +100,6 @@ double MUtil::variance(QArray<double>* values){
 }
 
 /** Returns the standard deviation for an array of doubles */
-double MUtil::stdDeviation(QArray<double>* values){
+double MUtil::stdDeviation(QMemArray<double>* values){
   return sqrt(variance(values));
 }

@@ -109,7 +109,7 @@ private:
   QDate currDate;
 
   /** Grand total array */
-  QList<QArray<double> > grandTotal;
+  QPtrList<QMemArray<double> > grandTotal;
 
 	/** Cancel rendering flag */
 	bool cancelRender;

@@ -1,9 +1,9 @@
 /***************************************************************************
               mreportsection.cpp  -  Kugar report section
               -------------------
-    begin     : Mon Aug 23 1999                                           
-    copyright : (C) 1999 by Mutiny Bay Software                         
-    email     : info@mutinybaysoftware.com                                     
+    begin     : Mon Aug 23 1999
+    copyright : (C) 1999 by Mutiny Bay Software
+    email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
 #include "mreportsection.h"
@@ -31,7 +31,7 @@ MReportSection::MReportSection(){
 
 /** Copy constructor */
 MReportSection::MReportSection(const MReportSection& mReportSection)/*: QObject((QObject &) mReportSection)*/{
-  copy(&mReportSection);	
+  copy(&mReportSection);
 }
 
 /** Assignment operator */
@@ -49,7 +49,7 @@ MReportSection MReportSection::operator=(const MReportSection& mReportSection){
 
 /** Destructor */
 MReportSection::~MReportSection(){
-	clear();	
+	clear();
 }
 
 /** Frees all resources allocated by the report section */
@@ -134,7 +134,7 @@ void MReportSection::setCalcFieldData(int idx, QString data){
 }
 
 /** Sets the data for the all calculated fields - list size must number of calculated fields */
-void MReportSection::setCalcFieldData(QList<QArray<double> >* values){
+void MReportSection::setCalcFieldData(QPtrList<QMemArray<double> >* values){
   MCalcObject* field;
   int i = 0;
 

@@ -32,7 +32,7 @@ MReportViewer::MReportViewer(QWidget *parent, const char *name ) : QWidget(paren
 
   // Get the current color palette
   QPalette p = palette();
-  QColorGroup g = p.normal();
+  QColorGroup g = p.active();
 
   // Set the scroller's background color
   scroller->viewport()->setBackgroundColor(g.mid());

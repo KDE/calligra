@@ -199,7 +199,7 @@ MPageCollection* MReportEngine::renderReport(){
   // Initialize the grand total array
   grandTotal.clear();
   for(int i = 0; i < rFooter.getCalcFieldCount(); i++)
-    grandTotal.append(new QArray<double>);
+    grandTotal.append(new QMemArray<double>);
 
   // Create the first page
   startPage(pages);

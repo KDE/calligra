@@ -10,7 +10,7 @@
 #define MPAGECOLLECTION_H
 
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpicture.h>
 #include <qsize.h>
 
@@ -32,7 +32,7 @@ public:
 
 private:
   /** The report page list */
-  QList<QPicture> pages;
+  QPtrList<QPicture> pages;
   /** Page dimensions */
   QSize dimensions;
   /** Page size */
