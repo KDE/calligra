@@ -720,7 +720,6 @@ VTextTool::accept()
 	}
 
 	view()->part()->addCommand( cmd, true );
-	view()->selectionChanged();
 
 	m_creating = false;
 }
@@ -754,8 +753,6 @@ VTextTool::convertToShapes()
 								   m_text );
 
 	view()->part()->addCommand( cmd, true );
-
-	view()->selectionChanged();
 
 	m_creating = false;
 

@@ -106,10 +106,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 void VStrokeDocker::updateCanvas()
 {
 	if( m_part && m_part->document().selection()->objects().count() > 0 )
-	{
 		m_part->addCommand( new VStrokeCmd( &m_part->document(), &m_stroke ), true );
-		m_view->selectionChanged();
-	}
 }
 
 void VStrokeDocker::slotCapChanged( int ID )

@@ -79,7 +79,6 @@ VImageTool::mouseButtonRelease()
 		VInsertImageCmd *cmd = new VInsertImageCmd( &view()->part()->document(), i18n( "Insert Image" ), image, first() );
 
 		view()->part()->addCommand( cmd, true );
-		//view()->selectionChanged();
 	}
 }
 

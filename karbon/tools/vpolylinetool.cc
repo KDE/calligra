@@ -121,7 +121,6 @@ VPolylineTool::deactivate()
 			"14_polyline" );
 
 		view()->part()->addCommand( cmd, true );
-		view()->selectionChanged();
 	}
 }
 

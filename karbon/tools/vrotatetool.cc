@@ -107,8 +107,6 @@ VRotateTool::mouseDragRelease()
 			m_center,
 			m_angle, altPressed() ),
 		true );
-
-	view()->selectionChanged();
 }
 
 void

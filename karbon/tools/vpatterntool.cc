@@ -196,8 +196,6 @@ VPatternTool::mouseButtonRelease()
 		view()->part()->addCommand(
 			new VStrokeCmd( &view()->part()->document(), &stroke, "14_pattern" ), true );
 	}*/
-
-	view()->selectionChanged();
 } // VPatternTool::mouseButtonRelease
 
 void
@@ -229,8 +227,6 @@ VPatternTool::mouseDragRelease()
 		view()->part()->addCommand(
 			new VStrokeCmd( &view()->part()->document(), &stroke, "14_pattern" ), true );
 	}*/
-
-	view()->selectionChanged();
 } // VPatternTool::mouseDragRelease
 
 void

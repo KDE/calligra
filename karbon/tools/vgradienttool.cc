@@ -131,8 +131,6 @@ VGradientTool::mouseButtonRelease()
 		view()->part()->addCommand(
 			new VStrokeCmd( &view()->part()->document(), &stroke, "14_gradient" ), true );
 	}
-
-	view()->selectionChanged();
 }
 
 void
@@ -166,8 +164,6 @@ VGradientTool::mouseDragRelease()
 	else
 		view()->part()->addCommand(
 			new VStrokeCmd( &view()->part()->document(), &m_gradient ), true );
-
-	view()->selectionChanged();
 }
 
 void

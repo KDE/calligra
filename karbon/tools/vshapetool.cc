@@ -100,7 +100,6 @@ VShapeTool::mouseButtonRelease()
 				name(), composite, icon() );
 
 			view()->part()->addCommand( cmd, true );
-			view()->selectionChanged();
 		}
 	}
 
@@ -130,7 +129,6 @@ VShapeTool::mouseDragRelease()
 		name(), shape(), icon() );
 
 	view()->part()->addCommand( cmd, true );
-	view()->selectionChanged();
 
 	m_isSquare = false;
 	m_isCentered = false;
