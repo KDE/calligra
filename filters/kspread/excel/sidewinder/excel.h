@@ -2093,36 +2093,6 @@ private:
   Private* d;
 };
 
-#if 0
-  
-  unsigned formatIndex;   // see FORMAT record
-  bool cellLocked;
-  bool formulaHidden;
-  bool styleFormat;
-  unsigned parentIndex;
-  unsigned verticalAlignment;
-  bool textWrapped;
-  unsigned rotationAngle;
-  unsigned indentLevel;
-  bool shrinkContent;
-  unsigned usedAttrib;
-  unsigned leftBorder;
-  unsigned rightBorder;
-  unsigned topBorder;
-  unsigned bottomBorder;
-  unsigned leftColorIndex;
-  unsigned rightColorIndex;
-  unsigned topColorIndex;
-  unsigned bottomColorIndex;
-  bool diagonalFromTopLeft;
-  bool diagonalFromRightLeft;
-  unsigned diagonalColorIndex;
-  unsigned diagonalLineStyle;
-  unsigned fillPattern;
-  unsigned patternForeColorIndex;
-  unsigned patternBackColorIndex;
-#endif
-  
 /**
   Class XFRecord holds information of XF (eXtended Format) which specifies
   many kind of properties of a specific cell. It will be referred 
