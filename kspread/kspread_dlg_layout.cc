@@ -1335,7 +1335,7 @@ else if(dlg->m_bValue)
             int start=0;
             if(tmp.find('%')!=-1)
                 start=2;
-            else if(tmp.find(KGlobal::locale()->currencySymbol())==(tmp.length()-KGlobal::locale()->currencySymbol().length()))
+            else if(tmp.find(KGlobal::locale()->currencySymbol())==((int)(tmp.length()-KGlobal::locale()->currencySymbol().length())))
                 start=KGlobal::locale()->currencySymbol().length()+1;
             else if((start=tmp.find('E'))!=-1)
                 start=tmp.length()-start;

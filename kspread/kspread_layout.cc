@@ -43,6 +43,8 @@ using namespace std;
 
 KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
 {
+    QPen pen( Qt::black,1,Qt::NoPen);
+    QBrush brush( Qt::red,Qt::NoBrush);
     m_pTable = _table;
     m_mask = 0;
     m_bNoFallBack = 0;
@@ -52,26 +54,13 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_bgColor = QColor();
     m_eAlign = KSpreadLayout::Undefined;
     m_eAlignY = KSpreadLayout::Middle;
-    m_leftBorderPen.setColor( Qt::black );
-    m_leftBorderPen.setWidth( 1 );
-    m_leftBorderPen.setStyle( Qt::NoPen );
-    m_topBorderPen.setColor( Qt::black );
-    m_topBorderPen.setWidth( 1 );
-    m_topBorderPen.setStyle( Qt::NoPen );
-    m_rightBorderPen.setColor( Qt::black );
-    m_rightBorderPen.setWidth( 1 );
-    m_rightBorderPen.setStyle( Qt::NoPen );
-    m_bottomBorderPen.setColor( Qt::black );
-    m_bottomBorderPen.setWidth( 1 );
-    m_bottomBorderPen.setStyle( Qt::NoPen );
-    m_fallDiagonalPen.setColor( Qt::black );
-    m_fallDiagonalPen.setWidth( 1 );
-    m_fallDiagonalPen.setStyle( Qt::NoPen );
-    m_goUpDiagonalPen.setColor( Qt::black );
-    m_goUpDiagonalPen.setWidth( 1 );
-    m_goUpDiagonalPen.setStyle( Qt::NoPen );
-    m_backGroundBrush.setStyle( Qt::NoBrush);
-    m_backGroundBrush.setColor( Qt::red );
+    m_leftBorderPen=pen;
+    m_topBorderPen=pen;
+    m_rightBorderPen=pen;
+    m_bottomBorderPen=pen;
+    m_fallDiagonalPen=pen;
+    m_goUpDiagonalPen=pen;
+    m_backGroundBrush=brush;
     m_dFaktor = 1.0;
     m_bMultiRow = FALSE;
     m_bVerticalText = FALSE;
@@ -87,6 +76,31 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
 
 KSpreadLayout::~KSpreadLayout()
 {
+}
+
+void KSpreadLayout::defaultStyleLayout()
+{
+  QPen pen( Qt::black,1,Qt::NoPen); // TODO set to QColor() and change painting to use default colors
+  QBrush brush( Qt::red,Qt::NoBrush);
+  setBottomBorderPen(pen);
+  setRightBorderPen(pen);
+  setLeftBorderPen(pen);
+  setTopBorderPen(pen);
+  setFallDiagonalPen(pen);
+  setGoUpDiagonalPen(pen);
+  setAlign( KSpreadCell::Undefined );
+  setAlignY( KSpreadCell::Middle );
+  setBackGroundBrush(brush);
+  setTextColor( QColor() );
+  setBgColor( QColor() );
+  setFaktor( 1.0);
+  setPrecision( -1 );
+  setPostfix( "" );
+  setPrefix( "" );
+  setVerticalText(false);
+  setAngle(0);
+  setFormatNumber(Number);
+  setComment("");
 }
 
 void KSpreadLayout::copy( KSpreadLayout &_l )

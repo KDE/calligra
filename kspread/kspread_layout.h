@@ -83,6 +83,8 @@ public:
 
     void copy( KSpreadLayout &_l );
 
+    void defaultStyleLayout();
+
     ////////////////////////////////
     //
     // Loading and saving

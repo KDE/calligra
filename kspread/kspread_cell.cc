@@ -198,23 +198,7 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
 
 void KSpreadCell::defaultStyle()
 {
-  QPen pen( Qt::black,1,Qt::NoPen); // TODO set to QColor() and change painting to use default colors
-  QBrush brush( Qt::red,Qt::NoBrush);
-  setBottomBorderPen(pen);
-  setRightBorderPen(pen);
-  setLeftBorderPen(pen);
-  setTopBorderPen(pen);
-  setFallDiagonalPen(pen);
-  setGoUpDiagonalPen(pen);
-  setAlign( KSpreadCell::Undefined );
-  setAlignY( KSpreadCell::Middle );
-  setBackGroundBrush(brush);
-  setTextColor( QColor() );
-  setBgColor( QColor() );
-  setFaktor( 1.0);
-  setPrecision( -1 );
-  setPostfix( "" );
-  setPrefix( "" );
+  defaultStyleLayout();
   if(m_firstCondition!=0)
         delete m_firstCondition;
   m_firstCondition=0;
@@ -229,10 +213,7 @@ void KSpreadCell::defaultStyle()
 
   m_conditionIsTrue=false;
   m_numberOfCond=-1;
-  setComment("");
-  setVerticalText(false);
-  setAngle(0);
-  setFormatNumber(Number);
+
   if(m_Validity!=0)
         delete m_Validity;
   m_Validity=0;
@@ -956,7 +937,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             int start=0;
             if(localizedNumber.find('%')!=-1)
                 start=2;
-            else if(localizedNumber.find( locale()->currencySymbol())==(localizedNumber.length()-locale()->currencySymbol().length()))
+            else if(localizedNumber.find( locale()->currencySymbol())==((int)(localizedNumber.length()-locale()->currencySymbol().length())))
                 start=locale()->currencySymbol().length()+1;
             else if((start=localizedNumber.find('E'))!=-1)
                 start=localizedNumber.length()-start;
@@ -3401,7 +3382,7 @@ void KSpreadCell::incPrecision()
       int start=0;
       if(m_strOutText.find('%')!=-1)
         start=2;
-      else if(m_strOutText.find(locale()->currencySymbol())==(m_strOutText.length()-locale()->currencySymbol().length()))
+      else if(m_strOutText.find(locale()->currencySymbol())==((int)(m_strOutText.length()-locale()->currencySymbol().length())))
         start=locale()->currencySymbol().length()+1;
       else if((start=m_strOutText.find('E'))!=-1)
         start=m_strOutText.length()-start;
@@ -3431,7 +3412,7 @@ void KSpreadCell::decPrecision()
     int start=0;
     if(m_strOutText.find('%')!=-1)
         start=2;
-    else if(m_strOutText.find(locale()->currencySymbol())==(m_strOutText.length()-locale()->currencySymbol().length()))
+    else if(m_strOutText.find(locale()->currencySymbol())==((int)(m_strOutText.length()-locale()->currencySymbol().length())))
         start=locale()->currencySymbol().length()+1;
     else if((start=m_strOutText.find('E'))!=-1)
         start=m_strOutText.length()-start;
