@@ -40,6 +40,9 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* 
 {
   m_bLoading = false;
   kdDebug(35001) << "Constructor started!" << endl;
+
+  setInstance( KChartFactory::global(), false );
+
   (void)new WizardExt( this );
   initDoc();
   // hack
@@ -356,7 +359,7 @@ QDomDocument KChartPart::saveXML() {
     note.appendChild( doc.createTextNode( _params->annotation->note ) );
     params.appendChild( note );
   }
-  
+
   // PENDING(kalle) There might be a list of scatter points, this is only saving one.
   if( _params->scatter ) {
     QDomElement scatter = doc.createElement( "scatter" );
@@ -368,7 +371,7 @@ QDomDocument KChartPart::saveXML() {
     scatter.setAttribute( "numpoints", _params->num_scatter_pts );
     params.appendChild( scatter );
   }
-  
+
 
   QDomElement legend = doc.createElement("legend");
   chart.appendChild(legend);
@@ -410,7 +413,7 @@ QDomDocument KChartPart::saveXML() {
   return doc;
 };
 
-bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc ) 
+bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
 {
   kdDebug(35001) << "kchart loadXML called" << endl;
   // <spreadsheet>
@@ -419,15 +422,15 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
     //m_bLoading = false;
     return false;
   }
-  
+
   kdDebug(35001) << "Ok, it is a chart" << endl;
-  
+
   QDomElement chart = doc.documentElement();
   if ( chart.attribute( "mime" ) != "application/x-kchart" )
     return false;
-  
+
   kdDebug(35001) << "Mimetype ok" << endl;
-  
+
   QDomElement data = chart.namedItem("data").toElement();
   bool ok;
   int cols = data.attribute("cols").toInt(&ok);
@@ -441,7 +444,7 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
   QDomNode n = data.firstChild();
   QArray<int> tmpExp(rows*cols);
   QArray<bool> tmpMissing(rows*cols);
-  
+
   for (int i=0; i!=rows; i++) {
     for (int j=0; j!=cols; j++) {
       if (n.isNull()) {
@@ -660,7 +663,7 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
     }
     if(graph.hasAttribute("thumbval")) {
       _params->thumbval=(bool) graph.attribute("thumbval").toDouble( &ok );
-      if(!ok) 
+      if(!ok)
 	return false;
     }
   }
@@ -684,37 +687,37 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
     }
     if(graphparams.hasAttribute( "other_threshold" )) {
       _params->other_threshold=graphparams.attribute("other_threshold").toShort( &ok );
-      if(!ok) 
+      if(!ok)
 	return false;
     }
     if(graphparams.hasAttribute( "offsetCol" )) {
       _params->offsetCol = graphparams.attribute("offsetCol").toInt( &ok );
-      if(!ok) 
+      if(!ok)
 	return false;
     }
     if(graphparams.hasAttribute( "hard_size" )) {
       _params->hard_size = (bool)graphparams.attribute("hard_size").toInt( &ok );
-      if(!ok) 
+      if(!ok)
 	return false;
     }
     if(graphparams.hasAttribute( "hard_graphheight" )) {
       _params->hard_graphheight = graphparams.attribute("hard_graphheight").toInt( &ok );
-      if(!ok) 
+      if(!ok)
 	return false;
     }
     if(graphparams.hasAttribute( "hard_graphwidth" )) {
       _params->hard_graphwidth = graphparams.attribute("hard_graphwidth").toInt( &ok );
-      if(!ok) 
+      if(!ok)
 	return false;
     }
     if(graphparams.hasAttribute( "hard_xorig" )) {
       _params->hard_xorig = graphparams.attribute("hard_xorig").toInt( &ok );
-      if(!ok) 
+      if(!ok)
 	return false;
     }
     if(graphparams.hasAttribute( "hard_yorig" )) {
       _params->hard_yorig = graphparams.attribute("hard_yorig").toInt( &ok );
-      if(!ok) 
+      if(!ok)
 	return false;
     }
     if(graphparams.hasAttribute( "labeldist" )) {
@@ -898,11 +901,11 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
   return true;
 };
 
-QDomElement KChartPart::createElement( const QString &tagName, const QFont &font, 
-				       QDomDocument &doc ) const 
+QDomElement KChartPart::createElement( const QString &tagName, const QFont &font,
+				       QDomDocument &doc ) const
 {
   QDomElement e=doc.createElement( tagName );
-  
+
   e.setAttribute( "family", font.family() );
   e.setAttribute( "size", font.pointSize() );
   e.setAttribute( "weight", font.weight() );
@@ -910,28 +913,28 @@ QDomElement KChartPart::createElement( const QString &tagName, const QFont &font
     e.setAttribute( "bold", "yes" );
   if ( font.italic() )
     e.setAttribute( "italic", "yes" );
-  
+
   return e;
 }
 
-QFont KChartPart::toFont( QDomElement &element ) const 
+QFont KChartPart::toFont( QDomElement &element ) const
 {
   QFont f;
   f.setFamily( element.attribute( "family" ) );
-  
+
   bool ok;
   f.setPointSize( element.attribute("size").toInt( &ok ) );
   if ( !ok ) return QFont();
-  
+
   f.setWeight( element.attribute("weight").toInt( &ok ) );
   if ( !ok ) return QFont();
-  
+
   if ( element.hasAttribute( "italic" ) )
     f.setItalic( TRUE );
-  
+
   if ( element.hasAttribute( "bold" ) )
     f.setBold( TRUE );
-  
+
   return f;
 }
 
@@ -940,6 +943,10 @@ QFont KChartPart::toFont( QDomElement &element ) const
 
   /**
    * $Log$
+   * Revision 1.49  2000/09/23 21:37:36  hausmann
+   * - removed all component specific shells. they are not needed anymore.
+   *   (as discussed with David)
+   *
    * Revision 1.48  2000/09/22 20:59:48  hausmann
    * - don't link kspread against kchart. instead use some shared interface
    *   (which probably needs some finetuning :-}
