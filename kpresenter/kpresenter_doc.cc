@@ -737,6 +737,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	if ( _rastY == 0 ) _rastY = 10;
 
 	setPageLayout( __pgLayout, 0, 0 );
+        QApplication::restoreOverrideCursor();
 
 	return true;
 }
