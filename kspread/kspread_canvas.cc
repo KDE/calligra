@@ -2548,6 +2548,7 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   /* Prepare the painter */
   QPainter painter;
   painter.begin( this );
+  painter.save();
 
   // Do the view transformation.
   QWMatrix m = m_pView->matrix();
@@ -2562,10 +2563,11 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   QPoint br = m.map( QPoint( width(), height() ) );
   QRect view( tl, br );
 
-  if (view.width() < width())
+  //TODO: Fix following condition, shouldn't be necessary: Used when zoomed
+  if ( view.width() < width() )
     view.setWidth( width() );
 
-  if (view.height() < height())
+  if ( view.height() < height() )
     view.setHeight( height() );
 
   QValueList<QRect> cellRegions;
@@ -2573,8 +2575,15 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   cellRegions.append(area2);
 
   m_pDoc->paintCellRegions(painter, view, m_pView, cellRegions, table, true);
+  painter.restore();
 
+  //TODO: remove hack: The painter is saved, restored and "scaled" with the matrix again, 
+  //      because within paintCellRegions the region for the children is clipped out.
+  
   // Draw children
+  m = m_pView->matrix();
+  painter.setWorldMatrix( m );
+
   QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
   it.toFirst();
 
