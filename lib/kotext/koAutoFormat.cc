@@ -423,7 +423,7 @@ void KoAutoFormat::loadEntry( const QDomElement &nl)
     {
         tmp->createNewEntryContext();
         tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::Bold;
-        QString value = nl.attribute("ITALIC");
+        QString value = nl.attribute("BOLD");
         if ( value.toInt() == 1 )
             tmp->formatEntryContext()->m_options |= KoSearchContext::Bold;
     }
