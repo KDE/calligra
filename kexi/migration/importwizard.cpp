@@ -81,9 +81,9 @@ importWizard::~importWizard()
 void importWizard::setupintro()
 {
     QLabel *lblIntro = new QLabel(introPage);
-    lblIntro->setText("This wizard will guide you through the\n"
+    lblIntro->setText(i18n("This wizard will guide you through the\n"
                       "process of converting an existing data\n"
-                      "set into a kexi database");
+                      "set into a kexi database"));
 }
 
 //===========================================================
@@ -91,8 +91,8 @@ void importWizard::setupintro()
 void importWizard::setupsrcType()
 {
     QLabel *lblSource = new QLabel(srcTypePage);
-    lblSource->setText("Here you can choose the type\n"
-                       "of data to import data from");
+    lblSource->setText(i18n("Here you can choose the type\n"
+                       "of data to import data from"));
 
     QVBox *srcTypeControls = new QVBox(srcTypePage);
     srcTypeCombo = new KComboBox(srcTypeControls);
@@ -106,8 +106,8 @@ void importWizard::setupsrcconn()
 {
 
     QLabel *lblSource = new QLabel(srcConnPage);
-    lblSource->setText("Here you can choose the location\n"
-                       "to import data from");
+    lblSource->setText(i18n("Here you can choose the location\n"
+                       "to import data from"));
 
     QVBox *srcconnControls = new QVBox(srcConnPage);
 
@@ -123,8 +123,8 @@ void importWizard::setupsrcdb()
 {
 
     QLabel *lblSourceDb = new QLabel(srcdbPage);
-    lblSourceDb->setText("Here you can choose the actual\n"
-                         "database to import data from");
+    lblSourceDb->setText(i18n("Here you can choose the actual\n"
+                         "database to import data from"));
 
     srcdbControls = new QVBox(srcdbPage);
 
@@ -139,8 +139,8 @@ void importWizard::setupdstType()
 
     QStringList names = manager.driverNames();
     QLabel *lblDest = new QLabel(dstTypePage);
-    lblDest->setText("Here you can choose the location\n"
-                     "to save the data");
+    lblDest->setText(i18n("Here you can choose the location\n"
+                     "to save the data"));
 
     QVBox *dstTypeControls = new QVBox(dstTypePage);
 
@@ -153,9 +153,9 @@ void importWizard::setupdstType()
 void importWizard::setupdst()
 {
     QLabel *lblDest = new QLabel(dstPage);
-    lblDest->setText("Here you can choose the location\n"
+    lblDest->setText(i18n("Here you can choose the location\n"
                      "to save the data in and the new\n"
-                     "database name");
+                     "database name"));
 
     QVBox *dstControls = new QVBox(dstPage);
 
@@ -164,7 +164,7 @@ void importWizard::setupdst()
     dstConn->hideHelpers();
 
     dstNewDBName = new KLineEdit(dstControls);
-    dstNewDBName->setText("Enter new database name here");
+    dstNewDBName->setText(i18n("Enter new database name here"));
 }
 
 //===========================================================
@@ -175,14 +175,14 @@ void importWizard::setupfinish()
     QLabel *lblDone = new QLabel(finishPage);
     lblfinishTxt = new QLabel(finishPage);
 
-    lblDone->setText("Finished!\n"
+    lblDone->setText(i18n("Finished!\n"
                      "All required information has now\n"
                      "been gathered.  Click Finish below\n"
                      "to start the import process\n\n"
                      "NOTE:  You may be asked for extra\n"
                      "information such as field types if\n"
                      "the import module cannot automatically\n"
-                     "determine this for you");
+                     "determine this for you"));
     finishPage->show();
 }
 
@@ -198,22 +198,22 @@ bool importWizard::checkUserInput()
     if (srcTypeCombo->currentText() != "PostgreSQL Database")
     {
         problem = true;
-        finishtxt = "Source type was not PostgreSQL Database";
+        finishtxt = i18n("Source type was not PostgreSQL Database");
     }
     if (dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text() == "")
     {
         problem = true;
-        finishtxt = finishtxt + "\nNo new database name was entered";
+        finishtxt = finishtxt + i18n("\nNo new database name was entered");
     }
 
     if (problem)
     {
-        finishtxt = "I found the following problems with the data you entered:\n\n" + finishtxt;
-        finishtxt = finishtxt + "\n\nPlease go back and correct these errors";
+        finishtxt = i18n("I found the following problems with the data you entered:\n\n") + finishtxt;
+        finishtxt = finishtxt + i18n("\n\nPlease go back and correct these errors");
     }
     else
     {
-        finishtxt = "I did not find any problems with the data you entered";
+        finishtxt = i18n("I did not find any problems with the data you entered");
     }
     lblfinishTxt->setText(finishtxt);
     
@@ -231,7 +231,7 @@ void importWizard::accept()
     KexiDB::DriverManager manager;
 
     //get a driver to the destination database
-    KexiDB::Driver *driver = manager.driver("Postgresql");
+    KexiDB::Driver *driver = manager.driver(dstTypeCombo->currentText());
 
     //Check for errors
     if (!driver || manager.error())
@@ -239,19 +239,23 @@ void importWizard::accept()
         manager.debugError();
     }
 
+    if (!dstConn->selectedConnectionData())
+    {
+        KMessageBox::error(this, "Destination connection data was NULL", "Panic");
+        return;
+    }
     //Create connections to the kexi database
     kexi_conn = driver->createConnection(*(dstConn->selectedConnectionData()));
 
-    KMessageBox::information(this, "Creating pqxxMigrate Object...", "Busy...");
     import = new pqxxMigrate(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, false);
-    KMessageBox::information(this, "Performing Import...", "Busy...");
+    
     if (import->performImport())
     {
-        KMessageBox::error(this, "", "Import suceeded!");
+        KMessageBox::error(this, i18n("Import Suceeded"), i18n("Yay"));
     }
     else
     {
-        KMessageBox::error(this, "", "Import failed!");
+        KMessageBox::error(this, i18n("Import failed because: "), i18n("Oh no"));
     }
 }
 
@@ -309,6 +313,10 @@ void importWizard::nextClicked(const QString & p)
         {
             dstConn->showAdvancedConn();
         }
+        else
+        {
+            dstConn->showSimpleConn();
+        }
         dstPage->show();
     }
     else if (currentPage() == finishPage)
@@ -327,20 +335,20 @@ void importWizard::nextClicked(const QString & p)
 
 void importWizard::createBlankPages()
 {
-    introPage = new QHBox(this);
-    srcTypePage = new QHBox(this);
-    srcConnPage = new QHBox(this);
-    srcdbPage = new QHBox(this);
-    dstTypePage = new QHBox(this);
-    dstPage = new QHBox(this);
+    introPage = new QVBox(this);
+    srcTypePage = new QVBox(this);
+    srcConnPage = new QVBox(this);
+    srcdbPage = new QVBox(this);
+    dstTypePage = new QVBox(this);
+    dstPage = new QVBox(this);
     finishPage = new QHBox(this);
-    this->addPage(introPage, "Introduction");
-    this->addPage(srcTypePage, "Source Database Type");
-    this->addPage(srcConnPage, "Source Connection");
-    this->addPage(srcdbPage, "Source Database");
-    this->addPage(dstTypePage, "Destination Database Type");
-    this->addPage(dstPage, "Destination Database");
-    this->addPage(finishPage, "Finished");
+    this->addPage(introPage, i18n("Introduction"));
+    this->addPage(srcTypePage, i18n("Source Database Type"));
+    this->addPage(srcConnPage, i18n("Source Connection"));
+    this->addPage(srcdbPage, i18n("Source Database"));
+    this->addPage(dstTypePage, i18n("Destination Database Type"));
+    this->addPage(dstPage, i18n("Destination Database"));
+    this->addPage(finishPage, i18n("Finished"));
 }
 };
 #include "importwizard.moc"

@@ -32,8 +32,9 @@ class importWizard : public KWizard
 {
 Q_OBJECT
 private:
-    QHBox *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, *dstPage, *finishPage;
+    QVBox *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, *dstPage;
     QVBox *srcdbControls;
+    QHBox *finishPage;
     KComboBox *srcTypeCombo, *dstTypeCombo;
     KexiConnSelectorWidget *srcConn, *dstConn;
     KLineEdit *dstNewDBName;
