@@ -64,6 +64,7 @@ k_dcop:
     virtual void bringToFront();
     virtual void sendToBack();
     virtual void applyAutoFormat();
+    virtual void createStyleFromSelection();
 private:
     KWView *view;
 

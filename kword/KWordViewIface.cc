@@ -174,3 +174,8 @@ void KWordViewIface::applyAutoFormat()
     view->applyAutoFormat();
 }
 
+
+void KWordViewIface::createStyleFromSelection()
+{
+    view->createStyleFromSelection();
+}
