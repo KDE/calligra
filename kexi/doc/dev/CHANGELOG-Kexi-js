@@ -312,9 +312,14 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 KexiDB
 - alterTable() added (now only drops and recreates table)
 - createTable() 'zombie' rows from 'kexi__fields' table is removed for safety 
+- Connection::storeObjectSchemaData() identifier is not obtained if 
+  it's already provided
 Table Designer
 - saving changes to tables works now (data is just dropped, though);
   user is warned about this, when needed
+- DataTable view is updated after saving table's design
+- temporary data added; KexiAlterTable_DataView implemented
+  (this fixes lack of updating datatable view after schema changes)
 
 2004-07-28..2004-08-03
 KexiDB
