@@ -21,32 +21,28 @@
 #define KEXIRELATIONVIEW_H
 
 #include <qscrollview.h>
-//#include <qworkspace.h>
-#include <qvaluelist.h>
+#include <qptrlist.h>
 #include <qmap.h>
-#include <qdragobject.h>
-#include <qcstring.h>
 
-#include <klistview.h>
 #include <kexirelation.h>
-#include "kexirelationviewtable.h"
+#include "kexirelationviewconnection.h"
 
-//#include <qlistview.h>
 
-//class KListView;
 class QFrame;
 
 class KexiRelationViewTable;
+class KexiRelationViewTableContainer;
 class KexiRelation;
 
-typedef struct RelationSource
+/*typedef struct RelationSource
 {
 	QString			table;
 	QRect			geometry;
 	KexiRelationViewTable	*columnView;
-};
+};*/
 
-typedef QMap<QString, RelationSource> TableList;
+typedef QMap<QString, KexiRelationViewTableContainer*> TableList;
+typedef QPtrList<KexiRelationViewConnection> ConnectionList;
 
 class KexiRelationView : public QScrollView
 {
@@ -60,32 +56,34 @@ class KexiRelationView : public QScrollView
 		void		addConnection(SourceConnection con, bool interactive=true);
 
 		RelationList	getConnections()const { return m_connections; };
-		void setReadOnly(bool);
+		void		setReadOnly(bool);
 
 	public slots:
 		void		slotTableScrolling(QString);
 
+	protected slots:
+		void		containerMoved(KexiRelationViewTableContainer *c);
+
 	protected:
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
-		void		drawSource(QPainter *p, RelationSource src);
-		void		drawConnection(QPainter *p, SourceConnection *conn, bool paint=true);
+//		void		drawSource(QPainter *p, RelationSource src);
+//		void		drawConnection(QPainter *p, SourceConnection *conn, bool paint=true);
 
-		void		contentsMouseReleaseEvent(QMouseEvent *ev);
-		void		contentsMouseMoveEvent(QMouseEvent *ev);
+//		void		contentsMouseReleaseEvent(QMouseEvent *ev);
+//		void		contentsMouseMoveEvent(QMouseEvent *ev);
 
-		QRect		recalculateConnectionRect(SourceConnection *conn);
+//		QRect		recalculateConnectionRect(SourceConnection *conn);
 
 	private:
 		int		m_tableCount;
 
-		RelationSource	*m_floatingSource;
-		int		m_grabOffsetX;
-		int		m_grabOffsetY;
+//		RelationSource	*m_floatingSource;
 
 		TableList	m_tables;
 		RelationList	m_connections;
 		bool		m_readOnly;
 		KexiRelation    *m_relation;
+		ConnectionList	m_connectionViews;
 };
 
 #endif

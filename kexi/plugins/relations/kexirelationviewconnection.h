@@ -22,15 +22,18 @@
 
 #include <qstring.h>
 
-#include "kexirelationviewtable.h"
 
 class QPainter;
+class KexiRelationViewTableContainer;
+
 
 class KexiRelationViewConnection
 {
 	public:
 	
-		KexiRelationViewConnection(KexiRelationViewTable *srcTbl, KexiRelationViewTable *rcvTbl,
+//		KexiRelationViewConnection(KexiRelationViewTable *srcTbl, KexiRelationViewTable *rcvTbl,
+//		  const QString &srcFld, const QString &rcvFld);
+		KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl,KexiRelationViewTableContainer *rcvTbl,
 		  const QString &srcFld, const QString &rcvFld);
 		~KexiRelationViewConnection();
 
@@ -41,7 +44,17 @@ class KexiRelationViewConnection
 		   
 		   http://www.c-plusplus.de ;)
 		*/
-		void	drawConnection(QPainter *p);
+		void		drawConnection(QPainter *p, QWidget *parent);
+		const QRect	connectionRect();
+
+		KexiRelationViewTableContainer	*srcTable() { return m_srcTable; }
+		KexiRelationViewTableContainer	*rcvTable() { return m_rcvTable; }
+
+	private:
+		KexiRelationViewTableContainer	*m_srcTable;
+		KexiRelationViewTableContainer	*m_rcvTable;
+		QString				m_srcField;
+		QString				m_rcvField;
 };
 
 #endif

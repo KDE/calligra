@@ -32,6 +32,7 @@
 #include <koApplication.h>
 
 #include "kexirelationview.h"
+#include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
 #include "kexirelation.h"
 
@@ -45,9 +46,6 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name,KexiRelatio
 
 	m_tableCount = 0;
 
-	m_floatingSource = 0;
-	m_grabOffsetX = 0;
-	m_grabOffsetY = 0;
 
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 	
@@ -64,24 +62,29 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 	if(m_tables.contains(table))
 		return;
 
-	RelationSource s;
-	s.table = table;
+//	RelationSource s;
+//	s.table = table;
 
-	int widest = -15;
-	for(TableList::Iterator it=m_tables.begin(); it != m_tables.end(); it++)
-	{
-		if((*it).geometry.x() + (*it).geometry.width() > widest)
-		{
-			widest = (*it).geometry.x() + (*it).geometry.width();
-		}
-	}
+//	int widest = -15;
+//	for(TableList::Iterator it=m_tables.begin(); it != m_tables.end(); it++)
+//	{
+//		if((*it).geometry.x() + (*it).geometry.width() > widest)
+//		{
+//			widest = (*it).geometry.x() + (*it).geometry.width();
+//		}
+//	}
 
-	s.geometry = QRect(widest + 20, 5, 100, 150);
+//	s.geometry = QRect(widest + 20, 5, 100, 150);
 
 	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, table, columns);
 //	c->show(); 
 	addChild(c, 100,100);
-	
+	c->show();
+
+	connect(c, SIGNAL(moved(KexiRelationViewTableContainer *)), this,
+	 SLOT(containerMoved(KexiRelationViewTableContainer *)));
+
+	m_tables.insert(table, c);
 /*	KexiRelationViewTable *tableView = new KexiRelationViewTable(this, table, columns, "someTable");
 	tableView->setReadOnly(m_readOnly);
 	s.columnView = tableView;
@@ -101,6 +104,15 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 void
 KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
+	KexiRelationViewConnection *cview;
+
+	QRect clipping(cx, cy, cw, ch);
+	for(cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
+	{
+		p->drawRect(cview->connectionRect());
+		if(clipping.intersects(cview->connectionRect()))
+			cview->drawConnection(p, this);
+	}
 /*
 	QRect clip(cx, cy, cw, ch);
 	for(TableList::Iterator it=m_tables.begin(); it != m_tables.end(); it++)
@@ -121,11 +133,11 @@ KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 	}
 */
 }
-
+/*
 void
 KexiRelationView::drawSource(QPainter *p, RelationSource src)
 {
-/*
+
 	kapp->style().drawPrimitive(QStyle::PE_PanelPopup, p, src.geometry, colorGroup());
 	p->setBrush(QBrush(colorGroup().background()));
 	p->setBrush(QBrush(colorGroup().highlight()));
@@ -133,13 +145,13 @@ KexiRelationView::drawSource(QPainter *p, RelationSource src)
 	p->drawRect(src.geometry.x() + 2, src.geometry.y() + 2, src.geometry.width() - 3, 15);
 	p->setPen(QPen(colorGroup().highlightedText()));
 	p->drawText(src.geometry.x() + 3, src.geometry.y() + 3, src.geometry.width() - 4, 14, AlignLeft | SingleLine | AlignVCenter, src.table);
-*/
 }
+
 
 void
 KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint)
 {
-/*
+
 	KexiRelationViewTable *tSrc = m_tables[(*conn).srcTable].columnView;
 	if(!tSrc)
 		return;
@@ -212,7 +224,7 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 	}
 
 //	kdDebug() << "KexiRelationView::drawConnection(): geometry: " << (*conn).geometry.x() << ":" << (*conn).geometry.width() << endl;
-*/
+
 }
 
 void
@@ -272,7 +284,7 @@ KexiRelationView::contentsMouseReleaseEvent(QMouseEvent *ev)
 		m_grabOffsetY = 0;
 	}
 }
-
+*/
 void
 KexiRelationView::slotTableScrolling(QString table)
 {
@@ -286,19 +298,28 @@ KexiRelationView::slotTableScrolling(QString table)
 	}
 }
 
+
 void
 KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 {
 	kdDebug() << "KexiRelationView::addConnection()" << endl;
+//	m_connection.insert(new KexiRelationViewConnection(
 //	kdDebug() << "KexiRelationView::addConnection() source: " << (&conn)->srcTable << endl;
 //	QString srcS = (&conn)->srcTable;
 //	KexiRelationViewTable *src = m_tables[srcS];
-//	KexiRelationViewTable *rcv = m_tables[(&conn)->rcvTable];
+//	SourceConnection *c = &conn;
+	KexiRelationViewTableContainer *rcv = m_tables[conn.rcvTable];
+	KexiRelationViewTableContainer *src = m_tables[conn.srcTable];
+	
 
-//	KexiRelationViewConnection *conn = new KexiRelationViewConnection(src, rcv, conn.srcField, conn.rcvField);
+	KexiRelationViewConnection *connView = new KexiRelationViewConnection(src, rcv, conn.srcField, conn.rcvField);
+	m_connectionViews.append(connView);
+	updateContents(connView->connectionRect());
+}
+/*
 //	SourceConnection *conn = &connection;
 //	bool add=true;
-/*	for (RelationList::iterator it=m_connections.begin();it!=m_connections.end();++it)
+	for (RelationList::iterator it=m_connections.begin();it!=m_connections.end();++it)
 	{
 		if (
 			(connection.srcTable==(*it).srcTable) &&
@@ -313,7 +334,7 @@ KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 		}
 	}
 	kdDebug() << "KexiRelationView::addConnection()" << conn->srcTable << ":" << conn->rcvTable << endl;
-*/
+
 
 //	recalculateConnectionRect(conn);
 
@@ -322,7 +343,7 @@ KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 
 //	updateContents((*conn).geometry);
 //	kdDebug() << "KexiRelationView::addConnection(): rect: " << (*conn).geometry.x() << ", " << (*conn).geometry.y() << endl;
-}
+
 
 QRect
 KexiRelationView::recalculateConnectionRect(SourceConnection *conn)
@@ -331,15 +352,30 @@ KexiRelationView::recalculateConnectionRect(SourceConnection *conn)
 
 //	return (*conn).geometry;
 }
+*/
 
-void KexiRelationView::setReadOnly(bool b) 
+void
+KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
+{
+	KexiRelationViewConnection *cview;
+	for(cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
+	{
+		if(cview->srcTable() == c || cview->rcvTable() == c)
+			updateContents(cview->connectionRect());
+	}
+}
+
+void
+KexiRelationView::setReadOnly(bool b) 
 {
 	m_readOnly=b;
 	for (TableList::iterator it=m_tables.begin();it!=m_tables.end();++it)
 	{
-		(*it).columnView->setReadOnly(b);
+//		(*it)->setReadOnly(b);
+		#warning readonly needed
 	}
 }
+
 
 KexiRelationView::~KexiRelationView()
 {

@@ -20,16 +20,14 @@
 #ifndef KEXIRELATIONVIEWTABLE_H
 #define KEXIRELATIONVIEWTABLE_H
 
-#include <qobject.h>
 #include <qframe.h>
+#include <qstringlist.h>
 
 #include <klistview.h>
 
-#include "kexirelation.h"
-#include "kexirelationview.h"
-
 class KexiRelationView;
 class KexiRelationViewTable;
+//class KexiRelationViewTableContainer;
 
 class KexiRelationViewTableContainer : public QFrame
 {
@@ -38,6 +36,11 @@ class KexiRelationViewTableContainer : public QFrame
 	public:
 		KexiRelationViewTableContainer(KexiRelationView *parent, QString table, QStringList fields);
 		~KexiRelationViewTableContainer();
+
+		int			globalY(const QString &field);
+
+	signals:
+		void			moved(KexiRelationViewTableContainer *);
 
 	protected:
 		void			mouseMoveEvent(QMouseEvent *ev);

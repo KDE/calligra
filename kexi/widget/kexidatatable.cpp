@@ -99,6 +99,9 @@ KexiDataTable::executeQuery(const QString &queryStatement)
 		return false;
 	}
 
+	if(!m_record)
+		kdDebug() << "KexiDataTable::executeQuery(): record doesn't exist" << endl;
+
 	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{
 		if(!m_record->fieldInfo(i)->auto_increment())

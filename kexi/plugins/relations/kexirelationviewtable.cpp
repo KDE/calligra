@@ -61,6 +61,16 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 	setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 }
 
+int
+KexiRelationViewTableContainer::globalY(const QString &field)
+{
+//	m_ta
+	kdDebug() << "KexiRelationViewTableContainer::globalY()" << endl;
+	QPoint o = mapFromGlobal(QPoint(0, (m_tableView->globalY(field))));
+	kdDebug() << "KexiRelationViewTableContainer::globalY() db2" << endl;
+	return mapToParent(o).y();
+}
+
 void
 KexiRelationViewTableContainer::mousePressEvent(QMouseEvent *ev)
 {
@@ -89,6 +99,8 @@ KexiRelationViewTableContainer::mouseMoveEvent(QMouseEvent *ev)
 			else
 				resize(ev->x(), height());
 		}
+
+		emit moved(this);
 	}
 	else
 	{

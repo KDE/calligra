@@ -20,6 +20,7 @@
 #include <qregexp.h>
 #include <qevent.h>
 #include <qlayout.h>
+#include <qtimer.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -67,10 +68,11 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	}
 	else
 	{
-		static_cast<QLineEdit*>(m_view)->insert(value.toString());
+		static_cast<QLineEdit*>(m_view)->setText(value.toString());
 		kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)"
 			<< static_cast<QLineEdit*>(m_view)->text().length() << endl;
-		static_cast<QLineEdit*>(m_view)->setSelection(0, static_cast<QLineEdit*>(m_view)->text().length());
+//		static_cast<QLineEdit*>(m_view)->setSelection(0, static_cast<QLineEdit*>(m_view)->text().length());
+		QTimer::singleShot(0, m_view, SLOT(selectAll()));
 		static_cast<QLineEdit*>(m_view)->selectAll();
 	}
 
