@@ -2585,46 +2585,6 @@ void KSpreadUndoHideTable::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoShowTable
- *
- ***************************************************************************/
-
-
-KSpreadUndoShowTable::KSpreadUndoShowTable( KSpreadDoc *_doc, KSpreadSheet *_table) :
-    KSpreadUndoAction( _doc )
-{
-    name=i18n("Show Table");
-
-    m_tableName = _table->tableName();
-}
-
-KSpreadUndoShowTable::~KSpreadUndoShowTable()
-{
-}
-
-void KSpreadUndoShowTable::execute( bool b )
-{
-    KSpreadSheet* table = doc()->map()->findTable( m_tableName );
-    if ( !table )
-	return;
-
-    doc()->undoLock();
-    table->hideTable(b);
-    doc()->undoUnlock();
-}
-
-void KSpreadUndoShowTable::undo()
-{
-    execute( true );
-}
-
-void KSpreadUndoShowTable::redo()
-{
-    execute( false );
-}
-
-/****************************************************************************
- *
  * KSpreadUndoCellPaste
  *
  ***************************************************************************/

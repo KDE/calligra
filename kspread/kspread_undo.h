@@ -635,20 +635,6 @@ protected:
     QString m_tableName;
 };
 
-class KSpreadUndoShowTable : public KSpreadUndoAction
-{
-public:
-    KSpreadUndoShowTable( KSpreadDoc *_doc, KSpreadSheet *_table );
-    virtual ~KSpreadUndoShowTable();
-
-    virtual void undo();
-    virtual void redo();
-
-protected:
-    void execute( bool b );
-    QString m_tableName;
-};
-
 
 class KSpreadUndoCellPaste : public KSpreadUndoAction
 {
