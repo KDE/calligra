@@ -152,6 +152,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
                 strReturn += '#'; //use KWord 1.[123] replacement character instead
                 break;
             }
+  	// ### FIXME: Dirk Mueller writes that some compilers cannot do case ranges
         // Following characters are not allowed in XML (but some files from KWord 0.8 have some of them.)
         case  0: case  2 ... 8: case 11: case 12: case 14 ... 31:
             {
