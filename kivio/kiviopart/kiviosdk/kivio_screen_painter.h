@@ -93,6 +93,7 @@ public:
     void drawPixmap( float, float, const QPixmap & );
 
     void drawHandle( float, float, int );
+    virtual void drawSelectionBox( const QRect& );
 
     virtual void saveState();
     virtual void restoreState();

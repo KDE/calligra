@@ -42,6 +42,7 @@
 #include <qsimplerichtext.h>
 #include <qpalette.h>
 #include <qrect.h>
+#include <qbitmap.h>
 #include <kdebug.h>
 #include <koGlobal.h>
 #include <math.h>
@@ -349,8 +350,7 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
                 break;
 
             case KivioShapeData::kstTextBox:
-                // Don't paint text in outline mode as it makes moving harder
-                //drawOutlineTextBox( pShape, pData );
+                drawOutlineTextBox( pShape, pData );
                 break;
 
 
@@ -719,14 +719,20 @@ void KivioSMLStencil::drawOutlineTextBox( KivioShape *pShape, KivioIntraStencilD
   _h = zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
 
+  QPixmap pix(_w, _h);
+  pix.fill();
+  QPainter p(&pix);
+  
   QFont f = pShapeData->textFont();
   f.setPointSizeFloat(f.pointSizeFloat() * (((float)zoomHandler->zoom()) / 100.0));
-  painter->setFont( f );
-  painter->setTextColor( QColor(0, 0, 0) );
-
-
+  p.setFont( f );
+  p.setPen( QColor(0, 0, 0) );
   int tf = pShapeData->vTextAlign() | pShapeData->hTextAlign();
-  painter->drawText( _x, _y, _w, _h, tf | Qt::WordBreak, pShapeData->text() );
+  p.drawText( 0, 0, _w, _h, tf | Qt::WordBreak, pShapeData->text() );
+  QBitmap mask;
+  mask = pix;
+  pix.setMask(mask);
+  painter->drawPixmap(_x, _y, pix);
 }
 
 

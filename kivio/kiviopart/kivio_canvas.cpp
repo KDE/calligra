@@ -1015,6 +1015,7 @@ void KivioCanvas::drawSelectedStencilsXOR()
     while( pStencil )
     {
         pStencil->paintOutline( &m_dragStencilData );
+        pStencil->paintSelectionHandles( &m_dragStencilData );
 
         pStencil = activePage()->selectedStencils()->next();
     }

@@ -126,6 +126,8 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
   painter->saveState();
   painter->setTranslation(newX, newY);
   rotatePainter(pData);  // Rotate the painter if needed
+  
+  painter->drawSelectionBox(QRect(0, 0, newW, newH));
 
   // top left, top right, bottom left, bottom right
   if( m_pProtection->at( kpWidth ) ||

@@ -908,6 +908,16 @@ void KivioScreenPainter::drawHandle( float x, float y, int flags )
    }
 }
 
+void KivioScreenPainter::drawSelectionBox( const QRect& r )
+{
+   PAINTER_CHECK();
+   QPen p;
+   p.setColor(QColor(0,200,0));
+   p.setStyle(Qt::DashLine);
+   m_pPainter->setPen(p);
+   m_pPainter->drawRect(r);
+}
+
 void KivioScreenPainter::saveState()
 {
    PAINTER_CHECK();

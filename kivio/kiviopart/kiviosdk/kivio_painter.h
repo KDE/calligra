@@ -135,6 +135,7 @@ public:
        cpfLock=0x10
     };
     virtual void drawHandle( float, float, int ) { ; }
+    virtual void drawSelectionBox( const QRect& ) { ; }
 
     virtual void saveState() {;}
     virtual void restoreState() {;}

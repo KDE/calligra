@@ -59,6 +59,9 @@
 #include <math.h>
 #include <kozoomhandler.h>
 
+#include <qbitmap.h>
+#include <qpainter.h>
+
 /**
  * Default constructor.
  *
@@ -931,7 +934,6 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
 
   int tf;
   int _x, _y, _w, _h;
-  QRect boundRect;
 
   _x = zoomHandler->zoomItX(m_pTextConn->x());
   _y = zoomHandler->zoomItY(m_pTextConn->y());
@@ -942,14 +944,18 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
 
   f.setPointSizeFloat(f.pointSizeFloat() * (((float)zoomHandler->zoom()) / 100.0));
   painter->setFont(f);
-  painter->setTextColor(m_pTextStyle->color());
-
-
+  QRect boundRect = painter->boundingRect( _x, _y, _w, _h, tf, m_pTextStyle->text() );
+  QPixmap pix(boundRect.width(), boundRect.height());
+  pix.fill();
+  QPainter p(&pix);
+  p.setPen(m_pTextStyle->color());
+  p.setFont(f);
   tf = m_pTextStyle->hTextAlign() | m_pTextStyle->vTextAlign();
-
-  boundRect = painter->boundingRect( _x, _y, _w, _h, tf, m_pTextStyle->text() );
-
-  painter->drawText( _x, _y, boundRect.width(), boundRect.height(), tf, m_pTextStyle->text() );
+  p.drawText( 0, 0, boundRect.width(), boundRect.height(), tf, m_pTextStyle->text() );
+  QBitmap mask;
+  mask = pix;
+  pix.setMask(mask);
+  painter->drawPixmap(_x, _y, pix);
 }
 
 bool Kivio1DStencil::connected()

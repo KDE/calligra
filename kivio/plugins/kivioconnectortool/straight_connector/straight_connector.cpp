@@ -297,7 +297,7 @@ void KivioStraightConnector::paintOutline( KivioIntraStencilData *pData )
 
   // Text
   // Don't paint text in outline mode as it makes moving harder
-  //drawText(pData);
+  drawText(pData);
 }
 
 bool KivioStraightConnector::saveCustom( QDomElement &e, QDomDocument &doc )
