@@ -204,8 +204,6 @@ DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, const QString &_c
     m_name->setText( _customName );
     listSlide->insertStringList( _listPage );
     listSlideShow->insertStringList( _customListPage );
-    //disable by default
-    m_name->setEnabled( false );
 }
 
 void DefineCustomSlideShow::init()
