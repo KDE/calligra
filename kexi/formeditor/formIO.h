@@ -124,7 +124,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 
 	protected:
 		/*! Saves the QVariant \a value as text to be included in an xml file, with \a parentNode.*/
-		static void   writeVariant(QDomDocument &parent, QDomElement &parentNodeQVariant value);
+		static void   writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant value);
 
 		/*! Creates a toplevel widget from the QDomElement \a element in the Form \a form, with \a parent as parent widget.
 		  It calls readProp() and loadWidget() to load child widgets.
