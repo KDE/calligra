@@ -1,1 +1,1 @@
-SUBDIRS = cql driver
+SUBDIRS = driver
