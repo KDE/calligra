@@ -613,7 +613,9 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
 #endif
 
     QDomElement counterElement = m_mainDocument.createElement( "COUNTER" );
-    counterElement.setAttribute( "numberingtype", listInfo->prev() ? "1" : "0" );
+    // numbering type: 0==list 1==chapter. First we determine it for word6 docs.
+    // But we can also activate it if the text() looks that way
+    int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
     counterElement.setAttribute( "start", listInfo->startAt() );
     wvWare::UString text = listInfo->text().text;
     int nfc = listInfo->numberFormat();
@@ -650,12 +652,15 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
         // Heading styles don't set the ilvl, but must have a depth coming
         // from their heading level (the style's STI)
         if ( depth == 0 && m_paragStyle && m_paragStyle->sti() >= 1 && m_paragStyle->sti() <= 9 )
+        {
             depth = m_paragStyle->sti() - 1;
+            numberingType = 1;
+        }
+        kdDebug() << "  ilvl=" << pap.ilvl << " sti=" << m_paragStyle->sti() << " depth=" << depth << " numberingType=" << numberingType << endl;
         counterElement.setAttribute( "depth", depth );
 
         // Now we need to parse the text, to try and convert msword's powerful list template
         // stuff, into what KWord can do right now.
-        kdDebug() << "  ilvl=" << pap.ilvl << " depth=" << depth << endl;
         QString prefix, suffix;
         bool depthFound = false;
         bool otherDepthFound = false;
@@ -685,8 +690,11 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
         }
         if ( otherDepthFound )
         {
-            // That's the case we can't support yet, e.g. <1>.<0>.
-            // Instead of importing this as ".<0>", we just drop the prefix
+            // This is the kind of hierarchical list numbering we can't support, e.g. <1>.<0>.
+            // (unless this is about a heading, in which case we've set numberingtype to 1 already
+            // so it will indeed look like that).
+            // Instead of importing this as ".<0>.", we drop the prefix,
+            // we assume it's part of the upper level's counter text
             prefix = QString::null;
         }
         if ( depthFound )
@@ -705,5 +713,6 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
         // listInfo->notRestarted() [by higher level of lists] not supported
         // listInfo->followingchar() ignored, it's always a space in KWord currently
     }
+    counterElement.setAttribute( "numberingtype", numberingType );
     parentElement.appendChild( counterElement );
 }
