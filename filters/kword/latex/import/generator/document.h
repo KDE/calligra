@@ -22,9 +22,11 @@
 
 #include <element.h>
 #include <qptrlist.h>
+#include "body.h"
 
 class KoStore;
 class QDomNode;
+class Command;
 
 class Document
 {
@@ -47,6 +49,11 @@ class Document
 		bool analyse(QPtrList<Element>* elt);
 
 		/**
+		 * Analyse and get all information in a documentclass command.
+		 */
+		bool analyseDocumentClass(Command* documentclass);
+
+		/**
 		 * Generate a kword document.
 		 *
 		 * @param store The kword document zip file.
@@ -63,6 +70,9 @@ class Document
 		 * @param indent The tabulation to indent the XML tree.
 		 */
 		void serialize(KoStore* store, QDomDocument tree);
+
+	private:
+		Body _body;
 };
 
 #endif /* __KWORD_LATEX_IMPORT_DOCUMENT__ */

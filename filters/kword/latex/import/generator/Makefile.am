@@ -8,7 +8,7 @@ liblatexgenerator_la_LIBADD  = -lm $(KOFFICE_LIBS)
 
 kde_module_LTLIBRARIES = liblatexgenerator.la
 
-liblatexgenerator_la_SOURCES = document.cc kwordgenerator.cc
+liblatexgenerator_la_SOURCES = body.cc document.cc kwordgenerator.cc latex.cc paragraph.cc
 
-noinst_HEADERS = document.h kwordgenerator.h
+noinst_HEADERS = body.h document.h kwordgenerator.h latex.h paragraph.h
 
