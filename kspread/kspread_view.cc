@@ -334,6 +334,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pTabBar = new KSpread::TabBar( this );
     m_pTabBar->setReadOnly( !m_pDoc->isReadWrite() );
     QObject::connect( m_pTabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
+    QObject::connect( m_pTabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
+      this, SLOT( moveTable( unsigned, unsigned ) ) );
     QObject::connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ),
       this, SLOT( popupTabBarMenu( const QPoint& ) ) );
     QObject::connect( m_pTabBar, SIGNAL( doubleClicked() ),
@@ -3223,6 +3225,18 @@ void KSpreadView::changeTable( const QString& _name )
     m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
     m_pCanvas->slotMaxRow( m_pTable->maxRow() );
     m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
+}
+
+void KSpreadView::moveTable( unsigned table, unsigned target )
+{
+    QStringList vs = m_pDoc->map()->visibleSheets();
+
+    if( target >= vs.count() )
+        m_pDoc->map()->moveTable( vs[ table ], vs[ vs.count()-1 ], false );
+    else
+        m_pDoc->map()->moveTable( vs[ table ], vs[ target ], true );
+
+    m_pTabBar->moveTab( table, target );
 }
 
 void KSpreadView::insertTable()

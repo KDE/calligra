@@ -140,6 +140,18 @@ public:
      */
     bool readOnly() const;
 
+    /**
+     * Moves a tab to another position and reorder other tabs.
+     *
+     * Example 1: if there are four tabs A - B - C - D, then
+     * moveTab(2,1) will yield A - C - B - D. This is because
+     * 2nd tab (i.e C) is moved to a position before 1th tab (i.e B).
+     *
+     * Example 2: for these tabs: X - Y - Z, moveTab(0,3) will
+     * move tab X after tab Z so that the result is Y - Z - X.
+     */
+    void moveTab( unsigned tab, unsigned target );
+
 public slots:
     void scrollLeft();
     void scrollRight();
@@ -147,6 +159,7 @@ public slots:
     void scrollLast();
 
 signals:
+
     /**
      * Emitted if the active tab changed. This will cause the
      * KSpreadView to change its active table, too.
@@ -154,8 +167,20 @@ signals:
     void tabChanged( const QString& _text );
 
     /**
-     * Emitted upon mouse right click. This is typically used
-     * to popup a context menu.
+     * This signal is emitted whenever a tab is dragged, moved and
+     * released. This means that the user wants to move a tab into
+     * another position (right before target).
+     *
+     * When the signal is emitted, the tabs are not reordered.
+     * Therefore if you just ignore this signal, than no tab reorder
+     * is possible. Call moveTab (from the slot connected to this signal)
+     * to perform the actual tab reorder.
+     */
+    void tabMoved( unsigned tab, unsigned target );
+
+    /**
+     * This signal is emitted whenever the tab bar is right-clicked.
+     * Typically it is used to popup a context menu.
      */
     void contextMenu( const QPoint& pos );
 

@@ -373,6 +373,8 @@ public slots:
      * is signaled.
      */
     void changeTable( const QString& _name );
+    void moveTable( unsigned table, unsigned target );
+
     void nextTable();
     void previousTable();
     void firstTable();

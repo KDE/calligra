@@ -104,10 +104,6 @@ public:
     // draw a marker to indicate tab moving
     void drawMoveMarker( QPainter& painter, int x, int y );
 
-    // move tab into another position
-    // handle the active tab as necessary
-    void moveTab( int tab, int target );
-
     // update the enable/disable status of scroll buttons
     void updateButtons();
 };
@@ -270,26 +266,6 @@ void TabBarPrivate::drawMoveMarker( QPainter& painter, int x, int y )
     painter.setBrush( oldBrush );
 }
 
-void TabBarPrivate::moveTab( int tab, int target )
-{
-    if( tab < 0 ) return;
-
-    QString tabName = visibleTabs[ tab ];
-    QStringList::Iterator it;
-
-    it = visibleTabs.at( tab );
-    visibleTabs.remove( it );
-
-    if( target > tab ) target--;
-    it = visibleTabs.at( target );
-    if( target == visibleTabs.count() )
-      it = visibleTabs.end();
-    visibleTabs.insert( it, tabName );
-
-    if( activeTab == tab+1 )
-        activeTab = target+1;
-}
-
 void TabBarPrivate::updateButtons()
 {
     scrollFirstButton->setEnabled( tabbar->canScrollLeft() );
@@ -385,6 +361,26 @@ bool TabBar::readOnly() const
 void TabBar::setReadOnly( bool ro )
 {
     d->readOnly = ro;
+}
+
+void TabBar::moveTab( unsigned tab, unsigned target )
+{
+    QString tabName = d->visibleTabs[ tab ];
+    QStringList::Iterator it;
+
+    it = d->visibleTabs.at( tab );
+    d->visibleTabs.remove( it );
+
+    if( target > tab ) target--;
+    it = d->visibleTabs.at( target );
+    if( target >= d->visibleTabs.count() )
+      it = d->visibleTabs.end();
+    d->visibleTabs.insert( it, tabName );
+
+    if( d->activeTab == tab+1 )
+        d->activeTab = target+1;
+
+    update();
 }
 
 bool TabBar::canScrollLeft() const
@@ -615,12 +611,8 @@ void TabBar::mouseReleaseEvent( QMouseEvent* ev )
 
     if ( ev->button() == LeftButton && d->targetTab != 0 )
     {
-        d->view->doc()->map()->moveTable( (*d->visibleTabs.at( d->activeTab - 1 )),
-                                          (*d->visibleTabs.at( d->targetTab - 1 )),
-                                          true );
-        d->moveTab( d->activeTab - 1, d->targetTab - 1 );
+        emit tabMoved( d->activeTab-1, d->targetTab-1 );
         d->targetTab = 0;
-        update();
     }
 }
 
