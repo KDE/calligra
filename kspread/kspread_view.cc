@@ -156,7 +156,7 @@ public:
     QScrollBar *vertScrollBar;
     KoTabBar *tabBar;
     KStatusBarLabel* calcLabel;
-    
+
     // formulabar, consists of:
     QHBoxLayout* formulaBarLayout;
     KSpreadComboboxLocationEditWidget *posWidget;
@@ -756,16 +756,16 @@ void ViewPrivate::initActions()
       0, view, SLOT( sheetProperties() ), ac, "sheetProperties" );
   actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties."));
 
-  actions->insertSheet = new KAction( i18n("Insert Sheet"),"insertsheet",
+  actions->insertSheet = new KAction( i18n("Insert Sheet"),"inserttable",
       0, view, SLOT( insertSheet() ), ac, "insertSheet" );
   actions->insertSheet->setToolTip(i18n("Insert a new sheet."));
 
   // same action as insertSheet, but without 'insert' in the caption
-  actions->menuInsertSheet = new KAction( i18n("&Sheet"),"insertsheet",
+  actions->menuInsertSheet = new KAction( i18n("&Sheet"),"inserttable",
       0, view, SLOT( insertSheet() ), ac, "menuInsertSheet" );
   actions->menuInsertSheet->setToolTip(i18n("Insert a new sheet."));
 
-  actions->removeSheet = new KAction( i18n("Remove Sheet"), "delete_sheet",
+  actions->removeSheet = new KAction( i18n("Remove Sheet"), "delete_table",
       0, view, SLOT( removeSheet() ), ac, "removeSheet" );
   actions->removeSheet->setToolTip(i18n("Remove the active sheet."));
 
@@ -808,7 +808,7 @@ void ViewPrivate::initActions()
   actions->removeLink = new KAction( i18n("&Remove Link"),
       0, view, SLOT( removeHyperlink() ), ac, "removeHyperlink" );
   actions->removeLink->setToolTip(i18n("Remove a link."));
-  
+
   actions->insertSpecialChar = new KAction( i18n( "S&pecial Character..." ), "char",
       view, SLOT( insertSpecialChar() ), ac, "insertSpecialChar" );
   actions->insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
@@ -1233,7 +1233,7 @@ void ViewPrivate::adjustActions( bool mode )
   actions->showCommentIndicator->setChecked( view->doc()->showCommentIndicator() );
 
   formulaButton->setEnabled( mode );
-  
+
   if ( activeSheet )
     view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
 }
@@ -1537,7 +1537,7 @@ void KSpreadView::initView()
     d->posWidget->setMinimumWidth( 100 );
     d->formulaBarLayout->addWidget( d->posWidget );
     d->formulaBarLayout->addSpacing( 6 );
-    
+
     d->formulaButton = d->newIconButton( "funct", TRUE, d->toolWidget );
     d->formulaBarLayout->addWidget( d->formulaButton );
     d->formulaBarLayout->addSpacing( 2 );
@@ -4147,13 +4147,13 @@ void KSpreadView::removeHyperlink()
 {
     QPoint marker( selectionInfo()->marker() );
     KSpreadCell * cell = d->activeSheet->cellAt( marker );
-    if( !cell ) return;    
+    if( !cell ) return;
     if( cell->link().isEmpty() ) return;
-    
+
     LinkCommand* command = new LinkCommand( cell, QString::null, QString::null );
     doc()->addCommand( command );
     command->execute();
-    
+
 	canvasWidget()->setFocus();
 	editWidget()->setText( cell->text() );
 }
@@ -4161,10 +4161,10 @@ void KSpreadView::removeHyperlink()
 void KSpreadView::insertHyperlink()
 {
     d->canvas->closeEditor();
-    
+
     QPoint marker( selectionInfo()->marker() );
     KSpreadCell* cell = d->activeSheet->cellAt( marker );
-    
+
     LinkDialog* dlg = new LinkDialog( this );
     dlg->setCaption( i18n( "Insert Link" ) );
     if( cell )
@@ -4176,15 +4176,15 @@ void KSpreadView::insertHyperlink()
         dlg->setLink( cell->link() );
       }
     }
-    
+
     if( dlg->exec() == KDialog::Accepted )
     {
         cell = d->activeSheet->nonDefaultCell( marker );
-        
+
         LinkCommand* command = new LinkCommand( cell, dlg->text(), dlg->link() );
         doc()->addCommand( command );
         command->execute();
-        
+
         //refresh editWidget
 	    canvasWidget()->setFocus();
 	    editWidget()->setText( cell->text() );
@@ -6112,7 +6112,7 @@ void KSpreadView::resultOfCalc()
   MethodOfCalc tmpMethod = doc()->getTypeOfCalc() ;
   if ( tmpMethod != NoneCalc )
   {
-    
+
     KSpreadValue range = sheet->valueRange (tmpRect.left(), tmpRect.top(),
         tmpRect.right(), tmpRect.bottom());
     switch (tmpMethod)
@@ -6136,9 +6136,9 @@ void KSpreadView::resultOfCalc()
       default:
       break;
     }
-    
+
   }
-  
+
   QString res = converter()->asString (val).asString ();
   QString tmp;
   switch(tmpMethod )
@@ -6473,8 +6473,8 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
             QRect drect( damagedCell->column(), damagedCell->row(), 1, 1 );
             damagedSheet->setRegionPaintDirty( drect );
             paintUpdates();
-        }      
-        
+        }
+
         if( damage->type() == Damage::Sheet )
         {
             SheetDamage* sd = static_cast<SheetDamage*>( damage );
