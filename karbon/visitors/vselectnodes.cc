@@ -62,6 +62,8 @@ VSelectNodes::visitVPath( VPath& path )
 				m_rect.contains( path.current()->point( 0 ) ) )
 			{
 				path.current()->selectPoint( 0, m_select );
+				if( path.current()->prev() && path.current()->prev()->type() == VSegment::curve )
+					path.current()->prev()->selectPoint( 1, true );
 				setSuccess();
 			}
 

@@ -34,50 +34,15 @@ VTransformNodes::visitVPath( VPath& path )
 	path.first();
 	while( path.current() )
 	{
-		/*if(
-			path.current()->prev() &&
-			path.current()->prev()->knotIsSelected() )
-		{
-			// Do nothing.
-		}
-		else if( path.current()->pointIsSelected( 0 ) )
-		{
-			path.current()->setPoint(
-				0,
-				path.current()->point( 0 ).transform( m_matrix ) );
-		}*/
-
-		if( path.current()->knotIsSelected() || path.current()->type() == VSegment::curve )
-		{
+		if( path.current()->knotIsSelected() )
 			path.current()->transform( m_matrix );
-			kdDebug() << "Transforming knot!!" << endl;
-			/*path.current()->setPoint(
-				1,
-				path.current()->point( 1 ).transform( m_matrix ) );
-			path.current()->setKnot(
-				path.current()->knot().transform( m_matrix ) );
-
-			if( path.current() == path.getLast() )
-			{
-				path.getFirst()->setKnot(
-					path.getFirst()->knot().transform( m_matrix ) );
-				path.getFirst()->next()->setPoint(
-					0,
-					path.getFirst()->next()->point( 0 ).transform( m_matrix ) );
-			}
-			else
-			{
-				path.current()->next()->setPoint(
-					0,
-					path.current()->next()->point( 0 ).transform( m_matrix ) );
-			}*/
-		}
-		/*else if( path.current()->pointIsSelected( 1 ) )
+		else if( path.current()->type() == VSegment::curve )
 		{
-			path.current()->setPoint(
-				1,
-				path.current()->point( 1 ).transform( m_matrix ) );
-		}*/
+			//if( path.current()->pointIsSelected( 1 ) )
+			//	path.current()->transform( QWMatrix( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(), -m_matrix.dx(), -m_matrix.dy() ) );
+			//else 
+				path.current()->transform( m_matrix );
+		}
 
 		if( !success() )
 			setSuccess();

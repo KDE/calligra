@@ -40,12 +40,11 @@ protected:
 	virtual void mouseDrag();
 
 private:
-	enum { normal, dragging, moving } m_state;
+	enum { normal, dragging, moving, movingbezier1, movingbezier2 } m_state;
 
 	void recalc();
 
 	// A list of temporary objects:
-	VObjectList m_selectionCopy;
 	VObjectList m_objects;
 
 	KoPoint m_current;

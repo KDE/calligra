@@ -72,13 +72,20 @@ VSelectNodesTool::draw()
 					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
 	QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
 	if( view()->part()->document().selection()->objects().count() > 0 &&
-		m_state != dragging && ( m_state == moving || segments.count() > 0 ) )
+		m_state != dragging && ( m_state >= moving || segments.count() > 0 ) )
 	{
 		if( m_state == normal )
 		{
 			if( segments.count() == 1 && !selrect.contains( segments.at( 0 )->knot() ) )
+			{
+				if( selrect.contains( segments.at( 0 )->point( 1 ) ) )
+					m_state = movingbezier1;
+				else
+					m_state = movingbezier2;
 				view()->part()->document().selection()->append( selrect.normalize(), false, true );
-			m_state = moving;
+			}
+			else
+				m_state = moving;
 			recalc();
 		}
 
@@ -156,16 +163,23 @@ VSelectNodesTool::mouseDrag()
 void
 VSelectNodesTool::mouseDragRelease()
 {
-	if( m_state == moving )
+	if( m_state >= moving )
 	{
-		m_state = normal;
 
 		view()->part()->document().selection()->setState( VObject::selected );
-		VTranslateCmd *cmd = new VTranslateCmd(
-				&view()->part()->document(),
-				qRound( ( last().x() - first().x() ) ),
-				qRound( ( last().y() - first().y() ) ) );
+		VTranslateCmd *cmd;
+		if( m_state == movingbezier2 )
+			cmd = new VTranslateCmd(
+					&view()->part()->document(),
+					qRound( ( first().x() - last().x() ) ),
+					qRound( ( first().y() - last().y() ) ) );
+		else
+			cmd = new VTranslateCmd(
+					&view()->part()->document(),
+					qRound( ( last().x() - first().x() ) ),
+					qRound( ( last().y() - first().y() ) ) );
 		view()->part()->addCommand( cmd, true );
+		m_state = normal;
 	}
 	else
 	{
@@ -200,12 +214,16 @@ VSelectNodesTool::recalc()
 	{
 		m_current = last();
 	}
-	else if( m_state == moving )
+	else if( m_state == moving || m_state == movingbezier1 || m_state == movingbezier2 )
 	{
 		// move operation
 		QWMatrix mat;
-		mat.translate(	( last().x() - first().x() ),
-						( last().y() - first().y() ) );
+		if( m_state == movingbezier2 )
+			mat.translate(	( first().x() - last().x() ),
+							( first().y() - last().y() ) );
+		else
+			mat.translate(	( last().x() - first().x() ),
+							( last().y() - first().y() ) );
 
 		// Copy selected objects and transform:
 		m_objects.clear();

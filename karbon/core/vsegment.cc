@@ -968,9 +968,48 @@ VSegment::next() const
 void
 VSegment::transform( const QWMatrix& m )
 {
-	for( int i = 0; i < degree(); ++i )
-		if( pointIsSelected( i ) )
-			setPoint( i, point( i ).transform( m ) );
+	if( degree() == 1 )
+	{
+		if( knotIsSelected() )
+			setKnot( knot().transform( m ) );
+	}
+	else
+	{
+		if( knotIsSelected() )
+		{
+			for( int i = 0; i < degree(); ++i )
+				//if( pointIsSelected( i ) )
+					setPoint( i, point( i ).transform( m ) );
+		}
+		/*else if( pointIsSelected( 0 ) )
+		{
+			if( prev() && prev()->type() == curve && prev()->knotIsSelected() )
+			{
+				QWMatrix m2( m.m11(), m.m12(), m.m21(), m.m22(), -m.dx(), -m.dy() );
+				setPoint( 0, point( 0 ).transform( m2 ) );
+			}
+		}*/
+		/*else if( pointIsSelected( 0 ) )
+		{
+			setPoint( 0, point( 0 ).transform( m ) );
+			if( prev() && prev()->type() == curve )
+			{
+				QWMatrix m2( m.m11(), m.m12(), m.m21(), m.m22(), -m.dx(), -m.dy() );
+				prev()->selectPoint( 1 );
+				prev()->setPoint( 1, prev()->point( 1 ).transform( m2 ) );
+			}
+		}*/
+		else if( pointIsSelected( 1 ) )
+		{
+			setPoint( 1, point( 1 ).transform( m ) );
+			if( next() && next()->type() == curve )
+			{
+				QWMatrix m2( m.m11(), m.m12(), m.m21(), m.m22(), -m.dx(), -m.dy() );
+				next()->selectPoint( 0 );
+				next()->setPoint( 0, next()->point( 0 ).transform( m2 ) );
+			}
+		}
+	}
 }
 
 void
