@@ -396,6 +396,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
 
 void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext& context )
 {
+    context.styleStack().setTypeProperties( "paragraph" );
     // layout is an input and output parameter
     // It can have been initialized already, e.g. by copying from a style
 

@@ -354,7 +354,7 @@ static void importUnderline( const QString& in,
 void KoTextFormat::load( KoOasisContext& context )
 {
     KoStyleStack& styleStack = context.styleStack();
-    styleStack.setTypeProperties( "" ); //be safe
+    styleStack.setTypeProperties( "text" );
     if ( styleStack.hasAttribute( "fo:color" ) ) { // 3.10.3
         col.setNamedColor( styleStack.attribute( "fo:color" ) ); // #rrggbb format
     }
