@@ -62,6 +62,10 @@ unsigned int colors[] = {
     0xffd700
 };
 
+int arrow_ids[] = {
+  6, 1, 2, 7
+};
+
 struct PSFont {
   const char* family;
   QFont::Weight weight;
@@ -420,16 +424,32 @@ void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
 
   assert (obj != NULL);
 
+  int arrow_type, arrow_style;
+  float arrow_thickness, arrow_width, arrow_height;
+  GObject::OutlineInfo oinfo;
+  oinfo.mask = GObject::OutlineInfo::Custom;
+  oinfo.startArrowId = oinfo.endArrowId = 0;
+
   if (forward_arrow > 0) {
+
     // forward arow line
+    fin >> arrow_type >> arrow_style >> arrow_thickness 
+	>> arrow_width >> arrow_height;
+    oinfo.endArrowId = arrow_ids[arrow_type];
+    if (oinfo.endArrowId == 1 && arrow_style == 0)
+      oinfo.endArrowId = 4;
     fin.ignore (INT_MAX, '\n');
   }
 
   if (backward_arrow > 0) {
     // backward arrow line
+    fin >> arrow_type >> arrow_style >> arrow_thickness
+	>> arrow_width >> arrow_height;
+    oinfo.startArrowId = arrow_ids[arrow_type];
+    if (oinfo.startArrowId == 1 && arrow_style == 0)
+      oinfo.startArrowId = 4;
     fin.ignore (INT_MAX, '\n');
   }
-
   // points line
   for (int i = 0; i < npoints; i++) {
     int x, y;
@@ -441,6 +461,9 @@ void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
     Coord p (x / fig_resolution, y / fig_resolution);
     obj->_addPoint (i, p);
   }
+
+  if (oinfo.startArrowId || oinfo.endArrowId)
+    obj->setOutlineInfo (oinfo);
 
   // now set the properties
   setProperties (obj, pen_color, line_style, thickness, area_fill, fill_color);

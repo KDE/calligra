@@ -31,6 +31,7 @@
 #include "GPolyline.h"
 #include "GText.h"
 #include "CommandHistory.h"
+#include "TextAlongPathCmd.h"
 #include <qkeycode.h>
 #include <qbitmap.h>
 #include <kapp.h>
@@ -98,7 +99,8 @@ void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
       if (textObj && 
 	  (obj = doc->findContainingObject (xpos, ypos)) != 0L) {
-	textObj->setPathObject (obj);
+	TextAlongPathCmd *cmd = new TextAlongPathCmd (doc, textObj, obj);
+	history->addCommand (cmd, true);
       }
     }
     emit operationDone ();

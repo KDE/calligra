@@ -1,6 +1,7 @@
 /* -*- C++ -*-
 
   $Id$
+
   This file is part of KIllustrator.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
@@ -21,37 +22,46 @@
 
 */
 
-#include "GClipart.h"
-#include "GClipart.moc"
+#include "GPixmap.h"
+#include "GPixmap.moc"
 #include "qwmf.h"
 
 #include <klocale.h>
 #include <kapp.h>
 
-GClipart::GClipart () {
-  pic = 0L;
+GPixmap::GPixmap () {
+  pix = 0L;
 }
 
-GClipart::GClipart (const list<XmlAttribute>& attribs) : GObject (attribs) {
+GPixmap::GPixmap (const char* filename) : url (filename) {
+  if (url.isLocalFile ()) {
+    pix = new QPixmap (url.path ());
+    if (pix->isNull ()) {
+      delete pix;
+      pix = 0L;
+    }
+  }
+  if (pix) {
+    // use real pixmap dimension
+    width = pix->width ();
+    height = pix->height ();
+  }
+  calcBoundingBox ();
+}
+
+GPixmap::GPixmap (const list<XmlAttribute>& attribs) : GObject (attribs) {
   list<XmlAttribute>::const_iterator first = attribs.begin ();
 	
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
     if (attr == "src") {
-      QWinMetaFile wmf;
-      
       url = (*first).stringValue ().c_str ();
-      if (url.isLocalFile () && wmf.load (url.path ())) {
-	QRect r = wmf.bbox ();
-	
-	width = (r.right () - r.left ()) * 72.0 / wmf.dpi ();
-	height = (r.bottom () - r.top ()) * 72.0 / wmf.dpi ();
-	pic = new QPicture ();
-	wmf.paint (pic);
-      }
-      else {
-	// construct a malformed url
-	url = KURL ();
+      if (url.isLocalFile ()) {
+	pix = new QPixmap (url.path ());
+	if (pix->isNull ()) {
+	  delete pix;
+	  pix = 0L;
+	}
       }
     }
     else if (attr == "width") 
@@ -60,69 +70,61 @@ GClipart::GClipart (const list<XmlAttribute>& attribs) : GObject (attribs) {
       height = (*first).floatValue ();
     first++;
   }
+  if (pix) {
+    // use real pixmap dimension
+    width = pix->width ();
+    height = pix->height ();
+  }
   calcBoundingBox ();
 }
 
-GClipart::GClipart (QWinMetaFile& wmf, const char* name) : url (name) {
-  QRect r = wmf.bbox ();
-
-  width = (r.right () - r.left ()) * 72.0 / wmf.dpi ();
-  height = (r.bottom () - r.top ()) * 72.0 / wmf.dpi ();
-  pic = new QPicture ();
-  wmf.paint (pic);
-  calcBoundingBox ();
-}
-
-GClipart::GClipart (const GClipart& obj) : GObject (obj) {
+GPixmap::GPixmap (const GPixmap& obj) : GObject (obj) {
   url = obj.url;
+  if (obj.pix)
+    pix = new QPixmap (*obj.pix);
   width = obj.width;
   height = obj.height;
   calcBoundingBox ();
 }
 
-const char* GClipart::typeName () {
-  return i18n ("Clipart object");
+GPixmap::~GPixmap () {
+  if (pix)
+    delete pix;
 }
 
-void GClipart::draw (Painter& p, bool withBasePoints, bool outline) {
+const char* GPixmap::typeName () {
+  return i18n ("Pixmap object");
+}
+
+void GPixmap::draw (Painter& p, bool withBasePoints, bool outline) {
   p.save ();
+  p.setWorldMatrix (tmpMatrix, true);
   if (outline) {
     p.setPen (black);
-    p.drawRect (box.x (), box.y (), box.width (), box.height ());
+    p.drawRect (0, 0, width, height);
   }
   else {
-    if (! url.isMalformed ()) {
-      p.setWorldMatrix (tmpMatrix, true);
-      QWMatrix mx = p.worldMatrix ();
-      QRect mr = mx.map (QRect (0, 0, width, height));
-      QRect oldWin = p.window ();
-      QRect vPort = p.viewport ();
-      p.setViewport (mr);
-      p.setWorldMatrix (QWMatrix ());
-      p.drawPicture (*pic);
-      p.setWindow (oldWin);
-      p.setViewport (vPort);
-    }
+    if (pix != 0L)
+      p.drawPixmap (0, 0, *pix);
     else {
       p.setPen (gray);
-      p.fillRect (box.x (), box.y (), box.width (), box.height (),
-		  gray);
+      p.fillRect (0, 0, width, height, gray);
     }
   }
   p.restore ();
 }
 
-void GClipart::calcBoundingBox () {
+void GPixmap::calcBoundingBox () {
   calcUntransformedBoundingBox (Coord (0, 0), Coord (width, 0),
 				Coord (width, height), Coord (0, height));
 }
 
-GObject* GClipart::copy () {
-  return new GClipart (*this);
+GObject* GPixmap::copy () {
+  return new GPixmap (*this);
 }
 
-void GClipart::writeToXml (XmlWriter& xml) {
-  xml.startTag ("clipart", false);
+void GPixmap::writeToXml (XmlWriter& xml) {
+  xml.startTag ("pixmap", false);
   writePropertiesToXml (xml);
   xml.addAttribute ("src", (const char *) url.url ());
   xml.addAttribute ("width", width);

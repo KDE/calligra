@@ -34,6 +34,7 @@
 
 #include "KIllustrator.h"
 #include "GDocument.h"
+#include "GPart.h"
 
 #define MIME_TYPE "application/x-killustrator"
 #define EDITOR "IDL:KIllustrator/Document:1.0"
@@ -72,6 +73,9 @@ public:
 
   void cleanUp ();
 
+  void insertPart (const QRect& rect, KoDocumentEntry& e);
+  void changeChildGeometry (KIllustratorChild* child, const QRect& r);
+
   // --- IDL ---
   virtual CORBA::Boolean init ();
 
@@ -96,8 +100,14 @@ public:
   virtual KIllustratorView* createKIllustratorView ();
 
   virtual bool isEmpty () { return m_bEmpty; }
+
+signals:
+  void partInserted (KIllustratorChild* child, GPart* part);
+  void childGeometryChanged (KIllustratorChild* child);
  
 protected:
+  void insertChild (KIllustratorChild* child);
+
   bool m_bEmpty;
   QList<KIllustratorView> m_lstViews;
   QList<KIllustratorChild> m_lstChildren;

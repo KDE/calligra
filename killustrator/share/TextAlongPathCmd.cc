@@ -22,43 +22,39 @@
 
 */
 
-#ifndef Arrow_h_
-#define Arrow_h_
+#include "TextAlongPathCmd.h"
 
-#include <iostream.h>
-#include <qintdict.h>
-#include <qpntarry.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include "Coord.h"
-#include "Painter.h"
+TextAlongPathCmd::TextAlongPathCmd (GDocument* doc, GText* obj, GObject* path) 
+  : Command(i18n("Text along path"))
+{
+  document = doc;
+  object = obj;
+  object->ref ();
+  oldPath = obj->pathObject ();
+  if (oldPath)
+    oldPath->ref ();
+  newPath = path;
+  if (newPath)
+    newPath->ref ();
+}
 
-class Arrow {
-public:
-  Arrow (long aid, int npts, const QCOORD* pts, bool fillIt = true);
-  ~Arrow ();
+TextAlongPathCmd::~TextAlongPathCmd () {
+  object->unref ();
+  if (oldPath)
+    oldPath->unref ();
+  if (newPath)
+    newPath->unref ();
+}
 
-  long arrowID () const;
-  QPixmap& leftPixmap ();
-  QPixmap& rightPixmap ();
-  void draw (Painter& p, const Coord& c, const QColor& color, 
-	     float width, float angle);
+void TextAlongPathCmd::execute () {
+  if (oldPath)
+    oldPath->unref ();
+  oldPath = object->pathObject ();
+  if (oldPath)
+    oldPath->ref ();
+  object->setPathObject (newPath);
+}
 
-  Rect boundingBox (const Coord& c, float width, float angle);
-
-  static void install (Arrow* arrow);
-  static Arrow* getArrow (long id);
-  static QIntDictIterator<Arrow> getArrows ();
-
-private:
-  static void initialize ();
-
-  long id;
-  QPixmap *lpreview, *rpreview;
-  QPointArray points;
-  bool fill;
-
-  static QIntDict<Arrow> arrows;
-};
-
-#endif
+void TextAlongPathCmd::unexecute () {
+  object->setPathObject (oldPath);
+}

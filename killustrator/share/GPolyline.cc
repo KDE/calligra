@@ -157,57 +157,7 @@ void GPolyline::draw (Painter& p, bool withBasePoints, bool outline) {
 }
 
 bool GPolyline::contains (const Coord& p) {
-#if 0
-  float x1, x2, y1, y2, m, n, xp, yp;
-
-  if (box.contains (p)) {
-    QPoint pp = iMatrix.map (QPoint ((int) p.x (), (int) p.y ()));
-
-    for (unsigned int i = 1; i < points.count (); i++) {
-      x1 = points.at (i - 1)->x ();
-      x2 = points.at (i)->x ();
-      if (x2 <= x1) {
-        // swap the points
-        x2 = x1;
-        x1 = points.at (i)->x ();
-        y2 = points.at (i - 1)->y ();
-        y1 = points.at (i)->y ();
-      }
-      else {
-        y1 = points.at (i - 1)->y ();
-        y2 = points.at (i)->y ();
-      }
-
-      if (x1 - 3 <= pp.x () && pp.x () <= x2 + 3) {
-        if (abs (int (x1 - x2)) < 5) {
-          if ((y1 <= pp.y () && pp.y () <= y2) ||
-              (y2 <= pp.y () && pp.y () <= y1))
-          return true;
-        }
-        else {
-          // y = m * x + n;
-          m = (y2 - y1) / (x2 - x1);
-          n = y1 - m * x1;
-
-	  if (m > 1) {
-	    xp = ((float) pp.y () - n) / m;
-	    if (xp - 5 <= pp.x () && pp.x () <= xp + 5)
-	      return true;
-	  }
-	  else {
-	    yp = m * (float) pp.x () + n;
-	    
-	    if (yp - 5 <= pp.y () && pp.y () <= yp + 5) 
-	      return true;
-	  }
-	}
-      }
-    }
-  }
-  return false;
-#else
   return ((containingSegment (p.x (), p.y ())) != -1);
-#endif
 }
 
 void GPolyline::setPoint (int idx, const Coord& p) {
@@ -327,15 +277,21 @@ void GPolyline::calcBoundingBox () {
   if (num < 2)
     return;
 
+  float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
+
   if (sArrow != 0L) {
     Coord p1 = points.at (0)->transform (tmpMatrix);
     Coord p2 = points.at (1)->transform (tmpMatrix);
     sAngle = calcArrowAngle (p1, p2, 0);
+    Rect sr = sArrow->boundingBox (p1, w, sAngle);
+    r = r.unite (sr);
   }
   if (eArrow != 0L) {
     Coord p1 = points.at (num - 2)->transform (tmpMatrix);
     Coord p2 = points.at (num - 1)->transform (tmpMatrix);
     eAngle = calcArrowAngle (p1, p2, 1);
+    Rect er = eArrow->boundingBox (p2, w, eAngle);
+    r = r.unite (er);
   }
 
   updateBoundingBox (r);

@@ -90,6 +90,7 @@ public:
   void setFont (const QFont& f);
 
   void setPathObject (GObject* obj);
+  GObject* pathObject () { return pathObj; }
 
   virtual const char* typeName ();
 
@@ -102,6 +103,7 @@ public:
 
 public slots:
   void updateMatricesForPath ();
+  void deletePathObject ();
   
 protected:
   void calcBoundingBox ();

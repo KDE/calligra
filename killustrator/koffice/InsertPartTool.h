@@ -22,43 +22,31 @@
 
 */
 
-#ifndef Arrow_h_
-#define Arrow_h_
+#ifndef InsertPartTool_h_
+#define InsertPartTool_h_
 
-#include <iostream.h>
-#include <qintdict.h>
-#include <qpntarry.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include "Coord.h"
-#include "Painter.h"
+#include <qobject.h>
+#include <qevent.h>
 
-class Arrow {
+#include <koScanParts.h>
+#include <koQueryTypes.h>
+#include "Tool.h"
+
+class InsertPartTool : public Tool {
+  Q_OBJECT
 public:
-  Arrow (long aid, int npts, const QCOORD* pts, bool fillIt = true);
-  ~Arrow ();
+  InsertPartTool (CommandHistory* history);
 
-  long arrowID () const;
-  QPixmap& leftPixmap ();
-  QPixmap& rightPixmap ();
-  void draw (Painter& p, const Coord& c, const QColor& color, 
-	     float width, float angle);
+  virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
+  virtual void activate (GDocument* doc, Canvas* canvas);
+  virtual void deactivate (GDocument*, Canvas*);
 
-  Rect boundingBox (const Coord& c, float width, float angle);
-
-  static void install (Arrow* arrow);
-  static Arrow* getArrow (long id);
-  static QIntDictIterator<Arrow> getArrows ();
+  void setPartEntry (KoDocumentEntry& entry);
 
 private:
-  static void initialize ();
-
-  long id;
-  QPixmap *lpreview, *rpreview;
-  QPointArray points;
-  bool fill;
-
-  static QIntDict<Arrow> arrows;
+  KoDocumentEntry docEntry;
+  bool validEntry;
+  int x, y, width, height;
 };
 
 #endif

@@ -461,3 +461,29 @@ void GOval::updateGradientShape (QPainter& p) {
   // and create a new gradient pixmap
   gShape.updatePixmap ();
 }
+
+void GOval::getPath (vector<Coord>& path) {
+  // this is not the right way.
+  // we should reimplement this !!
+  QPointArray parray;
+  if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
+    parray.makeArc (sPoint.x (), sPoint.y (), 
+		    ePoint.x () - sPoint.x (), 
+		    ePoint.y () - sPoint.y (),
+		    -180 * 16, -360 * 16);
+  else {
+    float alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
+    parray.makeArc (sPoint.x (), sPoint.y (), 
+		    ePoint.x () - sPoint.x (), 
+		    ePoint.y () - sPoint.y (), -eAngle * 16, 
+		    -alen * 16);
+  }
+  unsigned int num = parray.size ();
+  path.resize (num);
+  for (unsigned int i = 0; i < num; i++) {
+    const QPoint& p = parray[i];
+    Coord pi (p.x (), p.y ());
+    path[i] = pi.transform (tMatrix);
+  }
+}
+

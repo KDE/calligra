@@ -18,13 +18,17 @@
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # just set the variable
-APPSDIR = $(kde_appsdir)/share/apps
+APPSDIR = $(kde_appsdir)/Graphics
+MIMEDIR = $(kde_mimedir)/application
+DATADIR = $(kde_datadir)/killustrator
 
 # set the include path for X, qt and KDE
 INCLUDES= -I../share -I.. $(all_includes)
 # claim, which subdirectories you want to install
 
-EXTRA_DIST = killustrator.xpm killustrator.kdelnk
+EXTRA_DIST = killustrator.xpm \
+	killustrator.kdelnk x-killustrator.kdelnk \
+	default.pal
 
 ####### This part is project specific
 # you can add here more. This one gets installed 
@@ -67,18 +71,21 @@ messages:
 # don't install a list of file. Just one file per install.
 # if you have more of them, create a subdirectory with an extra Makefile 
 install-data-local: 
-#	$(mkinstalldirs) $(APPSDIR)
-#	$(INSTALL_DATA) killustrator.kdelnk $(APPSDIR)
+	$(mkinstalldirs) $(APPSDIR)
+	$(INSTALL_DATA) killustrator.kdelnk $(APPSDIR)
+	$(mkinstalldirs) $(MIMEDIR)
+	$(INSTALL_DATA) x-killustrator.kdelnk $(MIMEDIR)
 	$(mkinstalldirs) $(kde_icondir)
 	$(INSTALL_DATA) killustrator.xpm $(kde_icondir)
-#	$(mkinstalldirs) $(kde_minidir)
-#	$(INSTALL_DATA) mini-killustrator.xpm $(kde_minidir)/killustrator.xpm
+	$(mkinstalldirs) $(DATADIR)
+	$(INSTALL_DATA) default.pal $(DATADIR)
 
 # remove ALL you have installed in install-data-local or install-exec-local
 uninstall-local:
-#	-rm -f $(APPSDIR)/killustrator.kdelnk
+	-rm -f $(APPSDIR)/killustrator.kdelnk
+	-rm -f $(MIMEDIR)/x-killustrator.kdelnk
 	-rm -f $(kde_icondir)/killustrator.xpm
-#	-rm -f $(kde_minidir)/killustrator.xpm
+	-rm -f $(DATADIR)/default.pal
 
 # add a dependency for every moc file to be full portable
 # I've added a key binding to emacs for this. 

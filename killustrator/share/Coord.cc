@@ -104,13 +104,6 @@ bool Rect::contains (const Rect& r) const {
 }
 
 bool Rect::intersects (const Rect& r) const {
-/*
-  return this->contains (r.topLeft ()) || this->contains (r.bottomRight ())
-    || this->contains (r.topRight ()) || this->contains (r.bottomLeft ()) 
-    || r.contains (topLeft ()) || r.contains (bottomRight ())
-    || r.contains (topRight ()) || r.contains (bottomLeft ())
-    || r.contains (*this);
-*/
   float x1, x2, y1, y2;
   x1 = QMAX(x1_, r.x1_);
   y1 = QMAX(y1_, r.y1_);
@@ -122,6 +115,33 @@ bool Rect::intersects (const Rect& r) const {
 void Rect::enlarge (float v) {
   x1_ -= v; y1_ -= v;
   x2_ += v; y2_ += v;
+}
+
+Rect Rect::transform (const QWMatrix& m) const {
+  Rect result;
+  if (m.m12 () == 0.0F && m.m21 () == 0.0F) {
+    result = Rect (topLeft ().transform (m), bottomRight ().transform (m));
+  } 
+  else {
+    int i;
+    Coord p[4] = { Coord (x1_, y1_), Coord (x1_, y2_), 
+		   Coord (x2_, y2_), Coord (x2_, y1_) };
+    for (i = 0; i < 4; i++)
+      p[i] = p[i].transform (m);
+
+    result.left (p[0].x ());
+    result.top (p[0].y ());
+    result.right (p[0].x ());
+    result.bottom (p[0].y ());
+
+    for (int i = 1; i < 4; i++) {
+      result.left (QMIN(p[i].x (), result.left ()));
+      result.top (QMIN(p[i].y (), result.top ()));
+      result.right (QMAX(p[i].x (), result.right ()));
+      result.bottom (QMAX(p[i].y (), result.bottom ()));
+    }
+  }
+  return result;
 }
 
 ostream& operator<< (ostream& os, const Rect& r) {

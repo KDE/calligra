@@ -1,12 +1,16 @@
 # KDE Config File
 [KDE Desktop Entry]
-SwallowExec=
 SwallowTitle=
-BinaryPattern=
-MimeType=
-Exec=killustrator
+SwallowExec=
+BinaryPattern=killustrator;
+Protocols=file;ftp;http
+MiniIcon=mini-killustrator.xpm
+MimeType=application/x-killustrator;
+Name[de]=killustrator
+Exec=killustrator %u
 Icon=killustrator.xpm
 TerminalOptions=
 Path=
 Type=Application
+Comment[de]=
 Terminal=0

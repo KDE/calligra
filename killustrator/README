@@ -1,10 +1,10 @@
-		KIllustrator - Release 0.5
+		KIllustrator - Release 0.6
 		==========================
 
 1. Introduction
 ---------------
 
-Welcome to the second preview release of KIllustrator - the vector
+Welcome to release 0.6 of KIllustrator - the vector
 drawing program for the K Desktop Environment. The aim of the
 KIllustrator project is the development of a freely available
 vector-based drawing application similiar to Corel Draw or Adobe
@@ -22,18 +22,17 @@ package for yourself. But the configuration and compilation conforms
 to the usual GNU autoconf procedure.
 
 After downloading the archive, unpack the distribution with
-	gunzip -c killustrator-0.5.tar.gz | tar xvof -
+	gunzip -c killustrator-0.6.tar.gz | tar xvof -
 Next, change into the distribution directory 
-	cd killustrator-0.5
+	cd killustrator-0.6
 and invoke
 	./configure
 
-The installation requires a working K Desktop Environment (1.0
-better). The current release is tested on Linux and Solaris 2.6 with
-gcc-2.8 and egcs-1.0. For image export (JPEG and PNG) the Qt Image I/O
-Extension (qimgio) is required. Otherwise only XPM, PPM and GIF is
-supported. In addition, ghostscript is required for Encapsulated Postscript
-output.
+The installation requires a working K Desktop Environment (1.1 or
+better) as well as QT-1.41 or better. The current release is tested on
+Linux and Solaris 2.6 with gcc-2.8 and egcs-1.0. For image export
+(JPEG and PNG) the Qt Image I/O Extension (qimgio) is
+required. Otherwise only XPM, PPM and GIF is supported.
 
 After the successfull configuration compile the project
 	make
@@ -50,7 +49,7 @@ remove the package with
 Here is a short description of currently implemented features: 
 - different object types: polylines, freehand lines, circles,
   ellipses, squares, rectangles, symmetric polygones,
-  bezier curves and muliline text
+  bezier curves, multiline text, raster images
 - tools for creating these objects
 - tools for moving, scaling, rotating, shearing as well as
   grouping, ungrouping, aligning, distributing and
@@ -62,7 +61,7 @@ Here is a short description of currently implemented features:
 - (network-transparent) drop support with the KDE filemanager
 - printing to PostScript (file or printer)
 - Import of WMF-Cliparts (Thanks to Stefan Taferner)
-- editing single points of polylines and curves
+- editing, inserting and deleting single points of polylines and curves
 - different line styles and arrows
 - export to raster image formats (JPEG, PNG, GIF, XPM)
 - saving/restoring of default object properties
@@ -70,20 +69,26 @@ Here is a short description of currently implemented features:
 - page layout
 - transformation dialog
 - rounded rectangles
+- fill styles: pattern and gradients
+- Closed (and fillable) bezier curves
 - arcs and pies
+- Graphical layers
+- Alignment of text
 - XML-based file format
 - Support for different measurement units: inches, millimeter, points
 - A rudimentary Xfig import filter:
   * Support for 3.1 and 3.2 files
-  * Splines and arrows not implemented
+  * Splines not implemented
 
 New in this release:
-- More fill styles: pattern and gradients.
-- Closed (and fillable) bezier curves.
-- Better EPS export and PS printing: now clipart printing works !
-- Graphical layers.
-- Alignment of text.
-- Improved undo facility.
+- Shearing implemented.
+- Bitmap objects (GIF, JPEG, XPM, XBM, PNG).
+- Alignment of text to path. Supported pathes are polylines, bezier curves,
+  polygons and ellipses.
+- An outline mode.
+- Configuring of tools by double click.
+- Inserting and deleting of points in polylines and curves.
+- KDE session management.
 - Bugfixes.
 
 The handling follows the Corel Draw(tm) user interface. That means:
@@ -91,9 +96,9 @@ The handling follows the Corel Draw(tm) user interface. That means:
   produces squares resp. circles instead of rectangles or
   ellipses.
 - Clicking in an existing text object enables the editing of the text.
-- You can configure a tool by right clicking the
+- You can configure a tool by double clicking the
   activated tool button. Currently, this works only for
-  the polygon tool.
+  the polygon tool and the ellipse tool.
 - Lines are constructed with left click (this adds a new point) and 
   finished with right click.
 - Bezier curves are constructed with 4 control
@@ -109,6 +114,7 @@ The handling follows the Corel Draw(tm) user interface. That means:
     to polylines and bezier curves: Press SHIFT+Left
     Button near the point of line to snap the new line 
     segment to this point.
+  * Polylines and bezier curves are closed by SHIFT+Right button.
   * You can cancel selection or line adding with ESC.
 
 4. Contributions
@@ -130,6 +136,7 @@ of known bugs and limitations:
 - the drawing code is slow
 - no help available
 - poorly documented code ;-)
+- undo/redo for layer operations not implemented
 
 6. Download
 -----------
@@ -141,17 +148,21 @@ In addition, the sourrce code should available from the KDE ftp site
 and it's mirrors:
         ftp://ftp.kde.org
 
-5. History
+7. Contributors
+---------------
+
+8. History
 ----------
 
-11/06/98: snapshot 0.5 released
-08/28/98: snapshot 0.4.1 released
-08/10/98: snapshot 0.4 released
+12/??/98: release 0.6
+11/06/98: release 0.5
+08/28/98: release 0.4.1
+08/10/98: release 0.4
 06/02/98: release 0.3
 04/21/98: second snapshot released
 03/25/98: first preview version released
 
-8. Contact 
+9. Contact 
 ----------
 
 I am interested to know if you find KIllustrator useful. If you would

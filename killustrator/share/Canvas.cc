@@ -72,6 +72,7 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
   dragging = false;
   ensureVisibilityFlag = false;
   outlineMode = false;
+  pendingRedraws = 0;
 }
 
 Canvas::~Canvas () {
@@ -266,6 +267,8 @@ float Canvas::scaleFactor () const {
 }
 
 void Canvas::updateView () {
+  pendingRedraws = 0;
+
   Painter p;
   float s = scaleFactor ();
 
@@ -303,7 +306,27 @@ void Canvas::updateView () {
   repaint ();
 }
 
-void Canvas::updateRegion (const Rect& r) {
+void Canvas::updateRegion (const Rect& reg) {
+  if (pendingRedraws == 0 && document->selectionCount () > 1) {
+    // we have to update a multiple selection, so we collect
+    // the update regions and redraw it in one call
+    pendingRedraws = document->selectionCount () - 1;
+    regionForUpdate = reg;
+    return;
+  }
+
+  Rect r = reg;
+
+  if (pendingRedraws > 0) {
+    regionForUpdate = regionForUpdate.unite (r);
+    pendingRedraws--;
+    if (pendingRedraws > 0)
+      // not the last redraw call
+      return;
+    else
+      r = regionForUpdate;
+  }
+
   Painter p;
   float s = scaleFactor ();
 
@@ -321,8 +344,8 @@ void Canvas::updateRegion (const Rect& r) {
   if (clip.x () <= 1) clip.setX (1);
   if (clip.y () <= 1) clip.setY (1);
 
-  unsigned int mw = (unsigned int) ((float) document->getPaperWidth () * s);
-  unsigned int mh = (unsigned int) ((float) document->getPaperHeight () * s);
+  int mw = (int) ((float) document->getPaperWidth () * s);
+  int mh = (int) ((float) document->getPaperHeight () * s);
 
   if (clip.right () >= mw) 
     clip.setRight (mw);

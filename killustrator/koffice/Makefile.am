@@ -14,18 +14,24 @@ killustrator_bin_SOURCES = KIllustrator_main.cc \
 	KIllustrator_doc.cc \
 	KIllustrator_shell.cc \
 	KIllustrator_view.cc \
-	KIllustrator.cc 
+	KIllustrator.cc \
+	InsertPartTool.cc \
+	GPart.cc
 
 noinst_HEADERS = KIllustrator_main.h \
 	KIllustrator_doc.h \
 	KIllustrator_shell.h \
 	KIllustrator_view.h \
-	KIllustrator.h
+	KIllustrator.h \
+	InsertPartTool.h \
+	GPart.h
 
 BUILTSOURCES = KIllustrator_main.moc \
 	KIllustrator_shell.moc \
 	KIllustrator_doc.moc \
-	KIllustrator_view.moc
+	KIllustrator_view.moc \
+	InsertPartTool.moc \
+	GPart.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(BUILTSOURCES)
 
@@ -56,3 +62,5 @@ KIllustrator_main.cc: KIllustrator.h KIllustrator_main.moc
 KIllustrator_doc.cc: KIllustrator.h KIllustrator_doc.moc
 KIllustrator_shell.cc: KIllustrator.h KIllustrator_shell.moc
 KIllustrator_view.cc: KIllustrator.h KIllustrator_view.moc
+InsertPartTool.cc: InsertPartTool.moc
+GPart.cc: GPart.moc

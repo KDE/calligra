@@ -33,17 +33,25 @@
 class ColorField : public QButton {
   Q_OBJECT
 public:
-  ColorField (const QBrush& b, QWidget *parent = 0, const char* name = 0);
+  ColorField (int idx, const QBrush& b, 
+	      QWidget *parent = 0, const char* name = 0);
+
+  void setBrush (const QBrush& b);
+
+public slots:
+  void highlight (bool flag);
 
 protected:
   void drawButton (QPainter* p);
   void mouseReleaseEvent (QMouseEvent* e);
     
 signals:
-  void colorSelected (int flag, const QBrush& b);
+  void colorSelected (int flag, int idx, const QBrush& b);
 
 private:
   QBrush brush;
+  bool highlighted;
+  int id;
 };
 
 #endif

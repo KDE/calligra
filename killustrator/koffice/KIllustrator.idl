@@ -14,8 +14,11 @@ module KIllustrator {
     slot void editPaste ();
     slot void editSelectAll ();
     slot void editDelete ();
-    slot void editInsertOject ();
     slot void editProperties ();
+
+    slot void editInsertObject ();
+    slot void editInsertClipart ();
+    slot void editInsertBitmap ();
 
     slot void viewOutline ();
     slot void viewNormal ();
@@ -32,6 +35,7 @@ module KIllustrator {
     slot void arrangeOneBack ();
     slot void arrangeGroup ();
     slot void arrangeUngroup ();
+    slot void arrangeTextAlongPath ();
 
     slot void editLayers ();
     slot void setupPage ();

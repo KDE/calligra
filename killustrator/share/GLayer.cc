@@ -127,6 +127,7 @@ void GLayer::insertObjectAtIndex (GObject* obj, unsigned int idx) {
   list<GObject*>::iterator i = contents.begin ();
   advance (i, idx);
   contents.insert (i, obj);
+  obj->setLayer (this);
 }
 
 void GLayer::moveObjectToIndex (GObject* obj, unsigned int idx) {

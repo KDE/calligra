@@ -314,6 +314,8 @@ bool GObject::contains (const Coord& p) {
 
 void GObject::setLayer (GLayer* l) {
   layer = l;
+  if (l == 0L)
+    emit deleted ();
 }
 
 void GObject::updateBoundingBox (const Rect& r) {

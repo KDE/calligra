@@ -22,43 +22,52 @@
 
 */
 
-#ifndef Arrow_h_
-#define Arrow_h_
+#ifndef GPart_h_
+#define GPart_h_
 
-#include <iostream.h>
-#include <qintdict.h>
-#include <qpntarry.h>
-#include <qpixmap.h>
+#include <qobject.h>
+#include <qcolor.h>
+#include <qwmatrix.h>
 #include <qpainter.h>
+#include <qdstream.h>
+#include <qpicture.h>
+
 #include "Coord.h"
-#include "Painter.h"
+#include "GObject.h"
 
-class Arrow {
+class KIllustratorFrame;
+class KIllustratorChild;
+
+class GPart : public GObject {
+  Q_OBJECT
 public:
-  Arrow (long aid, int npts, const QCOORD* pts, bool fillIt = true);
-  ~Arrow ();
+  GPart (KIllustratorChild *c);
+  GPart (const list<XmlAttribute>& attribs);
+  GPart (const GPart& p);
 
-  long arrowID () const;
-  QPixmap& leftPixmap ();
-  QPixmap& rightPixmap ();
-  void draw (Painter& p, const Coord& c, const QColor& color, 
-	     float width, float angle);
+  ~GPart ();
+  
+  virtual void draw (Painter& p, bool withBasePoints = false,
+		     bool outline = false);
 
-  Rect boundingBox (const Coord& c, float width, float angle);
+  virtual const char* typeName ();
 
-  static void install (Arrow* arrow);
-  static Arrow* getArrow (long id);
-  static QIntDictIterator<Arrow> getArrows ();
+  virtual GObject* copy ();
+
+  virtual void writeToXml (XmlWriter&);
+
+  void setView (KIllustratorFrame *v) { view = v; }
+  KIllustratorFrame *getView () { return view; }
+
+  KIllustratorChild *getChild () { return child; }
+
+protected:
+  void calcBoundingBox ();
 
 private:
-  static void initialize ();
-
-  long id;
-  QPixmap *lpreview, *rpreview;
-  QPointArray points;
-  bool fill;
-
-  static QIntDict<Arrow> arrows;
+  KIllustratorChild *child;
+  KIllustratorFrame *view;
 };
 
 #endif
+

@@ -156,7 +156,9 @@ signals:
   void selectionChanged ();
   void sizeChanged ();
 
-private:
+  void wasModified (bool flag);
+
+protected:
   bool autoUpdate;
   bool modifyFlag;
   QString filename;

@@ -125,6 +125,9 @@ private:
   float hGridDistance, vGridDistance;
   bool drawBasePoints;
   bool outlineMode;
+  int pendingRedraws;
+  Rect regionForUpdate;
+
   static QArray<float> zoomFactors;
 };
 

@@ -5,7 +5,8 @@ datadir = $(kde_datadir)/killustrator
 noinst_LIBRARIES = libkillu.a
 
 noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
-		 GText.h GGroup.h GClipart.h GBezier.h Tool.h PolylineTool.h \
+		 GText.h GGroup.h GClipart.h GBezier.h GPixmap.h \
+		 Tool.h PolylineTool.h \
 		 RectangleTool.h OvalTool.h TextTool.h FreeHandTool.h \
 		 SelectionTool.h PolygonTool.h ToolController.h \
 		 EditPointTool.h BezierTool.h ZoomTool.h \
@@ -23,8 +24,8 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 SetPropertyCmd.h ReorderCmd.h \
 		 AddLineSegmentCmd.h EditPointCmd.h \
 		 CreatePolygonCmd.h CreateBezierCmd.h \
-		 RemovePointCmd.h InsertPointCmd.h \
-		 InsertObjCmd.h ShearCmd.h CommandHistory.h \
+		 RemovePointCmd.h InsertPointCmd.h TextAlongPathCmd.h \
+		 InsertObjCmd.h ShearCmd.h InsertPixmapCmd.h CommandHistory.h \
 		 FilterInfo.h ExportFilter.h ImportFilter.h \
 		 Ruler.h AboutDialog.h \
 		 qwmf.h wmfstruct.h metafuncs.h version.h \
@@ -38,7 +39,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 EllipseConfigDialog.h
 
 libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
-			  GOval.cc GClipart.cc GBezier.cc \
+			  GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
 			  GText.cc GGroup.cc Tool.cc PolylineTool.cc \
 			  FreeHandTool.cc \
 			  RectangleTool.cc OvalTool.cc TextTool.cc \
@@ -60,6 +61,7 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  AddLineSegmentCmd.cc EditPointCmd.cc \
 			  CreatePolygonCmd.cc CreateBezierCmd.cc \
 			  RemovePointCmd.cc InsertPointCmd.cc \
+			  TextAlongPathCmd.cc InsertPixmapCmd.cc \
 			  InsertObjCmd.cc ShearCmd.cc CommandHistory.cc \
 			  FilterInfo.cc ExportFilter.cc \
 			  ImportFilter.cc \
@@ -75,7 +77,7 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 
 # just to make sure, automake makes them 
 BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
-		GText.moc GGroup.moc GClipart.moc GBezier.moc \
+		GText.moc GGroup.moc GClipart.moc GBezier.moc GPixmap.moc \
 		Tool.moc PolylineTool.moc FreeHandTool.moc \
 		RectangleTool.moc OvalTool.moc TextTool.moc \
 		SelectionTool.moc PolygonTool.moc ToolController.moc \
@@ -113,6 +115,7 @@ GClipart.cc: GClipart.moc
 GBezier.cc: GBezier.moc
 GText.cc: GText.moc
 GGroup.cc: GGroup.moc
+GPixmap.cc: GPixmap.moc
 Tool.cc: Tool.moc
 PolylineTool.cc: PolylineTool.moc
 FreeHandTool.cc: FreeHandTool.moc

@@ -38,39 +38,45 @@
 #include <kapp.h>
 #include "version.h"
 #include "KIllustrator.h"
-// #include "KIllustratorApp.h"
 #include "PStateManager.h"
 
 int main (int argc, char** argv) {
 #ifdef __FreeBSD__
   fpsetmask (fpgetmask() & ~(FP_X_DZ|FP_X_INV));
 #endif
-  //  KIllustratorApp* app = new KIllustratorApp (argc, argv, APP_NAME);
-  //  app->readDefaultSettings ();
-
   KApplication* app = new KApplication (argc, argv, APP_NAME);
+
   QObject::connect (app, SIGNAL(saveYourself ()), 
 		    PStateManager::instance (), SLOT(saveDefaultSettings ()));
 
-  if (argc > 1) {
-    for (int i = 1; i < argc; i++) {
-      QString arg = argv[i];
-      if (arg.find (":/") == -1) {
-	if (arg.left (1) != "/") {
-	  char buf[MAXPATHLEN];
-	  getcwd (buf, MAXPATHLEN);
-	  arg.sprintf ("file:%s/%s", buf, argv[i]);
-	}
-	else
-	  arg.sprintf ("file:%s", argv[i]);
-      }
-      KTopLevelWidget* toplevel = new KIllustrator ((const char *) arg);
-      toplevel->show ();
+  if (app->isRestored ()) {
+    int n = 1;
+    while (KTMainWindow::canBeRestored (n)) {
+      KTMainWindow* toplevel = new KIllustrator ();
+      toplevel->restore (n++);
     }
   }
   else {
-    KTopLevelWidget* toplevel = new KIllustrator ();	
-    toplevel->show ();
+    if (argc > 1) {
+      for (int i = 1; i < argc; i++) {
+	QString arg = argv[i];
+	if (arg.find (":/") == -1) {
+	  if (arg.left (1) != "/") {
+	    char buf[MAXPATHLEN];
+	    getcwd (buf, MAXPATHLEN);
+	    arg.sprintf ("file:%s/%s", buf, argv[i]);
+	  }
+	  else
+	    arg.sprintf ("file:%s", argv[i]);
+	}
+	KTMainWindow* toplevel = new KIllustrator ((const char *) arg);
+	toplevel->show ();
+      }
+    }
+    else {
+      KTMainWindow* toplevel = new KIllustrator ();	
+      toplevel->show ();
+    }
   }
   int retval = app->exec ();
 

@@ -81,7 +81,7 @@ QPixmap& Arrow::rightPixmap () {
 void Arrow::draw (Painter& p, const Coord& c, const QColor& color,
 		  float width, float angle) {
   p.save ();
-  p.translate ((int) c.x (), (int) c.y ());
+  p.translate (c.x (), c.y ());
   p.rotate (angle);
   if (width == 0)
     width = 1.0;
@@ -92,6 +92,34 @@ void Arrow::draw (Painter& p, const Coord& c, const QColor& color,
     p.setBrush (white);
   p.drawPolygon (points);
   p.restore ();
+}
+
+Rect Arrow::boundingBox (const Coord& c, float width, float angle) {
+  Rect box, r;
+
+  QPoint p = points.at (0);
+  r.left (p.x ());
+  r.top (p.y ());
+  r.right (p.x ());
+  r.bottom (p.y ());
+
+  for (int i = 1; i < points.size (); i++) {
+    p = points.at (i);
+
+    r.left (QMIN(p.x (), r.left ()));
+    r.top (QMIN(p.y (), r.top ()));
+    r.right (QMAX(p.x (), r.right ()));
+    r.bottom (QMAX(p.y (), r.bottom ()));
+  }
+
+  QWMatrix m;
+  if (width == 0)
+    width = 1.0;
+  m.translate (c.x (), c.y ());
+  m.rotate (angle);
+  m.scale (width, width);
+  box = r.transform (m);
+  return box;
 }
 
 void Arrow::install (Arrow* arrow) {

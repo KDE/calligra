@@ -426,15 +426,21 @@ void GBezier::calcBoundingBox () {
     }
   }
 
+  float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
+
   if (sArrow != 0L && num > 2) {
     Coord p1 = points.at (0)->transform (tmpMatrix);
     Coord p2 = points.at (2)->transform (tmpMatrix);
     sAngle = calcArrowAngle (p1, p2, 0);
+    Rect sr = sArrow->boundingBox (p1, w, sAngle);
+    r = r.unite (sr);
   }
   if (eArrow != 0L && num >= 3) {
     Coord p1 = points.at (num - 3)->transform (tmpMatrix);
     Coord p2 = points.at (num - 1)->transform (tmpMatrix);
     eAngle = calcArrowAngle (p1, p2, 1);
+    Rect er = eArrow->boundingBox (p2, w, eAngle);
+    r = r.unite (er);
   }
 
   r.enlarge (2); // for the help lines

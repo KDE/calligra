@@ -22,43 +22,32 @@
 
 */
 
-#ifndef Arrow_h_
-#define Arrow_h_
+#include "InsertPixmapCmd.h"
+#include "GPixmap.h"
 
-#include <iostream.h>
-#include <qintdict.h>
-#include <qpntarry.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include "Coord.h"
-#include "Painter.h"
+InsertPixmapCmd::InsertPixmapCmd (GDocument* doc, const char* fname) :
+ Command(i18n("Insert Pixmap"))
+{
+  document = doc;
+  filename = fname;
+  pixmap = 0L;
+}
 
-class Arrow {
-public:
-  Arrow (long aid, int npts, const QCOORD* pts, bool fillIt = true);
-  ~Arrow ();
+InsertPixmapCmd::~InsertPixmapCmd () {
+  if (pixmap)
+    pixmap->unref ();
+}
 
-  long arrowID () const;
-  QPixmap& leftPixmap ();
-  QPixmap& rightPixmap ();
-  void draw (Painter& p, const Coord& c, const QColor& color, 
-	     float width, float angle);
+void InsertPixmapCmd::execute () {
+  if (pixmap)
+    pixmap->unref ();
 
-  Rect boundingBox (const Coord& c, float width, float angle);
+  pixmap = new GPixmap (filename);
+  document->insertObject (pixmap);
+}
 
-  static void install (Arrow* arrow);
-  static Arrow* getArrow (long id);
-  static QIntDictIterator<Arrow> getArrows ();
+void InsertPixmapCmd::unexecute () {
+  if (pixmap)
+    document->deleteObject (pixmap);
+}
 
-private:
-  static void initialize ();
-
-  long id;
-  QPixmap *lpreview, *rpreview;
-  QPointArray points;
-  bool fill;
-
-  static QIntDict<Arrow> arrows;
-};
-
-#endif

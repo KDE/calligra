@@ -22,43 +22,48 @@
 
 */
 
-#ifndef Arrow_h_
-#define Arrow_h_
+#ifndef GPixmap_h_
+#define GPixmap_h_
 
-#include <iostream.h>
-#include <qintdict.h>
-#include <qpntarry.h>
-#include <qpixmap.h>
+#include <qobject.h>
+#include <qcolor.h>
+#include <qwmatrix.h>
 #include <qpainter.h>
+#include <qdstream.h>
+#include <qpicture.h>
+
+#include <kurl.h>
+
 #include "Coord.h"
-#include "Painter.h"
+#include "GObject.h"
 
-class Arrow {
+class GPixmap : public GObject {
+  Q_OBJECT
 public:
-  Arrow (long aid, int npts, const QCOORD* pts, bool fillIt = true);
-  ~Arrow ();
+  GPixmap (const char* filename);
+  GPixmap (const list<XmlAttribute>& attribs);
 
-  long arrowID () const;
-  QPixmap& leftPixmap ();
-  QPixmap& rightPixmap ();
-  void draw (Painter& p, const Coord& c, const QColor& color, 
-	     float width, float angle);
+  GPixmap ();
+  GPixmap (const GPixmap& obj);
+  ~GPixmap ();
+  
+  virtual void draw (Painter& p, bool withBasePoints = false,
+		     bool outline = false);
 
-  Rect boundingBox (const Coord& c, float width, float angle);
+  virtual const char* typeName ();
 
-  static void install (Arrow* arrow);
-  static Arrow* getArrow (long id);
-  static QIntDictIterator<Arrow> getArrows ();
+  virtual GObject* copy ();
+
+  virtual void writeToXml (XmlWriter&);
+
+protected:
+  void calcBoundingBox ();
 
 private:
-  static void initialize ();
-
-  long id;
-  QPixmap *lpreview, *rpreview;
-  QPointArray points;
-  bool fill;
-
-  static QIntDict<Arrow> arrows;
+  QPixmap *pix;
+  KURL url;
+  float width, height;
 };
 
 #endif
+

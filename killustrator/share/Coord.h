@@ -97,6 +97,7 @@ public:
   bool contains (const Coord& p) const;
   bool contains (const Rect& r) const;
 
+  Rect transform (const QWMatrix& m) const;
   bool intersects (const Rect& r) const;
 
   bool empty () const { return x1_ == 0 && x2_ == 0 && y1_ == 0 && y2_ == 0; }

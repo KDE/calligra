@@ -45,6 +45,8 @@
 #include "EditPointTool.h"
 #include "BezierTool.h"
 #include "ZoomTool.h"
+#include "PathTextTool.h"
+#include "InsertPartTool.h"
 #include "PropertyEditor.h"
 #include "AlignmentDialog.h"
 #include "GridDialog.h"
@@ -62,6 +64,9 @@
 #include "PasteCmd.h"
 #include "ReorderCmd.h"
 #include "SetPropertyCmd.h"
+#include "InsertClipartCmd.h"
+#include "InsertPixmapCmd.h"
+#include "SetPropertyCmd.h"
 #include "FilterManager.h"
 
 #include <kiconloader.h>
@@ -76,6 +81,7 @@
 
 #include <openparts_ui.h>
 #include <opUIUtils.h>
+#include <koPartSelectDia.h>
 
 KIllustratorFrame::KIllustratorFrame (KIllustratorView* view, 
 				      KIllustratorChild* child) :
@@ -109,6 +115,13 @@ QWidget (parent), KoViewIf (doc), OPViewIf (doc), KIllustrator::View_skel () {
   zFactors[4] = 4.0;
   Canvas::initZoomFactors (zFactors);
 
+  QObject::connect (m_pDoc, 
+		    SIGNAL (partInserted (KIllustratorChild *, GPart *)),
+		    this, 
+		    SLOT (insertPartSlot (KIllustratorChild *, GPart *)));
+  QObject::connect (m_pDoc, 
+		    SIGNAL (childGeometryChanged (KIllustratorChild *)),
+		   this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
   createGUI ();
 }
 
@@ -210,12 +223,23 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem (i18n ("&Select All"), this,
 						    "editSelectAll", 0);
   m_vMenuEdit->insertSeparator (-1);
-  m_idMenuEdit_InsertObject = 
-    m_vMenuEdit->insertItem (i18n ("&Insert Object..."), this,
-			     "editInsertObject", 0);
+
+  m_vMenuEdit->insertItem8 (i18n ("&Insert"), m_vMenuInsert, -1, -1);
+  
   m_idMenuEdit_Properties = 
     m_vMenuEdit->insertItem (i18n ("Pr&operties"), this,
 			     "editProperties", 0);
+
+  // Menu: Edit->Insert
+  m_idMenuInsert_Object =
+    m_vMenuInsert->insertItem (i18n ("Insert &Object..."), this,
+			       "editInsertObject", 0);
+  m_idMenuInsert_Clipart =
+    m_vMenuInsert->insertItem (i18n ("Insert &Clipart..."), this,
+			       "editInsertClipart", 0);
+  m_idMenuInsert_Bitmap =
+    m_vMenuInsert->insertItem (i18n ("Insert &Bitmap..."), this,
+			       "editInsertBitmap", 0);
 
   // Menu: View
   menubar->insertMenu (i18n ("&View"), m_vMenuView, -1, -1);
@@ -268,6 +292,11 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   m_idMenuArrange_Ungroup = m_vMenuArrange->insertItem (i18n ("Ungroup"), 
 							this, 
 							"arrangeUngroup", 0);
+  m_vMenuArrange->insertSeparator (-1);
+  m_idMenuArrange_TextAlongPath = 
+    m_vMenuArrange->insertItem (i18n ("Text along path"), 
+				this, 
+				"arrangeTextAlongPath", 0);
 
   // Menu: Arrange->Transform
   m_idMenuTransform_Position =
@@ -641,6 +670,18 @@ void KIllustratorView::setupCanvas () {
 			     tool = new ZoomTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
 		    this, SLOT(showCurrentMode(const char*)));
+
+  tcontroller->registerTool (ID_TOOL_PATHTEXT, 
+			     tool = new PathTextTool (&cmdHistory));
+  QObject::connect (tool, SIGNAL(operationDone ()), 
+		    this, SLOT (resetTools ()));
+
+  tcontroller->registerTool (ID_TOOL_INSERTPART, 
+			     insertPartTool = 
+			     new InsertPartTool (&cmdHistory));
+  QObject::connect (insertPartTool, SIGNAL(operationDone ()), 
+		    this, SLOT (resetTools ()));
+
   tcontroller->toolSelected (ID_TOOL_SELECT);
   m_idActiveTool = ID_TOOL_SELECT;
 
@@ -779,13 +820,15 @@ void KIllustratorView::arrangeOneBackSlot () {
 void KIllustratorView::editUndo () {
   cmdHistory.undo ();
   //  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
+  //  tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
+  resetTools ();
 }
 
 void KIllustratorView::editRedo () {
   cmdHistory.redo ();
   //  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
+  //  tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
+  resetTools ();
 }
 
 void KIllustratorView::editCut () {
@@ -808,7 +851,39 @@ void KIllustratorView::editDelete () {
   cmdHistory.addCommand (new DeleteCmd (m_pDoc), true);
 }
 
-void KIllustratorView::editInsertOject () {
+void KIllustratorView::editInsertObject () {
+  m_pDoc->unselectAllObjects ();
+  KoDocumentEntry docEntry = KoPartSelectDia::selectPart ();
+  if (docEntry.name.isEmpty ())
+    return;
+
+  insertPartTool->setPartEntry (docEntry);
+  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_INSERTPART);
+}
+
+void KIllustratorView::editInsertClipart () {
+  QString fname = KFilePreviewDialog::getOpenFileName 
+    (0, "*.wmf *.WMF | Windows Metafiles", this);
+  if (! fname.isEmpty ()) {
+    InsertClipartCmd *cmd = new InsertClipartCmd (m_pDoc, 
+						  (const char *) fname);
+    cmdHistory.addCommand (cmd, true);
+  }
+}
+
+void KIllustratorView::editInsertBitmap () {
+  QString fname = KFilePreviewDialog::getOpenFileName 
+    (0, "*.gif *.GIF | GIF Images\n"
+     "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+     "*.png | PNG Images\n"
+     "*.xbm | X11 Bitmaps\n"
+     "*.xpm | X11 Pixmaps",
+     this);
+  if (! fname.isEmpty ()) {
+    InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc, 
+						(const char *) fname);
+    cmdHistory.addCommand (cmd, true);
+  }
 }
 
 void KIllustratorView::editProperties () {
@@ -865,6 +940,10 @@ void KIllustratorView::arrangeGroup () {
 
 void KIllustratorView::arrangeUngroup () {
   cmdHistory.addCommand (new UngroupCmd (m_pDoc), true);
+}
+
+void KIllustratorView::arrangeTextAlongPath () {
+  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_PATHTEXT);
 }
 
 void KIllustratorView::transformPosition () {
@@ -1081,4 +1160,62 @@ void KIllustratorView::toolRemovePoint () {
   editPointTool->setMode (EditPointTool::RemovePoint);
   m_vToolBarEditPoint->setButton (ID_TOOL_EP_MOVE, false);
   m_vToolBarEditPoint->setButton (ID_TOOL_EP_INSERT, false);
+}
+
+void KIllustratorView::resetTools () {
+  m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
+  tcontroller->toolSelected (m_idActiveTool = ID_TOOL_SELECT);
+  m_vToolBarTools->setButton (m_idActiveTool, true);
+}
+
+void KIllustratorView::insertPartSlot (KIllustratorChild *child, GPart *part) {
+  OpenParts::View_var v = child->createView (m_vKoMainWindow);
+  assert (! CORBA::is_nil (v));
+  KIllustratorFrame *frame = new KIllustratorFrame (this, child);
+  frame->setGeometry (child->geometry ());
+  m_lstFrames.append (frame);
+
+  KOffice::View_var kv = KOffice::View::_narrow (v);
+  kv->setMode (KOffice::View::ChildMode);
+  assert (!CORBA::is_nil(kv));
+
+  frame->attachView (kv);
+  frame->hide ();
+  part->setView (frame);
+
+  /*
+  QObject::connect (frame, SIGNAL(sig_geometryEnd (KoFrame *)),
+		    this, SLOT(childGeometryEndSlot (KoFrame *)));
+  QObject::connect (frame, SIGNAL(sig_moveEnd (KoFrame *)),
+		    this, SLOT(childMoveEndSlot (KoFrame *)));
+  */
+}
+
+void KIllustratorView::childGeometryEndSlot (KoFrame *f) {
+  KIllustratorFrame* frame = (KIllustratorFrame *) f;
+  m_pDoc->changeChildGeometry (frame->child (), frame->partGeometry ());
+}
+
+void KIllustratorView::childMoveEndSlot (KoFrame *f) {
+  KIllustratorFrame* frame = (KIllustratorFrame *) f;
+  m_pDoc->changeChildGeometry (frame->child (), frame->partGeometry ());
+}
+
+void KIllustratorView::changeChildGeometrySlot (KIllustratorChild *child) {
+  // Find frame for child
+  KIllustratorFrame *f = 0L;
+  QListIterator<KIllustratorFrame> it (m_lstFrames);
+  for (; it.current () && !f; ++it)
+    if (it.current ()->child () == child)
+      f = it.current ();
+  
+  assert(f != 0L);
+  
+  // Are we already up to date ?
+  if (child->geometry () == f->partGeometry ()) 
+    return;
+  
+  // TODO scaling
+  f->setPartGeometry (child->geometry ());
 }

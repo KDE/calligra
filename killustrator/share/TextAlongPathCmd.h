@@ -22,43 +22,26 @@
 
 */
 
-#ifndef Arrow_h_
-#define Arrow_h_
+#ifndef TextAlongPathCmd_h_
+#define TextAlongPathCmd_h_
 
-#include <iostream.h>
-#include <qintdict.h>
-#include <qpntarry.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include "Coord.h"
-#include "Painter.h"
+#include "GDocument.h"
+#include "GText.h"
+#include "Command.h"
 
-class Arrow {
+class TextAlongPathCmd : public Command {
 public:
-  Arrow (long aid, int npts, const QCOORD* pts, bool fillIt = true);
-  ~Arrow ();
+  TextAlongPathCmd (GDocument* doc, GText* obj, GObject* path);
 
-  long arrowID () const;
-  QPixmap& leftPixmap ();
-  QPixmap& rightPixmap ();
-  void draw (Painter& p, const Coord& c, const QColor& color, 
-	     float width, float angle);
+  ~TextAlongPathCmd ();
 
-  Rect boundingBox (const Coord& c, float width, float angle);
-
-  static void install (Arrow* arrow);
-  static Arrow* getArrow (long id);
-  static QIntDictIterator<Arrow> getArrows ();
+  void execute ();
+  void unexecute ();
 
 private:
-  static void initialize ();
-
-  long id;
-  QPixmap *lpreview, *rpreview;
-  QPointArray points;
-  bool fill;
-
-  static QIntDict<Arrow> arrows;
+  GDocument* document;
+  GText* object;
+  GObject *oldPath, *newPath; 
 };
 
 #endif

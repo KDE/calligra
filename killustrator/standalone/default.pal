@@ -1,0 +1,19 @@
+KIllustrator palette
+255 255 255   white (for no pen)
+255   0   0   red
+  0 255   0   green
+  0   0 255   blue
+  0 255 255   cyan
+255   0 255   magenta
+255 255   0   yellow
+128   0   0   darkRed
+  0 128   0   darkGreen
+  0   0 128   darkBlue
+  0 128 128   darkCyan
+128   0 128   darkMagenta
+128 128   0   darkYellow
+255 255 255   white
+192 192 192   lightGray
+160 160 164   gray
+128 128 128   darkGray
+  0   0   0   black

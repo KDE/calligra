@@ -32,6 +32,7 @@
 #include "GBezier.h"
 #include "GClipart.h"
 #include "GGroup.h"
+#include "GPixmap.h"
 
 #include <string>
 #include <map>
@@ -120,6 +121,7 @@ void GDocument::initialize () {
 
 void GDocument::setModified (bool flag) {
   modifyFlag = flag;
+  emit wasModified (flag);
 }
 
 void GDocument::setPaperSize (int width, int height) {
@@ -612,6 +614,8 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 	obj = new GPolygon (elem.attributes ());
       else if (elem.tag () == "clipart")
 	obj = new GClipart (elem.attributes ());
+      else if (elem.tag () == "pixmap")
+	obj = new GPixmap (elem.attributes ());
       else if (elem.tag () == "text") {
 	obj = new GText (elem.attributes ());
 	// read font attributes 

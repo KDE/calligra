@@ -29,7 +29,7 @@
 #include <config.h>
 #endif
 
-#include <ktopwidget.h>
+#include <ktmainwindow.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <kfm.h>
@@ -73,6 +73,9 @@ class EditPointTool;
 #define ID_EDIT_SELECT_ALL     206
 #define ID_EDIT_PROPERTIES     207
 
+#define ID_INSERT_BITMAP       211
+#define ID_INSERT_CLIPART      212
+
 #define ID_VIEW_OUTLINE        301
 #define ID_VIEW_NORMAL         302
 #define ID_VIEW_LAYERS         305
@@ -89,16 +92,15 @@ class EditPointTool;
 #define ID_ARRANGE_1_BACK      504
 #define ID_ARRANGE_GROUP       505
 #define ID_ARRANGE_UNGROUP     506
+#define ID_ARRANGE_PATHTEXT    507
 
 #define ID_TRANSFORM_POSITION  600
 #define ID_TRANSFORM_DIMENSION 601
 #define ID_TRANSFORM_ROTATION  602
 #define ID_TRANSFORM_MIRROR    603
 
-#define ID_EFFECTS_PATHTEXT    700
-
 #define ID_EXTRAS_OPTIONS      800
-#define ID_EXTRAS_CLIPART      801
+#define ID_EXTRAS_LOAD_PALETTE 801
 #define ID_EXTRAS_SCRIPTS      802
 
 #define ID_HELP_HELP           900
@@ -123,7 +125,7 @@ class EditPointTool;
 #define ID_TOOL_EP_JOIN       1103
 #define ID_TOOL_EP_SPLIT      1104
 
-class KIllustrator : public KTopLevelWidget, public MainView {
+class KIllustrator : public KTMainWindow, public MainView {
   Q_OBJECT
 
 public:
@@ -139,6 +141,9 @@ protected:
   QSize sizeHint () const { return QSize (700, 500); }
   void closeEvent (QCloseEvent*);
   
+  void saveProperties (KConfig* config);
+  void readProperties (KConfig* config);
+
 public slots:
   void menuCallback (int item);
 
@@ -159,7 +164,7 @@ public slots:
 protected slots:
   void toolSelected (int id);
   void zoomFactorSlot (int);
-  void selectColor (int flag, const QBrush& b);
+  void selectColor (int flag, int idx, const QBrush& b);
   void setUndoStatus(bool undoPossible, bool redoPossible);
 
   void popupForSelection (int x, int y);
@@ -167,7 +172,12 @@ protected slots:
 
   void resetTools ();
 
+  void documentIsModifiedSlot (bool flag);
+
 private:
+  void saveRulerStatus (bool show_it);
+  void restoreRulerStatus ();
+
   static bool closeWindow (KIllustrator* win);
   static void quit ();
 
@@ -186,10 +196,15 @@ private:
   void openURL (const char* url);
   void exportToFile ();
   void importFromFile ();
+  void backupFile (const QString& fname);
 
   void setFileCaption (const char* fname);
 
   void showTransformationDialog (int id);
+
+  bool parseColorPalette (const char* fname, vector<QColor>& colors);
+  void loadPalette ();
+  void updatePalette ();
 
   KToolBar *toolbar, *toolPalette, *colorPalette, *editPointToolbar;
   KStatusBar* statusbar;
@@ -198,7 +213,7 @@ private:
   QGridLayout *gridLayout;
 
   QPopupMenu *file, *edit, *view, *layout,
-    *arrangement, *effects, *extras, *help, *popupMenu;
+    *arrangement, *extras, *help, *popupMenu;
   QPopupMenu *openRecent;
   ToolController *tcontroller;
   QwViewport *viewport;
@@ -215,13 +230,16 @@ private:
   KFM *kfmConn;
   // the drop zone
   KDNDDropZone *dropZone;
-
+  
   CommandHistory cmdHistory;
 
   QString localFile;
   QArray<float> zFactors;
   PStateManager* psm;
+  int selectedColorIdx;
+  vector<QColor> palette;
 
+  // this should go away sometimes ...
   static QList<KIllustrator> windows;
   static bool previewHandlerRegistered;
 };

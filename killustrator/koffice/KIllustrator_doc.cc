@@ -26,6 +26,10 @@
 #include "KIllustrator_doc.moc"
 #include "KIllustrator_view.h"
 
+#include "GPart.h"
+
+#include <qmessagebox.h>
+
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu, 
 				      const QRect& rect, 
 				      KOffice::Document_ptr doc) {
@@ -79,6 +83,39 @@ bool KIllustratorDocument::hasToWriteMultipart () {
   return false;
 }
 
+void KIllustratorDocument::insertPart (const QRect& rect, 
+				       KoDocumentEntry& e) {
+  KOffice::Document_var doc = imr_createDoc (e);
+  if (CORBA::is_nil (doc))
+    return;
+
+  if (! doc->init ()) {
+    QMessageBox::critical ((QWidget *) 0L, i18n ("KIllustrator Error"), 
+			   i18n ("Could not insert document"), i18n ("OK"));
+    return;
+  }
+
+  KIllustratorChild *child =
+    new KIllustratorChild (this, rect, doc);
+  insertChild (child);
+
+  GPart* part = new GPart (child);
+  GDocument::insertObject (part);
+}
+
+
+void KIllustratorDocument::insertChild (KIllustratorChild* child) {
+  m_lstChildren.append (child);
+  setModified (true);
+}
+
+void KIllustratorDocument::changeChildGeometry (KIllustratorChild* child, 
+						const QRect& r) {
+  child->setGeometry (r);
+  setModified (true);
+  emit childGeometryChanged (child);
+}
+
 CORBA::Boolean KIllustratorDocument::init () {
   return true;
 }
@@ -124,6 +161,10 @@ void KIllustratorDocument::setModified (bool f) {
 
 void KIllustratorDocument::draw (QPaintDevice* dev, 
 				 CORBA::Long w, CORBA::Long h) {
+  Painter painter;
+  painter.begin (dev);
+  GDocument::drawContents (painter);
+  painter.end ();
 }
 
 

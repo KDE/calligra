@@ -54,6 +54,16 @@ KIllustratorShell::KIllustratorShell () {
 					       PreviewPixmap);
     KFilePreviewDialog::registerPreviewModule ("wmf", wmfPreviewHandler,
 					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("gif", pixmapPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("jpg", pixmapPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("xpm", pixmapPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("xbm", pixmapPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("png", pixmapPreviewHandler,
+					       PreviewPixmap);
     previewHandlerRegistered = true;
   }
 

@@ -64,6 +64,7 @@
 #include "PasteCmd.h"
 #include "ReorderCmd.h"
 #include "SetPropertyCmd.h"
+#include "InsertPixmapCmd.h"
 #include "filter/FilterManager.h"
 #include "Preview.h"
 #include "units.h"
@@ -89,10 +90,20 @@
 #endif
 #endif
 
+#define DEFAULT_PALETTE "default.pal"
+
 QList<KIllustrator> KIllustrator::windows;
 bool KIllustrator::previewHandlerRegistered = false;
 
-KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
+/*
+static const QColor cpalette[] = { white, red, green, blue, cyan, 
+				   magenta, yellow,
+				   darkRed, darkGreen, darkBlue, darkCyan,
+				   darkMagenta, darkYellow, white, lightGray,
+				   gray, darkGray, black };
+*/
+
+KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   windows.setAutoDelete (false);
   windows.append (this);
 
@@ -116,6 +127,8 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   initStatusBar ();
   
   document = new GDocument ();
+  connect (document, SIGNAL (wasModified (bool)),
+	   this, SLOT (documentIsModifiedSlot (bool)));
 
   setupMainView ();
 
@@ -143,6 +156,16 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
     KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
 					       PreviewPixmap);
     KFilePreviewDialog::registerPreviewModule ("wmf", wmfPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("gif", pixmapPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("jpg", pixmapPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("xpm", pixmapPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("xbm", pixmapPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("png", pixmapPreviewHandler,
 					       PreviewPixmap);
     previewHandlerRegistered = true;
   }
@@ -215,6 +238,8 @@ void KIllustrator::setupMainView () {
 
   setView (w);
   
+  restoreRulerStatus ();
+
   tcontroller = new ToolController (this);
   Tool* tool;
   tcontroller->registerTool (ID_TOOL_SELECT, 
@@ -268,6 +293,7 @@ void KIllustrator::setupMainView () {
   setUndoStatus(false, false);
   connect(&cmdHistory, SIGNAL(changed(bool, bool)), 
 	  SLOT(setUndoStatus(bool, bool)));
+
 }
 
 void KIllustrator::initToolBars () {
@@ -387,19 +413,25 @@ void KIllustrator::initToolBars () {
 
   /* the color toolbar */
   colorPalette = new KToolBar (this);
+  QString palFile = kapp->kde_datadir ().copy ();
+  palFile += "/killustrator/";
+  palFile += DEFAULT_PALETTE;
 
-  const QColor cpalette[] = { white, red, green, blue, cyan, magenta, yellow,
-			      darkRed, darkGreen, darkBlue, darkCyan,
-			      darkMagenta, darkYellow, white, lightGray,
-			      gray, darkGray, black };
+  parseColorPalette ((const char *) palFile, palette);
 
-  for (int i = 0; i < 18; i++) {
-    QBrush brush (cpalette[i], i == 0 ? NoBrush : SolidPattern);
-    ColorField* cfield = new ColorField (brush, colorPalette);
-    connect (cfield, SIGNAL(colorSelected (int, const QBrush&)),
-	     this, SLOT(selectColor (int, const QBrush&)));
+  GObject::OutlineInfo oinfo = GObject::getDefaultOutlineInfo ();
+  for (int i = 0; i < (int) palette.size (); i++) {
+    QBrush brush (palette[i], i == 0 ? NoBrush : SolidPattern);
+    ColorField* cfield = new ColorField (i, brush, colorPalette);
+    connect (cfield, SIGNAL(colorSelected (int, int, const QBrush&)),
+	     this, SLOT(selectColor (int, int, const QBrush&)));
+    if (oinfo.color == palette[i]) {
+      cfield->highlight (true);
+      selectedColorIdx = i;
+    }
     colorPalette->insertWidget (i, cfield->width (), cfield);
   }
+
   colorPalette->setBarPos (KToolBar::Right);
   addToolBar (colorPalette);
 
@@ -442,7 +474,6 @@ void KIllustrator::initMenu () {
   layout = new QPopupMenu ();
   view = new QPopupMenu ();
   arrangement = new QPopupMenu ();
-  effects = new QPopupMenu ();
   extras = new QPopupMenu ();
   help = new QPopupMenu ();
   openRecent = new QPopupMenu ();
@@ -478,7 +509,12 @@ void KIllustrator::initMenu () {
   file->setAccel (CTRL + Key_Q, ID_FILE_EXIT);
 
   connect (file, SIGNAL (activated (int)), SLOT (menuCallback (int)));
-   
+  
+  QPopupMenu* insert = new QPopupMenu ();
+  insert->insertItem (i18n ("&Bitmap..."), ID_INSERT_BITMAP);
+  insert->insertItem (i18n ("&Clipart..."), ID_INSERT_CLIPART);
+  connect (insert, SIGNAL (activated (int)), SLOT (menuCallback (int)));
+
   edit->insertItem (i18n ("Undo"), ID_EDIT_UNDO);
   edit->setAccel (CTRL + Key_Z, ID_EDIT_UNDO);
   edit->insertItem (i18n ("Redo"), ID_EDIT_REDO);
@@ -494,6 +530,8 @@ void KIllustrator::initMenu () {
   edit->setAccel (Key_Delete, ID_EDIT_DELETE);
   edit->insertSeparator ();
   edit->insertItem (i18n ("&Select All"), ID_EDIT_SELECT_ALL);
+  edit->insertSeparator ();
+  edit->insertItem (i18n ("&Insert"), insert);
   edit->insertSeparator ();
   edit->insertItem (i18n ("Pr&operties"), ID_EDIT_PROPERTIES);
   connect (edit, SIGNAL (activated (int)), SLOT (menuCallback (int)));
@@ -528,10 +566,6 @@ void KIllustrator::initMenu () {
   connect (transformations, SIGNAL (activated (int)), 
 	   SLOT (menuCallback (int)));
 
-  effects->insertItem (i18n ("Text along Path"), ID_EFFECTS_PATHTEXT);
-  connect (effects, SIGNAL (activated (int)), 
-	   SLOT (menuCallback (int)));
-
   arrangement->insertItem (i18n ("Transform"), transformations);
   arrangement->insertItem (i18n ("Align"), ID_ARRANGE_ALIGN);
   arrangement->setAccel (CTRL + Key_A, ID_ARRANGE_ALIGN);
@@ -550,11 +584,13 @@ void KIllustrator::initMenu () {
   arrangement->setAccel (CTRL + Key_G, ID_ARRANGE_GROUP);
   arrangement->insertItem (i18n ("Ungroup"), ID_ARRANGE_UNGROUP);
   arrangement->setAccel (CTRL + Key_U, ID_ARRANGE_UNGROUP);
+  arrangement->insertSeparator ();
+  arrangement->insertItem (i18n ("Text along Path"), ID_ARRANGE_PATHTEXT);
   connect (arrangement, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
-  extras->insertItem (i18n ("&Options..."), ID_EXTRAS_OPTIONS);
+  extras->insertItem (i18n ("Load &Palette..."), ID_EXTRAS_LOAD_PALETTE);
   extras->insertSeparator ();
-  extras->insertItem (i18n ("&Clipart..."), ID_EXTRAS_CLIPART);
+  extras->insertItem (i18n ("&Options..."), ID_EXTRAS_OPTIONS);
   //  extras->insertItem (i18n ("&Scripts..."), ID_EXTRAS_SCRIPTS);
   connect (extras, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
@@ -573,7 +609,6 @@ void KIllustrator::initMenu () {
   menubar->insertItem (i18n ("&View"), view);
   menubar->insertItem (i18n ("&Layout"), layout);
   menubar->insertItem (i18n ("&Arrange"), arrangement);
-  menubar->insertItem (i18n ("E&ffects"), effects);
   menubar->insertItem (i18n ("Ex&tras"), extras);
   menubar->insertItem (i18n ("&Help"), help);
   
@@ -673,7 +708,7 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_FILE_NEW_WINDOW:
     {
-      KTopLevelWidget* w = new KIllustrator ();
+      KTMainWindow* w = new KIllustrator ();
       w->show ();
       break;
     }
@@ -709,6 +744,33 @@ void KIllustrator::menuCallback (int item) {
   case ID_EDIT_SELECT_ALL:
     document->selectAllObjects ();
     break;
+  case ID_INSERT_BITMAP:
+    {
+      QString fname = KFilePreviewDialog::getOpenFileName 
+	(0, "*.gif *.GIF | GIF Images\n"
+	 "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+	 "*.png | PNG Images\n"
+	 "*.xbm | X11 Bitmaps\n"
+	 "*.xpm | X11 Pixmaps",
+	 this);
+      if (! fname.isEmpty ()) {
+	InsertPixmapCmd *cmd = new InsertPixmapCmd (document, 
+						    (const char *) fname);
+	cmdHistory.addCommand (cmd, true);
+      }
+      break;
+    }
+  case ID_INSERT_CLIPART:
+    {
+      QString fname = KFilePreviewDialog::getOpenFileName 
+	(0, "*.wmf *.WMF | Windows Metafiles", this);
+      if (! fname.isEmpty ()) {
+	InsertClipartCmd *cmd = new InsertClipartCmd (document, 
+						      (const char *) fname);
+	cmdHistory.addCommand (cmd, true);
+      }
+      break;
+    }
   case ID_EDIT_PROPERTIES:
     {
       int result = 1;
@@ -750,6 +812,7 @@ void KIllustrator::menuCallback (int item) {
 	hRuler->hide ();
 	vRuler->hide ();
       }
+      saveRulerStatus (show_it);
       gridLayout->activate ();
       view->setItemChecked (ID_VIEW_RULER, show_it);
     }
@@ -802,22 +865,15 @@ void KIllustrator::menuCallback (int item) {
   case ID_TRANSFORM_MIRROR:
     showTransformationDialog (item - ID_TRANSFORM_POSITION);
     break;
-  case ID_EFFECTS_PATHTEXT:
+  case ID_ARRANGE_PATHTEXT:
     tcontroller->toolSelected (ID_TOOL_PATHTEXT);
     break;
   case ID_EXTRAS_OPTIONS:
     OptionDialog::setup ();
     break;
-  case ID_EXTRAS_CLIPART:
-    {
-      QString fname = KFilePreviewDialog::getOpenFileName (0, "*.wmf *.WMF | Windows Metafiles", this);
-      if (! fname.isEmpty ()) {
-	InsertClipartCmd *cmd = new InsertClipartCmd (document, 
-						      (const char *) fname);
-	cmdHistory.addCommand (cmd, true);
-      }
-      break;
-    }
+  case ID_EXTRAS_LOAD_PALETTE:
+    loadPalette ();
+    break;
   case ID_EXTRAS_SCRIPTS:
     if (!scriptDialog) 
       scriptDialog = new ScriptDialog ();
@@ -962,6 +1018,7 @@ void KIllustrator::saveFile () {
     saveAsFile ();
   }
   else {
+    backupFile (document->fileName ());
     ofstream os ((const char *) document->fileName ());
     if (os.fail ())
       // write out an error message !!
@@ -971,6 +1028,7 @@ void KIllustrator::saveFile () {
     document->setFileName ((const char *) document->fileName ());
     PStateManager::instance ()->addRecentFile ((const char *) 
 					       document->fileName ());
+    setUnsavedData (false);
   }
 }
 
@@ -987,6 +1045,8 @@ void KIllustrator::saveAsFile () {
 			      i18n ("Cancel"));
       if (result != 1)
 	return;
+
+      backupFile (fname);
     }
     ofstream os (fname);
     if (os.fail ())
@@ -996,12 +1056,34 @@ void KIllustrator::saveAsFile () {
     document->setFileName (fname);
     PStateManager::instance ()->addRecentFile ((const char *) fname);
     setFileCaption (fname);
+    setUnsavedData (false);
   }
 }
 
-void KIllustrator::selectColor (int flag, const QBrush& b) {
-  if (flag == 0)
+void KIllustrator::backupFile (const QString& fname) {
+  QString newName;
+  int pos = fname.findRev ('/');
+  if (pos == -1)
+    newName = "backup_of_" + fname;
+  else {
+    newName = fname.left (pos + 1);
+    newName += "backup_of_";
+    newName += fname.right (fname.length () - pos - 1);
+  }
+  rename ((const char *) fname, (const char *) newName);
+}
+
+void KIllustrator::selectColor (int flag, int idx, const QBrush& b) {
+  if (flag == 0) {
     setPenColor (b);
+    ColorField* cfield = 
+      (ColorField *) colorPalette->getWidget (selectedColorIdx);
+    cfield->highlight (false);
+    
+    cfield = (ColorField *) colorPalette->getWidget (idx);
+    cfield->highlight (true);
+    selectedColorIdx = idx;
+  }
   else if (flag == 1)
     emit setFillColor (b);
 }
@@ -1205,5 +1287,108 @@ void KIllustrator::toolSelected (int id) {
   else {
     editPointToolbar->move (10000, 10000);
     editPointToolbar->enable (KToolBar::Hide);
+  }
+}
+
+void KIllustrator::documentIsModifiedSlot (bool flag) {
+  setUnsavedData (flag);
+}
+
+void KIllustrator::saveProperties (KConfig* config) {
+  if (document->objectCount () > 0 && 
+      strcmp (document->fileName (), UNNAMED_FILE) != 0)
+    config->writeEntry ("Name", document->fileName ());
+}
+
+void KIllustrator::readProperties (KConfig* config) {
+  QString entry = config->readEntry ("Name", "");
+  if (! entry.isEmpty ())
+    openURL ((const char *) entry);
+}
+
+void KIllustrator::restoreRulerStatus () {
+  KConfig* config = kapp->getConfig ();
+  QString oldgroup = config->group ();
+
+  config->setGroup ("Ruler");
+  bool show_it = config->readBoolEntry ("showRuler", true);
+  config->setGroup (oldgroup);
+
+  if (show_it) {
+    hRuler->show ();
+    vRuler->show ();
+  }
+  else {
+    hRuler->hide ();
+    vRuler->hide ();
+  }
+  gridLayout->activate ();
+  view->setItemChecked (ID_VIEW_RULER, show_it);
+}
+
+void KIllustrator::saveRulerStatus (bool show_it) {
+  KConfig* config = kapp->getConfig ();
+  QString oldgroup = config->group ();
+
+  config->setGroup ("Ruler");
+  config->writeEntry ("showRuler", show_it);
+
+  config->setGroup (oldgroup);
+  config->sync ();
+}
+
+bool KIllustrator::parseColorPalette (const char* fname, 
+				      vector<QColor>& colors) {
+  ifstream in (fname);
+  if (in.fail ()) {
+    cerr << "Cannot open color palette: " << fname << endl;
+    return false;
+  }
+
+  char buf[80];
+  in.getline (buf, 80);
+  if (strcasecmp (buf, "KIllustrator Palette") == 0 ||
+      strcasecmp (buf, "GIMP Palette") == 0) {
+    while (! in.eof ()) {
+      int r, g, b;
+      char c;
+
+      in.get (c);
+      if (c != '#') {
+	in.putback (c);
+	in >> r >> g >> b;
+	colors.push_back (QColor (r, g, b));
+      }
+      in.ignore (INT_MAX, '\n');
+    }
+    return true;
+  }
+  return false;
+}
+
+void KIllustrator::loadPalette () {
+  QString pfile = KFileDialog::getOpenFileName ();
+  if (! pfile.isEmpty ()) {
+    vector<QColor> new_palette;
+    if (parseColorPalette ((const char *) pfile, new_palette)) {
+      // update color palette
+      palette = new_palette;
+      updatePalette ();
+    }
+  }
+}
+
+void KIllustrator::updatePalette () {
+  GObject::OutlineInfo oinfo = GObject::getDefaultOutlineInfo ();
+  for (int i = 0; i < (int) palette.size (); i++) {
+    QBrush brush (palette[i], i == 0 ? NoBrush : SolidPattern);
+    ColorField* cfield = (ColorField *) colorPalette->getWidget (i);
+    if (cfield == 0L)
+      break;
+    cfield->setBrush (brush);
+    if (oinfo.color == palette[i]) {
+      cfield->highlight (true);
+      selectedColorIdx = i;
+    }
   }
 }

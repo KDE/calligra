@@ -52,6 +52,8 @@
 #define ID_TOOL_ZOOM          1010
 #define ID_TOOL_PATHTEXT      1011
 
+#define ID_TOOL_INSERTPART    1012
+
 #define ID_EDIT_UNDO          2001
 #define ID_EDIT_REDO          2002
 #define ID_EDIT_CUT           2003
@@ -66,8 +68,8 @@
 #define ID_TOOL_EP_SPLIT      1104
 #define ID_TOOL_EP_JOIN       1105
 
-class KIlustratorView;
-class KIllustratorDocument;
+class KIllustratorView;
+class KIllustratorChild;
 class Canvas;
 class GDocument;
 class QwViewport;
@@ -76,6 +78,8 @@ class ToolController;
 class Canvas;
 class Ruler;
 class EditPointTool;
+class InsertPartTool;
+class GPart;
 
 class KIllustratorFrame : public KoFrame {
   Q_OBJECT
@@ -118,8 +122,11 @@ public:
   void editPaste ();
   void editSelectAll ();
   void editDelete ();
-  void editInsertOject ();
   void editProperties ();
+
+  void editInsertObject ();
+  void editInsertClipart ();
+  void editInsertBitmap ();
 
   void viewOutline ();
   void viewNormal ();
@@ -136,6 +143,7 @@ public:
   void arrangeOneBack ();
   void arrangeGroup ();
   void arrangeUngroup ();
+  void arrangeTextAlongPath ();
 
   void toggleRuler ();
   void toggleGrid ();
@@ -194,14 +202,26 @@ protected slots:
   void popupForSelection (int x, int y);
   void setUndoStatus(bool undoPossible, bool redoPossible);
   void showCurrentMode (const char* msg);
+  void resetTools ();
+
+  void insertPartSlot (KIllustratorChild *child, GPart *part);
+  void changeChildGeometrySlot (KIllustratorChild *child);
+  void childGeometryEndSlot (KoFrame *f);
+  void childMoveEndSlot (KoFrame *f);
 
 protected:
   /* Menu: Edit */
   OpenPartsUI::Menu_var m_vMenuEdit;
+  OpenPartsUI::Menu_var m_vMenuInsert;
   CORBA::Long m_idMenuEdit_Undo, m_idMenuEdit_Redo,
     m_idMenuEdit_Cut, m_idMenuEdit_Copy, m_idMenuEdit_Paste, 
     m_idMenuEdit_Delete, m_idMenuEdit_SelectAll, 
     m_idMenuEdit_InsertObject, m_idMenuEdit_Properties;
+
+  /* Menu: Edit->Insert */
+  CORBA::Long m_idMenuInsert_Object, m_idMenuInsert_Clipart, 
+    m_idMenuInsert_Bitmap;
+
   /* Menu: View */
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_Outline, 
@@ -220,7 +240,8 @@ protected:
     m_idMenuTransform_Mirror, m_idMenuArrange_Align, 
     m_idMenuArrange_ToFront, m_idMenuArrange_ToBack, 
     m_idMenuArrange_1Forward, m_idMenuArrange_1Back, 
-    m_idMenuArrange_Group, m_idMenuArrange_Ungroup;
+    m_idMenuArrange_Group, m_idMenuArrange_Ungroup,
+    m_idMenuArrange_TextAlongPath;
   /* Menu: Extras */
   OpenPartsUI::Menu_var m_vMenuExtras;
   /* Menu: Help */
@@ -261,6 +282,7 @@ protected:
 
   KIllustratorDocument *m_pDoc;
   EditPointTool *editPointTool;
+  InsertPartTool *insertPartTool;
   QPopupMenu *objMenu;
   QList<KIllustratorFrame> m_lstFrames;
   QArray<float> zFactors;

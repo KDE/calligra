@@ -355,6 +355,7 @@ public:
   bool hasRefId () const { return ! refid.isEmpty (); }
 
 signals:
+  void deleted ();
   void changed ();
   void changed (const Rect& r);
   void propertiesChanged (GObject::Property p, int mask);

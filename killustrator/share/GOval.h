@@ -67,6 +67,8 @@ public:
 
   virtual const char* typeName ();
 
+  virtual void getPath (vector<Coord>& path);
+
 protected:
   void updateGradientShape (QPainter& p);
   void calcBoundingBox ();

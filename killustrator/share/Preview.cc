@@ -113,3 +113,17 @@ bool wmfPreviewHandler (const KFileInfo* fInfo, const QString fileName,
   }
   return res;
 }
+/**
+ * A preview handler for the KFilePreviewDialag that shows
+ * a Pixmap object.
+ */
+bool pixmapPreviewHandler (const KFileInfo* fInfo, const QString fileName,
+			QString&, QPixmap& pixmap) {
+  bool res = false;
+
+  if (fInfo->isFile ()) {
+    pixmap.load ((const char *) fileName);
+    return ! pixmap.isNull ();
+  }
+  return res;
+}

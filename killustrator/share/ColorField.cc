@@ -30,22 +30,44 @@
 #include "ColorField.h"
 #include "ColorField.moc"
 
-ColorField::ColorField (const QBrush& b, QWidget* parent, const char* name) 
+ColorField::ColorField (int idx, const QBrush& b, 
+			QWidget* parent, const char* name) 
   : QButton (parent, name) {
   setFixedSize (15, 15);
   resize (15, 15);
   brush = b;
+  highlighted = false;
+  id = idx;
+}
+
+void ColorField::setBrush (const QBrush& b) {
+  brush = b;
+  repaint ();
+}
+
+void ColorField::highlight (bool flag) {
+  if (highlighted != flag) {
+    highlighted = flag;
+    repaint ();
+  }
 }
 
 void ColorField::drawButton (QPainter* p) {
   QRect r = rect ();
   QBrush fill (brush.color ());
   qDrawShadeRect (p, r, colorGroup (), TRUE, 1, 1, &fill);
+  if (brush.style () == NoBrush) {
+    p->setPen (darkGray);
+    p->drawLine (1, 1, 13, 13);
+    p->drawLine (13, 1, 1, 13);
+  }
+  if (highlighted)
+    p->drawWinFocusRect (1, 1, 13, 13);
 }
 
 void ColorField::mouseReleaseEvent (QMouseEvent* e) {
-  if (e->state () == RightButton) 
-    emit colorSelected (0, brush);
+  if (e->state () == RightButton)
+    emit colorSelected (0, id, brush);
   else if (e->state () == LeftButton)
-    emit colorSelected (1, brush);
+    emit colorSelected (1, id, brush);
 }
