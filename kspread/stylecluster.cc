@@ -26,6 +26,8 @@
 #include "kspread_sheet.h"
 #include "kspread_util.h"
 
+#include <qptrlist.h>
+
 namespace KSpread {
 
 class StyleClusterQuad
@@ -48,7 +50,7 @@ class StyleClusterQuad
     QuadType m_type;
   
     KSpreadStyle* m_style;
-    
+        
     StyleClusterQuad* m_topLeft;
     StyleClusterQuad* m_topRight;
     StyleClusterQuad* m_bottomLeft;
@@ -123,7 +125,10 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
     else
       m_topQuad->m_type = StyleClusterQuad::Quad;
   }
-   
+  
+  //let's keep track of the path we went down, so we can go up as well
+  // note that we store pointers to pointers 
+  QPtrList<StyleClusterQuad*> path;
   
   while (true)
   {
@@ -131,6 +136,8 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
     Q_ASSERT( (*current_node)->m_type == StyleClusterQuad::Quad );
   
     last_node = *current_node;
+    
+    path.append(current_node);
     
     if( x - x_offset < half_quad_size ) {
       if( y - y_offset < half_quad_size ) {
@@ -178,19 +185,32 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
       if(half_quad_size == 0) {
         (*current_node)->m_style = style;
         style->addRef();
+        
         if( last_node->m_style == style) {
-          delete (*current_node);
+          delete (*current_node);  //style is released in the destructor
           *current_node = NULL;
         } else {
-          while( last_node->m_topLeft != NULL && last_node->m_topRight != NULL &&
+          while( last_node && last_node->m_topLeft != NULL && last_node->m_topRight != NULL &&
               last_node->m_bottomLeft != NULL && last_node->m_bottomRight != NULL ) {
+              
+              //if the parent quad is full, and this is a simple node, we delete this node
+              //and set the style of the parent node accordingly.
+              
+              last_node->m_style = style;
+              style->addRef();
+              
+              //always make sure that reference
+              // counting does not drop to 0 if we need
+              // it still, so addRef() BEFORE release()
+              // (or delete node) for the same style
               
               delete (*current_node);
               *current_node = NULL;
-              last_node->m_style = style;
-              style->addRef();
-              //FIXME we need to go back up the tree somehow
-              //and set last_node to last_node->last_node
+              
+              //move up one layer
+              current_node = path.last();
+              path.removeLast();
+              last_node = *(path.last());
           }
         }
         
@@ -206,14 +226,11 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
   
 }
 
-/*!
-   Do not modify returned spreadformat
-   manipulate through @ref StyleManipulator
- */
 const KSpreadStyle& StyleCluster::lookup(int x, int y)
 {
   //walk over quad-tree
   // see gnumeric sheet-style.c  cell_tile_apply_pos(...)
+  //  these implementations rather differ though
   
   Q_ASSERT(m_topQuad);
   
@@ -247,9 +264,9 @@ const KSpreadStyle& StyleCluster::lookup(int x, int y)
       }
     }
   }
-  if( !current_node ) return last_node->m_style;
+  if( !current_node ) return *(last_node->m_style);
   
-  return current_node->m_style;
+  return *(current_node->m_style);
 }
 
 };
