@@ -74,11 +74,7 @@ public:
 
 void WinObjBrushHandle::apply( QPainter& p )
 {
-    QPen pen;
-    pen.setColor( brush.color() );
-
     p.setBrush( brush );
-    p.setPen( pen );
 }
 
 void WinObjPenHandle::apply( QPainter& p )
@@ -87,7 +83,6 @@ void WinObjPenHandle::apply( QPainter& p )
 }
 
 #define MAX_OBJHANDLE 64
-
 
 
 
@@ -493,14 +488,14 @@ void QWinMetaFile::setWindowExt( short, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::lineTo( short, short* parm )
 {
-    mPainter.lineTo( parm[ 0 ], parm[ 1 ] );
+    mPainter.lineTo( parm[ 1 ], parm[ 0 ] );
 }
 
 
 //-----------------------------------------------------------------------------
 void QWinMetaFile::moveTo( short, short* parm )
 {
-    mPainter.moveTo( parm[ 0 ], parm[ 1 ] );
+    mPainter.moveTo( parm[ 1 ], parm[ 0 ] );
 }
 
 
@@ -523,7 +518,7 @@ void QWinMetaFile::deleteObject( short, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::ellipse( short, short* parm )
 {
-    mPainter.drawEllipse( parm[ 0 ], parm[ 1 ], parm[ 2 ]-parm[ 0 ], parm[ 3 ]-parm[ 1 ] );
+    mPainter.drawEllipse( parm[ 3 ], parm[ 2 ], parm[ 1 ]-parm[ 3 ], parm[ 0 ]-parm[ 2 ] );
 }
 
 
@@ -601,6 +596,36 @@ void QWinMetaFile::setRop( short, short* parm )
 
 
 //-----------------------------------------------------------------------------
+void QWinMetaFile::createPalette( short, short* )
+{
+    // allocation of an empty object (to keep object counting in sync)
+    WinObjPenHandle* handle = new WinObjPenHandle;
+    int idx = handleIndex();
+    if ( idx >= 0 ) mObjHandleTab[ idx ] = handle;
+}
+
+
+//-----------------------------------------------------------------------------
+void QWinMetaFile::createFontIndirect( short, short* )
+{
+    // allocation of an empty object (to keep object counting in sync)
+    WinObjPenHandle* handle = new WinObjPenHandle;
+    int idx = handleIndex();
+    if ( idx >= 0 ) mObjHandleTab[ idx ] = handle;
+}
+
+
+//-----------------------------------------------------------------------------
+void QWinMetaFile::createRegion( short, short* )
+{
+    // allocation of an empty object (to keep object counting in sync)
+    WinObjPenHandle* handle = new WinObjPenHandle;
+    int idx = handleIndex();
+    if ( idx >= 0 ) mObjHandleTab[ idx ] = handle;
+}
+
+
+//-----------------------------------------------------------------------------
 void QWinMetaFile::createBrushIndirect( short, short* parm )
 {
     static Qt::BrushStyle hatchedStyleTab[] =
@@ -663,6 +688,7 @@ void QWinMetaFile::createPenIndirect( short, short* parm )
     {
         kdDebug() << "QWinMetaFile::createPenIndirect: invalid pen " << parm[ 0 ] << endl;
         style = Qt::SolidLine;
+        parm[ 1 ] = 1;
     }
     // if ( parm[ 1 ]<=0 ) style=NoPen;
 

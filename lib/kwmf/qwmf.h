@@ -74,6 +74,12 @@ public: // should be protected but cannot
     void polyline( short num, short* parms );
     // set polygon fill mode
     void setPolyFillMode( short num, short* parms );
+    // create palette
+    void createPalette( short num, short* parms );
+    // create a logical font
+    void createFontIndirect( short num, short* parms );
+    // create region
+    void createRegion( short num, short* parms );
     // create a logical brush
     void createBrushIndirect( short num, short* parms );
     // create a logical pen

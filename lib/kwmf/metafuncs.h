@@ -75,12 +75,12 @@ struct MetaFuncRec
       { "STRETCHDIB",           0x0f43, 0 },
       { "EXTFLOODFILL",         0x0548, 0 },
       { "DELETEOBJECT",         0x01f0, &QWinMetaFile::deleteObject },
-      { "CREATEPALETTE",        0x00f7, 0 },
+      { "CREATEPALETTE",        0x00f7, &QWinMetaFile::createPalette },
       { "CREATEPATTERNBRUSH",   0x01F9, 0 },
       { "CREATEPENINDIRECT",    0x02FA, &QWinMetaFile::createPenIndirect },
-      { "CREATEFONTINDIRECT",   0x02FB, 0 },
+      { "CREATEFONTINDIRECT",   0x02FB, &QWinMetaFile::createFontIndirect },
       { "CREATEBRUSHINDIRECT",  0x02FC, &QWinMetaFile::createBrushIndirect },
-      { "CREATEREGION",         0x06FF, 0 },
+      { "CREATEREGION",         0x06FF, &QWinMetaFile::createRegion },
       { NULL,                   0,      0 }
   };
 
