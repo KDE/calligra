@@ -80,11 +80,15 @@ KarbonView::editPaste()
 void
 KarbonView::editSelectAll()
 {
-	// TODO : hmm should this be a proper Command or not ?
 	m_part->selectAllObjects();
-
 	handleTool();
+	m_part->repaintAllViews();
+}
 
+void
+KarbonView::editDeselectAll()
+{
+	m_part->deselectAllObjects();
 	m_part->repaintAllViews();
 }
 
@@ -190,44 +194,49 @@ void
 KarbonView::initActions()
 {
 	// edit
-	KStdAction::cut( this, SLOT( editCut() ), actionCollection(),
-		"edit_cut" );
-	KStdAction::copy( this, SLOT( editCopy() ), actionCollection(),
-		"edit_copy");
-	KStdAction::paste( this, SLOT( editPaste() ), actionCollection(),
-		"edit_paste" );
-  	KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(),
-		"edit_select_all" );
-  	new KAction( i18n( "&Delete" ), "editdelete", 0, this, SLOT( editDeleteSelection() ), actionCollection(),
-		"edit_delete" );
-	new KAction( i18n( "&History" ), 0, 0, this, SLOT( editPurgeHistory() ), actionCollection(),
-		"edit_purge_history" );
+	KStdAction::cut( this,
+		SLOT( editCut() ), actionCollection(), "edit_cut" );
+	KStdAction::copy( this,
+		SLOT( editCopy() ), actionCollection(), "edit_copy");
+	KStdAction::paste( this,
+		SLOT( editPaste() ), actionCollection(), "edit_paste" );
+  	KStdAction::selectAll( this,
+		SLOT( editSelectAll() ), actionCollection(), "edit_select_all" );
+	new KAction(
+		i18n( "&Deselect All" ), QKeySequence( "Ctrl+D" ), this,
+		SLOT( editDeselectAll() ), actionCollection(), "edit_deselect_all" );
+  	new KAction(
+		i18n( "D&elete" ), "editdelete", 0, this,
+		SLOT( editDeleteSelection() ), actionCollection(), "edit_delete" );
+	new KAction(
+		i18n( "&History" ), 0, 0, this,
+		SLOT( editPurgeHistory() ), actionCollection(), "edit_purge_history" );
 
 	// tools:
 	m_ellipseToolAction = new KToggleAction(
-		i18n("&Ellipse"), "ellipse", 0, this, SLOT( ellipseTool() ),
-		actionCollection(), "tool_ellipse" );
+		i18n("&Ellipse"), "ellipse", 0, this,
+		SLOT( ellipseTool() ), actionCollection(), "tool_ellipse" );
 	m_polygonToolAction = new KToggleAction(
-		i18n("&Polygon"), "polygon", 0, this, SLOT( polygonTool() ),
-		actionCollection(), "tool_polygon" );
+		i18n("&Polygon"), "polygon", 0, this,
+		SLOT( polygonTool() ), actionCollection(), "tool_polygon" );
 	m_rectangleToolAction = new KToggleAction(
-		i18n("&Rectangle"), "rectangle", 0, this, SLOT( rectangleTool() ),
-		actionCollection(), "tool_rectangle" );
+		i18n("&Rectangle"), "rectangle", 0, this,
+		SLOT( rectangleTool() ), actionCollection(), "tool_rectangle" );
 	m_roundRectToolAction = new KToggleAction(
-		i18n("&Round Rectangle"), "roundrect", 0, this, SLOT( roundRectTool() ),
-		actionCollection(), "tool_roundrect" );
+		i18n("&Round Rectangle"), "roundrect", 0, this,
+		SLOT( roundRectTool() ), actionCollection(), "tool_roundrect" );
 	m_sinusToolAction = new KToggleAction(
-		i18n("S&inus"), "sinus", 0, this, SLOT( sinusTool() ),
-		actionCollection(), "tool_sinus" );
+		i18n("S&inus"), "sinus", 0, this,
+		SLOT( sinusTool() ), actionCollection(), "tool_sinus" );
 	m_selectToolAction = new KToggleAction(
-		i18n("&Select Objects"), "select", 0, this, SLOT( selectTool() ),
-		actionCollection(), "tool_select" );
+		i18n("&Select Objects"), "select", 0, this,
+		SLOT( selectTool() ), actionCollection(), "tool_select" );
 	m_spiralToolAction = new KToggleAction(
-		i18n("S&piral"), "spiral", 0, this, SLOT( spiralTool() ),
-		actionCollection(), "tool_spiral" );
+		i18n("S&piral"), "spiral", 0, this,
+		SLOT( spiralTool() ), actionCollection(), "tool_spiral" );
 	m_starToolAction = new KToggleAction(
-		i18n("S&tar"), "star", 0, this, SLOT( starTool() ),
-		actionCollection(), "tool_star" );
+		i18n("S&tar"), "star", 0, this,
+		SLOT( starTool() ), actionCollection(), "tool_star" );
 
 	m_ellipseToolAction->setExclusiveGroup( "Tools" );
 	m_polygonToolAction->setExclusiveGroup( "Tools" );

@@ -150,14 +150,14 @@ void
 KarbonPart::selectObject( VObject& object, bool exclusive )
 {
 	if( exclusive )
-		unselectAllObjects();
+		deselectAllObjects();
 
 	object.setState( VObject::selected );
 	m_selection.append( &object );
 }
 
 void
-KarbonPart::unselectObject( VObject& object )
+KarbonPart::deselectObject( VObject& object )
 {
 	object.setState( VObject::normal );
 	m_selection.removeRef( &object );
@@ -190,7 +190,7 @@ void
 KarbonPart::selectObjectsWithinRect( const KoRect& rect, bool exclusive )
 {
 	if( exclusive )
-		unselectAllObjects();
+		deselectAllObjects();
 
 	VObjectList objects;
 	VLayerListIterator itr( m_layers );
@@ -208,9 +208,9 @@ KarbonPart::selectObjectsWithinRect( const KoRect& rect, bool exclusive )
 }
 
 void
-KarbonPart::unselectAllObjects()
+KarbonPart::deselectAllObjects()
 {
-	// unselect objects:
+	// deselect objects:
 	VObjectListIterator itr( m_selection );
 	for ( ; itr.current() ; ++itr )
 	{

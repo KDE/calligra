@@ -34,10 +34,10 @@ public:
 	// manipulate selection:
 	const VObjectList& selection() const { return m_selection; }	// r/o access
 	void selectObject( VObject& object, bool exclusive = false );
-	void unselectObject( VObject& object );
+	void deselectObject( VObject& object );
 	void selectObjectsWithinRect( const KoRect& rect, bool exclusive = false );
 	void selectAllObjects();	// select all vobjects period.
-	void unselectAllObjects();	// unselect all vobjects from all vlayers.
+	void deselectAllObjects();	// unselect all vobjects from all vlayers.
 
 	// inserting, deleting objects:
 	void insertObject( const VObject* object );	// insert a new vobject:

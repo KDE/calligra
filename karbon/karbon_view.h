@@ -42,6 +42,7 @@ protected slots:
 	void editCopy();
 	void editPaste();
 	void editSelectAll();
+	void editDeselectAll();
 	void editDeleteSelection();
 	void editPurgeHistory();
 

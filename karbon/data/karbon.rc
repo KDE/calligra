@@ -10,6 +10,7 @@
 		<Action name="edit_copy"/>
 		<Action name="edit_paste"/>
 		<Action name="edit_select_all"/>
+		<Action name="edit_deselect_all"/>
 		<Action name="edit_delete"/>
 		<Separator/>
 		<Menu name="edit_purge">

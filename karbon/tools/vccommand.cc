@@ -24,7 +24,7 @@ VCCommand::unexecute()
 {
 	if ( m_object )
 	{
-		m_part->unselectObject( *m_object );
+		m_part->deselectObject( *m_object );
 		m_object->setState( VObject::deleted );
 	}
 }

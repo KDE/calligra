@@ -7,10 +7,13 @@
 #include "vmcmd_delete.h"
 
 VMCmdDelete::VMCmdDelete( KarbonPart* part )
-	: VCommand( part, i18n( "Delete Object(s)" ) )
+	: VCommand( part, i18n( "Delete Objects" ) )
 {
 	m_objects = m_part->selection();
-	m_part->unselectAllObjects();
+	m_part->deselectAllObjects();
+
+	if( m_objects.count() == 1 )
+		setName( i18n( "Delete Object" ) );
 }
 
 void

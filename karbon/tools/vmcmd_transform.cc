@@ -8,14 +8,17 @@
 #include "vpath.h"
 
 VMCmdTransform::VMCmdTransform( KarbonPart* part, QPtrList<VObject> objects, const QWMatrix &mat )
-	: VCommand( part, i18n("Transform Object") ), m_objects( objects ), m_mat( mat )
+	: VCommand( part, i18n( "Transform Objects" ) ), m_objects( objects ), m_mat( mat )
 {
+	if( m_objects.count() == 1 )
+		setName( i18n( "Transform Object" ) );
 }
 
 VMCmdTransform::VMCmdTransform( KarbonPart* part, QPtrList<VObject> objects, const QString &name )
 	: VCommand( part, name ), m_objects( objects )
 {
 }
+
 void
 VMCmdTransform::execute()
 {
