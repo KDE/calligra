@@ -46,7 +46,9 @@
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
+#include <kexidb/cursor.h>
 
+#include "projectsettingsui.h"
 #include "kexibrowser.h"
 #include "kexipropertyeditorview.h"
 #include "kexipropertybuffer.h"
@@ -63,6 +65,7 @@
 #include "kexi_utils.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
+#include "kexiuseraction.h"
 
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiConnSelector.h"
@@ -183,9 +186,14 @@ class KexiMainWindowImpl::Private
 		//! Used sometimes to block showErrorMessage()
 		bool disableErrorMessages : 1;
 
+		//! Indicates if project is started in --final mode
+		bool final;
+
 	Private()
 		: dialogs(401)
 	{
+		propEditorToolWindow=0;
+		final = false;
 		nav=0;
 		navToolWindow=0;
 		prj = 0;
@@ -227,10 +235,15 @@ class KexiMainWindowImpl::Private
 
 //-------------------------------------------------
 
-KexiMainWindowImpl::KexiMainWindowImpl()
+KexiMainWindowImpl::KexiMainWindowImpl(bool final)
  : KexiMainWindow()
  , d(new KexiMainWindowImpl::Private() )
 {
+	d->final = final;
+
+	if(final)
+		kdDebug() << "KexiMainWindowImpl::KexiMainWindowImpl(): starting up in final mode" << endl;
+
 	d->config = kapp->config();
 
 	if ( !initialGeometrySet() ) {
@@ -246,8 +259,12 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	setStandardMDIMenuEnabled(false);
 	setAsDefaultHost(); //this is default host now.
 	KGlobal::iconLoader()->addAppDir("kexi");
-	setXMLFile("kexiui.rc");
-	setAcceptDrops(true);
+
+	if(!final)
+	{
+		setXMLFile("kexiui.rc");
+		setAcceptDrops(true);
+	}
 
 	//get informed
 	connect(&Kexi::partManager(),SIGNAL(partLoaded(KexiPart::Part*)),this,SLOT(slotPartLoaded(KexiPart::Part*)));
@@ -261,16 +278,23 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		this, SLOT(slotMdiModeHasBeenChangedTo(KMdi::MdiMode)));
 
 
-	initActions();
-	createShellGUI(true);
+	if(!final)
+	{
+		initActions();
+		createShellGUI(true);
+	}
+
 	(void) new KexiStatusBar(this, "status_bar");
 
 	d->origAppCaption = caption();
 
 	restoreSettings();
 
-	initContextHelp();
-	initPropertyEditor();
+	if(!final)
+	{
+		initContextHelp();
+		initPropertyEditor();
+	}
 
 	{//store menu popups list
 		QObjectList *l = queryList( "QPopupMenu" );
@@ -284,7 +308,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		d->createMenu = d->popups["create"];
 	}
 
-	if (!isFakingSDIApplication()) {
+	if (!isFakingSDIApplication() && !d->final) {
 //		QPopupMenu *menu = (QPopupMenu*) child( "window", "KPopupMenu" );
 		QPopupMenu *menu = d->popups["window"];
 		unsigned int count = menuBar()->count();
@@ -296,9 +320,11 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 
 	m_pTaskBar->setCaption(i18n("Task Bar"));	//js TODO: move this to KMDIlib
 
-	invalidateActions();
+	if(!final)
+		invalidateActions();
 
-	d->timer.singleShot(0,this,SLOT(slotLastActions()));
+	if(!final)
+		d->timer.singleShot(0,this,SLOT(slotLastActions()));
 }
 
 KexiMainWindowImpl::~KexiMainWindowImpl()
@@ -541,6 +567,9 @@ void KexiMainWindowImpl::invalidateSharedActionsLater()
 void KexiMainWindowImpl::invalidateProjectWideActions()
 {
 //	stateChanged("project_opened",d->prj ? StateNoReverse : StateReverse);
+
+	if(d->final)
+		return;
 
 	const bool have_dialog = d->curDialog;
 	const bool dialog_dirty = d->curDialog && d->curDialog->dirty();
@@ -808,17 +837,26 @@ bool KexiMainWindowImpl::closeProject(bool &cancelled)
 		if (cancelled)
 			return true;
 	}
-	d->nav->clear();
-	d->navToolWindow->hide();
-	d->propEditorToolWindow->hide();
+
+	if(d->nav)
+	{
+		d->nav->clear();
+		d->navToolWindow->hide();
+	}
+
+	if(d->propEditorToolWindow)
+		d->propEditorToolWindow->hide();
 
 	d->dialogs.clear(); //sanity!
 	delete d->prj;
 	d->prj=0;
 
 //	Kexi::partManager().unloadAllParts();
+
 	invalidateActions();
-	updateAppCaption();
+	if(!d->final)
+		updateAppCaption();
+
 	return true;
 }
 
@@ -1239,7 +1277,7 @@ KexiMainWindowImpl::registerChild(KexiDialogBase *dlg)
 
 	if (m_mdiMode==KMdi::ToplevelMode || m_mdiMode==KMdi::ChildframeMode) {//kmdi fix
 		//js TODO: check if taskbar is switched in menu
-		if (!m_pTaskBar->isSwitchedOn())
+		if (m_pTaskBar && !m_pTaskBar->isSwitchedOn())
 			m_pTaskBar->switchOn(true);
 	}
 	//KMdiChildFrm *frm = dlg->mdiParent();
@@ -1600,7 +1638,9 @@ KexiMainWindowImpl::slotProjectSaveAs()
 void
 KexiMainWindowImpl::slotProjectProperties()
 {
-	KEXI_UNFINISHED(i18n("Project properties"));
+	//TODO: load the implementation not the ui :)
+	ProjectSettingsUI u(this);
+	u.exec();
 }
 
 void
@@ -1916,7 +1956,8 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 	}
 	else {
 		//not dirty now
-		d->nav->updateItemName( dlg->partItem(), false );
+		if(d->nav)
+			d->nav->updateItemName( dlg->partItem(), false );
 	}
 
 	d->dialogs.take(dlg_id); //don't remove -KMDI will do that
@@ -1959,7 +2000,7 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 	KMdiMainFrm::closeWindow(dlg, layoutTaskBar);
 
 	//focus navigator if nothing else available
-	if (d->dialogs.isEmpty())
+	if (d->dialogs.isEmpty() && d->nav)
 		d->nav->setFocus();
 
 	invalidateActions();
@@ -2191,7 +2232,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 		return 0;
 	}
 
-	if (needsUpdateViewGUIClient) {
+	if (needsUpdateViewGUIClient && !d->final) {
 		//view changed: switch to this view's gui client
 		KXMLGUIClient *viewClient=dlg->guiClient();
 		updateDialogViewGUIClient(viewClient);
@@ -2199,9 +2240,10 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 			guiFactory()->removeClient(d->curDialogViewGUIClient);
 		d->curDialogViewGUIClient=viewClient; //remember
 	}
-	
+
 	invalidateViewModeActions();
 	invalidateSharedActions();
+
 	return dlg;
 }
 
@@ -2281,7 +2323,7 @@ bool KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 	if (dlg) {//close existing window
 //		if (!dlg->tryClose(true))
 		const bool tmp = d->forceDialogClosing;
-		const bool remove_on_closing = dlg->partItem()->neverSaved();
+		/*const bool remove_on_closing = */dlg->partItem()->neverSaved();
 		bool cancelled;
 		d->forceDialogClosing = true;
 		if (!closeDialog(dlg, cancelled)) {
@@ -2328,9 +2370,11 @@ void KexiMainWindowImpl::slotDirtyFlagChanged(KexiDialogBase* dlg)
 {
 	KexiPart::Item *item = dlg->partItem();
 	//update text in navigator and app. caption
-	d->nav->updateItemName( item, dlg->dirty() );
-	updateAppCaption();
+	if(!d->final)
+		d->nav->updateItemName( item, dlg->dirty() );
+
 	invalidateActions();
+	updateAppCaption();
 }
 
 void KexiMainWindowImpl::slotMdiModeHasBeenChangedTo(KMdi::MdiMode)
@@ -2422,6 +2466,95 @@ void KexiMainWindowImpl::slotOptionsEnableForms(bool show, bool noMessage)
 		KMessageBox::information(this,
 			"<p>"+i18n("Forms will be hidden after restarting Kexi application.")+"</p><p>"+note+"<p>");
 	}
+}
+
+bool
+KexiMainWindowImpl::initFinal(KexiProjectData *projectData)
+{
+	Kexi::tempShowForms() = true;
+	if(!projectData)
+		return false;
+
+	createKexiProject(projectData); //initialize project
+	d->prj->m_final = true;         //announce that we are in fianl mode
+
+	if(!d->prj->open())             //try to open database
+		return false;
+
+	KexiDB::TableSchema *sch = d->prj->dbConnection()->tableSchema("kexi__final");
+	if(!sch)
+	{
+		KMessageBox::error(this, i18n("No <b>Finalmode data</b> found"));
+		return false;
+	}
+
+	KexiDB::Cursor *c = d->prj->dbConnection()->executeQuery(*sch);
+	if(!c)
+	{
+		KMessageBox::error(this, i18n("Couldn't read <b>Finalmode data</b>"));
+		return false;
+	}
+
+	QString startupPart;
+	QString startupItem;
+	while(c->moveNext())
+	{
+		kdDebug() << "KexiMainWinImpl::initFinal(): property: [" << c->value(1).toString() << "] " << c->value(2).toString() << endl;
+		if(c->value(1).toString() == "startup-part")
+			startupPart = c->value(2).toString();
+		else if(c->value(1).toString() == "startup-item")
+			startupItem = c->value(2).toString();
+		else if(c->value(1).toString() == "mainxmlui")
+			setXML(c->value(2).toString());
+	}
+	d->prj->dbConnection()->deleteCursor(c);
+
+	kdDebug() << "KexiMainWinImpl::initFinal(): part: " << startupPart << endl;
+	kdDebug() << "KexiMainWinImpl::initFinal(): item: " << startupItem << endl;
+
+	initActions();
+	initUserActions();
+	guiFactory()->addClient(this);
+	setStandardToolBarMenuEnabled(false);
+	setHelpMenuEnabled(false);
+
+	KexiPart::Info *i = Kexi::partManager().info(startupPart.latin1());
+	if (!i) {
+		KMessageBox::error(this, i18n("Specified part does not exist"));
+		return false;
+	}
+
+	Kexi::partManager().part(i);
+	KexiPart::Item *item = d->prj->item(i, startupItem);
+	if(!openObject(item, Kexi::DataViewMode)) {
+		KMessageBox::error(this, i18n("Specified document couldn't be opened"));
+		return false;
+	}
+
+	QWidget::setCaption("MyApp");
+
+	return true;
+}
+
+void
+KexiMainWindowImpl::initUserActions()
+{
+	KexiDB::Cursor *c = d->prj->dbConnection()->executeQuery("SELECT p_id, name, text, icon, method, arguments FROM kexi__useractions WHERE scope = 0");
+	if(!c)
+		return;
+
+	while(c->moveNext())
+	{
+		KexiUserAction::fromCurrentRecord(this, actionCollection(), c);
+	}
+	d->prj->dbConnection()->deleteCursor(c);
+/*
+	KexiUserAction *a1 = new KexiUserAction(this, actionCollection(), "user_dataview", "Change to dataview", "table");
+	Arguments args;
+	args.append(QVariant("kexi/table"));
+	args.append(QVariant("persons"));
+	a1->setMethod(KexiUserAction::OpenObject, args);
+*/
 }
 
 #include "keximainwindowimpl.moc"

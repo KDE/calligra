@@ -47,7 +47,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/**
 		 * creates an empty mainwindow
 		 */
-		KexiMainWindowImpl();
+		KexiMainWindowImpl(bool final=false);
 		virtual ~KexiMainWindowImpl();
 
 		//! Project data of currently opened project or NULL if no project here yet.
@@ -64,6 +64,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		bool activateWindow(KexiDialogBase *dlg);
 
 		void startup(KexiProjectData* pdata);
+
+		/*! Initialises final mode: constructs window according to kexi__final database and loads the specified part
+		    \return true on success or false if e.g. kexi__final does not exist or a fatal exception happened */
+		bool initFinal(KexiProjectData *projectData);
+
 
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
@@ -133,7 +138,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 
 		/*! Creates standard actions like new, open, save ... */
 		void		initActions();
-		
+
+		/*! Creates user project-wide actions */
+		void		initUserActions();
+
 		/*! Sets up the window from user settings (e.g. mdi mode). */
 		void		restoreSettings();
 
