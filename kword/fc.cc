@@ -26,7 +26,6 @@
 #include "char.h"
 #include "autoformat.h"
 #include "font.h"
-#include <kdebug.h>
 
 /******************************************************************/
 /* Class: KWFormatContext                                         */
@@ -1076,7 +1075,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
     }
 
 
-    ptPos = 0;
+    //ptPos = 0;
 
     // Calculate the first characters position in screen coordinates
     ptPos = xShift + left;
@@ -1402,7 +1401,10 @@ unsigned int KWFormatContext::getLineHeight() const
 /*================================================================*/
 void KWFormatContext::makeCounterLayout()
 {
-    if ( parag->getParagLayout()->getCounterType() == KWParagLayout::CT_NONE ) return;
+    if ( parag->getParagLayout()->getCounterType() == KWParagLayout::CT_NONE ) {
+        ptCounterWidth=0;
+        return;
+    }
 
     KWFormat format( doc, parag->getParagLayout()->getFormat() );
     format.apply( parag->getParagLayout()->getFormat() );
