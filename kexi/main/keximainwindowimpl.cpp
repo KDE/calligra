@@ -1164,10 +1164,10 @@ void KexiMainWindowImpl::slotCaptionForCurrentMDIChild(bool childrenMaximized)
 
 	if (childrenMaximized && view) {
 		setCaption( d->curDialog->caption()
-			+ (d->appCaptionPrefix.isEmpty() ? "" : " - " + d->appCaptionPrefix) );
+			+ (d->appCaptionPrefix.isEmpty() ? QString::null : (QString::fromLatin1(" - ") + d->appCaptionPrefix)) );
 	}
 	else {
-		setCaption( (d->appCaptionPrefix.isEmpty() ? "" : d->appCaptionPrefix + " - ")
+		setCaption( (d->appCaptionPrefix.isEmpty() ? QString::null : (d->appCaptionPrefix + QString::fromLatin1(" - ")))
 			+ d->origAppCaption );
 	}
 }
@@ -1182,8 +1182,8 @@ void KexiMainWindowImpl::updateAppCaption()
 		if (d->appCaptionPrefix.isEmpty())
 			d->appCaptionPrefix = d->prj->data()->databaseName();
 	}
-	if (!d->appCaptionPrefix.isEmpty())
-		d->appCaptionPrefix = d->appCaptionPrefix;
+//	if (!d->appCaptionPrefix.isEmpty())
+//		d->appCaptionPrefix = d->appCaptionPrefix;
 
 	bool max = false;
 	if (d->curDialog && d->curDialog->mdiParent())
@@ -2644,7 +2644,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 
 		//temp. hack: avoid problems with autonumber
 		// see http://bugs.kde.org/show_bug.cgi?id=89381
-		int p_id = 3; //min is == 3
+		int p_id = KexiDB::LastObjectType+1; //min is == 3+1
 		if (project()->dbConnection()->querySingleNumber("SELECT max(p_id) FROM kexi__parts", p_id))
 			p_id++;
 

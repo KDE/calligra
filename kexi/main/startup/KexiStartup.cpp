@@ -310,7 +310,12 @@ bool KexiStartupHandler::init(int argc, char **argv)
 
 	//database filenames, shortcut filenames or db names on a server
 	if (args->count()>=1) {
-		QString prjName = args->arg(0);
+		QString prjName;
+		if (fileDriverSelected)
+			prjName = QFile::decodeName(args->arg(0));
+		else
+			prjName = QString::fromLocal8Bit(args->arg(0));
+		
 		if (fileDriverSelected) {
 			QFileInfo finfo(prjName);
 			cdata.setFileName( finfo.absFilePath() );
@@ -337,8 +342,10 @@ bool KexiStartupHandler::init(int argc, char **argv)
 					cdata.fileName(), 0, detectOptions );
 				if (cdata.driverName.isEmpty())
 					return false;
+				m_projectData = new KexiProjectData(cdata, prjName);
 			}
-			m_projectData = new KexiProjectData(cdata, prjName);
+			else
+				m_projectData = new KexiProjectData(cdata, prjName);
 		}
 //		if (!m_projectData)
 //			return false;
