@@ -342,8 +342,8 @@ void KPresenterView_impl::extraOptions()
     }
   optionDia = new OptionDia(0,"OptionDia");
   optionDia->setCaption(i18n("KPresenter - Options"));
-  optionDia->setMaximumSize(optionDia->width(),optionDia->height());
-  optionDia->setMinimumSize(optionDia->width(),optionDia->height());
+  optionDia->setMaximumSize(optionDia->minimumSize());
+  optionDia->resize(optionDia->minimumSize());
   QObject::connect(optionDia,SIGNAL(applyButtonPressed()),this,SLOT(optionOk()));
   optionDia->setRastX(KPresenterDoc()->getRastX());
   optionDia->setRastY(KPresenterDoc()->getRastY());

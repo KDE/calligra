@@ -15,6 +15,7 @@
 
 #include "optiondia.h"
 #include "optiondia.moc"
+#include <kapp.h>
 
 /******************************************************************/
 /* class OptionDia                                                */
@@ -90,7 +91,7 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
   rect->move(col1,txtObj->y()+txtObj->height()+20);
 
   lRndX = new QLabel(rect,"lRndX");
-  lRndX->setTexti18n(("Roundedness X:"));
+  lRndX->setText(i18n("Roundedness X:"));
   lRndX->move(10,20);
 
   lRndY = new QLabel(rect,"lRndY");

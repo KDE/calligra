@@ -1589,28 +1589,33 @@ void Page::drawPageInPix(QPixmap &_pix,int __diffy)
 /*=========================== change pages =======================*/
 void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 {
-//   QTime _time;
-//   int _step = 0,_steps;
+  QTime _time;
+  int _step = 0,_steps;
+  int _h = getPageSize(1,_presFakt).height();
+  int _y = (height() - _h) / 2;
 
-//   printf("%d\n",(int)_effect);
+  switch (_effect)
+    {
+    case PEF_CLOSE_HORZ:
+      {
+	_steps = 80;
+	int _height = _h / _steps;
+	_time.start();
 
-//   switch (_effect)
-//     {
-//     case PEF_CLOSE_HORZ:
-//       {
-// 	_steps = 10;
-// 	int _height = getPageSize(1,_presFakt).height() / _steps;
-// 	_time.start();
-
-// 	for (;;)
-// 	  {
-// 	    if (_step > _steps) break;
-// 	    else if (_time.elapsed() >= 100)
-// 	      {
-// 		_step++;
-// 		_time.restart();
-// 	      }
-// 	  }
-//       } break;
-//     }
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_step == _steps) break;
+	    else if (_time.elapsed() >= 5)
+	      {
+		_step++;
+		bitBlt(this,0,_y,&_pix2,0,_pix2.height() / 2 - (_pix2.height()/(2 * _steps)) * _step,
+		       width(),(_pix2.height()/(2 * _steps)) * _step);
+		bitBlt(this,0,height() - _y - ((_pix2.height()/(2 * _steps)) * _step),&_pix2,
+		       0,_pix2.height() / 2,width(),(_pix2.height()/(2 * _steps)) * _step);
+		_time.restart();
+	      }
+	  }
+      } break;
+    }
 }
