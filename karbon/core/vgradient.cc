@@ -30,6 +30,7 @@
 
 #include <koGenStyles.h>
 #include <koxmlwriter.h>
+#include <koxmlns.h>
 
 int VGradient::VColorStopList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
 {
@@ -217,13 +218,13 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 void
 VGradient::loadOasis( const QDomElement &object, KoStyleStack &stack )
 {
-	m_type = object.attribute( "draw:style" ) == "radial" ? VGradient::radial : VGradient::linear;
+	m_type = object.attributeNS( KoXmlNS::draw, "style", QString::null ) == "radial" ? VGradient::radial : VGradient::linear;
 	if( m_type == VGradient::radial )
 	{
 		// TODO : find out whether Oasis works with boundingBox only?
-		m_origin.setX( KoUnit::parseValue( object.attribute( "svg:cx" ) ) );
-		m_origin.setY( KoUnit::parseValue( object.attribute( "svg:cy" ) ) );
-		double r = KoUnit::parseValue( object.attribute( "svg:r" ) );
+		m_origin.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cx", QString::null ) ) );
+		m_origin.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cy", QString::null ) ) );
+		double r = KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "r", QString::null ) );
 		m_vector.setX( m_origin.x() + r );
 		m_vector.setY( m_origin.y() );
 	}
@@ -254,9 +255,9 @@ VGradient::loadOasis( const QDomElement &object, KoStyleStack &stack )
 
 			if( colorstop.tagName() == "svg:stop" )
 			{
-				VColor color( QColor( colorstop.attribute( "svg:color" ) ) );
-				color.setOpacity( colorstop.attribute( "svg:stop-opacity", "1.0" ).toDouble() );
-				addStop( color, colorstop.attribute( "svg:offset", "0.0" ).toDouble(), 0.5 );
+				VColor color( QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString::null ) ) );
+				color.setOpacity( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
+				addStop( color, colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble(), 0.5 );
 			}
 		}
 	}

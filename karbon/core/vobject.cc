@@ -29,6 +29,7 @@
 #include <koGenStyles.h>
 #include <koStyleStack.h>
 #include <koxmlwriter.h>
+#include <koxmlns.h>
 #include <kooasiscontext.h>
 #include <koOasisStyles.h>
 
@@ -153,8 +154,8 @@ VObject::loadOasis( const QDomElement &object, KoOasisContext &context )
 	if( !m_fill )
 		m_fill = new VFill();
 
-	if( object.hasAttribute( "draw:style-name" ) )
-		addStyles( context.oasisStyles().styles()[object.attribute( "draw:style-name" )], context );
+	if( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+		addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "style-name", QString::null )], context );
 
 	KoStyleStack &styleStack = context.styleStack();
 	styleStack.setTypeProperties( "graphic" );
@@ -167,8 +168,8 @@ void
 VObject::addStyles( const QDomElement* style, KoOasisContext & context )
 {
 	// this function is necessary as parent styles can have parents themself
-	if( style->hasAttribute( "style:parent-style-name" ) )
-		addStyles( context.oasisStyles().styles()[style->attribute( "style:parent-style-name" )], context );
+	if( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
+		addStyles( context.oasisStyles().styles()[style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null )], context );
 	context.addStyles( style );
 }
 

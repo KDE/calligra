@@ -23,6 +23,7 @@
 #include <koGenStyles.h>
 #include <koStyleStack.h>
 #include <koUnit.h>
+#include <koxmlns.h>
 
 #include "vobject.h"
 #include "vstroke.h"
@@ -132,15 +133,15 @@ VStroke::saveOasis( KoGenStyle &style ) const
 void
 VStroke::loadOasis( const KoStyleStack &stack )
 {
-	if( stack.hasAttribute( "draw:stroke" ))
+	if( stack.hasAttributeNS( KoXmlNS::draw, "stroke" ))
 	{
-		if( stack.attribute( "draw:stroke" ) == "solid" )
+		if( stack.attributeNS( KoXmlNS::draw, "stroke" ) == "solid" )
 		{
 			setType( VStroke::solid );
-			setColor( QColor( stack.attribute( "svg:stroke-color" ) ) );
-			if( stack.hasAttribute( "svg:stroke-opacity" ) )
-				m_color.setOpacity( stack.attribute( "svg:stroke-opacity" ).remove( '%' ).toFloat() / 100. );
-			QString join = stack.attribute( "draw:stroke-linejoin" );
+			setColor( QColor( stack.attributeNS( KoXmlNS::svg, "stroke-color" ) ) );
+			if( stack.hasAttributeNS( KoXmlNS::svg, "stroke-opacity" ) )
+				m_color.setOpacity( stack.attributeNS( KoXmlNS::svg, "stroke-opacity" ).remove( '%' ).toFloat() / 100. );
+			QString join = stack.attributeNS( KoXmlNS::draw, "stroke-linejoin" );
 			if( !join.isEmpty() )
 			{
 				if( join == "round" )
@@ -151,11 +152,11 @@ VStroke::loadOasis( const KoStyleStack &stack )
 					m_lineJoin = joinMiter;
 			}
 		}
-		else if( stack.attribute( "draw:stroke" ) == "none" )
+		else if( stack.attributeNS( KoXmlNS::draw, "stroke" ) == "none" )
 			setType( VStroke::none );
 	}
-	if( stack.hasAttribute( "svg:stroke-width" ) )
-		m_lineWidth = KoUnit::parseValue( stack.attribute( "svg:stroke-width" ) );
+	if( stack.hasAttributeNS( KoXmlNS::svg, "stroke-width" ) )
+		m_lineWidth = KoUnit::parseValue( stack.attributeNS( KoXmlNS::svg, "stroke-width" ) );
 	if( m_lineWidth < 0.0 )
 		m_lineWidth = 0.0;
 }

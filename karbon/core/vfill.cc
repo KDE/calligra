@@ -24,6 +24,7 @@
 #include <koGenStyles.h>
 #include <kooasiscontext.h>
 #include <koOasisStyles.h>
+#include <koxmlns.h>
 
 #include "vfill.h"
 
@@ -102,25 +103,25 @@ void
 VFill::loadOasis( const QDomElement &object, KoOasisContext &context )
 {
 	KoStyleStack &stack = context.styleStack();
-	if( stack.hasAttribute( "draw:fill" ) )
+	if( stack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
 	{
-		if( stack.attribute( "draw:fill" ) == "solid" )
+		if( stack.attributeNS( KoXmlNS::draw, "fill" ) == "solid" )
 		{
 			setType( VFill::solid );
-			setColor( QColor( stack.attribute( "draw:fill-color" ) ) );
+			setColor( QColor( stack.attributeNS( KoXmlNS::draw, "fill-color" ) ) );
 		}
-		else if( stack.attribute( "draw:fill" ) == "gradient" )
+		else if( stack.attributeNS( KoXmlNS::draw, "fill" ) == "gradient" )
 		{
 			setType( VFill::grad );
-			QString style = stack.attribute( "draw:fill-gradient-name" );
+			QString style = stack.attributeNS( KoXmlNS::draw, "fill-gradient-name" );
 			kdDebug()<<" style gradient name :"<<style<<endl;
 			QDomElement *grad = context.oasisStyles().drawStyles()[ style ];
 			kdDebug()<<" style gradient name :"<< grad <<endl;
 			if( grad )
 				m_gradient.loadOasis( *grad, stack );
 		}
-		if( stack.hasAttribute( "draw:opacity" ) )
-			m_color.setOpacity( stack.attribute( "draw:opacity" ).remove( '%' ).toFloat() / 100. );
+		if( stack.hasAttributeNS( KoXmlNS::draw, "opacity" ) )
+			m_color.setOpacity( stack.attributeNS( KoXmlNS::draw, "opacity" ).remove( '%' ).toFloat() / 100. );
 	}
 }
 

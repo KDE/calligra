@@ -26,6 +26,7 @@
 #include <koRect.h>
 #include <koStore.h>
 #include <koxmlwriter.h>
+#include <koxmlns.h>
 
 #include "vcomposite.h"
 #include "vcomposite_iface.h"
@@ -381,15 +382,15 @@ VPath::loadOasis( const QDomElement &element, KoOasisContext &context )
 {
 	setState( normal );
 
-	QString data = element.attribute( "svg:d" );
+	QString data = element.attributeNS( KoXmlNS::svg, "d", QString::null );
 	if( data.length() > 0 )
 	{
 		loadSvgPath( data );
 	}
 
-	m_fillRule = element.attribute( "svg:fill-rule" ) == "winding" ? winding : evenOdd;
+	m_fillRule = element.attributeNS( KoXmlNS::svg, "fill-rule", QString::null ) == "winding" ? winding : evenOdd;
 
-	QString trafo = element.attribute( "draw:transform" );
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
 	if( !trafo.isEmpty() )
 		transform( trafo );
 
