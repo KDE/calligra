@@ -67,7 +67,6 @@ public:
      * @returns the documents context style.
      */
     ContextStyle& getContextStyle( bool edit=false );
-    const ContextStyle& getContextStyle() const;
 
     /**
      * Change the zoom factor to @p z (e.g. 150 for 150%)
@@ -215,6 +214,8 @@ public slots:
     void symbolNames();
 
 private:
+
+    void lazyInit();
 
     /**
      * Creates the standard formula actions and puts them into

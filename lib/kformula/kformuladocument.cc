@@ -233,24 +233,30 @@ Document::~Document()
 }
 
 
-ContextStyle& Document::getContextStyle( bool edit )
+void Document::lazyInit()
 {
-    // Make sure not to change anything depending on `forPrinting' that
-    // would require a new calculation of the formula.
-    //kdDebug( DEBUGID ) << "Document::activate: forPrinting=" << forPrinting << endl;
-    //impl->contextStyle.setSyntaxHighlighting( forPrinting ? false : impl->syntaxHighlighting );
-    impl->contextStyle.setEdit( edit );
-    return impl->contextStyle;
+    if ( impl->firstTime ) {
+        impl->firstTime = false;
+        impl->contextStyle.init( impl->config );
+
+        if ( impl->actionsCreated ) {
+            QStringList names = impl->contextStyle.symbolTable().allNames();
+            impl->symbolNamesAction->setItems(names);
+            impl->selectedName = names[0];
+        }
+    }
 }
 
-const ContextStyle& Document::getContextStyle() const
+ContextStyle& Document::getContextStyle( bool edit )
 {
-    //impl->contextStyle.setEdit( false );
+    lazyInit();
+    impl->contextStyle.setEdit( edit );
     return impl->contextStyle;
 }
 
 void Document::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
+    lazyInit();
     impl->contextStyle.setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
@@ -263,23 +269,14 @@ void Document::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 
 void Document::setZoom( double zoomX, double zoomY, bool updateViews, bool forPrint )
 {
-    if ( impl->contextStyle.setZoom( zoomX, zoomY, updateViews, forPrint ) && updateViews ) {
+    if ( getContextStyle( !forPrint ).setZoom( zoomX, zoomY, updateViews, forPrint ) && updateViews ) {
         recalc();
     }
 }
 
 Container* Document::createFormula()
 {
-    if ( impl->firstTime ) {
-        impl->firstTime = false;
-        impl->contextStyle.init( impl->config );
-
-        if ( impl->actionsCreated ) {
-            QStringList names = impl->contextStyle.symbolTable().allNames();
-            impl->symbolNamesAction->setItems(names);
-            impl->selectedName = names[0];
-        }
-    }
+    lazyInit();
     Container* f = new Container(this);
     impl->formulae.append(f);
     return f;

@@ -30,19 +30,17 @@ KFORMULA_NAMESPACE_BEGIN
 
 
 ContextStyle::ContextStyle()
-    : defaultFont( "Times", 18, QFont::Normal, true ),
-      nameFont( "Times" ), numberFont( "Times" ),
-      operatorFont( "Times" ), symbolFont( "Symbol" ),
+    : symbolFont( "Symbol" ),
       defaultColor(Qt::black), numberColor(Qt::blue),
       operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
       emptyColor(Qt::blue)
 {
-    kdDebug() << "ContextStyle::ContextStyle" << endl
-              << "defaultFont: " << defaultFont.rawName() << endl
-              << "nameFont: " << nameFont.rawName() << endl
-              << "numberFont: " << numberFont.rawName() << endl
-              << "operatorFont: " << operatorFont.rawName() << endl
-              << "symbolFont: " << symbolFont.rawName() << endl;
+//     kdDebug() << "ContextStyle::ContextStyle" << endl
+//               << "defaultFont: " << defaultFont.rawName() << endl
+//               << "nameFont: " << nameFont.rawName() << endl
+//               << "numberFont: " << numberFont.rawName() << endl
+//               << "operatorFont: " << operatorFont.rawName() << endl
+//               << "symbolFont: " << symbolFont.rawName() << endl;
 
     textStyleValues[ displayStyle      ].setup( 1. );
     textStyleValues[ textStyle         ].setup( 1. );
@@ -52,16 +50,8 @@ ContextStyle::ContextStyle()
     m_baseTextStyle = displayStyle;
 
     lineWidth = 1;
-    //emptyRectWidth = 10;
-    //emptyRectHeight = 10;
-    baseSize = defaultFont.pointSizeFloat();
-
     linearMovement = false;
-
     centerSymbol = false;
-    m_syntaxHighlighting = true;
-
-    //setup();
 }
 
 void ContextStyle::init( KConfig* config )
@@ -69,13 +59,13 @@ void ContextStyle::init( KConfig* config )
     table.init();
 
     config->setGroup( "kformula Font" );
-    QString fontName = config->readEntry( "defaultFont", defaultFont.toString() );
+    QString fontName = config->readEntry( "defaultFont", "Times,18,-1,5,50,1,0,0,0,0" );
     defaultFont.fromString( fontName );
-    fontName = config->readEntry( "nameFont", nameFont.toString() );
+    fontName = config->readEntry( "nameFont", "Times,12,-1,5,50,0,0,0,0,0" );
     nameFont.fromString( fontName );
-    fontName = config->readEntry( "numberFont", numberFont.toString() );
+    fontName = config->readEntry( "numberFont", "Times,12,-1,5,50,0,0,0,0,0" );
     numberFont.fromString( fontName );
-    fontName = config->readEntry( "operatorFont", operatorFont.toString() );
+    fontName = config->readEntry( "operatorFont", "Times,12,-1,5,50,0,0,0,0,0" );
     operatorFont.fromString( fontName );
     //fontName = config->readEntry( "symbolFont", "times,12,-1,5,50,0,0,0,0,0" );
     //symbolFont.fromString( fontName );
@@ -89,8 +79,7 @@ void ContextStyle::init( KConfig* config )
     operatorColor = config->readColorEntry( "operatorColor", &operatorColor );
     emptyColor    = config->readColorEntry( "emptyColor",    &emptyColor );
     errorColor    = config->readColorEntry( "errorColor",    &errorColor );
-    m_syntaxHighlighting = config->readBoolEntry( "syntaxHighlighting",
-                                                  m_syntaxHighlighting );
+    m_syntaxHighlighting = config->readBoolEntry( "syntaxHighlighting", true );
 }
 
 bool ContextStyle::setZoom( double zoomX, double zoomY, bool, bool )

@@ -21,11 +21,11 @@
 #include <qapp.h>
 #include <qdom.h>
 #include <qevent.h>
-#include <qtextstream.h>
 #include <qfile.h>
 #include <qpainter.h>
-
+#include <qpixmap.h>
 #include <qstring.h>
+#include <qtextstream.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -503,6 +503,37 @@ void Container::print(KPrinter& printer)
                                                    rootElement()->getHeight() ),
                              document()->getContextStyle( false ) );
     }
+}
+
+QImage Container::drawImage( int width, int height )
+{
+    ContextStyle& context = document()->getContextStyle( false );
+    QRect rect(impl->rootElement->getX(), impl->rootElement->getY(),
+               impl->rootElement->getWidth(), impl->rootElement->getHeight());
+
+    int realWidth = context.layoutUnitToPixelX( impl->rootElement->getWidth() );
+    int realHeight = context.layoutUnitToPixelY( impl->rootElement->getHeight() );
+
+    double f = QMAX( static_cast<double>( width )/static_cast<double>( realWidth ),
+                     static_cast<double>( height )/static_cast<double>( realHeight ) );
+
+    int oldZoom = context.zoom();
+    context.setZoomAndResolution( oldZoom*f, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+
+    kdDebug( DEBUGID ) << "Container::drawImage "
+                       << "(" << width << " " << height << ")"
+                       << "(" << context.layoutUnitToPixelX( impl->rootElement->getWidth() )
+                       << " " << context.layoutUnitToPixelY( impl->rootElement->getHeight() ) << ")"
+                       << endl;
+
+    QPixmap pm( context.layoutUnitToPixelX( impl->rootElement->getWidth() ),
+                context.layoutUnitToPixelY( impl->rootElement->getHeight() ) );
+    pm.fill();
+    QPainter paint(&pm);
+    impl->rootElement->draw(paint, rect, context);
+    paint.end();
+    context.setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    return pm.convertToImage().smoothScale( width, height );
 }
 
 QString Container::texString()

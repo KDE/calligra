@@ -23,6 +23,7 @@
 
 #include <qclipboard.h>
 #include <qdom.h>
+#include <qimage.h>
 #include <qlist.h>
 #include <qobject.h>
 #include <qstack.h>
@@ -183,6 +184,10 @@ public:
      */
     void print(KPrinter& printer);
 
+    /**
+     * @returns an image that looks like out formula.
+     */
+    QImage drawImage( int width, int height );
 
     /**
      * @returns the cursor to be used for editing.
