@@ -1103,7 +1103,26 @@ void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
         writer.startElement( "text:modification" );
         break;
     }
-    writer.addAttribute( "style:data-style-name", KoOasisStyles::saveOasisDateStyle(context.mainStyles(), m_varFormat->formatProperties() ) );
+    QString value(  m_varFormat->formatProperties() );
+    bool klocaleFormat = false;
+    if ( value.lower() == "locale" ||
+         value.isEmpty() ||
+         value.lower() == "localeshort" ||
+         value.lower() == "localedatetime" ||
+         value.lower() == "localedatetimeshort" )
+    {
+        QDateTime dateTime ( m_varValue.toDateTime() );
+        if ( value.lower() == "locale" || value.isEmpty())
+            value =  KGlobal::locale()->formatDate( dateTime.date(), false );
+        else if ( value.lower() == "localeshort" )
+            value = KGlobal::locale()->formatDate( dateTime.date(), true );
+        else if ( value.lower() == "localedatetime" )
+            value =  KGlobal::locale()->formatDateTime( dateTime, false );
+        else if ( value.lower() == "localedatetimeshort" )
+            value =  KGlobal::locale()->formatDateTime( dateTime, true );
+        klocaleFormat = true;
+    }
+    writer.addAttribute( "style:data-style-name", KoOasisStyles::saveOasisDateStyle(context.mainStyles(), value, klocaleFormat ) );
     writer.addAttribute( "text:date-adjust", m_correctDate );
     writer.endElement();
 }

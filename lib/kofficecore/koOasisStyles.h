@@ -68,7 +68,7 @@ public:
     /// Key: format name. Value:
     const DataFormatsMap& dataFormats() const { return m_dataFormats; }
 
-    static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format );
+    static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
     static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format );
     
 protected:
@@ -80,6 +80,7 @@ private:
     void insertStyle( const QDomElement& style );
     void importDataStyle( const QDomElement& parent );
     static bool saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text );
+    static void parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );
 
     KoOasisStyles( const KoOasisStyles & ); // forbidden
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden

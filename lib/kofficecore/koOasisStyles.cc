@@ -24,6 +24,8 @@
 #include "koxmlns.h"
 #include "koGenStyles.h"
 #include <qbuffer.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 KoOasisStyles::KoOasisStyles()
 {
@@ -468,8 +470,122 @@ QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QStrin
     return mainStyles.lookup( currentStyle, "N" );
 }
 
+//convert klocale string to good format
+void KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text )
+{
+    kdDebug()<<"KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format<<endl;
+    do
+    {
+        if ( format.startsWith( "%Y" ) )
+        {
+#if 0
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "long" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+#endif
+        }
+        else if ( format.startsWith( "%y" ) )
+        {
+#if 0
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+#endif
+        }
+        else if ( format.startsWith( "%n" ) )
+        {
+#if 0
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+#endif
+        }
+        else if ( format.startsWith( "%e" ) )
+        {
+#if 0
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+#endif
+        }
+        else if ( format.startsWith( "%b" ) )
+        {
+#if 0
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+#endif
+        }
+        else if ( format.startsWith( "%B" ) )
+        {
+#if 0
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+#endif
+        }
+        else if ( format.startsWith( "%d" ) )
+        {
+#if 0
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+#endif
+        }
+        else if ( format.startsWith( "%a" ) )
+        {
+#if 0
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+#endif
+        }
+        else if ( format.startsWith( "%A" ) )
+        {
+#if 0
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+#endif
+        }
+        else
+        {
+            text += format[0];
+            format = format.remove( 0, 1 );
+        }
+    }
+    while ( format.length() > 0 );
+    addTextNumber( text, elementWriter );
+}
 
-QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format )
+QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat )
 {
     kdDebug()<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
@@ -481,109 +597,116 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
-    do
+    if ( klocaleFormat )
     {
-        if ( format.startsWith( "MMMM" ) )
+        parseOasisDateKlocale( elementWriter, format, text );
+    }
+    else
+    {
+        do
         {
-            addTextNumber( text, elementWriter );
-            elementWriter.startElement( "number:month" );
-            elementWriter.addAttribute( "number:style", "long" );
-            elementWriter.addAttribute( "number:textual", "true");
-            elementWriter.endElement();
-            format = format.remove( 0, 4 );
-        }
-        else if ( format.startsWith( "MMM" ) )
-        {
-            addTextNumber( text, elementWriter );
-            elementWriter.startElement( "number:month" );
-            elementWriter.addAttribute( "number:style", "short" );
-            elementWriter.addAttribute( "number:textual", "true");
-            elementWriter.endElement();
-            format = format.remove( 0, 3 );
-        }
-        else if ( format.startsWith( "MM" ) )
-        {
-            addTextNumber( text, elementWriter );
-            elementWriter.startElement( "number:month" );
-            elementWriter.addAttribute( "number:style", "long" );
-            elementWriter.addAttribute( "number:textual", "false"); //not necessary remove it
-            elementWriter.endElement();
-            format = format.remove( 0, 2 );
-        }
-        else if ( format.startsWith( "M" ) )
-        {
-            addTextNumber( text, elementWriter );
-            elementWriter.startElement( "number:month" );
-            elementWriter.addAttribute( "number:style", "short" );
-            elementWriter.addAttribute( "number:textual", "false");
-            elementWriter.endElement();
-            format = format.remove( 0, 1 );
-        }
-        else if ( format.startsWith( "dddd" ) )
-        {
-            addTextNumber( text, elementWriter );
-
-            elementWriter.startElement( "number:day-of-week" );
-            elementWriter.addAttribute( "number:style", "long" );
-            elementWriter.endElement();
-            format = format.remove( 0, 4 );
-        }
-        else if ( format.startsWith( "ddd" ) )
-        {
-            addTextNumber( text, elementWriter );
-
-            elementWriter.startElement( "number:day-of-week" );
-            elementWriter.addAttribute( "number:style", "short" );
-            elementWriter.endElement();
-            format = format.remove( 0, 3 );
-        }
-        else if ( format.startsWith( "dd" ) )
-        {
-            addTextNumber( text, elementWriter );
-
-            elementWriter.startElement( "number:day" );
-            elementWriter.addAttribute( "number:style", "long" );
-            elementWriter.endElement();
-            format = format.remove( 0, 2 );
-        }
-        else if ( format.startsWith( "d" ) )
-        {
-            addTextNumber( text, elementWriter );
-
-            elementWriter.startElement( "number:day" );
-            elementWriter.addAttribute( "number:style", "short" );
-            elementWriter.endElement();
-            format = format.remove( 0, 1 );
-        }
-        else if ( format.startsWith( "yyyy" ) )
-        {
-            addTextNumber( text, elementWriter );
-
-            elementWriter.startElement( "number:year" );
-            elementWriter.addAttribute( "number:style", "long" );
-            elementWriter.endElement();
-            format = format.remove( 0, 4 );
-        }
-        else if ( format.startsWith( "yy" ) )
-        {
-            addTextNumber( text, elementWriter );
-
-            elementWriter.startElement( "number:year" );
-            elementWriter.addAttribute( "number:style", "short" );
-            elementWriter.endElement();
-            format = format.remove( 0, 2 );
-        }
-        else
-        {
-            if ( !saveOasisTimeFormat( elementWriter, format, text ) )
+            if ( format.startsWith( "MMMM" ) )
             {
-                text += format[0];
+                addTextNumber( text, elementWriter );
+                elementWriter.startElement( "number:month" );
+                elementWriter.addAttribute( "number:style", "long" );
+                elementWriter.addAttribute( "number:textual", "true");
+                elementWriter.endElement();
+                format = format.remove( 0, 4 );
+            }
+            else if ( format.startsWith( "MMM" ) )
+            {
+                addTextNumber( text, elementWriter );
+                elementWriter.startElement( "number:month" );
+                elementWriter.addAttribute( "number:style", "short" );
+                elementWriter.addAttribute( "number:textual", "true");
+                elementWriter.endElement();
+                format = format.remove( 0, 3 );
+            }
+            else if ( format.startsWith( "MM" ) )
+            {
+                addTextNumber( text, elementWriter );
+                elementWriter.startElement( "number:month" );
+                elementWriter.addAttribute( "number:style", "long" );
+                elementWriter.addAttribute( "number:textual", "false"); //not necessary remove it
+                elementWriter.endElement();
+                format = format.remove( 0, 2 );
+            }
+            else if ( format.startsWith( "M" ) )
+            {
+                addTextNumber( text, elementWriter );
+                elementWriter.startElement( "number:month" );
+                elementWriter.addAttribute( "number:style", "short" );
+                elementWriter.addAttribute( "number:textual", "false");
+                elementWriter.endElement();
                 format = format.remove( 0, 1 );
             }
+            else if ( format.startsWith( "dddd" ) )
+            {
+                addTextNumber( text, elementWriter );
+
+                elementWriter.startElement( "number:day-of-week" );
+                elementWriter.addAttribute( "number:style", "long" );
+                elementWriter.endElement();
+                format = format.remove( 0, 4 );
+            }
+            else if ( format.startsWith( "ddd" ) )
+            {
+                addTextNumber( text, elementWriter );
+
+                elementWriter.startElement( "number:day-of-week" );
+                elementWriter.addAttribute( "number:style", "short" );
+                elementWriter.endElement();
+                format = format.remove( 0, 3 );
+            }
+            else if ( format.startsWith( "dd" ) )
+            {
+                addTextNumber( text, elementWriter );
+
+                elementWriter.startElement( "number:day" );
+                elementWriter.addAttribute( "number:style", "long" );
+                elementWriter.endElement();
+                format = format.remove( 0, 2 );
+            }
+            else if ( format.startsWith( "d" ) )
+            {
+                addTextNumber( text, elementWriter );
+
+                elementWriter.startElement( "number:day" );
+                elementWriter.addAttribute( "number:style", "short" );
+                elementWriter.endElement();
+                format = format.remove( 0, 1 );
+            }
+            else if ( format.startsWith( "yyyy" ) )
+            {
+                addTextNumber( text, elementWriter );
+
+                elementWriter.startElement( "number:year" );
+                elementWriter.addAttribute( "number:style", "long" );
+                elementWriter.endElement();
+                format = format.remove( 0, 4 );
+            }
+            else if ( format.startsWith( "yy" ) )
+            {
+                addTextNumber( text, elementWriter );
+
+                elementWriter.startElement( "number:year" );
+                elementWriter.addAttribute( "number:style", "short" );
+                elementWriter.endElement();
+                format = format.remove( 0, 2 );
+            }
+            else
+            {
+                if ( !saveOasisTimeFormat( elementWriter, format, text ) )
+                {
+                    text += format[0];
+                    format = format.remove( 0, 1 );
+                }
+            }
         }
+        while ( format.length() > 0 );
+        addTextNumber( text, elementWriter );
     }
-    while ( format.length() > 0 );
-    addTextNumber( text, elementWriter );
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
