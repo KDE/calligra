@@ -105,6 +105,7 @@ bool KoApplication::start()
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
         doc->addShell( shell ); // for initDoc to fill in the recent docs list
 
+        doc->setInitDocFlags( KoDocument::InitDocAppStarting );
 	if ( doc->checkAutoSaveFile() || doc->initDoc() )
         {
             doc->removeShell( shell ); // setRootDocument will redo it

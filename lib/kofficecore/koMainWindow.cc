@@ -997,12 +997,16 @@ bool KoMainWindow::queryClose()
     return true;
 }
 
-void KoMainWindow::slotFileNew()
+// Helper method for slotFileNew and slotFileClose
+void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFlags )
 {
     KoDocument* doc = rootDocument();
     KoDocument *newdoc=createDoc();
+    if (!newdoc)
+        return;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    if(!newdoc || !newdoc->initDoc())
+    newdoc->setInitDocFlags( (KoDocument::InitDocFlags)initDocFlags );
+    if(!newdoc->initDoc())
     {
         delete newdoc;
         return;
@@ -1021,7 +1025,11 @@ void KoMainWindow::slotFileNew()
     }
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     setRootDocument( newdoc );
-    return;
+}
+
+void KoMainWindow::slotFileNew()
+{
+    chooseNewDocument( KoDocument::InitDocFileNew );
 }
 
 void KoMainWindow::slotFileOpen()
@@ -1092,7 +1100,7 @@ void KoMainWindow::slotFileClose()
         setRootDocument( 0L ); // don't delete this shell when deleting the document
         delete d->m_rootDoc;
         d->m_rootDoc = 0L;
-        slotFileNew();
+        chooseNewDocument( KoDocument::InitDocFileClose );
     }
 }
 

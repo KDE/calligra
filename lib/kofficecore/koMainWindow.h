@@ -276,6 +276,8 @@ public slots:
 
 protected:
 
+    /// Helper method for slotFileNew and slotFileClose
+    void chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFlags );
     /**
      * Special method for KOShell, to allow switching the root
      * document (and its views) among a set of them.

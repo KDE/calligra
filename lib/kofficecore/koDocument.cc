@@ -101,7 +101,8 @@ public:
         m_backupPath( QString::null ),
         m_doNotSaveExtDoc( false ),
         m_current( false ),
-        m_storeInternal( false )
+        m_storeInternal( false ),
+        m_initDocFlags( KoDocument::InitDocAppStarting )
     {
         m_confirmNonNativeSave[0] = true;
         m_confirmNonNativeSave[1] = true;
@@ -140,6 +141,7 @@ public:
     bool m_doNotSaveExtDoc; // makes it possible to save only internally stored child documents
     bool m_current;
     bool m_storeInternal; // Store this doc internally even if url is external
+    InitDocFlags m_initDocFlags;
 };
 
 // Used in singleViewMode
@@ -1942,6 +1944,15 @@ bool KoDocument::hasExternURL()
     return !url().protocol().isEmpty() && url().protocol() != STORE_PROTOCOL && url().protocol() != INTERNAL_PROTOCOL;
 }
 
+KoDocument::InitDocFlags KoDocument::initDocFlags() const
+{
+    return d->m_initDocFlags;
+}
 
-#include "koDocument.moc"
+void KoDocument::setInitDocFlags( InitDocFlags flags )
+{
+    d->m_initDocFlags = flags;
+}
+
 #include "koDocument_p.moc"
+#include "koDocument.moc"

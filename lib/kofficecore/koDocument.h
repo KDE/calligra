@@ -355,6 +355,20 @@ public:
      */
     virtual bool initDoc() = 0;
 
+    // Who calls initDoc?
+    enum InitDocFlags { InitDocAppStarting, InitDocFileNew, InitDocFileClose, InitDocEmbedded };
+    /**
+     * Return some flags for initDoc (BCI: this should be merged with initDoc)
+     * Usually the app will want to
+     * - show the template dialog with 'everything' if InitDocAppStarting, InitDocFileClose or InitDocEmbedded
+     * - show the template dialog with 'templates only' if InitDocFileNew
+     */
+    InitDocFlags initDocFlags() const;
+    /**
+     * For KoMainWindow only - don't use!
+     */
+    void setInitDocFlags( InitDocFlags flags );
+
     /**
      *  Sets the modified flag on the document. This means that it has
      *  to be saved or not before deleting it.
