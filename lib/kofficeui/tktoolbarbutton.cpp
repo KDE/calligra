@@ -395,9 +395,9 @@ void TKToolBarButton::drawButton( QPainter* p )
           d->m_isRaised, isEnabled(), false, KStyle::Icon, "",
           &arrow_pix, &ref_font, this);
       } else {
-        style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( 0, 0, width()-12, height() ), isEnabled() ? colorGroup() : palette().disabled() );
+        style().drawControl( QStyle::CE_PushButton, p, this, QRect( 0, 0, width()-12, height() ), isEnabled() ? colorGroup() : palette().disabled() );
 
-        style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( width()-13, 0, 13, height() ), isEnabled() ? colorGroup() : palette().disabled() );
+        style().drawControl( QStyle::CE_PushButton, p, this, QRect( width()-13, 0, 13, height() ), isEnabled() ? colorGroup() : palette().disabled() );
         style().drawItem( p, QRect( width()-13, 0, 13, height() ), AlignCenter, colorGroup(), isEnabled(), &arrow_pix, QString::null );
         DRAW_PIXMAP_AND_TEXT
       }
