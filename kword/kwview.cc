@@ -2157,38 +2157,72 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
     }
 }
 
+// Make room for refZOrder, by raising all z-orders above it by 1
+void KWView::increaseAllZOrdersAbove(int refZOrder, int pageNum, const QPtrList<KWFrame> frameSelection) {
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( pageNum, false );
+    for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
+        if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore frames we selected.
+        if(frameIt.current()->zOrder() >= refZOrder) {
+            frameIt.current()->setZOrder( frameIt.current()->zOrder() + 1 );
+        }
+    }
+}
+
+// Make room for refZOrder, by lowering all z-orders below it by 1
+void KWView::decreaseAllZOrdersUnder(int refZOrder, int pageNum, const QPtrList<KWFrame> frameSelection) {
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( pageNum, false );
+    for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
+        if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore frames we selected.
+        if(frameIt.current()->zOrder() <= refZOrder) {
+            frameIt.current()->setZOrder( frameIt.current()->zOrder() - 1 );
+        }
+    }
+}
+
 int KWView::raiseFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
     int newZOrder = 10000;
-    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum() );
+    QValueList<int> zorders;
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
         if(! frameIt.current()->intersects(*frame)) continue; // only frames that I intersect with.
-        if(frameIt.current()->zOrder() > frame->zOrder()) {
-            newZOrder=QMIN(newZOrder, frameIt.current()->zOrder() +1);
+        int z = frameIt.current()->zOrder();
+        if(z > frame->zOrder()) {
+            newZOrder=QMIN(newZOrder, z + 1);
         }
+        zorders.append( z );
     }
     if(newZOrder==10000) return frame->zOrder();
+    // Ensure that newZOrder is "free"
+    if ( zorders.find( newZOrder ) != zorders.end() )
+        increaseAllZOrdersAbove( newZOrder, frame->pageNum(), frameSelection );
     return newZOrder;
 }
 
 int KWView::lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
     int newZOrder = -10000;
-    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum() );
+    QValueList<int> zorders;
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
         if(frameIt.current()->frameSet()->isMainFrameset()) continue; // ignore main frameset.
         if(! frameIt.current()->intersects(*frame)) continue; // only frames that I intersect with.
-        if(frameIt.current()->zOrder() < frame->zOrder()) {
-            newZOrder=QMAX(newZOrder, frameIt.current()->zOrder() -1);
+        int z = frameIt.current()->zOrder();
+        if(z < frame->zOrder()) {
+            newZOrder=QMAX(newZOrder, z -1);
         }
+        zorders.append( z );
     }
     if(newZOrder==-10000) return frame->zOrder();
+    // Ensure that newZOrder is "free"
+    if ( zorders.find( newZOrder ) != zorders.end() )
+        decreaseAllZOrdersUnder( newZOrder, frame->pageNum(), frameSelection );
     return newZOrder;
 }
 
 int KWView::bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
     int newZOrder = frame->zOrder();
-    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum());
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
         if(! frameIt.current()->intersects(*frame)) continue; // only frames that I intersect with.
@@ -2199,7 +2233,7 @@ int KWView::bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *
 
 int KWView::sendToBack(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
     int newZOrder = frame->zOrder();
-    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum() );
+    QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNum(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
         if(frameIt.current()->frameSet()->isMainFrameset()) continue; // ignore main frameset.
