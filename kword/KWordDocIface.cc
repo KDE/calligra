@@ -532,7 +532,18 @@ void KWordDocIface::setConfigAddCompletionWord( bool b )
 {
     doc->getAutoFormat()->configAddCompletionWord( b );
 }
+
 bool KWordDocIface::configAddCompletionWord() const
 {
     return doc->getAutoFormat()->getConfigAddCompletionWord();
+}
+
+bool KWordDocIface::configIncludeTwoUpperUpperLetterException() const
+{
+    return doc->getAutoFormat()->getConfigIncludeTwoUpperUpperLetterException();
+}
+
+void KWordDocIface::setConfigIncludeTwoUpperUpperLetterException( bool b)
+{
+    doc->getAutoFormat()->configIncludeTwoUpperUpperLetterException( b );
 }

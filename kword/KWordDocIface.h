@@ -155,6 +155,9 @@ k_dcop:
     void setConfigAddCompletionWord( bool b );
     bool configAddCompletionWord() const;
 
+    bool configIncludeTwoUpperUpperLetterException() const;
+    void setConfigIncludeTwoUpperUpperLetterException( bool b);
+
     //init/save config
     virtual void initConfig();
     virtual void saveConfig();
