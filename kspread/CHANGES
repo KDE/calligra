@@ -5,7 +5,7 @@ Bugfixes:
 - Fix crash on printout when printrange was one row or one column only
 - Small fix: "14: 4 am" is now "14:04 am"
 - Fix scroll to end of sheet when zoomed
-
+- Fix repainting cells too many times
 
 
 Changes from 1.1 to 1.2

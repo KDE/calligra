@@ -1813,6 +1813,11 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 			     KSpreadView* view, const QPair<double, double> &coordinate,
 			     const QPoint &cellRef, bool drawCursor )
 {
+  if ( testFlag( Flag_PaintingCell ) )
+    return;
+
+  setFlag( Flag_PaintingCell );
+
   static int paintingObscured = 0;
   /* this flag indicates that we are working on drawing the cells that a cell
      is obscuring.  The value is the number of levels down we are currently
@@ -1863,7 +1868,10 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 
   QRect r2( corner.x(), corner.y(), width, height );
   if ( !r2.intersects( rect ) )
+  {
+    clearFlag( Flag_PaintingCell );
     return;
+  }
 
   if ( !isObscuringForced() )
   {
@@ -1947,6 +1955,8 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
       painter.restore();
     }
   }
+
+  clearFlag( Flag_PaintingCell );
 }
 /* the following code was commented out in the above function.  I'll leave
    it here in case this functionality is ever re-implemented and someone
