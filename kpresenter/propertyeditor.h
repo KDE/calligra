@@ -32,6 +32,7 @@ class BrushProperty;
 class RectProperty;
 class PolygonProperty;
 class PieProperty;
+class PictureProperty;
 class TextProperty;
 class KPObjectProperties;
 
@@ -55,6 +56,7 @@ private:
     void setupTabRect();
     void setupTabPolygon();
     void setupTabPie();
+    void setupTabPicture();
     void setupTabText();
     void setupTabGeneral();
 
@@ -69,6 +71,7 @@ private:
     RectProperty *m_rectProperty;
     PolygonProperty *m_polygonProperty;
     PieProperty *m_pieProperty;
+    PictureProperty *m_pictureProperty;
     TextProperty *m_textProperty;
     GeneralProperty *m_generalProperty;
 

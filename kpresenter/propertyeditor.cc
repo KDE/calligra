@@ -29,6 +29,7 @@
 #include "rectproperty.h"
 #include "polygonproperty.h"
 #include "pieproperty.h"
+#include "pictureproperty.h"
 #include "textproperty.h"
 #include "kpobjectproperties.h"
 
@@ -44,6 +45,7 @@ PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page
     , m_rectProperty( 0 )
     , m_polygonProperty( 0 )
     , m_pieProperty( 0 )
+    , m_pictureProperty( 0 )
     , m_textProperty( 0 )
     , m_generalProperty( 0 )
     , m_objectProperties( 0 )
@@ -162,6 +164,23 @@ KCommand * PropertyEditor::getCommand()
         {
             PieValueCmd *cmd = new PieValueCmd( i18n("Apply Styles"), m_pieProperty->getPieValues(),
                                                 m_objects, m_doc, m_page, change );
+            if ( !macro )
+            {
+                macro = new KMacroCommand( i18n( "Apply Properties" ) );
+            }
+
+            macro->addCommand( cmd );
+        }
+    }
+
+    if ( m_pictureProperty )
+    {
+        int change = m_pictureProperty->getPicturePropertyChange();
+
+        if ( change )
+        {
+            PictureSettingCmd *cmd = new PictureSettingCmd( i18n("Apply Styles"), m_pictureProperty->getPictureSettings(),
+                                                            m_objects, m_doc, m_page, change );
             if ( !macro )
             {
                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
@@ -314,6 +333,9 @@ void PropertyEditor::setupTabs()
     if ( flags & KPObjectProperties::PtPie )
         setupTabPie();
 
+    if ( flags & KPObjectProperties::PtPicture )
+        setupTabPicture();
+
     if ( flags & KPObjectProperties::PtText )
         setupTabText();
 
@@ -387,6 +409,16 @@ void PropertyEditor::setupTabPie()
     {
         m_pieProperty = new PieProperty( this, 0, m_objectProperties->getPieValues() );
         addTab( m_pieProperty, i18n("P&ie" ) );
+    }
+}
+
+
+void PropertyEditor::setupTabPicture()
+{
+    if ( m_pictureProperty == 0 )
+    {
+        m_pictureProperty = new PictureProperty( this, 0, m_objectProperties->getPixmap(), m_objectProperties->getPictureSettings() );
+        addTab( m_pictureProperty, i18n("Pict&ure" ) );
     }
 }
 
@@ -477,6 +509,8 @@ void PropertyEditor::slotDone()
         m_polygonProperty->apply();
     if ( m_pieProperty )
         m_pieProperty->apply();
+    if ( m_pictureProperty )
+        m_pictureProperty->apply();
     if ( m_textProperty )
         m_textProperty->apply();
     if ( m_generalProperty )

@@ -46,7 +46,10 @@ public:
     int getPropertyFlags() { return m_flags; }
 
     /// get pie properties
-    PieValueCmd::PieValues getPieValues() { return m_pieValues; }
+    PieValueCmd::PieValues getPieValues() const { return m_pieValues; }
+    // get picture properties
+    PictureSettingCmd::PictureSettings getPictureSettings() const { return m_pictureSettings; }
+    const QPixmap &getPixmap() const { return m_pixmap; }
     /// get text properties
     MarginsStruct getMarginsStruct() { return m_marginsStruct; }
     PropValue getProtectContent() { return m_protectContent; }
@@ -55,6 +58,7 @@ protected:
     void getProperties( const QPtrList<KPObject> &objects );
 
     void getPieProperties( KPObject *object );
+    void getPictureProperties( KPObject *object );
     void getTextProperties( KPObject *object );
 
 private:
@@ -63,6 +67,9 @@ private:
 
     /// pie properties
     PieValueCmd::PieValues m_pieValues;
+    /// picture properties
+    PictureSettingCmd::PictureSettings m_pictureSettings;
+    QPixmap m_pixmap;
     /// text properties
     MarginsStruct m_marginsStruct;
     PropValue m_protectContent;

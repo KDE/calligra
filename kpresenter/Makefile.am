@@ -61,6 +61,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	generalpropertyui.ui generalproperty.cc \
 	polygonpropertyui.ui polygonproperty.cc \
 	piepropertyui.ui pieproperty.cc \
+	picturepropertyui.ui pictureproperty.cc \
 	marginui.ui kpmarginwidget.cc textproperty.cc \
 	kpobjectproperties.cc \
 	propertyeditor.cc \

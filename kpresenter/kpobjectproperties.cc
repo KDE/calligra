@@ -26,6 +26,7 @@
 #include "kpcubicbeziercurveobject.h"
 #include "kpgroupobject.h"
 #include "kppieobject.h"
+#include "kppixmapobject.h"
 #include "kppointobject.h"
 #include "kpquadricbeziercurveobject.h"
 #include "kptextobject.h"
@@ -90,7 +91,7 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
                 break;
             case OT_CLIPART:
             case OT_PICTURE:
-                m_flags |= PtPen | PtBrush | PtPicture;
+                getPictureProperties( it.current() );
                 break;
             case OT_GROUP:
                 {
@@ -122,6 +123,25 @@ void KPObjectProperties::getPieProperties( KPObject *object )
             m_flags |= PtPen | PtPie;
             if ( obj->getPieType() != PT_ARC )
                 m_flags |= PtBrush;
+        }
+    }
+}
+
+
+void KPObjectProperties::getPictureProperties( KPObject *object )
+{
+    if ( !( m_flags & PtPicture ) )
+    {
+        KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( object );
+        if ( obj )
+        {
+            m_pictureSettings.mirrorType = obj->getPictureMirrorType();
+            m_pictureSettings.depth = obj->getPictureDepth();
+            m_pictureSettings.swapRGB = obj->getPictureSwapRGB();
+            m_pictureSettings.grayscal = obj->getPictureGrayscal();
+            m_pictureSettings.bright = obj->getPictureBright();
+            m_pixmap = obj->getOriginalPixmap();
+            m_flags |= PtPen | PtBrush | PtPicture;
         }
     }
 }
