@@ -3020,11 +3020,11 @@ void KSpreadCell::checkValue()
         {
          tmp=m_strText.mid(0,m_strText.length()-stringPm.length());
          tmp=tmp.simplifyWhiteSpace();
-         if(!(tmpTime=KGlobal::locale()->readTime(tmp+" "+stringPm)).isNull())
+         if((tmpTime=KGlobal::locale()->readTime(tmp+" "+stringPm)).isValid())
                 {
                 valid=true;
                 }
-         else if(!(tmpTime=KGlobal::locale()->readTime(tmp+":00 "+stringPm)).isNull())
+         else if((tmpTime=KGlobal::locale()->readTime(tmp+":00 "+stringPm)).isValid())
                 {
                 valid=true;
                 }
@@ -3033,11 +3033,11 @@ void KSpreadCell::checkValue()
         {
          tmp=m_strText.mid(0,m_strText.length()-stringAm.length());
          tmp=tmp.simplifyWhiteSpace();
-         if(!(tmpTime=KGlobal::locale()->readTime(tmp+" "+stringAm)).isNull())
+         if((tmpTime=KGlobal::locale()->readTime(tmp+" "+stringAm)).isValid())
                 {
                 valid=true;
                 }
-         else if(!(tmpTime=KGlobal::locale()->readTime(tmp+":00 "+stringAm)).isNull())
+         else if((tmpTime=KGlobal::locale()->readTime(tmp+":00 "+stringAm)).isValid())
                 {
                 valid=true;
                 }
@@ -3834,7 +3834,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
 	    second = t.right(t.length()-pos1-1).toInt();
 	    m_Time = QTime(hours,minutes,second);
-	    if(!m_Time.isNull() )
+	    if(m_Time.isValid() )
                 setCellText(KGlobal::locale()->formatTime(m_Time,true),false);
 	    else
                 setCellText( pasteOperation( t, m_strText, op ), false );
