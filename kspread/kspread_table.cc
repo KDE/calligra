@@ -5888,8 +5888,6 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
         shiftColumn(rect,false);
         }
     }
-
-
 }
 
 void KSpreadTable::deleteCells( const QRect& rect )

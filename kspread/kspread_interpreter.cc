@@ -2266,6 +2266,24 @@ static bool kspreadfunc_round( KSContext& context )
   return true;
 }
 
+static QString kspreadfunc_create_complex( double real,double imag )
+{
+  QString tmp,tmp2;
+  if(imag ==0)
+        {
+        tmp=tmp.setNum( real);
+        return tmp;
+        }
+  if(real!=0)
+        tmp=tmp.setNum(real);
+  if (imag >0)
+        tmp=tmp+"+"+tmp2.setNum(imag)+"i";
+  else
+        tmp=tmp+tmp2.setNum(imag)+"i";
+  return tmp;
+
+}
+
 static bool kspreadfunc_complex( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -2283,20 +2301,332 @@ static bool kspreadfunc_complex( KSContext& context )
         context.setValue( new KSValue(args[0]->doubleValue()));
         return true;
         }
-  QString tmp,tmp2;
-  tmp=tmp.setNum(args[0]->doubleValue());
-  if( args[1]->doubleValue() <0)
+  QString tmp=kspreadfunc_create_complex(args[0]->doubleValue(),args[1]->doubleValue());
+  bool ok;
+  double result=tmp.toDouble(&ok);
+  if(ok)
         {
-        tmp=tmp+tmp2.setNum(args[1]->doubleValue())+"i";
-        }
-  else if (args[1]->doubleValue() >0)
-        {
-        tmp=tmp+"+"+tmp2.setNum(args[1]->doubleValue())+"i";
+        context.setValue( new KSValue(result));
+        return true;
         }
   context.setValue( new KSValue(tmp));
 
   return true;
 }
+
+
+static double imag_complexe(QString str, bool &ok)
+{
+QString tmp=str;
+if(tmp.find('i')==-1)
+        {  //not a complex
+        ok=true;
+        return 0;
+        }
+else if( tmp.length()==1)
+        {
+        // i
+        ok=true;
+        return 1;
+        }
+else  if( tmp.length()==2 )
+        {
+        //-i,+i,
+        int pos1;
+        if((pos1=tmp.find('+'))!=-1&& pos1==0)
+                {
+                ok=true;
+                return 1;
+                }
+        else if( (pos1=tmp.find('-'))!=-1 && pos1==0 )
+                {
+                ok=true;
+                return -1;
+                }
+        else if(tmp[0].isDigit())
+                { //5i
+                ok=true;
+                return tmp.left(1).toDouble();
+                }
+        else
+                {
+                ok=false;
+                return 0;
+                }
+        }
+else
+        {//12+12i
+        int pos1,pos2;
+        if((pos1=tmp.find('i'))!=-1)
+                {
+                double val;
+                QString tmpStr;
+
+                if((pos2=tmp.findRev('+'))!=-1 && pos2!=0)
+                        {
+                        if((pos1-pos2)==1)
+                                {
+                                 ok=true;
+                                 return 1;
+                                }
+                        else
+                                {
+                                tmpStr=tmp.mid(pos2,(pos1-pos2));
+                                val=tmpStr.toDouble(&ok);
+                                if(!ok)
+                                        val=0;
+                                return val;
+                                }
+                        }
+                else if( (pos2=tmp.findRev('-'))!=-1&& pos2!=0)
+                        {
+                        if((pos1-pos2)==1)
+                                {
+                                 ok=true;
+                                 return -1;
+                                }
+                        else
+                                {
+                                tmpStr=tmp.mid(pos2,(pos1-pos2));
+                                val=tmpStr.toDouble(&ok);
+                                if(!ok)
+                                        val=0;
+                                return val;
+                                }
+                        }
+                else
+                        {//15.55i
+                        tmpStr=tmp.left(pos1);
+                        val=tmpStr.toDouble(&ok);
+                        if(!ok)
+                                val=0;
+                        return val;
+                        }
+                }
+        }
+ok=false;
+return 0;
+}
+
+static bool kspreadfunc_complex_imag( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMAGINARY",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp=tmp.setNum( args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  bool good;
+  double result=imag_complexe(tmp, good);
+  if(good)
+        context.setValue( new KSValue(result));
+  else
+        context.setValue( new KSValue(i18n("Err")));
+
+  return true;
+}
+
+
+static double real_complexe(QString str, bool &ok)
+{
+double val;
+int pos1,pos2;
+QString tmp=str;
+QString tmpStr;
+if((pos1=tmp.find('i'))==-1)
+        { //12.5
+        val=tmp.toDouble(&ok);
+        if(!ok)
+                val=0;
+        return val;
+        }
+else
+        { //15-xi
+        if((pos2=tmp.findRev('-'))!=-1 && pos2!=0)
+                {
+                tmpStr=tmp.left(pos2);
+                val=tmpStr.toDouble(&ok);
+                if(!ok)
+                        val=0;
+                return val;
+                } //15+xi
+        else if((pos2=tmp.findRev('+'))!=-1)
+                {
+                tmpStr=tmp.left(pos2);
+                val=tmpStr.toDouble(&ok);
+                if(!ok)
+                        val=0;
+                return val;
+                }
+        else
+                {
+                ok=true;
+                return 0;
+                }
+        }
+
+ok=false;
+return 0;
+}
+
+static bool kspreadfunc_complex_real( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMREAL",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp=tmp.setNum( args[0]->doubleValue());
+        }
+  else
+        tmp=args[0]->stringValue();
+  bool good;
+  double result=real_complexe(tmp, good);
+  if(good)
+        context.setValue( new KSValue(result));
+  else
+        context.setValue( new KSValue(i18n("Err")));
+
+  return true;
+}
+
+
+static bool kspreadfunc_imsum_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_imsum_helper( context, (*it)->listValue(), result ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
+      {
+      double imag,real,imag1,real1;
+      bool ok;
+      imag=imag_complexe(result, ok);
+      real=real_complexe(result,  ok);
+      imag1=imag_complexe((*it)->stringValue(), ok);
+      real1=real_complexe((*it)->stringValue(), ok);
+      result=kspreadfunc_create_complex(real+real1,imag+imag1);
+      }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
+      double imag,real,imag1,real1;
+      bool ok;
+      imag=imag_complexe(result, ok);
+      real=real_complexe(result,  ok);
+      imag1=0;
+      real1=(*it)->doubleValue();
+      result=kspreadfunc_create_complex(real+real1,imag+imag1);
+      }
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_imsum( KSContext& context )
+{
+  QString result ;
+  bool b = kspreadfunc_imsum_helper( context, context.value()->listValue(), result );
+  bool ok;
+  QString tmp;
+  double val=result.toDouble(&ok);
+  if(ok&&b)
+        context.setValue( new KSValue( val ) );
+  else if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+static bool kspreadfunc_imsub_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_imsub_helper( context, (*it)->listValue(), result ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
+      {
+      double imag,real,imag1,real1;
+      bool ok;
+      cout <<"REsult avant :"<<result.ascii()<<endl;
+      if(!result.isEmpty())
+        {
+        imag=imag_complexe(result, ok);
+        real=real_complexe(result,  ok);
+        imag1=imag_complexe((*it)->stringValue(), ok);
+        real1=real_complexe((*it)->stringValue(), ok);
+        result=kspreadfunc_create_complex(real-real1,imag-imag1);
+        }
+      else
+        {
+        imag1=imag_complexe((*it)->stringValue(), ok);
+        real1=real_complexe((*it)->stringValue(), ok);
+        result=kspreadfunc_create_complex(real1,imag1);
+        }
+        cout <<"REsult apreq :"<<result.ascii()<<endl;
+      }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
+      double imag,real,imag1,real1;
+      bool ok;
+      imag=imag_complexe(result, ok);
+      real=real_complexe(result,  ok);
+      imag1=0;
+      real1=(*it)->doubleValue();
+      if(!result.isEmpty())
+        result=kspreadfunc_create_complex(real-real1,imag-imag1);
+      else
+        result=kspreadfunc_create_complex(real1,imag1);
+      cout <<"Result2 :"<<result.ascii()<<endl;
+      }
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_imsub( KSContext& context )
+{
+  QString result ;
+  bool b = kspreadfunc_imsub_helper( context, context.value()->listValue(), result );
+  bool ok;
+  QString tmp;
+  double val=result.toDouble(&ok);
+  if(ok&&b)
+        context.setValue( new KSValue( val ) );
+  else if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
 
 static bool kspreadfunc_polr( KSContext& context )
 {
@@ -2577,6 +2907,10 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "POLA", new KSValue( new KSBuiltinFunction( module,"POLA",kspreadfunc_pola) ) );
   module->addObject( "CARX", new KSValue( new KSBuiltinFunction( module,"CARX",kspreadfunc_carx) ) );
   module->addObject( "CARY", new KSValue( new KSBuiltinFunction( module,"CARY",kspreadfunc_cary) ) );
+  module->addObject( "IMAGINARY", new KSValue( new KSBuiltinFunction( module,"IMAGINARY",kspreadfunc_complex_imag) ) );
+  module->addObject( "IMREAL", new KSValue( new KSBuiltinFunction( module,"IMREAL",kspreadfunc_complex_real) ) );
+  module->addObject( "IMSUM", new KSValue( new KSBuiltinFunction( module, "IMSUM", kspreadfunc_imsum ) ) );
+  module->addObject( "IMSUB", new KSValue( new KSBuiltinFunction( module, "IMSUB", kspreadfunc_imsub ) ) );
   return module;
 }
 

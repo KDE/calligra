@@ -1240,7 +1240,116 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>COMPLEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Real coefficient</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Imaginary coefficient</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The COMPLEX(real,imag) returns a complex number of form x+yi.</Text>
+	<Syntax>COMPLEX( real; imag )</Syntax>
+	<Example>COMPLEX(1.2;3.4) returns "1.2+3.4i"</Example>
+	<Example>COMPLEX(0;-1) returns "-i"</Example>
+      </Help>
+    </Function>
 
+    <Function>
+      <Name>IMAGINARY</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMAGINARY(string)  returns the imaginary coefficient of a complex.</Text>
+	<Syntax>IMAGINARY(string )</Syntax>
+	<Example>IMAGINARY("1.2+3.4i") returns 3.4</Example>
+	<Example>IMAGINARY("1.2") returns 0 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMREAL</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMREAL(string)  returns the real coefficient of a complex.</Text>
+	<Syntax>IMREAL(string )</Syntax>
+	<Example>IMREAL("1.2+3.4i") returns 1.2</Example>
+	<Example>IMAGINARY("1.2i") returns 0 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSUM</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSUM() returns the sum of severial complex number of form x+yi.</Text>
+	<Syntax>IMSUM( values; value; ... )</Syntax>
+	<Example>IMSUM(1.2;"3.4+5i") returns "4.6+5i"</Example>
+	<Example>IMSUM(1.2;"1i") returns "1.2+i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSUB</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSUB() returns the difference of several complex number of form x+yi.</Text>
+	<Syntax>IMSUB( values; value; ... )</Syntax>
+	<Example>IMSUB(1.2;"3.4+5i") returns "-2.2-5i"</Example>
+	<Example>IMSUB(1.2;"1i") returns "1.2-i"</Example>
+      </Help>
+    </Function>
   </Group>
   <Group>
     <GroupName>Logic</GroupName>

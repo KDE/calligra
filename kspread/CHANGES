@@ -1081,3 +1081,9 @@ compatibility with old function you can used against DECHEX, DECOCT, DECBIN
 2000-11-21-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 Now you can copy and insert in same time (For the moment just for column/row)
+
+2000-11-22-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now kspread understands complex number
+you can add /sub complex number
+COMPLEX, IMREAL, IMAGINARY, IMSUB, IMSUM
