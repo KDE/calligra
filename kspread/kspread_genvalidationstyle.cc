@@ -125,7 +125,7 @@ void KSpreadGenValidationStyle::initVal( KSpreadValidity *_val )
         }
 
         titleInfo = _val->titleInfo;
-        displayMessage = _val->displayMessage;
+        displayMessage = ( _val->displayMessage ? "true" : "false" );
         message = _val->message;
     }
 }
