@@ -406,6 +406,7 @@
 	<Example>PMT(0.1; 4; 10000) equals -3154.71</Example>
         <Related>NPER</Related>
 	<Related>IPMT</Related>
+	<Related>PPMT</Related>
         <Related>PV</Related>
       </Help>
     </Function>
