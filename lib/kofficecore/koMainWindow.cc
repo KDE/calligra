@@ -841,7 +841,7 @@ void KoMainWindow::print(bool quick) {
     // ### TODO: apply global koffice settings here
 
     rootView()->setupPrinter( printer );
-    
+
     if ( quick ||  printer.setup( this ) )
         rootView()->print( printer );
 }
@@ -1231,10 +1231,16 @@ void KoMainWindow::slotEmailFile()
    QString fileURL = d->m_rootDoc->url().url();
    QString theSubject = d->m_rootDoc->url().fileName(false);
    kdDebug(30003) << "(" << fileURL <<")" << endl;
-
+   QStringList urls;
+   urls.append( fileURL );
    if (!fileURL.isEmpty())
-       kapp->invokeMailer("mailto:?subject=" + theSubject +
-                          "&attach=" + fileURL);
+       kapp->invokeMailer(QString::null, QString::null, QString::null, theSubject,
+                          QString::null, //body
+                          QString::null,
+                          urls); // attachments
+
+   /*kapp->invokeMailer("mailto:?subject=" + theSubject +
+     "&attach=" + fileURL);*/
    else
        KMessageBox::detailedSorry (0, i18n("ERROR: File not found."),
                                    i18n("To send a file you must first have saved the file to the filesystem."),
