@@ -32,6 +32,7 @@
 #include <qkeycode.h>
 
 #include <kapp.h>
+#include <kstdaccel.h>
 #include <kiconloader.h>
 
 KoMainWindow::KoMainWindow( const char *_name )
@@ -138,34 +139,41 @@ void KoMainWindow::createFileMenu( OPMenuBar* _menubar )
     return;
   }
 
+  bool bInsertFileMenu = false;
   m_pFileMenu = _menubar->fileMenu();
   if ( m_pFileMenu == 0L )
   {
+    bInsertFileMenu = true;
+    debug("Creating File Menu in koMainWindow.cc");
     m_pFileMenu = new OPMenu( _menubar );
-
-    _menubar->insertItem( i18n( "&File" ), m_pFileMenu, -1, 0 );
   }
   else
     m_pFileMenu->insertSeparator();    
 
-  m_idMenuFile_New = m_pFileMenu->insertItem( Icon( "filenew.xpm" ) , i18n( "&New" ), this, SLOT( slotFileNew() ), CTRL + Key_N );
-  m_idMenuFile_Open = m_pFileMenu->insertItem( Icon( "fileopen.xpm" ), i18n( "&Open..." ), this, SLOT( slotFileOpen() ), CTRL + Key_O );
+// Do we really want to add new, open, save, ... to a menu already containing those ??? (David)
+
+  KStdAccel stdAccel;
+  m_idMenuFile_New = m_pFileMenu->insertItem( Icon( "filenew.xpm" ) , i18n( "&New" ), this, SLOT( slotFileNew() ), stdAccel.openNew() );
+  m_idMenuFile_Open = m_pFileMenu->insertItem( Icon( "fileopen.xpm" ), i18n( "&Open..." ), this, SLOT( slotFileOpen() ), stdAccel.open() );
   m_pFileMenu->insertSeparator(-1);
-  m_idMenuFile_Save = m_pFileMenu->insertItem( Icon( "filefloppy.xpm" ), i18n( "&Save" ), this, SLOT( slotFileSave() ), CTRL + Key_S );
+  m_idMenuFile_Save = m_pFileMenu->insertItem( Icon( "filefloppy.xpm" ), i18n( "&Save" ), this, SLOT( slotFileSave() ), stdAccel.save() );
   m_pFileMenu->setItemEnabled( m_idMenuFile_Save, false );
   
   m_idMenuFile_SaveAs = m_pFileMenu->insertItem( i18n( "&Save as..." ), this, SLOT( slotFileSaveAs() ) );
   m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, false );
 
   m_pFileMenu->insertSeparator(-1);
-  m_idMenuFile_Print = m_pFileMenu->insertItem( i18n( "&Print..." ), this, SLOT( slotFilePrint() ) );
+  m_idMenuFile_Print = m_pFileMenu->insertItem( Icon( "fileprint.xpm" ), i18n( "&Print..." ), this, SLOT( slotFilePrint() ),  stdAccel.print() );
   m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
   
   m_pFileMenu->insertSeparator(-1);
-  m_idMenuFile_Close = m_pFileMenu->insertItem( i18n( "&Close" ), this, SLOT( slotFileClose() ), CTRL + Key_W );
+  m_idMenuFile_Close = m_pFileMenu->insertItem( i18n( "&Close" ), this, SLOT( slotFileClose() ), stdAccel.close() );
   m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
   
-  m_idMenuFile_Quit = m_pFileMenu->insertItem( i18n( "&Quit" ), this, SLOT( slotFileQuit() ), CTRL + Key_Q );
+  m_idMenuFile_Quit = m_pFileMenu->insertItem( Icon( "exit.xpm" ), i18n( "&Quit" ), this, SLOT( slotFileQuit() ), stdAccel.quit() );
+
+  if (bInsertFileMenu)
+    _menubar->insertItem( i18n( "&File" ), m_pFileMenu, -1, 0 );
 }
 
 void KoMainWindow::createHelpMenu( OPMenuBar* _menubar )
