@@ -25,7 +25,7 @@
 #include <kexidb/driver.h>
 #include <kexidb/expression.h>
 
-// we use here I18N_NOOP() but this depends on kde libs: TODO: add #ifdefs
+// we use here i18n() but this depends on kde libs: TODO: add #ifdefs
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -142,26 +142,31 @@ QVariant::Type Field::variantType(uint type)
 
 QString Field::typeName(uint type)
 {
+	m_typeNames.init();
 	return (type <= LastType) ? m_typeNames.at(type) : QString::number(type);
 }
 
 QString Field::typeString(uint type)
 {
+	m_typeNames.init();
 	return (type <= LastType) ? m_typeNames.at((int)LastType+1 + type) : QString("Type%1").arg(type);
 }
 
 QString Field::typeGroupName(uint typeGroup)
 {
+	m_typeGroupNames.init();
 	return (typeGroup <= LastTypeGroup) ? m_typeGroupNames.at(typeGroup) : typeGroupString(typeGroup);
 }
 
 QString Field::typeGroupString(uint typeGroup)
 {
+	m_typeGroupNames.init();
 	return (typeGroup <= LastTypeGroup) ? m_typeGroupNames.at((int)LastTypeGroup+1 + typeGroup) : QString("TypeGroup%1").arg(typeGroup);
 }
 
 Field::Type Field::typeForString(const QString typeString)
 {
+	m_typeNames.init();
 	if (m_typeNames.str2num.find(typeString)==m_typeNames.str2num.end())
 		return InvalidType;
 	return m_typeNames.str2num[typeString];
@@ -169,6 +174,7 @@ Field::Type Field::typeForString(const QString typeString)
 
 Field::TypeGroup Field::typeGroupForString(const QString typeGroupString)
 {
+	m_typeGroupNames.init();
 	if (m_typeGroupNames.str2num.find(typeGroupString)==m_typeGroupNames.str2num.end())
 		return InvalidGroup;
 	return m_typeGroupNames.str2num[typeGroupString];
@@ -556,39 +562,55 @@ void Field::setExpression(KexiDB::Expression *expr)
 
 Field::FieldTypeNames::FieldTypeNames()
  : QValueVector<QString>()
+ , m_initialized(false)
 {
+}
+
+void Field::FieldTypeNames::init()
+{
+	if (m_initialized)
+		return;
+	m_initialized = true;
 	resize((Field::LastType + 1)*2);
 
-	ADDTYPE( InvalidType, I18N_NOOP("Invalid type"), "InvalidType" );
-	ADDTYPE( Byte, I18N_NOOP("Byte"), "Byte" );
-	ADDTYPE( ShortInteger, I18N_NOOP("Short integer number"), "ShortInteger" );
-	ADDTYPE( Integer, I18N_NOOP("Integer number"), "Integer" );
-	ADDTYPE( BigInteger, I18N_NOOP("Big integer number"), "BigInteger" );
-	ADDTYPE( Boolean, I18N_NOOP("Yes/No value"), "Boolean" );
-	ADDTYPE( Date, I18N_NOOP("Date"), "Date" );
-	ADDTYPE( DateTime, I18N_NOOP("Date and time"), "DateTime" );
-	ADDTYPE( Time, I18N_NOOP("Time"), "Time" );
-	ADDTYPE( Float, I18N_NOOP("Single precision number"), "Float" );
-	ADDTYPE( Double, I18N_NOOP("Double precision number"), "Double" );
-	ADDTYPE( Text, I18N_NOOP("Text"), "Text" );
-	ADDTYPE( LongText, I18N_NOOP("Long text"), "LongText" );
-	ADDTYPE( BLOB, I18N_NOOP("Object"), "BLOB" );
+	ADDTYPE( InvalidType, i18n("Invalid type"), "InvalidType" );
+	ADDTYPE( Byte, i18n("Byte"), "Byte" );
+	ADDTYPE( ShortInteger, i18n("Short integer number"), "ShortInteger" );
+	ADDTYPE( Integer, i18n("Integer number"), "Integer" );
+	ADDTYPE( BigInteger, i18n("Big integer number"), "BigInteger" );
+	ADDTYPE( Boolean, i18n("Yes/No value"), "Boolean" );
+	ADDTYPE( Date, i18n("Date"), "Date" );
+	ADDTYPE( DateTime, i18n("Date and time"), "DateTime" );
+	ADDTYPE( Time, i18n("Time"), "Time" );
+	ADDTYPE( Float, i18n("Single precision number"), "Float" );
+	ADDTYPE( Double, i18n("Double precision number"), "Double" );
+	ADDTYPE( Text, i18n("Text"), "Text" );
+	ADDTYPE( LongText, i18n("Long text"), "LongText" );
+	ADDTYPE( BLOB, i18n("Object"), "BLOB" );
 }
 
 //-------------------------------------------------------
 
 Field::FieldTypeGroupNames::FieldTypeGroupNames()
  : QValueVector<QString>()
+ , m_initialized(false)
 {
+}
+
+void Field::FieldTypeGroupNames::init()
+{
+	if (m_initialized)
+		return;
+	m_initialized = true;
 	resize((Field::LastTypeGroup + 1)*2);
 
-	ADDGROUP( InvalidGroup, I18N_NOOP("Invalid group"), "InvalidGroup" );
-	ADDGROUP( TextGroup, I18N_NOOP("Text"), "TextGroup" );
-	ADDGROUP( IntegerGroup, I18N_NOOP("Integer number"), "IntegerGroup" );
-	ADDGROUP( FloatGroup, I18N_NOOP("Floating point number"), "FloatGroup" );
-	ADDGROUP( BooleanGroup, I18N_NOOP("Yes/No"), "BooleanGroup" );
-	ADDGROUP( DateTimeGroup, I18N_NOOP("Date/Time"), "DateTimeGroup" );
-	ADDGROUP( BLOBGroup, I18N_NOOP("Object"), "BLOBGroup" );
+	ADDGROUP( InvalidGroup, i18n("Invalid group"), "InvalidGroup" );
+	ADDGROUP( TextGroup, i18n("Text"), "TextGroup" );
+	ADDGROUP( IntegerGroup, i18n("Integer number"), "IntegerGroup" );
+	ADDGROUP( FloatGroup, i18n("Floating point number"), "FloatGroup" );
+	ADDGROUP( BooleanGroup, i18n("Yes/No"), "BooleanGroup" );
+	ADDGROUP( DateTimeGroup, i18n("Date/Time"), "DateTimeGroup" );
+	ADDGROUP( BLOBGroup, i18n("Object"), "BLOBGroup" );
 }
 
 //-------------------------------------------------------

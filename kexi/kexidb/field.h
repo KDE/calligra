@@ -435,12 +435,20 @@ class KEXI_DB_EXPORT Field
 		Expression *m_expr;
 
 		class KEXI_DB_EXPORT FieldTypeNames : public QValueVector<QString> {
-			public: FieldTypeNames();
+			public:
+				FieldTypeNames();
+				void init();
 			QMap<QString,Type> str2num;
+			protected:
+				bool m_initialized : 1;
 		};
 		class KEXI_DB_EXPORT FieldTypeGroupNames : public QValueVector<QString> {
-			public: FieldTypeGroupNames();
+			public: 
+				FieldTypeGroupNames();
+				void init();
 			QMap<QString,TypeGroup> str2num;
+			protected:
+				bool m_initialized : 1;
 		};
 
 		//! real i18n'd type names (and not-i18n'd type name strings)
