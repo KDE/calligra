@@ -879,11 +879,7 @@ private:
     QFont tbFont;
     int tbAlign;
     QColor tbColor;
-    QStringList fontList;
 
-    bool m_bRectSelection;
-    QRect m_rctRectSelection;
-    QString m_strNewPart;
     bool m_bShowGUI;
     bool presStarted;
     bool allowWebPres;

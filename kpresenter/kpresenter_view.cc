@@ -242,7 +242,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     pieAngle = 45 * 16;
     setMouseTracking( true );
     m_bShowGUI = true;
-    m_bRectSelection = false;
     presStarted = false;
     m_autoPresRestart = false;
     m_autoPresStop = false;
