@@ -1291,3 +1291,11 @@ Reggie, 11.6.1999:
 - Some more flicker-freeness (there are some redraw errors now, I'll keep working on that)
 - Initial position of vert. scrollbar is correct now
 - Made some broken stuff working again
+
+Reggie, 13.6.1999:
+------------------
+- Text edit mode is now (more or less) totally flicker-free. In the other modes
+  there are still lots of redraw errors, but fixing that is the next step.
+- Small improvements for more efficient drawing
+
+

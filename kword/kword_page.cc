@@ -57,7 +57,8 @@
 KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     : QScrollView( parent, "" ), format( _doc ),
       blinkTimer( this ), scrollTimer( this ), cachedParag( 0L ),
-      cachedContentsPos( QPoint( -1, -1 ) ), _setErase( true )
+      cachedContentsPos( QPoint( -1, -1 ) ), _setErase( true ),
+      _resizing( false )
 {
     setKeyCompression( true );
     setFocusPolicy( QWidget::StrongFocus );
@@ -66,7 +67,6 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     recalcingText = false;
     maybeDrag = false;
 
-    viewport()->setBackgroundColor( white );
     doc = _doc;
     gui = _gui;
 
@@ -134,6 +134,10 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
 
     resizeContents( ptPaperWidth(), doc->getPages() * ptPaperHeight() );
     connect( this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( contentsWillMove( int, int ) ) );
+
+    viewport()->setBackgroundColor( white );
+    viewport()->setBackgroundMode( NoBackground );
+    repaintScreen( true ); 
 }
 
 /*================================================================*/
@@ -1581,7 +1585,7 @@ void KWPage::recalcPage( KWParag *_p )
 
     if ( blinking )
         startBlinkCursor();
-    }
+}
 
 /*================================================================*/
 bool KWPage::allowBreak1( KWFormatContext *paintfc, unsigned int i )
@@ -1655,11 +1659,36 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
             paintfc->setFrameSet( i + 1 );
             paintfc->init( p, recalcAll );
 
+            KWFrame *frame = 0L;
+            int _y = -1, _hei = -1;
             bool bend = false;
             while ( !bend )
             {
                 if ( allowBreak1( paintfc, i ) )
                     break;
+                if ( !_resizing )
+                {
+                    KWFrame *oldFrame = frame;
+                    frame = doc->getFrameSet( i )->getFrame( paintfc->getFrame() - 1 );
+                
+                    if ( oldFrame && frame && oldFrame != frame && _y >= 0 && _hei > 0 )
+                    {
+                        int li = oldFrame->getLeftIndent( _y, _hei );
+                        painter.fillRect( oldFrame->x() - contentsX() + li,
+                                          _y, oldFrame->width() - li - oldFrame->getRightIndent( _y, _hei ),
+                                          _hei, QBrush( oldFrame->getBackgroundColor() ) );
+                    }
+                        
+                    unsigned int _x = frame->x() - contentsX();
+                    unsigned int _wid = frame->width();
+                    unsigned int li = frame->getLeftIndent( paintfc->getPTY(), paintfc->getLineHeight() );
+                    QRect fr( _x + li, paintfc->getPTY() - contentsY(),
+                              _wid - li - frame->getRightIndent( paintfc->getPTY(), paintfc->getLineHeight() ),
+                              paintfc->getLineHeight() );
+                    painter.fillRect( fr, QBrush( frame->getBackgroundColor() ) );
+                    _y = fr.bottom();
+                    _hei = frame->height() - ( _y - ( frame->y() - contentsY() ) );
+                }
                 doc->printLine( *paintfc, painter, contentsX(), contentsY(), width(), height(), gui->getView()->getViewFormattingChars() );
                 bend = !paintfc->makeNextLineLayout();
                 if ( paintfc->getPage() > lastVisiblePage )
@@ -1694,6 +1723,18 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
             {
                 if ( allowBreak1( paintfc, i ) )
                     break;
+                
+                if ( !_resizing )
+                {
+                    KWFrame *frame = fs->getFrame( paintfc->getFrame() - 1 );
+                    unsigned int _x = frame->x() - contentsX();
+                    unsigned int _wid = frame->width();
+                    unsigned int li = frame->getLeftIndent( paintfc->getPTY(), paintfc->getLineHeight() );
+                    QRect fr( _x + li, paintfc->getPTY() - contentsY(),
+                              _wid - li - frame->getRightIndent( paintfc->getPTY(), paintfc->getLineHeight() ),
+                              paintfc->getLineHeight() );
+                    painter.fillRect( fr, QBrush( fs->getFrame( 0 )->getBackgroundColor() ) );
+                }
                 doc->printLine( *paintfc, painter, contentsX(), contentsY(), width(), height(), gui->getView()->getViewFormattingChars() );
                 bend = !paintfc->makeNextLineLayout();
                 if ( paintfc->getPage() > lastVisiblePage )
@@ -1752,13 +1793,11 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
         _erase = e->erased();
     _setErase = false;
     
-    if ( ( doc->getPageLayoutChanged() ||
-           QPoint( contentsX(), contentsY() ) != cachedContentsPos )
-         && _erase )
+    if ( _erase && !_resizing )
         painter.eraseRect( e->rect().x(), e->rect().y(),
                            e->rect().width(), e->rect().height() );
 
-    drawBorders( painter, e->rect(), _erase );
+    drawBorders( painter, e->rect(), _erase && !_resizing );
 
     KWFormatContext *paintfc = new KWFormatContext( doc, 1 );
     for ( unsigned i = 0; i < doc->getNumFrameSets(); i++ )
@@ -1810,6 +1849,7 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
     while ( !bend )
     {
         bool forceDraw = false;
+        KWFrame *frame = frameSet->getFrame( paintfc.getFrame() - 1 );
         if ( paintfc.getParag() != fc->getParag() )
             forceDraw = true;
         if ( paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() &&
@@ -1820,11 +1860,11 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
              static_cast<int>( lastVisiblePage ) * static_cast<int>( ptPaperHeight() ) &&
              static_cast<int>( paintfc.getPTY() - contentsY() ) > height() )
             break;
-        if ( frameSet->getFrame( paintfc.getFrame() - 1 )->top() - static_cast<int>( contentsY() ) >
+        if ( frame->top() - static_cast<int>( contentsY() ) >
              static_cast<int>( lastVisiblePage ) * static_cast<int>( ptPaperHeight() ) )
             break;
-        unsigned int _x = frameSet->getFrame( paintfc.getFrame() - 1 )->x() - contentsX();
-        unsigned int _wid = frameSet->getFrame( paintfc.getFrame() - 1 )->width();
+        unsigned int _x = frame->x() - contentsX();
+        unsigned int _wid = frame->width();
 
         QString str = paintfc.getParag()->getKWString()->toString( paintfc.getLineStartPos(),
                                                                    paintfc.getLineEndPos() - paintfc.getLineStartPos() + 1 );
@@ -1841,11 +1881,10 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 
         if ( drawIt || forceDraw )
         {
-            painter.fillRect( _x + frameSet->getFrame( paintfc.getFrame() - 1 )->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() ),
-                              paintfc.getPTY() - contentsY(),
-                              _wid - frameSet->getFrame( paintfc.getFrame() - 1 )->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() ) -
-                              frameSet->getFrame( paintfc.getFrame() - 1 )->getRightIndent( paintfc.getPTY(), paintfc.getLineHeight() ),
-                              paintfc.getLineHeight(), QBrush( frameSet->getFrame( paintfc.getFrame() - 1 )->getBackgroundColor() ) );
+            unsigned int li = frame->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() );
+            painter.fillRect( _x + li, paintfc.getPTY() - contentsY(),
+                              _wid - li - frame->getRightIndent( paintfc.getPTY(), paintfc.getLineHeight() ),
+                              paintfc.getLineHeight(), QBrush( frame->getBackgroundColor() ) );
             doc->printLine( paintfc, painter, contentsX(), contentsY(), width(), height(), gui->getView()->getViewFormattingChars() );
         }
 
@@ -2165,12 +2204,14 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
         }
     }
 
-    recalcCursor( true, 0 );
+    recalcCursor( false, 0 );
 
+    int yp = contentsY();
     redrawAllWhileScrolling = true;
     scrollToCursor( *fc );
     redrawAllWhileScrolling = false;
-
+    bool scrolled = yp != contentsY();
+    
     QPainter painter;
     painter.begin( viewport() );
     doc->drawMarker( *fc, &painter, contentsX(), contentsY() );
@@ -2205,6 +2246,17 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
         fc->apply( _format );
     gui->getView()->setFormat( *( ( KWFormat* )fc ) );
 
+    if ( scrolled )
+    {
+        KWParag *rp = fc->getParag();
+        if ( rp->getPrev() )
+            rp = rp->getPrev();
+        
+        KWFrame *frame = frameSet->getFrame( fc->getFrame() - 1 );
+        if ( frame )
+            repaintScreen( QRect( frame->x() - contentsX(), rp->getPTYStart() - contentsY(),
+                                  frame->width(), frame->height() ), false );
+    }
     return false;
 }
 
@@ -3811,6 +3863,7 @@ void KWPage::setFrameBackgroundColor( QBrush _color )
 
     doc->updateTableHeaders( grpMgrs );
     doc->updateAllViews( 0L );
+    repaintScreen( true );
 }
 
 /*================================================================*/
@@ -4364,8 +4417,19 @@ void KWPage::resizeContents( int w, int h )
 }
 
 /*================================================================*/
+void KWPage::resizeEvent( QResizeEvent *e )
+{
+    _resizing = true;
+    QScrollView::resizeEvent( e );
+    _resizing = false;
+}
+
+/*================================================================*/
 void KWPage::viewportResizeEvent( QResizeEvent *e )
 {
+    _resizing = true;
+    _erase = false;
+    _setErase = true;
     QScrollView::viewportResizeEvent( e );
     calcVisiblePages();
 }

@@ -244,6 +244,7 @@ protected:
     virtual void viewportDragLeaveEvent( QDragLeaveEvent *e );
     virtual void viewportDropEvent( QDropEvent *e );
     virtual void viewportResizeEvent( QResizeEvent *e );
+    virtual void resizeEvent( QResizeEvent *e );
     bool isInSelection( KWFormatContext *_fc );
 
     void startProcessKeyEvent();
@@ -356,6 +357,7 @@ protected:
     QPoint cachedContentsPos;
     bool _erase;
     bool _setErase;
+    bool _resizing;
     
 };
 
