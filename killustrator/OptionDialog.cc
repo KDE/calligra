@@ -36,7 +36,7 @@
 #include <PStateManager.h>
 
 OptionDialog::OptionDialog (QWidget* parent, const char* name) :
-    KDialogBase(KDialogBase::Tabbed, i18n("Option"),
+    KDialogBase(KDialogBase::TreeList, i18n("Option"),
                 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok,
                 parent, name, true) {
     createGeneralWidget(addPage(i18n("General")));
