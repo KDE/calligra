@@ -379,6 +379,8 @@ void KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
         {
             unsigned int length = lastWord.length();
             int start = index+1 - length;
+            KMacroCommand *macro = new KMacroCommand( i18n("Completion word"));
+
             KoTextCursor cursor( parag->document() );
             cursor.setParag( parag );
             cursor.setIndex( start );
@@ -389,9 +391,20 @@ void KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( start + length );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, word,
-                                                                    KoTextObject::HighlightSelection,
-                                                                    i18n("Autocorrect word") ));
+
+            macro->addCommand( txtObj->replaceSelectionCommand( textEditCursor, word,
+                                                              KoTextObject::HighlightSelection,
+                                                              i18n("Completion word") ));
+            if ( m_completionAppendSpace && !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
+            {
+                int newPos = word.length() + index - 3;
+                lastWord = getLastWord(parag, newPos);
+                KCommand *cmd = doUpperCase( textEditCursor, parag, newPos, lastWord, txtObj );
+                if( cmd )
+                    macro->addCommand( cmd );
+            }
+            txtObj->emitNewCommand( macro );
+
             // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
             // -> go right
             txtObj->emitHideCursor();
