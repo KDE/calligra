@@ -3513,6 +3513,16 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 
     for ( i = 0; i < static_cast<unsigned int>( pages ); i++ ) {
         kapp->processEvents();
+        // don't print if outside the bounduaries printer->fromPage() / printer->toPage()
+        if ( 0 != printer->fromPage()  && i + 1 < static_cast<unsigned int>( printer->fromPage() ) ) {
+            kdDebug(32001) << "skipping page " << i+1 << ": it is less than " << printer->fromPage() << endl;
+            continue;
+        }
+        if ( 0 != printer->toPage() && i + 1 > static_cast<unsigned int>( printer->toPage() ) ) {
+            kdDebug(32001) << "end print on page " << i+1 << ": it is greater than " << printer->toPage() << endl;
+            break;
+        }
+
         QRect pageRect( 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
         unsigned int minus = 0;
         if ( i + 1 > static_cast<unsigned int>( printer->fromPage() ) )
