@@ -300,6 +300,7 @@ QString KoAutoFormat::getWordAfterSpace(KoTextParag *parag, int index)
 
 void KoAutoFormat::doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
 {
+    kdDebug()<<" m_autoCompletion :"<<m_autoCompletion<<endl;
     if( m_autoCompletion )
     {
         QString lastWord = getLastWord(parag, index+1);
@@ -335,7 +336,7 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
         readConfig();
 
     if ( !m_useBulletStyle && !m_removeSpaceBeginEndLine && !m_autoDetectUrl
-         && !m_convertUpperUpper && !m_convertUpperCase && ! m_autoReplaceNumber && m_autoChangeFormat && m_autoCompletion
+         && !m_convertUpperUpper && !m_convertUpperCase && ! m_autoReplaceNumber && !m_autoChangeFormat && !m_autoCompletion
          && !m_typographicDoubleQuotes.replace && !m_typographicSimpleQuotes.replace && m_entries.count()==0)
         return;
 
