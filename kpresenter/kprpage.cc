@@ -2033,7 +2033,7 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
     }
 
     if ( !_objects.isEmpty() ) {
-        brushCmd = new BrushCmd( i18n( "Apply Styles" ), _oldBrush, _newBrush, _objects, m_doc, flags );
+        brushCmd = new BrushCmd( i18n( "Apply Styles" ), _oldBrush, _newBrush, _objects, m_doc, this, flags );
         brushCmd->execute();
         cmd->addCommand(brushCmd);
         cmdCreate=true;
@@ -2488,7 +2488,7 @@ KCommand* KPrPage::setBrushColor( const QColor &c, bool fill, QPtrList<KPObject>
     }
 
     if ( !_objects.isEmpty() ) {
-	brushCmd = new BrushCmd( i18n( "Change Brush" ), _oldBrush, _newBrush, _objects, m_doc );
+	brushCmd = new BrushCmd( i18n( "Change Brush" ), _oldBrush, _newBrush, _objects, m_doc, this );
 	brushCmd->execute();
         cmd->addCommand( brushCmd );
         cmdCreate=true;

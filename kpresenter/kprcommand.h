@@ -500,7 +500,7 @@ public:
     };
 
     BrushCmd(const QString &_name, QPtrList<Brush> &_oldBrush, Brush _newBrush,
-             QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = All);
+             QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All);
     ~BrushCmd();
     void applyBrush(KPObject *kpobject, Brush *tmpBrush);
 
@@ -512,6 +512,7 @@ protected:
     QPtrList<Brush> oldBrush;
     QPtrList<KPObject> objects;
     Brush newBrush;
+    KPrPage *m_page;
     int flags;
 };
 

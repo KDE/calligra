@@ -1142,9 +1142,9 @@ void PenCmd::unexecute()
 /******************************************************************/
 
 BrushCmd::BrushCmd(const QString &_name, QPtrList<Brush> &_oldBrush, Brush _newBrush,
-                   QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags)
+                   QPtrList<KPObject> &_objects, KPresenterDoc *_doc,  KPrPage *_page, int _flags)
     : KNamedCommand(_name), doc(_doc), oldBrush(_oldBrush), objects(_objects),
-      newBrush(_newBrush), flags(_flags)
+      newBrush(_newBrush), m_page( _page ), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldBrush.setAutoDelete( false );
@@ -1204,6 +1204,13 @@ void BrushCmd::execute()
         applyBrush(objects.at( i ), &newBrush);
     }
     newBrush = tmpBrush;
+
+    if ( doc->refreshSideBar()) //for redo
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
+    }
+
 }
 
 void BrushCmd::applyBrush(KPObject *kpobject, Brush *tmpBrush)
@@ -1356,6 +1363,12 @@ void BrushCmd::unexecute()
             applyBrush(objects.at( i ), oldBrush.at( i ));
         }
     }
+    if ( doc->refreshSideBar()) //for redo
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
+    }
+
 }
 
 /******************************************************************/
