@@ -739,14 +739,8 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
             m_page_effect = "fade-from-center";
             break;
         case 7:
-            kdDebug()<<" this style is not defined :"<<tmp<<endl;
-            break;
         case 8:
-            kdDebug()<<" this style is not defined :"<<tmp<<endl;
-            break;
         case 9:
-            kdDebug()<<" this style is not defined :"<<tmp<<endl;
-            break;
         case 10:
             kdDebug()<<" this style is not defined :"<<tmp<<endl;
             break;
@@ -754,23 +748,11 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
             m_page_effect = "spiralin-left";
             break;
         case 12:
-            kdDebug()<<" this style is not defined :"<<tmp<<endl;
-            break;
         case 13:
-            kdDebug()<<" this style is not defined :"<<tmp<<endl;
-            break;
         case 14:
-            kdDebug()<<" this style is not defined :"<<tmp<<endl;
-            break;
         case 15:
-            kdDebug()<<" this style is not defined :"<<tmp<<endl;
-            break;
         case 16:
-            kdDebug()<<" this style is not defined :"<<tmp<<endl;
-            break;
         case 17:
-            kdDebug()<<" this style is not defined :"<<tmp<<endl;
-            break;
         case 18:
             kdDebug()<<" this style is not defined :"<<tmp<<endl;
             break;
