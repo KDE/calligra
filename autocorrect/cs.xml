@@ -583,6 +583,7 @@
   <word exception="atd." />
   <word exception="aj." />
   <word exception="tj." />
+  <word exception="resp." />
  </UpperCaseExceptions>
  <TwoUpperLetterExceptions>
   <word exception="KOffice" />
