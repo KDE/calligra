@@ -4933,8 +4933,8 @@ void Page::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
     p.setRasterOp( Qt::NotROP );
 
     double angle = 2 * M_PI / cornersValue;
-    double dx = fabs( startPoint.x () - endPoint.x () );
-    double dy =  fabs( startPoint.y () - endPoint.y () );
+    double dx = ::fabs( startPoint.x () - endPoint.x () );
+    double dy =  ::fabs( startPoint.y () - endPoint.y () );
     double radius = (dx > dy ? dx / 2.0 : dy / 2.0);
 
     double xoff = startPoint.x() + ( startPoint.x() < endPoint.x() ? radius : -radius );
