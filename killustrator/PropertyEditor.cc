@@ -59,7 +59,7 @@
 #include <Gradient.h>
 #include <BrushCells.h>
 #include <UnitBox.h>
-
+#include "KIllustrator_factory.h"
 
 #define SOLID_BOX    0
 #define PATTERN_BOX  1
@@ -259,15 +259,15 @@ void PropertyEditor::createOutlineWidget (QWidget* parent)
 
       ellipseKind[0] = new QPushButton(group);
       ellipseKind[0]->setToggleButton(true);
-      ellipseKind[0]->setPixmap (SmallIcon ("ellipse1"));
+      ellipseKind[0]->setPixmap (SmallIcon ("ellipse1",KIllustratorFactory::global()));
 
       ellipseKind[1] = new QPushButton (group);
       ellipseKind[1]->setToggleButton (true);
-      ellipseKind[1]->setPixmap (SmallIcon ("ellipse2"));
+      ellipseKind[1]->setPixmap (SmallIcon ("ellipse2",KIllustratorFactory::global()));
 
       ellipseKind[2] = new QPushButton (group);
       ellipseKind[2]->setToggleButton (true);
-      ellipseKind[2]->setPixmap (SmallIcon ("ellipse3"));
+      ellipseKind[2]->setPixmap (SmallIcon ("ellipse3",KIllustratorFactory::global()));
       gridY++;
    };
    if (haveRectangleObjects)
@@ -403,15 +403,15 @@ void PropertyEditor::createFontWidget (QWidget* parent)
 
    textAlign[0] = new QPushButton (group);
    textAlign[0]->setToggleButton (true);
-   textAlign[0]->setPixmap (SmallIcon ("tleftalign"));
+   textAlign[0]->setPixmap (SmallIcon ("tleftalign",KIllustratorFactory::global()));
 
    textAlign[1] = new QPushButton (group);
    textAlign[1]->setToggleButton (true);
-   textAlign[1]->setPixmap (SmallIcon ("tcenteralign"));
+   textAlign[1]->setPixmap (SmallIcon ("tcenteralign",KIllustratorFactory::global()));
 
    textAlign[2] = new QPushButton (group);
    textAlign[2]->setToggleButton (true);
-   textAlign[2]->setPixmap (SmallIcon ("trightalign"));
+   textAlign[2]->setPixmap (SmallIcon ("trightalign",KIllustratorFactory::global()));
 }
 
 void PropertyEditor::applyPressed ()

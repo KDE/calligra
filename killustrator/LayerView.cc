@@ -30,6 +30,7 @@
 #include <GLayer.h>
 #include <GDocument.h>
 #include "GPage.h"
+#include "KIllustrator_factory.h"
 
 #define CELL_HEIGHT 25
 #define CELL1_WIDTH 25
@@ -42,9 +43,9 @@ LayerView::LayerView (QWidget *parent, const char *name)
     setBackgroundColor(colorGroup().base());
     document = 0L;
 
-    pixmaps[0] = SmallIcon ("eye");
-    pixmaps[1] = SmallIcon ("freehandtool");
-    pixmaps[2] = BarIcon ("fileprint");
+    pixmaps[0] = SmallIcon ("eye",KIllustratorFactory::global());
+    pixmaps[1] = SmallIcon ("freehandtool",KIllustratorFactory::global());
+    pixmaps[2] = BarIcon ("fileprint",KIllustratorFactory::global());
 
     setTableFlags (Tbl_autoScrollBars | Tbl_smoothScrolling);
     setFrameStyle (QFrame::Panel | QFrame::Sunken);

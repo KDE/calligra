@@ -49,6 +49,9 @@
 #include <GObject.h>
 #include <CommandHistory.h>
 #include <UnitBox.h>
+#include "KIllustrator_factory.h"
+
+
 
 TransformationDialog::TransformationDialog (CommandHistory* cmdHist,
                                             QWidget* parent, const char* name) :
@@ -214,11 +217,11 @@ void TransformationDialog::createMirrorWidget (QWidget* parent) {
 
     horizMirror = new QPushButton(group);
     horizMirror->setToggleButton(true);
-    horizMirror->setPixmap(SmallIcon("hmirror"));
+    horizMirror->setPixmap(SmallIcon("hmirror",KIllustratorFactory::global()));
 
     vertMirror = new QPushButton(group);
     vertMirror->setToggleButton(true);
-    vertMirror->setPixmap(SmallIcon("vmirror"));
+    vertMirror->setPixmap(SmallIcon("vmirror",KIllustratorFactory::global()));
 
     group=new QHButtonGroup(parent);
     group->setFrameStyle (QFrame::NoFrame);

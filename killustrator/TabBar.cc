@@ -43,6 +43,7 @@
 #include "KIllustrator_doc.h"
 #include "GDocument.h"
 #include "GPage.h"
+#include "KIllustrator_factory.h"
 
 TabBar::TabBar( QWidget *parent, KIllustratorView *view )
 : QWidget(parent), m_pView(view)
@@ -233,14 +234,14 @@ void TabBar::openPopupMenu( const QPoint &_global )
 {
   if(!doc->document()->isReadWrite())
     return;
-  
+
   if ( m_pPopupMenu != 0L )
     delete m_pPopupMenu;
   m_pPopupMenu = new QPopupMenu();
 
-  m_pPopupMenu->insertItem( BarIcon("item_rename"), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
-  m_pPopupMenu->insertItem( BarIcon("item_add"), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
-  m_pPopupMenu->insertItem( BarIcon("item_remove"),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
+  m_pPopupMenu->insertItem( BarIcon("item_rename", KIllustratorFactory::global()), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
+  m_pPopupMenu->insertItem( BarIcon("item_add", KIllustratorFactory::global()), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
+  m_pPopupMenu->insertItem( BarIcon("item_remove", KIllustratorFactory::global()),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
   m_pPopupMenu->popup( _global );
 }
 

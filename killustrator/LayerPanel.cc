@@ -33,6 +33,7 @@
 #include <GDocument.h>
 #include <GLayer.h>
 #include "GPage.h"
+#include "KIllustrator_factory.h"
 
 LayerPanel::LayerPanel (QWidget* parent, const char* name) :
     QWidget(parent, name) {
@@ -41,21 +42,21 @@ LayerPanel::LayerPanel (QWidget* parent, const char* name) :
     mGrid = new QGridLayout(this, 2, 4);
     layerView = new LayerView (this);
     mGrid->addMultiCellWidget( layerView, 1, 1, 0, 3 );
-    
+
     btn_rl = new QPushButton(this);
-    btn_rl->setPixmap(SmallIcon("raiselayer"));
+    btn_rl->setPixmap(SmallIcon("raiselayer",KIllustratorFactory::global()));
     connect (btn_rl, SIGNAL (clicked ()), SLOT (upPressed ()));
     mGrid->addWidget( btn_rl, 0, 0 );
     btn_ll = new QPushButton(this);
-    btn_ll->setPixmap (SmallIcon ("lowerlayer"));
+    btn_ll->setPixmap (SmallIcon ("lowerlayer",KIllustratorFactory::global()));
     connect (btn_ll, SIGNAL (clicked ()), SLOT (downPressed ()));
     mGrid->addWidget( btn_ll, 0, 1 );
     btn_nl = new QPushButton(this);
-    btn_nl->setPixmap (SmallIcon ("newlayer"));
+    btn_nl->setPixmap (SmallIcon ("newlayer",KIllustratorFactory::global()));
     connect (btn_nl, SIGNAL (clicked ()), SLOT (newPressed ()));
     mGrid->addWidget( btn_nl, 0, 2 );
     btn_dl = new QPushButton(this);
-    btn_dl->setPixmap (SmallIcon ("deletelayer"));
+    btn_dl->setPixmap (SmallIcon ("deletelayer",KIllustratorFactory::global()));
     connect (btn_dl, SIGNAL (clicked ()), SLOT (deletePressed ()));
     mGrid->addWidget( btn_dl, 0, 3 );
 }

@@ -40,7 +40,7 @@
 #include <GDocument.h>
 #include <GObject.h>
 #include <CommandHistory.h>
-
+#include "KIllustrator_factory.h"
 
 AlignmentDialog::AlignmentDialog (QWidget* parent, const char* name) :
     KDialogBase(KDialogBase::Tabbed, i18n("Alignment"),
@@ -60,15 +60,15 @@ void AlignmentDialog::createAlignmentWidget (QWidget* parent) {
 
     valignButton[0] = new QPushButton (group);
     valignButton[0]->setToggleButton (true);
-    valignButton[0]->setPixmap (SmallIcon ("atop"));
+    valignButton[0]->setPixmap (SmallIcon ("atop",KIllustratorFactory::global()));
 
     valignButton[1] = new QPushButton (group);
     valignButton[1]->setToggleButton (true);
-    valignButton[1]->setPixmap (SmallIcon ("avcenter"));
+    valignButton[1]->setPixmap (SmallIcon ("avcenter",KIllustratorFactory::global()));
 
     valignButton[2] = new QPushButton (group);
     valignButton[2]->setToggleButton (true);
-    valignButton[2]->setPixmap (SmallIcon ("abottom"));
+    valignButton[2]->setPixmap (SmallIcon ("abottom",KIllustratorFactory::global()));
 
     group = new QHButtonGroup (i18n ("Horizontally"), parent, "Horizontally");
     group->setExclusive (true);
@@ -76,15 +76,15 @@ void AlignmentDialog::createAlignmentWidget (QWidget* parent) {
 
     halignButton[0] = new QPushButton (group);
     halignButton[0]->setToggleButton (true);
-    halignButton[0]->setPixmap (SmallIcon ("aleft"));
+    halignButton[0]->setPixmap (SmallIcon ("aleft",KIllustratorFactory::global()));
 
     halignButton[1] = new QPushButton (group);
     halignButton[1]->setToggleButton (true);
-    halignButton[1]->setPixmap (SmallIcon ("ahcenter"));
+    halignButton[1]->setPixmap (SmallIcon ("ahcenter",KIllustratorFactory::global()));
 
     halignButton[2] = new QPushButton (group);
     halignButton[2]->setToggleButton (true);
-    halignButton[2]->setPixmap (SmallIcon ("aright"));
+    halignButton[2]->setPixmap (SmallIcon ("aright",KIllustratorFactory::global()));
 
     QGroupBox *box = new QVGroupBox (parent);
     layout->addWidget(box, 1, 1);
@@ -103,19 +103,19 @@ void AlignmentDialog::createDistributionWidget (QWidget* parent) {
 
     vdistButton[0] = new QPushButton (group);
     vdistButton[0]->setToggleButton (true);
-    vdistButton[0]->setPixmap (SmallIcon ("dtop"));
+    vdistButton[0]->setPixmap (SmallIcon ("dtop",KIllustratorFactory::global()));
 
     vdistButton[1] = new QPushButton (group);
     vdistButton[1]->setToggleButton (true);
-    vdistButton[1]->setPixmap (SmallIcon ("dvcenter"));
+    vdistButton[1]->setPixmap (SmallIcon ("dvcenter",KIllustratorFactory::global()));
 
     vdistButton[2] = new QPushButton (group);
     vdistButton[2]->setToggleButton (true);
-    vdistButton[2]->setPixmap (SmallIcon ("dvdist"));
+    vdistButton[2]->setPixmap (SmallIcon ("dvdist",KIllustratorFactory::global()));
 
     vdistButton[3] = new QPushButton (group);
     vdistButton[3]->setToggleButton (true);
-    vdistButton[3]->setPixmap (SmallIcon ("dbottom"));
+    vdistButton[3]->setPixmap (SmallIcon ("dbottom",KIllustratorFactory::global()));
 
     group = new QHButtonGroup (i18n ("Horizontally"), parent, "Horizontally");
     group->setExclusive (true);
@@ -123,19 +123,19 @@ void AlignmentDialog::createDistributionWidget (QWidget* parent) {
 
     hdistButton[0] = new QPushButton (group);
     hdistButton[0]->setToggleButton (true);
-    hdistButton[0]->setPixmap (SmallIcon ("dleft"));
+    hdistButton[0]->setPixmap (SmallIcon ("dleft",KIllustratorFactory::global()));
 
     hdistButton[1] = new QPushButton (group);
     hdistButton[1]->setToggleButton (true);
-    hdistButton[1]->setPixmap (SmallIcon ("dhcenter"));
+    hdistButton[1]->setPixmap (SmallIcon ("dhcenter",KIllustratorFactory::global()));
 
     hdistButton[2] = new QPushButton (group);
     hdistButton[2]->setToggleButton (true);
-    hdistButton[2]->setPixmap (SmallIcon ("dhdist"));
+    hdistButton[2]->setPixmap (SmallIcon ("dhdist",KIllustratorFactory::global()));
 
     hdistButton[3] = new QPushButton (group);
     hdistButton[3]->setToggleButton (true);
-    hdistButton[3]->setPixmap (SmallIcon ("dright"));
+    hdistButton[3]->setPixmap (SmallIcon ("dright",KIllustratorFactory::global()));
 
     group = new QVButtonGroup(i18n ("Distribute at"), parent);
     layout->addWidget(group, 1, 1);
