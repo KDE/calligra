@@ -65,14 +65,15 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     
     m_dialog = new KDialogBase(KJanusWidget::Plain, i18n("Related words"),
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok);
-    m_dialog->setButtonOKText(i18n("Replace"));
     m_dialog->setHelp(QString::null, "thesaurus");
-    m_dialog->resize(500, 350);
+    m_dialog->resize(500, 400);
     
     QFrame *page = m_dialog->plainPage();
     QVBoxLayout *topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
 
     m_edit = new KHistoryCombo(page);
+    m_edit_label = new QLabel(m_edit, i18n("&Search for:"), page);
+    topLayout->addWidget(m_edit_label);
     topLayout->addWidget(m_edit);
 
     m_tab = new QTabWidget(page);
@@ -83,7 +84,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     //
     
     vbox = new QVBox(m_tab);
-    m_tab->addTab(vbox, i18n("Thesaurus"));
+    m_tab->addTab(vbox, i18n("&Thesaurus"));
     vbox->setMargin(KDialog::marginHint());
     vbox->setSpacing(KDialog::spacingHint());
     
@@ -116,7 +117,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     //
 
     vbox2 = new QVBox(m_tab);
-    m_tab->addTab(vbox2, i18n("WordNet"));
+    m_tab->addTab(vbox2, i18n("&WordNet"));
     vbox2->setMargin(KDialog::marginHint());    
     vbox2->setSpacing(KDialog::spacingHint());    
 
@@ -138,6 +139,9 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     connect(m_edit, SIGNAL(activated(const QString &)), this, SLOT(slotFindTerm(const QString &)));
     connect(m_edit, SIGNAL(returnPressed(const QString&)), m_edit, SLOT(addToHistory(const QString&)));
 
+    // Set focus
+    m_edit->setFocus();
+    
     //
     // The external command stuff
     //
@@ -180,21 +184,25 @@ Thesaurus::~Thesaurus()
 bool Thesaurus::run(const QString& command, void* data, const QString& datatype, const QString& mimetype)
 {
 
-    if ( command != "thesaurus" )
-    {
-        kdDebug(31000) << "Thesaurus does only accept the command 'thesaurus'" << endl;
-        kdDebug(31000) << "   The command " << command << " is not accepted" << endl;
-        return FALSE;
-    }
     // Check whether we can accept the data
-    if ( datatype != "QString" )
-    {
+    if ( datatype != "QString" ) {
         kdDebug(31000) << "Thesaurus only accepts datatype QString" << endl;
         return FALSE;
     }
-    if ( mimetype != "text/plain" )
-    {
+    if ( mimetype != "text/plain" ) {
         kdDebug(31000) << "Thesaurus only accepts mimetype text/plain" << endl;
+        return FALSE;
+    }
+
+    if ( command == "thesaurus" ) {
+        m_dialog->setButtonOKText(i18n("&Replace"));
+    } else if ( command == "thesaurus_standalone" ) {
+        // not called from any application, but from KThesaurus
+        m_dialog->showButtonOK(false);
+        m_dialog->setButtonCancelText(i18n("Close"));
+    } else {
+        kdDebug(31000) << "Thesaurus does only accept the command 'thesaurus' or 'thesaurus_standalone'" << endl;
+        kdDebug(31000) << "The command " << command << " is not accepted" << endl;
         return FALSE;
     }
 

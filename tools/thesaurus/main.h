@@ -98,6 +98,7 @@ protected:
     QVBox *vbox2;
     
     KHistoryCombo *m_edit;
+    QLabel *m_edit_label;
 
     // WordNet:
     QTextBrowser *m_resultbox;
