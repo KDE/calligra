@@ -471,9 +471,8 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
     case 0xB3: //date february-00
       format.setAttribute("format", "207");
 	  break;
-    case 0xB4: //date 2 february 2000 : doesn't exist in kspread =>
-      // 2-feb-2000
-	  format.setAttribute("format", "201");
+    case 0xB4: //date 2 february 2000 
+	  format.setAttribute("format", "216");
 	  break;
     case 0xB5:  //date 2/2/00 12:00 AM :doesn't exist in kspread
       //=>2/2/00

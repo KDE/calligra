@@ -64,6 +64,7 @@ const record biff[] = {
   { 0x001b, &XMLTree::_horizontalpagebreaks },
   { 0x007f, &XMLTree::_imdata },
   { 0x00fd, &XMLTree::_labelsst },
+  { 0x0204, &XMLTree::_label },
   { 0x0026, &XMLTree::_leftmargin },
   { 0x00be, &XMLTree::_mulblank },
   { 0x00bd, &XMLTree::_mulrk },
