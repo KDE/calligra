@@ -89,9 +89,6 @@
 #include <unistd.h>
 
 
-
-#define HEADERFOOTERBYPAGE 0
-
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase ), buffer( size() )
 {
