@@ -22,23 +22,22 @@
 KGObjectPool *KGObjectPool::m_self=0L;
 
 KGObjectPool *KGObjectPool::self() {
-    if(m_self==0L) 
+    if(m_self==0L)
         m_self=new KGObjectPool;
     return m_self;
 }
 
-KGObjectPool::KGObjectPool() {
-    objects.setAutoDelete(true);
+KGObjectPool::KGObjectPool() : KGGenericPool<KGObject>() {
 }
 
 const bool KGObjectPool::remove(const unsigned int &index) {
     // if the object is member of a group, tell the
     // group to remove it (TODO)
-    return objects.remove(index);
+    return pool.remove(index);
 }
 
 const bool KGObjectPool::remove(const KGObject *object) {
     // if the object is member of a group, tell the
     // group to remove it (TODO)
-    return objects.remove(object);
+    return pool.removeRef(object);
 }

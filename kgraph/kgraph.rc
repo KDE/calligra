@@ -4,7 +4,7 @@
   <Action name="edit_cut"/>
  </Menu>
 </MenuBar>
-<ToolBar>
+<ToolBar name="edit_bar" fullWidth="false">
   <Action name="edit_cut"/>
 </ToolBar>
 </kpartgui>

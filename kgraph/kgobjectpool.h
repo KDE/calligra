@@ -27,27 +27,18 @@
 #define kgobjectpool_h
 
 #include <qlist.h>
+
 #include <kgobject.h>
+#include <kggenericpool.h>
 
 
-class KGObjectPool {
+class KGObjectPool : public KGGenericPool<KGObject> {
 
 public:
     static KGObjectPool *self();   // allow only one object pool!
 
-    KGObject *first() { return objects.first(); }
-    KGObject *last() { return objects.last(); }
-    KGObject *next() { return objects.next(); }
-    KGObject *prev() { return objects.prev(); }
-    KGObject *current() { return objects.current(); }
-    KGObject *at(const unsigned int &index) { return objects.at(index); }
-    const int find(const KGObject *object) { return objects.findRef(object); }
-
-    const bool remove(const unsigned int &index);
-    const bool remove(const KGObject *object);
-
-    const unsigned int count() const { return objects.count(); }
-    const bool isEmpty() const { return objects.isEmpty(); }
+    virtual const bool remove(const unsigned int &index);
+    virtual const bool remove(const KGObject *object);
 
     const bool toFront(const KGObject *object); // moves the object to the front (last item)
     const bool toBack(const KGObject *object);  // moves the object to the back (first item)
@@ -61,13 +52,11 @@ public:
     //KGLine *createLine(const QDomElement &e);   // used to "load" a line object
     //KGLine *createLine(const QPoint &a, const QPoint &b);
 
-
 protected:
     KGObjectPool();
-    ~KGObjectPool();
+    virtual ~KGObjectPool() {}
 
 private:
-    QList<KGObject> objects;
     static KGObjectPool *m_self;
 };
 #endif // kgobjectpool_h

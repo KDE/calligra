@@ -27,16 +27,15 @@ KGGroupPool *KGGroupPool::self() {
     return m_self;
 }
 
-KGGroupPool::KGGroupPool() {
-    groups.setAutoDelete(true);
+KGGroupPool::KGGroupPool() : KGGenericPool<KGGroup>() {
 }
 
 const bool KGGroupPool::remove(const unsigned int &index) {
     // tell the objects that this group will be deleted (TODO)
-    return groups.remove(index);
+    return pool.remove(index);
 }
 
 const bool KGGroupPool::remove(const KGGroup *group) {
     // tell the objects that this group will be deleted (TODO)
-    return groups.remove(group);
+    return pool.removeRef(group);
 }

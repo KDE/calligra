@@ -27,35 +27,26 @@
 #define kggrouppool_h
 
 #include <qlist.h>
+
+#include <kggenericpool.h>
 #include <kggroup.h>
 
 
-class KGGroupPool {
+class KGGroupPool : public KGGenericPool<KGGroup> {
 
 public:
     static KGGroupPool *self();   // allow only one group pool!
 
-    KGGroup *first() { return groups.first(); }
-    KGGroup *last() { return groups.last(); }
-    KGGroup *next() { return groups.next(); }
-    KGGroup *prev() { return groups.prev(); }
-    KGGroup *current() { return groups.current(); }
-    KGGroup *at(const unsigned int &index) { return groups.at(index); }
-    const int find(const KGGroup *group) { return groups.findRef(group); }
     KGGroup *find(const int &id);  // find the group via its ID
 
-    const bool remove(const unsigned int &index);
-    const bool remove(const KGGroup *group);
-
-    const unsigned int count() const { return groups.count(); }
-    const bool isEmpty() const { return groups.isEmpty(); }
+    virtual const bool remove(const unsigned int &index);
+    virtual const bool remove(const KGGroup *group);
 
 protected:
     KGGroupPool();
-    ~KGGroupPool();
+    virtual ~KGGroupPool() {}
 
 private:
-    QList<KGGroup> groups;
     static KGGroupPool *m_self;
 };
 #endif // kggrouppool_h

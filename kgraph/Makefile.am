@@ -22,7 +22,7 @@ kgraph_SOURCES = main.cc
 noinst_HEADERS =  kgraph_global.h kgraph_shell.h \
     kgraph_part.h kgraph_view.h kgraph_factory.h \
     kgobject.h kgcanvas.h kgobjectpool.h kggroup.h \
-    kggrouppool.h
+    kggrouppool.h kggenericpool.h
 
 libkgraph_la_METASOURCES = AUTO
 
