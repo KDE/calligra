@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 
 #include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"
+#include "KWEFKWordLeader.h"
 
 void KWEFBaseWorker::registerKWordLeader(KWEFKWordLeader* leader)
 {
@@ -61,6 +62,23 @@ bool KWEFBaseWorker::doFullAllParagraphs (const QValueList<ParaData>& paraList)
             return false;
     }
     return true;
+}
+
+bool KWEFBaseWorker::loadKoStoreFile(const QString& fileName, QByteArray& array)
+// return value:
+//   true if the file is not empty
+//   false if the file is empty or if an error occured
+{
+    bool flag=false;
+    if (m_kwordLeader)
+    {
+        flag=m_kwordLeader->loadKoStoreFile(fileName,array);
+    }
+    else
+    {
+        kdWarning(30508) << "Leader is unknown! (KWEFBaseWorker::loadKoStoreFile)" << endl;
+    }
+    return flag;
 }
 
 //

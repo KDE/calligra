@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,6 +36,8 @@ class KWEFBaseWorker
         virtual ~KWEFBaseWorker(void) {}
     public:
         void registerKWordLeader(KWEFKWordLeader* leader);
+    public: // callbacks to Leader
+        bool loadKoStoreFile(const QString& fileName, QByteArray& array);
     public: // leader/worker functions
         virtual bool doOpenFile (const QString& filenameOut, const QString& to);
         virtual bool doCloseFile (void); // Close file in normal conditions
