@@ -38,10 +38,12 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 	//context menu
 	m_popup = new KPopupMenu(this, "contextMenu");
+	m_provider = new KexiDataProvider();
 }
 
 KexiFormScrollView::~KexiFormScrollView()
 {
+	delete m_provider;
 }
 
 void
@@ -67,33 +69,9 @@ KexiFormScrollView::slotResizingStarted()
 		setSnapToGrid(false);
 }
 
-void KexiFormScrollView::connectCellSelectedSignal(const QObject* receiver, const char* intIntMember)
-{
-	connect(this, SIGNAL(cellSelected(int,int)), receiver, intIntMember);
-}
-
-void KexiFormScrollView::connectRowEditStartedSignal(const QObject* receiver, const char* intMember)
-{
-}
-
-void KexiFormScrollView::connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember)
-{
-}
-
-void KexiFormScrollView::connectReloadActionsSignal(const QObject* receiver, const char* voidMember)
-{
-}
-
-void KexiFormScrollView::connectDataSetSignal(const QObject* receiver, const char* kexiTableViewDataMember)
-{
-}
-
-void KexiFormScrollView::connectToReloadDataSlot(const QObject* sender, const char* voidSignal)
-{
-}
-
 int KexiFormScrollView::rowsPerPage() const
 {
+	//! @todo
 	return 10;
 }
 
@@ -170,11 +148,6 @@ void KexiFormScrollView::updateGUIAfterSorting()
 	//! @todo
 }
 
-void KexiFormScrollView::reloadActions()
-{
-	//! @todo
-}
-
 void KexiFormScrollView::createEditor(int row, int col, const QString& addText, 
 	bool removeOld)
 {
@@ -190,6 +163,8 @@ KexiTableEdit *KexiFormScrollView::editor( int col, bool ignoreMissingEditor )
 void KexiFormScrollView::editorShowFocus( int row, int col )
 {
 	//! @todo
+	if (m_currentItem)
+		m_provider->fillDataItems(*m_currentItem);
 }
 
 void KexiFormScrollView::updateCell(int row, int col)

@@ -4402,36 +4402,5 @@ KexiTableItem *KexiTableView::highlightedItem() const
 	return m_data->at(d->highlightedRow);
 }
 
-void KexiTableView::connectCellSelectedSignal(const QObject* receiver, const char* intIntMember)
-{
-	connect(this, SIGNAL(cellSelected(int,int)), receiver, intIntMember);
-}
-
-void KexiTableView::connectRowEditStartedSignal(const QObject* receiver, 
-	const char* intMember)
-{
-	connect(this, SIGNAL(rowEditStarted(int)), receiver, intMember);
-}
-
-void KexiTableView::connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember)
-{
-	connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember);
-}
-
-void KexiTableView::connectReloadActionsSignal(const QObject* receiver, const char* voidMember)
-{
-	connect(this, SIGNAL(reloadActions()), receiver, voidMember);
-}
-
-void KexiTableView::connectDataSetSignal(const QObject* receiver, const char* kexiTableViewDataMember)
-{
-	connect(this, SIGNAL(dataSet(KexiTableViewData*)), receiver, kexiTableViewDataMember);
-}
-
-void KexiTableView::connectToReloadDataSlot(const QObject* sender, const char* voidSignal)
-{
-	connect(sender, voidSignal, this, SLOT(reloadData()));
-}
-
 #include "kexitableview.moc"
 

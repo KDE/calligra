@@ -558,7 +558,6 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		}
 
 		//show editor-dependent focus, if needed
-		//find the editor for this column
 		editorShowFocus( m_curRow, m_curCol );
 
 		updateCell( oldRow, oldCol );

@@ -74,6 +74,7 @@ class KEXIDATATABLE_EXPORT KexiTableView :
 	public KexiDataAwareObjectInterface
 {
 Q_OBJECT
+KEXI_DATAAWAREOBJECTINTERFACE
 public:
 
 	/*! Defines table view's detailed appearance settings. */
@@ -409,23 +410,6 @@ public:
 
 	KexiTableItem *highlightedItem() const;
 
-	virtual void connectCellSelectedSignal(const QObject* receiver, 
-		const char* intIntMember);
-
-	virtual void connectRowEditStartedSignal(const QObject* receiver, 
-		const char* intMember);
-
-	virtual void connectRowEditTerminatedSignal(const QObject* receiver, 
-		const char* voidMember);
-
-	virtual void connectReloadActionsSignal(const QObject* receiver, 
-		const char* voidMember);
-
-	virtual void connectDataSetSignal(const QObject* receiver, 
-			const char* kexiTableViewDataMember);
-
-	virtual void connectToReloadDataSlot(const QObject* sender, 
-			const char* voidSignal);
 
 public slots:
 	virtual void setData( KexiTableViewData *data, bool owner = true )

@@ -22,6 +22,7 @@
 #define KEXIFORMSCROLLVIEW_H
 
 #include "kexiscrollview.h"
+#include "kexidataprovider.h"
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/tableview/kexidataawareobjectiface.h>
@@ -39,6 +40,7 @@ class KexiFormScrollView :
 	public KexiDataAwareObjectInterface
 {
 	Q_OBJECT
+	KEXI_DATAAWAREOBJECTINTERFACE
 
 	public:
 		KexiFormScrollView(QWidget *parent, bool preview);
@@ -46,18 +48,7 @@ class KexiFormScrollView :
 
 		void setForm(KFormDesigner::Form *form) { m_form = form; }
 
-		virtual void connectCellSelectedSignal(const QObject* receiver, 
-			const char* intIntMember);
-		virtual void connectRowEditStartedSignal(const QObject* receiver, 
-			const char* intMember);
-		virtual void connectRowEditTerminatedSignal(const QObject* receiver, 
-			const char* voidMember);
-		virtual void connectReloadActionsSignal(const QObject* receiver, 
-			const char* voidMember);
-		virtual void connectDataSetSignal(const QObject* receiver, 
-			const char* kexiTableViewDataMember);
-		virtual void connectToReloadDataSlot(const QObject* sender, 
-			const char* voidSignal);
+		KexiDataProvider* dataProvider() const { return m_provider; }
 
 	public slots:
 		/*! Reimplemented to update resize policy. */
@@ -87,7 +78,9 @@ class KexiFormScrollView :
 		virtual void itemSelected(KexiTableItem *);
 		virtual void cellSelected(int col, int row);
 		virtual void sortedColumnChanged(int col);
+		virtual void rowEditStarted(int row);
 		virtual void rowEditTerminated(int row);
+		virtual void reloadActions();
 
 	protected slots:
 		void slotResizingStarted();
@@ -111,6 +104,10 @@ class KexiFormScrollView :
 
 		virtual void slotDataDestroying() { KexiDataAwareObjectInterface::slotDataDestroying(); }
 
+		/*! Reloads data for this widget.
+		 Handles KexiTableViewData::reloadRequested() signal. */
+		virtual void reloadData() { KexiDataAwareObjectInterface::reloadData(); }
+
 	protected:
 		//! Implementation for KexiDataAwareObjectInterface
 		virtual void clearColumnsInternal(bool repaint);
@@ -132,9 +129,6 @@ class KexiFormScrollView :
 
 		//! Implementation for KexiDataAwareObjectInterface
 		virtual void updateGUIAfterSorting();
-
-		//! Implementation for KexiDataAwareObjectInterface
-		virtual void reloadActions();
 
 		//! Implementation for KexiDataAwareObjectInterface
 		virtual void createEditor(int row, int col, const QString& addText = QString::null, 
@@ -171,6 +165,8 @@ class KexiFormScrollView :
 		KFormDesigner::Form *m_form;
 
 		int m_currentLocalSortColumn, m_localSortingOrder;
+
+		KexiDataProvider* m_provider;
 };
 
 #endif

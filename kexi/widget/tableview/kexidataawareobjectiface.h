@@ -643,4 +643,31 @@ inline KexiTableItem *KexiDataAwareObjectInterface::itemAt(int row) const
 	return item;
 }
 
+#define KEXI_DATAAWAREOBJECTINTERFACE \
+public: \
+	void connectCellSelectedSignal(const QObject* receiver, const char* intIntMember) { \
+		connect(this, SIGNAL(cellSelected(int,int)), receiver, intIntMember); \
+	} \
+	\
+	void connectRowEditStartedSignal(const QObject* receiver, const char* intMember) { \
+		connect(this, SIGNAL(rowEditStarted(int)), receiver, intMember); \
+	} \
+	\
+	void connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember) { \
+		connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember); \
+	} \
+	\
+	void connectReloadActionsSignal(const QObject* receiver, const char* voidMember) { \
+		connect(this, SIGNAL(reloadActions()), receiver, voidMember); \
+	} \
+	\
+	void connectDataSetSignal(const QObject* receiver, \
+		const char* kexiTableViewDataMember) { \
+		connect(this, SIGNAL(dataSet(KexiTableViewData*)), receiver, kexiTableViewDataMember); \
+	} \
+	\
+	void connectToReloadDataSlot(const QObject* sender, const char* voidSignal) { \
+		connect(sender, voidSignal, this, SLOT(reloadData())); \
+	}
+
 #endif

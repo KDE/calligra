@@ -26,7 +26,6 @@
 #include <kexiviewbase.h>
 #include <widget/kexidataawareview.h>
 
-#include "kexidataprovider.h"
 #include "kexiformpart.h"
 
 class KexiFormPart;
@@ -127,7 +126,7 @@ class KexiFormView : public KexiDataAwareView
 		QString m_previousDataSourceString;
 		int m_resizeMode;
 
-		KexiDataProvider* m_provider;
+//		KexiDataProvider* m_provider;
 //		KexiDB::Cursor *m_cursor;
 		KexiDB::QuerySchema* m_query;
 //moved		KexiTableViewData *m_data;

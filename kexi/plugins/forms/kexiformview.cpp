@@ -50,7 +50,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char 
  , m_buffer(0)
 //moved m_conn(conn)
  , m_resizeMode(KexiFormView::ResizeDefault)
- , m_provider(0)
+// , m_provider(0)
  , m_query(0)
 //moved , m_data(0)
 //moved , m_currentRow(0)
@@ -142,7 +142,7 @@ KexiFormView::~KexiFormView()
 {
 //	if (m_cursor)
 //		m_conn->deleteCursor(m_cursor);
-	delete m_provider;
+//	delete m_provider;
 	delete m_query;
 //	delete m_data;
 }
@@ -303,15 +303,15 @@ void KexiFormView::initDataSource()
 	m_previousDataSourceString = dataSourceString;
 	bool ok = true;
 	//collect all data-aware widgets and create query schema
-	if (!m_provider)
-		m_provider = new KexiDataProvider();
-	m_provider->setMainWidget(m_dbform);
+//	if (!m_provider)
+//		m_provider = new KexiDataProvider();
+	m_scrollView->dataProvider()->setMainWidget(m_dbform);
 //			if (m_cursor)
 //				m_conn->deleteCursor(m_cursor);
 	KexiDB::Cursor *cursor;
 	delete m_query;
 	m_query = new KexiDB::QuerySchema();
-	QStringList sources( m_provider->usedDataSources() );
+	QStringList sources( m_scrollView->dataProvider()->usedDataSources() );
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	KexiDB::TableSchema *tableSchema = conn->tableSchema( dataSourceString );
 	ok = tableSchema != 0;
