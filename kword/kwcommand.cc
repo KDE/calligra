@@ -2039,3 +2039,22 @@ void KWRenameBookmarkCommand::unexecute()
 {
     m_doc->renameBookMark( m_newName, m_oldName);
 }
+
+bool KWIsItATableVisitor::visit( KoTextParag *parag, int start, int end )
+{
+  for ( int i = start ; i < end ; ++i )
+  {
+    KoTextStringChar * ch = parag->at( i );
+    if ( ch->isCustom() )
+    {
+      KoTextCustomItem *customitem = ch->customItem();
+      KWAnchor *anchor = static_cast<KWAnchor *>(customitem);
+      if (anchor)
+      {
+	kdDebug() << "Anchor found " << endl;
+	m_framesets.append(anchor->frameSet());
+      }
+    }
+  }
+  return true; //always return true
+}

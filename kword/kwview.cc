@@ -4477,25 +4477,52 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
     QPtrList<KoTextFormatInterface> lst;
     if (currentTextEdit())
     {
-        if ( !currentTextEdit()->textObject()->protectContent())
-        {
-            // simply return the current textEdit :
-            lst.append( currentTextEdit() );
-        }
+      if ( !currentTextEdit()->textObject()->protectContent())
+      {
+	// simply return the current textEdit
+	lst.append( currentTextEdit() );
+	kdDebug() << "text frame name: " << currentTextEdit()->textFrameSet()->name() << endl;
+	KWIsItATableVisitor visitor;
+	currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all KWFrameSet-objects in the selection
+	QPtrList<KWFrameSet> frameset = visitor.frameSets();
+	for (QPtrListIterator<KWFrameSet> it( frameset ); it.current(); ++it )
+	{
+	  if ( it.current()->type() == FT_TABLE)
+	  {
+	    KWTableFrameSet* kwtableframeset = static_cast<KWTableFrameSet *>( it.current() );
+	    //kdDebug() << "table found: " << kwtableframeset->getNumFrames() << endl;
+	    int const rows  = kwtableframeset->getRows();
+	    int const cols = kwtableframeset->getCols();
+	    //finding all cells and add them to the interface list
+	    for (int r=0; r<rows; ++r)
+	    {
+	      for (int c=0; c<cols; ++c)
+	      {
+		KWTableFrameSet::Cell *cell = kwtableframeset->getCell(r,c);
+		if (cell)
+		{
+		  kdDebug() << "adding (" << r << "," << c << ")" << endl;
+		  lst.append(cell);
+		}
+	      }
+	    }
+	  }
+	}
+      }
     }
     else
     {   // it might be that a frame (or several frames) are selected
         // in that case, list the text framesets behind them
-        QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
-        QPtrListIterator<KWFrame> it( selectedFrames );
-        for ( ; it.current() ; ++it )
-        {
-            if ( it.current()->frameSet()->type() == FT_TEXT ) {
-                KWTextFrameSet* fs = static_cast<KWTextFrameSet *>( it.current()->frameSet() );
-                if ( !lst.contains( fs )&& !fs->protectContent() )
-                    lst.append( fs );
-            }
-        }
+      QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+      QPtrListIterator<KWFrame> it( selectedFrames );
+      for ( ; it.current() ; ++it )
+      {
+	if ( it.current()->frameSet()->type() == FT_TEXT ) {
+	  KWTextFrameSet* fs = static_cast<KWTextFrameSet *>( it.current()->frameSet() );
+	  if ( !lst.contains( fs )&& !fs->protectContent() )
+	    lst.append( fs );
+	}
+      }
     }
     return lst;
 }

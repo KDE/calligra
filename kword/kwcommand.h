@@ -874,4 +874,15 @@ protected:
     QString m_oldName;
     QString m_newName;
 };
+
+class KWIsItATableVisitor : public KoParagVisitor // see kotextdocument.h
+{
+  public:
+    KWIsItATableVisitor(): KoParagVisitor() {;};
+    bool visit( KoTextParag *parag, int start, int end );
+    QPtrList<KWFrameSet> frameSets(){return m_framesets;};
+  private:
+    QPtrList<KWFrameSet> m_framesets;
+};
+
 #endif
