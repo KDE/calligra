@@ -67,7 +67,10 @@ namespace Qt3 { // can't be Qt, a class already exists with that name :(
 	ISODate,       // ISO 8601
 	LocalDate      // locale dependant
     };
-
+    // Called _blah in Qt 2 and Q_blah in Qt 3
+#if defined(_WS_X11)
+#define Q_WS_X11
+#endif
 
     // "handle" type for system objects.
 #if defined(Q_WS_MAC)
