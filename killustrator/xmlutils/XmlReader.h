@@ -30,6 +30,8 @@
 #include "XmlElement.h"
 #include "XmlTokenizer.h"
 
+using std::string;
+
 /**
  * The XMLReader class supports reading elements from a XML stream.
  *
@@ -103,7 +105,7 @@ public:
 protected:
   bool parseEndElement (XmlElement& elem);
   bool parseElement (const string& id, XmlElement& elem);
-  bool readAttributes (list<XmlAttribute>& attrib_list);
+  bool readAttributes (std::list<XmlAttribute>& attrib_list);
 
 private:
   XmlTokenizer tokenizer;

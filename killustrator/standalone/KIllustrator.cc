@@ -29,6 +29,7 @@
 #include <qframe.h>
 #include <qclipboard.h>
 #include <qmessagebox.h>
+#include <cassert>
 #include <qcombobox.h>
 #include "KIllustrator.h"
 #include "KIllustrator.moc"

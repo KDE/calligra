@@ -24,6 +24,8 @@
 
 #include "XmlWriter.h"
 
+using namespace std;
+
 XmlWriter::XmlWriter (ostream& os) 
   : strm (os.rdbuf ()) {
   strm << "<?xml version=\"1.0\"?>" << endl;

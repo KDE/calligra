@@ -90,7 +90,7 @@ public:
    *
    * @return  The string representation.
    */
-  const string& element ();
+  const std::string& element ();
 
   /**
    * Cause the next call to method <tt>nextToken</tt> of this tokenizer 
@@ -106,8 +106,8 @@ protected:
   Token readComment ();
 
 private:
-  istream strm;
-  string elem;
+  std::istream strm;
+  std::string elem;
   Token last_tok;
   bool use_last;
   bool is_open;

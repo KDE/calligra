@@ -178,8 +178,8 @@ public:
   ostream& stream () { return strm; }
 
 private:
-    std::stack<string, vector<string> > lastTags;
-    std::ostream strm;
+    std::stack<std::string, std::vector<std::string> > lastTags;
+    ostream strm;
 };
 
 #endif

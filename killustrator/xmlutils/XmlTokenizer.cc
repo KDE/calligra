@@ -25,6 +25,8 @@
 #include "XmlTokenizer.h"
 #include <ctype.h>
 
+using namespace std;
+
 XmlTokenizer::XmlTokenizer (istream& is) : 
   strm (is.rdbuf ()), use_last (false), is_open (false) {
 }

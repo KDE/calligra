@@ -26,6 +26,8 @@
 #include <strstream.h>
 #include "XmlElement.h"
 
+using namespace std;
+
 XmlAttribute::XmlAttribute (const string& n, const string& v) :
   aname (n), value (v) {
 }

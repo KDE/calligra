@@ -48,7 +48,7 @@ public:
    * @param n   The name of the attribute.
    * @param v   The attribute value.
    */
-  XmlAttribute (const string& n, const string& v);
+  XmlAttribute (const std::string& n, const std::string& v);
 
   /**
    * Copy constructor.
@@ -70,14 +70,14 @@ public:
    *
    * @return The attribute name.
    */
-  const string& name () const { return aname; }
+  const std::string& name () const { return aname; }
 
   /**
    * Return a string representation of the attribute value.
    *
    * @return The attribute value as string.
    */
-  const string& stringValue () const { return value; }
+  const std::string& stringValue () const { return value; }
 
   /**
    * Return a float representation of the attribute value.
@@ -108,7 +108,7 @@ public:
   QWMatrix matrixValue () const;
 
 private:
-  string aname, value;
+  std::string aname, value;
 };
 
 /**
@@ -150,7 +150,7 @@ public:
    *
    * @return The element ID.
    */
-  const string& tag () const { return tagId; }
+  const std::string& tag () const { return tagId; }
 
   /**
    * Return the attributes of the element.
@@ -158,7 +158,7 @@ public:
    *
    * @return The list of attributes.
    */
-  const list<XmlAttribute>& attributes () const { return attribs; }
+  const std::list<XmlAttribute>& attributes () const { return attribs; }
 
   /**
    * Return <tt>true</tt> if the element is closed.
@@ -175,10 +175,10 @@ public:
   bool isEndTag () const { return endTag; }
 
 private:
-  string tagId;
+  std::string tagId;
   bool closed;
   bool endTag;
-  list<XmlAttribute> attribs;
+  std::list<XmlAttribute> attribs;
 };
 
 #endif

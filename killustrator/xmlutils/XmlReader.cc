@@ -24,6 +24,8 @@
 
 #include "XmlReader.h"
 
+using namespace std;
+
 XmlReader::XmlReader (istream& is) : tokenizer (is) {
 }
 
