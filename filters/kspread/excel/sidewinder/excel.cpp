@@ -2894,6 +2894,26 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
     setDiagonalStyle( ( flag >> 4 ) & 0x1e  );
     setDiagonalColor( ( ( flag & 0x1f ) << 2 ) + (  ( color1 >> 14 ) & 3 ));
   }
+  else
+  {
+    unsigned data1 = readU32( data + 8 );
+    unsigned data2 = readU32( data + 12 );
+    
+    setPatternForeColor( data1 & 0x7f );
+    setPatternBackColor( ( data1 >> 7 ) & 0x7f );
+    setFillPattern( ( data1 >> 16 ) & 0x3f );
+    
+    setBottomBorderStyle( ( data1 >> 22 ) & 0x07 );
+    setBottomBorderColor( ( data1 >> 25 ) & 0x7f ); 
+    
+    setTopBorderStyle( data2 & 0x07 );
+    setLeftBorderStyle( ( data2 >> 3 ) & 0x07 );
+    setRightBorderStyle( ( data2 >> 6 ) & 0x07 );
+    
+    setTopBorderColor( ( data2 >> 9 ) & 0x7f );
+    setLeftBorderColor( ( data2 >> 16 ) & 0x7f );
+    setRightBorderColor( ( data2 >> 23 ) & 0x7f );
+  }
 }
 
 void XFRecord::dump( std::ostream& out ) const
