@@ -1506,7 +1506,7 @@ void FontRecord::setData( unsigned size, const unsigned char* data )
   setCharacterSet( data[12] );
     
   UString fn = ( version() >= Excel97 ) ?
-    EString::fromSheetName( data+6, size-6 ).str() :
+    EString::fromSheetName( data+14, size-14 ).str() :
     EString::fromByteString( data+14, false, size-14 ).str();
   setFontName( fn );
 }
