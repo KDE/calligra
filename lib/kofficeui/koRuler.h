@@ -72,7 +72,7 @@ class KoRulerPrivate;
 class KoRuler : public QFrame
 {
     Q_OBJECT
-
+    friend class KoRulerPrivate;
 public:
     static const int F_TABS = 1;
     static const int F_INDENTS = 2;
