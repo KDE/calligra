@@ -22,6 +22,7 @@ AM_ENABLE_SHARED(yes)
 AM_ENABLE_STATIC(no)
 KDE_PROG_LIBTOOL
 AC_PATH_KDE 
+AM_KDE_WITH_NLS
 
 dnl Check for MICO. The argument is the minimal version required.
 KDE_CHECK_MICO(2.0.7)
@@ -56,6 +57,7 @@ AC_OUTPUT(Makefile \
 	kpresenter/templates/Makefile \
 	kchart/Makefile	\
 	kchart/core/Makefile \
-	kchart/ui/Makefile
-	kchart/pics/Makefile
+	kchart/ui/Makefile \
+	kchart/pics/Makefile \
+	po/Makefile 
  )

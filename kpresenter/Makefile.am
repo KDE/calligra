@@ -12,8 +12,8 @@ LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
 
 bin_PROGRAMS = kpresenter.bin
 
-kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc kpresenter_view.cc \
-	kpresenter_shell.cc kpresenter.cc graphobj.cc \
+kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
+	kpresenter_view.cc kpresenter_shell.cc kpresenter.cc graphobj.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	jpeg.cc formats.cc qwmf.cc kenumlistdia.cc kcharselect.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc
@@ -28,8 +28,8 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc graphobj.moc moc \
 		page.moc ktextobject.mocbackdia.moc styledia.moc \
-		kenumlistdia.moc kcharselect.moc kcharselectdia.moc optiondia.moc \
-		pgconfdia.moc effectdia.moc
+		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
+		optiondia.moc pgconfdia.moc effectdia.moc
 
 idl_DATA =	kpresenter.idl
 idl_HEADER =    kpresenter.h
@@ -50,6 +50,9 @@ SUFFIXES = .h .moc
 
 install-exec-local:
 	$(INSTALL_SCRIPT) kpresenter $(bindir)/kpresenter
+
+messages:
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(includedir)/corba.pot  *.cc */*.cc  && mv messages.po ../po/kpresenter.pot
 
 kpresenter.h: kpresenter.idl
 	-rm -f kpresenter.h

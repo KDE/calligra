@@ -1,2 +1,5 @@
 
 SUBDIRS = koml kofficecore kofficeui
+
+messages:
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(includedir)/corba.pot  */*.cc && mv messages.po ../po/koffice.pot

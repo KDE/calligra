@@ -200,7 +200,7 @@ KoPrintDiaData::KoPrintDiaData( QWidget* parent )
 	fileName->setGeometry( 120, 50, 260, 30 );
 	fileName->setText( "" );
 
-	browse = new QPushButton( i18n( "Browse ..." ), parent );
+	browse = new QPushButton( i18n( "Browse..." ), parent );
 	browse->setGeometry( 400, 50, 80, 30 );
 
 	tmpQLabel = new QLabel( parent, "Label_3" );

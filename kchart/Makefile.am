@@ -40,6 +40,9 @@ SUFFIXES = .h .moc
 install-exec-local:
 	$(INSTALL_SCRIPT) kchart $(bindir)/kchart
 
+messages:
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(includedir)/corba.pot  *.cc */*.cpp && mv messages.po ../po/kchart.pot
+
 kchart.h: kchart.idl
 	@echo $(IDL) --query-server-for-narrow $(IDL_INCLUDES) kchart.idl ;\
 	-rm -f kchart.h kchart.cc ;\

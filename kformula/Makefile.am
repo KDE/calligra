@@ -15,6 +15,9 @@ noinst_HEADERS = part.h widget.h main.h
 
 BUILTSOURCES =	part.moc widget.moc main.moc
 
+messages:
+	$(XGETTEXT) -C -ki18n -kklocale -ktranslate -x $(includedir)/kde.pot $(includedir)/corba.pot  *.cpp && mv messages.po ../po/kformula.pot
+
 part.cpp: part.moc
 widget.cpp: widget.moc
 main.cpp: main.moc
