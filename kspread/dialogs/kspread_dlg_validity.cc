@@ -91,6 +91,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   list+=i18n("equal to or less than");
   list+=i18n("between");
   list+=i18n("different from");
+  list+=i18n("different to");
   choose->insertStringList(list);
   choose->setCurrentItem(0);
 
@@ -520,6 +521,9 @@ void KSpreadDlgValidity::init()
      case Different:
       choose->setCurrentItem(6);
       break;
+     case DifferentTo:
+      choose->setCurrentItem(7);
+      break;
      default :
       choose->setCurrentItem(0);
       break;
@@ -566,7 +570,7 @@ void KSpreadDlgValidity::OkPressed()
       return;
     }
     val_max->text().toDouble(&ok);
-    if(! ok && choose->currentItem() >=5 )
+    if(! ok && choose->currentItem() >=5 && choose->currentItem()< 7)
     {
       KMessageBox::error( this , i18n("This is not a valid value."),i18n("Error"));
       val_max->setText("");
@@ -584,7 +588,7 @@ void KSpreadDlgValidity::OkPressed()
       return;
     }
     val_max->text().toInt(&ok);
-    if(! ok && choose->currentItem() >=5 )
+    if(! ok && choose->currentItem() >=5 && choose->currentItem()< 7)
     {
       KMessageBox::error( this , i18n("This is not a valid value."),i18n("Error"));
       val_max->setText("");
@@ -708,6 +712,9 @@ void KSpreadDlgValidity::OkPressed()
       break;
      case 6:
       result.m_cond=Different;
+      break;
+     case 7:
+      result.m_cond=DifferentTo;
       break;
      default :
       break;
