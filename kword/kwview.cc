@@ -2083,7 +2083,8 @@ void KWView::updateStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act = 0L;
-        KoParagStyle *tmp = m_doc->styleCollection()->findTranslatedStyle( lst[ i]);
+        // The list lst was created (unsorted) from the style collection, so we have still the same order.
+        KoParagStyle *tmp = m_doc->styleCollection()->styleAt( i );
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
@@ -2153,7 +2154,9 @@ void KWView::updateFrameStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        KWFrameStyle *tmp = m_doc->frameStyleCollection()->findTranslatedFrameStyle( lst[ i]);
+        
+        // The list lst was created (unsorted) from the frame style collection, so we have still the same order.
+        KWFrameStyle *tmp = m_doc->frameStyleCollection()->frameStyleAt( i );
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
@@ -2225,7 +2228,9 @@ void KWView::updateTableStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        KWTableStyle *tmp = m_doc->tableStyleCollection()->findTranslatedTableStyle( lst[ i]);
+
+        // The list lst was created (unsorted) from the table style collection, so we have still the same order.
+        KWTableStyle *tmp = m_doc->tableStyleCollection()->tableStyleAt( i );
         if ( tmp)
         {
             QCString name = tmp->shortCutName().latin1();
