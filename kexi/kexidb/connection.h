@@ -383,9 +383,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! Creates table defined by \a tableSchema.
 		 Schema information is also added into kexi system tables, for later reuse.
-		 \a tableSchema object is inserted to Connection structures - it is
-		 owned by Connection object now, so you shouldn't destroy the tableSchema 
-		 object by hand (or declare it as local-scope variable). 
+		 \return true on success - \a tableSchema object is then 
+		 inserted to Connection structures - it is owned by Connection object now, 
+		 so you shouldn't destroy the tableSchema object by hand 
+		 (or declare it as local-scope variable). 
+		 Note: on error, \a tableSchema is not inserted into Connection structures,
+		 so you are still owner of this object.
 		*/
 		bool createTable( KexiDB::TableSchema* tableSchema );
 
