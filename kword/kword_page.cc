@@ -3797,6 +3797,7 @@ void KWPage::setCounter( KWParagLayout::Counter _counter )
     recalcText();
     recalcCursor();
     recalcAll = FALSE;
+    doc->setModified(true);
 }
 /*================================================================*/
 void KWPage::setEnumList()
@@ -3815,6 +3816,7 @@ void KWPage::setEnumList()
                                      fc->getParag()->getParagLayout()->getRightBorder(),
                                      fc->getParag()->getParagLayout()->getTopBorder(),
                                      fc->getParag()->getParagLayout()->getBottomBorder() );
+    doc->setModified(true);
 }
 
 /*================================================================*/
@@ -3834,6 +3836,7 @@ void KWPage::setBulletList()
                                      fc->getParag()->getParagLayout()->getRightBorder(),
                                      fc->getParag()->getParagLayout()->getTopBorder(),
                                      fc->getParag()->getParagLayout()->getBottomBorder() );
+    doc->setModified(true);
 }
 
 /*================================================================*/
@@ -3853,6 +3856,7 @@ void KWPage::setNormalText()
                                      fc->getParag()->getParagLayout()->getRightBorder(),
                                      fc->getParag()->getParagLayout()->getTopBorder(),
                                      fc->getParag()->getParagLayout()->getBottomBorder() );
+    doc->setModified(true);
 }
 
 /*================================================================*/
@@ -3888,6 +3892,7 @@ void KWPage::setFlow( KWParagLayout::Flow _flow )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
 }
 
@@ -3906,6 +3911,7 @@ void KWPage::setLeftIndent( KWUnit _left )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
 }
 
@@ -3924,6 +3930,7 @@ void KWPage::setFirstLineIndent( KWUnit _first )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
 }
 
@@ -3943,6 +3950,7 @@ void KWPage::setSpaceBeforeParag( KWUnit _before )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
     recalcAll = FALSE;
 }
@@ -3963,6 +3971,7 @@ void KWPage::setSpaceAfterParag( KWUnit _after )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
     recalcAll = FALSE;
 }
@@ -3983,6 +3992,7 @@ void KWPage::setLineSpacing( KWUnit _spacing )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
     recalcAll = FALSE;
 }
@@ -4002,6 +4012,7 @@ void KWPage::setParagLeftBorder( KWParagLayout::Border _brd )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
 }
 
@@ -4020,6 +4031,7 @@ void KWPage::setParagRightBorder( KWParagLayout::Border _brd )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
 }
 
@@ -4038,6 +4050,7 @@ void KWPage::setParagTopBorder( KWParagLayout::Border _brd )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
 }
 
@@ -4056,6 +4069,7 @@ void KWPage::setParagBottomBorder( KWParagLayout::Border _brd )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
 }
 
@@ -4076,6 +4090,7 @@ void KWPage::tabListChanged( QList<KoTabulator> *_tablist )
         recalcCursor( FALSE, -1, doc->getSelStart() );
         recalcCursor( FALSE, -1, doc->getSelEnd() );
     }
+    doc->setModified(true);
     recalcCursor();
 }
 
@@ -4310,7 +4325,7 @@ void KWPage::setLeftFrameBorder( KWParagLayout::Border _brd, bool _enable )
             }
         }
     }
-
+    doc->setModified(true);
     doc->updateTableHeaders( grpMgrs );
     doc->updateAllViews( 0L );
 }
@@ -4338,7 +4353,7 @@ void KWPage::setRightFrameBorder( KWParagLayout::Border _brd, bool _enable )
             }
         }
     }
-
+    doc->setModified(true);
     doc->updateTableHeaders( grpMgrs );
     doc->updateAllViews( 0L );
 }
@@ -4366,7 +4381,7 @@ void KWPage::setTopFrameBorder( KWParagLayout::Border _brd, bool _enable )
             }
         }
     }
-
+    doc->setModified(true);
     doc->updateTableHeaders( grpMgrs );
     doc->updateAllViews( 0L );
 }
@@ -4394,7 +4409,7 @@ void KWPage::setBottomFrameBorder( KWParagLayout::Border _brd, bool _enable )
             }
         }
     }
-
+    doc->setModified(true);
     doc->updateTableHeaders( grpMgrs );
     doc->updateAllViews( 0L );
 }
@@ -4451,7 +4466,7 @@ void KWPage::setFrameBorderColor( const QColor &_color )
             }
         }
     }
-
+    doc->setModified(true);
     doc->updateTableHeaders( grpMgrs );
     doc->updateAllViews( 0L );
 }
@@ -4483,6 +4498,7 @@ void KWPage::setFrameBackgroundColor( QBrush _color )
             }
         }
     }
+    doc->setModified(true);
 
     doc->updateTableHeaders( grpMgrs );
     doc->updateAllViews( 0L );

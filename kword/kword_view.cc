@@ -1509,6 +1509,7 @@ void KWordView::formatPage()
         gui->getVertRuler()->setPageLayout( pgLayout );
         gui->getHorzRuler()->setPageLayout( pgLayout );
         gui->getPaperWidget()->frameSizeChanged( pgLayout );
+        doc->setModified(true);
     }
 }
 
@@ -2525,6 +2526,7 @@ void KWordView::newPageLayout( KoPageLayout _layout )
 
     gui->getPaperWidget()->frameSizeChanged( _layout );
     gui->getPaperWidget()->forceFullUpdate();
+    doc->setModified(true);
 }
 
 /*================================================================*/
