@@ -1,0 +1,7 @@
+[Desktop Entry]
+MimeType=application/x-kword-crypt
+Comment=KWord Encrypted
+Icon=kword
+Type=MimeType
+Patterns=
+X-KDE-AutoEmbed=false

@@ -70,6 +70,9 @@ int rc;
 
     BlockCipher *cipher = new BlowFish;
     BlockCipher *cbc = new CipherBlockChain(cipher);
+    char *thekey = "a test key";
+
+    cbc->setKey((void *)thekey, 80);   // this propagates to the cipher
 
     if (cbc->blockSize() > 0) blocksize = cbc->blockSize();
 
