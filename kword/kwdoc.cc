@@ -1883,6 +1883,13 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         m_lstFrameSet.append( fs );
         return fs;
     } break;
+    case FT_HORZLINE:
+    {
+        KWHorzLineFrameSet *fs = new KWHorzLineFrameSet( this, fsname );
+        fs->load( framesetElem, loadFrames );
+        m_lstFrameSet.append( fs );
+        return fs;
+    } break;
     case FT_FORMULA: {
         KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
