@@ -1,0 +1,72 @@
+/*
+ *  kis_channel.h - part of KImageShop
+ *
+ *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
+ *                1999-2000 Matthias ELter  <elter@kde.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+#ifndef __kis_channel_h__
+#define __kis_channel_h__
+
+#include <qrect.h>
+#include <qpoint.h>
+
+#include "kis_global.h"
+
+class KisChannel
+{
+ public:
+
+  KisChannel(cId id);
+  virtual ~KisChannel();
+
+  cId    channelId()    { return m_id; }
+  uint   xTiles()       { return m_xTiles; }
+  uint   yTiles()       { return m_xTiles; }
+  int    width()        { return m_imgRect.width(); }
+  int    height()       { return m_imgRect.height(); }
+  QRect  tileExtents()  { return m_tileRect; };
+  QRect  imageExtents() { return m_imgRect; };
+  QPoint offset()       { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
+
+  uchar** tiles()       { return m_tiles; } // FIXME: get rid of this
+
+  void allocateRect(QRect newRect);
+  
+  void moveBy(int dx, int dy);
+  void moveTo(int x, int y);
+  
+  void  setPixel(uint x, uint y, uchar val);
+  uchar pixel(uint x, uint y);
+	
+  QRect tileRect(int tileNo);
+
+  uint lastTileOffsetX();
+  uint lastTileOffsetY();
+  
+ protected:
+  
+  cId      m_id;
+  // array of pointers to tile data
+  uchar**  m_tiles;
+  uint     m_xTiles, m_yTiles;
+  
+  QRect    m_imgRect, m_tileRect;
+};
+
+
+#endif // __kis_channel_h__
