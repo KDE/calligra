@@ -37,9 +37,6 @@
 
 #include <stdio.h>
 
-// ??? (Werner)
-//#define i18n( x ) x
-
 /***************************************************
  *
  * Factory
@@ -97,6 +94,7 @@ Calculator::Calculator( KSpreadView* parent, const char* name )
     m_calc = 0;
     m_view = parent;
 
+    KGlobal::locale()->insertCatalogue("kspreadcalc_calc"); 
     parent->installEventFilter( this );
 
     // HACK: Don't know what to do with the icon (Werner)
