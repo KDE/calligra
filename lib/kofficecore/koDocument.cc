@@ -51,6 +51,9 @@ KoDocumentChild::KoDocumentChild( const QRect& _rect, KOffice::Document_ptr _doc
 
 KoDocumentChild::KoDocumentChild()
 {
+  m_rDoc = 0L;
+  m_pPicture = 0L;
+  m_bHasPrintingExtension = false;
 }
 
 void KoDocumentChild::setGeometry( const QRect& _rect )
