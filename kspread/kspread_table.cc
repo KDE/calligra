@@ -5659,12 +5659,12 @@ void KSpreadTable::dissociateCell( const QPoint &cellRef, bool makeUndo)
     KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_pDoc, this, marker.x() ,marker.y(), cell->extraXCells(), cell->extraYCells());
     m_pDoc->undoBuffer()->appendUndo( undo );
   }
-    int x=cell->extraXCells();
+    int x = cell->extraXCells() + 1;
     if( x == 0 )
-        x=1;
-    int y = cell->extraYCells();
+        x = 1;
+    int y = cell->extraYCells() + 1;
     if( y == 0 )
-        y=1;
+        y = 1;
 
     cell->forceExtraCells( marker.x() ,marker.y(), 0, 0 );
     QRect selection( marker.x(), marker.y(), x, y );

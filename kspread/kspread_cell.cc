@@ -367,12 +367,15 @@ void KSpreadCell::obscure( KSpreadCell *cell, bool isForcing )
   {
     m_ObscuringCells.append(cell);
   }
+  setFlag(Flag_LayoutDirty);
+  updateDepending();
 }
 
 void KSpreadCell::unobscure( KSpreadCell *cell )
 {
   m_ObscuringCells.remove(cell);
   setFlag(Flag_LayoutDirty);
+  updateDepending();
 }
 
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
@@ -3635,6 +3638,7 @@ void KSpreadCell::updateDepending()
 
   setFlag(Flag_UpdatingDeps);
 
+  KSpreadCell * cell; 
   // Every cell that references us must calculate with this new value
   for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
   {
@@ -3642,7 +3646,10 @@ void KSpreadCell::updateDepending()
     {
       for (int r = d->Top(); r <= d->Bottom(); r++)
       {
-        d->Table()->cellAt( c, r )->calc();
+        kdDebug() << "Cell: " << c << ", " << r << endl;
+        cell = d->Table()->cellAt( c, r );
+        cell->setCalcDirtyFlag();
+        cell->calc();
       }
     }
   }
@@ -4825,8 +4832,8 @@ void KSpreadCell::NotifyDepending( int col, int row, KSpreadTable* table, bool i
   /* see if this cell is already in the list */
   for (d = m_lstDependingOnMe.first(); d != NULL && !alreadyInList; d = m_lstDependingOnMe.next() )
   {
-    alreadyInList = (d->Left() <= row && d->Right() >= row &&
-		     d->Top() <= col && d->Bottom() >= col &&
+    alreadyInList = (d->Left() <= col && d->Right() >= col &&
+		     d->Top() <= row && d->Bottom() >= row &&
 		     d->Table() == table);
   }
 
