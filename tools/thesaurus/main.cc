@@ -23,9 +23,6 @@
  ***************************************************************************/
 
 /*
-FIXME:
--See the fixme's in the source below
-
 TODO:
 -Make dialog non-modal???
 -Add back/forward buttons
@@ -34,6 +31,8 @@ TODO:
 -Also "Replace" with text selection in m_resultbox?
 -Be more verbose if the result is empty
 -See the TODO's in the source below
+-Maybe remove more uncommon words. However, the "polysemy/familiarity
+ count" is sometimes very low for quite common word, e.g. "sky".
 
 -Don't forget to insert comments for the translators if necessary
  (because WordNet is English language only)
