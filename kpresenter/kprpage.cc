@@ -1119,7 +1119,6 @@ KCommand * KPrPage::alignObjsLeft()
     if(newPosition)
     {
         moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) left" ), _diffs, _objects, m_doc );
-        m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -1162,7 +1161,6 @@ KCommand * KPrPage::alignObjsCenterH()
     {
         moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) centered (horizontal)" ),
                                                  _diffs, _objects, m_doc );
-        m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -1201,7 +1199,6 @@ KCommand * KPrPage::alignObjsRight()
     if(newPosition)
     {
         moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) right" ), _diffs, _objects, m_doc);
-        m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -1243,7 +1240,6 @@ KCommand *KPrPage::alignObjsTop()
     if(newPosition)
     {
         moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) top" ), _diffs, _objects, m_doc );
-        m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -1287,7 +1283,6 @@ KCommand * KPrPage::alignObjsCenterV()
     if(newPosition)
     {
         moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) center / vertical" ), _diffs, _objects, m_doc );
-        m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -1328,7 +1323,6 @@ KCommand * KPrPage::alignObjsBottom()
     if(newPosition)
     {
         moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) bottom" ), _diffs, _objects, m_doc );
-        m_doc->addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -2603,8 +2597,6 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 	kppixmapobject->setSize( w, h );
 	m_doc->repaint( false );
     }
-
-    m_doc->setModified(true);
 }
 
 void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
@@ -2620,7 +2612,6 @@ void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
     insertCmd->execute();
 
     m_doc->addCommand( insertCmd );
-    m_doc->setModified( true );
 }
 
 void KPrPage::insertClipart( const QString &_file, const KoRect &_rect )
