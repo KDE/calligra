@@ -1387,15 +1387,26 @@ void KoTextParag::printRTDebug( int info )
                           + ch.pixelxadj;
             if ( ch.lineStart )
                 kdDebug(32500) << "LINESTART" << endl;
-            kdDebug(32500) << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
+            QString attrs = " ";
+            if ( ch.whiteSpace )
+                attrs += "whitespace ";
+            if ( !ch.charStop )
+                attrs += "notCharStop ";
+            if ( ch.wordStop )
+                attrs += "wordStop ";
+            attrs.truncate( attrs.length() - 1 );
+
+            kdDebug(32500) << i << ": '" << QString(ch.c).rightJustify(2)
+                           << "' (" << QString::number( ch.c.unicode() ).rightJustify(3) << ")"
                       << " x(LU)=" << ch.x
                       << " w(LU)=" << ch.width//s->width(i)
                       << " x(PIX)=" << pixelx
                       << " (xadj=" << + ch.pixelxadj << ")"
                       << " w(PIX)=" << ch.pixelwidth
                       << " height=" << ch.height()
+                      << attrs
                 //      << " format=" << ch.format()
-                      << " \"" << ch.format()->key() << "\" "
+                //      << " \"" << ch.format()->key() << "\" "
                 //<< " fontsize:" << dynamic_cast<KoTextFormat *>(ch.format())->pointSize()
                       << endl;
 
