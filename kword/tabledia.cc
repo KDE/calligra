@@ -245,10 +245,10 @@ void KWTableDia::slotOk()
                 for ( int i = 0 ; i < abs( rowsDiff ) ; i++ )
                 {
                     if ( rowsDiff < 0 )
-                        cmd = new KWRemoveRowCommand( "Remove row", table, oldRowCount-i-1 );
+                        cmd = new KWRemoveRowCommand( i18n("Remove row"), table, oldRowCount-i-1 );
                     else
                     {
-                        cmd = new KWInsertRowCommand( "Insert row", table, oldRowCount+i );
+                        cmd = new KWInsertRowCommand( i18n("Insert row"), table, oldRowCount+i );
                     }
 
                     if (cmd)
@@ -274,10 +274,10 @@ void KWTableDia::slotOk()
                 for ( int i = 0 ; i < abs( colsDiff ) ; i++ )
                 {
                     if ( colsDiff < 0 )
-                        cmd = new KWRemoveColumnCommand( "Remove column", table, oldColCount-i-1 );
+                        cmd = new KWRemoveColumnCommand( i18n("Remove column"), table, oldColCount-i-1 );
                     else
                     {
-                        cmd = new KWInsertColumnCommand( "Insert column", table, oldColCount+i,  maxRightOffset);
+                        cmd = new KWInsertColumnCommand( i18n("Insert column"), table, oldColCount+i,  maxRightOffset);
                     }
 
                     if (cmd)
