@@ -360,8 +360,8 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 void KivioCanvas::updateScrollBars()
 {
   KoPageLayout pl = activePage()->paperLayout();
-  m_pScrollX = m_pView->zoomHandler()->zoomItX(pl.ptWidth) - width();
-  m_pScrollY = m_pView->zoomHandler()->zoomItY(pl.ptHeight) - height();
+  m_pScrollX = QMAX(m_pView->zoomHandler()->zoomItX(pl.ptWidth) - width(), 0);
+  m_pScrollY = QMAX(m_pView->zoomHandler()->zoomItY(pl.ptHeight) - height(), 0);
 
   m_pHorzScrollBar->setRange(0, m_pScrollX);
   if ( m_pHorzScrollBar->value() > m_pHorzScrollBar->maxValue() ||
