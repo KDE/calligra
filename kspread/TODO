@@ -56,7 +56,7 @@ Other things: (please add the things you are working on!)
 - Scrollbar that supports jumping one row/column forward or back
 - formula result: fit the precision to the width of the cell
 - other bug fixes                               (everybody, every time)
-
+- Handling of empty cells: empty cells are != 0.0 
 
 *********
 * Taken:
@@ -100,8 +100,8 @@ Norbert
 - StarCalc/OpenCalc export filter
 
 - Multiple Operations
-- Lookup & Reference functions
-- Date/Time functions
++ Lookup & Reference functions (LOOKUP needs to fixed)
++ Date/Time functions
 + Database functions 
 + Subtotals
 - more information functions (Excel compatible)
@@ -125,11 +125,12 @@ OpenCalc - filter
   we should be able to assign complete styles (KSpreadLayout objects)
 - support for format strings (dd/mm/yyyy)       - Norbert
 - cells with links have the wrong size (due to QML)
-- more font attributes + attributes for parts of the text
+- more font attributes (outline, shadow,...) + attributes for parts of the text
+- double borders
 - multiline header/footer support
 - for formulas: fit precision so the result fits in the cell or resize the cell
 - save m_strOutText in file => no parsing on load  (Norbert)
-- save results in a certain way in the cell (Norbert)
+- save formula results etc in a certain way in the cell (Norbert)
 
 
 ***************************************************************************************

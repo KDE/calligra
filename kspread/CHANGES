@@ -24,29 +24,35 @@ since 1.2 relase ( 'til 1.3 beta 1 :-)
 
 New functions:
 
-Math:
+Date/Time (14):
+- EDATE, EOMONTH, DAYS360, WEEKDAY, TIMEVALUE, DATEVALUE, YEAR,
+  MONTH, DAY, HOUR, MINUTE, SECOND, DAYNAME, MONTHNAME
+
+Math (15):
 - SUBTOTAL, POWER, TRUNC, CEILING, PRODUCT (now Excel compatible), 
   KPRODUCT, RANDEXP, RANDBINOM, RANDNEGBINOM, RANDBERNOULLI,
   RANDPOISSON, MROUND, COUNTA, MINA, MAXA
 
-Statistical:
+Statistical (17):
 - VARP, STDEV, VAR, STDEVP, GEOMEAN, HARMEAN, 
   KURT, LOGINV, DEVSQ, STANDARDIZE, HYPGEOMDIST,
   NEGBINOMDIST, KURTP, CORREL, COVAR, SMALL, LARGE
 
-Financial:
+Financial (7):
 - PPMT, DDB, DURATION, PMT, NPER, ISPMT, IPMT
 
-Database:
+Database (12):
 - DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN,
   DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP
 
-Reference & Lookup:
+Reference & Lookup (8):
 - ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, INDIRECT,
   ROW, ROWS
 
 Obsolete formulas 
 - stddev (was stddevp in fact)
+- day (is dayname now)
+- month (is monthname now)
 
 Obsolete but still usable formulas (do not show up in dialog )
 - variance, pow
