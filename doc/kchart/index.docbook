@@ -131,7 +131,10 @@ of the application.
 <para>
 The &dataeditor; can be reached by selecting <menuchoice>
 <guimenu>Edit</guimenu><guimenuitem>Edit Data...</guimenuitem>
-</menuchoice> from the menu.
+</menuchoice> from the menu or by clicking on the
+<inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-data.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
 </para>
 <screenshot>
 <screeninfo>&dataeditor; in standalone mode</screeninfo>
@@ -172,7 +175,10 @@ available in standalone mode and when embedded in &kspread;
 To get to the chart configuration dialog, select <menuchoice>
 <guimenu>Edit</guimenu><guisubmenu>Chart</guisubmenu>
 <guimenuitem>Configure Chart...</guimenuitem>
-</menuchoice> from the menu.
+</menuchoice> from the menu or by clicking on the
+<inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-options.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
 </para>
 </sect2>
 </sect1>
