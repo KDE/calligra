@@ -1436,16 +1436,20 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
         return;
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    m_mousePressed = true; // needed for the dbl-click + move feature.
     switch ( m_mouseMode ) {
         case MM_EDIT:
             if ( m_currentFrameSetEdit )
                 m_currentFrameSetEdit->mouseDoubleClickEvent( e, normalPoint, docPoint );
+            else
+            {
+                editFrameProperties();
+                m_mousePressed = false;
+            }
             break;
         default:
             break;
     }
-
-    m_mousePressed = true; // needed for the dbl-click + move feature.
 }
 
 KCommand *KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
