@@ -2032,14 +2032,14 @@ void KPresenterView::brushChosen()
 	bool fill = true;
         KMacroCommand *macro= 0L;
         KCommand *cmd=0L;
-        cmd=m_canvas->activePage()->setBrushColor( c, fill );
+        cmd=m_canvas->activePage()->setBrushColor( c, fill,m_canvas->activePage()->objectList() );
         if(cmd)
         {
             if ( !macro )
                 macro= new KMacroCommand(i18n( "Change Brush Color" ));
             macro->addCommand(cmd);
         }
-        cmd=stickyPage()->setBrushColor( c, fill );
+        cmd=stickyPage()->setBrushColor( c, fill,stickyPage()->objectList() );
         if(cmd)
         {
             if ( !macro )

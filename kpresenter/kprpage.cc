@@ -2333,14 +2333,15 @@ KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth
     return pictureSettingCmd;
 }
 
-KCommand* KPrPage::setBrushColor( const QColor &c, bool fill )
+KCommand* KPrPage::setBrushColor( const QColor &c, bool fill, QPtrList<KPObject> list )
 {
     KPObject *kpobject = 0;
     BrushCmd *brushCmd=0L;
     QPtrList<KPObject> _objects;
     QPtrList<BrushCmd::Brush> _oldBrush;
     BrushCmd::Brush _newBrush, *btmp;
-
+    KMacroCommand *cmd=new KMacroCommand(i18n("Change Brush"));
+    bool cmdCreate=false;
     _newBrush.fillType = FT_BRUSH;
     if ( !fill )
 	_newBrush.brush = Qt::NoBrush;
@@ -2350,7 +2351,7 @@ KCommand* KPrPage::setBrushColor( const QColor &c, bool fill )
     _objects.setAutoDelete( false );
     _oldBrush.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrListIterator<KPObject> it( list );
     for ( ; it.current() ; ++it )
     {
         kpobject=it.current();
@@ -2461,6 +2462,22 @@ KCommand* KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gType = obj->getGType();
                 }
             } break;
+            case OT_GROUP:
+            {
+                KPGroupObject *obj=dynamic_cast<KPGroupObject*>( kpobject );
+                if(obj)
+                {
+                    obj->selectAllObj();
+                    KCommand* cmd2= setBrushColor( c, fill, obj->objectList() );
+                    obj->deSelectAllObj();
+                    if(cmd2)
+                    {
+                        cmd->addCommand(cmd2);
+                        cmdCreate=true;
+                    }
+                }
+            }
+            break;
 	    default: continue; break;
 	    }
 	    _oldBrush.append( btmp );
@@ -2471,13 +2488,23 @@ KCommand* KPrPage::setBrushColor( const QColor &c, bool fill )
     if ( !_objects.isEmpty() ) {
 	brushCmd = new BrushCmd( i18n( "Change Brush" ), _oldBrush, _newBrush, _objects, m_doc );
 	brushCmd->execute();
+        cmd->addCommand( brushCmd );
+        cmdCreate=true;
     } else {
 	_oldBrush.setAutoDelete( true );
 	_oldBrush.clear();
     }
 
+    if(cmdCreate)
+        return cmd;
+    else
+    {
+        delete cmd;
+        cmd=0L;
+    }
+
     m_doc->setModified(true);
-    return brushCmd;
+    return cmd;
 }
 
 void KPrPage::slotRepaintVariable()

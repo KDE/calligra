@@ -176,7 +176,7 @@ public:
     KCommand* setRectSettings( int _rx, int _ry, int flags );
     KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue, int flags );
     KCommand* setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal, int _bright );
-    KCommand* setBrushColor( const QColor &c, bool fill );
+    KCommand* setBrushColor( const QColor &c, bool fill, QPtrList<KPObject> list );
 
     void slotRepaintVariable();
     void recalcPageNum();
