@@ -29,12 +29,14 @@ static const char* version="1.2 Beta1";
 
 KAboutData * newKFormulaAboutData()
 {
-    KAboutData * aboutData = new KAboutData( "kformula", I18N_NOOP("KFormula"),
+    KAboutData * aboutData = new KAboutData( "kformula", I18N_NOOP( "KFormula" ),
                                              version, description, KAboutData::License_GPL,
                                              "(c) 1998-2002, Andrea Rizzi", 0,
-					     "http://www.koffice.org/kformula/");
-    aboutData->addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
-    aboutData->addAuthor("Ulrich Kuettler",0, "ulrich.kuettler@gmx.de");
+					     "http://www.koffice.org/kformula/" );
+    aboutData->addAuthor( "Andrea Rizzi", 0, "rizzi@kde.org" );
+    aboutData->addAuthor( "Ulrich Kuettler", 0, "ulrich.kuettler@gmx.de" );
+    aboutData->addCredit( "Claus O. Wilke", I18N_NOOP( "for your advice to look at TeX first" ) );
+    aboutData->addCredit( "Tom Deblauwe", I18N_NOOP( "for the sweet icons" ) );
     return aboutData;
 }
 
