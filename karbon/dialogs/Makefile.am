@@ -13,22 +13,14 @@ noinst_HEADERS = \
 	vconfiguredlg.h \
 	vfilldlg.h \
 	vcolortab.h \
-	vflattendlg.h \
-	vinsertknotsdlg.h \
-	vroundcornersdlg.h \
-	vstrokedlg.h \
-	vwhirlpinchdlg.h
+	vstrokedlg.h 
 
 libkarbondialogs_la_SOURCES = \
 	dummy.cc \
 	vconfiguredlg.cc \
 	vfilldlg.cc \
 	vcolortab.cc \
-	vflattendlg.cc \
-	vinsertknotsdlg.cc \
-	vroundcornersdlg.cc \
-	vstrokedlg.cc \
-	vwhirlpinchdlg.cc
+	vstrokedlg.cc 
 
 libkarbondialogs_la_METASOURCES = \
 	AUTO
