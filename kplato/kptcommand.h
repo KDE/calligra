@@ -23,6 +23,7 @@
 #include <kcommand.h>
 #include "kptnode.h"
 #include "kptduration.h"
+#include "kpttask.h"
 
 class QString;
 
@@ -610,6 +611,20 @@ private:
     KPTResourceGroup *m_group;
     QString m_newvalue;
     QString m_oldvalue;
+};
+
+class KPTTaskModifyProgressCmd : public KNamedCommand
+{
+public:
+    KPTTaskModifyProgressCmd(KPTPart *part, KPTTask &task, struct KPTTask::Progress &value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTTask &m_task;
+    struct KPTTask::Progress m_newvalue;
+    struct KPTTask::Progress m_oldvalue;
 };
 
 

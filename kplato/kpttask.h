@@ -178,6 +178,26 @@ public:
     
     bool isEndNode() const;
     bool isStartNode() const;
+    
+    struct Progress {
+        bool operator==(struct Progress &p) {
+            return percentFinished == p.percentFinished &&
+                   remainingEffort == p.remainingEffort &&
+                   totalPerformed == p.totalPerformed;
+        }
+        bool operator!=(struct Progress &p) { return !(*this == p); }
+        struct Progress &operator=(struct Progress &p) {
+            percentFinished = p.percentFinished;
+            remainingEffort = p.remainingEffort;
+            totalPerformed = p.totalPerformed;
+            return *this;
+        }
+        int percentFinished;
+        KPTDuration remainingEffort;
+        KPTDuration totalPerformed;        
+    };
+    struct Progress &progress() { return m_progress; }
+    
 private:
     KPTDateTime calculateSuccessors(const QPtrList<KPTRelation> &list, int use);
     KPTDateTime calculatePredeccessors(const QPtrList<KPTRelation> &list, int use);
@@ -193,6 +213,8 @@ private:
 
     QPtrList<KPTRelation> m_parentProxyRelations;
     QPtrList<KPTRelation> m_childProxyRelations;
+      
+    struct Progress m_progress;
     
 #ifndef NDEBUG
 public:

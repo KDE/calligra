@@ -26,7 +26,8 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     standardworktimedialogbase.ui kptstandardworktimedialog.cc \
     kptintervaleditbase.ui kptintervaledit.cc \
     kpttaskgeneralpanel.cc kpttaskdefaultpanel.cc \
-    kptconfigdialog.cc
+    kptconfigdialog.cc \
+    kpttaskprogresspanel.cc kpttaskprogresspanelbase.ui
 
 # (this is not used)
 noinst_HEADERS = kptaboutdata.h kptduration.h kptfactory.h \
@@ -45,7 +46,8 @@ noinst_HEADERS = kptaboutdata.h kptduration.h kptfactory.h \
     kptcommand.h \
     kptstandardworktimedialog.h kptintervaledit.h \
     kpttaskgeneralpanel.h kpttaskdefaultpanel.h \
-    kptconfigdialog.h
+    kptconfigdialog.h \
+    kpttaskprogresspanel.h
 
 ## The part
 lib_LTLIBRARIES = 

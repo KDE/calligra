@@ -21,11 +21,12 @@
 #include "kpttaskdialog.h"
 #include "kpttaskgeneralpanel.h"
 #include "kptrequestresourcespanel.h"
+#include "kpttaskprogresspanel.h"
 
 #include <klocale.h>
 #include <kcommand.h>
 
-#include <qlayout.h>
+#include <qvbox.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -34,25 +35,25 @@ namespace KPlato
 KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, QWidget *p, const char *n)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, n, true, true)
 {
-    QFrame *page;
-    QVBoxLayout *topLayout;
-
+    QVBox *page;
+    
     // Create all the tabs.
-    page = addPage(i18n("&General"));
-    topLayout = new QVBoxLayout(page, 0, spacingHint());
+    page = addVBoxPage(i18n("&General"));
     m_generalTab = new KPTTaskGeneralPanel(task, workTime, page);
-    topLayout->addWidget(m_generalTab);
 
-    page = addPage(i18n("&Resources"));
-    topLayout = new QVBoxLayout(page, 0, spacingHint());
+    page = addVBoxPage(i18n("&Resources"));
     m_resourcesTab = new KPTRequestResourcesPanel(page, task);
-    topLayout->addWidget(m_resourcesTab);
+    
+    kdDebug()<<k_funcinfo<<endl;
+    page = addVBoxPage(i18n("&Progress"));
+    m_progressTab = new KPTTaskProgressPanel(task, page);
 
     // Set the state of all the child widgets.
     enableButtonOK(false);
     
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
+    connect(m_progressTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
 }
 
 
@@ -69,6 +70,11 @@ KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
         m->addCommand(cmd);
         modified = true;
     }
+    cmd = m_progressTab->buildCommand(part);
+    if (cmd) {
+        m->addCommand(cmd);
+        modified = true;
+    }
     if (!modified) {
         delete m;
         return 0;
@@ -80,6 +86,8 @@ void KPTTaskDialog::slotOk() {
     if (!m_generalTab->ok())
         return;
     if (!m_resourcesTab->ok())
+        return;
+    if (!m_progressTab->ok())
         return;
     accept();
 }

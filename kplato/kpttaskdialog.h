@@ -48,6 +48,7 @@ class KPTRequestResourcesPanel;
 class KPTPart;
 class KPTTask;
 class KPTStandardWorktime;
+class KPTTaskProgressPanel;
 
 class KPTTaskDialog : public KDialogBase {
     Q_OBJECT
@@ -62,6 +63,7 @@ protected slots:
 private:
     KPTTaskGeneralPanel *m_generalTab;
     KPTRequestResourcesPanel *m_resourcesTab;
+    KPTTaskProgressPanel *m_progressTab;
 
 };
 

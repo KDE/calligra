@@ -961,6 +961,24 @@ void KPTModifyResourceGroupNameCmd::unexecute() {
         m_part->setCommandType(0);
 }
 
+KPTTaskModifyProgressCmd::KPTTaskModifyProgressCmd(KPTPart *part, KPTTask &task, struct KPTTask::Progress &value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_task(task),
+      m_newvalue(value) {
+    m_oldvalue = task.progress();
+}
+void KPTTaskModifyProgressCmd::execute() {
+    m_task.progress() = m_newvalue;
+    if (m_part)
+        m_part->setCommandType(0);
+}
+void KPTTaskModifyProgressCmd::unexecute() {
+    m_task.progress() = m_oldvalue;
+    if (m_part)
+        m_part->setCommandType(0);
+}
+
 
 
 }  //KPlato namespace

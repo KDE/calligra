@@ -44,6 +44,8 @@ KPTTask::KPTTask(KPTNode *parent) : KPTNode(parent), m_resource() {
     if (m_parent)
         m_leader = m_parent->leader();
         
+    m_progress.percentFinished = 0;
+        
     m_parentProxyRelations.setAutoDelete(true);
     m_childProxyRelations.setAutoDelete(true);
 }
@@ -189,7 +191,7 @@ bool KPTTask::load(QDomElement &element) {
     m_resourceError = element.attribute("resource-error", "0").toInt();
     m_resourceError = element.attribute("resource-overbooked", "0").toInt();
     m_resourceError = element.attribute("scheduling-conflict", "0").toInt();
-        
+    
     // Load the project children
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
@@ -231,8 +233,12 @@ bool KPTTask::load(QDomElement &element) {
                     delete r;
                 }
             }
+        } else if (e.tagName() == "progress") {
+            m_progress.percentFinished = e.attribute("percent-finished", "0").toInt();
+            m_progress.remainingEffort =             KPTDuration::fromString(e.attribute("remaining-effort"));
+            m_progress.totalPerformed = KPTDuration::fromString(e.attribute("performed-effort"));
         }
-	}
+    }
     }
     //kdDebug()<<k_funcinfo<<m_name<<" loaded"<<endl;
     return true;
@@ -265,7 +271,12 @@ void KPTTask::save(QDomElement &element)  {
 
     m_effort->save(me);
 
-
+    QDomElement el = me.ownerDocument().createElement("progress");
+    me.appendChild(el);
+    el.setAttribute("percent-finished", m_progress.percentFinished);
+    el.setAttribute("remaining-effort", m_progress.remainingEffort.toString());
+    el.setAttribute("performed-effort", m_progress.totalPerformed.toString());
+    
     if (m_requests) {
         m_requests->save(me);
     }
