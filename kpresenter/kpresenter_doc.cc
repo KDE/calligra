@@ -1645,12 +1645,26 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         {
             fillStyleStack( o, context );
 
-            KPTextObject *kptextobject = new KPTextObject( this );
-            kptextobject->loadOasis(o, context, m_loadingInfo);
-            if ( groupObject )
-                groupObject->addObjects( kptextobject );
+            QDomNode imageBox = KoDom::namedItemNS( o, KoXmlNS::draw, "image" );
+            kdDebug()<<" imageBox:"<<imageBox.isNull()<<endl;
+            if ( !imageBox.isNull() )
+            {
+                KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
+                kppixmapobject->loadOasis( o, context, m_loadingInfo);
+                if ( groupObject )
+                    groupObject->addObjects( kppixmapobject );
+                else
+                    newpage->appendObject(kppixmapobject);
+            }
             else
-                newpage->appendObject(kptextobject);
+            {
+                KPTextObject *kptextobject = new KPTextObject( this );
+                kptextobject->loadOasis(o, context, m_loadingInfo);
+                if ( groupObject )
+                    groupObject->addObjects( kptextobject );
+                else
+                    newpage->appendObject(kptextobject);
+            }
         }
         else if ( name == "rect" && isDrawNS) // rectangle
         {
@@ -1719,6 +1733,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kpPolygoneObject);
         }
+#if 0 //old code
         else if ( name == "image" && isDrawNS) // image
         {
             fillStyleStack( o, context );
@@ -1729,6 +1744,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kppixmapobject);
         }
+#endif
         else if ( name == "path" && isDrawNS)
         {
             //we have 4 elements to use here.

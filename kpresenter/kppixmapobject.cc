@@ -42,6 +42,7 @@
 #include <koStoreDevice.h>
 #include <kooasiscontext.h>
 #include <koxmlns.h>
+#include <kodom.h>
 
 #include "kppixmapobject.h"
 #include "kpgradient.h"
@@ -205,14 +206,17 @@ void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
 
 bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
 {
-    xmlWriter.startElement( "draw:image" );
+    xmlWriter.startElement( "draw:frame" );
     xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(),indexObj ) );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
+
+    xmlWriter.startElement( "draw:image" );
     xmlWriter.addAttribute( "xlink:type", "simple" );
     xmlWriter.addAttribute( "xlink:show", "embed" );
     xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
-    xmlWriter.addAttribute( "xlink:href", "#"+ imageCollection->getOasisFileName(image) );
+    xmlWriter.addAttribute( "xlink:href", imageCollection->getOasisFileName(image) );
+    xmlWriter.endElement();
 
     xmlWriter.endElement();
     return true;
@@ -339,11 +343,13 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
 
 void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
+    //load it into kpresenter_doc
     KP2DObject::loadOasis( element, context, info );
     loadOasisPictureEffect( context );
-    const QString href( element.attributeNS( KoXmlNS::xlink, "href", QString::null) );
+    QDomNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
+    const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString::null) );
     kdDebug()<<" href: "<<href<<endl;
-    if ( !href.isEmpty() && href[0] == '#' )
+    if ( !href.isEmpty() /*&& href[0] == '#'*/ )
     {
         QString strExtension;
         const int result=href.findRev(".");
@@ -351,7 +357,7 @@ void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & cont
         {
             strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
         }
-        QString filename(href.mid(1));
+        QString filename(href/*.mid(1)*/);
         const KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
         image.setKey(key);
 
