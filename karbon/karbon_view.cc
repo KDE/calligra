@@ -911,10 +911,10 @@ KarbonView::initActions()
 		i18n( "Send to &Back" ), 0, QKeySequence("Shift+PgDown"), this,
 		SLOT( selectionSendToBack() ), actionCollection(), "object_move_tobottom" );
 	new KAction(
-		i18n( "&Group Objects" ), 0, QKeySequence("Ctrl+G"), this,
+		i18n( "&Group Objects" ), "group", QKeySequence("Ctrl+G"), this,
 		SLOT( groupSelection() ), actionCollection(), "selection_group" );
 	new KAction(
-		i18n( "&Ungroup Objects" ), 0, QKeySequence("Ctrl+U"), this,
+		i18n( "&Ungroup Objects" ), "ungroup", QKeySequence("Ctrl+U"), this,
 		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	new KAction(
 		i18n( "&Translate" ), "14_translate", 0, this,

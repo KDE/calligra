@@ -76,6 +76,8 @@
 		<Text>Stroke Properties</Text>
 		<Action name="setLineWidth"/>
 		<Action name="setJoinStyle"/>
+		<Action name="selection_group"/>
+		<Action name="selection_ungroup"/>
 	</ToolBar>
 	<ToolBar name="Toolbox" position="left">
 		<Text>Toolbox</Text>
