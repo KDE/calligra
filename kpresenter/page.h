@@ -93,6 +93,8 @@ public:
     void setTextSubScript( bool b );
     void setTextSuperScript( bool b );
     void setTextDefaultFormat( );
+    void setIncreaseFontSize();
+    void setDecreaseFontSize();
     KPTextObject* kpTxtObj();
 
     // Start a screen presentation

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="21">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="22">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -213,6 +213,9 @@
   <Separator/>
   <Action name="format_super"/>
   <Action name="format_sub"/>
+  <Separator/>
+  <Action name="increaseFontSize"/>
+  <Action name="decreaseFontSize"/>
   <Separator/>
   <Action name="text_color"/>
   <Action name="brush_color"/>

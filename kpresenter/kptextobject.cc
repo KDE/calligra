@@ -546,6 +546,9 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     //todo FIXME : KoTextFormat
 
                     KoTextFormat *fm = static_cast<KoTextFormat*> (textDocument()->formatCollection()->format( fn, col ));
+                    kdDebug()<<"******************************************\n";
+                    kdDebug()<<"format :"<<fm->key()<<endl;
+                    kdDebug()<<"******************************************\n";
                     QString textBackColor=n.attribute(attrTextBackColor);
                     if(!textBackColor.isEmpty())
                     {

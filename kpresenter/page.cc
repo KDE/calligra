@@ -1605,6 +1605,28 @@ void Page::setTextDefaultFormat( )
         it.current()->setDefaultFormat( );
 }
 
+void Page::setIncreaseFontSize()
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    int size=12;
+    if(!lst.isEmpty())
+        size=static_cast<int>( KoTextZoomHandler::layoutUnitToPt(lst.first()->currentFormat()->font().pointSize()));
+    for ( ; it.current() ; ++it )
+        it.current()->setPointSize( size+1 );
+}
+
+void Page::setDecreaseFontSize()
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+        int size=12;
+    if(!lst.isEmpty())
+        size=static_cast<int>( KoTextZoomHandler::layoutUnitToPt(lst.first()->currentFormat()->font().pointSize()));
+    for ( ; it.current() ; ++it )
+        it.current()->setPointSize( size-1 );
+}
+
 /*===================== set text alignment =======================*/
 void Page::setTextAlign( int align )
 {

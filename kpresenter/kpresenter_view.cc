@@ -2530,6 +2530,15 @@ void KPresenterView::setupActions()
                                             actionCollection(), "insert_custom" );
     actionInsertVariable->insert(actionInsertCustom);
     refreshCustomMenu();
+
+    actionIncreaseFontSize = new KAction( i18n("Increase font size"),"fontsizeup", 0,
+                                  this, SLOT( increaseFontSize() ),
+                                  actionCollection(), "increaseFontSize" );
+
+    actionDecreaseFontSize = new KAction( i18n("Decrease font size"),"fontsizedown", 0,
+                                  this, SLOT( decreaseFontSize() ),
+                                  actionCollection(), "decreaseFontSize" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -2542,6 +2551,15 @@ void KPresenterView::textSuperScript()
     page->setTextSuperScript(actionFormatSuper->isChecked());
 }
 
+void KPresenterView::decreaseFontSize()
+{
+    page->setDecreaseFontSize();
+}
+
+void KPresenterView::increaseFontSize()
+{
+    page->setIncreaseFontSize();
+}
 
 void KPresenterView::objectSelectedChanged()
 {
@@ -2589,6 +2607,8 @@ void KPresenterView::objectSelectedChanged()
     actionFormatStrikeOut->setEnabled(isText);
     actionFormatSuper->setEnabled(isText);
     actionFormatSub->setEnabled(isText);
+    actionIncreaseFontSize->setEnabled(isText);
+    actionDecreaseFontSize->setEnabled(isText);
 
     KPTextView *edit=page->currentTextObjectView();
     bool val=edit && isText;

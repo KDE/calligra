@@ -279,6 +279,9 @@ public slots:
     void editCustomVars ();
     void openLink();
 
+    void increaseFontSize();
+    void decreaseFontSize();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -674,6 +677,8 @@ private:
     KAction *actionInsertLink;
     KAction *actionFormatParag;
     KAction *actionOpenLink;
+    KAction *actionIncreaseFontSize;
+    KAction *actionDecreaseFontSize;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
