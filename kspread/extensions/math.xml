@@ -225,7 +225,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The FACT() function calculates the factorial of the parameter. The mathematical expression is (value).</Text>
+	<Text>The FACT() function calculates the factorial of the parameter. The mathematical expression is (value)!.</Text>
 	<Syntax>FACT(number)</Syntax>
 	<Example>FACT(10) returns 3628800</Example>
 	<Example>FACT(0) returns 1</Example>
