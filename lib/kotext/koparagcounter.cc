@@ -461,7 +461,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
         tmp.setNum( m_cache.number );
         break;
 
-    // --- these are used in export filters but get drawn over by the paragraph renderer  ---
+    // --- these are used in export filters but are ignored by KoTextParag::drawLabel (for bulleted lists - which they are :))  ---
     case KoParagCounter::STYLE_DISCBULLET:
         tmp = '*';
         break;
