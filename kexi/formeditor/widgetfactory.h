@@ -48,7 +48,7 @@ class KFORMEDITOR_EXPORT Widget
 		/**
 		 * returns a pixmap associated with the widget
 		 */
-		virtual QPixmap	pixmap() { return m_pixmap; }
+		virtual QString	pixmap() { return m_pixmap; }
 
 		/**
 		 * returns the class name of a widget e.g. 'QLineEdit'
@@ -69,13 +69,13 @@ class KFORMEDITOR_EXPORT Widget
 
 		virtual WidgetFactory *factory() { return m_factory; }
 
-		void		setPixmap(const QPixmap &p) { m_pixmap = p; }
+		void		setPixmap(const QString &p) { m_pixmap = p; }
 		void		setClassName(const QString &s) { m_class = s; }
 		void		setName(const QString &n) { m_name = n; }
 		//void		setDescription(const QString &desc) { m_desc = desc;}
 
 	private:
-		QPixmap		m_pixmap;
+		QString		m_pixmap;
 		QString		m_class;
 		QString		m_name;
 		//QString		m_desc;

@@ -22,21 +22,21 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
  : KFormDesigner::WidgetFactory(parent, name)
 {
 	KFormDesigner::Widget *wLabel = new KFormDesigner::Widget(this);
-	wLabel->setPixmap(SmallIcon("label"));
+	wLabel->setPixmap("label");
 	wLabel->setClassName("QLabel");
 	wLabel->setName("Text Label");
 //	wLabel->setDescription(i18n("A widget to display text or pixmaps"));
 	m_classes.append(wLabel);
 
 	KFormDesigner::Widget *wLineEdit = new KFormDesigner::Widget(this);
-	wLineEdit->setPixmap(SmallIcon("lineedit"));
+	wLineEdit->setPixmap("lineedit");
 	wLineEdit->setClassName("QLineEdit");
 	wLineEdit->setName("Line Edit");
 //	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
 	
 	KFormDesigner::Widget *wWidget = new KFormDesigner::Widget(this);
-	wWidget->setPixmap(SmallIcon("widget"));
+	wWidget->setPixmap("widget");
 	wWidget->setClassName("QWidget");
 	wWidget->setName("Empty Widget");
 //	wLabel->setDescription(i18n("A widget to display text or pixmaps"));

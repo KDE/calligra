@@ -28,13 +28,13 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
  : KFormDesigner::WidgetFactory(parent, name)
 {
 	KFormDesigner::Widget *wBtnGroup = new KFormDesigner::Widget(this);
-	wBtnGroup->setPixmap(SmallIcon("frame"));
+	wBtnGroup->setPixmap("frame");
 	wBtnGroup->setClassName("QButtonGroup");
 	wBtnGroup->setName("Button Group");
 	m_classes.append(wBtnGroup);
 
 	KFormDesigner::Widget *wTabWidget = new KFormDesigner::Widget(this);
-	wTabWidget->setPixmap(SmallIcon("tabwidget"));
+	wTabWidget->setPixmap("tabwidget");
 	wTabWidget->setClassName("QTabWidget");
 	wTabWidget->setName("Tab Widget");
 	m_classes.append(wTabWidget);
