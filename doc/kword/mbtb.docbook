@@ -192,7 +192,7 @@ of another toolbar.</para>
 </sect1>
 
 <sect1 id="basic-menubar">
-<title>Basic Menubar</title>
+<title>Menubar</title>
      
 <para>The Menubar contains all commands available to &kword;.  It is
 divided into 10 general categories.</para>

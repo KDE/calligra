@@ -8,16 +8,16 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
-<title>The &kword; Screen</title>
+<title>The &kword; Window</title>
 
 <sect1 id="screen-overview">
 <title>Overview</title>
 <indexterm><primary>screen</primary></indexterm>
 
 <para>&kword;, like most &GUI; based programs, divides
-the screen up into several areas. Each area of the screen is used to
+the window up into several areas. Each area of the window is used to
 perform a group of similar features.  When you examine the &kword;
-screen, it is divided into 5 major areas:</para>
+window, it is divided into 5 major areas:</para>
 
 <orderedlist numeration="arabic">
 <listitem><para><link linkend="kde-frame">The &kde; Titlebar</link>
@@ -26,13 +26,13 @@ screen, it is divided into 5 major areas:</para>
 
 <listitem><para><link linkend="mb">The Menubar</link>.</para></listitem>
 
-<listitem><para><link linkend="tb">an assortment of
+<listitem><para><link linkend="tb">An assortment of
 Toolbars</link>.</para></listitem>
 
-<listitem><para><link linkend="da">the Document
+<listitem><para><link linkend="da">The Document
 Area</link>, including the rulers and scrollbars.</para></listitem>
 
-<listitem><para><link linkend="statb">and the Status bar</link>.</para></listitem>
+<listitem><para><link linkend="statb">The Status bar</link>.</para></listitem>
 
 </orderedlist>
 
@@ -43,8 +43,8 @@ Area</link>, including the rulers and scrollbars.</para></listitem>
 
 <variablelist>
 <varlistentry>
-<term><emphasis><anchor id="kde-frame"/>The &kde; Titlebar.</emphasis></term>
-<listitem><para>The &kde; titlebar surrounds all applications run under &kde;.
+<term><emphasis><anchor id="kde-frame"/>The &kde; Titlebar</emphasis></term>
+<listitem><para>The &kde; titlebar sits on top of all applications run under &kde;.
 For more information on the titlebar, please see the &kde; User Guide.</para>
 </listitem>
 </varlistentry>
@@ -53,7 +53,7 @@ For more information on the titlebar, please see the &kde; User Guide.</para>
 
 <listitem><para>The menubar provides access to all of &kword;'s functions and
 options.  Each part of the &kword; menubar is detailed in the section
-entitled: <link linkend="basic-menubar">The Basic Menubar</link>.</para>
+entitled: <link linkend="basic-menubar">The Menubar</link>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -65,7 +65,7 @@ entitled: <link linkend="basic-menubar">The Basic Menubar</link>.</para>
 </varlistentry>
 <varlistentry>
 
-<term><emphasis><anchor id="statb"/>Status bar</emphasis></term>
+<term><emphasis><anchor id="statb"/>The Statusbar</emphasis></term>
 <listitem><para>The status bar provides important information during the editing of your document.
 In the lower left corner, &kword; gives you the current page number and the total number of pages.  There will be helpful text shown in
 the status bar whenever you hold the mouse over a menu item.</para>
@@ -74,10 +74,9 @@ See the section on <link linkend="opt-ui">Configure &kword; User Interface</link
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><emphasis><anchor id="da"/>The Document Area.</emphasis></term>
+<term><emphasis><anchor id="da"/>The Document Area</emphasis></term>
 
 <listitem><para>The document area consists of:</para>
-
 
 <itemizedlist>
 <listitem><para><emphasis>Horizontal and Vertical Rulers</emphasis> -
@@ -118,10 +117,10 @@ frames, select text, and cut and paste text.  </para>
 <para>Along the top and left edges of the document area, are a
 horizontal and a vertical ruler.</para>
 
-<para>These rulers measure from the top left edge of the page. </para>
+<para>These rulers measure from the top left corner of the page. </para>
 
 <para>Each ruler has a bright area surrounded by a dark area.  The
-bright area shows the size and location of the currently selected frame
+bright area shows the size and location of the currently edited frame
 on that page.  As you change frames, the bright area changes to reflect
 the new frame's settings.</para>
 
@@ -149,7 +148,7 @@ the new frame's settings.</para>
 of the rulers (either one), and click with the
 <mousebutton>right</mousebutton> button on your mouse.</para>
 
-<para>Select your choice from the sub-menu.  You will notice both rulers
+<para>Select the units you want to use from the sub-menu.  You will notice both rulers
 change to the new unit of measure.</para>
 
 <para>You may also notice two vertical arrows (one pointed up, the other
@@ -160,7 +159,7 @@ linkend="format-para">Formatting Paragraphs.</link></para>
 
 <para>Finally, you may see some black marks, which are not part of the
 ruler.  They may appear as L shaped, a Reverse-L, an Upside-down T, or
-an Upside-down T with a dot in it.  These are location of tab stops.
+an Upside-down T with a dot in it.  These are locations of tab stops.
 For more information see the section entitled <link
 linkend="tab-stops">Using Tab Stops</link>.</para>
 

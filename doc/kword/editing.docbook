@@ -20,7 +20,7 @@ with other types of data, please see the section entitled <link linkend="guides-
 <para>For many editing and formatting functions in &kword;, certain actions (bold face, underline,&etc;) should be
 applied to a
 certain section of text, not the document as a whole. You specify which
-text should be altered by selecting ( or highlighting) the text you want changed.</para>
+text should be altered by selecting (or highlighting) the text you want changed.</para>
 
 <para>Selected text has a colored background to separate it from
 unselected text.</para>
@@ -57,10 +57,10 @@ Use the following key combinations to move the endpoint to the desired location.
 <informaltable><tgroup cols="2" align="left">
 <thead><row><entry align="center">Key Combination</entry><entry align="left">Function</entry></row></thead>
 <tbody>
-<row><entry align="center"><keycombo action="simul">&Shift;<keycap>Left Arrow</keycap></keycombo></entry><entry>Move endpoint one character to the left.</entry></row>
-<row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Left Arrow</keycap></keycombo></entry><entry>Move endpoint one word to the left.</entry></row>
-<row><entry align="center"><keycombo action="simul">&Shift;<keycap>Right Arrow</keycap></keycombo></entry><entry>Move endpoint one character to the Right.</entry></row>
-<row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Right Arrow</keycap></keycombo></entry><entry>Move endpoint one word to the Right.</entry></row>
+<row><entry align="center"><keycombo action="simul">&Shift;<keycap>Left Arrow</keycap></keycombo></entry><entry>Moves the endpoint one character to the left.</entry></row>
+<row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Left Arrow</keycap></keycombo></entry><entry>Moves the endpoint one word to the left.</entry></row>
+<row><entry align="center"><keycombo action="simul">&Shift;<keycap>Right Arrow</keycap></keycombo></entry><entry>Moves the endpoint one character to the Right.</entry></row>
+<row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Right Arrow</keycap></keycombo></entry><entry>Moves the endpoint one word to the Right.</entry></row>
 
 <row><entry align="center"><keycombo action="simul">&Shift;<keycap>Up Arrow</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the character directly up one line.</entry></row>
 <row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Up Arrow</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the first character of the line directly above.</entry></row>
@@ -130,7 +130,7 @@ use the same toolbars, menubars, etc.  Contrast this to the effect of the <link 
 <menuchoice><guimenu>View</guimenu><guimenuitem>Split View</guimenuitem></menuchoice> from the menubar. </para>
 
 <para>The current document area will be split into two views. Alterations to your document can be made in either view.
-Updates in one window will be immediately visible in the other.</para>
+Updates in one view will be immediately visible in the other.</para>
 
 <tip><para>The views can either be split horizontally or vertically.  See the next section for instructions.</para></tip>
 </sect2>
@@ -151,10 +151,15 @@ This will show a submenu.  Select either <guilabel>Horizontal</guilabel> or <gui
 <title>Changing the size of views </title>
 <indexterm><primary>views</primary><secondary>resizing</secondary></indexterm>
 <para>The relative sizes of each view can be adjusted with your mouse.</para>
-<para>To adjust the view size, look at the border between the scrollbar of one window
+<para>To adjust the view size, look at the border between the scrollbar of one view
 (the upper or right view) and the ruler of the other view (the lower or left view).  There is a
 solid border which appears raised between the scrollbar and the ruler. As the mouse pointer passes
 over this bar, it changes from an arrow to double lines with double arrows.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="viewsize.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
 <para>When the mouse pointer changes, click once with the &LMB; and hold the button
 down.  Drag that border to the new location.  When the mouse button is released, the
 views will change to the new proportions.</para>
@@ -210,7 +215,7 @@ the menubar.</para>
 
 <informalexample><para>It is a pleasure for me to give you this letter of introduction to your newest employee.</para></informalexample>
 
-<para>If, after you Undo a change, and then decide the <guimenuitem>Undo</guimenuitem> was a mistake,
+<para>If, after you Undo a change, and then want to reverse that decision,
 select
 <menuchoice><guimenu>Edit</guimenu><guimenuitem>Redo</guimenuitem></menuchoice> and
 the Undo is reversed.</para>
@@ -269,8 +274,8 @@ part of the same document or to another document entirely.</para>
 
 <informalexample><para>The big, red fox jumped over the lazy dog.</para></informalexample>
 
-<para>Using the mouse or keyboard, select the phrase <quote>big,
-red</quote>.</para>
+<para>Using the mouse or keyboard, select the phrase 
+<quote> big, red</quote> (notice the space before <quote>big</quote> is selected).</para>
 
 <para>Now select <menuchoice>
 <guimenu>Edit</guimenu><guimenuitem>Copy</guimenuitem></menuchoice> from
@@ -279,7 +284,7 @@ the menubar.</para>
 <para><emphasis>This has moved a copy of the selected text to the
 clipboard.</emphasis></para>
 
-<para>Now place the mouse cursor between <quote>lazy</quote> and
+<para>Now place the mouse cursor directly behind the word 
 <quote>dog</quote> and click once.</para>
 
 <para>Now select <menuchoice>
@@ -348,17 +353,17 @@ the menubar</para>
 fileref="editcut.png" format="PNG"/></imageobject></inlinemediaobject>
 on the toolbar.</para>
 </listitem>
-<listitem>
-<para>After the text is selected, click once with the &RMB; and hold the button down. 
-A small submenu will appear.  Simply select <guilabel>Cut</guilabel></para>
-</listitem>
+
 <listitem>
 <para>Using the keyboard shortcut: <keycombo
 action="simul">&Ctrl;<keycap>X</keycap></keycombo> or the alternate keyboard shortcut: 
 <keycombo
 action="simul">&Shift;<keycap>Delete</keycap></keycombo></para>
 </listitem>
-</itemizedlist>
+<listitem>
+<para>After the text is selected, click once with the &RMB; and hold the button down. 
+A small submenu will appear.  Simply select <guilabel>Cut</guilabel></para>
+</listitem></itemizedlist>
 
 <para>The <guimenuitem>Cut</guimenuitem> command moves a copy of the selected data
 to the clipboard.  <emphasis>The selected data is then deleted from the
@@ -385,17 +390,18 @@ on the toolbar.</para>
 </listitem>
 
 <listitem>
-<para>Place the cursor where the contents of the clipboard
-should be inserted. Click once with the &RMB; and hold the button down. A small
-submenu will appear.  Simply select <guilabel>Paste</guilabel></para>
-</listitem>
-
-<listitem>
 <para>Using the keyboard shortcut: <keycombo
 action="simul">&Ctrl;<keycap>V</keycap></keycombo> or the alternate keyboard shortcut: 
 <keycombo
 action="simul">&Shift;<keycap>Insert</keycap></keycombo></para>
 </listitem>
+
+<listitem>
+<para>Place the cursor where the contents of the clipboard
+should be inserted. Click once with the &RMB; and hold the button down. A small
+submenu will appear.  Simply select <guilabel>Paste</guilabel></para>
+</listitem>
+
 </itemizedlist>
 
 <para>The <guimenuitem>Paste</guimenuitem> command inserts a copy of all the data in
@@ -416,7 +422,7 @@ clipboard.</para>
 
 <tip><para>The clipboard is not limited to the bounds of the current document.  If
 text is copied (or cut) from a document, this text can be pasted
-into another open document, or another &kde; application entirely.</para></tip>
+into another open document, or another application entirely.</para></tip>
 
 </sect2>
 </sect1>
@@ -463,8 +469,10 @@ the toolbar.</para>
 <para>The combo box labelled <guilabel>Text to Find</guilabel>,
 provides a place for you to enter the text of your search command. (In
 the screenshot, that box is currently filled with
-<emphasis>KDE</emphasis>)</para> <para>If you click on
-<guibutton>OK</guibutton>, then &kword; will search the document until it
+<emphasis>KDE</emphasis>).</para> 
+
+<para>If you click on
+<guibutton>F</guibutton>, then &kword; will search the document until it
 finds a match to your text.  If &kword; cannot find a match, a dialog
 box will appear that says <guilabel>No match found</guilabel>.  </para>
 <tip><para>If you want to repeat a recent search, simply select the arrow in the drop-down
@@ -587,7 +595,7 @@ to include shadow text in the search text and whether to search for word by word
 <term><guilabel>Capitalization:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Normal</guilabel>, <guilabel>Uppercase</guilabel>, <guilabel>Lowercase</guilabel>,  or
-<guilabel>Small caps</guilabel> to determine what font alignment you want &kword; to search for.</para>
+<guilabel>Small caps</guilabel> to determine what capitalization you want &kword; to search for.</para>
 </listitem>
 </varlistentry>
 
@@ -617,10 +625,10 @@ with a few useful options.</para>
 <listitem>
 <para>When this option is selected, &kword; will not only search for the
 string of letters, but will verify that the case of the letters is the
-same.  For example.  Searching for:</para><para>
-<emphasis>KDE</emphasis></para><para>will match:</para><para>
+same.  For example.  Searching for:
+<emphasis>KDE</emphasis></para><para>will match:
 <emphasis>KDE</emphasis> and
-<emphasis>hiddenKDEinwords</emphasis> but not: </para><para><emphasis>Kde,
+<emphasis>hiddenKDEinwords</emphasis> </para><para>but not: <emphasis>Kde,
 kde</emphasis> or <emphasis> hiddenkdeinwords</emphasis>.</para>
 </listitem>
 </varlistentry>
@@ -870,10 +878,10 @@ with a few useful options.</para>
 <listitem>
 <para>When this option is selected, &kword; will not only search for the
 string of letters, but will verify that the case of the letters is the
-same.  For example.  Searching for:</para><para>
-<emphasis>KDE</emphasis></para><para>will match:</para><para>
+same.  For example.  Searching for:
+<emphasis>KDE</emphasis></para><para>will match:
 <emphasis>KDE</emphasis> and
-<emphasis>hiddenKDEinwords</emphasis> but not: </para><para><emphasis>Kde,
+<emphasis>hiddenKDEinwords</emphasis> </para><para>but not: <emphasis>Kde,
 kde</emphasis> or <emphasis> hiddenkdeinwords</emphasis>.</para>
 </listitem>
 </varlistentry>
@@ -940,8 +948,6 @@ is, by default forward in the document, but can be changed with the
 
 <para>To include formatting options in your search, click the button labeled
 <guibutton>Show Formatting Options</guibutton> in the <guilabel>Replace with</guilabel> section. </para>
-<para>Clicking <guibutton>No options</guibutton> disables all previous formatting options selections. This ensures that &kword; 
-changes the text, but not the formatting of the text (bold text will remain boldface, superscript text will remain superscript, etc).</para>
 
 <para>Once <guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
 
@@ -953,28 +959,28 @@ changes the text, but not the formatting of the text (bold text will remain bold
 </screenshot>
 
 <para>You can use this dialog to select the format of the replaced text.</para>
-<para>The left column consists of nine check boxes.  If there is a mark in the check box, then &kword; will change
+<para>The left column consists of 13 check boxes.  If there is a mark in the check box, then &kword; will change
 any replaced text to match the property selected.  
 If no mark is in the check box, &kword; does not consider that property when replacing text.</para>
 
 <variablelist>
 
 <varlistentry>
-<term><guilabel>Family</guilabel></term>
+<term><guilabel>Family:</guilabel></term>
 <listitem>
 <para>Use this combo box to select the font family you want your replacement text to use.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Size</guilabel></term>
+<term><guilabel>Size:</guilabel></term>
 <listitem>
 <para>Use this spin box to set the font size you want &kword; to use for your replaced text.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Color</guilabel> and <guilabel>Background Color</guilabel></term>
+<term><guilabel>Color:</guilabel> and <guilabel>Background Color:</guilabel></term>
 <listitem>
 <para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively,
 you want &kword; to use.  For more information on selecting a color, see the
@@ -983,7 +989,7 @@ section on <link linkend="select-colors">Selecting Colors from the Color Dialog<
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Bold</guilabel> and <guilabel>Italic</guilabel></term>
+<term><guilabel>Bold:</guilabel> and <guilabel>Italic:</guilabel></term>
 <listitem>
 <para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
 to change the fonts to boldface or italicized fonts.</para>
@@ -991,7 +997,7 @@ to change the fonts to boldface or italicized fonts.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Strikeout</guilabel></term>
+<term><guilabel>Strikeout:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
 <guilabel>Without</guilabel> to use for the replacement text.</para>
@@ -999,7 +1005,7 @@ to change the fonts to boldface or italicized fonts.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Underline</guilabel></term>
+<term><guilabel>Underline:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel>, <guilabel>Wave</guilabel>,  or
 <guilabel>Without</guilabel> to use for the replacement text.</para>
@@ -1007,7 +1013,7 @@ to change the fonts to boldface or italicized fonts.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Vertical Alignment</guilabel></term>
+<term><guilabel>Vertical Alignment:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
 <guilabel>Subscript</guilabel> to determine what font alignment you want &kword; to use.</para>
@@ -1049,12 +1055,16 @@ to use shadow text and/or word by word underlining and strikethrough in the repl
 <emphasis>Complete text string</emphasis>.</para>
 <para>This placeholder will contain the entire text string matched by the find command.</para>
 <para>For example:</para>
-<para>You create a search string, using patterns:  <emphasis>Reference \d</emphasis></para>
+<para>You create a search string, using regular expressions:  <emphasis>Reference \d</emphasis></para>
+<note><para>In order for this string example to work, a mark must be placed in the check box labeled 
+<guilabel>Regular expression</guilabel></para>
+<para>Regular expressions are available by placing a mark in this checkbox. The use of regular expressions is beyond the 
+scope of this manual.  For more information see the KDE Regular Expression Manual (Available in the &kde; help center).</para></note>
 <para>Now in the <guilabel>Replace With</guilabel> section of the replace dialog, you place a mark in the check box labeled
 <guilabel>Use placeholders</guilabel>.  Click the <guibutton>Insert Placeholder</guibutton> button and select
-<guilabel>Complete text found</guilabel>.  &kword; will insert a <emphasis>/0</emphasis> in the 
+<guilabel>Complete text found</guilabel>.  &kword; will insert a <emphasis>\0</emphasis> in the 
 <guilabel>Replacement text</guilabel> text box.</para>
-<para>Now surround the placeholder with parentheses, so your text string is:  <emphasis>(/0)</emphasis></para>
+<para>Now surround the placeholder with parentheses, so your text string is:  <emphasis>(\0)</emphasis></para>
 <para>When this is executed, whenever &kword; encounters the find text (ie. <quote>Reference 0</quote>, <quote>Reference 1</quote>,
 <quote>Reference 2</quote>, etc) it will surround the text in parethesis (<quote>(Reference 0)</quote>, <quote>(Reference 1)</quote>,
 <quote>(Reference 2)</quote>, respectively). </para>
@@ -1191,9 +1201,6 @@ box.</para>
 <guilabel>Replacement</guilabel>.  In the list box labeled <guilabel>Suggestion</guilabel> is a list of words
 the spelling program has determined as possible correct spellings.</para>
 
-<para>There is a progress bar below the list of suggestions which tells
-you how much of the document has been spellchecked. In this example, that is 28 percent.</para>
-
 <para>From here you have eight options:</para>
 
 <variablelist>
@@ -1263,10 +1270,12 @@ in the document that the spellchecking was begun.</para>
 
 <note>
 <para>If the document does not have any spelling errors, &kword; does
-not show a dialog box.  When spellchecking is started, it
+not show a dialog box informing you there were no spelling errors.</para>
+
+<para>When spellchecking is started, it
 will proceed to check all of the document against the dictionary, and
-then exit the spellcheck dialog box.  With short documents, you may
-miss the dialog box.  &kword; has spellchecked the document!</para>
+if there are no spelling errors it will close the spellcheck dialog box.  With short documents, 
+this may happen quickly. &kword; has spellchecked the document!</para>
 </note>
 
 <para>There are several options for configuring the spelling application used.
@@ -1279,7 +1288,7 @@ For more details, please see the section entitled
 
 <para>&kword; can check the spelling of your document as you edit it.  It will underline in red any word which 
 it cannot find in the dictionary.  This behavior can be turned on and off by the user. By selecting <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Autospellcheck</guimenuitem></menuchoice>
 from the menubar you can toggle autospellchecking on and off. </para> 
 </sect2>
 
@@ -1336,12 +1345,12 @@ automatically, while you are editing your document.</para>
 <guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
 <guimenuitem>Enable Autocorrection</guimenuitem></menuchoice>
 from the menubar.  When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>.  You can
-determine which changes to make by <link linkend="configure-autocorrection">configuring autocorrection</link></para>
+determine which changes to make by <link linkend="configure-autocorrection">configuring autocorrection</link>.</para>
 
-<para>To toggle autocorrection on, select <menuchoice>
+<para>To toggle autocorrection off, select <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
 <guimenuitem>Disable Autocorrection</guimenuitem></menuchoice>
-from the menubar. If disabled, autocorrection changes are not made. You can, however,
+from the menubar. When disabled, autocorrection changes are not made. You can, however,
 <link linkend="autoformat">apply autocorrection manually</link>.</para>
 </sect2>
 
@@ -1349,7 +1358,7 @@ from the menubar. If disabled, autocorrection changes are not made. You can, how
 <title>Configuring Autocorrection Options</title>
 <indexterm><primary>autocorrection</primary><secondary>configuring</secondary></indexterm>
 
-<para>To adjust the options for auto correction, select <menuchoice>
+<para>To adjust the options for autocorrection, select <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection...</guimenuitem></menuchoice>
 from the menubar.  </para>
 
@@ -1500,7 +1509,7 @@ quotation character, click on one of the buttons. Clicking on
 <sect3 id="advanced-autocorrection">
 <title>Advanced Autocorrection</title>
 
-<para>To switch to the Advanced Autocorrection, click on the tab labled
+<para>To switch to the Advanced Autocorrection, click on the tab labeled
 <guilabel>Advanced Autocorrection</guilabel>.</para>
 
 <screenshot>
@@ -1531,7 +1540,7 @@ on setting the format options for replacement text, see the section on
 
 <para>To add an autocorrection string, simply type the text you want &kword; to
 check for in the text box labeled
-<guilabel>Find</guilabel> Then enter the text you want &kword;
+<guilabel>Find</guilabel>, then enter the text you want &kword;
 to substitute in the text box labeled <guilabel>Replace</guilabel>.</para>
 
 
@@ -1586,7 +1595,7 @@ button.</para>
 </mediaobject>
 </screenshot>
 <para>You can use this dialog to select the format of the replaced text.</para>
-<para>The left column consists of nine check boxes.  If there is a mark in the check box, then &kword; will change
+<para>The left column consists of 13 check boxes.  If there is a mark in the check box, then &kword; will change
 any replaced text to match the property selected.
 If no mark is in the check box, &kword; does not consider that property when replacing text.</para>
 
@@ -1682,7 +1691,7 @@ to use shadow text and/or word by word underlining and strikethrough in the repl
 <indexterm><primary>autocorrection</primary><secondary>exceptions</secondary></indexterm>
 
 <para>There are instances where &kword; will make autocorrection changes
-that are inappropriate.  You can use the third tab of this dialog to define
+that are inappropriate.  You can use the fourth tab of this dialog to define
 <emphasis>exceptions</emphasis> to the rules previously discussed.</para>
 <para>The dialog for exceptions is shown below:</para>
 <screenshot>
@@ -1698,18 +1707,18 @@ the end of a sentence, simply enter the text fragment in the text box below
 <para><quote>Robert Jones Jr. is a friend of the family.</quote></para>
 <para>from being changed to:</para>
 <para><quote>Robert Jones Jr. Is a friend of the family.</quote></para>
-<para>To remove an erroneous entry, simply click once on the wrong entry with the &RMB;
+<para>To remove an erroneous entry, simply click once on the wrong entry with the &LMB;
 and click on the <guibutton>Remove</guibutton> button.</para>
-<para>The second set of boxes performs a similar function to the first.  Only in
-this instance, text entered in these boxes will stay double capital letters.</para>
-<para>simply enter the text fragment in the text box below
+<para>The second set of boxes performs a similar function to the first except text entered in these boxes will allow two capital letters in a word if it 
+is entered in this text box.</para>
+<para>Simply enter the word in the text box below
 <guilabel>Accept two uppercase letters in</guilabel>.  Then click
 <guibutton>Add</guibutton>.</para>
 <para>As an example:  Adding <quote>FL</quote> to this dialog prevents</para>
-<para><quote>Sarasota, FL </quote></para>
+<para><quote>CDs</quote></para>
 <para>from being changed to:</para>
-<para><quote>Sarasota, Fl </quote></para>
-<para>To remove an erroneous entry, simply click once on the wrong entry with the &RMB;
+<para><quote>Cds</quote></para>
+<para>To remove an erroneous entry, simply click once on the wrong entry with the &LMB;
 and click on the <guibutton>Remove</guibutton> button.</para>
 </sect3>
 </sect2>
@@ -1727,7 +1736,7 @@ from the menubar.</para>
 <para>&kword; will start at the beginning of the document and apply all selected autocorrection options to the entire document.</para>
 <para>When &kword; is finished, it will return you to your document for further editing.</para>
 <para>For more information on enabling and disabling autocorrection,
-see <link linkend="autocorrection-enable">Enable/Disable Autocorrection</link>.</para>
+see <link linkend="autocorrection-enable">Enabling/Disabling Autocorrection</link>.</para>
 
 </sect2>
 </sect1>
@@ -1775,7 +1784,7 @@ from the menubar.  This will bring up a dialog.</para>
 <para>The second check box, labeled <guilabel>Automatically add new words to completion list</guilabel> will add any word equal to or longer
 than the <guilabel>Minimum word length</guilabel> to the list of proposed autocompletion words.</para>
 <para>The large listbox in the center of the dialog contains the current proposed list of autocompletion words.</para>
-<note><para>Not all words listed in the list box will be replaced when autocompletion is selected.</para>
+<note><para>Not all words listed in the list box will be immediatly affected by autocompletion when entered into this dialog.</para>
 <para>A word is not part of autocompletion until the list is <emphasis>saved</emphasis> to disk.  At that moment, &kword; 
 will use that saved list for all autocompletion, until the list is replaced with another saved list.</para>
 <para>Some of the words in the autocompletion list may not have been saved yet.</para></note>

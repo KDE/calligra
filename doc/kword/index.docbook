@@ -60,8 +60,8 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-2-11</date>
-<releaseinfo>1.3</releaseinfo>
+<date>2005-3-29</date>
+<releaseinfo>1.4</releaseinfo>
 
 <abstract>
 <para>
@@ -69,7 +69,7 @@
 &koffice; suite of utilities.
 </para>
 <para>
-This manual describes &kword; 1.3.
+This manual describes &kword; 1.4.
 </para>
 </abstract>
 
@@ -114,8 +114,9 @@ Environment.  Other applications in &koffice; include:
 <listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
 <listitem><para><application>Karbon14</application> (A vector drawing program.)</para></listitem>
 <listitem><para>&kivio; (A flowchart creator)</para></listitem>
-<listitem><para>&krita; (A raster drawing program.)</para></listitem>
+<listitem><para>&krita; (A pixel based drawing program.)</para></listitem>
 <listitem><para>&kugar; (A report generation tool.)  </para></listitem>
+<listitem><para>Kexi (An integrated environment for databases.)  </para></listitem>
 <listitem><para>&kchart; (A chart and graph creator.)</para></listitem>
 <listitem><para>and a simple integrated office desktop, to help organize your
 work.</para></listitem>
@@ -929,7 +930,7 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <sect1 id="filters-included"><title>Filters included in &kword;</title>
 
 <para>&kword; comes with the following filters:</para>
-<sect2 id="filters-abiword"><title>Abiword</title>
+<sect2 id="filters-abiword"><title>AbiWord</title>
 <para>&kword; can open and save AbiWord documents. Most AbiWord features are
 supported.</para>
 
@@ -940,7 +941,7 @@ import filter.  Default tabulator settings and fields are only partially support
 
 
 <para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/abiword.phtml">Abiword filter table</ulink></para>
+<ulink url="http://www.koffice.org/filters/1.2/kword/abiword.phtml">AbiWord filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-amipro"><title>AmiPro</title>
@@ -959,17 +960,17 @@ format than AmiPro. Therefore, if you want to read WordPro documents from
 <ulink url="http://www.koffice.org/filters/1.2/kword/amipro.phtml">AmiPro filter table</ulink></para>
 </sect2>
 
-<sect2 id="filters-applixword"><title>Applix Word</title>
+<sect2 id="filters-applixword"><title>ApplixWord</title>
 
 <para>&kword; can read ApplixWord documents quite well; however, there are limitations:
 text formatting, colors, paragraphs, and special characters are
 supported; styles and inline images, though, will be lost during the conversion.</para>
 
 <para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/applixword.phtml">Applix Word filter table</ulink></para>
+<ulink url="http://www.koffice.org/filters/1.2/kword/applixword.phtml">ApplixWord filter table</ulink></para>
 </sect2>
 
-<sect2 id="filters-docbook"><title>Docbook</title>
+<sect2 id="filters-docbook"><title>DocBook</title>
 
 <para>&kword; can save DocBook documents in the SGML version only. It saves texts,
 lists, pictures, tables and hyperlinks.  Only the simplest formatting (bold
@@ -978,12 +979,12 @@ and italic) are supported. Pictures are saved into a sub-directory.</para>
 <para>&kword; cannot load any DocBook document. </para>
 
 <para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/docbook.phtml">Docbook filter table</ulink></para>
+<ulink url="http://www.koffice.org/filters/1.2/kword/docbook.phtml">DocBook filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-hancom"><title>Hancom Word</title>
 
-<para>&kword; can read HancomWord document produced with HancomWord 5.2 or 6. However,
+<para>&kword; can read HancomWord document produced with Hancom Word 5.2 or 6. However,
 &kword; does not yet recognize text formatting inside the document, hence the
 text will be imported but without formatting at all.</para>
 

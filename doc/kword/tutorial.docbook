@@ -21,9 +21,8 @@ least once if you are new to frame based word processors.</para>
 <sect1 id="choose-template">
 <title>Tutorial: Choosing the initial template</title>
 
-<note><para>The steps to this tutorial are numbered from 1 to 22.
-Beneath each step, is text in <emphasis>italics</emphasis>. This text
-will explain what the previous step in the tutorial accomplished.</para></note>
+<note><para>The steps to this tutorial are numbered from 1 to 23.
+Beneath each step, is text in <emphasis>italics</emphasis> which further elaborates or explains the changes.</para></note>
 
 <para>When you first <link linkend="starting-kword">start &kword;</link> (or <link linkend="new-doc">start a new
 document</link> after &kword; is running), a dialog appears.</para>
@@ -35,17 +34,17 @@ document</link> after &kword; is running), a dialog appears.</para>
 </mediaobject>
 
 <para><emphasis>This dialog box is used to either:</emphasis></para>
-<orderedlist numeration="arabic">
+<itemizedlist>
 <listitem>
 <para><emphasis>Select the initial template for your new
 document.</emphasis></para>
 </listitem>
 <listitem>
-<para><emphasis>Open a &kword; Document saved to your hard
+<para><emphasis>Open a &kword; document saved to your hard
 drive or network.</emphasis></para>
 </listitem>
 
-</orderedlist>
+</itemizedlist>
 
 <para>Step 1: Click on the <guilabel>Page Layout</guilabel> icon.</para>
 
@@ -64,15 +63,15 @@ clicking once with the left button of your mouse.</para>
 fileref="Tut2.png"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
 <para><emphasis>This is the template we will use for the
-tutorial</emphasis></para>
+tutorial</emphasis>.</para>
 
 <para>Step 3: Now confirm your selection by clicking on
-<guibutton>OK</guibutton> </para>
+<guibutton>OK</guibutton>.</para>
 
 <mediaobject><imageobject><imagedata format="PNG" fileref="Tut3.png"
 align="center"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
-<para><emphasis>To complete your selection</emphasis></para>
+<para><emphasis>To complete your selection</emphasis>.</para>
 
 <para><emphasis>&kword; will open a new document with three frames. The
 frames are outlined on the white background, as gray boxes. Each box is
@@ -122,7 +121,7 @@ newsletter.</emphasis></para>
 <para>Step 7: Select <emphasis>KWord Press Release</emphasis> by placing
 the mouse cursor on the right end of the text.  Click once with the
 &LMB; and drag the mouse cursor
-to the left..  Selected text will be black text on a yellow
+to the left.  Selected text will be black text on a yellow
 background.  When all the text has been selected, release the &LMB;.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
@@ -184,7 +183,7 @@ fileref="Tut11b.png"/></imageobject>
 top of the page.</para>
 
 <para>Step 11: Place the mouse pointer over the border of the frame (but
-not on any of the dark squares).</para>
+not on any of the squares).</para>
 
 <para><emphasis>The pointer will now change to a 4 way arrow.  This
 indicates &kword; is ready to move the frame on the
@@ -241,16 +240,16 @@ the example for the purposes of this tutorial.</emphasis></para>
 mouse button, a new dialog box appears.</emphasis></para>
 
 
-<para><emphasis>This dialog box lists all the current frame sets.  The
-default value is highlighted.  By selecting the default value, you will
+<para><emphasis>This dialog box lists all the current frame sets and has a radio button to create a 
+new frame set (default value). By selecting the default value, you will
 create a new frame set (text will not flow from any other frame into this
-frame)</emphasis></para>
+frame)</emphasis>.</para>
 
-<para><emphasis>Notice that the default name for this frameset is <guilabel>
-Text Frameset 3</guilabel></emphasis></para>
+<para><emphasis>Notice that the default name for this frameset is 
+<guilabel>Text Frameset 3</guilabel></emphasis></para>
 
 <para>Step 15: For the purposes of this tutorial, the default value of
-<guilabel>Create a new frameset with this frame</guilabel> is good.  Simply select
+<guilabel>Create a new frameset</guilabel> is good.  Simply select
 <guibutton>OK</guibutton>.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
@@ -263,7 +262,7 @@ fileref="Tut15.png"/></imageobject>
 <para><emphasis>Now we are going to create another small frame right next to this one.</emphasis></para>
 
 <para>Step 16: Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Text
-Frame</guimenuitem></menuchoice></para>
+Frame</guimenuitem></menuchoice>.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut14.png"/></imageobject>
@@ -311,8 +310,7 @@ fileref="Tut19.png"/></imageobject>
 <sect1 id="tutorial-del-frame"> 
 <title>Tutorial: Deleting a frame</title>
 
-<para>Now we will delete an unneeded frame. (Yes, we just created
-a new frame, but &kword; will forgive an indecisive user.).  We will delete
+<para>Now we will delete an unneeded frame. We will delete
 the long text frame on the right side of the page.</para>
 
 <para>Step 21: Place the mouse pointer over the frame border of the right
@@ -326,13 +324,13 @@ fileref="Tut21.png"/></imageobject>
 
 <para>Step 22: Select
 <menuchoice><guimenu>Frames</guimenu><guimenuitem>Delete
-Frame</guimenuitem></menuchoice></para>
+Frame</guimenuitem></menuchoice>.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut22.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
-<para><emphasis>A small dialog box appears, checking you really intended to delete this frame.</emphasis></para>
+<para><emphasis>A small dialog box appears, checking that you really intended to delete this frame.</emphasis></para>
 <para>Step 23: Select <guibutton>Delete</guibutton>.</para>
 
 <para><emphasis>This deletes the frame.</emphasis></para>

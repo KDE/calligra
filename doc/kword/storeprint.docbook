@@ -99,7 +99,7 @@ general layout of the template. </para>
 
 <tip>
 <para>&kword; comes with four standard template groups. You can add
-new tabs by installing outside templates, or <link linkend="template-creation">creating templates of your
+new icons by installing outside templates, or <link linkend="template-creation">creating templates of your
 own</link>.</para>
 </tip></listitem>
 
@@ -143,7 +143,7 @@ dialog box is revealed.  For more details on this dialog box refer to
 usually want to save this to a file on your hard drive.</para>
 
 <tip><para>&kword; can create a <literal role="extension">.pdf</literal> file for you.  For instructions see 
-<link linkend="qd-pdf">How do I create a <literal role="extension">.pdf</literal> file</link>.</para></tip>
+<link linkend="qd-pdf">How do I create a <literal role="extension">.pdf</literal> file?</link></para></tip>
 
 <sect2 id="command-save">
 

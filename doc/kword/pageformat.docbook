@@ -37,15 +37,14 @@ from the menubar.</para>
 
 <tip>
 <para>You can also go straight to the <guimenuitem>Format
-Page</guimenuitem> options by selecting the main frame of the document then double clicking on either of the
+Page</guimenuitem> options by selecting the main frame of the document and then double clicking on either of the
 rulers.</para>
 </tip>
 
-<para>A dialog box will appear with three tabs, labeled <guilabel>Format and
-Borders</guilabel>, <guilabel>Columns</guilabel> and <guilabel>Header
+<para>A dialog box will appear with three tabs, labeled <guilabel>Page Size &amp; Margins</guilabel>, <guilabel>Columns</guilabel> and <guilabel>Header
 and Footer</guilabel>.</para>
 
-<para>The <guilabel>Format and Borders</guilabel> tab is for altering
+<para>The <guilabel>Page Size &amp; Margins</guilabel> tab is for altering
 the paper size, and changing the margins.</para>
 
 <screenshot>
@@ -66,10 +65,10 @@ you use for your document rulers. (In this example, we are using
 inches.)  To change the units, follow the instructions in the section entitled
 <link linkend="rulers">Using Rulers</link>.</para>
 
-<para>The dialog section labled <guilabel>Page Size &amp; Margins</guilabel> is used to specify
+<para>The dialog section labled <guilabel>Page Size</guilabel> is used to specify
 the paper size for the document.  </para>
 <para>&kword; includes many predefined paper sizes.  Select the appropriate paper size with the drop down
-box labled <guilabel>Format</guilabel>.</para>
+box labeled <guilabel>Size</guilabel>.</para>
 
 <para>In addition to standard paper sizes, there are two selections that
 deserve special mention.</para>
@@ -91,20 +90,20 @@ entry boxes (labeled <guilabel>Width:</guilabel> and
 </varlistentry>
 </variablelist>
 
-<para>Next to the paper format, in the combo box labeled
+<para>Below the page size, are two radio boxes in the section labeled
 <guilabel>Orientation</guilabel> you can select either <link
 linkend="defportrait">Portrait</link> or <link
 linkend="deflandscape">Landscape</link> layout for
 your document. </para>
 
-<para>Below the page format options, is the <guilabel>Margins</guilabel> subsection, which
+<para>Below the page orientation, is the <guilabel>Margins</guilabel> subsection, which
 consists of 4 spin boxes.</para>
 
 <para>The <guilabel>Margins</guilabel> define the
 white-space surrounding the text in your main frame.  You can enter any
 number from 0 to the maximum size of the page in these boxes.  The units
 are the same for all four boxes, and is the same as the measurement
-listed at the top of the dialog..</para>
+listed at the top of the dialog.</para>
 
 <para>Clicking on the <guilabel>Columns</guilabel> tab allows you to
 change the number of columns on each page.  Details on multi-column documents
@@ -159,7 +158,7 @@ pages use another footer.  </para>
 
 <para>In the spin box labeled <guilabel>Spacing between footer and
 body</guilabel>, you can specify how much empty space should be placed
-between the bottom of the footer, and the top of the main frame.</para>
+between the top of the footer, and the bottom of the main frame.</para>
 
 <para>The bottom spin box is labeled <guilabel>Spacing between footnote and body</guilabel>.  As the label
 suggests, you can use this text
@@ -175,11 +174,11 @@ be ignored.</para>
 </sect2>
 
 <sect2 id="dtp-page-format">
-<title> Formatting the Page (Page Layout Template)</title>
+<title> Formatting the Page (Page Layout Document)</title>
 <indexterm><primary>page layout document</primary><secondary>formatting the page size</secondary></indexterm>
-<indexterm><primary>formatting the page size(page layout document)</primary></indexterm>
+<indexterm><primary>formatting the page size (page layout document)</primary></indexterm>
 
-<para>When you are working with a Page Layout Template, you control the
+<para>When you are working with a Page Layout Document, you control the
 size and shape of all the frames individually. </para>
 
 <para>Formatting the page is usually done by selecting: <menuchoice>
@@ -188,7 +187,7 @@ from the menubar.</para>
 
 <tip>
 <para>You can also go straight to the <guimenuitem>Format
-Page</guimenuitem> options by selecting the a frame of the document then double clicking on either of the
+Page</guimenuitem> options by double clicking on either of the
 rulers.</para>
 </tip>
 
