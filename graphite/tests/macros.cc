@@ -18,6 +18,7 @@
 */
 
 #include <qcolor.h>
+#include <qpen.h>
 #include <qdom.h>
 #include <kdebug.h>
 #include <graphiteglobal.h>

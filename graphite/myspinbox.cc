@@ -129,7 +129,7 @@ void MySpinBox::setValue(const double &value) {
 }
 
 void MySpinBox::fixSpinbox() {
-    upButton()->setDown(false);
+    //upButton()->setDown(false);
 }
 
 void MySpinBox::stepUp() {
