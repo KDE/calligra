@@ -14,12 +14,16 @@
 #include <koMainWindow.h>
 #include <koView.h>
 
+#include "karbon_part.h"
+#include "vfillcmd.h"
+#include "vstrokecmd.h"
 #include "vcolorslider.h"
+#include "vcolor.h"
 
 #include "vcolordlg.h"
 
-VColorDlg::VColorDlg( KoView* parent, const char* /*name*/ )
-	: QDockWindow( QDockWindow::OutsideDock, parent->shell() )
+VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
+	: QDockWindow( QDockWindow::OutsideDock, parent->shell() ), m_part ( part )
 {
 	setCaption( i18n( "Color Manager" ) );
 
@@ -45,6 +49,16 @@ VColorDlg::VColorDlg( KoView* parent, const char* /*name*/ )
 	mBlueSlider = new VColorSlider( i18n("B:"), QColor( "blue" ), QColor( "black" ), 0, 255, 0, cgroupbox );
 	mainLayout->addWidget( cgroupbox, 1, 0);
 
+	//Connections for Sliders
+	connect(
+		mRedSlider, SIGNAL( valueChanged ( int ) ),
+		this, SLOT( updateRGBColorPreview() ) );
+	connect(
+		mGreenSlider, SIGNAL( valueChanged ( int ) ),
+		this, SLOT( updateRGBColorPreview() ) );
+	connect(
+		mBlueSlider, SIGNAL( valueChanged ( int ) ),
+		this, SLOT( updateRGBColorPreview() ) );
 
 	//Buttons
 	QPushButton *button;
@@ -57,6 +71,38 @@ VColorDlg::VColorDlg( KoView* parent, const char* /*name*/ )
 	mainLayout->activate();
 	mTabWidget->addTab(mRGBWidget, i18n("RGB"));
 	setWidget( mTabWidget );
+	
+	//Button Connections
+	connect(
+		mButtonGroup, SIGNAL( clicked ( int ) ),
+		this, SLOT( buttonClicked ( int ) ) );
+}
+
+void VColorDlg::updateRGBColorPreview()
+{
+	QColor color( mRedSlider->value(), mGreenSlider->value(), mBlueSlider->value() );
+	mColorPreview->setColor( color );
+}
+
+void VColorDlg::buttonClicked( int button_ID )
+{
+	//VColor color( QColor ( mRedSlider->value(), mGreenSlider->value(), mBlueSlider->value() ) );
+	//QColor color( mRedSlider->value(), mGreenSlider->value(), mBlueSlider->value() );
+	VColor color;
+	float r = mRedSlider->value() / 255.0, g = mGreenSlider->value() / 255.0, b = mBlueSlider->value() / 255.0;
+	//float op = mOpacity->value() / 100.0; <----- Reserved for later
+	color.setValues( &r, &g, &b, 0L );
+	switch( button_ID ) {
+	case Fill:
+		if( m_part )
+		m_part->addCommand( new VFillCmd( &m_part->document(), color ), true );
+		break;
+	case Outline:
+		if( m_part )
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), color ), true );
+		break;
+	}
+
 }
 
 #include "vcolordlg.moc"

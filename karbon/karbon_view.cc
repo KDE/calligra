@@ -105,7 +105,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	addStatusBarItem( m_status, 0 );
 	
 	//Create Color Manager
-	m_ColorManager = new VColorDlg( this );
+	m_ColorManager = new VColorDlg( m_part, this );
 	
 	if( shell() )
 	{
@@ -131,7 +131,7 @@ KarbonView::~KarbonView()
 //	delete m_canvas;
 //	m_canvas = 0L;
 
-
+	//delete m_ColorManager;
 	delete m_dcop;
 }
 
