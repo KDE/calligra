@@ -8,6 +8,7 @@
 #include <kgenericfactory.h>
 #include <koFilter.h>
 #include <koFilterChain.h>
+#include <krun.h>
 
 #include <kdebug.h>
 
@@ -47,11 +48,18 @@ EpsImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::NotImplemented;
 	}
 
-	// run ghostscript:
+	// copy input filename:
+	QString input = m_chain->inputFile();
+
+	// quote spaces in filename:
+	KRun::shellQuote( input );
+
+	// build ghostscript call to convert ps/eps -> ai:
 	QString command = QString(
 		"gs -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 > %2" ).
-			arg( m_chain->inputFile() ).arg( m_chain->outputFile() );
+			arg( input ).arg( m_chain->outputFile() );
 
+	// execute it:
 	system( command.latin1() );
 
 	return KoFilter::OK;
