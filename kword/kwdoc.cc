@@ -1423,6 +1423,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
 
+
     startBackgroundSpellCheck();
 
     return true;
@@ -1677,6 +1678,10 @@ bool KWDocument::completeLoading( KoStore *_store )
 
     // Save memory
     m_urlIntern = QString::null;
+
+    //fix z orders on older documents
+    fixZOrders();
+
     return TRUE;
 }
 
@@ -2546,6 +2551,33 @@ QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
 }
 
 
+void KWDocument::fixZOrders() {
+	for (int pgnum=0;pgnum<getPages();pgnum++) {
+		QPtrList<KWFrame> frames= framesInPageUnsorted(pgnum);
+		// scan this page to see if we need to fixup.
+		bool need_fixup=true;
+		for (KWFrame *f = frames.last();f;f=frames.prev()) {
+			if (f->zOrder() != 0) { // assumption: old documents come with no zorder=>initialised to 0
+				need_fixup=false;
+				break;
+			}
+		}
+  		if (need_fixup) {
+			int current_zorder=0;
+			kdDebug() << "fixing page " << pgnum << " z-orders " << endl;
+			for (KWFrame *fr = frames.first();fr;fr=frames.next()) {
+				// only consider non-inline framesets.
+			        if (fr->frameSet()->isFloating())
+			            continue;
+				current_zorder++;
+				fr->setZOrder(current_zorder);
+			}
+		}
+
+	}
+}
+
+
 class KWFrameList: public QPtrList<KWFrame>
 {
 public:
@@ -2559,7 +2591,8 @@ public:
     }
 };
 
-QPtrList<KWFrame> KWDocument::framesInPage( int pageNum ) const {
+
+QPtrList<KWFrame> KWDocument::framesInPageUnsorted( int pageNum ) const {
     KWFrameList frames;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -2572,6 +2605,12 @@ QPtrList<KWFrame> KWDocument::framesInPage( int pageNum ) const {
         for ( ; it.current() ; ++it )
             frames.append( it.current() );
     }
+    return frames;
+}
+
+
+QPtrList<KWFrame> KWDocument::framesInPage( int pageNum ) const {
+    QPtrList<KWFrame> frames=framesInPageUnsorted(pageNum);
     frames.sort();
     return frames;
 }

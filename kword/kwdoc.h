@@ -287,6 +287,7 @@ public:
      */
     QPtrList<KWFrame> framesInPage( int pageNum ) const;
 
+
     /**
      * Max z-order among all frames on the given page
      */
@@ -565,7 +566,8 @@ protected slots:
 
 protected:
     void nextParagraphNeedingCheck();
-
+    // fix up Z-order for import from older kword versions.
+    void fixZOrders();
     KoView* createViewInstance( QWidget* parent, const char* name );
     virtual bool saveChildren( KoStore *_store );
 
@@ -579,6 +581,8 @@ protected:
     DCOPObject *dcop;
 
 private:
+    // private helper function for fixZorder and framesInPage.
+    QPtrList<KWFrame> framesInPageUnsorted( int pageNum ) const;
     //private helper functions for frameUnderMouse
     /** return the top-most frame under mouse, using nPoint, always returns the first found. */
     KWFrame *topFrameUnderMouse( const QPoint& nPoint, bool* border=0L);
