@@ -483,7 +483,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     firstX = contentsPoint.x();
                     firstY = contentsPoint.y();
                     if ( (int)objectList().count() - 1 >= 0 ) {
-                        for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0 ; i-- ) {
+                        for ( int i = objectList().count() - 1; i >= 0 ; i-- ) {
                             kpobject = objectList().at( i );
                             KoSize s = kpobject->getSize();
                             KoPoint pnt = kpobject->getOrig();
@@ -1063,7 +1063,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	     toolEditMode == TEM_MOUSE ) {
 	    bool cursorAlreadySet = false;
 	    if ( (int)objectList().count() - 1 >= 0 ) {
-		for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
+		for ( int i = objectList().count() - 1; i >= 0; i-- ) {
 		    kpobject = objectList().at( i );
 		    KoSize s = kpobject->getSize();
 		    KoPoint pnt = kpobject->getOrig();
@@ -1315,7 +1315,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     KPObject *kpobject = 0;
 
     if ( (int)objectList().count() - 1 >= 0 ) {
-	for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
+	for ( int i = objectList().count()  - 1; i >= 0; i-- ) {
 	    kpobject = objectList().at( i );
 	    if ( kpobject->contains( docPoint ) ) {
 		if ( kpobject->getType() == OT_TEXT ) {
@@ -1555,7 +1555,7 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
 /*========================== get object ==========================*/
 int KPrCanvas::getObjectAt( const KoPoint&pos )
 {
-    for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0 ; i-- ) {
+    for ( int i = objectList().count() - 1; i >= 0 ; i-- ) {
         KPObject * kpobject = objectList().at( i );
         if ( kpobject->contains( pos ) )
             return i;
@@ -4980,18 +4980,16 @@ void KPrCanvas::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
     p.setRasterOp( Qt::NotROP );
 
     double angle = 2 * M_PI / cornersValue;
-    double dx = ::fabs( startPoint.x () - endPoint.x () );
-    double dy =  ::fabs( startPoint.y () - endPoint.y () );
-    double radius = ( dx > dy ? dx / 2.0 : dy / 2.0 );
+    int dx = QABS( startPoint.x () - endPoint.x () );
+    int dy = QABS( startPoint.y () - endPoint.y () );
+    double radius = ( dx > dy ? (double)dx / 2.0 : (double)dy / 2.0 );
 
+    //xoff / yoff : coordinate of centre of the circle. 
     double xoff = startPoint.x() + ( startPoint.x() < endPoint.x() ? radius : -radius );
     double yoff = startPoint.y() + ( startPoint.y() < endPoint.y() ? radius : -radius );
 
     KoPointArray points( checkConcavePolygon ? cornersValue * 2 : cornersValue );
-    points.setPoint( 0, xoff, ( -radius + yoff ) );
-
-    KoPointArray unzoomPoints( checkConcavePolygon ? cornersValue * 2 : cornersValue );
-    unzoomPoints.setPoint( 0, m_view->zoomHandler()->unzoomItX( (int)xoff ),
+    points.setPoint( 0, m_view->zoomHandler()->unzoomItX( (int)xoff ),
                               m_view->zoomHandler()->unzoomItY( (int)( -radius + yoff ) ) );
 
     if ( checkConcavePolygon ) {
@@ -5009,8 +5007,7 @@ void KPrCanvas::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
                 yp = -radius * cos( a );
             }
             a += angle;
-            points.setPoint( i, xp + xoff, yp + yoff );
-            unzoomPoints.setPoint( i, m_view->zoomHandler()->unzoomItX( (int)( xp + xoff ) ),
+	    points.setPoint( i, m_view->zoomHandler()->unzoomItX( (int)( xp + xoff ) ),
                                       m_view->zoomHandler()->unzoomItY( (int)( yp + yoff ) ) );
         }
     }
@@ -5020,15 +5017,14 @@ void KPrCanvas::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
             double xp = radius * sin( a );
             double yp = -radius * cos( a );
             a += angle;
-            points.setPoint( i, xp + xoff, yp + yoff );
-            unzoomPoints.setPoint( i, m_view->zoomHandler()->unzoomItX( (int)( xp + xoff ) ),
+            points.setPoint( i, m_view->zoomHandler()->unzoomItX( (int)( xp + xoff ) ),
                                       m_view->zoomHandler()->unzoomItY( (int)( yp + yoff ) ) );
         }
     }
     p.drawPolygon( points.zoomPointArray( m_view->zoomHandler() ) );
     p.end();
 
-    m_pointArray = unzoomPoints;
+    m_pointArray = points;
 }
 
 
