@@ -385,6 +385,7 @@ bool SelectTool::startResizing(const QPoint &pos)
         m_resizeHandle = isOverResizeHandle(pStencil, x, y);
         if( m_resizeHandle > 0 )
         {
+
             switch( m_resizeHandle )
             {
                 case 1: // top left
@@ -614,6 +615,7 @@ void SelectTool::continueResizing(const QPoint &pos)
     double sy = pData->rect.y();
     double sw = pData->rect.w();
     double sh = pData->rect.h();
+    double ratio = sw / sh;
 
     switch( m_resizeHandle )
     {
@@ -621,6 +623,12 @@ void SelectTool::continueResizing(const QPoint &pos)
             if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
               m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
+                if((dx > dy) && (dx != 0)) {
+                  dy = dx / ratio;
+                } else {
+                  dx = dy * ratio;
+                }
+
                 m_pResizingStencil->setX( sx + dx );
                 m_pResizingStencil->setW( sw - dx );
 
@@ -641,10 +649,16 @@ void SelectTool::continueResizing(const QPoint &pos)
             if( m_pResizingStencil->protection()->testBit( kpHeight )==false &&
               m_pResizingStencil->protection()->testBit( kpWidth )==false )
             {
-               m_pResizingStencil->setY( sy + dy );
-               m_pResizingStencil->setH( sh - dy );
+                if((dx > dy) && (dx != 0)) {
+                  dy = -(dx / ratio);
+                } else {
+                  dx = -(dy * ratio);
+                }
 
-               m_pResizingStencil->setW( sw + dx );
+                m_pResizingStencil->setY( sy + dy );
+                m_pResizingStencil->setH( sh - dy );
+
+                m_pResizingStencil->setW( sw + dx );
             }
             break;
 
@@ -661,7 +675,13 @@ void SelectTool::continueResizing(const QPoint &pos)
             if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
               m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
-                m_pResizingStencil->setW( sw+dx );
+                if((dx > dy) && (dx != 0)) {
+                  dy = dx / ratio;
+                } else {
+                  dx = dy * ratio;
+                }
+
+                m_pResizingStencil->setW( sw + dx );
                 m_pResizingStencil->setH( sh + dy );
             }
             break;
@@ -677,10 +697,16 @@ void SelectTool::continueResizing(const QPoint &pos)
             if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
               m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
-              m_pResizingStencil->setX( sx + dx );
-              m_pResizingStencil->setW( sw - dx );
+                if((dx > dy) && (dx != 0)) {
+                  dy = -(dx / ratio);
+                } else {
+                  dx = -(dy * ratio);
+                }
 
-              m_pResizingStencil->setH( sh + dy );
+                m_pResizingStencil->setX( sx + dx );
+                m_pResizingStencil->setW( sw - dx );
+
+                m_pResizingStencil->setH( sh + dy );
             }
             break;
 

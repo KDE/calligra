@@ -2009,9 +2009,14 @@ int KivioSMLStencil::resizeHandlePositions()
       mask &= ~(krhpNE | krhpNW | krhpSW | krhpSE | krhpE | krhpW);
    }
 
-   if( m_pProtection->at( kpHeight) )
+   if( m_pProtection->at( kpHeight ) )
    {
       mask &= ~(krhpNE | krhpNW | krhpSW | krhpSE | krhpN | krhpS);
+   }
+
+   if( m_pProtection->at( kpAspect ) )
+   {
+      mask = KIVIO_RESIZE_HANDLE_POSITION_CORNERS;
    }
 
    return mask;
