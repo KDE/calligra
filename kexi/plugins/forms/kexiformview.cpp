@@ -619,7 +619,7 @@ KexiFormView::setFocusInternal()
 			return;
 		}
 	}
-	setFocus();
+	QWidget::setFocus();
 }
 
 
