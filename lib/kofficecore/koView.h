@@ -63,7 +63,7 @@ public:
    *                 must not be zero.
    *  @param name   Name of the view. The name is used in DCOP, so the name should
    *                match the pattern [A-Za-z_][A-Za-z_0-9]*.
-   * 
+   *
    */
   KoView( KoDocument *document, QWidget *parent = 0, const char *name = 0 );
   /**
@@ -89,7 +89,7 @@ public:
    * @see KXMLGUIClient
    * @see KXMLGUIClient::actionCollection
    * @see KoDocument::action
-   */       
+   */
   virtual KAction *action( const QDomElement &element );
 
   /**
@@ -227,8 +227,7 @@ protected:
 
   /**
    * Handles the event KParts::PartActivateEvent.
-   *
-   * 
+   */
   virtual void partActivateEvent( KParts::PartActivateEvent *event );
   virtual void partSelectEvent( KParts::PartSelectEvent *event );
 
