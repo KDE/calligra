@@ -37,7 +37,7 @@ class VPath;
 class VFillCmd : public VCommand
 {
 public:
-	VFillCmd( VDocument *doc, const VFill & );
+	VFillCmd( VDocument *doc, const VFill &, const QString& icon = "14_action" );
 	virtual ~VFillCmd();
 
 	virtual void execute();

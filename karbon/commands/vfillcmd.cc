@@ -25,8 +25,8 @@
 #include "vselection.h"
 
 
-VFillCmd::VFillCmd( VDocument *doc, const VFill &fill )
-	: VCommand( doc, i18n( "Fill Objects" ) ), m_fill( fill ), m_executed( false )
+VFillCmd::VFillCmd( VDocument *doc, const VFill &fill, const QString &icon )
+	: VCommand( doc, i18n( "Fill Objects" ), icon ), m_fill( fill ), m_executed( false )
 {
 	m_selection = document()->selection()->clone();
 

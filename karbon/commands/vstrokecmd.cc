@@ -107,8 +107,8 @@ VStrokeLineWidthCmd::unexecute()
 	m_executed = false;
 }
 
-VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke )
-    : VCommand( doc, i18n( "Stroke Objects" ) ), m_stroke( stroke ), m_executed( false )
+VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke, const QString& icon = "14_action" )
+    : VCommand( doc, i18n( "Stroke Objects" ), icon ), m_stroke( stroke ), m_executed( false )
 {
 	m_selection = document()->selection()->clone();
 	m_gradient = 0L;
@@ -119,7 +119,7 @@ VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke )
 }
 
 VStrokeCmd::VStrokeCmd( VDocument *doc, VGradient *gradient )
-	: VCommand( doc, i18n( "Stroke Objects" ) ), m_gradient( gradient ), m_executed( false )
+	: VCommand( doc, i18n( "Stroke Objects" ), "14_gradient" ), m_gradient( gradient ), m_executed( false )
 {
 	m_selection = document()->selection()->clone();
 	m_stroke = 0L;
