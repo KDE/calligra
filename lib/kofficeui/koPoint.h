@@ -57,6 +57,7 @@ public:
     friend inline KoPoint operator-( const KoPoint &, const KoPoint & );
     friend inline KoPoint operator*( const KoPoint &, const double & );
     friend inline KoPoint operator*( const double &, const KoPoint & );
+    friend inline double  operator*( const KoPoint &a, const KoPoint &b );
 
     // Not in QPoint:
     void setCoords(const double &x, const double &y) { m_x = x; m_y = y; }
@@ -98,5 +99,7 @@ inline KoPoint operator*( const KoPoint &p, const double &c )
 inline KoPoint operator*( const double &c, const KoPoint &p )
 { return KoPoint( p.m_x*c, p.m_y*c ); }
 
+inline double operator*( const KoPoint &a, const KoPoint &b )
+{ return a.m_x * b.m_x + a.m_y * b.m_y; }
 
 #endif

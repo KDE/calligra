@@ -208,6 +208,11 @@ public:
 	double param( double len ) const;
 
 	/**
+	 * Returns the parameter of the nearest point to the point p on this segment.
+	 */
+	double nearestPointParam( const KoPoint& p ) const;
+
+	/**
 	 * Returns true if tangent at p3 is exactly parallel to the tangent at
 	 * p0 of the next segment. Returns false if the current segment is a "begin".
 	 */
@@ -219,11 +224,6 @@ public:
 			   ? isSmooth( *next() )
 			   : false;
 	}
-
-	/**
-	 * Returns the parameter of the nearest point to the point p on this segment.
-	 */
-	double project( const KoPoint& p ) const;
 
 	/**
 	 * Returns the bounding box.

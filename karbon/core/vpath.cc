@@ -285,8 +285,8 @@ VPath::arcTo(
 	KoPoint t12 = p2 - p1;
 
 	// Calculate distance squares:
-	double dsqT10 = t10.x() * t10.x() + t10.y() * t10.y();
-	double dsqT12 = t12.x() * t12.x() + t12.y() * t12.y();
+	double dsqT10 = t10 * t10;
+	double dsqT12 = t12 * t12;
 
 	// We now calculate tan(a/2) where a is the angle between T10 and T12.
 	// We benefit from the facts T10*T12 = |T10|*|T12|*cos(a),
@@ -317,9 +317,9 @@ VPath::arcTo(
 
 		// The two bezier-control points are located on the tangents at a fraction
 		// of the distance [tangent points<->tangent intersection].
-		double distsq =
-			( p1.x() - b0.x() ) * ( p1.x() - b0.x() ) +
-			( p1.y() - b0.y() ) * ( p1.y() - b0.y() );
+		const KoPoint d = p1 - b0;
+		double distsq = d * d;
+
 		double rsq = r * r;
 		double fract;
 

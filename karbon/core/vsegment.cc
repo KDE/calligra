@@ -44,9 +44,8 @@ height(
 		a.x() * p.y() + a.x() * b.y() - b.x() * a.y();
 
 	// Calculate norm = length(AB).
-	const double norm = sqrt(
-		( b.x() - a.x() ) * ( b.x() - a.x() ) +
-		( b.y() - a.y() ) * ( b.y() - a.y() ) );
+	const KoPoint ab = b - a;
+	const double norm = sqrt( ab * ab );
 
 	// If norm is very small, simply use distance AP.
 	if( norm < VGlobal::verySmallNumber )
@@ -273,13 +272,13 @@ VSegment::length( double t ) const
 	// Length of a bezier.
 	else if( m_type == curve )
 	{
-		// This algortihm is based on an idea by Jens Gravesen <gravesen@mat.dth.dk>.
-		// We calculate the chord length "chord"=|P0P3| and the length of the control point
-		// polygon "poly"=|P0P1|+|P1P2|+|P2P3|. The approximation for the bezier length is
-		// 0.5 * poly + 0.5 * chord. "poly - chord" is a measure for the error.
-		// We subdivide each segment until the error is smaller than a given tolerance
-		// and add up the subresults.
-
+		/* The idea for this algortihm is by Jens Gravesen <gravesen@mat.dth.dk>.
+		 * We calculate the chord length "chord"=|P0P3| and the length of the control point
+		 * polygon "poly"=|P0P1|+|P1P2|+|P2P3|. The approximation for the bezier length is
+		 * 0.5 * poly + 0.5 * chord. "poly - chord" is a measure for the error.
+		 * We subdivide each segment until the error is smaller than a given tolerance
+		 * and add up the subresults.
+		 */
 
 		// "Copy segment" splitted at t into a path.
 		VPath path( 0L );
@@ -420,6 +419,31 @@ VSegment::param( double len ) const
 	return 0.0;
 }
 
+double
+VSegment::nearestPointParam( const KoPoint& p ) const
+{
+	if(
+		!m_prev ||
+		m_type == begin )
+	{
+		return 1.0;
+	}
+
+	/* This function solves the "nearest point on curve" problem. That means, it
+	 * calculates the point (to be precise: it's paramter t) on this segment, which
+	 * is located nearest to the input point p.
+	 * The basic idea is described e.g. in "The NURBS Book" by Les Piegl, Wayne Tiller
+	 * (Springer 1997) or "Solving the Nearest Point-on-Curve Problem and A Bezier
+	 * Curve-Based Root-Finder" by Philip J. Schneider (from "Graphics Gems",
+	 * Academic Press 1990).
+	 *
+	 * 
+	 */
+
+// TODO
+	return 0.0;
+}
+
 bool
 VSegment::isSmooth( const VSegment& next ) const
 {
@@ -437,24 +461,10 @@ VSegment::isSmooth( const VSegment& next ) const
 
 
 	// Scalar product.
-	if( t1.x() * t2.x() + t1.y() * t2.y() >= VGlobal::parallelTolerance )
+	if( t1 * t2 >= VGlobal::parallelTolerance )
 		return true;
 
 	return false;
-}
-
-double
-VSegment::project( const KoPoint& p ) const
-{
-	if(
-		!m_prev ||
-		m_type == begin )
-	{
-		return 1.0;
-	}
-
-// TODO
-	return 0.0;
 }
 
 KoRect
@@ -523,7 +533,7 @@ VSegment::splitAt( double t )
 		return segment;
 	}
 
-	// These references make our life a bit easier.
+	// These references make the folowing code nicer to look at.
 	KoPoint& p0 = m_prev->m_node[2];
 	KoPoint& p1 = m_node[0];
 	KoPoint& p2 = m_node[1];
