@@ -1126,7 +1126,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                        ? DTP : WP;
 
     // TODO settings (m_unit, spellcheck settings)
-    m_hasTOC = false; // TODO (during parsing)
+    m_hasTOC = false;
     m_tabStop = MM_TO_POINT(15); // TODO
     // TODO m_initialEditing
 

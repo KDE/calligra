@@ -1449,7 +1449,7 @@ KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
     return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
-KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl )
+KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection* styleColl )
 {
     // was OoWriterImport::parseBodyOrSimilar
     for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
@@ -1458,73 +1458,71 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
         QDomElement tag = text.toElement();
         const QString tagName = tag.tagName();
         const bool textFoo = tagName.startsWith( "text:" );
-        if ( textFoo )
+        if ( textFoo && tagName == "text:p" ) {  // text paragraph
+            kdDebug(32500)<<" text paragraph \n";
+            context.fillStyleStack( tag, "text:style-name" );
+
+            KoTextParag *parag = createParag( this, lastParagraph );
+            parag->loadOasis( tag, context, styleColl );
+            if ( !lastParagraph )        // First parag
+                setFirstParag( parag );
+            lastParagraph = parag;
+            //use signal slot ?
+            //m_doc->progressItemLoaded(); // ## check
+        }
+        else if ( textFoo && tagName == "text:h" ) // heading
         {
-            if ( tagName == "text:p" ) {  // text paragraph
-                kdDebug(32500)<<" text paragraph \n";
-                context.fillStyleStack( tag, "text:style-name" );
+            kdDebug(32500)<<" heading \n";
+            context.fillStyleStack( tag, "text:style-name" );
+            int level = tag.attribute( "text:level" ).toInt();
+            bool listOK = false;
+            // When a heading is inside a list, it seems that the list prevails.
+            // Example:
+            //    <text:ordered-list text:style-name="Numbering 1">
+            //      <text:list-item text:start-value="5">
+            //        <text:h text:style-name="P2" text:level="4">The header</text:h>
+            // where P2 has list-style-name="something else"
+            // Result: the numbering of the header follows "Numbering 1".
+            // So we use the style for the outline level only if we're not inside a list:
+            //if ( !context.atStartOfListItem() )
+            // === The new method for this is that we simply override it in parseList, afterwards.
+            listOK = context.pushOutlineListLevelStyle( level );
+            int restartNumbering = -1;
+            if ( tag.hasAttribute( "text:start-value" ) )
+                // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
+                restartNumbering = tag.attribute( "text:start-value" ).toInt();
 
-                KoTextParag *parag = createParag( this, lastParagraph );
-                parag->loadOasis( tag, context, styleColl );
-                if ( !lastParagraph )        // First parag
-                    setFirstParag( parag );
-                lastParagraph = parag;
-                //use signal slot ?
-                //m_doc->progressItemLoaded(); // ## check
-            }
-            else if ( tagName == "text:h" ) // heading
-            {
-                kdDebug(32500)<<" heading \n";
-                context.fillStyleStack( tag, "text:style-name" );
-                int level = tag.attribute( "text:level" ).toInt();
-                bool listOK = false;
-                // When a heading is inside a list, it seems that the list prevails.
-                // Example:
-                //    <text:ordered-list text:style-name="Numbering 1">
-                //      <text:list-item text:start-value="5">
-                //        <text:h text:style-name="P2" text:level="4">The header</text:h>
-                // where P2 has list-style-name="something else"
-                // Result: the numbering of the header follows "Numbering 1".
-                // So we use the style for the outline level only if we're not inside a list:
-                //if ( !context.atStartOfListItem() )
-                // === The new method for this is that we simply override it in parseList, afterwards.
-                listOK = context.pushOutlineListLevelStyle( level );
-                int restartNumbering = -1;
-                if ( tag.hasAttribute( "text:start-value" ) )
-                    // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-                    restartNumbering = tag.attribute( "text:start-value" ).toInt();
-
-                KoTextParag *parag = createParag( this, lastParagraph );
-                parag->loadOasis( tag, context, styleColl );
-                if ( !lastParagraph )        // First parag
-                    setFirstParag( parag );
-                lastParagraph = parag;
-                if ( listOK ) {
-                    parag->applyListStyle( context, restartNumbering, true /*ordered*/, true /*heading*/, level );
-                    context.listStyleStack().pop();
-                }
-            }
-            else if ( tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
-                      || tagName == "text:list" )  // OASIS
-            {
-                kdDebug(32500)<<" list \n";
-                lastParagraph = loadList( tag, context, lastParagraph, styleColl );
-                context.styleStack().restore();
-                continue;
-            }
-            else if ( tagName == "text:section" ) // Provisory support (###TODO)
-            {
-                kdDebug(32500) << "Section found!" << endl;
-                context.fillStyleStack( tag, "text:style-name" );
-                lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl );
-            }
-            else if ( tagName == "text:variable-decls" )
-            {
-                // We don't parse variable-decls since we ignore var types right now
-                // (and just storing a list of available var names wouldn't be much use)
+            KoTextParag *parag = createParag( this, lastParagraph );
+            parag->loadOasis( tag, context, styleColl );
+            if ( !lastParagraph )        // First parag
+                setFirstParag( parag );
+            lastParagraph = parag;
+            if ( listOK ) {
+                parag->applyListStyle( context, restartNumbering, true /*ordered*/, true /*heading*/, level );
+                context.listStyleStack().pop();
             }
         }
-        else if ( !loadOasisBodyTag( tag, context, lastParagraph ) )
+        else if ( textFoo &&
+                  (  tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
+                     || tagName == "text:list" ) )  // OASIS
+        {
+            kdDebug(32500)<<" list \n";
+            lastParagraph = loadList( tag, context, lastParagraph, styleColl );
+            context.styleStack().restore();
+            continue;
+        }
+        else if ( textFoo && tagName == "text:section" ) // Provisory support (###TODO)
+        {
+            kdDebug(32500) << "Section found!" << endl;
+            context.fillStyleStack( tag, "text:style-name" );
+            lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl );
+        }
+        else if ( textFoo && tagName == "text:variable-decls" )
+        {
+            // We don't parse variable-decls since we ignore var types right now
+            // (and just storing a list of available var names wouldn't be much use)
+        }
+        else if ( !loadOasisBodyTag( tag, context, lastParagraph, styleColl ) )
         {
             kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
         }

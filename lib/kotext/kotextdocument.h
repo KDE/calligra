@@ -335,7 +335,7 @@ protected:
      * @return true if @p tag was handled.
      */
     virtual bool loadOasisBodyTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/,
-                                   KoTextParag* /*lastParagraph*/ ) {
+                                   KoTextParag* & /*lastParagraph*/, KoStyleCollection* /*styleColl*/ ) {
         return false;
     }
 

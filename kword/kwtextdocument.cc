@@ -65,8 +65,40 @@ KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
+void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& context, KoTextParag* & lastParagraph, KoStyleCollection * styleColl )
+{
+    // table-of-content OOo SPEC 7.5 p452
+    //fillStyleStack( tag, "text:style-name" ); that's the section style
+
+    //QDomElement tocSource = toc.namedItem( "text:table-of-content-source" );
+    // TODO parse templates and generate "Contents ..." styles from it
+    //for ( QDomNode n(tocSource.firstChild()); !text.isNull(); text = text.nextSibling() )
+    //{
+    //}
+
+    QDomElement tocIndexBody = tag.namedItem( "text:index-body" ).toElement();
+    for ( QDomNode n(tocIndexBody.firstChild()); !n.isNull(); n = n.nextSibling() )
+    {
+        context.styleStack().save();
+        QDomElement t = n.toElement();
+        QString tagName = t.tagName();
+        QDomElement e;
+        if ( tagName == "text:index-title" ) {
+            lastParagraph = loadOasisText( t, context, lastParagraph, styleColl ); // recurse again
+        } else if ( tagName == "text:p" ) {
+            context.fillStyleStack( t, "text:style-name" );
+            lastParagraph = createParag( this, lastParagraph );
+            lastParagraph->loadOasis( t, context, styleColl );
+        } else
+            kdWarning() << "OASIS TOC loading: unknown tag " << tagName << " found in text:index-body" << endl;
+        context.styleStack().restore();
+    }
+
+    m_textfs->kWordDocument()->hasTOC( true );
+}
+
 bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& context,
-                                       KoTextParag* /*lastParagraph*/ )
+                                       KoTextParag* & lastParagraph, KoStyleCollection* styleColl )
 {
     const QCString tagName( tag.tagName().latin1() );
     if ( tagName == "draw:frame" )
@@ -93,13 +125,11 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
         return true;
     }
 #endif
-#if 0 // TODO (OASIS text:table-of-content)
     else if ( tagName == "text:table-of-content" )
     {
-        appendTOC( e );
+        loadOasisTOC( tag, context, lastParagraph, styleColl );
         return true;
     }
-#endif
     else if ( tagName == "draw:text-box" )
     {
         kdDebug()<<" append text-box\n";

@@ -55,14 +55,15 @@ public:
                               KoTextParag* parag, uint pos,
                               QString& textData, KoTextCustomItem* & customItem );
     /// Extensions to KoTextDocument::loadOasisText
-    bool loadOasisBodyTag( const QDomElement& tag, KoOasisContext& /*context*/,
-                                           KoTextParag* /*lastParagraph*/ );
+    bool loadOasisBodyTag( const QDomElement& tag, KoOasisContext& context,
+                           KoTextParag* & lastParagraph, KoStyleCollection * styleColl );
 protected:
     void init();
 private:
     void appendBookmark( KoTextParag* parag, int pos, KoTextParag* endParag, int endPos, const QString& name );
     void loadOasisFootnote( const QDomElement& tag, KoOasisContext& context,
                             KoTextCustomItem* & customItem );
+    void loadOasisTOC( const QDomElement& tag, KoOasisContext& context, KoTextParag* & lastParagraph, KoStyleCollection* styleColl );
 
     KWTextFrameSet * m_textfs;
 };
