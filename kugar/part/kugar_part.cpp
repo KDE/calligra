@@ -25,6 +25,7 @@
 
 
 KInstance *KugarFactory::s_instance = 0L;
+KAboutData *KugarFactory::s_aboutdata = 0L;
 
 
 // The part's entry point.
@@ -38,28 +39,43 @@ extern "C" void *init_libkugarpart()
 
 // The factory ctor.
 
-KugarFactory::KugarFactory()
+KugarFactory::KugarFactory(QObject *parent, const char* name):KoFactory(parent,name)
 {
+	global();	
 }
 
+KInstance* KugarFactory::global()
+{
+    if ( !s_instance )
+    {
+        s_instance = new KInstance(aboutData());
+    }
+    return s_instance;
+}
 
 // The factory dtor.
 
 KugarFactory::~KugarFactory()
 {
-	if (s_instance)
-	{
-		delete s_instance -> aboutData();
-		delete s_instance;
-
-		s_instance = 0L;
-	}
+	delete s_instance;
+	s_instance=0;
+	delete s_aboutdata;
+	s_aboutdata=0;
 }
 
+KAboutData *KugarFactory::aboutData()
+{
+	if (!s_aboutdata)
+	s_aboutdata=new KAboutData(PACKAGE,
+                                                   I18N_NOOP("Kugar"),
+                   	                               VERSION);
+	return s_aboutdata;
+}
 
 // Create a new part.
 
-QObject *KugarFactory::createObject(QObject *parent,const char *name,const char *,const QStringList &data)
+KParts::Part* KugarFactory::createPartObject( QWidget *parentWidget, const char *,
+        QObject* parent, const char* name, const char*, const QStringList & data)
 {
 	QString forcedUserTemplate;
 	for (QStringList::const_iterator it=data.begin();it!=data.end();++it)
@@ -68,28 +84,7 @@ QObject *KugarFactory::createObject(QObject *parent,const char *name,const char 
 		if (tmp.startsWith("template="))
 			forcedUserTemplate=tmp.right(tmp.length()-9);
 	}
-	QObject *obj = new KugarPart((QWidget*)parent,name,forcedUserTemplate);
-
-	return obj;
-}
-
-
-// Create a new instance.
-
-KInstance *KugarFactory::instance()
-{
-	// Create it if it hasn't already been done.
-
-	if (!s_instance)
-	{
-		KAboutData *about = new KAboutData(PACKAGE,
-						   I18N_NOOP("Kugar"),
-						   VERSION);
-
-		s_instance = new KInstance(about);
-	}
-
-	return s_instance;
+	return ( new KugarPart(parentWidget,name,forcedUserTemplate));
 }
 
 
@@ -99,7 +94,7 @@ KugarPart::KugarPart(QWidget *parent,const char *name,const QString &forcedUserT
 	: KParts::ReadOnlyPart(parent,name)
 {
 	m_forcedUserTemplate=forcedUserTemplate;
-	setInstance(KugarFactory::instance());
+	setInstance(KugarFactory::global());
 
 	view = new MReportViewer(parent);
 

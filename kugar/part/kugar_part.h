@@ -9,6 +9,8 @@
 #include <kparts/browserextension.h>
 #include <klibloader.h>
 
+#include <koFactory.h>
+
 #include "kugar.h"
 
 
@@ -16,21 +18,24 @@ class KInstance;
 class KugarBrowserExtension;
 
 
-class KugarFactory : public KLibFactory
+class KugarFactory : public KoFactory
 {
-	Q_OBJECT
-
+    Q_OBJECT
 public:
-	KugarFactory();
-	virtual ~KugarFactory();
+    KugarFactory( QObject* parent = 0, const char* name = 0 );
+    ~KugarFactory();
 
-	virtual QObject* createObject(QObject *parent = 0,const char *name = 0,
-				const char *classname = "QObject",
-				const QStringList &args = QStringList());
-	static KInstance *instance();
+    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0,
+                QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument",
+                const QStringList &args = QStringList() );
 
+    static KInstance* global();
+
+    // _Creates_ a KAboutData but doesn't keep ownership
+    static KAboutData* aboutData();
 private:
-	static KInstance *s_instance;
+    static KInstance* s_instance;
+    static KAboutData* s_aboutdata;
 };
 
 
