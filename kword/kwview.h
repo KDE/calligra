@@ -780,7 +780,7 @@ private:
     bool m_canceled;
     QLabel *resultLabelAll[7];
     QLabel *resultLabelSelected[7];
-    QLabel *resultGeneralLabel[5];
+    QLabel *resultGeneralLabel[6];
     void addBox( QFrame *page, QLabel **resultLabel );
     void addBoxGeneral( QFrame *page, QLabel **resultLabel );
 

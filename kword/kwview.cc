@@ -7188,7 +7188,7 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
     for (int i=0; i < 7; ++i) {
         resultLabelAll[i] = 0;
         resultLabelSelected[i] = 0;
-        if ( i < 5 )
+        if ( i < 6 )
             resultGeneralLabel[i]=0;
     }
     m_doc = _doc;
@@ -7236,6 +7236,7 @@ void KWStatisticsDialog::calcGeneral( QLabel **resultLabel )
     int picture = 0;
     int part = 0;
     int nbFrameset = 0;
+    int nbFormula = 0;
     QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
         KWFrameSet *frameSet = framesetIt.current();
@@ -7247,6 +7248,8 @@ void KWStatisticsDialog::calcGeneral( QLabel **resultLabel )
                 picture++;
             else if ( frameSet->type() == FT_PART )
                 part++;
+            else if ( frameSet->type() == FT_FORMULA )
+                nbFormula++;
             nbFrameset++;
         }
     }
@@ -7255,6 +7258,7 @@ void KWStatisticsDialog::calcGeneral( QLabel **resultLabel )
     resultLabel[2]->setText( locale->formatNumber( picture, 0 ) );
     resultLabel[3]->setText( locale->formatNumber( table, 0 ) );
     resultLabel[4]->setText( locale->formatNumber( part, 0 ) );
+    resultLabel[5]->setText( locale->formatNumber( nbFormula, 0 ) );
 }
 
 bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
@@ -7373,6 +7377,11 @@ void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
     grid->addWidget( label5, 5, 0, 1 );
     resultLabel[4] = new QLabel( "", box );
     grid->addWidget( resultLabel[4], 5, 2, 2 );
+
+    QLabel *label6 = new QLabel( i18n( "Number Of Formula FrameSet:" ), box );
+    grid->addWidget( label6, 6, 0, 1 );
+    resultLabel[5] = new QLabel( "", box );
+    grid->addWidget( resultLabel[5], 6, 2, 2 );
 
     topLayout->addWidget( box );
 }
