@@ -2068,6 +2068,12 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
   paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorderRight, paintBorderBottom,
                        paintBorderLeft, paintBorderTop, rightPen, bottomPen, leftPen, topPen );
 
+  /* paint all the cells that this one obscures */
+  paintingObscured++;
+  paintObscuredCells( rect, painter, view, cellRect, cellRef, paintBorderRight, paintBorderBottom,
+                      paintBorderLeft, paintBorderTop, rightPen, bottomPen, leftPen, topPen );
+  paintingObscured--;
+
   //If we print pages then we disable clipping otherwise borders are cut in the middle at the page borders
   if ( painter.device()->isExtDev() )
     painter.setClipping( false );
@@ -2080,12 +2086,6 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
     painter.setClipping( true );
 
   paintCellDiagonalLines( painter, cellRect, cellRef );
-
-  /* paint all the cells that this one obscures */
-  paintingObscured++;
-  paintObscuredCells( rect, painter, view, cellRect, cellRef, paintBorderRight, paintBorderBottom,
-                      paintBorderLeft, paintBorderTop, rightPen, bottomPen, leftPen, topPen );
-  paintingObscured--;
 
   paintPageBorders( painter, cellRect, cellRef, paintBorderRight, paintBorderBottom );
 
@@ -3097,12 +3097,23 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   int vert_penWidth, horz_penWidth;
 
   // Fix the borders which meet at the top left corner
-  vert_pen = effLeftBorderPen( cellRef.x(), cellRef.y() - 1 );
+  if ( m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effLeftBorderValue( cellRef.x(), cellRef.y() - 1 ) 
+       >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effRightBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
+    vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effLeftBorderPen( cellRef.x(), cellRef.y() - 1 );
+  else
+    vert_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effRightBorderPen( cellRef.x() - 1, cellRef.y() - 1 );
+
   vert_penWidth = QMAX( 1, doc->zoomItX( vert_pen.width() ) );
   vert_pen.setWidth( vert_penWidth );
-  if ( ( paintLeft || paintTop ) && vert_pen.style() != Qt::NoPen )
+
+  if ( vert_pen.style() != Qt::NoPen )
   {
-    horz_pen = effTopBorderPen( cellRef.x() - 1, cellRef.y() );
+    if ( m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effTopBorderValue( cellRef.x() - 1, cellRef.y() ) 
+         >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effBottomBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
+      horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
+    else
+      horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effBottomBorderPen( cellRef.x() - 1, cellRef.y() - 1 );
+
     horz_penWidth = QMAX( 1, doc->zoomItY( horz_pen.width() ) );
     int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2 + 1;
 
@@ -3126,12 +3137,24 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   }
 
   // Fix the borders which meet at the top right corner
-  vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
+  if ( m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effRightBorderValue( cellRef.x(), cellRef.y() - 1 ) 
+       >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effLeftBorderValue( cellRef.x() + 1, cellRef.y() - 1 ) )
+    vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
+  else
+    vert_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effLeftBorderPen( cellRef.x() + 1, cellRef.y() - 1 );
+
+  // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
   vert_penWidth = QMAX( 1, doc->zoomItX( vert_pen.width() ) );
   vert_pen.setWidth( vert_penWidth );
-  if ( ( paintRight || paintTop ) && ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) )
+  if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) )
   {
-    horz_pen = effTopBorderPen( cellRef.x() + 1, cellRef.y() );
+    if ( m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effTopBorderValue( cellRef.x() + 1, cellRef.y() ) 
+         >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effBottomBorderValue( cellRef.x() + 1, cellRef.y() - 1 ) )
+      horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
+    else
+      horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effBottomBorderPen( cellRef.x() + 1, cellRef.y() - 1 );
+
+    // horz_pen = effTopBorderPen( cellRef.x() + 1, cellRef.y() );
     horz_penWidth = QMAX( 1, doc->zoomItY( horz_pen.width() ) );
     int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2 + 1;
 
@@ -3155,15 +3178,27 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   }
 
   // Bottom
-  if ( ( paintLeft || paintBottom ) && cellRef.y() < KS_rowMax )
+  if ( cellRef.y() < KS_rowMax )
   {
     // Fix the borders which meet at the bottom left corner
-    vert_pen = effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
+    if ( m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effLeftBorderValue( cellRef.x(), cellRef.y() + 1 ) 
+         >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effRightBorderValue( cellRef.x() - 1, cellRef.y() + 1 ) )
+      vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
+    else
+      vert_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effRightBorderPen( cellRef.x() - 1, cellRef.y() + 1 );
+
+    // vert_pen = effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
     vert_penWidth = QMAX( 1, doc->zoomItY( vert_pen.width() ) );
     vert_pen.setWidth( vert_penWidth );
     if ( vert_pen.style() != Qt::NoPen )
     {
-      horz_pen = effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
+      if ( m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effBottomBorderValue( cellRef.x() - 1, cellRef.y() ) 
+           >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effTopBorderValue( cellRef.x() - 1, cellRef.y() + 1 ) )
+        horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
+      else
+        horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effTopBorderPen( cellRef.x() - 1, cellRef.y() + 1 );
+
+      // horz_pen = effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
       horz_penWidth = QMAX( 1, doc->zoomItX( horz_pen.width() ) );
       int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2;
 
@@ -3187,12 +3222,24 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
 
     // Fix the borders which meet at the bottom right corner
-    vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
+    if ( m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effRightBorderValue( cellRef.x(), cellRef.y() + 1 ) 
+         >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effLeftBorderValue( cellRef.x() + 1, cellRef.y() + 1 ) )
+      vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
+    else
+      vert_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effLeftBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
+
+    // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
     vert_penWidth = QMAX( 1, doc->zoomItY( vert_pen.width() ) );
     vert_pen.setWidth( vert_penWidth );
-    if ( ( paintBottom || paintRight ) && ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) )
+    if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) )
     {
-      horz_pen = effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
+      if ( m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effBottomBorderValue( cellRef.x() + 1, cellRef.y() ) 
+           >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effTopBorderValue( cellRef.x() + 1, cellRef.y() + 1 ) )
+        horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
+      else
+        horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effTopBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
+
+      // horz_pen = effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
       horz_penWidth = QMAX( 1, doc->zoomItX( horz_pen.width() ) );
       int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2;
 
