@@ -107,6 +107,43 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   insertNewPage(0,0);
 }
 
+/*====================== constructor =============================*/
+KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData &_refdata)
+  : KPresenter::KPresenterDocument_skel(_refdata)
+{
+  // Use CORBA mechanism for deleting views
+  m_lstViews.setAutoDelete(false);
+  m_lstChildren.setAutoDelete(true);
+
+  m_bModified = false;
+
+  // init
+  _pageList.setAutoDelete(true);
+  _objList.setAutoDelete(true);
+  _objNums = 0;
+  _pageNums = 0;
+  _spInfinitLoop = false;
+  _spManualSwitch = true;
+  _spPageConfig.setAutoDelete(true);
+  _rastX = 20;
+  _rastY = 20;
+  _xRnd = 20;
+  _yRnd = 20;
+  _txtBackCol.operator=(white);
+  _txtSelCol.operator=(lightGray);
+  _pageLayout.format = PG_SCREEN;
+  _pageLayout.orientation = PG_PORTRAIT;
+  _pageLayout.width = PG_SCREEN_WIDTH;
+  _pageLayout.height = PG_SCREEN_HEIGHT;
+  _pageLayout.left = 0;
+  _pageLayout.right = 0;
+  _pageLayout.top = 0;
+  _pageLayout.bottom = 0;
+  _pageLayout.unit = PG_MM;
+  setPageLayout(_pageLayout,0,0);
+  insertNewPage(0,0);
+}
+
 /*====================== destructor ==============================*/
 KPresenterDocument_impl::~KPresenterDocument_impl()
 {

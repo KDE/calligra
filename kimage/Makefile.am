@@ -10,7 +10,6 @@ LDADD =  ../lib/kofficeui/libkofficeui.la \
 ####### Files
 
 bin_PROGRAMS = kimage.bin
-bin_SCRIPTS = kimage
 
 kimage_bin_SOURCES = img_main.cc img_doc.cc img_view.cc img.cc img_shell.cc
 noinst_HEADERS = img_main.h img_doc.h img_view.h img.h img_shell.h
@@ -20,7 +19,7 @@ idl_DATA = img.idl
 idl_HEADER =  img.h
 
 kdelnk_DATA = kimage_part.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/partlnk/kimage.kdelnk
+kdelnkdir = $(kde_datadir)/koffice/partlnk
 
 ####### Implicit rules
 
@@ -30,6 +29,9 @@ SUFFIXES = .h .moc
 	$(MOC) $< -o $@      
 
 ####### Build rules
+
+install-exec-local:
+	$(INSTALL_SCRIPT) kimage $(bindir)/kimage
 
 img.h: img.idl
 	@echo $(IDL) --query-server-for-narrow -I$(idldir) img.idl ;\

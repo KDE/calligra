@@ -11,7 +11,7 @@ public:
 
     virtual bool isOk() { return TRUE; }
     
-    virtual QString openFile( const char *_file ) { return QString; }
+    virtual QString openFile( const char *_file ) { return 0; }
     virtual bool updateFromFile( const char *_file ) { return false; }
     virtual bool switchToBuffer( const char *_buffer ) { return false; }
     virtual bool killBuffer( const char *_buffer ) { return false; }

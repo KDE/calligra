@@ -61,6 +61,8 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   pen.operator=(QPen(black,1,SolidLine));
   brush.operator=(QBrush(white,SolidPattern));
   setMouseTracking(true);
+  m_bShowGUI = true;
+  m_bRectSelection = false;
 }
 
 /*======================= destructor ============================*/
@@ -231,10 +233,10 @@ void KPresenterView_impl::insertAutoform()
 void KPresenterView_impl::insertObject()
 {
   KoPartEntry* pe = KoPartSelectDia::selectPart();
-  if ( !pe )
-    return;
+  if (!pe) return;
   
-  startRectSelection(pe->name());
+  m_pKPresenterDoc->insertObject(QRect(10,10,200,200),pe->name());
+  //  startRectSelection(pe->name());
 }
 
 /*===================== extra pen and brush =====================*/
@@ -979,10 +981,22 @@ void KPresenterView_impl::changeClipart(unsigned int,const char* filename)
 void KPresenterView_impl::resizeEvent(QResizeEvent *e)
 {
   QWidget::resizeEvent(e);
-  page->resize(widget()->width()-16,widget()->height()-16);
-  vert->setGeometry(widget()->width()-16,0,16,widget()->height()-16);
-  horz->setGeometry(0,widget()->height()-16,widget()->width()-16,16);
-  setRanges();
+
+  if (m_bShowGUI)
+    { 
+      horz->show();
+      vert->show();
+      page->resize(widget()->width()-16,widget()->height()-16);
+      vert->setGeometry(widget()->width()-16,0,16,widget()->height()-16);
+      horz->setGeometry(0,widget()->height()-16,widget()->width()-16,16);
+      setRanges();
+    }
+  else
+    {
+      horz->hide();
+      vert->hide();
+      page->resize(widget()->width(),widget()->height());
+    }  
 }
 
 /*======================= setup menu ============================*/
@@ -1876,8 +1890,9 @@ void KPresenterView_impl::cancelRectSelection()
 /*========================== paint rect selection ================*/
 void KPresenterView_impl::paintRectSelection()
 {
+  printf("paintRect\n");
   QPainter painter;
-  painter.begin(this);
+  painter.begin(page);
   
   painter.setRasterOp(NotROP);
   painter.drawRect(m_rctRectSelection);
@@ -1943,3 +1958,29 @@ void KPresenterView_impl::mouseReleaseEvent(QMouseEvent *_ev)
   m_pKPresenterDoc->insertObject(m_rctRectSelection,m_strNewPart);
 }
 
+/*======================== set mode ==============================*/
+void KPresenterView_impl::setMode(OPParts::Part::Mode _mode)
+{
+  Part_impl::setMode(_mode);
+  
+  if (mode() == OPParts::Part::ChildMode && !m_bFocus)
+    m_bShowGUI = false;
+  else
+    m_bShowGUI = true;
+}
+
+/*===================== set focus ================================*/
+void KPresenterView_impl::setFocus(CORBA::Boolean _mode)
+{
+  Part_impl::setFocus(_mode);
+
+  bool old = m_bShowGUI;
+  
+  if (mode() == OPParts::Part::ChildMode && !m_bFocus)
+    m_bShowGUI = false;
+  else
+    m_bShowGUI = true;
+
+  if (old != m_bShowGUI)
+    resizeEvent(0L);
+}

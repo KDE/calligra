@@ -1,12 +1,11 @@
 
 INCLUDES  = $(all_includes) $(PYTHONINC) -I$(idldir) $(MICO_INCLUDES) -I../lib/koml -I../lib/kofficecore -I../lib/kofficeui
-LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(KDE_RPATH) $(MICO_LDFLAGS)
+LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la ../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la -lkfile -lkfm -lop -lkom -lqt -lkdeui -lkdecore $(LIBMICO) $(LIBPYTHON) -lXext -lX11 $(LIBSOCKET)
 
 ####### Files
 
 bin_PROGRAMS = kspread.bin
-bin_SCRIPTS = kspread
 
 kspread_bin_SOURCES = kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread_shell.cc kspread_doc.cc \
@@ -30,8 +29,8 @@ SRCMETA = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 idl_DATA = kspread.idl
 idl_HEADERS = kspread.h
 
-applnk_DATA = kspread_part.kdelnk
-applnkdir = $(kde_datadir)/koffice/partlnk
+kdelnk_DATA = kspread_part.kdelnk
+kdelnkdir = $(kde_datadir)/koffice/partlnk
 
 SUBDIRS = pics scripts
 
@@ -43,6 +42,9 @@ SUFFIXES = .h .moc
 	$(MOC) $< -o $@
 
 ####### Build rules
+
+install-exec-local:
+	$(INSTALL_SCRIPT) kspread $(bindir)/kspread
 
 kspread.h: kspread.idl
 	$(IDL) --query-server-for-narrow -I$(idldir) kspread.idl

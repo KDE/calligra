@@ -30,7 +30,6 @@ typedef AutoLoader<KPresenterFactory> KPresenterAutoLoader;
 KPresenterApp::KPresenterApp(int argc,char** argv)
   : OPApplication(argc,argv)
 {
-  m_pShell = 0L;
 }
 
 /*====================== destrcutor ==============================*/

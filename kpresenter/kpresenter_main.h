@@ -43,11 +43,6 @@ public:
   // start application
   virtual void start();
   
-protected:
-
-  // pointer to the shell
-  KPresenterShell_impl *m_pShell;
-
 };
 
 #endif

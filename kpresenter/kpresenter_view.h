@@ -190,6 +190,9 @@ public:
   virtual void textUnsortList();
   virtual void textNormalText();
   
+  virtual void setMode(OPParts::Part::Mode _mode);
+  virtual void setFocus(CORBA::Boolean mode);
+
   // ------ C++ ------
   // set document
   virtual void setDocument(KPresenterDocument_impl *_doc);
@@ -455,6 +458,7 @@ protected:
   bool m_bRectSelection;
   QRect m_rctRectSelection;
   QString m_strNewPart;
+  bool m_bShowGUI;
 
 };
 

@@ -44,6 +44,8 @@ class KPresenterView_impl;
 #include "graphobj.h"
 #include "ktextobject.h"
 
+#include <koIMR.h>
+
 #define MIME_TYPE "application/x-kpresenter"
 #define EDITOR "IDL:KPresenter/KPresenterDocument:1.0"
 
@@ -116,6 +118,7 @@ public:
 
   // ------ C++ ------ 
   // constructor - destructor
+  KPresenterDocument_impl(const CORBA::BOA::ReferenceData &refdata);
   KPresenterDocument_impl();
   ~KPresenterDocument_impl();
   
