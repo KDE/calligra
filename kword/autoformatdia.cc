@@ -29,7 +29,7 @@
 
 #include <stdlib.h>
 
-#include <qtabdialog.h>
+#include <qlayout.h>
 #include <qvbox.h>
 #include <qhbox.h>
 #include <qcheckbox.h>
@@ -44,27 +44,26 @@
 
 /*================================================================*/
 KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page )
-    : QTabDialog( parent, name, true ), doc( _doc ), oBegin( doc->getAutoFormat().getConfigTypographicQuotes().begin ),
-      oEnd( doc->getAutoFormat().getConfigTypographicQuotes().end ), quotesChanged( false )
+    : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
+      doc( _doc ), 
+      oBegin( doc->getAutoFormat().getConfigTypographicQuotes().begin ),
+      oEnd( doc->getAutoFormat().getConfigTypographicQuotes().end ), 
+      quotesChanged( false )
 {
     page = _page;
 
     setupTab1();
     setupTab2();
 
-    setCancelButton( i18n( "Cancel" ) );
-    setOkButton( i18n( "OK" ) );
-
-    resize( 500, 300 );
-    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( applyConfig() ) );
+    setInitialSize( QSize(500, 300) );
 }
 
 /*================================================================*/
 void KWAutoFormatDia::setupTab1()
 {
-    tab1 = new QVBox( this );
-
-    tab1->setMargin( 10 );
+    tab1 = addPage( i18n( "Simple Autocorrection" ) );
+    QVBoxLayout *grid = new QVBoxLayout(tab1, 10, 5);
+    grid->setAutoAdd( true );
 
     cbTypographicQuotes = new QCheckBox( tab1 );
     cbTypographicQuotes->setText( i18n( "Replace &Quotes by Typographical Quotes:" ) );
@@ -102,18 +101,14 @@ void KWAutoFormatDia::setupTab1()
     cbUpperUpper->setChecked( doc->getAutoFormat().getConfigUpperUpper() );
 
     ( void )new QWidget( tab1 );
-
-    addTab( tab1, i18n( "Simple Autocorrection" ) );
-
-    resize(minimumSize());
 }
 
 /*================================================================*/
 void KWAutoFormatDia::setupTab2()
 {
-    tab2 = new QHBox( this );
-    tab2->setMargin( 10 );
-    tab2->setSpacing( 5 );
+    tab2 = addPage( i18n( "Advanced Autocorrection" ) );
+    QHBoxLayout *grid = new QHBoxLayout(tab2, 10, 5);
+    grid->setAutoAdd( true );
 
     entries = new QListView( tab2 );
     entries->addColumn( i18n( "Find" ) );
@@ -132,12 +127,10 @@ void KWAutoFormatDia::setupTab2()
     ( void )new QWidget( buttons );
     pbEdit = new QPushButton( i18n( "Edit..." ), buttons );
     ( void )new QWidget( buttons );
-
-    addTab( tab2, i18n( "Advanced Autocorrection" ) );
 }
 
 /*================================================================*/
-void KWAutoFormatDia::applyConfig()
+bool KWAutoFormatDia::applyConfig()
 {
     // iiiiiiiiigit - that's a hack!
     if ( quotesChanged )
@@ -163,6 +156,15 @@ void KWAutoFormatDia::applyConfig()
     doc->updateAllViews( 0L );
     doc->updateAllCursors();
     doc->getAutoFormat().setEnabled( false );
+    return true;
+}
+
+void KWAutoFormatDia::slotOk()
+{
+    if (applyConfig())
+    {
+       KDialogBase::slotOk();
+    }
 }
 
 /*================================================================*/

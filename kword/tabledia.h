@@ -20,7 +20,7 @@
 #ifndef tabledia_h
 #define tabledia_h
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 #include <qlist.h>
 
 #include "paraglayout.h"
@@ -60,17 +60,39 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWTableConf                                             */
+/* Class: KWTableDia                                              */
 /******************************************************************/
 
-class KWTableConf : public QWidget
+class KWTableDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KWTableConf( QWidget *_parent, KWordDocument *_doc );
+    KWTableDia( QWidget *parent, const char *name, KWPage *_page, KWordDocument *_doc,
+		int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
 
 protected:
+    bool insertTable();
+    void readTableStyles();
+    void setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
+    void setupTab2();
+
+    QWidget *tab1;
+    QLabel *lRows, *lCols, *lWid, *lHei;
+    QSpinBox *nRows, *nCols;
+    KWTablePreview *preview;
+
+    QWidget *tab2;
+    QWidget *preview2;
+    QComboBox *cWid, *cHei;
+    QLabel *lStyles;
+    QListBox *lbStyles;
+    QCheckBox *cbHeaderOnAllPages;
+    QButtonGroup *bgHeader, *bgFirstCol, *bgBody;
+    QCheckBox *cbHBorder, *cbHBack, *cbHFormat;
+    QCheckBox *cbFCBorder, *cbFCBack, *cbFCFormat;
+    QCheckBox *cbBodyBorder, *cbBodyBack, *cbBodyFormat;
+
     struct TableStyle {
         bool hasHeader, hasFirstCol;
 
@@ -84,57 +106,15 @@ protected:
         KWFormat header, firstRow, Body;
     };
 
-    void readTableStyles();
-    void setupPage();
-
-    QGridLayout *grid1;
-    QLabel *lStyles;
-    QListBox *lbStyles;
-    QWidget *preview;
-    QCheckBox *cbHeaderOnAllPages;
-    QButtonGroup *bgHeader, *bgFirstCol, *bgBody;
-    QCheckBox *cbHBorder, *cbHBack, *cbHFormat;
-    QCheckBox *cbFCBorder, *cbFCBack, *cbFCFormat;
-    QCheckBox *cbBodyBorder, *cbBodyBack, *cbBodyFormat;
-
-    KWordDocument *doc;
     QList<TableStyle> tableStyles;
-
-};
-
-/******************************************************************/
-/* Class: KWTableDia                                              */
-/******************************************************************/
-
-class KWTableDia : public QTabDialog
-{
-    Q_OBJECT
-
-public:
-    KWTableDia( QWidget *parent, const char *name, KWPage *_page, KWordDocument *_doc,
-		int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
-
-protected:
-    void setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
-    void setupTab2();
-    void closeEvent( QCloseEvent * ) { emit cancelButtonPressed(); }
-
-    QWidget *tab1;
-    QGridLayout *grid1;
-    QLabel *lRows, *lCols, *lWid, *lHei;
-    QSpinBox *nRows, *nCols;
-    KWTablePreview *preview;
-    KWTableConf *tab2;
-    QComboBox *cWid, *cHei;
 
     KWPage *page;
     KWordDocument *doc;
 
 protected slots:
-    void insertTable();
     void rowsChanged( int );
     void colsChanged( int );
-
+    virtual void slotOk();
 };
 
 #endif

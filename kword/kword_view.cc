@@ -1535,7 +1535,6 @@ void KWordView::extraSpelling()
 void KWordView::extraAutoFormat()
 {
     KWAutoFormatDia dia( this, "", m_pKWordDoc, gui->getPaperWidget() );
-    dia.setCaption( i18n( "Autocorrection" ) );
     dia.show();
 }
 

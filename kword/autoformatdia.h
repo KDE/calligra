@@ -20,7 +20,7 @@
 #ifndef autoformatdia_h
 #define autoformatdia_h
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 
 class KWordDocument;
 class KWPage;
@@ -35,7 +35,7 @@ class QListView;
 /* Class: KWAutoFormatDia                                         */
 /******************************************************************/
 
-class KWAutoFormatDia : public QTabDialog
+class KWAutoFormatDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -43,11 +43,12 @@ public:
     KWAutoFormatDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page );
 
 protected:
+    bool applyConfig();
     void setupTab1();
     void setupTab2();
 
-    QVBox *tab1;
-    QHBox *tab2;
+    QWidget *tab1;
+    QWidget *tab2;
     QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper;
     QPushButton *pbQuote1, *pbQuote2, *pbEdit, *pbRemove, *pbAdd;
     KCharSelect *charselect;
@@ -60,7 +61,7 @@ protected:
     KWPage *page;
 
 protected slots:
-    void applyConfig();
+    virtual void slotOk();
 
     void chooseQuote1();
     void chooseQuote2();
