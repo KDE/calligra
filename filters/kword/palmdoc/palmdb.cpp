@@ -208,11 +208,18 @@ bool PalmDB::save( const char* filename )
   // write database name
   setName( name() );
   const char *dbname = m_name.latin1();
-  for( unsigned k=0; k<32; k++ )
+  for( unsigned k=0; k<31; k++ )
   {
     Q_UINT8 c = (k<m_name.length()) ? dbname[k] : 0;
     stream << c;
   }
+  {
+    // NUL-terminate the database name
+    Q_UINT8 c = 0;
+    stream << c;
+  }
+
+
 
   // write database attribute
   Q_UINT16 attr = m_attributes;
