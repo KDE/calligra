@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,8 +34,9 @@
 #include "kexiquerydesignersqlhistory.h"
 #include "kexiquerydesignersql.h"
 #include "kexiquerydocument.h"
+#include "kexisectionheader.h"
 
-KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
+KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
 	m_doc = doc;
@@ -42,7 +44,9 @@ KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *par
 	l->setOrientation(Vertical);
 
 	m_history = new KexiQueryDesignerSQLHistory(l, "sqlh");
-	m_editor = new KexiQueryDesignerSQLEditor(l, "sqle");
+	m_head = new KexiSectionHeader(i18n("SQL Text"), Vertical, l);
+	m_editor = new KexiQueryDesignerSQLEditor(mainWin, m_head, "sqle");
+	addChildView(m_editor);
 
 	QHBoxLayout *b = new QHBoxLayout(this);
 	b->addWidget(l);
@@ -55,7 +59,7 @@ KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *par
 }
 
 bool
-KexiQueryDesignerSQL::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
+KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 	//TODO
 	return true;
@@ -68,7 +72,7 @@ KexiQueryDesignerSQL::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 		if(parser->operation() == KexiDB::Parser::OP_Error)
 		{
 			m_history->addEvent(getQuery(), false, parser->error().error());
-			kdDebug() << "KexiQueryDesignerSQL::beforeSwitchTo(): syntax error!" << endl;
+			kdDebug() << "KexiQueryDesignerSQLView::beforeSwitchTo(): syntax error!" << endl;
 			return false;
 		}
 		delete parser;
@@ -79,9 +83,9 @@ KexiQueryDesignerSQL::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 }
 
 bool
-KexiQueryDesignerSQL::afterSwitchFrom(int mode, bool &cancelled)
+KexiQueryDesignerSQLView::afterSwitchFrom(int mode, bool &cancelled)
 {
-	kdDebug() << "KexiQueryDesignerSQL::afterSwitchFrom()" << endl;
+	kdDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
 	if (m_doc && m_doc->schema()) {
 		m_editor->setText(m_doc->schema()->connection()->selectStatement(*m_doc->schema()));
 	}
@@ -89,12 +93,12 @@ KexiQueryDesignerSQL::afterSwitchFrom(int mode, bool &cancelled)
 }
 
 QString
-KexiQueryDesignerSQL::getQuery()
+KexiQueryDesignerSQLView::getQuery()
 {
 	return m_editor->getText();
 }
 
-KexiQueryDesignerSQL::~KexiQueryDesignerSQL()
+KexiQueryDesignerSQLView::~KexiQueryDesignerSQLView()
 {
 }
 

@@ -309,15 +309,18 @@ HOT TODO:
 
 CC_MAIL: dkite@shaw.ca
 
-
-
+2004-06-18
+Query Designer
+- SQL Editor: added KexiSectionHeader
+- KexiQueryDesignerSQLView -> KexiQueryDesignerSQL
+- KexiQueryDesignerSQLEditor: now inherits KexiViewBase
 
 2004-06-17
 KexiTableView
 - Combobox's button is now in "toggle" mode; popping up is now better hidden/shown
 KexiViewBase
 - storeNewData(), storeDataBlock() simplified; parts code updated for this change
-Query Desinger
+Query Designer
 - relations widget: geometries for tables and connection lines are now stored
 - 'dirty' flag better updated
 

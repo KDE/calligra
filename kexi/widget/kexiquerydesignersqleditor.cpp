@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -33,8 +34,11 @@
 
 #include "kexiquerydesignersqleditor.h"
 
-KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const char *name)
- : QWidget(parent, name)
+//KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const char *name)
+// : QWidget(parent, name)
+KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
+	KexiMainWindow *mainWin, QWidget *parent, const char *name)
+ : KexiViewBase(mainWin, parent, name)
 #ifndef Q_WS_WIN //(TEMP)
 	, m_doc( KTextEditor::EditorChooser::createDocument(this, "sqlDoc") )
 	, m_view( m_doc->createView(this, 0L) )
@@ -55,6 +59,8 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const ch
 	}
 #endif
 	m_view->installEventFilter(this);
+	setFocusProxy(m_view);
+
 //	QPushButton *btnQuery = new QPushButton(i18n("&Query"), this);
 //	btnQuery->setFlat(true);
 //	QPushButton *btnClear = new QPushButton(i18n("&Clear"), this);
@@ -99,7 +105,7 @@ KexiQueryDesignerSQLEditor::setText(const QString &text)
 }
 
 bool
-KexiQueryDesignerSQLEditor::eventFilter(QObject *, QEvent *ev)
+KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 {
 	if(ev->type() == QEvent::KeyRelease)
 	{
@@ -110,6 +116,9 @@ KexiQueryDesignerSQLEditor::eventFilter(QObject *, QEvent *ev)
 			emit execQ();
 			return true;
 		}
+	}
+	else if (o==m_view && (ev->type() == QEvent::FocusIn || ev->type() == QEvent::FocusOut)) {
+		emit focus(ev->type() == QEvent::FocusIn);
 	}
 
 	return false;

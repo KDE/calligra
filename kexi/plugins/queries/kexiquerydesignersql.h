@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,16 +26,19 @@
 class KexiQueryDesigner;
 class KexiQueryDesignerSQLEditor;
 class KexiQueryDesignerSQLHistory;
-
 class KexiQueryDocument;
+class KexiSectionHeader;
 
-class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQL : public KexiViewBase
+/*! The KexiQueryDesignerSQLView class is a view containing SQL text editor 
+ and SQL history widget splitted vertically. */
+
+class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name = 0);
-		~KexiQueryDesignerSQL();
+		KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name = 0);
+		~KexiQueryDesignerSQLView();
 
 		QString				getQuery();
 		KexiQueryDesignerSQLEditor	*editor() { return m_editor; }
@@ -50,6 +54,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQL : public KexiViewBase
 		KexiQueryDesignerSQLEditor	*m_editor;
 		KexiQueryDesignerSQLHistory	*m_history;
 		KexiQueryDocument		*m_doc;
+		KexiSectionHeader *m_head;
 };
 
 #endif

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -21,6 +22,8 @@
 #define KEXIQUERYDESIGNERSQLEDITOR_H
 
 #include <qwidget.h>
+#include "kexiviewbase.h"
+
 class KTextEdit;
 
 namespace KTextEditor
@@ -29,13 +32,17 @@ namespace KTextEditor
 	class View;
 }
 
-class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public QWidget
+/*! The KexiQueryDesignerSQLEditor class embeds text editor 
+ for entering query texts. */
+
+class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerSQLEditor(QWidget *parent, const char *name = 0);
-		~KexiQueryDesignerSQLEditor();
+//		KexiQueryDesignerSQLEditor(QWidget *parent, const char *name = 0);
+		KexiQueryDesignerSQLEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+		virtual ~KexiQueryDesignerSQLEditor();
 
 		QString		getText();
 		void		jump(int col);

@@ -63,7 +63,7 @@ KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Ite
 		return new KexiQueryDesignerGuiEditor(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "guieditor");
 	}
 	else if (viewMode == Kexi::TextViewMode) {
-		return new KexiQueryDesignerSQL(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "sqldesigner");
+		return new KexiQueryDesignerSQLView(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "sqldesigner");
 	}
 
 	return 0;
