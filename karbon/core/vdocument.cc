@@ -29,6 +29,8 @@
 
 #include <kdebug.h>
 
+static unsigned short VDocument::DOC_OFFSETX = 20;
+static unsigned short VDocument::DOC_OFFSETY = 20;
 
 VDocument::VDocument()
 	: VObject( 0L ),
@@ -60,8 +62,8 @@ VDocument::~VDocument()
 void
 VDocument::drawPage( VPainter *p ) const
 {
-	double left		= 20;
-	double bottom	= 20;
+	double left		= DOC_OFFSETX;
+	double bottom	= DOC_OFFSETY;
 	double right	= left + m_width;
 	double top		= bottom + m_height;
 
