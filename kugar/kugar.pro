@@ -12,7 +12,6 @@ MOC_DIR = .moc
 MAKEFILE = Makefile.qt
 SUBDIRS += lib \
            kudesigner_qt \
-           kudesigner_qt2 \
            kudesigner_lib \
-           shell_qt \
+           kudesigner_qt2 \
            shell_qt2 
