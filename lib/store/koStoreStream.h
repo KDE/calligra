@@ -49,7 +49,8 @@ public:
    *  - the whole stuff has to be one char shorter to
    *    trigger overflow() if the m_bufferSized char is reached
    */
-  ostorestreambuffer( KoStore* _store ) : m_pStore( _store )
+  ostorestreambuffer( KoStore* _store )
+    : m_pStore( _store )
   {
     setp (m_buffer, m_buffer+(m_bufferSize-1));
   }
@@ -102,17 +103,16 @@ protected:
 class ostorestream : public ostream
 {
 public:
-  ostorestream( KoStore* _store ) : ostream( &m_buf ), m_buf( _store ) { }
+  ostorestream( KoStore* _store )
+    : ostream( &m_buf ), m_buf( _store ) { }
 
 protected:
   ostorestreambuffer m_buf;
 };
 
-/*******************************************
- *
+/**
  * Store Input Buffer
- *
- *******************************************/
+ */
 
 class istorestreambuffer : public streambuf
 {
@@ -131,7 +131,8 @@ public:
    *  - no Putback-Zone!
    *  => force underflow()
    */
-  istorestreambuffer( KoStore* _store ) : m_pStore( _store )
+  istorestreambuffer( KoStore* _store )
+    : m_pStore( _store )
   {
     //kdebug( KDEBUG_INFO, 30002, "Pointer constructor" );
     setg (puffer+4,     // beginning of Putback-Zone
@@ -145,16 +146,15 @@ protected:
   virtual int underflow ();
 };
 
-/*******************************************
- *
+/**
  * Store Input Stream
- *
- *******************************************/
+ */
 
 class istorestream : public istream
 {
 public:
-  istorestream( KoStore* _store ) : istream( &m_buf ), m_buf( _store ) { }
+  istorestream( KoStore* _store )
+    : istream( &m_buf ), m_buf( _store ) { }
 
 protected:
   istorestreambuffer m_buf;
