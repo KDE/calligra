@@ -57,7 +57,18 @@ public:
 	void setPrecision( unsigned int precision ) { m_precision = precision; };
 protected:
     friend class KoUnitDoubleValidator;
+    /**
+     * Transform the double in a nice text, using locale symbols
+     * @param value the number as double
+     * @return the resulting string
+     */
     QString getVisibleText( double value ) const;
+    /**
+     * Transfrom a string inot a double, while taking care of locale specific symbols.
+     * @param str the string to transform into a number
+     * @param ok true, if the conversion was succesful
+     * @return the value as double
+     */
     double toDouble( const QString& str, bool* ok ) const;
 
 protected:

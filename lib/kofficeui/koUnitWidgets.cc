@@ -55,7 +55,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     
     bool ok = false;
     // ### TODO: readNumber is not enough, as it wants 1000 separators at fixed positions, but when editing they might shift.
-    const double value = KGlobal::locale()->readNumber( number, &ok );
+    const double value = m_base->toDouble( number, &ok );
     double newVal = 0.0;
     if( ok )
     {
@@ -120,10 +120,14 @@ QString KoUnitDoubleBase::getVisibleText( double value ) const
 
 double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
 {
-    QString str2 ( str );
-    kdDebug(30004) << "toDouble:" << str2 << ":" << endl;
-    // ### TODO: use KLocale::readNumber
-    return str2.replace( ',', "." ).toDouble( ok );
+    kdDebug(30004) << "toDouble:" << str << ":" << endl;
+    QString str2( str );
+    /* KLocale::readNumber wants the thousand separator exactly at 1000.
+       But when editing, it might be anywhere. So we need to remove it. */
+    const QString sep( KGlobal::locale()->thousandsSeparator() );
+    if ( !sep.isEmpty() )
+        str2.remove( sep );
+    return KGlobal::locale()->readNumber( str2, ok );
 }
 
 
