@@ -162,6 +162,7 @@ public:
     void setTabList(QList<KoTabulator> *tabList);
 
     bool getNextTab(unsigned int _ptPos,unsigned int _lBorder,unsigned int _rBorder,unsigned int &_tabPos,KoTabulators &_tabType);
+  bool hasSpecialTabs() { return specialTabs; }
 
 protected:
     Flow flow;
@@ -209,6 +210,7 @@ protected:
      */
     KWordDocument *document;
     QList<KoTabulator> tabList;
+    bool specialTabs;
 
 };
 

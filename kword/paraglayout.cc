@@ -52,6 +52,7 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name
     document->paragLayoutList.setAutoDelete(true);
 
     tabList.setAutoDelete(false);
+    specialTabs = false;
 }
 
 KWParagLayout::~KWParagLayout()
@@ -420,6 +421,7 @@ void KWParagLayout::setTabList(QList<KoTabulator> *_tabList)
   tabList.setAutoDelete(true);
   tabList.clear(); 
   tabList.setAutoDelete(false);
+  specialTabs = false;
   for (unsigned int i = 0;i < _tabList->count();i++)
     {
       KoTabulator *t = new KoTabulator;
@@ -427,6 +429,7 @@ void KWParagLayout::setTabList(QList<KoTabulator> *_tabList)
       t->mmPos = _tabList->at(i)->mmPos;
       t->ptPos = _tabList->at(i)->ptPos;
       tabList.append(t);
+      if (t->type != T_LEFT) specialTabs = true;
     }
 }
 

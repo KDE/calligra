@@ -114,12 +114,13 @@ CORBA::Boolean KWordDocument::init()
   pageColumns.columnSpacing = STANDARD_COLUMN_SPACING;
 
   QString _template;
-  QString _templatePath = kapp->kde_datadir() + "/kword/templates/";
+  QString _globalTemplatePath = kapp->kde_datadir() + "/kword/templates/";
+  QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kword/templates/";
 
-  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template,false))
+  if (KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,false))
     {
       QFileInfo fileInfo(_template);
-      QString fileName(_templatePath + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".kwt");
+      QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kwt");
       loadTemplate(fileName.data());
     }
   else

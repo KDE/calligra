@@ -781,11 +781,14 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
     return TRUE;
 }
 
-bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects = true )
+bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects = true, bool _checkTabs = true )
 {
     int _left = 0,_right = 0;
 
     // Reggie: DAMN SLOW HACK !!!!!!! 
+//     if (parag->getParagLayout()->hasSpecialTabs())
+//       makeLineLayout(_painter,true,false);
+
     if (_checkIntersects)
       {
 	if (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->hasIntersections())
@@ -961,6 +964,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	      } break;
 	    case ID_KWCharTab:
 	      {
+		if (!_checkTabs) break;
 		unsigned int tabPos = 0;
 		KoTabulators tabType;
 		if (parag->getParagLayout()->getNextTab(ptPos,document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left(),
@@ -974,6 +978,10 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 			  case T_LEFT:
 			    ptPos = tabPos;
 			    break;
+// 			  case T_RIGHT:
+// 			    {
+// 			      if ((ptStartPos + ptWidth) - ptPos) < tabPos 
+// 			    }
 			  default: break;
 			  }
 		      }

@@ -479,3 +479,8 @@ Reggie, 8.12.1998:
 - Using ICON() for loading icons in whole KWord
 - Save as works again
 - When loading a file the toolbar and rulers are update correctly at the beginning
+
+Reggie, 9.12.1998:
+------------------
+- Templates are searched in the local kdedir (~/.kde/share/apps/kword/templates) now too
+- More work on tabs (started with right aligned tabs)
