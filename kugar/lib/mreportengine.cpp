@@ -93,6 +93,7 @@ void MReportEngine::clearFormatting(){
 	{
 		detail->clear();
 	}
+    details.clear();
 	pFooter.clear();
 	rFooter.clear();
 }
