@@ -92,6 +92,8 @@ public:
 protected:
     void resizeEvent( QResizeEvent *e );
 
+protected slots:
+	void slotSelectionChanged();
     QListBox *names;
     QVBox *back;
 

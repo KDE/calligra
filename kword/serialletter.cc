@@ -218,7 +218,7 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
     : KDialogBase(Plain, i18n( "Serial Letter - Variable Name" ), Ok | Cancel, Ok, parent, "", true )
 {
     QWidget *page = plainPage();
-  
+
     back = new QVBox( page );
     back->setSpacing( 5 );
     back->setMargin( 5 );
@@ -235,6 +235,13 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
         names->insertItem( it.key(), -1 );
 
     setInitialSize( QSize( 350, 400 ) );
+    connect(names,SIGNAL(selectionChanged () ),this,SLOT(slotSelectionChanged()));
+    enableButtonOK(names->currentItem ()!=-1);
+}
+
+void KWSerialLetterVariableInsertDia::slotSelectionChanged()
+{
+    enableButtonOK(names->currentItem ()!=-1);
 }
 
 QString KWSerialLetterVariableInsertDia::getName() const
@@ -397,7 +404,7 @@ void KWSerialLetterEditorList::displayRecord( int i )
 
 KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db_ )
     : KDialogBase( Plain, i18n( "Serial Letter - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
-{    
+{
     QWidget *page = plainPage();
 
     back = new QVBox( page );
