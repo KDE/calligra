@@ -1807,8 +1807,7 @@ void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
             QString name  = e.attribute( "table:name" );
             QString areaPoint = e.attribute( "table:cell-range-address" );
 
-            //todo create a kspread_info.h
-            //m_namedAreas.append( name );
+            d->m_loadingInfo->addWordInAreaList( name );
             kdDebug() << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
 
             QString range( KSpreadSheet::translateOpenCalcPoint( areaPoint ) );

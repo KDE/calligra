@@ -26,7 +26,7 @@ class KSPLoadingInfo
 public:
     KSPLoadingInfo() {}
     ~KSPLoadingInfo() {}
-
+    void addWordInAreaList( const QString & word) { m_areaNamed.append( word ); }
     bool findWordInAreaList(const QString & word) const { return (m_areaNamed.find( word ) != m_areaNamed.end());}
 
 private:
