@@ -698,9 +698,23 @@ void KImageShopView::slotSetZoomFactor(float zoomFactor)
 
 void KImageShopView::editUndo()
 {
+  m_pDoc->commandHistory()->undo();
 }
-
+ 
 void KImageShopView::editRedo()
+{
+  m_pDoc->commandHistory()->redo();
+}
+ 
+void KImageShopView::editCut()
+{
+}
+ 
+void KImageShopView::editCopy()
+{
+}
+ 
+void KImageShopView::editPaste()
 {
 }
 
@@ -715,6 +729,54 @@ void KImageShopView::viewLayerDialog()
       
       m_vMenuView->setItemChecked(m_idMenuView_LayerDialog, true);
     }
+}
+
+void KImageShopView::changeUndo( QString _text, bool _enable )
+{
+  CORBA::WString_var text;
+ 
+  cout << "Michael : changeUndo" << endl;
+ 
+  if( _enable )
+  {
+    m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, true );
+    QString str;
+    str.sprintf( i18n( "Undo: %s" ), _text.data() );
+    text = Q2C( str );
+    m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
+    m_vToolBarEdit->setItemEnabled( m_idMenuEdit_Undo, true );
+  }
+  else
+  {
+    text = Q2C( i18n( "No Undo possible" ) );
+    m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
+    m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
+    m_vToolBarEdit->setItemEnabled( m_idMenuEdit_Undo, false );
+  }
+}
+
+void KImageShopView::changeRedo( QString _text, bool _enable )
+{
+  CORBA::WString_var text;
+ 
+  cout << "Michael : changeRedo" << endl;
+ 
+  if( _enable )
+  {
+    m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, true );
+    QString str;
+    str.sprintf( i18n( "Redo: %s" ), _text.data() );
+    text = Q2C( str );
+    m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
+    m_vToolBarEdit->setItemEnabled( m_idMenuEdit_Redo, true );
+  }
+  else
+  {
+    text = Q2C( i18n( "No Redo possible" ) );
+    m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
+    m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
+    m_vToolBarEdit->setItemEnabled( m_idMenuEdit_Redo, false );
+  }
 }
 
 #include "kimageshop_view.moc"
