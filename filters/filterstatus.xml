@@ -155,7 +155,7 @@
                 <note xml:lang="en_us">SGML DocBook only</note>
                 <stat import="none" export="twostars"/>
             </filter>
-            <filter id="kword_hamcomword">
+            <filter id="kword_hancomword">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/hancomword"/>
                 <title xml:lang="en_us">HancomWord</title>
                 <note xml:lang="en_us">for version 2.0, text only</note>
@@ -211,7 +211,7 @@
                 <contact href="mailto:info@marcozanon.com">Marco Zanon</contact>
                 <stat import="planned" export="none"/>
             </filter>
-            <filter id="kword_msword">
+            <filter id="kword_msword97">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/winword97"/>
                 <title xml:lang="en_us">MS Word</title>
                 <note xml:lang="en_us">Microsoft Word 97/2000</note>
@@ -362,13 +362,15 @@
             </filter>
         </application>
 
-        <application id="krita">
+        <application id="krita" released="no">
             <title xml:lang="en_us">Krita</title>
         </application>
 
+<!--
         <application id="kivio">
             <title xml:lang="en_us">Kivio</title>
         </application>
+-->
 
         <application id="kontour" released="no">
             <title xml:lang="en_us">Kontour</title>
@@ -379,7 +381,6 @@
                 <stat import="none" export="abandoned"/>
             </filter>
         </application>
-
     </version>
 
 </filters>
