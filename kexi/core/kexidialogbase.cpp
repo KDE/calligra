@@ -201,42 +201,59 @@ QString KexiDialogBase::itemIcon()
 	return m_part->info()->itemIcon();
 }
 
-bool KexiDialogBase::switchToViewMode( int viewMode )
+bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 {
 	kdDebug() << "KexiDialogBase::switchToViewMode()" << endl;
+	cancelled = false;
 	KexiViewBase *view = selectedView();
 
-	if (m_currentViewMode == viewMode)
+	if (m_currentViewMode == newViewMode)
 		return true;
-	if (!supportsViewMode(viewMode))
+	if (!supportsViewMode(newViewMode))
 		return false;
 
 	if (view) {
-		view->beforeSwitchTo(viewMode);
-		//take current proxy child
-		takeActionProxyChild( view );
+		if (!view->beforeSwitchTo(newViewMode, cancelled))
+			return false;
+		if (cancelled)
+			return true;
+		if (view->dirty()) {
+			if (!m_parentWindow->saveObject(this, cancelled, i18n("Design has been changed. You must save it before switching to other view.")))
+				return false;
+			if (cancelled)
+				return true;
+//			KMessageBox::questionYesNo(0, i18n("Design has been changed. You must save it before switching to other view."))
+//				==KMessageBox::No
+		}
 	}
 
 	//get view for viewMode
-	view = (m_stack->widget(viewMode) && m_stack->widget(viewMode)->inherits("KexiViewBase"))
-		? static_cast<KexiViewBase*>(m_stack->widget(viewMode)) : 0;
-	if (!view) {
+	KexiViewBase *newView = (m_stack->widget(newViewMode) && m_stack->widget(newViewMode)->inherits("KexiViewBase"))
+		? static_cast<KexiViewBase*>(m_stack->widget(newViewMode)) : 0;
+	if (!newView) {
 		//ask the part to create view for the new mode
-		view = m_part->createView(m_stack, this, *m_item, viewMode);
-		if (!view) {
+		newView = m_part->createView(m_stack, this, *m_item, newViewMode);
+		if (!newView) {
 			//js TODO error?
+			kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
+				<< m_currentViewMode << " restored." << endl;
 			return false;
 		}
-		addView(view, viewMode);
+		addView(newView, newViewMode);
 	}
-	//new proxy child
-	addActionProxyChild( view );
-
-	m_stack->raiseWidget(view);
-	view->afterSwitchFrom(m_currentViewMode);
-	m_currentViewMode = viewMode;
-
-	view->propertyBufferSwitched();
+	if (!newView->afterSwitchFrom(m_currentViewMode, cancelled)) {
+		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
+			<< m_currentViewMode << " restored." << endl; 
+		return false;
+	}
+	if (cancelled)
+		return true;
+	m_currentViewMode = newViewMode;
+	if (view)
+		takeActionProxyChild( view ); //take current proxy child
+	addActionProxyChild( newView ); //new proxy child
+	m_stack->raiseWidget( newView );
+	newView->propertyBufferSwitched();
 	return true;
 }
 
@@ -337,6 +354,7 @@ bool KexiDialogBase::storeNewData()
 	m_schemaData = v->storeNewData(sdata);
 	if (!m_schemaData)
 		return false;
+	v->setDirty(false);
 	//new schema data has now ID updated to a unique value 
 	//-assign that to item's identifier
 	m_item->setIdentifier( m_schemaData->id() );
@@ -351,7 +369,10 @@ bool KexiDialogBase::storeData()
 	KexiViewBase *v = selectedView();
 	if (!v)
 		return false;
-	return v->storeData() != 0;
+	if (!v->storeData())
+		return false;
+	v->setDirty(false);
+	return true;
 }
 
 bool KexiDialogBase::storeDataBlock( const QString &dataString, const QString& dataID )

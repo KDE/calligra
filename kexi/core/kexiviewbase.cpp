@@ -42,12 +42,12 @@ KexiViewBase::~KexiViewBase()
 {
 }
 
-bool KexiViewBase::beforeSwitchTo(int /* mode */)
+bool KexiViewBase::beforeSwitchTo(int /* mode */, bool & /*cancelled*/)
 {
 	return true;
 }
 
-bool KexiViewBase::afterSwitchFrom(int /* mode */)
+bool KexiViewBase::afterSwitchFrom(int /* mode */, bool & /*cancelled*/)
 {
 	return true;
 }

@@ -286,12 +286,19 @@ void KexiAlterTableDialog::slotCellSelected(int, int row)
 	propertyBufferSwitched();
 }
 
-bool KexiAlterTableDialog::beforeSwitchTo(int mode)
+bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled)
 {
 	if (mode==Kexi::DesignViewMode) {
 		//todo
 	}
 	else if (mode==Kexi::DataViewMode) {
+		if (!dirty() && parentDialog()->neverSaved()) {
+			cancelled=true;
+			KMessageBox::information(this, i18n("Cannot switch to data view, because table design is empty.\n"
+				"First, please create your design.") );
+			return true;
+		}
+
 #if 0
 		//todo
 		KexiDB::TableSchema *nt = new KexiDB::TableSchema(m_newTable->name());
@@ -661,6 +668,12 @@ bool KexiAlterTableDialog::storeData()
 	KexiDB::TableSchema *ts = static_cast<KexiDB::TableSchema*>(m_dialog->schemaData());
 	
 	m_view->acceptRowEdit();
+
+//<TODO: remove this in the future>
+	if (!m_dialog->neverSaved()) {
+		return KMessageBox::Yes == KMessageBox::questionYesNo(this, i18n("Saving changes for existing table design are not yet supported.\nDo you want to discard your changes now?"));
+	}
+//</TODO>
 
 /*** TODO: ALTER TABLE CODE IN KEXIDB!
 	if (!ts || !mainWin()->project()->dbConnection()->alterTable(ts))

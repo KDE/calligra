@@ -109,9 +109,13 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		/*! \return current view mode for this dialog. */
 		int currentViewMode() const { return m_currentViewMode; }
 
-		/*! Switches this dialog to \a viewMode.
-		 \a viewMode is one of Kexi::ViewMode enum elements. */
-		bool switchToViewMode( int viewMode );
+		/*! Switches this dialog to \a newViewMode.
+		 \a viewMode is one of Kexi::ViewMode enum elements. 
+		 \return true for successfull switching
+		 True is returned also if user has cancelled switching 
+		 (rarely, but for any reason) - \a cancelled is set to true.
+		 */
+		bool switchToViewMode( int newViewMode, bool &cancelled );
 
 		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 

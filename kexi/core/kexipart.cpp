@@ -104,9 +104,13 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 //		dlg->mainWidget()->setIcon( *dlg->icon() );
 	dlg->stack()->setIcon( *dlg->icon() );
 
-	if (!dlg->switchToViewMode( viewMode )) {
+	bool cancelled;
+	if (!dlg->switchToViewMode( viewMode, cancelled )) {
 		//js TODO ERROR???
+		return 0;
 	}
+	if (cancelled)
+		return 0;
 
 	if (dlg->mdiParent() && dlg->mdiParent()->state()==KMdiChildFrm::Normal) //only resize dialog if it is in normal state
 		dlg->resize(dlg->sizeHint());

@@ -319,6 +319,28 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 
 CC_MAIL: dkite@shaw.ca
 
+2004-03-24
+Main Window
+	- Wrong behaviour fixed:
+	 after switching to other MDI mode, pointer to current dialog needs to be updated
+	 (property editor was empty)
+	- previous 'view mode' toggle action is checked back properly after cancelled switch
+Table View
+	- fixed editing initializing with 'removeOld' mode
+
+Alter Table Dialog
+	- Temporary workaround:
+	 if data is dirty and table schema was saved before --user is asked 
+	 for discarding changes.
+	- switching to Data Mode is cancelled if current design is empty (never saved and !dirty)
+KexiDialogBase
+	- switchToViewMode() has now option for cancelling switching 
+	 (if user is able to cancel in any case)
+	- switchToViewMode() calls saveObject() on main window before switching, if needed
+	- KexiViewBase::afterSwitchFrom() and beforeSwitchTo() have now bool &cancelled
+		 parameter that allows to gently cancel switching 
+		 (probably after showing some info messages)
+
 2004-03-23
 2004-03-24
 Core, Main Window

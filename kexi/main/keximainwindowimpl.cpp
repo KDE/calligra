@@ -138,7 +138,8 @@ class KexiMainWindowImpl::Private
 		// view menu
 		KAction *action_view_nav, *action_view_propeditor;
 		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
-		KRadioAction *last_checked_mode;
+		QIntDict<KRadioAction> actions_for_view_modes;
+//		KRadioAction *last_checked_mode;
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
@@ -183,15 +184,20 @@ class KexiMainWindowImpl::Private
 		forceDialogClosing=false;
 		insideCloseDialog=false;
 		createMenu=0;
-		last_checked_mode=0;
+//		last_checked_mode=0;
 	}
 
 	/*! Toggles last checked view mode radio action, if available. */
 	void toggleLastCheckedMode()
 	{
-		if (!last_checked_mode)
+		if (curDialog.isNull())
 			return;
-		last_checked_mode->setChecked(true);
+		KRadioAction *ra = actions_for_view_modes[ curDialog->currentViewMode() ];
+		if (ra)
+			ra->setChecked(true);
+//		if (!last_checked_mode)
+//			return;
+//		last_checked_mode->setChecked(true);
 	}
 };
 
@@ -361,18 +367,21 @@ KexiMainWindowImpl::initActions()
 	//VIEW MENU
 	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "table", KShortcut(), 
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
+	d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
 	d->action_view_data_mode->setToolTip(i18n("Switch to Data View mode"));
 	d->action_view_data_mode->setWhatsThis(i18n("Switches to Data View mode."));
 
 	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", KShortcut(), 
 		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
+	d->actions_for_view_modes.insert( Kexi::DesignViewMode, d->action_view_design_mode );
 	d->action_view_design_mode->setExclusiveGroup("view_mode");
 	d->action_view_design_mode->setToolTip(i18n("Switch to Design View mode"));
 	d->action_view_design_mode->setWhatsThis(i18n("Switches to Design View mode."));
 
 	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", KShortcut(), 
 		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
+	d->actions_for_view_modes.insert( Kexi::TextViewMode, d->action_view_text_mode );
 	d->action_view_text_mode->setExclusiveGroup("view_mode");
 	d->action_view_text_mode->setToolTip(i18n("Switch to Text View mode"));
 	d->action_view_text_mode->setWhatsThis(i18n("Switches to Text View mode."));
@@ -1189,6 +1198,8 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 	if (update_dlg_caption) {
 		slotCaptionForCurrentMDIChild(d->curDialog->mdiParent()->state()==KMdiChildFrm::Maximized);
 	}
+//	if (!d->curDialog.isNull())
+//		d->last_checked_mode = d->actions_for_view_modes[ d->curDialog->currentViewMode() ];
 	invalidateViewModeActions();
 	invalidateActions();
 }
@@ -1482,13 +1493,18 @@ void KexiMainWindowImpl::slotViewDataMode()
 		d->toggleLastCheckedMode();
 		return;
 	}
-	if (!d->curDialog->switchToViewMode( Kexi::DataViewMode )) {
+	bool cancelled;
+	if (!d->curDialog->switchToViewMode( Kexi::DataViewMode, cancelled )) {
 		// js TODO error...
 		d->toggleLastCheckedMode();
 		return;
 	}
+	if (cancelled) {
+		d->toggleLastCheckedMode();
+		return;
+	}
 	invalidateSharedActions();
-	d->last_checked_mode = d->action_view_data_mode;
+//	d->last_checked_mode = d->action_view_data_mode;
 }
 
 void KexiMainWindowImpl::slotViewDesignMode()
@@ -1502,12 +1518,17 @@ void KexiMainWindowImpl::slotViewDesignMode()
 		d->toggleLastCheckedMode();
 		return;
 	}
-	if (!d->curDialog->switchToViewMode( Kexi::DesignViewMode )) {
+	bool cancelled;
+	if (!d->curDialog->switchToViewMode( Kexi::DesignViewMode, cancelled )) {
 		// js TODO error...
 		return;
 	}
+	if (cancelled) {
+		d->toggleLastCheckedMode();
+		return;
+	}
 	invalidateSharedActions();
-	d->last_checked_mode = d->action_view_design_mode;
+//	d->last_checked_mode = d->action_view_design_mode;
 }
 
 void KexiMainWindowImpl::slotViewTextMode()
@@ -1521,13 +1542,18 @@ void KexiMainWindowImpl::slotViewTextMode()
 		d->toggleLastCheckedMode();
 		return;
 	}
-	if (!d->curDialog->switchToViewMode( Kexi::TextViewMode )) {
+	bool cancelled;
+	if (!d->curDialog->switchToViewMode( Kexi::TextViewMode, cancelled )) {
 		// js TODO error...
 		d->toggleLastCheckedMode();
 		return;
 	}
+	if (cancelled) {
+		d->toggleLastCheckedMode();
+		return;
+	}
 	invalidateSharedActions();
-	d->last_checked_mode = d->action_view_text_mode;
+//	d->last_checked_mode = d->action_view_text_mode;
 }
 
 void
@@ -1576,14 +1602,15 @@ void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 	closeDialog(static_cast<KexiDialogBase *>(pWnd), cancelled, layoutTaskBar);
 }
 
-bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled ) //, bool dontAsk = true )
+bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled, 
+	const QString& messageWhenAskingForName )
 {
 	cancelled=false;
 	if (dlg->neverSaved()) {
 		//data was never saved in the past -we need to create a new object at the backend
 		if (!d->nameDialog) {
-			d->nameDialog = new KexiNameDialog(QString::null,
-				this, "nameDialog");
+			d->nameDialog = new KexiNameDialog(
+				messageWhenAskingForName, this, "nameDialog");
 			//check if that name is allowed
 			d->nameDialog->widget()->addNameSubvalidator( 
 				new Kexi::KexiDBObjectNameValidator(project()->dbConnection()->driver(), 0, "sub"));
@@ -1913,10 +1940,13 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 	if (dlg) {
 		if (dlg->currentViewMode()!=viewMode) {
 			//try to switch
-			if (!dlg->switchToViewMode(viewMode)) {
+			bool cancelled;
+			if (!dlg->switchToViewMode(viewMode, cancelled)) {
 				//js TODO: add error msg...
 				return 0;
 			}
+			if (cancelled)
+				return 0;
 		}
 	}
 	else {
@@ -2061,6 +2091,7 @@ void KexiMainWindowImpl::slotDirtyFlagChanged(KexiDialogBase* dlg)
 
 void KexiMainWindowImpl::slotMdiModeHasBeenChangedTo(KMdi::MdiMode)
 {
+	//after switching to other MDI mode, pointer to current dialog needs to be updated
 	activateFirstWin();
 	activeWindowChanged(activeWindow());
 }

@@ -76,6 +76,16 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 if the currently pointed buffer is the same as before. */
 		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false) = 0;
 
+		/*! Saves dialog's \a dlg data. It dialog's data is never saved,
+		 User is asked for name and caption, before saving.
+		 \return true on successul closing or false on saving error.
+		 If saving was cancelled by user, true is returned and cancelled is true.
+		 \a messageWhenAskingForName is a i18n'ed text that will be visible
+		 within name/caption dialog (see KexiNameDialog), which is popped 
+		 up for never saved objects. */
+		virtual bool saveObject( KexiDialogBase *dlg, bool &cancelled,
+			const QString& messageWhenAskingForName = QString::null ) = 0;
+
 };
 
 
