@@ -783,7 +783,7 @@ bool KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool clean=f
   QString _template;
   QString _templatePath = kapp->kde_datadir() + "/kpresenter/templates/";
 
-  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template))
+  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template,true))
     {
       QFileInfo fileInfo(_template);
       QString fileName(_templatePath + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".kpt");
@@ -1603,6 +1603,38 @@ int KPresenterDocument_impl::getBottomBorder()
   if (_pageLayout.unit == PG_CM) fact = 10;
   if (_pageLayout.unit == PG_INCH) fact = 25.4;
   return static_cast<int>(_pageLayout.bottom * fact * 100 * MM_TO_POINT) / 100;
+}
+
+/*================================================================*/
+void KPresenterDocument_impl::deletePage(int _page,DelPageMode _delPageMode)
+{
+  KPObject *kpobject = 0;
+  int _h = getPageSize(0,0,0).height();
+
+  if (_delPageMode == DPM_DEL_OBJS || _delPageMode == DPM_DEL_MOVE_OBJS)
+    {
+      deSelectAllObj();
+      for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+	{
+	  kpobject = objectList()->at(i);
+	  if (getPageOfObj(i,0,0) - 1 == _page)
+	    kpobject->setSelected(true);
+	}
+      deleteObjs();
+    }
+
+  if (_delPageMode == DPM_MOVE_OBJS || _delPageMode == DPM_DEL_MOVE_OBJS)
+    {
+      for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+	{
+	  kpobject = objectList()->at(i);
+	  if (getPageOfObj(i,0,0) - 1 > _page)
+	    kpobject->setOrig(kpobject->getOrig().x(),kpobject->getOrig().y() - _h);
+	}
+    }
+
+  _backgroundList.remove(_page);
+  repaint(false);
 }
 
 /*================ return number of selected objs ================*/

@@ -672,13 +672,21 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 
 bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects = true )
 {
-//     if (_checkIntersects)
-//       {
-// 	if (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->hasIntersections())
-// 	  makeLineLayout(_painter,false);
-//       }
-    int _left = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getLeftIndent(ptY,getLineHeight());
-    
+    int _left = 0,_right = 0;
+
+    // Reggie: DAMN SLOW HACK !!!!!!! 
+    if (_checkIntersects)
+      {
+	if (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->hasIntersections())
+	  makeLineLayout(_painter,false);
+      }
+
+    if (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->hasIntersections())
+      {	  
+	_left = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getLeftIndent(ptY,getLineHeight());
+	_right = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getRightIndent(ptY,getLineHeight());
+      }
+
     compare_formats = false;
     ptTextLen = 0;
     specialHeight = 0;
@@ -725,7 +733,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     unsigned int xShift = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left() + indent;
 
     ptLeft = xShift;
-    ptWidth = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent;
+    ptWidth = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right;
 
     // First line ? Draw the couter ?
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterNr() != -1 )
@@ -786,7 +794,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     lineStartFormat = *this;
     
     // Loop until we reach the end of line
-    while( ptPos < xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent  && textPos < parag->getTextLen() )
+    while(ptPos < xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right  && textPos < parag->getTextLen())
     {
 	char c = text[ textPos ].c;
 
@@ -803,13 +811,13 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	// if we will not fit into the line anymore, let us leave the loop
 	if (c != 0)
 	  {
-	    if (ptPos + font->getPTWidth(c) >= xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent)
+	    if (ptPos + font->getPTWidth(c) >= xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right)
 	      break;
 	  }
 	else
 	  {
 	    if (((KWCharImage*)text[textPos].attrib)->getImage()->width() + ptPos >= 
-		xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent)
+		xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right)
 	      break;
 	  }
 
@@ -869,18 +877,18 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER )
       {
-	ptPos = xShift + ( document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - left - right - ptTextLen ) / 2;
+	ptPos = xShift + ( document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - left - right - ptTextLen - _right) / 2;
 	ptStartPos = ptPos;
       }
     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT )
       {      
-	ptPos = xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - right - ptTextLen - indent;
+	ptPos = xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - right - ptTextLen - indent - _right;
 	ptStartPos = ptPos;
       }
 
     // Calculate the space between words if we have "block" formating.
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK && spaces > 0)
-      ptSpacing = (float)( document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - ptTextLen - indent) / (float)spaces;
+      ptSpacing = (float)( document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - ptTextLen - indent - _right) / (float)spaces;
     else
       ptSpacing = 0;
 

@@ -77,6 +77,7 @@ class Page;
 #include "ksearchdialogs.h"
 #include "shadowdia.h"
 #include "presstructview.h"
+#include "delpagedia.h"
 #include "setbackcmd.h"
 #include "pgconfcmd.h"
 #include "pglayoutcmd.h"
@@ -141,6 +142,7 @@ public:
   virtual void editPaste();
   virtual void editDelete();
   virtual void editSelectAll();
+  virtual void editDelPage();
   virtual void editFind();
   virtual void editFindReplace();
   
@@ -316,6 +318,7 @@ protected slots:
   void rotateOk();
   void shadowOk();
   void psvClosed();
+  void delPageOk(int,DelPageMode);
 
   // scrolling
   void scrollH(int);
@@ -426,6 +429,7 @@ protected:
   CORBA::Long m_idMenuEdit_Paste;
   CORBA::Long m_idMenuEdit_Delete;
   CORBA::Long m_idMenuEdit_SelectAll;
+  CORBA::Long m_idMenuEdit_DelPage;
   CORBA::Long m_idMenuEdit_Find;
   CORBA::Long m_idMenuEdit_FindReplace;
 
@@ -599,6 +603,7 @@ protected:
   KSearchReplaceDialog *replaceDia;
   ShadowDia *shadowDia;
   PresStructViewer *presStructView;
+  DelPageDia *delPageDia;
 
   // default pen and brush
   QPen pen;

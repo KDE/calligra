@@ -45,6 +45,7 @@ enum ShadowDirection {SD_LEFT_UP = 1,SD_UP = 2,SD_RIGHT_UP = 3,SD_RIGHT = 4,SD_R
 		      SD_LEFT_BOTTOM = 7,SD_LEFT = 8};
 enum FillType {FT_BRUSH = 0,FT_GRADIENT = 1};
 enum PresSpeed {PS_SLOW = 0,PS_NORMAL = 1,PS_FAST = 2};
+enum DelPageMode {DPM_LET_OBJS = 0,DPM_MOVE_OBJS = 1,DPM_DEL_OBJS = 2,DPM_DEL_MOVE_OBJS = 3};
 
 static const float ObjSpeed[] = {70.0,50.0,30.0};
 static const float PageSpeed[] = {8.0,16.0,32.0};

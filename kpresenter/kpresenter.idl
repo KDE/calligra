@@ -14,6 +14,7 @@ module KPresenter
       slot void editPaste();
       slot void editDelete();
       slot void editSelectAll();
+      slot void editDelPage();
       slot void editFind();
       slot void editFindReplace();
       

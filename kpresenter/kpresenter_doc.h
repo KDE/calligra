@@ -316,6 +316,8 @@ public:
   int getLeftBorder();
   int getTopBorder();
   int getBottomBorder();
+  
+  void deletePage(int _page,DelPageMode _delPageMode);
 
 signals:
 

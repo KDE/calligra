@@ -228,6 +228,10 @@ private slots:
     {view->extraLayout();}
   void pageBackground()
     {view->extraBackground();}
+  void pageInsert()
+    {view->insertPage();}
+  void pageDelete()
+    {view->editDelPage();}
   void configPages()
     {view->screenConfigPages();}
   void presStructView()

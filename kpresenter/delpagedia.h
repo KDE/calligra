@@ -10,71 +10,59 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Template Choose Dialog (header)                        */
+/* Module: delete page dialog (header)                            */
 /******************************************************************/
 
-#ifndef koTemplateChooseDia_h
-#define koTemplateChooseDia_h
+#ifndef delpagedia_h
+#define delpagedia_h
 
-#include <qtabdlg.h>
-#include <qwidget.h>
+#include <qdialog.h>
 #include <qlabel.h>
-#include <qstring.h>
 #include <qpushbt.h>
-#include <qlist.h>
-#include <qfileinf.h>
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qevent.h>
-#include <qfile.h>
-#include <qcolor.h>
+#include <qradiobutton.h>
 
-#include <kiconloaderdialog.h>
 #include <kapp.h>
+#include <kspinbox.h>
+
+#include "global.h"
+
+class KPresenterDocument_impl;
+
+#ifndef max
+#define max(a,b) ((a)>(b)?(a):(b))
+#endif
 
 /******************************************************************/
-/* Class: KoTemplateChooseDia                                     */
+/* class DelPageDia                                               */
 /******************************************************************/
 
-class KoTemplateChooseDia : public QTabDialog
+class DelPageDia : public QDialog
 {
   Q_OBJECT
 
 public:
-  KoTemplateChooseDia(QWidget *parent,const char *name,QString _templatePath,bool _hasCancel); 
-  ~KoTemplateChooseDia() {;}
-
-  static bool chooseTemplate(QString _templatePath,QString &_template,bool _hasCancel);
-
-  QString getTemplate() { return templateName; }
+  DelPageDia(QWidget* parent,const char* name,KPresenterDocument_impl *_doc,int currPageNum);  
 
 protected:
-  struct Group
-  {
-    QFileInfo dir;
-    QString name;
-    QWidget *tab;
-    KIconLoaderCanvas *loadWid;
-    QLabel *label;
-  };
+  void uncheckAll();
 
-  void getGroups();
-  void setupTabs();
-  void resizeEvent(QResizeEvent *);
-
-  QList<Group> groupList;
-  Group *grpPtr;
-  QString templatePath;
-  QString templateName;
-
-private slots:
-  void nameChanged(const char*);
-  void chosen();
+  KPresenterDocument_impl *doc;
+  
+  QLabel *label;
+  KNumericSpinBox *spinBox;
+  QRadioButton *leave,*_move,*del,*move_del;
+  QPushButton *ok,*cancel;
+  
+protected slots:
+  void leaveClicked();
+  void moveClicked();
+  void delClicked();
+  void moveDelClicked();
+  void okClicked();
 
 signals:
-  void templateChosen(const char*);
+  void deletePage(int,DelPageMode);
 
 };
 
 #endif
-

@@ -782,8 +782,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      break;
 	    unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset;
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
-	    painter.fillRect(_x,paintfc.getPTY() - yOffset,
-			     _wid,paintfc.getLineHeight(),QBrush(white));
+	    painter.fillRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+			     paintfc.getPTY() - yOffset,
+			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
+			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+			     paintfc.getLineHeight(),QBrush(white));
 	    doc->printLine(paintfc,painter,xOffset,yOffset,width(),height());
 	    bend = !paintfc.makeNextLineLayout(painter);
 
@@ -805,10 +808,13 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() < frameSet->getFrame(paintfc.getFrame() - 1)->bottom())
 	  {
 	    unsigned int _y = (int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset;
-	    unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset;
+	    unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset ;
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
 	    unsigned int _hei = frameSet->getFrame(paintfc.getFrame() - 1)->height() - 
 	      (_y - frameSet->getFrame(paintfc.getFrame() - 1)->y());
+// 	    _x += frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(_y + yOffset,_hei);
+// 	    _wid -= (frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(_y + yOffset,_hei) +
+// 		     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(_y + yOffset,_hei));
 	    painter.fillRect(_x,_y,_wid,_hei,QBrush(white));
 	    drawBuffer(QRect(_x,_y,_wid,_hei));
 	  }
@@ -909,8 +915,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      break;
 	    unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset;
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
-	    painter.fillRect(_x,paintfc.getPTY() - yOffset,
-			     _wid,paintfc.getLineHeight(),QBrush(white));
+	    painter.fillRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+			     paintfc.getPTY() - yOffset,
+			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
+			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+			     paintfc.getLineHeight(),QBrush(white));
 	    doc->printLine(paintfc,painter,xOffset,yOffset,width(),height());
 	    bend = !paintfc.makeNextLineLayout(painter);
 
@@ -936,6 +945,9 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
 	    unsigned int _hei = frameSet->getFrame(paintfc.getFrame() - 1)->height() - 
 	      (_y - frameSet->getFrame(paintfc.getFrame() - 1)->y());
+// 	    _x += frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(_y,_hei);
+// 	    _wid -= (frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(_y,_hei) +
+// 		     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(_y,_hei));
 	    painter.fillRect(_x,_y,_wid,_hei,QBrush(white));
 	    drawBuffer(QRect(_x,_y,_wid,_hei));
 	  }
@@ -1013,8 +1025,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		  break;
 		unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset;
 		unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
-		painter.fillRect(_x,paintfc.getPTY() - yOffset,
-				 _wid,paintfc.getLineHeight(),QBrush(white));
+		painter.fillRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				 paintfc.getPTY() - yOffset,
+				 _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
+				 frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				 paintfc.getLineHeight(),QBrush(white));
 		doc->printLine(paintfc,painter,xOffset,yOffset,width(),height());
 		bend = !paintfc.makeNextLineLayout(painter);
 		

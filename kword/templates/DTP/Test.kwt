@@ -6,6 +6,7 @@
  <FRAMESETS>
   <FRAMESET frameType="1">
    <FRAME left="28" top="100" right="200" bottom="300"/>
+   <FRAME left="200" top="400" right="300" bottom="510"/>
    <PARAGRAPH>
     <TEXT value=""/>
     <FORMATS>

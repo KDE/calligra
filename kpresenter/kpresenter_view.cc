@@ -65,6 +65,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent,const char *_name)
   replaceDia = 0;
   shadowDia = 0;
   presStructView = 0;
+  delPageDia = 0;
   xOffset = 0;
   yOffset = 0;
   v_ruler = 0;
@@ -225,6 +226,35 @@ void KPresenterView_impl::editDelete()
 void KPresenterView_impl::editSelectAll()
 {
   page->selectAllObj();
+}
+
+/*========================== edit delete page ===================*/
+void KPresenterView_impl::editDelPage()
+{
+  if (delPageDia)
+    {
+      QObject::disconnect(delPageDia,SIGNAL(deletePage(int,DelPageMode)),this,SLOT(delPageOk(int,DelPageMode)));
+      delPageDia->close();
+      delete delPageDia;
+      delPageDia = 0;
+    }
+  
+  if (m_pKPresenterDoc->getPageNums() < 2)
+    {
+      QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),
+			  i18n("Every document has to have at least one page. Because this document \n"
+			       "has not more that one page you can't delete this one."),
+			  i18n("OK"));
+    }
+  else
+    {
+      delPageDia = new DelPageDia(0,"",m_pKPresenterDoc,getCurrPgNum());
+      delPageDia->setCaption(i18n("KPresenter - Delete Page"));
+      delPageDia->setMaximumSize(delPageDia->width(),delPageDia->height());
+      delPageDia->setMinimumSize(delPageDia->width(),delPageDia->height());
+      QObject::connect(delPageDia,SIGNAL(deletePage(int,DelPageMode)),this,SLOT(delPageOk(int,DelPageMode)));
+      delPageDia->show();
+    }
 }
 
 /*========================== edit find ==========================*/
@@ -1410,6 +1440,13 @@ void KPresenterView_impl::psvClosed()
   presStructView = 0;
 }
 
+/*================================================================*/
+void KPresenterView_impl::delPageOk(int _page,DelPageMode _delPageMode)
+{
+  m_pKPresenterDoc->deletePage(_page,_delPageMode);
+  setRanges();
+}
+
 /*================== scroll horizontal ===========================*/
 void KPresenterView_impl::scrollH(int _value)
 {
@@ -2313,6 +2350,12 @@ void KPresenterView_impl::setupMenu()
       m_idMenuEdit_Delete = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						    CORBA::string_dup(i18n("&Delete")),m_idMenuEdit,
 						    this,CORBA::string_dup("editDelete"));
+      m_rMenuBar->insertSeparator(m_idMenuEdit);
+      m_idMenuEdit_SelectAll = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Select all")),m_idMenuEdit,
+						      this,CORBA::string_dup("editSelectAll"));
+      m_rMenuBar->insertSeparator(m_idMenuEdit);
+      m_idMenuEdit_DelPage = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Delete Page...")),m_idMenuEdit,
+						    this,CORBA::string_dup("editDelPage"));
       m_rMenuBar->insertSeparator(m_idMenuEdit);
       m_idMenuEdit_Find = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Find...")),m_idMenuEdit,
 						 this,CORBA::string_dup("editFind"));

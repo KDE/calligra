@@ -99,10 +99,25 @@ int KWFrame::getLeftIndent(int _y,int _h)
 }
 
 /*================================================================*/
-int KWFrame::getRighIndent(int _y,int _h)
+int KWFrame::getRightIndent(int _y,int _h)
 {
   if (intersections.isEmpty()) return 0;
-  return 0;
+
+  int _right = 0;
+  QRect rect;
+
+  for (unsigned int i = 0;i < intersections.count();i++)
+    {
+      rect = *intersections.at(i);
+
+      if (rect.intersects(QRect(left(),_y,width(),_h)))
+	{
+	  if (rect.right() == right())
+	    _right = max(_right,rect.width() + 2);
+	}
+    }
+
+  return _right;
 }
 
 /******************************************************************/

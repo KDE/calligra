@@ -21,10 +21,12 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,QString _templatePath)
+KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,QString _templatePath,bool _hasCancel)
   : QTabDialog(parent,name,true), templatePath(_templatePath)
 {
   setOKButton(i18n("OK"));
+  if (_hasCancel)
+    setCancelButton(i18n("Cancel"));
   groupList.setAutoDelete(true);
   getGroups();
   setupTabs();
@@ -33,10 +35,10 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,QStrin
 }
 
 /*================================================================*/
-bool KoTemplateChooseDia::chooseTemplate(QString _templatePath,QString &_template)
+bool KoTemplateChooseDia::chooseTemplate(QString _templatePath,QString &_template,bool _hasCancel)
 {
   bool res = false;
-  KoTemplateChooseDia *dlg = new KoTemplateChooseDia(0,"Template",_templatePath);
+  KoTemplateChooseDia *dlg = new KoTemplateChooseDia(0,"Template",_templatePath,_hasCancel);
 
   dlg->resize(400,300);
   dlg->setCaption(i18n("Choose a Template"));

@@ -272,3 +272,7 @@ Reggie, 23.10.1998:
 -------------------
 - Started implementing that text can flow around other frames. It
   already works somehow :-))
+
+Reggie, 24.10.1998:
+-------------------
+- More work on text flow around frames

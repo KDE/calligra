@@ -329,7 +329,7 @@ void PresStructViewer::setupToolBar()
 
   toolbar->insertSeparator();
 
-  toolbar->insertButton(QPixmap(pixdir + "picture.xpm"),B_BACK,SIGNAL(clicked()),this,SLOT(slotBackground()),false,i18n("Background"));
+  toolbar->insertButton(QPixmap(pixdir + "screen.xpm"),B_BACK,SIGNAL(clicked()),this,SLOT(slotBackground()),false,i18n("Background"));
   toolbar->insertButton(QPixmap(KApplication::kde_toolbardir() + "/filenew.xpm"),B_CPAGES,
 			SIGNAL(clicked()),this,SLOT(slotConfigPages()),false,i18n("Configure Pages"));
 

@@ -52,7 +52,7 @@ public:
     { intersections.clear(); }
   
   int getLeftIndent(int _y,int _h);
-  int getRighIndent(int _y,int _h);
+  int getRightIndent(int _y,int _h);
 
   bool hasIntersections()
     { return !intersections.isEmpty(); }

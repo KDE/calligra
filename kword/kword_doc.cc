@@ -103,7 +103,7 @@ CORBA::Boolean KWordDocument_impl::init()
   QString _template;
   QString _templatePath = kapp->kde_datadir() + "/kword/templates/";
 
-  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template))
+  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template,false))
     {
       QFileInfo fileInfo(_template);
       QString fileName(_templatePath + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".kwt");

@@ -1068,6 +1068,9 @@ void Page::setupMenus()
   presMenu->setItemChecked(PM_DM,false);
   presMenu->setMouseTracking(true);
 
+  pixdir = KApplication::kde_toolbardir();
+  pixmap.load(pixdir + "/filenew.xpm");
+
   // create right button page menu
   pageMenu = new QPopupMenu();
   CHECK_PTR(pageMenu);
@@ -1076,6 +1079,9 @@ void Page::setupMenus()
   pageMenu->insertSeparator();
   pageMenu->insertItem(i18n("&Configure pages..."),this,SLOT(configPages()));
   pageMenu->insertItem(i18n("&Open presentation structure viewer..."),this,SLOT(presStructView()));
+  pageMenu->insertSeparator();
+  pageMenu->insertItem(pixmap,i18n("&Insert Page..."),this,SLOT(pageInsert()));
+  pageMenu->insertItem(i18n("&Delete Page..."),this,SLOT(pageDelete()));
   pageMenu->setMouseTracking(true);
 }
 
