@@ -1523,7 +1523,7 @@ void KSpreadView::gotoCell()
 {
     KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
     dlg->show();
-    
+
 }
 
 void KSpreadView::replace()

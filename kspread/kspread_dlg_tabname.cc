@@ -26,6 +26,7 @@
 #include "kspread_util.h"
 #include "kspread_map.h"
 
+#include <kbuttonbox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <qmessagebox.h>
@@ -39,26 +40,28 @@ KSpreadTableName::KSpreadTableName( KSpreadView* _parent, const char* _name, QSt
    setCaption( i18n("Change Table Name") );
 
    QLabel* tmpQLabel;
-
-   QGridLayout* grid = new QGridLayout( this, 2, 2, 10 );
+   QVBoxLayout *lay1 = new QVBoxLayout( this );
+   lay1->setMargin( 5 );
+   lay1->setSpacing( 10 );
 
    tmpQLabel = new QLabel( this, "Label_1" );
    tmpQLabel->setText( i18n("Table Name") );
-   grid->addWidget( tmpQLabel, 0, 0 );
+   lay1->addWidget( tmpQLabel );
 
    m_pTableName = new QLineEdit( this );
    m_pTableName->setText( _tableName );
    m_pTableName->setFocus();
-   grid->addWidget( m_pTableName, 1, 0 );
+   lay1->addWidget( m_pTableName );
 
-   m_pOk = new QPushButton( i18n("Ok"), this );
-   grid->addWidget( m_pOk, 0, 1 );
-   m_pClose = new QPushButton( i18n("Cancel"), this );
-   grid->addWidget( m_pClose, 1, 1 );
-
+   KButtonBox *bb = new KButtonBox( this );
+   bb->addStretch();
+   m_pOk = bb->addButton( i18n("OK") );
+   m_pOk->setDefault( TRUE );
+   m_pClose = bb->addButton( i18n( "Close" ) );
+   bb->layout();
+   lay1->addWidget( bb );
    connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
    connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-   connect( m_pTableName, SIGNAL( returnPressed() ), this, SLOT( slotOk() ) );
 }
 
 void KSpreadTableName::slotOk()
