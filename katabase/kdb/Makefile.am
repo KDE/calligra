@@ -23,4 +23,3 @@ METASOURCES = kdbcalendar.moc kdbcriteria.moc kdbdatabase.moc kdbdatafield.moc \
 
 IDL_FLAGS = --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
 
-messages:
