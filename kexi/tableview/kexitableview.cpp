@@ -941,6 +941,7 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 
 	if (d->dragIndicatorLine>=0 && d->dragIndicatorLine==r) {
 		pb->setPen( QPen(d->textColor, 3) );
+//		pb->setRasterOp
 		pb->drawLine(0, transly+1, maxwc, transly+1);
 	}
 }
