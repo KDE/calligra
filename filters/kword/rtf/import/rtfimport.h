@@ -25,7 +25,6 @@
 #include <qvaluelist.h>
 #include <qvaluestack.h>
 #include <qtextcodec.h>
-#include <fstream.h>
 #include "rtfimport_dom.h"
 #include "rtfimport_tokenizer.h"
 
@@ -206,7 +205,7 @@ public:
 			 const QString &from, const QString &to,
 			 const QString &config = QString::null );
 
-    void setCodepage( RTFProperty *property );
+    void setCodepage( RTFProperty * );
     void setToggleProperty( RTFProperty * );
     void setFlagProperty( RTFProperty *property );
     void setNumericProperty( RTFProperty *property );

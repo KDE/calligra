@@ -583,10 +583,10 @@ bool RTFImport::filter( const QString &fileIn, const QString &fileOut,
 /**
  * Set document codepage.
  */
-void RTFImport::setCodepage(RTFProperty* property){
-    codepage.setNum(token.value);
-    codepage.prepend("CP");
-    cout<<property->value<<" "<<codepage<<"\n"<<flush;
+void RTFImport::setCodepage( RTFProperty * )
+{
+    codepage.setNum( token.value );
+    codepage.prepend( "CP" );
 }
 
 /**
