@@ -105,6 +105,26 @@ void KontourImport::convert()
 			double width = right - left; // Needs a check (sven)
 			m_document.append( new VEllipse( 0L, KoPoint( left, top ),  width, height ) );
 		}
+		else
+		if ( b.tagName() == "polyline" )
+		{
+			QDomElement point = b.firstChild().toElement();
+			VPath *path = new VPath( 0L );
+			int x, y;
+			x = point.attribute( "x" ).toInt();
+			y = point.attribute( "y" ).toInt();
+			kdDebug() << "MoveTo: " << "x: " << x << "; y: " << y << endl;
+			path->moveTo( KoPoint( x, y ) );
+			for( ; !point.isNull(); point = point.nextSibling().toElement() )
+			{
+				x = point.attribute( "x" ).toInt();
+				y = point.attribute( "y" ).toInt();
+				kdDebug() << "LineTo: " << "x: " << x << "; y: " << y << endl;
+				path->lineTo( KoPoint( x, y ) );
+			}
+		path->close();
+		m_document.append( path );	
+		}
 	}
 	
 	m_document.saveXML( outdoc );
