@@ -1053,7 +1053,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     {
         kdError(30518) << "No office:text found!" << endl;
         // ## TODO: print the actual tag that was found, it might help finding the right app to use :)
-        setErrorMessage( i18n( "Invalid KWord document. No office:text tag found." ) );
+        setErrorMessage( i18n( "Invalid OASIS document. No office:text tag found." ) );
         return false;
     }
 

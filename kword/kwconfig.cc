@@ -272,7 +272,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     connect(m_unitCombo, SIGNAL(activated(int)), this, SIGNAL(unitChanged(int)));
     unitLabel->setBuddy( m_unitCombo );
     QString unitHelp = i18n("Select the unit type used every time a distance or width/height "
-                            "is displayed or entered. This one setting is for the whole of KWord: all dialogs, the rulers etc."
+                            "is displayed or entered. This one setting is for the whole of KWord: all dialogs, the rulers etc. "
                             "Note that KWord documents specify the unit which was used to create them, so this setting "
                             "only affects this document and all documents that will be created later.");
     QWhatsThis::add( unitLabel, unitHelp );

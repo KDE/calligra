@@ -689,14 +689,14 @@ void KWView::setupActions()
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
                                     this, SLOT( formatFont() ),
                                     actionCollection(), "format_font" );
-    actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics, etc." ) );
+    actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
     actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
 
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
-    actionFormatParag->setToolTip( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc." ) );
-    actionFormatParag->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed." ) );
+    actionFormatParag->setToolTip( i18n( "Change paragraph margins, text flow, borders, bullets, numbering etc." ) );
+    actionFormatParag->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed." ) );
 
     actionFormatFrameSet = new KAction( i18n( "F&rame/Frameset Properties..." ), 0,
                                      this, SLOT( formatFrameSet() ),
@@ -1092,7 +1092,7 @@ void KWView::setupActions()
     actionShowDocStruct->setCheckedState(i18n("Hide Doc Structure"));
 #endif
     actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar." ) );
-    actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables, etc." ) );
+    actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables etc." ) );
 
 	actionShowRuler = new KToggleAction( i18n( "Show Rulers" ), 0,
 										this, SLOT( showRuler() ),
@@ -5924,7 +5924,7 @@ void KWView::savePicture()
                     else
                     {
                         KMessageBox::error(this,
-                                   i18n("Error during saving. Couldn't open '%1' for writing").arg ( url.path() ),
+                                   i18n("Error during saving. Could not open '%1' for writing").arg ( url.path() ),
                                    i18n("Save Picture"));
                     }
                 }
@@ -5948,12 +5948,12 @@ void KWView::savePicture()
                         }
                         else
                             KMessageBox::error(this,
-                                i18n("Error during saving. Couldn't open '%1' temporary file for writing").arg ( file.name() ),
+                                i18n("Error during saving. Could not open '%1' temporary file for writing").arg ( file.name() ),
                                 i18n("Save Picture"));
                     }
                     else
                         KMessageBox::sorry( this, i18n(
-                            "Error during saving. Couldn't create temporary file: %1.").arg( strerror( tempFile.status() ) ),
+                            "Error during saving. Could not create temporary file: %1.").arg( strerror( tempFile.status() ) ),
                             i18n("Save Picture") );
                 }
             }
