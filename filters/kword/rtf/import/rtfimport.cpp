@@ -345,11 +345,9 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     // Verify document type and version (RTF version 1.x)
 
-    // Change this to > 1 so to be able to open RTF0 documents created by "Ted" etc...
-    // RTF Version 0 should be compatible with version 1.
-
     token.next();
 
+    // ### TODO: user visible error messages
     if (token.type != RTFTokenizer::ControlWord)
     {
 	kdError(30515) << "Wrong document type" << endl;
@@ -357,12 +355,32 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	return KoFilter::WrongFormat;
     }
 
-    // ### TODO: Pocket Word seems to have 2 variants of RTF. \pwd seems to very similar to \rtf
-    if ((qstrcmp( token.text, "rtf" ) || token.value > 1))
+    if ( !qstrcmp( token.text, "rtf" ) )
     {
-	kdError(30515) << "Wrong document type (" << token.text << ") or version (" << token.value << "; version 0 or 1.x expected)" << endl;
-	in.close();
-	return KoFilter::WrongFormat;
+        // RTF is normally version 1 but at least Ted uses 0 as version number
+        if ( token.value > 1 )
+        {
+            kdError(30515) << "Wrong RTF version (" << token.value << "); version 0 or 1 expected" << endl;
+            in.close();
+            return KoFilter::WrongFormat;
+        }
+    }
+    else if ( !qstrcmp( token.text, "pwd" ) )
+    {
+        // PocketWord's PWD format is similar to RTF but has a version number of 2.
+        // ### TODO: should lower version numbers be refused?
+        if ( token.value > 2 )
+        {
+            kdError(30515) << "Wrong PWD version (" << token.value << "); version 2 expected" << endl;
+            in.close();
+            return KoFilter::WrongFormat;
+        }
+    }
+    else
+    {
+            kdError(30515) << "Wrong RTF document type (\\" << token.text << "); \\rtf or \\pwd expected" << endl;
+            in.close();
+            return KoFilter::WrongFormat;
     }
 
     table	= 0;
