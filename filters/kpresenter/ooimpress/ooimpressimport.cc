@@ -703,10 +703,10 @@ void OoImpressImport::append2DGeometry( QDomDocument& doc, QDomElement& e, const
             QString transform = object.attribute( "draw:transform" );
             if( transform.contains("rotate ("))
                 {
-                    kdDebug()<<" rotate object \n";
+                    //kdDebug()<<" rotate object \n";
                     transform = transform.remove("rotate (" );
                     transform = transform.left(transform.find(")"));
-                    kdDebug()<<" transform :"<<transform<<endl;
+                    //kdDebug()<<" transform :"<<transform<<endl;
                     bool ok;
                     double radian = transform.toDouble(&ok);
                     if( ok )
@@ -1805,7 +1805,7 @@ void OoImpressImport::fillStyleStack( const QDomElement& object, bool sticky )
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttribute( "presentation:style-name" ) )
     {
-        kdDebug()<<" presentation:style-name **************************** :"<<object.attribute( "presentation:style-name" )<<endl;
+        //kdDebug()<<" presentation:style-name **************************** :"<<object.attribute( "presentation:style-name" )<<endl;
         if ( sticky )
             addStyles( m_stylesPresentation[object.attribute( "presentation:style-name" )] );
         else
@@ -1826,10 +1826,10 @@ void OoImpressImport::addStyles( const QDomElement* style )
     // this function is necessary as parent styles can have parents themself
     if ( style->hasAttribute( "style:parent-style-name" ) )
     {
-        kdDebug()<<"m_styles[style->attribute( style:parent-style-name )] :"<<m_styles[style->attribute( "style:parent-style-name" )]<<endl;
+        //kdDebug()<<"m_styles[style->attribute( style:parent-style-name )] :"<<m_styles[style->attribute( "style:parent-style-name" )]<<endl;
         addStyles( m_styles[style->attribute( "style:parent-style-name" )] );
     }
-    kdDebug()<<" void OoImpressImport::addStyles( const QDomElement* style ) :"<<style<<endl;
+    //kdDebug()<<" void OoImpressImport::addStyles( const QDomElement* style ) :"<<style<<endl;
     m_styleStack.push( *style );
 }
 
