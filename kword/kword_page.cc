@@ -1164,6 +1164,7 @@ void KWPage::vmrCreateTable()
 		    KWFrame *frame = new KWFrame(_frameSet, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
 		    _frameSet->addFrame( frame );
 		    frame->setFrameBehaviour(AutoExtendFrame);
+		    frame->setNewFrameBehaviour(NoFollowup);
 		    _frameSet->setGroupManager( grpMgr );
 		    grpMgr->addFrameSet( _frameSet, i, j );
 		}
@@ -1475,6 +1476,7 @@ void KWPage::editDeleteFrame()
     }
 
     if ( fs->getGroupManager() ) {
+        // Should we not post a message "really delete" here ??
 	deleteTable( fs->getGroupManager() );
 	return;
     }
@@ -1508,6 +1510,7 @@ void KWPage::editDeleteFrame()
 	fs->delFrame( frame );
     else
 	doc->delFrameSet( fs );
+
 
     doc->recalcFrames();
     doc->updateAllFrames();
@@ -1672,23 +1675,21 @@ void KWPage::recalcWholeText( bool _cursor, bool )
 
     recalcingText = TRUE;
 
-    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ )
-	{
-	    if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT || doc->getFrameSet( i )->getNumFrames() == 0 )
-		continue;
-	    KWFormatContext _fc( doc, i + 1 );
-	    _fc.init( doc->getFirstParag( i ) );
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
+        if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT || doc->getFrameSet( i )->getNumFrames() == 0 )
+            continue;
+        KWFormatContext _fc( doc, i + 1 );
+        _fc.init( doc->getFirstParag( i ) );
 
-	    bool bend = FALSE;
+        bool bend = FALSE;
 
-	    while ( !bend )
-		{
-		    bend = !_fc.makeNextLineLayout();
-		    if ( /*_fast &&*/ doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
-			 static_cast<int>( contentsY() + height() + height() / 2 ) )
-			bend = TRUE;
-		}
-	}
+        while ( !bend ) {
+            bend = !_fc.makeNextLineLayout();
+            if ( /*_fast &&*/ doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
+                 static_cast<int>( contentsY() + height() + height() / 2 ) )
+                bend = TRUE;
+        }
+    }
 
     if ( _cursor ) recalcCursor();
     recalcingText = FALSE;

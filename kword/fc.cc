@@ -171,6 +171,7 @@ void KWFormatContext::init( KWParag *_parag, bool _fromStart,
     ptMaxDescender = 0;
 
     if ( _fromStart ) {
+
 	// Offset from the top of the page
 	if ( pFrameSet->getNumFrames() > 0 )
 	    ptY = static_cast<int>(pFrameSet->getFrame( 0 )->top() + pFrameSet->getFrame( 0 )->getBTop().pt());
@@ -1358,7 +1359,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 		    outOfFrame = TRUE;
 		    return FALSE;
 		}
-	    } else if (pFrame->getFrameBehaviour() == AutoCreateNewFrame && pFrame->getNewFrameBehaviour()==Reconnect) { // Append page
+	    } else if (!(pFrame->getFrameSet()->getGroupManager()) && pFrame->getFrameBehaviour() == AutoCreateNewFrame && pFrame->getNewFrameBehaviour()==Reconnect) { // Append page
 		doc->appendPage( page - 1, redrawBackgroundWhenAppendPage );
 		page++;
 		setFrame( frame + 1 );
@@ -1512,7 +1513,8 @@ void KWFormatContext::setFrame( unsigned int _frame )
     frame = _frame;
     if ( doc && pFrameSet ) {
 	pFrame = pFrameSet->getFrame( frame - 1 );
-	emptyRegion = pFrame->getEmptyRegion();
+        if(pFrame) 
+            emptyRegion = pFrame->getEmptyRegion();
     } else
 	pFrame = 0;
 
