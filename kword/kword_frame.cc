@@ -2537,7 +2537,9 @@ QRect KWGroupManager::getBoundingRect()
 {
     QRect r1, r2;
     KWFrame *first = getFrameSet( 0, 0 )->getFrame( 0 );
+    assert(first);
     KWFrame *last = getFrameSet( rows - 1, cols - 1 )->getFrame( 0 );
+    assert(last);
 
     r1 = QRect( first->x(), first->y(), first->width(), first->height() );
     r2 = QRect( last->x(), last->y(), last->width(), last->height() );
