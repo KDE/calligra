@@ -15,6 +15,8 @@
 
 #include "image.h"
 #include "kword_doc.h"
+#include "defs.h"
+#include "kword_utils.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -48,7 +50,7 @@ void KWImage::incRef()
 /*================================================================*/
 void KWImage::save( ostream &out )
 {
-    out << indent << "<FILENAME value=\"" << filename.ascii() << "\"/>" << endl;
+    out << indent << "<FILENAME value=\"" << correctQString( filename ).latin1() << "\"/>" << endl;
 }
 
 /*================================================================*/
@@ -63,7 +65,7 @@ void KWImage::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // filename
         if ( name == "FILENAME" )
         {
@@ -72,8 +74,8 @@ void KWImage::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *
             for( ; it != lst.end(); it++ )
             {
                 if ( ( *it ).m_strName == "value" )
-                {       
-                    filename = ( *it ).m_strValue.c_str();
+                {
+                    filename = correctQString( ( *it ).m_strValue.c_str() );
                     QImage::load( filename );
                 }
             }

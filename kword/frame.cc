@@ -19,6 +19,7 @@
 #include "image.h"
 #include "parag.h"
 #include "defs.h"
+#include "kword_utils.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -499,8 +500,9 @@ void KWFrameSet::save( ostream &out )
             << "\" runaGapPT=\"" << frame->getRunAroundGap().pt()
             << "\" runaGapMM=\"" << frame->getRunAroundGap().mm()
             << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" "
-            << frame->leftBrd2String().ascii() << frame->rightBrd2String().ascii() << frame->topBrd2String().ascii()
-            << frame->bottomBrd2String().ascii() << "bkRed=\"" << frame->getBackgroundColor().color().red()
+            << correctQString( frame->leftBrd2String() ).latin1() << correctQString( frame->rightBrd2String() ).latin1()
+            << correctQString( frame->topBrd2String() ).latin1() 
+            << correctQString( frame->bottomBrd2String() ).latin1() << "bkRed=\"" << frame->getBackgroundColor().color().red()
             << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
 
             << "\" bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm()
@@ -842,7 +844,7 @@ void KWTextFrameSet::save( ostream &out )
     if ( grpMgr )
     {
         grp = "\" grpMgr=\"";
-        grp += grpMgr->getName().copy();
+        grp += correctQString( grpMgr->getName() );
 
         unsigned int _row = 0, _col = 0;
         grpMgr->getFrameSet( this, _row, _col );
@@ -853,7 +855,7 @@ void KWTextFrameSet::save( ostream &out )
 
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
         << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\""
-        << static_cast<int>( frameInfo ) << grp.ascii() << "\" removeable=\"" << static_cast<int>( removeableHeader )
+        << static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\"" << static_cast<int>( removeableHeader )
         << "\">" << endl;
 
     KWFrameSet::save( out );

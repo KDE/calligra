@@ -2,6 +2,7 @@
 #include "kword_doc.h"
 #include "defs.h"
 #include "font.h"
+#include "kword_utils.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -167,7 +168,7 @@ void KWFormat::incRef()
 void KWFormat::save( ostream &out )
 {
     out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
-    out << indent << "<FONT name=\"" << userFont->getFontName().ascii() << "\"/>" << endl;
+    out << indent << "<FONT name=\"" << correctQString( userFont->getFontName() ).latin1() << "\"/>" << endl;
     out << indent << "<SIZE value=\"" << ptFontSize << "\"/>" << endl;
     out << indent << "<WEIGHT value=\"" << weight << "\"/>" << endl;
     out << indent << "<ITALIC value=\"" << static_cast<int>( italic ) << "\"/>" << endl;
@@ -187,7 +188,7 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // color
         if ( name == "COLOR" )
         {
@@ -222,7 +223,7 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
             for( ; it != lst.end(); it++ )
             {
                 if ( ( *it ).m_strName == "name" )
-                    userFont = _doc->findUserFont( ( *it ).m_strValue.c_str() );
+                    userFont = _doc->findUserFont( correctQString( ( *it ).m_strValue.c_str() ) );
             }
         }
 

@@ -15,6 +15,7 @@
 
 #include "variable.h"
 #include "parag.h"
+#include "defs.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -124,7 +125,7 @@ void KWVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
                 pageNum = atoi( ( *it ).m_strValue.c_str() );
         }
     }
-}   
+}
 
 /******************************************************************/
 /* Class: KWPgNumVariable                                         */

@@ -23,3 +23,18 @@ QString makeRomanNumber( int n )
                     RNTens[ ( n / 10 ) % 10 ] +
                     RNUnits[ ( n ) % 10 ] );
 }
+
+/*================================================================*/
+QString correctQString( const QString &str )
+{
+    if ( str.lower() == "(null)" )
+        return QString::null;
+    
+    return str;
+}
+
+/*================================================================*/
+QString correctQString( const char *str )
+{
+    return correctQString( QString( str ) );
+}

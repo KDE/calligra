@@ -302,7 +302,7 @@ void KWParag::save( ostream &out )
 {
     out << indent << "<TEXT>" << ( const char* )text.utf8() << "</TEXT>" << endl;
     if ( info == PI_FOOTNOTE )
-        out << indent << "<NAME name=\"" << paragName.ascii() << "\"/>" << endl;
+        out << indent << "<NAME name=\"" << correctQString( paragName ).latin1() << "\"/>" << endl;
     out << indent << "<INFO info=\"" << static_cast<int>( info ) << "\"/>" << endl;
     out << indent << "<HARDBRK frame=\"" << static_cast<int>( hardBreak ) << "\"/>" << endl;
     out << otag << "<FORMATS>" << endl;
@@ -325,7 +325,7 @@ void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // text
         if ( name == "TEXT" )
         {
@@ -344,7 +344,7 @@ void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     tmp2 = tmp.c_str();
             }
 
-            tmp2 = QString::fromUtf8( tmp2.ascii() );
+            tmp2 = QString::fromUtf8( tmp2.latin1() );
 
             if ( text.size() == 1 && tmp2.length() > 0 ) text.remove( 0 );
             text.insert( text.size(), tmp2 );
@@ -382,7 +382,7 @@ void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             for( ; it != lst.end(); it++ )
             {
                 if ( ( *it ).m_strName == "name" )
-                    paragName = ( *it ).m_strValue.c_str();
+                    paragName = correctQString( ( *it ).m_strValue.c_str() );
             }
         }
 

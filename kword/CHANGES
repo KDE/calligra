@@ -1224,3 +1224,8 @@ Reggie, 25.5.1999:
 Reggie, 28.5.1999:
 ------------------
 - Some QStrList -> QStringList
+
+Reggie, 29.5.1999:
+------------------
+- Fixed some problems with loading/saving strings. Now
+  inserting Endnotes works again too.

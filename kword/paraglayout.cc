@@ -1,5 +1,7 @@
 #include "paraglayout.h"
 #include "kword_doc.h"
+#include "defs.h"
+#include "kword_utils.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -110,8 +112,8 @@ void KWParagLayout::setFormat( KWFormat &_f )
 /*================================================================*/
 void KWParagLayout::save( ostream &out )
 {
-    out << indent << "<NAME value=\"" << name.ascii() << "\"/>" << endl;
-    out << indent << "<FOLLOWING name=\"" << followingParagLayout.ascii() << "\"/>" << endl;
+    out << indent << "<NAME value=\"" << correctQString( name ).latin1() << "\"/>" << endl;
+    out << indent << "<FOLLOWING name=\"" << correctQString( followingParagLayout ).latin1() << "\"/>" << endl;
     out << indent << "<FLOW value=\"" << static_cast<int>( flow ) << "\"/>" << endl;
     out << indent << "<OHEAD " << paragHeadOffset << "/>" << endl;
     out << indent << "<OFOOT " << paragFootOffset << "/>" << endl;
@@ -120,9 +122,9 @@ void KWParagLayout::save( ostream &out )
     out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
     out << indent << "<COUNTER type=\"" << static_cast<int>( counter.counterType ) << "\" depth=\"" << counter.counterDepth
         << "\" bullet=\"" << static_cast<unsigned short>( counter.counterBullet.unicode() ) << "\" start=\""
-        << counter.startCounter.ascii() << "\" numberingtype=\""
-        << static_cast<int>( counter.numberingType ) << "\" lefttext=\"" << counter.counterLeftText.ascii() << "\" righttext=\""
-        << counter.counterRightText.ascii() << "\" bulletfont=\"" << counter.bulletFont.ascii() << "\"/>" << endl;
+        << correctQString( counter.startCounter ).latin1() << "\" numberingtype=\""
+        << static_cast<int>( counter.numberingType ) << "\" lefttext=\"" << correctQString( counter.counterLeftText ).latin1() << "\" righttext=\""
+        << correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\"" << correctQString( counter.bulletFont ).latin1() << "\"/>" << endl;
     out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
         << left.color.blue() << "\" style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
     out << indent << "<RIGHTBORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
@@ -151,7 +153,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), _name, lst );
-    
+
         // name
         if ( _name == "NAME" )
         {
@@ -160,7 +162,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             for( ; it != lst.end(); it++ )
             {
                 if ( ( *it ).m_strName == "value" )
-                    name = ( *it ).m_strValue.c_str();
+                    name = correctQString( ( *it ).m_strValue.c_str() );
             }
         }
 
@@ -172,7 +174,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             for( ; it != lst.end(); it++ )
             {
                 if ( ( *it ).m_strName == "name" )
-                    followingParagLayout = ( *it ).m_strValue.c_str();
+                    followingParagLayout = correctQString( ( *it ).m_strValue.c_str() );
             }
         }
 
@@ -362,15 +364,15 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                 else if ( ( *it ).m_strName == "bullet" )
                     counter.counterBullet = QChar( static_cast<unsigned short>( atoi( ( *it ).m_strValue.c_str() ) ) );
                 else if ( ( *it ).m_strName == "lefttext" )
-                    counter.counterLeftText = ( *it ).m_strValue.c_str();
+                    counter.counterLeftText = correctQString( ( *it ).m_strValue.c_str() );
                 else if ( ( *it ).m_strName == "righttext" )
-                    counter.counterRightText = ( *it ).m_strValue.c_str();
+                    counter.counterRightText = correctQString( ( *it ).m_strValue.c_str() );
                 else if ( ( *it ).m_strName == "start" )
-                    counter.startCounter = ( *it ).m_strValue.c_str();
+                    counter.startCounter = correctQString( ( *it ).m_strValue.c_str() );
                 else if ( ( *it ).m_strName == "numberingtype" )
                     counter.numberingType = static_cast<NumType>( atoi( ( *it ).m_strValue.c_str() ) );
                 else if ( ( *it ).m_strName == "bulletfont" )
-                    counter.bulletFont = ( *it ).m_strValue.c_str();
+                    counter.bulletFont = correctQString( ( *it ).m_strValue.c_str() );
             }
         }
 

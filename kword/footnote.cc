@@ -19,6 +19,8 @@
 #include "frame.h"
 #include "parag.h"
 #include "char.h"
+#include "defs.h"
+#include "kword_utils.h"
 
 #include <klocale.h>
 
@@ -34,7 +36,7 @@
 
 /*================================================================*/
 KWFootNoteManager::KWFootNoteManager( KWordDocument *_doc )
-    : start( 1 ), superscript( true ), firstParag( QString::null )
+    : start( 1 ), superscript( true ), firstParag()
 {
     noteType = EndNotes;
     doc = _doc;
@@ -218,7 +220,7 @@ void KWFootNoteManager::save( ostream &out )
     out << indent << "<START value=\"" << start << "\"/>" << endl;
     out << indent << "<FORMAT superscript=\"" << superscript
         << "\" type=\"" << static_cast<int>( noteType ) << "\"/>" << endl;
-    out << indent << "<FIRSTPARAG ref=\"" << firstParag.ascii() << "\"/>" << endl;
+    out << indent << "<FIRSTPARAG ref=\"" << correctQString( firstParag ).latin1() << "\"/>" << endl;
 }
 
 /*================================================================*/
@@ -230,7 +232,7 @@ void KWFootNoteManager::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         if ( name == "START" )
         {
             KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -260,7 +262,7 @@ void KWFootNoteManager::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
             for( ; it != lst.end(); it++ )
             {
                 if ( ( *it ).m_strName == "ref" )
-                    firstParag = ( *it ).m_strValue.c_str();
+                    firstParag = correctQString( ( *it ).m_strValue.c_str() );
             }
         }
 
@@ -273,7 +275,7 @@ void KWFootNoteManager::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
             return;
         }
     }
-}   
+}
 
 /******************************************************************/
 /* Class: KWFootNote                                              */
@@ -447,11 +449,11 @@ void KWFootNote::save( ostream &out )
     KWFootNoteInternal *fi = 0L;
     for ( fi = parts.first(); fi; fi = parts.next() )
         out << indent << "<PART from=\"" << fi->from << "\" to=\"" << fi->to
-            << "\" space=\"" << fi->space.ascii() << "\"/>" << endl;
+            << "\" space=\"" << correctQString( fi->space ).latin1() << "\"/>" << endl;
     out << etag << "</INTERNAL>" << endl;
     out << indent << "<RANGE start=\"" << start << "\" end=\"" << end << "\"/>" << endl;
-    out << indent << "<TEXT before=\"" << before.ascii() << "\" after=\"" << after.ascii() << "\"/>" << endl;
-    out << indent << "<DESCRIPT ref=\"" << parag.ascii() << "\"/>" << endl;
+    out << indent << "<TEXT before=\"" << correctQString( before ).latin1() << "\" after=\"" << correctQString( after ).latin1() << "\"/>" << endl;
+    out << indent << "<DESCRIPT ref=\"" << correctQString( parag ).latin1() << "\"/>" << endl;
 }
 
 /*================================================================*/
@@ -474,7 +476,7 @@ void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLA
                 vector<KOMLAttrib>::const_iterator it = lst.begin();
 
                 KWFootNoteInternal *part = new KWFootNoteInternal;
-    
+
                 for( ; it != lst.end(); it++ )
                 {
                     if ( ( *it ).m_strName == "from" )
@@ -482,13 +484,13 @@ void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLA
                     else if ( ( *it ).m_strName == "to" )
                         part->to = atoi( ( *it ).m_strValue.c_str() );
                     else if ( ( *it ).m_strName == "space" )
-                        part->space = ( *it ).m_strValue.c_str();
+                        part->space = correctQString( ( *it ).m_strValue.c_str() );
                 }
                 parts.append( part );
             }
             else
                 cerr << "Unknown tag '" << tag << "' in INTERNAL" << endl;
-    
+
             if ( !parser.close( tag ) )
             {
                 cerr << "ERR: Closing Child" << endl;
@@ -515,9 +517,9 @@ void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLA
         for( ; it != lst.end(); it++ )
         {
             if ( ( *it ).m_strName == "before" )
-                before = ( *it ).m_strValue.c_str();
+                before = correctQString( ( *it ).m_strValue.c_str() );
             else if ( ( *it ).m_strName == "after" )
-                after = ( *it ).m_strValue.c_str();
+                after = correctQString( ( *it ).m_strValue.c_str() );
         }
     }
     else if ( name == "DESCRIPT" )
@@ -527,9 +529,9 @@ void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLA
         for( ; it != lst.end(); it++ )
         {
             if ( ( *it ).m_strName == "ref" )
-                parag = ( *it ).m_strValue.c_str();
+                parag = correctQString( ( *it ).m_strValue.c_str() );
         }
     }
 
     makeText();
-}   
+}

@@ -30,6 +30,7 @@
 #include "clipbrd_dnd.h"
 #include "image.h"
 #include "char.h"
+#include "kword_utils.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -1017,7 +1018,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
                 else if ( ( *it ).m_strName == "hasFooter" )
                     _footer = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
                 else if ( ( *it ).m_strName == "unit" )
-                    unit = ( *it ).m_strValue.c_str();
+                    unit = correctQString( ( *it ).m_strValue.c_str() );
             }
         }
 
@@ -1189,7 +1190,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     entry->setFind( "(C)" );
     entry->setReplace( "©" );
     autoFormat.addAutoFormatEntry( entry );
-    
+
     entry = new KWAutoFormatEntry;
     entry->setFind( "(c)" );
     entry->setReplace( "©" );
@@ -1199,7 +1200,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     entry->setFind( "(R)" );
     entry->setReplace( "®" );
     autoFormat.addAutoFormatEntry( entry );
-    
+
     entry = new KWAutoFormatEntry;
     entry->setFind( "(r)" );
     entry->setReplace( "®" );
@@ -1275,7 +1276,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
                 if ( ( *it ).m_strName == "frameInfo" )
                     frameInfo = static_cast<FrameInfo>( atoi( ( *it ).m_strValue.c_str() ) );
                 if ( ( *it ).m_strName == "grpMgr" )
-                    _name = QString( ( *it ).m_strValue.c_str() );
+                    _name = correctQString( ( *it ).m_strValue.c_str() );
                 if ( ( *it ).m_strName == "row" )
                     _row = atoi( ( *it ).m_strValue.c_str() );
                 if ( ( *it ).m_strName == "col" )
@@ -1370,7 +1371,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     out << etag << "</PAPER>" << endl;
     out << indent << "<ATTRIBUTES processing=\"" << static_cast<int>( processingType ) << "\" standardpage=\"" << 1
         << "\" hasHeader=\"" << hasHeader() << "\" hasFooter=\"" << hasFooter()
-        << "\" unit=\"" << getUnit().ascii() << "\"/>" << endl;
+        << "\" unit=\"" << correctQString( getUnit() ).latin1() << "\"/>" << endl;
 
     out << otag << "<FOOTNOTEMGR>" << endl;
     footNoteManager.save( out );

@@ -2,6 +2,7 @@
 #include "kword_doc.h"
 #include "frame.h"
 #include "font.h"
+#include "defs.h"
 
 #include <string.h>
 #include <assert.h>
