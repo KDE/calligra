@@ -34,9 +34,6 @@
 #include <kstdaction.h>
 #include <kiconloader.h>
 
-#include "vtooloptionsdocker.h"
-#include "vcontexthelpdocker.h"
-
 // tools:
 #include "vellipsetool.h"
 #include "vgradienttool.h"
@@ -78,8 +75,10 @@
 
 //dockers
 #include "vcolordocker.h"
-#include "vtooldocker.h"
+#include "vcontexthelpdocker.h"
 #include "vstrokedocker.h"
+#include "vtooldocker.h"
+#include "vtooloptionsdocker.h"
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -1151,12 +1150,12 @@ KarbonView::selectionChanged()
 		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
 		if( m_ColorManager->isStrokeDocker() )
 		{
-			VColor *c = new VColor ( m_part->document().selection()->objects().getFirst()->stroke()->color() );
+			VColor *c = new VColor( m_part->document().selection()->objects().getFirst()->stroke()->color() );
 			m_ColorManager->setColor( c );
 		}
 		else
 		{
-			VColor *c = new VColor ( m_part->document().selection()->objects().getFirst()->fill()->color() );
+			VColor *c = new VColor( m_part->document().selection()->objects().getFirst()->fill()->color() );
 			m_ColorManager->setColor( c );
 		}
 	}
