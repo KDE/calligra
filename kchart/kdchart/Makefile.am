@@ -1,0 +1,50 @@
+lib_LTLIBRARIES = libkdchart.la
+
+libkdchart_la_SOURCES = KDChartAreaPainter.cpp	\
+			KDChartAxesPainter.cpp	\
+			KDChartAxisParams.cpp	\
+			KDChartBarPainter.cpp	\
+			KDChart.cpp			\
+			KDChartHiLoPainter.cpp	\
+			KDChartLinesPainter.cpp	\
+			KDChartPainter.cpp		\
+			KDChartParams.cpp		\
+			KDChartPiePainter.cpp	\
+			KDChartRingPainter.cpp	\
+			KDChartTextPiece.cpp	\
+			KDChartWidget.cpp \
+			KDXMLTools.cpp \
+			KDFrameProfileSection.cpp \
+			KDFrame.cpp \
+			KDChartPolarPainter.cpp \
+			KDChartCustomBox.cpp 
+
+noinst_HEADERS =	KDChartAreaPainter.h	\
+			KDChartAxesPainter.h	\
+			KDChartBarPainter.h		\
+			KDChartHiLoPainter.h	\
+			KDChartLinesPainter.h	\
+			KDChartPiePainter.h		\
+			KDChartRingPainter.h	\
+			KDChartTextPiece.h	\
+			KDChartAxisParams.h	\
+			KDChartDataRegion.h	\
+			KDChart.h		\
+			KDChartNotEnoughSpaceException.h	\
+			KDChartPainter.h	\
+			KDChartParams.h		\
+			KDChartUnknownTypeException.h	\
+			KDChartWidget.h \
+			KDDrawText.h \
+			KDChartPolarPainter.h \
+			KDXMLTools.h \
+			KDFrameProfileSection.h \
+			KDFrame.h \
+			KDChartEnums.h \
+			KDChartCustomBox.h
+
+METASOURCES = AUTO
+
+INCLUDES  = -I../include $(all_includes)
+
+include_HEADERS = KDChartData.h KDChartTable.h
