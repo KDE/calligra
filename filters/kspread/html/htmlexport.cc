@@ -99,6 +99,9 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     QString html_right= "right";
     QString html_left= "left";
     QString html_center= "center";
+    QString html_top="top";
+    QString html_bottom="bottom";
+    QString html_middle="center";
 
     // Ah ah ah - the document is const, but the map and table aren't. Safety:0.
     QString str;
@@ -241,6 +244,21 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
             case KSpreadCell::Undefined:
                 break;
             }
+            switch((KSpreadCell::AlignY)cell-> alignY(currentrow, currentcolumn))
+            {
+            case KSpreadCell::Top:
+                line+=" valign=\"" + html_top +"\"";
+                break;
+            case KSpreadCell::Middle:
+                line+=" valign=\"" + html_middle +"\"";
+                break;
+            case KSpreadCell::Bottom:
+                line+=" valign=\"" + html_bottom +"\"";
+                break;
+            }
+            line+=" width=\""+QString::number(cell->width())+"\"";
+            line+=" height=\""+QString::number(cell->height())+"\"";
+
             if (cell->extraXCells()>0)
             {
               QString tmp;
