@@ -34,6 +34,7 @@ KWGroupManager::KWGroupManager( KWDocument *_doc )
     cols = 0;
     name = QString::null;
     isRendered=false;
+    active=true;
 }
 
 /*================================================================*/
