@@ -38,6 +38,7 @@
 #include "vselectnodestool.h"
 #include <vtransformnodes.h>
 #include <commands/vdeletenodescmd.h>
+#include <widgets/vcanvas.h>
 
 #include <kdebug.h>
 
@@ -282,10 +283,12 @@ VSelectNodesTool::recalc()
 	}
 	else if( m_state == moving || m_state == movingbezier1 || m_state == movingbezier2 )
 	{
+		KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
+		double distx = _last.x() - first().x();
+		double disty = _last.y() - first().y();
 		// move operation
 		QWMatrix mat;
-		mat.translate(	( last().x() - first().x() ),
-						( last().y() - first().y() ) );
+		mat.translate( distx, disty );
 
 		// Copy selected objects and transform:
 		m_objects.clear();
