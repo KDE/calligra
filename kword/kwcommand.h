@@ -458,4 +458,25 @@ protected:
     unsigned int m_rowEnd;
 };
 
+/**
+ * Command created when jointing a cell
+ */
+class KWJoinCellCommand : public KCommand
+{
+public:
+    KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QList<KWFrameSet> listFrameSet,QList<KWFrame> listCopyFrame);
+    ~KWJoinCellCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWTableFrameSet *m_pTable;
+    unsigned int m_colBegin;
+    unsigned int m_rowBegin; 
+    unsigned int m_colEnd;
+    unsigned int m_rowEnd;
+    QList<KWFrameSet> m_ListFrameSet;
+    QList<KWFrame> m_copyFrame;
+};
+
 #endif

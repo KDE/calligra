@@ -198,9 +198,9 @@ public:
     bool isActive() { return m_active; }
 
     /** merge cells to one cell. Will loose all text not in top-left cell */
-    bool joinCells(unsigned int colBegin=0,unsigned int rowBegin=0, unsigned int colEnd=0,unsigned int rowEnd=0);
+    KCommand *joinCells(unsigned int colBegin=0,unsigned int rowBegin=0, unsigned int colEnd=0,unsigned int rowEnd=0);
     /** split selected cell into a number of cells */
-    KCommand * splitCell(unsigned int intoRows, unsigned int intoCols, int _col=-1, int _row=-1);
+    KCommand * splitCell(unsigned int intoRows, unsigned int intoCols, int _col=-1, int _row=-1,QList<KWFrameSet> listFrameSet=QList<KWFrameSet>(),QList<KWFrame>listFrame=QList<KWFrame>());
 
     /** display formatting information */
     void viewFormatting( QPainter &painter, int zoom );

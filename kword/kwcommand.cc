@@ -1061,7 +1061,7 @@ void KWSplitCellCommand::execute()
     doc->terminateEditing(m_pTable);
 
     m_pTable->splitCell(m_rowEnd, m_colEnd,m_colBegin,m_rowBegin);
-
+    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
@@ -1069,13 +1069,52 @@ void KWSplitCellCommand::execute()
 
 void KWSplitCellCommand::unexecute()
 {
-    kdDebug() << "KWRemoveColumnCommand::unexecute" << endl;
+    kdDebug() << "KWSplitCellCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     //laurent
     //m_colEnd =m_colEnd-1 value give by splitcelldialogbox
     m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd-1,m_rowEnd-1);
+    doc->frameSelectedChanged();
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
 
+
+
+KWJoinCellCommand::KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QList<KWFrameSet> listFrameSet,QList<KWFrame> listCopyFrame):
+    KCommand(name),
+    m_pTable(_table),
+    m_colBegin(colBegin),
+    m_rowBegin(rowBegin),
+    m_colEnd(colEnd),
+    m_rowEnd(rowEnd),
+    m_ListFrameSet(listFrameSet),
+    m_copyFrame(listCopyFrame)
+{
+    ASSERT(m_pTable);
+}
+
+void KWJoinCellCommand::execute()
+{
+    kdDebug() << "KWJoinCellCommand::execute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    doc->terminateEditing(m_pTable);
+    m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd,m_rowEnd);
+    doc->frameSelectedChanged();
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+void KWJoinCellCommand::unexecute()
+{
+    kdDebug() << "KWJoinCellCommand::unexecute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    doc->terminateEditing(m_pTable);
+    m_pTable->splitCell(m_rowEnd-m_rowBegin+1, m_colEnd-m_colBegin+1,m_colBegin,m_rowBegin,m_ListFrameSet,m_copyFrame);
+    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();

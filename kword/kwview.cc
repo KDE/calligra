@@ -2245,7 +2245,8 @@ void KWView::tableJoinCells()
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
-    if ( !table->joinCells() )
+    KCommand * cmd=table->joinCells();
+    if ( !cmd )
     {
         KMessageBox::sorry( this,
                             i18n( "You have to select some cells which are next to each other\n"
@@ -2253,6 +2254,7 @@ void KWView::tableJoinCells()
                             i18n( "Join Cells" ) );
         return;
     }
+    m_doc->addCommand(cmd);
     m_doc->layout();
     //KoRect r = m_doc->zoomRect( table->boundingRect() );
     //m_gui->canvasWidget()->repaintScreen( r, TRUE );

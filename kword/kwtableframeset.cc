@@ -1114,13 +1114,13 @@ void KWTableFrameSet::group()
    m_active = true;
 }
 
-bool KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd) {
+KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd) {
     Cell *firstCell = getCell(rowBegin, colBegin);
     if(colBegin==0 && rowBegin==0 && colEnd==0 && rowEnd==0)
     {
 
         if ( !getFirstSelected( rowBegin, colBegin ) )
-            return false;
+            return 0L;
         kdDebug()<<"rowBegin :"<<rowBegin<< " colBegin :"<<colBegin<<endl;
 
         firstCell = getCell(rowBegin, colBegin);
@@ -1141,7 +1141,7 @@ bool KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, uns
                 for(unsigned int j=1; j <= cell->m_rows; j++) {
                     for(unsigned int i=colBegin; i<=colEnd; i++) {
                         if(! getCell(rowEnd+j,i)->getFrame(0)->isSelected())
-                            return false; // can't use this selection..
+                            return 0L; // can't use this selection..
                     }
                 }
                 rowEnd+=cell->m_rows;
@@ -1151,16 +1151,23 @@ bool KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, uns
         // if just one cell selected for joining; exit.
         if(rowBegin == rowEnd && colBegin == colEnd ||
            getCell(rowBegin,colBegin) == getCell(rowEnd,colEnd))
-            return false;
+            return 0L;
     }
     double bottom=getCell(rowEnd, colBegin)->getFrame(0)->bottom();
     double right=getCell(rowEnd, colEnd)->getFrame(0)->right();
+
+    QList<KWFrameSet> listFrameSet;
+    QList<KWFrame> listCopyFrame;
 
     // do the actual merge.
     for(unsigned int i=colBegin; i<=colEnd;i++) {
         for(unsigned int j=rowBegin; j<=rowEnd;j++) {
             Cell *cell = getCell(j,i);
             if(cell && cell!=firstCell) {
+
+                listFrameSet.append(cell);
+                listCopyFrame.append(cell->getFrame(0)->getCopy());
+
                 frames.remove( cell->getFrame(0) );
                 cell->delFrame( cell->getFrame(0));
                 //m_cells.remove(  cell);
@@ -1180,10 +1187,10 @@ bool KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, uns
     recalcRows();
     m_doc->updateAllFrames();
     m_doc->repaintAllViews();
-    return true;
+    return new KWJoinCellCommand( i18n("Join Cells"), this,colBegin,rowBegin, colEnd,rowEnd,listFrameSet,listCopyFrame);
 }
 
-KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, int _col, int _row) {
+KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, int _col, int _row,QList<KWFrameSet> listFrameSet, QList<KWFrame>listFrame) {
     if(intoRows < 1 || intoCols < 1)
         return 0L;
         //return false; // assertion.
@@ -1256,27 +1263,46 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     // If we created extra rows/cols, adjust the groupmanager counters.
     if(rowsDiff>0) m_rows+= rowsDiff;
     if(colsDiff>0) m_cols+= colsDiff;
+    int i=0;
+
     // create new cells
     for (unsigned int y = 0; y < intoRows; y++) {
         for (unsigned int x = 0; x < intoCols; x++){
             if(x==0 && y==0)
                 continue; // the orig cell takes this spot.
 
-            Cell *lastFrameSet= new Cell( this, y + row, x + col );
+            Cell *lastFrameSet=0L;
+
+            if(listFrameSet.isEmpty())
+                lastFrameSet= new Cell( this, y + row, x + col );
+            else
+            {
+                lastFrameSet = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
+                addCell( lastFrameSet );
+            }
 
             /*Frame *frame = new KWFrame(lastFrameSet,
                     firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
                     firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
                     width, height, KWFrame::RA_NO);
             */
-            KWFrame *frame=firstFrame->getCopy();
-            frame->setRect(firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
-                           firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
-                           width, height);
-            frame->setRunAround( KWFrame::RA_NO );
-            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
-            frame->setNewFrameBehaviour(KWFrame::NoFollowup);
+            KWFrame *frame=0L;
+            if(listFrame.isEmpty())
+            {
+                frame=firstFrame->getCopy();
+                frame->setRect(firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
+                               firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
+                               width, height);
+                frame->setRunAround( KWFrame::RA_NO );
+                frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+                frame->setNewFrameBehaviour(KWFrame::NoFollowup);
+            }
+            else
+                frame=listFrame.at(i);
+
             lastFrameSet->addFrame( frame );
+
+            i++;
 
             lastFrameSet->m_rows = 1;
             lastFrameSet->m_cols = 1;
@@ -1292,7 +1318,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     finalize();
 
 
-    return new KWSplitCellCommand(/*i18n(*/"Split Cell"/*)*/,this,col,row,intoCols, intoRows);
+    return new KWSplitCellCommand(i18n("Split Cells"),this,col,row,intoCols, intoRows);
 }
 
 void KWTableFrameSet::viewFormatting( QPainter &/*painter*/, int )
