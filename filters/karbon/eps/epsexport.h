@@ -39,6 +39,10 @@ private:
 	virtual void visitVPath( VPath& path );
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 
+	void getStroke( const VStroke& stroke );
+	void getFill( const VFill& fill );
+	void getColor( const VColor& color );
+
 	QTextStream* m_stream;
 };
 

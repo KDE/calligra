@@ -128,6 +128,9 @@ EpsExport::visitVDocument( VDocument& document )
 		"/f {fill} def\n"
 		"/w {setlinewidth} def\n"
 		"/d {setdash} def\n"
+		"/r {setrgbcolor} def\n"
+		"/S {gsave} def\n"
+		"/R {grestore} def\n"
 	<< endl;
 
 	// export layers:
@@ -162,37 +165,10 @@ EpsExport::visitVPath( VPath& path )
 	for( ; itr.current(); ++itr )
 		itr.current()->accept( *this );
 
-	if( path.stroke()->type() != stroke_none )
-	{
-		// dash pattern:
-		*m_stream << "[";
+	getFill( *path.fill() );
+	getStroke( *path.stroke() );
 
-		const QValueList<float>&
-			array( path.stroke()->dashPattern().array() );
-
-		QValueListConstIterator<float> itr = array.begin();
-		for( ; itr != array.end(); ++itr )
-			 *m_stream << *itr << " ";
-
-		*m_stream << "] " << path.stroke()->dashPattern().offset()
-			<< " d\n";
-
-
-		// setlinewidth:
-		*m_stream << path.stroke()->lineWidth() << " w ";
-
-
-		// stroke:
-		*m_stream << "s ";
-	}
-
-	if( path.fill()->type() != fill_none )
-	{
-		// fill:
-		*m_stream << "f ";
-	}
-
-	*m_stream << "\n" << endl;
+	*m_stream << endl;
 }
 
 void
@@ -255,6 +231,62 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 
 	if( segmentList.isClosed() )
 		*m_stream << "C\n";
+}
+
+void
+EpsExport::getStroke( const VStroke& stroke )
+{
+	if( stroke.type() != stroke_none )
+	{
+		// gsave:
+		*m_stream << "S ";
+
+		// dash pattern:
+		*m_stream << "[";
+
+		const QValueList<float>&
+			array( stroke.dashPattern().array() );
+
+		QValueListConstIterator<float> itr = array.begin();
+		for( ; itr != array.end(); ++itr )
+			 *m_stream << *itr << " ";
+
+		*m_stream << "] " << stroke.dashPattern().offset()
+			<< " d ";
+
+		getColor( stroke.color() );
+
+		// setlinewidth, stroke, grestore:
+		*m_stream << " " << stroke.lineWidth() << " w s R\n";
+	}
+}
+
+void
+EpsExport::getFill( const VFill& fill )
+{
+	if( fill.type() != fill_none )
+	{
+		// gsave:
+		*m_stream << "S ";
+
+		// setrgbcolor:
+		getColor( fill.color() );
+
+		// fill, grestore:
+		*m_stream << " f R\n";
+	}
+}
+
+void
+EpsExport::getColor( const VColor& color )
+{
+	VColor copy( color );
+	copy.setColorSpace( VColor::rgb );
+
+	*m_stream <<
+		copy.value( 0 ) << " " <<
+		copy.value( 1 ) << " " <<
+		copy.value( 2 ) << " r";
 }
 
 #include "epsexport.moc"
