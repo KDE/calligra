@@ -410,7 +410,7 @@ int KWTextParag::findCustomItem( QTextCustomItem * custom ) const
             return i;
     }
     kdDebug() << "KWTextParag::findCustomItem custom item " << custom
-              << " not found in paragraph " << this << " " << paragId() << endl;
+              << " not found in paragraph " << paragId() << endl;
     return 0;
 }
 
