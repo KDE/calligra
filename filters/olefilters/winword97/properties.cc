@@ -962,8 +962,11 @@ void Properties::apply(const MsWord::LFO &style)
 
             m_pap.istd = data.rgistd[m_pap.ilvl];
 
-            // Build the base PAP.
+            // Build the base PAP. A list with a base style of 4095 has
+            // a null style, default to something sane.
 
+            if (m_pap.istd == 4095)
+                m_pap.istd = 0;
             apply(m_pap.istd);
 
             MsWord::U8 *ptr2 = (MsWord::U8 *)m_document.m_listStyles[i][m_pap.ilvl];
