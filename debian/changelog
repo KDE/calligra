@@ -3,6 +3,7 @@ koffice (1:1.2.94-1) unstable; urgency=low
   * New upstream release (1.3-rc1).
   * Updated versions in shlibs files to >= 1:1.2.94 (closes: #209218).
   * Packages kword and kpresenter recommend libkscan1 (closes: #214584).
+  * Patched admin/debianrules so koffice uses --enable-final by default.
   * Note that this release contains a workaround for the crash upon
     File -> Save As.
 
