@@ -1388,20 +1388,13 @@ void CellFormatPageFloat::slotChangeState()
     listFormat->clear();
     currency->hide();
     currencyLabel->hide();
-    if (!dlg->isSingleCell())
-        {
-            precision->setEnabled(true);
-            prefix->setEnabled(true);
-            postfix->setEnabled(true);
-            format->setEnabled(true);
-        }
-    else
-        {
-            precision->setEnabled(false);
-            prefix->setEnabled(false);
-            postfix->setEnabled(false);
-            format->setEnabled(false);
-        }
+    
+    // start with enabled, they get disabled when inappropriate further down
+    precision->setEnabled(true);
+    prefix->setEnabled(true);
+    postfix->setEnabled(true);
+    format->setEnabled(true);
+    
     if (generic->isChecked() || number->isChecked() || percent->isChecked() ||
         scientific->isChecked() || textFormat->isChecked())
       listFormat->setEnabled(false);
