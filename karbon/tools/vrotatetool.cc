@@ -83,7 +83,7 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	VHandleNode node = part()->document().selection()->node( QPoint( m_lp.x(), m_lp.y() ) );
+	VHandleNode node = part()->document().selection()->node( QPoint( m_lp.x() / view->zoom(), m_lp.y() / view->zoom() ) );
 	if( part()->document().selection()->objects().count() > 0 && node != node_mm )
 	{
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
@@ -115,10 +115,10 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 		}
 		// rotate operation
 		QWMatrix mat;
-		mat.translate( sp.x() / view->zoom(), sp.y() / view->zoom());
+		mat.translate( sp.x(), sp.y() );
 		mat.rotate( m_angle / VGlobal::pi_180 );
-		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoom(),
-						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
+		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ),
+						- ( sp.y() + view->canvasWidget()->contentsY() ) );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->document().selection()->objects();
@@ -177,7 +177,7 @@ VRotateTool::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		part()->addCommand(
-			new VRotateCmd( &part()->document(), m_sp * (1.0 / view->zoom() ), m_angle / VGlobal::pi_180 ),
+			new VRotateCmd( &part()->document(), m_sp, m_angle / VGlobal::pi_180 ),
 			true );
 
 		m_isDragging = false;
