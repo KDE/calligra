@@ -344,6 +344,9 @@ Record* RecordFactory::create( unsigned type )
   if( type == BoundSheetRecord::id )
     record = new BoundSheetRecord();
     
+  if( type == ColInfoRecord::id )
+    record = new ColInfoRecord();
+    
   if( type == Date1904Record::id )
     record = new Date1904Record();
     
@@ -987,6 +990,7 @@ ColInfoRecord::~ColInfoRecord()
   delete d;
 }
 
+// FIXME how to find the real width (in pt/mm/inch) ?
 unsigned ColInfoRecord::width() const
 {
   return d->width;
@@ -1055,6 +1059,13 @@ void ColInfoRecord::setData( unsigned size, const unsigned char* data )
 void ColInfoRecord::dump( std::ostream& out ) const
 {
   out << "COLINFO" << std::endl;
+  out << "  First Column : " << firstColumn() << std::endl;
+  out << "   Last Column : " << lastColumn() << std::endl;
+  out << "         Width : " << width() << std::endl;
+  out << "      XF Index : " << xfIndex() << std::endl;
+  out << "        Hidden : " << ( hidden() ? "Yes" : "No" ) << std::endl;
+  out << "     Collapsed : " << ( collapsed() ? "Yes" : "No" ) << std::endl;
+  out << " Outline Level : " << outlineLevel() << std::endl;  
 }
 
 
@@ -2369,6 +2380,7 @@ void ExcelReader::handleRecord( Record* record )
   handleBOF( dynamic_cast<BOFRecord*>( record ) );
   handleBoolErr( dynamic_cast<BoolErrRecord*>( record ) );
   handleBlank( dynamic_cast<BlankRecord*>( record ) );
+  handleColInfo( dynamic_cast<ColInfoRecord*>( record ) );
   handleFormat( dynamic_cast<FormatRecord*>( record ) );
   handleFont( dynamic_cast<FontRecord*>( record ) );
   handleLabel( dynamic_cast<LabelRecord*>( record ) );
@@ -2469,6 +2481,13 @@ void ExcelReader::handleBlank( BlankRecord* record )
   {
     cell->setFormat( convertFormat( xfIndex ) );
   }
+}
+
+void ExcelReader::handleColInfo( ColInfoRecord* record )
+{
+  if( !record ) return;
+  
+  record->dump( std::cout );  
 }
 
 void ExcelReader::handleDate1904( Date1904Record* record )

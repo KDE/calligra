@@ -542,7 +542,8 @@ public:
   
   /**
    * Returns the width of the column(s), specified in 1/256 of 
-   * a character width.
+   * a character width. The exact width (in pt or inch) could only be 
+   * calculated given the base character width for the column format.
    *
    * \sa setWidth
    */
@@ -550,7 +551,8 @@ public:
   
   /**
    * Sets the width of the column(s), specified in 1/256 of 
-   * a character width.
+   * a character width. The exact width (in pt or inch) could only be 
+   * calculated given the base character width for the column format.
    *
    * \sa width
    */
@@ -1764,6 +1766,7 @@ private:
   void handleBOF( BOFRecord* record );
   void handleBoolErr( BoolErrRecord* record );
   void handleBlank( BlankRecord* record );
+  void handleColInfo( ColInfoRecord* record );
   void handleDate1904( Date1904Record* record );
   void handleFormat( FormatRecord* record );
   void handleFont( FontRecord* record );
