@@ -9,8 +9,8 @@ LDADD = ../lib/kofficeui/libkofficeui.la
 
 bin_PROGRAMS = kchart
 
-kchart_SOURCES = kchart.idl kchart_main.cc kchart_shell.cc \
-			kchart_doc.cc kchart_view.cc koDiagramm.cc chart.idl \
+kchart_SOURCES = chart.idl kchart.idl kchart_main.cc kchart_shell.cc \
+			kchart_doc.cc kchart_view.cc koDiagramm.cc \
 			sheet.cc table.cc parser.cc sheetdlg.cc KChartAreaPainter.cpp \
 			KChartAxesPainter.cpp KChartBarsPainter.cpp KChartLinesPainter.cpp\
 			KChartLinesPointsPainter.cpp KChartPainter.cpp \
