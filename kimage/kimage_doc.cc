@@ -17,12 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h> // FIXME: is this needed ? 
+#include <qprinter.h> // FIXME: is this needed ?
 #include <qdatetm.h> // FIXME: what's this ?
 #include <qpainter.h>
 #include <qrect.h>
 
 #include <kstddirs.h>
+
+#include <kdebug.h>
 
 /*
 #include <komlParser.h>
@@ -91,7 +93,7 @@ void KImageDocument::paintContent( QPainter& _painter, const QRect& /* _rect */,
 {
   // TODO : paint image here
   // draw only the rect given in _rect
-  
+
   //paintPixmap( &_painter, _rect);
 
   QPixmap pix;
@@ -157,7 +159,7 @@ bool KImageDocument::loadBinary( istream& _stream, bool _randomaccess, KOStore::
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
-  // implement binary loading here.  
+  // implement binary loading here.
 
   kdebug( KDEBUG_INFO, 0, "--------------------- LOADING DONE ------------------" );
 }
@@ -566,7 +568,7 @@ void KImageDocument::setPaperLayout( float _leftBorder, float _topBorder, float 
   setModified( TRUE );
 }
 
-QString KImageDocument::completeHeading( const char *_data, 
+QString KImageDocument::completeHeading( const char *_data,
 				    int / * _page * /, const char* / * _table * / )
 {
   / * QString page;
@@ -653,7 +655,7 @@ void KImageDocument::calcPaperSize()
 QString KImageDocument::paperFormatString()
 {
   QString paperFormatStr;
-  
+
   switch( m_paperFormat )
   {
     case PG_DIN_A5:
@@ -691,7 +693,7 @@ QString KImageDocument::paperFormatString()
 QString KImageDocument::orientationString()
 {
   QString orientationStr;
-  
+
   switch( m_orientation )
   {
     case QPrinter::Portrait :
@@ -767,7 +769,7 @@ float KImageDocument::paperWidth()
 {
   return m_paperWidth;
 }
-  
+
 float KImageDocument::leftBorder()
 {
   return m_leftBorder;

@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <klineeditdlg.h>
+#include <kdebug.h>
 
 #include <koPartSelectDia.h>
 
@@ -118,7 +119,7 @@ void KImageView::paintEvent( QPaintEvent* /* _event */ )
     painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
   else
     painter.drawPixmap( 0, 0, m_pixmap );
-  
+
   painter.end();
 }
 

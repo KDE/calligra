@@ -2,12 +2,12 @@
 
 SUBDIRS   = pics
 
-INCLUDES  = $(KOFFICE_INCLUDES) $(all_includes) 
+INCLUDES  = $(KOFFICE_INCLUDES) $(all_includes)
 
 kimage_LDFLAGS   = $(all_libraries) $(KDE_RPATH)
-kimage_LDADD     = $(LIB_KOFFICEUI)
+kimage_LDADD     = $(LIB_KOFFICEUI)  libkimage.la
 
-libkimage_la_LDFLAGS = $(all_libraries) -avoid-version -module 
+libkimage_la_LDFLAGS = $(all_libraries) -avoid-version -module
 
 ####### Files
 
