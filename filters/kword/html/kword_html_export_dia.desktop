@@ -1,0 +1,12 @@
+[Desktop Entry]
+Export=text/html
+Icon=
+Import=application/x-kword
+Name=HTML Export Filter Dialog
+Name[de]=HTML-Export-Filterdialog
+ServiceTypes=KOfficeFilterDialog
+Type=Service
+X-KDE-Library=libhtmlexportdia
+X-KDE-LibraryDependencies=
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
