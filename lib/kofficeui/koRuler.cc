@@ -95,6 +95,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     showMPos = false;
     mposX = 0;
     mposY = 0;
+    gridSize=0.0;
     hasToDelete = false;
     d->whileMovingBorderLeft = d->whileMovingBorderRight = d->whileMovingBorderTop = d->whileMovingBorderBottom = false;
 
@@ -475,6 +476,9 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 
             d->removeTab=d->tabList.insert(it, tab);
 
+            d->action=A_TAB;
+            d->currTab=d->removeTab;
+
             emit tabListChanged( d->tabList );
             repaint( false );
         }
@@ -538,6 +542,20 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
             d->tabList.remove(d->currTab);
 
         qHeapSort( d->tabList );
+
+        // Delete the new tabulator if it is placed on top of another.
+        KoTabulatorList::iterator tmpTab=d->tabList.begin();
+        int count=0;
+        while(tmpTab!=d->tabList.end()) {
+            if((*(tmpTab)).ptPos ==  (*(d->currTab)).ptPos) {
+                count++;
+                if(count > 1) {
+                    d->tabList.remove(d->currTab);
+                    break;
+                }
+            }
+            tmpTab++;
+        }
         searchTab( e->x() );
         emit tabListChanged( d->tabList );
         repaint( false );
@@ -719,19 +737,38 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                         }
                     } break;
                     case A_TAB: {
-                        if ( d->canvas && mx-left >= 0 && right-mx >= 0) {
+                        if ( d->canvas) {
+                            int newPos;
+                            if(mx-left < 0) newPos=left;
+                            else if (right-mx < 0) newPos=right;
+                            else newPos=mx;
+
+                            double newValue = unZoomIt(static_cast<double>(newPos) - frameStart + diffx);
+                            if( newPos!=right && gridSize!=0.0 && (e->state() & ShiftButton)==0) {
+                                // use grid
+                                double diff = (*d->currTab).ptPos - newValue;
+
+                                if(diff < 0) diff=0-diff;
+                                if(diff*2 < gridSize) break; // diff less then gridSize; skip
+
+                                newValue = static_cast<int>((newValue / gridSize) + 0.5) * gridSize;
+                                if(newValue > unZoomIt(static_cast<double>(right)  - frameStart + diffx) )
+                                    newValue = unZoomIt(static_cast<double>(right)  - frameStart + diffx);
+                            } else if(newValue == (*d->currTab).ptPos) break; // no change
                             QPainter p( d->canvas );
                             p.setRasterOp( Qt::NotROP );
                             double pt = zoomIt((*d->currTab).ptPos);
                             int pt_fr = qRound(pt) + frameStart - diffx;
-                            p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
-                            (*d->currTab).ptPos = unZoomIt(static_cast<double>(mx) - frameStart + diffx );
+                            if(d->currTab != d->removeTab) // prevent drawLine when we just created a new tab.
+                                p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
+                            (*d->currTab).ptPos = newValue;
                             pt = zoomIt( (*d->currTab).ptPos );
                             pt_fr = qRound(pt) + frameStart - diffx;
                             p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
                             p.end();
                             d->oldMx = mx;
                             d->oldMy = my;
+                            d->removeTab=d->tabList.end();
                             repaint( false );
                         }
                     } break;

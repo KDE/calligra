@@ -171,6 +171,12 @@ public:
     void changeFlags(int _flags);
 
     /**
+     * set the size of the grid used for tabs positioning, size in pt.
+     * default value is 0. 0 means no grid.
+     */
+    void setGridSize(double newGridSize) { gridSize=newGridSize; }
+
+    /**
      * @return the current flags
      */
     int flags() const;
@@ -236,6 +242,8 @@ protected:
     bool m_bFrameStartSet;
 
     bool m_bReadWrite;
+
+    double gridSize;
 
 protected slots:
     void rbPT() { setUnit( QString::fromLatin1("pt") ); emit unitChanged( unit ); }
