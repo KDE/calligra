@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=OpenOffice.org Spreadsheet
+Comment[en]=OpenOffice.org Spreadsheet
+Comment[cs]=OpenOffice.org Sešit
+Comment[sk]=OpenOffice.org Zošit
+Icon=004_spreadsheet_document.xpm
+Type=MimeType
+Patterns=*.sxc;*.SXC;
+MimeType=application/vnd.sun.xml.calc
