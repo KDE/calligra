@@ -473,7 +473,7 @@ void KivioView::setupActions()
   QHBoxLayout* lwl = new QHBoxLayout(lineWidthWidget);
   lwl->addWidget(lineWidthLbl);
   lwl->addWidget(m_setLineWidth);
-  action = new KWidgetAction(lineWidthWidget, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+  KAction* action = new KWidgetAction(lineWidthWidget, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
   action->setWhatsThis(i18n("The line width allows setting the width of outlines, either using predefined values or user input"));
   connect(m_setLineWidth, SIGNAL(valueChanged(double)), SLOT(setLineWidth()));
   connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setLineWidthUnit(KoUnit::Unit)));
