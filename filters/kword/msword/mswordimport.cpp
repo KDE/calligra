@@ -31,7 +31,7 @@
 #include <document.h>
 
 typedef KGenericFactory<MSWordImport, KoFilter> MSWordImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libmswordimport, MSWordImportFactory( "kwordmswordfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libmswordimport, MSWordImportFactory( "kwordmswordfilter" ) )
 
 MSWordImport::MSWordImport( KoFilter *, const char *, const QStringList& ) : KoFilter()
 {

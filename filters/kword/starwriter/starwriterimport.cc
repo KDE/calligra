@@ -31,7 +31,7 @@
 #include "pole.h"
 
 typedef KGenericFactory<StarWriterImport, KoFilter> StarWriterImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("starwriterimport"));
+K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("starwriterimport"))
 
 // Get unsigned 24-bits integer at given offset
 static inline Q_UINT32 readU24(QByteArray array, Q_UINT32 p)
