@@ -28,7 +28,6 @@
 #include "kwanchor.h"
 #include "framedia.h"
 #include "kwcommand.h"
-#include "kformuladocument.h"
 
 #include <qtimer.h>
 #include <qclipboard.h>

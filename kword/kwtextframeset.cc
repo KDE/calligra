@@ -3093,9 +3093,9 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
     bool ownline = false;
     { // the loop will start here :)
         KWAnchor * anchor = new KWAnchor( textFrameSet()->textDocument(), fs, frameNumber );
-        if ( frameNumber == 0 && anchor->ownLine() && cursor->index() > 0 ) // enforce start of line [for tables] - hack?
+        if ( frameNumber == 0 && anchor->ownLine() && cursor->index() > 0 ) // enforce start of line - currently unused
         {
-            kdDebug() << "inserting a table -> prepending \\n" << endl;
+            kdDebug() << "ownline -> prepending \\n" << endl;
             placeHolders += QChar('\n');
             index++;
             ownline = true;

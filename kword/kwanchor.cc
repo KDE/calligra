@@ -127,6 +127,7 @@ void KWAnchor::save( QDomElement &formatElem )
 
 bool KWAnchor::ownLine() const
 {
-    // hack ? :)
-    return m_frameset->getFrameType() == FT_TABLE;
+    return false;
+    //commented out, since it prevents multiple tables on the same line, alignment etc.
+    //return m_frameset->getFrameType() == FT_TABLE;
 }
