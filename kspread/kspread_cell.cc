@@ -978,8 +978,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             int start=0;
             if(localizedNumber.find('%')!=-1)
                 start=2;
-            else if(localizedNumber.find(KGlobal::locale()->currencySymbol())==(localizedNumber.length()-1))
-                start=2;
+            else if(localizedNumber.find(KGlobal::locale()->currencySymbol())==(localizedNumber.length()-KGlobal::locale()->currencySymbol().length()))
+                start=KGlobal::locale()->currencySymbol().length()+1;
             else if((start=localizedNumber.find('E'))!=-1)
                 start=localizedNumber.length()-start;
             else
@@ -3010,8 +3010,8 @@ void KSpreadCell::incPrecision()
       int start=0;
       if(m_strOutText.find('%')!=-1)
         start=2;
-      else if(m_strOutText.find(KGlobal::locale()->currencySymbol())==(m_strOutText.length()-1))
-        start=2;
+      else if(m_strOutText.find(KGlobal::locale()->currencySymbol())==(m_strOutText.length()-KGlobal::locale()->currencySymbol().length()))
+        start=KGlobal::locale()->currencySymbol().length()+1;
       else if((start=m_strOutText.find('E'))!=-1)
         start=m_strOutText.length()-start;
       else
@@ -3040,8 +3040,8 @@ void KSpreadCell::decPrecision()
     int start=0;
     if(m_strOutText.find('%')!=-1)
         start=2;
-    else if(m_strOutText.find(KGlobal::locale()->currencySymbol())==(m_strOutText.length()-1))
-        start=2;
+    else if(m_strOutText.find(KGlobal::locale()->currencySymbol())==(m_strOutText.length()-KGlobal::locale()->currencySymbol().length()))
+        start=KGlobal::locale()->currencySymbol().length()+1;
     else if((start=m_strOutText.find('E'))!=-1)
         start=m_strOutText.length()-start;
     else
