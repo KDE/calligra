@@ -122,6 +122,8 @@ class KSpreadConditions
  private:
   KSpreadConditions() {}
 
+    QString saveOasisConditionValue(KSpreadConditional &cond);
+
   const KSpreadCell * m_cell;
   QValueList<KSpreadConditional> m_condList;
   KSpreadStyle * m_matchedStyle;

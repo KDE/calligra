@@ -234,6 +234,7 @@ void KSpreadConditions::setConditionList( const QValueList<KSpreadConditional> &
 
 void KSpreadConditions::saveOasisConditions( KoGenStyle &currentCellStyle )
 {
+    //todo fix me with kspread old format!!!
     if ( m_condList.isEmpty() )
         return;
     QValueList<KSpreadConditional>::const_iterator it;
@@ -245,14 +246,63 @@ void KSpreadConditions::saveOasisConditions( KoGenStyle &currentCellStyle )
     {
         KSpreadConditional condition = *it;
         elementWriter.startElement( "style:map" );
-        elementWriter.addAttribute( "style:condition", "..." ); //todo
-        elementWriter.addAttribute("style:apply-style-name", "..." );//todo
-        elementWriter.addAttribute( "style:base-cell-address", "..." );//todo
+        elementWriter.addAttribute( "style:condition", saveOasisConditionValue( condition ) );
+        elementWriter.addAttribute("style:apply-style-name", *( condition.styleName ) );
+        //elementWriter.addAttribute( "style:base-cell-address", "..." );//todo
         elementWriter.endElement();
     }
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentCellStyle.addChildElement( "conditional attribute", elementContents );
 
+}
+
+QString KSpreadConditions::saveOasisConditionValue( KSpreadConditional &condition)
+{
+    QString value;
+    switch( condition.cond )
+    {
+    case None:
+        break;
+    case Equal:
+        value="cell-content()=";
+        value+=QString::number( condition.val1 );
+        break;
+    case Superior:
+        value="cell-content()>";
+        value+=QString::number( condition.val1 );
+        break;
+    case Inferior:
+        value="cell-content()<";
+        value+=QString::number( condition.val1 );
+        break;
+    case SuperiorEqual:
+        value="cell-content()>=";
+        value+=QString::number( condition.val1 );
+        break;
+    case InferiorEqual:
+        value="cell-content()<=";
+        value+=QString::number( condition.val1 );
+        break;
+    case Between:
+        value="cell-content-is-between(";
+        value+=QString::number( condition.val1 );
+        value+=",";
+        value+=QString::number( condition.val2 );
+        value+=")";
+        break;
+    case DifferentTo:
+        value="cell-content()!=";
+        value+=QString::number( condition.val1 );
+        break;
+    case Different:
+        value="cell-content-is-not-between(";
+        value+=QString::number( condition.val1 );
+        value+=",";
+        value+=QString::number( condition.val2 );
+        value+=")";
+        break;
+    }
+    return value;
 }
 
 
