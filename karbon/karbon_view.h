@@ -79,6 +79,7 @@ protected slots:
 	void sinusTool();
 	void spiralTool();
 	void starTool();
+	void textTool();
 
 	// handle-tool:
 	void handleTool();
@@ -119,6 +120,7 @@ private:
 	KToggleAction* m_sinusToolAction;
 	KToggleAction* m_spiralToolAction;
 	KToggleAction* m_starToolAction;
+	KToggleAction* m_textToolAction;
 
 	//toolbox
 	VToolContainer *m_toolbox;

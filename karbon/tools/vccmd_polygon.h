@@ -10,7 +10,7 @@
 
 // create a polygon-shape.
 
-class VPath;
+class VObject;
 
 class VCCmdPolygon : public VCCommand
 {
@@ -20,7 +20,7 @@ public:
 	virtual ~VCCmdPolygon() {}
 
 	// for complex shapes. needed to draw while creation (creation tool):
-	VPath* createPath();
+	VObject* createPath();
 
 private:
 	double m_centerX;

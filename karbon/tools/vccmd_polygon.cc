@@ -25,7 +25,7 @@ VCCmdPolygon::VCCmdPolygon( KarbonPart* part,
 	m_radius = radius < 0.0 ? -radius : radius;
 }
 
-VPath*
+VObject*
 VCCmdPolygon::createPath()
 {
 	VPath* path = new VPath();

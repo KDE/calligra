@@ -16,7 +16,7 @@ VCCmdRectangle::VCCmdRectangle( KarbonPart* part,
 {
 }
 
-VPath*
+VObject*
 VCCmdRectangle::createPath()
 {
 	VPath* path = new VPath();

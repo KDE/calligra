@@ -26,7 +26,7 @@ VCCmdStar::VCCmdStar( KarbonPart* part,
 	m_innerR = innerR < 0.0 ? -innerR : innerR;
 }
 
-VPath*
+VObject*
 VCCmdStar::createPath()
 {
 	VPath* path = new VPath();

@@ -1,5 +1,6 @@
 INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir)/.. -I$(srcdir)/../tools \
 	-I$(srcdir)/../render $(all_includes)
+#	`freetype-config --cflags` -DXFTFREETYPE
 
 noinst_LTLIBRARIES = libkarboncore.la
 

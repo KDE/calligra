@@ -46,7 +46,7 @@ VCCmdRoundRect::VCCmdRoundRect( KarbonPart* part,
 	}
 }
 
-VPath*
+VObject*
 VCCmdRoundRect::createPath()
 {
 	VPath* path = new VPath();

@@ -11,6 +11,7 @@
 #include "vlayer.h"
 #include "vobject.h"
 #include "vpath.h"
+#include "vtext.h"
 
 #include <kdebug.h>
 
@@ -113,6 +114,12 @@ VLayer::load( const QDomElement& element )
 				VPath* path = new VPath();
 				path->load( e );
 				insertObject( path );
+			}
+			else if( e.tagName() == "TEXT" )
+			{
+				VText* text = new VText();
+				text->load( e );
+				insertObject( text );
 			}
 		}
 	}

@@ -38,7 +38,7 @@ VCCmdEllipse::VCCmdEllipse( KarbonPart* part,
 	}
 }
 
-VPath*
+VObject*
 VCCmdEllipse::createPath()
 {
 	// first create (half-)unity circle around origin (0,0):

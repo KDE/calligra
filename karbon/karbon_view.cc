@@ -33,9 +33,12 @@
 #include "vpainterfactory.h"
 #include "vpainter.h"
 #include "vmdlg_solidfill.h"
+#include "vccmd_text.h"
+#include "vtext.h"
 
 #include <kdebug.h>
 #include <koMainWindow.h>
+#include <koFontDia.h>
 
 #include "KArbonViewIface.h"
 
@@ -249,6 +252,29 @@ KarbonView::scaleTool()
 }
 
 void
+KarbonView::textTool()
+{
+    kdDebug() << "KarbonView::textTool()" << endl;
+	QFont f;
+
+	KoFontDia *fontDia = new KoFontDia( this, "", f, false, false, Qt::black, Qt::white );
+	fontDia->exec();
+	int flags = fontDia->changedFlags();
+	//kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
+	if( flags )
+	{
+		f = fontDia->getNewFont();
+		//fontDia->getSubScript(), fontDia->getSuperScript(),
+		//fontDia->color(),fontDia->backGroundColor(), flags);
+	}
+
+	delete fontDia;
+
+	// TODO : find a way to edit the text, no predefined strings
+	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ) );
+}
+
+void
 KarbonView::shearTool()
 {
 	kdDebug() << "KarbonView::shearTool()" << endl;
@@ -400,6 +426,9 @@ KarbonView::initActions()
 	m_starToolAction = new KToggleAction(
 		i18n( "S&tar" ), "star", 0, this,
 		SLOT( starTool() ), actionCollection(), "tool_star" );
+	m_textToolAction = new KToggleAction(
+		i18n( "Text" ), "text", 0, this,
+		SLOT( textTool() ), actionCollection(), "tool_text" );
 
 	m_ellipseToolAction->setExclusiveGroup( "Tools" );
 	m_polygonToolAction->setExclusiveGroup( "Tools" );
@@ -411,6 +440,7 @@ KarbonView::initActions()
 	m_scaleToolAction->setExclusiveGroup( "Tools" );
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
+	m_textToolAction->setExclusiveGroup( "Tools" );
 	// tools <-----
 
 	// view ----->
@@ -456,6 +486,7 @@ KarbonView::initActions()
 	connect( m_toolbox, SIGNAL(starToolActivated()),		this, SLOT(starTool()) );
 	connect( m_toolbox, SIGNAL(sinusToolActivated()),		this, SLOT(sinusTool()) );
 	connect( m_toolbox, SIGNAL(spiralToolActivated()),		this, SLOT(spiralTool()) );
+	connect( m_toolbox, SIGNAL(textToolActivated()),		this, SLOT(textTool()) );
 	connect( m_toolbox, SIGNAL(solidFillActivated()), this, SLOT(solidFillClicked()) );
 	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
 	m_toolbox->show();

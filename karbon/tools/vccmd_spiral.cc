@@ -27,7 +27,7 @@ VCCmdSpiral::VCCmdSpiral( KarbonPart* part,
 	m_fade = ( fade <= 0.0 || fade >= 1.0 ) ? 0.5 : fade;
 }
 
-VPath*
+VObject*
 VCCmdSpiral::createPath()
 {
 	VPath* path = new VPath();

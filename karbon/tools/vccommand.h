@@ -8,7 +8,7 @@
 
 #include "vcommand.h"
 
-class VPath;
+class VObject;
 
 // Provides a common base class for creation commands since they all have
 // a similar execute / unexecute behaviour and all build a VPath.
@@ -23,10 +23,10 @@ public:
 	virtual void unexecute();
 
 	// for complex shapes. needed to draw while creation (creation tool):
-	virtual VPath* createPath() { return 0L; }
+	virtual VObject* createPath() { return 0L; }
 
 protected:
-	VPath* m_object;
+	VObject* m_object;
 };
 
 #endif

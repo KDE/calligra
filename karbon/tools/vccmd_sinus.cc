@@ -20,7 +20,7 @@ VCCmdSinus::VCCmdSinus( KarbonPart* part,
 	m_periods = periods < 1 ? 1 : periods;
 }
 
-VPath*
+VObject*
 VCCmdSinus::createPath()
 {
 	VPath* path = new VPath();

@@ -10,7 +10,7 @@
 
 // create a star-shape.
 
-class VPath;
+class VObject;
 
 class VCCmdStar : public VCCommand
 {
@@ -20,7 +20,7 @@ public:
 	virtual ~VCCmdStar() {}
 
 	// for complex shapes. needed to draw while creation (creation tool):
-	VPath* createPath();
+	VObject* createPath();
 
 private:
 	double m_centerX;

@@ -20,7 +20,7 @@ public:
 	QButtonGroup *btngroup;
 	QButtonGroup *dlggroup;
 private:
-	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral };
+	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral, Text };
 	enum DlgChoice { Outline, SolidFill, Gradient };
 private slots:
 	void slotButton( int ID );
@@ -37,6 +37,7 @@ signals:
 	void sinusToolActivated();
 	void spiralToolActivated();
 	void starToolActivated();
+	void textToolActivated();
 	void solidFillActivated();
 };
 

@@ -36,7 +36,7 @@ public:
 	virtual ~VObject() {}
 
 	virtual void draw( VPainter* painter, const QRect& rect,
-		const double zoomFactor ) = 0;
+		const double zoomFactor = 1.0  ) = 0;
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;
 

@@ -10,7 +10,7 @@
 
 // create a sinus curve-shape.
 
-class VPath;
+class VObject;
 
 class VCCmdSinus : public VCCommand
 {
@@ -20,7 +20,7 @@ public:
 	virtual ~VCCmdSinus() {}
 
 	// for complex shapes. needed to draw while creation (creation tool):
-	VPath* createPath();
+	VObject* createPath();
 
 private:
 	double m_tlX;

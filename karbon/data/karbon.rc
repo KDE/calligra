@@ -44,6 +44,7 @@
 			<Action name="tool_sinus"/>
 			<Action name="tool_spiral"/>
 			<Action name="tool_star"/>
+			<Action name="tool_text"/>
 		</Menu>
 	</Menu>
 	<Menu name="text">

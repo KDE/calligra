@@ -7,6 +7,7 @@
 #include <qlayout.h>
 #include <qgroupbox.h>
 #include <qspinbox.h>
+#include <qlabel.h>
 #include <kcolordialog.h>
 #include <klocale.h>
 #include <koMainWindow.h>

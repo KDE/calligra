@@ -5,14 +5,20 @@
 #ifndef __VTEXT_H__
 #define __VTEXT_H__
 
+#include <qptrlist.h>
 #include <qstring.h>
+#include <qfont.h>
 
-#include "vobject.h"
+#include "vobjectlist.h"
+
+class KarbonView;
 
 class VText : public VObject
 {
 public:
 	VText();
+	VText( KarbonView *view, const QFont &font );
+	VText( KarbonView *view, const QFont &font, const QString& text );
 	VText( const VText& text );
 	virtual ~VText();
 
@@ -29,8 +35,17 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
+	void setState( const VState state );
+
 private:
+#ifdef XFTFREETYPE
+	void traceText( const QString &text );
+#endif
+
 	QString m_text;
+	VObjectList m_glyphs;
+	KarbonView *m_view;
+	QFont m_font;
 };
 
 #endif

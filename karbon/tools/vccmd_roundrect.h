@@ -10,7 +10,7 @@
 
 // create a round rectangle-shape.
 
-class VPath;
+class VObject;
 
 class VCCmdRoundRect : public VCCommand
 {
@@ -20,7 +20,7 @@ public:
 	virtual ~VCCmdRoundRect() {}
 
 	// for complex shapes. needed to draw while creation (creation tool):
-	VPath* createPath();
+	VObject* createPath();
 
 private:
 	double m_tlX;

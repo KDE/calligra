@@ -10,7 +10,7 @@
 
 // create a ellipse-shape.
 
-class VPath;
+class VObject;
 
 class VCCmdEllipse : public VCCommand
 {
@@ -20,7 +20,7 @@ public:
 	virtual ~VCCmdEllipse() {}
 
 	// for complex shapes. needed to draw while creation (creation tool):
-	VPath* createPath();
+	VObject* createPath();
 
 private:
 	double m_tlX;

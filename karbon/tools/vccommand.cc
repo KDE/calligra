@@ -4,7 +4,7 @@
 */
 
 #include "vccommand.h"
-#include "vpath.h"
+#include "vobject.h"
 
 void
 VCCommand::execute()
