@@ -2391,7 +2391,7 @@ void KPresenterView::search( QString text, bool sensitive, bool direction )
 		searchFirst = false;
 		page->kTxtObj()->setSearchIndexToBegin();
 		QMessageBox::warning( this, i18n( "Warning" ),
-				      i18n( "The search string '" + text + "' couldn't be found!" ) );
+				      i18n( "The search string '" + text + "' couldn't be found!" ), i18n("OK"));
 	    }
 	}
 	else
@@ -2408,7 +2408,7 @@ void KPresenterView::search( QString text, bool sensitive, bool direction )
 		searchFirst = false;
 		page->kTxtObj()->setSearchIndexToEnd();
 		QMessageBox::warning( this, i18n( "Warning" ),
-				      i18n( "The search string '" + text + "' couldn't be found!" ) );
+				      i18n( "The search string '" + text + "' couldn't be found!" ), i18n("OK"));
 	    }
 	}
     }
@@ -2439,7 +2439,7 @@ void KPresenterView::replace( QString search, QString replace, bool sensitive, b
 		page->kTxtObj()->setSearchIndexToBegin();
 		QMessageBox::warning( this, i18n( "Warning" ),
 				      i18n( "The search string '" + search + "' couldn't be found"
-					    " and replaced with '" + replace + "'!" ) );
+					    " and replaced with '" + replace + "'!" ), i18n("OK"));
 	    }
 	}
 	else
@@ -2457,7 +2457,7 @@ void KPresenterView::replace( QString search, QString replace, bool sensitive, b
 		page->kTxtObj()->setSearchIndexToEnd();
 		QMessageBox::warning( this, i18n( "Warning" ),
 				      i18n( "The search string '" + search + "' couldn't be found"
-					    " and replaced with '" + replace + "'!" ) );
+					    " and replaced with '" + replace + "'!" ), i18n("OK"));
 	    }
 	}
     }

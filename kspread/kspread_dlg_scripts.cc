@@ -69,7 +69,7 @@ void KSpreadScripts::slotAdd()
     QString t = add2->text();
     if ( t.length() == 0 )
     {
-	QMessageBox::message( i18n("KSpread Error"), i18n("You must enter a name") );
+	QMessageBox::critical(this, i18n("KSpread Error"), i18n("You must enter a name"), i18n("OK"));
 	return;
     }
 
@@ -77,7 +77,7 @@ void KSpreadScripts::slotAdd()
     t2 += ".ks";
     if ( nameList.find( t2 ) != nameList.end() )
     {
-	QMessageBox::message( i18n("KSpread Error"),i18n( "The file already exists") );
+	QMessageBox::critical(this, i18n("KSpread Error"),i18n( "The file already exists"), i18n("OK"));
 	return;
     }
 
@@ -86,7 +86,7 @@ void KSpreadScripts::slotAdd()
     FILE *f = fopen( d.data(), "w" );
     if ( f == 0L )
     {
-	QMessageBox::message( i18n("KSpread Error"), i18n("Could not open file.\nPerhaps access denied") );
+	QMessageBox::critical(this, i18n("KSpread Error"), i18n("Could not open file.\nPerhaps access denied"), i18n("OK"));
 	return;
     }
     fclose( f );
@@ -103,10 +103,9 @@ void KSpreadScripts::slotDelete()
     if ( list->currentItem() == -1 )
 	return;
 
-    QString t;
-    t.sprintf( i18n("Do you really want to delete the script\n%s"), list->text( list->currentItem() ).ascii() );
+    QString t = i18n("Do you really want to delete the script\n%1").arg(list->text( list->currentItem() ) );
 
-    if ( !QMessageBox::query( "KSpread Question", t.data() ) )
+    if ( QMessageBox::information(this, i18n("KSpread Question"), t, i18n("OK"), i18n("No")) )
 	return;
 
     QString t2( list->text( list->currentItem() ) );
@@ -135,7 +134,7 @@ void KSpreadScripts::slotRename()
     QString t = rename2->text();
     if ( t.length() == 0 )
     {
-	QMessageBox::message( i18n("KSpread Error"), i18n("You must enter a name") );
+	QMessageBox::critical(this, i18n("KSpread Error"), i18n("You must enter a name"), i18n("OK"));
 	return;
     }
 
@@ -143,7 +142,7 @@ void KSpreadScripts::slotRename()
     t2 += ".py";
     if ( nameList.find( t2 ) != nameList.end() )
     {
-	QMessageBox::message( i18n("KSpread Error"), i18n("The file already exists") );
+	QMessageBox::critical(this, i18n("KSpread Error"), i18n("The file already exists"), i18n("OK"));
 	return;
     }
 

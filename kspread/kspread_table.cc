@@ -1608,12 +1608,12 @@ void KSpreadTable::copySelection( const QPoint &_marker )
     rct.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
   else if ( m_rctSelection.right() == 0x7fff )
   {
-    QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supproted" );
+    QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supproted", i18n("OK"));
     return;
   }
   else if ( m_rctSelection.bottom() == 0x7fff )
   {
-    QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supproted" );
+    QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supproted", i18n("OK"));
     return;
   }
   else

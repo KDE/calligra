@@ -1096,7 +1096,7 @@ bool KSpreadCell::makeFormular()
     QString tmp("Error in cell %1\n\n");
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
     tmp += context.exception()->toString();
-    QMessageBox::critical( 0, i18n("KSpread error"), tmp );
+    QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
     return false;
   }
 
@@ -1202,7 +1202,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	QString tmp("Error in cell %1\n\n");
 	tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
 	tmp += context.exception()->toString();
-	QMessageBox::critical( 0, i18n("KSpread error"), tmp );
+	QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
       }
       m_bError = true;
       m_strFormularOut = "####";
