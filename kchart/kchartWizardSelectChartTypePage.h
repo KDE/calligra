@@ -29,7 +29,7 @@ private:
   int ystep;
 
 
-  addButton(QString name, QString icon_name, int type);
+  void addButton(QString name, QString icon_name, int type);
 };
 
 

@@ -13,7 +13,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-kchartWizardSelectChartTypePage::addButton(QString name,
+void kchartWizardSelectChartTypePage::addButton(QString name,
 					   QString icon_name,
 					   int type) {  
 
