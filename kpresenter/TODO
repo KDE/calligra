@@ -68,7 +68,6 @@ Done:
 	-> grayscal
 
 Todo:
--> save/load part element (necessary to modify koDocumentChild)
 -> save/load cubic/quadric/freehand object (define as svg object)
 -> save/load picture effect
 	-> picture effect (extend oasis format)
@@ -87,6 +86,7 @@ In Progress:
 -> save/load picture effect
 -> save/load protect object
 -> save/load embedded object
+-> save/load general config (GridIsVisible etc.)
 	
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>

@@ -78,6 +78,7 @@ bool KPPartObject::saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavi
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
+    xmlWriter.addAttribute( "draw:id", indexObj );
     xmlWriter.endElement();
     return true;
 }

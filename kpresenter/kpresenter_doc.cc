@@ -1041,9 +1041,14 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoXmlWriter settingsWriter(&contentDev, "office:document-settings");
     settingsWriter.startElement("office:settings");
     settingsWriter.startElement("config:config-item-set");
-    settingsWriter.addAttribute("config:name", "kspread:settings");
+    //todo define how to save it to use into ooimpress
+    settingsWriter.addAttribute("config:name", "view-settings");
 
     KoUnit::saveOasis(&settingsWriter, m_unit);
+
+    settingsWriter.startElement("config:config-item-map-entry" );
+    saveOasisSettings( settingsWriter );
+    settingsWriter.endElement();
 
     settingsWriter.endElement(); // config:config-item-set
     settingsWriter.endElement(); // office:settings
@@ -1062,6 +1067,35 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     setModified( false );
 
     return true;
+}
+
+void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
+{
+    //ooimpress save it as this line.
+    //<config:config-item config:name="SnapLinesDrawing" config:type="string">H2260V14397H7693H12415H15345H1424</config:config-item>
+    settingsWriter.startElement( "config:config-item" );
+    QString helpLineOasis;
+    //save in pixel
+    for(QValueList<double>::Iterator it = m_vertHelplines.begin(); it != m_vertHelplines.end(); ++it)
+    {
+        helpLineOasis+="V"+QString::number( zoomHandler()->zoomItX( *it ) );
+    }
+
+    for(QValueList<double>::Iterator it = m_horizHelplines.begin(); it != m_horizHelplines.end(); ++it)
+    {
+        helpLineOasis+="H"+QString::number( zoomHandler()->zoomItY(*it ) );
+    }
+    if ( !helpLineOasis.isEmpty() )
+    {
+        settingsWriter.addAttribute( "config:name", "SnapLinesDrawing" );
+        settingsWriter.addAttribute( "config:type", "string" );
+        settingsWriter.addTextNode(helpLineOasis);
+    }
+    settingsWriter.endElement();
+}
+
+void KPresenterDoc::loadOasisSettings()
+{
 }
 
 void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter )

@@ -551,6 +551,10 @@ protected:
 
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
 
+    void saveOasisSettings( KoXmlWriter &contentTmpWriter );
+    void loadOasisSettings();
+
+
     //we move presSpeed to each table => compatibility with old file format
     void compatibilityPresSpeed();
 
