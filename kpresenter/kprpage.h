@@ -117,8 +117,8 @@ public:
     bool setLineEnd( LineEnd le );
     bool setLineBegin( LineEnd lb );
 
-    bool setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const  QColor& g1, const QColor &g2,
-			   BCType gt, bool unbalanced, int xfactor, int yfactor, bool sticky );
+    KCommand *setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const  QColor& g1, const QColor &g2,
+			   BCType gt, bool unbalanced, int xfactor, int yfactor);
 
     QPen getPen( const QPen & pen );
 
@@ -229,6 +229,7 @@ public:
 
     KCommand *rotateObj(float _newAngle);
     KCommand *shadowObj(ShadowDirection dir,int dist, const QColor &col);
+    KCommand *stickyObj(bool _sticky, KPrPage * currentPage);
 
     QPtrList<KoTextObject> objectText();
 

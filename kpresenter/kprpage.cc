@@ -1651,11 +1651,11 @@ bool KPrPage::setLineBegin( LineEnd lb )
 
 
 /*===================== set pen and brush ========================*/
-bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft, const QColor &g1, const QColor &g2,
-				 BCType gt, bool unbalanced, int xfactor, int yfactor, bool sticky )
+KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft, const QColor &g1, const QColor &g2,
+                                    BCType gt, bool unbalanced, int xfactor, int yfactor )
 {
     KPObject *kpobject = 0;
-    bool ret = false;
+    PenBrushCmd *penBrushCmd=0L;
 
     QPtrList<KPObject> _objects;
     QPtrList<PenBrushCmd::Pen> _oldPen;
@@ -1686,7 +1686,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
         if(it.current()->isSelected())
         {
             kpobject=it.current();
-            kpobject->setSticky( sticky );
             ptmp = new PenBrushCmd::Pen;
             btmp = new PenBrushCmd::Brush;
             switch ( kpobject->getType() ) {
@@ -1698,7 +1697,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
             }
 	    break;
@@ -1716,8 +1714,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     btmp->unbalanced = obj->getGUnbalanced();
                     btmp->xfactor = obj->getGXFactor();
                     btmp->yfactor = obj->getGYFactor();
-                    ret = true;
-
                 }
             }
 	    break;
@@ -1735,7 +1731,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     btmp->unbalanced = obj->getGUnbalanced();
                     btmp->xfactor = obj->getGXFactor();
                     btmp->yfactor = obj->getGYFactor();
-                    ret = true;
                 }
             }
 	    break;
@@ -1755,7 +1750,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     btmp->unbalanced = obj->getGUnbalanced();
                     btmp->xfactor = obj->getGXFactor();
                     btmp->yfactor = obj->getGYFactor();
-                    ret = true;
                 }
             }
 	    break;
@@ -1775,7 +1769,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     btmp->unbalanced = obj->getGUnbalanced();
                     btmp->xfactor = obj->getGXFactor();
                     btmp->yfactor = obj->getGYFactor();
-                    ret = true;
                 }
             }
 	    break;
@@ -1793,7 +1786,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     btmp->unbalanced = obj->getGUnbalanced();
                     btmp->xfactor = obj->getGXFactor();
                     btmp->yfactor = obj->getGYFactor();
-                    ret = true;
                 }
             }
             break;
@@ -1811,7 +1803,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     btmp->unbalanced = obj->getGUnbalanced();
                     btmp->xfactor = obj->getGXFactor();
                     btmp->yfactor = obj->getGYFactor();
-                    ret = true;
                 }
             }
             break;
@@ -1829,7 +1820,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     btmp->unbalanced = obj->getGUnbalanced();
                     btmp->xfactor = obj->getGXFactor();
                     btmp->yfactor = obj->getGYFactor();
-                    ret = true;
                 }
             }
             break;
@@ -1848,7 +1838,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     btmp->unbalanced = obj->getGUnbalanced();
                     btmp->xfactor = obj->getGXFactor();
                     btmp->yfactor = obj->getGYFactor();
-                    ret = true;
                 }
             }
             break;
@@ -1860,7 +1849,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
             }
             break;
@@ -1872,7 +1860,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
             }
             break;
@@ -1885,7 +1872,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
             }
             break;
@@ -1898,7 +1884,6 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
             }
             break;
@@ -1911,9 +1896,8 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
     }
 
     if ( !_objects.isEmpty() ) {
-        PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Apply Styles" ), _oldPen, _oldBrush,
+        penBrushCmd = new PenBrushCmd( i18n( "Apply Styles" ), _oldPen, _oldBrush,
                                                     _newPen, _newBrush, _objects, m_doc );
-        m_doc->addCommand( penBrushCmd );
         penBrushCmd->execute();
     } else {
         _oldPen.setAutoDelete( true );
@@ -1922,7 +1906,7 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
         _oldBrush.clear();
     }
     m_doc->setModified(true);
-    return ret;
+    return penBrushCmd;
 }
 
 int KPrPage::getPenBrushFlags() const
@@ -3230,6 +3214,32 @@ KCommand *KPrPage::rotateObj(float _newAngle)
     }
     return rotateCmd;
 }
+//necessary to use currentPage otherwise when we unsticke object
+//it not take from sticky page.
+KCommand *KPrPage::stickyObj(bool _sticky, KPrPage * currentPage)
+{
+    KPrStickyObjCommand *stickyCmd=0L;
+    QPtrList<KPObject> _objects;
+
+    _objects.setAutoDelete( false );
+    //store all object which isSticky!=_sticky
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() && it.current()->isSticky()!=_sticky) {
+	    _objects.append( it.current() );
+	}
+    }
+
+    if ( !_objects.isEmpty() )
+    {
+        stickyCmd = new KPrStickyObjCommand( i18n( "Sticky object" ),
+                                             _objects,_sticky, currentPage, m_doc );
+	stickyCmd->execute();
+    }
+    return stickyCmd;
+}
+
 
 KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
 {

@@ -2097,8 +2097,7 @@ void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
                       doc->getGColor1( gColor1 ),
                       doc->getGColor2( gColor2 ), doc->getGType( gType ),
                       doc->getGUnbalanced( gUnbalanced ),
-                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
-                      doc->getSticky( sticky ) );
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ) );
 }
 
 /*===============================================================*/
@@ -2173,8 +2172,7 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
                       page->getGColor1( gColor1 ),
                       page->getGColor2( gColor2 ), page->getGType( gType ),
                       page->getGUnbalanced( gUnbalanced ),
-                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ),
-                      page->getSticky( sticky ) );
+                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
 }
 
 /*===============================================================*/
@@ -3046,13 +3044,50 @@ void KPresenterView::slotAfchooseCanceled()
 /*=========== take changes for style dialog =====================*/
 void KPresenterView::styleOk()
 {
-    if ( !m_canvas->activePage()->setPenBrush( styleDia->getPen(), styleDia->getBrush(), styleDia->getLineBegin(),
-					 styleDia->getLineEnd(), styleDia->getFillType(),
-					 styleDia->getGColor1(),
-					 styleDia->getGColor2(), styleDia->getGType(),
-					 styleDia->getGUnbalanced(),
-					 styleDia->getGXFactor(), styleDia->getGYFactor(),
-					 styleDia->isSticky() ) ) {
+    bool createMacro=false;
+    KMacroCommand *macro=new KMacroCommand(i18n( "Apply Styles" ) );
+
+    KCommand *cmd=m_canvas->activePage()->setPenBrush(
+        styleDia->getPen(), styleDia->getBrush(), styleDia->getLineBegin(),
+        styleDia->getLineEnd(), styleDia->getFillType(),
+        styleDia->getGColor1(),
+        styleDia->getGColor2(), styleDia->getGType(),
+        styleDia->getGUnbalanced(),
+        styleDia->getGXFactor(), styleDia->getGYFactor() );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    bool bSticky=styleDia->isSticky();
+    //all sticky obj are sticky page => when sticky=false test sticky page
+    if(bSticky)
+        cmd=m_canvas->activePage()->stickyObj(bSticky,m_canvas->activePage() );
+    else
+        cmd=stickyPage()->stickyObj(bSticky,m_canvas->activePage());
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->setPenBrush(
+        styleDia->getPen(), styleDia->getBrush(), styleDia->getLineBegin(),
+        styleDia->getLineEnd(), styleDia->getFillType(),
+        styleDia->getGColor1(),
+        styleDia->getGColor2(), styleDia->getGType(),
+        styleDia->getGUnbalanced(),
+        styleDia->getGXFactor(), styleDia->getGYFactor() );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+        delete macro;
+
+    if ( !createMacro ) {
 	pen = styleDia->getPen();
 	brush = styleDia->getBrush();
 	lineBegin = styleDia->getLineBegin();
@@ -3064,7 +3099,7 @@ void KPresenterView::styleOk()
 	gUnbalanced = styleDia->getGUnbalanced();
 	gXFactor = styleDia->getGXFactor();
 	gYFactor = styleDia->getGYFactor();
-	sticky = styleDia->isSticky();
+	sticky = bSticky;
     }
     else {
         actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
