@@ -27,6 +27,7 @@
 
 // compound objects
 #include <ggroup.h>
+#include <gbackground.h>
 
 
 GObjectFactory *GObjectFactory::m_self=0L;
@@ -91,4 +92,6 @@ GObjectFactory::GObjectFactory() : m_registry(17, false) {
     // compound objects
     registerPrototype(QString::fromLatin1("ggroup"),
                       new GGroup(QString::fromLatin1("group")));
+    registerPrototype(QString::fromLatin1("gbackground"),
+                      new GBackground(QString::fromLatin1("gbackground")));
 }

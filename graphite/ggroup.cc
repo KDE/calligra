@@ -25,13 +25,11 @@
 #include <ggroup.h>
 #include <gobjectfactory.h>
 
-// test
-#include <graphiteview.h>
-#include <kdialogbase.h>
-#include <kdebug.h>
-
 
 GAbstractGroup::~GAbstractGroup() {
+
+    // delete the children we own
+    m_members.setAutoDelete(true);
     delete m_iterator;
     m_iterator=0L;
 }
@@ -427,39 +425,6 @@ bool GGroupM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
 bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
 
     // ###
-    // test
-    kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
-    kdDebug(37001) << "Name: " << gobject()->name() << endl;
-    kdDebug(37001) << "Pen: color: " << gobject()->pen().color().name() << " width: "
-                   << gobject()->pen().width() << " style: "
-                   << (int)gobject()->pen().style() << endl;
-    kdDebug(37001) << "Fill Style: " << gobject()->fillStyle() << endl;
-    kdDebug(37001) << "Brush: color: " << gobject()->brush().color().name()
-                   << " style: " << (int)gobject()->brush().style() << endl;
-    kdDebug(37001) << "Gradient: color a: " << gobject()->gradient().ca.name()
-                   << " color b: " << gobject()->gradient().cb.name()
-                   << " type: " << (int)gobject()->gradient().type
-                   << " xfactor: " << gobject()->gradient().xfactor
-                   << " yfactor: " << gobject()->gradient().yfactor
-                   << endl;
-    kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
-    createPropertyDialog();
-    exec();
-    kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
-    kdDebug(37001) << "Name: " << gobject()->name() << endl;
-    kdDebug(37001) << "Pen: color: " << gobject()->pen().color().name() << " width: "
-                   << gobject()->pen().width() << " style: "
-                   << (int)gobject()->pen().style() << endl;
-    kdDebug(37001) << "Fill Style: " << gobject()->fillStyle() << endl;
-    kdDebug(37001) << "Brush: color: " << gobject()->brush().color().name()
-                   << " style: " << (int)gobject()->brush().style() << endl;
-    kdDebug(37001) << "Gradient: color a: " << gobject()->gradient().ca.name()
-                   << " color b: " << gobject()->gradient().cb.name()
-                   << " type: " << (int)gobject()->gradient().type
-                   << " xfactor: " << gobject()->gradient().xfactor
-                   << " yfactor: " << gobject()->gradient().yfactor
-                   << endl;
-    kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     return false;
 }
 

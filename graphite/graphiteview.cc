@@ -57,20 +57,26 @@ void GraphiteView::layoutChanged(const QValueList<FxRect> &diff) {
     m_vert->setPageLayout(m_doc->pageLayout());
     m_horiz->setPageLayout(m_doc->pageLayout());
     m_canvas->resizeContentsMM(m_doc->pageLayout().width(),m_doc->pageLayout().height());
+
     // seems we changed a lot of stuff... let's update completely
     if(diff.isEmpty()) {
         m_canvas->viewport()->erase();
         m_canvas->viewport()->update(0, 0, m_canvas->visibleWidth(),
                                      m_canvas->visibleHeight());
     }
+    // only minor stuff, avoid flicker
     else {
         double oldZoom=GraphiteGlobal::self()->zoom();
+        int dx=-m_canvas->contentsX();
+        int dy=-m_canvas->contentsY();
         GraphiteGlobal::self()->setZoom(zoom());
         QValueList<FxRect>::ConstIterator it=diff.begin();
         for( ; it!=diff.end(); ++it) {
-            (*it).recalculate();
-            m_canvas->viewport()->erase((*it).pxRect());
-            m_canvas->viewport()->update((*it).pxRect());
+            (*it).recalculate();  // The zoom factor might have changed
+            QRect r=(*it).pxRect();
+            r.moveBy(dx, dy);
+            m_canvas->viewport()->erase(r);
+            m_canvas->viewport()->update(r);
         }
         GraphiteGlobal::self()->setZoom(oldZoom);
     }

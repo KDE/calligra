@@ -243,6 +243,7 @@ public:
     enum FillStyle { Brush, GradientFilled };  // all possible fill styles
     enum Position { First, Last, Current }; // where to insert the new child object
 
+    // deletes all the objects it has the ownership of
     virtual ~GObject() {}
 
     virtual bool isOk() const { return m_ok; }
@@ -256,11 +257,14 @@ public:
     virtual void setDirty() = 0;  // don't forget to call this default impl.!
     bool dirty() const { return m_dirty; }
 
+    // Note: The parent "owns" us. We're going to be deleted as soon as the parent is
     const GObject *parent() const { return m_parent; }
+    // Don't call this one directly, use plug/unplug
     void setParent(GObject *parent) const;   // parent==0L - no parent, parent==this - illegal
 
     // These two methods are only implemented for "complex" objetcs!
     // The child is inserted at GObject::Position
+    // Note: This transfers ownership! We delete all out children
     virtual bool plugChild(GObject */*child*/, const Position &/*pos*/=Current) { return false; }
     virtual bool unplugChild(GObject */*child*/) { return false; }
 

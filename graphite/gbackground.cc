@@ -74,17 +74,17 @@ void GBackground::draw(QPainter &p, const QRect &rect, bool toPrinter) const {
         return;
 
     // okay, let's draw a nice background
-    // ### optimize, setPen
     if(!m_transparent) {
         p.save();
         if(fillStyle()==GObject::Brush) {
             p.setBrush(brush());
+            p.setPen(pen());
             p.drawRect(m_rect.pxRect());
         }
         //else {
-            // okay, we have a bg gradient...
+            // we have a bg gradient...
             // let's wait for Dirk's answer
-            // Update: Seems that gradients won't be supported (too slow and mem-hungry)
+            // Update: Seems that gradients won't be supported as bg (too slow and mem-hungry)
         //}
         p.restore();
     }

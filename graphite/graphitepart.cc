@@ -44,8 +44,6 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
 
     m_nodeZero=new GBackground(QString::fromLatin1("Background"));
     m_nodeZero->resize(m_pageLayout.fxRect());
-    // test
-    m_nodeZero->setBrush(Qt::red);
 }
 
 GraphitePart::~GraphitePart() {
@@ -195,19 +193,8 @@ void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
     // ### setGlobalZoom()
 }
 
-void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
+void GraphitePart::mousePressEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
     //kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
-    // test
-    // ### Check the view - if it's the same as "before" -> ok :)
-    // TEST -------------
-    GObject *o=new GGroup(QString::fromLatin1("foo"));
-    o->rotate(FxPoint(0, 0), 45.0*180.0*M_1_PI);
-    GObjectM9r *m=o->createM9r(this, view);
-    QRect r;
-    m->mousePressEvent(e, r);
-    delete m;
-    delete o;
-    // TEST -------------
     // ### setGlobalZoom()
 }
 
