@@ -36,6 +36,7 @@ OoImpressExport::OoImpressExport( KoFilter *, const char *, const QStringList & 
     : KoFilter()
     , m_currentPage( 0 )
     , m_pageHeight( 0 )
+    , m_pictureIndex( 0 )
 {
 }
 
@@ -330,10 +331,14 @@ void OoImpressExport::createDocumentManifest( QDomDocument & docmanifest )
     entry.setAttribute( "manifest:full-path", "/" );
     manifest.appendChild( entry );
 
-    entry = docmanifest.createElement( "manifest:file-entry" );
-    entry.setAttribute( "manifest:media-type", "" );
-    entry.setAttribute( "manifest:full-path", "Pictures/" );
-    manifest.appendChild( entry );
+    QMap<QString, QString>::Iterator it;
+    for ( it = m_pictureLst.begin(); it != m_pictureLst.end(); ++it )
+    {
+        entry = docmanifest.createElement( "manifest:file-entry" );
+        entry.setAttribute( "manifest:media-type", it.data() );
+        entry.setAttribute( "manifest:full-path", it.key() );
+        manifest.appendChild( entry );
+    }
 
     entry = docmanifest.createElement( "manifest:file-entry" );
     entry.setAttribute( "manifest:media-type", "text/xml" );
@@ -408,6 +413,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
             switch( o.attribute( "type" ).toInt() )
             {
             case 0: // image
+                appendPicture( doccontent, o, drawPage, pictures );
                 break;
             case 1: // line
                 appendLine( doccontent, o, drawPage );
@@ -554,6 +560,32 @@ void OoImpressExport::appendText( QDomDocument & doc, QDomElement & source, QDom
     textspan.appendChild( doc.createTextNode( source.text() ) );
     target.appendChild( textspan );
 }
+
+void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target, QDomNode & picture )
+{
+    QDomElement image = doc.createElement( "draw:image" );
+
+    // create the graphic style
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    image.setAttribute( "draw:style-name", gs );
+
+    QString pictureName = QString( "Picture/Picture%1" ).arg( m_pictureIndex );
+
+    image.setAttribute( "xlink:type", "simple" );
+    image.setAttribute( "xlink:show", "embed" );
+    image.setAttribute( "xlink:actuate", "onLoad");
+    image.setAttribute( "xlink:href", "#" + pictureName );
+
+    // set the geometry
+    set2DGeometry( source, image );
+
+    target.appendChild( image );
+
+    m_pictureLst.insert( pictureName , "image/png" );
+
+    ++m_pictureIndex;
+}
+
 
 void OoImpressExport::appendLine( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {

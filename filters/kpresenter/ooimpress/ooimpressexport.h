@@ -55,6 +55,7 @@ private:
     void set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject = false, bool multiPoint = false );
     void setLineGeometry( QDomElement & source, QDomElement & target );
     void appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target,  bool polygone = false);
+    void appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target, QDomNode & picture );
 
     QString rotateValue( double val );
 
@@ -65,6 +66,8 @@ private:
     QDomElement m_styles;
     QDomDocument m_maindoc;
     QDomDocument m_documentinfo;
+    QMap<QString, QString> m_pictureLst;
+    int m_pictureIndex;
 };
 
 #endif
