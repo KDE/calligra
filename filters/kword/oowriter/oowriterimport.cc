@@ -47,20 +47,8 @@
 # include <kdebugclasses.h>
 #endif
 
-class OoWriterImportFactory : KGenericFactory<OoWriterImport, KoFilter>
-{
-public:
-    OoWriterImportFactory(void) : KGenericFactory<OoWriterImport, KoFilter> ( "oowriterimport" )
-    {}
-
-protected:
-    virtual void setupTranslations(void)
-    {
-        KGlobal::locale()->insertCatalogue( "kofficefilters" );
-    }
-};
-
-K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory() )
+typedef KGenericFactory<OoWriterImport, KoFilter> OoWriterImportFactory;
+K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory(  "kofficefilters" ) )
 
 
 OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )
