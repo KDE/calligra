@@ -40,6 +40,10 @@ public:
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
+public slots:
+    void commSlotDelayStream( const char* delay );
+    void commSlotShapeID( unsigned int& shapeID );
+
 protected slots:
     // This slot saves the document informations to the KOffice tar storage.
     void slotSaveDocumentInformation(
@@ -92,6 +96,11 @@ protected slots:
     // (Therefore it's searching only in the current dir)
     // Attention: You'll have to delete [] the stream.data ptr!
     void slotGetStream(const QString &name, myFile &stream);
+
+signals:
+    // Forwarding signals for inter-filter communication
+    void internalCommShapeID( unsigned int& shapeID );
+    void internalCommDelayStream( const char* delay );
 
 private:
     // Don't copy or assign me >:)

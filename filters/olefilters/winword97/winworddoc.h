@@ -51,6 +51,10 @@ public:
 
     bool convert();
 
+public slots:
+    void internalCommDelayStream( const char* delay );
+    void internalCommShapeID( unsigned int& shapeID );
+
 signals:
     // See olefilter.h for information
     void signalSaveDocumentInformation(
@@ -191,6 +195,10 @@ private:
     QString m_embedded;
     unsigned m_embeddedCount;
     QString m_extraFrameSets;
+
+    // hacky: These variables hold the delay and the shapeID
+    const char* m_delay;
+    unsigned int m_shapeID;
 
     // Page sizes, margins etc. all in points.
 

@@ -50,10 +50,15 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
         return KoFilter::NotImplemented;
 
     // Get configuration data: the shape id, and any delay stream that we were given.
-    // ###### FIXME: This has to be done using comm* magic, I think
-
-    unsigned shapeId = (unsigned)-1;
+    unsigned shapeId;
+    emit commSignalShapeID( shapeId );
     const char *delayStream = 0L;
+    emit commSignalDelayStream( delayStream );
+    kdDebug( s_area ) << "##################################################################" << endl;
+    kdDebug( s_area ) << "shape id: " << shapeId << endl;
+    kdDebug( s_area ) << "delay stream: " << delayStream << endl;
+    kdDebug( s_area ) << "##################################################################" << endl;
+/*
     QString config = ""; // ###### FIXME: We aren't able to pass config data right now
     QStringList args = QStringList::split(";", config);
     unsigned i;
@@ -76,7 +81,7 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
             return KoFilter::StupidError;
         }
     }
-
+*/
     m_text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     m_text += "<!DOCTYPE kontour>\n";
     m_text += "<kontour mime=\"application/x-kontour\" version=\"3\" editor=\"MSOD import filter\">\n";

@@ -54,6 +54,8 @@ WinWordDoc::WinWordDoc(
     m_extraFrameSets = "";
     m_cellEdges.setAutoDelete(true);
     m_table.setAutoDelete(true);
+    m_delay = 0;
+    m_shapeID = 0;
 }
 
 WinWordDoc::~WinWordDoc()
@@ -248,6 +250,16 @@ bool WinWordDoc::convert()
     return m_success;
 }
 
+void WinWordDoc::internalCommDelayStream( const char* delay )
+{
+    delay = m_delay;
+}
+
+void WinWordDoc::internalCommShapeID( unsigned int& shapeID )
+{
+    shapeID = m_shapeID;
+}
+
 void WinWordDoc::encode(QString &text)
 {
     // When encoding the stored form of text to its run-time form,
@@ -437,10 +449,12 @@ QString WinWordDoc::generateFormats(
             ourKey = "vectorGraphic" + QString::number(vectorGraphic->id) + "." + vectorGraphic->type;
             if (vectorGraphic->type == "msod")
             {
-                filterArgs = "shape-id=";
-                filterArgs += QString::number(vectorGraphic->id);
-                filterArgs += ";delay-stream=";
-                filterArgs += QString::number((unsigned long)vectorGraphic->delay);
+                m_shapeID = vectorGraphic->id;
+                m_delay = vectorGraphic->delay;
+                //filterArgs = "shape-id=";
+                //filterArgs += QString::number(vectorGraphic->id);
+                //filterArgs += ";delay-stream=";
+                //filterArgs += QString::number((unsigned long)vectorGraphic->delay);
             }
             emit signalSavePart(
                     ourKey,
@@ -449,6 +463,9 @@ QString WinWordDoc::generateFormats(
                     vectorGraphic->type,
                     vectorGraphic->length,
                     vectorGraphic->data);
+
+            m_shapeID = 0;
+            m_delay = 0;
 
             // Add an anchor for this frameset.
 

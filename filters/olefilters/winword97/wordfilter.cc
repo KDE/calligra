@@ -57,6 +57,10 @@ WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
         SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, unsigned int, const char *)),
         this,
         SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, unsigned int, const char *)));
+
+    // forward the internal communication calls
+    connect( this, SIGNAL( internalCommShapeID( unsigned int& ) ), myDoc, SLOT( internalCommShapeID( unsigned int& ) ) );
+    connect( this, SIGNAL( internalCommDelayStream( const char* ) ), myDoc, SLOT( internalCommDelayStream( const char* ) ) );
 }
 
 WordFilter::~WordFilter()

@@ -64,6 +64,11 @@ protected:
         const DrawContext &dc,
         const QPointArray &points);
 
+signals:
+    // Communication signals to the parent filters
+    void commSignalDelayStream( const char* delay );
+    void commSignalShapeID( unsigned int& shapeID );
+
 private:
     virtual void savePartContents( QIODevice* file );
 

@@ -39,6 +39,10 @@ public:
     virtual bool plainString() const { return true; }
     virtual QCString CString() const;
 
+signals:
+    void internalCommDelayStream( const char* delay );
+    void internalCommShapeID( unsigned int& shapeID );
+
 private:
     WordFilter(const WordFilter &);
     const WordFilter &operator=(const WordFilter &);

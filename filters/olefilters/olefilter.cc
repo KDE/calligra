@@ -112,6 +112,16 @@ KoFilter::ConversionStatus OLEFilter::convert( const QCString& from, const QCStr
         return KoFilter::StupidError;
 }
 
+void OLEFilter::commSlotDelayStream( const char* delay )
+{
+    emit internalCommDelayStream( delay );
+}
+
+void OLEFilter::commSlotShapeID( unsigned int& shapeID )
+{
+    emit internalCommShapeID( shapeID );
+}
+
 void OLEFilter::slotSavePart(
     const QString &nameIN,
     QString &storageId,
@@ -353,6 +363,10 @@ void OLEFilter::convert()
 
                 mimeType = "application/x-kword";
                 myFilter=new WordFilter(main, table0, table1, data);
+
+                // forward the internal communication calls
+                connect( this, SIGNAL( internalCommShapeID( unsigned int& ) ), myFilter, SIGNAL( internalCommShapeID( unsigned int& ) ) );
+                connect( this, SIGNAL( internalCommDelayStream( const char* ) ), myFilter, SIGNAL( internalCommDelayStream( const char* ) ) );
             }
             else if(node->name()=="Workbook" || node->name()=="Book") {
 
