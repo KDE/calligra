@@ -715,6 +715,8 @@ protected:
     void textStyleSelected( KoStyle *_sty );
 
 private:
+    void clearSpellChecker();
+
 // ********** variables **********
 
     // document
@@ -1077,6 +1079,8 @@ private:
 	QPtrList<KPTextObject> textObject;
 	KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
+        bool bSpellSelection;
+        int selectionStartPos;
      } m_spell;
 
     KActionMenu *actionInsertVariable;

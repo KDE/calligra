@@ -116,3 +116,4 @@ Bugfixes:
 Changes after KPresenter 1.2
 ============================
 - Use ForbiddenCursor when object is "protect size"
+- Spell checker can spellcheck only selection

@@ -5119,25 +5119,47 @@ void KPresenterView::extraSpelling()
 #if KDE_VERSION >= 305
     m_spell.replaceAll.clear();
 #endif
+    m_spell.bSpellSelection = false;
+    m_spell.selectionStartPos=0;
 
     m_pKPresenterDoc->setReadWrite(false); // prevent editing text
     m_initSwitchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_switchPage = m_initSwitchPage;
 
-    spellAddTextObject();
-
-    //for first page add text object in sticky page
-    //move it in kprpage
-    QPtrList<KPObject> lstObj;
-    stickyPage()->getAllObjectSelectedList(lstObj, true);
-    QPtrListIterator<KPObject> it( lstObj );
-    for ( ; it.current() ; ++it )
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit && edit->kpTextObject()->textDocument()->hasSelection(KoTextDocument::Standard))
     {
-        if(it.current()->getType()==OT_TEXT)
+        m_spell.spellCurrTextObjNum = -1;
+        m_spell.textObject.clear();
+        m_spell.textObject.append(edit->kpTextObject());
+        m_spell.bSpellSelection = true;
+        m_spell.selectionStartPos = 0;
+        KoTextCursor start = edit->textDocument()->selectionStartCursor( KoTextDocument::Standard );
+        m_spell.selectionStartPos =start.index();
+        for ( int i = 0 ; i < start.parag()->paragId(); i++)
         {
-            KPTextObject* tmp = dynamic_cast<KPTextObject*>(it.current() );
-            if ( tmp && !tmp->isProtectContent())
-                m_spell.textObject.append(tmp);
+            m_spell.selectionStartPos += start.parag()->document()->paragAt( i )->string()->length();
+        }
+        kdDebug()<<" m_spell.selectionStartPos after :"<<m_spell.selectionStartPos<<endl;
+
+    }
+    else
+    {
+        spellAddTextObject();
+
+        //for first page add text object in sticky page
+        //move it in kprpage
+        QPtrList<KPObject> lstObj;
+        stickyPage()->getAllObjectSelectedList(lstObj, true);
+        QPtrListIterator<KPObject> it( lstObj );
+        for ( ; it.current() ; ++it )
+        {
+            if(it.current()->getType()==OT_TEXT)
+            {
+                KPTextObject* tmp = dynamic_cast<KPTextObject*>(it.current() );
+                if ( tmp && !tmp->isProtectContent())
+                    m_spell.textObject.append(tmp);
+            }
         }
     }
     startKSpell();
@@ -5208,12 +5230,11 @@ void KPresenterView::spellCheckerIgnoreAll( const QString & word)
 
 void KPresenterView::spellCheckerReady()
 {
-
     for ( unsigned int i = m_spell.spellCurrTextObjNum + 1; i < m_spell.textObject.count(); i++ ) {
         KPTextObject *textobj = m_spell.textObject.at( i );
         m_spell.spellCurrTextObjNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
         //kdDebug(33001) << "KPresenterView::spellCheckerReady spell-checking frameset " << spellCurrTextObjNum << endl;
-
+#if 0 //synchronize code with kword.
         KoTextParag * p = textobj->textDocument()->firstParag();
         QString text;
         bool textIsEmpty=true;
@@ -5229,6 +5250,27 @@ void KPresenterView::spellCheckerReady()
             continue;
         text += '\n';
         m_spell.kspell->check( text );
+#endif
+        QString text = textobj->textDocument()->plainText();
+        if ( m_spell.bSpellSelection)
+        {
+            text = textobj->textDocument()->selectedText(KoTextDocument::Standard);
+        }
+        bool textIsEmpty=true;
+        // Determine if text has any non-space character, otherwise there's nothing to spellcheck
+        for ( uint i = 0 ; i < text.length() ; ++ i )
+            if ( !text[i].isSpace() ) {
+                textIsEmpty = false;
+                break;
+            }
+        if(textIsEmpty)
+            continue;
+        text += '\n'; // end of last paragraph
+        text += '\n'; // empty line required by kspell
+        m_spell.kspell->check( text );
+        textobj->textObject()->setNeedSpellCheck(true);
+
+
         return;
     }
     //kdDebug(33001) << "KPresenterView::spellCheckerReady done" << endl;
@@ -5239,12 +5281,7 @@ void KPresenterView::spellCheckerReady()
         m_pKPresenterDoc->setReadWrite(true);
         delete m_spell.kspell;
         m_spell.kspell = 0;
-        m_initSwitchPage = -1;
-        m_switchPage = -1;
-        m_spell.textObject.clear();
-        if(m_spell.macroCmdSpellCheck)
-            m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
-        m_spell.macroCmdSpellCheck=0L;
+        clearSpellChecker();
     }
     else
     {
@@ -5253,6 +5290,19 @@ void KPresenterView::spellCheckerReady()
     }
 }
 
+void KPresenterView::clearSpellChecker()
+{
+    m_initSwitchPage = -1;
+    m_switchPage = -1;
+    m_spell.textObject.clear();
+    if(m_spell.macroCmdSpellCheck)
+        m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+    m_spell.macroCmdSpellCheck=0L;
+    m_spell.bSpellSelection= false;
+    m_spell.selectionStartPos = 0;
+}
+
+
 void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {
     //kdDebug(33001) << "KPresenterView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
@@ -5260,6 +5310,7 @@ void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringL
     Q_ASSERT( textobj );
     if ( !textobj ) return;
     KoTextParag * p = textobj->textDocument()->firstParag();
+    pos += m_spell.selectionStartPos;
     while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
@@ -5278,6 +5329,7 @@ void KPresenterView::spellCheckerCorrected( const QString &old, const QString &c
     KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
     Q_ASSERT( textobj );
     if ( !textobj ) return;
+    pos += m_spell.selectionStartPos;
     KoTextParag * p = textobj->textDocument()->firstParag();
     while ( p && (int)pos >= p->length() )
     {
@@ -5314,6 +5366,13 @@ void KPresenterView::spellCheckerDone( const QString & )
     delete m_spell.kspell;
     m_spell.kspell = 0;
 
+    if ( m_spell.bSpellSelection )
+    {
+        KMessageBox::information(this,
+                                 i18n("SpellCheck selection finished."),
+                                 i18n("Spell checking"));
+
+    }
     if ( result != KS_CANCEL && result != KS_STOP )
     {
         // Try to check another frameset
