@@ -83,7 +83,7 @@ KSpreadCellIface.kidl: KSpreadCellIface.h
 	( dcopidl KSpreadCellIface.h >KSpreadCellIface.kidl; dcopidl2cpp --no-stub KSpreadCellIface.kidl )
 KSpreadCellIface_skel.cpp: KSpreadCellIface.kidl
 KSpreadAppIface.kidl: KSpreadAppIface.h
-	( kidl KSpreadAppIface.h >KSpreadAppIface.kidl; kidl2cpp --no-stub KSpreadAppIface.kidl )
+	( dcopidl KSpreadAppIface.h >KSpreadAppIface.kidl; dcopidl2cpp --no-stub KSpreadAppIface.kidl )
 KSpreadAppIface_skel.cpp: KSpreadAppIface.kidl
 
 parser:
