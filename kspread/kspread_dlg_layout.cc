@@ -207,9 +207,9 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 	    if ( bottomBorderColor != obj->bottomBorderColor( x, y ) )
 		bBottomBorderColor = FALSE;
 	    if ( prefix != obj->prefix() )
-		prefix = 0L;
+		prefix = QString::null;
 	    if ( postfix != obj->postfix() )
-		postfix = 0L;
+		postfix = QString::null;
 	    if ( precision != obj->precision() )
 		precision = -2;
 	    if ( floatFormat != obj->floatFormat() )
@@ -1363,7 +1363,7 @@ void CellLayoutPageFont::display_example(const QFont& font)
   QFontInfo info = example_label->fontInfo();
   actual_family_label_data->setText(info.family());
 
-  printf("FAMILY 3 '%s' %i\n",info.family(), info.pointSize());
+  printf("FAMILY 3 '%s' %i\n",info.family().latin1(), info.pointSize());
 
   string.setNum(info.pointSize());
   actual_size_label_data->setText(string);
