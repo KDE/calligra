@@ -1137,29 +1137,27 @@ QString KSpreadCell::createFormat(double value)
 // the zeros later. Is 8 ok ?
 int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
 QString localizedNumber= KGlobal::locale()->formatNumber(value, p);
-/*QString res = QString::number(value, 'G', p);
-cout <<"text :"<<res.ascii()<<endl;*/
 int pos=0;
 switch( m_eFormatNumber)
         {
         case Number :
                 localizedNumber = KGlobal::locale()->formatNumber(value, p);
-                /*if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
+                if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
                         {
-                        if(KGlobal::locale()->positiveSign().isNull())
+                        if(KGlobal::locale()->positiveSign().isEmpty())
                                 localizedNumber='+'+localizedNumber;
-                        }*/
+                        }
                 break;
         case Percentage :
                 localizedNumber = KGlobal::locale()->formatNumber(value, p)+ " %";
                 break;
         case Money :
                 localizedNumber = KGlobal::locale()->formatMoney(value,KGlobal::locale()->currencySymbol(),p );
-                /*if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
+                if(floatFormat() == KSpreadCell::AlwaysSigned && value>=0)
                         {
                         if(KGlobal::locale()->positiveSign().isNull())
                                 localizedNumber='+'+localizedNumber;
-                        }*/
+                        }
                 break;
         case Scientific:
                 localizedNumber= QString::number(value, 'E', p);
@@ -2001,7 +1999,16 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     else
     {
         _painter.setFont( m_textFont );
-        m_textPen.setColor( textColor() );
+        if(m_bValue &&!m_pTable->getShowFormular())
+                {
+                double v = m_dValue * m_dFaktor;
+                if ( floatColor() == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormular())
+                        m_textPen.setColor(Qt::red);
+                else
+                        m_textPen.setColor( textColor() );
+                }
+        else
+                m_textPen.setColor( textColor() );
     }
     //_painter.setFont( m_textFont );
     conditionAlign(_painter,_col,_row);
@@ -2573,7 +2580,7 @@ const QColor& KSpreadCell::topBorderColor( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->topBorderColor();
 	else
@@ -2993,7 +3000,7 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
       if ( _table == dep->m_pTable )
 	if ( left <= _column && _column <= right )
 	  if ( top <= _row && _row <= bottom )
-	    isdep = TRUE;	
+	    isdep = TRUE;
     }
     else if ( dep->m_iColumn == _column && dep->m_iRow == _row && dep->m_pTable == _table )
       isdep = TRUE;
