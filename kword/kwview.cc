@@ -344,7 +344,7 @@ void KWView::setupActions()
     actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
     actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
 
-    actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
+    actionFileStatistics = new KAction( i18n( "Statistics..." ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
     actionFileStatistics->setToolTip( i18n( "Sentence, word and letter counts for this document" ) );
     actionFileStatistics->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions

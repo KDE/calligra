@@ -51,7 +51,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     connect(m_listOfExpression,SIGNAL(selectionChanged()),
             this,SLOT(slotSelectionChanged()));
 
-    m_addGroup=new QPushButton(i18n("Add Group"),page);
+    m_addGroup=new QPushButton(i18n("Add Group..."),page);
     grid->addWidget(m_addGroup,1,2);
     connect(m_addGroup,SIGNAL(clicked ()),this,SLOT(slotAddGroup()));
 
@@ -60,11 +60,11 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     connect(m_delGroup,SIGNAL(clicked ()),this,SLOT(slotDelGroup()));
 
 
-    m_renameGroup=new QPushButton(i18n("Rename Group"),page);
+    m_renameGroup=new QPushButton(i18n("Rename Group..."),page);
     grid->addWidget(m_renameGroup,3,2);
     connect(m_renameGroup,SIGNAL(clicked ()),this,SLOT(slotRenameGroup()));
 
-    m_addExpression=new QPushButton(i18n("Add New Expression"),page);
+    m_addExpression=new QPushButton(i18n("Add New Expression..."),page);
     grid->addWidget(m_addExpression,4,2);
     connect(m_addExpression,SIGNAL(clicked ()),this,SLOT(slotAddExpression()));
 
@@ -72,7 +72,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     grid->addWidget(m_delExpression,5,2);
     connect(m_delExpression,SIGNAL(clicked ()),this,SLOT(slotDelExpression()));
 
-    m_renameExpression=new QPushButton(i18n("Rename Expression"),page);
+    m_renameExpression=new QPushButton(i18n("Rename Expression..."),page);
     grid->addWidget(m_renameExpression,6,2);
     connect(m_renameExpression,SIGNAL(clicked ()),this,SLOT(slotRenameExpression()));
 
