@@ -530,7 +530,7 @@ void KoTextFormat::save( KoGenStyle& gs ) const
     gs.addProperty( "style:font-name", fn.family(), tt ); // hack
     gs.addPropertyPt( "fo:font-size", fn.pointSize(), tt );
     int w = fn.weight();
-    gs.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( w * 10 ), tt );
+    gs.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound( w / 10 ) * 100 ), tt );
     gs.addProperty( "fo:font-style", fn.italic() ? "italic" : "normal", tt );
     gs.addProperty( "style:text-underline-mode", d->m_bWordByWord ? "skip-white-space" : "continuous", tt );
     gs.addProperty( "style:text-underline-type", m_underlineType == U_NONE ? "none" :
