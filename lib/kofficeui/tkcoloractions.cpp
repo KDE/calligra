@@ -109,6 +109,7 @@ void TKSelectColorAction::init()
 TKSelectColorAction::~TKSelectColorAction()
 {
   delete m_pMenu;
+  delete d;
 }
 
 void TKSelectColorAction::initToolBarButton(TKToolBarButton* b)
