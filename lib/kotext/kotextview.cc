@@ -1040,9 +1040,14 @@ void KoTextView::insertNonbreakingSpace()
 
 void KoTextView::insertSpecialChar(QChar _c, const QString& font)
 {
-    KCommand* cmd = textObject()->setFamilyCommand( font );
-    if(textObject()->hasSelection() )
+    KoTextFormat * newFormat = new KoTextFormat(*currentFormat());
+    newFormat->setFamily( font );
+    if ( textObject()->hasSelection() )
     {
+        KoTextFormat * lastFormat = currentFormat();
+
+        KCommand *cmd = textObject()->setFormatCommand( cursor(), &lastFormat, newFormat, KoTextFormat::Family );
+
         KMacroCommand* macroCmd = new KMacroCommand( i18n("Insert Special Char") );
         macroCmd->addCommand( cmd );
         macroCmd->addCommand( textObject()->replaceSelectionCommand(
@@ -1051,8 +1056,10 @@ void KoTextView::insertSpecialChar(QChar _c, const QString& font)
     }
     else
     {
-        Q_ASSERT( cmd == 0L ); // no selection -> setting font doesn't change doc
-        textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
+        KoTextFormat * newFormat = new KoTextFormat(*currentFormat());
+        newFormat->setFamily( font );
+
+        textObject()->insert( cursor(), newFormat, _c, false, true, i18n("Insert Special Char"));
     }
 }
 
