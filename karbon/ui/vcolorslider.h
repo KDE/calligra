@@ -11,12 +11,30 @@
 
 #include <qwidget.h>
 
+class QLabel;
+class QSpinBox;
+class KGradientSelector;
+
 class VColorSlider : public QWidget
 {
     Q_OBJECT
 public:
     VColorSlider(QWidget *parent=0, const char *name=0);
     ~VColorSlider();
+
+public slots:
+    virtual void setLabel(const QString &);
+    virtual void setColors(const QColor &, const QColor &);
+    virtual void setValue( int & );
+    virtual void setMinValue ( int & );
+    virtual void setMaxValue ( int & );
+
+private:
+	void init();
+	QLabel *mLabel;
+	QSpinBox *mSpinBox;
+	KGradientSelector *mSelector;
+
 };
 
 #endif
