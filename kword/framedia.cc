@@ -1016,6 +1016,23 @@ bool KWFrameDia::applyChanges()
 
         frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
     }
+    KMacroCommand * macroCmd=0L;
+
+    if(!createFrameset && (frameCopy->runAroundGap()!=frame->runAroundGap()
+                           || frameCopy->runAround()!=frame->runAround()
+                           || frameCopy->runAround()!=frame->runAround()
+                           || frameCopy->getFrameBehaviour()!=frame->getFrameBehaviour()
+                           || frameCopy->getNewFrameBehaviour()!=frame->getNewFrameBehaviour()))
+    {
+        if(!macroCmd)
+            macroCmd = new KMacroCommand( i18n("Frame Properties") );
+        KWFramePropertiesCommand*cmd = new KWFramePropertiesCommand( i18n("Frame Properties"), frameCopy, frame );
+        macroCmd->addCommand(cmd);
+    }
+    else
+    {
+        delete frameCopy;
+    }
 
     if ( tab4 )
     {
@@ -1026,7 +1043,8 @@ bool KWFrameDia::applyChanges()
         // Floating
         if ( floating->isChecked() && !parentFs->isFloating() )
         {
-            KMacroCommand * macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
 
             QList<FrameIndex> frameindexList;
             QList<FrameResizeStruct> frameindexMove;
@@ -1049,14 +1067,14 @@ bool KWFrameDia::applyChanges()
 
             macroCmd->addCommand(cmdMoveFrame);
             macroCmd->addCommand(cmd);
-            doc->addCommand(macroCmd);
-
         }
         else if ( !floating->isChecked() && parentFs->isFloating() )
         {
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Make FrameSet Non-Inline") );
             // turn floating-frame into non-floating frame
             KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Non-Inline"), parentFs, false );
-            doc->addCommand(cmd);
+            macroCmd->addCommand(cmd);
             cmd->execute();
         }
 
@@ -1083,8 +1101,11 @@ bool KWFrameDia::applyChanges()
 
                 // TODO apply page limits?
                 tmpResize.sizeOfEnd = frame->normalize();
+                if(!macroCmd)
+                    macroCmd = new KMacroCommand( i18n("Resize Frame") );
+
                 KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize ) ;
-                doc->addCommand(cmd);
+                macroCmd->addCommand(cmd);
                 doc->frameChanged( frame );
             }
         }
@@ -1096,15 +1117,10 @@ bool KWFrameDia::applyChanges()
         u4=KWUnit::fromUserValue( QMAX(smb->text().toDouble(),0), doc->getUnit() );
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
-    if(!createFrameset)
-    {
-        KWFramePropertiesCommand*cmd = new KWFramePropertiesCommand( i18n("Frame Properties"), frameCopy, frame );
-        doc->addCommand(cmd);
-    }
-    else
-    {
-        delete frameCopy;
-    }
+
+    if(macroCmd)
+        doc->addCommand(macroCmd);
+
     updateFrames();
     return true;
 }
