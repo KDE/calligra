@@ -1180,16 +1180,24 @@ void KPTextObject::recalcPageNum( KPrPage *page )
         KPrPgNumVariable * var = dynamic_cast<KPrPgNumVariable *>( cit.current() );
         if ( var && !var->isDeleted()  )
         {
-            if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_CURRENT )
+            switch ( var->subType() ) {
+            case KPrPgNumVariable::VST_PGNUM_CURRENT:
                 var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage()-1);
-            else if ( var->subtype() == KPrPgNumVariable::VST_CURRENT_SECTION )
+                break;
+            case KPrPgNumVariable::VST_CURRENT_SECTION:
                 var->setSectionTitle( page->pageTitle("") );
-            else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_PREVIOUS )
+                break;
+            case KPrPgNumVariable::VST_PGNUM_PREVIOUS:
                 var->setPgNum( QMAX( pgnum -1 , 0) +
                                kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
-            else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_NEXT )
+                break;
+            case KPrPgNumVariable::VST_PGNUM_NEXT:
                 var->setPgNum( QMIN( m_doc->getPageNums(), pgnum +1) +
                                kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
+                break;
+            default:
+                break;
+            }
 
             var->resize();
             var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
@@ -1986,8 +1994,9 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
     view->kPresenterDoc()->getVariableCollection()->setVariableSelected(variable());
     if ( variable() )
     {
-        variableList = variable()->actionList();
+        variableList = view->kPresenterDoc()->getVariableCollection()->popupActionList();
     }
+
     if( variableList.count()>0)
     {
         view->plugActionList( "variable_action", variableList );
@@ -2117,9 +2126,6 @@ void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, b
         textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
                               false, removeSelectedText, i18n("Insert Variable"),
                               customItemsMap );
-        var->recalc();
-        cursor()->parag()->invalidate(0);
-        cursor()->parag()->setChanged( true );
         if ( refreshCustomMenu && var->type() == VT_CUSTOM )
             kpTextObject()->kPresenterDocument()->refreshMenuCustomVariable();
         kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );

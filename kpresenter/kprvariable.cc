@@ -27,16 +27,17 @@
 #include <kdebug.h>
 
 
-KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting)
-    : KoVariableCollection(_setting)
+KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting, KoVariableFormatCollection* coll)
+    : KoVariableCollection(_setting, coll)
 {
 }
 
-KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll,
+KoVariable *KPrVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll,
                                                    KoVariableFormat *varFormat,KoTextDocument *textdoc,
                                                    KoDocument * doc,  int _correct, bool _forceDefaultFormat )
 {
     KPresenterDoc*m_doc=static_cast<KPresenterDoc*>(doc);
+    KoVariable * var = 0L;
     switch(type) {
     case VT_PGNUM:
     {
@@ -44,51 +45,18 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
         kdDebug(33001)<<" varFormat :"<<varFormat<<endl;
         if ( !varFormat )
             varFormat = (subtype == KPrPgNumVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
-        return new KPrPgNumVariable( textdoc,subtype, varFormat,this,m_doc  );
+        var = new KPrPgNumVariable( textdoc,subtype, varFormat,this,m_doc  );
+        break;
     }
-    case VT_FIELD:
-        if ( !varFormat )
-            varFormat =  coll->format("STRING");
-        return new KPrFieldVariable( textdoc, subtype, varFormat, this, m_doc );
-    case VT_DATE:
-        if ( !varFormat )
-        {
-            if ( _forceDefaultFormat
-                 || subtype == KoDateVariable::VST_DATE_LAST_PRINTING
-                 || subtype ==KoDateVariable::VST_DATE_CREATE_FILE
-                 || subtype ==KoDateVariable::VST_DATE_MODIFY_FILE)
-                varFormat = coll->format( KoDateVariable::defaultFormat() );
-            else
-            {
-                QCString result = KoDateVariable::formatStr(_correct);
-                if ( result == 0 )//we cancel insert variable
-                    return 0L;
-                varFormat =  coll->format( result );
-            }
-        }
-        return new KPrDateVariable( textdoc, subtype, varFormat, this, m_doc,_correct );
-    case VT_TIME:
-        if ( !varFormat )
-        {
-            if ( _forceDefaultFormat )
-                varFormat = coll->format( KoTimeVariable::defaultFormat() );
-            else
-            {
-                QCString result = KoTimeVariable::formatStr(_correct);
-                if ( result == 0 )//we cancel insert variable
-                    return 0L;
-                varFormat =  coll->format( result );
-            }
-        }
-        return new KPrTimeVariable( textdoc, subtype, varFormat, this, m_doc,_correct );
     default:
         return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc,
                                                      doc, _correct, _forceDefaultFormat);
     }
+    return var;
 }
 
 
-KPrPgNumVariable::KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
+KPrPgNumVariable::KPrPgNumVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat,
                                     KoVariableCollection *_varColl, KPresenterDoc *doc  )
     : KoPgNumVariable( textdoc, subtype, varFormat ,_varColl ),m_doc(doc)
 {
@@ -100,324 +68,5 @@ void KPrPgNumVariable::recalc()
     {
         m_varValue = QVariant( (int)(m_doc->getPageNums()+m_varColl->variableSetting()->startingPage()-1));
         resize();
-    }
-}
-
-void KPrPgNumVariable::setVariableSubType( short int type)
-{
-    m_subtype=type;
-    setVariableFormat((m_subtype == KPrPgNumVariable::VST_CURRENT_SECTION)
-                      ? m_doc->variableFormatCollection()->format("STRING")
-                      : m_doc->variableFormatCollection()->format("NUMBER"));
-}
-
-QPtrList<KAction> KPrPgNumVariable::actionList()
-{
-    QPtrList<KAction> listAction=QPtrList<KAction>();
-    QStringList list = subTypeText();
-    QStringList::ConstIterator it = list.begin();
-    for ( int i = 0; it != list.end() ; ++it, ++i )
-    {
-        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
-        {
-            KToggleAction * act = new KToggleAction( (*it));
-            if ( m_subtype == i )
-                act->setChecked( true );
-            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
-
-            m_subTextMap.insert( act, i );
-            listAction.append( act );
-        }
-    }
-
-    return listAction;
-}
-
-void KPrPgNumVariable::slotChangeSubType()
-{
-    KAction * act = (KAction *)(sender());
-    SubTextMap::Iterator it = m_subTextMap.find( act );
-    if ( it == m_subTextMap.end() )
-        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
-    else // if ( m_subtype != variableSubType(*it) )
-    {
-        short int oldvalue = m_subtype;
-        if ( oldvalue != variableSubType(*it) )
-        {
-            setVariableSubType( variableSubType(*it) );
-            KPrChangePgNumVariableValue *cmd=new KPrChangePgNumVariableValue(
-                i18n( "Change Page Number Variable" ),
-                m_doc, oldvalue, m_subtype, this );
-            m_doc->addCommand(cmd);
-            paragraph()->invalidate( 0 );
-            paragraph()->setChanged( true );
-            m_doc->recalcVariables(VT_PGNUM);
-        }
-    }
-}
-
-
-KPrFieldVariable::KPrFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
-                                    KoVariableCollection *_varColl, KPresenterDoc *_doc )
-    : KoFieldVariable( textdoc, subtype, varFormat, _varColl ,_doc ),
-      m_doc(_doc)
-{
-}
-
-QPtrList<KAction> KPrFieldVariable::actionList()
-{
-    QPtrList<KAction> listAction=QPtrList<KAction>();
-    QStringList list = subTypeText();
-    QStringList::ConstIterator it = list.begin();
-    for ( int i = 0; it != list.end() ; ++it, ++i )
-    {
-        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
-        {
-            KToggleAction * act = new KToggleAction( (*it));
-            if ( variableSubType(i) == m_subtype )
-                act->setChecked( true );
-            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
-
-            m_subTextMap.insert( act, i );
-            listAction.append( act );
-        }
-    }
-
-    return listAction;
-}
-
-void KPrFieldVariable::slotChangeSubType()
-{
-    KAction * act = (KAction *)(sender());
-    SubTextMap::Iterator it = m_subTextMap.find( act );
-    if ( it == m_subTextMap.end() )
-        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
-    else // if ( m_subtype != variableSubType(*it) )
-    {
-        short int oldvalue = m_subtype;
-        if ( oldvalue != variableSubType(*it))
-        {
-            setVariableSubType( variableSubType(*it) );
-            KPrChangeFieldVariableSubType *cmd=new KPrChangeFieldVariableSubType(
-                i18n( "Change Field Variable" ),
-                m_doc, oldvalue, m_subtype, this );
-            m_doc->addCommand(cmd);
-            paragraph()->invalidate( 0 );
-            paragraph()->setChanged( true );
-            m_doc->recalcVariables(VT_FIELD);
-        }
-    }
-}
-
-KPrDateVariable::KPrDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
-                                  KoVariableCollection *_varColl, KPresenterDoc *_doc, int _correct )
-    : KoDateVariable( textdoc, subtype, varFormat, _varColl,_correct ),
-      m_doc(_doc)
-{
-}
-
-QPtrList<KAction> KPrDateVariable::actionList()
-{
-    QPtrList<KAction> listAction=QPtrList<KAction>();
-    QStringList list = subTypeText();
-    QStringList::ConstIterator it = list.begin();
-    for ( int i = 0; it != list.end() ; ++it, ++i )
-    {
-        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
-        {
-            KToggleAction * act = new KToggleAction( (*it));
-            if ( i == m_subtype)
-                act->setChecked( true );
-
-            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
-
-            m_subTextMap.insert( act, i );
-            listAction.append( act );
-        }
-    }
-    list=subTypeFormat();
-    it = list.begin();
-    KoVariableDateFormat *frm = static_cast<KoVariableDateFormat *>(variableFormat());
-    QString format = frm->m_strFormat;
-
-    for ( int i = 0; it != list.end() ; ++it, ++i )
-    {
-        if( i == 0)
-            listAction.append( new KActionSeparator() );
-
-        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
-        {
-            subFormatDef v;
-            QDate ct=QDate::currentDate();
-            ct = ct.addDays(correctValue());
-            if((*it)==i18n("Locale").lower())
-                v.translatedString=KGlobal::locale()->formatDate( ct );
-            else
-                v.translatedString=ct.toString(*it);
-            v.format=*it;
-
-            KToggleAction * act = new KToggleAction(v.translatedString);
-            if ( (*it) == format )
-                act->setChecked( true );
-            connect( act, SIGNAL(activated()),this, SLOT(slotChangeFormat()) );
-            m_subFormatMap.insert( act, v );
-            listAction.append( act );
-        }
-    }
-
-    return listAction;
-}
-
-void KPrDateVariable::slotChangeSubType()
-{
-    KAction * act = (KAction *)(sender());
-    SubTextMap::Iterator it = m_subTextMap.find( act );
-    if ( it == m_subTextMap.end() )
-        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
-    else // if ( m_subtype != variableSubType(*it) )
-    {
-        short int oldvalue = m_subtype;
-        if (oldvalue != variableSubType(*it) )
-        {
-            setVariableSubType( variableSubType(*it) );
-            KPrChangeDateVariableSubType *cmd=new KPrChangeDateVariableSubType(
-                i18n( "Change Date Variable Type" ),
-                m_doc, oldvalue, m_subtype, this );
-            m_doc->addCommand(cmd);
-            paragraph()->invalidate( 0 );
-            paragraph()->setChanged( true );
-            m_doc->recalcVariables(VT_DATE);
-        }
-    }
-}
-
-void KPrDateVariable::slotChangeFormat()
-{
-    KAction * act = (KAction *)(sender());
-    SubFormatMap::Iterator it = m_subFormatMap.find( act );
-    if ( it == m_subFormatMap.end() )
-        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
-    else
-    {
-        KoVariableDateFormat *frm = static_cast<KoVariableDateFormat *>(variableFormat());
-        QString oldvalue = frm->m_strFormat;
-        if ( oldvalue != (*it).format)
-        {
-            frm->m_strFormat = (*it).format;
-            KPrChangeDateVariableFormat *cmd=new KPrChangeDateVariableFormat(
-                i18n( "Change Date Variable Format" ),
-                m_doc, oldvalue, frm->m_strFormat, this );
-            m_doc->addCommand(cmd);
-            paragraph()->invalidate( 0 );
-            paragraph()->setChanged( true );
-            m_doc->recalcVariables(VT_DATE);
-        }
-    }
-}
-
-KPrTimeVariable::KPrTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,
-                                  KoVariableCollection *_varColl, KPresenterDoc *_doc,int _correct )
-    : KoTimeVariable( textdoc, subtype, varFormat, _varColl,_correct ),
-      m_doc(_doc)
-{
-}
-
-QPtrList<KAction> KPrTimeVariable::actionList()
-{
-    QPtrList<KAction> listAction=QPtrList<KAction>();
-    QStringList list = subTypeText();
-    QStringList::ConstIterator it = list.begin();
-    for ( int i = 0; it != list.end() ; ++it, ++i )
-    {
-        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
-        {
-            KToggleAction * act = new KToggleAction( (*it));
-            if ( i == m_subtype )
-                act->setChecked( true );
-
-            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
-
-            m_subTextMap.insert( act, i );
-            listAction.append( act );
-        }
-    }
-    list=subTypeFormat();
-    it = list.begin();
-    KoVariableTimeFormat *frm = static_cast<KoVariableTimeFormat *>(variableFormat());
-    QString format = frm->m_strFormat;
-
-    for ( int i = 0; it != list.end() ; ++it, ++i )
-    {
-        if( i == 0)
-            listAction.append( new KActionSeparator() );
-
-        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
-        {
-            subFormatDef v;
-            QTime ct=QTime::currentTime();
-            ct = ct.addSecs(correctValue());
-            if((*it)==i18n("Locale").lower())
-                v.translatedString=KGlobal::locale()->formatTime( ct );
-            else
-                v.translatedString=ct.toString(*it);
-            v.format=*it;
-
-            KToggleAction * act = new KToggleAction(v.translatedString);
-            if ( *it == format )
-                act->setChecked( true );
-
-            connect( act, SIGNAL(activated()),this, SLOT(slotChangeFormat()) );
-            m_subFormatMap.insert( act, v );
-            listAction.append( act );
-        }
-    }
-
-    return listAction;
-}
-
-void KPrTimeVariable::slotChangeSubType()
-{
-    KAction * act = (KAction *)(sender());
-    SubTextMap::Iterator it = m_subTextMap.find( act );
-    if ( it == m_subTextMap.end() )
-        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
-    else // if ( m_subtype != variableSubType(*it) )
-    {
-        short int oldvalue = m_subtype;
-        if ( oldvalue != variableSubType(*it))
-        {
-            setVariableSubType( variableSubType(*it) );
-            KPrChangeTimeVariableSubType *cmd=new KPrChangeTimeVariableSubType(
-                i18n( "Change Time Variable Type" ),
-                m_doc, oldvalue, m_subtype, this );
-            m_doc->addCommand(cmd);
-            paragraph()->invalidate( 0 );
-            paragraph()->setChanged( true );
-            m_doc->recalcVariables(VT_TIME);
-        }
-    }
-}
-
-void KPrTimeVariable::slotChangeFormat()
-{
-    KAction * act = (KAction *)(sender());
-    SubFormatMap::Iterator it = m_subFormatMap.find( act );
-    if ( it == m_subFormatMap.end() )
-        kdWarning(33001) << "Action not found in m_subTextMap." << endl;
-    else
-    {
-        KoVariableTimeFormat *frm = static_cast<KoVariableTimeFormat *>(variableFormat());
-        QString oldvalue = frm->m_strFormat;
-        if ( oldvalue != (*it).format )
-        {
-            frm->m_strFormat = (*it).format;
-            KPrChangeTimeVariableFormat *cmd=new KPrChangeTimeVariableFormat(
-                i18n( "Change Time Variable Format" ),
-                m_doc, oldvalue, frm->m_strFormat, this );
-            m_doc->addCommand(cmd);
-            paragraph()->invalidate( 0 );
-            paragraph()->setChanged( true );
-            m_doc->recalcVariables(VT_TIME);
-        }
     }
 }

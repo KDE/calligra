@@ -140,6 +140,7 @@ class KPresenterDoc : public KoDocument
 
     virtual bool initDoc() { return insertNewTemplate( true ); }
     void initEmpty();
+    virtual void setEmpty();
 
     virtual void addView( KoView *_view );
     virtual void removeView( KoView *_view );

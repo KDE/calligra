@@ -179,7 +179,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_zoomHandler = new KoZoomHandler;
 
     m_varFormatCollection = new KoVariableFormatCollection;
-    m_varColl=new KPrVariableCollection( new KoVariableSettings());
+    m_varColl = new KPrVariableCollection( new KoVariableSettings(), m_varFormatCollection );
     m_bgSpellCheck = new KPrBgSpellCheck(this);
 
     dcop = 0;
@@ -496,6 +496,10 @@ QDomDocument KPresenterDoc::saveXML()
         emit sigProgress( 0 );
     }
 
+    m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
+    recalcVariables( VT_DATE );
+    recalcVariables( VT_TIME );
+
     QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
     QDomElement presenter=doc.documentElement();
     presenter.setAttribute("editor", "KPresenter");
@@ -519,10 +523,7 @@ QDomDocument KPresenterDoc::saveXML()
     paper.appendChild(paperBorders);
     presenter.appendChild(paper);
 
-    getVariableCollection()->variableSetting()->setCreateFile(QDate::currentDate());
-    getVariableCollection()->variableSetting()->setModifyFile(QDate::currentDate());
-
-    getVariableCollection()->variableSetting()->save(presenter );
+    m_varColl->variableSetting()->save(presenter );
 
     presenter.appendChild(saveAttribute( doc ));
 
@@ -653,9 +654,6 @@ QDomDocument KPresenterDoc::saveXML()
     makeUsedSoundFileList();
     QDomElement soundFiles = saveUsedSoundFileToXML( doc, usedSoundFile );
     presenter.appendChild( soundFiles );
-
-    //necessary to recalcvariable date because new we are MODIFY/CREATE FILE date
-    recalcVariables(  VT_DATE );
 
     setModified( false );
     return doc;
@@ -2011,6 +2009,13 @@ void KPresenterDoc::initEmpty()
     setModified(true);
     loadNativeFormat( fileName );
     resetURL();
+}
+
+void KPresenterDoc::setEmpty()
+{
+    KoDocument::setEmpty();
+    // Whether loaded from template or from empty doc: this is a new one -> set creation date
+    m_varColl->variableSetting()->setCreationDate(QDateTime::currentDateTime());
 }
 
 void KPresenterDoc::setGridValue( double _x, double _y, bool _replace )
