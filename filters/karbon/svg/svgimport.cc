@@ -136,6 +136,24 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	}
 	if( !e.attribute( "stroke-width" ).isEmpty() )
 		gc->stroke.setLineWidth( e.attribute( "stroke-width" ).toDouble() );
+	if( !e.attribute( "stroke-linestyle" ).isEmpty() )
+	{
+		if( e.attribute( "stroke-linestyle" ) == "miter" )
+			gc->stroke.setLineJoin( VStroke::joinMiter );
+		else if( e.attribute( "stroke-linestyle" ) == "round" )
+			gc->stroke.setLineJoin( VStroke::joinRound );
+		else if( e.attribute( "stroke-linestyle" ) == "bevel" )
+			gc->stroke.setLineJoin( VStroke::joinBevel );
+	}
+	if( !e.attribute( "stroke-linecap" ).isEmpty() )
+	{
+		if( e.attribute( "stroke-linecap" ) == "butt" )
+			gc->stroke.setLineCap( VStroke::capButt );
+		else if( e.attribute( "stroke-linecap" ) == "round" )
+			gc->stroke.setLineCap( VStroke::capRound );
+		else if( e.attribute( "stroke-linecap" ) == "square" )
+			gc->stroke.setLineCap( VStroke::capSquare );
+	}
 	// handle opacity
 	if( !e.attribute( "stroke-opacity" ).isEmpty() )
 		strokecolor.setOpacity( e.attribute( "stroke-opacity" ).toFloat() );
@@ -186,6 +204,24 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		}
 		else if( command == "stroke-width" )
 			gc->stroke.setLineWidth( params.toDouble() );
+		else if( command == "stroke-linestyle" )
+		{
+			if( params == "miter" )
+				gc->stroke.setLineJoin( VStroke::joinMiter );
+			else if( params == "round" )
+				gc->stroke.setLineJoin( VStroke::joinRound );
+			else if( params == "bevel" )
+				gc->stroke.setLineJoin( VStroke::joinBevel );
+		}
+		else if( command == "stroke-linecap" )
+		{
+			if( params == "butt" )
+				gc->stroke.setLineCap( VStroke::capButt );
+			else if( params == "round" )
+				gc->stroke.setLineCap( VStroke::capRound );
+			else if( params == "square" )
+				gc->stroke.setLineCap( VStroke::capSquare );
+		}
 		// handle opacity
 		else if( command == "stroke-opacity" )
 			strokecolor.setOpacity( params.toFloat() );
