@@ -252,7 +252,7 @@
 
 		Attributes:
 
-		align	1=left, 2=right, 4=center
+		align	1=left, 2=right, 4=center 8=justify
 		type	0=normal, 1=bullet-list, 2=enum-list
 		depth	list depth
 -->
