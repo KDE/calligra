@@ -46,8 +46,7 @@ public:
     void clear();
     QSize canvasSize();
 	
-	void setRow(int row, int col);
-	int row(int col);
+	int row(int minrow, int col);
 	KPTPertCanvasItem *selectedItem();
 	
 protected:
@@ -64,8 +63,6 @@ private:
     bool m_mousePressed;
     bool m_printing;
     
-	QMemArray<int> m_rows;
-	
 #ifndef NDEBUG
     void printDebug( int );
 #endif

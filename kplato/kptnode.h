@@ -126,6 +126,7 @@ public:
     
     KPTRelation *findRelation(KPTNode *node);
     bool isChildOf(KPTNode *node);
+	int getRow();
 	int getColumn();
 	
     // These are calculated, or set manually if node is MustStartOn

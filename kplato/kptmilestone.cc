@@ -122,11 +122,10 @@ void KPTMilestone::drawPert(KPTPertCanvas *view, QCanvas* canvas) {
 			    return;
 			}
             int col = getColumn();
-		    int row = view->row(col);
+			int row = view->row(getRow(), col);
             m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
 			m_pertItem->show();
 			m_drawn = true;
-			view->setRow(row+1, col);
 	    }
         QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
 		for ( ; cit.current(); ++cit ) {

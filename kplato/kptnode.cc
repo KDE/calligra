@@ -228,6 +228,19 @@ int KPTNode::getColumn() {
 	return col;
 }
 
+int KPTNode::getRow() {
+    //kdDebug()<<k_funcinfo<<endl;
+	int row = 0;
+    for (int i=0; i<numDependParentNodes(); i++) {
+        KPTRelation *rel = getDependParentNode(i);
+        KPTPertCanvasItem *parent = rel->parent()->pertItem();
+        if (parent) {
+		    row = QMAX(row,parent->row());
+	    }
+	}
+	return row;
+}
+
 void KPTNode::initialize_arcs() {
   // Clear all lists of arcs and set unvisited to zero
   start_node()->successors.list.clear();

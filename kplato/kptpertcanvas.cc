@@ -65,7 +65,6 @@ void KPTPertCanvas::draw(KPTProject& project)
     kdDebug()<<k_funcinfo<<endl;
     clear();
     updateContents();
-	m_rows.resize(0);
 	project.drawPert(this, m_canvas);
 	project.drawPertRelations(m_canvas);
 	QSize s = canvasSize();
@@ -176,24 +175,43 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
     }
 }
 
-void KPTPertCanvas::setRow(int row, int col)
+int KPTPertCanvas::row(int minrow, int col)
 {
-    if (m_rows.count() <= col)
+	QValueList<int> rows;
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) 
+    {
+        if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
+		{
+		    KPTPertCanvasItem *item = (KPTPertCanvasItem *)(*it);
+            if ( item->column() == col )
+			{
+    		    rows.append(item->row());
+			}
+		}
+    }
+	int row = minrow;
+	if (!rows.empty())
 	{
-	    m_rows.resize(col+1);
-		m_rows[col] = 0;
+    	qHeapSort(rows);
+    	bool found = false;
+		for (int i=0; i < rows.size(); ++i)
+		{
+			if ( rows[i] < minrow)
+			    continue;
+			if ( rows[i] == minrow)
+			    found = true;
+            if (found)
+			{
+			    if (row !=rows[i])
+				    break;          // free row
+			    ++row;
+			}
+		}
 	}
-	if (m_rows[col] < row);
-	    m_rows[col] = row;
-	kdDebug()<<k_funcinfo<<"m_rows["<<col<<"]="<<m_rows[col]<<" row="<<row<<endl;
-}
-
-int KPTPertCanvas::row(int col)
-{
-    if (m_rows.size() <= col)
-	    setRow(0, col);
-	kdDebug()<<k_funcinfo<<"m_rows["<<col<<"]="<<m_rows[col]<<endl;
-    return m_rows[col];
+    //kdDebug()<<k_funcinfo<<" col="<<col<<" free row="<<row<<endl;
+	return row;
 }
 
 KPTPertCanvasItem *KPTPertCanvas::selectedItem()
