@@ -334,3 +334,5 @@ Reggie, 22.6.1999:
 Reggie, 23.6.1999:
 ------------------
 - Don't flicker when resizing the page
+- Optimized drawing background - produces much smaller PS output now
+ 

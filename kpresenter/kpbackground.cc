@@ -451,7 +451,9 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 /*================================================================*/
 void KPBackGround::drawBackColor( QPainter *_painter )
 {
-    if ( gradient )
+    if ( getBackColorType() == BCT_PLAIN || getBackColor1() == getBackColor2() )
+        _painter->fillRect( 0, 0, ext.width(), ext.height(), QBrush( getBackColor1() ) );
+    else if ( gradient )
         _painter->drawPixmap( 0, 0, *gradient );
 }
 
