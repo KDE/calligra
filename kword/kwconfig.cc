@@ -428,6 +428,7 @@ void ConfigureMiscPage::apply()
     {
         doc->getVariableCollection()->variableSetting()->setNumberOffset(newVarOffset);
         doc->recalcVariables( VT_PGNUM );
+        doc->setModified(true);
     }
 }
 
