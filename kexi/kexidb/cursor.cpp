@@ -22,6 +22,7 @@
 #include <kexidb/driver.h>
 #include <kexidb/driver_p.h>
 #include <kexidb/error.h>
+#include <kexidb/roweditbuffer.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -68,13 +69,23 @@ void Cursor::init()
 	m_at = 0;
 //js:todo:	if (m_query)
 //		m_fieldCount = m_query->fieldsCount();
-	m_fieldCount = m_query ? m_query->fieldCount() : 0; //do not know
+//	m_fieldCount = m_query ? m_query->fieldCount() : 0; //do not know
 	//<members related to buffering>
 //	m_cols_pointers_mem_size = 0;
 	m_records_in_buf = 0;
 	m_buffering_completed = false;
 	m_at_buffer = false;
 	m_result = -1;
+
+	if (m_query) {
+		//get list of all fields
+		m_fieldsExpanded = new Field::Vector();
+		*m_fieldsExpanded = m_query->fieldsExpanded();
+		m_fieldCount = m_fieldsExpanded->count();
+	} else {
+		m_fieldsExpanded = 0;
+		m_fieldCount = 0;
+	}
 }
 
 Cursor::~Cursor()
@@ -91,6 +102,7 @@ Cursor::~Cursor()
 		KexiDBDbg << "Cursor::~Cursor() can be destroyed with Conenction::deleteCursor(), not with delete operator !"<< endl;
 		exit(1);
 	}
+	delete m_fieldsExpanded;
 }
 
 bool Cursor::open()
@@ -407,6 +419,13 @@ bool Cursor::getNextRecord()
 
 	m_validRecord = true;
 	return true;
+}
+
+bool Cursor::updateRow(RowData& data, RowEditBuffer& buf)
+{
+	if (!m_query)
+		return false;
+	return m_conn->updateRow(*m_query, data, buf);
 }
 
 QString Cursor::debugString() const

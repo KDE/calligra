@@ -21,6 +21,8 @@
 #define KEXIDB_QUERY_H
 
 #include <qvaluelist.h>
+#include <qvaluevector.h>
+#include <qvaluevector.h>
 #include <qstring.h>
 #include <qmap.h>
 #include <qptrlist.h>
@@ -143,16 +145,37 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return list of QueryAsterisk objects defined for this query */
 		Field::List* asterisks() { return &m_asterisks; }
 
-		/*! QuerySchema::fields() returns list of fields used in query, but 
-		 in a case when there are asterisks defined for the query, it return
-		 does not expand QueryAsterisk objects to field lists but return asterisk as-is.
+		/*! QuerySchema::fields() returns vector of fields used in the query, but 
+		 in a case when there are asterisks defined for the query,
+		 it does not expand QueryAsterisk objects to field lists but return asterisk as-is.
 		 This could be inconvenient when you need just full expanede list of fields,
 		 so this method does the work for you. 
 
-		 Note: You should not permanently store a pointer to returned field list. 
-		 Make a deep copy if the list if you need.
+		 Note: You should assign the resulted vector in your space - it will be shared 
+		 and implicity copied on any modification.
+		 This method's result is cached by QuerySchema object.
+@todo js: UPDATE CACHE!
 		*/
-		Field::List* fieldsExpanded();
+		Field::Vector fieldsExpanded();
+
+		/*! \return a map for fast lookup of query fields' order.
+		 This is exactly opposite information compared to vector returned by fieldsExpanded()
+		 This method's result is cached by QuerySchema object.
+@todo js: UPDATE CACHE!
+		*/
+		QMap<Field*,uint> fieldsOrder();
+
+		/*! \return table describing order of PKEY fields within the query.
+		 It is usable foe e.g. Conenction::updateRow(), when we need 
+		 to locate each PKEY's field in a constant time.
+		 Returned vector is owned by QuerySchema object, when you assign it, it is implicity shared.
+		 Its size if equal to number of PKEY fields, i.e. 
+		 == parentTable()->primaryKey()->fieldCount().
+		 Returns empty vector if there is neither parent table nor parent table's pkey.
+		 This method's result is cached by QuerySchema object.
+@todo js: UPDATE CACHE!
+		*/
+		QValueVector<uint> pkeyFieldsOrder();
 
 	protected:
 		void init();
@@ -182,8 +205,16 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! List of asterisks defined for this query  */
 		Field::List m_asterisks;
 
-		/*! Temporary field list for using in fieldsExpanded() */
-		Field::List m_fieldsExpanded;
+		/*! Temporary field vector for using in fieldsExpanded() */
+		Field::Vector *m_fieldsExpanded;
+
+		/*! A map for fast lookup of query fields' order.
+		 This is exactly opposite information compared to vector returned by fieldsExpanded()
+		*/
+		QMap<Field*,uint> *m_fieldsOrder;
+
+		//! order of PKEY fields (e.g. for updateRow() )
+		QValueVector<uint> *m_pkeyFieldsOrder;
 
 	friend class Connection;
 };

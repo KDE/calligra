@@ -25,7 +25,7 @@
 namespace KexiDB
 {
 
-/*! Internad SQLite conenction data. Also used as inside SQLiteCursor. */
+/*! Internal SQLite connection data. Also used inside SQLiteCursor. */
 class SQLiteConnectionInternal
 {
 	public:

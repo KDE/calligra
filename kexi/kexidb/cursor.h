@@ -23,11 +23,14 @@
 #include <qstring.h>
 #include <qvariant.h>
 #include <qptrvector.h>
+#include <qvaluevector.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/object.h>
 
 namespace KexiDB {
+
+class RowEditBuffer;
 
 /*! Provides database cursor functionality.
 
@@ -72,7 +75,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		virtual ~Cursor();
 
 		/*! \return connection used for the cursor */
-		Connection* connection() { return m_conn; }
+		inline Connection* connection() const { return m_conn; }
 
 		/*! Opens the cursor using data provided on creation. 
 		 The data might be either QuerySchema or raw sql statement. */
@@ -95,18 +98,18 @@ class KEXI_DB_EXPORT Cursor: public Object
 
 		/*! \return query schema used to define this cursor
 		 or NULL if query schema is undefined but raw statement instead. */
-		QuerySchema *query() const { return m_query; }
+		inline QuerySchema *query() const { return m_query; }
 
 		/*! \return raw query statement used to define this cursor
 		 or null string if raw statement instead (but QuerySchema is defined instead). */
-		QString rawStatement() const { return m_rawStatement; }
+		inline QString rawStatement() const { return m_rawStatement; }
 
 		/*! \return logically or'd cursor's options, 
 			selected from Cursor::Options enum. */
-		uint options() const { return m_options; }
+		inline uint options() const { return m_options; }
 
 		/*! \returns true if the cursor is opened. */
-		bool isOpened() const { return m_opened; }
+		inline bool isOpened() const { return m_opened; }
 
 		/*! \returns true if the cursor is buffered. */
 		bool isBuffered() const;
@@ -149,7 +152,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		Q_LLONG at() const;
 
 		/*! \return number of fields available for this cursor. */
-		uint fieldCount() const { return m_fieldCount; }
+		inline uint fieldCount() const { return m_fieldCount; }
 
 		/*! \return a value stored in column number \a i (counting from 0).
 		 This have unspecified behaviour if the cursor is not at valid record.
@@ -157,17 +160,19 @@ class KEXI_DB_EXPORT Cursor: public Object
 		 If \a i is >= than m_fieldCount, null QVariant value should be returned. 
 		 To return a value typically you can use a pointer to internal structure 
 		 that contain current row data (buffered or unbuffered). */
-		virtual QVariant value(int i) const = 0;
+		virtual QVariant value(uint i) = 0;
 
 		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
-		virtual const char ** recordData() const = 0;
-		
+		virtual const char ** rowData() const = 0;
+
 		/*! Puts current record's data into \a data (makes a deep copy).
 		 This have unspecified behaviour if the cursor is not at valid record.
 		 Note: For reimplementation in driver's code. Shortly, this method translates
 		 a row data from internal representation (probably also used in buffer)
 		 to simple public RecordData representation. */
-		virtual void storeCurrentRecord(RecordData &data) const = 0;
+		virtual void storeCurrentRow(RowData &data) const = 0;
+
+		bool updateRow(RowData& data, RowEditBuffer& buf);
 
 		/*! \return a code of last executed operation's result at the server side.
 		 This code is engine dependent and may be even engine-version dependent.
@@ -276,7 +281,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 //		bool m_atLast;
 		bool m_validRecord : 1; //! true if valid record is currently retrieved @ current position
 		Q_LLONG m_at;
-		int m_fieldCount; //! cached field count information
+		uint m_fieldCount; //! cached field count information
 		uint m_options; //! cursor options that describes its behaviour
 
 		char m_result; //! result of a row fetching
@@ -285,7 +290,10 @@ class KEXI_DB_EXPORT Cursor: public Object
 		int m_records_in_buf;          //! number of records currently stored in the buffer
 		bool m_buffering_completed : 1;   //! true if we already have all records stored in the buffer
 		//</members related to buffering>
-	
+
+		//! Usefull e.g. for value(int) method when we need access to schema def.
+		Field::Vector* m_fieldsExpanded;
+
 	private:
 		bool m_readAhead : 1;
 		

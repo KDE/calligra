@@ -87,8 +87,15 @@ Object::~Object()
 
 void Object::debugError()
 {
-	if (error())
+	if (error()) {
 		KexiDBDbg << "KEXIDB ERROR: " << errorMsg() << endl;
-	else
+		QString s = serverErrorMsg(), sn = serverResultName();
+		if (!s.isEmpty())
+			KexiDBDbg << "KEXIDB SERVER ERRMSG: " << s << endl;
+		if (!sn.isEmpty())
+			KexiDBDbg << "KEXIDB SERVER RESULT NAME: " << sn << endl;
+		if (serverResult()!=0)
+			KexiDBDbg << "KEXIDB SERVER RESULT #: " << serverResult() << endl;
+	} else
 		KexiDBDbg << "KEXIDB OK." << endl;
 }

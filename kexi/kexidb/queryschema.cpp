@@ -60,6 +60,8 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 
 QuerySchema::~QuerySchema()
 {
+	delete m_fieldsExpanded;
+	delete m_pkeyFieldsOrder;
 }
 
 void QuerySchema::init()
@@ -67,7 +69,9 @@ void QuerySchema::init()
 	m_type = KexiDB::QueryObjectType;
 	m_tables.setAutoDelete(false);
 	m_asterisks.setAutoDelete(true);
-	m_fieldsExpanded.setAutoDelete(false); //it is temporary
+	m_fieldsExpanded=0;
+	m_fieldsOrder=0;
+	m_pkeyFieldsOrder=0;
 }
 
 void QuerySchema::clear()
@@ -78,7 +82,16 @@ void QuerySchema::clear()
 	m_asterisks.clear();
 	m_parent_table = 0;
 	m_tables.clear();
-//	m_conn = 0;
+	if (m_fieldsExpanded) {
+		delete m_fieldsExpanded;
+		m_fieldsExpanded=0;
+		delete m_fieldsOrder;
+		m_fieldsOrder=0;
+	}
+	if (m_pkeyFieldsOrder) {
+		delete m_pkeyFieldsOrder;
+		m_pkeyFieldsOrder=0;
+	}
 }
 
 KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
@@ -178,15 +191,20 @@ void QuerySchema::setAlias(Field *field, const QString& alias)
 	m_aliases[field] = alias;
 }
 
-Field::List* QuerySchema::fieldsExpanded()
+Field::Vector QuerySchema::fieldsExpanded()
 {
-	m_fieldsExpanded.clear();
-	for (Field *f = m_fields.first(); f; f = m_fields.next()) {
+	if (m_fieldsExpanded)
+		return *m_fieldsExpanded;
+
+	Field::List list;
+	int i = 0;
+	Field *f;
+	for (f = m_fields.first(); f; f = m_fields.next()) {
 		if (f->isQueryAsterisk()) {
 			if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) {
 				Field::List *ast_fields = static_cast<QueryAsterisk*>(f)->table()->fields();
 				for (Field *ast_f = ast_fields->first(); ast_f; ast_f=ast_fields->next()) {
-					m_fieldsExpanded.append(ast_f);
+					list.append(ast_f);
 				}
 			}
 			else {//all-tables asterisk: itereate through table list
@@ -195,16 +213,64 @@ Field::List* QuerySchema::fieldsExpanded()
 					Field::List *tab_fields = table->fields();
 					for (Field *tab_f = tab_fields->first(); tab_f; tab_f = tab_fields->next()) {
 //! \todo (js): perhaps not all fields should be appended here
-						m_fieldsExpanded.append(tab_f);
+						list.append(tab_f);
 					}
 				}
 			}
 		}
 		else {
-			m_fieldsExpanded.append(f);
+			list.append(f);
 		}
 	}
-	return &m_fieldsExpanded;
+	if (!m_fieldsExpanded) {
+		m_fieldsExpanded = new Field::Vector( list.count() );
+		m_fieldsOrder = new QMap<Field*,uint>();
+	}
+	else {//for future:
+		m_fieldsExpanded->clear();
+		m_fieldsExpanded->resize( list.count() );
+		m_fieldsOrder->clear();
+	}
+
+	for (i=0, f = list.first(); f; f = list.next(), i++) {
+		m_fieldsExpanded->insert(i,f);
+		m_fieldsOrder->insert(f,i);
+	}
+	return *m_fieldsExpanded;
+}
+
+QMap<Field*,uint> QuerySchema::fieldsOrder()
+{
+	if (!m_fieldsOrder)
+		(void)fieldsExpanded();
+	return *m_fieldsOrder;
+}
+
+QValueVector<uint> QuerySchema::pkeyFieldsOrder()
+{
+	if (m_pkeyFieldsOrder)
+		return *m_pkeyFieldsOrder;
+
+	TableSchema *tbl = parentTable();
+	if (!tbl || !tbl->primaryKey())
+		return QValueVector<uint>();
+
+	//get order of PKEY fields (e.g. for save() )
+	IndexSchema *pkey = tbl->primaryKey();
+	if (!m_pkeyFieldsOrder) {
+		m_pkeyFieldsOrder = new QValueVector<uint>( pkey->fieldCount() );
+	}
+//			m_pkeyFieldsOrder->reserve(pkey->fieldCount());
+	const uint fCount = fieldsExpanded().count();
+	for (uint i=0, j=0; i<fCount; i++) {
+		Field *f = m_fieldsExpanded->at(i);
+		if (f->table()==tbl && pkey->field(f->name())!=0) {
+			KexiDBDbg << "Cursor::init(): FIELD " << f->name() << " IS IN PKEY" << endl;
+			(*m_pkeyFieldsOrder)[j]=i;
+			j++;
+		}
+	}
+	return *m_pkeyFieldsOrder;
 }
 
 //---------------------------------------------------

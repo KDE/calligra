@@ -22,7 +22,6 @@
 #include "sqliteconnection.h"
 #include "sqliteconnection_p.h"
 
-
 #include <kexidb/error.h>
 
 #include <assert.h>
@@ -111,6 +110,7 @@ SQLiteCursor::SQLiteCursor(Connection* conn, QuerySchema& query, uint options )
 SQLiteCursor::~SQLiteCursor()
 {
 	close();
+	delete d;
 }
 
 bool SQLiteCursor::drv_open(const QString& statement)
@@ -162,20 +162,22 @@ bool SQLiteCursor::drv_close()
 
 void SQLiteCursor::drv_getNextRecord()
 {
+	static int _fieldCount;
 	if ((d->res = sqlite_step(
 	 d->vm,
-	 &m_fieldCount,
+	 &_fieldCount,
 	 &d->curr_coldata,
-	 &d->curr_colname))==SQLITE_ROW)
+	 &d->curr_colname))==SQLITE_ROW) {
 		m_result = FetchOK;
-	else if (d->res==SQLITE_DONE)
+		m_fieldCount = (uint)_fieldCount;
+	} else if (d->res==SQLITE_DONE)
 		m_result = FetchEnd;
 	else
 		m_result = FetchError;
 	
 	//debug
 	if (m_result == FetchOK && d->curr_coldata) {
-		for (int i=0;i<m_fieldCount;i++) {
+		for (uint i=0;i<m_fieldCount;i++) {
 			KexiDBDrvDbg<<"col."<< i<<": "<< d->curr_colname[i]<<" "<< d->curr_colname[m_fieldCount+i]
 			<< " = " << (d->curr_coldata[i] ? QString::fromLocal8Bit(d->curr_coldata[i]) : "(NULL)") <<endl;
 		}
@@ -191,7 +193,7 @@ void SQLiteCursor::drv_appendCurrentRecordToBuffer()
 	const char **record = (const char**)malloc(d->cols_pointers_mem_size);
 	const char **src_col = d->curr_coldata;
 	const char **dest_col = record;
-	for (int i=0; i<m_fieldCount; i++,src_col++,dest_col++) {
+	for (uint i=0; i<m_fieldCount; i++,src_col++,dest_col++) {
 //		KexiDBDrvDbg << i <<": '" << *src_col << "'" <<endl;
 		*dest_col = strdup(*src_col);
 	}
@@ -340,7 +342,7 @@ void SQLiteCursor::drv_clearBuffer()
 	//		const char **record = m_records.at(i);
 			const char **field_data = *r_ptr;
 	//		for (int col=0; col<d->curr_cols; col++, field_data++) {
-			for (int col=0; col<m_fieldCount; col++, field_data++) {
+			for (uint col=0; col<m_fieldCount; col++, field_data++) {
 				free((void*)*field_data); //free field memory
 			}
 			free(*r_ptr); //free pointers to fields array
@@ -380,58 +382,54 @@ const char *** SQLiteCursor::bufferData()
 	return m_records.data();
 }*/
 
-const char ** SQLiteCursor::recordData() const
+const char ** SQLiteCursor::rowData() const
 {
 	return d->curr_coldata;
 }
 
-void SQLiteCursor::storeCurrentRecord(RecordData &data) const
+void SQLiteCursor::storeCurrentRow(RowData &data) const
 {
-	if (!d)
-		return;
 	const char **col = d->curr_coldata;
 	data.reserve(m_fieldCount);
-    for( int i=0; i<m_fieldCount; i++, col++ ) {
-		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRecord(): col=" << (col ? *col : 0) << endl;
-		data[i] = QVariant( *col );
+	if (!m_fieldsExpanded) {//simply version: without types
+		for( uint i=0; i<m_fieldCount; i++, col++ ) {
+			data[i] = QVariant( *col );
+		}
+		return;
+	}
+
+	for( uint i=0; i<m_fieldCount; i++, col++ ) {
+		KexiDB::Field *f = m_fieldsExpanded->at(i);
+		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
+
+		if (f->isTextType())
+			data[i] = QVariant( *col );
+		else if (f->isNumericType())
+			data[i] = QVariant( QCString(*col).toInt() );
+		else if (f->isFPNumericType())
+			data[i] = QVariant( QCString(*col).toDouble() );
+		else
+			data[i] = QVariant( *col ); //default
 	}
 }
 
-QVariant SQLiteCursor::value(int i) const
+QVariant SQLiteCursor::value(uint i)
 {
-//	if (i > (m_data->curr_cols-1)) //range checking
 	if (i > (m_fieldCount-1)) //range checking
 		return QVariant();
 //TODO: allow disable range checking! - performance reasons
-	return QVariant( d->curr_coldata[i] );
+//	const KexiDB::Field *f = m_query ? m_query->field(i) : 0;
+	KexiDB::Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i) : 0;
+	//from most to least frequently used types:
+	if (!f || f->isTextType())
+		return QVariant( d->curr_coldata[i] );
+	else if (f->isNumericType())
+		return QVariant( QCString(d->curr_coldata[i]).toInt() );
+	else if (f->isFPNumericType())
+		return QVariant( QCString(d->curr_coldata[i]).toDouble() );
+
+	return QVariant( d->curr_coldata[i] ); //default
 }
-
-//bool SQLiteCursor::moveLast()
-//{
-	//TODO
-//	return true;
-//}
-
-/*bool SQLiteCursor::moveNext()
-{
-	//TODO
-	return true;
-}*/
-
-/*
-bool SQLiteCursor::eof()
-{
-	return m_afterLast;
-}
-
-int SQLiteCursor::at()
-{
-	if (m_readAhead)
-		return 0;
-	return m_at;
-}
-
-*/
 
 int SQLiteCursor::serverResult() const
 {

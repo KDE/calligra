@@ -21,6 +21,7 @@ Boston, MA 02111-1307, USA.
 #include "mysqlconnection.h"
 #include <kexidb/error.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 using namespace KexiDB;
 
@@ -103,10 +104,11 @@ void MySqlCursor::drv_getNextRecord() {
 
 
 
-QVariant MySqlCursor::value(int pos) const {
+QVariant MySqlCursor::value(uint pos) {
 	if (!m_row) return QVariant();
 	if (pos>=m_fieldCount) return QVariant();
 	if (m_row[pos]==0) return QVariant();
+	//js TODO: encode for type using m_fieldsExpanded like in SQLiteCursor::value()
 	return QVariant(QString::fromUtf8((const char*)m_row[pos]));
 }
 
@@ -140,11 +142,19 @@ void MySqlCursor::drv_bufferMovePointerTo(Q_LLONG to) {
 }
 
 
-const char** MySqlCursor::recordData() const {
+const char** MySqlCursor::rowData() const {
 	//! @todo
 	return 0;
 }
 
-void MySqlCursor::storeCurrentRecord(RecordData &data) const {
+void MySqlCursor::storeCurrentRow(RowData &data) const {
+	//! @todo
 }
 
+/*bool MySqlCursor::save(RowData& data, RowEditBuffer& buf)
+{
+	KexiDBDrvDbg << "MySqlCursor::save.." << endl;
+	//! @todo
+	return true;
+}
+*/

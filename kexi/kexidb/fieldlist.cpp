@@ -53,7 +53,7 @@ FieldList& FieldList::addField(KexiDB::Field *field)
 	if (!field)
 		return *this;
 	m_fields.append(field);
-	m_fields_by_name.insert(field->name(),field);
+	m_fields_by_name.insert(field->name().lower(),field);
 	m_sqlFields = QString::null;
 	return *this;
 }
@@ -72,7 +72,7 @@ KexiDB::Field* FieldList::field(unsigned int id)
 
 Field* FieldList::field(const QString& name) const
 {
-	return m_fields_by_name[name];
+	return m_fields_by_name[name.lower()];
 }
 
 unsigned int FieldList::fieldCount() const
@@ -101,7 +101,7 @@ void FieldList::debug() const
 #define _ADD_FIELD(fname) \
 { \
 	if (fname.isEmpty()) return fl; \
-	f = m_fields_by_name[fname]; \
+	f = m_fields_by_name[fname.lower()]; \
 	if (!f) { delete fl; return 0; } \
 	fl->addField(f); \
 }

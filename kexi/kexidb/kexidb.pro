@@ -34,6 +34,7 @@ fieldlist.cpp \
 global.cpp \
 expression.cpp \
 reference.cpp \
+roweditbuffer.cpp \
 \
 parser/parser.cpp \
 parser/sqlparser.cpp \

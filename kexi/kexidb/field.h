@@ -26,6 +26,7 @@
 #include <qstring.h>
 #include <qpair.h>
 #include <qvaluevector.h>
+#include <qptrvector.h>
 
 namespace KexiDB {
 
@@ -40,6 +41,7 @@ class KEXI_DB_EXPORT Field
 {
 	public:
 		typedef QPtrList<Field> List; //!< list of fields 
+		typedef QPtrVector<Field> Vector; //!< vector of fields 
 		typedef QPtrListIterator<Field> ListIterator; //!< iterator for list of fields 
 		typedef QPair<Field*,Field*> Pair; //!< fields pair
 		typedef QPtrList<Pair> PairList; //!< list of fields pair

@@ -62,7 +62,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		 This method never returns NULL value,
 		 if there is no primary key, empty IndexSchema object is returned.
 		 IndexSchema object is owned by the table schema. */
-		IndexSchema* primaryKey() const;
+		inline IndexSchema* primaryKey() const { return m_pkey; }
 
 		/*! Sets table's primary key index to \a pkey. Pass pkey==NULL if you want to unassign
 		 existing primary key ("primary" property of given IndexSchema object will be
@@ -75,8 +75,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		*/
 		void setPrimaryKey(IndexSchema *pkey);
 
-		const IndexSchema::ListIterator indicesIterator() const { return IndexSchema::ListIterator(m_indices); }
-		const IndexSchema::List* indices() { return &m_indices; }
+		inline const IndexSchema::ListIterator indicesIterator() const { return IndexSchema::ListIterator(m_indices); }
+		inline const IndexSchema::List* indices() { return &m_indices; }
 
 //js		void addPrimaryKey(const QString& key);
 
@@ -89,8 +89,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 		/*! if table was created using a connection, 
 			returns this connection object, otherwise NULL. */
-		Connection* connection();
-		
+		inline Connection* connection() const { return m_conn; }
+
 		/*! \return true if this is KexiDB storage system's table 
 		 (used internally by KexiDB). This helps in hiding such tables
 		 in applications (if desired) and will also enable lookup of system 

@@ -41,7 +41,7 @@ public:
         virtual bool drv_moveFirst();
         virtual void drv_getNextRecord();
         //virtual bool drv_getPrevRecord();
-	virtual QVariant value(int) const;
+	virtual QVariant value(uint);
 
 
         virtual void drv_clearServerResult();
@@ -49,8 +49,9 @@ public:
         virtual void drv_bufferMovePointerNext();
         virtual void drv_bufferMovePointerPrev();
         virtual void drv_bufferMovePointerTo(Q_LLONG to);
-        virtual const char** recordData() const;
-        virtual void storeCurrentRecord(RecordData &data) const;
+        virtual const char** rowData() const;
+        virtual void storeCurrentRow(RowData &data) const;
+//        virtual bool save(RowData& data, RowEditBuffer& buf);
 
 
 private:

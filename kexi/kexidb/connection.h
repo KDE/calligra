@@ -39,11 +39,12 @@
 namespace KexiDB {
 
 //! structure for storing single record with type information
-typedef QValueVector<QVariant> RecordData; 
+typedef QValueVector<QVariant> RowData; 
 
 class Cursor;
 class Driver;
 class ConnectionPrivate;
+class RowEditBuffer;
 
 /*! This class represents database connection established with given database source.
 */
@@ -338,7 +339,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 This is convenient method when we need only first recors from query result,
 		 or when we know that query result has only one record.
 		 \return true if query was successfully executed and first record has been found. */
-		bool querySingleRecord(const QString& sql, KexiDB::RecordData &data);
+		bool querySingleRecord(const QString& sql, KexiDB::RowData &data);
 
 		//PROTOTYPE:
 		#define A , const QVariant&
@@ -663,12 +664,14 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Setups schema data for object that owns sdata (e.g. table, query)
 			using \a cursor opened on 'kexi__objects' table, pointing to a record
 			corresponding to given object. */
-		bool setupObjectSchemaData( const KexiDB::RecordData &data, SchemaData &sdata );
+		bool setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata );
 //		bool setupObjectSchemaData( const KexiDB::Cursor *cursor, SchemaData *sdata );
 		
 		/*! Setups full table schema for table \a t using 'kexi__*' system tables. 
 			Used internally by tableSchema() methods. */
-		KexiDB::TableSchema* setupTableSchema( const KexiDB::RecordData &data );
+		KexiDB::TableSchema* setupTableSchema( const KexiDB::RowData &data );
+
+		bool updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf);
 
 		/*! Allocates all needed table KexiDB system objects for kexi__* KexiDB liblary's
 		 system tables schema.

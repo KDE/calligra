@@ -28,6 +28,7 @@
 #include <kexidb/transaction.h>
 #include <kexidb/cursor.h>
 #include <kexidb/global.h>
+#include <kexidb/roweditbuffer.h>
 
 #include <qfileinfo.h>
 #include <qguardedptr.h>
@@ -883,7 +884,7 @@ Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName)
 {
 	int row_id = drv_lastInsertRowID();
-	KexiDB::RecordData rdata;
+	KexiDB::RowData rdata;
 	if (row_id<=0 || !querySingleRecord(
 	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME
 	 +"="+QString::number(row_id), rdata)) {
@@ -1273,7 +1274,7 @@ bool Connection::deleteCursor(Cursor *cursor)
 	return ret;
 }
 
-bool Connection::setupObjectSchemaData( const KexiDB::RecordData &data, SchemaData &sdata )
+bool Connection::setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata )
 {
 	//not found: retrieve schema
 /*	KexiDB::Cursor *cursor;
@@ -1300,7 +1301,7 @@ bool Connection::setupObjectSchemaData( const KexiDB::RecordData &data, SchemaDa
 	return true;
 }
 
-bool Connection::querySingleRecord(const QString& sql, KexiDB::RecordData &data)
+bool Connection::querySingleRecord(const QString& sql, KexiDB::RowData &data)
 {
 	KexiDB::Cursor *cursor;
 	if (!(cursor = executeQuery( sql ))) {
@@ -1312,11 +1313,11 @@ bool Connection::querySingleRecord(const QString& sql, KexiDB::RecordData &data)
 		deleteCursor(cursor);
 		return false;
 	}
-	cursor->storeCurrentRecord(data);
+	cursor->storeCurrentRow(data);
 	return deleteCursor(cursor);
 }
 
-KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RecordData &data )//KexiDB::Cursor *table_cur )
+KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RowData &data )//KexiDB::Cursor *table_cur )
 {
 	TableSchema *t = new TableSchema( this );
 	if (!setupObjectSchemaData( data, *t )) {
@@ -1329,8 +1330,11 @@ KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RecordData &dat
 	}*/
 	
 	KexiDB::Cursor *cursor;
-	if (!(cursor = executeQuery( QString("select * from kexi__fields where t_id=%1 order by f_order").arg(t->m_id) )))
+	if (!(cursor = executeQuery( 
+		QString("select t_id, f_type, f_name, f_length, f_precision, f_constraints, f_options, f_order, f_caption, f_help"
+		" from kexi__fields where t_id=%1 order by f_order").arg(t->m_id) ))) {
 		return 0;
+	}
 	if (!cursor->moveFirst()) {
 		deleteCursor(cursor);
 		return 0;
@@ -1340,35 +1344,20 @@ KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RecordData &dat
 		KexiDBDbg<<"@@@ f_name=="<<cursor->value(2).asCString()<<endl;
 
 		int f_type = cursor->value(1).toInt(&ok);
-		if (!ok) { 
-			deleteCursor(cursor);
-			delete t;
-			return 0;
-		}
+		if (!ok)
+			break;
 		int f_len = cursor->value(3).toInt(&ok);
-		if (!ok) {
-			deleteCursor(cursor);
-			delete t;
-			return 0;
-		}
+		if (!ok)
+			break;
 		int f_prec = cursor->value(4).toInt(&ok);
-		if (!ok) {
-			deleteCursor(cursor);
-			delete t;
-			return 0;
-		}
+		if (!ok)
+			break;
 		int f_constr = cursor->value(5).toInt(&ok);
-		if (!ok) {
-			deleteCursor(cursor);
-			delete t;
-			return 0;
-		}
+		if (!ok)
+			break;
 		int f_opts = cursor->value(6).toInt(&ok);
-		if (!ok) {
-			deleteCursor(cursor);
-			delete t;
-			return 0;
-		}
+		if (!ok)
+			break;
 		
 		Field *f = new Field(
 			cursor->value(2).asString(), (Field::Type)f_type, f_constr, f_len, f_prec, f_opts );
@@ -1377,6 +1366,12 @@ KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RecordData &dat
 		f->m_help = cursor->value(10).asString();
 		t->addField(f);
 		cursor->moveNext();
+	}
+
+	if (!ok) {//error:
+		deleteCursor(cursor);
+		delete t;
+		return 0;
 	}
 
 	if (!deleteCursor(cursor)) {
@@ -1404,7 +1399,7 @@ TableSchema* Connection::tableSchema( const QString& tableName )
 		return 0;
 	}*/
 	//not found: retrieve schema
-	RecordData data;
+	RowData data;
 	if (!querySingleRecord(QString("select * from kexi__objects where o_name='%1' and o_type=%2")
 			.arg(m_tableName).arg(KexiDB::TableObjectType), data))
 		return 0;
@@ -1418,7 +1413,7 @@ TableSchema* Connection::tableSchema( const int tableId )
 	if (t)
 		return t;
 	//not found: retrieve schema
-	RecordData data;
+	RowData data;
 	if (!querySingleRecord(QString("select * from kexi__objects where o_id=%1").arg(tableId), data))
 		return 0;
 	
@@ -1431,7 +1426,7 @@ QuerySchema* Connection::querySchema( const int queryId )
 	if (q)
 		return q;
 	//not found: retrieve schema
-	RecordData queryobject_data, querydata_data;
+	RowData queryobject_data, querydata_data;
 
 	if (!querySingleRecord(QString("select * from kexi__objects where o_id=%1").arg(queryId), queryobject_data))
 		return 0;
@@ -1547,5 +1542,60 @@ void Connection::setAvailableDatabaseName(const QString& dbName)
 {
 	m_availableDatabaseName = dbName;
 }
+
+bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
+{
+	KexiDBDrvDbg << "Connection::updateRow.." << endl;
+	//--get PKEY
+	if (buf.dbBuffer().isEmpty()) {
+		KexiDBDrvDbg << " -- NO CHANGES DATA!" << endl;
+		return true;
+	}
+	if (!query.parentTable()) {
+		KexiDBDrvDbg << " -- NO PARENT TABLE!" << endl;
+		return false;
+	}
+	IndexSchema *pkey = query.parentTable()->primaryKey();
+	if (!pkey || pkey->fields()->isEmpty()) {
+		KexiDBDrvDbg << " -- NO PARENT TABLE's PKEY!" << endl;
+//js TODO: hmm, perhaps we can try to update without using PKEY?
+		return false;
+	}
+	//fetch the record:
+	QString sql = "UPDATE " + query.parentTable()->name() + " SET ";
+	QString sqlset, sqlwhere;
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=buf.dbBuffer().begin();it!=buf.dbBuffer().end();++it) {
+		if (!sqlset.isEmpty())
+			sqlset+=",";
+		sqlset += (it.key()->name() + "=" + valueToSQL(it.key(),it.data()));
+	}
+	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
+	if (pkey->fieldCount()>0) {
+		uint i=0;
+		for (Field::ListIterator it = pkey->fieldsIterator(); it.current(); i++, ++it) {
+			if (!sqlwhere.isEmpty())
+				sqlwhere+=" AND ";
+			sqlwhere += ( it.current()->name() + "=" 
+				+ valueToSQL( it.current(), data[ pkeyFieldsOrder[i] ] ) );
+		}
+	}
+	sql += (sqlset + " WHERE " + sqlwhere);
+	KexiDBDrvDbg << " -- SQL == " << sql << endl;
+
+	bool res = drv_executeSQL(sql);
+
+	if (!res) {
+//TODO: js: we would like to know a reason of failures...
+		return false;
+	}
+	//success: now also assign new value in memory:
+	QMap<Field*,uint> fieldsOrder = query.fieldsOrder();
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=buf.dbBuffer().begin();it!=buf.dbBuffer().end();++it) {
+		data[ fieldsOrder[it.key()] ] = it.data();
+	}
+
+	return res;
+}
+
 
 #include "connection.moc"
