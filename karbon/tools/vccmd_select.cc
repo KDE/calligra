@@ -21,19 +21,14 @@ VCCmdSelect::execute()
 	if ( m_object )
 		m_object->setState( VObject::normal );
 	else
-	{
 		m_part->selectObjects( QRect( m_tlX, m_tlY, m_brX, m_brY ) );
-		//m_object = createPath();
-		// add path:
-		//m_part->insertObject( m_object );
-	}
 }
 
 void
 VCCmdSelect::unexecute()
 {
 	if ( m_object )
-		m_object->setState( VObject::deleted );
+		m_object->setState( VObject::normal );
 }
 
 VPath*

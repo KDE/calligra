@@ -4,6 +4,7 @@
 
 #include "vcdlg_rectangle.h"	// dialog
 #include "vctool_select.h"
+#include "vccmd_select.h"
 
 VCToolSelect* VCToolSelect::s_instance = 0L;
 

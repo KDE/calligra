@@ -9,7 +9,6 @@
 #include <qpoint.h>
 
 #include "karbon_view.h"
-#include "vccmd_select.h"
 #include "vpath.h"
 #include "vtool.h"
 
@@ -75,10 +74,10 @@ VCToolSelect::recalcCoords()
 
 	if ( m_isCentered )
 	{
-		m_tl.setX( qRound( m_fp.x() - width*0.5 ) );
-		m_tl.setY( qRound( m_fp.y() + height*0.5 ) );
-		m_br.setX( qRound( m_fp.x() + width*0.5 ) );
-		m_br.setY( qRound( m_fp.y() - height*0.5 ) );
+		m_tl.setX( qRound( m_fp.x() - width ) );
+		m_tl.setY( qRound( m_fp.y() + height ) );
+		m_br.setX( qRound( m_fp.x() + width ) );
+		m_br.setY( qRound( m_fp.y() - height ) );
 	}
 	else
 	{
@@ -94,14 +93,19 @@ VCToolSelect::drawTemporaryObject( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 
-	VCCmdSelect* cmd =
-		new VCCmdSelect( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y() );
+	// Make a simple selection rectangle.
+	// Maybe a simple drawRect would be quicker though.
+    VPath* path = new VPath();
 
-	VPath* path = cmd->createPath();
+    path->moveTo( m_tl.x(), m_tl.y() );
+    path->lineTo( m_br.x(), m_tl.y() );
+    path->lineTo( m_br.x(), m_br.y() );
+    path->lineTo( m_tl.x(), m_br.y() );
+    path->close();
+
 	path->setState( VObject::edit );
 	path->draw( painter, path->boundingBox() );
 
-	delete( cmd );
 	delete( path );
 }
 
