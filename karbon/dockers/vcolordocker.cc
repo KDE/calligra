@@ -87,7 +87,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	connect( mBlackSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
 	
 	mainCMYKLayout->activate();
-	mTabWidget->addTab( mCMYKWidget, i18n("CMYK") );
+	mTabWidget->addTab( mCMYKWidget, i18n( "CMYK" ) );
 	
 	//Opacity
 	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "black" ), QColor( "white" ), 0, 100, 100, mainWidget );
@@ -106,12 +106,12 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 
 void VColorDocker::updateCanvas()
 {
-	if ( m_isStrokeDocker && m_part)
+	if ( m_isStrokeDocker && m_part && m_part->document().selection() )
 	{
 		m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
 		m_view->selectionChanged();
 	}
-	else if( m_part )
+	else if( m_part && m_part->document().selection() )
 	{
 		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
 		m_view->selectionChanged();
@@ -185,7 +185,7 @@ void VColorDocker::updateSliders()
 		mGreenSlider->setValue( int ( m_Color->operator[](1) * 255 ) );
 		mBlueSlider->setValue( int ( m_Color->operator[](2) * 255 ) );
 		mOpacity->setValue( int ( m_Color->opacity() * 100 ) );
-		mTabWidget->changeTab( mRGBWidget, i18n( "RGB ") );
+		mTabWidget->showPage( mRGBWidget );
 		break;
 	case VColor::cmyk:
 		mCyanSlider->setValue( int ( m_Color->operator[](0) * 100 ) );
@@ -193,7 +193,7 @@ void VColorDocker::updateSliders()
 		mYellowSlider->setValue( int ( m_Color->operator[](2) * 100 ) );
 		mBlackSlider->setValue( int ( m_Color->operator[](3) * 100 ) );
 		mOpacity->setValue( int ( m_Color->opacity() * 100 ) );
-		mTabWidget->changeTab( mCMYKWidget, i18n( "CMYK" ) );
+		mTabWidget->showPage( mCMYKWidget );
 		break;
 	}
 	

@@ -1209,6 +1209,16 @@ KarbonView::selectionChanged()
 		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
 		m_objectDlg->enable();
 		m_objectDlg->update( m_part );
+		if ( m_ColorManager->isStrokeDocker() )
+		{
+			VColor *c = new VColor ( m_part->document().selection()->objects().getFirst()->stroke()->color() );
+			m_ColorManager->setColor( c );
+		}
+		else
+		{
+			VColor *c = new VColor ( m_part->document().selection()->objects().getFirst()->fill()->color() );
+			m_ColorManager->setColor( c );
+		}
 	}
 	else
 	{
