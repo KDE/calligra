@@ -1020,8 +1020,9 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                 fillStyleStack( o, oasisStyles );
                 if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
                 {
+                    fillStyleStack( o, oasisStyles );
                     KPPieObject *kppieobject = new KPPieObject();
-                    kppieobject->loadOasis(o);
+                    kppieobject->loadOasis(o, m_styleStack);
                     newpage->appendObject(kppieobject);
                 }
                 else  // circle or ellipse

@@ -21,6 +21,7 @@
 #define kppieobject_h
 
 #include "kpobject.h"
+#include <koStyleStack.h>
 
 class KPGradient;
 class DCOPObject;
@@ -80,7 +81,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void flip(bool horizontal );
-    virtual void loadOasis(const QDomElement &element);
+    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack);
 
     virtual KoSize getRealSize() const;
     virtual KoPoint getRealOrig() const;

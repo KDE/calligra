@@ -81,25 +81,70 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPPieObject::loadOasis(const QDomElement &element)
+void KPPieObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
 {
     kdDebug()<<"void KPPieObject::loadOasis(const QDomElement &element) ***************\n";
     KP2DObject::loadOasis(element);
-    if ( element.hasAttribute( "draw:kind" ) )
+    QString kind = element.attribute( "draw:kind" );
+    if ( kind == "section" )
+        pieType = PT_PIE;
+    else if ( kind == "cut" )
+        pieType = PT_CHORD;
+    else if ( kind == "arc" )
+        pieType =PT_ARC;
+    else
     {
-        QString kind = element.attribute( "draw:kind" );
-        if ( kind == "section" )
-            pieType = PT_PIE;
-        else if ( kind == "cut" )
-            pieType = PT_CHORD;
-        else if ( kind == "arc" )
-            pieType =PT_ARC;
-        else
-        {
-            kdDebug()<<" KPPieObject::loadOasis(const QDomElement &element) type indefined :"<<kind<<endl;
-            pieType = PT_PIE;
-        }
-        kdDebug()<<" type of pie object :"<<( ( pieType == PT_PIE ) ? "pie" : ( pieType == PT_CHORD )?"cut" : "arc" )<<endl;
+        kdDebug()<<" KPPieObject::loadOasis(const QDomElement &element) type indefined :"<<kind<<endl;
+        pieType = PT_PIE;
+    }
+    kdDebug()<<" type of pie object :"<<( ( pieType == PT_PIE ) ? "pie" : ( pieType == PT_CHORD )?"cut" : "arc" )<<endl;
+
+    int start = (int) ( element.attribute( "draw:start-angle" ).toDouble() );
+    p_angle=start*16;
+
+    int end = (int) ( element.attribute( "draw:end-angle" ).toDouble() );
+    if ( end < start )
+        p_len = ( ( 360 - start + end ) * 16 );
+    else
+        p_len = (  ( end - start ) * 16 );
+
+    kdDebug()<<"KPPieObject::loadOasis(const QDomElement &element) : p_angle :"<<p_angle<<" p_len :"<<p_len<<endl;
+
+    if ( styleStack.hasAttribute( "draw:marker-start" ) )
+    {
+        QString type = styleStack.attribute( "draw:marker-start" );
+        kdDebug()<<"type arrow start :"<<type<<endl;
+        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
+             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
+            lineBegin =  L_ARROW;
+        else if ( type == "Square" )
+            lineBegin =  L_SQUARE;
+        else if ( type == "Circle" || type == "Square 45" )
+            lineBegin = L_CIRCLE;
+        else if ( type == "Line Arrow" )
+            lineBegin = L_LINE_ARROW;
+        else if ( type == "Dimension Lines" )
+            lineBegin = L_DIMENSION_LINE;
+        else if ( type == "Double Arrow" )
+            lineBegin = L_DOUBLE_LINE_ARROW;
+    }
+    if ( styleStack.hasAttribute( "draw:marker-end" ) )
+    {
+        QString type = styleStack.attribute( "draw:marker-start" );
+        kdDebug()<<"type arrow end :"<<type<<endl;
+        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
+             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
+            lineEnd =  L_ARROW;
+        else if ( type == "Square" )
+            lineEnd =  L_SQUARE;
+        else if ( type == "Circle" || type == "Square 45" )
+            lineEnd = L_CIRCLE;
+        else if ( type == "Line Arrow" )
+            lineEnd = L_LINE_ARROW;
+        else if ( type == "Dimension Lines" )
+            lineEnd = L_DIMENSION_LINE;
+        else if ( type == "Double Arrow" )
+            lineEnd = L_DOUBLE_LINE_ARROW;
     }
 }
 
