@@ -24,7 +24,7 @@
 #include <qframe.h>
 #include <qpixmap.h>
 #include <qintdict.h>
-
+#include <koffice_export.h>
 class QPushButton;
 class QPixmap;
 class KoKoolBar;
@@ -134,7 +134,7 @@ protected:
   KoKoolBarBoxPrivate *d;
 };
 
-class KoKoolBar : public QWidget
+class KOFFICEUI_EXPORT KoKoolBar : public QWidget
 {
   Q_OBJECT
 public:

@@ -35,7 +35,7 @@ static const KCmdLineOptions options[]=
 }  //KPlato namespace
 
 
-extern "C" int kdemain( int argc, char **argv ) {
+extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv ) {
     KCmdLineArgs::init( argc, argv, KPlato::newKPTAboutData());
     KCmdLineArgs::addCmdLineOptions( KPlato::options );
 

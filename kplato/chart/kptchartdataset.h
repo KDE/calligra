@@ -24,13 +24,13 @@
 #include <qptrlist.h>
 #include <qpen.h>
 #include <qbrush.h>
-
+#include <koffice_export.h>
 namespace KPlato
 {
 
 class KPTChartDataSet;
 
-class KPTChartDataSetItem
+class KPLATOCHART_EXPORT KPTChartDataSetItem
 {
 public:
     KPTChartDataSetItem(const QDateTime &x1, const QDateTime &x2, double y1, double y2);
@@ -64,7 +64,7 @@ private:
     double m_y2;
 };
 
-class KPTChartDataSet 
+class KPLATOCHART_EXPORT KPTChartDataSet 
 {
 public:
     enum DrawMode { Mode_Default, Mode_Bar, Mode_Line };

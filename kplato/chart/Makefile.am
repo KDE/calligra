@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes)
+INCLUDES = $(KOFFICECORE_INCLUDES) $(all_includes)
 
 libkptchart_la_SOURCES = kptchartview.cc \
                          kpttimescale.cc \

@@ -26,6 +26,7 @@
 
 #include <qdatetime.h>
 #include <qcanvas.h>
+#include <koffice_export.h>
 
 class QanvasView;
 class QBoxLayout;
@@ -37,7 +38,7 @@ class KPTNumberScale;
 class KPTTimeScale;
 class KPTChartCanvasView;
 
-class KPTChartView : public QWidget
+class KPLATOCHART_EXPORT KPTChartView : public QWidget
 {
     Q_OBJECT
 public:
