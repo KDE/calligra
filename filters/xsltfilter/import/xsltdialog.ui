@@ -1,170 +1,170 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>XSLTDialog</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>XSLTDialog</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
             <width>410</width>
-            <height>310</height>
+            <height>357</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Export XSLT Configuration</string>
     </property>
-    <property stdset="1">
-        <name>sizeGripEnabled</name>
+    <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
-    <widget>
-        <class>QGroupBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>GroupBox1</cstring>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>390</width>
-                <height>161</height>
-            </rect>
+        <property name="margin">
+            <number>11</number>
         </property>
-        <property stdset="1">
-            <name>title</name>
-            <string>Common xslt files:</string>
+        <property name="spacing">
+            <number>6</number>
         </property>
-        <widget>
-            <class>QListBox</class>
-            <item>
-                <property>
-                    <name>text</name>
-                    <string>Export XSL:FO</string>
+        <spacer>
+            <property name="name" stdset="0">
+                <cstring>Spacer56</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>GroupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Common xslt files:</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
                 </property>
-            </item>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>xsltList</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>20</x>
-                    <y>30</y>
-                    <width>351</width>
-                    <height>111</height>
-                </rect>
-            </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QListBox">
+                    <item>
+                        <property name="text">
+                            <string>Export XSL:FO</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>xsltList</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>200</height>
+                        </size>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
-    </widget>
-    <widget>
-        <class>QGroupBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>GroupBox2</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>180</y>
-                <width>390</width>
-                <height>80</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>title</name>
-            <string>Personal xslt files:</string>
-        </property>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>chooseBtn</cstring>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>GroupBox2</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>280</x>
-                    <y>30</y>
-                    <width>90</width>
-                    <height>31</height>
-                </rect>
+            <property name="title">
+                <string>Personal xslt files:</string>
             </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Choose...</string>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>recentBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>chooseBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Choose...</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
-        <widget>
-            <class>QComboBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>recentBox</cstring>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout36</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>20</x>
-                    <y>30</y>
-                    <width>250</width>
-                    <height>31</height>
-                </rect>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer53</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>OkBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>CancelBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>CancelBtn</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>300</x>
-                <y>270</y>
-                <width>91</width>
-                <height>31</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Cancel</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>OkBtn</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>190</x>
-                <y>270</y>
-                <width>90</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>OK</string>
-        </property>
-        <property stdset="1">
-            <name>default</name>
-            <bool>true</bool>
-        </property>
-    </widget>
+    </vbox>
 </widget>
 <connections>
     <connection>
@@ -185,8 +185,11 @@
         <receiver>XSLTDialog</receiver>
         <slot>chooseSlot()</slot>
     </connection>
-    <slot access="public">cancelSlot()</slot>
-    <slot access="public">chooseSlot()</slot>
-    <slot access="public">okSlot()</slot>
 </connections>
+<slots>
+    <slot>cancelSlot()</slot>
+    <slot>chooseSlot()</slot>
+    <slot>okSlot()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

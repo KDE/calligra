@@ -1,169 +1,131 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ImportDialogUI</class>
 <comment>Dialog for the HTML import of KWord</comment>
 <author>Nicolas GOUTTE &lt;nicog@snafu.de&gt;</author>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QWidget">
+    <property name="name">
         <cstring>ImportDialogUI</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>362</width>
-            <height>252</height>
+            <width>380</width>
+            <height>216</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>HTML Import Dialog</string>
     </property>
-    <widget>
-        <class>QGroupBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>groupCharSet</cstring>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>330</width>
-                <height>212</height>
-            </rect>
+        <property name="margin">
+            <number>11</number>
         </property>
-        <property stdset="1">
-            <name>title</name>
-            <string>Character Set</string>
+        <property name="spacing">
+            <number>6</number>
         </property>
-        <vbox>
-            <property stdset="1">
-                <name>margin</name>
-                <number>11</number>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupCharSet</cstring>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
-                <number>6</number>
+            <property name="title">
+                <string>Character Set</string>
             </property>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>textLabelCharset</cstring>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Hint For Character Set:</string>
+                <property name="margin">
+                    <number>11</number>
                 </property>
-            </widget>
-            <widget>
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>lineEditCharSet</cstring>
+                <property name="spacing">
+                    <number>6</number>
                 </property>
-            </widget>
-            <spacer>
-                <property>
-                    <name>name</name>
-                    <cstring>Spacer1</cstring>
-                </property>
-                <property stdset="1">
-                    <name>orientation</name>
-                    <enum>Vertical</enum>
-                </property>
-                <property stdset="1">
-                    <name>sizeType</name>
-                    <enum>Expanding</enum>
-                </property>
-                <property>
-                    <name>sizeHint</name>
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
-            <widget>
-                <class>QButtonGroup</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>buttonHint</cstring>
-                </property>
-                <property stdset="1">
-                    <name>title</name>
-                    <string>&amp;Hint</string>
-                </property>
-                <widget>
-                    <class>QRadioButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>radioButtonHintFallback</cstring>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabelCharset</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>11</x>
-                            <y>44</y>
-                            <width>286</width>
-                            <height>19</height>
-                        </rect>
+                    <property name="text">
+                        <string>&amp;Hint For Character Set:</string>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>Use hint only as &amp;fall back!</string>
+                    <property name="buddy" stdset="0">
+                        <cstring>lineEditCharSet</cstring>
                     </property>
                 </widget>
-                <widget>
-                    <class>QRadioButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>radioButtonHintForce</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>11</x>
-                            <y>69</y>
-                            <width>286</width>
-                            <height>19</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>Force the use of the hint! (For buggy files!)</string>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>lineEditCharSet</cstring>
                     </property>
                 </widget>
-                <widget>
-                    <class>QRadioButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+            </vbox>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonHint</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Hint</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
                         <cstring>radioButtonHintNone</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>geometry</name>
-                        <rect>
-                            <x>11</x>
-                            <y>19</y>
-                            <width>286</width>
-                            <height>19</height>
-                        </rect>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Do &amp;not use the hint! (Recommended!)</string>
                     </property>
-                    <property stdset="1">
-                        <name>checked</name>
+                    <property name="checked">
                         <bool>true</bool>
                     </property>
                 </widget>
-            </widget>
-        </vbox>
-    </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioButtonHintFallback</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use hint only as &amp;fall back!</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioButtonHintForce</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Force the use of the hint! (For buggy files)</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <spacer>
+            <property name="name" stdset="0">
+                <cstring>Spacer58</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
 </widget>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>
