@@ -39,7 +39,7 @@ KexiBrowser::KexiBrowser(Kexi *mainWin, QWidget *parent, const char *name ) : QW
 	m_mainWin = mainWin;
 	m_parent = parent;
 
-	KIconLoader *iconLoader = KGlobal::iconLoader();
+	iconLoader = KGlobal::iconLoader();
 
 	QVBoxLayout *l = new QVBoxLayout(this);
 	
@@ -73,6 +73,13 @@ KexiBrowser::KexiBrowser(Kexi *mainWin, QWidget *parent, const char *name ) : QW
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
 	
 	connect(m_list, SIGNAL(executed(QListViewItem *)), SLOT(slotCreate()));
+}
+
+void KexiBrowser::addTableItem(QString name)
+{
+	KListViewItem *tblItem = new KListViewItem(m_tables, name);
+	tblItem->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
+	m_list->setOpen(m_tables, true);
 }
 
 void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p)

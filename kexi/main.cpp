@@ -22,7 +22,8 @@
 
 #include "kexiglobal.h"
 #include "kexi.h"
-#include "kexiinterfacemanager.h"
+#include "kexidb.h"
+//#include "kexiinterfacemanager.h"
 
 static const char *description =
 	I18N_NOOP("Kexi");
@@ -53,18 +54,11 @@ int main(int argc, char *argv[])
 
 	g_Global = new KexiGlobal;	
 	 
-//	KexiInterfaceManager *manager = new KexiInterfaceManager();
-	g_Global->g_manager = new KexiInterfaceManager();
 		
-	g_Global->g_manager->lookupPlugins();
-	
+	g_Global->g_db = new KexiDB();
 	
 	Kexi *kexi = new Kexi();
-//	app->g_window = kexi;
-//	g_Global->g_window = kexi;	
-
 	kexi->show();
 
 	return app.exec();
-	delete g_Global->g_manager;
 }  

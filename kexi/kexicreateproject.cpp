@@ -17,10 +17,11 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-//#include <qlineedit.h>
 #include <qpixmap.h>
 #include <qdict.h>
 #include <qstringlist.h>
+#include <qsqldatabase.h>
+#include <qsqlquery.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -29,17 +30,19 @@
 #include <ktextbrowser.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-
-//#include <qwhatsthis.h>
+#include <klistview.h>
 
 #include "kexiglobal.h"
-#include "kexiinterface.h"
-#include "kexiinterfacemanager.h"
-#include "kexiinterfacetemplate.h"
+#include "kexi.h"
+#include "kexidb.h"
+#include "kexibrowser.h"
+
 #include "kexicreateproject.h"
 
-KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool modal, WFlags f) : KWizard(parent,name,modal,f)
+KexiCreateProject::KexiCreateProject(Kexi *main, QWidget *parent, const char *name, bool modal, WFlags f) : KWizard(parent,name,modal,f)
 {
+	m_main = main;
+	
 	setCaption(i18n("create project"));
 
 	m_wpic = QPixmap(locate("data","kexi/createproject.png"));
@@ -58,13 +61,8 @@ KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool mod
 	if(m_cEngine->count() > 0)
 	{
 		engineSelectionChanged(m_cEngine->text(m_cEngine->currentItem()));
-//		kdDebug() << "
 		kdDebug() << "item: " << m_cEngine->currentItem() << endl;
 	}
-
-	 
-//	addPage(generatePage0(), i18n("New Project"));
-// 	addPage(generatePage1(), i18n("where?"));
 }
 
 QWidget *KexiCreateProject::generatePage0()
@@ -88,8 +86,8 @@ QWidget *KexiCreateProject::generatePage0()
 	
 	
 	//checking drivers and making them avaible	
-	QStringList *engines = g_Global->g_manager->m_interfaceNames;
-	for(QStringList::Iterator it = engines->begin(); it != engines->end(); ++it)
+	QStringList engines = g_Global->g_db->engines();
+	for(QStringList::Iterator it = engines.begin(); it != engines.end(); ++it)
 	{
 		kdDebug() << "found engine: " << *it << endl;
 		m_cEngine->insertItem(*it);
@@ -98,7 +96,7 @@ QWidget *KexiCreateProject::generatePage0()
 	QString description = "<b>";
 	description += m_cEngine->currentText();
 	description += "</b><br><hr><br>";
-	description += g_Global->g_manager->m_interfaceList->find(m_cEngine->currentText())->description();
+	//description += g_Global->g_manager->m_interfaceList->find(m_cEngine->currentText())->description();
 	iEngine->setText(description);
 	
 	g0->addMultiCellWidget(pic0,	0,	2,	0,	0);
@@ -150,37 +148,19 @@ QWidget *KexiCreateProject::generatePage2()
 	QLabel *pic2 = new QLabel("", p2);
 	pic2->setPixmap(m_wpic);
 	
+	//QLabel *lLog = new QLabel(i18n("connection log"), p2);
+	m_connectionLog = new KListView(p2);
+	m_connectionLog->addColumn(i18n("log message"));
+	
+	g2->addWidget(pic2, 0, 0);
+	g2->addWidget(m_connectionLog, 0, 1);
+	
 	return p2;
 }
 
 void KexiCreateProject::engineSelectionChanged(const QString &engineName)
 {
 	kdDebug() << "engine is changeing to " << engineName << endl;
-	
-	if(g_Global->g_manager->m_interfaceList->find(engineName)->load())
-	{
-		m_engine = g_Global->g_manager->m_interfaceList->find(engineName);
-		m_loadedEngine = engineName;
-		m_engineLoaded = true;
-
-		switch(m_engine->m_info->location)
-		{
-			case KexiInterface::RemoteDB:
-			{
-				break;
-			}
-			
-			default:
-			{
-				this->removePage(m_page1);
-			}
-		}
-		
-	}
-	else
-	{
-		KMessageBox::error(this, i18n("the selected driver doesn't exist or is invalid!"), i18n("driver-selection")); 
-	}
 }
 
 
@@ -189,11 +169,27 @@ void KexiCreateProject::nextClicked(const QString &pageTitle)
 	if(pageTitle == i18n("Connecting"))
 	{
 		kdDebug() << "it's time to connect to the db..." << endl;
-		if(m_engine)
+		
+		m_connectionLog->clear();
+		if(g_Global->g_db->connectDB(m_cEngine->currentText(), m_dbHost->text(), m_dbName->text(), m_dbUser->text(), m_dbPass->text()))
 		{
-			m_engine->m_db->connectDB(m_dbHost->text(), m_dbName->text(), m_dbUser->text(), m_dbPass->text());
+			KListViewItem *i = new KListViewItem(m_connectionLog, i18n("1. connected to the database"));
+			KListViewItem *i2 = new KListViewItem(m_connectionLog, i18n("2. checking content"));
+			QSqlQuery query("show tables;", g_Global->g_db->m_db);
+			while(query.next())
+			{
+				QString tblName = query.value(0).toString();
+				kdDebug() << "table: " << tblName << endl;
+				m_main->m_browser->addTableItem(tblName);
+			}
 		}
-
+		else
+		{
+			QString msg = i18n("connection faild: ");
+			msg += g_Global->g_db->m_db->lastError().databaseText();
+			KListViewItem *i = new KListViewItem(m_connectionLog, msg);
+		}
+		
 	}
 }
 
@@ -201,5 +197,4 @@ KexiCreateProject::~KexiCreateProject()
 {
 }
 
-//#include "kexicreateproject.moc"
 #include "kexicreateproject.moc"

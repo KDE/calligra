@@ -1,9 +1,6 @@
-####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kexi
 
-## INCLUDES were found outside kdevelop specific part
-
-kexi_SOURCES = kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp kexi.cpp main.cpp 
+kexi_SOURCES = kexidb.cpp kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp kexi.cpp main.cpp 
 kexi_LDADD   =  $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = . interfaces pics 
@@ -20,8 +17,6 @@ install-data-local:
 	
 uninstall-local:
 
-####### kdevelop will overwrite this part!!! (end)############
-# These paths are KDE specific. Use them:
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
 # kde_sounddir        Where your sounds should go to.

@@ -25,17 +25,16 @@
   *@author lucijan busch
   */
 
-class KexiInterface;
-class KexiInterfaceTemplate;
-
+class Kexi;
 class KComboBox;
 class KLineEdit;
+class KListView;
   
 class KexiCreateProject : public KWizard  {
    Q_OBJECT
 
 	public: 
-		KexiCreateProject(QWidget *parent=0, const char *name=0, bool modal=false, WFlags f=0);
+		KexiCreateProject(Kexi *main=0, QWidget *parent=0, const char *name=0, bool modal=false, WFlags f=0);
 		~KexiCreateProject();
 
 		
@@ -44,9 +43,7 @@ class KexiCreateProject : public KWizard  {
 		QWidget *generatePage1();
 		QWidget *generatePage2();
 		
-		KexiInterface		*m_engine;
-		KexiInterfaceTemplate	*m_db;
-//		KComboBox	*m_cEngine;
+		Kexi			*m_main;
 		
 		bool			m_engineLoaded;
 		QString			m_loadedEngine;
@@ -59,6 +56,8 @@ class KexiCreateProject : public KWizard  {
 		KLineEdit		*m_dbHost;
 		KLineEdit		*m_dbUser;
 		KLineEdit		*m_dbPass;
+		
+		KListView		*m_connectionLog;
 		
 		QPixmap			m_wpic;
 		
