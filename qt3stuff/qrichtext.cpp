@@ -2402,12 +2402,6 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 
     if ( useDoubleBuffer  ) {
 	painter = new QPainter;
-        if ( verticalBreak() && parag->next() )
-            if ( ir.y() + ir.height() < parag->next()->rect().y() ) {
-                ir.setLeft( 0 );
-                ir.setRight( parag->document()->x() + parag->document()->width() );
-                ir.setBottom( parag->next()->rect().y() - 1 );
-            }
 	if ( cx >= 0 && cy >= 0 )
 	    ir = ir.intersect( QRect( cx, cy, cw, ch ) );
 	if ( !doubleBuffer ||
@@ -2454,13 +2448,21 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 	painter->translate( -ir.x(), -ir.y() );
     }
 
-    if ( parag->rect().x() + parag->rect().width() < parag->document()->x() + parag->document()->width() ) {
-	p->fillRect( parag->rect().x() + parag->rect().width(), parag->rect().y(),
+    QRect rect = parag->rect();
+    if ( rect.x() + rect.width() < parag->document()->x() + parag->document()->width() ) {
+	p->fillRect( rect.x() + rect.width(), rect.y(),
 		     ( parag->document()->x() + parag->document()->width() ) -
-		     ( parag->rect().x() + parag->rect().width() ),
-		     parag->rect().height(), cg.brush( QColorGroup::Base ) );
+		     ( rect.x() + rect.width() ),
+		     rect.height(), cg.brush( QColorGroup::Base ) );
     }
 
+    if ( verticalBreak() && parag->lastInFrame && parag->next() )
+        if ( rect.y() + rect.height() < parag->next()->rect().y() ) {
+            p->fillRect( 0, rect.y() + rect.height(),
+                         parag->document()->x() + parag->document()->width(),
+                         parag->next()->rect().y() - ( rect.y() + rect.height() ) - 1,
+                         cg.brush( QColorGroup::Base ) );
+        }
     //if ( verticalBreak() && parag->lastInFrame && parag->document()->flow() )
     //    parag->document()->flow()->eraseAfter( parag, p, cg );
 
@@ -3635,7 +3637,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	}
 
 	//if something (format, etc.) changed, draw what we have so far
-	if ( ( ( ( alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify && at(paintEnd)->c.isSpace() ) ||
+	if ( ( ( ( alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify && paintEnd != -1 && at(paintEnd)->c.isSpace() ) ||
 	       lastDirection != (bool)chr->rightToLeft ||
 	       chr->startOfRun ||
 	       lastY != cy || chr->format() != lastFormat ||
