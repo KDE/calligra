@@ -36,14 +36,17 @@ enum _EVarType
 	VAR_PAGE,
 	VAR_UNUSED3,
 	VAR_CUSTOM,
-	VAR_SERIALLETTER,
-	VAR_FIELD
+	VAR_MAILMERGE,
+	VAR_FIELD,
+	VAR_LINK,
+	VAR_NOTE,
+	VAR_FOOTNOTE
 };
 
 typedef enum _EVarType EVarType;
 
 /***********************************************************************/
-/* Class: VariableFormat                                                   */
+/* Class: VariableFormat                                               */
 /***********************************************************************/
 
 /**
@@ -76,6 +79,12 @@ class VariableFormat: public TextFormat
 	int _hour;
 	int _minute;
 	int _seconde;
+
+	/* FOOTNOTE */
+	QString _numberingtype;
+	QString _notetype;
+	QString _frameset;
+	QString _value;
 
 	public:
 		/**
@@ -121,7 +130,10 @@ class VariableFormat: public TextFormat
 		int          getHour      () const { return _hour;    }
 		int          getMinute    () const { return _minute;  }
 		int          getSeconde   () const { return _seconde; }
-
+		QString      getNumberingtype() const { return _numberingtype; }
+		QString      getNotetype  () const { return _notetype; }
+		QString      getFrameset  () const { return _frameset; }
+		QString      getValue     () const { return _value; }
 		
 		bool         isFix        () const { return (_fix       == true); }
 		/*bool         isItalic     () const { return (_italic    == true); }
@@ -150,6 +162,10 @@ class VariableFormat: public TextFormat
 		void setMinute     (const int m)           { _minute    = m; }
 		void setSeconde    (const int s)           { _seconde   = s; }
 		void setColor      (const int, const int, const int);
+    void setNumberingtype(const QString nt) { _numberingtype = nt; }
+		void setNotetype  (const QString nt)  { _notetype = nt; }
+		void setFrameset  (const QString fs)  { _frameset = fs; }
+		void setValue     (const QString val) { _value = val; }
 
 		/**
 		 * Helpfull functions
@@ -166,6 +182,7 @@ class VariableFormat: public TextFormat
 		void analyseSize      (const QDomNode);*/
 		void analyseDate      (const QDomNode);
 		void analyseTime      (const QDomNode);
+		void analyseFootnote  (const QDomNode);
 		void analyseType      (const QDomNode);
 };
 

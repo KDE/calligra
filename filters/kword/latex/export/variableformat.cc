@@ -102,6 +102,8 @@ void VariableFormat::analyseVariableFormat(const QDomNode balise)
 		analyseSize(getChild(balise, "SIZE"));
 	if(isChild(balise, "DATE"))
 		analyseDate(getChild(balise, "DATE"));
+	if(isChild(balise, "FOOTNOTE"))
+		analyseFootnote(getChild(balise, "FOOTNOTE"));
 	if(isChild(balise, "TYPE"))
 		analyseType(getChild(balise, "TYPE"));
 	kdDebug() << "END OF A FORMAT" << endl;
@@ -255,6 +257,14 @@ void VariableFormat::analyseTime(const QDomNode balise)
 	setMinute(getAttr(balise, "month").toInt());
 	setSeconde(getAttr(balise, "year").toInt());
 	setFix(getAttr(balise, "fix").toInt());
+}
+
+void VariableFormat::analyseFootnote(const QDomNode balise)
+{
+	setNumberingtype(getAttr(balise, "numberingtype"));
+	setNotetype(getAttr(balise, "notetype"));
+	setFrameset(getAttr(balise, "frameset"));
+	setValue(getAttr(balise, "value"));
 }
 
 /*******************************************/

@@ -28,6 +28,7 @@
 
 #include "variablezone.h"
 #include "para.h"
+#include "document.h"
 
 #define CSTART 0x00C0
 
@@ -324,6 +325,18 @@ void VariableZone::generate(QTextStream &out, int tab)
 	kdDebug() << "type : " << getType() << endl;
 	if((getType() == VAR_DATE) && !isFix())
 		out << "\\today" << endl;
+	else if(getType() == VAR_FOOTNOTE)
+	{
+		if(getNotetype() == "footnote")
+			out << "\\,\\footnote{";
+		else if(getNotetype() == "endnote")
+			out << "\\,\\endnote{";
+		/* Get the footnote and generate it. */
+		Element* footnote = getRoot()->searchFootnote(getFrameset());
+		footnote->generate(out);
+		Config::instance()->writeIndent(out);
+		out << "}";
+	}
 	else
 	{
 		if(Config::instance()->mustUseLatin1())

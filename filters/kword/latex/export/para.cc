@@ -371,7 +371,10 @@ void Para::generate(QTextStream &out)
 		generateDebut(out);
 	}
 
-	if(_lines != 0)
+	/* If text is a \n, then it's a break line. */
+	if(_text == "\n")
+		out << "\\\\" << endl;
+	else if(_lines != 0)
 	{
 		Format* zone = 0;
 		kdDebug() << "  NB ZONE : " << _lines->count() << endl;
