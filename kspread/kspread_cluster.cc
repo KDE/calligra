@@ -100,7 +100,7 @@ const KSpreadCell* KSpreadCluster::lookup( int x, int y ) const
     int dx = x % KSPREAD_CLUSTER_LEVEL2;
     int dy = y % KSPREAD_CLUSTER_LEVEL2;
 
-    const KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ];
+    KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ];
     if ( !cl )
 	return 0;
 
@@ -617,7 +617,7 @@ const ColumnLayout* KSpreadColumnCluster::lookup( int col ) const
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
-    const ColumnLayout** cl = m_cluster[ cx ];
+    ColumnLayout** cl = m_cluster[ cx ];
     if ( !cl )
 	return 0;
 
@@ -863,7 +863,7 @@ const RowLayout* KSpreadRowCluster::lookup( int row ) const
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
-    const RowLayout** cl = m_cluster[ cx ];
+    RowLayout** cl = m_cluster[ cx ];
     if ( !cl )
 	return 0;
 
