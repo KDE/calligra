@@ -48,20 +48,26 @@ class QStringList;
 class KEXICORE_EXPORT KexiProperty
 {
 	public:
-		/*! Creates a simple property with \a name as name and \a value as value. */
-		KexiProperty(const QString &name, QVariant value);
-		/*! Creates a simple property with \a name as name, \a value as value and \a as i18n'ed description. */
-		KexiProperty(const QString &name, QVariant value, const QString &desc);
+//		/*! Creates a simple property with \a name as name and \a value as value. */
+//		KexiProperty(const QString &name, QVariant value);
+
+		/*! Creates a simple property with \a name as name, \a value as value 
+		 and \a as i18n'ed description. */
+		KexiProperty(const QString &name, QVariant value, const QString &desc = QString::null);
+
 		/*! Creates a list property with \a name as name, \a value as value 
 		  and \a list as the list of all possible values for \a value.
 		  The user will be able to choose a value in \a list.
 		*/
-		KexiProperty(const QString &name, QVariant value, const QStringList &list);
+		KexiProperty(const QString &name, QVariant value, const QStringList &list, 
+		 const QString &desc = QString::null);
+
 		//! Copy constructor.
 		KexiProperty(const KexiProperty &property);
-		//KexiProperty(const QString &name, QVariant value, QStringList *list);
+
 		//! Creates an empty property.
 		KexiProperty();
+
 		~KexiProperty();
 		
 		const KexiProperty& operator=(const KexiProperty &property);
@@ -104,6 +110,13 @@ class KEXICORE_EXPORT KexiProperty
 		bool changed() const { return m_changed; }
 		/*! Marks this property as changed if \a set is true, or unchanged if \a set is true. */
 		void setChanged(bool set);
+
+		/*! \return visiblility of this property. Property can be hidden, what can usually mean that 
+		 it wont be available to the GUI (or scripting). After construction, property is visible. */
+		bool isVisible( bool v ) const { return m_visible; }
+
+		/*! Sets visiblility of this property to \a v. */
+		void setVisible( bool v ) { m_visible=v; }
 	private:
 		QString		m_name;
 		QString		m_desc;
@@ -112,6 +125,7 @@ class KEXICORE_EXPORT KexiProperty
 		QStringList	*m_list;
 		int		m_autosync;
 		bool m_changed : 1;
+		bool m_visible : 1;
 };
 
 #endif

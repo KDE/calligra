@@ -23,36 +23,29 @@
 #include "kexiproperty.h"
 
 
-KexiProperty::KexiProperty(const QString &name, QVariant value)
-{
-	m_name = name;
-	m_value = value;
-	m_list = 0;
-	m_desc = name;
-	m_autosync = -1;
-	//kdDebug() << "KexiProperty::KexiProperty(): standard property (" << m_desc << ")" << endl;
-}
-
-KexiProperty::KexiProperty(const QString &name, QVariant value, const QStringList &list)
-{
-	m_name = name;
-	m_value = value;
-	m_changed = false;
-	m_list = new QStringList(list);
-	m_desc = name;
-	m_autosync = -1;
-	//kdDebug() << "creating stringlist property" << endl;
-}
-
 KexiProperty::KexiProperty(const QString &name, QVariant value, const QString &desc)
 {
 	m_name = name;
 	m_value = value;
 	m_changed = false;
+	m_visible = true;
 	m_desc = desc;
 	m_list = 0;
 	m_autosync = -1;
-	kdDebug() << "KexiProperty::KexiProperty(): labeled property (" << m_desc << ")" << endl;
+	if (!m_desc.isEmpty())
+		kdDebug() << "KexiProperty::KexiProperty(): labeled property (" << m_desc << ")" << endl;
+}
+
+KexiProperty::KexiProperty(const QString &name, QVariant value, const QStringList &list, const QString &desc)
+{
+	m_name = name;
+	m_value = value;
+	m_changed = false;
+	m_visible = true;
+	m_list = new QStringList(list);
+	m_desc = name;
+	m_autosync = -1;
+	//kdDebug() << "creating stringlist property" << endl;
 }
 
 /*KexiProperty::KexiProperty(const QString &name, QVariant value, QStringList *list)
@@ -66,7 +59,8 @@ KexiProperty::KexiProperty(const KexiProperty &property)
 {
 	m_name = property.m_name;
 	m_value = property.m_value;
-	m_changed = false;
+	m_changed = property.m_changed;
+	m_visible = property.m_visible;
 	m_desc = property.m_desc;
 	m_autosync = property.m_autosync;
 	if(property.m_list)
