@@ -166,7 +166,7 @@
       </Parameter>
       <Help>
 	<Text>The TRUNC() function truncates a numeric value to a certain precision. If the precision is omitted 0 is assumed.</Text>
-	<Syntax>TRUNC(value, precision)</Syntax>
+	<Syntax>TRUNC(value; precision)</Syntax>
 	<Example>TRUNC(1.2) returns 1</Example>
 	<Example>TRUNC(213.232; 2) returns 213.23</Example>
 	<Related>ROUND</Related>
