@@ -1348,15 +1348,7 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor,const QList<KoTabulator> *
     }
 
     undoRedoInfo.newParagLayout.m_tabList.clear();
-    QListIterator<KoTabulator> it( *tabList );
-    for ( it.toFirst(); it.current(); ++it ) {
-        KoTabulator *t = new KoTabulator;
-        t->type = it.current()->type;
-        t->mmPos = it.current()->mmPos;
-        t->inchPos = it.current()->inchPos;
-        t->ptPos = it.current()->ptPos;
-        undoRedoInfo.newParagLayout.m_tabList.append( t );
-    }
+    undoRedoInfo.newParagLayout.setTabList(tabList);
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI();

@@ -687,15 +687,7 @@ void KWStyleEditor::paragDiaOk()
      style->paragLayout().counter= paragDia->counter() ;
      break;
    case KWParagDia::PD_TABS:
-       it=*paragDia->tabListTabulator();
-       for ( it.toFirst(); it.current(); ++it ) {
-           KoTabulator *t = new KoTabulator;
-           t->type = it.current()->type;
-           t->mmPos = it.current()->mmPos;
-           t->inchPos = it.current()->inchPos;
-           t->ptPos = it.current()->ptPos;
-           style->paragLayout().m_tabList.append( t );
-       }
+       style->paragLayout().setTabList(paragDia->tabListTabulator());
      break;
    default: break;
    }

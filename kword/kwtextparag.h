@@ -135,6 +135,8 @@ struct KWParagLayout
 
     void save( QDomElement & parentElem );
 
+    void setTabList(const QList<KoTabulator> *tabList );
+
     // From QTextParag
     int alignment;
 
@@ -144,6 +146,7 @@ struct KWParagLayout
     Border leftBorder, rightBorder, topBorder, bottomBorder;
     Counter counter;
     QString styleName;
+    
     QList<KoTabulator> m_tabList;
 };
 

@@ -891,16 +891,7 @@ KWParagLayout KWTextParag::createParagLayout() const
     l.styleName = m_styleName;
 
     l.m_tabList.clear();
-    QListIterator<KoTabulator> it( m_tabList);
-    for ( it.toFirst(); it.current(); ++it ) {
-        KoTabulator *t = new KoTabulator;
-        t->type = it.current()->type;
-        t->mmPos = it.current()->mmPos;
-        t->inchPos = it.current()->inchPos;
-        t->ptPos = it.current()->ptPos;
-        l.m_tabList.append( t );
-    }
-
+    l.setTabList(&m_tabList );
     return l;
 }
 
@@ -927,7 +918,7 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout )
         tmp.append( t );
     }
 
-    setTabList( &tmp);
+    setTabList( &tmp );
     // Don't call setStyle from here, it would overwrite any paragraph-specific settings
     m_styleName = layout.styleName;
 }
@@ -1107,4 +1098,17 @@ void KWParagLayout::save( QDomElement & parentElem )
     }
 }
 
+void KWParagLayout::setTabList(const QList<KoTabulator> *tabList )
+{
+    m_tabList.clear();
+    QListIterator<KoTabulator> it( *tabList);
+    for ( it.toFirst(); it.current(); ++it ) {
+        KoTabulator *t = new KoTabulator;
+        t->type = it.current()->type;
+        t->mmPos = it.current()->mmPos;
+        t->inchPos = it.current()->inchPos;
+        t->ptPos = it.current()->ptPos;
+        m_tabList.append( t );
+    }
+}
 #include "kwtextparag.moc"
