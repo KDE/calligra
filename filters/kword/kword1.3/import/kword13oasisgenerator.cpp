@@ -968,12 +968,15 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
 
 
 # ifndef NDEBUG // DEBUG (out of specification)
-    m_store->open("debug.xml"); // ### TODO: check error!
-    KoStoreDevice io ( m_store );
-    io.open( IO_WriteOnly );  // ### TODO: check error!
-    kwordDocument.xmldump( &io );
-    io.close();
-    m_store->close();
+    // No entry in the manifest file, as it is not part of the document
+    if ( m_store->open("Debug/debug.xml") )
+    {
+        KoStoreDevice io ( m_store );
+        io.open( IO_WriteOnly );  // ### TODO: check error!
+        kwordDocument.xmldump( &io );
+        io.close();
+        m_store->close();
+    }
 # endif
 
 
