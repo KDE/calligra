@@ -1,126 +1,114 @@
 #ifndef __kpresenter_idl__
 #define __kpresenter_idl__
 
-#include <openparts.idl>
-#include <koffice.idl>
-#include <openparts_ui.idl>
-
 module KPresenter
 {
-  interface KPresenterView : KOffice::View
+  interface KPresenterView
     {
-      slot void editUndo();
-      slot void editRedo();
-      slot void editCut();
-      slot void editCopy();
-      slot void editPaste();
-      slot void editDelete();
-      slot void editSelectAll();
-      slot void editCopyPage();
-      slot void editDelPage();
-      slot void editFind();
-      slot void editFindReplace();
-      slot void editHeaderFooter();
+       void editUndo();
+       void editRedo();
+       void editCut();
+       void editCopy();
+       void editPaste();
+       void editDelete();
+       void editSelectAll();
+       void editCopyPage();
+       void editDelPage();
+       void editFind();
+       void editFindReplace();
+       void editHeaderFooter();
 
-      slot void newView();
+       void newView();
 	
-      slot void insertPage();
-      slot void insertPicture();
-      slot void insertClipart();
+       void insertPage();
+       void insertPicture();
+       void insertClipart();
 
-      slot void toolsMouse();
-      slot void toolsLine();
-      slot void toolsRectangle();
-      slot void toolsCircleOrEllipse();
-      slot void toolsPie();
-      slot void toolsText();
-      slot void toolsAutoform();
-      slot void toolsDiagramm();
-      slot void toolsTable();
-      slot void toolsFormula();
-      slot void toolsObject();
+       void toolsMouse();
+       void toolsLine();
+       void toolsRectangle();
+       void toolsCircleOrEllipse();
+       void toolsPie();
+       void toolsText();
+       void toolsAutoform();
+       void toolsDiagramm();
+       void toolsTable();
+       void toolsFormula();
+       void toolsObject();
 
-      slot void extraPenBrush();
-      slot void extraConfigPie();
-      slot void extraConfigRect();
-      slot void extraRaise();
-      slot void extraLower();
-      slot void extraRotate();
-      slot void extraShadow();
-      slot void extraAlignObj();
-      slot void extraBackground();
-      slot void extraLayout();
-      slot void extraOptions();
-      slot void extraLineBegin();
-      slot void extraLineEnd();
-      slot void extraWebPres();
+       void extraPenBrush();
+       void extraConfigPie();
+       void extraConfigRect();
+       void extraRaise();
+       void extraLower();
+       void extraRotate();
+       void extraShadow();
+       void extraAlignObj();
+       void extraBackground();
+       void extraLayout();
+       void extraOptions();
+       void extraLineBegin();
+       void extraLineEnd();
+       void extraWebPres();
 
-      slot void extraAlignObjLeftidl();
-      slot void extraAlignObjCenterHidl();
-      slot void extraAlignObjRightidl();
-      slot void extraAlignObjTopidl();
-      slot void extraAlignObjCenterVidl();
-      slot void extraAlignObjBottomidl();
+       void extraAlignObjLeftidl();
+       void extraAlignObjCenterHidl();
+       void extraAlignObjRightidl();
+       void extraAlignObjTopidl();
+       void extraAlignObjCenterVidl();
+       void extraAlignObjBottomidl();
 
-      slot void screenConfigPages();
-      slot void screenPresStructView();
-      slot void screenAssignEffect();
-      slot void screenStart();
-      slot void screenStop();
-      slot void screenPause();
-      slot void screenFirst();
-      slot void screenPrev();
-      slot void screenNext();
-      slot void screenLast();
-      slot void screenSkip();
-      slot void screenFullScreen();
-      slot void screenPen();
-      slot void presPen1idl();
-      slot void presPen2idl();
-      slot void presPen3idl();
-      slot void presPen4idl();
-      slot void presPen5idl();
-      slot void presPen6idl();
-      slot void presPen7idl();
-      slot void presPen8idl();
-      slot void presPen9idl();
-      slot void presPen10idl();
-      slot void presPenColoridl();
+       void screenConfigPages();
+       void screenPresStructView();
+       void screenAssignEffect();
+       void screenStart();
+       void screenStop();
+       void screenPause();
+       void screenFirst();
+       void screenPrev();
+       void screenNext();
+       void screenLast();
+       void screenSkip();
+       void screenFullScreen();
+       void screenPen();
+       void presPen1idl();
+       void presPen2idl();
+       void presPen3idl();
+       void presPen4idl();
+       void presPen5idl();
+       void presPen6idl();
+       void presPen7idl();
+       void presPen8idl();
+       void presPen9idl();
+       void presPen10idl();
+       void presPenColoridl();
 
-      slot void helpContents();
+       void helpContents();
 
-      slot void sizeSelected(in wstring size);
-      slot void fontSelected(in wstring font);
-      slot void textBold();
-      slot void textItalic();
-      slot void textUnderline();
-      slot void textColor();
-      slot void textAlignLeft();
-      slot void textAlignCenter();
-      slot void textAlignRight();
-      slot void mtextAlignLeft();
-      slot void mtextAlignCenter();
-      slot void mtextAlignRight();
-      slot void mtextFont();
-      slot void textEnumList();
-      slot void textUnsortList();
-      slot void textNormalText();
-      slot void textDepthPlus();
-      slot void textDepthMinus();
-      slot void textSpacing();
-      slot void textContentsToHeight();
-      slot void textObjectToContents();
-      
-      slot void setPenColor(in long id);
-      slot void setFillColor(in long id);
-    };
+       void sizeSelected(in wstring size);
+       void fontSelected(in wstring font);
+       void textBold();
+       void textItalic();
+       void textUnderline();
+       void textColor();
+       void textAlignLeft();
+       void textAlignCenter();
+       void textAlignRight();
+       void mtextAlignLeft();
+       void mtextAlignCenter();
+       void mtextAlignRight();
+       void mtextFont();
+       void textEnumList();
+       void textUnsortList();
+       void textNormalText();
+       void textDepthPlus();
+       void textDepthMinus();
+       void textSpacing();
+       void textContentsToHeight();
+       void textObjectToContents();
 
-  interface KPresenterDocument : KOffice::Document, KOffice::Print
-    {
-    };
-
-  interface DocumentFactory : KOffice::DocumentFactory
-    {
+       void setPenColor(in long id);
+       void setFillColor(in long id);
     };
 };
 

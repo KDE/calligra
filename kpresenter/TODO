@@ -1,20 +1,30 @@
 BUGS :
 ======
-- Text editor : 
+- Text editor :
   - fix Home, End (they bring to the beginning/end of the document!)
+    also CTRL-A, CTRL-E, etc.
   - fix Esc : should exit edit mode (currently inserts non-visible char!)
   - copy&paste with mouse (MMB) bugs (ah, QT 2 bug)
     '^' + 'e' = 'e' !
   - selecting several lines : first line gets unselected
   - enumerated list / unsorted list / normal text : don't work if not in edit mode
-- adding a new page (from template) changes the width & height of the 
-  whole presentation (if different from the one of the template)
 
-MISSING FEATURES :
-==================
+MISSING FEATURES, todo :
+==============================
 - Restart with last presentation (suggesting it in initial "open" dialog)
   (using kapp->getConfig)
 - Window title : kpresenter - filename
 - Current "align objects" aligns in relation with the page, is there a
   way to align the h or v centers of several objects ?
 - Copy page
+- use libkformula
+- seperate the general configuration and page/slide specific config dialog
+  and make 2 out of them (currently it's one, which is confusing)
+- use GM in all dialogs
+- rework background-config dialog
+- Presentation structure editor/viewer (finish it)
+- Rewrite autoforms (using XML)
+- Insert pagenumber into txt objs
+- Group objects
+
+Reginald Stadlbauer <reggie@kde.org>

@@ -3,6 +3,6 @@
 MimeType=application/x-kpresenter
 Comment=KPresenter
 DefaultApp=KPresenter
-Icon=txt.xpm
+Icon=kpresenter.png
 Type=MimeType
 Patterns=*.kpr;

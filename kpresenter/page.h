@@ -108,7 +108,7 @@ public:
     void editSelectedTextArea();
     void setPartEntry( KoDocumentEntry& _e )
     { partEntry = _e; }
-    void setToolEditMode( ToolEditMode _m );
+    void setToolEditMode( ToolEditMode _m, bool updateView = TRUE );
     void setAutoForm( QString _autoform )
     { autoform = _autoform; }
 

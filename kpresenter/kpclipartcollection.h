@@ -1,15 +1,15 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1998                   */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* KPresenter is under GNU GPL                                    */
+/* KPresenter - (c) by Reginald Stadlbauer 1998			  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* KPresenter is under GNU GPL					  */
 /******************************************************************/
-/* Module: clipart collection (header)                            */
+/* Module: clipart collection (header)				  */
 /******************************************************************/
 
 #ifndef kpclipartcollection_h
@@ -25,7 +25,7 @@
 #include <iostream.h>
 
 /******************************************************************/
-/* Class: KPClipartCollection                                     */
+/* Class: KPClipartCollection					  */
 /******************************************************************/
 
 class KPClipartCollection
@@ -33,45 +33,45 @@ class KPClipartCollection
 public:
     struct Key
     {
-        Key()
-            : filename(), lastModified()
-        {}
+	Key()
+	    : filename(), lastModified()
+	{}
 
-        Key( const QString &fn, const QDateTime &mod )
-            : filename( fn ), lastModified( mod )
-        {}
-        Key( const Key &key )
-            : filename( key.filename ), lastModified( key.lastModified )
-        {}
+	Key( const QString &fn, const QDateTime &mod )
+	    : filename( fn ), lastModified( mod )
+	{}
+	Key( const Key &key )
+	    : filename( key.filename ), lastModified( key.lastModified )
+	{}
 
-        Key &operator=( const Key &key ) {
-            filename = key.filename;
-            lastModified = key.lastModified;
-            return *this;
-        }
+	Key &operator=( const Key &key ) {
+	    filename = key.filename;
+	    lastModified = key.lastModified;
+	    return *this;
+	}
 
-        bool operator==( const Key &key ) const {
-            return ( key.filename == filename &&
-                     key.lastModified == lastModified );
-        }
+	bool operator==( const Key &key ) const {
+	    return ( key.filename == filename &&
+		     key.lastModified == lastModified );
+	}
 
-        bool operator<( const Key &key ) const {
-            QString s1( key.toString() );
-            QString s2( toString() );
-            return ( s1 < s2 );
-        }
+	bool operator<( const Key &key ) const {
+	    QString s1( key.toString() );
+	    QString s2( toString() );
+	    return ( s1 < s2 );
+	}
 
-        QString toString() const {
-            QString s = QString( "%1_%2" ).arg( filename ).arg( lastModified.toString() );
-            return QString( s );
-        }
+	QString toString() const {
+	    QString s = QString( "%1_%2" ).arg( filename ).arg( lastModified.toString() );
+	    return QString( s );
+	}
 
-        QString filename;
-        QDateTime lastModified;
+	QString filename;
+	QDateTime lastModified;
     };
 
     KPClipartCollection()
-        : allowChangeRef( false )
+	: allowChangeRef( TRUE )
     { date = QDate::currentDate(); time = QTime::currentTime(); }
     ~KPClipartCollection();
 

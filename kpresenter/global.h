@@ -18,6 +18,12 @@
 
 #include <qsize.h>
 
+#include <kiconloader.h>
+
+#include "kpresenter_factory.h"
+
+#define KPBarIcon( x ) BarIcon( x, KPresenterFactory::global() )
+
 // factors
 // #define MM_TO_POINT 2.83465
 // #define POINT_TO_MM 0.3527772388

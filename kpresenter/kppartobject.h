@@ -17,8 +17,6 @@
 #define kppartobject_h
 
 #include <koMainWindow.h>
-#include <koView.h>
-#include <openparts.h>
 
 #include "kpobject.h"
 
@@ -42,6 +40,14 @@ public:
 
     virtual void save( ostream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+
+    virtual void rotate( float _angle );
+    virtual void setSize( int _width, int _height );
+    virtual void setOrig( QPoint _point );
+    virtual void setOrig( int _x, int _y );
+    virtual void moveBy( QPoint _point );
+    virtual void moveBy( int _dx, int _dy );
+    virtual void resizeBy( int _dx, int _dy );
 
     virtual void setPen( QPen _pen )
     { pen = _pen; }
@@ -87,20 +93,9 @@ public:
     virtual void activate( QWidget *_widget, int diffx, int diffy );
     virtual void deactivate();
 
-    virtual void setSize( int _width, int _height );
-    virtual void resizeBy( int _dx, int _dy );
-    virtual void setOrig( int _x, int _y );
-    virtual void moveBy( int _dx, int _dy );
-
     KPresenterChild *getChild() { return child; }
 
     void enableDrawing( bool f ) { _enableDrawing = f; }
-
-    void setGetNewPic( bool _new )
-    { getNewPic = _new; }
-
-    void setView( KOffice::View_var kv )
-    { view = KOffice::View::_narrow( kv ); }
 
 protected:
     void paint( QPainter *_painter );
@@ -116,12 +111,7 @@ protected:
     KPGradient *gradient;
     bool _enableDrawing;
 
-    KPresenterFrame *frame;
     KPresenterChild *child;
-    OpenParts::Id parentID;
-    KOffice::View_var view;
-
-    bool getNewPic;
 
 };
 

@@ -20,7 +20,6 @@ class KPresenterView;
 
 #include <koDocument.h>
 #include <koQueryTypes.h>
-#include <koPrintExt.h>
 
 #include <qapp.h>
 #include <qlist.h>
@@ -66,91 +65,61 @@ class KPresenterChild : public KoDocumentChild
 public:
 
     // constructor - destructor
-    KPresenterChild( KPresenterDoc *_kpr, const QRect& _rect, KOffice::Document_ptr _doc, int, int );
+    KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect, int, int );
     KPresenterChild( KPresenterDoc *_kpr );
     ~KPresenterChild();
 
     // get parent
-    KPresenterDoc* parent() {return m_pKPresenterDoc; }
-
-protected:
-
-    // parent, document and geometry
-    KPresenterDoc *m_pKPresenterDoc;
-
+    KPresenterDoc* parent() { return (KPresenterDoc*)parent(); }
 };
 
 /*****************************************************************/
 /* class KPresenterDoc						 */
 /*****************************************************************/
-class KPresenterDoc : public QObject,
-		      virtual public KoDocument,
-		      virtual public KoPrintExt,
-		      virtual public KPresenter::KPresenterDocument_skel
+class KPresenterDoc : public KoDocument
 {
     Q_OBJECT
 
 public:
 
-    // ------ C++ ------
     // constructor - destructor
-    KPresenterDoc();
+    KPresenterDoc( QObject* doc = 0, const char* name = 0 );
     ~KPresenterDoc();
 
-    // clean
-    virtual void cleanUp();
+    Shell* createShell();
+    View* createView( QWidget* parent, const char* name );
+
+    // Drawing
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
     // save
     virtual bool save( ostream&, const char *_format );
-    virtual bool completeSaving( KOStore::Store_ptr _store );
+    virtual bool completeSaving( KoStore* _store );
 
     // load
     virtual bool load_template( const QString &_url );
-    virtual bool loadXML( KOMLParser&, KOStore::Store_ptr );
-    virtual bool loadChildren( KOStore::Store_ptr _store );
+    virtual bool loadXML( KOMLParser&, KoStore* );
+    virtual bool loadChildren( KoStore* _store );
 
-    virtual KPresenterView* createPresenterView( QWidget* _parent = 0 );
-
-    // ------ IDL ------
     virtual bool initDoc() { return insertNewTemplate( 0, 0, TRUE ); }
 
-    KOffice::MainWindow_ptr createMainWindow();
-
-    // create a view
-    virtual OpenParts::View_ptr createView();
-
-    // get list of views
-    virtual void viewList( OpenParts::Document::ViewList _list );
-
     // get mime type
-    virtual QCString mimeType() {return QCString( MIME_TYPE ); }
+    virtual QCString mimeType() const { return QCString( MIME_TYPE ); }
 
     // ask, if document is modified
     virtual bool isModified() { return m_bModified; }
     virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
     virtual bool isEmpty() { return m_bEmpty; }
 
-    // ------ C++ ------
-    virtual int viewCount();
-
-    // ------ C++ ------
     // get output- and inputformats
     virtual QStrList outputFormats();
     virtual QStrList inputFormats();
 
-    // add - remove a view
-    virtual void addView( KPresenterView *_view );
-    virtual void removeView( KPresenterView *_view );
-
     // insert an object
     virtual void insertObject( const QRect&, KoDocumentEntry&, int, int );
-    virtual void insertChild( KPresenterChild *_child );
 
     // change geomentry of a child
     virtual void changeChildGeometry( KPresenterChild*, const QRect&, int, int );
-
-    // get iterator if a child
-    virtual QListIterator<KPresenterChild> childIterator();
 
     // page layout
     void setPageLayout( KoPageLayout, int, int );
@@ -350,7 +319,7 @@ protected:
     /**
      * Overloaded function from @ref Document_impl. Saves all children.
      */
-    virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
+    virtual bool saveChildren( KoStore* _store, const char *_path );
     /*
      * Overloaded function from @ref KoDocument.
      *
@@ -367,8 +336,13 @@ protected:
     void saveObjects( ostream& );
     void loadBackground( KOMLParser&, vector<KOMLAttrib>& );
     void loadObjects( KOMLParser&, vector<KOMLAttrib>&, bool _paste = false );
-    virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
+    virtual bool completeLoading( KoStore* /* _store */ );
     void makeUsedPixmapList();
+
+    /**
+     * Overloaded from @ref Part
+     */
+    virtual QString configFile() const;
 
     // ************ variables ************
 
@@ -379,8 +353,8 @@ protected:
     };
 
     // list of views and children
-    QList<KPresenterView> m_lstViews;
-    QList<KPresenterChild> m_lstChildren;
+    // QList<KPresenterView> m_lstViews;
+    // QList<KPresenterChild> m_lstChildren;
     KPresenterView *viewPtr;
 
     // modified?

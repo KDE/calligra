@@ -16,10 +16,12 @@
 #include "kppartobject.h"
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
+#include "kpresenter_shell.h"
 #include "kpgradient.h"
 
 #include <qpicture.h>
 #include <qwidget.h>
+#include <part.h>
 
 /******************************************************************/
 /* Class: KPPartObject						  */
@@ -30,7 +32,6 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     : KPObject()
 {
     child = _child;
-    frame = 0L;
     brush = Qt::NoBrush;
     gradient = 0;
     fillType = FT_BRUSH;
@@ -39,7 +40,6 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     gColor1 = Qt::red;
     gColor2 = Qt::green;
     _enableDrawing = true;
-    getNewPic = false;
     unbalanced = FALSE;
     xfactor = 100;
     yfactor = 100;
@@ -48,17 +48,83 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
 /*================================================================*/
 KPPartObject::~KPPartObject()
 {
-    if ( frame )
-    {
-	frame->detach();
-	delete frame;
-    }
 }
 
 /*================================================================*/
 KPPartObject &KPPartObject::operator=( const KPPartObject & )
 {
     return *this;
+}
+
+/*================================================================*/
+void KPPartObject::rotate( float _angle )
+{
+    KPObject::rotate( _angle );
+
+    child->setRotation( _angle );
+    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
+			     getOrig().y() + getSize().height() / 2 ) );
+}
+
+/*======================== draw ==================================*/
+void KPPartObject::setSize( int _width, int _height )
+{
+    KPObject::setSize( _width, _height );
+
+    child->setGeometry( QRect( orig, ext ) );
+    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
+				     getOrig().y() + getSize().height() / 2 ) );
+}
+
+/*======================== draw ==================================*/
+void KPPartObject::setOrig( QPoint _point )
+{
+    KPObject::setOrig( _point );
+
+    child->setGeometry( QRect( orig, ext ) );
+    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
+				     getOrig().y() + getSize().height() / 2 ) );
+}
+
+/*======================== draw ==================================*/
+void KPPartObject::setOrig( int _x, int _y )
+{
+    KPObject::setOrig( _x, _y );
+
+    child->setGeometry( QRect( orig, ext ) );
+    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
+				     getOrig().y() + getSize().height() / 2 ) );
+
+}
+
+/*======================== draw ==================================*/
+void KPPartObject::moveBy( QPoint _point )
+{
+    KPObject::moveBy( _point );
+
+    child->setGeometry( QRect( orig, ext ) );
+    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
+				     getOrig().y() + getSize().height() / 2 ) );
+}
+
+/*======================== draw ==================================*/
+void KPPartObject::moveBy( int _dx, int _dy )
+{
+    KPObject::moveBy( _dx, _dy );
+
+    child->setGeometry( QRect( orig, ext ) );
+    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
+				     getOrig().y() + getSize().height() / 2 ) );
+}
+
+/*======================== draw ==================================*/
+void KPPartObject::resizeBy( int _dx, int _dy )
+{
+    KPObject::resizeBy( _dx, _dy );
+
+    child->setGeometry( QRect( orig, ext ) );
+    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
+				     getOrig().y() + getSize().height() / 2 ) );
 }
 
 /*======================== draw ==================================*/
@@ -70,21 +136,23 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 	return;
     }
 
-    int ox = orig.x() - _diffx;
-    int oy = orig.y() - _diffy;
+//     int ox = orig.x() - _diffx;
+//     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-    QRect r;
+//     QRect r;
 
     int penw = pen.width();
 
     _painter->save();
-
-    r = _painter->viewport();
-    _painter->setViewport( ox, oy, r.width(), r.height() );
+    _painter->translate( -_diffx, -_diffy );
+    // r = _painter->viewport();
+    // _painter->setViewport( ox, oy, r.width(), r.height() );
 
     if ( angle == 0 )
     {
+	child->transform( *_painter );
+		
 	_painter->setPen( Qt::NoPen );
 	_painter->setBrush( brush );
 	if ( fillType == FT_BRUSH || !gradient )
@@ -100,7 +168,9 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
     }
     else
     {
-	QRect br = QRect( 0, 0, ow, oh );
+	child->transform( *_painter );
+	
+	/* QRect br = QRect( 0, 0, ow, oh );
 	int pw = br.width();
 	int ph = br.height();
 	QRect rr = br;
@@ -114,7 +184,7 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 	m2.translate( rr.left() + xPos, rr.top() + yPos );
 	m = m2 * mtx * m;
 
-	_painter->setWorldMatrix( m );
+	_painter->setWorldMatrix( m ); */
 
 	_painter->setPen( Qt::NoPen );
 	_painter->setBrush( brush );
@@ -131,7 +201,7 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 	paint( _painter );
     }
 
-    _painter->setViewport( r );
+    // _painter->setViewport( r );
 
     _painter->restore();
 
@@ -143,45 +213,28 @@ void KPPartObject::paint( QPainter *_painter )
 {
     if ( !_enableDrawing ) return;
 
-    QPicture* pic;
-    pic = child->draw( ( zoomed ? presFakt : 1.0 ), ( zoomed ? true : getNewPic ) );
-    getNewPic = false;
-
-    _painter->setPen( pen );
-    _painter->setBrush( brush );
-
-    _painter->drawPicture( *pic );
+    // ######### Torben: Care about zooming
+    if ( child )
+	child->part()->paintEverything( *_painter, QRect( QPoint( 0, 0 ), getSize() ), TRUE, 0 );
 }
 
 /*================================================================*/
-void KPPartObject::activate( QWidget *_widget, int diffx, int diffy )
+void KPPartObject::activate( QWidget *_widget, int /*diffx*/, int /*diffy*/ )
 {
-    if ( !frame ) {
-	frame = new KPresenterFrame( dynamic_cast<KPresenterView*>( _widget ), child );
-	frame->attachView( view );
-	frame->show();
-    }
-    frame->setGeometry( orig.x() - diffx + 20, orig.y() - diffy + 20, ext.width(), ext.height() );
-    frame->view()->mainWindow()->setActivePart( frame->view()->id() );
-    frame->setFocus();
-    
-    parentID = dynamic_cast<KPresenterView*>( _widget )->getID();
+    KPresenterView *view = (KPresenterView*)_widget;
+    Part* part = child->part();
+    if ( !part )
+	return;
+    view->shell()->setActiveView( view, part );
 }
 
 /*================================================================*/
 void KPPartObject::deactivate()
 {
-    if ( frame ) {
-	frame->view()->mainWindow()->setActivePart( parentID );
-	// HACK!
-	frame->setGeometry( -10, -10, 1, 1 );
-    }
-
-    getNewPic = true;
 }
 
 /*================================================================*/
-void KPPartObject::setSize( int _width, int _height )
+/* void KPPartObject::setSize( int _width, int _height )
 {
     KPObject::setSize( _width, _height );
 
@@ -194,10 +247,10 @@ void KPPartObject::setSize( int _width, int _height )
 	gradient->setSize( getSize() );
 
     getNewPic = true;
-}
+    } */
 
 /*================================================================*/
-void KPPartObject::resizeBy( int _dx, int _dy )
+/* void KPPartObject::resizeBy( int _dx, int _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
@@ -210,21 +263,21 @@ void KPPartObject::resizeBy( int _dx, int _dy )
 	gradient->setSize( getSize() );
 
     getNewPic = true;
-}
+    } */
 
 /*================================================================*/
-void KPPartObject::setOrig( int _x, int _y )
+/* void KPPartObject::setOrig( int _x, int _y )
 {
     KPObject::setOrig( _x, _y );
     child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
-}
+    } */
 
 /*================================================================*/
-void KPPartObject::moveBy( int _dx, int _dy )
+/* void KPPartObject::moveBy( int _dx, int _dy )
 {
     KPObject::moveBy( _dx, _dy );
     child->setGeometry( QRect( orig.x(), orig.y(), ext.width(), ext.height() ) );
-}
+    } */
 
 /*================================================================*/
 void KPPartObject::setFillType( FillType _fillType )

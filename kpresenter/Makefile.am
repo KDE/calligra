@@ -7,8 +7,8 @@ LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO)
 
 bin_PROGRAMS = kpresenter
 
-kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc kpresenter_main.cc \
-	kpresenter_doc.cc kpresenter_shell.cc kpresenter.idl \
+kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc \
+	kpresenter_doc.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	qwmf.cc kenumlistdia.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
@@ -24,10 +24,10 @@ kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc kpresenter_main.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
-	commandhistory.cc preview.cc gotopage.cc footer_header.cc
+	commandhistory.cc preview.cc gotopage.cc footer_header.cc main.cc \
+	kpresenter_shell.cc kpresenter_factory.cc
 
-noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
-		kpresenter_shell.h kpresenter.h \
+noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h ktextobject.h styledia.h \
 		qwmf.h global.h \
 		kenumlistdia.h kcharselectdia.h optiondia.h \
@@ -44,10 +44,9 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
 		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h penbrushcmd.cc \
 		commandhistory.h preview.h gotopage.h webpresentation.h \
-		footer_header.h
+		footer_header.h kpresenter_shell.h kpresenter_factory.h
 
-METASOURCES =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
-		kpresenter_shell.moc \
+METASOURCES =	kpresenter_doc.moc kpresenter_view.moc \
 		page.moc ktextobject.moc backdia.moc styledia.moc \
 		kenumlistdia.moc kcharselectdia.moc \
 		optiondia.moc pgconfdia.moc effectdia.moc \
@@ -55,10 +54,10 @@ METASOURCES =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		presstructview.moc delpagedia.moc inspagedia.moc confpiedia.moc \
 		spacingdia.moc confrectdia.moc \
 		commandhistory.moc gotopage.moc webpresentation.moc \
-		footer_header.moc
+		footer_header.moc kpresenter_shell.moc kpresenter_factory.moc
 
-idl_DATA =	kpresenter.idl
-kpresenter.h: $(top_builddir)/lib/kofficecore/koffice.idl
+# idl_DATA =	kpresenter.idl
+# kpresenter.h: $(top_builddir)/lib/kofficecore/koffice.idl
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
@@ -66,7 +65,10 @@ kdelnkdir = $(kde_appsdir)/KOffice
 kdemime_DATA = x-kpresenter.desktop
 kdemimedir = $(kde_mimedir)/application
 
-SUBDIRS = autoformEdit autoforms . pics toolbar templates dtd slideshow
+rcdir = $(kde_datadir)/kpresenter
+rc_DATA = kpresenter.rc kpresenter_shell.rc
+
+SUBDIRS = autoformEdit autoforms . pics templates dtd slideshow toolbar
 
 messages:
 	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot

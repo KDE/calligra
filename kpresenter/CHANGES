@@ -456,3 +456,7 @@ Reggie, 16.9.1999:
 - It's possible now to assign an effect for screenpresentations
   to multiple objects at the same time if multiple objs are selected
 
+Reggie, 15.1.1999:
+---------------
+- Fixed refcounting in collections => fixed some segfaults
+- Some other small fixes

@@ -72,6 +72,13 @@ KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QSt
 }
 
 /*================================================================*/
+KPPixmapObject::~KPPixmapObject()
+{
+    if ( pixmap )
+	pixmapCollection->removeRef( key );
+}
+
+/*================================================================*/
 KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
 {
     return *this;

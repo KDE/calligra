@@ -33,8 +33,7 @@ class KPPixmapObject : public KPObject
 public:
     KPPixmapObject( KPPixmapCollection *_pixmapCollection );
     KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QString &_filename, QDateTime _lastModified );
-    virtual ~KPPixmapObject()
-    {}
+    virtual ~KPPixmapObject();
 
     KPPixmapObject &operator=( const KPPixmapObject & );
 

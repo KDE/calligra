@@ -17,7 +17,9 @@
 #include <klocale.h>
 #include "afchoose.moc"
 #include <qvbox.h>
+#include <qtextstream.h>
 #include <kstddirs.h>
+#include "../kpresenter_factory.h"
 
 /******************************************************************/
 /* class AFChoose						  */
@@ -44,33 +46,23 @@ AFChoose::~AFChoose()
 void AFChoose::getGroups()
 {
     // global autoforms
-    QString afDir = locate( "autoforms", ".autoforms" ), str;
-    qDebug( "%s", afDir.latin1() );
-    char* c = new char[256];
+    QString afDir = locate( "autoforms", ".autoforms", KPresenterFactory::global() );
 
-    QFile afInf( afDir );
-
-    if (afInf.open(IO_ReadOnly))
-    {
-	while (!afInf.atEnd())
-	{
-	    afInf.readLine(c,256);
-	    str = c;
-	    str = str.stripWhiteSpace();
-	    if (!str.isEmpty())
-	    {
+    QFile f( afDir );
+    if ( f.open(IO_ReadOnly) ) {    
+	QTextStream t( &f );
+	QString s;
+	while ( !t.eof() ) {
+	    s = t.readLine();
+	    if ( !s.isEmpty() ) {
 		grpPtr = new Group;
-		grpPtr->dir.setFile( QFileInfo( afDir ).dirPath() + "/" + QString(c).stripWhiteSpace() + "/");
-		grpPtr->name = QString(qstrdup(c)).stripWhiteSpace();
-		groupList.append(grpPtr);
+		grpPtr->dir.setFile( QFileInfo( afDir ).dirPath() + "/" + s.simplifyWhiteSpace() );
+		grpPtr->name = s.simplifyWhiteSpace();
+		groupList.append( grpPtr );
 	    }
-	    strcpy(c,"");
 	}
-
-	afInf.close();
+	f.close();
     }
-
-    delete c;
 }
 
 /*======================= setup Tabs =============================*/
@@ -83,7 +75,7 @@ void AFChoose::setupTabs()
 	    grpPtr->tab = new QVBox(this);
 	    grpPtr->loadWid = new KIconLoaderCanvas(grpPtr->tab);
 	    qDebug( "%s", grpPtr->dir.absFilePath().latin1() );
-	    grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.xpm");
+	    grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.png");
 	    grpPtr->loadWid->setBackgroundColor(colorGroup().base());
 	    grpPtr->loadWid->show();
 	    connect(grpPtr->loadWid,SIGNAL(nameChanged(const QString &)),

@@ -1,80 +1,48 @@
-/******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1998                   */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* KPresenter is under GNU GPL                                    */
-/******************************************************************/
-/* Module: KPresenter Shell (header)                              */
-/******************************************************************/
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #ifndef __kpresenter_shell_h__
 #define __kpresenter_shell_h__
 
 #include <koMainWindow.h>
 
-class KPresenterDoc;
-class KPresenterView;
-
-#include <qlist.h>
-#include <qstring.h>
-
-/*****************************************************************/
-/* class KPresenterShell                                         */
-/*****************************************************************/
+class QAction;
 
 class KPresenterShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    // C++
-    KPresenterShell();
+    KPresenterShell( QWidget* parent = 0, const char* name = 0 );
     ~KPresenterShell();
 
-    // C++
-    virtual void cleanUp();
-    void setDocument( KPresenterDoc *_doc );
+    QString nativeFormatMimeType() const { return "application/x-kpresenter"; }
+    QString nativeFormatPattern() const { return "*.kpr"; }
+    QString nativeFormatName() const { return "KPresenter"; }
 
-    // C++
-    virtual bool newDocument();
-    virtual bool openDocument( const char *_filename );
-    virtual bool saveDocument();
-    virtual bool closeDocument();
-    virtual bool closeAllDocuments();
+    virtual void setRootPart( Part* );
 
-protected slots:
-    void slotFileNew();
-    void slotFileOpen();
-    void slotFileSave();
-    void slotFileSaveAs();
+public slots:
     void slotFilePrint();
-    void slotFileClose();
-    void slotFileQuit();
 
 protected:
-    // C++
-    virtual KOffice::Document_ptr document();
-    virtual KOffice::View_ptr view();
-
-    virtual bool printDlg();
-    virtual void helpAbout();
-    virtual int documentCount();
-
-    bool isModified();
-    bool requestClose();
-
-    void releaseDocument();
-
-    KPresenterDoc* m_pDoc;
-    KPresenterView* m_pView;
-
-    static QList<KPresenterShell>* s_lstShells;
-    static bool previewHandlerRegistered;
-
+    virtual QString configFile() const;
+    virtual KoDocument* createDoc();
 };
 
 #endif

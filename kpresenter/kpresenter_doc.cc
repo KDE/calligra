@@ -14,10 +14,9 @@
 
 #include "kpresenter_doc.h"
 #include "kpresenter_doc.moc"
+#include "kpresenter_view.h"
 #include "kpresenter_shell.h"
-#include "kpresenter_view.h"
 #include "page.h"
-#include "kpresenter_view.h"
 #include "ktextobject.h"
 #include "footer_header.h"
 #include "kplineobject.h"
@@ -69,7 +68,6 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 
-#include <koView.h>
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
 #include <koFilterManager.h>
@@ -84,25 +82,20 @@
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, const QRect& _rect, KOffice::Document_ptr _doc,
-				  int _diffx, int _diffy )
-    : KoDocumentChild( _rect, _doc )
+KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect, int _diffx, int _diffy )
+    : KoDocumentChild( _kpr, _doc, QRect( _rect.left() + _diffx, _rect.top() + _diffy, _rect.width(), _rect.height() ) )
 {
-    m_pKPresenterDoc = _kpr;
-    setGeometry( QRect( _rect.left() + _diffx, _rect.top() + _diffy, _rect.width(), _rect.height() ) );
 }
 
 /*====================== constructor =============================*/
 KPresenterChild::KPresenterChild( KPresenterDoc *_kpr ) :
-    KoDocumentChild()
+    KoDocumentChild( _kpr )
 {
-    m_pKPresenterDoc = _kpr;
 }
 
 /*====================== destructor ==============================*/
 KPresenterChild::~KPresenterChild()
 {
-    m_rDoc = 0L;
 }
 
 /******************************************************************/
@@ -110,17 +103,11 @@ KPresenterChild::~KPresenterChild()
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterDoc::KPresenterDoc()
-    : _pixmapCollection(), _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
+KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
+    : KoDocument( parent, name ),
+      _pixmapCollection(), _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
       _hasFooter( false ), urlIntern()
 {
-    ADD_INTERFACE( "IDL:KOffice/Print:1.0" )
-    // Use CORBA mechanism for deleting views
-    m_lstViews.setAutoDelete( false );
-    m_lstChildren.setAutoDelete( true );
-
-    m_bModified = false;
-
     // init
     _clean = true;
     _objectList = new QList<KPObject>;
@@ -187,43 +174,15 @@ KPresenterDoc::~KPresenterDoc()
     _objectList->clear();
     delete _objectList;
     _backgroundList.clear();
-    cleanUp();
-//    edeb( "...KPresenterDoc::~KPresenterDoc() %i\n", _refcnt() );
 }
 
 /*======================== draw contents as QPicture =============*/
-void KPresenterDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
-			  float _scale )
+void KPresenterDoc::draw( QPaintDevice* /*_dev*/, long int /*_width*/, long int /*_height*/,
+			  float /*_scale*/ )
 {
     warning( "***********************************************" );
     warning( i18n( "KPresenter doesn't support KoDocument::draw( ... ) now!" ) );
     warning( "***********************************************" );
-
-    return;
-
-    if ( m_lstViews.count() > 0 ) {
-	QPainter painter;
-	painter.begin( _dev );
-
-	if ( _scale != 1.0 )
-	    painter.scale( _scale, _scale );
-
-	m_lstViews.at( 0 )->getPage()->draw( QRect( 0, 0, _width, _height ), &painter );
-
-	painter.end();
-    }
-}
-
-/*======================= clean up ===============================*/
-void KPresenterDoc::cleanUp()
-{
-    if ( m_bIsClean ) return;
-
-    assert( m_lstViews.count() == 0 );
-
-    m_lstChildren.clear();
-
-    KoDocument::cleanUp();
 }
 
 /*========================== save ===============================*/
@@ -240,15 +199,14 @@ bool KPresenterDoc::hasToWriteMultipart()
 }
 
 /*======================= make child list intern ================*/
-bool KPresenterDoc::saveChildren( KOStore::Store_ptr _store, const char *_path )
+bool KPresenterDoc::saveChildren( KoStore* _store, const char *_path )
 {
     int i = 0;
 
-    QListIterator<KPresenterChild> it( m_lstChildren );
+    QListIterator<PartChild> it( children() );
     for( ; it.current(); ++it ) {
 	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-	KOffice::Document_var doc = it.current()->document();
-	if ( !doc->saveToStore( _store, "", internURL ) )
+	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, "", internURL ) )
           return false;
     }
     return true;
@@ -311,17 +269,19 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     out << etag << "</SELSLIDES>" << endl;
 
     // Write "OBJECT" tag for every child
-    QListIterator<KPresenterChild> chl( m_lstChildren );
+    QListIterator<PartChild> chl( children() );
     for( ; chl.current(); ++chl ) {
 	out << otag << "<EMBEDDED>" << endl;
 
-	chl.current()->save( out );
+	KPresenterChild* curr = (KPresenterChild*)chl.current();
+	
+	curr->save( out );
 
 	out << otag << "<SETTINGS>" << endl;
 	for ( unsigned int i = 0; i < _objectList->count(); i++ ) {
 	    kpobject = _objectList->at( i );
 	    if ( kpobject->getType() == OT_PART &&
-		 dynamic_cast<KPPartObject*>( kpobject )->getChild() == chl.current() )
+		 dynamic_cast<KPPartObject*>( kpobject )->getChild() == curr )
 		kpobject->save( out );
 	}
 	out << etag << "</SETTINGS> "<< endl;
@@ -346,7 +306,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 		format = "BMP";
             QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
             if ( !isStoredExtern() )
-              pictureName.prepend( m_strURL + "/" );
+              pictureName.prepend( url() + "/" );
 	    out << indent << "<KEY " << key << " name=\""
 		<< pictureName.latin1()
 		<< "\" />" << endl;
@@ -364,7 +324,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 	KPClipartCollection::Key key = it2.key();
         QString clipartName = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
         if ( !isStoredExtern() )
-          clipartName.prepend( m_strURL + "/" );
+          clipartName.prepend( url() + "/" );
 	out << indent << "<KEY " << key << " name=\""
 	    << clipartName.latin1()
 	    << "\" />" << endl;
@@ -420,7 +380,7 @@ void KPresenterDoc::saveObjects( ostream& out )
 }
 
 /*==============================================================*/
-bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
+bool KPresenterDoc::completeSaving( KoStore* _store )
 {
     if ( !_store )
 	return true;
@@ -443,7 +403,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 
 	    QString mime = "image/" + format.lower();
             if ( !isStoredExtern() )
-              u2.prepend( m_strURL + "/" );
+              u2.prepend( url() + "/" );
 
 	    if ( _store->open( u2, mime.lower().ascii() ) ) {
 	        ostorestream out( _store );
@@ -462,7 +422,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 	    QString u2 = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
 	    QString mime = "clipart/wmf";
             if ( !isStoredExtern() )
-              u2.prepend( m_strURL + "/" );
+              u2.prepend( url() + "/" );
 
 	    if ( _store->open( u2, mime.lower().ascii() ) ) {
 	        ostorestream out( _store );
@@ -477,11 +437,11 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 }
 
 /*========================== load ===============================*/
-bool KPresenterDoc::loadChildren( KOStore::Store_ptr _store )
+bool KPresenterDoc::loadChildren( KoStore* _store )
 {
-    QListIterator<KPresenterChild> it( m_lstChildren );
+    QListIterator<PartChild> it( children() );
     for( ; it.current(); ++it ) {
-	if ( !it.current()->loadDocument( _store ) )
+	if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
 	    return false;
     }
 
@@ -495,7 +455,7 @@ bool KPresenterDoc::load_template( const QString &_url )
 }
 
 /*========================== load ===============================*/
-bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
+bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 {
     QApplication::setOverrideCursor( waitCursor );
     string tag;
@@ -917,14 +877,14 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	else
 	    setPageLayout( _pageLayout, 0, 0 );
 
+	_pixmapCollection.setAllowChangeRef( true );
+	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
+
 	KPObject *kpobject = 0L;
 	for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
 	    if ( kpobject->getType() == OT_PICTURE )
 		dynamic_cast<KPPixmapObject*>( kpobject )->reload();
 	}
-
-	_pixmapCollection.setAllowChangeRef( true );
-	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
     }
 
     return true;
@@ -1040,6 +1000,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
 		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this );
 		    insertCmd->execute();
 		    _commands.addCommand( insertCmd );
+		    kpclipartobject->reload();
 		} else
 		    _objectList->append( kpclipartobject );
 	    } break;
@@ -1062,6 +1023,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
 		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this );
 		    insertCmd->execute();
 		    _commands.addCommand( insertCmd );
+		    kppixmapobject->reload();
 		} else
 		    _objectList->append( kppixmapobject );
 	    } break;
@@ -1084,11 +1046,12 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
 }
 
 /*===================================================================*/
-bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
+bool KPresenterDoc::completeLoading( KoStore* _store )
 {
     if ( _store ) {
-	CORBA::String_var str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
-
+	// CORBA::String_var str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
+	QString str = urlIntern.isEmpty() ? KURL( url() ).path() : urlIntern;
+	
 	QValueListIterator<KPPixmapDataCollection::Key> it = pixmapCollectionKeys.begin();
 	QStringList::Iterator nit = pixmapCollectionNames.begin();
 
@@ -1098,7 +1061,7 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	    if ( !( *nit ).isEmpty() )
 		u = *nit;
 	    else {
-		u = str.in();
+		u = str;
 		u += "/";
 		u += it.node->data.toString();
 	    }
@@ -1130,7 +1093,7 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	    if ( !( *nit2 ).isEmpty() )
 		u = *nit2;
 	    else {
-		u = str.in();
+		u = str;
 		u += "/";
 		u += it2.node->data.toString();
 	    }
@@ -1153,6 +1116,9 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	    _clipartCollection.insertClipart( it2.node->data, pic );
 	}
 
+	_pixmapCollection.setAllowChangeRef( true );
+	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
+
 	KPObject *kpobject = 0L;
 	for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
 	    if ( kpobject->getType() == OT_PICTURE )
@@ -1174,43 +1140,6 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
     return true;
 }
 
-/*========================= create a new shell ========================*/
-KOffice::MainWindow_ptr KPresenterDoc::createMainWindow()
-{
-    KPresenterShell* shell = new KPresenterShell;
-    shell->show();
-    shell->setDocument( this );
-
-    return KOffice::MainWindow::_duplicate( shell->koInterface() );
-}
-
-/*========================= create a view ========================*/
-KPresenterView* KPresenterDoc::createPresenterView( QWidget* _parent )
-{
-    KPresenterView *p = new KPresenterView( _parent, 0L, this );
-    //p->QWidget::show();
-    m_lstViews.append( p );
-
-    return p;
-}
-
-/*========================= create a view ========================*/
-OpenParts::View_ptr KPresenterDoc::createView()
-{
-    return OpenParts::View::_duplicate( createPresenterView() );
-}
-
-/*========================== view list ===========================*/
-void KPresenterDoc::viewList( OpenParts::Document::ViewList _list )
-{
-    _list.clear();
-
-    int i = 0;
-    QListIterator<KPresenterView> it( m_lstViews );
-    for( ; it.current(); ++it )
-        _list.append( OpenParts::View::_duplicate( it.current() ) );
-}
-
 /*========================== output formats ======================*/
 QStrList KPresenterDoc::outputFormats()
 {
@@ -1223,24 +1152,36 @@ QStrList KPresenterDoc::inputFormats()
     return new QStrList();
 }
 
-/*========================= add view =============================*/
-void KPresenterDoc::addView( KPresenterView *_view )
-{
-    m_lstViews.append( _view );
-}
-
-/*======================== remove view ===========================*/
-void KPresenterDoc::removeView( KPresenterView *_view )
-{
-    m_lstViews.setAutoDelete( false );
-    m_lstViews.removeRef( _view );
-    m_lstViews.setAutoDelete( true );
-}
-
 /*========================= insert an object =====================*/
 void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _diffx, int _diffy )
 {
-    KOffice::Document_var doc = _e.createDoc();
+
+    KoDocument* doc = _e.createDoc( this );
+    if ( !doc || !doc->initDoc() ) {
+	QMessageBox::critical( ( QWidget* )0L, i18n( "KPresenter Error" ), i18n( "Could not init" ), i18n( "OK" ) );
+	return;
+    }
+
+    KPresenterChild* ch = new KPresenterChild( this, doc, _rect, _diffx, _diffy );
+
+    insertChild( ch );
+    setModified( TRUE );
+
+    KPPartObject *kppartobject = new KPPartObject( ch );
+    kppartobject->setOrig( _rect.x() + _diffx, _rect.y() + _diffy );
+    kppartobject->setSize( _rect.width(), _rect.height() );
+    kppartobject->setSelected( true );
+
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Embed Object" ), kppartobject, this );
+    insertCmd->execute();
+    _commands.addCommand( insertCmd );
+
+    emit sig_insertObject( ch, kppartobject );
+
+    repaint( false );
+
+    // ############# Torben
+    /* KOffice::Document_var doc = _e.createDoc();
     if ( CORBA::is_nil( doc ) )
 	return;
 
@@ -1265,14 +1206,7 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
 
     emit sig_insertObject( ch, kppartobject );
 
-    repaint( false );
-}
-
-/*========================= insert a child object =====================*/
-void KPresenterDoc::insertChild( KPresenterChild *_child )
-{
-    m_lstChildren.append( _child );
-    m_bModified = true;
+    repaint( false ); */
 }
 
 /*======================= change child geometry ==================*/
@@ -1286,10 +1220,11 @@ void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const QRect& _
 }
 
 /*======================= child iterator =========================*/
-QListIterator<KPresenterChild> KPresenterDoc::childIterator()
+// ### Reggie: I think nobody needs this function any more
+/* QListIterator<KPresenterChild> KPresenterDoc::childIterator()
 {
     return QListIterator<KPresenterChild> ( m_lstChildren );
-}
+} */
 
 /*===================== set page layout ==========================*/
 void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
@@ -1350,7 +1285,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 								"*.kpr", "KPresenter",
 								FALSE );
 
-    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", _template, true, false, filter,
+    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", KPresenterFactory::global(), _template, true, false, filter,
 					       "application/x-kpresenter" );
 
     if ( ret == KoTemplateChooseDia::Template ) {
@@ -1373,7 +1308,8 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	setURL( _template );
 	return true;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
-	QString fileName( locate("kpresenter_template", "Screenpresentations/Plain.kpt") );
+	QString fileName( locate("kpresenter_template", "Screenpresentations/Plain.kpt",
+				 KPresenterFactory::global() ) );
 	objStartY = 0;
 	_clean = true;
 	m_bModified = true;
@@ -3005,9 +2941,14 @@ void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace 
 /*=================== repaint all views =========================*/
 void KPresenterDoc::repaint( bool erase )
 {
-    if ( !m_lstViews.isEmpty() ) {
-	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-	    viewPtr->repaint( erase );
+    qDebug("Repainting");
+    View* view = firstView();
+    for( ; view; view = nextView() )
+    {
+	qDebug("-Repainting");
+	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
+	// decided to overload the non virtual repaint method!
+	((KPresenterView*)view)->repaint( erase );
     }
 }
 
@@ -3016,41 +2957,47 @@ void KPresenterDoc::setUnit( KoUnit _unit, QString __unit )
 {
     _pageLayout.unit = _unit;
 
-    if ( !m_lstViews.isEmpty() ) {
-	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-	    viewPtr->getHRuler()->setUnit( __unit );
-	    viewPtr->getVRuler()->setUnit( __unit );
-	}
+    View* view = firstView();
+    for( ; view; view = nextView() )
+    {
+	((KPresenterView*)view)->getHRuler()->setUnit( __unit );
+	((KPresenterView*)view)->getVRuler()->setUnit( __unit );
     }
 }
 
 /*===================== repaint =================================*/
 void KPresenterDoc::repaint( QRect rect )
 {
-    if ( !m_lstViews.isEmpty() ) {
-	QRect r;
+    QRect r;
+	
+    View* view = firstView();
+    for( ; view; view = nextView() )
+    {
+	r = rect;
+	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)view)->getDiffX(),
+			       r.y() - ((KPresenterView*)view)->getDiffY() ) );
 
-	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-	    r = rect;
-	    r.moveTopLeft( QPoint( r.x() - viewPtr->getDiffX(), r.y() - viewPtr->getDiffY() ) );
-
-	    viewPtr->repaint( r, false );
-	}
+	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
+	// decided to overload the non virtual repaint method!
+	((KPresenterView*)view)->repaint( r, false );
     }
 }
 
 /*===================== repaint =================================*/
 void KPresenterDoc::repaint( KPObject *kpobject )
 {
-    if ( !m_lstViews.isEmpty() ) {
-	QRect r;
+    QRect r;
+	
+    View* view = firstView();
+    for( ; view; view = nextView() )
+    {
+	r = kpobject->getBoundingRect( 0, 0 );
+	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)view)->getDiffX(),
+			       r.y() - ((KPresenterView*)view)->getDiffY() ) );
 
-	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-	    r = kpobject->getBoundingRect( 0, 0 );
-	    r.moveTopLeft( QPoint( r.x() - viewPtr->getDiffX(), r.y() - viewPtr->getDiffY() ) );
-
-	    viewPtr->repaint( r, false );
-	}
+	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
+	// decided to overload the non virtual repaint method!
+	((KPresenterView*)view)->repaint( r, false );
     }
 }
 
@@ -3204,7 +3151,7 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 
     QString _template;
 
-    if ( KoTemplateChooseDia::chooseTemplate( "kpresenter_template", _template, true, true ) !=
+    if ( KoTemplateChooseDia::chooseTemplate( "kpresenter_template", KPresenterFactory::global(), _template, true, true ) !=
 	 KoTemplateChooseDia::Cancel ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );
@@ -3392,10 +3339,9 @@ void KPresenterDoc::loadStream( istream &in )
 /*================= deselect all objs ===========================*/
 void KPresenterDoc::deSelectAllObj()
 {
-    if ( !m_lstViews.isEmpty() ) {
-	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-	    viewPtr->getPage()->deSelectAllObj();
-    }
+    View* view = firstView();
+    for( ; view; view = nextView() )
+	((KPresenterView*)view)->getPage()->deSelectAllObj();
 }
 
 /*======================== align objects left ===================*/
@@ -3555,18 +3501,12 @@ void KPresenterDoc::alignObjsBottom()
 /*================= undo redo changed ===========================*/
 void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 {
-    if ( !m_lstViews.isEmpty() ) {
-	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-	    viewPtr->changeUndo( _undo, !_undo.isEmpty() );
-	    viewPtr->changeRedo( _redo, !_redo.isEmpty() );
-	}
+    View* view = firstView();
+    for( ; view; view = nextView() )
+    {
+	((KPresenterView*)view)->changeUndo( _undo, !_undo.isEmpty() );
+	((KPresenterView*)view)->changeRedo( _redo, !_redo.isEmpty() );
     }
-}
-
-/*=================== count of views ===========================*/
-int KPresenterDoc::viewCount()
-{
-    return m_lstViews.count();
 }
 
 /*==============================================================*/
@@ -3687,4 +3627,35 @@ void KPresenterDoc::makeUsedPixmapList()
 	if ( kpbackground->getBackType() == BT_PICTURE )
 	    usedPixmaps.append( kpbackground->getKey() );
 
+}
+
+/*================================================================*/
+Shell* KPresenterDoc::createShell()
+{
+    Shell* shell = new KPresenterShell;
+    shell->setRootPart( this );
+    shell->show();
+
+    return shell;
+}
+
+/*================================================================*/
+View* KPresenterDoc::createView( QWidget* parent, const char* name )
+{
+    KPresenterView* view = new KPresenterView( this, parent, name );
+    addView( view );
+
+    return view;
+}
+
+/*================================================================*/
+QString KPresenterDoc::configFile() const
+{
+    return readConfigFile( locate( "data", "kpresenter/kpresenter.rc", KPresenterFactory::global() ) );
+}
+
+/*================================================================*/
+void KPresenterDoc::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/ )
+{
+    qDebug("------------------ ::paintContent still unimplemented ----------" );
 }

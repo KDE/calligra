@@ -21,7 +21,6 @@
 #include <kmenubar.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
-#include <ktmainwindow.h>
 #include <knewpanner.h>
 #include <klocale.h>
 #include <koAboutDia.h>
