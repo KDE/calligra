@@ -19,6 +19,8 @@
 #include <kgenericfactory.h>
 #include <qcstring.h>
 #include <qstringlist.h>
+#include <qdir.h>
+#include <qfileinfo.h>
 
 #include <koPicture.h>
 
@@ -288,7 +290,8 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
         return KoFilter::NotImplemented;
 
     // Open input file
-    QFile in( m_chain->inputFile() );
+    inFileName = m_chain->inputFile();
+    QFile in( inFileName );
 
     if (!in.open( IO_ReadOnly ))
     {
@@ -1347,8 +1350,17 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
 {
     kdDebug(30515) << "Import field: reading " << rawFileName << endl;
 
+    QString slashPath( rawFileName );
+    slashPath.replace('\\','/'); // Replace directory separators.
+    // ### TODO: what with MS-DOS absolute paths? (Will only work for KOffice on Win32)
+    QFileInfo info;
+    info.setFile( inFileName );
+    QDir dir( info.dirPath() );
+
     KURL url;
-    url.setPath(rawFileName); // ### TODO: relative to document
+    url.setPath(dir.filePath( rawFileName ));
+
+    kdDebug(30515) << "Path: " << url.prettyURL() << endl;
 
     KoPicture pic;
     pic.setKeyAndDownloadPicture(url);
@@ -1389,7 +1401,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     pictures.addKey( dt, rawFileName.utf8(), pictName.utf8() );
 
     // Add picture frameset
-    const QSize size ( pic.getOriginalSize() );
+    const QSize size ( pic.getOriginalSize() * 20 );  // We need twips for addFrame
     frameSets.addFrameSet( frameName, 2, 0 );
     frameSets.addFrame( 0, 0, size.width(), size.height(), 0, 1, 0 );
     frameSets.closeNode( "FRAME" );
