@@ -40,7 +40,8 @@
 VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
 {
-	setCaption( i18n( "Color" ) );
+	m_isStrokeDocker = false;
+	setCaption( i18n( "Fill Color" ) );
 
 	mainWidget = new QWidget( this );
 	mTabWidget = new QTabWidget( mainWidget );
@@ -103,21 +104,21 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	m_Color = new VColor();
 }
 
-/*void VColorDocker::buttonClicked( int button_ID )
+void VColorDocker::updateCanvas()
 {
-	switch( button_ID ) {
-	case Fill:
+	switch( m_isStrokeDocker ) {
+	case false:
 		if( m_part )
 			m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
 		m_view->selectionChanged();
 		break;
-	case Outline:
+	case true:
 		if( m_part )
 			m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
 		m_view->selectionChanged();
 		break;
 	}
-}*/
+}
 
 void VColorDocker::updateRGB()
 {
@@ -127,6 +128,7 @@ void VColorDocker::updateRGB()
 
 	m_Color->setColorSpace( VColor::rgb );
 	m_Color->set( r, g, b );
+	updateCanvas();
 }
 
 void VColorDocker::updateCMYK()
@@ -138,12 +140,26 @@ void VColorDocker::updateCMYK()
 
 	m_Color->setColorSpace( VColor::cmyk );
 	m_Color->set( c, m, y, k );
+	updateCanvas();
 }
 
 void VColorDocker::updateOpacity()
 {
 	float op = mOpacity->value() / 100.0;
 	m_Color->setOpacity( op );
+	updateCanvas();
+}
+
+void VColorDocker::setFillDocker()
+{
+	m_isStrokeDocker = false;
+	setCaption( i18n( "Fill Color" ) );
+}
+
+void VColorDocker::setStrokeDocker()
+{
+	m_isStrokeDocker = true;
+	setCaption( i18n( "Stroke Color" ) );
 }
 
 #include "vcolordocker.moc"
