@@ -50,23 +50,26 @@ class KoVariableSettings
  public:
     KoVariableSettings();
     virtual ~KoVariableSettings();
-    int startingPage()const{return m_startingPageNumber;}
-    void setStartingPage(int _startingPageNumber){ m_startingPageNumber=m_startingPageNumber;}
 
-    int startingPageNumber()const{return startingPage();}
-    void setStartingPageNumber(int _startingPageNumber){setStartingPage(_startingPageNumber);}
+    // don't remove startingPage or startingPageNumber! - Clarence
 
-    bool displayLink()const{return m_displayLink;}
-    void setDisplayLink( bool b){ m_displayLink=b;}
+    int startingPage()const { return m_startingPageNumber; }
+    void setStartingPage(int num) { m_startingPageNumber=num; }
 
-    bool underlineLink()const {return m_underlineLink;}
-    void setUnderlineLink( bool b){ m_underlineLink=b;}
+    int startingPageNumber()const { return startingPage(); }
+    void setStartingPageNumber(int num) { setStartingPage(num); }
+
+    bool displayLink()const{ return m_displayLink; }
+    void setDisplayLink( bool b){ m_displayLink=b; }
+
+    bool underlineLink()const { return m_underlineLink; }
+    void setUnderlineLink( bool b){ m_underlineLink=b; }
     
-	 bool displayComment()const {return m_displayComment;}
-    void setDisplayComment( bool b){ m_displayComment=b;}
+    bool displayComment()const { return m_displayComment; }
+    void setDisplayComment( bool b){ m_displayComment=b; }
 
-    bool displayFieldCode()const {return m_displayFieldCode;}
-    void setDisplayFieldCode( bool b){ m_displayFieldCode=b;}
+    bool displayFieldCode()const { return m_displayFieldCode; }
+    void setDisplayFieldCode( bool b){ m_displayFieldCode=b; }
 
 
     virtual void save( QDomElement &parentElem );
