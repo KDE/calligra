@@ -18,6 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <qhbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
@@ -42,43 +43,29 @@ LayerTab::LayerTab( KisDoc *_doc, QWidget *_parent, const char *_name , WFlags _
   QVBoxLayout *layout = new QVBoxLayout( this );
 
   LayerView* layerview = new LayerView( _doc, this, "layerlist" );
-  layout->addWidget( layerview );
+  layout->addWidget( layerview, 1 );
 
-  QHBoxLayout *buttonlayout = new QHBoxLayout( layout );
+  QHBox *buttons = new QHBox( this );
+  layout->addWidget( buttons );
 
-  QPushButton* pbAddLayer = new QPushButton( this, "addlayer" );
+  QPushButton* pbAddLayer = new QPushButton( buttons, "addlayer" );
   pbAddLayer->setPixmap( BarIcon( "newlayer" ) );
-  buttonlayout->addWidget( pbAddLayer );
   connect( pbAddLayer, SIGNAL( clicked() ), layerview, SLOT( slotAddLayer() ) );
 
-  QPushButton* pbRemoveLayer = new QPushButton( this, "removelayer" );
+  QPushButton* pbRemoveLayer = new QPushButton( buttons, "removelayer" );
   pbRemoveLayer->setPixmap( BarIcon( "deletelayer" ) );
-  buttonlayout->addWidget( pbRemoveLayer );
   connect( pbRemoveLayer, SIGNAL( clicked() ), layerview, SLOT( slotRemoveLayer() ) );
 
-/*
-  QPushButton* pbAddMask = new QPushButton( this, "addmask" );
-  pbAddMask->setPixmap( BarIcon( "newlayer" ) );
-  buttonlayout->addWidget( pbAddMask );
-
-  QPushButton* pbRemoveMask = new QPushButton( this, "removemask" );
-  pbRemoveMask->setPixmap( BarIcon( "removelayer" ) );
-  buttonlayout->addWidget( pbRemoveMask );
-*/
-
-  QPushButton* pbUp = new QPushButton( this, "up" );
+  QPushButton* pbUp = new QPushButton( buttons, "up" );
   pbUp->setPixmap( BarIcon( "raiselayer" ) );
-  buttonlayout->addWidget( pbUp );
   connect( pbUp, SIGNAL( clicked() ), layerview, SLOT( slotRaiseLayer() ) );
 
-  QPushButton* pbDown = new QPushButton( this, "down" );
+  QPushButton* pbDown = new QPushButton( buttons, "down" );
   pbDown->setPixmap( BarIcon( "lowerlayer" ) );
-  buttonlayout->addWidget( pbDown );
   connect( pbDown, SIGNAL( clicked() ), layerview, SLOT( slotLowerLayer() ) );
 
   // Matthias: Never use fixed sizes with kfloatingdialog.
   //setMinimumSize( sizeHint() );
-
 }
 
 ChannelTab::ChannelTab( KisDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
