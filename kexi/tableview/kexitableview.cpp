@@ -894,7 +894,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	p->setPen(pen);
 
 	//	If we are in the focus cell, draw indication
-	if(d->pCurrentItem == item && col == d->curCol && m_data->columns[col].readOnly) //js: && !d->recordIndicator)
+	if(d->pCurrentItem == item && col == d->curCol) //js: && !d->recordIndicator)
 	{
 		if (!hasFocus() && !viewport()->hasFocus()) {
 			QPen gray_pen(p->pen());
