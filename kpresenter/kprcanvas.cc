@@ -520,7 +520,12 @@ void KPrCanvas::drawPresPage( QPainter *painter, const QRect &_rect, PresStep st
     //objects in current page
     drawObjectsPres( painter, page->objectList(), step );
     //draw master page object
+#if MASTERPAGE
+    if ( page->masterPage() )
+        drawObjectsPres( painter, page->masterPage()->objectList(), step );
+#else
     drawObjectsPres( painter, page->masterPage()->objectList(), step );
+#endif
 }
 
 
@@ -1175,7 +1180,7 @@ void KPrCanvas::calcBoundingRect()
     m_boundingRect = KoRect();
 
     m_boundingRect=m_activePage->getBoundingRect(m_boundingRect);
-    
+
 #if ! MASTERPAGE
     m_boundingRect = m_activePage->masterPage()->getBoundingRect( m_boundingRect );
 #endif
@@ -2402,7 +2407,7 @@ KPObject * KPrCanvas::getObjectAt( const KoPoint &pos, bool withoutProtected )
     if ( !object )
     {
         object = m_activePage->masterPage()->getObjectAt( pos, withoutProtected );
-    
+
         if ( objectIsAHeaderFooterHidden( object ) )
            object = 0;
     }
@@ -2440,7 +2445,7 @@ void KPrCanvas::selectAllObj()
         if ( !objectIsAHeaderFooterHidden(it.current()) )
             it.current()->setSelected( true );
     }
-#else 
+#else
     QPtrListIterator<KPObject> it( m_activePage->masterPage()->objectList() );
     for ( ; it.current() ; ++it )
     {
@@ -5430,7 +5435,7 @@ int KPrCanvas::getPenBrushFlags() const
     int flags=0;
     flags=activePage()->getPenBrushFlags(activePage()->objectList());
 #if ! MASTERPAGE
-    flags = flags | m_activePage->masterPage()->getPenBrushFlags( m_activePage->masterPage()->objectList() );
+    flags |= m_activePage->masterPage()->getPenBrushFlags( m_activePage->masterPage()->objectList() );
 #endif
     if(flags==0)
         flags = StyleDia::SdAll;
