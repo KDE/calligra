@@ -34,7 +34,7 @@ public:
     virtual void pageBreak();
 
 private:
-    void writeOutParagraph( const QString& name, const QString& text );
+    void writeOutParagraph( const QString& styleName, const QString& text );
 
     QString m_paragraph;
     QDomDocument& m_mainDocument;

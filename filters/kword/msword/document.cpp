@@ -53,6 +53,7 @@ void Document::paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap 
 
 void Document::paragraphEnd()
 {
+    // TODO: get style name (and properties) from pap.istd, in paragraphStart
     writeOutParagraph( "Standard", m_paragraph );
 }
 
@@ -156,12 +157,17 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
 
 void Document::pageBreak()
 {
-    QDomElement pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
+    // Check if PAGEBREAKING already exists (e.g. due to linesTogether)
+    QDomElement pageBreak = m_oldLayout.namedItem( "PAGEBREAKING" ).toElement();
+    if ( pageBreak.isNull() )
+    {
+        pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
+        m_oldLayout.appendChild( pageBreak );
+    }
     pageBreak.setAttribute( "hardFrameBreakAfter", "true" );
-    m_oldLayout.appendChild( pageBreak );
 }
 
-void Document::writeOutParagraph( const QString& name, const QString& text )
+void Document::writeOutParagraph( const QString& styleName, const QString& text )
 {
     QDomElement paragraphElementOut=m_mainDocument.createElement("PARAGRAPH");
     m_mainFramesetElement.appendChild(paragraphElementOut);
@@ -171,27 +177,45 @@ void Document::writeOutParagraph( const QString& name, const QString& text )
     QDomElement layoutElement=m_mainDocument.createElement("LAYOUT");
     paragraphElementOut.appendChild(layoutElement);
 
-    QDomElement element;
-    element=m_mainDocument.createElement("NAME");
-    element.setAttribute("value",name);
-    layoutElement.appendChild(element);
+    QDomElement nameElement = m_mainDocument.createElement("NAME");
+    nameElement.setAttribute("value", styleName);
+    layoutElement.appendChild(nameElement);
 
-    QDomElement flowElement;
-    flowElement=m_mainDocument.createElement("FLOW");
-    QString alignment( "left" );
     if ( m_pap ) {
+        QDomElement flowElement = m_mainDocument.createElement("FLOW");
+        QString alignment( "left" );
         if ( m_pap->jc == 1 )
             alignment = "center";
         else if ( m_pap->jc == 2 )
             alignment = "right";
         else if ( m_pap->jc == 3 )
             alignment = "justify";
+        flowElement.setAttribute("align",alignment);
+        layoutElement.appendChild(flowElement);
+
+        // TODO: INDENTS dxaRight dxaLeft dxaLeft1 - in which unit are those?
+        // TODO: OFFSETS dyaBefore dyaAfter
+        // TODO: LINESPACING lspd
+        if ( m_pap->fKeep || m_pap->fKeepFollow || m_pap->fPageBreakBefore )
+        {
+            QDomElement pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
+            pageBreak.setAttribute("linesTogether", m_pap->fKeep ? "true" : "false");
+            pageBreak.setAttribute("hardFrameBreak", m_pap->fPageBreakBefore ? "true" : "false");
+            pageBreak.setAttribute("keepWithNext", m_pap->fKeepFollow ? "true" : "false");
+            layoutElement.appendChild( pageBreak );
+        }
+
+        // TODO: LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER  - see pap.brcl brcTop brcLeft brcBottom brcRight
+
+        // TODO: COUNTER
+        // TODO: FORMAT - unless it all comes from the style
+        // TODO: SHADOW [it comes from the text runs...]
+        // TODO: TABULATORs itbdMac? (why "Mac"?) rgdxaTab[] rgtbd[]
     }
-    flowElement.setAttribute("align",alignment);
-    layoutElement.appendChild(flowElement);
 
     textElement.appendChild(m_mainDocument.createTextNode(text));
-    textElement.normalize(); // Put text together (not sure if needed)
+    //textElement.normalize(); // Put text together (not sure if needed)
+    // DF: I don't think so, you created only one text node ;)
 
     m_paragraph = QString( "" );
     m_index = 0;
