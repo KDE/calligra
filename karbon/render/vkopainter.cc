@@ -827,10 +827,10 @@ VKoPainter::drawNode( const KoPoint& p, int width )
 	if( !m_bDrawNodes ) return;
 
 	QPoint _p = m_matrix.map( QPoint( p.x() * m_zoomFactor, p.y() * m_zoomFactor ) );
-	int x1 = _p.x() - width * m_zoomFactor;
-	int x2 = _p.x() + width * m_zoomFactor;
-	int y1 = _p.y() - width * m_zoomFactor;
-	int y2 = _p.y() + width * m_zoomFactor;
+	int x1 = _p.x() - width;
+	int x2 = _p.x() + width;
+	int y1 = _p.y() - width;
+	int y2 = _p.y() + width;
 
 	clampToViewport( x1, y1, x2, y2 );
 
