@@ -201,7 +201,7 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     KFileMetaInfoGroup group1 = appendGroup(info, DocAdvanced);
     for (int i = 0; Advanced[i]; i+=2){
 	    QString txt = stringFromNode(base, Advanced[i]);
-	    if (txt != ""){
+	    if (! txt.isEmpty()){
 		    // A silly method to do it, but efficient
 		    if (i>1 && i<8){
 			    QDateTime dt = QDateTime::fromString( txt, Qt::ISODate );
@@ -241,7 +241,7 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 QString KOfficePlugin::stringFromNode(QDomNode node, QString name)
 {
     QString value = node.namedItem(name).toElement().text();
-    return value.isEmpty() ? "" : value;
+    return value.isEmpty() ? QString::null : value;
 }
 
 void KOfficePlugin::addAttributeInfo(const QDomElement & elem, KFileMetaInfoGroup & group, const QString attributeName)
