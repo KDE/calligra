@@ -1601,13 +1601,20 @@ void KSpreadCanvas::dragMoveEvent( QDragMoveEvent * _ev )
 
   _ev->accept( KSpreadTextDrag::canDecode( _ev ) );
 
+  double dwidth = doc()->unzoomItX( width() );
   double xpos = table->dblColumnPos( selectionInfo()->selection().left() );
   double ypos = table->dblRowPos( selectionInfo()->selection().top() );
   double width  = table->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
   double height = table->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
 
   QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
-  double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+
+  double ev_PosX;
+  if (table->layoutDirection()==KSpreadSheet::RightToLeft)
+    ev_PosX = dwidth - doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  else
+    ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
 
   if ( r1.contains( QPoint ((int) ev_PosX, (int) ev_PosY) ) )
@@ -1630,13 +1637,20 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
     return;
   }
 
+  double dwidth = doc()->unzoomItX( width() );
   double xpos = table->dblColumnPos( selectionInfo()->selection().left() );
   double ypos = table->dblRowPos( selectionInfo()->selection().top() );
   double width  = table->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
   double height = table->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
 
   QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
-  double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+
+  double ev_PosX;
+  if (table->layoutDirection()==KSpreadSheet::RightToLeft)
+    ev_PosX = dwidth - doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  else
+    ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
 
   if ( r1.contains( QPoint ((int) ev_PosX, (int) ev_PosY) ) )
