@@ -121,9 +121,9 @@ void ZoomTool::processEvent(QEvent* e)
         }
         break;
       case QEvent::MouseButtonPress:
-        if ( m_pCurrent == m_pMinus )
+        if ( m_pCurrent == m_pMinus ) {
           m_pCurrent->activate();
-        else {
+        } else {
           if( ((QMouseEvent*)e)->button()==RightButton )
           {
             showPopupMenu( ((QMouseEvent*)e)->globalPos() );
@@ -137,10 +137,12 @@ void ZoomTool::processEvent(QEvent* e)
         }
         break;
       case QEvent::MouseButtonRelease:
-        m_pCanvas->endRectDraw();
-        m_bDrawRubber = false;
-        m_bLockKeyboard = false;
-        zoomRect(m_pCanvas->rect());
+        if(m_pCurrent != m_pMinus) {
+          m_pCanvas->endRectDraw();
+          m_bDrawRubber = false;
+          m_bLockKeyboard = false;
+          zoomRect(m_pCanvas->rect());
+        }
         break;
       case QEvent::MouseMove:
         if (m_bDrawRubber)
@@ -226,7 +228,7 @@ void ZoomTool::zoomPlus()
 {
    setOverride();
    m_pCanvas->zoomIn(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
-   if(m_pView->zoomHandler()->zoom() >= 1000000)
+   if(m_pView->zoomHandler()->zoom() >= 2000)
    {
       m_pPlus->setEnabled(false);
       m_pMinus->setEnabled(true);
