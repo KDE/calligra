@@ -48,6 +48,7 @@
 #include <koDataTool.h>
 
 #include <kdebug.h>
+#include <assert.h>
 
 //#define DEBUG_MARGINS
 //#define DEBUG_FLOW
@@ -622,13 +623,17 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
 
     QPoint p;
-    KWFrame * frame = internalToNormal( QPoint(0, yp), p );
-    if (!frame)
+    // The +h in here is a little hack, for the case where this line is going to
+    // be moved down by adjustFlow. We anticipate, and look at the bottom of the
+    // line rather than the top of it, in order to find the bottom frame (the one
+    // in which we'll end up). See TODO file for a real solution.
+    KWFrame * frame = internalToNormal( QPoint(0, yp + h), p );
+    if (!frame )
     {
 #ifdef DEBUG_MARGINS
-        kdDebug(32002) << "  getMargins: internalToNormal returned frame=0L for yp=" << yp << " ->aborting with 0 margins" << endl;
+        kdDebug(32002) << "  getMargins: internalToNormal returned frame=0L for yp+h=" << yp+h << " ->aborting with 0 margins" << endl;
 #endif
-        // frame == 0 happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
+        // this happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
         // Abort then, no need to return precise values
         if ( marginLeft )
             *marginLeft = 0;
@@ -636,17 +641,22 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
             *marginRight = 0;
         return;
     }
+#ifdef DEBUG_MARGINS
+    //else if (marginRight)
+    //    kdDebug(32002) << "  getMargins: found frame " << frame << " for yp+h=" << yp+h << endl;
+#endif
 
     // Note: it is very important that this method works in internal coordinates.
     // Otherwise, parags broken at the line-level (e.g. between two columns) are seen
     // as still in one piece, and we miss the frames in the 2nd column.
     int left = 0;
     int from = left;
-    int to = kWordDocument()->zoomItX( frame->width() );
+    double frameWidth = frame->width();
+    int to = kWordDocument()->zoomItX( frameWidth );
     bool init = false;
 
 #ifdef DEBUG_MARGINS
-    kdDebugBody(32002) << "  getMargins: looking for frames between " << yp << " and " << yp+h << " (internal coords)" << endl;
+    //kdDebugBody(32002) << "  getMargins: looking for frames between " << yp << " and " << yp+h << " (internal coords)" << endl;
 #endif
     // Principle: for every frame on top at this height, we'll move from and to
     // towards each other. The text flows between 'from' and 'to'
@@ -722,7 +732,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
     if ( from == to ) { // no-space case. Drop the margins we found - we'll reformat again.
         from = 0;
-        to = kWordDocument()->zoomItX( frame->width() );
+        to = kWordDocument()->zoomItX( frameWidth );
     }
 
     if ( marginLeft )
@@ -813,15 +823,21 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, QTextParag * parag, 
                             return true;
                         }
                         dy = breakEnd + 1 - y;
+                        ls->y = breakEnd - parag->rect().y();
 #ifdef DEBUG_FLOW
                         kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
-                                       << " BREAKING at line " << line << " dy=" << dy << endl;
+                                       << " BREAKING at line " << line << " dy=" << dy << "  Setting ls->y to " << ls->y << ", y=" << breakEnd << endl;
 #endif
-                        ls->y = breakEnd - parag->rect().y();
                     }
                 }
                 else
+		{
                     ls->y += dy;
+#ifdef DEBUG_FLOW
+		    if ( dy )
+                        kdDebug(32002) << "                   moving down to position ls->y=" << ls->y << endl;
+#endif
+		}
             }
             parag->setMovedDown( true );
             parag->setHeight( h + dy );
@@ -1050,7 +1066,7 @@ void KWTextFrameSet::updateFrames()
     }
     if ( width != textdoc->width() )
     {
-        //kdDebug(32002) << "KWTextFrameSet::updateFrames setWidth " << width << endl;
+        kdDebug(32002) << "KWTextFrameSet::updateFrames setWidth " << width << endl;
         textdoc->setMinimumWidth( -1, 0 );
         textdoc->setWidth( width );
     } //else kdDebug(32002) << "KWTextFrameSet::updateFrames width already " << width << endl;

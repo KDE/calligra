@@ -3,30 +3,27 @@ TODO-List
 
 Bugs:
 -----
-
+- textformatter: need to check for line-level breaking during the formatting of each line
+Currently we do it afterwards, so if the margins differ, where the line ends up, we can't notice.
 - Fix drawing of table cell borders
 - Add code to ensure that adjacent cells have the same border setting for the borders they share
-- Need a routine which renders the table per row in a way that any cellsize is adjusted to fit.
-- deleting pictures-frames should also delete the picture (from the tar) (imageCollection)
-  (we have a problem with reference counts in the creation of a new image) [does this still happen?]
-- reconnect dumps sometimes [does it still?].
+- Need a routine which renders the table per row in a way that any cellsize is adjusted to fit. [still needed?]
 - anything else that http://bugs.kde.org mentions ;)
 
 Missing or incomplete stuff:
 ----------------------------
 - Even/odd pages
  - Add SheetSide config in framedia 
-- Preview widget for numbering
-- Improving preview widget for style templates editor (those 2 could use a KWTextDocument)
 - runAroundGap does nothing
 - Tables should get a title (with positioning posibility)
   This will basicly be a new frame placed on top or at bottom of table.
+  And it shouldn't be limited to tables - any frame could get that.
 
 Other missing features:
 
 Sideheads (for text)
 Split frames needs to be implemented.
-Styles have to be saved external (do they??).
+Styles have to be saved external (and/or an import/export facility).
 Books (collection of documents) should be implemented
 Implement complete DCOP interface
 Make everything scriptable
