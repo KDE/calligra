@@ -48,8 +48,19 @@
 
 #include "abiwordimport.h"
 
-typedef KGenericFactory<ABIWORDImport, KoFilter> ABIWORDImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory( "kwordabiwordimport" ) );
+class ABIWORDImportFactory : KGenericFactory<ABIWORDImport, KoFilter>
+{
+public:
+    ABIWORDImportFactory(void) : KGenericFactory<ABIWORDImport, KoFilter> ("kwordabiwordimport")
+    {}
+protected:
+    virtual void setupTranslations( void )
+    {
+        KGlobal::locale()->insertCatalogue( "kwordabiwordfilter" );
+    }
+};
+
+K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory() );
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <c>) are AbiWord's ones.

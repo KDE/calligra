@@ -58,8 +58,19 @@
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
 
-typedef KGenericFactory<ABIWORDExport, KoFilter> ABIWORDExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libabiwordexport, ABIWORDExportFactory( "kwordabiwordexport" ) );
+class ABIWORDExportFactory : KGenericFactory<ABIWORDExport, KoFilter>
+{
+public:
+    ABIWORDExportFactory(void) : KGenericFactory<ABIWORDExport, KoFilter> ("kwordabiwordexport")
+    {}
+protected:
+    virtual void setupTranslations( void )
+    {
+        KGlobal::locale()->insertCatalogue( "kwordabiwordfilter" );
+    }
+};
+
+K_EXPORT_COMPONENT_FACTORY( libabiwordexport, ABIWORDExportFactory() );
 
 class StyleMap : public QMap<QString,LayoutData>
 {
