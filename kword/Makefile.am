@@ -73,7 +73,7 @@ kdelnk_DATA = kword.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
 rcdir = $(kde_datadir)/kword
-rc_DATA = kword.rc
+rc_DATA = kword.rc kword_readonly.rc
 
 SUBDIRS = . mailmerge toolbar templates dtd pics expression data
 

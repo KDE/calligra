@@ -145,7 +145,10 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     //m_viewTableGrid = true;
 
     setInstance( KWFactory::global() );
-    setXMLFile( "kword.rc" );
+    if ( !m_doc->isReadWrite() )
+        setXMLFile( "kword_readonly.rc" );
+    else
+        setXMLFile( "kword.rc" );
 
     QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
                       this, SLOT( slotEmbedImage( const QString & ) ) );
