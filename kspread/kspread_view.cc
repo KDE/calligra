@@ -968,7 +968,7 @@ void ViewPrivate::initActions()
       0, view, SLOT( insertSeries() ), ac, "series");
   actions->insertSeries ->setToolTip(i18n("Insert a series."));
 
-  actions->insertLink = new KAction( i18n("&Link..."),
+  actions->insertLink = new KAction( i18n("&Link..."), "insert_link",
       0, view, SLOT( insertHyperlink() ), ac, "insertHyperlink" );
   actions->insertLink->setToolTip(i18n("Insert an Internet hyperlink."));
 
