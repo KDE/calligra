@@ -181,7 +181,7 @@ void KWFrameDia::init() {
     {
         setupTab5();
     }
-    else if ( fs && fs->isHeaderOrFooter() )
+    else if ( fs && (fs->isHeaderOrFooter() || fs->isFootEndNote()) )
     {
         setupTab1();
         setupTab2();
@@ -878,7 +878,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
             slotFloatingToggled( true );
 
         // Can't change geometry of main WP frame or headers/footers
-        if ( fs && ( fs->isHeaderOrFooter() || fs->isMainFrameset() ) )
+        if ( fs && ( fs->isHeaderOrFooter() || fs->isMainFrameset() || fs->isFootEndNote()) )
             disable = true;
     }
     else
@@ -1190,7 +1190,7 @@ void KWFrameDia::enableOnNewPageOptions()
             reconnect->setEnabled( false );
         else if(frame) {
             KWFrameSet *fs = frame->frameSet(); // 0 when creating a frame
-            if ( fs && fs->isHeaderOrFooter() )
+            if ( fs && (fs->isHeaderOrFooter() || fs->isFootEndNote() ))
             {
                 reconnect->setEnabled( false );
                 noFollowup->setEnabled( false );
@@ -1208,7 +1208,7 @@ void KWFrameDia::enableRunAround()
         else
         {
             if ( frame && frame->frameSet() )
-                runGroup->setEnabled( !frameSetFloating && !frame->frameSet()->isMainFrameset() && !frame->frameSet()->isHeaderOrFooter() );
+                runGroup->setEnabled( !frameSetFloating && !frame->frameSet()->isMainFrameset() && !frame->frameSet()->isHeaderOrFooter() && !frame->frameSet()->isFootEndNote() );
             else
                 runGroup->setEnabled( true );
         }
