@@ -156,7 +156,7 @@ void Document::startBody()
     // TODO: "name" attribute (needs I18N)
     m_framesetsElement.appendChild(mainFramesetElement);
 
-    createInitialFrame( mainFramesetElement, 42, 566 );
+    createInitialFrame( mainFramesetElement, 42, 566, false );
 
     m_textHandler->setFrameSetElement( mainFramesetElement );
     connect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
@@ -232,7 +232,7 @@ void Document::startHeader( wvWare::HeaderData::Type type )
 
     bool isHeader = Conversion::isHeader( type );
 
-    createInitialFrame( framesetElement, isHeader?0:567, isHeader?41:567+41 );
+    createInitialFrame( framesetElement, isHeader?0:567, isHeader?41:567+41, true );
 
     m_textHandler->setFrameSetElement( framesetElement );
 
@@ -250,7 +250,7 @@ void Document::endHeader()
 
 }
 
-void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom )
+void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter )
 {
     QDomElement frameElementOut = parentFramesetElem.ownerDocument().createElement("FRAME");
     // Those values are unused. The paper margins make recalcFrames() resize this frame.
@@ -259,7 +259,8 @@ void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int
     frameElementOut.setAttribute( "top", top );
     frameElementOut.setAttribute( "bottom", bottom );
     frameElementOut.setAttribute( "runaround", 1 );
-    frameElementOut.setAttribute( "autoCreateNewFrame", 1 );
+    // AutoExtendFrame for header/footers, AutoCreateNewFrame for body text
+    frameElementOut.setAttribute( "autoCreateNewFrame", headerFooter ? 0 : 1 );
     parentFramesetElem.appendChild( frameElementOut );
 }
 
