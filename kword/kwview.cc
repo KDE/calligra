@@ -4543,8 +4543,9 @@ void KWView::frameSelectedChanged()
         bool okForDelete = true;
         bool okForLowerRaise = false;
         bool okForChangeParagStyle = true;
+        bool okForChangeInline = true;
         QPtrListIterator<KWFrame> it( selectedFrames );
-        for ( ; it.current() && ( okForDelete || okForLowerRaise || okForChangeParagStyle) ; ++it )
+        for ( ; it.current() && ( okForDelete || okForLowerRaise || okForChangeParagStyle || okForChangeInline) ; ++it )
         {
             // Check we selected no footer nor header
             bool isFootNote = it.current()->frameSet()->isFootEndNote();
@@ -4559,6 +4560,7 @@ void KWView::frameSelectedChanged()
             // The header, footer, main frameset, footnotes and inline frames can't be raised.
             // As soon as we find one who we can lower/raise open the option.
             okForLowerRaise |= !(isMainWPFrame || headerFooterFootNote || it.current()->frameSet()->isFloating());
+            okForChangeInline &= !(isMainWPFrame || headerFooterFootNote );
         }
         actionEditDelFrame->setEnabled( okForDelete );
         actionEditCut->setEnabled( okForDelete );
@@ -4570,6 +4572,7 @@ void KWView::frameSelectedChanged()
         actionFormatBullet->setEnabled( okForChangeParagStyle );
         actionFormatNumber->setEnabled( okForChangeParagStyle );
         actionFormatStyle->setEnabled( okForChangeParagStyle);
+        actionInlineFrame->setEnabled( okForChangeInline);
 
     } else
     {   // readonly document, or no frame selected -> disable
