@@ -33,19 +33,14 @@
 #include "kis_factory.h"
 #include "kis_pluginserver.h"
 
-KisShell::KisShell( QWidget* parent, const char* name )
-    : KoMainWindow( parent, name )
+KisShell::KisShell( const char* name )
+    : KoMainWindow( name )
 {
   resize(800, 600);
 }
 
 KisShell::~KisShell()
 {
-}
-
-QString KisShell::configFile() const
-{
-    return readConfigFile( locate("kis", "kimageshop_shell.rc", KisFactory::global()));
 }
 
 KoDocument* KisShell::createDoc()
@@ -55,7 +50,7 @@ KoDocument* KisShell::createDoc()
 
 void KisShell::slotFileNew()
 {
-  KisDoc* doc = (KisDoc*)document();
+  KisDoc* doc = (KisDoc*)rootDocument();
 
   if ( !doc )
     {
@@ -65,7 +60,7 @@ void KisShell::slotFileNew()
 	  delete doc;
 	  return;
 	}
-      setRootPart( doc );
+      setRootDocument( doc );
     }
     else
     {
@@ -78,12 +73,12 @@ void KisShell::slotFileOpen()
   QString filter =  KImageIO::pattern( KImageIO::Reading ) + "*.kis|KImageShop picture\n";
 
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
-  
+
   if ( file.isNull() )
     return;
 
-  KisDoc* doc = (KisDoc*)document();
-  
+  KisDoc* doc = (KisDoc*)rootDocument();
+
   if (!doc->loadImage(file))
     {
       QString tmp;
@@ -103,12 +98,12 @@ void KisShell::slotFileSaveAs()
   QString filter =  KImageIO::pattern( KImageIO::Reading ) + "*.kis|KImageShop picture\n";
 
   QString file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
-  
+
   if ( file.isNull() )
     return;
-  
-  KisDoc* doc = (KisDoc*)document();
-  
+
+  KisDoc* doc = (KisDoc*)rootDocument();
+
   if (!doc->saveCurrentImage( file ))
     {
       QString tmp;
@@ -124,7 +119,7 @@ void KisShell::slotFilePrint()
 
 void KisShell::slotFileClose()
 {
-  KisDoc* doc = (KisDoc*)document();
+  KisDoc* doc = (KisDoc*)rootDocument();
   doc->slotRemoveImage( doc->currentImage() );
 }
 

@@ -1,0 +1,27 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="KOfficeShell">
+<MenuBar>
+ <Menu name="file"><text>&amp;File</text>
+  <Action name="filenew" />
+  <Action name="fileopen" />
+  <Action name="filesave" />
+  <Action name="filesaveas" />
+  <Separator />
+  <Action name="fileprint" />
+  <Separator />
+  <Action name="fileclose" />
+  <Action name="quit" />
+ </Menu>
+ <Merge />
+ <Menu name="help"><text>&amp;Help</text>
+  <Action name="about" />
+  <Merge />
+ </Menu>
+</MenuBar>
+<ToolBar name="kofficeshelltoolbar" fullWidth="false">
+  <Action name="filenew" />
+  <Action name="fileopen" />
+  <Action name="filesave" />
+  <Action name="fileprint" />
+</ToolBar>
+</kpartgui>

@@ -1,12 +1,10 @@
-<!DOCTYPE QConfig ><QConfig>
+<!DOCTYPE QConfig ><QConfig name="Example">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="cut"/>
  </Menu>
 </MenuBar>
-<ToolBars>
- <ToolBar>
+<ToolBar>
   <Action name="cut"/>
- </ToolBar>
-</ToolBars>
+</ToolBar>
 </QConfig>

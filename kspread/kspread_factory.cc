@@ -37,13 +37,24 @@ KSpreadFactory::~KSpreadFactory()
 
 QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
-    if ( parent && !parent->inherits("KoDocument") )
+/*    if ( parent && !parent->inherits("KoDocument") )
     {
 	qDebug("KSpreadFactory: parent does not inherit KoDocument");
 	return 0;
     }
+*/
+//    return new KSpreadDoc( (KoDocument*)parent, name );
 
-    return new KSpreadDoc( (KoDocument*)parent, name );
+  bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 ); 
+ 
+  KSpreadDoc *doc = new KSpreadDoc( parent, name, !bWantKoDocument );
+  
+  if ( !bWantKoDocument )
+    doc->setReadWrite( false );
+
+  emit objectCreated( doc );
+  
+  return doc;
 }
 
 KInstance* KSpreadFactory::global()

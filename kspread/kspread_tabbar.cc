@@ -20,6 +20,7 @@
 #include <qmessagebox.h>
 #include <qpointarray.h>
 #include <qstring.h>
+#include <qpopupmenu.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -350,6 +351,9 @@ void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, in
 
 void KSpreadTabBar::openPopupMenu( const QPoint &_global )
 {
+    if ( !m_pView->koDocument()->isReadWrite() )
+      return;
+ 
     if ( m_pPopupMenu != 0L )
         delete m_pPopupMenu;
     m_pPopupMenu = new QPopupMenu();

@@ -30,8 +30,8 @@
 
 #include <qpainter.h>
 
-KChartPart::KChartPart( KoDocument* parent, const char* name )
-  : KoDocument( parent, name ),
+KChartPart::KChartPart( KoDocument* parent, const char* name, bool singleViewMode )
+  : KoDocument( parent, name, singleViewMode ),
     _params( 0 )
 {
   m_bLoading = false;
@@ -89,7 +89,7 @@ QCString KChartPart::mimeType() const
     return "application/x-kchart";
 }
 
-View* KChartPart::createView( QWidget* parent, const char* name )
+KoView* KChartPart::createView( QWidget* parent, const char* name )
 {
     KChartView* view = new KChartView( this, parent, name );
     addView( view );
@@ -97,10 +97,10 @@ View* KChartPart::createView( QWidget* parent, const char* name )
     return view;
 }
 
-Shell* KChartPart::createShell()
+KoMainWindow* KChartPart::createShell()
 {
-    Shell* shell = new KChartShell;
-    shell->setRootPart( this );
+    KoMainWindow* shell = new KChartShell;
+    shell->setRootDocument( this );
     shell->show();
 
     return shell;
@@ -125,21 +125,13 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
   // Need to draw only the document rectangle described in the parameter rect.
   //  return;
   out_graph( rect.width(),
-	     rect.height(), // short width, height 
+	     rect.height(), // short width, height
 	     &painter,        // Paint into this painter
 	     _params,	      // the parameters of the chart,
 	     // including the type
 	     currentData );
 
 }
-
-QString KChartPart::configFile() const
-{
-  //    return readConfigFile( "kchart.rc" );
-    return readConfigFile( locate( "data", "kchart/kchart.rc", 
-			  KChartFactory::global() ) );
-}
-
 
 void KChartPart::setPart( const KChartData& data )
 {
@@ -808,6 +800,9 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.23  2000/01/28 20:00:37  mlaurent
+ * Improved save and load parameters (label,legend,extcolor)
+ *
  * Revision 1.22  2000/01/23 14:48:48  mlaurent
  * Improved pie chart
  *

@@ -28,6 +28,8 @@ bool mousePressed;
 KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadView *_view ) : QLineEdit( _parent, "KSpreadEditWidget" )
 {
     m_pView = _view;
+    if ( !m_pView->koDocument()->isReadWrite() )
+      setEnabled( false );
 }
 
 void KSpreadEditWidget::slotAbortEdit()
@@ -54,6 +56,9 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 	return;
     }
 
+    if ( !m_pView->koDocument()->isReadWrite() )
+      return;
+    
     switch ( _ev->key() )
     {
     case Key_Down:
@@ -438,6 +443,9 @@ void KSpreadCanvas::setAction( Actions _act, KoDocumentEntry& _e )
 */
 void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 {
+    if ( !m_pView->koDocument()->isReadWrite() )
+      return;
+
     if( m_bChoose )
     {
 	chooseMouseMoveEvent( _ev );
@@ -917,6 +925,7 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::mouseDoubleClickEvent( QMouseEvent*  )
 {
+  if ( m_pView->koDocument()->isReadWrite() ) 
     createEditor();
 }
 
@@ -950,11 +959,11 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
     QRegion rgn = painter.clipRegion();
     if ( rgn.isEmpty() )
 	rgn = QRegion( _ev->rect() );
-    QListIterator<PartChild> it( m_pDoc->children() );
+    QListIterator<KoDocumentChild> it( m_pDoc->children() );
     for( ; it.current(); ++it )
     {
 	if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
-	     !m_pView->hasPartInWindow( it.current()->part() ) )
+	     !m_pView->hasDocumentInWindow( it.current()->document() ) )
         {
 	    rgn -= it.current()->region( painter.worldMatrix() );
 	}
@@ -972,7 +981,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
     for( ; it.current(); ++it )
     {
 	if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
-	     !m_pView->hasPartInWindow( it.current()->part() ) )
+	     !m_pView->hasDocumentInWindow( it.current()->document() ) )
         {
 	    // #### todo: paint only if child is visible inside rect
 	    painter.save();
@@ -1211,7 +1220,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     default:
 	
 	// No null character ...
-	if ( _ev->ascii() == 0 )
+	if ( _ev->ascii() == 0 || !m_pView->koDocument()->isReadWrite() )
         {
 	    _ev->accept();
 	    return;

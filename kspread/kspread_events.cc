@@ -1,18 +1,11 @@
 #include "kspread_events.h"
 
-Event::Event()
-    : QEvent( QEvent::User )
-{
-}
-
-Event::~Event()
-{
-}
-
 // ----------------------------------------------------
 
+const char *KSpreadSelectionChanged::s_strSelectionChanged = "KSpread/View/SelectionChanged";
+
 KSpreadSelectionChanged::KSpreadSelectionChanged( const QRect& rect, const QString& table )
-    : Event()
+    : KParts::Event( s_strSelectionChanged )
 {
     m_rect = rect;
     m_table = table;
@@ -22,10 +15,3 @@ KSpreadSelectionChanged::~KSpreadSelectionChanged()
 {
 }
 
-bool KSpreadSelectionChanged::test( QEvent* e )
-{
-    if ( e->type() != QEvent::User )
-	return FALSE;
-    
-    return ( strcmp( ((Event*)e)->eventName(), "KSpread/View/SelectionChanged" ) == 0 );
-}

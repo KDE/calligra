@@ -29,6 +29,7 @@ class KWSerialLetterDataBase;
 class KWContents;
 
 #include <koDocument.h>
+#include <koDocumentChild.h>
 #include <koPageLayoutDia.h>
 #include <koQueryTypes.h>
 
@@ -69,6 +70,8 @@ public:
     KWordDocument* parent()
     { return m_pKWordDoc; }
 
+    virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
+
 protected:
     KWordDocument *m_pKWordDoc;
 
@@ -83,7 +86,7 @@ class KWordDocument : public KoDocument
     Q_OBJECT
 
 public:
-    KWordDocument( KoDocument* doc = 0, const char* name = 0 );
+    KWordDocument( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KWordDocument();
 
     enum ProcessingType {WP = 0, DTP = 1};
@@ -105,6 +108,7 @@ protected:
 public:
     // IDL
     virtual bool initDoc();
+    void initEmpty();
 
     // C++
     virtual bool loadXML( KOMLParser& parser, KoStore *_store );
@@ -115,9 +119,9 @@ public:
     virtual bool loadTemplate( const QString &_url );
 
     // IDL
-    Shell* createShell();
-    View* createView( QWidget* parent, const char* name );
-    virtual QString configFile() const;
+    KoMainWindow* createShell();
+    KoView* createView( QWidget* parent, const char* name );
+
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
     virtual QCString mimeType() const
@@ -387,7 +391,7 @@ public:
 
     void checkNumberOfPages( KWFormatContext *fc );
     bool canRemovePage( int num, KWFrame *f );
-    
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -396,6 +400,8 @@ signals:
 
 protected slots:
     void slotUndoRedoChanged( QString, QString );
+
+    void slotDocumentLoaded();
 
 protected:
     virtual bool saveChildren( KoStore *_store, const char *_path );
@@ -478,7 +484,7 @@ protected:
     bool spellCheck;
     KWContents *contents;
 
-    Shell *tmpShell;
+    KoMainWindow *tmpShell;
     QRect tmpShellSize;
 
 };

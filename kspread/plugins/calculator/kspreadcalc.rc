@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="KSpreadPluginCalculator" library="libkspreadcalc">
+<MenuBar>
+ <Menu name="Extra"><text>Extra</text>
+  <Action name="kspreadcalc" />
+ </Menu>
+</MenuBar>
+<ToolBar>
+ <Action name="kspreadcalc" />
+</ToolBar>
+</kpartgui>

@@ -1,0 +1,2 @@
+
+DO_NOT_COMPILE="$DO_NOT_COMPILE koshell"

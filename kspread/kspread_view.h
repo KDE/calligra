@@ -60,13 +60,14 @@ class DCOPObject;
 #include <qbutton.h>
 #include <qpoint.h>
 
-#include <container.h>
+#include <koView.h>
+#include <koDocument.h>
 
 #include <koDataTool.h>
 
 /**
  */
-class KSpreadView : public ContainerView
+class KSpreadView : public KoView
 {
     friend KSpreadCanvas;
 
@@ -138,7 +139,7 @@ public:
     void updateEditWidget();
 
     virtual DCOPObject* dcopObject();
-    
+
 public slots:
     /**
      * Actions
@@ -270,8 +271,8 @@ protected slots:
 protected slots:
     void repaintPolygon( const QPointArray& );
 
-    void slotChildSelected( PartChild* ch );
-    void slotChildUnselected( PartChild* );
+    void slotChildSelected( KoDocumentChild* ch );
+    void slotChildUnselected( KoDocumentChild* );
 
 public slots:
     // Document signals
@@ -311,6 +312,8 @@ protected:
      * a button in the formula toolbar.
      */
     void activateFormulaEditor();
+
+    virtual void updateReadWrite( bool readwrite );
 
 private:
     // GUI stuff
@@ -411,7 +414,7 @@ private:
     KToggleAction* m_showPageBorders;
     QActionMenu* m_scripts;
     KAction* m_default;
-    
+
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.
@@ -429,7 +432,7 @@ private:
      */
     DCOPObject* m_dcop;
 
-    
+
     /**
      * Tells whether the user modfied the current cell.
      * Some key events are passed to the @ref EditWindow. When this flag is set and you

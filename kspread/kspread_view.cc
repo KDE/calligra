@@ -90,8 +90,11 @@
 KSpreadScripts* KSpreadView::m_pGlobalScriptsDialog = 0L;
 
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc ) :
-  ContainerView( doc, _parent, _name )
+  KoView( doc, _parent, _name )
 {
+    setInstance( KSpreadFactory::global() );
+    setXMLFile( "kspread.rc" );
+
     m_toolbarLock = FALSE;
 	
     m_pDoc = doc;
@@ -318,14 +321,14 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_scripts = new KScriptMenu( DCOPRef( kapp->dcopClient()->appId(), dcopObject()->objId() ), KSpreadFactory::global(),
 				 i18n("Scripts"), actionCollection(), "scripts" );
 
-    connect( this, SIGNAL( childSelected( PartChild* ) ),
-	     this, SLOT( slotChildSelected( PartChild* ) ) );
-    connect( this, SIGNAL( childUnselected( PartChild* ) ),
-	     this, SLOT( slotChildUnselected( PartChild* ) ) );
+    connect( this, SIGNAL( childSelected( KoDocumentChild* ) ),
+	     this, SLOT( slotChildSelected( KoDocumentChild* ) ) );
+    connect( this, SIGNAL( childUnselected( KoDocumentChild* ) ),
+	     this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
     // If a selected part becomes active this is like it is deselected
     // just before.
-    connect( this, SIGNAL( childActivated( PartChild* ) ),
-	     this, SLOT( slotChildUnselected( PartChild* ) ) );
+    connect( this, SIGNAL( childActivated( KoDocumentChild* ) ),
+	     this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
 }
 
 KSpreadView::~KSpreadView()
@@ -655,6 +658,27 @@ void KSpreadView::activateFormulaEditor()
 
     m_pCanvas->createEditor( KSpreadCanvas::FormulaEditor );
 }
+
+void KSpreadView::updateReadWrite( bool readwrite )
+{
+#warning TODO 
+  m_pCancelButton->setEnabled( readwrite ); 
+  m_pOkButton->setEnabled( readwrite );
+  m_pEditWidget->setEnabled( readwrite );
+  
+  QValueList<QAction*> actions = actionCollection()->actions();
+  QValueList<QAction*>::ConstIterator aIt = actions.begin();
+  QValueList<QAction*>::ConstIterator aEnd = actions.end();
+  for (; aIt != aEnd; ++aIt )
+    (*aIt)->setEnabled( readwrite );
+
+  m_showTable->setEnabled( true );
+  m_hideTable->setEnabled( true );
+  m_newView->setEnabled( true );
+  m_gotoCell->setEnabled( true );
+  m_help->setEnabled( true );
+  m_oszi->setEnabled( true );
+} 
 
 void KSpreadView::formulaPower()
 {
@@ -1468,7 +1492,7 @@ void KSpreadView::createAnchor()
 
 void KSpreadView::newView()
 {
-    Shell* shell = m_pDoc->createShell();
+    KoMainWindow* shell = m_pDoc->createShell();
     shell->show();
 }
 
@@ -1697,6 +1721,9 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
 {
     assert( m_pTable );
 
+    if ( !koDocument()->isReadWrite() )
+      return;
+    
     if (m_pPopupColumn != 0L )
 	delete m_pPopupColumn ;
 
@@ -1756,6 +1783,9 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
 {
     assert( m_pTable );
 
+    if ( !koDocument()->isReadWrite() )
+      return;
+    
     if (m_pPopupRow != 0L )
 	delete m_pPopupRow ;
 
@@ -1842,7 +1872,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 
     // If there is no selection
     QRect selection( m_pTable->selectionRect() );
-    if(selection.left()==0)
+    if(selection.left()==0 && koDocument()->isReadWrite() )
     {
     	m_pPopupMenu->insertSeparator();
     	m_pPopupMenu->insertItem( i18n("Insert Cell"),this,SLOT(slotInsert()));
@@ -2086,7 +2116,7 @@ void KSpreadView::percent( bool b )
 
 void KSpreadView::insertObject()
 {
-  KoDocumentEntry e = KoPartSelectDia::selectPart();
+  KoDocumentEntry e = KoPartSelectDia::selectPart( m_pCanvas );
   if ( e.isEmpty() )
     return;
 
@@ -2336,44 +2366,44 @@ void KSpreadView::transformPart()
 {
     ASSERT( selectedChild() );
 
-    TransformToolBox* box = 0;
-    QObject* obj = topLevelWidget()->child( 0, "TransformToolBox" );
+    KoTransformToolBox* box = 0;
+    QObject* obj = topLevelWidget()->child( 0, "KoTransformToolBox" );
     if ( !obj )
     {
-	box = new TransformToolBox( selectedChild(), topLevelWidget() );
+	box = new KoTransformToolBox( selectedChild(), topLevelWidget() );
 	box->show();
 
-	box->setPartChild( selectedChild() );
+	box->setDocumentChild( selectedChild() );
     }
     else
     {
-	box = (TransformToolBox*)obj;
+	box = (KoTransformToolBox*)obj;
 	box->show();
 	box->raise();
     }
 }
 
-void KSpreadView::slotChildSelected( PartChild* ch )
+void KSpreadView::slotChildSelected( KoDocumentChild* ch )
 {
     m_transform->setEnabled( TRUE );
 
-    QObject* obj = topLevelWidget()->child( 0, "TransformToolBox" );
+    QObject* obj = topLevelWidget()->child( 0, "KoTransformToolBox" );
     if ( obj )
     {
-	TransformToolBox* box = (TransformToolBox*)obj;
+	KoTransformToolBox* box = (KoTransformToolBox*)obj;
 	box->setEnabled( TRUE );
-	box->setPartChild( ch );
+	box->setDocumentChild( ch );
     }
 }
 
-void KSpreadView::slotChildUnselected( PartChild* )
+void KSpreadView::slotChildUnselected( KoDocumentChild* )
 {
     m_transform->setEnabled( FALSE );
 
-    QObject* obj = topLevelWidget()->child( 0, "TransformToolBox" );
+    QObject* obj = topLevelWidget()->child( 0, "KoTransformToolBox" );
     if ( obj )
     {
-	TransformToolBox* box = (TransformToolBox*)obj;
+	KoTransformToolBox* box = (KoTransformToolBox*)obj;
 	box->setEnabled( FALSE );
     }
 }

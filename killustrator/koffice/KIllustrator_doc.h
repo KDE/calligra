@@ -26,6 +26,7 @@
 #define KIllustrator_doc_h_
 
 #include <koDocument.h>
+#include <koDocumentChild.h>
 
 #include <qcstring.h>
 
@@ -50,7 +51,7 @@ class KIllustratorDocument : public KoDocument
 {
     Q_OBJECT
 public:
-    KIllustratorDocument( QObject* parent = 0, const char* name = 0 );
+    KIllustratorDocument( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KIllustratorDocument ();
 
     // Overloaded methods from KoDocument
@@ -66,12 +67,12 @@ public:
     /**
      * Overloaded @ref Part::createView
      */
-    View* createView( QWidget* parent, const char* name );
+    KoView* createView( QWidget* parent, const char* name );
 
     /**
      * Overloaded @ref Part::createShell
      */
-    Shell* createShell();
+    KoMainWindow* createShell();
 
     /**
      * Overloaded @ref KoDocument::initDoc.
@@ -86,7 +87,7 @@ public:
     /**
      * Overloaded @ref ContainerPart::insertChild.
      */
-    void insertChild( PartChild* child );
+    void insertChild( KoDocumentChild* child );
 	
     /**
      * Overloaded @ref Part::paintContent
@@ -103,12 +104,6 @@ signals:
     void partInserted (KIllustratorChild* child, GPart* part);
     void childGeometryChanged (KIllustratorChild* child);
 
-protected:
-    /**
-     * Overloaded @ref Part::configFile
-     */
-    QString configFile() const;
-	
 private:
     GDocument* m_gdocument;
 };

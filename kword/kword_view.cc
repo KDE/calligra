@@ -99,7 +99,7 @@
 
 /*================================================================*/
 KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
-    : ContainerView( _doc, _parent, _name ), format( _doc )
+    : KoView( _doc, _parent, _name ), format( _doc )
 {
     m_pKWordDoc = 0L;
     m_bUnderConstruction = TRUE;
@@ -138,6 +138,9 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     m_pKWordDoc = _doc;
     backColor = QBrush( white );
 
+    setInstance( KWordFactory::global() );
+    setXMLFile( "kword.rc" );
+
     QObject::connect( m_pKWordDoc, SIGNAL( sig_insertObject( KWordChild*, KWPartFrameSet* ) ),
 		      this, SLOT( slotInsertObject( KWordChild*, KWPartFrameSet* ) ) );
     QObject::connect( m_pKWordDoc, SIGNAL( sig_updateChildGeometry( KWordChild* ) ),
@@ -153,7 +156,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
 /*================================================================*/
 void KWordView::showEvent( QShowEvent *e )
 {
-    ContainerView::showEvent( e );
+    KoView::showEvent( e );
     if ( gui && gui->getPaperWidget() )
 	gui->getPaperWidget()->setFocus();
 }
@@ -205,11 +208,18 @@ void KWordView::initGui()
     ( (KColorAction*)actionFrameBackColor )->blockSignals( FALSE );
 
     showFormulaToolbar( FALSE );
+    /* err? I'm not sure about those two hacks ;-)
+       The second one is easy to solve: copy koffice_shell.rc to kword_shell.rc,
+       hack kword_shell.rc to align the toolbar to the left and call setXMLFile() in your
+       KWordShell constructor
+       For the first one...hrm... Guess we need something for that in libkparts :-)
+       (Simon)
     KToolBar *tb = shell()->viewToolBar( "frame_toolbar" );
     if ( tb )
 	tb->hide();
     if ( ( (KoMainWindow*)shell() )->fileToolBar() )
 	( (KoMainWindow*)shell() )->fileToolBar()->setBarPos( KToolBar::Left );
+    */
 }
 
 /*================================================================*/
@@ -643,6 +653,7 @@ void KWordView::createGUI()
 /*================================================================*/
 void KWordView::showFormulaToolbar( bool show )
 {
+/*
     KToolBar *tb = shell()->viewToolBar( "formula_toolbar" );
     if ( !tb )
 	return;
@@ -650,6 +661,7 @@ void KWordView::showFormulaToolbar( bool show )
 	tb->show();
     else
 	tb->hide();
+*/	
 }
 
 /*================================================================*/
@@ -912,6 +924,11 @@ void KWordView::setParagBorders( KWParagLayout::Border _left, KWParagLayout::Bor
     }
 }
 
+void KWordView::updateReadWrite( bool readwrite )
+{
+#warning TODO 
+} 
+
 /*===============================================================*/
 void KWordView::setTool( MouseMode _mouseMode )
 {
@@ -962,7 +979,7 @@ void KWordView::setTool( MouseMode _mouseMode )
 	( (KToggleAction*)actionToolsCreatePart )->blockSignals( FALSE );
 	break;
     }
-
+    /*
     KToolBar *tbFormat = shell()->viewToolBar( "format_toolbar" );
     KToolBar *tbFrame = shell()->viewToolBar( "frame_toolbar" );
     if ( tbFrame && tbFormat ) {
@@ -974,7 +991,7 @@ void KWordView::setTool( MouseMode _mouseMode )
 	    tbFrame->hide();
 	}
     }
-
+    */
     actionTableInsertRow->setEnabled( FALSE );
     actionTableInsertCol->setEnabled( FALSE );
     actionTableDelRow->setEnabled( FALSE );
@@ -1223,13 +1240,13 @@ void KWordView::insertPicture()
     fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
-#else 
+#else
     KFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp) | Pictures | All files (*)" ), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();  
+	file = fd.selectedFile();
 #endif
     if ( !file.isEmpty() ) m_pKWordDoc->insertPicture( file, gui->getPaperWidget() );
 }
@@ -1245,7 +1262,7 @@ void KWordView::insertClipart()
 /*===============================================================*/
 void KWordView::insertSpecialChar()
 {
-    QMessageBox::information( this, i18n( "Not implemented" ), 
+    QMessageBox::information( this, i18n( "Not implemented" ),
 			      i18n( "Inserting special characters is currently not implemented!" ),
 			      i18n( "OK" ) );
 }
@@ -1603,7 +1620,7 @@ void KWordView::toolsPart()
 	return;
     gui->getPaperWidget()->mmEdit();
 
-    KoDocumentEntry pe = KoPartSelectDia::selectPart();
+    KoDocumentEntry pe = KoPartSelectDia::selectPart( this );
     if ( pe.name.isEmpty() )
 	return;
 
@@ -3406,7 +3423,7 @@ void KWordView::spellCheckerDone( const char* )
 /*================================================================*/
 void KWordView::spellCheckerFinished( )
 {
-    KSpell::spellStatus status = kspell->status();                                
+    KSpell::spellStatus status = kspell->status();
     delete kspell;
     kspell = 0;
     if (status == KSpell::Error)

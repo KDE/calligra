@@ -24,18 +24,13 @@
 
 #include <kstddirs.h>
 
-KSpreadShell::KSpreadShell( QWidget* parent, const char* name )
-    : KoMainWindow( parent, name )
+KSpreadShell::KSpreadShell( const char* name )
+    : KoMainWindow( name )
 {
 }
 
 KSpreadShell::~KSpreadShell()
 {
-}
-
-QString KSpreadShell::configFile() const
-{
-    return readConfigFile( locate( "data", "kspread/kspread_shell.rc", KSpreadFactory::global() ) );
 }
 
 KoDocument* KSpreadShell::createDoc()

@@ -32,20 +32,14 @@
 #include "kimage_doc.h"
 #include "kimage_view.h"
 
-KImageShell::KImageShell( QWidget* parent, const char* name )
-  : KoMainWindow( parent, name )
+KImageShell::KImageShell( const char* name )
+  : KoMainWindow( name )
 {
-  setDoPartActivation( FALSE );
   resize( 640, 480 );
 }
 
 KImageShell::~KImageShell()
 {
-}
-
-QString KImageShell::configFile() const
-{
-  return readConfigFile( locate( "data", "kimage/kimage_shell.rc", KImageFactory::global() ) );
 }
 
 KoDocument* KImageShell::createDoc()

@@ -1,4 +1,4 @@
-<!DOCTYPE QConfig ><QConfig>
+<!DOCTYPE QConfig ><QConfig name="KChart">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="wizard"/>
@@ -10,15 +10,13 @@
   <Action name="saveconfig"/>	
  </Menu>
 </MenuBar>
-<ToolBars>
- <ToolBar>
-  <Action name="wizard"/>
-  <Action name="edit"/>
-  <Action name="config"/>
-  <Action name="piechart"/>
-  <Action name="linechart"/>
-  <Action name="areaschart"/>
-  <Action name="barschart"/>
- </ToolBar>
-</ToolBars>
+<ToolBar name="KChartToolBar">
+ <Action name="wizard"/>
+ <Action name="edit"/>
+ <Action name="config"/>
+ <Action name="piechart"/>
+ <Action name="linechart"/>
+ <Action name="areaschart"/>
+ <Action name="barschart"/>
+</ToolBar>
 </QConfig>

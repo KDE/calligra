@@ -78,7 +78,7 @@ kdemime_DATA = x-kpresenter.desktop
 kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/kpresenter
-rc_DATA = kpresenter.rc kpresenter_shell.rc
+rc_DATA = kpresenter.rc
 
 SUBDIRS = autoformEdit autoforms . pics templates dtd slideshow toolbar
 

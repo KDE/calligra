@@ -35,6 +35,9 @@ libkspreadcalc_la_METASOURCES = configdlg.moc \
 desktop_DATA = kspreadcalc.desktop
 desktopdir = $(kde_servicesdir)
 
+rc_DATA = kspreadcalc.rc
+rcdir = $(kde_datadir)/kspread/kpartplugins
+
 SUBDIRS = pics
 
 messages:

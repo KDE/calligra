@@ -35,7 +35,7 @@
  *
  ****************************************************/
 
-KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) : 
+KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     KDialogBase( parent, name, TRUE, "Insert Part", KDialogBase::Ok | KDialogBase::Cancel )
 {
     listview = new QListView( this );
@@ -48,7 +48,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
 	     this, SLOT( slotOk() ) );
     connect( listview, SIGNAL( selectionChanged( QListViewItem * ) ),
 	     this, SLOT( selectionChanged( QListViewItem * ) ) );
-    
+
     // Query for documents
     m_lstEntries = KoDocumentEntry::query();
     QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
@@ -58,7 +58,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     }
 
     okButton = 0;
-    
+
 #warning "After KRASH the KDialogBase API has to be opened a bit. It´s unacceptable"
 #warning "that one cannot access the buttons (Ok, Cancel, etc.) without a hack!"
     QObjectList *lst = queryList( "QPushButton" );
@@ -71,11 +71,11 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
 	}
     }
     selectionChanged( 0 );
-    
+
     resize( listview->sizeHint().width() + 20, 300 );
 }
 
-void KoPartSelectDia::selectionChanged( QListViewItem *item ) 
+void KoPartSelectDia::selectionChanged( QListViewItem *item )
 {
     if ( okButton )
 	okButton->setEnabled( item != 0 );
@@ -93,11 +93,11 @@ KoDocumentEntry KoPartSelectDia::entry()
     return KoDocumentEntry();
 }
 
-KoDocumentEntry KoPartSelectDia::selectPart()
+KoDocumentEntry KoPartSelectDia::selectPart( QWidget *parent )
 {
     KoDocumentEntry e;
 
-    KoPartSelectDia *dlg = new KoPartSelectDia( 0, "PartSelect" );
+    KoPartSelectDia *dlg = new KoPartSelectDia( parent, "PartSelect" );
 
     if (dlg->exec() == QDialog::Accepted)
 	e = dlg->entry();

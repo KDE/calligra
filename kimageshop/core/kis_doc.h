@@ -44,14 +44,14 @@ public:
     enum {RGB=0, CMYK, LAB, GREYSCALE } ColorModel;
     enum {BACKGROUND=0, FOREGROUND, WHITE, TRANSPARENT } BgColor;
 
-    KisDoc( KoDocument* parent = 0, const char* name = 0 );
+    KisDoc( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KisDoc();
 
     virtual bool loadFromURL( const QString& );
-    
+
     // document
-    virtual View* createView( QWidget* parent = 0, const char* name = 0 );
-    virtual Shell* createShell();
+    virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
+    virtual KoMainWindow* createShell();
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
     virtual bool initDoc();
     virtual QCString mimeType() const;
@@ -79,15 +79,15 @@ public:
     void compositeImage( QRect _rect );
     KisLayer* layerPtr( KisLayer *_layer );
     void setLayerOpacity( uchar _opacity, KisLayer *_layer = 0 );
-    
-    void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay, 
+
+    void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay,
 			      KisLayer *dstLay, int dstTile );
     void moveLayer( int dx, int dy, KisLayer *lay = 0 );
     void moveLayerTo( int x, int y, KisLayer *lay = 0 );
     void renderTileQuadrant( const KisLayer *srcLay, int srcTile, KisLayer *dstLay,
 			     int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
     LayerList layerList();
-    
+
     void rotateLayer180(KisLayer *_layer);
     void rotateLayerLeft90(KisLayer *_layer);
     void rotateLayerRight90(KisLayer *_layer);
@@ -104,17 +104,18 @@ public:
     bool saveCurrentImage( const QString& file );
     bool loadImage( const QString& file );
     void removeImage( KisImage *img );
-    
+
     QString currentImage();
 
     void setCurrentImage(KisImage *img);
 
     bool isEmpty();
 
+
     QStringList images();
 
     void renameImage(const QString& oldname, const QString &newname);
-    
+
 public slots:
 
   void setCurrentLayerOpacity( double opacity )
@@ -127,17 +128,15 @@ public slots:
   void setCurrentImage(const QString& _name);
 
   void slotRemoveImage( const QString& name );
- 
+
 signals:
 
   void docUpdated();
   void docUpdated( const QRect& rect );
   void layersUpdated();
   void imageListUpdated();
-    
-protected:
 
-  virtual QString configFile() const;
+protected:
   KoCommandHistory m_commands;
 
 private:

@@ -24,19 +24,13 @@
 
 #include <kstddirs.h>
 
-KIllustratorShell::KIllustratorShell( QWidget* parent, const char* name )
-    : KoMainWindow( parent, name )
+KIllustratorShell::KIllustratorShell( const char* name )
+    : KoMainWindow( name )
 {
 }
 
 KIllustratorShell::~KIllustratorShell()
 {
-}
-
-QString KIllustratorShell::configFile() const
-{
-    return readConfigFile( locate( "data", "killustrator/KIllustrator_shell.rc", KIllustratorFactory::global() ) );
-    // return readConfigFile( "KIllustrator_shell.rc" );
 }
 
 KoDocument* KIllustratorShell::createDoc()

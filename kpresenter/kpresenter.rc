@@ -1,4 +1,4 @@
-<!DOCTYPE QConfig ><QConfig>
+<!DOCTYPE QConfig ><QConfig name="KPresenter">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="edit_undo"/>
@@ -119,8 +119,7 @@
   <Action name="screen_presstruct"/>
  </Menu>
 </MenuBar>
-<ToolBars>
- <ToolBar position="right">
+<ToolBar position="right">
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -129,14 +128,14 @@
   <Action name="edit_paste"/>
   <Separator/>
   <Action name="edit_delete"/>
- </ToolBar>
- <ToolBar position="left">
+</ToolBar>
+<ToolBar position="left">
   <Action name="insert_page"/>
   <Separator/>
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
- </ToolBar>
- <ToolBar position="top">
+</ToolBar>
+<ToolBar position="top">
   <Action name="tools_mouse"/>
   <Action name="tools_line"/>
   <Action name="tools_rectangle"/>
@@ -148,8 +147,8 @@
   <Action name="tools_table"/>
   <Action name="tools_formula"/>
   <Action name="tools_object"/>
- </ToolBar>
- <ToolBar position="bottom">
+</ToolBar>
+<ToolBar position="bottom">
   <Action name="text_fontsize"/>
   <Action name="text_fontfamily"/>
   <Separator/>
@@ -171,8 +170,8 @@
   <Action name="text_spacing"/>
   <Separator/>
   <Action name="text_inspgnum"/>
- </ToolBar>
- <ToolBar position="left">
+</ToolBar>
+<ToolBar position="left">
   <Action name="extra_penbrush"/>
   <Action name="extra_configpie"/>
   <Action name="extra_configrect"/>
@@ -190,8 +189,8 @@
   <Action name="extra_ungroup"/>
   <Separator/>
   <Action name="extra_webpres"/>
- </ToolBar>
- <ToolBar position="top">
+</ToolBar>
+<ToolBar position="top">
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Action name="screen_start"/>
@@ -203,9 +202,8 @@
   <Separator/>
   <Action name="screen_pencolor"/>
   <Action name="screen_penwidth"/>
- </ToolBar>
- <ToolBar position="right">
+</ToolBar>
+<ToolBar position="right">
   <Action name="colorbar"/>
- </ToolBar>
-</ToolBars>
+</ToolBar>
 </QConfig>

@@ -44,8 +44,11 @@
 #include "kimage_global.h"
 
 KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _name )
-  : ContainerView( _doc, _parent, _name )
+  : KoView( _doc, _parent, _name )
 {
+  setInstance( KImageFactory::global() );
+  setXMLFile( "kimage.rc" );
+
   QObject::connect( _doc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
   // edit actions
@@ -98,7 +101,7 @@ void KImageView::paintEvent( QPaintEvent* /* _event */ )
 {
   if( doc()->isEmpty() )
     return;
-  
+
   QPainter painter;
   painter.begin( this );
 
@@ -107,9 +110,14 @@ void KImageView::paintEvent( QPaintEvent* /* _event */ )
   painter.end();
 }
 
+void KImageView::updateReadWrite( bool readwrite )
+{
+#warning TODO 
+} 
+
 KImageDocument* KImageView::doc()
 {
-  return (KImageDocument*) part();
+  return (KImageDocument*) koDocument();
 }
 
 /*

@@ -62,13 +62,15 @@ QList<KSpreadDoc>& KSpreadDoc::documents()
     return *s_docs;
 }
 
-KSpreadDoc::KSpreadDoc( QObject* parent, const char* name )
-    : KoDocument( parent, name )
+KSpreadDoc::KSpreadDoc( QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parent, name, singleViewMode )
 {
   if ( s_docs == 0 )
       s_docs = new QList<KSpreadDoc>;
   s_docs->append( this );
 
+  setInstance( KSpreadFactory::global(), false );
+  
   // Set a name if there is no name specified
   if ( !name )
   {
@@ -114,16 +116,16 @@ bool KSpreadDoc::initDoc()
   return true;
 }
 
-Shell* KSpreadDoc::createShell()
+KoMainWindow* KSpreadDoc::createShell()
 {
-    Shell* shell = new KSpreadShell;
-    shell->setRootPart( this );
+    KoMainWindow* shell = new KSpreadShell;
+    shell->setRootDocument( this );
     shell->show();
 
     return shell;
 }
 
-View* KSpreadDoc::createView( QWidget* parent, const char* name )
+KoView* KSpreadDoc::createView( QWidget* parent, const char* name )
 {
     if ( name == 0 )
 	name = "View";
@@ -789,11 +791,6 @@ void KSpreadDoc::paperLayoutDlg()
     setPaperLayout( pl.left, pl.top, pl.right, pl.bottom, pl.format, pl.orientation );
 
     setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
-}
-
-QString KSpreadDoc::configFile() const
-{
-    return readConfigFile( locate( "data", "kspread/kspread.rc", KSpreadFactory::global() ) );
 }
 
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent )

@@ -33,7 +33,7 @@ kdemime_DATA = x-killustrator.desktop
 kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/killustrator
-rc_DATA = KIllustrator.rc KIllustrator_shell.rc
+rc_DATA = KIllustrator.rc
 
 # SUBDIRS =  . plugins pics dtd toolbar
 

@@ -90,12 +90,16 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     markerIsVisible = TRUE;
     redrawAllWhileScrolling = FALSE;
 
+
     if ( doc )
 	calcVisiblePages();
 
     fc = new KWFormatContext( doc, 1 );
+
     fc->init( doc->getFirstParag( 0 ) );
+
     fc->cursorGotoLine( 0 );
+
     oldFc = new KWFormatContext( doc, 1 );
 
     viewport()->setCursor( ibeamCursor );
@@ -4635,7 +4639,7 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 		    *fc = oldFc;
 		    recalcCursor();
 		    pasteLaterData = drop->encodedData( "text/plain" );
-		} else 
+		} else
 		    editPaste( drop->encodedData( "text/plain" ) );
 	    }
 	}

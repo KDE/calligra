@@ -19,8 +19,11 @@
 //#include "sheetdlg.h"
 
 KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
-    : ContainerView( part, parent, name )
+    : KoView( part, parent, name )
 {
+    setInstance( KChartFactory::global() );
+    setXMLFile( "kchart.rc" );
+
     m_wizard = new KAction( tr("Customize with &wizard"),
 			    KChartBarIcon("wizard"), 0,
 			    this, SLOT( wizard() ),
@@ -76,19 +79,23 @@ void KChartView::paintEvent( QPaintEvent* /*ev*/ )
     // PENDING(kalle) Do double-buffering if we are a widget
     //    part()->paintEverything( painter, ev->rect(), FALSE, this );
     // paint everything
-    part()->paintEverything( painter, rect(), FALSE, this );
+    koDocument()->paintEverything( painter, rect(), FALSE, this );
 
 
     painter.end();
 }
 
+void KChartView::updateReadWrite( bool readwrite )
+{
+#warning TODO 
+} 
 
 void KChartView::createTempData()
 {
     int row, col;
     int nbrow,nbcol;
 
-    KChartData *dat = ((KChartPart*)part())->data();
+    KChartData *dat = ((KChartPart*)koDocument())->data();
 
     // initialize some data, if there is none
     nbrow=4;
@@ -110,7 +117,7 @@ void KChartView::createTempData()
 	//      _dlg->exec();
     }
 
-    KChartParameters *params = ((KChartPart*)part())->params();
+    KChartParameters *params = ((KChartPart*)koDocument())->params();
     if(params->legend.isEmpty())
     	{
         for(unsigned int i=0;i<dat->rows();i++)
@@ -154,9 +161,9 @@ if(params->explode.isEmpty())
 void KChartView::edit()
 {
   kchartDataEditor ed;
-  KChartParameters* params=((KChartPart*)part())->params();
+  KChartParameters* params=((KChartPart*)koDocument())->params();
 
-  KChartData *dat = (( (KChartPart*)part())->data());
+  KChartData *dat = (( (KChartPart*)koDocument())->data());
   ed.setData(dat);
   ed.setLegend(params->legend);
   ed.setXLabel(params->xlbl);
@@ -173,7 +180,7 @@ void KChartView::wizard()
 {
     qDebug("Wizard called");
     kchartWizard *wiz =
-      new kchartWizard((KChartPart*)part(), this, "KChart Wizard", true);
+      new kchartWizard((KChartPart*)koDocument(), this, "KChart Wizard", true);
     qDebug("Executed. Now, display it");
     wiz->exec();
     repaint();
@@ -184,7 +191,7 @@ void KChartView::wizard()
 void KChartView::config()
 {
     // open a config dialog depending on the chart type
-    KChartParameters* params = ((KChartPart*)part())->params();
+    KChartParameters* params = ((KChartPart*)koDocument())->params();
 
     switch( params->type ) {
     case KCHARTTYPE_3DBAR:
@@ -226,37 +233,37 @@ void KChartView::config()
 
 void KChartView::saveConfig() {
     qDebug("Save config...");
-    ((KChartPart*)part())->saveConfig( KGlobal::config() );
+    ((KChartPart*)koDocument())->saveConfig( KGlobal::config() );
 }
 
 void KChartView::loadConfig() {
     qDebug("Load config...");
     KGlobal::config()->reparseConfiguration();
-    ((KChartPart*)part())->loadConfig( KGlobal::config() );
+    ((KChartPart*)koDocument())->loadConfig( KGlobal::config() );
     //refresh chart when you load config
     repaint();
 }
 
 void KChartView::pieChart() {
-KChartParameters* params = ((KChartPart*)part())->params();
+KChartParameters* params = ((KChartPart*)koDocument())->params();
 params->type=KCHARTTYPE_2DPIE;
 repaint();
 }
- 
+
 void KChartView::lineChart() {
-KChartParameters* params = ((KChartPart*)part())->params();
+KChartParameters* params = ((KChartPart*)koDocument())->params();
 params->type=KCHARTTYPE_3DLINE;
 repaint();
 }
 
 void KChartView::barsChart() {
-KChartParameters* params = ((KChartPart*)part())->params();
+KChartParameters* params = ((KChartPart*)koDocument())->params();
 params->type=KCHARTTYPE_3DBAR;
 repaint();
 }
 
 void KChartView::areasChart() {
-KChartParameters* params = ((KChartPart*)part())->params();
+KChartParameters* params = ((KChartPart*)koDocument())->params();
 params->type=KCHARTTYPE_3DAREA;
 repaint();
 }

@@ -110,13 +110,18 @@ KPresenterChild::~KPresenterChild()
 {
 }
 
+KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
+{
+  return 0L; 
+} 
+
 /******************************************************************/
 /* class KPresenterDoc						  */
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
-    : KoDocument( parent, name ),
+KPresenterDoc::KPresenterDoc( QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parent, name, singleViewMode ),
       _pixmapCollection(), _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
       _hasFooter( false ), urlIntern()
 {
@@ -125,6 +130,8 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
   // are set correctly
   //setModified(true);
 
+    setInstance( KPresenterFactory::global() ); 
+ 
     dcop = 0;
     docAlreadyOpen = FALSE;
     _clean = true;
@@ -236,7 +243,7 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const char *_path )
 {
     int i = 0;
 
-    QListIterator<PartChild> it( children() );
+    QListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
 	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
 	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, "", internURL ) )
@@ -301,7 +308,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     out << etag << "</SELSLIDES>" << endl;
 
     // Write "OBJECT" tag for every child
-    QListIterator<PartChild> chl( children() );
+    QListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
 	out << otag << "<EMBEDDED>" << endl;
 
@@ -482,7 +489,7 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
 /*========================== load ===============================*/
 bool KPresenterDoc::loadChildren( KoStore* _store )
 {
-    QListIterator<PartChild> it( children() );
+    QListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
 	if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
 	    return false;
@@ -509,7 +516,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
     clipartCollectionKeys.clear();
     clipartCollectionNames.clear();
     lastObj = -1;
-    
+
     // clean
     if ( _clean ) {
 	//KoPageLayout __pgLayout;
@@ -1310,7 +1317,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 {
 //     if ( _pageLayout == pgLayout )
 // 	return;
-    
+
     _pageLayout = pgLayout;
     QRect r = getPageSize( 0, diffx, diffy );
 
@@ -1408,6 +1415,18 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
     } else
 	return false;
 }
+
+/*================================================================*/
+void KPresenterDoc::initEmpty()
+{
+  QString fileName( locate("kpresenter_template", "Screenpresentations/Plain.kpt",
+			    KPresenterFactory::global() ) );
+  objStartY = 0;
+  _clean = true;
+  setModified(true);
+  load_template( fileName );
+  setURL( QString::null );
+} 
 
 /*==================== set background color ======================*/
 void KPresenterDoc::setBackColor( unsigned int pageNum, QColor backColor1, QColor backColor2, BCType bcType,
@@ -3062,7 +3081,7 @@ void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace 
 /*=================== repaint all views =========================*/
 void KPresenterDoc::repaint( bool erase )
 {
-    View* view = firstView();
+    KoView* view = firstView();
     for( ; view; view = nextView() ) {
 	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
 	// decided to overload the non virtual repaint method!
@@ -3075,7 +3094,7 @@ void KPresenterDoc::setUnit( KoUnit _unit, QString __unit )
 {
     _pageLayout.unit = _unit;
 
-    View* view = firstView();
+    KoView* view = firstView();
     for( ; view; view = nextView() ) {
 	((KPresenterView*)view)->getHRuler()->setUnit( __unit );
 	((KPresenterView*)view)->getVRuler()->setUnit( __unit );
@@ -3087,7 +3106,7 @@ void KPresenterDoc::repaint( QRect rect )
 {
     QRect r;
 	
-    View* view = firstView();
+    KoView* view = firstView();
     for( ; view; view = nextView() ) {
 	r = rect;
 	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)view)->getDiffX(),
@@ -3104,7 +3123,7 @@ void KPresenterDoc::repaint( KPObject *kpobject )
 {
     QRect r;
 	
-    View* view = firstView();
+    KoView* view = firstView();
     for( ; view; view = nextView() )
     {
 	r = kpobject->getBoundingRect( 0, 0 );
@@ -3247,7 +3266,7 @@ void KPresenterDoc::deletePage( int _page, DelPageMode _delPageMode )
 	if ( kpobject->getType() == OT_TEXT )
 	    ( (KPTextObject*)kpobject )->recalcPageNum( this );
     }
-    
+
     _backgroundList.remove( _page );
     repaint( false );
 }
@@ -3290,7 +3309,7 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 	_backgroundList.insert( _page, kpbackground );
 	setURL( QString::null );
     }
-    
+
     repaint( false );
 }
 
@@ -3521,7 +3540,7 @@ void KPresenterDoc::loadStream( istream &in, int currPage )
 /*================= deselect all objs ===========================*/
 void KPresenterDoc::deSelectAllObj()
 {
-    View* view = firstView();
+    KoView* view = firstView();
     for( ; view; view = nextView() )
 	((KPresenterView*)view)->getPage()->deSelectAllObj();
 }
@@ -3683,13 +3702,18 @@ void KPresenterDoc::alignObjsBottom()
 /*================= undo redo changed ===========================*/
 void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 {
-    View* view = firstView();
+    KoView* view = firstView();
     for( ; view; view = nextView() )
     {
 	((KPresenterView*)view)->changeUndo( _undo, !_undo.isEmpty() );
 	((KPresenterView*)view)->changeRedo( _redo, !_redo.isEmpty() );
     }
 }
+
+/*==============================================================*/
+void KPresenterDoc::slotDocumentLoaded()
+{
+} 
 
 /*==============================================================*/
 int KPresenterDoc::getPenBrushFlags()
@@ -3812,7 +3836,7 @@ void KPresenterDoc::makeUsedPixmapList()
 	    usedPixmaps.append( dynamic_cast<KPPixmapObject*>( kpobject )->getKey() );
 	}
     }
-    
+
     KPBackGround *kpbackground = 0;
     i = 0;
     for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next(), ++i ) {
@@ -3825,28 +3849,22 @@ void KPresenterDoc::makeUsedPixmapList()
 }
 
 /*================================================================*/
-Shell* KPresenterDoc::createShell()
+KoMainWindow* KPresenterDoc::createShell()
 {
-    Shell* shell = new KPresenterShell;
-    shell->setRootPart( this );
+    KoMainWindow* shell = new KPresenterShell;
+    shell->setRootDocument( this );
     shell->show();
 
     return shell;
 }
 
 /*================================================================*/
-View* KPresenterDoc::createView( QWidget* parent, const char* name )
+KoView* KPresenterDoc::createView( QWidget* parent, const char* name )
 {
     KPresenterView* view = new KPresenterView( this, parent, name );
     addView( view );
 
     return view;
-}
-
-/*================================================================*/
-QString KPresenterDoc::configFile() const
-{
-    return readConfigFile( locate( "data", "kpresenter/kpresenter.rc", KPresenterFactory::global() ) );
 }
 
 /*================================================================*/

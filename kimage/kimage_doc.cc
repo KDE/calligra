@@ -44,9 +44,10 @@
 //#define MM_TO_POINT 2.83465
 //#define POINT_TO_MM 0.3527772388
 
-KImageDocument::KImageDocument( KoDocument* parent, const char* name )
-  : KoDocument( parent, name )
+KImageDocument::KImageDocument( QObject* parent, const char* name, bool singleViewMode )
+  : KoDocument( parent, name, singleViewMode )
 {
+  setInstance( KImageFactory::global() ); 
 }
 
 KImageDocument::~KImageDocument()
@@ -76,7 +77,7 @@ bool KImageDocument::initDoc()
   return true;
 }
 
-View* KImageDocument::createView( QWidget* parent, const char* name )
+KoView* KImageDocument::createView( QWidget* parent, const char* name )
 {
   KImageView* view = new KImageView( this, parent, name );
   addView( view );
@@ -84,10 +85,10 @@ View* KImageDocument::createView( QWidget* parent, const char* name )
   return view;
 }
 
-Shell* KImageDocument::createShell()
+KoMainWindow* KImageDocument::createShell()
 {
-  Shell* shell = new KImageShell;
-  shell->setRootPart( this );
+  KoMainWindow* shell = new KImageShell;
+  shell->setRootDocument( this );
   shell->show();
 
   return shell;
@@ -133,11 +134,6 @@ QCString KImageDocument::mimeType() const
   // FIXME: save the same file type as loaded, not allways KImage file format ;-)
 
   return "application/x-kimage";
-}
-
-QString KImageDocument::configFile() const
-{
-    return readConfigFile( locate("data", "kimage/kimage.rc", KImageFactory::global()) );
 }
 
 bool KImageDocument::loadFromURL( const KURL& _url )
@@ -276,7 +272,7 @@ void KImageDocument::setPositionString( QString name )
     m_posMode = LeftTop;
     return;
   }
-  
+
   kdebug( KDEBUG_ERROR, 0, "Error: Unsupported position, using 'topleft' : " + name );
 
   m_posMode = LeftTop;
@@ -331,7 +327,7 @@ void KImageDocument::setSizeString( QString name )
     m_drawMode = ZoomFactor;
     return;
   }
-  
+
   kdebug( KDEBUG_ERROR, 0, "Error: Unsupported drawmode, using 'original' : " + name  );
 
   m_drawMode = OriginalSize;

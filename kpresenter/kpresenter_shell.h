@@ -28,20 +28,19 @@ class KPresenterShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    KPresenterShell( QWidget* parent = 0, const char* name = 0 );
+    KPresenterShell( const char* name = 0 );
     ~KPresenterShell();
 
     QString nativeFormatPattern() const { return "*.kpr"; }
     QString nativeFormatName() const { return "KPresenter"; }
 
-    virtual void setRootPart( Part* );
+    virtual void setRootDocument( KoDocument* );
 
 public slots:
     void slotFilePrint();
     void slotHelpAbout();
 
 protected:
-    virtual QString configFile() const;
     virtual KoDocument* createDoc();
 };
 

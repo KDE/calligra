@@ -58,16 +58,16 @@ public:
      *  @returns the KoDocumentEntry of the selected KOffice components
      *           or an empty entry.
      */
-    static KoDocumentEntry selectPart();
+    static KoDocumentEntry selectPart( QWidget *parent = 0L );
 
 private slots:
     void selectionChanged( QListViewItem * );
-    
+
 private:
     QValueList<KoDocumentEntry> m_lstEntries;
     QListView *listview;
     QPushButton *okButton;
-    
+
 };
 
 #endif

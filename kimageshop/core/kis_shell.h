@@ -27,7 +27,7 @@ class KisShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    KisShell( QWidget* parent = 0, const char* name = 0 );
+    KisShell( const char* name = 0 );
     ~KisShell();
 
     /**
@@ -43,9 +43,8 @@ public slots:
    virtual void slotFileSaveAs();
    virtual void slotFilePrint();
    virtual void slotFileClose();
-   
+
 protected:
-    virtual QString configFile() const;
     virtual KoDocument* createDoc();
 };
 

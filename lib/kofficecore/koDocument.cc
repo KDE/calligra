@@ -20,6 +20,8 @@
 #include <fstream>
 
 #include "koDocument.h"
+#include "koDocumentChild.h"
+#include "koView.h"
 #include "koApplication.h"
 #include "koStream.h"
 #include "koQueryTypes.h"
@@ -54,215 +56,281 @@
 
 /**********************************************************
  *
- * KoDocumentChild
- *
- **********************************************************/
-
-KoDocumentChild::KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry )
-    : PartChild( parent, doc, geometry )
-{
-}
-
-KoDocumentChild::KoDocumentChild( KoDocument* parent )
-    : PartChild( parent )
-{
-}
-
-bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
-{
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end(); it++ )
-  {
-    if ( (*it).m_strName == "url" )
-    {
-      m_tmpURL = (*it).m_strValue.c_str();
-    }
-    else if ( (*it).m_strName == "mime" )
-    {
-      m_tmpMimeType = (*it).m_strValue.c_str();
-    }
-    else
-      kDebugInfo( 30003, "Unknown attrib 'OBJECT:%s'", (*it).m_strName.c_str() );
-  }
-
-  if ( m_tmpURL.isEmpty() )
-  {	
-    kDebugInfo( 30003, "Empty 'url' attribute in OBJECT" );
-    return false;
-  }
-  else if ( m_tmpMimeType.isEmpty() )
-  {
-    kDebugInfo( 30003, "Empty 'mime' attribute in OBJECT" );
-    return false;
-  }
-
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
-
-  bool brect = false;
-
-  // RECT
-  while( parser.open( 0L, tag ) )
-  {
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-
-    if ( name == "RECT" )
-    {
-      brect = true;
-      m_tmpGeometry = tagToRect( lst );
-      setGeometry( m_tmpGeometry );
-    }
-    else
-      kDebugInfo( 30003, "Unknown tag '%s' in OBJECT", tag.c_str() );
-
-    if ( !parser.close( tag ) )
-    {
-      kDebugInfo( 30003, "ERR: Closing Child in OBJECT" );
-      return false;
-    }
-  }
-
-  if ( !brect )
-  {
-    kDebugInfo( 30003, "Missing RECT in OBJECT" );
-    return false;
-  }
-
-  return true;
-}
-
-bool KoDocumentChild::load( const QDomElement& element )
-{
-    if ( element.hasAttribute( "url" ) )
-	m_tmpURL = element.attribute("url");
-    if ( element.hasAttribute("mime") )
-	m_tmpMimeType = element.attribute("mime");
-
-    if ( m_tmpURL.isEmpty() )
-    {	
-	kDebugInfo( 30003, "Empty 'url' attribute in OBJECT" );
-	return false;
-    }
-    if ( m_tmpMimeType.isEmpty() )
-    {
-	kDebugInfo( 30003, "Empty 'mime' attribute in OBJECT" );
-	return false;
-    }
-
-    bool brect = FALSE;
-    QDomElement e = element.firstChild().toElement();
-    for( ; !e.isNull(); e = e.nextSibling().toElement() )
-    {
-	if ( e.tagName() == "rect" )
-        {
-	    brect = true;
-	    m_tmpGeometry = e.toRect();
-	}
-    }
-
-    if ( !brect )
-    {
-	kDebugInfo( 30003, "Missing RECT in OBJECT" );
-	return false;
-    }
-
-    return true;
-}
-
-bool KoDocumentChild::loadTag( KOMLParser&, const string&, vector<KOMLAttrib>& )
-{
-    return FALSE;
-}
-
-bool KoDocumentChild::loadDocument( KoStore* _store )
-{
-  assert( !m_tmpURL.isEmpty() );
-
-  kDebugInfo( 30003, QString("Trying to load %1").arg(m_tmpURL) );
-
-  KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
-  if ( e.isEmpty() )
-  {
-    kDebugInfo( 30003, "ERROR: Could not create child document" );
-    return false;
-  }
-
-  // ######## Torben: Do some error handling on createDoc here
-  setPart( e.createDoc( (KoDocument*)parent() ), m_tmpGeometry );
-
-  bool res;
-  if ( m_tmpURL.left( STORE_PROTOCOL_LENGTH ) == STORE_PROTOCOL )
-      res = document()->loadFromStore( _store, m_tmpURL );
-  else
-  {
-      // Reference to an external document. Hmmm...
-      res = document()->loadFromURL( m_tmpURL );
-      // Still waiting...
-      QApplication::setOverrideCursor( waitCursor );
-  }
-
-  m_tmpURL = QString::null;
-
-  return res;
-}
-
-QDomElement KoDocumentChild::save( QDomDocument& doc )
-{
-    QDomElement e = doc.createElement( "object" );
-    e.setAttribute( "url", document()->url().url() );
-    e.setAttribute( "mime", document()->mimeType() );
-    QDomElement rect = doc.createElement( "rect" );
-    rect.setAttribute( "x", geometry().left() );
-    rect.setAttribute( "y", geometry().top() );
-    rect.setAttribute( "w", geometry().width() );
-    rect.setAttribute( "h", geometry().height() );
-    e.appendChild(rect);
-    return e;
-}
-
-bool KoDocumentChild::save( ostream& out )
-{
-  QString u = document()->url().url();
-  QString mime = document()->mimeType();
-
-  out << indent << "<OBJECT url=\"" << u.ascii() << "\" mime=\"" << mime.ascii() << "\">"
-      << geometry() << "</OBJECT>" << endl;
-
-  return true;
-}
-
-bool KoDocumentChild::isStoredExtern()
-{
-  const KURL & url = document()->url();
-  if ( !url.hasPath() )
-    return false;
-  if ( url.protocol() == STORE_PROTOCOL )
-    return false;
-
-  return true;
-}
-
-KURL KoDocumentChild::url()
-{
-    return ( document() ? document()->url() : KURL() );
-}
-
-KoDocumentChild::~KoDocumentChild()
-{
-}
-
-/**********************************************************
- *
  * KoDocument
  *
  **********************************************************/
 
-KoDocument::KoDocument( QObject* parent, const char* name )
-    : ContainerPart( parent, name )
+class KoDocumentPrivate
 {
-    m_bModified = FALSE;
+public:
+  KoDocumentPrivate()
+  {
+    m_children.setAutoDelete( true );
+  }
+  ~KoDocumentPrivate()
+  {
+  }
+
+  QList<KoView> m_views;
+  QList<KoDocumentChild> m_children;
+
+  bool m_bSingleViewMode;
+};
+
+KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
+    : KParts::ReadWritePart( parent, name )
+{
+    d = new KoDocumentPrivate;
     m_bEmpty = TRUE;
+
+    d->m_bSingleViewMode = singleViewMode;
+
+    // the parent setting *always* overrides! (Simon)
+    if ( parent )
+    {
+      if ( parent->inherits( "KoDocument" ) )
+        d->m_bSingleViewMode = ((KoDocument *)parent)->singleViewMode();
+      else if ( parent->inherits( "KParts::Part" ) )
+        d->m_bSingleViewMode = true;
+    }
+}
+
+KoDocument::~KoDocument()
+{
+  delete d;
+}
+
+bool KoDocument::singleViewMode() const
+{
+  return d->m_bSingleViewMode;
+}
+
+bool KoDocument::saveFile()
+{
+  if ( !kapp->inherits( "KoApplication" ) )
+    return false;
+
+  return saveToURL( KURL( m_file ), KOAPP->nativeFormatMimeType() );
+}
+
+bool KoDocument::openFile()
+{
+  return loadFromURL( KURL( m_file ) );
+}
+
+QWidget *KoDocument::widget()
+{
+  if ( !d->m_bSingleViewMode )
+    return 0L;
+
+  if ( d->m_views.count() == 0 )
+  {
+    QWidget *parentWidget = 0L;
+
+    if ( parent() )
+    {
+      if ( parent()->inherits( "QWidget" ) )
+        parentWidget = (QWidget *)parent();
+      else if ( parent()->inherits( "KoDocument" ) )
+      {
+        KoDocument *parentDoc = (KoDocument *)parent();
+	if ( parentDoc->singleViewMode() )
+	  parentWidget = parentDoc->widget();
+      }
+    }
+
+    QWidget *w = createView( parentWidget );
+    assert( w );
+    setWidget( w );
+  }
+
+  return d->m_views.getFirst();
+}
+
+QAction *KoDocument::action( const QDomElement &element )
+{
+  return d->m_views.getFirst()->action( element );
+}
+
+QDomDocument KoDocument::document() const
+{
+  return d->m_views.getFirst()->document();
+}
+
+void KoDocument::setManager( KParts::PartManager *manager )
+{
+  KParts::ReadWritePart::setManager( manager );
+  if ( d->m_bSingleViewMode && d->m_views.count() == 1 )
+    d->m_views.getFirst()->setPartManager( manager );
+}
+
+void KoDocument::setReadWrite( bool readwrite )
+{
+  KParts::ReadWritePart::setReadWrite( readwrite ); 
+  
+  QListIterator<KoView> vIt( d->m_views );
+  for (; vIt.current(); ++vIt )
+    vIt.current()->updateReadWrite( readwrite );
+  
+  QListIterator<KoDocumentChild> dIt( d->m_children );
+  for (; dIt.current(); ++dIt )
+    if ( dIt.current()->document() )
+      dIt.current()->document()->setReadWrite( readwrite );
+} 
+
+void KoDocument::addView( KoView *view )
+{
+  if ( !view )
+    return;
+
+  d->m_views.append( view );
+
+  connect( view, SIGNAL( destroyed() ),
+	   this, SLOT( slotViewDestroyed() ) );
+  
+  view->updateReadWrite( isReadWrite() );  
+}
+
+KoView *KoDocument::firstView()
+{
+  return d->m_views.first();
+}
+
+KoView *KoDocument::nextView()
+{
+  return d->m_views.next();
+}
+
+void KoDocument::slotViewDestroyed()
+{
+  d->m_views.removeRef( (KoView *)sender() );
+}
+
+void KoDocument::insertChild( KoDocumentChild *child )
+{
+  setModified( true );
+
+  d->m_children.append( child );
+
+  connect( child, SIGNAL( changed( KoDocumentChild * ) ),
+	   this, SIGNAL( childChanged( KoDocumentChild * ) ) );
+}
+
+QList<KoDocumentChild> &KoDocument::children() const
+{
+  return d->m_children;
+}
+
+KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
+{
+  QListIterator<KoView> it( d->m_views );
+  for (; it.current(); ++it )
+    if ( (QWidget *)it.current() == widget )
+    {
+      QPoint canvasPos( it.current()->canvas()->mapFromGlobal( globalPos ) );
+      canvasPos.rx() -= it.current()->canvasXOffset();
+      canvasPos.ry() -= it.current()->canvasYOffset();
+
+      KParts::Part *part = it.current()->hitTest( canvasPos );
+      if ( part )
+        return part;
+    }
+
+  return 0L;
+}
+
+KoDocument *KoDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
+{
+  QListIterator<KoDocumentChild> it( d->m_children );
+  for (; it.current(); ++it )
+  {
+    KoDocument *doc = it.current()->hitTest( pos, matrix );
+    if ( doc )
+      return doc;
+  }
+
+  return this;
+}
+
+KoDocumentChild *KoDocument::child( KoDocument *doc )
+{
+  QListIterator<KoDocumentChild> it( d->m_children );
+  for (; it.current(); ++it )
+    if ( it.current()->document() == doc )
+      return it.current();
+
+  return 0L;
+}
+
+void KoDocument::paintEverything( QPainter &painter, const QRect &rect, bool transparent, KoView *view )
+{
+  paintContent( painter, rect, transparent );
+  paintChildren( painter, rect, view );
+}
+
+void KoDocument::paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view )
+{
+  QListIterator<KoDocumentChild> it( d->m_children );
+  for (; it.current(); ++it )
+  {
+    // #### todo: paint only if child is visible inside rect
+    painter.save();
+    paintChild( it.current(), painter, view );
+    painter.restore();
+  }
+}
+
+void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *view )
+{
+  QRegion rgn = painter.clipRegion();
+
+  child->transform( painter );
+  child->document()->paintEverything( painter, child->contentRect(), child->isTransparent(), view );
+
+  if ( view && view->partManager() )
+  {
+    KParts::PartManager *manager = view->partManager();
+
+    painter.scale( 1.0 / child->xScaling(), 1.0 / child->yScaling() );
+
+    int w = int( (double)child->contentRect().width() * child->xScaling() );
+    int h = int( (double)child->contentRect().height() * child->yScaling() );
+    if ( ( manager->selectedPart() == (KParts::Part *)child->document() &&
+	   manager->selectedWidget() == (QWidget *)view ) ||
+	 ( manager->activePart() == (KParts::Part *)child->document() &&
+	   manager->activeWidget() == (QWidget *)view ) )
+        {
+	  painter.setClipRegion( rgn );
+
+	  painter.setPen( black );
+	  painter.fillRect( -5, -5, w + 10, 5, white );
+	  painter.fillRect( -5, h, w + 10, 5, white );
+	  painter.fillRect( -5, -5, 5, h + 10, white );
+	  painter.fillRect( w, -5, 5, h + 10, white );
+	  painter.fillRect( -5, -5, w + 10, 5, BDiagPattern );
+	  painter.fillRect( -5, h, w + 10, 5, BDiagPattern );		
+	  painter.fillRect( -5, -5, 5, h + 10, BDiagPattern );
+	  painter.fillRect( w, -5, 5, h + 10, BDiagPattern );
+	
+	  if ( manager->selectedPart() == (KParts::Part *)child->document() &&
+	       manager->selectedWidget() == (QWidget *)view )
+	  {
+	    QColor color;
+	    if ( view->koDocument() == this )
+	      color = black;
+	    else
+	      color = gray;
+	    painter.fillRect( -5, -5, 5, 5, color );
+	    painter.fillRect( -5, h, 5, 5, color );
+	    painter.fillRect( w, h, 5, 5, color );
+	    painter.fillRect( w, -5, 5, 5, color );
+	    painter.fillRect( w / 2 - 3, -5, 5, 5, color );
+	    painter.fillRect( w / 2 - 3, h, 5, 5, color );
+	    painter.fillRect( -5, h / 2 - 3, 5, 5, color );
+	    painter.fillRect( w, h / 2 - 3, 5, 5, color );
+	  }
+      }
+  }
 }
 
 bool KoDocument::saveChildren( KoStore* /*_store*/, const char */*_path*/ )
@@ -372,8 +440,14 @@ bool KoDocument::loadFromURL( const KURL & url )
   QString file = url.path();
 
   QApplication::setOverrideCursor( waitCursor );
+
+
   // Launch a filter if we need one for this url ?
-  QString importedFile = KoFilterManager::self()->import( file, KOAPP->nativeFormatMimeType() );
+  QString importedFile = file;
+
+  if ( kapp->inherits( "KoApplication" ) ) // we can use the KoFilterManager only if we are inside KOffice! (Simon)
+    importedFile = KoFilterManager::self()->import( file, KOAPP->nativeFormatMimeType() );
+
 
   // The filter, if any, has been applied. It's all native format now.
   bool loadOk = (!importedFile.isEmpty()) &&        // Empty = an error occured in the filter
@@ -544,16 +618,11 @@ bool KoDocument::isStoredExtern()
   return ( m_strURL.protocol() != STORE_PROTOCOL );
 }
 
-bool KoDocument::isModified() const
-{
-    return m_bModified;
-}
-
 void KoDocument::setModified( bool _mod )
 {
-    m_bModified = _mod;
+    KParts::ReadWritePart::setModified( _mod );
 
-    if ( m_bModified )
+    if ( _mod )
 	m_bEmpty = FALSE;
 }
 
@@ -613,13 +682,6 @@ QString KoDocument::copyright() const
 QString KoDocument::comment() const
 {
     return "";
-}
-
-void KoDocument::insertChild( PartChild* child )
-{
-    m_bModified = TRUE;
-
-    ContainerPart::insertChild( child );
 }
 
 bool KoDocument::hasToWriteMultipart()

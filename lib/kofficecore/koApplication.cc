@@ -20,7 +20,7 @@
 #include "koApplication.h"
 #include "koQueryTypes.h"
 #include "koDocument.h"
-#include "shell.h"
+#include "koMainWindow.h"
 #include <klocale.h>
 #include <kimgio.h>
 #include <kglobal.h>
@@ -59,7 +59,7 @@ void KoApplication::start()
         KoDocument* doc = entry.createDoc( 0, "Document" );
         if ( doc && ( doc->initDoc() ) )
         {
-          Shell* shell = doc->createShell();
+          KoMainWindow* shell = doc->createShell();
           shell->show();
           // setMainWidget( shell ); // probably bad idea, says Torben...
         }
@@ -75,7 +75,7 @@ void KoApplication::start()
             KURL url( QDir::currentDirPath()+"/", *it ); // allow URLs relative to current dir
             if ( doc->loadFromURL( url ) )
             {
-              Shell* shell = doc->createShell();
+              KoMainWindow* shell = doc->createShell();
               shell->show();
               //setMainWidget( shell );
               n++;

@@ -7,22 +7,22 @@
 #ifndef KCHART_VIEW
 #define KCHART_VIEW
 
-#include <container.h>
+#include <koView.h>
 
 class QAction;
 class QPaintEvent;
 
 class KChartPart;
 
-class KChartView : public ContainerView
+class KChartView : public KoView
 {
     Q_OBJECT
 public:
     KChartView( KChartPart* part, QWidget* parent = 0, const char* name = 0 );
-    
+
 protected slots:
       void edit();
-      void config(); 
+      void config();
       void wizard();
       void saveConfig();
       void loadConfig();
@@ -33,6 +33,8 @@ protected slots:
       void areasChart();
 protected:
     void paintEvent( QPaintEvent* );
+
+    virtual void updateReadWrite( bool readwrite );
 
 private:
     QAction* m_cut;

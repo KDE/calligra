@@ -75,14 +75,25 @@ KPresenterFactory::~KPresenterFactory()
     delete s_global;
 }
 
-QObject* KPresenterFactory::create( QObject* parent, const char* name, 
-				    const char*, const QStringList & )
+QObject* KPresenterFactory::create( QObject* parent, const char* name,
+				    const char *classname, const QStringList & )
 {
-    if ( parent && !parent->inherits("KoDocument") ) {
+/*
+   if ( parent && !parent->inherits("KoDocument") ) {
 	qDebug("KPresenterFactory: parent does not inherit KoDocument");
 	return 0;
     }
-    KPresenterDoc *doc = new KPresenterDoc( (KoDocument*)parent, name );
+*/
+    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+
+    KPresenterDoc *doc = new KPresenterDoc( (KoDocument*)parent, name, !bWantKoDocument );
+    
+    if ( !bWantKoDocument )
+    {
+      doc->initEmpty();
+      doc->setReadWrite( false );
+    }
+    
     emit objectCreated(doc);
     return doc;
 }

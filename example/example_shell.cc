@@ -20,18 +20,13 @@
 #include "example_shell.h"
 #include "example_part.h"
 
-ExampleShell::ExampleShell( QWidget* parent, const char* name )
-    : KoMainWindow( parent, name )
+ExampleShell::ExampleShell( const char* name )
+    : KoMainWindow( name )
 {
 }
 
 ExampleShell::~ExampleShell()
 {
-}
-
-QString ExampleShell::configFile() const
-{
-    return readConfigFile( "example_shell.rc" );
 }
 
 KoDocument* ExampleShell::createDoc()

@@ -24,14 +24,23 @@ ExampleFactory::~ExampleFactory()
     delete s_global;
 }
 
-QObject* ExampleFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
+QObject* ExampleFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
+/* 
     if ( parent && !parent->inherits("KoDocument") )
     {
 	qDebug("ExampleFactory: parent does not inherit KoDocument");
 	return 0;
     }
-    ExamplePart *part = new ExamplePart( (KoDocument*)parent, name );
+*/  
+
+    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+ 
+    ExamplePart *part = new ExamplePart( parent, name, !bWantKoDocument );
+    
+    if ( !bWantKoDocument )
+      part->setReadWrite( false );
+    
     emit objectCreated(part);
     return part;
 }

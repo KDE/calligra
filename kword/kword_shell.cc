@@ -24,10 +24,10 @@
 #include <kstddirs.h>
 #include <kaboutdialog.h>
 
-KWordShell::KWordShell( QWidget* parent, const char* name )
-    : KoMainWindow( parent, name )
+KWordShell::KWordShell( const char* name )
+    : KoMainWindow( name )
 {
-    setDoPartActivation( FALSE );
+//    partManager()->setAllowDoubleClickActivation( false );
     resize( 800, 600 );
 }
 
@@ -35,21 +35,15 @@ KWordShell::~KWordShell()
 {
 }
 
-QString KWordShell::configFile() const
-{
-    return readConfigFile( locate( "data", "kword/kword_shell.rc",
-				   KWordFactory::global() ) );
-}
-
 KoDocument* KWordShell::createDoc()
 {
     return new KWordDocument;
 }
 
-void KWordShell::setRootPart( Part *part )
+void KWordShell::setRootDocument( KoDocument *doc )
 {
-    KoMainWindow::setRootPart( part );
-    if ( part )
+    KoMainWindow::setRootDocument( doc );
+    if ( doc )
       ( (KWordView*)rootView() )->initGui();
 }
 

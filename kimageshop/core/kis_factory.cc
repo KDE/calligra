@@ -43,7 +43,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
   s_global = new KInstance( "kimageshop" );
-  
+
   s_global->dirs()->addResourceType("kis", KStandardDirs::kde_default("data") + "kimageshop/");
   s_global->dirs()->addResourceType("kis_images", KStandardDirs::kde_default("data") + "kimageshop/images/");
   s_global->dirs()->addResourceType("kis_brushes", KStandardDirs::kde_default("data") + "kimageshop/brushes/");
@@ -61,15 +61,22 @@ KisFactory::~KisFactory()
   delete s_global;
 }
 
-QObject* KisFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
+QObject* KisFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
+/* 
     if ( parent && !parent->inherits("KoDocument") )
     {
 	qDebug("KisFactory: parent does not inherit KoDocument");
 	return 0;
     }
+*/
+    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
     
-    KisDoc *doc = new KisDoc( (KoDocument*)parent, name );
+    KisDoc *doc = new KisDoc( parent, name, !bWantKoDocument );
+    
+    if ( !bWantKoDocument )
+      doc->setReadWrite( false );
+    
     emit objectCreated(doc);
     return doc;
 }

@@ -22,6 +22,7 @@
 #include "koApplication.h"
 #include "koMainWindow.h"
 #include "koDocument.h"
+#include "koView.h"
 #include "koFilterManager.h"
 #include "koIcons.h"
 
@@ -49,6 +50,9 @@
 #include <kstdaccel.h>
 #include <kstddirs.h>
 
+#include <kparts/partmanager.h>
+#include <kparts/plugin.h>
+
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -56,12 +60,49 @@
 
 QList<KoMainWindow>* KoMainWindow::s_lstMainWindows = 0;
 
-KoMainWindow::KoMainWindow( QWidget* parent, const char* name )
-    : Shell( parent, name )
+class KoMainWindowPrivate
+{
+public:
+  KoMainWindowPrivate()
+  {
+    m_rootDoc = 0L;
+    m_rootView = 0L;
+    m_manager = 0L;
+    bMainWindowGUIBuilt = false;
+    m_activePart = 0L;
+    m_activeView = 0L;
+  }
+  ~KoMainWindowPrivate()
+  {
+  }
+
+  KoDocument *m_rootDoc;
+  KoView *m_rootView;
+  KParts::PartManager *m_manager;
+
+  KParts::Part *m_activePart;
+  KoView *m_activeView;
+
+  bool bMainWindowGUIBuilt;
+};
+
+KoMainWindow::KoMainWindow( const char* name )
+    : KParts::MainWindow( name )
 {
     if ( !s_lstMainWindows )
 	s_lstMainWindows = new QList<KoMainWindow>;
     s_lstMainWindows->append( this );
+
+    d = new KoMainWindowPrivate;
+
+    d->m_manager = new KParts::PartManager( this );
+    d->m_manager->setSelectionPolicy( KParts::PartManager::TriState );
+    d->m_manager->setAllowNestedParts( true );
+
+    connect( d->m_manager, SIGNAL( activePartChanged( KParts::Part * ) ),
+	     this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
+
+    setXMLFile( locate( "data", "koffice/koffice_shell.rc" ) );
 
     KAction* fnew = new KAction( i18n("New"), KofficeBarIcon( "filenew" ), KStdAccel::openNew(), this, SLOT( slotFileNew() ),
 			  actionCollection(), "filenew" );
@@ -80,20 +121,56 @@ KoMainWindow::KoMainWindow( QWidget* parent, const char* name )
     /*KAction* helpAbout =*/ new KAction( i18n("About..."), 0, this, SLOT( slotHelpAbout() ),
 			  actionCollection(), "about" );
 
-    fileTools = new KToolBar( this, "file operations" );
-    fileTools->setFullWidth( FALSE );
-    fnew->plug( fileTools );
-    open->plug( fileTools );
-    save->plug( fileTools );
-    print->plug( fileTools );
-    //(void)QWhatsThis::whatsThisButton( fileTools );
-    addToolBar( fileTools );
 }
 
 KoMainWindow::~KoMainWindow()
 {
     if ( s_lstMainWindows )
 	s_lstMainWindows->removeRef( this );
+
+    delete d;
+}
+
+void KoMainWindow::setRootDocument( KoDocument *doc )
+{
+  KoView *oldRootView = d->m_rootView;
+
+  d->m_rootDoc = doc;
+
+  if ( doc )
+  {
+    doc->setSelectable( false );
+    d->m_rootView = doc->createView( this );
+    d->m_rootView->setPartManager( d->m_manager );
+#warning TEMPORARY!
+    //    doc->setReadWrite( false );
+
+    setView( d->m_rootView );
+    d->m_rootView->show();
+  }
+  else
+    d->m_rootView = 0L;
+
+  show();
+  d->m_manager->setActivePart( d->m_rootDoc, d->m_rootView );
+
+  if ( oldRootView )
+    delete oldRootView;
+}
+
+KoDocument *KoMainWindow::rootDocument() const
+{
+  return d->m_rootDoc;
+}
+
+KoView *KoMainWindow::rootView() const
+{
+  return (KoView *)view();
+}
+
+KParts::PartManager *KoMainWindow::partManager()
+{
+  return d->m_manager;
 }
 
 KoMainWindow* KoMainWindow::firstMainWindow()
@@ -114,7 +191,7 @@ KoMainWindow* KoMainWindow::nextMainWindow()
 
 bool KoMainWindow::openDocument( const KURL & url )
 {
-    KoDocument* doc = document();
+    KoDocument* doc = rootDocument();
 	
     KoDocument* newdoc = createDoc();
     if ( !newdoc->loadFromURL( url ) )
@@ -126,26 +203,26 @@ bool KoMainWindow::openDocument( const KURL & url )
     if ( doc && doc->isEmpty() )
     {
         // Replace current empty document
-	setRootPart( newdoc );
+	setRootDocument( newdoc );
 	delete doc;
     }
     else if ( doc && !doc->isEmpty() )
     {
         // Open in a new shell
-        Shell *s = newdoc->createShell();
+        KoMainWindow *s = newdoc->createShell();
         s->show();
     }
     else
     {
         // We had no document, set the new one
-        setRootPart( newdoc );
+        setRootDocument( newdoc );
     }
     return TRUE;
 }
 
 bool KoMainWindow::saveDocument( bool saveas )
 {
-    KoDocument* pDoc = document();
+    KoDocument* pDoc = rootDocument();
 
     KURL url = pDoc->url();
     QCString _native_format ( KOAPP->nativeFormatMimeType() );
@@ -157,7 +234,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 
     if ( !url.hasPath() || saveas )
     {
-#ifdef USE_QFD        
+#ifdef USE_QFD
         QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
 								    _native_format, nativeFormatPattern(),
                                                                     nativeFormatName(), TRUE );
@@ -241,10 +318,10 @@ bool KoMainWindow::saveDocument( bool saveas )
 
 bool KoMainWindow::closeDocument()
 {
-    if ( document() == 0 )
+    if ( rootDocument() == 0 )
 	return TRUE;
 
-    if ( document()->isModified() )
+    if ( rootDocument()->isModified() )
     {
 	int res = KMessageBox::warningYesNoCancel( 0L,
            i18n( "The document has been modified\nDo you want to save it ?" ));
@@ -254,8 +331,8 @@ bool KoMainWindow::closeDocument()
 	    return saveDocument();
         case KMessageBox::No :
           {
-            KoDocument* doc = document();
-    	    setRootPart( 0 );
+            KoDocument* doc = rootDocument();
+    	    setRootDocument( 0 );
             delete doc;
             return TRUE;
           }
@@ -282,7 +359,7 @@ bool KoMainWindow::closeAllDocuments()
 
 void KoMainWindow::slotFileNew()
 {
-    KoDocument* doc = document();
+    KoDocument* doc = rootDocument();
 
     KoDocument* newdoc = createDoc();
     if ( !newdoc->initDoc() )
@@ -293,18 +370,18 @@ void KoMainWindow::slotFileNew()
 
     if ( doc && doc->isEmpty() )
     {
-	setRootPart( newdoc );
+	setRootDocument( newdoc );
 	delete doc;
 	return;
     }
     else if ( doc && !doc->isEmpty() )
     {
-        Shell *s = newdoc->createShell();
+        KoMainWindow *s = newdoc->createShell();
         s->show();
 	return;
     }
 
-    setRootPart( newdoc );
+    setRootDocument( newdoc );
     return;
 }
 
@@ -376,6 +453,79 @@ void KoMainWindow::slotHelpAbout()
     dia->setImage( locate( "data", "koffice/pics/koffice-logo.png" ) );
     dia->exec();
     delete dia;
+}
+
+void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
+{
+  qDebug( "void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )" );
+
+  if ( d->m_activePart && d->m_activePart == newPart )
+  {
+    qDebug( "no need to change the GUI" );
+    return;
+  }
+
+  KParts::XMLGUIFactory *factory = guiFactory();
+
+  QValueList<XMLGUIServant *> plugins;
+  QValueList<XMLGUIServant *>::ConstIterator pIt, pBegin, pEnd;
+
+  setUpdatesEnabled( false );
+
+  if ( d->m_activeView )
+  {
+    //TODO: event stuff
+
+    plugins = KParts::Plugin::pluginServants( d->m_activeView );
+    pIt = plugins.fromLast();
+    pBegin = plugins.begin();
+
+    for (; pIt != pBegin; --pIt )
+      factory->removeServant( *pIt );
+
+    if ( pIt != plugins.end() )
+      factory->removeServant( *pIt );
+
+    factory->removeServant( (XMLGUIServant *)d->m_activeView );
+  }
+
+  if ( !d->bMainWindowGUIBuilt )
+  {
+    KParts::GUIActivateEvent ev( true );
+    QApplication::sendEvent( this, &ev );
+
+    factory->addServant( this );
+
+    plugins = KParts::Plugin::pluginServants( this );
+    pIt = plugins.begin();
+    pEnd = plugins.end();
+    for (; pIt != pEnd; ++pIt )
+      factory->addServant( *pIt );
+
+    d->bMainWindowGUIBuilt = true;
+  }
+
+  if ( newPart && d->m_manager->activeWidget() && d->m_manager->activeWidget()->inherits( "KoView" ) )
+  {
+    d->m_activeView = (KoView *)d->m_manager->activeWidget();
+    d->m_activePart = newPart;
+
+    factory->addServant( (KParts::XMLGUIServant *)d->m_activeView );
+
+    plugins = KParts::Plugin::pluginServants( d->m_activeView );
+    pIt = plugins.begin();
+    pEnd = plugins.end();
+    for (; pIt != pEnd; ++pIt )
+      factory->addServant( *pIt );
+  }
+  else
+  {
+    d->m_activeView = 0L;
+    d->m_activePart = 0L;
+  }
+
+  setUpdatesEnabled( true );
+  updateRects();
 }
 
 #include "koMainWindow.moc"

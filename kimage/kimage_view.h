@@ -20,14 +20,14 @@
 #ifndef __kimage_view_h__
 #define __kimage_view_h__
 
-#include <container.h>
+#include <koView.h>
 
 class QPaintEvent;
 class KAction;
 class KToggleAction;
 class KImageDocument;
 
-class KImageView : public ContainerView
+class KImageView : public KoView
 {
   Q_OBJECT
 
@@ -82,6 +82,8 @@ public slots:
 protected:
 
   virtual void paintEvent( QPaintEvent* );
+
+  virtual void updateReadWrite( bool readwrite );
 
 private:
 

@@ -85,14 +85,14 @@ KInstance* CalcFactory::global()
  ***************************************************/
 
 Calculator::Calculator( KSpreadView* parent, const char* name )
-    : Plugin( parent, name )
+    : KParts::Plugin( parent, name )
 {
     m_calc = 0;
     m_view = parent;
 
     parent->installEventFilter( this );
 
-    (void)new KAction( tr("Calculator"), 
+    (void)new KAction( tr("Calculator"),
 		       CalcFactory::global()->iconLoader()->loadIcon( "kspreadcalc.png", KIconLoader::Small ),
 		       0, this, SLOT( showCalculator() ), actionCollection(), "kspreadcalc");
 }

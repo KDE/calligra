@@ -7,19 +7,16 @@ class ExamplePart : public KoDocument
 {
     Q_OBJECT
 public:
-    ExamplePart( KoDocument* parent = 0, const char* name = 0 );
-    
-    virtual View* createView( QWidget* parent = 0, const char* name = 0 );
-    virtual Shell* createShell();
+    ExamplePart( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+
+    virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
+    virtual KoMainWindow* createShell();
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
     virtual bool initDoc();
 
     virtual QCString mimeType() const;
-    
-protected:
-    virtual QString configFile() const;
 };
 
 #endif

@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kimage_doc_h__
 #define __kimage_doc_h__
@@ -36,7 +36,7 @@ class KImageDocument : public KoDocument
 
 public:
 
-  KImageDocument( KoDocument* parent = 0, const char* name = 0 );
+  KImageDocument( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
   ~KImageDocument();
 
   virtual bool loadFromURL( const KURL& );
@@ -45,9 +45,9 @@ public:
 
 public:
 
-  virtual View* createView( QWidget* parent = 0, const char* name = 0 );
-  virtual Shell* createShell();
-  virtual QString configFile() const;
+  virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
+  virtual KoMainWindow* createShell();
+
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
   virtual bool initDoc();
   virtual QCString mimeType() const;
@@ -104,11 +104,11 @@ public:
   void setPositionString( QString );
   QString sizeString();
   void setSizeString( QString );
-  
+
 signals:
 
   void sigUpdateView();
-  
+
 protected:
 
   virtual bool save( ostream&, const char* );
@@ -120,7 +120,7 @@ protected:
   KoOrientation m_orientation;
   KoFormat m_paperFormat;
   float m_paperWidth;
-  float m_paperHeight;    
+  float m_paperHeight;
   float m_leftBorder;
   float m_rightBorder;
   float m_topBorder;

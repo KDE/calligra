@@ -30,7 +30,7 @@
 #include "CommandHistory.h"
 #include "MainView.h"
 
-#include <container.h>
+#include <koView.h>
 
 #define ID_TOOL_SELECT        1001
 #define ID_TOOL_EDITPOINT     1002
@@ -81,7 +81,7 @@ class KAction;
 class KToggleAction;
 class KColorBarAction;
 
-class KIllustratorView : public ContainerView, public MainView
+class KIllustratorView : public KoView, public MainView
 {
     Q_OBJECT
 public:
@@ -100,7 +100,7 @@ public:
     Canvas* getCanvas () { return canvas; }
 
     bool printDlg();
-    
+
     /* void newView ();
   bool printDlg ();
 
@@ -179,12 +179,14 @@ protected:
     void setupPopups ();
     void resizeEvent (QResizeEvent*);
 
+    virtual void updateReadWrite( bool readwrite );
+
 protected slots:
     void setUndoStatus( bool undoPossible, bool redoPossible );
     void popupForSelection (int x, int y);
     void resetTools();
     QString getExportFileName (FilterManager *filterMgr);
-    
+
   void showCurrentMode (const char* msg);
     /* protected slots:
   void editCutSlot ();
@@ -263,7 +265,7 @@ private slots:
     void slotSplitLine( bool );
     void slotLayers();
     void slotDocumentInfo();
-    
+
 protected:
   KIllustratorDocument *m_pDoc;
   EditPointTool *editPointTool;

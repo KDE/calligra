@@ -36,7 +36,7 @@ kdemime_DATA = x-kimage.desktop
 kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/kimage
-rc_DATA = kimage.rc kimage_shell.rc
+rc_DATA = kimage.rc
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po $(podir)/kimage.pot

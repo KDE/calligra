@@ -26,7 +26,7 @@ class KSpreadShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    KSpreadShell( QWidget* parent = 0, const char* name = 0 );
+    KSpreadShell( const char* name = 0 );
     ~KSpreadShell();
 
     QString nativeFormatPattern() const { return "*.ksp"; }
@@ -34,9 +34,8 @@ public:
 
 public slots:
     void slotFilePrint();
-    
+
 protected:
-    virtual QString configFile() const;
     virtual KoDocument* createDoc();
 };
 

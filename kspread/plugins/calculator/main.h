@@ -25,7 +25,7 @@
 #include <qobject.h>
 
 #include <klibloader.h>
-#include <plugin.h>
+#include <kparts/plugin.h>
 
 class KSpreadView;
 class QtCalculator;
@@ -38,7 +38,7 @@ public:
     CalcFactory( QObject* parent = 0, const char* name = 0 );
     ~CalcFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* name = 0, 
+    virtual QObject* create( QObject* parent = 0, const char* name = 0,
 			     const char* classname = "QObject", const QStringList &args = QStringList() );
 
     static KInstance* global();
@@ -47,7 +47,7 @@ private:
     static KInstance* s_global;
 };
 
-class Calculator : public Plugin
+class Calculator : public KParts::Plugin
 {
     Q_OBJECT
 public:

@@ -39,6 +39,7 @@ class QDomElement;
 class DCOPObject;
 
 #include <koDocument.h>
+#include <koDocumentChild.h>
 
 #include <kscript_context.h>
 

@@ -20,11 +20,17 @@
 #ifndef __ko_main_window_h__
 #define __ko_main_window_h__
 
-#include <shell.h>
+#include <kparts/mainwindow.h>
 #include <kurl.h>
 
 class KoDocument;
-class KToolBar;
+class KoView;
+class KoMainWindowPrivate;
+
+namespace KParts
+{
+  class PartManager;
+}
 
 /**
  * This class is used to represent a main window
@@ -34,7 +40,7 @@ class KToolBar;
  * If you are going to implement a new KOffice component, then
  * you must implement a subclass of this class.
  */
-class KoMainWindow : public Shell
+class KoMainWindow : public KParts::MainWindow
 {
     Q_OBJECT
 
@@ -45,17 +51,21 @@ public:
      *
      *  Initializes a window with a file toolbar.
      */
-    KoMainWindow( QWidget* parent = 0, const char *_name = 0 );
+    KoMainWindow( const char *_name = 0 );
 
     /**
      *  Destructor.
      */
     ~KoMainWindow();
 
+    virtual void setRootDocument( KoDocument *doc );
+
     /**
      *  Retrieves the document that is displayed in the mainwindow.
      */
-    KoDocument* document() { return (KoDocument*)rootPart(); }
+    virtual KoDocument* rootDocument() const;
+
+    virtual KoView *rootView() const;
 
     /**
      * The pattern of the native file format, for example "*.ksp".
@@ -67,6 +77,8 @@ public:
      * your component, for example "KSpread" or "KWord".
      */
     virtual QString nativeFormatName() const = 0;
+
+    virtual KParts::PartManager *partManager();
 
     /**
      *  Retrieves the first MainWindow.
@@ -81,12 +93,6 @@ public:
      *  @ref firstMeinWindow
      */
     static KoMainWindow* nextMainWindow();
-
-    /**
-     *  Retrieves a pointer to the file toolbar. Each mainwindow
-     *  has this toolbar per default.
-     */
-    KToolBar *fileToolBar() { return fileTools; }
 
 public slots:
 
@@ -172,10 +178,14 @@ protected:
      */
     virtual bool saveDocument( bool _saveas = FALSE );
 
+protected slots:
+    virtual void slotActivePartChanged( KParts::Part *newPart );
+
 private:
 
     static QList<KoMainWindow>* s_lstMainWindows;
-    KToolBar* fileTools;
+
+    KoMainWindowPrivate *d;
 
 };
 

@@ -52,9 +52,10 @@ KIllustratorChild::~KIllustratorChild ()
 
 // ----------------------------------------------------------
 
-KIllustratorDocument::KIllustratorDocument( QObject* parent, const char* name )
-    : KoDocument( parent, name )
+KIllustratorDocument::KIllustratorDocument( QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parent, name, singleViewMode )
 {
+    setInstance( KIllustratorFactory::global() ); 
     m_gdocument = new GDocument();
     GObject::registerPrototype ("object", new GPart ());
 }
@@ -96,7 +97,7 @@ bool KIllustratorDocument::load (istream& in, KoStore* )
 
 bool KIllustratorDocument::loadChildren (KoStore* store)
 {
-  QListIterator<PartChild> it ( children() );
+  QListIterator<KoDocumentChild> it ( children() );
   for (; it.current (); ++it) {
     if (! ((KoDocumentChild*)it.current())->loadDocument (store))
       return false;
@@ -109,7 +110,7 @@ bool KIllustratorDocument::saveChildren (KoStore* _store, const char *_path)
 {
   cerr << "void KIllustratorDocument::saveChildren( KOStore::Store _store, const char *_path )" << endl;
   int i = 0;
-  QListIterator<PartChild> it ( children() );
+  QListIterator<KoDocumentChild> it ( children() );
   for( ; it.current(); ++it )
   {
     QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
@@ -154,9 +155,9 @@ void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 }
 
 
-void KIllustratorDocument::insertChild( PartChild* child )
+void KIllustratorDocument::insertChild( KoDocumentChild* child )
 {
-    ContainerPart::insertChild( child );
+    KoDocument::insertChild( child );
 
     setModified (true);
 }
@@ -173,7 +174,7 @@ bool KIllustratorDocument::initDoc()
   return true;
 }
 
-View* KIllustratorDocument::createView( QWidget* parent, const char* name )
+KoView* KIllustratorDocument::createView( QWidget* parent, const char* name )
 {
     KIllustratorView* view = new KIllustratorView( parent, name, this );
     addView( view );
@@ -181,10 +182,10 @@ View* KIllustratorDocument::createView( QWidget* parent, const char* name )
     return view;
 }
 
-Shell* KIllustratorDocument::createShell()
+KoMainWindow* KIllustratorDocument::createShell()
 {
-    Shell* shell = new KIllustratorShell;
-    shell->setRootPart( this );
+    KoMainWindow* shell = new KIllustratorShell;
+    shell->setRootDocument( this );
     shell->show();
 
     return shell;
@@ -197,12 +198,6 @@ void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, b
     if ( !transparent )
 	painter.fillRect( rect, white );
     m_gdocument->drawContentsInRegion( painter, r );
-}
-
-QString KIllustratorDocument::configFile() const
-{
-    return readConfigFile( locate( "data", "killustrator/KIllustrator.rc", KIllustratorFactory::global() ) );
-    // return readConfigFile( "KIllustrator.rc" );
 }
 
 GDocument* KIllustratorDocument::gdoc()

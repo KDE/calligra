@@ -61,9 +61,12 @@
 #include "kis_tool_eraser.h"
 
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
-  : ContainerView( doc, parent, name )
+  : KoView( doc, parent, name )
   , m_pDoc(doc)
 {
+  setInstance( KisFactory::global() );
+  setXMLFile( "kimageshop.rc" );
+
   QObject::connect( m_pDoc, SIGNAL( docUpdated( ) ),
                     this, SLOT( slotDocUpdated ( ) ) );
   QObject::connect( m_pDoc, SIGNAL( docUpdated( const QRect& ) ),
@@ -91,18 +94,18 @@ void KisView::setupCanvas()
 
   QObject::connect( m_pCanvas, SIGNAL( mouseMoved( QMouseEvent* ) ),
                     this, SLOT( canvasGotMouseMoveEvent ( QMouseEvent* ) ) );
-  
+
   QObject::connect( m_pCanvas, SIGNAL( mouseReleased (QMouseEvent* ) ),
 		    this, SLOT( canvasGotMouseReleaseEvent ( QMouseEvent* ) ) );
 
   QObject::connect( m_pCanvas, SIGNAL( gotPaintEvent (QPaintEvent* ) ),
 		    this, SLOT( canvasGotPaintEvent ( QPaintEvent* ) ) );
-  
+
 }
 
 void KisView::setupSideBar()
 {
-  m_pSideBar = new KisSideBar(this, "kis_sidebar"); 
+  m_pSideBar = new KisSideBar(this, "kis_sidebar");
   connect(m_pSideBar, SIGNAL(fgColorChanged(const KisColor&)), this, SLOT(slotSetFGColor(const KisColor&)));
   connect(m_pSideBar, SIGNAL(bgColorChanged(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&)));
   m_pSideBar->slotSetBrush(*m_pBrush);
@@ -154,7 +157,7 @@ void KisView::setupTabBar()
   QObject::connect( m_pDoc, SIGNAL( imageListUpdated() ),
 		    m_pTabBar, SLOT( slotImageListUpdated( ) ) );
 
- 
+
   // tabbar control buttons
   m_pTabFirst = new QPushButton( this );
   m_pTabFirst->setPixmap( QPixmap( KISBarIcon( "tab_first" ) ) );
@@ -180,24 +183,24 @@ void KisView::setupTools()
 
   // move tool
   m_pMoveTool = new MoveTool(m_pDoc);
-  
+
   // brush tool
   m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
 
   // airbrush tool
   m_pAirBrushTool = new AirBrushTool(m_pDoc, this, m_pBrush);
-  
+
   // pen tool
   m_pPenTool = new PenTool(m_pDoc, this, m_pBrush);
 
   // eraser tool
   m_pEraserTool = new EraserTool(m_pDoc, this, m_pBrush);
-  
+
   // color picker
   m_pColorPicker = new ColorPicker(m_pDoc, this);
   //connect(m_pColorPicker, SIGNAL(fgColorPicked(const KisColor&)), this, SLOT(slotSetFGColor(const KisColor&)));
   //connect(m_pColorPicker, SIGNAL(bgColorPicked(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&)));
-  
+
   // zoom tool
   m_pZoomTool = new ZoomTool(this);
  
@@ -259,7 +262,7 @@ void KisView::setupDialogs()
 void KisView::setupActions()
 {
   // edit actions
-  
+
   m_undo = new KAction( i18n("&Undo"), KISBarIcon("undo"), 0, this, SLOT( undo() ),
 			actionCollection(), "undo");
   m_redo = new KAction( i18n("&Redo"), KISBarIcon("redo"), 0, this, SLOT( redo() ),
@@ -306,7 +309,7 @@ void KisView::setupActions()
 				       SLOT( tool_airbrush() ),actionCollection(), "tool_airbrush");
   m_tool_airbrush->setExclusiveGroup( "tools" );
   m_tool_airbrush->setEnabled( false );
- 
+
   m_tool_eraser = new KToggleAction( i18n("&Eraser tool"), KISBarIcon("eraser"), 0, this,
 			      SLOT( tool_eraser() ),actionCollection(), "tool_eraser");
   m_tool_eraser->setExclusiveGroup( "tools" );
@@ -443,6 +446,11 @@ void KisView::resizeEvent(QResizeEvent*)
     m_pHRuler->setOffset(-xPaintOffset());
 }
 
+void KisView::updateReadWrite( bool readwrite )
+{
+#warning TODO 
+} 
+
 void KisView::scrollH(int)
 {
   m_pHRuler->setOffset(m_pHorz->value());
@@ -479,9 +487,9 @@ void KisView::slotDocUpdated(const QRect& rect)
 
   p.begin( m_pCanvas );
   p.translate(xt, yt);
-  
+
   // let the document draw the image
-  part()->paintEverything( p, r, FALSE, this );
+  koDocument()->paintEverything( p, r, FALSE, this );
   p.end();
 }
 
@@ -567,8 +575,8 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
   int yt = yPaintOffset() + ur.y() - m_pVert->value();
 
   p.translate(xt, yt);
-  part()->paintEverything( p, ur, FALSE, this );
-    
+  koDocument()->paintEverything( p, ur, FALSE, this );
+
   p.end();
 }
 
@@ -576,7 +584,7 @@ void KisView::activateTool(KisTool* t)
 {
   if (!t)
     return;
-  
+
   if (m_pTool)
     QObject::disconnect(m_pTool);
 
@@ -587,7 +595,7 @@ void KisView::activateTool(KisTool* t)
 
   QObject::connect( this, SIGNAL( canvasMouseMoveEvent( QMouseEvent* ) ),
                     m_pTool, SLOT( mouseMove ( QMouseEvent* ) ) );
-  
+
   QObject::connect( this, SIGNAL( canvasMouseReleaseEvent (QMouseEvent* ) ),
 		    m_pTool, SLOT( mouseRelease ( QMouseEvent* ) ) );
 
@@ -654,14 +662,14 @@ void KisView::tool_gradient()
 void KisView::undo()
 {
     qDebug("UNDO called");
-    
+
     m_pDoc->commandHistory()->undo();
 }
 
 void KisView::redo()
 {
     qDebug("REDO called");
-    
+
     m_pDoc->commandHistory()->redo();
 }
 
@@ -743,7 +751,7 @@ void KisView::dialog_gradienteditor()
 void KisView::updateToolbarButtons()
 {
   kdebug( KDEBUG_INFO, 0, "KisView::updateToolbarButtons" );
-  
+
   m_dialog_layer->setChecked( m_pLayerDialog->isVisible() );
   m_dialog_color->setChecked( m_pColorDialog->isVisible() );
   m_dialog_brush->setChecked( m_pBrushDialog->isVisible() );
@@ -869,7 +877,7 @@ void KisView::slotSetBGColor(const KisColor& c)
 {
   m_bg = c;
 }
-   
+
 void KisView::slotUndoRedoChanged( QString /*_undo*/, QString /*_redo*/ )
 {
   //####### FIXME

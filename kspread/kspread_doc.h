@@ -59,7 +59,7 @@ class KSpreadDoc : public KoDocument
 {
   Q_OBJECT
 public:
-  KSpreadDoc( QObject* parent = 0, const char* name = 0 );
+  KSpreadDoc( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
   ~KSpreadDoc();
 
   virtual bool save( ostream&, const char *_format );
@@ -229,8 +229,8 @@ public:
 
   const QPen& defaultGridPen() { return m_defaultGridPen; }
 
-  Shell* createShell();
-  View* createView( QWidget* parent, const char* name );
+  KoMainWindow* createShell();
+  KoView* createView( QWidget* parent, const char* name );
 
   void paintContent( QPainter& painter, const QRect& rect, bool transparent );
   void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table );
@@ -238,7 +238,7 @@ public:
   virtual DCOPObject* dcopObject();
 
   static QList<KSpreadDoc>& documents();
-    
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -259,11 +259,6 @@ signals:
   void sig_updateView();
 
 protected:
-    /**
-     * Overloaded from @ref Part.
-     */
-    virtual QString configFile() const;
-	
   /**
    * Needed for the printing extension KOffice::Print
    */

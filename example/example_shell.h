@@ -26,7 +26,7 @@ class ExampleShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    ExampleShell( QWidget* parent = 0, const char* name = 0 );
+    ExampleShell( const char* name = 0 );
     ~ExampleShell();
 
     /**
@@ -36,7 +36,6 @@ public:
     QString nativeFormatName() const { return "Example"; }
 
 protected:
-    virtual QString configFile() const;
     virtual KoDocument* createDoc();
 };
 

@@ -26,7 +26,7 @@ class KChartShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    KChartShell( QWidget* parent = 0, const char* name = 0 );
+    KChartShell( const char* name = 0 );
     virtual ~KChartShell();
 
     /**
@@ -36,7 +36,6 @@ public:
     QString nativeFormatName() const { return "KChart"; }
 
 protected:
-    virtual QString configFile() const;
     virtual KoDocument* createDoc();
 };
 

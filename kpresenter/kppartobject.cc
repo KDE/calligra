@@ -25,7 +25,7 @@
 
 #include <qpicture.h>
 #include <qwidget.h>
-#include <part.h>
+#include <koDocument.h>
 
 /******************************************************************/
 /* Class: KPPartObject						  */
@@ -226,18 +226,19 @@ void KPPartObject::paint( QPainter *_painter )
     if ( !_enableDrawing ) return;
 
     // ######### Torben: Care about zooming
-    if ( child )
-	child->part()->paintEverything( *_painter, QRect( QPoint( 0, 0 ), getSize() ), TRUE, 0 );
+    if ( child && child->document() )
+	child->document()->paintEverything( *_painter, QRect( QPoint( 0, 0 ), getSize() ), TRUE, 0 );
 }
 
 /*================================================================*/
 void KPPartObject::activate( QWidget *_widget, int /*diffx*/, int /*diffy*/ )
 {
     KPresenterView *view = (KPresenterView*)_widget;
-    Part* part = child->part();
+    KoDocument* part = child->document();
     if ( !part )
 	return;
-    view->shell()->setActiveView( view, part );
+    view->partManager()->addPart( part, false );
+    view->partManager()->setActivePart( part, view );
 }
 
 /*================================================================*/

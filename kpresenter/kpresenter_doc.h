@@ -25,6 +25,7 @@ class KPresenterView;
 class DCOPObject;
 
 #include <koDocument.h>
+#include <koDocumentChild.h>
 #include <koQueryTypes.h>
 
 #include <qapplication.h>
@@ -79,6 +80,9 @@ public:
 
     // get parent
     KPresenterDoc* parent() { return (KPresenterDoc*)parent(); }
+
+    virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
+
 };
 
 /*****************************************************************/
@@ -91,11 +95,11 @@ class KPresenterDoc : public KoDocument
 public:
 
     // constructor - destructor
-    KPresenterDoc( QObject* doc = 0, const char* name = 0 );
+    KPresenterDoc( QObject* doc = 0, const char* name = 0, bool singleViewMode = false );
     ~KPresenterDoc();
 
-    Shell* createShell();
-    View* createView( QWidget* parent, const char* name );
+    KoMainWindow* createShell();
+    KoView* createView( QWidget* parent, const char* name );
 
     // Drawing
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
@@ -110,6 +114,7 @@ public:
     virtual bool loadChildren( KoStore* _store );
 
     virtual bool initDoc() { return insertNewTemplate( 0, 0, TRUE ); }
+    void initEmpty();
 
     // get mime type
     virtual QCString mimeType() const { return QCString( MIME_TYPE ); }
@@ -343,6 +348,8 @@ signals:
 protected slots:
     void slotUndoRedoChanged( QString, QString );
 
+    void slotDocumentLoaded();
+
 protected:
 
     // ************ functions ************
@@ -368,11 +375,6 @@ protected:
     void loadObjects( KOMLParser&, vector<KOMLAttrib>&, bool _paste = false );
     virtual bool completeLoading( KoStore* /* _store */ );
     void makeUsedPixmapList();
-
-    /**
-     * Overloaded from @ref Part
-     */
-    virtual QString configFile() const;
 
     void addToRecentlyOpenedList( const QString &file );
     QStringList getRecentryOpenedList();
@@ -441,7 +443,7 @@ protected:
     QStringList pixmapCollectionNames, clipartCollectionNames;
     KoPageLayout __pgLayout;
     int lastObj;
-    
+
     QString urlIntern;
 
     PresentSlides presentSlides;

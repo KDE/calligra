@@ -20,8 +20,9 @@
 #ifndef __ko_document_h__
 #define __ko_document_h__
 
-#include <container.h>
-#include <part.h>
+#include <qwmatrix.h>
+
+#include <kparts/part.h>
 #include <kurl.h>
 
 #include <komlParser.h>
@@ -30,9 +31,12 @@ class QDomElement;
 class QDomDocument;
 
 class KoStore;
+class KoMainWindow;
 
 class KoDocumentChild;
 class KoDocumentChildPicture;
+class KoView;
+class KoDocumentPrivate;
 
 /**
  *  The KOffice document class
@@ -41,7 +45,7 @@ class KoDocumentChildPicture;
  *
  *  @short The KOffice document class
  */
-class KoDocument : public ContainerPart
+class KoDocument : public KParts::ReadWritePart
 {
   Q_OBJECT
 
@@ -50,12 +54,125 @@ public:
   /**
    *  Constructor.
    */
-  KoDocument( QObject* parent = 0, const char* name = 0 );
+  KoDocument( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
 
   /**
    *  Destructor.
    */
-  virtual ~KoDocument() { };
+  virtual ~KoDocument();
+
+  bool singleViewMode() const;
+
+  virtual bool saveFile();
+
+  virtual bool openFile();
+
+  virtual QWidget *widget();
+
+  virtual QAction *action( const QDomElement &element );
+
+  virtual QDomDocument document() const;
+
+  virtual void setManager( KParts::PartManager *manager );
+
+  virtual void setReadWrite( bool readwrite = true );
+
+  /**
+   *  Create a new view for the document.
+   *
+   *  You need to overload this method to create a view of your desired type.
+   *
+   *  @param parent Parent widget of the view.
+   *  @param name   Name of the view.
+   *
+   *  @see createShell
+   */
+  virtual KoView *createView( QWidget *parent = 0, const char *name = 0 ) = 0;
+
+  /**
+   *  Create a new toplevel shell for the document. This in turn will create
+   *  a new view.
+   *
+   *  You have to overload this method to return a shell of your desired type.
+   *
+   *  @see createView
+   */
+  virtual KoMainWindow *createShell() = 0;
+
+  /**
+   *  Adds a view to the document.
+   */
+  virtual void addView( KoView *view );
+
+  /**
+   *  Retrieves the first view of the document.
+   *
+   *  @see nextView
+   */
+  virtual KoView *firstView();
+
+  /**
+   *  Retrieves the next view of the document after you called @ref firstView
+   *  or nextView itself.
+   *
+   *  @see firstView
+   */
+  virtual KoView *nextView();
+
+  /**
+   * Reimplemented from @ref KParts::Part
+   */
+  virtual KParts::Part *hitTest( QWidget *widget, const QPoint &globalPos );
+
+
+  /**
+   *  Find the most nested child document which contains the
+   *  questionable point. The point is in the coordinate system
+   *  of this part. If no child document contains this point, then
+   *  a pointer to this document is returned.
+   *
+   *  This function has to be overloaded if the document features child documents.
+   *
+   *  @param matrix transforms points from the documens coordinate system
+   *         to the coordinate system of the questionable point.
+   *  @param p is in some unknown coordinate system, but the matrix can
+   *         be used to transform a point of this parts coordinate system
+   *         to the coordinate system of p.
+   *
+   *  @return Pointer to the document, that was hit.
+   */
+  virtual KoDocument *hitTest( const QPoint &pos, const QWMatrix &matrix = QWMatrix() );
+
+  /**
+   *  Paints the whole document into the given painter object.
+   *
+   *  @param painter     The painter object into that should be drawn.
+   *  @param rect        The rect that should be used in the painter object.
+   *  @param transparent .
+   *  @param view        .
+   */
+  virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false, KoView *view = 0L );
+
+  /**
+   *  Paints the whole document and all its children into the given painter object.
+   *
+   *  @see #paintChild #paintChildren #paintContent
+   */
+  virtual void paintChildren( QPainter &painter, const QRect &rect, KoView *view );
+
+  /**
+   *  Paint a special child. Normally called by @ref paintChildren.
+   *
+   *  @see #paintEverything #paintChildren
+   */
+  virtual void paintChild( KoDocumentChild *child, QPainter &painter, KoView *view );
+
+  /**
+   *  Paints the data itself. Normally called by @ref paintEverthing
+   *
+   *  @see #paintEverything
+   */
+  virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false ) = 0;
 
   /**
    *  Initializes an empty document. You have to overlaod this method
@@ -64,15 +181,10 @@ public:
   virtual bool initDoc() = 0;
 
   /**
-   *  Retrieves, if the document is modified or not.
-   */
-  virtual bool isModified() const;
-
-  /**
    *  Sets the modified flag on the document. This means that it has
    *  to be saved or not before deleting it.
    */
-  virtual void setModified( bool _mod = true );
+  virtual void setModified( bool _mod );
 
   /**
    *  Retrieves, if the document is empty or not.
@@ -125,9 +237,39 @@ public:
   virtual QCString mimeType() const = 0;
 
   /**
-   * Overloaded from ContainerPart to set the modified flag.
+   * Inserts the new child in the list of children and emits the
+   * @ref #childChanged signal.
    */
-  virtual void insertChild( PartChild* child );
+  virtual void insertChild( KoDocumentChild *child );
+
+  /**
+   * @return the list of all children. Do not modify the
+   *         returned list.
+   */
+  QList<KoDocumentChild> &children() const;
+
+  /**
+   * @return the KoDocumentChild associated with the given Document, but only if
+   *         "doc" is a direct child of this document.
+   *
+   * This is a convenience function. You could get the same result
+   * by traversing the list returned by @ref #children.
+   */
+  KoDocumentChild *child( KoDocument *doc );
+
+signals:
+  /**
+   * This signal is emitted, if a direct or indirect child document changes
+   * and needs to be updated in all views.
+   *
+   * If one of your child documents emits the childChanged signal, then you may
+   * usually just want to redraw this child. In this case you can ignore the parameter
+   * passes by the signal.
+   */
+  void childChanged( KoDocumentChild *child );
+
+protected slots:
+  virtual void slotViewDestroyed();
 
 protected:
 
@@ -265,104 +407,9 @@ protected:
 
 private:
 
+    KoDocumentPrivate *d;
     KURL m_strURL;
-    bool m_bModified;
     bool m_bEmpty;
-};
-
-/**
- *  Holds an embedded object.
- */
-class KoDocumentChild : public PartChild
-{
-
-public:
-
-  KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry );
-  KoDocumentChild( KoDocument* parent );
-  virtual ~KoDocumentChild();
-
-  virtual KoDocument* document() { return (KoDocument*) part(); }
-  /**
-   * Can be empty (which is why it doesn't return a const KURL &)
-   */
-  virtual KURL url();
-
-  /**
-   *  Writes the OBJECT tag, but does NOT write the content of the
-   *  embedded documents. Saving the embedded documents themselves
-   *  is done in @ref Document_impl. This function just stores information
-   *  about the position and id of the embedded document.
-   */
-  virtual bool save( ostream& out );
-
-  /**
-   *  Writes the OBJECT tag, but does NOT write the content of the
-   *  embedded documents. Saving the embedded documents themselves
-   *  is done in @ref Document_impl. This function just stores information
-   *  about the position and id of the embedded document.
-   *
-   *  Use this function if your application uses the DOM.
-   */
-  virtual QDomElement save( QDomDocument& doc );
-
-  /**
-   *  Parses the OBJECT tag. This does NOT mean creating the child documents.
-   *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
-   *  to actually load the embedded documents.
-   */
-  virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
-
-  /**
-   *  Parses the OBJECT tag. This does NOT mean creating the child documents.
-   *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
-   *  to actually load the embedded documents.
-   *
-   *  Use this function if your application uses the DOM.
-   */
-  virtual bool load( const QDomElement& element );
-
-  /**
-   *  Actually loads the document from the disk/net or from the store,
-   *  depending on @ref #url
-   */
-  virtual bool loadDocument( KoStore* );
-
-  virtual bool isStoredExtern();
-
-protected:
-
-  /**
-   * Called if @ref #load finds a tag that it does not understand.
-   *
-   * @return TRUE if the tag could be handled. The default implementation
-   *         returns FALSE.
-   */
-  virtual bool loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttrib>& lst2 );
-
-private:
-
-  /**
-   *  Holds the source of this object, for example "file:/home/weis/image.gif"
-   *  or "tar:/table1/2" if it is stored in a koffice store. This variable is
-   *  set after parsing the OBJECT tag in @ref #load and is reset after
-   *  calling @ref #loadDocument.
-   */
-  QString m_tmpURL;
-
-  /**
-   * This variable is
-   *  set after parsing the OBJECT tag in @ref #load and is reset after
-   *  calling @ref #loadDocument.
-   */
-  QRect m_tmpGeometry;
-
-  /**
-   * This variable is
-   *  set after parsing the OBJECT tag in @ref #load and is reset after
-   *  calling @ref #loadDocument.
-   */
-  QString m_tmpMimeType;
 };
 
 #endif

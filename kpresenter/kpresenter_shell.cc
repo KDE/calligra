@@ -24,10 +24,10 @@
 #include <kstddirs.h>
 #include <kaboutdialog.h>
 
-KPresenterShell::KPresenterShell( QWidget* parent, const char* name )
-    : KoMainWindow( parent, name )
+KPresenterShell::KPresenterShell( const char* name )
+    : KoMainWindow( name )
 {
-    setDoPartActivation( FALSE );
+// partManager()->setAllowDoubleClickActivation( false );
     resize( 800, 630 );
 }
 
@@ -35,20 +35,14 @@ KPresenterShell::~KPresenterShell()
 {
 }
 
-QString KPresenterShell::configFile() const
-{
-    return readConfigFile( locate( "data", "kpresenter/kpresenter_shell.rc",
-				   KPresenterFactory::global() ) );
-}
-
 KoDocument* KPresenterShell::createDoc()
 {
     return new KPresenterDoc( 0, "Document" );
 }
 
-void KPresenterShell::setRootPart( Part *part )
+void KPresenterShell::setRootDocument( KoDocument *part )
 {
-    KoMainWindow::setRootPart( part );
+    KoMainWindow::setRootDocument( part );
     if ( part )
       ( (KPresenterView*)rootView() )->initGui();
 }

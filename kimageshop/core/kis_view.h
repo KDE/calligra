@@ -23,7 +23,7 @@
 #ifndef __kis_view_h__
 #define __kis_view_h__
 
-#include <container.h>
+#include <koView.h>
 
 #include "kfloatingdialogowner.h"
 #include "kis_color.h"
@@ -60,7 +60,7 @@ class GradientTool;
 class ColorPicker;
 class QButton;
 
-class KisView : public ContainerView
+class KisView : public KoView
 {
   Q_OBJECT;
 
@@ -112,7 +112,7 @@ class KisView : public ContainerView
   void merge_all_layers();
   void merge_visible_layers();
   void merge_linked_layers();
-  
+
   // tool action slots
   void tool_select_rect();
   void tool_move();
@@ -141,6 +141,8 @@ class KisView : public ContainerView
 
  protected:
   virtual void resizeEvent( QResizeEvent* );
+
+  virtual void updateReadWrite( bool readwrite );
 
   void setupCanvas();
   void setupSideBar();

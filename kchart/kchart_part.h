@@ -28,18 +28,18 @@ class KChartPart : public KoDocument
 {
     Q_OBJECT
 public:
-    KChartPart( KoDocument* parent = 0, const char* name = 0 );
+    KChartPart( KoDocument* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KChartPart();
 
-    virtual View* createView( QWidget* parent = 0, const char* name = 0 );
-    virtual Shell* createShell();
+    virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
+    virtual KoMainWindow* createShell();
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
     virtual bool initDoc();
 
     virtual QCString mimeType() const;
-    
+
     void setPart( const KChartData& data );
     void loadConfig(KConfig *conf);
     void saveConfig(KConfig *conf);
@@ -59,7 +59,6 @@ signals:
     void docChanged();
 
 protected:
-    virtual QString configFile() const;
     void initRandomData();
 
 private:

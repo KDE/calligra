@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -81,7 +81,7 @@ public:
     enum Property { Prop_Outline, Prop_Fill };
 
   struct OutlineInfo {
-    enum { 
+    enum {
       Color = 1, Style = 2, Width = 4, Custom = 8, All = 15
     };
     unsigned int mask;   // indicates the valid fields of the structure
@@ -90,18 +90,19 @@ public:
     float width;         // outline width
     // custom properties (depend on object type)
     float roundness;     // roundness for rectangles
-    enum Shape { 
+    enum Shape 
+    { 
       DefaultShape, ArcShape, PieShape 
-    };           
-    Shape shape;         // shape of ellipse 
+    };
+    Shape shape;         // shape of ellipse
     int startArrowId,    // arrow heads (for lines and bezier curves)
       endArrowId;
   };
 
   struct FillInfo {
     enum { Color = 1, FillStyle = 2, Pattern = 4, GradientInfo = 8, All = 15 };
-    enum Style { 
-      NoFill, SolidFill, PatternFill, TileFill, GradientFill 
+    enum Style {
+      NoFill, SolidFill, PatternFill, TileFill, GradientFill
     };
     unsigned int mask;  // indicates the valid fields of the structure
     QColor color;       // fill color
@@ -136,7 +137,7 @@ public:
 
   /**
    * Set the ouline color of the object.
-   * 
+   *
    * @param c The outline color.
    */
   void setOutlineColor (const QColor& c);
@@ -234,7 +235,7 @@ public:
    * @return The current matrix.
    */
   const QWMatrix& matrix () const { return tMatrix; }
-  
+
   /**
    * Initialize a temporary matrix for transformation from the values of
    * the transformation matrix. The temporary matrix is used by interactive
@@ -247,28 +248,28 @@ public:
    *
    * @param m      The matrix for combining with the current transformation
    *               matrix.
-   * @param update if true, the bounding box of the object is immediatly 
+   * @param update if true, the bounding box of the object is immediatly
    *               updated, otherwise not. This is usefull for a sequence of
    *               transformations in order to avoid flickering.
    */
   void transform (const QWMatrix& m, bool update = false);
 
   /**
-   * Transform the object temporary according to the given matrix. The 
+   * Transform the object temporary according to the given matrix. The
    * transformation matrix is not modified.
    *
    * @param m      The matrix for combining with the current transformation
    *               matrix.
-   * @param update if true, the bounding box of the object is immediatly 
+   * @param update if true, the bounding box of the object is immediatly
    *               updated, otherwise not.
    * @see
    */
   void ttransform (const QWMatrix& m, bool update = false);
-  
+
   /**
    * Mark the object as selected or not selected.
    *
-   * @param flag if true, the object is selected, otherwise the object will 
+   * @param flag if true, the object is selected, otherwise the object will
    *             be unselected.
    */
   virtual void select (bool flag = true);
@@ -282,10 +283,10 @@ public:
 
   virtual bool isValid () { return true; }
 
-  bool gradientFill () const { 
+  bool gradientFill () const {
     return fillInfo.fstyle == GObject::FillInfo::GradientFill;
   }
-  
+
   /**
    * Retrieve the bounding box for the object.
    *
@@ -317,7 +318,7 @@ public:
    * NOTE: This method has to be implemented in every subclass.
    *
    * @param p The Painter for drawing the object.
-   * @param withBasePoints If true, draw the base points of the 
+   * @param withBasePoints If true, draw the base points of the
    *                       object.
    */
   virtual void draw (QPainter& /*p*/, bool /*withBasePoints*/ = false,
@@ -348,9 +349,9 @@ public:
   /**
    * At the moment only valid for lines and bezier curves.
    */
-  virtual bool findNearestPoint (const Coord& , float /*max_dist*/, 
-				 float& /*dist*/, int& /*pidx*/, bool /*all*/ = false) { 
-    return false; 
+  virtual bool findNearestPoint (const Coord& , float /*max_dist*/,
+				 float& /*dist*/, int& /*pidx*/, bool /*all*/ = false) {
+    return false;
   }
 
   virtual void printInfo ();
@@ -383,7 +384,7 @@ signals:
   void changed ();
   void changed (const Rect& r);
   void propertiesChanged (GObject::Property p, int mask);
-  
+
 protected:
   void initBrush (QBrush& b);
   void initPen (QPen& p);
@@ -393,7 +394,7 @@ protected:
 
   void calcUntransformedBoundingBox (const Coord& tleft, const Coord& tright,
 				     const Coord& bright, const Coord& bleft);
-  
+
   bool sflag;              // object is selected
   Rect box;                // the bounding box
   QWMatrix tMatrix;        // transformation matrix
@@ -439,7 +440,7 @@ private:
 class SWrapper {
 protected:
   SWrapper () : obj (0L) {}
-  
+
 public:
   void setObject (GObject* o) { obj = o; }
 

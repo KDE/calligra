@@ -110,8 +110,12 @@
 
 /*======================= constructor ===========================*/
 KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const char *_name )
-    : ContainerView( _doc, _parent, _name )
+    : KoView( _doc, _parent, _name )
 {
+
+    setInstance( KPresenterFactory::global() );
+    setXMLFile( "kpresenter.rc" );
+
     dcop = 0;
 
     m_pKPresenterDoc = 0L;
@@ -2535,7 +2539,7 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();  
+	file = fd.selectedFile();
 #endif
 
     if ( !file.isEmpty() ) m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
@@ -2652,6 +2656,11 @@ void KPresenterView::doAutomaticScreenPres()
 
     screenStop();
 }
+
+void KPresenterView::updateReadWrite( bool readwrite )
+{
+#warning TODO 
+} 
 
 /*========================= change undo =========================*/
 void KPresenterView::changeUndo( QString _text, bool _enable )

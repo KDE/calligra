@@ -26,15 +26,23 @@ KImageFactory::~KImageFactory()
   delete s_global;
 }
 
-QObject* KImageFactory::create( QObject* parent, const char* name, const char* /* classname */, const QStringList & )
+QObject* KImageFactory::create( QObject* parent, const char* name, const char*classname, const QStringList & )
 {
-    if ( parent && !parent->inherits("KoDocument") )
+/*
+   if ( parent && !parent->inherits("KoDocument") )
     {
 	qDebug("KImageFactory: parent does not inherit KoDocument");
 	return 0;
     }
+*/
+
+    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+ 
+    KImageDocument *doc = new KImageDocument( parent, name, !bWantKoDocument );
     
-    KImageDocument *doc = new KImageDocument( (KoDocument*)parent, name );
+    if ( !bWantKoDocument )
+      doc->setReadWrite( false );
+    
     emit objectCreated(doc);
     return doc;
 }

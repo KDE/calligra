@@ -73,14 +73,25 @@ KWordFactory::~KWordFactory()
     delete s_global;
 }
 
-QObject* KWordFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
+QObject* KWordFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
-    if ( parent && !parent->inherits("KoDocument") )
+/*
+ if ( parent && !parent->inherits("KoDocument") )
     {
 	qDebug("KWordFactory: parent does not inherit KoDocument");
 	return 0;
     }
-    KWordDocument *doc = new KWordDocument( (KoDocument*)parent, name );
+*/
+    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+ 
+    KWordDocument *doc = new KWordDocument( parent, name, !bWantKoDocument );
+    
+    if ( !bWantKoDocument )
+    {
+      doc->initEmpty();
+      doc->setReadWrite( false );
+    }
+    
     emit objectCreated(doc);
     return doc;
 }

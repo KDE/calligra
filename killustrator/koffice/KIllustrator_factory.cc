@@ -26,13 +26,23 @@ KIllustratorFactory::~KIllustratorFactory()
 
 QObject* KIllustratorFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
-    if ( parent && !parent->inherits("KoDocument") )
+/* 
+   if ( parent && !parent->inherits("KoDocument") )
     {
 	qDebug("KIllustratorFactory: parent does not inherit KoDocument");
 	return 0;
     }
+*/
 
-    return new KIllustratorDocument( parent, name );
+    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+ 
+    KIllustratorDocument *doc = new KIllustratorDocument( parent, name, !bWantKoDocument );
+    
+    if ( !bWantKoDocument )
+      doc->setReadWrite( false );
+    
+    emit objectCreated( doc );
+    return doc;
 }
 
 KInstance* KIllustratorFactory::global()

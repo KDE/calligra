@@ -1,9 +1,9 @@
-<!DOCTYPE QConfig ><QConfig>
+<!DOCTYPE QConfig ><QConfig name="KImage">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="undo"/>
   <Action name="redo"/>
-  <Separator/>  
+  <Separator/>
   <Action name="editImportImage"/>
   <Action name="editExportImage"/>
   <Separator/>
@@ -15,7 +15,7 @@
   <Action name="viewFitToView"/>
   <Action name="viewFitWithProportions"/>
   <Action name="viewOriginalSize"/>
-  <Separator/>  
+  <Separator/>
   <Action name="viewCentered"/>
   <Action name="viewScrollbars"/>
   <Action name="viewInformations"/>
@@ -27,7 +27,7 @@
   <Action name="transformRotateAngle"/>
   <Action name="transformFlipHorizontal"/>
   <Action name="transformFlipVertical"/>
-  <Separator/>  
+  <Separator/>
   <Action name="transformZoomFactor"/>
   <Action name="transformZoomIn10"/>
   <Action name="transformZoomOut10"/>
@@ -36,23 +36,21 @@
   <Action name="transformZoomMax"/>
   <Action name="transformZoomMaxAspect"/>
  </Menu>
- <Menu name="Help">
+ <Menu name="help">
   <Action name="helpUsingHelp"/>
  </Menu>
 </MenuBar>
-<ToolBars>
- <ToolBar>
+<ToolBar>
   <Action name="undo"/>
   <Action name="redo"/>
-  <Separator/>  
+  <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="paste"/>
- </ToolBar>
- <ToolBar>
+</ToolBar>
+<ToolBar>
   <Action name="viewFitToView"/>
   <Action name="viewFitWithProportions"/>
   <Action name="viewOriginalSize"/>
- </ToolBar>
-</ToolBars>
+</ToolBar>
 </QConfig>

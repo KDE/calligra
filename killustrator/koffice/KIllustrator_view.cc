@@ -97,8 +97,10 @@
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 				    KIllustratorDocument* doc) :
-    ContainerView( doc, parent, name )
+    KoView( doc, parent, name )
 {
+  setInstance( KIllustratorFactory::global() );
+  setXMLFile( "KIllustrator.rc" );
   m_pDoc = doc;
   m_bShowGUI = true;
   m_bShowRulers = true;
@@ -143,7 +145,7 @@ KIllustratorView::~KIllustratorView()
 void KIllustratorView::createGUI()
 {
     setupCanvas ();
-    
+
     // File menu
     m_import = new KAction( i18n("Import"), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
     m_export = new KAction( i18n("Export"), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
@@ -187,7 +189,7 @@ void KIllustratorView::createGUI()
     connect( m_alignToGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToGrid( bool ) ) );
     m_alignToHelplines = new KToggleAction( i18n("Align To Helplines"), 0, actionCollection(), "alignToHelplines" );
     connect( m_alignToHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToHelplines( bool ) ) );
-	    
+	
     // Transform menu
     m_transformPosition = new KAction( i18n("Position ..."), 0, this, SLOT( slotTransformPosition() ), actionCollection(), "transformPosition" );
     m_transformDimension = new KAction( i18n("Dimension ..."), 0, this, SLOT( slotTransformDimension() ), actionCollection(), "transformDimension" );
@@ -429,7 +431,7 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 {
     m_undo->setEnabled( undoPossible );
     m_redo->setEnabled( redoPossible );
-    
+
     QString label = i18n ("Undo");
     if (undoPossible)
       label += " " + cmdHistory.getUndoName ();
@@ -468,6 +470,11 @@ void KIllustratorView::resizeEvent (QResizeEvent* )
 	  } */
   }
 }
+
+void KIllustratorView::updateReadWrite( bool readwrite )
+{
+#warning TODO 
+} 
 
 void KIllustratorView::showTransformationDialog( int id )
 {
@@ -682,7 +689,7 @@ void KIllustratorView::slotImport()
 
 #ifdef USE_QFD
     QString fname = QFileDialog::getOpenFileName (lastImportDir, filter, this);
-#else 
+#else
     QString fname = KFileDialog::getOpenFileName (lastImportDir, filter, this);
 #endif
     if (! fname.isEmpty ())
@@ -710,7 +717,7 @@ void KIllustratorView::slotImport()
 	    QMessageBox::critical (this, i18n ("KIllustrator Error"),
 				   i18n ("Unknown import format"), i18n ("OK"));
     }
-    
+
     resetTools ();
 }
 
@@ -1006,7 +1013,7 @@ void KIllustratorView::slotBrushChosen( const QColor & c )
 {
     // #### Torben: ..... hmmmmm
     bool fill = TRUE;
-    
+
     GObject::OutlineInfo oInfo;
     oInfo.mask = 0;
 
@@ -1037,7 +1044,7 @@ void KIllustratorView::slotPenChosen( const QColor & c  )
 {
     // #### Torben: ..... hmmmmm
     bool fill = TRUE;
-    
+
     GObject::OutlineInfo oInfo;
     oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style;
     oInfo.color = c                        ;
@@ -1075,7 +1082,7 @@ void KIllustratorView::slotPointTool( bool b )
     m_newNode->setEnabled( b );
     m_deleteNode->setEnabled( b );
     m_splitLine->setEnabled( b );
-    
+
     if ( b )
 	slotMoveNode( TRUE );
 

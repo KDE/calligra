@@ -30,13 +30,22 @@ KChartFactory::~KChartFactory()
     delete s_global;
 }
 
-QObject* KChartFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* KChartFactory::create( QObject* parent, const char* name, const char *classname, const QStringList & )
 {
+/* 
     if ( parent && !parent->inherits("KoDocument") ) {
 		qDebug("KChartFactory: parent does not inherit KoDocument");
 		return 0;
     }
-    KChartPart *part = new KChartPart( (KoDocument*)parent, name );
+*/  
+
+    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 ); 
+ 
+    KChartPart *part = new KChartPart( (KoDocument*)parent, name, !bWantKoDocument );
+    
+    if ( !bWantKoDocument )
+      part->setReadWrite( false );
+    
     emit objectCreated(part);
     return part;
 }

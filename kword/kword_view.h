@@ -33,7 +33,7 @@
 
 #include <koPageLayoutDia.h>
 
-#include <container.h>
+#include <koView.h>
 
 class KWPartFrameSet;
 class KWordView;
@@ -88,7 +88,7 @@ class QAction;
 /* Class: KWordView						  */
 /******************************************************************/
 
-class KWordView : public ContainerView
+class KWordView : public KoView
 {
     Q_OBJECT
 
@@ -293,6 +293,8 @@ protected:
 
     void getFonts();
     void setParagBorderValues();
+
+    virtual void updateReadWrite( bool readwrite );
 
     KWordDocument *m_pKWordDoc;
 

@@ -4092,7 +4092,7 @@ bool ChartChild::loadDocument( KoStore* _store )
 
 KChartPart* ChartChild::chart()
 {
-    return (KChartPart*)part();
+    return (KChartPart*)document();
 }
 
 #include "kspread_table.moc"

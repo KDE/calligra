@@ -30,6 +30,9 @@ kdelnkdir = $(kde_appsdir)/Applications/KOffice
 kdemime_DATA = x-example.desktop
 kdemimedir = $(kde_mimedir)/application
 
+rc_DATA = example.rc
+rcdir = $(kde_datadir)/example/example.rc
+
 # SUBDIRS =  . plugins pics dtd toolbar
 
 messages:

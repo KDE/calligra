@@ -26,7 +26,7 @@ class KIllustratorShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    KIllustratorShell( QWidget* parent = 0, const char* name = 0 );
+    KIllustratorShell( const char* name = 0 );
     ~KIllustratorShell();
 
     QString nativeFormatPattern() const { return "*.kil"; }
@@ -36,7 +36,6 @@ public:
     void slotFilePrint();
 	
 protected:
-    virtual QString configFile() const;
     virtual KoDocument* createDoc();
 };
 

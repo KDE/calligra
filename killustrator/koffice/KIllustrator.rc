@@ -1,4 +1,4 @@
-<!DOCTYPE QConfig ><QConfig>
+<!DOCTYPE QConfig ><QConfig name="KIllustrator">
 <MenuBar>
  <Menu name="File"><text>File</text>
   <Action name="import"/>
@@ -70,18 +70,17 @@
   <Action name="options"/>
  </Menu>
 </MenuBar>
-<ToolBars>
- <ToolBar>
+<ToolBar>
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
- </ToolBar>
- <ToolBar position="right">
+</ToolBar>
+<ToolBar position="right">
   <Action name="colorbar"/>
- </ToolBar>
- <ToolBar position="left">
+</ToolBar>
+<ToolBar position="left">
   <Action name="selectTool"/>
   <Action name="pointTool"/>
   <Action name="freehandTool"/>
@@ -92,14 +91,14 @@
   <Action name="ellipseTool"/>
   <Action name="textTool"/>
   <Action name="zoomTool"/>
- </ToolBar>
- <ToolBar position="left">
+</ToolBar>
+<ToolBar position="left">
   <Action name="moveNode"/>
   <Action name="newNode"/>
   <Action name="deleteNode"/>
   <Action name="splitLine"/>
- </ToolBar>
-</ToolBars>
+</ToolBar>
+<!--
 <InPlaceEditing>
  <MenuBar>
   <Menu name="View"><text>View</text>
@@ -114,5 +113,5 @@
    <Action name="about"/>
   </ToolBar>
  </ToolBars>
-</InPlaceEditing>
+</InPlaceEditing> -->
 </QConfig>

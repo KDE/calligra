@@ -44,14 +44,15 @@
 
 #define KIS_DEBUG(AREA, CMD)
 
-KisDoc::KisDoc( KoDocument* parent, const char* name )
-  : KoDocument( parent, name )
+KisDoc::KisDoc( QObject* parent, const char* name, bool singleViewMode )
+  : KoDocument( parent, name, singleViewMode )
   , m_commands()
 {
+  setInstance( KisFactory::global() );
   m_pCurrent = 0L;
   m_pNewDialog = 0L;
 
-  m_Images.setAutoDelete(false);  
+  m_Images.setAutoDelete(false);
 }
 
 bool KisDoc::initDoc()
@@ -61,13 +62,13 @@ bool KisDoc::initDoc()
   KisImage *img = newImage(name, 512, 512, RGB, WHITE);
   if (!img)
     return false;
-  
+
   // add background layer
   img->addRGBLayer(QRect(0, 0, 512, 512), QColor(255, 255, 255), "background");
   img->setLayerOpacity(255);
   img->compositeImage(QRect(0, 0, 512, 512));
   setCurrentImage(img);
-  
+
   emit imageListUpdated();
   return true;
 }
@@ -86,7 +87,7 @@ void KisDoc::setCurrentImage(KisImage *img)
     }
 
   m_pCurrent = img;
-  
+
   QObject::connect( m_pCurrent, SIGNAL( updated() ),
 		    this, SLOT( slotImageUpdated() ) );
   QObject::connect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
@@ -101,7 +102,7 @@ void KisDoc::setCurrentImage(KisImage *img)
 void KisDoc::setCurrentImage(const QString& _name)
 {
   KisImage *img = m_Images.first();
-  
+
   while (img)
     {
       if (img->name() == _name)
@@ -116,7 +117,7 @@ void KisDoc::setCurrentImage(const QString& _name)
 void KisDoc::renameImage(const QString& oldname, const QString &newname)
 {
   KisImage *img = m_Images.first();
-  
+
   while (img)
     {
       if (img->name() == oldname)
@@ -132,15 +133,15 @@ void KisDoc::renameImage(const QString& oldname, const QString &newname)
 QStringList KisDoc::images()
 {
   QStringList lst;
-  
+
   KisImage *img = m_Images.first();
-  
+
   while (img)
     {
       lst.append(img->name());
       img = m_Images.next();
     }
-  return lst;  
+  return lst;
 }
 
 bool KisDoc::isEmpty()
@@ -160,7 +161,7 @@ QString KisDoc::currentImage()
 KisDoc::~KisDoc()
 {
   KisImage *img = m_Images.first();
-  
+
   while (img)
     {
       delete img;
@@ -200,7 +201,7 @@ KisImage* KisDoc::newImage(const QString& _name, int w, int h, int /*colorModel*
 {
   KisImage *img = new KisImage( _name, w, h );
   m_Images.append(img);
-  
+
   return img;
 }
 
@@ -218,7 +219,7 @@ void KisDoc::removeImage( KisImage *img )
 void KisDoc::slotRemoveImage( const QString& _name )
 {
   KisImage *img = m_Images.first();
-  
+
   while (img)
     {
       if (img->name() == _name)
@@ -246,12 +247,12 @@ bool KisDoc::loadImage( const QString& file )
 
   if (img.isNull())
     return false;
- 
+
   QString alphaName = file;
   alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
   qDebug("alphaname=%s\n",alphaName.latin1());
   QImage alpha(alphaName);
-  
+
   QString name = QFileInfo(file).fileName();
   int w = img.width();
   int h = img.height();
@@ -260,7 +261,7 @@ bool KisDoc::loadImage( const QString& file )
   if (!kis_img)
     return false;
 
-  
+
   kis_img->addRGBLayer(img, alpha, name);
   kis_img->setLayerOpacity(255);
   kis_img->compositeImage(QRect(0, 0, w, h));
@@ -273,7 +274,7 @@ void KisDoc::slotNewImage()
   if (!m_pNewDialog)
     m_pNewDialog = new NewDialog();
   m_pNewDialog->show();
-  
+
   if(!m_pNewDialog->result() == QDialog::Accepted)
     return;
 
@@ -299,9 +300,9 @@ void KisDoc::slotNewImage()
 bool KisDoc::loadFromURL( const QString& _url )
 {
   cout << "KisDoc::loadFromURL" << endl;
-  
+
   QString mimetype = KMimeType::findByURL( _url )->mimeType();
-  
+
   if( ( mimetype == "image/png" ) ||
       ( mimetype == "image/jpeg" ) ||
       ( mimetype == "image/bmp" ) ||
@@ -320,7 +321,7 @@ QCString KisDoc::mimeType() const
     return "application/x-kimageshop";
 }
 
-View* KisDoc::createView( QWidget* parent, const char* name )
+KoView* KisDoc::createView( QWidget* parent, const char* name )
 {
   KisView* view = new KisView( this, parent, name );
   addView( view );
@@ -333,10 +334,10 @@ View* KisDoc::createView( QWidget* parent, const char* name )
   return view;
 }
 
-Shell* KisDoc::createShell()
+KoMainWindow* KisDoc::createShell()
 {
-    Shell* shell = new KisShell;
-    shell->setRootPart( this );
+    KoMainWindow* shell = new KisShell;
+    shell->setRootDocument( this );
     shell->show();
 
     return shell;}
@@ -345,11 +346,6 @@ void KisDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transpar
 {
   if (m_pCurrent)
     m_pCurrent->paintPixmap( &painter, rect );
-}
-
-QString KisDoc::configFile() const
-{
-  return readConfigFile( locate("kis", "kimageshop.rc", KisFactory::global()) );
 }
 
 void KisDoc::paintPixmap(QPainter *p, QRect area)

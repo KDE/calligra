@@ -1,4 +1,4 @@
-<!DOCTYPE QConfig ><QConfig>
+<!DOCTYPE QConfig ><QConfig name="KImageShop">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="undo"/>
@@ -31,23 +31,22 @@
   <Action name="layer_mirrorY"/>
  </Menu>
 </MenuBar>
-<ToolBars>
- <ToolBar position="top">
+<ToolBar position="top">
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
   <Action name="copy"/>
   <Action name="cut"/>
   <Action name="paste"/>
- </ToolBar>
- <ToolBar position="top">
+</ToolBar>
+<ToolBar position="top">
   <Action name="dialog_layer"/>
   <Action name="dialog_color"/>
   <Action name="dialog_brush"/>
   <Action name="dialog_gradient"/>
   <Action name="dialog_gradienteditor"/>
- </ToolBar>
- <ToolBar position="left">
+</ToolBar>
+<ToolBar position="left">
   <Action name="tool_select_rect"/>
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>
@@ -57,6 +56,5 @@
   <Action name="tool_airbrush"/>
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
-  </ToolBar>
-</ToolBars>
+</ToolBar>
 </QConfig>

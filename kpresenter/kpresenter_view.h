@@ -32,7 +32,7 @@
 #include <qpoint.h>
 
 #include <koMainWindow.h>
-#include <container.h>
+#include <koView.h>
 
 #include "kpresenter_doc.h"
 #include "global.h"
@@ -96,7 +96,7 @@ protected:
 /*****************************************************************/
 /* class KPresenterView						 */
 /*****************************************************************/
-class KPresenterView : public ContainerView
+class KPresenterView : public KoView
 {
     Q_OBJECT
 
@@ -389,6 +389,8 @@ protected:
     void keyPressEvent( QKeyEvent* );
 
     void doAutomaticScreenPres();
+
+    virtual void updateReadWrite( bool readwrite );
 
 // ********** variables **********
 

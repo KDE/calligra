@@ -6,8 +6,10 @@
 #include <qaction.h>
 
 ExampleView::ExampleView( ExamplePart* part, QWidget* parent, const char* name )
-    : ContainerView( part, parent, name )
+    : KoView( part, parent, name )
 {
+    setInstance( ExampleFactory::global() );
+    setXMLFile( "example.rc" );
     m_cut = new QAction( tr("&Cut"), ExampleBarIcon("editcut"), 0, this, SLOT( cut() ),
 			 actionCollection(), "cut");
 }
@@ -20,10 +22,15 @@ void ExampleView::paintEvent( QPaintEvent* ev )
     // ### TODO: Scaling
 
     // Let the document do the drawing
-    part()->paintEverything( painter, ev->rect(), FALSE, this );
+    koDocument()->paintEverything( painter, ev->rect(), FALSE, this );
 
     painter.end();
 }
+
+void ExampleView::updateReadWrite( bool readwrite )
+{
+#warning TODO 
+} 
 
 void ExampleView::cut()
 {

@@ -43,7 +43,7 @@
 #include <qscrollview.h>
 #include <qarray.h>
 
-#include <frame.h>
+#include <koFrame.h>
 
 /******************************************************************/
 /* Class: KWFrame						  */
@@ -850,7 +850,7 @@ void KWTextFrameSet::splitParag( KWParag *_parag, unsigned int _pos )
 
     unsigned int len = _parag->getTextLen() - _pos;
     KWChar* _string = _parag->getKWString()->split( _pos );
-    if ( _parag ) 
+    if ( _parag )
 	_next = _parag->getNext();
 
     _new = new KWParag( this, doc, _parag, _next, _parag->getParagLayout() );
@@ -1132,7 +1132,7 @@ void KWTextFrameSet::updateCounters()
 		for ( i = 0; i < 16; i++ ) {
 		    if ( listData[ i ] < 0 ) {
 			switch ( p->getParagLayout()->getCounterType() ) {
-			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L: 
+			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L:
 			case KWParagLayout::CT_ROM_NUM_U:
 			    listData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
 			    break;
@@ -1455,9 +1455,9 @@ QPicture *KWPartFrameSet::getPicture()
     QPainter p( &pic );
     //child->transform( p );
 
-    if ( child )
-	child->part()->paintEverything( p, QRect( QPoint( 0, 0 ),
-						  QSize( frames.at( 0 )->width(), frames.at( 0 )->height() ) ),
+    if ( child && child->document() )
+	child->document()->paintEverything( p, QRect( QPoint( 0, 0 ),
+					    QSize( frames.at( 0 )->width(), frames.at( 0 )->height() ) ),
 					TRUE, 0 );
 
     return &pic;
@@ -1470,10 +1470,12 @@ void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffx
 // 			       frames.at( 0 )->width(), frames.at( 0 )->height() ) );
     update();
     KWordView *view = (KWordView*)_widget;
-    Part* part = child->part();
+    KoDocument* part = child->document();
     if ( !part )
 	return;
-    view->shell()->setActiveView( view, part );
+    //    view->shell()->setActiveView( view, part );
+    view->partManager()->addPart( part, false );
+    view->partManager()->setActivePart(  part, view );
     view->child( part )->frame()->move( frames.at( 0 )->x() - diffx - diffxx,
 					frames.at( 0 )->y() - diffy );
 }

@@ -1,11 +1,11 @@
 ####### General stuff
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES= $(KOPARTS_INCLUDES) $(KOML_INCLUDES) $(KSTORE_INCLUDES) $(all_includes)
+INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) $(all_includes)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
-libkofficecore_la_LIBADD  = $(top_builddir)/lib/koparts/libkoparts.la \
+libkofficecore_la_LIBADD  = \
 	$(top_builddir)/lib/koml/libkoml.la \
-	$(top_builddir)/lib/store/libkstore.la $(LIB_KIMGIO) $(LIB_KIO) $(LIB_KFILE)
+	$(top_builddir)/lib/store/libkstore.la -lkparts $(LIB_KIMGIO) $(LIB_KIO) $(LIB_KFILE)
 
 ####### Files
 
@@ -17,7 +17,8 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koApplication.cc koQueryTrader.cc \
 	koUndo.cc koIcons.cc \
 	koDataTool.cc koFilter.cc \
-	koDocumentInfo.cc koFilterDialog.cc
+	koDocumentInfo.cc koFilterDialog.cc \
+	koView.cc koFrame.cc handler.cpp koDocumentChild.cc 
 
 include_HEADERS = koFilter.h \
 	koStream.h koDocument.h \
@@ -25,7 +26,9 @@ include_HEADERS = koFilter.h \
 	koApplication.h koQueryTypes.h \
 	koFilterManager.h koUndo.h koIcons.h \
 	koDataTool.h koDocumentInfo.h \
-    koFilterDialog.h
+	koFilterDialog.h koView.h koFrame.h handler.h koDocumentChild.h
 
 libkofficecore_la_METASOURCES = AUTO
 
+rcdir = $(kde_datadir)/koffice
+rc_DATA = koffice_shell.rc

@@ -36,7 +36,7 @@
 #include <kstddirs.h>
 #include <koStore.h>
 #include <koStoreStream.h>
-#include <shell.h>
+#include <koMainWindow.h>
 
 #include <kurl.h>
 #include <klocale.h>
@@ -82,14 +82,18 @@ KWordChild::~KWordChild()
 {
 }
 
+KoDocument *KWordChild::hitTest( const QPoint &, const QWMatrix & )
+{
+  return 0L;
+}
 
 /******************************************************************/
 /* Class: KWordDocument					     */
 /******************************************************************/
 
 /*================================================================*/
-KWordDocument::KWordDocument(KoDocument* parent, const char* name )
-    : KoDocument( parent, name ),
+KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parent, name, singleViewMode ),
       formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
       ret_pix( BarIcon( "return" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
       autoFormat( this ), urlIntern(), pglChanged( TRUE )
@@ -97,6 +101,8 @@ KWordDocument::KWordDocument(KoDocument* parent, const char* name )
     // Use CORBA mechanism for deleting views
     m_lstViews.setAutoDelete( FALSE );
     m_lstChildren.setAutoDelete( TRUE );
+
+    setInstance( KWordFactory::global() );
 
     m_bModified = FALSE;
     hasSelection = FALSE;
@@ -137,6 +143,9 @@ KWordDocument::KWordDocument(KoDocument* parent, const char* name )
     spellCheck = FALSE;
     contents = new KWContents( this );
     tmpShell = 0;
+    
+    connect( this, SIGNAL( completed() ),
+	     this, SLOT( slotDocumentLoaded() ) );
 }
 
 /*================================================================*/
@@ -196,8 +205,34 @@ bool KWordDocument::initDoc()
     else
 	return FALSE;
 
+
     return FALSE;
 }
+
+void KWordDocument::initEmpty()
+{
+    pageLayout.unit = PG_MM;
+    pages = 1;
+
+    pageColumns.columns = 1; //STANDARD_COLUMNS;
+    pageColumns.ptColumnSpacing = STANDARD_COLUMN_SPACING;
+    pageColumns.mmColumnSpacing = POINT_TO_MM( STANDARD_COLUMN_SPACING );
+    pageColumns.inchColumnSpacing = POINT_TO_INCH( STANDARD_COLUMN_SPACING );
+
+    pageHeaderFooter.header = HF_SAME;
+    pageHeaderFooter.footer = HF_SAME;
+    pageHeaderFooter.ptHeaderBodySpacing = 10;
+    pageHeaderFooter.ptFooterBodySpacing = 10;
+    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
+    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
+    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
+    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
+
+	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
+	bool ok = loadTemplate( fileName );
+	setURL( QString::null );
+}
+
 
 /*================================================================*/
 bool KWordDocument::loadTemplate( const QString &fileName )
@@ -677,7 +712,7 @@ bool KWordDocument::hasToWriteMultipart()
 /*================================================================*/
 bool KWordDocument::loadChildren( KoStore *_store )
 {
-    QListIterator<PartChild> it( children() );
+    QListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
 	if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
 	    return false;
@@ -1607,7 +1642,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 
 
     // Write "OBJECT" tag for every child
-    QListIterator<PartChild> chl( children() );
+    QListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
 	out << otag << "<EMBEDDED>" << endl;
 
@@ -1690,7 +1725,7 @@ bool KWordDocument::saveChildren( KoStore *_store, const char *_path )
 {
     int i = 0;
 
-    QListIterator<PartChild> it( children() );
+    QListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
 	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
 	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, "", internURL ) )
@@ -1715,6 +1750,7 @@ QStrList KWordDocument::inputFormats()
 void KWordDocument::addView( KWordView *_view )
 {
     m_lstViews.append( _view );
+    KoDocument::addView( _view );
 }
 
 /*================================================================*/
@@ -1726,28 +1762,22 @@ void KWordDocument::removeView( KWordView *_view )
 }
 
 /*================================================================*/
-Shell* KWordDocument::createShell()
+KoMainWindow* KWordDocument::createShell()
 {
-    Shell* shell = new KWordShell;
-    shell->setRootPart( this );
+    KoMainWindow* shell = new KWordShell;
+    shell->setRootDocument( this );
     shell->show();
 
     return shell;
 }
 
 /*================================================================*/
-View* KWordDocument::createView( QWidget* parent, const char* name )
+KoView* KWordDocument::createView( QWidget* parent, const char* name )
 {
     KWordView* view = new KWordView( parent, name, this );
     addView( view );
 
     return view;
-}
-
-/*================================================================*/
-QString KWordDocument::configFile() const
-{
-    return readConfigFile( locate( "data", "kword/kword.rc", KWordFactory::global() ) );
 }
 
 /*================================================================*/
@@ -2877,7 +2907,7 @@ void KWordDocument::setFormat( KWFormat &_format, int flags )
 }
 
 /*================================================================*/
-void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page, 
+void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 			   KWFormat *_format, const QString &_mime )
 {
     QStrList strList;
@@ -3049,7 +3079,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 		for ( unsigned int i = 1; i < strList.count(); i++ ) {
 		    str = QString( strList.at( i ) );
 		    len = str.length();
-		    p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ), 
+		    p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ),
 				     this,
 				     p, 0L, defaultParagLayout );
 		    if ( !calcParag )
@@ -3073,7 +3103,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 		_fc->cursorGotoLeft();
 		_fc->cursorGotoLeft();
 
-		KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(), 
+		KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(),
 		     *next = _fc->getParag()->getNext();
 
 		while ( parag ) {
@@ -3873,6 +3903,12 @@ void KWordDocument::slotUndoRedoChanged( QString undo, QString redo )
 	}
     }
 }
+
+/*================================================================*/
+void KWordDocument::slotDocumentLoaded()
+{
+  updateAllViews( 0L, true );
+} 
 
 /*================================================================*/
 void KWordDocument::updateTableHeaders( QList<KWGroupManager> &grpMgrs )

@@ -32,20 +32,19 @@ class KWordShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    KWordShell( QWidget* parent = 0, const char* name = 0 );
+    KWordShell( const char* name = 0 );
     ~KWordShell();
 
     QString nativeFormatPattern() const { return "*.kwd"; }
     QString nativeFormatName() const { return "KWord"; }
 
-    virtual void setRootPart( Part* );
+    virtual void setRootDocument( KoDocument* );
 
 public slots:
     void slotFilePrint();
     void slotHelpAbout();
-    
+
 protected:
-    virtual QString configFile() const;
     virtual KoDocument* createDoc();
 };
 
