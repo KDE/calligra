@@ -1792,7 +1792,7 @@ void KPresenterView::setupActions()
 					     actionCollection(), "tools_autoform" );
     ( (KToggleAction*)actionToolsAutoform )->setExclusiveGroup( "tools" );
 
-    actionToolsDiagramm = new KToggleAction( i18n( "&Diagram" ), "chart", Key_F12,
+    actionToolsDiagramm = new KToggleAction( i18n( "&Diagram" ), "frame_chart", Key_F12,
 					   this, SLOT( toolsDiagramm() ),
 					   actionCollection(), "tools_diagramm" );
     ( (KToggleAction*)actionToolsDiagramm )->setExclusiveGroup( "tools" );
