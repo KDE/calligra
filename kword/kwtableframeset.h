@@ -210,6 +210,7 @@ public:
 //    QString anchorInstance();
     virtual void statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences );
 
+    virtual void updateFrames();
 protected:
     unsigned int m_rows, m_cols;
     KWTblCellSize m_widthMode;

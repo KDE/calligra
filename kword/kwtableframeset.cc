@@ -78,6 +78,24 @@ KWFrameSetEdit * KWTableFrameSet::createFrameSetEdit( KWCanvas * canvas )
     return new KWTableFrameSetEdit( this, canvas );
 }
 
+void KWTableFrameSet::updateFrames()
+{
+
+     for ( unsigned int i = 0; i < m_cols; i++ )
+     {
+         for ( unsigned int j = 0; j < m_rows; j++ )
+         {
+             if(!m_cells.isEmpty())
+             {
+                 Cell *activeCell = getCell(j,i);
+                 if(activeCell)
+                     activeCell->updateFrames();
+             }
+         }
+     }
+    KWFrameSet::updateFrames();
+}
+
 /*================================================================*/
 void KWTableFrameSet::addCell( Cell *cell )
 {
