@@ -279,9 +279,9 @@ void KPresenter::KPresenterView_stub::insertAutoform()
 }
 
 
-void KPresenter::KPresenterView_stub::insertLineH()
+void KPresenter::KPresenterView_stub::insertLineHidl()
 {
-  CORBA::Request_var _req = this->_request( "insertLineH" );
+  CORBA::Request_var _req = this->_request( "insertLineHidl" );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->send_oneway();
   #ifdef HAVE_EXCEPTIONS
@@ -294,9 +294,9 @@ void KPresenter::KPresenterView_stub::insertLineH()
 }
 
 
-void KPresenter::KPresenterView_stub::insertLineV()
+void KPresenter::KPresenterView_stub::insertLineVidl()
 {
-  CORBA::Request_var _req = this->_request( "insertLineV" );
+  CORBA::Request_var _req = this->_request( "insertLineVidl" );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->send_oneway();
   #ifdef HAVE_EXCEPTIONS
@@ -309,9 +309,9 @@ void KPresenter::KPresenterView_stub::insertLineV()
 }
 
 
-void KPresenter::KPresenterView_stub::insertLineD1()
+void KPresenter::KPresenterView_stub::insertLineD1idl()
 {
-  CORBA::Request_var _req = this->_request( "insertLineD1" );
+  CORBA::Request_var _req = this->_request( "insertLineD1idl" );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->send_oneway();
   #ifdef HAVE_EXCEPTIONS
@@ -324,9 +324,9 @@ void KPresenter::KPresenterView_stub::insertLineD1()
 }
 
 
-void KPresenter::KPresenterView_stub::insertLineD2()
+void KPresenter::KPresenterView_stub::insertLineD2idl()
 {
-  CORBA::Request_var _req = this->_request( "insertLineD2" );
+  CORBA::Request_var _req = this->_request( "insertLineD2idl" );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->send_oneway();
   #ifdef HAVE_EXCEPTIONS
@@ -339,9 +339,9 @@ void KPresenter::KPresenterView_stub::insertLineD2()
 }
 
 
-void KPresenter::KPresenterView_stub::insertNormRect()
+void KPresenter::KPresenterView_stub::insertNormRectidl()
 {
-  CORBA::Request_var _req = this->_request( "insertNormRect" );
+  CORBA::Request_var _req = this->_request( "insertNormRectidl" );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->send_oneway();
   #ifdef HAVE_EXCEPTIONS
@@ -354,9 +354,9 @@ void KPresenter::KPresenterView_stub::insertNormRect()
 }
 
 
-void KPresenter::KPresenterView_stub::insertRoundRect()
+void KPresenter::KPresenterView_stub::insertRoundRectidl()
 {
-  CORBA::Request_var _req = this->_request( "insertRoundRect" );
+  CORBA::Request_var _req = this->_request( "insertRoundRectidl" );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->send_oneway();
   #ifdef HAVE_EXCEPTIONS
@@ -1205,58 +1205,58 @@ bool KPresenter::KPresenterView_skel::dispatch( CORBA::ServerRequest_ptr _req, C
     insertAutoform();
     return true;
   }
-  if( strcmp( _req->op_name(), "insertLineH" ) == 0 ) {
+  if( strcmp( _req->op_name(), "insertLineHidl" ) == 0 ) {
     CORBA::NVList_ptr _args;
     _orb()->create_list( 0, _args );
 
     _req->params( _args );
 
-    insertLineH();
+    insertLineHidl();
     return true;
   }
-  if( strcmp( _req->op_name(), "insertLineV" ) == 0 ) {
+  if( strcmp( _req->op_name(), "insertLineVidl" ) == 0 ) {
     CORBA::NVList_ptr _args;
     _orb()->create_list( 0, _args );
 
     _req->params( _args );
 
-    insertLineV();
+    insertLineVidl();
     return true;
   }
-  if( strcmp( _req->op_name(), "insertLineD1" ) == 0 ) {
+  if( strcmp( _req->op_name(), "insertLineD1idl" ) == 0 ) {
     CORBA::NVList_ptr _args;
     _orb()->create_list( 0, _args );
 
     _req->params( _args );
 
-    insertLineD1();
+    insertLineD1idl();
     return true;
   }
-  if( strcmp( _req->op_name(), "insertLineD2" ) == 0 ) {
+  if( strcmp( _req->op_name(), "insertLineD2idl" ) == 0 ) {
     CORBA::NVList_ptr _args;
     _orb()->create_list( 0, _args );
 
     _req->params( _args );
 
-    insertLineD2();
+    insertLineD2idl();
     return true;
   }
-  if( strcmp( _req->op_name(), "insertNormRect" ) == 0 ) {
+  if( strcmp( _req->op_name(), "insertNormRectidl" ) == 0 ) {
     CORBA::NVList_ptr _args;
     _orb()->create_list( 0, _args );
 
     _req->params( _args );
 
-    insertNormRect();
+    insertNormRectidl();
     return true;
   }
-  if( strcmp( _req->op_name(), "insertRoundRect" ) == 0 ) {
+  if( strcmp( _req->op_name(), "insertRoundRectidl" ) == 0 ) {
     CORBA::NVList_ptr _args;
     _orb()->create_list( 0, _args );
 
     _req->params( _args );
 
-    insertRoundRect();
+    insertRoundRectidl();
     return true;
   }
   if( strcmp( _req->op_name(), "extraPenBrush" ) == 0 ) {

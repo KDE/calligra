@@ -843,6 +843,48 @@ void KPresenterView_impl::insertRoundRect()
   m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,xOffset,yOffset);
 }
 
+/*======================= insert line (-) =======================*/
+void KPresenterView_impl::insertLineHidl()
+{
+  page->deSelectAllObj();
+  m_pKPresenterDoc->insertLine(pen,LT_HORZ,xOffset,yOffset);
+}
+
+/*======================= insert line (|) =======================*/
+void KPresenterView_impl::insertLineVidl()
+{
+  page->deSelectAllObj();
+  m_pKPresenterDoc->insertLine(pen,LT_VERT,xOffset,yOffset);
+}
+
+/*======================= insert line (\) =======================*/
+void KPresenterView_impl::insertLineD1idl()
+{
+  page->deSelectAllObj();
+  m_pKPresenterDoc->insertLine(pen,LT_LU_RD,xOffset,yOffset);
+}
+
+/*======================= insert line (/) =======================*/
+void KPresenterView_impl::insertLineD2idl()
+{
+  page->deSelectAllObj();
+  m_pKPresenterDoc->insertLine(pen,LT_LD_RU,xOffset,yOffset);
+}
+
+/*===================== insert normal rect  =====================*/
+void KPresenterView_impl::insertNormRectidl()
+{
+  page->deSelectAllObj();
+  m_pKPresenterDoc->insertRectangle(pen,brush,RT_NORM,xOffset,yOffset);
+}
+
+/*===================== insert round rect =======================*/
+void KPresenterView_impl::insertRoundRectidl()
+{
+  page->deSelectAllObj();
+  m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,xOffset,yOffset);
+}
+
 /*====================== paint event ============================*/
 void KPresenterView_impl::repaint(bool erase)
 {
@@ -949,27 +991,27 @@ void KPresenterView_impl::setupMenu()
       pix = loadPixmap(tmp);
       m_idMenuInsert_LineHorz = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 							0,m_idMenuInsert_Line,
-							this,CORBA::string_dup("insertLineH"));
+							this,CORBA::string_dup("insertLineHidl"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/linev.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_LineVert = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 							0,m_idMenuInsert_Line,
-							this,CORBA::string_dup("insertLineV"));
+							this,CORBA::string_dup("insertLineVidl"));
 
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/lined1.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_LineD1 = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						      0,m_idMenuInsert_Line,
-						      this,CORBA::string_dup("insertLineD1"));
+						      this,CORBA::string_dup("insertLineD1idl"));
 
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/lined2.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_LineD2 = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						      0,m_idMenuInsert_Line,
-						      this,CORBA::string_dup("insertLineD2"));
+						      this,CORBA::string_dup("insertLineD2idl"));
 
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/rectangle.xpm";
@@ -982,14 +1024,14 @@ void KPresenterView_impl::setupMenu()
       pix = loadPixmap(tmp);
       m_idMenuInsert_RectangleNormal = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 							       0,m_idMenuInsert_Rectangle,
-							       this,CORBA::string_dup("insertNormRect"));
+							       this,CORBA::string_dup("insertNormRectidl"));
 
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/rectangleRound.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_RectangleRound = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 							      0,m_idMenuInsert_Rectangle,
-							      this,CORBA::string_dup("insertRoundRect"));
+							      this,CORBA::string_dup("insertRoundRectidl"));
 
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/circle.xpm";

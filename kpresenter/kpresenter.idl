@@ -24,12 +24,12 @@ module KPresenter
       oneway void insertText();
       oneway void insertAutoform();
 
-      oneway void insertLineH();
-      oneway void insertLineV();
-      oneway void insertLineD1();
-      oneway void insertLineD2();
-      oneway void insertNormRect();
-      oneway void insertRoundRect();
+      oneway void insertLineHidl();
+      oneway void insertLineVidl();
+      oneway void insertLineD1idl();
+      oneway void insertLineD2idl();
+      oneway void insertNormRectidl();
+      oneway void insertRoundRectidl();
 
       oneway void extraPenBrush();
       oneway void extraRaise();

@@ -132,6 +132,13 @@ public:
   virtual void insertText();
   virtual void insertAutoform();
 
+  void insertLineHidl();
+  void insertLineVidl();
+  void insertLineD1idl();
+  void insertLineD2idl();
+  void insertNormRectidl();
+  void insertRoundRectidl();
+
   // extra menu
   virtual void extraPenBrush();
   virtual void extraRaise();

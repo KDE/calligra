@@ -1,4 +1,4 @@
-libkom*, libop*, libkofficeui* havbe to be installed. 
+libmico*, libkom*, libop*, libkofficeui* have to be installed. 
 
 To install KPresenter, do following:
 
@@ -15,6 +15,7 @@ cd ..
 cd toolbar
 mak install
 cd ..
+make idl
 make depend
 make all
 
