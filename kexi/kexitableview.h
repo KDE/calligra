@@ -62,15 +62,6 @@ Q_OBJECT
 public:
 	KexiTableView(QWidget* parent=0, const char* name=0);
 	~KexiTableView();
-/*
-	enum ColumnType
-	{
-		TypeText	= 1,
-		TypeInt,
-		TypeBool,
-		TypeDate
-	};
-*/
 
 	enum ColumnModes
 	{
@@ -107,6 +98,9 @@ public:
 	void		clearAll();
 	void		remove(int row);
 	void		remove(KexiTableItem *item, bool moveCursor=true);
+
+	// properties
+	void		setBackgroundAltering(bool altering) { m_bgAltering = altering; };
 
 	// reimplemented for internal reasons
 	QSizePolicy	sizePolicy() const;
@@ -250,6 +244,8 @@ protected:
 	};
 
 	ScrollDirection		m_scrollDirection;
+
+	bool			m_bgAltering;
 
 };
 

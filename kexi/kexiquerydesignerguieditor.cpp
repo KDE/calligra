@@ -218,7 +218,8 @@ KexiQueryDesignerGuiEditor::getQuery()
 						isSrcTable = false;
 						
 						JoinField jf;
-						jf.sourceField = (*itRel).srcField;
+//						jf.sourceField = (*itRel).srcField;
+						jf.sourceField = (*itRel).rcvTable;
 						jf.eqLeft = (*itRel).srcTable + "." + (*itRel).srcField;
 						jf.eqRight = (*itRel).rcvTable + "." + (*itRel).rcvField;
 						joinFields.append(jf);
@@ -241,12 +242,18 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 	for(JoinFields::Iterator itJ = joinFields.begin(); itJ != joinFields.end(); itJ++)
 	{
-		query += " LEFT JOIN ";
-		query += (*itJ).sourceField;
-		query += " ON ";
-		query += (*itJ).eqLeft;
-		query += " = ";
-		query += (*itJ).eqRight;
+		QStringList leftList = QStringList::split(".", (*itJ).eqLeft);
+		kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): left: " << (*itJ).eqLeft << endl;
+		kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): current master: " << (*leftList.first()) << endl;
+		if(leftList.first() == maxTable)
+		{
+			query += " LEFT JOIN ";
+			query += (*itJ).sourceField;
+			query += " ON ";
+			query += (*itJ).eqLeft;
+			query += " = ";
+			query += (*itJ).eqRight;
+		}
 	}
 
 	int conditionCount = 0;

@@ -116,6 +116,8 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 	m_scrollTimer = new QTimer(this);
 	connect(m_scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
 
+	setBackgroundAltering(true);
+
 	// Connect header, table and scrollbars
 	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), m_pTopHeader, SLOT(setOffset(int)));
 	connect(verticalScrollBar(), SIGNAL(valueChanged(int)),	m_pVerticalHeader, SLOT(setOffset(int)));
@@ -493,14 +495,29 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	int x2 = w - 1;
 	int y2 = h - 1;
 
+//	p->setPen(colorGroup().button());
+
+	if(m_bgAltering && m_contents.findRef(item)%2 != 0)
+	{
+		QPen originalPen(p->pen());
+		QBrush originalBrush(p->brush());
+
+		p->setBrush(KGlobalSettings::alternateBackgroundColor());
+		p->setPen(KGlobalSettings::alternateBackgroundColor());
+		p->drawRect(0, 0, x2, y2);
+
+		p->setPen(originalPen);
+		p->setBrush(originalBrush);
+	} 
+
 	//	Draw our lines
 	QPen pen(p->pen());
 	p->setPen(QColor(200,200,200));
-//	p->setPen(colorGroup().button());
+
 	p->drawLine( x2, 0, x2, y2 );	// right
 	p->drawLine( 0, y2, x2, y2 );	// bottom
 	p->setPen(pen);
-
+	
 	//	If we are in the focus cell, draw indication
 	if (m_pCurrentItem == item && col == m_curCol)
 	{
