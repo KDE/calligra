@@ -22,7 +22,7 @@
 		editor:		The program this file was written with
 		mime:		The MIME type (must always have the value application/x-kspread
 -->
-<!ELEMENT spreadsheet (paper, locale ,map)>  <!-- MISSING: areaname -->
+<!ELEMENT spreadsheet (paper, locale ,areaname, map)>  
 <!ATTLIST spreadsheet   author CDATA #IMPLIED
                         email  CDATA #IMPLIED
                         editor CDATA #IMPLIED
@@ -87,6 +87,47 @@
 
 
 
+<!--	Contains locale format.
+
+	Attributes:
+
+        positivePrefixCurrencySymbol:
+        negativeMonetarySignPosition:
+        negativePrefixCurrencySymbol:
+        fracDigits:
+        thousandsSeparator:
+        dateFormat:
+        timeFormat:
+        monetaryDecimalSymbol:
+        weekStartsMonday:
+        currencySymbol:
+        negativeSign:
+        positiveSign:
+        positiveMonetarySignPosition:
+        decimalSymbol:
+        monetaryThousandsSeparator:
+        dateFormatShort:
+-->
+
+<!ELEMENT locale EMPTY>
+<!ATTLIST locale  positivePrefixCurrencySymbol   CDATA #REQUIRED
+                  negativeMonetarySignPosition   CDATA #REQUIRED
+                  negativePrefixCurrencySymbol   CDATA #REQUIRED
+                  fracDigits                     CDATA #REQUIRED
+                  thousandsSeparator             CDATA #REQUIRED
+                  dateFormat                     CDATA #REQUIRED
+                  timeFormat                     CDATA #REQUIRED
+                  monetaryDecimalSymbol          CDATA #REQUIRED
+                  weekStartsMonday               CDATA #REQUIRED
+                  currencySymbol                 CDATA #REQUIRED
+                  negativeSign                   CDATA #REQUIRED
+                  positiveSign                   CDATA #REQUIRED
+                  positiveMonetarySignPosition   CDATA #REQUIRED
+                  decimalSymbol                  CDATA #REQUIRED
+                  monetaryThousandsSeparator     CDATA #REQUIRED
+                  dateFormatShort                CDATA #REQUIRED>
+
+ 
 
 
 <!--	Contains the table data for the various tables.
@@ -99,6 +140,7 @@
 <!ATTLIST map  activeTable    CDATA #IMPLIED
                markerColumn   CDATA #IMPLIED
                markerRow      CDATA #IMPLIED>
+
 
 <!--	Contains the data in one table or embedded objects.
 
@@ -170,6 +212,11 @@
 <!ATTLIST pen           width            CDATA #REQUIRED
                         style            CDATA #REQUIRED
                         color            CDATA #REQUIRED>
+
+<!ELEMENT font EMPTY>
+<!ATTLIST font          size             CDATA #REQUIRED
+                        family           CDATA #REQUIRED
+                        weight           CDATA #REQUIRED>
 
 <!ELEMENT validity  (param,title,message,timemin,timemax)>
 
