@@ -179,7 +179,6 @@ void KChartParameters::saveConfig(KConfig *conf) {
 
 
   conf->writeEntry("transparent_bg", transparent_bg);
-  conf->writeEntry("BGImage", BGImage);
   // TODO: explode, missing
   conf->writeEntry("percent_labels",(int) percent_labels );
   conf->writeEntry("label_dist", label_dist);
@@ -259,7 +258,6 @@ void KChartParameters::loadConfig(KConfig *conf) {
   loadColorArray(conf, &ExtColor, "ExtColor");
   loadColorArray(conf, &ExtVolColor, "ExtVolColor");
   transparent_bg = conf->readBoolEntry("transparent_bg", transparent_bg);
-  BGImage = conf->readEntry("BGImage", BGImage);
   // TODO: explode, missing
   percent_labels = (KChartPercentType)conf->readNumEntry("percent_labels",
 							 percent_labels);

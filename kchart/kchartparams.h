@@ -182,7 +182,6 @@ struct KChartParameters
     KChartColorArray ExtVolColor;
     bool transparent_bg;
     bool hasxlabel;
-    QString BGImage;
     QStringList xlbl;
     QStringList legend;
     QArray<int> explode; // pies
