@@ -25,7 +25,7 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qapplication.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qsortedlist.h>
 
 #include <kspread_map.h>
@@ -240,7 +240,7 @@ bool CSVExport::filter(const QString &fileIn, const QString &fileOut,
 
     int currentrow = 1;
     int currentcolumn = 1;
-    for ( QListIterator<Cell> it ( list ) ; it.current(); ++it )
+    for ( QPtrListIterator<Cell> it ( list ) ; it.current(); ++it )
     {
         Cell * cell = it.current();
 

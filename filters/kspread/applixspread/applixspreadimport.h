@@ -24,7 +24,7 @@
 #include <qfile.h>
 #include <qobject.h>
 #include <qtextstream.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <koFilter.h>
 #include <koStore.h>
@@ -66,7 +66,7 @@ protected:
     void    writePen           (QString &, int, int, QString);
     QString writeColor         (t_mycolor *);
     void    readTypefaceTable  (QTextStream &, QStringList &);
-    void    readColormap       (QTextStream &, QList<t_mycolor> &);
+    void    readColormap       (QTextStream &, QPtrList<t_mycolor> &);
     void    readView           (QTextStream &, QString, t_rc &);
     void    filterSHFGBG       (QString, int *, int *, int *);
     void    transPenFormat     (QString, int *, int *);

@@ -27,7 +27,7 @@
 #include <qmessagebox.h>
 #include <qstringlist.h>
 #include <qregexp.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <applixspreadimport.h>
 #include <applixspreadimport.moc>
 #include <kdebug.h>
@@ -75,7 +75,7 @@ APPLIXSPREADImport::filter (
     }
 
     QString str;
-    QList<t_mycolor> mcol;
+    QPtrList<t_mycolor> mcol;
 
     str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     str += "<!DOCTYPE spreadsheet>\n";
@@ -931,7 +931,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
  *  function:   readColormap                                                  *
  ******************************************************************************/
 void
-APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor> &mcol)
+APPLIXSPREADImport::readColormap (QTextStream &stream,  QPtrList<t_mycolor> &mcol)
 {
   int contcount, ok, pos;
 

@@ -27,7 +27,7 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qapplication.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qsortedlist.h>
 
 #include <kspread_map.h>
@@ -108,7 +108,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
       title = aboutPage->title();
     else
       title = file;
-    
+
     // header
     str = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" ";
     str += " \"http://www.w3.org/TR/html4/loose.dtd\"> \n";
@@ -129,10 +129,10 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     //  It's great to have parametrable filters... IIRC even MSOffice doesn't have that)
     // Ok, for now we'll use the first table - my document has only one table anyway ;-)))
     KSpreadTable * table = ksdoc->map()->firstTable();
-    
+
     while (table != 0)
     {
-    
+
       // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
       // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
       int iMaxColumn = table->maxColumn();
@@ -174,7 +174,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
       int i=1;
 
       str += "<" + html_table_tag + html_table_options + ">\n";
-    
+
       unsigned int nonempty_cells_prev=0;
 
       for ( currentrow = 1 ; currentrow < iMaxUsedRow ; ++currentrow, ++i )
@@ -204,7 +204,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
                 case KSpreadCell::Text:
                   text = cell->text();
                   break;
-                case KSpreadCell::RichText:   
+                case KSpreadCell::RichText:
                 case KSpreadCell::VisualFormula:
                   text = cell->text(); // untested
                   break;
@@ -213,7 +213,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
                   text = cell->valueString();
                   break;
             }
-            text = cell->prefix(currentrow, currentcolumn) + " " + text + " " 
+            text = cell->prefix(currentrow, currentcolumn) + " " + text + " "
                  + cell->postfix(currentrow, currentcolumn);
             line += "  <" + html_cell_tag + html_cell_options;
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
@@ -369,7 +369,7 @@ bool HTMLExport::filter(const QString &fileIn, const QString &fileOut,
 
     int currentrow = 1;
     int currentcolumn = 1;
-    for ( QListIterator<Cell> it ( list ) ; it.current(); ++it )
+    for ( QPtrListIterator<Cell> it ( list ) ; it.current(); ++it )
     {
         Cell * cell = it.current();
 

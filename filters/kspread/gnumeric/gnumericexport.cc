@@ -27,7 +27,7 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qapp.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qsortedlist.h>
 
 #include <kspread_map.h>
@@ -67,7 +67,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
 		     QDomElement cell_style;
 		     QDomElement font_style;
-		     
+
 		     cell_style = gnumeric_doc.createElement("gmr:Style");
 
 		     QString font_name = "Helvetica";
@@ -75,9 +75,9 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 		     //		     if (defaultColorGroup.background()!=cell->bgColor(currentcolumn, currentrow))
 		     if (cell->hasProperty(KSpreadCell::PBackgroundColor))
 		       {
-			 int red, green, blue; 
+			 int red, green, blue;
 
-			 QColor bgColor =  cell->bgColor(currentcolumn, currentrow); 
+			 QColor bgColor =  cell->bgColor(currentcolumn, currentrow);
 			 red = bgColor.red()<<8;
 			 green = bgColor.green()<<8;
 			 blue = bgColor.blue()<<8;
@@ -86,12 +86,12 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 			 cell_style.setAttribute("Back",QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16) );
 		       }
 
-		     
+
 		     if (defaultColorGroup.foreground()!=cell->textColor(currentcolumn, currentrow))
 		       {
-			 int red, green, blue; 
+			 int red, green, blue;
 
-			 QColor textColor =  cell->textColor(currentcolumn, currentrow); 
+			 QColor textColor =  cell->textColor(currentcolumn, currentrow);
 			 red = textColor.red()<<8;
 			 green = textColor.green()<<8;
 			 blue = textColor.blue()<<8;
@@ -130,7 +130,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 		     font_style = gnumeric_doc.createElement("gmr:Font");
 		     font_style.appendChild(gnumeric_doc.createTextNode(font_name));
 		     cell_style.appendChild(font_style);
-		     
+
 
 		     if (cell->textFontItalic(currentcolumn,currentrow)){
 		       font_style.setAttribute("Italic","1");
@@ -154,14 +154,14 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
 		     QString stringFormat;
 
-		     /* 
+		     /*
 			cell->setFaktor( 1.0);
 			cell->setPrecision(2);
 
 			cell->precision
 			cell->prefix
 			cell->postfix
-			
+
 
 		     */
 
@@ -172,7 +172,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 			 cell_style.setAttribute("Format",stringFormat);
 			 break;
 		       case KSpreadCell::Money:
-			 
+
 
 			 stringFormat="$0.00" +  cell->prefix(currentcolumn,currentrow) + cell->postfix(currentcolumn,currentrow) + QString::number(cell->precision(currentcolumn,currentrow));
 			 cell_style.setAttribute("Format",stringFormat);
@@ -244,8 +244,8 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 			 stringFormat="fraction_three_digits";
 			 break;
 		       }
-			
- 
+
+
 		     /* <gmr:Style Format="0.0000%"/> */
 		     /*  <format bgcolor="#ffffff" float="3" format="25" floatcolor="2" faktor="100"> */
 
@@ -257,10 +257,10 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
 
 		     /* <format bgcolor="#ffffff" float="1" floatcolor="1" >    */
-		     
+
 
 		     /* Unit="20" */
-		     
+
 		     /* textColor() */
 		     /* bgColor() */
 
@@ -273,9 +273,9 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-bool GNUMERICExport::filterExport(const QString &file, 
+bool GNUMERICExport::filterExport(const QString &file,
 					KoDocument * document,
-					const QString &from, 
+					const QString &from,
 					const QString &to,
 					const QString &config) {
 
@@ -338,10 +338,10 @@ bool GNUMERICExport::filterExport(const QString &file,
   gmr_name.appendChild(gnumeric_doc.createTextNode("title"));
   gmr_val_string.appendChild(gnumeric_doc.createTextNode(aboutPage->title()));
 
-  //	      
-  //	      
-  //	      
-	      
+  //
+  //
+  //
+
 
   gmr_item.appendChild(gmr_name);
   gmr_item.appendChild(gmr_val_string);
@@ -386,24 +386,24 @@ bool GNUMERICExport::filterExport(const QString &file,
 
       for ( table = ksdoc->map()->firstTable(); table != 0L; table =ksdoc->map()->nextTable() )
        {
-	 
+
 	 sheet = gnumeric_doc.createElement("gmr:Sheet");
 	 sheets.appendChild(sheet);
-	 
+
 	 tmp = gnumeric_doc.createElement("gmr:Name");
 	 tmp.appendChild(gnumeric_doc.createTextNode(table->tableName()));
 
 	 sheet.appendChild(tmp);
-	 
+
 	 tmp = gnumeric_doc.createElement("gmr:MaxCol");
 	 tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->maxColumn())));
 	 sheet.appendChild(tmp);
-	 
+
 	 tmp = gnumeric_doc.createElement("gmr:MaxRow");
-	 
+
 	 tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->maxRow())));
 	 sheet.appendChild(tmp);
-	 
+
 	 tmp = gnumeric_doc.createElement("gmr:Zoom");
 	 tmp.appendChild(gnumeric_doc.createTextNode("1.0"));
 	 sheet.appendChild(tmp);
@@ -422,21 +422,21 @@ bool GNUMERICExport::filterExport(const QString &file,
 
 	 selections = gnumeric_doc.createElement("gmr:Selections");
 	 sheet.appendChild(selections);
-	 
-	 // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.	 
+
+	 // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
 	 // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
 	 // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
 	 int iMaxColumn = table->maxColumn();
 	 int iMaxRow = table->maxRow();
-	 
+
 	 // this is just a bad approximation which fails for documents with less than 50 rows, but
 	 // we don't need any progress stuff there anyway :) (Werner)
 	 int value=0;
 	 int step=iMaxRow > 50 ? iMaxRow/50 : 1;
 	 int i=1;
-	 
+
 	 QString emptyLines;
-	 
+
 	 /* Save selection info. */
 
 	 QDomElement selection = gnumeric_doc.createElement("gmr:Selection");
@@ -464,7 +464,7 @@ bool GNUMERICExport::filterExport(const QString &file,
 	     colinfo.setAttribute("No", QString::number(cl->column()-1));
 	     colinfo.setAttribute("Hidden", QString::number(cl->isHide()));
 	     colinfo.setAttribute("Unit", QString::number((cl->width()*3)/4));
-	     
+
 	     cl=cl->next();
 	   }
 
@@ -472,7 +472,7 @@ bool GNUMERICExport::filterExport(const QString &file,
 
 	 //	 RowLayout *rl=table->m_cells.firstCell;
 	 //   <gmr:ColInfo No="1" Unit="96.75" MarginA="2" MarginB="2" HardSize="-1" Hidden="0"/>
-	   
+
 
 	 /* Start ROWS */
 
@@ -507,15 +507,15 @@ Hidden="0"/>
 	       emit sigProgress(value);
 	       i=0;
 	     }
-	     
+
 	     QString line;
 	     for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
 	       {
-		 
+
 		 QDomElement cell_contents;
-		 KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, true);	    
-		 
-		 
+		 KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, true);
+
+
 		 QString text;
 		 if ( !cell->isDefault() && !cell->isEmpty() )
 		   {
@@ -528,31 +528,31 @@ Hidden="0"/>
 		       text = cell->text(); // untested
 		       break;
 		     case KSpreadCell::Formula:
-		       
+
 		       /* cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened
 			  text = cell->valueString(); */
-		       
-                  text = cell->text(); 
+
+                  text = cell->text();
                   break;
 		     }
 		   }
-		 
+
 		 if ( !text.isEmpty() )
 		   {
 		     QDomElement gnumeric_cell = gnumeric_doc.createElement("gmr:Cell");
 		     QDomElement cell_style;
 
 		     QDomElement style_region = gnumeric_doc.createElement("gmr:StyleRegion");
-		     
+
 		     cells.appendChild(gnumeric_cell);
-		     
+
 		     gnumeric_cell.setAttribute("Col", QString::number(currentcolumn-1));
 		     gnumeric_cell.setAttribute("Row", QString::number(currentrow-1));
 
-		     
+
 		     /* Right now, we create a single region for each cell.. This is inefficient, but the
 		      * implementation is quicker.. Probably later we will have to consolidate styles into
-		      * style regions. 
+		      * style regions.
 		      */
 
 		     style_region.setAttribute("startCol", QString::number(currentcolumn-1));
@@ -574,12 +574,12 @@ Hidden="0"/>
 		 // Append a delimiter, but in a temp string -> if no other real cell in this line,
 		 // then those will be dropped
 	       }
-	     
+
 	   }
        }
 
     str = gnumeric_doc.toString ();
-    
+
 
     emit sigProgress(100);
 
