@@ -4516,7 +4516,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     //
     QDomElement text = cell.namedItem( "text" ).toElement();
 
-    if (!text.isNull() && (pm == ::Normal || pm == ::Text || pm == ::NoBorder ) || pm == ::Result)
+    if ( !text.isNull() && ( pm == ::Normal || pm == ::Text || pm == ::NoBorder || pm == ::Result ) )
     {
       /* older versions mistakenly put the datatype attribute on the cell
          instead of the text.  Just move it over in case we're parsing
@@ -4576,7 +4576,7 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
 
     if ( text.hasAttribute( "dataType" ) ) // new docs
     {
-        QString dataType = text.attribute( "dataType" );
+        dataType = text.attribute( "dataType" );
     }
     else // old docs: do the ugly solution of calling checkTextInput to parse the text
     {
@@ -4598,7 +4598,7 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
       {
         m_strText = pasteOperation( t, m_strText, op );
         checkTextInput();
-        //kdDebug(36001) << "KSpreadCell::load called checkTextInput, got dataType=" << dataType ) << "  t=" << t << endl;
+        //kdDebug(36001) << "KSpreadCell::load called checkTextInput, got dataType=" << dataType << "  t=" << t << endl;
         newStyleLoading = false;
       }
     }
