@@ -43,6 +43,16 @@ public:
 	void attach(KexiTableView *tableView, bool sorted=false);
 	void attach(KexiTableView *tableView, int position);
 
+	QVariant getValue(const int col) const
+	{
+		return m_columns[col];
+	}
+
+	void setValue(const int col, QVariant value)
+	{
+		m_columns[col] = value;
+	}
+
 	QString getText(const int col) const
 	{
 		return m_columns[col].toString();

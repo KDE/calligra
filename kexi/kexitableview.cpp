@@ -25,10 +25,13 @@ KexiTableView.cpp:
 #include <qstyle.h>
 
 #include <config.h>
-#ifdef USE_KDE
+
+//#ifdef USE_KDE
 #include <kglobal.h>
 #include <klocale.h>
-#endif
+//#endif
+
+#include <kexiapplication.h>
 
 #include "kexitablerm.h"
 #include "kexitableview.h"
@@ -57,7 +60,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 	
 	m_pUpdateTimer = new QTimer(this);
 
-	m_pColumnTypes = new QMemArray<ColumnType>;
+	m_pColumnTypes = new QMemArray<QVariant::Type>;
 
 	m_pColumnModes = new QMemArray<bool>;
 	m_deletionPolicy = NoDelete;
@@ -92,7 +95,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 }
 
 
-void KexiTableView::addColumn(QString name, ColumnType type, bool editable, int width=100)
+void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, int width=100)
 {
 	m_numCols++;
 	m_pColumnTypes->resize(m_numCols);
@@ -102,6 +105,7 @@ void KexiTableView::addColumn(QString name, ColumnType type, bool editable, int 
 	m_pColumnModes->at(m_numCols-1)		= editable;
 
 	m_pTopHeader->addLabel(name, width);
+
 	m_pTopHeader->setUpdatesEnabled(true);
 }
 
@@ -197,7 +201,7 @@ int KexiTableView::findString(const QString &string)
 	{
 		switch(columnType(col))
 		{
-			case TypeText:
+			case QVariant::String:
 			{
 				QString str2 = string.lower();
 				for(; it.current(); ++it)
@@ -212,8 +216,8 @@ int KexiTableView::findString(const QString &string)
 				}
 				break;
 			}
-			case TypeInt:
-			case TypeBool:
+			case QVariant::Int:
+			case QVariant::Bool:
 				for(; it.current(); ++it)
 				{
 					if(QString::number(it.current()->getInt(col)).left(string.length()).compare(string)==0)
@@ -225,6 +229,9 @@ int KexiTableView::findString(const QString &string)
 					row++;
 				}
 				break;
+
+			default:
+				break;
 		}
 	}
 	else
@@ -232,7 +239,7 @@ int KexiTableView::findString(const QString &string)
 		QString str2 = string.mid(1);
 		switch(columnType(col))
 		{
-			case TypeText:
+			case QVariant::String:
 				for(; it.current(); ++it)
 				{
 					if(it.current()->getText(col).find(str2,0,false) >= 0)
@@ -244,8 +251,8 @@ int KexiTableView::findString(const QString &string)
 					row++;
 				}
 				break;
-			case TypeInt:
-			case TypeBool:
+			case QVariant::Int:
+			case QVariant::Bool:
 				for(; it.current(); ++it)
 				{
 					if(QString::number(it.current()->getInt(col)).find(str2,0,true) >= 0)
@@ -388,7 +395,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 		collast = cols() - 1;
 
 	int r;
-	pb->fillRect(0, 0, cw, ch, QColor(255,255,255));
+	pb->fillRect(0, 0, cw, ch, colorGroup().base());
 
 	QPtrListIterator<KexiTableItem> it(m_contents);
 	it += rowfirst;
@@ -437,6 +444,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	//	Draw our lines
 	QPen pen(p->pen());
 	p->setPen(QColor(200,200,200));
+//	p->setPen(colorGroup().button());
 	p->drawLine( x2, 0, x2, y2 );	// right
 	p->drawLine( 0, y2, x2, y2 );	// bottom
 	p->setPen(pen);
@@ -450,35 +458,47 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 	int x = 2;
 
+	QPen fg(colorGroup().text());
+	p->setPen(fg);
 	switch(columnType(col))
 	{
-		case TypeInt:
+		case QVariant::Int:
 		{
-			int num = item->getInt(col);
+			int num = item->getValue(col).toInt();
 //			if(num < 0)
 //				p->setPen(red);
 			p->drawText(x, 2, w - (x+x), h, AlignRight, QString::number(num));
 			break;
 		}
-		case TypeBool:
+		case QVariant::Bool:
 		{
-			QRect r(x-1, 1, style().pixelMetric(QStyle::PM_IndicatorWidth), style().pixelMetric(QStyle::PM_IndicatorHeight));
+/*			QRect r(w/2 - style().pixelMetric(QStyle::PM_IndicatorWidth)/2 + x-1, 1, style().pixelMetric(QStyle::PM_IndicatorWidth), style().pixelMetric(QStyle::PM_IndicatorHeight));
 			QPen pen(p->pen());		// bug in KDE HighColorStyle
 			style().drawControl(QStyle::CE_CheckBox, p, this, r, colorGroup(), (item->getInt(col) ? QStyle::Style_On : QStyle::Style_Off) | QStyle::Style_Enabled);
-			p->setPen(pen);
+			p->setPen(pen); */
+			int s = QMAX(h - 5, 12);
+			QRect r(w/2 - s/2 + x, h/2 - s/2, s, s);
+			p->setPen(QPen(colorGroup().text(), 1));
+			p->drawRect(r);
+			if(item->getValue(col).asBool())
+			{
+				p->drawLine(r.x() + 2, r.y() + 2, r.right() - 1, r.bottom() - 1);
+				p->drawLine(r.x() + 2, r.bottom() - 2, r.right() - 1, r.y() + 1);
+			}
+
 			break;
 		}
-		case TypeDate:
+		case QVariant::Date:
 		{
 			#ifdef USE_KDE
-			QString s = KGlobal::_locale->formatDate(item->getDate(col), true);
+			QString s = KGlobal::_locale->formatDate(item->getValue(col).toDate(), true);
 			#else
 			QString s = item->getDate(col).toString(Qt::LocalDate);
 			#endif
 			p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
 			break;
 		}
-		case TypeText:
+		case QVariant::String:
 		default:
 		{
 			p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->getText(col));
@@ -544,6 +564,10 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 	contentsMousePressEvent(e);
 }
 
+void KexiTableView::contentsMouseReleaseEvent(QMouseEvent *e)
+{
+}
+
 void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
 	// if a cell is just editing, do some special stuff
@@ -593,18 +617,20 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
     case Key_End:
 		m_curRow = m_numRows-1;
 		break;
+
+	#warning this needs work!
 	case Key_Backspace:
-		if(columnType(m_curCol) != TypeBool && columnEditable(m_curCol))
+		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
 			createEditor(m_curRow, m_curCol, QString::null, true);
 		break;
 	case Key_Space:
-		if(columnType(m_curCol) == TypeBool && columnEditable(m_curCol))
+		if(columnType(m_curCol) == QVariant::Bool && columnEditable(m_curCol))
 		{
 			boolToggled();
 			break;
 		}
     default:
-		if(columnType(m_curCol) != TypeBool && columnEditable(m_curCol))
+		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
 		{
 			if (e->text()[0].isPrint())
 				createEditor(m_curRow, m_curCol, e->text(), false);
@@ -685,7 +711,7 @@ void KexiTableView::createEditor(int row, int col, QString addText = QString::nu
 	QString val;
 	switch(columnType(col))
 	{
-		case TypeDate:
+		case QVariant::Date:
 			#ifdef USE_KDE
 			val = KGlobal::_locale->formatDate(m_pCurrentItem->getDate(col), true);
 			#else

@@ -14,11 +14,16 @@ KexiTableView.h:
  *                                                                         *
  ***************************************************************************/
 
+//we want to have kde-support:
+#define USE_KDE
+
+
 #ifndef KEXITABLEVIEW_H
 #define KEXITABLEVIEW_H
 
 #include <qscrollview.h>
 #include <qtimer.h>
+#include <qvariant.h>
 
 #include "kexitablerm.h"
 #include "kexitablelist.h"
@@ -40,7 +45,7 @@ Q_OBJECT
 public:
 	KexiTableView(QWidget* parent=0, const char* name=0);
 	~KexiTableView();
-
+/*
 	enum ColumnType
 	{
 		TypeText	= 1,
@@ -48,22 +53,22 @@ public:
 		TypeBool,
 		TypeDate
 	};
-
-	virtual void addColumn(QString name, ColumnType type, bool editable, int width=100);
+*/
+	virtual void addColumn(QString name, QVariant::Type type, bool editable, int width=100);
 
 	void setSorting(int col, bool ascending=true);
 
-	ColumnType			columnType(int col);
+	QVariant::Type			columnType(int col);
 	bool				columnEditable(int col);
-	inline KexiTableItem *itemAt(int row);
+	inline KexiTableItem		*itemAt(int row);
 
 	inline int			currentRow();
-	inline KexiTableItem	*selectedItem();
+	inline KexiTableItem		*selectedItem();
 
-	int 	rows() const;
+	int		rows() const;
 	int		cols() const;
 
-	QRect	cellGeometry(int row, int col) const;
+	QRect		cellGeometry(int row, int col) const;
 	int		columnWidth(int col) const;
 	int		rowHeight(int row) const;
 	int		columnPos(int col) const;
@@ -122,8 +127,8 @@ protected:
 	QSize	tableSize() const;
 
 	// event handling
-	void	contentsMousePressEvent( QMouseEvent* );
-	void	contentsMouseMoveEvent( QMouseEvent* );
+	void	contentsMousePressEvent(QMouseEvent*);
+	void	contentsMouseMoveEvent(QMouseEvent*);
 	void	contentsMouseDoubleClickEvent(QMouseEvent *e);
 	void	keyPressEvent(QKeyEvent*);
 	void	focusInEvent(QFocusEvent*);
@@ -140,8 +145,8 @@ protected slots:
 	void			columnWidthChanged( int col, int os, int ns );
 	void			columnSort(int col);
 	void			editorCancel();
-	virtual void	editorOk();
-	virtual void	boolToggled();
+	virtual void		editorOk();
+	virtual void		boolToggled();
 	void			slotUpdate();
 
 public slots:
@@ -149,45 +154,45 @@ public slots:
 	void			setCursor(int row, int col = -1);
 	void			selectNext();
 	void			selectPrev();
-	int				findString(const QString &string);
-	virtual void	removeRecord();
-	virtual void	addRecord();
+	int			findString(const QString &string);
+	virtual void		removeRecord();
+	virtual void		addRecord();
 
 signals:
-	void	itemSelected(KexiTableItem *);
-	void	itemReturnPressed(KexiTableItem *, int);
-	void	itemDblClicked(KexiTableItem *, int);
-	void	itemChanged(KexiTableItem *, int);
-	void	itemRemoveRequest(KexiTableItem *);
-	void	addRecordRequest();
+	void			itemSelected(KexiTableItem *);
+	void			itemReturnPressed(KexiTableItem *, int);
+	void			itemDblClicked(KexiTableItem *, int);
+	void			itemChanged(KexiTableItem *, int);
+	void			itemRemoveRequest(KexiTableItem *);
+	void			addRecordRequest();
 
 protected:
 	// cursor position
-	int m_curRow;
-	int m_curCol;
-	KexiTableItem	*m_pCurrentItem;
+	int			m_curRow;
+	int			m_curCol;
+	KexiTableItem		*m_pCurrentItem;
 
     // foreign widgets
-	QHeader		*m_pTopHeader;
-	KexiTableRM	*m_pRecordMarker;
-	QLineEdit	*m_pEditor;
+	QHeader			*m_pTopHeader;
+	KexiTableRM		*m_pRecordMarker;
+	QLineEdit		*m_pEditor;
 
-	int		m_numRows;
-	int		m_numCols;
-	int		m_rowHeight;
-	int		m_sortedColumn;
-	bool	m_sortOrder;
+	int			m_numRows;
+	int			m_numCols;
+	int			m_rowHeight;
+	int			m_sortedColumn;
+	bool			m_sortOrder;
 
-	AdditionPolicy	m_additionPolicy;
-	DeletionPolicy	m_deletionPolicy;
+	AdditionPolicy		m_additionPolicy;
+	DeletionPolicy		m_deletionPolicy;
 
-	QPixmap		*m_pBufferPm;
-	QTimer		*m_pUpdateTimer;
-	QPopupMenu	*m_pContextMenu;
+	QPixmap			*m_pBufferPm;
+	QTimer			*m_pUpdateTimer;
+	QPopupMenu		*m_pContextMenu;
 
-	KexiTableList				m_contents;
-	QMemArray<ColumnType>	*m_pColumnTypes;
-	QMemArray<bool>			*m_pColumnModes;
+	KexiTableList		m_contents;
+	QMemArray<QVariant::Type>	*m_pColumnTypes;
+	QMemArray<bool>		*m_pColumnModes;
 };
 
 inline KexiTableItem *KexiTableView::itemAt(int row)
@@ -205,7 +210,7 @@ inline KexiTableItem *KexiTableView::selectedItem()
 	return m_pCurrentItem;
 }
 
-inline KexiTableView::ColumnType KexiTableView::columnType(int col)
+inline QVariant::Type KexiTableView::columnType(int col)
 {
 	return m_pColumnTypes->at(col);
 }

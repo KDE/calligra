@@ -22,17 +22,21 @@
 #define KEXIDATATABLE_H
 
 #include "kexitableview.h"
+
+class KexiTableItem;
  
 class KexiDataTable : public KexiTableView
 {
 	Q_OBJECT
 	
 	public:
-
 		KexiDataTable(QWidget *parent, QString content, const char *name=0);
 		~KexiDataTable();
 		
 		bool executeQuery(QString query);
+
+	protected slots:
+		void slotItemChanged(KexiTableItem *i, int col);
 };
  
 #endif

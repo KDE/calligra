@@ -23,6 +23,7 @@
 #include <qsqlcursor.h>
 #include <qsqlquery.h>
 #include <qsqlerror.h>
+#include <qvariant.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -36,6 +37,19 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
 	: KexiTableView(parent, name)
 {
 	setCaption(i18n(caption + " - table"));
+
+	if(width() > parent->width())
+	{
+		kdDebug() << "the width is higher..." << endl;
+		setBaseSize(parent->width(), height());
+	}
+
+	if(height() > parent->height())
+	{
+		setBaseSize(width(), parent->height());
+	}
+
+	connect(this, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
 }
 
 bool
@@ -61,7 +75,8 @@ KexiDataTable::executeQuery(QString queryStatement)
 	{
 		//WARNING: look for the type!!!
 		kdDebug() << "KexiDataTable::executeQuery: " << record.field(i)->name() << endl;
-		addColumn(record.field(i)->name(), KexiTableView::TypeText, true);
+		
+		addColumn(record.field(i)->name(), record.field(i)->type(), true);
 	}
 
 	while(query.next())
@@ -69,10 +84,16 @@ KexiDataTable::executeQuery(QString queryStatement)
 		KexiTableItem *it = new KexiTableItem(this);
 		for(unsigned int i=0; i < fields; i++)
 		{
-			it->setText(i, query.value(i).toString());
+			it->setValue(i, query.value(i));
 		}
 	}
 	return true;
+}
+
+void
+KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
+{
+	kdDebug() << "CHANGED!!!" << endl;
 }
 
 KexiDataTable::~KexiDataTable()
