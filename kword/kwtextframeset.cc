@@ -1471,7 +1471,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
                 undoRedoInfo.id = cursor->parag()->paragId();
                 undoRedoInfo.oldParagLayouts.prepend( paragLayout );
             }
-            setLastFormattedParag( cursor->parag() );
+            m_lastFormatted = cursor->parag();
         }
     } break;
     case ActionReturn: {
