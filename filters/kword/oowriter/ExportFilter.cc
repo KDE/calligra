@@ -69,9 +69,9 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
 {
     kdDebug(30518) << "Opening file: " << filenameOut
         << " (in OOWriterWorker::doOpenFile)" << endl;
-        
+
     m_zip=new KZip(filenameOut); // How to check failure?
-    
+
     if (!m_zip->open(IO_WriteOnly))
     {
         kdError(30518) << "Could not open ZIP file for writing! Aborting!" << endl;
@@ -83,7 +83,7 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
     m_streamOut=new QTextStream(m_contentBody, IO_WriteOnly);
 
     m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
-    
+
     return true;
 }
 
@@ -258,7 +258,7 @@ void OOWriterWorker::writeContentXml(void)
         zipWriteData(escapeOOText(*it));
         zipWriteData("\" fo:font-family=\"");
         zipWriteData(escapeOOText(*it));
-        // ### TODO: correct font pitch pitch
+        // ### TODO: correct font pitch
         zipWriteData("\" style:font-pitch=\"variable\" />\n");
     }
     zipWriteData(" </office:font-decls>\n");
@@ -352,7 +352,6 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
         const int size=formatData.fontSize;
         if (size>0)
         {
-            // We use absolute font sizes.
             strElement+="fo:font-size=\"";
             strElement+=QString::number(size,10);
             strElement+="pt\" ";
@@ -363,7 +362,6 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
     {
         if ( formatData.fgColor.isValid() )
         {
-            // Give colour
             strElement+="fo:color=\"";
             strElement+=formatData.fgColor.name();
             strElement+="\" ";
@@ -374,7 +372,6 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
     {
         if ( formatData.bgColor.isValid() )
         {
-            // Give background colour
             strElement+="fo:background-color=\"";
             strElement+=formatData.bgColor.name();
             strElement+="\" ";
@@ -488,12 +485,16 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     const double height=anchor.bottom - anchor.top;
     const double width =anchor.right  - anchor.left;
 
-    QString ooName("Pictures/");
-    QString number("00000000000000000000000000000000"); // 32 zeros
+     // We need a 32 digit hex value of the picture number
+     // Please note: it is an exactly 32 digit value, truncated if value is more than 512 bits wide. :-)
+    QString number;
+    number.fill('0',32);
     number += QString::number(++m_pictureNumber,16); // in hex
+
+    QString ooName("Pictures/");
     ooName += number.right(32);
-    ooName+='.';
-    ooName+=strExtension;
+    ooName += '.';
+    ooName += strExtension;
 
     kdDebug(30518) << "Picture " << koStoreName << " => " << ooName << endl;
 
@@ -510,7 +511,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     if (m_zip)
     {
 #if 0
-        // Why is the following line not working? (It makes unzip not seeing meta.xml)
+        // Why is the following line not working? (It makes unzip having problems with meta.xml)
         m_zip->writeFile(ooName,QString::null, QString::null, image.size(), image.data());
 #else
         zipPrepareWriting(ooName);
@@ -547,7 +548,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         *m_streamOut << partialText;
     }
     else
-    { // Text with properties, so use a <c> element!
+    { // Text with properties, so use a <text:span> element!
         *m_streamOut << "<text:span";
         // writeAbiProps(formatLayout,formatData.text); // ### TODO
         *m_streamOut << ">" << partialText << "</text:span>";
@@ -564,23 +565,19 @@ void OOWriterWorker::processVariable ( const QString&,
     }
     else if (2==formatData.variable.m_type)
     {
-        // As AbiWord's field is inflexible, we cannot make the time custom
         *m_streamOut << "<text:time/>";
     }
     else if (4==formatData.variable.m_type)
     {
-        // As AbiWord's field is inflexible, we cannot make the time custom
         QString strFieldType;
         if (formatData.variable.isPageNumber())
         {
-            *m_streamOut << "<text:page-number/>";
+            *m_streamOut << "<text:page-number text:select-page=\"current\"/>";
         }
-#if 0
         else if (formatData.variable.isPageCount())
         {
-            *m_streamOut << "<text:page-number/>";
+            *m_streamOut << "<text:page-count/>";
         }
-#endif
         else
         {
             // Unknown subtype, therefore write out the result
@@ -782,9 +779,10 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
                 case 0:  props += " style:type=\"left\""; break;
                 case 1:  props += " style:type=\"center\""; break;
                 case 2:  props += " style:type=\"right\""; break;
-                case 3:  props += " style:type=\"decimal\""; break;  // ### TODO: check spelling of "decimal"
+                case 3:  props += " style:type=\"char\" style:char=\".\""; break; // decimal
                 default: props += " style:type=\"left\""; break;
             }
+            // ### TODO: style:leader-char
             props += "/>\n";
         }
         props += "    </style:tab-stops>\n   ";
@@ -797,18 +795,26 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
     const ValueListFormatData& paraFormatDataList)
 {
-    // ### TODO: OOWriter works with automatic styles, not with extra style: or fo: attributes (unlike AbiWord)
+    const bool header = ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
+        && (layout.counter.depth<10) ); // ### TODO: Does OOWriter really limits to 10?
 
+    if (header)
+    {
+        *m_streamOut << "  <text:h text:level=\"";
+        *m_streamOut << QString::number(layout.counter.depth+1,10);
+        *m_streamOut << "\" ";
+    }
+    else
+        *m_streamOut << "  <text:p ";
 
-    QString style=layout.styleName;
-
-    *m_streamOut << "  <text:p ";
+    const QString style(layout.styleName);
     if (!style.isEmpty())
     {
-        *m_streamOut << "text:style-name=\"" << EscapeXmlText(style,true,true) << "\" ";
+        *m_streamOut << "text:style-name=\"" << escapeOOText(style) << "\" ";
     }
 
 #if 0
+    // ### TODO: OOWriter works with automatic styles, not with extra style: or fo: attributes (unlike AbiWord)
     const LayoutData& styleLayout=m_styleMap[style];
 
     QString props=layoutToCss(styleLayout,layout,false);
@@ -833,7 +839,11 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 
     // Before closing the paragraph, test if we have a page break
 
-    *m_streamOut << "</text:p>\n";
+    if (header)
+        *m_streamOut << "</text:h>\n";
+    else
+        *m_streamOut << "</text:p>\n";
+
     return true;
 }
 
@@ -854,15 +864,6 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
     m_styles += " style:next-style-name=\"" + EscapeXmlText(layout.styleFollowing,true,true) + "\"";
     m_styles += " style:family=\"paragraph\" style:class=\"text\"";
     m_styles += ">\n";
-#if 0
-    if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
-        && (layout.counter.depth<10) )
-    {
-        m_styles += " abiword:level=\"";
-        m_styles += QString::number(layout.counter.depth+1,10);
-        m_styles += << "\">";
-    }
-#endif
     m_styles += layoutToParagraphStyle(layout,layout,true);
 
     m_styles += "  </style:style>\n";
@@ -911,8 +912,8 @@ bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 
     zipWriteData(" <office:meta>\n");
 
-    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
-    zipWriteData("  <meta:generator>KWord Export Filter ");
+    // Say who we are in case we have a bug in our filter output!
+    zipWriteData("  <meta:generator>OOWriter Export Filter of KWord ");
 
     zipWriteData(escapeOOText(VERSION)); // escape the version string in case it would contain such character one day.
 
