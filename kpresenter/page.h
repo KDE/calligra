@@ -134,6 +134,8 @@ public:
 
     bool haveASelectedPictureObj();
 
+    KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
+
 public slots:
     void exitEditMode();
 
@@ -261,6 +263,8 @@ protected:
     bool inEffect, keepRatio;
     double ratio;
     QPixmap buffer;
+
+    KPTextView *m_currentTextObjectView;
 
 private:
     QValueList<int> pages(const QString &range);

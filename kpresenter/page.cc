@@ -69,7 +69,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
 {
     setWFlags( WResizeNoErase );
     presMenu = 0;
-
+    m_currentTextObjectView=0L;
     if ( parent ) {
         mousePressed = false;
         modType = MT_NONE;
@@ -1046,7 +1046,8 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 		if ( kpobject->getType() == OT_TEXT ) {
 		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 
-		    kpobject->activate( this, diffx(), diffy() );
+		    //kpobject->activate( this, diffx(), diffy() );
+                    m_currentTextObjectView=kptextobject->textObjectView();
 		    setTextBackground( kptextobject );
 #if 0
 		    connect( kptextobject->textObjectView(), SIGNAL( currentFontChanged( const QFont & ) ),
@@ -1104,11 +1105,12 @@ void Page::keyPressEvent( QKeyEvent *e )
     } else if ( editNum != -1 ) {
 	if ( e->key() == Key_Escape ) {
             exitEditMode();
-	} else if ( objectList()->at( editNum )->getType() == OT_TEXT )
+	} else if ( m_currentTextObjectView/*objectList()->at( editNum )->getType() == OT_TEXT*/ )
         {
+            kdDebug()<<"m_currentTextObjectView :"<<m_currentTextObjectView<<endl;
+            //m_currentTextObjectView->keyPressEvent( e );
             dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->keyPressEvent( e );
                 //QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView(), e );
-            kdDebug()<<"sendEvent( ********** *****************:"<<editNum << " pointer :"<<dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()<<endl;
         }
     } else if ( mouseSelectedObject ) {
 	if ( e->state() & ControlButton ) {
@@ -3154,6 +3156,9 @@ void Page::editSelectedTextArea()
 		if ( kpobject->getType() == OT_TEXT ) {
 		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 
+                    m_currentTextObjectView=kptextobject->textObjectView();
+                    kdDebug()<<"editSelectedTextArea() :"<<m_currentTextObjectView<<endl;
+                    Q_ASSERT(m_currentTextObjectView);
 		    //kpobject->activate( this, diffx(), diffy() );
 		    setTextBackground( kptextobject );
 #if 0
@@ -3724,6 +3729,7 @@ void Page::exitEditMode()
         editNum = -1;
         if ( kpobject->getType() == OT_TEXT ) {
             KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+            m_currentTextObjectView=0L;
             //kptextobject->deactivate( view->kPresenterDoc() );
             //kptextobject->textObjectView()->clearFocus();
 #if 0
@@ -3741,7 +3747,7 @@ void Page::exitEditMode()
             emit updateSideBarItem( currPgNum()-1 );
 
         } else if ( kpobject->getType() == OT_PART ) {
-            //kpobject->deactivate();
+            kpobject->deactivate();
             _repaint( kpobject );
             return;
         }
