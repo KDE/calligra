@@ -1716,8 +1716,7 @@ void KWView::viewZoom( const QString &s )
 void KWView::setZoom( int zoom, bool updateViews )
 {
     m_doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews, false );
-    m_gui->getHorzRuler()->setZoom( m_doc->zoomedResolutionX() );
-    m_gui->getVertRuler()->setZoom( m_doc->zoomedResolutionY() );
+    m_doc->updateZoomRuler();
 }
 
 void KWView::insertPicture()

@@ -2986,4 +2986,14 @@ void KWDocument::frameSelectedChanged()
     emit sig_frameSelectedChanged();
 }
 
+void KWDocument::updateZoomRuler()
+{
+    QListIterator<KWView> it( m_lstViews );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->getGUI()->getHorzRuler()->setZoom( zoomedResolutionX() );
+        it.current()->getGUI()->getVertRuler()->setZoom( zoomedResolutionY() );
+    }
+}
+
 #include "kwdoc.moc"
