@@ -20,6 +20,7 @@
 #define KEXIFORMBASE_H
 
 #include "kexidialogbase.h"
+#include <qpixmap.h>
 
 /**
   *@author Joseph Wenninger
@@ -29,7 +30,6 @@
 template <class type> class QPtrList;
 
 class KAction;
-  
 
 class KexiFormBaseResizeHandle : public QWidget
 {
@@ -75,7 +75,7 @@ class KexiFormBase : public KexiDialogBase
 	Q_OBJECT
    
 	public: 
-		KexiFormBase(QWidget *parent=0, const char *name=0, QString datasource=0);
+		KexiFormBase(QWidget *parent=0, const char *name=0, QString identifier=QString::null);
 		~KexiFormBase();
 		
 		void setActions(QPtrList<KAction> *actions);

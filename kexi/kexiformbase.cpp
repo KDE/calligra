@@ -199,14 +199,12 @@ KexiFormBaseResizeHandleSet::~KexiFormBaseResizeHandleSet()
 
 
 
-KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource)
+KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString identifier)
 	: KexiDialogBase(parent,name)
 {
 	initActions();
-	if(datasource == "")
-	{
-		setCaption(i18n("[new form]"));
-	}
+	
+	setCaption(identifier);
 
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));

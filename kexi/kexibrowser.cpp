@@ -179,9 +179,11 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 
 void KexiBrowser::slotCreateNewForm()
 {
-	KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Form, m_forms, i18n("New Form"));
-	slotCreate(item);	
+	QString name=kexi->project()->formManager()->newForm();
+
+	KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Form, m_forms,name,name);
 	item->setPixmap(0, iconLoader->loadIcon("form", KIcon::Small));
+	slotCreate(item);	
 	
 }
 

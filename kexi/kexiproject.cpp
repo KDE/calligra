@@ -31,6 +31,7 @@ KexiProject::KexiProject(QObject* parent) : QObject(parent)
 {
 	//hope that changes soon too
 	m_db = new KexiDB(this);
+	m_formManager=new KexiFormManager();
 }
 
 KexiProject::~KexiProject()

@@ -26,6 +26,7 @@
 //#include <qsqldatabase.h>
 
 #include "kexiDB/kexidb.h"
+#include "kexiformmanager.h"
 
 class KexiDoc;
 
@@ -51,7 +52,7 @@ public:
 	bool initDbConnection(const Credentials& cred);
 	
 	KexiDB* db() { return m_db; };
-
+	KexiFormManager *formManager() {return m_formManager;}
 signals:
 	void docModified();
 
@@ -61,6 +62,7 @@ protected:
 private:
 	KexiDoc* m_settings;
 	KexiDB* m_db;
+	KexiFormManager *m_formManager;
 	Credentials m_cred;
 };
 
