@@ -17,7 +17,7 @@
   <Separator/>
   <Action name="selectAll"/>
   <Separator/>
-  <Action name="porperties"/>
+  <Action name="properties"/>
  </Menu>
  <Menu name="view"><text>&amp;View</text>
   <Action name="view_newview"/>

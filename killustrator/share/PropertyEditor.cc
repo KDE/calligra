@@ -366,7 +366,7 @@ void PropertyEditor::applyPressed () {
 
     oinfo.width = widthField->getValue ();
     oinfo.color = penColorBttn->color ();
-    oinfo.style = (PenStyle) penStyleField->currentItem ();
+    oinfo.style = (Qt::PenStyle) penStyleField->currentItem ();
     if (leftArrows != 0L && rightArrows != 0L) {
         oinfo.startArrowId = leftArrows->currentItem ();
         oinfo.endArrowId = rightArrows->currentItem ();
@@ -471,7 +471,7 @@ void PropertyEditor::readProperties () {
         GObject::OutlineInfo oInfo = object->getOutlineInfo ();
         widthField->setValue (oInfo.width);
         penColorBttn->setColor (oInfo.color);
-        penStyleField->setCurrentItem (oInfo.style);
+        penStyleField->setCurrentItem((int)oInfo.style);
         if (object->isA ("GPolyline") || object->isA ("GBezier")) {
             leftArrows->setCurrentItem (oInfo.startArrowId);
             rightArrows->setCurrentItem (oInfo.endArrowId);
@@ -575,6 +575,9 @@ void PropertyEditor::readProperties () {
         GObject::OutlineInfo oInfo = GObject::getDefaultOutlineInfo ();
         widthField->setValue (oInfo.width);
         penColorBttn->setColor (oInfo.color);
+        penStyleField->setCurrentItem(oInfo.style);
+        leftArrows->setCurrentItem (oInfo.startArrowId);
+        rightArrows->setCurrentItem (oInfo.endArrowId);
 
         // Fill tab
         GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();

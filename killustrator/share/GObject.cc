@@ -56,6 +56,8 @@ void GObject::setDefaultOutlineInfo (const OutlineInfo& oi) {
     defaultOutlineInfo.style = oi.style;
   if (oi.mask & OutlineInfo::Width)
     defaultOutlineInfo.width = oi.width;
+  defaultOutlineInfo.startArrowId=oi.startArrowId;
+  defaultOutlineInfo.endArrowId=oi.endArrowId;
 }
 
 void GObject::setDefaultFillInfo (const FillInfo& fi) {

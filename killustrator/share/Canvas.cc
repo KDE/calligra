@@ -420,7 +420,7 @@ void Canvas::redrawView (bool repaintFlag) {
   // setup the painter
   pdev = (pixmap ? (QPaintDevice *) pixmap : (QPaintDevice *) this);
   p.begin (pdev);
-  p.setBackgroundColor (white);
+  p.setBackgroundColor(white);
   if (pixmap)
     pixmap->fill (backgroundColor ());
 
@@ -430,13 +430,14 @@ void Canvas::redrawView (bool repaintFlag) {
   //  p.translate (1, 1);
   p.eraseRect (0, 0, w, h);
 
-  p.setPen (black);
+  p.setPen(Qt::black);
   p.drawRect (0, 0, w - 2, h - 2);
-  p.setPen (QPen (darkGray, 2));
-  p.moveTo (w - 1, 2);
-  p.lineTo (w - 1, h - 1);
-  p.lineTo (2, h - 1);
-  p.setPen (black);
+  p.setPen (QPen(Qt::darkGray, 2));
+  p.moveTo (w-1, 0);
+  p.lineTo (w-1, h);
+  p.moveTo(w, h-1);
+  p.lineTo (0, h-1);
+  p.setPen(Qt::black);
 
   // draw the grid
   if (gridIsOn)

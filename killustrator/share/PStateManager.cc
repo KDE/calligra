@@ -27,6 +27,7 @@
 #include <qvector.h>
 #include <kapp.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 #include <GObject.h>
 #include <GText.h>
@@ -81,6 +82,8 @@ void PStateManager::readDefaultSettings () {
     oInfo.color = config->readColorEntry ("OutlineColor", &black);
     oInfo.style = (PenStyle) config->readNumEntry ("OutlineStyle", SolidLine);
     oInfo.width = (BrushStyle) config->readDoubleNumEntry ("OutlineWidth", 1.0);
+    oInfo.startArrowId=config->readNumEntry("StartArrowID", 0);
+    oInfo.endArrowId=config->readNumEntry("EndArrowID", 0);
     oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style |
                  GObject::OutlineInfo::Width;
     GObject::setDefaultOutlineInfo (oInfo);
@@ -89,7 +92,7 @@ void PStateManager::readDefaultSettings () {
     fInfo.color = config->readColorEntry ("FillColor", &white);
     fInfo.fstyle = GObject::FillInfo::NoFill;
     fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
-    GObject::setDefaultFillInfo (fInfo);
+    GObject::setDefaultFillInfo(fInfo);
 
     GText::TextInfo tInfo;
     QFont tmp(QFont::defaultFont ());
@@ -185,6 +188,8 @@ void PStateManager::saveDefaultSettings () {
     config->writeEntry ("OutlineColor", oInfo.color);
     config->writeEntry ("OutlineStyle", (int) oInfo.style);
     config->writeEntry ("OutlineWidth", (double) oInfo.width);
+    config->writeEntry("StartArrowID", oInfo.startArrowId);
+    config->writeEntry("EndArrowID", oInfo.endArrowId);
 
     GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
     config->writeEntry ("FillColor", fInfo.color);
