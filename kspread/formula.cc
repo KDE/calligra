@@ -1246,11 +1246,37 @@ RangeList Formula::getDependencies () const
 {
   RangeList rl;
   
-  //return an empty list if the formula isn't valid
-  if (!isValid())
-    return rl;
+  //perform lexical analysis
+  //TODO: use parsed formula instead, when cell/range references are supported
+  Tokens t = tokens();
   
+  if (!tokens.valid())
+    return rl;   //return empty list if the tokens aren't valid
   
+  for( unsigned i = 0; i < tokens.count(); i++ )
+  {
+    Token token = tokens[i];
+    Token::Type tokenType = token.type();
+    
+    //parse each cell/range and put it to our RangeList
+    if (tokenType == Token::Cell)
+    {
+      QString text = token.text();
+      KSpreadPoint cell (text);
+      if (cell.isValid())
+        rl.cells.push_back (cell);
+    }
+    else if (tokenType == Token::Range)
+    {
+      QString text = token.text();
+      KSpreadRange range (text);
+      if (range.isValid())
+        rl.ranges.push_back (range);
+    }
+  }
+  
+  //return the result
+  return rl;
 }
 
 // Convert any value to integer or float

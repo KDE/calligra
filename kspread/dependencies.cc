@@ -20,6 +20,8 @@
 
 #include "dependencies.h"
 
+#include "formula.h"
+
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
 
@@ -280,6 +282,8 @@ void DependencyManager::processRangeDependencies (const KSpreadRange &range) con
 {
   //TODO: some optimization, so that we don't recompute cells depending of huge
   //ranges more than once (now we recompute them once per cell-chunk used by their dependency)
+  //This will probably happen as a part of splitting this into dep manager
+  //and recalc manager
   
   QValueList<KSpreadPoint> leadings = leadingCells (range);
   QValueList<KSpreadPoint>::iterator it;
@@ -317,16 +321,27 @@ void DependencyManager::processDependencies (const RangeList &rangeList) const
 
 void DependencyManager::updateCell (const KSpreadPoint &cell) const
 {
-  //TODO...
-
+  KSpreadCell *c = cell.cell();
+  
   //prevent infinite recursion (circular dependencies)
+  if (c->testFlag (KSpreadCell::Flag_Progress))
+  {
+    kdError(36001) << "ERROR: Circle" << endl;
+    c->setFlag(KSpreadCell::Flag_CircularCalculation);
+    KSpreadValue v;
+    v.setError ( "####" );
+    c->setValue (v);
+    return;
+  }
   
   //set the computing-dependencies flag
+  c->setFlag (KSpreadCell::Flag_Progress);
   
-  //recalculate the cell ( probably using cell->calc(false); )
+  //recalculate the cell
+  c->calc (false);
   
   //clear the computing-dependencies flag
-  
+  c->clearFlag (KSpreadCell::Flag_Progress);
 }
 
 KSpreadPoint DependencyManager::leadingCell (const KSpreadPoint &cell) const
@@ -363,6 +378,18 @@ QValueList<KSpreadPoint> DependencyManager::leadingCells (const KSpreadRange &ra
 
 RangeList DependencyManager::getDependencies (const KSpreadPoint &cell) const
 {
-  //TODO
+  RangeList rl;
+  KSpreadCell *c = cell.cell();
+  if (!c->isFormula())
+    return rl;   //not a formula -> no dependencies
+
+  //TODO: when the new parser is in use, KSpreadCell will hold a Formula
+  //instance, hence we'll be able to use that one directly
+  Formula formula;
+  formula.setExpression (c->text());
+  
+  //now that we have the formula, we ask it to give us the dependencies
+  rl = formula.getDependencies ();
+  return rl;
 }
 

@@ -833,22 +833,20 @@ KSpreadPoint::KSpreadPoint( const QString & _str, KSpreadMap * _map,
     init( _str.mid( p ) );
 }
 
-KSpreadCell *KSpreadPoint::cell()
+KSpreadCell *KSpreadPoint::cell() const
 {
     return table->cellAt(pos);
 }
 
 bool KSpreadPoint::operator== (const KSpreadPoint &cell) const
 {
-  if (table != cell.table)
-    return false;
+  //sheet info ignored
   return (pos == cell.pos);
 }
 
 bool KSpreadPoint::operator< (const KSpreadPoint &cell) const
 {
-  if (table != cell.table)
-    return false;  //not really relevant, as this doesn't make any sense
+  //sheet info ignored
   return (pos.y() < cell.pos.y()) ? true :
       ((pos.y() == cell.pos.y()) && (pos.x() < cell.pos.x()));
 }

@@ -391,6 +391,10 @@ void KSpreadCell::setValue( const KSpreadValue& v )
       d->extra()->QML = 0;
     }
 
+    //set the displayed text, if we hold an error value
+    if (d->value.type() == KSpreadValue::Error)
+      d->strOutText = d->value.errorMessage ();
+    
     setFlag(Flag_LayoutDirty);
     setFlag(Flag_TextFormatDirty);
 
@@ -2070,7 +2074,6 @@ bool KSpreadCell::makeFormula()
     clearFormula();
 
     setFlag(Flag_ParseError);
-    d->strOutText = "####";
     KSpreadValue v;
     v.setError ( "####" );
     setValue (v);
@@ -2113,7 +2116,6 @@ bool KSpreadCell::calc(bool delay)
   {
     kdError(36001) << "ERROR: Circle" << endl;
     setFlag(Flag_CircularCalculation);
-    d->strOutText = "####";
     KSpreadValue v;
     v.setError ( "####" );
     setValue (v);
@@ -2160,7 +2162,6 @@ bool KSpreadCell::calc(bool delay)
         KSpreadCell *cell = dep->Table()->cellAt( x, y );
         if ( !cell->calc( delay ) )
         {
-          d->strOutText = "####";
           setFlag(Flag_DependancyError);
           KSpreadValue v;
           v.setError( "####" );
@@ -2176,7 +2177,6 @@ bool KSpreadCell::calc(bool delay)
   {
     // If we got an error during evaluation ...
     setFlag(Flag_ParseError);
-    d->strOutText = "####";
     setFlag(Flag_LayoutDirty);
     KSpreadValue v;
     v.setError( "####" );
