@@ -10,9 +10,9 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vhandletool.h"
-#include "vselecttool.h"
-#include "vpainterfactory.h"
 #include "vpainter.h"
+#include "vpainterfactory.h"
+#include "vselecttool.h"
 #include "vtransformcmd.h"
 
 #include <kdebug.h>

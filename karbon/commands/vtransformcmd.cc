@@ -29,7 +29,6 @@ VTransformCmd::execute()
 	for ( ; itr.current() ; ++itr )
 	{
 		itr.current()->transform( m_mat );
-		itr.current()->invalidateBoundingBox();
 	}
 }
 
@@ -41,7 +40,6 @@ VTransformCmd::unexecute()
 	for ( ; itr.current() ; ++itr )
 	{
 		itr.current()->transform( m_mat.invert() );
-		itr.current()->invalidateBoundingBox();
 	}
 }
 

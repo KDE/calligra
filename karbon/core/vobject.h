@@ -25,13 +25,13 @@ class VObject
 public:
 	VObject( VObject* parent = 0L ) : m_parent( parent )
 	{
-		m_boundingBoxIsInvalid = true;
+		invalidateBoundingBox();
 	}
 
 	VObject( const VObject& obj )
 	{
-		m_boundingBoxIsInvalid = true;
 		m_parent = obj.m_parent;
+		invalidateBoundingBox();
 	}
 
 	virtual ~VObject() {}
@@ -71,17 +71,6 @@ public:
 		{ return m_boundingBoxIsInvalid; }
 
 	/**
-	 * Invalidates the bounding box, so it has to be recalculated.
-	 */
-	void invalidateBoundingBox()
-	{
-		m_boundingBoxIsInvalid = true;
-
-		if( m_parent )
-			m_parent->invalidateBoundingBox();
-	}
-
-	/**
 	 * Tests whether this object is inside or intersects the given rectangle.
 	 * Default is false, each VObject derivative has to implement
 	 * this method.
@@ -108,6 +97,17 @@ public:
 	VObject* parent() { return m_parent; }
 
 protected:
+	/**
+	 * Invalidates the bounding box, so it has to be recalculated.
+	 */
+	void invalidateBoundingBox()
+	{
+		m_boundingBoxIsInvalid = true;
+
+		if( m_parent )
+			m_parent->invalidateBoundingBox();
+	}
+
 	/// Bounding box.
 	mutable KoRect m_boundingBox;
 	mutable bool m_boundingBoxIsInvalid;

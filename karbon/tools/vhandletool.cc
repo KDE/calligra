@@ -65,7 +65,7 @@ VHandleTool::draw( QPainter& painter, const double zoomFactor )
 			bb.right() * zoomFactor,
 			bb.bottom() * zoomFactor );
 
-		kdDebug() << " x : " << m_boundingBox.x() << ", " << m_boundingBox.y() << ", " << m_boundingBox.width() << ", " << m_boundingBox.height() << endl;
+kdDebug() << " x : " << m_boundingBox.x() << ", " << m_boundingBox.y() << ", " << m_boundingBox.width() << ", " << m_boundingBox.height() << endl;
 		painter.drawRect( m_boundingBox.toQRect() );
 
 		// draw boxes
