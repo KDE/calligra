@@ -109,7 +109,7 @@ VSegment::VSegment( const VSegment& segment )
 void
 VSegment::draw( VPainter* painter ) const
 {
-	if( m_state == deleted )
+	if( state() == deleted )
 		return;
 
 	if( type() == curve )
@@ -578,9 +578,38 @@ VSegment::revert() const
 	return segment;
 }
 
+VSegment*
+VSegment::prev() const
+{
+	VSegment* segment = m_prev;
+
+	while( segment && segment->state() != normal )
+	{
+		segment = segment->m_prev;
+	}
+
+	return segment;
+}
+
+VSegment*
+VSegment::next() const
+{
+	VSegment* segment = m_next;
+
+	while( segment && segment->state() != normal )
+	{
+		segment = segment->m_next;
+	}
+
+	return segment;
+}
+
 void
 VSegment::save( QDomElement& element ) const
 {
+	if( state() == deleted )
+		return;
+
 	QDomElement me;
 
 	if( m_type == curve )

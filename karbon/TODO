@@ -12,8 +12,6 @@ TODO:
 -	remove defaultFill/Stroke stuff from VDocument and just use VSelection's fill/stroke.
 -	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
 	canvas is "fragmented")
--	scratch your head about how to do undo/redo of path operations best like
-	removing nodes, inserting nodes...
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
 	similar to vshapecommand
 -	add undo/redo to shape commands like VFlattenCmd etc

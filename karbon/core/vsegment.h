@@ -131,18 +131,16 @@ public:
 	VSegment* revert() const;
 
 	/**
-	 * Returns a pointer to the previous segment, if stored in a
+	 * Returns a pointer to the previous not deleted segment, if stored in a
 	 * VSegmentList.
 	 */
-	VSegment* prev() const
-		{ return m_prev; }
+	VSegment* prev() const;
 
 	/**
-	 * Returns a pointer to the next segment, if stored in a
+	 * Returns a pointer to the next not deleted segment, if stored in a
 	 * VSegmentList.
 	 */
-	VSegment* next() const
-		{ return m_next; }
+	VSegment* next() const;
 
 	/**
 	 * Returns true if the segment is flat. That means it's height is
