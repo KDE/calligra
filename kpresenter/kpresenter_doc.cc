@@ -121,6 +121,10 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
       _hasFooter( false ), urlIntern()
 {
     // init
+  // make it not empty!!! it should be removed after the modifications
+  // are set correctly
+  //setModified(true);
+  
     dcop = 0;
     docAlreadyOpen = FALSE;
     _clean = true;
@@ -1276,7 +1280,8 @@ void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const QRect& _
 
     emit sig_updateChildGeometry( _child );
 
-    m_bModified = true;
+    //    m_bModified = true;
+    setModified(true);
 }
 
 /*======================= child iterator =========================*/
@@ -1310,8 +1315,8 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 	break;
     }
     setUnit( _pageLayout.unit, unit );
-
-    m_bModified = true;
+    
+    setModified(true);
     repaint( false );
 }
 
@@ -1330,7 +1335,7 @@ unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore )
 	repaint( false );
     }
 
-    m_bModified = true;
+    setModified(true);
     return getPageNums();
 }
 
@@ -1358,13 +1363,13 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	load_template( fileName.data() );
 	objStartY = 0;
 	_clean = true;
-	m_bModified = true;
+	setModified(true);
 	setURL( QString::null );
 	return true;
     } else if ( ret == KoTemplateChooseDia::File ) {
 	objStartY = 0;
 	_clean = true;
-	m_bModified = true;
+	setModified(true);
 	load_template( _template );
 	setURL( _template );
 	return true;
@@ -1373,7 +1378,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 				 KPresenterFactory::global() ) );
 	objStartY = 0;
 	_clean = true;
-	m_bModified = true;
+	setModified(true);
 	load_template( fileName );
 	setURL( QString::null );
 	return true;
@@ -1396,7 +1401,7 @@ void KPresenterDoc::setBackColor( unsigned int pageNum, QColor backColor1, QColo
 	kpbackground->setBackXFactor( xfactor );
 	kpbackground->setBackYFactor( yfactor );
     }
-    m_bModified = true;
+    setModified(true);
 }
 
 /*==================== set background picture ====================*/
@@ -1416,7 +1421,7 @@ void KPresenterDoc::setBackPixFilename( unsigned int pageNum, QString backPix )
 
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setBackPixmap( backPix, dt );
-    m_bModified = true;
+    setModified(true);
 }
 
 /*==================== set background clipart ====================*/
@@ -1436,7 +1441,7 @@ void KPresenterDoc::setBackClipFilename( unsigned int pageNum, QString backClip 
 
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setBackClipFilename( backClip, dt );
-    m_bModified = true;
+    setModified(true);
 }
 
 /*================= set background pic view ======================*/
@@ -1444,7 +1449,7 @@ void KPresenterDoc::setBackView( unsigned int pageNum, BackView backView )
 {
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setBackView( backView );
-    m_bModified = true;
+    setModified(true);
 }
 
 /*==================== set background type =======================*/
@@ -1452,7 +1457,7 @@ void KPresenterDoc::setBackType( unsigned int pageNum, BackType backType )
 {
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setBackType( backType );
-    m_bModified = true;
+    setModified(true);
 }
 
 /*========================== set page effect =====================*/
@@ -1460,7 +1465,7 @@ void KPresenterDoc::setPageEffect( unsigned int pageNum, PageEffect pageEffect )
 {
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setPageEffect( pageEffect );
-    m_bModified = true;
+    setModified(true);
 }
 
 /*===================== set pen and brush ========================*/
@@ -1625,7 +1630,7 @@ bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le,
 	_oldBrush.clear();
     }
 
-    m_bModified = true;
+    setModified(true);
     return ret;
 }
 
@@ -1690,7 +1695,7 @@ bool KPresenterDoc::setLineBegin( LineEnd lb )
 	_oldBrush.clear();
     }
 
-    m_bModified = true;
+    setModified(true);
     return ret;
 }
 
@@ -1756,7 +1761,7 @@ bool KPresenterDoc::setLineEnd( LineEnd le )
 	_oldBrush.clear();
     }
 
-    m_bModified = true;
+    setModified(true);
     return ret;
 }
 
@@ -1802,7 +1807,7 @@ bool KPresenterDoc::setPieSettings( PieType pieType, int angle, int len )
 	_oldValues.clear();
     }
 
-    m_bModified = true;
+    setModified(true);
     return ret;
 }
 
@@ -1845,7 +1850,7 @@ bool KPresenterDoc::setRectSettings( int _rx, int _ry )
 	_oldValues.clear();
     }
 
-    m_bModified = true;
+    setModified(true);
     return ret;
 }
 
@@ -1978,7 +1983,7 @@ bool KPresenterDoc::setPenColor( QColor c, bool fill )
 	_oldBrush.clear();
     }
 
-    m_bModified = true;
+    setModified(true);
     return ret;
 }
 
@@ -2108,7 +2113,7 @@ bool KPresenterDoc::setBrushColor( QColor c, bool fill )
 	_oldBrush.clear();
     }
 
-    m_bModified = true;
+    setModified(true);
     return ret;
 }
 
@@ -2754,7 +2759,7 @@ void KPresenterDoc::lowerObjs( int /*diffx*/, int /*diffy*/ )
     lrCmd->execute();
     _commands.addCommand( lrCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*========================= raise object =========================*/
@@ -2781,7 +2786,7 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
     lrCmd->execute();
     _commands.addCommand( lrCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*=================== insert a picture ==========================*/
@@ -2807,7 +2812,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*=================== insert a clipart ==========================*/
@@ -2834,7 +2839,7 @@ void KPresenterDoc::insertClipart( QString filename, int diffx, int diffy )
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*======================= change picture ========================*/
@@ -2867,7 +2872,7 @@ void KPresenterDoc::changePicture( QString filename, int /*diffx*/, int /*diffy*
 	}
     }
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*======================= change clipart ========================*/
@@ -2900,7 +2905,7 @@ void KPresenterDoc::changeClipart( QString filename, int /*diffx*/, int /*diffy*
 	}
     }
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*===================== insert a line ===========================*/
@@ -2915,7 +2920,7 @@ void KPresenterDoc::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineT
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*===================== insert a rectangle =======================*/
@@ -2932,7 +2937,7 @@ void KPresenterDoc::insertRectangle( QRect r, QPen pen, QBrush brush, FillType f
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*===================== insert a circle or ellipse ===============*/
@@ -2949,7 +2954,7 @@ void KPresenterDoc::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, Fill
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*================================================================*/
@@ -2967,7 +2972,7 @@ void KPresenterDoc::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QCo
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*===================== insert a textobject =====================*/
@@ -2986,7 +2991,7 @@ void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPr
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*======================= insert an autoform ====================*/
@@ -3004,7 +3009,7 @@ void KPresenterDoc::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb,
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*======================= set rasters ===========================*/
@@ -3113,7 +3118,7 @@ QValueList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int dif
 	}
     }
 
-    m_bModified = true;
+    setModified(true);
     return orderList;
 }
 
@@ -3242,7 +3247,7 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 	load_template( fileName.data() );
 	objStartY = 0;
 	_clean = true;
-	m_bModified = true;
+	setModified(true);
 	KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );
 	_backgroundList.take( _backgroundList.count() - 1 );
 	_backgroundList.insert( _page, kpbackground );
@@ -3298,7 +3303,7 @@ void KPresenterDoc::deleteObjs( bool _add )
 
     if ( _add ) _commands.addCommand( deleteCmd );
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*========================== copy objects ========================*/
@@ -3354,7 +3359,7 @@ void KPresenterDoc::pasteObjs( int diffx, int diffy )
     loadStream( in );
 
     pasting = false;
-    m_bModified = true;
+    setModified(true);
 }
 
 /*====================== replace objects =========================*/
@@ -3384,7 +3389,7 @@ void KPresenterDoc::replaceObjs()
     _commands.addCommand( setOptionsCmd );
     setOptionsCmd->execute();
 
-    m_bModified = true;
+    setModified(true);
 }
 
 /*========================= restore background ==================*/
@@ -3471,7 +3476,7 @@ void KPresenterDoc::loadStream( istream &in )
     }
 
     repaint( false );
-    m_bModified = true;
+    setModified(true);
 }
 
 /*================= deselect all objs ===========================*/

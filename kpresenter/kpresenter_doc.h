@@ -115,9 +115,13 @@ public:
     virtual QCString mimeType() const { return QCString( MIME_TYPE ); }
 
     // ask, if document is modified
+    // no need to overwrite these!!!
+    /*
     virtual bool isModified() { return m_bModified; }
     virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
     virtual bool isEmpty() { return m_bEmpty; }
+    */
+
 
     // get output- and inputformats
     virtual QStrList outputFormats();
@@ -387,8 +391,11 @@ protected:
     KPresenterView *viewPtr;
 
     // modified?
+    // no need to overwrite this!!! Lotzi Boloni
+    /*
     bool m_bModified;
     bool m_bEmpty;
+    */
 
     // page layout and background
     KoPageLayout _pageLayout;
