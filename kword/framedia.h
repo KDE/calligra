@@ -100,7 +100,7 @@ protected:
     float oldX, oldY, oldW, oldH;
 
     FrameBehaviour frameBehaviour;
-
+    KWUnits frameUnits;
 signals:
     void changed();
 

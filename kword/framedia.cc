@@ -91,48 +91,65 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
 }
 
 void KWFrameDia::init() {
+
     tab1 = tab2 = tab3 = tab4 = 0;
     if (frame) {
         QRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
         if(!doc && frame->getFrameSet())
+            {
             doc=frame->getFrameSet()->kWordDocument();
+            frameUnits=KWUnit::unitType( doc->getUnit() );
+            }
         if(!doc) {
             kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
             return;
         }
         if(doc->processingType() != KWDocument::DTP &&
-              frame->getFrameSet() == doc->getFrameSet(0)) {
+           frame->getFrameSet() == doc->getFrameSet(0))
+        {
             setupTab2();
             setupTab4();
-        } else if(frameType == FT_TEXT) {
+        }
+        else if(frameType == FT_TEXT)
+        {
             if(! (frame->getFrameSet() &&
-                frame->getFrameSet()->getGroupManager())) { // not a table
+                  frame->getFrameSet()->getGroupManager()))
+            { // not a table
                 setupTab1();
                 setupTab2();
                 setupTab3();
             }
             setupTab4();
             if(frame->getFrameSet() &&
-                frame->getFrameSet()->getGroupManager()) { // table
+               frame->getFrameSet()->getGroupManager())
+            { // table
                 grp1->setEnabled(false);
-            } else if(! frame->getFrameSet()) // first creation
-               showPage(2);
-        } else if(frameType == FT_PICTURE) {
-            setupTab1();
-            setupTab2();
-            setupTab4();
-            showPage(1); // while options are not implemented..
-        } else if(frameType == FT_PART) {
-            setupTab2();
-            setupTab4();
-        } else if(frameType == FT_FORMULA) {
+            }
+            else if(! frame->getFrameSet()) // first creation
+                showPage(2);
+        }
+        else if(frameType == FT_PICTURE)
+        {
             setupTab1();
             setupTab2();
             setupTab4();
             showPage(1); // while options are not implemented..
         }
-    } else
+        else if(frameType == FT_PART)
+        {
+            setupTab2();
+            setupTab4();
+        }
+        else if(frameType == FT_FORMULA)
+        {
+            setupTab1();
+            setupTab2();
+            setupTab4();
+            showPage(1); // while options are not implemented..
+        }
+    }
+    else
         kdDebug() << "ERROR: KWFrameDia::init  no frame.."<<endl;
     setInitialSize( QSize(550, 400) );
 }
@@ -140,7 +157,7 @@ void KWFrameDia::init() {
 /*================================================================*/
 
 void KWFrameDia::setupTab1(){ // TAB Frame Options
-    //kdDebug() << "setup tab 1 Frame options"<<endl;
+    kdDebug() << "setup tab 1 Frame options"<<endl;
     tab1 = addPage( i18n("Options") );
 
     int rows=2;
@@ -325,13 +342,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         // add rest of sidehead init..
     }
 
-    //kdDebug() << "setup tab 1 exit"<<endl;
+    kdDebug() << "setup tab 1 exit"<<endl;
     grid1->activate();
 }
 
 
 void KWFrameDia::setupTab2(){ // TAB Text Runaround
-    //kdDebug() << "setup tab 2 text runaround"<<endl;
+    kdDebug() << "setup tab 2 text runaround"<<endl;
 
     tab2 =  addPage( i18n( "Text run around" ) );
 
@@ -398,7 +415,7 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     grid2->addWidget( lRGap, 1, 0 );
 
     eRGap = new QLineEdit( tab2 );
-    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+    if ( frameUnits == U_PT )
         eRGap->setValidator( new QIntValidator( eRGap ) );
     else
         eRGap->setValidator( new QDoubleValidator( eRGap ) );
@@ -448,10 +465,10 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     }
 
     QString str;
-    str.sprintf( "%.2f", ragap.value( KWUnit::unitType( doc->getUnit() ) ) );
+    str.sprintf( "%.2f", ragap.value(frameUnits  ) );
     eRGap->setText( str );
 
-    //kdDebug() << "setup tab 2 exit"<<endl;
+    kdDebug() << "setup tab 2 exit"<<endl;
 }
 
 void KWFrameDia::setupTab3(){ // TAB Frameset
@@ -463,7 +480,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
      * framebehaviour will be copied from the frameset
      * then the new connection should be made.
  */
-    //kdDebug() << "setup tab 3 frameSet"<<endl;
+    kdDebug() << "setup tab 3 frameSet"<<endl;
     tab3 = addPage( i18n( "Connect text frames" ) );
 
     grid3 = new QGridLayout( tab3, 3, 1, 15, 7 );
@@ -558,7 +575,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->addWidget( lx, 1, 0 );
 
     sx = new QLineEdit( grp1 );
-    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+    if ( frameUnits == U_PT )
         sx->setValidator( new QIntValidator( sx ) );
     else
         sx->setValidator( new QDoubleValidator( sx ) );
@@ -574,7 +591,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->addWidget( ly, 1, 1 );
 
     sy = new QLineEdit( grp1 );
-    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+    if ( frameUnits == U_PT )
         sy->setValidator( new QIntValidator( sy ) );
     else
         sy->setValidator( new QDoubleValidator( sy ) );
@@ -590,7 +607,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->addWidget( lw, 3, 0 );
 
     sw = new QLineEdit( grp1 );
-    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+    if ( frameUnits == U_PT )
         sw->setValidator( new QIntValidator( sw ) );
     else
         sw->setValidator( new QDoubleValidator( sw ) );
@@ -606,7 +623,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->addWidget( lh, 3, 1 );
 
     sh = new QLineEdit( grp1 );
-    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+    if ( frameUnits == U_PT )
         sh->setValidator( new QIntValidator( sh ) );
     else
         sh->setValidator( new QDoubleValidator( sh ) );
@@ -655,7 +672,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->addWidget( lml, 1, 0 );
 
     sml = new QLineEdit( grp2 );
-    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+    if ( frameUnits== U_PT )
         sml->setValidator( new QIntValidator( sml ) );
     else
         sml->setValidator( new QDoubleValidator( sml ) );
@@ -671,7 +688,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->addWidget( lmr, 1, 1 );
 
     smr = new QLineEdit( grp2 );
-    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+    if ( frameUnits == U_PT )
         smr->setValidator( new QIntValidator( smr ) );
     else
         smr->setValidator( new QDoubleValidator( smr ) );
@@ -687,7 +704,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->addWidget( lmt, 3, 0 );
 
     smt = new QLineEdit( grp2 );
-    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+    if ( frameUnits == U_PT )
         smt->setValidator( new QIntValidator( smt ) );
     else
         smt->setValidator( new QDoubleValidator( smt ) );
@@ -703,7 +720,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->addWidget( lmb, 3, 1 );
 
     smb = new QLineEdit( grp2 );
-    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+    if ( frameUnits == U_PT )
         smb->setValidator( new QIntValidator( smb ) );
     else
         smb->setValidator( new QDoubleValidator( smb ) );
@@ -758,7 +775,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     KWUnit l, r, t, b;
     doc->getFrameMargins( l, r, t, b );
-    switch ( KWUnit::unitType( doc->getUnit() ) ) {
+    switch ( frameUnits ) {
     case U_MM:
         sml->setText( QString().setNum( l.mm() ) );
         smr->setText( QString().setNum( r.mm() ) );
@@ -788,7 +805,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         doc->getFrameCoords( x, y, w, h, _num );
         QString _x, _y, _w, _h;
 
-        switch ( KWUnit::unitType( doc->getUnit() ) ) {
+        switch ( frameUnits ) {
         case U_MM:
             _x.sprintf( "%.2f", POINT_TO_MM( x ) );
             _y.sprintf( "%.2f", POINT_TO_MM( y ) );
@@ -825,7 +842,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sh->setEnabled( false );
     }
 
-    //kdDebug() << "setup tab 4 exit"<<endl;
+    kdDebug() << "setup tab 4 exit"<<endl;
 }
 
 
@@ -896,53 +913,48 @@ void KWFrameDia::setFrameBehaviourInputOff() {
 bool KWFrameDia::applyChanges()
 {
     //kdDebug() << "KWFrameDia::applyChanges"<<endl;
-    if(frame && frameType==FT_TEXT ) {
-        if ( tab1 ) {
+    if(frame && frameType==FT_TEXT )
+    {
+        if ( tab1 )
+        {
             // FrameBehaviour
-            if(rResizeFrame->isChecked()) {
+            if(rResizeFrame->isChecked())
+            {
                 frame->setFrameBehaviour(AutoExtendFrame);
-            } else if ( rAppendFrame->isChecked()) {
+            }
+            else if ( rAppendFrame->isChecked())
+            {
                 frame->setFrameBehaviour(AutoCreateNewFrame);
-            } else {
+            }
+            else
+            {
                 frame->setFrameBehaviour(Ignore);
             }
         }
 
         // NewFrameBehaviour
-        if ( tab1 ) {
-            if(reconnect->isChecked()) {
+        if ( tab1 )
+        {
+            if(reconnect->isChecked())
+            {
                 frame->setNewFrameBehaviour(Reconnect);
-            } else if ( noFollowup->isChecked()) {
+            }
+            else if ( noFollowup->isChecked())
+            {
                 frame->setNewFrameBehaviour(NoFollowup);
-            } else {
+            }
+            else
+            {
                 frame->setNewFrameBehaviour(Copy);
             }
         }
-
-        // Run around
-        if ( tab2 ) {
-            if ( rRunNo->isChecked() )
-                frame->setRunAround( RA_NO );
-            else if ( rRunBounding->isChecked() )
-                frame->setRunAround( RA_BOUNDINGRECT );
-            else if ( rRunContur->isChecked() )
-                frame->setRunAround( RA_SKIP );
-
-            KWUnit u;
-            switch ( KWUnit::unitType( doc->getUnit() ) ) {
-            case U_MM: u.setMM( eRGap->text().toDouble() );
-                break;
-            case U_INCH: u.setINCH( eRGap->text().toDouble() );
-                break;
-            case U_PT: u.setPT( eRGap->text().toDouble() );
-                break;
-            }
-            frame->setRunAroundGap( u );
-        }
     }
+
+
     int currFS = -1;
 
-    if (frame && frameType==FT_TEXT) {
+    if (frame && frameType==FT_TEXT)
+    {
         if ( tab1 ) {
             QString str = lFrameSList->currentItem() ? lFrameSList->currentItem()->text( 0 ) : QString::null;
             QString name = QString::null;
@@ -1002,7 +1014,30 @@ bool KWFrameDia::applyChanges()
         }
     }
 
-    if ( frame ) {
+    if ( frame )
+    {
+        // Run around
+        if ( tab2 )
+        {
+            if ( rRunNo->isChecked() )
+                frame->setRunAround( RA_NO );
+            else if ( rRunBounding->isChecked() )
+                frame->setRunAround( RA_BOUNDINGRECT );
+            else if ( rRunContur->isChecked() )
+                frame->setRunAround( RA_SKIP );
+
+            KWUnit u;
+            switch ( frameUnits )
+            {
+                case U_MM: u.setMM( eRGap->text().toDouble() );
+                    break;
+                case U_INCH: u.setINCH( eRGap->text().toDouble() );
+                    break;
+                case U_PT: u.setPT( eRGap->text().toDouble() );
+                    break;
+            }
+            frame->setRunAroundGap( u );
+        }
 
         if ( frame->getRunAround() != RA_NO )
             doc->layout();
@@ -1012,51 +1047,52 @@ bool KWFrameDia::applyChanges()
                                                 ( doc->processingType() == KWDocument::WP &&
                                                   doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
             if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
-                unsigned int px, py, pw, ph;
-                switch ( KWUnit::unitType( doc->getUnit() ) ) {
-                case U_MM:
-                    px = static_cast<int>(MM_TO_POINT( QMAX(sx->text().toDouble(),0) ));
-                    py = static_cast<int>(MM_TO_POINT( QMAX(sy->text().toDouble(),0) ));
-                    pw = static_cast<int>(MM_TO_POINT( QMAX(sw->text().toDouble(),0) ));
-                    ph = static_cast<int>(MM_TO_POINT( QMAX(sh->text().toDouble(),0) ));
-                    break;
-                case U_INCH:
-                    px = static_cast<int>(INCH_TO_POINT( QMAX(sx->text().toDouble(),0) ));
-                    py = static_cast<int>(INCH_TO_POINT( QMAX(sy->text().toDouble(),0) ));
-                    pw = static_cast<int>(INCH_TO_POINT( QMAX(sw->text().toDouble(),0) ));
-                    ph = static_cast<int>(INCH_TO_POINT( QMAX(sh->text().toDouble(),0) ));
-                    break;
-                case U_PT:
-                    px = QMAX(sx->text().toInt(),0);
-                    py = QMAX(sy->text().toInt(),0);
-                    pw = QMAX(sw->text().toInt(),0);
-                    ph = QMAX(sh->text().toInt(),0);
-                    break;
+                unsigned int px=0, py=0, pw=0, ph=0;
+                switch ( frameUnits ) {
+                    case U_MM:
+                        px = static_cast<int>(MM_TO_POINT( QMAX(sx->text().toDouble(),0) ));
+                        py = static_cast<int>(MM_TO_POINT( QMAX(sy->text().toDouble(),0) ));
+                        pw = static_cast<int>(MM_TO_POINT( QMAX(sw->text().toDouble(),0) ));
+                        ph = static_cast<int>(MM_TO_POINT( QMAX(sh->text().toDouble(),0) ));
+                        break;
+                    case U_INCH:
+                        px = static_cast<int>(INCH_TO_POINT( QMAX(sx->text().toDouble(),0) ));
+                        py = static_cast<int>(INCH_TO_POINT( QMAX(sy->text().toDouble(),0) ));
+                        pw = static_cast<int>(INCH_TO_POINT( QMAX(sw->text().toDouble(),0) ));
+                        ph = static_cast<int>(INCH_TO_POINT( QMAX(sh->text().toDouble(),0) ));
+                        break;
+                    case U_PT:
+                        px = QMAX(sx->text().toInt(),0);
+                        py = QMAX(sy->text().toInt(),0);
+                        pw = QMAX(sw->text().toInt(),0);
+                        ph = QMAX(sh->text().toInt(),0);
+                        break;
                 }
                 doc->setFrameCoords( px, py, pw, ph );
             }
         }
 
         KWUnit u1, u2, u3, u4;
-        switch ( KWUnit::unitType( doc->getUnit() ) ) {
-        case U_MM:
-            u1.setMM( QMAX(sml->text().toDouble(),0) );
-            u2.setMM( QMAX(smr->text().toDouble(),0) );
-            u3.setMM( QMAX(smt->text().toDouble(),0) );
-            u4.setMM( QMAX(smb->text().toDouble(),0) );
-            break;
-        case U_INCH:
-            u1.setINCH( QMAX(sml->text().toDouble(),0) );
-            u2.setINCH( QMAX(smr->text().toDouble(),0) );
-            u3.setINCH( QMAX(smt->text().toDouble(),0) );
-            u4.setINCH( QMAX(smb->text().toDouble(),0) );
-            break;
-        case U_PT:
-            u1.setPT( QMAX(sml->text().toInt(),0) );
-            u2.setPT( QMAX(smr->text().toInt(),0) );
-            u3.setPT( QMAX(smt->text().toInt(),0) );
-            u4.setPT( QMAX(smb->text().toInt(),0) );
-            break;
+        switch ( frameUnits )
+        {
+            case U_MM:
+                u1.setMM( QMAX(sml->text().toDouble(),0) );
+                u2.setMM( QMAX(smr->text().toDouble(),0) );
+                u3.setMM( QMAX(smt->text().toDouble(),0) );
+                u4.setMM( QMAX(smb->text().toDouble(),0) );
+                break;
+            case U_INCH:
+                u1.setINCH( QMAX(sml->text().toDouble(),0) );
+                u2.setINCH( QMAX(smr->text().toDouble(),0) );
+                u3.setINCH( QMAX(smt->text().toDouble(),0) );
+                u4.setINCH( QMAX(smb->text().toDouble(),0) );
+                break;
+            case U_PT:
+                u1.setPT( QMAX(sml->text().toInt(),0) );
+                u2.setPT( QMAX(smr->text().toInt(),0) );
+                u3.setPT( QMAX(smt->text().toInt(),0) );
+                u4.setPT( QMAX(smb->text().toInt(),0) );
+                break;
         }
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
