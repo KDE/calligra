@@ -54,7 +54,7 @@ The following things are known in an MSWrite document (by MSWriteLib):
 # Footer #
 ##########    <-- bottom of footer
 
-If "Word Processing" mode is selected, spHeadBody and spHeadFoot would have
+If "Word Processing" mode is selected, spHeadBody and spFootBody would have
 to be specified.  From the information given above, however, these two cannot
 be computed in advance.  If "DTP" mode is selected, we would need KWord to
 support expanding frames upwards for the footer (since we only know the bottom
