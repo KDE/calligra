@@ -488,6 +488,8 @@ void KWFrameResizeCommand::execute()
     }
 
     frame->setSelected(true);
+    if(frame->getFrameSet()->getFrameType() == FT_FORMULA)
+            frame->getFrameSet()->updateFrames();
     m_pDoc->repaintAllViews();
 }
 
@@ -504,6 +506,8 @@ void KWFrameResizeCommand::unexecute()
         //repaintTableHeaders( grpMgr );
     }
     frame->setSelected(true);
+    if(frame->getFrameSet()->getFrameType() == FT_FORMULA)
+        frame->getFrameSet()->updateFrames();
     //update frames
     m_pDoc->repaintAllViews();
 }
@@ -527,6 +531,10 @@ void KWFrameMoveCommand::execute()
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
         frame->setCoords(tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfEnd.top(),tmpFrameMove->sizeOfEnd.right(),tmpFrameMove->sizeOfEnd.bottom());
         frame->setSelected(true);
+        //it's necessary because the text doesn't move
+        //with the frame as text frame
+        if(frame->getFrameSet()->getFrameType() == FT_FORMULA)
+            frame->getFrameSet()->updateFrames();
     }
 
     m_pDoc->repaintAllViews();
@@ -542,6 +550,8 @@ void KWFrameMoveCommand::unexecute()
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
         frame->setCoords(tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfBegin.top(),tmpFrameMove->sizeOfBegin.right(),tmpFrameMove->sizeOfBegin.bottom());
         frame->setSelected(true);
+        if(frame->getFrameSet()->getFrameType() == FT_FORMULA)
+            frame->getFrameSet()->updateFrames();
     }
 
     m_pDoc->repaintAllViews();
