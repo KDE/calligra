@@ -87,7 +87,15 @@ int main( int argc, char** argv ) {
     expected += x + "amp;\"/>\n";
     TEST_BEGIN( 0, 0 );
     writer.addAttribute( "a", x );
-    TEST_END( "escaping long string", expected.data() );
+    TEST_END( "escaping long cstring", expected.data() );
 
+    QString longPath;
+    for ( uint i = 0 ; i < 1000 ; ++i )
+        longPath += "M10 10L20 20 ";
+    expected = "<r a=\"";
+    expected += longPath.utf8() + "\"/>\n";
+    TEST_BEGIN( 0, 0 );
+    writer.addAttribute( "a", longPath );
+    TEST_END( "escaping long qstring", expected.data() );
     speedTest();
 }
