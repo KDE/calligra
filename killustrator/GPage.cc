@@ -678,7 +678,7 @@ bool GPage::readFromXml (const QDomElement &page)
   setAutoUpdate (false);
 
   setName(page.attribute("id"));
-  mBGColor.setNamedColor(page.attribute("bgcolor"));
+  mBGColor.setNamedColor(page.attribute("bgcolor", "#FFFFFF"));
   QDomElement layout=page.namedItem("layout").toElement();
   QString tmp=layout.attribute("format");
   if (tmp == "a3")
