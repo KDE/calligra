@@ -1,9 +1,14 @@
-# KDE Config File
 [Desktop Entry]
 MimeType=application/x-kword
 Comment=KWord
 Comment[ca]=Processador de textos KWord
+Comment[da]=KWord-programmet
+Comment[eo]=KVorto-dosiero
+Comment[is]=kword:  Ritvinnsluforrit K-vöndulsins
+Comment[pl]=Procesor tekstu
+Comment[pt]=Processador de Texto
 Comment[ro]=Document KWord
+Comment[ru]=Тестовый процессор
 Comment[sv]=Ordbehandlare
 DefaultApp=KWord
 Icon=kword
