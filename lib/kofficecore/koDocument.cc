@@ -704,7 +704,8 @@ QCString KoDocument::nativeFormatMimeType( KInstance *instance )
 
   KDesktopFile deFile( service->desktopEntryPath(), true );
 
-  return deFile.readEntry( "MimeType" ).utf8(); // ??????????
+  QStringList types = deFile.readListEntry( "MimeType", ';' );
+  return types.last().utf8();
 }
 
 void KoDocument::addShell( KoMainWindow *shell )
