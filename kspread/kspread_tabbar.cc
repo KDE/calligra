@@ -97,7 +97,7 @@ void KSpreadTabBar::moveTab( int _from, int _to, bool _before )
 	if ( !_before )
 		++_to;
 
-	if ( _to > tabsList.count() )
+	if ( _to > (int)tabsList.count() )
 	{
 		tabsList.append( tabname );
 		tabsList.remove( it );
@@ -134,7 +134,7 @@ void KSpreadTabBar::scrollRight()
     if ( tabsList.count() == 0 )
 	return;
 	
-	if ( m_rightTab == tabsList.count() )
+	if ( m_rightTab == (int)tabsList.count() )
 	return;
     
     if ( (unsigned int )leftTab == tabsList.count() )
@@ -490,7 +490,7 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 			m_moveTab = tabsList.count();
 			repaint( false );
 		}
-		if ( m_rightTab != tabsList.count() && m_autoScroll == 0 )
+		if ( m_rightTab != (int)tabsList.count() && m_autoScroll == 0 )
 		{
 			m_autoScroll = autoScrollRight;
 			m_moveTab = leftTab;

@@ -51,5 +51,5 @@ void ZoomTool::mousePress(const KImageShop::MouseEvent& e)
   m_pView->scrollTo(QPoint(x,y));
 }
 
-void ZoomTool::mouseMove(const KImageShop::MouseEvent& e){}
-void ZoomTool::mouseRelease(const KImageShop::MouseEvent& e){}
+void ZoomTool::mouseMove(const KImageShop::MouseEvent& ){}
+void ZoomTool::mouseRelease(const KImageShop::MouseEvent& ){}

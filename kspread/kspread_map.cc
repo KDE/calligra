@@ -64,7 +64,7 @@ void KSpreadMap::moveTable( const char* _from, const char* _to, bool _before )
   if ( !_before )
   ++to;
 
-  if ( to > m_lstTables.count() )
+  if ( to > (int)m_lstTables.count() )
   {
     m_lstTables.append( tablefrom );
     m_lstTables.take( from );

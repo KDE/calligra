@@ -45,13 +45,13 @@ KFormulaView::KFormulaView( QWidget *_parent, const char *_name, KFormulaDoc* _d
     m_pDoc = _doc;
 
     mn_indexList = new QPopupMenu();
-    mn_indexList->insertItem(BarIcon("index0.xpm"),0);
+    mn_indexList->insertItem(BarIcon("index0"),0);
     mn_indexList->insertSeparator();
-    mn_indexList->insertItem(BarIcon("index1.xpm"),1);
+    mn_indexList->insertItem(BarIcon("index1"),1);
     mn_indexList->insertSeparator();
-    mn_indexList->insertItem(BarIcon("index2.xpm"),2);
+    mn_indexList->insertItem(BarIcon("index2"),2);
     mn_indexList->insertSeparator();
-    mn_indexList->insertItem(BarIcon("index3.xpm"),3);
+    mn_indexList->insertItem(BarIcon("index3"),3);
     mn_indexList->setMouseTracking(true);
     mn_indexList->setCheckable(false);
 
@@ -201,38 +201,38 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "&Add Index" ) );
     m_vMenuElement->insertItem8( text, m_vMenuElement_AddIndex, -1, -1 );
 
-    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon("index0.xpm"));
+    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon("index0"));
     text = Q2C( i18n( "Top left" ) );
     m_idMenuElement_AddIndex_TL = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addTopLeftIndex", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("index1.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("index1") );
     text = Q2C( i18n( "Bottom left" ) );
     m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addBottomLeftIndex", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("index2.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("index2") );
     text = Q2C( i18n( "Top right" ) );
     m_idMenuElement_AddIndex_TR = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addTopRightIndex", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("index3.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("index3") );
     text = Q2C( i18n( "Bottom right" ) );
     m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addBottomRightIndex", 0, -1, -1 );
 
     text = Q2C( i18n( "&Add Element" ) );
     m_vMenuElement->insertItem8( text, m_vMenuElement_AddElement, -1, -1 );	
 
-    pix = OPUIUtils::convertPixmap(BarIcon("mini-xy.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("mini-xy") );
     text = Q2C( i18n( "Plain text" ) );
     m_idMenuElement_AddElement_T = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addText", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("mini-root.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("mini-root") );
     text = Q2C( i18n( "Root" ) );
     m_idMenuElement_AddElement_R = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addRoot", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("mini-bra.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("mini-bra") );
     text = Q2C( i18n( "Bracket" ) );
     m_idMenuElement_AddElement_B = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addBracket", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("mini-frac.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("mini-frac") );
     text = Q2C( i18n( "Fraction" ) );
     m_idMenuElement_AddElement_F = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addFraction", 0, -1, -1 );
 
@@ -250,7 +250,7 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "Set font" ) );
     m_idMenuElement_Text_Font = m_vMenuElement_Text->insertItem( text, this, "textFont", 0 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("split.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("split") );
     text = Q2C( i18n( "Split at current position" ) );
     m_idMenuElement_Text_Split = m_vMenuElement_Text->insertItem6( pix, text, this, "textSplit", 0, -1, -1 );
 
@@ -260,14 +260,14 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "Use pixmap" ) );
     m_idMenuElement_Root_Pixmap = m_vMenuElement_Root->insertItem( text, this, "togglePixmap", 0 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("rootindex.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("rootindex") );
     text = Q2C( i18n( "Add root index (Top left)" ) );
     m_idMenuElement_Root_Index = m_vMenuElement_Root->insertItem6( pix, text, this, "addTopLeftIndex", 0, -1, -1 );
 
     text = Q2C( i18n( "&Bracket" ) );
     m_vMenuElement->insertItem8( text, m_vMenuElement_Bracket, -1, -1 );	
 
-    pix = OPUIUtils::convertPixmap(BarIcon("delimiter.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("delimiter") );
     text = Q2C( i18n( "Set delimiter ..." ) );
     m_idMenuElement_Bracket_Type = m_vMenuElement_Bracket->insertItem6( pix, text, this, "bracketType", 0, -1, -1 );
 
@@ -289,35 +289,35 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "Use pixmap" ) );
     m_idMenuElement_Integral_Pixmap = m_vMenuElement_Integral->insertItem( text, this, "togglePixmap", 0 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("Ihigher.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("Ihigher") );
     text = Q2C( i18n( "Add higher limit" ) );
     m_idMenuElement_Integral_Higher = m_vMenuElement_Integral->insertItem6( pix, text, this, "addHigher", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("Ilower.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("Ilower") );
     text = Q2C( i18n( "Add lower limit" ) );
     m_idMenuElement_Integral_Lower = m_vMenuElement_Integral->insertItem6( pix, text, this, "addLower", 0, -1, -1 );
 
     text = Q2C( i18n( "&Matrix" ) );
     m_vMenuElement->insertItem8( text, m_vMenuElement_Matrix, -1, -1 );
 
-    // pix = OPUIUtils::convertPixmap(BarIcon("setmatrix.xpm" );
+    // pix = OPUIUtils::convertPixmap(BarIcon("setmatrix" );
     // m_idMenuElement_Matrix_Set = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Set dimension" ), this, "matrixSet", 0, -1, -1 );
     text = Q2C( i18n( "Set dimension" ) );
     m_idMenuElement_Matrix_Set = m_vMenuElement_Matrix->insertItem( text, this, "matrixSet", 0 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("insrow.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("insrow") );
     text = Q2C( i18n( "Insert a row" ) );
     m_idMenuElement_Matrix_InsRow = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixInsRow", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("inscol.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("inscol") );
     text = Q2C( i18n( "Insert a column" ) );
     m_idMenuElement_Matrix_InsCol = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixInsCol", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("remrow.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("remrow") );
     text = Q2C( i18n( "Remove a row" ) );
     m_idMenuElement_Matrix_RemRow = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixRemRow", 0, -1, -1 );
 
-    pix = OPUIUtils::convertPixmap(BarIcon("remcol.xpm") );
+    pix = OPUIUtils::convertPixmap(BarIcon("remcol") );
     text = Q2C( i18n( "Remove a column" ) );
     m_idMenuElement_Matrix_RemCol = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixRemCol", 0, -1, -1 );
 
@@ -372,33 +372,33 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     // Formula
     m_vToolBarFormula = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
-    m_idButtonFormula_0 = addToolButton(m_vToolBarFormula, "mini-xy.xpm",
+    m_idButtonFormula_0 = addToolButton(m_vToolBarFormula, "mini-xy",
 					i18n( "Add/change to simple text" ),
 					"addText", 0 );
 
 
-    m_idButtonFormula_1 = addToolButton(m_vToolBarFormula, "mini-root.xpm",
+    m_idButtonFormula_1 = addToolButton(m_vToolBarFormula, "mini-root",
 					i18n( "Add/change to root" ), "addRoot", 1 );
 
-    m_idButtonFormula_2 = addToolButton(m_vToolBarFormula, "mini-frac.xpm",
+    m_idButtonFormula_2 = addToolButton(m_vToolBarFormula, "mini-frac",
 					i18n( "Add/change fract line" ), "addFraction", 2 );
 
-    m_idButtonFormula_3 = addToolButton(m_vToolBarFormula, "mini-vspace.xpm",
+    m_idButtonFormula_3 = addToolButton(m_vToolBarFormula, "mini-vspace",
 					i18n( "Add/change vertical space" ), "addVertSpace", 3 );
 	
-    m_idButtonFormula_4 = addToolButton(m_vToolBarFormula, "mini-bra.xpm",
+    m_idButtonFormula_4 = addToolButton(m_vToolBarFormula, "mini-bra",
 					i18n( "Add/change a bracket block" ), "addBracket", 4 );
 
-    m_idButtonFormula_5 = addToolButton(m_vToolBarFormula, "mini-integral.xpm",
+    m_idButtonFormula_5 = addToolButton(m_vToolBarFormula, "mini-integral",
 					i18n( "Add/change an integral" ), "addIntegral", 5 );
 
-    m_idButtonFormula_6 = addToolButton(m_vToolBarFormula, "mini-symbols.xpm",
+    m_idButtonFormula_6 = addToolButton(m_vToolBarFormula, "mini-symbols",
 					i18n( "Add/change a block with symbols" ), "addSymbol", 6 );
 
-    m_idButtonFormula_6 = addToolButton(m_vToolBarFormula, "matrix.xpm",
+    m_idButtonFormula_6 = addToolButton(m_vToolBarFormula, "matrix",
 					i18n( "Add/change matrix" ), "addMatrix", 7  );
     	
-    m_idButtonFormula_7 = addToolButton(m_vToolBarFormula, "index.xpm",
+    m_idButtonFormula_7 = addToolButton(m_vToolBarFormula, "index",
 					i18n( "Add an index at position..." ), "indexList", 8 );
 
     m_vToolBarFormula->enable( OpenPartsUI::Show );
@@ -437,13 +437,13 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
 							  toolTip, 50, -1, OpenPartsUI::AtBottom );
     m_vToolBarFont->setCurrentComboItem( m_idComboFont_FontSize, 2  );
 
-    m_idButtonFont_Bold = addToolButton(m_vToolBarFont, "bold.xpm",
+    m_idButtonFont_Bold = addToolButton(m_vToolBarFont, "bold",
 					i18n( "Bold" ), "fontSwitch", 2 );
 
-    m_idButtonFont_Italic = addToolButton(m_vToolBarFont, "italic.xpm",
+    m_idButtonFont_Italic = addToolButton(m_vToolBarFont, "italic",
 					  i18n( "Italic" ),"fontSwitch", 3 );
 
-    m_idButtonFont_Underl = addToolButton(m_vToolBarFont, "underl.xpm",
+    m_idButtonFont_Underl = addToolButton(m_vToolBarFont, "underl",
 					  i18n( "Underlined" ), "fontSwitch", 4 );
 
     warning("provo1");
@@ -473,24 +473,24 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
 
     //    m_vToolBarFont->setCurrentComboItem( m_idComboFont_ScaleMode,  2 );
     warning("provo1");
-    m_idButtonFont_0 = addToolButton(m_vToolBarFont, "reduce.xpm",
+    m_idButtonFont_0 = addToolButton(m_vToolBarFont, "reduce",
 				     i18n( "Reduce the fontSize" ), "reduce", 6 );
 
-    m_idButtonFont_1 = addToolButton(m_vToolBarFont, "enlarge.xpm",
+    m_idButtonFont_1 = addToolButton(m_vToolBarFont, "enlarge",
 				     i18n( "Increase the fontSize" ), "enlarge", 7 );
 
     //m_vToolBarFont->insertSeparator( -1 );
 
-    m_idButtonFont_2 = addToolButton(m_vToolBarFont, "elementsw.xpm",
+    m_idButtonFont_2 = addToolButton(m_vToolBarFont, "elementsw",
 				     i18n( "Reduce/Increase active element fontSize" ),"fontSwitch", 8 );
 
-    m_idButtonFont_3 = addToolButton(m_vToolBarFont, "indexsw.xpm",
+    m_idButtonFont_3 = addToolButton(m_vToolBarFont, "indexsw",
 				     i18n( "Reduce/Increase indexes fontSize" ),"fontSwitch",  9 );
 
-    m_idButtonFont_4 = addToolButton(m_vToolBarFont, "childrensw.xpm",
+    m_idButtonFont_4 = addToolButton(m_vToolBarFont, "childrensw",
 				     i18n( "Reduce/Increase children (content) fontSize" ), "fontSwitch", 10 );
 
-    m_idButtonFont_5 = addToolButton(m_vToolBarFont, "nextsw.xpm",
+    m_idButtonFont_5 = addToolButton(m_vToolBarFont, "nextsw",
 				     i18n( "Reduce/Increase next element fontSize" ), "fontSwitch", 11 );
 
     m_vToolBarFont->setToggle( m_idButtonFont_Bold, true );
@@ -512,17 +512,17 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     m_vToolBarType = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
     // ************************* Text *********************
-    m_idButtonType_Spl = addToolButton(m_vToolBarType, "split.xpm",
+    m_idButtonType_Spl = addToolButton(m_vToolBarType, "split",
 				       i18n( "Split text into 2 elment" ), "textSplit", 0 );
     //m_vToolBarType->insertSeparator(  -1);
     // ************************** Root ********************
-    m_idButtonType_RIn = addToolButton(m_vToolBarType, "rootindex.xpm",
+    m_idButtonType_RIn = addToolButton(m_vToolBarType, "rootindex",
 				       i18n( "Add root index (i.e. Top Left index)" ), "addTopLeftIndex",  1 );
 
     // ************************** Brackets ********************	
     //m_vToolBarType->insertSeparator(  -1);
 
-    //    m_idButtonType_Del = addToolButton(m_vToolBarType, "delimiter.xpm",
+    //    m_idButtonType_Del = addToolButton(m_vToolBarType, "delimiter",
     //				     i18n( "Set delimiter type" ), "bracketType" );
 
     fonts.length( 9 );
@@ -556,65 +556,65 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     //m_vToolBarType->insertSeparator(  7 );
 
     // ************************** Fraction ********************
-    m_idButtonType_MAl = addToolButton(m_vToolBarType, "midalign.xpm",
+    m_idButtonType_MAl = addToolButton(m_vToolBarType, "midalign",
 				       i18n( "Align fraction to midline" ), "fractionAlignM", 4 );
 
-    m_idButtonType_UAl = addToolButton(m_vToolBarType, "upalign.xpm",
+    m_idButtonType_UAl = addToolButton(m_vToolBarType, "upalign",
 				       i18n( "Align fraction to numerator" ), "fractionAlignU", 5 );
 
-    m_idButtonType_DAl = addToolButton(m_vToolBarType, "downalign.xpm",
+    m_idButtonType_DAl = addToolButton(m_vToolBarType, "downalign",
 				       i18n( "Align fraction to denominator" ), "fractionAlignD",6  );
 
-    m_idButtonType_CAl = addToolButton(m_vToolBarType, "centralign.xpm",
+    m_idButtonType_CAl = addToolButton(m_vToolBarType, "centralign",
 				       i18n( "Align center" ), "fractionAlignC", 7 );
 
-    m_idButtonType_LAl = addToolButton(m_vToolBarType, "leftalign.xpm",
+    m_idButtonType_LAl = addToolButton(m_vToolBarType, "leftalign",
 				       i18n( "Align left" ), "fractionAlignL", 8 );
 
-    m_idButtonType_RAl = addToolButton(m_vToolBarType, "rightalign.xpm",
+    m_idButtonType_RAl = addToolButton(m_vToolBarType, "rightalign",
 				       i18n( "Align Right" ), "fractionAlignR",  9 );
 
-    m_idButtonType_Les = addToolButton(m_vToolBarType, "near.xpm",
+    m_idButtonType_Les = addToolButton(m_vToolBarType, "near",
 				       i18n( "Reduce element vertical distance" ), "fractionDistLess", 10 );
 
-    m_idButtonType_Mor = addToolButton(m_vToolBarType, "far.xpm",
+    m_idButtonType_Mor = addToolButton(m_vToolBarType, "far",
 				       i18n( "Increase element vertical distance" ), "fractionDistMore", 11 );
 
-    m_idButtonType_Mid = addToolButton(m_vToolBarType, "midline.xpm",
+    m_idButtonType_Mid = addToolButton(m_vToolBarType, "midline",
 				       i18n( "Toggle fraction line" ), "toggleMidline", 12 );
 
     //m_vToolBarType->insertSeparator( 17 );
 
     // *******************  Integral **************************+
-    m_idButtonType_AddH = addToolButton(m_vToolBarType, "Ihigher.xpm",
+    m_idButtonType_AddH = addToolButton(m_vToolBarType, "Ihigher",
 					i18n( "Add higher limit" ), "integralHigher", 13 );
 
-    m_idButtonType_AddL = addToolButton(m_vToolBarType, "Ilower.xpm",
+    m_idButtonType_AddL = addToolButton(m_vToolBarType, "Ilower",
 					i18n( "Add lower limit" ), "integralLower", 14 );
 
     //m_vToolBarType->insertSeparator( 20 );
 
     // *********************** Matrix *************************
-    m_idButtonType_SetM = addToolButton(m_vToolBarType, "matrix.xpm",
+    m_idButtonType_SetM = addToolButton(m_vToolBarType, "matrix",
 					i18n( "Set matrix dimension" ), "matrixSet", 15 );
 
-    m_idButtonType_InR = addToolButton(m_vToolBarType, "insrow.xpm",
+    m_idButtonType_InR = addToolButton(m_vToolBarType, "insrow",
 				       i18n( "Insert a row" ), "matrixInsRow", 16 );
 
-    m_idButtonType_InC = addToolButton(m_vToolBarType, "inscol.xpm",
+    m_idButtonType_InC = addToolButton(m_vToolBarType, "inscol",
 				       i18n( "Insert a column" ), "matrixInsCol",17  );
 
-    m_idButtonType_ReR = addToolButton(m_vToolBarType, "remrow.xpm",
+    m_idButtonType_ReR = addToolButton(m_vToolBarType, "remrow",
 				       i18n( "Remove a row" ), "matrixRemRow", 18 );
 
-    m_idButtonType_ReC = addToolButton(m_vToolBarType, "remcol.xpm",
+    m_idButtonType_ReC = addToolButton(m_vToolBarType, "remcol",
 				       i18n( "Remove a column" ), "matrixRemCol", 19 );
 
     //m_vToolBarType->insertSeparator( 26 );
     m_vToolBarType->enable( OpenPartsUI::Show );
 
     // *********************** General *************************
-    m_idButtonType_Pix = addToolButton(m_vToolBarType, "remcol.xpm",
+    m_idButtonType_Pix = addToolButton(m_vToolBarType, "remcol",
 				       i18n( "Toggle pixmap use" ), "togglePixmap", 20 );
     warning("vai");
     m_vToolBarType->setToggle( m_idButtonType_UAl, true );
@@ -705,10 +705,10 @@ void KFormulaView::slotTypeChanged( const BasicElement *elm)
 	{
 	    QString content=elm->getContent();
 
-	    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon(content.left(1) + "higher.xpm" ));
+	    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon(content.left(1) + "higher" ));
 	    m_vToolBarType->setButtonPixmap( m_idButtonType_AddH, pix );
 
-	    pix = OPUIUtils::convertPixmap( BarIcon(content.left(1) + "lower.xpm" ));
+	    pix = OPUIUtils::convertPixmap( BarIcon(content.left(1) + "lower" ));
 	    m_vToolBarType->setButtonPixmap(m_idButtonType_AddL, pix );
 	}
 
