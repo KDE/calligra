@@ -908,28 +908,8 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
         if ( property.hasAttribute( "style:column-width" ) )
         {
           QString sWidth = property.attribute( "style:column-width" );
+          width = KoUnit::parseValue( property.attribute( "style:column-width" ), width );
           kdDebug(30518) << "Col Width: " << sWidth << endl;
-          int p = sWidth.find( "cm" );
-          if ( p != -1 )
-          {
-            sWidth = sWidth.left( p );
-            bool ok = true;
-            double d = sWidth.toDouble( &ok );
-            if ( ok )
-              width = d * 10; // we work with mm
-          }
-          else
-          {
-            p = sWidth.find( "mm" );
-            if ( p != -1 )
-            {
-              sWidth = sWidth.left( p );
-              bool ok = true;
-              double d = sWidth.toDouble( &ok );
-              if ( ok )
-                width = d;
-            }
-          }
         }
 
         if ( property.hasAttribute( "fo:break-before" ) )
