@@ -188,7 +188,7 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
     {
         elem = doc.createElement( "SIZE" );
         formatElem.appendChild( elem );
-        int size = static_cast<int>( KoTextZoomHandler::layoutUnitToPt( curFormat->font().pointSize() ) );
+        int size = static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt( curFormat->font().pointSize() ) );
         elem.setAttribute( "value", size );
     }
     if( !refFormat || curFormat->font().italic() != refFormat->font().italic() )
@@ -378,7 +378,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     if ( !elem.isNull() )
     {
         int size = elem.attribute("value").toInt();
-        font.setPointSize( KoTextZoomHandler::ptToLayoutUnit( size ) );
+        font.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( size ) );
     }
     elem = formatElem.namedItem( "ITALIC" ).toElement();
     if ( !elem.isNull() )

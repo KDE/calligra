@@ -207,7 +207,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_defaultFont.fromString(defaultFontname);
 
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
-    m_defaultFont.setPointSize( ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
+    m_defaultFont.setPointSize( ptToLayoutUnitPt( QFontInfo(m_defaultFont).pointSize() ) );
 
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least

@@ -157,6 +157,9 @@ Document (pt values, in double, KoPoint, KoRect.)
  |--KWTextFrameSet::documentToInternal
  V
 Internal coordinates (the coordinates given to QRT - in "layout units")
+Note that there are pixels and pts in the layout unit system too !
+There are conversions between LU points and document points,
+but also direct conversions between LU pixels and view pixels.
 
 Font sizes
 ==========
