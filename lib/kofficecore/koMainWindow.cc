@@ -248,7 +248,7 @@ void KoMainWindow::updateCaption()
       }
       if ( caption.isEmpty() )
           // Fall back to document URL
-          caption = d->m_rootDoc->url().decodedURL();
+          caption = d->m_rootDoc->url().prettyURL();
 
       // KTMW hides some of the functionality of kapp->makeStdCaption !
       QWidget::setCaption( kapp->makeStdCaption( caption, true, d->m_rootDoc->isModified() ) );

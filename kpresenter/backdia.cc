@@ -409,7 +409,7 @@ void BackDia::selectPic()
         chosenPic = QString::null;
         if (!KIO::NetAccess::download( url, chosenPic ))
           return;
-	lPicName->setText( url.decodedURL() );
+	lPicName->setText( url.prettyURL() );
 	backCombo->setCurrentItem( 1 );
 	picChanged = TRUE;
 	picLastModified = QDateTime();
@@ -432,7 +432,7 @@ void BackDia::selectClip()
         chosenClip = QString::null;
         if (!KIO::NetAccess::download( url, chosenClip ))
           return;
-        lClipName->setText( url.decodedURL() );
+        lClipName->setText( url.prettyURL() );
 	backCombo->setCurrentItem( 2 );
 	clipChanged = TRUE;
 	clipLastModified = QDateTime();
