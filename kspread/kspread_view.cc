@@ -2570,8 +2570,8 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
                                 result+=cell->valueDouble();
                         }
         }
-    KoMainWindow * tmpKo = const_cast<KoMainWindow*>(m_pDoc->firstShell());
-    for ( ; tmpKo ; tmpKo = const_cast<KoMainWindow*>(m_pDoc->nextShell()) )
+    KoMainWindow * tmpKo = m_pDoc->firstShell();
+    for ( ; tmpKo ; tmpKo = m_pDoc->nextShell() )
         tmpKo->statusBarLabel()->setText(i18n(" Sum : %1").arg(result));
     // Send some event around. This is read for example
     // by the calculator plugin.
