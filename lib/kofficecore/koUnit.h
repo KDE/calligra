@@ -43,10 +43,10 @@ class KoUnit
 {
 public:
     enum Unit {
-        U_MM,
-        U_CM,
-        U_PT,
-        U_INCH
+        U_MM = 0,
+        U_PT = 1,
+        U_INCH = 2,
+        U_CM = 3
     };
 
     // Prepare ptValue to be displayed in pt
