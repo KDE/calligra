@@ -10,6 +10,7 @@ Changes after KWord-1.3-beta2
 - Esc to deselect all frames
 - Fixed line-height bug due to hyphenation
 - Make the text view mode work again
+- Fix "frame borders always painted/printed even when off" (#45907)
 
 Changes after KWord-1.3-beta1
 =============================
