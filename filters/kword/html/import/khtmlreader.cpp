@@ -19,7 +19,7 @@
 #include "khtmlreader.h"
 
 #include "khtmlreader.moc"
-
+#include <kdebug.h>
 #include <dom/dom_text.h>
 #include <dom/dom2_views.h>
 #include <dom/dom_doc.h>
@@ -44,14 +44,22 @@ void qt_leave_modal( QWidget *widget );
 
 
 bool KHTMLReader::filter(KURL url) {
+	kdDebug() << "KHTMLReader::filter" << endl;
 	QObject::connect(_html,SIGNAL(completed()),this,SLOT(completed()));
+
 	_state.clear();
 	_html->begin();
 	_list_depth=0;
-	_html->view()->resize(700,530); //FIX?
+
+	_html->view()->resize(700,530);
 	_html->setAutoloadImages(false);
-	_html->openURL(url);
-	_html->setAutoloadImages(false);
+
+	if (_html->openURL(url) == false) {
+		qWarning("openURL returned false");
+		return false;
+	}
+
+	//FIXME use synchronous IO instead of this hack if possible.
 	QWidget dummy(0,0,WType_Dialog | WShowModal);
 	qt_enter_modal(&dummy);
 	qApp->enter_loop();
@@ -82,17 +90,25 @@ HTMLReader_state *KHTMLReader::pushNewState() {
         return s;
 }
 
+
 void KHTMLReader::popState() {
 
 	HTMLReader_state *s=_state.pop();
 
+	/**
+	   the recursion trough html is somewhat clumsy still, i'm working on a better method.
+	   popState gets called when a tag is closed, but since a closed tag doesn't mean the end
+	   of a (kword) "tag" we have to copy some things over from the closed tag:
+	   	- the paragraph (after a </B>, we still are in the same paragraph, but
+			inside the <B></B> , there might have been a <BR>)
+		- BUT the layout of the paragraph should NOT be copied over FIXME: this is
+			my fault, and sucks. better replace it or document it.
+	   if we go back into another frameset, we start a new paragraph.
+	 **/
 	if (s->frameset == state()->frameset)
 		{
-			qWarning((tr("before ") + _writer->getLayoutAttribute(state()->paragraph,"FLOW","align")).latin1());
 			state()->paragraph=s->paragraph;
-			qWarning((tr("after ") + _writer->getLayoutAttribute(state()->paragraph,"FLOW","align")).latin1());
 			_writer->setLayout(state()->paragraph,state()->layout);
-			qWarning((tr("final ") + _writer->getLayoutAttribute(state()->paragraph,"FLOW","align")).latin1());
 		}
 	else
 		startNewParagraph(true,true);
@@ -103,18 +119,27 @@ void KHTMLReader::popState() {
 
 
 void KHTMLReader::completed() {
+	kdDebug() << "KHTMLReader::completed" << endl;
         qApp->exit_loop();
+
 	DOM::Document doc=_html->document(); // FIXME parse <HEAD> too
-	DOM::Node docbody=doc.getElementsByTagName("BODY").item(0);
-	if (docbody.isNull()) { qWarning("no body"); _it_worked=false; return; }
+	DOM::NodeList list=doc.getElementsByTagName("body");
+	DOM::Node docbody=list.item(0);
+
+	if (docbody.isNull()) {
+		qWarning("no body");
+		_it_worked=false;
+		return;
+	}
+
 	parseNode(docbody);
 	_writer->cleanUpParagraph(state()->paragraph);
-
         _it_worked=_writer->writeDoc();
 }
 
 
 void KHTMLReader::parseNode(DOM::Node node) {
+
         // check if this is a text node.
 	DOM::Text t=node;
 	if (!t.isNull()) {
@@ -122,33 +147,36 @@ void KHTMLReader::parseNode(DOM::Node node) {
 	   return; // no children anymore...
 	}
 
+	// is this really needed ? it can't do harm anyway.
 	state()->format=_writer->currentFormat(state()->paragraph,true);
 	state()->layout=_writer->currentLayout(state()->paragraph);
-
 	pushNewState();
 
-	 //FIXME fix this
-
 	DOM::Element e=node;
+
 	bool go_recursive=true;
+
 	if (!e.isNull()) {
                 // get the CSS information
                 parseStyle(e);
 	        // get the tag information
 	        go_recursive=parseTag(e);
 	}
+
 	if (go_recursive)
 		for (DOM::Node q=node.firstChild(); !q.isNull(); q=q.nextSibling()) {
-
 			parseNode(q);
 		}
+
 	popState();
 
 }
 
+
 #define _PP(x) {if (e.tagName() == #x) return parse_##x(e);}
 #define _PF(x,a,b,c) {if (e.tagName() == #x) { _writer->formatAttribute(state()->paragraph, #a,#b,#c); return true;}}
 #define _PL(x,a,b,c) {if (e.tagName() == #x) { _writer->layoutAttribute(state()->paragraph, #a,#b,#c); return true;}}
+
 
 bool KHTMLReader::parseTag(DOM::Element e) {
 	qWarning(e.tagName().string().latin1());
@@ -204,6 +232,7 @@ void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 	QDomElement ql=state()->layout;
 
 	_writer->cleanUpParagraph(state()->paragraph);
+
         if ((startnewlayout==true) || ql.isNull())
         	{state()->paragraph=_writer->addParagraph(state()->frameset);}
         else
@@ -218,6 +247,11 @@ void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 		state()->format=_writer->startFormat(state()->paragraph,qf);
 	}
 
+	/**
+	  support lists: if we are in a list, and we start a new paragraph,
+	  we don't want to start a new item, but we want to retain the list state.
+	  we do this by incrementing the 'environment depth' and changing the numbering type to 'no numbering'
+	 **/
 	QString ct=_writer->getLayoutAttribute(state()->paragraph,"COUNTER","type");
 	if ((ct != QString::null) && (ct != "0")) {
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","type","0");
@@ -252,7 +286,6 @@ bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
 
 
 bool KHTMLReader::parse_P(DOM::Element e) {
-
 	startNewParagraph();
 	parse_CommonAttributes(e);
 
@@ -267,12 +300,7 @@ bool KHTMLReader::parse_HR(DOM::Element e) {
 }
 
 bool KHTMLReader::parse_BR(DOM::Element e) {
-	//HTMLReader_state *s=_state.pop();
-		// a BR tag affects something 'up' in the hierarchy
-
-	startNewParagraph(false,false);
-
-	//_state.push(s);
+	startNewParagraph(false,false); //keep the current format and layout
 	return false; // a BR tag has no childs.
 }
 
