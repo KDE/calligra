@@ -37,11 +37,12 @@ we want to have in the 1.0 release:
 - Rules a la gimp 
 - Rotate layouts
 - Saves channel information to file
+- Undo/Redo
 
 BUGS
 
-- Selection tools don't get redrawed when they need to
+- Selection tools don't get redrawed when they need to (except for rectangle select now)
 - Paint offset causes mispaint
 - Select Ellipse Tool is broken
-
+- Save in tool propeties does not work
 
