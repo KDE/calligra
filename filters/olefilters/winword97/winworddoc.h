@@ -30,6 +30,8 @@
 #include <misc.h>
 #include <fib.h>
 #include <pcd.h>
+#include <atrd.h>
+#include <sttbf.h>
 
 #include <kdebug.h>
 
@@ -60,13 +62,25 @@ private:
 
     const bool locatePieceTbl();
     const bool checkBinTables();
+    const bool readAtrdList();
+    const bool readGrpXst();
+    const bool browseDop();
+
+    const bool readSTTBF(STTBF &sttbf, const unsigned long &fc,
+                         const unsigned long &lcb, const unsigned char * const stream);
+
     bool m_success, m_ready;
     FIB *m_fib;
     QDomDocument m_part;
     myFile m_main, m_table, m_data;
+
+    // Stylesheet
     StyleSheet *m_styleSheet;
 
-    // piece table (pt)
+    // Piece table (pt)
     long m_ptCPBase, m_ptSize, m_ptCount, m_ptPCDBase;
+
+    // ATRD
+    QList<ATRD> m_atrdList;
 };
 #endif // WINWORDDOC_H

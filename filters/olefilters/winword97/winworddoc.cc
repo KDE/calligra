@@ -57,25 +57,34 @@ WinWordDoc::~WinWordDoc() {
     m_fib=0L;
     delete m_styleSheet;
     m_styleSheet=0L;
+
+    for(ATRD *tmp=m_atrdList.first(); tmp!=0; tmp=m_atrdList.next()) {
+        delete tmp;
+        tmp=0L;
+    }
 }
 
 const bool WinWordDoc::convert() {
 
     if(!m_success || m_ready)
         return false;
+    if(!browseDop())
+        return false;
     if(!locatePieceTbl())
         return false;
     if(!checkBinTables())
         return false;
+    if(!readAtrdList())
+        return false;
+    if(!readGrpXst())
+        return false;
 
-    // Read & process the DOP [TODO],...
 
-    if(m_fib->fComplex==0) {
+    if(m_fib->fComplex==0)
         convertSimple();
-    }
-    else {
+    else
         convertComplex();
-    }
+
     m_ready=true;
     return m_success;
 }
@@ -99,7 +108,7 @@ const QDomDocument * const WinWordDoc::part() {
             "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
             "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n"
             "   <PARAGRAPH>\n"
-            "    <TEXT>This filter is still crappy and it was not able to convert your document...</TEXT>\n"
+            "    <TEXT>This filter is still crappy and it obviously was not able to convert your document...</TEXT>\n"
             "    <INFO info=\"0\"/>\n"
             "    <HARDBRK frame=\"0\"/>\n"
             "    <FORMATS>\n"
@@ -302,4 +311,114 @@ const bool WinWordDoc::checkBinTables() {
         m_success=false;
     }
     return notCompressed;
+}
+
+const bool WinWordDoc::readAtrdList() {
+
+    if(m_fib->lcbPlcfandRef==0)
+        return true;
+    else {
+        unsigned short count=static_cast<unsigned short>((m_fib->lcbPlcfandRef-4)/34); // 34 == (sizeof(ATRD)==30 + sizeof(long))
+        unsigned long base=m_fib->fcPlcfandRef+(count+1)*4;
+
+        ATRD *atrd;
+        for(unsigned short i=0;i<count;++i) {
+            atrd=new ATRD;
+            for(unsigned short j=0;j<10;++j)
+                atrd->xstUsrInitl[j]=read16(m_table.data+base+j);
+            atrd->ibst=read16(m_table.data+base+20);
+            atrd->ak=read16(m_table.data+base+22);
+            atrd->grfbmc=read16(m_table.data+base+24);
+            atrd->lTagBkmk=read32(m_table.data+base+26);
+            base+=30;                       // sizeof(ATRD)==30!
+            m_atrdList.append(atrd);
+        }
+    }
+    return true;
+}
+
+const bool WinWordDoc::readGrpXst() {
+    // TODO -> simply call readSTTBF with the correct params
+    // and add a STTBF variable to the class
+    return true;
+}
+
+const bool WinWordDoc::browseDop() {
+    // TODO
+    return true;
+}
+
+const bool WinWordDoc::readSTTBF(STTBF &sttbf, const unsigned long &fc,
+                                 const unsigned long &lcb, const unsigned char * const stream) {
+
+    if(lcb==0)
+        return false;
+
+    unsigned long base=fc+4;
+    unsigned short len, i, j;
+    bool unicode=false;
+    unsigned short numStrings=read16(stream+fc);
+    sttbf.extraDataLen=read16(stream+fc+2);
+
+    if(numStrings==0xffff) {
+        unicode=true;
+        base=fc+6;
+        numStrings=sttbf.extraDataLen;
+        sttbf.extraDataLen=read16(stream+fc+4);
+    }
+
+    // TODO: unroll this loops :)
+    if(unicode) {
+        for(i=0; i<numStrings; ++i) {
+            len=read16(stream+base);
+            base+=2;
+            if(len==0)
+                sttbf.stringList.append(QString(""));
+            else {
+                QString str;
+
+                for(j=0; j<len*2; j+=2)
+                    str+=QChar(read16(stream+base+j));
+
+                sttbf.stringList.append(str);
+                base+=j;   // j==len*2 :)
+
+                if(sttbf.extraDataLen!=0) {
+                    QArray<unsigned char> *tmpArray=new QArray<unsigned char>;
+                    tmpArray->resize(sttbf.extraDataLen);
+                    for(j=0; j<sttbf.extraDataLen; ++j)
+                        tmpArray[j]=*(stream+base+j);
+                    base+=j;
+                    sttbf.extraData.append(tmpArray);
+                }
+            }
+        }
+    }
+    else {
+        for(i=0; i<numStrings; ++i) {
+            len=*(stream+base);
+            ++base;
+            if(len==0)
+                sttbf.stringList.append(QString(""));
+            else {
+                QString str;
+
+                for(j=0; j<len; ++j)
+                    str+=QChar(char2uni(*(stream+base+j)));
+
+                sttbf.stringList.append(str);
+                base+=j;   // j==len :)
+
+                if(sttbf.extraDataLen!=0) {
+                    QArray<unsigned char> *tmpArray=new QArray<unsigned char>;
+                    tmpArray->resize(sttbf.extraDataLen);
+                    for(j=0; j<sttbf.extraDataLen; ++j)
+                        tmpArray[j]=*(stream+base+j);
+                    base+=j;
+                    sttbf.extraData.append(tmpArray);
+                }
+            }
+        }
+    }
+    return true;
 }

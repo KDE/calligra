@@ -1,7 +1,7 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) -I$(srcdir)/../lib $(all_includes)
-LDFLAGS	= $(all_libraries)
+INCLUDES = -I$(srcdir) -I$(srcdir)/../lib $(all_includes)
+LDFLAGS = $(all_libraries)
 
 ####### Files
 
@@ -13,7 +13,7 @@ section.cc
 
 noinst_HEADERS = winworddoc.h fib.h wordfilter.h \
 paragraph.h picture.h style.h stylesheet.h misc.h \
-section.h
+section.h atrd.h sttbf.h
 
 METASOURCES = AUTO
 
