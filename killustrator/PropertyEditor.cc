@@ -393,6 +393,9 @@ void PropertyEditor::createFontWidget (QWidget* parent)
    QLabel *label = new QLabel(i18n("Color:"), group);
    penColorBttn = new KColorButton(group);
    penColorBttn->setColor (Qt::white);
+   connect(penColorBttn, SIGNAL(changed( const QColor & )),
+           this, SLOT(textColorChanged(const QColor & )));
+
 
    group = new QHButtonGroup(parent);
    group->setFrameStyle(QFrame::NoFrame);
@@ -412,6 +415,13 @@ void PropertyEditor::createFontWidget (QWidget* parent)
    textAlign[2] = new QPushButton (group);
    textAlign[2]->setToggleButton (true);
    textAlign[2]->setPixmap (SmallIcon ("trightalign",KIllustratorFactory::global()));
+}
+
+void PropertyEditor::textColorChanged(const QColor &_color )
+{
+#ifdef KFONTCHOOSER_HAS_SETCOLOR
+    fontChooser->setColor( _color );
+#endif
 }
 
 void PropertyEditor::applyPressed ()
@@ -617,6 +627,9 @@ void PropertyEditor::readProperties ()
       if (haveTextObjects)
       {
          penColorBttn->setColor (oInfo.color);
+#ifdef KFONTCHOOSER_HAS_SETCOLOR
+         fontChooser->setColor( oInfo.color );
+#endif
          GText* tobj = (GText *) object;
          GText::TextInfo tInfo = tobj->getTextInfo ();
          fontChooser->setFont (tInfo.font);

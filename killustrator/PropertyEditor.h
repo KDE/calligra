@@ -79,7 +79,7 @@ private slots:
     void gradientColorChanged (const QColor&);
     void gradientStyleChanged (int);
     void gradientAngleChanged (int);
-
+    void textColorChanged(const QColor &_color );
 private:
     void readProperties ();
     void updateGradient ();
