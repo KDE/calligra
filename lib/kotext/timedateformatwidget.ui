@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>TimeDateFormatWidgetPrototype</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,14 +8,22 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>260</width>
-            <height>223</height>
+            <width>262</width>
+            <height>176</height>
         </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
     </property>
     <property name="minimumSize">
         <size>
-            <width>260</width>
-            <height>180</height>
+            <width>0</width>
+            <height>0</height>
         </size>
     </property>
     <property name="baseSize">
@@ -27,175 +35,159 @@
     <property name="caption">
         <string>TimeDateFormatWidgetPrototype</string>
     </property>
-    <widget class="QComboBox">
+    <grid>
         <property name="name">
-            <cstring>combo1</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>11</y>
-                <width>238</width>
-                <height>24</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>CheckBox1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>41</y>
-                <width>238</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>C&amp;ustom</string>
-        </property>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>Layout5</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>68</y>
-                <width>238</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <hbox>
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>layout7</cstring>
             </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QLabel">
+            <vbox>
                 <property name="name">
-                    <cstring>TextLabel1</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="text">
-                    <string>&amp;Insert:</string>
-                </property>
-                <property name="buddy" stdset="0">
-                    <cstring>combo2</cstring>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <property name="name">
-                    <cstring>combo2</cstring>
-                </property>
-                <property name="currentItem">
-                    <number>0</number>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
-    <spacer>
-        <property name="name">
-            <cstring>Spacer2</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Vertical</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>120</x>
-                <y>182</y>
-                <width>20</width>
-                <height>30</height>
-            </rect>
-        </property>
-    </spacer>
-    <spacer>
-        <property name="name">
-            <cstring>Spacer1</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>160</y>
-                <width>221</width>
-                <height>20</height>
-            </rect>
-        </property>
-    </spacer>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>Layout2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>100</y>
-                <width>240</width>
-                <height>28</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>label_correction</cstring>
-                </property>
-                <property name="text">
-                    <string>TextLabel1</string>
-                </property>
-            </widget>
-            <widget class="KIntNumInput">
-                <property name="name">
-                    <cstring>KIntNumInput1</cstring>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>140</y>
-                <width>240</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string></string>
-        </property>
-        <property name="textFormat">
-            <enum>PlainText</enum>
-        </property>
-        <property name="indent">
-            <number>5</number>
-        </property>
-    </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>combo1</cstring>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>CheckBox1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;ustom</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Insert:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>combo2</cstring>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer4</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>50</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>combo2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="currentItem">
+                                <number>0</number>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>label_correction</cstring>
+                            </property>
+                            <property name="text">
+                                <string>TextLabel1</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer5</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>50</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="KIntNumInput">
+                            <property name="name">
+                                <cstring>KIntNumInput1</cstring>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>label</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="textFormat">
+                        <enum>PlainText</enum>
+                    </property>
+                    <property name="indent">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>10</height>
+                        </size>
+                    </property>
+                </spacer>
+            </vbox>
+        </widget>
+    </grid>
 </widget>
 <connections>
     <connection>
@@ -214,9 +206,16 @@
 <tabstops>
     <tabstop>combo1</tabstop>
 </tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">timedateformatwidget.ui.h</include>
+</includes>
 <slots>
     <slot>comboActivated()</slot>
     <slot>updateLabel()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
 </UI>
