@@ -313,7 +313,7 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
     titleLayout->addWidget( title );
 
     QHBox *moreBox = new QHBox( this );
-    QPushButton *showColourButton = new QPushButton( i18n("&Set Colours"), moreBox );
+    QPushButton *showColourButton = new QPushButton( i18n("&Set Colors"), moreBox );
     showColourButton->setToggleButton( true );
     connect( showColourButton, SIGNAL( toggled(bool) ), this, SLOT( showColourGroup(bool) ) );
 
@@ -328,18 +328,18 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
                                             i18n("Preliminary Slides"),
                                             this , "colourBox" );
     QWhatsThis::add( colourGroup,
-                     i18n( "This section allows you to set the colours for "
+                     i18n( "This section allows you to set the colors for "
                            "the preliminary slides. It doesn't affect the "
                            "presentation in any way, and it is normal to "
                            "leave these set to the default.") );
     QHBox *textColourLayout = new QHBox( colourGroup );
-    QLabel *lable3 = new QLabel( i18n("Text colour:"), textColourLayout );
+    QLabel *lable3 = new QLabel( i18n("Text color:"), textColourLayout );
     lable3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     textColour = new KColorButton( msPres.getTextColour(), textColourLayout );
     lable3->setBuddy( textColour );
     
     QHBox *backgroundColourLayout = new QHBox( colourGroup );
-    QLabel *lable4 = new QLabel( i18n("Background colour:"), backgroundColourLayout );
+    QLabel *lable4 = new QLabel( i18n("Background color:"), backgroundColourLayout );
     lable4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     backColour = new KColorButton( msPres.getBackColour(), backgroundColourLayout );
     lable4->setBuddy( backColour );
