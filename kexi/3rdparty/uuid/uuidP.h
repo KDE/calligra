@@ -14,11 +14,20 @@
 
 /*js*/
 #ifdef _WIN32
-//..
-#define longlong __int64
-#else
-#define longlong long long
+/*.. */
+# define longlong __int64
+#else /* non-win32 systems */
+# define longlong long long
+#endif
+
+#ifdef __linux__
 # include <linux/types.h>
+#endif
+
+#ifdef __FreeBSD__
+typedef u_int32_t __u32;
+typedef u_int16_t __u16;
+typedef u_int8_t __u8;
 #endif
 
 #include "uuid.h"
