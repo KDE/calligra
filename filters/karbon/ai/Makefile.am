@@ -9,7 +9,6 @@ libkarbonaiimport_la_LDFLAGS = \
 	-version-info 1:0:0 -no-undefined
 
 INCLUDES = \
-	-I$(srcdir)/.. \
         $(KOFFICE_INCLUDES) \
 	$(all_includes)
 

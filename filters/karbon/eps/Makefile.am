@@ -4,7 +4,6 @@ libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonepsexport_la_LIBADD = $(LIB_KOFFICEUI)
 
 INCLUDES = $(KOFFICE_INCLUDES) \
-	-I$(srcdir)/.. \
 	$(all_includes)
 
 service_DATA = karbon_eps_export.desktop

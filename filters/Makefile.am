@@ -1,1 +1,1 @@
-SUBDIRS = kspread kword kpresenter olefilters kontour xsltfilter kformula
+SUBDIRS = kspread kword kpresenter olefilters kontour xsltfilter kformula karbon

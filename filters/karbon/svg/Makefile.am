@@ -4,7 +4,6 @@ libkarbonsvgexport_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonsvgexport_la_LIBADD = $(LIB_KOFFICEUI)
 
 INCLUDES = $(KOFFICE_INCLUDES) \
-	-I$(srcdir)/.. \
 	$(all_includes)
 
 service_DATA = karbon_svg_export.desktop
