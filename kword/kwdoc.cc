@@ -1487,7 +1487,7 @@ QDomDocument KWDocument::saveXML()
     docattrs.setAttribute( "standardpage", 1 );
     docattrs.setAttribute( "hasHeader", static_cast<int>(isHeaderVisible()) );
     docattrs.setAttribute( "hasFooter", static_cast<int>(isFooterVisible()) );
-    docattrs.setAttribute( "unit", getUnit() );
+    docattrs.setAttribute( "unit", KWUnit::unitName(getUnit()) );
 
 //    out << otag << "<FOOTNOTEMGR>" << endl;
 //    footNoteManager.save( out );
