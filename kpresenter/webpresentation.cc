@@ -89,7 +89,7 @@ void KPWebPresentation::loadConfig()
 {
   if (config.isEmpty())
     return;
-      
+
   KSimpleConfig cfg(config);
   cfg.setGroup("General");
 
@@ -97,13 +97,13 @@ void KPWebPresentation::loadConfig()
   title = cfg.readEntry("Title",title);
   email = cfg.readEntry("EMail",email);
   unsigned int num = cfg.readNumEntry("Slides",doc->getPageNums());
-  
+
   if (num <= doc->getPageNums())
     {
       for (unsigned int i = 0;i < num;i++)
 	slideTitles[i] = cfg.readEntry(QString("SlideTitle[%1]").arg(i),slideTitles[i]);
     }
-  
+
   backColor = cfg.readColorEntry("BackColor",&backColor);
   titleColor = cfg.readColorEntry("TitleColor",&titleColor);
   textColor = cfg.readColorEntry("TextColor",&textColor);
@@ -117,15 +117,15 @@ void KPWebPresentation::saveConfig()
 {
   KSimpleConfig cfg(config);
   cfg.setGroup("General");
-  
+
   cfg.writeEntry("Author",author);
   cfg.writeEntry("Title",title);
   cfg.writeEntry("EMail",email);
   cfg.writeEntry("Slides",doc->getPageNums());
-  
+
   for (unsigned int i = 0;i < doc->getPageNums();i++)
     cfg.writeEntry(QString("SlideTitle[%1]").arg(i),slideTitles[i]);
-  
+
   cfg.writeEntry("BackColor",backColor);
   cfg.writeEntry("TitleColor",titleColor);
   cfg.writeEntry("TextColor",textColor);
@@ -139,46 +139,53 @@ void KPWebPresentation::initCreation(QProgressBar *progressBar)
 {
   QString cmd;
   int p;
-  
+
   cmd = QString("mkdir -p %1/html").arg(path);
   system(cmd);
-  
+
   p = progressBar->progress();
   progressBar->setProgress(++p);
+  kapp->processEvents();
   
   cmd = QString("mkdir -p %1/pics").arg(path);
   system(cmd);
- 
+
   p = progressBar->progress();
   progressBar->setProgress(++p);
+  kapp->processEvents();
 
   QString dir = kapp->kde_datadir() + "/kpresenter/slideshow";
   QString format = imageFormat(imgFormat);
-    
+
   system(QString("cp %1/%2.%3 %4/pics/%5.%6").arg(dir).arg("home").arg(format).arg(path).arg("home").arg(format));
 
   p = progressBar->progress();
   progressBar->setProgress(++p);
+  kapp->processEvents();
 
   system(QString("cp %1/%2.%3 %4/pics/%5.%6").arg(dir).arg("first").arg(format).arg(path).arg("first").arg(format));
 
   p = progressBar->progress();
   progressBar->setProgress(++p);
+  kapp->processEvents();
 
   system(QString("cp %1/%2.%3 %4/pics/%5.%6").arg(dir).arg("next").arg(format).arg(path).arg("next").arg(format));
 
   p = progressBar->progress();
   progressBar->setProgress(++p);
+  kapp->processEvents();
 
   system(QString("cp %1/%2.%3 %4/pics/%5.%6").arg(dir).arg("prev").arg(format).arg(path).arg("prev").arg(format));
 
   p = progressBar->progress();
   progressBar->setProgress(++p);
+  kapp->processEvents();
 
   system(QString("cp %1/%2.%3 %4/pics/%5.%6").arg(dir).arg("last").arg(format).arg(path).arg("last").arg(format));
 
   p = progressBar->progress();
   progressBar->setProgress(++p);
+  kapp->processEvents();
 }
 
 /*================================================================*/
@@ -188,16 +195,17 @@ void KPWebPresentation::createSlidesPictures(QProgressBar *progressBar)
   QString filename;
   QString format = imageFormat(imgFormat);
   int p;
-  
+
   for (unsigned int i = 0;i < doc->getPageNums();i++)
     {
       pix.fill(Qt::white);
       view->getPage()->drawPageInPix2(pix,i * doc->getPageSize(0,0,0).height(),i);
       filename = QString("%1/pics/slide_%2.%3").arg(path).arg(i + 1).arg(format);
       pix.save(filename,format.upper());
-      
+
       p = progressBar->progress();
       progressBar->setProgress(++p);
+      kapp->processEvents();
     }
 }
 
@@ -207,13 +215,13 @@ void KPWebPresentation::createSlidesHTML(QProgressBar *progressBar)
   unsigned int pgNum;
   int p;
   QString format = imageFormat(imgFormat);
-  
+
   QString html;
   for (unsigned int i = 0;i < doc->getPageNums();i++)
     {
       pgNum = i + 1;
       html = QString("<HEAD><TITLE>%1 - %2</TITLE></HEAD>\n").arg(title).arg(slideTitles[i]);
-      
+
       QString c1;
       c1.sprintf("%02X%02X%02X",backColor.red(),backColor.green(),backColor.blue());
       QString c2;
@@ -222,7 +230,7 @@ void KPWebPresentation::createSlidesHTML(QProgressBar *progressBar)
       c3.sprintf("%02X%02X%02X",titleColor.red(),titleColor.green(),titleColor.blue());
 
       html += QString("<BODY bgcolor=\"%1\" text=\"%2\">\n").arg(c1).arg(c2);
-      
+
       html += QString("  <CENTER>\n");
       if (i > 0)
 	html += QString("    <A HREF=\"slide_1.html\">");
@@ -231,7 +239,7 @@ void KPWebPresentation::createSlidesHTML(QProgressBar *progressBar)
 	html += "</A>\n";
       else
 	html += "\n";
-      
+
       if (i > 0)
 	html += QString("    <A HREF=\"slide_%1.html\">").arg(pgNum - 1);
       html += QString("<IMG src=\"../pics/prev.%1\" border=\"0\">").arg(format);
@@ -239,15 +247,15 @@ void KPWebPresentation::createSlidesHTML(QProgressBar *progressBar)
 	html += "</A>\n";
       else
 	html += "\n";
-      
+
       if (i < doc->getPageNums() - 1)
 	html += QString("    <A HREF=\"slide_%1.html\">").arg(pgNum + 1);
       html += QString("<IMG src=\"../pics/next.%1\" border=\"0\">").arg(format);
       if (i < doc->getPageNums() - 1)
 	html += "</A>\n";
-      else 
+      else
 	html += "\n";
-      
+
       if (i < doc->getPageNums() - 1)
 	html += QString("    <A HREF=\"slide_%1.html\">").arg(doc->getPageNums());
       html += QString("<IMG src=\"../pics/last.%1\" border=\"0\">").arg(format);
@@ -255,20 +263,20 @@ void KPWebPresentation::createSlidesHTML(QProgressBar *progressBar)
 	html += "</A>\n";
       else
 	html += "\n";
-      
+
       html += "    &nbsp;&nbsp;&nbsp;&nbsp;\n";
-      
+
       html += "    <A HREF=\"../index.html\">";
       html += QString("<IMG src=\"../pics/home.%1\" border=\"0\">").arg(format);
       html += "</A>\n";
-      
+
       html += "  </CENTER><BR><HR noshade>\n";
-      
+
       html += QString("  <FONT color=\"%1\">\n").arg(c3);
       html += QString("  <CENTER><B>%1</B> - <I>%2</I></CENTER>\n").arg(title).arg(slideTitles[i]);
-      
+
       html += "  </FONT><HR noshade><BR>\n";
-      
+
       html += "  <CENTER>\n";
       html += QString("    <IMG src=\"../pics/slide_%1.%2\">").arg(pgNum).arg(format);
       html += "  </CENTER><BR><HR noshade>\n";
@@ -279,7 +287,7 @@ void KPWebPresentation::createSlidesHTML(QProgressBar *progressBar)
       html += QString("<I>%1</I>").arg(author);
       if (!email.isEmpty())
 	html += "</A>";
-      
+
       html += " - created with <A HREF=\"http://koffice.kde.org/kpresenter.html\">KPresenter</A>\n";
       html += "  </CENTER><HR noshade>\n";
       html += "</BODY></HTML>\n";
@@ -292,6 +300,7 @@ void KPWebPresentation::createSlidesHTML(QProgressBar *progressBar)
 
       p = progressBar->progress();
       progressBar->setProgress(++p);
+      kapp->processEvents();
     }
 }
 
@@ -308,17 +317,17 @@ void KPWebPresentation::createMainPage(QProgressBar *progressBar)
   c2.sprintf("%02X%02X%02X",textColor.red(),textColor.green(),textColor.blue());
   QString c3;
   c3.sprintf("%02X%02X%02X",titleColor.red(),titleColor.green(),titleColor.blue());
-  
+
   html += QString("<BODY bgcolor=\"%1\" text=\"%2\">\n").arg(c1).arg(c2);
 
   html += QString("<FONT color=\"%1\">\n").arg(c3);
   html += QString("<BR><CENTER><H1>%1</H1></CENTER>\n").arg(title);
   html += "</FONT>\n";
-  
+
   html += "<BR><BR><CENTER><H3><A HREF=\"html/slide_1.html\">Click here to start the Slideshow</A></H3></CENTER><BR>\n";
-  
+
   html += "<HR noshade><BR><BR>\n";
-  
+
   if (email.isEmpty())
     html += QString("Created on %1 by <I>%2</I><BR><BR>\n").arg(QDate::currentDate().toString()).arg(author);
   else
@@ -326,12 +335,12 @@ void KPWebPresentation::createMainPage(QProgressBar *progressBar)
 
   html += "<B>Table of Contents</B><BR>\n";
   html += "<OL>\n";
-  
+
   for (unsigned int i = 0;i < doc->getPageNums();i++)
     html += QString("  <LI><A HREF=\"html/slide_%1.html\">%2</A><BR>\n").arg(i + 1).arg(slideTitles[i]);
-  
+
   html += "</OL></BODY></HTML>\n";
-    
+
   QFile file(QString("%1/index.html").arg(path));
   file.open(IO_WriteOnly);
   QTextStream t(&file);
@@ -339,6 +348,7 @@ void KPWebPresentation::createMainPage(QProgressBar *progressBar)
   file.close();
 
   progressBar->setProgress(progressBar->totalSteps());
+  kapp->processEvents();
 }
 
 /*================================================================*/
@@ -365,7 +375,7 @@ void KPWebPresentation::init()
   title = "Slideshow";
 
   for (unsigned int i = 0;i < doc->getPageNums();i++)
-    slideTitles.append(QString("Slide %1").arg(i));
+    slideTitles.append(doc->getPageTitle(i,QString("Slide %1").arg(i)));
 
   backColor = Qt::white;
   textColor = Qt::black;
@@ -375,7 +385,7 @@ void KPWebPresentation::init()
 #else
   imgFormat = PNG;
 #endif
-  
+
   path = getenv("HOME");
   path += "/www";
 
@@ -417,7 +427,7 @@ void KPWebPresentationWizard::setupPage1()
   page1 = new QHBox(this);
 
   QLabel *helptext = new QLabel(page1);
-  helptext->setBackgroundColor(Qt::darkBlue);
+  helptext->setBackgroundColor(QColor(57,63,180));
   helptext->setText(i18n("  Enter here your Name, your Email  \n"
 			 "  Address and the Title of the Web-  \n"
 			 "  Presentation. Also enter the Path  \n"
@@ -471,7 +481,7 @@ void KPWebPresentationWizard::setupPage2()
   page2 = new QHBox(this);
 
   QLabel *helptext = new QLabel(page2);
-  helptext->setBackgroundColor(Qt::darkBlue);
+  helptext->setBackgroundColor(QColor(57,63,180));
   helptext->setText(i18n("  Here you can configure the style  \n"
 			 "  of the webpages (colors). You also  \n"
 			 "  need to specify the picture format  \n"
@@ -545,7 +555,7 @@ void KPWebPresentationWizard::setupPage3()
   page3 = new QHBox(this);
 
   QLabel *helptext = new QLabel(page3);
-  helptext->setBackgroundColor(Qt::darkBlue);
+  helptext->setBackgroundColor(QColor(57,63,180));
   helptext->setText(i18n("  Here you can specify titles for  \n"
 			 "  each slide. Click in the list on  \n"
 			 "  on a slide and then enter in the  \n"
@@ -596,14 +606,14 @@ void KPWebPresentationWizard::finish()
   for (;it.current();++it)
     slides[atoi(it.current()->text(0)) - 1] = QString(it.current()->text(1));
   webPres.setSlideTitles(slides);
-  
+
   webPres.setBackColor(backColor->color());
   webPres.setTitleColor(titleColor->color());
   webPres.setTextColor(textColor->color());
   webPres.setImageFormat(static_cast<KPWebPresentation::ImageFormat>(format->currentItem()));
   webPres.setPath(path->text());
   webPres.setZoom(zoom->value());
-  
+
   close();
   KPWebPresentationCreateDialog::createWebPresentation(doc,view,webPres);
 }
@@ -724,7 +734,7 @@ void KPWebPresentationCreateDialog::initCreation()
   progressBar->setTotalSteps(webPres.initSteps());
 
   webPres.initCreation(progressBar);
-  
+
   step1->setFont(f2);
   progressBar->setProgress(progressBar->totalSteps());
 }
@@ -740,7 +750,7 @@ void KPWebPresentationCreateDialog::createSlidesPictures()
   progressBar->setTotalSteps(webPres.slides1Steps());
 
   webPres.createSlidesPictures(progressBar);
-  
+
   step2->setFont(f2);
   progressBar->setProgress(progressBar->totalSteps());
 }
@@ -756,7 +766,7 @@ void KPWebPresentationCreateDialog::createSlidesHTML()
   progressBar->setTotalSteps(webPres.slides2Steps());
 
   webPres.createSlidesHTML(progressBar);
-  
+
   step3->setFont(f2);
   progressBar->setProgress(progressBar->totalSteps());
 }
@@ -772,7 +782,7 @@ void KPWebPresentationCreateDialog::createMainPage()
   progressBar->setTotalSteps(webPres.mainSteps());
 
   webPres.createMainPage(progressBar);
-  
+
   step4->setFont(f2);
   progressBar->setProgress(progressBar->totalSteps());
 }
@@ -782,13 +792,13 @@ void KPWebPresentationCreateDialog::setupGUI()
 {
   back = new QVBox(this);
   back->setMargin(10);
-  
+
   QFrame *line;
-  
+
   line = new QFrame(back);
   line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
   line->setMaximumHeight(20);
-  
+
   step1 = new QLabel(i18n("Initialize (create file structure, etc.)"),back);
   step2 = new QLabel(i18n("Create Pictures of the Slides"),back);
   step3 = new QLabel(i18n("Create HTML pages for the slides"),back);
@@ -799,7 +809,7 @@ void KPWebPresentationCreateDialog::setupGUI()
   line->setMaximumHeight(20);
 
   progressBar = new QProgressBar(back);
-  
+
   line = new QFrame(back);
   line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
   line->setMaximumHeight(20);
@@ -808,7 +818,7 @@ void KPWebPresentationCreateDialog::setupGUI()
   bSave = bb->addButton(i18n("Save Configuration..."));
   bb->addStretch();
   bDone = bb->addButton(i18n("Done"));
-  
+
   bSave->setEnabled(false);
   bDone->setEnabled(false);
 
@@ -831,9 +841,9 @@ void KPWebPresentationCreateDialog::saveConfig()
     filename = QFileInfo(filename).absFilePath();
   else
     filename = QString::null;
-  
+
   filename = KFileDialog::getOpenFileName(filename,"*.kpweb|KPresenter Web-Presentation");
-  
+
   if (!filename.isEmpty())
     {
       webPres.setConfig(filename);

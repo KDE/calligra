@@ -1889,7 +1889,7 @@ bool Page::canAssignEffect(int &pgNum,int &objNum)
 }
 
 /*================================================================*/
-void Page::drawPageInPix2(QPixmap &_pix,int __diffy,int pgnum)
+void Page::drawPageInPix2(QPixmap &_pix,int __diffy,int pgnum,float _zoom = 1.0)
 {
   currPresPage = pgnum + 1;
   int _yOffset = view->getDiffY();
@@ -1900,7 +1900,7 @@ void Page::drawPageInPix2(QPixmap &_pix,int __diffy,int pgnum)
 
   KPObject *kpobject = 0L;
   int i;
-  
+
   for (i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -1908,7 +1908,7 @@ void Page::drawPageInPix2(QPixmap &_pix,int __diffy,int pgnum)
     }
 
   bool _editMode = editMode;
-  
+
   editMode = false;
   drawBackground(&p,_pix.rect());
   editMode = _editMode;
@@ -3184,7 +3184,7 @@ void Page::dropEvent(QDropEvent *e)
       setCursor(waitCursor);
       view->kPresenterDoc()->insertPicture(filename,e->pos().x(),e->pos().y());
       setCursor(c);
-      
+
       QString cmd = "rm -f ";
       cmd += filename;
       system(cmd.ascii());

@@ -119,7 +119,7 @@ public:
   KTextObject *haveASelectedTextObj();
 
   void drawPageInPix(QPixmap&,int);
-  void drawPageInPix2(QPixmap&,int,int);
+  void drawPageInPix2(QPixmap&,int,int,float _zoom = 1.0);
 
 public slots:
 

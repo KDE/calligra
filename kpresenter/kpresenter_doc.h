@@ -151,7 +151,7 @@ public:
   virtual KPresenterView* createPresenterView();
 
   // ------ IDL ------
-  virtual CORBA::Boolean init() {return insertNewTemplate(0,0);}
+  virtual CORBA::Boolean init() { return insertNewTemplate(0,0); }
 
   KOffice::MainWindow_ptr createMainWindow();
 
@@ -165,8 +165,8 @@ public:
   virtual char* mimeType() {return CORBA::string_dup(MIME_TYPE);}
 
   // ask, if document is modified
-  virtual CORBA::Boolean isModified() {return m_bModified;}
-  virtual void setModified(bool _c) {m_bModified = _c; if (_c) m_bEmpty = false; }
+  virtual CORBA::Boolean isModified() { return m_bModified; }
+  virtual void setModified(bool _c) { m_bModified = _c; if (_c) m_bEmpty = false; }
   virtual bool isEmpty() { return m_bEmpty; }
 
   // ------ C++ ------
@@ -350,6 +350,8 @@ public:
 
   void setUnit(KoUnit _unit,QString __unit);
 
+  QString getPageTitle(unsigned int pgNum,const QString &_title);
+  
 signals:
 
   // document modified

@@ -139,3 +139,12 @@ Reggie, 3.5.1999:
 -----------------
 - Added PNG to filters when opening KFileDialog for opening a pic
 - Fixes in pixmap loading
+
+Reggie, 4.5.1999:
+-----------------
+- HTML Sideshow generation tries now to find titles for the slides
+  with looking through the text objects of each slide itself
+  (No "Slide_X" deafult titles anymore :-)
+- Some cosmetic fixes in the HTML Slidshow generation dialogs
+ 
+

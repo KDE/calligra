@@ -3160,3 +3160,44 @@ int KPresenterDoc::getPenBrushFlags()
   return flags;
 }
 
+/*================================================================*/
+QString KPresenterDoc::getPageTitle(unsigned int pgNum,const QString &_title)
+{
+  QList<KPObject> objs;
+  objs.setAutoDelete(false);
+
+  KRect rect = getPageSize(pgNum,0,0);
+  
+  KPObject *kpobject = 0L,*obj = 0L;
+  for (kpobject = _objectList->first();kpobject;kpobject = _objectList->next())
+    if (kpobject->getType() == OT_TEXT && rect.intersects(kpobject->getBoundingRect(0,0)) &&
+	dynamic_cast<KPTextObject*>(kpobject)->getKTextObject()->lines() > 0)
+      objs.append(kpobject);
+  
+  if (objs.isEmpty())
+    return QString(_title);
+
+  obj = objs.first();
+  
+  kpobject = objs.first();
+  for (kpobject = objs.next();kpobject;kpobject = objs.next())
+    if (kpobject->getOrig().y() < obj->getOrig().y())
+      obj = kpobject;
+  
+  // this can't happen, but you never know :-)
+  if (!obj)
+    return QString(_title);
+  
+  KTextObject *txtObj = dynamic_cast<KPTextObject*>(obj)->getKTextObject();
+  
+  if (txtObj->lines() == 2)
+    {
+      QString l1 = txtObj->lineAt(0)->getText();
+      l1 = l1.simplifyWhiteSpace();
+      QString l2 = txtObj->lineAt(1)->getText();
+      l2 = l2.simplifyWhiteSpace();
+      return QString("%1 %2").arg(l1).arg(l2);
+    }
+  
+  return QString(txtObj->lineAt(0)->getText()).simplifyWhiteSpace();
+}
