@@ -81,13 +81,13 @@ class KoTemplateChooseDia : public QDialog
 public:
     enum ReturnType {Cancel, Template, File, Empty};
 
-    KoTemplateChooseDia( QWidget *parent, const char *name, const QString& template_type, 
-			 KInstance* global, bool _hasCancel, bool _onlyTemplates, 
+    KoTemplateChooseDia( QWidget *parent, const char *name, const QString& template_type,
+			 KInstance* global, bool _hasCancel, bool _onlyTemplates,
 			 const QString &importFilter, const QString &mimeType );
     ~KoTemplateChooseDia() {;}
 
-    static ReturnType chooseTemplate( const QString& template_type, KInstance* global, QString &_template, 
-				      bool _hasCancel, bool _onlyTemplates = true, 
+    static ReturnType chooseTemplate( const QString& template_type, KInstance* global, QString &_template,
+				      bool _hasCancel, bool _onlyTemplates = true,
 				      const QString &importFilter = QString::null,
 				      const QString &mimeType = QString::null );
 
@@ -125,7 +125,8 @@ private:
     QString m_strImportFilter;
     QString m_strMimeType;
     KInstance* global;
-
+    bool firstTime;
+    
 private slots:
     void nameChanged( const QString & );
     void chosen();
@@ -136,7 +137,7 @@ private slots:
     void openEmpty();
     void chooseFile();
     void tabsChanged( const QString & )
-    { openTemplate(); }
+    { if ( !firstTime ) openTemplate(); firstTime = FALSE; }
 
 signals:
     void templateChosen( const QString & );

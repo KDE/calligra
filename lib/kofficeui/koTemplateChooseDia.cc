@@ -41,27 +41,29 @@
 /******************************************************************/
 
 /*================================================================*/
-KoTemplateChooseDia::KoTemplateChooseDia( QWidget *parent, const char *name, const QString& _template_type, 
-					 KInstance* _global, bool _hasCancel, bool _onlyTemplates, 
+KoTemplateChooseDia::KoTemplateChooseDia( QWidget *parent, const char *name, const QString& _template_type,
+					 KInstance* _global, bool _hasCancel, bool _onlyTemplates,
 					 const QString &importFilter, const QString &mimeType )
-    : QDialog( parent, name, TRUE ), template_type( _template_type ), onlyTemplates( _onlyTemplates ), 
+    : QDialog( parent, name, TRUE ), template_type( _template_type ), onlyTemplates( _onlyTemplates ),
       m_strImportFilter( importFilter ), m_strMimeType( mimeType )
 {
+    firstTime = TRUE;
     global = _global;
 	
     groupList.setAutoDelete( TRUE );
     getGroups();
-    setupTabs();
 
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
     ok = bb->addButton( i18n( "OK" ) );
     connect( ok, SIGNAL( clicked() ), this, SLOT( chosen() ) );
     ok->setDefault( TRUE );
+    ok->setEnabled( FALSE );
     if ( _hasCancel )
 	connect( bb->addButton( i18n( "Cancel" ) ), SIGNAL( clicked() ), this, SLOT( reject() ) );
     bb->layout();
     bb->setMaximumHeight( bb->sizeHint().height() );
+    setupTabs();
     grid->addWidget( bb, 9, 0 );
     grid->setRowStretch( 2, 1 );
 	
@@ -71,20 +73,20 @@ KoTemplateChooseDia::KoTemplateChooseDia( QWidget *parent, const char *name, con
 }
 
 /*================================================================*/
-KoTemplateChooseDia::ReturnType KoTemplateChooseDia::chooseTemplate( const QString& _template_type, 
-								     KInstance* global, 
-								    QString &_template, 
-								     bool _hasCancel, bool _onlyTemplates, 
-								    const QString &importFilter, 
+KoTemplateChooseDia::ReturnType KoTemplateChooseDia::chooseTemplate( const QString& _template_type,
+								     KInstance* global,
+								    QString &_template,
+								     bool _hasCancel, bool _onlyTemplates,
+								    const QString &importFilter,
 								     const QString &mimeType )
 {
     bool res = FALSE;
-    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Template", _template_type, global, _hasCancel, 
+    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Template", _template_type, global, _hasCancel,
 						       _onlyTemplates, importFilter, mimeType );
 
     dlg->resize( 500, 400 );
     dlg->setCaption( i18n( "Choose a Template" ) );
-
+    
     if ( dlg->exec() == QDialog::Accepted ) {
 	res = TRUE;
 	_template = dlg->getFullTemplate();
@@ -155,9 +157,11 @@ void KoTemplateChooseDia::setupTabs()
 	    grpPtr->loadWid->loadDir( grpPtr->dir.absFilePath(), "*.png" );
 	    grpPtr->loadWid->setBackgroundColor( colorGroup().base() );
 	    grpPtr->loadWid->show();
-	    connect( grpPtr->loadWid, SIGNAL( nameChanged( const QString & ) ), 
+	    connect( grpPtr->loadWid, SIGNAL( doubleClicked( QIconViewItem * ) ),
+		     this, SLOT( chosen() ) );
+	    connect( grpPtr->loadWid, SIGNAL( nameChanged( const QString & ) ),
 		    this, SLOT( nameChanged( const QString & ) ) );
-	    connect( grpPtr->loadWid, SIGNAL( currentChanged( const QString & ) ), 
+	    connect( grpPtr->loadWid, SIGNAL( currentChanged( const QString & ) ),
 		    this, SLOT( currentChanged( const QString & ) ) );
 	    grpPtr->label = new QLabel( grpPtr->tab );
 	    grpPtr->label->setText( " " );
@@ -204,7 +208,7 @@ void KoTemplateChooseDia::setupTabs()
 	grid->addWidget( line, 8, 0 );
 		
 	connect( rbTemplates, SIGNAL( clicked() ), this, SLOT( openTemplate() ) );
-	rbTemplates->setChecked( TRUE );
+	openEmpty();
     }
 }
 
@@ -239,7 +243,7 @@ void KoTemplateChooseDia::chosen()
 		if ( grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty() ) {
 		    emit templateChosen( QString( grpPtr->name + "/" + grpPtr->loadWid->getCurrent() ) );
 		    templateName = QString( grpPtr->name + "/" + grpPtr->loadWid->getCurrent() );
-		    fullTemplateName = QString( grpPtr->dir.dirPath( TRUE ) + "/" + 
+		    fullTemplateName = QString( grpPtr->dir.dirPath( TRUE ) + "/" +
 						grpPtr->name + "/" + grpPtr->loadWid->getCurrent() );
 		    accept();
 		}
