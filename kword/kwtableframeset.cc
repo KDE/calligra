@@ -845,7 +845,7 @@ void KWTableFrameSet::insertRow( unsigned int newRowNumber,QPtrList<KWFrameSet> 
         height = getPositionOfRow(copyFromRow,true) - getPositionOfRow(copyFromRow);
     else {
         KWFrame *f = redoFrame.at(0);
-        height = f->height() + f->topBorder().ptWidth + f->bottomBorder().ptWidth;;
+        height = f->height() + f->topBorder().width() + f->bottomBorder().width();;
     }
 
     // Calculate offset in QValueList because of page breaks.
@@ -938,7 +938,7 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
     double width=60;
     if(! redoFrame.isEmpty()) {
         KWFrame *f=redoFrameset.at(0)->frame(0);
-        width=f->width() + f->leftBorder().ptWidth + f->rightBorder().ptWidth;
+        width=f->width() + f->leftBorder().width() + f->rightBorder().width();
     }
 
     QValueList<double>::iterator tmp = m_colPositions.at(newColNumber);
@@ -1491,15 +1491,15 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                     bottom && cell->frame(0)->bottomBorder()!=*border ||
                     !bottom && cell->frame(0)->topBorder()!=*border
                     ))) {
-                if(border->ptWidth > 0 || drawPreviewLines) {
+                if(border->width() > 0 || drawPreviewLines) {
                     double y = m_rowPositions[i];
                     if(row==0)
-                        y+=border->ptWidth / 2; // move slightly down.
+                        y+=border->width() / 2; // move slightly down.
                     else if (row == getRows())
-                        y-=border->ptWidth / 2; // move slightly up.
+                        y-=border->width() / 2; // move slightly up.
                     y = m_doc->zoomItY(y);
                     double offset=0.0;
-                    if(border->ptWidth > 0 && col!=getCols()) { // offset border when not at right most cell.
+                    if(border->width() > 0 && col!=getCols()) { // offset border when not at right most cell.
                         if(cell) offset=cell->leftBorder();
                         Cell *c = getCell(row-1, col);
                         if(c) offset=QMAX(offset, c->leftBorder());
@@ -1509,11 +1509,11 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                     QPoint bottomRight = viewMode->normalToView(QPoint(m_doc->zoomItX(x), y));
                     QRect line = QRect(topLeft, bottomRight);
                     if(crect.intersects( line )) {
-                        //if(border->ptWidth <= 0) kdDebug(32004) << "preview line" << endl;
-                        if(border->ptWidth <= 0)
+                        //if(border->width() <= 0) kdDebug(32004) << "preview line" << endl;
+                        if(border->width() <= 0)
                             painter.setPen( previewLinePen );
                         else {
-                            int borderWidth = KoBorder::zoomWidthY( border->ptWidth, m_doc, minborder );
+                            int borderWidth = KoBorder::zoomWidthY( border->width(), m_doc, minborder );
                             painter.setPen( KoBorder::borderPen( *border, borderWidth, defaultBorderColor ) );
                         }
                         //kdDebug(32004) << "Paint: painter.drawHorizontalLine(" << line.left() << ","  << line.top() << "," <<  line.right() << ","  << line.bottom() << ")\n";
@@ -1533,7 +1533,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                     startPos = m_colPositions[col];
                 else {
                     double offset=0.0;
-                    if(border->ptWidth > 0) { // move line to the left a bit to compensate for the left border
+                    if(border->width() > 0) { // move line to the left a bit to compensate for the left border
                         if(cell) offset=cell->leftBorder();
                         Cell *c = getCell(row-1, col);
                         if(c) offset=QMAX(offset, c->leftBorder());
@@ -1565,12 +1565,12 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                 cell=0;
 
             if(startRow!=-1 && (!cell || cell->frame(0)->leftBorder()!=*border || row == getRows())) {
-                if(border->ptWidth > 0 || drawPreviewLines) {
+                if(border->width() > 0 || drawPreviewLines) {
                     double x = m_colPositions[col];
                     if(col==0) {
-                        x+=border->ptWidth / 2;
+                        x+=border->width() / 2;
                     } else if(col==getCols()) {
-                        x-=border->ptWidth / 2;
+                        x-=border->width() / 2;
                     }
                     x = m_doc->zoomItX(x);
                     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
@@ -1586,7 +1586,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         //kdDebug(32004) << "from: " << topRow << " to: " << QMIN(row, bottomRow) << endl;
                         //kdDebug(32004) << "from: " << m_rowPositions[topRow] << " to: " << m_rowPositions[QMIN(row, bottomRow)] << endl;
                         double offset=0.0;
-                        if(border->ptWidth > 0) {
+                        if(border->width() > 0) {
                             Cell *c=getCell(topRow,col);
                             if(c) offset=c->topBorder();
                             c=getCell(topRow,col-1);
@@ -1597,7 +1597,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
 
                         unsigned int toRow=QMIN(row,bottomRow);
                         offset=0.0;
-                        if(border->ptWidth > 0 && toRow!=bottomRow) {
+                        if(border->width() > 0 && toRow!=bottomRow) {
                             if(cell) offset=cell->topBorder();
                             Cell *c=getCell(toRow,col-1);
                             if(c) offset=QMAX(offset,c->topBorder());
@@ -1608,11 +1608,11 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         QPoint bottomRight = viewMode->normalToView(QPoint(x, m_doc->zoomItY(bottom)));
                         QRect line = QRect(topLeft, bottomRight);
                         if(crect.intersects( line )) {
-                            //if(border->ptWidth <= 0) kdDebug(32004) << "preview line" << endl;
-                            if(border->ptWidth <= 0)
+                            //if(border->width() <= 0) kdDebug(32004) << "preview line" << endl;
+                            if(border->width() <= 0)
                                 painter.setPen( previewLinePen );
                             else {
-                                int borderWidth = KoBorder::zoomWidthX( border->ptWidth, m_doc, minborder );
+                                int borderWidth = KoBorder::zoomWidthX( border->width(), m_doc, minborder );
                                 painter.setPen(KoBorder::borderPen( *border, borderWidth, defaultBorderColor ));
                             }
                             //kdDebug(32004) << "Paint: painter.drawVerticalLine(" << line.left() << ","  << line.top() << "," <<  line.right() << ","  << line.bottom() << ")\n";
@@ -1998,7 +1998,7 @@ void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
 }
 
 double KWTableFrameSet::Cell::leftBorder() {
-    double b = frame(0)->leftBorder().ptWidth;
+    double b = frame(0)->leftBorder().width();
     if(b==0.0)
         return 0.0;
     if(m_col==0) // left most cell
@@ -2007,7 +2007,7 @@ double KWTableFrameSet::Cell::leftBorder() {
 }
 
 double KWTableFrameSet::Cell::rightBorder() {
-    double b=frame(0)->rightBorder().ptWidth;
+    double b=frame(0)->rightBorder().width();
     if(b==0.0)
         return 0.0;
     if(m_col+m_cols==m_table->getCols()) // right most cell
@@ -2016,7 +2016,7 @@ double KWTableFrameSet::Cell::rightBorder() {
 }
 
 double KWTableFrameSet::Cell::topBorder() {
-    double b = frame(0)->topBorder().ptWidth;
+    double b = frame(0)->topBorder().width();
     if(b==0.0)
         return 0.0;
     if(m_row==0) // top most cell
@@ -2025,7 +2025,7 @@ double KWTableFrameSet::Cell::topBorder() {
 }
 
 double KWTableFrameSet::Cell::bottomBorder() {
-    double b = frame(0)->bottomBorder().ptWidth;
+    double b = frame(0)->bottomBorder().width();
     if(b==0.0)
         return 0.0;
     if(m_row+m_rows==m_table->m_rows) // bottom most cell
@@ -2035,7 +2035,7 @@ double KWTableFrameSet::Cell::bottomBorder() {
 
 void KWTableFrameSet::Cell::setLeftBorder(KoBorder newBorder) {
     KWFrame *f = frame(0);
-    double diff = f->leftBorder().ptWidth - newBorder.ptWidth;
+    double diff = f->leftBorder().width() - newBorder.width();
     f->setLeftBorder(newBorder);
 
     if((diff > 0.01 || diff < -0.01) && m_col!=0) {
@@ -2047,7 +2047,7 @@ void KWTableFrameSet::Cell::setLeftBorder(KoBorder newBorder) {
 
 void KWTableFrameSet::Cell::setRightBorder(KoBorder newBorder) {
     KWFrame *f = frame(0);
-    double diff = f->rightBorder().ptWidth - newBorder.ptWidth;
+    double diff = f->rightBorder().width() - newBorder.width();
     f->setRightBorder(newBorder);
 
     if((diff > 0.01 || diff < -0.01) && m_col+m_cols!=m_table->getCols()) {
@@ -2059,7 +2059,7 @@ void KWTableFrameSet::Cell::setRightBorder(KoBorder newBorder) {
 
 void KWTableFrameSet::Cell::setTopBorder(KoBorder newBorder) {
     KWFrame *f = frame(0);
-    double diff = f->topBorder().ptWidth - newBorder.ptWidth;
+    double diff = f->topBorder().width() - newBorder.width();
     f->setTopBorder(newBorder);
 
     if((diff > 0.01 || diff < -0.01) && m_row!=0) {
@@ -2071,7 +2071,7 @@ void KWTableFrameSet::Cell::setTopBorder(KoBorder newBorder) {
 
 void KWTableFrameSet::Cell::setBottomBorder(KoBorder newBorder) {
     KWFrame *f = frame(0);
-    double diff = f->bottomBorder().ptWidth - newBorder.ptWidth;
+    double diff = f->bottomBorder().width() - newBorder.width();
     f->setBottomBorder(newBorder);
 
     if((diff > 0.01 || diff < -0.01) && m_row+m_rows!=m_table->m_rows) {

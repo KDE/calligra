@@ -105,13 +105,13 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_spell.kspell = 0;
     m_border.left.color = white;
     m_border.left.style = KoBorder::SOLID;
-    m_border.left.ptWidth = 0;
+    m_border.left.setPenWidth( 0);
     m_border.right = m_border.left;
     m_border.top = m_border.left;
     m_border.bottom = m_border.left;
     m_border.common.color = black;
     m_border.common.style = KoBorder::SOLID;
-    m_border.common.ptWidth = 1;
+    m_border.common.setPenWidth( 1);
     m_currentPage = 0;
     m_specialCharDlg=0L;
     m_searchEntry = 0L;
@@ -1470,29 +1470,29 @@ void KWView::showParagBorders( const KoBorder& left, const KoBorder& right,
         m_border.top = top;
         m_border.bottom = bottom;
 
-        actionBorderLeft->setChecked( left.ptWidth > 0 );
-        actionBorderRight->setChecked( right.ptWidth > 0 );
-        actionBorderTop->setChecked( top.ptWidth > 0 );
-        actionBorderBottom->setChecked( bottom.ptWidth > 0 );
+        actionBorderLeft->setChecked( left.penWidth() > 0 );
+        actionBorderRight->setChecked( right.penWidth() > 0 );
+        actionBorderTop->setChecked( top.penWidth() > 0 );
+        actionBorderBottom->setChecked( bottom.penWidth() > 0 );
         actionBorderOutline->setChecked(
             actionBorderLeft->isChecked() &&
             actionBorderRight->isChecked() &&
             actionBorderTop->isChecked() &&
             actionBorderBottom->isChecked());
 
-        if ( left.ptWidth > 0 ) {
+        if ( left.penWidth() > 0 ) {
             m_border.common = left;
             borderShowValues();
         }
-        if ( right.ptWidth > 0 ) {
+        if ( right.penWidth() > 0 ) {
             m_border.common = right;
             borderShowValues();
         }
-        if ( top.ptWidth > 0 ) {
+        if ( top.penWidth() > 0 ) {
             m_border.common = top;
             borderShowValues();
         }
-        if ( bottom.ptWidth > 0 ) {
+        if ( bottom.penWidth() > 0 ) {
             m_border.common = bottom;
             borderShowValues();
         }
@@ -3927,11 +3927,11 @@ void KWView::borderColor()
 
 void KWView::borderWidth( const QString &width )
 {
-    m_border.common.ptWidth = width.toInt();
-    m_border.left.ptWidth = m_border.common.ptWidth;
-    m_border.right.ptWidth = m_border.common.ptWidth;
-    m_border.top.ptWidth = m_border.common.ptWidth;
-    m_border.bottom.ptWidth = m_border.common.ptWidth;
+    m_border.common.setPenWidth( width.toInt());
+    m_border.left.setPenWidth(m_border.common.penWidth());
+    m_border.right.setPenWidth(m_border.common.penWidth());
+    m_border.top.setPenWidth(m_border.common.penWidth());
+    m_border.bottom.setPenWidth(m_border.common.penWidth());
     borderSet();
     m_gui->canvasWidget()->setFocus();
 }
@@ -3975,19 +3975,19 @@ void KWView::borderSet()
     m_border.bottom = m_border.common;
     if ( !actionBorderLeft->isChecked() )
     {
-        m_border.left.ptWidth = 0;
+        m_border.left.setPenWidth( 0);
     }
     if ( !actionBorderRight->isChecked() )
     {
-        m_border.right.ptWidth = 0;
+        m_border.right.setPenWidth( 0);
     }
     if ( !actionBorderTop->isChecked() )
     {
-        m_border.top.ptWidth = 0;
+        m_border.top.setPenWidth(0);
     }
     if ( !actionBorderBottom->isChecked() )
     {
-        m_border.bottom.ptWidth = 0;
+        m_border.bottom.setPenWidth(0);
     }
     KWTextFrameSetEdit *edit = currentTextEdit();
     if ( edit )
@@ -4052,7 +4052,7 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void KWView::borderShowValues()
 {
-    actionBorderWidth->setCurrentItem( (int)m_border.common.ptWidth - 1 );
+    actionBorderWidth->setCurrentItem( (int)m_border.common.penWidth() - 1 );
     actionBorderStyle->setCurrentItem( (int)m_border.common.style );
 }
 

@@ -257,10 +257,10 @@ QRect KWFrame::outerRect() const
     KWDocument *doc = frameSet()->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
     if(!(frameSet() && frameSet()->getGroupManager())) {
-        outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.ptWidth, doc, 1 );
-        outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.ptWidth, doc, 1 );
-        outerRect.rRight() += KoBorder::zoomWidthX( brd_right.ptWidth, doc, 1 );
-        outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.ptWidth, doc, 1 );
+        outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.width(), doc, 1 );
+        outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.width(), doc, 1 );
+        outerRect.rRight() += KoBorder::zoomWidthX( brd_right.width(), doc, 1 );
+        outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.width(), doc, 1 );
     }
     return outerRect;
 }
@@ -269,10 +269,10 @@ KoRect KWFrame::outerKoRect() const
 {
     KoRect outerRect = *this;
     KWDocument *doc = frameSet()->kWordDocument();
-    outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
-    outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.ptWidth, doc, 1 ) / doc->zoomedResolutionY();
-    outerRect.rRight() += KoBorder::zoomWidthX( brd_right.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
-    outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.ptWidth, doc, 1 ) / doc->zoomedResolutionY();
+    outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.width(), doc, 1 ) / doc->zoomedResolutionX();
+    outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.width(), doc, 1 ) / doc->zoomedResolutionY();
+    outerRect.rRight() += KoBorder::zoomWidthX( brd_right.width(), doc, 1 ) / doc->zoomedResolutionX();
+    outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.width(), doc, 1 ) / doc->zoomedResolutionY();
     return outerRect;
 }
 
@@ -291,8 +291,8 @@ void KWFrame::save( QDomElement &frameElem )
     if(runAroundGap()!=0)
         frameElem.setAttribute( "runaroundGap", runAroundGap() );
 
-    if(leftBorder().ptWidth!=0)
-        frameElem.setAttribute( "lWidth", leftBorder().ptWidth );
+    if(leftBorder().penWidth()!=0)
+        frameElem.setAttribute( "lWidth", leftBorder().penWidth() );
 
     if(leftBorder().color.isValid())
     {
@@ -303,8 +303,8 @@ void KWFrame::save( QDomElement &frameElem )
     if(leftBorder().style != KoBorder::SOLID)
         frameElem.setAttribute( "lStyle", static_cast<int>( leftBorder().style ) );
 
-    if(rightBorder().ptWidth!=0)
-        frameElem.setAttribute( "rWidth", rightBorder().ptWidth );
+    if(rightBorder().penWidth()!=0)
+        frameElem.setAttribute( "rWidth", rightBorder().penWidth() );
 
     if(rightBorder().color.isValid())
     {
@@ -315,8 +315,8 @@ void KWFrame::save( QDomElement &frameElem )
     if(rightBorder().style != KoBorder::SOLID)
         frameElem.setAttribute( "rStyle", static_cast<int>( rightBorder().style ) );
 
-    if(topBorder().ptWidth!=0)
-        frameElem.setAttribute( "tWidth", topBorder().ptWidth );
+    if(topBorder().penWidth()!=0)
+        frameElem.setAttribute( "tWidth", topBorder().penWidth() );
 
     if(topBorder().color.isValid())
     {
@@ -327,8 +327,8 @@ void KWFrame::save( QDomElement &frameElem )
     if(topBorder().style != KoBorder::SOLID)
         frameElem.setAttribute( "tStyle", static_cast<int>( topBorder().style ) );
 
-    if(bottomBorder().ptWidth!=0) {
-        frameElem.setAttribute( "bWidth", bottomBorder().ptWidth );
+    if(bottomBorder().penWidth()!=0) {
+        frameElem.setAttribute( "bWidth", bottomBorder().penWidth() );
     }
     if(bottomBorder().color.isValid()) {
         frameElem.setAttribute( "bRed", bottomBorder().color.red() );
@@ -385,10 +385,10 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     m_newFrameBehavior = static_cast<NewFrameBehavior>( KWDocument::getAttribute( frameElem, "newFrameBehavior", defaultValue ) );
 
     KoBorder l, r, t, b;
-    l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0.0 );
-    r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0.0 );
-    t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0.0 );
-    b.ptWidth = KWDocument::getAttribute( frameElem, "bWidth", 0.0 );
+    l.setPenWidth( KWDocument::getAttribute( frameElem, "lWidth", 0.0 ));
+    r.setPenWidth(KWDocument::getAttribute( frameElem, "rWidth", 0.0 ));
+    t.setPenWidth(KWDocument::getAttribute( frameElem, "tWidth", 0.0 ));
+    b.setPenWidth(KWDocument::getAttribute( frameElem, "bWidth", 0.0 ));
     if ( frameElem.hasAttribute("lRed") )
         l.color.setRgb(
             KWDocument::getAttribute( frameElem, "lRed", 0 ),
@@ -422,14 +422,14 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
 
     if ( syntaxVersion < 2 ) // Activate old "white border == no border" conversion
     {
-        if(c==l.color && l.ptWidth==1 && l.style==0 )
-            l.ptWidth=0;
-        if(c==r.color  && r.ptWidth==1 && r.style==0)
-            r.ptWidth=0;
-        if(c==t.color && t.ptWidth==1 && t.style==0 )
-            t.ptWidth=0;
-        if(c==b.color && b.ptWidth==1 && b.style==0 )
-            b.ptWidth=0;
+        if(c==l.color && l.penWidth()==1 && l.style==0 )
+            l.setPenWidth(0);
+        if(c==r.color  && r.penWidth()==1 && r.style==0)
+            r.setPenWidth(0);
+        if(c==t.color && t.penWidth()==1 && t.style==0 )
+            t.setPenWidth(0);
+        if(c==b.color && b.penWidth()==1 && b.style==0 )
+            b.setPenWidth(0);
     }
     brd_left = l;
     brd_right = r;
@@ -744,8 +744,8 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 
     KoPoint pos( position );
     // position includes the border, we need to adjust accordingly
-    pos.rx() += frame->leftBorder().ptWidth;
-    pos.ry() += frame->topBorder().ptWidth;
+    pos.rx() += frame->leftBorder().width();
+    pos.ry() += frame->topBorder().width();
     if ( frame->topLeft() != pos )
     {
         kdDebug() << "KWFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;

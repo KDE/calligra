@@ -1353,7 +1353,7 @@ KCommand *KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
     bool leftFrameBorderChanged=false;
 
     if (!on)
-        newBorder.ptWidth=0;
+        newBorder.setPenWidth(0);
 
     QMap<KWTableFrameSet *, KWFrame*> tables;
 
@@ -1407,7 +1407,7 @@ KCommand *KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
     bool rightFrameBorderChanged=false;
     KWFrame *frame=0L;
     if (!on)
-        newBorder.ptWidth=0;
+        newBorder.setPenWidth(0);
 
     QMap<KWTableFrameSet *, KWFrame*> tables;
 
@@ -1463,7 +1463,7 @@ KCommand *KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
 
     KWFrame *frame=0L;
     if (!on)
-        newBorder.ptWidth=0;
+        newBorder.setPenWidth(0);
 
     QMap<KWTableFrameSet *, KWFrame*> tables;
 
@@ -1517,7 +1517,7 @@ KCommand *KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
     QPtrList<FrameIndex> frameindexList;
     KWFrame *frame=0L;
     if (!on)
-        newBorder.ptWidth=0;
+        newBorder.setPenWidth(0);
 
     QMap<KWTableFrameSet *, KWFrame*> tables;
 
