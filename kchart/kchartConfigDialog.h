@@ -28,16 +28,17 @@ class KDChartParams;
 namespace KChart
 {
 
+class KChartSubTypeChartPage;
+class KChartHeaderFooterConfigPage;
+
 class KChartColorConfigPage;
 class KChartParameterConfigPage;
 class KChartParameter3dConfigPage;
 class KChartParameterPieConfigPage;
 class KChartFontConfigPage;
 class KChartPieConfigPage;
-class KChartSubTypeChartPage;
 class KChartComboPage;
 class KChartBackgroundPixmapConfigPage;
-class KChartHeaderFooterConfigPage;
 class KChartLegendConfigPage;
 class KChartLine3dConfigPage;
 class KChartParameterPolarConfigPage;
@@ -51,24 +52,26 @@ public:
     KChartConfigDialog( KChartParams* params,
                         QWidget* parent, int flags,KoChart::Data *dat );
 
-    void init3dPage();
+    void initSubtypePage();
 signals:
-	void dataChanged();
+    void dataChanged();
 
 protected:
     KChartParams* _params;
+
+    KChartSubTypeChartPage       *_subTypePage;
+    KChartHeaderFooterConfigPage *_headerfooterpage;
+    KChartParameterConfigPage    *_axespage;
+
     //KChartGeometryConfigPage* _geompage;
     KChartColorConfigPage* _colorpage;
-    KChartParameterConfigPage*_axespage;
     KChartParameter3dConfigPage*_parameter3dpage;
     KChartParameterPieConfigPage*_parameterpiepage;
     KChartFontConfigPage*_parameterfontpage;
     KChartPieConfigPage*_piepage;
-    KChartSubTypeChartPage *_subTypePage;
     KChartBackgroundPixmapConfigPage* _backgroundpixpage;
     //KChartComboPage *_hlcChart;
     KChartLegendConfigPage *_parameterLegend;
-    KChartHeaderFooterConfigPage *_headerfooterpage;
     KChartLine3dConfigPage *_linepage3d;
     KChartParameterPolarConfigPage *_polarpage;
 protected slots:

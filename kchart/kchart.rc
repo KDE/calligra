@@ -5,12 +5,12 @@
   <Menu name="action_popup"><text>&amp;Chart</text>
    <Action name="config"/>
    <Separator />
+   <Action name="legend_subtype"/>
+   <Action name="headerfooter_subtype"/>
    <Action name="color_config"/>
    <Action name="font_config"/>
    <Action name="back_config"/>
    <Action name="legend_config"/>
-   <Action name="headerfooter_subtype"/>
-   <Action name="legend_subtype"/>
   </Menu>
   <Separator />
   <Action name="page_layout"/>
@@ -23,6 +23,7 @@
  <Action name="edit"/>
  <Action name="config"/>
  <Action name="wizard"/>
+ <Separator />
  <Action name="piechart"/>
  <Action name="linechart"/>
  <Action name="areaschart"/>
@@ -35,12 +36,12 @@
 <Menu name="action_popup">
  <Action name="config"/>
  <Separator />
+ <Action name="legend_subtype"/>
+ <Action name="headerfooter_subtype"/>
  <Action name="color_config"/>
  <Action name="font_config"/>
  <Action name="back_config"/>
  <Action name="legend_config"/>
- <Action name="headerfooter_subtype"/>
- <Action name="legend_subtype"/>
  <Separator />
  <Action name="edit"/>
 </Menu>

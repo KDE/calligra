@@ -24,6 +24,7 @@
 
 #include "kchartBackgroundPixmapConfigPage.h"
 #include "kchartSubTypeChartPage.h"
+#include "kchartHeaderFooterConfigPage.h"
 #include "kchartColorConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
 #include "kchartFontConfigPage.h"
@@ -32,7 +33,6 @@
 #include "kchartPieConfigPage.h"
 #include "kchartParameter3dConfigPage.h"
 #include "kchartLegendConfigPage.h"
-#include "kchartHeaderFooterConfigPage.h"
 #include "kchartLine3dConfigPage.h"
 #include "kchartParameterPolarConfigPage.h"
 
@@ -48,19 +48,22 @@ namespace KChart
 {
 
 KChartConfigDialog::KChartConfigDialog( KChartParams* params,
-					QWidget* parent, int flags,KoChart::Data *dat ) :
+					QWidget* parent, int flags,
+					KoChart::Data *dat ) :
     QTabDialog( parent, "Chart config dialog", true ),
     _params( params ),
-    _colorpage(0),
+
+    _subTypePage(0),
+    _headerfooterpage(0),
     _axespage(0),
+
+    _colorpage(0),
     _parameter3dpage(0),
     _parameterpiepage(0),
     _parameterfontpage(0),
     _piepage(0),
-    _subTypePage(0),
     _backgroundpixpage(0),
     _parameterLegend(0),
-    _headerfooterpage(0),
     _linepage3d(0),
     _polarpage(0)
 {
@@ -68,9 +71,18 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     //_geompage = new KChartGeometryConfigPage( this );
     //addTab( _geompage, i18n( "&Geometry" ) );
     setCaption( i18n( "Chart Config Dialog" ) );
-    // Color page
 
-    if(flags & KC_COLORS )
+    // Color page
+    if (flags & KC_SUBTYPE)
+    {
+        initSubtypePage();
+    }
+    else if(flags & KC_HEADERFOOTER)
+    {
+        _headerfooterpage=new KChartHeaderFooterConfigPage(_params,this);
+        addTab( _headerfooterpage,i18n("Header/Footer"));
+    }
+    else if(flags & KC_COLORS )
     {
         _colorpage = new KChartColorConfigPage( _params,  this, dat );
         addTab( _colorpage, i18n( "&Colors" ) );
@@ -90,36 +102,40 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         _parameterLegend = new KChartLegendConfigPage(_params,this );
         addTab( _parameterLegend,i18n("Legend"));
     }
-    else if(flags & KC_SUBTYPE)
-    {
-        init3dPage();
-    }
-    else if(flags & KC_HEADERFOOTER)
-    {
-        _headerfooterpage=new KChartHeaderFooterConfigPage(_params,this);
-        addTab( _headerfooterpage,i18n("Header/Footer"));
-    }
     else if( flags & KC_ALL )
     {
-        _colorpage = new KChartColorConfigPage( _params,  this, dat );
-        addTab( _colorpage, i18n( "&Colors" ) );
-        _parameterfontpage = new KChartFontConfigPage(_params,this, dat );
-        addTab( _parameterfontpage, i18n( "&Font" ) );
-        _backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
-        addTab( _backgroundpixpage, i18n( "&Background" ) );
-        _parameterLegend = new KChartLegendConfigPage(_params,this );
-        addTab( _parameterLegend,i18n("Legend"));
-        if( _params->chartType() != KDChartParams::Pie && _params->chartType() != KDChartParams::Ring )	{
+        initSubtypePage();
+
+	// The Header/Footer tab
+        _headerfooterpage=new KChartHeaderFooterConfigPage(_params, this);
+        addTab( _headerfooterpage, i18n("Header/Footer"));
+
+	// Add axes tab if applicable.
+        if( _params->chartType() != KDChartParams::Pie
+	    && _params->chartType() != KDChartParams::Ring )	{
             _axespage = new KChartParameterConfigPage(_params,this );
             addTab( _axespage, i18n( "&Axes" ) );
 
         } else if( _params->chartType() != KDChartParams::Ring ) {
+	    // FIXME: I don't understand this tab.  /ingwa
             _parameterpiepage = new KChartParameterPieConfigPage(_params,this );
             addTab( _parameterpiepage, i18n( "&Axes" ) );
 
             _piepage = new KChartPieConfigPage(_params, this );
             addTab( _piepage, i18n( "&Pie" ) );
         }
+
+        _colorpage = new KChartColorConfigPage( _params,  this, dat );
+        addTab( _colorpage, i18n( "&Colors" ) );
+
+        _parameterfontpage = new KChartFontConfigPage(_params,this, dat );
+        addTab( _parameterfontpage, i18n( "&Font" ) );
+
+        _backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
+        addTab( _backgroundpixpage, i18n( "&Background" ) );
+
+        _parameterLegend = new KChartLegendConfigPage(_params,this );
+        addTab( _parameterLegend,i18n("Legend"));
 
         if( _params->chartType() == KDChartParams::Bar )
         {
@@ -137,8 +153,6 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             addTab( _polarpage,i18n("Polar Parameters"));
         }
 
-        init3dPage();
-
         if( _params->chartType() == KDChartParams::HiLo &&
             ( _params->hiLoChartSubType() == KDChartParams::HiLoClose ||
               _params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) ) {
@@ -146,8 +160,6 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             //         _hlcChart=new KChartComboPage(_params,this);
 //         addTab( _hlcChart, i18n( "HLC Chart" ) );
         }
-        _headerfooterpage=new KChartHeaderFooterConfigPage(_params,this);
-        addTab( _headerfooterpage,i18n("Header/Footer"));
     }
 
     //init
@@ -331,32 +343,28 @@ void KChartConfigDialog::defaults()
 }
 
 
-void KChartConfigDialog::init3dPage()
+void KChartConfigDialog::initSubtypePage()
 {
     switch( _params->chartType() ) {
     case KDChartParams::Bar:
         _subTypePage = new KChartBarSubTypeChartPage( _params, this );
-        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
         break;
     case KDChartParams::Area:
         _subTypePage = new KChartAreaSubTypeChartPage( _params, this );
-        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
         break;
     case KDChartParams::Line:
         _subTypePage = new KChartLineSubTypeChartPage( _params, this );
-        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
         break;
     case KDChartParams::HiLo:
         _subTypePage = new KChartHiloSubTypeChartPage( _params, this );
-        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
         break;
     case KDChartParams::Polar:
         _subTypePage = new KChartPolarSubTypeChartPage( _params, this );
-        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
         break;
     default:
         ; // do nothing
     }
+    addTab( _subTypePage, i18n( "Chart &Subtype" ) );
 }
 
 }  //KChart namespace
