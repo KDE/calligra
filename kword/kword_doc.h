@@ -107,7 +107,7 @@ public:
     // C++
     virtual bool loadXML( QDomDocument&, KOStore::Store_ptr _store );
     virtual bool loadChildren( KOStore::Store_ptr _store );
-    virtual bool save( QIODevice* dev, KOStore::Store_ptr, const char* format )
+    virtual bool save( QIODevice* dev, KOStore::Store_ptr, const char* format );
     virtual bool completeSaving( KOStore::Store_ptr _store );
 
     virtual bool loadTemplate( const char *_url );

@@ -9,13 +9,7 @@
 #include "footnote.h"
 #include "font.h"
 
-#include <komlMime.h>
-
-#include <strstream>
-#include <fstream>
-
 #include <unistd.h>
-#include <string.h>
 #include <stdio.h>
 #include <assert.h>
 
@@ -313,116 +307,117 @@ void KWParag::save( ostream &out )
 }
 
 /*================================================================*/
-void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
-{
-    string tag;
-    string name;
-    string tmp;
+// #### todo
+// void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+// {
+//     string tag;
+//     string name;
+//     string tmp;
 
-    QString tmp2;
+//     QString tmp2;
 
-    while ( parser.open( 0L, tag ) )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+//     while ( parser.open( 0L, tag ) )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
 
-	// text
-	if ( name == "TEXT" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    tmp2 = ( *it ).m_strValue.c_str();
-	    }
+// 	// text
+// 	if ( name == "TEXT" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "value" )
+// 		    tmp2 = ( *it ).m_strValue.c_str();
+// 	    }
 
-	    if ( parser.readText( tmp ) )
-	    {
-		QString s = tmp.c_str();
-		if ( s.simplifyWhiteSpace().length() > 0 )
-		    tmp2 = tmp.c_str();
-	    }
+// 	    if ( parser.readText( tmp ) )
+// 	    {
+// 		QString s = tmp.c_str();
+// 		if ( s.simplifyWhiteSpace().length() > 0 )
+// 		    tmp2 = tmp.c_str();
+// 	    }
 
-	    tmp2 = QString::fromUtf8( tmp2.latin1() );
+// 	    tmp2 = QString::fromUtf8( tmp2.latin1() );
 
-	    if ( text.size() == 1 && tmp2.length() > 0 ) text.remove( 0 );
-	    text.insert( text.size(), tmp2 );
-	}
+// 	    if ( text.size() == 1 && tmp2.length() > 0 ) text.remove( 0 );
+// 	    text.insert( text.size(), tmp2 );
+// 	}
 
-	// hard break
-	else if ( name == "HARDBRK" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "frame" )
-		    hardBreak = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+// 	// hard break
+// 	else if ( name == "HARDBRK" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "frame" )
+// 		    hardBreak = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+// 	    }
+// 	}
 
-	// info
-	else if ( name == "INFO" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "info" )
-		    info = static_cast<Info>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+// 	// info
+// 	else if ( name == "INFO" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "info" )
+// 		    info = static_cast<Info>( atoi( ( *it ).m_strValue.c_str() ) );
+// 	    }
+// 	}
 
-	// name
-	else if ( name == "NAME" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "name" )
-		    paragName = correctQString( ( *it ).m_strValue.c_str() );
-	    }
-	}
+// 	// name
+// 	else if ( name == "NAME" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "name" )
+// 		    paragName = correctQString( ( *it ).m_strValue.c_str() );
+// 	    }
+// 	}
 
-	// format
-	else if ( name == "FORMATS" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-	    }
-	    text.loadFormat( parser, lst, document, frameSet );
-	}
+// 	// format
+// 	else if ( name == "FORMATS" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 	    }
+// 	    text.loadFormat( parser, lst, document, frameSet );
+// 	}
 
-	// layout
-	else if ( name == "LAYOUT" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-	    }
-	    paragLayout->load( parser, lst );
-	}
+// 	// layout
+// 	else if ( name == "LAYOUT" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 	    }
+// 	    paragLayout->load( parser, lst );
+// 	}
 
-	else
-	    cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;
+// 	else
+// 	    cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;
 
-	if ( !parser.close( tag ) )
-	{
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
-	}
-    }
+// 	if ( !parser.close( tag ) )
+// 	{
+// 	    cerr << "ERR: Closing Child" << endl;
+// 	    return;
+// 	}
+//     }
 
-    for ( unsigned int i = 0; i < text.size(); i++ )
-    {
-	if ( !text.data()[ i ].attrib )
-	    setFormat( i, 1, *paragLayout->getFormat() );
-    }
-}
+//     for ( unsigned int i = 0; i < text.size(); i++ )
+//     {
+// 	if ( !text.data()[ i ].attrib )
+// 	    setFormat( i, 1, *paragLayout->getFormat() );
+//     }
+// }
 
 /*================================================================*/
 void KWParag::applyStyle( QString _style )
@@ -607,7 +602,7 @@ void KWParag::correctFormat( KWParag *newParag, KWParag *oldParag )
     KWFormat &pfOld = *oldParag->getParagLayout()->getFormat();
     KWFormat &pfNew = *newParag->getParagLayout()->getFormat();
     KWFormat nf;
-    
+
     for ( unsigned int i = 0; i < oldParag->getTextLen(); ++i ) {
 	KWChar c = oldParag->getKWString()->data()[ i ];
 	KWFormat *f = 0;
@@ -619,7 +614,7 @@ void KWParag::correctFormat( KWParag *newParag, KWParag *oldParag )
 	    case ID_KWCharFootNote:
 		f = dynamic_cast<KWCharFootNote*>( c.attrib )->getFormat();
 		break;
-	    default: 
+	    default:
 		break;
 	    }
 	    continue;

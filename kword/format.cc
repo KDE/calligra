@@ -187,123 +187,124 @@ QDomElement KWFormat::save( QDomDocument &doc )
 }
 
 /*================================================================*/
-void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc )
-{
-    doc = _doc;
-    ref = 0;
+// #### todo
+// void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc )
+// {
+//     doc = _doc;
+//     ref = 0;
 
-    string tag;
-    string name;
+//     string tag;
+//     string name;
 
-    while ( parser.open( 0L, tag ) )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+//     while ( parser.open( 0L, tag ) )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
 
-	// color
-	if ( name == "COLOR" )
-	{
-	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "red" )
-		{
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "green" )
-		{
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "blue" )
-		{
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    color.setRgb( r, g, b );
-		}
-	    }
-	}
+// 	// color
+// 	if ( name == "COLOR" )
+// 	{
+// 	    unsigned int r = 0, g = 0, b = 0;
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "red" )
+// 		{
+// 		    r = atoi( ( *it ).m_strValue.c_str() );
+// 		    color.setRgb( r, g, b );
+// 		}
+// 		else if ( ( *it ).m_strName == "green" )
+// 		{
+// 		    g = atoi( ( *it ).m_strValue.c_str() );
+// 		    color.setRgb( r, g, b );
+// 		}
+// 		else if ( ( *it ).m_strName == "blue" )
+// 		{
+// 		    b = atoi( ( *it ).m_strValue.c_str() );
+// 		    color.setRgb( r, g, b );
+// 		}
+// 	    }
+// 	}
 
-	// font
-	else if ( name == "FONT" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "name" )
-		    userFont = _doc->findUserFont( correctQString( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+// 	// font
+// 	else if ( name == "FONT" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "name" )
+// 		    userFont = _doc->findUserFont( correctQString( ( *it ).m_strValue.c_str() ) );
+// 	    }
+// 	}
 
-	// font size
-	else if ( name == "SIZE" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    ptFontSize = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+// 	// font size
+// 	else if ( name == "SIZE" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "value" )
+// 		    ptFontSize = atoi( ( *it ).m_strValue.c_str() );
+// 	    }
+// 	}
 
-	// weight
-	else if ( name == "WEIGHT" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    weight = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+// 	// weight
+// 	else if ( name == "WEIGHT" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "value" )
+// 		    weight = atoi( ( *it ).m_strValue.c_str() );
+// 	    }
+// 	}
 
-	// italic
-	else if ( name == "ITALIC" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    italic = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+// 	// italic
+// 	else if ( name == "ITALIC" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "value" )
+// 		    italic = atoi( ( *it ).m_strValue.c_str() );
+// 	    }
+// 	}
 
-	// underline
-	else if ( name == "UNDERLINE" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    underline = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+// 	// underline
+// 	else if ( name == "UNDERLINE" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "value" )
+// 		    underline = atoi( ( *it ).m_strValue.c_str() );
+// 	    }
+// 	}
 
-	// vertical alignment
-	else if ( name == "VERTALIGN" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    vertAlign = static_cast<VertAlign>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+// 	// vertical alignment
+// 	else if ( name == "VERTALIGN" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "value" )
+// 		    vertAlign = static_cast<VertAlign>( atoi( ( *it ).m_strValue.c_str() ) );
+// 	    }
+// 	}
 
-	else
-	    cerr << "Unknown tag '" << tag << "' in FORMAT" << endl;
+// 	else
+// 	    cerr << "Unknown tag '" << tag << "' in FORMAT" << endl;
 
-	if ( !parser.close( tag ) )
-	{
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
-	}
-    }
-}
+// 	if ( !parser.close( tag ) )
+// 	{
+// 	    cerr << "ERR: Closing Child" << endl;
+// 	    return;
+// 	}
+//     }
+// }

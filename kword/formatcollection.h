@@ -41,12 +41,13 @@ public:
     { return generateKey( *_format ); }
 
     QMap< KWFormat*, unsigned int > &getIndexMap() {
-	return indexMap; 
+	return indexMap;
     }
-    
+
     QDomElement save( QDomDocument &doc );
-    void load( KOMLParser&, vector<KOMLAttrib>& );
-    
+    // #### todo
+    //void load( KOMLParser&, vector<KOMLAttrib>& );
+
 protected:
     QString generateKey( const KWFormat &_format );
     KWFormat *findFormat( QString _key );

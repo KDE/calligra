@@ -449,81 +449,82 @@ QDomElement KWFootNote::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst )
-{
-    if ( name == "INTERNAL" )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-	vector<KOMLAttrib>::const_iterator it = lst.begin();
-	for( ; it != lst.end(); it++ )
-	{
-	}
+// #### todo
+// void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst )
+// {
+//     if ( name == "INTERNAL" )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	for( ; it != lst.end(); it++ )
+// 	{
+// 	}
 
-	while ( parser.open( 0L, tag ) )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    if ( name == "PART" )
-	    {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
-		vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	while ( parser.open( 0L, tag ) )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    if ( name == "PART" )
+// 	    {
+// 		KOMLParser::parseTag( tag.c_str(), name, lst );
+// 		vector<KOMLAttrib>::const_iterator it = lst.begin();
 
-		KWFootNoteInternal *part = new KWFootNoteInternal;
+// 		KWFootNoteInternal *part = new KWFootNoteInternal;
 
-		for( ; it != lst.end(); it++ )
-		{
-		    if ( ( *it ).m_strName == "from" )
-			part->from = atoi( ( *it ).m_strValue.c_str() );
-		    else if ( ( *it ).m_strName == "to" )
-			part->to = atoi( ( *it ).m_strValue.c_str() );
-		    else if ( ( *it ).m_strName == "space" )
-			part->space = correctQString( ( *it ).m_strValue.c_str() );
-		}
-		parts.append( part );
-	    }
-	    else
-		cerr << "Unknown tag '" << tag << "' in INTERNAL" << endl;
+// 		for( ; it != lst.end(); it++ )
+// 		{
+// 		    if ( ( *it ).m_strName == "from" )
+// 			part->from = atoi( ( *it ).m_strValue.c_str() );
+// 		    else if ( ( *it ).m_strName == "to" )
+// 			part->to = atoi( ( *it ).m_strValue.c_str() );
+// 		    else if ( ( *it ).m_strName == "space" )
+// 			part->space = correctQString( ( *it ).m_strValue.c_str() );
+// 		}
+// 		parts.append( part );
+// 	    }
+// 	    else
+// 		cerr << "Unknown tag '" << tag << "' in INTERNAL" << endl;
 
-	    if ( !parser.close( tag ) )
-	    {
-		cerr << "ERR: Closing Child" << endl;
-		return;
-	    }
-	}
-    }
-    else if ( name == "RANGE" )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-	vector<KOMLAttrib>::const_iterator it = lst.begin();
-	for( ; it != lst.end(); it++ )
-	{
-	    if ( ( *it ).m_strName == "start" )
-		start = atoi( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "end" )
-		end = atoi( ( *it ).m_strValue.c_str() );
-	}
-    }
-    else if ( name == "TEXT" )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-	vector<KOMLAttrib>::const_iterator it = lst.begin();
-	for( ; it != lst.end(); it++ )
-	{
-	    if ( ( *it ).m_strName == "before" )
-		before = correctQString( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "after" )
-		after = correctQString( ( *it ).m_strValue.c_str() );
-	}
-    }
-    else if ( name == "DESCRIPT" )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-	vector<KOMLAttrib>::const_iterator it = lst.begin();
-	for( ; it != lst.end(); it++ )
-	{
-	    if ( ( *it ).m_strName == "ref" )
-		parag = correctQString( ( *it ).m_strValue.c_str() );
-	}
-    }
+// 	    if ( !parser.close( tag ) )
+// 	    {
+// 		cerr << "ERR: Closing Child" << endl;
+// 		return;
+// 	    }
+// 	}
+//     }
+//     else if ( name == "RANGE" )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	for( ; it != lst.end(); it++ )
+// 	{
+// 	    if ( ( *it ).m_strName == "start" )
+// 		start = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "end" )
+// 		end = atoi( ( *it ).m_strValue.c_str() );
+// 	}
+//     }
+//     else if ( name == "TEXT" )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	for( ; it != lst.end(); it++ )
+// 	{
+// 	    if ( ( *it ).m_strName == "before" )
+// 		before = correctQString( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "after" )
+// 		after = correctQString( ( *it ).m_strValue.c_str() );
+// 	}
+//     }
+//     else if ( name == "DESCRIPT" )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	for( ; it != lst.end(); it++ )
+// 	{
+// 	    if ( ( *it ).m_strName == "ref" )
+// 		parag = correctQString( ( *it ).m_strValue.c_str() );
+// 	}
+//     }
 
-    makeText();
-}
+//     makeText();
+// }

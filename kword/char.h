@@ -35,7 +35,8 @@ public:
     virtual bool operator==( const KWCharAttribute &_attrib )
     { return classId == static_cast<KWCharAttribute>( _attrib ).classId; }
 
-    virtual void save( ostream & ) {}
+    // #### todo
+    //virtual void save( ostream & ) {}
 
 protected:
     int classId;
@@ -62,8 +63,9 @@ public:
                  ( format ) && *format == *_attrib.format );
     }
 
-    virtual void save( ostream &out )
-    { format->save( out ); }
+    // #### todo
+    //virtual void save( ostream &out )
+    //{ format->save( out ); }
 
 protected:
     KWFormat *format;
@@ -85,8 +87,9 @@ public:
     { return image; }
     virtual void setImage( KWImage *_image )
     { image = _image; }
-    virtual void save( ostream &out )
-    { image->save( out ); }
+    // #### todo
+    //virtual void save( ostream &out )
+    //{ image->save( out ); }
 
 protected:
     KWImage *image;
@@ -118,12 +121,13 @@ public:
 
     KWVariable *getVar() { return var; }
 
-    virtual void save( ostream &out ) {
-        var->save( out );
-        out << otag << "<FRMAT>" << endl;
-        KWCharFormat::save( out );
-        out << etag << "</FRMAT>" << endl;
-    }
+    // #### todo
+    // virtual void save( ostream &out ) {
+//         var->save( out );
+//         out << otag << "<FRMAT>" << endl;
+//         KWCharFormat::save( out );
+//         out << etag << "</FRMAT>" << endl;
+//     }
 
 protected:
     KWVariable *var;
@@ -144,12 +148,13 @@ public:
 
     KWFootNote *getFootNote() { return fn; }
 
-    virtual void save( ostream &out ) {
-        fn->save( out );
-        out << otag << "<FRMAT>" << endl;
-        KWCharFormat::save( out );
-        out << etag << "</FRMAT>" << endl;
-    }
+    // #### todo
+    // virtual void save( ostream &out ) {
+//         fn->save( out );
+//         out << otag << "<FRMAT>" << endl;
+//         KWCharFormat::save( out );
+//         out << etag << "</FRMAT>" << endl;
+    //}
 
 protected:
     KWFootNote *fn;
@@ -208,8 +213,9 @@ public:
 
     QString toString();
     QString toString( unsigned int _pos, unsigned int _len );
-    void saveFormat( ostream &out );
-    void loadFormat( KOMLParser &parser, vector<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
+    // #### todo
+    //void saveFormat( ostream &out );
+    //void loadFormat( KOMLParser &parser, vector<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
 
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
     int find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false );

@@ -109,8 +109,9 @@ public:
 
     void destroy();
 
-    QDomElement save( QDomDocument& doc )
-    void load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst );
+    QDomElement save( QDomDocument& doc );
+    // #### todo
+    //void load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst );
 
 protected:
     void makeText();

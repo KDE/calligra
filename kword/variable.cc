@@ -118,23 +118,24 @@ QDomElement KWVariable::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-void KWVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
-{
-    if ( name == "POS" )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-	vector<KOMLAttrib>::const_iterator it = lst.begin();
-	for( ; it != lst.end(); it++ )
-	{
-	    if ( ( *it ).m_strName == "frameSet" )
-		frameSetNum = atoi( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "frame" )
-		frameNum = atoi( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "pgNum" )
-		pageNum = atoi( ( *it ).m_strValue.c_str() );
-	}
-    }
-}
+// #### todo
+// void KWVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+// {
+//     if ( name == "POS" )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	for( ; it != lst.end(); it++ )
+// 	{
+// 	    if ( ( *it ).m_strName == "frameSet" )
+// 		frameSetNum = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "frame" )
+// 		frameNum = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "pgNum" )
+// 		pageNum = atoi( ( *it ).m_strValue.c_str() );
+// 	}
+//     }
+// }
 
 /******************************************************************/
 /* Class: KWPgNumVariable					  */
@@ -153,21 +154,22 @@ QDomElement KWPgNumVariable::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-void KWPgNumVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
-{
-    KWVariable::load( name, tag, lst );
+// #### todo
+// void KWPgNumVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+// {
+//     KWVariable::load( name, tag, lst );
 
-    if ( name == "PGNUM" )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-	vector<KOMLAttrib>::const_iterator it = lst.begin();
-	for( ; it != lst.end(); it++ )
-	{
-	    if ( ( *it ).m_strName == "value" )
-		pgNum = atoi( ( *it ).m_strValue.c_str() );
-	}
-    }
-}
+//     if ( name == "PGNUM" )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	for( ; it != lst.end(); it++ )
+// 	{
+// 	    if ( ( *it ).m_strName == "value" )
+// 		pgNum = atoi( ( *it ).m_strValue.c_str() );
+// 	}
+//     }
+// }
 
 /******************************************************************/
 /* Class: KWDateVariable					  */
@@ -206,34 +208,35 @@ QDomElement KWDateVariable::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-void KWDateVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
-{
-    KWVariable::load( name, tag, lst );
+// #### todo
+// void KWDateVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+// {
+//     KWVariable::load( name, tag, lst );
 
-    int y, m, d;
+//     int y, m, d;
 
-    if ( name == "DATE" )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-	vector<KOMLAttrib>::const_iterator it = lst.begin();
-	for( ; it != lst.end(); it++ )
-	{
-	    if ( ( *it ).m_strName == "year" )
-		y = atoi( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "month" )
-		m = atoi( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "day" )
-		d = atoi( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "fix" )
-		fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-	}
-    }
+//     if ( name == "DATE" )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	for( ; it != lst.end(); it++ )
+// 	{
+// 	    if ( ( *it ).m_strName == "year" )
+// 		y = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "month" )
+// 		m = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "day" )
+// 		d = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "fix" )
+// 		fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+// 	}
+//     }
 
-    if ( fix )
-	date.setYMD( y, m, d );
-    else
-	date = QDate::currentDate();
-}
+//     if ( fix )
+// 	date.setYMD( y, m, d );
+//     else
+// 	date = QDate::currentDate();
+// }
 
 /******************************************************************/
 /* Class: KWTimeVariable					  */
@@ -273,35 +276,36 @@ QDomElement KWTimeVariable::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-void KWTimeVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
-{
-    KWVariable::load( name, tag, lst );
+// #### todo
+// void KWTimeVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+// {
+//     KWVariable::load( name, tag, lst );
 
-    int h, m, s, ms;
+//     int h, m, s, ms;
 
-    if ( name == "TIME" )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-	vector<KOMLAttrib>::const_iterator it = lst.begin();
-	for( ; it != lst.end(); it++ )
-	{
-	    if ( ( *it ).m_strName == "hour" )
-		h = atoi( ( *it ).m_strValue.c_str() );
-	    else if ((*it).m_strName == "minute")
-		m = atoi( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "second" )
-		s = atoi( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "msecond" )
-		ms = atoi( ( *it ).m_strValue.c_str() );
-	    else if ( ( *it ).m_strName == "fix" )
-		fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-	}
-    }
+//     if ( name == "TIME" )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	for( ; it != lst.end(); it++ )
+// 	{
+// 	    if ( ( *it ).m_strName == "hour" )
+// 		h = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ((*it).m_strName == "minute")
+// 		m = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "second" )
+// 		s = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "msecond" )
+// 		ms = atoi( ( *it ).m_strValue.c_str() );
+// 	    else if ( ( *it ).m_strName == "fix" )
+// 		fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+// 	}
+//     }
 
-    if ( fix )
-	time.setHMS( h, m, s, ms );
-    else
-	time = QTime::currentTime();
-}
+//     if ( fix )
+// 	time.setHMS( h, m, s, ms );
+//     else
+// 	time = QTime::currentTime();
+// }
 
 

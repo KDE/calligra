@@ -4,14 +4,7 @@
 #include "font.h"
 #include "defs.h"
 
-#include <string.h>
 #include <assert.h>
-
-#include <komlMime.h>
-#include <koStream.h>
-
-#include <strstream>
-#include <fstream>
 #include <unistd.h>
 
 #include <qimage.h>
@@ -299,268 +292,270 @@ QString KWString::toString( unsigned int _pos, unsigned int _len )
 }
 
 /*================================================================*/
-void KWString::saveFormat( ostream &out )
-{
-    unsigned int start = 0;
+// #### todo
+// void KWString::saveFormat( ostream &out )
+// {
+//     unsigned int start = 0;
 
-    for ( unsigned int i = 0; i < _len_; i++ )
-    {
-        if ( _data_[ i ].attrib->getClassId() != ID_KWCharFormat )
-        {
-            if ( start < i )
-            {
-                out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
-                    << "\" len=\"" << i - start << "\">" << endl;
-                _data_[ start ].attrib->save( out );
-                out << etag << "</FORMAT>" << endl;
-            }
-            switch ( _data_[ i ].attrib->getClassId() )
-            {
-            case ID_KWCharImage:
-            {
-                out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
-                _data_[ i ].attrib->save( out );
-                out << etag << "</FORMAT>" << endl;
-            } break;
-            case ID_KWCharTab:
-            {
-                out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
-                out << etag << "</FORMAT>" << endl;
-            } break;
-            case ID_KWCharVariable:
-            {
-                out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
-                _data_[ i ].attrib->save( out );
-                out << etag << "</FORMAT>" << endl;
-            } break;
-            case ID_KWCharFootNote:
-            {
-                out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
-                _data_[ i ].attrib->save( out );
-                out << etag << "</FORMAT>" << endl;
-            } break;
-            default: break;
-            }
-            start = i + 1;
-        }
-        else if ( i > 0 && _data_[ i ].attrib->getClassId() == ID_KWCharFormat &&
-                  !( *( ( KWCharFormat* )_data_[ i ].attrib ) == *( ( KWCharFormat* )_data_[ i - 1 ].attrib ) ) )
-        {
-            if ( start < i )
-            {
-                out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
-                    << "\" len=\"" << i - start << "\">" << endl;
-                _data_[ start ].attrib->save( out );
-                out << etag << "</FORMAT>" << endl;
-            }
-            start = i;
-        }
-    }
+//     for ( unsigned int i = 0; i < _len_; i++ )
+//     {
+//         if ( _data_[ i ].attrib->getClassId() != ID_KWCharFormat )
+//         {
+//             if ( start < i )
+//             {
+//                 out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
+//                     << "\" len=\"" << i - start << "\">" << endl;
+//                 _data_[ start ].attrib->save( out );
+//                 out << etag << "</FORMAT>" << endl;
+//             }
+//             switch ( _data_[ i ].attrib->getClassId() )
+//             {
+//             case ID_KWCharImage:
+//             {
+//                 out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+//                 _data_[ i ].attrib->save( out );
+//                 out << etag << "</FORMAT>" << endl;
+//             } break;
+//             case ID_KWCharTab:
+//             {
+//                 out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+//                 out << etag << "</FORMAT>" << endl;
+//             } break;
+//             case ID_KWCharVariable:
+//             {
+//                 out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+//                 _data_[ i ].attrib->save( out );
+//                 out << etag << "</FORMAT>" << endl;
+//             } break;
+//             case ID_KWCharFootNote:
+//             {
+//                 out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+//                 _data_[ i ].attrib->save( out );
+//                 out << etag << "</FORMAT>" << endl;
+//             } break;
+//             default: break;
+//             }
+//             start = i + 1;
+//         }
+//         else if ( i > 0 && _data_[ i ].attrib->getClassId() == ID_KWCharFormat &&
+//                   !( *( ( KWCharFormat* )_data_[ i ].attrib ) == *( ( KWCharFormat* )_data_[ i - 1 ].attrib ) ) )
+//         {
+//             if ( start < i )
+//             {
+//                 out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
+//                     << "\" len=\"" << i - start << "\">" << endl;
+//                 _data_[ start ].attrib->save( out );
+//                 out << etag << "</FORMAT>" << endl;
+//             }
+//             start = i;
+//         }
+//     }
 
-    if ( start < _len_ )
-    {
-        out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
-            << "\" len=\"" << _len_ - start << "\">" << endl;
-        _data_[ start ].attrib->save( out );
-        out << etag << "</FORMAT>" << endl;
-    }
-}
+//     if ( start < _len_ )
+//     {
+//         out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
+//             << "\" len=\"" << _len_ - start << "\">" << endl;
+//         _data_[ start ].attrib->save( out );
+//         out << etag << "</FORMAT>" << endl;
+//     }
+// }
 
 /*================================================================*/
-void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc, KWTextFrameSet * )
-{
-    string tag;
-    string name;
+// #### todo
+// void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc, KWTextFrameSet * )
+// {
+//     string tag;
+//     string name;
 
-    while ( parser.open( 0L, tag ) )
-    {
-        KOMLParser::parseTag( tag.c_str(), name, lst );
+//     while ( parser.open( 0L, tag ) )
+//     {
+//         KOMLParser::parseTag( tag.c_str(), name, lst );
 
-        // format
-        if ( name == "FORMAT" )
-        {
-            ClassIDs _id = ID_KWCharNone;
-            unsigned int __pos = 0, __len = 0;
-            KWFormat *_format = 0L, *format = 0L;
-            KWImage *_image = 0L; // , *image = 0L;
-            KWCharImage *_kwimage = 0L;
-            KWCharFormat *_kwformat = 0L;
-            KWCharTab *_kwtab = 0L;
-            KOMLParser::parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            bool _load = false;
-            for( ; it != lst.end(); it++ )
-            {
-                if ( ( *it ).m_strName == "id" )
-                {
-                    _id = static_cast<ClassIDs>( atoi( ( *it ).m_strValue.c_str() ) );
-                    _load = true;
-                }
-                else if ( ( *it ).m_strName == "pos" )
-                    __pos = atoi( ( *it ).m_strValue.c_str() );
-                else if ( ( *it ).m_strName == "len" )
-                    __len = atoi( ( *it ).m_strValue.c_str() );
-            }
-            if ( _load )
-            {
-                switch ( _id )
-                {
-                case ID_KWCharFormat:
-                {
-                    _format = new KWFormat();
-                    _format->load( parser, lst, _doc );
-                    format = _doc->getFormatCollection()->getFormat( *_format );
-                    for ( unsigned int i = __pos; i < __pos + __len; i++ )
-                    {
-                        if ( static_cast<int>( i ) > static_cast<int>( size() - 1 ) ) break;
-                        freeChar( _data_[ i ], doc );
-                        _kwformat = new KWCharFormat( format );
-                        _data_[ i ].attrib = _kwformat;
-                        format->incRef();
-                    }
-                    format->decRef();
-                    delete _format;
-                    _format = 0;
-                } break;
-                case ID_KWCharImage:
-                {
-                    _image = new KWImage();
-                    _image->load( parser, lst, _doc );
-//                     QString key;
-//                     image = _doc->getImageCollection()->getImage( *_image, key );
-                    _kwimage = new KWCharImage( 0L );
-                    doc->addImageRequest( _image->getFilename(), _kwimage );
-                    freeChar( _data_[ __pos ], doc );
-                    _data_[ __pos ].c = KWSpecialChar;
-                    _data_[ __pos ].attrib = _kwimage;
-                    delete _image;
-                    _image = 0;
-                } break;
-                case ID_KWCharTab:
-                {
-                    _kwtab = new KWCharTab();
-                    freeChar( _data_[ __pos ], doc );
-                    _data_[ __pos ].c = KWSpecialChar;
-                    _data_[ __pos ].attrib = _kwtab;
-                } break;
-                case ID_KWCharVariable:
-                {
-                    VariableType vart;
-                    KWVariable *var = 0L;
-                    KWCharVariable *v = 0L;
+//         // format
+//         if ( name == "FORMAT" )
+//         {
+//             ClassIDs _id = ID_KWCharNone;
+//             unsigned int __pos = 0, __len = 0;
+//             KWFormat *_format = 0L, *format = 0L;
+//             KWImage *_image = 0L; // , *image = 0L;
+//             KWCharImage *_kwimage = 0L;
+//             KWCharFormat *_kwformat = 0L;
+//             KWCharTab *_kwtab = 0L;
+//             KOMLParser::parseTag( tag.c_str(), name, lst );
+//             vector<KOMLAttrib>::const_iterator it = lst.begin();
+//             bool _load = false;
+//             for( ; it != lst.end(); it++ )
+//             {
+//                 if ( ( *it ).m_strName == "id" )
+//                 {
+//                     _id = static_cast<ClassIDs>( atoi( ( *it ).m_strValue.c_str() ) );
+//                     _load = true;
+//                 }
+//                 else if ( ( *it ).m_strName == "pos" )
+//                     __pos = atoi( ( *it ).m_strValue.c_str() );
+//                 else if ( ( *it ).m_strName == "len" )
+//                     __len = atoi( ( *it ).m_strValue.c_str() );
+//             }
+//             if ( _load )
+//             {
+//                 switch ( _id )
+//                 {
+//                 case ID_KWCharFormat:
+//                 {
+//                     _format = new KWFormat();
+//                     _format->load( parser, lst, _doc );
+//                     format = _doc->getFormatCollection()->getFormat( *_format );
+//                     for ( unsigned int i = __pos; i < __pos + __len; i++ )
+//                     {
+//                         if ( static_cast<int>( i ) > static_cast<int>( size() - 1 ) ) break;
+//                         freeChar( _data_[ i ], doc );
+//                         _kwformat = new KWCharFormat( format );
+//                         _data_[ i ].attrib = _kwformat;
+//                         format->incRef();
+//                     }
+//                     format->decRef();
+//                     delete _format;
+//                     _format = 0;
+//                 } break;
+//                 case ID_KWCharImage:
+//                 {
+//                     _image = new KWImage();
+//                     _image->load( parser, lst, _doc );
+// //                     QString key;
+// //                     image = _doc->getImageCollection()->getImage( *_image, key );
+//                     _kwimage = new KWCharImage( 0L );
+//                     doc->addImageRequest( _image->getFilename(), _kwimage );
+//                     freeChar( _data_[ __pos ], doc );
+//                     _data_[ __pos ].c = KWSpecialChar;
+//                     _data_[ __pos ].attrib = _kwimage;
+//                     delete _image;
+//                     _image = 0;
+//                 } break;
+//                 case ID_KWCharTab:
+//                 {
+//                     _kwtab = new KWCharTab();
+//                     freeChar( _data_[ __pos ], doc );
+//                     _data_[ __pos ].c = KWSpecialChar;
+//                     _data_[ __pos ].attrib = _kwtab;
+//                 } break;
+//                 case ID_KWCharVariable:
+//                 {
+//                     VariableType vart;
+//                     KWVariable *var = 0L;
+//                     KWCharVariable *v = 0L;
 
-                    while ( parser.open( 0L, tag ) )
-                    {
-                        KOMLParser::parseTag( tag.c_str(), name, lst );
+//                     while ( parser.open( 0L, tag ) )
+//                     {
+//                         KOMLParser::parseTag( tag.c_str(), name, lst );
 
-                        if ( name == "TYPE" )
-                        {
-                            KOMLParser::parseTag( tag.c_str(), name, lst );
-                            vector<KOMLAttrib>::const_iterator it = lst.begin();
-                            for( ; it != lst.end(); it++ )
-                            {
-                                if ( ( *it ).m_strName == "type" )
-                                {
-                                    vart = static_cast<VariableType>( atoi( ( *it ).m_strValue.c_str() ) );
-                                    switch ( vart )
-                                    {
-                                    case VT_DATE_FIX:
-                                        var = new KWDateVariable( _doc );
-                                        break;
-                                    case VT_DATE_VAR:
-                                        var = new KWDateVariable( _doc );
-                                        break;
-                                    case VT_TIME_FIX:
-                                        var = new KWTimeVariable( _doc );
-                                        break;
-                                    case VT_TIME_VAR:
-                                        var = new KWTimeVariable( _doc );
-                                        break;
-                                    case VT_PGNUM:
-                                        var = new KWPgNumVariable( _doc );
-                                        break;
-                                    default: break;
-                                    }
+//                         if ( name == "TYPE" )
+//                         {
+//                             KOMLParser::parseTag( tag.c_str(), name, lst );
+//                             vector<KOMLAttrib>::const_iterator it = lst.begin();
+//                             for( ; it != lst.end(); it++ )
+//                             {
+//                                 if ( ( *it ).m_strName == "type" )
+//                                 {
+//                                     vart = static_cast<VariableType>( atoi( ( *it ).m_strValue.c_str() ) );
+//                                     switch ( vart )
+//                                     {
+//                                     case VT_DATE_FIX:
+//                                         var = new KWDateVariable( _doc );
+//                                         break;
+//                                     case VT_DATE_VAR:
+//                                         var = new KWDateVariable( _doc );
+//                                         break;
+//                                     case VT_TIME_FIX:
+//                                         var = new KWTimeVariable( _doc );
+//                                         break;
+//                                     case VT_TIME_VAR:
+//                                         var = new KWTimeVariable( _doc );
+//                                         break;
+//                                     case VT_PGNUM:
+//                                         var = new KWPgNumVariable( _doc );
+//                                         break;
+//                                     default: break;
+//                                     }
 
-                                    var->setVariableFormat( _doc->getVarFormats().find( static_cast<int>( vart ) ) );
-                                    v = new KWCharVariable( var );
-                                }
-                            }
-                        }
-                        else if ( name == "FRMAT" && v )
-                        {
-                            _format = new KWFormat();
-                            _format->load( parser, lst, _doc );
-                            format = _doc->getFormatCollection()->getFormat( *_format );
-                            freeChar( _data_[ __pos ], doc );
-                            v->setFormat( format );
-                            _data_[ __pos ].attrib = v;
-                            _data_[ __pos ].c = KWSpecialChar;
-                            delete _format;
-                            _format = 0;
-                        }
-                        else
-                        {
-                            if ( var )
-                                var->load( name, tag, lst );
-                        }
+//                                     var->setVariableFormat( _doc->getVarFormats().find( static_cast<int>( vart ) ) );
+//                                     v = new KWCharVariable( var );
+//                                 }
+//                             }
+//                         }
+//                         else if ( name == "FRMAT" && v )
+//                         {
+//                             _format = new KWFormat();
+//                             _format->load( parser, lst, _doc );
+//                             format = _doc->getFormatCollection()->getFormat( *_format );
+//                             freeChar( _data_[ __pos ], doc );
+//                             v->setFormat( format );
+//                             _data_[ __pos ].attrib = v;
+//                             _data_[ __pos ].c = KWSpecialChar;
+//                             delete _format;
+//                             _format = 0;
+//                         }
+//                         else
+//                         {
+//                             if ( var )
+//                                 var->load( name, tag, lst );
+//                         }
 
-                        if ( !parser.close( tag ) )
-                        {
-                            cerr << "ERR: Closing Child" << endl;
-                            return;
-                        }
-                    }
-                } break;
-                case ID_KWCharFootNote:
-                {
-                    KWFootNote *fn = new KWFootNote( doc, new QList<KWFootNote::KWFootNoteInternal>() );
-                    KWCharFootNote *v = new KWCharFootNote( fn );
+//                         if ( !parser.close( tag ) )
+//                         {
+//                             cerr << "ERR: Closing Child" << endl;
+//                             return;
+//                         }
+//                     }
+//                 } break;
+//                 case ID_KWCharFootNote:
+//                 {
+//                     KWFootNote *fn = new KWFootNote( doc, new QList<KWFootNote::KWFootNoteInternal>() );
+//                     KWCharFootNote *v = new KWCharFootNote( fn );
 
-                    while ( parser.open( 0L, tag ) )
-                    {
-                        KOMLParser::parseTag( tag.c_str(), name, lst );
+//                     while ( parser.open( 0L, tag ) )
+//                     {
+//                         KOMLParser::parseTag( tag.c_str(), name, lst );
 
-                        if ( name == "FRMAT" && v )
-                        {
-                            _format = new KWFormat();
-                            _format->load( parser, lst, _doc );
-                            format = _doc->getFormatCollection()->getFormat( *_format );
-                            freeChar( _data_[ __pos ], doc );
-                            v->setFormat( format );
-                            _data_[ __pos ].attrib = v;
-                            _data_[ __pos ].c = KWSpecialChar;
-                            delete _format;
-                            _format = 0;
-                        }
-                        else
-                        {
-                            if ( fn )
-                                fn->load( name, tag, parser, lst );
-                        }
+//                         if ( name == "FRMAT" && v )
+//                         {
+//                             _format = new KWFormat();
+//                             _format->load( parser, lst, _doc );
+//                             format = _doc->getFormatCollection()->getFormat( *_format );
+//                             freeChar( _data_[ __pos ], doc );
+//                             v->setFormat( format );
+//                             _data_[ __pos ].attrib = v;
+//                             _data_[ __pos ].c = KWSpecialChar;
+//                             delete _format;
+//                             _format = 0;
+//                         }
+//                         else
+//                         {
+//                             if ( fn )
+//                                 fn->load( name, tag, parser, lst );
+//                         }
 
-                        if ( !parser.close( tag ) )
-                        {
-                            cerr << "ERR: Closing Child" << endl;
-                            return;
-                        }
-                    }
+//                         if ( !parser.close( tag ) )
+//                         {
+//                             cerr << "ERR: Closing Child" << endl;
+//                             return;
+//                         }
+//                     }
 
-                    doc->getFootNoteManager().insertFootNoteInternal( fn );
-                } break;
-                default: break;
-                }
-                _load = false;
-            }
-        }
+//                     doc->getFootNoteManager().insertFootNoteInternal( fn );
+//                 } break;
+//                 default: break;
+//                 }
+//                 _load = false;
+//             }
+//         }
 
-        if ( !parser.close( tag ) )
-        {
-            cerr << "ERR: Closing Child" << endl;
-            return;
-        }
-    }
-}
+//         if ( !parser.close( tag ) )
+//         {
+//             cerr << "ERR: Closing Child" << endl;
+//             return;
+//         }
+//     }
+// }
 
 /*================================================================*/
 void KWString::resize( unsigned int _size, bool del )

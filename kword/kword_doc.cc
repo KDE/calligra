@@ -748,18 +748,18 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     __pgLayout.mmHeight = paper.attribute( "mmHeight" ).toInt();
     __pgLayout.inchHeight = paper.attribute( "inchHeight" ).toInt();
     __pgLayout.ptHeight = paper.attribute( "ptHeight" ).toInt();
-    __pgLayout.columns = paper.attribute( "columns" ).toInt();
-    __pgLayout.ptColumnSpacing = paper.attribute( "ptColumnspc" ).toInt();
-    __pgLayout.mmColumnSpacing = paper.attribute( "mmColumnspc" ).toInt();
-    __pgLayout.inchColumnSpacing = paper.attribute( "inchColumnspc" ).toInt();
+    __columns.columns = paper.attribute( "columns" ).toInt();
+    __columns.ptColumnSpacing = paper.attribute( "ptColumnspc" ).toInt();
+    __columns.mmColumnSpacing = paper.attribute( "mmColumnspc" ).toInt();
+    __columns.inchColumnSpacing = paper.attribute( "inchColumnspc" ).toInt();
     __hf.header = (KoHFType)paper.attribute( "hType" ).toInt();
     __hf.footer = (KoHFType)paper.attribute( "fType" ).toInt();
-    __hf.ptHeadBody = paper.attribute( "ptHeadBody" ).toInt();
-    __hf.mmHeadBody = paper.attribute( "mmHeadBody" ).toInt();
-    __hf.inchHeadBody = paper.attribute( "inchHeadBody" ).toInt();
-    __hf.ptFootBody = paper.attribute( "ptFootBody" ).toInt();
-    __hf.mmFootBody = paper.attribute( "mmFootBody" ).toInt();
-    __hf.inchFootBody = paper.attribute( "inchFootBody" ).toInt();
+    __hf.ptHeaderBodySpacing = paper.attribute( "ptHeadBody" ).toInt();
+    __hf.mmHeaderBodySpacing = paper.attribute( "mmHeadBody" ).toInt();
+    __hf.inchHeaderBodySpacing = paper.attribute( "inchHeadBody" ).toInt();
+    __hf.ptFooterBodySpacing = paper.attribute( "ptFootBody" ).toInt();
+    __hf.mmFooterBodySpacing = paper.attribute( "mmFootBody" ).toInt();
+    __hf.inchFooterBodySpacing = paper.attribute( "inchFootBody" ).toInt();
 
     QDomElement border = paper.namedItem( "PAPERBORDERS" ).toElement();
     if ( border.isNull() )
@@ -776,7 +776,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     __pgLayout.inchRight = border.attribute( "inchRight" ).toInt();
     __pgLayout.inchTop = border.attribute( "inchTop" ).toInt();
     __pgLayout.inchBottom = border.attribute( "inchBottom" ).toInt();
-    
+
     QDomElement attribs = doc.namedItem( "ATTRIBUTES" ).toElement();
     if ( attribs.isNull() )
 	return false;
@@ -784,13 +784,13 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     _header = (bool)attribs.attribute( "hasHeader" ).toInt();
     _footer = (bool)attribs.attribute( "hasFooter" ).toInt();
     unit = attribs.attribute( "unit" );
-    
+
     if ( !footNoteManager.load( word.namedItem( "FOOTNOTE-GLOBAL" ).toElement() ) )
 	return FALSE;
-    
+
     if ( !loadFrameSets( word.namedItem( "FRAMESETS" ).toElement() ) )
 	return FALSE;
-    
+
     if ( !loadStyleTemplates( word.namedItem( "STYLES" ).toElement() ) )
 	return FALSE;
 
@@ -798,7 +798,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     QDomElement key = pix.firstChild();
     for ( ; !key.isNull(); key = key.nextSibling() )
 	pixmapKeys.append( key.attribute( "key" ) );
-    
+
 
     switch ( KWUnit::unitType( unit ) ) {
     case U_MM: __pgLayout.unit = PG_MM;
@@ -827,7 +827,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     if ( !_first_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_FIRST_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), 
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -837,7 +837,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     if ( !_even_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_EVEN_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), 
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -847,7 +847,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     if ( !_odd_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_ODD_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), 
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -950,7 +950,7 @@ bool KWordDocument::loadStyleTemplates( const QDomElement& element )
 	    return FALSE;
 	addStyleTemplate( pl );
     }
-    
+
     return TRUE;
 }
 
@@ -977,7 +977,7 @@ void KWordDocument::loadFrameSets( const QDomElement &framesets )
 	
 	frameType = (FrameType)frameset.attribute( "frameType" ).toInt();
 	autoCreateNewFrame = frameset.attribute( "autoCreateNewFrame" ).toInt();
-	frameInfo = (FrameInfo)frameset.attribute( "frameInfo" )toInt();
+	frameInfo = (FrameInfo)frameset.attribute( "frameInfo" ).toInt();
 	_name = frameset.attribute( "grpMgr" );
 	_row = frameset.attribute( "row" ).toInt();
 	_col = frameset.attribute( "col" ).toInt();
@@ -995,7 +995,8 @@ void KWordDocument::loadFrameSets( const QDomElement &framesets )
 	    KWTextFrameSet *frame = new KWTextFrameSet( this );
 	    frame->setVisible( _visible );
 	    frame->setName( fsname );
-	    frame->load( parser, lst );
+	    // #### todo
+	    //frame->load( parser, lst );
 	    frame->setAutoCreateNewFrame( autoCreateNewFrame );
 	    frame->setFrameInfo( frameInfo );
 	    frame->setIsRemoveableHeader( removeable );
@@ -1030,7 +1031,8 @@ void KWordDocument::loadFrameSets( const QDomElement &framesets )
 	case FT_PICTURE: {
 	    KWPictureFrameSet *frame = new KWPictureFrameSet( this );
 	    frame->setName( fsname );
-	    frame->load( parser, lst );
+	    // #### todo
+	    //frame->load( parser, lst );
 	    frame->setFrameInfo( frameInfo );
 	    frames.append( frame );
 	} break;
@@ -1058,7 +1060,8 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 
 	    _store->open( u, 0L );
 	    {
-		istorestream in( _store );
+		// #### todo
+		//istorestream in( _store );
 		in >> img;
 	    }
 	    _store->close();
@@ -1096,7 +1099,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     word.setAttribute( "email", "reggie@kde.org and weis@kde.org" );
     word.setAttribute( "editor", "KWord" );
     word.setAttribute( "mime", "application/x-kword" );
-    word.appendChild( spread );
+    word.appendChild( word );
 
     QDomElement paper = doc.createElement( "PAPER" );
     word.appendChild( paper );
@@ -1148,7 +1151,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     attr.setAttribute( "hasFooter", hasFooter() );
     attr.setAttribute( "unit", getUnit() );
 
-    QDomElement fn = footNodeManager.save( doc );
+    QDomElement fn = footNoteManager.save( doc );
     if ( fn.isNull() )
 	return false;
     word.appendChild( fn );
@@ -1191,7 +1194,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 	    continue;
 	QDomElement e = doc.createElement( "KEY" );
 	e.setAttribute( "key", it.current()->getFilename() );
-	pix.appendChild( e )
+	keys.appendChild( e );
 	    keys.append( it.currentKey() );
 	images.append( it.current()->getFilename() );
     }
@@ -1234,15 +1237,15 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	    format = "JPEG";
 	if ( QImage::outputFormats().find( format ) == -1 )
 	    format = "BMP";
-
-	QString mime = "image/" + format.lower();
-	_store->open( u2, mime.lower() );
-	ostorestream out( _store );
-	writeImageToStream( out, *it.current(), format );
-	out.flush();
-	_store->close();
-	keys.append( it.currentKey() );
-	images.append( it.current()->getFilename() );
+	// #### todo
+// 	QString mime = "image/" + format.lower();
+// 	_store->open( u2, mime.lower() );
+// 	ostorestream out( _store );
+// 	writeImageToStream( out, *it.current(), format );
+// 	out.flush();
+// 	_store->close();
+// 	keys.append( it.currentKey() );
+// 	images.append( it.current()->getFilename() );
     }
 
     return true;
@@ -1634,7 +1637,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
     {
 	//_painter.fillRect( _fc.getPTCounterPos() - xOffset, _fc.getPTY(), _fc.getPTCounterWidth(), _fc.getLineHeight(), lightGray );
 	KWFormat counterfm( this, _fc );
-	counterfm.apply( lay->getFormat() );
+	counterfm.apply( *lay->getFormat() );
 	if ( _fc.getParag()->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET )
 	    counterfm.setUserFont( findUserFont( _fc.getParag()->getParagLayout()->getBulletFont() ) );
 	_painter.setFont( *( counterfm.loadFont( this ) ) );

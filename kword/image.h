@@ -49,8 +49,9 @@ public:
     QString getFilename()
     { return filename; }
 
-    QDomElement save( QDomDocument& doc )
-    void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
+    QDomElement save( QDomDocument& doc );
+    // #### todo
+    //void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
 
 protected:
     int ref;

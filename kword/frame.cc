@@ -519,7 +519,7 @@ QCursor KWFrameSet::getMouseCursor( unsigned int mx, unsigned int my )
 QDomElement KWFrameSet::save( QDomDocument &doc )
 {
     QDomElement frameset = doc.createElement( "FRAMESET" );
-    
+
     KWFrame *frame;
 
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
@@ -886,7 +886,7 @@ void KWTextFrameSet::splitParag( KWParag *_parag, unsigned int _pos )
 QDomElement KWTextFrameSet::save( QDomDocument &doc )
 {
     QDomElement frameset = KWFrameSet::save( doc );
-    
+
     QString grp = "";
     if ( grpMgr )
     {
@@ -916,7 +916,7 @@ QDomElement KWTextFrameSet::save( QDomDocument &doc )
     frameset.setAttribute( "removeable", removeableHeader );
     frameset.setAttribute( "visible", visible );
     frameset.setAttribute( "name", name );
-    
+
     KWParag *parag = getFirstParag();
     while ( parag ) {
 	QDomElement p = parag->save( doc );
@@ -929,189 +929,190 @@ QDomElement KWTextFrameSet::save( QDomDocument &doc )
 }
 
 /*================================================================*/
-void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
-{
-    init();
+// #### todo
+// void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+// {
+//     init();
 
-    string tag;
-    string name;
+//     string tag;
+//     string name;
 
-    KWParag *last = 0L;
+//     KWParag *last = 0L;
 
-    while ( parser.open( 0L, tag ) )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+//     while ( parser.open( 0L, tag ) )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
 
-	// paragraph
-	if ( name == "PARAGRAPH" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-	    }
+// 	// paragraph
+// 	if ( name == "PARAGRAPH" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 	    }
 
-	    if ( !last )
-	    {
-		delete parags;
-		parags = new KWParag( this, doc, 0L, 0L, doc->getDefaultParagLayout() );
-		if ( doc->getNumFrameSets() == 0 )
-		{
-		    parags->insertText( 0, " " );
-		    KWFormat *format = new KWFormat( doc );
-		    format->setDefaults( doc );
-		    parags->setFormat( 0, 1, *format );
-		}
-		parags->load( parser, lst );
-		last = parags;
-	    }
-	    else
-	    {
-		last = new KWParag( this, doc, last, 0L, doc->getDefaultParagLayout() );
-		last->load( parser, lst );
-	    }
-	}
+// 	    if ( !last )
+// 	    {
+// 		delete parags;
+// 		parags = new KWParag( this, doc, 0L, 0L, doc->getDefaultParagLayout() );
+// 		if ( doc->getNumFrameSets() == 0 )
+// 		{
+// 		    parags->insertText( 0, " " );
+// 		    KWFormat *format = new KWFormat( doc );
+// 		    format->setDefaults( doc );
+// 		    parags->setFormat( 0, 1, *format );
+// 		}
+// 		parags->load( parser, lst );
+// 		last = parags;
+// 	    }
+// 	    else
+// 	    {
+// 		last = new KWParag( this, doc, last, 0L, doc->getDefaultParagLayout() );
+// 		last->load( parser, lst );
+// 	    }
+// 	}
 
-	else if ( name == "FRAME" )
-	{
-	    KWFrame rect;
-	    KWParagLayout::Border l, r, t, b;
-	    float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
-	    unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
+// 	else if ( name == "FRAME" )
+// 	{
+// 	    KWFrame rect;
+// 	    KWParagLayout::Border l, r, t, b;
+// 	    float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
+// 	    unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
 
-	    l.color = Qt::white;
-	    l.style = KWParagLayout::SOLID;
-	    l.ptWidth = 1;
-	    r.color = Qt::white;
-	    r.style = KWParagLayout::SOLID;
-	    r.ptWidth = 1;
-	    t.color = Qt::white;
-	    t.style = KWParagLayout::SOLID;
-	    t.ptWidth = 1;
-	    b.color = Qt::white;
-	    b.style = KWParagLayout::SOLID;
-	    b.ptWidth = 1;
-	    QColor c( Qt::white );
+// 	    l.color = Qt::white;
+// 	    l.style = KWParagLayout::SOLID;
+// 	    l.ptWidth = 1;
+// 	    r.color = Qt::white;
+// 	    r.style = KWParagLayout::SOLID;
+// 	    r.ptWidth = 1;
+// 	    t.color = Qt::white;
+// 	    t.style = KWParagLayout::SOLID;
+// 	    t.ptWidth = 1;
+// 	    b.color = Qt::white;
+// 	    b.style = KWParagLayout::SOLID;
+// 	    b.ptWidth = 1;
+// 	    QColor c( Qt::white );
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "left" )
-		    rect.setLeft( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "top" )
-		    rect.setTop( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "right" )
-		    rect.setRight( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bottom" )
-		    rect.setBottom( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "runaround" )
-		    rect.setRunAround( static_cast<RunAround>( atoi( ( *it ).m_strValue.c_str() ) ) );
-		else if ( ( *it ).m_strName == "runaroundGap" )
-		    rect.setRunAroundGap( KWUnit( atof( ( *it ).m_strValue.c_str() ) ) );
-		else if ( ( *it ).m_strName == "runaGapPT" )
-		    rapt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "runaGapMM" )
-		    ramm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "runaGapINCH" )
-		    rainch = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "lWidth" )
-		    l.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "rWidth" )
-		    r.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "tWidth" )
-		    t.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bWidth" )
-		    b.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "lRed" )
-		    l.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), l.color.green(), l.color.blue() );
-		else if ( ( *it ).m_strName == "rRed" )
-		    r.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), r.color.green(), r.color.blue() );
-		else if ( ( *it ).m_strName == "tRed" )
-		    t.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), t.color.green(), t.color.blue() );
-		else if ( ( *it ).m_strName == "bRed" )
-		    b.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), b.color.green(), b.color.blue() );
-		else if ( ( *it ).m_strName == "lGreen" )
-		    l.color.setRgb( l.color.red(), atoi( ( *it ).m_strValue.c_str() ), l.color.blue() );
-		else if ( ( *it ).m_strName == "rGreen" )
-		    r.color.setRgb( r.color.red(), atoi( ( *it ).m_strValue.c_str() ), r.color.blue() );
-		else if ( ( *it ).m_strName == "tGreen" )
-		    t.color.setRgb( t.color.red(), atoi( ( *it ).m_strValue.c_str() ), t.color.blue() );
-		else if ( ( *it ).m_strName == "bGreen" )
-		    b.color.setRgb( b.color.red(), atoi( ( *it ).m_strValue.c_str() ), b.color.blue() );
-		else if ( ( *it ).m_strName == "lBlue" )
-		    l.color.setRgb( l.color.red(), l.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "rBlue" )
-		    r.color.setRgb( r.color.red(), r.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "tBlue" )
-		    t.color.setRgb( t.color.red(), t.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bBlue" )
-		    b.color.setRgb( b.color.red(), b.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "lStyle" )
-		    l.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "rStyle" )
-		    r.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "tStyle" )
-		    t.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bStyle" )
-		    b.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bkRed" )
-		    c.setRgb( atoi( ( *it ).m_strValue.c_str() ), c.green(), c.blue() );
-		else if ( ( *it ).m_strName == "bkGreen" )
-		    c.setRgb( c.red(), atoi( ( *it ).m_strValue.c_str() ), c.blue() );
-		else if ( ( *it ).m_strName == "bkBlue" )
-		    c.setRgb( c.red(), c.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bleftpt" )
-		    lpt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "brightpt" )
-		    rpt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "btoppt" )
-		    tpt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bbottompt" )
-		    bpt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bleftmm" )
-		    lmm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "brightmm" )
-		    rmm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "btopmm" )
-		    tmm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bbottommm" )
-		    bmm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bleftinch" )
-		    linch = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "brightinch" )
-		    rinch = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "btopinch" )
-		    tinch = atof( ( *it ).m_strValue.c_str() );
-		else if ((*it).m_strName == "bbottominch")
-		    binch = atof( ( *it ).m_strValue.c_str() );
-	    }
-	    KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
-					   rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
-	    _frame->setLeftBorder( l );
-	    _frame->setRightBorder( r );
-	    _frame->setTopBorder( t );
-	    _frame->setBottomBorder( b );
-	    _frame->setBackgroundColor( QBrush( c ) );
-	    _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
-	    _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
-	    _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
-	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
-	    frames.append( _frame );
-	}
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "left" )
+// 		    rect.setLeft( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "top" )
+// 		    rect.setTop( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "right" )
+// 		    rect.setRight( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bottom" )
+// 		    rect.setBottom( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "runaround" )
+// 		    rect.setRunAround( static_cast<RunAround>( atoi( ( *it ).m_strValue.c_str() ) ) );
+// 		else if ( ( *it ).m_strName == "runaroundGap" )
+// 		    rect.setRunAroundGap( KWUnit( atof( ( *it ).m_strValue.c_str() ) ) );
+// 		else if ( ( *it ).m_strName == "runaGapPT" )
+// 		    rapt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "runaGapMM" )
+// 		    ramm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "runaGapINCH" )
+// 		    rainch = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "lWidth" )
+// 		    l.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "rWidth" )
+// 		    r.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "tWidth" )
+// 		    t.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bWidth" )
+// 		    b.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "lRed" )
+// 		    l.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), l.color.green(), l.color.blue() );
+// 		else if ( ( *it ).m_strName == "rRed" )
+// 		    r.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), r.color.green(), r.color.blue() );
+// 		else if ( ( *it ).m_strName == "tRed" )
+// 		    t.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), t.color.green(), t.color.blue() );
+// 		else if ( ( *it ).m_strName == "bRed" )
+// 		    b.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), b.color.green(), b.color.blue() );
+// 		else if ( ( *it ).m_strName == "lGreen" )
+// 		    l.color.setRgb( l.color.red(), atoi( ( *it ).m_strValue.c_str() ), l.color.blue() );
+// 		else if ( ( *it ).m_strName == "rGreen" )
+// 		    r.color.setRgb( r.color.red(), atoi( ( *it ).m_strValue.c_str() ), r.color.blue() );
+// 		else if ( ( *it ).m_strName == "tGreen" )
+// 		    t.color.setRgb( t.color.red(), atoi( ( *it ).m_strValue.c_str() ), t.color.blue() );
+// 		else if ( ( *it ).m_strName == "bGreen" )
+// 		    b.color.setRgb( b.color.red(), atoi( ( *it ).m_strValue.c_str() ), b.color.blue() );
+// 		else if ( ( *it ).m_strName == "lBlue" )
+// 		    l.color.setRgb( l.color.red(), l.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "rBlue" )
+// 		    r.color.setRgb( r.color.red(), r.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "tBlue" )
+// 		    t.color.setRgb( t.color.red(), t.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bBlue" )
+// 		    b.color.setRgb( b.color.red(), b.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "lStyle" )
+// 		    l.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "rStyle" )
+// 		    r.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "tStyle" )
+// 		    t.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bStyle" )
+// 		    b.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bkRed" )
+// 		    c.setRgb( atoi( ( *it ).m_strValue.c_str() ), c.green(), c.blue() );
+// 		else if ( ( *it ).m_strName == "bkGreen" )
+// 		    c.setRgb( c.red(), atoi( ( *it ).m_strValue.c_str() ), c.blue() );
+// 		else if ( ( *it ).m_strName == "bkBlue" )
+// 		    c.setRgb( c.red(), c.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bleftpt" )
+// 		    lpt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "brightpt" )
+// 		    rpt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "btoppt" )
+// 		    tpt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bbottompt" )
+// 		    bpt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bleftmm" )
+// 		    lmm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "brightmm" )
+// 		    rmm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "btopmm" )
+// 		    tmm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bbottommm" )
+// 		    bmm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bleftinch" )
+// 		    linch = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "brightinch" )
+// 		    rinch = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "btopinch" )
+// 		    tinch = atof( ( *it ).m_strValue.c_str() );
+// 		else if ((*it).m_strName == "bbottominch")
+// 		    binch = atof( ( *it ).m_strValue.c_str() );
+// 	    }
+// 	    KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
+// 					   rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
+// 	    _frame->setLeftBorder( l );
+// 	    _frame->setRightBorder( r );
+// 	    _frame->setTopBorder( t );
+// 	    _frame->setBottomBorder( b );
+// 	    _frame->setBackgroundColor( QBrush( c ) );
+// 	    _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
+// 	    _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
+// 	    _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
+// 	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
+// 	    frames.append( _frame );
+// 	}
 
-	else
-	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
+// 	else
+// 	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
 
-	if ( !parser.close( tag ) )
-	{
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
-	}
-    }
+// 	if ( !parser.close( tag ) )
+// 	{
+// 	    cerr << "ERR: Closing Child" << endl;
+// 	    return;
+// 	}
+//     }
 
-    updateCounters();
-}
+//     updateCounters();
+// }
 
 /*================================================================*/
 void KWTextFrameSet::updateCounters()
@@ -1323,178 +1324,179 @@ QDomElement KWPictureFrameSet::save( QDomDocument &doc )
     QDomElement frameset = KWFrameSet::save( doc );
     frameset.setAttribute( "frameType", (int)getFrameType() );
     frameset.setAttribute( "frameInfo", (int)frameInfo );
-    
+
     QDomElement img = image->save( doc );
     if ( img.isNull() )
 	return img;
     frameset.appendChild( img );
-    
+
     return frameset;
 }
 
 /*================================================================*/
-void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
-{
-    string tag;
-    string name;
+// #### todo
+// void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+// {
+//     string tag;
+//     string name;
 
-    while ( parser.open( 0L, tag ) )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+//     while ( parser.open( 0L, tag ) )
+//     {
+// 	KOMLParser::parseTag( tag.c_str(), name, lst );
 
-	if ( name == "IMAGE" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-	    }
+// 	if ( name == "IMAGE" )
+// 	{
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 	    }
 
-	    KWImage *_image = new KWImage();
-	    _image->load( parser, lst, doc );
-	    //setFileName( _image->getFilename() );
-	    doc->addImageRequest( _image->getFilename(), this );
-	    delete _image;
-	}
+// 	    KWImage *_image = new KWImage();
+// 	    _image->load( parser, lst, doc );
+// 	    //setFileName( _image->getFilename() );
+// 	    doc->addImageRequest( _image->getFilename(), this );
+// 	    delete _image;
+// 	}
 
-	else if ( name == "FRAME" )
-	{
-	    KWFrame rect;
-	    KWParagLayout::Border l, r, t, b;
-	    float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
-	    unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
+// 	else if ( name == "FRAME" )
+// 	{
+// 	    KWFrame rect;
+// 	    KWParagLayout::Border l, r, t, b;
+// 	    float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
+// 	    unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
 
-	    l.color = Qt::white;
-	    l.style = KWParagLayout::SOLID;
-	    l.ptWidth = 1;
-	    r.color = Qt::white;
-	    r.style = KWParagLayout::SOLID;
-	    r.ptWidth = 1;
-	    t.color = Qt::white;
-	    t.style = KWParagLayout::SOLID;
-	    t.ptWidth = 1;
-	    b.color = Qt::white;
-	    b.style = KWParagLayout::SOLID;
-	    b.ptWidth = 1;
-	    QColor c( Qt::white );
+// 	    l.color = Qt::white;
+// 	    l.style = KWParagLayout::SOLID;
+// 	    l.ptWidth = 1;
+// 	    r.color = Qt::white;
+// 	    r.style = KWParagLayout::SOLID;
+// 	    r.ptWidth = 1;
+// 	    t.color = Qt::white;
+// 	    t.style = KWParagLayout::SOLID;
+// 	    t.ptWidth = 1;
+// 	    b.color = Qt::white;
+// 	    b.style = KWParagLayout::SOLID;
+// 	    b.ptWidth = 1;
+// 	    QColor c( Qt::white );
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "left" )
-		    rect.setLeft( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "top" )
-		    rect.setTop( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "right" )
-		    rect.setRight( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bottom" )
-		    rect.setBottom( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "runaround" )
-		    rect.setRunAround( static_cast<RunAround>( atoi( ( *it ).m_strValue.c_str() ) ) );
-		else if ( ( *it ).m_strName == "runaroundGap" )
-		    rect.setRunAroundGap( KWUnit( atof( ( *it ).m_strValue.c_str() ) ) );
-		else if ( ( *it ).m_strName == "runaGapPT" )
-		    rapt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "runaGapMM" )
-		    ramm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "runaGapINCH" )
-		    rainch = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "lWidth" )
-		    l.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "rWidth" )
-		    r.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "tWidth" )
-		    t.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bWidth" )
-		    b.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "lRed" )
-		    l.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), l.color.green(), l.color.blue() );
-		else if ( ( *it ).m_strName == "rRed" )
-		    r.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), r.color.green(), r.color.blue() );
-		else if ( ( *it ).m_strName == "tRed" )
-		    t.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), t.color.green(), t.color.blue() );
-		else if ( ( *it ).m_strName == "bRed" )
-		    b.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), b.color.green(), b.color.blue() );
-		else if ( ( *it ).m_strName == "lGreen" )
-		    l.color.setRgb( l.color.red(), atoi( ( *it ).m_strValue.c_str() ), l.color.blue() );
-		else if ( ( *it ).m_strName == "rGreen" )
-		    r.color.setRgb( r.color.red(), atoi( ( *it ).m_strValue.c_str() ), r.color.blue() );
-		else if ( ( *it ).m_strName == "tGreen" )
-		    t.color.setRgb( t.color.red(), atoi( ( *it ).m_strValue.c_str() ), t.color.blue() );
-		else if ( ( *it ).m_strName == "bGreen" )
-		    b.color.setRgb( b.color.red(), atoi( ( *it ).m_strValue.c_str() ), b.color.blue() );
-		else if ( ( *it ).m_strName == "lBlue" )
-		    l.color.setRgb( l.color.red(), l.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "rBlue" )
-		    r.color.setRgb( r.color.red(), r.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "tBlue" )
-		    t.color.setRgb( t.color.red(), t.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bBlue" )
-		    b.color.setRgb( b.color.red(), b.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "lStyle" )
-		    l.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "rStyle" )
-		    r.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "tStyle" )
-		    t.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bStyle" )
-		    b.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bkRed" )
-		    c.setRgb( atoi( ( *it ).m_strValue.c_str() ), c.green(), c.blue() );
-		else if ( ( *it ).m_strName == "bkGreen" )
-		    c.setRgb( c.red(), atoi( ( *it ).m_strValue.c_str() ), c.blue() );
-		else if ( ( *it ).m_strName == "bkBlue" )
-		    c.setRgb( c.red(), c.green(), atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "bleftpt" )
-		    lpt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "brightpt" )
-		    rpt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "btoppt" )
-		    tpt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bbottompt" )
-		    bpt = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bleftmm" )
-		    lmm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "brightmm" )
-		    rmm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "btopmm" )
-		    tmm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bbottommm" )
-		    bmm = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "bleftinch" )
-		    linch = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "brightinch" )
-		    rinch = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "btopinch" )
-		    tinch = atof( ( *it ).m_strValue.c_str() );
-		else if ((*it).m_strName == "bbottominch")
-		    binch = atof( ( *it ).m_strValue.c_str() );
-	    }
-	    KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
-					   rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
-	    _frame->setLeftBorder( l );
-	    _frame->setRightBorder( r );
-	    _frame->setTopBorder( t );
-	    _frame->setBottomBorder( b );
-	    _frame->setBackgroundColor( QBrush( c ) );
-	    _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
-	    _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
-	    _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
-	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
-	    frames.append( _frame );
-	}
+// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+// 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+// 	    for( ; it != lst.end(); it++ )
+// 	    {
+// 		if ( ( *it ).m_strName == "left" )
+// 		    rect.setLeft( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "top" )
+// 		    rect.setTop( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "right" )
+// 		    rect.setRight( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bottom" )
+// 		    rect.setBottom( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "runaround" )
+// 		    rect.setRunAround( static_cast<RunAround>( atoi( ( *it ).m_strValue.c_str() ) ) );
+// 		else if ( ( *it ).m_strName == "runaroundGap" )
+// 		    rect.setRunAroundGap( KWUnit( atof( ( *it ).m_strValue.c_str() ) ) );
+// 		else if ( ( *it ).m_strName == "runaGapPT" )
+// 		    rapt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "runaGapMM" )
+// 		    ramm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "runaGapINCH" )
+// 		    rainch = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "lWidth" )
+// 		    l.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "rWidth" )
+// 		    r.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "tWidth" )
+// 		    t.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bWidth" )
+// 		    b.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "lRed" )
+// 		    l.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), l.color.green(), l.color.blue() );
+// 		else if ( ( *it ).m_strName == "rRed" )
+// 		    r.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), r.color.green(), r.color.blue() );
+// 		else if ( ( *it ).m_strName == "tRed" )
+// 		    t.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), t.color.green(), t.color.blue() );
+// 		else if ( ( *it ).m_strName == "bRed" )
+// 		    b.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), b.color.green(), b.color.blue() );
+// 		else if ( ( *it ).m_strName == "lGreen" )
+// 		    l.color.setRgb( l.color.red(), atoi( ( *it ).m_strValue.c_str() ), l.color.blue() );
+// 		else if ( ( *it ).m_strName == "rGreen" )
+// 		    r.color.setRgb( r.color.red(), atoi( ( *it ).m_strValue.c_str() ), r.color.blue() );
+// 		else if ( ( *it ).m_strName == "tGreen" )
+// 		    t.color.setRgb( t.color.red(), atoi( ( *it ).m_strValue.c_str() ), t.color.blue() );
+// 		else if ( ( *it ).m_strName == "bGreen" )
+// 		    b.color.setRgb( b.color.red(), atoi( ( *it ).m_strValue.c_str() ), b.color.blue() );
+// 		else if ( ( *it ).m_strName == "lBlue" )
+// 		    l.color.setRgb( l.color.red(), l.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "rBlue" )
+// 		    r.color.setRgb( r.color.red(), r.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "tBlue" )
+// 		    t.color.setRgb( t.color.red(), t.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bBlue" )
+// 		    b.color.setRgb( b.color.red(), b.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "lStyle" )
+// 		    l.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "rStyle" )
+// 		    r.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "tStyle" )
+// 		    t.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bStyle" )
+// 		    b.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bkRed" )
+// 		    c.setRgb( atoi( ( *it ).m_strValue.c_str() ), c.green(), c.blue() );
+// 		else if ( ( *it ).m_strName == "bkGreen" )
+// 		    c.setRgb( c.red(), atoi( ( *it ).m_strValue.c_str() ), c.blue() );
+// 		else if ( ( *it ).m_strName == "bkBlue" )
+// 		    c.setRgb( c.red(), c.green(), atoi( ( *it ).m_strValue.c_str() ) );
+// 		else if ( ( *it ).m_strName == "bleftpt" )
+// 		    lpt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "brightpt" )
+// 		    rpt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "btoppt" )
+// 		    tpt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bbottompt" )
+// 		    bpt = atoi( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bleftmm" )
+// 		    lmm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "brightmm" )
+// 		    rmm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "btopmm" )
+// 		    tmm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bbottommm" )
+// 		    bmm = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "bleftinch" )
+// 		    linch = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "brightinch" )
+// 		    rinch = atof( ( *it ).m_strValue.c_str() );
+// 		else if ( ( *it ).m_strName == "btopinch" )
+// 		    tinch = atof( ( *it ).m_strValue.c_str() );
+// 		else if ((*it).m_strName == "bbottominch")
+// 		    binch = atof( ( *it ).m_strValue.c_str() );
+// 	    }
+// 	    KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
+// 					   rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
+// 	    _frame->setLeftBorder( l );
+// 	    _frame->setRightBorder( r );
+// 	    _frame->setTopBorder( t );
+// 	    _frame->setBottomBorder( b );
+// 	    _frame->setBackgroundColor( QBrush( c ) );
+// 	    _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
+// 	    _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
+// 	    _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
+// 	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
+// 	    frames.append( _frame );
+// 	}
 
-	else
-	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
+// 	else
+// 	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
 
-	if ( !parser.close( tag ) )
-	{
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
-	}
-    }
-}
+// 	if ( !parser.close( tag ) )
+// 	{
+// 	    cerr << "ERR: Closing Child" << endl;
+// 	    return;
+// 	}
+//     }
+// }
 
 /******************************************************************/
 /* Class: KWPartFrameSet					  */
@@ -2026,7 +2028,7 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
     int ww = 0;
     for ( i = 0; i < getCols(); i++ )
     {
-	KWFrame *frame = new KWFrame( r.x() + ww, r.y(), *w.at( i ), 
+	KWFrame *frame = new KWFrame( r.x() + ww, r.y(), *w.at( i ),
 				      doc->getDefaultParagLayout()->getFormat()->getPTFontSize() + 10 );
 	KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 	_frameSet->addFrame( frame );

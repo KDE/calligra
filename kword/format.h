@@ -167,7 +167,8 @@ public:
     KWordDocument *getDocument() { return doc; }
 
     QDomElement save( QDomDocument &doc );
-    void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
+    // #### todo
+    //void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
 
 protected:
     /**

@@ -38,7 +38,7 @@ class KWordFrame;
 class KWGroupManager;
 
 enum FrameType {FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART};
-enum FrameInfo {FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3, FI_FIRST_FOOTER = 4, 
+enum FrameInfo {FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3, FI_FIRST_FOOTER = 4,
 		FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6, FI_FOOTNOTE = 7};
 enum RunAround {RA_NO = 0, RA_BOUNDINGRECT = 1, RA_CONTUR = 2};
 
@@ -266,7 +266,8 @@ public:
     void splitParag( KWParag *_parag, unsigned int _pos );
 
     virtual QDomElement save( QDomDocument &doc );
-    virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+    // #### todo
+    //virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
     bool getAutoCreateNewFrame() { return autoCreateNewFrame; }
     void setAutoCreateNewFrame( bool _auto ) { autoCreateNewFrame = _auto; }
@@ -313,7 +314,8 @@ public:
     QString getFileName() { return filename; }
 
     virtual QDomElement save( QDomDocument &doc );
-    virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+    // #### todo
+    //virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
 protected:
     KWImage *image;

@@ -111,12 +111,13 @@ QDomElement KWFormatCollection::save( QDomDocument &doc )
 	    return f;
 	formats_.appendChild( f );
     }
-    
+
     return formats_;
 }
 
 /*================================================================*/
-void KWFormatCollection::load( KOMLParser&, vector<KOMLAttrib>& )
-{
-}
+// #### todo
+// void KWFormatCollection::load( KOMLParser&, vector<KOMLAttrib>& )
+// {
+// }
 

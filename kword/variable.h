@@ -19,8 +19,6 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
-#include <string>
-
 class KWordDocument;
 class KWVariable;
 class KWParag;
@@ -142,20 +140,22 @@ public:
     QString getText()
     { return varFormat->convert( this ); }
 
-    virtual void setInfo( int _frameSetNum, int _frameNum, int _pageNum, KWParag *_parag )
-    { frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; parag = _parag; }
+    virtual void setInfo( int _frameSetNum, int _frameNum, int _pageNum, KWParag *_parag ) { 
+	frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; parag = _parag; 
+    }
 
-virtual void recalc() {}
+    virtual void recalc() {}
 
-virtual QDomElement save( QDomDocument& doc )
-virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual QDomElement save( QDomDocument& doc );
+    // #### todo
+    //virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
-KWordDocument *doc;
-KWVariableFormat *varFormat;
-QString text;
-int frameSetNum, frameNum, pageNum;
-KWParag *parag;
+    KWordDocument *doc;
+    KWVariableFormat *varFormat;
+    QString text;
+    int frameSetNum, frameNum, pageNum;
+    KWParag *parag;
 
 };
 
@@ -181,8 +181,9 @@ public:
     virtual void recalc() { pgNum = pageNum; }
     long unsigned int getPgNum() { return pgNum; }
 
-    virtual QDomElement save( QDomDocument& doc )
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual QDomElement save( QDomDocument& doc );
+    // #### todo
+    //virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
     long unsigned int pgNum;
@@ -214,8 +215,9 @@ public:
     QDate getDate() { return date; }
     void setDate( QDate _date ) { date = _date; }
 
-    virtual QDomElement save( QDomDocument& doc )
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual QDomElement save( QDomDocument& doc );
+    // #### todo
+    //virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
     QDate date;
@@ -248,8 +250,9 @@ public:
     QTime getTime() { return time; }
     void setTime( QTime _time ) { time = _time; }
 
-    virtual QDomElement save( QDomDocument& doc )
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual QDomElement save( QDomDocument& doc );
+    // #### todo
+    //virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
     QTime time;
