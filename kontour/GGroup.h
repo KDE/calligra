@@ -26,6 +26,8 @@
 #define GGroup_h_
 
 #include <GObject.h>
+class GOState;
+class Coord;
 
 class GGroup : public GObject
 {
