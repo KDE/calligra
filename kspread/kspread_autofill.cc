@@ -956,12 +956,15 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
       }
       else if(_srcList.at( s )->isNumeric() && _srcList.count()==1)
       {
-
-	double val=(_srcList.at( s )->valueDouble()+incr);
+	double val;
+        if (!down)
+          val = (_srcList.at( s )->valueDouble() - incr);
+        else
+          val = (_srcList.at( s )->valueDouble() + incr);
 	QString tmp;
-	tmp=tmp.setNum(val);
+	tmp = tmp.setNum(val);
 	cell->setCellText( tmp, true );
-        incr++;
+        ++incr;
       }
       else if(_srcList.at( s )->isDate() && _srcList.count()==1)
       {
