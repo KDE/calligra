@@ -87,6 +87,7 @@ Item								   Prio Status
 
 * Newly introduced bugs.
   + Get the colored lines back.					      1 ----
+  + Doesn't use the first line as header any more (KSpread)	      1 ----
 
 * Toolbars
   + Separate toolbar for chart types (separate from config, etc).     2 DONE
