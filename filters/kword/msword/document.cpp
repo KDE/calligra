@@ -30,19 +30,20 @@
 #include <parser.h>
 #include <parserfactory.h>
 #include <paragraphproperties.h>
+#include <klocale.h>
 
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& framesetsElement )
     : m_mainDocument( mainDocument ), m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ), m_textHandler( 0 ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ),
-      m_headerFooters( 0 ), m_bodyFound( false )
+      m_headerFooters( 0 ), m_bodyFound( false ), m_footNoteNumber( 0 )
 {
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
         m_textHandler = new KWordTextHandler( m_parser );
-        connect( m_textHandler, SIGNAL( subDocFound( const wvWare::HeaderFunctor& ) ),
-                 this, SLOT( pushSubDocument( const wvWare::HeaderFunctor& ) ) );
+        connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase* ) ),
+                 this, SLOT( pushSubDocument( const wvWare::FunctorBase* ) ) );
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setInlineReplacementHandler( m_replacementHandler );
@@ -106,7 +107,7 @@ void Document::processStyles()
     {
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        //kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
+        kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
@@ -117,7 +118,7 @@ void Document::processStyles()
             element.setAttribute( "value", name.string() );
             styleElem.appendChild( element );
 
-            //kdDebug() << k_funcinfo << "Style " << i << ": " << name.string() << endl;
+            kdDebug() << k_funcinfo << "Style " << i << ": " << name.string() << endl;
 
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
@@ -131,7 +132,7 @@ void Document::processStyles()
             m_textHandler->paragLayoutBegin(); // new style, reset some vars
 
             // It's important to do that one first, for m_shadowTextFound
-            m_textHandler->writeFormat( styleElem, &style->chp(), 0L /*all of it, no ref chp*/, 0, 0 );
+            m_textHandler->writeFormat( styleElem, &style->chp(), 0L /*all of it, no ref chp*/, 0, 0, 1, 0L );
 
             m_textHandler->writeLayout( styleElem, style->paragraphProperties(), style );
         }
@@ -246,11 +247,28 @@ void Document::startHeader( wvWare::HeaderData::Type type )
 
 void Document::endHeader()
 {
-    kdDebug() << k_funcinfo << endl;
-
 }
 
-void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter )
+void Document::startFootnote()
+{
+    QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
+    framesetElement.setAttribute( "frameType", 1 /* text */ );
+    framesetElement.setAttribute( "frameInfo", 7 /* footnote */ );
+    // Keep name in sync with KWordTextHandler::footnoteFound
+    framesetElement.setAttribute("name", i18n("FootNote %1").arg( ++m_footNoteNumber ) );
+    m_framesetsElement.appendChild(framesetElement);
+
+    createInitialFrame( framesetElement, 567, 567+41, true );
+
+    m_textHandler->setFrameSetElement( framesetElement );
+}
+
+void Document::endFootnote()
+{
+    kdDebug() << k_funcinfo << endl;
+}
+
+void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend )
 {
     QDomElement frameElementOut = parentFramesetElem.ownerDocument().createElement("FRAME");
     // Those values are unused. The paper margins make recalcFrames() resize this frame.
@@ -259,14 +277,15 @@ void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int
     frameElementOut.setAttribute( "top", top );
     frameElementOut.setAttribute( "bottom", bottom );
     frameElementOut.setAttribute( "runaround", 1 );
-    // AutoExtendFrame for header/footers, AutoCreateNewFrame for body text
-    frameElementOut.setAttribute( "autoCreateNewFrame", headerFooter ? 0 : 1 );
+    // AutoExtendFrame for header/footer/footnote, AutoCreateNewFrame for body text
+    frameElementOut.setAttribute( "autoCreateNewFrame", autoExtend ? 0 : 1 );
     parentFramesetElem.appendChild( frameElementOut );
 }
 
-void Document::pushSubDocument( const wvWare::HeaderFunctor& functor /*const SubDocument& subdoc*/ )
+void Document::pushSubDocument( const wvWare::FunctorBase* functor )
 {
-    m_subdocQueue.push( functor );
+    SubDocument subdoc( functor );
+    m_subdocQueue.push( subdoc );
 }
 
 bool Document::hasSubDocument() const
@@ -276,7 +295,7 @@ bool Document::hasSubDocument() const
 
 Document::SubDocument Document::popSubDocument()
 {
-    SubDocument subdoc = m_subdocQueue.front();
+    SubDocument subdoc( m_subdocQueue.front() );
     m_subdocQueue.pop();
     return subdoc;
 }
@@ -286,7 +305,9 @@ void Document::processSubDocQueue()
     while ( hasSubDocument() )
     {
         SubDocument subdoc = popSubDocument();
-        subdoc(); // call it
+        Q_ASSERT( subdoc.functorPtr );
+        (*subdoc.functorPtr)(); // call it
+        delete subdoc.functorPtr; // delete it
     }
 }
 

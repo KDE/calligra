@@ -30,6 +30,7 @@
 namespace wvWare {
     class Style;
     class Parser;
+    class FunctorBase;
     namespace Word97 {
         class PAP;
     }
@@ -58,6 +59,8 @@ public:
     virtual void sectionEnd();
     virtual void pageBreak();
     virtual void headersFound( const wvWare::HeaderFunctor& parseHeaders );
+    virtual void footnoteFound( wvWare::FootnoteData::Type type, wvWare::UChar character,
+                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::FootnoteFunctor& parseFootnote );
 
     virtual void paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties );
     virtual void paragraphEnd();
@@ -69,7 +72,8 @@ public:
     void paragLayoutBegin();
 
     // Write a <FORMAT> tag from the given CHP
-    void writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len );
+    // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
+    void writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len, int formatId, QDomElement* pChildElement );
 
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
     void writeLayout( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
@@ -77,13 +81,12 @@ public:
     // Communication with Document, without having to know about Document
 signals:
     void firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
-    // Note: it would be easier for us if headersFound was in SubDocumentHandler...
-    // (But it also makes sense to have it in sectionStart)
-    void subDocFound( const wvWare::HeaderFunctor& parseHeaders );
+    void subDocFound( const wvWare::FunctorBase* parsingFunctor );
 
 protected:
     void writeOutParagraph( const QString& styleName, const QString& text );
     void writeCounter( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
+    QDomElement insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format );
     QString getFont(unsigned fc) const;
     QDomDocument mainDocument() const;
 
@@ -91,12 +94,13 @@ private:
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     QDomElement m_framesetElement;
     int m_sectionNumber;
+    int m_footNoteNumber; // number of footnote _vars_ written out
 
     // Current paragraph
     QString m_paragraph;
     const wvWare::Style* m_currentStyle;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
-    bool m_shadowTextFound;
+    enum { NoShadow, Shadow, Imprint } m_shadowTextFound;
     int m_index;
     QDomElement m_formats;
     QDomElement m_oldLayout;

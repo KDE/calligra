@@ -31,6 +31,7 @@
 #include <qfont.h>
 #include <qfontinfo.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 
 wvWare::U8 KWordReplacementHandler::hardLineBreak()
@@ -50,8 +51,8 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
-    : m_parser( parser ), m_sectionNumber( 0 ), m_currentStyle( 0L ),
-      m_shadowTextFound( false ), m_index( 0 )
+    : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ),
+      m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 )
 {
 }
 
@@ -98,13 +99,54 @@ void KWordTextHandler::headersFound( const wvWare::HeaderFunctor& parseHeaders )
     // Currently we only care about headers in the first section
     if ( m_sectionNumber == 1 )
     {
-        emit subDocFound( parseHeaders );
+        emit subDocFound( new wvWare::HeaderFunctor( parseHeaders ) );
     }
+}
+
+void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
+                                      wvWare::UChar character, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                                      const wvWare::FootnoteFunctor& parseFootnote )
+{
+    // TODO in wv2: give me the custom label, if not autoNumbered!
+    // TODO: missing CHP for the variable?
+    bool autoNumbered = (character.unicode() == 2);
+    QDomElement varElem = insertVariable( 11 /*KWord code for footnotes*/, chp, "STRI" );
+    QDomElement footnoteElem = varElem.ownerDocument().createElement( "FOOTNOTE" );
+    if ( autoNumbered )
+        footnoteElem.setAttribute( "value", 1 ); // KWord will renumber anyway
+    else
+        footnoteElem.setAttribute( "value", QString(QChar(character.unicode())) );
+    footnoteElem.setAttribute( "notetype", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote" );
+    footnoteElem.setAttribute( "numberingtype", autoNumbered ? "auto" : "manual" );
+    // Keep name in sync with Document::startFootnote
+    footnoteElem.setAttribute( "frameset", i18n("FootNote %1").arg( ++m_footNoteNumber ) );
+    varElem.appendChild( footnoteElem );
+
+    // Remember to parse the footnote text later
+    emit subDocFound( new wvWare::FootnoteFunctor( parseFootnote ) );
+}
+
+QDomElement KWordTextHandler::insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format )
+{
+    m_paragraph += '#';
+
+    QDomElement formatElem;
+    writeFormat( m_formats, chp, m_currentStyle ? &m_currentStyle->chp() : 0, m_index, 1, 4 /*id*/, &formatElem );
+
+    m_index += 1;
+
+    QDomElement varElem = m_formats.ownerDocument().createElement( "VARIABLE" );
+    QDomElement typeElem = m_formats.ownerDocument().createElement( "TYPE" );
+    typeElem.setAttribute( "type", type );
+    typeElem.setAttribute( "key", format );
+    varElem.appendChild( typeElem );
+    formatElem.appendChild( varElem );
+    return varElem;
 }
 
 void KWordTextHandler::paragLayoutBegin()
 {
-    m_shadowTextFound = false;
+    m_shadowTextFound = NoShadow;
 }
 
 void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
@@ -118,8 +160,12 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
     paragLayoutBegin();
     // If the style's format includes shadowtext, then we need a <SHADOW> tag
     // in the parag layout
-    if ( m_currentStyle && m_currentStyle->chp().fShadow )
-        m_shadowTextFound = true;
+    if ( m_currentStyle ) {
+        if ( m_currentStyle->chp().fShadow )
+            m_shadowTextFound = Shadow;
+        else if ( m_currentStyle->chp().fImprint )
+            m_shadowTextFound = Imprint;
+    }
 }
 
 void KWordTextHandler::paragraphEnd()
@@ -137,15 +183,15 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
     kdDebug() << "runOfText: " << newText.string() << endl;
     m_paragraph += newText.string();
 
-    writeFormat( m_formats, chp, m_currentStyle ? &m_currentStyle->chp() : 0, m_index, text.length() );
+    writeFormat( m_formats, chp, m_currentStyle ? &m_currentStyle->chp() : 0, m_index, text.length(), 1, 0L );
 
     m_index += text.length();
 }
 
-void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len )
+void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len, int formatId, QDomElement* pChildElement )
 {
     QDomElement format( mainDocument().createElement( "FORMAT" ) );
-    format.setAttribute( "id", 1 );
+    format.setAttribute( "id", formatId );
     format.setAttribute( "pos", pos );
     format.setAttribute( "len", len );
 
@@ -279,17 +325,22 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
         }
         format.appendChild( bgcolElem );
     }
+    kdDebug() << "chp=" << chp << " emboss:" << chp->fEmboss << " imprint:" << chp->fImprint << endl;
     // Shadow text. Only on/off. The properties are defined at the paragraph level (in KWord).
-    if ( !refChp || refChp->fShadow != chp->fShadow ) {
+    if ( !refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint ) {
         QDomElement weight( mainDocument().createElement( "SHADOWTEXT" ) );
         weight.setAttribute( "value", chp->fShadow ? "1" : "0" );
         format.appendChild( weight );
         if ( chp->fShadow )
-            m_shadowTextFound = true;
+            m_shadowTextFound = Shadow;
+        else if ( chp->fImprint )
+            m_shadowTextFound = Imprint;
     }
 
-    if ( !format.firstChild().isNull() ) // Don't save an empty format tag
+    if ( pChildElement || !format.firstChild().isNull() ) // Don't save an empty format tag, unless the caller asked for it
         parentElement.appendChild( format );
+    if ( pChildElement )
+        *pChildElement = format;
 }
 
 //#define FONT_DEBUG
@@ -492,13 +543,15 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
         writeCounter( parentElement, paragraphProperties, style );
     }
 
-    if ( m_shadowTextFound )
+    if ( m_shadowTextFound != NoShadow )
     {
         // SHADOW - if any SHADOWTEXT was generated, generate <SHADOW> with hardcoded
         // values that make it look like in MSWord.
         QDomElement shadowElement = mainDocument().createElement( "SHADOW" );
         shadowElement.setAttribute( "distance", 1 );
-        shadowElement.setAttribute( "direction", 5 ); // bottom right
+        // Shadow -> bottom right; Imprint -> top left
+        int direction = m_shadowTextFound == Shadow ? 5 : 1;
+        shadowElement.setAttribute( "direction", direction );
         shadowElement.setAttribute( "red", 190 );
         shadowElement.setAttribute( "blue", 190 );
         shadowElement.setAttribute( "green", 190 );

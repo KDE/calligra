@@ -52,13 +52,22 @@ public:
     virtual void startHeader( wvWare::HeaderData::Type type );
     virtual void endHeader();
 
+    virtual void startFootnote();
+    virtual void endFootnote();
+
     bool parse();
 
     void processSubDocQueue();
 
     void finishDocument();
 
-    typedef wvWare::HeaderFunctor SubDocument;
+    typedef const wvWare::FunctorBase* FunctorPtr;
+    struct SubDocument
+    {
+        SubDocument( FunctorPtr ptr ) : functorPtr(ptr) {}
+        ~SubDocument() {}
+        FunctorPtr functorPtr;
+    };
     bool hasSubDocument() const;
     SubDocument popSubDocument();
 
@@ -68,11 +77,11 @@ protected slots:
 
     // Our parsing queue, for headers, footers, footnotes, text boxes etc.
     // Note that a header functor will parse ALL the header/footers (of the section)
-    void pushSubDocument( const wvWare::HeaderFunctor& functor /*const SubDocument& subdoc*/ );
+    void pushSubDocument( const wvWare::FunctorBase* functor /*const SubDocument& subdoc*/ );
 
 private:
     void processStyles();
-    void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter );
+    void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend );
 
     QDomDocument& m_mainDocument;
     QDomElement& m_framesetsElement;
@@ -82,6 +91,7 @@ private:
     std::queue<SubDocument> m_subdocQueue;
     unsigned char m_headerFooters; // a mask of HeaderData::Type bits
     bool m_bodyFound;
+    int m_footNoteNumber; // number of footnote _framesets_ written out
 };
 
 #endif // DOCUMENT_H
