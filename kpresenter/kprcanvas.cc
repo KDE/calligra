@@ -1458,18 +1458,20 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
         }
     } else if ( mouseSelectedObject ) {
 	if ( e->state() & ControlButton ) {
+            int offsetx=QMAX(1,m_view->zoomHandler()->zoomItX(10));
+            int offsety=QMAX(1,m_view->zoomHandler()->zoomItY(10));
 	    switch ( e->key() ) {
 	    case Key_Up:
-		moveObject( 0, -10, true );
+		moveObject( 0, -offsety, true );
 		break;
 	    case Key_Down:
-		moveObject( 0, 10, true );
+		moveObject( 0, offsety, true );
 		break;
 	    case Key_Right:
-		moveObject( 10, 0, true );
+		moveObject( offsetx, 0, true );
 		break;
 	    case Key_Left:
-		moveObject( -10, 0, true );
+		moveObject( -offsetx, 0, true );
 		break;
 	    default: break;
 	    }
@@ -2392,7 +2394,7 @@ bool KPrCanvas::isOneObjectSelected()
 }
 
 /*================================================================*/
-void KPrCanvas::drawPageInPix2( QPixmap &_pix, int pgnum, float /*_zoom*/ )
+void KPrCanvas::drawPageInPix2( QPixmap &_pix, int pgnum )
 {
     //kdDebug(33001) << "Page::drawPageInPix2" << endl;
     currPresPage = pgnum + 1;

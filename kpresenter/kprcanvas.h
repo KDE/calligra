@@ -146,7 +146,7 @@ public:
     { autoform = _autoform; }
 
     void drawPageInPix( QPixmap&, int );
-    void drawPageInPix2( QPixmap&, int, float _zoom = 1.0 );
+    void drawPageInPix2( QPixmap&, int );
 
     void gotoPage( int pg );
 
