@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kprinter.h> // has to be first
+#include <koprinter.h> // has to be first
 
 #include <stdlib.h>
 #include <time.h>

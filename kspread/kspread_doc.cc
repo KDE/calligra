@@ -24,7 +24,7 @@
 #include <dirent.h>
 #include <pwd.h>
 
-#include <kprinter.h>
+#include <koprinter.h>
 #include <qdom.h>
 #include <qtextstream.h>
 #include <qbuffer.h>

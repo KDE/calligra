@@ -21,7 +21,7 @@
 #define GRAPHITE_GLOBAL_H
 
 #include <qvaluelist.h>
-#include <kprinter.h>  // KPrinter enums
+#include <koprinter.h>  // KPrinter enums
 #include <kimageeffect.h>   // KImageEffect enum
 
 class QPoint;

@@ -15,7 +15,7 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
-#include <kprinter.h>
+#include <koprinter.h>
 #include <qprogressdialog.h>
 
 #include "mreportengine.h"
